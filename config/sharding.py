@@ -13,6 +13,10 @@ sharded_tables = {
     "ScalarModelValue": "shard_key",
 }
 
+read_table_config = {
+    "read_redshift_table": {"class": "redshift", "tables_arg": True},
+}
+
 
 shard_key_type = None
 

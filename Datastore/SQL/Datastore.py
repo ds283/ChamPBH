@@ -2,7 +2,7 @@ import functools
 from datetime import datetime
 from os import PathLike
 from pathlib import Path
-from typing import Union, Mapping, Callable, Optional, List, Iterable
+from typing import Union, Mapping, Callable, Optional, List, Iterable, Dict, Any
 
 import ray
 import sqlalchemy as sqla
@@ -56,6 +56,10 @@ _drop_actions = {}
 # should drop tables in a defined order, so that we do not violate foreign key constrints
 _drop_order = []
 
+# read table configuration should be a Dict with the mapping
+# "method_name" -> {"class": class specifier, "tables_arg": bool}
+ReadTableConfigType = Dict[str, Any]
+
 
 @ray.remote
 class Datastore:
@@ -70,6 +74,7 @@ class Datastore:
         profile_agent: Optional[ActorHandle] = None,
         prune_unvalidated: Optional[bool] = False,
         drop_actions: Optional[List[str]] = None,
+        read_table_config: Optional[ReadTableConfigType] = None,
     ):
         """
         Initialize an SQL datastore object
@@ -115,6 +120,19 @@ class Datastore:
             self._drop_actions(drop_actions)
             self._ensure_tables()
             self._validate_on_startup()
+
+        # build read table methods
+        if read_table_config is not None:
+            for method_name, method_config in read_table_config:
+
+                def wrapper(self, **kwargs):
+                    if method_config.get("tables_arg", False):
+                        kwargs["tables"] = self._tables
+                    return self._generic_read_table(
+                        method_config["class"], method_name, **kwargs
+                    )
+
+                setattr(self, method_name, wrapper)
 
         # convert version label to a version object
         # if a serial is specified, we are probably running as a replica, and we need to ensure that the specified
@@ -617,30 +635,30 @@ class Datastore:
 
         return output_flags
 
-    def read_redshift_table(
-        self,
-        **kwargs,
-    ):
+    def _generic_read_table(self, cls, method_name: str, **kwargs):
         """
-        Read the redshift value table from the database
+        Provide a generic reusable implementation to scan a table in the underlying datastore
+        :param cls:
+        :param method_name:
+        :param kwargs:
         :return:
         """
-        with ProfileBatchManager(self._profile_batcher, "read_redshift_table") as mgr:
-            self._ensure_registered_schema("redshift")
-            record = self._schema["redshift"]
+        if isinstance(cls, str):
+            class_name = cls
+        else:
+            class_name = cls.__name__
+
+        with ProfileBatchManager(self._profile_batcher, method_name) as mgr:
+            self._ensure_registered_schema(class_name)
+            record = self._schema[class_name]
 
             tab = record["table"]
-            factory: sqla_redshift_factory = self._factories["redshift"]
+            factory = self._factories[class_name]
 
             with self._engine.begin() as conn:
-                objects = factory.read_table(
-                    conn,
-                    tab,
-                    tables=self._tables,
-                    **kwargs,
-                )
+                objects = factory.read_table(conn, tab, tables=self._tables, **kwargs)
 
-        return objects
+            return objects
 
     def read_largest_store_ids(self):
         """

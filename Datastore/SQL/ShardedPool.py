@@ -1,16 +1,16 @@
 import random
 from pathlib import Path
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Callable
 
 import ray
 import sqlalchemy as sqla
 
 from Datastore.SQL import Datastore
-from Datastore.SQL.Datastore import PathType
+from Datastore.SQL.Datastore import PathType, ReadTableConfigType
 from Datastore.SQL.ProfileAgent import ProfileAgent
 from Datastore.SQL.SerialPoolBroker import SerialPoolBroker
 from MetadataConcepts import version
-from defaults import DEFAULT_STRING_LENGTH
+from config.defaults import DEFAULT_STRING_LENGTH
 
 _replicate_tables = [
     "version",
@@ -37,16 +37,17 @@ class ShardedPool:
         self,
         version_label: str,
         db_name: PathType,
-        ShardKeyType: object,
-        ShardKeyStoreIdGetter: object,
+        ShardKeyType,
+        ShardKeyStoreIdGetter: Callable,
         replicated_tables: List[str],
         sharded_tables: Dict[str, str],
-        timeout: object = None,
-        shards: object = 10,
+        timeout: int = None,
+        shards: int = 10,
         profile_agent: Optional[ProfileAgent] = None,
         job_name: Optional[str] = None,
         prune_unvalidated: Optional[bool] = False,
         drop_actions: Optional[List[str]] = None,
+        read_table_config: Optional[ReadTableConfigType] = None,
     ) -> None:
         """
         Initialize a pool of datastore actors
@@ -159,6 +160,7 @@ class ShardedPool:
             profile_agent=self._profile_agent,
             prune_unvalidated=self._prune_unvalidated,
             drop_actions=drop_actions,
+            read_table_config=read_table_config,
         )
         self._shards = {shard0_key: shard0_store}
 
@@ -180,6 +182,7 @@ class ShardedPool:
                     profile_agent=self._profile_agent,
                     prune_unvalidated=self._prune_unvalidated,
                     drop_actions=drop_actions,
+                    read_table_config=read_table_config,
                 )
                 for key in shard_ids
             }
@@ -195,6 +198,21 @@ class ShardedPool:
                 for payload in max_serial_data
             ]
         )
+
+        # build read table methods
+        if read_table_config is not None:
+            for method_name, method_config in read_table_config:
+
+                class_specifier = method_config["class"]
+                if class_specifier not in self._replicated_tables:
+                    raise RuntimeError(
+                        'It is only possible to configure a read-table method for a replicated table (class id="{class_specifier}")'
+                    )
+
+                def wrapper(self, **kwargs):
+                    return self._generic_read_table(method_name, **kwargs)
+
+                setattr(self, method_name, wrapper)
 
     def __enter__(self):
         return self
@@ -808,17 +826,13 @@ class ShardedPool:
 
             conn.commit()
 
-    def read_redshift_table(
-        self,
-        is_source: Optional[bool] = None,
-        is_response: Optional[bool] = None,
-        **kwargs,
-    ):
+    def _generic_read_table(self, method_name: str, **kwargs):
         """
-        Read the redshift value table from one of the database shards
+        Provide a generic implementation to read a replicated table using an underlying Datastore
+        :param kwargs:
         :return:
         """
-        # we only need to read the redshift table from a single shard, so pick one at random
+        # we only need to read the table from a single shard, so pick one at random
         shard_ids = list(self._shards.keys())
         i = random.randrange(len(shard_ids))
 
@@ -826,8 +840,7 @@ class ShardedPool:
         shard_ids[i], shard_ids[-1] = shard_ids[-1], shard_ids[i]
         shard_key = shard_ids.pop()
 
-        return self._shards[shard_key].read_redshift_table.remote(
-            is_source=is_source,
-            is_response=is_response,
-            **kwargs,
-        )
+        shard = self._shards[shard_key]
+        method = getattr(shard, method_name)
+
+        return method.remote(**kwargs)
