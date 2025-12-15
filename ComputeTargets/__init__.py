@@ -1,5 +1,5 @@
-from .BackgroundModel import (
-    BackgroundModel,
-    BackgroundModelValue,
-    ModelProxy,
+from .ScalarModel import (
+    ScalarModel,
+    ScalarModelValue,
+    ScalarModelProxy,
 )

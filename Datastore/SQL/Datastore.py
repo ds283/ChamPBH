@@ -10,13 +10,13 @@ from ray.actor import ActorHandle
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
 from Datastore.SQL.ClientPool import SerialPoolManager, SerialLeaseManager
-from Datastore.SQL.ObjectFactories.BackgroundModel import (
-    sqla_BackgroundModelFactory,
-    sqla_BackgroundModelTagAssociation_factory,
-    sqla_BackgroundModelValue_factory,
-)
 from Datastore.SQL.ObjectFactories.LambdaCDM import sqla_LambdaCDM_factory
 from Datastore.SQL.ObjectFactories.QCD_Cosmology import sqla_QCDCosmology_factory
+from Datastore.SQL.ObjectFactories.ScalarModel import (
+    sqla_ScalarModelFactory,
+    sqla_ScalarModelTagAssociation_factory,
+    sqla_ScalarModelValue_factory,
+)
 from Datastore.SQL.ObjectFactories.base import SQLAFactoryBase
 from Datastore.SQL.ObjectFactories.integration_metadata import (
     sqla_IntegrationSolver_factory,
@@ -43,9 +43,9 @@ _factories = {
     "LambdaCDM": sqla_LambdaCDM_factory,
     "QCD_Cosmology": sqla_QCDCosmology_factory,
     "IntegrationSolver": sqla_IntegrationSolver_factory,
-    "BackgroundModel": sqla_BackgroundModelFactory,
-    "BackgroundModel_tags": sqla_BackgroundModelTagAssociation_factory,
-    "BackgroundModelValue": sqla_BackgroundModelValue_factory,
+    "ScalarModel": sqla_ScalarModelFactory,
+    "ScalarModel_tags": sqla_ScalarModelTagAssociation_factory,
+    "ScalarModelValue": sqla_ScalarModelValue_factory,
 }
 
 _FactoryMappingType = Mapping[str, SQLAFactoryBase]

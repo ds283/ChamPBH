@@ -6,10 +6,11 @@ from math import log10
 import numpy as np
 import ray
 
-from ComputeTargets import BackgroundModel, ModelProxy
+from ComputeTargets import ScalarModel, ScalarModelProxy
 from CosmologyConcepts import redshift_array
-from Datastore.SQL import ProfileAgent, Datastore
+from Datastore.SQL import ProfileAgent
 from Datastore.SQL.ObjectFactories import tolerance
+from Datastore.SQL.ShardedPool import ShardedPool
 from Quadrature.integration_metadata import IntegrationSolver
 from Units import Mpc_units
 from defaults import (
@@ -139,9 +140,7 @@ def run_pipeline(
         SamplesPerLog10ZTag,  # labels number of redshifts per log10 interval of 1+z in the source grid
     ) = ray.get(
         [
-            pool.object_get(
-                "store_tag", label=f"RedshiftGrid_{len(z_sample)}"
-            ),
+            pool.object_get("store_tag", label=f"RedshiftGrid_{len(z_sample)}"),
             pool.object_get(
                 "store_tag", label=f"LargestSourceRedshift_{z_sample.max.z:.5g}"
             ),
@@ -157,9 +156,9 @@ def run_pipeline(
     ## STEP 1
     ## BAKE THE BACKGROUND COSMOLOGY INTO A BACKGROUND MODEL OBJECT
 
-    bg_model: BackgroundModel = ray.get(
+    bg_model: ScalarModel = ray.get(
         pool.object_get(
-            "BackgroundModel",
+            "ScalarModel",
             solver_labels=solvers,
             cosmology=model_cosmology,
             z_sample=z_sample,
@@ -183,15 +182,19 @@ def run_pipeline(
             f'\n** FOUND EXISTING {model_label} BACKGROUND MODEL "{bg_model.label}" (store_id={bg_model.store_id})'
         )
 
-    model_proxy = ModelProxy(bg_model)
+    model_proxy = ScalarModelProxy(bg_model)
 
 
 # construct a ShardedPool to orchestrate database access
-with Datastore(
+with ShardedPool(
     version_label=VERSION_LABEL,
     db_name=args.database,
+    ShardKeyType=wavenumber,
+    ShardKeyStoreIdGetter=shard_key_wavenumber_store_id,
     timeout=args.db_timeout,
+    shards=args.shards,
     profile_agent=profile_agent,
+    job_name=args.job_name,
     prune_unvalidated=args.prune_unvalidated,
     drop_actions=drop_actions,
 ) as pool:

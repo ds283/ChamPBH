@@ -1,6 +1,6 @@
 from collections import namedtuple
 from math import sqrt, fabs, log
-from typing import Optional, List, Union
+from typing import Optional, List
 
 import ray
 from ray import ObjectRef
@@ -8,7 +8,7 @@ from scipy.integrate import solve_ivp
 from scipy.interpolate import make_interp_spline
 
 from ComputeTargets.spline_wrappers import ZSplineWrapper
-from CosmologyConcepts import redshift_array, redshift, wavenumber
+from CosmologyConcepts import redshift_array, redshift
 from CosmologyModels import BaseCosmology
 from Datastore import DatastoreObject
 from MetadataConcepts import tolerance, store_tag
@@ -41,7 +41,7 @@ ModelFunctions = namedtuple(
 
 
 @ray.remote
-def compute_background(
+def compute_scalar_model(
     cosmology: BaseCosmology,
     z_sample: redshift_array,
     atol: float = DEFAULT_ABS_TOLERANCE,
@@ -78,14 +78,14 @@ def compute_background(
 
     if not sol.success:
         raise RuntimeError(
-            f'compute_background: integration did not terminate successfully (z_init={z_init:.5g}, z_stop={z_stop:.5g}, error at z={sol.t[-1]:.5g}, "{sol.message}")'
+            f'compute_scalar_model: integration did not terminate successfully (z_init={z_init:.5g}, z_stop={z_stop:.5g}, error at z={sol.t[-1]:.5g}, "{sol.message}")'
         )
 
     sampled_z = sol.t
     sampled_values = sol.y
     if len(sampled_values) != EXPECTED_SOL_LENGTH:
         raise RuntimeError(
-            f"compute_background: solution does not have expected number of members (expected {EXPECTED_SOL_LENGTH}, found {len(sampled_values)}; length of sol.t={len(z_sample)})"
+            f"compute_scalar_model: solution does not have expected number of members (expected {EXPECTED_SOL_LENGTH}, found {len(sampled_values)}; length of sol.t={len(z_sample)})"
         )
     a0_tau_sample = sampled_values[A0_TAU_INDEX]
 
@@ -94,7 +94,7 @@ def compute_background(
 
     if returned_values != expected_values:
         raise RuntimeError(
-            f"compute_background: solve_ivp returned {returned_values} samples, but expected {expected_values}"
+            f"compute_scalar_model: solve_ivp returned {returned_values} samples, but expected {expected_values}"
         )
 
     # validate that the samples of the solution correspond to the z-sample points that we specified.
@@ -103,7 +103,7 @@ def compute_background(
         diff = sampled_z[i] - z_sample[i].z
         if fabs(diff) > DEFAULT_ABS_TOLERANCE:
             raise RuntimeError(
-                f"compute_background: solve_ivp returned sample points that differ from those requested (difference={diff} at i={i})"
+                f"compute_scalar_model: solve_ivp returned sample points that differ from those requested (difference={diff} at i={i})"
             )
 
     # each BaseCosmology instance provides methods to evaluate H(z), rho(z), and the value of the equation of state
@@ -120,7 +120,7 @@ def compute_background(
     def _build_derivative(attr: str, f_to_diff=None, sample_to_diff=None):
         if f_to_diff is None and sample_to_diff is None:
             raise RuntimeError(
-                "compute_background._build_derivative: f_to_diff and sample_to_diff cannot both be None"
+                "compute_scalar_model._build_derivative: f_to_diff and sample_to_diff cannot both be None"
             )
 
         if hasattr(cosmology, attr):
@@ -186,7 +186,7 @@ def compute_background(
     }
 
 
-class BackgroundModel(DatastoreObject):
+class ScalarModel(DatastoreObject):
     """
     Encapsulates the time history of a cosmological model.
     This bakes-in all the quantities we need such as the conformal time \tau (for analytic
@@ -219,7 +219,7 @@ class BackgroundModel(DatastoreObject):
             DatastoreObject.__init__(self, payload["store_id"])
             self._data: Optional[IntegrationData] = payload["data"]
             self._solver: Optional[IntegrationSolver] = payload["solver"]
-            self._values: Optional[List[BackgroundModelValue]] = payload["values"]
+            self._values: Optional[List[ScalarModelValue]] = payload["values"]
 
         # store parameters
         self._label = label
@@ -250,15 +250,6 @@ class BackgroundModel(DatastoreObject):
     @property
     def z_sample(self):
         return self._z_sample
-
-    def efolds_subh(self, k: wavenumber, z: Union[redshift, float]) -> float:
-        if isinstance(z, redshift):
-            z_float = z.z
-        else:
-            z_float = float(z)
-
-        H = self.functions.Hubble(z_float)
-        return log((1.0 + z_float) * k.k / H)
 
     @property
     def data(self) -> IntegrationData:
@@ -377,7 +368,7 @@ class BackgroundModel(DatastoreObject):
         if label is not None:
             self._label = label
 
-        self._compute_ref = compute_background.remote(
+        self._compute_ref = compute_scalar_model.remote(
             self.cosmology,
             self._z_sample,
             atol=self._atol.tol,
@@ -421,7 +412,7 @@ class BackgroundModel(DatastoreObject):
         self._values = []
         for i in range(len(H_sample)):
             self._values.append(
-                BackgroundModelValue(
+                ScalarModelValue(
                     None,
                     self._z_sample[i],
                     Hubble=H_sample[i],
@@ -443,7 +434,7 @@ class BackgroundModel(DatastoreObject):
         return True
 
 
-class BackgroundModelValue(DatastoreObject):
+class ScalarModelValue(DatastoreObject):
     def __init__(
         self,
         store_id: int,
@@ -528,8 +519,8 @@ class BackgroundModelValue(DatastoreObject):
         return self._d2_wPerturbations_dz2
 
 
-class ModelProxy:
-    def __init__(self, model: BackgroundModel):
+class ScalarModelProxy:
+    def __init__(self, model: ScalarModel):
         self._ref: ObjectRef = ray.put(model)
 
         self._store_id: int = model.store_id if model.available else None
@@ -553,10 +544,10 @@ class ModelProxy:
     def cosmology(self) -> BaseCosmology:
         return self._cosmology
 
-    def get(self) -> BackgroundModel:
+    def get(self) -> ScalarModel:
         """
         The return value should only be held locally and not persisted, otherwise the entire
-        BackgroundModel instance may be serialized when it is passed around by Ray.
+        ScalarModel instance may be serialized when it is passed around by Ray.
         That would defeat the purpose of the proxy.
         :return:
         """

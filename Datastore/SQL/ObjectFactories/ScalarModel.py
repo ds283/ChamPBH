@@ -6,8 +6,8 @@ from sqlalchemy import and_, or_
 from sqlalchemy.exc import MultipleResultsFound, SQLAlchemyError
 
 from ComputeTargets import (
-    BackgroundModel,
-    BackgroundModelValue,
+    ScalarModel,
+    ScalarModelValue,
 )
 from CosmologyConcepts import redshift_array, redshift
 from CosmologyModels import BaseCosmology
@@ -18,7 +18,7 @@ from Units.base import UnitsLike
 from defaults import DEFAULT_STRING_LENGTH, DEFAULT_FLOAT_PRECISION
 
 
-class sqla_BackgroundModelTagAssociation_factory(SQLAFactoryBase):
+class sqla_ScalarModelTagAssociation_factory(SQLAFactoryBase):
     def __init__(self):
         pass
 
@@ -33,7 +33,7 @@ class sqla_BackgroundModelTagAssociation_factory(SQLAFactoryBase):
                 sqla.Column(
                     "model_serial",
                     sqla.Integer,
-                    sqla.ForeignKey("BackgroundModel.serial"),
+                    sqla.ForeignKey("ScalarModel.serial"),
                     index=True,
                     nullable=False,
                     primary_key=True,
@@ -54,7 +54,7 @@ class sqla_BackgroundModelTagAssociation_factory(SQLAFactoryBase):
         raise NotImplementedError
 
     @staticmethod
-    def add_tag(conn, inserter, model: BackgroundModel, tag: store_tag):
+    def add_tag(conn, inserter, model: ScalarModel, tag: store_tag):
         inserter(
             conn,
             {
@@ -64,7 +64,7 @@ class sqla_BackgroundModelTagAssociation_factory(SQLAFactoryBase):
         )
 
     @staticmethod
-    def remove_tag(conn, table, model: BackgroundModel, tag: store_tag):
+    def remove_tag(conn, table, model: ScalarModel, tag: store_tag):
         conn.execute(
             sqla.delete(table).where(
                 and_(
@@ -75,7 +75,7 @@ class sqla_BackgroundModelTagAssociation_factory(SQLAFactoryBase):
         )
 
 
-class sqla_BackgroundModelFactory(SQLAFactoryBase):
+class sqla_ScalarModelFactory(SQLAFactoryBase):
     def __init__(self):
         pass
 
@@ -148,7 +148,7 @@ class sqla_BackgroundModelFactory(SQLAFactoryBase):
         atol_table = tables["tolerance"].alias("atol")
         rtol_table = tables["tolerance"].alias("rtol")
         solver_table = tables["IntegrationSolver"]
-        tag_table = tables["BackgroundModel_tags"]
+        tag_table = tables["ScalarModel_tags"]
         redshift_table = tables["redshift"]
 
         # notice that we query only for validated data
@@ -206,13 +206,13 @@ class sqla_BackgroundModelFactory(SQLAFactoryBase):
             row_data = conn.execute(query).one_or_none()
         except MultipleResultsFound as e:
             print(
-                f"!! BackgroundModel.build(): multiple results found when querying for BackgroundModel"
+                f"!! ScalarModel.build(): multiple results found when querying for ScalarModel"
             )
             raise e
 
         if row_data is None:
             # build and return an unpopulated object
-            return BackgroundModel(
+            return ScalarModel(
                 payload=None,
                 solver_labels=solver_labels,
                 cosmology=cosmology,
@@ -229,7 +229,7 @@ class sqla_BackgroundModelFactory(SQLAFactoryBase):
         num_expected_samples = row_data.z_samples
 
         # read out sample values associated with this integration
-        value_table = tables["BackgroundModelValue"]
+        value_table = tables["ScalarModelValue"]
 
         sample_rows = conn.execute(
             sqla.select(
@@ -278,7 +278,7 @@ class sqla_BackgroundModelFactory(SQLAFactoryBase):
             )
             z_points.append(z_value)
             values.append(
-                BackgroundModelValue(
+                ScalarModelValue(
                     store_id=row.serial,
                     z=z_value,
                     Hubble=row.Hubble_GeV * GeV,
@@ -302,7 +302,7 @@ class sqla_BackgroundModelFactory(SQLAFactoryBase):
                     f'Fewer z-samples than expected were recovered from the validated background model "{store_label}"'
                 )
 
-        obj = BackgroundModel(
+        obj = ScalarModel(
             payload={
                 "store_id": store_id,
                 "data": IntegrationData(
@@ -335,7 +335,7 @@ class sqla_BackgroundModelFactory(SQLAFactoryBase):
 
     @staticmethod
     def store(
-        obj: BackgroundModel,
+        obj: ScalarModel,
         conn,
         table,
         inserter,
@@ -360,22 +360,20 @@ class sqla_BackgroundModelFactory(SQLAFactoryBase):
             "validated": False,
         }
 
-        # because BackgroundModel is a replicated table, we need to allow for the possibility that this object
+        # because ScalarModel is a replicated table, we need to allow for the possibility that this object
         # is a replica, rather than a fresh insert. If so, it's _my_id field will be set.
         if hasattr(obj, "_my_id") and obj._my_id is not None:
             payload.update({"serial": obj._my_id})
 
         store_id = inserter(conn, payload)
 
-        # set store_id on behalf of the BackgroundModel instance
+        # set store_id on behalf of the ScalarModel instance
         obj._my_id = store_id
 
         # add any tags that have been specified
-        tag_inserter = inserters["BackgroundModel_tags"]
+        tag_inserter = inserters["ScalarModel_tags"]
         for tag in obj.tags:
-            sqla_BackgroundModelTagAssociation_factory.add_tag(
-                conn, tag_inserter, obj, tag
-            )
+            sqla_ScalarModelTagAssociation_factory.add_tag(conn, tag_inserter, obj, tag)
 
         # now serialize the sampled output points
         units: UnitsLike = obj._units
@@ -384,9 +382,9 @@ class sqla_BackgroundModelFactory(SQLAFactoryBase):
         Kelvin = units.Kelvin
         Mpc = units.Mpc
 
-        value_inserter = inserters["BackgroundModelValue"]
+        value_inserter = inserters["ScalarModelValue"]
         for value in obj.values:
-            value: BackgroundModelValue
+            value: ScalarModelValue
             value_id = value_inserter(
                 conn,
                 {
@@ -414,12 +412,12 @@ class sqla_BackgroundModelFactory(SQLAFactoryBase):
 
     @staticmethod
     def validate(
-        obj: BackgroundModel,
+        obj: ScalarModel,
         conn,
         table,
         tables,
     ):
-        # query the row in BackgroundModel corresponding to this object
+        # query the row in ScalarModel corresponding to this object
         if not obj.available:
             raise RuntimeError(
                 "Attempt to validate a datastore object that has not yet been serialized"
@@ -429,7 +427,7 @@ class sqla_BackgroundModelFactory(SQLAFactoryBase):
             sqla.select(table.c.z_samples).filter(table.c.serial == obj.store_id)
         ).scalar()
 
-        value_table = tables["BackgroundModelValue"]
+        value_table = tables["ScalarModelValue"]
         num_samples = conn.execute(
             sqla.select(sqla.func.count(value_table.c.serial)).filter(
                 value_table.c.model_serial == obj.store_id
@@ -458,8 +456,8 @@ class sqla_BackgroundModelFactory(SQLAFactoryBase):
         atol_table = tables["tolerance"].alias("atol")
         rtol_table = tables["tolerance"].alias("rtol")
         solver_table = tables["IntegrationSolver"]
-        value_table = tables["BackgroundModelValue"]
-        tags_table = tables["BackgroundModel_tags"]
+        value_table = tables["ScalarModelValue"]
+        tags_table = tables["ScalarModel_tags"]
 
         # bake results into a list so that we can close this query; we are going to want to run
         # another one as we process the rows from this one
@@ -533,7 +531,7 @@ class sqla_BackgroundModelFactory(SQLAFactoryBase):
         return msgs
 
 
-class sqla_BackgroundModelValue_factory(SQLAFactoryBase):
+class sqla_ScalarModelValue_factory(SQLAFactoryBase):
     def __init__(self):
         pass
 
@@ -547,7 +545,7 @@ class sqla_BackgroundModelValue_factory(SQLAFactoryBase):
                 sqla.Column(
                     "model_serial",
                     sqla.Integer,
-                    sqla.ForeignKey("BackgroundModel.serial"),
+                    sqla.ForeignKey("ScalarModel.serial"),
                     index=True,
                     nullable=False,
                 ),
@@ -618,7 +616,7 @@ class sqla_BackgroundModelValue_factory(SQLAFactoryBase):
             ).one_or_none()
         except MultipleResultsFound as e:
             print(
-                f"!! BackgroundModelValue.build(): multiple results found when querying for BackgroundModelValue"
+                f"!! ScalarModelValue.build(): multiple results found when querying for ScalarModelValue"
             )
             raise e
 
@@ -671,7 +669,7 @@ class sqla_BackgroundModelValue_factory(SQLAFactoryBase):
                     f"Stored background model w_Background value (model store_id={model_serial}, z={z.store_id}) = {row_data.wBackground} differs from expected value = {wBackground}"
                 )
 
-        obj = BackgroundModelValue(
+        obj = ScalarModelValue(
             store_id=store_id,
             z=z,
             Hubble=Hubble,
