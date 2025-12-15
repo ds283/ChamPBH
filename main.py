@@ -20,7 +20,12 @@ from config.defaults import (
     DEFAULT_QUADRATURE_RTOL,
 )
 from config.model_list import build_model_list
-from config.sharding import replicated_tables, sharded_tables
+from config.sharding import (
+    replicated_tables,
+    sharded_tables,
+    get_shard_key_store_id,
+    shard_key_type,
+)
 from utilities import WallclockTimer, format_time
 
 DEFAULT_LABEL = "ChamPBH-test"
@@ -190,8 +195,8 @@ def run_pipeline(
 with ShardedPool(
     version_label=VERSION_LABEL,
     db_name=args.database,
-    ShardKeyType=wavenumber,
-    ShardKeyStoreIdGetter=shard_key_wavenumber_store_id,
+    ShardKeyType=shard_key_type,
+    ShardKeyStoreIdGetter=get_shard_key_store_id,
     replicated_tables=replicated_tables,
     sharded_tables=sharded_tables,
     timeout=args.db_timeout,
