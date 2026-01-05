@@ -2,10 +2,10 @@ from abc import ABC, abstractmethod
 
 from Units.base import UnitsLike
 
-# at high temperature, G and G_S usually have the same value
+# at high temperature, G_rho and G_S usually have the same value
 HIGH_T_GSTAR = 106.75
 
-# G and G_S usually only differ at low temperatures after neutrino decoupling, once e+/e- annihilation
+# G_rho and G_S usually only differ at low temperatures after neutrino decoupling, once e+/e- annihilation
 # reheats the photons (but *not* the neutrinos)
 # LOW_T_GSTAR = 3.36
 # LOW_T_G_S_STAR = 3.91
@@ -15,7 +15,7 @@ LOW_T_GSTAR = 3.38
 LOW_T_G_S_STAR = 3.94
 # these values look correct to me because e.g.
 #   2 + 2 * 3.042 * (7/8) * (4/11)^(4/3) = 3.38172
-# so this value of G* includes N_eff from Planck, plus reheating of the photons but not the neutrinos
+# so this value of G_rho* includes N_eff from Planck, plus reheating of the photons but not the neutrinos
 
 
 class GenericEOSBase(ABC):
@@ -34,7 +34,7 @@ class GenericEOSBase(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def G(self, T: float) -> float:
+    def G_rho(self, T: float) -> float:
         """
         Compute effective number of bosonic degrees of freedom g(T) for the energy, at temperature T.
         T should be regarded as a dimensionful quantity, measured in the given UnitsLike system
@@ -62,12 +62,12 @@ class GenericEOSBase(ABC):
 
         # TODO: This formula is valid only in thermal equilibrium, where all species have the same temperature T.
         #  It strictly IS NOT VALID after e+e- annihilation, when the neutrino and photon temperatures separate.
-        G = self.G(T)
+        G = self.G_rho(T)
         Gs = self.Gs(T)
         w = (4.0 * Gs) / (3.0 * G) - 1.0
 
         # print(
-        #     f">> evaluate w(T) at T = {T/self._units.GeV:.5g} GeV = {T/self._units.Kelvin:.5g} K | g* = {G:.5g}, g_S* = {Gs:.5g}, w = {w:.5g}"
+        #     f">> evaluate w(T) at T = {T/self._units.GeV:.5g} GeV = {T/self._units.Kelvin:.5g} K | g* = {G_rho:.5g}, g_S* = {Gs:.5g}, w = {w:.5g}"
         # )
 
         return w

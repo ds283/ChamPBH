@@ -11,16 +11,14 @@ class sqla_tolerance_factory(SQLAFactoryBase):
     def __init__(self):
         pass
 
-    @staticmethod
-    def register():
+    def register(self):
         return {
             "version": False,
             "timestamp": True,
             "columns": [sqla.Column("log10_tol", sqla.Float(64))],
         }
 
-    @staticmethod
-    def build(payload, conn, table, inserter, tables, inserters):
+    def build(self, payload, conn, table, inserter, tables, inserters):
         log10_tol = payload.get("log10_tol", None)
         if log10_tol is None:
             tol = payload.get("tol", None)

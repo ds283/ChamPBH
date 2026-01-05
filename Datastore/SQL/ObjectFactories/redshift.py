@@ -13,8 +13,7 @@ class sqla_redshift_factory(SQLAFactoryBase):
     def __init__(self):
         pass
 
-    @staticmethod
-    def register():
+    def register(self):
         return {
             "version": False,
             "timestamp": True,
@@ -23,17 +22,12 @@ class sqla_redshift_factory(SQLAFactoryBase):
             ],
         }
 
-    @staticmethod
-    def build(payload, conn, table, inserter, tables, inserters):
+    def build(self, payload, conn, table, inserter, tables, inserters):
         z = payload["z"]
-        is_source = payload["is_source"]
-        is_response = payload["is_response"]
 
         # query for this redshift in the datastore
         query = sqla.select(
             table.c.serial,
-            table.c.source,
-            table.c.response,
         ).filter(
             sqla.func.abs((table.c.z - z) / z) < DEFAULT_REDSHIFT_RELATIVE_PRECISION
         )
@@ -41,7 +35,7 @@ class sqla_redshift_factory(SQLAFactoryBase):
 
         # if not present, create a new id using the provided inserter
         if row_data is None:
-            insert_data = {"z": z, "source": is_source, "response": is_response}
+            insert_data = {"z": z}
             if "serial" in payload:
                 insert_data["serial"] = payload["serial"]
             store_id = inserter(conn, insert_data)
@@ -59,8 +53,8 @@ class sqla_redshift_factory(SQLAFactoryBase):
             setattr(obj, key, value)
         return obj
 
-    @staticmethod
     def read_table(
+        self,
         conn,
         table,
         tables,

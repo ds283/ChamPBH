@@ -9,16 +9,14 @@ class sqla_version_factory(SQLAFactoryBase):
     def __init__(self):
         pass
 
-    @staticmethod
-    def register():
+    def register(self):
         return {
             "version": False,
             "timestamp": False,
             "columns": [sqla.Column("label", sqla.String(DEFAULT_STRING_LENGTH))],
         }
 
-    @staticmethod
-    def build(payload, conn, table, inserter, tables, inserters):
+    def build(self, payload, conn, table, inserter, tables, inserters):
         label = payload["label"]
 
         store_id = conn.execute(

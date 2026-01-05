@@ -9,13 +9,26 @@ import sqlalchemy as sqla
 from ray.actor import ActorHandle
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
+from CosmologyConcepts import beta_value, Lambda_value, M_value, temperature
 from Datastore.SQL.ClientPool import SerialPoolManager, SerialLeaseManager
+from Datastore.SQL.ObjectFactories.DimensionfulQuantity import (
+    sqla_dimensionful_quantity_factory,
+)
+from Datastore.SQL.ObjectFactories.DimensionlessQuantity import (
+    sqla_dimensionless_quantity_factory,
+)
+from Datastore.SQL.ObjectFactories.ExponentialCoupling import (
+    sqla_ExponentialCoupling_factory,
+)
 from Datastore.SQL.ObjectFactories.LambdaCDM import sqla_LambdaCDM_factory
 from Datastore.SQL.ObjectFactories.QCD_Cosmology import sqla_QCDCosmology_factory
 from Datastore.SQL.ObjectFactories.ScalarModel import (
     sqla_ScalarModelFactory,
     sqla_ScalarModelTagAssociation_factory,
     sqla_ScalarModelValue_factory,
+)
+from Datastore.SQL.ObjectFactories.StandardChameleon import (
+    sqla_StandardChameleon_factory,
 )
 from Datastore.SQL.ObjectFactories.base import SQLAFactoryBase
 from Datastore.SQL.ObjectFactories.integration_metadata import (
@@ -36,16 +49,22 @@ PathType = Union[str, PathLike]
 
 
 _factories = {
-    "version": sqla_version_factory,
-    "store_tag": sqla_store_tag_factory,
-    "redshift": sqla_redshift_factory,
-    "tolerance": sqla_tolerance_factory,
-    "LambdaCDM": sqla_LambdaCDM_factory,
-    "QCD_Cosmology": sqla_QCDCosmology_factory,
-    "IntegrationSolver": sqla_IntegrationSolver_factory,
-    "ScalarModel": sqla_ScalarModelFactory,
-    "ScalarModel_tags": sqla_ScalarModelTagAssociation_factory,
-    "ScalarModelValue": sqla_ScalarModelValue_factory,
+    "version": sqla_version_factory(),
+    "store_tag": sqla_store_tag_factory(),
+    "redshift": sqla_redshift_factory(),
+    "tolerance": sqla_tolerance_factory(),
+    "beta_value": sqla_dimensionless_quantity_factory(beta_value),
+    "M_value": sqla_dimensionful_quantity_factory(M_value),
+    "Lambda_value": sqla_dimensionful_quantity_factory(Lambda_value),
+    "temperature": sqla_dimensionful_quantity_factory(temperature),
+    "StandardChameleon": sqla_StandardChameleon_factory(),
+    "ExponentialCoupling": sqla_ExponentialCoupling_factory(),
+    "LambdaCDM": sqla_LambdaCDM_factory(),
+    "QCD_Cosmology": sqla_QCDCosmology_factory(),
+    "IntegrationSolver": sqla_IntegrationSolver_factory(),
+    "ScalarModel": sqla_ScalarModelFactory(),
+    "ScalarModel_tags": sqla_ScalarModelTagAssociation_factory(),
+    "ScalarModelValue": sqla_ScalarModelValue_factory(),
 }
 
 _FactoryMappingType = Mapping[str, SQLAFactoryBase]

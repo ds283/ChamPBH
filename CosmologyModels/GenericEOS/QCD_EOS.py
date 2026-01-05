@@ -135,7 +135,7 @@ class QCD_EOS(GenericEOSBase):
 
     # below T_LO (measured in GeV) we assume the asymptotic low temperature degrees of freedom.
     # Saikawa & Shirai say that their parametrization is valid down to 10 keV = 1E-5 GeV, which
-    # may well be true for G(T) and G_S(T) alone, but we will get the wrong equation of state
+    # may well be true for G_rho(T) and G_S(T) alone, but we will get the wrong equation of state
     # if we do this, because the neutrinos are already out of thermal equilibrium here.
     # We cut to the late-time asymptotic values at 600 keV, just before e+e- annihilation reheats
     # the photon temperature.
@@ -155,7 +155,7 @@ class QCD_EOS(GenericEOSBase):
         return QCD_EOS_IDENTIFIER
 
     # Complete effective degrees of freedom functions
-    def G(self, T: float) -> float:
+    def G_rho(self, T: float) -> float:
         """
         Compute effective number of bosonic degrees of freedom g(T) for the energy, at temperature T.
         T should be regarded as a dimensionful quantity, measured in the given UnitsLike system
@@ -203,7 +203,7 @@ class QCD_EOS(GenericEOSBase):
             return HIGH_T_GSTAR  # Asymptotic high temperature limit
         elif QCD_EOS.T_120_MEV <= T_in_GeV <= QCD_EOS.T_HI:
             log_T_in_GeV = log(T_in_GeV)
-            return self.G(T) / (
+            return self.G_rho(T) / (
                 1.0
                 + polynomial_sum(c_coeffs, log_T_in_GeV)
                 / polynomial_sum(d_coeffs, log_T_in_GeV)
@@ -245,6 +245,6 @@ class QCD_EOS(GenericEOSBase):
             # It strictly IS NOT VALID after e+e- annihilation, when the neutrino and photon temperatures separate.
             T = QCD_EOS.EOS_T_LO * self._units.GeV
 
-        G = self.G(T)
+        G = self.G_rho(T)
         Gs = self.Gs(T)
         return (4.0 * Gs) / (3.0 * G) - 1.0

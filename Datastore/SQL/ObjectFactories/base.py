@@ -1,28 +1,15 @@
-from abc import ABC, abstractmethod
-
-
-class SQLAFactoryBase(ABC):
-    @staticmethod
-    @abstractmethod
-    def register():
+class SQLAFactoryBase:
+    def register(self):
         raise NotImplementedError
 
-    @staticmethod
-    @abstractmethod
-    def build(payload, conn, table, inserter, tables, inserters):
+    def build(self, payload, conn, table, inserter, tables, inserters):
         raise NotImplementedError
 
-    @staticmethod
-    @abstractmethod
-    def store(obj, conn, table, inserter, tables, inserters):
+    def store(self, obj, conn, table, inserter, tables, inserters):
         raise NotImplementedError
 
-    @staticmethod
-    @abstractmethod
-    def validate(obj, conn, table, tables):
+    def validate(self, obj, conn, table, tables):
         raise NotImplementedError
 
-    @staticmethod
-    @abstractmethod
-    def validate_on_startup(conn, table, tables, prune=False):
+    def validate_on_startup(self, conn, table, tables, prune=False):
         raise NotImplementedError

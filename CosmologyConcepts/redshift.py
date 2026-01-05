@@ -58,8 +58,6 @@ class redshift_array:
         # the conversion to set ensure that we remove any duplicates
         self._z_array = sorted(set(z_array), key=lambda x: x.z, reverse=True)
 
-        # sort into descending order of redshift
-
     def __iter__(self):
         for z in self._z_array:
             yield z

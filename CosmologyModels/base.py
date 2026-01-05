@@ -30,23 +30,7 @@ class BaseCosmology(DatastoreObject, ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def rho(self, z: float) -> float:
-        raise NotImplementedError
-
-    @abstractmethod
-    def Hubble(self, z: float) -> float:
-        raise NotImplementedError
-
-    @abstractmethod
-    def T_photon(self, z: float) -> float:
-        raise NotImplementedError
-
-    @abstractmethod
-    def wBackground(self, z: float) -> float:
-        raise NotImplementedError
-
-    @abstractmethod
-    def wPerturbations(self, z: float) -> float:
+    def z(self, T: float) -> float:
         raise NotImplementedError
 
 

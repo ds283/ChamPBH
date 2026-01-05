@@ -1,7 +1,7 @@
 import time
 from typing import Optional, Union
 
-from CosmologyConcepts import wavenumber, redshift
+from CosmologyConcepts import redshift
 from Quadrature.supervisors.base import IntegrationSupervisor, DEFAULT_UPDATE_INTERVAL
 from utilities import format_time
 
@@ -9,7 +9,6 @@ from utilities import format_time
 class NumericIntegrationSupervisor(IntegrationSupervisor):
     def __init__(
         self,
-        k: wavenumber,
         z_init: Union[redshift, float],
         z_final: Union[redshift, float],
         label: str,
@@ -20,7 +19,6 @@ class NumericIntegrationSupervisor(IntegrationSupervisor):
 
         self._label: str = label
 
-        self._k: wavenumber = k
         self._z_init: float = (
             z_init.z if isinstance(z_init, redshift) else float(z_init)
         )
@@ -55,7 +53,7 @@ class NumericIntegrationSupervisor(IntegrationSupervisor):
         z_remain = self._z_range - z_complete
         percent_remain = z_remain / self._z_range
         print(
-            f"** STATUS UPDATE #{update_number}: {self._label} integration for k = {self._k.k_inv_Mpc:.5g}/Mpc (store_id={self._k.store_id}) has been running for {format_time(since_start)} ({format_time(since_last_notify)} since last notification)"
+            f"** STATUS UPDATE #{update_number}: {self._label} integration for k = /Mpc (store_id=) has been running for {format_time(since_start)} ({format_time(since_last_notify)} since last notification)"
         )
         print(
             f"|    current z={current_z:.5g} (init z={self._z_init:.5g}, target z={self._z_final:.5g}, z complete={z_complete:.5g}, z remain={z_remain:.5g}, {percent_remain:.3%} remains)"
@@ -80,7 +78,7 @@ class NumericIntegrationSupervisor(IntegrationSupervisor):
         grid_spacing = (1.0 + z) * self._delta_logz
         if wavelength < grid_spacing:
             print(
-                f"!! WARNING: {self._label} integration for k = {self._k.k_inv_Mpc:.5g}/Mpc (store_id={self._k.store_id}) may have developed unresolved oscillations"
+                f"!! WARNING: {self._label} integration for k = /Mpc (store_id=) may have developed unresolved oscillations"
             )
             print(
                 f"|    current z={z:.5g}, e-folds inside horizon={efolds_subh:.3g} | approximate wavelength Delta z={wavelength:.5g}, approximate grid spacing at this z: {grid_spacing:.5g}"

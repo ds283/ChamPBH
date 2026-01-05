@@ -12,20 +12,6 @@ from Datastore.SQL.SerialPoolBroker import SerialPoolBroker
 from MetadataConcepts import version
 from config.defaults import DEFAULT_STRING_LENGTH
 
-_replicate_tables = [
-    "version",
-    "store_tag",
-    "redshift",
-    "tolerance",
-    "LambdaCDM",
-    "QCD_Cosmology",
-    "IntegrationSolver",
-]
-_shard_tables = {
-    "ScalarModel": "shard_key",
-    "ScalarModelValue": "shard_key",
-}
-
 
 class ShardedPool:
     """

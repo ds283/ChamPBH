@@ -1,11 +1,17 @@
 from functools import total_ordering
-from typing import Iterable
+from typing import Iterable, Optional
 
 from Datastore import DatastoreObject
 
 
 @total_ordering
-class DimensionlessQuantity(DatastoreObject):
+class DimensionfulQuantity(DatastoreObject):
+    # default_unit is a class attribute; it is set for all instances of the class,
+    # not on an instance-by-instance basis.
+    # It should be overridden by derived classes to fix the default
+    # storage unit
+    default_unit: Optional[str] = None
+
     def __init__(self, store_id: int, value: float, name: str):
         """
         Represents a value of beta that can be used in the conformal coupling
@@ -39,8 +45,8 @@ class DimensionlessQuantity(DatastoreObject):
         return (self.name, self.store_id).__hash__()
 
 
-class DimensionlessQuantityArray:
-    def __init__(self, value_array: Iterable[DimensionlessQuantity]):
+class DimensionfulQuantityArray:
+    def __init__(self, value_array: Iterable[DimensionfulQuantity]):
         """
         Represents an array of dimensionless quantity objects.
         """
@@ -72,15 +78,15 @@ class DimensionlessQuantityArray:
     def __add__(self, other):
         full_array = set(self._value_array)
         full_array.update(set(other._value_array))
-        return DimensionlessQuantityArray(full_array)
+        return DimensionfulQuantityArray(full_array)
 
     def as_float_list(self) -> list[float]:
         return [float(v) for v in self._value_array]
 
     @property
-    def max(self) -> DimensionlessQuantity:
+    def max(self) -> DimensionfulQuantity:
         return self._value_array[-1]
 
     @property
-    def min(self) -> DimensionlessQuantity:
+    def min(self) -> DimensionfulQuantity:
         return self._value_array[0]

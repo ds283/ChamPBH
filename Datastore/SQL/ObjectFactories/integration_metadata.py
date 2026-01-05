@@ -9,8 +9,7 @@ class sqla_IntegrationSolver_factory(SQLAFactoryBase):
     def __init__(self):
         pass
 
-    @staticmethod
-    def register():
+    def register(self):
         return {
             "version": False,
             "stepping": "minimum",
@@ -20,8 +19,7 @@ class sqla_IntegrationSolver_factory(SQLAFactoryBase):
             ],
         }
 
-    @staticmethod
-    def build(payload, conn, table, inserter, tables, inserters):
+    def build(self, payload, conn, table, inserter, tables, inserters):
         label = payload["label"]
         stepping = payload["stepping"]
         if stepping < 0:

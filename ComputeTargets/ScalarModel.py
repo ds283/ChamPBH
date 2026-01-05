@@ -1,5 +1,5 @@
 from collections import namedtuple
-from math import sqrt, fabs, log
+from math import fabs, log
 from typing import Optional, List
 
 import ray
@@ -8,14 +8,20 @@ from scipy.integrate import solve_ivp
 from scipy.interpolate import make_interp_spline
 
 from ComputeTargets.spline_wrappers import ZSplineWrapper
-from CosmologyConcepts import redshift_array, redshift
+from CosmologyConcepts import (
+    redshift,
+    temperature,
+    redshift_array,
+    AbstractPotential,
+    AbstractCoupling,
+)
 from CosmologyModels import BaseCosmology
 from Datastore import DatastoreObject
 from MetadataConcepts import tolerance, store_tag
 from Quadrature.integration_metadata import IntegrationSolver, IntegrationData
 from Quadrature.supervisors.base import RHS_timer, IntegrationSupervisor
 from Units.base import UnitsLike
-from defaults import DEFAULT_ABS_TOLERANCE, DEFAULT_REL_TOLERANCE
+from config.defaults import DEFAULT_ABS_TOLERANCE, DEFAULT_REL_TOLERANCE
 
 A0_TAU_INDEX = 0
 EXPECTED_SOL_LENGTH = 1
@@ -23,19 +29,10 @@ EXPECTED_SOL_LENGTH = 1
 ModelFunctions = namedtuple(
     "ModelFunctions",
     [
-        "Hubble",
-        "epsilon",
-        "d_epsilon_dz",
-        "d2_epsilon_dz2",
-        "wBackground",
-        "wPerturbations",
-        "tau",
-        "T_photon",
-        "d_lnH_dz",
-        "d2_lnH_dz2",
-        "d3_lnH_dz3",
-        "d_wPerturbations_dz",
-        "d2_wPerturbations_dz2",
+        "H_Einstein",
+        "phi_Einstein",
+        "T_Jordan",
+        "fm",
     ],
 )
 
@@ -43,25 +40,25 @@ ModelFunctions = namedtuple(
 @ray.remote
 def compute_scalar_model(
     cosmology: BaseCosmology,
-    z_sample: redshift_array,
+    T_init: temperature,
+    T_stop: temperature,
+    z_grid: redshift_array,
+    potential: AbstractPotential,
+    coupling: AbstractCoupling,
     atol: float = DEFAULT_ABS_TOLERANCE,
     rtol: float = DEFAULT_REL_TOLERANCE,
 ) -> dict:
-    z_init = float(z_sample.max)
-    z_stop = float(z_sample.min)
+    T_init_float: float = float(T_init)
+    T_stop_float: float = float(T_stop)
 
     def RHS(z, state, supervisor) -> List[float]:
         with RHS_timer(supervisor) as timer:
             H = cosmology.Hubble(z)
-            da0_tau_dz = -1.0 / H
 
             return [da0_tau_dz]
 
     with IntegrationSupervisor() as supervisor:
         rho_init = cosmology.rho(z_init)
-        tau_init = (
-            sqrt(3.0) * cosmology.units.PlanckMass / sqrt(rho_init) * (1.0 + z_init)
-        )
 
         initial_state = [tau_init]
 
@@ -74,6 +71,7 @@ def compute_scalar_model(
             atol=atol,
             rtol=rtol,
             args=(supervisor,),
+            dense_output=True,
         )
 
     if not sol.success:
@@ -163,7 +161,7 @@ def compute_scalar_model(
     )
 
     return {
-        "data": IntegrationData(
+        "metadata": IntegrationData(
             compute_time=supervisor.integration_time,
             compute_steps=int(sol.nfev),
             RHS_evaluations=supervisor.RHS_evaluations,
@@ -171,17 +169,11 @@ def compute_scalar_model(
             max_RHS_time=supervisor.max_RHS_time,
             min_RHS_time=supervisor.min_RHS_time,
         ),
-        "a0_tau_sample": a0_tau_sample,
-        "H_sample": H_sample,
+        "H_Einstein_sample": H_Einstein_sample,
+        "phi_Einstein_sample": phi_Einstein_sample,
         "rho_sample": rho_sample,
-        "T_photon_sample": T_photon_sample,
-        "wBackground_sample": wBackground_sample,
-        "wPerturbations_sample": wPerturbations_sample,
-        "d_lnH_dz_sample": d_lnH_dz_sample,
-        "d2_lnH_dz2_sample": d2_lnH_dz2_sample,
-        "d3_lnH_dz3_sample": d3_lnH_dz3_sample,
-        "d_wPerturbations_dz_sample": d_wPerturbations_dz_sample,
-        "d2_wPerturbations_dz2_sample": d2_wPerturbations_dz2_sample,
+        "T_Jordan_sample": T_Jordan_sample,
+        "fm_sample": fm_sample,
         "solver_label": "solve_ivp+RK45-stepping0",
     }
 
@@ -200,24 +192,35 @@ class ScalarModel(DatastoreObject):
         payload,
         solver_labels: dict,
         cosmology: BaseCosmology,
+        T_init: temperature,
+        T_stop: temperature,
+        potential: AbstractPotential,
+        coupling: AbstractCoupling,
         atol: tolerance,
         rtol: tolerance,
-        z_sample: Optional[redshift_array] = None,
+        z_grid: Optional[redshift_array] = None,
         label: Optional[str] = None,
         tags: Optional[List[store_tag]] = None,
     ):
         self._solver_labels = solver_labels
-        self._z_sample = z_sample
+
+        self._T_init: temperature = T_init
+        self._T_stop: temperature = T_stop
+
+        self._potential: AbstractPotential = potential
+        self._coupling: AbstractCoupling = coupling
+
+        self._z_grid: Optional[redshift_array] = z_grid
 
         if payload is None:
             DatastoreObject.__init__(self, None)
-            self._data = None
+            self._metadata = None
             self._solver = None
             self._values = None
 
         else:
             DatastoreObject.__init__(self, payload["store_id"])
-            self._data: Optional[IntegrationData] = payload["data"]
+            self._metadata: Optional[IntegrationData] = payload["metadata"]
             self._solver: Optional[IntegrationSolver] = payload["solver"]
             self._values: Optional[List[ScalarModelValue]] = payload["values"]
 
@@ -236,11 +239,11 @@ class ScalarModel(DatastoreObject):
         self._rtol = rtol
 
     @property
-    def cosmology(self):
+    def cosmology(self) -> BaseCosmology:
         return self._cosmology
 
     @property
-    def label(self) -> str:
+    def label(self) -> Optional[str]:
         return self._label
 
     @property
@@ -248,11 +251,23 @@ class ScalarModel(DatastoreObject):
         return self._tags
 
     @property
-    def z_sample(self):
-        return self._z_sample
+    def T_init(self) -> temperature:
+        return self._T_init
 
     @property
-    def data(self) -> IntegrationData:
+    def T_stop(self) -> temperature:
+        return self._T_stop
+
+    @property
+    def potential(self) -> AbstractPotential:
+        return self._potential
+
+    @property
+    def coupling(self) -> AbstractCoupling:
+        return self._coupling
+
+    @property
+    def metadata(self) -> IntegrationData:
         if self.values is None:
             raise RuntimeError("values have not yet been populated")
 
@@ -357,11 +372,21 @@ class ScalarModel(DatastoreObject):
 
     def compute(self, label: Optional[str] = None):
         if self._values is not None:
-            raise RuntimeError("values has not yet been populated")
+            raise RuntimeError("values have already been populated")
 
-        if self._z_sample is None:
+        if self._T_high is None:
             raise RuntimeError(
-                "Object has not been configured correctly for a concrete calculation (z_sample is missing). It can only represent a query."
+                "Object has not been configured correctly for a concrete calculation (T_init is missing). It can only represent a query."
+            )
+
+        if self._T_low is None:
+            raise RuntimeError(
+                "Object has not been configured correctly for a concrete calculation (T_stop is missing). It can only represent a query."
+            )
+
+        if self._samples_per_log10_z is None:
+            raise RuntimeError(
+                "Object has not been configured correctly for a concrete calculation (samples_per_log10_z is missing). It can only represent a query."
             )
 
         # replace label if specified
@@ -370,7 +395,9 @@ class ScalarModel(DatastoreObject):
 
         self._compute_ref = compute_scalar_model.remote(
             self.cosmology,
-            self._z_sample,
+            self.T_init,
+            self.T_stop,
+            self.samples_per_log10_z,
             atol=self._atol.tol,
             rtol=self._rtol.tol,
         )
@@ -379,7 +406,7 @@ class ScalarModel(DatastoreObject):
     def store(self) -> Optional[bool]:
         if self._compute_ref is None:
             raise RuntimeError(
-                "GkWKBIntegration: store() called, but no compute() is in progress"
+                "ScalarModel: store() called, but no compute() is in progress"
             )
 
         # check whether the computation has actually resolved
@@ -393,7 +420,7 @@ class ScalarModel(DatastoreObject):
         data = ray.get(self._compute_ref)
         self._compute_ref = None
 
-        self._data = data["data"]
+        self._data = data["metadata"]
 
         H_sample = data["H_sample"]
         wB_sample = data["wBackground_sample"]

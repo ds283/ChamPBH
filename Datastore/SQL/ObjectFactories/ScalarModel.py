@@ -2,6 +2,7 @@ from math import fabs
 from typing import Optional, List
 
 import sqlalchemy as sqla
+from defaults import DEFAULT_STRING_LENGTH, DEFAULT_FLOAT_PRECISION
 from sqlalchemy import and_, or_
 from sqlalchemy.exc import MultipleResultsFound, SQLAlchemyError
 
@@ -15,15 +16,13 @@ from Datastore.SQL.ObjectFactories.base import SQLAFactoryBase
 from MetadataConcepts import store_tag, tolerance
 from Quadrature.integration_metadata import IntegrationData, IntegrationSolver
 from Units.base import UnitsLike
-from defaults import DEFAULT_STRING_LENGTH, DEFAULT_FLOAT_PRECISION
 
 
 class sqla_ScalarModelTagAssociation_factory(SQLAFactoryBase):
     def __init__(self):
         pass
 
-    @staticmethod
-    def register():
+    def register(self):
         return {
             "serial": False,
             "version": False,
@@ -49,11 +48,9 @@ class sqla_ScalarModelTagAssociation_factory(SQLAFactoryBase):
             ],
         }
 
-    @staticmethod
-    def build(payload, conn, table, inserter, tables, inserters):
+    def build(self, payload, conn, table, inserter, tables, inserters):
         raise NotImplementedError
 
-    @staticmethod
     def add_tag(conn, inserter, model: ScalarModel, tag: store_tag):
         inserter(
             conn,
@@ -63,7 +60,6 @@ class sqla_ScalarModelTagAssociation_factory(SQLAFactoryBase):
             },
         )
 
-    @staticmethod
     def remove_tag(conn, table, model: ScalarModel, tag: store_tag):
         conn.execute(
             sqla.delete(table).where(
@@ -79,8 +75,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
     def __init__(self):
         pass
 
-    @staticmethod
-    def register():
+    def register(self):
         return {
             "version": True,
             "stepping": False,
@@ -131,8 +126,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
             ],
         }
 
-    @staticmethod
-    def build(payload, conn, table, inserter, tables, inserters):
+    def build(self, payload, conn, table, inserter, tables, inserters):
         label: Optional[str] = payload.get("label", None)
         tags: List[store_tag] = payload.get("tags", [])
 
@@ -305,7 +299,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
         obj = ScalarModel(
             payload={
                 "store_id": store_id,
-                "data": IntegrationData(
+                "metadata": IntegrationData(
                     compute_time=row_data.compute_time,
                     compute_steps=row_data.compute_steps,
                     RHS_evaluations=row_data.RHS_evaluations,
@@ -333,8 +327,8 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
         obj._deserialized = True
         return obj
 
-    @staticmethod
     def store(
+        self,
         obj: ScalarModel,
         conn,
         table,
@@ -351,12 +345,12 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
             "solver_serial": obj.solver.store_id,
             "z_init_serial": obj.z_sample.min.store_id,
             "z_samples": len(obj.values),
-            "compute_time": obj.data.compute_time,
-            "compute_steps": obj.data.compute_steps,
-            "RHS_evaluations": obj.data.RHS_evaluations,
-            "mean_RHS_time": obj.data.mean_RHS_time,
-            "max_RHS_time": obj.data.max_RHS_time,
-            "min_RHS_time": obj.data.min_RHS_time,
+            "compute_time": obj.metadata.compute_time,
+            "compute_steps": obj.metadata.compute_steps,
+            "RHS_evaluations": obj.metadata.RHS_evaluations,
+            "mean_RHS_time": obj.metadata.mean_RHS_time,
+            "max_RHS_time": obj.metadata.max_RHS_time,
+            "min_RHS_time": obj.metadata.min_RHS_time,
             "validated": False,
         }
 
@@ -410,8 +404,8 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
 
         return obj
 
-    @staticmethod
     def validate(
+        self,
         obj: ScalarModel,
         conn,
         table,
@@ -449,8 +443,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
 
         return validated
 
-    @staticmethod
-    def validate_on_startup(conn, table, tables, prune=False):
+    def validate_on_startup(self, conn, table, tables, prune=False):
         # query the datastore for any integrations that are not validated
 
         atol_table = tables["tolerance"].alias("atol")
@@ -535,8 +528,7 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
     def __init__(self):
         pass
 
-    @staticmethod
-    def register():
+    def register(self):
         return {
             "version": False,
             "timestamp": False,
@@ -571,8 +563,7 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
             ],
         }
 
-    @staticmethod
-    def build(payload, conn, table, inserter, tables, inserters):
+    def build(self, payload, conn, table, inserter, tables, inserters):
         model_serial = payload["model_serial"]
         units = payload["units"]
 

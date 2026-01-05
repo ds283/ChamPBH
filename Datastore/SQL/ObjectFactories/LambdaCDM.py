@@ -9,8 +9,7 @@ class sqla_LambdaCDM_factory(SQLAFactoryBase):
     def __init__(self):
         pass
 
-    @staticmethod
-    def register():
+    def register(self):
         return {
             "version": False,
             "timestamp": True,
@@ -25,8 +24,7 @@ class sqla_LambdaCDM_factory(SQLAFactoryBase):
             ],
         }
 
-    @staticmethod
-    def build(payload, conn, table, inserter, tables, inserters):
+    def build(self, payload, conn, table, inserter, tables, inserters):
         params = payload["params"]
         units = payload["units"]
 

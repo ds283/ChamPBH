@@ -1,18 +1,28 @@
 import argparse
 import datetime
+import itertools
 import sys
-from math import log10
+from typing import List, Tuple
 
 import numpy as np
 import ray
 
-from ComputeTargets import ScalarModel, ScalarModelProxy
-from CosmologyConcepts import redshift_array
+from ComputeTargets import ScalarModel
+from CosmologyConcepts import (
+    DimensionlessQuantityArray,
+    DimensionfulQuantityArray,
+    temperature,
+    redshift_array,
+)
+from CosmologyConcepts.ConformalCouplings.AbstractCoupling import AbstractCoupling
+from CosmologyConcepts.Potentials.AbstractPotential import AbstractPotential
 from Datastore.SQL import ProfileAgent
 from Datastore.SQL.ObjectFactories import tolerance
 from Datastore.SQL.ShardedPool import ShardedPool
 from Quadrature.integration_metadata import IntegrationSolver
-from Units import Mpc_units
+from RayTools.RayWorkPool import RayWorkPool
+from Units import GeV_units
+from Units.base import UnitsLike
 from config.defaults import (
     DEFAULT_ABS_TOLERANCE,
     DEFAULT_REL_TOLERANCE,
@@ -27,14 +37,28 @@ from config.sharding import (
     shard_key_type,
     read_table_config,
 )
-from utilities import WallclockTimer, format_time
+from utilities import grouper
 
 DEFAULT_LABEL = "ChamPBH-test"
 DEFAULT_TIMEOUT = 60
 DEFAULT_SHARDS = 20
 DEFAULT_RAY_ADDRESS = "auto"
+
+DEFAULT_Z_END = 0.1
+DEFAULT_T_HIGH_GEV = 20000
 DEFAULT_SAMPLES_PER_LOG10_Z = 100
-DEFAULT_ZEND = 0.1
+
+DEFAULT_BETA_LOW = 0.1
+DEFAULT_BETA_HIGH = 3.0
+DEFAULT_SAMPLES_PER_BETA = 10
+
+DEFAULT_LOG10_M_LOW_EV = -33
+DEFAULT_LOG10_M_HIGH_EV = -25
+DEFAULT_SAMPLES_PER_LOG10_M_EV = 50
+
+DEFAULT_LOG10_LAMBDA_LOW_EV = -33
+DEFAULT_LOG10_LAMBDA_HIGH_EV = -25
+DEFAULT_SAMPLES_PER_LOG10_LAMBDA_EV = 50
 
 MIN_NOTIFY_INTERVAL = 5 * 60
 
@@ -71,10 +95,70 @@ parser.add_argument(
     help="write profiling and performance data to the specified database",
 )
 parser.add_argument(
-    "--samples-log10z",
+    "--samples-log10-z",
     type=int,
     default=DEFAULT_SAMPLES_PER_LOG10_Z,
     help="specify number of z-sample points per log10(z)",
+)
+parser.add_argument(
+    "--T-high-GeV",
+    type=float,
+    default=DEFAULT_T_HIGH_GEV,
+    help="set initial conditions at temperature T_init, specified in GeV",
+)
+parser.add_argument(
+    "--beta-low",
+    type=float,
+    default=DEFAULT_BETA_LOW,
+    help="minimum value of beta to sample",
+)
+parser.add_argument(
+    "--beta-high",
+    type=float,
+    default=DEFAULT_BETA_HIGH,
+    help="maximum value of beta to sample",
+)
+parser.add_argument(
+    "--samples-per-beta",
+    type=int,
+    default=DEFAULT_SAMPLES_PER_BETA,
+    help="number of samples per beta",
+)
+parser.add_argument(
+    "--log10-M-low-eV",
+    type=float,
+    default=DEFAULT_LOG10_M_LOW_EV,
+    help="minimum value of log10(M/eV) to sample",
+)
+parser.add_argument(
+    "--log10-M-high-eV",
+    type=float,
+    default=DEFAULT_LOG10_M_HIGH_EV,
+    help="maximum value of log10(M/eV) to sample",
+)
+parser.add_argument(
+    "--samples-per-log10-M-eV",
+    type=int,
+    default=DEFAULT_SAMPLES_PER_LOG10_M_EV,
+    help="number of samples per log10(M/eV)",
+)
+parser.add_argument(
+    "--log10-Lambda-low-eV",
+    type=float,
+    default=DEFAULT_LOG10_LAMBDA_LOW_EV,
+    help="minimum value of log10(Lambda/eV) to sample",
+)
+parser.add_argument(
+    "--log10-Lambda-high-eV",
+    type=float,
+    default=DEFAULT_LOG10_LAMBDA_HIGH_EV,
+    help="maximum value of log10(Lambda/eV) to sample",
+)
+parser.add_argument(
+    "--samples-per-log10-Lambda-eV",
+    type=int,
+    default=DEFAULT_SAMPLES_PER_LOG10_LAMBDA_EV,
+    help="number of samples per log10(Lambda/eV)",
 )
 parser.add_argument(
     "--prune-unvalidated",
@@ -129,7 +213,11 @@ if args.profile_db is not None:
 
 def run_pipeline(
     model_data: dict,
-    z_sample: redshift_array,
+    units: UnitsLike,
+    Potential_array: List[AbstractPotential],
+    Coupling_array: List[AbstractCoupling],
+    T_init: temperature,
+    z_grid: redshift_array,
     atol: tolerance,
     rtol: tolerance,
     solvers: dict[str, IntegrationSolver],
@@ -137,25 +225,33 @@ def run_pipeline(
     model_label = model_data["label"]
     model_cosmology = model_data["cosmology"]
 
+    T_CMB_Kelvin = model_cosmology.T_CMB_Kelvin
+    T_stop = temperature(T_CMB_Kelvin * units.Kelvin)
+
+    T_init_GeV = float(T_init) / units.GeV
+
     print(f"\n>> RUNNING PIPELINE FOR MODEL {model_label}")
 
     # build tags and other labels, based on these sample grids
     (
-        ZGridSizeTag,  # labels size of the z sample grid
-        LargestZTag,  # labels largest z in the global grid
-        SmallestZTag,  # labels smallest z in the global grid
-        SamplesPerLog10ZTag,  # labels number of redshifts per log10 interval of 1+z in the source grid
+        TInitGeVTag,  # initial value of temperature in GeV
+        SamplesPerLog10ZTag,  # labels number of sampled redshifts per log10 interval of 1+z in the source grid
+        SamplesPerBetaTag,  # labels number of sampled beta values per log10 in beta
+        SamplesPerLog10LambdaTag,  # labels number of sampled Lambda values per log10 in Lambda
+        SamplesPerLog10MTag,  # labels number of sampled M values per log10 in M
     ) = ray.get(
         [
-            pool.object_get("store_tag", label=f"RedshiftGrid_{len(z_sample)}"),
+            pool.object_get("store_tag", label=f"TInitGeV_{T_init_GeV:.6g}"),
             pool.object_get(
-                "store_tag", label=f"LargestSourceRedshift_{z_sample.max.z:.5g}"
+                "store_tag", label=f"SamplesPerLog10Z_{samples_per_log10z}"
+            ),
+            pool.object_get("store_tag", label=f"SamplesPerBeta_{samples_per_beta}"),
+            pool.object_get(
+                "store_tag",
+                labels=f"SamplesPerLog10Lambda_eV_{samples_per_log10_Lambda_eV}",
             ),
             pool.object_get(
-                "store_tag", label=f"SmallestSourceRedshift_{z_sample.min.z:.5g}"
-            ),
-            pool.object_get(
-                "store_tag", label=f"SourceSamplesPerLog10Z_{samples_per_log10z}"
+                "store_tag", labels=f"SamplesPerLog10M_eV_{samples_per_log10_M_eV}"
             ),
         ]
     )
@@ -163,33 +259,123 @@ def run_pipeline(
     ## STEP 1
     ## BAKE THE BACKGROUND COSMOLOGY INTO A BACKGROUND MODEL OBJECT
 
-    bg_model: ScalarModel = ray.get(
-        pool.object_get(
-            "ScalarModel",
-            solver_labels=solvers,
-            cosmology=model_cosmology,
-            z_sample=z_sample,
-            atol=atol,
-            rtol=rtol,
-            tags=[ZGridSizeTag, LargestZTag, SmallestZTag, SamplesPerLog10ZTag],
-        )
+    # sharding is done on M value, so put it on the right hand side
+    # this means that each batch will have as nearly an equal distribution of M values as we can,
+    # which helps balance the load on each shard
+    solver_work_items = itertools.product(
+        Potential_array,
+        Coupling_array,
     )
-    if not bg_model.available:
-        print(f"\n** CALCULATING BACKGROUND {model_label} MODEL")
-        with WallclockTimer() as timer:
-            data = ray.get(bg_model.compute(label=model_cosmology.name))
-            bg_model.store()
-            bg_model = ray.get(pool.object_store(bg_model))
-            outcome = ray.get(pool.object_validate(bg_model))
-        print(
-            f"   @@ computed and stored new background solution in time {format_time(timer.elapsed)}"
-        )
-    else:
-        print(
-            f'\n** FOUND EXISTING {model_label} BACKGROUND MODEL "{bg_model.label}" (store_id={bg_model.store_id})'
-        )
+    solver_work_batches = list(grouper(solver_work_items, n=50, incomplete="fill"))
 
-    model_proxy = ScalarModelProxy(bg_model)
+    def build_solver_work(batch: List[Tuple[AbstractPotential, AbstractCoupling]]):
+        # grouper may fill with None values, which we want to strip out
+        batch = [x for x in batch if x is not None]
+
+        # query whether a stored result exists for all potential/coupling combinations
+        query_batch = [
+            {
+                "solver_labels": [],
+                "cosmology": model_cosmology,
+                "T_init": T_init,
+                "T_stop": T_stop,
+                "z_grid": None,  # don't check
+                "potential": potential,
+                "coupling": coupling,
+                "atol": atol,
+                "rtol": rtol,
+                "tags": [
+                    TInitGeVTag,
+                    SamplesPerLog10ZTag,
+                    SamplesPerBetaTag,
+                    SamplesPerLog10MTag,
+                    SamplesPerLog10LambdaTag,
+                ],
+                "_do_not_populate": True,
+            }
+            for potential, coupling in batch
+        ]
+
+        query_queue = RayWorkPool(
+            pool,
+            query_batch,
+            task_builder=lambda x: pool.object_get("ScalarModel", **x),
+            available_handler=None,
+            compute_handler=None,
+            store_handler=None,
+            validation_handler=None,
+            label_builder=None,
+            title=None,
+            store_results=True,
+            create_batch_size=20,
+            process_batch_size=20,
+        )
+        query_queue.run()
+
+        # which models are missing?
+        missing = [m for obj, m in zip(query_queue.results, batch) if not obj.available]
+
+        if len(missing) == 0:
+            return []
+
+        work_refs = []
+
+        for potential, coupling in missing:
+            work_refs.append(
+                pool.object_get(
+                    "ScalarModel",
+                    solver_labels=solvers,
+                    z_grid=z_grid,
+                    T_init=T_init,
+                    potential=potential,
+                    coupling=coupling,
+                    atol=atol,
+                    rtol=rtol,
+                    tags=[
+                        TInitGeVTag,
+                        SamplesPerLog10ZTag,
+                        SamplesPerBetaTag,
+                        SamplesPerLog10MTag,
+                        SamplesPerLog10LambdaTag,
+                    ],
+                    _do_not_populate=True,  # ignored if object does not already exist in database, so does not spoil work scheduling
+                )
+            )
+
+        return work_refs
+
+    def build_solver_work_label(m: ScalarModel):
+        potential: AbstractPotential = m.potential
+        coupling: AbstractCoupling = m.coupling
+        return f"{args.job_name}-ScalarModel-{potential.label}-{coupling.label}-{datetime.now().replace(microsecond=0).isoformat()}"
+
+    def compute_solver_work(m: ScalarModel):
+        return m.compute(label=label)
+
+    def validate_solver_work(m: ScalarModel):
+        if not m.available:
+            raise RuntimeError(
+                "ScalarModel object passed for validation, but is not yet available"
+            )
+
+        return pool.object_validate(m)
+
+    solver_queue = RayWorkPool(
+        pool,
+        solver_work_batches,
+        task_builder=build_solver_work,
+        compute_handler=compute_solver_work,
+        validation_handler=validate_solver_work,
+        label_builder=build_solver_work_label,
+        title="CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID",
+        store_results=False,
+        create_batch_size=20,
+        notify_batch_size=500,
+        max_task_queue=100,
+        process_batch_size=50,
+        notify_min_time_interval=MIN_NOTIFY_INTERVAL,
+    )
+    solver_queue.run()
 
 
 # construct a ShardedPool to orchestrate database access
@@ -211,15 +397,68 @@ with ShardedPool(
 
     # set up LambdaCDM object representing a basic Planck2018 cosmology in Mpc units
 
-    zend = args.zend
-    samples_per_log10z = args.samples_log10z
+    z_end: float = args.zend
+    samples_per_log10z: int = args.samples_log10z
 
-    units = Mpc_units()
+    beta_low: float = args.beta_low
+    beta_high: float = args.beta_high
+    samples_per_beta: int = args.samples_per_beta
 
-    def convert_to_redshifts(z_sample_set):
+    log10_M_low_eV: float = args.log10_M_low_eV
+    log10_M_high_eV: float = args.log10_M_high_eV
+    samples_per_log10_M_eV: int = args.samples_per_log10_M_eV
+
+    log10_Lambda_low_eV: float = args.log10_Lambda_low_eV
+    log10_Lambda_high_eV: float = args.log10_Lambda_high_eV
+    samples_per_log10_Lambda_eV: int = args.samples_per_log10_Lambda_eV
+
+    T_high_GeV: float = args.T_high_GeV
+
+    units = GeV_units()
+
+    T_high = ray.get(
+        pool.object_get("temperature", value=T_high_GeV * units.GeV, units=units)
+    )
+
+    def convert_to_redshift(z_array):
         return pool.object_get(
             "redshift",
-            payload_data=[{"z": z} for z in z_sample_set],
+            payload_data=[{"z": z} for z in z_array],
+        )
+
+    def convert_to_betas(beta_sample_set):
+        return pool.object_get(
+            "beta_value",
+            payload_data=[{"value": beta} for beta in beta_sample_set],
+        )
+
+    def convert_to_Ms(M_sample_set):
+        return pool.object_get(
+            "M_value",
+            payload_data=[{"value": M, "units": units} for M in M_sample_set],
+        )
+
+    def convert_to_Lambdas(lambda_sample_set):
+        return pool.object_get(
+            "Lambda_value",
+            payload_data=[
+                {"value": Lambda, "units": units} for Lambda in lambda_sample_set
+            ],
+        )
+
+    def convert_to_potential(M_lambda_set):
+        return pool.object_get(
+            "StandardChameleon",
+            payload_data=[
+                {"M": M, "Lambda": Lambda, "n": 1, "units": units}
+                for M, Lambda in M_lambda_set
+            ],
+        )
+
+    def convert_to_coupling(beta_set):
+        return pool.object_get(
+            "ExponentialCoupling",
+            payload_data=[{"beta": beta, "units": units} for beta in beta_set],
         )
 
     ## DATASTORE OBJECTS
@@ -260,29 +499,82 @@ with ShardedPool(
         "solve_ivp+LSODA-stepping0": solve_icp_LSODA,
     }
 
-    ## STEP 1
-    ## BUILD A GRID OF Z-VALUES AT WHICH TO SAMPLE
-
-    print("\n** BUILDING ARRAY OF Z-VALUES AT WHICH TO SAMPLE")
-
-    # now we want to build a set of sample points for redshifts between z_init and
-    # the final point z = z_final, using the specified number of redshift sample points
-    num_z_sample = int(
-        round(samples_per_log10z * (log10(zstart) - log10(zend)) + 0.5, 0)
-    )
-
+    # the redshift z corresponding to T = 20,000 GeV is about 6E35 in a LambdaCDM-like cosmology
+    # we set up a redshift sampling grid that covers this range
+    # we use this grid to store the scalar field histories
+    log10_one_plus_z_high = 36
+    log10_one_plus_z_low = 0
+    num_z_samples = samples_per_log10z * (log10_one_plus_z_high - log10_one_plus_z_low)
     z_array = ray.get(
-        convert_to_redshifts(
-            np.logspace(log10(zstart), log10(zend), num_z_sample),
+        convert_to_redshift(
+            np.logspace(log10_one_plus_z_low, log10_one_plus_z_high, num_z_samples)
+            - 1.0,
         )
     )
-    z_sample = redshift_array(z_array=z_array)
+    z_grid = redshift_array(z_array=z_array)
+
+    ## STEP 1
+    ## BUILD A GRID OF beta, M, Lambda VALUES AT WHICH TO SAMPLE, AND USE THIS
+    ## TO BUILD A GRID OF POTENTIAL AND COUPLING FUNCTIONS
+
+    print("\n** BUILDING GRID OF MODELS TO SAMPLE")
+
+    num_beta_sample = int(round(samples_per_beta * (beta_high - beta_low) + 0.5, 0))
+
+    beta_array = ray.get(
+        convert_to_betas(
+            np.linspace(beta_low, beta_high, num_beta_sample, endpoint=True)
+        )
+    )
+    beta_grid = DimensionlessQuantityArray(value_array=beta_array)
+
+    num_M_sample = int(
+        round(samples_per_log10_M_eV * (log10_M_high_eV - log10_M_low_eV) + 0.5, 0)
+    )
+
+    M_array = ray.get(
+        convert_to_Ms(
+            np.logspace(log10_M_low_eV, log10_M_high_eV, num_M_sample, endpoint=True)
+            * units.eV
+        )
+    )
+    M_grid = DimensionfulQuantityArray(value_array=M_array)
+
+    num_Lambda_sample = int(
+        round(
+            samples_per_log10_Lambda_eV * (log10_Lambda_high_eV - log10_Lambda_low_eV)
+            + 0.5,
+            0,
+        )
+    )
+
+    Lambda_array = ray.get(
+        convert_to_Lambdas(
+            np.logspace(
+                log10_Lambda_low_eV,
+                log10_Lambda_high_eV,
+                num_Lambda_sample,
+                endpoint=True,
+            )
+            * units.eV
+        )
+    )
+    Lambda_grid = DimensionfulQuantityArray(value_array=Lambda_array)
+
+    M_lambda_grid = itertools.product(M_grid, Lambda_grid)
+    Potential_array = ray.get(convert_to_potential(M_lambda_grid))
+
+    Coupling_array = ray.get(convert_to_coupling(beta_grid))
 
     model_list = build_model_list(pool, units)
     for model_data in model_list:
         run_pipeline(
             model_data,
-            z_sample,
+            units,
+            Potential_array,
+            Coupling_array,
+            T_high,
+            z_array,
             atol,
             rtol,
             solvers,
