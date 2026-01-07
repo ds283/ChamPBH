@@ -324,10 +324,7 @@ class ScalarModel(DatastoreObject):
 
     def _create_functions(self):
         def _build_func(attr: str):
-            if hasattr(self._cosmology, attr):
-                return getattr(self._cosmology, attr)
-
-            data = [(log(1.0 + v.z.z), getattr(v, attr)) for v in self.values]
+            data = [(v.p, getattr(v, attr)) for v in self.values]
             data.sort(key=lambda pair: pair[0])
 
             x_data, y_data = zip(*data)
@@ -340,81 +337,47 @@ class ScalarModel(DatastoreObject):
                 log_z=True,
             )
 
-        tau_func = _build_func("tau")
-        T_photon_func = _build_func("T_photon")
-        d_lnH_dz_func = _build_func("d_lnH_dz")
-        d2_lnH_dz2_func = _build_func("d2_lnH_dz2")
-        d3_lnH_dz3_func = _build_func("d3_lnH_dz3")
-        d_wPerturbations_dz_func = _build_func("d_wPerturbations_dz")
-        d2_wPerturbations_dz2_func = _build_func("d2_wPerturbations_dz2")
+        # build splines for those functions that are stored directly as part of the integration output
+        H_Einstein = _build_func("H_Einstein")
+        H_Jordan = _build_func("H_Jordan")
+        phi_Einstein = _build_func("phi_Einstein")
+        pi_Einstein = _build_func("pi_Einstein")
+        log_rhorad_Einstein = _build_func("log_rhorad_Einstein")
+        log_rhorad_Jordan = _build_func("log_rhorad_Jordan")
+        log_fm = _build_func("log_fm")
+        T_Jordan = _build_func("T_Jordan")
 
-        def epsilon(z: float) -> float:
-            """
-            Evaluate the conventional epsilon parameter eps = -dot(H)/H^2
-            :param z: redshift of evaluation
-            :return:
-            """
-            one_plus_z = 1.0 + z
-            return one_plus_z * d_lnH_dz_func(z)
-
-        def d_epsilon_dz(z: float) -> float:
-            """
-            Evaluate the z derivative of the epsilon parameter
-            :param z:
-            :return:
-            """
-            one_plus_z = 1.0 + z
-            return d_lnH_dz_func(z) + one_plus_z * d2_lnH_dz2_func(z)
-
-        def d2_epsilon_dz2(z: float) -> float:
-            """
-            Evaluate the 2nd z derivative of the epsilon parameter
-            :param z:
-            :return:
-            """
-            one_plus_z = 1.0 + z
-            return 2.0 * d2_lnH_dz2_func(z) + one_plus_z * d3_lnH_dz3_func(z)
-
-        # the underlying cosmology object is guaranteed to provide methods for Hubble, rho, wBackground, and wPerturbations.
-        # it may or may not provide methods for other quantities.
-        # The functions built above will pass through to the underlying cosmology object when it can perform the computation
-        # (so we can make use of e.g. analytic expressions where they are available), but otherwise we use splines
-        # constructed by differentiation (usually of another spline). Differentiating a spline gives us much less noisy
-        # results than finite difference formulae.
         self._functions = ModelFunctions(
-            Hubble=self._cosmology.Hubble,
-            epsilon=epsilon,
-            d_epsilon_dz=d_epsilon_dz,
-            d2_epsilon_dz2=d2_epsilon_dz2,
-            wBackground=self._cosmology.wBackground,
-            wPerturbations=self._cosmology.wPerturbations,
-            tau=tau_func,
-            T_photon=T_photon_func,
-            d_lnH_dz=d_lnH_dz_func,
-            d2_lnH_dz2=d2_lnH_dz2_func,
-            d3_lnH_dz3=d3_lnH_dz3_func,
-            d_wPerturbations_dz=d_wPerturbations_dz_func,
-            d2_wPerturbations_dz2=d2_wPerturbations_dz2_func,
+            H_Einstein=H_Einstein,
+            H_Jordan=H_Jordan,
+            phi_Einstein=phi_Einstein,
+            pi_Einstein=pi_Einstein,
+            log_rhorad_Einstein=log_rhorad_Einstein,
+            log_rhorad_Jordan=log_rhorad_Jordan,
+            log_fm=log_fm,
+            T_Jordan=T_Jordan,
         )
 
     def compute(self, label: Optional[str] = None):
         if self._values is not None:
             raise RuntimeError("values have already been populated")
 
-        if self._T_high is None:
-            raise RuntimeError(
-                "Object has not been configured correctly for a concrete calculation (T_init is missing). It can only represent a query."
-            )
+        def check_required_parameter(attr: str):
+            if not hasattr(self, attr):
+                raise RuntimeError(
+                    f'Object has not been configured correctly for a concrete calcuation ("{attr}" is missing). This object can only represent a Datastore query.'
+                )
 
-        if self._T_low is None:
-            raise RuntimeError(
-                "Object has not been configured correctly for a concrete calculation (T_stop is missing). It can only represent a query."
-            )
+            if getattr(self, attr) is None:
+                raise RuntimeError(
+                    f'Object has not been configured correctly for a concrete calcuation ("{attr}" is set to None). This object can only represent a Datastore query.'
+                )
 
-        if self._samples_per_log10_z is None:
-            raise RuntimeError(
-                "Object has not been configured correctly for a concrete calculation (samples_per_log10_z is missing). It can only represent a query."
-            )
+        check_required_parameter("_T_high")
+        check_required_parameter("_T_low")
+        check_required_parameter("_phi_init")
+        check_required_parameter("_pi_init")
+        check_required_parameter("_z_grid")
 
         # replace label if specified
         if label is not None:
@@ -424,7 +387,11 @@ class ScalarModel(DatastoreObject):
             self.cosmology,
             self.T_init,
             self.T_stop,
-            self.samples_per_log10_z,
+            self.phi_init,
+            self.pi_init,
+            self.z_grid,
+            self.potential,
+            self.coupling,
             atol=self._atol.tol,
             rtol=self._rtol.tol,
         )
