@@ -23,16 +23,23 @@ from Quadrature.supervisors.base import RHS_timer, IntegrationSupervisor
 from Units.base import UnitsLike
 from config.defaults import DEFAULT_ABS_TOLERANCE, DEFAULT_REL_TOLERANCE
 
-A0_TAU_INDEX = 0
-EXPECTED_SOL_LENGTH = 1
+PHI_EINSTEIN_INDEX = 0
+PI_EINSTEIN_INDEX = 1
+LOG_RHORAD_EINSTEIN_INDEX = 2
+LOG_FM_INDEX = 3
+EXPECTED_SOL_LENGTH = 4
 
 ModelFunctions = namedtuple(
     "ModelFunctions",
     [
         "H_Einstein",
+        "H_Jordan",
         "phi_Einstein",
+        "pi_Einstein",
+        "log_rhorad_Einstein",
+        "log_rhorad_Jordan",
+        "log_fm",
         "T_Jordan",
-        "fm",
     ],
 )
 
@@ -42,12 +49,27 @@ def compute_scalar_model(
     cosmology: BaseCosmology,
     T_init: temperature,
     T_stop: temperature,
+    phi_init: float,
+    pi_init: float,
     z_grid: redshift_array,
     potential: AbstractPotential,
     coupling: AbstractCoupling,
     atol: float = DEFAULT_ABS_TOLERANCE,
     rtol: float = DEFAULT_REL_TOLERANCE,
 ) -> dict:
+    """
+    :param cosmology:
+    :param T_init: initial radiation temperature in Jordan frame
+    :param T_stop: final radiation temperature in Jordan frame (usually T_CMB)
+    :param phi_init: initial phi value
+    :param pi_init: initial dphi/dN value
+    :param z_grid:
+    :param potential:
+    :param coupling:
+    :param atol:
+    :param rtol:
+    :return:
+    """
     T_init_float: float = float(T_init)
     T_stop_float: float = float(T_stop)
 
@@ -192,8 +214,10 @@ class ScalarModel(DatastoreObject):
         payload,
         solver_labels: dict,
         cosmology: BaseCosmology,
-        T_init: temperature,
-        T_stop: temperature,
+        T_init: temperature,  # initial Jordan-frame temperature
+        T_stop: temperature,  # Jordan-frame temperature at which to terminate the calculation
+        phi_init: float,  # initial value of Einstein-frame scalar phi
+        pi_init: float,  # initial value of dphi/dN
         potential: AbstractPotential,
         coupling: AbstractCoupling,
         atol: tolerance,
@@ -206,6 +230,9 @@ class ScalarModel(DatastoreObject):
 
         self._T_init: temperature = T_init
         self._T_stop: temperature = T_stop
+
+        self._phi_init: float = phi_init
+        self._pi_init: float = pi_init
 
         self._potential: AbstractPotential = potential
         self._coupling: AbstractCoupling = coupling

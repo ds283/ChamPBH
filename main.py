@@ -228,6 +228,11 @@ def run_pipeline(
     T_CMB_Kelvin = model_cosmology.T_CMB_Kelvin
     T_stop = temperature(T_CMB_Kelvin * units.Kelvin)
 
+    phi_init = (
+        7.0 * units.PlanckMass
+    )  # think Xav is using 5 Mp, picking a slightly different comparison to check stability of evolutions
+    pi_init = 0.0
+
     T_init_GeV = float(T_init) / units.GeV
 
     print(f"\n>> RUNNING PIPELINE FOR MODEL {model_label}")
@@ -279,7 +284,9 @@ def run_pipeline(
                 "cosmology": model_cosmology,
                 "T_init": T_init,
                 "T_stop": T_stop,
-                "z_grid": None,  # don't check
+                "phi_init": phi_init,  # currently using fixed initial value of phi_Einstein
+                "pi_init": pi_init,  # currently all integrations begin with the field at rest
+                "z_grid": None,  # don't check which values of z we have sampled
                 "potential": potential,
                 "coupling": coupling,
                 "atol": atol,
@@ -325,10 +332,13 @@ def run_pipeline(
                 pool.object_get(
                     "ScalarModel",
                     solver_labels=solvers,
-                    z_grid=z_grid,
                     T_init=T_init,
+                    T_stop=T_stop,
+                    phi_init=phi_init,
+                    pi_init=pi_init,
                     potential=potential,
                     coupling=coupling,
+                    z_grid=z_grid,
                     atol=atol,
                     rtol=rtol,
                     tags=[
