@@ -137,8 +137,8 @@ def compute_scalar_model(
 
             if supervisor.notify_available:
                 supervisor.message(
-                    N,
-                    f"current state: T_Jordan = {T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp",
+                    T_Jordan,
+                    f"current state: N={N:.3g}, T_Jordan = {T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp",
                 )
                 supervisor.reset_notify_time()
             V: float = potential.V(phi_Einstein)

@@ -50,18 +50,20 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
 
         update_number = self.report_notify()
 
-        T_GeV = T_Jordan / self._GeV
-        T_Kelvin = T_Jordan / self._Kelvin
+        T_Jordan_float = GetTemperature(T_Jordan)
+
+        T_GeV = T_Jordan_float / self._GeV
+        T_Kelvin = T_Jordan_float / self._Kelvin
 
         log_T_GeV = log(T_GeV)
         log_T_GeV_remain = log_T_GeV - self._log_T_stop_GeV
-        percent_complete = log_T_GeV_remain / self._log_T_GeV_range
+        percent_remain = log_T_GeV_remain / self._log_T_GeV_range
 
         print(
-            f"** {self._label} - STATUS UPDATE #{update_number}: integration has been running for {format_time(since_start)} ({format_time(since_last_notify)} since last notification)"
+            f"** STATUS UPDATE #{update_number} - {self._label}: integration has been running for {format_time(since_start)} ({format_time(since_last_notify)} since last notification)"
         )
         print(
-            f"|    current T_Jordan = {T_GeV:.5g} GeV or {T_Kelvin:.5g} K | init log(T_J/GeV) = {self._log_T_init_GeV:.5g}, final log(T_J/GeV) = {self._log_T_stop_GeV:.5g}, {percent_complete:.3%} complete"
+            f"|    current T_Jordan = {T_GeV:.5g} GeV or {T_Kelvin:.5g} K | current log(T_J/GeV) = {log_T_GeV:.5g}, init log(T_J/GeV) = {self._log_T_init_GeV:.5g}, final log(T_J/GeV) = {self._log_T_stop_GeV:.5g}, {1.0-percent_remain:.3%} complete"
         )
         if self._last_log_T_GeV is not None:
             log_T_GeV_delta = self._last_log_T_GeV - log_T_GeV
