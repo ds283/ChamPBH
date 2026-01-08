@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+from CosmologyConcepts import TemperatureLike
 from Units.base import UnitsLike
 
 # at high temperature, G_rho and G_S usually have the same value
@@ -34,7 +35,7 @@ class GenericEOSBase(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def G_rho(self, T: float) -> float:
+    def G_rho(self, T: TemperatureLike) -> float:
         """
         Compute effective number of bosonic degrees of freedom g(T) for the energy, at temperature T.
         T should be regarded as a dimensionful quantity, measured in the given UnitsLike system
@@ -44,7 +45,7 @@ class GenericEOSBase(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def G_s(self, T: float) -> float:
+    def G_s(self, T: TemperatureLike) -> float:
         """
         Compute effective number of bosonic degrees of freedom g_S(T) for the entropy, at temperature T
         T should be regarded as a dimensionful quantity, measured in the given UnitsLike system
@@ -53,15 +54,31 @@ class GenericEOSBase(ABC):
         """
         raise NotImplementedError
 
-    def w(self, T: float) -> float:
+    @abstractmethod
+    def dG_s_dT(self, T: TemperatureLike) -> float:
+        """
+        Compute derivative of G_s(T) with respect to temperature T
+        T should be regarded as a dimensionful quantity, measured in the given UnitsLike system
+        :param T: dimensionful temperature T
+        :return: DIMENSIONFUL number representing d(g_S)/dT at T (units should be inverse to T)
+        """
+        raise NotImplementedError
+
+    def w(self, T: TemperatureLike) -> float:
         """
         Generic formula for equation of state parameter w(T) as a function of temperature T.
-        T should be regarded as a dimensionful quantity, measured in the given UnitsLike system
+        T should be regarded as a dimensionful quantity, measured in the given UnitsLike system.
         :return:
         """
 
-        # TODO: This formula is valid only in thermal equilibrium, where all species have the same temperature T.
-        #  It strictly IS NOT VALID after e+e- annihilation, when the neutrino and photon temperatures separate.
+        # Obtained using s = (rho + P)/T and therefore sT = rho + P
+        # Since w = P/rho, we get 1 + w = sT/rho.
+        # Now, expressing S in terms of g*_s and rho in terms of g*_rho, gives the required formula.
+
+        # Notice that g*_s and g*_rho can't be independent. They must satisfy quite a nontrivial differential constraint
+        # in order to make this formula for w(T) compatible with the continuity equation
+        # d ln(rho)/dt = 3 (1 + w), because this naively involves derivatives of both g*_s and g*_rho
+
         G = self.G_rho(T)
         Gs = self.G_s(T)
         w = (4.0 * Gs) / (3.0 * G) - 1.0

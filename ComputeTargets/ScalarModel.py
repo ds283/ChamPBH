@@ -1,5 +1,5 @@
 from collections import namedtuple
-from math import fabs, log, pi, exp
+from math import log, pi, exp, sqrt
 from typing import Optional, List
 
 import ray
@@ -11,29 +11,38 @@ from ComputeTargets.spline_wrappers import ZSplineWrapper
 from CosmologyConcepts import (
     redshift,
     temperature,
+    TemperatureLike,
     redshift_array,
     AbstractPotential,
     AbstractCoupling,
+    GetTemperature,
 )
-from CosmologyConcepts.temperature import TemperatureLike
 from CosmologyModels import BaseCosmology
 from CosmologyModels.GenericEOS.LambdaCDM_GenericEOS import LambdaCDM_GenericEOS
 from Datastore import DatastoreObject
 from MetadataConcepts import tolerance, store_tag
 from Quadrature.integration_metadata import IntegrationSolver, IntegrationData
-from Quadrature.supervisors.base import RHS_timer, IntegrationSupervisor
+from Quadrature.supervisors.ScalarField import ScalarFieldIntegrationSupervisor
+from Quadrature.supervisors.base import RHS_timer
 from Units.base import UnitsLike
 from config.defaults import DEFAULT_ABS_TOLERANCE, DEFAULT_REL_TOLERANCE
 
-PHI_EINSTEIN_INDEX = 0
-PI_EINSTEIN_INDEX = 1
-LOG_RHORAD_EINSTEIN_INDEX = 2
-LOG_FM_INDEX = 3
-LOG_T_JORDAN_INDEX = 4
-EXPECTED_SOL_LENGTH = 5
-
+# useful constants, calculated once and cached to speed up the numerical integration
 PISQ_OVER_30 = pi * pi / 30.0
 LOG_PISQ_OVER_30 = log(PISQ_OVER_30)
+
+# use of named tuples ensures that we never get the fields of the state vector in the wrong order
+StateVector = namedtuple(
+    "StateVector",
+    [
+        "phi_Einstein",
+        "pi_Einstein",
+        "log_rhorad_Einstein",
+        "log_fm",
+        "log_T_Jordan",
+    ],
+)
+EXPECTED_SOL_LENGTH = 5
 
 ModelFunctions = namedtuple(
     "ModelFunctions",
@@ -46,6 +55,9 @@ ModelFunctions = namedtuple(
         "log_H_Einstein",
         "log_H_Jordan",
         "log_T_Jordan",
+        "gstar_rho",
+        "gstar_s",
+        "Sigma",
     ],
 )
 
@@ -60,6 +72,7 @@ def compute_scalar_model(
     z_grid: redshift_array,
     potential: AbstractPotential,
     coupling: AbstractCoupling,
+    task_label: str = "compute_scalar_model",
     atol: float = DEFAULT_ABS_TOLERANCE,
     rtol: float = DEFAULT_REL_TOLERANCE,
 ) -> dict:
@@ -78,10 +91,13 @@ def compute_scalar_model(
     """
     units: UnitsLike = cosmology.units
 
+    log_T_init: float = log(GetTemperature(T_init))
+    log_T_stop: float = log(GetTemperature(T_stop))
+
     # compute initial Jordan frame radiation density at T_J = T_init
     # rho = (pi^2 / 30) g* T^4
     log_rhorad_Jordan_init: float = (
-        LOG_PISQ_OVER_30 + 4.0 * log(T_init) + log(cosmology.G_rho(T_init))
+        LOG_PISQ_OVER_30 + 4.0 * log_T_init + log(cosmology.G_rho(T_init))
     )
 
     # convert Jordan frame radiation density at T_J = T_init to Einstein frame radiation density
@@ -97,28 +113,34 @@ def compute_scalar_model(
     CONST_MP_SQ = units.PlanckMass * units.PlanckMass
     CONST_6_MP_SQ = 6.0 * CONST_MP_SQ
 
-    def RHS(z, state, supervisor) -> List[float]:
+    def RHS(N, s, supervisor) -> StateVector:
         with RHS_timer(supervisor) as timer:
-            phi_Einstein: float = state[PHI_EINSTEIN_INDEX]
-            pi_Einstein: float = state[PI_EINSTEIN_INDEX]
-            log_rhorad_Einstein: float = state[LOG_RHORAD_EINSTEIN_INDEX]
-            log_fm: float = state[LOG_FM_INDEX]
-            log_T_Jordan: float = state[LOG_T_JORDAN_INDEX]
+            state: StateVector = StateVector._make(supervisor)
+
+            phi_Einstein: float = state.phi_Einstein
+            pi_Einstein: float = state.pi_Einstein
+            log_rhorad_Einstein: float = state.log_rhorad_Einstein
+            log_fm: float = state.log_fm
+            log_T_Jordan: float = state.log_T_Jordan
 
             rhorad_Einstein: float = exp(log_rhorad_Einstein)
             fm: float = exp(log_fm)
             T_Jordan: float = exp(log_T_Jordan)
 
+            if supervisor.notify_available:
+                supervisor.message(
+                    N,
+                    f"current state: T(k) = {T:.5g}, dT(k)/dz = {Tprime:.5g}",
+                )
+                supervisor.reset_notify_time()
             V: float = potential.V(phi_Einstein)
             Vprime: float = potential.Vprime(phi_Einstein)
 
             log_Omega_prime: float = coupling.log_Omega_prime(phi_Einstein)
 
-            phiprime_factor: float = 1.0 - pi_Einstein * pi_Einstein / CONST_6_MP_SQ
+            G: float = 1.0 - pi_Einstein * pi_Einstein / CONST_6_MP_SQ
 
-            H2_Mp2_Einstein: float = (
-                (rhorad_Einstein * (1.0 + fm) + V) / (phiprime_factor) / 3.0
-            )
+            H2_Mp2_Einstein: float = (rhorad_Einstein * (1.0 + fm) + V) / (G) / 3.0
 
             H2_Einstein: float = H2_Mp2_Einstein / CONST_MP_SQ
 
@@ -140,121 +162,128 @@ def compute_scalar_model(
             )
 
             d_pi_Einstein: float = (
-                -pi_Einstein * (phiprime_factor * A1 + C * A2)
+                -pi_Einstein * (G * A1 + C * A2)
                 - D
-                - 3.0 * CONST_MP_SQ * phiprime_factor * E * log_Omega_prime * A3
+                - 3.0 * CONST_MP_SQ * G * E * log_Omega_prime * A3
             )
 
-            return [
-                d_phi_Einstein,
-                d_pi_Einstein,
-                d_log_rhorad_Einstein,
-                d_log_fm,
-                d_log_T_Jordan,
-            ]
+            G_s: float = cosmology.G_s(T_Jordan)
+            dG_s: float = cosmology.dG_s_dT(T_Jordan)
+            d_log_T_Jordan: float = -(1.0 + log_Omega_prime * pi_Einstein) / (
+                1.0 + (T_Jordan / G_s) * dG_s / 3.0
+            )
 
-    with IntegrationSupervisor() as supervisor:
-        rho_init = cosmology.rho(z_init)
+            return StateVector(
+                phi_Einstein=d_phi_Einstein,
+                pi_Einstein=d_pi_Einstein,
+                log_rhorad_Einstein=d_log_rhorad_Einstein,
+                log_fm=d_log_fm,
+                log_T_Jordan=d_log_T_Jordan,
+            )
 
-        initial_state = [tau_init]
+    # termination occurs when the Jordan frame temperature hits T_stop, usually equal to T_CMB,
+    # so the actual stop value given in t_span is mostly irrelevant, just
+    # to ensure that the integration terminates
+    def terminate_at_T_stop(N, s, supervisor) -> float:
+        state: StateVector = StateVector._make(s)
+
+        return state.log_T_Jordan - log_T_stop
+
+    terminate_at_T_stop.terminal = True
+    terminate_at_T_stop.direction = (
+        -1.0
+    )  # only trigger when going from positive to negative, i.e., when the temperature dips *below* T_stop
+
+    with ScalarFieldIntegrationSupervisor(
+        units, T_init, T_stop, label=task_label
+    ) as supervisor:
+        initial_state = StateVector(
+            phi_Einstein=phi_init,
+            pi_Einstein=pi_init,
+            log_rhorad_Einstein=log_rhorad_Einstein_init,
+            log_fm=log_fm_init,
+            log_T_Jordan=log_T_init,
+        )
 
         sol = solve_ivp(
             RHS,
             method="RK45",
-            t_span=(z_init, z_stop),
+            t_span=(0.0, 1000.0),
             y0=initial_state,
-            t_eval=z_sample.as_float_list(),
             atol=atol,
             rtol=rtol,
             args=(supervisor,),
+            events=(terminate_at_T_stop,),
             dense_output=True,
         )
 
     if not sol.success:
         raise RuntimeError(
-            f'compute_scalar_model: integration did not terminate successfully (z_init={z_init:.5g}, z_stop={z_stop:.5g}, error at z={sol.t[-1]:.5g}, "{sol.message}")'
+            f'compute_scalar_model: integration did not terminate successfully (log_T_init={log_T_init:.5g}, log_T_stop={log_T_stop:.5g}, error at N={sol.t[-1]:.5g}, "{sol.message}")'
         )
 
-    sampled_z = sol.t
-    sampled_values = sol.y
+    if not sol.status == 1:
+        raise RuntimeError(
+            f'compute_scalar_model: expected termination to occur at T_stop (log_T_init={log_T_init:.5g}, log_T_stop={log_T_stop:.5g}, last sample at N={sol.t[-1]:.5g}, "{sol.message}")'
+        )
+
+    sampled_N = sol.t
+    sampled_values = StateVector._make(sol.y)
     if len(sampled_values) != EXPECTED_SOL_LENGTH:
         raise RuntimeError(
-            f"compute_scalar_model: solution does not have expected number of members (expected {EXPECTED_SOL_LENGTH}, found {len(sampled_values)}; length of sol.t={len(z_sample)})"
-        )
-    a0_tau_sample = sampled_values[A0_TAU_INDEX]
-
-    returned_values = sampled_z.size
-    expected_values = len(z_sample)
-
-    if returned_values != expected_values:
-        raise RuntimeError(
-            f"compute_scalar_model: solve_ivp returned {returned_values} samples, but expected {expected_values}"
+            f"compute_scalar_model: solution does not have expected number of members (expected {EXPECTED_SOL_LENGTH}, found {len(sampled_values)}; length of sol.t={len(sampled_N)})"
         )
 
-    # validate that the samples of the solution correspond to the z-sample points that we specified.
-    # This really should be true, but there is no harm in being defensive.
-    for i in range(returned_values):
-        diff = sampled_z[i] - z_sample[i].z
-        if fabs(diff) > DEFAULT_ABS_TOLERANCE:
-            raise RuntimeError(
-                f"compute_scalar_model: solve_ivp returned sample points that differ from those requested (difference={diff} at i={i})"
+    # the integration should have terminate when T_Jordan = T_CMB, which ought to correspond to z = 0
+    # we now work backwards and sample the integration output on the supplied z grid, using the e-fold number
+    # to assign a value of log(1 + z).
+    final_N = sol.t[-1]
+    largest_z = exp(final_N) - 1.0
+    z_grid_cut = z_grid.truncate(largest_z, keep="lower")
+
+    sample = []
+
+    for z in z_grid_cut:
+        z: redshift
+        N_backward = log(1.0 + z.z)
+        N_forward = final_N - N_backward
+
+        state: StateVector = StateVector._make(sol.sol(N_forward))
+
+        log_Omega: float = coupling.log_Omega(state.phi_Einstein)
+        log_Omega_prime: float = coupling.log_Omega_prime(state.phi_Einstein)
+        offset: float = 4.0 * log_Omega
+        log_rhorad_Jordan: float = state.log_rhorad_Einstein - offset
+
+        V: float = potential.V(state.phi_Einstein)
+        G: float = 1.0 - state.pi_Einstein * state.pi_Einstein / CONST_6_MP_SQ
+        rhorad_Einstein: float = exp(state.log_rhorad_Einstein)
+        fm: float = exp(state.log_fm)
+
+        H2_Mp2_Einstein: float = (rhorad_Einstein * (1.0 + fm) + V) / (G) / 3.0
+        H2_Einstein: float = H2_Mp2_Einstein / CONST_MP_SQ
+        log_H_Einstein: float = log(sqrt(H2_Einstein))
+        log_H_Jordan: float = (
+            log_H_Einstein - log_Omega + log(1.0 + log_Omega_prime * state.pi_Einstein)
+        )
+
+        T_Jordan: float = exp(state.log_T_Jordan)
+
+        sample.append(
+            ModelFunctions(
+                phi_Einstein=state.phi_Einstein,
+                pi_Einstein=state.pi_Einstein,
+                log_rhorad_Einstein=log_rhorad_Jordan,
+                log_rhorad_Jordan=log_rhorad_Jordan,
+                log_fm=state.log_fm,
+                log_T_Jordan=state.log_T_Jordan,
+                log_H_Einstein=log_H_Einstein,
+                log_H_Jordan=log_H_Jordan,
+                gstar_rho=cosmology.G_rho(T_Jordan),
+                gstar_s=cosmology.G_s(T_Jordan),
+                Sigma=1.0 - 3.0 * cosmology.w(T_Jordan),
             )
-
-    # each BaseCosmology instance provides methods to evaluate H(z), rho(z), and the value of the equation of state
-    # for the background and perturbations
-    H_sample = [cosmology.Hubble(z.z) for z in z_sample]
-    rho_sample = [cosmology.rho(z.z) for z in z_sample]
-    T_photon_sample = [cosmology.T_photon(z.z) for z in z_sample]
-    wBackground_sample = [cosmology.wBackground(z.z) for z in z_sample]
-    wPerturbations_sample = [cosmology.wPerturbations(z.z) for z in z_sample]
-
-    # further, each BaseCosmology instance may provide methods to evaluate the derivatives of H(z) and w(z), but if it doesn't,
-    # we estimate these derivatives using a spline
-
-    def _build_derivative(attr: str, f_to_diff=None, sample_to_diff=None):
-        if f_to_diff is None and sample_to_diff is None:
-            raise RuntimeError(
-                "compute_scalar_model._build_derivative: f_to_diff and sample_to_diff cannot both be None"
-            )
-
-        if hasattr(cosmology, attr):
-            return [getattr(cosmology, attr)(z.z) for z in z_sample]
-
-        if f_to_diff is not None:
-            data = [(log(1.0 + z.z), f_to_diff(z.z)) for z in z_sample]
-        else:
-            data = [(log(1.0 + z.z), s) for z, s in zip(z_sample, sample_to_diff)]
-
-        data.sort(key=lambda pair: pair[0])
-        x_data, y_data = zip(*data)
-
-        raw = make_interp_spline(x_data, y_data)
-        deriv = raw.derivative()
-
-        spline = ZSplineWrapper(
-            deriv,
-            label=attr,
-            min_z=z_sample.min.z,
-            max_z=z_sample.max.z,
-            log_z=True,
-            deriv=True,
         )
-
-        return [spline(z.z) for z in z_sample]
-
-    d_lnH_dz_sample = _build_derivative(
-        "d_lnH_dz", f_to_diff=lambda z: log(cosmology.Hubble(z))
-    )
-    d2_lnH_dz2_sample = _build_derivative("d2_lnH_dz2", sample_to_diff=d_lnH_dz_sample)
-    d3_lnH_dz3_sample = _build_derivative(
-        "d3_lnH_dz3", sample_to_diff=d2_lnH_dz2_sample
-    )
-    d_wPerturbations_dz_sample = _build_derivative(
-        "d_wPerturbations_dz", sample_to_diff=wPerturbations_sample
-    )
-    d2_wPerturbations_dz2_sample = _build_derivative(
-        "d2_wPerturbations_dz2", sample_to_diff=d_wPerturbations_dz_sample
-    )
 
     return {
         "metadata": IntegrationData(
@@ -265,11 +294,8 @@ def compute_scalar_model(
             max_RHS_time=supervisor.max_RHS_time,
             min_RHS_time=supervisor.min_RHS_time,
         ),
-        "H_Einstein_sample": H_Einstein_sample,
-        "phi_Einstein_sample": phi_Einstein_sample,
-        "rho_sample": rho_sample,
-        "T_Jordan_sample": T_Jordan_sample,
-        "fm_sample": fm_sample,
+        "z_grid": z_grid_cut,
+        "sample": sample,
         "solver_label": "solve_ivp+RK45-stepping0",
     }
 
@@ -464,6 +490,9 @@ class ScalarModel(DatastoreObject):
             self.z_grid,
             self.potential,
             self.coupling,
+            task_label=(
+                self._label if self._label is not None else "ScalarModel.compute"
+            ),
             atol=self._atol.tol,
             rtol=self._rtol.tol,
         )

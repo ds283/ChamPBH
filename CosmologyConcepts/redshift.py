@@ -50,7 +50,7 @@ class redshift(DatastoreObject):
 class redshift_array:
     def __init__(self, z_array: Iterable[redshift]):
         """
-        Reppresents an array of redshifts
+        Represents an array of redshifts
         :param store_id: unique Datastore id. Should not be None
         :param z_array: array of redshift value
         """

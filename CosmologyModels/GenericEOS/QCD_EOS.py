@@ -1,6 +1,10 @@
 from math import exp, log, pow
 from typing import Mapping
 
+from jax.numpy import exp, log, pow
+from jax import grad
+
+from CosmologyConcepts import TemperatureLike, GetTemperature
 from CosmologyModels.GenericEOS.GenericEOS import (
     GenericEOSBase,
     HIGH_T_GSTAR,
@@ -155,7 +159,7 @@ class QCD_EOS(GenericEOSBase):
         return QCD_EOS_IDENTIFIER
 
     # Complete effective degrees of freedom functions
-    def G_rho(self, T: float) -> float:
+    def G_rho(self, T: TemperatureLike) -> float:
         """
         Compute effective number of bosonic degrees of freedom g(T) for the energy, at temperature T.
         T should be regarded as a dimensionful quantity, measured in the given UnitsLike system
@@ -163,7 +167,7 @@ class QCD_EOS(GenericEOSBase):
         :return: dimensionless number representing g(T)
         """
 
-        T_in_GeV = T / self._units.GeV
+        T_in_GeV = GetTemperature(T) / self._units.GeV
 
         if T_in_GeV > QCD_EOS.T_HI:
             return HIGH_T_GSTAR  # Asymptotic high temperature limit
@@ -189,7 +193,7 @@ class QCD_EOS(GenericEOSBase):
         else:
             return LOW_T_GSTAR  # Low temperature limit
 
-    def G_s(self, T: float) -> float:
+    def G_s(self, T: TemperatureLike) -> float:
         """
         Compute effective number of bosonic degrees of freedom g_S(T) for the entropy, at temperature T
         T should be regarded as a dimensionful quantity, measured in the given UnitsLike system
@@ -197,7 +201,7 @@ class QCD_EOS(GenericEOSBase):
         :return: dimensionless number representing g_S(T)
         """
 
-        T_in_GeV = T / self._units.GeV
+        T_in_GeV = GetTemperature(T) / self._units.GeV
 
         if T_in_GeV > QCD_EOS.T_HI:
             return HIGH_T_GSTAR  # Asymptotic high temperature limit
@@ -225,8 +229,15 @@ class QCD_EOS(GenericEOSBase):
         else:
             return LOW_T_G_S_STAR  # Low temperature limit
 
+    def dG_s_dT(self, T: TemperatureLike) -> float:
+        # use JAX automatic differentiation to obtain a result for the temperature derivative
+        grad_Gs = grad(self.G_s)
+
+        # units of the output will be 1/GeV because we internally evaluate T in GeV
+        return grad_Gs(T) / self._units.GeV
+
     # override equation of state implementation
-    def w(self, T: float) -> float:
+    def w(self, T: TemperatureLike) -> float:
         """
         Compute equation of state parameter w(T) as a function of temperature T.
         :return:
@@ -238,11 +249,9 @@ class QCD_EOS(GenericEOSBase):
         # However, with our choices w(z) will just evaluate to 1/3 for all temperatures in this range.
         # To get a smooth result we evaluate the asymptotic value exactly at T_LO
 
-        T_in_GeV = T / self._units.GeV
+        T_in_GeV: float = GetTemperature(T) / self._units.GeV
 
         if T_in_GeV <= QCD_EOS.EOS_T_LO:
-            # Note: This formula is valid only in thermal equilibrium, where all species have the same temperature T.
-            # It strictly IS NOT VALID after e+e- annihilation, when the neutrino and photon temperatures separate.
             T = QCD_EOS.EOS_T_LO * self._units.GeV
 
         G = self.G_rho(T)

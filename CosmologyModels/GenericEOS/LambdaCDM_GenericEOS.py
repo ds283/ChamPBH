@@ -1,4 +1,4 @@
-from CosmologyConcepts.temperature import TemperatureLike, GetTemperature
+from CosmologyConcepts import TemperatureLike, GetTemperature
 from CosmologyModels import BaseCosmology
 from CosmologyModels.GenericEOS.GenericEOS import GenericEOSBase
 from Units.base import UnitsLike
@@ -87,16 +87,16 @@ class LambdaCDM_GenericEOS(BaseCosmology):
         return self._H0
 
     def G_rho(self, T: TemperatureLike) -> float:
-        T_float: float = GetTemperature(T)
-        return self._eos.G_rho(T_float)
+        return self._eos.G_rho(T)
 
     def G_s(self, T: TemperatureLike) -> float:
-        T_float: float = GetTemperature(T)
-        return self._eos.G_s(T_float)
+        return self._eos.G_s(T)
+
+    def dG_s_dT(self, T: TemperatureLike) -> float:
+        return self._eos.dG_s_dT(T)
 
     def w(self, T: TemperatureLike) -> float:
-        T_float: float = GetTemperature(T)
-        return self._eos.w(T_float)
+        return self._eos.w(T)
 
     def z(self, T: TemperatureLike) -> float:
         """

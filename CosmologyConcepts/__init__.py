@@ -8,4 +8,4 @@ from .Potentials.AbstractPotential import AbstractPotential
 from .Potentials.StandardChameleon import StandardChameleon
 from .beta_value import beta_value
 from .redshift import redshift, redshift_array
-from .temperature import temperature
+from .temperature import temperature, TemperatureLike, GetTemperature
