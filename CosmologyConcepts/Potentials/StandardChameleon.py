@@ -1,5 +1,3 @@
-from math import exp
-
 from CosmologyConcepts import M_value, Lambda_value
 from CosmologyConcepts.Potentials.AbstractPotential import AbstractPotential
 from CosmologyConcepts.Potentials.model_ids import STANDARD_CHAMELEON
@@ -45,7 +43,13 @@ class StandardChameleon(AbstractPotential):
         :return:
         """
         arg: float = pow(phi / self._M_float, self._n)
-        return self._Lambda_4 * exp(arg)
+        try:
+            return self._Lambda_4 * arg
+        except OverflowError as e:
+            print(
+                f"Overflow in StandardChameleon potential V() at phi={phi / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV [(phi/M)^n = {arg:.5g}]"
+            )
+            raise e
 
     def Vprime(self, phi: float) -> float:
         """
@@ -54,4 +58,10 @@ class StandardChameleon(AbstractPotential):
         :return:
         """
         arg: float = pow(phi / self._M_float, self._n)
-        return -self._Lambda_4 * self._n * exp(arg) * arg / phi
+        try:
+            return -self._Lambda_4 * self._n * arg / phi
+        except OverflowError as e:
+            print(
+                f"Overflow in StandardChameleon potential Vprime() at phi={phi / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV [(phi/M)^n = {arg:.5g}]"
+            )
+            raise e
