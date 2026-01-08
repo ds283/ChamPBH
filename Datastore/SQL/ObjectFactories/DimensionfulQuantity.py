@@ -26,7 +26,18 @@ class sqla_dimensionful_quantity_factory(SQLAFactoryBase):
         value = payload["value"]
         units = payload["units"]
 
-        unit = getattr(units, self.ObjectType.default_unit)
+        try:
+            unit = getattr(units, self.ObjectType.default_unit)
+        except TypeError as e:
+            print(
+                f'TypeError encountered in sqla_dimensionful_quantity_factory.build(): self.ObjectType="{self.ObjectType.__name__}", self.ObjectType.default_unit="{self.ObjectType.default_unit}"'
+            )
+            raise e
+
+        if unit is None:
+            raise RuntimeError(
+                f'default_unit must be a class attribute of specified object type "{self.ObjectType.__name__}"'
+            )
         value_in_units = value / unit
 
         query = sqla.select(
@@ -39,7 +50,7 @@ class sqla_dimensionful_quantity_factory(SQLAFactoryBase):
 
         # if this quantity is not already present, create a new id using the provided inserter
         if row_data is None:
-            insert_data = {"value": value}
+            insert_data = {self.value_col: value}
             if "serial" in payload:
                 insert_data["serial"] = payload["serial"]
             store_id = inserter(conn, insert_data)

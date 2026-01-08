@@ -242,7 +242,7 @@ def run_pipeline(
     ) = ray.get(
         [
             pool.object_get(
-                "store_tag", label=f"SamplesPerLog10Z_{samples_per_log10z}"
+                "store_tag", label=f"SamplesPerLog10Z_{samples_per_log10_z}"
             ),
             pool.object_get("store_tag", label=f"SamplesPerBeta_{samples_per_beta}"),
             pool.object_get(
@@ -399,8 +399,7 @@ with ShardedPool(
 
     # set up LambdaCDM object representing a basic Planck2018 cosmology in Mpc units
 
-    z_end: float = args.zend
-    samples_per_log10z: int = args.samples_log10z
+    samples_per_log10_z: int = args.samples_log10_z
 
     beta_low: float = args.beta_low
     beta_high: float = args.beta_high
@@ -460,7 +459,7 @@ with ShardedPool(
         return pool.object_get(
             "StandardChameleon",
             payload_data=[
-                {"M": M, "Lambda": Lambda, "n": 1, "units": units}
+                {"shard_key": M, "M": M, "Lambda": Lambda, "n": 1, "units": units}
                 for M, Lambda in M_lambda_set
             ],
         )
@@ -514,7 +513,7 @@ with ShardedPool(
     # we use this grid to store the scalar field histories
     log10_one_plus_z_high = 36
     log10_one_plus_z_low = 0
-    num_z_samples = samples_per_log10z * (log10_one_plus_z_high - log10_one_plus_z_low)
+    num_z_samples = samples_per_log10_z * (log10_one_plus_z_high - log10_one_plus_z_low)
     z_array = ray.get(
         convert_to_redshift(
             np.logspace(log10_one_plus_z_low, log10_one_plus_z_high, num_z_samples)

@@ -45,7 +45,6 @@ from Datastore.SQL.ObjectFactories.store_tag import sqla_store_tag_factory
 from Datastore.SQL.ObjectFactories.tolerance import sqla_tolerance_factory
 from Datastore.SQL.ObjectFactories.version import sqla_version_factory
 from Datastore.SQL.ProfileAgent import ProfileBatcher, ProfileBatchManager
-from MetadataConcepts import version
 from utilities import WallclockTimer
 
 VERSION_ID_LENGTH = 64
@@ -167,7 +166,7 @@ class Datastore:
         if version_serial is not None:
             version_payload["serial"] = version_serial
 
-        self._version = self.object_get(version, **version_payload)
+        self._version = self.object_get("version", **version_payload)
 
         if version_serial is not None and self._version.store_id != version_serial:
             raise IntegrityError(

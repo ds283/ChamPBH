@@ -187,7 +187,7 @@ class ShardedPool:
 
         # build read table methods
         if read_table_config is not None:
-            for method_name, method_config in read_table_config:
+            for method_name, method_config in read_table_config.items():
 
                 class_specifier = method_config["class"]
                 if class_specifier not in self._replicated_tables:
@@ -560,7 +560,7 @@ class ShardedPool:
             return work_refs
             # TODO: consider consolidating all objects for the same shard into a list, for efficiency
 
-        # otherwise, can assume this is scalar get
+        # otherwise, can assume this is a scalar get
         key = kwargs[shard_key_field]
         shard_id = self._shard_keys[self._ShardKeyStoreIdGetter(key)]
 
@@ -587,8 +587,6 @@ class ShardedPool:
             self._ShardKeyStoreIdGetter(shard_key[shard_key_field])
         ]
 
-        for value in payload_data:
-            value.update(shard_key)
         return self._shards[shard_id].object_get.remote(
             cls_name, payload_data=payload_data
         )
@@ -605,9 +603,9 @@ class ShardedPool:
             )
 
         shard_key_field = self._sharded_tables[cls_name]
-        if shard_key_field not in shard_key:
+        if not hasattr(shard_key, shard_key_field):
             raise RuntimeError(
-                f'ShardedPool: expected shard key "{shard_key_field}" to be provided for object type "{cls_name}", but instead received keys: {shard_key.keys()}'
+                f'ShardedPool: expected shard key "{shard_key_field}" to be provided for object type "{cls_name}", but instead received keys: {shard_key.__attrs__}'
             )
 
         shard_id = self._shard_keys[

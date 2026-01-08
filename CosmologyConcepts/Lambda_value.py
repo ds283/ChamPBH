@@ -4,7 +4,7 @@ from CosmologyConcepts.DimensionfulQuantity import (
 
 
 class Lambda_value(DimensionfulQuantity):
-    default_value = "eV"
+    default_unit = "eV"
 
     def __init__(self, store_id: int, value: float):
         super().__init__(store_id, value, "Lambda_value")
