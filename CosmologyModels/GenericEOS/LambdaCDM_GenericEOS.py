@@ -66,8 +66,9 @@ class LambdaCDM_GenericEOS(BaseCosmology):
         self._G_CMB_pow13 = pow(self._G_CMB, 1.0 / 3.0)
         self._G_S_CMB_pow13 = pow(self._G_S_CMB, 1.0 / 3.0)
 
-        print(f'@@ Parametrized equation-of-state LambdaCDM-like model "{self._name}"')
-        print(f'|  equation of state = "{self._eos.name}", max_z = {self._max_z:.5g}')
+        print(
+            f'@@ Parametrized equation-of-state LambdaCDM-like model "{self._name}" | equation of state = "{self._eos.name}"'
+        )
 
     @property
     def type_id(self) -> int:
