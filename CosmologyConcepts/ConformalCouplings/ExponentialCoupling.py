@@ -16,13 +16,21 @@ class ExponentialCoupling(AbstractCoupling):
 
         self._Mp: float = units.PlanckMass
 
+    def log_Omega(self, phi: float) -> float:
+        """
+        Evaluate the logarithm of the conformal coupling Omega at field value phi
+        :param phi:
+        :return:
+        """
+        return self._beta_float * phi / self._Mp
+
     def Omega(self, phi: float) -> float:
         """
         Evaluate the conformal coupling Omega at field value phi
         :param phi:
         :return:
         """
-        return exp(self._beta_float * phi / self._Mp)
+        return exp(self.log_Omega(phi))
 
     def log_Omega_prime(self, phi: float) -> float:
         """

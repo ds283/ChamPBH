@@ -44,7 +44,7 @@ class GenericEOSBase(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def Gs(self, T: float) -> float:
+    def G_s(self, T: float) -> float:
         """
         Compute effective number of bosonic degrees of freedom g_S(T) for the entropy, at temperature T
         T should be regarded as a dimensionful quantity, measured in the given UnitsLike system
@@ -63,11 +63,11 @@ class GenericEOSBase(ABC):
         # TODO: This formula is valid only in thermal equilibrium, where all species have the same temperature T.
         #  It strictly IS NOT VALID after e+e- annihilation, when the neutrino and photon temperatures separate.
         G = self.G_rho(T)
-        Gs = self.Gs(T)
+        Gs = self.G_s(T)
         w = (4.0 * Gs) / (3.0 * G) - 1.0
 
         # print(
-        #     f">> evaluate w(T) at T = {T/self._units.GeV:.5g} GeV = {T/self._units.Kelvin:.5g} K | g* = {G_rho:.5g}, g_S* = {Gs:.5g}, w = {w:.5g}"
+        #     f">> evaluate w(T) at T = {T/self._units.GeV:.5g} GeV = {T/self._units.Kelvin:.5g} K | g* = {G_rho:.5g}, g_S* = {G_s:.5g}, w = {w:.5g}"
         # )
 
         return w

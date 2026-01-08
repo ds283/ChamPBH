@@ -1,3 +1,4 @@
+from CosmologyConcepts.temperature import TemperatureLike, GetTemperature
 from CosmologyModels import BaseCosmology
 from CosmologyModels.GenericEOS.GenericEOS import GenericEOSBase
 from Units.base import UnitsLike
@@ -61,7 +62,7 @@ class LambdaCDM_GenericEOS(BaseCosmology):
 
         # cache values of G_rho(T_CMB), G_S(T_CMB), [G_rho(T_CMB)]^(4/3) and [G_S(T_CMB)]^(4/3) which we need to use later
         self._G_CMB = eos.G_rho(self._T_CMB)
-        self._G_S_CMB = eos.Gs(self._T_CMB)
+        self._G_S_CMB = eos.G_s(self._T_CMB)
         self._G_CMB_pow13 = pow(self._G_CMB, 1.0 / 3.0)
         self._G_S_CMB_pow13 = pow(self._G_S_CMB, 1.0 / 3.0)
 
@@ -85,7 +86,19 @@ class LambdaCDM_GenericEOS(BaseCosmology):
     def H0(self) -> float:
         return self._H0
 
-    def z(self, T: float) -> float:
+    def G_rho(self, T: TemperatureLike) -> float:
+        T_float: float = GetTemperature(T)
+        return self._eos.G_rho(T_float)
+
+    def G_s(self, T: TemperatureLike) -> float:
+        T_float: float = GetTemperature(T)
+        return self._eos.G_s(T_float)
+
+    def w(self, T: TemperatureLike) -> float:
+        T_float: float = GetTemperature(T)
+        return self._eos.w(T_float)
+
+    def z(self, T: TemperatureLike) -> float:
         """
         Compute z(T), the redshift as a function of temperature
         :param T: temperature (as a dimensionful quantity)
@@ -102,7 +115,11 @@ class LambdaCDM_GenericEOS(BaseCosmology):
         #   T [G_S(T)]^(1/3) = T_CMB [G_S(T_CMB)]^(1/3) (1 + z)
         #  --> 1 + z(T) = (T/T_CMB) [ G_S(T) / G_S(T_CMB) ]^(1/3)
 
+        T_float: float = GetTemperature(T)
+
         one_plus_z: float = (
-            (T / self._T_CMB) * pow(self._eos.Gs(T), 1.0 / 3.0) / self._G_S_CMB_pow13
+            (T / self._T_CMB)
+            * pow(self._eos.G_s(T_float), 1.0 / 3.0)
+            / self._G_S_CMB_pow13
         )
         return one_plus_z - 1.0

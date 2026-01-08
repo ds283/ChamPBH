@@ -1,5 +1,5 @@
 from collections import namedtuple
-from math import fabs, log
+from math import fabs, log, pi, exp
 from typing import Optional, List
 
 import ray
@@ -15,7 +15,9 @@ from CosmologyConcepts import (
     AbstractPotential,
     AbstractCoupling,
 )
+from CosmologyConcepts.temperature import TemperatureLike
 from CosmologyModels import BaseCosmology
+from CosmologyModels.GenericEOS.LambdaCDM_GenericEOS import LambdaCDM_GenericEOS
 from Datastore import DatastoreObject
 from MetadataConcepts import tolerance, store_tag
 from Quadrature.integration_metadata import IntegrationSolver, IntegrationData
@@ -27,28 +29,32 @@ PHI_EINSTEIN_INDEX = 0
 PI_EINSTEIN_INDEX = 1
 LOG_RHORAD_EINSTEIN_INDEX = 2
 LOG_FM_INDEX = 3
-EXPECTED_SOL_LENGTH = 4
+LOG_T_JORDAN_INDEX = 4
+EXPECTED_SOL_LENGTH = 5
+
+PISQ_OVER_30 = pi * pi / 30.0
+LOG_PISQ_OVER_30 = log(PISQ_OVER_30)
 
 ModelFunctions = namedtuple(
     "ModelFunctions",
     [
-        "H_Einstein",
-        "H_Jordan",
         "phi_Einstein",
         "pi_Einstein",
         "log_rhorad_Einstein",
         "log_rhorad_Jordan",
         "log_fm",
-        "T_Jordan",
+        "log_H_Einstein",
+        "log_H_Jordan",
+        "log_T_Jordan",
     ],
 )
 
 
 @ray.remote
 def compute_scalar_model(
-    cosmology: BaseCosmology,
-    T_init: temperature,
-    T_stop: temperature,
+    cosmology: LambdaCDM_GenericEOS,
+    T_init: TemperatureLike,
+    T_stop: TemperatureLike,
     phi_init: float,
     pi_init: float,
     z_grid: redshift_array,
@@ -70,14 +76,82 @@ def compute_scalar_model(
     :param rtol:
     :return:
     """
-    T_init_float: float = float(T_init)
-    T_stop_float: float = float(T_stop)
+    units: UnitsLike = cosmology.units
+
+    # compute initial Jordan frame radiation density at T_J = T_init
+    # rho = (pi^2 / 30) g* T^4
+    log_rhorad_Jordan_init: float = (
+        LOG_PISQ_OVER_30 + 4.0 * log(T_init) + log(cosmology.G_rho(T_init))
+    )
+
+    # convert Jordan frame radiation density at T_J = T_init to Einstein frame radiation density
+    offset: float = 4.0 * coupling.log_Omega(phi_init)
+    log_rhorad_Einstein_init: float = log_rhorad_Jordan_init + offset
+
+    # estimate initial matter fraction at T_J = T_init
+    # f_m = rho_m
+    z_init_estimate = cosmology.z(T_init)
+    log_rho_m0: float = log(cosmology.rho_m0)
+    log_fm_init = log_rho_m0 - log_rhorad_Jordan_init
+
+    CONST_MP_SQ = units.PlanckMass * units.PlanckMass
+    CONST_6_MP_SQ = 6.0 * CONST_MP_SQ
 
     def RHS(z, state, supervisor) -> List[float]:
         with RHS_timer(supervisor) as timer:
-            H = cosmology.Hubble(z)
+            phi_Einstein: float = state[PHI_EINSTEIN_INDEX]
+            pi_Einstein: float = state[PI_EINSTEIN_INDEX]
+            log_rhorad_Einstein: float = state[LOG_RHORAD_EINSTEIN_INDEX]
+            log_fm: float = state[LOG_FM_INDEX]
+            log_T_Jordan: float = state[LOG_T_JORDAN_INDEX]
 
-            return [da0_tau_dz]
+            rhorad_Einstein: float = exp(log_rhorad_Einstein)
+            fm: float = exp(log_fm)
+            T_Jordan: float = exp(log_T_Jordan)
+
+            V: float = potential.V(phi_Einstein)
+            Vprime: float = potential.Vprime(phi_Einstein)
+
+            log_Omega_prime: float = coupling.log_Omega_prime(phi_Einstein)
+
+            phiprime_factor: float = 1.0 - pi_Einstein * pi_Einstein / CONST_6_MP_SQ
+
+            H2_Mp2_Einstein: float = (
+                (rhorad_Einstein * (1.0 + fm) + V) / (phiprime_factor) / 3.0
+            )
+
+            H2_Einstein: float = H2_Mp2_Einstein / CONST_MP_SQ
+
+            Sigma: float = 1.0 - 3.0 * cosmology.w(T_Jordan)
+
+            d_phi_Einstein: float = pi_Einstein
+            d_log_rhorad_Einstein: float = Sigma - 4.0
+            d_log_fm: float = 1.0 - Sigma
+
+            A1: float = (2.0 + 3.0 * fm + Sigma) / (2.0 * (1.0 + fm))
+            A2: float = (4.0 + 3.0 * fm - Sigma) / (1.0 + fm)
+            A3: float = (Sigma + fm) / (1.0 + fm)
+            C: float = V / (6.0 * H2_Mp2_Einstein)
+            D: float = Vprime / H2_Einstein
+            E: float = (
+                1.0
+                - pi_Einstein * pi_Einstein / CONST_6_MP_SQ
+                - V / (3.0 * H2_Mp2_Einstein)
+            )
+
+            d_pi_Einstein: float = (
+                -pi_Einstein * (phiprime_factor * A1 + C * A2)
+                - D
+                - 3.0 * CONST_MP_SQ * phiprime_factor * E * log_Omega_prime * A3
+            )
+
+            return [
+                d_phi_Einstein,
+                d_pi_Einstein,
+                d_log_rhorad_Einstein,
+                d_log_fm,
+                d_log_T_Jordan,
+            ]
 
     with IntegrationSupervisor() as supervisor:
         rho_init = cosmology.rho(z_init)
@@ -324,7 +398,7 @@ class ScalarModel(DatastoreObject):
 
     def _create_functions(self):
         def _build_func(attr: str):
-            data = [(v.p, getattr(v, attr)) for v in self.values]
+            data = [(v.z.z, getattr(v, attr)) for v in self.values]
             data.sort(key=lambda pair: pair[0])
 
             x_data, y_data = zip(*data)
@@ -338,24 +412,22 @@ class ScalarModel(DatastoreObject):
             )
 
         # build splines for those functions that are stored directly as part of the integration output
-        H_Einstein = _build_func("H_Einstein")
-        H_Jordan = _build_func("H_Jordan")
         phi_Einstein = _build_func("phi_Einstein")
         pi_Einstein = _build_func("pi_Einstein")
         log_rhorad_Einstein = _build_func("log_rhorad_Einstein")
         log_rhorad_Jordan = _build_func("log_rhorad_Jordan")
         log_fm = _build_func("log_fm")
-        T_Jordan = _build_func("T_Jordan")
+        log_T_Jordan = _build_func("log_T_Jordan")
 
         self._functions = ModelFunctions(
-            H_Einstein=H_Einstein,
-            H_Jordan=H_Jordan,
+            log_H_Einstein=H_Einstein,
+            log_H_Jordan=H_Jordan,
             phi_Einstein=phi_Einstein,
             pi_Einstein=pi_Einstein,
             log_rhorad_Einstein=log_rhorad_Einstein,
             log_rhorad_Jordan=log_rhorad_Jordan,
             log_fm=log_fm,
-            T_Jordan=T_Jordan,
+            log_T_Jordan=log_T_Jordan,
         )
 
     def compute(self, label: Optional[str] = None):
@@ -460,84 +532,72 @@ class ScalarModelValue(DatastoreObject):
         self,
         store_id: int,
         z: redshift,
-        Hubble: float,
-        wBackground: float,
-        wPerturbations: float,
-        rho: float,
-        tau: float,
-        T_photon: float,
-        d_lnH_dz: float,
-        d2_lnH_dz2: Optional[float] = None,
-        d3_lnH_dz3: Optional[float] = None,
-        d_wPerturbations_dz: Optional[float] = None,
-        d2_wPerturbations_dz2: Optional[float] = None,
+        phi_Einstein: float,
+        pi_Einstein: float,
+        log_rhorad_Einstein: float,
+        log_rhorad_Jordan: float,
+        log_fm: float,
+        log_H_Einstein: float,
+        log_H_Jordan: float,
+        log_T_Jordan: float,
+        Sigma: float,
     ):
         DatastoreObject.__init__(self, store_id)
 
         self._z = z
 
-        self._Hubble: float = Hubble
-        self._wBackground: float = wBackground
-        self._wPerturbations: float = wPerturbations
+        self._log_H_Einstein = log_H_Einstein
+        self._log_H_Jordan = log_H_Jordan
 
-        self._rho: float = rho
-        self._tau: float = tau
-        self._T_photon: float = T_photon
+        self._phi_Einstein = phi_Einstein
+        self._pi_Einstein = pi_Einstein
 
-        self._d_lnH_dz: float = d_lnH_dz
-        self._d2_lnH_dz2: float = d2_lnH_dz2
-        self._d3_lnH_dz3: float = d3_lnH_dz3
+        self._log_rhorad_Einstein = log_rhorad_Einstein
+        self._log_rhorad_Jordan = log_rhorad_Jordan
+        self._log_fm = log_fm
+        self._log_T_Jordan = log_T_Jordan
 
-        self._d_wPerturbations_dz: float = d_wPerturbations_dz
-        self._d2_wPerturbations_dz2: float = d2_wPerturbations_dz2
+        self._Sigma = Sigma
 
     @property
     def z(self) -> redshift:
         return self._z
 
     @property
-    def Hubble(self) -> float:
-        return self._Hubble
+    def log_H_Einstein(self) -> float:
+        return self._log_H_Einstein
 
     @property
-    def wBackground(self) -> float:
-        return self._wBackground
+    def log_H_Jordan(self) -> float:
+        return self._log_H_Jordan
 
     @property
-    def wPerturbations(self) -> float:
-        return self._wPerturbations
+    def phi_Einstein(self) -> float:
+        return self._phi_Einstein
 
     @property
-    def rho(self) -> float:
-        return self._rho
+    def pi_Einstein(self) -> float:
+        return self._pi_Einstein
 
     @property
-    def tau(self) -> float:
-        return self._tau
+    def log_rhorad_Einstein(self) -> float:
+        return self._log_rhorad_Einstein
 
     @property
-    def T_photon(self) -> float:
-        return self._T_photon
+    def log_rhorad_Jordan(self) -> float:
+        return self._log_rhorad_Jordan
 
     @property
-    def d_lnH_dz(self) -> float:
-        return self._d_lnH_dz
+    def log_fm(self) -> float:
+        return self._log_fm
 
     @property
-    def d2_lnH_dz2(self) -> Optional[float]:
-        return self._d2_lnH_dz2
+    def log_T_Jordan(self) -> float:
+        return self._log_T_Jordan
 
     @property
-    def d3_lnH_dz3(self) -> Optional[float]:
-        return self._d3_lnH_dz3
-
-    @property
-    def d_wPerturbations_dz(self) -> Optional[float]:
-        return self._d_wPerturbations_dz
-
-    @property
-    def d2_wPerturbations_dz2(self) -> Optional[float]:
-        return self._d2_wPerturbations_dz2
+    def Sigma(self) -> float:
+        return self._Sigma
 
 
 class ScalarModelProxy:

@@ -17,7 +17,7 @@ def get_w(units, model, row) -> Tuple[float, float]:
 
     T: float = T_in_GeV * units.GeV
     my_G: float = model.G_rho(T)
-    my_Gs: float = model.Gs(T)
+    my_Gs: float = model.G_s(T)
     my_w: float = model.w(T)
 
     return (

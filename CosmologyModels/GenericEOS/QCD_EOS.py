@@ -189,7 +189,7 @@ class QCD_EOS(GenericEOSBase):
         else:
             return LOW_T_GSTAR  # Low temperature limit
 
-    def Gs(self, T: float) -> float:
+    def G_s(self, T: float) -> float:
         """
         Compute effective number of bosonic degrees of freedom g_S(T) for the entropy, at temperature T
         T should be regarded as a dimensionful quantity, measured in the given UnitsLike system
@@ -246,5 +246,5 @@ class QCD_EOS(GenericEOSBase):
             T = QCD_EOS.EOS_T_LO * self._units.GeV
 
         G = self.G_rho(T)
-        Gs = self.Gs(T)
+        Gs = self.G_s(T)
         return (4.0 * Gs) / (3.0 * G) - 1.0

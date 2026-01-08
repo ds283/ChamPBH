@@ -8,6 +8,15 @@ class AbstractCoupling(DatastoreObject, ABC):
         DatastoreObject.__init__(self, store_id)
 
     @abstractmethod
+    def log_Omega(self, phi: float) -> float:
+        """
+        Evaluate the logarithm of the conformal coupling function at field value phi
+        :param phi:
+        :return:
+        """
+        raise NotImplementedError
+
+    @abstractmethod
     def Omega(self, phi: float) -> float:
         """
         Evaluate the conformal coupling function at field value phi
