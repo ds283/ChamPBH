@@ -1,7 +1,8 @@
 from math import exp
 
 from CosmologyConcepts import beta_value
-from CosmologyConcepts.ConformalCouplings import AbstractCoupling, EXPONENTIAL_COUPLING
+from CosmologyConcepts.ConformalCouplings.AbstractCoupling import AbstractCoupling
+from CosmologyConcepts.ConformalCouplings.model_ids import EXPONENTIAL_COUPLING
 from Units.base import UnitsLike
 
 

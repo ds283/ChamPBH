@@ -149,7 +149,7 @@ class Datastore:
 
         # build read table methods
         if read_table_config is not None:
-            for method_name, method_config in read_table_config:
+            for method_name, method_config in read_table_config.items():
 
                 def wrapper(self, **kwargs):
                     if method_config.get("tables_arg", False):

@@ -1,7 +1,7 @@
 import argparse
-import datetime
 import itertools
 import sys
+from datetime import datetime
 from typing import List, Tuple
 
 import numpy as np
@@ -19,8 +19,8 @@ from CosmologyConcepts import (
 from CosmologyConcepts.ConformalCouplings import AbstractCoupling
 from CosmologyConcepts.Potentials import AbstractPotential
 from CosmologyModels import BaseCosmology
-from Datastore.SQL import ProfileAgent
 from Datastore.SQL.ObjectFactories import tolerance
+from Datastore.SQL.ProfileAgent import ProfileAgent
 from Datastore.SQL.ShardedPool import ShardedPool
 from Quadrature.integration_metadata import IntegrationSolver
 from RayTools.RayWorkPool import RayWorkPool
@@ -194,7 +194,7 @@ if args.database is None:
 # connect to ray cluster on supplied address; defaults to 'auto' meaning a locally running cluster
 ray.init(address=args.ray_address)
 
-VERSION_LABEL = "2025.1.1"
+VERSION_LABEL = "2026.1.1"
 
 specified_drop_actions = [x.lower() for x in args.drop]
 drop_actions = [x for x in specified_drop_actions if x in allowed_drop_actions]

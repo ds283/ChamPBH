@@ -1,7 +1,8 @@
 from math import exp
 
 from CosmologyConcepts import M_value, Lambda_value
-from CosmologyConcepts.Potentials import AbstractPotential, STANDARD_CHAMELEON
+from CosmologyConcepts.Potentials.AbstractPotential import AbstractPotential
+from CosmologyConcepts.Potentials.model_ids import STANDARD_CHAMELEON
 from Units.base import UnitsLike
 
 

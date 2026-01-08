@@ -339,7 +339,7 @@ class ShardedPool:
             for row in shard_key_configs:
                 num_config += 1
                 if num_config == 1:
-                    if row.key_attr != self._ShardKeyType_name:
+                    if row.key_type != self._ShardKeyType_name:
                         raise RuntimeError(
                             f'Existing ShardedPool was configured with shard key type "{row.key_attr}", but provided type was "{self._ShardKeyType_name}"'
                         )
