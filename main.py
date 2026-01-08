@@ -247,10 +247,10 @@ def run_pipeline(
             pool.object_get("store_tag", label=f"SamplesPerBeta_{samples_per_beta}"),
             pool.object_get(
                 "store_tag",
-                labels=f"SamplesPerLog10Lambda_eV_{samples_per_log10_Lambda_eV}",
+                label=f"SamplesPerLog10Lambda_eV_{samples_per_log10_Lambda_eV}",
             ),
             pool.object_get(
-                "store_tag", labels=f"SamplesPerLog10M_eV_{samples_per_log10_M_eV}"
+                "store_tag", label=f"SamplesPerLog10M_eV_{samples_per_log10_M_eV}"
             ),
         ]
     )
