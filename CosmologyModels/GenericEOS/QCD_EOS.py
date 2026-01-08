@@ -1,8 +1,8 @@
 from math import exp, log, pow
 from typing import Mapping
 
-from jax.numpy import exp, log, pow
 from jax import grad
+from jax.numpy import exp, log, pow
 
 from CosmologyConcepts import TemperatureLike, GetTemperature
 from CosmologyModels.GenericEOS.GenericEOS import (
@@ -159,6 +159,7 @@ class QCD_EOS(GenericEOSBase):
         return QCD_EOS_IDENTIFIER
 
     # Complete effective degrees of freedom functions
+
     def G_rho(self, T: TemperatureLike) -> float:
         """
         Compute effective number of bosonic degrees of freedom g(T) for the energy, at temperature T.
@@ -168,7 +169,9 @@ class QCD_EOS(GenericEOSBase):
         """
 
         T_in_GeV = GetTemperature(T) / self._units.GeV
+        return self._raw_G_rho(T_in_GeV)
 
+    def _raw_G_rho(self, T_in_GeV: float) -> float:
         if T_in_GeV > QCD_EOS.T_HI:
             return HIGH_T_GSTAR  # Asymptotic high temperature limit
         elif QCD_EOS.T_120_MEV <= T_in_GeV <= QCD_EOS.T_HI:
@@ -202,12 +205,14 @@ class QCD_EOS(GenericEOSBase):
         """
 
         T_in_GeV = GetTemperature(T) / self._units.GeV
+        return self._raw_G_s(T_in_GeV)
 
+    def _raw_G_s(self, T_in_GeV: float) -> float:
         if T_in_GeV > QCD_EOS.T_HI:
             return HIGH_T_GSTAR  # Asymptotic high temperature limit
         elif QCD_EOS.T_120_MEV <= T_in_GeV <= QCD_EOS.T_HI:
             log_T_in_GeV = log(T_in_GeV)
-            return self.G_rho(T) / (
+            return self._raw_G_rho(T_in_GeV) / (
                 1.0
                 + polynomial_sum(c_coeffs, log_T_in_GeV)
                 / polynomial_sum(d_coeffs, log_T_in_GeV)
@@ -231,10 +236,11 @@ class QCD_EOS(GenericEOSBase):
 
     def dG_s_dT(self, T: TemperatureLike) -> float:
         # use JAX automatic differentiation to obtain a result for the temperature derivative
-        grad_Gs = grad(self.G_s)
+        grad_Gs = grad(self._raw_G_s)
 
         # units of the output will be 1/GeV because we internally evaluate T in GeV
-        return grad_Gs(T) / self._units.GeV
+        T_in_GeV = GetTemperature(T) / self._units.GeV
+        return grad_Gs(GetTemperature(T_in_GeV)) / self._units.GeV
 
     # override equation of state implementation
     def w(self, T: TemperatureLike) -> float:
