@@ -1,5 +1,6 @@
 import time
 from math import log
+from typing import Optional
 
 from CosmologyConcepts import TemperatureLike, GetTemperature
 from Quadrature.supervisors.base import IntegrationSupervisor, DEFAULT_UPDATE_INTERVAL
@@ -28,6 +29,8 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
         self._log_T_init_GeV = log(self._T_init / units.GeV)
         self._log_T_stop_GeV = log(self._T_stop / units.GeV)
         self._log_T_GeV_range = self._log_T_init_GeV - self._log_T_stop_GeV
+
+        self._last_log_T_GeV: Optional[float] = None
 
         self._GeV = units.GeV
         self._Kelvin = units.Kelvin
