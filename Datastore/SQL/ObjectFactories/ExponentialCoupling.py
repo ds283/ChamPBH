@@ -27,7 +27,7 @@ class sqla_ExponentialCoupling_factory(SQLAFactoryBase):
         }
 
     def build(self, payload, conn, table, inserter, tables, inserters):
-        beta: beta_value = payload["M"]
+        beta: beta_value = payload["beta"]
 
         units: UnitsLike = payload["units"]
 

@@ -1,5 +1,3 @@
-from math import log10
-
 import sqlalchemy as sqla
 
 from CosmologyModels.GenericEOS.QCD_Cosmology import QCD_Cosmology
@@ -23,17 +21,12 @@ class sqla_QCDCosmology_factory(SQLAFactoryBase):
                 sqla.Column("f_baryon", sqla.Float(64)),
                 sqla.Column("T_CMB_Kelvin", sqla.Float(64)),
                 sqla.Column("Neff", sqla.Float(64)),
-                sqla.Column("log10_max_z", sqla.Float(64)),
             ],
         }
 
     def build(self, payload, conn, table, inserter, tables, inserters):
         params = payload["params"]
         units = payload["units"]
-
-        max_z = payload["max_z"]
-
-        log10_max_z = log10(1.0 + max_z)
 
         name = params.name
         omega_m = params.omega_m
@@ -55,8 +48,6 @@ class sqla_QCDCosmology_factory(SQLAFactoryBase):
                     sqla.func.abs(table.c.T_CMB_Kelvin - T_CMB_Kelvin)
                     < DEFAULT_FLOAT_PRECISION,
                     sqla.func.abs(table.c.Neff - Neff) < DEFAULT_FLOAT_PRECISION,
-                    sqla.func.abs(table.c.log10_max_z - log10_max_z)
-                    < DEFAULT_FLOAT_PRECISION,
                 )
             )
         ).scalar()
@@ -71,7 +62,6 @@ class sqla_QCDCosmology_factory(SQLAFactoryBase):
                 "f_baryon": f_baryon,
                 "T_CMB_Kelvin": T_CMB_Kelvin,
                 "Neff": Neff,
-                "log10_max_z": log10_max_z,
             }
             if "serial" in payload:
                 insert_data["serial"] = payload["serial"]
@@ -84,7 +74,7 @@ class sqla_QCDCosmology_factory(SQLAFactoryBase):
         else:
             attribute_set = {"_deserialized": True}
 
-        obj = QCD_Cosmology(store_id=store_id, units=units, params=params, max_z=max_z)
+        obj = QCD_Cosmology(store_id=store_id, units=units, params=params)
         for key, value in attribute_set.items():
             setattr(obj, key, value)
 
