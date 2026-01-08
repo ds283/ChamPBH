@@ -44,7 +44,7 @@ class StandardChameleon(AbstractPotential):
         """
         arg: float = pow(phi / self._M_float, self._n)
         try:
-            return self._Lambda_4 * arg
+            return self._Lambda_4 * (1.0 + arg)
         except OverflowError as e:
             print(
                 f"Overflow in StandardChameleon potential V() at phi={phi / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV [(phi/M)^n = {arg:.5g}]"
