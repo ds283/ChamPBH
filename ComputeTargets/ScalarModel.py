@@ -123,7 +123,7 @@ def compute_scalar_model(
 
     def RHS(N, s, supervisor) -> StateVector:
         with RHS_timer(supervisor) as timer:
-            state: StateVector = StateVector._make(supervisor)
+            state: StateVector = StateVector._make(s)
 
             phi_Einstein: float = state.phi_Einstein
             pi_Einstein: float = state.pi_Einstein
@@ -487,10 +487,12 @@ class ScalarModel(DatastoreObject):
                     f'Object has not been configured correctly for a concrete calcuation ("{attr}" is set to None). This object can only represent a Datastore query.'
                 )
 
-        check_required_parameter("_T_high")
-        check_required_parameter("_T_low")
+        check_required_parameter("_T_Jordan_init")
+        check_required_parameter("_T_Jordan_stop")
         check_required_parameter("_phi_Einstein_init")
         check_required_parameter("_pi_Einstein_init")
+        check_required_parameter("_potential")
+        check_required_parameter("_coupling")
         check_required_parameter("_target_z_grid")
 
         # replace label if specified
@@ -501,8 +503,8 @@ class ScalarModel(DatastoreObject):
             self.cosmology,
             self.T_Jordan_init,
             self.T_Jordan_stop,
-            self.phi_init,
-            self.pi_init,
+            self.phi_Einstein_init,
+            self.pi_Einstein_init,
             self._target_z_grid,
             self.potential,
             self.coupling,

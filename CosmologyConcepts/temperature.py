@@ -17,7 +17,7 @@ TemperatureLike = Union[temperature, float]
 
 def GetTemperature(T: TemperatureLike) -> float:
     if isinstance(T, temperature):
-        return float(temperature)
+        return float(T)
 
     if isinstance(T, float):
         return T

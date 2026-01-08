@@ -119,8 +119,8 @@ class LambdaCDM_GenericEOS(BaseCosmology):
         T_float: float = GetTemperature(T)
 
         one_plus_z: float = (
-            (T / self._T_CMB)
-            * pow(self._eos.G_s(T_float), 1.0 / 3.0)
+            (T_float / self._T_CMB)
+            * pow(self._eos.G_s(T), 1.0 / 3.0)
             / self._G_S_CMB_pow13
         )
         return one_plus_z - 1.0

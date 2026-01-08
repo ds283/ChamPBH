@@ -180,6 +180,8 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
         potential: AbstractPotential = payload.get("potential")
         coupling: AbstractCoupling = payload.get("coupling")
 
+        z_grid: Optional[redshift_array] = payload.get("z_grid", None)
+
         solver_labels = payload["solver_labels"]
 
         atol: tolerance = payload["atol"]
@@ -265,6 +267,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 pi_Einstein_init=pi_Einstein_init,
                 potential=potential,
                 coupling=coupling,
+                z_grid=z_grid,
                 atol=atol,
                 rtol=rtol,
                 label=label,
@@ -344,6 +347,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                     f'Fewer z-samples than expected were recovered from the validated ScalarModel "{store_label}"'
                 )
 
+        # z_grid not supplied since this object has already been computed/populated
         obj = ScalarModel(
             payload={
                 "store_id": store_id,
