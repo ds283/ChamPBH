@@ -7,6 +7,16 @@ class AbstractCoupling(DatastoreObject, ABC):
     def __init__(self, store_id: int):
         DatastoreObject.__init__(self, store_id)
 
+    @property
+    @abstractmethod
+    def name(self):
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def type_id(self) -> int:
+        raise NotImplementedError
+
     @abstractmethod
     def log_Omega(self, phi: float) -> float:
         """

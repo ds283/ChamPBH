@@ -1,7 +1,7 @@
 from math import exp
 
 from CosmologyConcepts import beta_value
-from CosmologyConcepts.ConformalCouplings.AbstractCoupling import AbstractCoupling
+from CosmologyConcepts.ConformalCouplings import AbstractCoupling, EXPONENTIAL_COUPLING
 from Units.base import UnitsLike
 
 
@@ -15,6 +15,14 @@ class ExponentialCoupling(AbstractCoupling):
         self._beta_float: float = float(beta)
 
         self._Mp: float = units.PlanckMass
+
+    @property
+    def name(self):
+        return f"ExponentialCoupling(beta={self._beta_float:.5g})"
+
+    @property
+    def type_id(self) -> int:
+        raise EXPONENTIAL_COUPLING
 
     def log_Omega(self, phi: float) -> float:
         """

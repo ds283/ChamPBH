@@ -1,7 +1,8 @@
 import sqlalchemy as sqla
 from sqlalchemy.exc import MultipleResultsFound
 
-from CosmologyConcepts import M_value, Lambda_value, StandardChameleon
+from CosmologyConcepts import M_value, Lambda_value
+from CosmologyConcepts.Potentials import StandardChameleon
 from Datastore.SQL.ObjectFactories.base import SQLAFactoryBase
 from Units.base import UnitsLike
 

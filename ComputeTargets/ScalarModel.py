@@ -13,10 +13,15 @@ from CosmologyConcepts import (
     temperature,
     TemperatureLike,
     redshift_array,
-    AbstractPotential,
-    AbstractCoupling,
     GetTemperature,
+    M_value,
+    phi_value,
+    pi_value,
+    GetFieldValue,
+    EnergyLike,
 )
+from CosmologyConcepts.ConformalCouplings import AbstractCoupling
+from CosmologyConcepts.Potentials import AbstractPotential
 from CosmologyModels import BaseCosmology
 from CosmologyModels.GenericEOS.LambdaCDM_GenericEOS import LambdaCDM_GenericEOS
 from Datastore import DatastoreObject
@@ -67,8 +72,8 @@ def compute_scalar_model(
     cosmology: LambdaCDM_GenericEOS,
     T_init: TemperatureLike,
     T_stop: TemperatureLike,
-    phi_init: float,
-    pi_init: float,
+    phi_init: EnergyLike,
+    pi_init: EnergyLike,
     z_grid: redshift_array,
     potential: AbstractPotential,
     coupling: AbstractCoupling,
@@ -94,17 +99,20 @@ def compute_scalar_model(
     log_T_init: float = log(GetTemperature(T_init))
     log_T_stop: float = log(GetTemperature(T_stop))
 
-    # compute initial Jordan frame radiation density at T_J = T_init
+    phi_init_float: float = GetFieldValue(phi_init)
+    pi_init_float: float = GetFieldValue(pi_init)
+
+    # compute initial Jordan frame radiation density at T_J = T_Jordan_init
     # rho = (pi^2 / 30) g* T^4
     log_rhorad_Jordan_init: float = (
         LOG_PISQ_OVER_30 + 4.0 * log_T_init + log(cosmology.G_rho(T_init))
     )
 
-    # convert Jordan frame radiation density at T_J = T_init to Einstein frame radiation density
-    offset: float = 4.0 * coupling.log_Omega(phi_init)
+    # convert Jordan frame radiation density at T_J = T_Jordan_init to Einstein frame radiation density
+    offset: float = 4.0 * coupling.log_Omega(phi_init_float)
     log_rhorad_Einstein_init: float = log_rhorad_Jordan_init + offset
 
-    # estimate initial matter fraction at T_J = T_init
+    # estimate initial matter fraction at T_J = T_Jordan_init
     # f_m = rho_m
     z_init_estimate = cosmology.z(T_init)
     log_rho_m0: float = log(cosmology.rho_m0)
@@ -130,7 +138,7 @@ def compute_scalar_model(
             if supervisor.notify_available:
                 supervisor.message(
                     N,
-                    f"current state: T(k) = {T:.5g}, dT(k)/dz = {Tprime:.5g}",
+                    f"current state: T_Jordan = {T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp",
                 )
                 supervisor.reset_notify_time()
             V: float = potential.V(phi_Einstein)
@@ -181,7 +189,7 @@ def compute_scalar_model(
                 log_T_Jordan=d_log_T_Jordan,
             )
 
-    # termination occurs when the Jordan frame temperature hits T_stop, usually equal to T_CMB,
+    # termination occurs when the Jordan frame temperature hits T_Jordan_stop, usually equal to T_CMB,
     # so the actual stop value given in t_span is mostly irrelevant, just
     # to ensure that the integration terminates
     def terminate_at_T_stop(N, s, supervisor) -> float:
@@ -192,14 +200,14 @@ def compute_scalar_model(
     terminate_at_T_stop.terminal = True
     terminate_at_T_stop.direction = (
         -1.0
-    )  # only trigger when going from positive to negative, i.e., when the temperature dips *below* T_stop
+    )  # only trigger when going from positive to negative, i.e., when the temperature dips *below* T_Jordan_stop
 
     with ScalarFieldIntegrationSupervisor(
         units, T_init, T_stop, label=task_label
     ) as supervisor:
         initial_state = StateVector(
-            phi_Einstein=phi_init,
-            pi_Einstein=pi_init,
+            phi_Einstein=phi_init_float,
+            pi_Einstein=pi_init_float,
             log_rhorad_Einstein=log_rhorad_Einstein_init,
             log_fm=log_fm_init,
             log_T_Jordan=log_T_init,
@@ -207,7 +215,7 @@ def compute_scalar_model(
 
         sol = solve_ivp(
             RHS,
-            method="RK45",
+            method="DOP853",
             t_span=(0.0, 1000.0),
             y0=initial_state,
             atol=atol,
@@ -224,7 +232,7 @@ def compute_scalar_model(
 
     if not sol.status == 1:
         raise RuntimeError(
-            f'compute_scalar_model: expected termination to occur at T_stop (log_T_init={log_T_init:.5g}, log_T_stop={log_T_stop:.5g}, last sample at N={sol.t[-1]:.5g}, "{sol.message}")'
+            f'compute_scalar_model: expected termination to occur at T_Jordan_stop (log_T_init={log_T_init:.5g}, log_T_stop={log_T_stop:.5g}, last sample at N={sol.t[-1]:.5g}, "{sol.message}")'
         )
 
     sampled_N = sol.t
@@ -234,7 +242,7 @@ def compute_scalar_model(
             f"compute_scalar_model: solution does not have expected number of members (expected {EXPECTED_SOL_LENGTH}, found {len(sampled_values)}; length of sol.t={len(sampled_N)})"
         )
 
-    # the integration should have terminate when T_Jordan = T_CMB, which ought to correspond to z = 0
+    # the integration should have terminated when T_Jordan = T_CMB, which ought to correspond to z = 0
     # we now work backwards and sample the integration output on the supplied z grid, using the e-fold number
     # to assign a value of log(1 + z).
     final_N = sol.t[-1]
@@ -296,7 +304,7 @@ def compute_scalar_model(
         ),
         "z_grid": z_grid_cut,
         "sample": sample,
-        "solver_label": "solve_ivp+RK45-stepping0",
+        "solver_label": "solve_ivp+DOP853-stepping0",
     }
 
 
@@ -314,10 +322,10 @@ class ScalarModel(DatastoreObject):
         payload,
         solver_labels: dict,
         cosmology: BaseCosmology,
-        T_init: temperature,  # initial Jordan-frame temperature
-        T_stop: temperature,  # Jordan-frame temperature at which to terminate the calculation
-        phi_init: float,  # initial value of Einstein-frame scalar phi
-        pi_init: float,  # initial value of dphi/dN
+        T_Jordan_init: temperature,  # initial Jordan-frame temperature
+        T_Jordan_stop: temperature,  # Jordan-frame temperature at which to terminate the calculation
+        phi_Einstein_init: phi_value,  # initial value of Einstein-frame scalar phi
+        pi_Einstein_init: pi_value,  # initial value of dphi/dN
         potential: AbstractPotential,
         coupling: AbstractCoupling,
         atol: tolerance,
@@ -328,16 +336,16 @@ class ScalarModel(DatastoreObject):
     ):
         self._solver_labels = solver_labels
 
-        self._T_init: temperature = T_init
-        self._T_stop: temperature = T_stop
+        self._T_Jordan_init: temperature = T_Jordan_init
+        self._T_Jordan_stop: temperature = T_Jordan_stop
 
-        self._phi_init: float = phi_init
-        self._pi_init: float = pi_init
+        self._phi_Einstein_init: phi_value = phi_Einstein_init
+        self._pi_Einstein_init: pi_value = pi_Einstein_init
 
         self._potential: AbstractPotential = potential
         self._coupling: AbstractCoupling = coupling
 
-        self._z_grid: Optional[redshift_array] = z_grid
+        self._target_z_grid: Optional[redshift_array] = z_grid
 
         if payload is None:
             DatastoreObject.__init__(self, None)
@@ -366,6 +374,10 @@ class ScalarModel(DatastoreObject):
         self._rtol = rtol
 
     @property
+    def shard_key(self) -> M_value:
+        return self._potential.shard_key
+
+    @property
     def cosmology(self) -> BaseCosmology:
         return self._cosmology
 
@@ -378,12 +390,20 @@ class ScalarModel(DatastoreObject):
         return self._tags
 
     @property
-    def T_init(self) -> temperature:
-        return self._T_init
+    def T_Jordan_init(self) -> temperature:
+        return self._T_Jordan_init
 
     @property
-    def T_stop(self) -> temperature:
-        return self._T_stop
+    def T_Jordan_stop(self) -> temperature:
+        return self._T_Jordan_stop
+
+    @property
+    def phi_Einstein_init(self) -> phi_value:
+        return self._phi_Einstein_init
+
+    @property
+    def pi_Einstein_init(self) -> pi_value:
+        return self._pi_Einstein_init
 
     @property
     def potential(self) -> AbstractPotential:
@@ -438,22 +458,18 @@ class ScalarModel(DatastoreObject):
             )
 
         # build splines for those functions that are stored directly as part of the integration output
-        phi_Einstein = _build_func("phi_Einstein")
-        pi_Einstein = _build_func("pi_Einstein")
-        log_rhorad_Einstein = _build_func("log_rhorad_Einstein")
-        log_rhorad_Jordan = _build_func("log_rhorad_Jordan")
-        log_fm = _build_func("log_fm")
-        log_T_Jordan = _build_func("log_T_Jordan")
-
         self._functions = ModelFunctions(
-            log_H_Einstein=H_Einstein,
-            log_H_Jordan=H_Jordan,
-            phi_Einstein=phi_Einstein,
-            pi_Einstein=pi_Einstein,
-            log_rhorad_Einstein=log_rhorad_Einstein,
-            log_rhorad_Jordan=log_rhorad_Jordan,
-            log_fm=log_fm,
-            log_T_Jordan=log_T_Jordan,
+            phi_Einstein=_build_func("phi_Einstein"),
+            pi_Einstein=_build_func("pi_Einstein"),
+            log_rhorad_Einstein=_build_func("log_rhorad_Einstein"),
+            log_rhorad_Jordan=_build_func("log_rhorad_Jordan"),
+            log_fm=_build_func("log_fm"),
+            log_H_Einstein=_build_func("log_H_Einstein"),
+            log_H_Jordan=_build_func("log_H_Jordan"),
+            log_T_Jordan=_build_func("log_T_Jordan"),
+            gstar_rho=_build_func("gstar_rho"),
+            gstar_s=_build_func("gstar_s"),
+            Sigma=_build_func("Sigma"),
         )
 
     def compute(self, label: Optional[str] = None):
@@ -473,9 +489,9 @@ class ScalarModel(DatastoreObject):
 
         check_required_parameter("_T_high")
         check_required_parameter("_T_low")
-        check_required_parameter("_phi_init")
-        check_required_parameter("_pi_init")
-        check_required_parameter("_z_grid")
+        check_required_parameter("_phi_Einstein_init")
+        check_required_parameter("_pi_Einstein_init")
+        check_required_parameter("_target_z_grid")
 
         # replace label if specified
         if label is not None:
@@ -483,15 +499,17 @@ class ScalarModel(DatastoreObject):
 
         self._compute_ref = compute_scalar_model.remote(
             self.cosmology,
-            self.T_init,
-            self.T_stop,
+            self.T_Jordan_init,
+            self.T_Jordan_stop,
             self.phi_init,
             self.pi_init,
-            self.z_grid,
+            self._target_z_grid,
             self.potential,
             self.coupling,
             task_label=(
-                self._label if self._label is not None else "ScalarModel.compute"
+                self._label
+                if self._label is not None
+                else f"{self.potential.name}-{self.coupling.name}"
             ),
             atol=self._atol.tol,
             rtol=self._rtol.tol,
@@ -516,38 +534,25 @@ class ScalarModel(DatastoreObject):
         self._compute_ref = None
 
         self._data = data["metadata"]
-
-        H_sample = data["H_sample"]
-        wB_sample = data["wBackground_sample"]
-        wP_sample = data["wPerturbations_sample"]
-        rho_sample = data["rho_sample"]
-        T_photon_sample = data["T_photon_sample"]
-        tau_sample = data["a0_tau_sample"]
-
-        d_lnH_ds_sample = data["d_lnH_dz_sample"]
-        d2_lnH_dz2_sample = data["d2_lnH_dz2_sample"]
-        d3_lnH_dz3_sample = data["d3_lnH_dz3_sample"]
-
-        d_wPerturbations_dz_sample = data["d_wPerturbations_dz_sample"]
-        d2_wPerturbations_dz2_sample = data["d2_wPerturbations_dz2_sample"]
+        sample = data["sample"]
 
         self._values = []
-        for i in range(len(H_sample)):
+        for i in range(len(sample)):
             self._values.append(
                 ScalarModelValue(
                     None,
-                    self._z_sample[i],
-                    Hubble=H_sample[i],
-                    wBackground=wB_sample[i],
-                    wPerturbations=wP_sample[i],
-                    rho=rho_sample[i],
-                    tau=tau_sample[i],
-                    T_photon=T_photon_sample[i],
-                    d_lnH_dz=d_lnH_ds_sample[i],
-                    d2_lnH_dz2=d2_lnH_dz2_sample[i],
-                    d3_lnH_dz3=d3_lnH_dz3_sample[i],
-                    d_wPerturbations_dz=d_wPerturbations_dz_sample[i],
-                    d2_wPerturbations_dz2=d2_wPerturbations_dz2_sample[i],
+                    self.z_grid[i],
+                    phi_Einstein=sample[i].phi_Einstein,
+                    pi_Einstein=sample[i].pi_Einstein,
+                    log_rhorad_Einstein=sample[i].log_rhorad_Einstein,
+                    log_rhorad_Jordan=sample[i].log_rhorad_Jordan,
+                    log_fm=sample[i].log_fm,
+                    log_T_Jordan=sample[i].log_T_Jordan,
+                    log_H_Einstein=sample[i].log_H_Einstein,
+                    log_H_Jordan=sample[i].log_H_Jordan,
+                    gstar_rho=sample[i].gstar_rho,
+                    gstar_s=sample[i].gstar_s,
+                    Sigma=sample[i].Sigma,
                 )
             )
 
@@ -566,27 +571,36 @@ class ScalarModelValue(DatastoreObject):
         log_rhorad_Einstein: float,
         log_rhorad_Jordan: float,
         log_fm: float,
+        log_T_Jordan: float,
         log_H_Einstein: float,
         log_H_Jordan: float,
-        log_T_Jordan: float,
+        gstar_rho: float,
+        gstar_s: float,
         Sigma: float,
     ):
         DatastoreObject.__init__(self, store_id)
 
         self._z = z
 
-        self._log_H_Einstein = log_H_Einstein
-        self._log_H_Jordan = log_H_Jordan
-
         self._phi_Einstein = phi_Einstein
         self._pi_Einstein = pi_Einstein
+
+        self._log_H_Einstein = log_H_Einstein
+        self._log_H_Jordan = log_H_Jordan
 
         self._log_rhorad_Einstein = log_rhorad_Einstein
         self._log_rhorad_Jordan = log_rhorad_Jordan
         self._log_fm = log_fm
         self._log_T_Jordan = log_T_Jordan
 
+        self._gstar_rho = gstar_rho
+        self._gstar_s = gstar_s
         self._Sigma = Sigma
+
+    @property
+    def shard_key(self) -> M_value:
+        # should not get called individually, since serialization is handled by the parent ScalarModel
+        return NotImplementedError
 
     @property
     def z(self) -> redshift:
@@ -623,6 +637,14 @@ class ScalarModelValue(DatastoreObject):
     @property
     def log_T_Jordan(self) -> float:
         return self._log_T_Jordan
+
+    @property
+    def gstar_rho(self) -> float:
+        return self._gstar_rho
+
+    @property
+    def gstar_s(self) -> float:
+        return self._gstar_s
 
     @property
     def Sigma(self) -> float:

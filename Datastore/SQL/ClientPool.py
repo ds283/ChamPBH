@@ -14,6 +14,8 @@ _default_serial_batch_size = {
     "M_value": 200,
     "Lambda_value": 200,
     "temperature": 200,
+    "phi_value": 200,
+    "pi_value": 200,
     "ExponentialCoupling": 50,
     "StandardChameleon": 50,
     "LambdaCDM": 5,

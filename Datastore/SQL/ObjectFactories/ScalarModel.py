@@ -1,8 +1,7 @@
-from math import fabs
+from math import fabs, log
 from typing import Optional, List
 
 import sqlalchemy as sqla
-from defaults import DEFAULT_STRING_LENGTH, DEFAULT_FLOAT_PRECISION
 from sqlalchemy import and_, or_
 from sqlalchemy.exc import MultipleResultsFound, SQLAlchemyError
 
@@ -10,12 +9,21 @@ from ComputeTargets import (
     ScalarModel,
     ScalarModelValue,
 )
-from CosmologyConcepts import redshift_array, redshift
+from CosmologyConcepts import (
+    redshift_array,
+    redshift,
+    temperature,
+    phi_value,
+    pi_value,
+)
+from CosmologyConcepts.ConformalCouplings import AbstractCoupling
+from CosmologyConcepts.Potentials import AbstractPotential
 from CosmologyModels import BaseCosmology
 from Datastore.SQL.ObjectFactories.base import SQLAFactoryBase
 from MetadataConcepts import store_tag, tolerance
 from Quadrature.integration_metadata import IntegrationData, IntegrationSolver
 from Units.base import UnitsLike
+from config.defaults import DEFAULT_STRING_LENGTH, DEFAULT_FLOAT_PRECISION
 
 
 class sqla_ScalarModelTagAssociation_factory(SQLAFactoryBase):
@@ -51,6 +59,7 @@ class sqla_ScalarModelTagAssociation_factory(SQLAFactoryBase):
     def build(self, payload, conn, table, inserter, tables, inserters):
         raise NotImplementedError
 
+    @staticmethod
     def add_tag(conn, inserter, model: ScalarModel, tag: store_tag):
         inserter(
             conn,
@@ -60,6 +69,7 @@ class sqla_ScalarModelTagAssociation_factory(SQLAFactoryBase):
             },
         )
 
+    @staticmethod
     def remove_tag(conn, table, model: ScalarModel, tag: store_tag):
         conn.execute(
             sqla.delete(table).where(
@@ -87,6 +97,14 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 sqla.Column(
                     "cosmology_serial", sqla.Integer, index=True, nullable=False
                 ),
+                sqla.Column("potential_type", sqla.Integer, index=True, nullable=False),
+                sqla.Column(
+                    "potential_serial", sqla.Integer, index=True, nullable=False
+                ),
+                sqla.Column("coupling_type", sqla.Integer, index=True, nullable=False),
+                sqla.Column(
+                    "coupling_serial", sqla.Integer, index=True, nullable=False
+                ),
                 sqla.Column(
                     "atol_serial",
                     sqla.Integer,
@@ -109,9 +127,30 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                     nullable=False,
                 ),
                 sqla.Column(
-                    "z_init_serial",
+                    "phi_Einstein_init_serial",
                     sqla.Integer,
-                    sqla.ForeignKey("redshift.serial"),
+                    sqla.ForeignKey("phi_value.serial"),
+                    index=True,
+                    nullable=False,
+                ),
+                sqla.Column(
+                    "pi_Einstein_init_serial",
+                    sqla.Integer,
+                    sqla.ForeignKey("pi_value.serial"),
+                    index=True,
+                    nullable=False,
+                ),
+                sqla.Column(
+                    "T_Jordan_init_serial",
+                    sqla.Integer,
+                    sqla.ForeignKey("temperature.serial"),
+                    index=True,
+                    nullable=False,
+                ),
+                sqla.Column(
+                    "T_Jordan_stop_serial",
+                    sqla.Integer,
+                    sqla.ForeignKey("temperature.serial"),
                     index=True,
                     nullable=False,
                 ),
@@ -130,14 +169,21 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
         label: Optional[str] = payload.get("label", None)
         tags: List[store_tag] = payload.get("tags", [])
 
+        cosmology: BaseCosmology = payload["cosmology"]
+
+        T_init: temperature = payload.get("T_Jordan_init")
+        T_stop: temperature = payload.get("T_Jordan_stop")
+
+        phi_Einstein_init: phi_value = payload.get("phi_Einstein_init")
+        pi_Einstein_init: pi_value = payload.get("pi_Einstein_init")
+
+        potential: AbstractPotential = payload.get("potential")
+        coupling: AbstractCoupling = payload.get("coupling")
+
         solver_labels = payload["solver_labels"]
 
         atol: tolerance = payload["atol"]
         rtol: tolerance = payload["rtol"]
-
-        cosmology: BaseCosmology = payload["cosmology"]
-        z_sample: redshift_array = payload["z_sample"]
-        z_init: redshift_array = payload.get("z_init", None)
 
         atol_table = tables["tolerance"].alias("atol")
         rtol_table = tables["tolerance"].alias("rtol")
@@ -172,15 +218,18 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 table.c.validated == True,
                 table.c.cosmology_type == cosmology.type_id,
                 table.c.cosmology_serial == cosmology.store_id,
+                table.c.potential_type == potential.type_id,
+                table.c.potential_serial == potential.store_id,
+                table.c.coupling_type == coupling.type_id,
+                table.c.coupling_serial == coupling.store_id,
+                table.c.T_Jordan_init_serial == T_init.store_id,
+                table.c.T_Jordan_stop_serial == T_stop.store_id,
+                table.c.phi_Einstein_init_serial == phi_Einstein_init.store_id,
+                table.c.pi_Einstein_init_serial == pi_Einstein_init.store_id,
                 table.c.atol_serial == atol.store_id,
                 table.c.rtol_serial == rtol.store_id,
             )
         )
-
-        if z_init is not None:
-            query = query.filter(
-                table.c.z_init_serial == z_init.store_id,
-            )
 
         # require that the integration we search for has the specified list of tags
         count = 0
@@ -210,9 +259,14 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 payload=None,
                 solver_labels=solver_labels,
                 cosmology=cosmology,
+                T_Jordan_init=T_init,
+                T_Jordan_stop=T_stop,
+                phi_Einstein_init=phi_Einstein_init,
+                pi_Einstein_init=pi_Einstein_init,
+                potential=potential,
+                coupling=coupling,
                 atol=atol,
                 rtol=rtol,
-                z_sample=z_sample,
                 label=label,
                 tags=tags,
             )
@@ -230,20 +284,17 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 value_table.c.serial,
                 value_table.c.z_serial,
                 redshift_table.c.z,
-                redshift_table.c.source.label("z_is_source"),
-                redshift_table.c.response.label("z_is_response"),
-                value_table.c.Hubble_GeV,
-                value_table.c.wBackground,
-                value_table.c.wPerturbations,
-                value_table.c.rho_GeV,
-                value_table.c.tau_Mpc,
-                value_table.c.T_photon_GeV,
-                # don't need to read redundant value of T_photon_Kelvin
-                value_table.c.d_lnH_dz,
-                value_table.c.d2_lnH_dz2,
-                value_table.c.d3_lnH_dz3,
-                value_table.c.d_wPerturbations_dz,
-                value_table.c.d2_wPerturbations_dz2,
+                value_table.c.phi_Einstein_Mp,
+                value_table.c.pi_Einstein_Mp,
+                value_table.c.log_rhorad_Einstein_Mp4,
+                value_table.c.log_rhorad_Jordan_Mp4,
+                value_table.c.log_fm,
+                value_table.c.log_T_Jordan_GeV,
+                value_table.c.log_H_Einstein_GeV,
+                value_table.c.log_H_Jordan_GeV,
+                value_table.c.gstar_rho,
+                value_table.c.gstar_s,
+                value_table.c.Sigma,
             )
             .select_from(
                 value_table.join(
@@ -259,33 +310,30 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
         values = []
 
         units: UnitsLike = cosmology.units
-        GeV = units.GeV
-        GeV4 = pow(GeV, 4.0)
-        Mpc = units.Mpc
+        log_Mp = log(units.PlanckMass)
+        log_GeV = log(units.GeV)
 
         for row in sample_rows:
             z_value = redshift(
                 store_id=row.z_serial,
                 z=row.z,
-                is_source=row.z_is_source,
-                is_response=row.z_is_response,
             )
             z_points.append(z_value)
             values.append(
                 ScalarModelValue(
                     store_id=row.serial,
                     z=z_value,
-                    Hubble=row.Hubble_GeV * GeV,
-                    wBackground=row.wBackground,
-                    wPerturbations=row.wPerturbations,
-                    rho=row.rho_GeV * GeV4,
-                    tau=row.tau_Mpc * Mpc,
-                    T_photon=row.T_photon_GeV * GeV,
-                    d_lnH_dz=row.d_lnH_dz,
-                    d2_lnH_dz2=row.d2_lnH_dz2,
-                    d3_lnH_dz3=row.d3_lnH_dz3,
-                    d_wPerturbations_dz=row.d_wPerturbations_dz,
-                    d2_wPerturbations_dz2=row.d2_wPerturbations_dz2,
+                    phi_Einstein=row.phi_Einstein_Mp * units.PlanckMass,
+                    pi_Einstein=row.pi_Einstein_Mp * units.PlanckMass,
+                    log_rhorad_Einstein=row.log_rhorad_Einstein_Mp4 + 4.0 * log_Mp,
+                    log_rhorad_Jordan=row.log_rhorad_Jordan_Mp4 + 4.0 * log_Mp,
+                    log_fm=row.log_fm,
+                    log_T_Jordan=row.log_T_Jordan_GeV + log_GeV,
+                    log_H_Einstein=row.log_H_Einstein_Mp + log_Mp,
+                    log_H_Jordan=row.log_H_Jordan_GeV + log_Mp,
+                    gstar_rho=row.gstar_rho,
+                    gstar_s=row.gstar_s,
+                    Sigma=row.Sigma,
                 )
             )
         imported_z_sample = redshift_array(z_points)
@@ -293,7 +341,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
         if num_expected_samples is not None:
             if len(imported_z_sample) != num_expected_samples:
                 raise RuntimeError(
-                    f'Fewer z-samples than expected were recovered from the validated background model "{store_label}"'
+                    f'Fewer z-samples than expected were recovered from the validated ScalarModel "{store_label}"'
                 )
 
         obj = ScalarModel(
@@ -310,17 +358,22 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 "solver": (
                     IntegrationSolver(
                         store_id=row_data.solver_serial,
-                        label=(row_data.solver_label),
-                        stepping=(row_data.solver_stepping),
+                        label=row_data.solver_label,
+                        stepping=row_data.solver_stepping,
                     )
                 ),
                 "values": values,
             },
             solver_labels=solver_labels,
             cosmology=cosmology,
+            T_Jordan_init=T_init,
+            T_Jordan_stop=T_stop,
+            phi_Einstein_init=phi_Einstein_init,
+            pi_Einstein_init=pi_Einstein_init,
+            potential=potential,
+            coupling=coupling,
             atol=atol,
             rtol=rtol,
-            z_sample=imported_z_sample,
             label=store_label,
             tags=tags,
         )
@@ -340,10 +393,17 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
             "label": obj.label,
             "cosmology_type": obj.cosmology.type_id,
             "cosmology_serial": obj.cosmology.store_id,
+            "potential_type": obj.potential.type_id,
+            "potential_serial": obj.potential.store_id,
+            "coupling_type": obj.coupling.type_id,
+            "coupling_serial": obj.coupling.store_id,
+            "T_Jordan_init_serial": obj.T_Jordan_init.store_id,
+            "T_Jordan_stop_serial": obj.T_Jordan_stop.store_id,
+            "phi_Einstein_init_serial": obj.phi_Einstein_init.store_id,
+            "pi_Einstein_init_serial": obj.pi_Einstein_init.store_id,
             "atol_serial": obj._atol.store_id,
             "rtol_serial": obj._rtol.store_id,
             "solver_serial": obj.solver.store_id,
-            "z_init_serial": obj.z_sample.min.store_id,
             "z_samples": len(obj.values),
             "compute_time": obj.metadata.compute_time,
             "compute_steps": obj.metadata.compute_steps,
@@ -371,10 +431,8 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
 
         # now serialize the sampled output points
         units: UnitsLike = obj._units
-        GeV = units.GeV
-        GeV4 = pow(GeV, 4.0)
-        Kelvin = units.Kelvin
-        Mpc = units.Mpc
+        log_Mp = log(units.PlanckMass)
+        log_GeV = log(units.GeV)
 
         value_inserter = inserters["ScalarModelValue"]
         for value in obj.values:
@@ -384,18 +442,17 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 {
                     "model_serial": store_id,
                     "z_serial": value.z.store_id,
-                    "Hubble_GeV": value.Hubble / GeV,
-                    "rho_GeV": value.rho / GeV4,
-                    "wBackground": value.wBackground,
-                    "wPerturbations": value.wPerturbations,
-                    "tau_Mpc": value.tau / Mpc,
-                    "T_photon_GeV": value.T_photon / GeV,
-                    "T_photon_Kelvin": value.T_photon / Kelvin,
-                    "d_lnH_dz": value.d_lnH_dz,
-                    "d2_lnH_dz2": value.d2_lnH_dz2,
-                    "d3_lnH_dz3": value.d3_lnH_dz3,
-                    "d_wPerturbations_dz": value.d_wPerturbations_dz,
-                    "d2_wPerturbations_dz2": value.d2_wPerturbations_dz2,
+                    "phi_Einstein_Mp": value.phi_Einstein / units.PlanckMass,
+                    "pi_Einstein_Mp": value.pi_Einstein / units.PlanckMass,
+                    "log_rhorad_Einstein_Mp4": value.log_rhorad_Einstein - 4.0 * log_Mp,
+                    "log_rhorad_Jordan_Mp4": value.log_rhorad_Jordan - 4.0 * log_Mp,
+                    "log_fm": value.log_fm,
+                    "log_T_Jordan_GeV": value.log_T_Jordan - log_GeV,
+                    "log_H_Einstein_Mp": value.log_H_Einstein - log_Mp,
+                    "log_H_Jordan_Mp": value.log_H_Jordan - log_Mp,
+                    "gstar_rho": value.gstar_rho,
+                    "gstar_s": value.gstar_s,
+                    "Sigma": value.Sigma,
                 },
             )
 
@@ -432,7 +489,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
         validated: bool = num_samples == expected_samples
         if not validated:
             print(
-                f'!! WARNING: Background model "{obj.label}" did not validate after serialization (expected samples={expected_samples}, number stored={num_samples})'
+                f'!! WARNING: ScalarModel "{obj.label}" did not validate after serialization (expected samples={expected_samples}, number stored={num_samples})'
             )
 
         conn.execute(
@@ -548,58 +605,70 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
                     index=True,
                     nullable=False,
                 ),
-                sqla.Column("Hubble_GeV", sqla.Float(64), nullable=False),
-                sqla.Column("wBackground", sqla.Float(64), nullable=False),
-                sqla.Column("wPerturbations", sqla.Float(64), nullable=False),
-                sqla.Column("rho_GeV", sqla.Float(64), nullable=False),
-                sqla.Column("tau_Mpc", sqla.Float(64), nullable=False),
-                sqla.Column("T_photon_GeV", sqla.Float(64), nullable=False),
-                sqla.Column("T_photon_Kelvin", sqla.Float(64), nullable=False),
-                sqla.Column("d_lnH_dz", sqla.Float(64), nullable=False),
-                sqla.Column("d2_lnH_dz2", sqla.Float(64), nullable=False),
-                sqla.Column("d3_lnH_dz3", sqla.Float(64), nullable=False),
-                sqla.Column("d_wPerturbations_dz", sqla.Float(64), nullable=False),
-                sqla.Column("d2_wPerturbations_dz2", sqla.Float(64), nullable=False),
+                sqla.Column("phi_Einstein_Mp", sqla.Float(64), nullable=False),
+                sqla.Column("pi_Einstein_Mp", sqla.Float(64), nullable=False),
+                sqla.Column("log_rhorad_Einstein_Mp4", sqla.Float(64), nullable=False),
+                sqla.Column("log_rhorad_Jordan_Mp4", sqla.Float(64), nullable=False),
+                sqla.Column("log_fm", sqla.Float(64), nullable=False),
+                sqla.Column("log_T_Jordan_GeV", sqla.Float(64), nullable=False),
+                sqla.Column("log_H_Einstein_Mp", sqla.Float(64), nullable=False),
+                sqla.Column("log_H_Jordan_Mp", sqla.Float(64), nullable=False),
+                sqla.Column("gstar_rho", sqla.Float(64), nullable=False),
+                sqla.Column("gstar_s", sqla.Float(64), nullable=False),
+                sqla.Column("Sigma", sqla.Float(64), nullable=False),
             ],
         }
 
     def build(self, payload, conn, table, inserter, tables, inserters):
         model_serial = payload["model_serial"]
-        units = payload["units"]
+        units: UnitsLike = payload["units"]
 
-        z = payload["z"]
+        z: redshift = payload["z"]
 
-        Hubble = payload["Hubble"]
-        wBackground = payload["wBackground"]
-        wPerturbations = payload["wPerturbations"]
+        phi_Einstein: float = payload["phi_Einstein"]
+        pi_Einstein: float = payload["pi_Einstein"]
 
-        rho = payload["rho"]
-        tau = payload["tau"]
-        T_photon = payload["T_photon"]
+        log_rhorad_Einstein: float = payload["log_rhorad_Einstein"]
+        log_rhorad_Jordan: float = payload["log_rhorad_Jordan"]
+        log_fm: float = payload["log_fm"]
+        log_T_Jordan: float = payload["log_T_Jordan"]
 
-        d_lnH_dz = payload["d_lnH_dz"]
-        d2_lnH_dz2 = payload["d2_lnH_dz2"]
-        d3_lnH_dz3 = payload["d3_lnH_dz3"]
+        log_H_Einstein: float = payload["log_H_Einstein"]
+        log_H_Jordan: float = payload["log_H_Jordan"]
 
-        d_wPerturbations_dz = payload["d_wPerturbations_dz"]
-        d2_wPerturbations_dz2 = payload["d2_wPerturbations_dz2"]
+        gstar_rho: float = payload["gstar_rho"]
+        gstar_s: float = payload["gstar_s"]
+        Sigma: float = payload["Sigma"]
+
+        # define quantities in explicit units
+        log_Mp = log(units.PlanckMass)
+        log_GeV = log(units.GeV)
+
+        phi_Einstein_Mp: float = phi_Einstein / units.PlanckMass
+        pi_Einstein_Mp: float = pi_Einstein / units.PlanckMass
+
+        log_rhorad_Einstein_Mp4: float = log_rhorad_Einstein - 4.0 * log_Mp
+        log_rhorad_Jordan_Mp4: float = log_rhorad_Jordan - 4.0 * log_Mp
+        log_T_Jordan_GeV: float = log_T_Jordan - log_GeV
+
+        log_H_Einstein_Mp: float = log_H_Einstein - log_Mp
+        log_H_Jordan_Mp: float = log_H_Jordan - log_Mp
 
         try:
             row_data = conn.execute(
                 sqla.select(
                     table.c.serial,
-                    table.c.Hubble_GeV,
-                    table.c.rho_GeV,
-                    table.c.wBackground,
-                    table.c.wPerturbations,
-                    table.c.tau_Mpc,
-                    table.c.T_photon_GeV,
-                    # don't need to read redundant value of T_photon_Kelvin
-                    table.c.d_lnH_dz,
-                    table.c.d2_lnH_dz2,
-                    table.c.d3_lnH_dz3,
-                    table.c.d_wPerturbations_dz,
-                    table.c.d2_wPerturbations_dz2,
+                    table.c.phi_Einstein_Mp,
+                    table.c.pi_Einstein_Mp,
+                    table.c.log_rhorad_Einstein_Mp4,
+                    table.c.log_rhorad_Jordan_Mp4,
+                    table.c.log_fm,
+                    table.c.log_T_Jordan_GeV,
+                    table.c.log_H_Einstein_Mp,
+                    table.c.log_H_Jordan_Mp,
+                    table.c.gstar_rho,
+                    table.c.gstar_s,
+                    table.c.Sigma,
                 ).filter(
                     table.c.model_serial == model_serial,
                     table.c.z_serial == z.store_id,
@@ -611,69 +680,76 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
             )
             raise e
 
-        GeV = units.GeV
-        GeV4 = pow(GeV, 4.0)
-        Kelvin = units.Kelvin
-        Mpc = units.Mpc
-
         if row_data is None:
             store_id = inserter(
                 conn,
                 {
-                    "wkb_serial": model_serial,
+                    "model_serial": model_serial,
                     "z_serial": z.store_id,
-                    "Hubble_GeV": Hubble / GeV,
-                    "rho_GeV": rho / GeV4,
-                    "wBackground": wBackground,
-                    "wPerturbations": wPerturbations,
-                    "tau_Mpc": tau / Mpc,
-                    "T_photon_GeV": T_photon / GeV,
-                    "T_photon_Kelvin": T_photon / Kelvin,
-                    "d_lnH_dz": d_lnH_dz,
-                    "d2_lnH_dz2": d2_lnH_dz2,
-                    "d3_lnH_dz3": d3_lnH_dz3,
-                    "d_wPerturbations_dz": d_wPerturbations_dz,
-                    "d2_wPerturbations_dz2": d2_wPerturbations_dz2,
+                    "phi_Einstein_Mp": phi_Einstein_Mp,
+                    "pi_Einstein_Mp": pi_Einstein_Mp,
+                    "log_rhorad_Einstein_Mp4": log_rhorad_Einstein_Mp4,
+                    "log_rhorad_Jordan_Mp4": log_rhorad_Jordan_Mp4,
+                    "log_fm": log_fm,
+                    "log_T_Jordan_GeV": log_T_Jordan_GeV,
+                    "log_H_Einstein_Mp": log_H_Einstein_Mp,
+                    "log_H_Jordan_Mp": log_H_Jordan_Mp,
+                    "gstar_rho": gstar_rho,
+                    "gstar_s": gstar_s,
+                    "Sigma": Sigma,
                 },
             )
         else:
             store_id = row_data.serial
 
-            Hubble = row_data.Hubble_GeV * GeV
-            rho = row_data.rho_GeV * GeV4
-            tau = row_data.tau_Mpc * Mpc
-            T_photon = row_data.T_photon_GeV * GeV
+            # phi_Einstein = row_data.phi_Einstein_Mp * units.PlanckMass
+            # pi_Einstein = row_data.pi_Einstein_Mp * units.PlanckMass
 
-            d_lnH_dz = row_data.d_lnH_dz
-            d2_lnH_dz2 = row_data.d2_lnH_dz2
-            d3_lnH_dz3 = row_data.d3_lnH_dz3
+            # replace supplied values with those read from the database
+            log_rhorad_Einstein = row_data.log_rhorad_Einstein_Mp4 + 4.0 * log_Mp
+            log_rhorad_Jordan = row_data.log_rhorad_Jordan_Mp4 + 4.0 * log_Mp
+            log_fm = row_data.log_fm
+            log_T_Jordan = row_data.log_T_Jordan_GeV + log_GeV
 
-            d_wPerturbations_dz = row_data.d_wPerturbations_dz
-            d2_wPerturbations_dz2 = row_data.d2_wPerturbations_dz2
+            log_H_Einstein = row_data.log_H_Einstein_Mp + log_Mp
+            log_H_Jordan = row_data.log_H_Jordan_Mp + log_Mp
 
-            if fabs(row_data.Hubble - Hubble) > DEFAULT_FLOAT_PRECISION:
+            gstar_rho = row_data.gstar_rho
+            gstar_s = row_data.gstar_s
+            Sigma = row_data.Sigma
+
+            # validate that recovered values match the supplied values, at least for phi and pi
+            # (we could do this for all of the values but it is laborious)
+            if (
+                fabs(row_data.phi_Einstein_Mp - phi_Einstein_Mp)
+                > DEFAULT_FLOAT_PRECISION
+            ):
                 raise ValueError(
-                    f"Stored background model Hubble value (model store_id={model_serial}, z={z.store_id}) = {row_data.Hubble} differs from expected value = {Hubble}"
+                    f"Stored ScalarModel phi(Einstein)/Mp value (model store_id={model_serial}, z={z.store_id}) = {row_data.phi_Einstein_Mp}/Mp differs from expected value = {phi_Einstein_Mp}/Mp"
                 )
-            if fabs(row_data.wBackground - wBackground) > DEFAULT_FLOAT_PRECISION:
+
+            if (
+                fabs(row_data.phi_Einstein_Mp - pi_Einstein_Mp)
+                > DEFAULT_FLOAT_PRECISION
+            ):
                 raise ValueError(
-                    f"Stored background model w_Background value (model store_id={model_serial}, z={z.store_id}) = {row_data.wBackground} differs from expected value = {wBackground}"
+                    f"Stored ScalarModel pi(Einstein)/Mp value (model store_id={model_serial}, z={z.store_id}) = {row_data.pi_Einstein_Mp}/Mp differs from expected value = {pi_Einstein_Mp}/Mp"
                 )
 
         obj = ScalarModelValue(
             store_id=store_id,
             z=z,
-            Hubble=Hubble,
-            rho=rho,
-            wBackground=wBackground,
-            wPerturbations=wPerturbations,
-            tau=tau,
-            T_photon=T_photon,
-            d_lnH_dz=d_lnH_dz,
-            d2_lnH_dz2=d2_lnH_dz2,
-            d3_lnH_dz3=d3_lnH_dz3,
-            d_wPerturbations_dz=d_wPerturbations_dz,
-            d2_wPerturbations_dz2=d2_wPerturbations_dz2,
+            phi_Einstein=phi_Einstein,
+            pi_Einstein=pi_Einstein,
+            log_rhorad_Einstein=log_rhorad_Einstein,
+            log_rhorad_Jordan=log_rhorad_Jordan,
+            log_fm=log_fm,
+            log_T_Jordan=log_T_Jordan,
+            log_H_Einstein=log_H_Einstein,
+            log_H_Jordan=log_H_Jordan,
+            gstar_rho=gstar_rho,
+            gstar_s=gstar_s,
+            Sigma=Sigma,
         )
         obj._deserialized = True
         return obj

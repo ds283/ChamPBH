@@ -13,9 +13,12 @@ from CosmologyConcepts import (
     DimensionfulQuantityArray,
     temperature,
     redshift_array,
+    phi_value,
+    pi_value,
 )
-from CosmologyConcepts.ConformalCouplings.AbstractCoupling import AbstractCoupling
-from CosmologyConcepts.Potentials.AbstractPotential import AbstractPotential
+from CosmologyConcepts.ConformalCouplings import AbstractCoupling
+from CosmologyConcepts.Potentials import AbstractPotential
+from CosmologyModels import BaseCosmology
 from Datastore.SQL import ProfileAgent
 from Datastore.SQL.ObjectFactories import tolerance
 from Datastore.SQL.ShardedPool import ShardedPool
@@ -104,7 +107,7 @@ parser.add_argument(
     "--T-high-GeV",
     type=float,
     default=DEFAULT_T_HIGH_GEV,
-    help="set initial conditions at temperature T_init, specified in GeV",
+    help="set initial conditions at temperature T_Jordan_init, specified in GeV",
 )
 parser.add_argument(
     "--beta-low",
@@ -217,6 +220,9 @@ def run_pipeline(
     Potential_array: List[AbstractPotential],
     Coupling_array: List[AbstractCoupling],
     T_init: temperature,
+    T_stop: temperature,
+    phi_init: phi_value,
+    pi_init: pi_value,
     z_grid: redshift_array,
     atol: tolerance,
     rtol: tolerance,
@@ -225,28 +231,16 @@ def run_pipeline(
     model_label = model_data["label"]
     model_cosmology = model_data["cosmology"]
 
-    T_CMB_Kelvin = model_cosmology.T_CMB_Kelvin
-    T_stop = temperature(T_CMB_Kelvin * units.Kelvin)
-
-    phi_init = (
-        7.0 * units.PlanckMass
-    )  # think Xav is using 5 Mp, picking a slightly different comparison to check stability of evolutions
-    pi_init = 0.0
-
-    T_init_GeV = float(T_init) / units.GeV
-
     print(f"\n>> RUNNING PIPELINE FOR MODEL {model_label}")
 
     # build tags and other labels, based on these sample grids
     (
-        TInitGeVTag,  # initial value of temperature in GeV
         SamplesPerLog10ZTag,  # labels number of sampled redshifts per log10 interval of 1+z in the source grid
         SamplesPerBetaTag,  # labels number of sampled beta values per log10 in beta
         SamplesPerLog10LambdaTag,  # labels number of sampled Lambda values per log10 in Lambda
         SamplesPerLog10MTag,  # labels number of sampled M values per log10 in M
     ) = ray.get(
         [
-            pool.object_get("store_tag", label=f"TInitGeV_{T_init_GeV:.6g}"),
             pool.object_get(
                 "store_tag", label=f"SamplesPerLog10Z_{samples_per_log10z}"
             ),
@@ -282,17 +276,16 @@ def run_pipeline(
             {
                 "solver_labels": [],
                 "cosmology": model_cosmology,
-                "T_init": T_init,
-                "T_stop": T_stop,
-                "phi_init": phi_init,  # currently using fixed initial value of phi_Einstein
-                "pi_init": pi_init,  # currently all integrations begin with the field at rest
+                "T_Jordan_init": T_init,
+                "T_Jordan_stop": T_stop,
+                "phi_Einstein_init": phi_init,  # currently using fixed initial value of phi_Einstein
+                "pi_Einstein_init": pi_init,  # currently all integrations begin with the field at rest
                 "z_grid": None,  # don't check which values of z we have sampled
                 "potential": potential,
                 "coupling": coupling,
                 "atol": atol,
                 "rtol": rtol,
                 "tags": [
-                    TInitGeVTag,
                     SamplesPerLog10ZTag,
                     SamplesPerBetaTag,
                     SamplesPerLog10MTag,
@@ -332,17 +325,16 @@ def run_pipeline(
                 pool.object_get(
                     "ScalarModel",
                     solver_labels=solvers,
-                    T_init=T_init,
-                    T_stop=T_stop,
-                    phi_init=phi_init,
-                    pi_init=pi_init,
+                    T_Jordan_init=T_init,
+                    T_Jordan_stop=T_stop,
+                    phi_Einstein_init=phi_init,
+                    pi_Einstein_init=pi_init,
                     potential=potential,
                     coupling=coupling,
                     z_grid=z_grid,
                     atol=atol,
                     rtol=rtol,
                     tags=[
-                        TInitGeVTag,
                         SamplesPerLog10ZTag,
                         SamplesPerBetaTag,
                         SamplesPerLog10MTag,
@@ -357,7 +349,7 @@ def run_pipeline(
     def build_solver_work_label(m: ScalarModel):
         potential: AbstractPotential = m.potential
         coupling: AbstractCoupling = m.coupling
-        return f"{args.job_name}-ScalarModel-{potential.label}-{coupling.label}-{datetime.now().replace(microsecond=0).isoformat()}"
+        return f"{args.job_name}-ScalarModel-{potential.name}-{coupling.name}-{datetime.now().replace(microsecond=0).isoformat()}"
 
     def compute_solver_work(m: ScalarModel):
         return m.compute(label=label)
@@ -430,6 +422,14 @@ with ShardedPool(
         pool.object_get("temperature", value=T_high_GeV * units.GeV, units=units)
     )
 
+    # think Xav is using phi_init=5 Mp, picking a slightly different comparison to check stability of evolutions
+    phi_init, pi_init = ray.get(
+        [
+            pool.object_get("phi_value", value=7.0 * units.PlanckMass, units=units),
+            pool.object_get("pi_value", value=0.0, units=units),
+        ]
+    )
+
     def convert_to_redshift(z_array):
         return pool.object_get(
             "redshift",
@@ -488,7 +488,7 @@ with ShardedPool(
     # So we can no longer construct these on-the-fly in the integration classes, as used to be done
     (
         solve_ivp_RK45,
-        solve_ivp_DOP852,
+        solve_ivp_DOP853,
         solve_ivp_Radau,
         solve_ivp_BDF,
         solve_icp_LSODA,
@@ -503,7 +503,7 @@ with ShardedPool(
     )
     solvers = {
         "solve_ivp+RK45-stepping0": solve_ivp_RK45,
-        "solve_ivp+DOP853-stepping0": solve_ivp_DOP852,
+        "solve_ivp+DOP853-stepping0": solve_ivp_DOP853,
         "solve_ivp+Radau-stepping0": solve_ivp_Radau,
         "solve_ivp+BDF-stepping0": solve_ivp_BDF,
         "solve_ivp+LSODA-stepping0": solve_icp_LSODA,
@@ -578,12 +578,20 @@ with ShardedPool(
 
     model_list = build_model_list(pool, units)
     for model_data in model_list:
+        cosmology: BaseCosmology = model_data["cosmology"]
+        T_CMB = cosmology._params.T_CMB_Kelvin * units.Kelvin
+
+        T_stop = ray.get(pool.object_get("temperature", value=T_CMB, units=units))
+
         run_pipeline(
             model_data,
             units,
             Potential_array,
             Coupling_array,
             T_high,
+            T_stop,
+            phi_init,
+            pi_init,
             z_array,
             atol,
             rtol,

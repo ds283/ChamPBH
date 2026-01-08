@@ -9,7 +9,14 @@ import sqlalchemy as sqla
 from ray.actor import ActorHandle
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
-from CosmologyConcepts import beta_value, Lambda_value, M_value, temperature
+from CosmologyConcepts import (
+    beta_value,
+    Lambda_value,
+    M_value,
+    temperature,
+    phi_value,
+    pi_value,
+)
 from Datastore.SQL.ClientPool import SerialPoolManager, SerialLeaseManager
 from Datastore.SQL.ObjectFactories.DimensionfulQuantity import (
     sqla_dimensionful_quantity_factory,
@@ -20,7 +27,6 @@ from Datastore.SQL.ObjectFactories.DimensionlessQuantity import (
 from Datastore.SQL.ObjectFactories.ExponentialCoupling import (
     sqla_ExponentialCoupling_factory,
 )
-from Datastore.SQL.ObjectFactories.LambdaCDM import sqla_LambdaCDM_factory
 from Datastore.SQL.ObjectFactories.QCD_Cosmology import sqla_QCDCosmology_factory
 from Datastore.SQL.ObjectFactories.ScalarModel import (
     sqla_ScalarModelFactory,
@@ -57,9 +63,10 @@ _factories = {
     "M_value": sqla_dimensionful_quantity_factory(M_value),
     "Lambda_value": sqla_dimensionful_quantity_factory(Lambda_value),
     "temperature": sqla_dimensionful_quantity_factory(temperature),
+    "phi_value": sqla_dimensionful_quantity_factory(phi_value),
+    "pi_value": sqla_dimensionful_quantity_factory(pi_value),
     "StandardChameleon": sqla_StandardChameleon_factory(),
     "ExponentialCoupling": sqla_ExponentialCoupling_factory(),
-    "LambdaCDM": sqla_LambdaCDM_factory(),
     "QCD_Cosmology": sqla_QCDCosmology_factory(),
     "IntegrationSolver": sqla_IntegrationSolver_factory(),
     "ScalarModel": sqla_ScalarModelFactory(),

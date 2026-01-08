@@ -1,7 +1,7 @@
 from math import exp
 
 from CosmologyConcepts import M_value, Lambda_value
-from CosmologyConcepts.Potentials import AbstractPotential
+from CosmologyConcepts.Potentials import AbstractPotential, STANDARD_CHAMELEON
 from Units.base import UnitsLike
 
 
@@ -23,6 +23,15 @@ class StandardChameleon(AbstractPotential):
         self._Lambda_4 = _Lambda_2 * _Lambda_2
 
         self._M_float = float(M)
+        self._Lambda_float = float(Lambda)
+
+    @property
+    def name(self):
+        return f"StandardChameleon(M={self._M_float / self._units.eV:.5g}eV,Lambda={self._Lambda_float / self._units.eV:.5g}eV)"
+
+    @property
+    def type_id(self) -> int:
+        raise STANDARD_CHAMELEON
 
     @property
     def shard_key(self) -> M_value:

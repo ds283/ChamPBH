@@ -9,6 +9,8 @@ replicated_tables = [
     "M_value",
     "Lambda_value",
     "temperature",
+    "phi_value",
+    "pi_value",
     "ExponentialCoupling",
     "LambdaCDM",
     "QCD_Cosmology",
@@ -26,6 +28,8 @@ read_table_config = {
     "read_beta_table": {"class": "beta_value", "tables_arg": False},
     "read_M_table": {"class": "M_value", "tables_arg": False},
     "read_Lambda_table": {"class": "Lambda_value", "tables_arg": False},
+    "read_phi_table": {"class": "phi_value", "tables_arg": False},
+    "read_pi_table": {"class": "pi_value", "tables_arg": False},
 }
 
 

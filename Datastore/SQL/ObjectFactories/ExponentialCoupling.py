@@ -1,7 +1,8 @@
 import sqlalchemy as sqla
 from sqlalchemy.exc import MultipleResultsFound
 
-from CosmologyConcepts import beta_value, ExponentialCoupling
+from CosmologyConcepts import beta_value
+from CosmologyConcepts.ConformalCouplings import ExponentialCoupling
 from Datastore.SQL.ObjectFactories.base import SQLAFactoryBase
 from Units.base import UnitsLike
 
