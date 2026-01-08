@@ -272,8 +272,11 @@ def run_pipeline(
         batch = [x for x in batch if x is not None]
 
         # query whether a stored result exists for all potential/coupling combinations
+        # ScalarModel is a sharded table and needs a "shard_key" field
+        # TODO: find a better way to implement/handle
         query_batch = [
             {
+                "shard_key": potential.shard_key,
                 "solver_labels": [],
                 "cosmology": model_cosmology,
                 "T_Jordan_init": T_init,
@@ -324,7 +327,9 @@ def run_pipeline(
             work_refs.append(
                 pool.object_get(
                     "ScalarModel",
+                    shard_key=potential.shard_key,
                     solver_labels=solvers,
+                    cosmology=model_cosmology,
                     T_Jordan_init=T_init,
                     T_Jordan_stop=T_stop,
                     phi_Einstein_init=phi_init,
@@ -456,6 +461,8 @@ with ShardedPool(
         )
 
     def convert_to_potential(M_lambda_set):
+        # StandardChameleon is a sharded table and needs a "shard_key" field
+        # TODO: find a better way to implement/handle
         return pool.object_get(
             "StandardChameleon",
             payload_data=[

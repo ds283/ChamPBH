@@ -23,7 +23,7 @@ class ExponentialCoupling(AbstractCoupling):
 
     @property
     def type_id(self) -> int:
-        raise EXPONENTIAL_COUPLING
+        return EXPONENTIAL_COUPLING
 
     def log_Omega(self, phi: float) -> float:
         """

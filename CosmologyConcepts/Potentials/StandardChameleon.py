@@ -32,7 +32,7 @@ class StandardChameleon(AbstractPotential):
 
     @property
     def type_id(self) -> int:
-        raise STANDARD_CHAMELEON
+        return STANDARD_CHAMELEON
 
     @property
     def shard_key(self) -> M_value:
