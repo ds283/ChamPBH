@@ -1,5 +1,5 @@
 from collections import namedtuple
-from math import log, pi, exp, sqrt
+from math import log, pi, exp, sqrt, isinf, isnan
 from typing import Optional, List
 
 import ray
