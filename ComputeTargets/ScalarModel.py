@@ -228,19 +228,19 @@ def compute_scalar_model(
 
     if not sol.success:
         raise RuntimeError(
-            f'compute_scalar_model: integration did not terminate successfully (log_T_init={log_T_init:.5g}, log_T_stop={log_T_stop:.5g}, error at N={sol.t[-1]:.5g}, "{sol.message}")'
+            f'compute_scalar_model ({task_label}): integration did not terminate successfully (log_T_init={log_T_init:.5g}, log_T_stop={log_T_stop:.5g}, error at N={sol.t[-1]:.5g}, "{sol.message}")'
         )
 
     if not sol.status == 1:
         raise RuntimeError(
-            f'compute_scalar_model: expected termination to occur at T_Jordan_stop (log_T_init={log_T_init:.5g}, log_T_stop={log_T_stop:.5g}, last sample at N={sol.t[-1]:.5g}, "{sol.message}")'
+            f'compute_scalar_model ({task_label}): expected termination to occur at T_Jordan_stop (log_T_init={log_T_init:.5g}, log_T_stop={log_T_stop:.5g}, last sample at N={sol.t[-1]:.5g}, "{sol.message}")'
         )
 
     sampled_N = sol.t
     sampled_values = StateVector._make(sol.y)
     if len(sampled_values) != EXPECTED_SOL_LENGTH:
         raise RuntimeError(
-            f"compute_scalar_model: solution does not have expected number of members (expected {EXPECTED_SOL_LENGTH}, found {len(sampled_values)}; length of sol.t={len(sampled_N)})"
+            f"compute_scalar_model ({task_label}): solution does not have expected number of members (expected {EXPECTED_SOL_LENGTH}, found {len(sampled_values)}; length of sol.t={len(sampled_N)})"
         )
 
     # the integration should have terminated when T_Jordan = T_CMB, which ought to correspond to z = 0
@@ -249,6 +249,13 @@ def compute_scalar_model(
     final_N = sol.t[-1]
     largest_z = exp(final_N) - 1.0
     z_grid_cut = z_grid.truncate(largest_z, keep="lower")
+
+    max_z: redshift = z_grid.max
+    max_N: float = log(1.0 + max_z.z)
+    if max_N < final_N:
+        raise RuntimeError(
+            f"compute_scalar_model: ({task_label}): largest supplied redshift z={max_z.z:.3g} is equivalent to maximum e-fold number N={max_N:.3g}, but solution required N={final_N:.3g} e-folds"
+        )
 
     sample = []
 
