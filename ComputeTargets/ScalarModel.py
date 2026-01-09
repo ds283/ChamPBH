@@ -164,6 +164,15 @@ def compute_scalar_model(
         with RHS_timer(supervisor) as timer:
             state: StateVector = StateVector._make(s)
 
+            if any((isnan(x) or isinf(x)) for x in state):
+                print(
+                    f"!! compute_scalar_model ({task_label}): input to ODE RHS has infinity or NaN values at N={N:.8g}"
+                )
+                print(f"     - state={state}")
+                raise RuntimeError(
+                    f"compute_scalar_model ({task_label}): input to ODE RHS has infinity or NaN values"
+                )
+
             phi_Einstein: float = state.phi_Einstein
             pi_Einstein: float = state.pi_Einstein
             log_rhorad_Einstein: float = state.log_rhorad_Einstein
@@ -221,13 +230,44 @@ def compute_scalar_model(
                 1.0 + (T_Jordan / G_s) * dG_s / 3.0
             )
 
-            return StateVector(
+            return_state = StateVector(
                 phi_Einstein=d_phi_Einstein,
                 pi_Einstein=d_pi_Einstein,
                 log_rhorad_Einstein=d_log_rhorad_Einstein,
                 log_fm=d_log_fm,
                 log_T_Jordan=d_log_T_Jordan,
             )
+
+            if any((isnan(x) or isinf(x)) for x in return_state):
+                print(
+                    f"!! compute_scalar_model ({task_label}): output from ODE RHS has infinity or NaN values at N={N:.8g}"
+                )
+                print(
+                    f"     - inputs/states: phi_E={phi_Einstein/units.PlanckMass:.5g} Mp, pi_E={pi_Einstein/units.PlanckMass:.5g} Mp, log_rhorad_E={log_rhorad_Einstein:.5g}, log_fm={log_fm:.5g}, log_T_J={log_T_Jordan:.5g}"
+                )
+                print(
+                    f"     - physical: rhorad_E=({pow(rhorad_Einstein, 1.0/4.0)/units.GeV:.5g} GeV)^4, fm={fm:.5g}, T_J={T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K"
+                )
+                print(
+                    f"     - potential: V=({pow(V, 1.0/4.0)/units.GeV:.5g} GeV)^4, V'=({pow(Vprime, 1.0/3.0)/units.GeV:.5g} GeV)^4, log_Omega'={log_Omega_prime:.5g}"
+                )
+                print(
+                    f"     - cosmology: H2_Mp2_E=({pow(H2_Mp2_Einstein, 1.0/4.0)/units.PlanckMass:.5g} Mp)^4, H2_E=({pow(H2_Einstein, 1.0/2.0)/units.PlanckMass:.5g} Mp)^2, Sigma={Sigma:.5g}"
+                )
+                print(
+                    f"     - intermediates: G={G:.5g}, A1={A1:.5g}, A2={A2:.5g}, A3={A3:.5g}, C={C:.5g}, D={D:.5g}, E={E:.5g}"
+                )
+                print(
+                    f"     - derivatives: d_phi_E={d_phi_Einstein:.5g}, d_pi_E={d_pi_Einstein:.5g}, d_log_rhorad_E={d_log_rhorad_Einstein:.5g}, d_log_fm={d_log_fm:.5g}, d_log_T_J={d_log_T_Jordan:.5g}"
+                )
+                print(f"     - thermodynamics: G_s={G_s:.5g}, dG_s={dG_s:.5g}")
+                print(f"     - state={state}")
+                print(f"     - return_state={return_state}")
+                raise RuntimeError(
+                    f"compute_scalar_model ({task_label}): output from ODE RHS has infinity or NaN values"
+                )
+
+            return return_state
 
     # termination occurs when the Jordan frame temperature hits T_Jordan_stop, usually equal to T_CMB,
     # so the actual stop value given in t_span is mostly irrelevant, just
