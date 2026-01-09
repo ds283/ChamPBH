@@ -536,14 +536,16 @@ class ScalarModel(DatastoreObject):
         self._compute_ref = None
 
         self._data = data["metadata"]
+
         sample = data["sample"]
+        z_grid = data["z_grid"]
 
         self._values = []
         for i in range(len(sample)):
             self._values.append(
                 ScalarModelValue(
                     None,
-                    self.z_grid[i],
+                    z_grid[i],
                     phi_Einstein=sample[i].phi_Einstein,
                     pi_Einstein=sample[i].pi_Einstein,
                     log_rhorad_Einstein=sample[i].log_rhorad_Einstein,
