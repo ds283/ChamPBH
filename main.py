@@ -595,7 +595,7 @@ with ShardedPool(
             T_stop,
             phi_init,
             pi_init,
-            z_array,
+            z_grid,
             atol,
             rtol,
             solvers,
