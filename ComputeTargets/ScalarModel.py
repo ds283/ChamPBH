@@ -49,6 +49,15 @@ StateVector = namedtuple(
 )
 EXPECTED_SOL_LENGTH = 5
 
+SolutionFragment = namedtuple(
+    "SolutionFragment",
+    [
+        "N_low",
+        "N_high",
+        "sol",
+    ],
+)
+
 SampleValues = namedtuple(
     "SampleValues",
     [
@@ -139,24 +148,24 @@ def compute_scalar_model(
     log_fm_init = log_rho_m_init - log_rhorad_Jordan_init
     assert log_fm_init < 0.0
 
-    rhorad_Jordan_init: float = exp(log_rhorad_Einstein_init)
-    rhorad_Jordan_init_14: float = pow(rhorad_Jordan_init, 1.0 / 4.0)
+    # rhorad_Jordan_init: float = exp(log_rhorad_Einstein_init)
+    # rhorad_Jordan_init_14: float = pow(rhorad_Jordan_init, 1.0 / 4.0)
 
-    rhomat_Jordan_init: float = exp(log_rho_m_init)
-    rhomat_Jordan_init_14: float = pow(rhomat_Jordan_init, 1.0 / 4.0)
+    # rhomat_Jordan_init: float = exp(log_rho_m_init)
+    # rhomat_Jordan_init_14: float = pow(rhomat_Jordan_init, 1.0 / 4.0)
 
-    fm_init = exp(log_fm_init)
+    # fm_init = exp(log_fm_init)
 
-    print(f"-- compute_scalar_model ({task_label}): initial data")
-    print(
-        f"    - T_Jordan_init = {GetTemperature(T_init)/units.GeV:.5g} GeV = {GetTemperature(T_init)/units.Kelvin:.5g} K"
-    )
-    print(f"    - rho_r_Jordan_init = ({rhorad_Jordan_init_14/units.GeV:.5g} GeV)^4")
-    print(f"    - rho_m_Jordan_init = ({rhomat_Jordan_init_14/units.GeV:.5g} GeV)^4")
-    print(f"    - f_m_init = {fm_init:.5g} | log(f_m_init) = {log_fm_init:.5g}")
-    print(
-        f"    - log_rho_r_Jordan_init = {log_rhorad_Jordan_init:.5g}, log_rho_r_Einstein_init = {log_rhorad_Einstein_init:.5g}"
-    )
+    # print(f"-- compute_scalar_model ({task_label}): initial data")
+    # print(
+    #     f"    - T_Jordan_init = {GetTemperature(T_init)/units.GeV:.5g} GeV = {GetTemperature(T_init)/units.Kelvin:.5g} K"
+    # )
+    # print(f"    - rho_r_Jordan_init = ({rhorad_Jordan_init_14/units.GeV:.5g} GeV)^4")
+    # print(f"    - rho_m_Jordan_init = ({rhomat_Jordan_init_14/units.GeV:.5g} GeV)^4")
+    # print(f"    - f_m_init = {fm_init:.5g} | log(f_m_init) = {log_fm_init:.5g}")
+    # print(
+    #     f"    - log_rho_r_Jordan_init = {log_rhorad_Jordan_init:.5g}, log_rho_r_Einstein_init = {log_rhorad_Einstein_init:.5g}"
+    # )
 
     CONST_MP_SQ = units.PlanckMass * units.PlanckMass
     CONST_6_MP_SQ = 6.0 * CONST_MP_SQ
@@ -292,45 +301,116 @@ def compute_scalar_model(
         -1.0
     )  # only trigger when going from positive to negative, i.e., when the temperature dips *below* T_Jordan_stop
 
+    # detect failures to reflect at the chameleon "brick wall" at the origin
+    def reflection_failute_detector(N, s, supervisor) -> float:
+        state: StateVector = StateVector._make(s)
+
+        return state.phi_Einstein
+
+    reflection_failute_detector.terminal = True
+    reflection_failute_detector.direction = (
+        -1.0
+    )  # only trigger when phi_Einstein crosses from positive to negative values
+
+    N_failsafe = 1000.0  # terminate after 1000 e-folds as a failsafe
+    N_start = 0.0
+
+    # track number of function evaluations reported by the integrator
+    compute_steps = 0
+
+    # track the solution fragments generated between reflection events
+    solution_fragments = []
+    solution_complete = False
+
+    # track when we impose a "manual" hard reflection - this happens when we detect phi_E crossing zero
+    hard_reflections = []
+
+    # prepare the first initial state
+    initial_state = StateVector(
+        phi_Einstein=phi_init_float,
+        pi_Einstein=pi_init_float,
+        log_rhorad_Einstein=log_rhorad_Einstein_init,
+        log_fm=log_fm_init,
+        log_T_Jordan=log_T_init,
+    )
+
     with ScalarFieldIntegrationSupervisor(
         units, T_init, T_stop, label=task_label
     ) as supervisor:
-        initial_state = StateVector(
-            phi_Einstein=phi_init_float,
-            pi_Einstein=pi_init_float,
-            log_rhorad_Einstein=log_rhorad_Einstein_init,
-            log_fm=log_fm_init,
-            log_T_Jordan=log_T_init,
-        )
+        while not solution_complete:
+            sol = solve_ivp(
+                RHS,
+                method="Radau",
+                t_span=(N_start, N_failsafe),
+                y0=initial_state,
+                atol=atol,
+                rtol=rtol,
+                args=(supervisor,),
+                events=(
+                    terminate_at_T_stop,
+                    reflection_failute_detector,
+                ),
+                dense_output=True,
+            )
 
-        sol = solve_ivp(
-            RHS,
-            method="Radau",
-            t_span=(0.0, 1000.0),
-            y0=initial_state,
-            atol=atol,
-            rtol=rtol,
-            args=(supervisor,),
-            events=(terminate_at_T_stop,),
-            dense_output=True,
-        )
+            # check that termination occurred due to reaching the end of the integration domain, or because of a termination event
+            if not sol.success:
+                raise RuntimeError(
+                    f'compute_scalar_model ({task_label}): integration did not terminate successfully (log_T_init={log_T_init:.5g}, log_T_stop={log_T_stop:.5g}, error at N={sol.t[-1]:.5g}, "{sol.message}")'
+                )
 
-    if not sol.success:
-        raise RuntimeError(
-            f'compute_scalar_model ({task_label}): integration did not terminate successfully (log_T_init={log_T_init:.5g}, log_T_stop={log_T_stop:.5g}, error at N={sol.t[-1]:.5g}, "{sol.message}")'
-        )
+            # check that termination was not due to reaching the end of the integraton domain (that is supposed to be just a failsafe)
+            if not sol.status == 1:
+                raise RuntimeError(
+                    f'compute_scalar_model ({task_label}): integration concluded without a termination event => failsafe activated (log_T_init={log_T_init:.5g}, log_T_stop={log_T_stop:.5g}, last sample at N={sol.t[-1]:.5g}, "{sol.message}")'
+                )
 
-    if not sol.status == 1:
-        raise RuntimeError(
-            f'compute_scalar_model ({task_label}): expected termination to occur at T_Jordan_stop (log_T_init={log_T_init:.5g}, log_T_stop={log_T_stop:.5g}, last sample at N={sol.t[-1]:.5g}, "{sol.message}")'
-        )
+            # check that the solution has the expected number of elements
+            sampled_N = sol.t
+            sampled_values = StateVector._make(sol.y)
+            if len(sampled_values) != EXPECTED_SOL_LENGTH:
+                raise RuntimeError(
+                    f"compute_scalar_model ({task_label}): solution does not have expected number of members (expected {EXPECTED_SOL_LENGTH}, found {len(sampled_values)}; length of sol.t={len(sampled_N)})"
+                )
 
-    sampled_N = sol.t
-    sampled_values = StateVector._make(sol.y)
-    if len(sampled_values) != EXPECTED_SOL_LENGTH:
-        raise RuntimeError(
-            f"compute_scalar_model ({task_label}): solution does not have expected number of members (expected {EXPECTED_SOL_LENGTH}, found {len(sampled_values)}; length of sol.t={len(sampled_N)})"
-        )
+            # update running number of function evaluations (recorded by integrator)
+            compute_steps += int(sol.nfev)
+
+            # at this stage, we know that one of the event handlers fired to terminate the evolution
+            # now we decide which one
+
+            termination_event_times = sol.t_events[0]
+            reflection_event_times = sol.t_events[1]
+
+            num_termination_events = len(termination_event_times)
+            num_reflection_events = len(reflection_event_times)
+            if num_termination_events + num_reflection_events != 1:
+                raise RuntimeError(
+                    f"compute_scalar_model ({task_label}): integration terminated with multiple termination events (N_start={N_start:.5g}, N_failsafe={N_failsafe:.5g}, num_termination_events={num_termination_events}, num_reflection_events={num_reflection_events})"
+                )
+
+            # append this solution fragment to this list
+            solution_fragments.append(
+                SolutionFragment(
+                    N_low=N_start,
+                    N_high=sol.t[-1],
+                    sol=sol.sol,
+                )
+            )
+
+            # if the integration terminated, break out
+            if num_termination_events == 1:
+                solution_complete = True
+                continue
+
+            # record that a hard reflection occurred and prepare for the next integration step
+            hard_reflections.append(reflection_event_times[0])
+            N_start = sol.t[-1]
+            initial_state = StateVector._make(sol.y[-1])
+
+            # reverse direction of travel for the scalar field
+            initial_state.pi_Einstein = -initial_state.pi_Einstein
+            assert initial_state.pi_Einstein >= 0.0
 
     # the integration should have terminated when T_Jordan = T_CMB, which ought to correspond to z = 0
     # we now work backwards and sample the integration output on the supplied z grid, using the e-fold number
@@ -348,12 +428,25 @@ def compute_scalar_model(
 
     sample = []
 
+    # loop over the required z sample grid.
+    # Note that we will work from high z to low z.
+
+    current_fragment = solution_fragments.pop(0)
     for z in z_grid_cut:
         z: redshift
         N_backward = log(1.0 + z.z)
         N_forward = final_N - N_backward
 
-        state: StateVector = StateVector._make(sol.sol(N_forward))
+        if N_forward > current_fragment.N_high:
+            while N_forward > current_fragment.N_high:
+                current_fragment = solution_fragments.pop(0)
+
+        if N_forward < current_fragment.N_low:
+            raise RuntimeError(
+                f"compute_scalar_model: ({task_label}): z={z.z:.3g} appears to be out-of-order relative to the solution fragments"
+            )
+
+        state: StateVector = StateVector._make(current_fragment.sol(N_forward))
 
         Omega: float = coupling.Omega(state.phi_Einstein)
         log_Omega: float = coupling.log_Omega(state.phi_Einstein)
@@ -397,7 +490,7 @@ def compute_scalar_model(
     return {
         "metadata": IntegrationData(
             compute_time=supervisor.integration_time,
-            compute_steps=int(sol.nfev),
+            compute_steps=compute_steps,
             RHS_evaluations=supervisor.RHS_evaluations,
             mean_RHS_time=supervisor.mean_RHS_time,
             max_RHS_time=supervisor.max_RHS_time,
@@ -405,6 +498,7 @@ def compute_scalar_model(
         ),
         "z_grid": z_grid_cut,
         "sample": sample,
+        "hard_reflections": hard_reflections,
         "solver_label": "solve_ivp+Radau-stepping0",
     }
 
@@ -469,12 +563,14 @@ class ScalarModel(DatastoreObject):
             self._metadata = None
             self._solver = None
             self._values = None
+            self._extra_data = None
 
         else:
             DatastoreObject.__init__(self, payload["store_id"])
             self._metadata: Optional[IntegrationData] = payload["metadata"]
             self._solver: Optional[IntegrationSolver] = payload["solver"]
             self._values: Optional[List[ScalarModelValue]] = payload["values"]
+            self._extra_data = payload["extra_data"]
 
         # store parameters
         self._label = label
@@ -656,6 +752,14 @@ class ScalarModel(DatastoreObject):
 
         sample: List[SampleValues] = data["sample"]
         z_grid: redshift_array = data["z_grid"]
+
+        extra_data = {}
+        hard_reflections = data["hard_reflections"]
+        if len(hard_reflections) > 0:
+            extra_data["hard_reflections"] = hard_reflections
+
+        if len(extra_data) > 0:
+            self._extra_data = extra_data
 
         self._values = []
         for i in range(len(sample)):

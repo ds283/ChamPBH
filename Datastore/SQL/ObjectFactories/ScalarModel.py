@@ -1,3 +1,4 @@
+import json
 from math import fabs, log
 from typing import Optional, List
 
@@ -162,6 +163,9 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 sqla.Column("max_RHS_time", sqla.Float(64)),
                 sqla.Column("min_RHS_time", sqla.Float(64)),
                 sqla.Column("validated", sqla.Boolean, default=False, nullable=False),
+                sqla.Column(
+                    "extra_data", sqla.String(DEFAULT_STRING_LENGTH), nullable=True
+                ),
             ],
         }
 
@@ -206,6 +210,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 table.c.solver_serial,
                 table.c.label,
                 table.c.z_samples,
+                table.c.extra_data,
                 solver_table.c.label.label("solver_label"),
                 solver_table.c.stepping.label("solver_stepping"),
                 atol_table.c.log10_tol.label("log10_atol"),
@@ -368,6 +373,11 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                         stepping=row_data.solver_stepping,
                     )
                 ),
+                "extra_data": (
+                    json.loads(row_data.extra_data)
+                    if row_data.extra_data is not None
+                    else None
+                ),
                 "values": values,
             },
             solver_labels=solver_labels,
@@ -418,6 +428,9 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
             "max_RHS_time": obj.metadata.max_RHS_time,
             "min_RHS_time": obj.metadata.min_RHS_time,
             "validated": False,
+            "extra_data": (
+                json.dumps(obj._extra_data) if obj._extra_data is not None else None
+            ),
         }
 
         # because ScalarModel is a replicated table, we need to allow for the possibility that this object
