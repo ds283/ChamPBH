@@ -406,10 +406,12 @@ def compute_scalar_model(
             # record that a hard reflection occurred and prepare for the next integration step
             hard_reflections.append(reflection_event_times[0])
             N_start = sol.t[-1]
-            initial_state = StateVector._make(sol.y[-1])
+            initial_state = StateVector._make(sol.y[:, -1])
 
             # reverse direction of travel for the scalar field
-            initial_state.pi_Einstein = -initial_state.pi_Einstein
+            initial_state = initial_state._replace(
+                pi_Einstein=-initial_state.pi_Einstein
+            )
             assert initial_state.pi_Einstein >= 0.0
 
     # the integration should have terminated when T_Jordan = T_CMB, which ought to correspond to z = 0
