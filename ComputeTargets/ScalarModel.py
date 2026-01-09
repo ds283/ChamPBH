@@ -141,6 +141,7 @@ def compute_scalar_model(
                     f"current state: N={N:.3g}, T_Jordan = {T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp",
                 )
                 supervisor.reset_notify_time()
+
             V: float = potential.V(phi_Einstein)
             Vprime: float = potential.Vprime(phi_Einstein)
 
@@ -215,7 +216,7 @@ def compute_scalar_model(
 
         sol = solve_ivp(
             RHS,
-            method="DOP853",
+            method="Radau",
             t_span=(0.0, 1000.0),
             y0=initial_state,
             atol=atol,
@@ -304,7 +305,7 @@ def compute_scalar_model(
         ),
         "z_grid": z_grid_cut,
         "sample": sample,
-        "solver_label": "solve_ivp+DOP853-stepping0",
+        "solver_label": "solve_ivp+Radau-stepping0",
     }
 
 
