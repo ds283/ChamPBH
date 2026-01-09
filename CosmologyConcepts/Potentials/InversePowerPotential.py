@@ -1,6 +1,6 @@
-from CosmologyConcepts import M_value, Lambda_value
+from CosmologyConcepts import M_value, Lambda_value, FieldLike, GetFieldValue
 from CosmologyConcepts.Potentials.AbstractPotential import AbstractPotential
-from CosmologyConcepts.Potentials.model_ids import STANDARD_CHAMELEON
+from CosmologyConcepts.Potentials.model_ids import INVERSE_POWER_POTENTIAL
 from Units.base import UnitsLike
 
 
@@ -11,6 +11,8 @@ class InversePowerPotential(AbstractPotential):
         super().__init__(store_id)
 
         self._units: UnitsLike = units
+
+        assert n >= 0
 
         self._M: M_value = M
         self._Lambda: Lambda_value = Lambda
@@ -30,38 +32,40 @@ class InversePowerPotential(AbstractPotential):
 
     @property
     def type_id(self) -> int:
-        return STANDARD_CHAMELEON
+        return INVERSE_POWER_POTENTIAL
 
     @property
     def shard_key(self) -> M_value:
         return self._M
 
-    def V(self, phi: float) -> float:
+    def V(self, phi: FieldLike) -> float:
         """
         Evaluate the potential at a given value of phi
         :param phi:
         :return:
         """
-        arg: float = pow(phi / self._M_float, self._n)
+        phi_float = GetFieldValue(phi)
+        arg: float = pow(self._M_float / phi_float, self._n)
         try:
             return self._Lambda_4 * (1.0 + arg)
         except OverflowError as e:
             print(
-                f"Overflow in InversePowerPotential potential V() at phi={phi / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV [(phi/M)^n = {arg:.5g}]"
+                f"Overflow in InversePowerPotential potential V() at phi={phi_float / self._units.GeV:.5g} GeV, M={self._M_float / self._units.GeV:.5g} GeV [(M/phi)^n = {arg:.5g}]"
             )
             raise e
 
-    def Vprime(self, phi: float) -> float:
+    def Vprime(self, phi: FieldLike) -> float:
         """
         Evaluate the derivative of the potential at a given value of phi
         :param phi:
         :return:
         """
-        arg: float = pow(phi / self._M_float, self._n)
+        phi_float = GetFieldValue(phi)
+        arg: float = pow(self._M_float / phi_float, self._n)
         try:
-            return -self._Lambda_4 * self._n * arg / phi
+            return -self._Lambda_4 * self._n * arg / phi_float
         except OverflowError as e:
             print(
-                f"Overflow in InversePowerPotential potential Vprime() at phi={phi / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV [(phi/M)^n = {arg:.5g}]"
+                f"Overflow in InversePowerPotential potential Vprime() at phi={phi_float / self._units.GeV:.5g} GeV, M={self._M_float / self._units.GeV:.5g} GeV [(M/phi)^n = {arg:.5g}]"
             )
             raise e
