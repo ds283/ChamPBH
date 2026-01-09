@@ -100,16 +100,17 @@ def compute_scalar_model(
     rtol: float = DEFAULT_REL_TOLERANCE,
 ) -> dict:
     """
-    :param cosmology:
+    :param cosmology: background cosmology
     :param T_init: initial radiation temperature in Jordan frame
     :param T_stop: final radiation temperature in Jordan frame (usually T_CMB)
-    :param phi_init: initial phi value
-    :param pi_init: initial dphi/dN value
-    :param z_grid:
-    :param potential:
-    :param coupling:
-    :param atol:
-    :param rtol:
+    :param phi_init: initial Einstein-frame scalar field value phi
+    :param pi_init: initial Einstein-frame scalar field derivative dphi/dN
+    :param z_grid: grid of redshifts at which to sample the solution
+    :param potential: the scalar field potential
+    :param coupling: the conformal coupling
+    :param task_label: label for the ray task
+    :param atol: absolute tolerance for the ODE solver
+    :param rtol: relative tolerance for the ODE solver
     :return:
     """
     units: UnitsLike = cosmology.units
@@ -434,6 +435,22 @@ class ScalarModel(DatastoreObject):
         label: Optional[str] = None,
         tags: Optional[List[store_tag]] = None,
     ):
+        """
+        :param payload: data dictionary for initializing from the datastore (may be None)
+        :param solver_labels: dictionary mapping solver labels to IntegrationSolver objects
+        :param cosmology: background cosmology
+        :param T_Jordan_init: initial radiation temperature in the Jordan frame
+        :param T_Jordan_stop: final radiation temperature in the Jordan frame
+        :param phi_Einstein_init: initial Einstein-frame scalar field value
+        :param pi_Einstein_init: initial Einstein-frame scalar field derivative dphi/dN
+        :param potential: the scalar field potential
+        :param coupling: the conformal coupling
+        :param atol: absolute tolerance for the ODE solver
+        :param rtol: relative tolerance for the ODE solver
+        :param z_grid: grid of redshifts at which to sample the solution (optional)
+        :param label: optional label for the model
+        :param tags: optional list of tags for the model
+        """
         self._solver_labels = solver_labels
 
         self._T_Jordan_init: temperature = T_Jordan_init
@@ -684,6 +701,22 @@ class ScalarModelValue(DatastoreObject):
         gstar_s: float,
         Sigma: float,
     ):
+        """
+        :param store_id: ID in the datastore
+        :param z: redshift at this point
+        :param raw_N: the raw e-folding time N from the ODE solver
+        :param phi_Einstein: Einstein-frame scalar field value
+        :param pi_Einstein: Einstein-frame scalar field derivative dphi/dN
+        :param log_rhorad_Einstein: natural logarithm of the radiation density in the Einstein frame
+        :param log_rhorad_Jordan: natural logarithm of the radiation density in the Jordan frame
+        :param log_fm: natural logarithm of the matter fraction
+        :param log_T_Jordan: natural logarithm of the Jordan-frame radiation temperature
+        :param H_Einstein: Hubble parameter in the Einstein frame
+        :param H_Jordan: Hubble parameter in the Jordan frame
+        :param gstar_rho: effective number of degrees of freedom for energy density
+        :param gstar_s: effective number of degrees of freedom for entropy density
+        :param Sigma: equation of state parameter (1 - 3w)
+        """
         DatastoreObject.__init__(self, store_id)
 
         self._z: float = z
