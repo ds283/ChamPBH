@@ -207,9 +207,18 @@ def compute_scalar_model(
             d_log_rhorad_Einstein: float = Sigma - 4.0
             d_log_fm: float = 1.0 - Sigma
 
-            A1: float = (2.0 + 3.0 * fm + Sigma) / (2.0 * (1.0 + fm))
-            A2: float = (4.0 + 3.0 * fm - Sigma) / (1.0 + fm)
-            A3: float = (Sigma + fm) / (1.0 + fm)
+            assert d_log_fm < 1.5
+
+            if fm > 1.0:
+                A1: float = (2.0 + Sigma) / (2.0 * (1.0 + fm)) + (3.0 / 2.0) / (
+                    1.0 + 1.0 / fm
+                )
+                A2: float = (4.0 - Sigma) / (1.0 + fm) + 3.0 / (1.0 + 1.0 / fm)
+                A3: float = 1.0 + Sigma / (1.0 + fm)
+            else:
+                A1: float = (2.0 + 3.0 * fm + Sigma) / (2.0 * (1.0 + fm))
+                A2: float = (4.0 + 3.0 * fm - Sigma) / (1.0 + fm)
+                A3: float = (1.0 + Sigma + fm) / (1.0 + fm)
             C: float = V / (6.0 * H2_Mp2_Einstein)
             D: float = Vprime / H2_Einstein
             E: float = (
