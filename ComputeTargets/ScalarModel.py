@@ -758,7 +758,7 @@ class ScalarModel(DatastoreObject):
         extra_data = {}
         hard_reflections = data["hard_reflections"]
         if len(hard_reflections) > 0:
-            extra_data["hard_reflections"] = hard_reflections
+            extra_data["num_hard_reflections"] = len(hard_reflections)
 
         if len(extra_data) > 0:
             self._extra_data = extra_data
