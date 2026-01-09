@@ -25,7 +25,6 @@ from Datastore.SQL.ShardedPool import ShardedPool
 from Quadrature.integration_metadata import IntegrationSolver
 from RayTools.RayWorkPool import RayWorkPool
 from Units import GeV_units
-from Units.base import UnitsLike
 from config.defaults import (
     DEFAULT_ABS_TOLERANCE,
     DEFAULT_REL_TOLERANCE,
@@ -216,7 +215,6 @@ if args.profile_db is not None:
 
 def run_pipeline(
     model_data: dict,
-    units: UnitsLike,
     Potential_array: List[AbstractPotential],
     Coupling_array: List[AbstractCoupling],
     T_init: temperature,
@@ -356,7 +354,7 @@ def run_pipeline(
         coupling: AbstractCoupling = m.coupling
         return f"{args.job_name}-ScalarModel-{potential.name}-{coupling.name}-{datetime.now().replace(microsecond=0).isoformat()}"
 
-    def compute_solver_work(m: ScalarModel):
+    def compute_solver_work(m: ScalarModel, label: str):
         return m.compute(label=label)
 
     def validate_solver_work(m: ScalarModel):
@@ -376,10 +374,10 @@ def run_pipeline(
         label_builder=build_solver_work_label,
         title="CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID",
         store_results=False,
-        create_batch_size=20,
-        notify_batch_size=500,
-        max_task_queue=100,
-        process_batch_size=50,
+        create_batch_size=10,
+        notify_batch_size=20,
+        max_task_queue=20,
+        process_batch_size=10,
         notify_min_time_interval=MIN_NOTIFY_INTERVAL,
     )
     solver_queue.run()
@@ -418,12 +416,12 @@ with ShardedPool(
     log10_Lambda_high_eV: float = args.log10_Lambda_high_eV
     samples_per_log10_Lambda_eV: int = args.samples_per_log10_Lambda_eV
 
-    T_high_GeV: float = args.T_high_GeV
+    T_init_GeV: float = args.T_high_GeV
 
     units = GeV_units()
 
-    T_high = ray.get(
-        pool.object_get("temperature", value=T_high_GeV * units.GeV, units=units)
+    T_init = ray.get(
+        pool.object_get("temperature", value=T_init_GeV * units.GeV, units=units)
     )
 
     # think Xav is using phi_init=5 Mp, picking a slightly different comparison to check stability of evolutions
@@ -591,10 +589,9 @@ with ShardedPool(
 
         run_pipeline(
             model_data,
-            units,
             Potential_array,
             Coupling_array,
-            T_high,
+            T_init,
             T_stop,
             phi_init,
             pi_init,
