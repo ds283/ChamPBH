@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+from CosmologyConcepts import FieldLike
 from Datastore import DatastoreObject
 
 
@@ -18,7 +19,7 @@ class AbstractCoupling(DatastoreObject, ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def log_Omega(self, phi: float) -> float:
+    def log_Omega(self, phi: FieldLike) -> float:
         """
         Evaluate the logarithm of the conformal coupling function at field value phi
         :param phi:
@@ -27,7 +28,7 @@ class AbstractCoupling(DatastoreObject, ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def Omega(self, phi: float) -> float:
+    def Omega(self, phi: FieldLike) -> float:
         """
         Evaluate the conformal coupling function at field value phi
         :param phi:
@@ -36,7 +37,7 @@ class AbstractCoupling(DatastoreObject, ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def log_Omega_prime(self, phi: float) -> float:
+    def log_Omega_prime(self, phi: FieldLike) -> float:
         """
         Evaluate the logarithmic derivative Omega'/Omega at field value phi
         :param phi:

@@ -1,3 +1,4 @@
 from .AbstractPotential import AbstractPotential
+from .ExponentialPotential import ExponentialPotential
 from .InversePowerPotential import InversePowerPotential
-from .model_ids import STANDARD_CHAMELEON
+from .model_ids import INVERSE_POWER_POTENTIAL

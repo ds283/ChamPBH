@@ -1,6 +1,6 @@
 from math import exp
 
-from CosmologyConcepts import beta_value
+from CosmologyConcepts import beta_value, FieldLike, GetFieldValue
 from CosmologyConcepts.ConformalCouplings.AbstractCoupling import AbstractCoupling
 from CosmologyConcepts.ConformalCouplings.model_ids import EXPONENTIAL_COUPLING
 from Units.base import UnitsLike
@@ -25,15 +25,16 @@ class ExponentialCoupling(AbstractCoupling):
     def type_id(self) -> int:
         return EXPONENTIAL_COUPLING
 
-    def log_Omega(self, phi: float) -> float:
+    def log_Omega(self, phi: FieldLike) -> float:
         """
         Evaluate the logarithm of the conformal coupling Omega at field value phi
         :param phi:
         :return:
         """
-        return self._beta_float * phi / self._Mp
+        phi_float = GetFieldValue(phi)
+        return self._beta_float * phi_float / self._Mp
 
-    def Omega(self, phi: float) -> float:
+    def Omega(self, phi: FieldLike) -> float:
         """
         Evaluate the conformal coupling Omega at field value phi
         :param phi:
@@ -41,7 +42,7 @@ class ExponentialCoupling(AbstractCoupling):
         """
         return exp(self.log_Omega(phi))
 
-    def log_Omega_prime(self, phi: float) -> float:
+    def log_Omega_prime(self, phi: FieldLike) -> float:
         """
         Evluate the logarithmic derivative Omega'/Omega at field value phi
         :param phi:

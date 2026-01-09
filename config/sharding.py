@@ -19,6 +19,7 @@ replicated_tables = [
 
 sharded_tables = {
     "InversePowerPotential": "shard_key",
+    "ExponentialPotential": "shard_key",
     "ScalarModel": "shard_key",
     "ScalarModelValue": "shard_key",
 }

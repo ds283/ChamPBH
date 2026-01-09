@@ -27,6 +27,9 @@ from Datastore.SQL.ObjectFactories.DimensionlessQuantity import (
 from Datastore.SQL.ObjectFactories.ExponentialCoupling import (
     sqla_ExponentialCoupling_factory,
 )
+from Datastore.SQL.ObjectFactories.ExponentialPotential import (
+    sqla_ExponentialPotential_factory,
+)
 from Datastore.SQL.ObjectFactories.InversePowerPotential import (
     sqla_InversePowerPotential_factory,
 )
@@ -65,6 +68,7 @@ _factories = {
     "phi_value": sqla_dimensionful_quantity_factory(phi_value),
     "pi_value": sqla_dimensionful_quantity_factory(pi_value),
     "InversePowerPotential": sqla_InversePowerPotential_factory(),
+    "ExponentialPotential": sqla_ExponentialPotential_factory(),
     "ExponentialCoupling": sqla_ExponentialCoupling_factory(),
     "QCD_Cosmology": sqla_QCDCosmology_factory(),
     "IntegrationSolver": sqla_IntegrationSolver_factory(),
