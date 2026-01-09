@@ -26,6 +26,7 @@ class Mpc_units(UnitsLike):
 
     PlanckMass = sqrt(1.0 / (8.0 * pi)) / sqrt_NewtonG
     eV = PlanckMass / 2.436e27
+    GeV = 1e6 * eV
 
     # c should be unity for consistency, since we have assumed c = hbar = k_B = 1 in writing some of the equations above
     c = 299792458 * Metre / Second

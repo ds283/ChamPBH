@@ -14,7 +14,7 @@ class GeV_units(UnitsLike):
     # to be Mpc instead.
 
     GeV = 1.0
-    eV = GeV / 1e3
+    eV = GeV / 1e6
 
     PlanckMass = 2.436e27 * eV
 
