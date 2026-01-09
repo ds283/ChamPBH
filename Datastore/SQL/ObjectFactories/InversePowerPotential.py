@@ -2,12 +2,12 @@ import sqlalchemy as sqla
 from sqlalchemy.exc import MultipleResultsFound
 
 from CosmologyConcepts import M_value, Lambda_value
-from CosmologyConcepts.Potentials import StandardChameleon
+from CosmologyConcepts.Potentials import InversePowerPotential
 from Datastore.SQL.ObjectFactories.base import SQLAFactoryBase
 from Units.base import UnitsLike
 
 
-class sqla_StandardChameleon_factory(SQLAFactoryBase):
+class sqla_InversePowerPotential_factory(SQLAFactoryBase):
     def __init__(self):
         pass
 
@@ -53,7 +53,7 @@ class sqla_StandardChameleon_factory(SQLAFactoryBase):
             row_data = conn.execute(query).one_or_none()
         except MultipleResultsFound as e:
             print(
-                f"!! StandardChameleon.build(): multiple results found when querying for StandardChameleon"
+                f"!! InversePowerPotential.build(): multiple results found when querying for InversePowerPotential"
             )
             raise e
 
@@ -73,7 +73,7 @@ class sqla_StandardChameleon_factory(SQLAFactoryBase):
             attribute_set = {"_deserialized": True}
 
         # return the constructed object
-        obj = StandardChameleon(
+        obj = InversePowerPotential(
             store_id=store_id,
             M=M,
             Lambda=Lambda,

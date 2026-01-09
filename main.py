@@ -459,10 +459,10 @@ with ShardedPool(
         )
 
     def convert_to_potential(M_lambda_set):
-        # StandardChameleon is a sharded table and needs a "shard_key" field
+        # InversePowerPotential is a sharded table and needs a "shard_key" field
         # TODO: find a better way to implement/handle
         return pool.object_get(
-            "StandardChameleon",
+            "InversePowerPotential",
             payload_data=[
                 {"shard_key": M, "M": M, "Lambda": Lambda, "n": 1, "units": units}
                 for M, Lambda in M_lambda_set

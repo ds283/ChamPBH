@@ -4,7 +4,7 @@ from CosmologyConcepts.Potentials.model_ids import STANDARD_CHAMELEON
 from Units.base import UnitsLike
 
 
-class StandardChameleon(AbstractPotential):
+class InversePowerPotential(AbstractPotential):
     def __init__(
         self, store_id: int, M: M_value, Lambda: Lambda_value, n: int, units: UnitsLike
     ):
@@ -26,7 +26,7 @@ class StandardChameleon(AbstractPotential):
 
     @property
     def name(self):
-        return f"StandardChameleon(M={self._M_float / self._units.eV:.5g}eV,Lambda={self._Lambda_float / self._units.eV:.5g}eV)"
+        return f"InversePowerPotential(M={self._M_float / self._units.eV:.5g}eV,Lambda={self._Lambda_float / self._units.eV:.5g}eV)"
 
     @property
     def type_id(self) -> int:
@@ -47,7 +47,7 @@ class StandardChameleon(AbstractPotential):
             return self._Lambda_4 * (1.0 + arg)
         except OverflowError as e:
             print(
-                f"Overflow in StandardChameleon potential V() at phi={phi / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV [(phi/M)^n = {arg:.5g}]"
+                f"Overflow in InversePowerPotential potential V() at phi={phi / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV [(phi/M)^n = {arg:.5g}]"
             )
             raise e
 
@@ -62,6 +62,6 @@ class StandardChameleon(AbstractPotential):
             return -self._Lambda_4 * self._n * arg / phi
         except OverflowError as e:
             print(
-                f"Overflow in StandardChameleon potential Vprime() at phi={phi / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV [(phi/M)^n = {arg:.5g}]"
+                f"Overflow in InversePowerPotential potential Vprime() at phi={phi / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV [(phi/M)^n = {arg:.5g}]"
             )
             raise e

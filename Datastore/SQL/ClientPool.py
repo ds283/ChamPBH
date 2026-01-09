@@ -17,7 +17,7 @@ _default_serial_batch_size = {
     "phi_value": 200,
     "pi_value": 200,
     "ExponentialCoupling": 50,
-    "StandardChameleon": 50,
+    "InversePowerPotential": 50,
     "LambdaCDM": 5,
     "QCD_Cosmology": 5,
     "IntegrationSolver": 6,

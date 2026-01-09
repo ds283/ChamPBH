@@ -18,7 +18,7 @@ replicated_tables = [
 ]
 
 sharded_tables = {
-    "StandardChameleon": "shard_key",
+    "InversePowerPotential": "shard_key",
     "ScalarModel": "shard_key",
     "ScalarModelValue": "shard_key",
 }

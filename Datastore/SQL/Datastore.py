@@ -27,14 +27,14 @@ from Datastore.SQL.ObjectFactories.DimensionlessQuantity import (
 from Datastore.SQL.ObjectFactories.ExponentialCoupling import (
     sqla_ExponentialCoupling_factory,
 )
+from Datastore.SQL.ObjectFactories.InversePowerPotential import (
+    sqla_InversePowerPotential_factory,
+)
 from Datastore.SQL.ObjectFactories.QCD_Cosmology import sqla_QCDCosmology_factory
 from Datastore.SQL.ObjectFactories.ScalarModel import (
     sqla_ScalarModelFactory,
     sqla_ScalarModelTagAssociation_factory,
     sqla_ScalarModelValue_factory,
-)
-from Datastore.SQL.ObjectFactories.StandardChameleon import (
-    sqla_StandardChameleon_factory,
 )
 from Datastore.SQL.ObjectFactories.base import SQLAFactoryBase
 from Datastore.SQL.ObjectFactories.integration_metadata import (
@@ -64,7 +64,7 @@ _factories = {
     "temperature": sqla_dimensionful_quantity_factory(temperature),
     "phi_value": sqla_dimensionful_quantity_factory(phi_value),
     "pi_value": sqla_dimensionful_quantity_factory(pi_value),
-    "StandardChameleon": sqla_StandardChameleon_factory(),
+    "InversePowerPotential": sqla_InversePowerPotential_factory(),
     "ExponentialCoupling": sqla_ExponentialCoupling_factory(),
     "QCD_Cosmology": sqla_QCDCosmology_factory(),
     "IntegrationSolver": sqla_IntegrationSolver_factory(),
