@@ -129,6 +129,60 @@ def S_fit(x: float) -> float:
     return 1.0 + (7.0 / 4.0) * f_s(x)
 
 
+def _raw_G_rho(T_in_GeV: float) -> float:
+    if T_in_GeV > QCD_EOS.T_HI:
+        return HIGH_T_GSTAR  # Asymptotic high temperature limit
+    elif QCD_EOS.T_120_MEV <= T_in_GeV <= QCD_EOS.T_HI:
+        log_T_in_GeV = log(T_in_GeV)
+        return polynomial_sum(a_coeffs, log_T_in_GeV) / polynomial_sum(
+            b_coeffs, log_T_in_GeV
+        )
+    elif QCD_EOS.T_LO <= T_in_GeV <= QCD_EOS.T_120_MEV:
+        # Eq. (C.3) of 1803.01038 v2
+        return (
+            2.030
+            + 1.353 * pow(S_fit(M_e / T_in_GeV), 4.0 / 3.0)
+            + 3.495 * f_rho(M_e / T_in_GeV)
+            + 3.446 * f_rho(M_mu / T_in_GeV)
+            + 1.05 * b_rho(M_pi0 / T_in_GeV)
+            + 2.08 * b_rho(M_piplus / T_in_GeV)
+            + 4.165 * b_rho(M_1 / T_in_GeV)
+            + 30.55 * b_rho(M_2 / T_in_GeV)
+            + 89.4 * b_rho(M_3 / T_in_GeV)
+            + 8209.0 * b_rho(M_4 / T_in_GeV)
+        )
+    else:
+        return LOW_T_GSTAR  # Low temperature limit
+
+
+def _raw_G_s(T_in_GeV: float) -> float:
+    if T_in_GeV > QCD_EOS.T_HI:
+        return HIGH_T_GSTAR  # Asymptotic high temperature limit
+    elif QCD_EOS.T_120_MEV <= T_in_GeV <= QCD_EOS.T_HI:
+        log_T_in_GeV = log(T_in_GeV)
+        return _raw_G_rho(T_in_GeV) / (
+            1.0
+            + polynomial_sum(c_coeffs, log_T_in_GeV)
+            / polynomial_sum(d_coeffs, log_T_in_GeV)
+        )
+    elif QCD_EOS.T_LO <= T_in_GeV <= QCD_EOS.T_120_MEV:
+        # Eq. (C.4) of 1803.01038 v2
+        return (
+            2.008
+            + 1.923 * S_fit(M_e / T_in_GeV)
+            + 3.442 * f_s(M_e / T_in_GeV)
+            + 3.468 * f_s(M_mu / T_in_GeV)
+            + 1.034 * b_s(M_pi0 / T_in_GeV)
+            + 2.068 * b_s(M_piplus / T_in_GeV)
+            + 4.16 * b_s(M_1 / T_in_GeV)
+            + 30.55 * b_s(M_2 / T_in_GeV)
+            + 90.0 * b_s(M_3 / T_in_GeV)
+            + 6209.0 * b_s(M_4 / T_in_GeV)
+        )
+    else:
+        return LOW_T_G_S_STAR  # Low temperature limit
+
+
 class QCD_EOS(GenericEOSBase):
 
     # above T_HI (measured in GeV) we assume the asymptotic high temperature degrees of freedom
@@ -148,6 +202,10 @@ class QCD_EOS(GenericEOSBase):
 
     def __init__(self, units: UnitsLike):
         GenericEOSBase.__init__(self, units)
+
+        # use JAX automatic differentiation to obtain a result for the temperature derivatives
+        self._grad_raw_G_rho = grad(_raw_G_rho)
+        self._grad_raw_G_s = grad(_raw_G_s)
 
     @property
     def name(self):
@@ -169,32 +227,13 @@ class QCD_EOS(GenericEOSBase):
         """
 
         T_in_GeV = GetTemperature(T) / self._units.GeV
-        return self._raw_G_rho(T_in_GeV)
+        return _raw_G_rho(T_in_GeV)
 
-    def _raw_G_rho(self, T_in_GeV: float) -> float:
-        if T_in_GeV > QCD_EOS.T_HI:
-            return HIGH_T_GSTAR  # Asymptotic high temperature limit
-        elif QCD_EOS.T_120_MEV <= T_in_GeV <= QCD_EOS.T_HI:
-            log_T_in_GeV = log(T_in_GeV)
-            return polynomial_sum(a_coeffs, log_T_in_GeV) / polynomial_sum(
-                b_coeffs, log_T_in_GeV
-            )
-        elif QCD_EOS.T_LO <= T_in_GeV <= QCD_EOS.T_120_MEV:
-            # Eq. (C.3) of 1803.01038 v2
-            return (
-                2.030
-                + 1.353 * pow(S_fit(M_e / T_in_GeV), 4.0 / 3.0)
-                + 3.495 * f_rho(M_e / T_in_GeV)
-                + 3.446 * f_rho(M_mu / T_in_GeV)
-                + 1.05 * b_rho(M_pi0 / T_in_GeV)
-                + 2.08 * b_rho(M_piplus / T_in_GeV)
-                + 4.165 * b_rho(M_1 / T_in_GeV)
-                + 30.55 * b_rho(M_2 / T_in_GeV)
-                + 89.4 * b_rho(M_3 / T_in_GeV)
-                + 8209.0 * b_rho(M_4 / T_in_GeV)
-            )
-        else:
-            return LOW_T_GSTAR  # Low temperature limit
+    def dG_rho_dT(self, T: TemperatureLike) -> float:
+
+        # units of the output will be 1/GeV because we internally evaluate T in GeV
+        T_in_GeV = GetTemperature(T) / self._units.GeV
+        return self._grad_raw_G_rho(T_in_GeV) / self._units.GeV
 
     def G_s(self, T: TemperatureLike) -> float:
         """
@@ -205,42 +244,13 @@ class QCD_EOS(GenericEOSBase):
         """
 
         T_in_GeV = GetTemperature(T) / self._units.GeV
-        return self._raw_G_s(T_in_GeV)
-
-    def _raw_G_s(self, T_in_GeV: float) -> float:
-        if T_in_GeV > QCD_EOS.T_HI:
-            return HIGH_T_GSTAR  # Asymptotic high temperature limit
-        elif QCD_EOS.T_120_MEV <= T_in_GeV <= QCD_EOS.T_HI:
-            log_T_in_GeV = log(T_in_GeV)
-            return self._raw_G_rho(T_in_GeV) / (
-                1.0
-                + polynomial_sum(c_coeffs, log_T_in_GeV)
-                / polynomial_sum(d_coeffs, log_T_in_GeV)
-            )
-        elif QCD_EOS.T_LO <= T_in_GeV <= QCD_EOS.T_120_MEV:
-            # Eq. (C.4) of 1803.01038 v2
-            return (
-                2.008
-                + 1.923 * S_fit(M_e / T_in_GeV)
-                + 3.442 * f_s(M_e / T_in_GeV)
-                + 3.468 * f_s(M_mu / T_in_GeV)
-                + 1.034 * b_s(M_pi0 / T_in_GeV)
-                + 2.068 * b_s(M_piplus / T_in_GeV)
-                + 4.16 * b_s(M_1 / T_in_GeV)
-                + 30.55 * b_s(M_2 / T_in_GeV)
-                + 90.0 * b_s(M_3 / T_in_GeV)
-                + 6209.0 * b_s(M_4 / T_in_GeV)
-            )
-        else:
-            return LOW_T_G_S_STAR  # Low temperature limit
+        return _raw_G_s(T_in_GeV)
 
     def dG_s_dT(self, T: TemperatureLike) -> float:
-        # use JAX automatic differentiation to obtain a result for the temperature derivative
-        grad_Gs = grad(self._raw_G_s)
 
         # units of the output will be 1/GeV because we internally evaluate T in GeV
         T_in_GeV = GetTemperature(T) / self._units.GeV
-        return grad_Gs(GetTemperature(T_in_GeV)) / self._units.GeV
+        return self._grad_raw_G_s(T_in_GeV) / self._units.GeV
 
     # override equation of state implementation
     def w(self, T: TemperatureLike) -> float:

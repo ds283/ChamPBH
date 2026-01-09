@@ -45,6 +45,16 @@ class GenericEOSBase(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def dG_rho_dT(self, T: TemperatureLike) -> float:
+        """
+        Compute derivative of G_rho(T) with respect to temperature T
+        T should be regarded as a dimensionful quantity, measured in the given UnitsLike system
+        :param T: dimensionful temperature T
+        :return: DIMENSIONFUL number representing d(g_rho)/dT at T (units should be inverse to T)
+        """
+        raise NotImplementedError
+
+    @abstractmethod
     def G_s(self, T: TemperatureLike) -> float:
         """
         Compute effective number of bosonic degrees of freedom g_S(T) for the entropy, at temperature T
