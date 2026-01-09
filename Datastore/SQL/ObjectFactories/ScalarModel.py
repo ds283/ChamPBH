@@ -287,6 +287,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 value_table.c.serial,
                 value_table.c.z_serial,
                 redshift_table.c.z,
+                value_table.c.raw_N,
                 value_table.c.phi_Einstein_Mp,
                 value_table.c.pi_Einstein_Mp,
                 value_table.c.log_rhorad_Einstein_Mp4,
@@ -326,6 +327,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 ScalarModelValue(
                     store_id=row.serial,
                     z=z_value,
+                    raw_N=row.raw_N,
                     phi_Einstein=row.phi_Einstein_Mp * units.PlanckMass,
                     pi_Einstein=row.pi_Einstein_Mp * units.PlanckMass,
                     log_rhorad_Einstein=row.log_rhorad_Einstein_Mp4 + 4.0 * log_Mp,
@@ -446,6 +448,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 {
                     "model_serial": store_id,
                     "z_serial": value.z.store_id,
+                    "raw_N": value.raw_N,
                     "phi_Einstein_Mp": value.phi_Einstein / units.PlanckMass,
                     "pi_Einstein_Mp": value.pi_Einstein / units.PlanckMass,
                     "log_rhorad_Einstein_Mp4": value.log_rhorad_Einstein - 4.0 * log_Mp,
@@ -609,6 +612,7 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
                     index=True,
                     nullable=False,
                 ),
+                sqla.Column("raw_N", sqla.Float(64), nullable=False),
                 sqla.Column("phi_Einstein_Mp", sqla.Float(64), nullable=False),
                 sqla.Column("pi_Einstein_Mp", sqla.Float(64), nullable=False),
                 sqla.Column("log_rhorad_Einstein_Mp4", sqla.Float(64), nullable=False),
@@ -628,6 +632,7 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
         units: UnitsLike = payload["units"]
 
         z: redshift = payload["z"]
+        raw_N: float = payload["raw_N"]
 
         phi_Einstein: float = payload["phi_Einstein"]
         pi_Einstein: float = payload["pi_Einstein"]
@@ -662,6 +667,7 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
             row_data = conn.execute(
                 sqla.select(
                     table.c.serial,
+                    table.c.raw_N,
                     table.c.phi_Einstein_Mp,
                     table.c.pi_Einstein_Mp,
                     table.c.log_rhorad_Einstein_Mp4,
@@ -690,6 +696,7 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
                 {
                     "model_serial": model_serial,
                     "z_serial": z.store_id,
+                    "raw_N": raw_N,
                     "phi_Einstein_Mp": phi_Einstein_Mp,
                     "pi_Einstein_Mp": pi_Einstein_Mp,
                     "log_rhorad_Einstein_Mp4": log_rhorad_Einstein_Mp4,
@@ -710,6 +717,8 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
             # pi_Einstein = row_data.pi_Einstein_Mp * units.PlanckMass
 
             # replace supplied values with those read from the database
+            raw_N = row_data.raw_N
+
             log_rhorad_Einstein = row_data.log_rhorad_Einstein_Mp4 + 4.0 * log_Mp
             log_rhorad_Jordan = row_data.log_rhorad_Jordan_Mp4 + 4.0 * log_Mp
             log_fm = row_data.log_fm
@@ -743,6 +752,7 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
         obj = ScalarModelValue(
             store_id=store_id,
             z=z,
+            raw_N=raw_N,
             phi_Einstein=phi_Einstein,
             pi_Einstein=pi_Einstein,
             log_rhorad_Einstein=log_rhorad_Einstein,

@@ -49,6 +49,24 @@ StateVector = namedtuple(
 )
 EXPECTED_SOL_LENGTH = 5
 
+SampleValues = namedtuple(
+    "SampleValues",
+    [
+        "raw_N",
+        "phi_Einstein",
+        "pi_Einstein",
+        "log_rhorad_Einstein",
+        "log_rhorad_Jordan",
+        "log_fm",
+        "log_H_Einstein",
+        "log_H_Jordan",
+        "log_T_Jordan",
+        "gstar_rho",
+        "gstar_s",
+        "Sigma",
+    ],
+)
+
 ModelFunctions = namedtuple(
     "ModelFunctions",
     [
@@ -286,7 +304,8 @@ def compute_scalar_model(
         T_Jordan: float = exp(state.log_T_Jordan)
 
         sample.append(
-            ModelFunctions(
+            SampleValues(
+                raw_N=N_forward,
                 phi_Einstein=state.phi_Einstein,
                 pi_Einstein=state.pi_Einstein,
                 log_rhorad_Einstein=state.log_rhorad_Einstein,
@@ -545,8 +564,8 @@ class ScalarModel(DatastoreObject):
 
         self._data = data["metadata"]
 
-        sample = data["sample"]
-        z_grid = data["z_grid"]
+        sample: List[SampleValues] = data["sample"]
+        z_grid: redshift_array = data["z_grid"]
 
         self._values = []
         for i in range(len(sample)):
@@ -554,6 +573,7 @@ class ScalarModel(DatastoreObject):
                 ScalarModelValue(
                     None,
                     z_grid[i],
+                    raw_N=sample[i].N,
                     phi_Einstein=sample[i].phi_Einstein,
                     pi_Einstein=sample[i].pi_Einstein,
                     log_rhorad_Einstein=sample[i].log_rhorad_Einstein,
@@ -578,6 +598,7 @@ class ScalarModelValue(DatastoreObject):
         self,
         store_id: int,
         z: redshift,
+        raw_N: float,
         phi_Einstein: float,
         pi_Einstein: float,
         log_rhorad_Einstein: float,
@@ -592,22 +613,23 @@ class ScalarModelValue(DatastoreObject):
     ):
         DatastoreObject.__init__(self, store_id)
 
-        self._z = z
+        self._z: float = z
+        self._raw_N: float = raw_N
 
-        self._phi_Einstein = phi_Einstein
-        self._pi_Einstein = pi_Einstein
+        self._phi_Einstein: float = phi_Einstein
+        self._pi_Einstein: float = pi_Einstein
 
-        self._log_H_Einstein = log_H_Einstein
-        self._log_H_Jordan = log_H_Jordan
+        self._log_H_Einstein: float = log_H_Einstein
+        self._log_H_Jordan: float = log_H_Jordan
 
-        self._log_rhorad_Einstein = log_rhorad_Einstein
-        self._log_rhorad_Jordan = log_rhorad_Jordan
-        self._log_fm = log_fm
-        self._log_T_Jordan = log_T_Jordan
+        self._log_rhorad_Einstein: float = log_rhorad_Einstein
+        self._log_rhorad_Jordan: float = log_rhorad_Jordan
+        self._log_fm: float = log_fm
+        self._log_T_Jordan: float = log_T_Jordan
 
-        self._gstar_rho = gstar_rho
-        self._gstar_s = gstar_s
-        self._Sigma = Sigma
+        self._gstar_rho: float = gstar_rho
+        self._gstar_s: float = gstar_s
+        self._Sigma: float = Sigma
 
     @property
     def shard_key(self) -> M_value:
@@ -617,6 +639,10 @@ class ScalarModelValue(DatastoreObject):
     @property
     def z(self) -> redshift:
         return self._z
+
+    @property
+    def raw_N(self) -> float:
+        return self._raw_N
 
     @property
     def log_H_Einstein(self) -> float:
