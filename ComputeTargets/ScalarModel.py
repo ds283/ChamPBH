@@ -281,7 +281,7 @@ def compute_scalar_model(
             ModelFunctions(
                 phi_Einstein=state.phi_Einstein,
                 pi_Einstein=state.pi_Einstein,
-                log_rhorad_Einstein=log_rhorad_Jordan,
+                log_rhorad_Einstein=state.log_rhorad_Einstein,
                 log_rhorad_Jordan=log_rhorad_Jordan,
                 log_fm=state.log_fm,
                 log_T_Jordan=state.log_T_Jordan,
