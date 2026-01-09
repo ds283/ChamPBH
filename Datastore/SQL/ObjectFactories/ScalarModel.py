@@ -294,8 +294,8 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 value_table.c.log_rhorad_Jordan_Mp4,
                 value_table.c.log_fm,
                 value_table.c.log_T_Jordan_GeV,
-                value_table.c.log_H_Einstein_GeV,
-                value_table.c.log_H_Jordan_GeV,
+                value_table.c.H_Einstein_GeV,
+                value_table.c.H_Jordan_GeV,
                 value_table.c.gstar_rho,
                 value_table.c.gstar_s,
                 value_table.c.Sigma,
@@ -334,8 +334,8 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                     log_rhorad_Jordan=row.log_rhorad_Jordan_Mp4 + 4.0 * log_Mp,
                     log_fm=row.log_fm,
                     log_T_Jordan=row.log_T_Jordan_GeV + log_GeV,
-                    log_H_Einstein=row.log_H_Einstein_Mp + log_Mp,
-                    log_H_Jordan=row.log_H_Jordan_GeV + log_Mp,
+                    H_Einstein=row.H_Einstein_Mp * units.PlanckMass,
+                    H_Jordan=row.H_Jordan_GeV * units.PlanckMass,
                     gstar_rho=row.gstar_rho,
                     gstar_s=row.gstar_s,
                     Sigma=row.Sigma,
@@ -455,8 +455,8 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                     "log_rhorad_Jordan_Mp4": value.log_rhorad_Jordan - 4.0 * log_Mp,
                     "log_fm": value.log_fm,
                     "log_T_Jordan_GeV": value.log_T_Jordan - log_GeV,
-                    "log_H_Einstein_Mp": value.log_H_Einstein - log_Mp,
-                    "log_H_Jordan_Mp": value.log_H_Jordan - log_Mp,
+                    "H_Einstein_Mp": value.H_Einstein / units.PlanckMass,
+                    "H_Jordan_Mp": value.H_Jordan / units.PlanckMass,
                     "gstar_rho": value.gstar_rho,
                     "gstar_s": value.gstar_s,
                     "Sigma": value.Sigma,
@@ -619,8 +619,8 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
                 sqla.Column("log_rhorad_Jordan_Mp4", sqla.Float(64), nullable=False),
                 sqla.Column("log_fm", sqla.Float(64), nullable=False),
                 sqla.Column("log_T_Jordan_GeV", sqla.Float(64), nullable=False),
-                sqla.Column("log_H_Einstein_Mp", sqla.Float(64), nullable=False),
-                sqla.Column("log_H_Jordan_Mp", sqla.Float(64), nullable=False),
+                sqla.Column("H_Einstein_Mp", sqla.Float(64), nullable=False),
+                sqla.Column("H_Jordan_Mp", sqla.Float(64), nullable=False),
                 sqla.Column("gstar_rho", sqla.Float(64), nullable=False),
                 sqla.Column("gstar_s", sqla.Float(64), nullable=False),
                 sqla.Column("Sigma", sqla.Float(64), nullable=False),
@@ -642,8 +642,8 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
         log_fm: float = payload["log_fm"]
         log_T_Jordan: float = payload["log_T_Jordan"]
 
-        log_H_Einstein: float = payload["log_H_Einstein"]
-        log_H_Jordan: float = payload["log_H_Jordan"]
+        H_Einstein: float = payload["H_Einstein"]
+        H_Jordan: float = payload["H_Jordan"]
 
         gstar_rho: float = payload["gstar_rho"]
         gstar_s: float = payload["gstar_s"]
@@ -660,8 +660,8 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
         log_rhorad_Jordan_Mp4: float = log_rhorad_Jordan - 4.0 * log_Mp
         log_T_Jordan_GeV: float = log_T_Jordan - log_GeV
 
-        log_H_Einstein_Mp: float = log_H_Einstein - log_Mp
-        log_H_Jordan_Mp: float = log_H_Jordan - log_Mp
+        H_Einstein_Mp: float = H_Einstein / units.PlanckMass
+        H_Jordan_Mp: float = H_Jordan / units.PlanckMass
 
         try:
             row_data = conn.execute(
@@ -674,8 +674,8 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
                     table.c.log_rhorad_Jordan_Mp4,
                     table.c.log_fm,
                     table.c.log_T_Jordan_GeV,
-                    table.c.log_H_Einstein_Mp,
-                    table.c.log_H_Jordan_Mp,
+                    table.c.H_Einstein_Mp,
+                    table.c.H_Jordan_Mp,
                     table.c.gstar_rho,
                     table.c.gstar_s,
                     table.c.Sigma,
@@ -703,8 +703,8 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
                     "log_rhorad_Jordan_Mp4": log_rhorad_Jordan_Mp4,
                     "log_fm": log_fm,
                     "log_T_Jordan_GeV": log_T_Jordan_GeV,
-                    "log_H_Einstein_Mp": log_H_Einstein_Mp,
-                    "log_H_Jordan_Mp": log_H_Jordan_Mp,
+                    "H_Einstein_Mp": H_Einstein_Mp,
+                    "H_Jordan_Mp": H_Jordan_Mp,
                     "gstar_rho": gstar_rho,
                     "gstar_s": gstar_s,
                     "Sigma": Sigma,
@@ -724,8 +724,8 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
             log_fm = row_data.log_fm
             log_T_Jordan = row_data.log_T_Jordan_GeV + log_GeV
 
-            log_H_Einstein = row_data.log_H_Einstein_Mp + log_Mp
-            log_H_Jordan = row_data.log_H_Jordan_Mp + log_Mp
+            H_Einstein = row_data.H_Einstein_Mp * units.PlanckMass
+            H_Jordan = row_data.H_Jordan_Mp * units.PlanckMass
 
             gstar_rho = row_data.gstar_rho
             gstar_s = row_data.gstar_s
@@ -759,8 +759,8 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
             log_rhorad_Jordan=log_rhorad_Jordan,
             log_fm=log_fm,
             log_T_Jordan=log_T_Jordan,
-            log_H_Einstein=log_H_Einstein,
-            log_H_Jordan=log_H_Jordan,
+            H_Einstein=H_Einstein,
+            H_Jordan=H_Jordan,
             gstar_rho=gstar_rho,
             gstar_s=gstar_s,
             Sigma=Sigma,

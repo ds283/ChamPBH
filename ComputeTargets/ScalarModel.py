@@ -58,8 +58,8 @@ SampleValues = namedtuple(
         "log_rhorad_Einstein",
         "log_rhorad_Jordan",
         "log_fm",
-        "log_H_Einstein",
-        "log_H_Jordan",
+        "H_Einstein",
+        "H_Jordan",
         "log_T_Jordan",
         "gstar_rho",
         "gstar_s",
@@ -75,8 +75,8 @@ ModelFunctions = namedtuple(
         "log_rhorad_Einstein",
         "log_rhorad_Jordan",
         "log_fm",
-        "log_H_Einstein",
-        "log_H_Jordan",
+        "H_Einstein",
+        "H_Jordan",
         "log_T_Jordan",
         "gstar_rho",
         "gstar_s",
@@ -354,6 +354,7 @@ def compute_scalar_model(
 
         state: StateVector = StateVector._make(sol.sol(N_forward))
 
+        Omega: float = coupling.Omega(state.phi_Einstein)
         log_Omega: float = coupling.log_Omega(state.phi_Einstein)
         log_Omega_prime: float = coupling.log_Omega_prime(state.phi_Einstein)
         offset: float = 4.0 * log_Omega
@@ -366,9 +367,11 @@ def compute_scalar_model(
 
         H2_Mp2_Einstein: float = (rhorad_Einstein * (1.0 + fm) + V) / (G) / 3.0
         H2_Einstein: float = H2_Mp2_Einstein / CONST_MP_SQ
-        log_H_Einstein: float = log(sqrt(H2_Einstein))
-        log_H_Jordan: float = (
-            log_H_Einstein - log_Omega + log(1.0 + log_Omega_prime * state.pi_Einstein)
+
+        # H_Jordan can even be negative, so there is no use trying to store its logarithm
+        H_Einstein: float = sqrt(H2_Einstein)
+        H_Jordan: float = (
+            H_Einstein * (1.0 + log_Omega_prime * state.pi_Einstein) / Omega
         )
 
         T_Jordan: float = exp(state.log_T_Jordan)
@@ -382,8 +385,8 @@ def compute_scalar_model(
                 log_rhorad_Jordan=log_rhorad_Jordan,
                 log_fm=state.log_fm,
                 log_T_Jordan=state.log_T_Jordan,
-                log_H_Einstein=log_H_Einstein,
-                log_H_Jordan=log_H_Jordan,
+                H_Einstein=H_Einstein,
+                H_Jordan=H_Jordan,
                 gstar_rho=cosmology.G_rho(T_Jordan),
                 gstar_s=cosmology.G_s(T_Jordan),
                 Sigma=1.0 - 3.0 * cosmology.w(T_Jordan),
@@ -561,8 +564,8 @@ class ScalarModel(DatastoreObject):
             log_rhorad_Einstein=_build_func("log_rhorad_Einstein"),
             log_rhorad_Jordan=_build_func("log_rhorad_Jordan"),
             log_fm=_build_func("log_fm"),
-            log_H_Einstein=_build_func("log_H_Einstein"),
-            log_H_Jordan=_build_func("log_H_Jordan"),
+            H_Einstein=_build_func("H_Einstein"),
+            H_Jordan=_build_func("H_Jordan"),
             log_T_Jordan=_build_func("log_T_Jordan"),
             gstar_rho=_build_func("gstar_rho"),
             gstar_s=_build_func("gstar_s"),
@@ -650,8 +653,8 @@ class ScalarModel(DatastoreObject):
                     log_rhorad_Jordan=sample[i].log_rhorad_Jordan,
                     log_fm=sample[i].log_fm,
                     log_T_Jordan=sample[i].log_T_Jordan,
-                    log_H_Einstein=sample[i].log_H_Einstein,
-                    log_H_Jordan=sample[i].log_H_Jordan,
+                    H_Einstein=sample[i].H_Einstein,
+                    H_Jordan=sample[i].H_Jordan,
                     gstar_rho=sample[i].gstar_rho,
                     gstar_s=sample[i].gstar_s,
                     Sigma=sample[i].Sigma,
@@ -675,8 +678,8 @@ class ScalarModelValue(DatastoreObject):
         log_rhorad_Jordan: float,
         log_fm: float,
         log_T_Jordan: float,
-        log_H_Einstein: float,
-        log_H_Jordan: float,
+        H_Einstein: float,
+        H_Jordan: float,
         gstar_rho: float,
         gstar_s: float,
         Sigma: float,
@@ -689,8 +692,8 @@ class ScalarModelValue(DatastoreObject):
         self._phi_Einstein: float = phi_Einstein
         self._pi_Einstein: float = pi_Einstein
 
-        self._log_H_Einstein: float = log_H_Einstein
-        self._log_H_Jordan: float = log_H_Jordan
+        self._H_Einstein: float = H_Einstein
+        self._H_Jordan: float = H_Jordan
 
         self._log_rhorad_Einstein: float = log_rhorad_Einstein
         self._log_rhorad_Jordan: float = log_rhorad_Jordan
@@ -715,12 +718,12 @@ class ScalarModelValue(DatastoreObject):
         return self._raw_N
 
     @property
-    def log_H_Einstein(self) -> float:
-        return self._log_H_Einstein
+    def H_Einstein(self) -> float:
+        return self._H_Einstein
 
     @property
-    def log_H_Jordan(self) -> float:
-        return self._log_H_Jordan
+    def H_Jordan(self) -> float:
+        return self._H_Jordan
 
     @property
     def phi_Einstein(self) -> float:
