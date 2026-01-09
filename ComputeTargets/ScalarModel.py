@@ -643,7 +643,7 @@ class ScalarModel(DatastoreObject):
                 ScalarModelValue(
                     None,
                     z_grid[i],
-                    raw_N=sample[i].N,
+                    raw_N=sample[i].raw_N,
                     phi_Einstein=sample[i].phi_Einstein,
                     pi_Einstein=sample[i].pi_Einstein,
                     log_rhorad_Einstein=sample[i].log_rhorad_Einstein,
