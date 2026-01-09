@@ -134,7 +134,28 @@ def compute_scalar_model(
     # f_m = rho_m
     z_init_estimate = cosmology.z(T_init)
     log_rho_m0: float = log(cosmology.rho_m0)
-    log_fm_init = log_rho_m0 - log_rhorad_Jordan_init
+    log_rho_m_init: float = log_rho_m0 - 3.0 * log(1.0 + z_init_estimate)
+    log_fm_init = log_rho_m_init - log_rhorad_Jordan_init
+    assert log_fm_init < 0.0
+
+    rhorad_Jordan_init: float = exp(log_rhorad_Einstein_init)
+    rhorad_Jordan_init_14: float = pow(rhorad_Jordan_init, 1.0 / 4.0)
+
+    rhomat_Jordan_init: float = exp(log_rho_m_init)
+    rhomat_Jordan_init_14: float = pow(rhomat_Jordan_init, 1.0 / 4.0)
+
+    fm_init = exp(log_fm_init)
+
+    print(f"-- compute_scalar_model ({task_label}): initial data")
+    print(
+        f"    - T_Jordan_init = {GetTemperature(T_init)/units.GeV:.5g} GeV = {GetTemperature(T_init)/units.Kelvin:.5g} K"
+    )
+    print(f"    - rho_r_Jordan_init = ({rhorad_Jordan_init_14/units.GeV:.5g} GeV)^4")
+    print(f"    - rho_m_Jordan_init = ({rhomat_Jordan_init_14/units.GeV:.5g} GeV)^4")
+    print(f"    - f_m_init = {fm_init:.5g} | log(f_m_init) = {log_fm_init:.5g}")
+    print(
+        f"    - log_rho_r_Jordan_init = {log_rhorad_Jordan_init:.5g}, log_rho_r_Einstein_init = {log_rhorad_Einstein_init:.5g}"
+    )
 
     CONST_MP_SQ = units.PlanckMass * units.PlanckMass
     CONST_6_MP_SQ = 6.0 * CONST_MP_SQ
