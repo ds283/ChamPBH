@@ -47,7 +47,7 @@ DEFAULT_SHARDS = 20
 DEFAULT_RAY_ADDRESS = "auto"
 
 DEFAULT_Z_END = 0.1
-DEFAULT_T_HIGH_GEV = 20000
+DEFAULT_T_INIT_GEV = 20000
 DEFAULT_SAMPLES_PER_LOG10_Z = 100
 
 DEFAULT_BETA_LOW = 0.1
@@ -103,9 +103,9 @@ parser.add_argument(
     help="specify number of z-sample points per log10(z)",
 )
 parser.add_argument(
-    "--T-high-GeV",
+    "--T-init-GeV",
     type=float,
-    default=DEFAULT_T_HIGH_GEV,
+    default=DEFAULT_T_INIT_GEV,
     help="set initial conditions at temperature T_Jordan_init, specified in GeV",
 )
 parser.add_argument(
@@ -416,7 +416,7 @@ with ShardedPool(
     log10_Lambda_high_eV: float = args.log10_Lambda_high_eV
     samples_per_log10_Lambda_eV: int = args.samples_per_log10_Lambda_eV
 
-    T_init_GeV: float = args.T_high_GeV
+    T_init_GeV: float = args.T_init_GeV
 
     units = GeV_units()
 
