@@ -18,7 +18,6 @@ class GeV_units(UnitsLike):
 
     PlanckMass = 2.436e27 * eV
 
-    PlanckMass = 1.0
     sqrt_NewtonG = sqrt(1.0 / (8.0 * pi)) / PlanckMass
 
     Metre = sqrt_NewtonG / 1.616255e-35
