@@ -18,7 +18,7 @@ from CosmologyConcepts import (
     phi_value,
     pi_value,
     GetFieldValue,
-    EnergyLike,
+    FieldLike,
 )
 from CosmologyConcepts.ConformalCouplings import AbstractCoupling
 from CosmologyConcepts.Potentials import AbstractPotential
@@ -72,8 +72,8 @@ def compute_scalar_model(
     cosmology: LambdaCDM_GenericEOS,
     T_init: TemperatureLike,
     T_stop: TemperatureLike,
-    phi_init: EnergyLike,
-    pi_init: EnergyLike,
+    phi_init: FieldLike,
+    pi_init: FieldLike,
     z_grid: redshift_array,
     potential: AbstractPotential,
     coupling: AbstractCoupling,

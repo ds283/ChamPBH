@@ -17,10 +17,10 @@ class pi_value(DimensionfulQuantity):
         super().__init__(store_id, value, "pi_value")
 
 
-EnergyLike = Union[phi_value, pi_value, float]
+FieldLike = Union[phi_value, pi_value, float]
 
 
-def GetFieldValue(value: EnergyLike) -> float:
+def GetFieldValue(value: FieldLike) -> float:
     if isinstance(value, phi_value):
         return float(value)
 
