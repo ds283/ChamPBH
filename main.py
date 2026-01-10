@@ -462,7 +462,7 @@ with ShardedPool(
         # InversePowerPotential is a sharded table and needs a "shard_key" field
         # TODO: find a better way to implement/handle
         return pool.object_get(
-            "ExponentialPotential",
+            "InversePowerPotential",
             payload_data=[
                 {"shard_key": M, "M": M, "Lambda": Lambda, "n": 1, "units": units}
                 for M, Lambda in M_lambda_set
