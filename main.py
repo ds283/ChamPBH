@@ -495,7 +495,15 @@ with ShardedPool(
         solve_ivp_DOP853,
         solve_ivp_Radau,
         solve_ivp_BDF,
-        solve_icp_LSODA,
+        solve_ivp_LSODA,
+        diffrax_Dopri5,
+        diffrax_Dopri8,
+        diffrax_Kvaerno3,
+        diffrax_Kvaerno4,
+        diffrax_Kvaerno5,
+        diffrax_KenCarp3,
+        diffrax_KenCarp4,
+        diffrax_KenCarp5,
     ) = ray.get(
         [
             pool.object_get("IntegrationSolver", label="solve_ivp+RK45", stepping=0),
@@ -503,6 +511,30 @@ with ShardedPool(
             pool.object_get("IntegrationSolver", label="solve_ivp+Radau", stepping=0),
             pool.object_get("IntegrationSolver", label="solve_ivp+BDF", stepping=0),
             pool.object_get("IntegrationSolver", label="solve_ivp+LSODA", stepping=0),
+            pool.object_get(
+                "IntegrationSolver", label="diffrax+Dopri5-stepping0", stepping=0
+            ),
+            pool.object_get(
+                "IntegrationSolver", label="diffrax+Dopri8-stepping0", stepping=0
+            ),
+            pool.object_get(
+                "IntegrationSolver", label="diffrax+Kvaerno3-stepping0", stepping=0
+            ),
+            pool.object_get(
+                "IntegrationSolver", label="diffrax+Kvaerno4-stepping0", stepping=0
+            ),
+            pool.object_get(
+                "IntegrationSolver", label="diffrax+Kvaerno5-stepping0", stepping=0
+            ),
+            pool.object_get(
+                "IntegrationSolver", label="diffrax+KenCarp3-stepping0", stepping=0
+            ),
+            pool.object_get(
+                "IntegrationSolver", label="diffrax+KenCarp4-stepping0", stepping=0
+            ),
+            pool.object_get(
+                "IntegrationSolver", label="diffrax+KenCarp5-stepping0", stepping=0
+            ),
         ]
     )
     solvers = {
@@ -510,7 +542,15 @@ with ShardedPool(
         "solve_ivp+DOP853-stepping0": solve_ivp_DOP853,
         "solve_ivp+Radau-stepping0": solve_ivp_Radau,
         "solve_ivp+BDF-stepping0": solve_ivp_BDF,
-        "solve_ivp+LSODA-stepping0": solve_icp_LSODA,
+        "solve_ivp+LSODA-stepping0": solve_ivp_LSODA,
+        "diffrax+Dopri5-stepping0": diffrax_Dopri5,
+        "diffrax+Dopri8-stepping0": diffrax_Dopri8,
+        "diffrax+Kvaerno3-stepping0": diffrax_Kvaerno3,
+        "diffrax+Kvaerno4-stepping0": diffrax_Kvaerno4,
+        "diffrax+Kvaerno5-stepping0": diffrax_Kvaerno5,
+        "diffrax+KenCarp3-stepping0": diffrax_KenCarp3,
+        "diffrax+KenCarp4-stepping0": diffrax_KenCarp4,
+        "diffrax+KenCarp5-stepping0": diffrax_KenCarp5,
     }
 
     # the redshift z corresponding to T = 20,000 GeV is about 6E35 in a LambdaCDM-like cosmology

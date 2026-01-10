@@ -2,10 +2,16 @@ from collections import namedtuple
 from math import log, pi, exp, sqrt, isinf, isnan
 from typing import Optional, List
 
+import diffrax
+import jax
+import optimistix as optx
 import ray
+from jaxtyping import Array
 from ray import ObjectRef
-from scipy.integrate import solve_ivp
 from scipy.interpolate import make_interp_spline
+
+# ensure JAX is using double-precision arithmetic
+jax.config.update("jax_enable_x64", True)
 
 from ComputeTargets.spline_wrappers import ZSplineWrapper
 from CosmologyConcepts import (
@@ -55,6 +61,14 @@ SolutionFragment = namedtuple(
         "N_low",
         "N_high",
         "sol",
+    ],
+)
+
+EventSet = namedtuple(
+    "EventSet",
+    [
+        "terminate_at_T_stop",
+        "reflection_failute_detector",
     ],
 )
 
@@ -170,7 +184,7 @@ def compute_scalar_model(
     CONST_MP_SQ = units.PlanckMass * units.PlanckMass
     CONST_6_MP_SQ = 6.0 * CONST_MP_SQ
 
-    def RHS(N, s, supervisor) -> StateVector:
+    def RHS(N, s, supervisor) -> Array:
         with RHS_timer(supervisor) as timer:
             state: StateVector = StateVector._make(s)
 
@@ -284,7 +298,7 @@ def compute_scalar_model(
                     f"compute_scalar_model ({task_label}): output from ODE RHS has infinity or NaN values"
                 )
 
-            return return_state
+            return jax.numpy.asarray(return_state)
 
     # termination occurs when the Jordan frame temperature hits T_Jordan_stop, usually equal to T_CMB,
     # so the actual stop value given in t_span is mostly irrelevant, just
@@ -336,86 +350,92 @@ def compute_scalar_model(
         units, T_init, T_stop, label=task_label
     ) as supervisor:
         while not solution_complete:
-            sol = solve_ivp(
-                RHS,
-                method="Radau",
-                t_span=(N_start, N_failsafe),
-                y0=initial_state,
-                atol=atol,
-                rtol=rtol,
-                args=(supervisor,),
-                events=(
-                    terminate_at_T_stop,
-                    reflection_failute_detector,
-                ),
-                dense_output=True,
+            ode_system = diffrax.ODETerm(RHS)
+            solver = diffrax.Kvaerno5()
+            saveat = diffrax.SaveAt(dense=True)
+            controller = diffrax.PIDController(atol=atol, rtol=rtol)
+
+            # specify event predicates to handle termination conditions
+            root_finder = optx.Newton(1e-5, 1e-5, optx.rms_norm)
+            event_predicates = EventSet(
+                terminate_at_T_stop=terminate_at_T_stop,
+                reflection_failute_detector=reflection_failute_detector,
+            )
+            events = diffrax.Event(
+                event_predicates,
+                root_finder=root_finder,
+            )
+            sol: diffrax.Solution = diffrax.diffeqsolve(
+                terms=ode_system,
+                solver=solver,
+                t0=N_start,
+                t1=N_failsafe,
+                dt0=None,  # choose initial step size automatically
+                y0=jax.numpy.asarray(initial_state),
+                args=supervisor,
+                saveat=saveat,
+                stepsize_controller=controller,
+                event=events,
             )
 
+            if sol.result == diffrax.RESULTS.max_steps_reached:
+                print(
+                    f"compute_scalar_model ({task_label}): maximum number of steps was reached during integration; restarting to obtain another fragment, but consider increasing max_steps if this occurs regularly (solved interval was N0={sol.t0:.5g}, N1={sol.t1:.5g}"
+                )
+
             # check that termination occurred due to reaching the end of the integration domain, or because of a termination event
-            if not sol.success:
+            if sol.result == diffrax.RESULTS.successful:
                 raise RuntimeError(
-                    f'compute_scalar_model ({task_label}): integration did not terminate successfully (log_T_init={log_T_init:.5g}, log_T_stop={log_T_stop:.5g}, error at N={sol.t[-1]:.5g}, "{sol.message}")'
+                    f"compute_scalar_model ({task_label}): integration concluded without a termination event => failsafe activated (solved interval was N0={sol.t0:.5g}, N1={sol.t1:.5g})"
                 )
 
             # check that termination was not due to reaching the end of the integraton domain (that is supposed to be just a failsafe)
-            if not sol.status == 1:
+            if not sol.result.event_occurred:
                 raise RuntimeError(
-                    f'compute_scalar_model ({task_label}): integration concluded without a termination event => failsafe activated (log_T_init={log_T_init:.5g}, log_T_stop={log_T_stop:.5g}, last sample at N={sol.t[-1]:.5g}, "{sol.message}")'
-                )
-
-            # check that the solution has the expected number of elements
-            sampled_N = sol.t
-            sampled_values = StateVector._make(sol.y)
-            if len(sampled_values) != EXPECTED_SOL_LENGTH:
-                raise RuntimeError(
-                    f"compute_scalar_model ({task_label}): solution does not have expected number of members (expected {EXPECTED_SOL_LENGTH}, found {len(sampled_values)}; length of sol.t={len(sampled_N)})"
-                )
-
-            # update running number of function evaluations (recorded by integrator)
-            compute_steps += int(sol.nfev)
-
-            # at this stage, we know that one of the event handlers fired to terminate the evolution
-            # now we decide which one
-
-            termination_event_times = sol.t_events[0]
-            reflection_event_times = sol.t_events[1]
-
-            num_termination_events = len(termination_event_times)
-            num_reflection_events = len(reflection_event_times)
-            if num_termination_events + num_reflection_events != 1:
-                raise RuntimeError(
-                    f"compute_scalar_model ({task_label}): integration terminated with multiple termination events (N_start={N_start:.5g}, N_failsafe={N_failsafe:.5g}, num_termination_events={num_termination_events}, num_reflection_events={num_reflection_events})"
+                    f'compute_scalar_model ({task_label}): integration did not terminate successfully (solved interval was N0={sol.t0:.5g}, N1={sol.t1:.5g}, message="{sol.result}")'
                 )
 
             # append this solution fragment to this list
             solution_fragments.append(
                 SolutionFragment(
-                    N_low=N_start,
-                    N_high=sol.t[-1],
-                    sol=sol.sol,
+                    N_low=sol.t0,
+                    N_high=sol.t1,
+                    sol=sol,
                 )
             )
 
-            # if the integration terminated, break out
-            if num_termination_events == 1:
+            # update the running number of function evaluations (recorded by integrator, we also record it sepaartely in the integration supervisor)
+            compute_steps += int(sol.stats["num_steps"])
+
+            # at this stage, we know that one of the event handlers fired to terminate the evolution
+            # now we decide which one
+            event_mask = EventSet._make(sol.result.event_mask)
+            if event_mask.terminate_at_T_stop:
+                # termination occurred due to reach T_stop
                 solution_complete = True
                 continue
 
-            # record that a hard reflection occurred and prepare for the next integration step
-            hard_reflections.append(reflection_event_times[0])
-            N_start = sol.t[-1]
-            initial_state = StateVector._make(sol.y[:, -1])
+            if event_mask.reflection_failute_detector:
+                # record that a hard reflection occurred and prepare for the next integration step
+                hard_reflections.append(sol.t1)
+                N_start = sol.t1
+                initial_state = StateVector._make(sol.evaluate(sol.t1))
 
-            # reverse direction of travel for the scalar field
-            initial_state = initial_state._replace(
-                pi_Einstein=-initial_state.pi_Einstein
-            )
-            assert initial_state.pi_Einstein >= 0.0
+                # reverse direction of travel for the scalar field
+                if initial_state.pi_Einstein < 0.0:
+                    initial_state = initial_state._replace(
+                        pi_Einstein=-initial_state.pi_Einstein
+                    )
+
+                assert initial_state.pi_Einstein >= 0.0
+                continue
+
+            assert False
 
     # the integration should have terminated when T_Jordan = T_CMB, which ought to correspond to z = 0
     # we now work backwards and sample the integration output on the supplied z grid, using the e-fold number
     # to assign a value of log(1 + z).
-    final_N = sol.t[-1]
+    final_N = sol.t1
     largest_z = exp(final_N) - 1.0
     z_grid_cut = z_grid.truncate(largest_z, keep="lower")
 
@@ -446,7 +466,7 @@ def compute_scalar_model(
                 f"compute_scalar_model: ({task_label}): z={z.z:.3g} appears to be out-of-order relative to the solution fragments"
             )
 
-        state: StateVector = StateVector._make(current_fragment.sol(N_forward))
+        state: StateVector = StateVector._make(current_fragment.sol.evaluate(N_forward))
 
         Omega: float = coupling.Omega(state.phi_Einstein)
         log_Omega: float = coupling.log_Omega(state.phi_Einstein)
@@ -499,7 +519,7 @@ def compute_scalar_model(
         "z_grid": z_grid_cut,
         "sample": sample,
         "hard_reflections": hard_reflections,
-        "solver_label": "solve_ivp+Radau-stepping0",
+        "solver_label": "diffrax+Kvaerno5-stepping0",
     }
 
 
@@ -656,6 +676,10 @@ class ScalarModel(DatastoreObject):
         return self._functions
 
     def _create_functions(self):
+        z_sample = redshift_array(v.z for v in self.values)
+        min_z: redshift = z_sample.min
+        max_z: redshift = z_sample.max
+
         def _build_func(attr: str):
             data = [(v.z.z, getattr(v, attr)) for v in self.values]
             data.sort(key=lambda pair: pair[0])
@@ -665,8 +689,8 @@ class ScalarModel(DatastoreObject):
             return ZSplineWrapper(
                 spline,
                 label=attr,
-                min_z=self.z_sample.min.z,
-                max_z=self.z_sample.max.z,
+                min_z=float(min_z),
+                max_z=float(max_z),
                 log_z=True,
             )
 
