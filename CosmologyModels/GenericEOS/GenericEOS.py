@@ -1,19 +1,19 @@
 from abc import ABC, abstractmethod
 
-from CosmologyConcepts import TemperatureLike
+from CosmologyConcepts import TemperatureLike, GetTemperature
 from Units.base import UnitsLike
 
 # at high temperature, G_rho and G_S usually have the same value
-HIGH_T_GSTAR = 106.75
+_HIGH_T_GSTAR = 106.75
 
 # G_rho and G_S usually only differ at low temperatures after neutrino decoupling, once e+/e- annihilation
 # reheats the photons (but *not* the neutrinos)
-# LOW_T_GSTAR = 3.36
-# LOW_T_G_S_STAR = 3.91
+# _LOW_T_GSTAR = 3.36
+# _LOW_T_G_S_STAR = 3.91
 
 # TODO: check, https://www.astronomy.ohio-state.edu/weinberg.21/A8873/notes7a.pdf quotes instead
-LOW_T_GSTAR = 3.38
-LOW_T_G_S_STAR = 3.94
+_LOW_T_GSTAR = 3.38
+_LOW_T_G_S_STAR = 3.94
 # these values look correct to me because e.g.
 #   2 + 2 * 3.042 * (7/8) * (4/11)^(4/3) = 3.38172
 # so this value of G_rho* includes N_eff from Planck, plus reheating of the photons but not the neutrinos
@@ -35,6 +35,16 @@ class GenericEOSBase(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def _raw_G_rho(self, T):
+        """
+        Compute effective number of bosonic degrees of freedom g(T) for the energy, at temperature T.
+        T should be regarded as a dimensionful quantity, measured in the given UnitsLike system,
+        but supplied here as a float for compatibility with JAX tracing
+        :param T: dimensionful temperature T
+        :return: dimensionless number representing g(T)
+        """
+        raise NotImplementedError
+
     def G_rho(self, T: TemperatureLike) -> float:
         """
         Compute effective number of bosonic degrees of freedom g(T) for the energy, at temperature T.
@@ -42,9 +52,19 @@ class GenericEOSBase(ABC):
         :param T: dimensionful temperature T
         :return: dimensionless number representing g(T)
         """
-        raise NotImplementedError
+        return self._raw_G_rho(GetTemperature(T))
 
     @abstractmethod
+    def _raw_dG_rho_dT(self, T):
+        """
+        Compute derivative of G_rho(T) with respect to temperature T
+        T should be regarded as a dimensionful quantity, measured in the given UnitsLike system,
+        but supplied here as a float for compatibility with JAX tracing
+        :param T: dimensionful temperature T
+        :return: DIMENSIONFUL number representing d(g_rho)/dT at T (units should be inverse to T)
+        """
+        raise NotImplementedError
+
     def dG_rho_dT(self, T: TemperatureLike) -> float:
         """
         Compute derivative of G_rho(T) with respect to temperature T
@@ -52,9 +72,19 @@ class GenericEOSBase(ABC):
         :param T: dimensionful temperature T
         :return: DIMENSIONFUL number representing d(g_rho)/dT at T (units should be inverse to T)
         """
-        raise NotImplementedError
+        return self._raw_dG_rho_dT(GetTemperature(T))
 
     @abstractmethod
+    def _raw_G_s(self, T):
+        """
+        Compute effective number of bosonic degrees of freedom g_S(T) for the entropy, at temperature T
+        T should be regarded as a dimensionful quantity, measured in the given UnitsLike system,
+        but supplied here as a float for compatibility with JAX tracing
+        :param T: dimensionful temperature T
+        :return: dimensionless number representing g_S(T)
+        """
+        raise NotImplementedError
+
     def G_s(self, T: TemperatureLike) -> float:
         """
         Compute effective number of bosonic degrees of freedom g_S(T) for the entropy, at temperature T
@@ -62,9 +92,19 @@ class GenericEOSBase(ABC):
         :param T: dimensionful temperature T
         :return: dimensionless number representing g_S(T)
         """
-        raise NotImplementedError
+        return self._raw_G_s(GetTemperature(T))
 
     @abstractmethod
+    def _raw_dG_s_dT(self, T):
+        """
+        Compute derivative of G_s(T) with respect to temperature T
+        T should be regarded as a dimensionful quantity, measured in the given UnitsLike system,
+        but supplied here as a float for compatibility with JAX tracing
+        :param T: dimensionful temperature T
+        :return: DIMENSIONFUL number representing d(g_S)/dT at T (units should be inverse to T)
+        """
+        raise NotImplementedError
+
     def dG_s_dT(self, T: TemperatureLike) -> float:
         """
         Compute derivative of G_s(T) with respect to temperature T
@@ -72,12 +112,13 @@ class GenericEOSBase(ABC):
         :param T: dimensionful temperature T
         :return: DIMENSIONFUL number representing d(g_S)/dT at T (units should be inverse to T)
         """
-        raise NotImplementedError
+        return self._raw_dG_s_dT(GetTemperature(T))
 
-    def w(self, T: TemperatureLike) -> float:
+    def _raw_w(self, T):
         """
         Generic formula for equation of state parameter w(T) as a function of temperature T.
-        T should be regarded as a dimensionful quantity, measured in the given UnitsLike system.
+        T should be regarded as a dimensionful quantity, measured in the given UnitsLike system,
+        but supplied here as a float for compatibility with JAX tracing
         :return:
         """
 
@@ -88,9 +129,8 @@ class GenericEOSBase(ABC):
         # Notice that g*_s and g*_rho can't be independent. They must satisfy quite a nontrivial differential constraint
         # in order to make this formula for w(T) compatible with the continuity equation
         # d ln(rho)/dt = 3 (1 + w), because this naively involves derivatives of both g*_s and g*_rho
-
-        G = self.G_rho(T)
-        Gs = self.G_s(T)
+        G = self._raw_G_rho(T)
+        Gs = self._raw_G_s(T)
         w = (4.0 * Gs) / (3.0 * G) - 1.0
 
         # print(
@@ -98,3 +138,11 @@ class GenericEOSBase(ABC):
         # )
 
         return w
+
+    def w(self, T: TemperatureLike) -> float:
+        """
+        Generic formula for equation of state parameter w(T) as a function of temperature T.
+        T should be regarded as a dimensionful quantity, measured in the given UnitsLike system.
+        :return:
+        """
+        return self._raw_w(GetTemperature(T))

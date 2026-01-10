@@ -1,9 +1,11 @@
 from collections import namedtuple
-from math import log, pi, exp, sqrt, isinf, isnan
+from math import log, pi, exp, sqrt
 from typing import Optional, List
 
 import diffrax
 import jax
+import jax.lax as lax
+import jax.numpy as jnp
 import optimistix as optx
 import ray
 from jaxtyping import Array
@@ -184,28 +186,23 @@ def compute_scalar_model(
     CONST_MP_SQ = units.PlanckMass * units.PlanckMass
     CONST_6_MP_SQ = 6.0 * CONST_MP_SQ
 
-    def RHS(N, s, supervisor) -> Array:
+    def RHS(N, s: Array, supervisor) -> Array:
         with RHS_timer(supervisor) as timer:
-            state: StateVector = StateVector._make(s)
+            phi_Einstein, pi_Einstein, log_rhorad_Einstein, log_fm, log_T_Jordan = s
 
-            if any((isnan(x) or isinf(x)) for x in state):
-                print(
-                    f"!! compute_scalar_model ({task_label}): input to ODE RHS has infinity or NaN values at N={N:.8g}"
-                )
-                print(f"     - state={state}")
-                raise RuntimeError(
-                    f"compute_scalar_model ({task_label}): input to ODE RHS has infinity or NaN values"
-                )
+            # if jnp.any(jnp.isnan(s)):
+            #     # if jnp.any(jnp.isnan(s)) or jnp.any(jnp.isinf(s)):
+            #     print(
+            #         f"!! compute_scalar_model ({task_label}): input to ODE RHS has infinity or NaN values at N={N:.8g}"
+            #     )
+            #     print(f"     - state={state}")
+            #     raise RuntimeError(
+            #         f"compute_scalar_model ({task_label}): input to ODE RHS has infinity or NaN values"
+            #     )
 
-            phi_Einstein: float = state.phi_Einstein
-            pi_Einstein: float = state.pi_Einstein
-            log_rhorad_Einstein: float = state.log_rhorad_Einstein
-            log_fm: float = state.log_fm
-            log_T_Jordan: float = state.log_T_Jordan
-
-            rhorad_Einstein: float = exp(log_rhorad_Einstein)
-            fm: float = exp(log_fm)
-            T_Jordan: float = exp(log_T_Jordan)
+            rhorad_Einstein = jnp.exp(log_rhorad_Einstein)
+            fm = jnp.exp(log_fm)
+            T_Jordan = jnp.exp(log_T_Jordan)
 
             if supervisor.notify_available:
                 supervisor.message(
@@ -214,91 +211,103 @@ def compute_scalar_model(
                 )
                 supervisor.reset_notify_time()
 
-            V: float = potential.V(phi_Einstein)
-            Vprime: float = potential.Vprime(phi_Einstein)
+            V = potential._raw_V(phi_Einstein)
+            Vprime = potential._raw_Vprime(phi_Einstein)
 
-            log_Omega_prime: float = coupling.log_Omega_prime(phi_Einstein)
+            log_Omega_prime = coupling._raw_log_Omega_prime(phi_Einstein)
 
-            G: float = 1.0 - pi_Einstein * pi_Einstein / CONST_6_MP_SQ
+            G = 1.0 - pi_Einstein * pi_Einstein / CONST_6_MP_SQ
 
-            H2_Mp2_Einstein: float = (rhorad_Einstein * (1.0 + fm) + V) / (G) / 3.0
+            H2_Mp2_Einstein = (rhorad_Einstein * (1.0 + fm) + V) / (G) / 3.0
 
-            H2_Einstein: float = H2_Mp2_Einstein / CONST_MP_SQ
+            H2_Einstein = H2_Mp2_Einstein / CONST_MP_SQ
 
-            Sigma: float = 1.0 - 3.0 * cosmology.w(T_Jordan)
+            Sigma = 1.0 - 3.0 * cosmology._raw_w(T_Jordan)
 
-            d_phi_Einstein: float = pi_Einstein
-            d_log_rhorad_Einstein: float = Sigma - 4.0
-            d_log_fm: float = 1.0 - Sigma
+            d_phi_Einstein = pi_Einstein
+            d_log_rhorad_Einstein = Sigma - 4.0
+            d_log_fm = 1.0 - Sigma
 
-            if fm > 1.0:
-                A1: float = (2.0 + Sigma) / (2.0 * (1.0 + fm)) + (3.0 / 2.0) / (
-                    1.0 + 1.0 / fm
-                )
-                A2: float = (4.0 - Sigma) / (1.0 + fm) + 3.0 / (1.0 + 1.0 / fm)
-                A3: float = 1.0 + Sigma / (1.0 + fm)
-            else:
-                A1: float = (2.0 + 3.0 * fm + Sigma) / (2.0 * (1.0 + fm))
-                A2: float = (4.0 + 3.0 * fm - Sigma) / (1.0 + fm)
-                A3: float = (1.0 + Sigma + fm) / (1.0 + fm)
-            C: float = V / (6.0 * H2_Mp2_Einstein)
-            D: float = Vprime / H2_Einstein
-            E: float = (
+            A1 = lax.cond(
+                fm > 1.0,
+                lambda: (2.0 + Sigma) / (2.0 * (1.0 + fm))
+                + (3.0 / 2.0) / (1.0 + 1.0 / fm),
+                lambda: (2.0 + 3.0 * fm + Sigma) / (2.0 * (1.0 + fm)),
+            )
+            A2 = lax.cond(
+                fm > 1.0,
+                lambda: (4.0 - Sigma) / (1.0 + fm) + 3.0 / (1.0 + 1.0 / fm),
+                lambda: (4.0 + 3.0 * fm - Sigma) / (1.0 + fm),
+            )
+            A3 = lax.cond(
+                fm > 1.0,
+                lambda: 1.0 + Sigma / (1.0 + fm),
+                lambda: (1.0 + Sigma + fm) / (1.0 + fm),
+            )
+
+            C = V / (6.0 * H2_Mp2_Einstein)
+            D = Vprime / H2_Einstein
+            E = (
                 1.0
                 - pi_Einstein * pi_Einstein / CONST_6_MP_SQ
                 - V / (3.0 * H2_Mp2_Einstein)
             )
 
-            d_pi_Einstein: float = (
+            d_pi_Einstein = (
                 -pi_Einstein * (G * A1 + C * A2)
                 - D
                 - 3.0 * CONST_MP_SQ * G * E * log_Omega_prime * A3
             )
 
-            G_s: float = cosmology.G_s(T_Jordan)
-            dG_s: float = cosmology.dG_s_dT(T_Jordan)
-            d_log_T_Jordan: float = -(1.0 + log_Omega_prime * pi_Einstein) / (
+            G_s = cosmology._raw_G_s(T_Jordan)
+            dG_s = cosmology._raw_dG_s_dT(T_Jordan)
+            d_log_T_Jordan = -(1.0 + log_Omega_prime * pi_Einstein) / (
                 1.0 + (T_Jordan / G_s) * dG_s / 3.0
             )
 
-            return_state = StateVector(
-                phi_Einstein=d_phi_Einstein,
-                pi_Einstein=d_pi_Einstein,
-                log_rhorad_Einstein=d_log_rhorad_Einstein,
-                log_fm=d_log_fm,
-                log_T_Jordan=d_log_T_Jordan,
+            return_state = jnp.asarray(
+                (
+                    d_phi_Einstein,
+                    d_pi_Einstein,
+                    d_log_rhorad_Einstein,
+                    d_log_fm,
+                    d_log_T_Jordan,
+                )
             )
 
-            if any((isnan(x) or isinf(x)) for x in return_state):
-                print(
-                    f"!! compute_scalar_model ({task_label}): output from ODE RHS has infinity or NaN values at N={N:.8g}"
-                )
-                print(
-                    f"     - inputs/states: phi_E={phi_Einstein/units.PlanckMass:.5g} Mp, pi_E={pi_Einstein/units.PlanckMass:.5g} Mp, log_rhorad_E={log_rhorad_Einstein:.5g}, log_fm={log_fm:.5g}, log_T_J={log_T_Jordan:.5g}"
-                )
-                print(
-                    f"     - physical: rhorad_E=({pow(rhorad_Einstein, 1.0/4.0)/units.GeV:.5g} GeV)^4, fm={fm:.5g}, T_J={T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K"
-                )
-                print(
-                    f"     - potential: V=({pow(V, 1.0/4.0)/units.GeV:.5g} GeV)^4, V'=({pow(Vprime, 1.0/3.0)/units.GeV:.5g} GeV)^4, log_Omega'={log_Omega_prime:.5g}"
-                )
-                print(
-                    f"     - cosmology: H2_Mp2_E=({pow(H2_Mp2_Einstein, 1.0/4.0)/units.PlanckMass:.5g} Mp)^4, H2_E=({pow(H2_Einstein, 1.0/2.0)/units.PlanckMass:.5g} Mp)^2, Sigma={Sigma:.5g}"
-                )
-                print(
-                    f"     - intermediates: G={G:.5g}, A1={A1:.5g}, A2={A2:.5g}, A3={A3:.5g}, C={C:.5g}, D={D:.5g}, E={E:.5g}"
-                )
-                print(
-                    f"     - derivatives: d_phi_E={d_phi_Einstein:.5g}, d_pi_E={d_pi_Einstein:.5g}, d_log_rhorad_E={d_log_rhorad_Einstein:.5g}, d_log_fm={d_log_fm:.5g}, d_log_T_J={d_log_T_Jordan:.5g}"
-                )
-                print(f"     - thermodynamics: G_s={G_s:.5g}, dG_s={dG_s:.5g}")
-                print(f"     - state={state}")
-                print(f"     - return_state={return_state}")
-                raise RuntimeError(
-                    f"compute_scalar_model ({task_label}): output from ODE RHS has infinity or NaN values"
-                )
+            # if jnp.any(jnp.isnan(return_state)):
+            #     # if jnp.any(jnp.isnan(return_state)) or jnp.any(
+            #     #     jnp.isinf(return_state)
+            #     # ):
+            #     print(
+            #         f"!! compute_scalar_model ({task_label}): output from ODE RHS has infinity or NaN values at N={N:.8g}"
+            #     )
+            #     print(
+            #         f"     - inputs/states: phi_E={phi_Einstein/units.PlanckMass:.5g} Mp, pi_E={pi_Einstein/units.PlanckMass:.5g} Mp, log_rhorad_E={log_rhorad_Einstein:.5g}, log_fm={log_fm:.5g}, log_T_J={log_T_Jordan:.5g}"
+            #     )
+            #     print(
+            #         f"     - physical: rhorad_E=({pow(rhorad_Einstein, 1.0/4.0)/units.GeV:.5g} GeV)^4, fm={fm:.5g}, T_J={T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K"
+            #     )
+            #     print(
+            #         f"     - potential: V=({pow(V, 1.0/4.0)/units.GeV:.5g} GeV)^4, V'=({pow(Vprime, 1.0/3.0)/units.GeV:.5g} GeV)^4, log_Omega'={log_Omega_prime:.5g}"
+            #     )
+            #     print(
+            #         f"     - cosmology: H2_Mp2_E=({pow(H2_Mp2_Einstein, 1.0/4.0)/units.PlanckMass:.5g} Mp)^4, H2_E=({pow(H2_Einstein, 1.0/2.0)/units.PlanckMass:.5g} Mp)^2, Sigma={Sigma:.5g}"
+            #     )
+            #     print(
+            #         f"     - intermediates: G={G:.5g}, A1={A1:.5g}, A2={A2:.5g}, A3={A3:.5g}, C={C:.5g}, D={D:.5g}, E={E:.5g}"
+            #     )
+            #     print(
+            #         f"     - derivatives: d_phi_E={d_phi_Einstein:.5g}, d_pi_E={d_pi_Einstein:.5g}, d_log_rhorad_E={d_log_rhorad_Einstein:.5g}, d_log_fm={d_log_fm:.5g}, d_log_T_J={d_log_T_Jordan:.5g}"
+            #     )
+            #     print(f"     - thermodynamics: G_s={G_s:.5g}, dG_s={dG_s:.5g}")
+            #     print(f"     - state={state}")
+            #     print(f"     - return_state={return_state}")
+            #     raise RuntimeError(
+            #         f"compute_scalar_model ({task_label}): output from ODE RHS has infinity or NaN values"
+            #     )
 
-            return jax.numpy.asarray(return_state)
+            return return_state
 
     # termination occurs when the Jordan frame temperature hits T_Jordan_stop, usually equal to T_CMB,
     # so the actual stop value given in t_span is mostly irrelevant, just
@@ -371,7 +380,7 @@ def compute_scalar_model(
                 t0=N_start,
                 t1=N_failsafe,
                 dt0=None,  # choose initial step size automatically
-                y0=jax.numpy.asarray(initial_state),
+                y0=jnp.asarray(initial_state),
                 args=supervisor,
                 saveat=saveat,
                 stepsize_controller=controller,

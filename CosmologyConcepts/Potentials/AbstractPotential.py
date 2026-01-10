@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from CosmologyConcepts import FieldLike
+from CosmologyConcepts import FieldLike, GetFieldValue
 from Datastore import DatastoreObject
 
 
@@ -19,19 +19,25 @@ class AbstractPotential(DatastoreObject, ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def _raw_V(self, phi):
+        raise NotImplementedError
+
     def V(self, phi: FieldLike) -> float:
         """
         Evaluate the potential at a given value of phi
         :param phi:
         :return:
         """
-        raise NotImplementedError
+        return self._raw_V(GetFieldValue(phi))
 
     @abstractmethod
+    def _raw_Vprime(self, phi):
+        raise NotImplementedError
+
     def Vprime(self, phi: FieldLike) -> float:
         """
         Evaluate the derivative of the potential at a given value of phi
         :param phi:
         :return:
         """
-        raise NotImplementedError
+        return self._raw_Vprime(GetFieldValue(phi))

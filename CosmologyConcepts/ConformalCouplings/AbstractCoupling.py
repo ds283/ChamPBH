@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from CosmologyConcepts import FieldLike
+from CosmologyConcepts import FieldLike, GetFieldValue
 from Datastore import DatastoreObject
 
 
@@ -19,28 +19,37 @@ class AbstractCoupling(DatastoreObject, ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def _raw_log_Omega(self, phi):
+        raise NotImplementedError
+
     def log_Omega(self, phi: FieldLike) -> float:
         """
         Evaluate the logarithm of the conformal coupling function at field value phi
         :param phi:
         :return:
         """
-        raise NotImplementedError
+        return self._raw_log_Omega(GetFieldValue(phi))
 
     @abstractmethod
-    def Omega(self, phi: FieldLike) -> float:
-        """
-        Evaluate the conformal coupling function at field value phi
-        :param phi:
-        :return:
-        """
+    def _raw_log_Omega_prime(self, phi):
         raise NotImplementedError
 
-    @abstractmethod
     def log_Omega_prime(self, phi: FieldLike) -> float:
         """
         Evaluate the logarithmic derivative Omega'/Omega at field value phi
         :param phi:
         :return:
         """
+        return self._raw_log_Omega_prime(GetFieldValue(phi))
+
+    @abstractmethod
+    def _raw_Omega(self, phi):
         raise NotImplementedError
+
+    def Omega(self, phi: FieldLike) -> float:
+        """
+        Evaluate the conformal coupling function at field value phi
+        :param phi:
+        :return:
+        """
+        return self._raw_Omega(GetFieldValue(phi))
