@@ -17,10 +17,10 @@ TemperatureLike = Union[temperature, float]
 
 def GetTemperature(T: TemperatureLike) -> float:
     if isinstance(T, temperature):
-        return float(T)
+        return T.as_float
 
     if isinstance(T, float):
         return T
 
     # attempt conversion to float, allowing an exception to be raised if it fails
-    return float(T)
+    raise ValueError("Expected a TemperatureLike object")

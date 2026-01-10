@@ -20,6 +20,9 @@ class DimensionfulQuantity(DatastoreObject):
             raise ValueError("Store ID cannot be None")
         DatastoreObject.__init__(self, store_id)
 
+        if not isinstance(value, float):
+            raise ValueError("value must be a float")
+
         self.value: float = value
         self.name: str = name
 
@@ -27,7 +30,7 @@ class DimensionfulQuantity(DatastoreObject):
         """
         Cast to float. Returns numerical value.
         """
-        return float(self.value)
+        return self.value
 
     def __eq__(self, other):
         if not isinstance(other, type(self)):
@@ -43,6 +46,10 @@ class DimensionfulQuantity(DatastoreObject):
 
     def __hash__(self):
         return (self.name, self.store_id).__hash__()
+
+    @property
+    def as_float(self) -> float:
+        return self.value
 
 
 class DimensionfulQuantityArray:
@@ -81,7 +88,7 @@ class DimensionfulQuantityArray:
         return DimensionfulQuantityArray(full_array)
 
     def as_float_list(self) -> list[float]:
-        return [float(v) for v in self._value_array]
+        return [v.as_float for v in self._value_array]
 
     @property
     def max(self) -> DimensionfulQuantity:

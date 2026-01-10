@@ -22,13 +22,12 @@ FieldLike = Union[phi_value, pi_value, float]
 
 def GetFieldValue(value: FieldLike) -> float:
     if isinstance(value, phi_value):
-        return float(value)
+        return value.as_float
 
     if isinstance(value, pi_value):
-        return float(value)
+        return value.as_float
 
     if isinstance(value, float):
         return value
 
-    # attempt conversion to float, allowing an exception to be raised if it fails
-    return float(value)
+    raise ValueError("Expected a FieldLike object")
