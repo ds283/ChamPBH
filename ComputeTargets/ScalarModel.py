@@ -217,8 +217,6 @@ def compute_scalar_model(
             d_log_rhorad_Einstein: float = Sigma - 4.0
             d_log_fm: float = 1.0 - Sigma
 
-            assert d_log_fm < 1.5
-
             if fm > 1.0:
                 A1: float = (2.0 + Sigma) / (2.0 * (1.0 + fm)) + (3.0 / 2.0) / (
                     1.0 + 1.0 / fm
