@@ -25,7 +25,7 @@ class Planck_units(UnitsLike):
     Kelvin = 1.0 / (1.416784e32 * sqrt_NewtonG)
 
     eV = PlanckMass / 2.436e27
-    GeV = 1e9 * eV
+    # keV, MeV, GeV are set by base UnitsLike
 
     # c should be unity for consistency, since we have assumed c = hbar = k_B = 1 in writing some of the equations above
     c = 299792458 * Metre / Second

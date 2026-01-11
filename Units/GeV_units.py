@@ -13,8 +13,9 @@ class GeV_units(UnitsLike):
     # We can choose this to be whatever we like; often it is GeV, but here we are choosing it
     # to be Mpc instead.
 
-    GeV = 1.0
-    eV = GeV / 1e9
+    _GeV = 1.0
+    eV = _GeV / 1e9
+    # keV, MeV, GeV are set by base UnitsLike
 
     PlanckMass = 2.436e27 * eV
 
