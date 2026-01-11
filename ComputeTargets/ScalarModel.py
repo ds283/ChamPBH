@@ -198,7 +198,7 @@ def compute_scalar_model(
                     T_Jordan,
                     f"current state: N={N:.3g}, f_m = {fm}, T_Jordan = {T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp",
                 )
-                supervisor.reset_notify_time()
+                supervisor.reset_notify_time(T_Jordan)
 
             V: float = potential.V(phi_Einstein)
             Vprime: float = potential.Vprime(phi_Einstein)
@@ -431,6 +431,7 @@ def compute_scalar_model(
     # loop over the required z sample grid.
     # Note that we will work from high z to low z.
 
+    num_fragments = len(solution_fragments)
     current_fragment = solution_fragments.pop(0)
     for z in z_grid_cut:
         z: redshift
@@ -499,6 +500,7 @@ def compute_scalar_model(
         "z_grid": z_grid_cut,
         "sample": sample,
         "hard_reflections": supervisor.number_hard_reflections,
+        "number_fragments": num_fragments,
         "solver_label": "solve_ivp+DOP853-stepping0",
     }
 
@@ -754,9 +756,14 @@ class ScalarModel(DatastoreObject):
         z_grid: redshift_array = data["z_grid"]
 
         extra_data = {}
+
         hard_reflections = data["hard_reflections"]
         if hard_reflections > 0:
             extra_data["num_hard_reflections"] = hard_reflections
+
+        number_fragments = data["number_fragments"]
+        if number_fragments > 1:
+            extra_data["number_fragments"] = number_fragments
 
         if len(extra_data) > 0:
             self._extra_data = extra_data

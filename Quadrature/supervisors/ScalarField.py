@@ -99,9 +99,6 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
         )
         print(f"|    {msg}")
 
-        self._new_hard_reflection_events = []
-        self._last_log_T_GeV = log_T_GeV
-
     def notify_hard_reflection(self, N: float):
         self._hard_reflection_events.append(N)
         self._new_hard_reflection_events.append(N)
@@ -109,3 +106,13 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
     @property
     def number_hard_reflections(self):
         return len(self._hard_reflection_events)
+
+    def reset_hard_reflection_events(self, T_Jordan: TemperatureLike):
+        super().reset_notify_time()
+        self._new_hard_reflection_events = []
+
+        T_Jordan_float = GetTemperature(T_Jordan)
+        T_GeV = T_Jordan_float / self._GeV
+        log_T_GeV = log(T_GeV)
+
+        self._last_log_T_GeV = log_T_GeV
