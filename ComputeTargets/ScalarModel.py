@@ -196,7 +196,7 @@ def compute_scalar_model(
             if supervisor.notify_available:
                 supervisor.message(
                     T_Jordan,
-                    f"current state: N={N:.3g}, T_Jordan = {T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp",
+                    f"current state: N={N:.3g}, f_m = {fm}, T_Jordan = {T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp",
                 )
                 supervisor.reset_notify_time()
 
@@ -300,13 +300,13 @@ def compute_scalar_model(
     )  # only trigger when going from positive to negative, i.e., when the temperature dips *below* T_Jordan_stop
 
     # detect failures to reflect at the chameleon "brick wall" at the origin
-    def reflection_failute_detector(N, s, supervisor) -> float:
+    def reflection_failure_detector(N, s, supervisor) -> float:
         state: StateVector = StateVector._make(s)
 
         return state.phi_Einstein
 
-    reflection_failute_detector.terminal = True
-    reflection_failute_detector.direction = (
+    reflection_failure_detector.terminal = True
+    reflection_failure_detector.direction = (
         -1.0
     )  # only trigger when phi_Einstein crosses from positive to negative values
 
@@ -319,9 +319,6 @@ def compute_scalar_model(
     # track the solution fragments generated between reflection events
     solution_fragments = []
     solution_complete = False
-
-    # track when we impose a "manual" hard reflection - this happens when we detect phi_E crossing zero
-    hard_reflections = []
 
     # prepare the first initial state
     initial_state = StateVector(
@@ -346,7 +343,7 @@ def compute_scalar_model(
                 args=(supervisor,),
                 events=(
                     terminate_at_T_stop,
-                    reflection_failute_detector,
+                    reflection_failure_detector,
                 ),
                 dense_output=True,
             )
@@ -402,14 +399,17 @@ def compute_scalar_model(
                 continue
 
             # record that a hard reflection occurred and prepare for the next integration step
-            hard_reflections.append(reflection_event_times[0])
+            supervisor.notify_hard_reflection(reflection_event_times[0])
+
+            # change the initial state to restart the integration from here
             N_start = sol.t[-1]
             initial_state = StateVector._make(sol.y[:, -1])
 
             # reverse direction of travel for the scalar field
-            initial_state = initial_state._replace(
-                pi_Einstein=-initial_state.pi_Einstein
-            )
+            if initial_state.pi_Einstein < 0.0:
+                initial_state = initial_state._replace(
+                    pi_Einstein=-initial_state.pi_Einstein
+                )
             assert initial_state.pi_Einstein >= 0.0
 
     # the integration should have terminated when T_Jordan = T_CMB, which ought to correspond to z = 0
@@ -498,8 +498,8 @@ def compute_scalar_model(
         ),
         "z_grid": z_grid_cut,
         "sample": sample,
-        "hard_reflections": hard_reflections,
-        "solver_label": "solve_ivp+Radau-stepping0",
+        "hard_reflections": supervisor.number_hard_reflections,
+        "solver_label": "solve_ivp+DOP853-stepping0",
     }
 
 
