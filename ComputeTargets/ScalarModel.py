@@ -186,7 +186,38 @@ def compute_scalar_model(
     CONST_MP_SQ = units.PlanckMass * units.PlanckMass
     CONST_6_MP_SQ = 6.0 * CONST_MP_SQ
 
-    def RHS(N, s: Array, supervisor) -> Array:
+    def RHS_explicit(N, s: Array, supervisor) -> Array:
+        with RHS_timer(supervisor) as timer:
+            phi_Einstein, pi_Einstein, log_rhorad_Einstein, log_fm, log_T_Jordan = s
+
+            T_Jordan = jnp.exp(log_T_Jordan)
+
+            log_Omega_prime = coupling._raw_log_Omega_prime(phi_Einstein)
+
+            G_s = cosmology._raw_G_s(T_Jordan)
+            dG_s = cosmology._raw_dG_s_dT(T_Jordan)
+            d_log_T_Jordan = -(1.0 + log_Omega_prime * pi_Einstein) / (
+                1.0 + (T_Jordan / G_s) * dG_s / 3.0
+            )
+
+            Sigma = 1.0 - 3.0 * cosmology._raw_w(T_Jordan)
+            d_log_fm = 1.0 - Sigma
+
+            d_log_rhorad_Einstein = Sigma - 4.0
+
+            return_state = jnp.asarray(
+                (
+                    0.0,
+                    0.0,
+                    d_log_rhorad_Einstein,
+                    d_log_fm,
+                    d_log_T_Jordan,
+                )
+            )
+
+            return return_state
+
+    def RHS_implicit(N, s: Array, supervisor) -> Array:
         with RHS_timer(supervisor) as timer:
             phi_Einstein, pi_Einstein, log_rhorad_Einstein, log_fm, log_T_Jordan = s
 
@@ -225,8 +256,6 @@ def compute_scalar_model(
             Sigma = 1.0 - 3.0 * cosmology._raw_w(T_Jordan)
 
             d_phi_Einstein = pi_Einstein
-            d_log_rhorad_Einstein = Sigma - 4.0
-            d_log_fm = 1.0 - Sigma
 
             A1 = lax.cond(
                 fm > 1.0,
@@ -259,19 +288,13 @@ def compute_scalar_model(
                 - 3.0 * CONST_MP_SQ * G * E * log_Omega_prime * A3
             )
 
-            G_s = cosmology._raw_G_s(T_Jordan)
-            dG_s = cosmology._raw_dG_s_dT(T_Jordan)
-            d_log_T_Jordan = -(1.0 + log_Omega_prime * pi_Einstein) / (
-                1.0 + (T_Jordan / G_s) * dG_s / 3.0
-            )
-
             return_state = jnp.asarray(
                 (
                     d_phi_Einstein,
                     d_pi_Einstein,
-                    d_log_rhorad_Einstein,
-                    d_log_fm,
-                    d_log_T_Jordan,
+                    0.0,
+                    0.0,
+                    0.0,
                 )
             )
 
@@ -312,26 +335,16 @@ def compute_scalar_model(
     # termination occurs when the Jordan frame temperature hits T_Jordan_stop, usually equal to T_CMB,
     # so the actual stop value given in t_span is mostly irrelevant, just
     # to ensure that the integration terminates
-    def terminate_at_T_stop(N, s, supervisor) -> float:
-        state: StateVector = StateVector._make(s)
+    def terminate_at_T_stop(t, y, args, **kwargs) -> float:
+        _, _, _, _, log_T_Jordan = y
 
-        return state.log_T_Jordan - log_T_stop
-
-    terminate_at_T_stop.terminal = True
-    terminate_at_T_stop.direction = (
-        -1.0
-    )  # only trigger when going from positive to negative, i.e., when the temperature dips *below* T_Jordan_stop
+        return log_T_Jordan - log_T_stop
 
     # detect failures to reflect at the chameleon "brick wall" at the origin
-    def reflection_failute_detector(N, s, supervisor) -> float:
-        state: StateVector = StateVector._make(s)
+    def reflection_failute_detector(t, y, args, **kwargs) -> float:
+        phi_Einstein, _, _, _, _ = y
 
-        return state.phi_Einstein
-
-    reflection_failute_detector.terminal = True
-    reflection_failute_detector.direction = (
-        -1.0
-    )  # only trigger when phi_Einstein crosses from positive to negative values
+        return phi_Einstein
 
     N_failsafe = 1000.0  # terminate after 1000 e-folds as a failsafe
     N_start = 0.0
@@ -359,8 +372,10 @@ def compute_scalar_model(
         units, T_init, T_stop, label=task_label
     ) as supervisor:
         while not solution_complete:
-            ode_system = diffrax.ODETerm(RHS)
-            solver = diffrax.Kvaerno5()
+            ode_system = diffrax.MultiTerm(
+                diffrax.ODETerm(RHS_explicit), diffrax.ODETerm(RHS_implicit)
+            )
+            solver = diffrax.KenCarp4()
             saveat = diffrax.SaveAt(dense=True)
             controller = diffrax.PIDController(atol=atol, rtol=rtol)
 
