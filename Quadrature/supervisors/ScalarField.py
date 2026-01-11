@@ -70,10 +70,10 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
             f"** STATUS UPDATE #{update_number} - {self._label}: integration has been running for {format_time(since_start)} ({format_time(since_last_notify)} since last notification)"
         )
         print(
-            f"|    current T_Jordan = {T_GeV:.5g} GeV or {T_Kelvin:.5g} K | target T_Jordan = {self._T_stop_GeV:.5g} GeV or {self._T_stop_Kelvin:.5g} K"
+            f"|    current T_Jordan = {T_GeV:.5g} GeV or {T_Kelvin:.5g} K, log(T_Jordan/GeV) = {log_T_GeV:.5g} | {1.0-percent_remain:.3%} complete measured in T_Jordan"
         )
         print(
-            f"|    current log(T_J/GeV) = {log_T_GeV:.5g}, init log(T_J/GeV) = {self._log_T_init_GeV:.5g}, final log(T_J/GeV) = {self._log_T_stop_GeV:.5g}, {1.0-percent_remain:.3%} complete measured in T_J"
+            f"|    target T_Jordan = {self._T_stop_GeV:.5g} GeV or {self._T_stop_Kelvin:.5g} K, log(T_Jordan/GeV) = {self._log_T_stop_GeV:.5g}"
         )
         num_hard_reflection_events = len(self._hard_reflection_events)
         if num_hard_reflection_events > 0:
@@ -92,7 +92,7 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
         if self._last_log_T_GeV is not None:
             log_T_GeV_delta = self._last_log_T_GeV - log_T_GeV
             print(
-                f"|    log_T_GeV advance since last update: Delta(log(TJ/GeV)) = {log_T_GeV_delta:.5g}"
+                f"|    log_T_GeV advance since last update: Delta(log(T_Jordan/GeV)) = {log_T_GeV_delta:.5g}"
             )
         print(
             f"|    {self.RHS_evaluations} RHS evaluations, mean {self.mean_RHS_time:.5g}s per evaluation, min RHS time = {self.min_RHS_time:.5g}s, max RHS time = {self.max_RHS_time:.5g}s"
