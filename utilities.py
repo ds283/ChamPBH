@@ -78,3 +78,13 @@ def grouper(iterable, n, *, incomplete="fill", fillvalue=None):
             return zip(*iterators)
         case _:
             raise ValueError("Expected fill, strict, or ignore")
+
+
+def to_float(val) -> float:
+    """
+    Safely convert a numpy float64, single-element array, or other numeric
+    types to a native Python float.
+    """
+    if hasattr(val, "item"):
+        return float(val.item())
+    return float(val)
