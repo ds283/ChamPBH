@@ -1,4 +1,5 @@
 import time
+from collections import namedtuple
 from math import log
 from typing import Optional
 
@@ -6,6 +7,18 @@ from CosmologyConcepts import TemperatureLike, GetTemperature
 from Quadrature.supervisors.base import IntegrationSupervisor, DEFAULT_UPDATE_INTERVAL
 from Units.base import UnitsLike
 from utilities import format_time
+
+# use named tuples ensures that we never get the fields of the state vector in the wrong order
+StateVector = namedtuple(
+    "StateVector",
+    [
+        "phi_Einstein",
+        "pi_Einstein",
+        "log_rhorad_Einstein",
+        "log_fm",
+        "log_T_Jordan",
+    ],
+)
 
 
 class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
@@ -16,12 +29,14 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
         T_stop: TemperatureLike,
         label: str,
         notify_interval: int = DEFAULT_UPDATE_INTERVAL,
+        collect_full_statistics: bool = False,
     ):
         super().__init__(notify_interval)
 
         self._units = units
 
         self._label: str = label
+        self._collect_full_statistics: bool = collect_full_statistics
 
         self._T_init = GetTemperature(T_init)
         self._T_stop = GetTemperature(T_stop)
@@ -41,6 +56,14 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
 
         self._GeV = units.GeV
         self._Kelvin = units.Kelvin
+
+        self._largest_RHS_values: StateVector = StateVector(
+            None, None, None, None, None
+        )
+        self._smallest_RHS_values: StateVector = StateVector(
+            None, None, None, None, None
+        )
+        self._mean_RHS_values: StateVector = StateVector(0.0, 0.0, 0.0, 0.0, 0.0)
 
     def __enter__(self):
         super().__enter__()
@@ -99,6 +122,20 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
         )
         print(f"|    {msg}")
 
+        if self._collect_full_statistics:
+            print(f"|    MEAN VALUES OF RHS VECTOR:")
+            print(
+                f"|      phi_E={self._mean_RHS_values.phi_Einstein/self._units.PlanckMass:.5g}, pi_E={self._mean_RHS_values.pi_Einstein/self._units.PlanckMass}, log_rhorad_E={self._mean_RHS_values.log_rhorad_Einstein:.5g}, log_fm={self._mean_RHS_values.log_fm:.5g}, log_T_J={self._mean_RHS_values.log_T_Jordan:.5g}"
+            )
+            print(f"|    LARGEST VALUES OF RHS VECTOR:")
+            print(
+                f"|      phi_E={self._largest_RHS_values.phi_Einstein/self._units.PlanckMass:.5g}, pi_E={self._largest_RHS_values.pi_Einstein/self._units.PlanckMass}, log_rhorad_E={self._largest_RHS_values.log_rhorad_Einstein:.5g}, log_fm={self._largest_RHS_values.log_fm:.5g}, log_T_J={self._largest_RHS_values.log_T_Jordan:.5g}"
+            )
+            print(f"|    SMALLEST VALUES OF RHS VECTOR:")
+            print(
+                f"|      phi_E={self._smallest_RHS_values.phi_Einstein/self._units.PlanckMass:.5g}, pi_E={self._smallest_RHS_values.pi_Einstein/self._units.PlanckMass}, log_rhorad_E={self._smallest_RHS_values.log_rhorad_Einstein:.5g}, log_fm={self._smallest_RHS_values.log_fm:.5g}, log_T_J={self._smallest_RHS_values.log_T_Jordan:.5g}"
+            )
+
     def notify_hard_reflection(self, N: float):
         self._hard_reflection_events.append(N)
         self._new_hard_reflection_events.append(N)
@@ -116,3 +153,94 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
         log_T_GeV = log(T_GeV)
 
         self._last_log_T_GeV = log_T_GeV
+
+    def notify_new_RHS(self, RHS: StateVector):
+        if not self._collect_full_statistics:
+            return
+
+        self._largest_RHS_values = StateVector(
+            phi_Einstein=(
+                RHS.phi_Einstein
+                if self._largest_RHS_values.phi_Einstein is None
+                else max(self._largest_RHS_values.phi_Einstein, RHS.phi_Einstein)
+            ),
+            pi_Einstein=(
+                RHS.pi_Einstein
+                if self._largest_RHS_values.pi_Einstein is None
+                else max(self._largest_RHS_values.pi_Einstein, RHS.pi_Einstein)
+            ),
+            log_rhorad_Einstein=(
+                RHS.log_rhorad_Einstein
+                if self._largest_RHS_values.log_rhorad_Einstein is None
+                else max(
+                    self._largest_RHS_values.log_rhorad_Einstein,
+                    RHS.log_rhorad_Einstein,
+                )
+            ),
+            log_fm=(
+                RHS.log_fm
+                if self._largest_RHS_values.log_fm is None
+                else max(self._largest_RHS_values.log_fm, RHS.log_fm)
+            ),
+            log_T_Jordan=(
+                RHS.log_T_Jordan
+                if self._largest_RHS_values.log_T_Jordan is None
+                else max(self._largest_RHS_values.log_T_Jordan, RHS.log_T_Jordan)
+            ),
+        )
+
+        self._smallest_RHS_values = StateVector(
+            phi_Einstein=(
+                RHS.phi_Einstein
+                if self._smallest_RHS_values.phi_Einstein is None
+                else min(self._smallest_RHS_values.phi_Einstein, RHS.phi_Einstein)
+            ),
+            pi_Einstein=(
+                RHS.pi_Einstein
+                if self._smallest_RHS_values.pi_Einstein is None
+                else min(self._smallest_RHS_values.pi_Einstein, RHS.pi_Einstein)
+            ),
+            log_rhorad_Einstein=(
+                RHS.log_rhorad_Einstein
+                if self._smallest_RHS_values.log_rhorad_Einstein is None
+                else min(
+                    self._smallest_RHS_values.log_rhorad_Einstein,
+                    RHS.log_rhorad_Einstein,
+                )
+            ),
+            log_fm=(
+                RHS.log_fm
+                if self._smallest_RHS_values.log_fm is None
+                else min(self._smallest_RHS_values.log_fm, RHS.log_fm)
+            ),
+            log_T_Jordan=(
+                RHS.log_T_Jordan
+                if self._smallest_RHS_values.log_T_Jordan is None
+                else min(self._smallest_RHS_values.log_T_Jordan, RHS.log_T_Jordan)
+            ),
+        )
+
+        self._mean_RHS_values = StateVector(
+            phi_Einstein=(
+                self._mean_RHS_values.phi_Einstein * self.RHS_evaluations
+                + RHS.phi_Einstein
+            )
+            / (self.RHS_evaluations + 1),
+            pi_Einstein=(
+                self._mean_RHS_values.pi_Einstein * self.RHS_evaluations
+                + RHS.pi_Einstein
+            )
+            / (self.RHS_evaluations + 1),
+            log_rhorad_Einstein=(
+                self._mean_RHS_values.log_rhorad_Einstein * self.RHS_evaluations
+                + RHS.log_rhorad_Einstein
+            )
+            / (self.RHS_evaluations + 1),
+            log_fm=(self._mean_RHS_values.log_fm * self.RHS_evaluations + RHS.log_fm)
+            / (self.RHS_evaluations + 1),
+            log_T_Jordan=(
+                self._mean_RHS_values.log_T_Jordan * self.RHS_evaluations
+                + RHS.log_T_Jordan
+            )
+            / (self.RHS_evaluations + 1),
+        )

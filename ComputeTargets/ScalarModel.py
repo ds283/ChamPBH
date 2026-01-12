@@ -26,7 +26,10 @@ from CosmologyModels.GenericEOS.LambdaCDM_GenericEOS import LambdaCDM_GenericEOS
 from Datastore import DatastoreObject
 from MetadataConcepts import tolerance, store_tag
 from Quadrature.integration_metadata import IntegrationSolver, IntegrationData
-from Quadrature.supervisors.ScalarField import ScalarFieldIntegrationSupervisor
+from Quadrature.supervisors.ScalarField import (
+    ScalarFieldIntegrationSupervisor,
+    StateVector,
+)
 from Quadrature.supervisors.base import RHS_timer
 from Units.base import UnitsLike
 from config.defaults import DEFAULT_ABS_TOLERANCE, DEFAULT_REL_TOLERANCE
@@ -36,19 +39,9 @@ from config.sharding import ShardKeyType
 PISQ_OVER_30 = pi * pi / 30.0
 LOG_PISQ_OVER_30 = log(PISQ_OVER_30)
 
-# use of named tuples ensures that we never get the fields of the state vector in the wrong order
-StateVector = namedtuple(
-    "StateVector",
-    [
-        "phi_Einstein",
-        "pi_Einstein",
-        "log_rhorad_Einstein",
-        "log_fm",
-        "log_T_Jordan",
-    ],
-)
 EXPECTED_SOL_LENGTH = 5
 
+# using named tuples ensures that we never get the fields in the wrong order
 SolutionFragment = namedtuple(
     "SolutionFragment",
     [
@@ -285,6 +278,8 @@ def compute_scalar_model(
                     f"compute_scalar_model ({task_label}): output from ODE RHS has infinity or NaN values"
                 )
 
+            supervisor.notify_new_RHS(return_state)
+
             return return_state
 
     # termination occurs when the Jordan frame temperature hits T_Jordan_stop, usually equal to T_CMB,
@@ -331,7 +326,11 @@ def compute_scalar_model(
     )
 
     with ScalarFieldIntegrationSupervisor(
-        units, T_init, T_stop, label=task_label
+        units,
+        T_init,
+        T_stop,
+        label=task_label,
+        collect_full_statistics=True,
     ) as supervisor:
         while not solution_complete:
             sol = solve_ivp(
@@ -513,7 +512,7 @@ def compute_scalar_model(
         "sample": sample,
         "hard_reflections": supervisor.number_hard_reflections,
         "number_fragments": num_fragments,
-        "solver_label": "solve_ivp+DOP853-stepping0",
+        "solver_label": "solve_ivp+Radau-stepping0",
     }
 
 
