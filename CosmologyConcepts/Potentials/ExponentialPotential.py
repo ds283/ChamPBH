@@ -38,10 +38,6 @@ class ExponentialPotential(AbstractPotential):
     def type_id(self) -> int:
         return EXPONENTIAL_POTENTIAL
 
-    @property
-    def shard_key(self) -> M_value:
-        return self._M
-
     def V(self, phi: FieldLike) -> float:
         """
         Evaluate the potential at a given value of phi

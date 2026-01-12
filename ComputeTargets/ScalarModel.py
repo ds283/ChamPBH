@@ -14,7 +14,6 @@ from CosmologyConcepts import (
     TemperatureLike,
     redshift_array,
     GetTemperature,
-    M_value,
     phi_value,
     pi_value,
     GetFieldValue,
@@ -31,6 +30,7 @@ from Quadrature.supervisors.ScalarField import ScalarFieldIntegrationSupervisor
 from Quadrature.supervisors.base import RHS_timer
 from Units.base import UnitsLike
 from config.defaults import DEFAULT_ABS_TOLERANCE, DEFAULT_REL_TOLERANCE
+from config.sharding import ShardKeyType
 
 # useful constants, calculated once and cached to speed up the numerical integration
 PISQ_OVER_30 = pi * pi / 30.0
@@ -589,8 +589,8 @@ class ScalarModel(DatastoreObject):
         self._rtol = rtol
 
     @property
-    def shard_key(self) -> M_value:
-        return self._potential.shard_key
+    def shard_key(self) -> ShardKeyType:
+        return self._coupling.shard_key
 
     @property
     def cosmology(self) -> BaseCosmology:
@@ -849,7 +849,7 @@ class ScalarModelValue(DatastoreObject):
         self._Sigma: float = Sigma
 
     @property
-    def shard_key(self) -> M_value:
+    def shard_key(self) -> ShardKeyType:
         # should not get called individually, since serialization is handled by the parent ScalarModel
         return NotImplementedError
 

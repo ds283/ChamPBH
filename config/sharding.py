@@ -1,4 +1,4 @@
-from CosmologyConcepts import M_value
+from CosmologyConcepts import beta_value
 
 replicated_tables = [
     "version",
@@ -18,8 +18,7 @@ replicated_tables = [
 ]
 
 sharded_tables = {
-    "InversePowerPotential": "shard_key",
-    "ExponentialPotential": "shard_key",
+    "ExponentialCoupling": "shard_key",
     "ScalarModel": "shard_key",
     "ScalarModelValue": "shard_key",
 }
@@ -34,16 +33,18 @@ read_table_config = {
 }
 
 
-# configure ShardedPool to shard by M_value
-shard_key_type = M_value
+# configure ShardedPool to shard by beta_value
+# this seems the best choice, because we know the phenomenology is mostly independent of (M, Lambda), and we won't
+# always want to probe a lot of those
+ShardKeyType = beta_value
 
 
 # get wavenumber store id for a wavenumber object, interpreted as a shard key,
 # or a proxy for it
 def get_shard_key_store_id(obj):
-    if isinstance(obj, M_value):
+    if isinstance(obj, beta_value):
         return obj.store_id
 
     raise RuntimeError(
-        f'Could not determine wavenumber shard key for object of type "{type(obj)}"'
+        f'Could not determine shard key for object of type "{type(obj)}"'
     )

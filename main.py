@@ -36,7 +36,7 @@ from config.sharding import (
     replicated_tables,
     sharded_tables,
     get_shard_key_store_id,
-    shard_key_type,
+    ShardKeyType,
     read_table_config,
 )
 from utilities import grouper
@@ -274,7 +274,7 @@ def run_pipeline(
         # TODO: find a better way to implement/handle
         query_batch = [
             {
-                "shard_key": potential.shard_key,
+                "shard_key": coupling.shard_key,
                 "solver_labels": [],
                 "cosmology": model_cosmology,
                 "T_Jordan_init": T_init,
@@ -325,7 +325,7 @@ def run_pipeline(
             work_refs.append(
                 pool.object_get(
                     "ScalarModel",
-                    shard_key=potential.shard_key,
+                    shard_key=coupling.shard_key,
                     solver_labels=solvers,
                     cosmology=model_cosmology,
                     T_Jordan_init=T_init,
@@ -387,7 +387,7 @@ def run_pipeline(
 with ShardedPool(
     version_label=VERSION_LABEL,
     db_name=args.database,
-    ShardKeyType=shard_key_type,
+    ShardKeyType=ShardKeyType,
     ShardKeyStoreIdGetter=get_shard_key_store_id,
     replicated_tables=replicated_tables,
     sharded_tables=sharded_tables,
@@ -459,20 +459,22 @@ with ShardedPool(
         )
 
     def convert_to_potential(M_lambda_set):
-        # InversePowerPotential is a sharded table and needs a "shard_key" field
-        # TODO: find a better way to implement/handle
         return pool.object_get(
             "InversePowerPotential",
             payload_data=[
-                {"shard_key": M, "M": M, "Lambda": Lambda, "n": 1, "units": units}
+                {"M": M, "Lambda": Lambda, "n": 1, "units": units}
                 for M, Lambda in M_lambda_set
             ],
         )
 
     def convert_to_coupling(beta_set):
+        # ExponentialCoupling is a sharded table and needs a "shard_key" field
+        # TODO: find a better way to implement/handle
         return pool.object_get(
             "ExponentialCoupling",
-            payload_data=[{"beta": beta, "units": units} for beta in beta_set],
+            payload_data=[
+                {"shard_key": beta, "beta": beta, "units": units} for beta in beta_set
+            ],
         )
 
     ## DATASTORE OBJECTS

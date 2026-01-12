@@ -4,6 +4,7 @@ from CosmologyConcepts import beta_value, FieldLike, GetFieldValue
 from CosmologyConcepts.ConformalCouplings.AbstractCoupling import AbstractCoupling
 from CosmologyConcepts.ConformalCouplings.model_ids import EXPONENTIAL_COUPLING
 from Units.base import UnitsLike
+from config.sharding import ShardKeyType
 
 
 class ExponentialCoupling(AbstractCoupling):
@@ -24,6 +25,10 @@ class ExponentialCoupling(AbstractCoupling):
     @property
     def type_id(self) -> int:
         return EXPONENTIAL_COUPLING
+
+    @property
+    def shard_key(self) -> ShardKeyType:
+        return self._beta
 
     def log_Omega(self, phi: FieldLike) -> float:
         """
