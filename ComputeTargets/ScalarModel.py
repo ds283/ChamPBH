@@ -1,6 +1,6 @@
 from collections import namedtuple
 from math import log, pi, exp, sqrt, isinf, isnan
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 
 import ray
 from ray import ObjectRef
@@ -208,6 +208,13 @@ def compute_scalar_model(
             log_Omega_prime: float = coupling.log_Omega_prime(phi_Einstein)
 
             G: float = 1.0 - pi_Einstein * pi_Einstein / CONST_6_MP_SQ
+            if G < 0.0:
+                print(
+                    f"!! compute_scalar_model ({task_label}): negative value of G = {G:.5g} detected at N={N:.8g} | f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp, pi_Einstein = {pi_Einstein / units.PlanckMass:.5g} Mp, log(rho_rad/GeV^4) = {log_rhorad_Einstein - 4.0*log(units.GeV):.5g}, T_Jordan = {T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K"
+                )
+                raise RuntimeError(
+                    f"compute_scalar_model ({task_label}): negative value of G = {G:.5g} detected"
+                )
 
             Sigma: float = 1.0 - 3.0 * cosmology.w(T_Jordan)
 
@@ -216,7 +223,7 @@ def compute_scalar_model(
             d_log_fm: float = 1.0 - Sigma
 
             R: float
-            if fm > 1.0:
+            if fm > 10.0:
                 R = (1.0 + Sigma / fm) / (1.0 + 1.0 / fm)
             else:
                 R = (Sigma + fm) / (1.0 + fm)
@@ -228,7 +235,7 @@ def compute_scalar_model(
 
             log_rhorad_over_V: float = log_rhorad_Einstein - log_V
             T: float
-            if log_rhorad_over_V > 0.0:
+            if log_rhorad_over_V > 2.0:
                 V_over_rhorad: float = exp(-log_rhorad_over_V)
                 T = V_over_rhorad / (V_over_rhorad + 1.0 + fm)
             else:
@@ -348,7 +355,7 @@ def compute_scalar_model(
         while not solution_complete:
             sol = solve_ivp(
                 RHS,
-                method="DOP853",
+                method="BDF",
                 t_span=(N_start, N_failsafe),
                 y0=initial_state,
                 atol=atol,
@@ -535,7 +542,7 @@ def compute_scalar_model(
         "mean_RHS_values": (
             supervisor.mean_RHS_values if collected_full_statistics else None
         ),
-        "solver_label": "solve_ivp+DOP853-stepping0",
+        "solver_label": "solve_ivp+BDF-stepping0",
     }
 
 
@@ -606,21 +613,21 @@ class ScalarModel(DatastoreObject):
             self._metadata: Optional[IntegrationData] = payload["metadata"]
             self._solver: Optional[IntegrationSolver] = payload["solver"]
             self._values: Optional[List[ScalarModelValue]] = payload["values"]
-            self._extra_data = payload["extra_data"]
+            self._extra_data: Optional[Dict[str, Any]] = payload["extra_data"]
 
         # store parameters
-        self._label = label
-        self._tags = tags if tags is not None else []
+        self._label: str = label
+        self._tags: Optional[List[store_tag]] = tags if tags is not None else []
 
-        self._cosmology = cosmology
-        self._units = cosmology.units
+        self._cosmology: BaseCosmology = cosmology
+        self._units: UnitsLike = cosmology.units
 
-        self._functions = None
+        self._functions: Optional[ModelFunctions] = None
 
-        self._compute_ref = None
+        self._compute_ref: Optional[ray.ObjectRef] = None
 
-        self._atol = atol
-        self._rtol = rtol
+        self._atol: tolerance = atol
+        self._rtol: tolerance = rtol
 
     @property
     def shard_key(self) -> ShardKeyType:
@@ -667,7 +674,7 @@ class ScalarModel(DatastoreObject):
         if self.values is None:
             raise RuntimeError("values have not yet been populated")
 
-        return self._data
+        return self._metadata
 
     @property
     def solver(self) -> IntegrationSolver:
@@ -784,7 +791,7 @@ class ScalarModel(DatastoreObject):
         data = ray.get(self._compute_ref)
         self._compute_ref = None
 
-        self._data = data["metadata"]
+        self._metadata = data["metadata"]
 
         sample: List[SampleValues] = data["sample"]
         z_grid: redshift_array = data["z_grid"]
