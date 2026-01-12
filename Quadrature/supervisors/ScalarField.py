@@ -123,17 +123,24 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
         print(f"|    {msg}")
 
         if self._collect_full_statistics:
+            mean_values = self.mean_RHS_values
+            largest_values = self.largest_RHS_values
+            smallest_values = self.smallest_RHS_values
+
             print(f"|    MEAN VALUES OF RHS VECTOR:")
             print(
-                f"|      phi_E={self._total_RHS_values.phi_Einstein / self._RHS_evaluations / self._units.PlanckMass:.5g}, pi_E={self._total_RHS_values.pi_Einstein / self._RHS_evaluations / self._units.PlanckMass}, log_rhorad_E={self._total_RHS_values.log_rhorad_Einstein/self._RHS_evaluations:.5g}, log_fm={self._total_RHS_values.log_fm/self._RHS_evaluations:.5g}, log_T_J={self._total_RHS_values.log_T_Jordan/self._RHS_evaluations:.5g}"
+                f"|      d(phi_E)/dN={mean_values.phi_Einstein / self._units.PlanckMass:.5g} Mp, d(pi_E)/dN={mean_values.pi_Einstein / self._units.PlanckMass:.5g} Mp, d(log_rhorad_E)/dN={mean_values.log_rhorad_Einstein:.5g}, d(log_fm)/dN={mean_values.log_fm:.5g}, d(log_T_Jordan)/dN={mean_values.log_T_Jordan:.5g}"
+            )
+            print(
+                f'|      d(phi_E)/dN={mean_values.phi_Einstein:.5g} raw, d(pi_E)/dN={mean_values.pi_Einstein:.5g} raw | values in the current units system "{self._units.system_name}"'
             )
             print(f"|    LARGEST VALUES OF RHS VECTOR:")
             print(
-                f"|      phi_E={self._largest_RHS_values.phi_Einstein/self._units.PlanckMass:.5g}, pi_E={self._largest_RHS_values.pi_Einstein/self._units.PlanckMass}, log_rhorad_E={self._largest_RHS_values.log_rhorad_Einstein:.5g}, log_fm={self._largest_RHS_values.log_fm:.5g}, log_T_J={self._largest_RHS_values.log_T_Jordan:.5g}"
+                f"|      phi_E={largest_values.phi_Einstein/self._units.PlanckMass:.5g} Mp, pi_E={largest_values.pi_Einstein/self._units.PlanckMass:.5g} Mp, log_rhorad_E={largest_values.log_rhorad_Einstein:.5g}, log_fm={largest_values.log_fm:.5g}, log_T_J={largest_values.log_T_Jordan:.5g}"
             )
             print(f"|    SMALLEST VALUES OF RHS VECTOR:")
             print(
-                f"|      phi_E={self._smallest_RHS_values.phi_Einstein/self._units.PlanckMass:.5g}, pi_E={self._smallest_RHS_values.pi_Einstein/self._units.PlanckMass}, log_rhorad_E={self._smallest_RHS_values.log_rhorad_Einstein:.5g}, log_fm={self._smallest_RHS_values.log_fm:.5g}, log_T_J={self._smallest_RHS_values.log_T_Jordan:.5g}"
+                f"|      phi_E={smallest_values.phi_Einstein/self._units.PlanckMass:.5g} Mp, pi_E={smallest_values.pi_Einstein/self._units.PlanckMass:.5g} Mp, log_rhorad_E={smallest_values.log_rhorad_Einstein:.5g}, log_fm={smallest_values.log_fm:.5g}, log_T_J={smallest_values.log_T_Jordan:.5g}"
             )
 
     def notify_hard_reflection(self, N: float):
@@ -141,8 +148,34 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
         self._new_hard_reflection_events.append(N)
 
     @property
-    def number_hard_reflections(self):
+    def number_hard_reflections(self) -> int:
         return len(self._hard_reflection_events)
+
+    @property
+    def collect_full_statistics(self) -> bool:
+        return self._collect_full_statistics
+
+    @property
+    def largest_RHS_values(self) -> StateVector:
+        return self._largest_RHS_values
+
+    @property
+    def smallest_RHS_values(self) -> StateVector:
+        return self._smallest_RHS_values
+
+    @property
+    def mean_RHS_values(self) -> StateVector:
+        if self._RHS_evaluations == 0:
+            return StateVector(0.0, 0.0, 0.0, 0.0, 0.0)
+
+        return StateVector(
+            phi_Einstein=self._total_RHS_values.phi_Einstein / self._RHS_evaluations,
+            pi_Einstein=self._total_RHS_values.pi_Einstein / self._RHS_evaluations,
+            log_rhorad_Einstein=self._total_RHS_values.log_rhorad_Einstein
+            / self._RHS_evaluations,
+            log_fm=self._total_RHS_values.log_fm / self._RHS_evaluations,
+            log_T_Jordan=self._total_RHS_values.log_T_Jordan / self._RHS_evaluations,
+        )
 
     def reset_notify_time(self, T_Jordan: TemperatureLike):
         super().reset_notify_time()

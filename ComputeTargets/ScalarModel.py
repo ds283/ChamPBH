@@ -499,6 +499,7 @@ def compute_scalar_model(
             )
         )
 
+    collected_full_statistics = supervisor.collect_full_statistics
     return {
         "metadata": IntegrationData(
             compute_time=supervisor.integration_time,
@@ -512,7 +513,16 @@ def compute_scalar_model(
         "sample": sample,
         "hard_reflections": supervisor.number_hard_reflections,
         "number_fragments": num_fragments,
-        "solver_label": "solve_ivp+Radau-stepping0",
+        "largest_RHS_values": (
+            supervisor.largest_RHS_values if collected_full_statistics else None
+        ),
+        "smallest_RHS_values": (
+            supervisor.smallest_RHS_values if collected_full_statistics else None
+        ),
+        "mean_RHS_values": (
+            supervisor.mean_RHS_values if collected_full_statistics else None
+        ),
+        "solver_label": "solve_ivp+DOP853-stepping0",
     }
 
 
@@ -775,6 +785,17 @@ class ScalarModel(DatastoreObject):
         number_fragments = data["number_fragments"]
         if number_fragments > 1:
             extra_data["number_fragments"] = number_fragments
+
+        largest_RHS_values = data["largest_RHS_values"]
+        smallest_RHS_values = data["smallest_RHS_values"]
+        mean_RHS_values = data["mean_RHS_values"]
+
+        if largest_RHS_values is not None:
+            extra_data["largest_RHS_values"] = largest_RHS_values._asdict()
+        if smallest_RHS_values is not None:
+            extra_data["smallest_RHS_values"] = smallest_RHS_values._asdict()
+        if mean_RHS_values is not None:
+            extra_data["mean_RHS_values"] = mean_RHS_values._asdict()
 
         if len(extra_data) > 0:
             self._extra_data = extra_data
