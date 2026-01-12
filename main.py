@@ -460,7 +460,7 @@ with ShardedPool(
 
     def convert_to_potential(M_lambda_set):
         return pool.object_get(
-            "InversePowerPotential",
+            "ExponentialPotential",
             payload_data=[
                 {"M": M, "Lambda": Lambda, "n": 1, "units": units}
                 for M, Lambda in M_lambda_set
