@@ -24,7 +24,7 @@ from Datastore.SQL.ProfileAgent import ProfileAgent
 from Datastore.SQL.ShardedPool import ShardedPool
 from Quadrature.integration_metadata import IntegrationSolver
 from RayTools.RayWorkPool import RayWorkPool
-from Units import GeV_units
+from Units import Planck_units
 from config.defaults import (
     DEFAULT_ABS_TOLERANCE,
     DEFAULT_REL_TOLERANCE,
@@ -418,7 +418,7 @@ with ShardedPool(
 
     T_init_GeV: float = args.T_init_GeV
 
-    units = GeV_units()
+    units = Planck_units()
 
     T_init = ray.get(
         pool.object_get("temperature", value=T_init_GeV * units.GeV, units=units)
