@@ -182,8 +182,21 @@ def compute_scalar_model(
             log_fm: float = state.log_fm
             log_T_Jordan: float = state.log_T_Jordan
 
-            fm: float = exp(log_fm)
-            T_Jordan: float = exp(log_T_Jordan)
+            try:
+                fm: float = exp(log_fm)
+            except OverflowError as e:
+                print(
+                    f"!! compute_scalar_model ({task_label}): math overflow in exp(log_fm), log_fm = {log_fm:.5g} | N = {N:.5g}, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp, pi_Einstein = {pi_Einstein / units.PlanckMass:.5g} Mp"
+                )
+                raise e
+
+            try:
+                T_Jordan: float = exp(log_T_Jordan)
+            except OverflowError as e:
+                print(
+                    f"!! compute_scalar_model ({task_label}): math overflow in exp(log_T_Jordan), log_T_Jordan = {log_T_Jordan:.5g} | N = {N:.5g}, f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp, pi_Einstein = {pi_Einstein / units.PlanckMass:.5g} Mp"
+                )
+                raise e
 
             if supervisor.notify_available:
                 supervisor.message(
