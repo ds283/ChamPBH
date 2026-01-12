@@ -216,7 +216,6 @@ def compute_scalar_model(
                 R = (Sigma + fm) / (1.0 + fm)
             A1: float = 2.0 + R / 2.0
             A2: float = 4.0 - R
-            A3: float = R
 
             log_V: float = potential.log_V(phi_Einstein)
             d_logV_dphi: float = potential.d_logV_dphi(phi_Einstein)
@@ -240,7 +239,7 @@ def compute_scalar_model(
             d_pi_Einstein: float = (
                 -pi_Einstein * (G * A1 + C * A2)
                 - D
-                - 3.0 * CONST_MP_SQ * G * E * log_Omega_prime * A3
+                - 3.0 * CONST_MP_SQ * G * E * log_Omega_prime * R
             )
 
             G_s: float = cosmology.G_s(T_Jordan)
@@ -268,13 +267,13 @@ def compute_scalar_model(
                     f"     - physical: rhorad_E=({pow(rhorad_Einstein, 1.0/4.0)/units.GeV:.5g} GeV)^4, fm={fm:.5g}, T_J={T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K"
                 )
                 print(
-                    f"     - potential: V=({pow(V, 1.0/4.0)/units.GeV:.5g} GeV)^4, V'=({pow(Vprime, 1.0/3.0)/units.GeV:.5g} GeV)^4, log_Omega'={log_Omega_prime:.5g}"
+                    f"     - potential: log(V/GeV)={log_V - log(units.GeV):.5g}, V'/V={d_logV_dphi*units.GeV:.5g} GeV^(-1), log_Omega'={log_Omega_prime:.5g}"
                 )
                 print(
                     f"     - cosmology: H2_Mp2_E=({pow(H2_Mp2_Einstein, 1.0/4.0)/units.PlanckMass:.5g} Mp)^4, H2_E=({pow(H2_Einstein, 1.0/2.0)/units.PlanckMass:.5g} Mp)^2, Sigma={Sigma:.5g}"
                 )
                 print(
-                    f"     - intermediates: G={G:.5g}, A1={A1:.5g}, A2={A2:.5g}, A3={A3:.5g}, C={C:.5g}, D={D:.5g}, E={E:.5g}"
+                    f"     - intermediates: G={G:.5g}, T={T:.5g}, A1={A1:.5g}, A2={A2:.5g}, R={R:.5g}, C={C:.5g}, D={D:.5g}, E={E:.5g}"
                 )
                 print(
                     f"     - derivatives: d_phi_E={d_phi_Einstein:.5g}, d_pi_E={d_pi_Einstein:.5g}, d_log_rhorad_E={d_log_rhorad_Einstein:.5g}, d_log_fm={d_log_fm:.5g}, d_log_T_J={d_log_T_Jordan:.5g}"
