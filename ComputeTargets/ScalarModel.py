@@ -137,7 +137,7 @@ def compute_scalar_model(
     # f_m = rho_m
     z_init_estimate = cosmology.z(T_init)
     log_rho_m0: float = log(cosmology.rho_m0)
-    log_rho_m_init: float = log_rho_m0 - 3.0 * log(1.0 + z_init_estimate)
+    log_rho_m_init: float = log_rho_m0 + 3.0 * log(1.0 + z_init_estimate)
     log_fm_init = log_rho_m_init - log_rhorad_Jordan_init
     assert log_fm_init < 0.0
 
