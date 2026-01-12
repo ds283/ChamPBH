@@ -107,7 +107,7 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
     def number_hard_reflections(self):
         return len(self._hard_reflection_events)
 
-    def reset_hard_reflection_events(self, T_Jordan: TemperatureLike):
+    def reset_notify_time(self, T_Jordan: TemperatureLike):
         super().reset_notify_time()
         self._new_hard_reflection_events = []
 
