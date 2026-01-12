@@ -1,4 +1,4 @@
-from math import exp
+from math import log
 
 from CosmologyConcepts import M_value, Lambda_value, FieldLike, GetFieldValue
 from CosmologyConcepts.Potentials.AbstractPotential import AbstractPotential
@@ -24,8 +24,7 @@ class ExponentialPotential(AbstractPotential):
 
         # pre-evaluated Lambda^4, which we don't need to recompute each time
         _Lambda_as_float = float(Lambda)
-        _Lambda_2 = _Lambda_as_float * _Lambda_as_float
-        self._Lambda_4 = _Lambda_2 * _Lambda_2
+        self._log_Lambda_4 = 4.0 * log(_Lambda_as_float)
 
         self._M_float = float(M)
         self._Lambda_float = float(Lambda)
@@ -38,7 +37,7 @@ class ExponentialPotential(AbstractPotential):
     def type_id(self) -> int:
         return EXPONENTIAL_POTENTIAL
 
-    def V(self, phi: FieldLike) -> float:
+    def log_V(self, phi: FieldLike) -> float:
         """
         Evaluate the potential at a given value of phi
         :param phi:
@@ -47,14 +46,14 @@ class ExponentialPotential(AbstractPotential):
         phi_float = GetFieldValue(phi)
         arg: float = pow(self._M_float / phi_float, self._n)
         try:
-            return self._Lambda_4 * exp(arg)
+            return self._log_Lambda_4 + arg
         except OverflowError as e:
             print(
                 f"Overflow in ExponentialPotential potential V() at phi={phi_float / self._units.GeV:.5g} GeV, M={self._M_float / self._units.GeV:.5g} GeV [(M/phi)^n = {arg:.5g}]"
             )
             raise e
 
-    def Vprime(self, phi: FieldLike) -> float:
+    def d_logV_dphi(self, phi: FieldLike) -> float:
         """
         Evaluate the derivative of the potential at a given value of phi
         :param phi:
@@ -63,7 +62,7 @@ class ExponentialPotential(AbstractPotential):
         phi_float = GetFieldValue(phi)
         arg: float = pow(self._M_float / phi_float, self._n)
         try:
-            return -self._Lambda_4 * self._n * exp(arg) * arg / phi_float
+            return -self._n * arg / phi
         except OverflowError as e:
             print(
                 f"Overflow in ExponentialPotential potential Vprime() at phi={phi_float / self._units.GeV:.5g} GeV, M={self._M_float / self._units.GeV:.5g} GeV [(M/phi)^n = {arg:.5g}]"

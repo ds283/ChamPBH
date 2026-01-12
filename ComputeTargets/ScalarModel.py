@@ -189,7 +189,6 @@ def compute_scalar_model(
             log_fm: float = state.log_fm
             log_T_Jordan: float = state.log_T_Jordan
 
-            rhorad_Einstein: float = exp(log_rhorad_Einstein)
             fm: float = exp(log_fm)
             T_Jordan: float = exp(log_T_Jordan)
 
@@ -200,16 +199,9 @@ def compute_scalar_model(
                 )
                 supervisor.reset_notify_time(T_Jordan)
 
-            V: float = potential.V(phi_Einstein)
-            Vprime: float = potential.Vprime(phi_Einstein)
-
             log_Omega_prime: float = coupling.log_Omega_prime(phi_Einstein)
 
             G: float = 1.0 - pi_Einstein * pi_Einstein / CONST_6_MP_SQ
-
-            H2_Mp2_Einstein: float = (rhorad_Einstein * (1.0 + fm) + V) / (G) / 3.0
-
-            H2_Einstein: float = H2_Mp2_Einstein / CONST_MP_SQ
 
             Sigma: float = 1.0 - 3.0 * cosmology.w(T_Jordan)
 
@@ -217,23 +209,33 @@ def compute_scalar_model(
             d_log_rhorad_Einstein: float = Sigma - 4.0
             d_log_fm: float = 1.0 - Sigma
 
+            R: float
             if fm > 1.0:
-                A1: float = (2.0 + Sigma) / (2.0 * (1.0 + fm)) + (3.0 / 2.0) / (
-                    1.0 + 1.0 / fm
-                )
-                A2: float = (4.0 - Sigma) / (1.0 + fm) + 3.0 / (1.0 + 1.0 / fm)
-                A3: float = 1.0 + Sigma / (1.0 + fm)
+                R = (1.0 + Sigma / fm) / (1.0 + 1.0 / fm)
             else:
-                A1: float = (2.0 + 3.0 * fm + Sigma) / (2.0 * (1.0 + fm))
-                A2: float = (4.0 + 3.0 * fm - Sigma) / (1.0 + fm)
-                A3: float = (1.0 + Sigma + fm) / (1.0 + fm)
-            C: float = V / (6.0 * H2_Mp2_Einstein)
-            D: float = Vprime / H2_Einstein
-            E: float = (
-                1.0
-                - pi_Einstein * pi_Einstein / CONST_6_MP_SQ
-                - V / (3.0 * H2_Mp2_Einstein)
-            )
+                R = (Sigma + fm) / (1.0 + fm)
+            A1: float = 2.0 + R / 2.0
+            A2: float = 4.0 - R
+            A3: float = R
+
+            log_V: float = potential.log_V(phi_Einstein)
+            d_logV_dphi: float = potential.d_logV_dphi(phi_Einstein)
+
+            log_rhorad_over_V: float = log_rhorad_Einstein - log_V
+            T: float
+            if log_rhorad_over_V > 0.0:
+                V_over_rhorad: float = exp(-log_rhorad_over_V)
+                T = V_over_rhorad / (V_over_rhorad + 1.0 + fm)
+            else:
+                rhorad_over_V: float = exp(log_rhorad_over_V)
+                T = 1.0 / (1.0 + rhorad_over_V * (1.0 + fm))
+
+            V_over_3H2Mp2: float = G * T
+            Vprime_over_3H2Mp2: float = G * d_logV_dphi * T
+
+            C: float = V_over_3H2Mp2 / 2.0
+            D: float = 3.0 * CONST_MP_SQ * Vprime_over_3H2Mp2
+            E: float = G - V_over_3H2Mp2
 
             d_pi_Einstein: float = (
                 -pi_Einstein * (G * A1 + C * A2)
@@ -242,9 +244,9 @@ def compute_scalar_model(
             )
 
             G_s: float = cosmology.G_s(T_Jordan)
-            dG_s: float = cosmology.dG_s_dT(T_Jordan)
+            dG_s_dT: float = cosmology.dG_s_dT(T_Jordan)
             d_log_T_Jordan: float = -(1.0 + log_Omega_prime * pi_Einstein) / (
-                1.0 + (T_Jordan / G_s) * dG_s / 3.0
+                1.0 + (T_Jordan / G_s) * dG_s_dT / 3.0
             )
 
             return_state = StateVector(
@@ -277,7 +279,7 @@ def compute_scalar_model(
                 print(
                     f"     - derivatives: d_phi_E={d_phi_Einstein:.5g}, d_pi_E={d_pi_Einstein:.5g}, d_log_rhorad_E={d_log_rhorad_Einstein:.5g}, d_log_fm={d_log_fm:.5g}, d_log_T_J={d_log_T_Jordan:.5g}"
                 )
-                print(f"     - thermodynamics: G_s={G_s:.5g}, dG_s={dG_s:.5g}")
+                print(f"     - thermodynamics: G_s={G_s:.5g}, dG_s={dG_s_dT:.5g}")
                 print(f"     - state={state}")
                 print(f"     - return_state={return_state}")
                 raise RuntimeError(
@@ -455,12 +457,23 @@ def compute_scalar_model(
         offset: float = 4.0 * log_Omega
         log_rhorad_Jordan: float = state.log_rhorad_Einstein - offset
 
-        V: float = potential.V(state.phi_Einstein)
-        G: float = 1.0 - state.pi_Einstein * state.pi_Einstein / CONST_6_MP_SQ
-        rhorad_Einstein: float = exp(state.log_rhorad_Einstein)
         fm: float = exp(state.log_fm)
 
-        H2_Mp2_Einstein: float = (rhorad_Einstein * (1.0 + fm) + V) / (G) / 3.0
+        G: float = 1.0 - state.pi_Einstein * state.pi_Einstein / CONST_6_MP_SQ
+
+        log_V: float = potential.log_V(state.phi_Einstein)
+        log_rhorad_over_V: float = state.log_rhorad_Einstein - log_V
+
+        U: float
+        if log_rhorad_over_V > 1.0:
+            V_over_rhorad: float = exp(-log_rhorad_over_V)
+            U = 1.0 / (V_over_rhorad + 1.0 + fm)
+        else:
+            rhorad_over_V: float = exp(log_rhorad_over_V)
+            U = rhorad_over_V / (1.0 + rhorad_over_V * (1.0 + fm))
+
+        rhorad_Einstein: float = exp(state.log_rhorad_Einstein)
+        H2_Mp2_Einstein: float = rhorad_Einstein / G / U / 3.0
         H2_Einstein: float = H2_Mp2_Einstein / CONST_MP_SQ
 
         # H_Jordan can even be negative, so there is no use trying to store its logarithm

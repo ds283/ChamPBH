@@ -1,3 +1,5 @@
+from math import log, fabs
+
 from CosmologyConcepts import M_value, Lambda_value, FieldLike, GetFieldValue
 from CosmologyConcepts.Potentials.AbstractPotential import AbstractPotential
 from CosmologyConcepts.Potentials.model_ids import INVERSE_POWER_POTENTIAL
@@ -20,8 +22,7 @@ class InversePowerPotential(AbstractPotential):
 
         # pre-evaluated Lambda^4, which we don't need to recompute each time
         _Lambda_as_float = float(Lambda)
-        _Lambda_2 = _Lambda_as_float * _Lambda_as_float
-        self._Lambda_4 = _Lambda_2 * _Lambda_2
+        self._log_Lambda_4 = 4.0 * log(_Lambda_as_float)
 
         self._M_float = float(M)
         self._Lambda_float = float(Lambda)
@@ -38,7 +39,7 @@ class InversePowerPotential(AbstractPotential):
     def shard_key(self) -> M_value:
         return self._M
 
-    def V(self, phi: FieldLike) -> float:
+    def log_V(self, phi: FieldLike) -> float:
         """
         Evaluate the potential at a given value of phi
         :param phi:
@@ -47,14 +48,14 @@ class InversePowerPotential(AbstractPotential):
         phi_float = GetFieldValue(phi)
         arg: float = pow(self._M_float / phi_float, self._n)
         try:
-            return self._Lambda_4 * (1.0 + arg)
+            return self._log_Lambda_4 + log(1.0 + arg)
         except OverflowError as e:
             print(
                 f"Overflow in InversePowerPotential potential V() at phi={phi_float / self._units.GeV:.5g} GeV, M={self._M_float / self._units.GeV:.5g} GeV [(M/phi)^n = {arg:.5g}]"
             )
             raise e
 
-    def Vprime(self, phi: FieldLike) -> float:
+    def d_logV_dphi(self, phi: FieldLike) -> float:
         """
         Evaluate the derivative of the potential at a given value of phi
         :param phi:
@@ -63,7 +64,11 @@ class InversePowerPotential(AbstractPotential):
         phi_float = GetFieldValue(phi)
         arg: float = pow(self._M_float / phi_float, self._n)
         try:
-            return -self._Lambda_4 * self._n * arg / phi_float
+            if fabs(arg) < 1.0:
+                arginv = pow(phi_float / self._M_float, 1.0 / self._n)
+                return -(self._n / phi) / (1.0 + arginv)
+            else:
+                return -(self._n * arg / phi) / (1.0 + arg)
         except OverflowError as e:
             print(
                 f"Overflow in InversePowerPotential potential Vprime() at phi={phi_float / self._units.GeV:.5g} GeV, M={self._M_float / self._units.GeV:.5g} GeV [(M/phi)^n = {arg:.5g}]"

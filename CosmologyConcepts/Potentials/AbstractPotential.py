@@ -19,7 +19,7 @@ class AbstractPotential(DatastoreObject, ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def V(self, phi: FieldLike) -> float:
+    def log_V(self, phi: FieldLike) -> float:
         """
         Evaluate the potential at a given value of phi
         :param phi:
@@ -28,7 +28,7 @@ class AbstractPotential(DatastoreObject, ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def Vprime(self, phi: FieldLike) -> float:
+    def d_logV_dphi(self, phi: FieldLike) -> float:
         """
         Evaluate the derivative of the potential at a given value of phi
         :param phi:
