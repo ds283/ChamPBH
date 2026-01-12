@@ -188,7 +188,7 @@ def compute_scalar_model(
             if supervisor.notify_available:
                 supervisor.message(
                     T_Jordan,
-                    f"current state: N={N:.3g}, f_m = {fm}, T_Jordan = {T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp",
+                    f"current state: N={N:.5g}, f_m = {fm:.5g}, T_Jordan = {T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp",
                 )
                 supervisor.reset_notify_time(T_Jordan)
 
@@ -257,13 +257,13 @@ def compute_scalar_model(
                     f"     - inputs/states: phi_E={phi_Einstein/units.PlanckMass:.5g} Mp, pi_E={pi_Einstein/units.PlanckMass:.5g} Mp, log_rhorad_E={log_rhorad_Einstein:.5g}, log_fm={log_fm:.5g}, log_T_J={log_T_Jordan:.5g}"
                 )
                 print(
-                    f"     - physical: rhorad_E=({pow(rhorad_Einstein, 1.0/4.0)/units.GeV:.5g} GeV)^4, fm={fm:.5g}, T_J={T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K"
+                    f"     - physical: log(rhorad_E^(1/4)/GeV)=({log_rhorad_Einstein/4.0 - log(units.GeV):.5g} GeV)^4, fm={fm:.5g}, T_J={T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K"
                 )
                 print(
-                    f"     - potential: log(V/GeV)={log_V - log(units.GeV):.5g}, V'/V={d_logV_dphi*units.GeV:.5g} GeV^(-1), log_Omega'={log_Omega_prime:.5g}"
+                    f"     - potential: log(V^(1/4)/GeV)={log_V/4.0 - log(units.GeV):.5g}, V'/V={d_logV_dphi*units.GeV:.5g} GeV^(-1), log_Omega'={log_Omega_prime:.5g}"
                 )
                 print(
-                    f"     - cosmology: H2_Mp2_E=({pow(H2_Mp2_Einstein, 1.0/4.0)/units.PlanckMass:.5g} Mp)^4, H2_E=({pow(H2_Einstein, 1.0/2.0)/units.PlanckMass:.5g} Mp)^2, Sigma={Sigma:.5g}"
+                    f"     - cosmology: V/3H2Mp2={V_over_3H2Mp2:.5g}, V'/3H2Mp2={Vprime_over_3H2Mp2:.5g}, Sigma={Sigma:.5g}"
                 )
                 print(
                     f"     - intermediates: G={G:.5g}, T={T:.5g}, A1={A1:.5g}, A2={A2:.5g}, R={R:.5g}, C={C:.5g}, D={D:.5g}, E={E:.5g}"
