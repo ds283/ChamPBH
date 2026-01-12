@@ -335,7 +335,7 @@ def compute_scalar_model(
         while not solution_complete:
             sol = solve_ivp(
                 RHS,
-                method="Radau",
+                method="DOP853",
                 t_span=(N_start, N_failsafe),
                 y0=initial_state,
                 atol=atol,
