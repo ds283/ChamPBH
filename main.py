@@ -544,37 +544,39 @@ with ShardedPool(
     )
     beta_grid = DimensionlessQuantityArray(value_array=beta_array)
 
-    num_M_sample = int(
-        round(samples_per_log10_M_eV * (log10_M_high_eV - log10_M_low_eV) + 0.5, 0)
-    )
-
-    M_array = ray.get(
-        convert_to_Ms(
-            np.logspace(log10_M_low_eV, log10_M_high_eV, num_M_sample, endpoint=True)
-            * units.eV
-        )
-    )
+    # num_M_sample = int(
+    #     round(samples_per_log10_M_eV * (log10_M_high_eV - log10_M_low_eV) + 0.5, 0)
+    # )
+    #
+    # M_array = ray.get(
+    #     convert_to_Ms(
+    #         np.logspace(log10_M_low_eV, log10_M_high_eV, num_M_sample, endpoint=True)
+    #         * units.eV
+    #     )
+    # )
+    M_array = ray.get(convert_to_Ms([0.5 * units.PlanckMass]))
     M_grid = DimensionfulQuantityArray(value_array=M_array)
 
-    num_Lambda_sample = int(
-        round(
-            samples_per_log10_Lambda_eV * (log10_Lambda_high_eV - log10_Lambda_low_eV)
-            + 0.5,
-            0,
-        )
-    )
-
-    Lambda_array = ray.get(
-        convert_to_Lambdas(
-            np.logspace(
-                log10_Lambda_low_eV,
-                log10_Lambda_high_eV,
-                num_Lambda_sample,
-                endpoint=True,
-            )
-            * units.eV
-        )
-    )
+    # num_Lambda_sample = int(
+    #     round(
+    #         samples_per_log10_Lambda_eV * (log10_Lambda_high_eV - log10_Lambda_low_eV)
+    #         + 0.5,
+    #         0,
+    #     )
+    # )
+    #
+    # Lambda_array = ray.get(
+    #     convert_to_Lambdas(
+    #         np.logspace(
+    #             log10_Lambda_low_eV,
+    #             log10_Lambda_high_eV,
+    #             num_Lambda_sample,
+    #             endpoint=True,
+    #         )
+    #         * units.eV
+    #     )
+    # )
+    Lambda_array = ray.get(convert_to_Lambdas([1e-3 * units.eV]))
     Lambda_grid = DimensionfulQuantityArray(value_array=Lambda_array)
 
     M_lambda_grid = itertools.product(M_grid, Lambda_grid)
@@ -585,8 +587,9 @@ with ShardedPool(
     model_list = build_model_list(pool, units)
     for model_data in model_list:
         cosmology: BaseCosmology = model_data["cosmology"]
-        T_CMB = cosmology._params.T_CMB_Kelvin * units.Kelvin
 
+        # T_CMB = cosmology._params.T_CMB_Kelvin * units.Kelvin
+        T_CMB = 50 * units.keV
         T_stop = ray.get(pool.object_get("temperature", value=T_CMB, units=units))
 
         run_pipeline(
