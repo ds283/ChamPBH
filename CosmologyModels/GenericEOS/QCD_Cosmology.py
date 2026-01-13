@@ -1,9 +1,7 @@
 from CosmologyModels.GenericEOS.LambdaCDM_GenericEOS import (
     LambdaCDM_GenericEOS,
 )
-from CosmologyModels.GenericEOS.SaikawaShirai_EOS_jax_autodiff import (
-    SaikawaShirai_EOS_jax_autodiff,
-)
+from CosmologyModels.GenericEOS.Xav_EOS_spline import Xav_EOS_spline
 from Units.base import UnitsLike
 
 
@@ -25,7 +23,7 @@ class QCD_Cosmology(LambdaCDM_GenericEOS):
         LambdaCDM_GenericEOS.__init__(
             self,
             store_id,
-            SaikawaShirai_EOS_jax_autodiff(units),
+            Xav_EOS_spline(units),
             units,
             params,
         )
