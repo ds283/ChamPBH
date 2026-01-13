@@ -27,6 +27,7 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
         units: UnitsLike,
         T_init: TemperatureLike,
         T_stop: TemperatureLike,
+        max_step_size,
         label: str,
         notify_interval: int = DEFAULT_UPDATE_INTERVAL,
         collect_full_statistics: bool = False,
@@ -37,6 +38,7 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
 
         self._label: str = label
         self._collect_full_statistics: bool = collect_full_statistics
+        self._max_step_size = max_step_size
 
         self._T_init = GetTemperature(T_init)
         self._T_stop = GetTemperature(T_stop)
@@ -60,6 +62,9 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
             "entry": {"all": [], "new": []},
             "exit": {"all": [], "new": []},
         }
+
+        self._in_level_1 = False
+        self._in_level_2 = False
 
         self._GeV = units.GeV
         self._Kelvin = units.Kelvin
@@ -96,8 +101,15 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
         log_T_GeV_remain = log_T_GeV - self._log_T_stop_GeV
         percent_remain = log_T_GeV_remain / self._log_T_GeV_range
 
+        level_state = None
+        if self._in_level_2:
+            level_state = "level 2"
+        elif self._in_level_1:
+            level_state = "level 1"
+
+        print(f"** STATUS UPDATE #{update_number} - {self._label}")
         print(
-            f"** STATUS UPDATE #{update_number} - {self._label}: integration has been running for {format_time(since_start)} ({format_time(since_last_notify)} since last notification)"
+            f"|    integration has been running for {format_time(since_start)} ({format_time(since_last_notify)} since last notification) | current max step size dN={self._max_step_size:.5g}{" | in " + level_state if level_state is not None else ""}"
         )
         print(
             f"|    current T_Jordan = {T_GeV:.5g} GeV or {T_Kelvin:.5g} K, log(T_Jordan/GeV) = {log_T_GeV:.5g} | {1.0-percent_remain:.3%} complete measured in T_Jordan"
@@ -162,25 +174,45 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
         self._hard_reflection_data["all"].append(N_as_float)
         self._hard_reflection_data["new"].append(N_as_float)
 
-    def notify_level_1_entry(self, N):
+    def notify_level_1_entry(self, N, max_step_size):
         N_as_float = to_float(N)
         self._level_1_data["entry"]["all"].append(N_as_float)
         self._level_1_data["entry"]["new"].append(N_as_float)
 
-    def notify_level_1_exit(self, N):
+        self._max_step_size = max_step_size
+
+        self._in_level_1 = True
+        self._in_level_2 = False
+
+    def notify_level_1_exit(self, N, max_step_size):
         N_as_float = to_float(N)
         self._level_1_data["exit"]["all"].append(N_as_float)
         self._level_1_data["exit"]["new"].append(N_as_float)
 
-    def notify_level_2_entry(self, N):
+        self._max_step_size = max_step_size
+
+        self._in_level_1 = False
+        self._in_level_2 = False
+
+    def notify_level_2_entry(self, N, max_step_size):
         N_as_float = to_float(N)
         self._level_2_data["entry"]["all"].append(N_as_float)
         self._level_2_data["entry"]["new"].append(N_as_float)
 
-    def notify_level_2_exit(self, N):
+        self._max_step_size = max_step_size
+
+        self._in_level_1 = True
+        self._in_level_2 = True
+
+    def notify_level_2_exit(self, N, max_step_size):
         N_as_float = to_float(N)
         self._level_2_data["exit"]["all"].append(N_as_float)
         self._level_2_data["exit"]["new"].append(N_as_float)
+
+        self._max_step_size = max_step_size
+
+        self._in_level_1 = True
+        self._in_level_2 = False
 
     @property
     def number_hard_reflections(self) -> int:

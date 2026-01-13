@@ -418,6 +418,7 @@ def compute_scalar_model(
         units,
         T_init,
         T_stop,
+        max_step_size,
         label=task_label,
         collect_full_statistics=True,
     ) as supervisor:
@@ -531,7 +532,9 @@ def compute_scalar_model(
 
                 if num_enter_level1_events == 1:
                     max_step_size = potential.bounce_region_level1_max_step
-                    supervisor.notify_level_1_entry(enter_bounce_region_level1_times[0])
+                    supervisor.notify_level_1_entry(
+                        enter_bounce_region_level1_times[0], max_step_size
+                    )
                     in_level1 = True
                     in_level2 = False
                     if verbose:
@@ -541,7 +544,9 @@ def compute_scalar_model(
 
                 if num_exit_level1_events == 1:
                     max_step_size = np_inf
-                    supervisor.notify_level_1_exit(exit_bounce_region_level1_times[0])
+                    supervisor.notify_level_1_exit(
+                        exit_bounce_region_level1_times[0], max_step_size
+                    )
                     in_level1 = False
                     in_level2 = False
                     if verbose:
@@ -551,7 +556,9 @@ def compute_scalar_model(
 
                 if num_enter_level2_events == 1:
                     max_step_size = potential.bounce_region_level2_max_step
-                    supervisor.notify_level_2_entry(enter_bounce_region_level2_times[0])
+                    supervisor.notify_level_2_entry(
+                        enter_bounce_region_level2_times[0], max_step_size
+                    )
                     in_level1 = True
                     in_level2 = True
                     if verbose:
@@ -561,7 +568,9 @@ def compute_scalar_model(
 
                 if num_exit_level2_events == 1:
                     max_step_size = potential.bounce_region_level1_max_step
-                    supervisor.notify_level_2_exit(exit_bounce_region_level2_times[0])
+                    supervisor.notify_level_2_exit(
+                        exit_bounce_region_level2_times[0], max_step_size
+                    )
                     in_level1 = True
                     in_level2 = False
                     if verbose:
