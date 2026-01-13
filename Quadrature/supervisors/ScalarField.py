@@ -1,7 +1,7 @@
 import time
 from collections import namedtuple
 from math import log
-from typing import Optional
+from typing import Optional, Dict, List
 
 from CosmologyConcepts import TemperatureLike, GetTemperature
 from Quadrature.supervisors.base import IntegrationSupervisor, DEFAULT_UPDATE_INTERVAL
@@ -51,8 +51,15 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
         self._last_log_T_GeV: Optional[float] = None
 
         # track when we impose a "manual" hard reflection - this happens when we detect phi_E crossing zero
-        self._hard_reflection_events = []
-        self._new_hard_reflection_events = []
+        self._hard_reflection_data = {"all": [], "new": []}
+        self._level_1_data = {
+            "entry": {"all": [], "new": []},
+            "exit": {"all": [], "new": []},
+        }
+        self._level_2_data = {
+            "entry": {"all": [], "new": []},
+            "exit": {"all": [], "new": []},
+        }
 
         self._GeV = units.GeV
         self._Kelvin = units.Kelvin
@@ -98,20 +105,27 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
         print(
             f"|    target T_Jordan = {self._T_stop_GeV:.5g} GeV or {self._T_stop_Kelvin:.5g} K, log(T_Jordan/GeV) = {self._log_T_stop_GeV:.5g}"
         )
-        num_hard_reflection_events = len(self._hard_reflection_events)
-        if num_hard_reflection_events > 0:
-            num_new_hard_reflection_events = len(self._new_hard_reflection_events)
-            if num_new_hard_reflection_events > 0:
-                formatted_event_times = [
-                    f"{N:.5g}" for N in self._new_hard_reflection_events
-                ]
-                print(
-                    f"|    {num_hard_reflection_events} hard reflection events, {num_new_hard_reflection_events} since last update: N = [{", ".join(formatted_event_times)}]"
-                )
-            else:
-                print(
-                    f"|    {num_hard_reflection_events} hard reflection events, none since last update"
-                )
+
+        def events_status(label: str, events: Dict[str, List[float]]):
+            num_events = len(events["all"])
+
+            if num_events > 0:
+                num_new_events = len(events["new"])
+
+                if num_new_events > 0:
+                    formatted_event_times = [f"{N:.5g}" for N in events["new"]]
+                    print(
+                        f"|    {num_events} {label} events, {num_new_events} since last update: N = [{', '.join(formatted_event_times)}]"
+                    )
+                else:
+                    print(f"|    {num_events} {label} events, none since last update")
+
+        events_status("hard reflection", self._hard_reflection_data)
+        events_status("level 1 entry", self._level_1_data["entry"])
+        events_status("level 1 exit", self._level_1_data["exit"])
+        events_status("level 2 entry", self._level_2_data["entry"])
+        events_status("level 2 exit", self._level_2_data["exit"])
+
         if self._last_log_T_GeV is not None:
             log_T_GeV_delta = self._last_log_T_GeV - log_T_GeV
             print(
@@ -143,13 +157,50 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
                 f"|      d(phi_E)/dN={smallest_values.phi_Einstein/self._units.PlanckMass:.5g} Mp, d(pi_E)/dN={smallest_values.pi_Einstein/self._units.PlanckMass:.5g} Mp, d(log_rhorad_E)/dN={smallest_values.log_rhorad_Einstein:.5g}, d(log_fm)/dN={smallest_values.log_fm:.5g}, d(log_T_J)/dN={smallest_values.log_T_Jordan:.5g}"
             )
 
-    def notify_hard_reflection(self, N: float):
-        self._hard_reflection_events.append(N)
-        self._new_hard_reflection_events.append(N)
+    def notify_hard_reflection(self, N):
+        N_as_float = to_float(N)
+        self._hard_reflection_data["all"].append(N_as_float)
+        self._hard_reflection_data["new"].append(N_as_float)
+
+    def notify_level_1_entry(self, N):
+        N_as_float = to_float(N)
+        self._level_1_data["entry"]["all"].append(N_as_float)
+        self._level_1_data["entry"]["new"].append(N_as_float)
+
+    def notify_level_1_exit(self, N):
+        N_as_float = to_float(N)
+        self._level_1_data["exit"]["all"].append(N_as_float)
+        self._level_1_data["exit"]["new"].append(N_as_float)
+
+    def notify_level_2_entry(self, N):
+        N_as_float = to_float(N)
+        self._level_2_data["entry"]["all"].append(N_as_float)
+        self._level_2_data["entry"]["new"].append(N_as_float)
+
+    def notify_level_2_exit(self, N):
+        N_as_float = to_float(N)
+        self._level_2_data["exit"]["all"].append(N_as_float)
+        self._level_2_data["exit"]["new"].append(N_as_float)
 
     @property
     def number_hard_reflections(self) -> int:
-        return len(self._hard_reflection_events)
+        return len(self._hard_reflection_data["all"])
+
+    @property
+    def number_level_1_entries(self) -> int:
+        return len(self._level_1_data["entry"]["all"])
+
+    @property
+    def number_level_1_exits(self) -> int:
+        return len(self._level_1_data["exit"]["all"])
+
+    @property
+    def number_level_2_entries(self) -> int:
+        return len(self._level_2_data["entry"]["all"])
+
+    @property
+    def number_level_2_exits(self) -> int:
+        return len(self._level_2_data["exit"]["all"])
 
     @property
     def collect_full_statistics(self) -> bool:
@@ -179,7 +230,12 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
 
     def reset_notify_time(self, T_Jordan: TemperatureLike):
         super().reset_notify_time()
-        self._new_hard_reflection_events = []
+
+        self._hard_reflection_data["new"] = []
+        self._level_1_data["entry"]["new"] = []
+        self._level_1_data["exit"]["new"] = []
+        self._level_2_data["entry"]["new"] = []
+        self._level_2_data["exit"]["new"] = []
 
         T_Jordan_float = GetTemperature(T_Jordan)
         T_GeV = T_Jordan_float / self._GeV

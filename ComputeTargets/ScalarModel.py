@@ -530,6 +530,10 @@ def compute_scalar_model(
 
                 if num_enter_level1_events == 1:
                     max_step_size = potential.bounce_region_level1_max_step
+                    supervisor.notify_level_1_entry(enter_bounce_region_level1_times[0])
+                    print(
+                        f"-- compute_scalar_model ({task_label}): enter level-1 bounce region at N={enter_bounce_region_level1_times[0]:.5g}, reducing max step size to {max_step_size:.5g}"
+                    )
                     in_level1 = True
                     in_level2 = False
                     print(
@@ -538,6 +542,7 @@ def compute_scalar_model(
 
                 if num_exit_level1_events == 1:
                     max_step_size = np_inf
+                    supervisor.notify_level_1_exit(exit_bounce_region_level1_times[0])
                     in_level1 = False
                     in_level2 = False
                     print(
@@ -546,6 +551,7 @@ def compute_scalar_model(
 
                 if num_enter_level2_events == 1:
                     max_step_size = potential.bounce_region_level2_max_step
+                    supervisor.notify_level_2_entry(enter_bounce_region_level2_times[0])
                     in_level1 = True
                     in_level2 = True
                     print(
@@ -554,6 +560,7 @@ def compute_scalar_model(
 
                 if num_exit_level2_events == 1:
                     max_step_size = potential.bounce_region_level1_max_step
+                    supervisor.notify_level_2_exit(exit_bounce_region_level2_times[0])
                     in_level1 = True
                     in_level2 = False
                     print(
@@ -681,6 +688,10 @@ def compute_scalar_model(
         "z_grid": z_grid_cut,
         "sample": sample,
         "hard_reflections": supervisor.number_hard_reflections,
+        "level_1_entries": supervisor.number_level_1_entries,
+        "level_1_exits": supervisor.number_level_1_exits,
+        "level_2_entries": supervisor.number_level_2_entries,
+        "level_2_exits": supervisor.number_level_2_exits,
         "number_fragments": num_fragments,
         "largest_RHS_values": (
             supervisor.largest_RHS_values if collected_full_statistics else None
@@ -947,13 +958,18 @@ class ScalarModel(DatastoreObject):
 
         extra_data = {}
 
-        hard_reflections = data["hard_reflections"]
-        if hard_reflections > 0:
-            extra_data["num_hard_reflections"] = hard_reflections
+        def store_attr(src_attr: str, dest_attr: str, min_value: Optional[int] = None):
+            value = data[src_attr]
 
-        number_fragments = data["number_fragments"]
-        if number_fragments > 1:
-            extra_data["number_fragments"] = number_fragments
+            if min_value is None or value > min_value:
+                extra_data[dest_attr] = value
+
+        store_attr("hard_reflections", "number_hard_reflections", 0)
+        store_attr("level_1_entries", "number_level_1_entries", 0)
+        store_attr("level_1_exits", "number_level_1_exits", 0)
+        store_attr("level_2_entries", "number_level_2_entries", 0)
+        store_attr("level_2_exits", "number_level_2_exits", 0)
+        store_attr("number_fragments", "number_fragments", 1)
 
         largest_RHS_values = data["largest_RHS_values"]
         smallest_RHS_values = data["smallest_RHS_values"]
