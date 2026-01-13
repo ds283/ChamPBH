@@ -29,7 +29,7 @@ class Xav_EOS_spline(SaikawaShirai_EOS_spline):
 
     @property
     def name(self):
-        return "QCD equation of state in Saikawa & Shirai parametrization (arXiv:1803.01038, splined)"
+        return "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined)"
 
     @property
     def type_id(self) -> int:
