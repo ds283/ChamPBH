@@ -5,7 +5,7 @@ from CosmologyConcepts import TemperatureLike, GetTemperature
 from CosmologyModels.GenericEOS.GenericEOS import (
     GenericEOSBase,
 )
-from CosmologyModels.GenericEOS.SaikawaShirai import (
+from CosmologyModels.GenericEOS.SaikawaShirai_common import (
     _raw_G_rho,
     _raw_G_s,
     SAIKAWA_SHIRAI_T_LO,
@@ -22,7 +22,7 @@ from Units.base import UnitsLike
 _EOS_T_LO = 2e-3
 
 
-class QCD_EOS_spline(GenericEOSBase):
+class SaikawaShirai_EOS_spline(GenericEOSBase):
 
     def __init__(self, units: UnitsLike):
         GenericEOSBase.__init__(self, units)

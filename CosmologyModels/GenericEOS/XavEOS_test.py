@@ -4,8 +4,10 @@ from typing import Tuple
 
 import pandas as pd
 
-from CosmologyModels.GenericEOS.QCD_EOS_jax_autodiff import QCD_EOS_jax
-from CosmologyModels.GenericEOS.QCD_EOS_spline import QCD_EOS_spline
+from CosmologyModels.GenericEOS.SaikawaShirai_EOS_jax_autodiff import (
+    SaikawaShirai_EOS_jax_autodiff,
+)
+from CosmologyModels.GenericEOS.SaikawaShirai_EOS_spline import SaikawaShirai_EOS_spline
 from Units import GeV_units
 
 
@@ -45,8 +47,8 @@ def get_w(units, jax_eos, spline_eos, row) -> Tuple[float, float]:
 
 
 units = GeV_units()
-jax_eos = QCD_EOS_jax(units)
-spline_eos = QCD_EOS_spline(units)
+jax_eos = SaikawaShirai_EOS_jax_autodiff(units)
+spline_eos = SaikawaShirai_EOS_spline(units)
 
 data = pd.read_csv("CosmologyModels/GenericEOS/XavEOS_data.csv")
 

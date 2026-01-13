@@ -9,7 +9,7 @@ from CosmologyConcepts import TemperatureLike, GetTemperature
 from CosmologyModels.GenericEOS.GenericEOS import (
     GenericEOSBase,
 )
-from CosmologyModels.GenericEOS.SaikawaShirai import (
+from CosmologyModels.GenericEOS.SaikawaShirai_common import (
     a_coeffs,
     b_coeffs,
     c_coeffs,
@@ -138,7 +138,7 @@ def _jax_raw_G_s(T_in_GeV: Array) -> Array:
         return jnp.asarray(LOW_T_G_S_STAR)  # Low temperature limit
 
 
-class QCD_EOS_jax(GenericEOSBase):
+class SaikawaShirai_EOS_jax_autodiff(GenericEOSBase):
 
     # above SAIKAWA_SHIRAI_SAIKAWA_SHIRAI_T_HI (measured in GeV) we assume the asymptotic high temperature degrees of freedom
     SAIKAWA_SHIRAI_T_HI = 1e16
