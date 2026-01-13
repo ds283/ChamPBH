@@ -208,6 +208,7 @@ def compute_scalar_model(
             log_Omega_prime: float = coupling.log_Omega_prime(phi_Einstein)
 
             G: float = 1.0 - pi_Einstein * pi_Einstein / CONST_6_MP_SQ
+            # G must be positive in order the H_Einstein^2 is also positive
             if G < 0.0:
                 print(
                     f"!! compute_scalar_model ({task_label}): negative value of G = {G:.5g} detected at N={N:.8g} | f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp, pi_Einstein = {pi_Einstein / units.PlanckMass:.5g} Mp, log(rho_rad/GeV^4) = {log_rhorad_Einstein - 4.0*log(units.GeV):.5g}, T_Jordan = {T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K"
@@ -248,6 +249,14 @@ def compute_scalar_model(
             C: float = V_over_3H2Mp2 / 2.0
             D: float = 3.0 * CONST_MP_SQ * Vprime_over_3H2Mp2
             E: float = G - V_over_3H2Mp2
+            # must be positive, because it is proportional to rho_R/H^2
+            if E < 0.0:
+                print(
+                    f"!! compute_scalar_model ({task_label}): negative value of E = {E:.5g} detected at N={N:.8g} | f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp, pi_Einstein = {pi_Einstein / units.PlanckMass:.5g} Mp, log(rho_rad/GeV^4) = {log_rhorad_Einstein - 4.0*log(units.GeV):.5g}, T_Jordan = {T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K, G = {G:.5g}, T = {T:.5g}"
+                )
+                raise RuntimeError(
+                    f"compute_scalar_model ({task_label}): negative value of E = {E:.5g} detected"
+                )
 
             d_pi_Einstein: float = (
                 -pi_Einstein * (G * A1 + C * A2)
