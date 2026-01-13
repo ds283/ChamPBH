@@ -589,8 +589,8 @@ with ShardedPool(
     for model_data in model_list:
         cosmology: BaseCosmology = model_data["cosmology"]
 
-        # T_CMB = cosmology._params.T_CMB_Kelvin * units.Kelvin
-        T_CMB = 50 * units.keV
+        T_CMB = cosmology._params.T_CMB_Kelvin * units.Kelvin
+        # T_CMB = 50 * units.keV
         T_stop = ray.get(pool.object_get("temperature", value=T_CMB, units=units))
 
         run_pipeline(
