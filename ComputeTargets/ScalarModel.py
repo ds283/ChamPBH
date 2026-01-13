@@ -101,6 +101,7 @@ def compute_scalar_model(
     task_label: str = "compute_scalar_model",
     atol: float = DEFAULT_ABS_TOLERANCE,
     rtol: float = DEFAULT_REL_TOLERANCE,
+    verbose: bool = False,
 ) -> dict:
     """
     :param cosmology: background cosmology
@@ -531,41 +532,42 @@ def compute_scalar_model(
                 if num_enter_level1_events == 1:
                     max_step_size = potential.bounce_region_level1_max_step
                     supervisor.notify_level_1_entry(enter_bounce_region_level1_times[0])
-                    print(
-                        f"-- compute_scalar_model ({task_label}): enter level-1 bounce region at N={enter_bounce_region_level1_times[0]:.5g}, reducing max step size to {max_step_size:.5g}"
-                    )
                     in_level1 = True
                     in_level2 = False
-                    print(
-                        f"-- compute_scalar_model ({task_label}): enter level-1 bounce region at N={enter_bounce_region_level1_times[0]:.5g}, reducing max step size to {max_step_size:.5g}"
-                    )
+                    if verbose:
+                        print(
+                            f"-- compute_scalar_model ({task_label}): enter level-1 bounce region at N={enter_bounce_region_level1_times[0]:.5g}, reducing max step size to {max_step_size:.5g}"
+                        )
 
                 if num_exit_level1_events == 1:
                     max_step_size = np_inf
                     supervisor.notify_level_1_exit(exit_bounce_region_level1_times[0])
                     in_level1 = False
                     in_level2 = False
-                    print(
-                        f"-- compute_scalar_model ({task_label}): exit level-1 bounce region at N={exit_bounce_region_level1_times[0]:.5g}, increasing max step size to {max_step_size:.5g}"
-                    )
+                    if verbose:
+                        print(
+                            f"-- compute_scalar_model ({task_label}): exit level-1 bounce region at N={exit_bounce_region_level1_times[0]:.5g}, increasing max step size to {max_step_size:.5g}"
+                        )
 
                 if num_enter_level2_events == 1:
                     max_step_size = potential.bounce_region_level2_max_step
                     supervisor.notify_level_2_entry(enter_bounce_region_level2_times[0])
                     in_level1 = True
                     in_level2 = True
-                    print(
-                        f"-- compute_scalar_model ({task_label}): enter level-2 bounce region at N={enter_bounce_region_level2_times[0]:.5g}, reducing max step size to {max_step_size:.5g}"
-                    )
+                    if verbose:
+                        print(
+                            f"-- compute_scalar_model ({task_label}): enter level-2 bounce region at N={enter_bounce_region_level2_times[0]:.5g}, reducing max step size to {max_step_size:.5g}"
+                        )
 
                 if num_exit_level2_events == 1:
                     max_step_size = potential.bounce_region_level1_max_step
                     supervisor.notify_level_2_exit(exit_bounce_region_level2_times[0])
                     in_level1 = True
                     in_level2 = False
-                    print(
-                        f"-- compute_scalar_model ({task_label}): exit level-2 bounce region at N={exit_bounce_region_level2_times[0]:.5g}, increasing max step size to {max_step_size:.5g}"
-                    )
+                    if verbose:
+                        print(
+                            f"-- compute_scalar_model ({task_label}): exit level-2 bounce region at N={exit_bounce_region_level2_times[0]:.5g}, increasing max step size to {max_step_size:.5g}"
+                        )
 
                 if num_reflection_events == 1:
                     # record that a hard reflection occurred and prepare for the next integration step
@@ -577,9 +579,11 @@ def compute_scalar_model(
                             pi_Einstein=-initial_state.pi_Einstein
                         )
                     assert initial_state.pi_Einstein >= 0.0
-                    print(
-                        f"-- compute_scalar_model ({task_label}): hard reflection detected at N={reflection_times[0]:.5g}"
-                    )
+
+                    if verbose:
+                        print(
+                            f"-- compute_scalar_model ({task_label}): hard reflection detected at N={reflection_times[0]:.5g}"
+                        )
 
                 continue
 
