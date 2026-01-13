@@ -1,5 +1,6 @@
 import time
 from collections import namedtuple
+from datetime import datetime
 from math import log
 from typing import Optional, Dict, List
 
@@ -107,7 +108,9 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
         elif self._in_level_1:
             level_state = "level 1"
 
-        print(f"** STATUS UPDATE #{update_number} - {self._label}")
+        print(
+            f"** STATUS UPDATE #{update_number} - {datetime.now().strftime("%X %x")} - {self._label}"
+        )
         print(
             f"|    integration has been running for {format_time(since_start)} ({format_time(since_last_notify)} since last notification) | current max step size dN={self._max_step_size:.5g}{" | in " + level_state if level_state is not None else ""}"
         )
