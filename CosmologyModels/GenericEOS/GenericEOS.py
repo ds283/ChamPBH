@@ -3,21 +3,6 @@ from abc import ABC, abstractmethod
 from CosmologyConcepts import TemperatureLike
 from Units.base import UnitsLike
 
-# at high temperature, G_rho and G_S usually have the same value
-HIGH_T_GSTAR = 106.75
-
-# G_rho and G_S usually only differ at low temperatures after neutrino decoupling, once e+/e- annihilation
-# reheats the photons (but *not* the neutrinos)
-# LOW_T_GSTAR = 3.36
-# LOW_T_G_S_STAR = 3.91
-
-# TODO: check, https://www.astronomy.ohio-state.edu/weinberg.21/A8873/notes7a.pdf quotes instead
-LOW_T_GSTAR = 3.38
-LOW_T_G_S_STAR = 3.94
-# these values look correct to me because e.g.
-#   2 + 2 * 3.042 * (7/8) * (4/11)^(4/3) = 3.38172
-# so this value of G_rho* includes N_eff from Planck, plus reheating of the photons but not the neutrinos
-
 
 class GenericEOSBase(ABC):
 

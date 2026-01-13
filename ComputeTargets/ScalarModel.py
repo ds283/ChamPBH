@@ -425,7 +425,7 @@ def compute_scalar_model(
         while not solution_complete:
             sol = solve_ivp(
                 RHS,
-                method="BDF",
+                method="LSODA",
                 t_span=(N_start, N_failsafe),
                 y0=initial_state,
                 atol=atol,
@@ -715,7 +715,7 @@ def compute_scalar_model(
         "mean_RHS_values": (
             supervisor.mean_RHS_values if collected_full_statistics else None
         ),
-        "solver_label": "solve_ivp+BDF-stepping0",
+        "solver_label": "solve_ivp+LSODA-stepping0",
     }
 
 

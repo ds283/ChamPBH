@@ -48,7 +48,7 @@ DEFAULT_RAY_ADDRESS = "auto"
 
 DEFAULT_Z_END = 0.1
 DEFAULT_T_INIT_GEV = 20000
-DEFAULT_SAMPLES_PER_LOG10_Z = 100
+DEFAULT_SAMPLES_PER_LOG10_Z = 250
 
 DEFAULT_BETA_LOW = 0.1
 DEFAULT_BETA_HIGH = 3.0
@@ -535,13 +535,14 @@ with ShardedPool(
 
     print("\n** BUILDING GRID OF MODELS TO SAMPLE")
 
-    num_beta_sample = int(round(samples_per_beta * (beta_high - beta_low) + 0.5, 0))
-
-    beta_array = ray.get(
-        convert_to_betas(
-            np.linspace(beta_low, beta_high, num_beta_sample, endpoint=True)
-        )
-    )
+    # num_beta_sample = int(round(samples_per_beta * (beta_high - beta_low) + 0.5, 0))
+    #
+    # beta_array = ray.get(
+    #     convert_to_betas(
+    #         np.linspace(beta_low, beta_high, num_beta_sample, endpoint=True)
+    #     )
+    # )
+    beta_array = ray.get(convert_to_betas([0.5, 1.0, 1.5, 2.0, 2.5, 3.0]))
     beta_grid = DimensionlessQuantityArray(value_array=beta_array)
 
     # num_M_sample = int(

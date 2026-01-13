@@ -1,7 +1,7 @@
 from CosmologyModels.GenericEOS.LambdaCDM_GenericEOS import (
     LambdaCDM_GenericEOS,
 )
-from CosmologyModels.GenericEOS.QCD_EOS import QCD_EOS
+from CosmologyModels.GenericEOS.QCD_EOS_jax_autodiff import QCD_EOS_jax
 from Units.base import UnitsLike
 
 
@@ -14,8 +14,8 @@ class QCD_Cosmology(LambdaCDM_GenericEOS):
         params,
     ):
         """
-        QCD_Cosmology is a convenience wrapper that builds a ParametrizedEOS cosmology using the
-        QCD_EOS equation of state
+        QCD_Cosmology is a convenience wrapper that builds a ParametrizedEOS cosmology using
+        a specified equation of state
         :param store_id:
         :param units:
         :param params:
@@ -23,7 +23,7 @@ class QCD_Cosmology(LambdaCDM_GenericEOS):
         LambdaCDM_GenericEOS.__init__(
             self,
             store_id,
-            QCD_EOS(units),
+            QCD_EOS_jax(units),
             units,
             params,
         )
