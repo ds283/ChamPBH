@@ -43,12 +43,6 @@ class Xav_EOS_spline(SaikawaShirai_EOS_spline):
         :return:
         """
 
-        # below SAIKAWA_SHIRAI_T_LO we have photons and neutrinos, each with
-        #   P(T) = s(T) T - rho(T)
-        # so we cannot write a single formula for w(T) = P(T)/rho(T) that is valid both above and below SAIKAWA_SHIRAI_T_LO.
-        # However, with our choices w(z) will just evaluate to 1/3 for all temperatures in this range.
-        # To get a smooth result we evaluate the asymptotic value exactly at SAIKAWA_SHIRAI_T_LO
-
         T_in_GeV: float = GetTemperature(T) / self._units.GeV
 
         if T_in_GeV >= self._T_max:
