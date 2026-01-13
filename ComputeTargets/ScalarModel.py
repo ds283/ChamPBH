@@ -3,6 +3,7 @@ from math import log, pi, exp, sqrt, isinf, isnan
 from typing import Optional, List, Dict, Any
 
 import ray
+from numpy import inf as np_inf
 from ray import ObjectRef
 from scipy.integrate import solve_ivp
 from scipy.interpolate import make_interp_spline
@@ -263,6 +264,17 @@ def compute_scalar_model(
                 - D
                 - 3.0 * CONST_MP_SQ * G * E * log_Omega_prime * R
             )
+            # if N > 30.6:
+            #     print(
+            #         f"** N = {N}, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp, pi_Einstein = {pi_Einstein / units.PlanckMass:.5g} Mp"
+            #     )
+            #     print(
+            #         f"   -- friction: G = {G:.5g}, C = {C:.5g}, A1 = {A1:.5g}, A2 = {A2:.5g}, delta = {-pi_Einstein * (G * A1 + C * A2):.5g}"
+            #     )
+            #     print(f"   -- reflection: delta = {-D:.5g}")
+            #     print(
+            #         f"   -- kicking: Sigma = {Sigma:.5g}, E = {E:.5g}, R = {R:.5g}, delta = {-3.0 * CONST_MP_SQ * G * E * log_Omega_prime * R:.5g}"
+            #     )
 
             G_s: float = cosmology.G_s(T_Jordan)
             dG_s_dT: float = cosmology.dG_s_dT(T_Jordan)
@@ -335,6 +347,48 @@ def compute_scalar_model(
         -1.0
     )  # only trigger when phi_Einstein crosses from positive to negative values
 
+    # detect entry/exit from region close a bounce
+    bounce_region_level1_boundary = potential.bounce_region_boundary
+    bounce_region_level2_boundary = potential.bounce_region_boundary / 75.0
+
+    def enter_bounce_region_level1(N, s, supervisor) -> float:
+        state: StateVector = StateVector._make(s)
+
+        return state.phi_Einstein - bounce_region_level1_boundary
+
+    enter_bounce_region_level1.terminal = True
+    enter_bounce_region_level1.direction = -1.0
+
+    def exit_bounce_region_level1(N, s, supervisor) -> float:
+        state: StateVector = StateVector._make(s)
+
+        return state.phi_Einstein - bounce_region_level1_boundary
+
+    exit_bounce_region_level1.terminal = True
+    exit_bounce_region_level1.direction = +1.0
+
+    def enter_bounce_region_level2(N, s, supervisor) -> float:
+        state: StateVector = StateVector._make(s)
+
+        return state.phi_Einstein - bounce_region_level2_boundary
+
+    enter_bounce_region_level2.terminal = True
+    enter_bounce_region_level2.direction = -1.0
+
+    def exit_bounce_region_level2(N, s, supervisor) -> float:
+        state: StateVector = StateVector._make(s)
+
+        return state.phi_Einstein - bounce_region_level2_boundary
+
+    exit_bounce_region_level2.terminal = True
+    exit_bounce_region_level2.direction = +1.0
+
+    in_level1 = False
+    in_level2 = False
+
+    def dummy_event_handler(N, s, supervisor):
+        return 1.0
+
     N_failsafe = 1000.0  # terminate after 1000 e-folds as a failsafe
     N_start = 0.0
 
@@ -353,6 +407,11 @@ def compute_scalar_model(
         log_fm=log_fm_init,
         log_T_Jordan=log_T_init,
     )
+
+    # track maximum step size
+    # usually we want this to be unbounded, so the stepper can choose as large a value as it wishes
+    # but close to a bounce we want to dramatically shorten the step size, so that we resolve the bounce accurately
+    max_step_size = np_inf
 
     with ScalarFieldIntegrationSupervisor(
         units,
@@ -373,8 +432,21 @@ def compute_scalar_model(
                 events=(
                     terminate_at_T_stop,
                     reflection_failure_detector,
+                    (
+                        enter_bounce_region_level1
+                        if not in_level1
+                        else dummy_event_handler
+                    ),
+                    exit_bounce_region_level1 if in_level1 else dummy_event_handler,
+                    (
+                        enter_bounce_region_level2
+                        if not in_level2
+                        else dummy_event_handler
+                    ),
+                    exit_bounce_region_level2 if in_level2 else dummy_event_handler,
                 ),
                 dense_output=True,
+                max_step=max_step_size,
             )
 
             # check that termination occurred due to reaching the end of the integration domain, or because of a termination event
@@ -403,12 +475,29 @@ def compute_scalar_model(
             # at this stage, we know that one of the event handlers fired to terminate the evolution
             # now we decide which one
 
-            termination_event_times = sol.t_events[0]
-            reflection_event_times = sol.t_events[1]
+            termination_times = sol.t_events[0]
+            reflection_times = sol.t_events[1]
+            enter_bounce_region_level1_times = sol.t_events[2]
+            exit_bounce_region_level1_times = sol.t_events[3]
+            enter_bounce_region_level2_times = sol.t_events[4]
+            exit_bounce_region_level2_times = sol.t_events[5]
 
-            num_termination_events = len(termination_event_times)
-            num_reflection_events = len(reflection_event_times)
-            if num_termination_events + num_reflection_events != 1:
+            num_termination_events = len(termination_times)
+            num_reflection_events = len(reflection_times)
+            num_enter_level1_events = len(enter_bounce_region_level1_times)
+            num_exit_level1_events = len(exit_bounce_region_level1_times)
+            num_enter_level2_events = len(enter_bounce_region_level2_times)
+            num_exit_level2_events = len(exit_bounce_region_level2_times)
+
+            if (
+                num_termination_events
+                + num_reflection_events
+                + num_enter_level1_events
+                + num_exit_level1_events
+                + num_enter_level2_events
+                + num_exit_level2_events
+                != 1
+            ):
                 raise RuntimeError(
                     f"compute_scalar_model ({task_label}): integration terminated with multiple termination events (N_start={N_start:.5g}, N_failsafe={N_failsafe:.5g}, num_termination_events={num_termination_events}, num_reflection_events={num_reflection_events})"
                 )
@@ -427,19 +516,70 @@ def compute_scalar_model(
                 solution_complete = True
                 continue
 
-            # record that a hard reflection occurred and prepare for the next integration step
-            supervisor.notify_hard_reflection(reflection_event_times[0])
+            # if we need to restart the integration, prepare a new state
+            if (
+                num_reflection_events == 1
+                or num_enter_level1_events == 1
+                or num_exit_level1_events == 1
+                or num_enter_level2_events == 1
+                or num_exit_level2_events == 1
+            ):
+                # prepare to restart the integration
+                N_start = sol.t[-1]
+                initial_state = StateVector._make(sol.y[:, -1])
 
-            # change the initial state to restart the integration from here
-            N_start = sol.t[-1]
-            initial_state = StateVector._make(sol.y[:, -1])
+                if num_enter_level1_events == 1:
+                    max_step_size = bounce_region_level1_boundary / 1e2
+                    in_level1 = True
+                    in_level2 = False
+                    print(
+                        f"-- compute_scalar_model ({task_label}): enter level-1 bounce region at N={enter_bounce_region_level1_times[0]:.5g}, reducing step size to {max_step_size:.5g}"
+                    )
 
-            # reverse direction of travel for the scalar field
-            if initial_state.pi_Einstein < 0.0:
-                initial_state = initial_state._replace(
-                    pi_Einstein=-initial_state.pi_Einstein
-                )
-            assert initial_state.pi_Einstein >= 0.0
+                if num_exit_level1_events == 1:
+                    max_step_size = np_inf
+                    in_level1 = False
+                    in_level2 = False
+                    print(
+                        f"-- compute_scalar_model ({task_label}): exit level-1 bounce region at N={exit_bounce_region_level1_times[0]:.5g}, increasing step size to {max_step_size:.5g}"
+                    )
+
+                if num_enter_level2_events == 1:
+                    max_step_size = bounce_region_level2_boundary / 1e2
+                    in_level1 = True
+                    in_level2 = True
+                    print(
+                        f"-- compute_scalar_model ({task_label}): enter level-2 bounce region at N={enter_bounce_region_level2_times[0]:.5g}, reducing step size to {max_step_size:.5g}"
+                    )
+
+                if num_exit_level2_events == 1:
+                    max_step_size = bounce_region_level1_boundary / 1e2
+                    in_level1 = True
+                    in_level2 = False
+                    print(
+                        f"-- compute_scalar_model ({task_label}): exit level-2 bounce region at N={exit_bounce_region_level2_times[0]:.5g}, increasing step size to {max_step_size:.5g}"
+                    )
+
+                if num_reflection_events == 1:
+                    # record that a hard reflection occurred and prepare for the next integration step
+                    supervisor.notify_hard_reflection(reflection_times[0])
+
+                    # reverse direction of travel for the scalar field
+                    if initial_state.pi_Einstein < 0.0:
+                        initial_state = initial_state._replace(
+                            pi_Einstein=-initial_state.pi_Einstein
+                        )
+                    assert initial_state.pi_Einstein >= 0.0
+                    print(
+                        f"-- compute_scalar_model ({task_label}): hard reflection detected at N={reflection_times[0]:.5g}"
+                    )
+
+                continue
+
+            # otherwise, we don't know what happened, so we should never reach this point
+            raise RuntimeError(
+                f"compute_scalar_model ({task_label}): integration terminated with unknown events (N_start={N_start:.5g}, N_failsafe={N_failsafe:.5g}"
+            )
 
     # the integration should have terminated when T_Jordan = T_CMB, which ought to correspond to z = 0
     # we now work backwards and sample the integration output on the supplied z grid, using the e-fold number

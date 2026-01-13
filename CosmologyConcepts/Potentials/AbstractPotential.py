@@ -18,6 +18,11 @@ class AbstractPotential(DatastoreObject, ABC):
     def type_id(self) -> int:
         raise NotImplementedError
 
+    @property
+    @abstractmethod
+    def bounce_region_boundary(self) -> float:
+        raise NotImplementedError
+
     @abstractmethod
     def log_V(self, phi: FieldLike) -> float:
         """

@@ -37,6 +37,10 @@ class ExponentialPotential(AbstractPotential):
     def type_id(self) -> int:
         return EXPONENTIAL_POTENTIAL
 
+    @property
+    def bounce_region_boundary(self) -> float:
+        return self._M_float
+
     def log_V(self, phi: FieldLike) -> float:
         """
         Evaluate the potential at a given value of phi

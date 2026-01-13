@@ -36,6 +36,10 @@ class InversePowerPotential(AbstractPotential):
         return INVERSE_POWER_POTENTIAL
 
     @property
+    def bounce_region_boundary(self) -> float:
+        return self._M_float
+
+    @property
     def shard_key(self) -> M_value:
         return self._M
 
