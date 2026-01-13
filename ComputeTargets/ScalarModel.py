@@ -265,17 +265,6 @@ def compute_scalar_model(
                 - D
                 - 3.0 * CONST_MP_SQ * G * E * log_Omega_prime * R
             )
-            # if N > 30.6:
-            #     print(
-            #         f"** N = {N}, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp, pi_Einstein = {pi_Einstein / units.PlanckMass:.5g} Mp"
-            #     )
-            #     print(
-            #         f"   -- friction: G = {G:.5g}, C = {C:.5g}, A1 = {A1:.5g}, A2 = {A2:.5g}, delta = {-pi_Einstein * (G * A1 + C * A2):.5g}"
-            #     )
-            #     print(f"   -- reflection: delta = {-D:.5g}")
-            #     print(
-            #         f"   -- kicking: Sigma = {Sigma:.5g}, E = {E:.5g}, R = {R:.5g}, delta = {-3.0 * CONST_MP_SQ * G * E * log_Omega_prime * R:.5g}"
-            #     )
 
             G_s: float = cosmology.G_s(T_Jordan)
             dG_s_dT: float = cosmology.dG_s_dT(T_Jordan)
