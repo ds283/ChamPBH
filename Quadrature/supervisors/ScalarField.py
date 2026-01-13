@@ -136,11 +136,11 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
             )
             print(f"|    LARGEST VALUES OF RHS VECTOR:")
             print(
-                f"|      phi_E={largest_values.phi_Einstein/self._units.PlanckMass:.5g} Mp, pi_E={largest_values.pi_Einstein/self._units.PlanckMass:.5g} Mp, log_rhorad_E={largest_values.log_rhorad_Einstein:.5g}, log_fm={largest_values.log_fm:.5g}, log_T_J={largest_values.log_T_Jordan:.5g}"
+                f"|      d(phi_E)/dN={largest_values.phi_Einstein/self._units.PlanckMass:.5g} Mp, d(pi_E)/dN={largest_values.pi_Einstein/self._units.PlanckMass:.5g} Mp, d(log_rhorad_E)/dN={largest_values.log_rhorad_Einstein:.5g}, d(log_fm)/dN={largest_values.log_fm:.5g}, d(log_T_J)/dN={largest_values.log_T_Jordan:.5g}"
             )
             print(f"|    SMALLEST VALUES OF RHS VECTOR:")
             print(
-                f"|      phi_E={smallest_values.phi_Einstein/self._units.PlanckMass:.5g} Mp, pi_E={smallest_values.pi_Einstein/self._units.PlanckMass:.5g} Mp, log_rhorad_E={smallest_values.log_rhorad_Einstein:.5g}, log_fm={smallest_values.log_fm:.5g}, log_T_J={smallest_values.log_T_Jordan:.5g}"
+                f"|      d(phi_E)/dN={smallest_values.phi_Einstein/self._units.PlanckMass:.5g} Mp, d(pi_E)/dN={smallest_values.pi_Einstein/self._units.PlanckMass:.5g} Mp, d(log_rhorad_E)/dN={smallest_values.log_rhorad_Einstein:.5g}, d(log_fm)/dN={smallest_values.log_fm:.5g}, d(log_T_J)/dN={smallest_values.log_T_Jordan:.5g}"
             )
 
     def notify_hard_reflection(self, N: float):
