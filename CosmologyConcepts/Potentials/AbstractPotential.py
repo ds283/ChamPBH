@@ -20,7 +20,22 @@ class AbstractPotential(DatastoreObject, ABC):
 
     @property
     @abstractmethod
-    def bounce_region_boundary(self) -> float:
+    def bounce_region_level1_boundary(self) -> float:
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def bounce_region_level2_boundary(self) -> float:
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def bounce_region_level1_max_step(self) -> float:
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def bounce_region_level2_max_step(self) -> float:
         raise NotImplementedError
 
     @abstractmethod
