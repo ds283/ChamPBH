@@ -272,11 +272,16 @@ def add_redshift_xaxis_labels(
     model: ScalarModel,
     temp_unit: str = "GeV",
     text_labels: bool = True,
-    x_coord="redshift",
+    x_coord: str = "redshift",
 ):
     events = _find_T_event_times(model)
 
     xtrans = ax.get_xaxis_transform()
+
+    if x_coord == "efolds":
+        xlabel = "N"
+    else:
+        xlabel = "z"
 
     single_lines = ["Electroweak", "Lambda_QCD", "e+e-", "BBN start", "BBN end"]
     for event in single_lines:
@@ -293,7 +298,7 @@ def add_redshift_xaxis_labels(
                         ax.text(
                             TEXT_DISPLACEMENT_MULTIPLIER * xpos,
                             config["ypos"],
-                            f"{config['label']}@{config["T_Jordan"]:.3g}{config["unit"]} $z$={xpos:.3g}",
+                            f"{config['label']}@{config["T_Jordan"]:.3g}{config["unit"]} ${xlabel}$={xpos:.3g}",
                             color=config["color"],
                             transform=xtrans,
                             fontsize="x-small",
