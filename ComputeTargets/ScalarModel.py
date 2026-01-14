@@ -683,20 +683,17 @@ def compute_scalar_model(
 
         T_Jordan: float = data.T_Jordan
 
-        log_V_over_3H2Mp2 = log(data.V_over_3H2Mp2)
-        log_3H2Mp2 = -1.0 * (log_V_over_3H2Mp2 - data.log_V)
-        H2Mp2_Einstein = exp(log_3H2Mp2) / 3.0
-        H2_Einstein: float = H2Mp2_Einstein / CONST_MP_SQ
+        log_V_over_3H2Mp2: float = log(data.V_over_3H2Mp2)
+        log_3H2Mp2: float = -1.0 * (log_V_over_3H2Mp2 - data.log_V)
+        H2_Einstein: float = exp(log_3H2Mp2) / 3.0 / CONST_MP_SQ
+        H_Einstein: float = sqrt(H2_Einstein)
 
         log_Omega: float = coupling.log_Omega(state.phi_Einstein)
-        offset: float = 4.0 * log_Omega
-        log_rhorad_Jordan: float = state.log_rhorad_Einstein - offset
-
-        # H_Jordan can even be negative, so there is no use trying to store its logarithm
-        H_Einstein: float = sqrt(H2_Einstein)
+        log_rhorad_Jordan: float = state.log_rhorad_Einstein - 4.0 * log_Omega
 
         Omega: float = coupling.Omega(state.phi_Einstein)
 
+        # H_Jordan can even be negative, so there is no use trying to store its logarithm
         H_Jordan: float = (
             H_Einstein * (1.0 + data.log_Omega_prime * state.pi_Einstein) / Omega
         )
