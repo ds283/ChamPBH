@@ -52,15 +52,15 @@ DEFAULT_SAMPLES_PER_LOG10_Z = 250
 
 DEFAULT_BETA_LOW = 0.1
 DEFAULT_BETA_HIGH = 3.0
-DEFAULT_SAMPLES_PER_BETA = 1
+DEFAULT_SAMPLES_PER_BETA = 5
 
 DEFAULT_LOG10_M_LOW_EV = 25
 DEFAULT_LOG10_M_HIGH_EV = 26.5
-DEFAULT_SAMPLES_PER_LOG10_M_EV = 1
+DEFAULT_SAMPLES_PER_LOG10_M_EV = 6
 
 DEFAULT_LOG10_LAMBDA_LOW_EV = -2
 DEFAULT_LOG10_LAMBDA_HIGH_EV = 1
-DEFAULT_SAMPLES_PER_LOG10_LAMBDA_EV = 1
+DEFAULT_SAMPLES_PER_LOG10_LAMBDA_EV = 6
 
 MIN_NOTIFY_INTERVAL = 5 * 60
 
@@ -374,10 +374,10 @@ def run_pipeline(
         label_builder=build_solver_work_label,
         title="CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID",
         store_results=False,
-        create_batch_size=10,
-        notify_batch_size=20,
-        max_task_queue=20,
-        process_batch_size=10,
+        create_batch_size=5,
+        notify_batch_size=5,
+        max_task_queue=5,
+        process_batch_size=1,
         notify_min_time_interval=MIN_NOTIFY_INTERVAL,
     )
     solver_queue.run()
@@ -535,49 +535,46 @@ with ShardedPool(
 
     print("\n** BUILDING GRID OF MODELS TO SAMPLE")
 
-    # num_beta_sample = int(round(samples_per_beta * (beta_high - beta_low) + 0.5, 0))
-    #
-    # beta_array = ray.get(
-    #     convert_to_betas(
-    #         np.linspace(beta_low, beta_high, num_beta_sample, endpoint=True)
-    #     )
-    # )
-    beta_array = ray.get(convert_to_betas([0.5, 1.0, 1.5, 2.0, 2.5, 3.0]))
+    num_beta_sample = int(round(samples_per_beta * (beta_high - beta_low) + 0.5, 0))
+
+    beta_array = ray.get(
+        convert_to_betas(
+            np.linspace(beta_low, beta_high, num_beta_sample, endpoint=True)
+        )
+    )
     beta_grid = DimensionlessQuantityArray(value_array=beta_array)
 
-    # num_M_sample = int(
-    #     round(samples_per_log10_M_eV * (log10_M_high_eV - log10_M_low_eV) + 0.5, 0)
-    # )
-    #
-    # M_array = ray.get(
-    #     convert_to_Ms(
-    #         np.logspace(log10_M_low_eV, log10_M_high_eV, num_M_sample, endpoint=True)
-    #         * units.eV
-    #     )
-    # )
-    M_array = ray.get(convert_to_Ms([0.5 * units.PlanckMass]))
+    num_M_sample = int(
+        round(samples_per_log10_M_eV * (log10_M_high_eV - log10_M_low_eV) + 0.5, 0)
+    )
+
+    M_array = ray.get(
+        convert_to_Ms(
+            np.logspace(log10_M_low_eV, log10_M_high_eV, num_M_sample, endpoint=True)
+            * units.eV
+        )
+    )
     M_grid = DimensionfulQuantityArray(value_array=M_array)
 
-    # num_Lambda_sample = int(
-    #     round(
-    #         samples_per_log10_Lambda_eV * (log10_Lambda_high_eV - log10_Lambda_low_eV)
-    #         + 0.5,
-    #         0,
-    #     )
-    # )
-    #
-    # Lambda_array = ray.get(
-    #     convert_to_Lambdas(
-    #         np.logspace(
-    #             log10_Lambda_low_eV,
-    #             log10_Lambda_high_eV,
-    #             num_Lambda_sample,
-    #             endpoint=True,
-    #         )
-    #         * units.eV
-    #     )
-    # )
-    Lambda_array = ray.get(convert_to_Lambdas([1e-3 * units.eV]))
+    num_Lambda_sample = int(
+        round(
+            samples_per_log10_Lambda_eV * (log10_Lambda_high_eV - log10_Lambda_low_eV)
+            + 0.5,
+            0,
+        )
+    )
+
+    Lambda_array = ray.get(
+        convert_to_Lambdas(
+            np.logspace(
+                log10_Lambda_low_eV,
+                log10_Lambda_high_eV,
+                num_Lambda_sample,
+                endpoint=True,
+            )
+            * units.eV
+        )
+    )
     Lambda_grid = DimensionfulQuantityArray(value_array=Lambda_array)
 
     M_lambda_grid = itertools.product(M_grid, Lambda_grid)
