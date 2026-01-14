@@ -171,7 +171,7 @@ def plot_ScalarModel(
         pi_ax.plot(
             pi_Einstein_x,
             pi_Einstein_y,
-            label=r"$\pi_{E}$ [$M_{\text{P}}$]",
+            label=r"$\pi_{\text{E}}$ [$M_{\text{P}}$]",
             color="b",
             linestyle="solid",
         )
