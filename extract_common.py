@@ -1,5 +1,11 @@
+from datetime import datetime
 from math import fabs
 from typing import Optional
+
+from ComputeTargets import ScalarModel
+from CosmologyConcepts import beta_value, M_value, Lambda_value
+from Quadrature.integration_metadata import IntegrationSolver
+from Units.base import UnitsLike
 
 TEXT_DISPLACEMENT_MULTIPLIER = 0.85
 
@@ -55,25 +61,49 @@ def set_linear_axes(ax):
     ax.xaxis.set_inverted(True)
 
 
-def add_plot_labels(ax, units, beta, M, Lambda, model_label):
+def add_plot_labels(ax, model: ScalarModel, model_label):
+    units: UnitsLike = model._units
+
+    solver: IntegrationSolver = model.solver
+    beta: beta_value = model.coupling._beta
+    M: M_value = model.potential._M
+    Lambda: Lambda_value = model.potential._Lambda
+
+    now = datetime.now()
+
     ax.text(
         LEFT_COLUMN,
         TOP_ROW,
-        f"$\\beta={beta:.5g}$",
+        f"$\\beta={beta.as_float:.5g}$",
         transform=ax.transAxes,
         fontsize="x-small",
     )
     ax.text(
         MIDDLE_COLUMN,
         TOP_ROW,
-        f"$M={M / units.eV:.5g}$ eV",
+        f"$M={M.as_float / units.eV:.5g}$ eV",
         transform=ax.transAxes,
         fontsize="x-small",
     )
     ax.text(
         RIGHT_COLUMN,
         TOP_ROW,
-        f"$\\Lambda={Lambda / units.eV:.5g}$ eV",
+        f"$\\Lambda={Lambda.as_float / units.eV:.5g}$ eV",
+        transform=ax.transAxes,
+        fontsize="x-small",
+    )
+
+    ax.text(
+        LEFT_COLUMN,
+        BOTTOM_ROW,
+        f"Solver: {solver.label}",
+        transform=ax.transAxes,
+        fontsize="x-small",
+    )
+    ax.text(
+        MIDDLE_COLUMN,
+        BOTTOM_ROW,
+        f"Created at: {now.strftime("%a %d %b %Y %H:%M:%S")}",
         transform=ax.transAxes,
         fontsize="x-small",
     )

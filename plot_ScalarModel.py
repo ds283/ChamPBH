@@ -2,7 +2,7 @@ import argparse
 import itertools
 import sys
 from datetime import datetime
-from math import exp
+from math import exp, log
 from pathlib import Path
 from typing import List
 
@@ -98,7 +98,6 @@ def plot_ScalarModel(
     model: ScalarModel,
 ):
     if not model.available:
-        print(f"-- found model {model.label}, but it is not available")
         return
 
     coupling: AbstractCoupling = model.coupling
@@ -115,19 +114,19 @@ def plot_ScalarModel(
     units = model._units
 
     abs_phi_Einstein_points = [
-        (value.z.z, safe_fabs(value.phi_Einstein / units.PlanckMass))
+        (1.0 + value.z.z, safe_fabs(value.phi_Einstein / units.PlanckMass))
         for value in values
     ]
     pi_Einstein_points = [
-        (value.z.z, value.pi_Einstein / units.PlanckMass) for value in values
+        (1.0 + value.z.z, value.pi_Einstein / units.PlanckMass) for value in values
     ]
     T_Jordan_points = [
-        (value.z.z, exp(value.log_T_Jordan) / units.GeV) for value in values
+        (1.0 + value.z.z, exp(value.log_T_Jordan) / units.GeV) for value in values
     ]
-    Sigma_points = [(value.z.z, value.Sigma) for value in values]
-    w_points = [(value.z.z, (1.0 - value.Sigma) / 3.0) for value in values]
-    gstar_rho_points = [(value.z.z, value.gstar_rho) for value in values]
-    gstar_s_points = [(value.z.z, value.gstar_s) for value in values]
+    Sigma_points = [(1.0 + value.z.z, value.Sigma) for value in values]
+    w_points = [(1.0 + value.z.z, (1.0 - value.Sigma) / 3.0) for value in values]
+    gstar_rho_points = [(1.0 + value.z.z, value.gstar_rho) for value in values]
+    gstar_s_points = [(1.0 + value.z.z, value.gstar_s) for value in values]
 
     abs_phi_Einstein_x, abs_phi_Einstein_y = zip(*abs_phi_Einstein_points)
     pi_Einstein_x, pi_Einstein_y = zip(*pi_Einstein_points)
@@ -162,7 +161,7 @@ def plot_ScalarModel(
         phi_ax.set_yscale("log")
         phi_ax.xaxis.set_inverted(True)
 
-        phi_ax.set_xlabel("redshift $z$")
+        phi_ax.set_xlabel("redshift $1+z$")
 
         phi_ax.legend(loc="best")
         phi_ax.grid(True)
@@ -190,7 +189,7 @@ def plot_ScalarModel(
         T_ax.legend(loc="best")
         T_ax.grid(True)
 
-        add_plot_labels(T_ax, model._units, beta, M, Lambda, model_label)
+        add_plot_labels(T_ax, model, model_label)
 
         fig_path = (
             base_path
@@ -220,6 +219,8 @@ def plot_ScalarModel(
         )
         Sigma_ax.set_xscale("log")
         Sigma_ax.xaxis.set_inverted(True)
+
+        Sigma_ax.set_xlabel("redshift $1+z$")
 
         Sigma_ax.legend(loc="best")
         Sigma_ax.grid(True)
@@ -251,7 +252,7 @@ def plot_ScalarModel(
         gstar_ax.legend(loc="best")
         gstar_ax.grid(True)
 
-        add_plot_labels(gstar_ax, model._units, beta, M, Lambda, model_label)
+        add_plot_labels(gstar_ax, model, model_label)
 
         fig_path = (
             base_path
@@ -264,22 +265,27 @@ def plot_ScalarModel(
         plt.close()
 
         data = []
+        log_GeV = log(units.GeV)
         for val in values:
             data.append(
                 {
                     "z": float(val.z),
                     "raw_N": val.raw_N,
-                    "phi_Einstein": val.phi_Einstein,
-                    "pi_Einstein": val.pi_Einstein,
-                    "H_Einstein": val.H_Einstein,
-                    "H_Jordan": val.H_Jordan,
-                    "log_rhorad_Einstein": val.log_rhorad_Einstein,
-                    "log_rhorad_Jordan": val.log_rhorad_Jordan,
+                    "phi_Einstein_Mp": val.phi_Einstein / units.PlanckMass,
+                    "pi_Einstein_Mp": val.pi_Einstein / units.PlanckMass,
+                    "H_Einstein_Mp": val.H_Einstein / units.PlanckMass,
+                    "H_Jordan_Mp": val.H_Jordan / units.PlanckMass,
+                    "log_rhorad_Einstein_GeV4": val.log_rhorad_Einstein - 4.0 * log_GeV,
+                    "log_rhorad_Jordan_GeV4": val.log_rhorad_Jordan - 4.0 * log_GeV,
                     "log_fm": val.log_fm,
-                    "log_T_Jordan": val.log_T_Jordan,
+                    "fm": exp(val.log_fm),
+                    "log_T_Jordan_GeV": val.log_T_Jordan - log_GeV,
+                    "T_Jordan_GeV": exp(val.log_T_Jordan) / units.GeV,
+                    "T_Jordan_Kelvin": exp(val.log_T_Jordan) / units.Kelvin,
                     "gstar_rho": val.gstar_rho,
                     "gstar_s": val.gstar_s,
                     "Sigma": val.Sigma,
+                    "w": (1.0 - val.Sigma) / 3.0,
                 }
             )
 
@@ -386,10 +392,9 @@ with ShardedPool(
         )
     )
 
-    # think Xav is using phi_init=5 Mp, picking a slightly different comparison to check stability of evolutions
     phi_init, pi_init = ray.get(
         [
-            pool.object_get("phi_value", value=7.0 * units.PlanckMass, units=units),
+            pool.object_get("phi_value", value=5.0 * units.PlanckMass, units=units),
             pool.object_get("pi_value", value=0.0, units=units),
         ]
     )
