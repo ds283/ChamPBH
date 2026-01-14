@@ -136,6 +136,16 @@ def plot_ScalarModel(
     gstar_rho_points = [(1.0 + value.z.z, value.gstar_rho) for value in values]
     gstar_s_points = [(1.0 + value.z.z, value.gstar_s) for value in values]
 
+    friction_term_points = [
+        (1.0 + value.z.z, value.friction_term / units.PlanckMass) for value in values
+    ]
+    reflecting_term_points = [
+        (1.0 + value.z.z, value.reflecting_term / units.PlanckMass) for value in values
+    ]
+    kicking_term_points = [
+        (1.0 + value.z.z, value.kicking_term / units.PlanckMass) for value in values
+    ]
+
     positive_abs_H_Einstein_points = [
         (1.0 + value.z.z, safe_fabs_positive(value.H_Einstein / units.GeV))
         for value in values
@@ -173,6 +183,10 @@ def plot_ScalarModel(
     negative_abs_H_Jordan_x, negative_abs_H_Jordan_y = zip(
         *negative_abs_H_Jordan_points
     )
+
+    friction_term_x, friction_term_y = zip(*friction_term_points)
+    reflecting_term_x, reflecting_term_y = zip(*reflecting_term_points)
+    kicking_term_x, kicking_term_y = zip(*kicking_term_points)
 
     sns.set_theme()
 
@@ -356,6 +370,64 @@ def plot_ScalarModel(
         fig_path = (
             base_path
             / f"plots/beta={beta:.5g}/M={M/units.eV:.5g}eV_Lambda={Lambda/units.eV:.5g}eV/Hubble.pdf"
+        )
+        fig_path.parents[0].mkdir(exist_ok=True, parents=True)
+        fig.savefig(fig_path)
+        fig.savefig(fig_path.with_suffix(".png"))
+
+        plt.close()
+
+        fig = plt.figure()
+        fig.set_size_inches(8.0, 10.0)
+
+        axs = fig.subplots(nrows=3, ncols=1, sharex=True, sharey=False)
+
+        f_ax = axs[0]
+        r_ax = axs[1]
+        k_ax = axs[2]
+
+        f_ax.plot(
+            friction_term_x,
+            friction_term_y,
+            label=r"friction term [$M_{\text{P}}$]",
+            color="r",
+            linestyle="solid",
+        )
+        f_ax.legend(loc="best")
+        f_ax.grid(True)
+
+        r_ax.plot(
+            reflecting_term_x,
+            reflecting_term_y,
+            label=r"reflecting term [$M_{\text{P}}$]",
+            color="g",
+            linestyle="solid",
+        )
+        r_ax.legend(loc="best")
+        r_ax.grid(True)
+
+        k_ax.plot(
+            kicking_term_x,
+            kicking_term_y,
+            label=r"kicking term [$M_{\text{P}}$]",
+            color="b",
+            linestyle="solid",
+        )
+        k_ax.legend(loc="best")
+        k_ax.grid(True)
+
+        k_ax.set_xscale("log")
+        k_ax.xaxis.set_inverted(True)
+        k_ax.set_xlabel("redshift $1+z$")
+
+        add_plot_labels(f_ax, model, model_label)
+        add_redshift_xaxis_labels(f_ax, model, text_labels=False)
+        add_redshift_xaxis_labels(r_ax, model, text_labels=False)
+        add_redshift_xaxis_labels(k_ax, model, temp_unit="GeV", text_labels=True)
+
+        fig_path = (
+            base_path
+            / f"plots/beta={beta:.5g}/M={M/units.eV:.5g}eV_Lambda={Lambda/units.eV:.5g}eV/ODE_terms.pdf"
         )
         fig_path.parents[0].mkdir(exist_ok=True, parents=True)
         fig.savefig(fig_path)
