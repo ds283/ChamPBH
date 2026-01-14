@@ -424,10 +424,10 @@ with ShardedPool(
         pool.object_get("temperature", value=T_init_GeV * units.GeV, units=units)
     )
 
-    # think Xav is using phi_init=5 Mp, picking a slightly different comparison to check stability of evolutions
+    # pick initial conditions that are equivalent to Xav's
     phi_init, pi_init = ray.get(
         [
-            pool.object_get("phi_value", value=7.0 * units.PlanckMass, units=units),
+            pool.object_get("phi_value", value=5.0 * units.PlanckMass, units=units),
             pool.object_get("pi_value", value=0.0, units=units),
         ]
     )
