@@ -43,7 +43,7 @@ class ExponentialPotential(AbstractPotential):
 
     @property
     def bounce_region_level2_boundary(self) -> float:
-        return 1.5 * self._M_float / 50.0
+        return 1.5 * self._M_float / 30.0
 
     @property
     def bounce_region_level1_max_step(self) -> float:
