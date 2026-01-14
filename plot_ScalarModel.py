@@ -124,10 +124,18 @@ def plot_ScalarModel(
     T_Jordan_points = [
         (value.z.z, exp(value.log_T_Jordan) / units.GeV) for value in values
     ]
+    Sigma_points = [(value.z.z, value.Sigma) for value in values]
+    w_points = [(value.z.z, (1.0 - value.Sigma) / 3.0) for value in values]
+    gstar_rho_points = [(value.z.z, value.gstar_rho) for value in values]
+    gstar_s_points = [(value.z.z, value.gstar_s) for value in values]
 
     abs_phi_Einstein_x, abs_phi_Einstein_y = zip(*abs_phi_Einstein_points)
     pi_Einstein_x, pi_Einstein_y = zip(*pi_Einstein_points)
     T_Jordan_x, T_Jordan_y = zip(*T_Jordan_points)
+    Sigma_x, Sigma_y = zip(*Sigma_points)
+    w_x, w_y = zip(*w_points)
+    gstar_rho_x, gstar_rho_y = zip(*gstar_rho_points)
+    gstar_s_x, gstar_s_y = zip(*gstar_s_points)
 
     sns.set_theme()
 
@@ -150,14 +158,14 @@ def plot_ScalarModel(
             color="r",
             linestyle="solid",
         )
-        phi_ax.set_xlabel("redshift $z$")
-        phi_ax.set_ylabel("")
-
         phi_ax.set_xscale("log")
         phi_ax.set_yscale("log")
+        phi_ax.xaxis.set_inverted(True)
+
+        phi_ax.set_xlabel("redshift $z$")
+
         phi_ax.legend(loc="best")
         phi_ax.grid(True)
-        phi_ax.xaxis.set_inverted(True)
 
         set_loglog_axes(phi_ax)
 
@@ -186,11 +194,74 @@ def plot_ScalarModel(
 
         fig_path = (
             base_path
-            / f"plots/beta={beta:.5g}/M={M:.5g}eV_Lambda={Lambda:.5g}eV/fields.pdf"
+            / f"plots/beta={beta:.5g}/M={M/units.eV:.5g}eV_Lambda={Lambda/units.eV:.5g}eV/fields.pdf"
         )
         fig_path.parents[0].mkdir(exist_ok=True, parents=True)
         fig.savefig(fig_path)
         fig.savefig(fig_path.with_suffix(".png"))
+
+        plt.close()
+
+        fig = plt.figure()
+        fig.set_size_inches(8.0, 8.0)
+
+        axs = fig.subplots(nrows=3, ncols=1, sharex=True, sharey=False)
+
+        gstar_ax = axs[0]
+        w_ax = axs[1]
+        Sigma_ax = axs[2]
+
+        Sigma_ax.plot(
+            Sigma_x,
+            Sigma_y,
+            label=r"$\Sigma$",
+            color="r",
+            linestyle="solid",
+        )
+        Sigma_ax.set_xscale("log")
+        Sigma_ax.xaxis.set_inverted(True)
+
+        Sigma_ax.legend(loc="best")
+        Sigma_ax.grid(True)
+
+        w_ax.plot(
+            w_x,
+            w_y,
+            label=r"$w = (1-\Sigma)/3$",
+            color="b",
+            linestyle="solid",
+        )
+        w_ax.legend(loc="best")
+        w_ax.grid(True)
+
+        gstar_ax.plot(
+            gstar_rho_x,
+            gstar_rho_y,
+            label=r"$g_{*\rho}$",
+            color="g",
+            linestyle="solid",
+        )
+        gstar_ax.plot(
+            gstar_s_x,
+            gstar_s_y,
+            label=r"$g_{*s}$",
+            color="m",
+            linestyle="solid",
+        )
+        gstar_ax.legend(loc="best")
+        gstar_ax.grid(True)
+
+        add_plot_labels(gstar_ax, model._units, beta, M, Lambda, model_label)
+
+        fig_path = (
+            base_path
+            / f"plots/beta={beta:.5g}/M={M/units.eV:.5g}eV_Lambda={Lambda/units.eV:.5g}eV/thermo.pdf"
+        )
+        fig_path.parents[0].mkdir(exist_ok=True, parents=True)
+        fig.savefig(fig_path)
+        fig.savefig(fig_path.with_suffix(".png"))
+
+        plt.close()
 
         data = []
         for val in values:
@@ -217,7 +288,7 @@ def plot_ScalarModel(
 
         csv_path = (
             base_path
-            / f"csv/beta={beta:.5g}/M={M:.5g}eV_Lambda={Lambda:.5g}eV/fields.csv"
+            / f"csv/beta={beta:.5g}/M={M/units.eV:.5g}eV_Lambda={Lambda/units.eV:.5g}eV/fields.csv"
         )
         csv_path.parents[0].mkdir(exist_ok=True, parents=True)
 
