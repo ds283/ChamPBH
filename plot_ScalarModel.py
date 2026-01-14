@@ -214,8 +214,6 @@ def plot_ScalarModel(
         phi_ax.xaxis.set_inverted(True)
 
         phi_ax.set_xlabel("redshift $1+z$")
-
-        phi_ax.legend(loc="best")
         phi_ax.grid(True)
 
         set_loglog_axes(phi_ax)
@@ -227,7 +225,6 @@ def plot_ScalarModel(
             color="b",
             linestyle="solid",
         )
-        pi_ax.legend(loc="best")
         pi_ax.grid(True)
 
         T_ax.plot(
@@ -238,14 +235,25 @@ def plot_ScalarModel(
             linestyle="solid",
         )
         T_ax.set_yscale("log")
-        T_ax.legend(loc="best")
         T_ax.grid(True)
 
         add_plot_labels(T_ax, model, model_label)
         add_temperature_yaxis_labels(T_ax, model, temp_unit="GeV")
 
-        add_redshift_xaxis_labels(phi_ax, model, temp_unit="GeV", text_labels=True)
+        h, l = add_redshift_xaxis_labels(
+            phi_ax, model, temp_unit="GeV", text_labels=True
+        )
         add_redshift_xaxis_labels(pi_ax, model, text_labels=False)
+
+        T_ax.legend(loc="best")
+        pi_ax.legend(loc="best")
+
+        handles, labels = phi_ax.get_legend_handles_labels()
+        handles.extend(h)
+        labels.extend(l)
+        print(handles)
+        print(labels)
+        phi_ax.legend(handles, labels, loc="best")
 
         fig_path = (
             base_path
@@ -277,8 +285,6 @@ def plot_ScalarModel(
         Sigma_ax.xaxis.set_inverted(True)
 
         Sigma_ax.set_xlabel("redshift $1+z$")
-
-        Sigma_ax.legend(loc="best")
         Sigma_ax.grid(True)
 
         w_ax.plot(
@@ -288,7 +294,6 @@ def plot_ScalarModel(
             color="b",
             linestyle="solid",
         )
-        w_ax.legend(loc="best")
         w_ax.grid(True)
 
         gstar_ax.plot(
@@ -305,14 +310,21 @@ def plot_ScalarModel(
             color="m",
             linestyle="solid",
         )
-        gstar_ax.legend(loc="best")
         gstar_ax.grid(True)
 
         add_plot_labels(gstar_ax, model, model_label)
 
-        add_redshift_xaxis_labels(gstar_ax, model, text_labels=False)
+        h, l = add_redshift_xaxis_labels(gstar_ax, model, text_labels=False)
         add_redshift_xaxis_labels(w_ax, model, text_labels=False)
         add_redshift_xaxis_labels(Sigma_ax, model, temp_unit="GeV", text_labels=True)
+
+        w_ax.legend(loc="best")
+        gstar_ax.legend(loc="best")
+
+        handles, labels = Sigma_ax.get_legend_handles_labels()
+        handles.extend(h)
+        labels.extend(l)
+        Sigma_ax.legend(handles, labels, loc="best")
 
         fig_path = (
             base_path
@@ -361,11 +373,15 @@ def plot_ScalarModel(
 
         H_ax.set_xlabel("redshift $1+z$")
 
-        H_ax.legend(loc="best")
         H_ax.grid(True)
 
         add_plot_labels(H_ax, model, model_label)
-        add_redshift_xaxis_labels(H_ax, model, temp_unit="GeV", text_labels=True)
+        h, l = add_redshift_xaxis_labels(H_ax, model, temp_unit="GeV", text_labels=True)
+
+        handles, labels = H_ax.get_legend_handles_labels()
+        handles.extend(h)
+        labels.extend(l)
+        H_ax.legend(handles, labels, loc="best")
 
         fig_path = (
             base_path
@@ -393,7 +409,6 @@ def plot_ScalarModel(
             color="r",
             linestyle="solid",
         )
-        f_ax.legend(loc="best")
         f_ax.grid(True)
 
         r_ax.plot(
@@ -403,7 +418,6 @@ def plot_ScalarModel(
             color="g",
             linestyle="solid",
         )
-        r_ax.legend(loc="best")
         r_ax.grid(True)
 
         k_ax.plot(
@@ -413,7 +427,6 @@ def plot_ScalarModel(
             color="b",
             linestyle="solid",
         )
-        k_ax.legend(loc="best")
         k_ax.grid(True)
 
         k_ax.set_xscale("log")
@@ -423,7 +436,15 @@ def plot_ScalarModel(
         add_plot_labels(f_ax, model, model_label)
         add_redshift_xaxis_labels(f_ax, model, text_labels=False)
         add_redshift_xaxis_labels(r_ax, model, text_labels=False)
-        add_redshift_xaxis_labels(k_ax, model, temp_unit="GeV", text_labels=True)
+        h, l = add_redshift_xaxis_labels(k_ax, model, temp_unit="GeV", text_labels=True)
+
+        f_ax.legend(loc="best")
+        r_ax.legend(loc="best")
+
+        handles, labels = k_ax.get_legend_handles_labels()
+        handles.extend(h)
+        labels.extend(l)
+        k_ax.legend(handles, labels, loc="best")
 
         fig_path = (
             base_path

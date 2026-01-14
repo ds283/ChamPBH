@@ -3,6 +3,7 @@ from datetime import datetime
 from math import fabs, exp
 from typing import Optional
 
+from matplotlib.patches import Patch
 from numpy import nan
 
 from ComputeTargets import ScalarModel
@@ -64,7 +65,8 @@ def safe_div(x: Optional[float], y: float) -> Optional[float]:
 def set_loglinear_axes(ax):
     ax.set_xscale("log")
     ax.set_yscale("linear")
-    ax.legend(loc="best")
+    handles, labels = ax.get_legend_handles_labels()
+    ax.legend(handles, labels, loc="best")
     ax.grid(True)
     ax.xaxis.set_inverted(True)
 
@@ -72,7 +74,8 @@ def set_loglinear_axes(ax):
 def set_loglog_axes(ax):
     ax.set_xscale("log")
     ax.set_yscale("log")
-    ax.legend(loc="best")
+    handles, labels = ax.get_legend_handles_labels()
+    ax.legend(handles, labels, loc="best")
     ax.grid(True)
     ax.xaxis.set_inverted(True)
 
@@ -80,7 +83,8 @@ def set_loglog_axes(ax):
 def set_linear_axes(ax):
     ax.set_xscale("linear")
     ax.set_yscale("linear")
-    ax.legend(loc="best")
+    handles, labels = ax.get_legend_handles_labels()
+    ax.legend(handles, labels, loc="best")
     ax.grid(True)
     ax.xaxis.set_inverted(True)
 
@@ -252,8 +256,6 @@ def add_temperature_yaxis_labels(ax, model: ScalarModel, temp_unit: str = "GeV")
 def add_redshift_xaxis_labels(
     ax, model: ScalarModel, temp_unit: str = "GeV", text_labels: bool = True
 ):
-    units: UnitsLike = model._units
-
     events = _find_T_event_times(model)
 
     xtrans = ax.get_xaxis_transform()
@@ -278,6 +280,8 @@ def add_redshift_xaxis_labels(
                             fontsize="x-small",
                         )
 
+    legend_entries = set()
+
     band_pairs = [("BBN start", "BBN end")]
     for pair in band_pairs:
         if pair[0] in events and pair[1] in events:
@@ -296,5 +300,17 @@ def add_redshift_xaxis_labels(
                         z1 = time1["z"]
                         ax.axvspan(z0, z1, color="g", alpha=0.15)
 
+                        legend_entries.add(pair)
+
                 else:
                     print(f"-- could not match events for band {pair[0]} and {pair[1]}")
+
+    h = []
+    l = []
+
+    for pair in legend_entries:
+        if pair == ("BBN start", "BBN end"):
+            h.append(Patch(facecolor=("g", 0.15), edgecolor="g"))
+            l.append("BBN region")
+
+    return h, l
