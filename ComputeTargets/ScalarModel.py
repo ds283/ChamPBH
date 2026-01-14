@@ -43,6 +43,23 @@ LOG_PISQ_OVER_30 = log(PISQ_OVER_30)
 EXPECTED_SOL_LENGTH = 5
 
 # using named tuples ensures that we never get the fields in the wrong order
+ODE_data = namedtuple(
+    "ODE_data",
+    [
+        "fm",
+        "T_Jordan",
+        "Sigma",
+        "log_V",
+        "d_logV_dphi",
+        "V_over_3H2Mp2",
+        "Vprime_over_3H2Mp2",
+        "log_Omega_prime",
+        "friction_term",
+        "reflecting_term",
+        "kicking_term",
+    ],
+)
+
 SolutionFragment = namedtuple(
     "SolutionFragment",
     [
@@ -67,6 +84,9 @@ SampleValues = namedtuple(
         "gstar_rho",
         "gstar_s",
         "Sigma",
+        "friction_term",
+        "reflecting_term",
+        "kicking_term",
     ],
 )
 
@@ -165,40 +185,112 @@ def compute_scalar_model(
     CONST_MP_SQ = units.PlanckMass * units.PlanckMass
     CONST_6_MP_SQ = 6.0 * CONST_MP_SQ
 
+    def RHS_impl(N: float, state: StateVector):
+        if any((isnan(x) or isinf(x)) for x in state):
+            print(
+                f"!! compute_scalar_model ({task_label}): input to ODE RHS has infinity or NaN values at N={N:.8g}"
+            )
+            print(f"     - state={state}")
+            raise RuntimeError(
+                f"compute_scalar_model ({task_label}): input to ODE RHS has infinity or NaN values"
+            )
+
+        phi_Einstein: float = state.phi_Einstein
+        pi_Einstein: float = state.pi_Einstein
+        log_rhorad_Einstein: float = state.log_rhorad_Einstein
+        log_fm: float = state.log_fm
+        log_T_Jordan: float = state.log_T_Jordan
+
+        try:
+            fm: float = exp(log_fm)
+        except OverflowError as e:
+            print(
+                f"!! compute_scalar_model ({task_label}): math overflow in exp(log_fm), log_fm = {log_fm:.5g} | N = {N:.5g}, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp, pi_Einstein = {pi_Einstein / units.PlanckMass:.5g} Mp"
+            )
+            raise e
+
+        try:
+            T_Jordan: float = exp(log_T_Jordan)
+        except OverflowError as e:
+            print(
+                f"!! compute_scalar_model ({task_label}): math overflow in exp(log_T_Jordan), log_T_Jordan = {log_T_Jordan:.5g} | N = {N:.5g}, f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp, pi_Einstein = {pi_Einstein / units.PlanckMass:.5g} Mp"
+            )
+            raise e
+
+        log_Omega_prime: float = coupling.log_Omega_prime(phi_Einstein)
+
+        G: float = 1.0 - pi_Einstein * pi_Einstein / CONST_6_MP_SQ
+        # G must be positive in order the H_Einstein^2 is also positive
+        if G < 0.0:
+            print(
+                f"!! compute_scalar_model ({task_label}): negative value of G = {G:.5g} detected at N={N:.8g} | f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp, pi_Einstein = {pi_Einstein / units.PlanckMass:.5g} Mp, log(rho_rad/GeV^4) = {log_rhorad_Einstein - 4.0*log(units.GeV):.5g}, T_Jordan = {T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K"
+            )
+            raise RuntimeError(
+                f"compute_scalar_model ({task_label}): negative value of G = {G:.5g} detected"
+            )
+
+        Sigma: float = 1.0 - 3.0 * cosmology.w(T_Jordan)
+
+        R: float
+        if fm > 10.0:
+            R = (1.0 + Sigma / fm) / (1.0 + 1.0 / fm)
+        else:
+            R = (Sigma + fm) / (1.0 + fm)
+        A1: float = 2.0 + R / 2.0
+        A2: float = 4.0 - R
+
+        log_V: float = potential.log_V(phi_Einstein)
+        d_logV_dphi: float = potential.d_logV_dphi(phi_Einstein)
+
+        log_rhorad_over_V: float = log_rhorad_Einstein - log_V
+        T: float
+        if log_rhorad_over_V > 2.0:
+            V_over_rhorad: float = exp(-log_rhorad_over_V)
+            T = V_over_rhorad / (V_over_rhorad + 1.0 + fm)
+        else:
+            rhorad_over_V: float = exp(log_rhorad_over_V)
+            T = 1.0 / (1.0 + rhorad_over_V * (1.0 + fm))
+
+        V_over_3H2Mp2: float = G * T
+        Vprime_over_3H2Mp2: float = G * d_logV_dphi * T
+
+        C: float = V_over_3H2Mp2 / 2.0
+        D: float = 3.0 * CONST_MP_SQ * Vprime_over_3H2Mp2
+        E: float = G - V_over_3H2Mp2
+        # must be positive, because it is proportional to rho_R/H^2
+        if E < 0.0:
+            print(
+                f"!! compute_scalar_model ({task_label}): negative value of E = {E:.5g} detected at N={N:.8g} | f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp, pi_Einstein = {pi_Einstein / units.PlanckMass:.5g} Mp, log(rho_rad/GeV^4) = {log_rhorad_Einstein - 4.0*log(units.GeV):.5g}, T_Jordan = {T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K, G = {G:.5g}, T = {T:.5g}"
+            )
+            raise RuntimeError(
+                f"compute_scalar_model ({task_label}): negative value of E = {E:.5g} detected"
+            )
+
+        return ODE_data(
+            fm=fm,
+            T_Jordan=T_Jordan,
+            Sigma=Sigma,
+            log_V=log_V,
+            d_logV_dphi=d_logV_dphi,
+            V_over_3H2Mp2=V_over_3H2Mp2,
+            Vprime_over_3H2Mp2=Vprime_over_3H2Mp2,
+            log_Omega_prime=log_Omega_prime,
+            friction_term=-pi_Einstein * (G * A1 + C * A2),
+            reflecting_term=-D,
+            kicking_term=-3.0 * CONST_MP_SQ * G * E * log_Omega_prime * R,
+        )
+
     def RHS(N, s, supervisor) -> StateVector:
         with RHS_timer(supervisor) as timer:
             state: StateVector = StateVector._make(s)
-
-            if any((isnan(x) or isinf(x)) for x in state):
-                print(
-                    f"!! compute_scalar_model ({task_label}): input to ODE RHS has infinity or NaN values at N={N:.8g}"
-                )
-                print(f"     - state={state}")
-                raise RuntimeError(
-                    f"compute_scalar_model ({task_label}): input to ODE RHS has infinity or NaN values"
-                )
+            data: ODE_data = RHS_impl(N, state)
 
             phi_Einstein: float = state.phi_Einstein
             pi_Einstein: float = state.pi_Einstein
             log_rhorad_Einstein: float = state.log_rhorad_Einstein
-            log_fm: float = state.log_fm
-            log_T_Jordan: float = state.log_T_Jordan
 
-            try:
-                fm: float = exp(log_fm)
-            except OverflowError as e:
-                print(
-                    f"!! compute_scalar_model ({task_label}): math overflow in exp(log_fm), log_fm = {log_fm:.5g} | N = {N:.5g}, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp, pi_Einstein = {pi_Einstein / units.PlanckMass:.5g} Mp"
-                )
-                raise e
-
-            try:
-                T_Jordan: float = exp(log_T_Jordan)
-            except OverflowError as e:
-                print(
-                    f"!! compute_scalar_model ({task_label}): math overflow in exp(log_T_Jordan), log_T_Jordan = {log_T_Jordan:.5g} | N = {N:.5g}, f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp, pi_Einstein = {pi_Einstein / units.PlanckMass:.5g} Mp"
-                )
-                raise e
+            fm: float = data.fm
+            T_Jordan: float = data.T_Jordan
 
             if supervisor.notify_available:
                 supervisor.message(
@@ -207,68 +299,18 @@ def compute_scalar_model(
                 )
                 supervisor.reset_notify_time(T_Jordan)
 
-            log_Omega_prime: float = coupling.log_Omega_prime(phi_Einstein)
-
-            G: float = 1.0 - pi_Einstein * pi_Einstein / CONST_6_MP_SQ
-            # G must be positive in order the H_Einstein^2 is also positive
-            if G < 0.0:
-                print(
-                    f"!! compute_scalar_model ({task_label}): negative value of G = {G:.5g} detected at N={N:.8g} | f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp, pi_Einstein = {pi_Einstein / units.PlanckMass:.5g} Mp, log(rho_rad/GeV^4) = {log_rhorad_Einstein - 4.0*log(units.GeV):.5g}, T_Jordan = {T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K"
-                )
-                raise RuntimeError(
-                    f"compute_scalar_model ({task_label}): negative value of G = {G:.5g} detected"
-                )
-
-            Sigma: float = 1.0 - 3.0 * cosmology.w(T_Jordan)
-
             d_phi_Einstein: float = pi_Einstein
-            d_log_rhorad_Einstein: float = Sigma - 4.0
-            d_log_fm: float = 1.0 - Sigma
-
-            R: float
-            if fm > 10.0:
-                R = (1.0 + Sigma / fm) / (1.0 + 1.0 / fm)
-            else:
-                R = (Sigma + fm) / (1.0 + fm)
-            A1: float = 2.0 + R / 2.0
-            A2: float = 4.0 - R
-
-            log_V: float = potential.log_V(phi_Einstein)
-            d_logV_dphi: float = potential.d_logV_dphi(phi_Einstein)
-
-            log_rhorad_over_V: float = log_rhorad_Einstein - log_V
-            T: float
-            if log_rhorad_over_V > 2.0:
-                V_over_rhorad: float = exp(-log_rhorad_over_V)
-                T = V_over_rhorad / (V_over_rhorad + 1.0 + fm)
-            else:
-                rhorad_over_V: float = exp(log_rhorad_over_V)
-                T = 1.0 / (1.0 + rhorad_over_V * (1.0 + fm))
-
-            V_over_3H2Mp2: float = G * T
-            Vprime_over_3H2Mp2: float = G * d_logV_dphi * T
-
-            C: float = V_over_3H2Mp2 / 2.0
-            D: float = 3.0 * CONST_MP_SQ * Vprime_over_3H2Mp2
-            E: float = G - V_over_3H2Mp2
-            # must be positive, because it is proportional to rho_R/H^2
-            if E < 0.0:
-                print(
-                    f"!! compute_scalar_model ({task_label}): negative value of E = {E:.5g} detected at N={N:.8g} | f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp, pi_Einstein = {pi_Einstein / units.PlanckMass:.5g} Mp, log(rho_rad/GeV^4) = {log_rhorad_Einstein - 4.0*log(units.GeV):.5g}, T_Jordan = {T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K, G = {G:.5g}, T = {T:.5g}"
-                )
-                raise RuntimeError(
-                    f"compute_scalar_model ({task_label}): negative value of E = {E:.5g} detected"
-                )
-
             d_pi_Einstein: float = (
-                -pi_Einstein * (G * A1 + C * A2)
-                - D
-                - 3.0 * CONST_MP_SQ * G * E * log_Omega_prime * R
+                data.friction_term + data.reflecting_term + data.kicking_term
             )
+
+            d_log_rhorad_Einstein: float = data.Sigma - 4.0
+            d_log_fm: float = 1.0 - data.Sigma
 
             G_s: float = cosmology.G_s(T_Jordan)
             dG_s_dT: float = cosmology.dG_s_dT(T_Jordan)
-            d_log_T_Jordan: float = -(1.0 + log_Omega_prime * pi_Einstein) / (
+
+            d_log_T_Jordan: float = -(1.0 + data.log_Omega_prime * pi_Einstein) / (
                 1.0 + (T_Jordan / G_s) * dG_s_dT / 3.0
             )
 
@@ -281,6 +323,17 @@ def compute_scalar_model(
             )
 
             if any((isnan(x) or isinf(x)) for x in return_state):
+                log_fm: float = state.log_fm
+                log_T_Jordan: float = state.log_T_Jordan
+
+                Sigma: float = data.Sigma
+
+                log_V: float = data.log_V
+                d_logV_dphi: float = data.d_logV_dphi
+
+                V_over_3H2Mp2: float = data.V_over_3H2Mp2
+                Vprime_over_3H2Mp2: float = data.Vprime_over_3H2Mp2
+
                 print(
                     f"!! compute_scalar_model ({task_label}): output from ODE RHS has infinity or NaN values at N={N:.8g}"
                 )
@@ -296,9 +349,9 @@ def compute_scalar_model(
                 print(
                     f"     - cosmology: V/3H2Mp2={V_over_3H2Mp2:.5g}, V'/3H2Mp2={Vprime_over_3H2Mp2:.5g}, Sigma={Sigma:.5g}"
                 )
-                print(
-                    f"     - intermediates: G={G:.5g}, T={T:.5g}, A1={A1:.5g}, A2={A2:.5g}, R={R:.5g}, C={C:.5g}, D={D:.5g}, E={E:.5g}"
-                )
+                # print(
+                #     f"     - intermediates: G={G:.5g}, T={T:.5g}, A1={A1:.5g}, A2={A2:.5g}, R={R:.5g}, C={C:.5g}, D={D:.5g}, E={E:.5g}"
+                # )
                 print(
                     f"     - derivatives: d_phi_E={d_phi_Einstein:.5g}, d_pi_E={d_pi_Einstein:.5g}, d_log_rhorad_E={d_log_rhorad_Einstein:.5g}, d_log_fm={d_log_fm:.5g}, d_log_T_J={d_log_T_Jordan:.5g}"
                 )
@@ -626,39 +679,27 @@ def compute_scalar_model(
             )
 
         state: StateVector = StateVector._make(current_fragment.sol(N_forward))
+        data: ODE_data = RHS_impl(N_forward, state)
 
-        Omega: float = coupling.Omega(state.phi_Einstein)
+        T_Jordan: float = data.T_Jordan
+
+        log_V_over_3H2Mp2 = log(data.V_over_3H2Mp2)
+        log_3H2Mp2 = -1.0 * (log_V_over_3H2Mp2 - data.log_V)
+        H2Mp2_Einstein = exp(log_3H2Mp2) / 3.0
+        H2_Einstein: float = H2Mp2_Einstein / CONST_MP_SQ
+
         log_Omega: float = coupling.log_Omega(state.phi_Einstein)
-        log_Omega_prime: float = coupling.log_Omega_prime(state.phi_Einstein)
         offset: float = 4.0 * log_Omega
         log_rhorad_Jordan: float = state.log_rhorad_Einstein - offset
 
-        fm: float = exp(state.log_fm)
-
-        G: float = 1.0 - state.pi_Einstein * state.pi_Einstein / CONST_6_MP_SQ
-
-        log_V: float = potential.log_V(state.phi_Einstein)
-        log_rhorad_over_V: float = state.log_rhorad_Einstein - log_V
-
-        U: float
-        if log_rhorad_over_V > 1.0:
-            V_over_rhorad: float = exp(-log_rhorad_over_V)
-            U = 1.0 / (V_over_rhorad + 1.0 + fm)
-        else:
-            rhorad_over_V: float = exp(log_rhorad_over_V)
-            U = rhorad_over_V / (1.0 + rhorad_over_V * (1.0 + fm))
-
-        rhorad_Einstein: float = exp(state.log_rhorad_Einstein)
-        H2_Mp2_Einstein: float = rhorad_Einstein / G / U / 3.0
-        H2_Einstein: float = H2_Mp2_Einstein / CONST_MP_SQ
-
         # H_Jordan can even be negative, so there is no use trying to store its logarithm
         H_Einstein: float = sqrt(H2_Einstein)
-        H_Jordan: float = (
-            H_Einstein * (1.0 + log_Omega_prime * state.pi_Einstein) / Omega
-        )
 
-        T_Jordan: float = exp(state.log_T_Jordan)
+        Omega: float = coupling.Omega(state.phi_Einstein)
+
+        H_Jordan: float = (
+            H_Einstein * (1.0 + data.log_Omega_prime * state.pi_Einstein) / Omega
+        )
 
         sample.append(
             SampleValues(
@@ -674,6 +715,9 @@ def compute_scalar_model(
                 gstar_rho=cosmology.G_rho(T_Jordan),
                 gstar_s=cosmology.G_s(T_Jordan),
                 Sigma=1.0 - 3.0 * cosmology.w(T_Jordan),
+                friction_term=data.friction_term,
+                reflecting_term=data.reflecting_term,
+                kicking_term=data.kicking_term,
             )
         )
 
@@ -1005,6 +1049,9 @@ class ScalarModel(DatastoreObject):
                     gstar_rho=sample[i].gstar_rho,
                     gstar_s=sample[i].gstar_s,
                     Sigma=sample[i].Sigma,
+                    friction_term=sample[i].friction_term,
+                    reflecting_term=sample[i].reflecting_term,
+                    kicking_term=sample[i].kicking_term,
                 )
             )
 
@@ -1030,6 +1077,9 @@ class ScalarModelValue(DatastoreObject):
         gstar_rho: float,
         gstar_s: float,
         Sigma: float,
+        friction_term: float,
+        reflecting_term: float,
+        kicking_term: float,
     ):
         """
         :param store_id: ID in the datastore
@@ -1066,6 +1116,10 @@ class ScalarModelValue(DatastoreObject):
         self._gstar_rho: float = gstar_rho
         self._gstar_s: float = gstar_s
         self._Sigma: float = Sigma
+
+        self._friction_term: float = friction_term
+        self._reflecting_term: float = reflecting_term
+        self._kicking_term: float = kicking_term
 
     @property
     def shard_key(self) -> ShardKeyType:
@@ -1123,6 +1177,18 @@ class ScalarModelValue(DatastoreObject):
     @property
     def Sigma(self) -> float:
         return self._Sigma
+
+    @property
+    def friction_term(self) -> float:
+        return self._friction_term
+
+    @property
+    def reflecting_term(self) -> float:
+        return self._reflecting_term
+
+    @property
+    def kicking_term(self) -> float:
+        return self._kicking_term
 
 
 class ScalarModelProxy:

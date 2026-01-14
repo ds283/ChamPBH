@@ -304,6 +304,9 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 value_table.c.gstar_rho,
                 value_table.c.gstar_s,
                 value_table.c.Sigma,
+                value_table.c.friction_term_Mp,
+                value_table.c.reflecting_term_Mp,
+                value_table.c.kicking_term_Mp,
             )
             .select_from(
                 value_table.join(
@@ -344,6 +347,9 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                     gstar_rho=row.gstar_rho,
                     gstar_s=row.gstar_s,
                     Sigma=row.Sigma,
+                    friction_term=row.friction_term_Mp * units.PlanckMass,
+                    reflecting_term=row.reflecting_term_Mp * units.PlanckMass,
+                    kicking_term=row.kicking_term_Mp * units.PlanckMass,
                 )
             )
         imported_z_sample = redshift_array(z_points)
@@ -473,6 +479,9 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                     "gstar_rho": value.gstar_rho,
                     "gstar_s": value.gstar_s,
                     "Sigma": value.Sigma,
+                    "friction_term_Mp": value.friction_term / units.PlanckMass,
+                    "reflecting_term_Mp": value.reflecting_term / units.PlanckMass,
+                    "kicking_term_Mp": value.kicking_term / units.PlanckMass,
                 },
             )
 
@@ -637,6 +646,9 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
                 sqla.Column("gstar_rho", sqla.Float(64), nullable=False),
                 sqla.Column("gstar_s", sqla.Float(64), nullable=False),
                 sqla.Column("Sigma", sqla.Float(64), nullable=False),
+                sqla.Column("friction_term_Mp", sqla.Float(64), nullable=False),
+                sqla.Column("reflecting_term_Mp", sqla.Float(64), nullable=False),
+                sqla.Column("kicking_term_Mp", sqla.Float(64), nullable=False),
             ],
         }
 
@@ -662,6 +674,10 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
         gstar_s: float = payload["gstar_s"]
         Sigma: float = payload["Sigma"]
 
+        friction_term: float = payload["friction_term"]
+        reflecting_term: float = payload["reflecting_term"]
+        kicking_term: float = payload["kicking_term"]
+
         # define quantities in explicit units
         log_Mp = log(units.PlanckMass)
         log_GeV = log(units.GeV)
@@ -675,6 +691,10 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
 
         H_Einstein_Mp: float = H_Einstein / units.PlanckMass
         H_Jordan_Mp: float = H_Jordan / units.PlanckMass
+
+        friction_term_Mp: float = friction_term / units.PlanckMass
+        reflecting_term_Mp: float = reflecting_term / units.PlanckMass
+        kicking_term_Mp: float = kicking_term / units.PlanckMass
 
         try:
             row_data = conn.execute(
@@ -692,6 +712,9 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
                     table.c.gstar_rho,
                     table.c.gstar_s,
                     table.c.Sigma,
+                    table.c.friction_term_Mp,
+                    table.c.reflecting_term_Mp,
+                    table.c.kicking_term_Mp,
                 ).filter(
                     table.c.model_serial == model_serial,
                     table.c.z_serial == z.store_id,
@@ -721,6 +744,9 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
                     "gstar_rho": gstar_rho,
                     "gstar_s": gstar_s,
                     "Sigma": Sigma,
+                    "friction_term_Mp": friction_term_Mp,
+                    "reflecting_term_Mp": reflecting_term_Mp,
+                    "kicking_term_Mp": kicking_term_Mp,
                 },
             )
         else:
@@ -743,6 +769,10 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
             gstar_rho = row_data.gstar_rho
             gstar_s = row_data.gstar_s
             Sigma = row_data.Sigma
+
+            friction_term = row_data.friction_term_Mp * units.PlanckMass
+            reflecting_term = row_data.reflecting_term_Mp * units.PlanckMass
+            kicking_term = row_data.kicking_term_Mp * units.PlanckMass
 
             # validate that recovered values match the supplied values, at least for phi and pi
             # (we could do this for all of the values but it is laborious)
@@ -777,6 +807,9 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
             gstar_rho=gstar_rho,
             gstar_s=gstar_s,
             Sigma=Sigma,
+            friction_term=friction_term,
+            reflecting_term=reflecting_term,
+            kicking_term=kicking_term,
         )
         obj._deserialized = True
         return obj
