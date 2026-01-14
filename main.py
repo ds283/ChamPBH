@@ -64,7 +64,7 @@ DEFAULT_SAMPLES_PER_LOG10_LAMBDA_EV = 1
 
 MIN_NOTIFY_INTERVAL = 5 * 60
 
-allowed_drop_actions = []
+allowed_drop_actions = ["scalar-model"]
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -256,7 +256,7 @@ def run_pipeline(
     ## STEP 1
     ## BAKE THE BACKGROUND COSMOLOGY INTO A BACKGROUND MODEL OBJECT
 
-    # sharding is done on M value, so put it on the right hand side
+    # sharding is done on beta value, so put it on the right hand side
     # this means that each batch will have as nearly an equal distribution of M values as we can,
     # which helps balance the load on each shard
     solver_work_items = itertools.product(
