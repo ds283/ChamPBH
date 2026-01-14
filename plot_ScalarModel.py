@@ -30,7 +30,13 @@ from config.sharding import (
     sharded_tables,
     read_table_config,
 )
-from extract_common import safe_fabs, set_loglog_axes, add_plot_labels
+from extract_common import (
+    safe_fabs,
+    set_loglog_axes,
+    add_plot_labels,
+    add_redshift_xaxis_labels,
+    add_temperature_yaxis_labels,
+)
 
 DEFAULT_TIMEOUT = 60
 
@@ -190,6 +196,10 @@ def plot_ScalarModel(
         T_ax.grid(True)
 
         add_plot_labels(T_ax, model, model_label)
+        add_temperature_yaxis_labels(T_ax, model, temp_unit="GeV")
+
+        add_redshift_xaxis_labels(phi_ax, model, temp_unit="GeV", text_labels=True)
+        add_redshift_xaxis_labels(pi_ax, model, text_labels=False)
 
         fig_path = (
             base_path
@@ -253,6 +263,10 @@ def plot_ScalarModel(
         gstar_ax.grid(True)
 
         add_plot_labels(gstar_ax, model, model_label)
+
+        add_redshift_xaxis_labels(gstar_ax, model, text_labels=False)
+        add_redshift_xaxis_labels(w_ax, model, text_labels=False)
+        add_redshift_xaxis_labels(Sigma_ax, model, temp_unit="GeV", text_labels=True)
 
         fig_path = (
             base_path
