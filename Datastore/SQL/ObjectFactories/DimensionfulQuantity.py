@@ -1,8 +1,11 @@
+from math import fabs
+
 import sqlalchemy as sqla
 
 from Datastore.SQL.ObjectFactories.base import SQLAFactoryBase
 from Units.base import UnitsLike
 from config.defaults import (
+    DEFAULT_DIMENSIONFUL_QUANTITY_PRECISION,
     DEFAULT_DIMENSIONFUL_QUANTITY_RELATIVE_PRECISION,
 )
 
@@ -40,17 +43,27 @@ class sqla_dimensionful_quantity_factory(SQLAFactoryBase):
             )
         value_in_units = value / unit
 
-        query = sqla.select(
-            table.c.serial,
-        ).filter(
-            sqla.func.abs((table.c[self.value_col] - value_in_units) / value_in_units)
-            < DEFAULT_DIMENSIONFUL_QUANTITY_RELATIVE_PRECISION
-        )
+        if fabs(value_in_units) == 0:
+            query = sqla.select(
+                table.c.serial,
+            ).filter(
+                sqla.func.abs(table.c[self.value_col] - value_in_units)
+                < DEFAULT_DIMENSIONFUL_QUANTITY_PRECISION
+            )
+        else:
+            query = sqla.select(
+                table.c.serial,
+            ).filter(
+                sqla.func.abs(
+                    (table.c[self.value_col] - value_in_units) / value_in_units
+                )
+                < DEFAULT_DIMENSIONFUL_QUANTITY_RELATIVE_PRECISION
+            )
         row_data = conn.execute(query).one_or_none()
 
         # if this quantity is not already present, create a new id using the provided inserter
         if row_data is None:
-            insert_data = {self.value_col: value}
+            insert_data = {self.value_col: value_in_units}
             if "serial" in payload:
                 insert_data["serial"] = payload["serial"]
             store_id = inserter(conn, insert_data)
@@ -85,6 +98,8 @@ class sqla_dimensionful_quantity_factory(SQLAFactoryBase):
         rows = conn.execute(query.order_by(table.c[self.value_col]))
 
         return [
-            self.ObjectType(store_id=row.store_id, value=row[self.value_col] * unit)
+            self.ObjectType(
+                store_id=row.serial, value=row._mapping[self.value_col] * unit
+            )
             for row in rows
         ]

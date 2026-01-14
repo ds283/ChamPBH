@@ -1,7 +1,12 @@
+from math import fabs
+
 import sqlalchemy as sqla
 
 from Datastore.SQL.ObjectFactories.base import SQLAFactoryBase
-from config.defaults import DEFAULT_DIMENSIONLESS_QUANTITY_RELATIVE_PRECISION
+from config.defaults import (
+    DEFAULT_DIMENSIONLESS_QUANTITY_PRECISION,
+    DEFAULT_DIMENSIONLESS_QUANTITY_RELATIVE_PRECISION,
+)
 
 
 class sqla_dimensionless_quantity_factory(SQLAFactoryBase):
@@ -20,12 +25,20 @@ class sqla_dimensionless_quantity_factory(SQLAFactoryBase):
     def build(self, payload, conn, table, inserter, tables, inserters):
         value = payload["value"]
 
-        query = sqla.select(
-            table.c.serial,
-        ).filter(
-            sqla.func.abs((table.c.value - value) / value)
-            < DEFAULT_DIMENSIONLESS_QUANTITY_RELATIVE_PRECISION
-        )
+        if fabs(value) == 0:
+            query = sqla.select(
+                table.c.serial,
+            ).filter(
+                sqla.func.abs(table.c.value - value)
+                < DEFAULT_DIMENSIONLESS_QUANTITY_PRECISION
+            )
+        else:
+            query = sqla.select(
+                table.c.serial,
+            ).filter(
+                sqla.func.abs((table.c.value - value) / value)
+                < DEFAULT_DIMENSIONLESS_QUANTITY_RELATIVE_PRECISION
+            )
         row_data = conn.execute(query).one_or_none()
 
         # if this quantity is not already present, create a new id using the provided inserter
@@ -61,4 +74,4 @@ class sqla_dimensionless_quantity_factory(SQLAFactoryBase):
 
         rows = conn.execute(query.order_by(table.c.value))
 
-        return [self.ObjectType(store_id=row.store_id, value=row.value) for row in rows]
+        return [self.ObjectType(store_id=row.serial, value=row.value) for row in rows]
