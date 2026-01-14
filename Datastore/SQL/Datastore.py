@@ -81,9 +81,13 @@ _FactoryMappingType = Mapping[str, SQLAFactoryBase]
 _TableMappingType = Mapping[str, sqla.Table]
 _InserterMappingType = Mapping[str, Callable]
 
-_drop_actions = {}
+_drop_actions = {
+    "scalar-model": ["ScalarModel", "ScalarModel_tags", "ScalarModelValue"],
+}
 # should drop tables in a defined order, so that we do not violate foreign key constrints
-_drop_order = []
+_drop_order = [
+    "scalar-model",
+]
 
 # read table configuration should be a Dict with the mapping
 # "method_name" -> {"class": class specifier, "tables_arg": bool}
