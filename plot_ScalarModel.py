@@ -32,12 +32,12 @@ from config.sharding import (
 )
 from extract_common import (
     safe_fabs,
-    set_loglog_axes,
     add_plot_labels,
     add_redshift_xaxis_labels,
     add_temperature_yaxis_labels,
     safe_fabs_positive,
     safe_fabs_negative,
+    get_x_coord,
 )
 
 DEFAULT_TIMEOUT = 60
@@ -101,12 +101,12 @@ if args.profile_db is not None:
 
 
 @ray.remote
-def plot_ScalarModel(
-    model_label: str,
-    model: ScalarModel,
-):
+def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redshift"):
     if not model.available:
         return
+
+    if x_coord not in ["redshift", "efolds"]:
+        raise RuntimeError(f"Invalid x_coord: {x_coord}")
 
     coupling: AbstractCoupling = model.coupling
     potential: AbstractPotential = model.potential
@@ -121,45 +121,56 @@ def plot_ScalarModel(
     values: List[ScalarModelValue] = model.values
     units = model._units
 
+    def _get_x_coord(value: ScalarModelValue) -> float:
+        return get_x_coord(value, x_coord)
+
+    def x_axis_label() -> str:
+        if x_coord == "efolds":
+            return r"e-folds $N$"
+
+        return r"redshift $1+z$"
+
     abs_phi_Einstein_points = [
-        (1.0 + value.z.z, safe_fabs(value.phi_Einstein / units.PlanckMass))
+        (_get_x_coord(value), safe_fabs(value.phi_Einstein / units.PlanckMass))
         for value in values
     ]
     pi_Einstein_points = [
-        (1.0 + value.z.z, value.pi_Einstein / units.PlanckMass) for value in values
+        (_get_x_coord(value), value.pi_Einstein / units.PlanckMass) for value in values
     ]
     T_Jordan_points = [
-        (1.0 + value.z.z, exp(value.log_T_Jordan) / units.GeV) for value in values
+        (_get_x_coord(value), exp(value.log_T_Jordan) / units.GeV) for value in values
     ]
-    Sigma_points = [(1.0 + value.z.z, value.Sigma) for value in values]
-    w_points = [(1.0 + value.z.z, (1.0 - value.Sigma) / 3.0) for value in values]
-    gstar_rho_points = [(1.0 + value.z.z, value.gstar_rho) for value in values]
-    gstar_s_points = [(1.0 + value.z.z, value.gstar_s) for value in values]
+    Sigma_points = [(_get_x_coord(value), value.Sigma) for value in values]
+    w_points = [(_get_x_coord(value), (1.0 - value.Sigma) / 3.0) for value in values]
+    gstar_rho_points = [(_get_x_coord(value), value.gstar_rho) for value in values]
+    gstar_s_points = [(_get_x_coord(value), value.gstar_s) for value in values]
 
     friction_term_points = [
-        (1.0 + value.z.z, value.friction_term / units.PlanckMass) for value in values
+        (_get_x_coord(value), value.friction_term / units.PlanckMass)
+        for value in values
     ]
     reflecting_term_points = [
-        (1.0 + value.z.z, value.reflecting_term / units.PlanckMass) for value in values
+        (_get_x_coord(value), value.reflecting_term / units.PlanckMass)
+        for value in values
     ]
     kicking_term_points = [
-        (1.0 + value.z.z, value.kicking_term / units.PlanckMass) for value in values
+        (_get_x_coord(value), value.kicking_term / units.PlanckMass) for value in values
     ]
 
     positive_abs_H_Einstein_points = [
-        (1.0 + value.z.z, safe_fabs_positive(value.H_Einstein / units.GeV))
+        (_get_x_coord(value), safe_fabs_positive(value.H_Einstein / units.GeV))
         for value in values
     ]
     negative_abs_H_Einstein_points = [
-        (1.0 + value.z.z, safe_fabs_negative(value.H_Einstein / units.GeV))
+        (_get_x_coord(value), safe_fabs_negative(value.H_Einstein / units.GeV))
         for value in values
     ]
     positive_abs_H_Jordan_points = [
-        (1.0 + value.z.z, safe_fabs_positive(value.H_Jordan / units.GeV))
+        (_get_x_coord(value), safe_fabs_positive(value.H_Jordan / units.GeV))
         for value in values
     ]
     negative_abs_H_Jordan_points = [
-        (1.0 + value.z.z, safe_fabs_negative(value.H_Jordan / units.GeV))
+        (_get_x_coord(value), safe_fabs_negative(value.H_Jordan / units.GeV))
         for value in values
     ]
 
@@ -209,14 +220,13 @@ def plot_ScalarModel(
             color="r",
             linestyle="solid",
         )
-        phi_ax.set_xscale("log")
+        if x_coord == "redshift":
+            phi_ax.set_xscale("log")
+            phi_ax.xaxis.set_inverted(True)
         phi_ax.set_yscale("log")
-        phi_ax.xaxis.set_inverted(True)
 
-        phi_ax.set_xlabel("redshift $1+z$")
+        phi_ax.set_xlabel(x_axis_label())
         phi_ax.grid(True)
-
-        set_loglog_axes(phi_ax)
 
         pi_ax.plot(
             pi_Einstein_x,
@@ -241,9 +251,9 @@ def plot_ScalarModel(
         add_temperature_yaxis_labels(T_ax, model, temp_unit="GeV")
 
         h, l = add_redshift_xaxis_labels(
-            phi_ax, model, temp_unit="GeV", text_labels=True
+            phi_ax, model, temp_unit="GeV", text_labels=True, x_coord=x_coord
         )
-        add_redshift_xaxis_labels(pi_ax, model, text_labels=False)
+        add_redshift_xaxis_labels(pi_ax, model, text_labels=False, x_coord=x_coord)
 
         T_ax.legend(loc="best")
         pi_ax.legend(loc="best")
@@ -251,8 +261,6 @@ def plot_ScalarModel(
         handles, labels = phi_ax.get_legend_handles_labels()
         handles.extend(h)
         labels.extend(l)
-        print(handles)
-        print(labels)
         phi_ax.legend(handles, labels, loc="best")
 
         fig_path = (
@@ -281,10 +289,11 @@ def plot_ScalarModel(
             color="r",
             linestyle="solid",
         )
-        Sigma_ax.set_xscale("log")
-        Sigma_ax.xaxis.set_inverted(True)
+        if x_coord == "redshift":
+            Sigma_ax.set_xscale("log")
+            Sigma_ax.xaxis.set_inverted(True)
 
-        Sigma_ax.set_xlabel("redshift $1+z$")
+        Sigma_ax.set_xlabel(x_axis_label())
         Sigma_ax.grid(True)
 
         w_ax.plot(
@@ -314,9 +323,13 @@ def plot_ScalarModel(
 
         add_plot_labels(gstar_ax, model, model_label)
 
-        h, l = add_redshift_xaxis_labels(gstar_ax, model, text_labels=False)
-        add_redshift_xaxis_labels(w_ax, model, text_labels=False)
-        add_redshift_xaxis_labels(Sigma_ax, model, temp_unit="GeV", text_labels=True)
+        h, l = add_redshift_xaxis_labels(
+            gstar_ax, model, text_labels=False, x_coord=x_coord
+        )
+        add_redshift_xaxis_labels(w_ax, model, text_labels=False, x_coord=x_coord)
+        add_redshift_xaxis_labels(
+            Sigma_ax, model, temp_unit="GeV", text_labels=True, x_coord=x_coord
+        )
 
         w_ax.legend(loc="best")
         gstar_ax.legend(loc="best")
@@ -367,16 +380,19 @@ def plot_ScalarModel(
             linestyle="dashed",
         )
 
-        H_ax.set_xscale("log")
+        if x_coord == "redshift":
+            H_ax.set_xscale("log")
+            H_ax.xaxis.set_inverted(True)
         H_ax.set_yscale("log")
-        H_ax.xaxis.set_inverted(True)
 
-        H_ax.set_xlabel("redshift $1+z$")
+        H_ax.set_xlabel(x_axis_label())
 
         H_ax.grid(True)
 
         add_plot_labels(H_ax, model, model_label)
-        h, l = add_redshift_xaxis_labels(H_ax, model, temp_unit="GeV", text_labels=True)
+        h, l = add_redshift_xaxis_labels(
+            H_ax, model, temp_unit="GeV", text_labels=True, x_coord=x_coord
+        )
 
         handles, labels = H_ax.get_legend_handles_labels()
         handles.extend(h)
@@ -429,14 +445,17 @@ def plot_ScalarModel(
         )
         k_ax.grid(True)
 
-        k_ax.set_xscale("log")
-        k_ax.xaxis.set_inverted(True)
-        k_ax.set_xlabel("redshift $1+z$")
+        if x_coord == "redshift":
+            k_ax.set_xscale("log")
+            k_ax.xaxis.set_inverted(True)
+        k_ax.set_xlabel(x_axis_label())
 
         add_plot_labels(f_ax, model, model_label)
-        add_redshift_xaxis_labels(f_ax, model, text_labels=False)
-        add_redshift_xaxis_labels(r_ax, model, text_labels=False)
-        h, l = add_redshift_xaxis_labels(k_ax, model, temp_unit="GeV", text_labels=True)
+        add_redshift_xaxis_labels(f_ax, model, text_labels=False, x_coord=x_coord)
+        add_redshift_xaxis_labels(r_ax, model, text_labels=False, x_coord=x_coord)
+        h, l = add_redshift_xaxis_labels(
+            k_ax, model, temp_unit="GeV", text_labels=True, x_coord=x_coord
+        )
 
         f_ax.legend(loc="best")
         r_ax.legend(loc="best")
@@ -532,7 +551,7 @@ def run_pipeline(
 
         ref = pool.object_get("ScalarModel", **query_payload)
 
-        return plot_ScalarModel.remote(model_label, ref)
+        return plot_ScalarModel.remote(model_label, ref, x_coord="efolds")
 
     work_grid = itertools.product(Potential_array, Coupling_array)
 

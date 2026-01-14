@@ -6,7 +6,7 @@ from typing import Optional
 from matplotlib.patches import Patch
 from numpy import nan
 
-from ComputeTargets import ScalarModel
+from ComputeTargets import ScalarModel, ScalarModelValue
 from CosmologyConcepts import beta_value, M_value, Lambda_value
 from CosmologyModels import BaseCosmology
 from Quadrature.integration_metadata import IntegrationSolver
@@ -233,6 +233,20 @@ def _find_T_event_times(model: ScalarModel):
     return events
 
 
+def get_x_coord(value: ScalarModelValue, x_coord: str = "redshift") -> float:
+    if x_coord == "efolds":
+        return value.raw_N
+
+    return 1.0 + value.z.z
+
+
+def get_xpos_attr(obj, x_coord: str = "redshift") -> float:
+    if x_coord == "efolds":
+        return obj["raw_N"]
+
+    return obj["z"]
+
+
 def add_temperature_yaxis_labels(ax, model: ScalarModel, temp_unit: str = "GeV"):
     units: UnitsLike = model._units
     cosmology: BaseCosmology = model._cosmology
@@ -254,7 +268,11 @@ def add_temperature_yaxis_labels(ax, model: ScalarModel, temp_unit: str = "GeV")
 
 
 def add_redshift_xaxis_labels(
-    ax, model: ScalarModel, temp_unit: str = "GeV", text_labels: bool = True
+    ax,
+    model: ScalarModel,
+    temp_unit: str = "GeV",
+    text_labels: bool = True,
+    x_coord="redshift",
 ):
     events = _find_T_event_times(model)
 
@@ -267,14 +285,15 @@ def add_redshift_xaxis_labels(
             if "times" in config:
                 event_times = config["times"]
                 for time in event_times:
-                    z = time["z"]
-                    raw_N = time["raw_N"]
-                    ax.axvline(z, color=config["color"], linestyle=config["linestyle"])
+                    xpos = get_xpos_attr(time, x_coord)
+                    ax.axvline(
+                        xpos, color=config["color"], linestyle=config["linestyle"]
+                    )
                     if text_labels:
                         ax.text(
-                            TEXT_DISPLACEMENT_MULTIPLIER * z,
+                            TEXT_DISPLACEMENT_MULTIPLIER * xpos,
                             config["ypos"],
-                            f"{config['label']}@{config["T_Jordan"]:.3g}{config["unit"]} $z$={z:.3g}",
+                            f"{config['label']}@{config["T_Jordan"]:.3g}{config["unit"]} $z$={xpos:.3g}",
                             color=config["color"],
                             transform=xtrans,
                             fontsize="x-small",
@@ -296,9 +315,9 @@ def add_redshift_xaxis_labels(
                     times = zip(event_times0, event_times1)
 
                     for time0, time1 in times:
-                        z0 = time0["z"]
-                        z1 = time1["z"]
-                        ax.axvspan(z0, z1, color="g", alpha=0.15)
+                        xpos0 = get_xpos_attr(time0, x_coord)
+                        xpos1 = get_xpos_attr(time1, x_coord)
+                        ax.axvspan(xpos0, xpos1, color="g", alpha=0.15)
 
                         legend_entries.add(pair)
 
