@@ -36,6 +36,8 @@ from extract_common import (
     add_plot_labels,
     add_redshift_xaxis_labels,
     add_temperature_yaxis_labels,
+    safe_fabs_positive,
+    safe_fabs_negative,
 )
 
 DEFAULT_TIMEOUT = 60
@@ -134,6 +136,23 @@ def plot_ScalarModel(
     gstar_rho_points = [(1.0 + value.z.z, value.gstar_rho) for value in values]
     gstar_s_points = [(1.0 + value.z.z, value.gstar_s) for value in values]
 
+    positive_abs_H_Einstein_points = [
+        (1.0 + value.z.z, safe_fabs_positive(value.H_Einstein / units.GeV))
+        for value in values
+    ]
+    negative_abs_H_Einstein_points = [
+        (1.0 + value.z.z, safe_fabs_negative(value.H_Einstein / units.GeV))
+        for value in values
+    ]
+    positive_abs_H_Jordan_points = [
+        (1.0 + value.z.z, safe_fabs_positive(value.H_Jordan / units.GeV))
+        for value in values
+    ]
+    negative_abs_H_Jordan_points = [
+        (1.0 + value.z.z, safe_fabs_negative(value.H_Jordan / units.GeV))
+        for value in values
+    ]
+
     abs_phi_Einstein_x, abs_phi_Einstein_y = zip(*abs_phi_Einstein_points)
     pi_Einstein_x, pi_Einstein_y = zip(*pi_Einstein_points)
     T_Jordan_x, T_Jordan_y = zip(*T_Jordan_points)
@@ -141,6 +160,19 @@ def plot_ScalarModel(
     w_x, w_y = zip(*w_points)
     gstar_rho_x, gstar_rho_y = zip(*gstar_rho_points)
     gstar_s_x, gstar_s_y = zip(*gstar_s_points)
+
+    positive_abs_H_Einstein_x, positive_abs_H_Einstein_y = zip(
+        *positive_abs_H_Einstein_points
+    )
+    negative_abs_H_Einstein_x, negative_abs_H_Einstein_y = zip(
+        *negative_abs_H_Einstein_points
+    )
+    positive_abs_H_Jordan_x, positive_abs_H_Jordan_y = zip(
+        *positive_abs_H_Jordan_points
+    )
+    negative_abs_H_Jordan_x, negative_abs_H_Jordan_y = zip(
+        *negative_abs_H_Jordan_points
+    )
 
     sns.set_theme()
 
@@ -278,6 +310,59 @@ def plot_ScalarModel(
 
         plt.close()
 
+        fig = plt.figure()
+        fig.set_size_inches(8.0, 5.0)
+        H_ax = fig.gca()
+
+        H_ax.plot(
+            positive_abs_H_Einstein_x,
+            positive_abs_H_Einstein_y,
+            label=r"$H_{\text{Einstein}}$ [GeV]",
+            color="b",
+            linestyle="solid",
+        )
+        H_ax.plot(
+            negative_abs_H_Einstein_x,
+            negative_abs_H_Einstein_y,
+            color="b",
+            linestyle="dashed",
+        )
+        H_ax.plot(
+            positive_abs_H_Jordan_x,
+            positive_abs_H_Jordan_y,
+            label=r"$H_{\text{Jordan}}$ [GeV]",
+            color="g",
+            linestyle="solid",
+        )
+        H_ax.plot(
+            negative_abs_H_Jordan_x,
+            negative_abs_H_Jordan_y,
+            color="g",
+            linestyle="dashed",
+        )
+
+        H_ax.set_xscale("log")
+        H_ax.set_yscale("log")
+        H_ax.xaxis.set_inverted(True)
+
+        H_ax.set_xlabel("redshift $1+z$")
+
+        H_ax.legend(loc="best")
+        H_ax.grid(True)
+
+        add_plot_labels(H_ax, model, model_label)
+        add_redshift_xaxis_labels(H_ax, model, temp_unit="GeV", text_labels=True)
+
+        fig_path = (
+            base_path
+            / f"plots/beta={beta:.5g}/M={M/units.eV:.5g}eV_Lambda={Lambda/units.eV:.5g}eV/Hubble.pdf"
+        )
+        fig_path.parents[0].mkdir(exist_ok=True, parents=True)
+        fig.savefig(fig_path)
+        fig.savefig(fig_path.with_suffix(".png"))
+
+        plt.close()
+
         data = []
         log_GeV = log(units.GeV)
         for val in values:
@@ -300,6 +385,9 @@ def plot_ScalarModel(
                     "gstar_s": val.gstar_s,
                     "Sigma": val.Sigma,
                     "w": (1.0 - val.Sigma) / 3.0,
+                    "friction_term_Mp": val.friction_term / units.PlanckMass,
+                    "reflecting_term_Mp": val.reflecting_term / units.PlanckMass,
+                    "kicking_term_Mp": val.kicking_term / units.PlanckMass,
                 }
             )
 

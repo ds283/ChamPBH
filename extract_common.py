@@ -3,6 +3,8 @@ from datetime import datetime
 from math import fabs, exp
 from typing import Optional
 
+from numpy import nan
+
 from ComputeTargets import ScalarModel
 from CosmologyConcepts import beta_value, M_value, Lambda_value
 from CosmologyModels import BaseCosmology
@@ -22,21 +24,41 @@ RIGHT_COLUMN = 0.85
 
 def safe_fabs(x: Optional[float]) -> Optional[float]:
     if x is None:
-        return None
+        return nan
+
+    return fabs(x)
+
+
+def safe_fabs_positive(x: Optional[float]) -> Optional[float]:
+    if x is None:
+        return nan
+
+    if x < 0.0:
+        return nan
+
+    return fabs(x)
+
+
+def safe_fabs_negative(x: Optional[float]) -> Optional[float]:
+    if x is None:
+        return nan
+
+    if x > 0.0:
+        return nan
 
     return fabs(x)
 
 
 def safe_div(x: Optional[float], y: float) -> Optional[float]:
     if x is None or y is None:
-        return None
+        return nan
 
     try:
         return x / y
     except ZeroDivisionError:
         pass
 
-    return None
+    return nan
 
 
 def set_loglinear_axes(ax):
