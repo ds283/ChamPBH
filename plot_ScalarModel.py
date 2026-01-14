@@ -1,0 +1,373 @@
+import argparse
+import itertools
+import sys
+from datetime import datetime
+from math import exp
+from pathlib import Path
+from typing import List
+
+import pandas as pd
+import ray
+import seaborn as sns
+from matplotlib import pyplot as plt
+
+from ComputeTargets import ScalarModel, ScalarModelValue
+from CosmologyConcepts import temperature, phi_value, pi_value
+from CosmologyConcepts.ConformalCouplings import AbstractCoupling
+from CosmologyConcepts.Potentials import AbstractPotential
+from CosmologyModels import BaseCosmology
+from Datastore.SQL.ProfileAgent import ProfileAgent
+from Datastore.SQL.ShardedPool import ShardedPool
+from MetadataConcepts import tolerance
+from RayTools.RayWorkPool import RayWorkPool
+from Units import Planck_units
+from config.defaults import DEFAULT_ABS_TOLERANCE, DEFAULT_REL_TOLERANCE
+from config.model_list import build_model_list
+from config.sharding import (
+    ShardKeyType,
+    get_shard_key_store_id,
+    replicated_tables,
+    sharded_tables,
+    read_table_config,
+)
+from extract_common import safe_fabs, set_loglog_axes, add_plot_labels
+
+DEFAULT_TIMEOUT = 60
+
+DEFAULT_T_INIT_GEV = 20000
+
+parser = argparse.ArgumentParser()
+parser.add_argument
+parser.add_argument(
+    "--database",
+    type=str,
+    default=None,
+    help="read/write work items using the specified database cache",
+)
+parser.add_argument(
+    "--db-timeout",
+    type=int,
+    default=DEFAULT_TIMEOUT,
+    help="specify connection timeout for database layer",
+)
+parser.add_argument(
+    "--profile-db",
+    type=str,
+    default=None,
+    help="write profiling and performance data to the specified database",
+)
+parser.add_argument(
+    "--ray-address", default="auto", type=str, help="specify address of Ray cluster"
+)
+parser.add_argument(
+    "--output",
+    default="ScalarModel-out",
+    type=str,
+    help="specify folder for output files",
+)
+args = parser.parse_args()
+
+if args.database is None:
+    parser.print_help()
+    sys.exit()
+
+# connect to ray cluster on supplied address; defaults to 'auto' meaning a locally running cluster
+ray.init(address=args.ray_address)
+
+VERSION_LABEL = "2026.1.1"
+
+# instantiate a Datastore actor: this runs on its own node, and acts as a broker between
+# ourselves and the database.
+# For performance reasons, we want all database activity to run on this node.
+# For one thing, this lets us use transactions efficiently.
+
+profile_agent = None
+if args.profile_db is not None:
+    label = f'{VERSION_LABEL}--plot_ScalarModel-primarydb-"{args.database}"-{datetime.now().replace(microsecond=0).isoformat()}'
+
+    profile_agent = ProfileAgent.options(name="ProfileAgent").remote(
+        db_name=args.profile_db,
+        timeout=args.db_timeout,
+        label=label,
+    )
+
+
+@ray.remote
+def plot_ScalarModel(
+    model_label: str,
+    model: ScalarModel,
+):
+    if not model.available:
+        print(f"-- found model {model.label}, but it is not available")
+        return
+
+    coupling: AbstractCoupling = model.coupling
+    potential: AbstractPotential = model.potential
+
+    beta = coupling._beta.as_float
+    M = potential._M.as_float
+    Lambda = potential._Lambda.as_float
+
+    base_path = Path(args.output).resolve()
+    base_path = base_path / f"{model_label}"
+
+    values: List[ScalarModelValue] = model.values
+    units = model._units
+
+    abs_phi_Einstein_points = [
+        (value.z.z, safe_fabs(value.phi_Einstein / units.PlanckMass))
+        for value in values
+    ]
+    pi_Einstein_points = [
+        (value.z.z, value.pi_Einstein / units.PlanckMass) for value in values
+    ]
+    T_Jordan_points = [
+        (value.z.z, exp(value.log_T_Jordan) / units.GeV) for value in values
+    ]
+
+    abs_phi_Einstein_x, abs_phi_Einstein_y = zip(*abs_phi_Einstein_points)
+    pi_Einstein_x, pi_Einstein_y = zip(*pi_Einstein_points)
+    T_Jordan_x, T_Jordan_y = zip(*T_Jordan_points)
+
+    sns.set_theme()
+
+    if len(abs_phi_Einstein_x) > 0 and any(
+        y is not None and y > 0 for y in abs_phi_Einstein_y
+    ):
+        fig = plt.figure()
+        fig.set_size_inches(8.0, 8.0)
+
+        axs = fig.subplots(nrows=3, ncols=1, sharex=True, sharey=False)
+
+        phi_ax = axs[2]
+        pi_ax = axs[1]
+        T_ax = axs[0]
+
+        phi_ax.plot(
+            abs_phi_Einstein_x,
+            abs_phi_Einstein_y,
+            label=r"$\phi_{\text{E}}$ [$M_{\text{P}}$]",
+            color="r",
+            linestyle="solid",
+        )
+        phi_ax.set_xlabel("redshift $z$")
+        phi_ax.set_ylabel("")
+
+        phi_ax.set_xscale("log")
+        phi_ax.set_yscale("log")
+        phi_ax.legend(loc="best")
+        phi_ax.grid(True)
+        phi_ax.xaxis.set_inverted(True)
+
+        set_loglog_axes(phi_ax)
+
+        pi_ax.plot(
+            pi_Einstein_x,
+            pi_Einstein_y,
+            label=r"$\pi_{E}$ [$M_{\text{P}}$]",
+            color="b",
+            linestyle="solid",
+        )
+        pi_ax.legend(loc="best")
+        pi_ax.grid(True)
+
+        T_ax.plot(
+            T_Jordan_x,
+            T_Jordan_y,
+            label=r"$T_{\text{Jordan}}$ [GeV]",
+            color="g",
+            linestyle="solid",
+        )
+        T_ax.set_yscale("log")
+        T_ax.legend(loc="best")
+        T_ax.grid(True)
+
+        add_plot_labels(T_ax, model._units, beta, M, Lambda, model_label)
+
+        fig_path = (
+            base_path
+            / f"plots/beta={beta:.5g}/M={M:.5g}eV_Lambda={Lambda:.5g}eV/fields.pdf"
+        )
+        fig_path.parents[0].mkdir(exist_ok=True, parents=True)
+        fig.savefig(fig_path)
+        fig.savefig(fig_path.with_suffix(".png"))
+
+        data = []
+        for val in values:
+            data.append(
+                {
+                    "z": float(val.z),
+                    "raw_N": val.raw_N,
+                    "phi_Einstein": val.phi_Einstein,
+                    "pi_Einstein": val.pi_Einstein,
+                    "H_Einstein": val.H_Einstein,
+                    "H_Jordan": val.H_Jordan,
+                    "log_rhorad_Einstein": val.log_rhorad_Einstein,
+                    "log_rhorad_Jordan": val.log_rhorad_Jordan,
+                    "log_fm": val.log_fm,
+                    "log_T_Jordan": val.log_T_Jordan,
+                    "gstar_rho": val.gstar_rho,
+                    "gstar_s": val.gstar_s,
+                    "Sigma": val.Sigma,
+                }
+            )
+
+        df = pd.DataFrame(data)
+        df.sort_values(by="z", inplace=True, ascending=False, ignore_index=True)
+
+        csv_path = (
+            base_path
+            / f"csv/beta={beta:.5g}/M={M:.5g}eV_Lambda={Lambda:.5g}eV/fields.csv"
+        )
+        csv_path.parents[0].mkdir(exist_ok=True, parents=True)
+
+        df.to_csv(csv_path, header=True, index=False)
+
+
+def run_pipeline(
+    model_data,
+    Potential_array: List[AbstractPotential],
+    Coupling_array: List[AbstractCoupling],
+    T_init: temperature,
+    T_stop: temperature,
+    phi_init: phi_value,
+    pi_init: pi_value,
+    atol: tolerance,
+    rtol: tolerance,
+):
+    model_label = model_data["label"]
+    model_cosmology = model_data["cosmology"]
+
+    print(f"\n>> RUNNING PIPELINE FOR MODEL {model_label}")
+
+    def build_plot_work(item):
+        potential, coupling = item
+
+        query_payload = {
+            "shard_key": coupling.shard_key,
+            "solver_labels": [],
+            "cosmology": model_cosmology,
+            "T_Jordan_init": T_init,
+            "T_Jordan_stop": T_stop,
+            "phi_Einstein_init": phi_init,  # currently using fixed initial value of phi_Einstein
+            "pi_Einstein_init": pi_init,  # currently all integrations begin with the field at rest
+            "z_grid": None,  # don't check which values of z we have sampled
+            "potential": potential,
+            "coupling": coupling,
+            "atol": atol,
+            "rtol": rtol,
+        }
+
+        ref = pool.object_get("ScalarModel", **query_payload)
+
+        return plot_ScalarModel.remote(model_label, ref)
+
+    work_grid = itertools.product(Potential_array, Coupling_array)
+
+    work_queue = RayWorkPool(
+        pool,
+        work_grid,
+        task_builder=build_plot_work,
+        compute_handler=None,
+        store_handler=None,
+        available_handler=None,
+        validation_handler=None,
+        post_handler=None,
+        label_builder=None,
+        create_batch_size=10,
+        process_batch_size=10,
+        notify_batch_size=50,
+        notify_time_interval=120,
+        title="GENERATING ScalarModel DATA PRODUCTS",
+        store_results=False,
+    )
+    work_queue.run()
+
+
+# establish a ShardedPool to orchestrate database access
+with ShardedPool(
+    version_label=VERSION_LABEL,
+    db_name=args.database,
+    ShardKeyType=ShardKeyType,
+    ShardKeyStoreIdGetter=get_shard_key_store_id,
+    replicated_tables=replicated_tables,
+    sharded_tables=sharded_tables,
+    timeout=args.db_timeout,
+    profile_agent=profile_agent,
+    job_name="plot_ScalarModel",
+    prune_unvalidated=False,
+    read_table_config=read_table_config,
+) as pool:
+    # build absolute and relative tolerances
+    atol, rtol = ray.get(
+        [
+            pool.object_get(tolerance, tol=DEFAULT_ABS_TOLERANCE),
+            pool.object_get(tolerance, tol=DEFAULT_REL_TOLERANCE),
+        ]
+    )
+
+    # get list of models we want to extract transfer functions for
+    units = Planck_units()
+
+    T_init = ray.get(
+        pool.object_get(
+            "temperature", value=DEFAULT_T_INIT_GEV * units.GeV, units=units
+        )
+    )
+
+    # think Xav is using phi_init=5 Mp, picking a slightly different comparison to check stability of evolutions
+    phi_init, pi_init = ray.get(
+        [
+            pool.object_get("phi_value", value=7.0 * units.PlanckMass, units=units),
+            pool.object_get("pi_value", value=0.0, units=units),
+        ]
+    )
+
+    def convert_to_potential(M_lambda_set):
+        return pool.object_get(
+            "ExponentialPotential",
+            payload_data=[
+                {"M": M, "Lambda": Lambda, "n": 1, "units": units}
+                for M, Lambda in M_lambda_set
+            ],
+        )
+
+    def convert_to_coupling(beta_set):
+        # ExponentialCoupling is a sharded table and needs a "shard_key" field
+        # TODO: find a better way to implement/handle
+        return pool.object_get(
+            "ExponentialCoupling",
+            payload_data=[
+                {"shard_key": beta, "beta": beta, "units": units} for beta in beta_set
+            ],
+        )
+
+    # read in the stored tables of beta, M, and Lambda
+    beta_table = ray.get(pool.read_table("beta_value"))
+    M_table = ray.get(pool.read_table("M_value", units))
+    Lambda_table = ray.get(pool.read_table("Lambda_value", units))
+
+    M_Lambda_grid = itertools.product(M_table, Lambda_table)
+    Potential_array = ray.get(convert_to_potential(M_Lambda_grid))
+
+    Coupling_array = ray.get(convert_to_coupling(beta_table))
+
+    model_list = build_model_list(pool, units)
+
+    for model_data in model_list:
+        cosmology: BaseCosmology = model_data["cosmology"]
+
+        T_CMB = cosmology._params.T_CMB_Kelvin * units.Kelvin
+        T_stop = ray.get(pool.object_get("temperature", value=T_CMB, units=units))
+
+        run_pipeline(
+            model_data,
+            Potential_array,
+            Coupling_array,
+            T_init,
+            T_stop,
+            phi_init,
+            pi_init,
+            atol,
+            rtol,
+        )
