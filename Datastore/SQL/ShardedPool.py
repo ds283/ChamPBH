@@ -185,20 +185,12 @@ class ShardedPool:
             ]
         )
 
-        # build read table methods
-        if read_table_config is not None:
-            for method_name, method_config in read_table_config.items():
-
-                class_specifier = method_config["class"]
-                if class_specifier not in self._replicated_tables:
-                    raise RuntimeError(
-                        'It is only possible to configure a read-table method for a replicated table (class id="{class_specifier}")'
-                    )
-
-                def wrapper(self, **kwargs):
-                    return self._generic_read_table(method_name, **kwargs)
-
-                setattr(self, method_name, wrapper)
+        self._read_table_config: Optional[ReadTableConfigType] = read_table_config
+        for class_name, config in read_table_config.items():
+            if class_name not in self._replicated_tables:
+                raise RuntimeError(
+                    f'It is only possible to configure a read-table method for a replicated table (class name="{class_name}")'
+                )
 
     def __enter__(self):
         return self
@@ -810,12 +802,23 @@ class ShardedPool:
 
             conn.commit()
 
-    def _generic_read_table(self, method_name: str, **kwargs):
+    def read_table(self, cls, *args, **kwargs):
         """
         Provide a generic implementation to read a replicated table using an underlying Datastore
         :param kwargs:
         :return:
         """
+        if self._read_table_config is None:
+            raise RuntimeError("No read_table configuration available")
+
+        if isinstance(cls, str):
+            class_name = cls
+        else:
+            class_name = cls.__name__
+
+        if class_name not in self._read_table_config:
+            raise RuntimeError(f"No read_table configuration for class '{class_name}'")
+
         # we only need to read the table from a single shard, so pick one at random
         shard_ids = list(self._shards.keys())
         i = random.randrange(len(shard_ids))
@@ -825,6 +828,5 @@ class ShardedPool:
         shard_key = shard_ids.pop()
 
         shard = self._shards[shard_key]
-        method = getattr(shard, method_name)
 
-        return method.remote(**kwargs)
+        return shard.read_table.remote(class_name, *args, **kwargs)

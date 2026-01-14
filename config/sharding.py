@@ -25,12 +25,12 @@ sharded_tables = {
 }
 
 read_table_config = {
-    "read_redshift_table": {"class": "redshift", "tables_arg": True},
-    "read_beta_table": {"class": "beta_value", "tables_arg": False},
-    "read_M_table": {"class": "M_value", "tables_arg": False},
-    "read_Lambda_table": {"class": "Lambda_value", "tables_arg": False},
-    "read_phi_table": {"class": "phi_value", "tables_arg": False},
-    "read_pi_table": {"class": "pi_value", "tables_arg": False},
+    "redshift": {"tables_arg": True},
+    "beta_value": {"tables_arg": False},
+    "M_value": {"tables_arg": False},
+    "Lambda_value": {"tables_arg": False},
+    "phi_value": {"tables_arg": False},
+    "pi_value": {"tables_arg": False},
 }
 
 
