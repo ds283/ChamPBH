@@ -266,6 +266,9 @@ def compute_scalar_model(
                 f"compute_scalar_model ({task_label}): negative value of E = {E:.5g} detected"
             )
 
+        friction_term = -pi_Einstein * (G * A1 + C * A2)
+        reflecting_term = -D
+        kicking_term = -3.0 * CONST_MP_SQ * G * E * log_Omega_prime * R
         return ODE_data(
             fm=fm,
             T_Jordan=T_Jordan,
@@ -275,9 +278,9 @@ def compute_scalar_model(
             V_over_3H2Mp2=V_over_3H2Mp2,
             Vprime_over_3H2Mp2=Vprime_over_3H2Mp2,
             log_Omega_prime=log_Omega_prime,
-            friction_term=-pi_Einstein * (G * A1 + C * A2),
-            reflecting_term=-D,
-            kicking_term=-3.0 * CONST_MP_SQ * G * E * log_Omega_prime * R,
+            friction_term=friction_term,
+            reflecting_term=reflecting_term,
+            kicking_term=kicking_term,
         )
 
     def RHS(N, s, supervisor) -> StateVector:
