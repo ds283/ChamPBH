@@ -37,19 +37,19 @@ class InversePowerPotential(AbstractPotential):
 
     @property
     def bounce_region_level1_boundary(self) -> float:
-        return self._M_float
+        return self._M_float / 1e1
 
     @property
     def bounce_region_level2_boundary(self) -> float:
-        return self._M_float / 10.0
+        return self._M_float / 1e3
 
     @property
     def bounce_region_level1_max_step(self) -> float:
-        return self.bounce_region_level1_boundary / 1e4
+        return self.bounce_region_level1_boundary / 1e2
 
     @property
     def bounce_region_level2_max_step(self) -> float:
-        return self.bounce_region_level2_boundary / 1e6
+        return self.bounce_region_level2_boundary / 1e5
 
     @property
     def shard_key(self) -> M_value:
