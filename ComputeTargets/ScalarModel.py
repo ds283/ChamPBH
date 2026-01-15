@@ -347,7 +347,7 @@ def compute_scalar_model(
                     f"     - physical: log(rhorad_E/GeV^4)={log_rhorad_Einstein - 4.0*log(units.GeV):.5g}, fm={fm:.5g}, T_J={T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K"
                 )
                 print(
-                    f"     - potential: log(V/GeV^4)={log_V - 4.0*log(units.GeV):.5g}, V'/V={d_logV_dphi*units.GeV:.5g} GeV^(-1), log_Omega'={log_Omega_prime:.5g}"
+                    f"     - potential: log(V/GeV^4)={log_V - 4.0*log(units.GeV):.5g}, V'/V={d_logV_dphi*units.GeV:.5g} GeV^(-1), log_Omega'={data.log_Omega_prime:.5g}"
                 )
                 print(
                     f"     - cosmology: V/3H2Mp2={V_over_3H2Mp2:.5g}, V'/3H2Mp2={Vprime_over_3H2Mp2:.5g}, Sigma={Sigma:.5g}"
