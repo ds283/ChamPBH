@@ -382,11 +382,13 @@ def compute_scalar_model(
         -1.0
     )  # only trigger when going from positive to negative, i.e., when the temperature dips *below* T_Jordan_stop
 
+    hard_reflection_point: float = potential.hard_reflection_point
+
     # detect failures to reflect at the chameleon "brick wall" at the origin
     def reflection_failure_detector(N, s, supervisor) -> float:
         state: StateVector = StateVector._make(s)
 
-        return state.phi_Einstein
+        return state.phi_Einstein - hard_reflection_point
 
     reflection_failure_detector.terminal = True
     reflection_failure_detector.direction = (

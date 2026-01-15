@@ -1,5 +1,7 @@
 from math import log, fabs
 
+from numpy import inf
+
 from CosmologyConcepts import M_value, Lambda_value, FieldLike, GetFieldValue
 from CosmologyConcepts.Potentials.AbstractPotential import AbstractPotential
 from CosmologyConcepts.Potentials.model_ids import INVERSE_POWER_POTENTIAL
@@ -37,11 +39,11 @@ class InversePowerPotential(AbstractPotential):
 
     @property
     def bounce_region_level1_boundary(self) -> float:
-        return self._M_float / 1e1
+        return self._M_float / 1e2
 
     @property
     def bounce_region_level2_boundary(self) -> float:
-        return self._M_float / 1e3
+        return self._M_float / 1e4
 
     @property
     def bounce_region_level1_max_step(self) -> float:
@@ -49,11 +51,11 @@ class InversePowerPotential(AbstractPotential):
 
     @property
     def bounce_region_level2_max_step(self) -> float:
-        return self.bounce_region_level2_boundary / 1e5
+        return self.bounce_region_level2_boundary / 1e4
 
     @property
-    def shard_key(self) -> M_value:
-        return self._M
+    def hard_reflection_point(self) -> float:
+        return 0.0
 
     def log_V(self, phi: FieldLike) -> float:
         """
@@ -62,6 +64,10 @@ class InversePowerPotential(AbstractPotential):
         :return:
         """
         phi_float = GetFieldValue(phi)
+
+        if phi_float < 0.0:
+            return inf
+
         arg: float = pow(self._M_float / phi_float, self._n)
         try:
             return self._log_Lambda_4 + log(1.0 + arg)
@@ -83,6 +89,10 @@ class InversePowerPotential(AbstractPotential):
         :return:
         """
         phi_float = GetFieldValue(phi)
+
+        if phi_float < 0.0:
+            return inf
+
         arg: float = pow(self._M_float / phi_float, self._n)
         try:
             if fabs(arg) < 1.0:

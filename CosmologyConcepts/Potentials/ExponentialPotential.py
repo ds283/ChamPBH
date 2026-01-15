@@ -1,5 +1,7 @@
 from math import log
 
+from numpy import inf
+
 from CosmologyConcepts import M_value, Lambda_value, FieldLike, GetFieldValue
 from CosmologyConcepts.Potentials.AbstractPotential import AbstractPotential
 from CosmologyConcepts.Potentials.model_ids import (
@@ -53,6 +55,10 @@ class ExponentialPotential(AbstractPotential):
     def bounce_region_level2_max_step(self) -> float:
         return self.bounce_region_level2_boundary / 5e2
 
+    @property
+    def hard_reflection_point(self) -> float:
+        return 0.0
+
     def log_V(self, phi: FieldLike) -> float:
         """
         Evaluate the potential at a given value of phi
@@ -60,6 +66,10 @@ class ExponentialPotential(AbstractPotential):
         :return:
         """
         phi_float = GetFieldValue(phi)
+
+        if phi_float < 0.0:
+            return inf
+
         arg: float = pow(self._M_float / phi_float, self._n)
         try:
             return self._log_Lambda_4 + arg
@@ -81,6 +91,10 @@ class ExponentialPotential(AbstractPotential):
         :return:
         """
         phi_float = GetFieldValue(phi)
+
+        if phi_float < 0.0:
+            return inf
+
         arg: float = pow(self._M_float / phi_float, self._n)
         try:
             return -self._n * arg / phi
