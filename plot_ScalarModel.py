@@ -247,7 +247,7 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
         T_ax.set_yscale("log")
         T_ax.grid(True)
 
-        add_plot_labels(T_ax, model, model_label)
+        add_plot_labels(T_ax, model, model_label, shift=0.05)
         add_temperature_yaxis_labels(T_ax, model, temp_unit="GeV")
 
         h, l = add_redshift_xaxis_labels(
@@ -321,7 +321,7 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
         )
         gstar_ax.grid(True)
 
-        add_plot_labels(gstar_ax, model, model_label)
+        add_plot_labels(gstar_ax, model, model_label, shift=0.05)
 
         h, l = add_redshift_xaxis_labels(
             gstar_ax, model, text_labels=False, x_coord=x_coord
@@ -450,7 +450,7 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
             k_ax.xaxis.set_inverted(True)
         k_ax.set_xlabel(x_axis_label())
 
-        add_plot_labels(f_ax, model, model_label)
+        add_plot_labels(f_ax, model, model_label, shift=0.05)
         add_redshift_xaxis_labels(f_ax, model, text_labels=False, x_coord=x_coord)
         add_redshift_xaxis_labels(r_ax, model, text_labels=False, x_coord=x_coord)
         h, l = add_redshift_xaxis_labels(
