@@ -152,7 +152,9 @@ def compute_scalar_model(
     )
 
     # convert Jordan frame radiation density at T_J = T_Jordan_init to Einstein frame radiation density
-    log_rhorad_Einstein_init: float = log_rhorad_Jordan_init + 4.0 * coupling.log_Omega(phi_init_float)
+    log_rhorad_Einstein_init: float = log_rhorad_Jordan_init + 4.0 * coupling.log_Omega(
+        phi_init_float
+    )
 
     # estimate initial matter fraction at T_J = T_Jordan_init
     # f_m = rho_m
