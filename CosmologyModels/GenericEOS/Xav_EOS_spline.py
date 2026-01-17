@@ -46,7 +46,7 @@ class Xav_EOS_spline(SaikawaShirai_EOS_spline):
         T_in_GeV: float = GetTemperature(T) / self._units.GeV
 
         if T_in_GeV >= self._T_max:
-            return 1.0 / 3.9
+            return 1.0 / 3.0
         elif T_in_GeV <= self._T_min:
             return 1.0 / 3.0
 
