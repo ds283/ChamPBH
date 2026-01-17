@@ -1,7 +1,5 @@
 from math import log, fabs
 
-from numpy import inf
-
 from CosmologyConcepts import M_value, Lambda_value, FieldLike, GetFieldValue
 from CosmologyConcepts.Potentials.AbstractPotential import AbstractPotential
 from CosmologyConcepts.Potentials.model_ids import INVERSE_POWER_POTENTIAL
@@ -65,8 +63,8 @@ class InversePowerPotential(AbstractPotential):
         """
         phi_float = GetFieldValue(phi)
 
-        if phi_float < 0.0:
-            return inf
+        # if phi_float < 0.0:
+        #     return inf
 
         arg: float = pow(self._M_float / phi_float, self._n)
         try:
@@ -90,8 +88,8 @@ class InversePowerPotential(AbstractPotential):
         """
         phi_float = GetFieldValue(phi)
 
-        if phi_float < 0.0:
-            return inf
+        # if phi_float < 0.0:
+        #     return inf
 
         arg: float = pow(self._M_float / phi_float, self._n)
         try:
