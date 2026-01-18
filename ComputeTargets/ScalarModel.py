@@ -83,6 +83,8 @@ SampleValues = namedtuple(
         "log_T_Jordan",
         "gstar_rho",
         "gstar_s",
+        "dgstar_s_dT",
+        "dgstar_rho_dT",
         "Sigma",
         "friction_term",
         "reflecting_term",
@@ -710,6 +712,8 @@ def compute_scalar_model(
                 H_Jordan=H_Jordan,
                 gstar_rho=cosmology.G_rho(T_Jordan),
                 gstar_s=cosmology.G_s(T_Jordan),
+                dgstar_rho_dT=cosmology.dG_rho_dT(T_Jordan),
+                dgstar_s_dT=cosmology.dG_s_dT(T_Jordan),
                 Sigma=1.0 - 3.0 * cosmology.w(T_Jordan),
                 friction_term=data.friction_term,
                 reflecting_term=data.reflecting_term,
@@ -1044,6 +1048,8 @@ class ScalarModel(DatastoreObject):
                     H_Jordan=sample[i].H_Jordan,
                     gstar_rho=sample[i].gstar_rho,
                     gstar_s=sample[i].gstar_s,
+                    dgstar_rho_dT=sample[i].dgstar_rho_dT,
+                    dgstar_s_dT=sample[i].dgstar_s_dT,
                     Sigma=sample[i].Sigma,
                     friction_term=sample[i].friction_term,
                     reflecting_term=sample[i].reflecting_term,
@@ -1072,6 +1078,8 @@ class ScalarModelValue(DatastoreObject):
         H_Jordan: float,
         gstar_rho: float,
         gstar_s: float,
+        dgstar_rho_dT: float,
+        dgstar_s_dT: float,
         Sigma: float,
         friction_term: float,
         reflecting_term: float,
@@ -1091,11 +1099,13 @@ class ScalarModelValue(DatastoreObject):
         :param H_Jordan: Hubble parameter in the Jordan frame
         :param gstar_rho: effective number of degrees of freedom for energy density
         :param gstar_s: effective number of degrees of freedom for entropy density
+        :param dgstar_rho_dT: derivative of gstar_rho with respect to temperature
+        :param dgstar_s_dT: derivative of gstar_s with respect to temperature
         :param Sigma: equation of state parameter (1 - 3w)
         """
         DatastoreObject.__init__(self, store_id)
 
-        self._z: float = z
+        self._z: redshift = z
         self._raw_N: float = raw_N
 
         self._phi_Einstein: float = phi_Einstein
@@ -1111,6 +1121,9 @@ class ScalarModelValue(DatastoreObject):
 
         self._gstar_rho: float = gstar_rho
         self._gstar_s: float = gstar_s
+        self._dgstar_rho_dT: float = dgstar_rho_dT
+        self._dgstar_s_dT: float = dgstar_s_dT
+
         self._Sigma: float = Sigma
 
         self._friction_term: float = friction_term
@@ -1169,6 +1182,14 @@ class ScalarModelValue(DatastoreObject):
     @property
     def gstar_s(self) -> float:
         return self._gstar_s
+
+    @property
+    def dgstar_rho_dT(self) -> float:
+        return self._dgstar_rho_dT
+
+    @property
+    def dgstar_s_dT(self) -> float:
+        return self._dgstar_s_dT
 
     @property
     def Sigma(self) -> float:

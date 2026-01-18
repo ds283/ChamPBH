@@ -94,6 +94,9 @@ class LambdaCDM_GenericEOS(BaseCosmology):
     def dG_s_dT(self, T: TemperatureLike) -> float:
         return self._eos.dG_s_dT(T)
 
+    def dG_rho_dT(self, T: TemperatureLike) -> float:
+        return self._eos.dG_rho_dT(T)
+
     def w(self, T: TemperatureLike) -> float:
         return self._eos.w(T)
 
