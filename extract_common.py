@@ -7,7 +7,6 @@ from matplotlib.patches import Patch
 from numpy import nan
 
 from ComputeTargets import ScalarModel, ScalarModelValue
-from CosmologyConcepts import beta_value, M_value, Lambda_value
 from CosmologyModels import BaseCosmology
 from Quadrature.integration_metadata import IntegrationSolver
 from Units.base import UnitsLike
@@ -89,34 +88,21 @@ def set_linear_axes(ax):
     ax.xaxis.set_inverted(True)
 
 
-def add_plot_labels(ax, model: ScalarModel, model_label):
-    units: UnitsLike = model._units
-
+def add_plot_labels(ax, model: ScalarModel, model_label, shift: float = 0.0):
     solver: IntegrationSolver = model.solver
-    beta: beta_value = model.coupling._beta
-    M: M_value = model.potential._M
-    Lambda: Lambda_value = model.potential._Lambda
-
     now = datetime.now()
 
     ax.text(
         LEFT_COLUMN,
-        TOP_ROW,
-        f"$\\beta={beta.as_float:.5g}$",
+        TOP_ROW + 2 * shift,
+        f"Coupling: {model._coupling.name}",
         transform=ax.transAxes,
         fontsize="x-small",
     )
     ax.text(
-        MIDDLE_COLUMN,
-        TOP_ROW,
-        f"$M={M.as_float / units.eV:.5g}$ eV",
-        transform=ax.transAxes,
-        fontsize="x-small",
-    )
-    ax.text(
-        RIGHT_COLUMN,
-        TOP_ROW,
-        f"$\\Lambda={Lambda.as_float / units.eV:.5g}$ eV",
+        LEFT_COLUMN,
+        MIDDLE_ROW + shift,
+        f"Potential: {model._potential.name}",
         transform=ax.transAxes,
         fontsize="x-small",
     )
@@ -138,7 +124,7 @@ def add_plot_labels(ax, model: ScalarModel, model_label):
     ax.text(
         RIGHT_COLUMN,
         BOTTOM_ROW,
-        f"Model: {model_label}",
+        f"Cosmology: {model_label}",
         transform=ax.transAxes,
         fontsize="x-small",
     )

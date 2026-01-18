@@ -128,7 +128,14 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
                 num_new_events = len(events["new"])
 
                 if num_new_events > 0:
-                    formatted_event_times = [f"{N:.5g}" for N in events["new"]]
+                    if num_new_events <= 20:
+                        formatted_event_times = [f"{N:.5g}" for N in events["new"]]
+                    else:
+                        early_event_times = [f"{N:.5g}" for N in events["new"][:10]]
+                        late_event_times = [f"{N:.5g}" for N in events["new"][-10:]]
+                        formatted_event_times = (
+                            early_event_times + ["..."] + late_event_times
+                        )
                     print(
                         f"|    {num_events} {label} events, {num_new_events} since last update: N = [{', '.join(formatted_event_times)}]"
                     )

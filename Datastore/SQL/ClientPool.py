@@ -19,6 +19,7 @@ _default_serial_batch_size = {
     "ExponentialCoupling": 50,
     "InversePowerPotential": 50,
     "ExponentialPotential": 50,
+    "ReflectingPotential": 50,
     "LambdaCDM": 5,
     "QCD_Cosmology": 5,
     "IntegrationSolver": 6,

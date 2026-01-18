@@ -34,6 +34,9 @@ from Datastore.SQL.ObjectFactories.InversePowerPotential import (
     sqla_InversePowerPotential_factory,
 )
 from Datastore.SQL.ObjectFactories.QCD_Cosmology import sqla_QCDCosmology_factory
+from Datastore.SQL.ObjectFactories.ReflectingPotential import (
+    sqla_ReflectingPotential_factory,
+)
 from Datastore.SQL.ObjectFactories.ScalarModel import (
     sqla_ScalarModelFactory,
     sqla_ScalarModelTagAssociation_factory,
@@ -69,6 +72,7 @@ _factories = {
     "pi_value": sqla_dimensionful_quantity_factory(pi_value),
     "InversePowerPotential": sqla_InversePowerPotential_factory(),
     "ExponentialPotential": sqla_ExponentialPotential_factory(),
+    "ReflectingPotential": sqla_ReflectingPotential_factory(),
     "ExponentialCoupling": sqla_ExponentialCoupling_factory(),
     "QCD_Cosmology": sqla_QCDCosmology_factory(),
     "IntegrationSolver": sqla_IntegrationSolver_factory(),

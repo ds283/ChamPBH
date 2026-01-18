@@ -154,7 +154,9 @@ def compute_scalar_model(
     )
 
     # convert Jordan frame radiation density at T_J = T_Jordan_init to Einstein frame radiation density
-    log_rhorad_Einstein_init: float = log_rhorad_Jordan_init + 4.0 * coupling.log_Omega(phi_init_float)
+    log_rhorad_Einstein_init: float = log_rhorad_Jordan_init + 4.0 * coupling.log_Omega(
+        phi_init_float
+    )
 
     # estimate initial matter fraction at T_J = T_Jordan_init
     # f_m = rho_m
@@ -267,6 +269,9 @@ def compute_scalar_model(
                 f"compute_scalar_model ({task_label}): negative value of E = {E:.5g} detected"
             )
 
+        friction_term = -pi_Einstein * (G * A1 + C * A2)
+        reflecting_term = -D
+        kicking_term = -3.0 * CONST_MP_SQ * G * E * log_Omega_prime * R
         return ODE_data(
             fm=fm,
             T_Jordan=T_Jordan,
@@ -276,9 +281,9 @@ def compute_scalar_model(
             V_over_3H2Mp2=V_over_3H2Mp2,
             Vprime_over_3H2Mp2=Vprime_over_3H2Mp2,
             log_Omega_prime=log_Omega_prime,
-            friction_term=-pi_Einstein * (G * A1 + C * A2),
-            reflecting_term=-D,
-            kicking_term=-3.0 * CONST_MP_SQ * G * E * log_Omega_prime * R,
+            friction_term=friction_term,
+            reflecting_term=reflecting_term,
+            kicking_term=kicking_term,
         )
 
     def RHS(N, s, supervisor) -> StateVector:
@@ -345,7 +350,7 @@ def compute_scalar_model(
                     f"     - physical: log(rhorad_E/GeV^4)={log_rhorad_Einstein - 4.0*log(units.GeV):.5g}, fm={fm:.5g}, T_J={T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K"
                 )
                 print(
-                    f"     - potential: log(V/GeV^4)={log_V - 4.0*log(units.GeV):.5g}, V'/V={d_logV_dphi*units.GeV:.5g} GeV^(-1), log_Omega'={log_Omega_prime:.5g}"
+                    f"     - potential: log(V/GeV^4)={log_V - 4.0*log(units.GeV):.5g}, V'/V={d_logV_dphi*units.GeV:.5g} GeV^(-1), log_Omega'={data.log_Omega_prime:.5g}"
                 )
                 print(
                     f"     - cosmology: V/3H2Mp2={V_over_3H2Mp2:.5g}, V'/3H2Mp2={Vprime_over_3H2Mp2:.5g}, Sigma={Sigma:.5g}"
@@ -380,11 +385,13 @@ def compute_scalar_model(
         -1.0
     )  # only trigger when going from positive to negative, i.e., when the temperature dips *below* T_Jordan_stop
 
+    hard_reflection_point: float = potential.hard_reflection_point
+
     # detect failures to reflect at the chameleon "brick wall" at the origin
     def reflection_failure_detector(N, s, supervisor) -> float:
         state: StateVector = StateVector._make(s)
 
-        return state.phi_Einstein
+        return state.phi_Einstein - hard_reflection_point
 
     reflection_failure_detector.terminal = True
     reflection_failure_detector.direction = (

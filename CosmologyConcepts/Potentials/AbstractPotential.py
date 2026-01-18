@@ -38,6 +38,11 @@ class AbstractPotential(DatastoreObject, ABC):
     def bounce_region_level2_max_step(self) -> float:
         raise NotImplementedError
 
+    @property
+    @abstractmethod
+    def hard_reflection_point(self) -> float:
+        raise NotImplementedError
+
     @abstractmethod
     def log_V(self, phi: FieldLike) -> float:
         """

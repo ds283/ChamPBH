@@ -53,6 +53,10 @@ class ExponentialPotential(AbstractPotential):
     def bounce_region_level2_max_step(self) -> float:
         return self.bounce_region_level2_boundary / 5e2
 
+    @property
+    def hard_reflection_point(self) -> float:
+        return 0.0
+
     def log_V(self, phi: FieldLike) -> float:
         """
         Evaluate the potential at a given value of phi
@@ -60,12 +64,21 @@ class ExponentialPotential(AbstractPotential):
         :return:
         """
         phi_float = GetFieldValue(phi)
+
+        # if phi_float < 0.0:
+        #     return inf
+
         arg: float = pow(self._M_float / phi_float, self._n)
         try:
             return self._log_Lambda_4 + arg
         except OverflowError as e:
             print(
-                f"Overflow in ExponentialPotential potential V() at phi={phi_float / self._units.GeV:.5g} GeV, M={self._M_float / self._units.GeV:.5g} GeV [(M/phi)^n = {arg:.5g}]"
+                f"!! Overflow in ExponentialPotential log_V at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
+            )
+            raise e
+        except ValueError as e:
+            print(
+                f"!! ValueError in ExponentialPotential log_V at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
             )
             raise e
 
@@ -76,11 +89,20 @@ class ExponentialPotential(AbstractPotential):
         :return:
         """
         phi_float = GetFieldValue(phi)
+
+        # if phi_float < 0.0:
+        #     return inf
+
         arg: float = pow(self._M_float / phi_float, self._n)
         try:
             return -self._n * arg / phi
         except OverflowError as e:
             print(
-                f"Overflow in ExponentialPotential potential Vprime() at phi={phi_float / self._units.GeV:.5g} GeV, M={self._M_float / self._units.GeV:.5g} GeV [(M/phi)^n = {arg:.5g}]"
+                f"! Overflow in ExponentialPotential d_logV_dphi at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
+            )
+            raise e
+        except ValueError as e:
+            print(
+                f"!! ValueError in ExponentialPotential d_logV_dphi at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
             )
             raise e

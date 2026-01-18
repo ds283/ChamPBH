@@ -13,6 +13,7 @@ replicated_tables = [
     "pi_value",
     "ExponentialPotential",
     "InversePowerPotential",
+    "ReflectingPotential",
     "LambdaCDM",
     "QCD_Cosmology",
     "IntegrationSolver",

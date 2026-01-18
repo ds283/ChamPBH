@@ -37,23 +37,23 @@ class InversePowerPotential(AbstractPotential):
 
     @property
     def bounce_region_level1_boundary(self) -> float:
-        return 1.5 * self._M_float
+        return self._M_float / 1e2
 
     @property
     def bounce_region_level2_boundary(self) -> float:
-        return 1.5 * self._M_float / 50.0
+        return self._M_float / 1e4
 
     @property
     def bounce_region_level1_max_step(self) -> float:
-        return self.bounce_region_level1_boundary / 5e2
+        return self.bounce_region_level1_boundary / 1e2
 
     @property
     def bounce_region_level2_max_step(self) -> float:
-        return self.bounce_region_level2_boundary / 5e2
+        return self.bounce_region_level2_boundary / 1e4
 
     @property
-    def shard_key(self) -> M_value:
-        return self._M
+    def hard_reflection_point(self) -> float:
+        return 0.0
 
     def log_V(self, phi: FieldLike) -> float:
         """
@@ -62,12 +62,21 @@ class InversePowerPotential(AbstractPotential):
         :return:
         """
         phi_float = GetFieldValue(phi)
+
+        # if phi_float < 0.0:
+        #     return inf
+
         arg: float = pow(self._M_float / phi_float, self._n)
         try:
             return self._log_Lambda_4 + log(1.0 + arg)
         except OverflowError as e:
             print(
-                f"Overflow in InversePowerPotential potential V() at phi={phi_float / self._units.GeV:.5g} GeV, M={self._M_float / self._units.GeV:.5g} GeV [(M/phi)^n = {arg:.5g}]"
+                f"!! Overflow in InversePowerPotential log_V at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
+            )
+            raise e
+        except ValueError as e:
+            print(
+                f"!! ValueError in InversePowerPotential log_V at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
             )
             raise e
 
@@ -78,6 +87,10 @@ class InversePowerPotential(AbstractPotential):
         :return:
         """
         phi_float = GetFieldValue(phi)
+
+        # if phi_float < 0.0:
+        #     return inf
+
         arg: float = pow(self._M_float / phi_float, self._n)
         try:
             if fabs(arg) < 1.0:
@@ -87,6 +100,11 @@ class InversePowerPotential(AbstractPotential):
                 return -(self._n * arg / phi) / (1.0 + arg)
         except OverflowError as e:
             print(
-                f"Overflow in InversePowerPotential potential Vprime() at phi={phi_float / self._units.GeV:.5g} GeV, M={self._M_float / self._units.GeV:.5g} GeV [(M/phi)^n = {arg:.5g}]"
+                f"! Overflow in InversePowerPotential d_logV_dphi at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
+            )
+            raise e
+        except ValueError as e:
+            print(
+                f"!! ValueError in InversePowerPotential d_logV_dphi at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
             )
             raise e
