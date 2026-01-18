@@ -144,6 +144,8 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
     w_points = [(_get_x_coord(value), (1.0 - value.Sigma) / 3.0) for value in values]
     gstar_rho_points = [(_get_x_coord(value), value.gstar_rho) for value in values]
     gstar_s_points = [(_get_x_coord(value), value.gstar_s) for value in values]
+    dgstar_rho_points = [(_get_x_coord(value), value.dgstar_rho_dT * units.GeV) for value in values]
+    dgstar_s_points = [(_get_x_coord(value), value.dgstar_s_dT * units.GeV) for value in values]
 
     friction_term_points = [
         (_get_x_coord(value), value.friction_term / units.PlanckMass)
@@ -181,6 +183,8 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
     w_x, w_y = zip(*w_points)
     gstar_rho_x, gstar_rho_y = zip(*gstar_rho_points)
     gstar_s_x, gstar_s_y = zip(*gstar_s_points)
+    dgstar_rho_x, dgstar_rho_y = zip(*dgstar_rho_points)
+    dgstar_s_x, dgstar_s_y = zip(*dgstar_s_points)
 
     positive_abs_H_Einstein_x, positive_abs_H_Einstein_y = zip(
         *positive_abs_H_Einstein_points
@@ -205,7 +209,7 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
         y is not None and y > 0 for y in abs_phi_Einstein_y
     ):
         fig = plt.figure()
-        fig.set_size_inches(8.0, 8.0)
+        fig.set_size_inches(8.0, 10.0)
 
         axs = fig.subplots(nrows=3, ncols=1, sharex=True, sharey=False)
 
@@ -274,13 +278,14 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
         plt.close()
 
         fig = plt.figure()
-        fig.set_size_inches(8.0, 8.0)
+        fig.set_size_inches(8.0, 13.0)
 
-        axs = fig.subplots(nrows=3, ncols=1, sharex=True, sharey=False)
+        axs = fig.subplots(nrows=4, ncols=1, sharex=True, sharey=False)
 
         gstar_ax = axs[0]
-        w_ax = axs[1]
-        Sigma_ax = axs[2]
+        dgstar_ax = axs[1]
+        w_ax = axs[2]
+        Sigma_ax = axs[3]
 
         Sigma_ax.plot(
             Sigma_x,
@@ -321,11 +326,27 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
         )
         gstar_ax.grid(True)
 
+        dgstar_ax.plot(
+            dgstar_rho_x,
+            dgstar_rho_y,
+            label=r"$\mathrm{d} g_{*\rho}/\mathrm{d} T$ [GeV$^{-1}$]",
+            color="g",
+            linestyle="solid",
+        )
+        dgstar_ax.plot(
+            dgstar_s_x,
+            dgstar_s_y,
+            label=r"$\mathrm{d} g_{*s}/\mathrm{d} T$ [GeV$^{-1}$]",
+            color="m",
+            linestyle="solid",
+        )
+
         add_plot_labels(gstar_ax, model, model_label, shift=0.05)
 
         h, l = add_redshift_xaxis_labels(
             gstar_ax, model, text_labels=False, x_coord=x_coord
         )
+        add_redshift_xaxis_labels(dgstar_ax, model, text_labels=False, x_coord=x_coord)
         add_redshift_xaxis_labels(w_ax, model, text_labels=False, x_coord=x_coord)
         add_redshift_xaxis_labels(
             Sigma_ax, model, temp_unit="GeV", text_labels=True, x_coord=x_coord
@@ -333,6 +354,7 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
 
         w_ax.legend(loc="best")
         gstar_ax.legend(loc="best")
+        dgstar_ax.legend(loc="best")
 
         handles, labels = Sigma_ax.get_legend_handles_labels()
         handles.extend(h)
@@ -495,6 +517,8 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
                     "T_Jordan_Kelvin": exp(val.log_T_Jordan) / units.Kelvin,
                     "gstar_rho": val.gstar_rho,
                     "gstar_s": val.gstar_s,
+                    "dgstar_rho_dT_Gevinv": val.dgstar_rho_dT * units.GeV,
+                    "dgstar_s_dT_Gevinv": val.dgstar_s_dT * units.GeV,
                     "Sigma": val.Sigma,
                     "w": (1.0 - val.Sigma) / 3.0,
                     "friction_term_Mp": val.friction_term / units.PlanckMass,
