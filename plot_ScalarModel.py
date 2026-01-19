@@ -146,6 +146,16 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
 
         return (Sigma + fm) / (1.0 + fm)
 
+    def KE(value: ScalarModelValue) -> float:
+        H_Einstein2 = value.H_Einstein * value.H_Einstein
+        return H_Einstein2 * value.pi_Einstein * value.pi_Einstein / 2.0
+
+    def PE(value: ScalarModelValue) -> float:
+        return exp(potential.log_V(value.phi_Einstein))
+
+    def TotalEnergy(value: ScalarModelValue) -> float:
+        return KE(value) + PE(value)
+
     abs_phi_Einstein_points = [
         (_get_x_coord(value), safe_fabs(value.phi_Einstein / units.PlanckMass))
         for value in values
@@ -231,6 +241,14 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
         for value in values
     ]
 
+    Mp2 = units.PlanckMass * units.PlanckMass
+    Mp4 = Mp2 * Mp2
+    KE_points = [(_get_x_coord(value), KE(value) / Mp4) for value in values]
+    PE_points = [(_get_x_coord(value), PE(value) / Mp4) for value in values]
+    TotalEnergy_points = [
+        (_get_x_coord(value), TotalEnergy(value) / Mp4) for value in values
+    ]
+
     abs_phi_Einstein_BBN = [
         (
             T_Jordan_MeV(value),
@@ -306,19 +324,6 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
     dgstar_rho_x, dgstar_rho_y = zip(*dgstar_rho_points)
     dgstar_s_x, dgstar_s_y = zip(*dgstar_s_points)
 
-    positive_abs_H_Einstein_x, positive_abs_H_Einstein_y = zip(
-        *positive_abs_H_Einstein_points
-    )
-    negative_abs_H_Einstein_x, negative_abs_H_Einstein_y = zip(
-        *negative_abs_H_Einstein_points
-    )
-    positive_abs_H_Jordan_x, positive_abs_H_Jordan_y = zip(
-        *positive_abs_H_Jordan_points
-    )
-    negative_abs_H_Jordan_x, negative_abs_H_Jordan_y = zip(
-        *negative_abs_H_Jordan_points
-    )
-
     positive_friction_term_x, positive_friction_term_y = zip(
         *positive_friction_term_points
     )
@@ -337,6 +342,23 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
     negative_kicking_term_x, negative_kicking_term_y = zip(
         *negative_kicking_term_points
     )
+
+    positive_abs_H_Einstein_x, positive_abs_H_Einstein_y = zip(
+        *positive_abs_H_Einstein_points
+    )
+    negative_abs_H_Einstein_x, negative_abs_H_Einstein_y = zip(
+        *negative_abs_H_Einstein_points
+    )
+    positive_abs_H_Jordan_x, positive_abs_H_Jordan_y = zip(
+        *positive_abs_H_Jordan_points
+    )
+    negative_abs_H_Jordan_x, negative_abs_H_Jordan_y = zip(
+        *negative_abs_H_Jordan_points
+    )
+
+    KE_x, KE_y = zip(*KE_points)
+    PE_x, PE_y = zip(*PE_points)
+    TotalEnergy_x, TotalEnergy_y = zip(*TotalEnergy_points)
 
     abs_phi_Einstein_BBN_x, abs_phi_Einstein_BBN_y = zip(*abs_phi_Einstein_BBN)
     positive_Sigma_BBN_x, positive_Sigma_BBN_y = zip(*positive_Sigma_BBN)
@@ -583,6 +605,59 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
         fig.savefig(fig_path.with_suffix(".png"))
 
         plt.close()
+
+        fig = plt.figure()
+        fig.set_size_inches(8.0, 5.0)
+        energy_ax = fig.gca()
+
+        energy_ax.plot(
+            KE_x,
+            KE_y,
+            label=r"KE [$M_{\mathrm{P}}^4$]",
+            color="r",
+            linestyle="solid",
+        )
+        energy_ax.plot(
+            PE_x,
+            PE_y,
+            label=r"PE [$M_{\mathrm{P}}^4$]",
+            color="g",
+            linestyle="solid",
+        )
+        energy_ax.plot(
+            TotalEnergy_x,
+            TotalEnergy_y,
+            label=r"Total energy [$M_{\mathrm{P}}^4$]",
+            color="b",
+            linestyle="dashed",
+        )
+
+        if x_coord == "redshift":
+            energy_ax.set_xscale("log")
+            energy_ax.xaxis.set_inverted(True)
+        energy_ax.set_yscale("log")
+
+        energy_ax.set_xlabel(x_axis_label())
+
+        energy_ax.grid(True)
+
+        add_plot_labels(energy_ax, model, model_label)
+        h, l = add_redshift_xaxis_labels(
+            energy_ax, model, temp_unit="GeV", text_labels=True, x_coord=x_coord
+        )
+
+        handles, labels = energy_ax.get_legend_handles_labels()
+        handles.extend(h)
+        labels.extend(l)
+        energy_ax.legend(handles, labels, loc="best")
+
+        fig_path = (
+            base_path
+            / f"plots/beta={beta:.5g}/M={M/units.eV:.5g}eV_Lambda={Lambda/units.eV:.5g}eV/energy.pdf"
+        )
+        fig_path.parents[0].mkdir(exist_ok=True, parents=True)
+        fig.savefig(fig_path)
+        fig.savefig(fig_path.with_suffix(".png"))
 
         fig = plt.figure()
         fig.set_size_inches(8.0, 10.0)
