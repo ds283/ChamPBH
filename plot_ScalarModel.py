@@ -149,16 +149,41 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
     ]
     dgstar_s_points = [(_get_x_coord(value), value.dgstar_s_dlogT) for value in values]
 
-    friction_term_points = [
-        (_get_x_coord(value), value.friction_term / units.PlanckMass)
+    positive_friction_term_points = [
+        (
+            _get_x_coord(value),
+            safe_fabs_positive(value.friction_term / units.PlanckMass),
+        )
         for value in values
     ]
-    reflecting_term_points = [
-        (_get_x_coord(value), value.reflecting_term / units.PlanckMass)
+    negative_friction_term_points = [
+        (
+            _get_x_coord(value),
+            safe_fabs_negative(value.friction_term / units.PlanckMass),
+        )
         for value in values
     ]
-    kicking_term_points = [
-        (_get_x_coord(value), value.kicking_term / units.PlanckMass) for value in values
+    positive_reflecting_term_points = [
+        (
+            _get_x_coord(value),
+            safe_fabs_positive(value.reflecting_term / units.PlanckMass),
+        )
+        for value in values
+    ]
+    negative_reflecting_term_points = [
+        (
+            _get_x_coord(value),
+            safe_fabs_negative(value.reflecting_term / units.PlanckMass),
+        )
+        for value in values
+    ]
+    positive_kicking_term_points = [
+        (_get_x_coord(value), safe_fabs_positive(value.kicking_term / units.PlanckMass))
+        for value in values
+    ]
+    negative_kicking_term_points = [
+        (_get_x_coord(value), safe_fabs_negative(value.kicking_term / units.PlanckMass))
+        for value in values
     ]
 
     positive_abs_H_Einstein_points = [
@@ -176,6 +201,59 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
     negative_abs_H_Jordan_points = [
         (_get_x_coord(value), safe_fabs_negative(value.H_Jordan / units.GeV))
         for value in values
+    ]
+
+    # max and min BBN temperatures chosen to match the PRyMordial defaults
+    LOG_T_BBN_MAX = log(10 * units.MeV)
+    LOG_T_BBN_MIN = log(1e-3 * units.MeV)
+
+    def is_in_BBN_era(value: ScalarModelValue) -> bool:
+        return LOG_T_BBN_MIN <= value.log_T_Jordan <= LOG_T_BBN_MAX
+
+    abs_phi_Einstein_BBN = [
+        (
+            exp(value.log_T_Jordan) / units.MeV,
+            safe_fabs(value.phi_Einstein / units.PlanckMass),
+        )
+        for value in values
+        if is_in_BBN_era(value)
+    ]
+    Sigma_BBN = [
+        (exp(value.log_T_Jordan) / units.MeV, value.Sigma)
+        for value in values
+        if is_in_BBN_era(value)
+    ]
+    positive_kicking_term_BBN = [
+        (
+            exp(value.log_T_Jordan) / units.MeV,
+            safe_fabs_positive(value.kicking_term / units.PlanckMass),
+        )
+        for value in values
+        if is_in_BBN_era(value)
+    ]
+    negative_kicking_term_BBN = [
+        (
+            exp(value.log_T_Jordan) / units.MeV,
+            safe_fabs_negative(value.kicking_term / units.PlanckMass),
+        )
+        for value in values
+        if is_in_BBN_era(value)
+    ]
+    positive_reflecting_term_BBN = [
+        (
+            exp(value.log_T_Jordan) / units.MeV,
+            safe_fabs_positive(value.reflecting_term / units.PlanckMass),
+        )
+        for value in values
+        if is_in_BBN_era(value)
+    ]
+    negative_reflecting_term_BBN = [
+        (
+            exp(value.log_T_Jordan) / units.MeV,
+            safe_fabs_negative(value.reflecting_term / units.PlanckMass),
+        )
+        for value in values
+        if is_in_BBN_era(value)
     ]
 
     abs_phi_Einstein_x, abs_phi_Einstein_y = zip(*abs_phi_Einstein_points)
@@ -201,9 +279,39 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
         *negative_abs_H_Jordan_points
     )
 
-    friction_term_x, friction_term_y = zip(*friction_term_points)
-    reflecting_term_x, reflecting_term_y = zip(*reflecting_term_points)
-    kicking_term_x, kicking_term_y = zip(*kicking_term_points)
+    positive_friction_term_x, positive_friction_term_y = zip(
+        *positive_friction_term_points
+    )
+    negative_friction_term_x, negative_friction_term_y = zip(
+        *negative_friction_term_points
+    )
+    positive_reflecting_term_x, positive_reflecting_term_y = zip(
+        *positive_reflecting_term_points
+    )
+    negative_reflecting_term_x, negative_reflecting_term_y = zip(
+        *negative_reflecting_term_points
+    )
+    positive_kicking_term_x, positive_kicking_term_y = zip(
+        *positive_kicking_term_points
+    )
+    negative_kicking_term_x, negative_kicking_term_y = zip(
+        *negative_kicking_term_points
+    )
+
+    abs_phi_Einstein_BBN_x, abs_phi_Einstein_BBN_y = zip(*abs_phi_Einstein_BBN)
+    Sigma_BBN_x, Sigma_BBN_y = zip(*Sigma_BBN)
+    positive_kicking_term_BBN_x, positive_kicking_term_BBN_y = zip(
+        *positive_kicking_term_BBN
+    )
+    negative_kicking_term_BBN_x, negative_kicking_term_BBN_y = zip(
+        *negative_kicking_term_BBN
+    )
+    positive_reflecting_term_BBN_x, positive_reflecting_term_BBN_y = zip(
+        *positive_reflecting_term_BBN
+    )
+    negative_reflecting_term_BBN_x, negative_reflecting_term_BBN_y = zip(
+        *negative_reflecting_term_BBN
+    )
 
     sns.set_theme()
 
@@ -443,30 +551,51 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
         k_ax = axs[2]
 
         f_ax.plot(
-            friction_term_x,
-            friction_term_y,
+            positive_friction_term_x,
+            positive_friction_term_y,
             label=r"friction term [$M_{\text{P}}$]",
             color="r",
             linestyle="solid",
         )
+        f_ax.plot(
+            negative_friction_term_x,
+            negative_friction_term_y,
+            color="r",
+            linestyle="dashed",
+        )
+        f_ax.set_yscale("log")
         f_ax.grid(True)
 
         r_ax.plot(
-            reflecting_term_x,
-            reflecting_term_y,
+            positive_reflecting_term_x,
+            positive_reflecting_term_y,
             label=r"reflecting term [$M_{\text{P}}$]",
             color="g",
             linestyle="solid",
         )
+        r_ax.plot(
+            negative_reflecting_term_x,
+            negative_reflecting_term_y,
+            color="g",
+            linestyle="dashed",
+        )
+        r_ax.set_yscale("log")
         r_ax.grid(True)
 
         k_ax.plot(
-            kicking_term_x,
-            kicking_term_y,
+            positive_kicking_term_x,
+            positive_kicking_term_y,
             label=r"kicking term [$M_{\text{P}}$]",
             color="b",
             linestyle="solid",
         )
+        k_ax.plot(
+            negative_kicking_term_x,
+            negative_kicking_term_y,
+            color="b",
+            linestyle="dashed",
+        )
+        k_ax.set_yscale("log")
         k_ax.grid(True)
 
         if x_coord == "redshift":
@@ -492,6 +621,88 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
         fig_path = (
             base_path
             / f"plots/beta={beta:.5g}/M={M/units.eV:.5g}eV_Lambda={Lambda/units.eV:.5g}eV/ODE_terms.pdf"
+        )
+        fig_path.parents[0].mkdir(exist_ok=True, parents=True)
+        fig.savefig(fig_path)
+        fig.savefig(fig_path.with_suffix(".png"))
+
+        plt.close()
+
+        fig = plt.figure()
+        fig.set_size_inches(8.0, 13.0)
+
+        axs = fig.subplots(nrows=4, ncols=1, sharex=True, sharey=False)
+
+        reflecting_term_BBN_ax = axs[0]
+        kicking_term_BBN_ax = axs[1]
+        Sigma_BBN_ax = axs[2]
+        phi_BBN_ax = axs[3]
+
+        phi_BBN_ax.plot(
+            abs_phi_Einstein_BBN_x,
+            abs_phi_Einstein_BBN_y,
+            label=r"$|\phi_{\text{E}}|$ [$M_{\text{P}}$]",
+            color="r",
+            linestyle="solid",
+        )
+        phi_BBN_ax.set_yscale("log")
+        phi_BBN_ax.grid(True)
+
+        Sigma_BBN_ax.plot(
+            Sigma_BBN_x,
+            Sigma_BBN_y,
+            label=r"$\Sigma$",
+            color="m",
+            linestyle="solid",
+        )
+        Sigma_BBN_ax.grid(True)
+
+        kicking_term_BBN_ax.plot(
+            positive_kicking_term_BBN_x,
+            positive_kicking_term_BBN_y,
+            label=r"kicking term [$M_{\text{P}}$]",
+            color="b",
+            linestyle="solid",
+        )
+        kicking_term_BBN_ax.plot(
+            negative_kicking_term_BBN_x,
+            negative_kicking_term_BBN_y,
+            color="b",
+            linestyle="dashed",
+        )
+        kicking_term_BBN_ax.set_yscale("log")
+        kicking_term_BBN_ax.grid(True)
+
+        reflecting_term_BBN_ax.plot(
+            positive_reflecting_term_BBN_x,
+            positive_reflecting_term_BBN_y,
+            label=r"reflecting term [$M_{\text{P}}$]",
+            color="g",
+            linestyle="solid",
+        )
+        reflecting_term_BBN_ax.plot(
+            negative_reflecting_term_BBN_x,
+            negative_reflecting_term_BBN_y,
+            color="g",
+            linestyle="dashed",
+        )
+        reflecting_term_BBN_ax.set_yscale("log")
+        reflecting_term_BBN_ax.grid(True)
+
+        phi_BBN_ax.set_xlabel("Temperature $T$ [MeV]")
+        phi_BBN_ax.set_xscale("log")
+        phi_BBN_ax.xaxis.set_inverted(True)
+
+        add_plot_labels(reflecting_term_BBN_ax, model, model_label, shift=0.05)
+
+        phi_BBN_ax.legend(loc="best")
+        Sigma_BBN_ax.legend(loc="best")
+        kicking_term_BBN_ax.legend(loc="best")
+        reflecting_term_BBN_ax.legend(loc="best")
+
+        fig_path = (
+            base_path
+            / f"plots/beta={beta:.5g}/M={M/units.eV:.5g}eV_Lambda={Lambda/units.eV:.5g}eV/BBN_era.pdf"
         )
         fig_path.parents[0].mkdir(exist_ok=True, parents=True)
         fig.savefig(fig_path)
