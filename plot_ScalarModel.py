@@ -145,11 +145,9 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
     gstar_rho_points = [(_get_x_coord(value), value.gstar_rho) for value in values]
     gstar_s_points = [(_get_x_coord(value), value.gstar_s) for value in values]
     dgstar_rho_points = [
-        (_get_x_coord(value), value.dgstar_rho_dlogT * units.GeV) for value in values
+        (_get_x_coord(value), value.dgstar_rho_dlogT) for value in values
     ]
-    dgstar_s_points = [
-        (_get_x_coord(value), value.dgstar_s_dlogT * units.GeV) for value in values
-    ]
+    dgstar_s_points = [(_get_x_coord(value), value.dgstar_s_dlogT) for value in values]
 
     friction_term_points = [
         (_get_x_coord(value), value.friction_term / units.PlanckMass)
@@ -333,14 +331,14 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
         dgstar_ax.plot(
             dgstar_rho_x,
             dgstar_rho_y,
-            label=r"$\mathrm{d} g_{*\rho}/\mathrm{d} T$ [GeV$^{-1}$]",
+            label=r"$\mathrm{d} g_{*\rho}/\mathrm{d}(\log T)$",
             color="g",
             linestyle="solid",
         )
         dgstar_ax.plot(
             dgstar_s_x,
             dgstar_s_y,
-            label=r"$\mathrm{d} g_{*s}/\mathrm{d} T$ [GeV$^{-1}$]",
+            label=r"$\mathrm{d} g_{*s}/\mathrm{d}(\log T)$",
             color="m",
             linestyle="solid",
         )
