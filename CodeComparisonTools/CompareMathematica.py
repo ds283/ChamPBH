@@ -7,8 +7,8 @@ import pandas as pd
 import seaborn as sns
 from matplotlib import pyplot as plt
 
-DEFAULT_CHAMPBH_OUTPUT_FILE = "/Users/ds283/Documents/Code/ChamPBH/CodeComparison-out/QCD_Cosmology/csv/beta=2/M=1.218e+27eV_Lambda=0.001eV/fields.csv"
-DEFAULT_MATHEMATICA_OUTPUT_FILE = "/Users/ds283/Library/CloudStorage/Box-Box/Research projects/Chameleon PBHs/Code Comparison/MathematicaOut_beta=2.csv"
+DEFAULT_CHAMPBH_OUTPUT_FILE = "/Users/ds283/Documents/Code/ChamPBH/XavComparison-Radau-small-out/QCD_Cosmology/csv/beta=1.5/M=1.218e+27eV_Lambda=0.001eV/fields.csv"
+DEFAULT_MATHEMATICA_OUTPUT_FILE = "/Users/ds283/Library/CloudStorage/Box-Box/Research projects/Chameleon PBHs/Code Comparison/MathematicaOut_beta=1.5.csv"
 DEFAULT_OUPTUT_DIRECTORY = (
     "/Users/ds283/Documents/Code/ChamPBH/CodeComparison-out/ComparisonProducts-out"
 )
