@@ -110,6 +110,7 @@ ax.legend(loc="best")
 ax.set_xlabel(r"e-folds $N$")
 ax.set_yscale("log")
 ax.grid(True)
+ax.set_ylabel(r"Relative error [%]")
 
 base_path = Path(args.output).resolve()
 fig_path = base_path / f"plots.pdf"
