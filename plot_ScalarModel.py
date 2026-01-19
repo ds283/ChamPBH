@@ -144,8 +144,12 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
     w_points = [(_get_x_coord(value), (1.0 - value.Sigma) / 3.0) for value in values]
     gstar_rho_points = [(_get_x_coord(value), value.gstar_rho) for value in values]
     gstar_s_points = [(_get_x_coord(value), value.gstar_s) for value in values]
-    dgstar_rho_points = [(_get_x_coord(value), value.dgstar_rho_dT * units.GeV) for value in values]
-    dgstar_s_points = [(_get_x_coord(value), value.dgstar_s_dT * units.GeV) for value in values]
+    dgstar_rho_points = [
+        (_get_x_coord(value), value.dgstar_rho_dT * units.GeV) for value in values
+    ]
+    dgstar_s_points = [
+        (_get_x_coord(value), value.dgstar_s_dT * units.GeV) for value in values
+    ]
 
     friction_term_points = [
         (_get_x_coord(value), value.friction_term / units.PlanckMass)
@@ -517,8 +521,8 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
                     "T_Jordan_Kelvin": exp(val.log_T_Jordan) / units.Kelvin,
                     "gstar_rho": val.gstar_rho,
                     "gstar_s": val.gstar_s,
-                    "dgstar_rho_dT_Gevinv": val.dgstar_rho_dT * units.GeV,
-                    "dgstar_s_dT_Gevinv": val.dgstar_s_dT * units.GeV,
+                    "dgstar_rho_dT_GeVinv": val.dgstar_rho_dT * units.GeV,
+                    "dgstar_s_dT_GeVinv": val.dgstar_s_dT * units.GeV,
                     "Sigma": val.Sigma,
                     "w": (1.0 - val.Sigma) / 3.0,
                     "friction_term_Mp": val.friction_term / units.PlanckMass,
