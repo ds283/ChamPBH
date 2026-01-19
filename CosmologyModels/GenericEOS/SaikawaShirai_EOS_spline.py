@@ -21,6 +21,11 @@ from Units.base import UnitsLike
 
 _EOS_T_LO = 2e-3
 
+_SAMPLES_PER_LOG10_T = 250
+
+_LOG10_SAIKAWA_SHIRAI_T_HI = np.log10(SAIKAWA_SHIRAI_T_HI)
+_LOG10_SAIKAWA_SHIRAI_T_LO = np.log10(SAIKAWA_SHIRAI_T_LO)
+
 
 class SaikawaShirai_EOS_spline(GenericEOSBase):
 
@@ -30,28 +35,32 @@ class SaikawaShirai_EOS_spline(GenericEOSBase):
         log10_lo = np.log10(0.8 * SAIKAWA_SHIRAI_T_LO)
         log10_hi = np.log10(1.2 * SAIKAWA_SHIRAI_T_HI)
         range = log10_hi - log10_lo
-        samples = int(round(250 * range + 0.5, 0))
+        samples = int(round(_SAMPLES_PER_LOG10_T * range + 0.5, 0))
 
-        self._T_grid = np.logspace(
+        self._log_T_grid = np.linspace(
             log10_lo,
             log10_hi,
             samples,
             endpoint=True,
         )
 
-        self._gstar_rho_grid = np.asarray([_raw_G_rho(T) for T in self._T_grid])
+        self._gstar_rho_grid = np.asarray(
+            [_raw_G_rho(np.pow(10.0, T)) for T in self._log_T_grid]
+        )
         self._g_star_rho_spline = make_interp_spline(
-            self._T_grid,
+            self._log_T_grid,
             self._gstar_rho_grid,
         )
-        self._g_star_rho_deriv_spline = self._g_star_rho_spline.derivative()
+        self._dg_star_dlogT_spline = self._g_star_rho_spline.derivative()
 
-        self._gstar_s_grid = np.asarray([_raw_G_s(T) for T in self._T_grid])
+        self._gstar_s_grid = np.asarray(
+            [_raw_G_s(np.pow(10.0, T)) for T in self._log_T_grid]
+        )
         self._g_star_s_spline = make_interp_spline(
-            self._T_grid,
+            self._log_T_grid,
             self._gstar_s_grid,
         )
-        self._g_star_s_deriv_spline = self._g_star_s_spline.derivative()
+        self._dg_star_s_dlogT_spline = self._g_star_s_spline.derivative()
 
     @property
     def name(self):
@@ -73,25 +82,27 @@ class SaikawaShirai_EOS_spline(GenericEOSBase):
         """
 
         T_in_GeV = GetTemperature(T) / self._units.GeV
+        log10_T_in_GeV = np.log10(T_in_GeV)
 
-        if T_in_GeV >= SAIKAWA_SHIRAI_T_HI:
+        if log10_T_in_GeV >= _LOG10_SAIKAWA_SHIRAI_T_HI:
             return HIGH_T_GSTAR
-        elif T_in_GeV <= SAIKAWA_SHIRAI_T_LO:
+        elif log10_T_in_GeV <= _LOG10_SAIKAWA_SHIRAI_T_LO:
             return LOW_T_GSTAR
 
-        return self._g_star_rho_spline(T_in_GeV)
+        return self._g_star_rho_spline(log10_T_in_GeV)
 
-    def dG_rho_dT(self, T: TemperatureLike) -> float:
+    def dG_rho_dlogT(self, T: TemperatureLike) -> float:
 
         # units of the output will be 1/GeV because we internally evaluate T in GeV
         T_in_GeV = GetTemperature(T) / self._units.GeV
+        log10_T_in_GeV = np.log10(T_in_GeV)
 
-        if T_in_GeV >= SAIKAWA_SHIRAI_T_HI:
+        if log10_T_in_GeV >= _LOG10_SAIKAWA_SHIRAI_T_HI:
             return 0.0
-        elif T_in_GeV <= SAIKAWA_SHIRAI_T_LO:
+        elif log10_T_in_GeV <= _LOG10_SAIKAWA_SHIRAI_T_LO:
             return 0.0
 
-        return self._g_star_rho_deriv_spline(T_in_GeV)
+        return self._dg_star_dlogT_spline(log10_T_in_GeV)
 
     def G_s(self, T: TemperatureLike) -> float:
         """
@@ -102,25 +113,27 @@ class SaikawaShirai_EOS_spline(GenericEOSBase):
         """
 
         T_in_GeV = GetTemperature(T) / self._units.GeV
+        log10_T_in_GeV = np.log10(T_in_GeV)
 
-        if T_in_GeV >= SAIKAWA_SHIRAI_T_HI:
+        if log10_T_in_GeV >= _LOG10_SAIKAWA_SHIRAI_T_HI:
             return HIGH_T_GSTAR
-        elif T_in_GeV <= SAIKAWA_SHIRAI_T_LO:
+        elif log10_T_in_GeV <= _LOG10_SAIKAWA_SHIRAI_T_LO:
             return LOW_T_G_S_STAR
 
-        return self._g_star_s_spline(T_in_GeV)
+        return self._g_star_s_spline(log10_T_in_GeV)
 
-    def dG_s_dT(self, T: TemperatureLike) -> float:
+    def dG_s_dlogT(self, T: TemperatureLike) -> float:
 
         # units of the output will be 1/GeV because we internally evaluate T in GeV
         T_in_GeV = GetTemperature(T) / self._units.GeV
+        log10_T_in_GeV = np.log10(T_in_GeV)
 
-        if T_in_GeV >= SAIKAWA_SHIRAI_T_HI:
+        if log10_T_in_GeV >= _LOG10_SAIKAWA_SHIRAI_T_HI:
             return 0.0
-        elif T_in_GeV <= SAIKAWA_SHIRAI_T_LO:
+        elif log10_T_in_GeV <= _LOG10_SAIKAWA_SHIRAI_T_LO:
             return 0.0
 
-        return self._g_star_s_deriv_spline(T_in_GeV)
+        return self._dg_star_s_dlogT_spline(log10_T_in_GeV)
 
     # override equation of state implementation
     def w(self, T: TemperatureLike) -> float:

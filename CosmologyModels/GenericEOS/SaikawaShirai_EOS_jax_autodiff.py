@@ -184,11 +184,11 @@ class SaikawaShirai_EOS_jax_autodiff(GenericEOSBase):
         T_in_GeV = GetTemperature(T) / self._units.GeV
         return _jax_raw_G_rho(T_in_GeV)
 
-    def dG_rho_dT(self, T: TemperatureLike) -> Array:
+    def dG_rho_dlogT(self, T: TemperatureLike) -> Array:
 
         # units of the output will be 1/GeV because we internally evaluate T in GeV
         T_in_GeV = GetTemperature(T) / self._units.GeV
-        return self._grad_raw_G_rho(T_in_GeV) / self._units.GeV
+        return T_in_GeV * self._grad_raw_G_rho(T_in_GeV)
 
     def G_s(self, T: TemperatureLike) -> Array:
         """
@@ -201,11 +201,11 @@ class SaikawaShirai_EOS_jax_autodiff(GenericEOSBase):
         T_in_GeV = GetTemperature(T) / self._units.GeV
         return _jax_raw_G_s(T_in_GeV)
 
-    def dG_s_dT(self, T: TemperatureLike) -> Array:
+    def dG_s_dlogT(self, T: TemperatureLike) -> Array:
 
         # units of the output will be 1/GeV because we internally evaluate T in GeV
         T_in_GeV = GetTemperature(T) / self._units.GeV
-        return self._grad_raw_G_s(T_in_GeV) / self._units.GeV
+        return T_in_GeV * self._grad_raw_G_s(T_in_GeV)
 
     # override equation of state implementation
     def w(self, T: TemperatureLike) -> Array:

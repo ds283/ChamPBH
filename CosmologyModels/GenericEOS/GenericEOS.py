@@ -30,12 +30,12 @@ class GenericEOSBase(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def dG_rho_dT(self, T: TemperatureLike) -> float:
+    def dG_rho_dlogT(self, T: TemperatureLike) -> float:
         """
-        Compute derivative of G_rho(T) with respect to temperature T
+        Compute logarithmic derivative of G_rho(T) with respect to temperature T
         T should be regarded as a dimensionful quantity, measured in the given UnitsLike system
         :param T: dimensionful temperature T
-        :return: DIMENSIONFUL number representing d(g_rho)/dT at T (units should be inverse to T)
+        :return: dimensionless number representing T d(g_rho)/dT at T
         """
         raise NotImplementedError
 
@@ -50,12 +50,12 @@ class GenericEOSBase(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def dG_s_dT(self, T: TemperatureLike) -> float:
+    def dG_s_dlogT(self, T: TemperatureLike) -> float:
         """
-        Compute derivative of G_s(T) with respect to temperature T
+        Compute logarithmic derivative of G_s(T) with respect to temperature T
         T should be regarded as a dimensionful quantity, measured in the given UnitsLike system
         :param T: dimensionful temperature T
-        :return: DIMENSIONFUL number representing d(g_S)/dT at T (units should be inverse to T)
+        :return: dimensionless number representing d(g_S)/dT at T
         """
         raise NotImplementedError
 

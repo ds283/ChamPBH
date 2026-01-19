@@ -83,8 +83,8 @@ SampleValues = namedtuple(
         "log_T_Jordan",
         "gstar_rho",
         "gstar_s",
-        "dgstar_s_dT",
-        "dgstar_rho_dT",
+        "dgstar_s_dlogT",
+        "dgstar_rho_dlogT",
         "Sigma",
         "friction_term",
         "reflecting_term",
@@ -314,10 +314,10 @@ def compute_scalar_model(
             d_log_fm: float = 1.0 - data.Sigma
 
             G_s: float = cosmology.G_s(T_Jordan)
-            dG_s_dT: float = cosmology.dG_s_dT(T_Jordan)
+            dG_s_dlogT: float = cosmology.dG_s_dlogT(T_Jordan)
 
             d_log_T_Jordan: float = -(1.0 + data.log_Omega_prime * pi_Einstein) / (
-                1.0 + (T_Jordan / G_s) * dG_s_dT / 3.0
+                1.0 + dG_s_dlogT / G_s / 3.0
             )
 
             return_state = StateVector(
@@ -361,7 +361,7 @@ def compute_scalar_model(
                 print(
                     f"     - derivatives: d_phi_E={d_phi_Einstein:.5g}, d_pi_E={d_pi_Einstein:.5g}, d_log_rhorad_E={d_log_rhorad_Einstein:.5g}, d_log_fm={d_log_fm:.5g}, d_log_T_J={d_log_T_Jordan:.5g}"
                 )
-                print(f"     - thermodynamics: G_s={G_s:.5g}, dG_s={dG_s_dT:.5g}")
+                print(f"     - thermodynamics: G_s={G_s:.5g}, dG_s={dG_s_dlogT:.5g}")
                 print(f"     - state={state}")
                 print(f"     - return_state={return_state}")
                 raise RuntimeError(
@@ -719,8 +719,8 @@ def compute_scalar_model(
                 H_Jordan=H_Jordan,
                 gstar_rho=cosmology.G_rho(T_Jordan),
                 gstar_s=cosmology.G_s(T_Jordan),
-                dgstar_rho_dT=cosmology.dG_rho_dT(T_Jordan),
-                dgstar_s_dT=cosmology.dG_s_dT(T_Jordan),
+                dgstar_rho_dlogT=cosmology.dG_rho_dlogT(T_Jordan),
+                dgstar_s_dlogT=cosmology.dG_s_dlogT(T_Jordan),
                 Sigma=1.0 - 3.0 * cosmology.w(T_Jordan),
                 friction_term=data.friction_term,
                 reflecting_term=data.reflecting_term,
@@ -1055,8 +1055,8 @@ class ScalarModel(DatastoreObject):
                     H_Jordan=sample[i].H_Jordan,
                     gstar_rho=sample[i].gstar_rho,
                     gstar_s=sample[i].gstar_s,
-                    dgstar_rho_dT=sample[i].dgstar_rho_dT,
-                    dgstar_s_dT=sample[i].dgstar_s_dT,
+                    dgstar_rho_dlogT=sample[i].dgstar_rho_dlogT,
+                    dgstar_s_dlogT=sample[i].dgstar_s_dlogT,
                     Sigma=sample[i].Sigma,
                     friction_term=sample[i].friction_term,
                     reflecting_term=sample[i].reflecting_term,
@@ -1085,8 +1085,8 @@ class ScalarModelValue(DatastoreObject):
         H_Jordan: float,
         gstar_rho: float,
         gstar_s: float,
-        dgstar_rho_dT: float,
-        dgstar_s_dT: float,
+        dgstar_rho_dlogT: float,
+        dgstar_s_dlogT: float,
         Sigma: float,
         friction_term: float,
         reflecting_term: float,
@@ -1106,8 +1106,8 @@ class ScalarModelValue(DatastoreObject):
         :param H_Jordan: Hubble parameter in the Jordan frame
         :param gstar_rho: effective number of degrees of freedom for energy density
         :param gstar_s: effective number of degrees of freedom for entropy density
-        :param dgstar_rho_dT: derivative of gstar_rho with respect to temperature
-        :param dgstar_s_dT: derivative of gstar_s with respect to temperature
+        :param dgstar_rho_dlogT: logarithmic derivative of gstar_rho with respect to temperature
+        :param dgstar_s_dlogT: logarithmic derivative of gstar_s with respect to temperature
         :param Sigma: equation of state parameter (1 - 3w)
         """
         DatastoreObject.__init__(self, store_id)
@@ -1128,8 +1128,8 @@ class ScalarModelValue(DatastoreObject):
 
         self._gstar_rho: float = gstar_rho
         self._gstar_s: float = gstar_s
-        self._dgstar_rho_dT: float = dgstar_rho_dT
-        self._dgstar_s_dT: float = dgstar_s_dT
+        self._dgstar_rho_dlogT: float = dgstar_rho_dlogT
+        self._dgstar_s_dlogT: float = dgstar_s_dlogT
 
         self._Sigma: float = Sigma
 
@@ -1191,12 +1191,12 @@ class ScalarModelValue(DatastoreObject):
         return self._gstar_s
 
     @property
-    def dgstar_rho_dT(self) -> float:
-        return self._dgstar_rho_dT
+    def dgstar_rho_dlogT(self) -> float:
+        return self._dgstar_rho_dlogT
 
     @property
-    def dgstar_s_dT(self) -> float:
-        return self._dgstar_s_dT
+    def dgstar_s_dlogT(self) -> float:
+        return self._dgstar_s_dlogT
 
     @property
     def Sigma(self) -> float:

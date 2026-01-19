@@ -49,9 +49,9 @@ comparison_columns = {
     },
     r"$g^\ast_\rho$": {"ChamPBH": "gstar_rho", "Xav": "g*_rho"},
     r"$g^\ast_s$": {"ChamPBH": "gstar_s", "Xav": "g*s(interpolated)"},
-    r"$\mathrm{d}g^\ast_s/\mathrm{d}T$": {
-        "ChamPBH": "dgstar_s_dT_GeVinv",
-        "Xav": "dg*s/dT(interpolated)_GeVinv",
+    r"$\mathrm{d}g^\ast_s/\mathrm{d}\ln T$": {
+        "ChamPBH": "dgstar_s_dlogT",
+        "Xav": "dg*s/dlogT(interpolated)",
     },
 }
 

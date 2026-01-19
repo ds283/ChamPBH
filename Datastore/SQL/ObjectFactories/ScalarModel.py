@@ -303,8 +303,8 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 value_table.c.H_Jordan_Mp,
                 value_table.c.gstar_rho,
                 value_table.c.gstar_s,
-                value_table.c.dgstar_rho_dT_GeVinv,
-                value_table.c.dgstar_s_dT_GeVinv,
+                value_table.c.dgstar_rho_dlogT,
+                value_table.c.dgstar_s_dlogT,
                 value_table.c.Sigma,
                 value_table.c.friction_term_Mp,
                 value_table.c.reflecting_term_Mp,
@@ -348,8 +348,8 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                     H_Jordan=row.H_Jordan_Mp * units.PlanckMass,
                     gstar_rho=row.gstar_rho,
                     gstar_s=row.gstar_s,
-                    dgstar_rho_dT=row.dgstar_rho_dT_GeVinv / units.GeV,
-                    dgstar_s_dT=row.dgstar_s_dT_GeVinv / units.GeV,
+                    dgstar_rho_dlogT=row.dgstar_rho_dlogT,
+                    dgstar_s_dlogT=row.dgstar_s_dlogT,
                     Sigma=row.Sigma,
                     friction_term=row.friction_term_Mp * units.PlanckMass,
                     reflecting_term=row.reflecting_term_Mp * units.PlanckMass,
@@ -482,8 +482,8 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                     "H_Jordan_Mp": value.H_Jordan / units.PlanckMass,
                     "gstar_rho": value.gstar_rho,
                     "gstar_s": value.gstar_s,
-                    "dgstar_rho_dT_GeVinv": value.dgstar_rho_dT * units.GeV,
-                    "dgstar_s_dT_GeVinv": value.dgstar_s_dT * units.GeV,
+                    "dgstar_rho_dlogT": value.dgstar_rho_dlogT,
+                    "dgstar_s_dlogT": value.dgstar_s_dlogT,
                     "Sigma": value.Sigma,
                     "friction_term_Mp": value.friction_term / units.PlanckMass,
                     "reflecting_term_Mp": value.reflecting_term / units.PlanckMass,
@@ -651,8 +651,8 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
                 sqla.Column("H_Jordan_Mp", sqla.Float(64), nullable=False),
                 sqla.Column("gstar_rho", sqla.Float(64), nullable=False),
                 sqla.Column("gstar_s", sqla.Float(64), nullable=False),
-                sqla.Column("dgstar_rho_dT_GeVinv", sqla.Float(64), nullable=False),
-                sqla.Column("dgstar_s_dT_GeVinv", sqla.Float(64), nullable=False),
+                sqla.Column("dgstar_rho_dlogT", sqla.Float(64), nullable=False),
+                sqla.Column("dgstar_s_dlogT", sqla.Float(64), nullable=False),
                 sqla.Column("Sigma", sqla.Float(64), nullable=False),
                 sqla.Column("friction_term_Mp", sqla.Float(64), nullable=False),
                 sqla.Column("reflecting_term_Mp", sqla.Float(64), nullable=False),
@@ -680,8 +680,8 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
 
         gstar_rho: float = payload["gstar_rho"]
         gstar_s: float = payload["gstar_s"]
-        dgstar_rho_dT: float = payload["dgstar_rho_dT"]
-        dgstar_s_dT: float = payload["dgstar_s_dT"]
+        dgstar_rho_dlogT: float = payload["dgstar_rho_dlogT"]
+        dgstar_s_dlogT: float = payload["dgstar_s_dlogT"]
 
         Sigma: float = payload["Sigma"]
 
@@ -703,9 +703,6 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
         H_Einstein_Mp: float = H_Einstein / units.PlanckMass
         H_Jordan_Mp: float = H_Jordan / units.PlanckMass
 
-        dgstar_rho_dT_GeVinv: float = dgstar_rho_dT * units.GeV
-        dgstar_s_dT_GeVinv: float = dgstar_s_dT * units.GeV
-
         friction_term_Mp: float = friction_term / units.PlanckMass
         reflecting_term_Mp: float = reflecting_term / units.PlanckMass
         kicking_term_Mp: float = kicking_term / units.PlanckMass
@@ -726,8 +723,8 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
                     table.c.gstar_rho,
                     table.c.gstar_s,
                     table.c.Sigma,
-                    table.c.dgstar_rho_dT_GeVinv,
-                    table.c.dgstar_s_dT_GeVinv,
+                    table.c.dgstar_rho_dlogT,
+                    table.c.dgstar_s_dlogT,
                     table.c.friction_term_Mp,
                     table.c.reflecting_term_Mp,
                     table.c.kicking_term_Mp,
@@ -759,8 +756,8 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
                     "H_Jordan_Mp": H_Jordan_Mp,
                     "gstar_rho": gstar_rho,
                     "gstar_s": gstar_s,
-                    "dgstar_rho_dT_GeVinv": dgstar_rho_dT_GeVinv,
-                    "dgstar_s_dT_GeVinv": dgstar_s_dT_GeVinv,
+                    "dgstar_rho_dlogT": dgstar_rho_dlogT,
+                    "dgstar_s_dlogT": dgstar_s_dlogT,
                     "Sigma": Sigma,
                     "friction_term_Mp": friction_term_Mp,
                     "reflecting_term_Mp": reflecting_term_Mp,
@@ -786,8 +783,8 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
 
             gstar_rho = row_data.gstar_rho
             gstar_s = row_data.gstar_s
-            dgstar_rho_dT = row_data.dgstar_rho_dT_GeVinv / units.GeV
-            dgstar_s_dT = row_data.dgstar_s_dT_GeVinv / units.GeV
+            dgstar_rho_dlogT = row_data.dgstar_rho_dlogT
+            dgstar_s_dlogT = row_data.dgstar_s_dlogT
 
             Sigma = row_data.Sigma
 
@@ -828,8 +825,8 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
             gstar_rho=gstar_rho,
             gstar_s=gstar_s,
             Sigma=Sigma,
-            dgstar_rho_dT=dgstar_rho_dT,
-            dgstar_s_dT=dgstar_s_dT,
+            dgstar_rho_dlogT=dgstar_rho_dlogT,
+            dgstar_s_dlogT=dgstar_s_dlogT,
             friction_term=friction_term,
             reflecting_term=reflecting_term,
             kicking_term=kicking_term,
