@@ -4,7 +4,7 @@ import sys
 from datetime import datetime
 from math import exp, log
 from pathlib import Path
-from typing import List
+from typing import List, Any
 
 import pandas as pd
 import ray
@@ -130,6 +130,22 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
 
         return r"redshift $1+z$"
 
+    # max and min BBN temperatures chosen to match the PRyMordial defaults
+    LOG_T_BBN_MAX = log(10 * units.MeV)
+    LOG_T_BBN_MIN = log(1e-3 * units.MeV)
+
+    def is_in_BBN_era(value: ScalarModelValue) -> bool:
+        return LOG_T_BBN_MIN <= value.log_T_Jordan <= LOG_T_BBN_MAX
+
+    def SigmaFm(value: ScalarModelValue) -> float:
+        Sigma = value.Sigma
+        fm = exp(value.log_fm)
+
+        if fm > 10.0:
+            return (1.0 + Sigma / fm) / (1.0 + 1.0 / fm)
+
+        return (Sigma + fm) / (1.0 + fm)
+
     abs_phi_Einstein_points = [
         (_get_x_coord(value), safe_fabs(value.phi_Einstein / units.PlanckMass))
         for value in values
@@ -141,6 +157,18 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
         (_get_x_coord(value), exp(value.log_T_Jordan) / units.GeV) for value in values
     ]
     Sigma_points = [(_get_x_coord(value), value.Sigma) for value in values]
+    positive_Sigma_points = [
+        (_get_x_coord(value), safe_fabs_positive(value.Sigma)) for value in values
+    ]
+    negative_Sigma_points = [
+        (_get_x_coord(value), safe_fabs_negative(value.Sigma)) for value in values
+    ]
+    positive_SigmaFm_points = [
+        (_get_x_coord(value), safe_fabs_positive(SigmaFm(value))) for value in values
+    ]
+    negative_SigmaFm_points = [
+        (_get_x_coord(value), safe_fabs_negative(SigmaFm(value))) for value in values
+    ]
     w_points = [(_get_x_coord(value), (1.0 - value.Sigma) / 3.0) for value in values]
     gstar_rho_points = [(_get_x_coord(value), value.gstar_rho) for value in values]
     gstar_s_points = [(_get_x_coord(value), value.gstar_s) for value in values]
@@ -203,53 +231,37 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
         for value in values
     ]
 
-    # max and min BBN temperatures chosen to match the PRyMordial defaults
-    LOG_T_BBN_MAX = log(10 * units.MeV)
-    LOG_T_BBN_MIN = log(1e-3 * units.MeV)
-
-    def is_in_BBN_era(value: ScalarModelValue) -> bool:
-        return LOG_T_BBN_MIN <= value.log_T_Jordan <= LOG_T_BBN_MAX
-
-    def SigmaFm_BBN(value: ScalarModelValue) -> float:
-        Sigma = value.Sigma
-        fm = exp(value.log_fm)
-
-        if fm > 10.0:
-            return (1.0 + Sigma / fm) / (1.0 + 1.0 / fm)
-
-        return (Sigma + fm) / (1.0 + fm)
-
     abs_phi_Einstein_BBN = [
         (
-            exp(value.log_T_Jordan) / units.MeV,
+            T_Jordan_MeV(value),
             safe_fabs(value.phi_Einstein / units.PlanckMass),
         )
         for value in values
         if is_in_BBN_era(value)
     ]
     positive_Sigma_BBN = [
-        (exp(value.log_T_Jordan) / units.MeV, safe_fabs_positive(value.Sigma))
+        (T_Jordan_MeV(value), safe_fabs_positive(value.Sigma))
         for value in values
         if is_in_BBN_era(value)
     ]
     negative_Sigma_BBN = [
-        (exp(value.log_T_Jordan) / units.MeV, safe_fabs_negative(value.Sigma))
+        (T_Jordan_MeV(value), safe_fabs_negative(value.Sigma))
         for value in values
         if is_in_BBN_era(value)
     ]
     positive_SigmaFm_BBN = [
-        (exp(value.log_T_Jordan) / units.MeV, safe_fabs_positive(SigmaFm_BBN(value)))
+        (T_Jordan_MeV(value), safe_fabs_positive(SigmaFm(value)))
         for value in values
         if is_in_BBN_era(value)
     ]
     negative_SigmaFm_BBN = [
-        (exp(value.log_T_Jordan) / units.MeV, safe_fabs_negative(SigmaFm_BBN(value)))
+        (T_Jordan_MeV(value), safe_fabs_negative(SigmaFm(value)))
         for value in values
         if is_in_BBN_era(value)
     ]
     positive_kicking_term_BBN = [
         (
-            exp(value.log_T_Jordan) / units.MeV,
+            T_Jordan_MeV(value),
             safe_fabs_positive(value.kicking_term / units.PlanckMass),
         )
         for value in values
@@ -257,7 +269,7 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
     ]
     negative_kicking_term_BBN = [
         (
-            exp(value.log_T_Jordan) / units.MeV,
+            T_Jordan_MeV(value),
             safe_fabs_negative(value.kicking_term / units.PlanckMass),
         )
         for value in values
@@ -265,7 +277,7 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
     ]
     positive_reflecting_term_BBN = [
         (
-            exp(value.log_T_Jordan) / units.MeV,
+            T_Jordan_MeV(value),
             safe_fabs_positive(value.reflecting_term / units.PlanckMass),
         )
         for value in values
@@ -273,7 +285,7 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
     ]
     negative_reflecting_term_BBN = [
         (
-            exp(value.log_T_Jordan) / units.MeV,
+            T_Jordan_MeV(value),
             safe_fabs_negative(value.reflecting_term / units.PlanckMass),
         )
         for value in values
@@ -284,6 +296,10 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
     pi_Einstein_x, pi_Einstein_y = zip(*pi_Einstein_points)
     T_Jordan_x, T_Jordan_y = zip(*T_Jordan_points)
     Sigma_x, Sigma_y = zip(*Sigma_points)
+    positive_Sigma_x, positive_Sigma_y = zip(*positive_Sigma_points)
+    negative_Sigma_x, negative_Sigma_y = zip(*negative_Sigma_points)
+    positive_SigmaFm_x, positive_SigmaFm_y = zip(*positive_SigmaFm_points)
+    negative_SigmaFm_x, negative_SigmaFm_y = zip(*negative_SigmaFm_points)
     w_x, w_y = zip(*w_points)
     gstar_rho_x, gstar_rho_y = zip(*gstar_rho_points)
     gstar_s_x, gstar_s_y = zip(*gstar_s_points)
@@ -571,11 +587,12 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
         fig = plt.figure()
         fig.set_size_inches(8.0, 10.0)
 
-        axs = fig.subplots(nrows=3, ncols=1, sharex=True, sharey=False)
+        axs = fig.subplots(nrows=4, ncols=1, sharex=True, sharey=False)
 
         f_ax = axs[0]
         r_ax = axs[1]
         k_ax = axs[2]
+        Sigma_ax = axs[3]
 
         f_ax.plot(
             positive_friction_term_x,
@@ -625,25 +642,56 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
         k_ax.set_yscale("log")
         k_ax.grid(True)
 
+        Sigma_ax.plot(
+            positive_Sigma_x,
+            positive_Sigma_y,
+            label=r"$\Sigma$",
+            color="m",
+            linestyle="solid",
+        )
+        Sigma_ax.plot(
+            negative_Sigma_x,
+            negative_Sigma_y,
+            color="m",
+            linestyle="dashed",
+        )
+        Sigma_ax.plot(
+            positive_SigmaFm_x,
+            positive_SigmaFm_y,
+            label=r"$(\Sigma + f_{\mathrm{m}})/(1 + f_{\mathrm{m}})$",
+            color="c",
+            linestyle="solid",
+        )
+        Sigma_ax.plot(
+            negative_SigmaFm_x,
+            negative_SigmaFm_y,
+            color="c",
+            linestyle="dashed",
+        )
+        Sigma_ax.set_yscale("log")
+        Sigma_ax.grid(True)
+
         if x_coord == "redshift":
-            k_ax.set_xscale("log")
-            k_ax.xaxis.set_inverted(True)
-        k_ax.set_xlabel(x_axis_label())
+            Sigma_ax.set_xscale("log")
+            Sigma_ax.xaxis.set_inverted(True)
+        Sigma_ax.set_xlabel(x_axis_label())
 
         add_plot_labels(f_ax, model, model_label, shift=0.05)
         add_redshift_xaxis_labels(f_ax, model, text_labels=False, x_coord=x_coord)
         add_redshift_xaxis_labels(r_ax, model, text_labels=False, x_coord=x_coord)
+        add_redshift_xaxis_labels(k_ax, model, text_labels=False, x_coord=x_coord)
         h, l = add_redshift_xaxis_labels(
-            k_ax, model, temp_unit="GeV", text_labels=True, x_coord=x_coord
+            Sigma_ax, model, temp_unit="GeV", text_labels=True, x_coord=x_coord
         )
 
         f_ax.legend(loc="best")
         r_ax.legend(loc="best")
+        k_ax.legend(loc="best")
 
-        handles, labels = k_ax.get_legend_handles_labels()
+        handles, labels = Sigma_ax.get_legend_handles_labels()
         handles.extend(h)
         labels.extend(l)
-        k_ax.legend(handles, labels, loc="best")
+        Sigma_ax.legend(handles, labels, loc="best")
 
         fig_path = (
             base_path
@@ -792,6 +840,10 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
         csv_path.parents[0].mkdir(exist_ok=True, parents=True)
 
         df.to_csv(csv_path, header=True, index=False)
+
+
+def T_Jordan_MeV(value: ScalarModelValue) -> float | Any:
+    return exp(value.log_T_Jordan) / units.MeV
 
 
 def run_pipeline(
