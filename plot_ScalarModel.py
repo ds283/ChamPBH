@@ -210,6 +210,15 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
     def is_in_BBN_era(value: ScalarModelValue) -> bool:
         return LOG_T_BBN_MIN <= value.log_T_Jordan <= LOG_T_BBN_MAX
 
+    def SigmaFm_BBN(value: ScalarModelValue) -> float:
+        Sigma = value.Sigma
+        fm = exp(value.log_fm)
+
+        if fm > 10.0:
+            return (1.0 + Sigma / fm) / (1.0 + 1.0 / fm)
+
+        return (Sigma + fm) / (1.0 + fm)
+
     abs_phi_Einstein_BBN = [
         (
             exp(value.log_T_Jordan) / units.MeV,
@@ -218,8 +227,23 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
         for value in values
         if is_in_BBN_era(value)
     ]
-    Sigma_BBN = [
-        (exp(value.log_T_Jordan) / units.MeV, value.Sigma)
+    positive_Sigma_BBN = [
+        (exp(value.log_T_Jordan) / units.MeV, safe_fabs_positive(value.Sigma))
+        for value in values
+        if is_in_BBN_era(value)
+    ]
+    negative_Sigma_BBN = [
+        (exp(value.log_T_Jordan) / units.MeV, safe_fabs_negative(value.Sigma))
+        for value in values
+        if is_in_BBN_era(value)
+    ]
+    positive_SigmaFm_BBN = [
+        (exp(value.log_T_Jordan) / units.MeV, safe_fabs_positive(SigmaFm_BBN(value)))
+        for value in values
+        if is_in_BBN_era(value)
+    ]
+    negative_SigmaFm_BBN = [
+        (exp(value.log_T_Jordan) / units.MeV, safe_fabs_negative(SigmaFm_BBN(value)))
         for value in values
         if is_in_BBN_era(value)
     ]
@@ -299,7 +323,10 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
     )
 
     abs_phi_Einstein_BBN_x, abs_phi_Einstein_BBN_y = zip(*abs_phi_Einstein_BBN)
-    Sigma_BBN_x, Sigma_BBN_y = zip(*Sigma_BBN)
+    positive_Sigma_BBN_x, positive_Sigma_BBN_y = zip(*positive_Sigma_BBN)
+    negative_Sigma_BBN_x, negative_Sigma_BBN_y = zip(*negative_Sigma_BBN)
+    positive_SigmaFm_BBN_x, positive_SigmaFm_BBN_y = zip(*positive_SigmaFm_BBN)
+    negative_SigmaFm_BBN_x, negative_SigmaFm_BBN_y = zip(*negative_SigmaFm_BBN)
     positive_kicking_term_BBN_x, positive_kicking_term_BBN_y = zip(
         *positive_kicking_term_BBN
     )
@@ -629,14 +656,13 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
         plt.close()
 
         fig = plt.figure()
-        fig.set_size_inches(8.0, 13.0)
+        fig.set_size_inches(8.0, 10.0)
 
-        axs = fig.subplots(nrows=4, ncols=1, sharex=True, sharey=False)
+        axs = fig.subplots(nrows=3, ncols=1, sharex=True, sharey=False)
 
-        reflecting_term_BBN_ax = axs[0]
-        kicking_term_BBN_ax = axs[1]
-        Sigma_BBN_ax = axs[2]
-        phi_BBN_ax = axs[3]
+        ODE_terms_BBN_ax = axs[0]
+        Sigma_BBN_ax = axs[1]
+        phi_BBN_ax = axs[2]
 
         phi_BBN_ax.plot(
             abs_phi_Einstein_BBN_x,
@@ -649,56 +675,72 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
         phi_BBN_ax.grid(True)
 
         Sigma_BBN_ax.plot(
-            Sigma_BBN_x,
-            Sigma_BBN_y,
+            positive_Sigma_BBN_x,
+            positive_Sigma_BBN_y,
             label=r"$\Sigma$",
             color="m",
             linestyle="solid",
         )
+        Sigma_BBN_ax.plot(
+            negative_Sigma_BBN_x,
+            negative_Sigma_BBN_y,
+            color="m",
+            linestyle="dashed",
+        )
+        Sigma_BBN_ax.plot(
+            positive_SigmaFm_BBN_x,
+            positive_SigmaFm_BBN_y,
+            label=r"$(\Sigma + f_{\mathrm{m}})/(1 + f_{\mathrm{m}})$",
+            color="c",
+            linestyle="solid",
+        )
+        Sigma_BBN_ax.plot(
+            negative_SigmaFm_BBN_x,
+            negative_SigmaFm_BBN_y,
+            color="c",
+            linestyle="dashed",
+        )
+        Sigma_BBN_ax.set_yscale("log")
         Sigma_BBN_ax.grid(True)
 
-        kicking_term_BBN_ax.plot(
+        ODE_terms_BBN_ax.plot(
             positive_kicking_term_BBN_x,
             positive_kicking_term_BBN_y,
             label=r"kicking term [$M_{\text{P}}$]",
             color="b",
             linestyle="solid",
         )
-        kicking_term_BBN_ax.plot(
+        ODE_terms_BBN_ax.plot(
             negative_kicking_term_BBN_x,
             negative_kicking_term_BBN_y,
             color="b",
             linestyle="dashed",
         )
-        kicking_term_BBN_ax.set_yscale("log")
-        kicking_term_BBN_ax.grid(True)
-
-        reflecting_term_BBN_ax.plot(
+        ODE_terms_BBN_ax.plot(
             positive_reflecting_term_BBN_x,
             positive_reflecting_term_BBN_y,
             label=r"reflecting term [$M_{\text{P}}$]",
             color="g",
             linestyle="solid",
         )
-        reflecting_term_BBN_ax.plot(
+        ODE_terms_BBN_ax.plot(
             negative_reflecting_term_BBN_x,
             negative_reflecting_term_BBN_y,
             color="g",
             linestyle="dashed",
         )
-        reflecting_term_BBN_ax.set_yscale("log")
-        reflecting_term_BBN_ax.grid(True)
+        ODE_terms_BBN_ax.set_yscale("log")
+        ODE_terms_BBN_ax.grid(True)
 
         phi_BBN_ax.set_xlabel("Temperature $T$ [MeV]")
         phi_BBN_ax.set_xscale("log")
         phi_BBN_ax.xaxis.set_inverted(True)
 
-        add_plot_labels(reflecting_term_BBN_ax, model, model_label, shift=0.05)
+        add_plot_labels(ODE_terms_BBN_ax, model, model_label, shift=0.05)
 
         phi_BBN_ax.legend(loc="best")
         Sigma_BBN_ax.legend(loc="best")
-        kicking_term_BBN_ax.legend(loc="best")
-        reflecting_term_BBN_ax.legend(loc="best")
+        ODE_terms_BBN_ax.legend(loc="best")
 
         fig_path = (
             base_path
