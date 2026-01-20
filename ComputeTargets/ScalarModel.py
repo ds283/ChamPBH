@@ -239,7 +239,7 @@ def compute_scalar_model(
             R = (1.0 + Sigma / fm) / (1.0 + 1.0 / fm)
         else:
             R = (Sigma + fm) / (1.0 + fm)
-        A1: float = 2.0 + R / 2.0
+        A1: float = 1.0 + R / 2.0
         A2: float = 4.0 - R
 
         log_V: float = potential.log_V(phi_Einstein)
