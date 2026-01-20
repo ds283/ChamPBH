@@ -82,6 +82,11 @@ class SaikawaShirai_EOS_spline(GenericEOSBase):
         """
 
         T_in_GeV = GetTemperature(T) / self._units.GeV
+        if T_in_GeV <= 0.0:
+            raise RuntimeError(
+                f"!! SaikawaShirai_EOS_spline.G_rho: Temperature T = {T_in_GeV:.5g} GeV (raw T = {T:.5g}) is negative"
+            )
+
         log10_T_in_GeV = np.log10(T_in_GeV)
 
         if log10_T_in_GeV >= _LOG10_SAIKAWA_SHIRAI_T_HI:
@@ -95,6 +100,11 @@ class SaikawaShirai_EOS_spline(GenericEOSBase):
 
         # units of the output will be 1/GeV because we internally evaluate T in GeV
         T_in_GeV = GetTemperature(T) / self._units.GeV
+        if T_in_GeV <= 0.0:
+            raise RuntimeError(
+                f"!! SaikawaShirai_EOS_spline.dG_rho_dlogT: Temperature T = {T_in_GeV:.5g} GeV (raw T = {T:.5g}) is negative"
+            )
+
         log10_T_in_GeV = np.log10(T_in_GeV)
 
         if log10_T_in_GeV >= _LOG10_SAIKAWA_SHIRAI_T_HI:
@@ -113,6 +123,11 @@ class SaikawaShirai_EOS_spline(GenericEOSBase):
         """
 
         T_in_GeV = GetTemperature(T) / self._units.GeV
+        if T_in_GeV <= 0.0:
+            raise RuntimeError(
+                f"!! SaikawaShirai_EOS_spline.G_s: Temperature T = {T_in_GeV:.5g} GeV (raw T = {T:.5g}) is negative"
+            )
+
         log10_T_in_GeV = np.log10(T_in_GeV)
 
         if log10_T_in_GeV >= _LOG10_SAIKAWA_SHIRAI_T_HI:
@@ -126,6 +141,11 @@ class SaikawaShirai_EOS_spline(GenericEOSBase):
 
         # units of the output will be 1/GeV because we internally evaluate T in GeV
         T_in_GeV = GetTemperature(T) / self._units.GeV
+        if T_in_GeV <= 0.0:
+            raise RuntimeError(
+                f"!! SaikawaShirai_EOS_spline.dG_s_dlogT: Temperature T = {T_in_GeV:.5g} GeV (raw T = {T:.5g}) is negative"
+            )
+
         log10_T_in_GeV = np.log10(T_in_GeV)
 
         if log10_T_in_GeV >= _LOG10_SAIKAWA_SHIRAI_T_HI:
@@ -149,6 +169,10 @@ class SaikawaShirai_EOS_spline(GenericEOSBase):
         # To get a smooth result we evaluate the asymptotic value exactly at SAIKAWA_SHIRAI_T_LO
 
         T_in_GeV: float = GetTemperature(T) / self._units.GeV
+        if T_in_GeV <= 0.0:
+            raise RuntimeError(
+                f"!! SaikawaShirai_EOS_spline.w: Temperature T = {T_in_GeV:.5g} GeV (raw T = {T:.5g}) is negative"
+            )
 
         if T_in_GeV <= _EOS_T_LO:
             T = _EOS_T_LO * self._units.GeV

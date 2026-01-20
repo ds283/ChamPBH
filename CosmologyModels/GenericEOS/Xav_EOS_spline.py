@@ -44,6 +44,10 @@ class Xav_EOS_spline(SaikawaShirai_EOS_spline):
         """
 
         T_in_GeV: float = GetTemperature(T) / self._units.GeV
+        if T_in_GeV <= 0.0:
+            raise RuntimeError(
+                f"!! Xav_EOS_spline.w: Temperature T = {T_in_GeV:.5g} GeV (raw T = {T:.5g}) is negative"
+            )
 
         if T_in_GeV >= self._T_max:
             return 1.0 / 3.0

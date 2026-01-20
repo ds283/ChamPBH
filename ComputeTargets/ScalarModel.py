@@ -220,6 +220,12 @@ def compute_scalar_model(
             )
             raise e
 
+        if T_Jordan <= 0.0:
+            print(
+                f"!! compute_scalar_model ({task_label}): T_Jordan = {T_Jordan:.5g}, log_T_Jordan = {log_T_Jordan:.5g} at N={N:.8g}"
+            )
+            T_Jordan = 1 * units.Kelvin
+
         log_Omega_prime: float = coupling.log_Omega_prime(phi_Einstein)
 
         G: float = 1.0 - pi_Einstein * pi_Einstein / CONST_6_MP_SQ
