@@ -11,7 +11,8 @@ from CosmologyModels import BaseCosmology
 from Quadrature.integration_metadata import IntegrationSolver
 from Units.base import UnitsLike
 
-TEXT_DISPLACEMENT_MULTIPLIER = 0.8
+REDSHIFT_TEXT_DISPLACEMENT_MULTIPLIER = 0.8
+EFOLDS_TEXT_DISPLACEMENT_SHIFT = 0.5
 
 TOP_ROW = 1.12
 MIDDLE_ROW = 1.07
@@ -281,14 +282,25 @@ def add_redshift_xaxis_labels(
                         xpos, color=config["color"], linestyle=config["linestyle"]
                     )
                     if text_labels:
-                        ax.text(
-                            TEXT_DISPLACEMENT_MULTIPLIER * xpos,
-                            config["ypos"],
-                            f"{config['label']}@{config["T_Jordan"]:.3g}{config["unit"]} ${xlabel}$={xpos:.3g}",
-                            color=config["color"],
-                            transform=xtrans,
-                            fontsize="x-small",
-                        )
+                        if "x_coord" == "efolds":
+                            ax.text(
+                                EFOLDS_TEXT_DISPLACEMENT_SHIFT + xpos,
+                                config["ypos"],
+                                f"{config['label']}@{config["T_Jordan"]:.3g}{config["unit"]} ${xlabel}$={xpos:.3g}",
+                                color=config["color"],
+                                transform=xtrans,
+                                fontsize="x-small",
+                            )
+
+                        else:
+                            ax.text(
+                                REDSHIFT_TEXT_DISPLACEMENT_MULTIPLIER * xpos,
+                                config["ypos"],
+                                f"{config['label']}@{config["T_Jordan"]:.3g}{config["unit"]} ${xlabel}$={xpos:.3g}",
+                                color=config["color"],
+                                transform=xtrans,
+                                fontsize="x-small",
+                            )
 
     legend_entries = set()
 
