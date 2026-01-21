@@ -535,46 +535,51 @@ with ShardedPool(
 
     print("\n** BUILDING GRID OF MODELS TO SAMPLE")
 
-    num_beta_sample = int(round(samples_per_beta * (beta_high - beta_low) + 0.5, 0))
-
+    # num_beta_sample = int(round(samples_per_beta * (beta_high - beta_low) + 0.5, 0))
+    #
+    # beta_array = ray.get(
+    #     convert_to_betas(
+    #         np.linspace(beta_low, beta_high, num_beta_sample, endpoint=True)
+    #     )
+    # )
     beta_array = ray.get(
-        convert_to_betas(
-            np.linspace(beta_low, beta_high, num_beta_sample, endpoint=True)
-        )
+        convert_to_betas([0.1, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0])
     )
     beta_grid = DimensionlessQuantityArray(value_array=beta_array)
 
-    num_M_sample = int(
-        round(samples_per_log10_M_eV * (log10_M_high_eV - log10_M_low_eV) + 0.5, 0)
-    )
-
-    M_array = ray.get(
-        convert_to_Ms(
-            np.logspace(log10_M_low_eV, log10_M_high_eV, num_M_sample, endpoint=True)
-            * units.eV
-        )
-    )
+    # num_M_sample = int(
+    #     round(samples_per_log10_M_eV * (log10_M_high_eV - log10_M_low_eV) + 0.5, 0)
+    # )
+    #
+    # M_array = ray.get(
+    #     convert_to_Ms(
+    #         np.logspace(log10_M_low_eV, log10_M_high_eV, num_M_sample, endpoint=True)
+    #         * units.eV
+    #     )
+    # )
+    M_array = ray.get(convert_to_Ms([0.5 * units.PlanckMass]))
     M_grid = DimensionfulQuantityArray(value_array=M_array)
 
-    num_Lambda_sample = int(
-        round(
-            samples_per_log10_Lambda_eV * (log10_Lambda_high_eV - log10_Lambda_low_eV)
-            + 0.5,
-            0,
-        )
-    )
-
-    Lambda_array = ray.get(
-        convert_to_Lambdas(
-            np.logspace(
-                log10_Lambda_low_eV,
-                log10_Lambda_high_eV,
-                num_Lambda_sample,
-                endpoint=True,
-            )
-            * units.eV
-        )
-    )
+    # num_Lambda_sample = int(
+    #     round(
+    #         samples_per_log10_Lambda_eV * (log10_Lambda_high_eV - log10_Lambda_low_eV)
+    #         + 0.5,
+    #         0,
+    #     )
+    # )
+    #
+    # Lambda_array = ray.get(
+    #     convert_to_Lambdas(
+    #         np.logspace(
+    #             log10_Lambda_low_eV,
+    #             log10_Lambda_high_eV,
+    #             num_Lambda_sample,
+    #             endpoint=True,
+    #         )
+    #         * units.eV
+    #     )
+    # )
+    Lambda_array = ray.get(convert_to_Lambdas([1e-3 * units.eV]))
     Lambda_grid = DimensionfulQuantityArray(value_array=Lambda_array)
 
     M_lambda_grid = itertools.product(M_grid, Lambda_grid)
