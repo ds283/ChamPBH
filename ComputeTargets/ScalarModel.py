@@ -310,8 +310,12 @@ def compute_scalar_model(
                 data.friction_term + data.reflecting_term + data.kicking_term
             )
 
-            d_log_rhorad_Einstein: float = data.Sigma - 4.0
-            d_log_fm: float = 1.0 - data.Sigma
+            d_log_rhorad_Einstein: float = (
+                data.Sigma - 4.0 + data.Sigma * data.log_Omega_prime * pi_Einstein
+            )
+            d_log_fm: float = (1.0 - data.Sigma) * (
+                1.0 + data.log_Omega_prime * pi_Einstein
+            )
 
             G_s: float = cosmology.G_s(T_Jordan)
             dG_s_dlogT: float = cosmology.dG_s_dlogT(T_Jordan)
