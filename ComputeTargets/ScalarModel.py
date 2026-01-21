@@ -277,7 +277,7 @@ def compute_scalar_model(
 
         friction_term = -pi_Einstein * (G * A1 + C * A2)
         reflecting_term = -D
-        kicking_term = -3.0 * CONST_MP_SQ * G * E * log_Omega_prime * R
+        kicking_term = -3.0 * CONST_MP_SQ * E * log_Omega_prime * R
         return ODE_data(
             fm=fm,
             T_Jordan=T_Jordan,
