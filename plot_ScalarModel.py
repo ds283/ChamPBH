@@ -272,6 +272,16 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
         for value in values
         if is_in_BBN_era(value)
     ]
+    positive_abs_H_Jordan_BBN = [
+        (T_Jordan_MeV(value), safe_fabs_positive(value.H_Jordan / units.GeV))
+        for value in values
+        if is_in_BBN_era(value)
+    ]
+    negative_abs_H_Jordan_BBN = [
+        (T_Jordan_MeV(value), safe_fabs_negative(value.H_Jordan / units.GeV))
+        for value in values
+        if is_in_BBN_era(value)
+    ]
     positive_Sigma_BBN = [
         (T_Jordan_MeV(value), safe_fabs_positive(value.Sigma))
         for value in values
@@ -376,6 +386,12 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
     TotalEnergy_x, TotalEnergy_y = zip(*TotalEnergy_points)
 
     abs_phi_Einstein_BBN_x, abs_phi_Einstein_BBN_y = zip(*abs_phi_Einstein_BBN)
+    positive_abs_H_Jordan_BBN_x, positive_abs_H_Jordan_BBN_y = zip(
+        *positive_abs_H_Jordan_BBN
+    )
+    negative_abs_H_Jordan_BBN_x, negative_abs_H_Jordan_BBN_y = zip(
+        *negative_abs_H_Jordan_BBN
+    )
     positive_Sigma_BBN_x, positive_Sigma_BBN_y = zip(*positive_Sigma_BBN)
     negative_Sigma_BBN_x, negative_Sigma_BBN_y = zip(*negative_Sigma_BBN)
     positive_SigmaFm_BBN_x, positive_SigmaFm_BBN_y = zip(*positive_SigmaFm_BBN)
@@ -794,13 +810,14 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
         plt.close()
 
         fig = plt.figure()
-        fig.set_size_inches(8.0, 10.0)
+        fig.set_size_inches(8.0, 13.0)
 
-        axs = fig.subplots(nrows=3, ncols=1, sharex=True, sharey=False)
+        axs = fig.subplots(nrows=4, ncols=1, sharex=True, sharey=False)
 
         ODE_terms_BBN_ax = axs[0]
         Sigma_BBN_ax = axs[1]
-        phi_BBN_ax = axs[2]
+        HJordan_BBN_ax = axs[2]
+        phi_BBN_ax = axs[3]
 
         phi_BBN_ax.plot(
             abs_phi_Einstein_BBN_x,
@@ -811,6 +828,22 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
         )
         phi_BBN_ax.set_yscale("log")
         phi_BBN_ax.grid(True)
+
+        HJordan_BBN_ax.plot(
+            positive_abs_H_Jordan_BBN_x,
+            positive_abs_H_Jordan_BBN_y,
+            label=r"$H_{\text{Jordan}}$ [GeV]",
+            color="g",
+            linestyle="solid",
+        )
+        HJordan_BBN_ax.plot(
+            negative_abs_H_Jordan_BBN_x,
+            negative_abs_H_Jordan_BBN_y,
+            color="g",
+            linestyle="dashed",
+        )
+        HJordan_BBN_ax.set_yscale("log")
+        HJordan_BBN_ax.grid(True)
 
         Sigma_BBN_ax.plot(
             positive_Sigma_BBN_x,
@@ -877,6 +910,7 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
         add_plot_labels(ODE_terms_BBN_ax, model, model_label, shift=0.05)
 
         phi_BBN_ax.legend(loc="best")
+        HJordan_BBN_ax.legend(loc="best")
         Sigma_BBN_ax.legend(loc="best")
         ODE_terms_BBN_ax.legend(loc="best")
 
