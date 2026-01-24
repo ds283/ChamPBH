@@ -86,3 +86,11 @@ class ReflectingPotential(AbstractPotential):
         :return:
         """
         return 0.0
+
+    def d2_logV_dphi2(self, phi: FieldLike) -> float:
+        """
+        Evaluate the second derivative of the potential at a given value of phi
+        :param phi:
+        :return:
+        """
+        return 0.0

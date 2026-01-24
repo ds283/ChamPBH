@@ -52,9 +52,18 @@ class AbstractCoupling(DatastoreObject, ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def log_Omega_prime(self, phi: FieldLike) -> float:
+    def d_logOmega_dphi(self, phi: FieldLike) -> float:
         """
         Evaluate the logarithmic derivative Omega'/Omega at field value phi
+        :param phi:
+        :return:
+        """
+        raise NotImplementedError
+
+    @abstractmethod
+    def d2_logOmega_dphi2(self, phi: FieldLike) -> float:
+        """
+        Evaluate the second logarithmic derivative at field value phi
         :param phi:
         :return:
         """

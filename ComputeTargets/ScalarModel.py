@@ -68,7 +68,7 @@ ODE_data = namedtuple(
         "d_logV_dphi",
         "V_over_3H2Mp2",
         "Vprime_over_3H2Mp2",
-        "log_Omega_prime",
+        "d_logOmega_dphi",
         "friction_term",
         "reflecting_term",
         "kicking_term",
@@ -201,6 +201,7 @@ def compute_scalar_model(
     # )
 
     CONST_MP_SQ = units.PlanckMass * units.PlanckMass
+    CONST_3_MP_SQ = 2.0 * CONST_MP_SQ
     CONST_6_MP_SQ = 6.0 * CONST_MP_SQ
 
     def RHS_impl(N: float, state: StateVector):
@@ -241,7 +242,7 @@ def compute_scalar_model(
             )
             T_Jordan = 1 * units.Kelvin
 
-        log_Omega_prime: float = coupling.log_Omega_prime(phi_Einstein)
+        d_logOmega_dphi: float = coupling.d_logOmega_dphi(phi_Einstein)
 
         G: float = 1.0 - pi_Einstein * pi_Einstein / CONST_6_MP_SQ
         # G must be positive in order the H_Einstein^2 is also positive
@@ -279,7 +280,7 @@ def compute_scalar_model(
         Vprime_over_3H2Mp2: float = G * d_logV_dphi * T
 
         C: float = V_over_3H2Mp2 / 2.0
-        D: float = 3.0 * CONST_MP_SQ * Vprime_over_3H2Mp2
+        D: float = CONST_3_MP_SQ * Vprime_over_3H2Mp2
         E: float = G - V_over_3H2Mp2
         # must be positive, because it is proportional to rho_R/H^2
         if E < 0.0:
@@ -292,7 +293,7 @@ def compute_scalar_model(
 
         friction_term = -pi_Einstein * (G * A1 + C * A2)
         reflecting_term = -D
-        kicking_term = -3.0 * CONST_MP_SQ * E * log_Omega_prime * R
+        kicking_term = -CONST_3_MP_SQ * E * d_logOmega_dphi * R
         return ODE_data(
             fm=fm,
             T_Jordan=T_Jordan,
@@ -301,7 +302,7 @@ def compute_scalar_model(
             d_logV_dphi=d_logV_dphi,
             V_over_3H2Mp2=V_over_3H2Mp2,
             Vprime_over_3H2Mp2=Vprime_over_3H2Mp2,
-            log_Omega_prime=log_Omega_prime,
+            d_logOmega_dphi=d_logOmega_dphi,
             friction_term=friction_term,
             reflecting_term=reflecting_term,
             kicking_term=kicking_term,
@@ -332,16 +333,16 @@ def compute_scalar_model(
             )
 
             d_log_rhorad_Einstein: float = (
-                data.Sigma - 4.0 + data.Sigma * data.log_Omega_prime * pi_Einstein
+                data.Sigma - 4.0 + data.Sigma * data.d_logOmega_dphi * pi_Einstein
             )
             d_log_fm: float = (1.0 - data.Sigma) * (
-                1.0 + data.log_Omega_prime * pi_Einstein
+                1.0 + data.d_logOmega_dphi * pi_Einstein
             )
 
             G_s: float = cosmology.G_s(T_Jordan)
             dG_s_dlogT: float = cosmology.dG_s_dlogT(T_Jordan)
 
-            d_log_T_Jordan: float = -(1.0 + data.log_Omega_prime * pi_Einstein) / (
+            d_log_T_Jordan: float = -(1.0 + data.d_logOmega_dphi * pi_Einstein) / (
                 1.0 + dG_s_dlogT / G_s / 3.0
             )
 
@@ -375,7 +376,7 @@ def compute_scalar_model(
                     f"     - physical: log(rhorad_E/GeV^4)={log_rhorad_Einstein - 4.0*log(units.GeV):.5g}, fm={fm:.5g}, T_J={T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K"
                 )
                 print(
-                    f"     - potential: log(V/GeV^4)={log_V - 4.0*log(units.GeV):.5g}, V'/V={d_logV_dphi*units.GeV:.5g} GeV^(-1), log_Omega'={data.log_Omega_prime:.5g}"
+                    f"     - potential: log(V/GeV^4)={log_V - 4.0*log(units.GeV):.5g}, V'/V={d_logV_dphi*units.GeV:.5g} GeV^(-1), d_logOmega_dphi'={data.d_logOmega_dphi:.5g}"
                 )
                 print(
                     f"     - cosmology: V/3H2Mp2={V_over_3H2Mp2:.5g}, V'/3H2Mp2={Vprime_over_3H2Mp2:.5g}, Sigma={Sigma:.5g}"
@@ -718,7 +719,7 @@ def compute_scalar_model(
 
         log_V_over_3H2Mp2: float = log(data.V_over_3H2Mp2)
         log_3H2Mp2: float = -1.0 * (log_V_over_3H2Mp2 - data.log_V)
-        H2_Einstein: float = exp(log_3H2Mp2) / 3.0 / CONST_MP_SQ
+        H2_Einstein: float = exp(log_3H2Mp2) / CONST_3_MP_SQ
         H_Einstein: float = sqrt(H2_Einstein)
 
         log_Omega: float = coupling.log_Omega(state.phi_Einstein)
@@ -728,7 +729,7 @@ def compute_scalar_model(
 
         # H_Jordan can even be negative, so there is no use trying to store its logarithm
         H_Jordan: float = (
-            H_Einstein * (1.0 + data.log_Omega_prime * state.pi_Einstein) / Omega
+            H_Einstein * (1.0 + data.d_logOmega_dphi * state.pi_Einstein) / Omega
         )
 
         sample.append(

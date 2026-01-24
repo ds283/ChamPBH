@@ -121,3 +121,25 @@ class ExponentialPotential(AbstractPotential):
                 f"!! ValueError in ExponentialPotential d_logV_dphi at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
             )
             raise e
+
+    def d2_logV_dphi2(self, phi: FieldLike) -> float:
+        """
+        Evaluate the second derivative of the potential at a given value of phi
+        :param phi:
+        :return:
+        """
+        phi_float = GetFieldValue(phi)
+
+        arg: float = pow(self._M_float / phi_float, self._n)
+        try:
+            return self._n * (self._n + 1) * arg / (phi * phi)
+        except OverflowError as e:
+            print(
+                f"! Overflow in ExponentialPotential d2_logV_dphi2 at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
+            )
+            raise e
+        except ValueError as e:
+            print(
+                f"!! ValueError in ExponentialPotential d2_logV_dphi2 at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
+            )
+            raise e

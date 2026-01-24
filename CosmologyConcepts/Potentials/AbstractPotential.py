@@ -70,7 +70,16 @@ class AbstractPotential(DatastoreObject, ABC):
     @abstractmethod
     def d_logV_dphi(self, phi: FieldLike) -> float:
         """
-        Evaluate the derivative of the potential at a given value of phi
+        Evaluate the logarithmic derivative of the potential at a given value of phi
+        :param phi:
+        :return:
+        """
+        raise NotImplementedError
+
+    @abstractmethod
+    def d2_logV_dphi2(self, phi: FieldLike) -> float:
+        """
+        Evaluate the second logarithmic derivative of the potential at a given value of phi
         :param phi:
         :return:
         """

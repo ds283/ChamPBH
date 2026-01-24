@@ -62,10 +62,18 @@ class ExponentialCoupling(AbstractCoupling):
         """
         return exp(self.log_Omega(phi))
 
-    def log_Omega_prime(self, phi: FieldLike) -> float:
+    def d_logOmega_dphi(self, phi: FieldLike) -> float:
         """
-        Evluate the logarithmic derivative Omega'/Omega at field value phi
+        Evaluate the logarithmic derivative Omega'/Omega at field value phi
         :param phi:
         :return:
         """
         return self._beta_float / self._Mp
+
+    def d2_logOmega_dphi2(self, phi: FieldLike) -> float:
+        """
+        Evaluate the second logarithmic derivative at field value phi
+        :param phi:
+        :return:
+        """
+        return 0.0
