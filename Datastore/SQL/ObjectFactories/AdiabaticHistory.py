@@ -178,7 +178,7 @@ class sqla_AdiabaticHistoryFactory(SQLAFactoryBase):
         value_query = (
             sqla.select(
                 value_table.c.serial,
-                value_table.c.z_serial == value_table.c.z_serial,
+                value_table.c.z_serial,
                 redshift_table.c.z,
                 value_table.c.raw_N,
                 *value_columns,
@@ -225,7 +225,8 @@ class sqla_AdiabaticHistoryFactory(SQLAFactoryBase):
                 "store_id": store_id,
                 "values": values,
                 "max_abs_Q_values": {
-                    label: row_data._mapping[f"Q_{label}"] for label in self._Q_labels
+                    label: row_data._mapping[f"max_abs_Q_{label}"]
+                    for label in self._Q_labels
                 },
                 "compute_time": row_data.compute_time,
             },
@@ -399,6 +400,7 @@ class sqla_AdiabaticHistoryValue_factory(SQLAFactoryBase):
                 index=True,
                 nullable=False,
             ),
+            sqla.Column("raw_N", sqla.Float(64), nullable=False),
         ]
 
         # add columns for each adiabatic history label

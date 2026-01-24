@@ -1,4 +1,4 @@
-from math import log, exp
+from math import log
 from typing import Optional, List
 
 import sqlalchemy as sqla
@@ -188,6 +188,7 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
             units: UnitsLike = cosmology.units
             GeV2 = units.GeV * units.GeV
             GeV4 = GeV2 * GeV2
+            log_GeV = log(units.GeV)
 
             for row in value_rows:
                 z_value = redshift(
@@ -200,7 +201,7 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
                         row.serial,
                         z=redshift(row.z),
                         raw_N=row.raw_N,
-                        T_Jordan=exp(row.log_T_Jordan_GeV) * units.GeV,
+                        log_T_Jordan=row.log_T_Jordan_GeV + log_GeV,
                         density_NP=row.density_NP_GeV4 * GeV4,
                         pressure_NP=row.pressure_NP_GeV4 * GeV4,
                     )
@@ -246,6 +247,7 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
             "DOverH": obj.DOverH,
             "HeOverH": obj.HeOverH,
             "LiOverH": obj.LiOverH,
+            "z_samples": len(obj.values),
             "compute_time": obj.compute_time,
             "validated": True,
         }
@@ -274,7 +276,7 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
                 "bbn_serial": store_id,
                 "z_serial": val.z.store_id,
                 "raw_N": val.raw_N,
-                "log_T_Jordan_GeV": log(val.T_Jordan) - log_GeV,
+                "log_T_Jordan_GeV": val.log_T_Jordan - log_GeV,
                 "density_NP_GeV4": val.density_NP / GeV4,
                 "pressure_NP_GeV4": val.pressure_NP / GeV4,
             }
@@ -419,14 +421,16 @@ class sqla_BBNDataValue_factory(SQLAFactoryBase):
         z: redshift = payload["z"]
         raw_N: float = payload["raw_N"]
 
-        T_Jordan: float = payload["T_Jordan"]
+        log_T_Jordan: float = payload["log_T_Jordan"]
         density_NP: float = payload["density_NP"]
         pressure_NP: float = payload["pressure_NP"]
 
         # define quantities in explicit units
         GeV2 = units.GeV * units.GeV
         GeV4 = GeV2 * GeV2
-        log_T_Jordan_GeV: float = log(T_Jordan) - log(units.GeV)
+        log_GeV = log(units.GeV)
+
+        log_T_Jordan_GeV: float = log_T_Jordan - log_GeV
         density_NP_GeV4: float = density_NP / GeV4
         pressure_NP_GeV4: float = pressure_NP / GeV4
 
@@ -465,7 +469,7 @@ class sqla_BBNDataValue_factory(SQLAFactoryBase):
             # replace supplied values with those read from the dataabse
             raw_N = row_data.raw_N
 
-            T_Jordan = exp(row_data.log_T_Jordan_GeV) * units.GeV
+            log_T_Jordan = row_data.log_T_Jordan_GeV + log_GeV
             density_NP = row_data.density_NP_GeV4 * GeV4
             pressure_NP = row_data.pressure_NP_GeV4 * GeV4
 
@@ -473,7 +477,7 @@ class sqla_BBNDataValue_factory(SQLAFactoryBase):
             store_id,
             z=z,
             raw_N=raw_N,
-            T_Jordan=T_Jordan,
+            log_T_Jordan=log_T_Jordan,
             density_NP=density_NP,
             pressure_NP=pressure_NP,
         )

@@ -1,7 +1,9 @@
 from collections import namedtuple
+from math import exp, log
 from typing import Optional, List
 
 import ray
+from scipy.interpolate import make_interp_spline
 
 from CosmologyConcepts import redshift, redshift_array
 from CosmologyConcepts.ConformalCouplings import AbstractCoupling
@@ -17,26 +19,158 @@ SampleValues = namedtuple(
     "SampleValues",
     [
         "raw_N",
-        "T_Jordan",
+        "log_T_Jordan",
         "density_NP",
         "pressure_NP",
     ],
 )
 
 
+def _make_spline(x_grid, y_grid):
+    paired_data = list(zip(x_grid, y_grid))
+    paired_data.sort(key=lambda pair: pair[0])
+
+    sorted_x_grid, sorted_y_grid = zip(*paired_data)
+    return make_interp_spline(sorted_x_grid, sorted_y_grid, k=3)
+
+
 @ray.remote
-def compute_BBN_data(model_proxy: ScalarModelProxy, task_label: str):
+def compute_BBN_data(
+    model_proxy: ScalarModelProxy,
+    task_label: str,
+    T_BBN_MeV_spline_max: float = 100,  # PRyMordial default begins at 10 MeV
+    T_BBN_keV_spline_min: float = 1,  # PRyMordial default ends at 10 keV
+):
     model: ScalarModel = model_proxy.get()
     cosmology: BaseCosmology = model._cosmology
     units: UnitsLike = cosmology.units
 
-    z_grid: List[redshift] = []
-    samples: List[dict] = []
+    potential: AbstractPotential = model.potential
 
+    CONST_MP_SQ = units.PlanckMass * units.PlanckMass
+    CONST_6_MP_SQ = 6.0 * CONST_MP_SQ
+
+    z_grid: List[redshift] = []
+    samples: List[SampleValues] = []
+
+    raw_N_grid: List[float] = []
+    log_T_Jordan_grid: List[float] = []
+    log_T_Jordan_MeV_grid: List[float] = []
+    pressure_NP_grid: List[float] = []
+    density_NP_grid: List[float] = []
+
+    T_BBN_spline_max = T_BBN_MeV_spline_max * units.MeV
+    T_BBN_spline_min = T_BBN_keV_spline_min * units.keV
+
+    log_MeV = log(units.MeV)
+
+    last_log_T_Jordan_MeV = None
+
+    # first, build estimates for the "new physics" density and pressure needed by PRyMordial
     for value in model.values:
         value: ScalarModelValue
 
+        T_Jordan: float = exp(value.log_T_Jordan)
+
+        if T_BBN_spline_min <= T_Jordan <= T_BBN_spline_max:
+            z_grid.append(value.z)
+            raw_N_grid.append(value.raw_N)
+            log_T_Jordan_grid.append(value.log_T_Jordan)
+
+            log_T_Jordan_MeV = value.log_T_Jordan - log_MeV
+            if last_log_T_Jordan_MeV is not None:
+                if log_T_Jordan_MeV > last_log_T_Jordan_MeV:
+                    print(
+                        f"!! compute_BBN_data {task_label}: T_Jordan values are not monotonically decreasing: this log(T_Jordan/MeV) {log_T_Jordan_MeV:.5g} (this) > {log_T_Jordan_MeV:.5g} (last) = {last_log_T_Jordan_MeV:.5g} (last)"
+                    )
+
+            log_T_Jordan_MeV_grid.append(log_T_Jordan_MeV)
+            last_log_T_Jordan_MeV = log_T_Jordan_MeV
+
+            # compute new physics density and pressure
+            phi_Einstein: float = value.phi_Einstein
+            pi_Einstein: float = value.pi_Einstein
+            H_Jordan: float = value.H_Jordan
+            H2_Jordan: float = H_Jordan * H_Jordan
+
+            rhorad_Jordan: float = exp(value.log_rhorad_Jordan)
+            fm: float = exp(value.log_fm)
+            Sigma: float = value.Sigma
+            w: float = (1.0 - Sigma) / 3.0
+
+            G: float = 1.0 - pi_Einstein * pi_Einstein / CONST_6_MP_SQ
+
+            R: float
+            if fm > 10.0:
+                R = (1.0 + Sigma / fm) / (1.0 + 1.0 / fm)
+            else:
+                R = (Sigma + fm) / (1.0 + fm)
+            A1: float = 1.0 + R / 2.0
+            A2: float = 4.0 - R
+
+            log_V: float = potential.log_V(phi_Einstein)
+            log_rhorad_over_V: float = value.log_rhorad_Einstein - log_V
+
+            T: float
+            if log_rhorad_over_V > 2.0:
+                V_over_rhorad: float = exp(-log_rhorad_over_V)
+                T = V_over_rhorad / (V_over_rhorad + 1.0 + fm)
+            else:
+                rhorad_over_V: float = exp(log_rhorad_over_V)
+                T = 1.0 / (1.0 + rhorad_over_V * (1.0 + fm))
+
+            V_over_3H2Mp2: float = G * T
+            C: float = V_over_3H2Mp2 / 2.0
+
+            LHS: float = 3.0 * H2_Jordan * CONST_MP_SQ
+
+            dotH_over_H2: float = -3.0 + (G * A1 + C * A2)
+
+            density_NP: float = LHS - rhorad_Jordan * (1.0 + fm)
+            pressure_BP: float = (
+                -LHS * (1.0 + 2.0 * dotH_over_H2 / 3.0) - w * rhorad_Jordan
+            )
+
+            density_NP_grid.append(density_NP)
+            pressure_NP_grid.append(pressure_BP)
+
+    density_NP_spline = _make_spline(
+        log_T_Jordan_MeV_grid,
+        density_NP_grid,
+    )
+    pressure_NP_spline = _make_spline(
+        log_T_Jordan_MeV_grid,
+        pressure_NP_grid,
+    )
+    density_NP_derivative_spline = density_NP_spline.derivative()
+
+    def rho_NP(T_in_MeV: float):
+        log_T_in_MeV = log(T_in_MeV)
+        return density_NP_spline(log_T_in_MeV)
+
+    def P_NP(T_in_MeV: float):
+        log_T_in_MeV = log(T_in_MeV)
+        return pressure_NP_spline(log_T_in_MeV)
+
+    def drho_NP_dT(T_in_MeV: float):
+        log_T_in_MeV = log(T_in_MeV)
+        return density_NP_derivative_spline(log_T_in_MeV)
+
+    for i, z in enumerate(z_grid):
+        samples.append(
+            SampleValues(
+                raw_N=raw_N_grid[i],
+                log_T_Jordan=log_T_Jordan_grid[i],
+                density_NP=density_NP_grid[i],
+                pressure_NP=pressure_NP_grid[i],
+            )
+        )
+
     return {
+        "Yp_BBN": 0.0,
+        "DOverH": 0.0,
+        "HeOverH": 0.0,
+        "LiOverH": 0.0,
         "z_grid": z_grid,
         "samples": samples,
         "compute_time": 0.0,
@@ -53,6 +187,7 @@ class BBNData(DatastoreObject):
     ):
         self._model_proxy: ScalarModelProxy = model_proxy
         model: ScalarModel = model_proxy.get()
+
         self._coupling = model.coupling
         self._potential = model.potential
 
@@ -144,8 +279,7 @@ class BBNData(DatastoreObject):
             raise RuntimeError("compute_time has not yet been populated")
         return self._BBN_compute_time
 
-    @property
-    def compute(self, label: Optional[str] = None):
+    def compute(self, label: Optional[str] = None) -> ray.ObjectRef:
         if self._populated:
             raise RuntimeError("values have already been populated")
 
@@ -162,7 +296,6 @@ class BBNData(DatastoreObject):
         )
         return self._compute_ref
 
-    @property
     def store(self) -> Optional[bool]:
         if self._compute_ref is None:
             raise RuntimeError(
@@ -194,7 +327,7 @@ class BBNData(DatastoreObject):
                     None,
                     z=z_grid[i],
                     raw_N=samples[i].raw_N,
-                    T_Jordan=samples[i].T_Jordan,
+                    log_T_Jordan=samples[i].log_T_Jordan,
                     density_NP=samples[i].density_NP,
                     pressure_NP=samples[i].pressure_NP,
                 )
@@ -210,7 +343,7 @@ class BBNDataValue(DatastoreObject):
         store_id: int,
         z: redshift,
         raw_N: float,
-        T_Jordan: float,
+        log_T_Jordan: float,
         density_NP: float,
         pressure_NP: float,
     ):
@@ -218,7 +351,7 @@ class BBNDataValue(DatastoreObject):
 
         self._z: redshift = z
         self._raw_N: float = raw_N
-        self._T_Jordan: float = T_Jordan
+        self._log_T_Jordan: float = log_T_Jordan
 
         self._density_NP: float = density_NP
         self._pressure_NP: float = pressure_NP
@@ -236,8 +369,8 @@ class BBNDataValue(DatastoreObject):
         return self._raw_N
 
     @property
-    def T_Jordan(self) -> float:
-        return self._T_Jordan
+    def log_T_Jordan(self) -> float:
+        return self._log_T_Jordan
 
     @property
     def density_NP(self) -> float:

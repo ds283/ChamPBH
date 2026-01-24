@@ -915,8 +915,8 @@ def run_pipeline(
         coupling: AbstractCoupling = q.coupling
         return f"{args.job_name}-BBNData-{potential.name}-{coupling.name}-{datetime.now().replace(microsecond=0).isoformat()}"
 
-    def compute_bbn_data_batch(q: BBNData, label: str):
-        return q.compute(label=label)
+    def compute_bbn_data_batch(data: BBNData, label: str):
+        return data.compute(label=label)
 
     def validate_bbn_data_batch(q: BBNData):
         if not q.available:

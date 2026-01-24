@@ -51,9 +51,10 @@ def compute_adiabatic_values(
 
             T_Jordan: float = exp(value.log_T_Jordan)
 
-            G: float = 1.0 - pi_Einstein * pi_Einstein / CONST_6_MP_SQ
-            Sigma: float = 1.0 - 3.0 * cosmology.w(T_Jordan)
+            Sigma: float = value.Sigma
             fm: float = exp(value.log_fm)
+
+            G: float = 1.0 - pi_Einstein * pi_Einstein / CONST_6_MP_SQ
 
             R: float
             if fm > 10.0:
@@ -228,7 +229,7 @@ class AdiabaticHistory(DatastoreObject):
 
         return self._compute_time
 
-    def compute(self, label: Optional[str] = None):
+    def compute(self, label: Optional[str] = None) -> ray.ObjectRef:
         if self._values is not None:
             raise RuntimeError("values have already been populated")
 
