@@ -26,6 +26,7 @@ from Datastore.SQL.ProfileAgent import ProfileAgent
 from Datastore.SQL.SerialPoolBroker import SerialPoolBroker
 from MetadataConcepts import version
 from config.defaults import DEFAULT_STRING_LENGTH
+from config.sharding import ShardKeyType
 
 
 class ShardedPool:
@@ -584,15 +585,19 @@ class ShardedPool:
                 f"ShardedPool: it is only possible to vectorize object_get() over a sharded table (object type={cls_name})"
             )
 
-        shard_key_field = self._sharded_tables[cls_name]
-        if shard_key_field not in shard_key:
-            raise RuntimeError(
-                f'ShardedPool: expected shard key "{shard_key_field}" to be provided for object type "{cls_name}", but instead received keys: {shard_key.keys()}'
-            )
+        if isinstance(shard_key, ShardKeyType):
+            _real_shard_key = shard_key
 
-        shard_id = self._shard_keys[
-            self._ShardKeyStoreIdGetter(shard_key[shard_key_field])
-        ]
+        else:
+            shard_key_field = self._sharded_tables[cls_name]
+            if shard_key_field not in shard_key:
+                raise RuntimeError(
+                    f'ShardedPool: expected shard key "{shard_key_field}" to be provided for object type "{cls_name}", but instead received keys: {shard_key.keys()}'
+                )
+
+            _real_shard_key = shard_key[shard_key_field]
+
+        shard_id = self._shard_keys[self._ShardKeyStoreIdGetter(_real_shard_key)]
 
         return self._shards[shard_id].object_get.remote(
             cls_name, payload_data=payload_data

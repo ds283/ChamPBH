@@ -934,6 +934,11 @@ class ScalarModel(DatastoreObject):
 
     @property
     def functions(self) -> ModelFunctions:
+        if hasattr(self, "_do_not_populate"):
+            raise RuntimeError(
+                "ScalarModel: attempt to call functions(), but _do_not_populate is set"
+            )
+
         if self._values is None:
             raise RuntimeError("values has not yet been populated")
 
@@ -943,6 +948,11 @@ class ScalarModel(DatastoreObject):
         return self._functions
 
     def _create_functions(self):
+        if hasattr(self, "_do_not_populate"):
+            raise RuntimeError(
+                "ScalarModel: attempt to call _create_functions(), but _do_not_populate is set"
+            )
+
         def _build_func(attr: str):
             data = [(v.z.z, getattr(v, attr)) for v in self.values]
             data.sort(key=lambda pair: pair[0])
