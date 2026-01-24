@@ -147,7 +147,7 @@ class sqla_AdiabaticHistoryFactory(SQLAFactoryBase):
             query = query.join(
                 tab,
                 and_(
-                    tab.c.model_serial == table.c.serial,
+                    tab.c.history_serial == table.c.serial,
                     tab.c.tag_serial == tag.store_id,
                 ),
             )

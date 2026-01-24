@@ -298,7 +298,7 @@ def run_pipeline(
         # TODO: find a better way to implement/handle
         query_batch = [
             {
-                "shard_key": coupling.shard_key,
+                "shard_key": key,
                 "payload": [
                     {
                         "solver_labels": [],
@@ -320,10 +320,10 @@ def run_pipeline(
                         ],
                         "_do_not_populate": True,
                     }
-                    for potential, coupling in binned_batch[shard_key]
+                    for potential, coupling in binned_batch[key]
                 ],
             }
-            for shard_key in batch_keys
+            for key in batch_keys
         ]
 
         query_queue = RayWorkPool(
@@ -425,7 +425,13 @@ def run_pipeline(
 
     ## STEP 2
     ## CALCULATE THE ADIABATIC TRANSGRESSION PARAMETER Q FOR EACH MODEL IN THE GRID
-    adiabatic_work_bataches = list(grouper(model_sample_grid, n=20, incomplete="fill"))
+    adiabatic_sample_grid = itertools.product(
+        Potential_array,
+        Coupling_array,
+    )
+    adiabatic_work_batches = list(
+        grouper(adiabatic_sample_grid, n=20, incomplete="fill")
+    )
 
     def build_adiabatic_batch(batch: List[Tuple[AbstractPotential, AbstractCoupling]]):
         # grouper may fill with None values which must be filtered out
@@ -445,7 +451,7 @@ def run_pipeline(
         # find which instances are missing
         model_query_batch = [
             {
-                "shard_key": coupling.shard_key,
+                "shard_key": key,
                 "payload": [
                     {
                         "solver_labels": [],
@@ -467,10 +473,10 @@ def run_pipeline(
                         ],
                         "_do_not_populate": True,
                     }
-                    for potential, coupling in binned_batch[shard_key]
+                    for potential, coupling in binned_batch[key]
                 ],
             }
-            for shard_key in batch_keys
+            for key in batch_keys
         ]
 
         model_query_queue = RayWorkPool(
@@ -492,14 +498,20 @@ def run_pipeline(
         model_query_queue.run()
 
         missing_models = [
-            (potential, coupling)
+            {
+                "shard_key": key,
+                "missing": [
+                    m
+                    for obj, m in zip(query_outcomes, binned_batch[key])
+                    if not obj.available
+                ],
+            }
             for key, query_outcomes in zip(batch_keys, model_query_queue.results)
-            for obj, (potential, coupling) in zip(query_outcomes, binned_batch[key])
-            if not obj.available
         ]
-        if len(missing_models) > 0:
+        num_missing_models = sum(len(x["missing"]) for x in missing_models)
+        if num_missing_models > 0:
             raise RuntimeError(
-                f"Some ScalarModel instances needed for AdiabaticHistory computation are missing ({len(missing_models)} missing in this batch"
+                f"Some ScalarModel instances needed for AdiabaticHistory computation are missing ({num_missing_models} missing in this batch)"
             )
 
         adiabatic_query_batch = [
@@ -516,9 +528,7 @@ def run_pipeline(
                         ],
                         "_do_not_populate": True,
                     }
-                    for obj, (potential, coupling) in zip(
-                        query_outcomes, binned_batch[key]
-                    )
+                    for obj in query_outcomes
                 ],
             }
             for key, query_outcomes in zip(batch_keys, model_query_queue.results)
@@ -528,7 +538,7 @@ def run_pipeline(
             pool,
             adiabatic_query_batch,
             task_builder=lambda x: pool.object_get_vectorized(
-                "ScalarModel", x["shard_key"], payload_data=x["payload"]
+                "AdiabaticHistory", x["shard_key"], payload_data=x["payload"]
             ),
             available_handler=None,
             compute_handler=None,
@@ -602,6 +612,8 @@ def run_pipeline(
             store_handler=None,
             validation_handler=None,
             label_builder=None,
+            title=None,
+            store_results=True,
             create_batch_size=20,
             process_batch_size=20,
         )
@@ -621,6 +633,7 @@ def run_pipeline(
                 [
                     pool.object_get(
                         "AdiabaticHistory",
+                        shard_key=key,
                         model_proxy=proxy,
                         tags=[
                             SamplesPerLog10ZTag,
@@ -653,7 +666,7 @@ def run_pipeline(
 
     adiabatic_queue = RayWorkPool(
         pool,
-        adiabatic_work_bataches,
+        adiabatic_work_batches,
         task_builder=build_adiabatic_batch,
         compute_handler=compute_adiabatic_batch,
         validation_handler=validate_adiabatic_batch,
