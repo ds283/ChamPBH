@@ -84,7 +84,7 @@ DEFAULT_SAMPLES_PER_LOG10_LAMBDA_EV = 6
 
 MIN_NOTIFY_INTERVAL = 5 * 60
 
-allowed_drop_actions = ["scalar-model"]
+allowed_drop_actions = ["scalar-model", "adiabatic-history", "bbn-data"]
 
 parser = argparse.ArgumentParser()
 parser.add_argument(

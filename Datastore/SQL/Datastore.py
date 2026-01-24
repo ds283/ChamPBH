@@ -117,10 +117,18 @@ _TableMappingType = Mapping[str, sqla.Table]
 _InserterMappingType = Mapping[str, Callable]
 
 _drop_actions = {
-    "scalar-model": ["ScalarModel", "ScalarModel_tags", "ScalarModelValue"],
+    "scalar-model": ["ScalarModel_tags", "ScalarModelValue", "ScalarModel"],
+    "adiabatic-history": [
+        "AdiabaticHistory_tags",
+        "AdiabaticHistoryValue",
+        "AdiabaticHistory",
+    ],
+    "bbn-data": ["BBNData_tags", "BBNDataValue", "BBNData"],
 }
 # should drop tables in a defined order, so that we do not violate foreign key constrints
 _drop_order = [
+    "bbn-data",
+    "adiabatic-history",
     "scalar-model",
 ]
 
