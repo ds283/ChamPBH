@@ -38,6 +38,8 @@ sharded_tables = {
     "ExponentialCoupling": "shard_key",
     "ScalarModel": "shard_key",
     "ScalarModelValue": "shard_key",
+    "AdiabaticHistory": "shard_key",
+    "AdiabaticHistoryValue": "shard_key",
 }
 
 read_table_config = {

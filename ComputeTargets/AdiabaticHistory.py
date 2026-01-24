@@ -4,7 +4,6 @@ from typing import Optional, List, Mapping
 import ray
 from scipy.interpolate import make_interp_spline
 
-from ComputeTargets import ScalarModelProxy, ScalarModel, ScalarModelValue
 from CosmologyConcepts import redshift_array, redshift
 from CosmologyConcepts.ConformalCouplings import AbstractCoupling
 from CosmologyConcepts.Potentials import AbstractPotential
@@ -14,13 +13,7 @@ from MetadataConcepts import store_tag
 from Units.base import UnitsLike
 from config.sharding import ShardKeyType
 from utilities import WallclockTimer
-
-adiabatic_history_labels = {
-    "kp_over_H_1E1": 1e1,
-    "kp_over_H_1E2": 1e2,
-    "kp_over_H_1E3": 1e3,
-    "kp_over_H_1E4": 1e4,
-}
+from .ScalarModel import ScalarModelProxy, ScalarModel, ScalarModelValue
 
 
 @ray.remote
@@ -43,8 +36,8 @@ def compute_adiabatic_values(
 
     z_grid: List[redshift] = []
     raw_N_grid: List[float] = []
-    Q_samples: List[float] = []
-    log_Q_samples: List[float] = []
+    preQ_samples: List[float] = []
+    log_preQ_samples: List[float] = []
     dotH_over_H2_samples: List[float] = []
 
     with WallclockTimer() as timer:
@@ -103,32 +96,32 @@ def compute_adiabatic_values(
             dotH_over_H2_samples.append(dotH_over_H2)
 
             Q: float = d_Vpeff_dphi_over_V * V_over_H2 - 2.0 - dotH_over_H2
-            Q_samples.append(Q)
-            log_Q_samples.append(log(Q))
+            preQ_samples.append(Q)
+            log_preQ_samples.append(log(Q))
 
-        log_Q_spline = make_interp_spline(raw_N_grid, log_Q_samples)
-        log_Q_derivative_spline = log_Q_spline.derivative()
+        log_preQ_spline = make_interp_spline(raw_N_grid, log_preQ_samples)
+        log_preQ_derivative_spline = log_preQ_spline.derivative()
 
         for i, N in enumerate(raw_N_grid):
             for label in labels:
                 kp_over_H: float = labels[label]
                 kp2_over_H2: float = kp_over_H * kp_over_H
 
-                Q: float = Q_samples[i]
+                Q: float = preQ_samples[i]
                 dotH_over_H2: float = dotH_over_H2_samples[i]
 
                 Q_12: float = sqrt(Q)
 
                 A: float = 1.0 / Q_12
-                B: float = 1.0 + dotH_over_H2 + log_Q_derivative_spline(N) / 2.0
+                B: float = 1.0 + dotH_over_H2 + log_preQ_derivative_spline(N) / 2.0
                 C: float = 1.0 + kp2_over_H2 / Q
                 D: float = pow(C, 3.0 / 2.0)
 
-                QQ: float = fabs(B / D / A)
-                abs_Q_samples[label].append(QQ)
+                abs_Q: float = fabs(B / D / A)
+                abs_Q_samples[label].append(abs_Q)
 
-                if max_abs_Q_values[label] is None or QQ > max_abs_Q_values[label]:
-                    max_abs_Q_values[label] = QQ
+                if max_abs_Q_values[label] is None or abs_Q > max_abs_Q_values[label]:
+                    max_abs_Q_values[label] = abs_Q
 
     return {
         "z_grid": z_grid,
@@ -139,12 +132,19 @@ def compute_adiabatic_values(
 
 
 class AdiabaticHistory(DatastoreObject):
+    Q_labels = {
+        "kp_over_H_1E1": 1e1,
+        "kp_over_H_1E2": 1e2,
+        "kp_over_H_1E3": 1e3,
+        "kp_over_H_1E4": 1e4,
+    }
+
     def __init__(
         self,
         payload,
         model_proxy: ScalarModelProxy,
         label: Optional[str] = None,
-        tags: Optional[store_tag] = None,
+        tags: Optional[List[store_tag]] = None,
     ):
         self._model_proxy: ScalarModelProxy = model_proxy
         model: ScalarModel = model_proxy.get()
@@ -158,11 +158,15 @@ class AdiabaticHistory(DatastoreObject):
             DatastoreObject.__init__(self, None)
 
             self._values = None
+            self._compute_time = None
+            self._max_abs_Q_values = None
 
         else:
             DatastoreObject.__init__(self, payload["store_id"])
 
             self._values = payload["values"]
+            self._compute_time = payload["compute_time"]
+            self._max_abs_Q_values = payload["max_abs_Q_values"]
 
     @property
     def shard_key(self) -> ShardKeyType:
@@ -190,11 +194,15 @@ class AdiabaticHistory(DatastoreObject):
             raise RuntimeError("values has not yet been populated")
         return self._values
 
-    def max_Q(self, label: str) -> Optional[float]:
+    def max_abs_Q(self, label: str) -> Optional[float]:
         if self._values is None:
             raise RuntimeError("values have not yet been populated")
 
         return self._max_abs_Q_values[label]
+
+    @property
+    def compute_time(self) -> float:
+        return self._compute_time
 
     def compute(self, label: Optional[str] = None):
         if self._values is not None:
@@ -205,7 +213,7 @@ class AdiabaticHistory(DatastoreObject):
 
         self._compute_ref = compute_adiabatic_values.remote(
             self._model_proxy,
-            adiabatic_history_labels,
+            AdiabaticHistory.Q_labels,
             task_label=(
                 self._label
                 if self._label is not None
@@ -234,8 +242,6 @@ class AdiabaticHistory(DatastoreObject):
         abs_Q_samples: Mapping[str, List[float]] = data["abs_Q_samples"]
         z_grid: redshift_array = data["z_grid"]
 
-        self._compute_time = data["compute_time"]
-
         self._values = []
         for i in range(len(z_grid)):
             self._values.append(
@@ -244,21 +250,27 @@ class AdiabaticHistory(DatastoreObject):
                     z_grid[i],
                     {
                         label: abs_Q_samples[label][i]
-                        for label in adiabatic_history_labels
+                        for label in AdiabaticHistory.Q_labels
                     },
                 )
             )
 
+        self._compute_time = data["compute_time"]
         self._max_abs_Q_values: Mapping[str, float] = data["max_abs_Q_values"]
 
         return True
 
 
 class AdiabaticHistoryValue(DatastoreObject):
-    def __init__(self, store_id: int, z: redshift, values: Mapping[str, float]):
+    def __init__(
+        self, store_id: int, z: redshift, raw_N: float, values: Mapping[str, float]
+    ):
         DatastoreObject.__init__(self, store_id)
-        self._z = z
-        self._values = values
+
+        self._z: redshift = z
+        self._raw_N: float = raw_N
+
+        self._values: Mapping[str, float] = values
 
     @property
     def shard_key(self) -> ShardKeyType:
@@ -269,8 +281,15 @@ class AdiabaticHistoryValue(DatastoreObject):
         return self._z
 
     @property
+    def raw_N(self) -> float:
+        return self._raw_N
+
+    @property
     def values(self) -> Mapping[str, float]:
         return self._values
 
+    def value(self, label: str) -> float:
+        return self._values[label]
+
     def __getattr__(self, item):
-        return self._values[item]
+        return self.value(item)

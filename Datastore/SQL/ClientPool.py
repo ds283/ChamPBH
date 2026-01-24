@@ -40,6 +40,8 @@ _default_serial_batch_size = {
     "IntegrationSolver": 6,
     "ScalarModel": 5,
     "ScalarModelValue": 100,
+    "AdiabaticHistory": 5,
+    "AdiabaticHistoryValue": 100,
 }
 
 

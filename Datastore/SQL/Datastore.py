@@ -33,6 +33,11 @@ from CosmologyConcepts import (
     pi_value,
 )
 from Datastore.SQL.ClientPool import SerialPoolManager, SerialLeaseManager
+from Datastore.SQL.ObjectFactories.AdiabaticHistory import (
+    sqla_AdiabaticHistoryFactory,
+    sqla_AdiabaticHistoryTagAssociation_factory,
+    sqla_AdiabaticHistoryValue_factory,
+)
 from Datastore.SQL.ObjectFactories.DimensionfulQuantity import (
     sqla_dimensionful_quantity_factory,
 )
@@ -94,6 +99,9 @@ _factories = {
     "ScalarModel": sqla_ScalarModelFactory(),
     "ScalarModel_tags": sqla_ScalarModelTagAssociation_factory(),
     "ScalarModelValue": sqla_ScalarModelValue_factory(),
+    "AdiabaticHistory": sqla_AdiabaticHistoryFactory(),
+    "AdiabaticHistory_tags": sqla_AdiabaticHistoryTagAssociation_factory(),
+    "AdiabaticHistoryValue": sqla_AdiabaticHistoryValue_factory(),
 }
 
 _FactoryMappingType = Mapping[str, SQLAFactoryBase]

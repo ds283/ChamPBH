@@ -458,10 +458,10 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
             ),
         }
 
-        # because ScalarModel is a replicated table, we need to allow for the possibility that this object
-        # is a replica, rather than a fresh insert. If so, it's _my_id field will be set.
-        if hasattr(obj, "_my_id") and obj._my_id is not None:
-            payload.update({"serial": obj._my_id})
+        # # because ScalarModel is a replicated table, we need to allow for the possibility that this object
+        # # is a replica, rather than a fresh insert. If so, it's _my_id field will be set.
+        # if hasattr(obj, "_my_id") and obj._my_id is not None:
+        #     payload.update({"serial": obj._my_id})
 
         store_id = inserter(conn, payload)
 
@@ -506,7 +506,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 },
             )
 
-            # set store_id on behalf of the GkNumericValue instance
+            # set store_id on behalf of the ScalarModelValue instance
             value._my_id = value_id
 
         return obj
@@ -586,7 +586,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
             return []
 
         msgs = [
-            ">> Background models",
+            ">> ScalarModel instances",
             "     The following unvalidated models were detected in the datastore:",
         ]
         for model in not_validated:
