@@ -1,4 +1,4 @@
-from math import exp, log, sqrt, fabs
+from math import exp, sqrt, fabs
 from typing import Optional, List, Mapping
 
 import ray
@@ -37,7 +37,6 @@ def compute_adiabatic_values(
     z_grid: List[redshift] = []
     raw_N_grid: List[float] = []
     preQ_samples: List[float] = []
-    log_preQ_samples: List[float] = []
     dotH_over_H2_samples: List[float] = []
 
     with WallclockTimer() as timer:
@@ -70,6 +69,10 @@ def compute_adiabatic_values(
 
             # obtain V''/V
             Vpp_over_V: float = d2_logV_dphi2 + d_logV_dphi * d_logV_dphi
+            if Vpp_over_V < 0.0:
+                print(
+                    f"!! compute_adiabatic_values ({task_label}): detected undressed tachyon V''/V = {Vpp_over_V:.5g} at N={value.raw_N:.8g}"
+                )
 
             # obtain d2 ln(Omega) / dphi2
             d2_logOmega_dphi2: float = coupling.d2_logOmega_dphi2(phi_Einstein)
@@ -93,28 +96,43 @@ def compute_adiabatic_values(
             C: float = V_over_3H2Mp2 / 2.0
 
             dotH_over_H2: float = -3.0 + (G * A1 + C * A2)
+            if dotH_over_H2 > 0.0:
+                print(
+                    f"!! compute_adiabatic_values ({task_label}): detected positive dotH/H^2 = {dotH_over_H2:.5g} at N={value.raw_N:.8g}"
+                )
+                raise RuntimeError(
+                    f"compute_adiabatic_values ({task_label}): detected positive dotH/H^2 = {dotH_over_H2:.5g}"
+                )
+
             dotH_over_H2_samples.append(dotH_over_H2)
 
             Q: float = d_Vpeff_dphi_over_V * V_over_H2 - 2.0 - dotH_over_H2
-            preQ_samples.append(Q)
-            log_preQ_samples.append(log(Q))
+            # if Q < 0.0:
+            #     print(
+            #         f"!! compute_adiabatic_values ({task_label}): detected negative Q = {Q:.5g} at N={value.raw_N:.8g} | grad_phi(V')/V = {d_Vpeff_dphi_over_V:.5g}, grad_phi(V')/H^2 = {d_Vpeff_dphi_over_V * V_over_H2:.5g}, V''/V = {Vpp_over_V:.5g}, dotH/H^2 = {dotH_over_H2:.5g}, 2+dotH/H^2 = {2.0+dotH_over_H2:.5g}"
+            #     )
 
-        log_preQ_spline = make_interp_spline(raw_N_grid, log_preQ_samples)
-        log_preQ_derivative_spline = log_preQ_spline.derivative()
+            preQ_samples.append(Q)
+
+        preQ_spline = make_interp_spline(raw_N_grid, preQ_samples)
+        preQ_derivative_spline = preQ_spline.derivative()
 
         for i, N in enumerate(raw_N_grid):
             for label in labels:
                 kp_over_H: float = labels[label]
                 kp2_over_H2: float = kp_over_H * kp_over_H
 
-                Q: float = preQ_samples[i]
+                preQ: float = preQ_samples[i]
+                abs_preQ: float = fabs(preQ)
                 dotH_over_H2: float = dotH_over_H2_samples[i]
 
-                Q_12: float = sqrt(Q)
+                abs_preQ_12: float = sqrt(fabs(preQ))
 
-                A: float = 1.0 / Q_12
-                B: float = 1.0 + dotH_over_H2 + log_preQ_derivative_spline(N) / 2.0
-                C: float = 1.0 + kp2_over_H2 / Q
+                log_preQ_derivative: float = preQ_derivative_spline(N) / preQ
+
+                A: float = 1.0 / abs_preQ_12
+                B: float = 1.0 + dotH_over_H2 + log_preQ_derivative / 2.0
+                C: float = 1.0 + kp2_over_H2 / abs_preQ
                 D: float = pow(C, 3.0 / 2.0)
 
                 abs_Q: float = fabs(B / D / A)
@@ -125,6 +143,7 @@ def compute_adiabatic_values(
 
     return {
         "z_grid": z_grid,
+        "raw_N_grid": raw_N_grid,
         "abs_Q_samples": abs_Q_samples,
         "max_abs_Q_values": max_abs_Q_values,
         "compute_time": timer.elapsed,
@@ -241,14 +260,16 @@ class AdiabaticHistory(DatastoreObject):
 
         abs_Q_samples: Mapping[str, List[float]] = data["abs_Q_samples"]
         z_grid: redshift_array = data["z_grid"]
+        raw_N_grid: redshift_array = data["raw_N_grid"]
 
         self._values = []
         for i in range(len(z_grid)):
             self._values.append(
                 AdiabaticHistoryValue(
                     None,
-                    z_grid[i],
-                    {
+                    z=z_grid[i],
+                    raw_N=raw_N_grid[i],
+                    values={
                         label: abs_Q_samples[label][i]
                         for label in AdiabaticHistory.Q_labels
                     },
@@ -290,6 +311,3 @@ class AdiabaticHistoryValue(DatastoreObject):
 
     def value(self, label: str) -> float:
         return self._values[label]
-
-    def __getattr__(self, item):
-        return self.value(item)

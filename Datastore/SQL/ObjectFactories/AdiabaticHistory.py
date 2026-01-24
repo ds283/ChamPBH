@@ -291,7 +291,7 @@ class sqla_AdiabaticHistoryFactory(SQLAFactoryBase):
             sqla.select(table.c.z_samples).filter(table.c.serial == obj.store_id)
         ).scalar()
 
-        value_table = tables["AdiabaticModelValue"]
+        value_table = tables["AdiabaticHistoryValue"]
         num_samples = conn.execute(
             sqla.select(sqla.func.count(value_table.c.serial)).filter(
                 value_table.c.history_serial == obj.store_id
@@ -353,12 +353,12 @@ class sqla_AdiabaticHistoryFactory(SQLAFactoryBase):
             try:
                 conn.execute(
                     sqla.delete(value_table).where(
-                        value_table.c.model_serial.in_(invalid_serials)
+                        value_table.c.history_serial.in_(invalid_serials)
                     )
                 )
                 conn.execute(
                     sqla.delete(tags_table).where(
-                        tags_table.c.model_serial.in_(invalid_serials)
+                        tags_table.c.history_serial.in_(invalid_serials)
                     )
                 )
                 conn.execute(
