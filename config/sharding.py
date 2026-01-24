@@ -40,6 +40,8 @@ sharded_tables = {
     "ScalarModelValue": "shard_key",
     "AdiabaticHistory": "shard_key",
     "AdiabaticHistoryValue": "shard_key",
+    "BBNData": "shard_key",
+    "BBNDataValue": "shard_key",
 }
 
 read_table_config = {

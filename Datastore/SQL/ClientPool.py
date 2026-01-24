@@ -38,10 +38,12 @@ _default_serial_batch_size = {
     "LambdaCDM": 5,
     "QCD_Cosmology": 5,
     "IntegrationSolver": 6,
-    "ScalarModel": 5,
-    "ScalarModelValue": 100,
-    "AdiabaticHistory": 5,
-    "AdiabaticHistoryValue": 100,
+    "ScalarModel": 20,
+    "ScalarModelValue": 250,
+    "AdiabaticHistory": 20,
+    "AdiabaticHistoryValue": 250,
+    "BBNData": 20,
+    "BBNDataValue": 250,
 }
 
 

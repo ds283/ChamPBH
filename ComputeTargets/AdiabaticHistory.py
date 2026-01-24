@@ -187,6 +187,8 @@ class AdiabaticHistory(DatastoreObject):
             self._compute_time = payload["compute_time"]
             self._max_abs_Q_values = payload["max_abs_Q_values"]
 
+        self._compute_ref: Optional[ray.ObjectRef] = None
+
     @property
     def shard_key(self) -> ShardKeyType:
         return self._coupling.shard_key
@@ -221,6 +223,9 @@ class AdiabaticHistory(DatastoreObject):
 
     @property
     def compute_time(self) -> float:
+        if self._values is None:
+            raise RuntimeError("values have not yet been populated")
+
         return self._compute_time
 
     def compute(self, label: Optional[str] = None):

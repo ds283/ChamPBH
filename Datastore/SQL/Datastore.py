@@ -38,6 +38,11 @@ from Datastore.SQL.ObjectFactories.AdiabaticHistory import (
     sqla_AdiabaticHistoryTagAssociation_factory,
     sqla_AdiabaticHistoryValue_factory,
 )
+from Datastore.SQL.ObjectFactories.BBNData import (
+    sqla_BBNDataFactory,
+    sqla_BBNDataTagAssociation_factory,
+    sqla_BBNDataValue_factory,
+)
 from Datastore.SQL.ObjectFactories.DimensionfulQuantity import (
     sqla_dimensionful_quantity_factory,
 )
@@ -102,6 +107,9 @@ _factories = {
     "AdiabaticHistory": sqla_AdiabaticHistoryFactory(),
     "AdiabaticHistory_tags": sqla_AdiabaticHistoryTagAssociation_factory(),
     "AdiabaticHistoryValue": sqla_AdiabaticHistoryValue_factory(),
+    "BBNData": sqla_BBNDataFactory(),
+    "BBNData_tags": sqla_BBNDataTagAssociation_factory(),
+    "BBNDataValue": sqla_BBNDataValue_factory(),
 }
 
 _FactoryMappingType = Mapping[str, SQLAFactoryBase]
