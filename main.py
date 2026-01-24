@@ -22,7 +22,12 @@ from typing import List, Tuple
 import numpy as np
 import ray
 
-from ComputeTargets import ScalarModel, AdiabaticHistory, ScalarModelProxy
+from ComputeTargets import (
+    ScalarModel,
+    AdiabaticHistory,
+    ScalarModelProxy,
+    BBNData,
+)
 from CosmologyConcepts import (
     DimensionlessQuantityArray,
     DimensionfulQuantityArray,
@@ -680,6 +685,263 @@ def run_pipeline(
         notify_min_time_interval=MIN_NOTIFY_INTERVAL,
     )
     adiabatic_queue.run()
+
+    ## STEP 3
+    ## COMPUTE BBN DATA FOR EACG MODEL IN THE GRID
+    BBN_sample_grid = itertools.product(
+        Potential_array,
+        Coupling_array,
+    )
+
+    bbn_data_work_batches = list(grouper(BBN_sample_grid, n=25, incomplete="fill"))
+
+    def build_bbn_data_batch(batch: List[Tuple[AbstractPotential, AbstractCoupling]]):
+        # grouper may fill with None values which must be filtered out
+        batch = [x for x in batch if x is not None]
+
+        # STEP 1. PULL MODEL INSTANCES FROM THE DATABASE
+
+        # to allow vectorized object_get() calls to each shard, we need to bin the batch by shard
+        binned_batch = {}
+        for potential, coupling in batch:
+            shard_key = coupling.shard_key
+            binned_batch.setdefault(shard_key, []).append((potential, coupling))
+
+        # freeze the shard keys into a well-defined order, so we know the order in which they are returned
+        batch_keys = list(binned_batch.keys())
+
+        # find which instances are missing
+        model_query_batch = [
+            {
+                "shard_key": key,
+                "payload": [
+                    {
+                        "solver_labels": [],
+                        "cosmology": model_cosmology,
+                        "T_Jordan_init": T_init,
+                        "T_Jordan_stop": T_stop,
+                        "phi_Einstein_init": phi_init,
+                        "pi_Einstein_init": pi_init,
+                        "z_grid": None,
+                        "potential": potential,
+                        "coupling": coupling,
+                        "atol": atol,
+                        "rtol": rtol,
+                        "tags": [
+                            SamplesPerLog10ZTag,
+                            SamplesPerBetaTag,
+                            SamplesPerLog10MTag,
+                            SamplesPerLog10LambdaTag,
+                        ],
+                        "_do_not_populate": True,
+                    }
+                    for potential, coupling in binned_batch[key]
+                ],
+            }
+            for key in batch_keys
+        ]
+
+        model_query_queue = RayWorkPool(
+            pool,
+            model_query_batch,
+            task_builder=lambda x: pool.object_get_vectorized(
+                "ScalarModel", x["shard_key"], payload_data=x["payload"]
+            ),
+            available_handler=None,
+            compute_handler=None,
+            store_handler=None,
+            validation_handler=None,
+            label_builder=None,
+            title=None,
+            store_results=True,
+            create_batch_size=20,
+            process_batch_size=20,
+        )
+        model_query_queue.run()
+
+        missing_models = [
+            {
+                "shard_key": key,
+                "missing": [
+                    m
+                    for obj, m in zip(query_outcomes, binned_batch[key])
+                    if not obj.available
+                ],
+            }
+            for key, query_outcomes in zip(batch_keys, model_query_queue.results)
+        ]
+        num_missing_models = sum(len(x["missing"]) for x in missing_models)
+        if num_missing_models > 0:
+            raise RuntimeError(
+                f"Some ScalarModel instances needed for AdiabaticHistory computation are missing ({num_missing_models} missing in this batch)"
+            )
+
+        bbn_query_batch = [
+            {
+                "shard_key": key,
+                "payload": [
+                    {
+                        "model_proxy": ScalarModelProxy(obj),
+                        "tags": [
+                            SamplesPerLog10ZTag,
+                            SamplesPerBetaTag,
+                            SamplesPerLog10MTag,
+                            SamplesPerLog10LambdaTag,
+                        ],
+                        "_do_not_populate": True,
+                    }
+                    for obj in query_outcomes
+                ],
+            }
+            for key, query_outcomes in zip(batch_keys, model_query_queue.results)
+        ]
+
+        bbn_query_queue = RayWorkPool(
+            pool,
+            bbn_query_batch,
+            task_builder=lambda x: pool.object_get_vectorized(
+                "BBNData", x["shard_key"], payload_data=x["payload"]
+            ),
+            available_handler=None,
+            compute_handler=None,
+            store_handler=None,
+            validation_handler=None,
+            label_builder=None,
+            title=None,
+            store_results=True,
+            create_batch_size=20,
+            process_batch_size=20,
+        )
+        bbn_query_queue.run()
+
+        missing_bbn = [
+            {
+                "shard_key": key,
+                "missing": [
+                    (potential, coupling)
+                    for obj, (potential, coupling) in zip(
+                        query_outcomes, binned_batch[key]
+                    )
+                    if not obj.available
+                ],
+            }
+            for key, query_outcomes in zip(batch_keys, bbn_query_queue.results)
+        ]
+
+        num_missing = sum(len(x["missing"]) for x in missing_bbn)
+        if num_missing == 0:
+            return []
+
+        # now we need to re-lookup ScalarModel instances for the missing elements, this time
+        # *not* with _do_not_populate
+        required_models_payload = [
+            {
+                "shard_key": key,
+                "payload": [
+                    {
+                        "solver_labels": [],
+                        "cosmology": model_cosmology,
+                        "T_Jordan_init": T_init,
+                        "T_Jordan_stop": T_stop,
+                        "phi_Einstein_init": phi_init,
+                        "pi_Einstein_init": pi_init,
+                        "z_grid": None,
+                        "potential": potential,
+                        "coupling": coupling,
+                        "atol": atol,
+                        "rtol": rtol,
+                        "tags": [
+                            SamplesPerLog10ZTag,
+                            SamplesPerBetaTag,
+                            SamplesPerLog10MTag,
+                            SamplesPerLog10LambdaTag,
+                        ],
+                    }
+                    for potential, coupling in x["missing"]
+                ],
+            }
+            for key, x in zip(batch_keys, missing_bbn)
+        ]
+
+        required_models_queue = RayWorkPool(
+            pool,
+            required_models_payload,
+            task_builder=lambda x: pool.object_get_vectorized(
+                "ScalarModel", x["shard_key"], payload_data=x["payload"]
+            ),
+            available_handler=None,
+            compute_handler=None,
+            store_handler=None,
+            validation_handler=None,
+            label_builder=None,
+            title=None,
+            store_results=True,
+            create_batch_size=20,
+            process_batch_size=20,
+        )
+        required_models_queue.run()
+        required_models_proxies = [
+            {
+                "shard_key": key,
+                "missing_proxies": [ScalarModelProxy(obj) for obj in lookup_data],
+            }
+            for key, lookup_data in zip(batch_keys, required_models_queue.results)
+        ]
+
+        work_refs = []
+
+        for key, proxy_data in zip(batch_keys, required_models_proxies):
+            work_refs.extend(
+                [
+                    pool.object_get(
+                        "BBNData",
+                        shard_key=key,
+                        model_proxy=proxy,
+                        tags=[
+                            SamplesPerLog10ZTag,
+                            SamplesPerBetaTag,
+                            SamplesPerLog10MTag,
+                            SamplesPerLog10LambdaTag,
+                        ],
+                    )
+                    for proxy in proxy_data["missing_proxies"]
+                ]
+            )
+
+        return work_refs
+
+    def build_bbn_data_batch_label(q: BBNData):
+        potential: AbstractPotential = q.potential
+        coupling: AbstractCoupling = q.coupling
+        return f"{args.job_name}-BBNData-{potential.name}-{coupling.name}-{datetime.now().replace(microsecond=0).isoformat()}"
+
+    def compute_bbn_data_batch(q: BBNData, label: str):
+        return q.compute(label=label)
+
+    def validate_bbn_data_batch(q: BBNData):
+        if not q.available:
+            raise RuntimeError(
+                "BBNData object passed for validation, but is not yet available"
+            )
+
+        return pool.object_validate(q)
+
+    bbn_data_queue = RayWorkPool(
+        pool,
+        bbn_data_work_batches,
+        task_builder=build_bbn_data_batch,
+        compute_handler=compute_bbn_data_batch,
+        validation_handler=validate_bbn_data_batch,
+        label_builder=build_bbn_data_batch_label,
+        title="CALCULATE BBN DATA",
+        store_results=False,
+        create_batch_size=3,
+        notify_batch_size=3,
+        max_task_queue=3,
+        process_batch_size=1,
+        notify_min_time_interval=MIN_NOTIFY_INTERVAL,
+    )
+    bbn_data_queue.run()
 
 
 # construct a ShardedPool to orchestrate database access
