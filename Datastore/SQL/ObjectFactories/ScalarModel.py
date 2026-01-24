@@ -299,85 +299,94 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
 
         num_expected_samples = row_data.z_samples
 
-        # read out sample values associated with this integration
-        value_table = tables["ScalarModelValue"]
+        do_not_populate = payload.get("_do_not_populate", False)
+        if not do_not_populate:
+            # read out sample values associated with this integration
+            value_table = tables["ScalarModelValue"]
 
-        sample_rows = conn.execute(
-            sqla.select(
-                value_table.c.serial,
-                value_table.c.z_serial,
-                redshift_table.c.z,
-                value_table.c.raw_N,
-                value_table.c.phi_Einstein_Mp,
-                value_table.c.pi_Einstein_Mp,
-                value_table.c.log_rhorad_Einstein_Mp4,
-                value_table.c.log_rhorad_Jordan_Mp4,
-                value_table.c.log_fm,
-                value_table.c.log_T_Jordan_GeV,
-                value_table.c.H_Einstein_Mp,
-                value_table.c.H_Jordan_Mp,
-                value_table.c.gstar_rho,
-                value_table.c.gstar_s,
-                value_table.c.dgstar_rho_dlogT,
-                value_table.c.dgstar_s_dlogT,
-                value_table.c.Sigma,
-                value_table.c.friction_term_Mp,
-                value_table.c.reflecting_term_Mp,
-                value_table.c.kicking_term_Mp,
-            )
-            .select_from(
-                value_table.join(
-                    redshift_table,
-                    redshift_table.c.serial == value_table.c.z_serial,
+            sample_rows = conn.execute(
+                sqla.select(
+                    value_table.c.serial,
+                    value_table.c.z_serial,
+                    redshift_table.c.z,
+                    value_table.c.raw_N,
+                    value_table.c.phi_Einstein_Mp,
+                    value_table.c.pi_Einstein_Mp,
+                    value_table.c.log_rhorad_Einstein_Mp4,
+                    value_table.c.log_rhorad_Jordan_Mp4,
+                    value_table.c.log_fm,
+                    value_table.c.log_T_Jordan_GeV,
+                    value_table.c.H_Einstein_Mp,
+                    value_table.c.H_Jordan_Mp,
+                    value_table.c.gstar_rho,
+                    value_table.c.gstar_s,
+                    value_table.c.dgstar_rho_dlogT,
+                    value_table.c.dgstar_s_dlogT,
+                    value_table.c.Sigma,
+                    value_table.c.friction_term_Mp,
+                    value_table.c.reflecting_term_Mp,
+                    value_table.c.kicking_term_Mp,
                 )
-            )
-            .filter(value_table.c.model_serial == store_id)
-            .order_by(redshift_table.c.z.desc())
-        )
-
-        z_points = []
-        values = []
-
-        units: UnitsLike = cosmology.units
-        log_Mp = log(units.PlanckMass)
-        log_GeV = log(units.GeV)
-
-        for row in sample_rows:
-            z_value = redshift(
-                store_id=row.z_serial,
-                z=row.z,
-            )
-            z_points.append(z_value)
-            values.append(
-                ScalarModelValue(
-                    store_id=row.serial,
-                    z=z_value,
-                    raw_N=row.raw_N,
-                    phi_Einstein=row.phi_Einstein_Mp * units.PlanckMass,
-                    pi_Einstein=row.pi_Einstein_Mp * units.PlanckMass,
-                    log_rhorad_Einstein=row.log_rhorad_Einstein_Mp4 + 4.0 * log_Mp,
-                    log_rhorad_Jordan=row.log_rhorad_Jordan_Mp4 + 4.0 * log_Mp,
-                    log_fm=row.log_fm,
-                    log_T_Jordan=row.log_T_Jordan_GeV + log_GeV,
-                    H_Einstein=row.H_Einstein_Mp * units.PlanckMass,
-                    H_Jordan=row.H_Jordan_Mp * units.PlanckMass,
-                    gstar_rho=row.gstar_rho,
-                    gstar_s=row.gstar_s,
-                    dgstar_rho_dlogT=row.dgstar_rho_dlogT,
-                    dgstar_s_dlogT=row.dgstar_s_dlogT,
-                    Sigma=row.Sigma,
-                    friction_term=row.friction_term_Mp * units.PlanckMass,
-                    reflecting_term=row.reflecting_term_Mp * units.PlanckMass,
-                    kicking_term=row.kicking_term_Mp * units.PlanckMass,
+                .select_from(
+                    value_table.join(
+                        redshift_table,
+                        redshift_table.c.serial == value_table.c.z_serial,
+                    )
                 )
+                .filter(value_table.c.model_serial == store_id)
+                .order_by(redshift_table.c.z.desc())
             )
-        imported_z_sample = redshift_array(z_points)
 
-        if num_expected_samples is not None:
-            if len(imported_z_sample) != num_expected_samples:
-                raise RuntimeError(
-                    f'Fewer z-samples than expected were recovered from the validated ScalarModel "{store_label}"'
+            z_points = []
+            values = []
+
+            units: UnitsLike = cosmology.units
+            log_Mp = log(units.PlanckMass)
+            log_GeV = log(units.GeV)
+
+            for row in sample_rows:
+                z_value = redshift(
+                    store_id=row.z_serial,
+                    z=row.z,
                 )
+                z_points.append(z_value)
+                values.append(
+                    ScalarModelValue(
+                        store_id=row.serial,
+                        z=z_value,
+                        raw_N=row.raw_N,
+                        phi_Einstein=row.phi_Einstein_Mp * units.PlanckMass,
+                        pi_Einstein=row.pi_Einstein_Mp * units.PlanckMass,
+                        log_rhorad_Einstein=row.log_rhorad_Einstein_Mp4 + 4.0 * log_Mp,
+                        log_rhorad_Jordan=row.log_rhorad_Jordan_Mp4 + 4.0 * log_Mp,
+                        log_fm=row.log_fm,
+                        log_T_Jordan=row.log_T_Jordan_GeV + log_GeV,
+                        H_Einstein=row.H_Einstein_Mp * units.PlanckMass,
+                        H_Jordan=row.H_Jordan_Mp * units.PlanckMass,
+                        gstar_rho=row.gstar_rho,
+                        gstar_s=row.gstar_s,
+                        dgstar_rho_dlogT=row.dgstar_rho_dlogT,
+                        dgstar_s_dlogT=row.dgstar_s_dlogT,
+                        Sigma=row.Sigma,
+                        friction_term=row.friction_term_Mp * units.PlanckMass,
+                        reflecting_term=row.reflecting_term_Mp * units.PlanckMass,
+                        kicking_term=row.kicking_term_Mp * units.PlanckMass,
+                    )
+                )
+            imported_z_sample = redshift_array(z_points)
+
+            if num_expected_samples is not None:
+                if len(imported_z_sample) != num_expected_samples:
+                    raise RuntimeError(
+                        f'Fewer z-samples than expected were recovered from the validated ScalarModel "{store_label}"'
+                    )
+
+            attributes = {"_deserialized": True}
+        else:
+            values = None
+            imported_z_sample = None
+
+            attributes = {"_do_not_populate": True, "_deserialized": True}
 
         # z_grid not supplied since this object has already been computed/populated
         obj = ScalarModel(
@@ -418,7 +427,8 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
             label=store_label,
             tags=tags,
         )
-        obj._deserialized = True
+        for key, value in attributes.items():
+            setattr(obj, key, value)
         return obj
 
     def store(

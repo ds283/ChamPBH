@@ -923,6 +923,11 @@ class ScalarModel(DatastoreObject):
 
     @property
     def values(self) -> List:
+        if hasattr(self, "_do_not_populate"):
+            raise RuntimeError(
+                "ScalarModel: attempt to read values, but _do_not_populate is set"
+            )
+
         if self._values is None:
             raise RuntimeError("values has not yet been populated")
         return self._values
@@ -968,6 +973,11 @@ class ScalarModel(DatastoreObject):
         )
 
     def compute(self, label: Optional[str] = None):
+        if hasattr(self, "_do_not_populate"):
+            raise RuntimeError(
+                "ScalarModel: attempt to call compute(), but _do_not_populate is set"
+            )
+
         if self._values is not None:
             raise RuntimeError("values have already been populated")
 
