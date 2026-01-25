@@ -22,6 +22,7 @@ from matplotlib.patches import Patch
 from numpy import nan
 
 from ComputeTargets import ScalarModel, ScalarModelValue
+from CosmologyConcepts.Potentials import AbstractPotential
 from CosmologyModels import BaseCosmology
 from Quadrature.integration_metadata import IntegrationSolver
 from Units.base import UnitsLike
@@ -104,7 +105,34 @@ def set_linear_axes(ax):
     ax.xaxis.set_inverted(True)
 
 
-def add_plot_labels(ax, model: ScalarModel, model_label, shift: float = 0.0):
+def add_beta_summary_labels(ax, model_label, potential: AbstractPotential, shift=0.0):
+    now = datetime.now()
+
+    ax.text(
+        LEFT_COLUMN,
+        MIDDLE_ROW + shift,
+        f"Potential: {potential.name}",
+        transform=ax.transAxes,
+        fontsize="x-small",
+    )
+
+    ax.text(
+        LEFT_COLUMN,
+        BOTTOM_ROW,
+        f"Created at: {now.strftime("%a %d %b %Y %H:%M:%S")}",
+        transform=ax.transAxes,
+        fontsize="x-small",
+    )
+    ax.text(
+        RIGHT_COLUMN,
+        BOTTOM_ROW,
+        f"Cosmology: {model_label}",
+        transform=ax.transAxes,
+        fontsize="x-small",
+    )
+
+
+def add_ScalarModel_labels(ax, model: ScalarModel, model_label, shift: float = 0.0):
     solver: IntegrationSolver = model.solver
     now = datetime.now()
 

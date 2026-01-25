@@ -910,8 +910,8 @@ class ScalarModel(DatastoreObject):
 
     @property
     def metadata(self) -> IntegrationData:
-        if self.values is None:
-            raise RuntimeError("values have not yet been populated")
+        if self._metadata is None:
+            raise RuntimeError("metadata values have not yet been populated")
 
         return self._metadata
 
@@ -1266,6 +1266,7 @@ class ScalarModelProxy:
         self._ref: ObjectRef = ray.put(model)
 
         self._store_id: int = model.store_id if model.available else None
+        self._shard_key: ShardKeyType = model.shard_key if model.available else None
 
         self._units: UnitsLike = model.cosmology.units
         self._cosmology: BaseCosmology = model.cosmology
@@ -1273,6 +1274,10 @@ class ScalarModelProxy:
     @property
     def store_id(self) -> int:
         return self._store_id
+
+    @property
+    def shard_key(self) -> ShardKeyType:
+        return self._shard_key
 
     @property
     def available(self) -> bool:

@@ -1,0 +1,535 @@
+# (c) University of Sussex 2026
+# Created by David Seery
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import argparse
+import itertools
+import sys
+from datetime import datetime
+from pathlib import Path
+from typing import List
+
+import ray
+import seaborn as sns
+from matplotlib import pyplot as plt
+
+from ComputeTargets import ScalarModelProxy, AdiabaticHistory
+from CosmologyConcepts import temperature, phi_value, pi_value
+from CosmologyConcepts.ConformalCouplings import AbstractCoupling
+from CosmologyConcepts.Potentials import AbstractPotential
+from CosmologyModels import BaseCosmology
+from Datastore.SQL.ProfileAgent import ProfileAgent
+from Datastore.SQL.ShardedPool import ShardedPool
+from MetadataConcepts import tolerance, store_tag
+from RayTools.RayWorkPool import RayWorkPool
+from Units import Planck_units
+from config.defaults import DEFAULT_ABS_TOLERANCE, DEFAULT_REL_TOLERANCE
+from config.model_list import build_model_list
+from config.sharding import (
+    ShardKeyType,
+    get_shard_key_store_id,
+    replicated_tables,
+    sharded_tables,
+    read_table_config,
+)
+from extract_common import add_beta_summary_labels
+
+DEFAULT_TIMEOUT = 60
+
+DEFAULT_T_INIT_GEV = 20000
+
+parser = argparse.ArgumentParser()
+parser.add_argument
+parser.add_argument(
+    "--database",
+    type=str,
+    default=None,
+    help="read/write work items using the specified database cache",
+)
+parser.add_argument(
+    "--db-timeout",
+    type=int,
+    default=DEFAULT_TIMEOUT,
+    help="specify connection timeout for database layer",
+)
+parser.add_argument(
+    "--profile-db",
+    type=str,
+    default=None,
+    help="write profiling and performance data to the specified database",
+)
+parser.add_argument(
+    "--ray-address", default="auto", type=str, help="specify address of Ray cluster"
+)
+parser.add_argument(
+    "--output",
+    default="ScalarModel-out",
+    type=str,
+    help="specify folder for output files",
+)
+args = parser.parse_args()
+
+if args.database is None:
+    parser.print_help()
+    sys.exit()
+
+# connect to ray cluster on supplied address; defaults to 'auto' meaning a locally running cluster
+ray.init(address=args.ray_address)
+
+VERSION_LABEL = "2026.1.1"
+
+# instantiate a Datastore actor: this runs on its own node, and acts as a broker between
+# ourselves and the database.
+# For performance reasons, we want all database activity to run on this node.
+# For one thing, this lets us use transactions efficiently.
+
+profile_agent = None
+if args.profile_db is not None:
+    label = f'{VERSION_LABEL}--plot_ScalarModel-primarydb-"{args.database}"-{datetime.now().replace(microsecond=0).isoformat()}'
+
+    profile_agent = ProfileAgent.options(name="ProfileAgent").remote(
+        db_name=args.profile_db,
+        timeout=args.db_timeout,
+        label=label,
+    )
+
+nice_Q_labels = {
+    "kp_over_H_1E1": r"$k_p/H = 10^1$",
+    "kp_over_H_1E2": r"$k_p/H = 10^2$",
+    "kp_over_H_1E3": r"$k_p/H = 10^3$",
+    "kp_over_H_1E4": r"$k_p/H = 10^4$",
+}
+
+
+def run_pipeline(
+    model_data,
+    Potential_array: List[AbstractPotential],
+    Coupling_array: List[AbstractCoupling],
+    T_init: temperature,
+    T_stop: temperature,
+    phi_init: phi_value,
+    pi_init: pi_value,
+    atol: tolerance,
+    rtol: tolerance,
+    tags: List[store_tag],
+):
+    model_label = model_data["label"]
+    model_cosmology = model_data["cosmology"]
+
+    print(f"\n>> RUNNING PIPELINE FOR MODEL {model_label}")
+
+    def build_plot_work(potential: AbstractPotential):
+        # build a work queue to read in all ScalarModel instances with this potential, for the
+        # couplings in Coupling_array
+        model_query_batch = [
+            {
+                "shard_key": coupling.shard_key,
+                "solver_labels": [],
+                "cosmology": model_cosmology,
+                "T_Jordan_init": T_init,
+                "T_Jordan_stop": T_stop,
+                "phi_Einstein_init": phi_init,
+                "pi_Einstein_init": pi_init,
+                "z_grid": None,
+                "potential": potential,
+                "coupling": coupling,
+                "atol": atol,
+                "rtol": rtol,
+                "tags": tags,
+                "_do_not_populate": True,
+            }
+            for coupling in Coupling_array
+        ]
+        model_query_queue = RayWorkPool(
+            pool,
+            model_query_batch,
+            task_builder=lambda x: pool.object_get("ScalarModel", **x),
+            available_handler=None,
+            compute_handler=None,
+            store_handler=None,
+            validation_handler=None,
+            label_builder=None,
+            title=None,
+            store_results=True,
+            create_batch_size=20,
+            process_batch_size=20,
+        )
+        model_query_queue.run()
+
+        available_models = [m for m in model_query_queue.results if m.available]
+        model_proxies = [ScalarModelProxy(m) for m in available_models]
+
+        adiabatic_query_batch = [
+            {
+                "shard_key": m.shard_key,
+                "model_proxy": m,
+                "tags": tags,
+                "_do_not_populate": True,
+            }
+            for m in model_proxies
+        ]
+        adiabatic_query_queue = RayWorkPool(
+            pool,
+            adiabatic_query_batch,
+            task_builder=lambda x: pool.object_get("AdiabaticHistory", **x),
+            available_handler=None,
+            compute_handler=None,
+            store_handler=None,
+            validation_handler=None,
+            label_builder=None,
+            title=None,
+            store_results=True,
+            create_batch_size=20,
+            process_batch_size=20,
+        )
+        adiabatic_query_queue.run()
+
+        bbn_query_batch = [
+            {
+                "shard_key": m.shard_key,
+                "model_proxy": m,
+                "tags": tags,
+                "_do_not_populate": True,
+            }
+            for m in model_proxies
+        ]
+        bbn_query_queue = RayWorkPool(
+            pool,
+            bbn_query_batch,
+            task_builder=lambda x: pool.object_get("BBNData", **x),
+            available_handler=None,
+            compute_handler=None,
+            store_handler=None,
+            validation_handler=None,
+            label_builder=None,
+            title=None,
+            store_results=True,
+            create_batch_size=20,
+            process_batch_size=20,
+        )
+        bbn_query_queue.run()
+
+        base_path = Path(args.output).resolve()
+        base_path = base_path / f"{model_label}"
+
+        solver_time_points = [
+            (m.coupling._beta.as_float, m.metadata.compute_time)
+            for m in available_models
+        ]
+        bbn_time_points = [
+            (d.coupling._beta.as_float, d.BBN_compute_time)
+            for d in bbn_query_queue.results
+        ]
+
+        adiabatic_maxQ_points = [
+            (
+                q.coupling._beta.as_float,
+                {label: q.max_abs_Q(label) for label in AdiabaticHistory.Q_labels},
+            )
+            for q in adiabatic_query_queue.results
+        ]
+
+        Yp_points = [
+            (d.coupling._beta.as_float, d.Yp_BBN) for d in bbn_query_queue.results
+        ]
+        DOverH_points = [
+            (d.coupling._beta.as_float, d.DOverH) for d in bbn_query_queue.results
+        ]
+
+        solver_time_x, solver_time_y = zip(*solver_time_points)
+        bbn_time_x, bbn_time_y = zip(*bbn_time_points)
+        Yp_x, Yp_y = zip(*Yp_points)
+        DOverH_x, DOverH_y = zip(*DOverH_points)
+
+        adiabtic_maxQ_xy = {}
+        for label in AdiabaticHistory.Q_labels:
+            _points = [(x, y[label]) for x, y in adiabatic_maxQ_points]
+            adiabtic_maxQ_xy[label] = zip(*_points)
+
+        sns.set_theme()
+
+        if len(solver_time_x) > 0 or len(bbn_time_x) > 0:
+            # TIMINGS
+
+            fig = plt.figure()
+            fig.set_size_inches(8.0, 8.0)
+
+            axs = fig.subplots(nrows=2, ncols=1, sharex=True, sharey=False)
+
+            solver_ax = axs[1]
+            bbn_ax = axs[0]
+
+            solver_ax.plot(
+                solver_time_x,
+                solver_time_y,
+                label=r"scalar field",
+                color="r",
+                marker="o",
+            )
+            solver_ax.set_yscale("log")
+
+            bbn_ax.plot(
+                bbn_time_x,
+                bbn_time_y,
+                label=r"PRyMordial",
+                color="b",
+                marker="o",
+            )
+            bbn_ax.set_yscale("log")
+
+            solver_ax.set_xlabel(r"coupling $\beta$")
+            solver_ax.grid(True)
+
+            add_beta_summary_labels(bbn_ax, model_label, potential, shift=0.0)
+
+            solver_ax.legend(loc="best")
+            bbn_ax.legend(loc="best")
+
+            fig_path = (
+                base_path
+                / f"plots/M={potential._M.as_float/units.eV:.5g}eV_Lambda={potential._Lambda.as_float/units.eV:.5g}eV/timings.pdf"
+            )
+            fig_path.parents[0].mkdir(exist_ok=True, parents=True)
+            fig.savefig(fig_path)
+            fig.savefig(fig_path.with_suffix(".png"))
+
+            plt.close()
+
+        if len(Yp_x) > 0 or len(DOverH_x) > 0:
+            # BBN OUTPUT
+
+            fig = plt.figure()
+            fig.set_size_inches(8.0, 8.0)
+
+            axs = fig.subplots(nrows=2, ncols=1, sharex=True, sharey=False)
+
+            Yp_ax = axs[1]
+            D_ax = axs[0]
+
+            # add confidence contours for Yeh+2022
+            Yp_central_value = 0.2448
+            Yp_sigma = 0.0033
+
+            DOverH_central_value = 2.550
+            DOverH_sigma = 0.030
+
+            Yp_ax.axhline(
+                Yp_central_value, color="g", linestyle="dashed", label="Yeh+2022"
+            )
+            Yp_ax.axhspan(
+                ymin=Yp_central_value - Yp_sigma,
+                ymax=Yp_central_value + Yp_sigma,
+                color="g",
+                alpha=0.35,
+                label=None,
+            )
+            Yp_ax.axhspan(
+                ymin=Yp_central_value - 3.0 * Yp_sigma,
+                ymax=Yp_central_value + 3.0 * Yp_sigma,
+                color="g",
+                alpha=0.25,
+                label=None,
+            )
+
+            D_ax.axhline(
+                DOverH_central_value, color="g", linestyle="dashed", label="Yeh+2022"
+            )
+            D_ax.axhspan(
+                ymin=DOverH_central_value - DOverH_sigma,
+                ymax=DOverH_central_value + DOverH_sigma,
+                color="g",
+                alpha=0.35,
+                label=None,
+            )
+            D_ax.axhspan(
+                ymin=DOverH_central_value - 3.0 * DOverH_sigma,
+                ymax=DOverH_central_value + 3.0 * DOverH_sigma,
+                color="g",
+                alpha=0.25,
+                label=None,
+            )
+
+            Yp_ax.plot(Yp_x, Yp_y, label=r"$Y_p$ (BBN)", color="b", marker="o")
+            D_ax.plot(DOverH_x, DOverH_y, label=r"$10^5 D/H$", color="r", marker="o")
+
+            Yp_ax.set_xlabel(r"coupling $\beta$")
+            Yp_ax.grid(True)
+
+            add_beta_summary_labels(D_ax, model_label, potential, shift=0.0)
+
+            max_Yp = 1.05 * max(max(Yp_y), Yp_central_value + 3.0 * Yp_sigma)
+            min_Yp = 0.95 * min(min(Yp_y), Yp_central_value - 3.0 * Yp_sigma)
+            Yp_ax.set_ylim(min_Yp, max_Yp)
+
+            max_DOverH = 1.05 * max(
+                max(DOverH_y), DOverH_central_value + 3.0 * DOverH_sigma
+            )
+            min_DOverH = 0.95 * min(
+                min(DOverH_y), DOverH_central_value - 3.0 * DOverH_sigma
+            )
+            D_ax.set_ylim(min_DOverH, max_DOverH)
+
+            Yp_ax.legend(loc="best")
+            D_ax.legend(loc="best")
+
+            fig_path = (
+                base_path
+                / f"plots/M={potential._M.as_float/units.eV:.5g}eV_Lambda={potential._Lambda.as_float/units.eV:.5g}eV/BBN.pdf"
+            )
+            fig_path.parents[0].mkdir(exist_ok=True, parents=True)
+            fig.savefig(fig_path)
+            fig.savefig(fig_path.with_suffix(".png"))
+
+            plt.close()
+
+        if len(adiabtic_maxQ_xy) > 0:
+            # BBN OUTPUT
+
+            fig = plt.figure()
+            fig.set_size_inches(8.0, 8.0)
+
+            ax = fig.gca()
+
+            for label in AdiabaticHistory.Q_labels:
+                x, y = adiabtic_maxQ_xy[label]
+                ax.plot(x, y, label=nice_Q_labels[label], marker="o")
+            ax.set_yscale("log")
+
+            ax.set_xlabel(r"coupling $\beta$")
+            ax.grid(True)
+
+            add_beta_summary_labels(ax, model_label, potential, shift=0.0)
+
+            ax.legend(loc="best")
+
+            fig_path = (
+                base_path
+                / f"plots/M={potential._M.as_float/units.eV:.5g}eV_Lambda={potential._Lambda.as_float/units.eV:.5g}eV/max_Q.pdf"
+            )
+            fig_path.parents[0].mkdir(exist_ok=True, parents=True)
+            fig.savefig(fig_path)
+            fig.savefig(fig_path.with_suffix(".png"))
+
+            plt.close()
+
+        return None
+
+    work_queue = RayWorkPool(
+        pool,
+        Potential_array,
+        task_builder=build_plot_work,
+        compute_handler=None,
+        store_handler=None,
+        available_handler=None,
+        validation_handler=None,
+        label_builder=None,
+        create_batch_size=10,
+        notify_batch_size=10,
+        max_task_queue=10,
+        notify_min_time_interval=120,
+        title="GENERATING SUMMARY PLOTS BY BETA",
+        store_results=False,
+    )
+    work_queue.run()
+
+
+# establish a ShardedPool to orchestrate database access
+with ShardedPool(
+    version_label=VERSION_LABEL,
+    db_name=args.database,
+    ShardKeyType=ShardKeyType,
+    ShardKeyStoreIdGetter=get_shard_key_store_id,
+    replicated_tables=replicated_tables,
+    sharded_tables=sharded_tables,
+    timeout=args.db_timeout,
+    profile_agent=profile_agent,
+    job_name="plot_ScalarModel",
+    prune_unvalidated=False,
+    read_table_config=read_table_config,
+) as pool:
+    # build absolute and relative tolerances
+    atol, rtol = ray.get(
+        [
+            pool.object_get(tolerance, tol=DEFAULT_ABS_TOLERANCE),
+            pool.object_get(tolerance, tol=DEFAULT_REL_TOLERANCE),
+        ]
+    )
+
+    # get list of models we want to extract transfer functions for
+    units = Planck_units()
+
+    T_init = ray.get(
+        pool.object_get(
+            "temperature", value=DEFAULT_T_INIT_GEV * units.GeV, units=units
+        )
+    )
+
+    phi_init, pi_init = ray.get(
+        [
+            pool.object_get("phi_value", value=5.0 * units.PlanckMass, units=units),
+            pool.object_get("pi_value", value=0.0, units=units),
+        ]
+    )
+
+    def convert_to_potential(M_lambda_set):
+        return pool.object_get(
+            "ExponentialPotential",
+            payload_data=[
+                {"M": M, "Lambda": Lambda, "n": 1, "units": units}
+                for M, Lambda in M_lambda_set
+            ],
+        )
+
+    def convert_to_coupling(beta_set):
+        # ExponentialCoupling is a sharded table and needs a "shard_key" field
+        # TODO: find a better way to implement/handle
+        return pool.object_get(
+            "ExponentialCoupling",
+            payload_data=[
+                {"shard_key": beta, "beta": beta, "units": units} for beta in beta_set
+            ],
+        )
+
+    # read in the stored tables of beta, M, and Lambda
+    beta_table = ray.get(pool.read_table("beta_value"))
+    M_table = ray.get(pool.read_table("M_value", units))
+    Lambda_table = ray.get(pool.read_table("Lambda_value", units))
+
+    M_Lambda_grid = itertools.product(M_table, Lambda_table)
+    Potential_array = ray.get(convert_to_potential(M_Lambda_grid))
+
+    Coupling_array = ray.get(convert_to_coupling(beta_table))
+
+    model_list = build_model_list(pool, units)
+
+    for model_data in model_list:
+        cosmology: BaseCosmology = model_data["cosmology"]
+
+        T_CMB = cosmology._params.T_CMB_Kelvin * units.Kelvin
+        T_stop = ray.get(pool.object_get("temperature", value=T_CMB, units=units))
+
+        tags = []
+
+        run_pipeline(
+            model_data,
+            Potential_array,
+            Coupling_array,
+            T_init,
+            T_stop,
+            phi_init,
+            pi_init,
+            atol,
+            rtol,
+            tags,
+        )

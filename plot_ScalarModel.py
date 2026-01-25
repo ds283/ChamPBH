@@ -47,7 +47,7 @@ from config.sharding import (
 )
 from extract_common import (
     safe_fabs,
-    add_plot_labels,
+    add_ScalarModel_labels,
     add_redshift_xaxis_labels,
     add_temperature_yaxis_labels,
     safe_fabs_positive,
@@ -457,7 +457,7 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
         T_ax.set_yscale("log")
         T_ax.grid(True)
 
-        add_plot_labels(T_ax, model, model_label, shift=0.05)
+        add_ScalarModel_labels(T_ax, model, model_label, shift=0.05)
         add_temperature_yaxis_labels(T_ax, model, temp_unit="GeV")
 
         h, l = add_redshift_xaxis_labels(
@@ -547,7 +547,7 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
             linestyle="solid",
         )
 
-        add_plot_labels(gstar_ax, model, model_label, shift=0.05)
+        add_ScalarModel_labels(gstar_ax, model, model_label, shift=0.05)
 
         h, l = add_redshift_xaxis_labels(
             gstar_ax, model, text_labels=False, x_coord=x_coord
@@ -617,7 +617,7 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
 
         H_ax.grid(True)
 
-        add_plot_labels(H_ax, model, model_label)
+        add_ScalarModel_labels(H_ax, model, model_label)
         h, l = add_redshift_xaxis_labels(
             H_ax, model, temp_unit="GeV", text_labels=True, x_coord=x_coord
         )
@@ -672,7 +672,7 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
 
         energy_ax.grid(True)
 
-        add_plot_labels(energy_ax, model, model_label)
+        add_ScalarModel_labels(energy_ax, model, model_label)
         h, l = add_redshift_xaxis_labels(
             energy_ax, model, temp_unit="GeV", text_labels=True, x_coord=x_coord
         )
@@ -782,7 +782,7 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
             Sigma_ax.xaxis.set_inverted(True)
         Sigma_ax.set_xlabel(x_axis_label())
 
-        add_plot_labels(f_ax, model, model_label, shift=0.05)
+        add_ScalarModel_labels(f_ax, model, model_label, shift=0.05)
         add_redshift_xaxis_labels(f_ax, model, text_labels=False, x_coord=x_coord)
         add_redshift_xaxis_labels(r_ax, model, text_labels=False, x_coord=x_coord)
         add_redshift_xaxis_labels(k_ax, model, text_labels=False, x_coord=x_coord)
@@ -907,7 +907,7 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
         phi_BBN_ax.set_xscale("log")
         phi_BBN_ax.xaxis.set_inverted(True)
 
-        add_plot_labels(ODE_terms_BBN_ax, model, model_label, shift=0.05)
+        add_ScalarModel_labels(ODE_terms_BBN_ax, model, model_label, shift=0.05)
 
         phi_BBN_ax.legend(loc="best")
         HJordan_BBN_ax.legend(loc="best")

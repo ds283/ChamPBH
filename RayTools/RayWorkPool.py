@@ -308,6 +308,13 @@ class RayWorkPool:
                         for ref in ref_data:
                             store_ref(ref, allow_store=False)
 
+                    elif ref_data is None:
+                        if self._store_results:
+                            raise RuntimeError(
+                                "store_results=True is not compatible with returning None values from a task builder"
+                            )
+                        # nothing to do here
+
                     else:
                         store_ref(ref_data, allow_store=True)
 
