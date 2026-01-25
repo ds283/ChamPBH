@@ -5,6 +5,8 @@ from typing import Optional, List
 import ray
 from scipy.interpolate import make_interp_spline
 
+import PRyM.PRyM_init as PRyMini
+import PRyM.PRyM_main as PRyMmain
 from CosmologyConcepts import redshift, redshift_array
 from CosmologyConcepts.ConformalCouplings import AbstractCoupling
 from CosmologyConcepts.Potentials import AbstractPotential
@@ -13,6 +15,7 @@ from Datastore import DatastoreObject
 from MetadataConcepts import store_tag
 from Units.base import UnitsLike
 from config.sharding import ShardKeyType
+from utilities import WallclockTimer
 from .ScalarModel import ScalarModelProxy, ScalarModel, ScalarModelValue
 
 SampleValues = namedtuple(
@@ -22,6 +25,7 @@ SampleValues = namedtuple(
         "log_T_Jordan",
         "density_NP",
         "pressure_NP",
+        "density_NP_ratio",
     ],
 )
 
@@ -39,7 +43,7 @@ def compute_BBN_data(
     model_proxy: ScalarModelProxy,
     task_label: str,
     T_BBN_MeV_spline_max: float = 100,  # PRyMordial default begins at 10 MeV
-    T_BBN_keV_spline_min: float = 1,  # PRyMordial default ends at 10 keV
+    T_BBN_keV_spline_min: float = 1e-2,  # PRyMordial default ends at 1 keV, but samples at later times
 ):
     model: ScalarModel = model_proxy.get()
     cosmology: BaseCosmology = model._cosmology
@@ -54,10 +58,16 @@ def compute_BBN_data(
     samples: List[SampleValues] = []
 
     raw_N_grid: List[float] = []
+
     log_T_Jordan_grid: List[float] = []
-    log_T_Jordan_MeV_grid: List[float] = []
     pressure_NP_grid: List[float] = []
     density_NP_grid: List[float] = []
+    rhorad_Jordan_grid: List[float] = []
+
+    # PRyMordial expects energies to be in units of MeV
+    log_T_Jordan_MeV_grid: List[float] = []
+    pressure_NP_MeV_grid: List[float] = []
+    density_NP_MeV_grid: List[float] = []
 
     T_BBN_spline_max = T_BBN_MeV_spline_max * units.MeV
     T_BBN_spline_min = T_BBN_keV_spline_min * units.keV
@@ -66,95 +76,149 @@ def compute_BBN_data(
 
     last_log_T_Jordan_MeV = None
 
-    # first, build estimates for the "new physics" density and pressure needed by PRyMordial
-    for value in model.values:
-        value: ScalarModelValue
+    with WallclockTimer() as NP_timer:
+        # first, build estimates for the "new physics" density and pressure needed by PRyMordial
+        for value in model.values:
+            value: ScalarModelValue
 
-        T_Jordan: float = exp(value.log_T_Jordan)
+            T_Jordan: float = exp(value.log_T_Jordan)
 
-        if T_BBN_spline_min <= T_Jordan <= T_BBN_spline_max:
-            z_grid.append(value.z)
-            raw_N_grid.append(value.raw_N)
-            log_T_Jordan_grid.append(value.log_T_Jordan)
+            if T_BBN_spline_min <= T_Jordan <= T_BBN_spline_max:
+                z_grid.append(value.z)
+                raw_N_grid.append(value.raw_N)
+                log_T_Jordan_grid.append(value.log_T_Jordan)
 
-            log_T_Jordan_MeV = value.log_T_Jordan - log_MeV
-            if last_log_T_Jordan_MeV is not None:
-                if log_T_Jordan_MeV > last_log_T_Jordan_MeV:
-                    print(
-                        f"!! compute_BBN_data {task_label}: T_Jordan values are not monotonically decreasing: this log(T_Jordan/MeV) {log_T_Jordan_MeV:.5g} (this) > {log_T_Jordan_MeV:.5g} (last) = {last_log_T_Jordan_MeV:.5g} (last)"
-                    )
+                log_T_Jordan_MeV = value.log_T_Jordan - log_MeV
+                if last_log_T_Jordan_MeV is not None:
+                    if log_T_Jordan_MeV > last_log_T_Jordan_MeV:
+                        print(
+                            f"!! compute_BBN_data {task_label}: T_Jordan values are not monotonically decreasing: this log(T_Jordan/MeV) {log_T_Jordan_MeV:.5g} (this) > {log_T_Jordan_MeV:.5g} (last) = {last_log_T_Jordan_MeV:.5g} (last)"
+                        )
 
-            log_T_Jordan_MeV_grid.append(log_T_Jordan_MeV)
-            last_log_T_Jordan_MeV = log_T_Jordan_MeV
+                log_T_Jordan_MeV_grid.append(log_T_Jordan_MeV)
+                last_log_T_Jordan_MeV = log_T_Jordan_MeV
 
-            # compute new physics density and pressure
-            phi_Einstein: float = value.phi_Einstein
-            pi_Einstein: float = value.pi_Einstein
-            H_Jordan: float = value.H_Jordan
-            H2_Jordan: float = H_Jordan * H_Jordan
+                # compute new physics density and pressure
+                phi_Einstein: float = value.phi_Einstein
+                pi_Einstein: float = value.pi_Einstein
+                H_Jordan: float = value.H_Jordan
+                H2_Jordan: float = H_Jordan * H_Jordan
 
-            rhorad_Jordan: float = exp(value.log_rhorad_Jordan)
-            fm: float = exp(value.log_fm)
-            Sigma: float = value.Sigma
-            w: float = (1.0 - Sigma) / 3.0
+                rhorad_Jordan: float = exp(value.log_rhorad_Jordan)
+                fm: float = exp(value.log_fm)
+                Sigma: float = value.Sigma
+                w: float = (1.0 - Sigma) / 3.0
 
-            G: float = 1.0 - pi_Einstein * pi_Einstein / CONST_6_MP_SQ
+                G: float = 1.0 - pi_Einstein * pi_Einstein / CONST_6_MP_SQ
 
-            R: float
-            if fm > 10.0:
-                R = (1.0 + Sigma / fm) / (1.0 + 1.0 / fm)
-            else:
-                R = (Sigma + fm) / (1.0 + fm)
-            A1: float = 1.0 + R / 2.0
-            A2: float = 4.0 - R
+                R: float
+                if fm > 10.0:
+                    R = (1.0 + Sigma / fm) / (1.0 + 1.0 / fm)
+                else:
+                    R = (Sigma + fm) / (1.0 + fm)
+                A1: float = 1.0 + R / 2.0
+                A2: float = 4.0 - R
 
-            log_V: float = potential.log_V(phi_Einstein)
-            log_rhorad_over_V: float = value.log_rhorad_Einstein - log_V
+                log_V: float = potential.log_V(phi_Einstein)
+                log_rhorad_over_V: float = value.log_rhorad_Einstein - log_V
 
-            T: float
-            if log_rhorad_over_V > 2.0:
-                V_over_rhorad: float = exp(-log_rhorad_over_V)
-                T = V_over_rhorad / (V_over_rhorad + 1.0 + fm)
-            else:
-                rhorad_over_V: float = exp(log_rhorad_over_V)
-                T = 1.0 / (1.0 + rhorad_over_V * (1.0 + fm))
+                T: float
+                if log_rhorad_over_V > 2.0:
+                    V_over_rhorad: float = exp(-log_rhorad_over_V)
+                    T = V_over_rhorad / (V_over_rhorad + 1.0 + fm)
+                else:
+                    rhorad_over_V: float = exp(log_rhorad_over_V)
+                    T = 1.0 / (1.0 + rhorad_over_V * (1.0 + fm))
 
-            V_over_3H2Mp2: float = G * T
-            C: float = V_over_3H2Mp2 / 2.0
+                V_over_3H2Mp2: float = G * T
+                C: float = V_over_3H2Mp2 / 2.0
 
-            LHS: float = 3.0 * H2_Jordan * CONST_MP_SQ
+                LHS: float = 3.0 * H2_Jordan * CONST_MP_SQ
 
-            dotH_over_H2: float = -3.0 + (G * A1 + C * A2)
+                dotH_over_H2: float = -3.0 + (G * A1 + C * A2)
 
-            density_NP: float = LHS - rhorad_Jordan * (1.0 + fm)
-            pressure_BP: float = (
-                -LHS * (1.0 + 2.0 * dotH_over_H2 / 3.0) - w * rhorad_Jordan
-            )
+                density_NP: float = LHS - rhorad_Jordan * (1.0 + fm)
+                pressure_BP: float = (
+                    -LHS * (1.0 + 2.0 * dotH_over_H2 / 3.0) - w * rhorad_Jordan
+                )
 
-            density_NP_grid.append(density_NP)
-            pressure_NP_grid.append(pressure_BP)
+                rhorad_Jordan_grid.append(rhorad_Jordan)
 
-    density_NP_spline = _make_spline(
-        log_T_Jordan_MeV_grid,
-        density_NP_grid,
-    )
-    pressure_NP_spline = _make_spline(
-        log_T_Jordan_MeV_grid,
-        pressure_NP_grid,
-    )
-    density_NP_derivative_spline = density_NP_spline.derivative()
+                density_NP_grid.append(density_NP)
+                density_NP_MeV_grid.append(density_NP / units.MeV)
+
+                pressure_NP_grid.append(pressure_BP)
+                pressure_NP_MeV_grid.append(pressure_BP / units.MeV)
+
+        density_NP_spline = _make_spline(
+            log_T_Jordan_MeV_grid,
+            density_NP_MeV_grid,
+        )
+        pressure_NP_spline = _make_spline(
+            log_T_Jordan_MeV_grid,
+            pressure_NP_MeV_grid,
+        )
+        density_NP_derivative_spline = density_NP_spline.derivative()
 
     def rho_NP(T_in_MeV: float):
+        T = T_in_MeV * units.MeV
+
+        if T > T_BBN_spline_max:
+            raise ValueError(
+                f"T_in_MeV={T_in_MeV:.5g} MeV is larger than T_BBN_spline_max={T_BBN_spline_max/units.MeV:.5g} MeV"
+            )
+
+        if T < T_BBN_spline_min:
+            raise ValueError(
+                f"T_in_MeV={T_in_MeV:.5g} MeV is smaller than T_BBN_spline_min={T_BBN_spline_min/units.MeV:.5g} MeV"
+            )
+
         log_T_in_MeV = log(T_in_MeV)
         return density_NP_spline(log_T_in_MeV)
 
     def P_NP(T_in_MeV: float):
+        T = T_in_MeV * units.MeV
+
+        if T > T_BBN_spline_max:
+            raise ValueError(
+                f"T_in_MeV={T_in_MeV:.5g} MeV is larger than T_BBN_spline_max={T_BBN_spline_max/units.MeV:.5g} MeV"
+            )
+
+        if T < T_BBN_spline_min:
+            raise ValueError(
+                f"T_in_MeV={T_in_MeV:.5g} MeV is smaller than T_BBN_spline_min={T_BBN_spline_min/units.MeV:.5g} MeV"
+            )
+
         log_T_in_MeV = log(T_in_MeV)
         return pressure_NP_spline(log_T_in_MeV)
 
     def drho_NP_dT(T_in_MeV: float):
+        T = T_in_MeV * units.MeV
+
+        if T > T_BBN_spline_max:
+            raise ValueError(
+                f"T_in_MeV={T_in_MeV:.5g} MeV is larger than T_BBN_spline_max={T_BBN_spline_max/units.MeV:.5g} MeV"
+            )
+
+        if T < T_BBN_spline_min:
+            raise ValueError(
+                f"T_in_MeV={T_in_MeV:.5g} MeV is smaller than T_BBN_spline_min={T_BBN_spline_min/units.MeV:.5g} MeV"
+            )
+
         log_T_in_MeV = log(T_in_MeV)
         return density_NP_derivative_spline(log_T_in_MeV)
+
+    with WallclockTimer() as BBN_timer:
+        # ask PRyMordial to include new physics ("NP") contributions to the thermodynamics
+        PRyMini.NP_thermo_flag = True
+
+        # PryMordial seems to require the temperature in the NP sector to be set separately
+        # note PRyMini.T_start seems to be in Kelvin whereas all other energies are measured in MeV
+        PRyMini.Tstart_NP = PRyMini.T_start / PRyMini.MeV_to_Kelvin
+
+        PRyMini.verbose_flag = True
+
+        res = PRyMmain.PRyMclass(rho_NP, P_NP, drho_NP_dT).PRyMresults()
 
     for i, z in enumerate(z_grid):
         samples.append(
@@ -162,18 +226,20 @@ def compute_BBN_data(
                 raw_N=raw_N_grid[i],
                 log_T_Jordan=log_T_Jordan_grid[i],
                 density_NP=density_NP_grid[i],
+                density_NP_ratio=density_NP_grid[i] / rhorad_Jordan_grid[i],
                 pressure_NP=pressure_NP_grid[i],
             )
         )
 
     return {
-        "Yp_BBN": 0.0,
-        "DOverH": 0.0,
-        "HeOverH": 0.0,
-        "LiOverH": 0.0,
+        "Yp_BBN": res[4],
+        "DOverH": res[5],
+        "HeOverH": res[6],
+        "LiOverH": res[7],
         "z_grid": z_grid,
         "samples": samples,
-        "compute_time": 0.0,
+        "BBN_compute_time": BBN_timer.elapsed,
+        "NP_compute_time": NP_timer.elapsed,
     }
 
 
@@ -196,16 +262,17 @@ class BBNData(DatastoreObject):
 
         if payload is None:
             DatastoreObject.__init__(self, None)
-            self._Yp_BBN = None
-            self._DOverH = None
-            self._HeOverH = None
-            self._LiOverH = None
+            self._Yp_BBN: Optional[float] = None
+            self._DOverH: Optional[float] = None
+            self._HeOverH: Optional[float] = None
+            self._LiOverH: Optional[float] = None
 
-            self._values = None
+            self._values: Optional[List[BBNDataValue]] = None
 
-            self._BBN_compute_time = None
+            self._BBN_compute_time: Optional[float] = None
+            self._NP_compute_time: Optional[float] = None
 
-            self._populated = False
+            self._populated: bool = False
         else:
             DatastoreObject.__init__(self, payload["store_id"])
             self._Yp_BBN = payload["Yp_BBN"]
@@ -214,6 +281,9 @@ class BBNData(DatastoreObject):
             self._LiOverH = payload["LiOverH"]
 
             self._values = None
+
+            self._BBN_compute_time = payload["BBN_compute_time"]
+            self._NP_compute_time = payload["NP_compute_time"]
 
             self._populated = True
 
@@ -274,10 +344,16 @@ class BBNData(DatastoreObject):
         return self._values
 
     @property
-    def compute_time(self) -> float:
+    def BBN_compute_time(self) -> float:
         if self._populated is False:
-            raise RuntimeError("compute_time has not yet been populated")
+            raise RuntimeError("BBN_compute_time has not yet been populated")
         return self._BBN_compute_time
+
+    @property
+    def NP_compute_time(self) -> float:
+        if self._populated is False:
+            raise RuntimeError("NP_compute_time has not yet been populated")
+        return self._NP_compute_time
 
     def compute(self, label: Optional[str] = None) -> ray.ObjectRef:
         if self._populated:
@@ -317,6 +393,9 @@ class BBNData(DatastoreObject):
         self._HeOverH = data["HeOverH"]
         self._LiOverH = data["LiOverH"]
 
+        self._BBN_compute_time = data["BBN_compute_time"]
+        self._NP_compute_time = data["NP_compute_time"]
+
         z_grid: redshift_array = data["z_grid"]
         samples = data["samples"]
 
@@ -330,6 +409,7 @@ class BBNData(DatastoreObject):
                     log_T_Jordan=samples[i].log_T_Jordan,
                     density_NP=samples[i].density_NP,
                     pressure_NP=samples[i].pressure_NP,
+                    density_NP_ratio=samples[i].density_NP_ratio,
                 )
             )
 
@@ -346,6 +426,7 @@ class BBNDataValue(DatastoreObject):
         log_T_Jordan: float,
         density_NP: float,
         pressure_NP: float,
+        density_NP_ratio: float,
     ):
         DatastoreObject.__init__(self, store_id)
 
@@ -355,6 +436,7 @@ class BBNDataValue(DatastoreObject):
 
         self._density_NP: float = density_NP
         self._pressure_NP: float = pressure_NP
+        self._density_NP_ratio: float = density_NP_ratio
 
     @property
     def shard_key(self) -> ShardKeyType:
@@ -379,3 +461,7 @@ class BBNDataValue(DatastoreObject):
     @property
     def pressure_NP(self) -> float:
         return self._pressure_NP
+
+    @property
+    def density_NP_ratio(self) -> float:
+        return self._density_NP_ratio

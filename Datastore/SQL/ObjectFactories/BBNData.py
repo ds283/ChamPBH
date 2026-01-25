@@ -98,7 +98,8 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
                 sqla.Column("LiOverH", sqla.Float(64)),
                 sqla.Column("label", sqla.String(DEFAULT_STRING_LENGTH), nullable=True),
                 sqla.Column("z_samples", sqla.Integer, nullable=False),
-                sqla.Column("compute_time", sqla.Float(64)),
+                sqla.Column("NP_compute_time", sqla.Float(64), nullable=True),
+                sqla.Column("BBN_compute_time", sqla.Float(64), nullable=True),
                 sqla.Column("validated", sqla.Boolean, default=False, nullable=False),
             ],
         }
@@ -122,7 +123,8 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
             table.c.LiOverH,
             table.c.label,
             table.c.z_samples,
-            table.c.compute_time,
+            table.c.NP_compute_time,
+            table.c.BBN_compute_time,
         ).filter(
             table.c.model_serial == model_proxy.store_id,
         )
@@ -167,9 +169,10 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
                     value_table.c.serial,
                     redshift_table.c.z,
                     value_table.c.raw_N,
-                    value_table.c.log_T_Jordan_GeV,
-                    value_table.c.density_NP_GeV4,
-                    value_table.c.pressure_NP_GeV4,
+                    value_table.c.log_T_Jordan_MeV,
+                    value_table.c.density_NP_MeV4,
+                    value_table.c.pressure_NP_MeV4,
+                    value_table.c.density_NP_ratio,
                 )
                 .select_from(
                     value_table.join(
@@ -186,9 +189,9 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
             values = []
 
             units: UnitsLike = cosmology.units
-            GeV2 = units.GeV * units.GeV
-            GeV4 = GeV2 * GeV2
-            log_GeV = log(units.GeV)
+            MeV2 = units.MeV * units.MeV
+            MeV4 = MeV2 * MeV2
+            log_MeV = log(units.MeV)
 
             for row in value_rows:
                 z_value = redshift(
@@ -201,9 +204,10 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
                         row.serial,
                         z=redshift(row.z),
                         raw_N=row.raw_N,
-                        log_T_Jordan=row.log_T_Jordan_GeV + log_GeV,
-                        density_NP=row.density_NP_GeV4 * GeV4,
-                        pressure_NP=row.pressure_NP_GeV4 * GeV4,
+                        log_T_Jordan=row.log_T_Jordan_MeV + log_MeV,
+                        density_NP=row.density_NP_MeV4 * MeV4,
+                        pressure_NP=row.pressure_NP_MeV4 * MeV4,
+                        density_NP_ratio=row.density_NP_ratio,
                     )
                 )
             imported_z_sample = redshift_array(z_points)
@@ -228,7 +232,8 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
                 "DOverH": row_data.DOverH,
                 "HeOverH": row_data.HeOverH,
                 "LiOverH": row_data.LiOverH,
-                "compute_time": row_data.compute_time,
+                "NP_compute_time": row_data.NP_compute_time,
+                "BBN_compute_time": row_data.BBN_compute_time,
                 "values": values,
             },
             model_proxy,
@@ -248,7 +253,8 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
             "HeOverH": obj.HeOverH,
             "LiOverH": obj.LiOverH,
             "z_samples": len(obj.values),
-            "compute_time": obj.compute_time,
+            "NP_compute_time": obj.NP_compute_time,
+            "BBN_compute_time": obj.BBN_compute_time,
             "validated": True,
         }
 
@@ -265,9 +271,9 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
         cosmology: BaseCosmology = model.cosmology
         units: UnitsLike = cosmology.units
 
-        log_GeV = log(units.GeV)
-        GeV2 = units.GeV * units.GeV
-        GeV4 = GeV2 * GeV2
+        log_MeV = log(units.MeV)
+        MeV2 = units.MeV * units.MeV
+        MeV4 = MeV2 * MeV2
 
         value_inserter = inserters["BBNDataValue"]
         for val in obj.values:
@@ -276,9 +282,10 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
                 "bbn_serial": store_id,
                 "z_serial": val.z.store_id,
                 "raw_N": val.raw_N,
-                "log_T_Jordan_GeV": val.log_T_Jordan - log_GeV,
-                "density_NP_GeV4": val.density_NP / GeV4,
-                "pressure_NP_GeV4": val.pressure_NP / GeV4,
+                "log_T_Jordan_MeV": val.log_T_Jordan - log_MeV,
+                "density_NP_MeV4": val.density_NP / MeV4,
+                "pressure_NP_MeV4": val.pressure_NP / MeV4,
+                "density_NP_ratio": val.density_NP_ratio,
             }
 
             # set store_id on behalf of the BBNDataValue instance
@@ -408,9 +415,10 @@ class sqla_BBNDataValue_factory(SQLAFactoryBase):
                     nullable=False,
                 ),
                 sqla.Column("raw_N", sqla.Float(64), nullable=False),
-                sqla.Column("log_T_Jordan_GeV", sqla.Float(64), nullable=False),
-                sqla.Column("density_NP_GeV4", sqla.Float(64), nullable=False),
-                sqla.Column("pressure_NP_GeV4", sqla.Float(64), nullable=False),
+                sqla.Column("log_T_Jordan_MeV", sqla.Float(64), nullable=False),
+                sqla.Column("density_NP_MeV4", sqla.Float(64), nullable=False),
+                sqla.Column("pressure_NP_MeV4", sqla.Float(64), nullable=False),
+                sqla.Column("density_NP_ratio", sqla.Float(64), nullable=False),
             ],
         }
 
@@ -424,24 +432,26 @@ class sqla_BBNDataValue_factory(SQLAFactoryBase):
         log_T_Jordan: float = payload["log_T_Jordan"]
         density_NP: float = payload["density_NP"]
         pressure_NP: float = payload["pressure_NP"]
+        density_NP_ratio: float = payload["density_NP_ratio"]
 
         # define quantities in explicit units
-        GeV2 = units.GeV * units.GeV
-        GeV4 = GeV2 * GeV2
-        log_GeV = log(units.GeV)
+        MeV2 = units.MeV * units.MeV
+        MeV4 = MeV2 * MeV2
+        log_MeV = log(units.MeV)
 
-        log_T_Jordan_GeV: float = log_T_Jordan - log_GeV
-        density_NP_GeV4: float = density_NP / GeV4
-        pressure_NP_GeV4: float = pressure_NP / GeV4
+        log_T_Jordan_MeV: float = log_T_Jordan - log_MeV
+        density_NP_MeV4: float = density_NP / MeV4
+        pressure_NP_MeV4: float = pressure_NP / MeV4
 
         try:
             row_data = conn.execute(
                 sqla.select(
                     table.c.serial,
                     table.c.raw_N,
-                    table.c.log_T_Jordan_GeV,
-                    table.c.density_NP_GeV4,
-                    table.c.pressure_NP_GeV4,
+                    table.c.log_T_Jordan_MeV,
+                    table.c.density_NP_MeV4,
+                    table.c.pressure_NP_MeV4,
+                    table.c.density_NP_ratio,
                 ).filter(
                     table.c.bbn_serial == BBN_serial,
                     table.c.z_serial == z.store_id,
@@ -458,9 +468,10 @@ class sqla_BBNDataValue_factory(SQLAFactoryBase):
                     "bbn_serial": BBN_serial,
                     "z_serial": z.store_id,
                     "raw_N": raw_N,
-                    "log_T_Jordan_GeV": log_T_Jordan_GeV,
-                    "density_NP_GeV4": density_NP_GeV4,
-                    "pressure_NP_GeV4": pressure_NP_GeV4,
+                    "log_T_Jordan_MeV": log_T_Jordan_MeV,
+                    "density_NP_MeV4": density_NP_MeV4,
+                    "pressure_NP_MeV4": pressure_NP_MeV4,
+                    "density_NP_ratio": density_NP_ratio,
                 },
             )
         else:
@@ -469,9 +480,10 @@ class sqla_BBNDataValue_factory(SQLAFactoryBase):
             # replace supplied values with those read from the dataabse
             raw_N = row_data.raw_N
 
-            log_T_Jordan = row_data.log_T_Jordan_GeV + log_GeV
-            density_NP = row_data.density_NP_GeV4 * GeV4
-            pressure_NP = row_data.pressure_NP_GeV4 * GeV4
+            log_T_Jordan = row_data.log_T_Jordan_MeV + log_MeV
+            density_NP = row_data.density_NP_MeV4 * MeV4
+            pressure_NP = row_data.pressure_NP_MeV4 * MeV4
+            density_NP_ratio = row_data.density_NP_ratio
 
         obj = BBNDataValue(
             store_id,
@@ -480,6 +492,7 @@ class sqla_BBNDataValue_factory(SQLAFactoryBase):
             log_T_Jordan=log_T_Jordan,
             density_NP=density_NP,
             pressure_NP=pressure_NP,
+            density_NP_ratio=density_NP_ratio,
         )
         obj._deserialized = True
         return obj
