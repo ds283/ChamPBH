@@ -317,15 +317,16 @@ def run_pipeline(
             Yp_ax = axs[1]
             D_ax = axs[0]
 
-            # add confidence contours for Yeh+2022
-            Yp_central_value = 0.2448
-            Yp_sigma = 0.0033
+            # add confidence contours for Cooke+2017
+            Yp_central_value = 0.2449
+            Yp_sigma = 0.0040
 
-            DOverH_central_value = 2.550
+            # add confidence contours for Aver+2015
+            DOverH_central_value = 2.527
             DOverH_sigma = 0.030
 
             Yp_ax.axhline(
-                Yp_central_value, color="g", linestyle="dashed", label="Yeh+2022"
+                Yp_central_value, color="g", linestyle="dashed", label="Cooke+2017"
             )
             Yp_ax.axhspan(
                 ymin=Yp_central_value - Yp_sigma,
@@ -343,7 +344,7 @@ def run_pipeline(
             )
 
             D_ax.axhline(
-                DOverH_central_value, color="g", linestyle="dashed", label="Yeh+2022"
+                DOverH_central_value, color="g", linestyle="dashed", label="Aver+2015"
             )
             D_ax.axhspan(
                 ymin=DOverH_central_value - DOverH_sigma,
