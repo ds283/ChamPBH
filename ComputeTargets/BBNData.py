@@ -216,7 +216,7 @@ def compute_BBN_data(
         # note PRyMini.T_start seems to be in Kelvin whereas all other energies are measured in MeV
         PRyMini.Tstart_NP = PRyMini.T_start / PRyMini.MeV_to_Kelvin
 
-        PRyMini.verbose_flag = True
+        PRyMini.verbose_flag = False
 
         res = PRyMmain.PRyMclass(rho_NP, P_NP, drho_NP_dT).PRyMresults()
 
