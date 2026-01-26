@@ -43,7 +43,7 @@ def compute_BBN_data(
     model_proxy: ScalarModelProxy,
     task_label: str,
     T_BBN_MeV_spline_max: float = 100,  # PRyMordial default begins at 10 MeV
-    T_BBN_keV_spline_min: float = 1e-2,  # PRyMordial default ends at 1 keV, but samples at later times
+    T_BBN_keV_spline_min: float = 1e-3,  # PRyMordial default ends at 1 keV, but samples at later times
 ):
     model: ScalarModel = model_proxy.get()
     cosmology: BaseCosmology = model._cosmology
@@ -165,6 +165,10 @@ def compute_BBN_data(
     def rho_NP(T_in_MeV: float):
         T = T_in_MeV * units.MeV
 
+        # PRyMordial sometimes produces negative temperatures
+        if T < 0:
+            return 0.0
+
         if T > T_BBN_spline_max:
             raise ValueError(
                 f"T_in_MeV={T_in_MeV:.5g} MeV is larger than T_BBN_spline_max={T_BBN_spline_max/units.MeV:.5g} MeV"
@@ -181,6 +185,10 @@ def compute_BBN_data(
     def P_NP(T_in_MeV: float):
         T = T_in_MeV * units.MeV
 
+        # PRyMordial sometimes produces negative temperatures
+        if T < 0:
+            return 0.0
+
         if T > T_BBN_spline_max:
             raise ValueError(
                 f"T_in_MeV={T_in_MeV:.5g} MeV is larger than T_BBN_spline_max={T_BBN_spline_max/units.MeV:.5g} MeV"
@@ -196,6 +204,10 @@ def compute_BBN_data(
 
     def drho_NP_dT(T_in_MeV: float):
         T = T_in_MeV * units.MeV
+
+        # PRyMordial sometimes produces negative temperatures
+        if T < 0:
+            return 0.0
 
         if T > T_BBN_spline_max:
             raise ValueError(
