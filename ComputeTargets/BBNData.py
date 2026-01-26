@@ -73,6 +73,8 @@ def compute_BBN_data(
     T_BBN_spline_min = T_BBN_keV_spline_min * units.keV
 
     log_MeV = log(units.MeV)
+    MeV2 = units.MeV * units.MeV
+    MeV4 = MeV2 * MeV2
 
     last_log_T_Jordan_MeV = None
 
@@ -145,10 +147,10 @@ def compute_BBN_data(
                 rhorad_Jordan_grid.append(rhorad_Jordan)
 
                 density_NP_grid.append(density_NP)
-                density_NP_MeV_grid.append(density_NP / units.MeV)
+                density_NP_MeV_grid.append(density_NP / MeV4)
 
                 pressure_NP_grid.append(pressure_BP)
-                pressure_NP_MeV_grid.append(pressure_BP / units.MeV)
+                pressure_NP_MeV_grid.append(pressure_BP / MeV4)
 
         density_NP_spline = _make_spline(
             log_T_Jordan_MeV_grid,
