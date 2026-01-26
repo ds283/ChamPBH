@@ -194,6 +194,7 @@ def run_pipeline(
             process_batch_size=20,
         )
         adiabatic_query_queue.run()
+        available_adiabatic = [Q for Q in adiabatic_query_queue.results if Q.available]
 
         bbn_query_batch = [
             {
@@ -219,6 +220,7 @@ def run_pipeline(
             process_batch_size=20,
         )
         bbn_query_queue.run()
+        bbn_available = [B for B in bbn_query_queue.results if B.available]
 
         base_path = Path(args.output).resolve()
         base_path = base_path / f"{model_label}"
@@ -228,8 +230,7 @@ def run_pipeline(
             for m in available_models
         ]
         bbn_time_points = [
-            (d.coupling._beta.as_float, d.BBN_compute_time)
-            for d in bbn_query_queue.results
+            (d.coupling._beta.as_float, d.BBN_compute_time) for d in bbn_available
         ]
 
         adiabatic_maxQ_points = [
@@ -237,14 +238,15 @@ def run_pipeline(
                 q.coupling._beta.as_float,
                 {label: q.max_abs_Q(label) for label in AdiabaticHistory.Q_labels},
             )
-            for q in adiabatic_query_queue.results
+            for q in available_adiabatic
         ]
 
+        # ignore negative values which must represent a PRyMordial integration failure
         Yp_points = [
-            (d.coupling._beta.as_float, d.Yp_BBN) for d in bbn_query_queue.results
+            (d.coupling._beta.as_float, d.Yp_BBN) for d in bbn_available if d.Yp_BBN > 0
         ]
         DOverH_points = [
-            (d.coupling._beta.as_float, d.DOverH) for d in bbn_query_queue.results
+            (d.coupling._beta.as_float, d.DOverH) for d in bbn_available if d.DOverH > 0
         ]
 
         solver_time_x, solver_time_y = zip(*solver_time_points)
@@ -275,7 +277,7 @@ def run_pipeline(
                 solver_time_y,
                 label=r"scalar field",
                 color="r",
-                marker="o",
+                marker="o" if len(solver_time_x) <= 20 else None,
             )
             solver_ax.set_yscale("log")
 
@@ -284,7 +286,7 @@ def run_pipeline(
                 bbn_time_y,
                 label=r"PRyMordial",
                 color="b",
-                marker="o",
+                marker="o" if len(bbn_time_x) <= 20 else None,
             )
             bbn_ax.set_yscale("log")
 
@@ -361,25 +363,42 @@ def run_pipeline(
                 label=None,
             )
 
-            Yp_ax.plot(Yp_x, Yp_y, label=r"$Y_p$ (BBN)", color="b", marker="o")
-            D_ax.plot(DOverH_x, DOverH_y, label=r"$10^5 D/H$", color="r", marker="o")
+            Yp_ax.plot(
+                Yp_x,
+                Yp_y,
+                label=r"$Y_p$ (BBN)",
+                color="b",
+                marker="o" if len(Yp_x) <= 20 else None,
+            )
+            D_ax.plot(
+                DOverH_x,
+                DOverH_y,
+                label=r"$10^5 D/H$",
+                color="r",
+                marker="o" if len(DOverH_x) <= 20 else None,
+            )
 
             Yp_ax.set_xlabel(r"coupling $\beta$")
             Yp_ax.grid(True)
 
             add_beta_summary_labels(D_ax, model_label, potential, shift=0.0)
 
-            max_Yp = 1.05 * max(max(Yp_y), Yp_central_value + 3.0 * Yp_sigma)
-            min_Yp = 0.95 * min(min(Yp_y), Yp_central_value - 3.0 * Yp_sigma)
+            # max_Yp = 1.05 * max(max(Yp_y), Yp_central_value + 3.0 * Yp_sigma)
+            # min_Yp = 0.95 * min(min(Yp_y), Yp_central_value - 3.0 * Yp_sigma)
+            max_Yp = Yp_central_value + 5.5 * Yp_sigma
+            min_Yp = Yp_central_value - 5.5 * Yp_sigma
             Yp_ax.set_ylim(min_Yp, max_Yp)
 
-            max_DOverH = 1.05 * max(
-                max(DOverH_y), DOverH_central_value + 3.0 * DOverH_sigma
-            )
-            min_DOverH = 0.95 * min(
-                min(DOverH_y), DOverH_central_value - 3.0 * DOverH_sigma
-            )
-            D_ax.set_ylim(min_DOverH, max_DOverH)
+            # max_DOverH = max(max(DOverH_y), DOverH_central_value + 3.0 * DOverH_sigma)
+            # min_DOverH = min(min(DOverH_y), DOverH_central_value - 3.0 * DOverH_sigma)
+            # if max_DOverH / min_DOverH > 50.0:
+            #     D_ax.set_yscale("log")
+            #     D_ax.set_ylim(min_DOverH / 10.0, 10.0 * max_DOverH)
+            # else:
+            #     D_ax.set_ylim(0.95 * min_DOverH, 1.06 * max_DOverH)
+            max_DoverH = DOverH_central_value + 5.5 * DOverH_sigma
+            min_DoverH = DOverH_central_value - 5.5 * DOverH_sigma
+            D_ax.set_ylim(min_DoverH, max_DoverH)
 
             Yp_ax.legend(loc="best")
             D_ax.legend(loc="best")
@@ -404,7 +423,12 @@ def run_pipeline(
 
             for label in AdiabaticHistory.Q_labels:
                 x, y = adiabtic_maxQ_xy[label]
-                ax.plot(x, y, label=nice_Q_labels[label], marker="o")
+                ax.plot(
+                    x,
+                    y,
+                    label=nice_Q_labels[label],
+                    marker="o" if len(x) <= 20 else None,
+                )
             ax.set_yscale("log")
 
             ax.set_xlabel(r"coupling $\beta$")
