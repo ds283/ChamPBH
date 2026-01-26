@@ -66,8 +66,8 @@ def compute_BBN_data(
 
     # PRyMordial expects energies to be in units of MeV
     log_T_Jordan_MeV_grid: List[float] = []
-    pressure_NP_MeV_grid: List[float] = []
-    density_NP_MeV_grid: List[float] = []
+    pressure_NP_MeV4_grid: List[float] = []
+    density_NP_MeV4_grid: List[float] = []
 
     T_BBN_spline_max = T_BBN_MeV_spline_max * units.MeV
     T_BBN_spline_min = T_BBN_keV_spline_min * units.keV
@@ -147,20 +147,20 @@ def compute_BBN_data(
                 rhorad_Jordan_grid.append(rhorad_Jordan)
 
                 density_NP_grid.append(density_NP)
-                density_NP_MeV_grid.append(density_NP / MeV4)
+                density_NP_MeV4_grid.append(density_NP / MeV4)
 
                 pressure_NP_grid.append(pressure_BP)
-                pressure_NP_MeV_grid.append(pressure_BP / MeV4)
+                pressure_NP_MeV4_grid.append(pressure_BP / MeV4)
 
-        density_NP_spline = _make_spline(
+        density_NP_MeV4_spline = _make_spline(
             log_T_Jordan_MeV_grid,
-            density_NP_MeV_grid,
+            density_NP_MeV4_grid,
         )
-        pressure_NP_spline = _make_spline(
+        pressure_NP_MeV4_spline = _make_spline(
             log_T_Jordan_MeV_grid,
-            pressure_NP_MeV_grid,
+            pressure_NP_MeV4_grid,
         )
-        density_NP_derivative_spline = density_NP_spline.derivative()
+        density_NP_MeV4_derivative_spline = density_NP_MeV4_spline.derivative()
 
     def rho_NP(T_in_MeV: float):
         T = T_in_MeV * units.MeV
@@ -176,7 +176,7 @@ def compute_BBN_data(
             )
 
         log_T_in_MeV = log(T_in_MeV)
-        return density_NP_spline(log_T_in_MeV)
+        return density_NP_MeV4_spline(log_T_in_MeV)
 
     def P_NP(T_in_MeV: float):
         T = T_in_MeV * units.MeV
@@ -192,7 +192,7 @@ def compute_BBN_data(
             )
 
         log_T_in_MeV = log(T_in_MeV)
-        return pressure_NP_spline(log_T_in_MeV)
+        return pressure_NP_MeV4_spline(log_T_in_MeV)
 
     def drho_NP_dT(T_in_MeV: float):
         T = T_in_MeV * units.MeV
@@ -208,7 +208,7 @@ def compute_BBN_data(
             )
 
         log_T_in_MeV = log(T_in_MeV)
-        return density_NP_derivative_spline(log_T_in_MeV)
+        return density_NP_MeV4_derivative_spline(log_T_in_MeV)
 
     with WallclockTimer() as BBN_timer:
         # ask PRyMordial to include new physics ("NP") contributions to the thermodynamics
