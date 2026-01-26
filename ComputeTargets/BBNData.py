@@ -230,8 +230,13 @@ def compute_BBN_data(
         # note PRyMini.T_start seems to be in Kelvin whereas all other energies are measured in MeV
         PRyMini.Tstart_NP = PRyMini.T_start / PRyMini.MeV_to_Kelvin
 
+        # disable verbose output
         PRyMini.verbose_flag = False
 
+        # speed up calculation using small reaction network, at cost of Li7 accuracy
+        PRyMini.small_network_flag = True
+
+        # run PRyMordial
         res = PRyMmain.PRyMclass(rho_NP, P_NP, drho_NP_dT).PRyMresults()
 
     for i, z in enumerate(z_grid):
