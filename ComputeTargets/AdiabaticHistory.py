@@ -14,6 +14,7 @@ from Units.base import UnitsLike
 from config.sharding import ShardKeyType
 from utilities import WallclockTimer
 from .ScalarModel import ScalarModelProxy, ScalarModel, ScalarModelValue
+from .exceptions import ComputationFailureError
 
 
 @ray.remote
@@ -98,12 +99,8 @@ def compute_adiabatic_values(
 
             dotH_over_H2: float = -3.0 + (G * A1 + C * A2)
             if dotH_over_H2 > 0.0:
-                print(
-                    f"!! compute_adiabatic_values ({task_label}): detected positive dotH/H^2 = {dotH_over_H2:.5g} at N={value.raw_N:.8g}"
-                )
-                raise RuntimeError(
-                    f"compute_adiabatic_values ({task_label}): detected positive dotH/H^2 = {dotH_over_H2:.5g}"
-                )
+                msg = f"!! compute_adiabatic_values ({task_label}): detected positive dotH/H^2 = {dotH_over_H2:.5g} at N={value.raw_N:.8g}"
+                raise ComputationFailureError(msg)
 
             dotH_over_H2_samples.append(dotH_over_H2)
 

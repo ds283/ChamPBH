@@ -18,7 +18,7 @@ from math import log, pi, exp, sqrt, isinf, isnan
 from typing import Optional, List, Dict, Any
 
 import ray
-from numpy import inf as np_inf
+from numpy import inf
 from ray import ObjectRef
 from scipy.integrate import solve_ivp
 from scipy.interpolate import make_interp_spline
@@ -50,6 +50,7 @@ from Quadrature.supervisors.base import RHS_timer
 from Units.base import UnitsLike
 from config.defaults import DEFAULT_ABS_TOLERANCE, DEFAULT_REL_TOLERANCE
 from config.sharding import ShardKeyType
+from .exceptions import ComputationFailureError
 
 # useful constants, calculated once and cached to speed up the numerical integration
 PISQ_OVER_30 = pi * pi / 30.0
@@ -206,13 +207,10 @@ def compute_scalar_model(
 
     def RHS_impl(N: float, state: StateVector):
         if any((isnan(x) or isinf(x)) for x in state):
-            print(
-                f"!! compute_scalar_model ({task_label}): input to ODE RHS has infinity or NaN values at N={N:.8g}"
-            )
+            msg = f"!! compute_scalar_model ({task_label}): input to ODE RHS has infinity or NaN values at N={N:.8g}"
+            print(msg)
             print(f"     - state={state}")
-            raise RuntimeError(
-                f"compute_scalar_model ({task_label}): input to ODE RHS has infinity or NaN values"
-            )
+            raise ComputationFailureError(msg)
 
         phi_Einstein: float = state.phi_Einstein
         pi_Einstein: float = state.pi_Einstein
@@ -223,23 +221,20 @@ def compute_scalar_model(
         try:
             fm: float = exp(log_fm)
         except OverflowError as e:
-            print(
-                f"!! compute_scalar_model ({task_label}): math overflow in exp(log_fm), log_fm = {log_fm:.5g} | N = {N:.5g}, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp, pi_Einstein = {pi_Einstein / units.PlanckMass:.5g} Mp"
-            )
-            raise e
+            msg = f"!! compute_scalar_model ({task_label}): math overflow in exp(log_fm), log_fm = {log_fm:.5g} | N = {N:.5g}, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp, pi_Einstein = {pi_Einstein / units.PlanckMass:.5g} Mp"
+            print(msg)
+            raise ComputationFailureError(msg)
 
         try:
             T_Jordan: float = exp(log_T_Jordan)
         except OverflowError as e:
-            print(
-                f"!! compute_scalar_model ({task_label}): math overflow in exp(log_T_Jordan), log_T_Jordan = {log_T_Jordan:.5g} | N = {N:.5g}, f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp, pi_Einstein = {pi_Einstein / units.PlanckMass:.5g} Mp"
-            )
-            raise e
+            msg = f"!! compute_scalar_model ({task_label}): math overflow in exp(log_T_Jordan), log_T_Jordan = {log_T_Jordan:.5g} | N = {N:.5g}, f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp, pi_Einstein = {pi_Einstein / units.PlanckMass:.5g} Mp"
+            print(msg)
+            raise ComputationFailureError(msg)
 
         if T_Jordan <= 0.0:
-            print(
-                f"!! compute_scalar_model ({task_label}): T_Jordan = {T_Jordan:.5g}, log_T_Jordan = {log_T_Jordan:.5g} at N={N:.8g}"
-            )
+            msg = f"!! compute_scalar_model ({task_label}): T_Jordan = {T_Jordan:.5g}, log_T_Jordan = {log_T_Jordan:.5g} at N={N:.8g}"
+            print(msg)
             T_Jordan = 1 * units.Kelvin
 
         d_logOmega_dphi: float = coupling.d_logOmega_dphi(phi_Einstein)
@@ -247,12 +242,9 @@ def compute_scalar_model(
         G: float = 1.0 - pi_Einstein * pi_Einstein / CONST_6_MP_SQ
         # G must be positive in order the H_Einstein^2 is also positive
         if G < 0.0:
-            print(
-                f"!! compute_scalar_model ({task_label}): negative value of G = {G:.5g} detected at N={N:.8g} | f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp, pi_Einstein = {pi_Einstein / units.PlanckMass:.5g} Mp, log(rho_rad/GeV^4) = {log_rhorad_Einstein - 4.0*log(units.GeV):.5g}, T_Jordan = {T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K"
-            )
-            raise RuntimeError(
-                f"compute_scalar_model ({task_label}): negative value of G = {G:.5g} detected"
-            )
+            msg = f"!! compute_scalar_model ({task_label}): negative value of G = {G:.5g} detected at N={N:.8g} | f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp, pi_Einstein = {pi_Einstein / units.PlanckMass:.5g} Mp, log(rho_rad/GeV^4) = {log_rhorad_Einstein - 4.0*log(units.GeV):.5g}, T_Jordan = {T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K"
+            print(msg)
+            raise ComputationFailureError(msg)
 
         Sigma: float = 1.0 - 3.0 * cosmology.w(T_Jordan)
 
@@ -284,12 +276,8 @@ def compute_scalar_model(
         E: float = G - V_over_3H2Mp2
         # must be positive, because it is proportional to rho_R/H^2
         if E < 0.0:
-            print(
-                f"!! compute_scalar_model ({task_label}): negative value of E = {E:.5g} detected at N={N:.8g} | f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp, pi_Einstein = {pi_Einstein / units.PlanckMass:.5g} Mp, log(rho_rad/GeV^4) = {log_rhorad_Einstein - 4.0*log(units.GeV):.5g}, T_Jordan = {T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K, G = {G:.5g}, T = {T:.5g}"
-            )
-            raise RuntimeError(
-                f"compute_scalar_model ({task_label}): negative value of E = {E:.5g} detected"
-            )
+            msg = f"!! compute_scalar_model ({task_label}): negative value of E = {E:.5g} detected at N={N:.8g} | f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp, pi_Einstein = {pi_Einstein / units.PlanckMass:.5g} Mp, log(rho_rad/GeV^4) = {log_rhorad_Einstein - 4.0*log(units.GeV):.5g}, T_Jordan = {T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K, G = {G:.5g}, T = {T:.5g}"
+            raise ComputationFailureError(msg)
 
         friction_term = -pi_Einstein * (G * A1 + C * A2)
         reflecting_term = -D
@@ -390,7 +378,7 @@ def compute_scalar_model(
                 print(f"     - thermodynamics: G_s={G_s:.5g}, dG_s={dG_s_dlogT:.5g}")
                 print(f"     - state={state}")
                 print(f"     - return_state={return_state}")
-                raise RuntimeError(
+                raise ComputationFailureError(
                     f"compute_scalar_model ({task_label}): output from ODE RHS has infinity or NaN values"
                 )
 
@@ -460,222 +448,262 @@ def compute_scalar_model(
     exit_bounce_region_level2.terminal = True
     exit_bounce_region_level2.direction = +1.0
 
-    in_level1 = False
-    in_level2 = False
-
     def dummy_event_handler(N, s, supervisor):
         return 1.0
 
-    N_failsafe = 1000.0  # terminate after 1000 e-folds as a failsafe
-    N_start = 0.0
+    solver_list = ["Radau", "BDF", "LSODA", "DOP853"]
+    solver_labels = {
+        "Radau": "solve_ivp+Radau-stepping0",
+        "BDF": "solve_ivp+BDF-stepping0",
+        "LSODA": "solve_ivp+LSODA-stepping0",
+        "DOP853": "solve_ivp+DOP853-stepping0",
+    }
 
-    # track number of function evaluations reported by the integrator
+    success = False
+    label = solver_list.pop(0)
+    solution_fragments = []
     compute_steps = 0
 
-    # track the solution fragments generated between reflection events
-    solution_fragments = []
-    solution_complete = False
+    while not success and label is not None:
+        try:
+            in_level1 = False
+            in_level2 = False
 
-    # prepare the first initial state
-    initial_state = StateVector(
-        phi_Einstein=phi_init_float,
-        pi_Einstein=pi_init_float,
-        log_rhorad_Einstein=log_rhorad_Einstein_init,
-        log_fm=log_fm_init,
-        log_T_Jordan=log_T_init,
-    )
+            N_failsafe = 1000.0  # terminate after 1000 e-folds as a failsafe
+            N_start = 0.0
 
-    # track maximum step size
-    # usually we want this to be unbounded, so the stepper can choose as large a value as it wishes
-    # but close to a bounce we want to dramatically shorten the step size, so that we resolve the bounce accurately
-    max_step_size = np_inf
+            # track number of function evaluations reported by the integrator
+            compute_steps = 0
 
-    with ScalarFieldIntegrationSupervisor(
-        units,
-        T_init,
-        T_stop,
-        max_step_size,
-        label=task_label,
-        collect_full_statistics=True,
-    ) as supervisor:
-        while not solution_complete:
-            sol = solve_ivp(
-                RHS,
-                method="Radau",
-                t_span=(N_start, N_failsafe),
-                y0=initial_state,
-                atol=atol,
-                rtol=rtol,
-                args=(supervisor,),
-                events=(
-                    terminate_at_T_stop,
-                    reflection_failure_detector,
-                    (
-                        enter_bounce_region_level1
-                        if not in_level1
-                        else dummy_event_handler
-                    ),
-                    exit_bounce_region_level1 if in_level1 else dummy_event_handler,
-                    (
-                        enter_bounce_region_level2
-                        if not in_level2
-                        else dummy_event_handler
-                    ),
-                    exit_bounce_region_level2 if in_level2 else dummy_event_handler,
-                ),
-                dense_output=True,
-                max_step=max_step_size,
+            # track the solution fragments generated between reflection events
+            solution_fragments = []
+            solution_complete = False
+
+            # prepare the first initial state
+            initial_state = StateVector(
+                phi_Einstein=phi_init_float,
+                pi_Einstein=pi_init_float,
+                log_rhorad_Einstein=log_rhorad_Einstein_init,
+                log_fm=log_fm_init,
+                log_T_Jordan=log_T_init,
             )
 
-            # check that termination occurred due to reaching the end of the integration domain, or because of a termination event
-            if not sol.success:
-                raise RuntimeError(
-                    f'compute_scalar_model ({task_label}): integration did not terminate successfully (log_T_init={log_T_init:.5g}, log_T_stop={log_T_stop:.5g}, error at N={sol.t[-1]:.5g}, "{sol.message}")'
-                )
+            # track maximum step size
+            # usually we want this to be unbounded, so the stepper can choose as large a value as it wishes
+            # but close to a bounce we want to dramatically shorten the step size, so that we resolve the bounce accurately
+            max_step_size = inf
 
-            # check that termination was not due to reaching the end of the integraton domain (that is supposed to be just a failsafe)
-            if not sol.status == 1:
-                raise RuntimeError(
-                    f'compute_scalar_model ({task_label}): integration concluded without a termination event => failsafe activated (log_T_init={log_T_init:.5g}, log_T_stop={log_T_stop:.5g}, last sample at N={sol.t[-1]:.5g}, "{sol.message}")'
-                )
+            with ScalarFieldIntegrationSupervisor(
+                units,
+                T_init,
+                T_stop,
+                max_step_size,
+                label=task_label,
+                collect_full_statistics=True,
+            ) as supervisor:
+                while not solution_complete:
+                    sol = solve_ivp(
+                        RHS,
+                        method="Radau",
+                        t_span=(N_start, N_failsafe),
+                        y0=initial_state,
+                        atol=atol,
+                        rtol=rtol,
+                        args=(supervisor,),
+                        events=(
+                            terminate_at_T_stop,
+                            reflection_failure_detector,
+                            (
+                                enter_bounce_region_level1
+                                if not in_level1
+                                else dummy_event_handler
+                            ),
+                            (
+                                exit_bounce_region_level1
+                                if in_level1
+                                else dummy_event_handler
+                            ),
+                            (
+                                enter_bounce_region_level2
+                                if not in_level2
+                                else dummy_event_handler
+                            ),
+                            (
+                                exit_bounce_region_level2
+                                if in_level2
+                                else dummy_event_handler
+                            ),
+                        ),
+                        dense_output=True,
+                        max_step=max_step_size,
+                    )
 
-            # check that the solution has the expected number of elements
-            sampled_N = sol.t
-            sampled_values = StateVector._make(sol.y)
-            if len(sampled_values) != EXPECTED_SOL_LENGTH:
-                raise RuntimeError(
-                    f"compute_scalar_model ({task_label}): solution does not have expected number of members (expected {EXPECTED_SOL_LENGTH}, found {len(sampled_values)}; length of sol.t={len(sampled_N)})"
-                )
+                    # check that termination occurred due to reaching the end of the integration domain, or because of a termination event
+                    if not sol.success:
+                        raise RuntimeError(
+                            f'compute_scalar_model ({task_label}): integration did not terminate successfully (log_T_init={log_T_init:.5g}, log_T_stop={log_T_stop:.5g}, error at N={sol.t[-1]:.5g}, "{sol.message}")'
+                        )
 
-            # update running number of function evaluations (recorded by integrator)
-            compute_steps += int(sol.nfev)
+                    # check that termination was not due to reaching the end of the integraton domain (that is supposed to be just a failsafe)
+                    if not sol.status == 1:
+                        raise RuntimeError(
+                            f'compute_scalar_model ({task_label}): integration concluded without a termination event => failsafe activated (log_T_init={log_T_init:.5g}, log_T_stop={log_T_stop:.5g}, last sample at N={sol.t[-1]:.5g}, "{sol.message}")'
+                        )
 
-            # at this stage, we know that one of the event handlers fired to terminate the evolution
-            # now we decide which one
+                    # check that the solution has the expected number of elements
+                    sampled_N = sol.t
+                    sampled_values = StateVector._make(sol.y)
+                    if len(sampled_values) != EXPECTED_SOL_LENGTH:
+                        raise RuntimeError(
+                            f"compute_scalar_model ({task_label}): solution does not have expected number of members (expected {EXPECTED_SOL_LENGTH}, found {len(sampled_values)}; length of sol.t={len(sampled_N)})"
+                        )
 
-            termination_times = sol.t_events[0]
-            reflection_times = sol.t_events[1]
-            enter_bounce_region_level1_times = sol.t_events[2]
-            exit_bounce_region_level1_times = sol.t_events[3]
-            enter_bounce_region_level2_times = sol.t_events[4]
-            exit_bounce_region_level2_times = sol.t_events[5]
+                    # update running number of function evaluations (recorded by integrator)
+                    compute_steps += int(sol.nfev)
 
-            num_termination_events = len(termination_times)
-            num_reflection_events = len(reflection_times)
-            num_enter_level1_events = len(enter_bounce_region_level1_times)
-            num_exit_level1_events = len(exit_bounce_region_level1_times)
-            num_enter_level2_events = len(enter_bounce_region_level2_times)
-            num_exit_level2_events = len(exit_bounce_region_level2_times)
+                    # at this stage, we know that one of the event handlers fired to terminate the evolution
+                    # now we decide which one
 
-            if (
-                num_termination_events
-                + num_reflection_events
-                + num_enter_level1_events
-                + num_exit_level1_events
-                + num_enter_level2_events
-                + num_exit_level2_events
-                != 1
-            ):
-                raise RuntimeError(
-                    f"compute_scalar_model ({task_label}): integration terminated with multiple termination events (N_start={N_start:.5g}, N_failsafe={N_failsafe:.5g}, num_termination_events={num_termination_events}, num_reflection_events={num_reflection_events})"
-                )
+                    termination_times = sol.t_events[0]
+                    reflection_times = sol.t_events[1]
+                    enter_bounce_region_level1_times = sol.t_events[2]
+                    exit_bounce_region_level1_times = sol.t_events[3]
+                    enter_bounce_region_level2_times = sol.t_events[4]
+                    exit_bounce_region_level2_times = sol.t_events[5]
 
-            # append this solution fragment to this list
-            solution_fragments.append(
-                SolutionFragment(
-                    N_low=N_start,
-                    N_high=sol.t[-1],
-                    sol=sol.sol,
-                )
+                    num_termination_events = len(termination_times)
+                    num_reflection_events = len(reflection_times)
+                    num_enter_level1_events = len(enter_bounce_region_level1_times)
+                    num_exit_level1_events = len(exit_bounce_region_level1_times)
+                    num_enter_level2_events = len(enter_bounce_region_level2_times)
+                    num_exit_level2_events = len(exit_bounce_region_level2_times)
+
+                    if (
+                        num_termination_events
+                        + num_reflection_events
+                        + num_enter_level1_events
+                        + num_exit_level1_events
+                        + num_enter_level2_events
+                        + num_exit_level2_events
+                        != 1
+                    ):
+                        raise RuntimeError(
+                            f"compute_scalar_model ({task_label}): integration terminated with multiple termination events (N_start={N_start:.5g}, N_failsafe={N_failsafe:.5g}, num_termination_events={num_termination_events}, num_reflection_events={num_reflection_events})"
+                        )
+
+                    # append this solution fragment to this list
+                    solution_fragments.append(
+                        SolutionFragment(
+                            N_low=N_start,
+                            N_high=sol.t[-1],
+                            sol=sol.sol,
+                        )
+                    )
+
+                    # if the integration terminated, break out
+                    if num_termination_events == 1:
+                        solution_complete = True
+                        continue
+
+                    # if we need to restart the integration, prepare a new state
+                    if (
+                        num_reflection_events == 1
+                        or num_enter_level1_events == 1
+                        or num_exit_level1_events == 1
+                        or num_enter_level2_events == 1
+                        or num_exit_level2_events == 1
+                    ):
+                        # prepare to restart the integration
+                        N_start = sol.t[-1]
+                        initial_state = StateVector._make(sol.y[:, -1])
+
+                        if num_enter_level1_events == 1:
+                            max_step_size = potential.bounce_region_level1_max_step
+                            supervisor.notify_level_1_entry(
+                                enter_bounce_region_level1_times[0], max_step_size
+                            )
+                            in_level1 = True
+                            in_level2 = False
+                            if verbose:
+                                print(
+                                    f"-- compute_scalar_model ({task_label}): enter level-1 bounce region at N={enter_bounce_region_level1_times[0]:.5g}, reducing max step size to {max_step_size:.5g}"
+                                )
+
+                        if num_exit_level1_events == 1:
+                            max_step_size = inf
+                            supervisor.notify_level_1_exit(
+                                exit_bounce_region_level1_times[0], max_step_size
+                            )
+                            in_level1 = False
+                            in_level2 = False
+                            if verbose:
+                                print(
+                                    f"-- compute_scalar_model ({task_label}): exit level-1 bounce region at N={exit_bounce_region_level1_times[0]:.5g}, increasing max step size to {max_step_size:.5g}"
+                                )
+
+                        if num_enter_level2_events == 1:
+                            max_step_size = potential.bounce_region_level2_max_step
+                            supervisor.notify_level_2_entry(
+                                enter_bounce_region_level2_times[0], max_step_size
+                            )
+                            in_level1 = True
+                            in_level2 = True
+                            if verbose:
+                                print(
+                                    f"-- compute_scalar_model ({task_label}): enter level-2 bounce region at N={enter_bounce_region_level2_times[0]:.5g}, reducing max step size to {max_step_size:.5g}"
+                                )
+
+                        if num_exit_level2_events == 1:
+                            max_step_size = potential.bounce_region_level1_max_step
+                            supervisor.notify_level_2_exit(
+                                exit_bounce_region_level2_times[0], max_step_size
+                            )
+                            in_level1 = True
+                            in_level2 = False
+                            if verbose:
+                                print(
+                                    f"-- compute_scalar_model ({task_label}): exit level-2 bounce region at N={exit_bounce_region_level2_times[0]:.5g}, increasing max step size to {max_step_size:.5g}"
+                                )
+
+                        if num_reflection_events == 1:
+                            # record that a hard reflection occurred and prepare for the next integration step
+                            supervisor.notify_hard_reflection(reflection_times[0])
+
+                            # reverse direction of travel for the scalar field
+                            if initial_state.pi_Einstein < 0.0:
+                                initial_state = initial_state._replace(
+                                    pi_Einstein=-initial_state.pi_Einstein
+                                )
+                            assert initial_state.pi_Einstein >= 0.0
+
+                            if verbose:
+                                print(
+                                    f"-- compute_scalar_model ({task_label}): hard reflection detected at N={reflection_times[0]:.5g}"
+                                )
+
+                        continue
+
+                    # otherwise, we don't know what happened, so we should never reach this point
+                    raise RuntimeError(
+                        f"compute_scalar_model ({task_label}): integration terminated with unknown events (N_start={N_start:.5g}, N_failsafe={N_failsafe:.5g}"
+                    )
+
+        except ComputationFailureError as e:
+            print(
+                f'-- compute_scalar_model ({task_label}): integration failure with solver "{label}"'
             )
+            print(f"   {e.message}")
 
-            # if the integration terminated, break out
-            if num_termination_events == 1:
-                solution_complete = True
-                continue
+            label = solver_list.pop(0)
+            if label is not None:
+                print(f'   switching to solver "{label}"')
+        else:
+            success = True
 
-            # if we need to restart the integration, prepare a new state
-            if (
-                num_reflection_events == 1
-                or num_enter_level1_events == 1
-                or num_exit_level1_events == 1
-                or num_enter_level2_events == 1
-                or num_exit_level2_events == 1
-            ):
-                # prepare to restart the integration
-                N_start = sol.t[-1]
-                initial_state = StateVector._make(sol.y[:, -1])
-
-                if num_enter_level1_events == 1:
-                    max_step_size = potential.bounce_region_level1_max_step
-                    supervisor.notify_level_1_entry(
-                        enter_bounce_region_level1_times[0], max_step_size
-                    )
-                    in_level1 = True
-                    in_level2 = False
-                    if verbose:
-                        print(
-                            f"-- compute_scalar_model ({task_label}): enter level-1 bounce region at N={enter_bounce_region_level1_times[0]:.5g}, reducing max step size to {max_step_size:.5g}"
-                        )
-
-                if num_exit_level1_events == 1:
-                    max_step_size = np_inf
-                    supervisor.notify_level_1_exit(
-                        exit_bounce_region_level1_times[0], max_step_size
-                    )
-                    in_level1 = False
-                    in_level2 = False
-                    if verbose:
-                        print(
-                            f"-- compute_scalar_model ({task_label}): exit level-1 bounce region at N={exit_bounce_region_level1_times[0]:.5g}, increasing max step size to {max_step_size:.5g}"
-                        )
-
-                if num_enter_level2_events == 1:
-                    max_step_size = potential.bounce_region_level2_max_step
-                    supervisor.notify_level_2_entry(
-                        enter_bounce_region_level2_times[0], max_step_size
-                    )
-                    in_level1 = True
-                    in_level2 = True
-                    if verbose:
-                        print(
-                            f"-- compute_scalar_model ({task_label}): enter level-2 bounce region at N={enter_bounce_region_level2_times[0]:.5g}, reducing max step size to {max_step_size:.5g}"
-                        )
-
-                if num_exit_level2_events == 1:
-                    max_step_size = potential.bounce_region_level1_max_step
-                    supervisor.notify_level_2_exit(
-                        exit_bounce_region_level2_times[0], max_step_size
-                    )
-                    in_level1 = True
-                    in_level2 = False
-                    if verbose:
-                        print(
-                            f"-- compute_scalar_model ({task_label}): exit level-2 bounce region at N={exit_bounce_region_level2_times[0]:.5g}, increasing max step size to {max_step_size:.5g}"
-                        )
-
-                if num_reflection_events == 1:
-                    # record that a hard reflection occurred and prepare for the next integration step
-                    supervisor.notify_hard_reflection(reflection_times[0])
-
-                    # reverse direction of travel for the scalar field
-                    if initial_state.pi_Einstein < 0.0:
-                        initial_state = initial_state._replace(
-                            pi_Einstein=-initial_state.pi_Einstein
-                        )
-                    assert initial_state.pi_Einstein >= 0.0
-
-                    if verbose:
-                        print(
-                            f"-- compute_scalar_model ({task_label}): hard reflection detected at N={reflection_times[0]:.5g}"
-                        )
-
-                continue
-
-            # otherwise, we don't know what happened, so we should never reach this point
-            raise RuntimeError(
-                f"compute_scalar_model ({task_label}): integration terminated with unknown events (N_start={N_start:.5g}, N_failsafe={N_failsafe:.5g}"
-            )
+    if not success:
+        raise RuntimeError(
+            f"compute_scalar_model ({task_label}): failed to find an solver that could integrate this model"
+        )
 
     # the integration should have terminated when T_Jordan = T_CMB, which ought to correspond to z = 0
     # we now work backwards and sample the integration output on the supplied z grid, using the e-fold number
@@ -781,7 +809,7 @@ def compute_scalar_model(
         "mean_RHS_values": (
             supervisor.mean_RHS_values if collected_full_statistics else None
         ),
-        "solver_label": "solve_ivp+Radau-stepping0",
+        "solver_label": solver_labels[label] if label is not None else None,
     }
 
 

@@ -8,3 +8,4 @@ from .ScalarModel import (
     ScalarModelValue,
     ScalarModelProxy,
 )
+from .exceptions import ComputationFailureError

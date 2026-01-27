@@ -17,6 +17,7 @@ from Units.base import UnitsLike
 from config.sharding import ShardKeyType
 from utilities import WallclockTimer
 from .ScalarModel import ScalarModelProxy, ScalarModel, ScalarModelValue
+from .exceptions import ComputationFailureError
 
 SampleValues = namedtuple(
     "SampleValues",
@@ -170,12 +171,12 @@ def compute_BBN_data(
             return 0.0
 
         if T > T_BBN_spline_max:
-            raise ValueError(
+            raise ComputationFailureError(
                 f"T_in_MeV={T_in_MeV:.5g} MeV is larger than T_BBN_spline_max={T_BBN_spline_max/units.MeV:.5g} MeV"
             )
 
         if T < T_BBN_spline_min:
-            raise ValueError(
+            raise ComputationFailureError(
                 f"T_in_MeV={T_in_MeV:.5g} MeV is smaller than T_BBN_spline_min={T_BBN_spline_min/units.MeV:.5g} MeV"
             )
 
@@ -190,12 +191,12 @@ def compute_BBN_data(
             return 0.0
 
         if T > T_BBN_spline_max:
-            raise ValueError(
+            raise ComputationFailureError(
                 f"T_in_MeV={T_in_MeV:.5g} MeV is larger than T_BBN_spline_max={T_BBN_spline_max/units.MeV:.5g} MeV"
             )
 
         if T < T_BBN_spline_min:
-            raise ValueError(
+            raise ComputationFailureError(
                 f"T_in_MeV={T_in_MeV:.5g} MeV is smaller than T_BBN_spline_min={T_BBN_spline_min/units.MeV:.5g} MeV"
             )
 
@@ -210,12 +211,12 @@ def compute_BBN_data(
             return 0.0
 
         if T > T_BBN_spline_max:
-            raise ValueError(
+            raise ComputationFailureError(
                 f"T_in_MeV={T_in_MeV:.5g} MeV is larger than T_BBN_spline_max={T_BBN_spline_max/units.MeV:.5g} MeV"
             )
 
         if T < T_BBN_spline_min:
-            raise ValueError(
+            raise ComputationFailureError(
                 f"T_in_MeV={T_in_MeV:.5g} MeV is smaller than T_BBN_spline_min={T_BBN_spline_min/units.MeV:.5g} MeV"
             )
 
