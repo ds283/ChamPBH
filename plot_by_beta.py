@@ -292,7 +292,10 @@ def run_pipeline(
             )
             bbn_ax.set_yscale("log")
 
+            bbn_ax.set_ylabel(r"time [sec]")
+
             solver_ax.set_xlabel(r"coupling $\beta$")
+            solver_ax.set_ylabel(r"time [sec]")
             solver_ax.grid(True)
 
             add_beta_summary_labels(bbn_ax, model_label, potential, shift=0.0)
@@ -434,6 +437,7 @@ def run_pipeline(
             ax.set_yscale("log")
 
             ax.set_xlabel(r"coupling $\beta$")
+            ax.set_ylabel(r"maximum $|Q| = |\omega_k'/\omega_k^2|$")
             ax.grid(True)
 
             add_beta_summary_labels(ax, model_label, potential, shift=0.0)
@@ -480,13 +484,11 @@ def run_pipeline(
                         if store_id in beta_to_BBN
                         else nan
                     ),
-                    "NP_compute_time": {
-                        (
-                            beta_to_BBN[store_id].NP_compute_time
-                            if store_id in beta_to_BBN
-                            else nan
-                        )
-                    },
+                    "NP_compute_time": (
+                        beta_to_BBN[store_id].NP_compute_time
+                        if store_id in beta_to_BBN
+                        else nan
+                    ),
                     "Yp_BBN": (
                         beta_to_BBN[store_id].Yp_BBN if store_id in beta_to_BBN else nan
                     ),
