@@ -181,6 +181,7 @@ _T_events = {
         "direction": -1,
         "label": "electroweak",
         "ypos": 0.08,
+        "xpos": 0.15,
         "color": "m",
         "linestyle": (0, (1, 1)),
     },
@@ -190,6 +191,7 @@ _T_events = {
         "direction": -1,
         "label": r"$\Lambda_{\text{QCD}}$",
         "ypos": 0.3,
+        "xpos": 0.15,
         "color": "m",
         "linestyle": (0, (1, 1)),
     },
@@ -199,6 +201,7 @@ _T_events = {
         "direction": -1,
         "label": r"$e^+e^-$ annihilation",
         "ypos": 0.5,
+        "xpos": 0.15,
         "color": "m",
         "linestyle": (0, (1, 1)),
     },
@@ -207,6 +210,7 @@ _T_events = {
         "unit": "MeV",
         "label": r"BBN start",
         "ypos": 0.7,
+        "xpos": 0.65,
         "color": "tab:orange",
         "linestyle": (0, (3, 1, 1, 1)),
     },
@@ -215,6 +219,7 @@ _T_events = {
         "unit": "keV",
         "label": r"BBN end",
         "ypos": 0.9,
+        "xpos": 0.65,
         "color": "tab:orange",
         "linestyle": (0, (3, 1, 1, 1)),
     },
@@ -290,11 +295,32 @@ def add_temperature_yaxis_labels(ax, model: ScalarModel, temp_unit: str = "GeV")
     ax.text(
         0.15,
         5 * T_CMB_in_units,
-        f"$T_{{\\text{{CMB}}}}$ = {T_CMB_in_units:.3g} {temp_unit}",
+        rf"$T_{{\text{{CMB}}}}$ = {T_CMB_in_units:.3g} {temp_unit}",
         color="r",
         transform=ytrans,
         fontsize="x-small",
     )
+
+    single_lines = ["Electroweak", "Lambda_QCD", "e+e-", "BBN start", "BBN end"]
+    for event in single_lines:
+        if event in _T_events:
+            config = _T_events[event]
+            T_Jordan = config["T_Jordan"]
+            unit_label = config["unit"]
+            unit = getattr(units, unit_label)
+            T_Jordan_in_units = T_Jordan * unit / _temp_unit
+
+            ax.axhline(
+                T_Jordan_in_units, color=config["color"], linestyle=config["linestyle"]
+            )
+            ax.text(
+                config["xpos"],
+                5 * T_Jordan_in_units,
+                f"{config['label']}@{config['T_Jordan']:.3g}{config['unit']}",
+                color=config["color"],
+                transform=ytrans,
+                fontsize="x-small",
+            )
 
 
 def add_redshift_xaxis_labels(

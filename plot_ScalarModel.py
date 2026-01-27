@@ -447,6 +447,7 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
         )
         pi_ax.grid(True)
 
+        add_temperature_yaxis_labels(T_ax, model, temp_unit="GeV")
         T_ax.plot(
             T_Jordan_x,
             T_Jordan_y,
@@ -458,7 +459,6 @@ def plot_ScalarModel(model_label: str, model: ScalarModel, x_coord: str = "redsh
         T_ax.grid(True)
 
         add_ScalarModel_labels(T_ax, model, model_label, shift=0.05)
-        add_temperature_yaxis_labels(T_ax, model, temp_unit="GeV")
 
         h, l = add_redshift_xaxis_labels(
             phi_ax, model, temp_unit="GeV", text_labels=True, x_coord=x_coord
