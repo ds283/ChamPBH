@@ -20,9 +20,11 @@ from datetime import datetime
 from pathlib import Path
 from typing import List
 
+import pandas as pd
 import ray
 import seaborn as sns
 from matplotlib import pyplot as plt
+from numpy import nan
 
 from ComputeTargets import ScalarModelProxy, AdiabaticHistory
 from CosmologyConcepts import temperature, phi_value, pi_value
@@ -220,7 +222,7 @@ def run_pipeline(
             process_batch_size=20,
         )
         bbn_query_queue.run()
-        bbn_available = [B for B in bbn_query_queue.results if B.available]
+        available_bbn = [B for B in bbn_query_queue.results if B.available]
 
         base_path = Path(args.output).resolve()
         base_path = base_path / f"{model_label}"
@@ -230,7 +232,7 @@ def run_pipeline(
             for m in available_models
         ]
         bbn_time_points = [
-            (d.coupling._beta.as_float, d.BBN_compute_time) for d in bbn_available
+            (d.coupling._beta.as_float, d.BBN_compute_time) for d in available_bbn
         ]
 
         adiabatic_maxQ_points = [
@@ -243,10 +245,10 @@ def run_pipeline(
 
         # ignore negative values which must represent a PRyMordial integration failure
         Yp_points = [
-            (d.coupling._beta.as_float, d.Yp_BBN) for d in bbn_available if d.Yp_BBN > 0
+            (d.coupling._beta.as_float, d.Yp_BBN) for d in available_bbn if d.Yp_BBN > 0
         ]
         DOverH_points = [
-            (d.coupling._beta.as_float, d.DOverH) for d in bbn_available if d.DOverH > 0
+            (d.coupling._beta.as_float, d.DOverH) for d in available_bbn if d.DOverH > 0
         ]
 
         solver_time_x, solver_time_y = zip(*solver_time_points)
@@ -447,6 +449,82 @@ def run_pipeline(
             fig.savefig(fig_path.with_suffix(".png"))
 
             plt.close()
+
+            beta_to_models = {m.coupling._beta.store_id: m for m in available_models}
+            beta_to_Q = {Q.coupling._beta.store_id: Q for Q in available_adiabatic}
+            beta_to_BBN = {B.coupling._beta.store_id: B for B in available_bbn}
+
+            beta_keys = (
+                set(beta_to_models.keys())
+                | set(beta_to_Q.keys())
+                | set(beta_to_BBN.keys())
+            )
+            data = [
+                {
+                    "beta": (
+                        beta_to_models[store_id].coupling._beta.as_float
+                        if store_id in beta_to_models
+                        else (
+                            beta_to_Q[store_id].coupling._beta.as_float
+                            if store_id in beta_to_Q
+                            else beta_to_BBN[store_id].coupling._beta.as_float
+                        )
+                    ),
+                    "scalar_compute_time": (
+                        beta_to_models[store_id].metadata.compute_time
+                        if store_id in beta_to_models
+                        else nan
+                    ),
+                    "BBN_compute_time": (
+                        beta_to_BBN[store_id].BBN_compute_time
+                        if store_id in beta_to_BBN
+                        else nan
+                    ),
+                    "NP_compute_time": {
+                        (
+                            beta_to_BBN[store_id].NP_compute_time
+                            if store_id in beta_to_BBN
+                            else nan
+                        )
+                    },
+                    "Yp_BBN": (
+                        beta_to_BBN[store_id].Yp_BBN if store_id in beta_to_BBN else nan
+                    ),
+                    "D_over_H": (
+                        beta_to_BBN[store_id].DOverH if store_id in beta_to_BBN else nan
+                    ),
+                    "He_over_H": (
+                        beta_to_BBN[store_id].HeOverH
+                        if store_id in beta_to_BBN
+                        else nan
+                    ),
+                    "Li_over_H": (
+                        beta_to_BBN[store_id].LiOverH
+                        if store_id in beta_to_BBN
+                        else nan
+                    ),
+                }
+                | (
+                    {
+                        label: beta_to_Q[store_id].max_abs_Q(label)
+                        for label in AdiabaticHistory.Q_labels
+                    }
+                    if store_id in beta_to_Q
+                    else {label: nan for label in AdiabaticHistory.Q_labels}
+                )
+                for store_id in beta_keys
+            ]
+
+            df = pd.DataFrame(data)
+            df.sort_values(by="beta", inplace=True, ascending=True, ignore_index=True)
+
+            csv_path = (
+                base_path
+                / f"csv/M={potential._M.as_float/units.eV:.5g}eV_Lambda={potential._Lambda.as_float/units.eV:.5g}eV/data.csv"
+            )
+            csv_path.parents[0].mkdir(exist_ok=True, parents=True)
+
+            df.to_csv(csv_path, header=True, index=False)
 
         return None
 
