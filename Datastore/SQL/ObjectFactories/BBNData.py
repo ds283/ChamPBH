@@ -202,7 +202,7 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
                 values.append(
                     BBNDataValue(
                         row.serial,
-                        z=redshift(row.z),
+                        z=z_value,
                         raw_N=row.raw_N,
                         log_T_Jordan=row.log_T_Jordan_MeV + log_MeV,
                         density_NP=row.density_NP_MeV4 * MeV4,
