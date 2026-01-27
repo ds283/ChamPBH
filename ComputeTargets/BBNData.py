@@ -44,7 +44,7 @@ def compute_BBN_data(
     model_proxy: ScalarModelProxy,
     task_label: str,
     T_BBN_MeV_spline_max: float = 100,  # PRyMordial default begins at 10 MeV
-    T_BBN_keV_spline_min: float = 1e-3,  # PRyMordial default ends at 1 keV, but samples at later times
+    T_BBN_keV_spline_min: float = 1e-4,  # PRyMordial default ends at 1 keV, but samples at later times
 ):
     model: ScalarModel = model_proxy.get()
     cosmology: BaseCosmology = model._cosmology
