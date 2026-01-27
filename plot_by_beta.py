@@ -175,7 +175,7 @@ def build_beta_plot(
             solver_time_y,
             label=r"scalar field",
             color="r",
-            marker="o" if len(solver_time_x) <= 20 else None,
+            marker="o" if len(solver_time_x) <= 20.0 else None,
         )
         solver_ax.set_yscale("log")
 
@@ -184,7 +184,7 @@ def build_beta_plot(
             bbn_time_y,
             label=r"PRyMordial",
             color="b",
-            marker="o" if len(bbn_time_x) <= 20 else None,
+            marker="o" if len(bbn_time_x) <= 20.0 else None,
         )
         bbn_ax.set_yscale("log")
 
@@ -269,14 +269,14 @@ def build_beta_plot(
             Yp_y,
             label=r"$Y_p$ (BBN)",
             color="b",
-            marker="o" if len(Yp_x) <= 20 else None,
+            marker="o" if len(Yp_x) <= 20.0 else None,
         )
         D_ax.plot(
             DOverH_x,
             DOverH_y,
             label=r"$10^5 D/H$",
             color="r",
-            marker="o" if len(DOverH_x) <= 20 else None,
+            marker="o" if len(DOverH_x) <= 20.0 else None,
         )
 
         Yp_ax.set_xlabel(r"coupling $\beta$")
@@ -328,7 +328,7 @@ def build_beta_plot(
                 x,
                 y,
                 label=nice_Q_labels[label],
-                marker="o" if len(x) <= 20 else None,
+                marker="o" if len(x) <= 20.0 else None,
             )
         ax.set_yscale("log")
 
@@ -574,7 +574,7 @@ with ShardedPool(
         ]
     )
 
-    # get list of models we want to extract transfer functions for
+    # get list of models we want to handle
     units = Planck_units()
 
     T_init = ray.get(
