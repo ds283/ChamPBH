@@ -17,6 +17,7 @@ import argparse
 import itertools
 import sys
 from datetime import datetime
+from math import fabs
 from typing import List, Tuple
 
 import numpy as np
@@ -50,6 +51,7 @@ from config.defaults import (
     DEFAULT_REL_TOLERANCE,
     DEFAULT_QUADRATURE_ATOL,
     DEFAULT_QUADRATURE_RTOL,
+    DEFAULT_FLOAT_PRECISION,
 )
 from config.model_list import build_model_list
 from config.sharding import (
@@ -1096,17 +1098,35 @@ with ShardedPool(
 
     print("\n** BUILDING GRID OF MODELS TO SAMPLE")
 
-    # num_beta_sample = int(round(samples_per_beta * (beta_high - beta_low) + 0.5, 0))
-    #
-    # beta_array = ray.get(
-    #     convert_to_betas(
-    #         np.linspace(beta_low, beta_high, num_beta_sample, endpoint=True)
-    #     )
-    # )
-    beta_array = ray.get(
-        convert_to_betas([0.1, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0])
-    )
+    num_beta_sample = int(round(samples_per_beta * (beta_high - beta_low) + 0.5, 0))
+
+    beta_blacklist = []
+
+    def beta_blacklisted(beta: float) -> bool:
+        if (
+            len(
+                [
+                    b
+                    for b in beta_blacklist
+                    if fabs((beta - b) / b) < DEFAULT_FLOAT_PRECISION
+                ]
+            )
+            > 0
+        ):
+            print(
+                f"   @@ Note: beta = {beta:.8g} is blacklisted and has been removed from the sample"
+            )
+            return True
+
+        return False
+
+    beta_pre_sample = np.linspace(beta_low, beta_high, num_beta_sample, endpoint=True)
+    beta_pre_sample = [0.1, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0]
+    beta_sample = [beta for beta in beta_pre_sample if not beta_blacklisted(beta)]
+
+    beta_array = ray.get(convert_to_betas(beta_sample))
     beta_grid = DimensionlessQuantityArray(value_array=beta_array)
+    print(f"   -- populated beta sample grid with {len(beta_sample)} values")
 
     # num_M_sample = int(
     #     round(samples_per_log10_M_eV * (log10_M_high_eV - log10_M_low_eV) + 0.5, 0)
@@ -1120,6 +1140,7 @@ with ShardedPool(
     # )
     M_array = ray.get(convert_to_Ms([0.5 * units.PlanckMass]))
     M_grid = DimensionfulQuantityArray(value_array=M_array)
+    print(f"   -- populated M sample grid with {len(M_array)} values")
 
     # num_Lambda_sample = int(
     #     round(
@@ -1142,11 +1163,16 @@ with ShardedPool(
     # )
     Lambda_array = ray.get(convert_to_Lambdas([1e-3 * units.eV]))
     Lambda_grid = DimensionfulQuantityArray(value_array=Lambda_array)
+    print(f"   -- populated Lambda sample grid with {len(Lambda_array)} values")
 
     M_lambda_grid = itertools.product(M_grid, Lambda_grid)
     Potential_array = ray.get(convert_to_potential(M_lambda_grid))
 
     Coupling_array = ray.get(convert_to_coupling(beta_grid))
+
+    print(
+        f"   -- total number of models to sample: {len(Potential_array)*len(Coupling_array)}"
+    )
 
     model_list = build_model_list(pool, units)
     for model_data in model_list:
