@@ -300,7 +300,7 @@ class BBNData(DatastoreObject):
             self._HeOverH = payload["HeOverH"]
             self._LiOverH = payload["LiOverH"]
 
-            self._values = None
+            self._values = payload["values"]
 
             self._BBN_compute_time = payload["BBN_compute_time"]
             self._NP_compute_time = payload["NP_compute_time"]
@@ -361,6 +361,7 @@ class BBNData(DatastoreObject):
     def values(self) -> List:
         if self._values is None:
             raise RuntimeError("values have not yet been populated")
+
         return self._values
 
     @property

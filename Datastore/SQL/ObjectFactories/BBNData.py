@@ -219,12 +219,15 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
                         f'Fewer z-samples than expected were recovered from the validated BBNData "{store_label}"'
                     )
 
-            attributes = {"_deserialized": True}
+            attributes = {"_deserialized": True, "_populated": True}
         else:
             values = None
-            imported_z_sample = None
 
-            attributes = {"_do_not_populate": True, "_deserialized": True}
+            attributes = {
+                "_do_not_populate": True,
+                "_deserialized": True,
+                "_populated": False,
+            }
 
         obj = BBNData(
             {
