@@ -1113,6 +1113,7 @@ class ScalarModel(DatastoreObject):
             self._values = []
             return True
 
+        self._failure = False
         self._metadata = data["metadata"]
 
         sample: List[SampleValues] = data["sample"]
