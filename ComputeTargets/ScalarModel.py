@@ -694,7 +694,7 @@ def compute_scalar_model(
             )
             print(f"   {e.message}")
 
-            label = solver_list.pop(0)
+            label = solver_list.pop(0) if len(solver_list) > 0 else None
             if label is not None:
                 print(f'   switching to solver "{label}"')
         else:
