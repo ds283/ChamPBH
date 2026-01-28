@@ -167,6 +167,7 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
             value_query = (
                 sqla.select(
                     value_table.c.serial,
+                    value_table.c.z_serial,
                     redshift_table.c.z,
                     value_table.c.raw_N,
                     value_table.c.log_T_Jordan_MeV,
