@@ -19,7 +19,7 @@ import sys
 from datetime import datetime
 from math import exp, log
 from pathlib import Path
-from typing import List, Any
+from typing import List, Union
 
 import pandas as pd
 import ray
@@ -33,6 +33,7 @@ from ComputeTargets import (
     ScalarModelProxy,
     AdiabaticHistory,
     BBNData,
+    BBNDataValue,
 )
 from CosmologyConcepts import temperature, phi_value, pi_value
 from CosmologyConcepts.ConformalCouplings import AbstractCoupling
@@ -59,7 +60,8 @@ from extract_common import (
     add_redshift_xaxis_labels,
     add_temperature_yaxis_labels,
     safe_fabs_positive,
-    safe_fabs_negative, nice_Q_labels,
+    safe_fabs_negative,
+    nice_Q_labels,
 )
 
 DEFAULT_TIMEOUT = 60
@@ -121,7 +123,15 @@ if args.profile_db is not None:
     )
 
 
-def history_plot(plot_path, model: ScalarModel, Q: AdiabaticHistory, model_label: str, get_x_coord, x_axis_label, x_coord: str = "redshift"):
+def history_plot(
+    plot_path,
+    model: ScalarModel,
+    Q: AdiabaticHistory,
+    model_label: str,
+    get_x_coord,
+    x_axis_label,
+    x_coord: str = "redshift",
+):
     if x_coord not in ["redshift", "efolds"]:
         raise RuntimeError(f"Invalid x_coord: {x_coord}")
 
@@ -140,7 +150,10 @@ def history_plot(plot_path, model: ScalarModel, Q: AdiabaticHistory, model_label
     ]
 
     adiabatic_points = [
-        (get_x_coord(value), value.value(label) for label in AdiabaticHistory.Q_labels)
+        (
+            get_x_coord(value),
+            {label: value.value(label) for label in AdiabaticHistory.Q_labels},
+        )
         for value in Q.values
     ]
 
@@ -196,14 +209,26 @@ def history_plot(plot_path, model: ScalarModel, Q: AdiabaticHistory, model_label
     pi_ax.grid(True)
 
     if Q_ax is not None and len(adiabatic_xy) > 0:
+        ytrans = Q_ax.get_yaxis_transform()
+
+        Q_ax.axhline(y=1.0, color="r", linestyle="dashed")
+        Q_ax.text(
+            0.15,
+            5.0,
+            r"$|Q| = 1$",
+            color="r",
+            transform=ytrans,
+            fontsize="x-small",
+        )
+
         for label in adiabatic_xy:
             x, y = adiabatic_xy[label]
-            Q_ax.plot(
-                x, y, label=nice_Q_labels[label]
-            )
+            Q_ax.plot(x, y, label=nice_Q_labels[label])
+
         Q_ax.set_yscale("log")
-        Q_ax.set_grid(True)
+        Q_ax.grid(True)
         Q_ax.set_ylabel(r"$|Q| = |\omega_k'/\omega_k^2|$")
+        Q_ax.legend(loc="best")
 
     add_temperature_yaxis_labels(T_ax, model, temp_unit="GeV")
     T_ax.plot(
@@ -971,6 +996,146 @@ def BBN_era_plot(
     plt.close()
 
 
+def BBN_era_NP_plot(
+    plot_path, model: ScalarModel, BBN: BBNData, model_label: str, T_Jordan_MeV
+):
+    units: UnitsLike = model._units
+
+    if not BBN.available:
+        return
+
+    GeV2 = units.GeV * units.GeV
+    GeV4 = GeV2 * GeV2
+
+    positive_abs_density_NP_points = [
+        (
+            T_Jordan_MeV(value),
+            safe_fabs_positive(value.density_NP / GeV4),
+        )
+        for value in BBN.values
+    ]
+    positive_abs_pressure_NP_points = [
+        (T_Jordan_MeV(value), safe_fabs_positive(value.pressure_NP / GeV4))
+        for value in BBN.values
+    ]
+
+    negative_abs_density_NP_points = [
+        (
+            T_Jordan_MeV(value),
+            safe_fabs_negative(value.density_NP / GeV4),
+        )
+        for value in BBN.values
+    ]
+    negative_abs_pressure_NP_points = [
+        (T_Jordan_MeV(value), safe_fabs_negative(value.pressure_NP / GeV4))
+        for value in BBN.values
+    ]
+
+    positive_density_NP_ratio = [
+        (
+            T_Jordan_MeV(value),
+            safe_fabs_positive(value.density_NP_ratio),
+        )
+        for value in BBN.values
+    ]
+    negative_density_NP_ratio = [
+        (
+            T_Jordan_MeV(value),
+            safe_fabs_negative(value.density_NP_ratio),
+        )
+        for value in BBN.values
+    ]
+
+    positive_abs_density_NP_x, positive_abs_density_NP_y = zip(
+        *positive_abs_density_NP_points
+    )
+    negative_abs_density_NP_x, negative_abs_density_NP_y = zip(
+        *negative_abs_density_NP_points
+    )
+    positive_abs_pressure_NP_x, positive_abs_pressure_NP_y = zip(
+        *positive_abs_pressure_NP_points
+    )
+    negative_abs_pressure_NP_x, negative_abs_pressure_NP_y = zip(
+        *negative_abs_pressure_NP_points
+    )
+
+    positive_density_NP_ratio_x, positive_density_NP_ratio_y = zip(
+        *positive_density_NP_ratio
+    )
+    negative_density_NP_ratio_x, negative_density_NP_ratio_y = zip(
+        *negative_density_NP_ratio
+    )
+
+    fig = plt.figure()
+    fig.set_size_inches(8.0, 8.0)
+
+    axs = fig.subplots(nrows=2, ncols=1, sharex=True, sharey=False)
+
+    rhoP_NP_ax = axs[1]
+    ratio_NP_ax = axs[0]
+
+    rhoP_NP_ax.plot(
+        positive_abs_density_NP_x,
+        positive_abs_density_NP_y,
+        label=r"$|\rho_{\mathrm{NP}}|$ [GeV$^4$]",
+        color="b",
+        linestyle="solid",
+    )
+    rhoP_NP_ax.plot(
+        negative_abs_density_NP_x,
+        negative_abs_density_NP_y,
+        color="r",
+        linestyle="dashed",
+    )
+    rhoP_NP_ax.plot(
+        positive_abs_pressure_NP_x,
+        positive_abs_pressure_NP_y,
+        label=r"$|P_{\mathrm{NP}}|$ [GeV$^4$]",
+        color="r",
+        linestyle="solid",
+    )
+    rhoP_NP_ax.plot(
+        negative_abs_pressure_NP_x,
+        negative_abs_pressure_NP_y,
+        color="r",
+        linestyle="dashed",
+    )
+    rhoP_NP_ax.set_yscale("log")
+    rhoP_NP_ax.grid(True)
+
+    ratio_NP_ax.plot(
+        positive_density_NP_ratio_x,
+        positive_density_NP_ratio_y,
+        label=r"$|\rho_{\mathrm{NP}}/\rho_{\mathrm{SM}}|$",
+        color="b",
+        linestyle="solid",
+    )
+    ratio_NP_ax.plot(
+        negative_density_NP_ratio_x,
+        negative_density_NP_ratio_y,
+        color="b",
+        linestyle="dashed",
+    )
+    ratio_NP_ax.set_yscale("log")
+    ratio_NP_ax.grid(True)
+
+    rhoP_NP_ax.set_xscale("log")
+    rhoP_NP_ax.set_xlabel("Temperature $T$ [MeV]")
+    rhoP_NP_ax.xaxis.set_inverted(True)
+
+    add_ScalarModel_labels(ratio_NP_ax, model, model_label, shift=0.05)
+
+    rhoP_NP_ax.legend(loc="best")
+    ratio_NP_ax.legend(loc="best")
+
+    fig_path = plot_path / "BBN_era_NP.pdf"
+    fig_path.parents[0].mkdir(exist_ok=True, parents=True)
+    fig.savefig(fig_path)
+    fig.savefig(fig_path.with_suffix(".png"))
+
+    plt.close()
+
+
 def write_csv_file(
     BBN: BBNData,
     Q: AdiabaticHistory,
@@ -1148,12 +1313,14 @@ def plot_ScalarModel(
     def TotalEnergy(value: ScalarModelValue) -> float:
         return KE(value) + PE(value)
 
-    def T_Jordan_MeV(value: ScalarModelValue) -> float | Any:
+    def T_Jordan_MeV(value: Union[ScalarModelValue, BBNDataValue]) -> float:
         return exp(value.log_T_Jordan) / units.MeV
 
     sns.set_theme()
 
-    history_plot(plot_path, model, Q, model_label, get_x_coord, x_axis_label, x_coord=x_coord)
+    history_plot(
+        plot_path, model, Q, model_label, get_x_coord, x_axis_label, x_coord=x_coord
+    )
     thermo_plot(
         plot_path, model, model_label, get_x_coord, x_axis_label, x_coord=x_coord
     )
@@ -1181,6 +1348,7 @@ def plot_ScalarModel(
         x_coord=x_coord,
     )
     BBN_era_plot(plot_path, model, model_label, T_Jordan_MeV, SigmaFm)
+    BBN_era_NP_plot(plot_path, model, BBN, model_label, T_Jordan_MeV)
 
     write_csv_file(BBN, Q, csv_path, model, units)
 
