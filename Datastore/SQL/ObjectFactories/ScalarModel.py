@@ -473,7 +473,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
             "rtol_serial": obj._rtol.store_id,
             "failure": obj._failure,
             "solver_serial": obj.solver.store_id if not obj._failure else None,
-            "z_samples": len(obj.values) if not obj._failure else None,
+            "z_samples": len(obj._values) if not obj._failure else None,
             "compute_time": obj.metadata.compute_time if not obj._failure else None,
             "compute_steps": obj.metadata.compute_steps if not obj._failure else None,
             "RHS_evaluations": (
@@ -509,7 +509,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
         log_GeV = log(units.GeV)
 
         value_inserter = inserters["ScalarModelValue"]
-        for value in obj.values:
+        for value in obj._values:
             value: ScalarModelValue
             value_id = value_inserter(
                 conn,
