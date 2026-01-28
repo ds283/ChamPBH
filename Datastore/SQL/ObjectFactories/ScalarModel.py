@@ -238,7 +238,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 table.join(
                     solver_table,
                     solver_table.c.serial == table.c.solver_serial,
-                    isouter=True,
+                    isouter=True,  # outer join needed to allow matching failed instances
                 )
                 .join(atol_table, atol_table.c.serial == table.c.atol_serial)
                 .join(rtol_table, rtol_table.c.serial == table.c.rtol_serial)
@@ -285,6 +285,12 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 f"!! ScalarModel.build(): multiple results found when querying for ScalarModel"
             )
             raise e
+
+        # we did an outer join on the solver table to allow for failed instances, so enforce that we have non-null values
+        # if the failure flag is not set
+        if not row_data.failed:
+            if row_data.solver_label is None:
+                raise RuntimeError(f"ScalarModel {label} has no solver label")
 
         if row_data is None:
             # build and return an unpopulated object
@@ -614,7 +620,9 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 )
                 .select_from(
                     table.join(
-                        solver_table, solver_table.c.serial == table.c.solver_serial
+                        solver_table,
+                        solver_table.c.serial == table.c.solver_serial,
+                        is_outer=True,  # outer join needed to allow matching failed instances
                     )
                     .join(atol_table, atol_table.c.serial == table.c.atol_serial)
                     .join(rtol_table, rtol_table.c.serial == table.c.rtol_serial)
