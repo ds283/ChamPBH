@@ -25,6 +25,7 @@ import pandas as pd
 import ray
 import seaborn as sns
 from matplotlib import pyplot as plt
+from numpy import nan
 
 from ComputeTargets import (
     ScalarModel,
@@ -948,6 +949,104 @@ def BBN_era_plot(
     plt.close()
 
 
+def write_csv_file(
+    BBN: BBNData,
+    Q: AdiabaticHistory,
+    csv_path: Path,
+    model: ScalarModel,
+    units: UnitsLike,
+):
+    model_values = (
+        {value.z.store_id: value for value in model.values} if model.available else {}
+    )
+    Q_values = {value.z.store_id: value for value in Q.values} if Q.available else {}
+    BBN_values = (
+        {value.z.store_id: value for value in BBN.values} if BBN.available else {}
+    )
+
+    z_keys = set(model_values.keys()) | set(Q_values.keys()) | set(BBN_values.keys())
+
+    log_GeV = log(units.GeV)
+
+    def model_columns(store_id):
+        if store_id in model_values:
+            value = model_values[store_id]
+            return {
+                "z": float(value.z),
+                "raw_N": value.raw_N,
+                "phi_Einstein_Mp": value.phi_Einstein / units.PlanckMass,
+                "pi_Einstein_Mp": value.pi_Einstein / units.PlanckMass,
+                "H_Einstein_Mp": value.H_Einstein / units.PlanckMass,
+                "H_Jordan_Mp": value.H_Jordan / units.PlanckMass,
+                "log_rhorad_Einstein_GeV4": value.log_rhorad_Einstein - 4.0 * log_GeV,
+                "log_rhorad_Jordan_GeV4": value.log_rhorad_Jordan - 4.0 * log_GeV,
+                "log_fm": value.log_fm,
+                "fm": exp(value.log_fm),
+                "log_T_Jordan_GeV": value.log_T_Jordan - log_GeV,
+                "T_Jordan_GeV": exp(value.log_T_Jordan) / units.GeV,
+                "T_Jordan_Kelvin": exp(value.log_T_Jordan) / units.Kelvin,
+                "gstar_rho": value.gstar_rho,
+                "gstar_s": value.gstar_s,
+                "dgstar_rho_dlogT": value.dgstar_rho_dlogT,
+                "dgstar_s_dlogT": value.dgstar_s_dlogT,
+                "Sigma": value.Sigma,
+                "w": (1.0 - value.Sigma) / 3.0,
+                "friction_term_Mp": value.friction_term / units.PlanckMass,
+                "reflecting_term_Mp": value.reflecting_term / units.PlanckMass,
+                "kicking_term_Mp": value.kicking_term / units.PlanckMass,
+            }
+
+        return {
+            "z": nan,
+            "raw_N": nan,
+            "phi_Einstein_Mp": nan,
+            "pi_Einstein_Mp": nan,
+            "H_Einstein_Mp": nan,
+            "H_Jordan_Mp": nan,
+            "log_rhorad_Einstein_GeV4": nan,
+            "log_rhorad_Jordan_GeV4": nan,
+            "log_fm": nan,
+            "fm": nan,
+            "log_T_Jordan_GeV": nan,
+            "T_Jordan_GeV": nan,
+            "T_Jordan_Kelvin": nan,
+            "gstar_rho": nan,
+            "gstar_s": nan,
+            "dgstar_rho_dlogT": nan,
+            "dgstar_s_dlogT": nan,
+            "Sigma": nan,
+            "w": nan,
+            "friction_term_Mp": nan,
+            "reflecting_term_Mp": nan,
+            "kicking_term_Mp": nan,
+        }
+
+    def Q_columns(store_id):
+        if store_id in Q_values:
+            return {}
+
+        return {}
+
+    def BBN_columns(store_id):
+        if store_id in BBN_values:
+            return {}
+
+        return {}
+
+    data = [
+        model_columns(store_id) | Q_columns(store_id) | BBN_columns(store_id)
+        for store_id in z_keys
+    ]
+
+    df = pd.DataFrame(data)
+    df.sort_values(by="z", inplace=True, ascending=False, ignore_index=True)
+
+    csv_path = csv_path / "fields.csv"
+    csv_path.parents[0].mkdir(exist_ok=True, parents=True)
+
+    df.to_csv(csv_path, header=True, index=False)
+
+
 @ray.remote
 def plot_ScalarModel(
     model_label: str,
@@ -956,14 +1055,27 @@ def plot_ScalarModel(
     BBN: BBNData,
     x_coord: str = "redshift",
 ):
+    coupling: AbstractCoupling = model.coupling
+    potential: AbstractPotential = model.potential
+
     if not model.available:
+        print(
+            f"@@ plot_ScalarModel: scalar field history for Potential={potential.name}, Coupling={coupling.name} is not available; skipping this item"
+        )
         return
+
+    if not Q.available:
+        print(
+            f"@@ plot_ScalarModel: adiabatic Q history for Potential={potential.name}, Coupling={coupling.name} is not available, and will not be plotted"
+        )
+
+    if not BBN.available:
+        print(
+            f"@@ plot_ScalarModel: BBN data for Potential={potential.name}, Coupling={coupling.name} is not available, and will not be plotted"
+        )
 
     if x_coord not in ["redshift", "efolds"]:
         raise RuntimeError(f"Invalid x_coord: {x_coord}")
-
-    coupling: AbstractCoupling = model.coupling
-    potential: AbstractPotential = model.potential
 
     beta = coupling._beta.as_float
     M = potential._M.as_float
@@ -977,6 +1089,10 @@ def plot_ScalarModel(
     plot_path = (
         base_path
         / f"plots/beta={beta:.5g}/M={M/units.eV:.5g}eV_Lambda={Lambda/units.eV:.5g}eV"
+    )
+    csv_path = (
+        base_path
+        / f"csv/beta={beta:.5g}/M={M/units.eV:.5g}eV_Lambda={Lambda/units.eV:.5g}eV"
     )
 
     def get_x_coord(value: ScalarModelValue) -> float:
@@ -1046,46 +1162,7 @@ def plot_ScalarModel(
     )
     BBN_era_plot(plot_path, model, model_label, T_Jordan_MeV, SigmaFm)
 
-    data = []
-    log_GeV = log(units.GeV)
-    for val in values:
-        data.append(
-            {
-                "z": float(val.z),
-                "raw_N": val.raw_N,
-                "phi_Einstein_Mp": val.phi_Einstein / units.PlanckMass,
-                "pi_Einstein_Mp": val.pi_Einstein / units.PlanckMass,
-                "H_Einstein_Mp": val.H_Einstein / units.PlanckMass,
-                "H_Jordan_Mp": val.H_Jordan / units.PlanckMass,
-                "log_rhorad_Einstein_GeV4": val.log_rhorad_Einstein - 4.0 * log_GeV,
-                "log_rhorad_Jordan_GeV4": val.log_rhorad_Jordan - 4.0 * log_GeV,
-                "log_fm": val.log_fm,
-                "fm": exp(val.log_fm),
-                "log_T_Jordan_GeV": val.log_T_Jordan - log_GeV,
-                "T_Jordan_GeV": exp(val.log_T_Jordan) / units.GeV,
-                "T_Jordan_Kelvin": exp(val.log_T_Jordan) / units.Kelvin,
-                "gstar_rho": val.gstar_rho,
-                "gstar_s": val.gstar_s,
-                "dgstar_rho_dlogT": val.dgstar_rho_dlogT,
-                "dgstar_s_dlogT": val.dgstar_s_dlogT,
-                "Sigma": val.Sigma,
-                "w": (1.0 - val.Sigma) / 3.0,
-                "friction_term_Mp": val.friction_term / units.PlanckMass,
-                "reflecting_term_Mp": val.reflecting_term / units.PlanckMass,
-                "kicking_term_Mp": val.kicking_term / units.PlanckMass,
-            }
-        )
-
-    df = pd.DataFrame(data)
-    df.sort_values(by="z", inplace=True, ascending=False, ignore_index=True)
-
-    csv_path = (
-        base_path
-        / f"csv/beta={beta:.5g}/M={M/units.eV:.5g}eV_Lambda={Lambda/units.eV:.5g}eV/fields.csv"
-    )
-    csv_path.parents[0].mkdir(exist_ok=True, parents=True)
-
-    df.to_csv(csv_path, header=True, index=False)
+    write_csv_file(BBN, Q, csv_path, model, units)
 
 
 def run_pipeline(
