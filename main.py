@@ -776,7 +776,7 @@ def run_pipeline(
         num_missing_models = sum(len(x["missing"]) for x in missing_models)
         if num_missing_models > 0:
             raise RuntimeError(
-                f"Some ScalarModel instances needed for AdiabaticHistory computation are missing ({num_missing_models} missing in this batch)"
+                f"Some ScalarModel instances needed for BBN computations are missing ({num_missing_models} missing in this batch)"
             )
 
         bbn_query_batch = [

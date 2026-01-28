@@ -391,7 +391,6 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
             attributes = {"_deserialized": True}
         else:
             values = None
-            imported_z_sample = None
 
             attributes = {"_do_not_populate": True, "_deserialized": True}
 

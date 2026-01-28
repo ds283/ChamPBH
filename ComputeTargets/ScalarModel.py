@@ -880,7 +880,7 @@ class ScalarModel(DatastoreObject):
             self._solver: Optional[IntegrationSolver] = payload["solver"]
             self._values: Optional[List[ScalarModelValue]] = payload["values"]
             self._extra_data: Optional[Dict[str, Any]] = payload["extra_data"]
-            self._failure: Optional[str] = payload["failure"]
+            self._failure: Optional[bool] = payload["failure"]
 
         # store parameters
         self._label: str = label
