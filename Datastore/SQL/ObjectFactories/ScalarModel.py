@@ -622,7 +622,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                     table.join(
                         solver_table,
                         solver_table.c.serial == table.c.solver_serial,
-                        is_outer=True,  # outer join needed to allow matching failed instances
+                        isouter=True,  # outer join needed to allow matching failed instances
                     )
                     .join(atol_table, atol_table.c.serial == table.c.atol_serial)
                     .join(rtol_table, rtol_table.c.serial == table.c.rtol_serial)
