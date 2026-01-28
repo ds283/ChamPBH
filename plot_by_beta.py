@@ -45,7 +45,7 @@ from config.sharding import (
     sharded_tables,
     read_table_config,
 )
-from extract_common import add_beta_summary_labels
+from extract_common import add_beta_summary_labels, nice_Q_labels
 
 DEFAULT_TIMEOUT = 60
 
@@ -104,13 +104,6 @@ if args.profile_db is not None:
         timeout=args.db_timeout,
         label=label,
     )
-
-nice_Q_labels = {
-    "kp_over_H_1E1": r"$k_p/H = 10^1$",
-    "kp_over_H_1E2": r"$k_p/H = 10^2$",
-    "kp_over_H_1E3": r"$k_p/H = 10^3$",
-    "kp_over_H_1E4": r"$k_p/H = 10^4$",
-}
 
 
 @ray.remote

@@ -405,3 +405,11 @@ def add_redshift_xaxis_labels(
             l.append("BBN region")
 
     return h, l
+
+
+nice_Q_labels = {
+    "kp_over_H_1E1": r"$k_p/H = 10^1$",
+    "kp_over_H_1E2": r"$k_p/H = 10^2$",
+    "kp_over_H_1E3": r"$k_p/H = 10^3$",
+    "kp_over_H_1E4": r"$k_p/H = 10^4$",
+}

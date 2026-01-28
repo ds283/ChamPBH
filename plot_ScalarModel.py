@@ -59,7 +59,7 @@ from extract_common import (
     add_redshift_xaxis_labels,
     add_temperature_yaxis_labels,
     safe_fabs_positive,
-    safe_fabs_negative,
+    safe_fabs_negative, nice_Q_labels,
 )
 
 DEFAULT_TIMEOUT = 60
@@ -121,14 +121,7 @@ if args.profile_db is not None:
     )
 
 
-def history_plot(
-    plot_path,
-    model: ScalarModel,
-    model_label: str,
-    get_x_coord,
-    x_axis_label,
-    x_coord: str = "redshift",
-):
+def history_plot(plot_path, model: ScalarModel, Q: AdiabaticHistory, model_label: str, get_x_coord, x_axis_label, x_coord: str = "redshift"):
     if x_coord not in ["redshift", "efolds"]:
         raise RuntimeError(f"Invalid x_coord: {x_coord}")
 
@@ -146,18 +139,37 @@ def history_plot(
         (get_x_coord(value), exp(value.log_T_Jordan) / units.GeV) for value in values
     ]
 
+    adiabatic_points = [
+        (get_x_coord(value), value.value(label) for label in AdiabaticHistory.Q_labels)
+        for value in Q.values
+    ]
+
     abs_phi_Einstein_x, abs_phi_Einstein_y = zip(*abs_phi_Einstein_points)
     pi_Einstein_x, pi_Einstein_y = zip(*pi_Einstein_points)
     T_Jordan_x, T_Jordan_y = zip(*T_Jordan_points)
 
+    adiabatic_xy = {}
+    for label in AdiabaticHistory.Q_labels:
+        _points = [(x, y[label]) for x, y in adiabatic_points]
+        adiabatic_xy[label] = zip(*_points)
+
     fig = plt.figure()
-    fig.set_size_inches(8.0, 10.0)
+    if Q.available:
+        fig.set_size_inches(8.0, 13.0)
+        axs = fig.subplots(nrows=4, ncols=1, sharex=True, sharey=False)
 
-    axs = fig.subplots(nrows=3, ncols=1, sharex=True, sharey=False)
+        phi_ax = axs[3]
+        pi_ax = axs[2]
+        Q_ax = axs[1]
+        T_ax = axs[0]
+    else:
+        fig.set_size_inches(8.0, 10.0)
+        axs = fig.subplots(nrows=3, ncols=1, sharex=True, sharey=False)
 
-    phi_ax = axs[2]
-    pi_ax = axs[1]
-    T_ax = axs[0]
+        phi_ax = axs[2]
+        pi_ax = axs[1]
+        Q_ax = None
+        T_ax = axs[0]
 
     phi_ax.plot(
         abs_phi_Einstein_x,
@@ -182,6 +194,16 @@ def history_plot(
         linestyle="solid",
     )
     pi_ax.grid(True)
+
+    if Q_ax is not None and len(adiabatic_xy) > 0:
+        for label in adiabatic_xy:
+            x, y = adiabatic_xy[label]
+            Q_ax.plot(
+                x, y, label=nice_Q_labels[label]
+            )
+        Q_ax.set_yscale("log")
+        Q_ax.set_grid(True)
+        Q_ax.set_ylabel(r"$|Q| = |\omega_k'/\omega_k^2|$")
 
     add_temperature_yaxis_labels(T_ax, model, temp_unit="GeV")
     T_ax.plot(
@@ -209,7 +231,7 @@ def history_plot(
     labels.extend(l)
     phi_ax.legend(handles, labels, loc="best")
 
-    fig_path = plot_path / "fields.pdf"
+    fig_path = plot_path / "full_history.pdf"
     fig_path.parents[0].mkdir(exist_ok=True, parents=True)
     fig.savefig(fig_path)
     fig.savefig(fig_path.with_suffix(".png"))
@@ -1131,9 +1153,7 @@ def plot_ScalarModel(
 
     sns.set_theme()
 
-    history_plot(
-        plot_path, model, model_label, get_x_coord, x_axis_label, x_coord=x_coord
-    )
+    history_plot(plot_path, model, Q, model_label, get_x_coord, x_axis_label, x_coord=x_coord)
     thermo_plot(
         plot_path, model, model_label, get_x_coord, x_axis_label, x_coord=x_coord
     )
