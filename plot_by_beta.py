@@ -467,7 +467,9 @@ def run_pipeline(
         )
         model_query_queue.run()
 
-        available_models = [m for m in model_query_queue.results if m.available]
+        available_models = [
+            m for m in model_query_queue.results if m.available and not m.failure
+        ]
         model_proxies = [ScalarModelProxy(m) for m in available_models]
 
         adiabatic_query_batch = [

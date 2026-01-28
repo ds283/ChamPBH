@@ -536,6 +536,7 @@ def run_pipeline(
                         "_do_not_populate": True,
                     }
                     for obj in query_outcomes
+                    if not obj.failure
                 ],
             }
             for key, query_outcomes in zip(batch_keys, model_query_queue.results)
@@ -793,6 +794,7 @@ def run_pipeline(
                         "_do_not_populate": True,
                     }
                     for obj in query_outcomes
+                    if not obj.failure
                 ],
             }
             for key, query_outcomes in zip(batch_keys, model_query_queue.results)

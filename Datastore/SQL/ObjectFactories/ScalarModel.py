@@ -136,13 +136,6 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                     nullable=False,
                 ),
                 sqla.Column(
-                    "solver_serial",
-                    sqla.Integer,
-                    sqla.ForeignKey("IntegrationSolver.serial"),
-                    index=True,
-                    nullable=False,
-                ),
-                sqla.Column(
                     "phi_Einstein_init_serial",
                     sqla.Integer,
                     sqla.ForeignKey("phi_value.serial"),
@@ -170,13 +163,21 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                     index=True,
                     nullable=False,
                 ),
-                sqla.Column("z_samples", sqla.Integer, nullable=False),
-                sqla.Column("compute_time", sqla.Float(64)),
-                sqla.Column("compute_steps", sqla.Integer),
-                sqla.Column("RHS_evaluations", sqla.Integer),
-                sqla.Column("mean_RHS_time", sqla.Float(64)),
-                sqla.Column("max_RHS_time", sqla.Float(64)),
-                sqla.Column("min_RHS_time", sqla.Float(64)),
+                sqla.Column("failure", sqla.Boolean, default=False, nullable=False),
+                sqla.Column(
+                    "solver_serial",
+                    sqla.Integer,
+                    sqla.ForeignKey("IntegrationSolver.serial"),
+                    index=True,
+                    nullable=True,
+                ),
+                sqla.Column("z_samples", sqla.Integer, nullable=True),
+                sqla.Column("compute_time", sqla.Float(64), nullable=True),
+                sqla.Column("compute_steps", sqla.Integer, nullable=True),
+                sqla.Column("RHS_evaluations", sqla.Integer, nullable=True),
+                sqla.Column("mean_RHS_time", sqla.Float(64), nullable=True),
+                sqla.Column("max_RHS_time", sqla.Float(64), nullable=True),
+                sqla.Column("min_RHS_time", sqla.Float(64), nullable=True),
                 sqla.Column("validated", sqla.Boolean, default=False, nullable=False),
                 sqla.Column(
                     "extra_data", sqla.String(DEFAULT_STRING_LENGTH), nullable=True
@@ -201,6 +202,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
 
         z_grid: Optional[redshift_array] = payload.get("z_grid", None)
 
+        failure: Optional[bool] = payload.get("failure", None)
         solver_labels = payload["solver_labels"]
 
         atol: tolerance = payload["atol"]
@@ -222,6 +224,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 table.c.mean_RHS_time,
                 table.c.max_RHS_time,
                 table.c.min_RHS_time,
+                table.c.failure,
                 table.c.solver_serial,
                 table.c.label,
                 table.c.z_samples,
@@ -252,6 +255,10 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 table.c.rtol_serial == rtol.store_id,
             )
         )
+
+        # filter by failure flag if provided
+        if failure is not None:
+            query = query.filter(table.c.failure == failure)
 
         # require that the integration we search for has the specified list of tags
         count = 0
@@ -389,23 +396,33 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
             attributes = {"_do_not_populate": True, "_deserialized": True}
 
         # z_grid not supplied since this object has already been computed/populated
+        failed = row_data.failure
         obj = ScalarModel(
             payload={
                 "store_id": store_id,
-                "metadata": IntegrationData(
-                    compute_time=row_data.compute_time,
-                    compute_steps=row_data.compute_steps,
-                    RHS_evaluations=row_data.RHS_evaluations,
-                    mean_RHS_time=row_data.mean_RHS_time,
-                    max_RHS_time=row_data.max_RHS_time,
-                    min_RHS_time=row_data.min_RHS_time,
+                "failure": failed,
+                "metadata": (
+                    IntegrationData(
+                        compute_time=row_data.compute_time,
+                        compute_steps=row_data.compute_steps,
+                        RHS_evaluations=row_data.RHS_evaluations,
+                        mean_RHS_time=row_data.mean_RHS_time,
+                        max_RHS_time=row_data.max_RHS_time,
+                        min_RHS_time=row_data.min_RHS_time,
+                    )
+                    if not failed
+                    else None
                 ),
                 "solver": (
-                    IntegrationSolver(
-                        store_id=row_data.solver_serial,
-                        label=row_data.solver_label,
-                        stepping=row_data.solver_stepping,
+                    (
+                        IntegrationSolver(
+                            store_id=row_data.solver_serial,
+                            label=row_data.solver_label,
+                            stepping=row_data.solver_stepping,
+                        )
                     )
+                    if not failed
+                    else None
                 ),
                 "extra_data": (
                     json.loads(row_data.extra_data)
@@ -454,14 +471,17 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
             "pi_Einstein_init_serial": obj.pi_Einstein_init.store_id,
             "atol_serial": obj._atol.store_id,
             "rtol_serial": obj._rtol.store_id,
-            "solver_serial": obj.solver.store_id,
-            "z_samples": len(obj.values),
-            "compute_time": obj.metadata.compute_time,
-            "compute_steps": obj.metadata.compute_steps,
-            "RHS_evaluations": obj.metadata.RHS_evaluations,
-            "mean_RHS_time": obj.metadata.mean_RHS_time,
-            "max_RHS_time": obj.metadata.max_RHS_time,
-            "min_RHS_time": obj.metadata.min_RHS_time,
+            "failure": obj._failure,
+            "solver_serial": obj.solver.store_id if not obj._failure else None,
+            "z_samples": len(obj.values) if not obj._failure else None,
+            "compute_time": obj.metadata.compute_time if not obj._failure else None,
+            "compute_steps": obj.metadata.compute_steps if not obj._failure else None,
+            "RHS_evaluations": (
+                obj.metadata.RHS_evaluations if not obj._failure else None
+            ),
+            "mean_RHS_time": obj.metadata.mean_RHS_time if not obj._failure else None,
+            "max_RHS_time": obj.metadata.max_RHS_time if not obj._failure else None,
+            "min_RHS_time": obj.metadata.min_RHS_time if not obj._failure else None,
             "validated": False,
             "extra_data": (
                 json.dumps(obj._extra_data) if obj._extra_data is not None else None
@@ -534,6 +554,10 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 "Attempt to validate a datastore object that has not yet been serialized"
             )
 
+        # treat integration failues as validated
+        if obj._failure:
+            return True
+
         expected_samples = conn.execute(
             sqla.select(table.c.z_samples).filter(table.c.serial == obj.store_id)
         ).scalar()
@@ -588,7 +612,12 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                     .join(atol_table, atol_table.c.serial == table.c.atol_serial)
                     .join(rtol_table, rtol_table.c.serial == table.c.rtol_serial)
                 )
-                .filter(or_(table.c.validated == False, table.c.validated == None))
+                .filter(
+                    and_(
+                        table.c.failure == False,
+                        or_(table.c.validated == False, table.c.validated == None),
+                    )
+                )
             )
         )
 

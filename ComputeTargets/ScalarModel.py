@@ -701,9 +701,7 @@ def compute_scalar_model(
             success = True
 
     if not success:
-        raise RuntimeError(
-            f"compute_scalar_model ({task_label}): failed to find an solver that could integrate this model"
-        )
+        return {"failure": True}
 
     # the integration should have terminated when T_Jordan = T_CMB, which ought to correspond to z = 0
     # we now work backwards and sample the integration output on the supplied z grid, using the e-fold number
@@ -874,6 +872,7 @@ class ScalarModel(DatastoreObject):
             self._solver = None
             self._values = None
             self._extra_data = None
+            self._failure = None
 
         else:
             DatastoreObject.__init__(self, payload["store_id"])
@@ -881,6 +880,7 @@ class ScalarModel(DatastoreObject):
             self._solver: Optional[IntegrationSolver] = payload["solver"]
             self._values: Optional[List[ScalarModelValue]] = payload["values"]
             self._extra_data: Optional[Dict[str, Any]] = payload["extra_data"]
+            self._failure: Optional[str] = payload["failure"]
 
         # store parameters
         self._label: str = label
@@ -899,6 +899,10 @@ class ScalarModel(DatastoreObject):
     @property
     def shard_key(self) -> ShardKeyType:
         return self._coupling.shard_key
+
+    @property
+    def failure(self) -> Optional[bool]:
+        return self._failure
 
     @property
     def cosmology(self) -> BaseCosmology:
@@ -938,6 +942,11 @@ class ScalarModel(DatastoreObject):
 
     @property
     def metadata(self) -> IntegrationData:
+        if self._failure:
+            raise RuntimeError(
+                f"ScalarModel ({self._label}): this object had an integration failure and cannot be used"
+            )
+
         if self._metadata is None:
             raise RuntimeError("metadata values have not yet been populated")
 
@@ -945,6 +954,11 @@ class ScalarModel(DatastoreObject):
 
     @property
     def solver(self) -> IntegrationSolver:
+        if self._failure:
+            raise RuntimeError(
+                f"ScalarModel ({self._label}): this object had an integration failure and cannot be used"
+            )
+
         if self._solver is None:
             raise RuntimeError("solver has not yet been populated")
         return self._solver
@@ -956,6 +970,11 @@ class ScalarModel(DatastoreObject):
                 "ScalarModel: attempt to read values, but _do_not_populate is set"
             )
 
+        if self._failure:
+            raise RuntimeError(
+                f"ScalarModel ({self._label}): this object had an integration failure and cannot be used"
+            )
+
         if self._values is None:
             raise RuntimeError("values has not yet been populated")
         return self._values
@@ -965,6 +984,11 @@ class ScalarModel(DatastoreObject):
         if hasattr(self, "_do_not_populate"):
             raise RuntimeError(
                 "ScalarModel: attempt to call functions(), but _do_not_populate is set"
+            )
+
+        if self._failure:
+            raise RuntimeError(
+                f"ScalarModel ({self._label}): this object had an integration failure and cannot be used"
             )
 
         if self._values is None:
@@ -979,6 +1003,11 @@ class ScalarModel(DatastoreObject):
         if hasattr(self, "_do_not_populate"):
             raise RuntimeError(
                 "ScalarModel: attempt to call _create_functions(), but _do_not_populate is set"
+            )
+
+        if self._failure:
+            raise RuntimeError(
+                f"ScalarModel ({self._label}): this object had an integration failure and cannot be used"
             )
 
         def _build_func(attr: str):
@@ -1077,6 +1106,12 @@ class ScalarModel(DatastoreObject):
         # retrieve result and populate ourselves
         data = ray.get(self._compute_ref)
         self._compute_ref = None
+
+        failure = data.get("failure", False)
+        if failure:
+            self._failure = True
+            self._values = []
+            return True
 
         self._metadata = data["metadata"]
 

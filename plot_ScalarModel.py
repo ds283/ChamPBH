@@ -1251,6 +1251,11 @@ def plot_ScalarModel(
         )
         return
 
+    if model.failure:
+        print(
+            f"@@ plot_ScalarModel: scalar field history for Potential={potential.name}, Coupling={coupling.name} had an integration failure; skipping this item"
+        )
+
     if not Q.available:
         print(
             f"@@ plot_ScalarModel: adiabatic Q history for Potential={potential.name}, Coupling={coupling.name} is not available, and will not be plotted"
