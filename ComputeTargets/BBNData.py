@@ -5,8 +5,6 @@ from typing import Optional, List
 import ray
 from scipy.interpolate import make_interp_spline
 
-import PRyM.PRyM_init as PRyMini
-import PRyM.PRyM_main as PRyMmain
 from CosmologyConcepts import redshift, redshift_array
 from CosmologyConcepts.ConformalCouplings import AbstractCoupling
 from CosmologyConcepts.Potentials import AbstractPotential
@@ -224,6 +222,11 @@ def compute_BBN_data(
         return density_NP_MeV4_derivative_spline(log_T_in_MeV)
 
     with WallclockTimer() as BBN_timer:
+        # import locally so that global variable in PRyMini don't leak between threads
+        # (not sure if this is possible or not, but worth being defensive)
+        import PRyM.PRyM_init as PRyMini
+        import PRyM.PRyM_main as PRyMmain
+
         # ask PRyMordial to include new physics ("NP") contributions to the thermodynamics
         PRyMini.NP_thermo_flag = True
 
