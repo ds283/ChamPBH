@@ -1255,6 +1255,7 @@ def plot_ScalarModel(
         print(
             f"@@ plot_ScalarModel: scalar field history for Potential={potential.name}, Coupling={coupling.name} had an integration failure; skipping this item"
         )
+        return
 
     if not Q.available:
         print(
