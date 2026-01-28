@@ -235,7 +235,11 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 rtol_table.c.log10_tol.label("log10_rtol"),
             )
             .select_from(
-                table.join(solver_table, solver_table.c.serial == table.c.solver_serial)
+                table.join(
+                    solver_table,
+                    solver_table.c.serial == table.c.solver_serial,
+                    isouter=True,
+                )
                 .join(atol_table, atol_table.c.serial == table.c.atol_serial)
                 .join(rtol_table, rtol_table.c.serial == table.c.rtol_serial)
             )
@@ -396,6 +400,8 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
 
         # z_grid not supplied since this object has already been computed/populated
         failed = row_data.failure
+        if failed:
+            print(f"read failed ScalarModel with store_id={store_id}")
         obj = ScalarModel(
             payload={
                 "store_id": store_id,
@@ -553,23 +559,25 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 "Attempt to validate a datastore object that has not yet been serialized"
             )
 
-        # treat integration failues as validated
+        # treat integration failures as validated
         if obj._failure:
-            return True
+            validated = True
 
-        expected_samples = conn.execute(
-            sqla.select(table.c.z_samples).filter(table.c.serial == obj.store_id)
-        ).scalar()
+        else:
+            expected_samples = conn.execute(
+                sqla.select(table.c.z_samples).filter(table.c.serial == obj.store_id)
+            ).scalar()
 
-        value_table = tables["ScalarModelValue"]
-        num_samples = conn.execute(
-            sqla.select(sqla.func.count(value_table.c.serial)).filter(
-                value_table.c.model_serial == obj.store_id
-            )
-        ).scalar()
+            value_table = tables["ScalarModelValue"]
+            num_samples = conn.execute(
+                sqla.select(sqla.func.count(value_table.c.serial)).filter(
+                    value_table.c.model_serial == obj.store_id
+                )
+            ).scalar()
 
-        # check if we counted as many rows as we expected
-        validated: bool = num_samples == expected_samples
+            # check if we counted as many rows as we expected
+            validated: bool = num_samples == expected_samples
+
         if not validated:
             print(
                 f'!! WARNING: ScalarModel "{obj.label}" did not validate after serialization (expected samples={expected_samples}, number stored={num_samples})'

@@ -460,11 +460,11 @@ def compute_scalar_model(
     }
 
     success = False
-    label = solver_list.pop(0)
+    solver = solver_list.pop(0)
     solution_fragments = []
     compute_steps = 0
 
-    while not success and label is not None:
+    while not success and solver is not None:
         try:
             in_level1 = False
             in_level2 = False
@@ -690,17 +690,20 @@ def compute_scalar_model(
 
         except ComputationFailureError as e:
             print(
-                f'-- compute_scalar_model ({task_label}): integration failure with solver "{label}"'
+                f'-- compute_scalar_model ({task_label}): integration failure with solver "{solver}"'
             )
             print(f"   {e.message}")
 
-            label = solver_list.pop(0) if len(solver_list) > 0 else None
-            if label is not None:
-                print(f'   switching to solver "{label}"')
+            solver = solver_list.pop(0) if len(solver_list) > 0 else None
+            if solver is not None:
+                print(f'   switching to solver "{solver}"')
         else:
             success = True
 
     if not success:
+        print(
+            f"!! compute_scalar_model ({task_label}): marked as total integration failure"
+        )
         return {"failure": True}
 
     # the integration should have terminated when T_Jordan = T_CMB, which ought to correspond to z = 0
@@ -807,7 +810,7 @@ def compute_scalar_model(
         "mean_RHS_values": (
             supervisor.mean_RHS_values if collected_full_statistics else None
         ),
-        "solver_label": solver_labels[label] if label is not None else None,
+        "solver_label": solver_labels[solver] if solver is not None else None,
     }
 
 
