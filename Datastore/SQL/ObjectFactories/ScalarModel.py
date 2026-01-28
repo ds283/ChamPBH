@@ -288,7 +288,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
 
         # we did an outer join on the solver table to allow for failed instances, so enforce that we have non-null values
         # if the failure flag is not set
-        if not row_data.failed:
+        if not row_data.failure:
             if row_data.solver_label is None:
                 raise RuntimeError(f"ScalarModel {label} has no solver label")
 
