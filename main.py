@@ -1122,7 +1122,7 @@ with ShardedPool(
 
         return False
 
-    beta_pre_sample = np.linspace(beta_low, beta_high, num_beta_sample, endpoint=True)
+    # beta_pre_sample = np.linspace(beta_low, beta_high, num_beta_sample, endpoint=True)
     beta_pre_sample = [0.1, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0]
     beta_sample = [beta for beta in beta_pre_sample if not beta_blacklisted(beta)]
 
