@@ -1046,6 +1046,11 @@ def BBN_era_NP_plot(
         for value in BBN.values
     ]
 
+    w_NP_points = [
+        (T_Jordan_MeV(value), value.pressure_NP / value.density_NP)
+        for value in BBN.values
+    ]
+
     positive_abs_density_NP_x, positive_abs_density_NP_y = zip(
         *positive_abs_density_NP_points
     )
@@ -1066,13 +1071,16 @@ def BBN_era_NP_plot(
         *negative_density_NP_ratio
     )
 
+    w_NP_x, w_NP_y = zip(*w_NP_points)
+
     fig = plt.figure()
-    fig.set_size_inches(8.0, 8.0)
+    fig.set_size_inches(8.0, 10.0)
 
-    axs = fig.subplots(nrows=2, ncols=1, sharex=True, sharey=False)
+    axs = fig.subplots(nrows=3, ncols=1, sharex=True, sharey=False)
 
-    rhoP_NP_ax = axs[1]
-    ratio_NP_ax = axs[0]
+    rhoP_NP_ax = axs[2]
+    ratio_NP_ax = axs[1]
+    w_NP_ax = axs[0]
 
     rhoP_NP_ax.plot(
         positive_abs_density_NP_x,
@@ -1119,14 +1127,42 @@ def BBN_era_NP_plot(
     ratio_NP_ax.set_yscale("log")
     ratio_NP_ax.grid(True)
 
+    w_NP_ax.axhline(y=1.0 / 3.0, color="r", linestyle="dashed")
+    w_NP_ax.axhline(y=-1.0, color="c", linestyle="dashed")
+
+    y_trans = w_NP_ax.get_yaxis_transform()
+    w_NP_ax.text(
+        0.15,
+        0.4,
+        r"radiation",
+        color="r",
+        transform=y_trans,
+        fontsize="x-small",
+    )
+    w_NP_ax.text(
+        0.15,
+        -1.2,
+        r"cosmological constant",
+        color="c",
+        transform=y_trans,
+        fontsize="x-small",
+    )
+
+    w_NP_ax.plot(
+        w_NP_x, w_NP_y, label=r"$w_{\mathrm{NP}}$", color="g", linestyle="solid"
+    )
+    w_NP_ax.set_ylim(-1.5, 1.2)
+    w_NP_ax.grid(True)
+
     rhoP_NP_ax.set_xscale("log")
     rhoP_NP_ax.set_xlabel("Temperature $T$ [MeV]")
     rhoP_NP_ax.xaxis.set_inverted(True)
 
-    add_ScalarModel_labels(ratio_NP_ax, model, model_label, shift=0.05)
+    add_ScalarModel_labels(w_NP_ax, model, model_label, shift=0.05)
 
     rhoP_NP_ax.legend(loc="best")
     ratio_NP_ax.legend(loc="best")
+    w_NP_ax.legend(loc="best")
 
     fig_path = plot_path / "BBN_era_NP.pdf"
     fig_path.parents[0].mkdir(exist_ok=True, parents=True)
