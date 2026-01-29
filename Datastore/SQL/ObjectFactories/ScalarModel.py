@@ -406,8 +406,6 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
 
         # z_grid not supplied since this object has already been computed/populated
         failed = row_data.failure
-        if failed:
-            print(f"read failed ScalarModel with store_id={store_id}")
         obj = ScalarModel(
             payload={
                 "store_id": store_id,
