@@ -18,7 +18,7 @@ import itertools
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import List, Any
+from typing import List
 
 import pandas as pd
 import ray
@@ -113,15 +113,17 @@ def build_beta_plot(
     Q_data: List[AdiabaticHistory],
     bbn_data: list[BBNData],
     scalar_data: list[ScalarModel],
-) -> Any:
+):
     base_path = Path(args.output).resolve()
     base_path = base_path / f"{model_label}"
 
     solver_time_points = [
-        (m.coupling._beta.as_float, m.metadata.compute_time) for m in scalar_data
+        (m.coupling._beta.as_float, m.metadata.compute_time)
+        for m in scalar_data
+        if m.available and not m.failure
     ]
     bbn_time_points = [
-        (d.coupling._beta.as_float, d.BBN_compute_time) for d in bbn_data
+        (d.coupling._beta.as_float, d.BBN_compute_time) for d in bbn_data if d.available
     ]
 
     adiabatic_maxQ_points = [
@@ -130,14 +132,19 @@ def build_beta_plot(
             {label: q.max_abs_Q(label) for label in AdiabaticHistory.Q_labels},
         )
         for q in Q_data
+        if q.available
     ]
 
     # ignore negative values which must represent a PRyMordial integration failure
     Yp_points = [
-        (d.coupling._beta.as_float, d.Yp_BBN) for d in bbn_data if d.Yp_BBN > 0
+        (d.coupling._beta.as_float, d.Yp_BBN)
+        for d in bbn_data
+        if d.available and d.Yp_BBN > 0
     ]
     DOverH_points = [
-        (d.coupling._beta.as_float, d.DOverH) for d in bbn_data if d.DOverH > 0
+        (d.coupling._beta.as_float, d.DOverH)
+        for d in bbn_data
+        if d.available and d.DOverH > 0
     ]
 
     solver_time_x, solver_time_y = zip(*solver_time_points)
@@ -343,9 +350,13 @@ def build_beta_plot(
 
         plt.close()
 
-        beta_to_models = {m.coupling._beta.store_id: m for m in scalar_data}
-        beta_to_Q = {Q.coupling._beta.store_id: Q for Q in Q_data}
-        beta_to_BBN = {B.coupling._beta.store_id: B for B in bbn_data}
+        beta_to_models = {
+            m.coupling._beta.store_id: m
+            for m in scalar_data
+            if m.available and not m.failure
+        }
+        beta_to_Q = {Q.coupling._beta.store_id: Q for Q in Q_data if Q.available}
+        beta_to_BBN = {B.coupling._beta.store_id: B for B in bbn_data if B.available}
 
         beta_keys = (
             set(beta_to_models.keys()) | set(beta_to_Q.keys()) | set(beta_to_BBN.keys())

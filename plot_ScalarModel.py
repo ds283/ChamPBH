@@ -1077,7 +1077,7 @@ def BBN_era_NP_plot(
     rhoP_NP_ax.plot(
         positive_abs_density_NP_x,
         positive_abs_density_NP_y,
-        label=r"$|\rho_{\mathrm{NP}}|$ [GeV$^4$]",
+        label=r"$\rho_{\mathrm{NP}}$ [GeV$^4$]",
         color="b",
         linestyle="solid",
     )
@@ -1090,7 +1090,7 @@ def BBN_era_NP_plot(
     rhoP_NP_ax.plot(
         positive_abs_pressure_NP_x,
         positive_abs_pressure_NP_y,
-        label=r"$|P_{\mathrm{NP}}|$ [GeV$^4$]",
+        label=r"$P_{\mathrm{NP}}$ [GeV$^4$]",
         color="r",
         linestyle="solid",
     )
@@ -1106,7 +1106,7 @@ def BBN_era_NP_plot(
     ratio_NP_ax.plot(
         positive_density_NP_ratio_x,
         positive_density_NP_ratio_y,
-        label=r"$|\rho_{\mathrm{NP}}/\rho_{\mathrm{SM}}|$",
+        label=r"$\rho_{\mathrm{NP}}/\rho_{\mathrm{SM}}$",
         color="b",
         linestyle="solid",
     )
