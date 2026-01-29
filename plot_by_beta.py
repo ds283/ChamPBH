@@ -220,49 +220,61 @@ def build_beta_plot(
         Yp_ax = axs[1]
         D_ax = axs[0]
 
-        # add confidence contours for Cooke+2017
-        Yp_central_value = 0.2449
-        Yp_sigma = 0.0040
+        Yp_data = {
+            "Aver+2017": {
+                "label": "Aver+2015",
+                "central_value": 0.2449,
+                "sigma": 0.0040,
+                "colour": "g",
+            },
+            "PDG2022": {
+                "label": "PDG2022",
+                "central_value": 0.245,
+                "sigma": 0.003,
+                "colour": "r",
+            },
+        }
 
-        # add confidence contours for Aver+2015
-        DOverH_central_value = 2.527
-        DOverH_sigma = 0.030
+        D_data = {
+            "Cooke+2017": {
+                "label": "Cooke+2017",
+                "central_value": 2.527,
+                "sigma": 0.030,
+                "colour": "g",
+            },
+            "PDG2022": {
+                "label": "PDG2022",
+                "central_value": 2.547,
+                "sigma": 0.025,
+                "colour": "r",
+            },
+        }
 
-        Yp_ax.axhline(
-            Yp_central_value, color="g", linestyle="dashed", label="Cooke+2017"
-        )
-        Yp_ax.axhspan(
-            ymin=Yp_central_value - Yp_sigma,
-            ymax=Yp_central_value + Yp_sigma,
-            color="g",
-            alpha=0.35,
-            label=None,
-        )
-        Yp_ax.axhspan(
-            ymin=Yp_central_value - 3.0 * Yp_sigma,
-            ymax=Yp_central_value + 3.0 * Yp_sigma,
-            color="g",
-            alpha=0.25,
-            label=None,
-        )
+        def add_data_to_axis(ax, data):
+            for key, config in data.items():
+                ax.axhline(
+                    config["central_value"],
+                    color=config["colour"],
+                    linestyle="dashed",
+                    label=config["label"],
+                )
+                ax.axhspan(
+                    ymin=config["central_value"] - config["sigma"],
+                    ymax=config["central_value"] + config["sigma"],
+                    color=config["colour"],
+                    alpha=0.25,
+                    label=None,
+                )
+                ax.axhspan(
+                    ymin=config["central_value"] - 3.0 * config["sigma"],
+                    ymax=config["central_value"] + 3.0 * config["sigma"],
+                    color=config["colour"],
+                    alpha=0.15,
+                    label=None,
+                )
 
-        D_ax.axhline(
-            DOverH_central_value, color="g", linestyle="dashed", label="Aver+2015"
-        )
-        D_ax.axhspan(
-            ymin=DOverH_central_value - DOverH_sigma,
-            ymax=DOverH_central_value + DOverH_sigma,
-            color="g",
-            alpha=0.35,
-            label=None,
-        )
-        D_ax.axhspan(
-            ymin=DOverH_central_value - 3.0 * DOverH_sigma,
-            ymax=DOverH_central_value + 3.0 * DOverH_sigma,
-            color="g",
-            alpha=0.25,
-            label=None,
-        )
+        add_data_to_axis(Yp_ax, Yp_data)
+        add_data_to_axis(D_ax, D_data)
 
         Yp_ax.plot(
             Yp_x,
@@ -275,7 +287,7 @@ def build_beta_plot(
             DOverH_x,
             DOverH_y,
             label=r"$10^5 D/H$",
-            color="r",
+            color="m",
             marker="o" if len(DOverH_x) <= 20.0 else None,
         )
 
@@ -284,10 +296,24 @@ def build_beta_plot(
 
         add_beta_summary_labels(D_ax, model_label, potential, shift=0.0)
 
+        def get_max_min(data):
+            max_value = None
+            min_value = None
+
+            for key, config in data.items():
+                this_max = config["central_value"] + 5.5 * config["sigma"]
+                this_min = config["central_value"] - 5.5 * config["sigma"]
+
+                if max_value is None or this_max > max_value:
+                    max_value = this_max
+                if min_value is None or this_min < min_value:
+                    min_value = this_min
+
+            return max_value, min_value
+
         # max_Yp = 1.05 * max(max(Yp_y), Yp_central_value + 3.0 * Yp_sigma)
         # min_Yp = 0.95 * min(min(Yp_y), Yp_central_value - 3.0 * Yp_sigma)
-        max_Yp = Yp_central_value + 5.5 * Yp_sigma
-        min_Yp = Yp_central_value - 5.5 * Yp_sigma
+        max_Yp, min_Yp = get_max_min(Yp_data)
         Yp_ax.set_ylim(min_Yp, max_Yp)
 
         # max_DOverH = max(max(DOverH_y), DOverH_central_value + 3.0 * DOverH_sigma)
@@ -297,9 +323,8 @@ def build_beta_plot(
         #     D_ax.set_ylim(min_DOverH / 10.0, 10.0 * max_DOverH)
         # else:
         #     D_ax.set_ylim(0.95 * min_DOverH, 1.06 * max_DOverH)
-        max_DoverH = DOverH_central_value + 5.5 * DOverH_sigma
-        min_DoverH = DOverH_central_value - 5.5 * DOverH_sigma
-        D_ax.set_ylim(min_DoverH, max_DoverH)
+        max_D, min_D = get_max_min(D_data)
+        D_ax.set_ylim(min_D, max_D)
 
         Yp_ax.legend(loc="best")
         D_ax.legend(loc="best")
