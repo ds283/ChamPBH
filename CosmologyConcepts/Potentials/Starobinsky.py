@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from math import log, exp, fabs, copysign
+from math import log, exp, fabs, copysign, inf
 
 from CosmologyConcepts import M_value, Lambda_value, FieldLike, GetFieldValue
 from CosmologyConcepts.Potentials.AbstractPotential import AbstractPotential
@@ -76,7 +76,7 @@ class StarobinskyPotential(AbstractPotential):
         :param phi:
         :return:
         """
-        phi_float = GetFieldValue(phi)
+        phi_float: float = GetFieldValue(phi)
 
         # if phi_float < 0.0:
         #     return inf
@@ -84,7 +84,11 @@ class StarobinskyPotential(AbstractPotential):
         try:
             arg: float = phi_float / self._M_float
             exp_arg: float = exp(arg)
-            A: float = log(1.0 + exp_arg)
+            B: float = 1.0 - exp_arg
+            if B > 0.0:
+                A: float = log(B)
+            else:
+                A: float = -inf
 
             return self._log_Lambda_4 + 2.0 * A
         except OverflowError as e:
@@ -104,32 +108,32 @@ class StarobinskyPotential(AbstractPotential):
         :param phi:
         :return:
         """
-        phi_float = GetFieldValue(phi)
+        phi_float: float = GetFieldValue(phi)
 
         # if phi_float < 0.0:
         #     return inf
 
         try:
             arg: float = phi_float / self._M_float
-            A = 2.0 / self._M_float
+            A: float = 2.0 / self._M_float
 
             if arg > 2.0:
-                exp_marg = exp(-arg)
+                exp_marg: float = exp(-arg)
 
-                den = exp_marg - 1.0
+                den: float = exp_marg - 1.0
                 if fabs(den) < _DENOMINATOR_REGULATOR:
                     den = copysign(1.0, den) * _DENOMINATOR_REGULATOR
 
-                B = 1.0 / den
+                B: float = 1.0 / den
 
             else:
                 exp_arg: float = exp(arg)
 
-                den = 1.0 - exp_arg
+                den: float = 1.0 - exp_arg
                 if fabs(den) < _DENOMINATOR_REGULATOR:
                     den = copysign(1.0, den) * _DENOMINATOR_REGULATOR
 
-                B = exp_arg / den
+                B: float = exp_arg / den
 
             return -A * B
 
@@ -150,31 +154,31 @@ class StarobinskyPotential(AbstractPotential):
         :param phi:
         :return:
         """
-        phi_float = GetFieldValue(phi)
+        phi_float: float = GetFieldValue(phi)
 
         try:
             arg: float = phi_float / self._M_float
-            M2 = self._M_float * self._M_float
-            A = 2.0 / M2
+            M2: float = self._M_float * self._M_float
+            A: float = 2.0 / M2
 
             if arg > 2.0:
-                exp_marg = exp(-arg)
+                exp_marg: float = exp(-arg)
 
-                den = exp_marg - 1.0
+                den: float = exp_marg - 1.0
                 if fabs(den) < _DENOMINATOR_REGULATOR:
                     den = copysign(1.0, den) * _DENOMINATOR_REGULATOR
 
-                B = 1.0 / den
-                C = exp_marg / den
+                B: float = 1.0 / den
+                C: float = exp_marg / den
             else:
                 exp_arg: float = exp(arg)
 
-                den = 1.0 - exp_arg
+                den: float = 1.0 - exp_arg
                 if fabs(den) < _DENOMINATOR_REGULATOR:
                     den = copysign(1.0, den) * _DENOMINATOR_REGULATOR
 
-                B = exp_arg / den
-                C = 1.0 / den
+                B: float = exp_arg / den
+                C: float = 1.0 / den
 
             return -A * B * C
 

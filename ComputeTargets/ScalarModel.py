@@ -66,7 +66,6 @@ ODE_data = namedtuple(
         "T_Jordan",
         "Sigma",
         "log_V",
-        "d_logV_dphi",
         "V_over_3H2Mp2",
         "Vprime_over_3H2Mp2",
         "d_logOmega_dphi",
@@ -257,19 +256,36 @@ def compute_scalar_model(
         A2: float = 4.0 - R
 
         log_V: float = potential.log_V(phi_Einstein)
-        d_logV_dphi: float = potential.d_logV_dphi(phi_Einstein)
 
-        log_rhorad_over_V: float = log_rhorad_Einstein - log_V
-        T: float
-        if log_rhorad_over_V > 2.0:
-            V_over_rhorad: float = exp(-log_rhorad_over_V)
-            T = V_over_rhorad / (V_over_rhorad + 1.0 + fm)
+        if isinf(log_V):
+            if log_V < 0.0:
+                # in this case V = 0, so we should work out the Hubble rate without using it
+                rho_rad: float = exp(log_rhorad_Einstein)
+                ThreeH2Mp2: float = rho_rad * (1.0 + fm) / G
+
+                V_over_3H2Mp2: float = 0.0
+
+                dV_dphi: float = potential.dV_dphi(phi_Einstein)
+                Vprime_over_3H2Mp2: float = dV_dphi / ThreeH2Mp2
+
+            else:
+                msg = f"!! compute_scalar_model ({task_label}): log_V=+inf encountered at N={N:.8g} | f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp, pi_Einstein = {pi_Einstein / units.PlanckMass:.5g} Mp, T_Jordan = {T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K"
+                raise ComputationFailureError(msg)
+
         else:
-            rhorad_over_V: float = exp(log_rhorad_over_V)
-            T = 1.0 / (1.0 + rhorad_over_V * (1.0 + fm))
+            log_rhorad_over_V: float = log_rhorad_Einstein - log_V
+            T: float
+            if log_rhorad_over_V > 2.0:
+                V_over_rhorad: float = exp(-log_rhorad_over_V)
+                T = V_over_rhorad / (V_over_rhorad + 1.0 + fm)
+            else:
+                rhorad_over_V: float = exp(log_rhorad_over_V)
+                T = 1.0 / (1.0 + rhorad_over_V * (1.0 + fm))
 
-        V_over_3H2Mp2: float = G * T
-        Vprime_over_3H2Mp2: float = G * d_logV_dphi * T
+            V_over_3H2Mp2: float = G * T
+
+            d_logV_dphi: float = potential.d_logV_dphi(phi_Einstein)
+            Vprime_over_3H2Mp2: float = G * d_logV_dphi * T
 
         C: float = V_over_3H2Mp2 / 2.0
         D: float = CONST_3_MP_SQ * Vprime_over_3H2Mp2
@@ -287,7 +303,6 @@ def compute_scalar_model(
             T_Jordan=T_Jordan,
             Sigma=Sigma,
             log_V=log_V,
-            d_logV_dphi=d_logV_dphi,
             V_over_3H2Mp2=V_over_3H2Mp2,
             Vprime_over_3H2Mp2=Vprime_over_3H2Mp2,
             d_logOmega_dphi=d_logOmega_dphi,
@@ -746,9 +761,18 @@ def compute_scalar_model(
 
         T_Jordan: float = data.T_Jordan
 
-        log_V_over_3H2Mp2: float = log(data.V_over_3H2Mp2)
-        log_3H2Mp2: float = -1.0 * (log_V_over_3H2Mp2 - data.log_V)
-        H2_Einstein: float = exp(log_3H2Mp2) / CONST_3_MP_SQ
+        if data.V_over_3H2Mp2 > 0.0:
+            log_V_over_3H2Mp2: float = log(data.V_over_3H2Mp2)
+            log_3H2Mp2: float = -1.0 * (log_V_over_3H2Mp2 - data.log_V)
+            H2_Einstein: float = exp(log_3H2Mp2) / CONST_3_MP_SQ
+        else:
+            rho_rad: float = exp(state.log_rhorad_Einstein)
+            fm: float = exp(state.log_fm)
+            pi_Einstein: float = state.pi_Einstein
+            G: float = 1.0 - pi_Einstein * pi_Einstein / CONST_6_MP_SQ
+            ThreeH2Mp2: float = rho_rad * (1.0 + fm) / G
+            H2_Einstein: float = ThreeH2Mp2 / CONST_3_MP_SQ
+
         H_Einstein: float = sqrt(H2_Einstein)
 
         log_Omega: float = coupling.log_Omega(state.phi_Einstein)
