@@ -67,6 +67,9 @@ from Datastore.SQL.ObjectFactories.ScalarModel import (
     sqla_ScalarModelTagAssociation_factory,
     sqla_ScalarModelValue_factory,
 )
+from Datastore.SQL.ObjectFactories.Starobinsky import (
+    sqla_StarobinskyPotential_factory,
+)
 from Datastore.SQL.ObjectFactories.base import SQLAFactoryBase
 from Datastore.SQL.ObjectFactories.integration_metadata import (
     sqla_IntegrationSolver_factory,
@@ -96,6 +99,7 @@ _factories = {
     "phi_value": sqla_dimensionful_quantity_factory(phi_value),
     "pi_value": sqla_dimensionful_quantity_factory(pi_value),
     "InversePowerPotential": sqla_InversePowerPotential_factory(),
+    "StarobinskyPotential": sqla_StarobinskyPotential_factory(),
     "ExponentialPotential": sqla_ExponentialPotential_factory(),
     "ReflectingPotential": sqla_ReflectingPotential_factory(),
     "ExponentialCoupling": sqla_ExponentialCoupling_factory(),

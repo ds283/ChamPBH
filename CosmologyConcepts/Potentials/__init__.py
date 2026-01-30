@@ -2,4 +2,5 @@ from .AbstractPotential import AbstractPotential
 from .ExponentialPotential import ExponentialPotential
 from .InversePowerPotential import InversePowerPotential
 from .ReflectingPotential import ReflectingPotential
+from .Starobinsky import StarobinskyPotential
 from .model_ids import INVERSE_POWER_POTENTIAL

@@ -29,6 +29,7 @@ replicated_tables = [
     "ExponentialPotential",
     "InversePowerPotential",
     "ReflectingPotential",
+    "StarobinskyPotential",
     "LambdaCDM",
     "QCD_Cosmology",
     "IntegrationSolver",
