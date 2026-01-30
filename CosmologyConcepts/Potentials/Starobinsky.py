@@ -60,11 +60,11 @@ class StarobinskyPotential(AbstractPotential):
 
     @property
     def bounce_region_level1_max_step(self) -> float:
-        return self.bounce_region_level1_boundary / 5e2
+        return fabs(self.bounce_region_level1_boundary) / 5e2
 
     @property
     def bounce_region_level2_max_step(self) -> float:
-        return self.bounce_region_level2_boundary / 5e2
+        return fabs(self.bounce_region_level2_boundary) / 5e2
 
     @property
     def hard_reflection_point(self) -> float:
