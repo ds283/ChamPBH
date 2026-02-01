@@ -1350,7 +1350,14 @@ def plot_ScalarModel(
         return H_Einstein2 * value.pi_Einstein * value.pi_Einstein / 2.0
 
     def PE(value: ScalarModelValue) -> float:
-        return exp(potential.log_V(value.phi_Einstein))
+        if hasattr(potential, "V"):
+            return potential.V(value.phi_Einstein)
+        elif hasattr(potential, "log_V"):
+            return exp(potential.log_V(value.phi_Einstein))
+        else:
+            raise RuntimeError(
+                f"Potential {potential.name} has no V or log_V implementation"
+            )
 
     def TotalEnergy(value: ScalarModelValue) -> float:
         return KE(value) + PE(value)
