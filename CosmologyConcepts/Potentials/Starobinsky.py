@@ -38,7 +38,7 @@ class StarobinskyPotential(AbstractPotential):
         # pre-evaluated Lambda^4, which we don't need to recompute each time
         _Lambda_as_float = float(Lambda)
         self._Lambda2_float = _Lambda_as_float * _Lambda_as_float
-        self._Lambda4_float = self._Lambda2 * self._Lambda2
+        self._Lambda4_float = self._Lambda2_float * self._Lambda2_float
 
         self._M_float = float(M)
         self._Lambda_float = float(Lambda)
