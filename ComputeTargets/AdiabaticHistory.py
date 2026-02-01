@@ -69,10 +69,13 @@ class AdiabaticComputePolicy:
         # We interpret grad_phi of this to mean
         # grad_phi V'_eff = V'' + (d2 ln Omega / dphi2) rho_R* (Sigma + fm)
 
-        Vpp_over_3H2Mp2 = self.V_policy.Vprimeprime_over_3H2Mp2(
-            phi_Einstein, pi_Einstein, Sigma, fm
+        Vpp_over_3H2Mp2: float = self.V_policy.Vprimeprime_over_3H2Mp2(
+            phi_Einstein, pi_Einstein, log_rhorad_Einstein, fm
         )
-        d2_logOmega_dphi2 = self.coupling.d2_logOmega_dphi2(phi_Einstein)
+        V_over_3H2Mp2: float = self.V_policy.V_over_3H2Mp2(
+            phi_Einstein, pi_Einstein, log_rhorad_Einstein, fm
+        )
+        d2_logOmega_dphi2: float = self.coupling.d2_logOmega_dphi2(phi_Einstein)
 
         R: float
         if fm > 10.0:
@@ -86,11 +89,9 @@ class AdiabaticComputePolicy:
             print(msg)
             raise ComputationFailureError(msg)
 
-        self_mass = self.CONST_3_MP_SQ * self.V_policy.V_over_3H2Mp2(
-            phi_Einstein, pi_Einstein, log_rhorad_Einstein, fm
-        )
+        self_mass = self.CONST_3_MP_SQ * Vpp_over_3H2Mp2
 
-        E: float = G - Vpp_over_3H2Mp2
+        E: float = G - V_over_3H2Mp2
         if E < 0.0:
             msg = f"!! AdiabaticComputePolicy ({self.task_label}): negative value of E = {E:.5g} | f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / self.MP:.5g} Mp, pi_Einstein = {pi_Einstein / self.MP:.5g} Mp"
             raise ComputationFailureError(msg)
@@ -98,7 +99,7 @@ class AdiabaticComputePolicy:
         conformal_mass: float = self.CONST_3_MP_SQ * E * d2_logOmega_dphi2 * R
 
         gravitational_mass: float = 1.0 - self.V_policy.Hdot_over_H2_plus_3(
-            phi_Einstein, pi_Einstein, Sigma, Sigma, fm
+            phi_Einstein, pi_Einstein, log_rhorad_Einstein, Sigma, fm
         )
 
         return self_mass + conformal_mass + gravitational_mass
@@ -156,8 +157,7 @@ def compute_adiabatic_values(
         d_log_abs_M2eff_spline = log_abs_M2eff_spline.derivative()
 
         for i, N in enumerate(raw_N_grid):
-            for label in labels:
-                kp_over_H: float = labels[label]
+            for label, kp_over_H in labels.items():
                 kp2_over_H2: float = kp_over_H * kp_over_H
 
                 A: float = M2eff_over_H2_grid[i]
@@ -165,7 +165,7 @@ def compute_adiabatic_values(
                 B2: float = pow(fabs(B), 3.0 / 2.0)
                 C: float = 1.0 + d_log_abs_M2eff_spline(N) / 2.0
 
-                abs_Q: float = fabs(A * B / C)
+                abs_Q: float = fabs(A * C / B2)
                 abs_Q_samples[label].append(abs_Q)
 
                 if max_abs_Q_values[label] is None or abs_Q > max_abs_Q_values[label]:
