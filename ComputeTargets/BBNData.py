@@ -14,6 +14,7 @@ from MetadataConcepts import store_tag
 from Units.base import UnitsLike
 from config.sharding import ShardKeyType
 from utilities import WallclockTimer
+from .Policies import PotentialDerivativePolicy
 from .ScalarModel import ScalarModelProxy, ScalarModel, ScalarModelValue
 from .exceptions import ComputationFailureError
 
@@ -77,6 +78,10 @@ def compute_BBN_data(
 
     last_log_T_Jordan_MeV = None
 
+    policy: PotentialDerivativePolicy = PotentialDerivativePolicy(
+        task_label, cosmology, potential
+    )
+
     with WallclockTimer() as NP_timer:
         # first, build estimates for the "new physics" density and pressure needed by PRyMordial
         for value in model.values:
@@ -102,41 +107,22 @@ def compute_BBN_data(
                 # compute new physics density and pressure
                 phi_Einstein: float = value.phi_Einstein
                 pi_Einstein: float = value.pi_Einstein
+
                 H_Jordan: float = value.H_Jordan
                 H2_Jordan: float = H_Jordan * H_Jordan
 
                 rhorad_Jordan: float = exp(value.log_rhorad_Jordan)
+
                 fm: float = exp(value.log_fm)
                 Sigma: float = value.Sigma
+                log_rhorad_Einstein: float = value.log_rhorad_Einstein
+                dotH_over_H2: float = policy.Hdot_over_H2_plus_3(
+                    phi_Einstein, pi_Einstein, log_rhorad_Einstein, Sigma, fm
+                )
+
                 w: float = (1.0 - Sigma) / 3.0
 
-                G: float = 1.0 - pi_Einstein * pi_Einstein / CONST_6_MP_SQ
-
-                R: float
-                if fm > 10.0:
-                    R = (1.0 + Sigma / fm) / (1.0 + 1.0 / fm)
-                else:
-                    R = (Sigma + fm) / (1.0 + fm)
-                A1: float = 1.0 + R / 2.0
-                A2: float = 4.0 - R
-
-                log_V: float = potential.log_V(phi_Einstein)
-                log_rhorad_over_V: float = value.log_rhorad_Einstein - log_V
-
-                T: float
-                if log_rhorad_over_V > 2.0:
-                    V_over_rhorad: float = exp(-log_rhorad_over_V)
-                    T = V_over_rhorad / (V_over_rhorad + 1.0 + fm)
-                else:
-                    rhorad_over_V: float = exp(log_rhorad_over_V)
-                    T = 1.0 / (1.0 + rhorad_over_V * (1.0 + fm))
-
-                V_over_3H2Mp2: float = G * T
-                C: float = V_over_3H2Mp2 / 2.0
-
                 LHS: float = 3.0 * H2_Jordan * CONST_MP_SQ
-
-                dotH_over_H2: float = -3.0 + (G * A1 + C * A2)
 
                 density_NP: float = LHS - rhorad_Jordan * (1.0 + fm)
                 pressure_BP: float = (
