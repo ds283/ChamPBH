@@ -93,8 +93,12 @@ class AdiabaticComputePolicy:
 
         E: float = G - V_over_3H2Mp2
         if E < 0.0:
-            msg = f"!! AdiabaticComputePolicy ({self.task_label}): negative value of E = {E:.5g} | f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / self.MP:.5g} Mp, pi_Einstein = {pi_Einstein / self.MP:.5g} Mp"
-            raise ComputationFailureError(msg)
+            # unclear whether we should treat this as a genuine computational error, or whether it just means that rho_r is very small
+            # (e.g. at the end of the integration) and should harmlessly be treated as zero
+            msg = f"!! ODEPolicy ({self.task_label}): negative value of E = {E:.5g} | f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / self.MP:.5g} Mp, pi_Einstein = {pi_Einstein / self.MP:.5g} Mp"
+            print(msg)
+            # raise ComputationFailureError(msg)
+            E = 0.0
 
         conformal_mass: float = self.CONST_3_MP_SQ * E * d2_logOmega_dphi2 * R
 

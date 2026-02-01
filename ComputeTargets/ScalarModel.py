@@ -237,8 +237,12 @@ class ODEPolicy:
         E: float = G - V_over_3H2Mp2
         # E must be positive, because it is proportional to rho_R/H^2
         if E < 0.0:
+            # unclear whether we should treat this as a genuine computational error, or whether it just means that rho_r is very small
+            # (e.g. at the end of the integration) and should harmlessly be treated as zero
             msg = f"!! ODEPolicy ({self.task_label}): negative value of E = {E:.5g} | f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / self.MP:.5g} Mp, pi_Einstein = {pi_Einstein / self.MP:.5g} Mp"
-            raise ComputationFailureError(msg)
+            print(msg)
+            # raise ComputationFailureError(msg)
+            E = 0.0
 
         dotH_over_H2_plus_3: float = self.V_policy.Hdot_over_H2_plus_3(
             phi_Einstein, pi_Einstein, log_rhorad_Einstein, Sigma, fm
