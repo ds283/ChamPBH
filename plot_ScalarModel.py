@@ -138,8 +138,12 @@ def history_plot(
     values = model.values
     units: UnitsLike = model._units
 
-    abs_phi_Einstein_points = [
-        (get_x_coord(value), safe_fabs(value.phi_Einstein / units.PlanckMass))
+    positive_abs_phi_Einstein_points = [
+        (get_x_coord(value), safe_fabs_positive(value.phi_Einstein / units.PlanckMass))
+        for value in values
+    ]
+    negative_abs_phi_Einstein_points = [
+        (get_x_coord(value), safe_fabs_negative(value.phi_Einstein / units.PlanckMass))
         for value in values
     ]
     pi_Einstein_points = [
@@ -157,7 +161,12 @@ def history_plot(
         for value in Q.values
     ]
 
-    abs_phi_Einstein_x, abs_phi_Einstein_y = zip(*abs_phi_Einstein_points)
+    positive_abs_phi_Einstein_x, positive_abs_phi_Einstein_y = zip(
+        *positive_abs_phi_Einstein_points
+    )
+    negative_abs_phi_Einstein_x, negative_abs_phi_Einstein_y = zip(
+        *negative_abs_phi_Einstein_points
+    )
     pi_Einstein_x, pi_Einstein_y = zip(*pi_Einstein_points)
     T_Jordan_x, T_Jordan_y = zip(*T_Jordan_points)
 
@@ -185,11 +194,17 @@ def history_plot(
         T_ax = axs[0]
 
     phi_ax.plot(
-        abs_phi_Einstein_x,
-        abs_phi_Einstein_y,
+        positive_abs_phi_Einstein_x,
+        positive_abs_phi_Einstein_y,
         label=r"$\phi_{\text{E}}$ [$M_{\text{P}}$]",
         color="r",
         linestyle="solid",
+    )
+    phi_ax.plot(
+        negative_abs_phi_Einstein_x,
+        negative_abs_phi_Einstein_y,
+        color="r",
+        linestyle="dashed",
     )
     if x_coord == "redshift":
         phi_ax.set_xscale("log")
@@ -1310,7 +1325,6 @@ def plot_ScalarModel(
     M = potential._M.as_float
     Lambda = potential._Lambda.as_float
 
-    values: List[ScalarModelValue] = model.values
     units: UnitsLike = model._units
 
     base_path = Path(args.output).resolve()
