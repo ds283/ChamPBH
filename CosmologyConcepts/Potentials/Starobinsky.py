@@ -81,7 +81,7 @@ class StarobinskyPotential(AbstractPotential):
 
         try:
             arg: float = phi_float / self._M_float
-            B: float = 1.0 - exp(arg)
+            B: float = 1.0 - exp(-arg)
 
             return self._Lambda4_float * B * B
 
@@ -106,10 +106,11 @@ class StarobinskyPotential(AbstractPotential):
 
         try:
             arg: float = phi_float / self._M_float
-            B: float = exp(arg)
-            C: float = 1.0 - B
+            B1: float = exp(-arg)
+            B2: float = exp(-2.0 * arg)
+            B: float = B2 - B1
 
-            return -2.0 * self._Lambda4_float * B * C / self._M_float
+            return -2.0 * self._Lambda4_float * B / self._M_float
 
         except OverflowError as e:
             print(
@@ -133,10 +134,11 @@ class StarobinskyPotential(AbstractPotential):
 
         try:
             arg: float = phi_float / self._M_float
-            B: float = exp(arg)
-            C: float = 1.0 - 2 * B
+            B1: float = exp(-arg)
+            B2: float = exp(-2.0 * arg)
+            B: float = 2.0 * B2 - B1
 
-            return -2.0 * self._Lambda4_float * B * C / (self._M_float * self._M_float)
+            return 2.0 * self._Lambda4_float * B / (self._M_float * self._M_float)
 
         except OverflowError as e:
             print(
