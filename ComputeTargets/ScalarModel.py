@@ -50,6 +50,7 @@ from Quadrature.supervisors.base import RHS_timer
 from Units.base import UnitsLike
 from config.defaults import DEFAULT_ABS_TOLERANCE, DEFAULT_REL_TOLERANCE
 from config.sharding import ShardKeyType
+from .Policies import PotentialDerivativePolicy
 from .exceptions import ComputationFailureError
 
 # useful constants, calculated once and cached to speed up the numerical integration
@@ -59,8 +60,8 @@ LOG_PISQ_OVER_30 = log(PISQ_OVER_30)
 EXPECTED_SOL_LENGTH = 5
 
 # using named tuples ensures that we never get the fields in the wrong order
-ODE_data = namedtuple(
-    "ODE_data",
+ODEPolicyData = namedtuple(
+    "ODEPolicyData",
     [
         "fm",
         "T_Jordan",
@@ -72,6 +73,14 @@ ODE_data = namedtuple(
         "friction_term",
         "reflecting_term",
         "kicking_term",
+    ],
+)
+
+HubblePolicyData = namedtuple(
+    "HubblePolicyData",
+    [
+        "H_Einstein",
+        "H_Jordan",
     ],
 )
 
@@ -123,6 +132,277 @@ ModelFunctions = namedtuple(
         "Sigma",
     ],
 )
+
+
+class ODEPolicy:
+    def __init__(
+        self,
+        task_label: str,
+        cosmology: BaseCosmology,
+        potential: AbstractPotential,
+        coupling: AbstractCoupling,
+    ):
+        self.task_label: str = task_label
+        self.units: UnitsLike = cosmology.units
+
+        self.cosmology: BaseCosmology = cosmology
+        self.potential: AbstractPotential = potential
+        self.coupling: AbstractCoupling = coupling
+
+        self.V_policy: PotentialDerivativePolicy = PotentialDerivativePolicy(
+            task_label, cosmology, potential
+        )
+
+        self.MP = self.units.PlanckMass
+        self.CONST_MP_SQ = self.MP * self.MP
+        self.CONST_3_MP_SQ = 2.0 * self.CONST_MP_SQ
+        self.CONST_6_MP_SQ = 6.0 * self.CONST_MP_SQ
+
+        self.GeV = self.units.GeV
+        self.Kelvin = self.units.Kelvin
+
+    def _get_fm(self, N: float, state: StateVector) -> float:
+        try:
+            fm: float = exp(state.log_fm)
+        except OverflowError as e:
+            msg = f"!! ODEPolicy ({self.task_label}): math overflow in exp(log_fm), log_fm = {state.log_fm:.5g} | N = {N:.5g}, phi_Einstein = {state.phi_Einstein / self.MP:.5g} Mp, pi_Einstein = {state.pi_Einstein / self.MP:.5g} Mp"
+            print(msg)
+            raise ComputationFailureError(msg)
+
+        return fm
+
+    def _get_T_Jordan(self, N: float, state: StateVector) -> float:
+        try:
+            T_Jordan: float = exp(state.log_T_Jordan)
+        except OverflowError as e:
+            msg = f"!! ODEPolicy ({self.task_label}): math overflow in exp(log_T_Jordan), log_T_Jordan = {state.log_T_Jordan:.5g} | N = {N:.5g}, log_fm = {state.log_fm:.5g}, phi_Einstein = {state.phi_Einstein / self.MP:.5g} Mp, pi_Einstein = {state.pi_Einstein / self.MP:.5g} Mp"
+            print(msg)
+            raise ComputationFailureError(msg)
+
+        if T_Jordan <= 0.0:
+            # this doesn't have to indicate a problem, because the stepper sometimes goes down
+            # to zero in the last time step (e.g., 2.7K is quite a small number if we are using Planck units
+            # for the computation)
+            msg = f"!! ODEPolicy ({self.task_label}): T_Jordan = {T_Jordan:.5g}, log_T_Jordan = {state.log_T_Jordan:.5g} at N={N:.8g}"
+            print(msg)
+            T_Jordan = 1 * self.Kelvin
+
+        return T_Jordan
+
+    def __call__(self, N: float, state: StateVector) -> ODEPolicyData:
+        if any((isnan(x) or isinf(x)) for x in state):
+            msg = f"!! ODEPolicy ({self.task_label}): input to ODE RHS has infinity or NaN values at N={N:.8g}"
+            print(msg)
+            print(f"     - state={state}")
+            raise ComputationFailureError(msg)
+
+        phi_Einstein: float = state.phi_Einstein
+        pi_Einstein: float = state.pi_Einstein
+        log_rhorad_Einstein: float = state.log_rhorad_Einstein
+
+        fm = self._get_fm(N, state)
+        T_Jordan = self._get_T_Jordan(N, state)
+
+        Sigma: float = 1.0 - 3.0 * self.cosmology.w(T_Jordan)
+
+        # compute R = (Sigma + fm)/(1 + fm)
+        # try to avoid any problems with overflow
+        R: float
+        if fm > 10.0:
+            R = (1.0 + Sigma / fm) / (1.0 + 1.0 / fm)
+        else:
+            R = (Sigma + fm) / (1.0 + fm)
+
+        d_logOmega_dphi: float = self.coupling.d_logOmega_dphi(phi_Einstein)
+
+        log_V = self.V_policy.log_V(phi_Einstein)
+        V_over_3H2Mp2 = self.V_policy.V_over_3H2Mp2(
+            phi_Einstein, pi_Einstein, log_rhorad_Einstein, fm
+        )
+        Vprime_over_3H2Mp2 = self.V_policy.Vprime_over_3H2Mp2(
+            phi_Einstein, pi_Einstein, log_rhorad_Einstein, fm
+        )
+        D: float = self.CONST_3_MP_SQ * Vprime_over_3H2Mp2
+
+        # G must be positive in order that H_Einstein^2 is also positive
+        # this gives a limit pi_Einstein < sqrt(6) Mp
+        # equality only happens if the scalar field KE dominates the energy budget of the universe,
+        # which we should not encounter
+        G: float = 1.0 - pi_Einstein * pi_Einstein / self.CONST_6_MP_SQ
+        if G < 0.0:
+            msg = f"!! ODEPolicy ({self.task_label}): negative value of G = {G:.5g} | f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / self.MP:.5g} Mp, pi_Einstein = {pi_Einstein / self.MP:.5g} Mp"
+            print(msg)
+            raise ComputationFailureError(msg)
+
+        E: float = G - V_over_3H2Mp2
+        # E must be positive, because it is proportional to rho_R/H^2
+        if E < 0.0:
+            msg = f"!! ODEPolicy ({self.task_label}): negative value of E = {E:.5g} | f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / self.MP:.5g} Mp, pi_Einstein = {pi_Einstein / self.MP:.5g} Mp"
+            raise ComputationFailureError(msg)
+
+        dotH_over_H2_plus_3: float = self.V_policy.Hdot_over_H2_plus_3(
+            phi_Einstein, pi_Einstein, log_rhorad_Einstein, Sigma, fm
+        )
+
+        friction_term = -pi_Einstein * dotH_over_H2_plus_3
+        reflecting_term = -D
+        kicking_term = -self.CONST_3_MP_SQ * E * d_logOmega_dphi * R
+
+        return ODEPolicyData(
+            fm=fm,
+            T_Jordan=T_Jordan,
+            Sigma=Sigma,
+            log_V=log_V,
+            V_over_3H2Mp2=V_over_3H2Mp2,
+            Vprime_over_3H2Mp2=Vprime_over_3H2Mp2,
+            d_logOmega_dphi=d_logOmega_dphi,
+            friction_term=friction_term,
+            reflecting_term=reflecting_term,
+            kicking_term=kicking_term,
+        )
+
+
+class HubblePolicy:
+    def __init__(self, coupling: AbstractCoupling, units: UnitsLike):
+        self.coupling: AbstractCoupling = coupling
+        self.units: UnitsLike = units
+
+        self.MP = units.PlanckMass
+        self.CONST_MP_SQ = self.MP * self.MP
+        self.CONST_3_MP_SQ = 3.0 * self.CONST_MP_SQ
+        self.CONST_6_MP_SQ = 6.0 * self.CONST_MP_SQ
+
+    def __call__(self, data: ODEPolicyData, state: StateVector) -> HubblePolicyData:
+        if data.V_over_3H2Mp2 > 0.0:
+            # V should not be zero
+            assert not isinf(data.log_V)
+
+            log_V_over_3H2Mp2: float = log(data.V_over_3H2Mp2)
+            log_3H2Mp2: float = -1.0 * (log_V_over_3H2Mp2 - data.log_V)
+            H2_Einstein: float = exp(log_3H2Mp2) / self.CONST_3_MP_SQ
+        else:
+            # can assume the V = 0, so we have to compute H^2 ab initio
+
+            rho_rad: float = exp(state.log_rhorad_Einstein)
+            fm: float = exp(state.log_fm)
+            pi_Einstein: float = state.pi_Einstein
+            G: float = 1.0 - pi_Einstein * pi_Einstein / self.CONST_6_MP_SQ
+            ThreeH2Mp2: float = rho_rad * (1.0 + fm) / G
+            H2_Einstein: float = ThreeH2Mp2 / self.CONST_3_MP_SQ
+
+        H_Einstein: float = sqrt(H2_Einstein)
+
+        Omega: float = self.coupling.Omega(state.phi_Einstein)
+
+        # H_Jordan can even be negative, so there is no use trying to store its logarithm
+        H_Jordan: float = (
+            H_Einstein * (1.0 + data.d_logOmega_dphi * state.pi_Einstein) / Omega
+        )
+
+        return HubblePolicyData(H_Einstein=H_Einstein, H_Jordan=H_Jordan)
+
+
+class ODERHS:
+    def __init__(self, task_label: str, policy: ODEPolicy):
+        self.task_label = task_label
+        self.policy = policy
+
+        self.cosmology = policy.cosmology
+        self.units = self.cosmology.units
+
+        self.MP = self.units.PlanckMass
+        self.GeV = self.units.GeV
+        self.Kelvin = self.units.Kelvin
+
+    def __call__(self, N: float, s: StateVector, supervisor):
+        with RHS_timer(supervisor) as timer:
+            state: StateVector = StateVector._make(s)
+            data: ODEPolicyData = self.policy(N, state)
+
+            phi_Einstein: float = state.phi_Einstein
+            pi_Einstein: float = state.pi_Einstein
+            log_rhorad_Einstein: float = state.log_rhorad_Einstein
+
+            fm: float = data.fm
+            T_Jordan: float = data.T_Jordan
+
+            if supervisor.notify_available:
+                supervisor.message(
+                    T_Jordan,
+                    f"current state: N={N:.5g}, f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / self.MP:.5g} Mp, pi_Einstein = {pi_Einstein / self.MP:.5g} Mp, log(rho_rad/GeV^4) = {log_rhorad_Einstein - 4.0*log(self.GeV):.5g}, T_Jordan = {T_Jordan/self.GeV:.5g} GeV = {T_Jordan/self.Kelvin:.5g} K",
+                )
+                supervisor.reset_notify_time(T_Jordan)
+
+            d_phi_Einstein: float = pi_Einstein
+            d_pi_Einstein: float = (
+                data.friction_term + data.reflecting_term + data.kicking_term
+            )
+
+            d_log_rhorad_Einstein: float = (
+                data.Sigma - 4.0 + data.Sigma * data.d_logOmega_dphi * pi_Einstein
+            )
+            d_log_fm: float = (1.0 - data.Sigma) * (
+                1.0 + data.d_logOmega_dphi * pi_Einstein
+            )
+
+            G_s: float = self.cosmology.G_s(T_Jordan)
+            dG_s_dlogT: float = self.cosmology.dG_s_dlogT(T_Jordan)
+
+            d_log_T_Jordan: float = -(1.0 + data.d_logOmega_dphi * pi_Einstein) / (
+                1.0 + dG_s_dlogT / G_s / 3.0
+            )
+
+            return_state = StateVector(
+                phi_Einstein=d_phi_Einstein,
+                pi_Einstein=d_pi_Einstein,
+                log_rhorad_Einstein=d_log_rhorad_Einstein,
+                log_fm=d_log_fm,
+                log_T_Jordan=d_log_T_Jordan,
+            )
+
+            if any((isnan(x) or isinf(x)) for x in return_state):
+                log_fm: float = state.log_fm
+                log_T_Jordan: float = state.log_T_Jordan
+
+                Sigma: float = data.Sigma
+
+                log_V: float = data.log_V
+                d_logV_dphi: float = data.d_logV_dphi
+
+                V_over_3H2Mp2: float = data.V_over_3H2Mp2
+                Vprime_over_3H2Mp2: float = data.Vprime_over_3H2Mp2
+
+                print(
+                    f"!! compute_scalar_model ({self.task_label}): output from ODE RHS has infinity or NaN values at N={N:.8g}"
+                )
+                print(
+                    f"     - inputs/states: phi_E={phi_Einstein/self.MP:.5g} Mp, pi_E={pi_Einstein/self.MP:.5g} Mp, log_rhorad_E={log_rhorad_Einstein:.5g}, log_fm={log_fm:.5g}, log_T_J={log_T_Jordan:.5g}"
+                )
+                print(
+                    f"     - physical: log(rhorad_E/GeV^4)={log_rhorad_Einstein - 4.0*log(self.GeV):.5g}, fm={fm:.5g}, T_J={T_Jordan/self.GeV:.5g} GeV = {T_Jordan/self.Kelvin:.5g} K"
+                )
+                print(
+                    f"     - potential: log(V/GeV^4)={log_V - 4.0*log(self.GeV):.5g}, V'/V={d_logV_dphi*self.GeV:.5g} GeV^(-1), d_logOmega_dphi'={data.d_logOmega_dphi:.5g}"
+                )
+                print(
+                    f"     - cosmology: V/3H2Mp2={V_over_3H2Mp2:.5g}, V'/3H2Mp2={Vprime_over_3H2Mp2:.5g}, Sigma={Sigma:.5g}"
+                )
+                # print(
+                #     f"     - intermediates: G={G:.5g}, T={T:.5g}, A1={A1:.5g}, A2={A2:.5g}, R={R:.5g}, C={C:.5g}, D={D:.5g}, E={E:.5g}"
+                # )
+                print(
+                    f"     - derivatives: d_phi_E={d_phi_Einstein:.5g}, d_pi_E={d_pi_Einstein:.5g}, d_log_rhorad_E={d_log_rhorad_Einstein:.5g}, d_log_fm={d_log_fm:.5g}, d_log_T_J={d_log_T_Jordan:.5g}"
+                )
+                print(f"     - thermodynamics: G_s={G_s:.5g}, dG_s={dG_s_dlogT:.5g}")
+                print(f"     - state={state}")
+                print(f"     - return_state={return_state}")
+                raise ComputationFailureError(
+                    f"compute_scalar_model ({self.task_label}): output from ODE RHS has infinity or NaN values"
+                )
+
+            supervisor.notify_new_RHS(return_state)
+
+            return return_state
 
 
 @ray.remote
@@ -200,206 +480,8 @@ def compute_scalar_model(
     #     f"    - log_rho_r_Jordan_init = {log_rhorad_Jordan_init:.5g}, log_rho_r_Einstein_init = {log_rhorad_Einstein_init:.5g}"
     # )
 
-    CONST_MP_SQ = units.PlanckMass * units.PlanckMass
-    CONST_3_MP_SQ = 2.0 * CONST_MP_SQ
-    CONST_6_MP_SQ = 6.0 * CONST_MP_SQ
-
-    def RHS_impl(N: float, state: StateVector):
-        if any((isnan(x) or isinf(x)) for x in state):
-            msg = f"!! compute_scalar_model ({task_label}): input to ODE RHS has infinity or NaN values at N={N:.8g}"
-            print(msg)
-            print(f"     - state={state}")
-            raise ComputationFailureError(msg)
-
-        phi_Einstein: float = state.phi_Einstein
-        pi_Einstein: float = state.pi_Einstein
-        log_rhorad_Einstein: float = state.log_rhorad_Einstein
-        log_fm: float = state.log_fm
-        log_T_Jordan: float = state.log_T_Jordan
-
-        try:
-            fm: float = exp(log_fm)
-        except OverflowError as e:
-            msg = f"!! compute_scalar_model ({task_label}): math overflow in exp(log_fm), log_fm = {log_fm:.5g} | N = {N:.5g}, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp, pi_Einstein = {pi_Einstein / units.PlanckMass:.5g} Mp"
-            print(msg)
-            raise ComputationFailureError(msg)
-
-        try:
-            T_Jordan: float = exp(log_T_Jordan)
-        except OverflowError as e:
-            msg = f"!! compute_scalar_model ({task_label}): math overflow in exp(log_T_Jordan), log_T_Jordan = {log_T_Jordan:.5g} | N = {N:.5g}, f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp, pi_Einstein = {pi_Einstein / units.PlanckMass:.5g} Mp"
-            print(msg)
-            raise ComputationFailureError(msg)
-
-        if T_Jordan <= 0.0:
-            msg = f"!! compute_scalar_model ({task_label}): T_Jordan = {T_Jordan:.5g}, log_T_Jordan = {log_T_Jordan:.5g} at N={N:.8g}"
-            print(msg)
-            T_Jordan = 1 * units.Kelvin
-
-        d_logOmega_dphi: float = coupling.d_logOmega_dphi(phi_Einstein)
-
-        G: float = 1.0 - pi_Einstein * pi_Einstein / CONST_6_MP_SQ
-        # G must be positive in order the H_Einstein^2 is also positive
-        if G < 0.0:
-            msg = f"!! compute_scalar_model ({task_label}): negative value of G = {G:.5g} detected at N={N:.8g} | f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp, pi_Einstein = {pi_Einstein / units.PlanckMass:.5g} Mp, log(rho_rad/GeV^4) = {log_rhorad_Einstein - 4.0*log(units.GeV):.5g}, T_Jordan = {T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K"
-            print(msg)
-            raise ComputationFailureError(msg)
-
-        Sigma: float = 1.0 - 3.0 * cosmology.w(T_Jordan)
-
-        R: float
-        if fm > 10.0:
-            R = (1.0 + Sigma / fm) / (1.0 + 1.0 / fm)
-        else:
-            R = (Sigma + fm) / (1.0 + fm)
-        A1: float = 1.0 + R / 2.0
-        A2: float = 4.0 - R
-
-        log_V: float = potential.log_V(phi_Einstein)
-
-        if isinf(log_V):
-            if log_V < 0.0:
-                # in this case V = 0, so we should work out the Hubble rate without using it
-                rho_rad: float = exp(log_rhorad_Einstein)
-                ThreeH2Mp2: float = rho_rad * (1.0 + fm) / G
-
-                V_over_3H2Mp2: float = 0.0
-
-                dV_dphi: float = potential.dV_dphi(phi_Einstein)
-                Vprime_over_3H2Mp2: float = dV_dphi / ThreeH2Mp2
-
-            else:
-                msg = f"!! compute_scalar_model ({task_label}): log_V=+inf encountered at N={N:.8g} | f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp, pi_Einstein = {pi_Einstein / units.PlanckMass:.5g} Mp, T_Jordan = {T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K"
-                raise ComputationFailureError(msg)
-
-        else:
-            log_rhorad_over_V: float = log_rhorad_Einstein - log_V
-            T: float
-            if log_rhorad_over_V > 2.0:
-                V_over_rhorad: float = exp(-log_rhorad_over_V)
-                T = V_over_rhorad / (V_over_rhorad + 1.0 + fm)
-            else:
-                rhorad_over_V: float = exp(log_rhorad_over_V)
-                T = 1.0 / (1.0 + rhorad_over_V * (1.0 + fm))
-
-            V_over_3H2Mp2: float = G * T
-
-            d_logV_dphi: float = potential.d_logV_dphi(phi_Einstein)
-            Vprime_over_3H2Mp2: float = G * d_logV_dphi * T
-
-        C: float = V_over_3H2Mp2 / 2.0
-        D: float = CONST_3_MP_SQ * Vprime_over_3H2Mp2
-        E: float = G - V_over_3H2Mp2
-        # must be positive, because it is proportional to rho_R/H^2
-        if E < 0.0:
-            msg = f"!! compute_scalar_model ({task_label}): negative value of E = {E:.5g} detected at N={N:.8g} | f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp, pi_Einstein = {pi_Einstein / units.PlanckMass:.5g} Mp, log(rho_rad/GeV^4) = {log_rhorad_Einstein - 4.0*log(units.GeV):.5g}, T_Jordan = {T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K, G = {G:.5g}, T = {T:.5g}"
-            raise ComputationFailureError(msg)
-
-        friction_term = -pi_Einstein * (G * A1 + C * A2)
-        reflecting_term = -D
-        kicking_term = -CONST_3_MP_SQ * E * d_logOmega_dphi * R
-        return ODE_data(
-            fm=fm,
-            T_Jordan=T_Jordan,
-            Sigma=Sigma,
-            log_V=log_V,
-            V_over_3H2Mp2=V_over_3H2Mp2,
-            Vprime_over_3H2Mp2=Vprime_over_3H2Mp2,
-            d_logOmega_dphi=d_logOmega_dphi,
-            friction_term=friction_term,
-            reflecting_term=reflecting_term,
-            kicking_term=kicking_term,
-        )
-
-    def RHS(N, s, supervisor) -> StateVector:
-        with RHS_timer(supervisor) as timer:
-            state: StateVector = StateVector._make(s)
-            data: ODE_data = RHS_impl(N, state)
-
-            phi_Einstein: float = state.phi_Einstein
-            pi_Einstein: float = state.pi_Einstein
-            log_rhorad_Einstein: float = state.log_rhorad_Einstein
-
-            fm: float = data.fm
-            T_Jordan: float = data.T_Jordan
-
-            if supervisor.notify_available:
-                supervisor.message(
-                    T_Jordan,
-                    f"current state: N={N:.5g}, f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / units.PlanckMass:.5g} Mp, pi_Einstein = {pi_Einstein / units.PlanckMass:.5g} Mp, log(rho_rad/GeV^4) = {log_rhorad_Einstein - 4.0*log(units.GeV):.5g}, T_Jordan = {T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K",
-                )
-                supervisor.reset_notify_time(T_Jordan)
-
-            d_phi_Einstein: float = pi_Einstein
-            d_pi_Einstein: float = (
-                data.friction_term + data.reflecting_term + data.kicking_term
-            )
-
-            d_log_rhorad_Einstein: float = (
-                data.Sigma - 4.0 + data.Sigma * data.d_logOmega_dphi * pi_Einstein
-            )
-            d_log_fm: float = (1.0 - data.Sigma) * (
-                1.0 + data.d_logOmega_dphi * pi_Einstein
-            )
-
-            G_s: float = cosmology.G_s(T_Jordan)
-            dG_s_dlogT: float = cosmology.dG_s_dlogT(T_Jordan)
-
-            d_log_T_Jordan: float = -(1.0 + data.d_logOmega_dphi * pi_Einstein) / (
-                1.0 + dG_s_dlogT / G_s / 3.0
-            )
-
-            return_state = StateVector(
-                phi_Einstein=d_phi_Einstein,
-                pi_Einstein=d_pi_Einstein,
-                log_rhorad_Einstein=d_log_rhorad_Einstein,
-                log_fm=d_log_fm,
-                log_T_Jordan=d_log_T_Jordan,
-            )
-
-            if any((isnan(x) or isinf(x)) for x in return_state):
-                log_fm: float = state.log_fm
-                log_T_Jordan: float = state.log_T_Jordan
-
-                Sigma: float = data.Sigma
-
-                log_V: float = data.log_V
-                d_logV_dphi: float = data.d_logV_dphi
-
-                V_over_3H2Mp2: float = data.V_over_3H2Mp2
-                Vprime_over_3H2Mp2: float = data.Vprime_over_3H2Mp2
-
-                print(
-                    f"!! compute_scalar_model ({task_label}): output from ODE RHS has infinity or NaN values at N={N:.8g}"
-                )
-                print(
-                    f"     - inputs/states: phi_E={phi_Einstein/units.PlanckMass:.5g} Mp, pi_E={pi_Einstein/units.PlanckMass:.5g} Mp, log_rhorad_E={log_rhorad_Einstein:.5g}, log_fm={log_fm:.5g}, log_T_J={log_T_Jordan:.5g}"
-                )
-                print(
-                    f"     - physical: log(rhorad_E/GeV^4)={log_rhorad_Einstein - 4.0*log(units.GeV):.5g}, fm={fm:.5g}, T_J={T_Jordan/units.GeV:.5g} GeV = {T_Jordan/units.Kelvin:.5g} K"
-                )
-                print(
-                    f"     - potential: log(V/GeV^4)={log_V - 4.0*log(units.GeV):.5g}, V'/V={d_logV_dphi*units.GeV:.5g} GeV^(-1), d_logOmega_dphi'={data.d_logOmega_dphi:.5g}"
-                )
-                print(
-                    f"     - cosmology: V/3H2Mp2={V_over_3H2Mp2:.5g}, V'/3H2Mp2={Vprime_over_3H2Mp2:.5g}, Sigma={Sigma:.5g}"
-                )
-                # print(
-                #     f"     - intermediates: G={G:.5g}, T={T:.5g}, A1={A1:.5g}, A2={A2:.5g}, R={R:.5g}, C={C:.5g}, D={D:.5g}, E={E:.5g}"
-                # )
-                print(
-                    f"     - derivatives: d_phi_E={d_phi_Einstein:.5g}, d_pi_E={d_pi_Einstein:.5g}, d_log_rhorad_E={d_log_rhorad_Einstein:.5g}, d_log_fm={d_log_fm:.5g}, d_log_T_J={d_log_T_Jordan:.5g}"
-                )
-                print(f"     - thermodynamics: G_s={G_s:.5g}, dG_s={dG_s_dlogT:.5g}")
-                print(f"     - state={state}")
-                print(f"     - return_state={return_state}")
-                raise ComputationFailureError(
-                    f"compute_scalar_model ({task_label}): output from ODE RHS has infinity or NaN values"
-                )
-
-            supervisor.notify_new_RHS(return_state)
-
-            return return_state
+    policy = ODEPolicy(task_label, cosmology, potential, coupling)
+    RHS = ODERHS(task_label, policy)
 
     # termination occurs when the Jordan frame temperature hits T_Jordan_stop, usually equal to T_CMB,
     # so the actual stop value given in t_span is mostly irrelevant, just
@@ -742,6 +824,8 @@ def compute_scalar_model(
 
     num_fragments = len(solution_fragments)
     current_fragment = solution_fragments.pop(0)
+
+    hubble: HubblePolicy = HubblePolicy(coupling, units)
     for z in z_grid_cut:
         z: redshift
         N_backward = log(1.0 + z.z)
@@ -757,33 +841,13 @@ def compute_scalar_model(
             )
 
         state: StateVector = StateVector._make(current_fragment.sol(N_forward))
-        data: ODE_data = RHS_impl(N_forward, state)
+        data: ODEPolicyData = policy(N_forward, state)
+        hubble_data: HubblePolicyData = hubble(data, state)
 
         T_Jordan: float = data.T_Jordan
 
-        if data.V_over_3H2Mp2 > 0.0:
-            log_V_over_3H2Mp2: float = log(data.V_over_3H2Mp2)
-            log_3H2Mp2: float = -1.0 * (log_V_over_3H2Mp2 - data.log_V)
-            H2_Einstein: float = exp(log_3H2Mp2) / CONST_3_MP_SQ
-        else:
-            rho_rad: float = exp(state.log_rhorad_Einstein)
-            fm: float = exp(state.log_fm)
-            pi_Einstein: float = state.pi_Einstein
-            G: float = 1.0 - pi_Einstein * pi_Einstein / CONST_6_MP_SQ
-            ThreeH2Mp2: float = rho_rad * (1.0 + fm) / G
-            H2_Einstein: float = ThreeH2Mp2 / CONST_3_MP_SQ
-
-        H_Einstein: float = sqrt(H2_Einstein)
-
         log_Omega: float = coupling.log_Omega(state.phi_Einstein)
         log_rhorad_Jordan: float = state.log_rhorad_Einstein - 4.0 * log_Omega
-
-        Omega: float = coupling.Omega(state.phi_Einstein)
-
-        # H_Jordan can even be negative, so there is no use trying to store its logarithm
-        H_Jordan: float = (
-            H_Einstein * (1.0 + data.d_logOmega_dphi * state.pi_Einstein) / Omega
-        )
 
         sample.append(
             SampleValues(
@@ -794,8 +858,8 @@ def compute_scalar_model(
                 log_rhorad_Jordan=log_rhorad_Jordan,
                 log_fm=state.log_fm,
                 log_T_Jordan=state.log_T_Jordan,
-                H_Einstein=H_Einstein,
-                H_Jordan=H_Jordan,
+                H_Einstein=hubble_data.H_Einstein,
+                H_Jordan=hubble_data.H_Jordan,
                 gstar_rho=cosmology.G_rho(T_Jordan),
                 gstar_s=cosmology.G_s(T_Jordan),
                 dgstar_rho_dlogT=cosmology.dG_rho_dlogT(T_Jordan),

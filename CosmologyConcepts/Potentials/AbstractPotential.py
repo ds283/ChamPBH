@@ -15,7 +15,6 @@
 
 from abc import ABC, abstractmethod
 
-from CosmologyConcepts import FieldLike
 from Datastore import DatastoreObject
 
 
@@ -58,29 +57,7 @@ class AbstractPotential(DatastoreObject, ABC):
     def hard_reflection_point(self) -> float:
         raise NotImplementedError
 
-    @abstractmethod
-    def log_V(self, phi: FieldLike) -> float:
-        """
-        Evaluate the potential at a given value of phi
-        :param phi:
-        :return:
-        """
-        raise NotImplementedError
-
-    @abstractmethod
-    def d_logV_dphi(self, phi: FieldLike) -> float:
-        """
-        Evaluate the logarithmic derivative of the potential at a given value of phi
-        :param phi:
-        :return:
-        """
-        raise NotImplementedError
-
-    @abstractmethod
-    def d2_logV_dphi2(self, phi: FieldLike) -> float:
-        """
-        Evaluate the second logarithmic derivative of the potential at a given value of phi
-        :param phi:
-        :return:
-        """
-        raise NotImplementedError
+    # in addition, each potential should implement functions
+    # log_V(), d_logV_dphi(), and d2_logV_dphi2()
+    # or V(), d_V_dphi(), and d2_V_dphi2()
+    # or both

@@ -1,4 +1,4 @@
-from math import exp, sqrt, fabs
+from math import exp, fabs, log
 from typing import Optional, List, Mapping
 
 import ray
@@ -13,8 +13,95 @@ from MetadataConcepts import store_tag
 from Units.base import UnitsLike
 from config.sharding import ShardKeyType
 from utilities import WallclockTimer
-from .ScalarModel import ScalarModelProxy, ScalarModel, ScalarModelValue
+from .Policies import PotentialDerivativePolicy
+from .ScalarModel import (
+    ScalarModelProxy,
+    ScalarModel,
+    ScalarModelValue,
+)
 from .exceptions import ComputationFailureError
+
+
+class AdiabaticComputePolicy:
+    def __init__(
+        self,
+        task_label: str,
+        cosmology: BaseCosmology,
+        potential: AbstractPotential,
+        coupling: AbstractCoupling,
+    ):
+        self.task_label: str = task_label
+        self.units: UnitsLike = cosmology.units
+
+        self.cosmology: BaseCosmology = cosmology
+        self.potential: AbstractPotential = potential
+        self.coupling: AbstractCoupling = coupling
+
+        self.V_policy: PotentialDerivativePolicy = PotentialDerivativePolicy(
+            task_label, cosmology, potential
+        )
+
+        self.MP = self.units.PlanckMass
+        self.CONST_MP_SQ = self.MP * self.MP
+        self.CONST_3_MP_SQ = 2.0 * self.CONST_MP_SQ
+        self.CONST_6_MP_SQ = 6.0 * self.CONST_MP_SQ
+
+        self.GeV = self.units.GeV
+        self.Kelvin = self.units.Kelvin
+
+    def M2eff_over_H2(
+        self,
+        phi_Einstein: float,
+        pi_Einstein: float,
+        log_rhorad_Einstein: float,
+        Sigma: float,
+        fm: float,
+    ):
+        # compute the effective mass of the chameleon field normalized to H^2
+        #
+        # we have M^2_eff = grad_phi V_eff' - H^2(2 + dot(H)/H^2)
+        # so M^2_eff/H^2 = (grad_phi V_eff')/H^2 - (2 + dot(H)/H^2)
+        #
+        # to get grad_phi V'_eff, we proceed as follows.
+        # We have V'_eff = V' + (d ln Omega / dphi) rho_R* (Sigma + fm)
+        # where * means Einstein frame
+        #
+        # We interpret grad_phi of this to mean
+        # grad_phi V'_eff = V'' + (d2 ln Omega / dphi2) rho_R* (Sigma + fm)
+
+        Vpp_over_3H2Mp2 = self.V_policy.Vprimeprime_over_3H2Mp2(
+            phi_Einstein, pi_Einstein, Sigma, fm
+        )
+        d2_logOmega_dphi2 = self.coupling.d2_logOmega_dphi2(phi_Einstein)
+
+        R: float
+        if fm > 10.0:
+            R = (1.0 + Sigma / fm) / (1.0 + 1.0 / fm)
+        else:
+            R = (Sigma + fm) / (1.0 + fm)
+
+        G: float = 1.0 - pi_Einstein * pi_Einstein / self.CONST_6_MP_SQ
+        if G < 0.0:
+            msg = f"!! AdiabaticComputePolicy ({self.task_label}): negative value of G = {G:.5g} | f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / self.MP:.5g} Mp, pi_Einstein = {pi_Einstein / self.MP:.5g} Mp"
+            print(msg)
+            raise ComputationFailureError(msg)
+
+        self_mass = self.CONST_3_MP_SQ * self.V_policy.V_over_3H2Mp2(
+            phi_Einstein, pi_Einstein, log_rhorad_Einstein, fm
+        )
+
+        E: float = G - Vpp_over_3H2Mp2
+        if E < 0.0:
+            msg = f"!! AdiabaticComputePolicy ({self.task_label}): negative value of E = {E:.5g} | f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / self.MP:.5g} Mp, pi_Einstein = {pi_Einstein / self.MP:.5g} Mp"
+            raise ComputationFailureError(msg)
+
+        conformal_mass: float = self.CONST_3_MP_SQ * E * d2_logOmega_dphi2 * R
+
+        gravitational_mass: float = 1.0 - self.V_policy.Hdot_over_H2_plus_3(
+            phi_Einstein, pi_Einstein, Sigma, Sigma, fm
+        )
+
+        return self_mass + conformal_mass + gravitational_mass
 
 
 @ray.remote
@@ -37,8 +124,12 @@ def compute_adiabatic_values(
 
     z_grid: List[redshift] = []
     raw_N_grid: List[float] = []
-    preQ_samples: List[float] = []
-    dotH_over_H2_samples: List[float] = []
+    M2eff_over_H2_grid: List[float] = []
+    log_abs_M2eff_grid: List[float] = []
+
+    policy: AdiabaticComputePolicy = AdiabaticComputePolicy(
+        task_label, cosmology, potential, coupling
+    )
 
     with WallclockTimer() as timer:
         for value in model.values:
@@ -49,91 +140,32 @@ def compute_adiabatic_values(
 
             phi_Einstein: float = value.phi_Einstein
             pi_Einstein: float = value.pi_Einstein
-
-            T_Jordan: float = exp(value.log_T_Jordan)
-
             Sigma: float = value.Sigma
             fm: float = exp(value.log_fm)
+            log_rhorad_Einstein: float = value.log_rhorad_Einstein
 
-            G: float = 1.0 - pi_Einstein * pi_Einstein / CONST_6_MP_SQ
+            M2eff_over_H2: float = policy.M2eff_over_H2(
+                phi_Einstein, pi_Einstein, log_rhorad_Einstein, Sigma, fm
+            )
+            H2: float = value.H_Einstein * value.H_Einstein
 
-            R: float
-            if fm > 10.0:
-                R = (1.0 + Sigma / fm) / (1.0 + 1.0 / fm)
-            else:
-                R = (Sigma + fm) / (1.0 + fm)
-            A1: float = 1.0 + R / 2.0
-            A2: float = 4.0 - R
+            M2eff_over_H2_grid.append(M2eff_over_H2)
+            log_abs_M2eff_grid.append(log(fabs(H2 * M2eff_over_H2)))
 
-            log_V: float = potential.log_V(phi_Einstein)
-            d_logV_dphi: float = potential.d_logV_dphi(phi_Einstein)
-            d2_logV_dphi2: float = potential.d2_logV_dphi2(phi_Einstein)
-
-            # obtain V''/V
-            Vpp_over_V: float = d2_logV_dphi2 + d_logV_dphi * d_logV_dphi
-            if Vpp_over_V < 0.0:
-                print(
-                    f"!! compute_adiabatic_values ({task_label}): detected undressed tachyon V''/V = {Vpp_over_V:.5g} at N={value.raw_N:.8g}"
-                )
-
-            # obtain d2 ln(Omega) / dphi2
-            d2_logOmega_dphi2: float = coupling.d2_logOmega_dphi2(phi_Einstein)
-
-            log_rhorad_over_V: float = value.log_rhorad_Einstein - log_V
-
-            d_Vpeff_dphi_over_V: float = Vpp_over_V + d2_logOmega_dphi2 * exp(
-                log_rhorad_over_V
-            ) * (value.Sigma + fm)
-
-            T: float
-            if log_rhorad_over_V > 2.0:
-                V_over_rhorad: float = exp(-log_rhorad_over_V)
-                T = V_over_rhorad / (V_over_rhorad + 1.0 + fm)
-            else:
-                rhorad_over_V: float = exp(log_rhorad_over_V)
-                T = 1.0 / (1.0 + rhorad_over_V * (1.0 + fm))
-
-            V_over_3H2Mp2: float = G * T
-            V_over_H2: float = CONST_3_MP_SQ * V_over_3H2Mp2
-            C: float = V_over_3H2Mp2 / 2.0
-
-            dotH_over_H2: float = -3.0 + (G * A1 + C * A2)
-            if dotH_over_H2 > 0.0:
-                msg = f"!! compute_adiabatic_values ({task_label}): detected positive dotH/H^2 = {dotH_over_H2:.5g} at N={value.raw_N:.8g}"
-                raise ComputationFailureError(msg)
-
-            dotH_over_H2_samples.append(dotH_over_H2)
-
-            Q: float = d_Vpeff_dphi_over_V * V_over_H2 - 2.0 - dotH_over_H2
-            # if Q < 0.0:
-            #     print(
-            #         f"!! compute_adiabatic_values ({task_label}): detected negative Q = {Q:.5g} at N={value.raw_N:.8g} | grad_phi(V')/V = {d_Vpeff_dphi_over_V:.5g}, grad_phi(V')/H^2 = {d_Vpeff_dphi_over_V * V_over_H2:.5g}, V''/V = {Vpp_over_V:.5g}, dotH/H^2 = {dotH_over_H2:.5g}, 2+dotH/H^2 = {2.0+dotH_over_H2:.5g}"
-            #     )
-
-            preQ_samples.append(Q)
-
-        preQ_spline = make_interp_spline(raw_N_grid, preQ_samples)
-        preQ_derivative_spline = preQ_spline.derivative()
+        log_abs_M2eff_spline = make_interp_spline(raw_N_grid, log_abs_M2eff_grid)
+        d_log_abs_M2eff_spline = log_abs_M2eff_spline.derivative()
 
         for i, N in enumerate(raw_N_grid):
             for label in labels:
                 kp_over_H: float = labels[label]
                 kp2_over_H2: float = kp_over_H * kp_over_H
 
-                preQ: float = preQ_samples[i]
-                abs_preQ: float = fabs(preQ)
-                dotH_over_H2: float = dotH_over_H2_samples[i]
+                A: float = M2eff_over_H2_grid[i]
+                B: float = M2eff_over_H2_grid[i] + kp2_over_H2
+                B2: float = pow(fabs(B), 3.0 / 2.0)
+                C: float = 1.0 + d_log_abs_M2eff_spline(N) / 2.0
 
-                abs_preQ_12: float = sqrt(fabs(preQ))
-
-                log_preQ_derivative: float = preQ_derivative_spline(N) / preQ
-
-                A: float = 1.0 / abs_preQ_12
-                B: float = 1.0 + dotH_over_H2 + log_preQ_derivative / 2.0
-                C: float = 1.0 + kp2_over_H2 / abs_preQ
-                D: float = pow(C, 3.0 / 2.0)
-
-                abs_Q: float = fabs(B / D / A)
+                abs_Q: float = fabs(A * B / C)
                 abs_Q_samples[label].append(abs_Q)
 
                 if max_abs_Q_values[label] is None or abs_Q > max_abs_Q_values[label]:
