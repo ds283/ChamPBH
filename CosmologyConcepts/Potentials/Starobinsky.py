@@ -53,11 +53,11 @@ class StarobinskyPotential(AbstractPotential):
 
     @property
     def bounce_region_level1_boundary(self) -> float:
-        return -0.5 * self._M_float
+        return -self._M_float
 
     @property
     def bounce_region_level2_boundary(self) -> float:
-        return -self._M_float
+        return -3.0 * self._M_float
 
     @property
     def bounce_region_level1_max_step(self) -> float:
@@ -69,7 +69,7 @@ class StarobinskyPotential(AbstractPotential):
 
     @property
     def hard_reflection_point(self) -> float:
-        return -5.0 * self._M_float
+        return -15.0 * self._M_float
 
     def V(self, phi: FieldLike) -> float:
         """
