@@ -116,8 +116,11 @@ def compute_BBN_data(
                 fm: float = exp(value.log_fm)
                 Sigma: float = value.Sigma
                 log_rhorad_Einstein: float = value.log_rhorad_Einstein
-                dotH_over_H2: float = policy.Hdot_over_H2_plus_3(
-                    phi_Einstein, pi_Einstein, log_rhorad_Einstein, Sigma, fm
+                dotH_over_H2: float = (
+                    policy.Hdot_over_H2_plus_3(
+                        phi_Einstein, pi_Einstein, log_rhorad_Einstein, Sigma, fm
+                    )
+                    - 3.0
                 )
 
                 w: float = (1.0 - Sigma) / 3.0
