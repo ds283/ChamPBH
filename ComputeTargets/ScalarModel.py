@@ -493,6 +493,7 @@ def compute_scalar_model(
     def terminate_at_T_stop(N, s, supervisor) -> float:
         state: StateVector = StateVector._make(s)
 
+        supervisor.event_finder_notify_new_log_T_Jordan(state.log_T_Jordan)
         return state.log_T_Jordan - log_T_stop
 
     terminate_at_T_stop.terminal = True

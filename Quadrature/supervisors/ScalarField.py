@@ -16,7 +16,7 @@
 import time
 from collections import namedtuple
 from datetime import datetime
-from math import log
+from math import log, exp
 from typing import Optional, Dict, List
 
 from CosmologyConcepts import TemperatureLike, GetTemperature
@@ -50,23 +50,30 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
     ):
         super().__init__(notify_interval)
 
-        self._units = units
+        self._units: UnitsLike = units
 
         self._label: str = label
         self._collect_full_statistics: bool = collect_full_statistics
-        self._max_step_size = max_step_size
+        self._max_step_size: float = max_step_size
 
-        self._T_init = GetTemperature(T_init)
-        self._T_stop = GetTemperature(T_stop)
+        self._T_init: float = GetTemperature(T_init)
+        self._T_stop: float = GetTemperature(T_stop)
+        self._log_T_stop: float = log(self._T_stop)
 
-        self._T_stop_GeV = self._T_stop / units.GeV
-        self._T_stop_Kelvin = self._T_stop / units.Kelvin
+        self._T_stop_GeV: float = self._T_stop / units.GeV
+        self._T_stop_Kelvin: float = self._T_stop / units.Kelvin
 
-        self._log_T_init_GeV = log(self._T_init / units.GeV)
-        self._log_T_stop_GeV = log(self._T_stop / units.GeV)
-        self._log_T_GeV_range = self._log_T_init_GeV - self._log_T_stop_GeV
+        self._log_T_init_GeV: float = log(self._T_init / units.GeV)
+        self._log_T_stop_GeV: float = log(self._T_stop / units.GeV)
+        self._log_T_GeV_range: float = self._log_T_init_GeV - self._log_T_stop_GeV
 
         self._last_log_T_GeV: Optional[float] = None
+
+        ## TRACK EVOLVING STATE VARIABLES REPORTED BY EVENT FINDERS
+
+        self._event_finder_last_log_T_Jordan: Optional[float] = None
+
+        ## TRACK REFLECTION EVENTS AND LEVEL 1/2 REGIONS
 
         # track when we impose a "manual" hard reflection - this happens when we detect phi_E crossing zero
         self._hard_reflection_data = {"all": [], "new": []}
@@ -79,11 +86,10 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
             "exit": {"all": [], "new": []},
         }
 
-        self._in_level_1 = False
-        self._in_level_2 = False
+        self._in_level_1: bool = False
+        self._in_level_2: bool = False
 
-        self._GeV = units.GeV
-        self._Kelvin = units.Kelvin
+        ## TRACK STATISTICS OF RHS REPORTS
 
         self._largest_RHS_values: StateVector = StateVector(
             None, None, None, None, None
@@ -92,6 +98,11 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
             None, None, None, None, None
         )
         self._total_RHS_values: StateVector = StateVector(0.0, 0.0, 0.0, 0.0, 0.0)
+
+        ## UNITS CONVERSIONS
+
+        self._GeV = units.GeV
+        self._Kelvin = units.Kelvin
 
     def __enter__(self):
         super().__enter__()
@@ -381,3 +392,18 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
             log_fm=(self._total_RHS_values.log_fm + log_fm_float),
             log_T_Jordan=(self._total_RHS_values.log_T_Jordan + log_T_Jordan_float),
         )
+
+    def event_finder_notify_new_log_T_Jordan(self, log_T_Jordan: float):
+        if log_T_Jordan < self._log_T_stop:
+            T_Jordan = exp(log_T_Jordan)
+            print(
+                f"!! ScalarFieldIntegrationSupervisor: notified of log_T_Jordan={log_T_Jordan:.5g} (T_Jordan={T_Jordan/self._GeV:.5g} GeV={T_Jordan/self._Kelvin:.5g} K), which is smaller than terminal value log_T_stop={self._log_T_stop:.5g}"
+            )
+
+            if self._event_finder_last_log_T_Jordan is not None:
+                last_T_Jordan = exp(self._event_finder_last_log_T_Jordan)
+                print(
+                    f"   -- NOTE: previously notified value was log_T_Jordan={self._event_finder_last_log_T_Jordan:.5g} (T_Jordan={last_T_Jordan / self._GeV:.5g} GeV={last_T_Jordan / self._Kelvin:.5g} K)"
+                )
+
+        self._event_finder_last_log_T_Jordan = log_T_Jordan
