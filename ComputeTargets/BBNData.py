@@ -11,10 +11,12 @@ from CosmologyConcepts.Potentials import AbstractPotential
 from CosmologyModels import BaseCosmology
 from Datastore import DatastoreObject
 from MetadataConcepts import store_tag
+from Quadrature.supervisors.ScalarField import StateVector
 from Units.base import UnitsLike
 from config.sharding import ShardKeyType
 from utilities import WallclockTimer
-from .ScalarModel import ScalarModelProxy, ScalarModel, ScalarModelValue
+from .Policies import PotentialDerivativePolicy
+from .ScalarModel import ScalarModelProxy, ScalarModel, ScalarModelValue, ODEPolicy
 from .exceptions import ComputationFailureError
 
 SampleValues = namedtuple(
@@ -59,11 +61,6 @@ def compute_BBN_data(
 
     raw_N_grid: List[float] = []
 
-    H_Jordan_grid: List[float] = []
-    H_Einstein_grid: List[float] = []
-    Omega_grid: List[float] = []
-    w_grid: List[float] = []
-    fm_grid: List[float] = []
     log_T_Jordan_grid: List[float] = []
     pressure_NP_grid: List[float] = []
     density_NP_grid: List[float] = []
@@ -82,6 +79,11 @@ def compute_BBN_data(
     MeV4 = MeV2 * MeV2
 
     last_log_T_Jordan_MeV = None
+
+    V_policy: PotentialDerivativePolicy = PotentialDerivativePolicy(
+        task_label, cosmology, potential
+    )
+    ODE_policy: ODEPolicy = ODEPolicy(task_label, cosmology, potential, coupling)
 
     with WallclockTimer() as NP_timer:
         # first, build estimates for the "new physics" density and pressure needed by PRyMordial
@@ -105,50 +107,65 @@ def compute_BBN_data(
                 log_T_Jordan_MeV_grid.append(log_T_Jordan_MeV)
                 last_log_T_Jordan_MeV = log_T_Jordan_MeV
 
-                H_Jordan_grid.append(value.H_Jordan)
-                H_Einstein_grid.append(value.H_Einstein)
-
-                Omega_grid.append(coupling.Omega(value.phi_Einstein))
-
-                fm: float = exp(value.log_fm)
-                Sigma: float = value.Sigma
-
-                w: float = (1.0 - Sigma) / 3.0
-                w_grid.append(w)
-                fm_grid.append(fm)
-
                 rhorad_Jordan: float = exp(value.log_rhorad_Jordan)
                 rhorad_Jordan_grid.append(rhorad_Jordan)
 
-        H_Jordan_spline = _make_spline(raw_N_grid, H_Jordan_grid)
-        d_H_Jordan_spline = H_Jordan_spline.derivative()
+                H2_Jordan: float = value.H_Jordan * value.H_Jordan
 
-        for i in range(0, len(z_grid)):
-            raw_N: float = raw_N_grid[i]
-            H_Jordan: float = H_Jordan_grid[i]
-            H_Einstein: float = H_Einstein_grid[i]
-            rhorad_Jordan: float = rhorad_Jordan_grid[i]
-            Omega: float = Omega_grid[i]
-            fm: float = fm_grid[i]
-            w: float = w_grid[i]
+                Sigma: float = value.Sigma
+                fm: float = exp(value.log_fm)
+                w: float = (1.0 - Sigma) / 3.0
 
-            H2_Jordan: float = H_Jordan * H_Jordan
+                LHS: float = H2_Jordan * CONST_3_MP_SQ
+                density_NP: float = LHS - rhorad_Jordan * (1.0 + fm)
 
-            LHS: float = H2_Jordan * CONST_3_MP_SQ
-            density_NP: float = LHS - rhorad_Jordan * (1.0 + fm)
+                density_NP_grid.append(density_NP)
+                density_NP_MeV4_grid.append(density_NP / MeV4)
 
-            density_NP_grid.append(density_NP)
-            density_NP_MeV4_grid.append(density_NP / MeV4)
+                HEdot_over_HE2: float = (
+                    V_policy.Hdot_over_H2_plus_3(
+                        value.phi_Einstein,
+                        value.pi_Einstein,
+                        value.log_rhorad_Einstein,
+                        Sigma,
+                        fm,
+                    )
+                    - 3.0
+                )
+                log_Omega_prime: float = coupling.d_logOmega_dphi(value.phi_Einstein)
+                log_Omega_primeprime: float = coupling.d2_logOmega_dphi2(
+                    value.phi_Einstein
+                )
 
-            dotHJ_over_HJ2_normalize: float = (H_Einstein / H_Jordan) / H_Jordan / Omega
-            dotHJ_over_HJ2: float = dotHJ_over_HJ2_normalize * d_H_Jordan_spline(raw_N)
+                A1: float = 1.0 + log_Omega_prime * value.pi_Einstein
 
-            pressure_BP: float = (
-                -LHS * (1.0 + 2.0 * dotHJ_over_HJ2 / 3.0) - w * rhorad_Jordan
-            )
+                state: StateVector = StateVector(
+                    phi_Einstein=value.phi_Einstein,
+                    pi_Einstein=value.pi_Einstein,
+                    log_rhorad_Einstein=value.log_rhorad_Einstein,
+                    log_fm=value.log_fm,
+                    log_T_Jordan=value.log_T_Jordan,
+                )
+                data = ODE_policy(value.raw_N, state)
+                pi_Einstein_prime: float = (
+                    data.friction_term + data.reflecting_term + data.kicking_term
+                )
 
-            pressure_NP_grid.append(pressure_BP)
-            pressure_NP_MeV4_grid.append(pressure_BP / MeV4)
+                HJdot_over_HJ2: float = (
+                    HEdot_over_HE2 - log_Omega_prime * value.pi_Einstein
+                ) / A1 + (
+                    log_Omega_primeprime * value.pi_Einstein
+                    + log_Omega_prime * pi_Einstein_prime
+                ) / (
+                    A1 * A1
+                )
+
+                pressure_NP: float = (
+                    -LHS * (1.0 + 2.0 * HJdot_over_HJ2 / 3.0) - w * rhorad_Jordan
+                )
+
+                pressure_NP_grid.append(pressure_NP)
+                pressure_NP_MeV4_grid.append(pressure_NP / MeV4)
 
         density_NP_MeV4_spline = _make_spline(
             log_T_Jordan_MeV_grid,
