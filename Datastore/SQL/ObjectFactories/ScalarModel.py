@@ -290,7 +290,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
         # if the failure flag is not set
         if (
             row_data is not None
-            and row_data.failure is not False
+            and not row_data.failure
             and row_data.solver_label is None
         ):
             raise RuntimeError(f"ScalarModel {label} has no solver label")
