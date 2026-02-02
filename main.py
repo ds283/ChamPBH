@@ -285,7 +285,7 @@ def run_pipeline(
         Potential_array,
         Coupling_array,
     )
-    solver_work_batches = list(grouper(model_sample_grid, n=25, incomplete="fill"))
+    solver_work_batches = list(grouper(model_sample_grid, n=8, incomplete="fill"))
 
     def build_solver_batch(batch: List[Tuple[AbstractPotential, AbstractCoupling]]):
         # grouper may fill with None values, which we want to strip out
@@ -422,9 +422,9 @@ def run_pipeline(
         label_builder=build_solver_batch_label,
         title="CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID",
         store_results=False,
-        create_batch_size=3,
-        notify_batch_size=3,
-        max_task_queue=3,
+        create_batch_size=2,
+        notify_batch_size=2,
+        max_task_queue=2,
         process_batch_size=1,
         notify_min_time_interval=MIN_NOTIFY_INTERVAL,
     )
@@ -437,7 +437,7 @@ def run_pipeline(
         Coupling_array,
     )
     adiabatic_work_batches = list(
-        grouper(adiabatic_sample_grid, n=20, incomplete="fill")
+        grouper(adiabatic_sample_grid, n=8, incomplete="fill")
     )
 
     def build_adiabatic_batch(batch: List[Tuple[AbstractPotential, AbstractCoupling]]):
@@ -681,9 +681,9 @@ def run_pipeline(
         label_builder=build_adiabatic_batch_label,
         title="CALCULATE ADIABATIC TRANSGRESSION PARAMETERS",
         store_results=False,
-        create_batch_size=3,
-        notify_batch_size=3,
-        max_task_queue=3,
+        create_batch_size=2,
+        notify_batch_size=2,
+        max_task_queue=2,
         process_batch_size=1,
         notify_min_time_interval=MIN_NOTIFY_INTERVAL,
     )
@@ -696,7 +696,7 @@ def run_pipeline(
         Coupling_array,
     )
 
-    bbn_data_work_batches = list(grouper(BBN_sample_grid, n=25, incomplete="fill"))
+    bbn_data_work_batches = list(grouper(BBN_sample_grid, n=8, incomplete="fill"))
 
     def build_bbn_data_batch(batch: List[Tuple[AbstractPotential, AbstractCoupling]]):
         # grouper may fill with None values which must be filtered out
@@ -939,9 +939,9 @@ def run_pipeline(
         label_builder=build_bbn_data_batch_label,
         title="CALCULATE BBN DATA",
         store_results=False,
-        create_batch_size=3,
-        notify_batch_size=3,
-        max_task_queue=3,
+        create_batch_size=2,
+        notify_batch_size=2,
+        max_task_queue=2,
         process_batch_size=1,
         notify_min_time_interval=MIN_NOTIFY_INTERVAL,
     )
