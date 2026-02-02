@@ -17,9 +17,9 @@ import argparse
 import itertools
 import sys
 from datetime import datetime
-from math import exp, log
+from math import exp, log, sqrt
 from pathlib import Path
-from typing import List, Union
+from typing import List, Union, Dict
 
 import pandas as pd
 import ray
@@ -408,6 +408,7 @@ def Hubble_plot(
     model_label: str,
     _get_x_coord,
     _x_axis_label,
+    H_Standard,
     x_coord: str = "redshift",
 ):
     if x_coord not in ["redshift", "efolds"]:
@@ -433,6 +434,11 @@ def Hubble_plot(
         for value in values
     ]
 
+    abs_H_standard_points = [
+        (_get_x_coord(value), safe_fabs(H_Standard(value) / units.GeV))
+        for value in values
+    ]
+
     positive_abs_H_Einstein_x, positive_abs_H_Einstein_y = zip(
         *positive_abs_H_Einstein_points
     )
@@ -445,6 +451,8 @@ def Hubble_plot(
     negative_abs_H_Jordan_x, negative_abs_H_Jordan_y = zip(
         *negative_abs_H_Jordan_points
     )
+    abs_H_standard_x, abs_H_standard_y = zip(*abs_H_standard_points)
+
     fig = plt.figure()
     fig.set_size_inches(8.0, 5.0)
     H_ax = fig.gca()
@@ -474,6 +482,13 @@ def Hubble_plot(
         negative_abs_H_Jordan_y,
         color="g",
         linestyle="dashed",
+    )
+    H_ax.plot(
+        abs_H_standard_x,
+        abs_H_standard_y,
+        label=r"$H_{\mathrm{standard}}$ [GeV]",
+        color="r",
+        linestyle="solid",
     )
 
     if x_coord == "redshift":
@@ -791,7 +806,7 @@ def ODE_terms_plot(
 
 
 def BBN_era_plot(
-    plot_path, model: ScalarModel, model_label: str, T_Jordan_MeV, SigmaFm
+    plot_path, model: ScalarModel, model_label: str, T_Jordan_MeV, SigmaFm, H_Standard
 ):
     values = model.values
     units: UnitsLike = model._units
@@ -818,6 +833,11 @@ def BBN_era_plot(
     ]
     negative_abs_H_Jordan_BBN = [
         (T_Jordan_MeV(value), safe_fabs_negative(value.H_Jordan / units.GeV))
+        for value in values
+        if is_in_BBN_era(value)
+    ]
+    abs_H_Standard_BBN = [
+        (T_Jordan_MeV(value), safe_fabs(H_Standard(value) / units.GeV))
         for value in values
         if is_in_BBN_era(value)
     ]
@@ -881,6 +901,7 @@ def BBN_era_plot(
     negative_abs_H_Jordan_BBN_x, negative_abs_H_Jordan_BBN_y = zip(
         *negative_abs_H_Jordan_BBN
     )
+    abs_H_Standard_BBN_x, abs_H_Standard_BBN_y = zip(*abs_H_Standard_BBN)
     positive_Sigma_BBN_x, positive_Sigma_BBN_y = zip(*positive_Sigma_BBN)
     negative_Sigma_BBN_x, negative_Sigma_BBN_y = zip(*negative_Sigma_BBN)
     positive_SigmaFm_BBN_x, positive_SigmaFm_BBN_y = zip(*positive_SigmaFm_BBN)
@@ -930,6 +951,13 @@ def BBN_era_plot(
         negative_abs_H_Jordan_BBN_y,
         color="g",
         linestyle="dashed",
+    )
+    HJordan_BBN_ax.plot(
+        abs_H_Standard_BBN_x,
+        abs_H_Standard_BBN_y,
+        label=r"$H_{\text{standard}}$ [GeV]",
+        color="b",
+        linestyle="solid",
     )
     HJordan_BBN_ax.set_yscale("log")
     HJordan_BBN_ax.grid(True)
@@ -1012,12 +1040,35 @@ def BBN_era_plot(
 
 
 def BBN_era_NP_plot(
-    plot_path, model: ScalarModel, BBN: BBNData, model_label: str, T_Jordan_MeV
+    plot_path,
+    model: ScalarModel,
+    BBN: BBNData,
+    model_label: str,
+    T_Jordan_MeV,
+    H_Standard,
 ):
     units: UnitsLike = model._units
 
     if not BBN.available:
         return
+
+    # can assume model is available
+    assert model.available
+    assert not model.failure
+
+    # pair up BBNDataValue instances with corresponding ScalarModelValue instances
+    model_values: List[ScalarModelValue] = model.values
+    num_model_values: int = len(model_values)
+    current_model_index: int = 0
+
+    BBN_value_partners: Dict[int, ScalarModelValue] = {}
+    for BBN_value in BBN.values:
+        while model_values[current_model_index].z.store_id != BBN_value.z.store_id:
+            current_model_index += 1
+            if current_model_index >= num_model_values:
+                raise IndexError("Could not match BBN values to model values")
+
+        BBN_value_partners[BBN_value.store_id] = model_values[current_model_index]
 
     GeV2 = units.GeV * units.GeV
     GeV4 = GeV2 * GeV2
@@ -1066,6 +1117,28 @@ def BBN_era_NP_plot(
         for value in BBN.values
     ]
 
+    positive_abs_H_Jordan_points = [
+        (
+            T_Jordan_MeV(value),
+            safe_fabs_positive(BBN_value_partners[value.store_id].H_Jordan / units.GeV),
+        )
+        for value in BBN.values
+    ]
+    negative_abs_H_Jordan_points = [
+        (
+            T_Jordan_MeV(value),
+            safe_fabs_negative(BBN_value_partners[value.store_id].H_Jordan / units.GeV),
+        )
+        for value in BBN.values
+    ]
+    abs_H_standard_points = [
+        (
+            T_Jordan_MeV(value),
+            safe_fabs(H_Standard(BBN_value_partners[value.store_id]) / units.GeV),
+        )
+        for value in BBN.values
+    ]
+
     positive_abs_density_NP_x, positive_abs_density_NP_y = zip(
         *positive_abs_density_NP_points
     )
@@ -1088,12 +1161,21 @@ def BBN_era_NP_plot(
 
     w_NP_x, w_NP_y = zip(*w_NP_points)
 
+    positive_abs_H_Jordan_x, positive_abs_H_Jordan_y = zip(
+        *positive_abs_H_Jordan_points
+    )
+    negative_abs_H_Jordan_x, negative_abs_H_Jordan_y = zip(
+        *negative_abs_H_Jordan_points
+    )
+    abs_H_standard_x, abs_H_standard_y = zip(*abs_H_standard_points)
+
     fig = plt.figure()
-    fig.set_size_inches(8.0, 10.0)
+    fig.set_size_inches(8.0, 13.0)
 
-    axs = fig.subplots(nrows=3, ncols=1, sharex=True, sharey=False)
+    axs = fig.subplots(nrows=4, ncols=1, sharex=True, sharey=False)
 
-    rhoP_NP_ax = axs[2]
+    rhoP_NP_ax = axs[3]
+    H_ax = axs[2]
     ratio_NP_ax = axs[1]
     w_NP_ax = axs[0]
 
@@ -1107,7 +1189,7 @@ def BBN_era_NP_plot(
     rhoP_NP_ax.plot(
         negative_abs_density_NP_x,
         negative_abs_density_NP_y,
-        color="r",
+        color="b",
         linestyle="dashed",
     )
     rhoP_NP_ax.plot(
@@ -1141,6 +1223,29 @@ def BBN_era_NP_plot(
     )
     ratio_NP_ax.set_yscale("log")
     ratio_NP_ax.grid(True)
+
+    H_ax.plot(
+        positive_abs_H_Jordan_x,
+        positive_abs_H_Jordan_y,
+        label=r"$H_{\text{Jordan}}$ [GeV]",
+        color="g",
+        linestyle="solid",
+    )
+    H_ax.plot(
+        negative_abs_H_Jordan_x,
+        negative_abs_H_Jordan_y,
+        color="g",
+        linestyle="dashed",
+    )
+    H_ax.plot(
+        abs_H_standard_x,
+        abs_H_standard_y,
+        label=r"$H_{\text{standard}}$ [GeV]",
+        color="r",
+        linestyle="solid",
+    )
+    H_ax.set_yscale("log")
+    H_ax.grid(True)
 
     w_NP_ax.axhline(y=1.0 / 3.0, color="r", linestyle="dashed")
     w_NP_ax.axhline(y=-1.0, color="c", linestyle="dashed")
@@ -1177,6 +1282,7 @@ def BBN_era_NP_plot(
 
     rhoP_NP_ax.legend(loc="best")
     ratio_NP_ax.legend(loc="best")
+    H_ax.legend(loc="best")
     w_NP_ax.legend(loc="best")
 
     fig_path = plot_path / "BBN_era_NP.pdf"
@@ -1326,6 +1432,9 @@ def plot_ScalarModel(
     Lambda = potential._Lambda.as_float
 
     units: UnitsLike = model._units
+    CONST_MP: float = units.PlanckMass
+    CONST_MP2: float = CONST_MP * CONST_MP
+    CONST_3_MP2: float = 3.0 * CONST_MP2
 
     base_path = Path(args.output).resolve()
     base_path = base_path / f"{model_label}"
@@ -1379,6 +1488,13 @@ def plot_ScalarModel(
     def T_Jordan_MeV(value: Union[ScalarModelValue, BBNDataValue]) -> float:
         return exp(value.log_T_Jordan) / units.MeV
 
+    def H_Standard(value: ScalarModelValue) -> float:
+        rhorad_Jordan: float = exp(value.log_rhorad_Jordan)
+        fm: float = exp(value.log_fm)
+        H2: float = rhorad_Jordan * (1.0 + fm) / CONST_3_MP2
+        H: float = sqrt(H2)
+        return H
+
     sns.set_theme()
 
     history_plot(
@@ -1388,7 +1504,14 @@ def plot_ScalarModel(
         plot_path, model, model_label, get_x_coord, x_axis_label, x_coord=x_coord
     )
     Hubble_plot(
-        plot_path, model, BBN, model_label, get_x_coord, x_axis_label, x_coord=x_coord
+        plot_path,
+        model,
+        BBN,
+        model_label,
+        get_x_coord,
+        x_axis_label,
+        H_Standard,
+        x_coord=x_coord,
     )
     energy_plot(
         plot_path,
@@ -1410,8 +1533,8 @@ def plot_ScalarModel(
         SigmaFm,
         x_coord=x_coord,
     )
-    BBN_era_plot(plot_path, model, model_label, T_Jordan_MeV, SigmaFm)
-    BBN_era_NP_plot(plot_path, model, BBN, model_label, T_Jordan_MeV)
+    BBN_era_plot(plot_path, model, model_label, T_Jordan_MeV, SigmaFm, H_Standard)
+    BBN_era_NP_plot(plot_path, model, BBN, model_label, T_Jordan_MeV, H_Standard)
 
     write_csv_file(BBN, Q, csv_path, model, units)
 
