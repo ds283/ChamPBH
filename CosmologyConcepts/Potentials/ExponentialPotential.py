@@ -37,12 +37,11 @@ class ExponentialPotential(AbstractPotential):
         self._Lambda: Lambda_value = Lambda
         self._n: int = n
 
-        # pre-evaluated Lambda^4, which we don't need to recompute each time
-        _Lambda_as_float = float(Lambda)
-        self._log_Lambda_4 = 4.0 * log(_Lambda_as_float)
-
         self._M_float = float(M)
         self._Lambda_float = float(Lambda)
+
+        # pre-evaluated Lambda^4, which we don't need to recompute each time
+        self._log_Lambda_4 = 4.0 * log(self._Lambda_float)
 
     @property
     def name(self):
@@ -109,6 +108,7 @@ class ExponentialPotential(AbstractPotential):
         #     return inf
 
         arg: float = pow(self._M_float / phi_float, self._n)
+
         try:
             return -self._n * arg / phi
         except OverflowError as e:
@@ -131,6 +131,7 @@ class ExponentialPotential(AbstractPotential):
         phi_float = GetFieldValue(phi)
 
         arg: float = pow(self._M_float / phi_float, self._n)
+
         try:
             return self._n * (self._n + 1) * arg / (phi * phi)
         except OverflowError as e:

@@ -114,12 +114,12 @@ class StarobinskyPotential(AbstractPotential):
 
         except OverflowError as e:
             print(
-                f"! Overflow in StarobinskyPotential V' at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, M/phi = {arg:.5g}"
+                f"! Overflow in StarobinskyPotential V' at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
             )
             raise e
         except ValueError as e:
             print(
-                f"!! ValueError in StarobinskyPotential V'' at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, M/phi = {arg:.5g}"
+                f"!! ValueError in StarobinskyPotential V'' at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
             )
             raise e
 
@@ -142,11 +142,11 @@ class StarobinskyPotential(AbstractPotential):
 
         except OverflowError as e:
             print(
-                f"! Overflow in StarobinskyPotential V'' at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, M/phi = {arg:.5g}"
+                f"! Overflow in StarobinskyPotential V'' at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
             )
             raise e
         except ValueError as e:
             print(
-                f"!! ValueError in StarobinskyPotential V'' at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, M/phi = {arg:.5g}"
+                f"!! ValueError in StarobinskyPotential V'' at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
             )
             raise e
