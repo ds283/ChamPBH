@@ -424,8 +424,8 @@ def run_pipeline(
         store_results=False,
         create_batch_size=2,
         notify_batch_size=2,
-        max_task_queue=2,
-        process_batch_size=1,
+        max_task_queue=24,
+        process_batch_size=3,
         notify_min_time_interval=MIN_NOTIFY_INTERVAL,
     )
     solver_queue.run()
@@ -683,8 +683,8 @@ def run_pipeline(
         store_results=False,
         create_batch_size=2,
         notify_batch_size=2,
-        max_task_queue=2,
-        process_batch_size=1,
+        max_task_queue=24,
+        process_batch_size=3,
         notify_min_time_interval=MIN_NOTIFY_INTERVAL,
     )
     adiabatic_queue.run()
@@ -941,8 +941,8 @@ def run_pipeline(
         store_results=False,
         create_batch_size=2,
         notify_batch_size=2,
-        max_task_queue=2,
-        process_batch_size=1,
+        max_task_queue=24,
+        process_batch_size=3,
         notify_min_time_interval=MIN_NOTIFY_INTERVAL,
     )
     bbn_data_queue.run()
