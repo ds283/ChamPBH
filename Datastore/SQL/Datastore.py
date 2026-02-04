@@ -59,6 +59,9 @@ from Datastore.SQL.ObjectFactories.InversePowerPotential import (
     sqla_InversePowerPotential_factory,
 )
 from Datastore.SQL.ObjectFactories.QCD_Cosmology import sqla_QCDCosmology_factory
+from Datastore.SQL.ObjectFactories.ReclinerPotential import (
+    sqla_ReclinerPotential_factory,
+)
 from Datastore.SQL.ObjectFactories.ReflectingPotential import (
     sqla_ReflectingPotential_factory,
 )
@@ -101,6 +104,7 @@ _factories = {
     "InversePowerPotential": sqla_InversePowerPotential_factory(),
     "StarobinskyPotential": sqla_StarobinskyPotential_factory(),
     "ExponentialPotential": sqla_ExponentialPotential_factory(),
+    "ReclinerPotential": sqla_ReclinerPotential_factory(),
     "ReflectingPotential": sqla_ReflectingPotential_factory(),
     "ExponentialCoupling": sqla_ExponentialCoupling_factory(),
     "QCD_Cosmology": sqla_QCDCosmology_factory(),
