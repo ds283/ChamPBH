@@ -1,5 +1,5 @@
 from collections import namedtuple
-from math import exp, log
+from math import exp, log, asinh, sinh, sqrt
 from typing import Optional, List
 
 import ray
@@ -68,8 +68,8 @@ def compute_BBN_data(
 
     # PRyMordial expects energies to be in units of MeV
     log_T_Jordan_MeV_grid: List[float] = []
-    pressure_NP_MeV4_grid: List[float] = []
-    density_NP_MeV4_grid: List[float] = []
+    arcsinh_pressure_NP_MeV4_grid: List[float] = []
+    arcsinh_density_NP_MeV4_grid: List[float] = []
 
     T_BBN_spline_max = T_BBN_MeV_spline_max * units.MeV
     T_BBN_spline_min = T_BBN_keV_spline_min * units.keV
@@ -120,7 +120,7 @@ def compute_BBN_data(
                 density_NP: float = LHS - rhorad_Jordan * (1.0 + fm)
 
                 density_NP_grid.append(density_NP)
-                density_NP_MeV4_grid.append(density_NP / MeV4)
+                arcsinh_density_NP_MeV4_grid.append(asinh(density_NP / MeV4))
 
                 HEdot_over_HE2: float = (
                     V_policy.Hdot_over_H2_plus_3(
@@ -165,17 +165,19 @@ def compute_BBN_data(
                 )
 
                 pressure_NP_grid.append(pressure_NP)
-                pressure_NP_MeV4_grid.append(pressure_NP / MeV4)
+                arcsinh_pressure_NP_MeV4_grid.append(asinh(pressure_NP / MeV4))
 
-        density_NP_MeV4_spline = _make_spline(
+        arcsinh_density_NP_MeV4_spline = _make_spline(
             log_T_Jordan_MeV_grid,
-            density_NP_MeV4_grid,
+            arcsinh_density_NP_MeV4_grid,
         )
-        pressure_NP_MeV4_spline = _make_spline(
+        arcsinh_pressure_NP_MeV4_spline = _make_spline(
             log_T_Jordan_MeV_grid,
-            pressure_NP_MeV4_grid,
+            arcsinh_pressure_NP_MeV4_grid,
         )
-        density_NP_MeV4_derivative_spline = density_NP_MeV4_spline.derivative()
+        arcsinh_density_NP_MeV4_derivative_spline = (
+            arcsinh_density_NP_MeV4_spline.derivative()
+        )
 
     def rho_NP(T_in_MeV: float):
         T = T_in_MeV * units.MeV
@@ -195,7 +197,7 @@ def compute_BBN_data(
             )
 
         log_T_in_MeV = log(T_in_MeV)
-        return density_NP_MeV4_spline(log_T_in_MeV)
+        return sinh(arcsinh_density_NP_MeV4_spline(log_T_in_MeV))
 
     def P_NP(T_in_MeV: float):
         T = T_in_MeV * units.MeV
@@ -215,7 +217,7 @@ def compute_BBN_data(
             )
 
         log_T_in_MeV = log(T_in_MeV)
-        return pressure_NP_MeV4_spline(log_T_in_MeV)
+        return sinh(arcsinh_pressure_NP_MeV4_spline(log_T_in_MeV))
 
     def drho_NP_dT(T_in_MeV: float):
         T = T_in_MeV * units.MeV
@@ -235,7 +237,11 @@ def compute_BBN_data(
             )
 
         log_T_in_MeV = log(T_in_MeV)
-        return density_NP_MeV4_derivative_spline(log_T_in_MeV)
+        rho_T = sinh(arcsinh_density_NP_MeV4_spline(log_T_in_MeV))
+
+        norm_factor = sqrt(1.0 + rho_T * rho_T) / T_in_MeV
+
+        return norm_factor * arcsinh_density_NP_MeV4_derivative_spline(log_T_in_MeV)
 
     with WallclockTimer() as BBN_timer:
         # import locally so that global variable in PRyMini don't leak between threads
