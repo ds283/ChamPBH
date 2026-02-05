@@ -33,10 +33,15 @@ class ReclinerPotential(AbstractPotential):
         self._M: M_value = M
         self._Lambda: Lambda_value = Lambda
 
-        self._M_float = float(M)
-        self._Lambda_float = float(Lambda)
+        self._M_float: float = float(M)
+        self._Lambda_float: float = float(Lambda)
 
-        self._log_Lambda_4 = 4.0 * log(self._Lambda_float)
+        self._log_Lambda_4: float = 4.0 * log(self._Lambda_float)
+
+        self._Lambda_2: float = self._Lambda_float * self._Lambda_float
+        self._Lambda_4: float = self._Lambda_2 * self._Lambda_2
+
+        self._M_2: float = self._M_float * self._M_float
 
     @property
     def name(self):
@@ -48,11 +53,11 @@ class ReclinerPotential(AbstractPotential):
 
     @property
     def bounce_region_level1_boundary(self) -> float:
-        return -10.0 * self._M_float
+        return -0.5 * self._M_float
 
     @property
     def bounce_region_level2_boundary(self) -> float:
-        return -30.0 * self._M_float
+        return -self._M_float
 
     @property
     def bounce_region_level1_max_step(self) -> float:
@@ -60,13 +65,106 @@ class ReclinerPotential(AbstractPotential):
 
     @property
     def bounce_region_level2_max_step(self) -> float:
-        return fabs(self.bounce_region_level2_boundary) / 5e2
+        return fabs(self.bounce_region_level2_boundary) / 5e3
 
     @property
     def hard_reflection_point(self) -> float:
         return -50.0 * self._M_float
 
-    def log_V(self, phi: FieldLike) -> float:
+    # def log_V(self, phi: FieldLike) -> float:
+    #     """
+    #     Evaluate the potential at a given value of phi
+    #     :param phi:
+    #     :return:
+    #     """
+    #     phi_float = GetFieldValue(phi)
+    #     arg: float = phi_float / self._M_float
+    #
+    #     try:
+    #         if arg > 1.0:
+    #             A: float = exp(-arg)
+    #             return self._log_Lambda_4 + log(1.0 + A)
+    #
+    #         else:
+    #             A: float = exp(arg)
+    #             return self._log_Lambda_4 * (log(1.0 + A) - arg)
+    #
+    #     except OverflowError as e:
+    #         print(
+    #             f"! Overflow in ReclinerPotential log_V at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
+    #         )
+    #         raise e
+    #     except ValueError as e:
+    #         print(
+    #             f"!! ValueError in ReclinerPotential log_V at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
+    #         )
+    #         raise e
+    #
+    # def d_logV_dphi(self, phi: FieldLike) -> float:
+    #     """
+    #     Evaluate the derivative of the potential at a given value of phi
+    #     :param phi:
+    #     :return:
+    #     """
+    #     phi_float = GetFieldValue(phi)
+    #     arg: float = phi_float / self._M_float
+    #
+    #     try:
+    #         if arg > 1.0:
+    #             A: float = exp(-arg)
+    #             B: float = A / (1.0 + A)
+    #             return -B / self._M_float
+    #
+    #         else:
+    #             A: float = exp(arg)
+    #             B: float = 1.0 / (1.0 + A)
+    #             return -B / self._M_float
+    #
+    #     except OverflowError as e:
+    #         print(
+    #             f"! Overflow in ReclinerPotential d_logV_dphi at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
+    #         )
+    #         raise e
+    #     except ValueError as e:
+    #         print(
+    #             f"!! ValueError in ReclinerPotential d_logV_dphi at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
+    #         )
+    #         raise e
+    #
+    # def d2_logV_dphi2(self, phi: FieldLike) -> float:
+    #     """
+    #     Evaluate the second derivative of the potential at a given value of phi
+    #     :param phi:
+    #     :return:
+    #     """
+    #     phi_float = GetFieldValue(phi)
+    #     arg: float = phi_float / self._M_float
+    #
+    #     try:
+    #         if arg > 1.0:
+    #             A: float = exp(-arg)
+    #             B: float = A / (1.0 + A)
+    #             C: float = 1.0 / (1.0 + A)
+    #             return B * C / self._M_2
+    #
+    #         else:
+    #             A: float = exp(arg)
+    #             B: float = 1.0 / (1.0 + A)
+    #             C: float = A / (1.0 + A)
+    #             return B * C / self._M_2
+    #
+    #     except OverflowError as e:
+    #         print(
+    #             f"! Overflow in ReclinerPotential d2_logV_dphi2 at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
+    #         )
+    #         raise e
+    #     except ValueError as e:
+    #         print(
+    #             f"!! ValueError in ReclinerPotential d2_logV_dphi2 at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
+    #         )
+    #         raise e
+
+    def V(self, phi: FieldLike) -> float:
         """
         Evaluate the potential at a given value of phi
         :param phi:
@@ -76,26 +174,20 @@ class ReclinerPotential(AbstractPotential):
         arg: float = phi_float / self._M_float
 
         try:
-            if arg > 1.0:
-                A: float = exp(-arg)
-                return self._log_Lambda_4 + log(1.0 + A)
-
-            else:
-                A: float = exp(arg)
-                return self._log_Lambda_4 * (log(1.0 + A) - arg)
+            return self._Lambda_4 * (1.0 + exp(-arg))
 
         except OverflowError as e:
             print(
-                f"! Overflow in ReclinerPotential log_V at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
+                f"! Overflow in ReclinerPotential V at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
             )
             raise e
         except ValueError as e:
             print(
-                f"!! ValueError in ReclinerPotential log_V at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
+                f"!! ValueError in ReclinerPotential V at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
             )
             raise e
 
-    def d_logV_dphi(self, phi: FieldLike) -> float:
+    def dV_dphi(self, phi: FieldLike) -> float:
         """
         Evaluate the derivative of the potential at a given value of phi
         :param phi:
@@ -105,28 +197,20 @@ class ReclinerPotential(AbstractPotential):
         arg: float = phi_float / self._M_float
 
         try:
-            if arg > 1.0:
-                A: float = exp(-arg)
-                B: float = A / (1.0 + A)
-                return -B / self._M_float
-
-            else:
-                A: float = exp(arg)
-                B: float = 1.0 / (1.0 + A)
-                return -B / self._M_float
+            return -self._Lambda_4 * exp(-arg) / self._M_float
 
         except OverflowError as e:
             print(
-                f"! Overflow in ReclinerPotential d_logV_dphi at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
+                f"! Overflow in ReclinerPotential dV_dphi at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
             )
             raise e
         except ValueError as e:
             print(
-                f"!! ValueError in ReclinerPotential d_logV_dphi at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
+                f"!! ValueError in ReclinerPotential dV_dphi at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
             )
             raise e
 
-    def d2_logV_dphi2(self, phi: FieldLike) -> float:
+    def d2V_dphi2(self, phi: FieldLike) -> float:
         """
         Evaluate the second derivative of the potential at a given value of phi
         :param phi:
@@ -135,27 +219,16 @@ class ReclinerPotential(AbstractPotential):
         phi_float = GetFieldValue(phi)
         arg: float = phi_float / self._M_float
 
-        M2: float = self._M_float * self._M_float
         try:
-            if arg > 1.0:
-                A: float = exp(-arg)
-                B: float = A / (1.0 + A)
-                C: float = 1.0 / (1.0 + A)
-                return B * C / M2
-
-            else:
-                A: float = exp(arg)
-                B: float = 1.0 / (1.0 + A)
-                C: float = A / (1.0 + A)
-                return B * C / M2
+            return self._Lambda_4 * exp(-arg) / self._M_2
 
         except OverflowError as e:
             print(
-                f"! Overflow in ReclinerPotential d2_logV_dphi2 at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
+                f"! Overflow in ReclinerPotential d2V_dphi2 at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
             )
             raise e
         except ValueError as e:
             print(
-                f"!! ValueError in ReclinerPotential d2_logV_dphi2 at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
+                f"!! ValueError in ReclinerPotential d2V_dphi2 at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
             )
             raise e
