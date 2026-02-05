@@ -833,50 +833,56 @@ def compute_scalar_model(
     current_fragment = solution_fragments.pop(0)
 
     hubble: HubblePolicy = HubblePolicy(coupling, units)
-    for z in z_grid_cut:
-        z: redshift
-        N_backward = log(1.0 + z.z)
-        N_forward = final_N - N_backward
+    try:
+        for z in z_grid_cut:
+            z: redshift
+            N_backward = log(1.0 + z.z)
+            N_forward = final_N - N_backward
 
-        if N_forward > current_fragment.N_high:
-            while N_forward > current_fragment.N_high:
-                current_fragment = solution_fragments.pop(0)
+            if N_forward > current_fragment.N_high:
+                while N_forward > current_fragment.N_high:
+                    current_fragment = solution_fragments.pop(0)
 
-        if N_forward < current_fragment.N_low:
-            raise RuntimeError(
-                f"compute_scalar_model: ({task_label}): z={z.z:.3g} appears to be out-of-order relative to the solution fragments"
+            if N_forward < current_fragment.N_low:
+                raise RuntimeError(
+                    f"compute_scalar_model: ({task_label}): z={z.z:.3g} appears to be out-of-order relative to the solution fragments"
+                )
+
+            state: StateVector = StateVector._make(current_fragment.sol(N_forward))
+            data: ODEPolicyData = policy(N_forward, state)
+            hubble_data: HubblePolicyData = hubble(data, state)
+
+            T_Jordan: float = data.T_Jordan
+
+            log_Omega: float = coupling.log_Omega(state.phi_Einstein)
+            log_rhorad_Jordan: float = state.log_rhorad_Einstein - 4.0 * log_Omega
+
+            sample.append(
+                SampleValues(
+                    raw_N=N_forward,
+                    phi_Einstein=state.phi_Einstein,
+                    pi_Einstein=state.pi_Einstein,
+                    log_rhorad_Einstein=state.log_rhorad_Einstein,
+                    log_rhorad_Jordan=log_rhorad_Jordan,
+                    log_fm=state.log_fm,
+                    log_T_Jordan=state.log_T_Jordan,
+                    H_Einstein=hubble_data.H_Einstein,
+                    H_Jordan=hubble_data.H_Jordan,
+                    gstar_rho=cosmology.G_rho(T_Jordan),
+                    gstar_s=cosmology.G_s(T_Jordan),
+                    dgstar_rho_dlogT=cosmology.dG_rho_dlogT(T_Jordan),
+                    dgstar_s_dlogT=cosmology.dG_s_dlogT(T_Jordan),
+                    Sigma=1.0 - 3.0 * cosmology.w(T_Jordan),
+                    friction_term=data.friction_term,
+                    reflecting_term=data.reflecting_term,
+                    kicking_term=data.kicking_term,
+                )
             )
-
-        state: StateVector = StateVector._make(current_fragment.sol(N_forward))
-        data: ODEPolicyData = policy(N_forward, state)
-        hubble_data: HubblePolicyData = hubble(data, state)
-
-        T_Jordan: float = data.T_Jordan
-
-        log_Omega: float = coupling.log_Omega(state.phi_Einstein)
-        log_rhorad_Jordan: float = state.log_rhorad_Einstein - 4.0 * log_Omega
-
-        sample.append(
-            SampleValues(
-                raw_N=N_forward,
-                phi_Einstein=state.phi_Einstein,
-                pi_Einstein=state.pi_Einstein,
-                log_rhorad_Einstein=state.log_rhorad_Einstein,
-                log_rhorad_Jordan=log_rhorad_Jordan,
-                log_fm=state.log_fm,
-                log_T_Jordan=state.log_T_Jordan,
-                H_Einstein=hubble_data.H_Einstein,
-                H_Jordan=hubble_data.H_Jordan,
-                gstar_rho=cosmology.G_rho(T_Jordan),
-                gstar_s=cosmology.G_s(T_Jordan),
-                dgstar_rho_dlogT=cosmology.dG_rho_dlogT(T_Jordan),
-                dgstar_s_dlogT=cosmology.dG_s_dlogT(T_Jordan),
-                Sigma=1.0 - 3.0 * cosmology.w(T_Jordan),
-                friction_term=data.friction_term,
-                reflecting_term=data.reflecting_term,
-                kicking_term=data.kicking_term,
-            )
+    except OverflowError as e:
+        print(
+            f"!! compute_scalar_model ({task_label}): overflow when assembling sample values; marked as total integration failure"
         )
+        return {"failure": True}
 
     collected_full_statistics = supervisor.collect_full_statistics
     return {
