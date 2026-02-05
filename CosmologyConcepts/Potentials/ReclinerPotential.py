@@ -48,11 +48,11 @@ class ReclinerPotential(AbstractPotential):
 
     @property
     def bounce_region_level1_boundary(self) -> float:
-        return -self._M_float
+        return -10.0 * self._M_float
 
     @property
     def bounce_region_level2_boundary(self) -> float:
-        return -3.0 * self._M_float
+        return -30.0 * self._M_float
 
     @property
     def bounce_region_level1_max_step(self) -> float:
@@ -64,7 +64,7 @@ class ReclinerPotential(AbstractPotential):
 
     @property
     def hard_reflection_point(self) -> float:
-        return -15.0 * self._M_float
+        return -50.0 * self._M_float
 
     def log_V(self, phi: FieldLike) -> float:
         """
@@ -76,7 +76,13 @@ class ReclinerPotential(AbstractPotential):
         arg: float = phi_float / self._M_float
 
         try:
-            return self._log_Lambda_4 + log(1.0 + exp(-arg))
+            if arg > 1.0:
+                A: float = exp(-arg)
+                return self._log_Lambda_4 + log(1.0 + A)
+
+            else:
+                A: float = exp(arg)
+                return self._log_Lambda_4 * (log(1.0 + A) - arg)
 
         except OverflowError as e:
             print(
