@@ -644,7 +644,7 @@ def compute_scalar_model(
 
                     # check that termination occurred due to reaching the end of the integration domain, or because of a termination event
                     if not sol.success:
-                        raise RuntimeError(
+                        raise ComputationFailureError(
                             f'compute_scalar_model ({task_label}): integration did not terminate successfully (log_T_init={log_T_init:.5g}, log_T_stop={log_T_stop:.5g}, error at N={sol.t[-1]:.5g}, "{sol.message}")'
                         )
 
