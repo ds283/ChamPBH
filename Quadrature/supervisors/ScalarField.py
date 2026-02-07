@@ -407,3 +407,11 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
                 )
 
         self._event_finder_last_log_T_Jordan = log_T_Jordan
+
+    @property
+    def in_level_1(self):
+        return self._in_level_1
+
+    @property
+    def in_level_2(self):
+        return self._in_level_2
