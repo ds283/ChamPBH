@@ -418,11 +418,11 @@ def build_beta_plot(
                 "D_over_H": (
                     beta_to_BBN[store_id].DOverH if store_id in beta_to_BBN else nan
                 ),
-                "He_over_H": (
-                    beta_to_BBN[store_id].HeOverH if store_id in beta_to_BBN else nan
+                "He3_over_H": (
+                    beta_to_BBN[store_id].He3OverH if store_id in beta_to_BBN else nan
                 ),
-                "Li_over_H": (
-                    beta_to_BBN[store_id].LiOverH if store_id in beta_to_BBN else nan
+                "Li7_over_H": (
+                    beta_to_BBN[store_id].Li7OverH if store_id in beta_to_BBN else nan
                 ),
             }
             | (
