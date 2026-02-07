@@ -279,8 +279,8 @@ def compute_BBN_data(
     return {
         "Yp_BBN": res[4],
         "DOverH": res[5],
-        "HeOverH": res[6],
-        "LiOverH": res[7],
+        "He3OverH": res[6],
+        "Li7OverH": res[7],
         "z_grid": z_grid,
         "samples": samples,
         "BBN_compute_time": BBN_timer.elapsed,
@@ -309,8 +309,8 @@ class BBNData(DatastoreObject):
             DatastoreObject.__init__(self, None)
             self._Yp_BBN: Optional[float] = None
             self._DOverH: Optional[float] = None
-            self._HeOverH: Optional[float] = None
-            self._LiOverH: Optional[float] = None
+            self._He3OverH: Optional[float] = None
+            self._Li7OverH: Optional[float] = None
 
             self._values: Optional[List[BBNDataValue]] = None
 
@@ -322,8 +322,8 @@ class BBNData(DatastoreObject):
             DatastoreObject.__init__(self, payload["store_id"])
             self._Yp_BBN = payload["Yp_BBN"]
             self._DOverH = payload["DOverH"]
-            self._HeOverH = payload["HeOverH"]
-            self._LiOverH = payload["LiOverH"]
+            self._He3OverH = payload["He3OverH"]
+            self._Li7OverH = payload["Li7OverH"]
 
             self._values = payload["values"]
 
@@ -369,18 +369,18 @@ class BBNData(DatastoreObject):
         return self._DOverH
 
     @property
-    def HeOverH(self) -> Optional[float]:
+    def He3OverH(self) -> Optional[float]:
         if self._populated is False:
-            raise RuntimeError("HeOverH has not yet been populated")
+            raise RuntimeError("He3OverH has not yet been populated")
 
-        return self._HeOverH
+        return self._He3OverH
 
     @property
-    def LiOverH(self) -> Optional[float]:
+    def Li7OverH(self) -> Optional[float]:
         if self._populated is False:
-            raise RuntimeError("LiOverH has not yet been populated")
+            raise RuntimeError("Li7OverH has not yet been populated")
 
-        return self._LiOverH
+        return self._Li7OverH
 
     @property
     def values(self) -> List:
@@ -436,8 +436,8 @@ class BBNData(DatastoreObject):
 
         self._Yp_BBN = data["Yp_BBN"]
         self._DOverH = data["DOverH"]
-        self._HeOverH = data["HeOverH"]
-        self._LiOverH = data["LiOverH"]
+        self._He3OverH = data["He3OverH"]
+        self._Li7OverH = data["Li7OverH"]
 
         self._BBN_compute_time = data["BBN_compute_time"]
         self._NP_compute_time = data["NP_compute_time"]
