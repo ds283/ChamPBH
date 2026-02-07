@@ -404,6 +404,10 @@ class ODERHS:
                     f"compute_scalar_model ({self.task_label}): output from ODE RHS has infinity or NaN values"
                 )
 
+            # print(
+            #     f"@   N={N:.6g}, phi_E={phi_Einstein/self.MP:.6g} Mp, pi_E={pi_Einstein/self.MP:.6g} Mp, T_J={T_Jordan/self.GeV:.6g} GeV, friction={data.friction_term/self.MP:.6g} Mp, kicking={data.kicking_term/self.MP:.6g} Mp, reflecting={data.reflecting_term/self.MP} Mp"
+            # )
+
             supervisor.notify_new_RHS(return_state)
 
             return return_state
@@ -901,6 +905,10 @@ def compute_scalar_model(
         "level_1_exits": supervisor.number_level_1_exits,
         "level_2_entries": supervisor.number_level_2_entries,
         "level_2_exits": supervisor.number_level_2_exits,
+        "level_1_boundary": potential.bounce_region_level1_boundary,
+        "level_2_boundary": potential.bounce_region_level2_boundary,
+        "level_1_max_step": potential.bounce_region_level1_max_step,
+        "level_2_max_step": potential.bounce_region_level2_max_step,
         "number_fragments": num_fragments,
         "largest_RHS_values": (
             supervisor.largest_RHS_values if collected_full_statistics else None
@@ -1236,6 +1244,10 @@ class ScalarModel(DatastoreObject):
         store_attr("level_1_exits", "number_level_1_exits", 0)
         store_attr("level_2_entries", "number_level_2_entries", 0)
         store_attr("level_2_exits", "number_level_2_exits", 0)
+        store_attr("level_1_boundary", "level_1_boundary")
+        store_attr("level_2_boundary", "level_2_boundary")
+        store_attr("level_1_max_step", "level_1_max_step")
+        store_attr("level_2_max_step", "level_2_max_step")
         store_attr("number_fragments", "number_fragments", 1)
 
         largest_RHS_values = data["largest_RHS_values"]
