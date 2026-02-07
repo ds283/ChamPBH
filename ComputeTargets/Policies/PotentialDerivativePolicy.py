@@ -17,15 +17,6 @@ class PotentialDerivativePolicy:
 
         self.potential: AbstractPotential = potential
 
-        # check what features this potential implementation offers
-        self._has_log_V_functions: bool = False
-        if hasattr(self.potential, "log_V") and hasattr(self.potential, "d_logV_dphi"):
-            self._has_log_V_functions = True
-
-        self._has_plain_V_functions: bool = False
-        if hasattr(self.potential, "V") and hasattr(self.potential, "dV_dphi"):
-            self._has_plain_V_functions = True
-
         self.MP = self.units.PlanckMass
         self.CONST_MP_SQ = self.MP * self.MP
         self.CONST_3_MP_SQ = 2.0 * self.CONST_MP_SQ
@@ -37,7 +28,8 @@ class PotentialDerivativePolicy:
         # check what features this potential implementation offers
         self._has_log_V_functions: bool = False
         if (
-            hasattr(self.potential, "log_V")
+            not hasattr(self.potential, "_disable_log_V")
+            and hasattr(self.potential, "log_V")
             and hasattr(self.potential, "d_logV_dphi")
             and hasattr(self.potential, "d2_logV_dphi2")
         ):
@@ -45,7 +37,8 @@ class PotentialDerivativePolicy:
 
         self._has_plain_V_functions: bool = False
         if (
-            hasattr(self.potential, "V")
+            not hasattr(self.potential, "_disable_V")
+            and hasattr(self.potential, "V")
             and hasattr(self.potential, "dV_dphi")
             and hasattr(self.potential, "d2V_dphi2")
         ):
