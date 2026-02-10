@@ -18,7 +18,6 @@ from math import log, pi, exp, sqrt, isinf, isnan
 from typing import Optional, List, Dict, Any
 
 import ray
-from numpy import inf
 from ray import ObjectRef
 from scipy.integrate import solve_ivp
 from scipy.interpolate import make_interp_spline
@@ -58,6 +57,8 @@ PISQ_OVER_30 = pi * pi / 30.0
 LOG_PISQ_OVER_30 = log(PISQ_OVER_30)
 
 EXPECTED_SOL_LENGTH = 5
+
+DEFAULT_MAX_STEP_SIZE = 0.1
 
 # using named tuples ensures that we never get the fields in the wrong order
 ODEPolicyData = namedtuple(
@@ -405,7 +406,7 @@ class ODERHS:
                 )
 
             # print(
-            #     f"@   N={N:.6g}, phi_E={phi_Einstein/self.MP:.6g} Mp, pi_E={pi_Einstein/self.MP:.6g} Mp, T_J={T_Jordan/self.GeV:.6g} GeV, friction={data.friction_term/self.MP:.6g} Mp, kicking={data.kicking_term/self.MP:.6g} Mp, reflecting={data.reflecting_term/self.MP} Mp"
+            #     f"@   N={N:.6g}, phi_E={phi_Einstein/self.MP:.6g} Mp, pi_E={pi_Einstein/self.MP:.6g} Mp, T_J={T_Jordan/self.GeV:.6g} GeV, friction={data.friction_term/self.MP:.6g} Mp, kicking={data.kicking_term/self.MP:.6g} Mp, reflecting={data.reflecting_term/self.MP} Mp, phi_E/M={phi_Einstein/self.policy.potential._M_float:.6g}, max_step={supervisor._max_step_size:.6g}"
             # )
 
             supervisor.notify_new_RHS(return_state)
@@ -567,11 +568,16 @@ def compute_scalar_model(
         "DOP853": "solve_ivp+DOP853-stepping0",
     }
 
+    default_max_step_size: float = (
+        potential.default_max_step
+        if hasattr(potential, "default_max_step")
+        else DEFAULT_MAX_STEP_SIZE
+    )
+
     success = False
     solver = solver_list.pop(0)
-    solution_fragments = []
-    compute_steps = 0
 
+    # loop through all possible solvers in turn
     while not success and solver is not None:
         try:
             in_level1 = False
@@ -599,7 +605,7 @@ def compute_scalar_model(
             # track maximum step size
             # usually we want this to be unbounded, so the stepper can choose as large a value as it wishes
             # but close to a bounce we want to dramatically shorten the step size, so that we resolve the bounce accurately
-            max_step_size = inf
+            max_step_size: float = default_max_step_size
 
             with ScalarFieldIntegrationSupervisor(
                 units,
@@ -738,7 +744,7 @@ def compute_scalar_model(
                                 )
 
                         if num_exit_level1_events == 1:
-                            max_step_size = inf
+                            max_step_size = default_max_step_size
                             supervisor.notify_level_1_exit(
                                 exit_bounce_region_level1_times[0], max_step_size
                             )
