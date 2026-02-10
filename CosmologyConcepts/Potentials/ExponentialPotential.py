@@ -15,6 +15,7 @@
 
 from math import log
 
+from ComputeTargets.exceptions import ComputationFailureError
 from CosmologyConcepts import M_value, Lambda_value, FieldLike, GetFieldValue
 from CosmologyConcepts.Potentials.AbstractPotential import AbstractPotential
 from CosmologyConcepts.Potentials.model_ids import (
@@ -85,16 +86,14 @@ class ExponentialPotential(AbstractPotential):
         arg: float = pow(self._M_float / phi_float, self._n)
         try:
             return self._log_Lambda_4 + arg
-        except OverflowError as e:
-            print(
-                f"!! Overflow in ExponentialPotential log_V at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
-            )
-            raise e
-        except ValueError as e:
-            print(
-                f"!! ValueError in ExponentialPotential log_V at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
-            )
-            raise e
+        except OverflowError:
+            msg = f"!! Overflow in ExponentialPotential log_V at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
+            print(msg)
+            raise ComputationFailureError(msg)
+        except ValueError:
+            msg = f"!! ValueError in ExponentialPotential log_V at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
+            print(msg)
+            raise ComputationFailureError(msg)
 
     def d_logV_dphi(self, phi: FieldLike) -> float:
         """
@@ -111,16 +110,14 @@ class ExponentialPotential(AbstractPotential):
 
         try:
             return -self._n * arg / phi
-        except OverflowError as e:
-            print(
-                f"! Overflow in ExponentialPotential d_logV_dphi at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
-            )
-            raise e
-        except ValueError as e:
-            print(
-                f"!! ValueError in ExponentialPotential d_logV_dphi at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
-            )
-            raise e
+        except OverflowError:
+            msg = f"! Overflow in ExponentialPotential d_logV_dphi at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
+            print(msg)
+            raise ComputationFailureError(msg)
+        except ValueError:
+            msg = f"!! ValueError in ExponentialPotential d_logV_dphi at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
+            print(msg)
+            raise ComputationFailureError(msg)
 
     def d2_logV_dphi2(self, phi: FieldLike) -> float:
         """
@@ -134,13 +131,11 @@ class ExponentialPotential(AbstractPotential):
 
         try:
             return self._n * (self._n + 1) * arg / (phi * phi)
-        except OverflowError as e:
-            print(
-                f"! Overflow in ExponentialPotential d2_logV_dphi2 at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
-            )
-            raise e
-        except ValueError as e:
-            print(
-                f"!! ValueError in ExponentialPotential d2_logV_dphi2 at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
-            )
-            raise e
+        except OverflowError:
+            msg = f"! Overflow in ExponentialPotential d2_logV_dphi2 at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
+            print(msg)
+            raise ComputationFailureError(msg)
+        except ValueError:
+            msg = f"!! ValueError in ExponentialPotential d2_logV_dphi2 at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
+            print(msg)
+            raise ComputationFailureError(msg)
