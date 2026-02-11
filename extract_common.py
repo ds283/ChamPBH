@@ -30,13 +30,23 @@ from Units.base import UnitsLike
 REDSHIFT_TEXT_DISPLACEMENT_MULTIPLIER = 0.8
 EFOLDS_TEXT_DISPLACEMENT_SHIFT = 0.5
 
-TOP_ROW = 1.12
-MIDDLE_ROW = 1.07
-BOTTOM_ROW = 1.02
+ABOVE_PLOTS_TOP_ROW = 0.96
+ABOVE_PLOTS_MIDDLE_ROW = 0.94
+ABOVE_PLOTS_BOTTOM_ROW = 0.92
 
-LEFT_COLUMN = 0.0
-MIDDLE_COLUMN = 0.4
-RIGHT_COLUMN = 0.85
+BELOW_PLOTS_TOP_ROW = 0.04
+
+LEFT_COLUMN = 0.1
+MIDDLE_COLUMN = 0.5
+RIGHT_COLUMN = 0.9
+
+
+nice_Q_labels = {
+    "kp_over_H_1E1": r"$k_p/H = 10^1$",
+    "kp_over_H_1E2": r"$k_p/H = 10^2$",
+    "kp_over_H_1E3": r"$k_p/H = 10^3$",
+    "kp_over_H_1E4": r"$k_p/H = 10^4$",
+}
 
 
 def safe_fabs(x: Optional[float]) -> Optional[float]:
@@ -78,100 +88,108 @@ def safe_div(x: Optional[float], y: float) -> Optional[float]:
     return nan
 
 
-def set_loglinear_axes(ax):
-    ax.set_xscale("log")
-    ax.set_yscale("linear")
-    handles, labels = ax.get_legend_handles_labels()
-    ax.legend(handles, labels, loc="best")
-    ax.grid(True)
-    ax.xaxis.set_inverted(True)
-
-
-def set_loglog_axes(ax):
-    ax.set_xscale("log")
-    ax.set_yscale("log")
-    handles, labels = ax.get_legend_handles_labels()
-    ax.legend(handles, labels, loc="best")
-    ax.grid(True)
-    ax.xaxis.set_inverted(True)
-
-
-def set_linear_axes(ax):
-    ax.set_xscale("linear")
-    ax.set_yscale("linear")
-    handles, labels = ax.get_legend_handles_labels()
-    ax.legend(handles, labels, loc="best")
-    ax.grid(True)
-    ax.xaxis.set_inverted(True)
-
-
-def add_beta_summary_labels(ax, model_label, potential: AbstractPotential, shift=0.0):
+def add_beta_summary_labels(fig, model_label, potential: AbstractPotential):
     now = datetime.now()
 
-    ax.text(
+    fig.text(
         LEFT_COLUMN,
-        MIDDLE_ROW + shift,
+        ABOVE_PLOTS_MIDDLE_ROW,
         f"Potential: {potential.name}",
-        transform=ax.transAxes,
+        horizontalalignment="left",
         fontsize="x-small",
+        fontweight="semibold",
     )
 
-    ax.text(
-        LEFT_COLUMN,
-        BOTTOM_ROW,
-        f"Created at: {now.strftime("%a %d %b %Y %H:%M:%S")}",
-        transform=ax.transAxes,
-        fontsize="x-small",
-    )
-    ax.text(
+    fig.text(
         RIGHT_COLUMN,
-        BOTTOM_ROW,
+        ABOVE_PLOTS_MIDDLE_ROW,
+        f"Created at: {now.strftime("%a %d %b %Y %H:%M:%S")}",
+        horizontalalignment="right",
+        fontsize="x-small",
+    )
+    fig.text(
+        RIGHT_COLUMN,
+        ABOVE_PLOTS_BOTTOM_ROW,
         f"Cosmology: {model_label}",
-        transform=ax.transAxes,
+        horizontalalignment="right",
         fontsize="x-small",
     )
 
 
-def add_ScalarModel_labels(ax, model: ScalarModel, model_label, shift: float = 0.0):
+def add_ScalarModel_labels(fig, model: ScalarModel, model_label):
     solver: IntegrationSolver = model.solver
     now = datetime.now()
 
-    ax.text(
+    fig.text(
         LEFT_COLUMN,
-        TOP_ROW + 2 * shift,
+        ABOVE_PLOTS_TOP_ROW,
         f"Coupling: {model._coupling.name}",
-        transform=ax.transAxes,
+        horizontalalignment="left",
         fontsize="x-small",
+        fontweight="semibold",
     )
-    ax.text(
+    fig.text(
         LEFT_COLUMN,
-        MIDDLE_ROW + shift,
+        ABOVE_PLOTS_MIDDLE_ROW,
         f"Potential: {model._potential.name}",
-        transform=ax.transAxes,
+        horizontalalignment="left",
+        fontsize="x-small",
+        fontweight="semibold",
+    )
+    fig.text(
+        LEFT_COLUMN,
+        ABOVE_PLOTS_BOTTOM_ROW,
+        f"Solver: {solver.label}",
+        horizontalalignment="left",
         fontsize="x-small",
     )
 
-    ax.text(
-        LEFT_COLUMN,
-        BOTTOM_ROW,
-        f"Solver: {solver.label}",
-        transform=ax.transAxes,
-        fontsize="x-small",
-    )
-    ax.text(
-        MIDDLE_COLUMN,
-        BOTTOM_ROW,
-        f"Created at: {now.strftime("%a %d %b %Y %H:%M:%S")}",
-        transform=ax.transAxes,
-        fontsize="x-small",
-    )
-    ax.text(
+    fig.text(
         RIGHT_COLUMN,
-        BOTTOM_ROW,
-        f"Cosmology: {model_label}",
-        transform=ax.transAxes,
+        ABOVE_PLOTS_MIDDLE_ROW,
+        f"Created at: {now.strftime("%a %d %b %Y %H:%M:%S")}",
+        horizontalalignment="right",
         fontsize="x-small",
     )
+
+    fig.text(
+        RIGHT_COLUMN,
+        ABOVE_PLOTS_BOTTOM_ROW,
+        f"Cosmology: {model_label}",
+        horizontalalignment="right",
+        fontsize="x-small",
+    )
+
+    extra_data = model.extra_metadata
+    if extra_data is None:
+        return
+
+    if "hard_reflections" in extra_data:
+        fig.text(
+            LEFT_COLUMN,
+            BELOW_PLOTS_TOP_ROW,
+            f"Hard reflections: {extra_data['hard_reflections']}",
+            horizontalalignment="left",
+            fontsize="xx-small",
+        )
+    else:
+        # is 'hard_reflections' key is missing, it means there were none
+        fig.text(
+            LEFT_COLUMN,
+            BELOW_PLOTS_TOP_ROW,
+            f"Hard reflections: 0",
+            horizontalalignment="left",
+            fontsize="xx-small",
+        )
+
+    if "number_fragments" in extra_data:
+        fig.text(
+            RIGHT_COLUMN,
+            BELOW_PLOTS_TOP_ROW,
+            f"Solution fragments: {extra_data['number_fragments']}",
+            horizontalalignment="right",
+            fontsize="xx-small",
+        )
 
 
 _T_events = {
@@ -405,11 +423,3 @@ def add_redshift_xaxis_labels(
             l.append("BBN region")
 
     return h, l
-
-
-nice_Q_labels = {
-    "kp_over_H_1E1": r"$k_p/H = 10^1$",
-    "kp_over_H_1E2": r"$k_p/H = 10^2$",
-    "kp_over_H_1E3": r"$k_p/H = 10^3$",
-    "kp_over_H_1E4": r"$k_p/H = 10^4$",
-}

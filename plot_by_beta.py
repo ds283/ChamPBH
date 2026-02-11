@@ -147,7 +147,7 @@ def build_beta_plot(
         if d.available and d.DOverH > 0
     ]
     Li7_points = [
-        (d.coupling._beta_as_float, d.Li7OverH)
+        (d.coupling._beta_float, d.Li7OverH)
         for d in bbn_data
         if d.available and d.Li7OverH > 0
     ]
@@ -200,7 +200,7 @@ def build_beta_plot(
         solver_ax.set_ylabel(r"time [sec]")
         solver_ax.grid(True)
 
-        add_beta_summary_labels(bbn_ax, model_label, potential, shift=0.0)
+        add_beta_summary_labels(fig, model_label, potential)
 
         solver_ax.legend(loc="best")
         bbn_ax.legend(loc="best")
@@ -210,8 +210,13 @@ def build_beta_plot(
             / f"plots/M={potential._M.as_float / units.eV:.5g}eV_Lambda={potential._Lambda.as_float / units.eV:.5g}eV/timings.pdf"
         )
         fig_path.parents[0].mkdir(exist_ok=True, parents=True)
-        fig.savefig(fig_path)
-        fig.savefig(fig_path.with_suffix(".png"))
+        try:
+            fig.savefig(fig_path)
+            fig.savefig(fig_path.with_suffix(".png"))
+        except OverflowError:
+            print(
+                f"@@ build_beta_plot: error occurred when generating a timing plot for ScalarModel '{model_label}'"
+            )
 
         plt.close()
 
@@ -324,7 +329,7 @@ def build_beta_plot(
 
         Yp_ax.set_xlabel(r"coupling $\beta$")
 
-        add_beta_summary_labels(Li7_ax, model_label, potential, shift=0.0)
+        add_beta_summary_labels(fig, model_label, potential)
 
         def get_max_min(data):
             max_value = None
@@ -356,8 +361,8 @@ def build_beta_plot(
         max_D, min_D = get_max_min(D_data)
         D_ax.set_ylim(min_D, max_D)
 
-        max_Li7, min_Li7 = get_max_min(Li7_data)
-        Li7_ax.set_ylim(min_Li7, max_Li7)
+        # max_Li7, min_Li7 = get_max_min(Li7_data)
+        # Li7_ax.set_ylim(min_Li7, max_Li7)
 
         Yp_ax.legend(loc="best")
         D_ax.legend(loc="best")
@@ -368,8 +373,13 @@ def build_beta_plot(
             / f"plots/M={potential._M.as_float / units.eV:.5g}eV_Lambda={potential._Lambda.as_float / units.eV:.5g}eV/BBN.pdf"
         )
         fig_path.parents[0].mkdir(exist_ok=True, parents=True)
-        fig.savefig(fig_path)
-        fig.savefig(fig_path.with_suffix(".png"))
+        try:
+            fig.savefig(fig_path)
+            fig.savefig(fig_path.with_suffix(".png"))
+        except OverflowError:
+            print(
+                f"@@ build_beta_plot: error occurred when generating a BBN abundance plot for ScalarModel '{model_label}'"
+            )
 
         plt.close()
 
@@ -395,7 +405,7 @@ def build_beta_plot(
         ax.set_ylabel(r"maximum $|Q| = |\omega_k'/\omega_k^2|$")
         ax.grid(True)
 
-        add_beta_summary_labels(ax, model_label, potential, shift=0.0)
+        add_beta_summary_labels(fig, model_label, potential)
 
         ax.legend(loc="best")
 
@@ -404,8 +414,13 @@ def build_beta_plot(
             / f"plots/M={potential._M.as_float / units.eV:.5g}eV_Lambda={potential._Lambda.as_float / units.eV:.5g}eV/max_Q.pdf"
         )
         fig_path.parents[0].mkdir(exist_ok=True, parents=True)
-        fig.savefig(fig_path)
-        fig.savefig(fig_path.with_suffix(".png"))
+        try:
+            fig.savefig(fig_path)
+            fig.savefig(fig_path.with_suffix(".png"))
+        except OverflowError:
+            print(
+                f"@@ build_beta_plot: error occurred when generating a max(Q) plot for ScalarModel '{model_label}'"
+            )
 
         plt.close()
 

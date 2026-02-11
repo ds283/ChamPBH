@@ -256,7 +256,7 @@ def history_plot(
     T_ax.set_yscale("log")
     T_ax.grid(True)
 
-    add_ScalarModel_labels(T_ax, model, model_label, shift=0.05)
+    add_ScalarModel_labels(fig, model, model_label)
 
     h, l = add_redshift_xaxis_labels(
         phi_ax, model, temp_unit="GeV", text_labels=True, x_coord=x_coord
@@ -273,8 +273,13 @@ def history_plot(
 
     fig_path = plot_path / "full_history.pdf"
     fig_path.parents[0].mkdir(exist_ok=True, parents=True)
-    fig.savefig(fig_path)
-    fig.savefig(fig_path.with_suffix(".png"))
+    try:
+        fig.savefig(fig_path)
+        fig.savefig(fig_path.with_suffix(".png"))
+    except OverflowError:
+        print(
+            f"@@ plot_ScalarModel: error occurred when generating a history plot for ScalarModel '{model_label}'"
+        )
 
     plt.close()
 
@@ -373,7 +378,7 @@ def thermo_plot(
         linestyle="solid",
     )
 
-    add_ScalarModel_labels(gstar_ax, model, model_label, shift=0.05)
+    add_ScalarModel_labels(fig, model, model_label)
 
     h, l = add_redshift_xaxis_labels(
         gstar_ax, model, text_labels=False, x_coord=x_coord
@@ -395,8 +400,13 @@ def thermo_plot(
 
     fig_path = plot_path / "thermo.pdf"
     fig_path.parents[0].mkdir(exist_ok=True, parents=True)
-    fig.savefig(fig_path)
-    fig.savefig(fig_path.with_suffix(".png"))
+    try:
+        fig.savefig(fig_path)
+        fig.savefig(fig_path.with_suffix(".png"))
+    except OverflowError:
+        print(
+            f"@@ plot_ScalarModel: error occurred when generating a thermodynamics plot for ScalarModel '{model_label}'"
+        )
 
     plt.close()
 
@@ -500,7 +510,7 @@ def Hubble_plot(
 
     H_ax.grid(True)
 
-    add_ScalarModel_labels(H_ax, model, model_label)
+    add_ScalarModel_labels(fig, model, model_label)
     h, l = add_redshift_xaxis_labels(
         H_ax, model, temp_unit="GeV", text_labels=True, x_coord=x_coord
     )
@@ -512,8 +522,13 @@ def Hubble_plot(
 
     fig_path = plot_path / "Hubble.pdf"
     fig_path.parents[0].mkdir(exist_ok=True, parents=True)
-    fig.savefig(fig_path)
-    fig.savefig(fig_path.with_suffix(".png"))
+    try:
+        fig.savefig(fig_path)
+        fig.savefig(fig_path.with_suffix(".png"))
+    except OverflowError:
+        print(
+            f"@@ plot_ScalarModel: error occurred when generating a Hubble rate plot for ScalarModel '{model_label}'"
+        )
 
     plt.close()
 
@@ -581,7 +596,7 @@ def energy_plot(
 
     energy_ax.grid(True)
 
-    add_ScalarModel_labels(energy_ax, model, model_label)
+    add_ScalarModel_labels(fig, model, model_label)
     h, l = add_redshift_xaxis_labels(
         energy_ax, model, temp_unit="GeV", text_labels=True, x_coord=x_coord
     )
@@ -593,8 +608,13 @@ def energy_plot(
 
     fig_path = plot_path / "energy.pdf"
     fig_path.parents[0].mkdir(exist_ok=True, parents=True)
-    fig.savefig(fig_path)
-    fig.savefig(fig_path.with_suffix(".png"))
+    try:
+        fig.savefig(fig_path)
+        fig.savefig(fig_path.with_suffix(".png"))
+    except OverflowError:
+        print(
+            f"@@ plot_ScalarModel: error occurred when generating an energy history plot for ScalarModel '{model_label}'"
+        )
 
     plt.close()
 
@@ -780,7 +800,7 @@ def ODE_terms_plot(
         Sigma_ax.xaxis.set_inverted(True)
     Sigma_ax.set_xlabel(x_axis_label())
 
-    add_ScalarModel_labels(f_ax, model, model_label, shift=0.05)
+    add_ScalarModel_labels(fig, model, model_label)
     add_redshift_xaxis_labels(f_ax, model, text_labels=False, x_coord=x_coord)
     add_redshift_xaxis_labels(r_ax, model, text_labels=False, x_coord=x_coord)
     add_redshift_xaxis_labels(k_ax, model, text_labels=False, x_coord=x_coord)
@@ -799,8 +819,13 @@ def ODE_terms_plot(
 
     fig_path = plot_path / "ODE_terms.pdf"
     fig_path.parents[0].mkdir(exist_ok=True, parents=True)
-    fig.savefig(fig_path)
-    fig.savefig(fig_path.with_suffix(".png"))
+    try:
+        fig.savefig(fig_path)
+        fig.savefig(fig_path.with_suffix(".png"))
+    except OverflowError:
+        print(
+            f"@@ plot_ScalarModel: error occurred when generating a plot of the ODE terms for ScalarModel '{model_label}'"
+        )
 
     plt.close()
 
@@ -1024,7 +1049,7 @@ def BBN_era_plot(
     phi_BBN_ax.set_xscale("log")
     phi_BBN_ax.xaxis.set_inverted(True)
 
-    add_ScalarModel_labels(ODE_terms_BBN_ax, model, model_label, shift=0.05)
+    add_ScalarModel_labels(fig, model, model_label)
 
     phi_BBN_ax.legend(loc="best")
     HJordan_BBN_ax.legend(loc="best")
@@ -1033,8 +1058,13 @@ def BBN_era_plot(
 
     fig_path = plot_path / "BBN_era.pdf"
     fig_path.parents[0].mkdir(exist_ok=True, parents=True)
-    fig.savefig(fig_path)
-    fig.savefig(fig_path.with_suffix(".png"))
+    try:
+        fig.savefig(fig_path)
+        fig.savefig(fig_path.with_suffix(".png"))
+    except OverflowError:
+        print(
+            f"@@ plot_ScalarModel: error occurred when generating a BBN era plot for ScalarModel '{model_label}'"
+        )
 
     plt.close()
 
@@ -1278,7 +1308,7 @@ def BBN_era_NP_plot(
     rhoP_NP_ax.set_xlabel("Temperature $T$ [MeV]")
     rhoP_NP_ax.xaxis.set_inverted(True)
 
-    add_ScalarModel_labels(w_NP_ax, model, model_label, shift=0.05)
+    add_ScalarModel_labels(fig, model, model_label)
 
     rhoP_NP_ax.legend(loc="best")
     ratio_NP_ax.legend(loc="best")
@@ -1287,8 +1317,13 @@ def BBN_era_NP_plot(
 
     fig_path = plot_path / "BBN_era_NP.pdf"
     fig_path.parents[0].mkdir(exist_ok=True, parents=True)
-    fig.savefig(fig_path)
-    fig.savefig(fig_path.with_suffix(".png"))
+    try:
+        fig.savefig(fig_path)
+        fig.savefig(fig_path.with_suffix(".png"))
+    except OverflowError:
+        print(
+            f"@@ plot_ScalarModel: error occurred when generating a BBN NP plot for ScalarModel '{model_label}'"
+        )
 
     plt.close()
 
