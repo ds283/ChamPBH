@@ -260,6 +260,7 @@ def build_beta_plot(
         }
 
         Li7_data = {
+            # Eq. (24.4), page 5 of PDG 2024 review
             "PDG2024": {
                 "label": "PDG2024",
                 "central_value": 1.6,
