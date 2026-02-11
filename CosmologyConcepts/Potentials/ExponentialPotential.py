@@ -15,6 +15,8 @@
 
 from math import log
 
+from numpy import inf
+
 from ComputeTargets.exceptions import ComputationFailureError
 from CosmologyConcepts import M_value, Lambda_value, FieldLike, GetFieldValue
 from CosmologyConcepts.Potentials.AbstractPotential import AbstractPotential
@@ -51,6 +53,11 @@ class ExponentialPotential(AbstractPotential):
     @property
     def type_id(self) -> int:
         return EXPONENTIAL_POTENTIAL
+
+    @property
+    def default_max_step(self) -> float:
+        # seems no need to limit initial maximum step size for this potential
+        return inf
 
     @property
     def bounce_region_level1_boundary(self) -> float:

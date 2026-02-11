@@ -55,6 +55,14 @@ class ReclinerPotential(AbstractPotential):
         return RECLINER_POTENTIAL
 
     @property
+    def default_max_step(self) -> float:
+        # in this model we cannot take strides that are very long, at least at small values of <
+        # For larger M this max step size can be increased. Values that seem to work are
+        # M ~ 1E-4 about 1e-1
+        # M ~ 1E-5 about 1e-2
+        return 1e-2
+
+    @property
     def bounce_region_level1_boundary(self) -> float:
         return 0.2
 
