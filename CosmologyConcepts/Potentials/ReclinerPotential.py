@@ -21,6 +21,7 @@ from CosmologyConcepts.Potentials.model_ids import (
     RECLINER_POTENTIAL,
 )
 from Units.base import UnitsLike
+from config.defaults import DEFAULT_ABS_TOLERANCE, DEFAULT_REL_TOLERANCE
 
 
 class ReclinerPotential(AbstractPotential):
@@ -33,6 +34,8 @@ class ReclinerPotential(AbstractPotential):
 
         self._M: M_value = M
         self._Lambda: Lambda_value = Lambda
+
+        self._M_in_Mp: float = float(M) / units.PlanckMass
 
         self._M_float: float = float(M)
         self._Lambda_float: float = float(Lambda)
@@ -61,6 +64,20 @@ class ReclinerPotential(AbstractPotential):
         # M ~ 1E-4 about 1e-1
         # M ~ 1E-5 about 1e-2
         return 1e-2
+
+    @property
+    def default_abs_tol(self) -> float:
+        if self._M_in_Mp < 1e-3:
+            return 1e-5
+
+        return DEFAULT_ABS_TOLERANCE
+
+    @property
+    def default_rel_tol(self) -> float:
+        if self._M_in_Mp < 1e-3:
+            return 1e-6
+
+        return DEFAULT_REL_TOLERANCE
 
     @property
     def bounce_region_level1_boundary(self) -> float:

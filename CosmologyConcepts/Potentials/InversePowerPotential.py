@@ -22,6 +22,7 @@ from CosmologyConcepts import M_value, Lambda_value, FieldLike, GetFieldValue
 from CosmologyConcepts.Potentials.AbstractPotential import AbstractPotential
 from CosmologyConcepts.Potentials.model_ids import INVERSE_POWER_POTENTIAL
 from Units.base import UnitsLike
+from config.defaults import DEFAULT_ABS_TOLERANCE, DEFAULT_REL_TOLERANCE
 
 
 class InversePowerPotential(AbstractPotential):
@@ -52,6 +53,14 @@ class InversePowerPotential(AbstractPotential):
     @property
     def type_id(self) -> int:
         return INVERSE_POWER_POTENTIAL
+
+    @property
+    def default_abs_tol(self) -> float:
+        return DEFAULT_ABS_TOLERANCE
+
+    @property
+    def default_rel_tol(self) -> float:
+        return DEFAULT_REL_TOLERANCE
 
     @property
     def default_max_step(self) -> float:
