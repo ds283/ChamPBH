@@ -1072,6 +1072,15 @@ class ScalarModel(DatastoreObject):
         return self._metadata
 
     @property
+    def extra_metadata(self) -> Optional[Dict[str, Any]]:
+        if self._failure:
+            raise RuntimeError(
+                f"ScalarModel ({self._label}): this object had an integration failure and cannot be used"
+            )
+
+        return self._extra_data
+
+    @property
     def solver(self) -> IntegrationSolver:
         if self._failure:
             raise RuntimeError(
