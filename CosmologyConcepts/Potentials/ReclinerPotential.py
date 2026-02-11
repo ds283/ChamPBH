@@ -80,7 +80,7 @@ class ReclinerPotential(AbstractPotential):
 
     @property
     def hard_reflection_point(self) -> float:
-        return -100.0 * self._M_float
+        return -150.0 * self._M_float
 
     def log_V(self, phi: FieldLike) -> float:
         """
