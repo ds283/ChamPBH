@@ -18,6 +18,7 @@ from math import log, pi, exp, sqrt, isinf, isnan
 from typing import Optional, List, Dict, Any
 
 import ray
+from numpy import inf
 from ray import ObjectRef
 from scipy.integrate import solve_ivp
 from scipy.interpolate import make_interp_spline
@@ -58,7 +59,7 @@ LOG_PISQ_OVER_30 = log(PISQ_OVER_30)
 
 EXPECTED_SOL_LENGTH = 5
 
-DEFAULT_MAX_STEP_SIZE = 0.1
+DEFAULT_MAX_STEP_SIZE = inf
 
 # using named tuples ensures that we never get the fields in the wrong order
 ODEPolicyData = namedtuple(
