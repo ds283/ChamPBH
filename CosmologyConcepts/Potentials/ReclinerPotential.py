@@ -72,7 +72,7 @@ class ReclinerPotential(AbstractPotential):
 
     @property
     def bounce_region_level1_max_step(self) -> float:
-        return 1e-3
+        return 1e-5
 
     @property
     def bounce_region_level2_max_step(self) -> float:
@@ -80,7 +80,7 @@ class ReclinerPotential(AbstractPotential):
 
     @property
     def hard_reflection_point(self) -> float:
-        return -8.0 * self._M_float
+        return -100.0 * self._M_float
 
     def log_V(self, phi: FieldLike) -> float:
         """
