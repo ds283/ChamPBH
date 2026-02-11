@@ -146,11 +146,17 @@ def build_beta_plot(
         for d in bbn_data
         if d.available and d.DOverH > 0
     ]
+    Li7_points = [
+        (d.coupling._beta_as_float, d.Li7OverH)
+        for d in bbn_data
+        if d.available and d.Li7OverH > 0
+    ]
 
     solver_time_x, solver_time_y = zip(*solver_time_points)
     bbn_time_x, bbn_time_y = zip(*bbn_time_points)
     Yp_x, Yp_y = zip(*Yp_points)
     DOverH_x, DOverH_y = zip(*DOverH_points)
+    Li7_x, Li7_y = zip(*Li7_points)
 
     adiabtic_maxQ_xy = {}
     for label in AdiabaticHistory.Q_labels:
@@ -209,16 +215,17 @@ def build_beta_plot(
 
         plt.close()
 
-    if len(Yp_x) > 0 or len(DOverH_x) > 0:
+    if len(Yp_x) > 0 or len(DOverH_x) > 0 or len(Li7_x) > 0:
         # BBN OUTPUT
 
         fig = plt.figure()
-        fig.set_size_inches(8.0, 8.0)
+        fig.set_size_inches(8.0, 10.0)
 
-        axs = fig.subplots(nrows=2, ncols=1, sharex=True, sharey=False)
+        axs = fig.subplots(nrows=3, ncols=1, sharex=True, sharey=False)
 
-        Yp_ax = axs[1]
-        D_ax = axs[0]
+        Yp_ax = axs[2]
+        D_ax = axs[1]
+        Li7_ax = axs[0]
 
         Yp_data = {
             "Aver+2017": {
@@ -227,8 +234,9 @@ def build_beta_plot(
                 "sigma": 0.0040,
                 "colour": "g",
             },
+            # Eq. (24.3), page 5 of PDG 2024 review
             "PDG2022": {
-                "label": "PDG2022",
+                "label": "PDG2024",
                 "central_value": 0.245,
                 "sigma": 0.003,
                 "colour": "r",
@@ -242,12 +250,22 @@ def build_beta_plot(
                 "sigma": 0.030,
                 "colour": "g",
             },
+            # Eq. (24.2), page 3 of PDG 2024 review
             "PDG2022": {
-                "label": "PDG2022",
+                "label": "PDG2024",
                 "central_value": 2.547,
-                "sigma": 0.025,
+                "sigma": 0.029,
                 "colour": "r",
             },
+        }
+
+        Li7_data = {
+            "PDG2024": {
+                "label": "PDG2024",
+                "central_value": 1.6,
+                "sigma": 0.3,
+                "colour": "r",
+            }
         }
 
         def add_data_to_axis(ax, data):
@@ -275,6 +293,7 @@ def build_beta_plot(
 
         add_data_to_axis(Yp_ax, Yp_data)
         add_data_to_axis(D_ax, D_data)
+        add_data_to_axis(Li7_ax, Li7_data)
 
         Yp_ax.plot(
             Yp_x,
@@ -283,18 +302,28 @@ def build_beta_plot(
             color="b",
             marker="o" if len(Yp_x) <= 20.0 else None,
         )
+        Yp_ax.grid(True)
+
         D_ax.plot(
             DOverH_x,
             DOverH_y,
-            label=r"$10^5 D/H$",
+            label=r"$10^5 \; \mathrm{D}/\mathrm{H}$",
             color="m",
             marker="o" if len(DOverH_x) <= 20.0 else None,
         )
+        D_ax.grid(True)
+
+        Li7_ax.plot(
+            Li7_x,
+            Li7_y,
+            label=r"$10^{10} \; \mathrm{Li}^7/\mathrm{H}$",
+            color="c",
+            marker="o" if len(Li7_x) <= 20.0 else None,
+        )
 
         Yp_ax.set_xlabel(r"coupling $\beta$")
-        Yp_ax.grid(True)
 
-        add_beta_summary_labels(D_ax, model_label, potential, shift=0.0)
+        add_beta_summary_labels(Li7_ax, model_label, potential, shift=0.0)
 
         def get_max_min(data):
             max_value = None
@@ -326,8 +355,12 @@ def build_beta_plot(
         max_D, min_D = get_max_min(D_data)
         D_ax.set_ylim(min_D, max_D)
 
+        max_Li7, min_Li7 = get_max_min(Li7_data)
+        Li7_ax.set_ylim(min_Li7, max_Li7)
+
         Yp_ax.legend(loc="best")
         D_ax.legend(loc="best")
+        Li7_ax.legend(loc="best")
 
         fig_path = (
             base_path
