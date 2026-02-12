@@ -49,8 +49,6 @@ from Units import Planck_units
 from config.defaults import (
     DEFAULT_ABS_TOLERANCE,
     DEFAULT_REL_TOLERANCE,
-    DEFAULT_QUADRATURE_ATOL,
-    DEFAULT_QUADRATURE_RTOL,
     DEFAULT_FLOAT_PRECISION,
 )
 from config.model_list import build_model_list
@@ -1045,12 +1043,10 @@ with ShardedPool(
     ## DATASTORE OBJECTS
 
     # build absolute and relative tolerances
-    atol, rtol, quad_atol, quad_rtol = ray.get(
+    atol, rtol = ray.get(
         [
             pool.object_get("tolerance", tol=DEFAULT_ABS_TOLERANCE),
             pool.object_get("tolerance", tol=DEFAULT_REL_TOLERANCE),
-            pool.object_get("tolerance", tol=DEFAULT_QUADRATURE_ATOL),
-            pool.object_get("tolerance", tol=DEFAULT_QUADRATURE_RTOL),
         ]
     )
 
