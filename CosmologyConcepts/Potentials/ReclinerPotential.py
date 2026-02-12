@@ -89,6 +89,9 @@ class ReclinerPotential(AbstractPotential):
 
     @property
     def bounce_region_level1_max_step(self) -> float:
+        if self._M_in_Mp < 1e-6:
+            return 1e-6
+
         return 1e-5
 
     @property
