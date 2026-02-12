@@ -43,7 +43,7 @@ class AdiabaticComputePolicy:
 
         self.MP = self.units.PlanckMass
         self.CONST_MP_SQ = self.MP * self.MP
-        self.CONST_3_MP_SQ = 2.0 * self.CONST_MP_SQ
+        self.CONST_3_MP_SQ = 3.0 * self.CONST_MP_SQ
         self.CONST_6_MP_SQ = 6.0 * self.CONST_MP_SQ
 
         self.GeV = self.units.GeV
