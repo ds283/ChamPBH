@@ -153,14 +153,6 @@ def history_plot(
         (get_x_coord(value), exp(value.log_T_Jordan) / units.GeV) for value in values
     ]
 
-    adiabatic_points = [
-        (
-            get_x_coord(value),
-            {label: value.value(label) for label in AdiabaticHistory.Q_labels},
-        )
-        for value in Q.values
-    ]
-
     positive_abs_phi_Einstein_x, positive_abs_phi_Einstein_y = zip(
         *positive_abs_phi_Einstein_points
     )
@@ -170,13 +162,22 @@ def history_plot(
     pi_Einstein_x, pi_Einstein_y = zip(*pi_Einstein_points)
     T_Jordan_x, T_Jordan_y = zip(*T_Jordan_points)
 
-    adiabatic_xy = {}
-    for label in AdiabaticHistory.Q_labels:
-        _points = [(x, y[label]) for x, y in adiabatic_points]
-        adiabatic_xy[label] = zip(*_points)
-
     fig = plt.figure()
+    adiabatic_xy = {}
+
     if Q.available:
+        adiabatic_points = [
+            (
+                get_x_coord(value),
+                {label: value.value(label) for label in AdiabaticHistory.Q_labels},
+            )
+            for value in Q.values
+        ]
+
+        for label in AdiabaticHistory.Q_labels:
+            _points = [(x, y[label]) for x, y in adiabatic_points]
+            adiabatic_xy[label] = zip(*_points)
+
         fig.set_size_inches(8.0, 13.0)
         axs = fig.subplots(nrows=4, ncols=1, sharex=True, sharey=False)
 
