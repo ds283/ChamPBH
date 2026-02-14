@@ -1131,7 +1131,12 @@ with ShardedPool(
     # the redshift z corresponding to T = 20,000 GeV is about 6E35 in a LambdaCDM-like cosmology
     # we set up a redshift sampling grid that covers this range
     # we use this grid to store the scalar field histories
-    num_z_samples = samples_per_log10_z * (log10_one_plus_z_high - log10_one_plus_z_low)
+    num_z_samples = int(
+        round(
+            samples_per_log10_z * (log10_one_plus_z_high - log10_one_plus_z_low) + 0.5,
+            0,
+        )
+    )
     z_array = ray.get(
         convert_to_redshift(
             np.logspace(log10_one_plus_z_low, log10_one_plus_z_high, num_z_samples)
