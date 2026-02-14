@@ -1057,7 +1057,7 @@ with ShardedPool(
             )
         elif args.potential_type == "InversePower":
             return pool.object_get(
-                "ExponentialPotential",
+                "InversePowerPotential",
                 payload_data=[
                     {"M": M, "Lambda": Lambda, "n": 1, "units": units}
                     for M, Lambda in M_lambda_set
@@ -1065,7 +1065,7 @@ with ShardedPool(
             )
         elif args.potential_type == "Starobinsky":
             return pool.object_get(
-                "Starobinsky",
+                "StarobinskyPotential",
                 payload_data=[
                     {"M": M, "Lambda": Lambda, "units": units}
                     for M, Lambda in M_lambda_set
@@ -1073,7 +1073,7 @@ with ShardedPool(
             )
         elif args.potential_type == "Recliner":
             return pool.object_get(
-                "Recliner",
+                "ReclinerPotential",
                 payload_data=[
                     {"M": M, "Lambda": Lambda, "units": units}
                     for M, Lambda in M_lambda_set
@@ -1150,6 +1150,7 @@ with ShardedPool(
     ## TO BUILD A GRID OF POTENTIAL AND COUPLING FUNCTIONS
 
     print("\n** BUILDING GRID OF MODELS TO SAMPLE")
+    print(f'   -- using potential type "{args.potential_type}"')
 
     num_beta_sample = int(round(samples_per_beta * (beta_high - beta_low) + 0.5, 0))
 
@@ -1224,7 +1225,7 @@ with ShardedPool(
     Coupling_array = ray.get(convert_to_coupling(beta_grid))
 
     print(
-        f"   -- total number of models to sample: {len(Potential_array)*len(Coupling_array)}"
+        f"   -- total number of models to integrate: {len(Potential_array)*len(Coupling_array)}"
     )
 
     model_list = build_model_list(pool, units)

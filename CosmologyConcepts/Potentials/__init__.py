@@ -3,5 +3,5 @@ from .ExponentialPotential import ExponentialPotential
 from .InversePowerPotential import InversePowerPotential
 from .ReclinerPotential import ReclinerPotential
 from .ReflectingPotential import ReflectingPotential
-from .Starobinsky import StarobinskyPotential
+from .StarobinskyPotential import StarobinskyPotential
 from .model_ids import INVERSE_POWER_POTENTIAL
