@@ -239,7 +239,7 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
         obj = BBNData(
             {
                 "store_id": store_id,
-                "faillure": row_data.faillure,
+                "failure": row_data.failure,
                 "Yp_BBN": row_data.Yp_BBN,
                 "DOverH": row_data.DOverH,
                 "He3OverH": row_data.He3OverH,

@@ -1719,7 +1719,7 @@ with ShardedPool(
             )
         elif args.potential_type == "InversePower":
             return pool.object_get(
-                "ExponentialPotential",
+                "InversePowerPotential",
                 payload_data=[
                     {"M": M, "Lambda": Lambda, "n": 1, "units": units}
                     for M, Lambda in M_lambda_set
@@ -1727,7 +1727,7 @@ with ShardedPool(
             )
         elif args.potential_type == "Starobinsky":
             return pool.object_get(
-                "Starobinsky",
+                "StarobinskyPotential",
                 payload_data=[
                     {"M": M, "Lambda": Lambda, "units": units}
                     for M, Lambda in M_lambda_set
@@ -1735,7 +1735,7 @@ with ShardedPool(
             )
         elif args.potential_type == "Recliner":
             return pool.object_get(
-                "Recliner",
+                "ReclinerPotential",
                 payload_data=[
                     {"M": M, "Lambda": Lambda, "units": units}
                     for M, Lambda in M_lambda_set
