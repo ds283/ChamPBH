@@ -941,7 +941,7 @@ def run_pipeline(
         return f"{args.job_name}-BBNData-{potential.name}-{coupling.name}-{datetime.now().replace(microsecond=0).isoformat()}"
 
     def compute_bbn_data_batch(data: BBNData, label: str):
-        return data.compute(label=label, payload={'small_network': False})
+        return data.compute(label=label, payload={"small_network": True})
 
     def validate_bbn_data_batch(q: BBNData):
         if not q.available:
