@@ -68,6 +68,9 @@ DEFAULT_RAY_ADDRESS = "auto"
 
 DEFAULT_Z_END = 0.1
 DEFAULT_T_INIT_GEV = 20000
+
+DEFAULT_LOG10_ONE_PLUS_Z_HIGH = 35
+DEFAULT_LOG10_ONE_PLUS_Z_LOW = 0
 DEFAULT_SAMPLES_PER_LOG10_Z = 250
 
 DEFAULT_BETA_LOW = 0.1
@@ -85,6 +88,7 @@ DEFAULT_SAMPLES_PER_LOG10_LAMBDA_EV = 6
 MIN_NOTIFY_INTERVAL = 5 * 60
 
 allowed_drop_actions = ["scalar-model", "adiabatic-history", "bbn-data"]
+potential_types = ["Exponential", "InversePower", "Starobinsky", "Recliner"]
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -115,6 +119,13 @@ parser.add_argument(
     type=str,
     default=None,
     help="write profiling and performance data to the specified database",
+)
+parser.add_argument(
+    "--potential-type",
+    type=str,
+    default="Exponential",
+    choices=potential_types,
+    help="specify potential type to use",
 )
 parser.add_argument(
     "--samples-log10-z",
@@ -175,6 +186,18 @@ parser.add_argument(
     type=float,
     default=DEFAULT_LOG10_LAMBDA_HIGH_EV,
     help="maximum value of log10(Lambda/eV) to sample",
+)
+parser.add_argument(
+    "--log10-one-plus-z-high",
+    type=float,
+    default=DEFAULT_LOG10_ONE_PLUS_Z_HIGH,
+    help="maximum value of log10(1+z) to sample",
+)
+parser.add_argument(
+    "--log10-one-plus-z-low",
+    type=float,
+    default=DEFAULT_LOG10_ONE_PLUS_Z_LOW,
+    help="minimum value of log10(1+z) to sample",
 )
 parser.add_argument(
     "--samples-per-log10-Lambda-eV",
@@ -965,6 +988,8 @@ with ShardedPool(
 
     # set up LambdaCDM object representing a basic Planck2018 cosmology in Mpc units
 
+    log10_one_plus_z_low = args.log10_one_plus_z_low
+    log10_one_plus_z_high = args.log10_one_plus_z_high
     samples_per_log10_z: int = args.samples_log10_z
 
     beta_low: float = args.beta_low
@@ -1022,13 +1047,40 @@ with ShardedPool(
         )
 
     def convert_to_potential(M_lambda_set):
-        return pool.object_get(
-            "ExponentialPotential",
-            payload_data=[
-                {"M": M, "Lambda": Lambda, "n": 1, "units": units}
-                for M, Lambda in M_lambda_set
-            ],
-        )
+        if args.potential_type == "Exponential":
+            return pool.object_get(
+                "ExponentialPotential",
+                payload_data=[
+                    {"M": M, "Lambda": Lambda, "n": 1, "units": units}
+                    for M, Lambda in M_lambda_set
+                ],
+            )
+        elif args.potential_type == "InversePower":
+            return pool.object_get(
+                "ExponentialPotential",
+                payload_data=[
+                    {"M": M, "Lambda": Lambda, "n": 1, "units": units}
+                    for M, Lambda in M_lambda_set
+                ],
+            )
+        elif args.potential_type == "Starobinsky":
+            return pool.object_get(
+                "Starobinsky",
+                payload_data=[
+                    {"M": M, "Lambda": Lambda, "units": units}
+                    for M, Lambda in M_lambda_set
+                ],
+            )
+        elif args.potential_type == "Recliner":
+            return pool.object_get(
+                "Recliner",
+                payload_data=[
+                    {"M": M, "Lambda": Lambda, "units": units}
+                    for M, Lambda in M_lambda_set
+                ],
+            )
+        else:
+            raise ValueError(f"Unknown potential type: {args.potential_type}")
 
     def convert_to_coupling(beta_set):
         # ExponentialCoupling is a sharded table and needs a "shard_key" field
@@ -1079,8 +1131,6 @@ with ShardedPool(
     # the redshift z corresponding to T = 20,000 GeV is about 6E35 in a LambdaCDM-like cosmology
     # we set up a redshift sampling grid that covers this range
     # we use this grid to store the scalar field histories
-    log10_one_plus_z_high = 36
-    log10_one_plus_z_low = 0
     num_z_samples = samples_per_log10_z * (log10_one_plus_z_high - log10_one_plus_z_low)
     z_array = ray.get(
         convert_to_redshift(
@@ -1118,8 +1168,8 @@ with ShardedPool(
 
         return False
 
-    # beta_pre_sample = np.linspace(beta_low, beta_high, num_beta_sample, endpoint=True)
-    beta_pre_sample = [0.1, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0]
+    beta_pre_sample = np.linspace(beta_low, beta_high, num_beta_sample, endpoint=True)
+    # beta_pre_sample = [0.1, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0]
     beta_sample = [beta for beta in beta_pre_sample if not beta_blacklisted(beta)]
 
     beta_array = ray.get(convert_to_betas(beta_sample))

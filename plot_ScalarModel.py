@@ -68,12 +68,21 @@ DEFAULT_TIMEOUT = 60
 
 DEFAULT_T_INIT_GEV = 20000
 
+potential_types = ["Exponential", "InversePower", "Starobinsky", "Recliner"]
+
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "--database",
     type=str,
     default=None,
     help="read/write work items using the specified database cache",
+)
+parser.add_argument(
+    "--potential-type",
+    type=str,
+    default="Exponential",
+    choices=potential_types,
+    help="specify potential type to use",
 )
 parser.add_argument(
     "--db-timeout",
@@ -1700,13 +1709,40 @@ with ShardedPool(
     )
 
     def convert_to_potential(M_lambda_set):
-        return pool.object_get(
-            "ExponentialPotential",
-            payload_data=[
-                {"M": M, "Lambda": Lambda, "n": 1, "units": units}
-                for M, Lambda in M_lambda_set
-            ],
-        )
+        if args.potential_type == "Exponential":
+            return pool.object_get(
+                "ExponentialPotential",
+                payload_data=[
+                    {"M": M, "Lambda": Lambda, "n": 1, "units": units}
+                    for M, Lambda in M_lambda_set
+                ],
+            )
+        elif args.potential_type == "InversePower":
+            return pool.object_get(
+                "ExponentialPotential",
+                payload_data=[
+                    {"M": M, "Lambda": Lambda, "n": 1, "units": units}
+                    for M, Lambda in M_lambda_set
+                ],
+            )
+        elif args.potential_type == "Starobinsky":
+            return pool.object_get(
+                "Starobinsky",
+                payload_data=[
+                    {"M": M, "Lambda": Lambda, "units": units}
+                    for M, Lambda in M_lambda_set
+                ],
+            )
+        elif args.potential_type == "Recliner":
+            return pool.object_get(
+                "Recliner",
+                payload_data=[
+                    {"M": M, "Lambda": Lambda, "units": units}
+                    for M, Lambda in M_lambda_set
+                ],
+            )
+        else:
+            raise ValueError(f"Unknown potential type: {args.potential_type}")
 
     def convert_to_coupling(beta_set):
         # ExponentialCoupling is a sharded table and needs a "shard_key" field
