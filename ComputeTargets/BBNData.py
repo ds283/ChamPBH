@@ -1,8 +1,9 @@
 from collections import namedtuple
 from math import exp, log, asinh, sinh, sqrt
-from typing import Optional, List
+from typing import Optional, List, Any
 
 import ray
+from ray._private.runtime_env.agent.thirdparty_files.aiohttp import payload
 from scipy.interpolate import make_interp_spline
 
 from CosmologyConcepts import redshift, redshift_array
@@ -45,6 +46,7 @@ def compute_BBN_data(
     task_label: str,
     T_BBN_MeV_spline_max: float = 100,  # PRyMordial default begins at 10 MeV
     T_BBN_keV_spline_min: float = 1e-4,  # PRyMordial default ends at 1 keV, but samples at later times
+    small_network: bool = True,
 ):
     model: ScalarModel = model_proxy.get()
     cosmology: BaseCosmology = model._cosmology
@@ -295,7 +297,7 @@ def compute_BBN_data(
         PRyMini.verbose_flag = False
 
         # speed up calculation using small reaction network, at cost of Li7 accuracy
-        PRyMini.small_network_flag = True
+        PRyMini.small_network_flag = small_network
 
         try:
             # run PRyMordial
@@ -323,6 +325,8 @@ def compute_BBN_data(
         "samples": samples,
         "BBN_compute_time": BBN_timer.elapsed,
         "NP_compute_time": NP_timer.elapsed,
+        "small_network": small_network,
+        "PryM_version": "bf24c3d"       # PRyMordial seems not to have a proper versioning scheme
     }
 
 
@@ -345,6 +349,10 @@ class BBNData(DatastoreObject):
 
         if payload is None:
             DatastoreObject.__init__(self, None)
+
+            self._small_network: Optional[bool] = None
+            self._PRyM_version: Optional[str] = None
+
             self._Yp_BBN: Optional[float] = None
             self._DOverH: Optional[float] = None
             self._He3OverH: Optional[float] = None
@@ -364,6 +372,10 @@ class BBNData(DatastoreObject):
 
         else:
             DatastoreObject.__init__(self, payload["store_id"])
+
+            self._small_network = payload["small_network"]
+            self._PRyM_version = payload["PryM_version"]
+
             self._Yp_BBN = payload["Yp_BBN"]
             self._DOverH = payload["DOverH"]
             self._He3OverH = payload["He3OverH"]
@@ -404,6 +416,34 @@ class BBNData(DatastoreObject):
     @property
     def coupling(self) -> AbstractCoupling:
         return self._coupling
+
+    @property
+    def small_network(self) -> Optional[bool]:
+        if self._queryable is False:
+            raise RuntimeError(
+                f"BBNData ({self._label}): small_network has not yet been populated"
+            )
+
+        if self._failure:
+            raise RuntimeError(
+                f"BBNData ({self._label}): this object had an integration failure and cannot be used"
+            )
+
+        return self._small_network
+
+    @property
+    def PRyM_version(self) -> Optional[str]:
+        if self._queryable is False:
+            raise RuntimeError(
+                f"BBNData ({self._label}): PRyM_version has not yet been populated"
+            )
+
+        if self._failure:
+            raise RuntimeError(
+                f"BBNData ({self._label}): this object had an integration failure and cannot be used"
+            )
+
+        return self._PRyM_version
 
     @property
     def Yp_BBN(self) -> Optional[float]:
@@ -491,12 +531,17 @@ class BBNData(DatastoreObject):
             )
         return self._NP_compute_time
 
-    def compute(self, label: Optional[str] = None) -> ray.ObjectRef:
+    def compute(self, label: Optional[str] = None, payload: Optional[dict[str, Any]] = None) -> ray.ObjectRef:
         if self._queryable:
             raise RuntimeError("values have already been populated")
 
         if label is not None:
             self._label = label
+
+        if payload is not None:
+            small_network = payload.get("small_network", False)
+        else:
+            small_network = False
 
         self._compute_ref = compute_BBN_data.remote(
             self._model_proxy,
@@ -505,6 +550,7 @@ class BBNData(DatastoreObject):
                 if self._label is not None
                 else f"{self._potential.name}-{self._coupling.name}"
             ),
+            small_network=small_network,
         )
         return self._compute_ref
 
@@ -533,6 +579,9 @@ class BBNData(DatastoreObject):
             return True
 
         self._failure = False
+
+        self._small_network = data["small_network"]
+        self._PRyM_version = data["PryM_version"]
 
         self._Yp_BBN = data["Yp_BBN"]
         self._DOverH = data["DOverH"]
