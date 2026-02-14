@@ -360,7 +360,7 @@ class BBNData(DatastoreObject):
             # we don't want to use self._values as an indicator of whether we contain
             # useful, readable information, because we might read with "_do_not_populate",
             # but still want to read the summary Yp, D/H, Li7/H, etc. data
-            self._populated: bool = False
+            self._queryable: bool = False
 
         else:
             DatastoreObject.__init__(self, payload["store_id"])
@@ -377,7 +377,7 @@ class BBNData(DatastoreObject):
             self._failure: Optional[bool] = payload["failure"]
 
             # see above for explanation of this flag
-            self._populated = True
+            self._queryable = True
 
         self._compute_ref: Optional[ray.ObjectRef] = None
 
@@ -407,7 +407,7 @@ class BBNData(DatastoreObject):
 
     @property
     def Yp_BBN(self) -> Optional[float]:
-        if self._populated is False:
+        if self._queryable is False:
             raise RuntimeError(
                 f"BBNData ({self._label}): Yp_BBN has not yet been populated"
             )
@@ -421,7 +421,7 @@ class BBNData(DatastoreObject):
 
     @property
     def DOverH(self) -> Optional[float]:
-        if self._populated is False:
+        if self._queryable is False:
             raise RuntimeError(
                 f"BBNData ({self._label}): DOverH has not yet been populated"
             )
@@ -435,7 +435,7 @@ class BBNData(DatastoreObject):
 
     @property
     def He3OverH(self) -> Optional[float]:
-        if self._populated is False:
+        if self._queryable is False:
             raise RuntimeError(
                 f"BBNData ({self._label}): He3OverH has not yet been populated"
             )
@@ -449,7 +449,7 @@ class BBNData(DatastoreObject):
 
     @property
     def Li7OverH(self) -> Optional[float]:
-        if self._populated is False:
+        if self._queryable is False:
             raise RuntimeError(
                 f"BBNData ({self._label}): Li7OverH has not yet been populated"
             )
@@ -477,7 +477,7 @@ class BBNData(DatastoreObject):
 
     @property
     def BBN_compute_time(self) -> float:
-        if self._populated is False:
+        if self._queryable is False:
             raise RuntimeError(
                 f"BBNData ({self._label}): BBN_compute_time has not yet been populated"
             )
@@ -485,14 +485,14 @@ class BBNData(DatastoreObject):
 
     @property
     def NP_compute_time(self) -> float:
-        if self._populated is False:
+        if self._queryable is False:
             raise RuntimeError(
                 f"BBNData ({self._label}): NP_compute_time has not yet been populated"
             )
         return self._NP_compute_time
 
     def compute(self, label: Optional[str] = None) -> ray.ObjectRef:
-        if self._populated:
+        if self._queryable:
             raise RuntimeError("values have already been populated")
 
         if label is not None:
@@ -524,7 +524,7 @@ class BBNData(DatastoreObject):
         data = ray.get(self._compute_ref)
         self._compute_ref = None
 
-        self._populated = True
+        self._queryable = True
 
         failure: bool = data.get("failure", False)
         if failure:
