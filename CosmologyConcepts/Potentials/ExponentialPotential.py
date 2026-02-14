@@ -102,14 +102,14 @@ class ExponentialPotential(AbstractPotential):
         arg: float = pow(self._M_float / phi_float, self._n)
         try:
             return self._log_Lambda_4 + arg
-        except OverflowError:
+        except OverflowError as e:
             msg = f"!! Overflow in ExponentialPotential log_V at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
             print(msg)
-            raise ComputationFailureError(msg)
-        except ValueError:
+            raise ComputationFailureError(msg) from e
+        except ValueError as e:
             msg = f"!! ValueError in ExponentialPotential log_V at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
             print(msg)
-            raise ComputationFailureError(msg)
+            raise ComputationFailureError(msg) from e
 
     def d_logV_dphi(self, phi: FieldLike) -> float:
         """
@@ -126,14 +126,14 @@ class ExponentialPotential(AbstractPotential):
 
         try:
             return -self._n * arg / phi
-        except OverflowError:
+        except OverflowError as e:
             msg = f"! Overflow in ExponentialPotential d_logV_dphi at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
             print(msg)
-            raise ComputationFailureError(msg)
-        except ValueError:
+            raise ComputationFailureError(msg) from e
+        except ValueError as e:
             msg = f"!! ValueError in ExponentialPotential d_logV_dphi at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
             print(msg)
-            raise ComputationFailureError(msg)
+            raise ComputationFailureError(msg) from e
 
     def d2_logV_dphi2(self, phi: FieldLike) -> float:
         """
@@ -147,11 +147,11 @@ class ExponentialPotential(AbstractPotential):
 
         try:
             return self._n * (self._n + 1) * arg / (phi * phi)
-        except OverflowError:
+        except OverflowError as e:
             msg = f"! Overflow in ExponentialPotential d2_logV_dphi2 at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
             print(msg)
-            raise ComputationFailureError(msg)
-        except ValueError:
+            raise ComputationFailureError(msg) from e
+        except ValueError as e:
             msg = f"!! ValueError in ExponentialPotential d2_logV_dphi2 at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
             print(msg)
-            raise ComputationFailureError(msg)
+            raise ComputationFailureError(msg) from e

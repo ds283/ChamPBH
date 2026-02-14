@@ -197,7 +197,18 @@ def compute_BBN_data(
             )
 
         log_T_in_MeV = log(T_in_MeV)
-        return sinh(arcsinh_density_NP_MeV4_spline(log_T_in_MeV))
+        try:
+            value = sinh(arcsinh_density_NP_MeV4_spline(log_T_in_MeV))
+        except OverflowError as e:
+            msg = f"!! compute_BBN_data {task_label}: overflow error at T = {T_in_MeV:.5g} MeV: {e}"
+            print(msg)
+            raise ComputationFailureError(msg) from e
+        except ValueError as e:
+            msg = f"!! compute_BBN_data {task_label}: value error at T = {T_in_MeV:.5g} MeV: {e}"
+            print(msg)
+            raise ComputationFailureError(msg) from e
+        else:
+            return value
 
     def P_NP(T_in_MeV: float):
         T = T_in_MeV * units.MeV
@@ -217,7 +228,18 @@ def compute_BBN_data(
             )
 
         log_T_in_MeV = log(T_in_MeV)
-        return sinh(arcsinh_pressure_NP_MeV4_spline(log_T_in_MeV))
+        try:
+            value = sinh(arcsinh_pressure_NP_MeV4_spline(log_T_in_MeV))
+        except OverflowError as e:
+            msg = f"!! compute_BBN_data {task_label}: overflow error at T = {T_in_MeV:.5g} MeV: {e}"
+            print(msg)
+            raise ComputationFailureError(msg) from e
+        except ValueError as e:
+            msg = f"!! compute_BBN_data {task_label}: value error at T = {T_in_MeV:.5g} MeV: {e}"
+            print(msg)
+            raise ComputationFailureError(msg) from e
+        else:
+            return value
 
     def drho_NP_dT(T_in_MeV: float):
         T = T_in_MeV * units.MeV
@@ -237,11 +259,24 @@ def compute_BBN_data(
             )
 
         log_T_in_MeV = log(T_in_MeV)
-        rho_T = sinh(arcsinh_density_NP_MeV4_spline(log_T_in_MeV))
+        try:
+            rho_T = sinh(arcsinh_density_NP_MeV4_spline(log_T_in_MeV))
 
-        norm_factor = sqrt(1.0 + rho_T * rho_T) / T_in_MeV
+            norm_factor = sqrt(1.0 + rho_T * rho_T) / T_in_MeV
 
-        return norm_factor * arcsinh_density_NP_MeV4_derivative_spline(log_T_in_MeV)
+            value = norm_factor * arcsinh_density_NP_MeV4_derivative_spline(
+                log_T_in_MeV
+            )
+        except OverflowError as e:
+            msg = f"!! compute_BBN_data {task_label}: overflow error at T = {T_in_MeV:.5g} MeV: {e}"
+            print(msg)
+            raise ComputationFailureError(msg) from e
+        except ValueError as e:
+            msg = f"!! compute_BBN_data {task_label}: value error at T = {T_in_MeV:.5g} MeV: {e}"
+            print(msg)
+            raise ComputationFailureError(msg) from e
+        else:
+            return value
 
     with WallclockTimer() as BBN_timer:
         # import locally so that global variable in PRyMini don't leak between threads
@@ -262,8 +297,11 @@ def compute_BBN_data(
         # speed up calculation using small reaction network, at cost of Li7 accuracy
         PRyMini.small_network_flag = True
 
-        # run PRyMordial
-        res = PRyMmain.PRyMclass(rho_NP, P_NP, drho_NP_dT).PRyMresults()
+        try:
+            # run PRyMordial
+            res = PRyMmain.PRyMclass(rho_NP, P_NP, drho_NP_dT).PRyMresults()
+        except (OverflowError, ValueError, ComputationFailureError) as e:
+            return {"failure": True}
 
     for i, z in enumerate(z_grid):
         samples.append(
@@ -317,7 +355,13 @@ class BBNData(DatastoreObject):
             self._BBN_compute_time: Optional[float] = None
             self._NP_compute_time: Optional[float] = None
 
+            self._failure: bool = None
+
+            # we don't want to use self._values as an indicator of whether we contain
+            # useful, readable information, because we might read with "_do_not_populate",
+            # but still want to read the summary Yp, D/H, Li7/H, etc. data
             self._populated: bool = False
+
         else:
             DatastoreObject.__init__(self, payload["store_id"])
             self._Yp_BBN = payload["Yp_BBN"]
@@ -330,6 +374,9 @@ class BBNData(DatastoreObject):
             self._BBN_compute_time = payload["BBN_compute_time"]
             self._NP_compute_time = payload["NP_compute_time"]
 
+            self._failure: Optional[bool] = payload["failure"]
+
+            # see above for explanation of this flag
             self._populated = True
 
         self._compute_ref: Optional[ray.ObjectRef] = None
@@ -337,6 +384,10 @@ class BBNData(DatastoreObject):
     @property
     def shard_key(self) -> ShardKeyType:
         return self._coupling.shard_key
+
+    @property
+    def failure(self) -> Optional[bool]:
+        return self._failure
 
     @property
     def label(self) -> str:
@@ -357,48 +408,87 @@ class BBNData(DatastoreObject):
     @property
     def Yp_BBN(self) -> Optional[float]:
         if self._populated is False:
-            raise RuntimeError("Yp_BBN has not yet been populated")
+            raise RuntimeError(
+                f"BBNData ({self._label}): Yp_BBN has not yet been populated"
+            )
+
+        if self._failure:
+            raise RuntimeError(
+                f"BBNData ({self._label}): this object had an integration failure and cannot be used"
+            )
 
         return self._Yp_BBN
 
     @property
     def DOverH(self) -> Optional[float]:
         if self._populated is False:
-            raise RuntimeError("DOverH has not yet been populated")
+            raise RuntimeError(
+                f"BBNData ({self._label}): DOverH has not yet been populated"
+            )
+
+        if self._failure:
+            raise RuntimeError(
+                f"BBNData ({self._label}): this object had an integration failure and cannot be used"
+            )
 
         return self._DOverH
 
     @property
     def He3OverH(self) -> Optional[float]:
         if self._populated is False:
-            raise RuntimeError("He3OverH has not yet been populated")
+            raise RuntimeError(
+                f"BBNData ({self._label}): He3OverH has not yet been populated"
+            )
+
+        if self._failure:
+            raise RuntimeError(
+                f"BBNData ({self._label}): this object had an integration failure and cannot be used"
+            )
 
         return self._He3OverH
 
     @property
     def Li7OverH(self) -> Optional[float]:
         if self._populated is False:
-            raise RuntimeError("Li7OverH has not yet been populated")
+            raise RuntimeError(
+                f"BBNData ({self._label}): Li7OverH has not yet been populated"
+            )
+
+        if self._failure:
+            raise RuntimeError(
+                f"BBNData ({self._label}): this object had an integration failure and cannot be used"
+            )
 
         return self._Li7OverH
 
     @property
     def values(self) -> List:
         if self._values is None:
-            raise RuntimeError("values have not yet been populated")
+            raise RuntimeError(
+                f"BBNData ({self._label}): values have not yet been populated"
+            )
+
+        if self._failure:
+            raise RuntimeError(
+                f"BBNData ({self._label}): this object had an integration failure and cannot be used"
+            )
 
         return self._values
 
     @property
     def BBN_compute_time(self) -> float:
         if self._populated is False:
-            raise RuntimeError("BBN_compute_time has not yet been populated")
+            raise RuntimeError(
+                f"BBNData ({self._label}): BBN_compute_time has not yet been populated"
+            )
         return self._BBN_compute_time
 
     @property
     def NP_compute_time(self) -> float:
         if self._populated is False:
-            raise RuntimeError("NP_compute_time has not yet been populated")
+            raise RuntimeError(
+                f"BBNData ({self._label}): NP_compute_time has not yet been populated"
+            )
         return self._NP_compute_time
 
     def compute(self, label: Optional[str] = None) -> ray.ObjectRef:
@@ -434,6 +524,16 @@ class BBNData(DatastoreObject):
         data = ray.get(self._compute_ref)
         self._compute_ref = None
 
+        self._populated = True
+
+        failure: bool = data.get("failure", False)
+        if failure:
+            self._failure = True
+            self._values = []
+            return True
+
+        self._failure = False
+
         self._Yp_BBN = data["Yp_BBN"]
         self._DOverH = data["DOverH"]
         self._He3OverH = data["He3OverH"]
@@ -459,7 +559,6 @@ class BBNData(DatastoreObject):
                 )
             )
 
-        self._populated = True
         return True
 
 

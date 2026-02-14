@@ -169,7 +169,7 @@ class ODEPolicy:
         except OverflowError as e:
             msg = f"!! ODEPolicy ({self.task_label}): math overflow in exp(log_fm), log_fm = {state.log_fm:.5g} | N = {N:.5g}, phi_Einstein = {state.phi_Einstein / self.MP:.5g} Mp, pi_Einstein = {state.pi_Einstein / self.MP:.5g} Mp"
             print(msg)
-            raise ComputationFailureError(msg)
+            raise ComputationFailureError(msg) from e
 
         return fm
 
@@ -179,7 +179,7 @@ class ODEPolicy:
         except OverflowError as e:
             msg = f"!! ODEPolicy ({self.task_label}): math overflow in exp(log_T_Jordan), log_T_Jordan = {state.log_T_Jordan:.5g} | N = {N:.5g}, log_fm = {state.log_fm:.5g}, phi_Einstein = {state.phi_Einstein / self.MP:.5g} Mp, pi_Einstein = {state.pi_Einstein / self.MP:.5g} Mp"
             print(msg)
-            raise ComputationFailureError(msg)
+            raise ComputationFailureError(msg) from e
 
         if T_Jordan <= 0.0:
             # this doesn't have to indicate a problem, because the stepper sometimes goes down
@@ -1235,7 +1235,7 @@ class ScalarModel(DatastoreObject):
         data = ray.get(self._compute_ref)
         self._compute_ref = None
 
-        failure = data.get("failure", False)
+        failure: bool = data.get("failure", False)
         if failure:
             self._failure = True
             self._values = []

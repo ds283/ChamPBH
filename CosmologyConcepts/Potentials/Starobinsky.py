@@ -100,14 +100,14 @@ class StarobinskyPotential(AbstractPotential):
 
             return self._Lambda4_float * B * B
 
-        except OverflowError:
+        except OverflowError as e:
             msg = f"!! Overflow in StarobinskyPotential V at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
             print(msg)
-            raise ComputationFailureError(msg)
-        except ValueError:
+            raise ComputationFailureError(msg) from e
+        except ValueError as e:
             msg = f"!! ValueError in StarobinskyPotential V at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
             print(msg)
-            raise ComputationFailureError(msg)
+            raise ComputationFailureError(msg) from e
 
     def dV_dphi(self, phi: FieldLike) -> float:
         """
@@ -125,14 +125,14 @@ class StarobinskyPotential(AbstractPotential):
 
             return -2.0 * self._Lambda4_float * B / self._M_float
 
-        except OverflowError:
+        except OverflowError as e:
             msg = f"! Overflow in StarobinskyPotential V' at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
             print(msg)
-            raise ComputationFailureError(msg)
-        except ValueError:
+            raise ComputationFailureError(msg) from e
+        except ValueError as e:
             msg = f"!! ValueError in StarobinskyPotential V'' at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
             print(msg)
-            raise ComputationFailureError(msg)
+            raise ComputationFailureError(msg) from e
 
     def d2V_dphi2(self, phi: FieldLike) -> float:
         """
@@ -151,11 +151,11 @@ class StarobinskyPotential(AbstractPotential):
 
             return 2.0 * self._Lambda4_float * B / (self._M_float * self._M_float)
 
-        except OverflowError:
+        except OverflowError as e:
             msg = f"! Overflow in StarobinskyPotential V'' at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
             print(msg)
-            raise ComputationFailureError(msg)
-        except ValueError:
+            raise ComputationFailureError(msg) from e
+        except ValueError as e:
             msg = f"!! ValueError in StarobinskyPotential V'' at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
             print(msg)
-            raise ComputationFailureError(msg)
+            raise ComputationFailureError(msg) from e

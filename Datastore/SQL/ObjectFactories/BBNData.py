@@ -92,6 +92,7 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
                     index=True,
                     nullable=False,
                 ),
+                sqla.Column("failure", sqla.Boolean, default=False, nullable=False),
                 sqla.Column("Yp_BBN", sqla.Float(64)),
                 sqla.Column("DOverH", sqla.Float(64)),
                 sqla.Column("He3OverH", sqla.Float(64)),
@@ -112,11 +113,14 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
         model: ScalarModel = model_proxy.get()
         cosmology: BaseCosmology = model.cosmology
 
+        failure: Optional[bool] = payload.get("failure", False)
+
         redshift_table = tables["redshift"]
 
         # find if there is an existing record for this model
         query = sqla.select(
             table.c.serial,
+            table.c.failure,
             table.c.Yp_BBN,
             table.c.DOverH,
             table.c.He3OverH,
@@ -128,6 +132,10 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
         ).filter(
             table.c.model_serial == model_proxy.store_id,
         )
+
+        # filter by failure flag if provided
+        if failure is not None:
+            query = query.filter(table.c.failure == failure)
 
         # require that the integration we search for has the specified list of tags
         tag_table = tables["BBNData_tags"]
@@ -231,6 +239,7 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
         obj = BBNData(
             {
                 "store_id": store_id,
+                "faillure": row_data.faillure,
                 "Yp_BBN": row_data.Yp_BBN,
                 "DOverH": row_data.DOverH,
                 "He3OverH": row_data.He3OverH,
@@ -251,14 +260,15 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
         payload = {
             "model_serial": obj._model_proxy.store_id,
             "label": obj.label,
-            "Yp_BBN": obj.Yp_BBN,
-            "DOverH": obj.DOverH,
-            "He3OverH": obj.He3OverH,
-            "Li7OverH": obj.Li7OverH,
-            "z_samples": len(obj.values),
-            "NP_compute_time": obj.NP_compute_time,
-            "BBN_compute_time": obj.BBN_compute_time,
-            "validated": True,
+            "failure": obj._failure,
+            "Yp_BBN": obj.Yp_BBN if not obj._failure else None,
+            "DOverH": obj.DOverH if not obj._failure else None,
+            "He3OverH": obj.He3OverH if not obj._failure else None,
+            "Li7OverH": obj.Li7OverH if not obj._failure else None,
+            "z_samples": len(obj.values) if not obj._failure else None,
+            "NP_compute_time": obj.NP_compute_time if not obj._failure else None,
+            "BBN_compute_time": obj.BBN_compute_time if not obj._failure else None,
+            "validated": False,
         }
 
         # set store_id on behalf of the BBNData instance
@@ -304,19 +314,25 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
                 "Attempt to validate a datastore object that has not yet been serialized"
             )
 
-        expected_samples = conn.execute(
-            sqla.select(table.c.z_samples).filter(table.c.serial == obj.store_id)
-        ).scalar()
+        # treat integration failures as validated
+        if obj._failure:
+            validated: bool = True
 
-        value_table = tables["BBNDataValue"]
-        num_samples = conn.execute(
-            sqla.select(sqla.func.count(value_table.c.serial)).filter(
-                value_table.c.bbn_serial == obj.store_id
-            )
-        ).scalar()
+        else:
+            expected_samples = conn.execute(
+                sqla.select(table.c.z_samples).filter(table.c.serial == obj.store_id)
+            ).scalar()
 
-        # check if we counted as many rows as we expected
-        validated: bool = num_samples == expected_samples
+            value_table = tables["BBNDataValue"]
+            num_samples = conn.execute(
+                sqla.select(sqla.func.count(value_table.c.serial)).filter(
+                    value_table.c.bbn_serial == obj.store_id
+                )
+            ).scalar()
+
+            # check if we counted as many rows as we expected
+            validated: bool = num_samples == expected_samples
+
         if not validated:
             print(
                 f'!! WARNING: BBNData "{obj.label}" did not validate after serialization (expected samples={expected_samples}, number stored={num_samples})'
@@ -342,7 +358,12 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
                     table.c.serial,
                     table.c.label,
                     table.c.z_samples,
-                ).filter(or_(table.c.validated == False, table.c.validated == None))
+                ).filter(
+                    and_(
+                        table.c.failure == False,
+                        or_(table.c.validated == False, table.c.validated == None),
+                    )
+                )
             )
         )
 

@@ -568,7 +568,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
 
         # treat integration failures as validated
         if obj._failure:
-            validated = True
+            validated: bool = True
 
         else:
             expected_samples = conn.execute(

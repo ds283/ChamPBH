@@ -1080,7 +1080,7 @@ def BBN_era_NP_plot(
 ):
     units: UnitsLike = model._units
 
-    if not BBN.available:
+    if BBN.failure or not BBN.available:
         return
 
     # can assume model is available
@@ -1450,12 +1450,17 @@ def plot_ScalarModel(
         )
         return
 
+    if BBN.failure:
+        print(
+            f"@@ plot_ScalarModel: BBN data for Potential={potential.name}, Coupling={coupling.name} had an integration failure, and will not be used"
+        )
+
     if not Q.available:
         print(
             f"@@ plot_ScalarModel: adiabatic Q history for Potential={potential.name}, Coupling={coupling.name} is not available, and will not be plotted"
         )
 
-    if not BBN.available:
+    if not BBN.failure and not BBN.available:
         print(
             f"@@ plot_ScalarModel: BBN data for Potential={potential.name}, Coupling={coupling.name} is not available, and will not be plotted"
         )
@@ -1597,6 +1602,7 @@ def run_pipeline(
         model_query_payload = {
             "shard_key": coupling.shard_key,
             "solver_labels": [],
+            "failure": False,  # skip any failed instances
             "cosmology": model_cosmology,
             "T_Jordan_init": T_init,
             "T_Jordan_stop": T_stop,
@@ -1626,6 +1632,7 @@ def run_pipeline(
         BBN_query_payload = {
             "shard_key": coupling.shard_key,
             "model_proxy": model_proxy,
+            "failure": False,  # skip any failed instances
         }
 
         BBN: BBNData = pool.object_get("BBNData", **BBN_query_payload)

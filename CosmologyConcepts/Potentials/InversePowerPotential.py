@@ -101,14 +101,14 @@ class InversePowerPotential(AbstractPotential):
         arg: float = pow(self._M_float / phi_float, self._n)
         try:
             return self._log_Lambda_4 + log(1.0 + arg)
-        except OverflowError:
+        except OverflowError as e:
             msg = f"!! Overflow in InversePowerPotential log_V at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
             print(msg)
-            raise ComputationFailureError(msg)
-        except ValueError:
+            raise ComputationFailureError(msg) from e
+        except ValueError as e:
             msg = f"!! ValueError in InversePowerPotential log_V at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
             print(msg)
-            raise ComputationFailureError(msg)
+            raise ComputationFailureError(msg) from e
 
     def d_logV_dphi(self, phi: FieldLike) -> float:
         """
@@ -128,14 +128,14 @@ class InversePowerPotential(AbstractPotential):
                 return -(self._n / phi) / (1.0 + arginv)
             else:
                 return -(self._n * arg / phi) / (1.0 + arg)
-        except OverflowError:
+        except OverflowError as e:
             msg = f"! Overflow in InversePowerPotential d_logV_dphi at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
             print(msg)
-            raise ComputationFailureError(msg)
-        except ValueError:
+            raise ComputationFailureError(msg) from e
+        except ValueError as e:
             msg = f"!! ValueError in InversePowerPotential d_logV_dphi at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
             print(msg)
-            raise ComputationFailureError(msg)
+            raise ComputationFailureError(msg) from e
 
     def d2_logV_dphi2(self, phi: FieldLike) -> float:
         """
@@ -151,11 +151,11 @@ class InversePowerPotential(AbstractPotential):
             A: float = 1.0 + arg
             A2: float = A * A
             return self._n * (self._n + 1.0 + arg) * arg / phi2 / A2
-        except OverflowError:
+        except OverflowError as e:
             msg = f"! Overflow in InversePowerPotential d2_logV_dphi2 at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
             print(msg)
-            raise ComputationFailureError(msg)
+            raise ComputationFailureError(msg) from e
         except ValueError as e:
             msg = f"!! ValueError in InversePowerPotential d2_logV_dphi2 at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, (M/phi)^n = {arg:.5g}"
             print(msg)
-            raise ComputationFailureError(msg)
+            raise ComputationFailureError(msg) from e

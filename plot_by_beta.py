@@ -123,7 +123,9 @@ def build_beta_plot(
         if m.available and not m.failure
     ]
     bbn_time_points = [
-        (d.coupling._beta.as_float, d.BBN_compute_time) for d in bbn_data if d.available
+        (d.coupling._beta.as_float, d.BBN_compute_time)
+        for d in bbn_data
+        if d.available and not d.failure
     ]
 
     adiabatic_maxQ_points = [
@@ -139,17 +141,17 @@ def build_beta_plot(
     Yp_points = [
         (d.coupling._beta.as_float, d.Yp_BBN)
         for d in bbn_data
-        if d.available and d.Yp_BBN > 0
+        if d.available and not d.failure and d.Yp_BBN > 0
     ]
     DOverH_points = [
         (d.coupling._beta.as_float, d.DOverH)
         for d in bbn_data
-        if d.available and d.DOverH > 0
+        if d.available and not d.failure and d.DOverH > 0
     ]
     Li7_points = [
         (d.coupling._beta_float, d.Li7OverH)
         for d in bbn_data
-        if d.available and d.Li7OverH > 0
+        if d.available and not d.failure and d.Li7OverH > 0
     ]
 
     solver_time_x, solver_time_y = zip(*solver_time_points)
@@ -430,7 +432,11 @@ def build_beta_plot(
             if m.available and not m.failure
         }
         beta_to_Q = {Q.coupling._beta.store_id: Q for Q in Q_data if Q.available}
-        beta_to_BBN = {B.coupling._beta.store_id: B for B in bbn_data if B.available}
+        beta_to_BBN = {
+            B.coupling._beta.store_id: B
+            for B in bbn_data
+            if B.available and not B.failure
+        }
 
         beta_keys = (
             set(beta_to_models.keys()) | set(beta_to_Q.keys()) | set(beta_to_BBN.keys())
@@ -521,6 +527,7 @@ def run_pipeline(
             {
                 "shard_key": coupling.shard_key,
                 "solver_labels": [],
+                "failure": False,
                 "cosmology": model_cosmology,
                 "T_Jordan_init": T_init,
                 "T_Jordan_stop": T_stop,
@@ -587,6 +594,7 @@ def run_pipeline(
             {
                 "shard_key": m.shard_key,
                 "model_proxy": m,
+                "failure": False,
                 "tags": tags,
                 "_do_not_populate": True,
             }

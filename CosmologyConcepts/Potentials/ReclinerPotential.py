@@ -120,14 +120,14 @@ class ReclinerPotential(AbstractPotential):
                 A: float = exp(arg)
                 return self._log_Lambda_4 * (log(1.0 + A) - arg)
 
-        except OverflowError:
+        except OverflowError as e:
             msg = f"! Overflow in ReclinerPotential log_V at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
             print(msg)
-            raise ComputationFailureError(msg)
-        except ValueError:
+            raise ComputationFailureError(msg) from e
+        except ValueError as e:
             msg = f"!! ValueError in ReclinerPotential log_V at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
             print(msg)
-            raise ComputationFailureError(msg)
+            raise ComputationFailureError(msg) from e
 
     def d_logV_dphi(self, phi: FieldLike) -> float:
         """
@@ -149,14 +149,14 @@ class ReclinerPotential(AbstractPotential):
                 B: float = 1.0 / (1.0 + A)
                 return -B / self._M_float
 
-        except OverflowError:
+        except OverflowError as e:
             msg = f"! Overflow in ReclinerPotential d_logV_dphi at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
             print(msg)
-            raise ComputationFailureError(msg)
-        except ValueError:
+            raise ComputationFailureError(msg) from e
+        except ValueError as e:
             msg = f"!! ValueError in ReclinerPotential d_logV_dphi at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
             print(msg)
-            raise ComputationFailureError(msg)
+            raise ComputationFailureError(msg) from e
 
     def d2_logV_dphi2(self, phi: FieldLike) -> float:
         """
@@ -180,14 +180,14 @@ class ReclinerPotential(AbstractPotential):
                 C: float = A / (1.0 + A)
                 return B * C / self._M_2
 
-        except OverflowError:
+        except OverflowError as e:
             msg = f"! Overflow in ReclinerPotential d2_logV_dphi2 at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
             print(msg)
-            raise ComputationFailureError(msg)
-        except ValueError:
+            raise ComputationFailureError(msg) from e
+        except ValueError as e:
             msg = f"!! ValueError in ReclinerPotential d2_logV_dphi2 at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
             print(msg)
-            raise ComputationFailureError(msg)
+            raise ComputationFailureError(msg) from e
 
     def V(self, phi: FieldLike) -> float:
         """
@@ -201,14 +201,14 @@ class ReclinerPotential(AbstractPotential):
         try:
             return self._Lambda_4 * (1.0 + exp(-arg))
 
-        except OverflowError:
+        except OverflowError as e:
             msg = f"! Overflow in ReclinerPotential V at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
             print(msg)
-            raise ComputationFailureError(msg)
-        except ValueError:
+            raise ComputationFailureError(msg) from e
+        except ValueError as e:
             msg = f"!! ValueError in ReclinerPotential V at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
             print(msg)
-            raise ComputationFailureError(msg)
+            raise ComputationFailureError(msg) from e
 
     def dV_dphi(self, phi: FieldLike) -> float:
         """
@@ -222,14 +222,14 @@ class ReclinerPotential(AbstractPotential):
         try:
             return -self._Lambda_4 * exp(-arg) / self._M_float
 
-        except OverflowError:
+        except OverflowError as e:
             msg = f"! Overflow in ReclinerPotential dV_dphi at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
             print(msg)
-            raise ComputationFailureError(msg)
-        except ValueError:
+            raise ComputationFailureError(msg) from e
+        except ValueError as e:
             msg = f"!! ValueError in ReclinerPotential dV_dphi at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
             print(msg)
-            raise ComputationFailureError(msg)
+            raise ComputationFailureError(msg) from e
 
     def d2V_dphi2(self, phi: FieldLike) -> float:
         """
@@ -243,11 +243,11 @@ class ReclinerPotential(AbstractPotential):
         try:
             return self._Lambda_4 * exp(-arg) / self._M_2
 
-        except OverflowError:
+        except OverflowError as e:
             msg = f"! Overflow in ReclinerPotential d2V_dphi2 at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
             print(msg)
-            raise ComputationFailureError(msg)
-        except ValueError:
+            raise ComputationFailureError(msg) from e
+        except ValueError as e:
             msg = f"!! ValueError in ReclinerPotential d2V_dphi2 at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, phi/M = {arg:.5g}"
             print(msg)
-            raise ComputationFailureError(msg)
+            raise ComputationFailureError(msg) from e
