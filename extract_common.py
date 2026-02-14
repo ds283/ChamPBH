@@ -35,7 +35,8 @@ ABOVE_PLOTS_MIDDLE_ROW = 0.94
 ABOVE_PLOTS_BOTTOM_ROW = 0.92
 
 BELOW_PLOTS_TOP_ROW = 0.04
-BELOW_PLOTS_BOTTOM_ROW = 0.02
+BELOW_PLOTS_MIDDLE_ROW = 0.02
+BELOW_PLOTS_BOTTOM_ROW = 0.0
 
 LEFT_COLUMN = 0.1
 MIDDLE_COLUMN = 0.5
@@ -117,13 +118,15 @@ def add_beta_summary_labels(fig, model_label, potential: AbstractPotential):
     )
 
 
-def add_BBN_info_labels(fig, bbn: Optional[BBNData]=None, labels: Optional[dict[str, Any]]=None):
+def add_BBN_info_labels(
+    fig, bbn: Optional[BBNData] = None, labels: Optional[dict[str, Any]] = None
+):
     if bbn is None and labels is None:
-        print('!! add_BBN_info_labels: one of bbn or labels must be provided')
+        print("!! add_BBN_info_labels: one of bbn or labels must be provided")
         return
 
     if bbn is not None and labels is not None:
-        print('!! add_BBN_info_labels: only one of bbn or labels must be provided')
+        print("!! add_BBN_info_labels: only one of bbn or labels must be provided")
 
     if bbn is not None:
         if bbn.failure or not bbn.available:
@@ -132,12 +135,12 @@ def add_BBN_info_labels(fig, bbn: Optional[BBNData]=None, labels: Optional[dict[
         small_network = "True" if bbn.small_network else "False"
         PRyM_version = bbn.PRyM_version
     else:
-        small_network = labels['small_network']
-        PRyM_version = labels['PRyM_version']
+        small_network = labels["small_network"]
+        PRyM_version = labels["PRyM_version"]
 
     fig.text(
         LEFT_COLUMN,
-        BELOW_PLOTS_TOP_ROW,
+        BELOW_PLOTS_MIDDLE_ROW,
         f"Small reaction network: {small_network}",
         horizontalalignment="left",
         fontsize="xx-small",
@@ -155,11 +158,12 @@ def add_BBN_info_labels(fig, bbn: Optional[BBNData]=None, labels: Optional[dict[
 
     fig.text(
         RIGHT_COLUMN,
-        BELOW_PLOTS_TOP_ROW,
+        BELOW_PLOTS_MIDDLE_ROW,
         f"PRyMordial version: {PRyM_version}",
         horizontalalignment="right",
         fontsize="xx-small",
     )
+
 
 def add_ScalarModel_labels(fig, model: ScalarModel, model_label):
     solver: IntegrationSolver = model.solver

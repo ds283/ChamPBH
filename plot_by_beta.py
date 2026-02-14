@@ -126,8 +126,22 @@ def build_beta_plot(
     base_path = Path(args.output).resolve()
     base_path = base_path / f"{model_label}"
 
-    PRyM_versions = set([d.PRyM_version for d in bbn_data if d.available and not d.failure])
-    small_networks = set([d.small_network for d in bbn_data if d.avalable and not d.failure])
+    PRyM_versions = set(
+        [d.PRyM_version for d in bbn_data if d.available and not d.failure]
+    )
+    small_networks = set(
+        [d.small_network for d in bbn_data if d.available and not d.failure]
+    )
+    bbn_labels = {
+        "small_network": (
+            "Multiple"
+            if len(small_networks) > 1
+            else "True" if True in small_networks else "False"
+        ),
+        "PRyM_version": (
+            PRyM_versions.pop() if len(PRyM_versions) == 1 else "Multiple"
+        ),
+    }
 
     solver_time_points = [
         (m.coupling._beta.as_float, m.metadata.compute_time)
@@ -215,6 +229,7 @@ def build_beta_plot(
         solver_ax.grid(True)
 
         add_beta_summary_labels(fig, model_label, potential)
+        add_BBN_info_labels(fig, labels=bbn_labels)
 
         solver_ax.legend(loc="best")
         bbn_ax.legend(loc="best")
@@ -344,6 +359,7 @@ def build_beta_plot(
         Yp_ax.set_xlabel(r"coupling $\beta$")
 
         add_beta_summary_labels(fig, model_label, potential)
+        add_BBN_info_labels(fig, labels=bbn_labels)
 
         def get_max_min(data):
             max_value = None
@@ -420,11 +436,6 @@ def build_beta_plot(
         ax.grid(True)
 
         add_beta_summary_labels(fig, model_label, potential)
-        bbn_labels = {
-            "small_network": "Multiple" if len(small_networks) > 1 else "True" if True in small_networks else "False",
-            "PRyM_versions": PRyM_versions.pop() if len(PRyM_versions) == 1 else "Multiple"
-        }
-        add_BBN_info_labels(fig, labels=bbn_labels)
 
         ax.legend(loc="best")
 
