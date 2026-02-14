@@ -12,7 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+from math import fabs
 from typing import Optional
 
 import sqlalchemy as sqla
@@ -21,7 +21,9 @@ from sqlalchemy import and_
 from ComputeTargets import ScalarModelProxy, ScalarModel
 from CosmologyConcepts import redshift
 from Datastore.SQL.ObjectFactories.base import SQLAFactoryBase
-from config.defaults import DEFAULT_REDSHIFT_RELATIVE_PRECISION
+from config.defaults import (
+    DEFAULT_REDSHIFT_RELATIVE_PRECISION,
+)
 
 
 class sqla_redshift_factory(SQLAFactoryBase):
@@ -41,11 +43,17 @@ class sqla_redshift_factory(SQLAFactoryBase):
         z = payload["z"]
 
         # query for this redshift in the datastore
-        query = sqla.select(
-            table.c.serial,
-        ).filter(
-            sqla.func.abs((table.c.z - z) / z) < DEFAULT_REDSHIFT_RELATIVE_PRECISION
-        )
+        if fabs(z) == 0:
+            query = sqla.select(
+                table.c.serial,
+            ).filter(
+                sqla.func.abs((table.c.z - z) / z) < DEFAULT_REDSHIFT_RELATIVE_PRECISION
+            )
+        else:
+            query = sqla.select(table.c.serial).filter(
+                sqla.func.abs((table.c.z - z) < DEFAULT_REDSHIFT_RELATIVE_PRECISION)
+            )
+
         row_data = conn.execute(query).one_or_none()
 
         # if not present, create a new id using the provided inserter
