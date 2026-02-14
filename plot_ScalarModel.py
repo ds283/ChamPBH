@@ -61,7 +61,7 @@ from extract_common import (
     add_temperature_yaxis_labels,
     safe_fabs_positive,
     safe_fabs_negative,
-    nice_Q_labels,
+    nice_Q_labels, add_BBN_info_labels,
 )
 
 DEFAULT_TIMEOUT = 60
@@ -1319,6 +1319,7 @@ def BBN_era_NP_plot(
     rhoP_NP_ax.xaxis.set_inverted(True)
 
     add_ScalarModel_labels(fig, model, model_label)
+    add_BBN_info_labels(fig, bbn=BBN)
 
     rhoP_NP_ax.legend(loc="best")
     ratio_NP_ax.legend(loc="best")

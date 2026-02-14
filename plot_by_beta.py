@@ -45,7 +45,7 @@ from config.sharding import (
     sharded_tables,
     read_table_config,
 )
-from extract_common import add_beta_summary_labels, nice_Q_labels
+from extract_common import add_beta_summary_labels, nice_Q_labels, add_BBN_info_labels
 
 DEFAULT_TIMEOUT = 60
 
@@ -125,6 +125,9 @@ def build_beta_plot(
 ):
     base_path = Path(args.output).resolve()
     base_path = base_path / f"{model_label}"
+
+    PRyM_versions = set([d.PRyM_version for d in bbn_data if d.available and not d.failure])
+    small_networks = set([d.small_network for d in bbn_data if d.avalable and not d.failure])
 
     solver_time_points = [
         (m.coupling._beta.as_float, m.metadata.compute_time)
@@ -417,6 +420,11 @@ def build_beta_plot(
         ax.grid(True)
 
         add_beta_summary_labels(fig, model_label, potential)
+        bbn_labels = {
+            "small_network": "Multiple" if len(small_networks) > 1 else "True" if True in small_networks else "False",
+            "PRyM_versions": PRyM_versions.pop() if len(PRyM_versions) == 1 else "Multiple"
+        }
+        add_BBN_info_labels(fig, labels=bbn_labels)
 
         ax.legend(loc="best")
 
