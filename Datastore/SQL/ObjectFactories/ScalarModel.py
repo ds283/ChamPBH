@@ -685,6 +685,58 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
 
         return msgs
 
+    def inventory(self, conn, table, tables):
+        version_table = tables["version"]
+
+        query = sqla.select(
+            version_table.c.label.label("version_label"),
+            table.c.timestamp,
+            table.c.label,
+            table.c.validated,
+        ).join(version_table, table.c.version == version_table.c.serial)
+
+        rows = conn.execute(query)
+
+        data = {
+            "validated": {
+                "earliest_timestamp": None,
+                "latest_timestamp": None,
+                "versions": set(),
+                "labels": [],
+            },
+            "unvalidated": {
+                "earliest_timestamp": None,
+                "latest_timestamp": None,
+                "versions": set(),
+                "labels": [],
+            },
+        }
+
+        for item in rows:
+            if item.validated:
+                group = data["validated"]
+            else:
+                group = data["unvalidated"]
+
+            if (
+                group["latest_timestamp"] is None
+                or item.timestamp > group["latest_timestamp"]
+            ):
+                group["latest_timestamp"] = item.timestamp
+
+            if (
+                group["earliest_timestamp"] is None
+                or item.timestamp < group["earliest_timestamp"]
+            ):
+                group["earliest_timestamp"] = item.timestamp
+
+            if item.version_label not in group["versions"]:
+                group["versions"].add(item.version_label)
+
+            group["labels"].append(item.label)
+
+        return data
+
 
 class sqla_ScalarModelValue_factory(SQLAFactoryBase):
     def __init__(self):
@@ -903,55 +955,3 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
         )
         obj._deserialized = True
         return obj
-
-    def inventory(self, conn, table, tables):
-        version_table = tables["version"]
-
-        query = sqla.select(
-            version_table.c.label.label("version_label"),
-            table.c.timestamp,
-            table.c.label,
-            table.c.validated,
-        ).join(version_table, table.c.version_serial == version_table.c.serial)
-
-        rows = conn.execute(query)
-
-        data = {
-            "validated": {
-                "earliest_timestamp": None,
-                "latest_timestamp": None,
-                "versions": [],
-                "labels": [],
-            },
-            "unvalidated": {
-                "earliest_timestamp": None,
-                "latest_timestamp": None,
-                "versions": [],
-                "labels": [],
-            },
-        }
-
-        for item in rows:
-            if item.validated:
-                group = data["validated"]
-            else:
-                group = data["unvalidated"]
-
-            if (
-                group["latest_timestamp"] is None
-                or item.timestamp > group["latest_timestamp"]
-            ):
-                group["latest_timestamp"] = item.timestamp
-
-            if (
-                group["earliest_timestamp"] is None
-                or item.timestamp < group["earliest_timestamp"]
-            ):
-                group["earliest_timestamp"] = item.timestamp
-
-            if item.version_label not in group["versions"]:
-                group["versions"].append(item.version_label)
-
-            group["labels"].append(item.label)
-
-        return data

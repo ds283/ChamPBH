@@ -861,12 +861,11 @@ class ShardedPool:
 
         return shard.read_table.remote(class_name, *args, **kwargs)
 
-    def _merge_queue(self, merge_queue, class_name):
+    def _merge_queue(self, merge_queue, class_name, config):
         data = merge_queue.pop()
-        config = self._inventory_config[class_name]
 
         for next_data in merge_queue:
-            for field, current in data.fields.items():
+            for field, current in data.items():
                 if field not in config:
                     raise RuntimeError(
                         f'ShardedPool: the inventory configuration does not specify a merge policy for field "{field}"'
@@ -886,18 +885,28 @@ class ShardedPool:
                         continue
 
                 elif isinstance(current, datetime):
+                    if not isinstance(next, datetime) and next is not None:
+                        raise RuntimeError(
+                            f'ShardedPool: the inventory configuration specifies a merge policy for field "{field}" that requires a datetime, but the value "{next}" is not a datetime'
+                        )
+
                     if policy == "earliest":
-                        if next < current:
+                        if next is not None and next < current:
                             data[field] = next
                         continue
 
                     elif policy == "latest":
-                        if next > current:
+                        if next is not None and next > current:
                             data[field] = next
                         continue
 
+                elif current is None:
+                    if next is not None:
+                        data[field] = next
+                    continue
+
                 raise RuntimeError(
-                    f'ShardedPool: unknown merge policy "{policy}" for field "{field}" when merging inventory for object class "{class_name}"'
+                    f'ShardedPool: unknown merge policy "{policy}" for field "{field}" of type "{type(current).__name__}" when merging inventory for object class "{class_name}"'
                 )
 
         return data
@@ -951,17 +960,20 @@ class ShardedPool:
                 )
 
             # test whether merging takes place at the top level in the returned inventory, or whether we have a set of labels at the top level
-            field = list(data_queue[0].items()).pop()
+            field = list(data_queue[0].keys()).pop()
             if isinstance(data_queue[0][field], dict):
-                labels = list(data_queue[0][field].keys())
+                labels = list(data_queue[0].keys())
 
                 merged = {}
                 for label in labels:
                     queue = [d[label] for d in data_queue]
-                    merged[label] = self._merge_queue(queue, class_name)
+                    config = self._inventory_config[class_name][label]
+                    merged[label] = self._merge_queue(queue, class_name, config)
 
             else:
-                merged = self._merge_queue(data_queue, class_name)
+                merged = self._merge_queue(
+                    data_queue, class_name, self._inventory_config[class_name]
+                )
 
             return merged
 

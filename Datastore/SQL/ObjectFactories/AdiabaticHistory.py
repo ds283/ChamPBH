@@ -385,7 +385,7 @@ class sqla_AdiabaticHistoryFactory(SQLAFactoryBase):
             table.c.timestamp,
             table.c.label,
             table.c.validated,
-        ).join(version_table, table.c.version_serial == version_table.c.serial)
+        ).join(version_table, table.c.version == version_table.c.serial)
 
         rows = conn.execute(query)
 
@@ -393,13 +393,13 @@ class sqla_AdiabaticHistoryFactory(SQLAFactoryBase):
             "validated": {
                 "earliest_timestamp": None,
                 "latest_timestamp": None,
-                "versions": [],
+                "versions": set(),
                 "labels": [],
             },
             "unvalidated": {
                 "earliest_timestamp": None,
                 "latest_timestamp": None,
-                "versions": [],
+                "versions": set(),
                 "labels": [],
             },
         }
@@ -423,7 +423,7 @@ class sqla_AdiabaticHistoryFactory(SQLAFactoryBase):
                 group["earliest_timestamp"] = item.timestamp
 
             if item.version_label not in group["versions"]:
-                group["versions"].append(item.version_label)
+                group["versions"].add(item.version_label)
 
             group["labels"].append(item.label)
 
