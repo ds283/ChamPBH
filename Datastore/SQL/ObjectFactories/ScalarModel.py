@@ -687,13 +687,31 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
 
     def inventory(self, conn, table, tables):
         version_table = tables["version"]
+        temperature_table = tables["temperature"]
+        phi_table = tables["phi_value"]
+        pi_table = tables["pi_value"]
 
-        query = sqla.select(
-            version_table.c.label.label("version_label"),
-            table.c.timestamp,
-            table.c.label,
-            table.c.validated,
-        ).join(version_table, table.c.version == version_table.c.serial)
+        Tinit_table = temperature_table.alias("Tinit")
+        Tstop_table = temperature_table.alias("Tstop")
+
+        query = (
+            sqla.select(
+                version_table.c.label.label("version_label"),
+                table.c.timestamp,
+                table.c.label,
+                table.c.validated,
+                table.c.failure,
+                Tinit_table.c.value_GeV.label("Tinit_GeV"),
+                Tstop_table.c.value_GeV.label("Tstop_GeV"),
+                phi_table.c.value_PlanckMass.label("phi_Einstein_init_Mp"),
+                pi_table.c.value_PlanckMass.label("pi_Einstein_init_Mp"),
+            )
+            .join(version_table, table.c.version == version_table.c.serial)
+            .join(Tinit_table, table.c.T_Jordan_init_serial == Tinit_table.c.serial)
+            .join(Tstop_table, table.c.T_Jordan_stop_serial == Tstop_table.c.serial)
+            .join(phi_table, table.c.phi_Einstein_init_serial == phi_table.c.serial)
+            .join(pi_table, table.c.pi_Einstein_init_serial == pi_table.c.serial)
+        )
 
         rows = conn.execute(query)
 
@@ -733,7 +751,9 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
             if item.version_label not in group["versions"]:
                 group["versions"].add(item.version_label)
 
-            group["labels"].append(item.label)
+            group["labels"].append(
+                f"{item.label} (T_init={item.Tinit_GeV:.5g} GeV, T_stop={item.Tstop_GeV:.5g} GeV, phiE_init={item.phi_Einstein_init_Mp:.5g} Mp, piE_init={item.pi_Einstein_init_Mp:.5g} Mp, failure={item.failure})"
+            )
 
         return data
 

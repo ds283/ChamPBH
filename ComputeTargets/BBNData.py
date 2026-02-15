@@ -3,7 +3,6 @@ from math import exp, log, asinh, sinh, sqrt
 from typing import Optional, List, Any
 
 import ray
-from ray._private.runtime_env.agent.thirdparty_files.aiohttp import payload
 from scipy.interpolate import make_interp_spline
 
 from CosmologyConcepts import redshift, redshift_array
@@ -326,7 +325,7 @@ def compute_BBN_data(
         "BBN_compute_time": BBN_timer.elapsed,
         "NP_compute_time": NP_timer.elapsed,
         "small_network": small_network,
-        "PryM_version": "bf24c3d"       # PRyMordial seems not to have a proper versioning scheme
+        "PRyM_version": "bf24c3d",  # PRyMordial seems not to have a proper versioning scheme
     }
 
 
@@ -374,7 +373,7 @@ class BBNData(DatastoreObject):
             DatastoreObject.__init__(self, payload["store_id"])
 
             self._small_network = payload["small_network"]
-            self._PRyM_version = payload["PryM_version"]
+            self._PRyM_version = payload["PRyM_version"]
 
             self._Yp_BBN = payload["Yp_BBN"]
             self._DOverH = payload["DOverH"]
@@ -531,7 +530,9 @@ class BBNData(DatastoreObject):
             )
         return self._NP_compute_time
 
-    def compute(self, label: Optional[str] = None, payload: Optional[dict[str, Any]] = None) -> ray.ObjectRef:
+    def compute(
+        self, label: Optional[str] = None, payload: Optional[dict[str, Any]] = None
+    ) -> ray.ObjectRef:
         if self._queryable:
             raise RuntimeError("values have already been populated")
 
@@ -581,7 +582,7 @@ class BBNData(DatastoreObject):
         self._failure = False
 
         self._small_network = data["small_network"]
-        self._PRyM_version = data["PryM_version"]
+        self._PRyM_version = data["PRyM_version"]
 
         self._Yp_BBN = data["Yp_BBN"]
         self._DOverH = data["DOverH"]

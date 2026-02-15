@@ -100,7 +100,7 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
                 sqla.Column("label", sqla.String(DEFAULT_STRING_LENGTH), nullable=True),
                 sqla.Column("small_network", sqla.Boolean, nullable=True),
                 sqla.Column(
-                    "PryM_version", sqla.String(DEFAULT_STRING_LENGTH), nullable=True
+                    "PRyM_version", sqla.String(DEFAULT_STRING_LENGTH), nullable=True
                 ),
                 sqla.Column("z_samples", sqla.Integer, nullable=True),
                 sqla.Column("NP_compute_time", sqla.Float(64), nullable=True),
@@ -131,7 +131,7 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
             table.c.Li7OverH,
             table.c.label,
             table.c.small_network,
-            table.c.PryM_version,
+            table.c.PRyM_version,
             table.c.z_samples,
             table.c.NP_compute_time,
             table.c.BBN_compute_time,
@@ -248,7 +248,7 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
                 "failure": row_data.failure,
                 "Yp_BBN": row_data.Yp_BBN,
                 "small_network": row_data.small_network,
-                "PryM_version": row_data.PryM_version,
+                "PRyM_version": row_data.PRyM_version,
                 "DOverH": row_data.DOverH,
                 "He3OverH": row_data.He3OverH,
                 "Li7OverH": row_data.Li7OverH,
@@ -270,7 +270,7 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
             "label": obj.label,
             "failure": obj._failure,
             "small_network": obj.small_network if not obj._failure else None,
-            "PryM_version": obj.PRyM_version if not obj._failure else None,
+            "PRyM_version": obj.PRyM_version if not obj._failure else None,
             "Yp_BBN": obj.Yp_BBN if not obj._failure else None,
             "DOverH": obj.DOverH if not obj._failure else None,
             "He3OverH": obj.He3OverH if not obj._failure else None,
@@ -431,6 +431,8 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
             table.c.timestamp,
             table.c.label,
             table.c.validated,
+            table.c.failure,
+            table.c.PRyM_version,
         ).join(version_table, table.c.version == version_table.c.serial)
 
         rows = conn.execute(query)
@@ -440,12 +442,14 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
                 "earliest_timestamp": None,
                 "latest_timestamp": None,
                 "versions": set(),
+                "PRyM_versions": set(),
                 "labels": [],
             },
             "unvalidated": {
                 "earliest_timestamp": None,
                 "latest_timestamp": None,
                 "versions": set(),
+                "PRyM_versions": set(),
                 "labels": [],
             },
         }
@@ -471,7 +475,11 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
             if item.version_label not in group["versions"]:
                 group["versions"].add(item.version_label)
 
-            group["labels"].append(item.label)
+            if item.PRyM_version is not None:
+                if item.PRyM_version not in group["PRyM_versions"]:
+                    group["PRyM_versions"].add(item.PRyM_version)
+
+            group["labels"].append(f"{item.label} (failure={item.failure})")
 
         return data
 
