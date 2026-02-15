@@ -23,6 +23,7 @@ from CosmologyConcepts import redshift
 from Datastore.SQL.ObjectFactories.base import SQLAFactoryBase
 from config.defaults import (
     DEFAULT_REDSHIFT_RELATIVE_PRECISION,
+    DEFAULT_REDSHIFT_PRECISION,
 )
 
 
