@@ -299,16 +299,16 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
         MeV4 = MeV2 * MeV2
 
         value_inserter = inserters["BBNDataValue"]
-        for val in obj.values:
+        for val in obj._values:
             val: BBNDataValue
             v_payload = {
                 "bbn_serial": store_id,
                 "z_serial": val.z.store_id,
-                "raw_N": val.raw_N,
-                "log_T_Jordan_MeV": val.log_T_Jordan - log_MeV,
-                "density_NP_MeV4": val.density_NP / MeV4,
-                "pressure_NP_MeV4": val.pressure_NP / MeV4,
-                "density_NP_ratio": val.density_NP_ratio,
+                "raw_N": val._raw_N,
+                "log_T_Jordan_MeV": val._log_T_Jordan - log_MeV,
+                "density_NP_MeV4": val._density_NP / MeV4,
+                "pressure_NP_MeV4": val._pressure_NP / MeV4,
+                "density_NP_ratio": val._density_NP_ratio,
             }
 
             # set store_id on behalf of the BBNDataValue instance
