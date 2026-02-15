@@ -44,14 +44,14 @@ class sqla_redshift_factory(SQLAFactoryBase):
 
         # query for this redshift in the datastore
         if fabs(z) == 0:
+            query = sqla.select(table.c.serial).filter(
+                sqla.func.abs((table.c.z - z) < DEFAULT_REDSHIFT_PRECISION)
+            )
+        else:
             query = sqla.select(
                 table.c.serial,
             ).filter(
                 sqla.func.abs((table.c.z - z) / z) < DEFAULT_REDSHIFT_RELATIVE_PRECISION
-            )
-        else:
-            query = sqla.select(table.c.serial).filter(
-                sqla.func.abs((table.c.z - z) < DEFAULT_REDSHIFT_RELATIVE_PRECISION)
             )
 
         row_data = conn.execute(query).one_or_none()
