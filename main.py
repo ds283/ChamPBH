@@ -109,6 +109,12 @@ parser.add_argument(
     help="show an inventory of the datastore content",
 )
 parser.add_argument(
+    "--show-all",
+    default=False,
+    action=argparse.BooleanOptionalAction,
+    help="do not truncate long lists of inventory items",
+)
+parser.add_argument(
     "--job-name",
     default=DEFAULT_LABEL,
     help="specify a label for this job (used to identify integrations and other numerical products)",
@@ -1371,7 +1377,7 @@ def object_inventory(pool: ShardedPool, cls, label):
             else:
                 print(f'      versions = [ {", ".join(sorted_versions)} ]')
 
-        if num < 20:
+        if num < 20 or args.show_all:
             for value in sorted_labels:
                 print(f"      :: {value}")
 
@@ -1379,7 +1385,7 @@ def object_inventory(pool: ShardedPool, cls, label):
             for value in sorted_labels[:10]:
                 print(f"      :: {value}")
             print(f"      ...")
-            for value in sorted_labels[:-10]:
+            for value in sorted_labels[-10:]:
                 print(f"      :: {value}")
 
     print(f"      @@ validated models")
