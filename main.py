@@ -13,13 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import argparse
 import itertools
 import sys
 from datetime import datetime
 from math import fabs
 from typing import List, Tuple, Any
 
+import configargparse
 import numpy as np
 import ray
 
@@ -95,7 +95,8 @@ MIN_NOTIFY_INTERVAL = 5 * 60
 allowed_drop_actions = ["scalar-model", "adiabatic-history", "bbn-data"]
 potential_types = ["Exponential", "InversePower", "Starobinsky", "Recliner"]
 
-parser = argparse.ArgumentParser()
+parser = configargparse.ArgumentParser()
+
 parser.add_argument(
     "--database",
     type=str,
@@ -105,13 +106,13 @@ parser.add_argument(
 parser.add_argument(
     "--inventory",
     default=False,
-    action=argparse.BooleanOptionalAction,
+    action=configargparse.BooleanOptionalAction,
     help="show an inventory of the datastore content",
 )
 parser.add_argument(
     "--show-all",
     default=False,
-    action=argparse.BooleanOptionalAction,
+    action=configargparse.BooleanOptionalAction,
     help="do not truncate long lists of inventory items",
 )
 parser.add_argument(
@@ -224,7 +225,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "--prune-unvalidated",
-    action=argparse.BooleanOptionalAction,
+    action=configargparse.BooleanOptionalAction,
     default=True,
     help="prune unvalidated data from the datastore during startup",
 )

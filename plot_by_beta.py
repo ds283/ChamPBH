@@ -13,13 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import argparse
 import itertools
 import sys
 from datetime import datetime
 from pathlib import Path
 from typing import List
 
+import configargparse
 import pandas as pd
 import ray
 import seaborn as sns
@@ -54,7 +54,7 @@ DEFAULT_T_INIT_GEV = 20000
 
 potential_types = ["Exponential", "InversePower", "Starobinsky", "Recliner"]
 
-parser = argparse.ArgumentParser()
+parser = configargparse.ArgumentParser()
 parser.add_argument(
     "--database",
     type=str,

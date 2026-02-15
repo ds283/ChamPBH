@@ -13,11 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import argparse
 from math import fabs
 from pathlib import Path
 from typing import List, Dict, Any
 
+import configargparse
 import pandas as pd
 import seaborn as sns
 from matplotlib import pyplot as plt
@@ -28,7 +28,7 @@ DEFAULT_OUPTUT_DIRECTORY = (
     "/Users/ds283/Documents/Code/ChamPBH/CodeComparison-out/ComparisonProducts-out"
 )
 
-parser = argparse.ArgumentParser()
+parser = configargparse.ArgumentParser()
 parser.add_argument("--mma-output", type=str, default=DEFAULT_MATHEMATICA_OUTPUT_FILE)
 parser.add_argument("--champbh-output", type=str, default=DEFAULT_CHAMPBH_OUTPUT_FILE)
 parser.add_argument("--output", type=str, default=DEFAULT_OUPTUT_DIRECTORY)
