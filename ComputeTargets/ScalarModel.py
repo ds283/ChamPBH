@@ -334,8 +334,9 @@ class ODERHS:
 
             if supervisor.notify_available:
                 supervisor.message(
+                    N,
                     T_Jordan,
-                    f"current state: N={N:.5g}, f_m = {fm:.5g}, phi_Einstein = {phi_Einstein / self.MP:.5g} Mp, pi_Einstein = {pi_Einstein / self.MP:.5g} Mp, log(rho_rad/GeV^4) = {log_rhorad_Einstein - 4.0*log(self.GeV):.5g}, T_Jordan = {T_Jordan/self.GeV:.5g} GeV = {T_Jordan/self.Kelvin:.5g} K",
+                    f"current state: phi_E = {phi_Einstein / self.MP:.5g} Mp, pi_E = {pi_Einstein / self.MP:.5g} Mp, f_m = {fm:.5g}, log(rho_rad/GeV^4) = {log_rhorad_Einstein - 4.0 * log(self.GeV):.5g}, T_J = {T_Jordan / self.GeV:.5g} GeV = {T_Jordan / self.Kelvin:.5g} K",
                 )
                 supervisor.reset_notify_time(T_Jordan)
 
@@ -714,6 +715,17 @@ def compute_scalar_model(
                             sol=sol.sol,
                         )
                     )
+                    supervisor.notify_new_fragment()
+
+                    if len(solution_fragments) >= 20:
+                        if len(solution_fragments) % 20 == 0:
+                            print(
+                                f"-- compute_scalar_model ({task_label}): a large number of solution fragments are being used; {len(solution_fragments)} solution fragments now collected"
+                            )
+                    if len(solution_fragments) >= 100:
+                        raise RuntimeError(
+                            f"compute_scalar_model ({task_label}): too many solution fragments ({len(solution_fragments)}) => failsafe activated (N_start={N_start:.5g}, N_failsafe={N_failsafe:.5g})"
+                        )
 
                     # if the integration terminated, break out
                     if num_termination_events == 1:

@@ -52,6 +52,8 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
 
         self._units: UnitsLike = units
 
+        # CONFIGURATION
+
         self._label: str = label
         self._collect_full_statistics: bool = collect_full_statistics
         self._max_step_size: float = max_step_size
@@ -89,6 +91,10 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
         self._in_level_1: bool = False
         self._in_level_2: bool = False
 
+        # TRACK OTHER STATUS VARIABLES
+
+        self._number_fragments: int = 0
+
         ## TRACK STATISTICS OF RHS REPORTS
 
         self._largest_RHS_values: StateVector = StateVector(
@@ -111,7 +117,7 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
     def __exit__(self, exc_type, exc_val, exc_tb):
         super().__exit__(exc_type, exc_val, exc_tb)
 
-    def message(self, T_Jordan: TemperatureLike, msg: str):
+    def message(self, N: float, T_Jordan: TemperatureLike, msg: str):
         current_time = time.time()
 
         since_last_notify = current_time - self._last_notify
@@ -138,7 +144,7 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
             f"** STATUS UPDATE #{update_number} - {datetime.now().strftime("%a %d %b %Y %H:%M:%S")} - {self._label}"
         )
         print(
-            f"|    integration has been running for {format_time(since_start)} ({format_time(since_last_notify)} since last notification) | current max step size dN={self._max_step_size:.5g}{" | in " + level_state if level_state is not None else ""}"
+            f"|    integration has been running for {format_time(since_start)} ({format_time(since_last_notify)} since last notification) | current N = {N:.5g} | current max step size dN={self._max_step_size:.5g}{" | in " + level_state if level_state is not None else ""}"
         )
         print(
             f"|    current T_Jordan = {T_GeV:.5g} GeV or {T_Kelvin:.5g} K, log(T_Jordan/GeV) = {log_T_GeV:.5g} | {1.0-percent_remain:.3%} complete measured in T_Jordan"
@@ -146,6 +152,12 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
         print(
             f"|    target T_Jordan = {self._T_stop_GeV:.5g} GeV or {self._T_stop_Kelvin:.5g} K, log(T_Jordan/GeV) = {self._log_T_stop_GeV:.5g}"
         )
+        if self._last_log_T_GeV is not None:
+            log_T_GeV_delta = self._last_log_T_GeV - log_T_GeV
+            print(
+                f"|    log_T_GeV advance since last update: Delta(log(T_Jordan/GeV)) = {log_T_GeV_delta:.5g}"
+            )
+        print(f"|    solution fragments = {self._number_fragments}")
 
         def events_status(label: str, events: Dict[str, List[float]]):
             num_events = len(events["all"])
@@ -173,12 +185,6 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
         events_status("level 1 exit", self._level_1_data["exit"])
         events_status("level 2 entry", self._level_2_data["entry"])
         events_status("level 2 exit", self._level_2_data["exit"])
-
-        if self._last_log_T_GeV is not None:
-            log_T_GeV_delta = self._last_log_T_GeV - log_T_GeV
-            print(
-                f"|    log_T_GeV advance since last update: Delta(log(T_Jordan/GeV)) = {log_T_GeV_delta:.5g}"
-            )
         print(
             f"|    {self.RHS_evaluations} RHS evaluations, mean {self.mean_RHS_time:.5g}s per evaluation, min RHS time = {self.min_RHS_time:.5g}s, max RHS time = {self.max_RHS_time:.5g}s"
         )
@@ -392,6 +398,13 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
             log_fm=(self._total_RHS_values.log_fm + log_fm_float),
             log_T_Jordan=(self._total_RHS_values.log_T_Jordan + log_T_Jordan_float),
         )
+
+    def notify_new_fragment(self):
+        self._number_fragments += 1
+
+    @property
+    def number_fragments(self) -> int:
+        return self._number_fragments
 
     def event_finder_notify_new_log_T_Jordan(self, log_T_Jordan: float):
         if log_T_Jordan < self._log_T_stop:
