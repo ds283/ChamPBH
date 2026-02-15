@@ -780,7 +780,7 @@ class Datastore:
 
             return values
 
-    def inventory(self, cls):
+    def inventory(self, cls, *args, **kwargs):
         """
         Return a human-readable inventory of the Datastore contents for a particular object class
         :return:
@@ -805,6 +805,6 @@ class Datastore:
                 )
 
             with self._engine.begin() as conn:
-                objects = factory.inventory(conn, tab, self._tables)
+                objects = factory.inventory(conn, tab, self._tables, *args, **kwargs)
 
             return objects

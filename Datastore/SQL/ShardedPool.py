@@ -902,7 +902,7 @@ class ShardedPool:
 
         return data
 
-    def inventory(self, cls):
+    def inventory(self, cls, *args, **kwargs):
         """
         Return a human-readable inventory of the Datastore contents for a particular object class
         :param cls:
@@ -924,7 +924,7 @@ class ShardedPool:
             shard_key = shard_ids.pop()
 
             shard = self._shards[shard_key]
-            return ray.get(shard.inventory.remote(class_name))
+            return ray.get(shard.inventory.remote(class_name, *args, **kwargs))
 
         if class_name in self._sharded_tables:
             if self._inventory_config is None:
@@ -939,7 +939,10 @@ class ShardedPool:
 
             # read
             data_queue = ray.get(
-                [self._shards[key].inventory.remote(class_name) for key in shard_ids]
+                [
+                    self._shards[key].inventory.remote(class_name, *args, **kwargs)
+                    for key in shard_ids
+                ]
             )
 
             if len(data_queue) == 0:

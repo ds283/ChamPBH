@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from datetime import datetime
 from math import fabs
 
 import sqlalchemy as sqla
@@ -90,3 +91,30 @@ class sqla_dimensionless_quantity_factory(SQLAFactoryBase):
         rows = conn.execute(query.order_by(table.c.value))
 
         return [self.ObjectType(store_id=row.serial, value=row.value) for row in rows]
+
+    def inventory(self, conn, table, tables):
+        query = sqla.select(
+            table.c.timestamp,
+            table.c.value,
+        )
+
+        rows = conn.execute(query)
+
+        earliest_timestamp: datetime = None
+        latest_timestamp: datetime = None
+        values = []
+
+        for item in rows:
+            if latest_timestamp is None or item.timestamp > latest_timestamp:
+                latest_timestamp = item.timestamp
+
+            if earliest_timestamp is None or item.timestamp < earliest_timestamp:
+                earliest_timestamp = item.timestamp
+
+            values.append(item.value)
+
+        return {
+            "earliest_timestamp": earliest_timestamp,
+            "latest_timestamp": latest_timestamp,
+            "values": values,
+        }

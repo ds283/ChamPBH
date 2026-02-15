@@ -377,6 +377,58 @@ class sqla_AdiabaticHistoryFactory(SQLAFactoryBase):
 
         return msgs
 
+    def inventory(self, conn, table, tables):
+        version_table = tables["version"]
+
+        query = sqla.select(
+            version_table.c.label.label("version_label"),
+            table.c.timestamp,
+            table.c.label,
+            table.c.validated,
+        ).join(version_table, table.c.version_serial == version_table.c.serial)
+
+        rows = conn.execute(query)
+
+        data = {
+            "validated": {
+                "earliest_timestamp": None,
+                "latest_timestamp": None,
+                "versions": [],
+                "labels": [],
+            },
+            "unvalidated": {
+                "earliest_timestamp": None,
+                "latest_timestamp": None,
+                "versions": [],
+                "labels": [],
+            },
+        }
+
+        for item in rows:
+            if item.validated:
+                group = data["validated"]
+            else:
+                group = data["unvalidated"]
+
+            if (
+                group["latest_timestamp"] is None
+                or item.timestamp > group["latest_timestamp"]
+            ):
+                group["latest_timestamp"] = item.timestamp
+
+            if (
+                group["earliest_timestamp"] is None
+                or item.timestamp < group["earliest_timestamp"]
+            ):
+                group["earliest_timestamp"] = item.timestamp
+
+            if item.version_label not in group["versions"]:
+                group["versions"].append(item.version_label)
+
+            group["labels"].append(item.label)
+
+        return data
+
 
 class sqla_AdiabaticHistoryValue_factory(SQLAFactoryBase):
     _Q_labels = AdiabaticHistory.Q_labels

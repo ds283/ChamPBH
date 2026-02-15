@@ -116,17 +116,13 @@ class sqla_redshift_factory(SQLAFactoryBase):
         ]
 
     def inventory(self, conn, table, tables):
-        version_table = tables["Version"]
-
         query = sqla.select(
-            version_table.c.label.label("version_label"),
             table.c.timestamp,
             table.c.z,
-        ).join(version_table, version_table.c.serial == table.c.version)
+        )
 
         rows = conn.execute(query)
 
-        versions = set()
         earliest_timestamp: datetime = None
         latest_timestamp: datetime = None
         values = []
@@ -138,14 +134,10 @@ class sqla_redshift_factory(SQLAFactoryBase):
             if earliest_timestamp is None or item.timestamp < earliest_timestamp:
                 earliest_timestamp = item.timestamp
 
-            if item.version_label not in versions:
-                versions.add(item.version_label)
-
             values.append(item.z)
 
         return {
             "earliest_timestamp": earliest_timestamp,
             "latest_timestamp": latest_timestamp,
-            "versions": versions,
             "values": values,
         }

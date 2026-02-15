@@ -12,7 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+from datetime import datetime
 from math import fabs
 
 import sqlalchemy as sqla
@@ -118,3 +118,33 @@ class sqla_dimensionful_quantity_factory(SQLAFactoryBase):
             )
             for row in rows
         ]
+
+    def inventory(self, conn, table, tables, units):
+        unit = getattr(units, self.ObjectType.default_unit)
+
+        query = sqla.select(
+            table.c.timestamp,
+            table.c[self.value_col],
+        )
+
+        rows = conn.execute(query)
+
+        earliest_timestamp: datetime = None
+        latest_timestamp: datetime = None
+        values = []
+
+        for item in rows:
+            if latest_timestamp is None or item.timestamp > latest_timestamp:
+                latest_timestamp = item.timestamp
+
+            if earliest_timestamp is None or item.timestamp < earliest_timestamp:
+                earliest_timestamp = item.timestamp
+
+            values.append(item._mapping[self.value_col] * unit)
+
+        return {
+            "earliest_timestamp": earliest_timestamp,
+            "latest_timestamp": latest_timestamp,
+            "values": values,
+            "unit": self.ObjectType.default_unit,
+        }
