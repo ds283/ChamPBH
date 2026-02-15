@@ -1363,30 +1363,30 @@ def object_inventory(pool: ShardedPool, cls, label):
         num_versions = len(versions)
 
         if num == 0:
-            print(f"      no values committed")
+            print(f"        no values committed")
         elif num == 1:
             print(
-                f'       1 value committed at {group["earliest_timestamp"].strftime("%a %d %b %Y %H:%M:%S")}, version = {versions.pop()}'
+                f'        1 value committed at {group["earliest_timestamp"].strftime("%a %d %b %Y %H:%M:%S")}, version = {versions.pop()}'
             )
         else:
             print(
-                f'       {num} values committed between {group["earliest_timestamp"].strftime("%a %d %b %Y %H:%M:%S")} and {group["latest_timestamp"].strftime("%a %d %b %Y %H:%M:%S")}'
+                f'        {num} values committed between {group["earliest_timestamp"].strftime("%a %d %b %Y %H:%M:%S")} and {group["latest_timestamp"].strftime("%a %d %b %Y %H:%M:%S")}'
             )
             if num_versions == 1:
-                print(f"      version = {versions.pop()}")
+                print(f"        version = {versions.pop()}")
             else:
-                print(f'      versions = [ {", ".join(sorted_versions)} ]')
+                print(f'        versions = [ {", ".join(sorted_versions)} ]')
 
         if num < 20 or args.show_all:
             for value in sorted_labels:
-                print(f"      :: {value}")
+                print(f"        :: {value}")
 
         else:
             for value in sorted_labels[:10]:
-                print(f"      :: {value}")
+                print(f"        :: {value}")
             print(f"      ...")
             for value in sorted_labels[-10:]:
-                print(f"      :: {value}")
+                print(f"        :: {value}")
 
     print(f"      @@ validated models")
     print_data(data["validated"])
