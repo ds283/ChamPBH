@@ -14,6 +14,7 @@
 # limitations under the License.
 
 import random
+from datetime import datetime
 from pathlib import Path
 from typing import Optional, List, Dict, Callable
 
@@ -21,7 +22,7 @@ import ray
 import sqlalchemy as sqla
 
 from Datastore.SQL import Datastore
-from Datastore.SQL.Datastore import PathType, ReadTableConfigType
+from Datastore.SQL.Datastore import PathType, ReadTableConfigType, InventoryConfigType
 from Datastore.SQL.ProfileAgent import ProfileAgent
 from Datastore.SQL.SerialPoolBroker import SerialPoolBroker
 from MetadataConcepts import version
@@ -50,6 +51,7 @@ class ShardedPool:
         prune_unvalidated: Optional[bool] = False,
         drop_actions: Optional[List[str]] = None,
         read_table_config: Optional[ReadTableConfigType] = None,
+        inventory_config: Optional[InventoryConfigType] = None,
     ) -> None:
         """
         Initialize a pool of datastore actors
@@ -207,6 +209,8 @@ class ShardedPool:
                 raise RuntimeError(
                     f'It is only possible to configure a read-table method for a replicated table (class name="{class_name}")'
                 )
+
+        self._inventory_config: Optional[InventoryConfigType] = inventory_config
 
     def __enter__(self):
         return self
@@ -699,7 +703,6 @@ class ShardedPool:
         return [self._shards[shard_id].object_store.remote(item)]
 
     def object_validate(self, objects):
-        # we only expect to call object_store on sharded objects
         if isinstance(objects, list) or isinstance(objects, tuple):
             payload_data = objects
             scalar = False
@@ -829,15 +832,22 @@ class ShardedPool:
         :return:
         """
         if self._read_table_config is None:
-            raise RuntimeError("No read_table configuration available")
+            raise RuntimeError("ShardedPool: the read_table service is not configured")
 
         if isinstance(cls, str):
             class_name = cls
         else:
             class_name = cls.__name__
 
+        if class_name in self._sharded_tables:
+            raise RuntimeError(
+                f'ShardedPool: the read_table service is only available for replicated tables, but "{class_name}" is configured as a sharded table'
+            )
+
         if class_name not in self._read_table_config:
-            raise RuntimeError(f"No read_table configuration for class '{class_name}'")
+            raise RuntimeError(
+                f'ShardedPool: the read_table service is not available for objects of class "{class_name}"'
+            )
 
         # we only need to read the table from a single shard, so pick one at random
         shard_ids = list(self._shards.keys())
@@ -850,3 +860,108 @@ class ShardedPool:
         shard = self._shards[shard_key]
 
         return shard.read_table.remote(class_name, *args, **kwargs)
+
+    def _merge_queue(self, merge_queue, class_name):
+        data = merge_queue.pop()
+        config = self._inventory_config[class_name]
+
+        for next_data in merge_queue:
+            for field, current in data.fields.items():
+                if field not in config:
+                    raise RuntimeError(
+                        f'ShardedPool: the inventory configuration does not specify a merge policy for field "{field}"'
+                    )
+
+                policy = config[field]
+                next = next_data[field]
+
+                if isinstance(current, list):
+                    if policy == "extend":
+                        current.extend(next)
+                        continue
+
+                elif isinstance(current, set):
+                    if policy == "extend":
+                        current.update(next)
+                        continue
+
+                elif isinstance(current, datetime):
+                    if policy == "earliest":
+                        if next < current:
+                            data[field] = next
+                        continue
+
+                    elif policy == "latest":
+                        if next > current:
+                            data[field] = next
+                        continue
+
+                raise RuntimeError(
+                    f'ShardedPool: unknown merge policy "{policy}" for field "{field}" when merging inventory for object class "{class_name}"'
+                )
+
+        return data
+
+    def inventory(self, cls):
+        """
+        Return a human-readable inventory of the Datastore contents for a particular object class
+        :param cls:
+        :return:
+        """
+        if isinstance(cls, str):
+            class_name = cls
+        else:
+            class_name = cls.__name__
+
+        shard_ids = list(self._shards.keys())
+
+        if class_name in self._replicated_tables:
+            # we only need to read the table from a single shard, so pick one at random
+            i = random.randrange(len(shard_ids))
+
+            # swap this entry with the last element, then pop it
+            shard_ids[i], shard_ids[-1] = shard_ids[-1], shard_ids[i]
+            shard_key = shard_ids.pop()
+
+            shard = self._shards[shard_key]
+            return ray.get(shard.inventory.remote(class_name))
+
+        if class_name in self._sharded_tables:
+            if self._inventory_config is None:
+                raise RuntimeError(
+                    f"ShardedPool: the inventory service is not configured"
+                )
+
+            if class_name not in self._inventory_config:
+                raise RuntimeError(
+                    f'ShardedPool: the inventory service is not available for objects of class "{class_name}"'
+                )
+
+            # read
+            data_queue = ray.get(
+                [self._shards[key].inventory.remote(class_name) for key in shard_ids]
+            )
+
+            if len(data_queue) == 0:
+                raise RuntimeError(
+                    f'ShardedPool: no inventory data was returned from the shards for object class "{class_name}"'
+                )
+
+            # test whether merging takes place at the top level in the returned inventory, or whether we have a set of labels at the top level
+            field = list(data_queue[0].items()).pop()
+            if isinstance(data_queue[0][field], dict):
+                labels = list(data_queue[0][field].keys())
+
+                merged = {}
+                for label in labels:
+                    queue = [d[label] for d in data_queue]
+                    merged[label] = self._merge_queue(queue, class_name)
+
+            else:
+                merged = self._merge_queue(data_queue, class_name)
+
+            return merged
+
+        raise RuntimeError(
+            f'Unable to dispatch inventory() for item of type "{class_name}"'
+        )

@@ -55,6 +55,53 @@ read_table_config = {
     "pi_value": {"tables_arg": False},
 }
 
+inventory_config = {
+    "ScalarModel": {
+        "validated": {
+            "earliest_datestamp": "earliest",
+            "latest_datestamp": "latest",
+            "version_string": "extend",
+            "labels": "extend",
+        },
+        "unvalidated": {
+            "earliest_datestamp": "earliest",
+            "latest_datestamp": "latest",
+            "version_string": "extend",
+            "labels": "extend",
+        },
+    },
+    "AdiabaticHistory": {
+        "validated": {
+            "earliest_datestamp": "earliest",
+            "latest_datestamp": "latest",
+            "version_string": "extend",
+            "labels": "extend",
+        },
+        "unvalidated": {
+            "earliest_datestamp": "earliest",
+            "latest_datestamp": "latest",
+            "version_string": "extend",
+            "labels": "extend",
+        },
+    },
+    "BBNData": {
+        "validated": {
+            "earliest_datestamp": "earliest",
+            "latest_datestamp": "latest",
+            "version_string": "extend",
+            "PRyMordial_version": "extend",
+            "labels": "extend",
+        },
+        "unvalidated": {
+            "earliest_datestamp": "earliest",
+            "latest_datestamp": "latest",
+            "version_string": "extend",
+            "PRyMordial_version": "extend",
+            "labels": "extend",
+        },
+    },
+}
+
 
 # configure ShardedPool to shard by beta_value
 # this seems the best choice, because we know the phenomenology is mostly independent of (M, Lambda), and we won't

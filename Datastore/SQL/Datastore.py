@@ -144,6 +144,9 @@ _drop_order = [
 # "method_name" -> {"class": class specifier, "tables_arg": bool}
 ReadTableConfigType = Dict[str, Any]
 
+# inventory configuration should be a Dict with strings mapping to configuration entries
+InventoryConfigType = Dict[str, Any]
+
 
 @ray.remote
 class Datastore:
@@ -717,7 +720,7 @@ class Datastore:
         :return:
         """
         if self._read_table_config is None:
-            raise RuntimeError("No read_table configuration available")
+            raise RuntimeError("Datastore: the read_table service is not configured")
 
         if isinstance(cls, str):
             class_name = cls
@@ -725,7 +728,9 @@ class Datastore:
             class_name = cls.__name__
 
         if class_name not in self._read_table_config:
-            raise RuntimeError(f"No read_table configuration for class '{class_name}'")
+            raise RuntimeError(
+                f'Datastore: the read_table service is not available for objects of class "{class_name}"'
+            )
 
         with ProfileBatchManager(
             self._profile_batcher, f"read_table[{class_name}]"
@@ -735,6 +740,11 @@ class Datastore:
 
             tab = record["table"]
             factory = self._factories[class_name]
+
+            if not hasattr(factory, "read_table"):
+                raise RuntimeError(
+                    f'Datastore: the object factory for "{class_name}" does not provide a read_table service'
+                )
 
             config = self._read_table_config[class_name]
             if config.get("tables_arg", False):
@@ -769,3 +779,32 @@ class Datastore:
                         values[name] = largest_serial
 
             return values
+
+    def inventory(self, cls):
+        """
+        Return a human-readable inventory of the Datastore contents for a particular object class
+        :return:
+        """
+        if isinstance(cls, str):
+            class_name = cls
+        else:
+            class_name = cls.__name__
+
+        with ProfileBatchManager(
+            self._profile_batcher, f"inventory[{class_name}]"
+        ) as mgr:
+            self._ensure_registered_schema(class_name)
+            record = self._schema[class_name]
+
+            tab = record["table"]
+            factory = self._factories[class_name]
+
+            if not hasattr(factory, "inventory"):
+                raise RuntimeError(
+                    f'Datastore: the object factory for "{class_name}" does not provide an inventory service'
+                )
+
+            with self._engine.begin() as conn:
+                objects = factory.inventory(conn, tab, self._tables)
+
+            return objects

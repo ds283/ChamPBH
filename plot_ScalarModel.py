@@ -53,6 +53,7 @@ from config.sharding import (
     replicated_tables,
     sharded_tables,
     read_table_config,
+    inventory_config,
 )
 from extract_common import (
     safe_fabs,
@@ -61,7 +62,8 @@ from extract_common import (
     add_temperature_yaxis_labels,
     safe_fabs_positive,
     safe_fabs_negative,
-    nice_Q_labels, add_BBN_info_labels,
+    nice_Q_labels,
+    add_BBN_info_labels,
 )
 
 DEFAULT_TIMEOUT = 60
@@ -1684,6 +1686,7 @@ with ShardedPool(
     job_name="plot_ScalarModel",
     prune_unvalidated=False,
     read_table_config=read_table_config,
+    inventory_config=inventory_config,
 ) as pool:
     # build absolute and relative tolerances
     atol, rtol = ray.get(

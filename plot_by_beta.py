@@ -44,6 +44,7 @@ from config.sharding import (
     replicated_tables,
     sharded_tables,
     read_table_config,
+    inventory_config,
 )
 from extract_common import add_beta_summary_labels, nice_Q_labels, add_BBN_info_labels
 
@@ -681,6 +682,7 @@ with ShardedPool(
     job_name="plot_ScalarModel",
     prune_unvalidated=False,
     read_table_config=read_table_config,
+    inventory_config=inventory_config,
 ) as pool:
     # build absolute and relative tolerances
     atol, rtol = ray.get(
