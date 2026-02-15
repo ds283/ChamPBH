@@ -20,7 +20,6 @@ from math import exp, log, sqrt
 from pathlib import Path
 from typing import List, Union, Dict
 
-import configargparse
 import pandas as pd
 import ray
 import seaborn as sns
@@ -41,11 +40,11 @@ from CosmologyConcepts.Potentials import AbstractPotential
 from CosmologyModels import BaseCosmology
 from Datastore.SQL.ProfileAgent import ProfileAgent
 from Datastore.SQL.ShardedPool import ShardedPool
-from MetadataConcepts import tolerance
+from MetadataConcepts import tolerance, store_tag
 from RayTools.RayWorkPool import RayWorkPool
 from Units import Planck_units
 from Units.base import UnitsLike
-from config.defaults import DEFAULT_ABS_TOLERANCE, DEFAULT_REL_TOLERANCE
+from config.argument_parser import create_argument_parser
 from config.model_list import build_model_list
 from config.sharding import (
     ShardKeyType,
@@ -66,47 +65,7 @@ from extract_common import (
     add_BBN_info_labels,
 )
 
-DEFAULT_TIMEOUT = 60
-
-DEFAULT_T_INIT_GEV = 20000
-
-potential_types = ["Exponential", "InversePower", "Starobinsky", "Recliner"]
-
-parser = configargparse.ArgumentParser()
-parser.add_argument(
-    "--database",
-    type=str,
-    default=None,
-    help="read/write work items using the specified database cache",
-)
-parser.add_argument(
-    "--potential-type",
-    type=str,
-    default="Exponential",
-    choices=potential_types,
-    help="specify potential type to use",
-)
-parser.add_argument(
-    "--db-timeout",
-    type=int,
-    default=DEFAULT_TIMEOUT,
-    help="specify connection timeout for database layer",
-)
-parser.add_argument(
-    "--profile-db",
-    type=str,
-    default=None,
-    help="write profiling and performance data to the specified database",
-)
-parser.add_argument(
-    "--ray-address", default="auto", type=str, help="specify address of Ray cluster"
-)
-parser.add_argument(
-    "--output",
-    default="ScalarModel-out",
-    type=str,
-    help="specify folder for output files",
-)
+parser = create_argument_parser()
 args = parser.parse_args()
 
 if args.database is None:
@@ -1602,6 +1561,7 @@ def run_pipeline(
     pi_init: pi_value,
     atol: tolerance,
     rtol: tolerance,
+    tags: List[store_tag],
 ):
     model_label = model_data["label"]
     model_cosmology = model_data["cosmology"]
@@ -1625,6 +1585,7 @@ def run_pipeline(
             "coupling": coupling,
             "atol": atol,
             "rtol": rtol,
+            "tags": tags,
         }
 
         model: ScalarModel = ray.get(
@@ -1691,18 +1652,19 @@ with ShardedPool(
     # build absolute and relative tolerances
     atol, rtol = ray.get(
         [
-            pool.object_get(tolerance, tol=DEFAULT_ABS_TOLERANCE),
-            pool.object_get(tolerance, tol=DEFAULT_REL_TOLERANCE),
+            pool.object_get(tolerance, tol=args.abs_tol),
+            pool.object_get(tolerance, tol=args.rel_tol),
         ]
     )
 
     # get list of models we want to extract transfer functions for
     units = Planck_units()
 
+    T_init_GeV: float = args.T_init_GeV
+    T_stop_GeV: float = args.T_stop_GeV
+
     T_init = ray.get(
-        pool.object_get(
-            "temperature", value=DEFAULT_T_INIT_GEV * units.GeV, units=units
-        )
+        pool.object_get("temperature", value=T_init_GeV * units.GeV, units=units)
     )
 
     phi_init, pi_init = ray.get(
@@ -1773,8 +1735,17 @@ with ShardedPool(
     for model_data in model_list:
         cosmology: BaseCosmology = model_data["cosmology"]
 
-        T_CMB = cosmology._params.T_CMB_Kelvin * units.Kelvin
-        T_stop = ray.get(pool.object_get("temperature", value=T_CMB, units=units))
+        if T_stop_GeV is None:
+            T_CMB = cosmology._params.T_CMB_Kelvin * units.Kelvin
+            T_stop = ray.get(pool.object_get("temperature", value=T_CMB, units=units))
+        else:
+            T_stop = ray.get(
+                pool.object_get(
+                    "temperature", value=T_stop_GeV * units.GeV, units=units
+                )
+            )
+
+        tags = []
 
         run_pipeline(
             model_data,
@@ -1786,4 +1757,5 @@ with ShardedPool(
             pi_init,
             atol,
             rtol,
+            tags,
         )

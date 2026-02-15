@@ -1,0 +1,11 @@
+potential-type: "Recliner"
+shards: 10
+abs-tol: 1e-5
+rel-tol: 1e-6
+beta-low: 0.1
+beta-high: 3.0
+samples-per-beta: 5
+M-values-Mp: [ 1E-4, 1E-5, 1E-6, 1E-7 ]
+Lambda-values-eV: 1E-3
+log10-one-plus-z-high: 35
+T-stop: 5E-5    # 50 keV

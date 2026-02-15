@@ -19,7 +19,6 @@ from datetime import datetime
 from math import fabs
 from typing import List, Tuple, Any
 
-import configargparse
 import numpy as np
 import ray
 
@@ -50,9 +49,8 @@ from Quadrature.integration_metadata import IntegrationSolver
 from RayTools.RayWorkPool import RayWorkPool
 from Units import Planck_units
 from Units.base import UnitsLike
+from config.argument_parser import create_argument_parser
 from config.defaults import (
-    DEFAULT_ABS_TOLERANCE,
-    DEFAULT_REL_TOLERANCE,
     DEFAULT_FLOAT_PRECISION,
 )
 from config.model_list import build_model_list
@@ -66,184 +64,9 @@ from config.sharding import (
 )
 from utilities import grouper
 
-DEFAULT_LABEL = "ChamPBH-test"
-DEFAULT_TIMEOUT = 60
-DEFAULT_SHARDS = 20
-DEFAULT_RAY_ADDRESS = "auto"
-
-DEFAULT_Z_END = 0.1
-DEFAULT_T_INIT_GEV = 20000
-
-DEFAULT_LOG10_ONE_PLUS_Z_HIGH = 35
-DEFAULT_LOG10_ONE_PLUS_Z_LOW = 0
-DEFAULT_SAMPLES_PER_LOG10_Z = 250
-
-DEFAULT_BETA_LOW = 0.1
-DEFAULT_BETA_HIGH = 3.0
-DEFAULT_SAMPLES_PER_BETA = 5
-
-DEFAULT_LOG10_M_LOW_EV = 25
-DEFAULT_LOG10_M_HIGH_EV = 26.5
-DEFAULT_SAMPLES_PER_LOG10_M_EV = 6
-
-DEFAULT_LOG10_LAMBDA_LOW_EV = -2
-DEFAULT_LOG10_LAMBDA_HIGH_EV = 1
-DEFAULT_SAMPLES_PER_LOG10_LAMBDA_EV = 6
-
 MIN_NOTIFY_INTERVAL = 5 * 60
 
-allowed_drop_actions = ["scalar-model", "adiabatic-history", "bbn-data"]
-potential_types = ["Exponential", "InversePower", "Starobinsky", "Recliner"]
-
-parser = configargparse.ArgumentParser()
-
-parser.add_argument(
-    "--database",
-    type=str,
-    default=None,
-    help="read/write work items using the specified database cache",
-)
-parser.add_argument(
-    "--inventory",
-    default=False,
-    action=configargparse.BooleanOptionalAction,
-    help="show an inventory of the datastore content",
-)
-parser.add_argument(
-    "--show-all",
-    default=False,
-    action=configargparse.BooleanOptionalAction,
-    help="do not truncate long lists of inventory items",
-)
-parser.add_argument(
-    "--job-name",
-    default=DEFAULT_LABEL,
-    help="specify a label for this job (used to identify integrations and other numerical products)",
-)
-parser.add_argument(
-    "--shards",
-    type=int,
-    default=DEFAULT_SHARDS,
-    help="specify number of shards to be used when creating a new datastore (if used)",
-)
-parser.add_argument(
-    "--db-timeout",
-    type=int,
-    default=DEFAULT_TIMEOUT,
-    help="specify connection timeout for database layer",
-)
-parser.add_argument(
-    "--profile-db",
-    type=str,
-    default=None,
-    help="write profiling and performance data to the specified database",
-)
-parser.add_argument(
-    "--potential-type",
-    type=str,
-    default="Exponential",
-    choices=potential_types,
-    help="specify potential type to use",
-)
-parser.add_argument(
-    "--samples-log10-z",
-    type=int,
-    default=DEFAULT_SAMPLES_PER_LOG10_Z,
-    help="specify number of z-sample points per log10(z)",
-)
-parser.add_argument(
-    "--T-init-GeV",
-    type=float,
-    default=DEFAULT_T_INIT_GEV,
-    help="set initial conditions at temperature T_Jordan_init, specified in GeV",
-)
-parser.add_argument(
-    "--beta-low",
-    type=float,
-    default=DEFAULT_BETA_LOW,
-    help="minimum value of beta to sample",
-)
-parser.add_argument(
-    "--beta-high",
-    type=float,
-    default=DEFAULT_BETA_HIGH,
-    help="maximum value of beta to sample",
-)
-parser.add_argument(
-    "--samples-per-beta",
-    type=int,
-    default=DEFAULT_SAMPLES_PER_BETA,
-    help="number of samples per beta",
-)
-parser.add_argument(
-    "--log10-M-low-eV",
-    type=float,
-    default=DEFAULT_LOG10_M_LOW_EV,
-    help="minimum value of log10(M/eV) to sample",
-)
-parser.add_argument(
-    "--log10-M-high-eV",
-    type=float,
-    default=DEFAULT_LOG10_M_HIGH_EV,
-    help="maximum value of log10(M/eV) to sample",
-)
-parser.add_argument(
-    "--samples-per-log10-M-eV",
-    type=int,
-    default=DEFAULT_SAMPLES_PER_LOG10_M_EV,
-    help="number of samples per log10(M/eV)",
-)
-parser.add_argument(
-    "--log10-Lambda-low-eV",
-    type=float,
-    default=DEFAULT_LOG10_LAMBDA_LOW_EV,
-    help="minimum value of log10(Lambda/eV) to sample",
-)
-parser.add_argument(
-    "--log10-Lambda-high-eV",
-    type=float,
-    default=DEFAULT_LOG10_LAMBDA_HIGH_EV,
-    help="maximum value of log10(Lambda/eV) to sample",
-)
-parser.add_argument(
-    "--log10-one-plus-z-high",
-    type=float,
-    default=DEFAULT_LOG10_ONE_PLUS_Z_HIGH,
-    help="maximum value of log10(1+z) to sample",
-)
-parser.add_argument(
-    "--log10-one-plus-z-low",
-    type=float,
-    default=DEFAULT_LOG10_ONE_PLUS_Z_LOW,
-    help="minimum value of log10(1+z) to sample",
-)
-parser.add_argument(
-    "--samples-per-log10-Lambda-eV",
-    type=int,
-    default=DEFAULT_SAMPLES_PER_LOG10_LAMBDA_EV,
-    help="number of samples per log10(Lambda/eV)",
-)
-parser.add_argument(
-    "--prune-unvalidated",
-    action=configargparse.BooleanOptionalAction,
-    default=True,
-    help="prune unvalidated data from the datastore during startup",
-)
-parser.add_argument(
-    "--drop",
-    type=str,
-    nargs="+",
-    default=[],
-    choices=allowed_drop_actions,
-    help="drop one or more data categories",
-    action="extend",
-)
-parser.add_argument(
-    "--ray-address",
-    default=DEFAULT_RAY_ADDRESS,
-    type=str,
-    help="specify address of Ray cluster",
-)
+parser = create_argument_parser()
 args = parser.parse_args()
 
 
@@ -1000,16 +823,26 @@ def execute(pool, units: UnitsLike):
     beta_low: float = args.beta_low
     beta_high: float = args.beta_high
     samples_per_beta: int = args.samples_per_beta
+    beta_values: List[float] = args.beta_values
 
     log10_M_low_eV: float = args.log10_M_low_eV
     log10_M_high_eV: float = args.log10_M_high_eV
     samples_per_log10_M_eV: int = args.samples_per_log10_M_eV
+    M_values_eV: List[float] = args.M_values_eV
+    M_values_Mp: List[float] = args.M_values_Mp
+    M_values = [M * units.eV for M in M_values_eV] + [M * units.Mp for M in M_values_Mp]
 
     log10_Lambda_low_eV: float = args.log10_Lambda_low_eV
     log10_Lambda_high_eV: float = args.log10_Lambda_high_eV
     samples_per_log10_Lambda_eV: int = args.samples_per_log10_Lambda_eV
+    Lambda_values_eV: List[float] = args.Lambda_values_eV
+    Lambda_values_Mp: List[float] = args.Lambda_values_Mp
+    Lambda_values = [Lambda * units.eV for Lambda in Lambda_values_eV] + [
+        Lambda * units.Mp for Lambda in Lambda_values_Mp
+    ]
 
     T_init_GeV: float = args.T_init_GeV
+    T_stop_GeV: float = args.T_stop_GeV
 
     T_init = ray.get(
         pool.object_get("temperature", value=T_init_GeV * units.GeV, units=units)
@@ -1100,8 +933,8 @@ def execute(pool, units: UnitsLike):
     # build absolute and relative tolerances
     atol, rtol = ray.get(
         [
-            pool.object_get("tolerance", tol=DEFAULT_ABS_TOLERANCE),
-            pool.object_get("tolerance", tol=DEFAULT_REL_TOLERANCE),
+            pool.object_get("tolerance", tol=args.abs_tol),
+            pool.object_get("tolerance", tol=args.rel_tol),
         ]
     )
 
@@ -1155,70 +988,76 @@ def execute(pool, units: UnitsLike):
     print("\n** BUILDING GRID OF MODELS TO SAMPLE")
     print(f'   -- using potential type "{args.potential_type}"')
 
-    num_beta_sample = int(round(samples_per_beta * (beta_high - beta_low) + 0.5, 0))
+    if len(beta_values == 0):
+        num_beta_sample = int(round(samples_per_beta * (beta_high - beta_low) + 0.5, 0))
 
-    beta_blacklist = []
+        beta_blacklist = []
 
-    def beta_blacklisted(beta: float) -> bool:
-        if (
-            len(
-                [
-                    b
-                    for b in beta_blacklist
-                    if fabs((beta - b) / b) < DEFAULT_FLOAT_PRECISION
-                ]
-            )
-            > 0
-        ):
-            print(
-                f"   @@ Note: beta = {beta:.8g} is blacklisted and has been removed from the sample"
-            )
-            return True
+        def beta_blacklisted(beta: float) -> bool:
+            if (
+                len(
+                    [
+                        b
+                        for b in beta_blacklist
+                        if fabs((beta - b) / b) < DEFAULT_FLOAT_PRECISION
+                    ]
+                )
+                > 0
+            ):
+                print(
+                    f"   @@ Note: beta = {beta:.8g} is blacklisted and has been removed from the sample"
+                )
+                return True
 
-        return False
+            return False
 
-    beta_pre_sample = np.linspace(beta_low, beta_high, num_beta_sample, endpoint=True)
-    # beta_pre_sample = [0.1, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0]
-    beta_sample = [beta for beta in beta_pre_sample if not beta_blacklisted(beta)]
+        beta_pre_sample = np.linspace(
+            beta_low, beta_high, num_beta_sample, endpoint=True
+        )
+        # beta_pre_sample = [0.1, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0]
+        beta_sample = [beta for beta in beta_pre_sample if not beta_blacklisted(beta)]
+    else:
+        beta_sample = beta_values
 
     beta_array = ray.get(convert_to_betas(beta_sample))
     beta_grid = DimensionlessQuantityArray(value_array=beta_array)
     print(f"   -- populated beta sample grid with {len(beta_sample)} values")
 
-    # num_M_sample = int(
-    #     round(samples_per_log10_M_eV * (log10_M_high_eV - log10_M_low_eV) + 0.5, 0)
-    # )
-    #
-    # M_array = ray.get(
-    #     convert_to_Ms(
-    #         np.logspace(log10_M_low_eV, log10_M_high_eV, num_M_sample, endpoint=True)
-    #         * units.eV
-    #     )
-    # )
-    M_array = ray.get(convert_to_Ms([0.5 * units.PlanckMass]))
+    if len(M_values) == 0:
+        num_M_sample = int(
+            round(samples_per_log10_M_eV * (log10_M_high_eV - log10_M_low_eV) + 0.5, 0)
+        )
+        M_pre_sample = np.logspace(
+            log10_M_low_eV, log10_M_high_eV, num_M_sample, endpoint=True
+        )
+        M_sample = [M * units.eV for M in M_pre_sample]
+    else:
+        M_sample = M_values
+
+    M_array = ray.get(convert_to_Ms(M_sample))
     M_grid = DimensionfulQuantityArray(value_array=M_array)
     print(f"   -- populated M sample grid with {len(M_array)} values")
 
-    # num_Lambda_sample = int(
-    #     round(
-    #         samples_per_log10_Lambda_eV * (log10_Lambda_high_eV - log10_Lambda_low_eV)
-    #         + 0.5,
-    #         0,
-    #     )
-    # )
-    #
-    # Lambda_array = ray.get(
-    #     convert_to_Lambdas(
-    #         np.logspace(
-    #             log10_Lambda_low_eV,
-    #             log10_Lambda_high_eV,
-    #             num_Lambda_sample,
-    #             endpoint=True,
-    #         )
-    #         * units.eV
-    #     )
-    # )
-    Lambda_array = ray.get(convert_to_Lambdas([1e-3 * units.eV]))
+    if len(Lambda_values) == 0:
+        num_Lambda_sample = int(
+            round(
+                samples_per_log10_Lambda_eV
+                * (log10_Lambda_high_eV - log10_Lambda_low_eV)
+                + 0.5,
+                0,
+            )
+        )
+        Lambda_pre_sample = np.logspace(
+            log10_Lambda_low_eV,
+            log10_Lambda_high_eV,
+            num_Lambda_sample,
+            endpoint=True,
+        )
+        Lambda_sample = [Lambda * units.eV for Lambda in Lambda_pre_sample]
+    else:
+        Lambda_sample = Lambda_values
+
+    Lambda_array = ray.get(convert_to_Lambdas(Lambda_sample))
     Lambda_grid = DimensionfulQuantityArray(value_array=Lambda_array)
     print(f"   -- populated Lambda sample grid with {len(Lambda_array)} values")
 
@@ -1235,9 +1074,15 @@ def execute(pool, units: UnitsLike):
     for model_data in model_list:
         cosmology: BaseCosmology = model_data["cosmology"]
 
-        T_CMB = cosmology._params.T_CMB_Kelvin * units.Kelvin
-        # T_CMB = 50 * units.keV
-        T_stop = ray.get(pool.object_get("temperature", value=T_CMB, units=units))
+        if T_stop_GeV is None:
+            T_CMB = cosmology._params.T_CMB_Kelvin * units.Kelvin
+            T_stop = ray.get(pool.object_get("temperature", value=T_CMB, units=units))
+        else:
+            T_stop = ray.get(
+                pool.object_get(
+                    "temperature", value=T_stop_GeV * units.GeV, units=units
+                )
+            )
 
         run_pipeline(
             pool,
