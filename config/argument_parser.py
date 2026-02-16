@@ -32,14 +32,15 @@ allowed_drop_actions = ["scalar-model", "adiabatic-history", "bbn-data"]
 potential_types = ["Exponential", "InversePower", "Starobinsky", "Recliner"]
 
 
-def create_argument_parser():
-    parser = configargparse.ArgumentParser()
+def create_argument_parser() -> configargparse.ArgumentParser:
+    parser = configargparse.ArgumentParser(
+        config_file_parser_class=configargparse.YAMLConfigFileParser
+    )
 
     parser.add_argument(
         "-c",
         "--config",
         is_config_file=True,
-        config_file_parser_class=configargparse.YAMLConfigFileParser,
         help="read options from the specified configuration file",
     )
     parser.add_argument(
@@ -87,7 +88,6 @@ def create_argument_parser():
     parser.add_argument(
         "--potential-type",
         type=str,
-        required=True,
         choices=potential_types,
         help="specify potential type to use",
     )
@@ -229,7 +229,7 @@ def create_argument_parser():
     )
     parser.add_argument(
         "--prune-unvalidated",
-        action=configargparse.BooleanOptionalAction,
+        action=argparse.BooleanOptionalAction,
         default=True,
         help="prune unvalidated data from the datastore during startup",
     )
@@ -254,3 +254,5 @@ def create_argument_parser():
         type=str,
         help="specify address of Ray cluster",
     )
+
+    return parser
