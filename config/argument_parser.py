@@ -249,6 +249,24 @@ def create_argument_parser() -> configargparse.ArgumentParser:
         help="specify folder for output files",
     )
     parser.add_argument(
+        "--Li7-axis-limits",
+        default=True,
+        action=argparse.BooleanOptionalAction,
+        help="limit the y-axis on Li7 plots to near the observationally-allowed region",
+    )
+    parser.add_argument(
+        "--D-axis-limits",
+        default=True,
+        action=argparse.BooleanOptionalAction,
+        help="limit the y-axis on D/H plots to near the observationally-allowed region",
+    )
+    parser.add_argument(
+        "--Yp-axis-limits",
+        default=True,
+        action=argparse.BooleanOptionalAction,
+        help="limit the y-axis on Y_p plots to near the observationally-allowed region",
+    )
+    parser.add_argument(
         "--ray-address",
         default=DEFAULT_RAY_ADDRESS,
         type=str,

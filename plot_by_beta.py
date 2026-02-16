@@ -343,23 +343,26 @@ def build_beta_plot(
 
             return max_value, min_value
 
-        # max_Yp = 1.05 * max(max(Yp_y), Yp_central_value + 3.0 * Yp_sigma)
-        # min_Yp = 0.95 * min(min(Yp_y), Yp_central_value - 3.0 * Yp_sigma)
-        max_Yp, min_Yp = get_max_min(Yp_data)
-        Yp_ax.set_ylim(min_Yp, max_Yp)
+        if args.Yp_axis_limits:
+            # max_Yp = 1.05 * max(max(Yp_y), Yp_central_value + 3.0 * Yp_sigma)
+            # min_Yp = 0.95 * min(min(Yp_y), Yp_central_value - 3.0 * Yp_sigma)
+            max_Yp, min_Yp = get_max_min(Yp_data)
+            Yp_ax.set_ylim(min_Yp, max_Yp)
 
-        # max_DOverH = max(max(DOverH_y), DOverH_central_value + 3.0 * DOverH_sigma)
-        # min_DOverH = min(min(DOverH_y), DOverH_central_value - 3.0 * DOverH_sigma)
-        # if max_DOverH / min_DOverH > 50.0:
-        #     D_ax.set_yscale("log")
-        #     D_ax.set_ylim(min_DOverH / 10.0, 10.0 * max_DOverH)
-        # else:
-        #     D_ax.set_ylim(0.95 * min_DOverH, 1.06 * max_DOverH)
-        max_D, min_D = get_max_min(D_data)
-        D_ax.set_ylim(min_D, max_D)
+        if args.D_axis_limits:
+            # max_DOverH = max(max(DOverH_y), DOverH_central_value + 3.0 * DOverH_sigma)
+            # min_DOverH = min(min(DOverH_y), DOverH_central_value - 3.0 * DOverH_sigma)
+            # if max_DOverH / min_DOverH > 50.0:
+            #     D_ax.set_yscale("log")
+            #     D_ax.set_ylim(min_DOverH / 10.0, 10.0 * max_DOverH)
+            # else:
+            #     D_ax.set_ylim(0.95 * min_DOverH, 1.06 * max_DOverH)
+            max_D, min_D = get_max_min(D_data)
+            D_ax.set_ylim(min_D, max_D)
 
-        # max_Li7, min_Li7 = get_max_min(Li7_data)
-        # Li7_ax.set_ylim(min_Li7, max_Li7)
+        if args.Li7_axis_limits:
+            max_Li7, min_Li7 = get_max_min(Li7_data)
+            Li7_ax.set_ylim(min_Li7, max_Li7)
 
         Yp_ax.legend(loc="best")
         D_ax.legend(loc="best")

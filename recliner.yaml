@@ -9,3 +9,6 @@ M-values-Mp: [ 1E-4, 1E-5, 1E-6, 1E-7 ]
 Lambda-values-eV: 1E-3
 log10-one-plus-z-high: 35
 T-stop: 5E-5    # 50 keV
+Yp-axis-limits: False
+D-axis-limits: False
+Li7-axis-limits: False
