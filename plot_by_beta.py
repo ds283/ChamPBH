@@ -147,6 +147,10 @@ def build_beta_plot(
         if d.available and not d.failure and d.Li7OverH > 0
     ]
 
+    if len(Yp_points) == 0:
+        print("!! build_beta_plot: no valid BBN data to plot for '{model_label}'")
+        return
+
     solver_time_x, solver_time_y = zip(*solver_time_points)
     bbn_time_x, bbn_time_y = zip(*bbn_time_points)
     Yp_x, Yp_y = zip(*Yp_points)
@@ -211,7 +215,7 @@ def build_beta_plot(
             fig.savefig(fig_path.with_suffix(".png"))
         except OverflowError:
             print(
-                f"@@ build_beta_plot: error occurred when generating a timing plot for ScalarModel '{model_label}'"
+                f"!! build_beta_plot: error occurred when generating a timing plot for '{model_label}'"
             )
 
         plt.close()
@@ -378,7 +382,7 @@ def build_beta_plot(
             fig.savefig(fig_path.with_suffix(".png"))
         except OverflowError:
             print(
-                f"@@ build_beta_plot: error occurred when generating a BBN abundance plot for ScalarModel '{model_label}'"
+                f"!! build_beta_plot: error occurred when generating a BBN abundance plot for '{model_label}'"
             )
 
         plt.close()

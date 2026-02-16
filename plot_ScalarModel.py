@@ -249,7 +249,7 @@ def history_plot(
         fig.savefig(fig_path.with_suffix(".png"))
     except OverflowError:
         print(
-            f"@@ plot_ScalarModel: error occurred when generating a history plot for ScalarModel '{model_label}'"
+            f"!! plot_ScalarModel: error occurred when generating a history plot for ScalarModel '{model.label}'"
         )
 
     plt.close()
@@ -376,7 +376,7 @@ def thermo_plot(
         fig.savefig(fig_path.with_suffix(".png"))
     except OverflowError:
         print(
-            f"@@ plot_ScalarModel: error occurred when generating a thermodynamics plot for ScalarModel '{model_label}'"
+            f"!! plot_ScalarModel: error occurred when generating a thermodynamics plot for ScalarModel '{model.label}'"
         )
 
     plt.close()
@@ -498,7 +498,7 @@ def Hubble_plot(
         fig.savefig(fig_path.with_suffix(".png"))
     except OverflowError:
         print(
-            f"@@ plot_ScalarModel: error occurred when generating a Hubble rate plot for ScalarModel '{model_label}'"
+            f"!! plot_ScalarModel: error occurred when generating a Hubble rate plot for ScalarModel '{model.label}'"
         )
 
     plt.close()
@@ -584,7 +584,7 @@ def energy_plot(
         fig.savefig(fig_path.with_suffix(".png"))
     except OverflowError:
         print(
-            f"@@ plot_ScalarModel: error occurred when generating an energy history plot for ScalarModel '{model_label}'"
+            f"!! plot_ScalarModel: error occurred when generating an energy history plot for ScalarModel '{model.label}'"
         )
 
     plt.close()
@@ -795,7 +795,7 @@ def ODE_terms_plot(
         fig.savefig(fig_path.with_suffix(".png"))
     except OverflowError:
         print(
-            f"@@ plot_ScalarModel: error occurred when generating a plot of the ODE terms for ScalarModel '{model_label}'"
+            f"!! plot_ScalarModel: error occurred when generating a plot of the ODE terms for ScalarModel '{model.label}'"
         )
 
     plt.close()
@@ -1034,7 +1034,7 @@ def BBN_era_plot(
         fig.savefig(fig_path.with_suffix(".png"))
     except OverflowError:
         print(
-            f"@@ plot_ScalarModel: error occurred when generating a BBN era plot for ScalarModel '{model_label}'"
+            f"!! plot_ScalarModel: error occurred when generating a BBN era plot for ScalarModel '{model.label}'"
         )
 
     plt.close()
@@ -1294,7 +1294,7 @@ def BBN_era_NP_plot(
         fig.savefig(fig_path.with_suffix(".png"))
     except OverflowError:
         print(
-            f"@@ plot_ScalarModel: error occurred when generating a BBN NP plot for ScalarModel '{model_label}'"
+            f"!! plot_ScalarModel: error occurred when generating a BBN NP plot for ScalarModel '{model.label}'"
         )
 
     plt.close()
