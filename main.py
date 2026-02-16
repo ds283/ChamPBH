@@ -62,7 +62,7 @@ from config.sharding import (
     read_table_config,
     inventory_config,
 )
-from utilities import grouper
+from utilities import grouper, energy_formatter
 
 MIN_NOTIFY_INTERVAL = 5 * 60
 
@@ -772,6 +772,8 @@ def run_pipeline(
 
 
 def execute(pool, units: UnitsLike):
+    formatter: energy_formatter = energy_formatter(units)
+
     log10_one_plus_z_low = args.log10_one_plus_z_low
     log10_one_plus_z_high = args.log10_one_plus_z_high
     samples_per_log10_z: int = args.samples_log10_z
@@ -1005,10 +1007,10 @@ def execute(pool, units: UnitsLike):
     M_array = ray.get(convert_to_Ms(M_sample))
     M_grid = DimensionfulQuantityArray(value_array=M_array)
     if len(M_sample) <= 20:
-        formatted_M_sample = [f"{M/units.eV:.5g} eV" for M in M_sample]
+        formatted_M_sample = [formatter(M) for M in M_sample]
     else:
-        formatted_M_low = [f"{M/units.eV:.5g} eV" for M in M_sample[:10]]
-        formatted_M_high = [f"{M/units.eV:.5g} eV" for M in M_sample[-10:]]
+        formatted_M_low = [formatter(M) for M in M_sample[:10]]
+        formatted_M_high = [formatter(M) for M in M_sample[-10:]]
         formatted_M_sample = formatted_M_low + ["..."] + formatted_M_high
     print(
         f'   -- populated M sample grid with {len(M_array)} value{"" if len(M_array)==1 else "s"} = [ {", ".join(formatted_M_sample)} ]'
@@ -1036,16 +1038,10 @@ def execute(pool, units: UnitsLike):
     Lambda_array = ray.get(convert_to_Lambdas(Lambda_sample))
     Lambda_grid = DimensionfulQuantityArray(value_array=Lambda_array)
     if len(Lambda_sample) <= 20:
-        formatted_Lambda_sample = [
-            f"{Lambda/units.eV:.5g} eV" for Lambda in Lambda_sample
-        ]
+        formatted_Lambda_sample = [formatter(Lambda) for Lambda in Lambda_sample]
     else:
-        formatted_Lambda_low = [
-            f"{Lambda/units.eV:.5g} eV" for Lambda in Lambda_sample[:10]
-        ]
-        formatted_Lambda_high = [
-            f"{Lambda/units.eV:.5g} eV" for Lambda in Lambda_sample[-10:]
-        ]
+        formatted_Lambda_low = [formatter(Lambda) for Lambda in Lambda_sample[:10]]
+        formatted_Lambda_high = [formatter(Lambda) for Lambda in Lambda_sample[-10:]]
         formatted_Lambda_sample = formatted_Lambda_low + ["..."] + formatted_Lambda_high
     print(
         f'   -- populated Lambda sample grid with {len(Lambda_array)} value{"" if len(Lambda_array)==1 else "s"} = [ {", ".join(formatted_Lambda_sample)} ]'

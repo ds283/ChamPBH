@@ -15,7 +15,10 @@
 
 import time
 from itertools import zip_longest
+from math import fabs, log
 from traceback import print_tb
+
+from Units.base import UnitsLike
 
 
 class WallclockTimer:
@@ -74,6 +77,52 @@ def format_time(interval: float) -> str:
         str = f"{interval:.3g}s"
 
     return str
+
+
+def format_energy(
+    value, units: UnitsLike, format_string: str = ".5g", include_space=True
+) -> str:
+    config = {
+        "eV": {
+            "unit": units.eV,
+        },
+        "keV": {
+            "unit": units.keV,
+        },
+        "MeV": {
+            "unit": units.MeV,
+        },
+        "GeV": {
+            "unit": units.GeV,
+        },
+        "Mp": {"unit": units.PlanckMass},
+    }
+
+    # the unit that produces a result closest to one gives |log| closest to zero
+    trials = {label: fabs(log(value / data["unit"])) for label, data in config.items()}
+
+    # search for minimum value
+    best_label = min(trials, key=trials.get)
+
+    # format value using this unit and return
+    return f"{value/config[best_label]['unit']:{format_string}}{' ' if include_space else ''}{best_label}"
+
+
+class energy_formatter:
+    def __init__(
+        self, units: UnitsLike, format_string=".5g", include_space: bool = True
+    ):
+        self._units: UnitsLike = units
+        self._format_string: str = format_string
+        self._include_space: bool = include_space
+
+    def __call__(self, value) -> str:
+        return format_energy(
+            value,
+            units=self._units,
+            format_string=self._format_string,
+            include_space=self._include_space,
+        )
 
 
 # grouper borrowed from itertools recipes

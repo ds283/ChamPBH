@@ -23,6 +23,7 @@ from CosmologyConcepts.Potentials.model_ids import (
     REFLECTING_POTENTIAL,
 )
 from Units.base import UnitsLike
+from utilities import energy_formatter
 
 
 class ReflectingPotential(AbstractPotential):
@@ -32,6 +33,7 @@ class ReflectingPotential(AbstractPotential):
         super().__init__(store_id)
 
         self._units: UnitsLike = units
+        self._formatter: energy_formatter = energy_formatter(units, include_space=False)
 
         self._M: M_value = M
         self._Lambda: Lambda_value = Lambda
@@ -47,7 +49,7 @@ class ReflectingPotential(AbstractPotential):
 
     @property
     def name(self):
-        return f"ReflectingPotential(M={self._M_float / self._units.eV:.5g}eV,Lambda={self._Lambda_float / self._units.eV:.5g}eV)"
+        return f"ReflectingPotential(M={self._formatter(self._M)},Lambda={self._formatter(self._Lambda)})"
 
     @property
     def type_id(self) -> int:

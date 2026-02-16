@@ -23,6 +23,7 @@ from CosmologyConcepts.Potentials.AbstractPotential import AbstractPotential
 from CosmologyConcepts.Potentials.model_ids import INVERSE_POWER_POTENTIAL
 from Units.base import UnitsLike
 from config.defaults import DEFAULT_ABS_TOLERANCE, DEFAULT_REL_TOLERANCE
+from utilities import energy_formatter
 
 
 class InversePowerPotential(AbstractPotential):
@@ -32,6 +33,7 @@ class InversePowerPotential(AbstractPotential):
         super().__init__(store_id)
 
         self._units: UnitsLike = units
+        self._formatter: energy_formatter = energy_formatter(units, include_space=False)
 
         assert n >= 0
 
@@ -48,7 +50,7 @@ class InversePowerPotential(AbstractPotential):
 
     @property
     def name(self):
-        return f"InversePowerPotential(M={self._M_float / self._units.eV:.5g}eV,Lambda={self._Lambda_float / self._units.eV:.5g}eV)"
+        return f"InversePowerPotential(M={self._formatter(self._M)},Lambda={self._formatter(self._Lambda)})"
 
     @property
     def type_id(self) -> int:

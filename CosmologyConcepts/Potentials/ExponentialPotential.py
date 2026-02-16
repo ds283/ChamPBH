@@ -25,6 +25,7 @@ from CosmologyConcepts.Potentials.model_ids import (
 )
 from Units.base import UnitsLike
 from config.defaults import DEFAULT_ABS_TOLERANCE, DEFAULT_REL_TOLERANCE
+from utilities import energy_formatter
 
 
 class ExponentialPotential(AbstractPotential):
@@ -34,6 +35,7 @@ class ExponentialPotential(AbstractPotential):
         super().__init__(store_id)
 
         self._units: UnitsLike = units
+        self._formatter: energy_formatter = energy_formatter(units, include_space=False)
 
         assert n >= 0
 
@@ -49,7 +51,7 @@ class ExponentialPotential(AbstractPotential):
 
     @property
     def name(self):
-        return f"ExponentialPotential(M={self._M_float / self._units.eV:.5g}eV,Lambda={self._Lambda_float / self._units.eV:.5g}eV)"
+        return f"ExponentialPotential(M={self._formatter(self._M)},Lambda={self._formatter(self._Lambda)})"
 
     @property
     def type_id(self) -> int:
