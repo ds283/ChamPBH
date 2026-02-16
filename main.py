@@ -946,7 +946,7 @@ def execute(pool, units: UnitsLike):
     print("\n** BUILDING GRID OF MODELS TO SAMPLE")
     print(f'   -- using potential type "{args.potential_type}"')
 
-    if len(beta_values == 0):
+    if len(beta_values) == 0:
         num_beta_sample = int(round(samples_per_beta * (beta_high - beta_low) + 0.5, 0))
 
         beta_blacklist = []
@@ -973,13 +973,23 @@ def execute(pool, units: UnitsLike):
             beta_low, beta_high, num_beta_sample, endpoint=True
         )
         # beta_pre_sample = [0.1, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0]
-        beta_sample = [beta for beta in beta_pre_sample if not beta_blacklisted(beta)]
+        beta_sample = sorted(
+            [beta for beta in beta_pre_sample if not beta_blacklisted(beta)]
+        )
     else:
-        beta_sample = beta_values
+        beta_sample = sorted(beta_values)
 
     beta_array = ray.get(convert_to_betas(beta_sample))
     beta_grid = DimensionlessQuantityArray(value_array=beta_array)
-    print(f"   -- populated beta sample grid with {len(beta_sample)} values")
+    if len(beta_sample) <= 20:
+        formatted_beta_sample = [f"{beta:.5g}" for beta in beta_sample]
+    else:
+        formatted_beta_low = [f"{beta:.5g}" for beta in beta_sample[:10]]
+        formatted_beta_high = [f"{beta:.5g}" for beta in beta_sample[-10:]]
+        formatted_beta_sample = formatted_beta_low + ["..."] + formatted_beta_high
+    print(
+        f'   -- populated beta sample grid with {len(beta_sample)} value{"" if len(beta_sample)==1 else "s"} = [ {", ".join(formatted_beta_sample)} ]'
+    )
 
     if len(M_values) == 0:
         num_M_sample = int(
@@ -994,7 +1004,15 @@ def execute(pool, units: UnitsLike):
 
     M_array = ray.get(convert_to_Ms(M_sample))
     M_grid = DimensionfulQuantityArray(value_array=M_array)
-    print(f"   -- populated M sample grid with {len(M_array)} values")
+    if len(M_sample) <= 20:
+        formatted_M_sample = [f"{M/units.eV:.5g} eV" for M in M_sample]
+    else:
+        formatted_M_low = [f"{M/units.eV:.5g} eV" for M in M_sample[:10]]
+        formatted_M_high = [f"{M/units.eV:.5g} eV" for M in M_sample[-10:]]
+        formatted_M_sample = formatted_M_low + ["..."] + formatted_M_high
+    print(
+        f'   -- populated M sample grid with {len(M_array)} value{"" if len(M_array)==1 else "s"} = [ {", ".join(formatted_M_sample)} ]'
+    )
 
     if len(Lambda_values) == 0:
         num_Lambda_sample = int(
@@ -1017,7 +1035,21 @@ def execute(pool, units: UnitsLike):
 
     Lambda_array = ray.get(convert_to_Lambdas(Lambda_sample))
     Lambda_grid = DimensionfulQuantityArray(value_array=Lambda_array)
-    print(f"   -- populated Lambda sample grid with {len(Lambda_array)} values")
+    if len(Lambda_sample) <= 20:
+        formatted_Lambda_sample = [
+            f"{Lambda/units.eV:.5g} eV" for Lambda in Lambda_sample
+        ]
+    else:
+        formatted_Lambda_low = [
+            f"{Lambda/units.eV:.5g} eV" for Lambda in Lambda_sample[:10]
+        ]
+        formatted_Lambda_high = [
+            f"{Lambda/units.eV:.5g} eV" for Lambda in Lambda_sample[-10:]
+        ]
+        formatted_Lambda_sample = formatted_Lambda_low + ["..."] + formatted_Lambda_high
+    print(
+        f'   -- populated Lambda sample grid with {len(Lambda_array)} value{"" if len(Lambda_array)==1 else "s"} = [ {", ".join(formatted_Lambda_sample)} ]'
+    )
 
     M_lambda_grid = itertools.product(M_grid, Lambda_grid)
     Potential_array = ray.get(convert_to_potential(M_lambda_grid))
@@ -1025,7 +1057,7 @@ def execute(pool, units: UnitsLike):
     Coupling_array = ray.get(convert_to_coupling(beta_grid))
 
     print(
-        f"   -- total number of models to integrate: {len(Potential_array) * len(Coupling_array)}"
+        f"   -- total number of models to integrate = {len(Potential_array) * len(Coupling_array)}"
     )
 
     model_list = build_model_list(pool, units)
