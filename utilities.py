@@ -82,6 +82,15 @@ def format_time(interval: float) -> str:
 def format_energy(
     value, units: UnitsLike, format_string: str = ".5g", include_space=True
 ) -> str:
+    _value_as_float: float
+    if isinstance(value, float):
+        _value_as_float = value
+    elif hasattr(value, "as_float"):
+        _value_as_float = value.as_float
+    else:
+        # allow an exception to be raised if conversion is not possible
+        _value_as_float = float(value)
+
     config = {
         "eV": {
             "unit": units.eV,
@@ -99,13 +108,16 @@ def format_energy(
     }
 
     # the unit that produces a result closest to one gives |log| closest to zero
-    trials = {label: fabs(log(value / data["unit"])) for label, data in config.items()}
+    trials = {
+        label: fabs(log(_value_as_float / data["unit"]))
+        for label, data in config.items()
+    }
 
     # search for minimum value
     best_label = min(trials, key=trials.get)
 
     # format value using this unit and return
-    return f"{value/config[best_label]['unit']:{format_string}}{' ' if include_space else ''}{best_label}"
+    return f"{_value_as_float/config[best_label]['unit']:{format_string}}{' ' if include_space else ''}{best_label}"
 
 
 class energy_formatter:
