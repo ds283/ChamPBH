@@ -120,24 +120,10 @@ def run_pipeline(
     # build tags and other labels, based on these sample grids
     (
         SamplesPerLog10ZTag,  # labels number of sampled redshifts per log10 interval of 1+z in the source grid
-        SamplesPerBetaTag,  # labels number of sampled beta values per log10 in beta
-        SamplesPerLog10LambdaTag,  # labels number of sampled Lambda values per log10 in Lambda
-        SamplesPerLog10MTag,  # labels number of sampled M values per log10 in M
     ) = ray.get(
         [
             pool.object_get(
                 "store_tag", label=f"SamplesPerLog10Z_{metadata["samples_per_log10_z"]}"
-            ),
-            pool.object_get(
-                "store_tag", label=f"SamplesPerBeta_{metadata["samples_per_beta"]}"
-            ),
-            pool.object_get(
-                "store_tag",
-                label=f"SamplesPerLog10Lambda_eV_{metadata["samples_per_log10_Lambda_eV"]}",
-            ),
-            pool.object_get(
-                "store_tag",
-                label=f"SamplesPerLog10M_eV_{metadata["samples_per_log10_M_eV"]}",
             ),
         ]
     )
@@ -188,9 +174,6 @@ def run_pipeline(
                         "rtol": rtol,
                         "tags": [
                             SamplesPerLog10ZTag,
-                            SamplesPerBetaTag,
-                            SamplesPerLog10MTag,
-                            SamplesPerLog10LambdaTag,
                         ],
                         "_do_not_populate": True,
                     }
@@ -252,9 +235,6 @@ def run_pipeline(
                         rtol=rtol,
                         tags=[
                             SamplesPerLog10ZTag,
-                            SamplesPerBetaTag,
-                            SamplesPerLog10MTag,
-                            SamplesPerLog10LambdaTag,
                         ],
                         _do_not_populate=True,  # ignored if object does not already exist in database, so does not spoil work scheduling
                     )
@@ -341,9 +321,6 @@ def run_pipeline(
                         "rtol": rtol,
                         "tags": [
                             SamplesPerLog10ZTag,
-                            SamplesPerBetaTag,
-                            SamplesPerLog10MTag,
-                            SamplesPerLog10LambdaTag,
                         ],
                         "_do_not_populate": True,
                     }
@@ -396,9 +373,6 @@ def run_pipeline(
                         "model_proxy": ScalarModelProxy(obj),
                         "tags": [
                             SamplesPerLog10ZTag,
-                            SamplesPerBetaTag,
-                            SamplesPerLog10MTag,
-                            SamplesPerLog10LambdaTag,
                         ],
                         "_do_not_populate": True,
                     }
@@ -465,9 +439,6 @@ def run_pipeline(
                         "rtol": rtol,
                         "tags": [
                             SamplesPerLog10ZTag,
-                            SamplesPerBetaTag,
-                            SamplesPerLog10MTag,
-                            SamplesPerLog10LambdaTag,
                         ],
                     }
                     for potential, coupling in x["missing"]
@@ -512,9 +483,6 @@ def run_pipeline(
                         model_proxy=proxy,
                         tags=[
                             SamplesPerLog10ZTag,
-                            SamplesPerBetaTag,
-                            SamplesPerLog10MTag,
-                            SamplesPerLog10LambdaTag,
                         ],
                     )
                     for proxy in proxy_data["missing_proxies"]
@@ -599,9 +567,6 @@ def run_pipeline(
                         "rtol": rtol,
                         "tags": [
                             SamplesPerLog10ZTag,
-                            SamplesPerBetaTag,
-                            SamplesPerLog10MTag,
-                            SamplesPerLog10LambdaTag,
                         ],
                         "_do_not_populate": True,
                     }
@@ -654,9 +619,6 @@ def run_pipeline(
                         "model_proxy": ScalarModelProxy(obj),
                         "tags": [
                             SamplesPerLog10ZTag,
-                            SamplesPerBetaTag,
-                            SamplesPerLog10MTag,
-                            SamplesPerLog10LambdaTag,
                         ],
                         "_do_not_populate": True,
                     }
@@ -723,9 +685,6 @@ def run_pipeline(
                         "rtol": rtol,
                         "tags": [
                             SamplesPerLog10ZTag,
-                            SamplesPerBetaTag,
-                            SamplesPerLog10MTag,
-                            SamplesPerLog10LambdaTag,
                         ],
                     }
                     for potential, coupling in x["missing"]
@@ -770,9 +729,6 @@ def run_pipeline(
                         model_proxy=proxy,
                         tags=[
                             SamplesPerLog10ZTag,
-                            SamplesPerBetaTag,
-                            SamplesPerLog10MTag,
-                            SamplesPerLog10LambdaTag,
                         ],
                     )
                     for proxy in proxy_data["missing_proxies"]
@@ -830,7 +786,9 @@ def execute(pool, units: UnitsLike):
     samples_per_log10_M_eV: int = args.samples_per_log10_M_eV
     M_values_eV: List[float] = args.M_values_eV
     M_values_Mp: List[float] = args.M_values_Mp
-    M_values = [M * units.eV for M in M_values_eV] + [M * units.Mp for M in M_values_Mp]
+    M_values = [M * units.eV for M in M_values_eV] + [
+        M * units.PlanckMass for M in M_values_Mp
+    ]
 
     log10_Lambda_low_eV: float = args.log10_Lambda_low_eV
     log10_Lambda_high_eV: float = args.log10_Lambda_high_eV
@@ -838,7 +796,7 @@ def execute(pool, units: UnitsLike):
     Lambda_values_eV: List[float] = args.Lambda_values_eV
     Lambda_values_Mp: List[float] = args.Lambda_values_Mp
     Lambda_values = [Lambda * units.eV for Lambda in Lambda_values_eV] + [
-        Lambda * units.Mp for Lambda in Lambda_values_Mp
+        Lambda * units.PlanckMass for Lambda in Lambda_values_Mp
     ]
 
     T_init_GeV: float = args.T_init_GeV
