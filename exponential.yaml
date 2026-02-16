@@ -1,5 +1,5 @@
 potential-type: "Exponential"
-shards: 10
+shards: 16
 abs-tol: 1e-8
 rel-tol: 1e-8
 beta-low: 0.1
