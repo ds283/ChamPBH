@@ -10,4 +10,4 @@ Lambda-values-eV: 1E-3
 log10-one-plus-z-high: 85
 Yp-axis-limits: True
 D-axis-limits: True
-Li7-axis-limits: True
+Li7-axis-limits: False
