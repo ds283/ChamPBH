@@ -14,7 +14,7 @@ from MetadataConcepts import store_tag
 from Quadrature.supervisors.ScalarField import StateVector
 from Units.base import UnitsLike
 from config.sharding import ShardKeyType
-from utilities import WallclockTimer
+from utilities import WallclockTimer, format_energy
 from .Policies import PotentialDerivativePolicy
 from .ScalarModel import ScalarModelProxy, ScalarModel, ScalarModelValue, ODEPolicy
 from .exceptions import ComputationFailureError
@@ -74,6 +74,12 @@ def compute_BBN_data(
 
     T_BBN_spline_max = T_BBN_MeV_spline_max * units.MeV
     T_BBN_spline_min = T_BBN_keV_spline_min * units.keV
+
+    if model.T_Jordan_stop.as_float > 0.1 * T_BBN_spline_min:
+        print(
+            f"!! compute_BBN_data {task_label}: T_Jordan_stop={format_energy(model.T_Jordan_stop)} is more than than 0.1*T_BBN_spline_min={format_energy(0.1*T_BBN_spline_min)}, so cannot compute BBN abundances"
+        )
+        return {"failure": True}
 
     log_MeV = log(units.MeV)
     MeV2 = units.MeV * units.MeV
