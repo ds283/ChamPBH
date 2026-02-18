@@ -109,7 +109,7 @@ def format_energy(
 
     # the unit that produces a result closest to one gives |log| closest to zero
     trials = {
-        label: fabs(log(_value_as_float / data["unit"]))
+        label: fabs(log(fabs(_value_as_float / data["unit"])))
         for label, data in config.items()
     }
 
