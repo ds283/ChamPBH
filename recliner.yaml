@@ -2,13 +2,11 @@ potential-type: "Recliner"
 shards: 10
 abs-tol: 1e-5
 rel-tol: 1e-6
-beta-low: 0.1
-beta-high: 3.0
-samples-per-beta: 5
+beta-values: [ 0.1, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0 ]
 M-values-Mp: [ 1E-4, 1E-5, 1E-6, 1E-7 ]
 Lambda-values-eV: 1E-3
 log10-one-plus-z-high: 35
-T-stop: 5E-5    # 50 keV
+T-stop: 1E-8    # by default, PRyMordial ends BBN at 1 keV, but seems to sample to later times. BBNData wants the integration down to 0.1 eV, so we choose 0.01 eV
 Yp-axis-limits: False
 D-axis-limits: False
 Li7-axis-limits: False
