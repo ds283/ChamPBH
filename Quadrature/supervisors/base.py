@@ -32,9 +32,15 @@ class IntegrationSupervisor:
 
         self._num_notifications: int = 0
 
+        self._start_time: float = None
+        self._integration_start: float = None
+        self._integration_end: float = None
+
+        self._last_notify: float = None
+
     def __enter__(self):
         self._start_time = time.time()
-        self._last_notify = self._start_time
+        self._last_notify: float = self._start_time
 
         self._integration_start = time.perf_counter()
         return self
@@ -90,7 +96,11 @@ class IntegrationSupervisor:
 
 class RHS_timer:
     def __init__(self, supervisor: IntegrationSupervisor):
-        self._supervisor = supervisor
+        self._supervisor: IntegrationSupervisor = supervisor
+
+        self._start_time: float = None
+        self._end_time: float = None
+        self._elapsed: float = None
 
     def __enter__(self):
         self._start_time = time.perf_counter()

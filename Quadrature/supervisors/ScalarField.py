@@ -15,14 +15,14 @@
 
 import time
 from collections import namedtuple
-from datetime import datetime
+from datetime import datetime, timedelta
 from math import log, exp
 from typing import Optional, Dict, List
 
 from CosmologyConcepts import TemperatureLike, GetTemperature
 from Quadrature.supervisors.base import IntegrationSupervisor, DEFAULT_UPDATE_INTERVAL
 from Units.base import UnitsLike
-from utilities import format_time, to_float
+from utilities import format_time, to_float, energy_formatter
 
 # use named tuples ensures that we never get the fields of the state vector in the wrong order
 StateVector = namedtuple(
@@ -51,6 +51,7 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
         super().__init__(notify_interval)
 
         self._units: UnitsLike = units
+        self._formatter: energy_formatter = energy_formatter(units)
 
         # CONFIGURATION
 
@@ -118,21 +119,25 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
         super().__exit__(exc_type, exc_val, exc_tb)
 
     def message(self, N: float, T_Jordan: TemperatureLike, msg: str):
-        current_time = time.time()
+        current_time: float = time.time()
+        now: datetime = datetime.now()
 
-        since_last_notify = current_time - self._last_notify
-        since_start = current_time - self._start_time
+        # seconds since last notification
+        seconds_since_last_notify: float = current_time - self._last_notify
 
-        update_number = self.report_notify()
+        # seconds since start of integration
+        seconds_since_start: float = current_time - self._start_time
 
-        T_Jordan_float = GetTemperature(T_Jordan)
+        update_number: int = self.report_notify()
 
-        T_GeV = T_Jordan_float / self._GeV
-        T_Kelvin = T_Jordan_float / self._Kelvin
+        T_Jordan_float: float = GetTemperature(T_Jordan)
 
-        log_T_GeV = log(T_GeV)
-        log_T_GeV_remain = log_T_GeV - self._log_T_stop_GeV
-        percent_remain = log_T_GeV_remain / self._log_T_GeV_range
+        T_GeV: float = T_Jordan_float / self._GeV
+        log_T_GeV: float = log(T_GeV)
+
+        log_T_GeV_remain: float = log_T_GeV - self._log_T_stop_GeV
+        log_T_GeV_completed: float = self._log_T_init_GeV - log_T_GeV
+        percent_remain: float = log_T_GeV_remain / self._log_T_GeV_range
 
         level_state = None
         if self._in_level_2:
@@ -141,23 +146,28 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
             level_state = "level 1"
 
         print(
-            f"** STATUS UPDATE #{update_number} - {datetime.now().strftime("%a %d %b %Y %H:%M:%S")} - {self._label}"
+            f"** STATUS UPDATE #{update_number} - {now.strftime("%a %d %b %Y %H:%M:%S")} - {self._label}"
         )
         print(
-            f"|    integration has been running for {format_time(since_start)} ({format_time(since_last_notify)} since last notification) | current N = {N:.5g} | current max step size dN={self._max_step_size:.5g}{" | in " + level_state if level_state is not None else ""}"
+            f"|    running for {format_time(seconds_since_start)} ({format_time(seconds_since_last_notify)} since last notification) | solution fragments = {self._number_fragments} | current N = {N:.5g} | current max dN={self._max_step_size:.5g}{" | in " + level_state if level_state is not None else ""}"
+        )
+        print(f"|    --")
+        print(
+            f"|    current T_J = {self._formatter(T_Jordan_float)} | target T_J = {self._formatter(self._T_stop)}"
         )
         print(
-            f"|    current T_Jordan = {T_GeV:.5g} GeV or {T_Kelvin:.5g} K, log(T_Jordan/GeV) = {log_T_GeV:.5g} | {1.0-percent_remain:.3%} complete measured in T_Jordan"
-        )
-        print(
-            f"|    target T_Jordan = {self._T_stop_GeV:.5g} GeV or {self._T_stop_Kelvin:.5g} K, log(T_Jordan/GeV) = {self._log_T_stop_GeV:.5g}"
+            f"|    current log(T_J/GeV) = {log_T_GeV:.5g} | target log(T_J/GeV) = {self._log_T_stop_GeV:.5g} | {1.0-percent_remain:.3%} complete measured in T_J"
         )
         if self._last_log_T_GeV is not None:
-            log_T_GeV_delta = self._last_log_T_GeV - log_T_GeV
-            print(
-                f"|    log_T_GeV advance since last update: Delta(log(T_Jordan/GeV)) = {log_T_GeV_delta:.5g}"
+            log_T_GeV_delta: float = self._last_log_T_GeV - log_T_GeV
+            remaining_seconds: float = (
+                seconds_since_last_notify * log_T_GeV_remain / log_T_GeV_delta
             )
-        print(f"|    solution fragments = {self._number_fragments}")
+            expected_finish: datetime = now + timedelta(seconds=remaining_seconds)
+            print(
+                f"|    log_T_GeV increment since last update: Delta[ log(T_J/GeV) ] = {log_T_GeV_delta:.5g} | expected completion = {expected_finish.strftime("%a %d %b %Y %H:%M:%S")}"
+            )
+        print(f"|    --")
 
         def events_status(label: str, events: Dict[str, List[float]]):
             num_events = len(events["all"])
@@ -195,20 +205,21 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
             largest_values = self.largest_RHS_values
             smallest_values = self.smallest_RHS_values
 
+            print(f"|    --")
             print(f"|    MEAN VALUES OF RHS VECTOR:")
             print(
-                f"|      d(phi_E)/dN={mean_values.phi_Einstein / self._units.PlanckMass:.5g} Mp, d(pi_E)/dN={mean_values.pi_Einstein / self._units.PlanckMass:.5g} Mp, d(log_rhorad_E)/dN={mean_values.log_rhorad_Einstein:.5g}, d(log_fm)/dN={mean_values.log_fm:.5g}, d(log_T_Jordan)/dN={mean_values.log_T_Jordan:.5g}"
+                f"|      d(phi_E)/dN={self._formatter(mean_values.phi_Einstein)}, d(pi_E)/dN={self._formatter(mean_values.pi_Einstein)}, d(log_rhorad_E)/dN={mean_values.log_rhorad_Einstein:.5g}, d(log_fm)/dN={mean_values.log_fm:.5g}, d(log_T_J)/dN={mean_values.log_T_Jordan:.5g}"
             )
             print(
                 f'|      d(phi_E)/dN={mean_values.phi_Einstein:.5g} raw, d(pi_E)/dN={mean_values.pi_Einstein:.5g} raw | values in the current units system "{self._units.system_name}"'
             )
             print(f"|    LARGEST VALUES OF RHS VECTOR:")
             print(
-                f"|      d(phi_E)/dN={largest_values.phi_Einstein/self._units.PlanckMass:.5g} Mp, d(pi_E)/dN={largest_values.pi_Einstein/self._units.PlanckMass:.5g} Mp, d(log_rhorad_E)/dN={largest_values.log_rhorad_Einstein:.5g}, d(log_fm)/dN={largest_values.log_fm:.5g}, d(log_T_J)/dN={largest_values.log_T_Jordan:.5g}"
+                f"|      d(phi_E)/dN={self._formatter(largest_values.phi_Einstein)}, d(pi_E)/dN={self._formatter(largest_values.pi_Einstein)}, d(log_rhorad_E)/dN={largest_values.log_rhorad_Einstein:.5g}, d(log_fm)/dN={largest_values.log_fm:.5g}, d(log_T_J)/dN={largest_values.log_T_Jordan:.5g}"
             )
             print(f"|    SMALLEST VALUES OF RHS VECTOR:")
             print(
-                f"|      d(phi_E)/dN={smallest_values.phi_Einstein/self._units.PlanckMass:.5g} Mp, d(pi_E)/dN={smallest_values.pi_Einstein/self._units.PlanckMass:.5g} Mp, d(log_rhorad_E)/dN={smallest_values.log_rhorad_Einstein:.5g}, d(log_fm)/dN={smallest_values.log_fm:.5g}, d(log_T_J)/dN={smallest_values.log_T_Jordan:.5g}"
+                f"|      d(phi_E)/dN={self._formatter(smallest_values.phi_Einstein)}, d(pi_E)/dN={self._formatter(smallest_values.pi_Einstein)}, d(log_rhorad_E)/dN={smallest_values.log_rhorad_Einstein:.5g}, d(log_fm)/dN={smallest_values.log_fm:.5g}, d(log_T_J)/dN={smallest_values.log_T_Jordan:.5g}"
             )
 
     def notify_hard_reflection(self, N):

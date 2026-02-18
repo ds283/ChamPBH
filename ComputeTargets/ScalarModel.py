@@ -50,6 +50,7 @@ from Quadrature.supervisors.base import RHS_timer
 from Units.base import UnitsLike
 from config.defaults import DEFAULT_ABS_TOLERANCE, DEFAULT_REL_TOLERANCE
 from config.sharding import ShardKeyType
+from utilities import energy_formatter
 from .Policies import PotentialDerivativePolicy
 from .exceptions import ComputationFailureError
 
@@ -315,10 +316,10 @@ class ODERHS:
 
         self.cosmology = policy.cosmology
         self.units = self.cosmology.units
+        self._formatter: energy_formatter = energy_formatter(self.units)
 
         self.MP = self.units.PlanckMass
         self.GeV = self.units.GeV
-        self.Kelvin = self.units.Kelvin
 
     def __call__(self, N: float, s: StateVector, supervisor):
         with RHS_timer(supervisor) as timer:
@@ -336,7 +337,7 @@ class ODERHS:
                 supervisor.message(
                     N,
                     T_Jordan,
-                    f"current state: phi_E = {phi_Einstein / self.MP:.5g} Mp, pi_E = {pi_Einstein / self.MP:.5g} Mp, f_m = {fm:.5g}, log(rho_rad/GeV^4) = {log_rhorad_Einstein - 4.0 * log(self.GeV):.5g}, T_J = {T_Jordan / self.GeV:.5g} GeV = {T_Jordan / self.Kelvin:.5g} K",
+                    f"current state: phi_E = {self._formatter(phi_Einstein)}, pi_E = {self._formatter(pi_Einstein)}, f_m = {fm:.5g}, log(rho_rad/GeV^4) = {log_rhorad_Einstein - 4.0 * log(self.GeV):.5g}, T_J = {self._formatter(T_Jordan)}",
                 )
                 supervisor.reset_notify_time(T_Jordan)
 
@@ -383,10 +384,10 @@ class ODERHS:
                     f"!! compute_scalar_model ({self.task_label}): output from ODE RHS has infinity or NaN values at N={N:.8g}"
                 )
                 print(
-                    f"     - inputs/states: phi_E={phi_Einstein/self.MP:.5g} Mp, pi_E={pi_Einstein/self.MP:.5g} Mp, log_rhorad_E={log_rhorad_Einstein:.5g}, log_fm={log_fm:.5g}, log_T_J={log_T_Jordan:.5g}"
+                    f"     - inputs/states: phi_E={self._formatter(phi_Einstein)}, pi_E={self._formatter(pi_Einstein)}, log_rhorad_E={log_rhorad_Einstein:.5g}, log_fm={log_fm:.5g}, log_T_J={log_T_Jordan:.5g}"
                 )
                 print(
-                    f"     - physical: log(rhorad_E/GeV^4)={log_rhorad_Einstein - 4.0*log(self.GeV):.5g}, fm={fm:.5g}, T_J={T_Jordan/self.GeV:.5g} GeV = {T_Jordan/self.Kelvin:.5g} K"
+                    f"     - physical: log(rhorad_E/GeV^4)={log_rhorad_Einstein - 4.0*log(self.GeV):.5g}, fm={fm:.5g}, T_J={self._formatter(T_Jordan)}"
                 )
                 print(
                     f"     - potential: log(V/GeV^4)={log_V - 4.0*log(self.GeV):.5g}, V'/V={d_logV_dphi*self.GeV:.5g} GeV^(-1), d_logOmega_dphi'={data.d_logOmega_dphi:.5g}"
@@ -615,7 +616,7 @@ def compute_scalar_model(
                 T_stop,
                 max_step_size,
                 label=task_label,
-                collect_full_statistics=True,
+                collect_full_statistics=False,
             ) as supervisor:
                 while not solution_complete:
                     sol = solve_ivp(
