@@ -288,7 +288,7 @@ class HubblePolicy:
             log_3H2Mp2: float = -1.0 * (log_V_over_3H2Mp2 - data.log_V)
             H2_Einstein: float = exp(log_3H2Mp2) / self.CONST_3_MP_SQ
         else:
-            # can assume the V = 0, so we have to compute H^2 ab initio
+            # can assume that V = 0, so we can't use log(V/3H^2 Mp^2); we have to compute H^2 directly
 
             rho_rad: float = exp(state.log_rhorad_Einstein)
             fm: float = exp(state.log_fm)

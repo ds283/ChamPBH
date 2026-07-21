@@ -525,7 +525,7 @@ def run_pipeline(
     adiabatic_queue.run()
 
     ## STEP 3
-    ## COMPUTE BBN DATA FOR EACG MODEL IN THE GRID
+    ## COMPUTE BBN DATA FOR EACH MODEL IN THE GRID
     BBN_sample_grid = itertools.product(
         Potential_array,
         Coupling_array,
