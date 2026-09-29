@@ -157,6 +157,10 @@ these 15 open; they pass to whichever campaign takes them (`.documents/review-re
   (rebounds, stabilised phase); wrong as a general statement, and the paper's §NumericalSection
   repeats it. **Next step:** a prompt in the numerical campaign, since it changes stored
   `AdiabaticHistory` rows; needs dΣ/d ln T, which the w-spline can provide. **Out of scope here.**
+  - **Assigned (2026-09-30):** to the `production-readiness` campaign,
+    prompt 03 (P3), which adds the term, tested against a reference built from entropy conservation.
+    The user chose it as one of four to fix before the production run
+    (`prompts/production-readiness/README.md`).
 - **[00-initial-field-value-is-hard-coded-and-unchecked]** *(audit §6; review H8)* —
   `main.py:814` fixes φ* = 5 M_P and π* = 0; nothing checks A*T* ≲ M_P, so `exponential.yaml`
   runs β up to 25 with A* = e¹²⁵. Numerically harmless (everything is in logs); physically
@@ -171,6 +175,10 @@ these 15 open; they pass to whichever campaign takes them (`.documents/review-re
     `plot_ScalarModel.py` figure. It looks up the wrong key, so it always prints 0. That is
     opened separately as `[06-hard-reflection-caption-reads-the-wrong-key-and-always-prints-zero]`
     below. The survey summary (`plot_by_beta.py`) still does not report it.
+  - **Assigned (2026-09-30):** to the `production-readiness` campaign,
+    prompt 01 (P1), which fixes the reader and adds the count to `plot_by_beta.py`'s summary.
+    The user chose it as one of four to fix before the production run
+    (`prompts/production-readiness/README.md`).
 - **[00-kicking-function-table-has-no-provenance-in-the-repository]** *(audit §4)* —
   `CosmologyModels/GenericEOS/Xav_EOS_data.csv` (189 rows, 10 keV–25 TeV) was added in commit
   `1759515` without the script that built it; the treatment of g_ρ after neutrino decoupling that
@@ -228,6 +236,10 @@ these 15 open; they pass to whichever campaign takes them (`.documents/review-re
   - **Next step.** Decide which network the pipeline should use, then either set `smallnet_flag` or
     remove the switch and the column's claim. It changes physical output, so it needs a version
     decision. **Not fixed by prompt 03** (out of scope).
+  - **Assigned (2026-09-30):** to the `production-readiness` campaign,
+    prompt 02 (P2), which wires the flag to `smallnet_flag` and runs the full network, the user's decision.
+    The user chose it as one of four to fix before the production run
+    (`prompts/production-readiness/README.md`).
 - **[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]** *(log 03, observation 2)*.
   - **What.** PRyMordial's abundances respond to changes in the NP callbacks far below any
     physical scale.
@@ -364,6 +376,10 @@ these 15 open; they pass to whichever campaign takes them (`.documents/review-re
   - **Next step.** A one-line fix in `extract_common.py` (read `number_hard_reflections`), with a
     test that builds a `ScalarModel` payload with a non-zero count. It belongs with the N1 issue
     above. **Not fixed by prompt 06**, which changes no code.
+  - **Assigned (2026-09-30):** to the `production-readiness` campaign,
+    prompt 01 (P1), which fixes the reader and adds the count to `plot_by_beta.py`'s summary.
+    The user chose it as one of four to fix before the production run
+    (`prompts/production-readiness/README.md`).
 
 ---
 
