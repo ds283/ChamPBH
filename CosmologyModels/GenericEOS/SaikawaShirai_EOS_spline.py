@@ -13,6 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from math import log
+
 import numpy as np
 from scipy.interpolate import make_interp_spline
 
@@ -40,6 +42,13 @@ _SAMPLES_PER_LOG10_T = 250
 
 _LOG10_SAIKAWA_SHIRAI_T_HI = np.log10(SAIKAWA_SHIRAI_T_HI)
 _LOG10_SAIKAWA_SHIRAI_T_LO = np.log10(SAIKAWA_SHIRAI_T_LO)
+
+# The splines are built on a grid uniform in log10 T, so their derivatives are
+# d g / d log10 T. dG_rho_dlogT and dG_s_dlogT return d g / d ln T, which is
+# smaller by this factor. (review-remediation prompt 02, item R1: from 5962833
+# to that prompt the derivatives were returned undivided, and the temperature
+# law in ComputeTargets/ScalarModel.py used them as d / d ln T.)
+_LN_10 = log(10.0)
 
 
 class SaikawaShirai_EOS_spline(GenericEOSBase):
@@ -112,8 +121,14 @@ class SaikawaShirai_EOS_spline(GenericEOSBase):
         return self._g_star_rho_spline(log10_T_in_GeV)
 
     def dG_rho_dlogT(self, T: TemperatureLike) -> float:
+        """
+        Compute the logarithmic derivative d g_rho / d ln T = T d(g_rho)/dT at temperature T.
+        The derivative is with respect to the natural log of T; it is dimensionless.
+        It is exactly zero at and beyond the clamps at SAIKAWA_SHIRAI_T_LO and SAIKAWA_SHIRAI_T_HI.
+        :param T: dimensionful temperature T
+        :return: dimensionless number representing d g_rho / d ln T at T
+        """
 
-        # units of the output will be 1/GeV because we internally evaluate T in GeV
         T_in_GeV = GetTemperature(T) / self._units.GeV
         if T_in_GeV <= 0.0:
             raise RuntimeError(
@@ -127,7 +142,8 @@ class SaikawaShirai_EOS_spline(GenericEOSBase):
         elif log10_T_in_GeV <= _LOG10_SAIKAWA_SHIRAI_T_LO:
             return 0.0
 
-        return self._dg_star_dlogT_spline(log10_T_in_GeV)
+        # the spline is in log10 T; convert d/d log10 T to d/d ln T
+        return self._dg_star_dlogT_spline(log10_T_in_GeV) / _LN_10
 
     def G_s(self, T: TemperatureLike) -> float:
         """
@@ -153,8 +169,14 @@ class SaikawaShirai_EOS_spline(GenericEOSBase):
         return self._g_star_s_spline(log10_T_in_GeV)
 
     def dG_s_dlogT(self, T: TemperatureLike) -> float:
+        """
+        Compute the logarithmic derivative d g_S / d ln T = T d(g_S)/dT at temperature T.
+        The derivative is with respect to the natural log of T; it is dimensionless.
+        It is exactly zero at and beyond the clamps at SAIKAWA_SHIRAI_T_LO and SAIKAWA_SHIRAI_T_HI.
+        :param T: dimensionful temperature T
+        :return: dimensionless number representing d g_S / d ln T at T
+        """
 
-        # units of the output will be 1/GeV because we internally evaluate T in GeV
         T_in_GeV = GetTemperature(T) / self._units.GeV
         if T_in_GeV <= 0.0:
             raise RuntimeError(
@@ -168,7 +190,8 @@ class SaikawaShirai_EOS_spline(GenericEOSBase):
         elif log10_T_in_GeV <= _LOG10_SAIKAWA_SHIRAI_T_LO:
             return 0.0
 
-        return self._dg_star_s_dlogT_spline(log10_T_in_GeV)
+        # the spline is in log10 T; convert d/d log10 T to d/d ln T
+        return self._dg_star_s_dlogT_spline(log10_T_in_GeV) / _LN_10
 
     # override equation of state implementation
     def w(self, T: TemperatureLike) -> float:

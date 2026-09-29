@@ -1,6 +1,6 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-09-29 · **7 open** across one campaign.
+**Last updated:** 2026-09-29 · **8 open** across one campaign.
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -19,7 +19,7 @@ the two disagree, the board is right.
 ### 1.1 `review-remediation` — [board §3](../prompts/review-remediation/IMPLEMENTATION_STATE.md)
 
 Seven seeded at planning on 2026-09-29 from `.documents/audit-2026-09-29/README.md`. The two
-opened after that on 2026-09-29 are resolved (board §4).
+opened after that on 2026-09-29 are resolved (board §4). One opened by prompt 02.
 
 - `[00-adiabaticity-diagnostic-omits-the-source-response-term]` — `AdiabaticHistory.py:103`
   gives zero conformal mass for the exponential coupling; the (Ω′)² response term is missing
@@ -39,3 +39,6 @@ opened after that on 2026-09-29 are resolved (board §4).
 - `[00-bbn-spline-domain-is-far-wider-than-prymordial-uses]` — `BBNData.py:47` tabulates down to
   0.1 eV where PRyMordial stops near 0.3 keV; harmless at 250 knots per decade, but it includes
   the matter-era re-delivery oscillations.
+- `[02-stale-derivative-and-T_LO-comments-in-the-EOS-package]` — three wrong comments in
+  `CosmologyModels/GenericEOS/` (the base `dG_s_dlogT` docstring, the jax class's "1/GeV", the
+  "600 keV" above `SAIKAWA_SHIRAI_T_LO`); comment-only.

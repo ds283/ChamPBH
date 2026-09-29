@@ -28,7 +28,7 @@ The three witnesses:
 1. `exact_efolds` -- exact entropy conservation, T a g_s^{1/3} = const. It reads
    `G_s` only.
 2. `derivative_convention_ratio` -- the shipped `dG_s_dlogT` against a central
-   difference of `G_s` in ln T.
+   difference of `G_s` in ln T, `central_dG_s_dlogT`.
 3. `integrate_temperature_law(..., with_rho=True)` against `thermodynamic_rho_R`
    -- the radiation density carried with d ln rho_R/dN = Sigma - 4, Sigma from
    the production class's w(T), against (pi^2/30) g_rho(T) T^4.
@@ -192,18 +192,26 @@ def integrate_temperature_law(
     )
 
 
-def derivative_convention_ratio(eos, T_GeV: float, h: float = 1e-4) -> float:
+def central_dG_s_dlogT(eos, T_GeV: float, h: float = 1e-4) -> float:
     """
-    Witness 2: eos.dG_s_dlogT(T) divided by the central difference of `eos.G_s`
-    in ln T with half-step h,
-        [G_s(T e^h) - G_s(T e^-h)] / (2h).
-    The reference is built from `G_s` alone. The ratio is 1 if dG_s_dlogT is a
-    natural-log derivative and ln 10 if it is a log10 one.
+    The central difference of `eos.G_s` in ln T with half-step h,
+        [G_s(T e^h) - G_s(T e^-h)] / (2h),
+    the reference for witness 2. It is built from `G_s` alone and approximates
+    d g_s / d ln T. (Added by review-remediation prompt 02, which asserts the
+    absolute difference from it rather than the ratio.)
     """
     GeV = _GeV(eos)
     T = T_GeV * GeV
-    central = (float(eos.G_s(T * exp(h))) - float(eos.G_s(T * exp(-h)))) / (2.0 * h)
-    return float(eos.dG_s_dlogT(T)) / central
+    return (float(eos.G_s(T * exp(h))) - float(eos.G_s(T * exp(-h)))) / (2.0 * h)
+
+
+def derivative_convention_ratio(eos, T_GeV: float, h: float = 1e-4) -> float:
+    """
+    Witness 2: eos.dG_s_dlogT(T) divided by `central_dG_s_dlogT`. The ratio is 1
+    if dG_s_dlogT is a natural-log derivative and ln 10 if it is a log10 one.
+    """
+    T = T_GeV * _GeV(eos)
+    return float(eos.dG_s_dlogT(T)) / central_dG_s_dlogT(eos, T_GeV, h)
 
 
 # The Saikawa-Shirai branch boundaries inside the test range: G_s and G_rho switch

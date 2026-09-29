@@ -95,16 +95,21 @@ M_piminus = M_piplus
 HIGH_T_GSTAR = 106.75
 
 # G_rho and G_S usually only differ at low temperatures after neutrino decoupling, once e+/e- annihilation
-# reheats the photons (but *not* the neutrinos)
-# LOW_T_GSTAR = 3.36
-# LOW_T_G_S_STAR = 3.91
-LOW_T_GSTAR = 3.38
-
-# TODO: check, https://www.astronomy.ohio-state.edu/weinberg.21/A8873/notes7a.pdf quotes instead
-# these values look correct to me because e.g.
-#   2 + 2 * 3.042 * (7/8) * (4/11)^(4/3) = 3.38172
-# so this value of G_rho* includes N_eff from Planck, plus reheating of the photons but not the neutrinos
-LOW_T_G_S_STAR = 3.94
+# reheats the photons (but *not* the neutrinos).
+#
+# Below SAIKAWA_SHIRAI_T_LO both are clamped to these constants. They are the fit's own x -> infinity
+# limits (x = m_e/T): the constant terms of the low-T branches, Eqs. (C.3) and (C.4) of 1803.01038 v2,
+#   G_rho: 2.030 + 1.353 = 3.383,    G_S: 2.008 + 1.923 = 3.931.
+# At 10 keV the e+/e- terms are ~exp(-51), so the fit has already converged to them there and the clamp
+# is continuous. They also agree with N_eff = 3.046 when the neutrino temperature is scaled so that
+# rho_nu carries N_eff; the neutrino T^3 weight in G_S then scales as (N_eff/3)^(3/4):
+#   G_rho = 2 + 2 * 3.046 * (7/8) * (4/11)^(4/3)             = 3.3835
+#   G_S   = 2 + 6 * (7/8) * (4/11) * (3.046/3)^(3/4)          = 3.9310
+# (Scaling G_S linearly in N_eff instead gives 3.938, which rounds to the 3.94 used here before.)
+# Corrected from 3.38 and 3.94 in review-remediation prompt 02 (item R5); see
+# .documents/audit-2026-09-29/README.md §11.
+LOW_T_GSTAR = 3.383
+LOW_T_G_S_STAR = 3.931
 
 
 # above SAIKAWA_SHIRAI_T_HI (measured in GeV) we assume the asymptotic high temperature degrees of freedom

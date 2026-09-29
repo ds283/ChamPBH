@@ -1,6 +1,6 @@
 # Review remediation campaign — implementation state
 
-**Last updated:** 2026-09-29 · **Status: IN PROGRESS — 6 prompts written, 1 landed.** The campaign was
+**Last updated:** 2026-09-29 · **Status: IN PROGRESS — 6 prompts written, 2 landed.** The campaign was
 opened on 2026-09-29 from the code audit
 [`.documents/audit-2026-09-29/README.md`](../../.documents/audit-2026-09-29/README.md) of the paper
 review `Paper1_review.tex`. It fixes the audit's items 1–4: the ln 10 error in the Jordan
@@ -12,7 +12,11 @@ It found R5, the 10 keV join (audit §11). The campaign now characterises R5 in 
 in 02. **Prompt 01 landed 2026-09-29** (re-dispatch): the guard is in `CosmologyModels/tests/`
 and characterises R1 and R5; it opened one issue, on prompt 02's derivative target, since resolved by restating the target
 (§4).
-**Next: 02.** Target branch `review-remediation` from `f5896bb`.
+**Prompt 02 landed 2026-09-29:** R1 and R5 are fixed in the EOS class. The guard now asserts that
+the law agrees with exact entropy conservation to 1e-5 down to T_CMB (measured −3.6e-8).
+`VERSION_LABEL` is now `"2026.2.0"`. **Every store built under 2026.1.1 is invalid**, and the
+numerical campaign starts from an empty database. Prompt 02 opened one issue (§3).
+**Next: 03.** Target branch `review-remediation` from `f5896bb`.
 
 **Campaign:** [`README.md`](README.md) ·
 **Code:** `CosmologyModels/GenericEOS/SaikawaShirai_EOS_spline.py`, `ComputeTargets/BBNData.py`,
@@ -49,7 +53,7 @@ characters).
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
 | 01 | [The temperature-law harness](01-temperature-law-harness.md) | **R1** (guard), **R5** (characterised) | Opus | ✍️ 2026-09-29, amended 2026-09-29 | ✅ 2026-09-29 | `ec3a994` | [01](logs/01-temperature-law-harness.md) |
-| 02 | [Fix the entropy derivative](02-fix-the-entropy-derivative.md) | **R1**, **R5** (fix) | Opus | ✍️ 2026-09-29, amended 2026-09-29 | ⬜ | — | — |
+| 02 | [Fix the entropy derivative](02-fix-the-entropy-derivative.md) | **R1**, **R5** (fix) | Opus | ✍️ 2026-09-29, amended 2026-09-29 | ✅ 2026-09-29 | "Fix the ln 10 in the entropy derivative and the 10 keV join" | [02](logs/02-fix-the-entropy-derivative.md) |
 | 03 | [PRyMordial's passenger equation and failure reasons](03-prymordial-passenger-and-failure-reasons.md) | **R2** | Opus | ✍️ 2026-09-29 | ⬜ | — | — |
 | 04 | [Ratio splines and a baseline](04-ratio-splines-and-a-baseline.md) | **R3** | Opus | ✍️ 2026-09-29 | ⬜ | — | — |
 | 05 | [Pin the kicking function; EOS hygiene](05-kicking-function-and-eos-hygiene.md) | **R4** (pins) | Opus | ✍️ 2026-09-29 | ⬜ | — | — |
@@ -61,19 +65,20 @@ characters).
 
 | Item | Kind | Description | Prompt | Status |
 |---|---|---|---|---|
-| R1 | **DEFECT, critical** | `dG_s_dlogT` / `dG_rho_dlogT` in the spline EOS class return d/d log10 T; the temperature law consumes them as d/d ln T. N to T_CMB 41.497 vs exact 40.075; stored ρ_R,J at 1 MeV is 0.022× thermodynamic. | 01, 02 | 🟡 guard landed (01); fix pending (02) |
+| R1 | **DEFECT, critical** | `dG_s_dlogT` / `dG_rho_dlogT` in the spline EOS class return d/d log10 T; the temperature law consumes them as d/d ln T. N to T_CMB 41.497 vs exact 40.075; stored ρ_R,J at 1 MeV is 0.022× thermodynamic. | 01, 02 | ✅ done (02): both derivatives return d g/d ln T; N to T_CMB 40.0754 vs exact 40.0754 (−3.6e-8). **Every store built under 2026.1.1 is invalid.** |
 | R2 | **DEFECT, high** | PRyMordial's inert `dTNPdt` is singular where ρ_NP′ = 0; oscillating ρ_NP stalls LSODA (> 600 s vs 9 s); failures swallowed and dropped silently. | 03 | ⬜ planned |
 | R3 | **DEFECT, low** | asinh representation of ρ_NP, p_NP; sort hides non-monotonic T_J; `Ω″ π` should be `Ω″ π²`; no SM baseline through the same path. | 04 | ⬜ planned |
 | R4 | **DOCUMENTATION** | Kicking-function peaks and table–g consistency unpinned; paper describes dead code; two derivative implementations disagree. | 05, 06 | ⬜ planned |
-| R5 | **DEFECT, minor** | Below 10 keV `G_s` and `G_rho` return 3.94 and 3.38, not the fit's own limits 3.931 and 3.383. The corrected law is off by +1.465e-4 e-folds at 10 keV and T_CMB, and the ρ_R witness at 10 keV reads 1.00258 instead of 0.99922. Found by prompt 01's first dispatch, 2026-09-29; audit §11. | 01, 02 | 🟡 characterised (01); fix pending (02) |
+| R5 | **DEFECT, minor** | Below 10 keV `G_s` and `G_rho` return 3.94 and 3.38, not the fit's own limits 3.931 and 3.383. The corrected law is off by +1.465e-4 e-folds at 10 keV and T_CMB, and the ρ_R witness at 10 keV reads 1.00258 instead of 0.99922. Found by prompt 01's first dispatch, 2026-09-29; audit §11. | 01, 02 | ✅ done (02): limits 3.931 / 3.383; residual at 10 keV and T_CMB −3.6e-8; ρ_R witness at 10 keV 0.99922 |
 
 ---
 
 ## 3. Active and unresolved issues
 
-All seven were **seeded at planning on 2026-09-29** from the audit. The two issues opened on
+Seven were **seeded at planning on 2026-09-29** from the audit. The two issues opened on
 2026-09-29 after that (one at the re-plan, one by prompt 01) are both resolved; see §4.
-Measurements: `.documents/audit-2026-09-29/README.md`, section in brackets.
+Prompt 02 opened one more (the last entry below). Measurements for the seeded issues:
+`.documents/audit-2026-09-29/README.md`, section in brackets.
 
 - **[00-adiabaticity-diagnostic-omits-the-source-response-term]** *(audit §5; review H5)* —
   `ComputeTargets/AdiabaticHistory.py:103` sets the conformal contribution to m_eff² to
@@ -111,6 +116,18 @@ Measurements: `.documents/audit-2026-09-29/README.md`, section in brackets.
   oscillations of the review's H1 (vii). Harmless at 250 knots per decade; a narrower domain
   would need the `T_Jordan_stop` pre-check (`BBNData.py:77`) adjusted with it. **Not changed by
   prompt 04**, which keeps the domain and records the knot count it actually used.
+- **[02-stale-derivative-and-T_LO-comments-in-the-EOS-package]** *(log 02, observation 1)*.
+  - **What.** Three comments in `CosmologyModels/GenericEOS/` are wrong. None of them was in prompt
+    02's allowed lines:
+    - `GenericEOS.py:68–75`: the abstract `dG_s_dlogT` docstring says "d(g_S)/dT"; the method
+      returns d g_S/d ln T, as its sibling `dG_rho_dlogT` states.
+    - `SaikawaShirai_EOS_jax_autodiff.py:204, 221`: "units of the output will be 1/GeV"; the
+      output is dimensionless.
+    - `SaikawaShirai_common.py`: the comment above `SAIKAWA_SHIRAI_T_LO` says the cut is at
+      600 keV; it is at 10 keV.
+  - **Impact.** None on any number; a reader can be misled about the convention R1 was about.
+  - **Next step.** A comment-only commit, in whichever prompt next owns these files (prompt 05's
+    EOS hygiene, if its scope allows), or one of its own.
 
 ---
 

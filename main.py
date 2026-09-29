@@ -77,7 +77,10 @@ if args.database is None:
 # connect to ray cluster on supplied address; defaults to 'auto' meaning a locally running cluster
 ray.init(address=args.ray_address)
 
-VERSION_LABEL = "2026.1.1"
+# Stores made under an earlier VERSION_LABEL are invalid and must not be reused: on 2026-09-29
+# (review-remediation prompt 02) the Jordan-frame temperature law lost a spurious factor ln 10 in
+# its entropy term and the low-temperature g_rho, g_S limits changed, so every stored history differs.
+VERSION_LABEL = "2026.2.0"
 
 specified_drop_actions = [x.lower() for x in args.drop]
 drop_actions = [x for x in specified_drop_actions if x in allowed_drop_actions]

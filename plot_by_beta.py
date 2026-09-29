@@ -64,7 +64,7 @@ if args.database is None:
 # connect to ray cluster on supplied address; defaults to 'auto' meaning a locally running cluster
 ray.init(address=args.ray_address)
 
-VERSION_LABEL = "2026.1.1"
+VERSION_LABEL = "2026.2.0"
 
 # instantiate a Datastore actor: this runs on its own node, and acts as a broker between
 # ourselves and the database.

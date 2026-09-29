@@ -231,6 +231,25 @@ fitting functions at every RHS evaluation, they are **pre-splined once** at cons
   corresponding derivatives are set exactly to zero. This gives clean, physically-correct
   plateaus rather than letting the spline ring near the ends of its support.
 
+**Note added 2026-09-29 (review-remediation prompt 02, items R1 and R5).** The Jordan-frame
+temperature law, d ln T_J/dN = −(1 + A′φ′)/(1 + ⅓ d ln g_s/d ln T_J), in
+`ComputeTargets/ScalarModel.py`, needs `dG_s_dlogT` to be **d g_s/d ln T** (natural log,
+dimensionless). The jax class (`SaikawaShirai_EOS_jax_autodiff`) returns T dg_s/dT, which is
+that. The spline class differentiates a spline in log10 T, so its derivative is d g/d log10 T,
+larger by ln 10 ≈ 2.303. From commit `5962833` (2026-01-19) until prompt 02 it returned that
+derivative undivided. The entropy correction in the temperature law was therefore too large by
+ln 10: from 2×10⁴ GeV, the law took 41.497 e-folds to reach T_CMB against 40.075 for exact
+entropy conservation. Since prompt 02, `dG_s_dlogT` and `dG_rho_dlogT` divide the spline
+derivative by ln 10, and both docstrings state the convention. The log10 grid and the clamps are
+unchanged. The low-temperature clamp constants are now the fit's own limits, g*_ρ = 3.383 and
+g*_s = 3.931, rather than 3.38 and 3.94 as described above (item R5). Those are the constant
+terms of the fit's low-T branch, and the fit has converged to them at T_LO = 10 keV. The clamp is
+therefore continuous. With 3.94, the step in g_s at the clamp put N at and below 10 keV
+1.465e-4 e-folds away from exact entropy conservation. The guard
+is `CosmologyModels/tests/test_temperature_law.py`. The details are in
+`prompts/review-remediation/logs/02-fix-the-entropy-derivative.md` and
+`.documents/audit-2026-09-29/README.md` §1 and §11.
+
 ### 4.4 Equation of state w(T)
 
 `w(T)` is computed from `w = (4 g*_s)/(3 g*_ρ) − 1`, following directly from `s T = ρ + P`.
