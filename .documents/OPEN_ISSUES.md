@@ -1,6 +1,6 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-09-29 · **14 open** across one campaign.
+**Last updated:** 2026-09-30 · **14 open** across one campaign.
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -57,5 +57,5 @@ one by prompt 04, one by prompt 05.
   `.documents/numerical-strategies.md` §7.2–7.4 still describe the asinh transform and the sort
   that prompt 04 removed; needs a dated addendum.
 - `[05-kicking-table-and-saikawa-shirai-gs-disagree-through-qcd-and-ew]` — the table's Σ peaks
-  (QCD 0.3145, EW 0.0374) are not those the Saikawa–Shirai g's imply (0.299, 0.058); a decision
-  for the authors.
+  (QCD 0.3145, EW 0.0374) match neither the Σ the g's imply by conservation (0.299, 0.058) nor the
+  4g_s/(3g_ρ) − 1 formula (0.249, 0.0374 at 46 GeV); a decision for the authors.

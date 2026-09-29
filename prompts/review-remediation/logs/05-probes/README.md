@@ -21,3 +21,4 @@ PYTHONPATH=. ./venv/bin/python prompts/review-remediation/logs/05-probes/<script
 | `witness_scan.py` | The ρ_R witness from 2×10⁴ GeV at 37 end temperatures, 10 TeV down to 10 keV |
 | `sigma_implied.py` | Σ from the table against Σ_g = 4 − (4 + d ln g_ρ/d ln T)/(1 + ⅓ d ln g_s/d ln T), and the witness at 31.6 GeV and 178 MeV |
 | `sigma_implied2.py` | Σ_g peaks from the spline and jax classes, and a comparison at chosen temperatures |
+| `orchestrator_sigma_base_formula.py` | *The orchestrator's, not prompt 05's; added 2026-09-30.* The QCD and EW Σ peaks from the base-class formula w = 4g_s/(3g_ρ) − 1, through `SaikawaShirai_EOS_spline.w` |

@@ -1,6 +1,6 @@
 # Review remediation campaign — implementation state
 
-**Last updated:** 2026-09-29 · **Status: IN PROGRESS — 6 prompts written, 5 landed.** The campaign was
+**Last updated:** 2026-09-30 · **Status: IN PROGRESS — 6 prompts written, 5 landed.** The campaign was
 opened on 2026-09-29 from the code audit
 [`.documents/audit-2026-09-29/README.md`](../../.documents/audit-2026-09-29/README.md) of the paper
 review `Paper1_review.tex`. It fixes the audit's items 1–4: the ln 10 error in the Jordan
@@ -90,6 +90,12 @@ Opened in §3 for the user; see log 05, Deviations 6.
   - **In the note.** The paper-facing note gives both: the spline peak, and the table-row maximum
     as what the CSV itself contains.
   - **Precedence.** This supersedes §6.4's T_J column and prompt 05 §1 case 1 where they differ.
+
+- **2026-09-30, the user ("Option 2").** `[05-kicking-table-and-saikawa-shirai-gs-disagree-through-qcd-and-ew]`
+  (§3) is accepted as an open issue for the authors, not a campaign stop, so prompt 06 may proceed.
+  Before that, the issue is narrowed with the base-class formula's Σ peaks as a third column, so the
+  authors see all three descriptions. The user also asked for prompt 05's scratch probes to be kept
+  (`logs/05-probes/`, `0791935`).
 
 None pending otherwise. Decisions the prompts may surface (each is a stop-and-ask in its
 prompt's §7): whether to divide by ln 10 or rebuild the EOS grid in ln T (02, either is allowed);
@@ -295,6 +301,28 @@ Prompt 02 opened one more, prompt 03 opened four, prompt 04 opened one and promp
     `[00-kicking-function-table-has-no-provenance-in-the-repository]`, since the table's
     construction would say why it differs. **Not changed by prompt 05**, which pins the table as
     it is.
+  - **Narrowed 2026-09-30 at the user's request (option 2; see Decisions).** The fits define Σ in
+    two ways, and the two do not agree.
+    - **Σ_g** above is the Σ implied by energy and entropy conservation from how g_ρ and g_s
+      change with T.
+    - **The base-class formula** w = 4g_s/(3g_ρ) − 1 (`GenericEOS.py:77–100`, from s = (ρ + p)/T)
+      is the other. Its comment at `:88–90` notes the two agree only if g_s and g_ρ satisfy a
+      differential constraint, which the fits do not satisfy exactly.
+    - **Measured** by the orchestrator on `0791935`, through `SaikawaShirai_EOS_spline.w` at 1000
+      points per decade, in prompt 05's windows
+      (`logs/05-probes/orchestrator_sigma_base_formula.py`):
+
+      | Feature | Table Σ | Σ_g | 4g_s/(3g_ρ) − 1 |
+      |---|---|---|---|
+      | QCD | 0.3145 at 182 MeV | 0.2990 at 155 MeV | **0.2492 at 194 MeV** |
+      | EW | 0.0374 at 53 GeV | 0.0580 at 47.6 GeV | **0.0374 at 46.4 GeV** |
+
+    - **So there is no single "Saikawa–Shirai Σ" to compare the table against.** The EW table
+      peak has the base formula's height (0.0374) at a temperature about 14 % higher. What is
+      established is narrower: the table's Σ is not the one that keeps ρ_R consistent with the
+      g's the temperature law uses.
+    - **The question for the authors** is therefore which description of the plasma is intended
+      through the QCD and EW crossovers, among three: the table, Σ_g, and the base formula.
 
 ---
 
