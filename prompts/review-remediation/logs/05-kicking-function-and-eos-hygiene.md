@@ -193,7 +193,8 @@ and after (not touched).
 ## Verification performed
 
 Everything was run from the repository root with `venv/bin/python` on `89bd52e` plus this diff.
-Scratch probes, not committed, are in the session scratchpad:
+Scratch probes, not committed, are in the session scratchpad: *(Added 2026-09-30 by the orchestrator, at the user's request: the probes are now kept
+unchanged in [`05-probes/`](05-probes/), with how to run them.)*
 
 - `probe05.py`: peaks at 200, 1000 and 5000 per decade; profile; integral by Simpson, trapezoid
   and `quad`; the ends; the freeze; table statistics; the witness at two `max_step`.
