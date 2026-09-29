@@ -1,6 +1,6 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-09-30 · **14 open** across one campaign.
+**Last updated:** 2026-09-30 · **15 open** across one campaign (closed 2026-09-30).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -20,15 +20,17 @@ the two disagree, the board is right.
 
 Seven seeded at planning on 2026-09-29 from `.documents/audit-2026-09-29/README.md`. The two
 opened after that on 2026-09-29 are resolved (board §4). One opened by prompt 02, four by prompt 03,
-one by prompt 04, one by prompt 05.
+one by prompt 04, one by prompt 05, one by prompt 06. The campaign closed on 2026-09-30; these rows
+stay here until a later campaign takes them.
 
 - `[00-adiabaticity-diagnostic-omits-the-source-response-term]` — `AdiabaticHistory.py:103`
   gives zero conformal mass for the exponential coupling; the (Ω′)² response term is missing
   (review H5). Out of this campaign's scope.
 - `[00-initial-field-value-is-hard-coded-and-unchecked]` — `main.py:814` fixes φ* = 5 M_P with no
   A*T* ≲ M_P guard (review H8). Out of this campaign's scope.
-- `[00-hard-reflection-count-is-stored-but-never-reported]` — `hard_reflections` is on every
-  `ScalarModel` row and appears in no plot or caption (review N1).
+- `[00-hard-reflection-count-is-stored-but-never-reported]` — the hard-reflection count is on every
+  `ScalarModel` row; no survey summary reports it, and the one caption that tries reads it wrongly
+  (review N1; qualified by prompt 06).
 - `[00-kicking-function-table-has-no-provenance-in-the-repository]` —
   `CosmologyModels/GenericEOS/Xav_EOS_data.csv` was added in commit `1759515` without the script
   that built it.
@@ -59,3 +61,6 @@ one by prompt 04, one by prompt 05.
 - `[05-kicking-table-and-saikawa-shirai-gs-disagree-through-qcd-and-ew]` — the table's Σ peaks
   (QCD 0.3145, EW 0.0374) match neither the Σ the g's imply by conservation (0.299, 0.058) nor the
   4g_s/(3g_ρ) − 1 formula (0.249, 0.0374 at 46 GeV); a decision for the authors.
+- `[06-hard-reflection-caption-reads-the-wrong-key-and-always-prints-zero]` — `extract_common.py:216`
+  looks up `hard_reflections` but the count is stored as `number_hard_reflections`, so every
+  `plot_ScalarModel.py` caption says 0.

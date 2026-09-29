@@ -1,5 +1,10 @@
 # Code audit against `Paper1_review.tex` (29 September 2026)
 
+*Added 2026-09-30: items 1–4 were fixed by the `review-remediation` campaign, closed on
+2026-09-30. The re-measurement on the final tree and the handover are in
+[`../review-remediation-verification.md`](../review-remediation-verification.md). Nothing below is
+changed.*
+
 Scope: the code-relevant findings of the review of `Paper1.tex`
 (H1, H5, H6, H7, H8, F8, N1, N3, T7, T9), plus anything found while tracing
 those paths. Correctness only; no code was changed. The three scripts in this
