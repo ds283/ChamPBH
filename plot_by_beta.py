@@ -17,7 +17,7 @@ import itertools
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 import pandas as pd
 import ray
@@ -26,6 +26,7 @@ from matplotlib import pyplot as plt
 from numpy import nan
 
 from ComputeTargets import ScalarModelProxy, AdiabaticHistory, BBNData, ScalarModel
+from ComputeTargets.BBNData import compute_SM_baseline
 from CosmologyConcepts import temperature, phi_value, pi_value
 from CosmologyConcepts.ConformalCouplings import AbstractCoupling
 from CosmologyConcepts.Potentials import AbstractPotential
@@ -55,6 +56,12 @@ potential_types = ["Exponential", "InversePower", "Starobinsky", "Recliner"]
 
 
 parser = create_argument_parser()
+parser.add_argument(
+    "--no-baseline",
+    action="store_true",
+    default=False,
+    help="do not compute the Standard-Model BBN baseline (rho_NP = 0, one PRyMordial solve) or draw it on the abundance panels",
+)
 args = parser.parse_args()
 
 if args.database is None:
@@ -89,6 +96,7 @@ def build_beta_plot(
     Q_data: List[AdiabaticHistory],
     bbn_data: list[BBNData],
     scalar_data: list[ScalarModel],
+    SM_baseline: Optional[dict] = None,
 ):
     base_path = Path(args.output).resolve()
     base_path = base_path / f"{model_label}"
@@ -300,6 +308,21 @@ def build_beta_plot(
         add_data_to_axis(Yp_ax, Yp_data)
         add_data_to_axis(D_ax, D_data)
         add_data_to_axis(Li7_ax, Li7_data)
+
+        # the Standard-Model baseline through the same PRyMordial path (rho_NP = 0),
+        # computed once at plot time and not stored (review-remediation prompt 04)
+        if SM_baseline is not None:
+            for ax, key in (
+                (Yp_ax, "Yp_BBN"),
+                (D_ax, "DOverH"),
+                (Li7_ax, "Li7OverH"),
+            ):
+                ax.axhline(
+                    SM_baseline[key],
+                    color="k",
+                    linestyle="dotted",
+                    label=r"SM baseline ($\rho_{\mathrm{NP}} = 0$)",
+                )
 
         Yp_ax.plot(
             Yp_x,
@@ -516,6 +539,7 @@ def run_pipeline(
     atol: tolerance,
     rtol: tolerance,
     tags: List[store_tag],
+    SM_baseline: Optional[dict],
 ):
     model_label = model_data["label"]
     model_cosmology = model_data["cosmology"]
@@ -712,7 +736,12 @@ def run_pipeline(
         )
 
         return build_beta_plot.remote(
-            model_label, potential, available_adiabatic, available_bbn, available_models
+            model_label,
+            potential,
+            available_adiabatic,
+            available_bbn,
+            available_models,
+            SM_baseline,
         )
 
     work_queue = RayWorkPool(
@@ -832,6 +861,17 @@ with ShardedPool(
 
     model_list = build_model_list(pool, units)
 
+    # The Standard-Model baseline: rho_NP = 0 through compute_BBN_data's PRyMordial
+    # settings, one solve, not stored. small_network=True is what main.py passes.
+    # (review-remediation prompt 04)
+    SM_baseline = None
+    if not args.no_baseline:
+        SM_baseline = compute_SM_baseline(small_network=True)
+        print(
+            f"@@ plot_by_beta: SM baseline (rho_NP = 0, PRyM_version={SM_baseline['PRyM_version']}, small_network={SM_baseline['small_network']}): "
+            f"Yp={SM_baseline['Yp_BBN']:.6g}, D/H x1e5={SM_baseline['DOverH']:.6g}, 3He/H x1e5={SM_baseline['He3OverH']:.6g}, 7Li/H x1e10={SM_baseline['Li7OverH']:.6g}"
+        )
+
     for model_data in model_list:
         cosmology: BaseCosmology = model_data["cosmology"]
 
@@ -858,4 +898,5 @@ with ShardedPool(
             atol,
             rtol,
             tags,
+            SM_baseline,
         )

@@ -1,6 +1,6 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-09-29 · **12 open** across one campaign.
+**Last updated:** 2026-09-29 · **13 open** across one campaign.
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -19,7 +19,8 @@ the two disagree, the board is right.
 ### 1.1 `review-remediation` — [board §3](../prompts/review-remediation/IMPLEMENTATION_STATE.md)
 
 Seven seeded at planning on 2026-09-29 from `.documents/audit-2026-09-29/README.md`. The two
-opened after that on 2026-09-29 are resolved (board §4). One opened by prompt 02, four by prompt 03.
+opened after that on 2026-09-29 are resolved (board §4). One opened by prompt 02, four by prompt 03,
+one by prompt 04.
 
 - `[00-adiabaticity-diagnostic-omits-the-source-response-term]` — `AdiabaticHistory.py:103`
   gives zero conformal mass for the exponential coupling; the (Ω′)² response term is missing
@@ -46,8 +47,12 @@ opened after that on 2026-09-29 are resolved (board §4). One opened by prompt 0
   `small_network_flag`, PRyMordial reads `smallnet_flag`; every BBN solve so far used the full
   network.
 - `[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]` — PRyMordial's Yp and D/H
-  move by 1e-5–1e-4 under bit-level changes to ρ_NP; bears on prompt 04's 1e-4 target.
+  move by 1e-5–7e-4 under 1e-9–1e-8 changes to ρ_NP; prompt 04's 1e-4 D/H test passes at 8.85e-5
+  inside that band.
 - `[03-bbn-solver-failures-are-undetected-and-some-exceptions-escape]` — PRyMordial never checks
   `solve_ivp`'s status, and `compute_BBN_data` catches only three exception types.
 - `[03-main-recomputes-failed-bbn-rows-on-every-run]` — `main.py` looks up successes only, so a
   deterministic BBN failure is recomputed and re-stored each run.
+- `[04-numerical-strategies-describes-the-removed-asinh-bbn-interface]` —
+  `.documents/numerical-strategies.md` §7.2–7.4 still describe the asinh transform and the sort
+  that prompt 04 removed; needs a dated addendum.

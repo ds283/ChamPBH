@@ -1,6 +1,6 @@
 # Review remediation campaign — implementation state
 
-**Last updated:** 2026-09-29 · **Status: IN PROGRESS — 6 prompts written, 3 landed.** The campaign was
+**Last updated:** 2026-09-29 · **Status: IN PROGRESS — 6 prompts written, 4 landed.** The campaign was
 opened on 2026-09-29 from the code audit
 [`.documents/audit-2026-09-29/README.md`](../../.documents/audit-2026-09-29/README.md) of the paper
 review `Paper1_review.tex`. It fixes the audit's items 1–4: the ln 10 error in the Jordan
@@ -23,7 +23,13 @@ constant 0.08 family moves by 2.8e-7. A failed BBN solve now stores a `failure_r
 `plot_by_beta.py` lists the models it drops. New rows say `PRyM_version = "bf24c3d+cham03"`.
 Prompt 03 opened four issues (§3). Among them, `compute_BBN_data`'s `small_network` switch has
 never reached PRyMordial, so every BBN result so far used the full network.
-**Next: 04.** Target branch `review-remediation` from `f5896bb`.
+**Prompt 04 landed 2026-09-29.** R3 is fixed. The BBN callbacks now spline ρ_NP/ρ_R,J and
+p_NP/ρ_R,J and multiply back by the thermodynamic ρ_SM(T_J); the asinh path is gone. A
+non-monotonic T_J is refused rather than sorted, and the Ω″ term is Ω″π². A ρ_NP ≡ 0 baseline goes
+through the same PRyMordial settings (`compute_SM_baseline`, `tools/bbn_baseline.py`) and is drawn
+by `plot_by_beta.py`. The end-to-end D/H target (1e-4) is met at 8.85e-5, inside a measured
+PRyMordial noise band of 7e-4. Prompt 04 opened one issue and narrowed one (§3).
+**Next: 05.** Target branch `review-remediation` from `f5896bb`.
 
 **Campaign:** [`README.md`](README.md) ·
 **Code:** `CosmologyModels/GenericEOS/SaikawaShirai_EOS_spline.py`, `ComputeTargets/BBNData.py`,
@@ -76,7 +82,7 @@ characters).
 | 01 | [The temperature-law harness](01-temperature-law-harness.md) | **R1** (guard), **R5** (characterised) | Opus | ✍️ 2026-09-29, amended 2026-09-29 | ✅ 2026-09-29 | `ec3a994` | [01](logs/01-temperature-law-harness.md) |
 | 02 | [Fix the entropy derivative](02-fix-the-entropy-derivative.md) | **R1**, **R5** (fix) | Opus | ✍️ 2026-09-29, amended 2026-09-29 | ✅ 2026-09-29 | "Fix the ln 10 in the entropy derivative and the 10 keV join" | [02](logs/02-fix-the-entropy-derivative.md) |
 | 03 | [PRyMordial's passenger equation and failure reasons](03-prymordial-passenger-and-failure-reasons.md) | **R2** | Opus | ✍️ 2026-09-29 | ✅ 2026-09-29 | "Patch PRyMordial's inert T_NP equation and record BBN failures" | [03](logs/03-prymordial-passenger-and-failure-reasons.md) |
-| 04 | [Ratio splines and a baseline](04-ratio-splines-and-a-baseline.md) | **R3** | Opus | ✍️ 2026-09-29 | ⬜ | — | — |
+| 04 | [Ratio splines and a baseline](04-ratio-splines-and-a-baseline.md) | **R3** | Opus | ✍️ 2026-09-29 | ✅ 2026-09-29 | "Spline the BBN new-physics ratios and add an SM baseline" | [04](logs/04-ratio-splines-and-a-baseline.md) |
 | 05 | [Pin the kicking function; EOS hygiene](05-kicking-function-and-eos-hygiene.md) | **R4** (pins) | Opus | ✍️ 2026-09-29 | ⬜ | — | — |
 | 06 | [Close-out verification and handover](06-close-out-verification.md) | **R4** (verification), handover | Opus | ✍️ 2026-09-29 | ⬜ | — | — |
 
@@ -88,7 +94,7 @@ characters).
 |---|---|---|---|---|
 | R1 | **DEFECT, critical** | `dG_s_dlogT` / `dG_rho_dlogT` in the spline EOS class return d/d log10 T; the temperature law consumes them as d/d ln T. N to T_CMB 41.497 vs exact 40.075; stored ρ_R,J at 1 MeV is 0.022× thermodynamic. | 01, 02 | ✅ done (02): both derivatives return d g/d ln T; N to T_CMB 40.0754 vs exact 40.0754 (−3.6e-8). **Every store built under 2026.1.1 is invalid.** |
 | R2 | **DEFECT, high** | PRyMordial's inert `dTNPdt` is singular where ρ_NP′ = 0; oscillating ρ_NP stalls LSODA (> 600 s vs 9 s); failures swallowed and dropped silently. | 03 | ✅ done (03): `dTNPdt` returns 0 (marker comment in `PRyM/PRyM_main.py`); oscillating case 8–9 s (was > 120 s); ρ_NP ≡ 0 True vs False difference 0, `RuntimeWarning`s 916 → 0; constant 0.08 unchanged to 2.8e-7; `failure_reason` stored and printed; `PRyM_version` `"bf24c3d+cham03"` |
-| R3 | **DEFECT, low** | asinh representation of ρ_NP, p_NP; sort hides non-monotonic T_J; `Ω″ π` should be `Ω″ π²`; no SM baseline through the same path. | 04 | ⬜ planned |
+| R3 | **DEFECT, low** | asinh representation of ρ_NP, p_NP; sort hides non-monotonic T_J; `Ω″ π` should be `Ω″ π²`; no SM baseline through the same path. | 04 | ✅ done (04): `build_NP_callbacks` splines the ratios (constant 5.2e-17, oscillating 9.75e-9 / derivative 7.40e-7, against asinh 7.85e-10 / 3.30e-8 / 2.96e-6); non-monotonic T_J raises `ComputationFailureError`; `Ω″ π²` (`jordan_Hdot_over_H2`); `compute_SM_baseline` + `tools/bbn_baseline.py` + `plot_by_beta.py --no-baseline`. **ρ_SM choice: thermodynamic** (π²/30) g_ρ T⁴ with exact derivative; the stored-spline alternative differs by −2.12e-3 to −7.8e-4 on [10 keV, 10 MeV] and by 5.9e-5 (Yp) / 7.7e-4 (D/H) end to end. End-to-end D/H 8.85e-5 vs target 1e-4 |
 | R4 | **DOCUMENTATION** | Kicking-function peaks and table–g consistency unpinned; paper describes dead code; two derivative implementations disagree. | 05, 06 | ⬜ planned |
 | R5 | **DEFECT, minor** | Below 10 keV `G_s` and `G_rho` return 3.94 and 3.38, not the fit's own limits 3.931 and 3.383. The corrected law is off by +1.465e-4 e-folds at 10 keV and T_CMB, and the ρ_R witness at 10 keV reads 1.00258 instead of 0.99922. Found by prompt 01's first dispatch, 2026-09-29; audit §11. | 01, 02 | ✅ done (02): limits 3.931 / 3.383; residual at 10 keV and T_CMB −3.6e-8; ρ_R witness at 10 keV 0.99922 |
 
@@ -98,7 +104,8 @@ characters).
 
 Seven were **seeded at planning on 2026-09-29** from the audit. The two issues opened on
 2026-09-29 after that (one at the re-plan, one by prompt 01) are both resolved; see §4.
-Prompt 02 opened one more, and prompt 03 opened four (the last five entries below). Measurements for the seeded issues:
+Prompt 02 opened one more, prompt 03 opened four, and prompt 04 opened one (the last six entries
+below); prompt 04 also narrowed `[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]`. Measurements for the seeded issues:
 `.documents/audit-2026-09-29/README.md`, section in brackets.
 
 - **[00-adiabaticity-diagnostic-omits-the-source-response-term]** *(audit §5; review H5)* —
@@ -189,6 +196,17 @@ Prompt 02 opened one more, and prompt 03 opened four (the last five entries belo
   - **Next step.** Prompt 04 measures the spread before relying on its 1e-4 target; the planner
     decides whether that target stands. Whether PRyMordial's internal tolerances should be
     tightened is a question for the numerical campaign.
+  - **Narrowed 2026-09-29 by prompt 04** (log 04, Verification; scratch `probe_e2e.py` on
+    `ec206a3` plus prompt 04's diff). The constant ratio 0.08 went through the new
+    `build_NP_callbacks` into `run_prym`, with ρ_NP × (1 + ε).
+    - ε = 0 gives D/H 8.85e-5 from prompt 03's value and Yp 1.9e-6, so the 1e-4 target passes.
+    - ε = ±1e-9 and +1e-8 give D/H within 4.6e-6–9.4e-5.
+    - ε = −1e-8 gives **7.1e-4**.
+    - The oscillating family through the new callbacks differs from prompt 03's fixture by 6.1e-4
+      in D/H.
+    - So the passing end-to-end test (`test_bbn_callbacks` (h)) sits inside PRyMordial's noise and
+      could fail on another platform with no change to the code. The target was not loosened; the
+      planner's decision above is still open.
 - **[03-bbn-solver-failures-are-undetected-and-some-exceptions-escape]** *(log 03, observation 3)*.
   - **What.**
     - None of the eight `solve_ivp` calls in `PRyM/PRyM_main.py` checks `.status` or `.success`,
@@ -209,6 +227,20 @@ Prompt 02 opened one more, and prompt 03 opened four (the last five entries belo
   - **Next step.** Decide whether a failed row should stop recomputation, perhaps unless the
     `PRyM_version` or the `VERSION_LABEL` differs. That belongs with
     `[00-datastore-lookups-ignore-the-version-column]`.
+- **[04-numerical-strategies-describes-the-removed-asinh-bbn-interface]** *(log 04, observation 1)*.
+  - **What.** `.documents/numerical-strategies.md` §7.2–7.4 describe the BBN interface as it was
+    before prompt 04:
+    - the asinh/sinh transform and its chain-rule derivative (§7.2);
+    - `_make_spline`'s sort and the warn-only monotonicity check (§7.3);
+    - the `sinh` overflow path (§7.4).
+
+    Since prompt 04, `build_NP_callbacks` splines ρ_NP/ρ_R,J and p_NP/ρ_R,J and multiplies back by
+    the thermodynamic ρ_SM; it refuses non-monotonic T_J, and there is no `sinh`. §7.1's Ḣ_J/H_J²
+    description does not mention the Ω″π² correction either.
+  - **Impact.** None on any number. A reader is told the code does what it no longer does.
+  - **Next step.** A dated addendum to §7, additive per CLAUDE.md rule 6, in whichever prompt next
+    owns `.documents/` (prompt 06's close-out, if its scope allows), or a commit of its own. **Not
+    in prompt 04's files.**
 
 ---
 

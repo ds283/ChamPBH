@@ -1,7 +1,8 @@
 from collections import namedtuple
-from math import exp, log, asinh, sinh, sqrt
-from typing import Optional, List, Any
+from math import exp, log
+from typing import Optional, List, Any, Callable, NamedTuple, Sequence
 
+import numpy as np
 import ray
 from scipy.interpolate import make_interp_spline
 
@@ -15,6 +16,7 @@ from Quadrature.supervisors.ScalarField import StateVector
 from Units.base import UnitsLike
 from config.defaults import DEFAULT_STRING_LENGTH
 from config.sharding import ShardKeyType
+from constants import RadiationConstant
 from utilities import WallclockTimer, energy_formatter
 from .Policies import PotentialDerivativePolicy
 from .ScalarModel import ScalarModelProxy, ScalarModel, ScalarModelValue, ODEPolicy
@@ -47,12 +49,244 @@ def _failure_payload(reason: str) -> dict:
     return {"failure": True, "failure_reason": str(reason)[:DEFAULT_STRING_LENGTH]}
 
 
-def _make_spline(x_grid, y_grid):
-    paired_data = list(zip(x_grid, y_grid))
-    paired_data.sort(key=lambda pair: pair[0])
+class NPCallbacks(NamedTuple):
+    """
+    The three new-physics callbacks PRyMordial takes. Each takes T in MeV;
+    rho_NP and P_NP return MeV^4 and drho_NP_dT returns MeV^3.
+    """
 
-    sorted_x_grid, sorted_y_grid = zip(*paired_data)
-    return make_interp_spline(sorted_x_grid, sorted_y_grid, k=3)
+    rho_NP: Callable[[float], float]
+    P_NP: Callable[[float], float]
+    drho_NP_dT: Callable[[float], float]
+
+
+def thermodynamic_rho_SM(
+    eos, units: UnitsLike
+) -> tuple[Callable[[float], float], Callable[[float], float]]:
+    """
+    The Standard-Model radiation density rho_SM(T) = (pi^2/30) g_rho(T) T^4 and
+    its T-derivative, in PRyMordial's units: both take T in MeV and return MeV^4
+    and MeV^3 respectively. `eos` is anything with `G_rho` and `dG_rho_dlogT`
+    taking a dimensionful temperature in `units` (a LambdaCDM_GenericEOS
+    cosmology or an EOS class). dG_rho_dlogT is d g_rho / d ln T (correct since
+    review-remediation prompt 02), so
+        d rho_SM / dT = (pi^2/30) T^3 [4 g_rho(T) + d g_rho / d ln T].
+    Nothing is splined here and nothing is finite-differenced.
+    (review-remediation prompt 04)
+    """
+    MeV = units.MeV
+
+    def rho_SM_MeV4(T_in_MeV: float) -> float:
+        g = float(eos.G_rho(T_in_MeV * MeV))
+        return RadiationConstant * g * T_in_MeV**4
+
+    def drho_SM_dT_MeV3(T_in_MeV: float) -> float:
+        T = T_in_MeV * MeV
+        g = float(eos.G_rho(T))
+        dg_dlogT = float(eos.dG_rho_dlogT(T))
+        return RadiationConstant * T_in_MeV**3 * (4.0 * g + dg_dlogT)
+
+    return rho_SM_MeV4, drho_SM_dT_MeV3
+
+
+def build_NP_callbacks(
+    log_T_MeV: Sequence[float],
+    density_ratio: Sequence[float],
+    pressure_ratio: Sequence[float],
+    rho_SM_MeV4: Callable[[float], float],
+    drho_SM_dT_MeV3: Callable[[float], float],
+    T_min_MeV: float,
+    T_max_MeV: float,
+    task_label: str,
+) -> NPCallbacks:
+    """
+    Build PRyMordial's rho_NP, P_NP and drho_NP_dT from samples of the ratios
+    r = rho_NP / rho_R,J and s = p_NP / rho_R,J against ln(T_J / MeV).
+
+    The arrays are in the order the solver produced them, so `log_T_MeV` must be
+    strictly decreasing. If it is not, ComputationFailureError is raised naming
+    the first offending pair; nothing is sorted. The ratios are splined (cubic,
+    no transform) on the reversed arrays, and
+        rho_NP(T)     = r(T) rho_SM(T),
+        P_NP(T)       = s(T) rho_SM(T),
+        drho_NP_dT(T) = r'(ln T) rho_SM(T) / T + r(T) drho_SM_dT(T),
+    where r' is the analytic derivative of the ratio spline in ln T. The
+    derivative callback is differentiated from the interpolant, never
+    finite-differenced (campaign README section 2 (g)).
+
+    Guards, as before prompt 04: a negative T returns 0 (PRyMordial sometimes
+    produces one); T above T_max_MeV or below T_min_MeV raises
+    ComputationFailureError; an OverflowError or ValueError while evaluating is
+    wrapped in ComputationFailureError.
+    (review-remediation prompt 04, item R3)
+    """
+    log_T = np.asarray(log_T_MeV, dtype=float)
+    r = np.asarray(density_ratio, dtype=float)
+    s = np.asarray(pressure_ratio, dtype=float)
+
+    for i in range(len(log_T) - 1):
+        if not log_T[i + 1] < log_T[i]:
+            raise ComputationFailureError(
+                f"T_Jordan is not strictly decreasing: sample {i} has "
+                f"log(T/MeV)={log_T[i]:.10g} (T={exp(log_T[i]):.6g} MeV) and sample {i + 1} has "
+                f"log(T/MeV)={log_T[i + 1]:.10g} (T={exp(log_T[i + 1]):.6g} MeV) [{task_label}]"
+            )
+
+    # the spline wants increasing abscissae: reverse, do not sort
+    x = log_T[::-1]
+    density_ratio_spline = make_interp_spline(x, r[::-1], k=3)
+    pressure_ratio_spline = make_interp_spline(x, s[::-1], k=3)
+    density_ratio_derivative_spline = density_ratio_spline.derivative()
+
+    def _check_domain(T_in_MeV: float):
+        if T_in_MeV > T_max_MeV:
+            raise ComputationFailureError(
+                f"T_in_MeV={T_in_MeV:.5g} MeV is larger than T_BBN_spline_max={T_max_MeV:.5g} MeV"
+            )
+
+        if T_in_MeV < T_min_MeV:
+            raise ComputationFailureError(
+                f"T_in_MeV={T_in_MeV:.5g} MeV is smaller than T_BBN_spline_min={T_min_MeV:.5g} MeV"
+            )
+
+    def _wrap(e: Exception, kind: str, T_in_MeV: float) -> ComputationFailureError:
+        msg = f"!! compute_BBN_data {task_label}: {kind} error at T = {T_in_MeV:.5g} MeV: {e}"
+        print(msg)
+        return ComputationFailureError(msg)
+
+    def rho_NP(T_in_MeV: float) -> float:
+        # PRyMordial sometimes produces negative temperatures
+        if T_in_MeV < 0:
+            return 0.0
+
+        _check_domain(T_in_MeV)
+
+        log_T_in_MeV = log(T_in_MeV)
+        try:
+            value = float(density_ratio_spline(log_T_in_MeV)) * rho_SM_MeV4(T_in_MeV)
+        except OverflowError as e:
+            raise _wrap(e, "overflow", T_in_MeV) from e
+        except ValueError as e:
+            raise _wrap(e, "value", T_in_MeV) from e
+        else:
+            return value
+
+    def P_NP(T_in_MeV: float) -> float:
+        # PRyMordial sometimes produces negative temperatures
+        if T_in_MeV < 0:
+            return 0.0
+
+        _check_domain(T_in_MeV)
+
+        log_T_in_MeV = log(T_in_MeV)
+        try:
+            value = float(pressure_ratio_spline(log_T_in_MeV)) * rho_SM_MeV4(T_in_MeV)
+        except OverflowError as e:
+            raise _wrap(e, "overflow", T_in_MeV) from e
+        except ValueError as e:
+            raise _wrap(e, "value", T_in_MeV) from e
+        else:
+            return value
+
+    def drho_NP_dT(T_in_MeV: float) -> float:
+        # PRyMordial sometimes produces negative temperatures
+        if T_in_MeV < 0:
+            return 0.0
+
+        _check_domain(T_in_MeV)
+
+        log_T_in_MeV = log(T_in_MeV)
+        try:
+            ratio = float(density_ratio_spline(log_T_in_MeV))
+            dratio_dlogT = float(density_ratio_derivative_spline(log_T_in_MeV))
+            rho_SM = rho_SM_MeV4(T_in_MeV)
+            drho_SM_dT = drho_SM_dT_MeV3(T_in_MeV)
+            value = dratio_dlogT * rho_SM / T_in_MeV + ratio * drho_SM_dT
+        except OverflowError as e:
+            raise _wrap(e, "overflow", T_in_MeV) from e
+        except ValueError as e:
+            raise _wrap(e, "value", T_in_MeV) from e
+        else:
+            return value
+
+    return NPCallbacks(rho_NP=rho_NP, P_NP=P_NP, drho_NP_dT=drho_NP_dT)
+
+
+def jordan_Hdot_over_H2(
+    HEdot_over_HE2: float,
+    Omega_prime: float,
+    Omega_primeprime: float,
+    pi: float,
+    pi_prime: float,
+) -> float:
+    """
+    Hdot_J / H_J^2 from the Einstein-frame Hdot_E / H_E^2. Here Omega_prime and
+    Omega_primeprime are d ln Omega / d phi and d^2 ln Omega / d phi^2, pi is
+    d phi / dN and pi_prime is d pi / dN, with N the Einstein-frame e-fold number.
+    With A1 = 1 + Omega' pi, H_J = (H_E / Omega) A1, so
+        Hdot_J / H_J^2 = (Hdot_E / H_E^2 - Omega' pi) / A1 + A1' / A1^2,
+        A1' = Omega'' pi^2 + Omega' pi'.
+    Before review-remediation prompt 04 (item R3) the first term of A1' was
+    Omega'' pi, which is also dimensionally inconsistent. It is zero for the
+    exponential coupling, so no result has depended on it.
+    """
+    A1 = 1.0 + Omega_prime * pi
+    return (HEdot_over_HE2 - Omega_prime * pi) / A1 + (
+        Omega_primeprime * pi**2 + Omega_prime * pi_prime
+    ) / (A1 * A1)
+
+
+def _configure_PRyMordial(small_network: bool):
+    """
+    Set the PRyMordial flags that compute_BBN_data and compute_SM_baseline both
+    use, and return the PRyM_main module. (Factored out in review-remediation
+    prompt 04 so that the baseline goes through exactly the same settings.)
+    """
+    # import locally so that global variable in PRyMini don't leak between threads
+    # (not sure if this is possible or not, but worth being defensive)
+    import PRyM.PRyM_init as PRyMini
+    import PRyM.PRyM_main as PRyMmain
+
+    # ask PRyMordial to include new physics ("NP") contributions to the thermodynamics
+    PRyMini.NP_thermo_flag = True
+
+    # PryMordial seems to require the temperature in the NP sector to be set separately
+    # note PRyMini.T_start seems to be in Kelvin whereas all other energies are measured in MeV
+    PRyMini.Tstart_NP = PRyMini.T_start / PRyMini.MeV_to_Kelvin
+
+    # disable verbose output
+    PRyMini.verbose_flag = False
+
+    # speed up calculation using small reaction network, at cost of Li7 accuracy
+    PRyMini.small_network_flag = small_network
+
+    return PRyMmain
+
+
+def _zero_NP(T_in_MeV: float) -> float:
+    return 0.0
+
+
+def compute_SM_baseline(small_network: bool) -> dict:
+    """
+    The Standard-Model abundances through the same PRyMordial path as
+    compute_BBN_data: the same flags (NP_thermo_flag = True and the rest), with
+    rho_NP = p_NP = drho_NP/dT = 0. Returns Yp_BBN, DOverH (x 1e5), He3OverH
+    (x 1e5), Li7OverH (x 1e10), PRyM_version and small_network. One PRyMordial
+    solve, about 10 s; must be called from the repository root. Not stored.
+    (review-remediation prompt 04, item R3)
+    """
+    PRyMmain = _configure_PRyMordial(small_network)
+    res = PRyMmain.PRyMclass(_zero_NP, _zero_NP, _zero_NP).PRyMresults()
+
+    return {
+        "Yp_BBN": res[4],
+        "DOverH": res[5],
+        "He3OverH": res[6],
+        "Li7OverH": res[7],
+        "PRyM_version": PRYM_VERSION,
+        "small_network": small_network,
+    }
 
 
 @ray.remote
@@ -85,8 +319,8 @@ def compute_BBN_data(
 
     # PRyMordial expects energies to be in units of MeV
     log_T_Jordan_MeV_grid: List[float] = []
-    arcsinh_pressure_NP_MeV4_grid: List[float] = []
-    arcsinh_density_NP_MeV4_grid: List[float] = []
+    density_NP_ratio_grid: List[float] = []
+    pressure_NP_ratio_grid: List[float] = []
 
     T_BBN_spline_max = T_BBN_MeV_spline_max * units.MeV
     T_BBN_spline_min = T_BBN_keV_spline_min * units.keV
@@ -101,10 +335,6 @@ def compute_BBN_data(
         )
 
     log_MeV = log(units.MeV)
-    MeV2 = units.MeV * units.MeV
-    MeV4 = MeV2 * MeV2
-
-    last_log_T_Jordan_MeV = None
 
     V_policy: PotentialDerivativePolicy = PotentialDerivativePolicy(
         task_label, cosmology, potential
@@ -123,15 +353,7 @@ def compute_BBN_data(
                 raw_N_grid.append(value.raw_N)
                 log_T_Jordan_grid.append(value.log_T_Jordan)
 
-                log_T_Jordan_MeV = value.log_T_Jordan - log_MeV
-                if last_log_T_Jordan_MeV is not None:
-                    if log_T_Jordan_MeV > last_log_T_Jordan_MeV:
-                        print(
-                            f"!! compute_BBN_data {task_label}: T_Jordan values are not monotonically decreasing: this log(T_Jordan/MeV) {log_T_Jordan_MeV:.5g} (this) > {log_T_Jordan_MeV:.5g} (last) = {last_log_T_Jordan_MeV:.5g} (last)"
-                        )
-
-                log_T_Jordan_MeV_grid.append(log_T_Jordan_MeV)
-                last_log_T_Jordan_MeV = log_T_Jordan_MeV
+                log_T_Jordan_MeV_grid.append(value.log_T_Jordan - log_MeV)
 
                 rhorad_Jordan: float = exp(value.log_rhorad_Jordan)
                 rhorad_Jordan_grid.append(rhorad_Jordan)
@@ -146,7 +368,7 @@ def compute_BBN_data(
                 density_NP: float = LHS - rhorad_Jordan * (1.0 + fm)
 
                 density_NP_grid.append(density_NP)
-                arcsinh_density_NP_MeV4_grid.append(asinh(density_NP / MeV4))
+                density_NP_ratio_grid.append(density_NP / rhorad_Jordan)
 
                 HEdot_over_HE2: float = (
                     V_policy.Hdot_over_H2_plus_3(
@@ -163,8 +385,6 @@ def compute_BBN_data(
                     value.phi_Einstein
                 )
 
-                A1: float = 1.0 + log_Omega_prime * value.pi_Einstein
-
                 state: StateVector = StateVector(
                     phi_Einstein=value.phi_Einstein,
                     pi_Einstein=value.pi_Einstein,
@@ -177,13 +397,12 @@ def compute_BBN_data(
                     data.friction_term + data.reflecting_term + data.kicking_term
                 )
 
-                HJdot_over_HJ2: float = (
-                    HEdot_over_HE2 - log_Omega_prime * value.pi_Einstein
-                ) / A1 + (
-                    log_Omega_primeprime * value.pi_Einstein
-                    + log_Omega_prime * pi_Einstein_prime
-                ) / (
-                    A1 * A1
+                HJdot_over_HJ2: float = jordan_Hdot_over_H2(
+                    HEdot_over_HE2,
+                    log_Omega_prime,
+                    log_Omega_primeprime,
+                    value.pi_Einstein,
+                    pi_Einstein_prime,
                 )
 
                 pressure_NP: float = (
@@ -191,141 +410,35 @@ def compute_BBN_data(
                 )
 
                 pressure_NP_grid.append(pressure_NP)
-                arcsinh_pressure_NP_MeV4_grid.append(asinh(pressure_NP / MeV4))
+                pressure_NP_ratio_grid.append(pressure_NP / rhorad_Jordan)
 
-        arcsinh_density_NP_MeV4_spline = _make_spline(
-            log_T_Jordan_MeV_grid,
-            arcsinh_density_NP_MeV4_grid,
-        )
-        arcsinh_pressure_NP_MeV4_spline = _make_spline(
-            log_T_Jordan_MeV_grid,
-            arcsinh_pressure_NP_MeV4_grid,
-        )
-        arcsinh_density_NP_MeV4_derivative_spline = (
-            arcsinh_density_NP_MeV4_spline.derivative()
-        )
+        # the ratios are multiplied back by the thermodynamic rho_SM(T_J), not by a
+        # spline of the stored rho_R,J (review-remediation prompt 04; see its log)
+        rho_SM_MeV4, drho_SM_dT_MeV3 = thermodynamic_rho_SM(cosmology, units)
 
-    def rho_NP(T_in_MeV: float):
-        T = T_in_MeV * units.MeV
-
-        # PRyMordial sometimes produces negative temperatures
-        if T < 0:
-            return 0.0
-
-        if T > T_BBN_spline_max:
-            raise ComputationFailureError(
-                f"T_in_MeV={T_in_MeV:.5g} MeV is larger than T_BBN_spline_max={T_BBN_spline_max/units.MeV:.5g} MeV"
-            )
-
-        if T < T_BBN_spline_min:
-            raise ComputationFailureError(
-                f"T_in_MeV={T_in_MeV:.5g} MeV is smaller than T_BBN_spline_min={T_BBN_spline_min/units.MeV:.5g} MeV"
-            )
-
-        log_T_in_MeV = log(T_in_MeV)
         try:
-            value = sinh(arcsinh_density_NP_MeV4_spline(log_T_in_MeV))
-        except OverflowError as e:
-            msg = f"!! compute_BBN_data {task_label}: overflow error at T = {T_in_MeV:.5g} MeV: {e}"
-            print(msg)
-            raise ComputationFailureError(msg) from e
-        except ValueError as e:
-            msg = f"!! compute_BBN_data {task_label}: value error at T = {T_in_MeV:.5g} MeV: {e}"
-            print(msg)
-            raise ComputationFailureError(msg) from e
-        else:
-            return value
-
-    def P_NP(T_in_MeV: float):
-        T = T_in_MeV * units.MeV
-
-        # PRyMordial sometimes produces negative temperatures
-        if T < 0:
-            return 0.0
-
-        if T > T_BBN_spline_max:
-            raise ComputationFailureError(
-                f"T_in_MeV={T_in_MeV:.5g} MeV is larger than T_BBN_spline_max={T_BBN_spline_max/units.MeV:.5g} MeV"
+            callbacks: NPCallbacks = build_NP_callbacks(
+                log_T_Jordan_MeV_grid,
+                density_NP_ratio_grid,
+                pressure_NP_ratio_grid,
+                rho_SM_MeV4,
+                drho_SM_dT_MeV3,
+                T_min_MeV=T_BBN_spline_min / units.MeV,
+                T_max_MeV=T_BBN_spline_max / units.MeV,
+                task_label=task_label,
             )
-
-        if T < T_BBN_spline_min:
-            raise ComputationFailureError(
-                f"T_in_MeV={T_in_MeV:.5g} MeV is smaller than T_BBN_spline_min={T_BBN_spline_min/units.MeV:.5g} MeV"
-            )
-
-        log_T_in_MeV = log(T_in_MeV)
-        try:
-            value = sinh(arcsinh_pressure_NP_MeV4_spline(log_T_in_MeV))
-        except OverflowError as e:
-            msg = f"!! compute_BBN_data {task_label}: overflow error at T = {T_in_MeV:.5g} MeV: {e}"
-            print(msg)
-            raise ComputationFailureError(msg) from e
-        except ValueError as e:
-            msg = f"!! compute_BBN_data {task_label}: value error at T = {T_in_MeV:.5g} MeV: {e}"
-            print(msg)
-            raise ComputationFailureError(msg) from e
-        else:
-            return value
-
-    def drho_NP_dT(T_in_MeV: float):
-        T = T_in_MeV * units.MeV
-
-        # PRyMordial sometimes produces negative temperatures
-        if T < 0:
-            return 0.0
-
-        if T > T_BBN_spline_max:
-            raise ComputationFailureError(
-                f"T_in_MeV={T_in_MeV:.5g} MeV is larger than T_BBN_spline_max={T_BBN_spline_max/units.MeV:.5g} MeV"
-            )
-
-        if T < T_BBN_spline_min:
-            raise ComputationFailureError(
-                f"T_in_MeV={T_in_MeV:.5g} MeV is smaller than T_BBN_spline_min={T_BBN_spline_min/units.MeV:.5g} MeV"
-            )
-
-        log_T_in_MeV = log(T_in_MeV)
-        try:
-            rho_T = sinh(arcsinh_density_NP_MeV4_spline(log_T_in_MeV))
-
-            norm_factor = sqrt(1.0 + rho_T * rho_T) / T_in_MeV
-
-            value = norm_factor * arcsinh_density_NP_MeV4_derivative_spline(
-                log_T_in_MeV
-            )
-        except OverflowError as e:
-            msg = f"!! compute_BBN_data {task_label}: overflow error at T = {T_in_MeV:.5g} MeV: {e}"
-            print(msg)
-            raise ComputationFailureError(msg) from e
-        except ValueError as e:
-            msg = f"!! compute_BBN_data {task_label}: value error at T = {T_in_MeV:.5g} MeV: {e}"
-            print(msg)
-            raise ComputationFailureError(msg) from e
-        else:
-            return value
+        except ComputationFailureError as e:
+            print(f"!! compute_BBN_data {task_label}: {e}")
+            return _failure_payload(f"BBN callbacks: {e}")
 
     with WallclockTimer() as BBN_timer:
-        # import locally so that global variable in PRyMini don't leak between threads
-        # (not sure if this is possible or not, but worth being defensive)
-        import PRyM.PRyM_init as PRyMini
-        import PRyM.PRyM_main as PRyMmain
-
-        # ask PRyMordial to include new physics ("NP") contributions to the thermodynamics
-        PRyMini.NP_thermo_flag = True
-
-        # PryMordial seems to require the temperature in the NP sector to be set separately
-        # note PRyMini.T_start seems to be in Kelvin whereas all other energies are measured in MeV
-        PRyMini.Tstart_NP = PRyMini.T_start / PRyMini.MeV_to_Kelvin
-
-        # disable verbose output
-        PRyMini.verbose_flag = False
-
-        # speed up calculation using small reaction network, at cost of Li7 accuracy
-        PRyMini.small_network_flag = small_network
+        PRyMmain = _configure_PRyMordial(small_network)
 
         try:
             # run PRyMordial
-            res = PRyMmain.PRyMclass(rho_NP, P_NP, drho_NP_dT).PRyMresults()
+            res = PRyMmain.PRyMclass(
+                callbacks.rho_NP, callbacks.P_NP, callbacks.drho_NP_dT
+            ).PRyMresults()
         except (OverflowError, ValueError, ComputationFailureError) as e:
             return _failure_payload(f"PRyMordial: {type(e).__name__}: {e}")
 
