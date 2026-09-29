@@ -67,6 +67,22 @@ PRyMordial noise band of 7e-4. Prompt 04 opened one issue and narrowed one (§3)
 - **2026-09-29, the user.** The `small_network` flag bug is opened as a board issue and not fixed
   in prompt 03 (§3, `[03-small-network-flag-is-never-read-by-prymordial]`).
 
+- **2026-09-29, the user ("Option 1").** Prompt 05's peak temperatures are restated as the peaks
+  of the spline `Xav_EOS_spline.w` actually evaluates, not the table rows with the largest Σ.
+  README §6.4's T_J column (0.1585 MeV, 0.1778 GeV, 56.23 GeV) and prompt 05 §1 case 1 took the
+  argmax over the CSV's own rows, about 20 per decade. The spline peaks between rows. The EW peak
+  is at 53.25 GeV, −5.3 % from 56.23 GeV, outside the ±5 % tolerance. The test would pass only
+  by grid luck (−4.87 % at exactly 200 points per decade).
+  - **New T_J targets, still ±5 %:** e⁺e⁻ **0.1605 MeV**, QCD **0.1819 GeV**, EW **53.25 GeV**.
+  - **Σ targets and tolerance (±1e-3) unchanged:** 0.1007, 0.3138, 0.03733. The spline gives
+    0.10073, 0.31453 and 0.037436.
+  - **Provenance.** The orchestrator's scratch probe on `eba4473`, argmax of 1 − 3
+    `Xav_EOS_spline.w` on a 5000-points-per-decade log grid over the prompt's three windows. The
+    table-row values reproduce the audit exactly (pandas read, same commit).
+  - **In the note.** The paper-facing note gives both: the spline peak, and the table-row maximum
+    as what the CSV itself contains.
+  - **Precedence.** This supersedes §6.4's T_J column and prompt 05 §1 case 1 where they differ.
+
 None pending otherwise. Decisions the prompts may surface (each is a stop-and-ask in its
 prompt's §7): whether to divide by ln 10 or rebuild the EOS grid in ln T (02, either is allowed);
 whether ρ_SM(T) for the ratio interface is the thermodynamic formula or a spline of the stored
