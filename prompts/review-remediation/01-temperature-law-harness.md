@@ -1,8 +1,8 @@
 # Prompt 01 — the temperature-law harness, and the guard that would have caught R1
 
-**Campaign:** [`README.md`](README.md) · **Board item:** **R1** (the guard) ·
+**Campaign:** [`README.md`](README.md) · **Board items:** **R1** (the guard), **R5** (characterised) ·
 **Board:** `IMPLEMENTATION_STATE.md` — exists (created at planning); update your row in §1 and the
-R1 row in §2.
+R1 and R5 rows in §2.
 **Closes:** nothing. **Opens:** anything out of scope that you find (§5), without fixing it.
 **Recommended model:** **Opus**. No production code. The substance is making the reference
 *independent* of the thing being measured, and characterising the defect honestly so that the
@@ -10,10 +10,11 @@ next prompt's fix announces itself.
 
 **Read first:**
 
-1. [`README.md`](README.md) §0, §2 (a)–(c), §5, §6.1.
-2. `.documents/audit-2026-09-29/README.md` §1, and the three scripts beside it —
+1. [`README.md`](README.md) §0, §2 (a)–(c), (j), §5, §6.1.
+2. `.documents/audit-2026-09-29/README.md` §1 and §11, and the scripts beside it —
    `tlaw_check.py` and `eos_consistency.py` are the measurements you are turning into tests.
    Run them first, from the repository root, and confirm you reproduce the §6.1 "now" column.
+   `low_t_join_probe.py ship` is R5's measurement (§1 below).
 3. `CosmologyModels/GenericEOS/SaikawaShirai_EOS_spline.py` in full (`_log_T_grid` at `:55`,
    `dG_rho_dlogT` `:114–130`, `dG_s_dlogT` `:155–171`, `w` `:176–200`), and
    `SaikawaShirai_EOS_jax_autodiff.py:200–230` (`dG_s_dlogT` returns `T_in_GeV * grad`).
@@ -46,6 +47,14 @@ Three independent witnesses, none of which uses the shipped derivative:
 3. **The ρ_R witness.** d ln ρ_R/dN = Σ − 4 with Σ = 1 − 3w(T) from the production class,
    integrated alongside the law from 5 MeV to 10 keV, against (π²/30) g_ρ(T) T⁴. Today 0.182
    (0.0041 if started from 2×10⁴ GeV).
+
+**A second, smaller defect, R5** (added 2026-09-29; README §2 (j), audit §11). Below
+`SAIKAWA_SHIRAI_T_LO` = 10 keV, `G_s` and `G_rho` return the constants 3.94 and 3.38, not the
+fit's own limits 3.931 and 3.383. `dG_s_dlogT` is clamped to 0 there, so the ODE never sees the
+step, but `exact_efolds` reads `G_s` at the endpoint. With the corrected convention the law
+therefore agrees with exact entropy conservation to ~4e-8 down to 70 keV, but is off by
+**+1.465e-4** at 10 keV and at T_CMB. That residual is R5's, not R1's. Your case 2 separates the
+two, and prompt 02 fixes both.
 
 ---
 
@@ -83,9 +92,16 @@ This prompt characterises; prompt 02 flips the constants. Cases:
    `exact_efolds` equals the audit's offset (+0.180, +0.779, +0.987, +0.994, +1.336, +1.403,
    +1.422, +1.422) to **± 2e-3**. Constant `TEMPERATURE_LAW_EFOLD_OFFSET_TOLERANCE`; the
    comment says prompt 02 replaces the expected offsets by zero and the tolerance by 1e-5.
-2. **The guard, corrected convention.** The same with `kappa = 1/ln 10` agrees with
-   `exact_efolds` to **1e-5** at every T₁. This must pass *today*; it proves the fix is a
-   factor and nothing else, before anyone edits production code.
+2. **The guard, corrected convention.** The same with `kappa = 1/ln 10`:
+   - **Above the join** (T₁ ∈ {1 GeV, 100 MeV, 5 MeV, 1 MeV, 100 keV, 70 keV}): agrees with
+     `exact_efolds` to **1e-5**. This must pass *today*. It proves R1 is a factor and nothing
+     else, before anyone edits production code.
+   - **At and below the join** (T₁ ∈ {10 keV, T_CMB}): the residual `integrate − exact` equals
+     R5's step, **+1.465e-4 ± 5e-6**. Use a named constant, for example
+     `LOW_T_JOIN_EFOLD_RESIDUAL`, with the comment that prompt 02 sets it to 0 with tolerance
+     1e-5 when it corrects `LOW_T_G_S_STAR`.
+   - **Report the step's cause alongside it:** `G_s` just above and at `SAIKAWA_SHIRAI_T_LO`
+     (3.938269 and 3.94 today), and ⅓ ln of their ratio.
 3. **The derivative convention, characterised.** `derivative_convention_ratio` over 60 points
    log-spaced in [20 keV, 5 TeV] (inside the clamps, away from the table's own joins by at least
    a factor 1.5 in T) equals **ln 10 to 1e-3 relative**. Comment: prompt 02 sets the expected
@@ -97,7 +113,9 @@ This prompt characterises; prompt 02 flips the constants. Cases:
 5. **The ρ_R witness, characterised.** `integrate_temperature_law(eos, 5e-3, 1e-5, kappa=1.0,
    with_rho=True)` gives ρ_R/thermodynamic = **0.182 ± 2e-3**; with `kappa = 1/ln 10`,
    **1.005 ± 5e-3**. From 2×10⁴ GeV the same pair is 0.0041 and 1.0026 (README §2 (c)); assert
-   either range, but say which. Comment: prompt 02 removes the `kappa=1` half; prompt 05 tightens the other.
+   either range, but say which. Comment: prompt 02 removes the `kappa=1` half and re-centres
+   the other on the value it measures after R5. The audit §11 probe gives 1.00135 from 5 MeV
+   and 0.99922 from 2×10⁴ GeV. Prompt 05 tightens it.
 6. **Clamps.** `dG_s_dlogT` and `dG_rho_dlogT` are exactly 0 below 10⁻⁵ GeV and above 10¹⁶ GeV,
    and `G_s`, `G_rho` take `LOW_T_G_S_STAR`, `LOW_T_GSTAR`, `HIGH_T_GSTAR` there. These hold before
    and after and are not the point; they pin the plateaus the paper describes.
@@ -110,8 +128,8 @@ few seconds per call, so build the eight-point tables once in `setUpClass`.
 
 ## 3. What this prompt does not do
 
-- It does not touch `SaikawaShirai_EOS_spline.py`, `ScalarModel.py`, `main.py` or the version
-  label. Characterise, do not fix (README §5 rule 5).
+- It does not touch `SaikawaShirai_EOS_spline.py`, `SaikawaShirai_common.py` (R5's constants),
+  `ScalarModel.py`, `main.py` or the version label. Characterise, do not fix (README §5 rule 5).
 - It does not delete or edit the audit scripts; they stay as the record of the measurement on
   `f5896bb`. If your test and a script disagree, say so in the log and say which is right.
 - It does not pin the kicking-function peaks. That is prompt 05.
@@ -124,7 +142,8 @@ few seconds per call, so build the eight-point tables once in `setUpClass`.
    no datastore. Suite count: **0 → the number of cases above (6, or 5 if jax is skipped —
    record which)**.
 2. Cases 1, 3, 4, 5 pass **as characterisations of the defect**, each with its constant and
-   comment; case 2 passes and is the proof that ÷ln 10 is the whole fix; case 6 passes.
+   comment. Case 2 passes: at 1e-5 above the join, which proves ÷ln 10 is the whole of R1, and
+   as R5's characterised residual at and below it. Case 6 passes.
 3. `black --check` clean on the files added; the board's §1 and §2 rows updated; the log
    written; `.documents/OPEN_ISSUES.md` updated only if you opened an issue.
 4. The log's verification section reproduces README §6.1's "now" column from the tests
@@ -135,7 +154,11 @@ few seconds per call, so build the eight-point tables once in `setUpClass`.
 ## 5. Stop conditions — stop and ask the user
 
 - `integrate_temperature_law` with `kappa = 1/ln 10` does **not** agree with `exact_efolds` to
-  1e-5. That would mean the defect is not a pure factor, and prompt 02 as written is wrong.
+  1e-5 at the six points above the join. That would mean R1 is not a pure factor, and prompt 02
+  as written is wrong.
+- At 10 keV or T_CMB, the corrected-convention residual is **not** +1.465e-4 ± 5e-6, or it is not
+  accounted for by ⅓ ln[G_s(T_LO⁺)/G_s(T_LO)]. That would mean something other than R5 is
+  wrong at the join.
 - The ρ_R witness with the corrected convention is outside 1.005 ± 5e-3 (from 5 MeV). That would mean the
   table and the g's are inconsistent at a level the campaign has not budgeted for.
 - The jax class also returns a log10 derivative. README §2 (b) would then be wrong.
@@ -149,5 +172,6 @@ few seconds per call, so build the eight-point tables once in `setUpClass`.
 60-point derivative grid and why it avoids the table joins; the wall-clock of the suite; and the
 measured offsets to four decimals, since prompt 02 will quote them as "before".
 
-Board: your §1 row (landed, commit, log), R1's status in §2 ("guard landed; fix pending").
+Board: your §1 row (landed, commit, log), R1's and R5's status in §2 ("guard landed; fix
+pending" and "characterised; fix pending").
 `.documents/OPEN_ISSUES.md`: only if §3 changed.

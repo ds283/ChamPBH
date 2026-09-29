@@ -7,7 +7,9 @@ review `Paper1_review.tex`. It fixes the audit's items 1–4: the ln 10 error in
 temperature law (since commit `5962833`, 2026-01-19), the singular passenger equation in the
 vendored PRyMordial, the arcsinh representation in the BBN interface, and the unpinned kicking
 function. Items 5–9 of the audit are recorded in §3 as seeded issues and are out of scope.
-**Next: 01.** Target branch `review-remediation` from `f5896bb`.
+**Amended 2026-09-29.** Prompt 01's first dispatch stopped on its case 2 and committed nothing.
+It found R5, the 10 keV join (audit §11). The campaign now characterises R5 in 01 and fixes it
+in 02. **Next: 01 (re-dispatch).** Target branch `review-remediation` from `f5896bb`.
 
 **Campaign:** [`README.md`](README.md) ·
 **Code:** `CosmologyModels/GenericEOS/SaikawaShirai_EOS_spline.py`, `ComputeTargets/BBNData.py`,
@@ -23,7 +25,11 @@ function. Items 5–9 of the audit are recorded in §3 as seeded issues and are 
 
 ### Decisions
 
-None pending at planning. Decisions the prompts may surface (each is a stop-and-ask in its
+- **2026-09-29, the user.** R5 is to be fixed in this campaign, not deferred. Prompt 01's case 2
+  is amended to characterise it. Prompt 02 sets `LOW_T_G_S_STAR` and `LOW_T_GSTAR` to the fit's
+  own limits, 3.931 and 3.383 (README §2 (j)), under the version bump it already makes.
+
+None pending otherwise. Decisions the prompts may surface (each is a stop-and-ask in its
 prompt's §7): whether to divide by ln 10 or rebuild the EOS grid in ln T (02, either is allowed);
 whether ρ_SM(T) for the ratio interface is the thermodynamic formula or a spline of the stored
 `log_rhorad_Jordan` (04, thermodynamic preferred); what `failure_reason` may hold (03, ≤ 256
@@ -35,8 +41,8 @@ characters).
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | [The temperature-law harness](01-temperature-law-harness.md) | **R1** (guard) | Opus | ✍️ 2026-09-29 | ⬜ | — | — |
-| 02 | [Fix the entropy derivative](02-fix-the-entropy-derivative.md) | **R1** (fix) | Opus | ✍️ 2026-09-29 | ⬜ | — | — |
+| 01 | [The temperature-law harness](01-temperature-law-harness.md) | **R1** (guard), **R5** (characterised) | Opus | ✍️ 2026-09-29, amended 2026-09-29 | ⬜ | — | — |
+| 02 | [Fix the entropy derivative](02-fix-the-entropy-derivative.md) | **R1**, **R5** (fix) | Opus | ✍️ 2026-09-29, amended 2026-09-29 | ⬜ | — | — |
 | 03 | [PRyMordial's passenger equation and failure reasons](03-prymordial-passenger-and-failure-reasons.md) | **R2** | Opus | ✍️ 2026-09-29 | ⬜ | — | — |
 | 04 | [Ratio splines and a baseline](04-ratio-splines-and-a-baseline.md) | **R3** | Opus | ✍️ 2026-09-29 | ⬜ | — | — |
 | 05 | [Pin the kicking function; EOS hygiene](05-kicking-function-and-eos-hygiene.md) | **R4** (pins) | Opus | ✍️ 2026-09-29 | ⬜ | — | — |
@@ -52,13 +58,15 @@ characters).
 | R2 | **DEFECT, high** | PRyMordial's inert `dTNPdt` is singular where ρ_NP′ = 0; oscillating ρ_NP stalls LSODA (> 600 s vs 9 s); failures swallowed and dropped silently. | 03 | ⬜ planned |
 | R3 | **DEFECT, low** | asinh representation of ρ_NP, p_NP; sort hides non-monotonic T_J; `Ω″ π` should be `Ω″ π²`; no SM baseline through the same path. | 04 | ⬜ planned |
 | R4 | **DOCUMENTATION** | Kicking-function peaks and table–g consistency unpinned; paper describes dead code; two derivative implementations disagree. | 05, 06 | ⬜ planned |
+| R5 | **DEFECT, minor** | Below 10 keV `G_s` and `G_rho` return 3.94 and 3.38, not the fit's own limits 3.931 and 3.383. The corrected law is off by +1.465e-4 e-folds at 10 keV and T_CMB, and the ρ_R witness at 10 keV reads 1.00258 instead of 0.99922. Found by prompt 01's first dispatch, 2026-09-29; audit §11. | 01, 02 | ⬜ planned |
 
 ---
 
 ## 3. Active and unresolved issues
 
-All seven were **seeded at planning on 2026-09-29** from the audit; none has been opened by a
-prompt yet. Measurements: `.documents/audit-2026-09-29/README.md`, section in brackets.
+Seven were **seeded at planning on 2026-09-29** from the audit. One more,
+`[00-xav-eos-w-above-the-table-returns-one-over-3.9]`, was **opened at the re-plan after prompt
+01's first dispatch** (2026-09-29, audit §11). Measurements: `.documents/audit-2026-09-29/README.md`, section in brackets.
 
 - **[00-adiabaticity-diagnostic-omits-the-source-response-term]** *(audit §5; review H5)* —
   `ComputeTargets/AdiabaticHistory.py:103` sets the conformal contribution to m_eff² to
@@ -96,6 +104,14 @@ prompt yet. Measurements: `.documents/audit-2026-09-29/README.md`, section in br
   oscillations of the review's H1 (vii). Harmless at 250 knots per decade; a narrower domain
   would need the `T_Jordan_stop` pre-check (`BBNData.py:77`) adjusted with it. **Not changed by
   prompt 04**, which keeps the domain and records the knot count it actually used.
+
+- **[00-xav-eos-w-above-the-table-returns-one-over-3.9]** *(audit §11, correcting §4)*.
+  - **What.** `Xav_EOS_spline.w` returns `1.0 / 3.9` for T ≥ `_T_max` = 25 119 GeV, where 1/3
+    is plainly meant; the audit's §4 had said it returns 1/3.
+  - **Impact: latent.** The default `--T-init-GeV` is 20 000 (`config/argument_parser.py:13`),
+    below the table's top. Any run started above 25 TeV would get Σ = 0.23 there.
+  - **Next step:** a one-line fix with a test, in the prompt or campaign that next owns
+    `Xav_EOS_spline`. **Not assigned; not in 02's allowed files.**
 
 ---
 

@@ -277,3 +277,130 @@ for the stored results. Given §1, those results need regenerating anyway.
 5. Correct the adiabaticity diagnostic; make φ* a parameter with the
    A*T* < M_P guard; fix the `Ω''φ'²` term; update the paper's numerical
    section (table-based Σ, not the 2 MeV freeze).
+
+---
+
+## 11. Addendum (29 September 2026): the 10 keV join — **new, minor**
+
+*Added during the orchestration of `review-remediation` prompt 01, whose first dispatch stopped on
+it. Additive: §1–§10 were correct for what they measured; this section corrects one rounding in §1
+and one statement in §4. Tree `41b410d` (production code identical to `f5896bb`).*
+
+### What was found
+
+§1's table shows the corrected law (κ = 1/ln 10) agreeing with exact entropy conservation to four
+decimals everywhere. It does not agree to 1e-5 at and below 10 keV:
+
+```
+venv/bin/python .documents/audit-2026-09-29/low_t_join_probe.py ship
+```
+
+| T₁ | corrected-law residual (N − N_exact), as shipped | with `LOW_T_*` patched in memory |
+|---|---|---|
+| 1 GeV | −6.9e-12 | −6.9e-12 |
+| 100 MeV … 70 keV | −3.9e-08 to −4.3e-08 | the same |
+| **10 keV** | **+1.465e-04** | −4.0e-08 |
+| **T_CMB** | **+1.464e-04** | −4.0e-08 |
+
+`tlaw_check.py` shows the same thing at four decimals: 22.5082 against 22.5080 at 10 keV, and
+40.0747 against 40.0746 at T_CMB.
+
+**The cause** is the constants that replace the fit below `SAIKAWA_SHIRAI_T_LO` = 10⁻⁵ GeV.
+`LOW_T_G_S_STAR = 3.94` and `LOW_T_GSTAR = 3.38` (`SaikawaShirai_common.py:101,107`) differ from
+the fit's own limits, **3.931** and **3.383**. The fit's limits are its constant terms,
+2.008 + 1.923 and 2.030 + 1.353; the e± terms are ~e⁻⁵¹ at 10 keV.
+
+- **Size.** The spline gives `G_s` = 3.938269 just above T_LO and the clamp returns 3.94 at T_LO,
+  so ⅓ ln(3.938269/3.94) = −1.465e-4.
+- **Why 3.938269 and not 3.931.** The grid starts at 0.8 T_LO (`SaikawaShirai_EOS_spline.py:50`),
+  so the spline is fitted across the step and rings over the last ~1 % in T.
+- **Why only `exact_efolds` sees it.** `dG_s_dlogT` is clamped to 0 below T_LO, so the ODE never
+  sees the step. `exact_efolds` reads `G_s` at the endpoint.
+- **`G_rho` has the same kind of step:** 3.380577 just above T_LO against 3.38 at it.
+
+**The fix is two constants.** With them set in memory to 3.931 and 3.383, the residual at 10 keV
+and T_CMB falls to −4.0e-08, the level of every other point, and nothing above 10 keV moves.
+
+```
+venv/bin/python .documents/audit-2026-09-29/low_t_join_probe.py patch
+```
+
+**The fix also moves the ρ_R witness** at the low end:
+
+| ρ_R witness (corrected law) | as shipped | constants patched |
+|---|---|---|
+| 2×10⁴ GeV → 10 keV and → T_CMB | 1.00258 | **0.99922** |
+| 5 MeV → 10 keV | 1.00471 | **1.00135** |
+| 5 MeV → 10 keV, κ = 1 (shipped law) | 0.18184 | 0.18065 |
+
+Part of §1's "residual 0.3–0.5 %" at 10 keV was therefore this step, not the table–g mismatch.
+The shipped-law value 0.18184 differs from §2 (c)'s 0.182 only in the fourth digit. It also
+differs from `eos_consistency.py`'s 0.18081, because that script reads the last solver sample,
+not the event, and uses no `max_step`.
+
+### History
+
+The constants and the join do not come from ChamPBH. They come from SecondaryGWKit's history:
+
+| Commit | Date | Change |
+|---|---|---|
+| `d114cc2` | 2025-04-03 | Low-T limits 3.36 and 3.91 (still commented out at `SaikawaShirai_common.py:99–100`). |
+| `764f07d` | 2025-04-07 | Introduced `gs0 = 3.94` as a present-day normalisation in H(z), "from your document". |
+| `b0100be` | 2025-05-12 | Promoted 3.38 and 3.94 to the clamp constants, with the `TODO: check` and the check 2 + 2·3.042·(7/8)·(4/11)^{4/3} = 3.38172. That check is correct for g_ρ. |
+| `947a2d3`, `1cd3ed3` | 2025-05-15 | Introduced the `w` freeze at `EOS_T_LO` = 2 MeV, because 4g_s/(3g_ρ) − 1 goes wrong below neutrino decoupling. |
+
+**The values 3.38 and 3.94 are in the literature**, as g_*(T₀) and g_*s(T₀) in arXiv:2109.01398.
+
+**The g_s check was never done.** Applied to g_s, the argument above has to scale the neutrinos'
+T³ weight as (N_eff/3)^{3/4}, since N_eff is defined through ρ. That gives 3.931 at N_eff = 3.046,
+which is the fit's own limit. Scaling linearly in N_eff gives 3.936 at 3.042 and 3.938 at 3.046, both of which round to 3.94
+(`w_two_temperature.py`, last block).
+
+**SecondaryGWKit has the same issue.** It measured the same join independently as
+`[00-eos-branch-joins-do-not-match]`, in its qcd-background-audit of 2026-09-14. It pinned the
+join in a test and did not repair it. This addendum does not touch that repository.
+
+### Why the naive w fails, and what the table does
+
+```
+venv/bin/python .documents/audit-2026-09-29/w_two_temperature.py
+```
+
+The fits for g_ρ and g_s are not at fault. The identity p = Ts − ρ holds only at a common
+temperature, and the enthalpy is Σᵢ sᵢTᵢ. g_s weights the neutrino entropy by (T_ν/T)³, so
+4g_s/(3g_ρ) − 1 overstates the neutrino enthalpy by T/T_ν = 1.401 at low T. That is why it gives
+0.549 rather than 1/3.
+
+The low-T branch of the fit already encodes T_ν/T. S(x) = 1 + (7/4)f_s(m_e/T) is the
+entropy-transfer factor, with (T_ν/T)³ = (4/11)S. Weighting the neutrino entropy term 1.923·S by
+T_ν/T reproduces Xav's table:
+
+| T [MeV] | naive formula | two-temperature | Xav table |
+|---|---|---|---|
+| 2 | 0.3336 | 0.33250 | 0.33235 |
+| 0.158 | 0.4047 | 0.29905 | 0.29976 |
+| 0.07 | 0.5311 | 0.32519 | 0.32612 |
+| ≤ 0.03 | 0.5493 | 0.33238 | 0.33333 |
+
+- **The two agree to about 1e-3** through the whole e± annihilation.
+- **Why neither the reconstruction nor the fit reaches 1/3 exactly.** The fit's "constant" terms
+  (2.030 in g_ρ, 2.008 in g_s) are not pure photon terms (2); they absorb the fit's residuals.
+  Only the totals are accurate. Using the exact neutrino enthalpy (4/3)ρ_ν instead gives 0.32466.
+  So w = 1/3 below ~30 keV has to be imposed, which the table does.
+- **The 2 MeV freeze** in `SaikawaShirai_EOS_spline.w` and the jax class freezes at 0.3336, not
+  1/3, because T_ν/T = 0.9984 there in this parametrisation. It also removes the e± dip entirely.
+  Neither class is in production.
+
+### Correction to §4
+
+§4 says `Xav_EOS_spline.w` "returns exactly 1/3 outside that range". Below the table
+(T ≤ 10 keV) it does. **Above the table** (T ≥ 25 119 GeV) it returns `1.0 / 3.9`
+(`Xav_EOS_spline.py`, the `T_in_GeV >= self._T_max` branch). That looks like a typo for 1/3.
+
+It is latent: the default `--T-init-GeV` is 20 000 (`config/argument_parser.py:13`), below the
+table's top, but any run started above 25 TeV would get Σ = 0.23 there.
+
+### Disposition
+
+- **The two constants** become `review-remediation` item **R5**, fixed in prompt 02 alongside R1.
+- **The `1/3.9`** is seeded as an issue on that board.

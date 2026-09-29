@@ -4,7 +4,11 @@ Read [`README.md`](README.md) (this directory) and [`../README.md`](../README.md
 §6.1 first. **You do not write code.**
 
 **The prompt:** [`../01-temperature-law-harness.md`](../01-temperature-law-harness.md)
-**Board item:** R1 (guard) · **Closes:** nothing
+**Board items:** R1 (guard), R5 (characterised) · **Closes:** nothing
+
+*Amended 2026-09-29.* The first dispatch stopped on case 2: the corrected law was off by
++1.465e-4 at 10 keV and T_CMB. That is R5, the 10 keV join (campaign README §2 (j), audit §11).
+Case 2 now asserts 1e-5 above the join and characterises R5 at and below it.
 
 ## 0. What makes this prompt unusual
 
@@ -28,7 +32,8 @@ derivative".
    venv/bin/python .documents/audit-2026-09-29/eos_consistency.py
    ```
    Expected: N to T_CMB **41.4969** (code) vs **40.0746** (exact); ρ_R ratio **0.0041** at 10 keV;
-   with ÷ln 10, **1.0026**.
+   with ÷ln 10, **1.0026**. Also run `venv/bin/python .documents/audit-2026-09-29/low_t_join_probe.py ship`:
+   **+1.465e-04** at 10 keV and **+1.464e-04** at T_CMB, and **|residual| < 5e-8** above the join.
 4. Confirm `CosmologyModels/tests/` and `ComputeTargets/tests/` do not exist. Baseline counts: 0, 0.
 5. `git status` clean.
 
@@ -53,8 +58,12 @@ file."*
    1.0026 from 2×10⁴ GeV — the test says which). A test that asserts
    different numbers and passes is a stop — either the audit or the test is wrong, and you do
    not adjudicate.
-4. **Case 2 passes**: the corrected convention agrees with exact entropy conservation to 1e-5.
-   This is the proof the fix is a pure factor. If the log says otherwise, stop.
+4. **Case 2 passes, in two halves.**
+   - **Above the join** (1 GeV to 70 keV): the corrected convention agrees with exact entropy
+     conservation to 1e-5. This proves R1 is a pure factor.
+   - **At 10 keV and T_CMB:** the residual is asserted as R5's +1.465e-4 ± 5e-6, under a named
+     constant whose comment says prompt 02 sets it to 0.
+   If the log says otherwise, stop.
 5. **Every threshold has a comment naming the prompt that tightens it.** `grep -n "prompt 02\|prompt 05" CosmologyModels/tests/test_temperature_law.py`.
 6. **No Ray, no datastore.** `grep -n "ray\.\|Datastore\|ShardedPool" CosmologyModels/tests/*.py` is empty.
 7. **Suite: 0 → 6** (or 5 with jax skipped — jax 0.9.0 is installed, so expect 6). Wall-clock

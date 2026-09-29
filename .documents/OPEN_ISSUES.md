@@ -1,6 +1,6 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-09-29 · **7 open** across one campaign.
+**Last updated:** 2026-09-29 · **8 open** across one campaign.
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -18,8 +18,8 @@ the two disagree, the board is right.
 
 ### 1.1 `review-remediation` — [board §3](../prompts/review-remediation/IMPLEMENTATION_STATE.md)
 
-Seeded at planning on 2026-09-29 from `.documents/audit-2026-09-29/README.md`; none has yet been
-opened by a prompt.
+Seven seeded at planning on 2026-09-29 from `.documents/audit-2026-09-29/README.md`. One opened
+at the re-plan after prompt 01's first dispatch.
 
 - `[00-adiabaticity-diagnostic-omits-the-source-response-term]` — `AdiabaticHistory.py:103`
   gives zero conformal mass for the exponential coupling; the (Ω′)² response term is missing
@@ -39,3 +39,5 @@ opened by a prompt.
 - `[00-bbn-spline-domain-is-far-wider-than-prymordial-uses]` — `BBNData.py:47` tabulates down to
   0.1 eV where PRyMordial stops near 0.3 keV; harmless at 250 knots per decade, but it includes
   the matter-era re-delivery oscillations.
+- `[00-xav-eos-w-above-the-table-returns-one-over-3.9]` — `Xav_EOS_spline.w` returns 1/3.9, not
+  1/3, above 25 TeV; latent at the default T_init of 20 TeV.
