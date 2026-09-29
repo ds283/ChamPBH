@@ -522,6 +522,94 @@ def run_pipeline(
 
     print(f"\n>> RUNNING PIPELINE FOR MODEL {model_label}")
 
+    def report_dropped_bbn_models(
+        model_label: str,
+        potential: AbstractPotential,
+        model_proxies: List[ScalarModelProxy],
+        bbn_results: List[BBNData],
+    ):
+        """
+        Print, once per potential, every model the BBN plots drop, with its
+        (beta, M, Lambda) and the reason, and the count. Nothing plotted depends
+        on this. (review-remediation prompt 03)
+
+        Two filters drop a model. The lookup asks for successful rows only, so a
+        model whose BBN computation failed comes back unavailable; its failed row,
+        if there is one, is looked up here for its failure_reason (the newest, if
+        there are several). build_beta_plot then drops a stored non-positive
+        abundance from the panel it belongs to.
+        """
+        missing = [
+            proxy for proxy, B in zip(model_proxies, bbn_results) if not B.available
+        ]
+
+        dropped = []
+
+        if len(missing) > 0:
+            failed_query_queue = RayWorkPool(
+                pool,
+                [
+                    {
+                        "shard_key": m.shard_key,
+                        "model_proxy": m,
+                        "failure": True,
+                        "tags": tags,
+                        "_do_not_populate": True,
+                    }
+                    for m in missing
+                ],
+                task_builder=lambda x: pool.object_get("BBNData", **x),
+                available_handler=None,
+                compute_handler=None,
+                store_handler=None,
+                validation_handler=None,
+                label_builder=None,
+                title=None,
+                store_results=True,
+                create_batch_size=20,
+                process_batch_size=20,
+            )
+            failed_query_queue.run()
+
+            for F in failed_query_queue.results:
+                if F.available:
+                    reason = F.failure_reason
+                    if reason is None:
+                        reason = "failed, no failure_reason stored"
+                else:
+                    reason = "no BBNData row in the store"
+                dropped.append((F.coupling._beta.as_float, reason))
+
+        for B in bbn_results:
+            if B.available and not B.failure:
+                abundances = {"Yp": B.Yp_BBN, "D/H": B.DOverH, "7Li/H": B.Li7OverH}
+                non_positive = [
+                    name for name, value in abundances.items() if not value > 0
+                ]
+                if len(non_positive) > 0:
+                    values = ", ".join(
+                        f"{name}={value:.5g}" for name, value in abundances.items()
+                    )
+                    dropped.append(
+                        (
+                            B.coupling._beta.as_float,
+                            f"non-positive {'/'.join(non_positive)} ({values}); dropped from those panels",
+                        )
+                    )
+
+        if len(dropped) == 0:
+            return
+
+        M_eV = potential._M.as_float / units.eV
+        Lambda_eV = potential._Lambda.as_float / units.eV
+        print(
+            f"!! plot_by_beta '{model_label}', M={M_eV:.5g} eV, Lambda={Lambda_eV:.5g} eV: {len(dropped)} model(s) dropped from the BBN plots"
+        )
+        for beta, reason in sorted(dropped, key=lambda x: x[0]):
+            print(
+                f"     -- beta={beta:.5g}, M={M_eV:.5g} eV, Lambda={Lambda_eV:.5g} eV: {reason}"
+            )
+
     def build_plot_work(potential: AbstractPotential) -> ray.ObjectRef:
         # build a work queue to read in all ScalarModel instances with this potential, for the
         # couplings in Coupling_array
@@ -618,6 +706,10 @@ def run_pipeline(
         )
         bbn_query_queue.run()
         available_bbn = [B for B in bbn_query_queue.results if B.available]
+
+        report_dropped_bbn_models(
+            model_label, potential, model_proxies, bbn_query_queue.results
+        )
 
         return build_beta_plot.remote(
             model_label, potential, available_adiabatic, available_bbn, available_models

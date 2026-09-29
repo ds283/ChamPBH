@@ -93,6 +93,10 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
                     nullable=False,
                 ),
                 sqla.Column("failure", sqla.Boolean, default=False, nullable=False),
+                # why the computation failed; NULL for a success (review-remediation prompt 03)
+                sqla.Column(
+                    "failure_reason", sqla.String(DEFAULT_STRING_LENGTH), nullable=True
+                ),
                 sqla.Column("Yp_BBN", sqla.Float(64), nullable=True),
                 sqla.Column("DOverH", sqla.Float(64), nullable=True),
                 sqla.Column("He3OverH", sqla.Float(64), nullable=True),
@@ -125,6 +129,7 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
         query = sqla.select(
             table.c.serial,
             table.c.failure,
+            table.c.failure_reason,
             table.c.Yp_BBN,
             table.c.DOverH,
             table.c.He3OverH,
@@ -157,6 +162,14 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
                     tab.c.tag_serial == tag.store_id,
                 ),
             )
+
+        # main.py looks up successes only, so a model whose BBN computation fails
+        # deterministically gains a new failed row on every run. When failed rows are
+        # asked for, return the newest rather than raising MultipleResultsFound.
+        # (review-remediation prompt 03; the user's decision of 2026-09-29)
+        if failure is True:
+            query = query.order_by(table.c.timestamp.desc(), table.c.serial.desc())
+            query = query.limit(1)
 
         try:
             row_data = conn.execute(query).one_or_none()
@@ -246,6 +259,7 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
             {
                 "store_id": store_id,
                 "failure": row_data.failure,
+                "failure_reason": row_data.failure_reason,
                 "Yp_BBN": row_data.Yp_BBN,
                 "small_network": row_data.small_network,
                 "PRyM_version": row_data.PRyM_version,
@@ -269,6 +283,7 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
             "model_serial": obj._model_proxy.store_id,
             "label": obj.label,
             "failure": obj._failure,
+            "failure_reason": obj._failure_reason if obj._failure else None,
             "small_network": obj.small_network if not obj._failure else None,
             "PRyM_version": obj.PRyM_version if not obj._failure else None,
             "Yp_BBN": obj.Yp_BBN if not obj._failure else None,

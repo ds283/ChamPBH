@@ -13,6 +13,7 @@ from Datastore import DatastoreObject
 from MetadataConcepts import store_tag
 from Quadrature.supervisors.ScalarField import StateVector
 from Units.base import UnitsLike
+from config.defaults import DEFAULT_STRING_LENGTH
 from config.sharding import ShardKeyType
 from utilities import WallclockTimer, energy_formatter
 from .Policies import PotentialDerivativePolicy
@@ -29,6 +30,21 @@ SampleValues = namedtuple(
         "density_NP_ratio",
     ],
 )
+
+
+# The PRyMordial that produced a row: the pinned upstream hash, plus a suffix
+# naming the ChamPBH patches applied to the vendored copy. "cham03" is
+# review-remediation prompt 03: dTNPdt returns 0 (PRyM/PRyM_main.py).
+PRYM_VERSION = "bf24c3d+cham03"
+
+
+def _failure_payload(reason: str) -> dict:
+    """
+    The value compute_BBN_data returns from every failure path. The reason is
+    truncated to DEFAULT_STRING_LENGTH, the width of the BBNData.failure_reason
+    column. (review-remediation prompt 03)
+    """
+    return {"failure": True, "failure_reason": str(reason)[:DEFAULT_STRING_LENGTH]}
 
 
 def _make_spline(x_grid, y_grid):
@@ -80,7 +96,9 @@ def compute_BBN_data(
         print(
             f"!! compute_BBN_data {task_label}: T_Jordan_stop={formatter(model.T_Jordan_stop)} is more than than 0.1*T_BBN_spline_min={formatter(0.1*T_BBN_spline_min)}, so cannot compute BBN abundances"
         )
-        return {"failure": True}
+        return _failure_payload(
+            f"pre-check: T_Jordan_stop={formatter(model.T_Jordan_stop)} is more than 0.1*T_BBN_spline_min={formatter(0.1*T_BBN_spline_min)}"
+        )
 
     log_MeV = log(units.MeV)
     MeV2 = units.MeV * units.MeV
@@ -309,7 +327,7 @@ def compute_BBN_data(
             # run PRyMordial
             res = PRyMmain.PRyMclass(rho_NP, P_NP, drho_NP_dT).PRyMresults()
         except (OverflowError, ValueError, ComputationFailureError) as e:
-            return {"failure": True}
+            return _failure_payload(f"PRyMordial: {type(e).__name__}: {e}")
 
     for i, z in enumerate(z_grid):
         samples.append(
@@ -332,7 +350,7 @@ def compute_BBN_data(
         "BBN_compute_time": BBN_timer.elapsed,
         "NP_compute_time": NP_timer.elapsed,
         "small_network": small_network,
-        "PRyM_version": "bf24c3d",  # PRyMordial seems not to have a proper versioning scheme
+        "PRyM_version": PRYM_VERSION,  # PRyMordial seems not to have a proper versioning scheme
     }
 
 
@@ -370,6 +388,7 @@ class BBNData(DatastoreObject):
             self._NP_compute_time: Optional[float] = None
 
             self._failure: bool = None
+            self._failure_reason: Optional[str] = None
 
             # we don't want to use self._values as an indicator of whether we contain
             # useful, readable information, because we might read with "_do_not_populate",
@@ -393,6 +412,7 @@ class BBNData(DatastoreObject):
             self._NP_compute_time = payload["NP_compute_time"]
 
             self._failure: Optional[bool] = payload["failure"]
+            self._failure_reason: Optional[str] = payload["failure_reason"]
 
             # see above for explanation of this flag
             self._queryable = True
@@ -406,6 +426,18 @@ class BBNData(DatastoreObject):
     @property
     def failure(self) -> Optional[bool]:
         return self._failure
+
+    @property
+    def failure_reason(self) -> Optional[str]:
+        """
+        Why the BBN computation failed, or None if it did not. Unlike the other
+        properties this is readable when `failure` is true; that is its purpose.
+        """
+        if self._queryable is False:
+            raise RuntimeError(
+                f"BBNData ({self._label}): failure_reason has not yet been populated"
+            )
+        return self._failure_reason
 
     @property
     def label(self) -> str:
@@ -583,10 +615,12 @@ class BBNData(DatastoreObject):
         failure: bool = data.get("failure", False)
         if failure:
             self._failure = True
+            self._failure_reason = data.get("failure_reason", None)
             self._values = []
             return True
 
         self._failure = False
+        self._failure_reason = None
 
         self._small_network = data["small_network"]
         self._PRyM_version = data["PRyM_version"]

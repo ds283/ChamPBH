@@ -1,6 +1,6 @@
 # Review remediation campaign — implementation state
 
-**Last updated:** 2026-09-29 · **Status: IN PROGRESS — 6 prompts written, 2 landed.** The campaign was
+**Last updated:** 2026-09-29 · **Status: IN PROGRESS — 6 prompts written, 3 landed.** The campaign was
 opened on 2026-09-29 from the code audit
 [`.documents/audit-2026-09-29/README.md`](../../.documents/audit-2026-09-29/README.md) of the paper
 review `Paper1_review.tex`. It fixes the audit's items 1–4: the ln 10 error in the Jordan
@@ -16,7 +16,14 @@ and characterises R1 and R5; it opened one issue, on prompt 02's derivative targ
 the law agrees with exact entropy conservation to 1e-5 down to T_CMB (measured −3.6e-8).
 `VERSION_LABEL` is now `"2026.2.0"`. **Every store built under 2026.1.1 is invalid**, and the
 numerical campaign starts from an empty database. Prompt 02 opened one issue (§3).
-**Next: 03.** Target branch `review-remediation` from `f5896bb`.
+**Prompt 03 landed 2026-09-29** (re-dispatch, after the user's two decisions below). R2 is fixed:
+PRyMordial's inert `dTNPdt` returns 0, and the oscillating case finishes in about 9 s instead of
+more than 120 s. The patch is inert: ρ_NP ≡ 0 reproduces the no-NP run with difference 0, and the
+constant 0.08 family moves by 2.8e-7. A failed BBN solve now stores a `failure_reason`, and
+`plot_by_beta.py` lists the models it drops. New rows say `PRyM_version = "bf24c3d+cham03"`.
+Prompt 03 opened four issues (§3). Among them, `compute_BBN_data`'s `small_network` switch has
+never reached PRyMordial, so every BBN result so far used the full network.
+**Next: 04.** Target branch `review-remediation` from `f5896bb`.
 
 **Campaign:** [`README.md`](README.md) ·
 **Code:** `CosmologyModels/GenericEOS/SaikawaShirai_EOS_spline.py`, `ComputeTargets/BBNData.py`,
@@ -40,6 +47,20 @@ numerical campaign starts from an empty database. Prompt 02 opened one issue (§
   d ln g_s/d ln T, ≤ 1e-6 (option (b)), replacing "≤ 1e-6 relative". See §4,
   `[01-derivative-agreement-target-1e-6-is-missed-at-the-low-T-end]`.
 
+- **2026-09-29, the user.** Prompt 03's test (c) compares against the fixture's own unpatched
+  values, not README §2 (f)'s five-figure 0.25409 / 2.6715 ("Test (c): use option C"). The
+  fixture's ρ_SM uses the `SaikawaShirai_EOS_spline` class. The pins are Yp 0.2540937879 and
+  D/H ×10⁵ 2.671500711, measured on `47c50ae`, and the tolerance stays 1e-5. The first dispatch
+  stopped because the literal target missed by 1.49e-5 in Yp on the unpatched tree too. See log 03,
+  Deviations.
+
+- **2026-09-29, the user.** `sqla_BBNDataFactory.build()` asked for `failure=True` returns the
+  newest failed row rather than raising `MultipleResultsFound` ("build(): yes, pick the newest
+  row"). See log 03.
+
+- **2026-09-29, the user.** The `small_network` flag bug is opened as a board issue and not fixed
+  in prompt 03 (§3, `[03-small-network-flag-is-never-read-by-prymordial]`).
+
 None pending otherwise. Decisions the prompts may surface (each is a stop-and-ask in its
 prompt's §7): whether to divide by ln 10 or rebuild the EOS grid in ln T (02, either is allowed);
 whether ρ_SM(T) for the ratio interface is the thermodynamic formula or a spline of the stored
@@ -54,7 +75,7 @@ characters).
 |---|---|---|---|---|---|---|---|
 | 01 | [The temperature-law harness](01-temperature-law-harness.md) | **R1** (guard), **R5** (characterised) | Opus | ✍️ 2026-09-29, amended 2026-09-29 | ✅ 2026-09-29 | `ec3a994` | [01](logs/01-temperature-law-harness.md) |
 | 02 | [Fix the entropy derivative](02-fix-the-entropy-derivative.md) | **R1**, **R5** (fix) | Opus | ✍️ 2026-09-29, amended 2026-09-29 | ✅ 2026-09-29 | "Fix the ln 10 in the entropy derivative and the 10 keV join" | [02](logs/02-fix-the-entropy-derivative.md) |
-| 03 | [PRyMordial's passenger equation and failure reasons](03-prymordial-passenger-and-failure-reasons.md) | **R2** | Opus | ✍️ 2026-09-29 | ⬜ | — | — |
+| 03 | [PRyMordial's passenger equation and failure reasons](03-prymordial-passenger-and-failure-reasons.md) | **R2** | Opus | ✍️ 2026-09-29 | ✅ 2026-09-29 | "Patch PRyMordial's inert T_NP equation and record BBN failures" | [03](logs/03-prymordial-passenger-and-failure-reasons.md) |
 | 04 | [Ratio splines and a baseline](04-ratio-splines-and-a-baseline.md) | **R3** | Opus | ✍️ 2026-09-29 | ⬜ | — | — |
 | 05 | [Pin the kicking function; EOS hygiene](05-kicking-function-and-eos-hygiene.md) | **R4** (pins) | Opus | ✍️ 2026-09-29 | ⬜ | — | — |
 | 06 | [Close-out verification and handover](06-close-out-verification.md) | **R4** (verification), handover | Opus | ✍️ 2026-09-29 | ⬜ | — | — |
@@ -66,7 +87,7 @@ characters).
 | Item | Kind | Description | Prompt | Status |
 |---|---|---|---|---|
 | R1 | **DEFECT, critical** | `dG_s_dlogT` / `dG_rho_dlogT` in the spline EOS class return d/d log10 T; the temperature law consumes them as d/d ln T. N to T_CMB 41.497 vs exact 40.075; stored ρ_R,J at 1 MeV is 0.022× thermodynamic. | 01, 02 | ✅ done (02): both derivatives return d g/d ln T; N to T_CMB 40.0754 vs exact 40.0754 (−3.6e-8). **Every store built under 2026.1.1 is invalid.** |
-| R2 | **DEFECT, high** | PRyMordial's inert `dTNPdt` is singular where ρ_NP′ = 0; oscillating ρ_NP stalls LSODA (> 600 s vs 9 s); failures swallowed and dropped silently. | 03 | ⬜ planned |
+| R2 | **DEFECT, high** | PRyMordial's inert `dTNPdt` is singular where ρ_NP′ = 0; oscillating ρ_NP stalls LSODA (> 600 s vs 9 s); failures swallowed and dropped silently. | 03 | ✅ done (03): `dTNPdt` returns 0 (marker comment in `PRyM/PRyM_main.py`); oscillating case 8–9 s (was > 120 s); ρ_NP ≡ 0 True vs False difference 0, `RuntimeWarning`s 916 → 0; constant 0.08 unchanged to 2.8e-7; `failure_reason` stored and printed; `PRyM_version` `"bf24c3d+cham03"` |
 | R3 | **DEFECT, low** | asinh representation of ρ_NP, p_NP; sort hides non-monotonic T_J; `Ω″ π` should be `Ω″ π²`; no SM baseline through the same path. | 04 | ⬜ planned |
 | R4 | **DOCUMENTATION** | Kicking-function peaks and table–g consistency unpinned; paper describes dead code; two derivative implementations disagree. | 05, 06 | ⬜ planned |
 | R5 | **DEFECT, minor** | Below 10 keV `G_s` and `G_rho` return 3.94 and 3.38, not the fit's own limits 3.931 and 3.383. The corrected law is off by +1.465e-4 e-folds at 10 keV and T_CMB, and the ρ_R witness at 10 keV reads 1.00258 instead of 0.99922. Found by prompt 01's first dispatch, 2026-09-29; audit §11. | 01, 02 | ✅ done (02): limits 3.931 / 3.383; residual at 10 keV and T_CMB −3.6e-8; ρ_R witness at 10 keV 0.99922 |
@@ -77,7 +98,7 @@ characters).
 
 Seven were **seeded at planning on 2026-09-29** from the audit. The two issues opened on
 2026-09-29 after that (one at the re-plan, one by prompt 01) are both resolved; see §4.
-Prompt 02 opened one more (the last entry below). Measurements for the seeded issues:
+Prompt 02 opened one more, and prompt 03 opened four (the last five entries below). Measurements for the seeded issues:
 `.documents/audit-2026-09-29/README.md`, section in brackets.
 
 - **[00-adiabaticity-diagnostic-omits-the-source-response-term]** *(audit §5; review H5)* —
@@ -128,6 +149,66 @@ Prompt 02 opened one more (the last entry below). Measurements for the seeded is
   - **Impact.** None on any number; a reader can be misled about the convention R1 was about.
   - **Next step.** A comment-only commit, in whichever prompt next owns these files (prompt 05's
     EOS hygiene, if its scope allows), or one of its own.
+
+- **[03-small-network-flag-is-never-read-by-prymordial]** *(log 03, observation 1; opened at the
+  user's instruction, 2026-09-29)*.
+  - **What.** `ComputeTargets/BBNData.py:324` (`:306` before prompt 03) sets
+    `PRyMini.small_network_flag = small_network`. PRyMordial never reads that name. It reads
+    `smallnet_flag` (`PRyM/PRyM_init.py:111`, default `False`) at `PRyM_main.py:599, 884, 982, 989,
+    1161, 1167`. `small_network=True`, which `main.py` passes, therefore has no effect: every
+    production BBN solve ran the **full** network. The `small_network` value stored on `BBNData`
+    rows, and printed by `add_BBN_info_labels`, is a label that does not describe the run.
+  - **Also affected.** README §2 (f)'s figures ("small network") and prompt 03's fixture
+    (`run_prym(..., small_network=True)`, which copies the flag faithfully) also ran the full
+    network.
+  - **Measured** on `47c50ae` with a scratch probe. Constant family 0.08 ρ_SM, raw-fit g_ρ, 3.38
+    below 10 keV:
+    - `smallnet_flag = True` set directly: Yp 0.25408633, D/H ×10⁵ 2.6709992, ³He/H ×10⁵ 1.07231,
+      ⁷Li/H ×10¹⁰ 5.14143, 5.9 s;
+    - as `compute_BBN_data` sets it, that is the full network: 0.25408672, 2.6713932, 1.07201,
+      5.0910, 9.1 s.
+  - **Impact.** Yp and D/H move by 1.5e-6 and 1.5e-4 relative, and ⁷Li/H by 1 %. The small network
+    is documented as unreliable for ⁷Li, so the full network is arguably the better one. The defect
+    is that the flag and the stored label say otherwise.
+  - **Next step.** Decide which network the pipeline should use, then either set `smallnet_flag` or
+    remove the switch and the column's claim. It changes physical output, so it needs a version
+    decision. **Not fixed by prompt 03** (out of scope).
+- **[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]** *(log 03, observation 2)*.
+  - **What.** PRyMordial's abundances respond to changes in the NP callbacks far below any
+    physical scale.
+  - **Measured** on `47c50ae`, raw-fit constant family, ρ_NP × (1 + ε):
+    - ε = +1e-9 moves Yp by +1.8e-5 and D/H by +5e-6;
+    - ε = −1e-8 moves D/H by +3.6e-4;
+    - the response is not monotonic in ε.
+  - **More measurements.** Two constructions of the same ρ_NP agree to 2.2e-10 in ρ and 1.6e-8 in
+    dρ/dT, yet differ by 2.8e-5 in Yp. Re-associating one product (r · ρ_SM(T) against
+    r · (π²/30) · g · T⁴) moves D/H by 1.0e-4. The patched tree behaves the same.
+  - **Impact.** Any test that compares PRyMordial output across two constructions of the "same"
+    ρ_NP is limited to ~1e-4 in D/H. **This bears on prompt 04's end-to-end target** (Yp, D/H to
+    1e-4 through the ratio callbacks).
+  - **Next step.** Prompt 04 measures the spread before relying on its 1e-4 target; the planner
+    decides whether that target stands. Whether PRyMordial's internal tolerances should be
+    tightened is a question for the numerical campaign.
+- **[03-bbn-solver-failures-are-undetected-and-some-exceptions-escape]** *(log 03, observation 3)*.
+  - **What.**
+    - None of the eight `solve_ivp` calls in `PRyM/PRyM_main.py` checks `.status` or `.success`,
+      so a failed integration returns whatever the truncated arrays give. This is a plausible
+      source of the non-positive abundances `plot_by_beta.py` filters as "must represent a
+      PRyMordial integration failure".
+    - `compute_BBN_data` catches only `(OverflowError, ValueError, ComputationFailureError)`. Any
+      other exception leaves the Ray task with no failure row.
+  - **Next step.** Check `sol.success` after each background solve (a vendored patch, with a
+    marker) and raise `ComputationFailureError`, so the reason is recorded. **Not in prompt 03's
+    scope.**
+- **[03-main-recomputes-failed-bbn-rows-on-every-run]** *(log 03, observation 4)*.
+  - **What.** `main.py`'s BBN lookup (`:617–630`) uses `build()`'s default `failure=False`. A model
+    whose BBN computation fails deterministically is recomputed, and a new failed row stored, on
+    every run.
+  - **Impact.** Wasted solves, and duplicate failed rows. Since prompt 03, `build(failure=True)`
+    returns the newest, the user's decision.
+  - **Next step.** Decide whether a failed row should stop recomputation, perhaps unless the
+    `PRyM_version` or the `VERSION_LABEL` differs. That belongs with
+    `[00-datastore-lookups-ignore-the-version-column]`.
 
 ---
 

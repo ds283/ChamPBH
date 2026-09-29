@@ -137,14 +137,17 @@ class PRyMclass(object):
 
             # NP temperature evolution
             def dTNPdt(Tg, Tnue, Tnumu, T_NP):
-                Hubble_T = Hubble(Tg, Tnue, Tnumu, T_NP)
-                rho_NP = PRyMthermo.rho_NP(Tg)
-                p_NP = PRyMthermo.p_NP(Tg)
-                num = -3.0 * Hubble_T * (rho_NP + p_NP)
-                delta_rho_NP = PRyMthermo.delta_rho_NP(Tg, Tnue, Tnumu, Tg)
-                num += delta_rho_NP
-                den = PRyMthermo.drho_NP_dT(Tg)
-                return num / den
+                # ChamPBH review-remediation prompt 03: T_NP is inert (never read); the original
+                # -3H(rho+p)/drho_dT is singular wherever drho_NP/dT = 0 and stalls LSODA.
+                return 0.0
+                # Hubble_T = Hubble(Tg, Tnue, Tnumu, T_NP)
+                # rho_NP = PRyMthermo.rho_NP(Tg)
+                # p_NP = PRyMthermo.p_NP(Tg)
+                # num = -3.0 * Hubble_T * (rho_NP + p_NP)
+                # delta_rho_NP = PRyMthermo.delta_rho_NP(Tg, Tnue, Tnumu, Tg)
+                # num += delta_rho_NP
+                # den = PRyMthermo.drho_NP_dT(Tg)
+                # return num / den
 
             def dTtotdt(t, T_vec):
                 if PRyMini.NP_thermo_flag:
