@@ -13,6 +13,38 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+The production equation of state: `QCD_Cosmology` wraps `Xav_EOS_spline`.
+
+g_rho, g_s and their derivatives are inherited from `SaikawaShirai_EOS_spline`.
+w(T) is not: it is a cubic spline in ln T of the table `Xav_EOS_data.csv`, and
+w = 1/3 exactly (returned without consulting the spline) at and below the
+table's lowest temperature and at and above its highest. The inherited 2 MeV
+freeze of w is not used.
+
+What the CSV establishes about itself (recorded in review-remediation prompt 05,
+item R4; measured on 89bd52e):
+
+- Two columns, `T_GeV` and `w`; 189 rows, T strictly increasing from 1e-5 GeV
+  (10 keV) to 25118.86 GeV (25.1 TeV), uniformly spaced at 0.05 in log10 T,
+  i.e. 20 rows per decade.
+- w = 1/3 at the bottom row to 7e-16 (0.3333333333333326), and |1 - 3w| < 1e-9
+  in every row up to 15.8 keV. At the top row w = 0.3333329996, that is 1/3 to
+  3.3e-7 but not exactly; so w steps by 3.3e-7 where the class switches to 1/3.
+- No row has w > 1/3 by more than 3.3e-11.
+- The largest Sigma = 1 - 3w in the rows is 0.10072 at 0.1585 MeV (e+e-),
+  0.31377 at 0.1778 GeV (QCD) and 0.037326 at 56.23 GeV (electroweak). The
+  spline this class evaluates peaks between rows: 0.10073 at 0.1605 MeV, 0.31453
+  at 0.1819 GeV and 0.037436 at 53.25 GeV. `CosmologyModels/tests/
+  test_kicking_function.py` pins the spline's values.
+
+How the table was built is not recorded in the repository. It was added in
+commit 1759515 ("Add implementation of Xav's adjusted QCD equation of state",
+2026-01-13) without the script or the method that produced it, and it has not
+changed since. See the review-remediation board issue
+[00-kicking-function-table-has-no-provenance-in-the-repository].
+"""
+
 import numpy as np
 import pandas as pd
 from scipy.interpolate import make_interp_spline

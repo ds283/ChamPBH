@@ -1,6 +1,6 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-09-29 · **13 open** across one campaign.
+**Last updated:** 2026-09-29 · **14 open** across one campaign.
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -20,7 +20,7 @@ the two disagree, the board is right.
 
 Seven seeded at planning on 2026-09-29 from `.documents/audit-2026-09-29/README.md`. The two
 opened after that on 2026-09-29 are resolved (board §4). One opened by prompt 02, four by prompt 03,
-one by prompt 04.
+one by prompt 04, one by prompt 05.
 
 - `[00-adiabaticity-diagnostic-omits-the-source-response-term]` — `AdiabaticHistory.py:103`
   gives zero conformal mass for the exponential coupling; the (Ω′)² response term is missing
@@ -56,3 +56,6 @@ one by prompt 04.
 - `[04-numerical-strategies-describes-the-removed-asinh-bbn-interface]` —
   `.documents/numerical-strategies.md` §7.2–7.4 still describe the asinh transform and the sort
   that prompt 04 removed; needs a dated addendum.
+- `[05-kicking-table-and-saikawa-shirai-gs-disagree-through-qcd-and-ew]` — the table's Σ peaks
+  (QCD 0.3145, EW 0.0374) are not those the Saikawa–Shirai g's imply (0.299, 0.058); a decision
+  for the authors.

@@ -1,6 +1,6 @@
 # Review remediation campaign — implementation state
 
-**Last updated:** 2026-09-29 · **Status: IN PROGRESS — 6 prompts written, 4 landed.** The campaign was
+**Last updated:** 2026-09-29 · **Status: IN PROGRESS — 6 prompts written, 5 landed.** The campaign was
 opened on 2026-09-29 from the code audit
 [`.documents/audit-2026-09-29/README.md`](../../.documents/audit-2026-09-29/README.md) of the paper
 review `Paper1_review.tex`. It fixes the audit's items 1–4: the ln 10 error in the Jordan
@@ -29,7 +29,15 @@ non-monotonic T_J is refused rather than sorted, and the Ω″ term is Ω″π²
 through the same PRyMordial settings (`compute_SM_baseline`, `tools/bbn_baseline.py`) and is drawn
 by `plot_by_beta.py`. The end-to-end D/H target (1e-4) is met at 8.85e-5, inside a measured
 PRyMordial noise band of 7e-4. Prompt 04 opened one issue and narrowed one (§3).
-**Next: 05.** Target branch `review-remediation` from `f5896bb`.
+**Prompt 05 landed 2026-09-29.** R4's pins are done. `test_kicking_function.py` pins the three
+spline peaks (0.10073 at 0.1603 MeV, 0.31453 at 0.1820 GeV, 0.037436 at 53.22 GeV), the e⁺e⁻
+profile and its integral (0.1618), w = 1/3 outside the table, and that production does not use the
+2 MeV freeze. The `w()` docstrings, the `Xav_EOS_spline.py` module docstring and
+`.documents/numerical-methods-for-paper.md` are in place. **It found that the table's Σ and the
+Saikawa–Shirai g's disagree through the QCD and EW crossovers:** the g's imply peaks of 0.299 and
+0.058 where the table has 0.3145 and 0.0374. The integrated ρ_R witness still passes at 10 keV.
+Opened in §3 for the user; see log 05, Deviations 6.
+**Next: 06.** Target branch `review-remediation` from `f5896bb`.
 
 **Campaign:** [`README.md`](README.md) ·
 **Code:** `CosmologyModels/GenericEOS/SaikawaShirai_EOS_spline.py`, `ComputeTargets/BBNData.py`,
@@ -99,7 +107,7 @@ characters).
 | 02 | [Fix the entropy derivative](02-fix-the-entropy-derivative.md) | **R1**, **R5** (fix) | Opus | ✍️ 2026-09-29, amended 2026-09-29 | ✅ 2026-09-29 | "Fix the ln 10 in the entropy derivative and the 10 keV join" | [02](logs/02-fix-the-entropy-derivative.md) |
 | 03 | [PRyMordial's passenger equation and failure reasons](03-prymordial-passenger-and-failure-reasons.md) | **R2** | Opus | ✍️ 2026-09-29 | ✅ 2026-09-29 | "Patch PRyMordial's inert T_NP equation and record BBN failures" | [03](logs/03-prymordial-passenger-and-failure-reasons.md) |
 | 04 | [Ratio splines and a baseline](04-ratio-splines-and-a-baseline.md) | **R3** | Opus | ✍️ 2026-09-29 | ✅ 2026-09-29 | "Spline the BBN new-physics ratios and add an SM baseline" | [04](logs/04-ratio-splines-and-a-baseline.md) |
-| 05 | [Pin the kicking function; EOS hygiene](05-kicking-function-and-eos-hygiene.md) | **R4** (pins) | Opus | ✍️ 2026-09-29 | ⬜ | — | — |
+| 05 | [Pin the kicking function; EOS hygiene](05-kicking-function-and-eos-hygiene.md) | **R4** (pins) | Opus | ✍️ 2026-09-29 | ✅ 2026-09-29 | "Pin the kicking function and write the paper-facing note" | [05](logs/05-kicking-function-and-eos-hygiene.md) |
 | 06 | [Close-out verification and handover](06-close-out-verification.md) | **R4** (verification), handover | Opus | ✍️ 2026-09-29 | ⬜ | — | — |
 
 ---
@@ -111,7 +119,7 @@ characters).
 | R1 | **DEFECT, critical** | `dG_s_dlogT` / `dG_rho_dlogT` in the spline EOS class return d/d log10 T; the temperature law consumes them as d/d ln T. N to T_CMB 41.497 vs exact 40.075; stored ρ_R,J at 1 MeV is 0.022× thermodynamic. | 01, 02 | ✅ done (02): both derivatives return d g/d ln T; N to T_CMB 40.0754 vs exact 40.0754 (−3.6e-8). **Every store built under 2026.1.1 is invalid.** |
 | R2 | **DEFECT, high** | PRyMordial's inert `dTNPdt` is singular where ρ_NP′ = 0; oscillating ρ_NP stalls LSODA (> 600 s vs 9 s); failures swallowed and dropped silently. | 03 | ✅ done (03): `dTNPdt` returns 0 (marker comment in `PRyM/PRyM_main.py`); oscillating case 8–9 s (was > 120 s); ρ_NP ≡ 0 True vs False difference 0, `RuntimeWarning`s 916 → 0; constant 0.08 unchanged to 2.8e-7; `failure_reason` stored and printed; `PRyM_version` `"bf24c3d+cham03"` |
 | R3 | **DEFECT, low** | asinh representation of ρ_NP, p_NP; sort hides non-monotonic T_J; `Ω″ π` should be `Ω″ π²`; no SM baseline through the same path. | 04 | ✅ done (04): `build_NP_callbacks` splines the ratios (constant 5.2e-17, oscillating 9.75e-9 / derivative 7.40e-7, against asinh 7.85e-10 / 3.30e-8 / 2.96e-6); non-monotonic T_J raises `ComputationFailureError`; `Ω″ π²` (`jordan_Hdot_over_H2`); `compute_SM_baseline` + `tools/bbn_baseline.py` + `plot_by_beta.py --no-baseline`. **ρ_SM choice: thermodynamic** (π²/30) g_ρ T⁴ with exact derivative; the stored-spline alternative differs by −2.12e-3 to −7.8e-4 on [10 keV, 10 MeV] and by 5.9e-5 (Yp) / 7.7e-4 (D/H) end to end. End-to-end D/H 8.85e-5 vs target 1e-4 |
-| R4 | **DOCUMENTATION** | Kicking-function peaks and table–g consistency unpinned; paper describes dead code; two derivative implementations disagree. | 05, 06 | ⬜ planned |
+| R4 | **DOCUMENTATION** | Kicking-function peaks and table–g consistency unpinned; paper describes dead code; two derivative implementations disagree. | 05, 06 | 🟡 pins done (05); verification pending (06). `test_kicking_function.py`: spline peaks 0.100732 at 0.16033 MeV, 0.314532 at 0.181993 GeV, 0.037436 at 53.22 GeV; profile and ∫Σ d ln T = 0.161813; w = 1/3 outside [10 keV, 25.1 TeV]; ρ_R witness to 10 keV 1.001346 / 1.000053 / 0.999223 from 5 MeV / 100 MeV / 2×10⁴ GeV; freeze not in production. Derivative agreement stays in `test_temperature_law` (02). Note: `.documents/numerical-methods-for-paper.md`. **Table–g mismatch through QCD/EW opened (§3)** |
 | R5 | **DEFECT, minor** | Below 10 keV `G_s` and `G_rho` return 3.94 and 3.38, not the fit's own limits 3.931 and 3.383. The corrected law is off by +1.465e-4 e-folds at 10 keV and T_CMB, and the ρ_R witness at 10 keV reads 1.00258 instead of 0.99922. Found by prompt 01's first dispatch, 2026-09-29; audit §11. | 01, 02 | ✅ done (02): limits 3.931 / 3.383; residual at 10 keV and T_CMB −3.6e-8; ρ_R witness at 10 keV 0.99922 |
 
 ---
@@ -120,8 +128,8 @@ characters).
 
 Seven were **seeded at planning on 2026-09-29** from the audit. The two issues opened on
 2026-09-29 after that (one at the re-plan, one by prompt 01) are both resolved; see §4.
-Prompt 02 opened one more, prompt 03 opened four, and prompt 04 opened one (the last six entries
-below); prompt 04 also narrowed `[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]`. Measurements for the seeded issues:
+Prompt 02 opened one more, prompt 03 opened four, prompt 04 opened one and prompt 05 opened one
+(the last seven entries below); prompt 04 also narrowed `[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]`. Measurements for the seeded issues:
 `.documents/audit-2026-09-29/README.md`, section in brackets.
 
 - **[00-adiabaticity-diagnostic-omits-the-source-response-term]** *(audit §5; review H5)* —
@@ -257,6 +265,36 @@ below); prompt 04 also narrowed `[03-prymordial-output-moves-1e-5-under-1e-9-cha
   - **Next step.** A dated addendum to §7, additive per CLAUDE.md rule 6, in whichever prompt next
     owns `.documents/` (prompt 06's close-out, if its scope allows), or a commit of its own. **Not
     in prompt 04's files.**
+
+- **[05-kicking-table-and-saikawa-shirai-gs-disagree-through-qcd-and-ew]** *(log 05, Deviations 6
+  and observation 1)*.
+  - **What.** The kicking term uses Σ from `Xav_EOS_data.csv`. The temperature law and ρ_SM use the
+    Saikawa–Shirai g's. The two do not describe the same plasma through the QCD and electroweak
+    crossovers.
+  - **Measured** on `89bd52e` + prompt 05, with the scratch probes `sigma_implied*.py` and
+    `witness_scan.py` (log 05). At fixed field the g's imply
+    Σ_g = 4 − (4 + d ln g_ρ/d ln T)/(1 + ⅓ d ln g_s/d ln T). The spline and jax classes agree to
+    five figures.
+    - **Peaks, Σ_g against the table:**
+      - e⁺e⁻: 0.1000 at 0.159 MeV against 0.1007 at 0.160 MeV (they agree);
+      - QCD: **0.2990 at 155 MeV** against 0.3145 at 182 MeV;
+      - EW: **0.0580 at 47.6 GeV** against 0.0374 at 53 GeV.
+    - **Largest |Σ_table − Σ_g|:** 0.078 at 138 MeV and 0.021 at 45 GeV; ≤ 2.5e-3 at and below
+      110 MeV. The difference in ∫Σ d ln T over [10 keV, 2×10⁴ GeV] is 1.1e-3.
+    - **The ρ_R witness from 2×10⁴ GeV** is 0.9847 at 31.6 GeV and 1.0179 at 178 MeV, converged
+      in step size. It is in [0.99788, 0.99922] at every T₁ ≤ 100 MeV, which is why README §2 (c)'s
+      "0.3 %" and prompt 05's case 5 (endpoints at 10 keV) pass.
+  - **Impact.**
+    - Audit §4's "the table is compatible with the Saikawa–Shirai g's" holds for e⁺e⁻ only.
+    - The paper's QCD and EW Σ are the table's. By the paper's formula β_min would be 2.43 at
+      Σ_g's EW peak against 3.02 at the table's.
+    - Through the crossovers the stored ρ_R,J departs from (π²/30) g_ρ T⁴ by up to 1.8 %. This
+      does not reach the BBN window, where the departure is ≤ 0.22 %.
+  - **Next step.** A decision for the authors: which description of the plasma is intended through
+    the crossovers, and so which Σ peaks the paper quotes. It is tied to
+    `[00-kicking-function-table-has-no-provenance-in-the-repository]`, since the table's
+    construction would say why it differs. **Not changed by prompt 05**, which pins the table as
+    it is.
 
 ---
 

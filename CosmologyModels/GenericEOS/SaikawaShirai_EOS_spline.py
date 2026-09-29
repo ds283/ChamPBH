@@ -197,6 +197,11 @@ class SaikawaShirai_EOS_spline(GenericEOSBase):
     def w(self, T: TemperatureLike) -> float:
         """
         Compute equation of state parameter w(T) as a function of temperature T.
+
+        Not the production equation of state: `QCD_Cosmology` uses `Xav_EOS_spline`,
+        which overrides this method with a tabulated w(T) that includes the e+e- kick.
+        This implementation freezes its argument at 2 MeV and has no e+e- kick.
+        (Docstring added in review-remediation prompt 05, item R4.)
         :return:
         """
 
