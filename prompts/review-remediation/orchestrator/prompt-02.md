@@ -51,6 +51,9 @@ in the tree; read the log first. Your diff may touch `SaikawaShirai_EOS_spline.p
    - **Only the constants unfixed.** Case 2's join half (or case 1 at 10 keV and T_CMB) must fail
      with ≈ +1.465e-4.
    - Then confirm the suite passes at `HEAD`.
+4a. **The derivative cases use the amended norm** (README §6.1): cases 3 and 4 assert
+    |Δ dG_s_dlogT| / G_s ≤ 1e-6 absolute, not a ratio at 1e-6 relative. A relative test that
+    passes would mean the grid changed; stop.
 4. **The guard is at 1e-5.** `grep -n "1e-5\|1.0e-5" CosmologyModels/tests/test_temperature_law.py`
    finds the e-fold tolerance; the offsets are zero.
 5. **Re-scored.** Run `tlaw_check.py` yourself: the `kappa=1` column equals the exact column to

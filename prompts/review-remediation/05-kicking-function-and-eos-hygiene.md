@@ -40,7 +40,7 @@ Through `Xav_EOS_spline.w` (never the CSV directly), Σ = 1 − 3w on ≥ 200 po
    `Xav_EOS_spline`, and that `SaikawaShirai_EOS_spline.w(1 MeV) == w(2 MeV)` (the freeze) while
    `Xav_EOS_spline.w(1 MeV) ≠ w(2 MeV)`. This pins the fact the paper currently gets wrong.
 7. **The two derivative implementations agree** (spline vs jax, `skipUnless`) to 1e-6 on the
-   60-point grid — this is prompt 02's case 4; if it already lives there, reference it rather
+   60-point grid, measured as |Δ(d ln g_s/d ln T)| (README §6.1, amended 2026-09-29) — this is prompt 02's case 4; if it already lives there, reference it rather
    than duplicate.
 
 ---

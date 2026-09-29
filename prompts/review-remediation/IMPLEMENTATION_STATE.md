@@ -10,7 +10,8 @@ function. Items 5–9 of the audit are recorded in §3 as seeded issues and are 
 **Amended 2026-09-29.** Prompt 01's first dispatch stopped on its case 2 and committed nothing.
 It found R5, the 10 keV join (audit §11). The campaign now characterises R5 in 01 and fixes it
 in 02. **Prompt 01 landed 2026-09-29** (re-dispatch): the guard is in `CosmologyModels/tests/`
-and characterises R1 and R5; it opened one issue, on prompt 02's derivative target (§3).
+and characterises R1 and R5; it opened one issue, on prompt 02's derivative target, since resolved by restating the target
+(§4).
 **Next: 02.** Target branch `review-remediation` from `f5896bb`.
 
 **Campaign:** [`README.md`](README.md) ·
@@ -31,6 +32,10 @@ and characterises R1 and R5; it opened one issue, on prompt 02's derivative targ
   is amended to characterise it. Prompt 02 sets `LOW_T_G_S_STAR` and `LOW_T_GSTAR` to the fit's
   own limits, 3.931 and 3.383 (README §2 (j)), under the version bump it already makes.
 
+- **2026-09-29, the user.** Prompt 02's derivative targets become an absolute norm on
+  d ln g_s/d ln T, ≤ 1e-6 (option (b)), replacing "≤ 1e-6 relative". See §4,
+  `[01-derivative-agreement-target-1e-6-is-missed-at-the-low-T-end]`.
+
 None pending otherwise. Decisions the prompts may surface (each is a stop-and-ask in its
 prompt's §7): whether to divide by ln 10 or rebuild the EOS grid in ln T (02, either is allowed);
 whether ρ_SM(T) for the ratio interface is the thermodynamic formula or a spline of the stored
@@ -43,7 +48,7 @@ characters).
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | [The temperature-law harness](01-temperature-law-harness.md) | **R1** (guard), **R5** (characterised) | Opus | ✍️ 2026-09-29, amended 2026-09-29 | ✅ 2026-09-29 | "Add the temperature-law harness and the R1/R5 guard" | [01](logs/01-temperature-law-harness.md) |
+| 01 | [The temperature-law harness](01-temperature-law-harness.md) | **R1** (guard), **R5** (characterised) | Opus | ✍️ 2026-09-29, amended 2026-09-29 | ✅ 2026-09-29 | `ec3a994` | [01](logs/01-temperature-law-harness.md) |
 | 02 | [Fix the entropy derivative](02-fix-the-entropy-derivative.md) | **R1**, **R5** (fix) | Opus | ✍️ 2026-09-29, amended 2026-09-29 | ⬜ | — | — |
 | 03 | [PRyMordial's passenger equation and failure reasons](03-prymordial-passenger-and-failure-reasons.md) | **R2** | Opus | ✍️ 2026-09-29 | ⬜ | — | — |
 | 04 | [Ratio splines and a baseline](04-ratio-splines-and-a-baseline.md) | **R3** | Opus | ✍️ 2026-09-29 | ⬜ | — | — |
@@ -66,11 +71,9 @@ characters).
 
 ## 3. Active and unresolved issues
 
-Seven were **seeded at planning on 2026-09-29** from the audit. One more,
-`[00-xav-eos-w-above-the-table-returns-one-over-3.9]`, was **opened at the re-plan after prompt
-01's first dispatch** (2026-09-29, audit §11). One,
-`[01-derivative-agreement-target-1e-6-is-missed-at-the-low-T-end]`, was **opened by prompt 01**
-(2026-09-29). Measurements: `.documents/audit-2026-09-29/README.md`, section in brackets.
+All seven were **seeded at planning on 2026-09-29** from the audit. The two issues opened on
+2026-09-29 after that (one at the re-plan, one by prompt 01) are both resolved; see §4.
+Measurements: `.documents/audit-2026-09-29/README.md`, section in brackets.
 
 - **[00-adiabaticity-diagnostic-omits-the-source-response-term]** *(audit §5; review H5)* —
   `ComputeTargets/AdiabaticHistory.py:103` sets the conformal contribution to m_eff² to
@@ -109,6 +112,10 @@ Seven were **seeded at planning on 2026-09-29** from the audit. One more,
   would need the `T_Jordan_stop` pre-check (`BBNData.py:77`) adjusted with it. **Not changed by
   prompt 04**, which keeps the domain and records the knot count it actually used.
 
+---
+
+## 4. Resolved issues
+
 - **[00-xav-eos-w-above-the-table-returns-one-over-3.9]** *(audit §11, correcting §4)*.
   - **What.** `Xav_EOS_spline.w` returns `1.0 / 3.9` for T ≥ `_T_max` = 25 119 GeV, where 1/3
     is plainly meant; the audit's §4 had said it returns 1/3.
@@ -121,6 +128,9 @@ Seven were **seeded at planning on 2026-09-29** from the audit. One more,
     (2026-01-16, "Fix typo in the implementation of Xav's equation of state") changed `1.0 / 3.9`
     to `1.0 / 3.0`. Audit §4's original statement was right and §11's correction is not. Left open
     for the board owner to close; see log 01, "Observations not acted on" 1.
+  - **Withdrawn 2026-09-29 (planning correction after `ec3a994`): not a defect.** The planner
+    read `Xav_EOS_spline.py` as it stood at `1759515` instead of the working tree. The audit §11
+    addendum carries a dated correction. There is nothing to fix.
 
 - **[01-derivative-agreement-target-1e-6-is-missed-at-the-low-T-end]** *(log 01, observation 2;
   README §6.1 rows 4–5)*.
@@ -139,9 +149,10 @@ Seven were **seeded at planning on 2026-09-29** from the audit. One more,
   - **Next step:** before prompt 02 runs, the planner decides whether to measure the target on a
     sub-grid (for example T ≥ 40 keV), in a norm scaled by max |dg_s/d ln T|, or at a different
     tolerance. **Not a target change made by prompt 01.**
-
----
-
-## 4. Resolved issues
-
-None yet.
+  - **Resolved 2026-09-29 by the user's decision (option (b)).** Both targets are restated as
+    the absolute difference in the quantity the temperature law consumes: |Δ dG_s_dlogT| / G_s,
+    that is |Δ(d ln g_s/d ln T)|, ≤ 1e-6 at every grid point (README §6.1; prompt 02 F3).
+  - **Measured** on `ec3a994` with a scratch probe that calls `eos_reference`: the production EOS
+    and the spline class with ÷ln 10 applied in memory, on `derivative_test_grid_GeV()`, central
+    difference half-step 1e-4. Worst 1.26e-8 against the central difference and 2.44e-7 against
+    jax, both at 180 MeV. The largest |d ln g_s/d ln T| on the grid is 1.27.

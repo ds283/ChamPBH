@@ -404,3 +404,18 @@ table's top, but any run started above 25 TeV would get Σ = 0.23 there.
 
 - **The two constants** become `review-remediation` item **R5**, fixed in prompt 02 alongside R1.
 - **The `1/3.9`** is seeded as an issue on that board.
+
+### Correction to this addendum (29 September 2026, after prompt 01 landed at `ec3a994`)
+
+*Additive. The text above is left as written.* Two statements in this section are wrong:
+
+- **"Correction to §4" is itself wrong; §4 was right.** `Xav_EOS_spline.w` returns `1.0 / 3.0`
+  above the table on the working tree, and has done since `449de62` (2026-01-16, "Fix typo in the
+  implementation of Xav's equation of state"). The addendum's author read the file as it stood at
+  `1759515`, where it was added with `1.0 / 3.9`, rather than as it is now. Prompt 01's agent
+  measured `w(3e4 GeV)` = 0.3333333 at `b9bc694` (log 01, "Observations not acted on"). The
+  issue this addendum seeded is withdrawn.
+- **The explanation of `eos_consistency.py`'s 0.18081 is wrong.** The whole difference from the
+  event value 0.18184 comes from that script setting no `max_step`. With a terminal event its
+  last sample *is* the event, so it does not read "the last sample rather than the event"
+  (log 01).

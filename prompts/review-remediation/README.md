@@ -351,8 +351,8 @@ target.**
 | N from 2×10⁴ GeV to T_CMB, code law vs T a g_s^{1/3} = const | 41.497 vs 40.075 | **agree to 1e-5** (needs R1 and R5) | `tlaw_check.py`; the guard test |
 | same with ÷ln 10 applied (the corrected law), to 10 keV and T_CMB — R5's step | +1.465e-4 | **≤ 1e-5** (probe: −4.0e-8) | `low_t_join_probe.py`; guard case 2 |
 | same, to 1 GeV / 100 MeV / 1 MeV / 70 keV / 10 keV | +0.180 / +0.779 / +0.994 / +1.403 / +1.422 | **each ≤ 1e-5** | same |
-| `dG_s_dlogT(T)` vs central difference of `G_s` in ln T, worst over [10 keV, 10 TeV] | ratio **2.303** | **≤ 1e-6 relative** (away from the clamps) | derivative-convention test |
-| spline class vs jax class `dG_s_dlogT`, if jax is importable | ratio 2.303 | **≤ 1e-6 relative** | same test, `skipUnless` |
+| `dG_s_dlogT(T)` vs central difference of `G_s` in ln T, on prompt 01's 60-point grid | ratio **2.303** | **\|Δ(d ln g_s/d ln T)\| ≤ 1e-6 absolute**, i.e. \|dG_s_dlogT − central\| / G_s. *Amended 2026-09-29 from "≤ 1e-6 relative": the relative form fails in the e± tail even with an exact fix (log 01). Probe: 1.26e-8 worst, at 180 MeV* | derivative-convention test |
+| spline class vs jax class `dG_s_dlogT`, if jax is importable | ratio 2.303 | **\|Δ(d ln g_s/d ln T)\| ≤ 1e-6 absolute** (*amended likewise; probe 2.44e-7 worst, at 180 MeV*) | same test, `skipUnless` |
 | integrated ρ_R / thermodynamic ρ_R from 2×10⁴ GeV to 1 MeV / 70 keV / 10 keV | 0.022 / 0.0044 / 0.0041 | **0.998 / 0.999 / 0.999 ± 3e-3** (characterised; tightened by 05). *Amended 2026-09-29: 10 keV was 1.003 before R5; probe 0.99922* | `tlaw_check.py`; `low_t_join_probe.py`; ρ_R witness test |
 | same, from 5 MeV to 10 keV | 0.182 | **1.001 ± 5e-3** (*amended: 1.005 before R5; probe 1.00135*) | `eos_consistency.py`; `low_t_join_probe.py`; same test |
 | `VERSION_LABEL` | `"2026.1.1"` | **`"2026.2.0"`** in `main.py` and `plot_by_beta.py` | grep |

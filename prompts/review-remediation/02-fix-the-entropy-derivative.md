@@ -55,7 +55,15 @@ change; confirm it overrides neither.
 touch it. If you find yourself wanting to, that is a §6 stop.
 
 **F3 — flip the guard.** In `test_temperature_law.py`, per prompt 01's comments: expected
-offsets → 0 with tolerance 1e-5 (case 1); expected derivative ratio → 1 with 1e-6 (cases 3, 4);
+offsets → 0 with tolerance 1e-5 (case 1). For cases 3 and 4, **change the form of the
+assertion, not only its constants** (amended 2026-09-29, README §6.1): assert the absolute
+difference in d ln g_s/d ln T, |dG_s_dlogT − reference| / G_s ≤ 1e-6, at every grid point. The
+reference is the central difference (case 3) or the jax class (case 4). A relative-ratio test
+fails in the e± tail even with an exact fix, because the derivative there is ~1e-6
+(issue `[01-derivative-agreement-target-1e-6-is-missed-at-the-low-T-end]`, now resolved). The
+planner's probe, using ÷ln 10 in memory at `ec3a994`, gives worst 1.26e-8 (case 3) and 2.44e-7
+(case 4), both at 180 MeV. Keep the ratio as a printed diagnostic if you like. Set
+`KAPPA_CORRECTED` to 1 (log 01) so that case 2 does not divide twice;
 set prompt 01's R5 residual constant (at 10 keV and T_CMB, case 2) to 0 with tolerance 1e-5;
 remove the `kappa = 1` half of case 5; and re-centre the corrected half on the value you now
 measure. The audit §11 probe predicts 1.00135 from 5 MeV and 0.99922 from 2×10⁴ GeV. Keep
