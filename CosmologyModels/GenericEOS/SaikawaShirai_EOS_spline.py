@@ -223,3 +223,23 @@ class SaikawaShirai_EOS_spline(GenericEOSBase):
         G = self.G_rho(T)
         Gs = self.G_s(T)
         return (4.0 * Gs) / (3.0 * G) - 1.0
+
+    def dw_dlogT(self, T: TemperatureLike) -> float:
+        """
+        Compute d w / d ln T (dimensionless), consistently with this class's w: exactly 0 at
+        and below _EOS_T_LO = 2 MeV, where w freezes its argument, and above it the
+        base-class formula from dG_s_dlogT and dG_rho_dlogT.
+        (Added in production-readiness prompt 03.)
+        :param T: dimensionful temperature T
+        :return: dimensionless d w / d ln T at T
+        """
+        T_in_GeV: float = GetTemperature(T) / self._units.GeV
+        if T_in_GeV <= 0.0:
+            raise RuntimeError(
+                f"!! SaikawaShirai_EOS_spline.dw_dlogT: Temperature T = {T_in_GeV:.5g} GeV (raw T = {T:.5g}) is negative"
+            )
+
+        if T_in_GeV <= _EOS_T_LO:
+            return 0.0
+
+        return GenericEOSBase.dw_dlogT(self, T)

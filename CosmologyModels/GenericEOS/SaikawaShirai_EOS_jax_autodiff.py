@@ -153,6 +153,14 @@ def _jax_raw_G_s(T_in_GeV: Array) -> Array:
         return jnp.asarray(LOW_T_G_S_STAR)  # Low temperature limit
 
 
+def _jax_raw_w(T_in_GeV: Array) -> Array:
+    """
+    The class's w = 4 g_s / (3 g_rho) - 1 as a function of T in GeV, without the 2 MeV freeze,
+    so that it can be differentiated by jax. (production-readiness prompt 03)
+    """
+    return (4.0 * _jax_raw_G_s(T_in_GeV)) / (3.0 * _jax_raw_G_rho(T_in_GeV)) - 1.0
+
+
 class SaikawaShirai_EOS_jax_autodiff(GenericEOSBase):
 
     # above SAIKAWA_SHIRAI_SAIKAWA_SHIRAI_T_HI (measured in GeV) we assume the asymptotic high temperature degrees of freedom
@@ -176,6 +184,7 @@ class SaikawaShirai_EOS_jax_autodiff(GenericEOSBase):
         # use JAX automatic differentiation to obtain a result for the temperature derivatives
         self._grad_raw_G_rho = grad(_jax_raw_G_rho)
         self._grad_raw_G_s = grad(_jax_raw_G_s)
+        self._grad_raw_w = grad(_jax_raw_w)
 
     @property
     def name(self):
@@ -248,3 +257,19 @@ class SaikawaShirai_EOS_jax_autodiff(GenericEOSBase):
         G = self.G_rho(T)
         Gs = self.G_s(T)
         return (4.0 * Gs) / (3.0 * G) - 1.0
+
+    def dw_dlogT(self, T: TemperatureLike) -> float:
+        """
+        Compute d w / d ln T (dimensionless) by jax autodiff of this class's own w: exactly 0
+        at and below _EOS_T_LO = 2 MeV, where w freezes its argument, and T dw/dT from
+        grad(_jax_raw_w) above it. (Added in production-readiness prompt 03.)
+        :param T: dimensionful temperature T
+        :return: dimensionless d w / d ln T at T
+        """
+
+        T_in_GeV: float = GetTemperature(T) / self._units.GeV
+
+        if T_in_GeV <= _EOS_T_LO:
+            return 0.0
+
+        return float(T_in_GeV * self._grad_raw_w(T_in_GeV))

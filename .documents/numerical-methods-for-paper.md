@@ -252,6 +252,55 @@ All of these are on the board, `prompts/review-remediation/IMPLEMENTATION_STATE.
     the exponential coupling.
   - The source-response term (Ω′)² ρ_R,E [Σ(4 − d ln(ρ_J − 3p_J)/d ln T_J) + f_m] is missing.
   - `[00-adiabaticity-diagnostic-omits-the-source-response-term]`
+  - **Addendum (2026-09-30, `production-readiness` prompt 03): fixed.** Numbers are from
+    `ComputeTargets/tests/test_adiabatic_mass.py` run with `CHAMPBH_TEST_REPORT=1`, on `5aba202`
+    plus prompt 03's diff; the derivation is in
+    `prompts/production-readiness/logs/03-adiabatic-source-response.md` §1.
+    - **The term as implemented.** The conformal part of the mass is now
+      3 M_P² E [(ln Ω)″ R + (ln Ω)′² (Σ² − Σ_T/(1 + x) + f_m)/(1 + f_m)], with R = (Σ + f_m)/(1 + f_m),
+      Σ_T = dΣ/d ln T_J and x = ⅓ d ln g_s/d ln T_J. In physical variables the new piece is
+      (ln Ω)′² ρ_R,E [Σ² − Σ_T/(1 + x) + f_m]. It is the φ-derivative of the source term in
+      V_eff′ at fixed Einstein-frame scale factor and fixed comoving entropy, which is how the
+      ODE responds to δφ. Σ is the ODE's Σ = 1 − 3w, from Xav's table; Σ_T is the analytic
+      derivative of the same spline.
+    - **The form quoted above is missing a factor.** The bracket Σ(4 − d ln(ρ_J − 3p_J)/d ln T_J),
+      taken from the audit, assumes T_J ∝ 1/a_J. Entropy conservation, which the ODE's
+      temperature law integrates, gives d ln T_J/d ln Ω = −1/(1 + x) instead. With that factor on
+      the log-derivative the audit's route gives Σ² − Σ_T/(1 + x). The test's reference is
+      built from the defining relations alone: a root-find of T_J Ω g_s^{1/3} = const,
+      d ln ρ_R,E = Σ d ln Ω, ρ_m,E ∝ Ω, and a central difference. It agrees with the implemented
+      form to 9.6e-8, converging as h². The audit's form differs from it by up to 0.73
+      (at 154 MeV), and has the opposite sign at the QCD peak: −0.44 against +0.077 at 180 MeV.
+    - **The bracket's range.** B = Σ² − Σ_T/(1 + x) runs from **−0.4067 at 144 MeV** to
+      **+0.3498 at 230 MeV**, on 1000 points over [12 keV, 20 TeV]. For β = 2 that is up to
+      about ±5 in M²_eff/H² in radiation domination (3β² B), where the pieces the code had
+      before were O(1) unless V″ dominated.
+    - **The matter piece is the standard one.** As f_m → ∞ the new term tends to
+      β² ρ_m,E/(M_P² H²) for the exponential coupling. At f_m = 10⁶ it matches to 4.1e-7.
+    - **Sign changes.** The paper says the modulus "allows the sign changes to be passed
+      through without loss". That was not true of the code before this fix. It formed
+      1 + ½ d ln|m_eff²|/dN from a spline of log|m_eff²|, which is singular where m_eff²
+      changes sign. On a synthetic sign-changing history at production sampling its error was
+      1.53 of max |numerator|, and an exact zero raised. The code now computes the numerator as
+      (m_eff²/H²)(1 + Ḣ/H²) + ½ d(m_eff²/H²)/dN, which is finite through zero, from a spline of
+      asinh(m_eff²/H²). Its error is 3.1e-6 on that history and 6.3e-6 on a bounce-like one. At an
+      exact zero Q = ½ |d(m_eff²/H²)/dN| / (k/H)³. The definition of Q is unchanged; a sign change
+      of m_eff² is not a failure of adiabaticity.
+    - **What the diagnostic assumes** (unchanged, and not stated in the paper):
+      1. δφ is a test field on an unperturbed background. Mixing with the metric perturbation
+         enters at order π²/M_P² = 6(1 − G), which is small only while the field's kinetic
+         energy is a small fraction of the total.
+      2. The source's response is taken at fixed a_E and entropy. For modes deep inside the
+         horizon the plasma's own perturbations are dynamical, and the coupled δφ–plasma
+         system is beyond both the paper and the code.
+      3. Q is evaluated at fixed k_p/H ∈ {10, 10², 10³, 10⁴}. That is a different comoving mode
+         at each N, and no horizon-scale mode is included, so the stored maximum over the
+         history mixes modes. The paper's main text reads it as "whether adiabaticity is
+         violated at any point"; its appendix instead fixes the comoving k = (aH) at the first
+         rebound. Which modes the diagnostic should follow is a decision for the authors
+         (`production-readiness` board §3,
+         `[00-adiabaticity-is-evaluated-at-fixed-k-over-H-not-for-fixed-comoving-modes]`; also
+         `[00-paper-gives-two-inconsistent-adiabaticity-conditions]`).
 - **The initial condition (review H8).** φ* = 5 M_P and π* = 0 are hard-coded (`main.py`).
   Nothing checks A* T* ≲ M_P, which fails for β ≳ 6.5.
   `[00-initial-field-value-is-hard-coded-and-unchecked]`

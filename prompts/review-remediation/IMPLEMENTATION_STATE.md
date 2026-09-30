@@ -161,6 +161,9 @@ these 15 open; they pass to whichever campaign takes them (`.documents/review-re
     prompt 03 (P3), which adds the term, tested against a reference built from entropy conservation.
     The user chose it as one of four to fix before the production run
     (`prompts/production-readiness/README.md`).
+  - **Resolved (2026-09-30):** by the `production-readiness` campaign, prompt 03 (commit "Add the
+    source-response term to the adiabatic mass"; log
+    `prompts/production-readiness/logs/03-adiabatic-source-response.md`).
 - **[00-initial-field-value-is-hard-coded-and-unchecked]** *(audit §6; review H8)* —
   `main.py:814` fixes φ* = 5 M_P and π* = 0; nothing checks A*T* ≲ M_P, so `exponential.yaml`
   runs β up to 25 with A* = e¹²⁵. Numerically harmless (everything is in logs); physically

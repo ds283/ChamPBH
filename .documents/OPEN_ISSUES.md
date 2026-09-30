@@ -1,8 +1,7 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-09-30 · **14 open**: 12 on the `review-remediation` board (closed
-2026-09-30), 1 of them assigned to `production-readiness`; 2 on the `production-readiness` board
-(planned 2026-09-30).
+**Last updated:** 2026-09-30 · **15 open**: 11 on the `review-remediation` board (closed
+2026-09-30), none of them assigned; 4 on the `production-readiness` board (planned 2026-09-30).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -24,8 +23,8 @@ the two disagree, the board is right.
 Seven seeded at planning on 2026-09-29 from `.documents/audit-2026-09-29/README.md`. The two
 opened after that on 2026-09-29 are resolved (board §4). One opened by prompt 02, four by prompt 03,
 one by prompt 04, one by prompt 05, one by prompt 06. The campaign closed on 2026-09-30; these rows
-stay here until a later campaign takes them. Four were assigned on 2026-09-30; the one still
-open is listed in §1.2.
+stay here until a later campaign takes them. Four were assigned on 2026-09-30; all four are
+resolved (§1.2).
 
 - `[00-initial-field-value-is-hard-coded-and-unchecked]` — `main.py:814` fixes φ* = 5 M_P with no
   A*T* ≲ M_P guard (review H8). Out of this campaign's scope.
@@ -63,13 +62,12 @@ Assigned 2026-09-30 by the user, to clear before the production run. The entries
 `review-remediation` board (§3), which carries the **Assigned** line; the prompt that closes one
 deletes its row here.
 
-- `[00-adiabaticity-diagnostic-omits-the-source-response-term]` — `AdiabaticHistory.py:103`
-  gives zero conformal mass for the exponential coupling; the (Ω′)² response term is missing
-  (review H5).
+None open: the last, `[00-adiabaticity-diagnostic-omits-the-source-response-term]`, was
+resolved by prompt 03 on 2026-09-30.
 
 ### 1.3 `production-readiness` — [board §3](../prompts/production-readiness/IMPLEMENTATION_STATE.md)
 
-Two opened when the plan was amended on 2026-09-30, both for the authors.
+Two opened when the plan was amended on 2026-09-30, both for the authors; two opened by prompt 03.
 
 - `[00-adiabaticity-is-evaluated-at-fixed-k-over-H-not-for-fixed-comoving-modes]` — max |Q| is
   taken at fixed k_p/H ∈ {10 … 10⁴}, a different comoving mode at each N, with no horizon-scale
@@ -77,3 +75,8 @@ Two opened when the plan was amended on 2026-09-30, both for the authors.
 - `[00-paper-gives-two-inconsistent-adiabaticity-conditions]` — `Paper1.tex`'s main-text
   `eq:adiabaticity` (what the code does) and its appendix condition differ; the appendix also
   carries the H5 omission.
+- `[03-spline-eos-derivative-witness-misses-1e-6-above-the-120-mev-join]` — the h = 1e-4 central
+  difference of the non-production spline class's w is 1.1e-6 off in 120–122 MeV (its own h²
+  error); a README §6.3 witness missed, decision for the user.
+- `[03-q-numerator-end-samples-carry-the-spline-end-condition-error]` — A·C at a history's first
+  and last samples is 2.3e-4 of max |A·C| off on the synthetic crossing history (3.1e-6 inside).

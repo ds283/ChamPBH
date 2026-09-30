@@ -98,3 +98,22 @@ class GenericEOSBase(ABC):
         # )
 
         return w
+
+    def dw_dlogT(self, T: TemperatureLike) -> float:
+        """
+        Logarithmic derivative d w / d ln T of the generic w(T) = 4 g_s / (3 g_rho) - 1, at
+        temperature T. Dimensionless. Built from dG_s_dlogT and dG_rho_dlogT, never from a
+        finite difference of w:
+            d w / d ln T = (4/3) (g_s/g_rho) [ (d g_s/d ln T)/g_s - (d g_rho/d ln T)/g_rho ].
+        A subclass that overrides w must override this too, consistently with its own w.
+        (Added in production-readiness prompt 03; the adiabatic mass needs
+        Sigma_T = d Sigma / d ln T = -3 d w / d ln T.)
+        :param T: dimensionful temperature T
+        :return: dimensionless d w / d ln T at T
+        """
+        G = self.G_rho(T)
+        Gs = self.G_s(T)
+        dG = self.dG_rho_dlogT(T)
+        dGs = self.dG_s_dlogT(T)
+
+        return float((4.0 * Gs) / (3.0 * G) * (dGs / Gs - dG / G))

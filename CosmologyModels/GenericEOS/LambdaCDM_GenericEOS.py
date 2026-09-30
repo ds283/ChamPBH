@@ -115,6 +115,10 @@ class LambdaCDM_GenericEOS(BaseCosmology):
     def w(self, T: TemperatureLike) -> float:
         return self._eos.w(T)
 
+    def dw_dlogT(self, T: TemperatureLike) -> float:
+        # d w / d ln T of the EOS's own w (production-readiness prompt 03)
+        return self._eos.dw_dlogT(T)
+
     def z(self, T: TemperatureLike) -> float:
         """
         Compute z(T), the redshift as a function of temperature

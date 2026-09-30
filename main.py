@@ -83,6 +83,9 @@ ray.init(address=args.ray_address)
 # On 2026-09-30 (production-readiness prompt 02) the small_network switch was wired to the flag
 # PRyMordial reads: from 2026.3.0 the stored small_network describes the network that ran, and
 # production runs the full network (small_network=False).
+# On 2026-09-30 (production-readiness prompt 03), under the same label: from 2026.3.0 the
+# AdiabaticHistory effective mass M^2_eff includes the response of the source to delta phi, and
+# Q's numerator is computed in a form that is smooth where M^2_eff changes sign.
 VERSION_LABEL = "2026.3.0"
 
 specified_drop_actions = [x.lower() for x in args.drop]

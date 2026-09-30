@@ -288,6 +288,80 @@ when `f_m > 10`), the same guard used throughout the codebase. The kinetic const
 slightly-negative `E` (which can occur harmlessly when ρ_rad → 0 at late times) is clamped to
 zero rather than being treated as a fatal error.
 
+#### 5.2.1 Added 2026-09-30 (production-readiness prompt 03): the effective mass and Q's numerator as they now are
+
+This subsection supersedes the three-piece list above and the account of the log-spline in
+§5.3; both were right for the tree they describe (before `production-readiness` prompt 03). The
+derivation is in `prompts/production-readiness/logs/03-adiabatic-source-response.md` §1. Numbers
+marked **[adm]** are from `ComputeTargets/tests/test_adiabatic_mass.py`, and **[eosd]** from
+`CosmologyModels/tests/test_eos_w_derivative.py`, both run with `CHAMPBH_TEST_REPORT=1` on
+`5aba202` plus prompt 03's diff.
+
+**The four pieces of `M²_eff/H²`** (`AdiabaticComputePolicy.M2eff_over_H2`):
+
+- **self mass**, unchanged: `3 M_P² · (V''/3H²M_P²)` = V''/H².
+- **conformal curvature term**, unchanged: `3 M_P² E (ln Ω)″ R`.
+- **source response**, new: `3 M_P² E (ln Ω)′² (Σ² − Σ_T/(1 + x) + f_m)/(1 + f_m)`. It is the
+  response of the source in V_eff′ = V′ + (ln Ω)′ (Σ ρ_R,E + ρ_m,E) to δφ at fixed Einstein-frame
+  scale factor and fixed comoving entropy, which is how the ODE itself responds:
+  d ln ρ_R,E/d ln Ω = Σ, d ln ρ_m,E/d ln Ω = 1, and d ln T_J/d ln Ω = −1/(1 + x) (entropy
+  conservation, T_J Ω a_E g_s^{1/3} = const). Here Σ_T = dΣ/d ln T_J and
+  x = ⅓ d ln g_s/d ln T_J. For the exponential coupling it is the whole conformal mass. The
+  bracket B = Σ² − Σ_T/(1 + x) runs from −0.4067 (144 MeV) to +0.3498 (230 MeV) on 1000 points
+  over [12 keV, 20 TeV] [adm, test (b)]. As f_m → ∞ the term tends to β² ρ_m,E/(M_P² H²), the
+  standard matter-coupled chameleon mass; at f_m = 10⁶ it is within 4.1e-7 of it [adm, test (d)].
+  (S = (B + f_m)/(1 + f_m) is guarded at large f_m in the same way as R.)
+- **gravitational mass**, unchanged: `1 − (Ḣ/H² + 3)`.
+
+The two conformal terms are computed by the module-level pure function
+`conformal_mass_over_H2(three_MP_sq, E, Sigma, fm, d_logOmega_dphi, d2_logOmega_dphi2, Sigma_T, x)`.
+`M2eff_over_H2` gains the argument `T_Jordan`, which `compute_adiabatic_values` sets to
+`exp(value.log_T_Jordan)`, never anything derived from z.
+
+**Σ_T's source.** Σ_T = −3 `cosmology.dw_dlogT(T_J)`, a method added to `GenericEOSBase` and
+forwarded by `LambdaCDM_GenericEOS`. Each class's derivative is consistent with its own `w`: for
+`Xav_EOS_spline` (production) it is the analytic derivative of the ln T spline, 0 beyond the
+table; for `SaikawaShirai_EOS_spline` it is 0 at and below the 2 MeV freeze and the derivative of
+4g_s/(3g_ρ) − 1 from `dG_s_dlogT`, `dG_rho_dlogT` above it; the jax class uses autodiff of its own
+w. Against a central difference of `w` in ln T (half-step 10⁻⁴) the production class agrees to
+3.4e-8 [eosd]. No production code finite-differences `w`. Σ is the ODE's Σ = 1 − 3w (Xav's
+table), not one derived from the g's.
+
+**Q's numerator, in its smooth form.** Q is unchanged: |A·C|/|B|^{3/2} with A = M²_eff/H²,
+B = A + k_p²/H², C = 1 + ½ d ln|M²_eff|/dN. Since d ln H²/dN = 2Ḣ/H²,
+
+```
+A·C = m (1 + Ḣ/H²) + ½ dm/dN,        m = M²_eff/H²,
+```
+
+which is finite through m = 0, where Q = ½ |dm/dN| / (k_p/H)³. The code (`Q_numerator`) now
+computes it in that form: Ḣ/H² is `Hdot_over_H2_plus_3` − 3 at each sample (the quantity the ODE
+and the gravitational mass use), and dm/dN = √(1 + m²) d asinh m/dN, from a cubic spline of
+asinh m against N. asinh is linear through zero and logarithmic at large |m|, so the spline is
+accurate both through a sign change and across a bounce's dynamic range. On the synthetic
+histories of the campaign README §2 (e), at the production sampling ΔN = ln 10/250, A·C is
+within 3.1e-6 (sign-changing) and 6.3e-6 (four 10⁴ spikes) of its exact value, relative to
+max |A·C|, at the samples with N ∈ [0.5, 11.5]; at the two end samples of the sign-changing
+history the spline's end condition gives 2.3e-4 [adm, test (e)]. A history whose M²_eff is
+exactly zero at a sample gives a finite Q there, equal to ½ (dm/dN)/(k_p/H)³ to 4.7e-6.
+**Correction to §5.3:** taking log|M²_eff| before splining is *not* a sign-safe strategy. The
+log route was singular where M²_eff changes sign (A·C error 1.53 of max |A·C| on the
+sign-changing history) and raised at an exact zero. It is gone; nothing on the path to Q takes a
+logarithm of |M²_eff|, and no history is failed because M²_eff crosses zero.
+
+**What the diagnostic assumes** (campaign README §2 (h); unchanged by prompt 03):
+
+1. **A test field.** δφ is a test field on an unperturbed background. Mixing with the metric
+   perturbation enters at order π²/M_P² = 6(1 − G), small only while the field's kinetic
+   energy is a small fraction of the total.
+2. **The plasma's response** to δφ is taken at fixed a_E and entropy. For modes deep inside the
+   horizon the plasma's own perturbations are dynamical, and the coupled δφ–plasma system is not
+   modelled.
+3. **Which modes.** Q is evaluated at fixed k_p/H ∈ {10, 10², 10³, 10⁴}: a different comoving
+   mode at each N, and no horizon-scale mode. Whether that is the intended diagnostic is open for
+   the authors (`production-readiness` board §3,
+   `[00-adiabaticity-is-evaluated-at-fixed-k-over-H-not-for-fixed-comoving-modes]`).
+
 ### 5.3 The adiabaticity parameter and its use of a differentiated spline
 
 The quantity Q is built from `M²_eff/H²`, the physical scale `k_p²/H²`, and a logarithmic
@@ -315,6 +389,9 @@ decades be differentiated stably. `B^(3/2)` is likewise taken over `|B|` to be s
 sign.
 
 The whole computation is timed with a `WallclockTimer` and the timing persisted.
+
+*Note added 2026-09-30 (production-readiness prompt 03):* the log|M²_eff| spline described above
+was singular where M²_eff changes sign and has been replaced; see §5.2.1.
 
 ---
 

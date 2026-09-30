@@ -74,6 +74,10 @@ class Xav_EOS_spline(SaikawaShirai_EOS_spline):
         self._log_T_series = np.asarray([np.log(T) for T in self._T_series])
         self._spline = make_interp_spline(self._log_T_series, self._w_series)
 
+        # d w / d ln T, the analytic derivative of the same spline (the spline is in ln T)
+        # (production-readiness prompt 03)
+        self._dspline = self._spline.derivative()
+
     @property
     def name(self):
         return "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined)"
@@ -102,3 +106,26 @@ class Xav_EOS_spline(SaikawaShirai_EOS_spline):
             return 1.0 / 3.0
 
         return self._spline(np.log(T_in_GeV))
+
+    def dw_dlogT(self, T: TemperatureLike) -> float:
+        """
+        Compute d w / d ln T (dimensionless), consistently with this class's w: the analytic
+        derivative of the ln T spline, and exactly 0 at and beyond the table's ends, where w
+        returns 1/3 without consulting the spline. The inherited 2 MeV freeze is not used.
+        (Added in production-readiness prompt 03.)
+        :param T: dimensionful temperature T
+        :return: dimensionless d w / d ln T at T
+        """
+
+        T_in_GeV: float = GetTemperature(T) / self._units.GeV
+        if T_in_GeV <= 0.0:
+            raise RuntimeError(
+                f"!! Xav_EOS_spline.dw_dlogT: Temperature T = {T_in_GeV:.5g} GeV (raw T = {T:.5g}) is negative"
+            )
+
+        if T_in_GeV >= self._T_max:
+            return 0.0
+        elif T_in_GeV <= self._T_min:
+            return 0.0
+
+        return float(self._dspline(np.log(T_in_GeV)))
