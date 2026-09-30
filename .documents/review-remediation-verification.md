@@ -415,6 +415,140 @@ transitions, T_J(N), the stored ρ_R,J and the BBN interface.
     integration is not detected;
   - `[03-main-recomputes-failed-bbn-rows-on-every-run]`.
 
+### 4.6 Addendum 2026-09-30 — the `production-readiness` campaign
+
+Added by `production-readiness` prompt 04, measured on `6cab788` (the tree the campaign's three
+prompts left, before this commit). Nothing above this heading has been changed; where it is
+superseded, this section says so by statement. The campaign fixed four of the issues §4.5 names:
+the reflection count, the caption, the network flag and the adiabatic mass. It bumped
+`VERSION_LABEL` once. Its board is
+[`prompts/production-readiness/IMPLEMENTATION_STATE.md`](../prompts/production-readiness/IMPLEMENTATION_STATE.md).
+
+**This supersedes**, by statement and not by edit:
+
+- **§4.2 item 4's caption caution.** The caption is now right; see point 3.
+- **§4.3's "decide which network".** The user decided; see point 2.
+- **§4.5's H5 bullet and its network bullet.** Both issues are closed; see points 2 and 4. §4.5's
+  bullet on `[06-hard-reflection-caption-…]` is closed too (point 3).
+
+**The five points.**
+
+1. **`VERSION_LABEL = "2026.3.0"`; every store made before it is invalid.** That includes any made
+   under `2026.2.0`, which §4.1 called the valid label. The production run starts from an empty
+   database.
+   - *Evidence.* `main.py:89` and `plot_by_beta.py:79`, `grep -n VERSION_LABEL main.py
+     plot_by_beta.py`. One bump, made by prompt 02 (`8503fe7`); prompt 03 (`db0d8fc`) lands under
+     the same label.
+   - *Why.* The network flag changes physical output (point 2) and the adiabatic mass changes
+     (point 4). Still nothing stops an old store being reused
+     (`[00-datastore-lookups-ignore-the-version-column]`, open).
+2. **The network.** BBN solves use the **full** network, and the stored `small_network` column now
+   describes the run.
+   - *Evidence.* `_configure_PRyMordial` sets `PRyM_init.smallnet_flag`, the name PRyMordial reads
+     (`ComputeTargets/BBNData.py:264`); `test_network_flag` (a), which fails on `cf773b2`'s
+     `BBNData.py` (log 02). `main.py:755`, the `compute_BBN_data` default (`BBNData.py:301`),
+     `plot_by_beta.py:903` and `tools/bbn_baseline.py`'s default all pass `False`. Every pinned
+     abundance passes unchanged: they were full-network values all along. The SM baseline is as
+     §4.2 item 1 (Yp 0.2468872958, D/H 2.462251065, ³He/H 1.042050273, ⁷Li/H 5.423441017).
+   - *The small network, for awareness.* `small_network=True` now runs the 12-reaction network. On
+     the constant 0.08 family it moves ⁷Li/H by 1.006e-2, D/H by 2.274e-4 and Yp by 6.200e-5
+     (`test_network_flag` (b)). The user decided on 2026-09-30 that the Yp and D/H offsets are
+     PRyMordial's property and are not bounded; ⁷Li/H alone witnesses the flag.
+   - The ⁷Li warning in `add_BBN_info_labels` (`extract_common.py:149`, now `==`) no longer fires
+     for a production store.
+3. **The reflection count.** It is in `plot_by_beta.py`'s `data.csv` (column `hard_reflections`:
+   the count, 0 when the key is absent, NaN when no model) and on stdout (one summary line per
+   (M, Λ), then one line per model that reflected), and in every `plot_ScalarModel.py` caption.
+   - *Where to read it.* One reader, `extract_common.hard_reflection_count`, over the stored key
+     `HARD_REFLECTIONS_KEY = "number_hard_reflections"` (`ScalarModel.py`). The count 0 is never
+     stored, so an absent key means zero.
+   - *Evidence.* `test_hard_reflection_reporting`, 5 tests, all OK; the caption test fails on
+     `cf773b2`'s reader (log 01). The grep for `"hard_reflections"` outside the payload and the
+     test finds only the CSV column name in `plot_by_beta.py:500`.
+4. **The adiabatic mass** now includes the source response, so **no `AdiabaticHistory` row made
+   before 2026.3.0 is comparable.**
+   - *What to expect.* M²_eff/H² changes by the term 3 M_P² E (ln Ω)′² S, with bracket
+     S(1 + f_m) = Σ² − Σ_T/(1 + x) + f_m. In the bracket norm the radiation part ranges over
+     **−0.4067 at 144.3 MeV to +0.3498 at 230.4 MeV** (`test_adiabatic_mass` (b), f_m = 0,
+     1000 points over [12 keV, 20 TeV]). That is O(β²) through the QCD and e⁺e⁻ features, up to
+     about ±5 in M²/H² at β = 2. In matter domination it tends to 3β² f_m/(1 + f_m) (the textbook
+     β²ρ_m/(M_P²H²)).
+   - *Matter-limit check.* At f_m = 1e6 the code differs from β²ρ_m,E/(M_P²H²) by **4.067e-7**
+     relative, at 144.3 MeV; that is |B_min|/f_m, as log 03 §1.3 predicts (`test_adiabatic_mass`
+     (d), target 1e-6).
+   - *Against the independent reference* (built from entropy conservation and `w`, `G_s` only):
+     9.570e-8 / 4.702e-8 / 1.950e-9 for f_m = 0 / 1 / 100 (target 1e-6, test (b)). The audit's
+     form, which lacks the factor 1/(1 + x), is off by up to 0.7327 at 153.8 MeV and has the wrong
+     sign at the QCD peak (test (f)); it is not implemented.
+   - *Expect max |Q| to change*, and Q no longer depends on the sampling where M²_eff crosses zero.
+     Q's numerator is m(1 + Ḣ/H²) + ½ dm/dN from a spline of asinh m. On the crossing history it
+     is within 3.070e-6 of max |A·C| against the analytic value on N ∈ [0.5, 11.5]; the old
+     route was off by 1.529. The two end samples of a history are 2.26e-4 (accepted by the user;
+     recorded, not bounded). At an exact zero of M²_eff, Q is finite and matches ½(dm/dN)/(k_p/H)³
+     to 4.65e-6.
+   - *What Q assumes*, unchanged: a test field on an unperturbed background; the source's response
+     at fixed a_E and entropy; Q at fixed k_p/H ∈ {10 … 10⁴}. The last two are open for the
+     authors (`[00-adiabaticity-is-evaluated-at-fixed-k-over-H-not-for-fixed-comoving-modes]`,
+     `[00-paper-gives-two-inconsistent-adiabaticity-conditions]`).
+   - *Not measured.* How far max |Q| moves on a real history, and Ḣ/H² from the policy formula
+     against the stored H samples: both need a solve, which is the production run's.
+5. **The issues still open on the `review-remediation` board** that the production run may want
+   fixed first, by name: H8 `[00-initial-field-value-is-hard-coded-and-unchecked]` (β beyond
+   about 6.5); `[00-datastore-lookups-ignore-the-version-column]`;
+   `[03-bbn-solver-failures-are-undetected-and-some-exceptions-escape]`;
+   `[03-main-recomputes-failed-bbn-rows-on-every-run]`. The full list is
+   [`.documents/OPEN_ISSUES.md`](OPEN_ISSUES.md) (13 open on this date, 2 of them on the
+   `production-readiness` board, both for the authors).
+
+**Verification table.** Each README §6 row of the `production-readiness` campaign, on `6cab788`.
+Tests print their figures with `CHAMPBH_TEST_REPORT=1`. "Log" is the figure the prompt's log
+quotes; every one reproduced to the digits printed.
+
+| Row | Target | Final value | Witness |
+|---|---|---|---|
+| 6.1 caption, payload count 3 | "Hard reflections: 3" | "Hard reflections: 3" | `test_hard_reflection_reporting` (c) |
+| 6.1 caption, count 0 | unchanged, key absent | "Hard reflections: 0", key absent | same |
+| 6.1 `extra_data` from a payload | identical to the unfactored block | identical on four payloads | same (a) |
+| 6.1 readers of the stored key | 1 function, grep finds nothing else | `hard_reflection_count`; grep finds only the CSV column name `plot_by_beta.py:500` | `grep -rn "'hard_reflections'\|\"hard_reflections\"" --include='*.py'` |
+| 6.1 `data.csv` column | `hard_reflections` | present (`plot_by_beta.py:500`, NaN when no model) | read the diff |
+| 6.1 stdout summary | one line per (M, Λ), one per reflecting model | present (`plot_by_beta.py:520–550`) | read the diff |
+| 6.1 new test on `HEAD~1` | fails | failed (log 01); **not re-run here** (needs a production file swapped) | log 01 |
+| 6.2 `smallnet_flag` after `(True)` / `(False)` | True / False | True / False | `test_network_flag` (a); fails on `cf773b2` (log 02) |
+| 6.2 `small_network_flag` in `ComputeTargets/ tools/ main.py plot_by_beta.py` | empty (comments allowed) | comments only: `BBNData.py:263`, `prym_fixtures.py:193`, `test_network_flag.py:21, 176` | grep |
+| 6.2 `small_network` default | False everywhere | False: `main.py:755`, `BBNData.py:301`, `plot_by_beta.py:903`, `tools/bbn_baseline.py`, `run_prym` | grep; `test_network_flag` (c) |
+| 6.2 pinned abundances | pass unchanged | pass: Yp 7.521e-11, D/H 2.768e-07 against the pins; SM baseline as §4.2 | suite |
+| 6.2 ⁷Li/H, small vs full | ≥ 5e-3 | **1.006e-2** (D/H 2.274e-4, Yp 6.200e-5 recorded, unbounded) | `test_network_flag` (b) |
+| 6.2 `add_BBN_info_labels` | `==` | `==` (`extract_common.py:149`) | read |
+| 6.2 `VERSION_LABEL` | `"2026.3.0"` in both | `"2026.3.0"` (`main.py:89`, `plot_by_beta.py:79`) | grep |
+| 6.3 `dw_dlogT`, `Xav_EOS_spline`, ≥ 1000 points | ≤ 1e-6 | **3.375e-8** (1010 points, 143.0 MeV) | `test_eos_w_derivative` |
+| 6.3 same, spline class and base formula, above 2 MeV | ≤ 1e-6 (h = 1e-5 within a factor 1.03 of 120 MeV, by the user's decision) | **4.737e-9** (h = 1e-4, 1007 points); **1.102e-8** (h = 1e-5, 3 points in the window; h = 1e-4 there 1.104e-6, reported) | same |
+| 6.3 same, jax class | ≤ 1e-6 | **7.051e-9** (1010 points, 118.4 MeV) | same, jax importable |
+| 6.3 conformal part vs reference, exponential, f_m = 0 / 1 / 100 | ≤ 1e-6 | **9.570e-8 / 4.702e-8 / 1.950e-9** | `test_adiabatic_mass` (b) |
+| 6.3 same, stand-in coupling | ≤ 1e-6 | **7.589e-8 / 3.617e-8 / 3.762e-9** | (c) |
+| 6.3 f_m → ∞ limit | 1e-6 relative | **4.067e-7** | (d) |
+| 6.3 A·C, both histories, ΔN = ln 10/250 | ≤ 1e-4 of max \|A·C\|, N ∈ [0.5, 11.5] | **3.070e-6** (crossing), **6.304e-6** (spikes); all samples 2.258e-4 / 6.304e-6 | (e) |
+| 6.3 exact zero of M²_eff | finite Q, ½(dm/dN)/(k_p/H)³ to 1e-4 | relative **4.650e-6**, nothing raised | (e) |
+| 6.3 audit's form | measured, reported | **0.7327** at 153.8 MeV | (f) |
+| 6.3 `ScalarModel.py` in the diff | absent | present only as prompt 01's `HARD_REFLECTIONS_KEY` and `build_extra_data` factoring (75 lines, read); no change in prompt 03 | `git diff 204795e..HEAD -- ComputeTargets/ScalarModel.py` |
+| 6.3 planning probe, Table 1 | matches log 03's | matches to every printed digit (Σ, dΣ/d ln T, x, B_audit, B_closed form = B_reference, ten temperatures); Table 2 9.887e-6 / 9.885e-8 / 9.944e-10; both `q_sign_change_probe` rows as README §2 (e) | `PYTHONPATH=. venv/bin/python prompts/production-readiness/planning-probes/h5_bracket_probe.py` |
+| 6.4 suites | pass; counts not below 12 / 13 | `CosmologyModels/tests` **18** OK (109.6 s); `ComputeTargets/tests` **30** OK (74.7 s); at `204795e`: 12 / 13 | the two `unittest discover` commands |
+
+The `git diff --stat 204795e..HEAD` on `6cab788`, 43 files, 4990 insertions and 114 deletions,
+is all in files the campaign's plan, boards and logs allow: the production files of prompts 01–03
+(`extract_common.py`, `plot_by_beta.py`, `main.py`, `ComputeTargets/{AdiabaticHistory,BBNData,
+ScalarModel}.py`, `CosmologyModels/GenericEOS/*` (five files), `tools/bbn_baseline.py`); their
+tests (`prym_fixtures.py`, `test_bbn_callbacks.py` and four new modules); dated additions to
+three documents under `.documents/` (additive only: 6, 53 and 88 lines, no deletions) and the
+index; and the campaign's own planning material. `PRyM/`, `thirdparty/`, any schema and
+`Xav_EOS_data.csv` are absent from it. `prompts/review-remediation/IMPLEMENTATION_STATE.md` has
+28 additions and no deletions: the four **Resolved** lines.
+
+**To reproduce all of it** from the repository root (about 4 minutes):
+
+```bash
+PYTHONPATH=. CHAMPBH_TEST_REPORT=1 ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t . && PYTHONPATH=. CHAMPBH_TEST_REPORT=1 ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . && PYTHONPATH=. ./venv/bin/python prompts/production-readiness/planning-probes/h5_bracket_probe.py && PYTHONPATH=. ./venv/bin/python prompts/production-readiness/planning-probes/q_sign_change_probe.py && git diff --stat 204795e..HEAD && grep -n VERSION_LABEL main.py plot_by_beta.py
+```
+
 ---
 
 ## 5. Reproduce

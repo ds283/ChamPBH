@@ -1,6 +1,8 @@
 # Production readiness campaign — implementation state
 
-**Last updated:** 2026-09-30 · **Status: IN PROGRESS — 3 of 4 prompts landed (01, 02, 03).**
+**Last updated:** 2026-09-30 · **Status: COMPLETE — 3 of 3 prompts plus the close-out (04) landed. Final tree: the commit that adds log 04 (see `git log`); verified on `6cab788`.**
+**Fresh-database rule: every store made before 2026.3.0 is invalid.** The close-out's handover is
+§4.6 of [`.documents/review-remediation-verification.md`](../../.documents/review-remediation-verification.md).
 **`VERSION_LABEL` is `"2026.3.0"` since prompt 02: every store made before 2026.3.0 is invalid.**
 **Since prompt 03 the adiabatic mass includes the source response: no `AdiabaticHistory` row made
 before 2026.3.0 is comparable.**
@@ -96,7 +98,7 @@ None pending. Decisions the prompts may surface, each a stop-and-ask in its prom
 | 01 | [Report the hard-reflection count](01-report-hard-reflections.md) | **P1** | Sonnet | ✍️ 2026-09-30 | ✅ 2026-09-30 | see `git log` ("Report the hard-reflection count in captions and the survey") | [`logs/01-report-hard-reflections.md`](logs/01-report-hard-reflections.md) |
 | 02 | [Wire the network flag; run the full network](02-wire-the-network-flag.md) | **P2**, version bump | Opus | ✍️ 2026-09-30 | ⚠️ 2026-09-30, with deviations | see `git log` ("Wire the BBN network flag to PRyMordial and run the full network") | [`logs/02-wire-the-network-flag.md`](logs/02-wire-the-network-flag.md) |
 | 03 | [The adiabatic mass: the source-response term](03-adiabatic-source-response.md) | **P3** | Opus | ✍️ 2026-09-30 | ⚠️ 2026-09-30, with deviations | see `git log` ("Add the source-response term to the adiabatic mass") | [`logs/03-adiabatic-source-response.md`](logs/03-adiabatic-source-response.md) |
-| 04 | [Close-out verification and handover](04-close-out-verification.md) | close-out | Sonnet | ✍️ 2026-09-30 | — | — | — |
+| 04 | [Close-out verification and handover](04-close-out-verification.md) | close-out | Sonnet | ✍️ 2026-09-30 | ✅ 2026-09-30 | see `git log` ("Add the production-readiness close-out verification") | [`logs/04-close-out-verification.md`](logs/04-close-out-verification.md) |
 
 ---
 

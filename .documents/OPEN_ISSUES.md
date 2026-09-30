@@ -1,7 +1,7 @@
 # Open issues — project-wide index
 
 **Last updated:** 2026-09-30 · **13 open**: 11 on the `review-remediation` board (closed
-2026-09-30), none of them assigned; 2 on the `production-readiness` board (planned 2026-09-30).
+2026-09-30), none of them assigned; 2 on the `production-readiness` board (closed 2026-09-30).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
