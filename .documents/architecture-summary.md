@@ -768,6 +768,30 @@ STAGE 3: BBN Data
 `smallnet_flag`), so every earlier solve also ran the full network; the switch now works. See
 `prompts/production-readiness/logs/02-wire-the-network-flag.md`.
 
+**Note added 2026-09-30 (run-integrity prompt 03, item R).** Two changes to stages 2 and 3.
+
+- **A stored BBN failure counts as done.** Stage 3 looks up `BBNData` with `failure=None`, which
+  returns the success if one exists and otherwise the newest failure. So a BBN computation that
+  failed under the current `VERSION_LABEL` is final: it is not recomputed, and no new failed row
+  is stored, on a later run.
+  - `--retry-failed-bbn` (default off) counts a stored failure as missing, so those
+    computations are retried under the same label.
+  - A new `VERSION_LABEL` retries them too, since the lookups are keyed on the label (prompt
+    01): rows made under an earlier label are not returned.
+  - The reason stays in `BBNData.failure_reason`.
+- **Lookup results are paired with the models they were asked for.** Both stages build their
+  downstream query from the `ScalarModel`s that did not fail. Before this prompt, they then
+  zipped the results against the unfiltered bin, so one failed model shifted every later
+  result. The decision now lives in the pure module `pipeline_selection.py`:
+  - `build_query_entries` keeps each (potential, coupling) with its `ScalarModel`;
+  - `select_missing` pairs each downstream result with that entry, and raises if the counts
+    differ.
+- **Summary lines.** After each stage's queue, `run_pipeline` prints one line: the models
+  skipped because their `ScalarModel` failed and, for BBN, the computations skipped because of
+  a stored failure (or retried, under the flag).
+
+See `prompts/run-integrity/logs/03-failure-caching-and-pairing.md`.
+
 **The two-pass batching pattern** (repeated at each stage) is important for efficiency:
 
 ```python

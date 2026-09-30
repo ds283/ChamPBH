@@ -170,12 +170,20 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
                 ),
             )
 
-        # main.py looks up successes only, so a model whose BBN computation fails
-        # deterministically gains a new failed row on every run. When failed rows are
-        # asked for, return the newest rather than raising MultipleResultsFound.
-        # (review-remediation prompt 03; the user's decision of 2026-09-29)
+        # When failed rows are asked for, return the newest rather than raising
+        # MultipleResultsFound. (review-remediation prompt 03; the user's decision of
+        # 2026-09-29)
         if failure is True:
             query = query.order_by(table.c.timestamp.desc(), table.c.serial.desc())
+            query = query.limit(1)
+
+        # When any row is asked for (failure=None, as main.py's BBN stage does), return
+        # the success if one exists, otherwise the newest failure, so that a stored
+        # failure counts as done within a version label. (run-integrity prompt 03)
+        elif failure is None:
+            query = query.order_by(
+                table.c.failure.asc(), table.c.timestamp.desc(), table.c.serial.desc()
+            )
             query = query.limit(1)
 
         try:

@@ -1,7 +1,7 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-09-30 · **16 open**: 9 on the `review-remediation` board (closed
-2026-09-30), 1 of them assigned to `run-integrity`; 2 on the `production-readiness` board (closed
+**Last updated:** 2026-09-30 · **15 open**: 8 on the `review-remediation` board (closed
+2026-09-30), none of them assigned; 2 on the `production-readiness` board (closed
 2026-09-30); 5 on the `run-integrity` board (in progress).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
@@ -26,7 +26,7 @@ Seven seeded at planning on 2026-09-29 from `.documents/audit-2026-09-29/README.
 opened after that on 2026-09-29 are resolved (board §4). One opened by prompt 02, four by prompt 03,
 one by prompt 04, one by prompt 05, one by prompt 06. The campaign closed on 2026-09-30; these rows
 stay here until a later campaign takes them. Four were assigned on 2026-09-30; all four are
-resolved (§1.2). Three more were assigned on 2026-09-30 to `run-integrity` (§1.4); two of those
+resolved (§1.2). Three more were assigned on 2026-09-30 to `run-integrity` (§1.4); all three
 are resolved.
 
 - `[00-initial-field-value-is-hard-coded-and-unchecked]` — `main.py:814` fixes φ* = 5 M_P with no
@@ -79,17 +79,15 @@ Assigned 2026-09-30 by the user, to clear before a science run. The entries stay
 `review-remediation` board (§3), which carries the **Assigned** line; the prompt that closes one
 deletes its row here.
 
-- `[03-main-recomputes-failed-bbn-rows-on-every-run]` — `main.py` looks up successes only, so a
-  deterministic BBN failure is recomputed and re-stored each run.
+None open: the last, `[03-main-recomputes-failed-bbn-rows-on-every-run]`, was resolved by
+prompt 03 on 2026-09-30.
 
 ### 1.5 `run-integrity` — [board §3](../prompts/run-integrity/IMPLEMENTATION_STATE.md)
 
-Two opened by the planner on 2026-09-30, both assigned to the campaign's own prompts; prompt 02
-resolved one (board §4). Two opened by prompt 01 and two by prompt 02 on 2026-09-30, not assigned.
+Two opened by the planner on 2026-09-30, both assigned to the campaign's own prompts; prompts 02
+and 03 resolved them (board §4). Two opened by prompt 01, two by prompt 02 and one by prompt 03 on
+2026-09-30, not assigned.
 
-- `[00-main-pairs-lookup-results-against-the-unfiltered-bin]` — `main.py`'s adiabatic and BBN
-  stages zip lookup results for the non-failed models against every pair in the bin; after a
-  failed `ScalarModel` they schedule the wrong models, and the BBN stage stops. Prompt 03.
 - `[01-adiabatic-and-bbn-lookups-do-not-require-validated-rows]` — unlike `ScalarModel.build`,
   the `AdiabaticHistory` and `BBNData` lookups do not filter `validated == True`, so an
   unvalidated row left by an interrupted run is served unless `--prune-unvalidated` is passed.
@@ -100,3 +98,6 @@ resolved one (board §4). Two opened by prompt 01 and two by prompt 02 on 2026-0
   `compute_BBN_data`, so the task ends with no failure row.
 - `[02-the-bbn-callbacks-do-not-check-their-values-for-finiteness]` — a non-finite ρ_SM from the
   EOS would still give a NaN callback value, which can hang PRyMordial; reasoned, not measured.
+- `[03-step-1-first-pass-lookup-filters-nothing]` — `build_solver_batch`'s first-pass
+  `ScalarModel` lookup keeps every pair as missing (`main.py:208`); one redundant lookup per
+  batch, no wrong result.

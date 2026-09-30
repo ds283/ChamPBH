@@ -313,6 +313,9 @@ these 15 open; they pass to whichever campaign takes them (`.documents/review-re
   - **Assigned (2026-09-30):** to the `run-integrity` campaign, prompt 03 (R), which makes a
     stored failure final within a label; a new label, or `--retry-failed-bbn`, retries it. The
     user chose it as one of three to fix before a science run (`prompts/run-integrity/README.md`).
+  - **Resolved (2026-09-30):** by the `run-integrity` campaign, prompt 03 (commit "Cache failed
+    BBN rows and pair stage lookups by entry"; log
+    `prompts/run-integrity/logs/03-failure-caching-and-pairing.md`).
 - **[04-numerical-strategies-describes-the-removed-asinh-bbn-interface]** *(log 04, observation 1)*.
   - **What.** `.documents/numerical-strategies.md` §7.2–7.4 describe the BBN interface as it was
     before prompt 04:

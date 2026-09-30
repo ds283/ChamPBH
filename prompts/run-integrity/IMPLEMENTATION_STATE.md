@@ -1,11 +1,13 @@
 # Run integrity campaign — implementation state
 
-**Last updated:** 2026-09-30 · **Status: IN PROGRESS — 2 of 4 prompts landed (01, 02).**
+**Last updated:** 2026-09-30 · **Status: IN PROGRESS — 3 of 4 prompts landed (01, 02, 03).**
 `VERSION_LABEL` is `"2026.4.0"` since prompt 02, defined once in `config/version.py` since
 prompt 01. `PRyM_version` is `"bf24c3d+cham03+ri02"`.
 **Every store made before 2026.4.0 is invalid.** Since prompt 01, a lookup returns only rows made
 under the current label; opening an old store recomputes every compute target beside the old
 rows.
+**Since prompt 03, a failed BBN row is final within a label; a new label or
+`--retry-failed-bbn` retries it.**
 
 The campaign was planned on 2026-09-30, against `production-readiness` at `27a32bc`. It fixes three
 issues on the closed [`review-remediation`](../review-remediation/IMPLEMENTATION_STATE.md) board,
@@ -105,7 +107,7 @@ None pending. Decisions the prompts may surface, each a stop-and-ask in its prom
 |---|---|---|---|---|---|---|---|
 | 01 | [Key the compute-target lookups on the version](01-version-keyed-lookups.md) | **V** | Opus | ✍️ 2026-09-30 | ✅ 2026-09-30 | see `git log` ("Key the compute-target lookups on the version label") | [`logs/01-version-keyed-lookups.md`](logs/01-version-keyed-lookups.md) |
 | 02 | [Detect BBN solver failures; bump the version](02-detect-bbn-solver-failures.md) | **F**, version bump | Opus | ✍️ 2026-09-30 | ✅ 2026-09-30 | see `git log` ("Detect PRyMordial solver failures and bump to 2026.4.0") | [`logs/02-detect-bbn-solver-failures.md`](logs/02-detect-bbn-solver-failures.md) |
-| 03 | [Stop recomputing failed BBN rows; pair lookups correctly](03-failure-caching-and-pairing.md) | **R** | Opus | ✍️ 2026-09-30 | — | — | — |
+| 03 | [Stop recomputing failed BBN rows; pair lookups correctly](03-failure-caching-and-pairing.md) | **R** | Opus | ✍️ 2026-09-30 | ✅ 2026-09-30 | see `git log` ("Cache failed BBN rows and pair stage lookups by entry") | [`logs/03-failure-caching-and-pairing.md`](logs/03-failure-caching-and-pairing.md) |
 | 04 | [Close-out verification and handover](04-close-out-verification.md) | close-out | Sonnet | ✍️ 2026-09-30 | — | — | — |
 
 ---
@@ -116,7 +118,7 @@ None pending. Decisions the prompts may surface, each a stop-and-ask in its prom
 |---|---|---|---|---|
 | V | **DEFECT, high** | No `build()` filters on the `version` column that every compute-target row carries, so a store opened under a new label returns old rows: store_id 1 under `2026.4.0` in the planning probe. Three scripts carry three labels, one of them `"2026.1.1"`. Closes `[00-datastore-lookups-ignore-the-version-column]`. | 01 | **done 2026-09-30** (log 01). `ScalarModel`, `AdiabaticHistory` and `BBNData` register `"key_on_version": True`; `Datastore.object_get` hands their `build()` a copy of each payload with the current serial under `"_version_serial"`, and `build()` filters `version == serial`, raising if the key is absent. The label is defined once, in `config/version.py`, and imported by `main.py`, `plot_by_beta.py` and `plot_ScalarModel.py`; still `"2026.3.0"`. The planning probe's store_id 1 under `2026.4.0` is now `available=False`. Schema byte-identical. Suites 18 / 30 / 11, all OK |
 | F | **DEFECT, high** | No `solve_ivp` result in PRyMordial is checked. A last solve that gives up at 1 % of its span returns D/H 5.0e-3 off, with no exception. Only three exception types become failure rows. A NaN in ρ_NP hangs PRyMordial for more than 60 s. Closes `[03-bbn-solver-failures-are-undetected-and-some-exceptions-escape]` and `[00-a-nan-new-physics-sample-hangs-prymordial]`. | 02 | **done 2026-09-30** (log 02). Each of the eight `solve_ivp` calls in `PRyM/PRyM_main.py` is followed by a marked `_check_solve_ivp`, which raises `PRyMSolverFailureError` naming the stage, status, message and t reached; all five production stages and both small-network ones raise when forced to fail (on `HEAD~1`, k = 5 returned D/H x1e5 2.474578712). `_run_PRyMordial(callbacks, small_network)` turns any `Exception` inside the PRyMordial call into `"PRyMordial: <Type>: <message>"`; nothing else gained an `except`, and `compute_SM_baseline` still raises. `build_NP_callbacks` refuses non-finite samples, and each callback a non-finite T, with `ComputationFailureError`. `PRyM_version` `"bf24c3d+cham03+ri02"`; **`VERSION_LABEL` `"2026.4.0"`: every store made before 2026.4.0 is invalid.** Every pin unchanged. Suites 18 / 35 / 11, all OK |
-| R | **DEFECT, medium** | `main.py` looks up BBN successes only, so a failure is recomputed on every run; `failure=None` raises once two failed rows exist. Both stages zip lookup results against the unfiltered bin, so after a failed `ScalarModel` they schedule the wrong models: {V1, V3} for {V2, V4}. Closes `[03-main-recomputes-failed-bbn-rows-on-every-run]` and `[00-main-pairs-lookup-results-against-the-unfiltered-bin]`. | 03 | not started |
+| R | **DEFECT, medium** | `main.py` looks up BBN successes only, so a failure is recomputed on every run; `failure=None` raises once two failed rows exist. Both stages zip lookup results against the unfiltered bin, so after a failed `ScalarModel` they schedule the wrong models: {V1, V3} for {V2, V4}. Closes `[03-main-recomputes-failed-bbn-rows-on-every-run]` and `[00-main-pairs-lookup-results-against-the-unfiltered-bin]`. | 03 | **done 2026-09-30** (log 03). `BBNData.build(failure=None)` returns the success if one exists, else the newest failure (`failure ASC, timestamp DESC, serial DESC`, `LIMIT 1`); `failure=True`/`False` unchanged. `main.py`'s BBN lookup passes `failure=None`, so **a failed BBN row is final within a label; a new label or `--retry-failed-bbn` (new, default off) retries it.** Both stages pair lookups through the pure `pipeline_selection.build_query_entries` / `select_missing`, which raise on a length mismatch; no zip against the unfiltered bin remains in either. The helper gives {V2, V4} on the planning probe's bin, where the old logic gave {V1, V3}. One summary line per stage. Test (a) raises `MultipleResultsFound` on `765e80d`. Label and `PRyM_version` unchanged. Suites 18 / 41 / 17, all OK |
 
 ---
 
@@ -127,30 +129,8 @@ are assigned to this campaign's prompts. Issues opened by later prompts go here 
 row under §1.5 of `.documents/OPEN_ISSUES.md`. Prompt 01 opened two on 2026-09-30, neither
 assigned (the two `01-` entries). Prompt 02 closed
 `[00-a-nan-new-physics-sample-hangs-prymordial]` (§4) and opened two, neither assigned (the two
-`02-` entries).
-
-- **[00-main-pairs-lookup-results-against-the-unfiltered-bin]** *(the planner, 2026-09-30;
-  reasoned from `main.py` on `27a32bc`, reproduced by `planning-probes/pairing_probe.py`; not run
-  in the pipeline)*.
-  - **What.**
-    - **Two lengths.** In both `build_adiabatic_batch` and `build_bbn_data_batch`, the query
-      payload is built only from `ScalarModel`s that did not fail (`main.py:389`, `:635`). The
-      results are then zipped against `binned_batch[key]`, which still holds every pair
-      (`:413–425`, `:659–671`).
-    - **The shift.** After a failed model, every result is paired with the model before it,
-      and `zip` drops the last.
-  - **Measured on the probe's bin.** Five models; model 1's `ScalarModel` failed; models 0 and 3
-    already have BBN rows.
-    - The BBN stage schedules {V1, V3}. The right set is {V2, V4}.
-    - V1's `compute_BBN_data` reads `model.values` on a failed model. That raises `RuntimeError`
-      (`ComputeTargets/ScalarModel.py:1156`), outside every `except`, and the run stops.
-  - **Impact.** A single failed `ScalarModel` that is not last in its shard bin:
-    - misdirects the adiabatic and BBN stages;
-    - duplicates work for models already done;
-    - skips models that are not done;
-    - and in the BBN stage, stops the run.
-  - **Assigned (2026-09-30):** to this campaign, prompt 03 (R), by the user's decision to include
-    it.
+`02-` entries). Prompt 03 closed `[00-main-pairs-lookup-results-against-the-unfiltered-bin]` (§4)
+and opened one, not assigned (the `03-` entry).
 
 - **[01-adiabatic-and-bbn-lookups-do-not-require-validated-rows]** *(log 01, observation 1;
   reasoned from the code on `90b2c86` + prompt 01; not run)*.
@@ -200,14 +180,24 @@ assigned (the two `01-` entries). Prompt 02 closed
     route found other than those prompt 02 closes.
   - **Next step.** Raise `ComputationFailureError` on a non-finite return value. Prompt 02 was
     told not to change the callbacks' values, and did not add it.
+- **[03-step-1-first-pass-lookup-filters-nothing]** *(log 03, observation 1; reasoned from
+  `main.py` on `765e80d`; not run)*.
+  - **What.** In `build_solver_batch` (step 1 of `run_pipeline`), `missing` is
+    `[m for obj, m in zip(query_outcomes, binned_batch[key])]` (`main.py:205–210`), with no
+    `if not obj.available`. Every pair goes to the second pass, and the `num_missing == 0` early
+    return fires only for an empty batch.
+  - **Impact.** One redundant vectorized `ScalarModel` lookup per batch. No wrong result: the
+    second pass's `object_get` returns a stored model as `available`, and `RayWorkPool` skips it.
+  - **Next step.** Filter on `obj.available`, or drop the first pass. **Not in prompt 03's
+    scope**, which excludes step 1.
 
 ---
 
 ## 4. Resolved issues
 
-Two assigned issues, closed by prompts 01 and 02 on 2026-09-30. Their entries stay on the
-`review-remediation` board, with a **Resolved** line; they are listed here as the record. One
-opened here, closed by prompt 02 and moved from §3.
+Three assigned issues, closed by prompts 01, 02 and 03 on 2026-09-30. Their entries stay on the
+`review-remediation` board, with a **Resolved** line; they are listed here as the record. Two
+opened here, closed by prompts 02 and 03 and moved from §3.
 
 - **[00-datastore-lookups-ignore-the-version-column]** — resolved by prompt 01 (log 01). The three
   compute-target lookups are keyed on the current label's serial, delivered by
@@ -220,6 +210,11 @@ opened here, closed by prompt 02 and moved from §3.
   PRyMordial call becomes a failure payload, through `_run_PRyMordial`. Tests (a) and (b) in
   `ComputeTargets/tests/test_bbn_solver_failures.py` fail on `f0de762`; (c)'s breakage record is
   the three-type `except` quoted in log 02.
+- **[03-main-recomputes-failed-bbn-rows-on-every-run]** — resolved by prompt 03 (log 03).
+  `BBNData.build(failure=None)` returns the success if one exists, else the newest failure, and
+  `main.py`'s BBN lookup uses it, so a stored failure counts as done. A failed BBN row is final
+  within a label; a new label or `--retry-failed-bbn` retries it. Test (a) in
+  `Datastore/tests/test_bbn_failure_lookup.py` raises `MultipleResultsFound` on `765e80d`.
 - **[00-a-nan-new-physics-sample-hangs-prymordial]** *(the planner, 2026-09-30;
   `planning-probes/prymordial_solver_probe.py nan` on `27a32bc`)*.
   - **What.** With ρ_NP = NaN below 0.1 MeV, PRyMordial's first two solves succeed (lines 199 and
@@ -239,3 +234,31 @@ opened here, closed by prompt 02 and moved from §3.
     PRyMordial. `make_interp_spline` raised `ValueError`, which escaped `compute_BBN_data` with no
     failure row. The hang's route was a callback *returning* NaN, as for a NaN T. That route is
     closed too; a NaN from the EOS is not (`[02-the-bbn-callbacks-do-not-check-their-values-for-finiteness]`).
+- **[00-main-pairs-lookup-results-against-the-unfiltered-bin]** *(the planner, 2026-09-30;
+  reasoned from `main.py` on `27a32bc`, reproduced by `planning-probes/pairing_probe.py`; not run
+  in the pipeline)*.
+  - **What.**
+    - **Two lengths.** In both `build_adiabatic_batch` and `build_bbn_data_batch`, the query
+      payload is built only from `ScalarModel`s that did not fail (`main.py:389`, `:635`). The
+      results are then zipped against `binned_batch[key]`, which still holds every pair
+      (`:413–425`, `:659–671`).
+    - **The shift.** After a failed model, every result is paired with the model before it,
+      and `zip` drops the last.
+  - **Measured on the probe's bin.** Five models; model 1's `ScalarModel` failed; models 0 and 3
+    already have BBN rows.
+    - The BBN stage schedules {V1, V3}. The right set is {V2, V4}.
+    - V1's `compute_BBN_data` reads `model.values` on a failed model. That raises `RuntimeError`
+      (`ComputeTargets/ScalarModel.py:1156`), outside every `except`, and the run stops.
+  - **Impact.** A single failed `ScalarModel` that is not last in its shard bin:
+    - misdirects the adiabatic and BBN stages;
+    - duplicates work for models already done;
+    - skips models that are not done;
+    - and in the BBN stage, stops the run.
+  - **Assigned (2026-09-30):** to this campaign, prompt 03 (R), by the user's decision to include
+    it.
+  - **Resolved (2026-09-30):** by prompt 03 (log 03). Both stages build their downstream query
+    from `pipeline_selection.build_query_entries`, which keeps each (potential, coupling) with its
+    `ScalarModel`, and decide "missing" with `select_missing`, which pairs each result with that
+    entry and raises on a length mismatch. No zip against `binned_batch[key]` remains in either
+    function. On the probe's bin the helper gives {V2, V4}; the probe's copy of the old logic
+    gives {V1, V3} (test (d) in `ComputeTargets/tests/test_pipeline_selection.py`).

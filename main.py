@@ -63,6 +63,7 @@ from config.sharding import (
     inventory_config,
 )
 from config.version import VERSION_LABEL
+from pipeline_selection import build_query_entries, select_missing
 from utilities import grouper, energy_formatter
 
 MIN_NOTIFY_INTERVAL = 5 * 60
@@ -278,6 +279,9 @@ def run_pipeline(
 
     ## STEP 2
     ## CALCULATE THE ADIABATIC TRANSGRESSION PARAMETER Q FOR EACH MODEL IN THE GRID
+    # counts for the stage's summary line (run-integrity prompt 03)
+    adiabatic_counts = {"skipped_failed_models": 0}
+
     adiabatic_sample_grid = itertools.product(
         Potential_array,
         Coupling_array,
@@ -347,39 +351,36 @@ def run_pipeline(
         )
         model_query_queue.run()
 
-        missing_models = [
-            {
-                "shard_key": key,
-                "missing": [
-                    m
-                    for obj, m in zip(query_outcomes, binned_batch[key])
-                    if not obj.available
-                ],
-            }
+        # keep each ScalarModel lookup result with the (potential, coupling) pair it was
+        # asked for, and drop the models that failed (run-integrity prompt 03)
+        query_entries = {
+            key: build_query_entries(binned_batch[key], query_outcomes)
             for key, query_outcomes in zip(batch_keys, model_query_queue.results)
-        ]
-        num_missing_models = sum(len(x["missing"]) for x in missing_models)
+        }
+        num_missing_models = sum(len(x.unavailable) for x in query_entries.values())
         if num_missing_models > 0:
             raise RuntimeError(
                 f"Some ScalarModel instances needed for AdiabaticHistory computation are missing ({num_missing_models} missing in this batch)"
             )
+        adiabatic_counts["skipped_failed_models"] += sum(
+            x.skipped_failed_models for x in query_entries.values()
+        )
 
         adiabatic_query_batch = [
             {
                 "shard_key": key,
                 "payload": [
                     {
-                        "model_proxy": ScalarModelProxy(obj),
+                        "model_proxy": ScalarModelProxy(entry.model),
                         "tags": [
                             SamplesPerLog10ZTag,
                         ],
                         "_do_not_populate": True,
                     }
-                    for obj in query_outcomes
-                    if not obj.failure
+                    for entry in query_entries[key].entries
                 ],
             }
-            for key, query_outcomes in zip(batch_keys, model_query_queue.results)
+            for key in batch_keys
         ]
 
         adiabatic_query_queue = RayWorkPool(
@@ -400,18 +401,22 @@ def run_pipeline(
         )
         adiabatic_query_queue.run()
 
+        # pair each result with the entry it was asked for; AdiabaticHistory stores no
+        # failure rows, so there is nothing to retry
+        selections = [
+            select_missing(
+                query_entries[key].entries, query_outcomes, retry_failed=False
+            )
+            for key, query_outcomes in zip(batch_keys, adiabatic_query_queue.results)
+        ]
         missing_adiabatic = [
             {
                 "shard_key": key,
                 "missing": [
-                    (potential, coupling)
-                    for obj, (potential, coupling) in zip(
-                        query_outcomes, binned_batch[key]
-                    )
-                    if not obj.available
+                    (entry.potential, entry.coupling) for entry in selection.missing
                 ],
             }
-            for key, query_outcomes in zip(batch_keys, adiabatic_query_queue.results)
+            for key, selection in zip(batch_keys, selections)
         ]
 
         num_missing = sum(len(x["missing"]) for x in missing_adiabatic)
@@ -522,9 +527,15 @@ def run_pipeline(
         notify_min_time_interval=MIN_NOTIFY_INTERVAL,
     )
     adiabatic_queue.run()
+    print(
+        f"-- AdiabaticHistory: {adiabatic_counts['skipped_failed_models']} models skipped because their ScalarModel failed"
+    )
 
     ## STEP 3
     ## COMPUTE BBN DATA FOR EACH MODEL IN THE GRID
+    # counts for the stage's summary line (run-integrity prompt 03)
+    bbn_counts = {"skipped_failed_models": 0, "stored_failures": 0}
+
     BBN_sample_grid = itertools.product(
         Potential_array,
         Coupling_array,
@@ -593,39 +604,38 @@ def run_pipeline(
         )
         model_query_queue.run()
 
-        missing_models = [
-            {
-                "shard_key": key,
-                "missing": [
-                    m
-                    for obj, m in zip(query_outcomes, binned_batch[key])
-                    if not obj.available
-                ],
-            }
+        # keep each ScalarModel lookup result with the (potential, coupling) pair it was
+        # asked for, and drop the models that failed (run-integrity prompt 03)
+        query_entries = {
+            key: build_query_entries(binned_batch[key], query_outcomes)
             for key, query_outcomes in zip(batch_keys, model_query_queue.results)
-        ]
-        num_missing_models = sum(len(x["missing"]) for x in missing_models)
+        }
+        num_missing_models = sum(len(x.unavailable) for x in query_entries.values())
         if num_missing_models > 0:
             raise RuntimeError(
                 f"Some ScalarModel instances needed for BBN computations are missing ({num_missing_models} missing in this batch)"
             )
+        bbn_counts["skipped_failed_models"] += sum(
+            x.skipped_failed_models for x in query_entries.values()
+        )
 
         bbn_query_batch = [
             {
                 "shard_key": key,
                 "payload": [
                     {
-                        "model_proxy": ScalarModelProxy(obj),
+                        "model_proxy": ScalarModelProxy(entry.model),
                         "tags": [
                             SamplesPerLog10ZTag,
                         ],
+                        # any row: a stored failure counts as done (run-integrity prompt 03)
+                        "failure": None,
                         "_do_not_populate": True,
                     }
-                    for obj in query_outcomes
-                    if not obj.failure
+                    for entry in query_entries[key].entries
                 ],
             }
-            for key, query_outcomes in zip(batch_keys, model_query_queue.results)
+            for key in batch_keys
         ]
 
         bbn_query_queue = RayWorkPool(
@@ -646,18 +656,25 @@ def run_pipeline(
         )
         bbn_query_queue.run()
 
+        # pair each result with the entry it was asked for; a stored failure is final
+        # within this version label unless --retry-failed-bbn is given
+        selections = [
+            select_missing(
+                query_entries[key].entries,
+                query_outcomes,
+                retry_failed=args.retry_failed_bbn,
+            )
+            for key, query_outcomes in zip(batch_keys, bbn_query_queue.results)
+        ]
+        bbn_counts["stored_failures"] += sum(x.stored_failures for x in selections)
         missing_bbn = [
             {
                 "shard_key": key,
                 "missing": [
-                    (potential, coupling)
-                    for obj, (potential, coupling) in zip(
-                        query_outcomes, binned_batch[key]
-                    )
-                    if not obj.available
+                    (entry.potential, entry.coupling) for entry in selection.missing
                 ],
             }
-            for key, query_outcomes in zip(batch_keys, bbn_query_queue.results)
+            for key, selection in zip(batch_keys, selections)
         ]
 
         num_missing = sum(len(x["missing"]) for x in missing_bbn)
@@ -768,6 +785,13 @@ def run_pipeline(
         notify_min_time_interval=MIN_NOTIFY_INTERVAL,
     )
     bbn_data_queue.run()
+    if args.retry_failed_bbn:
+        stored_failure_summary = f"{bbn_counts['stored_failures']} computations with a stored failure retried (--retry-failed-bbn)"
+    else:
+        stored_failure_summary = f"{bbn_counts['stored_failures']} computations skipped because of a stored failure"
+    print(
+        f"-- BBNData: {bbn_counts['skipped_failed_models']} models skipped because their ScalarModel failed; {stored_failure_summary}"
+    )
 
 
 def execute(pool, units: UnitsLike):

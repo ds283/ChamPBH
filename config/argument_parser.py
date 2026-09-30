@@ -243,6 +243,13 @@ def create_argument_parser() -> configargparse.ArgumentParser:
         action="extend",
     )
     parser.add_argument(
+        "--retry-failed-bbn",
+        action="store_true",
+        default=False,
+        help="retry BBN computations that failed under the current version label; without "
+        "this flag a stored BBN failure counts as done and is not retried",
+    )
+    parser.add_argument(
         "--output",
         default="data-out",
         type=str,
