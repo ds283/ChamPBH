@@ -197,6 +197,10 @@ these 15 open; they pass to whichever campaign takes them (`.documents/review-re
   `main.py` opening a `2026.1.1` store is handed stale rows. Prompt 02 bumps `VERSION_LABEL` and
   states the fresh-database rule; keying on the version is the datastore layer's. **Out of scope
   here.**
+  - **Assigned (2026-09-30):** to the `run-integrity` campaign, prompt 01 (V), which keys the
+    `ScalarModel`, `AdiabaticHistory` and `BBNData` lookups on the current label's serial and
+    defines the label once, in `config/version.py`. The user chose it as one of three to fix
+    before a science run (`prompts/run-integrity/README.md`).
 - **[00-two-files-are-not-black-clean]** — `Datastore/SQL/ObjectFactories/base.py` and
   `CosmologyModels/LambdaCDM/Planck.py` at `f5896bb` (`black --check`, 2026-09-29). Housekeeping;
   reformat in a commit of their own, never inside a prompt's diff.
@@ -287,6 +291,10 @@ these 15 open; they pass to whichever campaign takes them (`.documents/review-re
   - **Next step.** Check `sol.success` after each background solve (a vendored patch, with a
     marker) and raise `ComputationFailureError`, so the reason is recorded. **Not in prompt 03's
     scope.**
+  - **Assigned (2026-09-30):** to the `run-integrity` campaign, prompt 02 (F), which checks every
+    `solve_ivp` result in a marked `PRyM/` patch and turns any exception inside the PRyMordial
+    call into a failure row. The user chose it as one of three to fix before a science run
+    (`prompts/run-integrity/README.md`).
 - **[03-main-recomputes-failed-bbn-rows-on-every-run]** *(log 03, observation 4)*.
   - **What.** `main.py`'s BBN lookup (`:617–630`) uses `build()`'s default `failure=False`. A model
     whose BBN computation fails deterministically is recomputed, and a new failed row stored, on
@@ -296,6 +304,9 @@ these 15 open; they pass to whichever campaign takes them (`.documents/review-re
   - **Next step.** Decide whether a failed row should stop recomputation, perhaps unless the
     `PRyM_version` or the `VERSION_LABEL` differs. That belongs with
     `[00-datastore-lookups-ignore-the-version-column]`.
+  - **Assigned (2026-09-30):** to the `run-integrity` campaign, prompt 03 (R), which makes a
+    stored failure final within a label; a new label, or `--retry-failed-bbn`, retries it. The
+    user chose it as one of three to fix before a science run (`prompts/run-integrity/README.md`).
 - **[04-numerical-strategies-describes-the-removed-asinh-bbn-interface]** *(log 04, observation 1)*.
   - **What.** `.documents/numerical-strategies.md` §7.2–7.4 describe the BBN interface as it was
     before prompt 04:

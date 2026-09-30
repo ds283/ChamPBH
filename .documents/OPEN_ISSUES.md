@@ -1,7 +1,8 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-09-30 · **13 open**: 11 on the `review-remediation` board (closed
-2026-09-30), none of them assigned; 2 on the `production-readiness` board (closed 2026-09-30).
+**Last updated:** 2026-09-30 · **15 open**: 11 on the `review-remediation` board (closed
+2026-09-30), 3 of them assigned to `run-integrity`; 2 on the `production-readiness` board (closed
+2026-09-30); 2 on the `run-integrity` board (planned 2026-09-30).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -14,7 +15,8 @@ the two disagree, the board is right.
 > the date above. See `CLAUDE.md`.
 
 **Boards.** [`review-remediation`](../prompts/review-remediation/IMPLEMENTATION_STATE.md) ·
-[`production-readiness`](../prompts/production-readiness/IMPLEMENTATION_STATE.md)
+[`production-readiness`](../prompts/production-readiness/IMPLEMENTATION_STATE.md) ·
+[`run-integrity`](../prompts/run-integrity/IMPLEMENTATION_STATE.md)
 
 ## 1. Open, by owning board
 
@@ -24,16 +26,13 @@ Seven seeded at planning on 2026-09-29 from `.documents/audit-2026-09-29/README.
 opened after that on 2026-09-29 are resolved (board §4). One opened by prompt 02, four by prompt 03,
 one by prompt 04, one by prompt 05, one by prompt 06. The campaign closed on 2026-09-30; these rows
 stay here until a later campaign takes them. Four were assigned on 2026-09-30; all four are
-resolved (§1.2).
+resolved (§1.2). Three more were assigned on 2026-09-30 to `run-integrity` (§1.4).
 
 - `[00-initial-field-value-is-hard-coded-and-unchecked]` — `main.py:814` fixes φ* = 5 M_P with no
   A*T* ≲ M_P guard (review H8). Out of this campaign's scope.
 - `[00-kicking-function-table-has-no-provenance-in-the-repository]` —
   `CosmologyModels/GenericEOS/Xav_EOS_data.csv` was added in commit `1759515` without the script
   that built it.
-- `[00-datastore-lookups-ignore-the-version-column]` — `ScalarModel`, `AdiabaticHistory` and
-  `BBNData` rows carry a `version` but no lookup filters on it, so a numerical fix returns stale
-  rows from an old store without complaint.
 - `[00-two-files-are-not-black-clean]` — `Datastore/SQL/ObjectFactories/base.py` and
   `CosmologyModels/LambdaCDM/Planck.py` at `f5896bb`; housekeeping.
 - `[00-bbn-spline-domain-is-far-wider-than-prymordial-uses]` — `BBNData.py:47` tabulates down to
@@ -45,10 +44,6 @@ resolved (§1.2).
 - `[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]` — PRyMordial's Yp and D/H
   move by 1e-5–7e-4 under 1e-9–1e-8 changes to ρ_NP; prompt 04's 1e-4 D/H test passes at 8.85e-5
   inside that band.
-- `[03-bbn-solver-failures-are-undetected-and-some-exceptions-escape]` — PRyMordial never checks
-  `solve_ivp`'s status, and `compute_BBN_data` catches only three exception types.
-- `[03-main-recomputes-failed-bbn-rows-on-every-run]` — `main.py` looks up successes only, so a
-  deterministic BBN failure is recomputed and re-stored each run.
 - `[04-numerical-strategies-describes-the-removed-asinh-bbn-interface]` —
   `.documents/numerical-strategies.md` §7.2–7.4 still describe the asinh transform and the sort
   that prompt 04 removed; needs a dated addendum.
@@ -76,3 +71,28 @@ prompt 03 were closed as accepted by the user the same day (board §4).
 - `[00-paper-gives-two-inconsistent-adiabaticity-conditions]` — `Paper1.tex`'s main-text
   `eq:adiabaticity` (what the code does) and its appendix condition differ; the appendix also
   carries the H5 omission.
+
+### 1.4 Assigned to `run-integrity` — [its board](../prompts/run-integrity/IMPLEMENTATION_STATE.md)
+
+Assigned 2026-09-30 by the user, to clear before a science run. The entries stay on the
+`review-remediation` board (§3), which carries the **Assigned** line; the prompt that closes one
+deletes its row here.
+
+- `[00-datastore-lookups-ignore-the-version-column]` — `ScalarModel`, `AdiabaticHistory` and
+  `BBNData` rows carry a `version` but no lookup filters on it, so a numerical fix returns stale
+  rows from an old store without complaint.
+- `[03-bbn-solver-failures-are-undetected-and-some-exceptions-escape]` — PRyMordial never checks
+  `solve_ivp`'s status, and `compute_BBN_data` catches only three exception types.
+- `[03-main-recomputes-failed-bbn-rows-on-every-run]` — `main.py` looks up successes only, so a
+  deterministic BBN failure is recomputed and re-stored each run.
+
+### 1.5 `run-integrity` — [board §3](../prompts/run-integrity/IMPLEMENTATION_STATE.md)
+
+Two opened by the planner on 2026-09-30, both assigned to the campaign's own prompts.
+
+- `[00-main-pairs-lookup-results-against-the-unfiltered-bin]` — `main.py`'s adiabatic and BBN
+  stages zip lookup results for the non-failed models against every pair in the bin; after a
+  failed `ScalarModel` they schedule the wrong models, and the BBN stage stops. Prompt 03.
+- `[00-a-nan-new-physics-sample-hangs-prymordial]` — a NaN in ρ_NP reaches PRyMordial's high-T
+  solve as `t_span = [nan, …]` and LSODA does not return; no guard in `build_NP_callbacks`
+  rejects it. Prompt 02.
