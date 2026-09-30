@@ -16,6 +16,13 @@ amends is §4 of
 (about 60 s, from the root with `venv/bin/python`). Every H5 figure in this README comes from it,
 and every other figure from the board entries it cites, on `204795e` unless stated.
 **Planned:** 2026-09-30 against `main` at `204795e`.
+**Amended:** 2026-09-30 at `b0e46bc`, after the planner audited the rest of the adiabaticity code at
+the user's request. It rewrote §2 (e), which had called the spike at a sign change of M²_eff
+physical and offered a fail-closed guard. Q is smooth there; the singularity is in the code's route
+to it. Prompt 03's A3 now removes the singular route instead of guarding it. The measurement is
+[`planning-probes/q_sign_change_probe.py`](planning-probes/q_sign_change_probe.py) (a few
+seconds). The amendment also opened two issues for the authors (board §3), and added a note in
+§2 (h) on what the diagnostic assumes.
 **Target branch:** `production-readiness`, to be cut from `204795e` by whoever runs prompt 01's
 orchestrator if it does not yet exist. Planning and orchestration commits land on the same branch.
 **Status board:** [`IMPLEMENTATION_STATE.md`](IMPLEMENTATION_STATE.md) ·
@@ -188,21 +195,58 @@ derivation below is evidence, and the test's reference decides.
 
   Σ_T = −3 `dw_dlogT`. **Never finite-difference `w` inside production code.**
 
-**(e) The log of |M²_eff| (P3).** `compute_adiabatic_values` splines log|H² M²_eff/H²| against N
-and differentiates it (`AdiabaticHistory.py:163–166`). With the new term, M²_eff can pass through
-zero where the old expression did not: the bracket is negative at 140 MeV. At a crossing,
-log|M²| → −∞ and d log|M²|/dN spikes.
+**(e) Q's numerator is smooth through M²_eff = 0; the code's route to it is not (P3; amended
+2026-09-30).**
 
-- **The spike is physical.** Adiabaticity really does fail near M² = 0.
-- **An exact zero, or a non-finite value, must not reach the spline.** Prompt 03 decides how to
-  guard it: fail closed with `ComputationFailureError`, or floor |M²|. It records the choice as an
-  IMPLEMENTATION CHOICE, and it does not otherwise change how Q is computed.
+- **What Q is.** The planner re-derived it, on `b0e46bc`. The code's
+  |A C| / |B|^{3/2}, with A = M²/H², B = A + k_p²/H² and C = 1 + ½ d ln|M²|/dN, is exactly
+  |dω/dτ|/ω² for ω² = k² + a² M²_eff in Einstein-frame conformal time at fixed comoving k. It
+  matches the paper's `eq:adiabaticity`, and the self, conformal-(ln Ω)″ and gravitational pieces
+  of M²_eff are right.
+- **The numerator.** A·C = M²/H² + ½ (dM²/dN)/H². Since d ln H²/dN = 2Ḣ/H², that is
+  **A·C = m (1 + Ḣ/H²) + ½ dm/dN** with m = M²_eff/H². This is finite through m = 0: Q there is
+  ½ (dm/dN) / (k_p/H)³. **A sign change of M²_eff is not a failure of adiabaticity.**
+- **The code's route.** `compute_adiabatic_values` splines log|H² m| against N
+  (`AdiabaticHistory.py:163–166`), differentiates it, and multiplies by A. At a crossing that is a
+  vanishing A times a spline derivative through a log going to −∞. An exact zero raises in
+  `math.log`.
+- **The measurement.** From `q_sign_change_probe.py`, at the production sampling of 250 per
+  decade in z (ΔN = ln 10/250), the error is quoted relative to max |A·C|:
+
+  | Synthetic history | log\|M²\| spline (now) | spline of m | spline of asinh m |
+  |---|---|---|---|
+  | m = 5 sin(2πN/3) + 0.5, crossing zero | **1.8** | 3.9e-8 | 1.1e-5 |
+  | m = 0.5 + four 10⁴ spikes of width 0.05 | 2.8e-6 | **7.0e-4** | 9.3e-6 |
+
+  The log route fails through zero; the plain spline loses accuracy over a bounce's dynamic range.
+- **Why prompt 03 must fix it.** With the new term, M²_eff will cross zero where it did not before,
+  because the bracket is negative at 140 MeV.
+- **Why it has done little harm so far.** For the stored scales, k_p/H ≥ 10, |B|^{3/2} ≳ 10³. So the
+  log route's O(1)–O(10) error in A·C near a crossing is ≲ 1e-2 in Q.
+- **Prompt 03 therefore removes the singular route rather than guarding it.** It computes A·C in
+  the smooth form, with Ḣ/H² from `Hdot_over_H2_plus_3` − 3. dm/dN comes from a representation
+  that is accurate both through zero and across a bounce. The asinh spline is one; an analytic dm/dN
+  is another. **A guard that fails a history because M²_eff crosses zero is not allowed.** The Q
+  formula, `Q_labels` and what is stored do not change.
 
 **(f) Units and conventions.** `units.PlanckMass` is reduced. `E`, `R`, `f_m` and Σ are as in
 `ODEPolicy.__call__` (`ScalarModel.py:195–275`), which is the definition. T_J is
 `exp(value.log_T_Jordan)`, never derived from `z`.
 
 **(g) Everything runs from the repository root** (`CLAUDE.md`).
+
+**(h) What the diagnostic assumes, which prompt 03 states and does not change (added
+2026-09-30).**
+
+- **A test field.** δφ is treated as a test field on an unperturbed background. Mixing with the
+  metric perturbation enters at order π²/M_P² = 6(1 − G), which is small only while the field's
+  kinetic energy is a small fraction of the total.
+- **The plasma's response.** The source's response to δφ is taken at fixed a_E and entropy
+  (§2 (c)). For modes deep inside the horizon the plasma's own perturbations are dynamical, and the
+  coupled δφ–plasma system is beyond both the paper and the code.
+- **Which modes Q describes.** Q is evaluated at fixed k_p/H ∈ {10, 10², 10³, 10⁴}, a different
+  comoving mode at each N, and no horizon-scale mode. Whether that is the intended diagnostic is a
+  question for the authors (board §3); prompt 03 does not change it.
 
 ---
 
@@ -212,7 +256,7 @@ log|M²| → −∞ and d log|M²|/dN spikes.
 |---|---|---|---|
 | 01 | [Report the hard-reflection count](01-report-hard-reflections.md) | **Sonnet** | Bookkeeping. One key constant, one pure `extra_data` builder factored out unchanged, one reader, a CSV column and a printed summary; a test that fails on `HEAD~1` |
 | 02 | [Wire the network flag; run the full network](02-wire-the-network-flag.md) | **Opus** | Plumbing, plus the version bump. The work is showing that the flag reaches PRyMordial and that nothing else moved |
-| 03 | [The adiabatic mass: the source-response term](03-adiabatic-source-response.md) | **Opus** | Physics. Re-derive; build the independent reference; expose `dw_dlogT` on every EOS class; add the term; guard the zero crossing; addenda to two documents |
+| 03 | [The adiabatic mass: the source-response term](03-adiabatic-source-response.md) | **Opus** | Physics. Re-derive; build the independent reference; expose `dw_dlogT` on every EOS class; add the term; compute Q's numerator in its smooth form; addenda to two documents |
 | 04 | [Close-out verification and handover](04-close-out-verification.md) | **Sonnet** | No production code. Re-run every §6 row on the final tree; an additive handover addendum |
 
 ### 3.1 Dependencies
@@ -254,6 +298,8 @@ repairs**.
   - to patch `PRyM/`; to touch `thirdparty/`;
   - to change a schema or a lookup key;
   - to bump `VERSION_LABEL` a second time.
+  - to fail or floor a history because M²_eff crosses zero, or to keep the log|M²| spline as
+    the route to Q's numerator (§2 (e)).
 - An agent proposes to rewrite anything under `.documents/` rather than add to it.
 - The subagent asks a question. **Relay it verbatim; do not answer it.**
 
@@ -393,7 +439,8 @@ target.**
 | the conformal part of `M2eff_over_H2`, minus the self and gravitational parts, against the §2 (c) reference, exponential coupling, f_m ∈ {0, 1, 100}, same grid | 0 against a bracket from −0.41 to +0.35 | **≤ 1e-6 absolute in the bracket**, i.e. \|Δ(M²/H²)\| / (3 (ln Ω)′² M_P² E) ≤ 1e-6, at h = 1e-4 in ln Ω (probe: 9.9e-8) | new test; **fails on `HEAD~1`** |
 | same, a stand-in coupling with (ln Ω)″ ≠ 0 | — | **≤ 1e-6** in the same norm | same |
 | f_m → ∞ limit, exponential coupling | 0 | **β² ρ_m,E / (M_P² H²) to 1e-6 relative** at f_m = 1e6 | same |
-| a history passing through M²_eff = 0 | — | **no non-finite value reaches the spline**; behaviour as chosen in §2 (e) | same |
+| A·C against its analytic value, at ΔN = ln 10/250, on the two synthetic histories of §2 (e) | 1.8 / 2.8e-6 of max \|A·C\| (log route) | **≤ 1e-4 of max \|A·C\| on both** (probe, asinh spline: 1.1e-5 / 9.3e-6) | new test |
+| a history whose M²_eff passes through exactly 0 at a sample | `math.log` raises | **finite Q, equal to ½ (dm/dN)/(k_p/H)³ at that sample to 1e-4 relative; the history is not failed** | same |
 | the audit's closed form | — | **measured against the reference and reported**, not implemented | log |
 | `ScalarModel.py` in the diff | — | **absent** | `git diff --stat` |
 
@@ -417,7 +464,7 @@ stating at least:
    superseded.
 4. **The adiabatic mass** now includes the source response. Expect M²_eff/H² to change by
    O(β²) through the QCD and e⁺e⁻ features and by 3β²f_m/(1 + f_m) in matter domination. Also
-   expect max |Q| to change, and possibly spike where M²_eff crosses zero. **No old
-   `AdiabaticHistory` row is comparable.**
+   expect max |Q| to change. Q no longer depends on the sampling where M²_eff crosses zero.
+   **No old `AdiabaticHistory` row is comparable.**
 5. The issues still open on the `review-remediation` board, by name, that the production run
    may want fixed first: H8, the version-column lookups, the BBN solver failures.

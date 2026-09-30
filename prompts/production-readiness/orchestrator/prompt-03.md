@@ -24,12 +24,15 @@ three things:
 2. `grep -n VERSION_LABEL main.py plot_by_beta.py` gives `"2026.3.0"` in both. **If not, stop.**
    Prompt 03 must not bump it.
 3. Baselines: both suite counts.
-4. Run the planning probe yourself and keep its output. It takes about 60 s.
+4. Run the planning probes yourself and keep their output. They take about 60 s and a few
+   seconds.
    ```bash
    PYTHONPATH=. ./venv/bin/python prompts/production-readiness/planning-probes/h5_bracket_probe.py
+   ./venv/bin/python prompts/production-readiness/planning-probes/q_sign_change_probe.py
    ```
    Table 2 should give 9.9e-8 at h = 1e-4. The analytic dΣ/d ln T should match a central
-   difference to 1.0e-7.
+   difference to 1.0e-7. The second probe should show the log route at 1.8 on the crossing history,
+   and the asinh spline at 1.1e-5 and 9.3e-6.
 5. `venv/bin/black --check ComputeTargets/AdiabaticHistory.py CosmologyModels/GenericEOS/*.py main.py`.
    Record which files are not clean.
 
@@ -76,10 +79,18 @@ README §2 (c), stop and report; do not implement either form."*
    ```
    Read it: `dw_dlogT` is analytic, spline or autodiff in every class, and there is no step size
    in production code.
-8. **The zero crossing.**
-   - The A3 guard is present, and test (e) passes.
-   - The log records the choice as an IMPLEMENTATION CHOICE with its consequence for Q.
-   - The Q formula (`A`, `B`, `C`, `abs_Q`) is unchanged in the diff.
+8. **Q's numerator** (A3, amended 2026-09-30).
+   - The diff computes A·C as m (1 + Ḣ/H²) + ½ dm/dN. `log` of |M²_eff| is no longer on the path
+     to `abs_Q`.
+   - **Nothing fails, floors or clips a history because M²_eff crosses zero.** Any of those is a
+     stop.
+   - Run test (e) yourself: ≤ 1e-4 of max |A·C| on both synthetic histories, and the exact-zero
+     sample finite. Quote the numbers.
+   - Run test (e) against `HEAD~1`'s `AdiabaticHistory.py`, the generic procedure. It must fail
+     on the crossing history or the exact zero.
+   - Q's definition (the `abs_Q` expression from A·C and |B|^{3/2}), `Q_labels` and the stored
+     fields are unchanged.
+   - The log records the dm/dN representation as an IMPLEMENTATION CHOICE.
 9. **The label is not bumped.** It is still `"2026.3.0"`, with one added sentence in `main.py`'s
    comment.
 10. **Housekeeping.**
@@ -106,7 +117,7 @@ Report:
 - Table 1, re-measured;
 - the audit-form difference;
 - the bracket's range;
-- the A3 choice;
+- the A3 representation and test (e)'s numbers, before and after;
 - the breakage record;
 - the suite counts.
 

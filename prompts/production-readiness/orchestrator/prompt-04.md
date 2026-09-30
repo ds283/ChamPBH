@@ -11,8 +11,9 @@ code, and neither does the agent.**
 1. Prompts 01–03 landed and reviewed; branch; `HEAD`; `git status` clean.
 2. Both suite counts and wall-clocks, recorded.
 3. `git diff --stat 204795e..HEAD`. Keep it; you will check the agent's copy against it.
-4. `grep -c "^- \`\[" .documents/OPEN_ISSUES.md` and the header count. Expect 11, not counting
-   anything prompts 01–03 opened.
+4. `grep -c "^- \`\[" .documents/OPEN_ISSUES.md` and the header count. Expect 13: the 11 left on
+   the `review-remediation` board and the 2 opened at the plan's amendment, plus anything prompts
+   01–03 opened.
 
 ## 2. Dispatch
 

@@ -1,7 +1,8 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-09-30 · **15 open**, all on the `review-remediation` board (closed
-2026-09-30); 4 of them assigned to `production-readiness` (planned 2026-09-30).
+**Last updated:** 2026-09-30 · **17 open**: 15 on the `review-remediation` board (closed
+2026-09-30), 4 of them assigned to `production-readiness`; 2 on the `production-readiness` board
+(planned 2026-09-30).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -74,3 +75,14 @@ deletes its row here.
 - `[00-adiabaticity-diagnostic-omits-the-source-response-term]` — `AdiabaticHistory.py:103`
   gives zero conformal mass for the exponential coupling; the (Ω′)² response term is missing
   (review H5).
+
+### 1.3 `production-readiness` — [board §3](../prompts/production-readiness/IMPLEMENTATION_STATE.md)
+
+Two opened when the plan was amended on 2026-09-30, both for the authors.
+
+- `[00-adiabaticity-is-evaluated-at-fixed-k-over-H-not-for-fixed-comoving-modes]` — max |Q| is
+  taken at fixed k_p/H ∈ {10 … 10⁴}, a different comoving mode at each N, with no horizon-scale
+  mode; the paper's appendix fixes k = (aH) at the first rebound.
+- `[00-paper-gives-two-inconsistent-adiabaticity-conditions]` — `Paper1.tex`'s main-text
+  `eq:adiabaticity` (what the code does) and its appendix condition differ; the appendix also
+  carries the H5 omission.

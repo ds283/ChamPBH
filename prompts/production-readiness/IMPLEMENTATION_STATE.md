@@ -1,6 +1,8 @@
 # Production readiness campaign — implementation state
 
-**Last updated:** 2026-09-30 · **Status: PLANNED — 0 of 4 prompts landed.**
+**Last updated:** 2026-09-30 · **Status: PLANNED — 0 of 4 prompts landed.** Amended 2026-09-30
+at `b0e46bc` (README header): prompt 03's A3 now removes the singular log|M²| route to Q's
+numerator instead of guarding it, and two issues are opened for the authors (§3).
 
 The campaign was opened on 2026-09-30, against `main` at `204795e`. It fixes four issues on the
 closed [`review-remediation`](../review-remediation/IMPLEMENTATION_STATE.md) board, which the user
@@ -22,7 +24,7 @@ Target branch `production-readiness` from `204795e`. `VERSION_LABEL` is `"2026.2
 **Code:** `extract_common.py`, `plot_by_beta.py`, `ComputeTargets/ScalarModel.py` (the
 `extra_data` builder only), `ComputeTargets/BBNData.py`, `main.py`, `tools/bbn_baseline.py`,
 `ComputeTargets/AdiabaticHistory.py`, `CosmologyModels/GenericEOS/`, and both test packages ·
-**Index:** [`.documents/OPEN_ISSUES.md`](../../.documents/OPEN_ISSUES.md) §1.2
+**Index:** [`.documents/OPEN_ISSUES.md`](../../.documents/OPEN_ISSUES.md) §1.2 (assigned), §1.3 (opened here)
 
 > **Maintenance rule.** Whenever an entry is added to, narrowed in, or closed out of §3 or §4
 > below, [`.documents/OPEN_ISSUES.md`](../../.documents/OPEN_ISSUES.md) is updated **in the same
@@ -45,11 +47,22 @@ Target branch `production-readiness` from `204795e`. `VERSION_LABEL` is `"2026.2
   factor 1/(1 + ⅓ d ln g_s/d ln T_J). The reference agrees with the corrected form to 9.9e-8. The
   two forms differ in sign at the QCD peak. Prompt 03 re-derives this and stops if its own
   derivation disagrees.
+- **2026-09-30, the user: amend the plan after an audit of the rest of the adiabaticity code.**
+  The planner audited the code on `b0e46bc`, beyond the missing term; the user asked for the
+  audit, and approved the amendment.
+  - **Right as it stands:** Q, and the self, (ln Ω)″ and gravitational pieces of M²_eff.
+  - **Wrong:** the route to Q's numerator. The log|M²| spline is singular at a sign change of
+    M²_eff, where Q is smooth. At production sampling its error on a crossing history is 1.8 of
+    max |A·C| (`planning-probes/q_sign_change_probe.py`).
+  - **The amendment.** README §2 (e) is rewritten, since it had called the spike physical. Prompt
+    03's A3 now requires the smooth form A·C = m(1 + Ḣ/H²) + ½ dm/dN, accurate to 1e-4 of max
+    |A·C| through zero and across a bounce, and forbids a fail-closed guard. README §2 (h) records
+    what the diagnostic assumes.
 
 None pending. Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
-- whether the zero-crossing guard fails closed or floors |M²_eff| (03). Either is allowed, and it
-  is recorded as an IMPLEMENTATION CHOICE;
+- how prompt 03 represents dm/dN in Q's numerator: an asinh spline, an analytic derivative, or
+  another choice meeting README §6.3. It is recorded as an IMPLEMENTATION CHOICE;
 - anything that would need `ScalarModel.py` beyond prompt 01's factoring.
 
 ---
@@ -77,8 +90,50 @@ None pending. Decisions the prompts may surface, each a stop-and-ask in its prom
 
 ## 3. Active and unresolved issues
 
-None yet. Issues opened by this campaign's prompts go here, with an index row under §1.2 of
-`.documents/OPEN_ISSUES.md`.
+Two opened at the plan's amendment on 2026-09-30, for the authors. Issues opened by this
+campaign's prompts go here too, with an index row under §1.3 of `.documents/OPEN_ISSUES.md`.
+
+- **[00-adiabaticity-is-evaluated-at-fixed-k-over-H-not-for-fixed-comoving-modes]** *(the
+  planner's audit, 2026-09-30, on `b0e46bc`; reasoned from the code and the paper, not run)*.
+  - **What.** `compute_adiabatic_values` evaluates |Q| at fixed k_p/H ∈ {10, 10², 10³, 10⁴}
+    (`AdiabaticHistory.Q_labels`). At each N that is whichever comoving mode currently sits at that
+    depth inside the horizon, so the stored max |Q| over the history mixes different modes.
+    - The derivative in Q is right for a fixed comoving k, because k drops out of dω/dτ. Each value
+      is therefore correct for the mode it describes; it is the maximum over N that mixes them.
+  - **What the paper says.**
+    - The main text (`Paper1.tex`, "Adiabaticity" paragraph, `eq:adiabaticity`) describes the code
+      as it is, "for a physical wavenumber k", and reads the maximum as "whether adiabaticity is
+      violated at any point".
+    - The appendix ("Adiabaticity revisited") instead fixes the comoving k = (aH) at the first
+      rebound, which is k_p/H ≈ 1 there.
+    - The stored scales include no horizon-scale mode. That is where the gravitational term and
+      the source-response term matter most relative to k_p²/H².
+  - **Impact.** No wrong number. The summary may not answer the question the text asks of it: a
+    violation for one mode can be missed, or a violation reported for a mode that never
+    experiences it.
+  - **Next step.** A decision for the authors: which modes the diagnostic should follow, whether
+    fixed comoving k (for example, the scale at the first rebound) or fixed k_p/H, and whether
+    k_p/H ~ 1 belongs in the set. **Not changed by prompt 03**, which keeps the scales.
+
+- **[00-paper-gives-two-inconsistent-adiabaticity-conditions]** *(the planner's audit,
+  2026-09-30; paper text, not code)*.
+  - **What.** `Paper1.tex` states two adiabaticity conditions that differ.
+    - **The main-text `eq:adiabaticity`.** Q = (m_eff²/H²)(1 + ½ d ln|m_eff²|/dN) /
+      |m_eff²/H² + k²/H²|^{3/2}, with m_eff² including the metric term −H²(2 + Ḣ/H²). The code
+      implements this.
+    - **The appendix's `adiabaticity`.** It drops the 2H·V_eff″ term from dω/dτ, keeps only the
+      bare V″ and V‴, and sets the metric term to zero for radiation domination.
+  - **Two further points on the appendix.**
+    - Its argument that "the conformal contributions to the second and third derivative cancel
+      exactly" is the H5 omission (`[00-adiabaticity-diagnostic-omits-the-source-response-term]`).
+    - Its justification, suppression by M/M_P, holds near the V_eff minimum. It does not hold
+      while the field is displaced from it: parked, or kicked.
+  - **Also.** The main text says taking the modulus "allows the sign changes to be passed through
+    without loss". Of the code before prompt 03 that is not true; see README §2 (e).
+  - **Impact.** A reader cannot tell which condition produced `Adiabaticity1.pdf`.
+  - **Next step.** The authors reconcile the two against the code as prompt 03 leaves it. Prompt
+    03's addendum to `.documents/numerical-methods-for-paper.md` gives them the material. **Not a
+    code change.**
 
 ---
 
