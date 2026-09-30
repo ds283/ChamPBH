@@ -32,6 +32,20 @@ On the final tree, record the commit:
     raise for [6]. It was written for `27a32bc`, so read its output rather than its captions.
   - `prymordial_solver_probe.py truncated` must now raise the new class. `nan` is unchanged,
     since the probe calls PRyMordial directly, bypassing the guard; say so.
+    *Amended 2026-09-30 after prompt 02 (the user; board Decisions).*
+    - The probe chooses the solve to truncate by line number (`truncate_line = 1252`, `:103`),
+      and prompt 02's patch moved that call. As committed, it truncates nothing and returns the
+      SM baseline. Record that output too.
+    - **Do not edit the probe.** Copy it to a scratch directory outside the repository and change
+      only that number. The new value is the line of the second match of
+      `grep -n "sol_at_LT = solve_ivp(" PRyM/PRyM_main.py` on the final tree (`:1291` on
+      `cc34de4`).
+    - Run the copy from the root. It must raise `PRyMSolverFailureError` naming
+      `'low-T nuclear network (full)'`.
+    - Quote the `diff` between the probe and the copy in the log.
+  - *Also amended 2026-09-30 (the user):* §6.2's "Now" for a NaN in the density ratio is
+    superseded by log 02 Deviation 5. On `f0de762` it raised `ValueError`; it did not return and
+    hang. Only the target is re-measured.
   - `pairing_probe.py` reproduces the old logic and is unchanged by design.
 
 ## 2. Write

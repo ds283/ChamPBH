@@ -388,3 +388,30 @@ failing solve or a non-finite ratio is not shown here. The tests force the failu
     own callback, not `build_NP_callbacks`, so it would still reach PRyMordial and hang; it
     measures PRyMordial, not the guard (not re-run).
 - **Suites.** 18 / 35 / 11, all OK.
+
+## Addendum 2026-09-30 — the orchestrator's review and the user's decisions
+
+Added after the orchestrator reviewed `cc34de4`. The record above is unchanged.
+
+The orchestrator's own runs on `cc34de4` agree with the numbers above:
+- **Breakage.** With `PRyM/PRyM_main.py` and `ComputeTargets/BBNData.py` taken from `f0de762`,
+  the new module gave **FAILED (failures=17, errors=3)**:
+  - (a) at k = 1…5 and (b) at k = 4, 5 each said "call k failed and nothing raised";
+  - (c) failed with an `ImportError` of `_run_PRyMordial`;
+  - (d) raised `ValueError` for the NaN and inf samples, and "not raised" for every callback
+    case.
+- **Restored.** With both files restored the module passes, and the tree is clean.
+- **Suites.** 18 / 35 / 11, all `OK`.
+- **The probe.** `prymordial_solver_probe.py truncated`:
+  - on `f0de762`: Yp 0.246887219, D/H 2.474578712, ⁷Li/H 5.425221518, no exception;
+  - on `cc34de4`, as committed: the SM baseline, Yp 0.2468872958, D/H 2.462251065,
+    ⁷Li/H 5.423441017;
+  - on `cc34de4`, from a scratch copy with `truncate_line = 1291`: it raised
+    `PRyMSolverFailureError` in stage `'low-T nuclear network (full)'`, status −1, t reached
+    1.328e+04 of 1.316e+06.
+
+The user decided two things:
+- **Deviation 5 is accepted as it stands, untagged.** README §2 (c) and §6.2 are not amended;
+  this log is the record.
+- **The probe's line number is noted for prompt 04.** The note is in prompt 04 §1 and in check 3
+  of orchestrator prompt 04. The probe itself is not edited.

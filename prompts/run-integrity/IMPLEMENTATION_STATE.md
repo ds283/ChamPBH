@@ -72,6 +72,23 @@ Target branch `run-integrity` from `27a32bc`.
     lookup returns, so it would be a revert unit of its own and need a new §6.3 row.
   - **What happens instead.** Prompt 04 re-checks the orchestrator's narrowed reading on the final
     tree and records it on the entry (§3). The issue stays open and unassigned.
+- **2026-09-30, the user: log 02's Deviation 5 is accepted as it stands.**
+  - **What it says.** README §2 (c) and the "Now" column of §6.2 are wrong about a NaN sample on
+    `f0de762`. `build_NP_callbacks` did not return and let PRyMordial hang. `make_interp_spline`
+    raised `ValueError`, which escaped `compute_BBN_data` with no failure row. The measured hang
+    comes from a callback called with T = NaN.
+  - **The review.** The orchestrator reproduced it: test (d) on `HEAD~1` errors with
+    `ValueError: Array must not contain infs or nans.` for the NaN and inf samples. Prompt 02's
+    guards close both routes, and the §6.2 target is met as written.
+  - **Accepted untagged.** The log does not give it one of the three tags, and the user
+    accepted it that way. The README is not amended; log 02 is the record.
+- **2026-09-30, the user: prompt 04 is told about the probe's line number.**
+  `planning-probes/prymordial_solver_probe.py` chooses the solve to truncate by line
+  (`truncate_line = 1252`, `:103`). Prompt 02's patch moved that call to `:1291`, so on `cc34de4`
+  the probe as committed truncates nothing and returns the SM baseline unchanged. The orchestrator
+  ran a scratch copy outside the repository, with only that number changed to 1291. It raised
+  `PRyMSolverFailureError` in stage `'low-T nuclear network (full)'`. The probe is left as it is,
+  as a record of `27a32bc`. Prompt 04 §1 and orchestrator prompt 04 check 3 carry the note.
 
 None pending. Decisions the prompts may surface, each a stop-and-ask in its prompt:
 

@@ -34,6 +34,12 @@ nothing above it changes."*
 3. **Every README §6 row is present** in the table with a final-tree value and a witness, and each
    value is at or better than target. Spot-check three by running the witness yourself: the
    prompt-01 cross-label test, the prompt-02 forced-failure test, and the prompt-03 helper test.
+   *Amended 2026-09-30 after prompt 02 (the user; board Decisions):* the solver probe's
+   `truncated` case works only through a scratch copy with `truncate_line` moved to the current
+   low-T full-network `solve_ivp` line (prompt §1). Check the following:
+   - the log quotes that `diff`;
+   - the copy raised `PRyMSolverFailureError` naming `'low-T nuclear network (full)'`;
+   - the probe itself is unchanged.
 4. **The addendum** carries README §7's five points:
    - the label, defined once, and that old rows are no longer returned;
    - failure detection and the boundary;
