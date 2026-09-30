@@ -754,6 +754,12 @@ STAGE 3: BBN Data
    → RayWorkPool with compute_handler = BBNData.compute(payload={"small_network": True})
 ```
 
+**Note added 2026-09-30 (production-readiness prompt 02, item P2).** `main.py` now passes
+`payload={"small_network": False}`: production runs PRyMordial's full reaction network. The
+`True` above never reached PRyMordial (it set the unread `small_network_flag`, not
+`smallnet_flag`), so every earlier solve also ran the full network; the switch now works. See
+`prompts/production-readiness/logs/02-wire-the-network-flag.md`.
+
 **The two-pass batching pattern** (repeated at each stage) is important for efficiency:
 
 ```python

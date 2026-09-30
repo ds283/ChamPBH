@@ -243,6 +243,9 @@ these 15 open; they pass to whichever campaign takes them (`.documents/review-re
     prompt 02 (P2), which wires the flag to `smallnet_flag` and runs the full network, the user's decision.
     The user chose it as one of four to fix before the production run
     (`prompts/production-readiness/README.md`).
+  - **Resolved (2026-09-30):** by the `production-readiness` campaign, prompt 02 (commit "Wire the
+    BBN network flag to PRyMordial and run the full network"; log
+    `prompts/production-readiness/logs/02-wire-the-network-flag.md`).
 - **[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]** *(log 03, observation 2)*.
   - **What.** PRyMordial's abundances respond to changes in the NP callbacks far below any
     physical scale.

@@ -23,7 +23,7 @@ Run from the repository root, since PRyMordial reads PRyMrates/ from the
 working directory:
 
     ./venv/bin/python tools/bbn_baseline.py
-    ./venv/bin/python tools/bbn_baseline.py --no-small-network
+    ./venv/bin/python tools/bbn_baseline.py --small-network
 
 Written for review-remediation prompt 04 (item R3).
 """
@@ -47,8 +47,8 @@ def main(argv=None) -> int:
     parser.add_argument(
         "--small-network",
         action=argparse.BooleanOptionalAction,
-        default=True,
-        help="the small_network value passed to compute_SM_baseline (default: True, as main.py passes)",
+        default=False,
+        help="the small_network value passed to compute_SM_baseline (default: False, the full network, as main.py passes)",
     )
     args = parser.parse_args(argv)
 

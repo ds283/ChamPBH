@@ -448,6 +448,17 @@ handling a unit inconsistency where PRyMordial's `T_start` is in Kelvin while ev
 is in MeV). By default the **small reaction network** is used (`small_network_flag = True`),
 which is faster at the cost of Li-7 accuracy; this is configurable per run.
 
+**Note added 2026-09-30 (production-readiness prompt 02, item P2).** The sentence above described
+the intent, not what ran. `small_network_flag` is not a name PRyMordial reads; it reads
+`smallnet_flag` (`PRyM/PRyM_init.py:111`) when the solve runs, so until this prompt every solve
+used the **full** network whatever the switch said. `_configure_PRyMordial` now sets
+`smallnet_flag = small_network`, and production (`main.py`, the `compute_BBN_data` default, the
+`plot_by_beta.py` baseline and `tools/bbn_baseline.py`) passes `small_network=False`, the full
+network. From `VERSION_LABEL = "2026.3.0"` the stored `small_network` describes the network that
+ran. On the constant 0.08 ρ_SM fixture the small network moves ⁷Li/H by 1.0 %, D/H by 2.3e-4 and
+Yp by 6.2e-5, in 5.2 s against 7.9 s (`ComputeTargets/tests/test_network_flag.py` (b)). See
+`prompts/production-readiness/logs/02-wire-the-network-flag.md`.
+
 `PRyMclass(rho_NP, P_NP, drho_NP_dT).PRyMresults()` is invoked inside a try/except that
 converts any `OverflowError`, `ValueError`, or `ComputationFailureError` into a graceful
 `{"failure": True}`. On success the code extracts and stores the primordial abundances

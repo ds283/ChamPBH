@@ -1,6 +1,8 @@
 # Production readiness campaign — implementation state
 
-**Last updated:** 2026-09-30 · **Status: IN PROGRESS — 1 of 4 prompts landed (01).** Amended 2026-09-30
+**Last updated:** 2026-09-30 · **Status: IN PROGRESS — 2 of 4 prompts landed (01, 02).**
+**`VERSION_LABEL` is `"2026.3.0"` since prompt 02: every store made before 2026.3.0 is invalid.**
+Amended 2026-09-30
 at `b0e46bc` (README header): prompt 03's A3 now removes the singular log|M²| route to Q's
 numerator instead of guarding it, and two issues are opened for the authors (§3).
 
@@ -17,8 +19,8 @@ Those four issues stay on the `review-remediation` board, with an **Assigned** l
 campaign. When a prompt closes one, it adds a **Resolved** line there (README §5 rule 4). This
 board's §3 is for issues the campaign's own prompts open.
 
-Target branch `production-readiness` from `204795e`. `VERSION_LABEL` is `"2026.2.0"`, and prompt
-02 makes it `"2026.3.0"`.
+Target branch `production-readiness` from `204795e`. `VERSION_LABEL` was `"2026.2.0"`; prompt 02
+made it `"2026.3.0"` (2026-09-30), and prompt 03 lands under the same label.
 
 **Campaign:** [`README.md`](README.md) ·
 **Code:** `extract_common.py`, `plot_by_beta.py`, `ComputeTargets/ScalarModel.py` (the
@@ -72,7 +74,7 @@ None pending. Decisions the prompts may surface, each a stop-and-ask in its prom
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
 | 01 | [Report the hard-reflection count](01-report-hard-reflections.md) | **P1** | Sonnet | ✍️ 2026-09-30 | ✅ 2026-09-30 | see `git log` ("Report the hard-reflection count in captions and the survey") | [`logs/01-report-hard-reflections.md`](logs/01-report-hard-reflections.md) |
-| 02 | [Wire the network flag; run the full network](02-wire-the-network-flag.md) | **P2**, version bump | Opus | ✍️ 2026-09-30 | — | — | — |
+| 02 | [Wire the network flag; run the full network](02-wire-the-network-flag.md) | **P2**, version bump | Opus | ✍️ 2026-09-30 | ⚠️ 2026-09-30, with deviations | see `git log` ("Wire the BBN network flag to PRyMordial and run the full network") | [`logs/02-wire-the-network-flag.md`](logs/02-wire-the-network-flag.md) |
 | 03 | [The adiabatic mass: the source-response term](03-adiabatic-source-response.md) | **P3** | Opus | ✍️ 2026-09-30 | — | — | — |
 | 04 | [Close-out verification and handover](04-close-out-verification.md) | close-out | Sonnet | ✍️ 2026-09-30 | — | — | — |
 
@@ -83,14 +85,15 @@ None pending. Decisions the prompts may surface, each a stop-and-ask in its prom
 | Item | Kind | Description | Prompt | Status |
 |---|---|---|---|---|
 | P1 | **DEFECT, low** | The count is stored as `extra_data["number_hard_reflections"]`, but the caption reads `"hard_reflections"` and always prints 0. `plot_by_beta.py` reports it nowhere. Closes `[00-hard-reflection-count-is-stored-but-never-reported]` and `[06-hard-reflection-caption-reads-the-wrong-key-and-always-prints-zero]`. | 01 | **done 2026-09-30** (log 01; suites 12 / 18) |
-| P2 | **DEFECT, medium** | `_configure_PRyMordial` sets `small_network_flag`, but PRyMordial reads `smallnet_flag`. Every stored `small_network = True` row ran the full network. Closes `[03-small-network-flag-is-never-read-by-prymordial]`. | 02 | open |
+| P2 | **DEFECT, medium** | `_configure_PRyMordial` sets `small_network_flag`, but PRyMordial reads `smallnet_flag`. Every stored `small_network = True` row ran the full network. Closes `[03-small-network-flag-is-never-read-by-prymordial]`. | 02 | **done 2026-09-30, COMPLETE WITH DEVIATIONS** (log 02; suites 12 / 22, one expected failure). `VERSION_LABEL` `"2026.3.0"`: **every store made before 2026.3.0 is invalid.** The Yp bound of README §6.2 is missed (6.2e-5 against 1e-5): §3 `[02-network-shift-bounds-sit-inside-prymordial-noise]` |
 | P3 | **DEFECT, high** | `M2eff_over_H2` omits (ln Ω)′² ρ_R,E [Σ² − Σ_T/(1 + x) + f_m]. That is the whole density-dependent mass for the exponential coupling. The bracket runs from −0.407 (146 MeV) to +0.350 (230 MeV), and → 1 in matter domination. Closes `[00-adiabaticity-diagnostic-omits-the-source-response-term]`. | 03 | open |
 
 ---
 
 ## 3. Active and unresolved issues
 
-Two opened at the plan's amendment on 2026-09-30, for the authors. Issues opened by this
+Two opened at the plan's amendment on 2026-09-30, for the authors, and one by prompt 02
+(`[02-network-shift-bounds-sit-inside-prymordial-noise]`). Issues opened by this
 campaign's prompts go here too, with an index row under §1.3 of `.documents/OPEN_ISSUES.md`.
 
 - **[00-adiabaticity-is-evaluated-at-fixed-k-over-H-not-for-fixed-comoving-modes]** *(the
@@ -135,6 +138,33 @@ campaign's prompts go here too, with an index row under §1.3 of `.documents/OPE
     03's addendum to `.documents/numerical-methods-for-paper.md` gives them the material. **Not a
     code change.**
 
+- **[02-network-shift-bounds-sit-inside-prymordial-noise]** *(log 02, Deviations and
+  Verification; `ComputeTargets/tests/test_network_flag.py` (b) and two scratch probes, on
+  `cf773b2` plus prompt 02's diff)*.
+  - **What.** README §6.2 bounds the small-against-full shift, constant 0.08 ρ_SM family, by
+    ≥ 5e-3 in ⁷Li/H, ≤ 1e-3 in D/H and ≤ 1e-5 in Yp, from the `review-remediation` board's
+    measurement (1 %, 1.5e-4, 1.5e-6; raw-fit g_ρ, 3.38 below 10 keV, `47c50ae`). Measured through
+    the fixed flag:
+
+    | Construction | ⁷Li/H | D/H | Yp |
+    |---|---|---|---|
+    | fixture `CONSTANT` (spline-class g_ρ), test (b) | 1.006e-2 | 2.274e-4 | **6.200e-5** |
+    | raw-fit `_raw_G_rho` (3.383 below 10 keV), scratch | 1.194e-2 | **1.203e-3** | 2.333e-6 |
+    | ρ_NP ≡ 0 (SM), scratch | 1.168e-2 | **1.736e-3** | 2.193e-5 |
+
+  - **Reading.** The two constant-family constructions agree to 2.2e-10 in ρ_NP (review-remediation
+    log 03), yet the network's Yp shift changes by a factor 27 and its D/H shift by a factor 5
+    between them. The Yp and D/H shifts sit inside PRyMordial's own noise
+    (`[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]`). The ⁷Li/H shift, 1.0–1.2 %,
+    is robust, and it is what shows that the flag selects the network.
+  - **What was done.** The Yp bound was not rewritten. It is `test_b_prime_Yp_within_1e_5`, marked
+    `unittest.expectedFailure`; test (b) asserts the ⁷Li/H, D/H and pin rows, which pass.
+  - **Impact.** None on production, which runs the full network. The table's bound cannot be met
+    on the fixture as written.
+  - **Next step.** A decision for the user: accept the miss, or restate the Yp and D/H rows as
+    bounds PRyMordial can resolve (for example ⁷Li/H only, with Yp and D/H bounded by the noise
+    band), and then remove the `expectedFailure`.
+
 ---
 
 ## 4. Resolved issues
@@ -148,3 +178,11 @@ Two assigned issues, closed by prompt 01 on 2026-09-30. Their entries stay on th
   (`extract_common.hard_reflection_count`) used by the caption and by `plot_by_beta.py`, a
   `hard_reflections` column in `data.csv` and a per-(M, Lambda) stdout summary. The caption test
   fails on the old reader.
+
+One assigned issue, closed by prompt 02 on 2026-09-30:
+
+- **[03-small-network-flag-is-never-read-by-prymordial]** — resolved by prompt 02 (log 02).
+  `_configure_PRyMordial` sets `PRyM_init.smallnet_flag`, the name PRyMordial reads, and no longer
+  sets `small_network_flag`. Production, the SM baseline, `tools/bbn_baseline.py` and the fixtures
+  pass `small_network=False`, the full network; every pinned abundance passes unchanged.
+  `VERSION_LABEL` is `"2026.3.0"`. Test (a) fails on the old `BBNData.py`.

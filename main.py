@@ -80,7 +80,10 @@ ray.init(address=args.ray_address)
 # Stores made under an earlier VERSION_LABEL are invalid and must not be reused: on 2026-09-29
 # (review-remediation prompt 02) the Jordan-frame temperature law lost a spurious factor ln 10 in
 # its entropy term and the low-temperature g_rho, g_S limits changed, so every stored history differs.
-VERSION_LABEL = "2026.2.0"
+# On 2026-09-30 (production-readiness prompt 02) the small_network switch was wired to the flag
+# PRyMordial reads: from 2026.3.0 the stored small_network describes the network that ran, and
+# production runs the full network (small_network=False).
+VERSION_LABEL = "2026.3.0"
 
 specified_drop_actions = [x.lower() for x in args.drop]
 drop_actions = [x for x in specified_drop_actions if x in allowed_drop_actions]
@@ -746,7 +749,7 @@ def run_pipeline(
         return f"{args.job_name}-BBNData-{potential.name}-{coupling.name}-{datetime.now().replace(microsecond=0).isoformat()}"
 
     def compute_bbn_data_batch(data: BBNData, label: str):
-        return data.compute(label=label, payload={"small_network": True})
+        return data.compute(label=label, payload={"small_network": False})
 
     def validate_bbn_data_batch(q: BBNData):
         if not q.available:

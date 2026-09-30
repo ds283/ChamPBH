@@ -146,7 +146,7 @@ def add_BBN_info_labels(
         horizontalalignment="left",
         fontsize="xx-small",
     )
-    if small_network is "True" or small_network is "Multiple":
+    if small_network == "True" or small_network == "Multiple":
         fig.text(
             LEFT_COLUMN,
             BELOW_PLOTS_BOTTOM_ROW,

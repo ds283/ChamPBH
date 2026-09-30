@@ -171,7 +171,7 @@ def run_prym(
     rho: Callable[[float], float],
     p: Callable[[float], float],
     drho: Callable[[float], float],
-    small_network: bool = True,
+    small_network: bool = False,
     NP_thermo_flag: bool = True,
 ):
     """
@@ -180,32 +180,38 @@ def run_prym(
     [N_eff, Omega_nu,rel h^2 x 1e6, 1/(Omega_nu,nr h^2 x 1e-6), Yp (CMB),
      Yp (BBN), D/H x 1e5, 3He/H x 1e5, 7Li/H x 1e10]; see the RES_* indices.
 
-    The flags are set as `compute_BBN_data` (ComputeTargets/BBNData.py) sets
-    them: `NP_thermo_flag`, `Tstart_NP = T_start` in MeV, `verbose_flag =
-    False`, and `small_network_flag = small_network`. The last is copied
-    faithfully even though PRyMordial never reads that name (it reads
-    `smallnet_flag`); see log 03. `NP_thermo_flag = False` is the reference
-    with no new physics at all: the callbacks are installed but no code path
-    reads them.
+    The flags are set by `_configure_PRyMordial` (ComputeTargets/BBNData.py),
+    the function `compute_BBN_data` and `compute_SM_baseline` use, so the
+    fixture and the pipeline cannot drift apart: `NP_thermo_flag = True`,
+    `Tstart_NP = T_start` in MeV, `verbose_flag = False` and `smallnet_flag =
+    small_network`. `NP_thermo_flag` is then overridden with the argument.
+    `NP_thermo_flag = False` is the reference with no new physics at all: the
+    callbacks are installed but no code path reads them.
+
+    `small_network = False` (the default, and production's) is PRyMordial's
+    full reaction network; `True` is its 12-reaction network. Before
+    production-readiness prompt 02 this function set `small_network_flag`,
+    which PRyMordial never reads, so every solve it ran used the full network
+    whatever the argument; every abundance pinned from it is a full-network
+    value.
 
     PRyM_init's flags and PRyM_thermo's NP callbacks are module globals that
     persist between runs, so every one this function touches is restored on
     exit, whether or not the solve raised.
     """
     import PRyM.PRyM_init as PRyMini
-    import PRyM.PRyM_main as PRyMmain
     import PRyM.PRyM_thermo as PRyMthermo
 
-    init_names = ("NP_thermo_flag", "Tstart_NP", "verbose_flag", "small_network_flag")
+    from ComputeTargets.BBNData import _configure_PRyMordial
+
+    init_names = ("NP_thermo_flag", "Tstart_NP", "verbose_flag", "smallnet_flag")
     thermo_names = ("rho_NP", "p_NP", "drho_NP_dT", "delta_rho_NP")
     saved_init = {n: getattr(PRyMini, n, _MISSING) for n in init_names}
     saved_thermo = {n: getattr(PRyMthermo, n) for n in thermo_names}
 
     try:
+        PRyMmain = _configure_PRyMordial(small_network)
         PRyMini.NP_thermo_flag = NP_thermo_flag
-        PRyMini.Tstart_NP = PRyMini.T_start / PRyMini.MeV_to_Kelvin
-        PRyMini.verbose_flag = False
-        PRyMini.small_network_flag = small_network
 
         return PRyMmain.PRyMclass(rho, p, drho).PRyMresults()
     finally:

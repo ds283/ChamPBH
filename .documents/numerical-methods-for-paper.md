@@ -234,6 +234,10 @@ qualifies the audit's §4 statement.
 - **Two caveats for the text** (board §3):
   - **The network.** `compute_BBN_data`'s `small_network` switch has never reached PRyMordial.
     Every BBN result so far used the **full** network. `[03-small-network-flag-is-never-read-by-prymordial]`
+    - *Added 2026-09-30 (production-readiness prompt 02):* fixed. The switch now sets the flag
+      PRyMordial reads, and production uses the **full** network (`small_network=False`), so the
+      stored label and the results agree from `VERSION_LABEL = "2026.3.0"`. The abundances above
+      are full-network values and are unchanged.
   - **PRyMordial's noise.** Its abundances move by up to 7e-4 in D/H under 1e-8 relative changes
     to ρ_NP. D/H differences below that level are not resolved.
     `[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]`

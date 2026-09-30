@@ -76,7 +76,7 @@ if args.database is None:
 # connect to ray cluster on supplied address; defaults to 'auto' meaning a locally running cluster
 ray.init(address=args.ray_address)
 
-VERSION_LABEL = "2026.2.0"
+VERSION_LABEL = "2026.3.0"
 
 # instantiate a Datastore actor: this runs on its own node, and acts as a broker between
 # ourselves and the database.
@@ -896,11 +896,11 @@ with ShardedPool(
     model_list = build_model_list(pool, units)
 
     # The Standard-Model baseline: rho_NP = 0 through compute_BBN_data's PRyMordial
-    # settings, one solve, not stored. small_network=True is what main.py passes.
+    # settings, one solve, not stored. small_network=False is what main.py passes.
     # (review-remediation prompt 04)
     SM_baseline = None
     if not args.no_baseline:
-        SM_baseline = compute_SM_baseline(small_network=True)
+        SM_baseline = compute_SM_baseline(small_network=False)
         print(
             f"@@ plot_by_beta: SM baseline (rho_NP = 0, PRyM_version={SM_baseline['PRyM_version']}, small_network={SM_baseline['small_network']}): "
             f"Yp={SM_baseline['Yp_BBN']:.6g}, D/H x1e5={SM_baseline['DOverH']:.6g}, 3He/H x1e5={SM_baseline['He3OverH']:.6g}, 7Li/H x1e10={SM_baseline['Li7OverH']:.6g}"

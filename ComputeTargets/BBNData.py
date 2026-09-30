@@ -257,8 +257,11 @@ def _configure_PRyMordial(small_network: bool):
     # disable verbose output
     PRyMini.verbose_flag = False
 
-    # speed up calculation using small reaction network, at cost of Li7 accuracy
-    PRyMini.small_network_flag = small_network
+    # select the reaction network: True restricts PRyMordial to its 12-reaction network, which is
+    # faster but unreliable for Li7; False (production) runs the full network. PRyMordial reads
+    # smallnet_flag when the solve runs. Until production-readiness prompt 02 this set
+    # small_network_flag, which PRyMordial never reads, so every solve ran the full network.
+    PRyMini.smallnet_flag = small_network
 
     return PRyMmain
 
@@ -295,7 +298,7 @@ def compute_BBN_data(
     task_label: str,
     T_BBN_MeV_spline_max: float = 100,  # PRyMordial default begins at 10 MeV
     T_BBN_keV_spline_min: float = 1e-4,  # PRyMordial default ends at 1 keV, but samples at later times
-    small_network: bool = True,
+    small_network: bool = False,
 ):
     model: ScalarModel = model_proxy.get()
     cosmology: BaseCosmology = model._cosmology

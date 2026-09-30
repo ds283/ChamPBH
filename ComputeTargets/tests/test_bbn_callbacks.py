@@ -174,7 +174,7 @@ class _SavedPRyMGlobals:
     in this package do not depend on order.
     """
 
-    _init_names = ("NP_thermo_flag", "Tstart_NP", "verbose_flag", "small_network_flag")
+    _init_names = ("NP_thermo_flag", "Tstart_NP", "verbose_flag", "smallnet_flag")
     _thermo_names = ("rho_NP", "p_NP", "drho_NP_dT", "delta_rho_NP")
     _missing = object()
 
@@ -491,17 +491,17 @@ class TestBBNCallbacks(unittest.TestCase):
             self.assertLessEqual(dDoH, END_TO_END_RTOL)
 
     def test_i_SM_baseline(self):
-        """(i) compute_SM_baseline(True) reproduces README section 2 (f) row 1 to
+        """(i) compute_SM_baseline(False) reproduces README section 2 (f) row 1 to
         1e-4 relative in all four abundances, and names the PRyMordial version.
         **Runs one PRyMordial solve, about 10 s.**"""
         with _SavedPRyMGlobals():
-            baseline = compute_SM_baseline(True)
+            baseline = compute_SM_baseline(False)
 
         print(
             "\n[test_bbn_callbacks (i)] baseline "
             + ", ".join(f"{k} {baseline[k]:.10g}" for k in README_BASELINE)
         )
-        self.assertTrue(baseline["small_network"])
+        self.assertFalse(baseline["small_network"])
         self.assertEqual(baseline["PRyM_version"], PRYM_VERSION)
         for key, reference in README_BASELINE.items():
             with self.subTest(key):
