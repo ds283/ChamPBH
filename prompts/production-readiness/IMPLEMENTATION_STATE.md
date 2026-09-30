@@ -69,6 +69,16 @@ made it `"2026.3.0"` (2026-09-30), and prompt 03 lands under the same label.
   withdrawn (§4). The expected-failure test and the D/H bound are removed, and ⁷Li/H alone
   witnesses the network. The shifts stay recorded in `.documents/numerical-strategies.md` §7.5,
   to be aware of. README header and §6.2 amended.
+- **2026-09-30, the user: prompt 03's two §6.3 readings are accepted.** Both were opened by
+  prompt 03 (`db0d8fc`) and are closed as accepted (§4).
+  - **The h = 1e-5 witness in the 120 MeV window.** For `SaikawaShirai_EOS_spline` and the base
+    formula, the h = 1e-4 central difference of `w` is itself 1.1e-6 off on [120.0, 122.2] MeV.
+    That is its own h² error: it is 1.1e-8 at h = 1e-5. Within a factor 1.03 of 120 MeV the row's
+    witness is h = 1e-5, still bounded by 1e-6. Everywhere else it is h = 1e-4, as written.
+  - **The windowed reading of the A·C row.** The ≤ 1e-4 of max |A·C| target holds on the samples
+    with N ∈ [0.5, 11.5], the planning probe's window. The two end samples of the crossing history
+    (2.26e-4 and 1.81e-4, set by the spline's end condition) are recorded, not bounded.
+  - Neither test changes. README header and §6.3 amended; log 03, addendum.
 
 None pending. Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
@@ -96,16 +106,16 @@ None pending. Decisions the prompts may surface, each a stop-and-ask in its prom
 |---|---|---|---|---|
 | P1 | **DEFECT, low** | The count is stored as `extra_data["number_hard_reflections"]`, but the caption reads `"hard_reflections"` and always prints 0. `plot_by_beta.py` reports it nowhere. Closes `[00-hard-reflection-count-is-stored-but-never-reported]` and `[06-hard-reflection-caption-reads-the-wrong-key-and-always-prints-zero]`. | 01 | **done 2026-09-30** (log 01; suites 12 / 18) |
 | P2 | **DEFECT, medium** | `_configure_PRyMordial` sets `small_network_flag`, but PRyMordial reads `smallnet_flag`. Every stored `small_network = True` row ran the full network. Closes `[03-small-network-flag-is-never-read-by-prymordial]`. | 02 | **done 2026-09-30, COMPLETE WITH DEVIATIONS** (log 02). `VERSION_LABEL` `"2026.3.0"`: **every store made before 2026.3.0 is invalid.** The Yp bound of README §6.2 was missed (6.2e-5 against 1e-5); the user withdrew the Yp and D/H bounds on 2026-09-30 (Decisions; log 02, addendum). Suites now 12 / 21, all OK |
-| P3 | **DEFECT, high** | `M2eff_over_H2` omits (ln Ω)′² ρ_R,E [Σ² − Σ_T/(1 + x) + f_m]. That is the whole density-dependent mass for the exponential coupling. The bracket runs from −0.407 (146 MeV) to +0.350 (230 MeV), and → 1 in matter domination. Closes `[00-adiabaticity-diagnostic-omits-the-source-response-term]`. | 03 | **done 2026-09-30, COMPLETE WITH DEVIATIONS** (log 03). The term is in `conformal_mass_over_H2`; Q's numerator is computed as m(1 + Ḣ/H²) + ½ dm/dN from an asinh spline. The test reference agrees to 9.6e-8 in the bracket norm. **No `AdiabaticHistory` row made before 2026.3.0 is comparable.** One §6.3 witness is missed: the h = 1e-4 central difference misses 1e-6 in a 2 MeV window above 120 MeV for the non-production spline class (1.1e-6). This is the witness's own h² error, not the derivative's; §3. Suites now 18 / 30, all OK |
+| P3 | **DEFECT, high** | `M2eff_over_H2` omits (ln Ω)′² ρ_R,E [Σ² − Σ_T/(1 + x) + f_m]. That is the whole density-dependent mass for the exponential coupling. The bracket runs from −0.407 (146 MeV) to +0.350 (230 MeV), and → 1 in matter domination. Closes `[00-adiabaticity-diagnostic-omits-the-source-response-term]`. | 03 | **done 2026-09-30, COMPLETE WITH DEVIATIONS** (log 03). The term is in `conformal_mass_over_H2`; Q's numerator is computed as m(1 + Ḣ/H²) + ½ dm/dN from an asinh spline. The test reference agrees to 9.6e-8 in the bracket norm. **No `AdiabaticHistory` row made before 2026.3.0 is comparable.** One §6.3 witness is missed: the h = 1e-4 central difference misses 1e-6 in a 2 MeV window above 120 MeV for the non-production spline class (1.1e-6). This is the witness's own h² error, not the derivative's. The user accepted the h = 1e-5 witness in that window, and the windowed reading of the A·C row, on 2026-09-30 (Decisions; log 03, addendum; §4). Suites now 18 / 30, all OK |
 
 ---
 
 ## 3. Active and unresolved issues
 
 Two opened at the plan's amendment on 2026-09-30, for the authors. One opened by prompt 02 was
-withdrawn by the user the same day (§4). Two opened by prompt 03 (the last two below). Issues
-opened by this campaign's prompts go here too, with an index row under §1.3 of
-`.documents/OPEN_ISSUES.md`.
+withdrawn by the user the same day (§4). Two opened by prompt 03 were closed as accepted by the
+user the same day (§4). Issues opened by this campaign's prompts go here too, with an index row
+under §1.3 of `.documents/OPEN_ISSUES.md`.
 
 - **[00-adiabaticity-is-evaluated-at-fixed-k-over-H-not-for-fixed-comoving-modes]** *(the
   planner's audit, 2026-09-30, on `b0e46bc`; reasoned from the code and the paper, not run)*.
@@ -148,42 +158,6 @@ opened by this campaign's prompts go here too, with an index row under §1.3 of
   - **Next step.** The authors reconcile the two against the code as prompt 03 leaves it. Prompt
     03's addendum to `.documents/numerical-methods-for-paper.md` gives them the material. **Not a
     code change.**
-
-- **[03-spline-eos-derivative-witness-misses-1e-6-above-the-120-mev-join]** *(log 03, Deviations
-  1; `CosmologyModels/tests/test_eos_w_derivative.py` and a scratch probe, on `5aba202` plus
-  prompt 03's diff)*.
-  - **What.** README §6.3 row 2 scores `SaikawaShirai_EOS_spline.dw_dlogT` and the base-class
-    formula against a central difference of `w` with half-step 1e-4, to ≤ 1e-6. Between 120.0
-    and 122.2 MeV that witness is itself in error by up to **1.12e-6**: 1.104e-6 at the test's
-    grid point 120.9 MeV, and 1.12e-6 on a 200001-point scan. The spline class's g splines are
-    fitted across the raw fits' 120 MeV jump and ring there, which makes w‴ large.
-  - **Why it is the witness, not the derivative.** The difference scales as h². It is 1.12e-8
-    at h = 1e-5, and Richardson extrapolation of h = 1e-4 and 5e-5 gives 7.4e-8. `dw_dlogT` is
-    the exact derivative of the class's w.
-  - **What was done.** The threshold was not rewritten. Within a factor 1.03 of 120 MeV the test
-    uses h = 1e-5, and asserts ≤ 1e-6 there (it measures 1.10e-8). It reports the h = 1e-4 value
-    and does not assert it. Everywhere else it asserts h = 1e-4.
-  - **Impact.** None on production, which uses `Xav_EOS_spline` (3.4e-8 against the h = 1e-4
-    witness everywhere). The spline class is not on the pipeline's path.
-  - **Next step.** A decision for the user: accept the h = 1e-5 witness in that window, or
-    restate the row.
-
-- **[03-q-numerator-end-samples-carry-the-spline-end-condition-error]** *(log 03, Deviations 3;
-  `ComputeTargets/tests/test_adiabatic_mass.py` (e), on `5aba202` plus prompt 03's diff)*.
-  - **What.** `Q_numerator` takes dm/dN from a not-a-knot cubic spline of asinh m. At the first
-    and last samples of a history the end condition sets the derivative. On README §2 (e)'s
-    sign-changing history at ΔN = ln 10/250 the error in A·C is **2.26e-4** of max |A·C| at the
-    last sample and 1.81e-4 at the first. At the samples with N ∈ [0.5, 11.5] it is 3.1e-6.
-  - **What was done.** Test (e) asserts ≤ 1e-4 on [0.5, 11.5], the window of the planning probe
-    the target came from, and reports the error at all samples. A quintic spline gets the ends
-    to 2.1e-5, but it is 4.6 times worse on a spike 0.03 wide (4.2e-4 against 9.3e-5), so it
-    was not used.
-  - **Impact.** Small, and only on the first and last few samples of each history. In Q the
-    error is further divided by |B|^{3/2}, which is ≥ 10³ for the stored scales. The maximum of
-    |Q| is set at bounces, not at the endpoints.
-  - **Next step.** Only if the end samples come to matter: clamp the spline's end derivatives
-    with one-sided estimates, or drop the end samples from the maximum. Not needed for
-    production.
 
 ---
 
@@ -253,3 +227,47 @@ One issue opened by prompt 02 and withdrawn by the user on 2026-09-30:
     the 1e-5 and 1e-3 bounds were ours, not PRyMordial's. Both bounds and the expected-failure
     test are removed; ⁷Li/H alone witnesses that the flag selects the network. README §6.2
     amended; log 02, addendum.
+
+Two issues opened by prompt 03 and closed as accepted by the user on 2026-09-30:
+
+- **[03-spline-eos-derivative-witness-misses-1e-6-above-the-120-mev-join]** *(log 03, Deviations
+  1; `CosmologyModels/tests/test_eos_w_derivative.py` and a scratch probe, on `5aba202` plus
+  prompt 03's diff)*.
+  - **What.** README §6.3 row 2 scores `SaikawaShirai_EOS_spline.dw_dlogT` and the base-class
+    formula against a central difference of `w` with half-step 1e-4, to ≤ 1e-6. Between 120.0
+    and 122.2 MeV that witness is itself in error by up to **1.12e-6**: 1.104e-6 at the test's
+    grid point 120.9 MeV, and 1.12e-6 on a 200001-point scan. The spline class's g splines are
+    fitted across the raw fits' 120 MeV jump and ring there, which makes w‴ large.
+  - **Why it is the witness, not the derivative.** The difference scales as h². It is 1.12e-8
+    at h = 1e-5, and Richardson extrapolation of h = 1e-4 and 5e-5 gives 7.4e-8. `dw_dlogT` is
+    the exact derivative of the class's w.
+  - **What was done.** The threshold was not rewritten. Within a factor 1.03 of 120 MeV the test
+    uses h = 1e-5, and asserts ≤ 1e-6 there (it measures 1.10e-8). It reports the h = 1e-4 value
+    and does not assert it. Everywhere else it asserts h = 1e-4.
+  - **Impact.** None on production, which uses `Xav_EOS_spline` (3.4e-8 against the h = 1e-4
+    witness everywhere). The spline class is not on the pipeline's path.
+  - **Next step.** A decision for the user: accept the h = 1e-5 witness in that window, or
+    restate the row.
+  - **Closed (2026-09-30, the user): accepted.** The h = 1e-5 witness within a factor 1.03 of
+    120 MeV is the row's witness there, bounded by 1e-6; h = 1e-4 everywhere else. The test is
+    unchanged. README §6.3 amended; log 03, addendum.
+
+- **[03-q-numerator-end-samples-carry-the-spline-end-condition-error]** *(log 03, Deviations 3;
+  `ComputeTargets/tests/test_adiabatic_mass.py` (e), on `5aba202` plus prompt 03's diff)*.
+  - **What.** `Q_numerator` takes dm/dN from a not-a-knot cubic spline of asinh m. At the first
+    and last samples of a history the end condition sets the derivative. On README §2 (e)'s
+    sign-changing history at ΔN = ln 10/250 the error in A·C is **2.26e-4** of max |A·C| at the
+    last sample and 1.81e-4 at the first. At the samples with N ∈ [0.5, 11.5] it is 3.1e-6.
+  - **What was done.** Test (e) asserts ≤ 1e-4 on [0.5, 11.5], the window of the planning probe
+    the target came from, and reports the error at all samples. A quintic spline gets the ends
+    to 2.1e-5, but it is 4.6 times worse on a spike 0.03 wide (4.2e-4 against 9.3e-5), so it
+    was not used.
+  - **Impact.** Small, and only on the first and last few samples of each history. In Q the
+    error is further divided by |B|^{3/2}, which is ≥ 10³ for the stored scales. The maximum of
+    |Q| is set at bounces, not at the endpoints.
+  - **Next step.** Only if the end samples come to matter: clamp the spline's end derivatives
+    with one-sided estimates, or drop the end samples from the maximum. Not needed for
+    production.
+  - **Closed (2026-09-30, the user): accepted.** The row is read on N ∈ [0.5, 11.5], the
+    planning probe's window, as the test asserts. The end-sample figures are recorded, not
+    bounded. The test is unchanged. README §6.3 amended; log 03, addendum.

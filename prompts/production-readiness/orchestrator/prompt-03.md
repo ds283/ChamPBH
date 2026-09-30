@@ -73,6 +73,8 @@ README §2 (c), stop and report; do not implement either form."*
    - `dw_dlogT` ≤ 1e-6 for each class;
    - the bracket ≤ 1e-6 for the exponential and the stand-in couplings;
    - the matter limit to 1e-6.
+   *Amended 2026-09-30 after the run (the user; README header): for the spline class and the base
+   formula, the witness within a factor 1.03 of 120 MeV is h = 1e-5.*
 7. **No finite difference in production.**
    ```bash
    git diff HEAD~1 HEAD -- CosmologyModels/GenericEOS/ ComputeTargets/AdiabaticHistory.py
@@ -86,6 +88,8 @@ README §2 (c), stop and report; do not implement either form."*
      stop.
    - Run test (e) yourself: ≤ 1e-4 of max |A·C| on both synthetic histories, and the exact-zero
      sample finite. Quote the numbers.
+     *Amended 2026-09-30 after the run (the user; README header): the ≤ 1e-4 is on N ∈ [0.5, 11.5];
+     the end samples are quoted, not checked.*
    - Run test (e) against `HEAD~1`'s `AdiabaticHistory.py`, the generic procedure. It must fail
      on the crossing history or the exact zero.
    - Q's definition (the `abs_Q` expression from A·C and |B|^{3/2}), `Q_labels` and the stored

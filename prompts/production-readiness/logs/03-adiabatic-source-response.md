@@ -501,3 +501,28 @@ I restored the file. Ran: **FAILED (failures=8, errors=2)**.
   decision) and `[03-q-numerator-end-samples-carry-the-spline-end-condition-error]`.
 - `VERSION_LABEL` is still `"2026.3.0"`. **No `AdiabaticHistory` row made before 2026.3.0 is
   comparable.**
+
+## Addendum 2026-09-30 — the user's decision on the two §6.3 readings
+
+Added after the orchestrator's review of `db0d8fc`. The record above is unchanged.
+
+The orchestrator's reruns on `db0d8fc` reproduced the numbers above exactly:
+- `test_eos_w_derivative`: h = 1e-4 gives 1.104e-6 at the 120 MeV window point, and h = 1e-5
+  gives 1.102e-8. `Xav_EOS_spline` gives 3.375e-8 and the jax class 7.051e-9.
+- `test_adiabatic_mass` (e): 3.070e-6 (crossing) and 6.304e-6 (spikes) on N ∈ [0.5, 11.5], and
+  2.258e-4 at the crossing history's end sample.
+- Suites 18 / 30, all `OK`.
+
+The user accepted both of this prompt's readings of README §6.3:
+
+- **Deviation 1.** Within a factor 1.03 of 120 MeV, the witness for `SaikawaShirai_EOS_spline`
+  and the base formula is the h = 1e-5 central difference, bounded by 1e-6. Everywhere else it
+  is h = 1e-4.
+- **Deviation 3.** The A·C row is read on N ∈ [0.5, 11.5]. The end-sample figures are recorded,
+  not bounded.
+
+Neither test changes. `[03-spline-eos-derivative-witness-misses-1e-6-above-the-120-mev-join]` and
+`[03-q-numerator-end-samples-carry-the-spline-end-condition-error]` are closed as accepted (board
+§4), and their rows are deleted from `.documents/OPEN_ISSUES.md` (13 open). The README header and
+§6.3 are amended. This supersedes the "State handed to the next prompt" bullet that lists them as
+open.

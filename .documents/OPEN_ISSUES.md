@@ -1,7 +1,7 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-09-30 · **15 open**: 11 on the `review-remediation` board (closed
-2026-09-30), none of them assigned; 4 on the `production-readiness` board (planned 2026-09-30).
+**Last updated:** 2026-09-30 · **13 open**: 11 on the `review-remediation` board (closed
+2026-09-30), none of them assigned; 2 on the `production-readiness` board (planned 2026-09-30).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -67,7 +67,8 @@ resolved by prompt 03 on 2026-09-30.
 
 ### 1.3 `production-readiness` — [board §3](../prompts/production-readiness/IMPLEMENTATION_STATE.md)
 
-Two opened when the plan was amended on 2026-09-30, both for the authors; two opened by prompt 03.
+Two opened when the plan was amended on 2026-09-30, both for the authors. The two opened by
+prompt 03 were closed as accepted by the user the same day (board §4).
 
 - `[00-adiabaticity-is-evaluated-at-fixed-k-over-H-not-for-fixed-comoving-modes]` — max |Q| is
   taken at fixed k_p/H ∈ {10 … 10⁴}, a different comoving mode at each N, with no horizon-scale
@@ -75,8 +76,3 @@ Two opened when the plan was amended on 2026-09-30, both for the authors; two op
 - `[00-paper-gives-two-inconsistent-adiabaticity-conditions]` — `Paper1.tex`'s main-text
   `eq:adiabaticity` (what the code does) and its appendix condition differ; the appendix also
   carries the H5 omission.
-- `[03-spline-eos-derivative-witness-misses-1e-6-above-the-120-mev-join]` — the h = 1e-4 central
-  difference of the non-production spline class's w is 1.1e-6 off in 120–122 MeV (its own h²
-  error); a README §6.3 witness missed, decision for the user.
-- `[03-q-numerator-end-samples-carry-the-spline-end-condition-error]` — A·C at a history's first
-  and last samples is 2.3e-4 of max |A·C| off on the synthetic crossing history (3.1e-6 inside).

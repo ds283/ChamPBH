@@ -29,6 +29,12 @@ network row no longer bounds the small network's Yp and D/H shifts. Prompt 02 me
 and D/H is PRyMordial's property, which it never promised to hold at any level. It is not a
 contract with this code, and not an issue. ⁷Li/H alone witnesses that the flag selects the
 network. The §2 (b) figures stand as the board measured them.
+**Amended:** 2026-09-30 after prompt 03 landed (`db0d8fc`), by the user's decision. Two §6.3 rows
+are read as prompt 03's tests assert them. For `SaikawaShirai_EOS_spline` and the base formula,
+the witness within a factor 1.03 of 120 MeV is a half-step of 1e-5, because at 1e-4 the central
+difference is itself 1.1e-6 off there (its own h² error). The A·C row holds on N ∈ [0.5, 11.5],
+the planning probe's window; the crossing history's end samples (2.3e-4) are recorded, not
+bounded. Neither threshold value changes.
 **Target branch:** `production-readiness`, to be cut from `204795e` by whoever runs prompt 01's
 orchestrator if it does not yet exist. Planning and orchestration commits land on the same branch.
 **Status board:** [`IMPLEMENTATION_STATE.md`](IMPLEMENTATION_STATE.md) ·
@@ -440,12 +446,12 @@ target.**
 | Quantity | Now | Target | Witness |
 |---|---|---|---|
 | `dw_dlogT` against a central difference of `w` in ln T (half-step 1e-4), `Xav_EOS_spline`, on ≥ 1000 points over [12 keV, 20 TeV] | not exposed | **≤ 1e-6 absolute** (probe: 1.0e-7 at 150 MeV) | new test |
-| same, `SaikawaShirai_EOS_spline` and the base formula, above 2 MeV | not exposed | **≤ 1e-6 absolute** | same |
+| same, `SaikawaShirai_EOS_spline` and the base formula, above 2 MeV | not exposed | **≤ 1e-6 absolute**. *Amended 2026-09-30 (the user): within a factor 1.03 of 120 MeV the witness's half-step is 1e-5, where 1e-4 is itself 1.1e-6 off (its h² error; prompt 03 measured 1.1e-8 at 1e-5)* | same |
 | same, jax class, if importable | not exposed | **≤ 1e-6 absolute** | same, `skipUnless` |
 | the conformal part of `M2eff_over_H2`, minus the self and gravitational parts, against the §2 (c) reference, exponential coupling, f_m ∈ {0, 1, 100}, same grid | 0 against a bracket from −0.41 to +0.35 | **≤ 1e-6 absolute in the bracket**, i.e. \|Δ(M²/H²)\| / (3 (ln Ω)′² M_P² E) ≤ 1e-6, at h = 1e-4 in ln Ω (probe: 9.9e-8) | new test; **fails on `HEAD~1`** |
 | same, a stand-in coupling with (ln Ω)″ ≠ 0 | — | **≤ 1e-6** in the same norm | same |
 | f_m → ∞ limit, exponential coupling | 0 | **β² ρ_m,E / (M_P² H²) to 1e-6 relative** at f_m = 1e6 | same |
-| A·C against its analytic value, at ΔN = ln 10/250, on the two synthetic histories of §2 (e) | 1.8 / 2.8e-6 of max \|A·C\| (log route) | **≤ 1e-4 of max \|A·C\| on both** (probe, asinh spline: 1.1e-5 / 9.3e-6) | new test |
+| A·C against its analytic value, at ΔN = ln 10/250, on the two synthetic histories of §2 (e) | 1.8 / 2.8e-6 of max \|A·C\| (log route) | **≤ 1e-4 of max \|A·C\| on both** (probe, asinh spline: 1.1e-5 / 9.3e-6). *Amended 2026-09-30 (the user): on the samples with N ∈ [0.5, 11.5], the probe's window; the end samples are recorded, not bounded (prompt 03: 2.26e-4 on the crossing history)* | new test |
 | a history whose M²_eff passes through exactly 0 at a sample | `math.log` raises | **finite Q, equal to ½ (dm/dN)/(k_p/H)³ at that sample to 1e-4 relative; the history is not failed** | same |
 | the audit's closed form | — | **measured against the reference and reported**, not implemented | log |
 | `ScalarModel.py` in the diff | — | **absent** | `git diff --stat` |
