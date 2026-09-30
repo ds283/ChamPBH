@@ -298,6 +298,9 @@ these 15 open; they pass to whichever campaign takes them (`.documents/review-re
     `solve_ivp` result in a marked `PRyM/` patch and turns any exception inside the PRyMordial
     call into a failure row. The user chose it as one of three to fix before a science run
     (`prompts/run-integrity/README.md`).
+  - **Resolved (2026-09-30):** by the `run-integrity` campaign, prompt 02 (commit "Detect
+    PRyMordial solver failures and bump to 2026.4.0"; log
+    `prompts/run-integrity/logs/02-detect-bbn-solver-failures.md`).
 - **[03-main-recomputes-failed-bbn-rows-on-every-run]** *(log 03, observation 4)*.
   - **What.** `main.py`'s BBN lookup (`:617–630`) uses `build()`'s default `failure=False`. A model
     whose BBN computation fails deterministically is recomputed, and a new failed row stored, on

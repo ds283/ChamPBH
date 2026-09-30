@@ -1,5 +1,5 @@
 from collections import namedtuple
-from math import exp, log
+from math import exp, isfinite, log
 from typing import Optional, List, Any, Callable, NamedTuple, Sequence
 
 import numpy as np
@@ -36,8 +36,10 @@ SampleValues = namedtuple(
 
 # The PRyMordial that produced a row: the pinned upstream hash, plus a suffix
 # naming the ChamPBH patches applied to the vendored copy. "cham03" is
-# review-remediation prompt 03: dTNPdt returns 0 (PRyM/PRyM_main.py).
-PRYM_VERSION = "bf24c3d+cham03"
+# review-remediation prompt 03: dTNPdt returns 0 (PRyM/PRyM_main.py). "ri02" is
+# run-integrity prompt 02: every solve_ivp result is checked, and a solve that
+# did not succeed raises PRyMSolverFailureError (PRyM/PRyM_main.py).
+PRYM_VERSION = "bf24c3d+cham03+ri02"
 
 
 def _failure_payload(reason: str) -> dict:
@@ -119,10 +121,35 @@ def build_NP_callbacks(
     ComputationFailureError; an OverflowError or ValueError while evaluating is
     wrapped in ComputationFailureError.
     (review-remediation prompt 04, item R3)
+
+    Finiteness (run-integrity prompt 02): a non-finite sample of log_T_MeV,
+    density_ratio or pressure_ratio raises ComputationFailureError before any
+    spline is built, naming the array, the first index and its T; and each
+    callback raises ComputationFailureError for a non-finite T, before the
+    negative-T guard. A NaN new-physics value made PRyMordial's high-T solve
+    hang, and a NaN T passes both the negative-T and the domain guards.
+    For finite input no value changes.
     """
     log_T = np.asarray(log_T_MeV, dtype=float)
     r = np.asarray(density_ratio, dtype=float)
     s = np.asarray(pressure_ratio, dtype=float)
+
+    # refuse non-finite samples before the monotonicity check, which a NaN in
+    # log_T_MeV would otherwise fail with a misleading message
+    # (run-integrity prompt 02)
+    for name, samples in (
+        ("log_T_MeV", log_T),
+        ("density_ratio", r),
+        ("pressure_ratio", s),
+    ):
+        bad = np.flatnonzero(~np.isfinite(samples))
+        if len(bad) > 0:
+            i = int(bad[0])
+            T_at_i = exp(log_T[i]) if i < len(log_T) else float("nan")
+            raise ComputationFailureError(
+                f"{name} is not finite: index {i} has {name}={float(samples[i])} "
+                f"at T={T_at_i:.6g} MeV [{task_label}]"
+            )
 
     for i in range(len(log_T) - 1):
         if not log_T[i + 1] < log_T[i]:
@@ -137,6 +164,14 @@ def build_NP_callbacks(
     density_ratio_spline = make_interp_spline(x, r[::-1], k=3)
     pressure_ratio_spline = make_interp_spline(x, s[::-1], k=3)
     density_ratio_derivative_spline = density_ratio_spline.derivative()
+
+    def _check_finite(T_in_MeV: float, callback: str):
+        # a NaN T passes both the negative-T guard and _check_domain
+        # (run-integrity prompt 02)
+        if not isfinite(T_in_MeV):
+            raise ComputationFailureError(
+                f"{callback} was called with a non-finite T_in_MeV={T_in_MeV!r} [{task_label}]"
+            )
 
     def _check_domain(T_in_MeV: float):
         if T_in_MeV > T_max_MeV:
@@ -155,6 +190,8 @@ def build_NP_callbacks(
         return ComputationFailureError(msg)
 
     def rho_NP(T_in_MeV: float) -> float:
+        _check_finite(T_in_MeV, "rho_NP")
+
         # PRyMordial sometimes produces negative temperatures
         if T_in_MeV < 0:
             return 0.0
@@ -172,6 +209,8 @@ def build_NP_callbacks(
             return value
 
     def P_NP(T_in_MeV: float) -> float:
+        _check_finite(T_in_MeV, "P_NP")
+
         # PRyMordial sometimes produces negative temperatures
         if T_in_MeV < 0:
             return 0.0
@@ -189,6 +228,8 @@ def build_NP_callbacks(
             return value
 
     def drho_NP_dT(T_in_MeV: float) -> float:
+        _check_finite(T_in_MeV, "drho_NP_dT")
+
         # PRyMordial sometimes produces negative temperatures
         if T_in_MeV < 0:
             return 0.0
@@ -270,6 +311,39 @@ def _zero_NP(T_in_MeV: float) -> float:
     return 0.0
 
 
+def _run_PRyMordial(callbacks: NPCallbacks, small_network: bool) -> dict:
+    """
+    The PRyMordial boundary (run-integrity prompt 02). Configure PRyMordial
+    with `_configure_PRyMordial(small_network)`, run it on the three
+    new-physics callbacks, and return {"Yp_BBN", "DOverH", "He3OverH",
+    "Li7OverH"} (D/H and 3He/H x 1e5, 7Li/H x 1e10).
+
+    Any Exception raised inside the PRyMordial call is returned as
+    `_failure_payload("PRyMordial: <Type>: <message>")`. That covers
+    PRyMSolverFailureError (a solve_ivp that did not succeed), a
+    ComputationFailureError raised by the callbacks, which PRyMordial calls,
+    and anything else PRyMordial or the callbacks raise. It does not cover a
+    BaseException such as KeyboardInterrupt, nor anything raised outside the
+    call: an exception from ChamPBH's own code outside PRyMordial is a bug and
+    propagates. compute_SM_baseline does not use this helper.
+    """
+    PRyMmain = _configure_PRyMordial(small_network)
+
+    try:
+        res = PRyMmain.PRyMclass(
+            callbacks.rho_NP, callbacks.P_NP, callbacks.drho_NP_dT
+        ).PRyMresults()
+    except Exception as e:
+        return _failure_payload(f"PRyMordial: {type(e).__name__}: {e}")
+
+    return {
+        "Yp_BBN": res[4],
+        "DOverH": res[5],
+        "He3OverH": res[6],
+        "Li7OverH": res[7],
+    }
+
+
 def compute_SM_baseline(small_network: bool) -> dict:
     """
     The Standard-Model abundances through the same PRyMordial path as
@@ -279,6 +353,9 @@ def compute_SM_baseline(small_network: bool) -> dict:
     solve, about 10 s; must be called from the repository root. Not stored.
     (review-remediation prompt 04, item R3)
     """
+    # this does not go through _run_PRyMordial: a failed baseline raises (for
+    # example PRyMSolverFailureError), since it is not stored and should be
+    # loud (run-integrity prompt 02)
     PRyMmain = _configure_PRyMordial(small_network)
     res = PRyMmain.PRyMclass(_zero_NP, _zero_NP, _zero_NP).PRyMresults()
 
@@ -435,15 +512,12 @@ def compute_BBN_data(
             return _failure_payload(f"BBN callbacks: {e}")
 
     with WallclockTimer() as BBN_timer:
-        PRyMmain = _configure_PRyMordial(small_network)
+        # run PRyMordial; any exception inside the call comes back as a failure
+        # payload (run-integrity prompt 02)
+        abundances: dict = _run_PRyMordial(callbacks, small_network)
 
-        try:
-            # run PRyMordial
-            res = PRyMmain.PRyMclass(
-                callbacks.rho_NP, callbacks.P_NP, callbacks.drho_NP_dT
-            ).PRyMresults()
-        except (OverflowError, ValueError, ComputationFailureError) as e:
-            return _failure_payload(f"PRyMordial: {type(e).__name__}: {e}")
+    if abundances.get("failure", False):
+        return abundances
 
     for i, z in enumerate(z_grid):
         samples.append(
@@ -457,10 +531,10 @@ def compute_BBN_data(
         )
 
     return {
-        "Yp_BBN": res[4],
-        "DOverH": res[5],
-        "He3OverH": res[6],
-        "Li7OverH": res[7],
+        "Yp_BBN": abundances["Yp_BBN"],
+        "DOverH": abundances["DOverH"],
+        "He3OverH": abundances["He3OverH"],
+        "Li7OverH": abundances["Li7OverH"],
         "z_grid": z_grid,
         "samples": samples,
         "BBN_compute_time": BBN_timer.elapsed,

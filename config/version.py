@@ -28,7 +28,9 @@
 # On 2026-09-30 (run-integrity prompt 01), under the same label: lookups of ScalarModel,
 # AdiabaticHistory and BBNData return only rows made under this label, and the label is defined
 # here once.
-VERSION_LABEL = "2026.3.0"
+# On 2026-09-30 (run-integrity prompt 02), 2026.4.0: from 2026.4.0 a failed PRyMordial solve is
+# stored as a failure with its reason, not as a success, and PRyM_version is "bf24c3d+cham03+ri02".
+VERSION_LABEL = "2026.4.0"
 
 # The reserved payload key under which Datastore.object_get hands a version-keyed factory's
 # build() the serial of the current version label (run-integrity prompt 01). A factory registers

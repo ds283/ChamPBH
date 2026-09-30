@@ -7,6 +7,31 @@ from scipy.interpolate import interp1d
 from scipy.special import zeta
 
 
+# ChamPBH run-integrity prompt 02: the solve_ivp results were never checked, so a solve that gave
+# up returned abundances read from the last point it reached. Every solve_ivp call below is now
+# followed by _check_solve_ivp, which raises PRyMSolverFailureError if the solve did not succeed.
+class PRyMSolverFailureError(Exception):
+    def __init__(self, stage, status, solver_message, t_reached, t_target):
+        self.stage = stage
+        self.status = status
+        self.solver_message = solver_message
+        self.t_reached = t_reached
+        self.t_target = t_target
+        super().__init__(
+            "solve_ivp failed in stage '%s': status=%s, message=%r; t reached %.6g of target %.6g"
+            % (stage, status, solver_message, t_reached, t_target)
+        )
+
+
+# ChamPBH run-integrity prompt 02: raise PRyMSolverFailureError unless sol.success.
+def _check_solve_ivp(sol, stage, t_target):
+    if not sol.success:
+        t_reached = float(sol.t[-1]) if len(sol.t) > 0 else float("nan")
+        raise PRyMSolverFailureError(
+            stage, sol.status, sol.message, t_reached, float(t_target)
+        )
+
+
 class PRyMclass(object):
     def __init__(
         self, my_rho_NP=None, my_p_NP=None, my_drho_NP_dT=None, my_delta_rho_NP=None
@@ -205,6 +230,8 @@ class PRyMclass(object):
                         rtol=1.0e-6,
                         atol=1.0e-9,
                     )
+                    # ChamPBH run-integrity prompt 02: check the solve
+                    _check_solve_ivp(sol_thermo, "thermodynamics (with NP)", tfin)
                     t_vec = sol_thermo.t
                     Tg_vec = sol_thermo.y[0][:]
                     Tnu_vec = sol_thermo.y[1][:]
@@ -245,6 +272,8 @@ class PRyMclass(object):
                         rtol=1.0e-6,
                         atol=1.0e-9,
                     )
+                    # ChamPBH run-integrity prompt 02: check the solve
+                    _check_solve_ivp(sol_thermo, "thermodynamics (no NP)", tfin)
                     t_vec = sol_thermo.t
                     Tg_vec = sol_thermo.y[0][:]
                     Tnu_vec = sol_thermo.y[1][:]
@@ -431,6 +460,8 @@ class PRyMclass(object):
                     rtol=1.0e-6,
                     atol=1.0e-9,
                 )
+                # ChamPBH run-integrity prompt 02: check the solve
+                _check_solve_ivp(sol_lnalnT, "a(T)", Tini_vec[1])
                 sol_lnT = np.array(sol_lnalnT.t[:]).flatten()
                 sol_lna = np.array(sol_lnalnT.y[:]).flatten()
             # log(a) as a function of log(T)
@@ -590,6 +621,8 @@ class PRyMclass(object):
                 rtol=1.0e-6,
                 atol=1.0e-9,
             )
+            # ChamPBH run-integrity prompt 02: check the solve
+            _check_solve_ivp(sol_at_HT, "high-T n <-> p", t_fin)
             Yn_HT_f, Yp_HT_f = sol_at_HT.y[0][-1], sol_at_HT.y[1][-1]
 
         if PRyMini.verbose_flag:
@@ -1028,6 +1061,8 @@ class PRyMclass(object):
                     rtol=1.0e-6,
                     atol=1.0e-9,
                 )
+                # ChamPBH run-integrity prompt 02: check the solve
+                _check_solve_ivp(sol_at_MT, "mid-T nuclear network (small)", t_fin)
                 (
                     Yn_MT_f,
                     Yp_MT_f,
@@ -1103,6 +1138,8 @@ class PRyMclass(object):
                     rtol=1.0e-6,
                     atol=1.0e-9,
                 )
+                # ChamPBH run-integrity prompt 02: check the solve
+                _check_solve_ivp(sol_at_MT, "mid-T nuclear network (full)", t_fin)
                 (
                     Yn_MT_f,
                     Yp_MT_f,
@@ -1194,6 +1231,8 @@ class PRyMclass(object):
                     jac=Jacobian,
                     atol=1.0e-11,
                 )
+                # ChamPBH run-integrity prompt 02: check the solve
+                _check_solve_ivp(sol_at_LT, "low-T nuclear network (small)", t_fin)
                 Yn_f, Yp_f, Yd_f, Yt_f, YHe3_f, Ya_f, YLi7_f, YBe7_f = (
                     sol_at_LT.y[0][-1],
                     sol_at_LT.y[1][-1],
@@ -1257,6 +1296,8 @@ class PRyMclass(object):
                     jac=Jacobian_LT,
                     atol=1.0e-15,
                 )
+                # ChamPBH run-integrity prompt 02: check the solve
+                _check_solve_ivp(sol_at_LT, "low-T nuclear network (full)", t_fin)
                 (
                     Yn_f,
                     Yp_f,

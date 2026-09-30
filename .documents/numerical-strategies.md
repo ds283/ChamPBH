@@ -516,6 +516,25 @@ probes them at temperatures the caller does not control:
 - `OverflowError`/`ValueError` from the `sinh` inversion are caught and converted to
   `ComputationFailureError`.
 
+**Note added 2026-09-30 (run-integrity prompt 02, item F).** Two finiteness guards were added;
+nothing above is changed by them, and no callback's value changes for finite input.
+
+- **The samples.** `build_NP_callbacks` refuses a non-finite sample of `log_T_MeV`,
+  `density_ratio` or `pressure_ratio` with `ComputationFailureError`, before any spline is built.
+  The message names the array, the first index and its T. `compute_BBN_data` already turns that
+  exception into a failure row (`"BBN callbacks: ..."`). Before this prompt a non-finite ratio
+  reached `make_interp_spline`, whose `ValueError` ("Array must not contain infs or nans") is
+  not caught there and escaped the task; a NaN in `log_T_MeV` was reported as a
+  monotonicity failure.
+- **The temperature.** Each of the three callbacks raises `ComputationFailureError` for a
+  non-finite T, before the negative-T guard. A NaN T passes both that guard (`T < 0` is False)
+  and the domain check (both comparisons are False), and the callbacks returned NaN; `-inf`
+  returned 0. A NaN new-physics value handed to PRyMordial made its high-T solve hang
+  (`prompts/run-integrity/planning-probes/prymordial_solver_probe.py nan`: no return in 60 s).
+
+Witness: `ComputeTargets/tests/test_bbn_solver_failures.py` (d). See
+`prompts/run-integrity/logs/02-detect-bbn-solver-failures.md`.
+
 ### 7.5 Running PRyMordial and outputs
 
 PRyMordial is imported *locally* inside the worker (with a comment noting the intent to avoid
@@ -544,6 +563,37 @@ a pinned PRyMordial commit hash (`"bf24c3d"`, since PRyMordial lacks formal vers
 both the NP-construction and BBN-solve wall-clock times. The reconstructed NP density and
 pressure (and the ratio `density_NP/ρ_rad,Jordan`) are stored per-redshift for later
 inspection.
+
+**Note added 2026-09-30 (run-integrity prompt 02, item F).**
+
+- **What is now checked.** Until this prompt none of the eight `solve_ivp` calls in
+  `PRyM/PRyM_main.py` checked its result, and the nuclear stages read the last point reached.
+  A last solve that gave up after 1 % of its span returned D/H 5.0e-3 off, with no exception.
+  Each of the eight calls is now followed by `_check_solve_ivp`, which raises
+  `PRyMSolverFailureError` (defined in `PRyM/PRyM_main.py`) unless `sol.success`. The message
+  names the stage, `sol.status`, `sol.message`, and the t reached against the target. The patch
+  is marked at each site with a comment naming run-integrity prompt 02, and `PRyM_version` is
+  `"bf24c3d+cham03+ri02"`. Under production's flags five calls run: thermodynamics (with NP),
+  a(T), high-T n ↔ p, and the full network's mid-T and low-T solves. The Julia branches
+  (`de.solve`) are not used, and are not patched.
+- **Where the boundary is.** The PRyMordial call is factored into `_run_PRyMordial(callbacks,
+  small_network)` (`ComputeTargets/BBNData.py`). It returns the abundances, or, for any
+  `Exception` raised inside the `PRyMclass(...).PRyMresults()` call,
+  `{"failure": True, "failure_reason": "PRyMordial: <Type>: <message>"}`. The `try/except` over
+  three exception types described in the paragraph above is gone. `compute_BBN_data` returns that
+  payload unchanged. Nothing outside the call gained an `except`: an exception from ChamPBH's own
+  code outside PRyMordial still propagates, as a bug. `compute_SM_baseline` does not use the
+  helper, and a failed baseline still raises. A `BaseException` such as `KeyboardInterrupt` is
+  not caught.
+- **What becomes a failure row.** A `solve_ivp` that did not succeed, in any stage
+  (`PRyMSolverFailureError`); a `ComputationFailureError` from the callbacks, which PRyMordial
+  calls (for example T outside the splined domain, or a non-finite T, §7.4); and any other
+  `Exception` raised by PRyMordial or by the callbacks while it runs. Each is stored with
+  its reason in `BBNData.failure_reason`. From `VERSION_LABEL = "2026.4.0"` a failed solve is
+  stored as a failure, not as a success.
+
+Witness: `ComputeTargets/tests/test_bbn_solver_failures.py` (a)–(c), (e). See
+`prompts/run-integrity/logs/02-detect-bbn-solver-failures.md`.
 
 ---
 
