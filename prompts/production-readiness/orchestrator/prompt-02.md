@@ -51,6 +51,8 @@ not re-pin any abundance."*
    - Restore, and confirm it passes.
 4. **The network moves.** Run test (b) yourself, about 15 s. Quote the ⁷Li/H, D/H and Yp
    differences. They must be ≥ 5e-3, ≤ 1e-3 and ≤ 1e-5 relative.
+   *Amended 2026-09-30 after the run (the user; README header): only the ⁷Li/H bound stands. The
+   D/H and Yp shifts are quoted, not checked.*
 5. **No pin was re-taken.** `git diff HEAD~1 HEAD -- ComputeTargets/tests/` changes no numeric
    pin: not `RES_*` values, not Yp 0.2540937879, D/H 2.671500711, nor the baseline figures. Then
    the whole `ComputeTargets` suite passes.

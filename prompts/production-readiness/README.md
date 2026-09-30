@@ -23,6 +23,12 @@ to it. Prompt 03's A3 now removes the singular route instead of guarding it. The
 [`planning-probes/q_sign_change_probe.py`](planning-probes/q_sign_change_probe.py) (a few
 seconds). The amendment also opened two issues for the authors (board §3), and added a note in
 §2 (h) on what the diagnostic assumes.
+**Amended:** 2026-09-30 after prompt 02 landed (`8503fe7`), by the user's decision. §6.2's
+network row no longer bounds the small network's Yp and D/H shifts. Prompt 02 measured Yp at
+6.2e-5 against the 1e-5 bound. How far PRyMordial's small network sits from its full one in Yp
+and D/H is PRyMordial's property, which it never promised to hold at any level. It is not a
+contract with this code, and not an issue. ⁷Li/H alone witnesses that the flag selects the
+network. The §2 (b) figures stand as the board measured them.
 **Target branch:** `production-readiness`, to be cut from `204795e` by whoever runs prompt 01's
 orchestrator if it does not yet exist. Planning and orchestration commits land on the same branch.
 **Status board:** [`IMPLEMENTATION_STATE.md`](IMPLEMENTATION_STATE.md) ·
@@ -425,7 +431,7 @@ target.**
 | `grep -rn small_network_flag ComputeTargets/ tools/ main.py plot_by_beta.py` | 4 files | **empty** (an explanatory comment naming the old attribute is allowed) | grep |
 | `small_network` passed by `main.py`, the `compute_BBN_data` default, `plot_by_beta.py`'s baseline, `tools/bbn_baseline.py`'s default, `run_prym`'s default | True everywhere | **False everywhere** | grep; read |
 | every pinned abundance in `ComputeTargets/tests/` | pass | **pass unchanged**, not re-pinned | suite |
-| constant 0.08 family, `small_network=True`, against the full-network pins | not measured through the fixed flag | **⁷Li/H differs by ≥ 5e-3 relative; D/H within 1e-3; Yp within 1e-5.** Board: 1 %, 1.5e-4, 1.5e-6 | new test, one solve |
+| constant 0.08 family, `small_network=True`, against the full-network pins | not measured through the fixed flag | **⁷Li/H differs by ≥ 5e-3 relative.** Board: 1 %. *Amended 2026-09-30 (the user): the planned bounds D/H within 1e-3 and Yp within 1e-5 are withdrawn; the shifts are recorded, not bounded. Prompt 02 measured 2.3e-4 and 6.2e-5* | new test, one solve |
 | `add_BBN_info_labels`' `small_network is "True"` (`extract_common.py:148`) | identity test on a string | **`==`** | read |
 | `VERSION_LABEL` | `"2026.2.0"` | **`"2026.3.0"`** in `main.py` and `plot_by_beta.py`, with a comment naming the reason | grep |
 

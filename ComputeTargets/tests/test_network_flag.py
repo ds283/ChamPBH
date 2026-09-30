@@ -22,13 +22,13 @@ Written for production-readiness prompt 02 (item P2). Before that prompt
 never reads; it reads `smallnet_flag` when the solve runs (`PRyM_main.py`), so
 every solve used the full network whatever the switch said.
 
-**Test (b) runs PRyMordial twice, about 15 s**; test (b') reuses those two
-solves. Tests (a) and (c) run no solve.
+**Test (b) runs PRyMordial twice, about 15 s.** Tests (a) and (c) run no
+solve.
 
-Test (b') is an expected failure. README section 6.2 bounds the small-network
-Yp shift by 1e-5 relative, from a board measurement of 1.5e-6 on another
-construction of the same family; on this fixture's family it is 6.2e-5. The
-bound is kept as written and the miss is an open issue (log 02).
+Test (b) bounds only the 7Li/H shift between the networks, which is what shows
+that the flag selects one. The Yp and D/H shifts are printed, not bounded: how
+far PRyMordial's small network sits from its full one in those is PRyMordial's
+property, not a contract with this code (the user, 2026-09-30; log 02, addendum).
 Nothing here needs a Ray cluster or a datastore. Run from the repository root,
 since PRyMordial reads `PRyMrates/` from the working directory:
 
@@ -63,11 +63,9 @@ from ComputeTargets.tests.test_prym_passenger import (
 _ROOT = Path(__file__).resolve().parents[2]
 
 # (b) small against full network, constant 0.08 rho_SM family. The review-
-# remediation board measured 1 % in 7Li/H, 1.5e-4 in D/H and 1.5e-6 in Yp
-# (47c50ae, smallnet_flag set directly); README section 6.2 sets the bounds.
+# remediation board measured 1 % in 7Li/H (47c50ae, smallnet_flag set directly);
+# README section 6.2 sets the bound.
 LI7_MIN_RELATIVE_SHIFT = 5e-3
-D_OVER_H_MAX_RELATIVE_SHIFT = 1e-3
-YP_MAX_RELATIVE_SHIFT = 1e-5
 
 
 def _relative(a: float, b: float) -> float:
@@ -124,8 +122,8 @@ _NETWORK_SOLVES = None
 def _network_solves() -> dict:
     """
     The constant 0.08 rho_SM family through run_prym, small network then
-    full, solved once per process and shared by tests (b) and (b'). Returns
-    the relative shifts small against full, and full against the pins.
+    full, solved once per process for test (b). Returns the relative shifts
+    small against full, and full against the pins.
     """
     global _NETWORK_SOLVES
     if _NETWORK_SOLVES is not None:
@@ -186,28 +184,17 @@ class TestNetworkFlag(unittest.TestCase):
 
     def test_b_flag_selects_the_network(self):
         """(b) The constant 0.08 rho_SM family through run_prym with
-        small_network=True and =False: 7Li/H moves by >= 5e-3 relative and D/H
-        by <= 1e-3; the full-network run reproduces the pinned Yp and D/H to the
-        fixture's 1e-5. The Yp bound is test (b'), below.
-        **Runs PRyMordial twice, about 15 s** (shared with (b'))."""
+        small_network=True and =False: 7Li/H moves by >= 5e-3 relative, and
+        the full-network run reproduces the pinned Yp and D/H to the fixture's
+        1e-5. The small network's Yp and D/H shifts are printed, not bounded.
+        **Runs PRyMordial twice, about 15 s.**"""
         r = _network_solves()
         with self.subTest("7Li/H moves"):
             self.assertGreaterEqual(r["dLi7"], LI7_MIN_RELATIVE_SHIFT)
-        with self.subTest("D/H"):
-            self.assertLessEqual(r["dDoH"], D_OVER_H_MAX_RELATIVE_SHIFT)
         with self.subTest("full network, pinned Yp"):
             self.assertLessEqual(r["dYp_pin"], REFERENCE_RTOL)
         with self.subTest("full network, pinned D/H"):
             self.assertLessEqual(r["dDoH_pin"], REFERENCE_RTOL)
-
-    @unittest.expectedFailure
-    def test_b_prime_Yp_within_1e_5(self):
-        """(b') README section 6.2's Yp bound: small against full network
-        within 1e-5 relative. **Not met**: 6.2e-5 on this family (log 02). The
-        bound is kept as written and marked as an expected failure; the miss is
-        board section 3 [02-network-shift-bounds-sit-inside-prymordial-noise].
-        Uses test (b)'s two solves."""
-        self.assertLessEqual(_network_solves()["dYp"], YP_MAX_RELATIVE_SHIFT)
 
     def test_c_production_defaults_are_the_full_network(self):
         """(c) The compute_BBN_data default is small_network=False, and so are

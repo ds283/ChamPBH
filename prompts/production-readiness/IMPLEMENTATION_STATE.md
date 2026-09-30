@@ -60,6 +60,13 @@ made it `"2026.3.0"` (2026-09-30), and prompt 03 lands under the same label.
     03's A3 now requires the smooth form A·C = m(1 + Ḣ/H²) + ½ dm/dN, accurate to 1e-4 of max
     |A·C| through zero and across a bounce, and forbids a fail-closed guard. README §2 (h) records
     what the diagnostic assumes.
+- **2026-09-30, the user: the small network's Yp and D/H shifts are not bounded.** Prompt 02
+  measured the small network 6.2e-5 from the full one in Yp, against README §6.2's 1e-5. That
+  offset is PRyMordial's, and PRyMordial never promised any level for it, so there is no contract
+  to impose and no issue to open. `[02-network-shift-bounds-sit-inside-prymordial-noise]` is
+  withdrawn (§4). The expected-failure test and the D/H bound are removed, and ⁷Li/H alone
+  witnesses the network. The shifts stay recorded in `.documents/numerical-strategies.md` §7.5,
+  to be aware of. README header and §6.2 amended.
 
 None pending. Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
@@ -85,15 +92,15 @@ None pending. Decisions the prompts may surface, each a stop-and-ask in its prom
 | Item | Kind | Description | Prompt | Status |
 |---|---|---|---|---|
 | P1 | **DEFECT, low** | The count is stored as `extra_data["number_hard_reflections"]`, but the caption reads `"hard_reflections"` and always prints 0. `plot_by_beta.py` reports it nowhere. Closes `[00-hard-reflection-count-is-stored-but-never-reported]` and `[06-hard-reflection-caption-reads-the-wrong-key-and-always-prints-zero]`. | 01 | **done 2026-09-30** (log 01; suites 12 / 18) |
-| P2 | **DEFECT, medium** | `_configure_PRyMordial` sets `small_network_flag`, but PRyMordial reads `smallnet_flag`. Every stored `small_network = True` row ran the full network. Closes `[03-small-network-flag-is-never-read-by-prymordial]`. | 02 | **done 2026-09-30, COMPLETE WITH DEVIATIONS** (log 02; suites 12 / 22, one expected failure). `VERSION_LABEL` `"2026.3.0"`: **every store made before 2026.3.0 is invalid.** The Yp bound of README §6.2 is missed (6.2e-5 against 1e-5): §3 `[02-network-shift-bounds-sit-inside-prymordial-noise]` |
+| P2 | **DEFECT, medium** | `_configure_PRyMordial` sets `small_network_flag`, but PRyMordial reads `smallnet_flag`. Every stored `small_network = True` row ran the full network. Closes `[03-small-network-flag-is-never-read-by-prymordial]`. | 02 | **done 2026-09-30, COMPLETE WITH DEVIATIONS** (log 02). `VERSION_LABEL` `"2026.3.0"`: **every store made before 2026.3.0 is invalid.** The Yp bound of README §6.2 was missed (6.2e-5 against 1e-5); the user withdrew the Yp and D/H bounds on 2026-09-30 (Decisions; log 02, addendum). Suites now 12 / 21, all OK |
 | P3 | **DEFECT, high** | `M2eff_over_H2` omits (ln Ω)′² ρ_R,E [Σ² − Σ_T/(1 + x) + f_m]. That is the whole density-dependent mass for the exponential coupling. The bracket runs from −0.407 (146 MeV) to +0.350 (230 MeV), and → 1 in matter domination. Closes `[00-adiabaticity-diagnostic-omits-the-source-response-term]`. | 03 | open |
 
 ---
 
 ## 3. Active and unresolved issues
 
-Two opened at the plan's amendment on 2026-09-30, for the authors, and one by prompt 02
-(`[02-network-shift-bounds-sit-inside-prymordial-noise]`). Issues opened by this
+Two opened at the plan's amendment on 2026-09-30, for the authors. One opened by prompt 02 was
+withdrawn by the user the same day (§4). Issues opened by this
 campaign's prompts go here too, with an index row under §1.3 of `.documents/OPEN_ISSUES.md`.
 
 - **[00-adiabaticity-is-evaluated-at-fixed-k-over-H-not-for-fixed-comoving-modes]** *(the
@@ -138,6 +145,30 @@ campaign's prompts go here too, with an index row under §1.3 of `.documents/OPE
     03's addendum to `.documents/numerical-methods-for-paper.md` gives them the material. **Not a
     code change.**
 
+---
+
+## 4. Resolved issues
+
+Two assigned issues, closed by prompt 01 on 2026-09-30. Their entries stay on the
+`review-remediation` board, each with a **Resolved** line; they are listed here as the record.
+
+- **[00-hard-reflection-count-is-stored-but-never-reported]** and
+  **[06-hard-reflection-caption-reads-the-wrong-key-and-always-prints-zero]** — resolved by
+  prompt 01 (log 01). One stored-key constant (`HARD_REFLECTIONS_KEY`), one reader
+  (`extract_common.hard_reflection_count`) used by the caption and by `plot_by_beta.py`, a
+  `hard_reflections` column in `data.csv` and a per-(M, Lambda) stdout summary. The caption test
+  fails on the old reader.
+
+One assigned issue, closed by prompt 02 on 2026-09-30:
+
+- **[03-small-network-flag-is-never-read-by-prymordial]** — resolved by prompt 02 (log 02).
+  `_configure_PRyMordial` sets `PRyM_init.smallnet_flag`, the name PRyMordial reads, and no longer
+  sets `small_network_flag`. Production, the SM baseline, `tools/bbn_baseline.py` and the fixtures
+  pass `small_network=False`, the full network; every pinned abundance passes unchanged.
+  `VERSION_LABEL` is `"2026.3.0"`. Test (a) fails on the old `BBNData.py`.
+
+One issue opened by prompt 02 and withdrawn by the user on 2026-09-30:
+
 - **[02-network-shift-bounds-sit-inside-prymordial-noise]** *(log 02, Deviations and
   Verification; `ComputeTargets/tests/test_network_flag.py` (b) and two scratch probes, on
   `cf773b2` plus prompt 02's diff)*.
@@ -164,25 +195,8 @@ campaign's prompts go here too, with an index row under §1.3 of `.documents/OPE
   - **Next step.** A decision for the user: accept the miss, or restate the Yp and D/H rows as
     bounds PRyMordial can resolve (for example ⁷Li/H only, with Yp and D/H bounded by the noise
     band), and then remove the `expectedFailure`.
-
----
-
-## 4. Resolved issues
-
-Two assigned issues, closed by prompt 01 on 2026-09-30. Their entries stay on the
-`review-remediation` board, each with a **Resolved** line; they are listed here as the record.
-
-- **[00-hard-reflection-count-is-stored-but-never-reported]** and
-  **[06-hard-reflection-caption-reads-the-wrong-key-and-always-prints-zero]** — resolved by
-  prompt 01 (log 01). One stored-key constant (`HARD_REFLECTIONS_KEY`), one reader
-  (`extract_common.hard_reflection_count`) used by the caption and by `plot_by_beta.py`, a
-  `hard_reflections` column in `data.csv` and a per-(M, Lambda) stdout summary. The caption test
-  fails on the old reader.
-
-One assigned issue, closed by prompt 02 on 2026-09-30:
-
-- **[03-small-network-flag-is-never-read-by-prymordial]** — resolved by prompt 02 (log 02).
-  `_configure_PRyMordial` sets `PRyM_init.smallnet_flag`, the name PRyMordial reads, and no longer
-  sets `small_network_flag`. Production, the SM baseline, `tools/bbn_baseline.py` and the fixtures
-  pass `small_network=False`, the full network; every pinned abundance passes unchanged.
-  `VERSION_LABEL` is `"2026.3.0"`. Test (a) fails on the old `BBNData.py`.
+  - **Withdrawn (2026-09-30, the user):** not an issue. The small network's offset from the full
+    one in Yp and D/H is a property of PRyMordial, which never promised to hold it at any level;
+    the 1e-5 and 1e-3 bounds were ours, not PRyMordial's. Both bounds and the expected-failure
+    test are removed; ⁷Li/H alone witnesses that the flag selects the network. README §6.2
+    amended; log 02, addendum.

@@ -250,3 +250,28 @@ All from the repository root with `venv/bin/python`, on `cf773b2` plus this diff
 - Reproduce test (b)'s numbers:
   `PYTHONPATH=. ./venv/bin/python -m unittest ComputeTargets.tests.test_network_flag -v` (about
   13 s).
+
+## Addendum 2026-09-30 — the user's decision on the Yp bound
+
+Added after the orchestrator's review of `8503fe7`. The record above is unchanged.
+
+The orchestrator's rerun of test (b) reproduced the numbers above exactly:
+- ⁷Li/H 1.006e-2, D/H 2.274e-4 and Yp 6.200e-5 relative, small against full;
+- 5.7 s for the small network and 7.7 s for the full one.
+
+The user decided that the small network's Yp and D/H offsets are not an issue. They are a property
+of PRyMordial, which never promised to hold them at any level. The 1e-5 and 1e-3 bounds were this
+campaign's, not a contract PRyMordial made.
+
+- `test_b_prime_Yp_within_1e_5` (the expected failure) and test (b)'s D/H bound are removed. Test
+  (b) keeps the ⁷Li/H ≥ 5e-3 bound and the full-network pins, and still prints the Yp and D/H
+  shifts.
+- `ComputeTargets/tests` is now **21**, all `OK`. The count falls by the one removed method, by
+  the user's decision.
+- `[02-network-shift-bounds-sit-inside-prymordial-noise]` is withdrawn: board §4, and its row is
+  deleted from `.documents/OPEN_ISSUES.md`. README header and §6.2 amended.
+- The shifts stay recorded in `.documents/numerical-strategies.md` §7.5, as something to be aware
+  of.
+
+This supersedes the "State handed to the next prompt" bullets on the suite count (22, one expected
+failure) and on the open decision. The next prompt should count **12 / 21**, all `OK`.

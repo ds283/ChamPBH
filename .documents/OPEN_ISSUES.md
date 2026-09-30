@@ -1,7 +1,7 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-09-30 · **15 open**: 12 on the `review-remediation` board (closed
-2026-09-30), 1 of them assigned to `production-readiness`; 3 on the `production-readiness` board
+**Last updated:** 2026-09-30 · **14 open**: 12 on the `review-remediation` board (closed
+2026-09-30), 1 of them assigned to `production-readiness`; 2 on the `production-readiness` board
 (planned 2026-09-30).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
@@ -69,7 +69,7 @@ deletes its row here.
 
 ### 1.3 `production-readiness` — [board §3](../prompts/production-readiness/IMPLEMENTATION_STATE.md)
 
-Two opened when the plan was amended on 2026-09-30, both for the authors; one opened by prompt 02.
+Two opened when the plan was amended on 2026-09-30, both for the authors.
 
 - `[00-adiabaticity-is-evaluated-at-fixed-k-over-H-not-for-fixed-comoving-modes]` — max |Q| is
   taken at fixed k_p/H ∈ {10 … 10⁴}, a different comoving mode at each N, with no horizon-scale
@@ -77,6 +77,3 @@ Two opened when the plan was amended on 2026-09-30, both for the authors; one op
 - `[00-paper-gives-two-inconsistent-adiabaticity-conditions]` — `Paper1.tex`'s main-text
   `eq:adiabaticity` (what the code does) and its appendix condition differ; the appendix also
   carries the H5 omission.
-- `[02-network-shift-bounds-sit-inside-prymordial-noise]` — small against full network, the Yp
-  shift is 6.2e-5 on the fixture's constant family against README §6.2's 1e-5 bound (2.3e-6 on the
-  raw-fit construction); ⁷Li/H's 1 % is robust.
