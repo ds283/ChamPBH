@@ -52,6 +52,10 @@ nothing above it changes."*
      grep -n "Resolved" prompts/review-remediation/IMPLEMENTATION_STATE.md
      ```
    - Both planning issues are in this board's §4.
+   - `[01-adiabatic-and-bbn-lookups-do-not-require-validated-rows]` is still in §3 and the index.
+     The board diff adds one dated **Narrowed** line to it and removes nothing, and the index hook
+     matches. If instead the log reports a failed claim (prompt §3), relay that claim and what the
+     code showed.
 6. **The scope check.** The agent's `git diff --stat 27a32bc..HEAD` matches yours, and the log
    names no out-of-scope file, or names and explains each one.
 
@@ -68,6 +72,8 @@ Report:
 - the commit;
 - the verification table verbatim;
 - the addendum's five points in one line each;
-- the final open-issue count.
+- the final open-issue count;
+- the **Narrowed** line on `[01-adiabatic-and-bbn-lookups-do-not-require-validated-rows]`
+  verbatim, or the claim that failed.
 
 Then stop. The science run is the user's.

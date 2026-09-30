@@ -63,6 +63,14 @@ Target branch `run-integrity` from `27a32bc`.
   LSODA, on a `t_span` of `[nan, 0.745]`. The fix is to refuse non-finite samples before
   PRyMordial is called, rather than to add a timeout. A Ray task timeout is out of scope (README
   §0.4).
+- **2026-09-30, the user: `[01-adiabatic-and-bbn-lookups-do-not-require-validated-rows]` is not
+  folded into a later prompt.**
+  - **Why.** Prompt 01 did not cause it, and prompt 03 does not widen it. Prompt 03 changes which
+    failure rows `main.py`'s lookup returns, not which success rows it returns.
+  - **The alternative, declined.** Adding `validated == True` to prompt 03. It changes which rows a
+    lookup returns, so it would be a revert unit of its own and need a new §6.3 row.
+  - **What happens instead.** Prompt 04 re-checks the orchestrator's narrowed reading on the final
+    tree and records it on the entry (§3). The issue stays open and unassigned.
 
 None pending. Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
@@ -152,6 +160,10 @@ assigned (the last two entries).
   - **Next step.** Add `validated == True` to both lookups, as `ScalarModel.build` has. It changes
     which rows a lookup returns, so it needs its own prompt. **Not in prompt 01's scope** ("nothing
     else in the query changes").
+  - **Decision (2026-09-30, the user):** not folded into prompts 02–03. It stays open and
+    unassigned. Prompt 04 re-checks the orchestrator's narrowed reading on the final tree and
+    records it here (prompt 04 §3). The reading, from the code on `bacddd8`, is that an interrupted
+    run cannot leave a partial row, so the served case is only a row that failed its count check.
 - **[01-plot-by-beta-profile-label-names-plot-scalarmodel]** *(log 01, observation 2)*.
   - **What.** `plot_by_beta.py:87` builds its `ProfileAgent` label as
     `f'{VERSION_LABEL}--plot_ScalarModel-primarydb-...'`, a copy of `plot_ScalarModel.py:86`.
