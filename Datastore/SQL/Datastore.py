@@ -82,6 +82,7 @@ from Datastore.SQL.ObjectFactories.store_tag import sqla_store_tag_factory
 from Datastore.SQL.ObjectFactories.tolerance import sqla_tolerance_factory
 from Datastore.SQL.ObjectFactories.version import sqla_version_factory
 from Datastore.SQL.ProfileAgent import ProfileBatcher, ProfileBatchManager
+from config.version import VERSION_SERIAL_KEY
 from utilities import WallclockTimer
 
 VERSION_ID_LENGTH = 64
@@ -325,6 +326,17 @@ class Datastore:
                     tab.append_column(version_col)
                     schema["version_col"] = version_col
 
+                # a compute-target factory may declare that its lookups are keyed on the version:
+                # object_get() then hands its build() the current version serial, and build()
+                # filters on it. Only a table that carries the version column can be keyed.
+                # (run-integrity prompt 01)
+                key_on_version = registration_data.get("key_on_version", False)
+                if key_on_version and not use_version:
+                    raise RuntimeError(
+                        f"Storable class factory '{cls_name}' declares 'key_on_version' but its table has no 'version' column"
+                    )
+                schema["key_on_version"] = key_on_version
+
                 use_timestamp = registration_data.get("timestamp", False)
                 schema["use_timestamp"] = use_timestamp
                 if use_timestamp:
@@ -375,6 +387,7 @@ class Datastore:
             else:
                 schema["table"] = None
                 schema["insert"] = None
+                schema["key_on_version"] = False
 
                 # print(
                 #     f"Registered storage schema for storable class adapter '{cls_name}' without database table"
@@ -487,6 +500,14 @@ class Datastore:
             if num_items > 1:
                 mgr.update_num_items(num_items)
 
+            # a version-keyed factory is handed a copy of each payload carrying the serial of the
+            # current version label, so its lookup returns only rows made under this label.
+            # The caller's payload is not mutated. (run-integrity prompt 01)
+            if record.get("key_on_version", False):
+                payload_data = [
+                    self._with_version_serial(cls_name, p) for p in payload_data
+                ]
+
             try:
                 with self._engine.begin() as conn:
                     objects = [
@@ -519,6 +540,19 @@ class Datastore:
             return objects[0]
 
         return objects
+
+    def _with_version_serial(self, cls_name: str, payload: Mapping) -> dict:
+        """
+        Return a copy of a lookup payload for a version-keyed factory, carrying the serial of
+        the current version label under the reserved key. The serial is the datastore's own;
+        a caller may not supply it. (run-integrity prompt 01)
+        """
+        if VERSION_SERIAL_KEY in payload:
+            raise KeyError(
+                f"object_get() payload for '{cls_name}' supplies the reserved key '{VERSION_SERIAL_KEY}'; the version serial is set by the datastore"
+            )
+
+        return {**payload, VERSION_SERIAL_KEY: self._version.store_id}
 
     def object_read_batch(self, ObjectClass, **payload):
         if isinstance(ObjectClass, str):

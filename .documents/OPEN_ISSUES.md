@@ -1,8 +1,8 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-09-30 · **15 open**: 11 on the `review-remediation` board (closed
-2026-09-30), 3 of them assigned to `run-integrity`; 2 on the `production-readiness` board (closed
-2026-09-30); 2 on the `run-integrity` board (planned 2026-09-30).
+**Last updated:** 2026-09-30 · **16 open**: 10 on the `review-remediation` board (closed
+2026-09-30), 2 of them assigned to `run-integrity`; 2 on the `production-readiness` board (closed
+2026-09-30); 4 on the `run-integrity` board (in progress).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -26,7 +26,8 @@ Seven seeded at planning on 2026-09-29 from `.documents/audit-2026-09-29/README.
 opened after that on 2026-09-29 are resolved (board §4). One opened by prompt 02, four by prompt 03,
 one by prompt 04, one by prompt 05, one by prompt 06. The campaign closed on 2026-09-30; these rows
 stay here until a later campaign takes them. Four were assigned on 2026-09-30; all four are
-resolved (§1.2). Three more were assigned on 2026-09-30 to `run-integrity` (§1.4).
+resolved (§1.2). Three more were assigned on 2026-09-30 to `run-integrity` (§1.4); one of those
+is resolved.
 
 - `[00-initial-field-value-is-hard-coded-and-unchecked]` — `main.py:814` fixes φ* = 5 M_P with no
   A*T* ≲ M_P guard (review H8). Out of this campaign's scope.
@@ -78,9 +79,6 @@ Assigned 2026-09-30 by the user, to clear before a science run. The entries stay
 `review-remediation` board (§3), which carries the **Assigned** line; the prompt that closes one
 deletes its row here.
 
-- `[00-datastore-lookups-ignore-the-version-column]` — `ScalarModel`, `AdiabaticHistory` and
-  `BBNData` rows carry a `version` but no lookup filters on it, so a numerical fix returns stale
-  rows from an old store without complaint.
 - `[03-bbn-solver-failures-are-undetected-and-some-exceptions-escape]` — PRyMordial never checks
   `solve_ivp`'s status, and `compute_BBN_data` catches only three exception types.
 - `[03-main-recomputes-failed-bbn-rows-on-every-run]` — `main.py` looks up successes only, so a
@@ -88,7 +86,8 @@ deletes its row here.
 
 ### 1.5 `run-integrity` — [board §3](../prompts/run-integrity/IMPLEMENTATION_STATE.md)
 
-Two opened by the planner on 2026-09-30, both assigned to the campaign's own prompts.
+Two opened by the planner on 2026-09-30, both assigned to the campaign's own prompts. Two opened
+by prompt 01 on 2026-09-30, not assigned.
 
 - `[00-main-pairs-lookup-results-against-the-unfiltered-bin]` — `main.py`'s adiabatic and BBN
   stages zip lookup results for the non-failed models against every pair in the bin; after a
@@ -96,3 +95,8 @@ Two opened by the planner on 2026-09-30, both assigned to the campaign's own pro
 - `[00-a-nan-new-physics-sample-hangs-prymordial]` — a NaN in ρ_NP reaches PRyMordial's high-T
   solve as `t_span = [nan, …]` and LSODA does not return; no guard in `build_NP_callbacks`
   rejects it. Prompt 02.
+- `[01-adiabatic-and-bbn-lookups-do-not-require-validated-rows]` — unlike `ScalarModel.build`,
+  the `AdiabaticHistory` and `BBNData` lookups do not filter `validated == True`, so an
+  unvalidated row left by an interrupted run is served unless `--prune-unvalidated` is passed.
+- `[01-plot-by-beta-profile-label-names-plot-scalarmodel]` — `plot_by_beta.py:87` names its
+  profiling run `--plot_ScalarModel-`; cosmetic.

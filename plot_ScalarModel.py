@@ -54,6 +54,7 @@ from config.sharding import (
     read_table_config,
     inventory_config,
 )
+from config.version import VERSION_LABEL
 from extract_common import (
     safe_fabs,
     add_ScalarModel_labels,
@@ -74,8 +75,6 @@ if args.database is None:
 
 # connect to ray cluster on supplied address; defaults to 'auto' meaning a locally running cluster
 ray.init(address=args.ray_address)
-
-VERSION_LABEL = "2026.1.1"
 
 # instantiate a Datastore actor: this runs on its own node, and acts as a broker between
 # ourselves and the database.

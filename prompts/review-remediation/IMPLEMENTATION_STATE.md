@@ -201,6 +201,9 @@ these 15 open; they pass to whichever campaign takes them (`.documents/review-re
     `ScalarModel`, `AdiabaticHistory` and `BBNData` lookups on the current label's serial and
     defines the label once, in `config/version.py`. The user chose it as one of three to fix
     before a science run (`prompts/run-integrity/README.md`).
+  - **Resolved (2026-09-30):** by the `run-integrity` campaign, prompt 01 (commit "Key the
+    compute-target lookups on the version label"; log
+    `prompts/run-integrity/logs/01-version-keyed-lookups.md`).
 - **[00-two-files-are-not-black-clean]** — `Datastore/SQL/ObjectFactories/base.py` and
   `CosmologyModels/LambdaCDM/Planck.py` at `f5896bb` (`black --check`, 2026-09-29). Housekeeping;
   reformat in a commit of their own, never inside a prompt's diff.

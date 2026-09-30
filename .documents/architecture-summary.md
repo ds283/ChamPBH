@@ -278,6 +278,14 @@ A single-shard database manager. One instance per shard file.
 
 **Serial ID management:** Each object class has a monotonically increasing integer serial number. The `SerialPoolBroker` actor coordinates across shards so that serial numbers never collide between shards (critical for replicated tables that must have the same `store_id` on every shard).
 
+**Version-keyed lookups (added 2026-09-30, `run-integrity` prompt 01).** Every table registered with `"version": True` records, in its `version` column, the serial of the label the datastore was opened under (`Datastore._insert`). From this prompt the lookups of the three compute targets read it:
+
+- **Which tables are keyed.** `ScalarModel`, `AdiabaticHistory` and `BBNData`, and only those. Each factory's `register()` declares `"key_on_version": True`; `_build_schema` refuses that flag on a table without `"version": True`. Their value and tag tables hang off the parent row's serial and carry no key of their own.
+- **How the serial reaches `build()`.** `Datastore.object_get`, the one route to every `build()` (scalar and `payload_data` alike, so also `ShardedPool.object_get_vectorized`), hands a keyed factory a *copy* of each payload with `self._version.store_id` added under the reserved key `VERSION_SERIAL_KEY` (`"_version_serial"`, in `config/version.py`). The caller's dict is not mutated, and a caller that supplies the key itself is refused (`KeyError`). The factory's `build()` adds `table.c.version == <serial>` to its query, and raises (`config.version.require_version_serial`) if the key is absent: a keyed lookup never falls back to an unfiltered one.
+- **Parameter tables are not keyed.** Couplings, potentials, cosmologies and the value tables (β, M, Λ, T, φ, π, z, tolerances) keep one row per parameter across labels, even where they carry a `version` column.
+
+A store opened under a new label therefore sees none of its old compute targets; they are recomputed and stored beside the old rows. `--inventory` still lists every version. The label is defined once, as `VERSION_LABEL` in `config/version.py`, and `main.py`, `plot_by_beta.py` and `plot_ScalarModel.py` import it.
+
 ### 4.4 `ShardedPool` (`Datastore/SQL/ShardedPool.py`)
 
 The user-facing database interface. Not a Ray actor itself — runs in the driver process and calls into the shard `Datastore` actors.

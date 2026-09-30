@@ -40,6 +40,7 @@ from MetadataConcepts import store_tag, tolerance
 from Quadrature.integration_metadata import IntegrationData, IntegrationSolver
 from Units.base import UnitsLike
 from config.defaults import DEFAULT_STRING_LENGTH, DEFAULT_FLOAT_PRECISION
+from config.version import require_version_serial
 
 
 class sqla_ScalarModelTagAssociation_factory(SQLAFactoryBase):
@@ -104,6 +105,8 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
     def register(self):
         return {
             "version": True,
+            # lookups return only rows made under the current version label (run-integrity prompt 01)
+            "key_on_version": True,
             "stepping": False,
             "timestamp": True,
             "validate_on_startup": True,
@@ -205,6 +208,9 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
         failure: Optional[bool] = payload.get("failure", None)
         solver_labels = payload["solver_labels"]
 
+        # the lookup is keyed on the version label; it may never fall back to unfiltered
+        version_serial: int = require_version_serial(payload, "ScalarModel")
+
         atol: tolerance = payload["atol"]
         rtol: tolerance = payload["rtol"]
 
@@ -245,6 +251,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
             )
             .filter(
                 table.c.validated == True,
+                table.c.version == version_serial,
                 table.c.cosmology_type == cosmology.type_id,
                 table.c.cosmology_serial == cosmology.store_id,
                 table.c.potential_type == potential.type_id,

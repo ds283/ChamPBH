@@ -17,6 +17,7 @@ from Datastore.SQL.ObjectFactories.base import SQLAFactoryBase
 from MetadataConcepts import store_tag
 from Units.base import UnitsLike
 from config.defaults import DEFAULT_STRING_LENGTH
+from config.version import require_version_serial
 
 
 class sqla_BBNDataTagAssociation_factory(SQLAFactoryBase):
@@ -81,6 +82,8 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
     def register(self):
         return {
             "version": True,
+            # lookups return only rows made under the current version label (run-integrity prompt 01)
+            "key_on_version": True,
             "stepping": False,
             "timestamp": True,
             "validate_on_startup": True,
@@ -123,6 +126,9 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
 
         failure: Optional[bool] = payload.get("failure", False)
 
+        # the lookup is keyed on the version label; it may never fall back to unfiltered
+        version_serial: int = require_version_serial(payload, "BBNData")
+
         redshift_table = tables["redshift"]
 
         # find if there is an existing record for this model
@@ -142,6 +148,7 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
             table.c.BBN_compute_time,
         ).filter(
             table.c.model_serial == model_proxy.store_id,
+            table.c.version == version_serial,
         )
 
         # filter by failure flag if provided

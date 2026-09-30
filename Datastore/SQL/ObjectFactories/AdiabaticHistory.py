@@ -28,6 +28,7 @@ from CosmologyConcepts import redshift, redshift_array
 from Datastore.SQL.ObjectFactories.base import SQLAFactoryBase
 from MetadataConcepts import store_tag
 from config.defaults import DEFAULT_STRING_LENGTH
+from config.version import require_version_serial
 
 
 class sqla_AdiabaticHistoryTagAssociation_factory(SQLAFactoryBase):
@@ -94,6 +95,8 @@ class sqla_AdiabaticHistoryFactory(SQLAFactoryBase):
     def register(self):
         return {
             "version": True,
+            # lookups return only rows made under the current version label (run-integrity prompt 01)
+            "key_on_version": True,
             "stepping": False,
             "timestamp": True,
             "validate_on_startup": True,
@@ -124,6 +127,9 @@ class sqla_AdiabaticHistoryFactory(SQLAFactoryBase):
 
         model_proxy: ScalarModelProxy = payload["model_proxy"]
 
+        # the lookup is keyed on the version label; it may never fall back to unfiltered
+        version_serial: int = require_version_serial(payload, "AdiabaticHistory")
+
         max_Q_value_cols = [table.c[f"max_abs_Q_{label}"] for label in self._Q_labels]
 
         # find if there is an existing record for this model
@@ -135,6 +141,7 @@ class sqla_AdiabaticHistoryFactory(SQLAFactoryBase):
             table.c.compute_time,
         ).filter(
             table.c.model_serial == model_proxy.store_id,
+            table.c.version == version_serial,
         )
 
         # require that the integration we search for has the specified list of tags

@@ -63,6 +63,7 @@ invariants that hold across all of them:
   ```bash
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s Datastore/tests -t .
   ```
   They **must not need a Ray cluster or a persistent datastore**. A test may build a temporary
   SQLite datastore in a `tempfile` directory, through the undecorated
