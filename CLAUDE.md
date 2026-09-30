@@ -64,8 +64,11 @@ invariants that hold across all of them:
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .
   ```
-  They **must not need a Ray cluster or a datastore**. Call a `@ray.remote` function through its
-  undecorated form (`fn._function` or a module-level helper) rather than `.remote()`. A test that
+  They **must not need a Ray cluster or a persistent datastore**. A test may build a temporary
+  SQLite datastore in a `tempfile` directory, through the undecorated
+  `Datastore.__ray_actor_class__`; it must never open a production or shared database file. Call a
+  `@ray.remote` function through its undecorated form (`fn._function` or a module-level helper)
+  rather than `.remote()`. A test that
   runs a PRyMordial solve is allowed (about 10 s with the small network) but must say so in its
   docstring. Record the per-package counts before and after every prompt; a count that falls is a
   stop.
