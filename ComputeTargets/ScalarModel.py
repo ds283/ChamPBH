@@ -58,6 +58,10 @@ from .exceptions import ComputationFailureError
 PISQ_OVER_30 = pi * pi / 30.0
 LOG_PISQ_OVER_30 = log(PISQ_OVER_30)
 
+# key under which the number of hard reflections is stored in ScalarModel.extra_metadata.
+# A count of zero is never stored, so an absent key means there were none.
+HARD_REFLECTIONS_KEY = "number_hard_reflections"
+
 EXPECTED_SOL_LENGTH = 5
 
 DEFAULT_MAX_STEP_SIZE = inf
@@ -943,6 +947,44 @@ def compute_scalar_model(
     }
 
 
+def build_extra_data(data: dict) -> Optional[dict]:
+    """
+    Assemble the ScalarModel's extra_data dictionary from the dictionary that
+    compute_scalar_model returns. Returns None if there is nothing to store.
+    """
+    extra_data = {}
+
+    def store_attr(src_attr: str, dest_attr: str, min_value: Optional[int] = None):
+        value = data[src_attr]
+
+        if min_value is None or value > min_value:
+            extra_data[dest_attr] = value
+
+    store_attr("hard_reflections", HARD_REFLECTIONS_KEY, 0)
+    store_attr("level_1_entries", "number_level_1_entries", 0)
+    store_attr("level_1_exits", "number_level_1_exits", 0)
+    store_attr("level_2_entries", "number_level_2_entries", 0)
+    store_attr("level_2_exits", "number_level_2_exits", 0)
+    store_attr("level_1_boundary", "level_1_boundary")
+    store_attr("level_2_boundary", "level_2_boundary")
+    store_attr("level_1_max_step", "level_1_max_step")
+    store_attr("level_2_max_step", "level_2_max_step")
+    store_attr("number_fragments", "number_fragments", 1)
+
+    largest_RHS_values = data["largest_RHS_values"]
+    smallest_RHS_values = data["smallest_RHS_values"]
+    mean_RHS_values = data["mean_RHS_values"]
+
+    if largest_RHS_values is not None:
+        extra_data["largest_RHS_values"] = largest_RHS_values._asdict()
+    if smallest_RHS_values is not None:
+        extra_data["smallest_RHS_values"] = smallest_RHS_values._asdict()
+    if mean_RHS_values is not None:
+        extra_data["mean_RHS_values"] = mean_RHS_values._asdict()
+
+    return extra_data if len(extra_data) > 0 else None
+
+
 class ScalarModel(DatastoreObject):
     """
     Encapsulates the time history of a cosmological model.
@@ -1260,37 +1302,8 @@ class ScalarModel(DatastoreObject):
         sample: List[SampleValues] = data["sample"]
         z_grid: redshift_array = data["z_grid"]
 
-        extra_data = {}
-
-        def store_attr(src_attr: str, dest_attr: str, min_value: Optional[int] = None):
-            value = data[src_attr]
-
-            if min_value is None or value > min_value:
-                extra_data[dest_attr] = value
-
-        store_attr("hard_reflections", "number_hard_reflections", 0)
-        store_attr("level_1_entries", "number_level_1_entries", 0)
-        store_attr("level_1_exits", "number_level_1_exits", 0)
-        store_attr("level_2_entries", "number_level_2_entries", 0)
-        store_attr("level_2_exits", "number_level_2_exits", 0)
-        store_attr("level_1_boundary", "level_1_boundary")
-        store_attr("level_2_boundary", "level_2_boundary")
-        store_attr("level_1_max_step", "level_1_max_step")
-        store_attr("level_2_max_step", "level_2_max_step")
-        store_attr("number_fragments", "number_fragments", 1)
-
-        largest_RHS_values = data["largest_RHS_values"]
-        smallest_RHS_values = data["smallest_RHS_values"]
-        mean_RHS_values = data["mean_RHS_values"]
-
-        if largest_RHS_values is not None:
-            extra_data["largest_RHS_values"] = largest_RHS_values._asdict()
-        if smallest_RHS_values is not None:
-            extra_data["smallest_RHS_values"] = smallest_RHS_values._asdict()
-        if mean_RHS_values is not None:
-            extra_data["mean_RHS_values"] = mean_RHS_values._asdict()
-
-        if len(extra_data) > 0:
+        extra_data = build_extra_data(data)
+        if extra_data is not None:
             self._extra_data = extra_data
 
         self._values = []

@@ -179,6 +179,9 @@ these 15 open; they pass to whichever campaign takes them (`.documents/review-re
     prompt 01 (P1), which fixes the reader and adds the count to `plot_by_beta.py`'s summary.
     The user chose it as one of four to fix before the production run
     (`prompts/production-readiness/README.md`).
+  - **Resolved (2026-09-30):** by the `production-readiness` campaign, prompt 01 (commit "Report the
+    hard-reflection count in captions and the survey"; log
+    `prompts/production-readiness/logs/01-report-hard-reflections.md`).
 - **[00-kicking-function-table-has-no-provenance-in-the-repository]** *(audit §4)* —
   `CosmologyModels/GenericEOS/Xav_EOS_data.csv` (189 rows, 10 keV–25 TeV) was added in commit
   `1759515` without the script that built it; the treatment of g_ρ after neutrino decoupling that
@@ -380,6 +383,9 @@ these 15 open; they pass to whichever campaign takes them (`.documents/review-re
     prompt 01 (P1), which fixes the reader and adds the count to `plot_by_beta.py`'s summary.
     The user chose it as one of four to fix before the production run
     (`prompts/production-readiness/README.md`).
+  - **Resolved (2026-09-30):** by the `production-readiness` campaign, prompt 01 (commit "Report the
+    hard-reflection count in captions and the survey"; log
+    `prompts/production-readiness/logs/01-report-hard-reflections.md`).
 
 ---
 

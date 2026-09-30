@@ -1,6 +1,6 @@
 # Production readiness campaign — implementation state
 
-**Last updated:** 2026-09-30 · **Status: PLANNED — 0 of 4 prompts landed.** Amended 2026-09-30
+**Last updated:** 2026-09-30 · **Status: IN PROGRESS — 1 of 4 prompts landed (01).** Amended 2026-09-30
 at `b0e46bc` (README header): prompt 03's A3 now removes the singular log|M²| route to Q's
 numerator instead of guarding it, and two issues are opened for the authors (§3).
 
@@ -71,7 +71,7 @@ None pending. Decisions the prompts may surface, each a stop-and-ask in its prom
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | [Report the hard-reflection count](01-report-hard-reflections.md) | **P1** | Sonnet | ✍️ 2026-09-30 | — | — | — |
+| 01 | [Report the hard-reflection count](01-report-hard-reflections.md) | **P1** | Sonnet | ✍️ 2026-09-30 | ✅ 2026-09-30 | see `git log` ("Report the hard-reflection count in captions and the survey") | [`logs/01-report-hard-reflections.md`](logs/01-report-hard-reflections.md) |
 | 02 | [Wire the network flag; run the full network](02-wire-the-network-flag.md) | **P2**, version bump | Opus | ✍️ 2026-09-30 | — | — | — |
 | 03 | [The adiabatic mass: the source-response term](03-adiabatic-source-response.md) | **P3** | Opus | ✍️ 2026-09-30 | — | — | — |
 | 04 | [Close-out verification and handover](04-close-out-verification.md) | close-out | Sonnet | ✍️ 2026-09-30 | — | — | — |
@@ -82,7 +82,7 @@ None pending. Decisions the prompts may surface, each a stop-and-ask in its prom
 
 | Item | Kind | Description | Prompt | Status |
 |---|---|---|---|---|
-| P1 | **DEFECT, low** | The count is stored as `extra_data["number_hard_reflections"]`, but the caption reads `"hard_reflections"` and always prints 0. `plot_by_beta.py` reports it nowhere. Closes `[00-hard-reflection-count-is-stored-but-never-reported]` and `[06-hard-reflection-caption-reads-the-wrong-key-and-always-prints-zero]`. | 01 | open |
+| P1 | **DEFECT, low** | The count is stored as `extra_data["number_hard_reflections"]`, but the caption reads `"hard_reflections"` and always prints 0. `plot_by_beta.py` reports it nowhere. Closes `[00-hard-reflection-count-is-stored-but-never-reported]` and `[06-hard-reflection-caption-reads-the-wrong-key-and-always-prints-zero]`. | 01 | **done 2026-09-30** (log 01; suites 12 / 18) |
 | P2 | **DEFECT, medium** | `_configure_PRyMordial` sets `small_network_flag`, but PRyMordial reads `smallnet_flag`. Every stored `small_network = True` row ran the full network. Closes `[03-small-network-flag-is-never-read-by-prymordial]`. | 02 | open |
 | P3 | **DEFECT, high** | `M2eff_over_H2` omits (ln Ω)′² ρ_R,E [Σ² − Σ_T/(1 + x) + f_m]. That is the whole density-dependent mass for the exponential coupling. The bracket runs from −0.407 (146 MeV) to +0.350 (230 MeV), and → 1 in matter domination. Closes `[00-adiabaticity-diagnostic-omits-the-source-response-term]`. | 03 | open |
 
@@ -139,4 +139,12 @@ campaign's prompts go here too, with an index row under §1.3 of `.documents/OPE
 
 ## 4. Resolved issues
 
-None yet.
+Two assigned issues, closed by prompt 01 on 2026-09-30. Their entries stay on the
+`review-remediation` board, each with a **Resolved** line; they are listed here as the record.
+
+- **[00-hard-reflection-count-is-stored-but-never-reported]** and
+  **[06-hard-reflection-caption-reads-the-wrong-key-and-always-prints-zero]** — resolved by
+  prompt 01 (log 01). One stored-key constant (`HARD_REFLECTIONS_KEY`), one reader
+  (`extract_common.hard_reflection_count`) used by the caption and by `plot_by_beta.py`, a
+  `hard_reflections` column in `data.csv` and a per-(M, Lambda) stdout summary. The caption test
+  fails on the old reader.

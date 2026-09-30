@@ -1,7 +1,7 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-09-30 · **17 open**: 15 on the `review-remediation` board (closed
-2026-09-30), 4 of them assigned to `production-readiness`; 2 on the `production-readiness` board
+**Last updated:** 2026-09-30 · **15 open**: 13 on the `review-remediation` board (closed
+2026-09-30), 2 of them assigned to `production-readiness`; 2 on the `production-readiness` board
 (planned 2026-09-30).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
@@ -63,12 +63,6 @@ Assigned 2026-09-30 by the user, to clear before the production run. The entries
 `review-remediation` board (§3), which carries the **Assigned** line; the prompt that closes one
 deletes its row here.
 
-- `[06-hard-reflection-caption-reads-the-wrong-key-and-always-prints-zero]` — `extract_common.py:216`
-  looks up `hard_reflections` but the count is stored as `number_hard_reflections`, so every
-  `plot_ScalarModel.py` caption says 0.
-- `[00-hard-reflection-count-is-stored-but-never-reported]` — the hard-reflection count is on every
-  `ScalarModel` row; no survey summary reports it, and the one caption that tries reads it wrongly
-  (review N1; qualified by prompt 06).
 - `[03-small-network-flag-is-never-read-by-prymordial]` — `BBNData.py` sets
   `small_network_flag`, PRyMordial reads `smallnet_flag`; every BBN solve so far used the full
   network.
