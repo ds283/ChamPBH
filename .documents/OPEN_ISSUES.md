@@ -1,8 +1,8 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-09-30 · **15 open**: 8 on the `review-remediation` board (closed
+**Last updated:** 2026-09-30 · **16 open**: 8 on the `review-remediation` board (closed
 2026-09-30), none of them assigned; 2 on the `production-readiness` board (closed
-2026-09-30); 5 on the `run-integrity` board (in progress).
+2026-09-30); 6 on the `run-integrity` board (closed 2026-09-30).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -85,8 +85,8 @@ prompt 03 on 2026-09-30.
 ### 1.5 `run-integrity` — [board §3](../prompts/run-integrity/IMPLEMENTATION_STATE.md)
 
 Two opened by the planner on 2026-09-30, both assigned to the campaign's own prompts; prompts 02
-and 03 resolved them (board §4). Two opened by prompt 01, two by prompt 02 and one by prompt 03 on
-2026-09-30, not assigned.
+and 03 resolved them (board §4). Two opened by prompt 01, two by prompt 02, one by prompt 03 and
+one by prompt 04 on 2026-09-30, not assigned.
 
 - `[01-adiabatic-and-bbn-lookups-do-not-require-validated-rows]` — unlike `ScalarModel.build`,
   the `AdiabaticHistory` and `BBNData` lookups do not filter `validated == True`, so an
@@ -101,3 +101,6 @@ and 03 resolved them (board §4). Two opened by prompt 01, two by prompt 02 and 
 - `[03-step-1-first-pass-lookup-filters-nothing]` — `build_solver_batch`'s first-pass
   `ScalarModel` lookup keeps every pair as missing (`main.py:208`); one redundant lookup per
   batch, no wrong result.
+- `[04-adiabatichistory-lookup-ignores-do-not-populate]` — `AdiabaticHistory.build` never reads
+  `_do_not_populate`, which `main.py` and `plot_by_beta.py` pass, so every lookup reads every
+  value row; a cost, not a wrong result.

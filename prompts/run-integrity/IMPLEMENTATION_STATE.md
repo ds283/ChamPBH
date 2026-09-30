@@ -1,6 +1,11 @@
 # Run integrity campaign — implementation state
 
-**Last updated:** 2026-09-30 · **Status: IN PROGRESS — 3 of 4 prompts landed (01, 02, 03).**
+**Last updated:** 2026-09-30 · **Status: COMPLETE — 3 of 3 fixes plus the close-out (01, 02, 03,
+04).** The close-out is the commit "Close the run-integrity campaign with a verification addendum"
+(SHA in `git log`); the campaign's last production commit is `6fd9017`. The handover is
+[`.documents/review-remediation-verification.md`](../../.documents/review-remediation-verification.md)
+§4.7.
+**The rule: every store made before 2026.4.0 is invalid, and a lookup no longer returns its rows.**
 `VERSION_LABEL` is `"2026.4.0"` since prompt 02, defined once in `config/version.py` since
 prompt 01. `PRyM_version` is `"bf24c3d+cham03+ri02"`.
 **Every store made before 2026.4.0 is invalid.** Since prompt 01, a lookup returns only rows made
@@ -108,7 +113,7 @@ None pending. Decisions the prompts may surface, each a stop-and-ask in its prom
 | 01 | [Key the compute-target lookups on the version](01-version-keyed-lookups.md) | **V** | Opus | ✍️ 2026-09-30 | ✅ 2026-09-30 | see `git log` ("Key the compute-target lookups on the version label") | [`logs/01-version-keyed-lookups.md`](logs/01-version-keyed-lookups.md) |
 | 02 | [Detect BBN solver failures; bump the version](02-detect-bbn-solver-failures.md) | **F**, version bump | Opus | ✍️ 2026-09-30 | ✅ 2026-09-30 | see `git log` ("Detect PRyMordial solver failures and bump to 2026.4.0") | [`logs/02-detect-bbn-solver-failures.md`](logs/02-detect-bbn-solver-failures.md) |
 | 03 | [Stop recomputing failed BBN rows; pair lookups correctly](03-failure-caching-and-pairing.md) | **R** | Opus | ✍️ 2026-09-30 | ✅ 2026-09-30 | see `git log` ("Cache failed BBN rows and pair stage lookups by entry") | [`logs/03-failure-caching-and-pairing.md`](logs/03-failure-caching-and-pairing.md) |
-| 04 | [Close-out verification and handover](04-close-out-verification.md) | close-out | Sonnet | ✍️ 2026-09-30 | — | — | — |
+| 04 | [Close-out verification and handover](04-close-out-verification.md) | close-out | Sonnet | ✍️ 2026-09-30 | ✅ 2026-09-30 | see `git log` ("Close the run-integrity campaign with a verification addendum") | [`logs/04-close-out-verification.md`](logs/04-close-out-verification.md) |
 
 ---
 
@@ -130,7 +135,7 @@ row under §1.5 of `.documents/OPEN_ISSUES.md`. Prompt 01 opened two on 2026-09-
 assigned (the two `01-` entries). Prompt 02 closed
 `[00-a-nan-new-physics-sample-hangs-prymordial]` (§4) and opened two, neither assigned (the two
 `02-` entries). Prompt 03 closed `[00-main-pairs-lookup-results-against-the-unfiltered-bin]` (§4)
-and opened one, not assigned (the `03-` entry).
+and opened one, not assigned (the `03-` entry). Prompt 04 opened one, not assigned (the `04-` entry).
 
 - **[01-adiabatic-and-bbn-lookups-do-not-require-validated-rows]** *(log 01, observation 1;
   reasoned from the code on `90b2c86` + prompt 01; not run)*.
@@ -190,6 +195,19 @@ and opened one, not assigned (the `03-` entry).
     second pass's `object_get` returns a stored model as `available`, and `RayWorkPool` skips it.
   - **Next step.** Filter on `obj.available`, or drop the first pass. **Not in prompt 03's
     scope**, which excludes step 1.
+- **[04-adiabatichistory-lookup-ignores-do-not-populate]** *(log 04; read from
+  `Datastore/SQL/ObjectFactories/AdiabaticHistory.py` on `6fd9017`; not run)*.
+  - **What.** `main.py` (`:378`) and `plot_by_beta.py` (`:689`) pass `_do_not_populate` to the
+    `AdiabaticHistory` lookup. `AdiabaticHistory.build` never reads the key; only `BBNData.build`
+    does (`:203`). It always loads every value row and raises "Fewer z-samples than expected" on a
+    short count (`:226–229`).
+  - **Impact.** A full value read per model per lookup, where the call sites intend none. No wrong
+    result. It also means the adiabatic lookup, unlike the BBN one, raises on a short-count row
+    rather than counting it as done (see log 04's check of claim 3 under
+    `[01-adiabatic-and-bbn-lookups-do-not-require-validated-rows]`).
+  - **Next step.** Honour the key in `AdiabaticHistory.build`, as `BBNData.build` does, or drop it
+    from the two call sites. Changing `build()` changes what it returns, so it needs its own
+    prompt. **Not in prompt 04's scope.**
 
 ---
 

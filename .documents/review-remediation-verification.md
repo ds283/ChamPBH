@@ -549,6 +549,137 @@ index; and the campaign's own planning material. `PRyM/`, `thirdparty/`, any sch
 PYTHONPATH=. CHAMPBH_TEST_REPORT=1 ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t . && PYTHONPATH=. CHAMPBH_TEST_REPORT=1 ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . && PYTHONPATH=. ./venv/bin/python prompts/production-readiness/planning-probes/h5_bracket_probe.py && PYTHONPATH=. ./venv/bin/python prompts/production-readiness/planning-probes/q_sign_change_probe.py && git diff --stat 204795e..HEAD && grep -n VERSION_LABEL main.py plot_by_beta.py
 ```
 
+
+### 4.7 Addendum 2026-09-30 — the `run-integrity` campaign
+
+Added by `run-integrity` prompt 04, measured on `6fd9017` (the tree the campaign's three prompts
+left, before this commit). Nothing above this heading has been changed; where it is superseded,
+this section says so by statement. The campaign fixed three of the issues §4.5 and §4.6 leave open,
+and two the planner found beside them: lookups that ignore the version label, PRyMordial solves
+that fail silently, failed BBN rows recomputed on every run, a NaN that hangs PRyMordial, and
+lookup results paired with the wrong models. It bumped `VERSION_LABEL` once. Its board is
+[`prompts/run-integrity/IMPLEMENTATION_STATE.md`](../prompts/run-integrity/IMPLEMENTATION_STATE.md).
+
+**This supersedes**, by statement and not by edit:
+
+- **§4.6 point 1's "Still nothing stops an old store being reused".** Something does now: point 1
+  below.
+- **Every earlier statement that `VERSION_LABEL` is `"2026.3.0"`**, including §4.6 point 1's
+  evidence (`main.py:89` and `plot_by_beta.py:79`). The label is `"2026.4.0"`, defined in one
+  place, `config/version.py:33`. `main.py` and `plot_by_beta.py` no longer define it.
+- **§4.5's and §4.6's mentions of `[00-datastore-lookups-ignore-the-version-column]` as open.** It
+  is resolved (point 1).
+
+**The five points.**
+
+1. **`VERSION_LABEL = "2026.4.0"`, defined once in `config/version.py`. Every store made before
+   2026.4.0 is invalid, and a lookup no longer returns such rows.** An old store opened under the
+   new label recomputes every compute target beside its old rows, rather than reusing them. The
+   fresh-database rule (§4.1) is still the clean choice, but it is no longer the only protection.
+   - *Evidence.* `grep -rn "VERSION_LABEL =" --include='*.py' .` outside `venv/`, `thirdparty/`
+     and `claude-context/` finds one line, `config/version.py:33`. `main.py:65`,
+     `plot_by_beta.py:49` and `plot_ScalarModel.py:57` import it; `plot_ScalarModel.py` moves from
+     `"2026.1.1"`. The three compute-target factories register `"key_on_version": True` and filter
+     `table.c.version == serial`, raising if the serial is missing; `Datastore.object_get` supplies
+     it. Tests (a)–(d) and (f) of `Datastore/tests/test_version_keyed_lookups.py` (prompt 01, log
+     01) fail on `90b2c86`. `datastore_version_probe.py` on this tree prints `available=False` for
+     its lines [3] and [5].
+   - *What a bump costs.* Every history is recomputed, including for a change that touches only
+     BBN. Per-target labels are out of scope. `--inventory` still lists every version.
+   - *What stays unkeyed.* Parameter tables (couplings, potentials, value tables). Test (e) checks
+     that one β gives one serial under two labels.
+2. **BBN failures are detected.** A `solve_ivp` that gives up raises `PRyMSolverFailureError`
+   inside PRyMordial. Any `Exception` inside the PRyMordial call becomes a failure row with its
+   reason (`"PRyMordial: <Type>: <message>"`). A non-finite new-physics sample, or a callback
+   called with a non-finite T, fails before PRyMordial starts. `PRyM_version` is
+   `"bf24c3d+cham03+ri02"`. **An exception from ChamPBH's own code outside the PRyMordial call
+   still stops the run, by design.**
+   - *Evidence.* All eight `solve_ivp` calls in `PRyM/PRyM_main.py` are followed by a marked
+     `_check_solve_ivp` (`grep -c`: 8 and 8; ten marked insertions in the diff, no deletions). The one new
+     `except Exception` is `ComputeTargets/BBNData.py:336`, inside `_run_PRyMordial`, around the
+     `PRyMclass(...).PRyMresults()` call only. Tests (a), (b) and (d) of
+     `ComputeTargets/tests/test_bbn_solver_failures.py` fail on `f0de762`; every pinned abundance
+     passes unchanged.
+   - *The probe.* As committed, `prymordial_solver_probe.py truncated` now truncates nothing,
+     because it picks the solve by line number (`truncate_line = 1252`) and the patch moved that
+     call to `:1291`. It returns the SM baseline, Yp 0.2468872958, D/H x1e5 2.462251065, ⁷Li/H
+     x1e10 5.423441017. A scratch copy with only that number changed raises
+     `PRyMSolverFailureError` in stage `'low-T nuclear network (full)'`. The probe's `nan` case
+     calls PRyMordial with its own callback, bypassing `build_NP_callbacks`, so it still does not
+     return within 60 s; it measures PRyMordial, not the guard.
+   - *Where a NaN sample actually fails.* README §2 (c) said PRyMordial hung on a NaN in the
+     density ratio. On `f0de762` `make_interp_spline` raised `ValueError` first (log 02,
+     Deviation 5, accepted by the user); the hang comes from a callback called with T = NaN. Both
+     are closed.
+3. **Failed BBN rows are final within a label.** A new label retries them, and so does
+   `--retry-failed-bbn` (default off). Reasons are in `BBNData.failure_reason`, in the per-stage skip
+   summary on stdout (`main.py:531`, `:793`), and in `plot_by_beta.py`'s failure lookup.
+   - *Evidence.* `main.py:632` passes `"failure": None`. `BBNData.build(failure=None)` returns the
+     success if one exists, else the newest failure. Test (a) of
+     `Datastore/tests/test_bbn_failure_lookup.py` raises `MultipleResultsFound` on `765e80d`.
+     `config/argument_parser.py:246` defines the flag.
+4. **A failed `ScalarModel` no longer misdirects the adiabatic or BBN stage.** Both stages pair
+   lookups through `pipeline_selection.build_query_entries` and `select_missing`, which raise on a
+   length mismatch (`main.py:357`, `:407`, `:610`, `:662`). On `pairing_probe.py`'s bin the helper
+   selects {V2, V4}; the probe's copy of the old logic selects {V1, V3}. V1's `ScalarModel` failed,
+   and the old logic would have stopped the run on it.
+5. **What is still open,** by name. H8 (`[00-initial-field-value-is-hard-coded-and-unchecked]`).
+   - The NaN route not closed: a non-finite EOS value
+     (`[02-the-bbn-callbacks-do-not-check-their-values-for-finiteness]`).
+   - A short sample grid that escapes `compute_BBN_data`
+     (`[02-a-short-bbn-sample-grid-escapes-compute-bbn-data]`).
+   - Unvalidated compute-target rows are still served by `AdiabaticHistory` and `BBNData` lookups
+     (`[01-adiabatic-and-bbn-lookups-do-not-require-validated-rows]`); see the board for its
+     scope.
+   - A Ray task timeout, and a worker that dies: neither is handled, and neither has an issue.
+   - Step 1's redundant first-pass lookup (`[03-step-1-first-pass-lookup-filters-nothing]`).
+   - `AdiabaticHistory.build` ignores `_do_not_populate`, so every adiabatic lookup reads every
+     value row (`[04-adiabatichistory-lookup-ignores-do-not-populate]`).
+
+**Verification table** (README §6; measured on `6fd9017`; "suite" is the `unittest discover`
+command of `CLAUDE.md`). Suites: `CosmologyModels/tests` 18 OK (80.0 s), `ComputeTargets/tests` 41
+OK (89.4 s), `Datastore/tests` 17 OK (1.2 s); at `27a32bc`, 18 / 30 / 0. A row marked "log" was
+shown to fail on `HEAD~1` by that prompt's log, and is not re-shown here.
+
+| Row | Target | Final value | Witness |
+|---|---|---|---|
+| 6.1 `ScalarModel`, `AdiabaticHistory`, `BBNData` (`failure=True` and default) stored under A, looked up under B | not returned | not returned | `Datastore/tests/test_version_keyed_lookups.py` (a), (b), (c1), (c2); suite; fail on `90b2c86` (log 01) |
+| 6.1 the same rows under A | returned, unchanged | returned | same |
+| 6.1 a keyed `build()` with no serial | raises | raises `RuntimeError` | (d); suite |
+| 6.1 `ExponentialCoupling` under A then B | one row, same serial | one row, same serial | (e); suite (a regression guard, passes on both) |
+| 6.1 `VERSION_LABEL` definitions | 1, in `config/version.py` | 1: `config/version.py:33`, value `"2026.4.0"` after prompt 02 (`"2026.3.0"` after prompt 01, as targeted) | grep above; (f) |
+| 6.1 dated label comment | in `config/version.py`, verbatim | present, `config/version.py:19–27`, plus dated sentences for prompts 01 and 02 | read; log 01 |
+| 6.1 schema | unchanged | unchanged | the `register()` diff is the flag and its comment only; `sqlite_master` byte-identical on prompt 01 (log 01) |
+| 6.1 `Datastore/tests` count | ≥ 5, in `CLAUDE.md` | 17; the command is in `CLAUDE.md` | suite |
+| 6.2 five production calls forced to fail | raises, names the stage | raises, five stage names | `test_bbn_solver_failures` (a); fails on `f0de762` (log 02) |
+| 6.2 two small-network calls forced to fail | raises, names the stage | raises | (b); same |
+| 6.2 line 239 | patched | patched (8 of 8) | `grep -c "= solve_ivp(" PRyM/PRyM_main.py` = 8; `grep -c "^ *_check_solve_ivp(sol_"` = 8 |
+| 6.2 a forced failure through the helper | failure payload `"PRyMordial: "` | as targeted | (c); suite |
+| 6.2 a `RuntimeError` callback inside PRyMordial | failure payload naming the type | as targeted | (c); suite |
+| 6.2 an exception outside the helper | propagates | propagates | one new `except`, `BBNData.py:336`, inside `_run_PRyMordial` |
+| 6.2 NaN in the density ratio | `ComputationFailureError` before any solve | as targeted | (d); suite; on `f0de762` it raised `ValueError` (log 02 Deviation 5) |
+| 6.2 a callback at T = NaN | `ComputationFailureError` | as targeted | (d); suite |
+| 6.2 every pinned abundance | unchanged | unchanged | suite |
+| 6.2 `PRYM_VERSION` | `"bf24c3d+cham03+ri02"` | `ComputeTargets/BBNData.py:42` | grep; (e) |
+| 6.2 `VERSION_LABEL` | `"2026.4.0"`, `config/version.py` only | `config/version.py:33` | grep |
+| 6.2 patched lines in `PRyM/` | marked | ten insertions, each with `ChamPBH run-integrity prompt 02` | `git diff 27a32bc..HEAD -- PRyM` |
+| 6.3 `build(failure=None)`, two failures | the newest | the newest | `Datastore/tests/test_bbn_failure_lookup.py` (a); fails on `765e80d` (log 03) |
+| 6.3 failure then success; success then failure | the success | the success | (b1), (b2); same |
+| 6.3 `failure=True`, `failure=False` | unchanged | unchanged | (c1)–(c3); suite |
+| 6.3 `main.py`'s BBN lookup | `failure=None` | `main.py:632` | grep |
+| 6.3 `--retry-failed-bbn` | present, default False | `config/argument_parser.py:246` | (g); suite |
+| 6.3 helper on the probe's bin | {V2, V4} | {V2, V4}; {V2, V3, V4} with V3 failed and the flag | `test_pipeline_selection` (d), (e); `pairing_probe.py` still prints the old {V1, V3} |
+| 6.3 wrong-length results | raises | raises `ValueError` | (f) |
+| 6.3 adiabatic stage | same helper | `main.py:357`, `:407` | read |
+| 6.3 skip summary | one line per stage | `main.py:531`, `:793` | read |
+| 6.3 `VERSION_LABEL`, `PRYM_VERSION` | unchanged by prompt 03 | `"2026.4.0"`, `"bf24c3d+cham03+ri02"` | grep |
+
+**To reproduce all of it** from the repository root (about 4 minutes):
+
+```bash
+PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t . && PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . && PYTHONPATH=. ./venv/bin/python -m unittest discover -s Datastore/tests -t . && PYTHONPATH=. ./venv/bin/python prompts/run-integrity/planning-probes/datastore_version_probe.py && PYTHONPATH=. ./venv/bin/python prompts/run-integrity/planning-probes/pairing_probe.py && grep -rn "VERSION_LABEL =" --include='*.py' . | grep -v "venv/\|thirdparty/\|claude-context/" && grep -n PRYM_VERSION ComputeTargets/BBNData.py && git diff --stat 27a32bc..HEAD
+```
+
 ---
 
 ## 5. Reproduce
