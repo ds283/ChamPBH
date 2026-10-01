@@ -74,6 +74,13 @@ PRyMordial reads, and adds the extraction and the four figures of the science ru
   printed and not bounded. Log 01, deviation 3 holds the measurements. The orchestrator's review
   of `1bc8977` passed all ten checks of `orchestrator/prompt-01.md` §3, and this ruling was the
   only open question.
+- **2026-10-01, the user: prompt 02's deviation 1 accepted as is.** `summarise_failure_reasons`
+  and `NO_FAILURE_REASON` live in `pipeline_selection.py`, outside prompt 02's allowed files,
+  because `main.py` parses `sys.argv` at import and a test cannot import from it. `main.py`
+  imports the function. The change to `pipeline_selection.py` is those 21 added lines and nothing
+  else. The orchestrator's review of `77a7e0c` failed only check 1 of
+  `orchestrator/prompt-02.md` §3 (allowed files), on this file; checks 2–6 passed, and this
+  ruling was the only open question. Log 02, deviation 1 holds the reasoning.
 
 Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
