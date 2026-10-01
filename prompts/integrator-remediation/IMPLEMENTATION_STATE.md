@@ -127,7 +127,8 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
 Fourteen opened by the planner on 2026-10-01 from the audit, and one more the same day from the
 user's guard G1; prompt 01 closed three (§4) and opened two; prompt 02 closed five (four of its
-own and `[01-bounce-phi-min-…]` by the user's ruling) and opened one; prompt 03 closed one; prompt 04 (the close-out) opened and closed none. Nine
+own and `[01-bounce-phi-min-…]` by the user's ruling) and opened one; prompt 03 closed one; prompt 04 (the close-out) opened and closed none; one more was opened
+after the close-out (2026-10-01, `[post-…]`). Ten
 are open and none is assigned to this campaign's prompts. Issues opened
 by later prompts go here too, with an index row under §1.6 of `.documents/OPEN_ISSUES.md`. Every
 measurement below is the audit's, on `b1f64d8`, by the script named in the audit README section
@@ -217,6 +218,29 @@ own source.
   - **Next step.** Decide whether `E < 0` on a trial state should raise (the loop would reject
     the step) or stay a clamp; a one-line change, witnessed by the (a) and (c) tests and the nine
     histories. Not assigned.
+- **[post-adiabatic-Q-reads-aliased-late-samples]** *(opened after the close-out, 2026-10-01, at
+  the user's request; measured on `1265c75`, `.documents/review-remediation-verification.md`
+  §4.9)*.
+  - **What.** Below `T_J ≈ 1 keV` the stored z grid (`ΔN = ln 10/250 ≈ 0.0092`) misses most
+    bounces, and more of them as `M` falls. The median number of stored samples per half-period
+    is 1.3–1.7 at `M = 0.01`, 0.35–0.6 at `1e-3`, and 0.02–0.3 at `1e-5` and `1e-6`, for
+    β = 1.2, 2, 3. Under one sample per half-period: 0–25 % of half-periods at `M = 0.01`,
+    78–93 % at `1e-3`, 87–99 % at `1e-5` and `1e-6`. At `1e-5` and `1e-6`, `φ` swings by
+    14–99 % of its value between turning points there, so the samples read `V''(φ)` and
+    `M²_eff` at an effectively random phase of each bounce. The kinetic fraction `π²/6` there is `≤ 4×10⁻⁵`. In
+    PRyMordial's window (10 MeV–1 keV) the sampling barely depends on `M` between `0.01` and
+    `1e-6`.
+  - **Impact.** `compute_adiabatic_values` stores `max |Q|` over every sample, and `Q`'s
+    numerator uses the derivative of a spline through `asinh(M²_eff/H²)` on the z grid. Where the
+    bounces fall between samples that derivative does not describe the field. Whether that
+    segment sets the stored maximum was **not measured**; if it does, the adiabaticity verdict at
+    small `M` is set by aliasing rather than by the physics. A sharper form of
+    `[00-stored-samples-alias-the-rebounds]` for the adiabatic stage.
+  - **Next step.** For the six §4.9 histories and the `M = 0.01`, `1e-3` baselines, find where
+    `max |Q|` occurs (`N`, `T_J`), for each `k/H` label. If it is below 1 keV, the remedy is
+    either the turning-point sampling of `[00-stored-samples-alias-the-rebounds]` or a
+    restricted window for the adiabatic diagnostic; that choice belongs to the authors. Not
+    assigned.
 
 ## 4. Resolved issues
 

@@ -827,6 +827,99 @@ PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t 
 The audit's probe scripts do not run against this tree (`harness.build` passes the supervisor an
 argument it no longer takes); run them from an export of `918590e` (`git archive 918590e`).
 
+### 4.9 Addendum 2026-10-01 — how small `M` can go before the parked-tracking model is needed
+
+Added after the `integrator-remediation` close-out, at the user's request. Measured on `1265c75`,
+whose code tree is the same as `abcc99f`'s (§4.8). Nothing above this heading has been changed.
+The question was whether histories at `M ≥ 1e-5` are safe without the parked-tracking model of
+`[00-settling-at-physical-M-needs-a-parked-tracking-model]`, and how far below that they stay
+safe.
+
+**Provenance.** Every figure below was measured on `1265c75` by three scratch scripts, which are
+not in the repository. They use only the helpers of
+`ComputeTargets/tests/test_kinematic_cap_loop.py` (`build`, `integrate`, `wall_bounces`,
+`interpolated_minima`).
+
+- *Histories.* `integrate_scalar_history` with the default `StepControl()` (budget `2×10⁶`), from
+  `main.py`'s initial data (`φ = 5`, `π = 0`, `T_init = 2×10⁴ GeV`), as log 04's `nine.py` does,
+  to `T_CMB`. Stdout and stderr were captured. Six to twelve histories ran at once on ten cores,
+  so the **wall times are inflated**: the `M = 0.01` baselines took 64–80 s here against 5–8 s in
+  log 04. RHS and step counts do not depend on load.
+- *Tolerances.* `integrate(P1, M, 21.0, params=StepControl(atol=…, rtol=…))` from the P1 state
+  (β = 2).
+- *Sampling.* The turning points are the sign changes of `π` between accepted states, located by
+  linear interpolation. Half-periods are assigned to a window by `T_J` at their midpoint. A
+  stored sample is one step of the production z grid, 250 per decade of `1 + z`
+  (`DEFAULT_SAMPLES_PER_LOG10_Z`), so `ΔN = ln 10/250 = 0.00921`.
+
+**1. Full histories at `M = 1e-5` and `1e-6`: all complete, inside the budget.** All six end at
+`T_J = 2.72550 K`. In each there were 0 reflections, 0 rejected steps, 0 `T_Jordan = 0`
+substitutions, 0 "negative value of E" prints and no traceback.
+
+| β | M | RHS | accepted steps | fraction of budget | wall bounces | first bounce `N` / `T_J` (MeV) | `N` at `T_CMB` | wall (loaded) |
+|---|---|---|---|---|---|---|---|---|
+| 1.2 | 1e-5 | 874 284 | 91 349 | 0.046 | 1 338 | 17.667942 / 231.1076 | 46.0743 | 129 s |
+| 1.2 | 1e-6 | 1 330 925 | 140 736 | 0.070 | 1 603 | 17.667942 / 231.1076 | 46.0750 | 256 s |
+| 2.0 | 1e-5 | 1 679 987 | 162 676 | 0.081 | 4 457 | 20.352100 / 746.6864 | 50.0740 | 293 s |
+| 2.0 | 1e-6 | 3 338 450 | 323 552 | 0.162 | 7 504 | 20.352100 / 746.6864 | 50.0749 | 391 s |
+| 3.0 | 1e-5 | 2 165 080 | 207 448 | 0.104 | 6 561 | 24.499004 / 1 680.0056 | 55.0737 | 343 s |
+| 3.0 | 1e-6 | 4 711 033 | 445 083 | 0.223 | 12 382 | 24.499005 / 1 680.0055 | 55.0749 | 531 s |
+
+- The `M = 0.01` and `1e-3` baselines, re-run alongside, reproduce log 04's RHS, steps, bounces
+  and first bounces exactly. At β = 1.2, `M = 1e-3` (not in log 04) the figures are 254 491 RHS,
+  26 458 steps and 473 wall bounces.
+- β = 2 at `1e-6` gives 3 338 450 RHS, against the 3.33×10⁶ of the audit's probe (audit §3.7);
+  the audit counted 7 429 bounces against 7 504 here.
+- From `1e-5` to `1e-6`, accepted steps grow 1.54× (β = 1.2), 1.99× (β = 2) and 2.15× (β = 3)
+  per decade of `M`. **Extrapolation, not measurement:** at that rate β = 3 reaches the budget
+  near `M ≈ 1e-8`, and β = 2 at a few ×1e-9. That second estimate falls where the floor
+  reflection starts to fire (`M ≲ 3e-9`, audit §3.7), and the behaviour changes there. Neither
+  limit is measured.
+
+**2. The absolute tolerance does not limit accuracy at the first bounce, to `M = 1e-6`.** From
+P1 to `N = 21`, the dense-output first-bounce `N` and `φ_min` are identical to the printed digits
+under four settings. The settings are the scalar `atol = rtol = 1e-8` (the default), the vector
+`[1e-8 M, 1e-8 M, 1e-8, 1e-8, 1e-8]`, scalar `1e-12`, and the vector at `1e-12 M`.
+
+| M | first bounce `N` | `φ_min` | `φ(21)`, default | `φ(21)`, 1e-12 references | RHS: default / vector / 1e-12 scalar / 1e-12 vector |
+|---|---|---|---|---|---|
+| 1e-3 | 20.352082227 | 9.1505066e-6 | 1.184500643e-1 | 1.184500674e-1 | 2 275 / 2 894 / 13 904 / 20 426 |
+| 1e-5 | 20.352100199 | 9.1505127e-8 | 1.184428761e-1 | 1.184428765e-1 | 2 831 / 3 466 / 17 627 / 26 062 |
+| 1e-6 | 20.352100362 | 9.1505128e-9 | 1.184428107e-1 | 1.184428112e-1 | 3 003 / 3 842 / 17 949 / 25 796 |
+
+`φ_min` falls below `atol` at `M = 1e-6`, yet nothing moves. The step cap, not the tolerance,
+controls the error at the wall. `[00-atol-does-not-scale-with-phi]` stays a refinement.
+
+**3. Sampling against the stored z grid, by Jordan-frame temperature window.**
+
+- **10 MeV–1 keV (PRyMordial's working range): essentially independent of `M`.** For each β the
+  window holds nearly the same number of half-periods, with nearly the same sampling, at
+  `M = 0.01`, `1e-3`, `1e-5` and `1e-6`.
+  - β = 1.2: 6 half-periods; a median of 152 samples per half-period (minimum 42).
+  - β = 2: 43–45 half-periods; median 6.7–7.2 (7.2 only at `M = 0.01`), minimum 5.1.
+  - β = 3: 97–99 half-periods; median 3.0, minimum 2.3.
+
+  The β = 3 figure is marginal at every `M`; it belongs to `[00-stored-samples-alias-the-rebounds]`.
+- **Below 1 keV: under-sampled at every `M`, much more so at small `M`.**
+
+| M | median stored samples per half-period, 1 keV–0.1 eV (β = 1.2 / 2 / 3) | half-periods with fewer than 1 sample, same window | median `φ` swing / `φ` | max `π²/6` |
+|---|---|---|---|---|
+| 0.01 | 1.50 / 1.67 / 1.31 | 0 % / 19 % / 25 % | 4e-3 – 7e-2 | ≤ 4.1e-5 |
+| 1e-3 | 0.59 / 0.42 / 0.35 | 78 % / 91 % / 93 % | 8e-3 – 0.24 | ≤ 4.2e-5 |
+| 1e-5 | 0.32 / 0.06 / 0.05 | 87 % / 98 % / 99 % | 0.14 – 0.94 | ≤ 4.2e-5 |
+| 1e-6 | 0.32 / 0.03 / 0.02 | 87 % / 99 % / 99 % | 0.39 – 0.99 | ≤ 4.2e-5 |
+
+  Below 0.1 eV it is the same or worse: at `1e-5` and `1e-6`, 99–100 % of half-periods hold fewer
+  than one sample.
+
+**What this means.** The integration is measured safe at `M = 1e-5` and `1e-6` for β = 1.2, 2 and
+3, using at most 22 % of the step budget. What BBN sees in PRyMordial's window barely depends on
+`M` over this range. The adiabatic stage is the open question. `compute_adiabatic_values` takes
+`max |Q|` over every stored sample, and `Q`'s numerator uses the spline derivative of
+`asinh(M²_eff/H²)` on the z grid. Below 1 keV at small `M` that grid samples the bounces at random
+phase. Whether this segment sets the stored maximum was not measured. It is opened as
+`[post-adiabatic-Q-reads-aliased-late-samples]` on the `integrator-remediation` board.
+
 ---
 
 ## 5. Reproduce
