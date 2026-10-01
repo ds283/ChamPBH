@@ -1,8 +1,9 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-09-30 · **16 open**: 8 on the `review-remediation` board (closed
+**Last updated:** 2026-10-01 · **30 open**: 8 on the `review-remediation` board (closed
 2026-09-30), none of them assigned; 2 on the `production-readiness` board (closed
-2026-09-30); 6 on the `run-integrity` board (closed 2026-09-30).
+2026-09-30); 6 on the `run-integrity` board (closed 2026-09-30); 14 on the
+`integrator-remediation` board (planned 2026-10-01), 8 of them assigned to its own prompts.
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -16,7 +17,8 @@ the two disagree, the board is right.
 
 **Boards.** [`review-remediation`](../prompts/review-remediation/IMPLEMENTATION_STATE.md) ·
 [`production-readiness`](../prompts/production-readiness/IMPLEMENTATION_STATE.md) ·
-[`run-integrity`](../prompts/run-integrity/IMPLEMENTATION_STATE.md)
+[`run-integrity`](../prompts/run-integrity/IMPLEMENTATION_STATE.md) ·
+[`integrator-remediation`](../prompts/integrator-remediation/IMPLEMENTATION_STATE.md)
 
 ## 1. Open, by owning board
 
@@ -104,3 +106,44 @@ one by prompt 04 on 2026-09-30, not assigned.
 - `[04-adiabatichistory-lookup-ignores-do-not-populate]` — `AdiabaticHistory.build` never reads
   `_do_not_populate`, which `main.py` and `plot_by_beta.py` pass, so every lookup reads every
   value row; a cost, not a wrong result.
+
+### 1.6 `integrator-remediation` — [board §3](../prompts/integrator-remediation/IMPLEMENTATION_STATE.md)
+
+Fourteen opened by the planner on 2026-10-01 from
+[`.documents/integrator-audit-2026-09-30/README.md`](integrator-audit-2026-09-30/README.md). The
+first eight are assigned to the campaign's own prompts (the board entry says which); the prompt
+that closes one deletes its row here. The last six are open and unassigned.
+
+- `[00-region-scheme-costs-100x-and-storms-fragments]` — the L1/L2 caps cost 2.1e6 RHS against
+  1.9e4 on the parked P2 window, and 85 fragments on the grazing P3 window; the 100-fragment
+  failsafe kills every M ≤ 0.01 history. Prompt 01.
+- `[00-hard-reflection-at-phi-zero-stalls-or-runs-free]` — for M ≳ 1e-13 the reflection at
+  φ = 0 stalls Radau or lets the field run on at φ < 0; the shipped scheme fails outright for
+  1e-13 ≲ M ≲ 1e-8. Prompt 01.
+- `[00-scipy-num-jac-factor-grows-without-bound]` — SciPy's Jacobian perturbation factor on
+  ln T_J grows ×10 per evaluation with no upper clamp; the origin of the "T_Jordan = 0" states
+  and of two dead histories. Prompt 01.
+- `[00-trial-state-exceptions-abort-the-solve]` — a `ComputationFailureError` on a Newton or
+  Jacobian trial state ends the solve. Prompts 01, 02.
+- `[00-solver-fallback-is-not-wired]` — `method="Radau"` is a literal; a failure is integrated
+  four times identically. Prompt 02.
+- `[00-runtime-errors-mix-bugs-and-failures]` — six `RuntimeError` sites, none caught by
+  `main.py`; a latent `AttributeError` on `data.d_logV_dphi`; `RHS_timer` prints every
+  traceback. Prompt 02.
+- `[00-physical-M-histories-run-for-days-without-a-parking-model]` — settling bounces double per
+  e-fold at M ≲ 1e-10, β ≥ 1.2; a step budget makes it a clean failure. Prompt 02.
+- `[00-paper-and-documents-describe-a-scheme-the-code-does-not-run]` — `NumericalSection`'s caps,
+  tolerances and fallback, and the two architecture documents' fragment loop. Prompt 03.
+- `[00-settling-at-physical-M-needs-a-parked-tracking-model]` — the field at φ_wall(ρ) as a
+  passenger once its bounces are unresolvable: the switch criterion and the parked field's
+  ρ_φ, p_φ; the authors' physics.
+- `[00-stored-samples-alias-the-rebounds]` — 2.4 samples per half-period in the grazing phase;
+  record turning points beside the z grid; the authors' decision.
+- `[00-atol-does-not-scale-with-phi]` — an `atol` vector scaled by M halves the first-bounce
+  error at 1 % cost; tolerance-level.
+- `[00-scalarmodel-failure-rows-carry-no-reason]` — four failure reasons after prompt 02, all
+  printed, none stored; a schema change.
+- `[00-region-properties-on-the-potentials-become-unread]` — `bounce_region_*`,
+  `default_max_step`, `hard_reflection_point` stay defined after prompt 01; housekeeping.
+- `[00-analytic-jacobian-would-remove-num-jac]` — only if Newton failures appear in the science
+  run.
