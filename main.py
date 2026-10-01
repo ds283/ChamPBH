@@ -63,7 +63,11 @@ from config.sharding import (
     inventory_config,
 )
 from config.version import VERSION_LABEL
-from pipeline_selection import build_query_entries, select_missing
+from pipeline_selection import (
+    build_query_entries,
+    select_missing,
+    summarise_failure_reasons,
+)
 from utilities import grouper, energy_formatter
 
 MIN_NOTIFY_INTERVAL = 5 * 60
@@ -252,11 +256,17 @@ def run_pipeline(
     def compute_solver_batch(m: ScalarModel, label: str):
         return m.compute(label=label)
 
+    # the reasons of the histories that failed in this run (science-readiness prompt 02)
+    scalar_model_failure_reasons: List[Any] = []
+
     def validate_solver_batch(m: ScalarModel):
         if not m.available:
             raise RuntimeError(
                 "ScalarModel object passed for validation, but is not yet available"
             )
+
+        if m.failure:
+            scalar_model_failure_reasons.append(m.failure_reason)
 
         return pool.object_validate(m)
 
@@ -276,6 +286,12 @@ def run_pipeline(
         notify_min_time_interval=MIN_NOTIFY_INTERVAL,
     )
     solver_queue.run()
+    if len(scalar_model_failure_reasons) > 0:
+        print(
+            f"-- ScalarModel: {len(scalar_model_failure_reasons)} histories failed in this run"
+        )
+        for clause, count in summarise_failure_reasons(scalar_model_failure_reasons):
+            print(f"     -- {count} x {clause}")
 
     ## STEP 2
     ## CALCULATE THE ADIABATIC TRANSGRESSION PARAMETER Q FOR EACH MODEL IN THE GRID

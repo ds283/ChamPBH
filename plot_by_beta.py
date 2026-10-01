@@ -667,6 +667,63 @@ def run_pipeline(
                 f"     -- beta={beta:.5g}, M={M_eV:.5g} eV, Lambda={Lambda_eV:.5g} eV: {reason}"
             )
 
+    def report_dropped_scalar_models(
+        model_label: str,
+        potential: AbstractPotential,
+        query_batch: List[dict],
+        model_results: List[ScalarModel],
+    ):
+        """
+        Print, once per potential, every model that no plot can show because its
+        ScalarModel history failed, with (beta, M, Lambda) and the reason the
+        ScalarModel stored, and the count. The first lookup asks for successful rows
+        only, so such a model comes back unavailable; its failed row is looked up here
+        (the newest, if there are several). (science-readiness prompt 02)
+        """
+        missing = [
+            query
+            for query, m in zip(query_batch, model_results)
+            if not (m.available and not m.failure)
+        ]
+        if len(missing) == 0:
+            return
+
+        failed_query_queue = RayWorkPool(
+            pool,
+            [dict(query, failure=True) for query in missing],
+            task_builder=lambda x: pool.object_get("ScalarModel", **x),
+            available_handler=None,
+            compute_handler=None,
+            store_handler=None,
+            validation_handler=None,
+            label_builder=None,
+            title=None,
+            store_results=True,
+            create_batch_size=20,
+            process_batch_size=20,
+        )
+        failed_query_queue.run()
+
+        dropped = []
+        for query, F in zip(missing, failed_query_queue.results):
+            if F.available:
+                reason = F.failure_reason
+                if reason is None:
+                    reason = "failed, no failure_reason stored"
+            else:
+                reason = "no ScalarModel row in the store"
+            dropped.append((query["coupling"]._beta.as_float, reason))
+
+        M_eV = potential._M.as_float / units.eV
+        Lambda_eV = potential._Lambda.as_float / units.eV
+        print(
+            f"!! plot_by_beta '{model_label}', M={M_eV:.5g} eV, Lambda={Lambda_eV:.5g} eV: {len(dropped)} model(s) dropped because their ScalarModel failed or is missing"
+        )
+        for beta, reason in sorted(dropped, key=lambda x: x[0]):
+            print(
+                f"     -- beta={beta:.5g}, M={M_eV:.5g} eV, Lambda={Lambda_eV:.5g} eV: {reason}"
+            )
+
     def build_plot_work(potential: AbstractPotential) -> ray.ObjectRef:
         # build a work queue to read in all ScalarModel instances with this potential, for the
         # couplings in Coupling_array
@@ -705,6 +762,10 @@ def run_pipeline(
             process_batch_size=20,
         )
         model_query_queue.run()
+
+        report_dropped_scalar_models(
+            model_label, potential, model_query_batch, model_query_queue.results
+        )
 
         available_models = [
             m for m in model_query_queue.results if m.available and not m.failure

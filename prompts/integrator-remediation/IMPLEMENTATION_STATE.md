@@ -183,6 +183,10 @@ own source.
     scope (README §0.4). Not assigned.
   - **Assigned (2026-10-01):** to the [`science-readiness`](../science-readiness/IMPLEMENTATION_STATE.md) campaign, prompt 02 (a `failure_reason` column; the
     science run starts from a fresh datastore, so no migration).
+  - **Resolved (2026-10-01):** by the `science-readiness` campaign, prompt 02 (commit "Store why a
+    ScalarModel history failed"). A nullable `ScalarModel.failure_reason String(256)` column,
+    written from `compute_scalar_model`'s two failure exits and read back through
+    `ScalarModel.failure_reason`.
 - **[00-region-properties-on-the-potentials-become-unread]** *(after prompt 01)*.
   - **What.** `bounce_region_level{1,2}_boundary`, `…_max_step`, `default_max_step` and
     `hard_reflection_point` are defined on `AbstractPotential` and six potentials and read only

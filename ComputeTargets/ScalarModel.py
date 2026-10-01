@@ -49,7 +49,11 @@ from Quadrature.supervisors.ScalarField import (
 )
 from Quadrature.supervisors.base import RHS_timer
 from Units.base import UnitsLike
-from config.defaults import DEFAULT_ABS_TOLERANCE, DEFAULT_REL_TOLERANCE
+from config.defaults import (
+    DEFAULT_ABS_TOLERANCE,
+    DEFAULT_REL_TOLERANCE,
+    DEFAULT_STRING_LENGTH,
+)
 from config.sharding import ShardKeyType
 from utilities import energy_formatter
 from .Policies import PotentialDerivativePolicy
@@ -758,6 +762,15 @@ def integrate_scalar_history(
     )
 
 
+def _failure_payload(reason: str) -> dict:
+    """
+    The payload compute_scalar_model returns for a failed history: the failure flag and
+    the reason, truncated to DEFAULT_STRING_LENGTH, the width of the
+    ScalarModel.failure_reason column. (science-readiness prompt 02; BBNData's pattern)
+    """
+    return {"failure": True, "failure_reason": str(reason)[:DEFAULT_STRING_LENGTH]}
+
+
 @ray.remote
 def compute_scalar_model(
     cosmology: LambdaCDM_GenericEOS,
@@ -946,14 +959,16 @@ def compute_scalar_model(
             print(
                 f"!! compute_scalar_model ({task_label}): overflow when assembling sample values; marked as total integration failure"
             )
-            return {"failure": True}
+            return _failure_payload(
+                f"sampling: overflow when assembling sample values: {e}"
+            )
     except ComputationFailureError as e:
         print(f"-- compute_scalar_model ({task_label}): integration failure")
         print(f"   {e.message}")
         print(
             f"!! compute_scalar_model ({task_label}): marked as total integration failure"
         )
-        return {"failure": True}
+        return _failure_payload(e.message)
 
     collected_full_statistics = supervisor.collect_full_statistics
     return {
@@ -1084,6 +1099,7 @@ class ScalarModel(DatastoreObject):
             self._values = None
             self._extra_data = None
             self._failure = None
+            self._failure_reason = None
 
         else:
             DatastoreObject.__init__(self, payload["store_id"])
@@ -1092,6 +1108,7 @@ class ScalarModel(DatastoreObject):
             self._values: Optional[List[ScalarModelValue]] = payload["values"]
             self._extra_data: Optional[Dict[str, Any]] = payload["extra_data"]
             self._failure: Optional[bool] = payload["failure"]
+            self._failure_reason: Optional[str] = payload["failure_reason"]
 
         # store parameters
         self._label: str = label
@@ -1114,6 +1131,18 @@ class ScalarModel(DatastoreObject):
     @property
     def failure(self) -> Optional[bool]:
         return self._failure
+
+    @property
+    def failure_reason(self) -> Optional[str]:
+        """
+        Why the history failed, or None if it did not. Unlike the other properties this is
+        readable when `failure` is true; that is its purpose. (science-readiness prompt 02)
+        """
+        if self._failure is None:
+            raise RuntimeError(
+                f"ScalarModel ({self._label}): failure_reason has not yet been populated"
+            )
+        return self._failure_reason
 
     @property
     def cosmology(self) -> BaseCosmology:
@@ -1330,10 +1359,14 @@ class ScalarModel(DatastoreObject):
         failure: bool = data.get("failure", False)
         if failure:
             self._failure = True
+            self._failure_reason = (
+                str(data.get("failure_reason", ""))[:DEFAULT_STRING_LENGTH] or None
+            )
             self._values = []
             return True
 
         self._failure = False
+        self._failure_reason = None
         self._metadata = data["metadata"]
 
         sample: List[SampleValues] = data["sample"]

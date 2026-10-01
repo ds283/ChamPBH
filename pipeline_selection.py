@@ -145,3 +145,24 @@ def select_missing(
                 missing.append(entry)
 
     return MissingSelection(missing=missing, stored_failures=stored_failures)
+
+
+NO_FAILURE_REASON = "no failure_reason stored"
+
+
+def summarise_failure_reasons(reasons: Sequence[Any]) -> List[Tuple[str, int]]:
+    """
+    Group failure reasons by their first clause, the text before the first ':', and count
+    each group. A reason of None or "" is counted under NO_FAILURE_REASON. The groups come
+    back most frequent first, ties in alphabetical order, so that the summary is stable.
+    (science-readiness prompt 02)
+
+    :param reasons: the failure_reason of each failed row
+    """
+    counts = {}
+    for reason in reasons:
+        clause = "" if reason is None else str(reason).split(":", 1)[0].strip()
+        if clause == "":
+            clause = NO_FAILURE_REASON
+        counts[clause] = counts.get(clause, 0) + 1
+    return sorted(counts.items(), key=lambda item: (-item[1], item[0]))

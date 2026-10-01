@@ -1,7 +1,7 @@
 # Science-readiness campaign — implementation state
 
-**Last updated:** 2026-10-01 · **Status: IN PROGRESS — 1 of 9 landed** (prompt 01, with
-deviations). Planned on 2026-10-01 against
+**Last updated:** 2026-10-01 · **Status: IN PROGRESS — 2 of 9 landed** (prompt 01, with
+deviations; prompt 02). Planned on 2026-10-01 against
 `main` at `6aaa706`, from a Claude Science re-evaluation kept at
 [`source/campaign_reevaluation_2026-10-01.md`](source/campaign_reevaluation_2026-10-01.md) and
 checked against the tree by the planner (README §0.3). Suites at `6aaa706`: CosmologyModels 18,
@@ -11,7 +11,7 @@ land on it.
 **`VERSION_LABEL` is `"2026.6.0"`** since prompt 01 (from `"2026.5.0"`), bumped once. Every store
 made before 2026.6.0 is invalid, and the science run needs a fresh datastore file (columns are
 added with no migration). `PRYM_VERSION` is `"bf24c3d+ri02+sr01"`. Suites after prompt 01:
-CosmologyModels 18, ComputeTargets 71, Datastore 17.
+CosmologyModels 18, ComputeTargets 71, Datastore 17. After prompt 02: 18, 75, 21.
 
 The campaign hands the scalar field to PRyMordial through the expansion rate alone, with a patched
 PRyMordial that has no fictitious new-physics temperature and an optional wall-clock limit. It
@@ -90,7 +90,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
 | 01 | [The Hubble-only BBN route, the wall-clock limit and the output checks](01-hubble-only-bbn-route.md) | **R**, **W**, **O**, version bump, driver | Opus | ✍️ 2026-10-01 | ✅ 2026-10-01 (with deviations) | see `git log` ("Hand the scalar field to PRyMordial through H alone") | [`logs/01-hubble-only-bbn-route.md`](logs/01-hubble-only-bbn-route.md) |
-| 02 | [A failure reason on `ScalarModel` rows](02-scalarmodel-failure-reasons.md) | **F** | Sonnet | ✍️ 2026-10-01 | — | — | — |
+| 02 | [A failure reason on `ScalarModel` rows](02-scalarmodel-failure-reasons.md) | **F** | Sonnet | ✍️ 2026-10-01 | ✅ 2026-10-01 (with deviations) | see `git log` ("Store why a ScalarModel history failed") | [`logs/02-scalarmodel-failure-reasons.md`](logs/02-scalarmodel-failure-reasons.md) |
 | 03 | [Store the first bounce](03-first-bounce.md) | **T** | Opus | ✍️ 2026-10-01 | — | — | — |
 | 04 | [The initial field as a run option, with a super-Planckian warning](04-initial-field-option.md) | **P** | Sonnet | ✍️ 2026-10-01 | — | — | — |
 | 05 | [Bounce averages on the dense output](05-bounce-averages.md) | **A** | Opus | ✍️ 2026-10-01 | — | — | — |
@@ -108,7 +108,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | R | **DEFECT, medium** | The `NP_thermo_flag` route integrates a fictitious `T_NP`, and adds −3H(ρ_NP + p_NP) and dρ_NP/dT to the plasma equation, cancelling only to `≈ r·1.2×10⁻³`. Replace it with a Hubble-only patch. Closes `[00-bbn-route-integrates-a-fictitious-np-temperature]`. | 01 | **done** 2026-10-01 (log 01) |
 | W | **GAP** | No bound on a PRyMordial solve's wall time. Closes `[00-prymordial-has-no-wall-clock-limit]`. | 01 | **done** 2026-10-01 (log 01) |
 | O | **GAP** | A successful PRyMordial return is stored unchecked. Closes `[00-prymordial-output-is-stored-unchecked]`; with P4, also closes `[02-a-short-bbn-sample-grid-escapes-compute-bbn-data]` and `[02-the-bbn-callbacks-do-not-check-their-values-for-finiteness]` (assigned). | 01 | **done** 2026-10-01 (log 01) |
-| F | **GAP** | A `ScalarModel` failure row carries no reason. Closes `[00-scalarmodel-failure-rows-carry-no-reason]` (assigned). | 02 | open |
+| F | **GAP** | A `ScalarModel` failure row carries no reason. Closes `[00-scalarmodel-failure-rows-carry-no-reason]` (assigned). | 02 | **done** 2026-10-01 (log 02) |
 | T | **GAP** | The first bounce is not stored and cannot be read from the samples at small `M`. Closes `[00-first-bounce-is-not-stored]`. | 03 | open |
 | P | **GAP** | φ\* is a literal in three drivers, with no super-Planckian warning. Closes `[00-initial-field-value-is-hard-coded-and-unchecked]` (assigned). | 04 | open |
 | A | **DEFECT, medium at M ≲ 10⁻⁴** | BBN integrates a spline through random-phase samples of the bounces below a few keV. Closes `[00-bbn-input-is-aliased-at-small-M]`; narrows `[00-stored-samples-alias-the-rebounds]` (assigned). | 05 | open |
@@ -122,7 +122,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
 Seven opened by the planner on 2026-10-01, one per campaign item that has no issue on another
 board; prompt 01 closed three (§4), and four are open. Seven more were assigned from other boards
-(§3.1); prompt 01 closed two of them, and five are open.
+(§3.1); prompts 01 and 02 closed three of them, and four are open.
 
 - **[00-first-bounce-is-not-stored]** *(README §1 T; the source §2)*.
   - **What.** The dense-output first bounce (`N`, `T_J`, `φ_min`) exists only during the
@@ -158,7 +158,7 @@ here (README §5 rule 4).
 | `[04-numerical-strategies-describes-the-removed-asinh-bbn-interface]` | `review-remediation` | 08 |
 | `[02-a-short-bbn-sample-grid-escapes-compute-bbn-data]` | `run-integrity` | 01 (P4) — **resolved 2026-10-01** (§4) |
 | `[02-the-bbn-callbacks-do-not-check-their-values-for-finiteness]` | `run-integrity` | 01 (P4) — **resolved 2026-10-01** (§4) |
-| `[00-scalarmodel-failure-rows-carry-no-reason]` | `integrator-remediation` | 02 |
+| `[00-scalarmodel-failure-rows-carry-no-reason]` | `integrator-remediation` | 02 — **resolved 2026-10-01** (§4) |
 | `[00-stored-samples-alias-the-rebounds]` | `integrator-remediation` | 05 (narrowed: the BBN half) |
 
 ---
@@ -209,3 +209,12 @@ here (README §5 rule 4).
   raises `ComputationFailureError` for a non-finite value at a finite in-domain T, for example
   from a NaN `G_rho` (`test_bbn_solver_failures (i)`; before, `nan` was returned to PRyMordial).
   The dated **Resolved** line is also on the `run-integrity` board.
+- **[00-scalarmodel-failure-rows-carry-no-reason]** *(assigned from `integrator-remediation`;
+  §3.1)*. **Resolved (2026-10-01):** by prompt 02 (log 02). `compute_scalar_model` returns
+  `{"failure": True, "failure_reason": …}` from both failure exits (the `ComputationFailureError`
+  message; `"sampling: overflow when assembling sample values: …"`), truncated to 256.
+  `ScalarModel.failure_reason` reads the new nullable `ScalarModel.failure_reason String(256)`
+  column, on a failure row, and is `None` on a success. `main.py` prints this run's failures
+  grouped by first clause (`pipeline_selection.summarise_failure_reasons`); `plot_by_beta.py`
+  reports models dropped because their `ScalarModel` failed, with the reason. The dated
+  **Resolved** line is also on the `integrator-remediation` board.

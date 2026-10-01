@@ -1,10 +1,10 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-01 · **28 open**: 8 on the `review-remediation` board (closed
+**Last updated:** 2026-10-01 · **27 open**: 8 on the `review-remediation` board (closed
 2026-09-30), 3 of them assigned to `science-readiness`; 2 on the `production-readiness` board
-(closed 2026-09-30); 4 on the `run-integrity` board (closed 2026-09-30); 10 on the
-`integrator-remediation` board (closed 2026-10-01), 2 of them assigned to `science-readiness`;
-4 on the `science-readiness` board (planned 2026-10-01, 1 of 9 landed).
+(closed 2026-09-30); 4 on the `run-integrity` board (closed 2026-09-30); 9 on the
+`integrator-remediation` board (closed 2026-10-01), 1 of them assigned to `science-readiness`;
+4 on the `science-readiness` board (planned 2026-10-01, 2 of 9 landed).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -104,8 +104,9 @@ Fourteen opened by the planner on 2026-10-01 from
 one the same day from the user's reflection guard G1. Prompt 01 (2026-10-01) closed three and
 opened two (`[01-…]`); prompt 02 (2026-10-01) closed five and opened one (`[02-…]`); prompt 03
 (2026-10-01) closed one; prompt 04, the close-out (2026-10-01), opened and closed none and the
-campaign closed; one more was opened after the close-out (2026-10-01, `[post-…]`). Ten are open;
-two were assigned on 2026-10-01 to `science-readiness` (§1.7) and the eight below are not.
+campaign closed; one more was opened after the close-out (2026-10-01, `[post-…]`). Nine are open;
+two were assigned on 2026-10-01 to `science-readiness` (§1.7), one of them since resolved (prompt
+02, 2026-10-01), and the eight below are not.
 
 - `[00-settling-at-physical-M-needs-a-parked-tracking-model]` — the field at φ_wall(ρ) as a
   passenger once its bounces are unresolvable: the switch criterion and the parked field's
@@ -137,8 +138,6 @@ carries the **Assigned** line; the prompt that closes one deletes its row here.
   reads to 0.363 keV. `review-remediation`; prompt 06.
 - `[04-numerical-strategies-describes-the-removed-asinh-bbn-interface]` — §7.2–7.4 need a dated
   addendum. `review-remediation`; prompt 08.
-- `[00-scalarmodel-failure-rows-carry-no-reason]` — the reason is printed, not stored.
-  `integrator-remediation`; prompt 02.
 - `[00-stored-samples-alias-the-rebounds]` — the z grid samples fast bounces at random phase; its
   BBN half goes to prompt 05 (cell means); the adiabatic half stays open. `integrator-remediation`.
 

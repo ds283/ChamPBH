@@ -167,6 +167,10 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                     nullable=False,
                 ),
                 sqla.Column("failure", sqla.Boolean, default=False, nullable=False),
+                # why the history failed; NULL on a success (science-readiness prompt 02)
+                sqla.Column(
+                    "failure_reason", sqla.String(DEFAULT_STRING_LENGTH), nullable=True
+                ),
                 sqla.Column(
                     "solver_serial",
                     sqla.Integer,
@@ -231,6 +235,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 table.c.max_RHS_time,
                 table.c.min_RHS_time,
                 table.c.failure,
+                table.c.failure_reason,
                 table.c.solver_serial,
                 table.c.label,
                 table.c.z_samples,
@@ -420,6 +425,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
             payload={
                 "store_id": store_id,
                 "failure": failed,
+                "failure_reason": row_data.failure_reason,
                 "metadata": (
                     IntegrationData(
                         compute_time=row_data.compute_time,
@@ -491,6 +497,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
             "atol_serial": obj._atol.store_id,
             "rtol_serial": obj._rtol.store_id,
             "failure": obj._failure,
+            "failure_reason": obj._failure_reason if obj._failure else None,
             "solver_serial": obj.solver.store_id if not obj._failure else None,
             "z_samples": len(obj._values) if not obj._failure else None,
             "compute_time": obj.metadata.compute_time if not obj._failure else None,
