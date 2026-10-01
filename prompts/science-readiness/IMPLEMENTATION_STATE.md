@@ -82,6 +82,15 @@ PRyMordial reads, and adds the extraction and the four figures of the science ru
   else. The orchestrator's review of `77a7e0c` failed only check 1 of
   `orchestrator/prompt-02.md` §3 (allowed files), on this file; checks 2–6 passed, and this
   ruling was the only open question. Log 02, deviation 1 holds the reasoning.
+- **2026-10-02, the user: prompt 04's test (c) accepted as is.** Test (c) of
+  `ComputeTargets/tests/test_initial_field_option.py` parses `["--database", "unused.db"]`
+  rather than the prompt's `[]`, because `--database` is `required=True` in
+  `config/argument_parser.py`. Log 04 does not record this as a deviation. The orchestrator's
+  review of `0b58eb8` passed the five checks of `orchestrator/prompt-04.md` §3; this unrecorded
+  deviation was the only open question. Also unrecorded in log 04, and noted by the orchestrator:
+  test (b) stops at the first driver it fails on, so on `HEAD~1` it reports `main.py:862` alone;
+  the orchestrator checked out each of the other two drivers from `HEAD~1` separately and the
+  test caught `plot_by_beta.py:895` and `plot_ScalarModel.py:1611`.
 
 Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
