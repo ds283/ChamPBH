@@ -476,6 +476,8 @@ class IntegrationSolver(DatastoreObject):
     stepping: int   # schema/stepping version (0 = current)
 ```
 
+> **Note, 2026-10-01 (`integrator-remediation`, prompt 01, `fc97233`).** `ScalarModel` no longer returns `"solve_ivp+Radau"` or any of the four other `solve_ivp+…` labels: the integrator is not `solve_ivp`. It returns one label, `"Radau+kinematic-cap"` with `stepping = 0` (`SCALAR_MODEL_STEPPER_LABEL = "Radau+kinematic-cap-stepping0"`), registered in `main.py`. The five older `IntegrationSolver` registrations stay so that a stored history under an old label still loads; nothing returns them. Every `ScalarModel` store made before `VERSION_LABEL = "2026.5.0"` is invalid.
+
 `IntegrationData` is a `namedtuple` holding solver performance statistics returned alongside the ODE solution:
 
 ```python
@@ -516,6 +518,8 @@ class RHS_timer:
 ```
 
 **`ScalarFieldIntegrationSupervisor` (`ScalarField.py`):** Extends the base supervisor with chameleon-specific event tracking (bounce region entry/exit, hard reflections, solution fragment transitions). For a new project, a project-specific subclass would track the relevant events (e.g., turning points in the instanton trajectory).
+
+> **Note, 2026-10-01 (`integrator-remediation`, prompt 01, `fc97233`).** The bounce-region entry/exit, hard-reflection and fragment-transition notifications are gone from `ScalarFieldIntegrationSupervisor`, along with their counters and the `max_step_size` constructor argument. It now has `notify_reflection(N)` (elastic reflections, `number_reflections`) and `notify_step_cap(cap)` (the current cap, shown in the status line). See [`numerical-strategies.md` §3.5.2–§3.5.3](numerical-strategies.md).
 
 **`StateVector` (`ScalarField.py`):** The ODE state namedtuple. For scalar field evolution:
 
@@ -576,6 +580,8 @@ ODEPolicyData = namedtuple("ODEPolicyData", [
 
 `SolutionFragment` — A namedtuple `(N_low, N_high, sol)` where `sol` is a `scipy.integrate.OdeSolution` (a callable interpolant). The integration may produce multiple fragments if the solver must restart due to reflection events or solver failures.
 
+> **Note, 2026-10-01 (`integrator-remediation`, prompt 01, `fc97233`).** The `SolutionFragment` type is gone, with the fragment loop that produced it; the integration yields one `scipy.integrate.OdeSolution`, inside `IntegrationResult`. `ODERHS` is still the right-hand side, but it is now called by `integrate_scalar_history` through `scipy.integrate.Radau` rather than by `solve_ivp`, and since prompt 02 `RHS_timer` no longer prints a traceback for exceptions passing through it. See [`numerical-strategies.md` §3.5.1](numerical-strategies.md).
+
 `SampleValues` — The values stored in the database per redshift grid point:
 
 ```python
@@ -607,6 +613,8 @@ SampleValues = namedtuple("SampleValues", [
 3. If a reflection event fires, flip the field momentum and restart integration from the event point. Append each sub-integration to the `SolutionFragment` list.
 4. After integration completes (or all solvers fail), resample the solution fragments onto `z_grid` by evaluating each fragment's `OdeSolution` at the matching e-fold values.
 5. Store sampled `SampleValues` in memory; `RayWorkPool` will later call `store()` and then `pool.object_store()`.
+
+> **Note, 2026-10-01 (`integrator-remediation`, prompts 01 and 02).** Steps 1–4 describe the code at `b1f64d8`. There is no solver loop, no event function, no region and no `SolutionFragment` list now. `compute_scalar_model` builds the initial state as before and calls `integrate_scalar_history`: one `scipy.integrate.Radau` instance, stepped by hand under a kinematic maximum-step cap (`h ≤ f φ/|π|` if `π < 0`, `h ≤ sqrt(2 f φ/|π̇|)` if `π̇ < 0`, `f = 0.1`, global `0.1` e-fold) set before every step. An inward-moving field whose cap would fall below `1e-11` e-folds is reflected elastically (`π ← −π`) and the solver restarted there; an accepted `φ ≤ 0` is a failure, not a reflection. The history is one `OdeSolution`, resampled onto `z_grid` in step 4's place. A step budget of `2×10⁶` accepted steps turns a history that cannot finish into a failure row. Details, parameters and numbers: [`numerical-strategies.md` §3.5](numerical-strategies.md).
 
 **`ScalarModelProxy`:** A lightweight reference object (just holds the model's `store_id` and key parameters, not the full solution array). Passed to downstream compute targets (AdiabaticHistory, BBNData) so they can fetch the full `ScalarModel` from the database only when needed.
 
@@ -680,6 +688,8 @@ class AbstractPotential(DatastoreObject):
     def d_V_dphi(self, phi) -> float: ...
     def d2_V_dphi2(self, phi) -> float: ...
 ```
+
+> **Note, 2026-10-01 (`integrator-remediation`, prompt 01, `fc97233`).** The five `bounce_region_level{1,2}_*` and `hard_reflection_point` properties are still defined on `AbstractPotential` and its potentials, but nothing reads them since `VERSION_LABEL = "2026.5.0"`: the regions are gone (see [`numerical-strategies.md` §3.5.2](numerical-strategies.md)). The same commit added two non-abstract properties, `reflects_at_origin -> bool` (default `False`) and `log_V_floor -> Optional[float]` (default `None`), implemented on `ExponentialPotential` only; they let the integrator's elastic reflection (§3.5.3 there) run for a potential that declares it. Removing the region properties is open issue `[00-region-properties-on-the-potentials-become-unread]`.
 
 Concrete implementations: `ExponentialPotential`, `InversePowerPotential`, `StarobinskyPotential`, `ReclinerPotential`, `ReflectingPotential`.
 
@@ -842,6 +852,8 @@ def to_float(val) -> float:
 **`ComputationFailureError`** (`ComputeTargets/exceptions.py`): raised when an ODE integration produces NaN/Inf, encounters unphysical state (negative energy density, imaginary Hubble rate), or overflows exponential bounds. Caught by the solver loop in `ScalarModel.compute()`.
 
 **Solver fallback:** `ScalarModel.compute()` iterates through [Radau, BDF, LSODA, DOP853]. If one solver raises `ComputationFailureError` or `solve_ivp` fails to converge, the next solver is tried. If all solvers fail, the object is marked with `failure=True` and stored in the database as a failed record (so the system does not attempt to recompute it on subsequent runs).
+
+> **Note, 2026-10-01 (`integrator-remediation`, prompt 02, `614c41a`).** The solver fallback described here does not exist and never ran: `method="Radau"` was a literal since `f67bc3a`, so a failing history was integrated four times identically. It is deleted. `ScalarModel.compute()` runs one Radau step loop (`integrate_scalar_history`), inside one `try`; a `ComputationFailureError` from the loop or from the sampling is printed and the function returns `{"failure": True}`, which is stored as a failure row (the reason is printed, not stored). The exception table, including the new step budget, is in [`numerical-strategies.md` §3.5.5–§3.5.6](numerical-strategies.md). The paragraph above is kept as written for `b1f64d8`.
 
 **`RayWorkPool` resilience:** The work pool does not bail out if individual tasks fail — it continues processing remaining items. The `_do_not_populate` two-pass pattern means failed objects are skipped in downstream stages (checked via `obj.failure`).
 

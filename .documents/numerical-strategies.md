@@ -172,6 +172,190 @@ Because each bounce generates fragments, two guards prevent runaway: a warning i
 every 20 fragments, and a hard `RuntimeError` failsafe trips at 100 fragments. This caps
 pathological trajectories that would otherwise spin forever near a wall.
 
+### 3.5 Added 2026-10-01 (`integrator-remediation`): the step loop that replaced §2.1 and §3.1–§3.4
+
+**What this supersedes.** §2.1 (the fallback cascade), the note in §2.2 on the potentials'
+tolerance overrides, and §3.1–§3.4 (events, fragments and step-size clamping, the hard
+reflection, the fragment failsafes) above describe `compute_scalar_model` as it was at tree
+`b1f64d8` and before `VERSION_LABEL = "2026.5.0"`. They were correct for that tree and are left
+as they stand. The code no longer does any of it. The audit that found the mismatches is
+[`integrator-audit-2026-09-30/README.md`](integrator-audit-2026-09-30/README.md) ("audit" below;
+section numbers are its); the code landed in `fc97233` (prompt 01) and `614c41a` (prompt 02) of
+the `integrator-remediation` campaign. Every figure below is the audit's on `b1f64d8` or the
+campaign's logs (`prompts/integrator-remediation/logs/01-…`, `02-…`) on the tree named there.
+
+#### 3.5.1 One Radau instance in a pure loop
+
+`integrate_scalar_history(RHS, supervisor, initial_state, N_start, log_T_stop,
+params=StepControl(), N_failsafe=1000.0, policy=None, task_label=None, N_stop=None) ->
+IntegrationResult` (`ComputeTargets/ScalarModel.py`) is a function of its arguments only: no
+Ray, no datastore. It drives one `scipy.integrate.Radau` instance step by step (`solve_ivp` is
+itself a thin loop over `solver.step()`, so nothing is lost, audit §9.2). There are no event
+functions, no `SolutionFragment` and no restarts at region crossings. The solver is rebuilt only
+at an elastic reflection (§3.5.3). Each accepted step's `solver.dense_output()` is kept, and the
+history is one `scipy.integrate.OdeSolution(ts, interpolants)`, which the z-grid sampling
+evaluates directly (§2.3 and the sampling itself are otherwise unchanged).
+`compute_scalar_model` builds the initial state as before and calls the function inside the
+supervisor's `with`.
+
+The parameters are one namedtuple, `StepControl(cap_fraction=0.1, cap_floor=1e-11,
+global_max_step=0.1, jacobian_factor_max=1e-4, atol=1e-8, rtol=1e-8, step_budget=2_000_000)`.
+`IntegrationResult` carries `solution`, `N_final`, `final_state`, `nfev` (every RHS call,
+Jacobian probes included), `accepted_steps`, `steps_rejected_by_exception`, `reflections` (a list
+of `Reflection(N, phi_Einstein, pi_Einstein_in)`) and `max_wall_to_kinetic_ratio`.
+
+Termination is at the first accepted step with `ln T_J < log_T_stop`; the crossing is located
+by `brentq` on that step's interpolant, as `solve_ivp`'s event code did, and the solution is
+truncated there. Reaching `N_failsafe = 1000` without the crossing is a failure of the history.
+
+#### 3.5.2 The kinematic step cap (replaces §3.1 and the max-step regions of §3.2)
+
+The nested regions and their per-region `max_step` are gone. Before every step the maximum step
+is set from the field's own motion (audit §9.1). The wall is purely repulsive, so the only
+inward force on `φ` is the conformal kick plus friction, and the inward displacement in a step
+`h` from `(φ, π, π̇)` is bounded by `max(−π, 0) h + ½ max(−π̇, 0) h²`. Requiring this to be at
+most `f φ` gives
+
+    h ≤ f φ / |π|           if π < 0,
+    h ≤ sqrt(2 f φ / |π̇|)   if π̇ < 0,
+
+with `f = 0.1`, on top of a global cap of `0.1` e-folds, and never below the floor of §3.5.3.
+`π̇` is `solver.f[1]`, which Radau already holds. The cap is written to `solver.max_step`, and
+`solver.h_abs` is clipped into it. Both terms are needed: the velocity term alone has a hole at
+an outer turning point (`π ≥ 0`, field falling from rest), found at β = 3, M = 0.01,
+`N = 34.60`, where a step of `2.9e-2` carried `φ` from `3.7e-4` through the wall to `−8.7e-6`
+(audit §9.1).
+
+The bound enforced is that the field cannot move inward by more than a fraction `f` of its
+distance to the origin in one step, whatever `M` is. The cost of an approach to the wall is
+`≈ 10 ln(φ_start/φ_wall)` steps, independent of `M`: 1 945, 2 120 and 2 275 RHS for the first
+reflection from the P1 state at `M = 0.5, 0.01, 0.001` (audit §3.6; the shipped scheme spent
+17 092, 26 634, 26 422, `p1_sweep.py a` and `p1_smallM.py`). On the P2 parked window (β = 2,
+M = 0.5, `N` 25 → 40) it is 18 880 RHS against 2 099 582, with `φ(40) = 1.909693e-2` in both;
+on the P3 grazing window (β = 1.2, M = 0.01, `N` 32.9 → 37.5) 38 547 against 5 188 284, with the
+same 51 bounces (audit §3.2, §3.3; campaign log 01). The nine full histories of audit §9.3 all
+complete, in 24 193 – 327 046 RHS and 2 – 26 s each (log 01 §6.1 (d)); the shipped scheme could not
+finish at least four of them.
+
+#### 3.5.3 The floor and the elastic reflection (replaces §3.3)
+
+Steps below about `10 · EPS · N ≈ 1e-13` e-folds are not representable at `N ~ 20–55`, and the
+resolved cap needs `h ≈ 2e-3 M` at the wall, so the loop can resolve a reflection only for
+`M ≳ 1e-8` (audit §3.7). Below that the bounce is modelled. The rule, before each step:
+
+    if π < 0 and f φ / |π| < h_floor (= 1e-11):  π ← −π, restart the solver at the same N.
+
+When the field decelerates inside a resolvable wall `|π| → 0` and the cap grows, so the floor is
+never reached. When the wall is thinner than a representable step the field reaches
+`φ_stop = |π| h_floor / f` (about `5e-11` at delivery speed) at full speed and is reflected.
+The neglected flight lasts under `2 h_floor / f = 2e-10` e-folds, below the `1e-8` tolerance, and
+the bounce is elastic because `½π² + V/(3H²M_P²)` is conserved by the wall force alone. Measured
+from the P1 state (`p_smallM_scan.py kinref`; log 01): `φ(N = 21) = 1.184428e-1` for every `M`
+from `1e-6` to `4.1e-28`, resolved at `1e-6` and `1e-8`, reflected at `φ = 4.70e-11` from
+`3e-9` down. The reflection and the resolved bounce agree to seven digits where both exist
+(audit §3.7). The shipped reflection at `φ = 0` agreed only for `M ≲ 1e-13` and failed or ran on
+at `φ < 0` above that (audit §3.5); it is gone.
+
+The reflection is a *model*, not a fallback, and it has two guards (log 01):
+
+- **G1.** The potential must declare `reflects_at_origin` (new on `AbstractPotential`, default
+  `False`; `True` on `ExponentialPotential` only). Otherwise reaching the floor is a
+  `ComputationFailureError` naming the potential. `log_V_floor` (the potential's value far from
+  the wall, `Λ⁴` for the exponential) is declared beside it.
+- **G2.** At the moment of reflection the wall part of the potential fraction must not exceed the
+  kinetic fraction, `W = 3 (V − V_floor)/(3H²M_P²) ≤ ½π²`, else the step has already passed the
+  wall and the history fails ("reflection requested inside the wall"). On a state inside the
+  wall at delivery speed `W/(½π²) ≈ 23`; on every legitimate reflection run it was at most
+  `1.76e-20`.
+
+An accepted state with `φ ≤ 0` is never reflected: under the cap it can only mean the cap was
+violated, and it is a `ComputationFailureError`. Reflections are counted, passed to the
+supervisor (`notify_reflection`) and stored as `number_reflections` (§3.5.7).
+
+Validity range. The model is right where the wall is thinner than a representable step and
+nothing but the wall turns an inward-moving field; that is the exponential potential at
+`M ≲ 1e-8`. It is exact to the neglected flight time and nothing else. It does *not* make
+physical-`M` histories with β ≥ 1.2 computable (§3.5.6).
+
+#### 3.5.4 The Jacobian clamp (new; no counterpart above)
+
+SciPy's `_dense_num_jac` (`scipy/integrate/_ivp/common.py`) multiplies a state component's
+perturbation factor by 10 whenever that component's Jacobian column is negligible, with only a
+lower clamp. The `ln T_J` column is identically zero once `g_s` is constant, so the factor grows
+for the rest of the history: `−910, −8 627, −85 936, …` as substituted values, reaching
+`−9.4×10³⁰⁷`, at which point `exp` is 0 and the next probe is non-finite (audit §8 F2). These
+were the "wild trial states". After every accepted step the loop does
+`np.minimum(solver.jac_factor, 1e-4, out=solver.jac_factor)` (`StepControl.jacobian_factor_max`;
+`jac_factor` is `None` until the first Jacobian evaluation), which bounds the probe at
+`1e-4 |y|`. Measured on P2: 35 `T_Jordan = 0` substitutions in 15 e-folds without the clamp, 0
+with it, the same RHS count and the same trajectory (audit §8 F2; log 01). None occurred in the
+nine full histories. An analytic Jacobian would remove `num_jac` altogether and is not done.
+
+#### 3.5.5 The exception policy (replaces §2.1's cascade and §3.4's `RuntimeError`)
+
+There is one stepper (Radau) and one label, `"Radau+kinematic-cap-stepping0"`. `solver_list`,
+the `while not success` loop and the BDF / LSODA / DOP853 names are deleted: `method="Radau"`
+had been a literal since `f67bc3a`, so a failing history was integrated four times identically
+(audit §4). The table as implemented (logs 01, 02):
+
+| condition | outcome |
+|---|---|
+| the RHS raises `ComputationFailureError` on a trial state inside `solver.step()` | a rejected step: `h ← h/2` and retry; below `1e-13` e-folds a `ComputationFailureError` |
+| `T_J ≤ 0` on a trial state (`ODEPolicy._get_T_Jordan`) | raises (it used to substitute 1 K, which hid the Jacobian-factor growth) |
+| `G < 0`, overflow, non-finite input, non-finite RHS output | `ComputationFailureError` (unchanged); the NaN branch no longer reads the missing `data.d_logV_dphi` |
+| `E < 0` (`ODEPolicy.__call__`) | printed and clamped to 0 (unchanged; open issue `[02-negative-E-is-clamped-not-raised-on-trial-states]`) |
+| Radau `step()` returns a message | `ComputationFailureError` |
+| the step budget is exhausted (§3.5.6) | `ComputationFailureError` |
+| `φ ≤ 0` in an accepted state; G1 or G2 at a reflection; the termination root not bracketed | `ComputationFailureError` |
+| the failsafe `N = 1000` is reached | `ComputationFailureError` (it was a `RuntimeError`) |
+| the solution's dimension is not 5 | `assert` (a bug) |
+| the z grid is too short for `N_final` | `RuntimeError`: configuration; stops the run |
+
+`compute_scalar_model` wraps the loop and the sampling in one `try` and turns a
+`ComputationFailureError` into `{"failure": True}`, which `ScalarModel.store()` records as a
+failure row. The reason is printed and not stored (open issue
+`[00-scalarmodel-failure-rows-carry-no-reason]`). `RHS_timer.__exit__` and
+`IntegrationSupervisor.__exit__` print nothing now, where they printed a traceback for every
+exception passing through an RHS call. The 100-fragment failsafe of §3.4 does not exist.
+
+#### 3.5.6 The step budget
+
+`StepControl.step_budget = 2_000_000` accepted steps (about an hour). Exceeding it raises
+`ComputationFailureError` "step budget exhausted: … took n accepted steps (budget b) at N=…,
+T_J=… GeV, with r reflection(s)". Why: at `M ≲ 1e-10` with β ≥ 1.2 the settling bounces
+double per e-fold from `N ≈ 37` (β ≤ 2) or `41` (β = 3), because a bounce period scales as the
+square root of the amplitude and the amplitude decays exponentially; the loop followed 4 587 →
+62 135 steps per e-fold for `N = 36 → 41` at β = 1.2, extrapolating to `10⁷–10⁸` steps to
+`T_CMB` (audit §3.7; `p_full.py … kin reflect`). No scheme that follows the bounces one at a
+time reaches `T_CMB` there. The missing piece is physics: once the amplitude is far below any
+scale of interest the field is a passenger at `φ_wall(ρ)`, the minimum of the effective
+potential, and a parked-tracking model (switch criterion, tracking solution, the parked field's
+contribution to `ρ_φ`, `p_φ` and the adiabatic diagnostic) is for the authors (open issue
+`[00-settling-at-physical-M-needs-a-parked-tracking-model]`). Until it exists such a history
+fails on the budget and is stored as a failure row instead of running for days. The budget is on accepted steps, not RHS calls. The `M = 1e-6`, β = 2 history completes with
+7 429 resolved bounces in 3.33×10⁶ RHS (audit §3.7); at 9–10 RHS per accepted step, the ratio
+the nine histories of log 01 show, that is about 3.5×10⁵ steps, under the budget. That is an
+estimate from the ratio, not a run under this tree.
+
+#### 3.5.7 What is stored per history
+
+Gone: `number_level_1_entries`, `…_exits`, `number_level_2_entries`, `…_exits`,
+`level_{1,2}_boundary`, `level_{1,2}_max_step`, `number_fragments` and
+`number_hard_reflections` (`HARD_REFLECTIONS_KEY`). Now, in `extra_data`:
+`number_reflections` (only when positive), `cap_fraction`, `cap_floor`, `cap_global_max_step`,
+`jacobian_factor_max`, `accepted_steps`, `steps_rejected_by_exception` (only when positive),
+and the three RHS statistics blocks as before. `compute_steps` is now the count of every RHS
+call, Jacobian probes included (it was `solve_ivp`'s `nfev`, which excludes them). The
+tolerances `atol = rtol = 1e-8` are stored as before and are the same everywhere: the relaxed
+`1e-5`/`1e-6` of the Recliner overrides in §2.2 were never in the production path, and inside a
+cap the tolerance does not set the cost (audit §3.6, §6). `ExponentialPotential`'s
+`bounce_region_level{1,2}_boundary`, `…_max_step`, `default_max_step` and
+`hard_reflection_point` are still defined and nothing reads them (open issue
+`[00-region-properties-on-the-potentials-become-unread]`).
+
+Every `ScalarModel` store made before `VERSION_LABEL = "2026.5.0"` is invalid, and so is every
+`AdiabaticHistory` and `BBNData` row built on one.
+
 ---
 
 ## 4. Splines: where they are used and how boundary/dynamic-range issues are handled

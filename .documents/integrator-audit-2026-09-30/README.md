@@ -813,3 +813,51 @@ For the record, from `p1_sweep.py a`, `p2_parked.py regions`, `p3_grazing.py reg
 
 The event-count invariant (`!= 1`, `:702`) never tripped in 85 + 5 + 3 fragments; the tangential
 grazing case the brief describes remains a reasoned risk, moot once the events are removed.
+
+---
+
+## Outcome (added 2026-10-01)
+
+The audit became the `integrator-remediation` campaign
+([`prompts/integrator-remediation/`](../../prompts/integrator-remediation/README.md)), planned on
+2026-10-01 against `main` at `2b89022` (this audit's commit), on branch `integrator-remediation`.
+Nothing above this heading has been changed; §0–§11 describe tree `b1f64d8` and remain correct
+for it. The commits that changed the code:
+
+| prompt | commit | subject | audit items |
+|---|---|---|---|
+| 01 | `fc97233` | Replace the fragment loop with a kinematic-cap step loop | §9.1, §9.2, §10 item 1: the loop, the cap (`f = 0.1`, global `0.1`), the floor `1e-11` and the elastic reflection (with two guards the user added, G1 and G2), the Jacobian clamp, trial-state exceptions as rejected steps, `φ ≤ 0` as a failure, one `OdeSolution`; `VERSION_LABEL` to `2026.5.0`; §10 item 3's tests |
+| 02 | `614c41a` | Remove the solver fallback and settle the exception taxonomy | §4, §5, §10 item 2: the fallback deleted, the §5 table, `_get_T_Jordan` raises, the latent `d_logV_dphi` fault fixed, `RHS_timer` quiet, and a step budget (`2×10⁶` accepted steps) for §3.7 |
+| 03 | the commit that adds this subsection | Documents and the paper's corrections | §10 item 4: dated addenda to `numerical-strategies.md` §3.5 and `architecture-summary.md`; `paper-corrections-numerical-section.md` |
+
+**Landed.** §9.1 (cap, floor, reflection), §9.2 (loop), the §8 F2 clamp, the §5 taxonomy and
+trial-state policy, the §4 deletion, the §9.4 decisions on `f` (kept at `0.1`; convergence shown
+at `0.02`) and on tolerance (kept at `1e-8`), and §10 items 1–4. The audit's §9.3 histories
+complete under the landed loop (24 193 – 327 046 RHS for the nine; campaign log 01), within 0.4 %
+of §9.3's RHS counts. The audit's §9.5 pointwise tests are in `ComputeTargets/tests/`
+(`test_kinematic_cap_loop.py`, `test_integrator_exceptions.py`). One audit claim was met in a
+narrower sense than written: §9.3 "per-bounce `φ_min` ≤ 2×10⁻⁴" holds on the minimum of the dense
+output, not on `φ` at the first accepted step after `π` turns positive, which gives 2.10×10⁻⁴ and
+2.31×10⁻⁴ for P3 bounces 2 and 8 (log 01 Deviations 5; the user ruled for the dense-output
+measure).
+
+**Open, by issue name** (all on the `integrator-remediation` board, §3, and indexed in
+`.documents/OPEN_ISSUES.md` §1.6):
+
+- §3.7, §9.4, §10 item 6: `[00-settling-at-physical-M-needs-a-parked-tracking-model]`. The budget
+  makes the absence a clean failure; the model is the authors' physics.
+- §7, §9.4, §10 item 5: `[00-stored-samples-alias-the-rebounds]`.
+- §6, §10 item 5: `[00-atol-does-not-scale-with-phi]`.
+- §9.4, §10 item 5: `[00-analytic-jacobian-would-remove-num-jac]`.
+- §5 (stored failure rows carry no reason): `[00-scalarmodel-failure-rows-carry-no-reason]`.
+- Unread region properties on the potentials: `[00-region-properties-on-the-potentials-become-unread]`.
+- Two new from the implementation: `[00-declare-reflects-at-origin-for-the-other-potentials]`
+  (guard G1) and `[01-trial-state-exception-in-radau-start-up-is-not-a-rejection]`;
+  and from the exception work `[02-negative-E-is-clamped-not-raised-on-trial-states]`.
+- The audit's own scripts no longer run against the post-campaign tree (the supervisor lost its
+  `max_step_size` argument; campaign log 01 Observations 6). They remain valid when run from an
+  export of the parent of `fc97233`, as that log describes.
+
+The paper's `NumericalSection` is not edited by the campaign; the sentences that now disagree with
+the code, with the measured fact beside each, are in
+[`../paper-corrections-numerical-section.md`](../paper-corrections-numerical-section.md).

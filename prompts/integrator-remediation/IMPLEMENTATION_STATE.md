@@ -1,6 +1,6 @@
 # Integrator remediation campaign — implementation state
 
-**Last updated:** 2026-10-01 · **Status: IN PROGRESS — 2 of 4 landed** (prompts 01, 02). Planned on 2026-10-01 against
+**Last updated:** 2026-10-01 · **Status: IN PROGRESS — 3 of 4 landed** (prompts 01, 02, 03). Planned on 2026-10-01 against
 `main` at `2b89022`, from the audit at
 [`.documents/integrator-audit-2026-09-30/README.md`](../../.documents/integrator-audit-2026-09-30/README.md).
 **Target branch** `integrator-remediation`, to be cut from `2b89022`; planning and orchestration
@@ -92,7 +92,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 |---|---|---|---|---|---|---|---|
 | 01 | [Replace the fragment loop with the kinematic-cap step loop](01-kinematic-cap-step-loop.md) | **A**, **J**, **X** (loop), version bump | Opus | ✍️ 2026-10-01 | ✅ 2026-10-01 (with deviations) | see `git log` ("Replace the fragment loop with a kinematic-cap step loop") | [`logs/01-kinematic-cap-step-loop.md`](logs/01-kinematic-cap-step-loop.md) |
 | 02 | [Remove the solver fallback and settle the exception taxonomy](02-fallback-and-exceptions.md) | **B**, **C**, **S**, **X** (RHS) | Opus | ✍️ 2026-10-01 | ✅ 2026-10-01 (with deviations) | see `git log` ("Remove the solver fallback and settle the exception taxonomy") | [`logs/02-fallback-and-exceptions.md`](logs/02-fallback-and-exceptions.md) |
-| 03 | [Documents and the paper's corrections](03-documents-and-paper-corrections.md) | **D** | Sonnet | ✍️ 2026-10-01 | — | — | — |
+| 03 | [Documents and the paper's corrections](03-documents-and-paper-corrections.md) | **D** | Sonnet | ✍️ 2026-10-01 | ✅ 2026-10-01 | see `git log` ("Document the step loop and list the paper's corrections") | [`logs/03-documents-and-paper-corrections.md`](logs/03-documents-and-paper-corrections.md) |
 | 04 | [Close-out verification and handover](04-close-out-verification.md) | close-out | Sonnet | ✍️ 2026-10-01 | — | — | — |
 
 ---
@@ -107,7 +107,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | B | **DEFECT, low** | `solver_list` is walked but `method="Radau"` is a literal; a failing history is integrated four times identically. Closes `[00-solver-fallback-is-not-wired]`. | 02 | **done 2026-10-01** (log 02). `solver_list`, `solver_labels`, `success` and the `while not success` loop are gone; one `try` around the loop and the sampling returns `{"failure": True}` on `ComputationFailureError` |
 | C | **DEFECT, medium** | Six `RuntimeError` sites mix bugs, per-history failures and configuration; any of them ends `main.py`. `data.d_logV_dphi` is a latent `AttributeError`. `RHS_timer.__exit__` prints every exception's traceback. Closes `[00-runtime-errors-mix-bugs-and-failures]`. | 02 | **done 2026-10-01** (log 02). One `RuntimeError` left in the integration path (z grid too short); the solution-dimension check is an `assert`; the NaN branch no longer reads `data.d_logV_dphi` and raises `ComputationFailureError`; the failsafe raises `ComputationFailureError`; `RHS_timer.__exit__` and `IntegrationSupervisor.__exit__` print nothing (the latter by the user's ruling) |
 | S | **GAP** | At `M ≲ 1e-10` with β ≥ 1.2 the settling bounces double per e-fold; no bounce-following scheme reaches `T_CMB`. A step budget makes it a clean failure. Closes `[00-physical-M-histories-run-for-days-without-a-parking-model]`; the model stays open. | 02 | **done 2026-10-01** (log 02). `StepControl.step_budget = 2_000_000` (planner's default); exceeding it raises `ComputationFailureError` "step budget exhausted: … took n accepted steps (budget b) at N=…, T_J=… GeV, with r reflection(s)" (P2 with budget 50: 51 steps). Suites 18 / 67 / 17 |
-| D | documents | The two architecture documents and the paper's `NumericalSection` describe regions, fragments, a fallback and relaxed tolerances the code does not run. Closes `[00-paper-and-documents-describe-a-scheme-the-code-does-not-run]`. | 03 | planned |
+| D | documents | The two architecture documents and the paper's `NumericalSection` describe regions, fragments, a fallback and relaxed tolerances the code does not run. Closes `[00-paper-and-documents-describe-a-scheme-the-code-does-not-run]`. | 03 | **done 2026-10-01** (log 03). `numerical-strategies.md` §3.5 (new, after §3.4) describes the loop, the cap, the floor and the guarded reflection, the Jacobian clamp, the exception table, the budget and the stored keys; six dated notes in `architecture-summary.md` (at the label, the supervisor, `SolutionFragment`, the procedure, the region properties, the fallback); an "Outcome" subsection at the end of the audit README; `paper-corrections-numerical-section.md` (nine rows, three statements for the paper). Additions only: `--numstat` 184/0, 12/0, 48/0, new file |
 
 ---
 
@@ -115,21 +115,13 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
 Fourteen opened by the planner on 2026-10-01 from the audit, and one more the same day from the
 user's guard G1; prompt 01 closed three (§4) and opened two; prompt 02 closed five (four of its
-own and `[01-bounce-phi-min-…]` by the user's ruling) and opened one. Ten are open: one is
-assigned to this campaign's prompts (the first, prompt 03) and nine are unassigned. Issues opened
+own and `[01-bounce-phi-min-…]` by the user's ruling) and opened one; prompt 03 closed one. Nine
+are open and none is assigned to this campaign's prompts. Issues opened
 by later prompts go here too, with an index row under §1.6 of `.documents/OPEN_ISSUES.md`. Every
 measurement below is the audit's, on `b1f64d8`, by the script named in the audit README section
 cited, except in the entries opened by prompts 01 and 02 (`[01-…]`, `[02-…]`), which name their
 own source.
 
-- **[00-paper-and-documents-describe-a-scheme-the-code-does-not-run]** *(audit §1, §11)*.
-  - **What.** `Paper1.tex` `NumericalSection`: outside cap `10⁻²` (code: `inf`), region caps
-    `10⁻⁵`/`10⁻⁶` (code: `3e-3 M`, `1e-4 M`), relaxed tolerances for `M ≲ 10⁻³` (not in the
-    production path), a BDF → LSODA → DOP853 fallback (never wired). `numerical-strategies.md`
-    §2–3 and `architecture-summary.md` describe the fragment loop.
-  - **Impact.** A reader of the paper or the documents cannot reproduce what the code does.
-  - **Next step.** Prompt 03: dated addenda and a corrections list for the authors.
-    **Assigned (2026-10-01):** prompt 03 (D).
 - **[00-settling-at-physical-M-needs-a-parked-tracking-model]** *(audit §3.7, §9.4)*.
   - **What.** Once the bounce amplitude is far below any scale of interest and the period far
     below the sample spacing, the field is a passenger at `φ_wall(ρ)`, the minimum of the
@@ -216,6 +208,20 @@ own source.
 
 ## 4. Resolved issues
 
+- **[00-paper-and-documents-describe-a-scheme-the-code-does-not-run]** *(audit §1, §11)*.
+  - **What.** `Paper1.tex` `NumericalSection`: outside cap `10⁻²` (code: `inf`), region caps
+    `10⁻⁵`/`10⁻⁶` (code: `3e-3 M`, `1e-4 M`), relaxed tolerances for `M ≲ 10⁻³` (not in the
+    production path), a BDF → LSODA → DOP853 fallback (never wired). `numerical-strategies.md`
+    §2–3 and `architecture-summary.md` describe the fragment loop.
+  - **Impact.** A reader of the paper or the documents cannot reproduce what the code does.
+  - **Next step.** Prompt 03: dated addenda and a corrections list for the authors.
+    **Assigned (2026-10-01):** prompt 03 (D).
+  - **Resolved (2026-10-01):** by prompt 03 (log 03). `numerical-strategies.md` §3.5 and six dated
+    notes in `architecture-summary.md` describe the loop that replaced the fragments, regions,
+    fallback and hard reflection; the audit README ends with an "Outcome" subsection; and
+    `.documents/paper-corrections-numerical-section.md` lists nine sentences of `NumericalSection`
+    with the measured fact and a suggested replacement beside each, plus three statements the
+    paper may carry. `Paper1.tex` is not edited.
 - **[00-region-scheme-costs-100x-and-storms-fragments]** *(audit §3.2, §3.3; `p2_parked.py
   regions`, `p3_grazing.py regions`)*.
   - **What.** Inside L2 at M = 0.5 every step is the cap `5e-5`: 2 099 582 RHS over 15 e-folds
