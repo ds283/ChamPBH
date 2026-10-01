@@ -81,6 +81,10 @@ MIN_STEP_AFTER_TRIAL_EXCEPTION = 1e-13
 #   global_max_step:     the cap applied everywhere, in e-folds
 #   jacobian_factor_max: upper clamp on scipy's finite-difference Jacobian perturbation factor
 #   atol, rtol:          tolerances passed to Radau
+#   step_budget:         the largest number of accepted steps; exceeding it is a failure of the
+#                        history (integrator-remediation prompt 02). The default, 2e6 steps, is
+#                        the planner's (README §0.2): about an hour, and far above the 3.4e4
+#                        steps of the costliest history measured (beta = 3, M = 0.001)
 StepControl = namedtuple(
     "StepControl",
     [
@@ -90,8 +94,17 @@ StepControl = namedtuple(
         "jacobian_factor_max",
         "atol",
         "rtol",
+        "step_budget",
     ],
-    defaults=[0.1, 1e-11, 0.1, 1e-4, DEFAULT_ABS_TOLERANCE, DEFAULT_REL_TOLERANCE],
+    defaults=[
+        0.1,
+        1e-11,
+        0.1,
+        1e-4,
+        DEFAULT_ABS_TOLERANCE,
+        DEFAULT_REL_TOLERANCE,
+        2_000_000,
+    ],
 )
 
 # one elastic reflection performed by integrate_scalar_history: the e-fold number, the field
@@ -240,12 +253,13 @@ class ODEPolicy:
             raise ComputationFailureError(msg) from e
 
         if T_Jordan <= 0.0:
-            # this doesn't have to indicate a problem, because the stepper sometimes goes down
-            # to zero in the last time step (e.g., 2.7K is quite a small number if we are using Planck units
-            # for the computation)
+            # exp(log_T_Jordan) has underflowed: an unphysical trial state (a Newton iterate or a
+            # Jacobian probe). Raise like the other unphysical states; integrate_scalar_history
+            # treats the exception as a rejected step. (integrator-remediation prompt 02: this
+            # replaces a silent substitution of T_Jordan = 1 K.)
             msg = f"!! ODEPolicy ({self.task_label}): T_Jordan = {T_Jordan:.5g}, log_T_Jordan = {state.log_T_Jordan:.5g} at N={N:.8g}"
             print(msg)
-            T_Jordan = 1 * self.Kelvin
+            raise ComputationFailureError(msg)
 
         return T_Jordan
 
@@ -431,8 +445,12 @@ class ODERHS:
 
                 Sigma: float = data.Sigma
 
+                # (integrator-remediation prompt 02) this branch used to read data.d_logV_dphi, a
+                # field ODEPolicyData does not have, so it raised AttributeError instead of the
+                # ComputationFailureError below. V'/V is no longer printed: not every potential
+                # implements d_logV_dphi, and a diagnostic must not raise on its own account.
+                # V/3H^2Mp^2 and V'/3H^2Mp^2 are printed on the "cosmology" line.
                 log_V: float = data.log_V
-                d_logV_dphi: float = data.d_logV_dphi
 
                 V_over_3H2Mp2: float = data.V_over_3H2Mp2
                 Vprime_over_3H2Mp2: float = data.Vprime_over_3H2Mp2
@@ -447,7 +465,7 @@ class ODERHS:
                     f"     - physical: log(rhorad_E/GeV^4)={log_rhorad_Einstein - 4.0*log(self.GeV):.5g}, fm={fm:.5g}, T_J={self._formatter(T_Jordan)}"
                 )
                 print(
-                    f"     - potential: log(V/GeV^4)={log_V - 4.0*log(self.GeV):.5g}, V'/V={d_logV_dphi*self.GeV:.5g} GeV^(-1), d_logOmega_dphi'={data.d_logOmega_dphi:.5g}"
+                    f"     - potential: log(V/GeV^4)={log_V - 4.0*log(self.GeV):.5g}, d_logOmega_dphi'={data.d_logOmega_dphi:.5g}"
                 )
                 print(
                     f"     - cosmology: V/3H2Mp2={V_over_3H2Mp2:.5g}, V'/3H2Mp2={Vprime_over_3H2Mp2:.5g}, Sigma={Sigma:.5g}"
@@ -551,7 +569,8 @@ def integrate_scalar_history(
     After every accepted step SciPy's Jacobian perturbation factor is clamped, and phi <= 0 is a
     failure (under the cap it can only mean the cap was violated). The history ends at the first
     accepted step with ln T_J < log_T_stop, at the root of ln T_J - log_T_stop on that step's
-    interpolant. Reaching N_failsafe is a failure.
+    interpolant. Reaching N_failsafe is a failure, and so is taking more than params.step_budget
+    accepted steps.
 
     If N_stop is given (used to drive a window of a history, e.g. from a mid-history state in a
     test), Radau's bound is min(N_stop, N_failsafe) and reaching N_stop ends the integration
@@ -576,6 +595,7 @@ def integrate_scalar_history(
     h_floor: float = params.cap_floor
     global_max_step: float = params.global_max_step
     jacobian_factor_max: float = params.jacobian_factor_max
+    step_budget: int = params.step_budget
 
     label = f" ({task_label})" if task_label is not None else ""
 
@@ -663,6 +683,16 @@ def integrate_scalar_history(
             )
 
         accepted_steps += 1
+
+        # the step budget (README §2 (h)): without a parked-tracking model a history whose
+        # bounces are unresolvable (physical M, beta >= 1.2) would run for days; fail it cleanly
+        if accepted_steps > step_budget:
+            raise ComputationFailureError(
+                f"step budget exhausted: integrate_scalar_history{label} took {accepted_steps} "
+                f"accepted steps (budget {step_budget}) at N={solver.t:.10g}, "
+                f"T_J={exp(solver.y[4]) / policy.GeV:.5g} GeV, with {len(reflections)} "
+                f"reflection(s)"
+            )
 
         # scipy's num_jac multiplies a component's perturbation factor by 10 whenever its
         # Jacobian column is (nearly) zero, with no upper clamp; clamp it (README §2 (f))
@@ -806,140 +836,122 @@ def compute_scalar_model(
     policy = ODEPolicy(task_label, cosmology, potential, coupling)
     RHS = ODERHS(task_label, policy)
 
-    # the fallback wrapper: every pass runs the same step loop. solver_labels is no longer read;
-    # the returned label is SCALAR_MODEL_STEPPER_LABEL. (integrator-remediation prompt 02 removes both.)
-    solver_list = ["Radau", "BDF", "LSODA", "DOP853"]
-    solver_labels = {
-        "Radau": "solve_ivp+Radau-stepping0",
-        "BDF": "solve_ivp+BDF-stepping0",
-        "LSODA": "solve_ivp+LSODA-stepping0",
-        "DOP853": "solve_ivp+DOP853-stepping0",
-    }
-
     # the step loop's parameters: the defaults of StepControl, with the tolerances requested
     step_control = StepControl(atol=atol, rtol=rtol)
 
-    success = False
-    solver = solver_list.pop(0)
+    N_failsafe = 1000.0  # terminate after 1000 e-folds as a failsafe
+    N_start = 0.0
 
-    # loop through all possible solvers in turn
-    while not success and solver is not None:
-        try:
-            N_failsafe = 1000.0  # terminate after 1000 e-folds as a failsafe
-            N_start = 0.0
+    # prepare the initial state
+    initial_state = StateVector(
+        phi_Einstein=phi_init_float,
+        pi_Einstein=pi_init_float,
+        log_rhorad_Einstein=log_rhorad_Einstein_init,
+        log_fm=log_fm_init,
+        log_T_Jordan=log_T_init,
+    )
 
-            # prepare the initial state
-            initial_state = StateVector(
-                phi_Einstein=phi_init_float,
-                pi_Einstein=pi_init_float,
-                log_rhorad_Einstein=log_rhorad_Einstein_init,
-                log_fm=log_fm_init,
-                log_T_Jordan=log_T_init,
+    # one stepper (integrator-remediation prompt 02): a ComputationFailureError from the step loop
+    # or from the sampling is a failure of this history, recorded as a failure row.
+    # The "z grid too short" RuntimeError below is a configuration error and is not caught.
+    try:
+        with ScalarFieldIntegrationSupervisor(
+            units,
+            T_init,
+            T_stop,
+            label=task_label,
+            collect_full_statistics=False,
+        ) as supervisor:
+            result: IntegrationResult = integrate_scalar_history(
+                RHS,
+                supervisor,
+                initial_state,
+                N_start,
+                log_T_stop,
+                step_control,
+                N_failsafe=N_failsafe,
+                policy=policy,
+                task_label=task_label,
             )
 
-            with ScalarFieldIntegrationSupervisor(
-                units,
-                T_init,
-                T_stop,
-                label=task_label,
-                collect_full_statistics=False,
-            ) as supervisor:
-                result: IntegrationResult = integrate_scalar_history(
-                    RHS,
-                    supervisor,
-                    initial_state,
-                    N_start,
-                    log_T_stop,
-                    step_control,
-                    N_failsafe=N_failsafe,
-                    policy=policy,
-                    task_label=task_label,
-                )
+        # the solution must carry the five components of StateVector; anything else is a bug
+        assert (
+            len(result.solution(result.N_final)) == EXPECTED_SOL_LENGTH
+        ), f"compute_scalar_model ({task_label}): solution does not have {EXPECTED_SOL_LENGTH} components"
 
-            if verbose and len(result.reflections) > 0:
-                print(
-                    f"-- compute_scalar_model ({task_label}): {len(result.reflections)} elastic reflection(s), first at N={result.reflections[0].N:.5g}"
-                )
-
-        except ComputationFailureError as e:
+        if verbose and len(result.reflections) > 0:
             print(
-                f'-- compute_scalar_model ({task_label}): integration failure with solver "{solver}"'
+                f"-- compute_scalar_model ({task_label}): {len(result.reflections)} elastic reflection(s), first at N={result.reflections[0].N:.5g}"
             )
-            print(f"   {e.message}")
 
-            solver = solver_list.pop(0) if len(solver_list) > 0 else None
-            if solver is not None:
-                print(f'   switching to solver "{solver}"')
-        else:
-            success = True
+        # the integration should have terminated when T_Jordan = T_CMB, which ought to correspond to z = 0
+        # we now work backwards and sample the integration output on the supplied z grid, using the e-fold number
+        # to assign a value of log(1 + z).
+        final_N = result.N_final
+        largest_z = exp(final_N) - 1.0
+        z_grid_cut = z_grid.truncate(largest_z, keep="lower")
 
-    if not success:
+        max_z: redshift = z_grid.max
+        max_N: float = log(1.0 + max_z.z)
+        if max_N < final_N:
+            raise RuntimeError(
+                f"compute_scalar_model: ({task_label}): largest supplied redshift z={max_z.z:.3g} is equivalent to maximum e-fold number N={max_N:.3g}, but solution required N={final_N:.3g} e-folds"
+            )
+
+        sample = []
+
+        # loop over the required z sample grid.
+        # Note that we will work from high z to low z.
+
+        solution: OdeSolution = result.solution
+
+        hubble: HubblePolicy = HubblePolicy(coupling, units)
+        try:
+            for z in z_grid_cut:
+                z: redshift
+                N_backward = log(1.0 + z.z)
+                N_forward = final_N - N_backward
+
+                state: StateVector = StateVector._make(solution(N_forward))
+                data: ODEPolicyData = policy(N_forward, state)
+                hubble_data: HubblePolicyData = hubble(data, state)
+
+                T_Jordan: float = data.T_Jordan
+
+                log_Omega: float = coupling.log_Omega(state.phi_Einstein)
+                log_rhorad_Jordan: float = state.log_rhorad_Einstein - 4.0 * log_Omega
+
+                sample.append(
+                    SampleValues(
+                        raw_N=N_forward,
+                        phi_Einstein=state.phi_Einstein,
+                        pi_Einstein=state.pi_Einstein,
+                        log_rhorad_Einstein=state.log_rhorad_Einstein,
+                        log_rhorad_Jordan=log_rhorad_Jordan,
+                        log_fm=state.log_fm,
+                        log_T_Jordan=state.log_T_Jordan,
+                        H_Einstein=hubble_data.H_Einstein,
+                        H_Jordan=hubble_data.H_Jordan,
+                        gstar_rho=cosmology.G_rho(T_Jordan),
+                        gstar_s=cosmology.G_s(T_Jordan),
+                        dgstar_rho_dlogT=cosmology.dG_rho_dlogT(T_Jordan),
+                        dgstar_s_dlogT=cosmology.dG_s_dlogT(T_Jordan),
+                        Sigma=1.0 - 3.0 * cosmology.w(T_Jordan),
+                        friction_term=data.friction_term,
+                        reflecting_term=data.reflecting_term,
+                        kicking_term=data.kicking_term,
+                    )
+                )
+        except OverflowError as e:
+            print(
+                f"!! compute_scalar_model ({task_label}): overflow when assembling sample values; marked as total integration failure"
+            )
+            return {"failure": True}
+    except ComputationFailureError as e:
+        print(f"-- compute_scalar_model ({task_label}): integration failure")
+        print(f"   {e.message}")
         print(
             f"!! compute_scalar_model ({task_label}): marked as total integration failure"
-        )
-        return {"failure": True}
-
-    # the integration should have terminated when T_Jordan = T_CMB, which ought to correspond to z = 0
-    # we now work backwards and sample the integration output on the supplied z grid, using the e-fold number
-    # to assign a value of log(1 + z).
-    final_N = result.N_final
-    largest_z = exp(final_N) - 1.0
-    z_grid_cut = z_grid.truncate(largest_z, keep="lower")
-
-    max_z: redshift = z_grid.max
-    max_N: float = log(1.0 + max_z.z)
-    if max_N < final_N:
-        raise RuntimeError(
-            f"compute_scalar_model: ({task_label}): largest supplied redshift z={max_z.z:.3g} is equivalent to maximum e-fold number N={max_N:.3g}, but solution required N={final_N:.3g} e-folds"
-        )
-
-    sample = []
-
-    # loop over the required z sample grid.
-    # Note that we will work from high z to low z.
-
-    solution: OdeSolution = result.solution
-
-    hubble: HubblePolicy = HubblePolicy(coupling, units)
-    try:
-        for z in z_grid_cut:
-            z: redshift
-            N_backward = log(1.0 + z.z)
-            N_forward = final_N - N_backward
-
-            state: StateVector = StateVector._make(solution(N_forward))
-            data: ODEPolicyData = policy(N_forward, state)
-            hubble_data: HubblePolicyData = hubble(data, state)
-
-            T_Jordan: float = data.T_Jordan
-
-            log_Omega: float = coupling.log_Omega(state.phi_Einstein)
-            log_rhorad_Jordan: float = state.log_rhorad_Einstein - 4.0 * log_Omega
-
-            sample.append(
-                SampleValues(
-                    raw_N=N_forward,
-                    phi_Einstein=state.phi_Einstein,
-                    pi_Einstein=state.pi_Einstein,
-                    log_rhorad_Einstein=state.log_rhorad_Einstein,
-                    log_rhorad_Jordan=log_rhorad_Jordan,
-                    log_fm=state.log_fm,
-                    log_T_Jordan=state.log_T_Jordan,
-                    H_Einstein=hubble_data.H_Einstein,
-                    H_Jordan=hubble_data.H_Jordan,
-                    gstar_rho=cosmology.G_rho(T_Jordan),
-                    gstar_s=cosmology.G_s(T_Jordan),
-                    dgstar_rho_dlogT=cosmology.dG_rho_dlogT(T_Jordan),
-                    dgstar_s_dlogT=cosmology.dG_s_dlogT(T_Jordan),
-                    Sigma=1.0 - 3.0 * cosmology.w(T_Jordan),
-                    friction_term=data.friction_term,
-                    reflecting_term=data.reflecting_term,
-                    kicking_term=data.kicking_term,
-                )
-            )
-    except OverflowError as e:
-        print(
-            f"!! compute_scalar_model ({task_label}): overflow when assembling sample values; marked as total integration failure"
         )
         return {"failure": True}
 

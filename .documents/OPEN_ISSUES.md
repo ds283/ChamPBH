@@ -1,9 +1,9 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-01 · **30 open**: 8 on the `review-remediation` board (closed
+**Last updated:** 2026-10-01 · **26 open**: 8 on the `review-remediation` board (closed
 2026-09-30), none of them assigned; 2 on the `production-readiness` board (closed
-2026-09-30); 6 on the `run-integrity` board (closed 2026-09-30); 14 on the
-`integrator-remediation` board (in progress, 1 of 4 prompts landed), 5 of them assigned to its
+2026-09-30); 6 on the `run-integrity` board (closed 2026-09-30); 10 on the
+`integrator-remediation` board (in progress, 2 of 4 prompts landed), 1 of them assigned to its
 own prompts.
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
@@ -113,25 +113,15 @@ one by prompt 04 on 2026-09-30, not assigned.
 Fourteen opened by the planner on 2026-10-01 from
 [`.documents/integrator-audit-2026-09-30/README.md`](integrator-audit-2026-09-30/README.md), and
 one the same day from the user's reflection guard G1. Prompt 01 (2026-10-01) closed three and
-opened two (`[01-…]`). The first five below are assigned to the campaign's own prompts (the board
-entry says which); the prompt that closes one deletes its row here. The other nine are open and
-unassigned.
+opened two (`[01-…]`); prompt 02 (2026-10-01) closed five and opened one (`[02-…]`). The first
+below is assigned to the campaign's own prompt 03 (the board entry says so); the prompt that
+closes it deletes its row here. The other nine are open and unassigned.
 
-- `[00-trial-state-exceptions-abort-the-solve]` — a `ComputationFailureError` on a Newton or
-  Jacobian trial state ends the solve; the loop half landed in prompt 01, the RHS half
-  (`_get_T_Jordan`) is prompt 02.
-- `[00-solver-fallback-is-not-wired]` — `method="Radau"` is a literal; a failure is integrated
-  four times identically. Prompt 02.
-- `[00-runtime-errors-mix-bugs-and-failures]` — six `RuntimeError` sites, none caught by
-  `main.py`; a latent `AttributeError` on `data.d_logV_dphi`; `RHS_timer` prints every
-  traceback. Prompt 02.
-- `[00-physical-M-histories-run-for-days-without-a-parking-model]` — settling bounces double per
-  e-fold at M ≲ 1e-10, β ≥ 1.2; a step budget makes it a clean failure. Prompt 02.
 - `[00-paper-and-documents-describe-a-scheme-the-code-does-not-run]` — `NumericalSection`'s caps,
   tolerances and fallback, and the two architecture documents' fragment loop. Prompt 03.
 - `[00-settling-at-physical-M-needs-a-parked-tracking-model]` — the field at φ_wall(ρ) as a
   passenger once its bounces are unresolvable: the switch criterion and the parked field's
-  ρ_φ, p_φ; the authors' physics.
+  ρ_φ, p_φ; the authors' physics. Since prompt 02 its absence is a clean failure (step budget).
 - `[00-stored-samples-alias-the-rebounds]` — 2.4 samples per half-period in the grazing phase;
   record turning points beside the z grid; the authors' decision.
 - `[00-atol-does-not-scale-with-phi]` — an `atol` vector scaled by M halves the first-bounce
@@ -145,8 +135,7 @@ unassigned.
 - `[00-declare-reflects-at-origin-for-the-other-potentials]` — prompt 01 declares
   `reflects_at_origin` and `log_V_floor` on `ExponentialPotential` only; the other four
   potentials keep the defaults and would fail at the floor rather than reflect.
-- `[01-bounce-phi-min-at-the-accepted-step-depends-on-step-placement]` — P3 bounces 2, 8 miss
-  ± 2e-4 at the accepted step (2.1e-4, 2.3e-4) but match to 1e-6 on the dense-output minimum;
-  which measure README §6.1 (b) means is for the orchestrator or the user.
 - `[01-trial-state-exception-in-radau-start-up-is-not-a-rejection]` — an RHS exception inside
   `Radau.__init__` (start or reflection restart) fails the history; never seen.
+- `[02-negative-E-is-clamped-not-raised-on-trial-states]` — `E < 0` is printed and clamped to 0,
+  the last silent substitution on an unphysical state; never seen.

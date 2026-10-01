@@ -14,7 +14,6 @@
 # limitations under the License.
 
 import time
-from traceback import print_tb
 from typing import Optional
 
 DEFAULT_UPDATE_INTERVAL = 5 * 60
@@ -48,10 +47,6 @@ class IntegrationSupervisor:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self._integration_end = time.perf_counter()
         self.integration_time = self._integration_end - self._integration_start
-
-        if exc_type is not None:
-            print(f"type={exc_type}, value={exc_val}")
-            print_tb(exc_tb)
 
     @property
     def notify_available(self) -> bool:
@@ -111,7 +106,3 @@ class RHS_timer:
         self._elapsed = self._end_time - self._start_time
 
         self._supervisor.notify_new_RHS_time(self._elapsed)
-
-        if exc_type is not None:
-            print(f"type={exc_type}, value={exc_val}")
-            print_tb(exc_tb)
