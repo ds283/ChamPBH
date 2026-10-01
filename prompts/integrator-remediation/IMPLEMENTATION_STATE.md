@@ -1,6 +1,10 @@
 # Integrator remediation campaign — implementation state
 
-**Last updated:** 2026-10-01 · **Status: IN PROGRESS — 3 of 4 landed** (prompts 01, 02, 03). Planned on 2026-10-01 against
+**Last updated:** 2026-10-01 · **Status: COMPLETE — 4 of 4 landed** (prompts 01, 02, 03 and the
+close-out 04; final code tree `abcc99f`, the close-out commit is the one after it, see `git log`
+"Close the integrator-remediation campaign with a handover"). Suites on the final tree:
+CosmologyModels 18, ComputeTargets 67, Datastore 17 (18, 41, 17 at `2b89022`). One question for
+the user is open on prompt 04 (log 04, Deviations 1). Planned on 2026-10-01 against
 `main` at `2b89022`, from the audit at
 [`.documents/integrator-audit-2026-09-30/README.md`](../../.documents/integrator-audit-2026-09-30/README.md).
 **Target branch** `integrator-remediation`, to be cut from `2b89022`; planning and orchestration
@@ -77,6 +81,14 @@ recorded, not built.
   gone with prompt 01's fragment loop) and a tightened test (f) (`print_tb` never prints
   "Traceback"). Log 02 Deviations 1–3.
 
+- **2026-10-01, prompt 04: a question for the user, not a ruling.** The prompt's stop condition
+  "first bounce disagrees with the probe's by more than `1e-5` in `N`" does not say how a bounce is
+  located. By the accepted step after `π` turns positive, β = 0.9, `M = 0.5` differs by 7.9×10⁻⁵
+  (the straddling step is 8.5×10⁻⁵ wide) and the other eight rows by ≤ 9.0×10⁻⁶; by the dense-output
+  turning point all nine agree to 9.4×10⁻¹⁰ (log 04, Deviations 1). Prompt 04 finished the work and
+  committed, as one revert unit, rather than stop; the user rules which measure was meant, as for
+  `φ_min` above. Nothing in the code depends on it.
+
 Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
 - a §6.1 tolerance that cannot be met at `f = 0.1`;
@@ -93,7 +105,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | 01 | [Replace the fragment loop with the kinematic-cap step loop](01-kinematic-cap-step-loop.md) | **A**, **J**, **X** (loop), version bump | Opus | ✍️ 2026-10-01 | ✅ 2026-10-01 (with deviations) | see `git log` ("Replace the fragment loop with a kinematic-cap step loop") | [`logs/01-kinematic-cap-step-loop.md`](logs/01-kinematic-cap-step-loop.md) |
 | 02 | [Remove the solver fallback and settle the exception taxonomy](02-fallback-and-exceptions.md) | **B**, **C**, **S**, **X** (RHS) | Opus | ✍️ 2026-10-01 | ✅ 2026-10-01 (with deviations) | see `git log` ("Remove the solver fallback and settle the exception taxonomy") | [`logs/02-fallback-and-exceptions.md`](logs/02-fallback-and-exceptions.md) |
 | 03 | [Documents and the paper's corrections](03-documents-and-paper-corrections.md) | **D** | Sonnet | ✍️ 2026-10-01 | ✅ 2026-10-01 | see `git log` ("Document the step loop and list the paper's corrections") | [`logs/03-documents-and-paper-corrections.md`](logs/03-documents-and-paper-corrections.md) |
-| 04 | [Close-out verification and handover](04-close-out-verification.md) | close-out | Sonnet | ✍️ 2026-10-01 | — | — | — |
+| 04 | [Close-out verification and handover](04-close-out-verification.md) | close-out | Sonnet | ✍️ 2026-10-01 | ✅ 2026-10-01 (with deviations) | see `git log` ("Close the integrator-remediation campaign with a handover") | [`logs/04-close-out-verification.md`](logs/04-close-out-verification.md) |
 
 ---
 
@@ -115,7 +127,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
 Fourteen opened by the planner on 2026-10-01 from the audit, and one more the same day from the
 user's guard G1; prompt 01 closed three (§4) and opened two; prompt 02 closed five (four of its
-own and `[01-bounce-phi-min-…]` by the user's ruling) and opened one; prompt 03 closed one. Nine
+own and `[01-bounce-phi-min-…]` by the user's ruling) and opened one; prompt 03 closed one; prompt 04 (the close-out) opened and closed none. Nine
 are open and none is assigned to this campaign's prompts. Issues opened
 by later prompts go here too, with an index row under §1.6 of `.documents/OPEN_ISSUES.md`. Every
 measurement below is the audit's, on `b1f64d8`, by the script named in the audit README section

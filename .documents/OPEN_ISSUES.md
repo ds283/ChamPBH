@@ -3,7 +3,7 @@
 **Last updated:** 2026-10-01 · **25 open**: 8 on the `review-remediation` board (closed
 2026-09-30), none of them assigned; 2 on the `production-readiness` board (closed
 2026-09-30); 6 on the `run-integrity` board (closed 2026-09-30); 9 on the
-`integrator-remediation` board (in progress, 3 of 4 prompts landed), none assigned.
+`integrator-remediation` board (complete, 4 of 4 prompts landed), none assigned.
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -113,7 +113,8 @@ Fourteen opened by the planner on 2026-10-01 from
 [`.documents/integrator-audit-2026-09-30/README.md`](integrator-audit-2026-09-30/README.md), and
 one the same day from the user's reflection guard G1. Prompt 01 (2026-10-01) closed three and
 opened two (`[01-…]`); prompt 02 (2026-10-01) closed five and opened one (`[02-…]`); prompt 03
-(2026-10-01) closed one. The nine below are open and none is assigned.
+(2026-10-01) closed one; prompt 04, the close-out (2026-10-01), opened and closed none and the
+campaign closed. The nine below are open and none is assigned.
 
 - `[00-settling-at-physical-M-needs-a-parked-tracking-model]` — the field at φ_wall(ρ) as a
   passenger once its bounces are unresolvable: the switch criterion and the parked field's

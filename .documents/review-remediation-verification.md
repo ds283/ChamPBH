@@ -680,6 +680,153 @@ shown to fail on `HEAD~1` by that prompt's log, and is not re-shown here.
 PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t . && PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . && PYTHONPATH=. ./venv/bin/python -m unittest discover -s Datastore/tests -t . && PYTHONPATH=. ./venv/bin/python prompts/run-integrity/planning-probes/datastore_version_probe.py && PYTHONPATH=. ./venv/bin/python prompts/run-integrity/planning-probes/pairing_probe.py && grep -rn "VERSION_LABEL =" --include='*.py' . | grep -v "venv/\|thirdparty/\|claude-context/" && grep -n PRYM_VERSION ComputeTargets/BBNData.py && git diff --stat 27a32bc..HEAD
 ```
 
+### 4.8 Addendum 2026-10-01 — the `integrator-remediation` campaign
+
+Added by `integrator-remediation` prompt 04, measured on `abcc99f` (the tree the campaign's three
+prompts left, before this commit). Nothing above this heading has been changed; where it is
+superseded, this section says so by statement. The campaign replaced the scalar-field integrator's
+two-region fragment scheme with one Radau step loop under a kinematic step cap, kept the elastic
+reflection as a deliberate model triggered at the representable-step floor, clamped SciPy's
+Jacobian perturbation factor, deleted the solver fallback that was never wired, settled the
+exception taxonomy, added a step budget, and documented all of it. It bumped `VERSION_LABEL` once.
+Its board is
+[`prompts/integrator-remediation/IMPLEMENTATION_STATE.md`](../prompts/integrator-remediation/IMPLEMENTATION_STATE.md);
+its source is [`integrator-audit-2026-09-30/README.md`](integrator-audit-2026-09-30/README.md).
+
+**This supersedes**, by statement and not by edit:
+
+- **Every earlier statement that `VERSION_LABEL` is `"2026.4.0"`**, including §4.7 point 1 and its
+  evidence (`config/version.py:33`) and the §4.7 verification rows that quote it. The label is
+  `"2026.5.0"`, still defined once, at `config/version.py:36` (point 1).
+- **§4.2's run-list expectations of cost per history.** §4.2 states none: the sections §4.2 and §4.3
+  contain no run-time or step-count figure for a history. The costs to expect are the table under
+  point 3.
+- **Any reading of a hard reflection as a failure indicator.** §4.3 states none either. The
+  statements to correct are §4.2 item 4 and §4.5, which name the stored key
+  `number_hard_reflections` and a hard-reflection count to read for every plotted history. That
+  key is no longer written, and the thing it counted is no longer done (the hard reflection at
+  `φ = 0` is gone). The count to read is `number_reflections`, the **elastic** reflections of
+  point 2, which is a feature of the model and not a symptom: it is 0 for every history with
+  `M ≳ 1e-8`, and 140 for β = 0.9 at physical `M`, which completes.
+
+**The five points.**
+
+1. **`VERSION_LABEL = "2026.5.0"`, defined once in `config/version.py`. Every `ScalarModel`
+   history made before it is invalid, and so is every `AdiabaticHistory` and `BBNData` row built on
+   one.** The keyed lookups of §4.7 point 1 do not return such rows: an old store opened under the
+   new label recomputes every compute target beside its old rows.
+   - *Why.* Every step size of every history changed (prompt 01, `fc97233`). The histories are
+     chaotic after delivery (audit §11), so an old row is not a perturbation of a new one.
+   - *Evidence.* `grep -rn "VERSION_LABEL =" --include='*.py' .` outside `venv/`, `thirdparty/`
+     and `claude-context/` finds one line: `config/version.py:36:VERSION_LABEL = "2026.5.0"`. One
+     bump, in prompt 01; prompts 02 and 03 landed under it.
+2. **The integrator.** `integrate_scalar_history` (`ComputeTargets/ScalarModel.py`) is one
+   `scipy.integrate.Radau` instance stepped by hand, with:
+   - *the kinematic cap,* `f = 0.1`: before every step the maximum step is
+     `min(0.1, f φ/|π| if π < 0, sqrt(2 f φ/|π̇|) if π̇ < 0)`, never below the floor, so that no
+     step can cross the repulsive wall; *the floor* `1e-11` e-folds, with *the elastic reflection*:
+     if `π < 0` and `f φ/|π|` is below the floor, `π ← −π` and the solver restarts. The reflection
+     is guarded: **G1**, the potential must declare `reflects_at_origin` (only
+     `ExponentialPotential` does); **G2**, `W ≤ ½π²` with `W` the wall part of the potential
+     fraction. Either failing is a failure row;
+   - *the Jacobian clamp,* `jac_factor ≤ 1e-4` after every accepted step;
+   - *one `OdeSolution`* of the accepted steps' dense outputs, sampled on the unchanged z grid;
+     termination at the root of `ln T_J − ln T_stop` on the last step's interpolant;
+   - *no regions, no fragments, no events, no hard reflection at `φ = 0`, no fallback.* An accepted
+     `φ ≤ 0` is a failure. A `ComputationFailureError` from the RHS on a trial state is a rejected
+     step (the step is halved; below `1e-13` e-folds it is the history's failure).
+   - *Stored per history* (`extra_data`): `cap_fraction`, `cap_floor`, `cap_global_max_step`,
+     `jacobian_factor_max`, `accepted_steps` always; `number_reflections` and
+     `steps_rejected_by_exception` only when positive; the RHS statistics blocks as before. The
+     ten region/fragment/hard-reflection keys are gone. The stepper label is
+     `"Radau+kinematic-cap-stepping0"`, registered in `main.py`, `plot_by_beta.py` and
+     `plot_ScalarModel.py`; the five old labels stay registered so that an old history still loads.
+   - *Evidence.* README §6 of the campaign, row by row, in
+     [`logs/04-close-out-verification.md`](../prompts/integrator-remediation/logs/04-close-out-verification.md).
+     The loop is `numerical-strategies.md` §3.5; the paper's sentences that now disagree with the
+     code are in [`paper-corrections-numerical-section.md`](paper-corrections-numerical-section.md).
+     The grep for `HARD_REFLECTIONS_KEY`, `SolutionFragment`, `notify_level_1` and
+     `notify_hard_reflection` over `*.py` outside the excluded directories and `prompts/` finds
+     nothing; `solver_list`, `LSODA`, `DOP853`, `"BDF"` and `solve_ivp` are not in
+     `ScalarModel.py`.
+3. **The cost.** The nine full histories of the campaign's README §6.1 (d), from `main.py`'s
+   initial data (`φ* = 5`, `π* = 0`, `T* = 2×10⁴ GeV`), `atol = rtol = 1e-8`, through the
+   production loop (`integrate_scalar_history` with `StepControl()`), on `abcc99f`, one machine,
+   run one after another. "Shipped" is the brief's figure on the two-region scheme.
+
+   | β | M | RHS | accepted steps | wall | wall bounces | first bounce `N` / `T_J` | shipped (brief) |
+   |---|---|---|---|---|---|---|---|
+   | 0.9 | 0.5 | 26 372 | 3 040 | 0.8 s | 16 | 36.15918 / 1.044 eV | 0.06×10⁶ RHS |
+   | 1.2 | 0.5 | 24 193 | 2 728 | 0.8 s | 17 | 17.66246 / 231.07 MeV | 1.52×10⁶ |
+   | 2.0 | 0.5 | 40 580 | 4 469 | 1.5 s | 26 | 20.34303 / 746.63 MeV | 2.78×10⁶ |
+   | 3.0 | 0.5 | 57 526 | 6 120 | 2.9 s | 48 | 24.48381 / 1 682.85 MeV | 3.13×10⁶ |
+   | 1.2 | 0.01 | 108 789 | 11 484 | 5.1 s | 195 | 17.66783 / 231.11 MeV | 5.90×10⁶, **failed** at `N` = 37.165 |
+   | 2.0 | 0.01 | 98 133 | 10 632 | 5.0 s | 196 | 20.35192 / 746.69 MeV | unfinished after 2 h |
+   | 3.0 | 0.01 | 151 480 | 16 513 | 7.5 s | 284 | 24.49870 / 1 680.06 MeV | unfinished |
+   | 2.0 | 0.001 | 271 783 | 27 979 | 13.4 s | 803 | 20.35208 / 746.69 MeV | unfinished |
+   | 3.0 | 0.001 | 327 046 | 34 342 | 14.6 s | 1 017 | 24.49897 / 1 680.01 MeV | — |
+
+   - All nine complete, to `T_J` = 2.7255 K, with 0 reflections, 0 rejected steps and no
+     `T_Jordan = 0` substitution.
+   - The audit's probe loop (`p_full.py … kin reflect`) agrees on RHS to under 1 % in every row
+     and on the turning point to `10⁻⁹` in `N` (log 04).
+   - **A science run of the grid of §4.2 costs seconds per history at `M = 0.5`.** The cost per
+     history grows with the number of matter-era rebounds, so it is set mainly by `M`.
+   - **Physical `M` (`M = 4.1×10⁻²⁸`, a field mass of 1 eV),** through `compute_scalar_model`:
+     β = 0.9 completes with 140 elastic reflections in 187 485 RHS (26 312 accepted steps,
+     6.7 s including the sampling). β = 2 does **not** complete: it ends as a failure row (`{"failure": True}`) on the step budget, after 1 414 s (23.6 min) of wall time: "step budget exhausted: integrate_scalar_history took 2000001 accepted steps (budget 2000000) at N=45.68459, T_J=1.896e-11 GeV, with 14769 reflection(s)", at about 89 % of the way to `T_CMB` measured in `ln T_J` (from 2×10⁴ GeV to 2.35×10⁻¹³ GeV, in the status line's measure). That is the cost of a clean failure at physical `M`: about 24 minutes, not days. A survey over β ≥ 1.2 at physical `M` therefore spends about that per history and stores a failure row.
+4. **What a failure row means now.** `{"failure": True}` is what `ScalarModel.store()` records
+   when `compute_scalar_model` catches a `ComputationFailureError`; the reason is **printed
+   and not stored** (the schema has no column for it). The reasons are:
+   - a step that could not be taken: too small after trial-state rejections, or Radau's own
+     message (Newton failure, step too small);
+   - **the step budget:** more than `2×10⁶` accepted steps ("step budget exhausted: … took n
+     accepted steps (budget b) at N=…, T_J=… GeV, with r reflection(s)"). This is what a physical-`M`
+     history with β ≥ 1.2 ends in, until the parked-tracking model of point 5 exists;
+   - the failsafe (`N = 1000`); an accepted `φ ≤ 0` (the cap was violated); G1 or G2 at a
+     reflection; an unbracketed termination root; a non-finite RHS output; `T_J ≤ 0` or another
+     unphysical state that persists; or an error in the sampling.
+   - **A `RuntimeError` is not a failure row.** The one left in the integration path is the z grid
+     being too short for the final `N`; it is a configuration error and ends the run. An
+     `AssertionError` is a bug.
+   - *Where the reason appears.* On the task's stdout, as `-- compute_scalar_model (<label>):
+     integration failure` followed by the message. The supervisors no longer print tracebacks.
+   - A failure row's cause cannot be counted from the datastore; see
+     `[00-scalarmodel-failure-rows-carry-no-reason]`.
+5. **What is still open,** by name (all on the campaign's board §3, none assigned):
+   - `[00-settling-at-physical-M-needs-a-parked-tracking-model]`: **no physical-`M` history with
+     β ≥ 1.2 can be produced until it exists, and such runs fail on the step budget until then.**
+     The authors' physics (audit §3.7, §9.4).
+   - `[00-stored-samples-alias-the-rebounds]` (turning-point sampling);
+   - `[00-atol-does-not-scale-with-phi]` (the `atol` vector);
+   - `[00-analytic-jacobian-would-remove-num-jac]`;
+   - `[00-scalarmodel-failure-rows-carry-no-reason]` (the failure-reason column);
+   - `[00-region-properties-on-the-potentials-become-unread]` (the unread region properties on the
+     potentials);
+   - `[00-declare-reflects-at-origin-for-the-other-potentials]`;
+   - `[01-trial-state-exception-in-radau-start-up-is-not-a-rejection]`;
+   - `[02-negative-E-is-clamped-not-raised-on-trial-states]`.
+   - A caution that is not an issue. A bounce's `N` and `φ_min` taken **at the accepted step after
+     `π` turns positive** depend on the width of that step; compare turning points on the dense
+     output (the root of `π` on the step's interpolant). At β = 0.9, `M = 0.5` the accepted-step `N`
+     of the first bounce differs between the audit's probe and the production loop by 7.9×10⁻⁵ (the
+     probe's step there is 8.5×10⁻⁵ wide); the dense-output turning points agree to 4×10⁻⁹. The
+     user's ruling of 2026-10-01 on `φ_min` (the dense-output minimum) is the one to follow.
+
+**Verification table** (the campaign's README §6; measured on `abcc99f`; the full rows, with
+witnesses, are in log 04). Suites: `CosmologyModels/tests` 18 OK (103.6 s), `ComputeTargets/tests`
+67 OK (135.3 s), `Datastore/tests` 17 OK (1.8 s), against 18, 41 and 17 at `2b89022`. The §6.1
+(a)–(f) rows are at or better than target; the nine histories complete.
+
+**To reproduce** from the repository root (the three suites take about four minutes):
+
+```bash
+PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t . && PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . && PYTHONPATH=. ./venv/bin/python -m unittest discover -s Datastore/tests -t . && grep -rn "VERSION_LABEL =" --include='*.py' . | grep -v "venv/\|thirdparty/\|claude-context/" && git diff --stat 2b89022..HEAD
+```
+
+The audit's probe scripts do not run against this tree (`harness.build` passes the supervisor an
+argument it no longer takes); run them from an export of `918590e` (`git archive 918590e`).
+
 ---
 
 ## 5. Reproduce
