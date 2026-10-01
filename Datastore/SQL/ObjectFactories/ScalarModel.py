@@ -25,6 +25,7 @@ from ComputeTargets import (
     ScalarModel,
     ScalarModelValue,
 )
+from ComputeTargets.ScalarModel import FirstBounce
 from CosmologyConcepts import (
     redshift_array,
     redshift,
@@ -185,6 +186,14 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 sqla.Column("mean_RHS_time", sqla.Float(64), nullable=True),
                 sqla.Column("max_RHS_time", sqla.Float(64), nullable=True),
                 sqla.Column("min_RHS_time", sqla.Float(64), nullable=True),
+                # the first bounce (science-readiness prompt 03; README §2 (g)). All four are
+                # NULL when the history had no bounce, and on a failure row. The e-fold number
+                # is dimensionless; phi is stored in units of the Planck mass and ln T_J with T_J
+                # in GeV, as the ScalarModelValue columns phi_Einstein_Mp and log_T_Jordan_GeV
+                sqla.Column("first_bounce_N", sqla.Float(64), nullable=True),
+                sqla.Column("first_bounce_log_T_Jordan", sqla.Float(64), nullable=True),
+                sqla.Column("first_bounce_phi_Einstein", sqla.Float(64), nullable=True),
+                sqla.Column("first_bounce_reflected", sqla.Boolean, nullable=True),
                 sqla.Column("validated", sqla.Boolean, default=False, nullable=False),
                 sqla.Column(
                     "extra_data", sqla.String(DEFAULT_STRING_LENGTH), nullable=True
@@ -240,6 +249,10 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 table.c.label,
                 table.c.z_samples,
                 table.c.extra_data,
+                table.c.first_bounce_N,
+                table.c.first_bounce_log_T_Jordan,
+                table.c.first_bounce_phi_Einstein,
+                table.c.first_bounce_reflected,
                 solver_table.c.label.label("solver_label"),
                 solver_table.c.stepping.label("solver_stepping"),
                 atol_table.c.log10_tol.label("log10_atol"),
@@ -454,6 +467,18 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                     if row_data.extra_data is not None
                     else None
                 ),
+                "first_bounce": (
+                    FirstBounce(
+                        N=row_data.first_bounce_N,
+                        phi_Einstein=row_data.first_bounce_phi_Einstein
+                        * cosmology.units.PlanckMass,
+                        log_T_Jordan=row_data.first_bounce_log_T_Jordan
+                        + log(cosmology.units.GeV),
+                        reflected=bool(row_data.first_bounce_reflected),
+                    )
+                    if not failed and row_data.first_bounce_N is not None
+                    else None
+                ),
                 "values": values,
             },
             solver_labels=solver_labels,
@@ -513,6 +538,27 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 json.dumps(obj._extra_data) if obj._extra_data is not None else None
             ),
         }
+
+        # the first bounce, if there was one (science-readiness prompt 03); NULL otherwise
+        bounce: Optional[FirstBounce] = obj._first_bounce if not obj._failure else None
+        payload.update(
+            {
+                "first_bounce_N": bounce.N if bounce is not None else None,
+                "first_bounce_log_T_Jordan": (
+                    bounce.log_T_Jordan - log(obj._units.GeV)
+                    if bounce is not None
+                    else None
+                ),
+                "first_bounce_phi_Einstein": (
+                    bounce.phi_Einstein / obj._units.PlanckMass
+                    if bounce is not None
+                    else None
+                ),
+                "first_bounce_reflected": (
+                    bool(bounce.reflected) if bounce is not None else None
+                ),
+            }
+        )
 
         # # because ScalarModel is a replicated table, we need to allow for the possibility that this object
         # # is a replica, rather than a fresh insert. If so, it's _my_id field will be set.

@@ -36,10 +36,14 @@ reads its tables from the working directory, one invocation at a time:
 M is in units of the (reduced) Planck mass. Output lines:
 
     history beta=... M=...: RHS=... accepted_steps=... reflections=... samples=... wall=... s
+    bounce beta=... M=...: N=... T_J=... MeV phi=... reflected=...
     ratio beta=... M=... [lo,hi) keV: n=... min=... median=... max=... rms_step=...
     bbn beta=... M=...: Yp=... DoH=... He3oH=... Li7oH=... PRyM_time=... s wall=... s PRyM_version=...
 
-or `... FAILURE ...` with the reason. The ratio lines are rho_NP / rho_R,J,
+or `... FAILURE ...` with the reason. The bounce line is the history's first
+bounce, `first_bounce` on the dense output (science-readiness prompt 03), with
+phi in units of M_P; it reads `bounce ...: none` if there was none. The ratio
+lines are rho_NP / rho_R,J,
 computed from the stored samples as compute_BBN_data computes it, in four
 Jordan-temperature windows; rms_step is the root mean square of the
 sample-to-sample difference.
@@ -243,6 +247,17 @@ def main(argv=None) -> int:
         f"accepted_steps={data['accepted_steps']} reflections={data['reflections']} "
         f"samples={len(data['sample'])} wall={wall:.1f} s"
     )
+
+    bounce = data["first_bounce"]
+    if bounce is None:
+        print(f"bounce {label}: none")
+    else:
+        print(
+            f"bounce {label}: N={bounce.N:.9f} "
+            f"T_J={exp(bounce.log_T_Jordan) / units.MeV:.6f} MeV "
+            f"phi={bounce.phi_Einstein / units.PlanckMass:.6e} "
+            f"reflected={bounce.reflected}"
+        )
 
     values = [
         ScalarModelValue(None, z, **SampleValues._make(tuple(s))._asdict())

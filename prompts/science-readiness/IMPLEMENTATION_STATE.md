@@ -1,7 +1,7 @@
 # Science-readiness campaign — implementation state
 
-**Last updated:** 2026-10-01 · **Status: IN PROGRESS — 2 of 9 landed** (prompt 01, with
-deviations; prompt 02). Planned on 2026-10-01 against
+**Last updated:** 2026-10-02 · **Status: IN PROGRESS — 3 of 9 landed** (prompt 01, with
+deviations; prompt 02; prompt 03, with deviations). Planned on 2026-10-01 against
 `main` at `6aaa706`, from a Claude Science re-evaluation kept at
 [`source/campaign_reevaluation_2026-10-01.md`](source/campaign_reevaluation_2026-10-01.md) and
 checked against the tree by the planner (README §0.3). Suites at `6aaa706`: CosmologyModels 18,
@@ -11,7 +11,8 @@ land on it.
 **`VERSION_LABEL` is `"2026.6.0"`** since prompt 01 (from `"2026.5.0"`), bumped once. Every store
 made before 2026.6.0 is invalid, and the science run needs a fresh datastore file (columns are
 added with no migration). `PRYM_VERSION` is `"bf24c3d+ri02+sr01"`. Suites after prompt 01:
-CosmologyModels 18, ComputeTargets 71, Datastore 17. After prompt 02: 18, 75, 21.
+CosmologyModels 18, ComputeTargets 71, Datastore 17. After prompt 02: 18, 75, 21. After
+prompt 03: 18, 82, 26.
 
 The campaign hands the scalar field to PRyMordial through the expansion rate alone, with a patched
 PRyMordial that has no fictitious new-physics temperature and an optional wall-clock limit. It
@@ -98,7 +99,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 |---|---|---|---|---|---|---|---|
 | 01 | [The Hubble-only BBN route, the wall-clock limit and the output checks](01-hubble-only-bbn-route.md) | **R**, **W**, **O**, version bump, driver | Opus | ✍️ 2026-10-01 | ✅ 2026-10-01 (with deviations) | see `git log` ("Hand the scalar field to PRyMordial through H alone") | [`logs/01-hubble-only-bbn-route.md`](logs/01-hubble-only-bbn-route.md) |
 | 02 | [A failure reason on `ScalarModel` rows](02-scalarmodel-failure-reasons.md) | **F** | Sonnet | ✍️ 2026-10-01 | ✅ 2026-10-01 (with deviations) | see `git log` ("Store why a ScalarModel history failed") | [`logs/02-scalarmodel-failure-reasons.md`](logs/02-scalarmodel-failure-reasons.md) |
-| 03 | [Store the first bounce](03-first-bounce.md) | **T** | Opus | ✍️ 2026-10-01 | — | — | — |
+| 03 | [Store the first bounce](03-first-bounce.md) | **T** | Opus | ✍️ 2026-10-01 | ✅ 2026-10-02 (with deviations) | see `git log` ("Store the first bounce of every ScalarModel") | [`logs/03-first-bounce.md`](logs/03-first-bounce.md) |
 | 04 | [The initial field as a run option, with a super-Planckian warning](04-initial-field-option.md) | **P** | Sonnet | ✍️ 2026-10-01 | — | — | — |
 | 05 | [Bounce averages on the dense output](05-bounce-averages.md) | **A** | Opus | ✍️ 2026-10-01 | — | — | — |
 | 06 | [Narrow the BBN spline to PRyMordial's range](06-bbn-spline-floor.md) | **L** | Sonnet | ✍️ 2026-10-01 | — | — | — |
@@ -116,7 +117,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | W | **GAP** | No bound on a PRyMordial solve's wall time. Closes `[00-prymordial-has-no-wall-clock-limit]`. | 01 | **done** 2026-10-01 (log 01) |
 | O | **GAP** | A successful PRyMordial return is stored unchecked. Closes `[00-prymordial-output-is-stored-unchecked]`; with P4, also closes `[02-a-short-bbn-sample-grid-escapes-compute-bbn-data]` and `[02-the-bbn-callbacks-do-not-check-their-values-for-finiteness]` (assigned). | 01 | **done** 2026-10-01 (log 01) |
 | F | **GAP** | A `ScalarModel` failure row carries no reason. Closes `[00-scalarmodel-failure-rows-carry-no-reason]` (assigned). | 02 | **done** 2026-10-01 (log 02) |
-| T | **GAP** | The first bounce is not stored and cannot be read from the samples at small `M`. Closes `[00-first-bounce-is-not-stored]`. | 03 | open |
+| T | **GAP** | The first bounce is not stored and cannot be read from the samples at small `M`. Closes `[00-first-bounce-is-not-stored]`. | 03 | **done** 2026-10-02 (log 03) |
 | P | **GAP** | φ\* is a literal in three drivers, with no super-Planckian warning. Closes `[00-initial-field-value-is-hard-coded-and-unchecked]` (assigned). | 04 | open |
 | A | **DEFECT, medium at M ≲ 10⁻⁴** | BBN integrates a spline through random-phase samples of the bounces below a few keV. Closes `[00-bbn-input-is-aliased-at-small-M]`; narrows `[00-stored-samples-alias-the-rebounds]` (assigned). | 05 | open |
 | L | **DEFECT, low** | The BBN spline reaches 0.1 eV, while PRyMordial reads to 0.363 keV. Closes `[00-bbn-spline-domain-is-far-wider-than-prymordial-uses]` (assigned). | 06 | open |
@@ -128,14 +129,9 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 ## 3. Active and unresolved issues
 
 Seven opened by the planner on 2026-10-01, one per campaign item that has no issue on another
-board; prompt 01 closed three (§4), and four are open. Seven more were assigned from other boards
+board; prompt 01 closed three and prompt 03 one (§4), and three are open. Seven more were assigned from other boards
 (§3.1); prompts 01 and 02 closed three of them, and four are open.
 
-- **[00-first-bounce-is-not-stored]** *(README §1 T; the source §2)*.
-  - **What.** The dense-output first bounce (`N`, `T_J`, `φ_min`) exists only during the
-    integration. The source's sample-based detector returns 0.138 GeV for 0.747 GeV at small `M`.
-  - **Impact.** `T_deliver(β)`, a figure of the science run, cannot be made from a store.
-  - **Next step.** Prompt 03.
 - **[00-bbn-input-is-aliased-at-small-M]** *(README §1 A; the source §2; README §6.1)*.
   - **What.** Below a few keV, `ρ_NP/ρ_R,J` jumps from sample to sample at small `M`, because the
     samples catch the bounces at random phase: ±0.4 % at M = 10⁻⁵ and ±0.85 % at 10⁻³, around a
@@ -225,3 +221,18 @@ here (README §5 rule 4).
   grouped by first clause (`pipeline_selection.summarise_failure_reasons`); `plot_by_beta.py`
   reports models dropped because their `ScalarModel` failed, with the reason. The dated
   **Resolved** line is also on the `integrator-remediation` board.
+- **[00-first-bounce-is-not-stored]** *(README §1 T; the source §2)*.
+  - **What.** The dense-output first bounce (`N`, `T_J`, `φ_min`) exists only during the
+    integration. The source's sample-based detector returns 0.138 GeV for 0.747 GeV at small `M`.
+  - **Impact.** `T_deliver(β)`, a figure of the science run, cannot be made from a store.
+  - **Next step.** Prompt 03.
+  - **Resolved (2026-10-02):** by prompt 03 (log 03). `first_bounce(result)` returns
+    `FirstBounce(N, phi_Einstein, log_T_Jordan, reflected)`: the root of π on the first accepted
+    step whose interpolant has π(t_k) < 0 < π(t_{k+1}), or the first reflection if it comes
+    earlier, or `None`. `compute_scalar_model` returns it, and four nullable columns
+    (`first_bounce_N`, `first_bounce_log_T_Jordan`, `first_bounce_phi_Einstein`,
+    `first_bounce_reflected`) store it; `ScalarModel.first_bounce` reads it back. On β = 2 it
+    gives 20.34302685 / 746.63 MeV (M = 0.5) and 20.35208223 / 746.69 MeV (M = 10⁻³), as
+    verification §4.8; β = 1.6 at 10⁻⁵: 18.97443372 / 420.76 MeV. It is the first `φ < 1.5 M`
+    wall bounce on every window and history it was run on (P5's premise). The sample-based
+    detector gives 742.79 MeV at M = 10⁻³ and 0.39 MeV at 10⁻⁵ on the same histories.

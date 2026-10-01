@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from bisect import bisect_left
 from collections import namedtuple
 from math import log, pi, exp, expm1, sqrt, isinf, isnan
 from typing import Optional, List, Dict, Any
@@ -762,6 +763,93 @@ def integrate_scalar_history(
     )
 
 
+# the first bounce of a history (science-readiness prompt 03; README §0.2 P5, §2 (g))
+#   N:             e-fold number of the bounce (the same N as Reflection.N and SampleValues.raw_N)
+#   phi_Einstein:  the Einstein-frame field there, phi_min for a turning point
+#   log_T_Jordan:  ln of the Jordan-frame temperature there, in the cosmology's units
+#   reflected:     True if the bounce is an elastic reflection, False if it is a turning point
+FirstBounce = namedtuple(
+    "FirstBounce",
+    [
+        "N",
+        "phi_Einstein",
+        "log_T_Jordan",
+        "reflected",
+    ],
+)
+
+
+def first_bounce(result: IntegrationResult) -> Optional[FirstBounce]:
+    """
+    The first bounce of an integrated history (science-readiness prompt 03; README §0.2 P5,
+    §2 (g)), or None if there is none.
+
+    The accepted steps are walked in order, on their own interpolants. The first bounce is the
+    first step [t_k, t_{k+1}] on whose interpolant pi(t_k) < 0 < pi(t_{k+1}); it is located at
+    the root of pi on that interpolant (brentq, xtol = 1e-15), and the state is read there. This
+    is the dense-output turning point the user ruled for (integrator-remediation board,
+    Decisions), so phi_Einstein is the minimum of phi along the dense output.
+
+    An elastic reflection (Reflection) happens at a step boundary: the step that ends at it has
+    pi < 0 at its end and the step after it starts with pi > 0, so it is never a sign change
+    inside one interpolant. If the first reflection comes before the first turning point, it is
+    the first bounce, with reflected=True and phi and ln T_J read from the step that ends at it
+    (from the step that starts at it if the reflection is at the history's first N).
+
+    The inequalities are strict, so a history that starts from pi = 0 (main.py's pi* = 0) and
+    then falls inwards does not count its start as a bounce. The last step's interpolant is read
+    only up to the history's end (ts[-1] = N_final). No phi < 1.5 M filter is applied (P5).
+
+    :param result: the IntegrationResult of integrate_scalar_history
+    :return: FirstBounce, or None if pi never turns from negative to positive and there was no
+             reflection
+    """
+    ts = result.solution.ts
+    interpolants = result.solution.interpolants
+
+    N_reflection: Optional[float] = (
+        result.reflections[0].N if len(result.reflections) > 0 else None
+    )
+
+    for k, interpolant in enumerate(interpolants):
+        t_low: float = ts[k]
+        t_high: float = ts[k + 1]
+
+        # a reflection at or before the start of this step comes before any turning point on it
+        if N_reflection is not None and N_reflection <= t_low:
+            break
+
+        if interpolant(t_low)[1] < 0.0 < interpolant(t_high)[1]:
+            N_bounce: float = brentq(
+                lambda t: interpolant(t)[1], t_low, t_high, xtol=1e-15
+            )
+            y = interpolant(N_bounce)
+            return FirstBounce(
+                N=float(N_bounce),
+                phi_Einstein=float(y[0]),
+                log_T_Jordan=float(y[4]),
+                reflected=False,
+            )
+
+    if N_reflection is None:
+        return None
+
+    # the state at the reflection, from the step that ends at it. A reflection is made at the
+    # solver's current N, which is always a node of ts (N_start, or the end of an accepted step)
+    k_end: int = bisect_left(ts, N_reflection) - 1
+    if k_end < 0:
+        # the reflection was made at the history's first N, before any step
+        y = interpolants[0](N_reflection)
+    else:
+        y = interpolants[k_end](N_reflection)
+    return FirstBounce(
+        N=float(N_reflection),
+        phi_Einstein=float(y[0]),
+        log_T_Jordan=float(y[4]),
+        reflected=True,
+    )
+
+
 def _failure_payload(reason: str) -> dict:
     """
     The payload compute_scalar_model returns for a failed history: the failure flag and
@@ -970,6 +1058,9 @@ def compute_scalar_model(
         )
         return _failure_payload(e.message)
 
+    # the first bounce, on the dense output (science-readiness prompt 03); None if there is none
+    bounce: Optional[FirstBounce] = first_bounce(result)
+
     collected_full_statistics = supervisor.collect_full_statistics
     return {
         "metadata": IntegrationData(
@@ -983,6 +1074,7 @@ def compute_scalar_model(
         "z_grid": z_grid_cut,
         "sample": sample,
         "reflections": len(result.reflections),
+        "first_bounce": bounce,
         "cap_fraction": step_control.cap_fraction,
         "cap_floor": step_control.cap_floor,
         "cap_global_max_step": step_control.global_max_step,
@@ -1100,6 +1192,7 @@ class ScalarModel(DatastoreObject):
             self._extra_data = None
             self._failure = None
             self._failure_reason = None
+            self._first_bounce = None
 
         else:
             DatastoreObject.__init__(self, payload["store_id"])
@@ -1109,6 +1202,7 @@ class ScalarModel(DatastoreObject):
             self._extra_data: Optional[Dict[str, Any]] = payload["extra_data"]
             self._failure: Optional[bool] = payload["failure"]
             self._failure_reason: Optional[str] = payload["failure_reason"]
+            self._first_bounce: Optional[FirstBounce] = payload["first_bounce"]
 
         # store parameters
         self._label: str = label
@@ -1200,6 +1294,22 @@ class ScalarModel(DatastoreObject):
             )
 
         return self._extra_data
+
+    @property
+    def first_bounce(self) -> Optional[FirstBounce]:
+        """
+        The history's first bounce (first_bounce()), or None if it had none.
+        Raises on a failure row, as metadata does. (science-readiness prompt 03)
+        """
+        if self._failure:
+            raise RuntimeError(
+                f"ScalarModel ({self._label}): this object had an integration failure and cannot be used"
+            )
+
+        if self._failure is None:
+            raise RuntimeError("first_bounce has not yet been populated")
+
+        return self._first_bounce
 
     @property
     def solver(self) -> IntegrationSolver:
@@ -1362,11 +1472,13 @@ class ScalarModel(DatastoreObject):
             self._failure_reason = (
                 str(data.get("failure_reason", ""))[:DEFAULT_STRING_LENGTH] or None
             )
+            self._first_bounce = None
             self._values = []
             return True
 
         self._failure = False
         self._failure_reason = None
+        self._first_bounce = data["first_bounce"]
         self._metadata = data["metadata"]
 
         sample: List[SampleValues] = data["sample"]

@@ -1,10 +1,10 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-01 · **27 open**: 8 on the `review-remediation` board (closed
+**Last updated:** 2026-10-02 · **26 open**: 8 on the `review-remediation` board (closed
 2026-09-30), 3 of them assigned to `science-readiness`; 2 on the `production-readiness` board
 (closed 2026-09-30); 4 on the `run-integrity` board (closed 2026-09-30); 9 on the
 `integrator-remediation` board (closed 2026-10-01), 1 of them assigned to `science-readiness`;
-4 on the `science-readiness` board (planned 2026-10-01, 2 of 9 landed).
+3 on the `science-readiness` board (planned 2026-10-01, 3 of 9 landed).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -144,10 +144,8 @@ carries the **Assigned** line; the prompt that closes one deletes its row here.
 ### 1.8 `science-readiness` — [board §3](../prompts/science-readiness/IMPLEMENTATION_STATE.md)
 
 Seven opened by the planner on 2026-10-01, one per campaign item with no issue elsewhere.
-Prompt 01 (2026-10-01) closed three (board §4).
+Prompt 01 (2026-10-01) closed three and prompt 03 (2026-10-02) one (board §4).
 
-- `[00-first-bounce-is-not-stored]` — the dense-output bounce is lost; samples cannot recover it at
-  small M. Prompt 03.
 - `[00-bbn-input-is-aliased-at-small-M]` — below 3 keV the ratio BBN splines swings ±0.4–0.85 %
   between samples at small M. Prompt 05.
 - `[00-no-extraction-for-the-science-figures]` — no code for the four Phase D figures. Prompt 07.
