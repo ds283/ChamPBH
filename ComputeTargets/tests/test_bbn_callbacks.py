@@ -14,53 +14,63 @@
 # limitations under the License.
 
 """
-The PRyMordial new-physics callbacks built by `build_NP_callbacks`, the
-Hdot_J/H_J^2 expression, and the Standard-Model baseline.
+The PRyMordial new-physics callback built by `build_rho_NP_callback`, the
+density compute_BBN_data hands it, and the Standard-Model baseline.
 
 Written for review-remediation prompt 04 (item R3). Before that prompt the
-callbacks splined asinh(rho_NP / MeV^4) and asinh(p_NP / MeV^4) against ln T;
-they now spline the ratios r = rho_NP / rho_R,J and s = p_NP / rho_R,J and
-multiply back by rho_SM(T). The synthetic geometry is that of
+callbacks splined asinh(rho_NP / MeV^4) against ln T; they now spline the ratio
+r = rho_NP / rho_R,J and multiply back by rho_SM(T). Since science-readiness
+prompt 01 there is one callback, rho_NP: the Hubble-only route reads nothing
+else, so the pressure and density-derivative callbacks, the Jordan-frame Hdot/H^2
+expression that built the pressure, and their tests went. Every remaining test
+keeps its purpose for rho_NP, and test (g), which tested the Hdot/H^2
+expression, is replaced by a test of what compute_BBN_data now computes in its
+place. The synthetic geometry is that of
 `.documents/audit-2026-09-29/spline_test.py`: knots at 250 per decade of T over
 [1e-7, 1e2] MeV (the pipeline's spline domain), errors measured on 3,000 points
 in [0.02, 5] MeV.
 
 rho_SM is the Saikawa-Shirai g_rho through `SaikawaShirai_EOS_spline` (the
-class whose G_rho and dG_rho_dlogT the production EOS inherits), passed through
-`thermodynamic_rho_SM`, so the derivative the callbacks receive is the exact
-derivative of the rho_SM they multiply by. No cosmology object is needed.
+class whose G_rho the production EOS inherits), passed through
+`thermodynamic_rho_SM`. No cosmology object is needed.
 
-Errors are reported as in spline_test.py:
-- values: |X_callback - X_true| / rho_SM(T), the spurious fractional change of H^2;
-- the derivative: |drho_callback - drho_true| T / (4 rho_SM(T)), that is the
-  error in d rho_NP / d ln T relative to d rho_SM / d ln T ~ 4 rho_SM.
+Errors are reported as in spline_test.py: |rho_callback - rho_true| / rho_SM(T),
+the spurious fractional change of H^2.
 
-**Tests (h) and (i) run PRyMordial, one solve each, about 10 s each.** Nothing
-here needs a Ray cluster or a datastore. Run from the repository root, since
-PRyMordial reads `PRyMrates/` from the working directory:
+**Tests (h) and (i) run PRyMordial, one solve each, about 10 s each.** Test (g)
+stubs PRyMclass and runs no solve. Nothing here needs a Ray cluster or a
+datastore. Run from the repository root, since PRyMordial reads `PRyMrates/`
+from the working directory:
 
     PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .
 """
 
 import os
 import unittest
-from math import log, log10, pi
+from math import exp, log, log10, pi, sin, sqrt
+from types import SimpleNamespace
+from unittest import mock
 
 import numpy as np
 from scipy.interpolate import make_interp_spline
 
 from ComputeTargets.BBNData import (
     PRYM_VERSION,
-    build_NP_callbacks,
+    build_rho_NP_callback,
+    compute_BBN_data,
     compute_SM_baseline,
-    jordan_Hdot_over_H2,
     thermodynamic_rho_SM,
 )
 from ComputeTargets.exceptions import ComputationFailureError
 from ComputeTargets.tests.prym_fixtures import (
     RES_D_OVER_H_E5,
     RES_YP_BBN,
+    SavedPRyMGlobals,
     run_prym,
+)
+from ComputeTargets.tests.test_prym_passenger import (
+    CONST_HONLY_FULL_D_OVER_H_E5,
+    CONST_HONLY_FULL_YP,
 )
 from CosmologyModels.GenericEOS.SaikawaShirai_EOS_spline import (
     SaikawaShirai_EOS_spline,
@@ -82,27 +92,52 @@ N_EVAL = 3000
 # (a) constant ratio
 CONSTANT_RATIO = 0.08
 CONSTANT_VALUE_TOLERANCE = 1e-12
-CONSTANT_DERIVATIVE_TOLERANCE = 1e-9
 
-# (b) oscillating ratio: README section 6.3 (spline_test.py measured 9.7e-9 and 7.4e-7)
+# (b) oscillating ratio: review-remediation README section 6.3 (spline_test.py
+# measured 9.7e-9)
 OSCILLATING_VALUE_BOUND = 2e-8
-OSCILLATING_DERIVATIVE_BOUND = 1.5e-6
 
 # (f) rho_SM at 1 MeV is about 3.5 MeV^4 (g_rho about 10.5)
 RHO_SM_1MEV_LO = 3.4
 RHO_SM_1MEV_HI = 3.6
 UNITS_AGREEMENT_RTOL = 1e-10
 
-# (h) prompt 03's constant family on the patched tree, full ten figures
-# (log 03, "State handed to the next prompt"; `python -m
-# ComputeTargets.tests.prym_fixtures constant`). README section 6.3 asks for
-# 1e-4 relative. PRyMordial's D/H moves by up to 7e-4 when rho_NP moves by 1e-8
-# (log 04, Verification), so this comparison sits near PRyMordial's own noise.
-PROMPT_03_CONSTANT_YP = 0.2540937879
-PROMPT_03_CONSTANT_D_OVER_H_E5 = 2.671499971
-END_TO_END_RTOL = 1e-4
+# (g) the stand-in history handed to compute_BBN_data: samples from 1 GeV to
+# 1e-8 keV in T_Jordan, of which those in [1e-4 keV, 100 MeV] are in the window
+G_N_SAMPLES = 120
+G_LOG10_T_MEV_HI = 3.0
+G_LOG10_T_MEV_LO = -11.0
+G_DENSITY_RTOL = 1e-12
+G_RATIO_ATOL = 1e-12
+G_CALLBACK_RTOL = 1e-10
+G_WALL_CLOCK_LIMIT = 123.0
+G_STUB_RESULTS = [3.04, 0.0, 0.0, 0.245, 0.247, 2.46, 1.04, 5.42]
 
-# (i) README section 2 (f) row 1, the SM baseline, to its quoted figures
+# (h) The constant ratio 0.08 through the callback builder, on this module's
+# knots, into PRyMordial, full network. The reference is the same callback on
+# the tree before science-readiness prompt 01 (7b518c9): that tree's
+# build_NP_callbacks on the same knots, through the "honly" route (its rho_NP,
+# the pressure set to -rho_NP and the density derivative to 0, the third LSODA
+# component inert), measured by prompt 01's scratch probe
+# `honly_builder_reference.py full` (log 01, Verification). That is what the
+# patched route must reproduce, so the tolerance is test_prym_passenger (c)'s
+# 1e-6.
+#
+# Until prompt 01 this test compared the builder's callback against the exact
+# constant family (prym_fixtures.CONSTANT) to 1e-4 relative. The two callbacks
+# differ by a few ulp (the spline of a constant, and the order of the product),
+# and PRyMordial moves D/H by 1e-4 under such changes
+# (review-remediation board, [03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]):
+# the comparison passed at 8.85e-5 on the old route and misses at 1.06e-4 on
+# the new one, where the old tree gives the same 1.06e-4 for the same callback
+# through the honly route. That offset is PRyMordial's, not the builder's, so it
+# is printed and not bounded.
+BUILDER_CONST_HONLY_FULL_YP = 0.2536761805
+BUILDER_CONST_HONLY_FULL_D_OVER_H_E5 = 2.648529359
+END_TO_END_RTOL = 1e-6
+
+# (i) review-remediation README section 2 (f) row 1, the SM baseline, to its
+# quoted figures
 README_BASELINE = {
     "Yp_BBN": 0.24689,
     "DOverH": 2.4623,
@@ -116,89 +151,32 @@ def ratio_constant(T_MeV):
     return CONSTANT_RATIO + 0.0 * np.log(T_MeV)
 
 
-def dratio_constant_dlogT(T_MeV):
-    return 0.0 * np.log(T_MeV)
-
-
 def ratio_oscillating(T_MeV):
     """README section 2 (d): 0.08 + 0.3 sin(2 pi x) exp(-(x/1.5)^2), x = ln(T/0.3 MeV)."""
     x = np.log(T_MeV / 0.3)
     return 0.08 + 0.3 * np.sin(2.0 * pi * x) * np.exp(-((x / 1.5) ** 2))
 
 
-def dratio_oscillating_dlogT(T_MeV):
-    """The analytic d r / d ln T of `ratio_oscillating`."""
-    x = np.log(T_MeV / 0.3)
-    return (
-        0.3
-        * np.exp(-((x / 1.5) ** 2))
-        * (2.0 * pi * np.cos(2.0 * pi * x) - (2.0 * x / 2.25) * np.sin(2.0 * pi * x))
-    )
-
-
 FAMILIES = {
-    "constant": (ratio_constant, dratio_constant_dlogT),
-    "oscillating": (ratio_oscillating, dratio_oscillating_dlogT),
+    "constant": ratio_constant,
+    "oscillating": ratio_oscillating,
 }
 
 
-def _old_HJdot_over_HJ2(HEdot_over_HE2, Omega_prime, Omega_primeprime, pi_, pi_prime):
-    """The expression at BBNData.py before prompt 04, with Omega'' pi."""
-    A1 = 1.0 + Omega_prime * pi_
-    return (HEdot_over_HE2 - Omega_prime * pi_) / A1 + (
-        Omega_primeprime * pi_ + Omega_prime * pi_prime
-    ) / (A1 * A1)
-
-
-class QuadraticStandIn:
+class _RecordingPRyMclass:
     """
-    A non-exponential stand-in coupling, ln Omega = phi^2 / (2 mu^2), for which
-    d^2 ln Omega / d phi^2 = 1/mu^2 is not zero. It has only the two methods
-    the Hdot_J/H_J^2 expression reads.
+    Stands in for PRyMclass in test (g): records the positional and keyword
+    arguments it is built with, and returns fixed results inside the output
+    checks. No solve.
     """
 
-    def __init__(self, mu: float):
-        self._mu2 = mu * mu
+    calls = []
 
-    def d_logOmega_dphi(self, phi: float) -> float:
-        return phi / self._mu2
+    def __init__(self, *args, **kwargs):
+        type(self).calls.append((args, kwargs))
 
-    def d2_logOmega_dphi2(self, phi: float) -> float:
-        return 1.0 / self._mu2
-
-
-class _SavedPRyMGlobals:
-    """
-    compute_SM_baseline sets PRyMordial's module flags and NP callbacks, as
-    compute_BBN_data does, and leaves them set. Restore them so that the tests
-    in this package do not depend on order.
-    """
-
-    _init_names = ("NP_thermo_flag", "Tstart_NP", "verbose_flag", "smallnet_flag")
-    _thermo_names = ("rho_NP", "p_NP", "drho_NP_dT", "delta_rho_NP")
-    _missing = object()
-
-    def __enter__(self):
-        import PRyM.PRyM_init as PRyMini
-        import PRyM.PRyM_thermo as PRyMthermo
-
-        self._ini, self._thermo = PRyMini, PRyMthermo
-        self._saved_init = {
-            n: getattr(PRyMini, n, self._missing) for n in self._init_names
-        }
-        self._saved_thermo = {n: getattr(PRyMthermo, n) for n in self._thermo_names}
-        return self
-
-    def __exit__(self, *exc):
-        for n, v in self._saved_init.items():
-            if v is self._missing:
-                if hasattr(self._ini, n):
-                    delattr(self._ini, n)
-            else:
-                setattr(self._ini, n, v)
-        for n, v in self._saved_thermo.items():
-            setattr(self._thermo, n, v)
-        return False
+    def PRyMresults(self):
+        return list(G_STUB_RESULTS)
 
 
 class TestBBNCallbacks(unittest.TestCase):
@@ -206,10 +184,8 @@ class TestBBNCallbacks(unittest.TestCase):
     def setUpClass(cls):
         cls.units = GeV_units()
         cls.eos = SaikawaShirai_EOS_spline(cls.units)
-        rho_SM, drho_SM_dT = thermodynamic_rho_SM(cls.eos, cls.units)
         # staticmethod, so that self.rho_SM(T) is not called as a bound method
-        cls.rho_SM = staticmethod(rho_SM)
-        cls.drho_SM_dT = staticmethod(drho_SM_dT)
+        cls.rho_SM = staticmethod(thermodynamic_rho_SM(cls.eos, cls.units))
 
         # knots, in the order the solver produces them (decreasing T)
         n_knots = int(round(KNOTS_PER_DECADE * log10(T_MAX_MEV / T_MIN_MEV))) + 1
@@ -222,123 +198,74 @@ class TestBBNCallbacks(unittest.TestCase):
         cls.x_eval = np.linspace(log(T_EVAL_LO_MEV), log(T_EVAL_HI_MEV), N_EVAL)
         cls.T_eval = np.exp(cls.x_eval)
         cls.rho_SM_eval = np.array([cls.rho_SM(T) for T in cls.T_eval])
-        cls.drho_SM_dT_eval = np.array([cls.drho_SM_dT(T) for T in cls.T_eval])
 
     # helpers
 
-    def _ratio_callbacks(self, family: str):
-        ratio, _ = FAMILIES[family]
-        r = ratio(self.T_knots)
-        return build_NP_callbacks(
+    def _ratio_callback(self, family: str):
+        ratio = FAMILIES[family]
+        return build_rho_NP_callback(
             self.x_knots,
-            r,
-            r / 3.0,
+            ratio(self.T_knots),
             self.rho_SM,
-            self.drho_SM_dT,
             T_min_MeV=T_MIN_MEV,
             T_max_MeV=T_MAX_MEV,
             task_label=f"test-{family}",
         )
 
-    def _asinh_callbacks(self, family: str):
+    def _asinh_callback(self, family: str):
         """
-        The representation before prompt 04, rebuilt here from its three-line
-        construction (BBNData.py at ec206a3): asinh(rho / MeV^4) splined against
-        ln(T/MeV), inverted with sinh, and drho/dT = sqrt(1 + rho^2)/T * spline'.
+        The representation before review-remediation prompt 04, rebuilt here
+        from its construction (BBNData.py at ec206a3): asinh(rho / MeV^4)
+        splined against ln(T/MeV) and inverted with sinh.
         """
-        ratio, _ = FAMILIES[family]
+        ratio = FAMILIES[family]
         rho_knots = ratio(self.T_knots) * self.rho_SM_knots
         x = self.x_knots[::-1]
         rho_spline = make_interp_spline(x, np.arcsinh(rho_knots[::-1]), k=3)
-        P_spline = make_interp_spline(x, np.arcsinh(rho_knots[::-1] / 3.0), k=3)
-        rho_derivative_spline = rho_spline.derivative()
 
         def rho(T):
             return float(np.sinh(rho_spline(log(T))))
 
-        def P(T):
-            return float(np.sinh(P_spline(log(T))))
+        return rho
 
-        def drho(T):
-            value = np.sinh(rho_spline(log(T)))
-            return float(
-                np.sqrt(1.0 + value * value) / T * rho_derivative_spline(log(T))
-            )
-
-        return rho, P, drho
-
-    def _truth(self, family: str):
-        ratio, dratio_dlogT = FAMILIES[family]
-        r = ratio(self.T_eval)
-        rho = r * self.rho_SM_eval
-        drho = (
-            dratio_dlogT(self.T_eval) * self.rho_SM_eval / self.T_eval
-            + r * self.drho_SM_dT_eval
-        )
-        return rho, rho / 3.0, drho
-
-    def _errors(self, rho, P, drho, family: str):
-        """Maximum value and derivative errors of three callables on the eval grid."""
-        rho_true, P_true, drho_true = self._truth(family)
+    def _error(self, rho, family: str) -> float:
+        """The maximum of |rho(T) - rho_true(T)| / rho_SM(T) on the eval grid."""
+        rho_true = FAMILIES[family](self.T_eval) * self.rho_SM_eval
         rho_c = np.array([rho(T) for T in self.T_eval])
-        P_c = np.array([P(T) for T in self.T_eval])
-        drho_c = np.array([drho(T) for T in self.T_eval])
-        return {
-            "rho": float(np.max(np.abs(rho_c - rho_true) / self.rho_SM_eval)),
-            "P": float(np.max(np.abs(P_c - P_true) / self.rho_SM_eval)),
-            "drho": float(
-                np.max(
-                    np.abs(drho_c - drho_true) * self.T_eval / (4.0 * self.rho_SM_eval)
-                )
-            ),
-        }
+        return float(np.max(np.abs(rho_c - rho_true) / self.rho_SM_eval))
 
-    def _report(self, label, errors):
+    def _report(self, label, error):
         if REPORT:
-            print(
-                f"\n[{label}] max rho {errors['rho']:.3e}, P {errors['P']:.3e}, "
-                f"drho {errors['drho']:.3e}"
-            )
+            print(f"\n[{label}] max rho_NP/rho_SM error {error:.3e}")
 
     # the cases
 
     def test_a_constant_ratio_is_exact(self):
-        """(a) r = 0.08, s = r/3: rho_NP and P_NP are r rho_SM and s rho_SM to 1e-12
-        of rho_SM; drho_NP_dT is r drho_SM/dT to 1e-9 of 4 rho_SM / T."""
-        cb = self._ratio_callbacks("constant")
-        errors = self._errors(cb.rho_NP, cb.P_NP, cb.drho_NP_dT, "constant")
-        self._report("constant, ratio", errors)
-
-        self.assertLessEqual(errors["rho"], CONSTANT_VALUE_TOLERANCE)
-        self.assertLessEqual(errors["P"], CONSTANT_VALUE_TOLERANCE)
-        self.assertLessEqual(errors["drho"], CONSTANT_DERIVATIVE_TOLERANCE)
+        """(a) r = 0.08: rho_NP is r rho_SM to 1e-12 of rho_SM."""
+        error = self._error(self._ratio_callback("constant"), "constant")
+        self._report("constant, ratio", error)
+        self.assertLessEqual(error, CONSTANT_VALUE_TOLERANCE)
 
     def test_b_oscillating_ratio_bounds(self):
-        """(b) README section 2 (d)'s oscillating ratio: <= 2e-8 in rho_NP/rho_SM
-        (and P_NP/rho_SM), <= 1.5e-6 in the derivative measure. Prints the maxima."""
-        cb = self._ratio_callbacks("oscillating")
-        errors = self._errors(cb.rho_NP, cb.P_NP, cb.drho_NP_dT, "oscillating")
+        """(b) README section 2 (d)'s oscillating ratio: <= 2e-8 in
+        rho_NP/rho_SM. Prints the maximum."""
+        error = self._error(self._ratio_callback("oscillating"), "oscillating")
         print(
             f"\n[test_bbn_callbacks (b)] oscillating ratio: max rho_NP/rho_SM error "
-            f"{errors['rho']:.3e}, P_NP {errors['P']:.3e}, derivative {errors['drho']:.3e}"
+            f"{error:.3e}"
         )
-
-        self.assertLessEqual(errors["rho"], OSCILLATING_VALUE_BOUND)
-        self.assertLessEqual(errors["P"], OSCILLATING_VALUE_BOUND)
-        self.assertLessEqual(errors["drho"], OSCILLATING_DERIVATIVE_BOUND)
+        self.assertLessEqual(error, OSCILLATING_VALUE_BOUND)
 
     def test_c_no_worse_than_asinh(self):
-        """(c) On both families the ratio representation's maximum error is no
-        larger than the asinh representation's, for rho, P and the derivative."""
+        """(c) On both families the ratio representation's maximum rho_NP error
+        is no larger than the asinh representation's."""
         for family in FAMILIES:
-            cb = self._ratio_callbacks(family)
-            ratio_errors = self._errors(cb.rho_NP, cb.P_NP, cb.drho_NP_dT, family)
-            asinh_errors = self._errors(*self._asinh_callbacks(family), family)
-            self._report(f"{family}, ratio", ratio_errors)
-            self._report(f"{family}, asinh", asinh_errors)
-            for key in ("rho", "P", "drho"):
-                with self.subTest(family=family, quantity=key):
-                    self.assertLessEqual(ratio_errors[key], asinh_errors[key])
+            ratio_error = self._error(self._ratio_callback(family), family)
+            asinh_error = self._error(self._asinh_callback(family), family)
+            self._report(f"{family}, ratio", ratio_error)
+            self._report(f"{family}, asinh", asinh_error)
+            with self.subTest(family=family):
+                self.assertLessEqual(ratio_error, asinh_error)
 
     def test_d_non_monotonic_input_is_refused(self):
         """(d) log_T_MeV not strictly decreasing raises ComputationFailureError
@@ -355,12 +282,10 @@ class TestBBNCallbacks(unittest.TestCase):
         for label, x in (("swapped", swapped), ("repeated", repeated)):
             with self.subTest(label):
                 with self.assertRaises(ComputationFailureError) as ctx:
-                    build_NP_callbacks(
+                    build_rho_NP_callback(
                         x,
                         r,
-                        r / 3.0,
                         self.rho_SM,
-                        self.drho_SM_dT,
                         T_min_MeV=T_MIN_MEV,
                         T_max_MeV=T_MAX_MEV,
                         task_label="test-non-monotonic",
@@ -371,119 +296,159 @@ class TestBBNCallbacks(unittest.TestCase):
                 self.assertIn("test-non-monotonic", message)
 
     def test_e_domain_guards(self):
-        """(e) Below T_min and above T_max every callback raises
+        """(e) Below T_min and above T_max the callback raises
         ComputationFailureError; a negative T returns 0."""
-        cb = self._ratio_callbacks("constant")
-        for name, fn in cb._asdict().items():
-            with self.subTest(name):
-                self.assertEqual(fn(-1.0), 0.0)
-                with self.assertRaises(ComputationFailureError):
-                    fn(0.5 * T_MIN_MEV)
-                with self.assertRaises(ComputationFailureError):
-                    fn(2.0 * T_MAX_MEV)
-                # the endpoints themselves are inside the domain
-                fn(T_MIN_MEV)
-                fn(T_MAX_MEV)
+        rho_NP = self._ratio_callback("constant")
+        self.assertEqual(rho_NP(-1.0), 0.0)
+        with self.assertRaises(ComputationFailureError):
+            rho_NP(0.5 * T_MIN_MEV)
+        with self.assertRaises(ComputationFailureError):
+            rho_NP(2.0 * T_MAX_MEV)
+        # the endpoints themselves are inside the domain
+        rho_NP(T_MIN_MEV)
+        rho_NP(T_MAX_MEV)
 
     def test_f_units(self):
-        """(f) T in MeV gives MeV^4, MeV^4, MeV^3. rho_SM(1 MeV) is about
-        3.5 MeV^4 and is the same whatever units the EOS was built in; and
-        T drho_NP_dT / rho_NP = 4 + d ln g_rho / d ln T, which is wrong by a
-        factor T at T != 1 MeV if the derivative were per ln T."""
+        """(f) T in MeV gives MeV^4. rho_SM(1 MeV) is about 3.5 MeV^4 and is the
+        same whatever units the EOS was built in, and rho_NP(T) / T^4 is
+        (pi^2/30) g_rho(T) r: wrong by a power of the unit if T were not in MeV."""
         rho_SM_1 = self.rho_SM(1.0)
         self.assertGreater(rho_SM_1, RHO_SM_1MEV_LO)
         self.assertLess(rho_SM_1, RHO_SM_1MEV_HI)
 
         planck = Planck_units()
-        rho_SM_planck, drho_SM_dT_planck = thermodynamic_rho_SM(
-            SaikawaShirai_EOS_spline(planck), planck
-        )
+        rho_SM_planck = thermodynamic_rho_SM(SaikawaShirai_EOS_spline(planck), planck)
         for T in (0.02, 0.3, 1.0, 5.0):
             with self.subTest(T=T):
                 self.assertAlmostEqual(
                     rho_SM_planck(T) / self.rho_SM(T), 1.0, delta=UNITS_AGREEMENT_RTOL
                 )
-                self.assertAlmostEqual(
-                    drho_SM_dT_planck(T) / self.drho_SM_dT(T),
-                    1.0,
-                    delta=UNITS_AGREEMENT_RTOL,
-                )
 
-        cb = self._ratio_callbacks("constant")
-        self.assertAlmostEqual(cb.rho_NP(1.0), CONSTANT_RATIO * rho_SM_1, delta=1e-12)
-        self.assertAlmostEqual(
-            cb.P_NP(1.0), CONSTANT_RATIO * rho_SM_1 / 3.0, delta=1e-12
-        )
+        rho_NP = self._ratio_callback("constant")
+        self.assertAlmostEqual(rho_NP(1.0), CONSTANT_RATIO * rho_SM_1, delta=1e-12)
         for T in (0.1, 2.0):
             with self.subTest(T=T):
-                T_GeV = T * 1e-3 * self.units.GeV
-                dlng = float(self.eos.dG_rho_dlogT(T_GeV)) / float(
-                    self.eos.G_rho(T_GeV)
-                )
+                g = float(self.eos.G_rho(T * 1e-3 * self.units.GeV))
                 self.assertAlmostEqual(
-                    T * cb.drho_NP_dT(T) / cb.rho_NP(T), 4.0 + dlng, delta=1e-9
+                    rho_NP(T) / T**4 / ((pi * pi / 30.0) * g * CONSTANT_RATIO),
+                    1.0,
+                    delta=1e-10,
                 )
 
-    def test_g_Hdot_over_H2_Omega_primeprime_term(self):
-        """(g) With Omega'' != 0 the new expression differs from the old by
-        Omega'' pi (pi - 1) / A1^2; with Omega'' = 0 they are equal. Along a
-        trajectory phi(N) with a non-exponential stand-in coupling, the A1'/A1^2
-        term of the new expression is dA1/dN / A1^2, dA1/dN taken by a central
-        difference in N of A1 = 1 + Omega'(phi(N)) pi(N); the old one is not."""
-        HE, Op, Opp, p, pp = -2.0, 2.0, 5.0, 0.3, 0.1
-        A1 = 1.0 + Op * p
-        new = jordan_Hdot_over_H2(HE, Op, Opp, p, pp)
-        old = _old_HJdot_over_HJ2(HE, Op, Opp, p, pp)
-        self.assertAlmostEqual(new - old, Opp * p * (p - 1.0) / A1**2, delta=1e-14)
+    def test_g_compute_BBN_data_hands_prymordial_the_density(self):
+        """(g) compute_BBN_data on a stand-in history (PRyMclass stubbed: no
+        solve). Replaces the test of the Jordan-frame Hdot/H^2 expression, which
+        built the pressure the Hubble-only route no longer reads (science-
+        readiness prompt 01). Each sample in [1e-4 keV, 100 MeV] is kept, with
+        density_NP = 3 M_P^2 H_J^2 - rho_R,J (1 + f_m) and
+        density_NP_ratio = density_NP / rho_R,J; the samples carry exactly
+        raw_N, log_T_Jordan, density_NP and density_NP_ratio; PRyMclass is built
+        with one positional callback, which at every sample temperature is
+        ratio * rho_SM(T), and with the wall-clock limit passed in. No potential
+        or coupling is needed: nothing evaluates the field equation."""
+        units = Planck_units()
+        eos = SaikawaShirai_EOS_spline(units)
+        cosmology = SimpleNamespace(units=units, G_rho=eos.G_rho)
+        M_P2 = units.PlanckMass * units.PlanckMass
 
+        values, expected = [], []
+        log10_T = np.linspace(G_LOG10_T_MEV_HI, G_LOG10_T_MEV_LO, G_N_SAMPLES)
+        for i, lt in enumerate(log10_T):
+            T = 10.0**lt * units.MeV
+            rho_R = (pi * pi / 30.0) * 10.0 * T**4
+            f_m = 1e-3 * (units.MeV / T) ** 0.5
+            r = 0.05 + 0.01 * sin(0.7 * i)
+            H_J = sqrt(rho_R * (1.0 + f_m + r) / (3.0 * M_P2))
+            values.append(
+                SimpleNamespace(
+                    z=SimpleNamespace(store_id=i),
+                    raw_N=0.1 * i,
+                    log_T_Jordan=log(T),
+                    log_rhorad_Jordan=log(rho_R),
+                    log_fm=log(f_m),
+                    H_Jordan=H_J,
+                )
+            )
+            # the stored values are logarithms; compute_BBN_data exponentiates them
+            T_s, rho_R_s, f_m_s = exp(log(T)), exp(log(rho_R)), exp(log(f_m))
+            if 1e-4 * units.keV <= T_s <= 100.0 * units.MeV:
+                expected.append((i, T_s, rho_R_s, f_m_s, H_J))
+
+        model = SimpleNamespace(
+            _cosmology=cosmology,
+            potential=None,
+            coupling=None,
+            T_Jordan_stop=SimpleNamespace(as_float=1e-3 * units.eV),
+            values=values,
+        )
+        proxy = SimpleNamespace(get=lambda: model)
+
+        import PRyM.PRyM_main as PRyMmain
+
+        _RecordingPRyMclass.calls = []
+        with SavedPRyMGlobals(), mock.patch.object(
+            PRyMmain, "PRyMclass", _RecordingPRyMclass
+        ):
+            result = compute_BBN_data._function(
+                proxy, task_label="test-g", wall_clock_limit=G_WALL_CLOCK_LIMIT
+            )
+
+        self.assertFalse(result.get("failure", False), result)
+        samples = result["samples"]
+        self.assertEqual(len(samples), len(expected))
+        self.assertGreaterEqual(len(expected), 4)
         self.assertEqual(
-            jordan_Hdot_over_H2(HE, Op, 0.0, p, pp),
-            _old_HJdot_over_HJ2(HE, Op, 0.0, p, pp),
+            set(samples[0]._fields),
+            {"raw_N", "log_T_Jordan", "density_NP", "density_NP_ratio"},
         )
 
-        coupling = QuadraticStandIn(mu=0.7)
-        phi0, a, b = 0.4, 0.25, -0.15
+        rho_SM_MeV4 = thermodynamic_rho_SM(cosmology, units)
+        self.assertEqual(len(_RecordingPRyMclass.calls), 1)
+        args, kwargs = _RecordingPRyMclass.calls[0]
+        self.assertEqual(len(args), 1)
+        self.assertEqual(kwargs, {"wall_clock_limit": G_WALL_CLOCK_LIMIT})
+        rho_NP = args[0]
 
-        def phi(N):
-            return phi0 + a * N + b * N * N
-
-        def pi_(N):
-            return a + 2.0 * b * N
-
-        def A1_of(N):
-            return 1.0 + coupling.d_logOmega_dphi(phi(N)) * pi_(N)
-
-        N0, h = 0.3, 1e-5
-        dA1_dN = (A1_of(N0 + h) - A1_of(N0 - h)) / (2.0 * h)
-
-        Op0 = coupling.d_logOmega_dphi(phi(N0))
-        Opp0 = coupling.d2_logOmega_dphi2(phi(N0))
-        p0, pp0 = pi_(N0), 2.0 * b
-        A10 = A1_of(N0)
-        first = (HE - Op0 * p0) / A10
-
-        new_A1_term = jordan_Hdot_over_H2(HE, Op0, Opp0, p0, pp0) - first
-        old_A1_term = _old_HJdot_over_HJ2(HE, Op0, Opp0, p0, pp0) - first
-        expected = dA1_dN / A10**2
-
-        self.assertAlmostEqual(new_A1_term, expected, delta=1e-8)
-        self.assertGreater(abs(old_A1_term - expected), 1e-2)
+        for sample, (i, T, rho_R, f_m, H_J) in zip(samples, expected):
+            with self.subTest(i=i):
+                density = H_J * H_J * (3.0 * M_P2) - rho_R * (1.0 + f_m)
+                self.assertEqual(sample.raw_N, 0.1 * i)
+                self.assertLessEqual(
+                    abs(sample.density_NP - density) / abs(density), G_DENSITY_RTOL
+                )
+                self.assertAlmostEqual(
+                    sample.density_NP_ratio, density / rho_R, delta=G_RATIO_ATOL
+                )
+                T_MeV = T / units.MeV
+                target = sample.density_NP_ratio * rho_SM_MeV4(T_MeV)
+                self.assertLessEqual(
+                    abs(rho_NP(T_MeV) - target) / abs(target), G_CALLBACK_RTOL
+                )
 
     def test_h_end_to_end_constant_ratio(self):
-        """(h) The constant ratio 0.08 through build_NP_callbacks into PRyMordial
-        reproduces prompt 03's Yp and D/H to 1e-4 relative.
+        """(h) The constant ratio 0.08 through build_rho_NP_callback into
+        PRyMordial's Hubble-only route (full network) reproduces the same
+        callback through the honly route on 7b518c9, Yp and D/H to 1e-6
+        relative. The offset from the exact constant family's const-honly
+        values is printed, not bounded (see END_TO_END_RTOL).
         **Runs one PRyMordial solve, about 10 s.**"""
-        cb = self._ratio_callbacks("constant")
-        res = run_prym(cb.rho_NP, cb.P_NP, cb.drho_NP_dT)
+        res = run_prym(self._ratio_callback("constant"))
 
         Yp, DoH = res[RES_YP_BBN], res[RES_D_OVER_H_E5]
-        dYp = abs(Yp - PROMPT_03_CONSTANT_YP) / PROMPT_03_CONSTANT_YP
+        dYp = abs(Yp - BUILDER_CONST_HONLY_FULL_YP) / BUILDER_CONST_HONLY_FULL_YP
         dDoH = (
-            abs(DoH - PROMPT_03_CONSTANT_D_OVER_H_E5) / PROMPT_03_CONSTANT_D_OVER_H_E5
+            abs(DoH - BUILDER_CONST_HONLY_FULL_D_OVER_H_E5)
+            / BUILDER_CONST_HONLY_FULL_D_OVER_H_E5
+        )
+        dYp_exact = abs(Yp - CONST_HONLY_FULL_YP) / CONST_HONLY_FULL_YP
+        dDoH_exact = (
+            abs(DoH - CONST_HONLY_FULL_D_OVER_H_E5) / CONST_HONLY_FULL_D_OVER_H_E5
         )
         print(
             f"\n[test_bbn_callbacks (h)] Yp {Yp:.10g} ({dYp:.2e}), "
-            f"D/H x1e5 {DoH:.10g} ({dDoH:.2e}) against prompt 03"
+            f"D/H x1e5 {DoH:.10g} ({dDoH:.2e}) against the builder's honly reference; "
+            f"against the exact family's const-honly (full): Yp {dYp_exact:.2e}, "
+            f"D/H {dDoH_exact:.2e} (not bounded)"
         )
         with self.subTest("Yp"):
             self.assertLessEqual(dYp, END_TO_END_RTOL)
@@ -494,7 +459,7 @@ class TestBBNCallbacks(unittest.TestCase):
         """(i) compute_SM_baseline(False) reproduces README section 2 (f) row 1 to
         1e-4 relative in all four abundances, and names the PRyMordial version.
         **Runs one PRyMordial solve, about 10 s.**"""
-        with _SavedPRyMGlobals():
+        with SavedPRyMGlobals():
             baseline = compute_SM_baseline(False)
 
         print(

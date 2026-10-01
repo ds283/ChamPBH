@@ -52,11 +52,12 @@ from ComputeTargets.tests.prym_fixtures import (
     RES_D_OVER_H_E5,
     RES_LI7_OVER_H_E10,
     RES_YP_BBN,
+    SavedPRyMGlobals,
     run_prym,
 )
 from ComputeTargets.tests.test_prym_passenger import (
-    CONSTANT_D_OVER_H_E5_UNPATCHED,
-    CONSTANT_YP_UNPATCHED,
+    CONST_HONLY_FULL_D_OVER_H_E5,
+    CONST_HONLY_FULL_YP,
     REFERENCE_RTOL,
 )
 
@@ -72,36 +73,11 @@ def _relative(a: float, b: float) -> float:
     return abs(a - b) / abs(b)
 
 
-class _SavedPRyMGlobals:
-    """
-    Save and restore every PRyMordial module global these tests can touch:
-    `_configure_PRyMordial`'s flags and PRyM_thermo's NP callbacks.
-    """
-
-    _init_names = ("NP_thermo_flag", "Tstart_NP", "verbose_flag", "smallnet_flag")
-    _thermo_names = ("rho_NP", "p_NP", "drho_NP_dT", "delta_rho_NP")
-    _missing = object()
-
-    def __enter__(self):
-        import PRyM.PRyM_init as PRyMini
-        import PRyM.PRyM_thermo as PRyMthermo
-
-        self._ini, self._thermo = PRyMini, PRyMthermo
-        self._saved_init = {
-            n: getattr(PRyMini, n, self._missing) for n in self._init_names
-        }
-        self._saved_thermo = {n: getattr(PRyMthermo, n) for n in self._thermo_names}
-        return self
-
-    def __exit__(self, *exc):
-        for n, v in self._saved_init.items():
-            if v is self._missing:
-                if hasattr(self._ini, n):
-                    delattr(self._ini, n)
-            else:
-                setattr(self._ini, n, v)
-        for n, v in self._saved_thermo.items():
-            setattr(self._thermo, n, v)
+# Save and restore every PRyMordial module global these tests can touch:
+# `_configure_PRyMordial`'s flags, NP_hubble_flag among them since
+# science-readiness prompt 01, and PRyM_thermo's rho_NP. One helper, in
+# prym_fixtures, since that prompt.
+_SavedPRyMGlobals = SavedPRyMGlobals
 
 
 def _calls_named(path: Path, name: str):
@@ -131,19 +107,19 @@ def _network_solves() -> dict:
 
     with _SavedPRyMGlobals():
         start = time.perf_counter()
-        small = run_prym(CONSTANT.rho, CONSTANT.p, CONSTANT.drho_dT, small_network=True)
+        small = run_prym(CONSTANT.rho, small_network=True)
         wall_small = time.perf_counter() - start
 
         start = time.perf_counter()
-        full = run_prym(CONSTANT.rho, CONSTANT.p, CONSTANT.drho_dT, small_network=False)
+        full = run_prym(CONSTANT.rho, small_network=False)
         wall_full = time.perf_counter() - start
 
     r = {
         "dLi7": _relative(small[RES_LI7_OVER_H_E10], full[RES_LI7_OVER_H_E10]),
         "dDoH": _relative(small[RES_D_OVER_H_E5], full[RES_D_OVER_H_E5]),
         "dYp": _relative(small[RES_YP_BBN], full[RES_YP_BBN]),
-        "dYp_pin": _relative(full[RES_YP_BBN], CONSTANT_YP_UNPATCHED),
-        "dDoH_pin": _relative(full[RES_D_OVER_H_E5], CONSTANT_D_OVER_H_E5_UNPATCHED),
+        "dYp_pin": _relative(full[RES_YP_BBN], CONST_HONLY_FULL_YP),
+        "dDoH_pin": _relative(full[RES_D_OVER_H_E5], CONST_HONLY_FULL_D_OVER_H_E5),
     }
     print(
         f"\n[test_network_flag (b)] small: Yp {small[RES_YP_BBN]:.10g}, "
@@ -187,6 +163,8 @@ class TestNetworkFlag(unittest.TestCase):
         small_network=True and =False: 7Li/H moves by >= 5e-3 relative, and
         the full-network run reproduces the pinned Yp and D/H to the fixture's
         1e-5. The small network's Yp and D/H shifts are printed, not bounded.
+        Since science-readiness prompt 01 the pins are the full-network
+        Hubble-only reference (test_prym_passenger, CONST_HONLY_FULL_*).
         **Runs PRyMordial twice, about 15 s.**"""
         r = _network_solves()
         with self.subTest("7Li/H moves"):
@@ -224,16 +202,23 @@ class TestNetworkFlag(unittest.TestCase):
             self.assertIs(PRyMini.smallnet_flag, False)
         self.assertIs(baseline["small_network"], False)
 
-        # main.py: the payload handed to BBNData.compute
+        # main.py: the payload handed to BBNData.compute. Since science-readiness
+        # prompt 01 it also carries the wall-clock limit, a name rather than a
+        # literal, so the dict is read key by key and only small_network is
+        # evaluated
         payloads = [
-            ast.literal_eval(k.value)
+            {
+                ast.literal_eval(key): value
+                for key, value in zip(k.value.keys, k.value.values)
+            }
             for c in _calls_named(_ROOT / "main.py", "compute")
             for k in c.keywords
-            if k.arg == "payload"
+            if k.arg == "payload" and isinstance(k.value, ast.Dict)
         ]
         bbn_payloads = [p for p in payloads if "small_network" in p]
         self.assertEqual(len(bbn_payloads), 1)
-        self.assertIs(bbn_payloads[0]["small_network"], False)
+        self.assertIs(ast.literal_eval(bbn_payloads[0]["small_network"]), False)
+        self.assertIn("wall_clock_limit", bbn_payloads[0])
 
         # tools/bbn_baseline.py: the --small-network argument's default
         flags = [

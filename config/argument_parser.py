@@ -2,6 +2,7 @@ import argparse
 
 import configargparse
 
+from ComputeTargets.BBNData import DEFAULT_BBN_WALL_CLOCK_LIMIT
 from config.defaults import DEFAULT_ABS_TOLERANCE, DEFAULT_REL_TOLERANCE
 
 DEFAULT_LABEL = "ChamPBH-test"
@@ -30,6 +31,14 @@ DEFAULT_SAMPLES_PER_LOG10_LAMBDA_EV = 6
 
 allowed_drop_actions = ["scalar-model", "adiabatic-history", "bbn-data"]
 potential_types = ["Exponential", "InversePower", "Starobinsky", "Recliner"]
+
+
+def non_negative_float(text: str) -> float:
+    """An argparse type: a float that is not negative (science-readiness prompt 01)."""
+    value = float(text)
+    if not value >= 0.0:
+        raise argparse.ArgumentTypeError(f"must be a non-negative number, not {text}")
+    return value
 
 
 def create_argument_parser() -> configargparse.ArgumentParser:
@@ -248,6 +257,14 @@ def create_argument_parser() -> configargparse.ArgumentParser:
         default=False,
         help="retry BBN computations that failed under the current version label; without "
         "this flag a stored BBN failure counts as done and is not retried",
+    )
+    parser.add_argument(
+        "--bbn-wall-clock-limit",
+        type=non_negative_float,
+        default=DEFAULT_BBN_WALL_CLOCK_LIMIT,
+        metavar="SECS",
+        help="wall-clock limit on each PRyMordial solve, in seconds; a solve that exceeds it is "
+        f"stored as a failure (default {DEFAULT_BBN_WALL_CLOCK_LIMIT:g}; 0 disables the limit)",
     )
     parser.add_argument(
         "--output",

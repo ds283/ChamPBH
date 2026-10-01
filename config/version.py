@@ -33,7 +33,14 @@
 # On 2026-10-01 (integrator-remediation prompt 01), 2026.5.0: from 2026.5.0 the scalar history is
 # integrated by one Radau step loop with a kinematic step cap and an elastic reflection at the
 # representable-step floor, replacing the two-region scheme, so every stored history changes.
-VERSION_LABEL = "2026.5.0"
+# On 2026-10-01 (science-readiness prompt 01), 2026.6.0: from 2026.6.0 the scalar field reaches
+# PRyMordial through the expansion rate alone (PRyM_version "bf24c3d+ri02+sr01"), with no
+# new-physics temperature and no pressure callback; a PRyMordial solve has a wall-clock limit; an
+# abundance outside the output checks is stored as a failure; and BBNDataValue has no
+# pressure_NP_MeV4 column. Every BBNData row changes. The science-readiness campaign adds columns
+# under this label with no migration, so a store made before 2026.6.0 cannot be reused: start a
+# fresh datastore file.
+VERSION_LABEL = "2026.6.0"
 
 # The reserved payload key under which Datastore.object_get hands a version-keyed factory's
 # build() the serial of the current version label (run-integrity prompt 01). A factory registers

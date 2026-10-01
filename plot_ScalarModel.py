@@ -1080,20 +1080,12 @@ def BBN_era_NP_plot(
         )
         for value in BBN.values
     ]
-    positive_abs_pressure_NP_points = [
-        (T_Jordan_MeV(value), safe_fabs_positive(value.pressure_NP / GeV4))
-        for value in BBN.values
-    ]
 
     negative_abs_density_NP_points = [
         (
             T_Jordan_MeV(value),
             safe_fabs_negative(value.density_NP / GeV4),
         )
-        for value in BBN.values
-    ]
-    negative_abs_pressure_NP_points = [
-        (T_Jordan_MeV(value), safe_fabs_negative(value.pressure_NP / GeV4))
         for value in BBN.values
     ]
 
@@ -1109,11 +1101,6 @@ def BBN_era_NP_plot(
             T_Jordan_MeV(value),
             safe_fabs_negative(value.density_NP_ratio),
         )
-        for value in BBN.values
-    ]
-
-    w_NP_points = [
-        (T_Jordan_MeV(value), value.pressure_NP / value.density_NP)
         for value in BBN.values
     ]
 
@@ -1145,12 +1132,6 @@ def BBN_era_NP_plot(
     negative_abs_density_NP_x, negative_abs_density_NP_y = zip(
         *negative_abs_density_NP_points
     )
-    positive_abs_pressure_NP_x, positive_abs_pressure_NP_y = zip(
-        *positive_abs_pressure_NP_points
-    )
-    negative_abs_pressure_NP_x, negative_abs_pressure_NP_y = zip(
-        *negative_abs_pressure_NP_points
-    )
 
     positive_density_NP_ratio_x, positive_density_NP_ratio_y = zip(
         *positive_density_NP_ratio
@@ -1158,8 +1139,6 @@ def BBN_era_NP_plot(
     negative_density_NP_ratio_x, negative_density_NP_ratio_y = zip(
         *negative_density_NP_ratio
     )
-
-    w_NP_x, w_NP_y = zip(*w_NP_points)
 
     positive_abs_H_Jordan_x, positive_abs_H_Jordan_y = zip(
         *positive_abs_H_Jordan_points
@@ -1169,44 +1148,33 @@ def BBN_era_NP_plot(
     )
     abs_H_standard_x, abs_H_standard_y = zip(*abs_H_standard_points)
 
+    # science-readiness prompt 01 removed the |p_NP| curves and the w_NP panel:
+    # the Hubble-only BBN route reads rho_NP alone, and p_NP is no longer computed.
+    # With the w_NP panel gone the figure has three panels, not four.
     fig = plt.figure()
-    fig.set_size_inches(8.0, 13.0)
+    fig.set_size_inches(8.0, 10.0)
 
-    axs = fig.subplots(nrows=4, ncols=1, sharex=True, sharey=False)
+    axs = fig.subplots(nrows=3, ncols=1, sharex=True, sharey=False)
 
-    rhoP_NP_ax = axs[3]
-    H_ax = axs[2]
-    ratio_NP_ax = axs[1]
-    w_NP_ax = axs[0]
+    rho_NP_ax = axs[2]
+    H_ax = axs[1]
+    ratio_NP_ax = axs[0]
 
-    rhoP_NP_ax.plot(
+    rho_NP_ax.plot(
         positive_abs_density_NP_x,
         positive_abs_density_NP_y,
         label=r"$\rho_{\mathrm{NP}}$ [GeV$^4$]",
         color="b",
         linestyle="solid",
     )
-    rhoP_NP_ax.plot(
+    rho_NP_ax.plot(
         negative_abs_density_NP_x,
         negative_abs_density_NP_y,
         color="b",
         linestyle="dashed",
     )
-    rhoP_NP_ax.plot(
-        positive_abs_pressure_NP_x,
-        positive_abs_pressure_NP_y,
-        label=r"$P_{\mathrm{NP}}$ [GeV$^4$]",
-        color="r",
-        linestyle="solid",
-    )
-    rhoP_NP_ax.plot(
-        negative_abs_pressure_NP_x,
-        negative_abs_pressure_NP_y,
-        color="r",
-        linestyle="dashed",
-    )
-    rhoP_NP_ax.set_yscale("log")
-    rhoP_NP_ax.grid(True)
+    rho_NP_ax.set_yscale("log")
+    rho_NP_ax.grid(True)
 
     ratio_NP_ax.plot(
         positive_density_NP_ratio_x,
@@ -1247,44 +1215,16 @@ def BBN_era_NP_plot(
     H_ax.set_yscale("log")
     H_ax.grid(True)
 
-    w_NP_ax.axhline(y=1.0 / 3.0, color="r", linestyle="dashed")
-    w_NP_ax.axhline(y=-1.0, color="c", linestyle="dashed")
-
-    y_trans = w_NP_ax.get_yaxis_transform()
-    w_NP_ax.text(
-        0.15,
-        0.4,
-        r"radiation",
-        color="r",
-        transform=y_trans,
-        fontsize="x-small",
-    )
-    w_NP_ax.text(
-        0.15,
-        -1.2,
-        r"cosmological constant",
-        color="c",
-        transform=y_trans,
-        fontsize="x-small",
-    )
-
-    w_NP_ax.plot(
-        w_NP_x, w_NP_y, label=r"$w_{\mathrm{NP}}$", color="g", linestyle="solid"
-    )
-    w_NP_ax.set_ylim(-1.5, 1.2)
-    w_NP_ax.grid(True)
-
-    rhoP_NP_ax.set_xscale("log")
-    rhoP_NP_ax.set_xlabel("Temperature $T$ [MeV]")
-    rhoP_NP_ax.xaxis.set_inverted(True)
+    rho_NP_ax.set_xscale("log")
+    rho_NP_ax.set_xlabel("Temperature $T$ [MeV]")
+    rho_NP_ax.xaxis.set_inverted(True)
 
     add_ScalarModel_labels(fig, model, model_label)
     add_BBN_info_labels(fig, bbn=BBN)
 
-    rhoP_NP_ax.legend(loc="best")
+    rho_NP_ax.legend(loc="best")
     ratio_NP_ax.legend(loc="best")
     H_ax.legend(loc="best")
-    w_NP_ax.legend(loc="best")
 
     fig_path = plot_path / "BBN_era_NP.pdf"
     fig_path.parents[0].mkdir(exist_ok=True, parents=True)

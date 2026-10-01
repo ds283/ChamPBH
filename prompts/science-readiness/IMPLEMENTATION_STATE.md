@@ -1,15 +1,17 @@
 # Science-readiness campaign — implementation state
 
-**Last updated:** 2026-10-01 · **Status: PLANNED — 0 of 9 landed.** Planned on 2026-10-01 against
+**Last updated:** 2026-10-01 · **Status: IN PROGRESS — 1 of 9 landed** (prompt 01, with
+deviations). Planned on 2026-10-01 against
 `main` at `6aaa706`, from a Claude Science re-evaluation kept at
 [`source/campaign_reevaluation_2026-10-01.md`](source/campaign_reevaluation_2026-10-01.md) and
 checked against the tree by the planner (README §0.3). Suites at `6aaa706`: CosmologyModels 18,
 ComputeTargets 67, Datastore 17.
 **Target branch** `science-readiness`, to be cut from `6aaa706`; planning and orchestration commits
 land on it.
-**`VERSION_LABEL` is `"2026.5.0"`**; prompt 01 bumps it to `"2026.6.0"`, once. From then on every
-store made before 2026.6.0 is invalid, and the science run needs a fresh datastore file (columns
-are added with no migration).
+**`VERSION_LABEL` is `"2026.6.0"`** since prompt 01 (from `"2026.5.0"`), bumped once. Every store
+made before 2026.6.0 is invalid, and the science run needs a fresh datastore file (columns are
+added with no migration). `PRYM_VERSION` is `"bf24c3d+ri02+sr01"`. Suites after prompt 01:
+CosmologyModels 18, ComputeTargets 71, Datastore 17.
 
 The campaign hands the scalar field to PRyMordial through the expansion rate alone, with a patched
 PRyMordial that has no fictitious new-physics temperature and an optional wall-clock limit. It
@@ -78,7 +80,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | [The Hubble-only BBN route, the wall-clock limit and the output checks](01-hubble-only-bbn-route.md) | **R**, **W**, **O**, version bump, driver | Opus | ✍️ 2026-10-01 | — | — | — |
+| 01 | [The Hubble-only BBN route, the wall-clock limit and the output checks](01-hubble-only-bbn-route.md) | **R**, **W**, **O**, version bump, driver | Opus | ✍️ 2026-10-01 | ✅ 2026-10-01 (with deviations) | see `git log` ("Hand the scalar field to PRyMordial through H alone") | [`logs/01-hubble-only-bbn-route.md`](logs/01-hubble-only-bbn-route.md) |
 | 02 | [A failure reason on `ScalarModel` rows](02-scalarmodel-failure-reasons.md) | **F** | Sonnet | ✍️ 2026-10-01 | — | — | — |
 | 03 | [Store the first bounce](03-first-bounce.md) | **T** | Opus | ✍️ 2026-10-01 | — | — | — |
 | 04 | [The initial field as a run option, with a super-Planckian warning](04-initial-field-option.md) | **P** | Sonnet | ✍️ 2026-10-01 | — | — | — |
@@ -94,9 +96,9 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
 | Item | Kind | Description | Prompt | Status |
 |---|---|---|---|---|
-| R | **DEFECT, medium** | The `NP_thermo_flag` route integrates a fictitious `T_NP`, and adds −3H(ρ_NP + p_NP) and dρ_NP/dT to the plasma equation, cancelling only to `≈ r·1.2×10⁻³`. Replace it with a Hubble-only patch. Closes `[00-bbn-route-integrates-a-fictitious-np-temperature]`. | 01 | open |
-| W | **GAP** | No bound on a PRyMordial solve's wall time. Closes `[00-prymordial-has-no-wall-clock-limit]`. | 01 | open |
-| O | **GAP** | A successful PRyMordial return is stored unchecked. Closes `[00-prymordial-output-is-stored-unchecked]`. | 01 | open |
+| R | **DEFECT, medium** | The `NP_thermo_flag` route integrates a fictitious `T_NP`, and adds −3H(ρ_NP + p_NP) and dρ_NP/dT to the plasma equation, cancelling only to `≈ r·1.2×10⁻³`. Replace it with a Hubble-only patch. Closes `[00-bbn-route-integrates-a-fictitious-np-temperature]`. | 01 | **done** 2026-10-01 (log 01) |
+| W | **GAP** | No bound on a PRyMordial solve's wall time. Closes `[00-prymordial-has-no-wall-clock-limit]`. | 01 | **done** 2026-10-01 (log 01) |
+| O | **GAP** | A successful PRyMordial return is stored unchecked. Closes `[00-prymordial-output-is-stored-unchecked]`; with P4, also closes `[02-a-short-bbn-sample-grid-escapes-compute-bbn-data]` and `[02-the-bbn-callbacks-do-not-check-their-values-for-finiteness]` (assigned). | 01 | **done** 2026-10-01 (log 01) |
 | F | **GAP** | A `ScalarModel` failure row carries no reason. Closes `[00-scalarmodel-failure-rows-carry-no-reason]` (assigned). | 02 | open |
 | T | **GAP** | The first bounce is not stored and cannot be read from the samples at small `M`. Closes `[00-first-bounce-is-not-stored]`. | 03 | open |
 | P | **GAP** | φ\* is a literal in three drivers, with no super-Planckian warning. Closes `[00-initial-field-value-is-hard-coded-and-unchecked]` (assigned). | 04 | open |
@@ -110,26 +112,9 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 ## 3. Active and unresolved issues
 
 Seven opened by the planner on 2026-10-01, one per campaign item that has no issue on another
-board. Seven more are assigned from other boards (§3.1).
+board; prompt 01 closed three (§4), and four are open. Seven more were assigned from other boards
+(§3.1); prompt 01 closed two of them, and five are open.
 
-- **[00-bbn-route-integrates-a-fictitious-np-temperature]** *(README §0.3, §1 R; `PRyM_main.py`
-  `:95–201` on `6aaa706`)*.
-  - **What.** `_configure_PRyMordial` sets `NP_thermo_flag`, which puts ρ_NP into `Hubble`, which
-    is wanted. It also adds −3H(ρ_NP + p_NP) and dρ_NP/dT to dT_γ/dt and integrates a third
-    variable `T_NP` that no output reads (`cham03` makes its equation inert). The plasma obeys the
-    Standard-Model equation only through a cancellation between two spline-derived terms.
-  - **Impact.** README §6.1 shows the cost of the route on real histories.
-  - **Next step.** Prompt 01.
-- **[00-prymordial-has-no-wall-clock-limit]** *(README §1 W)*.
-  - **What.** A solve that slows without failing occupies a Ray worker indefinitely; `run-integrity`
-    declined a Ray timeout (its README §0.4).
-  - **Impact.** One slow history stalls a survey's BBN stage.
-  - **Next step.** Prompt 01, as a PRyMordial parameter (U2).
-- **[00-prymordial-output-is-stored-unchecked]** *(README §1 O)*.
-  - **What.** `_run_PRyMordial` returns `res[4:8]` as they come. `plot_by_beta.py` drops
-    non-positive abundances at plot time, after storing them.
-  - **Impact.** An unphysical result is a stored success.
-  - **Next step.** Prompt 01.
 - **[00-first-bounce-is-not-stored]** *(README §1 T; the source §2)*.
   - **What.** The dense-output first bounce (`N`, `T_J`, `φ_min`) exists only during the
     integration. The source's sample-based detector returns 0.138 GeV for 0.747 GeV at small `M`.
@@ -162,8 +147,8 @@ here (README §5 rule 4).
 | `[00-initial-field-value-is-hard-coded-and-unchecked]` | `review-remediation` | 04 |
 | `[00-bbn-spline-domain-is-far-wider-than-prymordial-uses]` | `review-remediation` | 06 |
 | `[04-numerical-strategies-describes-the-removed-asinh-bbn-interface]` | `review-remediation` | 08 |
-| `[02-a-short-bbn-sample-grid-escapes-compute-bbn-data]` | `run-integrity` | 01 (P4) |
-| `[02-the-bbn-callbacks-do-not-check-their-values-for-finiteness]` | `run-integrity` | 01 (P4) |
+| `[02-a-short-bbn-sample-grid-escapes-compute-bbn-data]` | `run-integrity` | 01 (P4) — **resolved 2026-10-01** (§4) |
+| `[02-the-bbn-callbacks-do-not-check-their-values-for-finiteness]` | `run-integrity` | 01 (P4) — **resolved 2026-10-01** (§4) |
 | `[00-scalarmodel-failure-rows-carry-no-reason]` | `integrator-remediation` | 02 |
 | `[00-stored-samples-alias-the-rebounds]` | `integrator-remediation` | 05 (narrowed: the BBN half) |
 
@@ -171,4 +156,47 @@ here (README §5 rule 4).
 
 ## 4. Resolved issues
 
-None yet.
+- **[00-bbn-route-integrates-a-fictitious-np-temperature]** *(README §0.3, §1 R; `PRyM_main.py`
+  `:95–201` on `6aaa706`)*.
+  - **What.** `_configure_PRyMordial` sets `NP_thermo_flag`, which puts ρ_NP into `Hubble`, which
+    is wanted. It also adds −3H(ρ_NP + p_NP) and dρ_NP/dT to dT_γ/dt and integrates a third
+    variable `T_NP` that no output reads (`cham03` makes its equation inert). The plasma obeys the
+    Standard-Model equation only through a cancellation between two spline-derived terms.
+  - **Impact.** README §6.1 shows the cost of the route on real histories.
+  - **Next step.** Prompt 01.
+  - **Resolved (2026-10-01):** by prompt 01 (log 01). `PRyM_init.NP_hubble_flag` adds ρ_NP to
+    `Hubble` and nowhere else; `_configure_PRyMordial` sets `NP_thermo_flag = False` and checks
+    the flags the route relies on; the thermodynamic solve integrates (T_γ, T_ν) only and ρ_NP is
+    called only from `Hubble` (`test_bbn_solver_failures (f)`); `cham03` is reverted. The route
+    reproduces README §6.1's "honly" rows to every printed digit (β = 2 at M = 0.5 and 10⁻³; the
+    constant family, small and full network), and ρ_NP ≡ 0 is plain PRyMordial exactly.
+    `PRYM_VERSION = "bf24c3d+ri02+sr01"`, `VERSION_LABEL = "2026.6.0"`.
+- **[00-prymordial-has-no-wall-clock-limit]** *(README §1 W)*.
+  - **What.** A solve that slows without failing occupies a Ray worker indefinitely; `run-integrity`
+    declined a Ray timeout (its README §0.4).
+  - **Impact.** One slow history stalls a survey's BBN stage.
+  - **Next step.** Prompt 01, as a PRyMordial parameter (U2).
+  - **Resolved (2026-10-01):** by prompt 01 (log 01). `PRyMclass(…, wall_clock_limit=None)`;
+    every `fun` and `jac` of the eight `solve_ivp` calls is wrapped and the deadline is checked
+    before each stage; past it, `PRyMWallClockLimitError(stage, elapsed, limit)`, which
+    `_run_PRyMordial` returns as a failure row. 600 s by default (`DEFAULT_BBN_WALL_CLOCK_LIMIT`),
+    `--bbn-wall-clock-limit SECS` on `main.py` (0 disables it); `compute_SM_baseline` has none. At
+    1e-3 s the constant family fails in 0.001 s naming `thermodynamics (no NP)`.
+- **[00-prymordial-output-is-stored-unchecked]** *(README §1 O)*.
+  - **What.** `_run_PRyMordial` returns `res[4:8]` as they come. `plot_by_beta.py` drops
+    non-positive abundances at plot time, after storing them.
+  - **Impact.** An unphysical result is a stored success.
+  - **Next step.** Prompt 01.
+  - **Resolved (2026-10-01):** by prompt 01 (log 01). `_check_abundances`: all four finite,
+    0 < Yp < 0.5, D/H, ³He/H, ⁷Li/H > 0; otherwise `"PRyMordial output: …"` failure rows
+    (`test_bbn_solver_failures (h)`).
+- **[02-a-short-bbn-sample-grid-escapes-compute-bbn-data]** *(assigned from `run-integrity`;
+  §3.1)*. **Resolved (2026-10-01):** by prompt 01 (log 01). `build_rho_NP_callback` raises
+  `ComputationFailureError` for fewer than four samples, naming the count, so the case is a
+  `"BBN callbacks: …"` failure row (`test_bbn_solver_failures (i)`; before, `ValueError`). The
+  dated **Resolved** line is also on the `run-integrity` board.
+- **[02-the-bbn-callbacks-do-not-check-their-values-for-finiteness]** *(assigned from
+  `run-integrity`; §3.1)*. **Resolved (2026-10-01):** by prompt 01 (log 01). The ρ_NP callback
+  raises `ComputationFailureError` for a non-finite value at a finite in-domain T, for example
+  from a NaN `G_rho` (`test_bbn_solver_failures (i)`; before, `nan` was returned to PRyMordial).
+  The dated **Resolved** line is also on the `run-integrity` board.

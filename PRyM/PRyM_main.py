@@ -32,10 +32,54 @@ def _check_solve_ivp(sol, stage, t_target):
         )
 
 
+# ChamPBH science-readiness prompt 01: an optional wall-clock limit on a PRyMclass solve. The
+# deadline is taken when PRyMclass.__init__ starts. Every fun and jac handed to solve_ivp is
+# wrapped by _limited, which raises PRyMWallClockLimitError once the limit has passed, and the
+# limit is also checked between stages by _check_wall_clock. The stage names are those
+# _check_solve_ivp uses. With limit None nothing is wrapped and nothing is checked.
+class PRyMWallClockLimitError(Exception):
+    def __init__(self, stage, elapsed, limit):
+        self.stage = stage
+        self.elapsed = elapsed
+        self.limit = limit
+        super().__init__(
+            "wall-clock limit of %.6g s exceeded in stage '%s': %.6g s elapsed"
+            % (limit, stage, elapsed)
+        )
+
+
+# ChamPBH science-readiness prompt 01: raise PRyMWallClockLimitError if the limit has passed.
+def _check_wall_clock(stage, t_start, limit):
+    if limit is not None:
+        elapsed = time.monotonic() - t_start
+        if elapsed > limit:
+            raise PRyMWallClockLimitError(stage, elapsed, limit)
+
+
+# ChamPBH science-readiness prompt 01: fn itself if limit is None, else fn behind the deadline.
+def _limited(fn, stage, t_start, limit):
+    if limit is None:
+        return fn
+
+    def wrapped(*args, **kwargs):
+        _check_wall_clock(stage, t_start, limit)
+        return fn(*args, **kwargs)
+
+    return wrapped
+
+
 class PRyMclass(object):
     def __init__(
-        self, my_rho_NP=None, my_p_NP=None, my_drho_NP_dT=None, my_delta_rho_NP=None
+        self,
+        my_rho_NP=None,
+        my_p_NP=None,
+        my_drho_NP_dT=None,
+        my_delta_rho_NP=None,
+        wall_clock_limit=None,  # ChamPBH science-readiness prompt 01: seconds, or None
     ):
+        # ChamPBH science-readiness prompt 01: the wall-clock limit's reference time
+        wall_clock_start = time.monotonic()
+
         #############################
         # PRyMordial initialization #
         #############################
@@ -93,6 +137,9 @@ class PRyMclass(object):
             rho_3nu = PRyMthermo.rho_nu(Tnue) + 2.0 * PRyMthermo.rho_nu(Tnumu)
             rho_tot = rho_pl + rho_3nu
             if PRyMini.NP_thermo_flag:
+                rho_tot += PRyMthermo.rho_NP(Tg)
+            # ChamPBH science-readiness prompt 01: new physics in the expansion rate only
+            if PRyMini.NP_hubble_flag:
                 rho_tot += PRyMthermo.rho_NP(Tg)
             if PRyMini.NP_nu_flag:
                 rho_tot += PRyMthermo.rho_NP(Tnue)
@@ -162,17 +209,14 @@ class PRyMclass(object):
 
             # NP temperature evolution
             def dTNPdt(Tg, Tnue, Tnumu, T_NP):
-                # ChamPBH review-remediation prompt 03: T_NP is inert (never read); the original
-                # -3H(rho+p)/drho_dT is singular wherever drho_NP/dT = 0 and stalls LSODA.
-                return 0.0
-                # Hubble_T = Hubble(Tg, Tnue, Tnumu, T_NP)
-                # rho_NP = PRyMthermo.rho_NP(Tg)
-                # p_NP = PRyMthermo.p_NP(Tg)
-                # num = -3.0 * Hubble_T * (rho_NP + p_NP)
-                # delta_rho_NP = PRyMthermo.delta_rho_NP(Tg, Tnue, Tnumu, Tg)
-                # num += delta_rho_NP
-                # den = PRyMthermo.drho_NP_dT(Tg)
-                # return num / den
+                Hubble_T = Hubble(Tg, Tnue, Tnumu, T_NP)
+                rho_NP = PRyMthermo.rho_NP(Tg)
+                p_NP = PRyMthermo.p_NP(Tg)
+                num = -3.0 * Hubble_T * (rho_NP + p_NP)
+                delta_rho_NP = PRyMthermo.delta_rho_NP(Tg, Tnue, Tnumu, Tg)
+                num += delta_rho_NP
+                den = PRyMthermo.drho_NP_dT(Tg)
+                return num / den
 
             def dTtotdt(t, T_vec):
                 if PRyMini.NP_thermo_flag:
@@ -221,8 +265,18 @@ class PRyMclass(object):
                     Tnu_vec = sol_thermo[:, 1]
                     TNP_vec = sol_thermo[:, 2]
                 else:
+                    # ChamPBH science-readiness prompt 01: the wall-clock limit, between stages
+                    _check_wall_clock(
+                        "thermodynamics (with NP)", wall_clock_start, wall_clock_limit
+                    )
                     sol_thermo = solve_ivp(
-                        dTtotdt,
+                        # ChamPBH science-readiness prompt 01: fun (and jac) behind the wall-clock limit
+                        _limited(
+                            dTtotdt,
+                            "thermodynamics (with NP)",
+                            wall_clock_start,
+                            wall_clock_limit,
+                        ),
                         [tini, tfin],
                         Tini_vec,
                         t_eval=sol_thermo_sampling,
@@ -263,8 +317,18 @@ class PRyMclass(object):
                     Tg_vec = sol_thermo[:, 0]
                     Tnu_vec = sol_thermo[:, 1]
                 else:
+                    # ChamPBH science-readiness prompt 01: the wall-clock limit, between stages
+                    _check_wall_clock(
+                        "thermodynamics (no NP)", wall_clock_start, wall_clock_limit
+                    )
                     sol_thermo = solve_ivp(
-                        dTtotdt,
+                        # ChamPBH science-readiness prompt 01: fun (and jac) behind the wall-clock limit
+                        _limited(
+                            dTtotdt,
+                            "thermodynamics (no NP)",
+                            wall_clock_start,
+                            wall_clock_limit,
+                        ),
                         [tini, tfin],
                         Tini_vec,
                         t_eval=sol_thermo_sampling,
@@ -451,8 +515,11 @@ class PRyMclass(object):
                 def dlna(lnT, y):
                     return dlnadlnT(lnT)
 
+                # ChamPBH science-readiness prompt 01: the wall-clock limit, between stages
+                _check_wall_clock("a(T)", wall_clock_start, wall_clock_limit)
                 sol_lnalnT = solve_ivp(
-                    dlna,
+                    # ChamPBH science-readiness prompt 01: fun (and jac) behind the wall-clock limit
+                    _limited(dlna, "a(T)", wall_clock_start, wall_clock_limit),
                     Tini_vec,
                     [np.log(zend / Tend_MeV)],
                     t_eval=np.log(T_sol_vec),
@@ -613,8 +680,13 @@ class PRyMclass(object):
             sol_at_HT = np.array(sol_at_HT.u)
             Yn_HT_f, Yp_HT_f = sol_at_HT[-1, :]
         else:
+            # ChamPBH science-readiness prompt 01: the wall-clock limit, between stages
+            _check_wall_clock("high-T n <-> p", wall_clock_start, wall_clock_limit)
             sol_at_HT = solve_ivp(
-                Y_prime_HT,
+                # ChamPBH science-readiness prompt 01: fun (and jac) behind the wall-clock limit
+                _limited(
+                    Y_prime_HT, "high-T n <-> p", wall_clock_start, wall_clock_limit
+                ),
                 [t_init, t_fin],
                 Yi_vec,
                 method="LSODA",
@@ -1052,12 +1124,27 @@ class PRyMclass(object):
                     YBe7_MT_f,
                 ) = sol_at_MT[-1, :]
             else:
+                # ChamPBH science-readiness prompt 01: the wall-clock limit, between stages
+                _check_wall_clock(
+                    "mid-T nuclear network (small)", wall_clock_start, wall_clock_limit
+                )
                 sol_at_MT = solve_ivp(
-                    Y_prime,
+                    # ChamPBH science-readiness prompt 01: fun (and jac) behind the wall-clock limit
+                    _limited(
+                        Y_prime,
+                        "mid-T nuclear network (small)",
+                        wall_clock_start,
+                        wall_clock_limit,
+                    ),
                     [t_init, t_fin],
                     Yi_vec,
                     method="BDF",
-                    jac=Jacobian,
+                    jac=_limited(
+                        Jacobian,
+                        "mid-T nuclear network (small)",
+                        wall_clock_start,
+                        wall_clock_limit,
+                    ),
                     rtol=1.0e-6,
                     atol=1.0e-9,
                 )
@@ -1129,12 +1216,27 @@ class PRyMclass(object):
                     YB8_MT_f,
                 ) = sol_at_MT[-1, :]
             else:
+                # ChamPBH science-readiness prompt 01: the wall-clock limit, between stages
+                _check_wall_clock(
+                    "mid-T nuclear network (full)", wall_clock_start, wall_clock_limit
+                )
                 sol_at_MT = solve_ivp(
-                    Y_prime_MT,
+                    # ChamPBH science-readiness prompt 01: fun (and jac) behind the wall-clock limit
+                    _limited(
+                        Y_prime_MT,
+                        "mid-T nuclear network (full)",
+                        wall_clock_start,
+                        wall_clock_limit,
+                    ),
                     [t_init, t_fin],
                     Yi_vec,
                     method="BDF",
-                    jac=Jacobian_MT,
+                    jac=_limited(
+                        Jacobian_MT,
+                        "mid-T nuclear network (full)",
+                        wall_clock_start,
+                        wall_clock_limit,
+                    ),
                     rtol=1.0e-6,
                     atol=1.0e-9,
                 )
@@ -1223,12 +1325,27 @@ class PRyMclass(object):
                 sol_at_LT = np.array(sol_at_LT.u)
                 Yn_f, Yp_f, Yd_f, Yt_f, YHe3_f, Ya_f, YLi7_f, YBe7_f = sol_at_LT[-1, :]
             else:
+                # ChamPBH science-readiness prompt 01: the wall-clock limit, between stages
+                _check_wall_clock(
+                    "low-T nuclear network (small)", wall_clock_start, wall_clock_limit
+                )
                 sol_at_LT = solve_ivp(
-                    Y_prime,
+                    # ChamPBH science-readiness prompt 01: fun (and jac) behind the wall-clock limit
+                    _limited(
+                        Y_prime,
+                        "low-T nuclear network (small)",
+                        wall_clock_start,
+                        wall_clock_limit,
+                    ),
                     [t_init, t_fin],
                     Yi_vec,
                     method="BDF",
-                    jac=Jacobian,
+                    jac=_limited(
+                        Jacobian,
+                        "low-T nuclear network (small)",
+                        wall_clock_start,
+                        wall_clock_limit,
+                    ),
                     atol=1.0e-11,
                 )
                 # ChamPBH run-integrity prompt 02: check the solve
@@ -1288,12 +1405,27 @@ class PRyMclass(object):
                     YB8_f,
                 ) = sol_at_LT[-1, :]
             else:
+                # ChamPBH science-readiness prompt 01: the wall-clock limit, between stages
+                _check_wall_clock(
+                    "low-T nuclear network (full)", wall_clock_start, wall_clock_limit
+                )
                 sol_at_LT = solve_ivp(
-                    Y_prime_LT,
+                    # ChamPBH science-readiness prompt 01: fun (and jac) behind the wall-clock limit
+                    _limited(
+                        Y_prime_LT,
+                        "low-T nuclear network (full)",
+                        wall_clock_start,
+                        wall_clock_limit,
+                    ),
                     [t_init, t_fin],
                     Yi_vec,
                     method="BDF",
-                    jac=Jacobian_LT,
+                    jac=_limited(
+                        Jacobian_LT,
+                        "low-T nuclear network (full)",
+                        wall_clock_start,
+                        wall_clock_limit,
+                    ),
                     atol=1.0e-15,
                 )
                 # ChamPBH run-integrity prompt 02: check the solve

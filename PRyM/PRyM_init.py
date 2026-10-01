@@ -74,6 +74,10 @@ xi_NP = 1.
 NP_nu_flag = False
 # Set flag to True for new species in thermal equilibrium with plasma, i.e. photons and e+-
 NP_e_flag = False
+# ChamPBH science-readiness prompt 01: set flag to True to add rho_NP(T_gamma) to the expansion
+# rate in Hubble() and nowhere else. The plasma and neutrino equations stay the Standard-Model
+# ones and no NP temperature is integrated: the new physics reaches BBN through H alone.
+NP_hubble_flag = False
 
 #################################
 # Flags for n <--> p weak rates #

@@ -1,6 +1,6 @@
 from collections import namedtuple
 from math import exp, isfinite, log
-from typing import Optional, List, Any, Callable, NamedTuple, Sequence
+from typing import Optional, List, Any, Callable, Sequence
 
 import numpy as np
 import ray
@@ -12,14 +12,12 @@ from CosmologyConcepts.Potentials import AbstractPotential
 from CosmologyModels import BaseCosmology
 from Datastore import DatastoreObject
 from MetadataConcepts import store_tag
-from Quadrature.supervisors.ScalarField import StateVector
 from Units.base import UnitsLike
 from config.defaults import DEFAULT_STRING_LENGTH
 from config.sharding import ShardKeyType
 from constants import RadiationConstant
 from utilities import WallclockTimer, energy_formatter
-from .Policies import PotentialDerivativePolicy
-from .ScalarModel import ScalarModelProxy, ScalarModel, ScalarModelValue, ODEPolicy
+from .ScalarModel import ScalarModelProxy, ScalarModel, ScalarModelValue
 from .exceptions import ComputationFailureError
 
 SampleValues = namedtuple(
@@ -28,18 +26,38 @@ SampleValues = namedtuple(
         "raw_N",
         "log_T_Jordan",
         "density_NP",
-        "pressure_NP",
         "density_NP_ratio",
     ],
 )
 
 
 # The PRyMordial that produced a row: the pinned upstream hash, plus a suffix
-# naming the ChamPBH patches applied to the vendored copy. "cham03" is
-# review-remediation prompt 03: dTNPdt returns 0 (PRyM/PRyM_main.py). "ri02" is
+# naming the ChamPBH patches applied to the vendored copy. "ri02" is
 # run-integrity prompt 02: every solve_ivp result is checked, and a solve that
-# did not succeed raises PRyMSolverFailureError (PRyM/PRyM_main.py).
-PRYM_VERSION = "bf24c3d+cham03+ri02"
+# did not succeed raises PRyMSolverFailureError (PRyM/PRyM_main.py). "sr01" is
+# science-readiness prompt 01: NP_hubble_flag (PRyM/PRyM_init.py) adds rho_NP
+# to the expansion rate in Hubble() and nowhere else, and PRyMclass takes an
+# optional wall_clock_limit, past which it raises PRyMWallClockLimitError
+# (PRyM/PRyM_main.py). The "cham03" patch (review-remediation prompt 03, an
+# inert dTNPdt) was reverted by science-readiness prompt 01: with
+# PRyMordial's thermodynamic NP flag off, dTNPdt is never called.
+PRYM_VERSION = "bf24c3d+ri02+sr01"
+
+# The wall-clock limit on a production PRyMordial solve, in seconds
+# (science-readiness README section 0.2, P3). An unloaded full-network solve
+# takes about 10 s. main.py's --bbn-wall-clock-limit defaults to this value.
+DEFAULT_BBN_WALL_CLOCK_LIMIT = 600.0
+
+# The fewest samples the cubic ratio spline can be built on
+# (science-readiness prompt 01; run-integrity board,
+# [02-a-short-bbn-sample-grid-escapes-compute-bbn-data])
+MIN_BBN_SAMPLES = 4
+
+# The abundances _run_PRyMordial returns, and the range each must lie in for
+# the result to be stored as a success (science-readiness prompt 01, item O).
+# These classify our own failures; they are not accuracy bounds on PRyMordial.
+YP_UPPER_BOUND = 0.5
+ABUNDANCE_NAMES = ("Yp_BBN", "DOverH", "He3OverH", "Li7OverH")
 
 
 def _failure_payload(reason: str) -> dict:
@@ -51,30 +69,15 @@ def _failure_payload(reason: str) -> dict:
     return {"failure": True, "failure_reason": str(reason)[:DEFAULT_STRING_LENGTH]}
 
 
-class NPCallbacks(NamedTuple):
+def thermodynamic_rho_SM(eos, units: UnitsLike) -> Callable[[float], float]:
     """
-    The three new-physics callbacks PRyMordial takes. Each takes T in MeV;
-    rho_NP and P_NP return MeV^4 and drho_NP_dT returns MeV^3.
-    """
-
-    rho_NP: Callable[[float], float]
-    P_NP: Callable[[float], float]
-    drho_NP_dT: Callable[[float], float]
-
-
-def thermodynamic_rho_SM(
-    eos, units: UnitsLike
-) -> tuple[Callable[[float], float], Callable[[float], float]]:
-    """
-    The Standard-Model radiation density rho_SM(T) = (pi^2/30) g_rho(T) T^4 and
-    its T-derivative, in PRyMordial's units: both take T in MeV and return MeV^4
-    and MeV^3 respectively. `eos` is anything with `G_rho` and `dG_rho_dlogT`
-    taking a dimensionful temperature in `units` (a LambdaCDM_GenericEOS
-    cosmology or an EOS class). dG_rho_dlogT is d g_rho / d ln T (correct since
-    review-remediation prompt 02), so
-        d rho_SM / dT = (pi^2/30) T^3 [4 g_rho(T) + d g_rho / d ln T].
-    Nothing is splined here and nothing is finite-differenced.
-    (review-remediation prompt 04)
+    The Standard-Model radiation density rho_SM(T) = (pi^2/30) g_rho(T) T^4 in
+    PRyMordial's units: it takes T in MeV and returns MeV^4. `eos` is anything
+    with `G_rho` taking a dimensionful temperature in `units` (a
+    LambdaCDM_GenericEOS cosmology or an EOS class). Nothing is splined here.
+    (review-remediation prompt 04. Until science-readiness prompt 01 it also
+    returned d rho_SM / dT, for the density-derivative callback that prompt
+    removed.)
     """
     MeV = units.MeV
 
@@ -82,57 +85,58 @@ def thermodynamic_rho_SM(
         g = float(eos.G_rho(T_in_MeV * MeV))
         return RadiationConstant * g * T_in_MeV**4
 
-    def drho_SM_dT_MeV3(T_in_MeV: float) -> float:
-        T = T_in_MeV * MeV
-        g = float(eos.G_rho(T))
-        dg_dlogT = float(eos.dG_rho_dlogT(T))
-        return RadiationConstant * T_in_MeV**3 * (4.0 * g + dg_dlogT)
-
-    return rho_SM_MeV4, drho_SM_dT_MeV3
+    return rho_SM_MeV4
 
 
-def build_NP_callbacks(
+def build_rho_NP_callback(
     log_T_MeV: Sequence[float],
     density_ratio: Sequence[float],
-    pressure_ratio: Sequence[float],
     rho_SM_MeV4: Callable[[float], float],
-    drho_SM_dT_MeV3: Callable[[float], float],
     T_min_MeV: float,
     T_max_MeV: float,
     task_label: str,
-) -> NPCallbacks:
+) -> Callable[[float], float]:
     """
-    Build PRyMordial's rho_NP, P_NP and drho_NP_dT from samples of the ratios
-    r = rho_NP / rho_R,J and s = p_NP / rho_R,J against ln(T_J / MeV).
+    Build PRyMordial's rho_NP callback from samples of the ratio
+    r = rho_NP / rho_R,J against ln(T_J / MeV). The callback takes T in MeV and
+    returns rho_NP(T) = r(T) rho_SM(T) in MeV^4.
 
     The arrays are in the order the solver produced them, so `log_T_MeV` must be
     strictly decreasing. If it is not, ComputationFailureError is raised naming
-    the first offending pair; nothing is sorted. The ratios are splined (cubic,
-    no transform) on the reversed arrays, and
-        rho_NP(T)     = r(T) rho_SM(T),
-        P_NP(T)       = s(T) rho_SM(T),
-        drho_NP_dT(T) = r'(ln T) rho_SM(T) / T + r(T) drho_SM_dT(T),
-    where r' is the analytic derivative of the ratio spline in ln T. The
-    derivative callback is differentiated from the interpolant, never
-    finite-differenced (campaign README section 2 (g)).
+    the first offending pair; nothing is sorted. The ratio is splined (cubic,
+    no transform) on the reversed arrays.
 
-    Guards, as before prompt 04: a negative T returns 0 (PRyMordial sometimes
-    produces one); T above T_max_MeV or below T_min_MeV raises
-    ComputationFailureError; an OverflowError or ValueError while evaluating is
-    wrapped in ComputationFailureError.
-    (review-remediation prompt 04, item R3)
+    Checks, each raising ComputationFailureError:
+    - fewer than MIN_BBN_SAMPLES (4) samples, naming the count
+      (science-readiness prompt 01; before it, IndexError or ValueError escaped
+      compute_BBN_data with no failure row);
+    - a non-finite sample of log_T_MeV or density_ratio, naming the array, the
+      first index and its T (run-integrity prompt 02);
+    - log_T_MeV not strictly decreasing (review-remediation prompt 04);
+    - in the callback: a non-finite T (run-integrity prompt 02); T above
+      T_max_MeV or below T_min_MeV; an OverflowError or ValueError while
+      evaluating; and a non-finite value returned for a finite T in the domain,
+      for example from a non-finite g_rho (science-readiness prompt 01; before
+      it, the NaN was handed to PRyMordial).
+    A negative T returns 0 (PRyMordial sometimes produces one). For finite
+    input in the domain no value differs from the rho_NP callback that
+    build_NP_callbacks returned before science-readiness prompt 01.
 
-    Finiteness (run-integrity prompt 02): a non-finite sample of log_T_MeV,
-    density_ratio or pressure_ratio raises ComputationFailureError before any
-    spline is built, naming the array, the first index and its T; and each
-    callback raises ComputationFailureError for a non-finite T, before the
-    negative-T guard. A NaN new-physics value made PRyMordial's high-T solve
-    hang, and a NaN T passes both the negative-T and the domain guards.
-    For finite input no value changes.
+    Until science-readiness prompt 01 this was build_NP_callbacks, which also
+    built the pressure and density-derivative callbacks of PRyMordial's
+    thermodynamic new-physics route. The Hubble-only route reads rho_NP alone.
     """
     log_T = np.asarray(log_T_MeV, dtype=float)
     r = np.asarray(density_ratio, dtype=float)
-    s = np.asarray(pressure_ratio, dtype=float)
+
+    # a cubic spline needs four samples; with fewer, make_interp_spline raises
+    # ValueError and an empty grid raises IndexError, neither of which
+    # compute_BBN_data catches (science-readiness prompt 01)
+    if len(log_T) < MIN_BBN_SAMPLES:
+        raise ComputationFailureError(
+            f"too few samples for the rho_NP spline: {len(log_T)} in the window, "
+            f"at least {MIN_BBN_SAMPLES} needed [{task_label}]"
+        )
 
     # refuse non-finite samples before the monotonicity check, which a NaN in
     # log_T_MeV would otherwise fail with a misleading message
@@ -140,7 +144,6 @@ def build_NP_callbacks(
     for name, samples in (
         ("log_T_MeV", log_T),
         ("density_ratio", r),
-        ("pressure_ratio", s),
     ):
         bad = np.flatnonzero(~np.isfinite(samples))
         if len(bad) > 0:
@@ -162,18 +165,24 @@ def build_NP_callbacks(
     # the spline wants increasing abscissae: reverse, do not sort
     x = log_T[::-1]
     density_ratio_spline = make_interp_spline(x, r[::-1], k=3)
-    pressure_ratio_spline = make_interp_spline(x, s[::-1], k=3)
-    density_ratio_derivative_spline = density_ratio_spline.derivative()
 
-    def _check_finite(T_in_MeV: float, callback: str):
-        # a NaN T passes both the negative-T guard and _check_domain
+    def _wrap(e: Exception, kind: str, T_in_MeV: float) -> ComputationFailureError:
+        msg = f"!! compute_BBN_data {task_label}: {kind} error at T = {T_in_MeV:.5g} MeV: {e}"
+        print(msg)
+        return ComputationFailureError(msg)
+
+    def rho_NP(T_in_MeV: float) -> float:
+        # a NaN T passes both the negative-T guard and the domain guard
         # (run-integrity prompt 02)
         if not isfinite(T_in_MeV):
             raise ComputationFailureError(
-                f"{callback} was called with a non-finite T_in_MeV={T_in_MeV!r} [{task_label}]"
+                f"rho_NP was called with a non-finite T_in_MeV={T_in_MeV!r} [{task_label}]"
             )
 
-    def _check_domain(T_in_MeV: float):
+        # PRyMordial sometimes produces negative temperatures
+        if T_in_MeV < 0:
+            return 0.0
+
         if T_in_MeV > T_max_MeV:
             raise ComputationFailureError(
                 f"T_in_MeV={T_in_MeV:.5g} MeV is larger than T_BBN_spline_max={T_max_MeV:.5g} MeV"
@@ -184,116 +193,57 @@ def build_NP_callbacks(
                 f"T_in_MeV={T_in_MeV:.5g} MeV is smaller than T_BBN_spline_min={T_min_MeV:.5g} MeV"
             )
 
-    def _wrap(e: Exception, kind: str, T_in_MeV: float) -> ComputationFailureError:
-        msg = f"!! compute_BBN_data {task_label}: {kind} error at T = {T_in_MeV:.5g} MeV: {e}"
-        print(msg)
-        return ComputationFailureError(msg)
-
-    def rho_NP(T_in_MeV: float) -> float:
-        _check_finite(T_in_MeV, "rho_NP")
-
-        # PRyMordial sometimes produces negative temperatures
-        if T_in_MeV < 0:
-            return 0.0
-
-        _check_domain(T_in_MeV)
-
-        log_T_in_MeV = log(T_in_MeV)
-        try:
-            value = float(density_ratio_spline(log_T_in_MeV)) * rho_SM_MeV4(T_in_MeV)
-        except OverflowError as e:
-            raise _wrap(e, "overflow", T_in_MeV) from e
-        except ValueError as e:
-            raise _wrap(e, "value", T_in_MeV) from e
-        else:
-            return value
-
-    def P_NP(T_in_MeV: float) -> float:
-        _check_finite(T_in_MeV, "P_NP")
-
-        # PRyMordial sometimes produces negative temperatures
-        if T_in_MeV < 0:
-            return 0.0
-
-        _check_domain(T_in_MeV)
-
-        log_T_in_MeV = log(T_in_MeV)
-        try:
-            value = float(pressure_ratio_spline(log_T_in_MeV)) * rho_SM_MeV4(T_in_MeV)
-        except OverflowError as e:
-            raise _wrap(e, "overflow", T_in_MeV) from e
-        except ValueError as e:
-            raise _wrap(e, "value", T_in_MeV) from e
-        else:
-            return value
-
-    def drho_NP_dT(T_in_MeV: float) -> float:
-        _check_finite(T_in_MeV, "drho_NP_dT")
-
-        # PRyMordial sometimes produces negative temperatures
-        if T_in_MeV < 0:
-            return 0.0
-
-        _check_domain(T_in_MeV)
-
         log_T_in_MeV = log(T_in_MeV)
         try:
             ratio = float(density_ratio_spline(log_T_in_MeV))
-            dratio_dlogT = float(density_ratio_derivative_spline(log_T_in_MeV))
             rho_SM = rho_SM_MeV4(T_in_MeV)
-            drho_SM_dT = drho_SM_dT_MeV3(T_in_MeV)
-            value = dratio_dlogT * rho_SM / T_in_MeV + ratio * drho_SM_dT
+            value = ratio * rho_SM
         except OverflowError as e:
             raise _wrap(e, "overflow", T_in_MeV) from e
         except ValueError as e:
             raise _wrap(e, "value", T_in_MeV) from e
-        else:
-            return value
 
-    return NPCallbacks(rho_NP=rho_NP, P_NP=P_NP, drho_NP_dT=drho_NP_dT)
+        # a non-finite value for a finite T in the domain would be handed to
+        # PRyMordial, which can hang on one (science-readiness prompt 01;
+        # run-integrity board, [02-the-bbn-callbacks-do-not-check-their-values-for-finiteness])
+        if not isfinite(value):
+            raise ComputationFailureError(
+                f"rho_NP is not finite at T={T_in_MeV:.6g} MeV: ratio={ratio!r}, "
+                f"rho_SM={rho_SM!r} [{task_label}]"
+            )
 
+        return value
 
-def jordan_Hdot_over_H2(
-    HEdot_over_HE2: float,
-    Omega_prime: float,
-    Omega_primeprime: float,
-    pi: float,
-    pi_prime: float,
-) -> float:
-    """
-    Hdot_J / H_J^2 from the Einstein-frame Hdot_E / H_E^2. Here Omega_prime and
-    Omega_primeprime are d ln Omega / d phi and d^2 ln Omega / d phi^2, pi is
-    d phi / dN and pi_prime is d pi / dN, with N the Einstein-frame e-fold number.
-    With A1 = 1 + Omega' pi, H_J = (H_E / Omega) A1, so
-        Hdot_J / H_J^2 = (Hdot_E / H_E^2 - Omega' pi) / A1 + A1' / A1^2,
-        A1' = Omega'' pi^2 + Omega' pi'.
-    Before review-remediation prompt 04 (item R3) the first term of A1' was
-    Omega'' pi, which is also dimensionally inconsistent. It is zero for the
-    exponential coupling, so no result has depended on it.
-    """
-    A1 = 1.0 + Omega_prime * pi
-    return (HEdot_over_HE2 - Omega_prime * pi) / A1 + (
-        Omega_primeprime * pi**2 + Omega_prime * pi_prime
-    ) / (A1 * A1)
+    return rho_NP
 
 
 def _configure_PRyMordial(small_network: bool):
     """
     Set the PRyMordial flags that compute_BBN_data and compute_SM_baseline both
-    use, and return the PRyM_main module. (Factored out in review-remediation
-    prompt 04 so that the baseline goes through exactly the same settings.)
+    use, check the ones this route relies on, and return the PRyM_main module.
+    (Factored out in review-remediation prompt 04 so that the baseline goes
+    through exactly the same settings.)
+
+    Since science-readiness prompt 01 the new physics reaches PRyMordial through
+    the expansion rate alone: NP_hubble_flag adds rho_NP(T_gamma) to H in
+    Hubble(), and the thermodynamic NP flag is off, so the plasma obeys the
+    Standard-Model dT_gamma/dt, the neutrinos theirs, and no NP temperature is
+    integrated.
+    The route also needs NP_nu_flag and NP_e_flag off (each would put rho_NP
+    into the thermodynamics a second way), julia_flag off (the Julia branches
+    carry no wall-clock limit), and compute_bckg_flag on (a cached background,
+    thermo/Tgamma_Tnu.txt, would silently ignore rho_NP). Those are checked,
+    and an AssertionError is raised if one is not as required.
     """
     # import locally so that global variable in PRyMini don't leak between threads
     # (not sure if this is possible or not, but worth being defensive)
     import PRyM.PRyM_init as PRyMini
     import PRyM.PRyM_main as PRyMmain
 
-    # ask PRyMordial to include new physics ("NP") contributions to the thermodynamics
-    PRyMini.NP_thermo_flag = True
-
-    # PryMordial seems to require the temperature in the NP sector to be set separately
-    # note PRyMini.T_start seems to be in Kelvin whereas all other energies are measured in MeV
-    PRyMini.Tstart_NP = PRyMini.T_start / PRyMini.MeV_to_Kelvin
+    # the new physics enters the Hubble rate only (science-readiness prompt 01).
+    # Until then this set the thermodynamic NP flag and the NP start temperature.
+    PRyMini.NP_thermo_flag = False
+    PRyMini.NP_hubble_flag = True
 
     # disable verbose output
     PRyMini.verbose_flag = False
@@ -304,6 +254,23 @@ def _configure_PRyMordial(small_network: bool):
     # small_network_flag, which PRyMordial never reads, so every solve ran the full network.
     PRyMini.smallnet_flag = small_network
 
+    # the flags the Hubble-only route relies on (science-readiness prompt 01). An
+    # explicit raise rather than `assert`, so that the check survives python -O.
+    for name, required in (
+        ("NP_thermo_flag", False),
+        ("NP_hubble_flag", True),
+        ("NP_nu_flag", False),
+        ("NP_e_flag", False),
+        ("julia_flag", False),
+        ("compute_bckg_flag", True),
+    ):
+        value = getattr(PRyMini, name)
+        if value is not required:
+            raise AssertionError(
+                f"_configure_PRyMordial: PRyM_init.{name} is {value!r}; the Hubble-only "
+                f"BBN route requires {required!r}"
+            )
+
     return PRyMmain
 
 
@@ -311,53 +278,96 @@ def _zero_NP(T_in_MeV: float) -> float:
     return 0.0
 
 
-def _run_PRyMordial(callbacks: NPCallbacks, small_network: bool) -> dict:
+def _check_abundances(abundances: dict) -> Optional[str]:
+    """
+    The output checks (science-readiness prompt 01, item O). Return None if all
+    four abundances are finite, 0 < Yp_BBN < 0.5, and DOverH, He3OverH and
+    Li7OverH are positive; otherwise a reason naming each value that fails.
+    These classify our own failures, not PRyMordial's accuracy.
+    """
+    problems = []
+    for name in ABUNDANCE_NAMES:
+        value = float(abundances[name])
+        if not isfinite(value):
+            problems.append(f"{name}={value} is not finite")
+        elif name == "Yp_BBN":
+            if not 0.0 < value < YP_UPPER_BOUND:
+                problems.append(
+                    f"{name}={value:.10g} is outside (0, {YP_UPPER_BOUND:g})"
+                )
+        elif not value > 0.0:
+            problems.append(f"{name}={value:.10g} is not positive")
+
+    if len(problems) == 0:
+        return None
+    return "; ".join(problems)
+
+
+def _run_PRyMordial(
+    rho_NP: Callable[[float], float],
+    small_network: bool,
+    wall_clock_limit: Optional[float],
+) -> dict:
     """
     The PRyMordial boundary (run-integrity prompt 02). Configure PRyMordial
-    with `_configure_PRyMordial(small_network)`, run it on the three
-    new-physics callbacks, and return {"Yp_BBN", "DOverH", "He3OverH",
-    "Li7OverH"} (D/H and 3He/H x 1e5, 7Li/H x 1e10).
+    with `_configure_PRyMordial(small_network)`, run it on the rho_NP callback
+    with the given wall-clock limit (seconds; None for no limit), and return
+    {"Yp_BBN", "DOverH", "He3OverH", "Li7OverH"} (D/H and 3He/H x 1e5,
+    7Li/H x 1e10).
 
     Any Exception raised inside the PRyMordial call is returned as
     `_failure_payload("PRyMordial: <Type>: <message>")`. That covers
-    PRyMSolverFailureError (a solve_ivp that did not succeed), a
-    ComputationFailureError raised by the callbacks, which PRyMordial calls,
-    and anything else PRyMordial or the callbacks raise. It does not cover a
+    PRyMSolverFailureError (a solve_ivp that did not succeed),
+    PRyMWallClockLimitError (the limit passed; science-readiness prompt 01), a
+    ComputationFailureError raised by the callback, which PRyMordial calls,
+    and anything else PRyMordial or the callback raise. It does not cover a
     BaseException such as KeyboardInterrupt, nor anything raised outside the
     call: an exception from ChamPBH's own code outside PRyMordial is a bug and
     propagates. compute_SM_baseline does not use this helper.
+
+    A successful return is then checked by `_check_abundances`; one outside
+    the checks is returned as `_failure_payload("PRyMordial output: ...")`
+    (science-readiness prompt 01).
     """
     PRyMmain = _configure_PRyMordial(small_network)
 
     try:
         res = PRyMmain.PRyMclass(
-            callbacks.rho_NP, callbacks.P_NP, callbacks.drho_NP_dT
+            rho_NP, wall_clock_limit=wall_clock_limit
         ).PRyMresults()
     except Exception as e:
         return _failure_payload(f"PRyMordial: {type(e).__name__}: {e}")
 
-    return {
+    abundances = {
         "Yp_BBN": res[4],
         "DOverH": res[5],
         "He3OverH": res[6],
         "Li7OverH": res[7],
     }
 
+    problems = _check_abundances(abundances)
+    if problems is not None:
+        return _failure_payload(f"PRyMordial output: {problems}")
+
+    return abundances
+
 
 def compute_SM_baseline(small_network: bool) -> dict:
     """
     The Standard-Model abundances through the same PRyMordial path as
-    compute_BBN_data: the same flags (NP_thermo_flag = True and the rest), with
-    rho_NP = p_NP = drho_NP/dT = 0. Returns Yp_BBN, DOverH (x 1e5), He3OverH
-    (x 1e5), Li7OverH (x 1e10), PRyM_version and small_network. One PRyMordial
-    solve, about 10 s; must be called from the repository root. Not stored.
+    compute_BBN_data: the same flags (the Hubble-only route since
+    science-readiness prompt 01), with rho_NP = 0, which is PRyMordial with
+    every new-physics contribution zero. Returns Yp_BBN, DOverH (x 1e5),
+    He3OverH (x 1e5), Li7OverH (x 1e10), PRyM_version and small_network. One
+    PRyMordial solve, about 10 s, with no wall-clock limit; must be called from
+    the repository root. Not stored.
     (review-remediation prompt 04, item R3)
     """
     # this does not go through _run_PRyMordial: a failed baseline raises (for
     # example PRyMSolverFailureError), since it is not stored and should be
     # loud (run-integrity prompt 02)
     PRyMmain = _configure_PRyMordial(small_network)
-    res = PRyMmain.PRyMclass(_zero_NP, _zero_NP, _zero_NP).PRyMresults()
+    res = PRyMmain.PRyMclass(_zero_NP).PRyMresults()
 
     return {
         "Yp_BBN": res[4],
@@ -376,13 +386,22 @@ def compute_BBN_data(
     T_BBN_MeV_spline_max: float = 100,  # PRyMordial default begins at 10 MeV
     T_BBN_keV_spline_min: float = 1e-4,  # PRyMordial default ends at 1 keV, but samples at later times
     small_network: bool = False,
+    wall_clock_limit: Optional[float] = DEFAULT_BBN_WALL_CLOCK_LIMIT,
 ):
+    """
+    The BBN abundances of one stored history. For each sample in
+    [T_BBN_keV_spline_min, T_BBN_MeV_spline_max] in T_Jordan,
+        rho_NP = 3 M_P^2 H_J^2 - rho_R,J (1 + f_m),   r = rho_NP / rho_R,J,
+    and PRyMordial is run on the callback rho_NP(T) = r(T) rho_SM(T) of
+    build_rho_NP_callback, through the Hubble-only route of
+    _configure_PRyMordial, with `wall_clock_limit` seconds (None for no limit).
+
+    Since science-readiness prompt 01 nothing computes p_NP: the Hubble-only
+    route reads rho_NP alone. Every failure returns `_failure_payload`.
+    """
     model: ScalarModel = model_proxy.get()
     cosmology: BaseCosmology = model._cosmology
     units: UnitsLike = cosmology.units
-
-    potential: AbstractPotential = model.potential
-    coupling: AbstractCoupling = model.coupling
 
     CONST_MP_SQ = units.PlanckMass * units.PlanckMass
     CONST_3_MP_SQ = 3.0 * CONST_MP_SQ
@@ -393,14 +412,12 @@ def compute_BBN_data(
     raw_N_grid: List[float] = []
 
     log_T_Jordan_grid: List[float] = []
-    pressure_NP_grid: List[float] = []
     density_NP_grid: List[float] = []
     rhorad_Jordan_grid: List[float] = []
 
     # PRyMordial expects energies to be in units of MeV
     log_T_Jordan_MeV_grid: List[float] = []
     density_NP_ratio_grid: List[float] = []
-    pressure_NP_ratio_grid: List[float] = []
 
     T_BBN_spline_max = T_BBN_MeV_spline_max * units.MeV
     T_BBN_spline_min = T_BBN_keV_spline_min * units.keV
@@ -416,13 +433,8 @@ def compute_BBN_data(
 
     log_MeV = log(units.MeV)
 
-    V_policy: PotentialDerivativePolicy = PotentialDerivativePolicy(
-        task_label, cosmology, potential
-    )
-    ODE_policy: ODEPolicy = ODEPolicy(task_label, cosmology, potential, coupling)
-
     with WallclockTimer() as NP_timer:
-        # first, build estimates for the "new physics" density and pressure needed by PRyMordial
+        # first, build the "new physics" density needed by PRyMordial
         for value in model.values:
             value: ScalarModelValue
 
@@ -439,10 +451,7 @@ def compute_BBN_data(
                 rhorad_Jordan_grid.append(rhorad_Jordan)
 
                 H2_Jordan: float = value.H_Jordan * value.H_Jordan
-
-                Sigma: float = value.Sigma
                 fm: float = exp(value.log_fm)
-                w: float = (1.0 - Sigma) / 3.0
 
                 LHS: float = H2_Jordan * CONST_3_MP_SQ
                 density_NP: float = LHS - rhorad_Jordan * (1.0 + fm)
@@ -450,59 +459,15 @@ def compute_BBN_data(
                 density_NP_grid.append(density_NP)
                 density_NP_ratio_grid.append(density_NP / rhorad_Jordan)
 
-                HEdot_over_HE2: float = (
-                    V_policy.Hdot_over_H2_plus_3(
-                        value.phi_Einstein,
-                        value.pi_Einstein,
-                        value.log_rhorad_Einstein,
-                        Sigma,
-                        fm,
-                    )
-                    - 3.0
-                )
-                log_Omega_prime: float = coupling.d_logOmega_dphi(value.phi_Einstein)
-                log_Omega_primeprime: float = coupling.d2_logOmega_dphi2(
-                    value.phi_Einstein
-                )
-
-                state: StateVector = StateVector(
-                    phi_Einstein=value.phi_Einstein,
-                    pi_Einstein=value.pi_Einstein,
-                    log_rhorad_Einstein=value.log_rhorad_Einstein,
-                    log_fm=value.log_fm,
-                    log_T_Jordan=value.log_T_Jordan,
-                )
-                data = ODE_policy(value.raw_N, state)
-                pi_Einstein_prime: float = (
-                    data.friction_term + data.reflecting_term + data.kicking_term
-                )
-
-                HJdot_over_HJ2: float = jordan_Hdot_over_H2(
-                    HEdot_over_HE2,
-                    log_Omega_prime,
-                    log_Omega_primeprime,
-                    value.pi_Einstein,
-                    pi_Einstein_prime,
-                )
-
-                pressure_NP: float = (
-                    -LHS * (1.0 + 2.0 * HJdot_over_HJ2 / 3.0) - w * rhorad_Jordan
-                )
-
-                pressure_NP_grid.append(pressure_NP)
-                pressure_NP_ratio_grid.append(pressure_NP / rhorad_Jordan)
-
-        # the ratios are multiplied back by the thermodynamic rho_SM(T_J), not by a
+        # the ratio is multiplied back by the thermodynamic rho_SM(T_J), not by a
         # spline of the stored rho_R,J (review-remediation prompt 04; see its log)
-        rho_SM_MeV4, drho_SM_dT_MeV3 = thermodynamic_rho_SM(cosmology, units)
+        rho_SM_MeV4 = thermodynamic_rho_SM(cosmology, units)
 
         try:
-            callbacks: NPCallbacks = build_NP_callbacks(
+            rho_NP = build_rho_NP_callback(
                 log_T_Jordan_MeV_grid,
                 density_NP_ratio_grid,
-                pressure_NP_ratio_grid,
                 rho_SM_MeV4,
-                drho_SM_dT_MeV3,
                 T_min_MeV=T_BBN_spline_min / units.MeV,
                 T_max_MeV=T_BBN_spline_max / units.MeV,
                 task_label=task_label,
@@ -512,9 +477,10 @@ def compute_BBN_data(
             return _failure_payload(f"BBN callbacks: {e}")
 
     with WallclockTimer() as BBN_timer:
-        # run PRyMordial; any exception inside the call comes back as a failure
-        # payload (run-integrity prompt 02)
-        abundances: dict = _run_PRyMordial(callbacks, small_network)
+        # run PRyMordial; any exception inside the call, and an output outside
+        # the checks, comes back as a failure payload (run-integrity prompt 02;
+        # science-readiness prompt 01)
+        abundances: dict = _run_PRyMordial(rho_NP, small_network, wall_clock_limit)
 
     if abundances.get("failure", False):
         return abundances
@@ -526,7 +492,6 @@ def compute_BBN_data(
                 log_T_Jordan=log_T_Jordan_grid[i],
                 density_NP=density_NP_grid[i],
                 density_NP_ratio=density_NP_grid[i] / rhorad_Jordan_grid[i],
-                pressure_NP=pressure_NP_grid[i],
             )
         )
 
@@ -770,8 +735,13 @@ class BBNData(DatastoreObject):
 
         if payload is not None:
             small_network = payload.get("small_network", False)
+            # seconds, or None for no limit (science-readiness prompt 01)
+            wall_clock_limit = payload.get(
+                "wall_clock_limit", DEFAULT_BBN_WALL_CLOCK_LIMIT
+            )
         else:
             small_network = False
+            wall_clock_limit = DEFAULT_BBN_WALL_CLOCK_LIMIT
 
         self._compute_ref = compute_BBN_data.remote(
             self._model_proxy,
@@ -781,6 +751,7 @@ class BBNData(DatastoreObject):
                 else f"{self._potential.name}-{self._coupling.name}"
             ),
             small_network=small_network,
+            wall_clock_limit=wall_clock_limit,
         )
         return self._compute_ref
 
@@ -835,7 +806,6 @@ class BBNData(DatastoreObject):
                     raw_N=samples[i].raw_N,
                     log_T_Jordan=samples[i].log_T_Jordan,
                     density_NP=samples[i].density_NP,
-                    pressure_NP=samples[i].pressure_NP,
                     density_NP_ratio=samples[i].density_NP_ratio,
                 )
             )
@@ -851,7 +821,6 @@ class BBNDataValue(DatastoreObject):
         raw_N: float,
         log_T_Jordan: float,
         density_NP: float,
-        pressure_NP: float,
         density_NP_ratio: float,
     ):
         DatastoreObject.__init__(self, store_id)
@@ -861,7 +830,6 @@ class BBNDataValue(DatastoreObject):
         self._log_T_Jordan: float = log_T_Jordan
 
         self._density_NP: float = density_NP
-        self._pressure_NP: float = pressure_NP
         self._density_NP_ratio: float = density_NP_ratio
 
     @property
@@ -883,10 +851,6 @@ class BBNDataValue(DatastoreObject):
     @property
     def density_NP(self) -> float:
         return self._density_NP
-
-    @property
-    def pressure_NP(self) -> float:
-        return self._pressure_NP
 
     @property
     def density_NP_ratio(self) -> float:

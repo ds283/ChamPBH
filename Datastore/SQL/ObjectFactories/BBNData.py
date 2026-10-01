@@ -214,7 +214,6 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
                     value_table.c.raw_N,
                     value_table.c.log_T_Jordan_MeV,
                     value_table.c.density_NP_MeV4,
-                    value_table.c.pressure_NP_MeV4,
                     value_table.c.density_NP_ratio,
                 )
                 .select_from(
@@ -249,7 +248,6 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
                         raw_N=row.raw_N,
                         log_T_Jordan=row.log_T_Jordan_MeV + log_MeV,
                         density_NP=row.density_NP_MeV4 * MeV4,
-                        pressure_NP=row.pressure_NP_MeV4 * MeV4,
                         density_NP_ratio=row.density_NP_ratio,
                     )
                 )
@@ -337,7 +335,6 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
                 "raw_N": val._raw_N,
                 "log_T_Jordan_MeV": val._log_T_Jordan - log_MeV,
                 "density_NP_MeV4": val._density_NP / MeV4,
-                "pressure_NP_MeV4": val._pressure_NP / MeV4,
                 "density_NP_ratio": val._density_NP_ratio,
             }
 
@@ -541,7 +538,8 @@ class sqla_BBNDataValue_factory(SQLAFactoryBase):
                 sqla.Column("raw_N", sqla.Float(64), nullable=False),
                 sqla.Column("log_T_Jordan_MeV", sqla.Float(64), nullable=False),
                 sqla.Column("density_NP_MeV4", sqla.Float(64), nullable=False),
-                sqla.Column("pressure_NP_MeV4", sqla.Float(64), nullable=False),
+                # science-readiness prompt 01 removed the pressure column: the
+                # Hubble-only BBN route reads rho_NP alone, and p_NP is no longer computed
                 sqla.Column("density_NP_ratio", sqla.Float(64), nullable=False),
             ],
         }
@@ -555,7 +553,6 @@ class sqla_BBNDataValue_factory(SQLAFactoryBase):
 
         log_T_Jordan: float = payload["log_T_Jordan"]
         density_NP: float = payload["density_NP"]
-        pressure_NP: float = payload["pressure_NP"]
         density_NP_ratio: float = payload["density_NP_ratio"]
 
         # define quantities in explicit units
@@ -565,7 +562,6 @@ class sqla_BBNDataValue_factory(SQLAFactoryBase):
 
         log_T_Jordan_MeV: float = log_T_Jordan - log_MeV
         density_NP_MeV4: float = density_NP / MeV4
-        pressure_NP_MeV4: float = pressure_NP / MeV4
 
         try:
             row_data = conn.execute(
@@ -574,7 +570,6 @@ class sqla_BBNDataValue_factory(SQLAFactoryBase):
                     table.c.raw_N,
                     table.c.log_T_Jordan_MeV,
                     table.c.density_NP_MeV4,
-                    table.c.pressure_NP_MeV4,
                     table.c.density_NP_ratio,
                 ).filter(
                     table.c.bbn_serial == BBN_serial,
@@ -594,7 +589,6 @@ class sqla_BBNDataValue_factory(SQLAFactoryBase):
                     "raw_N": raw_N,
                     "log_T_Jordan_MeV": log_T_Jordan_MeV,
                     "density_NP_MeV4": density_NP_MeV4,
-                    "pressure_NP_MeV4": pressure_NP_MeV4,
                     "density_NP_ratio": density_NP_ratio,
                 },
             )
@@ -606,7 +600,6 @@ class sqla_BBNDataValue_factory(SQLAFactoryBase):
 
             log_T_Jordan = row_data.log_T_Jordan_MeV + log_MeV
             density_NP = row_data.density_NP_MeV4 * MeV4
-            pressure_NP = row_data.pressure_NP_MeV4 * MeV4
             density_NP_ratio = row_data.density_NP_ratio
 
         obj = BBNDataValue(
@@ -615,7 +608,6 @@ class sqla_BBNDataValue_factory(SQLAFactoryBase):
             raw_N=raw_N,
             log_T_Jordan=log_T_Jordan,
             density_NP=density_NP,
-            pressure_NP=pressure_NP,
             density_NP_ratio=density_NP_ratio,
         )
         obj._deserialized = True

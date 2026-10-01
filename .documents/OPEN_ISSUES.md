@@ -1,11 +1,10 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-01 · **33 open**: 8 on the `review-remediation` board (closed
+**Last updated:** 2026-10-01 · **28 open**: 8 on the `review-remediation` board (closed
 2026-09-30), 3 of them assigned to `science-readiness`; 2 on the `production-readiness` board
-(closed 2026-09-30); 6 on the `run-integrity` board (closed 2026-09-30), 2 of them assigned to
-`science-readiness`; 10 on the `integrator-remediation` board (closed 2026-10-01), 2 of them
-assigned to `science-readiness`; 7 on the `science-readiness` board (planned 2026-10-01, 0 of 9
-landed).
+(closed 2026-09-30); 4 on the `run-integrity` board (closed 2026-09-30); 10 on the
+`integrator-remediation` board (closed 2026-10-01), 2 of them assigned to `science-readiness`;
+4 on the `science-readiness` board (planned 2026-10-01, 1 of 9 landed).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -83,7 +82,8 @@ prompt 03 on 2026-09-30.
 
 Two opened by the planner on 2026-09-30, both assigned to the campaign's own prompts; prompts 02
 and 03 resolved them (board §4). Two opened by prompt 01, two by prompt 02, one by prompt 03 and
-one by prompt 04 on 2026-09-30. Two were assigned on 2026-10-01 to `science-readiness` (§1.7).
+one by prompt 04 on 2026-09-30. Two were assigned on 2026-10-01 to `science-readiness` (§1.7);
+its prompt 01 resolved both the same day.
 
 - `[01-adiabatic-and-bbn-lookups-do-not-require-validated-rows]` — unlike `ScalarModel.build`,
   the `AdiabaticHistory` and `BBNData` lookups do not filter `validated == True`, so an
@@ -137,10 +137,6 @@ carries the **Assigned** line; the prompt that closes one deletes its row here.
   reads to 0.363 keV. `review-remediation`; prompt 06.
 - `[04-numerical-strategies-describes-the-removed-asinh-bbn-interface]` — §7.2–7.4 need a dated
   addendum. `review-remediation`; prompt 08.
-- `[02-a-short-bbn-sample-grid-escapes-compute-bbn-data]` — fewer than four samples ends the BBN
-  task with no row. `run-integrity`; prompt 01.
-- `[02-the-bbn-callbacks-do-not-check-their-values-for-finiteness]` — a NaN ρ_SM would reach
-  PRyMordial. `run-integrity`; prompt 01.
 - `[00-scalarmodel-failure-rows-carry-no-reason]` — the reason is printed, not stored.
   `integrator-remediation`; prompt 02.
 - `[00-stored-samples-alias-the-rebounds]` — the z grid samples fast bounces at random phase; its
@@ -149,12 +145,8 @@ carries the **Assigned** line; the prompt that closes one deletes its row here.
 ### 1.8 `science-readiness` — [board §3](../prompts/science-readiness/IMPLEMENTATION_STATE.md)
 
 Seven opened by the planner on 2026-10-01, one per campaign item with no issue elsewhere.
+Prompt 01 (2026-10-01) closed three (board §4).
 
-- `[00-bbn-route-integrates-a-fictitious-np-temperature]` — `NP_thermo_flag` integrates an unread
-  `T_NP` and perturbs dT_γ/dt; replace with a Hubble-only patch. Prompt 01.
-- `[00-prymordial-has-no-wall-clock-limit]` — a slow solve holds a worker indefinitely. Prompt 01.
-- `[00-prymordial-output-is-stored-unchecked]` — unphysical abundances are stored as results.
-  Prompt 01.
 - `[00-first-bounce-is-not-stored]` — the dense-output bounce is lost; samples cannot recover it at
   small M. Prompt 03.
 - `[00-bbn-input-is-aliased-at-small-M]` — below 3 keV the ratio BBN splines swings ±0.4–0.85 %

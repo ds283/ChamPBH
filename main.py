@@ -758,8 +758,17 @@ def run_pipeline(
         coupling: AbstractCoupling = q.coupling
         return f"{args.job_name}-BBNData-{potential.name}-{coupling.name}-{datetime.now().replace(microsecond=0).isoformat()}"
 
+    # the wall-clock limit on each PRyMordial solve, in seconds; 0 means no limit
+    # (science-readiness prompt 01)
+    bbn_wall_clock_limit = (
+        None if args.bbn_wall_clock_limit == 0 else args.bbn_wall_clock_limit
+    )
+
     def compute_bbn_data_batch(data: BBNData, label: str):
-        return data.compute(label=label, payload={"small_network": False})
+        return data.compute(
+            label=label,
+            payload={"small_network": False, "wall_clock_limit": bbn_wall_clock_limit},
+        )
 
     def validate_bbn_data_batch(q: BBNData):
         if not q.available:
