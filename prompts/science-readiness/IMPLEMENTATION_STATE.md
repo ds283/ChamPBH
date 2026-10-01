@@ -65,6 +65,15 @@ PRyMordial reads, and adds the extraction and the four figures of the science ru
   issues of P4 are now firmly assigned to prompt 01. The user had earlier asked how close the
   probes came to P3's 600 s; the answer (the Hubble-only solves took 9.7–10.0 s, about 1.7 % of
   the limit, unloaded) left P3 as proposed.
+- **2026-10-01, the user: prompt 01's deviation 3 accepted as is.** `test_bbn_callbacks (h)` no
+  longer bounds the builder's constant-ratio callback against the exact constant family. It bounds
+  that callback through the Hubble-only route against the same callback through the "honly" route
+  on `7b518c9` (`BUILDER_CONST_HONLY_FULL_*`), at 1e-6. The 1.06e-4 D/H offset from the exact
+  family is PRyMordial's sensitivity to ulp-level changes in ρ_NP
+  (`[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]`, `review-remediation`). It is
+  printed and not bounded. Log 01, deviation 3 holds the measurements. The orchestrator's review
+  of `1bc8977` passed all ten checks of `orchestrator/prompt-01.md` §3, and this ruling was the
+  only open question.
 
 Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
