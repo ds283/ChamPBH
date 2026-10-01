@@ -51,7 +51,7 @@ from extract_common import (
     add_beta_summary_labels,
     nice_Q_labels,
     add_BBN_info_labels,
-    hard_reflection_count,
+    reflection_count,
 )
 
 DEFAULT_TIMEOUT = 60
@@ -496,8 +496,8 @@ def build_beta_plot(
                     if store_id in beta_to_BBN
                     else nan
                 ),
-                "hard_reflections": (
-                    hard_reflection_count(beta_to_models[store_id].extra_metadata)
+                "reflections": (
+                    reflection_count(beta_to_models[store_id].extra_metadata)
                     if store_id in beta_to_models
                     else nan
                 ),
@@ -525,12 +525,12 @@ def build_beta_plot(
             for store_id in beta_keys
         ]
 
-        # report how many models used the hard-reflection fallback
+        # report how many models had bounces modelled by the elastic reflection
         M_eV = potential._M.as_float / units.eV
         Lambda_eV = potential._Lambda.as_float / units.eV
         reflected = sorted(
             (
-                (m.coupling._beta.as_float, hard_reflection_count(m.extra_metadata))
+                (m.coupling._beta.as_float, reflection_count(m.extra_metadata))
                 for m in beta_to_models.values()
             ),
             key=lambda x: x[0],
@@ -538,15 +538,15 @@ def build_beta_plot(
         reflected = [(beta, count) for beta, count in reflected if count > 0]
         if len(reflected) > 0:
             print(
-                f"!! build_beta_plot '{model_label}', M={M_eV:.5g} eV, Lambda={Lambda_eV:.5g} eV: {len(reflected)} of {len(beta_to_models)} model(s) used hard reflections"
+                f"!! build_beta_plot '{model_label}', M={M_eV:.5g} eV, Lambda={Lambda_eV:.5g} eV: {len(reflected)} of {len(beta_to_models)} model(s) used elastic reflections"
             )
             for beta, count in reflected:
                 print(
-                    f"     -- beta={beta:.5g}, M={M_eV:.5g} eV, Lambda={Lambda_eV:.5g} eV: {count} hard reflection(s)"
+                    f"     -- beta={beta:.5g}, M={M_eV:.5g} eV, Lambda={Lambda_eV:.5g} eV: {count} reflection(s)"
                 )
         else:
             print(
-                f"@@ build_beta_plot '{model_label}', M={M_eV:.5g} eV, Lambda={Lambda_eV:.5g} eV: no models used hard reflections ({len(beta_to_models)} model(s) checked)"
+                f"@@ build_beta_plot '{model_label}', M={M_eV:.5g} eV, Lambda={Lambda_eV:.5g} eV: no models used elastic reflections ({len(beta_to_models)} model(s) checked)"
             )
 
         df = pd.DataFrame(data)
@@ -673,7 +673,7 @@ def run_pipeline(
         model_query_batch = [
             {
                 "shard_key": coupling.shard_key,
-                "solver_labels": [],
+                "solver_labels": ["Radau+kinematic-cap-stepping0"],
                 "failure": False,
                 "cosmology": model_cosmology,
                 "T_Jordan_init": T_init,

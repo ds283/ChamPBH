@@ -1,9 +1,10 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-01 · **31 open**: 8 on the `review-remediation` board (closed
+**Last updated:** 2026-10-01 · **30 open**: 8 on the `review-remediation` board (closed
 2026-09-30), none of them assigned; 2 on the `production-readiness` board (closed
-2026-09-30); 6 on the `run-integrity` board (closed 2026-09-30); 15 on the
-`integrator-remediation` board (planned 2026-10-01), 8 of them assigned to its own prompts.
+2026-09-30); 6 on the `run-integrity` board (closed 2026-09-30); 14 on the
+`integrator-remediation` board (in progress, 1 of 4 prompts landed), 5 of them assigned to its
+own prompts.
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -111,21 +112,14 @@ one by prompt 04 on 2026-09-30, not assigned.
 
 Fourteen opened by the planner on 2026-10-01 from
 [`.documents/integrator-audit-2026-09-30/README.md`](integrator-audit-2026-09-30/README.md), and
-one the same day from the user's reflection guard G1. The first eight are assigned to the
-campaign's own prompts (the board entry says which); the prompt that closes one deletes its row
-here. The last seven are open and unassigned.
+one the same day from the user's reflection guard G1. Prompt 01 (2026-10-01) closed three and
+opened two (`[01-…]`). The first five below are assigned to the campaign's own prompts (the board
+entry says which); the prompt that closes one deletes its row here. The other nine are open and
+unassigned.
 
-- `[00-region-scheme-costs-100x-and-storms-fragments]` — the L1/L2 caps cost 2.1e6 RHS against
-  1.9e4 on the parked P2 window, and 85 fragments on the grazing P3 window; the 100-fragment
-  failsafe kills every M ≤ 0.01 history. Prompt 01.
-- `[00-hard-reflection-at-phi-zero-stalls-or-runs-free]` — for M ≳ 1e-13 the reflection at
-  φ = 0 stalls Radau or lets the field run on at φ < 0; the shipped scheme fails outright for
-  1e-13 ≲ M ≲ 1e-8. Prompt 01.
-- `[00-scipy-num-jac-factor-grows-without-bound]` — SciPy's Jacobian perturbation factor on
-  ln T_J grows ×10 per evaluation with no upper clamp; the origin of the "T_Jordan = 0" states
-  and of two dead histories. Prompt 01.
 - `[00-trial-state-exceptions-abort-the-solve]` — a `ComputationFailureError` on a Newton or
-  Jacobian trial state ends the solve. Prompts 01, 02.
+  Jacobian trial state ends the solve; the loop half landed in prompt 01, the RHS half
+  (`_get_T_Jordan`) is prompt 02.
 - `[00-solver-fallback-is-not-wired]` — `method="Radau"` is a literal; a failure is integrated
   four times identically. Prompt 02.
 - `[00-runtime-errors-mix-bugs-and-failures]` — six `RuntimeError` sites, none caught by
@@ -151,3 +145,8 @@ here. The last seven are open and unassigned.
 - `[00-declare-reflects-at-origin-for-the-other-potentials]` — prompt 01 declares
   `reflects_at_origin` and `log_V_floor` on `ExponentialPotential` only; the other four
   potentials keep the defaults and would fail at the floor rather than reflect.
+- `[01-bounce-phi-min-at-the-accepted-step-depends-on-step-placement]` — P3 bounces 2, 8 miss
+  ± 2e-4 at the accepted step (2.1e-4, 2.3e-4) but match to 1e-6 on the dense-output minimum;
+  which measure README §6.1 (b) means is for the orchestrator or the user.
+- `[01-trial-state-exception-in-radau-start-up-is-not-a-rejection]` — an RHS exception inside
+  `Radau.__init__` (start or reflection restart) fails the history; never seen.

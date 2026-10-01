@@ -930,6 +930,7 @@ def execute(pool, units: UnitsLike):
         solve_ivp_Radau,
         solve_ivp_BDF,
         solve_icp_LSODA,
+        Radau_kinematic_cap,
     ) = ray.get(
         [
             pool.object_get("IntegrationSolver", label="solve_ivp+RK45", stepping=0),
@@ -937,6 +938,9 @@ def execute(pool, units: UnitsLike):
             pool.object_get("IntegrationSolver", label="solve_ivp+Radau", stepping=0),
             pool.object_get("IntegrationSolver", label="solve_ivp+BDF", stepping=0),
             pool.object_get("IntegrationSolver", label="solve_ivp+LSODA", stepping=0),
+            pool.object_get(
+                "IntegrationSolver", label="Radau+kinematic-cap", stepping=0
+            ),
         ]
     )
     solvers = {
@@ -945,6 +949,7 @@ def execute(pool, units: UnitsLike):
         "solve_ivp+Radau-stepping0": solve_ivp_Radau,
         "solve_ivp+BDF-stepping0": solve_ivp_BDF,
         "solve_ivp+LSODA-stepping0": solve_icp_LSODA,
+        "Radau+kinematic-cap-stepping0": Radau_kinematic_cap,
     }
 
     # the redshift z corresponding to T = 20,000 GeV is about 6E35 in a LambdaCDM-like cosmology

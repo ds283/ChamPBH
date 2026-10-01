@@ -43,7 +43,6 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
         units: UnitsLike,
         T_init: TemperatureLike,
         T_stop: TemperatureLike,
-        max_step_size,
         label: str,
         notify_interval: int = DEFAULT_UPDATE_INTERVAL,
         collect_full_statistics: bool = False,
@@ -57,7 +56,9 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
 
         self._label: str = label
         self._collect_full_statistics: bool = collect_full_statistics
-        self._max_step_size: float = max_step_size
+
+        # the step cap most recently set by the step loop (integrate_scalar_history)
+        self._current_step_cap: Optional[float] = None
 
         self._T_init: float = GetTemperature(T_init)
         self._T_stop: float = GetTemperature(T_stop)
@@ -76,25 +77,10 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
 
         self._event_finder_last_log_T_Jordan: Optional[float] = None
 
-        ## TRACK REFLECTION EVENTS AND LEVEL 1/2 REGIONS
+        ## TRACK REFLECTION EVENTS
 
-        # track when we impose a "manual" hard reflection - this happens when we detect phi_E crossing zero
-        self._hard_reflection_data = {"all": [], "new": []}
-        self._level_1_data = {
-            "entry": {"all": [], "new": []},
-            "exit": {"all": [], "new": []},
-        }
-        self._level_2_data = {
-            "entry": {"all": [], "new": []},
-            "exit": {"all": [], "new": []},
-        }
-
-        self._in_level_1: bool = False
-        self._in_level_2: bool = False
-
-        # TRACK OTHER STATUS VARIABLES
-
-        self._number_fragments: int = 0
+        # track the elastic reflections performed by the step loop at the representable-step floor
+        self._reflection_data = {"all": [], "new": []}
 
         ## TRACK STATISTICS OF RHS REPORTS
 
@@ -139,17 +125,17 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
         log_T_GeV_completed: float = self._log_T_init_GeV - log_T_GeV
         percent_remain: float = log_T_GeV_remain / self._log_T_GeV_range
 
-        level_state = None
-        if self._in_level_2:
-            level_state = "level 2"
-        elif self._in_level_1:
-            level_state = "level 1"
+        cap_text = (
+            f"{self._current_step_cap:.5g}"
+            if self._current_step_cap is not None
+            else "not set"
+        )
 
         print(
             f"** STATUS UPDATE #{update_number} - {now.strftime("%a %d %b %Y %H:%M:%S")} - {self._label}"
         )
         print(
-            f"|    running for {format_time(seconds_since_start)} ({format_time(seconds_since_last_notify)} since last notification) | solution fragments = {self._number_fragments} | current N = {N:.5g} | current max dN={self._max_step_size:.5g}{" | in " + level_state if level_state is not None else ""}"
+            f"|    running for {format_time(seconds_since_start)} ({format_time(seconds_since_last_notify)} since last notification) | reflections = {self.number_reflections} | current N = {N:.5g} | current step cap dN={cap_text}"
         )
         print(f"|    --")
         print(
@@ -190,11 +176,7 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
                 else:
                     print(f"|    {num_events} {label} events, none since last update")
 
-        events_status("hard reflection", self._hard_reflection_data)
-        events_status("level 1 entry", self._level_1_data["entry"])
-        events_status("level 1 exit", self._level_1_data["exit"])
-        events_status("level 2 entry", self._level_2_data["entry"])
-        events_status("level 2 exit", self._level_2_data["exit"])
+        events_status("elastic reflection", self._reflection_data)
         print(
             f"|    {self.RHS_evaluations} RHS evaluations, mean {self.mean_RHS_time:.5g}s per evaluation, min RHS time = {self.min_RHS_time:.5g}s, max RHS time = {self.max_RHS_time:.5g}s"
         )
@@ -222,70 +204,17 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
                 f"|      d(phi_E)/dN={self._formatter(smallest_values.phi_Einstein)}, d(pi_E)/dN={self._formatter(smallest_values.pi_Einstein)}, d(log_rhorad_E)/dN={smallest_values.log_rhorad_Einstein:.5g}, d(log_fm)/dN={smallest_values.log_fm:.5g}, d(log_T_J)/dN={smallest_values.log_T_Jordan:.5g}"
             )
 
-    def notify_hard_reflection(self, N):
+    def notify_reflection(self, N):
         N_as_float = to_float(N)
-        self._hard_reflection_data["all"].append(N_as_float)
-        self._hard_reflection_data["new"].append(N_as_float)
+        self._reflection_data["all"].append(N_as_float)
+        self._reflection_data["new"].append(N_as_float)
 
-    def notify_level_1_entry(self, N, max_step_size):
-        N_as_float = to_float(N)
-        self._level_1_data["entry"]["all"].append(N_as_float)
-        self._level_1_data["entry"]["new"].append(N_as_float)
-
-        self._max_step_size = max_step_size
-
-        self._in_level_1 = True
-        self._in_level_2 = False
-
-    def notify_level_1_exit(self, N, max_step_size):
-        N_as_float = to_float(N)
-        self._level_1_data["exit"]["all"].append(N_as_float)
-        self._level_1_data["exit"]["new"].append(N_as_float)
-
-        self._max_step_size = max_step_size
-
-        self._in_level_1 = False
-        self._in_level_2 = False
-
-    def notify_level_2_entry(self, N, max_step_size):
-        N_as_float = to_float(N)
-        self._level_2_data["entry"]["all"].append(N_as_float)
-        self._level_2_data["entry"]["new"].append(N_as_float)
-
-        self._max_step_size = max_step_size
-
-        self._in_level_1 = True
-        self._in_level_2 = True
-
-    def notify_level_2_exit(self, N, max_step_size):
-        N_as_float = to_float(N)
-        self._level_2_data["exit"]["all"].append(N_as_float)
-        self._level_2_data["exit"]["new"].append(N_as_float)
-
-        self._max_step_size = max_step_size
-
-        self._in_level_1 = True
-        self._in_level_2 = False
+    def notify_step_cap(self, cap: float):
+        self._current_step_cap = cap
 
     @property
-    def number_hard_reflections(self) -> int:
-        return len(self._hard_reflection_data["all"])
-
-    @property
-    def number_level_1_entries(self) -> int:
-        return len(self._level_1_data["entry"]["all"])
-
-    @property
-    def number_level_1_exits(self) -> int:
-        return len(self._level_1_data["exit"]["all"])
-
-    @property
-    def number_level_2_entries(self) -> int:
-        return len(self._level_2_data["entry"]["all"])
-
-    @property
-    def number_level_2_exits(self) -> int:
-        return len(self._level_2_data["exit"]["all"])
+    def number_reflections(self) -> int:
+        return len(self._reflection_data["all"])
 
     @property
     def collect_full_statistics(self) -> bool:
@@ -316,11 +245,7 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
     def reset_notify_time(self, T_Jordan: TemperatureLike):
         super().reset_notify_time()
 
-        self._hard_reflection_data["new"] = []
-        self._level_1_data["entry"]["new"] = []
-        self._level_1_data["exit"]["new"] = []
-        self._level_2_data["entry"]["new"] = []
-        self._level_2_data["exit"]["new"] = []
+        self._reflection_data["new"] = []
 
         T_Jordan_float = GetTemperature(T_Jordan)
         T_GeV = T_Jordan_float / self._GeV
@@ -410,13 +335,6 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
             log_T_Jordan=(self._total_RHS_values.log_T_Jordan + log_T_Jordan_float),
         )
 
-    def notify_new_fragment(self):
-        self._number_fragments += 1
-
-    @property
-    def number_fragments(self) -> int:
-        return self._number_fragments
-
     def event_finder_notify_new_log_T_Jordan(self, log_T_Jordan: float):
         if log_T_Jordan < self._log_T_stop:
             T_Jordan = exp(log_T_Jordan)
@@ -431,11 +349,3 @@ class ScalarFieldIntegrationSupervisor(IntegrationSupervisor):
                 )
 
         self._event_finder_last_log_T_Jordan = log_T_Jordan
-
-    @property
-    def in_level_1(self):
-        return self._in_level_1
-
-    @property
-    def in_level_2(self):
-        return self._in_level_2

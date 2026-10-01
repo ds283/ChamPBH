@@ -22,7 +22,7 @@ from matplotlib.patches import Patch
 from numpy import nan
 
 from ComputeTargets import ScalarModel, ScalarModelValue, BBNData
-from ComputeTargets.ScalarModel import HARD_REFLECTIONS_KEY
+from ComputeTargets.ScalarModel import REFLECTIONS_KEY
 from CosmologyConcepts.Potentials import AbstractPotential
 from CosmologyModels import BaseCosmology
 from Quadrature.integration_metadata import IntegrationSolver
@@ -166,16 +166,17 @@ def add_BBN_info_labels(
     )
 
 
-def hard_reflection_count(extra_data: Optional[dict]) -> int:
+def reflection_count(extra_data: Optional[dict]) -> int:
     """
-    Return the number of hard reflections recorded in a ScalarModel's extra_metadata.
+    Return the number of elastic reflections (the floor-triggered reflection model of the
+    scalar-field step loop) recorded in a ScalarModel's extra_metadata.
 
-    ScalarModel stores the count under HARD_REFLECTIONS_KEY only when it is positive,
+    ScalarModel stores the count under REFLECTIONS_KEY only when it is positive,
     so an absent key (or no extra_data at all) means there were none, and we return 0.
     """
     if extra_data is None:
         return 0
-    return extra_data.get(HARD_REFLECTIONS_KEY, 0)
+    return extra_data.get(REFLECTIONS_KEY, 0)
 
 
 def add_ScalarModel_labels(fig, model: ScalarModel, model_label):
@@ -229,19 +230,10 @@ def add_ScalarModel_labels(fig, model: ScalarModel, model_label):
     fig.text(
         LEFT_COLUMN,
         BELOW_PLOTS_TOP_ROW,
-        f"Hard reflections: {hard_reflection_count(extra_data)}",
+        f"Reflections (elastic model): {reflection_count(extra_data)}",
         horizontalalignment="left",
         fontsize="xx-small",
     )
-
-    if "number_fragments" in extra_data:
-        fig.text(
-            RIGHT_COLUMN,
-            BELOW_PLOTS_TOP_ROW,
-            f"Solution fragments: {extra_data['number_fragments']}",
-            horizontalalignment="right",
-            fontsize="xx-small",
-        )
 
 
 _T_events = {

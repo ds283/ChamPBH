@@ -1572,7 +1572,7 @@ def run_pipeline(
 
         model_query_payload = {
             "shard_key": coupling.shard_key,
-            "solver_labels": [],
+            "solver_labels": ["Radau+kinematic-cap-stepping0"],
             "failure": False,  # skip any failed instances
             "cosmology": model_cosmology,
             "T_Jordan_init": T_init,

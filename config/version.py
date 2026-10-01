@@ -30,7 +30,10 @@
 # here once.
 # On 2026-09-30 (run-integrity prompt 02), 2026.4.0: from 2026.4.0 a failed PRyMordial solve is
 # stored as a failure with its reason, not as a success, and PRyM_version is "bf24c3d+cham03+ri02".
-VERSION_LABEL = "2026.4.0"
+# On 2026-10-01 (integrator-remediation prompt 01), 2026.5.0: from 2026.5.0 the scalar history is
+# integrated by one Radau step loop with a kinematic step cap and an elastic reflection at the
+# representable-step floor, replacing the two-region scheme, so every stored history changes.
+VERSION_LABEL = "2026.5.0"
 
 # The reserved payload key under which Datastore.object_get hands a version-keyed factory's
 # build() the serial of the current version label (run-integrity prompt 01). A factory registers

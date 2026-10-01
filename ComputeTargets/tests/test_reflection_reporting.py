@@ -1,6 +1,8 @@
 """
-Prompt 01 (production-readiness): the hard-reflection count is stored, read and captioned
-under one name.
+Prompt 01 (integrator-remediation): the elastic-reflection count and the step-loop metadata are
+stored, read and captioned under one name. Rewritten from production-readiness prompt 01's
+test_hard_reflection_reporting.py, which pinned the region/fragment/hard-reflection block that
+this prompt replaced.
 
 No Ray cluster, no datastore and no solve is needed.
 """
@@ -16,14 +18,14 @@ import matplotlib
 matplotlib.use("Agg")
 from matplotlib import pyplot as plt
 
-from ComputeTargets.ScalarModel import HARD_REFLECTIONS_KEY, build_extra_data
-from extract_common import add_ScalarModel_labels, hard_reflection_count
+from ComputeTargets.ScalarModel import REFLECTIONS_KEY, build_extra_data
+from extract_common import add_ScalarModel_labels, reflection_count
 
 RHSStats = namedtuple("RHSStats", ["a", "b", "c"])
 
 
 def reference_extra_data(data: dict) -> Optional[dict]:
-    """Verbatim copy of the store_attr block that ScalarModel.store() held before it was factored."""
+    """Verbatim copy of the store_attr block of build_extra_data (integrator-remediation prompt 01)."""
     extra_data = {}
 
     def store_attr(src_attr: str, dest_attr: str, min_value: Optional[int] = None):
@@ -32,16 +34,13 @@ def reference_extra_data(data: dict) -> Optional[dict]:
         if min_value is None or value > min_value:
             extra_data[dest_attr] = value
 
-    store_attr("hard_reflections", "number_hard_reflections", 0)
-    store_attr("level_1_entries", "number_level_1_entries", 0)
-    store_attr("level_1_exits", "number_level_1_exits", 0)
-    store_attr("level_2_entries", "number_level_2_entries", 0)
-    store_attr("level_2_exits", "number_level_2_exits", 0)
-    store_attr("level_1_boundary", "level_1_boundary")
-    store_attr("level_2_boundary", "level_2_boundary")
-    store_attr("level_1_max_step", "level_1_max_step")
-    store_attr("level_2_max_step", "level_2_max_step")
-    store_attr("number_fragments", "number_fragments", 1)
+    store_attr("reflections", "number_reflections", 0)
+    store_attr("cap_fraction", "cap_fraction")
+    store_attr("cap_floor", "cap_floor")
+    store_attr("cap_global_max_step", "cap_global_max_step")
+    store_attr("jacobian_factor_max", "jacobian_factor_max")
+    store_attr("accepted_steps", "accepted_steps")
+    store_attr("steps_rejected_by_exception", "steps_rejected_by_exception", 0)
 
     largest_RHS_values = data["largest_RHS_values"]
     smallest_RHS_values = data["smallest_RHS_values"]
@@ -61,16 +60,13 @@ def reference_extra_data(data: dict) -> Optional[dict]:
 
 def sample_payload(**overrides) -> dict:
     data = {
-        "hard_reflections": 3,
-        "level_1_entries": 4,
-        "level_1_exits": 5,
-        "level_2_entries": 6,
-        "level_2_exits": 7,
-        "level_1_boundary": 0.25,
-        "level_2_boundary": 0.5,
-        "level_1_max_step": 1e-3,
-        "level_2_max_step": 1e-4,
-        "number_fragments": 2,
+        "reflections": 3,
+        "cap_fraction": 0.1,
+        "cap_floor": 1e-11,
+        "cap_global_max_step": 0.1,
+        "jacobian_factor_max": 1e-4,
+        "accepted_steps": 4476,
+        "steps_rejected_by_exception": 2,
         "largest_RHS_values": RHSStats(1.0, 2.0, 3.0),
         "smallest_RHS_values": RHSStats(-1.0, -2.0, -3.0),
         "mean_RHS_values": RHSStats(0.1, 0.2, 0.3),
@@ -97,14 +93,14 @@ def caption_texts(extra_data: Optional[dict]) -> list:
         plt.close(fig)
 
 
-class TestHardReflectionReporting(unittest.TestCase):
-    def test_a_builder_matches_the_old_block(self):
+class TestReflectionReporting(unittest.TestCase):
+    def test_a_builder_matches_the_block(self):
         cases = [
             sample_payload(),
             sample_payload(
                 largest_RHS_values=None, smallest_RHS_values=None, mean_RHS_values=None
             ),
-            sample_payload(hard_reflections=0, number_fragments=1),
+            sample_payload(reflections=0, steps_rejected_by_exception=0),
             sample_payload(
                 largest_RHS_values=None, mean_RHS_values=RHSStats(7.0, 8.0, 9.0)
             ),
@@ -112,29 +108,44 @@ class TestHardReflectionReporting(unittest.TestCase):
         for data in cases:
             self.assertEqual(build_extra_data(data), reference_extra_data(data))
 
+    def test_a_no_region_or_fragment_keys(self):
+        stored = build_extra_data(sample_payload())
+        for key in (
+            "number_hard_reflections",
+            "number_level_1_entries",
+            "number_level_1_exits",
+            "number_level_2_entries",
+            "number_level_2_exits",
+            "level_1_boundary",
+            "level_2_boundary",
+            "level_1_max_step",
+            "level_2_max_step",
+            "number_fragments",
+        ):
+            self.assertNotIn(key, stored)
+
     def test_b_count_survives_the_store(self):
         stored = json.loads(json.dumps(build_extra_data(sample_payload())))
-        self.assertEqual(hard_reflection_count(stored), 3)
+        self.assertEqual(reflection_count(stored), 3)
 
-        stored = json.loads(
-            json.dumps(build_extra_data(sample_payload(hard_reflections=0)))
-        )
-        self.assertNotIn(HARD_REFLECTIONS_KEY, stored)
-        self.assertEqual(hard_reflection_count(stored), 0)
+        stored = json.loads(json.dumps(build_extra_data(sample_payload(reflections=0))))
+        self.assertNotIn(REFLECTIONS_KEY, stored)
+        self.assertEqual(reflection_count(stored), 0)
 
     def test_b_reader_handles_no_extra_data(self):
-        self.assertEqual(hard_reflection_count(None), 0)
-        self.assertEqual(hard_reflection_count({}), 0)
+        self.assertEqual(reflection_count(None), 0)
+        self.assertEqual(reflection_count({}), 0)
 
     def test_c_caption_reports_the_stored_count(self):
         stored = json.loads(json.dumps(build_extra_data(sample_payload())))
-        self.assertIn("Hard reflections: 3", caption_texts(stored))
+        texts = caption_texts(stored)
+        self.assertIn("Reflections (elastic model): 3", texts)
+        self.assertFalse(any(t.startswith("Hard reflections") for t in texts))
+        self.assertFalse(any(t.startswith("Solution fragments") for t in texts))
 
-    def test_c_caption_for_zero_is_unchanged(self):
-        stored = json.loads(
-            json.dumps(build_extra_data(sample_payload(hard_reflections=0)))
-        )
-        self.assertIn("Hard reflections: 0", caption_texts(stored))
+    def test_c_caption_for_zero(self):
+        stored = json.loads(json.dumps(build_extra_data(sample_payload(reflections=0))))
+        self.assertIn("Reflections (elastic model): 0", caption_texts(stored))
 
 
 if __name__ == "__main__":

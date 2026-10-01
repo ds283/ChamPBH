@@ -1,12 +1,12 @@
 # Integrator remediation campaign — implementation state
 
-**Last updated:** 2026-10-01 · **Status: PLANNED — 0 of 4 landed.** Planned on 2026-10-01 against
+**Last updated:** 2026-10-01 · **Status: IN PROGRESS — 1 of 4 landed** (prompt 01). Planned on 2026-10-01 against
 `main` at `2b89022`, from the audit at
 [`.documents/integrator-audit-2026-09-30/README.md`](../../.documents/integrator-audit-2026-09-30/README.md).
 **Target branch** `integrator-remediation`, to be cut from `2b89022`; planning and orchestration
 commits land on it.
-**The rule once prompt 01 lands: every store made before 2026.5.0 is invalid.** `VERSION_LABEL` is
-`"2026.4.0"` until then.
+**Every store made before 2026.5.0 is invalid.** `VERSION_LABEL` is `"2026.5.0"` since prompt 01
+(2026-10-01); it was `"2026.4.0"` before.
 
 The campaign replaces the two-region, fragment-and-event step control of `compute_scalar_model`
 with one Radau step loop under a kinematic step cap, keeps the elastic reflection as a deliberate
@@ -76,7 +76,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | [Replace the fragment loop with the kinematic-cap step loop](01-kinematic-cap-step-loop.md) | **A**, **J**, **X** (loop), version bump | Opus | ✍️ 2026-10-01 | — | — | — |
+| 01 | [Replace the fragment loop with the kinematic-cap step loop](01-kinematic-cap-step-loop.md) | **A**, **J**, **X** (loop), version bump | Opus | ✍️ 2026-10-01 | ✅ 2026-10-01 (with deviations) | see `git log` ("Replace the fragment loop with a kinematic-cap step loop") | [`logs/01-kinematic-cap-step-loop.md`](logs/01-kinematic-cap-step-loop.md) |
 | 02 | [Remove the solver fallback and settle the exception taxonomy](02-fallback-and-exceptions.md) | **B**, **C**, **S**, **X** (RHS) | Opus | ✍️ 2026-10-01 | — | — | — |
 | 03 | [Documents and the paper's corrections](03-documents-and-paper-corrections.md) | **D** | Sonnet | ✍️ 2026-10-01 | — | — | — |
 | 04 | [Close-out verification and handover](04-close-out-verification.md) | close-out | Sonnet | ✍️ 2026-10-01 | — | — | — |
@@ -87,9 +87,9 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
 | Item | Kind | Description | Prompt | Status |
 |---|---|---|---|---|
-| A | **DEFECT, high** | The L1/L2 regions cap the step at `3e-3 M` and `1e-4 M` e-folds wherever `φ` is inside them: 2 099 582 RHS against 18 916 on the parked P2 window for the same trajectory; 85 fragments and 5 188 284 RHS on the grazing P3 window; the full β = 1.2, M = 0.01 history dies of the 100-fragment `RuntimeError` at `N = 37.165`. The hard reflection at `φ = 0` stalls or runs free for `M ≳ 1e-13`; the shipped scheme fails outright for `1e-13 ≲ M ≲ 1e-8`. Closes `[00-region-scheme-costs-100x-and-storms-fragments]`, `[00-hard-reflection-at-phi-zero-stalls-or-runs-free]`. | 01 | planned |
-| J | **DEFECT, high** | SciPy's `num_jac` grows the `ln T_J` perturbation factor by 10 per Jacobian evaluation with no upper clamp; the probe reaches `−9.4×10³⁰⁷`, is substituted by 1 K, and the next probe raises. Two full histories died of it at `N ≈ 38`. Closes `[00-scipy-num-jac-factor-grows-without-bound]`. | 01 | planned |
-| X | **DEFECT, medium** | A `ComputationFailureError` raised on a Newton iterate or Jacobian probe ends the solve: from P1 with no cap at `1e-10`, zero accepted steps. The loop treats it as a rejected step (01); `_get_T_Jordan`'s silent 1 K substitution becomes a raise the loop rejects (02). Closes `[00-trial-state-exceptions-abort-the-solve]`. | 01, 02 | planned |
+| A | **DEFECT, high** | The L1/L2 regions cap the step at `3e-3 M` and `1e-4 M` e-folds wherever `φ` is inside them: 2 099 582 RHS against 18 916 on the parked P2 window for the same trajectory; 85 fragments and 5 188 284 RHS on the grazing P3 window; the full β = 1.2, M = 0.01 history dies of the 100-fragment `RuntimeError` at `N = 37.165`. The hard reflection at `φ = 0` stalls or runs free for `M ≳ 1e-13`; the shipped scheme fails outright for `1e-13 ≲ M ≲ 1e-8`. Closes `[00-region-scheme-costs-100x-and-storms-fragments]`, `[00-hard-reflection-at-phi-zero-stalls-or-runs-free]`. | 01 | **done 2026-10-01** (log 01). `integrate_scalar_history` is one Radau step loop under the kinematic cap (`f = 0.1`, global `0.1`) with the elastic reflection at `h_floor = 1e-11`, guarded by G1 (`reflects_at_origin`) and G2 (`W ≤ ½π²`); `φ ≤ 0` is a `ComputationFailureError`; one `OdeSolution` is sampled. Events, fragments and regions are gone; the fallback wrapper stays for prompt 02. P1 1 945 / 2 120 / 2 275 RHS at M = 0.5 / 0.01 / 0.001 (17 092 / 26 634 / 26 422 shipped); M = 1e-10 and 4.1e-28 complete with one reflection; P3 38 547 RHS, 51 bounces; P2 18 880; all nine full histories complete with 0 reflections. Stored keys per README §2 (e); label `"Radau+kinematic-cap-stepping0"`; **`VERSION_LABEL` `"2026.5.0"`**. P3 per-bounce `φ_min` meets ± 2e-4 on the dense-output minimum but not at the accepted step (bounces 2, 8: 2.1e-4, 2.3e-4): `[01-bounce-phi-min-at-the-accepted-step-depends-on-step-placement]`. Suites 18 / 57 / 17 |
+| J | **DEFECT, high** | SciPy's `num_jac` grows the `ln T_J` perturbation factor by 10 per Jacobian evaluation with no upper clamp; the probe reaches `−9.4×10³⁰⁷`, is substituted by 1 K, and the next probe raises. Two full histories died of it at `N ≈ 38`. Closes `[00-scipy-num-jac-factor-grows-without-bound]`. | 01 | **done 2026-10-01** (log 01). `solver.jac_factor` clamped to `1e-4` after every accepted step; P2 to N = 40 prints no `T_Jordan = 0` (35 without cap and clamp, audit §8); none in the nine full histories |
+| X | **DEFECT, medium** | A `ComputationFailureError` raised on a Newton iterate or Jacobian probe ends the solve: from P1 with no cap at `1e-10`, zero accepted steps. The loop treats it as a rejected step (01); `_get_T_Jordan`'s silent 1 K substitution becomes a raise the loop rejects (02). Closes `[00-trial-state-exceptions-abort-the-solve]`. | 01, 02 | **loop half done 2026-10-01** (log 01): a `ComputationFailureError` from `solver.step()` halves the step and retries (three injected failures from P1: `steps_rejected_by_exception = 3`, same `φ(21)`); below `1e-13` e-folds it is the history's failure. The RHS half (`_get_T_Jordan`) is prompt 02 |
 | B | **DEFECT, low** | `solver_list` is walked but `method="Radau"` is a literal; a failing history is integrated four times identically. Closes `[00-solver-fallback-is-not-wired]`. | 02 | planned |
 | C | **DEFECT, medium** | Six `RuntimeError` sites mix bugs, per-history failures and configuration; any of them ends `main.py`. `data.d_logV_dphi` is a latent `AttributeError`. `RHS_timer.__exit__` prints every exception's traceback. Closes `[00-runtime-errors-mix-bugs-and-failures]`. | 02 | planned |
 | S | **GAP** | At `M ≲ 1e-10` with β ≥ 1.2 the settling bounces double per e-fold; no bounce-following scheme reaches `T_CMB`. A step budget makes it a clean failure. Closes `[00-physical-M-histories-run-for-days-without-a-parking-model]`; the model stays open. | 02 | planned |
@@ -100,40 +100,12 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 ## 3. Active and unresolved issues
 
 Fourteen opened by the planner on 2026-10-01 from the audit, and one more the same day from the
-user's guard G1. Eight are assigned to this campaign's prompts (the first eight); seven are open
-and unassigned. Issues opened by later prompts go here
+user's guard G1; prompt 01 closed three (§4) and opened two. Five are assigned to this campaign's
+prompts (the first five); nine are open and unassigned. Issues opened by later prompts go here
 too, with an index row under §1.6 of `.documents/OPEN_ISSUES.md`. Every measurement below is the
-audit's, on `b1f64d8`, by the script named in the audit README section cited.
+audit's, on `b1f64d8`, by the script named in the audit README section cited, except in the
+entries opened by prompt 01 (`[01-…]`), which name their own source.
 
-- **[00-region-scheme-costs-100x-and-storms-fragments]** *(audit §3.2, §3.3; `p2_parked.py
-  regions`, `p3_grazing.py regions`)*.
-  - **What.** Inside L2 at M = 0.5 every step is the cap `5e-5`: 2 099 582 RHS over 15 e-folds
-    for a trajectory the uncapped Radau reproduces to seven digits in 18 916. On the P3 window the
-    rebounds cross the L2 boundary twice each: 85 fragments, 42 entries, 5 188 284 RHS; the full
-    history trips the 100-fragment `RuntimeError`.
-  - **Impact.** Essentially the whole runtime at M = 0.5; no M ≤ 0.01 history finishes.
-  - **Next step.** Prompt 01: the kinematic cap. **Assigned (2026-10-01):** prompt 01 (A).
-- **[00-hard-reflection-at-phi-zero-stalls-or-runs-free]** *(audit §3.5, §3.7;
-  `p1_sweep.py`, `p_total2.py`, `p_smallM_scan.py regions`)*.
-  - **What.** For `M ≳ 1e-13` the event root at `φ = ±1e-15` lies inside the wall. On the `+`
-    side Radau fails at once ("Required step size is less than spacing between numbers"); on the
-    `−` side the field runs on at `φ < 0` to `T_CMB` with no wall and no event, and would be stored.
-    For `M ≲ 1e-13` the same reflection is correct and works. For `1e-13 ≲ M ≲ 1e-8` the shipped
-    scheme fails inside L2 (M = 1e-10).
-  - **Impact.** A missed reflection at the paper's `M` is a failure row at best and a silently
-    wrong history at worst.
-  - **Next step.** Prompt 01: the floor-triggered elastic reflection; `φ ≤ 0` is a failure.
-    **Assigned (2026-10-01):** prompt 01 (A).
-- **[00-scipy-num-jac-factor-grows-without-bound]** *(audit §8 F2; `p2_parked.py none`,
-  `p_full.py` without the clamp)*.
-  - **What.** `scipy/integrate/_ivp/common.py` `_dense_num_jac` multiplies a component's factor by
-    10 whenever its column is below `EPS^0.75` relative, with only a lower clamp. The `ln T_J`
-    column is identically zero at low T. Substituted values grow `−910, −8 627, −85 936, …` to
-    `−9.4×10³⁰⁷`.
-  - **Impact.** 35 substitutions on P2 without a cap; two full histories dead at `N ≈ 38`. The
-    shipped `T_J = 1 K` substitution hides it until the probe is non-finite.
-  - **Next step.** Prompt 01: clamp `solver.jac_factor` at `1e-4` after every step (35 → 0 on
-    P2, same trajectory). **Assigned (2026-10-01):** prompt 01 (J).
 - **[00-trial-state-exceptions-abort-the-solve]** *(audit §5; `p1_sweep.py a`, `p_total2.py`)*.
   - **What.** `ODEPolicy` and `PotentialDerivativePolicy` raise on `G < 0`, overflow and
     non-finite input, on trial states `solve_ivp` would have rejected. From P1 with no cap at
@@ -142,6 +114,10 @@ audit's, on `b1f64d8`, by the script named in the audit README section cited.
   - **Impact.** Integrable histories recorded as failures, four times over.
   - **Next step.** Prompt 01: the loop rejects the step. Prompt 02: `_get_T_Jordan` raises like
     the others. **Assigned (2026-10-01):** prompts 01, 02 (X).
+  - **Narrowed (2026-10-01):** prompt 01 landed the loop half (log 01): a `ComputationFailureError`
+    from `solver.step()` halves the step and retries, and below `1e-13` e-folds it is the
+    history's failure (three injected failures from P1 at M = 0.5: completes,
+    `steps_rejected_by_exception = 3`). Open: the RHS half, prompt 02.
 - **[00-solver-fallback-is-not-wired]** *(audit §4; `git log -S'method="Radau"'`)*.
   - **What.** `method="Radau"` has been a literal since `f67bc3a`; `solver_list` is walked on
     failure and the identical integration repeated.
@@ -229,6 +205,71 @@ audit's, on `b1f64d8`, by the script named in the audit README section cited.
 
 ---
 
+- **[01-bounce-phi-min-at-the-accepted-step-depends-on-step-placement]** *(prompt 01, 2026-10-01;
+  `ComputeTargets/tests/test_kinematic_cap_loop.py` helpers, log 01 Deviations 5)*.
+  - **What.** README §6.1 (b) asks for P3 bounces 1, 2, 8 to match the shipped `φ_min`
+    (2.79886e-4, 3.03650e-4, 3.66368e-4) to ± 2e-4. Taken as `φ` at the first accepted step after
+    `π` turns positive (the audit harness's measure), the loop at `f = 0.1` gives 1.06e-4,
+    2.10e-4, 2.31e-4; taken as the minimum of `φ` on the dense output, 4e-7, 1e-6, 1e-6. The
+    shipped values are effectively true minima (steps of `1e-6`); the accepted-step value carries
+    the turning-point step's placement. At `f = 0.02` the accepted-step values are within 1.9e-4.
+  - **Impact.** None on the trajectory. The (b) test asserts the dense-output minimum; the row as
+    the harness measures it is missed, which is why prompt 01 is `COMPLETE WITH DEVIATIONS`.
+  - **Next step.** The orchestrator or the user confirms which measure §6.1 (b) means; prompt 04
+    re-measures with the one chosen. Not assigned.
+- **[01-trial-state-exception-in-radau-start-up-is-not-a-rejection]** *(prompt 01, 2026-10-01;
+  read from `scipy/integrate/_ivp/radau.py` 1.17.0)*.
+  - **What.** `Radau.__init__` evaluates the RHS at the start state, at `select_initial_step`'s
+    probe and at five Jacobian probes. A `ComputationFailureError` there escapes
+    `integrate_scalar_history`, at the first construction or at a reflection restart, as the
+    history's failure rather than a rejected step.
+  - **Impact.** Not seen in any run of prompt 01 (P1–P3, the nine histories, M down to 4.1e-28).
+    After a reflection the probe moves `φ` outward.
+  - **Next step.** If it is ever seen: retry the construction with an explicit `first_step` at the
+    cap. Belongs with prompt 02's taxonomy if taken. Not assigned.
+
 ## 4. Resolved issues
 
-None yet.
+- **[00-region-scheme-costs-100x-and-storms-fragments]** *(audit §3.2, §3.3; `p2_parked.py
+  regions`, `p3_grazing.py regions`)*.
+  - **What.** Inside L2 at M = 0.5 every step is the cap `5e-5`: 2 099 582 RHS over 15 e-folds
+    for a trajectory the uncapped Radau reproduces to seven digits in 18 916. On the P3 window the
+    rebounds cross the L2 boundary twice each: 85 fragments, 42 entries, 5 188 284 RHS; the full
+    history trips the 100-fragment `RuntimeError`.
+  - **Impact.** Essentially the whole runtime at M = 0.5; no M ≤ 0.01 history finishes.
+  - **Next step.** Prompt 01: the kinematic cap. **Assigned (2026-10-01):** prompt 01 (A).
+  - **Resolved (2026-10-01):** by prompt 01 (log 01). No regions, events or fragments remain;
+    one Radau instance under the kinematic cap. P2 25 → 40: 18 880 RHS, 19 bounces,
+    `φ(40) = 1.9096925e-2`. P3 32.9 → 37.5: 38 547 RHS, 0 restarts, 51 bounces,
+    `φ(37.5) = 5.8078198e-4`. Full β = 1.2, M = 0.01 completes in 108 789 RHS; β = 2, 3 at
+    M = 0.01 and β = 2, 3 at M = 0.001 complete in 98 133 – 327 046 RHS (log 01 §6.1 (d)).
+- **[00-hard-reflection-at-phi-zero-stalls-or-runs-free]** *(audit §3.5, §3.7;
+  `p1_sweep.py`, `p_total2.py`, `p_smallM_scan.py regions`)*.
+  - **What.** For `M ≳ 1e-13` the event root at `φ = ±1e-15` lies inside the wall. On the `+`
+    side Radau fails at once ("Required step size is less than spacing between numbers"); on the
+    `−` side the field runs on at `φ < 0` to `T_CMB` with no wall and no event, and would be stored.
+    For `M ≲ 1e-13` the same reflection is correct and works. For `1e-13 ≲ M ≲ 1e-8` the shipped
+    scheme fails inside L2 (M = 1e-10).
+  - **Impact.** A missed reflection at the paper's `M` is a failure row at best and a silently
+    wrong history at worst.
+  - **Next step.** Prompt 01: the floor-triggered elastic reflection; `φ ≤ 0` is a failure.
+    **Assigned (2026-10-01):** prompt 01 (A).
+  - **Resolved (2026-10-01):** by prompt 01 (log 01). The hard reflection at `φ = 0` is gone; an
+    accepted `φ ≤ 0` raises `ComputationFailureError` (cap disabled from P1 at M = 0.01: raised at
+    `N = 20.354`). The elastic reflection fires at the floor rule of README §2 (b), after G1 and
+    G2: P1 at M = 1e-10 and 4.1e-28 each complete with one reflection at `φ = 4.70e-11`,
+    `φ(21) = 1.18442804e-1` (on `918590e`, M = 1e-10 fails "Required step size is less than
+    spacing between numbers"). Largest `W/(½π²)` at any reflection: 1.76e-20.
+- **[00-scipy-num-jac-factor-grows-without-bound]** *(audit §8 F2; `p2_parked.py none`,
+  `p_full.py` without the clamp)*.
+  - **What.** `scipy/integrate/_ivp/common.py` `_dense_num_jac` multiplies a component's factor by
+    10 whenever its column is below `EPS^0.75` relative, with only a lower clamp. The `ln T_J`
+    column is identically zero at low T. Substituted values grow `−910, −8 627, −85 936, …` to
+    `−9.4×10³⁰⁷`.
+  - **Impact.** 35 substitutions on P2 without a cap; two full histories dead at `N ≈ 38`. The
+    shipped `T_J = 1 K` substitution hides it until the probe is non-finite.
+  - **Next step.** Prompt 01: clamp `solver.jac_factor` at `1e-4` after every step (35 → 0 on
+    P2, same trajectory). **Assigned (2026-10-01):** prompt 01 (J).
+  - **Resolved (2026-10-01):** by prompt 01 (log 01). `solver.jac_factor` is clamped to `1e-4`
+    after every accepted step (`StepControl.jacobian_factor_max`). P2 to N = 40 prints no
+    `T_Jordan = 0`; none of the nine full histories does, and none has a rejected step.

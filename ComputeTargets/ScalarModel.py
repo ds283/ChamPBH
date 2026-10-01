@@ -14,14 +14,15 @@
 # limitations under the License.
 
 from collections import namedtuple
-from math import log, pi, exp, sqrt, isinf, isnan
+from math import log, pi, exp, expm1, sqrt, isinf, isnan
 from typing import Optional, List, Dict, Any
 
+import numpy as np
 import ray
-from numpy import inf
 from ray import ObjectRef
-from scipy.integrate import solve_ivp
+from scipy.integrate import OdeSolution, Radau
 from scipy.interpolate import make_interp_spline
+from scipy.optimize import brentq
 
 from ComputeTargets.spline_wrappers import ZSplineWrapper
 from CosmologyConcepts import (
@@ -58,13 +59,74 @@ from .exceptions import ComputationFailureError
 PISQ_OVER_30 = pi * pi / 30.0
 LOG_PISQ_OVER_30 = log(PISQ_OVER_30)
 
-# key under which the number of hard reflections is stored in ScalarModel.extra_metadata.
+# key under which the number of elastic reflections (the floor-triggered reflection model of
+# integrate_scalar_history) is stored in ScalarModel.extra_metadata.
 # A count of zero is never stored, so an absent key means there were none.
-HARD_REFLECTIONS_KEY = "number_hard_reflections"
+REFLECTIONS_KEY = "number_reflections"
 
 EXPECTED_SOL_LENGTH = 5
 
-DEFAULT_MAX_STEP_SIZE = inf
+# the stepper label returned by compute_scalar_model; main.py pre-registers it as
+# IntegrationSolver(label="Radau+kinematic-cap", stepping=0)
+SCALAR_MODEL_STEPPER_LABEL = "Radau+kinematic-cap-stepping0"
+
+# a trial-state exception inside a Radau step is treated as a rejected step and the step halved;
+# below this step size (in e-folds) it becomes a failure of the history
+MIN_STEP_AFTER_TRIAL_EXCEPTION = 1e-13
+
+# the parameters of the step loop in integrate_scalar_history (integrator-remediation prompt 01)
+#   cap_fraction:        f; a step may move the field inwards by at most f*phi
+#   cap_floor:           h_floor in e-folds; the cap never falls below it, and an inward-moving
+#                        field whose velocity cap f*phi/|pi| would fall below it is reflected
+#   global_max_step:     the cap applied everywhere, in e-folds
+#   jacobian_factor_max: upper clamp on scipy's finite-difference Jacobian perturbation factor
+#   atol, rtol:          tolerances passed to Radau
+StepControl = namedtuple(
+    "StepControl",
+    [
+        "cap_fraction",
+        "cap_floor",
+        "global_max_step",
+        "jacobian_factor_max",
+        "atol",
+        "rtol",
+    ],
+    defaults=[0.1, 1e-11, 0.1, 1e-4, DEFAULT_ABS_TOLERANCE, DEFAULT_REL_TOLERANCE],
+)
+
+# one elastic reflection performed by integrate_scalar_history: the e-fold number, the field
+# value and the (negative) inward velocity at which it was performed
+Reflection = namedtuple(
+    "Reflection",
+    [
+        "N",
+        "phi_Einstein",
+        "pi_Einstein_in",
+    ],
+)
+
+# what integrate_scalar_history returns
+#   solution:                    scipy OdeSolution over [N_start, N_final]
+#   N_final:                     e-fold number at which ln T_J crossed log_T_stop
+#   final_state:                 StateVector at N_final
+#   nfev:                        RHS evaluations requested by the loop (including Jacobian probes)
+#   accepted_steps:              accepted Radau steps
+#   steps_rejected_by_exception: step attempts abandoned because the RHS raised on a trial state
+#   reflections:                 list of Reflection
+#   max_wall_to_kinetic_ratio:   largest W/(pi^2/2) at a reflection (guard G2), or None
+IntegrationResult = namedtuple(
+    "IntegrationResult",
+    [
+        "solution",
+        "N_final",
+        "final_state",
+        "nfev",
+        "accepted_steps",
+        "steps_rejected_by_exception",
+        "reflections",
+        "max_wall_to_kinetic_ratio",
+    ],
+)
 
 # using named tuples ensures that we never get the fields in the wrong order
 ODEPolicyData = namedtuple(
@@ -88,15 +150,6 @@ HubblePolicyData = namedtuple(
     [
         "H_Einstein",
         "H_Jordan",
-    ],
-)
-
-SolutionFragment = namedtuple(
-    "SolutionFragment",
-    [
-        "N_low",
-        "N_high",
-        "sol",
     ],
 )
 
@@ -421,6 +474,260 @@ class ODERHS:
             return return_state
 
 
+def _reflection_guards(
+    policy: ODEPolicy, N: float, y: np.ndarray, task_label: Optional[str]
+) -> float:
+    """
+    The two guards on an elastic reflection (integrator-remediation README §2 (b')), checked at
+    the state where the floor rule asks for a reflection. Returns W/(pi^2/2); raises
+    ComputationFailureError if either guard fails.
+
+    G1: the potential must declare a repulsive wall between the origin and the field
+        (reflects_at_origin). The floor rule is a time-scale test, not a wall detector, and the
+        reflection is exact only if a wall exists in (0, phi).
+    G2: the wall part of the potential fraction, W = 3 (V - V_floor)/(3H^2 Mp^2), must not exceed
+        the kinetic fraction pi^2/(2 Mp^2). A field that arrived from outside the wall satisfies
+        this; one that has already been stepped into the wall does not.
+    """
+    potential = policy.potential
+    state = StateVector._make(y)
+    label = f" ({task_label})" if task_label is not None else ""
+
+    if not potential.reflects_at_origin:
+        raise ComputationFailureError(
+            f"integrate_scalar_history{label}: the representable-step floor was reached "
+            f"(N={N:.10g}, phi_E={state.phi_Einstein:.5g}, pi_E={state.pi_Einstein:.5g}), but the "
+            f"potential {potential.name} does not declare reflects_at_origin, so the elastic "
+            f"reflection model cannot be applied"
+        )
+
+    log_V_floor = potential.log_V_floor
+    if log_V_floor is None:
+        raise ComputationFailureError(
+            f"integrate_scalar_history{label}: the potential {potential.name} declares "
+            f"reflects_at_origin but provides no log_V_floor, so the reflection cannot be checked"
+        )
+
+    data: ODEPolicyData = policy(N, state)
+    W = -3.0 * data.V_over_3H2Mp2 * expm1(log_V_floor - data.log_V)
+    kinetic = 0.5 * state.pi_Einstein * state.pi_Einstein / policy.CONST_MP_SQ
+    ratio = W / kinetic
+
+    if not (W <= kinetic):
+        raise ComputationFailureError(
+            f"integrate_scalar_history{label}: reflection requested inside the wall: "
+            f"W/(pi^2/2) = {ratio:.5g} at N={N:.10g}, phi_E={state.phi_Einstein:.5g}, "
+            f"pi_E={state.pi_Einstein:.5g} (W = {W:.5g}, pi^2/2 = {kinetic:.5g})"
+        )
+
+    return ratio
+
+
+def integrate_scalar_history(
+    RHS,
+    supervisor: ScalarFieldIntegrationSupervisor,
+    initial_state: StateVector,
+    N_start: float,
+    log_T_stop: float,
+    params: StepControl = StepControl(),
+    N_failsafe: float = 1000.0,
+    policy: Optional[ODEPolicy] = None,
+    task_label: Optional[str] = None,
+    N_stop: Optional[float] = None,
+) -> IntegrationResult:
+    """
+    Integrate the scalar-field history from (N_start, initial_state) until ln T_J falls below
+    log_T_stop, with one Radau step loop under a kinematic step cap
+    (integrator-remediation prompt 01; README §2 (a)-(c)).
+
+    Before every step, from the current state (phi, pi) and the RHS pi' that Radau holds:
+      - if pi < 0 and f*phi/|pi| < h_floor, the wall is thinner than a representable step: after
+        the guards G1 and G2, pi -> -pi and a new Radau instance is started from the reflected
+        state at the same N (an instantaneous elastic reflection);
+      - otherwise the step is capped at min(global_max_step, f*phi/|pi| if pi < 0,
+        sqrt(2 f phi/|pi'|) if pi' < 0), never below h_floor.
+    A ComputationFailureError raised by the RHS on a trial state is a rejected step: the step is
+    halved and retried, and below MIN_STEP_AFTER_TRIAL_EXCEPTION it is the history's failure.
+    After every accepted step SciPy's Jacobian perturbation factor is clamped, and phi <= 0 is a
+    failure (under the cap it can only mean the cap was violated). The history ends at the first
+    accepted step with ln T_J < log_T_stop, at the root of ln T_J - log_T_stop on that step's
+    interpolant. Reaching N_failsafe is a failure.
+
+    If N_stop is given (used to drive a window of a history, e.g. from a mid-history state in a
+    test), Radau's bound is min(N_stop, N_failsafe) and reaching N_stop ends the integration
+    successfully at N_stop, unless ln T_J has fallen below log_T_stop first.
+
+    :param RHS: callable RHS(N, state, supervisor), normally an ODERHS
+    :param supervisor: the ScalarFieldIntegrationSupervisor (already entered)
+    :param initial_state: the state at N_start
+    :param N_start: the initial e-fold number
+    :param log_T_stop: the log Jordan-frame temperature at which to stop
+    :param params: the StepControl parameters
+    :param N_failsafe: the Radau bound; reaching it is a failure
+    :param policy: the ODEPolicy used for the reflection guard; defaults to RHS.policy
+    :param task_label: label used in failure messages
+    :param N_stop: optional e-fold number at which to end the integration successfully
+    :return: IntegrationResult
+    """
+    if policy is None:
+        policy = RHS.policy
+
+    f_cap: float = params.cap_fraction
+    h_floor: float = params.cap_floor
+    global_max_step: float = params.global_max_step
+    jacobian_factor_max: float = params.jacobian_factor_max
+
+    label = f" ({task_label})" if task_label is not None else ""
+
+    nfev = 0
+
+    def fun(N, y):
+        nonlocal nfev
+        nfev += 1
+        return RHS(N, y, supervisor)
+
+    N_bound: float = N_failsafe if N_stop is None else min(N_stop, N_failsafe)
+    stop_at_bound: bool = N_stop is not None and N_stop <= N_failsafe
+
+    def new_solver(N, y):
+        return Radau(
+            fun,
+            N,
+            y,
+            N_bound,
+            max_step=global_max_step,
+            rtol=params.rtol,
+            atol=params.atol,
+        )
+
+    solver = new_solver(float(N_start), np.array(initial_state, dtype=float))
+
+    ts = [solver.t]
+    interpolants = []
+    reflections = []
+    max_ratio: Optional[float] = None
+    accepted_steps = 0
+    steps_rejected_by_exception = 0
+
+    while True:
+        N: float = solver.t
+        phi: float = solver.y[0]
+        pi_: float = solver.y[1]
+
+        # the floor rule: an inward-moving field whose velocity cap would fall below the
+        # representable step is reflected elastically (README §2 (b))
+        if pi_ < 0.0 and f_cap * phi / (-pi_) < h_floor:
+            ratio = _reflection_guards(policy, N, solver.y, task_label)
+            max_ratio = ratio if max_ratio is None else max(max_ratio, ratio)
+
+            reflections.append(Reflection(N=N, phi_Einstein=phi, pi_Einstein_in=pi_))
+            supervisor.notify_reflection(N)
+
+            y_reflected = solver.y.copy()
+            y_reflected[1] = -pi_
+            solver = new_solver(N, y_reflected)
+            continue
+
+        # the kinematic cap (README §2 (a)): the inward displacement in a step is at most
+        # max(-pi, 0) h + 1/2 max(-pi', 0) h^2; require it to be at most f*phi
+        cap: float = global_max_step
+        if pi_ < 0.0:
+            cap = min(cap, f_cap * phi / (-pi_))
+        a_in: float = -solver.f[1]
+        if a_in > 0.0:
+            cap = min(cap, sqrt(2.0 * f_cap * phi / a_in))
+        cap = max(cap, h_floor)
+
+        solver.max_step = cap
+        if solver.h_abs > cap:
+            solver.h_abs = cap
+        supervisor.notify_step_cap(cap)
+
+        try:
+            message = solver.step()
+        except ComputationFailureError as e:
+            # the RHS raised on a trial state (a Newton iterate or a Jacobian probe): reject the step
+            steps_rejected_by_exception += 1
+            solver.h_abs *= 0.5
+            if solver.h_abs < MIN_STEP_AFTER_TRIAL_EXCEPTION:
+                raise ComputationFailureError(
+                    f"integrate_scalar_history{label}: step size fell below "
+                    f"{MIN_STEP_AFTER_TRIAL_EXCEPTION:.3g} e-folds after repeated trial-state "
+                    f"exceptions at N={N:.10g}, phi_E={phi:.5g}, pi_E={pi_:.5g}: {e.message}"
+                ) from e
+            continue
+
+        if message is not None:
+            raise ComputationFailureError(
+                f'integrate_scalar_history{label}: Radau step failed at N={solver.t:.10g}, phi_E={solver.y[0]:.5g}, pi_E={solver.y[1]:.5g}: "{message}"'
+            )
+
+        accepted_steps += 1
+
+        # scipy's num_jac multiplies a component's perturbation factor by 10 whenever its
+        # Jacobian column is (nearly) zero, with no upper clamp; clamp it (README §2 (f))
+        if solver.jac_factor is not None:
+            np.minimum(solver.jac_factor, jacobian_factor_max, out=solver.jac_factor)
+
+        if solver.y[0] <= 0.0:
+            raise ComputationFailureError(
+                f"integrate_scalar_history{label}: phi <= 0 in an accepted state (the step cap was "
+                f"violated) at N={solver.t:.10g}, phi_E={solver.y[0]:.5g}, pi_E={solver.y[1]:.5g}"
+            )
+
+        interpolant = solver.dense_output()
+
+        if solver.y[4] < log_T_stop:
+            N_low: float = solver.t_old
+            N_high: float = solver.t
+
+            def crossing(N_):
+                return interpolant(N_)[4] - log_T_stop
+
+            g_low = crossing(N_low)
+            g_high = crossing(N_high)
+            if not (g_low >= 0.0 and g_high < 0.0):
+                raise ComputationFailureError(
+                    f"integrate_scalar_history{label}: cannot bracket the termination root on the "
+                    f"last step [{N_low:.10g}, {N_high:.10g}] (ln T_J - log_T_stop = {g_low:.5g}, {g_high:.5g})"
+                )
+
+            if g_low == 0.0 and len(interpolants) > 0:
+                # the previous accepted state sits exactly on log_T_stop: it is the final node
+                N_final = N_low
+            else:
+                N_final = brentq(crossing, N_low, N_high) if g_low > 0.0 else N_low
+                ts.append(N_final)
+                interpolants.append(interpolant)
+            final_state = StateVector._make(interpolant(N_final))
+            break
+
+        ts.append(solver.t)
+        interpolants.append(interpolant)
+
+        if solver.status == "finished":
+            if stop_at_bound:
+                N_final = solver.t
+                final_state = StateVector._make(solver.y)
+                break
+
+            raise ComputationFailureError(
+                f"integrate_scalar_history{label}: the failsafe N={N_failsafe:.5g} was reached "
+                f"without ln T_J falling below log_T_stop={log_T_stop:.5g} (ln T_J={solver.y[4]:.5g})"
+            )
+
+    return IntegrationResult(
+        solution=OdeSolution(ts, interpolants),
+        N_final=N_final,
+        final_state=final_state,
+        nfev=nfev,
+        accepted_steps=accepted_steps,
+        steps_rejected_by_exception=steps_rejected_by_exception,
+        reflections=reflections,
+        max_wall_to_kinetic_ratio=max_ratio,
+    )
+
+
 @ray.remote
 def compute_scalar_model(
     cosmology: LambdaCDM_GenericEOS,
@@ -499,74 +806,8 @@ def compute_scalar_model(
     policy = ODEPolicy(task_label, cosmology, potential, coupling)
     RHS = ODERHS(task_label, policy)
 
-    # termination occurs when the Jordan frame temperature hits T_Jordan_stop, usually equal to T_CMB,
-    # so the actual stop value given in t_span is mostly irrelevant, just
-    # to ensure that the integration terminates
-    def terminate_at_T_stop(N, s, supervisor) -> float:
-        state: StateVector = StateVector._make(s)
-
-        # enable the following line if we need to track the values of T_Jordan, e.g., if a termination event is
-        # being missed
-        # supervisor.event_finder_notify_new_log_T_Jordan(state.log_T_Jordan)
-        return state.log_T_Jordan - log_T_stop
-
-    terminate_at_T_stop.terminal = True
-    terminate_at_T_stop.direction = (
-        -1.0
-    )  # only trigger when going from positive to negative, i.e., when the temperature dips *below* T_Jordan_stop
-
-    hard_reflection_point: float = potential.hard_reflection_point
-
-    # detect failures to reflect at the chameleon "brick wall" at the origin
-    def reflection_failure_detector(N, s, supervisor) -> float:
-        state: StateVector = StateVector._make(s)
-
-        return state.phi_Einstein - hard_reflection_point
-
-    reflection_failure_detector.terminal = True
-    reflection_failure_detector.direction = (
-        -1.0
-    )  # only trigger when phi_Einstein crosses from positive to negative values
-
-    # detect entry/exit from region close a bounce
-    bounce_region_level1_boundary = potential.bounce_region_level1_boundary
-    bounce_region_level2_boundary = potential.bounce_region_level2_boundary
-
-    def enter_bounce_region_level1(N, s, supervisor) -> float:
-        state: StateVector = StateVector._make(s)
-
-        return state.phi_Einstein - bounce_region_level1_boundary
-
-    enter_bounce_region_level1.terminal = True
-    enter_bounce_region_level1.direction = -1.0
-
-    def exit_bounce_region_level1(N, s, supervisor) -> float:
-        state: StateVector = StateVector._make(s)
-
-        return state.phi_Einstein - bounce_region_level1_boundary
-
-    exit_bounce_region_level1.terminal = True
-    exit_bounce_region_level1.direction = +1.0
-
-    def enter_bounce_region_level2(N, s, supervisor) -> float:
-        state: StateVector = StateVector._make(s)
-
-        return state.phi_Einstein - bounce_region_level2_boundary
-
-    enter_bounce_region_level2.terminal = True
-    enter_bounce_region_level2.direction = -1.0
-
-    def exit_bounce_region_level2(N, s, supervisor) -> float:
-        state: StateVector = StateVector._make(s)
-
-        return state.phi_Einstein - bounce_region_level2_boundary
-
-    exit_bounce_region_level2.terminal = True
-    exit_bounce_region_level2.direction = +1.0
-
-    def dummy_event_handler(N, s, supervisor):
-        return 1.0
-
+    # the fallback wrapper: every pass runs the same step loop. solver_labels is no longer read;
+    # the returned label is SCALAR_MODEL_STEPPER_LABEL. (integrator-remediation prompt 02 removes both.)
     solver_list = ["Radau", "BDF", "LSODA", "DOP853"]
     solver_labels = {
         "Radau": "solve_ivp+Radau-stepping0",
@@ -575,11 +816,8 @@ def compute_scalar_model(
         "DOP853": "solve_ivp+DOP853-stepping0",
     }
 
-    default_max_step_size: float = (
-        potential.default_max_step
-        if hasattr(potential, "default_max_step")
-        else DEFAULT_MAX_STEP_SIZE
-    )
+    # the step loop's parameters: the defaults of StepControl, with the tolerances requested
+    step_control = StepControl(atol=atol, rtol=rtol)
 
     success = False
     solver = solver_list.pop(0)
@@ -587,20 +825,10 @@ def compute_scalar_model(
     # loop through all possible solvers in turn
     while not success and solver is not None:
         try:
-            in_level1 = False
-            in_level2 = False
-
             N_failsafe = 1000.0  # terminate after 1000 e-folds as a failsafe
             N_start = 0.0
 
-            # track number of function evaluations reported by the integrator
-            compute_steps = 0
-
-            # track the solution fragments generated between reflection events
-            solution_fragments = []
-            solution_complete = False
-
-            # prepare the first initial state
+            # prepare the initial state
             initial_state = StateVector(
                 phi_Einstein=phi_init_float,
                 pi_Einstein=pi_init_float,
@@ -609,216 +837,29 @@ def compute_scalar_model(
                 log_T_Jordan=log_T_init,
             )
 
-            # track maximum step size
-            # usually we want this to be unbounded, so the stepper can choose as large a value as it wishes
-            # but close to a bounce we want to dramatically shorten the step size, so that we resolve the bounce accurately
-            max_step_size: float = default_max_step_size
-
             with ScalarFieldIntegrationSupervisor(
                 units,
                 T_init,
                 T_stop,
-                max_step_size,
                 label=task_label,
                 collect_full_statistics=False,
             ) as supervisor:
-                while not solution_complete:
-                    sol = solve_ivp(
-                        RHS,
-                        method="Radau",
-                        t_span=(N_start, N_failsafe),
-                        y0=initial_state,
-                        atol=atol,
-                        rtol=rtol,
-                        args=(supervisor,),
-                        events=(
-                            terminate_at_T_stop,
-                            reflection_failure_detector,
-                            (
-                                enter_bounce_region_level1
-                                if not in_level1
-                                else dummy_event_handler
-                            ),
-                            (
-                                exit_bounce_region_level1
-                                if in_level1
-                                else dummy_event_handler
-                            ),
-                            (
-                                enter_bounce_region_level2
-                                if not in_level2
-                                else dummy_event_handler
-                            ),
-                            (
-                                exit_bounce_region_level2
-                                if in_level2
-                                else dummy_event_handler
-                            ),
-                        ),
-                        dense_output=True,
-                        max_step=max_step_size,
-                    )
+                result: IntegrationResult = integrate_scalar_history(
+                    RHS,
+                    supervisor,
+                    initial_state,
+                    N_start,
+                    log_T_stop,
+                    step_control,
+                    N_failsafe=N_failsafe,
+                    policy=policy,
+                    task_label=task_label,
+                )
 
-                    # check that termination occurred due to reaching the end of the integration domain, or because of a termination event
-                    if not sol.success:
-                        raise ComputationFailureError(
-                            f'compute_scalar_model ({task_label}): integration did not terminate successfully (log_T_init={log_T_init:.5g}, log_T_stop={log_T_stop:.5g}, error at N={sol.t[-1]:.5g}, "{sol.message}")'
-                        )
-
-                    # check that termination was not due to reaching the end of the integraton domain (that is supposed to be just a failsafe)
-                    if not sol.status == 1:
-                        raise RuntimeError(
-                            f'compute_scalar_model ({task_label}): integration concluded without a termination event => failsafe activated (log_T_init={log_T_init:.5g}, log_T_stop={log_T_stop:.5g}, last sample at N={sol.t[-1]:.5g}, "{sol.message}")'
-                        )
-
-                    # check that the solution has the expected number of elements
-                    sampled_N = sol.t
-                    sampled_values = StateVector._make(sol.y)
-                    if len(sampled_values) != EXPECTED_SOL_LENGTH:
-                        raise RuntimeError(
-                            f"compute_scalar_model ({task_label}): solution does not have expected number of members (expected {EXPECTED_SOL_LENGTH}, found {len(sampled_values)}; length of sol.t={len(sampled_N)})"
-                        )
-
-                    # update running number of function evaluations (recorded by integrator)
-                    compute_steps += int(sol.nfev)
-
-                    # at this stage, we know that one of the event handlers fired to terminate the evolution
-                    # now we decide which one
-
-                    termination_times = sol.t_events[0]
-                    reflection_times = sol.t_events[1]
-                    enter_bounce_region_level1_times = sol.t_events[2]
-                    exit_bounce_region_level1_times = sol.t_events[3]
-                    enter_bounce_region_level2_times = sol.t_events[4]
-                    exit_bounce_region_level2_times = sol.t_events[5]
-
-                    num_termination_events = len(termination_times)
-                    num_reflection_events = len(reflection_times)
-                    num_enter_level1_events = len(enter_bounce_region_level1_times)
-                    num_exit_level1_events = len(exit_bounce_region_level1_times)
-                    num_enter_level2_events = len(enter_bounce_region_level2_times)
-                    num_exit_level2_events = len(exit_bounce_region_level2_times)
-
-                    if (
-                        num_termination_events
-                        + num_reflection_events
-                        + num_enter_level1_events
-                        + num_exit_level1_events
-                        + num_enter_level2_events
-                        + num_exit_level2_events
-                        != 1
-                    ):
-                        raise RuntimeError(
-                            f"compute_scalar_model ({task_label}): integration terminated with multiple termination events (N_start={N_start:.5g}, N_failsafe={N_failsafe:.5g}, num_termination_events={num_termination_events}, num_reflection_events={num_reflection_events})"
-                        )
-
-                    # append this solution fragment to this list
-                    solution_fragments.append(
-                        SolutionFragment(
-                            N_low=N_start,
-                            N_high=sol.t[-1],
-                            sol=sol.sol,
-                        )
-                    )
-                    supervisor.notify_new_fragment()
-
-                    if len(solution_fragments) >= 20:
-                        if len(solution_fragments) % 20 == 0:
-                            print(
-                                f"-- compute_scalar_model ({task_label}): a large number of solution fragments are being used; {len(solution_fragments)} solution fragments now collected"
-                            )
-                    if len(solution_fragments) >= 100:
-                        raise RuntimeError(
-                            f"compute_scalar_model ({task_label}): too many solution fragments ({len(solution_fragments)}) => failsafe activated (N_start={N_start:.5g}, N_failsafe={N_failsafe:.5g})"
-                        )
-
-                    # if the integration terminated, break out
-                    if num_termination_events == 1:
-                        solution_complete = True
-                        continue
-
-                    # if we need to restart the integration, prepare a new state
-                    if (
-                        num_reflection_events == 1
-                        or num_enter_level1_events == 1
-                        or num_exit_level1_events == 1
-                        or num_enter_level2_events == 1
-                        or num_exit_level2_events == 1
-                    ):
-                        # prepare to restart the integration
-                        N_start = sol.t[-1]
-                        initial_state = StateVector._make(sol.y[:, -1])
-
-                        if num_enter_level1_events == 1:
-                            max_step_size = potential.bounce_region_level1_max_step
-                            supervisor.notify_level_1_entry(
-                                enter_bounce_region_level1_times[0], max_step_size
-                            )
-                            in_level1 = True
-                            in_level2 = False
-                            if verbose:
-                                print(
-                                    f"-- compute_scalar_model ({task_label}): enter level-1 bounce region at N={enter_bounce_region_level1_times[0]:.5g}, reducing max step size to {max_step_size:.5g}"
-                                )
-
-                        if num_exit_level1_events == 1:
-                            max_step_size = default_max_step_size
-                            supervisor.notify_level_1_exit(
-                                exit_bounce_region_level1_times[0], max_step_size
-                            )
-                            in_level1 = False
-                            in_level2 = False
-                            if verbose:
-                                print(
-                                    f"-- compute_scalar_model ({task_label}): exit level-1 bounce region at N={exit_bounce_region_level1_times[0]:.5g}, increasing max step size to {max_step_size:.5g}"
-                                )
-
-                        if num_enter_level2_events == 1:
-                            max_step_size = potential.bounce_region_level2_max_step
-                            supervisor.notify_level_2_entry(
-                                enter_bounce_region_level2_times[0], max_step_size
-                            )
-                            in_level1 = True
-                            in_level2 = True
-                            if verbose:
-                                print(
-                                    f"-- compute_scalar_model ({task_label}): enter level-2 bounce region at N={enter_bounce_region_level2_times[0]:.5g}, reducing max step size to {max_step_size:.5g}"
-                                )
-
-                        if num_exit_level2_events == 1:
-                            max_step_size = potential.bounce_region_level1_max_step
-                            supervisor.notify_level_2_exit(
-                                exit_bounce_region_level2_times[0], max_step_size
-                            )
-                            in_level1 = True
-                            in_level2 = False
-                            if verbose:
-                                print(
-                                    f"-- compute_scalar_model ({task_label}): exit level-2 bounce region at N={exit_bounce_region_level2_times[0]:.5g}, increasing max step size to {max_step_size:.5g}"
-                                )
-
-                        if num_reflection_events == 1:
-                            # record that a hard reflection occurred and prepare for the next integration step
-                            supervisor.notify_hard_reflection(reflection_times[0])
-
-                            # reverse direction of travel for the scalar field
-                            if initial_state.pi_Einstein < 0.0:
-                                initial_state = initial_state._replace(
-                                    pi_Einstein=-initial_state.pi_Einstein
-                                )
-                            assert initial_state.pi_Einstein >= 0.0
-
-                            if verbose:
-                                print(
-                                    f"-- compute_scalar_model ({task_label}): hard reflection detected at N={reflection_times[0]:.5g}"
-                                )
-
-                        continue
-
-                    # otherwise, we don't know what happened, so we should never reach this point
-                    raise RuntimeError(
-                        f"compute_scalar_model ({task_label}): integration terminated with unknown events (N_start={N_start:.5g}, N_failsafe={N_failsafe:.5g}"
-                    )
+            if verbose and len(result.reflections) > 0:
+                print(
+                    f"-- compute_scalar_model ({task_label}): {len(result.reflections)} elastic reflection(s), first at N={result.reflections[0].N:.5g}"
+                )
 
         except ComputationFailureError as e:
             print(
@@ -841,7 +882,7 @@ def compute_scalar_model(
     # the integration should have terminated when T_Jordan = T_CMB, which ought to correspond to z = 0
     # we now work backwards and sample the integration output on the supplied z grid, using the e-fold number
     # to assign a value of log(1 + z).
-    final_N = sol.t[-1]
+    final_N = result.N_final
     largest_z = exp(final_N) - 1.0
     z_grid_cut = z_grid.truncate(largest_z, keep="lower")
 
@@ -857,8 +898,7 @@ def compute_scalar_model(
     # loop over the required z sample grid.
     # Note that we will work from high z to low z.
 
-    num_fragments = len(solution_fragments)
-    current_fragment = solution_fragments.pop(0)
+    solution: OdeSolution = result.solution
 
     hubble: HubblePolicy = HubblePolicy(coupling, units)
     try:
@@ -867,16 +907,7 @@ def compute_scalar_model(
             N_backward = log(1.0 + z.z)
             N_forward = final_N - N_backward
 
-            if N_forward > current_fragment.N_high:
-                while N_forward > current_fragment.N_high:
-                    current_fragment = solution_fragments.pop(0)
-
-            if N_forward < current_fragment.N_low:
-                raise RuntimeError(
-                    f"compute_scalar_model: ({task_label}): z={z.z:.3g} appears to be out-of-order relative to the solution fragments"
-                )
-
-            state: StateVector = StateVector._make(current_fragment.sol(N_forward))
+            state: StateVector = StateVector._make(solution(N_forward))
             data: ODEPolicyData = policy(N_forward, state)
             hubble_data: HubblePolicyData = hubble(data, state)
 
@@ -916,7 +947,7 @@ def compute_scalar_model(
     return {
         "metadata": IntegrationData(
             compute_time=supervisor.integration_time,
-            compute_steps=compute_steps,
+            compute_steps=result.nfev,
             RHS_evaluations=supervisor.RHS_evaluations,
             mean_RHS_time=supervisor.mean_RHS_time,
             max_RHS_time=supervisor.max_RHS_time,
@@ -924,16 +955,13 @@ def compute_scalar_model(
         ),
         "z_grid": z_grid_cut,
         "sample": sample,
-        "hard_reflections": supervisor.number_hard_reflections,
-        "level_1_entries": supervisor.number_level_1_entries,
-        "level_1_exits": supervisor.number_level_1_exits,
-        "level_2_entries": supervisor.number_level_2_entries,
-        "level_2_exits": supervisor.number_level_2_exits,
-        "level_1_boundary": potential.bounce_region_level1_boundary,
-        "level_2_boundary": potential.bounce_region_level2_boundary,
-        "level_1_max_step": potential.bounce_region_level1_max_step,
-        "level_2_max_step": potential.bounce_region_level2_max_step,
-        "number_fragments": num_fragments,
+        "reflections": len(result.reflections),
+        "cap_fraction": step_control.cap_fraction,
+        "cap_floor": step_control.cap_floor,
+        "cap_global_max_step": step_control.global_max_step,
+        "jacobian_factor_max": step_control.jacobian_factor_max,
+        "accepted_steps": result.accepted_steps,
+        "steps_rejected_by_exception": result.steps_rejected_by_exception,
         "largest_RHS_values": (
             supervisor.largest_RHS_values if collected_full_statistics else None
         ),
@@ -943,7 +971,7 @@ def compute_scalar_model(
         "mean_RHS_values": (
             supervisor.mean_RHS_values if collected_full_statistics else None
         ),
-        "solver_label": solver_labels[solver] if solver is not None else None,
+        "solver_label": SCALAR_MODEL_STEPPER_LABEL,
     }
 
 
@@ -960,16 +988,13 @@ def build_extra_data(data: dict) -> Optional[dict]:
         if min_value is None or value > min_value:
             extra_data[dest_attr] = value
 
-    store_attr("hard_reflections", HARD_REFLECTIONS_KEY, 0)
-    store_attr("level_1_entries", "number_level_1_entries", 0)
-    store_attr("level_1_exits", "number_level_1_exits", 0)
-    store_attr("level_2_entries", "number_level_2_entries", 0)
-    store_attr("level_2_exits", "number_level_2_exits", 0)
-    store_attr("level_1_boundary", "level_1_boundary")
-    store_attr("level_2_boundary", "level_2_boundary")
-    store_attr("level_1_max_step", "level_1_max_step")
-    store_attr("level_2_max_step", "level_2_max_step")
-    store_attr("number_fragments", "number_fragments", 1)
+    store_attr("reflections", REFLECTIONS_KEY, 0)
+    store_attr("cap_fraction", "cap_fraction")
+    store_attr("cap_floor", "cap_floor")
+    store_attr("cap_global_max_step", "cap_global_max_step")
+    store_attr("jacobian_factor_max", "jacobian_factor_max")
+    store_attr("accepted_steps", "accepted_steps")
+    store_attr("steps_rejected_by_exception", "steps_rejected_by_exception", 0)
 
     largest_RHS_values = data["largest_RHS_values"]
     smallest_RHS_values = data["smallest_RHS_values"]

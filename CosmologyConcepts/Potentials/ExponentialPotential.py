@@ -90,6 +90,17 @@ class ExponentialPotential(AbstractPotential):
     def hard_reflection_point(self) -> float:
         return 0.0
 
+    @property
+    def reflects_at_origin(self) -> bool:
+        # V = Lambda^4 exp((M/phi)^n) rises without bound as phi -> 0+, and its slope is negative
+        # for every phi > 0, so the wall between the field and the origin is purely repulsive
+        return True
+
+    @property
+    def log_V_floor(self) -> float:
+        # far from the wall (M/phi -> 0) the potential tends to Lambda^4
+        return self._log_Lambda_4
+
     def log_V(self, phi: FieldLike) -> float:
         """
         Evaluate the potential at a given value of phi
