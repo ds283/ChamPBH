@@ -892,7 +892,11 @@ with ShardedPool(
 
     phi_init, pi_init = ray.get(
         [
-            pool.object_get("phi_value", value=5.0 * units.PlanckMass, units=units),
+            pool.object_get(
+                "phi_value",
+                value=args.phi_init_Mp * units.PlanckMass,
+                units=units,
+            ),
             pool.object_get("pi_value", value=0.0, units=units),
         ]
     )

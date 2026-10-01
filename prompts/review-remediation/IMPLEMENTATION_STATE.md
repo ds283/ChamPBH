@@ -173,6 +173,8 @@ these 15 open; they pass to whichever campaign takes them (`.documents/review-re
     (`--phi-init-Mp` in the shared parser, read by the three drivers; a warning, and only a
     warning, for couplings with Ω(φ*) T* > M_P: the user ruled on 2026-10-01 that such points are
     computed, never skipped or refused).
+  - **Resolved (2026-10-02):** by `science-readiness` prompt 04 (its log 04): `--phi-init-Mp` and a
+    warning, only a warning, from `pipeline_selection.warn_super_planckian`.
 - **[00-hard-reflection-count-is-stored-but-never-reported]** *(audit §8; review N1)* —
   `ScalarModel` rows carry `hard_reflections`; no plotting script reads it. **Next step:** print
   it per model in `plot_ScalarModel.py` and in the survey summary. **Out of scope here.**

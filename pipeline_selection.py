@@ -29,6 +29,7 @@ can reach the decision directly. The lookup results are read only through their
 """
 
 from dataclasses import dataclass
+from math import exp, log
 from typing import Any, List, Sequence, Tuple
 
 
@@ -166,3 +167,65 @@ def summarise_failure_reasons(reasons: Sequence[Any]) -> List[Tuple[str, int]]:
             clause = NO_FAILURE_REASON
         counts[clause] = counts.get(clause, 0) + 1
     return sorted(counts.items(), key=lambda item: (-item[1], item[0]))
+
+
+def super_planckian_couplings(
+    couplings: Sequence[Any], phi_init: Any, T_init: Any, units: Any
+) -> List[Any]:
+    """
+    The couplings for which the run starts super-Planckian: those with
+    ln Omega(phi*) + ln T* > ln M_P, that is Omega(phi*) T* > M_P (review H8; the Jordan
+    temperature T* times Omega is the Einstein-frame temperature scale, which is compared
+    with the reduced Planck mass `units.PlanckMass`). (science-readiness prompt 04)
+
+    For `ExponentialCoupling`, ln Omega = beta phi/M_P, so the test is
+    beta phi*/M_P > ln(M_P/T*). With T* = 2e4 GeV, ln(M_P/T*) = 32.43, so phi* = 5 M_P
+    selects beta > 6.49 and phi* = 1 M_P selects beta > 32.43.
+
+    The couplings come back in their original order, as the same objects; nothing is
+    removed from `couplings`.
+
+    :param phi_init: a phi_value (or float) in the cosmology's units
+    :param T_init: a temperature (or float) in the cosmology's units
+    """
+    from CosmologyConcepts.FieldValues import GetFieldValue
+    from CosmologyConcepts.temperature import GetTemperature
+
+    phi = GetFieldValue(phi_init)
+    ln_T = log(GetTemperature(T_init))
+    ln_Mp = log(units.PlanckMass)
+    return [c for c in couplings if c.log_Omega(phi) + ln_T > ln_Mp]
+
+
+def warn_super_planckian(
+    couplings: Sequence[Any], phi_init: Any, T_init: Any, units: Any, emit=print
+) -> Sequence[Any]:
+    """
+    Print one warning per super-Planckian coupling (see `super_planckian_couplings`) and the
+    count, and return `couplings` itself, unchanged. A super-Planckian start is warned about
+    and computed, never skipped or refused (the user's ruling, science-readiness P6).
+    (science-readiness prompt 04)
+
+    :param emit: called with each line; `print` by default
+    """
+    from CosmologyConcepts.FieldValues import GetFieldValue
+    from CosmologyConcepts.temperature import GetTemperature
+
+    phi = GetFieldValue(phi_init)
+    ln_T = log(GetTemperature(T_init))
+    ln_Mp = log(units.PlanckMass)
+    flagged = super_planckian_couplings(couplings, phi_init, T_init, units)
+    for c in flagged:
+        ratio = exp(c.log_Omega(phi) + ln_T - ln_Mp)
+        beta = getattr(c, "_beta_float", None)
+        beta_text = f"{beta:.5g}" if beta is not None else getattr(c, "name", "?")
+        emit(
+            f"!! warning: beta={beta_text}, phi*={phi / units.PlanckMass:.5g} M_P: "
+            f"Omega(phi*) T* = {ratio:.5g} M_P (super-Planckian start)"
+        )
+    if flagged:
+        emit(
+            f"!! warning: {len(flagged)} of {len(couplings)} couplings start super-Planckian; "
+            f"they are computed like the others"
+        )
+    return couplings

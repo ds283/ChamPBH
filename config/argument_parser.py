@@ -12,6 +12,7 @@ DEFAULT_RAY_ADDRESS = "auto"
 
 DEFAULT_Z_END = 0.1
 DEFAULT_T_INIT_GEV = 20000
+DEFAULT_PHI_INIT_MP = 5.0
 
 DEFAULT_LOG10_ONE_PLUS_Z_HIGH = 35
 DEFAULT_LOG10_ONE_PLUS_Z_LOW = 0
@@ -123,6 +124,14 @@ def create_argument_parser() -> configargparse.ArgumentParser:
         type=float,
         default=DEFAULT_T_INIT_GEV,
         help="set initial temperature in Jordan frame, specified in GeV",
+    )
+    parser.add_argument(
+        "--phi-init-Mp",
+        type=float,
+        default=DEFAULT_PHI_INIT_MP,
+        help="set the initial value of the scalar field phi* in the Einstein frame, in units of "
+        "the (reduced) Planck mass M_P (science-readiness prompt 04). The initial momentum is zero. "
+        "A start with Omega(phi*) T* > M_P is warned about and computed",
     )
     parser.add_argument(
         "--T-stop-GeV",

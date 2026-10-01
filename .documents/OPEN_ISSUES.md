@@ -1,10 +1,10 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-02 · **26 open**: 8 on the `review-remediation` board (closed
-2026-09-30), 3 of them assigned to `science-readiness`; 2 on the `production-readiness` board
+**Last updated:** 2026-10-02 · **25 open**: 7 on the `review-remediation` board (closed
+2026-09-30), 2 of them assigned to `science-readiness`; 2 on the `production-readiness` board
 (closed 2026-09-30); 4 on the `run-integrity` board (closed 2026-09-30); 9 on the
 `integrator-remediation` board (closed 2026-10-01), 1 of them assigned to `science-readiness`;
-3 on the `science-readiness` board (planned 2026-10-01, 3 of 9 landed).
+3 on the `science-readiness` board (planned 2026-10-01, 4 of 9 landed).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -132,8 +132,6 @@ two were assigned on 2026-10-01 to `science-readiness` (§1.7), one of them sinc
 Assigned 2026-10-01 when the campaign was planned. Each entry stays on its own board, which
 carries the **Assigned** line; the prompt that closes one deletes its row here.
 
-- `[00-initial-field-value-is-hard-coded-and-unchecked]` — φ* = 5 M_P is a literal in three
-  drivers, with no A*T* > M_P warning (review H8). `review-remediation`; prompt 04.
 - `[00-bbn-spline-domain-is-far-wider-than-prymordial-uses]` — the spline reaches 0.1 eV; PRyMordial
   reads to 0.363 keV. `review-remediation`; prompt 06.
 - `[04-numerical-strategies-describes-the-removed-asinh-bbn-interface]` — §7.2–7.4 need a dated

@@ -67,6 +67,7 @@ from pipeline_selection import (
     build_query_entries,
     select_missing,
     summarise_failure_reasons,
+    warn_super_planckian,
 )
 from utilities import grouper, energy_formatter
 
@@ -859,7 +860,11 @@ def execute(pool, units: UnitsLike):
     # pick initial conditions that are equivalent to Xav's
     phi_init, pi_init = ray.get(
         [
-            pool.object_get("phi_value", value=5.0 * units.PlanckMass, units=units),
+            pool.object_get(
+                "phi_value",
+                value=args.phi_init_Mp * units.PlanckMass,
+                units=units,
+            ),
             pool.object_get("pi_value", value=0.0, units=units),
         ]
     )
@@ -1104,6 +1109,10 @@ def execute(pool, units: UnitsLike):
     Potential_array = ray.get(convert_to_potential(M_lambda_grid))
 
     Coupling_array = ray.get(convert_to_coupling(beta_grid))
+
+    # warn about a super-Planckian start, Omega(phi*) T* > M_P; warning only, the array is unchanged
+    # (science-readiness prompt 04, P6)
+    Coupling_array = warn_super_planckian(Coupling_array, phi_init, T_init, units)
 
     print(
         f"   -- total number of models to integrate = {len(Potential_array) * len(Coupling_array)}"

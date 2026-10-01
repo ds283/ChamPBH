@@ -1,7 +1,7 @@
 # Science-readiness campaign — implementation state
 
-**Last updated:** 2026-10-02 · **Status: IN PROGRESS — 3 of 9 landed** (prompt 01, with
-deviations; prompt 02; prompt 03, with deviations). Planned on 2026-10-01 against
+**Last updated:** 2026-10-02 · **Status: IN PROGRESS — 4 of 9 landed** (prompt 01, with
+deviations; prompt 02; prompt 03, with deviations; prompt 04, with deviations). Planned on 2026-10-01 against
 `main` at `6aaa706`, from a Claude Science re-evaluation kept at
 [`source/campaign_reevaluation_2026-10-01.md`](source/campaign_reevaluation_2026-10-01.md) and
 checked against the tree by the planner (README §0.3). Suites at `6aaa706`: CosmologyModels 18,
@@ -12,7 +12,7 @@ land on it.
 made before 2026.6.0 is invalid, and the science run needs a fresh datastore file (columns are
 added with no migration). `PRYM_VERSION` is `"bf24c3d+ri02+sr01"`. Suites after prompt 01:
 CosmologyModels 18, ComputeTargets 71, Datastore 17. After prompt 02: 18, 75, 21. After
-prompt 03: 18, 82, 26.
+prompt 03: 18, 82, 26. After prompt 04: 18, 86, 26.
 
 The campaign hands the scalar field to PRyMordial through the expansion rate alone, with a patched
 PRyMordial that has no fictitious new-physics temperature and an optional wall-clock limit. It
@@ -100,7 +100,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | 01 | [The Hubble-only BBN route, the wall-clock limit and the output checks](01-hubble-only-bbn-route.md) | **R**, **W**, **O**, version bump, driver | Opus | ✍️ 2026-10-01 | ✅ 2026-10-01 (with deviations) | see `git log` ("Hand the scalar field to PRyMordial through H alone") | [`logs/01-hubble-only-bbn-route.md`](logs/01-hubble-only-bbn-route.md) |
 | 02 | [A failure reason on `ScalarModel` rows](02-scalarmodel-failure-reasons.md) | **F** | Sonnet | ✍️ 2026-10-01 | ✅ 2026-10-01 (with deviations) | see `git log` ("Store why a ScalarModel history failed") | [`logs/02-scalarmodel-failure-reasons.md`](logs/02-scalarmodel-failure-reasons.md) |
 | 03 | [Store the first bounce](03-first-bounce.md) | **T** | Opus | ✍️ 2026-10-01 | ✅ 2026-10-02 (with deviations) | see `git log` ("Store the first bounce of every ScalarModel") | [`logs/03-first-bounce.md`](logs/03-first-bounce.md) |
-| 04 | [The initial field as a run option, with a super-Planckian warning](04-initial-field-option.md) | **P** | Sonnet | ✍️ 2026-10-01 | — | — | — |
+| 04 | [The initial field as a run option, with a super-Planckian warning](04-initial-field-option.md) | **P** | Sonnet | ✍️ 2026-10-01 | ✅ 2026-10-02 (with deviations) | see `git log` ("Make the initial field a run option and warn on a super-Planckian start") | [`logs/04-initial-field-option.md`](logs/04-initial-field-option.md) |
 | 05 | [Bounce averages on the dense output](05-bounce-averages.md) | **A** | Opus | ✍️ 2026-10-01 | — | — | — |
 | 06 | [Narrow the BBN spline to PRyMordial's range](06-bbn-spline-floor.md) | **L** | Sonnet | ✍️ 2026-10-01 | — | — | — |
 | 07 | [Extraction and the science figures](07-extraction-and-figures.md) | **G** | Sonnet | ✍️ 2026-10-01 | — | — | — |
@@ -118,7 +118,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | O | **GAP** | A successful PRyMordial return is stored unchecked. Closes `[00-prymordial-output-is-stored-unchecked]`; with P4, also closes `[02-a-short-bbn-sample-grid-escapes-compute-bbn-data]` and `[02-the-bbn-callbacks-do-not-check-their-values-for-finiteness]` (assigned). | 01 | **done** 2026-10-01 (log 01) |
 | F | **GAP** | A `ScalarModel` failure row carries no reason. Closes `[00-scalarmodel-failure-rows-carry-no-reason]` (assigned). | 02 | **done** 2026-10-01 (log 02) |
 | T | **GAP** | The first bounce is not stored and cannot be read from the samples at small `M`. Closes `[00-first-bounce-is-not-stored]`. | 03 | **done** 2026-10-02 (log 03) |
-| P | **GAP** | φ\* is a literal in three drivers, with no super-Planckian warning. Closes `[00-initial-field-value-is-hard-coded-and-unchecked]` (assigned). | 04 | open |
+| P | **GAP** | φ\* is a literal in three drivers, with no super-Planckian warning. Closes `[00-initial-field-value-is-hard-coded-and-unchecked]` (assigned). | 04 | **done** 2026-10-02 (log 04) |
 | A | **DEFECT, medium at M ≲ 10⁻⁴** | BBN integrates a spline through random-phase samples of the bounces below a few keV. Closes `[00-bbn-input-is-aliased-at-small-M]`; narrows `[00-stored-samples-alias-the-rebounds]` (assigned). | 05 | open |
 | L | **DEFECT, low** | The BBN spline reaches 0.1 eV, while PRyMordial reads to 0.363 keV. Closes `[00-bbn-spline-domain-is-far-wider-than-prymordial-uses]` (assigned). | 06 | open |
 | G | **GAP** | No extraction or figures for the science run. Closes `[00-no-extraction-for-the-science-figures]`. | 07 | open |
@@ -130,7 +130,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
 Seven opened by the planner on 2026-10-01, one per campaign item that has no issue on another
 board; prompt 01 closed three and prompt 03 one (§4), and three are open. Seven more were assigned from other boards
-(§3.1); prompts 01 and 02 closed three of them, and four are open.
+(§3.1); prompts 01, 02 and 04 closed four of them, and three are open.
 
 - **[00-bbn-input-is-aliased-at-small-M]** *(README §1 A; the source §2; README §6.1)*.
   - **What.** Below a few keV, `ρ_NP/ρ_R,J` jumps from sample to sample at small `M`, because the
@@ -156,7 +156,7 @@ here (README §5 rule 4).
 
 | Issue | Board | Prompt |
 |---|---|---|
-| `[00-initial-field-value-is-hard-coded-and-unchecked]` | `review-remediation` | 04 |
+| `[00-initial-field-value-is-hard-coded-and-unchecked]` | `review-remediation` | 04 — **resolved 2026-10-02** (§4) |
 | `[00-bbn-spline-domain-is-far-wider-than-prymordial-uses]` | `review-remediation` | 06 |
 | `[04-numerical-strategies-describes-the-removed-asinh-bbn-interface]` | `review-remediation` | 08 |
 | `[02-a-short-bbn-sample-grid-escapes-compute-bbn-data]` | `run-integrity` | 01 (P4) — **resolved 2026-10-01** (§4) |
@@ -236,3 +236,11 @@ here (README §5 rule 4).
     verification §4.8; β = 1.6 at 10⁻⁵: 18.97443372 / 420.76 MeV. It is the first `φ < 1.5 M`
     wall bounce on every window and history it was run on (P5's premise). The sample-based
     detector gives 742.79 MeV at M = 10⁻³ and 0.39 MeV at 10⁻⁵ on the same histories.
+- **[00-initial-field-value-is-hard-coded-and-unchecked]** *(assigned from `review-remediation`;
+  §3.1)*. **Resolved (2026-10-02):** by prompt 04 (log 04). `--phi-init-Mp` (default 5.0) in the
+  shared parser; `main.py`, `plot_by_beta.py` and `plot_ScalarModel.py` build φ\* from it, with no
+  `5.0 * units.PlanckMass` literal left. `pipeline_selection.super_planckian_couplings` returns
+  the couplings with ln Ω(φ\*) + ln T\* > ln M_P, and `warn_super_planckian` (called by
+  `main.py` before step 1) prints one warning per such coupling and the count and returns the
+  coupling array unchanged: warn, never skip or refuse (P6). The dated **Resolved** line is also
+  on the `review-remediation` board.

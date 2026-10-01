@@ -30,7 +30,7 @@ Nothing is stored.
 Run from the repository root, since PRyMordial reads PRyMrates/ and the EOS
 reads its tables from the working directory, one invocation at a time:
 
-    ./venv/bin/python tools/history_and_bbn.py BETA M [--T-stop-GeV T] \\
+    ./venv/bin/python tools/history_and_bbn.py BETA M [--phi-init-Mp X] [--T-stop-GeV T] \\
         [--small-network] [--wall-clock-limit SECS]
 
 M is in units of the (reduced) Planck mass. Output lines:
@@ -96,7 +96,7 @@ from CosmologyModels.LambdaCDM import Planck2018  # noqa: E402
 from Units import Planck_units  # noqa: E402
 
 # main.py's initial data (main.py, execute()) and z grid (config/argument_parser.py defaults)
-PHI_INIT_MP = 5.0
+PHI_INIT_MP = 5.0  # the default of --phi-init-Mp
 PI_INIT = 0.0
 T_INIT_GEV = 2.0e4
 LAMBDA_EV = 1.0e-3
@@ -170,6 +170,12 @@ def main(argv=None) -> int:
     parser.add_argument("beta", type=float, help="the coupling's beta")
     parser.add_argument("M", type=float, help="the potential's M, in units of M_P")
     parser.add_argument(
+        "--phi-init-Mp",
+        type=float,
+        default=PHI_INIT_MP,
+        help="initial value of the scalar field in units of M_P (default 5, as main.py)",
+    )
+    parser.add_argument(
         "--T-stop-GeV",
         type=float,
         default=None,
@@ -227,7 +233,7 @@ def main(argv=None) -> int:
         cosmology,
         T_init,
         T_stop,
-        phi_value(0, PHI_INIT_MP * units.PlanckMass),
+        phi_value(0, args.phi_init_Mp * units.PlanckMass),
         pi_value(0, PI_INIT),
         _z_grid(),
         potential,
