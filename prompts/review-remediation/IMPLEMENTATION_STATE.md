@@ -169,6 +169,10 @@ these 15 open; they pass to whichever campaign takes them (`.documents/review-re
   runs β up to 25 with A* = e¹²⁵. Numerically harmless (everything is in logs); physically
   super-Planckian for β ≳ 6.5. **Next step:** make φ* a CLI/yaml parameter carried in the store
   tags, and warn or refuse when βφ*/M_P > ln(M_P/T*). **Out of scope here.**
+  - **Assigned (2026-10-01):** to the [`science-readiness`](../science-readiness/IMPLEMENTATION_STATE.md) campaign, prompt 04
+    (`--phi-init-Mp` in the shared parser, read by the three drivers; a warning, and only a
+    warning, for couplings with Ω(φ*) T* > M_P: the user ruled on 2026-10-01 that such points are
+    computed, never skipped or refused).
 - **[00-hard-reflection-count-is-stored-but-never-reported]** *(audit §8; review N1)* —
   `ScalarModel` rows carry `hard_reflections`; no plotting script reads it. **Next step:** print
   it per model in `plot_ScalarModel.py` and in the survey summary. **Out of scope here.**
@@ -213,6 +217,9 @@ these 15 open; they pass to whichever campaign takes them (`.documents/review-re
   oscillations of the review's H1 (vii). Harmless at 250 knots per decade; a narrower domain
   would need the `T_Jordan_stop` pre-check (`BBNData.py:77`) adjusted with it. **Not changed by
   prompt 04**, which keeps the domain and records the knot count it actually used.
+  - **Assigned (2026-10-01):** to the [`science-readiness`](../science-readiness/IMPLEMENTATION_STATE.md) campaign, prompt 06. The planner measured PRyMordial's
+    lowest callback query at 0.363 keV on `6aaa706` (that campaign's README §6.0); the floor moves
+    to 0.2 keV, with the pre-check rule unchanged.
 - **[02-stale-derivative-and-T_LO-comments-in-the-EOS-package]** *(log 02, observation 1)*.
   - **What.** Three comments in `CosmologyModels/GenericEOS/` are wrong. None of them was in prompt
     02's allowed lines:
@@ -330,6 +337,8 @@ these 15 open; they pass to whichever campaign takes them (`.documents/review-re
   - **Next step.** A dated addendum to §7, additive per CLAUDE.md rule 6, in whichever prompt next
     owns `.documents/` (prompt 06's close-out, if its scope allows), or a commit of its own. **Not
     in prompt 04's files.**
+  - **Assigned (2026-10-01):** to the [`science-readiness`](../science-readiness/IMPLEMENTATION_STATE.md) campaign, prompt 08, which adds the dated §7 addendum
+    once that campaign has replaced the BBN route.
 
 - **[05-kicking-table-and-saikawa-shirai-gs-disagree-through-qcd-and-ew]** *(log 05, Deviations 6
   and observation 1)*.

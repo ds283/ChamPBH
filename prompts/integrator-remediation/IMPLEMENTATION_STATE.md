@@ -164,6 +164,10 @@ own source.
   - **Next step.** Record every turning point beside the z grid; the new loop sees every accepted
     step, so the cost is nil. It changes what BBN and the adiabatic stage see: the authors'
     decision. Not assigned.
+  - **Assigned (2026-10-01):** its BBN half, to the [`science-readiness`](../science-readiness/IMPLEMENTATION_STATE.md) campaign, prompt 05: cell means of
+    `H_J²` and `φ` by Gauss–Legendre on the dense output, which BBN reads (the user's choice,
+    2026-10-01). The adiabatic half stays here as `[post-adiabatic-Q-reads-aliased-late-samples]`;
+    prompt 05 narrows this entry rather than closing it.
 - **[00-atol-does-not-scale-with-phi]** *(audit §6)*.
   - **What.** `atol = 1e-8` on `φ` and `π`, whose wall-side values are `~1e-4 M`. A vector
     `atol = [1e-8 M, 1e-8 M, 1e-8, 1e-8, 1e-8]` halves the first-bounce error at 1 % cost.
@@ -177,6 +181,8 @@ own source.
   - **Impact.** How often each happens in a survey cannot be read from the datastore.
   - **Next step.** A reason column: a schema change and a migration, out of this campaign's
     scope (README §0.4). Not assigned.
+  - **Assigned (2026-10-01):** to the [`science-readiness`](../science-readiness/IMPLEMENTATION_STATE.md) campaign, prompt 02 (a `failure_reason` column; the
+    science run starts from a fresh datastore, so no migration).
 - **[00-region-properties-on-the-potentials-become-unread]** *(after prompt 01)*.
   - **What.** `bounce_region_level{1,2}_boundary`, `…_max_step`, `default_max_step` and
     `hard_reflection_point` are defined on `AbstractPotential` and six potentials and read only

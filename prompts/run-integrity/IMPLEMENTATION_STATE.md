@@ -174,6 +174,8 @@ and opened one, not assigned (the `03-` entry). Prompt 04 opened one, not assign
   - **Next step.** A length check in `build_NP_callbacks` that raises `ComputationFailureError`, so
     the case becomes a `"BBN callbacks: ..."` failure row. It changes which inputs become failure
     rows, so it needs its own prompt. **Not in prompt 02's scope.**
+  - **Assigned (2026-10-01):** to the [`science-readiness`](../science-readiness/IMPLEMENTATION_STATE.md) campaign, prompt 01, which rewrites the callback
+    builder (that campaign's README §0.2 P4, accepted by the user 2026-10-01).
 - **[02-the-bbn-callbacks-do-not-check-their-values-for-finiteness]** *(log 02, observation 2;
   reasoned from the code on `f0de762` + prompt 02; not run)*.
   - **What.** Since prompt 02 the samples and T are checked for finiteness, but not the callbacks'
@@ -185,6 +187,8 @@ and opened one, not assigned (the `03-` entry). Prompt 04 opened one, not assign
     route found other than those prompt 02 closes.
   - **Next step.** Raise `ComputationFailureError` on a non-finite return value. Prompt 02 was
     told not to change the callbacks' values, and did not add it.
+  - **Assigned (2026-10-01):** to the [`science-readiness`](../science-readiness/IMPLEMENTATION_STATE.md) campaign, prompt 01, which rewrites the callback
+    builder (that campaign's README §0.2 P4, accepted by the user 2026-10-01).
 - **[03-step-1-first-pass-lookup-filters-nothing]** *(log 03, observation 1; reasoned from
   `main.py` on `765e80d`; not run)*.
   - **What.** In `build_solver_batch` (step 1 of `run_pipeline`), `missing` is

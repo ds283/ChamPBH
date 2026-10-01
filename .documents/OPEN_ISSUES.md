@@ -1,9 +1,11 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-01 · **26 open**: 8 on the `review-remediation` board (closed
-2026-09-30), none of them assigned; 2 on the `production-readiness` board (closed
-2026-09-30); 6 on the `run-integrity` board (closed 2026-09-30); 10 on the
-`integrator-remediation` board (complete, 4 of 4 prompts landed), none assigned.
+**Last updated:** 2026-10-01 · **33 open**: 8 on the `review-remediation` board (closed
+2026-09-30), 3 of them assigned to `science-readiness`; 2 on the `production-readiness` board
+(closed 2026-09-30); 6 on the `run-integrity` board (closed 2026-09-30), 2 of them assigned to
+`science-readiness`; 10 on the `integrator-remediation` board (closed 2026-10-01), 2 of them
+assigned to `science-readiness`; 7 on the `science-readiness` board (planned 2026-10-01, 0 of 9
+landed).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -18,7 +20,8 @@ the two disagree, the board is right.
 **Boards.** [`review-remediation`](../prompts/review-remediation/IMPLEMENTATION_STATE.md) ·
 [`production-readiness`](../prompts/production-readiness/IMPLEMENTATION_STATE.md) ·
 [`run-integrity`](../prompts/run-integrity/IMPLEMENTATION_STATE.md) ·
-[`integrator-remediation`](../prompts/integrator-remediation/IMPLEMENTATION_STATE.md)
+[`integrator-remediation`](../prompts/integrator-remediation/IMPLEMENTATION_STATE.md) ·
+[`science-readiness`](../prompts/science-readiness/IMPLEMENTATION_STATE.md)
 
 ## 1. Open, by owning board
 
@@ -29,27 +32,19 @@ opened after that on 2026-09-29 are resolved (board §4). One opened by prompt 0
 one by prompt 04, one by prompt 05, one by prompt 06. The campaign closed on 2026-09-30; these rows
 stay here until a later campaign takes them. Four were assigned on 2026-09-30; all four are
 resolved (§1.2). Three more were assigned on 2026-09-30 to `run-integrity` (§1.4); all three
-are resolved.
+are resolved. Three more were assigned on 2026-10-01 to `science-readiness` (§1.7).
 
-- `[00-initial-field-value-is-hard-coded-and-unchecked]` — `main.py:814` fixes φ* = 5 M_P with no
-  A*T* ≲ M_P guard (review H8). Out of this campaign's scope.
 - `[00-kicking-function-table-has-no-provenance-in-the-repository]` —
   `CosmologyModels/GenericEOS/Xav_EOS_data.csv` was added in commit `1759515` without the script
   that built it.
 - `[00-two-files-are-not-black-clean]` — `Datastore/SQL/ObjectFactories/base.py` and
   `CosmologyModels/LambdaCDM/Planck.py` at `f5896bb`; housekeeping.
-- `[00-bbn-spline-domain-is-far-wider-than-prymordial-uses]` — `BBNData.py:47` tabulates down to
-  0.1 eV where PRyMordial stops near 0.3 keV; harmless at 250 knots per decade, but it includes
-  the matter-era re-delivery oscillations.
 - `[02-stale-derivative-and-T_LO-comments-in-the-EOS-package]` — three wrong comments in
   `CosmologyModels/GenericEOS/` (the base `dG_s_dlogT` docstring, the jax class's "1/GeV", the
   "600 keV" above `SAIKAWA_SHIRAI_T_LO`); comment-only.
 - `[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]` — PRyMordial's Yp and D/H
   move by 1e-5–7e-4 under 1e-9–1e-8 changes to ρ_NP; prompt 04's 1e-4 D/H test passes at 8.85e-5
   inside that band.
-- `[04-numerical-strategies-describes-the-removed-asinh-bbn-interface]` —
-  `.documents/numerical-strategies.md` §7.2–7.4 still describe the asinh transform and the sort
-  that prompt 04 removed; needs a dated addendum.
 - `[05-kicking-table-and-saikawa-shirai-gs-disagree-through-qcd-and-ew]` — the table's Σ peaks
   (QCD 0.3145, EW 0.0374) match neither the Σ the g's imply by conservation (0.299, 0.058) nor the
   4g_s/(3g_ρ) − 1 formula (0.249, 0.0374 at 46 GeV); a decision for the authors.
@@ -88,18 +83,13 @@ prompt 03 on 2026-09-30.
 
 Two opened by the planner on 2026-09-30, both assigned to the campaign's own prompts; prompts 02
 and 03 resolved them (board §4). Two opened by prompt 01, two by prompt 02, one by prompt 03 and
-one by prompt 04 on 2026-09-30, not assigned.
+one by prompt 04 on 2026-09-30. Two were assigned on 2026-10-01 to `science-readiness` (§1.7).
 
 - `[01-adiabatic-and-bbn-lookups-do-not-require-validated-rows]` — unlike `ScalarModel.build`,
   the `AdiabaticHistory` and `BBNData` lookups do not filter `validated == True`, so an
   unvalidated row left by an interrupted run is served unless `--prune-unvalidated` is passed.
 - `[01-plot-by-beta-profile-label-names-plot-scalarmodel]` — `plot_by_beta.py:87` names its
   profiling run `--plot_ScalarModel-`; cosmetic.
-- `[02-a-short-bbn-sample-grid-escapes-compute-bbn-data]` — `build_NP_callbacks` raises
-  `IndexError`/`ValueError` for fewer than four samples, outside every `except` in
-  `compute_BBN_data`, so the task ends with no failure row.
-- `[02-the-bbn-callbacks-do-not-check-their-values-for-finiteness]` — a non-finite ρ_SM from the
-  EOS would still give a NaN callback value, which can hang PRyMordial; reasoned, not measured.
 - `[03-step-1-first-pass-lookup-filters-nothing]` — `build_solver_batch`'s first-pass
   `ScalarModel` lookup keeps every pair as missing (`main.py:208`); one redundant lookup per
   batch, no wrong result.
@@ -114,18 +104,14 @@ Fourteen opened by the planner on 2026-10-01 from
 one the same day from the user's reflection guard G1. Prompt 01 (2026-10-01) closed three and
 opened two (`[01-…]`); prompt 02 (2026-10-01) closed five and opened one (`[02-…]`); prompt 03
 (2026-10-01) closed one; prompt 04, the close-out (2026-10-01), opened and closed none and the
-campaign closed; one more was opened after the close-out (2026-10-01, `[post-…]`). The ten below
-are open and none is assigned.
+campaign closed; one more was opened after the close-out (2026-10-01, `[post-…]`). Ten are open;
+two were assigned on 2026-10-01 to `science-readiness` (§1.7) and the eight below are not.
 
 - `[00-settling-at-physical-M-needs-a-parked-tracking-model]` — the field at φ_wall(ρ) as a
   passenger once its bounces are unresolvable: the switch criterion and the parked field's
   ρ_φ, p_φ; the authors' physics. Since prompt 02 its absence is a clean failure (step budget).
-- `[00-stored-samples-alias-the-rebounds]` — 2.4 samples per half-period in the grazing phase;
-  record turning points beside the z grid; the authors' decision.
 - `[00-atol-does-not-scale-with-phi]` — an `atol` vector scaled by M halves the first-bounce
   error at 1 % cost; tolerance-level.
-- `[00-scalarmodel-failure-rows-carry-no-reason]` — four failure reasons after prompt 02, all
-  printed, none stored; a schema change.
 - `[00-region-properties-on-the-potentials-become-unread]` — `bounce_region_*`,
   `default_max_step`, `hard_reflection_point` stay defined after prompt 01; housekeeping.
 - `[00-analytic-jacobian-would-remove-num-jac]` — only if Newton failures appear in the science
@@ -139,3 +125,40 @@ are open and none is assigned.
   the last silent substitution on an unphysical state; never seen.
 - `[post-adiabatic-Q-reads-aliased-late-samples]` — below 1 keV the z grid misses most bounces
   at small M (0.02–0.3 samples per half-period at 1e-5, 1e-6); max |Q| may be set by aliasing.
+
+### 1.7 Assigned to `science-readiness` — [its board](../prompts/science-readiness/IMPLEMENTATION_STATE.md) §3.1
+
+Assigned 2026-10-01 when the campaign was planned. Each entry stays on its own board, which
+carries the **Assigned** line; the prompt that closes one deletes its row here.
+
+- `[00-initial-field-value-is-hard-coded-and-unchecked]` — φ* = 5 M_P is a literal in three
+  drivers, with no A*T* > M_P warning (review H8). `review-remediation`; prompt 04.
+- `[00-bbn-spline-domain-is-far-wider-than-prymordial-uses]` — the spline reaches 0.1 eV; PRyMordial
+  reads to 0.363 keV. `review-remediation`; prompt 06.
+- `[04-numerical-strategies-describes-the-removed-asinh-bbn-interface]` — §7.2–7.4 need a dated
+  addendum. `review-remediation`; prompt 08.
+- `[02-a-short-bbn-sample-grid-escapes-compute-bbn-data]` — fewer than four samples ends the BBN
+  task with no row. `run-integrity`; prompt 01.
+- `[02-the-bbn-callbacks-do-not-check-their-values-for-finiteness]` — a NaN ρ_SM would reach
+  PRyMordial. `run-integrity`; prompt 01.
+- `[00-scalarmodel-failure-rows-carry-no-reason]` — the reason is printed, not stored.
+  `integrator-remediation`; prompt 02.
+- `[00-stored-samples-alias-the-rebounds]` — the z grid samples fast bounces at random phase; its
+  BBN half goes to prompt 05 (cell means); the adiabatic half stays open. `integrator-remediation`.
+
+### 1.8 `science-readiness` — [board §3](../prompts/science-readiness/IMPLEMENTATION_STATE.md)
+
+Seven opened by the planner on 2026-10-01, one per campaign item with no issue elsewhere.
+
+- `[00-bbn-route-integrates-a-fictitious-np-temperature]` — `NP_thermo_flag` integrates an unread
+  `T_NP` and perturbs dT_γ/dt; replace with a Hubble-only patch. Prompt 01.
+- `[00-prymordial-has-no-wall-clock-limit]` — a slow solve holds a worker indefinitely. Prompt 01.
+- `[00-prymordial-output-is-stored-unchecked]` — unphysical abundances are stored as results.
+  Prompt 01.
+- `[00-first-bounce-is-not-stored]` — the dense-output bounce is lost; samples cannot recover it at
+  small M. Prompt 03.
+- `[00-bbn-input-is-aliased-at-small-M]` — below 3 keV the ratio BBN splines swings ±0.4–0.85 %
+  between samples at small M. Prompt 05.
+- `[00-no-extraction-for-the-science-figures]` — no code for the four Phase D figures. Prompt 07.
+- `[00-documents-describe-the-thermo-route]` — three documents describe the replaced route.
+  Prompt 08.
