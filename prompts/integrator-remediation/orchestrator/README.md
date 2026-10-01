@@ -17,9 +17,9 @@ Start a fresh context with, for example:
 > Read `prompts/integrator-remediation/orchestrator/prompt-01.md` and follow it.
 
 Run 01 → 04 in order. Each orchestrator's preconditions include the previous prompt's landing;
-do not start 02 with a prompt-01 miss unresolved. **Before 01, the user's decisions on README
-§0.2 must be recorded on the board**; if the Decisions section still says "awaiting the user",
-stop and ask.
+do not start 02 with a prompt-01 miss unresolved. The user's decisions on README §0.2 and the two
+reflection guards were recorded on the board on 2026-10-01; prompt 01's orchestrator checks that
+they are there before dispatching.
 
 **Take the baselines each orchestrator names before dispatching anything.** They cannot be
 reconstructed after the fact.

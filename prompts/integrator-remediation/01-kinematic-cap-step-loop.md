@@ -73,6 +73,13 @@ behaviour is README §2 (a)–(c), item by item:
   `ComputationFailureError` with the message;
 - after an accepted step: clamp `solver.jac_factor` (if not `None`); if `φ ≤ 0` raise
   `ComputationFailureError` naming `N`, `φ`, `π`; append `solver.dense_output()`;
+- **the two guards of README §2 (b′), checked before any reflection:** G1, the potential's
+  `reflects_at_origin` is `True`, else `ComputationFailureError` naming the potential and the
+  state; G2, with `d = policy(N, state)` at the reflecting state,
+  `W = 3 d.V_over_3H2Mp2 (1 − exp(potential.log_V_floor − d.log_V))` satisfies `W ≤ ½π²`, else
+  `ComputationFailureError` ("reflection requested inside the wall") quoting `W/(½π²)`, `N`, `φ`,
+  `π`. Record the maximum `W/(½π²)` over the history's reflections in the result, so the log can
+  quote it;
 - a reflection restarts a new `Radau` from the reflected state at the same `N`, with the same
   parameters; the reflection is appended to the list and `supervisor.notify_reflection(N)` is
   called;
@@ -88,6 +95,12 @@ samples the result's solution on the z grid exactly as `:865–908` do today, wi
 replaced by one call per sample. **Leave the fallback wrapper in place** (`while not success`,
 `solver_list`, the `except`): prompt 02 removes it. Delete the six event functions,
 `SolutionFragment`, `DEFAULT_MAX_STEP_SIZE` and the reads of the potential's region properties.
+
+**A1′ — the potential interface.** `AbstractPotential` gains two properties with defaults:
+`reflects_at_origin -> bool` (`False`) and `log_V_floor -> Optional[float]` (`None`), each with a
+docstring stating what the loop uses it for (README §2 (b′)). `ExponentialPotential` returns
+`True` and `self._log_Lambda_4`. No other potential changes; no other property is added or
+removed.
 
 **A2 — the supervisor.** `ScalarFieldIntegrationSupervisor` loses `notify_level_1_entry/exit`,
 `notify_level_2_entry/exit`, `notify_new_fragment`, `notify_hard_reflection`, the `_level_*` and
@@ -151,6 +164,13 @@ from the audit's states, which you copy into the module as constants with their 
 - **(g) Metadata and labels**: `build_extra_data` on a stand-in result dict yields exactly the
   §2 (e) keys, `number_reflections` absent when zero; `ast`-parse `main.py`, `plot_by_beta.py`,
   `plot_ScalarModel.py` (do not import `main.py`) and find the new label string in each.
+- **(h) The guards**: README §6.1 (e), the three G1/G2 rows. For G1, a subclass of
+  `ExponentialPotential` overriding `reflects_at_origin` to `False`, from P1 at `M = 1e-10`. For
+  G2, the state `φ = 5e-5`, `π = −0.4976`, `ln ρ_rad,E = −166.04`, `ln f_m = −20.81`,
+  `ln T_J = −42.63` at `M = 0.01` (inside the wall, `φ_wall ≈ 9.2e-5`; the audit's step-over
+  state), reached by calling the loop with `h_floor` large enough that the floor fires at once
+  (`h_floor = 1e-3`): it must raise with the ratio quoted (`≈ 23`). For the negative control,
+  assert on every (a) and (b) run that the recorded maximum ratio is `≤ 1e-3`.
 
 `ComputeTargets/tests` rises from 41 by the methods you add, less nothing: the rewritten
 reporting test keeps at least five. `CosmologyModels/tests` 18 and `Datastore/tests` 17 pass
@@ -166,13 +186,16 @@ unchanged.
   `RHS_timer`. Prompt 02.
 - No change to the z grid, the sampling fields, `ScalarModel.store()` beyond what the new keys
   require (it reads `extra_data` through `build_extra_data`, so nothing), or any datastore code.
-- No schema change. No removal of the region properties from the potentials.
+- No schema change. No removal of the region properties from the potentials, and no potential
+  change beyond A1′.
 - No parked-tracking model, no analytic Jacobian, no `atol` vector, no step budget (prompt 02).
 - No edit to `.documents/`.
 
 ## 4. Acceptance
 
-1. README §6.1 (a), (b), (c), (e), (f), every row, with measured values in the log.
+1. README §6.1 (a), (b), (c), (e) including the three guard rows, (f), every row, with
+   measured values in the log, and the maximum `W/(½π²)` over every reflection in (a), (b) and
+   the nine histories.
 2. README §6.1 (d): run the nine histories yourself through the loop (a scratch driver outside
    the repository that builds the initial state as `compute_scalar_model` does, from
    `main.py`'s initial data as the audit's `harness.initial_state` writes it) and quote RHS,

@@ -1,8 +1,8 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-01 · **30 open**: 8 on the `review-remediation` board (closed
+**Last updated:** 2026-10-01 · **31 open**: 8 on the `review-remediation` board (closed
 2026-09-30), none of them assigned; 2 on the `production-readiness` board (closed
-2026-09-30); 6 on the `run-integrity` board (closed 2026-09-30); 14 on the
+2026-09-30); 6 on the `run-integrity` board (closed 2026-09-30); 15 on the
 `integrator-remediation` board (planned 2026-10-01), 8 of them assigned to its own prompts.
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
@@ -110,9 +110,10 @@ one by prompt 04 on 2026-09-30, not assigned.
 ### 1.6 `integrator-remediation` — [board §3](../prompts/integrator-remediation/IMPLEMENTATION_STATE.md)
 
 Fourteen opened by the planner on 2026-10-01 from
-[`.documents/integrator-audit-2026-09-30/README.md`](integrator-audit-2026-09-30/README.md). The
-first eight are assigned to the campaign's own prompts (the board entry says which); the prompt
-that closes one deletes its row here. The last six are open and unassigned.
+[`.documents/integrator-audit-2026-09-30/README.md`](integrator-audit-2026-09-30/README.md), and
+one the same day from the user's reflection guard G1. The first eight are assigned to the
+campaign's own prompts (the board entry says which); the prompt that closes one deletes its row
+here. The last seven are open and unassigned.
 
 - `[00-region-scheme-costs-100x-and-storms-fragments]` — the L1/L2 caps cost 2.1e6 RHS against
   1.9e4 on the parked P2 window, and 85 fragments on the grazing P3 window; the 100-fragment
@@ -147,3 +148,6 @@ that closes one deletes its row here. The last six are open and unassigned.
   `default_max_step`, `hard_reflection_point` stay defined after prompt 01; housekeeping.
 - `[00-analytic-jacobian-would-remove-num-jac]` — only if Newton failures appear in the science
   run.
+- `[00-declare-reflects-at-origin-for-the-other-potentials]` — prompt 01 declares
+  `reflects_at_origin` and `log_V_floor` on `ExponentialPotential` only; the other four
+  potentials keep the defaults and would fail at the floor rather than reflect.

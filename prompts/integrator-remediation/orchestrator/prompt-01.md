@@ -20,8 +20,8 @@ five things:
 
 ## 1. Before you dispatch
 
-1. The board's Decisions section records the user's answers on README §0.2. If it still says
-   "awaiting the user", **stop and ask**.
+1. The board's Decisions section records the user's acceptance of README §0.2 and the two
+   guards (dated 2026-10-01). If it does not, **stop and ask**.
 2. On branch `integrator-remediation`; `git status` clean; record `HEAD`.
 3. Baselines: all three suite counts (18, 41, 17) and wall-clocks.
 4. **Run the audit's probes on this tree and keep their output**; they are the "now" column:
@@ -42,11 +42,12 @@ five things:
 One fresh-context subagent, **Opus**, template in `README.md`. Add: *"Your diff may touch
 `ComputeTargets/ScalarModel.py`; `Quadrature/supervisors/ScalarField.py`; `extract_common.py`;
 `plot_by_beta.py`; `plot_ScalarModel.py`; `main.py` (the label registration only);
-`config/version.py`; `ComputeTargets/tests/` (new tests, and the reporting test rewritten under a
-new name); the log; this campaign's board; and `.documents/OPEN_ISSUES.md`. Not
-`Quadrature/supervisors/base.py`, not any potential, not any `ODEPolicy` or
-`PotentialDerivativePolicy` method, not the datastore, not `.documents/`. Leave the fallback
-wrapper in place."*
+`config/version.py`; `CosmologyConcepts/Potentials/AbstractPotential.py` and
+`ExponentialPotential.py` (the two new properties only); `ComputeTargets/tests/` (new tests, and
+the reporting test rewritten under a new name); the log; this campaign's board; and
+`.documents/OPEN_ISSUES.md`. Not `Quadrature/supervisors/base.py`, not any other potential, not
+any `ODEPolicy` or `PotentialDerivativePolicy` method, not the datastore, not `.documents/`.
+Leave the fallback wrapper in place."*
 
 ## 3. The review — ten checks
 
@@ -68,9 +69,14 @@ wrapper in place."*
    ```
    (and the other eight β, M pairs). First bounce `N` must agree to `1e-5`, RHS to 10 %, and both
    must be at or under the table's target. Any `T_Jordan = 0` line in the output is a fail.
-7. **The floor rule.** Read the loop: the reflection branch tests exactly `π < 0` and
-   `f φ/|π| < h_floor`; it negates `π` and changes nothing else in the state; `φ ≤ 0` after an
-   accepted step raises. No branch mirrors `φ` or reflects at `φ = 0`.
+7. **The floor rule and the guards.** Read the loop: the reflection branch tests exactly `π < 0`
+   and `f φ/|π| < h_floor`; before reflecting it checks `potential.reflects_at_origin` and
+   `W ≤ ½π²` with `W` built from `V_over_3H2Mp2`, `log_V` and `potential.log_V_floor` (README
+   §2 (b′)); it negates `π` and changes nothing else in the state; `φ ≤ 0` after an accepted step
+   raises. No branch mirrors `φ` or reflects at `φ = 0`. The log quotes the maximum `W/(½π²)`
+   over every reflection in tests (a), (b) and the nine histories, and it is `≤ 1e-3`; the G2
+   test's quoted ratio is about 23. `git diff HEAD~1 HEAD -- CosmologyConcepts/Potentials/`
+   shows only the two properties on `AbstractPotential` and `ExponentialPotential`.
 8. **The clamp.** `np.minimum(solver.jac_factor, …, out=…)` (or equivalent) runs after every
    accepted step, guarded for `None`.
 9. **Metadata and label.** `build_extra_data` writes the README §2 (e) keys and no old one; the

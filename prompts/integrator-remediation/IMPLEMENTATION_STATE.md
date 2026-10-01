@@ -39,11 +39,20 @@ recorded, not built.
 
 ### Decisions
 
-- **2026-10-01, the planner (awaiting the user; README §0.2):** `f = 0.1`; `h_floor = 1e-11`
-  with the elastic reflection at the floor; delete the fallback; tolerances stay `1e-8`; a step
-  budget of `2×10⁶` accepted steps as a clean failure; one bump to `"2026.5.0"` in prompt 01. Each
-  is a one-line constant or a one-paragraph deletion; the user may overrule any before
-  orchestration starts, and the outcome is recorded here.
+- **2026-10-01, the user: all five README §0.2 decisions accepted as proposed.** `f = 0.1`;
+  `h_floor = 1e-11` with the elastic reflection at the floor; delete the fallback; tolerances stay
+  `1e-8`, no `atol` vector; a step budget of `2×10⁶` accepted steps as a clean failure; one bump to
+  `"2026.5.0"` in prompt 01. The orchestrator for prompt 01 may dispatch.
+- **2026-10-01, the user: two guards on the reflection (README §2 (b′)), in prompt 01.** G1: the
+  potential must declare `reflects_at_origin`, else reaching the floor is a failure. G2: at the
+  moment of reflection the wall part of the potential fraction must not exceed the kinetic
+  fraction, `3 (V − V_floor)/(3H²M_P²) ≤ ½π²`, else the step has already passed the wall and the
+  history fails. The user's question was whether the floor criterion, which does not know where
+  the wall is, could fire after a resolved reflection had been stepped past; the planner's
+  measurement (ratio `≤ 1.6e-4` on every legitimate reflection, exactly 0 at physical `M`, `≈ 23`
+  on a step-over state) is in README §2 (b′). A first formulation with the full `V` was wrong near
+  `T_CMB`, where the constant `Λ⁴` is a dark-energy-sized fraction of `3H²M_P²`; the guard uses
+  `V − Λ⁴`.
 - **2026-10-01, the planner: the parked-tracking model is out of scope.** It decides what the
   field *is* once its bounces are unresolvable, and what it contributes to BBN and the adiabatic
   stage; that is the authors' physics, not step control (audit §3.7, §9.4). The budget makes its
@@ -90,8 +99,9 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
 ## 3. Active and unresolved issues
 
-Fourteen opened by the planner on 2026-10-01 from the audit. Eight are assigned to this campaign's
-prompts (the first eight); six are open and unassigned. Issues opened by later prompts go here
+Fourteen opened by the planner on 2026-10-01 from the audit, and one more the same day from the
+user's guard G1. Eight are assigned to this campaign's prompts (the first eight); seven are open
+and unassigned. Issues opened by later prompts go here
 too, with an index row under §1.6 of `.documents/OPEN_ISSUES.md`. Every measurement below is the
 audit's, on `b1f64d8`, by the script named in the audit README section cited.
 
@@ -199,6 +209,17 @@ audit's, on `b1f64d8`, by the script named in the audit README section cited.
   - **Impact.** Dead interface.
   - **Next step.** Remove them in a housekeeping prompt, with `grep` as the witness. Not
     assigned.
+- **[00-declare-reflects-at-origin-for-the-other-potentials]** *(the user's guard G1,
+  2026-10-01)*.
+  - **What.** Prompt 01 adds `reflects_at_origin` and `log_V_floor` to `AbstractPotential` with
+    defaults `False` and `None`, and implements them only on `ExponentialPotential`.
+    `InversePowerPotential`, `ReclinerPotential`, `ReflectingPotential`, `StarobinskyPotential`
+    keep the defaults, so a history under any of them that reaches the representable-step floor
+    fails rather than reflecting.
+  - **Impact.** None for production, which uses `ExponentialPotential`. A future run with another
+    potential would need the declaration, with the floor-part formula for that potential.
+  - **Next step.** Declare the two properties on each potential whose form justifies them, with
+    a one-line derivation in the docstring. Not assigned.
 - **[00-analytic-jacobian-would-remove-num-jac]** *(audit §9.4)*.
   - **What.** The stiff `(φ, π)` block's Jacobian (`V''` and the kick's `φ`-dependence) is
     available in closed form; the slow components could use finite differences under the loop's

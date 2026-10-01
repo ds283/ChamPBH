@@ -36,12 +36,11 @@ representable step; make a trial-state exception a rejected step rather than a d
 SciPy's Jacobian perturbation factor; delete the solver fallback that was never wired; and make
 every remaining failure a failure row, not a crash.
 
-### 0.2 Decisions proposed by the planner (2026-10-01), awaiting the user
+### 0.2 Decisions (proposed by the planner 2026-10-01; **all five accepted by the user, 2026-10-01**)
 
-The audit's §9.4 left four decisions open. The plan below takes a position on each so that the
-prompts are executable; **the user may overrule any of them before orchestration starts**, and the
-board's Decisions section records the outcome. Where a value is a parameter of the new loop it is
-one constant, so a change is one line.
+The audit's §9.4 left four decisions open. The plan takes a position on each; the user accepted
+all five as proposed on 2026-10-01, and asked for the two guards in §2 (b′). Where a value is a
+parameter of the new loop it is one constant, so a later change is one line.
 
 - **The cap fraction `f = 0.1`.** `0.1` and `0.02` give the same first bounce to `2×10⁻⁵` in
   `φ_min` (audit §3.1, §9.4); `0.02` costs 1.5×. Prompt 01's acceptance includes convergence in `f`.
@@ -94,10 +93,11 @@ and P3 windows to the tolerance the audit measured, and completion of named full
   Jacobian is an issue, to be taken up only if Newton failures appear in the science run.
 - **It does not edit `Paper1.tex`**, which is in another repository. Prompt 03 lists the
   corrections for the authors.
-- **It does not touch `PRyM/`, `thirdparty/`, or any potential other than through
-  `AbstractPotential`'s existing interface.** The region properties
-  (`bounce_region_level{1,2}_boundary`, `…_max_step`, `hard_reflection_point`) stay defined on the
-  potentials; they become unread.
+- **It does not touch `PRyM/` or `thirdparty/`.** On the potentials it adds exactly two
+  properties to `AbstractPotential`, `reflects_at_origin` and `log_V_floor` (§2 (b′)), and
+  implements them on `ExponentialPotential`; nothing else on any potential changes. The region
+  properties (`bounce_region_level{1,2}_boundary`, `…_max_step`, `hard_reflection_point`) stay
+  defined; they become unread.
 
 ---
 
@@ -149,6 +149,46 @@ bounce is elastic because `½π² + V/(3H²M_P²)` is conserved by the wall forc
 resolved at `1e-6` and `1e-8`, reflected at `φ = 4.7e-11` from `3e-9` down. The shipped hard
 reflection at `φ = 0` gives the same answer for `M ≤ 1e-14` and fails or misbehaves above
 (audit §3.5).
+
+**(b′) Two guards on the reflection (the user, 2026-10-01).** The floor rule is a time-scale
+test, not a wall detector: it is exact because (i) a wall exists somewhere in `(0, φ)` and nothing
+else can turn an inward-moving field, and (ii) an elastic reflection in a frozen background
+returns the field to the same `φ` with the same `|π|` wherever the turning point is, so only the
+flight time enters the error (measured: the error against a resolved bounce tracks `2φ/|π|`
+from 6e-10 to 3e-6 as the floor is moved from 1.1 to 4 891 wall radii; `h_floor = 1e-11` gives
+`~6e-10`). Two things are therefore checked rather than assumed:
+
+- **G1, the potential declares the wall.** Fact (i) is a property of the potential family.
+  `AbstractPotential` gains a boolean property, `reflects_at_origin` (default `False`), which
+  `ExponentialPotential` returns `True` for. The loop performs the floor reflection only if the
+  potential declares it; otherwise reaching the floor raises `ComputationFailureError` naming the
+  potential. The other potentials keep the default (issue
+  `[00-declare-reflects-at-origin-for-the-other-potentials]`, board §3).
+- **G2, the field has not already been stepped past the wall.** Along the excursion the wall
+  force conserves `½π² + W`, with `W = 3 (V(φ) − V_floor)/(3H²M_P²)` the *wall part* of the
+  potential fraction, `V_floor` the potential's value far from the wall (`Λ⁴` for the
+  exponential potential; `AbstractPotential` gains `log_V_floor`, which `ExponentialPotential`
+  returns as `_log_Lambda_4`). The constant part must be excluded: near `T_CMB` it is a
+  dark-energy-sized fraction of `3H²M_P²` and swamps a gentle approach's kinetic energy
+  (measured ratio `1.4×10³` at β = 0.9 with the full `V`, exactly 0 with `V − Λ⁴`). A field that
+  arrived from outside has `W ≤ ½π_in²`, and the floor fires with `|π| ≈ |π_in|`, so at the moment
+  of reflection the loop requires
+
+      W ≤ ½π²
+
+  and raises `ComputationFailureError` ("reflection requested inside the wall") otherwise. A
+  state inside the wall at approach speed has `V/(3H²M_P²) → 1`, so `W → 3` and the ratio is
+  `3/(½π²) ≈ 23` at delivery speed; every legitimate reflection in the audit's probes gives
+  `≤ 1.6×10⁻⁴` (the marginal case, the floor firing inside the foot at `M = 1e-8`) and exactly 0
+  at physical `M` (800 reflections over four histories). The margin is five orders of
+  magnitude. `W` uses `V_over_3H2Mp2` and `log_V`, which the policy already returns for the
+  state.
+
+Why not a per-step energy budget as well: the drift of the constant part under `H` over one step
+is larger than a gentle approach's kinetic energy near `T_CMB`, so a generic per-step check
+would need the same floor subtraction and a model of the kick's work; the reflection-time check
+is where the guarantee is needed, and `φ ≤ 0` and `G < 0` already make a step-over elsewhere a
+loud failure.
 
 **(c) The loop (A).** `solve_ivp` takes only a scalar `max_step`, so the cap needs a step loop
 around the public `scipy.integrate.Radau` class (SciPy 1.17.0; `Radau._step_impl` reads
@@ -301,7 +341,9 @@ repairs**.
   - **Scope.** To add a parked-tracking model, an analytic Jacobian, the `atol` vector, or a
     Ray timeout.
   - **Potentials.** To remove the region properties from `AbstractPotential` or any potential
-    (they become unread; removing them is a later housekeeping prompt).
+    (they become unread; removing them is a later housekeeping prompt). To set
+    `reflects_at_origin = True` on any potential but `ExponentialPotential`, or to skip either
+    guard of §2 (b′).
 - An agent proposes to rewrite anything under `.documents/` rather than add to it.
 - The subagent asks a question. **Relay it verbatim; do not answer it.**
 
@@ -478,6 +520,9 @@ zero reflections in all nine.
 |---|---|---|
 | the loop with the cap disabled (`f = ∞`), from P1 at `M = 0.01` | steps over; hard reflection; continues or stalls | **`ComputationFailureError`** naming `φ ≤ 0` |
 | an RHS that raises `ComputationFailureError` on its first three calls after `N₀` (a wrapper), from P1 at `M = 0.5` | the solve aborts | **completes**, `steps_rejected_by_exception ≥ 1`, same `φ(21)` as (a) |
+| G1: P1 at `M = 1e-10` with a potential stand-in that returns `reflects_at_origin = False` | — | **`ComputationFailureError`** naming the potential, at the floor |
+| G2: the loop asked to reflect from a state inside the wall (`φ = 5e-5`, `π = −0.4976` at `M = 0.01`, the audit's step-over state; drive the reflection branch directly or with `h_floor` large enough to fire there) | — | **`ComputationFailureError`** "inside the wall"; the quoted ratio `W/(½π²) ≈ 23` |
+| G2 on every legitimate reflection of (a), (b) and the nine histories | — | **never fires**; the log quotes the maximum `W/(½π²)` seen (`≤ 1.6e-4` on the probes) |
 
 **(f) Stored metadata, label, version.**
 
