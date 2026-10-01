@@ -6,6 +6,10 @@
 **Date:** 2026-10-01
 **Result:** COMPLETE WITH DEVIATIONS
 
+*Added 2026-10-01, after the commit:* Deviations 1 was ruled by the user (the board's
+Decisions). The first bounce is the dense-output turning point; all nine histories pass and the
+§5 stop condition is not met.
+
 The work was measured on `abcc99f` (`HEAD` at dispatch, prompt 03's commit), which is the final
 tree: this prompt changes no code and no test. "The probe" is the audit's `p_full.py β M 1e-8 1e-4
 kin reflect` run from an export of `918590e` (Deviations 2). "The loop" is
@@ -96,6 +100,11 @@ meant. **The user (or the orchestrator) rules**, as for `φ_min`: if the dense-o
 is the measure, all nine pass and nothing else changes; if the accepted-step `N` is, β = 0.9
 fails by a factor of 8 and the stop stands. The Result line above is `COMPLETE WITH DEVIATIONS`
 for that reason.
+
+**Ruling (2026-10-01, the user, added after the commit).** The dense-output turning point is the
+measure, as intended when the prompt was written. All nine histories pass, so the stop condition
+is not met. The largest dense-output difference in the table above is 3.5×10⁻⁹ (β = 0.9); the
+"9.4×10⁻¹⁰" in the Result paragraph above understates it, and the table is right.
 
 ### 2. The audit's `p_full.py` was run from an export of `918590e` — STRUCTURALLY REQUIRED
 

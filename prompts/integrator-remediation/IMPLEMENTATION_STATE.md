@@ -3,8 +3,9 @@
 **Last updated:** 2026-10-01 · **Status: COMPLETE — 4 of 4 landed** (prompts 01, 02, 03 and the
 close-out 04; final code tree `abcc99f`, the close-out commit is the one after it, see `git log`
 "Close the integrator-remediation campaign with a handover"). Suites on the final tree:
-CosmologyModels 18, ComputeTargets 67, Datastore 17 (18, 41, 17 at `2b89022`). One question for
-the user is open on prompt 04 (log 04, Deviations 1). Planned on 2026-10-01 against
+CosmologyModels 18, ComputeTargets 67, Datastore 17 (18, 41, 17 at `2b89022`). Prompt 04's
+first-bounce question was ruled by the user on 2026-10-01 (Decisions): the dense-output turning
+point, on which all nine histories pass. Planned on 2026-10-01 against
 `main` at `2b89022`, from the audit at
 [`.documents/integrator-audit-2026-09-30/README.md`](../../.documents/integrator-audit-2026-09-30/README.md).
 **Target branch** `integrator-remediation`, to be cut from `2b89022`; planning and orchestration
@@ -88,6 +89,12 @@ recorded, not built.
   turning point all nine agree to 9.4×10⁻¹⁰ (log 04, Deviations 1). Prompt 04 finished the work and
   committed, as one revert unit, rather than stop; the user rules which measure was meant, as for
   `φ_min` above. Nothing in the code depends on it.
+- **2026-10-01, the user: the first bounce is the dense-output turning point.** The question
+  above is closed in the way intended when prompt 04 was written. A bounce is located at the root
+  of `π` on the accepted step's interpolant, as for `φ_min`. On that measure all nine histories of
+  README §6.1 (d) agree with the probe to within `1e-5` in `N`: the largest difference is
+  3.5×10⁻⁹ (β = 0.9, `M = 0.5`, log 04's table), not the 9.4×10⁻¹⁰ log 04's prose quotes. The §5
+  stop condition is not met and the close-out stands.
 
 Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
