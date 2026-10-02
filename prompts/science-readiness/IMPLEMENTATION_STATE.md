@@ -1,9 +1,13 @@
 # Science-readiness campaign — implementation state
 
-**Last updated:** 2026-10-02 · **Status: IN PROGRESS — 9 of 10 landed** (prompt 01, with
+**Last updated:** 2026-10-02 · **Status: COMPLETE — 10 of 10 landed** (prompt 01, with
 deviations; prompt 02; prompt 03, with deviations; prompt 04, with deviations; prompt 05,
 measurement only, the averaging withdrawn; prompt 06; prompt 06b, with deviations; prompt 07, with deviations;
-prompt 08, documents only). Planned on 2026-10-01 against
+prompt 08, documents only; prompt 09, the close-out, with deviations). Final suites on `8efc50f`,
+run by prompt 09: **CosmologyModels 18, ComputeTargets 103, Datastore 31, all OK**, against 18, 67
+and 17 at `6aaa706`. The handover is
+[`.documents/review-remediation-verification.md`](../../.documents/review-remediation-verification.md)
+§4.10. Planned on 2026-10-01 against
 `main` at `6aaa706`, from a Claude Science re-evaluation kept at
 [`source/campaign_reevaluation_2026-10-01.md`](source/campaign_reevaluation_2026-10-01.md) and
 checked against the tree by the planner (README §0.3). Suites at `6aaa706`: CosmologyModels 18,
@@ -14,7 +18,7 @@ land on it.
 made before 2026.6.0 is invalid, and the science run needs a fresh datastore file (columns are
 added with no migration). `PRYM_VERSION` is `"bf24c3d+ri02+sr01"`. Suites after prompt 01:
 CosmologyModels 18, ComputeTargets 71, Datastore 17. After prompt 02: 18, 75, 21. After
-prompt 03: 18, 82, 26. After prompt 04: 18, 86, 26. After prompt 05 (no code): 18, 86, 26. After prompt 06: 18, 88, 26. After prompt 06b: 18, 91, 31. After prompt 07: 18, 103, 31. After prompt 08 (no code): 18, 103, 31.
+prompt 03: 18, 82, 26. After prompt 04: 18, 86, 26. After prompt 05 (no code): 18, 86, 26. After prompt 06: 18, 88, 26. After prompt 06b: 18, 91, 31. After prompt 07: 18, 103, 31. After prompt 08 (no code): 18, 103, 31. After prompt 09 (no code): 18, 103, 31.
 
 The campaign hands the scalar field to PRyMordial through the expansion rate alone, with a patched
 PRyMordial that has no fictitious new-physics temperature and an optional wall-clock limit. It
@@ -168,7 +172,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | 06b | [Store the fixed-temperature values on the `ScalarModel` row](06b-fixed-T-values.md) (added 2026-10-02) | **V** | Opus | ✍️ 2026-10-02 | ✅ 2026-10-02 (with deviations) | see `git log` ("Store phi and the NP ratio at 1 MeV and 70 keV on ScalarModel") | [`logs/06b-fixed-T-values.md`](logs/06b-fixed-T-values.md) |
 | 07 | [Extraction and the science figures](07-extraction-and-figures.md) | **G** | Sonnet | ✍️ 2026-10-01 (re-planned 2026-10-02) | ✅ 2026-10-02 (with deviations) | see `git log` ("Add the extraction and the four science figures to plot_by_beta") | [`logs/07-extraction-and-figures.md`](logs/07-extraction-and-figures.md) |
 | 08 | [Documents](08-documents.md) | **D** | Sonnet | ✍️ 2026-10-01 | ✅ 2026-10-02 | see `git log` ("Document the Hubble-only BBN route and the stored observables") | [`logs/08-documents.md`](logs/08-documents.md) |
-| 09 | [Close-out verification and handover](09-close-out-verification.md) | close-out | Sonnet | ✍️ 2026-10-01 | — | — | — |
+| 09 | [Close-out verification and handover](09-close-out-verification.md) | close-out | Sonnet | ✍️ 2026-10-01 | ✅ 2026-10-02 (with deviations) | see `git log` ("Close the science-readiness campaign with a handover") | [`logs/09-close-out-verification.md`](logs/09-close-out-verification.md) |
 
 ---
 
@@ -199,6 +203,12 @@ and none is open. Prompt 05 opened two more (`[05-…]`), which are open. The re
 closed it (§4). Seven more were assigned from other boards (§3.1); prompts 01, 02, 04, 06 and 08
 closed six of them and prompt 05 narrowed one; the narrowed one stays open on its own board.
 
+**Close-out (2026-10-02, prompt 09).** The campaign is complete and no issue was opened by prompt
+09. The two `[05-…]` issues below stay open, unassigned; the handover (verification §4.10, point 6)
+names both. Nothing else in §3 is open, and the one issue assigned from another board that is not
+closed (`[00-stored-samples-alias-the-rebounds]`, §3.1) stays open on its own board for its
+adiabatic half.
+
 - **[05-the-ratio-spline-may-ring-at-resolved-bounce-jumps]** *(log 05, Observations)*.
   - **What.** In PRyMordial's window the ratio `ρ_NP/ρ_R,J` is a resolved sawtooth: it jumps by
     about +0.005 to +0.007 at each bounce (β = 1.6, M = 10⁻⁵, 0.3–3 keV) and drifts smoothly in
@@ -209,6 +219,8 @@ closed six of them and prompt 05 narrowed one; the narrowed one stays open on it
     H rather than to our interpolation.
   - **Next step.** On one small-M history, compare the spline's r between samples with r from the
     dense output at the same T_J. Not assigned.
+  - **Open at close-out (2026-10-02, prompt 09).** All ten roster histories, including β = 1.6 and
+    2.0 at M = 10⁻⁵, completed BBN on point input, so no failure needs attributing today.
 - **[05-the-value-factory-compares-stored-phi-against-pi]** *(log 05, Observations)*.
   - **What.** `sqla_ScalarModelValue_factory.build`, on finding an existing row, checks
     `fabs(row_data.phi_Einstein_Mp - pi_Einstein_Mp)` (`Datastore/SQL/ObjectFactories/ScalarModel.py:1008`
@@ -217,6 +229,9 @@ closed six of them and prompt 05 narrowed one; the narrowed one stays open on it
   - **Impact.** The path raises a spurious `ValueError` whenever it is reached with φ ≠ π; nothing
     in the tree calls it today (the `ScalarModel` factory reads values directly).
   - **Next step.** One-word fix with a test of the existing-row path. Not assigned.
+  - **Open at close-out (2026-10-02, prompt 09).** Unchanged; `Datastore/SQL/ObjectFactories/ScalarModel.py`
+    has moved since `a522005` (prompts 03 and 06b added columns), so cite the function, not the
+    line.
 
 ### 3.1 Assigned to this campaign from other boards
 

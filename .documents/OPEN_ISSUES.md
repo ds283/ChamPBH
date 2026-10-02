@@ -4,7 +4,8 @@
 2026-09-30), none now assigned to `science-readiness`; 2 on the `production-readiness` board
 (closed 2026-09-30); 4 on the `run-integrity` board (closed 2026-09-30); 9 on the
 `integrator-remediation` board (closed 2026-10-01), 1 of them assigned to `science-readiness`;
-2 on the `science-readiness` board (planned 2026-10-01, 9 of 10 landed; prompt 06b added 2026-10-02).
+2 on the `science-readiness` board (planned 2026-10-01; closed 2026-10-02, 10 of 10 landed,
+prompt 06b having been added 2026-10-02).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -141,7 +142,8 @@ carries the **Assigned** line; the prompt that closes one deletes its row here.
 Seven opened by the planner on 2026-10-01, one per campaign item with no issue elsewhere.
 Prompt 01 (2026-10-01) closed three, prompt 03 (2026-10-02) one, prompt 05 (2026-10-02) one,
 prompt 07 (2026-10-02) one and prompt 08 (2026-10-02) one (board §4). Prompt 05 opened two (`[05-…]`). The re-plan of 2026-10-02 opened one for prompt
-06b, which closed it (2026-10-02).
+06b, which closed it (2026-10-02). The campaign closed on 2026-10-02 (prompt 09, the close-out)
+with both `[05-…]` rows still open and unassigned.
 
 - `[05-the-ratio-spline-may-ring-at-resolved-bounce-jumps]` — the cubic spline through the
   ratio's resolved bounce jumps may overshoot between samples; unmeasured.

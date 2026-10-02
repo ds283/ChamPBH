@@ -920,6 +920,262 @@ controls the error at the wall. `[00-atol-does-not-scale-with-phi]` stays a refi
 phase. Whether this segment sets the stored maximum was not measured. It is opened as
 `[post-adiabatic-Q-reads-aliased-late-samples]` on the `integrator-remediation` board.
 
+### 4.10 Addendum 2026-10-02 — the `science-readiness` campaign
+
+Added by `science-readiness` prompt 09, measured on `8efc50f` (the tree prompts 01–08 left, before
+this commit). Nothing above this heading has been changed; where it is superseded, this section
+says so by statement. The campaign replaced the `NP_thermo_flag` route to PRyMordial with a patched,
+Hubble-only one, gave PRyMordial a wall-clock limit and its output checks, made `ScalarModel` rows
+carry a failure reason, the first bounce and four fixed-temperature values, made φ\* a run option,
+narrowed the BBN spline, and added the extraction and four figures of the science run. It bumped
+`VERSION_LABEL` once. Its board is
+[`prompts/science-readiness/IMPLEMENTATION_STATE.md`](../prompts/science-readiness/IMPLEMENTATION_STATE.md);
+its plan is its [`README.md`](../prompts/science-readiness/README.md) (§0.2 records the user's
+rulings, including the withdrawal of the bounce averages and the move of the fixed-`T` values to the
+`ScalarModel` row); its source is
+[`source/campaign_reevaluation_2026-10-01.md`](../prompts/science-readiness/source/campaign_reevaluation_2026-10-01.md).
+
+**This supersedes**, by statement and not by edit:
+
+- **Every earlier statement that `VERSION_LABEL` is `"2026.5.0"`**, including §4.8 point 1 and its
+  evidence (`config/version.py:36`). The label is `"2026.6.0"`, still defined once, now at
+  `config/version.py:43` (point 1).
+- **§4.2's run list, where it implies that a datastore made before 2026.6.0 can be reused.** §4.1's
+  "start from an empty database" now holds for every store made under any earlier label, and a
+  store made under `"2026.5.0"` is no exception (point 1). In the same list:
+  - §4.2's SM baseline stands. `tools/bbn_baseline.py` on `8efc50f` prints Yp 0.2468872958, D/H
+    2.462251065, ³He/H 1.042050273, ⁷Li/H 5.423441017, as §4.2 does, and it takes 7.0 s.
+  - §4.2's check "Rerun with ρ_NP set to zero below 1 MeV" and the `NPCallbacks` it names do not
+    exist any more (point 2).
+  - §4.2's "φ\* = 5 M_P … (hard-coded, now at `main.py:815–817`)" is an option, `--phi-init-Mp`,
+    with default 5.0 (point 4).
+- **Any statement that BBN uses `NP_thermo_flag` or a pressure callback.** That covers §1.2's
+  `NP_thermo_flag` rows, §2's prompt 04 entry (R3: `build_NP_callbacks` splining a pressure ratio
+  and `jordan_Hdot_over_H2`), §4.2 item 2, §4.7's mention of `build_NP_callbacks`, and §4.3's
+  magnitudes for "p = ρ/3" (the +2.92 % in Yp and +8.50 % in D/H with `N_eff` 3.71342). Those were
+  true of the route they were measured on. The route is point 2, and the same constant ratio on it
+  is quoted there.
+
+**The six points.**
+
+1. **`VERSION_LABEL = "2026.6.0"`, and the science run needs a fresh datastore file. Every store
+   made before 2026.6.0 is invalid, and an old file cannot be opened by the new code.**
+   - *Why.* Prompt 01 changed every `BBNData` row (the route, the output checks, the dropped
+     `pressure_NP_MeV4` column). Prompts 02, 03 and 06b then added columns to the `ScalarModel`
+     table, under the same label and with no migration: `failure_reason` (`77a7e0c`), four
+     `first_bounce_*` (`568c23a`), and `phi_Einstein_1MeV`, `density_NP_ratio_1MeV`,
+     `phi_Einstein_70keV`, `density_NP_ratio_70keV` (`489ab26`). The `ScalarModel` lookup selects these columns
+     in its `build`, whether or not samples are populated (`Datastore/SQL/ObjectFactories/ScalarModel.py`),
+     so an old table is missing columns the new code reads.
+   - *Evidence.*
+     - `grep -rn "VERSION_LABEL =" --include='*.py' .` outside `venv/`, `thirdparty/` and
+       `claude-context/` finds one line: `config/version.py:43:VERSION_LABEL = "2026.6.0"`.
+     - `git log 6aaa706..HEAD -- config/version.py` finds one commit, `1bc8977` (prompt 01). One
+       bump; prompts 02–08 landed under it.
+     - `grep -rniE "alter table|migrat" Datastore/ --include="*.py"` finds nothing: the datastore
+       has no migration.
+     - The round trips run against a temporary SQLite store of the new schema:
+       `Datastore.tests.test_scalarmodel_failure_reason`, `…test_first_bounce_round_trip`,
+       `…test_fixed_T_values_round_trip` (all OK, below).
+   - *Reasoned, not run.* Opening an old file with the new code was not tried; that it fails on a
+     missing column is read from the column list above. Do not rely on any other outcome.
+2. **The BBN route.** The scalar field reaches PRyMordial through the expansion rate alone.
+   - *Route.* `PRyM_init.NP_hubble_flag` (`PRyM/PRyM_init.py:80`) adds ρ_NP to `Hubble` and
+     nowhere else (`PRyM/PRyM_main.py:142` is the only read). `_configure_PRyMordial` sets
+     `NP_thermo_flag = False` (`ComputeTargets/BBNData.py:245`) and checks it
+     (`BBNData.py:260`). The thermodynamic solve integrates (T_γ, T_ν) only: `test_bbn_solver_failures (f)`
+     printed `solve_ivp y0 lengths [2, 1, 2, 8, 8]; rho_NP callers {'Hubble': 1930}`. `p_NP`,
+     `T_NP`, `dρ_NP/dT`, `jordan_Hdot_over_H2` and `Tstart_NP` are gone:
+     `grep -rn "pressure_NP\|P_NP\|drho_NP_dT\|jordan_Hdot_over_H2\|Tstart_NP" ComputeTargets/
+     Datastore/ plot_ScalarModel.py main.py tools/` prints nothing. The `cham03` patch is reverted.
+   - *`PRYM_VERSION`* is `"bf24c3d+ri02+sr01"` (`ComputeTargets/BBNData.py:44`; `test_bbn_solver_failures (e)`).
+   - *The wall-clock limit.* `PRyMclass(…, wall_clock_limit=None)`. The default for production
+     solves is `DEFAULT_BBN_WALL_CLOCK_LIMIT = 600.0` s (`BBNData.py:49`), set from
+     `--bbn-wall-clock-limit SECS` on `main.py` (`config/argument_parser.py:279`; 0 disables it).
+     `compute_SM_baseline` has no limit. A solve that exceeds it is a failure row, and
+     `--retry-failed-bbn` retries it. `test_bbn_solver_failures (g)` printed
+     `PRyMordial: PRyMWallClockLimitError: wall-clock limit of 0.001 s exceeded in stage
+     'thermodynamics (no NP)'`. The driver with `--wall-clock-limit 0.001` at β = 2, M = 0.5
+     printed the same failure at 0.4 s of BBN wall.
+   - *The output checks.* A successful return is stored only if all four abundances are finite,
+     0 < Yp < 0.5, and D/H, ³He/H, ⁷Li/H > 0. `test_bbn_solver_failures (h)` printed `PRyMordial
+     output: Yp_BBN=0.7 is outside (0, 0.5)`, `… DOverH=nan is not finite` and `… Li7OverH=0 is
+     not positive`. These classify our failures; they are not accuracy bounds.
+   - *The spline window* is [0.2 keV, 100 MeV], so a history must reach 20 eV
+     (`T_Jordan_stop ≤ 0.1 × 0.2 keV`). `test_bbn_spline_floor (a)` checks that `--T-stop-GeV 1e-8`
+     passes the pre-check and `1e-7` fails it with the reason naming `20 eV`.
+     `test_bbn_spline_floor (b)` printed `calls=1944 lowest positive T = 0.3628 keV (floor 0.2
+     keV)`: PRyMordial never queries below the floor, and the domain guard did not fire on any
+     roster history (point 5).
+   - *The same constant ratio, on this route.* ρ_NP = 0.08 ρ_SM through the patched route
+     (`test_network_flag (b)`): small network Yp 0.2536690816, D/H ×10⁵ 2.6481673; **full
+     network Yp 0.2536754614 (+2.749 % against §4.2's baseline), D/H 2.648809882 (+7.577 %)**. §4.3's
+     +8.50 % was the old route, in which the new-physics fluid shared the e± entropy; the
+     difference is that sharing, which a scalar field does not do (README §6.1).
+3. **What a `ScalarModel` row now carries.** Each is read without loading samples
+   (`_do_not_populate` stays on in `plot_by_beta.py`: four literals, as before).
+   - *The failure reason* (`failure_reason String(256)`, nullable; `ScalarModel.failure_reason`).
+     A failure row stores why it failed, truncated to 256; `main.py` prints this run's failures
+     grouped by first clause, and `plot_by_beta.py` reports models dropped for it. The step budget
+     at 50 gives `step budget exhausted: integrate_scalar_history (reason-test) took 51 accepted
+     steps (budget 50) at N=4.325263426, T_J=269.15 GeV, with 0 reflection(s)`
+     (`test_scalarmodel_failure_reason`). It supersedes §4.8 point 4's "the reason is printed and
+     not stored".
+   - *The first bounce* (`first_bounce_N`, `first_bounce_log_T_Jordan`, `first_bounce_phi_Einstein`,
+     `first_bounce_reflected`; `ScalarModel.first_bounce`, `None` when there was none). It is the
+     root of π on the first accepted step whose interpolant has π(t_k) < 0 < π(t_{k+1}), or the
+     first elastic reflection if that comes earlier. It exists because the sample-based detector
+     lands at 742.79 MeV where the dense output gives 746.69 MeV (β = 2, M = 10⁻³), and at
+     0.39 MeV where it gives 420.76 MeV (β = 1.6, M = 10⁻⁵) (log 03). The roster's values are in point 5.
+   - *The fixed-temperature values* (`phi_Einstein_1MeV`, `density_NP_ratio_1MeV`,
+     `phi_Einstein_70keV`, `density_NP_ratio_70keV`; `ScalarModel.fixed_T_values`). φ and
+     ρ_NP/ρ_R,J at the first crossing of T_J = 1 MeV and 70 keV on the dense output, with the ratio
+     built as `compute_BBN_data` builds it. φ is in M_P in the column. A pair is `None` where the
+     temperature is not reached, and all four are NULL on a failure row. Each roster history
+     crosses each temperature once (the driver's `crossings=1`, twenty times).
+   - *There are no cell means.* Prompt 05 built bounce averages of `H_J²` and φ, measured them
+     and withdrew them by the user's ruling. **BBN reads the point `H_J`.** Log 05's finding is
+     that in PRyMordial's window the z grid *resolves* the bounces: the median is 0 half-periods
+     per sample cell from 100 MeV down to about 100 eV (β = 1.6 and 2 at M = 10⁻⁵, β = 2 at
+     M = 0.5), and aliasing begins only below that. At β = 1.6, M = 10⁻⁵ only 6 of 130 cells in
+     [0.3, 1) keV and 2 of 120 in [1, 3) keV hold a sign change of π. The sub-3-keV "noise" in the
+     ratio is a resolved sawtooth whose ten largest steps carry 95 % and 99 % of the rms². The cell
+     means cut the rms step only to 0.71–0.84×, biased `H_J²` by +5.65e-5, moved D/H at β = 2,
+     M = 0.5 by 1.57e-3, and made β = 2, M = 10⁻⁵ fail in PRyMordial. This does not
+     contradict §4.9, whose table is the stored samples between 1 keV and 0.1 eV (a median over a
+     window whose cold end dominates) and stands; it must not be read as a statement about
+     PRyMordial's window above about 100 eV. The roster's point windows are in point 5.
+4. **The options.**
+   - `--phi-init-Mp` (default 5.0). `main.py`, `plot_by_beta.py` and `plot_ScalarModel.py` read it,
+     with no `5.0 * units.PlanckMass` literal left (`test_initial_field_option (b)`). The driver at
+     φ\* = 2, β = 2, M = 0.5 gives 41 070 RHS, 4 603 steps, first bounce N = 14.476112028 at
+     659.393816 MeV, Yp 0.2487467993, D/H ×10⁵ 2.584485137.
+   - **The super-Planckian warning is a warning only.** A coupling with `ln Ω(φ*) + ln T* > ln M_P`
+     is printed by `main.py` before step 1 and computed and stored like any other: φ\* = 5 selects
+     {7, 25, 40} of {1, 6, 7, 25, 40}, φ\* = 1 selects {40}, with `ln(M_P/T*) = 32.433`
+     (`test_initial_field_option (a)`, (d): the list comes back unchanged). With `exponential.yaml`
+     (β 0.1–25) and φ\* = 5 it warns about 93 of 125 couplings (log 04).
+   - `--bbn-wall-clock-limit SECS` (point 2) and `--band-half-width` (default 0.025 in β;
+     `config/argument_parser.py:137`; `test_extraction (f)`). The figures and `histories.csv` come
+     from `plot_by_beta.py --database <store.db> --output <dir>`, which was checked by `ast` and has
+     **not been run against a store** (log 07; point 6).
+5. **The roster's figures.** The driver `tools/history_and_bbn.py β M`, full network, on `8efc50f`,
+   one history at a time with nothing else of the campaign running (the machine's load average was 6–9, from
+   a source not identified; the history walls equal log 06b's within 7 % for the three histories
+   they share),
+   ten histories, each completing with BBN inside the output checks. Baseline: `tools/bbn_baseline.py`, Yp 0.2468872958, D/H ×10⁵ 2.462251065 (7.0 s).
+
+   | β | M | RHS | accepted steps | history wall | first bounce `N` | `T_J` (MeV) | BBN wall |
+   |---|---|---|---|---|---|---|---|
+   | 1.2 | 0.5 | 24 193 | 2 728 | 0.9 s | 17.662454825 | 231.069537 | 7.2 s |
+   | 1.6 | 0.5 | 31 492 | 3 364 | 1.2 s | 18.967065903 | 420.726607 | 7.2 s |
+   | 2.0 | 0.5 | 40 580 | 4 469 | 1.5 s | 20.343026853 | 746.634744 | 7.9 s |
+   | 3.0 | 0.5 | 57 526 | 6 120 | 2.1 s | 24.483798229 | 1682.865313 | 7.9 s |
+   | 1.2 | 10⁻³ | 254 491 | 26 458 | 6.5 s | 17.667931109 | 231.107524 | 7.9 s |
+   | 1.6 | 10⁻³ | 155 961 | 16 275 | 4.6 s | 18.974419125 | 420.758090 | 8.3 s |
+   | 2.0 | 10⁻³ | 271 783 | 27 979 | 7.4 s | 20.352082230 | 746.686275 | 9.0 s |
+   | 3.0 | 10⁻³ | 327 046 | 34 342 | 9.9 s | 24.498974358 | 1680.011085 | 9.0 s |
+   | 1.6 | 10⁻⁵ | 1 445 132 | 137 137 | 35.2 s | 18.974433718 | 420.758153 | 8.3 s |
+   | 2.0 | 10⁻⁵ | 1 679 987 | 162 676 | 40.8 s | 20.352100202 | 746.686377 | 8.1 s |
+
+   All ten: 0 reflections, no wall-clock limit reached, the first bounce not reflected. RHS and
+   steps at β = 2 (M = 0.5, 10⁻³, 10⁻⁵), β = 1.2 and 3.0 (M = 0.5), β = 3.0 (M = 10⁻³) and
+   β = 1.2 (M = 10⁻³) equal §4.8 and §4.9's; β = 1.6 at M = 10⁻⁵ equals README §6.1's.
+
+   | β | M | Yp | ΔYp | D/H ×10⁵ | ΔD/H | source's ΔD/H (§2) |
+   |---|---|---|---|---|---|---|
+   | 1.2 | 0.5 | 0.2582949607 | +4.621 % | 2.649704815 | +7.613 % | 7.5 % |
+   | 1.6 | 0.5 | 0.2490967227 | +0.895 % | 2.53373365 | +2.903 % | 2.8 % |
+   | 2.0 | 0.5 | 0.249229266 | +0.949 % | 2.560889654 | +4.006 % | 4.0 % |
+   | 3.0 | 0.5 | 0.2509606949 | +1.650 % | 2.603108857 | +5.721 % | 5.8 % |
+   | 1.2 | 10⁻³ | 0.2567571266 | +3.998 % | 2.599025939 | +5.555 % | 5.79 % |
+   | 1.6 | 10⁻³ | 0.2468868563 | −0.000 % | 2.459878815 | −0.096 % | −0.03 % |
+   | 2.0 | 10⁻³ | 0.2467606164 | −0.051 % | 2.463862263 | +0.065 % | 0.07 % |
+   | 3.0 | 10⁻³ | 0.2467560634 | −0.053 % | 2.457894203 | −0.177 % | −0.02 % |
+   | 1.6 | 10⁻⁵ | 0.2468788501 | −0.003 % | 2.4647705 | +0.102 % | *BBN failed* |
+   | 2.0 | 10⁻⁵ | 0.2467016048 | −0.075 % | 2.46477019 | +0.102 % | −0.02 % |
+
+   - *Against the source.* The source (§2) ran the production `compute_BBN_data._function` on the
+     Hubble-only route through the old callbacks, and does not state a network. The production
+     default is the full network (`test_network_flag (c)`), and our β = 2 rows at M = 0.5 and
+     10⁻³ equal README §6.1's full-network "honly" rows to every printed digit. Its ΔYp at M ≤ 10⁻²
+     are +3.97 to +4.02 % (β = 1.2; ours +3.998 %), ≈ 0 (β = 1.6; −0.000 %), −0.10 to −0.07 %
+     (β = 2.0; ours −0.051 % and −0.075 %) and −0.01 to +0.04 % (β = 3.0; ours −0.053 %). The
+     ΔD/H agree to within 0.24 percentage points, as the source's own §2 says of the pointwise
+     differences (0.1–0.3 %); the largest are β = 3.0 at M = 10⁻³ (−0.177 against −0.02) and
+     β = 1.2 at M = 10⁻³ (+5.555 against +5.79). The source's β = 2, M = 0.5 D/H of 2.5597 against
+     ours 2.560889654 differs by 4.6e-4 relative, which is inside PRyMordial's response to
+     ulp-level changes in the input (`[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]`).
+     These are recorded as measurements, not bounds. **The source's one PRyMordial failure,
+     β = 1.6, M = 10⁻⁵, did not reproduce here, nor at β = 2.0, M = 10⁻⁵**: both complete.
+   - *The first bounce.* At β = 2 it is 746.63 MeV at M = 0.5 and 746.69 MeV at 10⁻³ and 10⁻⁵, as
+     §4.8–§4.9. At β = 3, M = 0.5 the dense-output root is `N` = 24.483798, against §4.8's
+     24.48381 (1.2e-5; §4.8 itself cautions that an accepted-step `N` depends on the step's width);
+     at β = 3, M = 10⁻³ it is 24.498974, as §4.8.
+   - *The ratio windows,* ρ_NP/ρ_R,J from the stored samples as `compute_BBN_data` computes it,
+     **point values, as BBN reads them** (median / rms step between samples; no averaged window
+     exists):
+
+     | β | M | [0.3, 1) keV | [1, 3) keV | [3, 10) keV | [10, 100) keV |
+     |---|---|---|---|---|---|
+     | 1.2 | 0.5 | 0.04615 / 0.0001356 | 0.05523 / 4.243e-05 | 0.0581 / 1.364e-05 | 0.05921 / 0.001702 |
+     | 1.6 | 0.5 | 0.04431 / 5.013e-05 | 0.04238 / 5.955e-05 | 0.03695 / 1.734e-05 | 0.03747 / 0.001671 |
+     | 2.0 | 0.5 | 0.05748 / 0.0002526 | 0.04666 / 0.0001986 | 0.05301 / 3.784e-05 | 0.05571 / 0.006658 |
+     | 3.0 | 0.5 | 0.08466 / 6.302e-05 | 0.07739 / 5.636e-05 | 0.07138 / 4.329e-05 | 0.06462 / 0.00886 |
+     | 1.2 | 10⁻³ | 0.02595 / 0.0001334 | 0.03488 / 4.174e-05 | 0.03771 / 1.341e-05 | 0.03879 / 0.001663 |
+     | 1.6 | 10⁻³ | 0.0001158 / 0.0004092 | 0.0001394 / 0.0002707 | −0.0002198 / 0.0002084 | 0.00038 / 0.007167 |
+     | 2.0 | 10⁻³ | 0.001347 / 0.002129 | −0.001016 / 0.001586 | 0.005897 / 3.634e-05 | 0.008126 / 0.01604 |
+     | 3.0 | 10⁻³ | −0.0002623 / 0.003212 | 0.001065 / 0.001777 | 0.001387 / 8.152e-05 | 0.006542 / 0.02187 |
+     | 1.6 | 10⁻⁵ | −0.0004114 / 0.001253 | −0.0005007 / 0.0007573 | 0.002184 / 2.316e-05 | 0.00377 / 0.007134 |
+     | 2.0 | 10⁻⁵ | 0.001831 / 0.002238 | −0.001186 / 0.001652 | 0.006159 / 3.637e-05 | 0.008392 / 0.01604 |
+
+     The β = 2 rows at M = 0.5, 10⁻³ and 10⁻⁵ and the β = 1.6, M = 10⁻⁵ row equal log 05's
+     printed figures to every digit, as log 01's do for the first two.
+   - *Fixed-temperature values* (the driver's `fixed_T` line) for the same ten histories are in
+     log 09; for the three histories of log 06b they equal its figures to every printed digit (for example β = 2, M = 0.5: φ = 1.138197048e-02 and
+     ρ_NP/ρ_R,J = −4.810565953e-02 at 1 MeV).
+6. **What is still open,** by name:
+   - **Do not report `AdiabaticHistory` max |Q| for M ≲ 10⁻³** until
+     `[post-adiabatic-Q-reads-aliased-late-samples]` (`integrator-remediation`) is settled.
+     `[00-stored-samples-alias-the-rebounds]` (`integrator-remediation`) stays open for its
+     adiabatic half only: it has no BBN half in PRyMordial's window (point 3).
+   - `[00-settling-at-physical-M-needs-a-parked-tracking-model]` (`integrator-remediation`): the
+     parked-tracking model does not exist, and a physical-`M` history with β ≥ 1.2 still ends in a
+     step-budget failure row, now with its reason stored.
+   - **The physical-`M` cross-check is now possible** with `--T-stop-GeV 1e-8` (a history stopped at
+     10 eV passes the 20 eV pre-check). It costs about 24 minutes per history (§4.8) and is the
+     user's to run.
+   - `[05-the-ratio-spline-may-ring-at-resolved-bounce-jumps]` (`science-readiness`): the cubic
+     spline through the ratio's resolved bounce jumps may overshoot between samples, unmeasured.
+     Until it is measured, a PRyMordial failure on point input cannot be attributed to the true H
+     rather than to our interpolation.
+   - `[05-the-value-factory-compares-stored-phi-against-pi]` (`science-readiness`): a one-word
+     fix, with nothing calling the path today.
+   - **`plot_by_beta.py` has not been run against a store.** Its figures and `histories.csv` are
+     built from synthetic records in tests and its wiring is checked by `ast` and by reading. The
+     warning for a super-Planckian start is printed by `main.py` only, which has not been run
+     either (README §0.5).
+   - PRyMordial's response to ulp-level input changes
+     (`[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]`, `review-remediation`): β-to-β
+     differences in D/H below about 7e-4 relative are not resolved (§4.3).
+   - The rest of §4.8 point 5 and of `OPEN_ISSUES.md` §1.1–§1.6 is as it was.
+
+**Verification table** (the campaign's README §6.2–§6.8, re-run on `8efc50f` by prompt 09; the rows
+and their witnesses are in
+[`logs/09-close-out-verification.md`](../prompts/science-readiness/logs/09-close-out-verification.md)).
+Suites: `CosmologyModels/tests` 18 OK (68.8 s), `ComputeTargets/tests` 103 OK (85.0 s),
+`Datastore/tests` 31 OK (1.9 s), against 18, 67 and 17 at `6aaa706`. Every row is at or better than
+its target, and none regressed since its prompt's log.
+
+**To reproduce** from the repository root (the three suites take about three minutes; each history
+of the roster takes 10–50 s):
+
+```bash
+PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t . && PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . && PYTHONPATH=. ./venv/bin/python -m unittest discover -s Datastore/tests -t . && grep -rn "VERSION_LABEL =" --include='*.py' . | grep -v "venv/\|thirdparty/\|claude-context/" && git diff --stat 6aaa706..8efc50f
+./venv/bin/python tools/bbn_baseline.py
+./venv/bin/python tools/history_and_bbn.py 2 0.5      # and β M for each roster row, one at a time
+```
+
 ---
 
 ## 5. Reproduce
