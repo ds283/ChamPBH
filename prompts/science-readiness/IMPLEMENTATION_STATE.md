@@ -111,6 +111,25 @@ PRyMordial reads, and adds the extraction and the four figures of the science ru
   This ruling is carried by the README §0.2 amendment and dated notes in §2 (i), (k), §3.1, §6.6,
   §6.7 and §7. Prompts 06–09 and `orchestrator/prompt-08.md` carry dated amendments. The two
   issues prompt 05 opened (`[05-…]`) are unassigned.
+- **2026-10-02, the user: prompt 07's `a2deb00` reverted (`8fcb295`); the fixed-`T` values move
+  to the `ScalarModel` row; prompt 07 to be re-planned.** Figure 4 and `histories.csv` need φ and
+  ρ_NP/ρ_R,J at T_J = 1 MeV and 70 keV. `a2deb00` interpolated them from every stored sample at
+  plot time. To do so it removed `_do_not_populate` from the `ScalarModel` and `BBNData` lookups
+  in `plot_by_beta.py`'s `build_plot_work`, so every lookup loaded each history's whole sample
+  table to yield four numbers. That is prompt 07 §5's first stop condition (the lookups cannot
+  return the values without a factory change). Log 07 tagged it `STRUCTURALLY REQUIRED`
+  (deviation 3) and did not stop; the orchestrator's first report also missed the stop condition.
+  The user's reason: the four values are properties of the whole history, not of a sample. They
+  belong on the parent `ScalarModel` row, as the first bounce does (prompt 03), and are read with
+  `_do_not_populate` kept. ρ_NP/ρ_R,J is built from `ScalarModelValue` fields alone
+  (`3 M_P² H_J² − ρ_R,J (1 + f_m)`, `ComputeTargets/BBNData.py`), so both can be computed in
+  `compute_scalar_model`. Also ruled, for the re-plan: log 07's deviation 2 is accepted.
+  `build_beta_plot` returns plain per-history records and `run_pipeline` gathers them across
+  potentials (`store_results=True`) for figure 2 and `histories.csv`. This is a change in how
+  data are marshalled, and figure 2 needs it. The orchestrator's review of `a2deb00` otherwise
+  passed its five checks: allowed files; pure functions; tests (a)–(e), 13 OK; existing figures
+  unchanged but for the caption; suites 18 / 101 / 26. Prompt 07 is suspended until re-planned;
+  G and `[00-no-extraction-for-the-science-figures]` stay open.
 
 Decisions the prompts may surface, each a stop-and-ask in its prompt:
 

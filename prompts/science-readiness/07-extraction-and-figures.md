@@ -14,6 +14,13 @@
 > README §0.3's "prompt 05's averaged φ" does not exist. Log 05 has no column names to hand on;
 > take them from log 03 and the existing value classes.
 
+> **Suspended 2026-10-02 (the user's ruling on `a2deb00`; board Decisions).** A first
+> implementation was reverted in `8fcb295`. The four fixed-`T` values (φ and ρ_NP/ρ_R,J at
+> 1 MeV and 70 keV) are to be stored on the `ScalarModel` row, like the first bounce, and not
+> interpolated from the samples at plot time. `_do_not_populate` stays on every lookup in
+> `plot_by_beta.py`. The first amendment above is superseded on this point. Do not dispatch this
+> prompt until it is re-planned.
+
 **Read first:**
 
 1. [`README.md`](README.md) §0.2 (U5), §0.3 (the last point), §2 (k), §5, §6.8.
