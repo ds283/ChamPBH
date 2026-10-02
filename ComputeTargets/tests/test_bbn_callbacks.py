@@ -79,7 +79,8 @@ from Units import GeV_units, Planck_units
 
 REPORT = bool(os.environ.get("CHAMPBH_TEST_REPORT"))
 
-# the pipeline's spline domain, compute_BBN_data's defaults: 1e-4 keV to 100 MeV
+# the builder tests' own spline domain, 1e-4 keV to 100 MeV: compute_BBN_data's defaults
+# before science-readiness prompt 06, which moved the floor to 0.2 keV
 T_MIN_MEV = 1e-7
 T_MAX_MEV = 100.0
 KNOTS_PER_DECADE = 250

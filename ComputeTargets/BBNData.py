@@ -430,7 +430,7 @@ def compute_BBN_data(
     if model.T_Jordan_stop.as_float > 0.1 * T_BBN_spline_min:
         formatter: energy_formatter = energy_formatter(units)
         print(
-            f"!! compute_BBN_data {task_label}: T_Jordan_stop={formatter(model.T_Jordan_stop)} is more than than 0.1*T_BBN_spline_min={formatter(0.1*T_BBN_spline_min)}, so cannot compute BBN abundances"
+            f"!! compute_BBN_data {task_label}: T_Jordan_stop={formatter(model.T_Jordan_stop)} is more than 0.1*T_BBN_spline_min={formatter(0.1*T_BBN_spline_min)}, so cannot compute BBN abundances"
         )
         return _failure_payload(
             f"pre-check: T_Jordan_stop={formatter(model.T_Jordan_stop)} is more than 0.1*T_BBN_spline_min={formatter(0.1*T_BBN_spline_min)}"
