@@ -344,6 +344,10 @@ these 15 open; they pass to whichever campaign takes them (`.documents/review-re
     in prompt 04's files.**
   - **Assigned (2026-10-01):** to the [`science-readiness`](../science-readiness/IMPLEMENTATION_STATE.md) campaign, prompt 08, which adds the dated §7 addendum
     once that campaign has replaced the BBN route.
+  - **Resolved (2026-10-02):** by `science-readiness` prompt 08 (its log 08):
+    `numerical-strategies.md` §7.6 is the dated addendum. It states that §7.2–§7.4 were superseded
+    here in prompt 04, and describes the route as it now is (the single ratio spline, the Hubble-only
+    patch, the [0.2 keV, 100 MeV] window).
 
 - **[05-kicking-table-and-saikawa-shirai-gs-disagree-through-qcd-and-ew]** *(log 05, Deviations 6
   and observation 1)*.

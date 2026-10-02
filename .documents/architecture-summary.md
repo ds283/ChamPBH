@@ -129,6 +129,19 @@ ChamPBH/
     └── sharding.py                  # Shard-key type and table lists
 ```
 
+> **Note, 2026-10-02 (`science-readiness`, prompts 01, 04 and 07).** The tree above omits three
+> files this campaign added or gave a role. `pipeline_selection.py` (pure functions that `main.py`
+> and the tests share, because `main.py` parses `sys.argv` at import and cannot be imported):
+> `build_query_entries`, `select_missing`, and since this campaign `summarise_failure_reasons`,
+> `super_planckian_couplings` and `warn_super_planckian`. `tools/history_and_bbn.py BETA M
+> [--T-stop-GeV T] [--phi-init-Mp P] [--small-network] [--wall-clock-limit SECS]` runs one full
+> history and its BBN solve through the undecorated `._function`s, with no datastore, and prints the history, first-bounce, fixed-T, ratio-window and abundance lines; `tools/bbn_baseline.py`
+> is the Standard-Model baseline. `extract_common.py` is no longer only "post-hoc extraction": it
+> holds the pure pieces of `plot_by_beta.py`'s science figures (`relative_shift`, `running_band`,
+> `kick_threshold_curve`, `build_history_record`, the four figure functions, `write_histories_csv`,
+> `CSV_COLUMNS`), so that a test can import them. `plot_by_beta.py` itself still parses `sys.argv`
+> and calls `ray.init` at import and is checked by `ast`, not run, in the tests.
+
 ---
 
 ## 3. The Ray Distributed Computing Layer
@@ -414,6 +427,26 @@ Uses `configargparse` (a drop-in `argparse` replacement) so that every CLI argum
 - `--inventory` (show DB contents and exit)
 - `--ray-address STR` (default 'auto')
 
+> **Note, 2026-10-02 (`science-readiness`).** Three options were added to the shared parser (so
+> `main.py`, `plot_by_beta.py` and `plot_ScalarModel.py` all accept them):
+>
+> - `--phi-init-Mp FLOAT` (default 5.0; prompt 04): the initial field value φ\* in units of the
+>   reduced Planck mass M_P, with π\* = 0. It replaces the literal `5.0 * units.PlanckMass` that
+>   was in each driver. `phi_Einstein_init` was already part of the `ScalarModel` lookup key, so a
+>   run and its plots must use the same value. A coupling with Ω(φ\*) T\* > M_P is warned about
+>   by `main.py` before step 1 and computed; none is skipped or refused.
+> - `--bbn-wall-clock-limit SECS` (default 600, `DEFAULT_BBN_WALL_CLOCK_LIMIT`; 0 disables it;
+>   negative is refused; prompt 01): the wall-clock limit on each PRyMordial solve. A solve past it
+>   is a stored BBN failure like any other (final within a label, retried by `--retry-failed-bbn`).
+> - `--band-half-width FLOAT` (default 0.025; prompt 07): `plot_by_beta.py` only. The half-width
+>   in β of the window `[β − h, β + h]` for the running median and the 16th–84th percentile band
+>   of the abundance shifts.
+>
+> `--T-stop-GeV` now interacts with the BBN window: a history must reach 20 eV to pass
+> `compute_BBN_data`'s pre-check (`--T-stop-GeV 1e-8` passes, `1e-7` fails; the default, `T_CMB`,
+> passes). The same prompt-01 and prompt-06 statements are in
+> [`numerical-strategies.md` §7.6](numerical-strategies.md).
+
 ### 5.2 Sharding Configuration (`config/sharding.py`)
 
 This file defines what the `ShardedPool` constructor needs:
@@ -616,6 +649,42 @@ SampleValues = namedtuple("SampleValues", [
 
 > **Note, 2026-10-01 (`integrator-remediation`, prompts 01 and 02).** Steps 1–4 describe the code at `b1f64d8`. There is no solver loop, no event function, no region and no `SolutionFragment` list now. `compute_scalar_model` builds the initial state as before and calls `integrate_scalar_history`: one `scipy.integrate.Radau` instance, stepped by hand under a kinematic maximum-step cap (`h ≤ f φ/|π|` if `π < 0`, `h ≤ sqrt(2 f φ/|π̇|)` if `π̇ < 0`, `f = 0.1`, global `0.1` e-fold) set before every step. An inward-moving field whose cap would fall below `1e-11` e-folds is reflected elastically (`π ← −π`) and the solver restarted there; an accepted `φ ≤ 0` is a failure, not a reflection. The history is one `OdeSolution`, resampled onto `z_grid` in step 4's place. A step budget of `2×10⁶` accepted steps turns a history that cannot finish into a failure row. Details, parameters and numbers: [`numerical-strategies.md` §3.5](numerical-strategies.md).
 
+> **Note, 2026-10-02 (`science-readiness`, prompts 02, 03 and 06b): columns added to the
+> `ScalarModel` table, and the properties that read them.** `VERSION_LABEL` is `"2026.6.0"` since
+> prompt 01; there is no migration, so a store made earlier cannot be opened by this code and the
+> science run needs a fresh datastore file. Nothing was removed from the table. Nine nullable
+> columns were added, all on the parent row, so that a lookup with `_do_not_populate` returns them
+> without loading the sample table:
+>
+> | column | type | units / content | added by |
+> |---|---|---|---|
+> | `failure_reason` | `String(256)` | the reason on a failure row; NULL on a success | prompt 02 |
+> | `first_bounce_N` | `Float(64)` | forward e-fold number of the first bounce | prompt 03 |
+> | `first_bounce_log_T_Jordan` | `Float(64)` | ln of T_J in GeV at the first bounce | prompt 03 |
+> | `first_bounce_phi_Einstein` | `Float(64)` | φ at the first bounce, in M_P | prompt 03 |
+> | `first_bounce_reflected` | `Boolean` | the first bounce was an elastic reflection | prompt 03 |
+> | `phi_Einstein_1MeV` | `Float(64)` | φ at the first crossing of T_J = 1 MeV, in M_P | prompt 06b |
+> | `density_NP_ratio_1MeV` | `Float(64)` | ρ_NP/ρ_R,J there | prompt 06b |
+> | `phi_Einstein_70keV` | `Float(64)` | φ at the first crossing of T_J = 70 keV, in M_P | prompt 06b |
+> | `density_NP_ratio_70keV` | `Float(64)` | ρ_NP/ρ_R,J there | prompt 06b |
+>
+> The four `first_bounce_*` columns are NULL when there is no bounce and on a failure row; so are
+> the four fixed-T columns, and each pair is NULL on its own where the history does not reach that
+> temperature. The table has 33 columns of its own, plus `serial`, `version` and `timestamp`.
+>
+> New properties on `ScalarModel`, each raising `RuntimeError` on a failure row (except
+> `failure_reason`) and on an object that was never populated: `failure_reason -> Optional[str]`,
+> `first_bounce -> Optional[FirstBounce]` and `fixed_T_values -> FixedTValues`
+> (`FirstBounce(N, phi_Einstein, log_T_Jordan, reflected)` and `FixedTValues(phi_Einstein_1MeV,
+> density_NP_ratio_1MeV, phi_Einstein_70keV, density_NP_ratio_70keV)`, both in
+> `ComputeTargets/ScalarModel.py` and not re-exported by the package). `compute_scalar_model`'s
+> success payload carries `"first_bounce"` and `"fixed_T_values"` (`store()` indexes both, so a
+> hand-built success payload in a test must carry them), and its failure payloads carry
+> `"failure_reason"`. `SampleValues` and the `ScalarModelValue` table are **unchanged**: there is no
+> cell-mean field or column, because the bounce averages were withdrawn (see
+> [`numerical-strategies.md` §3.6](numerical-strategies.md)). The definitions, units and values are
+> in that section.
+
 **`ScalarModelProxy`:** A lightweight reference object (just holds the model's `store_id` and key parameters, not the full solution array). Passed to downstream compute targets (AdiabaticHistory, BBNData) so they can fetch the full `ScalarModel` from the database only when needed.
 
 ### 7.3 `AdiabaticHistory` (`ComputeTargets/AdiabaticHistory.py`)
@@ -627,6 +696,33 @@ Computes the adiabatic perturbation parameter Q (which determines whether the ch
 Interfaces with the external PRyMordial library to compute primordial nucleosynthesis abundances (Y_p, D/H, Li-7/H). Also requires a `ScalarModelProxy`.
 
 The function `compute_BBN_data` is a `@ray.remote` function (not a class method). It constructs splines of `ρ_NP(T)` and `p_NP(T)` from the scalar field history, then passes them to PRyMordial as "new physics" contributions to the Friedmann equations.
+
+> **Note, 2026-10-02 (`science-readiness`, prompts 01 and 06): `compute_BBN_data` as it now is.**
+> The sentence above describes the code at `eba4473` and before.
+>
+> - **One callable, not two.** `compute_BBN_data` builds `ρ_NP(T) = r(T) ρ_SM(T)`: `r = ρ_NP/ρ_R,J`
+>   is splined (cubic, in ln T) from the stored samples with `T_J ∈ [0.2 keV, 100 MeV]` and
+>   multiplied back by the thermodynamic ρ_SM (`build_rho_NP_callback`,
+>   `thermodynamic_rho_SM`). `p_NP`, the derivative callback, `jordan_Hdot_over_H2` and
+>   `NPCallbacks` are removed.
+> - **Hubble-only.** The vendored PRyMordial is patched so that ρ_NP enters the expansion rate
+>   and nothing else (`PRyM_init.NP_hubble_flag`); `NP_thermo_flag` is off, and `_configure_PRyMordial`
+>   asserts the flags. The patch also adds an optional wall-clock limit to `PRyMclass`. Every
+>   hunk is listed in [`numerical-strategies.md` §7.6.4](numerical-strategies.md);
+>   `PRYM_VERSION = "bf24c3d+ri02+sr01"`.
+> - **Signature.** `compute_BBN_data(model_proxy, task_label, T_BBN_MeV_spline_max=100,
+>   T_BBN_keV_spline_min=0.2, small_network=False, wall_clock_limit=DEFAULT_BBN_WALL_CLOCK_LIMIT)`.
+>   The `BBNData.compute` payload is `{"small_network": False, "wall_clock_limit": …}`
+>   (`main.py` passes `None` for `--bbn-wall-clock-limit 0`).
+> - **Checks.** A result is stored only if all four abundances are finite, `0 < Yp < 0.5` and the
+>   other three are positive; otherwise a failure row with reason `"PRyMordial output: …"`. Fewer
+>   than four in-window samples, a non-finite sample or callback value, and a wall-clock overrun are
+>   failure rows with reasons too.
+> - **`BBNDataValue`** loses the column `pressure_NP_MeV4` (and the `pressure_NP` field and
+>   property). It keeps `density_NP` and `density_NP_ratio` per sample. `BBNData` itself gains no
+>   column.
+> - **Plots.** `plot_ScalarModel.py`'s BBN figure has three panels (ratio, H, ρ_NP); the |p_NP| and
+>   w_NP panels are gone.
 
 ---
 
@@ -801,6 +897,21 @@ STAGE 3: BBN Data
   a stored failure (or retried, under the flag).
 
 See `prompts/run-integrity/logs/03-failure-caching-and-pairing.md`.
+
+**Note added 2026-10-02 (`science-readiness`, prompts 01, 02, 04): changes to the stages.**
+
+- **Before step 1.** `main.py` calls `pipeline_selection.warn_super_planckian` on the coupling
+  array: one warning line per coupling with Ω(φ\*) T\* > M_P, then a count. It returns the array
+  unchanged, so nothing is dropped.
+- **Stage 1 (`ScalarModel`).** After the queue, `main.py` prints `-- ScalarModel: N histories
+  failed in this run`, grouped by the first clause of the stored reason
+  (`pipeline_selection.summarise_failure_reasons`). It counts only this run's failures: a stored
+  failure row counts as present and is not recomputed. `plot_by_beta.py` prints the reason for each
+  model it drops because its `ScalarModel` failed.
+- **Stage 3 (`BBNData`).** The compute payload is `{"small_network": False, "wall_clock_limit":
+  <--bbn-wall-clock-limit, None if 0>}` (the earlier note above gives `{"small_network": False}`).
+  A PRyMordial solve past the limit, or one whose output fails the checks of §7.4's note, is a
+  stored failure with its reason, final within a label and retried by `--retry-failed-bbn`.
 
 **The two-pass batching pattern** (repeated at each stage) is important for efficiency:
 

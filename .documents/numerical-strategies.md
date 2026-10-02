@@ -356,6 +356,109 @@ cap the tolerance does not set the cost (audit §3.6, §6). `ExponentialPotentia
 Every `ScalarModel` store made before `VERSION_LABEL = "2026.5.0"` is invalid, and so is every
 `AdiabaticHistory` and `BBNData` row built on one.
 
+### 3.6 Added 2026-10-02 (`science-readiness`, prompts 02, 03, 05, 06b): what the row now carries, and whether the samples resolve the bounces
+
+**What this adds to.** §3.5.7 lists what the supervisor stores per history; it is correct for what
+it lists and is left as it stands. Three whole-history quantities are added to the `ScalarModel`
+row itself, each in its own nullable columns and not in `extra_data`, and one measurement is
+recorded about the sample grid that the stage after the integration reads. `VERSION_LABEL` is
+`"2026.6.0"` since `science-readiness` prompt 01 (`1bc8977`); every store made before it is
+invalid, and because the datastore has no migration the columns below need a fresh datastore file.
+Commits: prompt 02 `77a7e0c`, prompt 03 `568c23a`, prompt 05 `c242f64`, prompt 06b `489ab26`.
+Figures are those printed by the logs named, on the trees named there
+(`prompts/science-readiness/logs/`).
+
+#### 3.6.1 Three additions on the parent row
+
+| what | column(s) | definition | read back by |
+|---|---|---|---|
+| the failure reason (prompt 02) | `failure_reason String(256)` | both failure exits of `compute_scalar_model` return `{"failure": True, "failure_reason": …}`: the `ComputationFailureError` message, or `"sampling: overflow when assembling sample values: …"`, truncated to 256; NULL on a success | `ScalarModel.failure_reason` (readable on a failure row, `None` on a success) |
+| the first bounce (prompt 03) | `first_bounce_N`, `first_bounce_log_T_Jordan` (ln of T_J in GeV), `first_bounce_phi_Einstein` (φ in M_P), `first_bounce_reflected` | `first_bounce(result)`: the root of π, by `brentq` (`xtol=1e-15`) on the interpolant of the first accepted step with π(t_k) < 0 < π(t_{k+1}); if an elastic reflection comes first, that reflection (`reflected=True`); `None` otherwise. No `φ < 1.5 M` filter. All four NULL with no bounce and on a failure row | `ScalarModel.first_bounce` |
+| φ and ρ_NP/ρ_R,J at fixed T_J (prompt 06b) | `phi_Einstein_1MeV`, `density_NP_ratio_1MeV`, `phi_Einstein_70keV`, `density_NP_ratio_70keV` (φ in M_P) | `fixed_T_values(result, policy, coupling, units)`: the first crossing of `ln T_J = ln(1 MeV)` and `ln(0.07 MeV)` on the dense output (`T_Jordan_crossing`, `brentq` on the accepted step's interpolant), φ read there, and the ratio built as `compute_BBN_data` builds it, `(3 M_P² H_J² − ρ_R,J (1 + f_m))/ρ_R,J`. NULL where the history does not reach the temperature, and on a failure row | `ScalarModel.fixed_T_values`, also under `_do_not_populate` |
+
+The two temperatures are the module constants `FIXED_T_JORDAN_HIGH_MEV = 1.0` and
+`FIXED_T_JORDAN_LOW_MEV = 0.07`; they are not a run option and not part of the lookup key.
+
+**Why the dense output.** The first bounce at small `M` lasts far less than one z-grid sample, so
+it cannot be recovered from the stored samples. On the same histories (log 03, Verification) the
+sample-based detector (first π sign change from − to + among the samples with `φ < 1.5 M`) returns
+742.79 MeV at β = 2, `M = 10⁻³` against the dense output's 746.686 MeV, and 0.39 MeV at β = 1.6,
+`M = 10⁻⁵` against 420.758 MeV. The same reasoning is why the fixed-`T` values are not read from
+the samples: they are properties of the whole history, and reading them from the samples means
+loading every sample of every history (the first implementation of the figures did, and was
+reverted, `a2deb00` → `8fcb295`).
+
+Values on the three roster histories (`tools/history_and_bbn.py`, log 03 and log 06b, full
+network):
+
+| β, M | first bounce N | T_J (MeV) | φ at 1 MeV (M_P) | ρ_NP/ρ_R,J at 1 MeV | φ at 70 keV (M_P) | ρ_NP/ρ_R,J at 70 keV |
+|---|---|---|---|---|---|---|
+| 2, 0.5 | 20.343026853 | 746.634744 | 1.138197048e-02 | −4.810565953e-02 | 8.695012936e-03 | 6.742167855e-02 |
+| 2, 10⁻³ | 20.352082230 | 746.686275 | 3.524341402e-03 | −7.814304755e-02 | 6.541189438e-04 | 1.579537539e-03 |
+| 1.6, 10⁻⁵ | 18.974433718 | 420.758153 | 1.418937374e-03 | −1.043543235e-02 | 1.313754026e-04 | −6.242391165e-03 |
+
+On every window and history it was run on, the first negative-to-positive turning point of π
+with no filter is the first `φ < 1.5 M` wall bounce, on the same accepted step (log 03; wall
+bounces 26, 803 and 4 337 on the three histories). The ρ_NP/ρ_R,J ratio at 1 MeV is negative on
+all three. Against the stand-in that interpolates the stored samples linearly in `ln T_J`, the
+dense-output values differ by 3.55e-6 to 1.44e-2 (the largest is the 70 keV ratio at `M = 10⁻³`,
+a small value between two samples; log 06b); that is a measurement, not a bound.
+
+#### 3.6.2 The samples do not alias the bounces in PRyMordial's window (log 05)
+
+The z grid has 250 samples per decade of Einstein-frame `1 + z`, so `ΔN = ln 10/250 = 0.0092`
+e-folds per sample. The sample *cell* of a sample is the interval between the midpoints to its
+neighbours in `N`. The half-periods of π (sign changes of π between accepted steps) were counted
+per cell. The orchestrator's count, quoted in log 05 (Verification; scratch script
+`orch_bounce_density.py` in the session scratchpad, not in the repository, run on `a522005` plus
+the uncommitted built tree, whose trajectories are bit-identical to `a522005`; it reproduces
+verification §4.9's 43–45 half-periods in 10 MeV–1 keV at β = 2), gives median half-periods per
+cell, and the fraction of cells with at least one:
+
+| T_J window | β = 1.6, M = 10⁻⁵ | β = 2, M = 10⁻⁵ | β = 2, M = 0.5 |
+|---|---|---|---|
+| 10–100 MeV | 0 / 0.01 | 0 / 0.03 | 0 / 0.03 |
+| 1–10 MeV | 0 / 0.01 | 0 / 0.00 | 0 / 0.00 |
+| 100 keV–1 MeV | 0 / 0.21 | 0 / 0.11 | 0 / 0.10 |
+| 10–100 keV | 0 / 0.06 | 0 / 0.04 | 0 / 0.02 |
+| 3–10 keV | 0 / 0.01 | 0 / 0.01 | 0 / 0.01 |
+| 1–3 keV | 0 / 0.02 | 0 / 0.01 | 0 / 0.01 |
+| 0.3–1 keV | 0 / 0.05 | 0 / 0.03 | 0 / 0.02 |
+| 100–300 eV | 0 / 0.17 | 0 / 0.12 | 0 / 0.00 |
+| 10–100 eV | 1 / 0.75 | 1 / 0.64 | 0 / 0.00 |
+| 1–10 eV | 7 / 1.00 | 5 / 1.00 | 0 / 0.00 |
+| 0.1–1 eV | 16 / 1.00 | 17 / 1.00 | 0 / 0.00 |
+
+The implementation agent's own count (log 05's `diag.py`) agrees: at β = 1.6, `M = 10⁻⁵`, 6 of 130 cells in
+[0.3, 1) keV and 2 of 120 in [1, 3) keV contain a sign change of π. So:
+
+- **In PRyMordial's window (0.3628 keV to 10 MeV, §7.6.1) the grid resolves the bounces.** Most
+  cells hold none. The jumps of ρ_NP/ρ_R,J below 3 keV at small `M` are resolved bounces, not
+  phase noise: the ratio is a sawtooth that jumps by about +0.005 to +0.007 at a bounce
+  (β = 1.6, `M = 10⁻⁵`) and falls smoothly by about 1.2e-4 per sample in between, and its 10
+  largest steps carry 95 % ([0.3, 1) keV) and 99 % ([1, 3) keV) of the rms step². The point
+  samples are therefore the behaviour of H_J on the solution there.
+- **Aliasing begins below about 100 eV**, and at `M = 10⁻⁵` is complete below 10 eV (5–17
+  half-periods per cell). The stage that reads the late samples, `AdiabaticHistory`, is therefore
+  exposed to it: open issue `[post-adiabatic-Q-reads-aliased-late-samples]`
+  (`integrator-remediation` board), and `[00-stored-samples-alias-the-rebounds]`, which
+  `science-readiness` narrowed on 2026-10-02 to that adiabatic half.
+- **Bounce averages were built, measured, and withdrawn. None of it is in the tree.** The plan
+  was a cell mean of H_J² and φ_E by three-point Gauss–Legendre on the dense output, handed to
+  BBN in place of the point values. Measured on the built tree (log 05, Deviation 1, back-to-back
+  against `a522005`): the rms step of ρ_NP/ρ_R,J fell only to 0.71–0.84× (target ≤ 0.1 at
+  β = 1.6, `M = 10⁻⁵`; ≤ 0.5 at β = 2, `M = 10⁻³`); the cell mean of H_J² against the point
+  ρ_R,J carries a curvature bias of `sinh(4h)/(4h) − 1 = 5.65e-5` for a cell half-width
+  `h = ΔN/2 = 0.0046`, because H_J² ∝ e^{−4N}; it moved D/H at β = 2, `M = 0.5` by 1.57e-3
+  (2.560889654 → 2.564920856 ×10⁻⁵); and β = 2, `M = 10⁻⁵` failed in PRyMordial's low-T
+  network. The user ruled on 2026-10-02 that, in that window, the point samples are the behaviour
+  of H on the solution, and that a PRyMordial failure on that input is a finding about
+  PRyMordial, not a reason to change the input. `SampleValues` and the `ScalarModelValue` table
+  have no cell-mean field or column, and `compute_BBN_data` reads the point `H_J`.
+- **Unmeasured.** Whether the cubic spline of §7.6.1, through the resolved jumps, overshoots
+  between two samples 0.0092 e-folds apart: `[05-the-ratio-spline-may-ring-at-resolved-bounce-jumps]`
+  (`science-readiness` board §3).
+
 ---
 
 ## 4. Splines: where they are used and how boundary/dynamic-range issues are handled
@@ -778,6 +881,166 @@ inspection.
 
 Witness: `ComputeTargets/tests/test_bbn_solver_failures.py` (a)–(c), (e). See
 `prompts/run-integrity/logs/02-detect-bbn-solver-failures.md`.
+
+### 7.6 Added 2026-10-02 (`science-readiness`, prompts 01 and 06): the BBN route as it now is
+
+**What this supersedes.** The text above describes the interface at three earlier trees, and none
+of it is edited:
+
+- §7.2–§7.4 (the asinh/sinh transform, `_make_spline`'s sort, the `sinh` overflow path) were
+  superseded in `review-remediation` prompt 04 (`eba4473`), which splined the ratios
+  ρ_NP/ρ_R,J and p_NP/ρ_R,J and multiplied back by the thermodynamic ρ_SM, and refused a
+  non-monotonic T_J rather than sorting it. §7.1's description of Ḣ_J/H_J² did not mention the
+  Ω″π² correction that prompt added either.
+- §7.1 (three callables, `NP_thermo_flag = True`, `pressure_NP`), the window and pre-check of §7.3,
+  the three callbacks of §7.4, and §7.5's `PRyMclass(rho_NP, P_NP, drho_NP_dT)`,
+  `Tstart_NP` and `PRyM_version` `"bf24c3d+cham03+ri02"` were superseded in `science-readiness`
+  prompt 01 (`1bc8977`) and prompt 06 (`835aa79`). That is what this subsection describes.
+- §9 item 2 (the delicate frame-conversion of Ḣ_J/H_J² "used for P_NP") has no subject: nothing
+  computes p_NP now.
+
+Figures are from `prompts/science-readiness/logs/` and README §6.1 of that campaign, on the trees
+those name.
+
+#### 7.6.1 What PRyMordial is given
+
+PRyMordial receives **one** callable, `rho_NP(T)` (T in MeV, result in MeV⁴), built by
+`build_rho_NP_callback` in `ComputeTargets/BBNData.py`:
+
+- For each stored sample with `T_J ∈ [0.2 keV, 100 MeV]` (`T_BBN_keV_spline_min = 0.2`,
+  `T_BBN_MeV_spline_max = 100`): `ρ_NP = 3 M_P² H_J² − ρ_R,J (1 + f_m)` and `r = ρ_NP/ρ_R,J`,
+  with the **point** `H_J` of the sample. (The cell-mean `H_J²` of the withdrawn bounce averages
+  is not used, §3.6.2.)
+- `r` is splined, cubic and with no transform, against `ln(T_J/MeV)` on the stored samples.
+  `T_J` must be strictly decreasing along the history; otherwise `ComputationFailureError`
+  naming the first offending pair, and nothing is sorted.
+- The callback returns `r(T) ρ_SM(T)`, with `ρ_SM = (π²/30) g_ρ(T) T⁴` from the cosmology's
+  `G_rho` (`thermodynamic_rho_SM`; nothing splined). For finite in-domain input this is the same
+  expression the earlier callback used.
+- **Guards** (each a `ComputationFailureError`, which `compute_BBN_data` turns into a
+  `"BBN callbacks: …"` failure row; prompt 01): fewer than `MIN_BBN_SAMPLES = 4` samples in the
+  window (before, a `ValueError` from `make_interp_spline` escaped); a non-finite sample; a
+  non-finite T; a T outside `[T_min, T_max]`; and a non-finite *value* `r(T) ρ_SM(T)` at a finite
+  in-domain T (before, `nan` was returned to PRyMordial). A negative T returns 0.
+- **The window and the pre-check.** The floor moved from 0.1 eV (`T_BBN_keV_spline_min = 1e-4`)
+  to **0.2 keV** in prompt 06 (`835aa79`). PRyMordial's lowest callback query is **0.3628 keV** and
+  its highest 10 MeV, with no negative T (`planning-probes/prym_callback_domain.py`, re-run on
+  prompt 01's tree: 1 944 calls, 140 below 1 keV, 307 below 3 keV; and
+  `ComputeTargets/tests/test_bbn_spline_floor.py` (b): lowest positive T 0.3628 keV, floor 0.2 keV).
+  The pre-check rule is unchanged, `T_Jordan_stop ≤ 0.1 × T_BBN_spline_min`, so **a history must
+  now reach 20 eV** (it was 0.01 eV): `--T-stop-GeV 1e-8` passes, `1e-7` fails with
+  `"pre-check: T_Jordan_stop=0.1 keV is more than 0.1*T_BBN_spline_min=20 eV"`
+  (`test_bbn_spline_floor (a)`). BBN abundances on β = 2 at `M = 0.5` and `10⁻³` are unchanged by
+  the narrowing, to every printed digit (log 06).
+
+#### 7.6.2 The Hubble-only patch, and why `p_NP` and `T_NP` are gone
+
+In the Jordan frame the plasma is minimally coupled: its energy is conserved and T_J follows the
+Standard-Model temperature law. The scalar field reaches the nuclear network only through the
+Jordan-frame expansion rate. The vendored PRyMordial is patched so that this is all it does:
+`PRyM_init.NP_hubble_flag`, when set, adds `PRyMthermo.rho_NP(Tg)` to the total density in
+`Hubble`, and nothing else reads it. `_configure_PRyMordial` sets `NP_thermo_flag = False` and
+`NP_hubble_flag = True` and raises `AssertionError` unless `NP_nu_flag`, `NP_e_flag` and
+`julia_flag` are false and `compute_bckg_flag` is true.
+
+The route it replaces, `NP_thermo_flag`, put ρ_NP into `Hubble` as well, but also added
+`−3H(ρ_NP + p_NP)` and `dρ_NP/dT` to the plasma's `dT_γ/dt` and integrated a third variable
+`T_NP` that no output reads. The plasma then obeyed the Standard-Model equation only through a
+cancellation between two spline-derived terms, ρ̇_NP = −3H(ρ_NP + p_NP) with p_NP built from Ḣ_J,
+accurate to about `r · 1.2×10⁻³` (`numerical-methods-for-paper.md` §4). So:
+
+- **`p_NP` is gone** because its only consumers were those two terms. `jordan_Hdot_over_H2`, the
+  `ODEPolicy` call that gave π′, the `pressure_NP` field of `BBNDataValue` and its
+  `pressure_NP_MeV4` column, the derivative callback `drho_NP_dT`, `build_NP_callbacks` and
+  `NPCallbacks` are removed, and so are the |p_NP| and w_NP panels of `plot_ScalarModel.py`'s BBN
+  figure (now three panels).
+- **`T_NP` is gone** because with `NP_thermo_flag` off nothing integrates it: the thermodynamic
+  `solve_ivp` has two components (T_γ, T_ν), not three (`test_bbn_solver_failures (f)`: first
+  `y0` of length 2, against 3 on the earlier tree), and `rho_NP` is called only from `Hubble`
+  (callers `{'Hubble': N}`; `{'Hubble': 2029, 'dTgdt': 903, 'N_eff': 1}` before). The `cham03`
+  patch, which made `dTNPdt` return 0 so that an oscillating ρ_NP could finish, is reverted: the
+  upstream body is back, its singularity in a branch nothing enters.
+- **What was measured.** On β = 2 at `M = 0.5` and `10⁻³` the earlier route did not finish in
+  900 s in the planner's unloaded probe (campaign README §0.3), where the Hubble-only route takes
+  about 10 s. The Hubble-only route's abundances on the roster (full network; logs 01, 03, 05):
+
+| β, M | Yp | D/H ×10⁵ | ³He/H ×10⁵ | ⁷Li/H ×10¹⁰ | BBN wall |
+|---|---|---|---|---|---|
+| 2, 0.5 | 0.249229266 | 2.560889654 | 1.054673338 | 5.241925487 | 9.6 s |
+| 2, 10⁻³ | 0.2467606164 | 2.463862263 | 1.042634494 | 5.409240365 | 10.0 s |
+| 1.6, 10⁻⁵ | 0.2468788501 | 2.4647705 | 1.042121506 | 5.419865323 | 9.7 s (loaded) |
+| 2, 10⁻⁵ | 0.2467016048 | 2.46477019 | 1.042619141 | 5.407992384 | — |
+
+Walls are log 01's (unloaded) for the two β = 2 rows at `M = 0.5` and `10⁻³`, and log 03's (loaded)
+for β = 1.6. The β = 2, `M = 10⁻⁵` row is log 05's point-input run on `a522005`, before the spline floor moved
+(log 06 shows that the move changes nothing, to every printed digit, on the two β = 2 rows it
+re-ran).
+
+- With ρ_NP ≡ 0 the route is plain PRyMordial exactly (`==` on all four abundances,
+  `test_prym_passenger (b)`). The constant 0.08 ρ_SM family, small network, gives Yp 0.2536690816,
+  D/H 2.6481673, against the planner's Hubble-only reference to 1.8e-10 and 4.5e-11 relative
+  (`test_prym_passenger (c)`).
+- **A sensitivity that is PRyMordial's.** Run through the builder, the constant-ratio callback
+  differs from the exact constant family by a few ulp, and PRyMordial moves D/H by 1.06e-4 (Yp
+  2.8e-6) under that: `test_bbn_callbacks (h)` therefore compares the builder's callback on the new
+  route against the same callback on the earlier tree's Hubble-only route, at 1e-6, and prints the
+  1.06e-4 without bounding it (log 01, Deviation 3; the user accepted it on 2026-10-01). It is
+  another instance of `[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]`.
+
+#### 7.6.3 The wall-clock limit and the output checks
+
+- **The limit.** `PRyMclass(…, wall_clock_limit=None)`; with a limit, every `fun` and `jac` of the
+  eight `solve_ivp` calls is wrapped to check `time.monotonic()` against the deadline, and the
+  deadline is also checked before each of the eight calls. Past it, `PRyMWallClockLimitError(stage,
+  elapsed, limit)`, which `_run_PRyMordial` returns as a failure row
+  (`"PRyMordial: PRyMWallClockLimitError: …"`, naming the stage). The default is
+  `DEFAULT_BBN_WALL_CLOCK_LIMIT = 600.0` s (an unloaded full-network solve takes about 10 s; the
+  source quoted 34–120 s on a loaded ten-core machine); `main.py --bbn-wall-clock-limit SECS`
+  overrides it and `0` disables it; `compute_SM_baseline` has no limit and still raises. At
+  `1e-3` s the constant family fails in 0.001 s, in stage `'thermodynamics (no NP)'`
+  (`test_bbn_solver_failures (g)`). A timeout is a stored failure like any other: final within a
+  `VERSION_LABEL`, retried by `--retry-failed-bbn`.
+- **The output checks.** `_check_abundances` rejects a result unless all four abundances are
+  finite, `0 < Yp_BBN < 0.5` and `DOverH`, `He3OverH`, `Li7OverH` are `> 0`; the failure row's
+  reason is `"PRyMordial output: <every failing value>"`, truncated to 256
+  (`test_bbn_solver_failures (h)`). Before, such a result was stored as a success.
+- **The stage name** `'thermodynamics (no NP)'` is now the stage whose `Hubble` carries ρ_NP; it
+  keeps its name because `_check_solve_ivp` and the test of distinct stage names read it.
+
+#### 7.6.4 The vendored patches, for a PRyMordial upgrade
+
+`PRyM/` is a copy of PRyMordial pinned at `bf24c3d`. `PRYM_VERSION` is `"bf24c3d+ri02+sr01"`
+(`ri02` is `run-integrity` prompt 02's `_check_solve_ivp` hunks, §7.5; `sr01` is this campaign's
+prompt 01). The `cham03` hunk is **not** to be re-applied: it is reverted. Every `sr01` hunk
+carries the comment "ChamPBH science-readiness prompt 01". Line numbers are those after prompt 01
+(`1bc8977`); a PRyMordial upgrade re-applies them from this table:
+
+| file:lines | hunk |
+|---|---|
+| `PRyM_init.py:77–80` | `NP_hubble_flag = False`, after `NP_e_flag`, with a three-line comment |
+| `PRyM_main.py:35–68` | `class PRyMWallClockLimitError(Exception)` with `__init__(self, stage, elapsed, limit)` (attributes `stage`, `elapsed`, `limit`; message `"wall-clock limit of %.6g s exceeded in stage '%s': %.6g s elapsed"`); `_check_wall_clock(stage, t_start, limit)` (raises once `time.monotonic() - t_start > limit`; nothing if `limit is None`); `_limited(fn, stage, t_start, limit)` (returns `fn` itself if `limit is None`, else a wrapper that calls `_check_wall_clock` before `fn`) |
+| `PRyM_main.py:72–81` | `PRyMclass.__init__(self, my_rho_NP=None, my_p_NP=None, my_drho_NP_dT=None, my_delta_rho_NP=None, wall_clock_limit=None)`; `wall_clock_start = time.monotonic()` is the first statement |
+| `PRyM_main.py:141–143` | in `Hubble`: `if PRyMini.NP_hubble_flag: rho_tot += PRyMthermo.rho_NP(Tg)`, after the `NP_thermo_flag` line. Nothing else reads the flag |
+| `PRyM_main.py:211–219` | `dTNPdt` back to the upstream body (identical, by `diff`, to the function at `6d3ecfa`); the `cham03` comment and the commented-out lines are gone |
+| eight `solve_ivp` sites | before each, `_check_wall_clock("<stage>", wall_clock_start, wall_clock_limit)`; in each, `fun` → `_limited(fun, "<stage>", …)`, and `jac=J` → `jac=_limited(J, "<stage>", …)` where a `jac` is passed. The stages are `_check_solve_ivp`'s: `thermodynamics (with NP)` (`:268–279`), `thermodynamics (no NP)` (`:320–331`), `a(T)` (`:518–522`), `high-T n <-> p` (`:683–689`), `mid-T nuclear network (small)` (`:1127–1147`, with `jac`), `mid-T nuclear network (full)` (`:1219–1239`, with `jac`), `low-T nuclear network (small)` (`:1328–1348`, with `jac`), `low-T nuclear network (full)` (`:1408–1428`, with `jac`) |
+
+The Julia branches are not patched (`julia_flag` is checked false). `N_eff` is not changed, and
+with `NP_thermo_flag` off it no longer counts ρ_NP; ChamPBH neither stores nor reads it. No
+reaction rate, network, tolerance, `T_start`, `T_end`, `t_end` or sampling changed. `black` was
+applied to the new hunks of `PRyM_main.py` only (it was black-clean before); `PRyM_init.py` is not
+black-clean and was not reformatted. Source of the table: log 01, "What shipped".
+
+#### 7.6.5 Other things recorded
+
+- The Standard-Model baseline through the new route is unchanged to every printed digit
+  (`test_bbn_callbacks (i)`, full network: Yp 0.2468872958, D/H 2.462251065, ³He/H 1.042050273,
+  ⁷Li/H 5.423441017).
+- `[05-the-ratio-spline-may-ring-at-resolved-bounce-jumps]`: until measured, a PRyMordial failure
+  on this input cannot be attributed to the true H rather than to the spline (§3.6.2).
+- The pre-check now accepts a history that stops as high as 20 eV (`--T-stop-GeV 1e-8` passes;
+  it required 0.01 eV, `1e-11` GeV, before). That is what makes the source's physical-`M`
+  cross-check possible with `--T-stop-GeV 1e-8`; a history that runs to `T_CMB` passes under
+  both. A history that stops above 20 eV stores a pre-check failure row.
 
 ---
 

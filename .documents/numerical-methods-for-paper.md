@@ -242,6 +242,100 @@ qualifies the audit's §4 statement.
     to ρ_NP. D/H differences below that level are not resolved.
     `[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]`
 
+### 4.1 Addendum (2026-10-02, `science-readiness` prompts 01, 05 and 06): the interface as it now is
+
+The bullets of §4 above describe the interface after `review-remediation` prompts 03 and 04. The
+campaign `science-readiness` replaced the route (prompt 01, `1bc8977`), narrowed the window
+(prompt 06, `835aa79`) and measured the sample grid (prompt 05, `c242f64`). This addendum states
+what is now true; nothing above is edited, and each bullet above that it contradicts is named.
+It is again a description of the code, not a statement of what the paper should claim.
+
+**Provenance tags.**
+
+| Tag | What it is |
+|---|---|
+| **[sr-01]**, **[sr-03]**, **[sr-05]**, **[sr-06]** | `prompts/science-readiness/logs/01-…`, `03-…`, `05-…`, `06-…`, on the trees those logs name |
+| **[sr-README]** | that campaign's README §0.3 and §6.1: the planner's probes (`planning-probes/`) on `6aaa706` |
+
+**Replaces "Why the plasma is unaffected".** The argument of §4 (the two terms
+−3H(ρ_NP + p_NP) and dρ_NP/dT cancel because p_NP is built from Ḣ_J) is replaced by a statement:
+the plasma is unaffected *by construction*.
+
+- The vendored PRyMordial now adds ρ_NP to the expansion rate `Hubble` and nowhere else
+  (`NP_hubble_flag`; `NP_thermo_flag` is off). The thermodynamic solve integrates (T_γ, T_ν),
+  two components, and ρ_NP is called only from `Hubble` [sr-01, `test_bbn_solver_failures (f)`:
+  `y0` lengths `[2, 1, 2, 8, 8]`, against `[3, 1, 2, 8, 8]` before; callers `{'Hubble': N}`
+  against `{'Hubble': 2029, 'dTgdt': 903, 'N_eff': 1}`].
+- In the Jordan frame the plasma is minimally coupled, its energy is conserved, and T_J follows
+  the Standard-Model law. So the residual of about r · 1.2e-3 that the cancellation left no longer
+  exists, and neither does the third variable T_NP.
+- With ρ_NP ≡ 0 the route is plain PRyMordial, bit for bit: the four abundances compare `==`
+  [sr-01, `test_prym_passenger (b)`].
+- The route that this replaces did not finish in 900 s on β = 2 at `M = 0.5` or `10⁻³`, in the
+  planner's unloaded probe, where the Hubble-only route takes about 10 s [sr-README §0.3, §6.1].
+
+**Replaces "What is handed over" and "The passenger patch".**
+
+- Only ρ_NP is handed over: `ρ_NP = 3 M_P² H_J² − ρ_R,J (1 + f_m)` with the **point** `H_J` of
+  each stored sample. `p_NP`, `Ḣ_J/H_J²`, its Ω″π² term, `dρ_NP/dT`, `NP_thermo_flag = True` and
+  `Tstart_NP` are all gone [sr-01]. The `cham03` patch (`dTNPdt` returning 0) is reverted, because
+  `dTNPdt` is never called.
+- The window is **[0.2 keV, 100 MeV]**, not [0.1 eV, 100 MeV]. PRyMordial's lowest callback query
+  is 0.3628 keV and its highest 10 MeV [sr-01 and sr-06, `test_bbn_spline_floor (b)`]. The
+  pre-check keeps its rule, `T_Jordan_stop ≤ 0.1 × (the floor)`, so a history must reach **20 eV**
+  (it was 0.01 eV). That remains "at least one decade below the nucleosynthesis window" against
+  the floor, and about 1.3 decades below PRyMordial's lowest query (log₁₀ 362.8/20 = 1.26). BBN abundances on β = 2 at
+  `M = 0.5` and `10⁻³` do not change with the narrowing, to every printed digit [sr-06].
+- The ratio r = ρ_NP/ρ_R,J is still splined, cubic against ln(T/MeV), and multiplied back by the
+  thermodynamic ρ_SM, as in §4. The paper's asinh description is still not true. The derivative
+  of the density is no longer supplied.
+
+**Checks added** [sr-01]. Each is a stored failure row with a reason, not a stored result:
+
+- a wall-clock limit on a PRyMordial solve (default 600 s, `--bbn-wall-clock-limit`, 0 disables);
+  an unloaded full-network solve takes about 10 s;
+- a check of the output: all four abundances finite, `0 < Yp < 0.5`, and D/H, ³He/H and ⁷Li/H
+  positive;
+- fewer than four samples in the window, and a non-finite callback value, raise
+  `ComputationFailureError`.
+
+**Measured results of the new route** (full network, one history at a time; the same digits were
+printed on every tree from prompt 01 on, unless noted) [sr-01, sr-03, sr-05]:
+
+| β, M | Yp | D/H ×10⁵ | ³He/H ×10⁵ | ⁷Li/H ×10¹⁰ |
+|---|---|---|---|---|
+| 2, 0.5 | 0.249229266 | 2.560889654 | 1.054673338 | 5.241925487 |
+| 2, 10⁻³ | 0.2467606164 | 2.463862263 | 1.042634494 | 5.409240365 |
+| 2, 10⁻⁵ [sr-05] | 0.2467016048 | 2.46477019 | 1.042619141 | 5.407992384 |
+| 1.6, 10⁻⁵ | 0.2468788501 | 2.4647705 | 1.042121506 | 5.419865323 |
+| baseline (ρ_NP ≡ 0) | 0.2468872958 | 2.462251065 | 1.042050273 | 5.423441017 |
+
+The baseline is the value in the baseline bullet of §4, and it did not move. These carry PRyMordial's
+sensitivity (the caveat of §4): a few-ulp difference in ρ_NP moves D/H by about 1e-4 relative
+[sr-01, Deviation 3], so differences of that size between two runs are not resolved.
+
+**The sample grid in PRyMordial's window** [sr-05]. §3 says histories are stored on 250 samples
+per decade of 1 + z, so ΔN = 0.0092 e-folds. In PRyMordial's window that grid *resolves* the
+bounces: the median number of half-periods of π per sample cell is 0 from 100 MeV down to about
+100 eV, on β = 1.6 and 2 at `M = 10⁻⁵` and β = 2 at `M = 0.5`. Aliasing begins below about 100 eV
+(1 half-period per cell at 10–100 eV; 5–17 at 0.1–10 eV for `M = 10⁻⁵`). So the jumps of
+ρ_NP/ρ_R,J below 3 keV are resolved bounces, a sawtooth, not phase noise. Averaging H² over each
+cell was built and measured and is not in the code; BBN is handed the point values. If the text
+claims that the BBN stage resolves the rebounds, this is the measurement for it; for the
+adiabatic stage, which reads the late samples, it is the measurement against (§5,
+`[post-adiabatic-Q-reads-aliased-late-samples]`). Whether the spline through the resolved jumps
+rings between samples is not measured (`[05-the-ratio-spline-may-ring-at-resolved-bounce-jumps]`).
+
+**What a history now stores beyond §3** [sr-03; `science-readiness` logs 02 and 06b]. Three
+whole-history quantities, on the `ScalarModel` row: the failure reason; the first bounce; and φ
+and ρ_NP/ρ_R,J at T_J = 1 MeV and 70 keV. The first bounce is the root of π on the dense output.
+The sample-based estimate cannot replace it: it returned 0.39 MeV for 420.76 MeV at β = 1.6,
+`M = 10⁻⁵`. The dense-output values are `N` = 20.34302685, T_J = 746.63 MeV at β = 2, `M = 0.5`;
+20.35208223, 746.69 MeV at `10⁻³`; and 18.97443372, 420.76 MeV at β = 1.6, `M = 10⁻⁵`.
+`numerical-strategies.md` §3.6 has the definitions and the fixed-T values.
+
+The stored `VERSION_LABEL` is `"2026.6.0"`, and every earlier store is invalid.
+
 ## 5. What is not yet fixed that the paper's text touches
 
 All of these are on the board, `prompts/review-remediation/IMPLEMENTATION_STATE.md` §3.
@@ -310,3 +404,17 @@ All of these are on the board, `prompts/review-remediation/IMPLEMENTATION_STATE.
 - **The kicking table's provenance** (§2). `[00-kicking-function-table-has-no-provenance-in-the-repository]`
 - **The table–g mismatch through the QCD and electroweak crossovers** (§2).
   `[05-kicking-table-and-saikawa-shirai-gs-disagree-through-qcd-and-ew]`
+
+## Addendum to §5 (2026-10-02, `science-readiness` prompt 04)
+
+- **The initial condition (review H8): now an option and a warning.** φ\* is `--phi-init-Mp`
+  (M_P units, default 5.0, in the shared parser); the three drivers (`main.py`, `plot_by_beta.py`,
+  `plot_ScalarModel.py`) build it from the option, and no `5.0 * units.PlanckMass` literal is left.
+  π\* = 0 stays. A coupling with ln Ω(φ\*) + ln T\* > ln M_P is warned about before step 1 (one
+  line each and a count) and is computed like any other; none is skipped or refused. Measured
+  [`science-readiness` log 04]: β ∈ {1, 6, 7, 25, 40} at φ\* = 5, T\* = 2×10⁴ GeV selects
+  {7, 25, 40}, and {40} at φ\* = 1. On the YAML grids at T\* = 2×10⁴ GeV, φ\* = 5 warns 93 of
+  125 values for the exponential grid (from β = 6.526), 33 of 65 for `starobinsky.yaml` (from
+  β = 6.55) and none for `recliner.yaml`. The paper's two statements of the initial value (5 M_P
+  and 10 M_P) are for the authors; the option makes either reproducible.
+  `[00-initial-field-value-is-hard-coded-and-unchecked]` is resolved.

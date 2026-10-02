@@ -121,3 +121,96 @@ measurement against it. Open issue `[00-stored-samples-alias-the-rebounds]`.
 - The audit's remark in §1 that the paper's inner two caps "hold only for $M \approx 3\times10^{-3}$
   and $M = 10^{-2}$ respectively" is the origin of row 2's arithmetic; the audit did not attempt
   to say which $M$ the authors had in mind.
+
+## 5. Added 2026-10-02 (`science-readiness`, prompt 08): the BBN-interface sentences
+
+**Written:** 2026-10-02, by prompt 08 of the `science-readiness` campaign. **Not edited:** nothing
+in `Paper1.tex` has been changed. The file was read on 2026-10-02 at the path in this document's
+header (last modified 2026-10-01 12:04). Line numbers are those of that read and will move.
+
+**What this section covers.** The paragraph "Interface to nucleosynthesis" (`\para`, 3127–3155 in
+`NumericalSection`) and the sentence in "Nucleosynthesis" that points back to it (3668–3677). §1
+above covers only the integrator paragraphs ("Stiffness", "Resolving the reflections", "Reflecting
+boundary condition"). The "Thermodynamics" and "Adiabaticity" paragraphs are not touched by this
+campaign.
+
+**Code.** "Then" is tree `eba4473` (`review-remediation` prompt 04, 2026-09-29): ratio splines,
+`NP_thermo_flag` on, the pressure and density-derivative callbacks, the spline floor at 0.1 eV.
+That is also the tree whose behaviour the paper's asinh sentences already did not describe. "Now"
+is `541c048`, the tree after prompt 07 (`VERSION_LABEL 2026.6.0`, `PRYM_VERSION
+bf24c3d+ri02+sr01`). "Log NN" is `prompts/science-readiness/logs/NN-….md`. The mechanism is in
+[`numerical-strategies.md` §7.6](numerical-strategies.md) and, for measurements, in
+[`numerical-methods-for-paper.md` §4.1](numerical-methods-for-paper.md). Suggested sentences are
+drafts, as in §1.
+
+### 5.1 Sentences that disagree with the code
+
+| # | Paper sentence (approx. line) | Then (`eba4473`) | Now (`541c048`) | Measurement | Suggested replacement |
+|---|---|---|---|---|---|
+| 10 | "This requires the additional energy density and pressure, relative to the Standard Model radiation and matter budget, as functions of the Jordan-frame temperature." (3132–3134) and "we pass the additional energy density and pressure, relative to the Standard Model energy budget, as functions of $T_J$, to the PRyMordial code" (3672–3674) | ρ_NP and p_NP were both built; p_NP from Ḣ_J through the Einstein-to-Jordan conversion (with its Ω″π² term), and passed with `NP_thermo_flag` on | **Only the density is built and passed.** There is no pressure, no Ḣ_J reconstruction and no `NP_thermo_flag`. ρ_NP = 3 M_P² H_J² − ρ_R,J (1 + f_m) enters PRyMordial's expansion rate and nothing else; the plasma temperature equation is the Standard-Model one | Log 01: `NP_hubble_flag` read once, in `Hubble`; thermodynamic `solve_ivp` has 2 components (3 before); `rho_NP` is called only from `Hubble` (`{'Hubble': N}` against `{'Hubble': 2029, 'dTgdt': 903, 'N_eff': 1}`); `pressure_NP`, `drho_NP_dT`, `jordan_Hdot_over_H2` and `Tstart_NP` are absent from the tree; ρ_NP ≡ 0 is plain PRyMordial exactly (`==` on four abundances). The earlier route did not finish in 900 s at β = 2, M = 0.5 and 10⁻³ (campaign README §0.3, §6.1), where this one takes about 10 s | "This requires the additional energy density, relative to the Standard Model radiation and matter budget, as a function of the Jordan-frame temperature. We supply it to the nucleosynthesis code through the expansion rate only; the plasma's temperature evolution is left as in the Standard Model." (and delete "and pressure" at 3672) |
+| 11 | "These are signed quantities that span many decades across the relevant temperature window. A logarithmic representation cannot accommodate the sign changes, and a linear one loses all precision where the contribution is small. We therefore interpolate the inverse hyperbolic sine of each quantity against $\log T_J$, and invert the transformation on evaluation. This behaves logarithmically where the argument is large and linearly where it is small, and remains smooth and single-valued through zero." (3135–3146) | **Already wrong at `eba4473`, and before this campaign:** the asinh splines of ρ_NP and P_NP were replaced in `review-remediation` prompt 04 by cubic splines of the ratios r = ρ_NP/ρ_R,J and s = p_NP/ρ_R,J against ln(T/MeV), multiplied back by ρ_SM(T) | One cubic spline of r = ρ_NP/ρ_R,J against ln(T/MeV) on the stored samples with T_J in [0.2 keV, 100 MeV], multiplied by ρ_SM(T) = (π²/30) g_ρ(T) T⁴ (no transform, no sort: a non-monotonic T_J is refused). r is signed and of order 10⁻²–10⁻¹, not a quantity spanning many decades: ρ_NP spans decades only through the factor ρ_SM ∝ T⁴ | Numerical-methods note §4 [bbn]: constant ratio, spurious ρ_NP/ρ_SM **5.2e-17** (asinh 7.9e-10); an oscillating ratio **9.75e-9** (asinh 3.3e-8). Log 05 (ratio windows, four histories, 0.3 keV–100 keV): −0.0737 ≤ r ≤ 0.11, so |r| ≤ 0.11 in every window printed | "We interpolate the ratio $r = \rho_{\rm NP}/\rho_{R,J}$, which is signed and of order $10^{-2}$ to $10^{-1}$ in the relevant window, with a cubic spline in $\ln T_J$, and multiply it by the Standard Model radiation density $\rho_{\rm SM}(T) = (\pi^2/30)\,g_\rho(T)\,T^4$ evaluated at the same temperature." |
+| 12 | "The temperature derivative of the density is obtained by differentiating the same interpolant and applying the chain rule, rather than by differencing, so that the density and its derivative supplied to the nucleosynthesis solver are consistent with each other." (3147–3151) | From `eba4473`: `dρ_NP/dT = r′ ρ_SM/T + r ρ_SM′`, the analytic derivative of the ratio spline (the chain rule of the paper's sentence was for the asinh form, since gone) | **No derivative is supplied.** PRyMordial is given ρ_NP(T) only, and reads it only in `Hubble`. The `drho_NP_dT` callback does not exist | Log 01 (`build_rho_NP_callback` returns one callable; `jordan_Hdot_over_H2`, `NPCallbacks`, `drho_NP_dT` removed). The derivative's old consumer was the `dρ_NP/dT` term of the plasma equation, gone with `NP_thermo_flag` | Delete the sentence. If a statement about consistency is wanted: "the density is the only quantity supplied, so there is no derivative to keep consistent with it." |
+| 13 | "We require that the scalar solution extends at least one decade in temperature below the nucleosynthesis window, so that the interpolants are never extrapolated during the abundance calculation." (3152–3155) | `compute_BBN_data` refused a history that did not reach 0.1 × 0.1 eV = 0.01 eV. That is a decade below a spline floor of 0.1 eV, which is **not** the nucleosynthesis window: PRyMordial queries the callback only between 0.3628 keV and 10 MeV | The floor is 0.2 keV and the pre-check is T_stop ≤ 0.1 × 0.2 keV = **20 eV**. The sentence is true if "the nucleosynthesis window" is read as the interpolation range (0.2 keV to 100 MeV); it is about 1.3 decades (log₁₀ 362.8/20 = 1.26) below the lowest temperature PRyMordial queries. A request outside the range raises `ComputationFailureError` and is stored as a failure with its reason; nothing is extrapolated | Log 01 (`prym_callback_domain.py` on prompt 01's tree: lowest query 0.3628 keV, highest 10 MeV, no negative T; 1 944 calls); log 06 (`test_bbn_spline_floor (a)`: 10 eV passes, 100 eV fails; `(b)`: lowest positive query 0.3628 keV; abundances at β = 2, M = 0.5 and 10⁻³ unchanged to every printed digit by the narrowing) | "We require that the scalar solution extends at least one decade in temperature below the lowest temperature of the interpolation range, $0.2\,\mathrm{keV}$ (that is, to $20\,\mathrm{eV}$ or below), so that the interpolant is never extrapolated. The nucleosynthesis code queries only temperatures between $0.36\,\mathrm{keV}$ and $10\,\mathrm{MeV}$." |
+
+Rows 10–12 describe code that the paper's text never matched in the form given (rows 11 and 12 by
+`eba4473`) or that this campaign replaced (row 10, and the removal of the derivative in row 12).
+Row 13 changed numerically but not in kind.
+
+**Searched for and not found.** The paper has no sentence about the fictitious new-physics
+temperature $T_{\rm NP}$ or a temperature-dependent new-physics fluid, about `NP_thermo_flag`, or
+about a wall-clock limit (searched `Paper1.tex` for `T_{\rm NP}`, `thermo_flag`, `fictitious`,
+"new-physics fluid", "wall clock", "timeout"; the 13 lines matching "fluid" are all about the
+cosmological, radiation or a perfect fluid; "wall clock" and "timeout" match nothing). So no row corrects them: the removal of $T_{\rm NP}$ is
+internal to the code and §5.4 below states what the text may want to say instead.
+
+### 5.2 Statements the campaign leaves correct, or newly makes true
+
+- "A scalar that still carries an appreciable share of the energy budget at this epoch changes the
+  expansion rate at fixed plasma temperature, and therefore also changes the neutron-to-proton
+  ratio at freeze-out" (3662–3665): this is now exactly what the code does. The scalar enters the
+  nuclear network through the Jordan-frame H alone, and the plasma temperature obeys the
+  Standard-Model law (log 01, `test_bbn_solver_failures (f)`). Before this campaign it held only
+  to the order of a cancellation (≈ r · 1.2×10⁻³).
+- "we generally choose initial conditions with $\phi$ in the vicinity of $5\,M_{\rm P}$" (2898–2899):
+  the default of the new `--phi-init-Mp` is 5.0 (log 04), and a different value is a run option
+  rather than an edit to three drivers. The authors' `\ds` notes on the 5 against 10 $M_{\rm P}$
+  discrepancy (2066–2070, 2751, 2903) are about the paper, not the code; either value can be run.
+  Couplings with $\Omega(\phi_*) T_* > M_{\rm P}$ are warned about, and computed (log 04: at
+  $\phi_* = 5$, $T_* = 2\times10^4\,\mathrm{GeV}$, 93 of the 125 values of the exponential grid,
+  from $\beta = 6.526$).
+
+### 5.3 Statements to check against the new measurements
+
+No sentence of `NumericalSection` was found that claims the stored samples resolve the rebounds.
+If the authors write one, these are the measurements (log 05, Verification; the orchestrator's
+half-period counts per sample cell, ΔN = 0.0092):
+
+- **For the BBN stage: it holds in PRyMordial's window.** The median number of half-periods of π
+  per cell is 0 from 100 MeV down to about 100 eV, on β = 1.6 and 2 at M = 10⁻⁵ and β = 2 at
+  M = 0.5. The jumps of ρ_NP/ρ_R,J below 3 keV at small M are resolved bounces, not phase noise.
+  The text should not say the BBN input is smoothed or averaged: it is not.
+- **Against the adiabatic stage: it fails below about 100 eV.** At M = 10⁻⁵ the median is 1
+  half-period per cell at 10–100 eV, 5–7 at 1–10 eV and 16–17 at 0.1–1 eV. That is
+  `[post-adiabatic-Q-reads-aliased-late-samples]`, open. §3.3 above is **narrowed**, not closed:
+  `[00-stored-samples-alias-the-rebounds]` has no BBN half; its adiabatic half stays.
+- **Not measured.** Whether the cubic spline through the resolved jumps rings between samples
+  (`[05-the-ratio-spline-may-ring-at-resolved-bounce-jumps]`), so a PRyMordial failure on this input
+  cannot yet be attributed to the true H rather than to the interpolation.
+
+### 5.4 What the text may want to state that it does not
+
+Not corrections; additions the authors may want in the numerical section or its limitations:
+
+- **A bound on each nucleosynthesis solve.** A PRyMordial solve is limited to 600 s of wall time by
+  default (an unloaded full-network solve takes about 10 s), and a solve that exceeds it, that
+  fails, or whose output is outside the checks (finite, $0 < Y_p < 0.5$, positive D/H, ³He/H and
+  ⁷Li/H) is recorded as a failure with its reason and excluded, not stored as a result (log 01).
+- **PRyMordial's sensitivity.** A few-ulp change in ρ_NP moves D/H by about $10^{-4}$ relative
+  (log 01, Deviation 3: 1.06e-4, Yp 2.8e-6; the review-remediation issue
+  `[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]`). D/H differences below that
+  level between two runs are not resolved.
+- **The first bounce** is stored from the dense output, because it cannot be recovered from the
+  samples at small M: the sample-based estimate returned 742.79 MeV for 746.69 MeV at β = 2,
+  M = 10⁻³, and 0.39 MeV for 420.76 MeV at β = 1.6, M = 10⁻⁵ (log 03). Any figure of
+  "delivery temperature against $\beta$" should be made from the stored value
+  (`numerical-strategies.md` §3.6).

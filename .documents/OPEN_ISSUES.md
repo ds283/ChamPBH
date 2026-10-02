@@ -1,10 +1,10 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-02 · **24 open**: 6 on the `review-remediation` board (closed
-2026-09-30), 1 of them assigned to `science-readiness`; 2 on the `production-readiness` board
+**Last updated:** 2026-10-02 · **22 open**: 5 on the `review-remediation` board (closed
+2026-09-30), none now assigned to `science-readiness`; 2 on the `production-readiness` board
 (closed 2026-09-30); 4 on the `run-integrity` board (closed 2026-09-30); 9 on the
 `integrator-remediation` board (closed 2026-10-01), 1 of them assigned to `science-readiness`;
-3 on the `science-readiness` board (planned 2026-10-01, 8 of 10 landed; prompt 06b added 2026-10-02).
+2 on the `science-readiness` board (planned 2026-10-01, 9 of 10 landed; prompt 06b added 2026-10-02).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -31,7 +31,7 @@ opened after that on 2026-09-29 are resolved (board §4). One opened by prompt 0
 one by prompt 04, one by prompt 05, one by prompt 06. The campaign closed on 2026-09-30; these rows
 stay here until a later campaign takes them. Four were assigned on 2026-09-30; all four are
 resolved (§1.2). Three more were assigned on 2026-09-30 to `run-integrity` (§1.4); all three
-are resolved. Three more were assigned on 2026-10-01 to `science-readiness` (§1.7); one since resolved (prompt 06 of that campaign).
+are resolved. Three more were assigned on 2026-10-01 to `science-readiness` (§1.7); all three since resolved (prompts 04, 06 and 08 of that campaign).
 
 - `[00-kicking-function-table-has-no-provenance-in-the-repository]` —
   `CosmologyModels/GenericEOS/Xav_EOS_data.csv` was added in commit `1759515` without the script
@@ -132,8 +132,6 @@ two were assigned on 2026-10-01 to `science-readiness` (§1.7), one of them sinc
 Assigned 2026-10-01 when the campaign was planned. Each entry stays on its own board, which
 carries the **Assigned** line; the prompt that closes one deletes its row here.
 
-- `[04-numerical-strategies-describes-the-removed-asinh-bbn-interface]` — §7.2–7.4 need a dated
-  addendum. `review-remediation`; prompt 08.
 - `[00-stored-samples-alias-the-rebounds]` — the z grid samples fast bounces at random phase below
   about 100 eV; narrowed by prompt 05: no BBN half (resolved in PRyMordial's window); the adiabatic
   half stays open. `integrator-remediation`.
@@ -141,12 +139,10 @@ carries the **Assigned** line; the prompt that closes one deletes its row here.
 ### 1.8 `science-readiness` — [board §3](../prompts/science-readiness/IMPLEMENTATION_STATE.md)
 
 Seven opened by the planner on 2026-10-01, one per campaign item with no issue elsewhere.
-Prompt 01 (2026-10-01) closed three, prompt 03 (2026-10-02) one, prompt 05 (2026-10-02) one and
-prompt 07 (2026-10-02) one (board §4). Prompt 05 opened two (`[05-…]`). The re-plan of 2026-10-02 opened one for prompt
+Prompt 01 (2026-10-01) closed three, prompt 03 (2026-10-02) one, prompt 05 (2026-10-02) one,
+prompt 07 (2026-10-02) one and prompt 08 (2026-10-02) one (board §4). Prompt 05 opened two (`[05-…]`). The re-plan of 2026-10-02 opened one for prompt
 06b, which closed it (2026-10-02).
 
-- `[00-documents-describe-the-thermo-route]` — three documents describe the replaced route.
-  Prompt 08.
 - `[05-the-ratio-spline-may-ring-at-resolved-bounce-jumps]` — the cubic spline through the
   ratio's resolved bounce jumps may overshoot between samples; unmeasured.
 - `[05-the-value-factory-compares-stored-phi-against-pi]` — `ScalarModelValue_factory.build`

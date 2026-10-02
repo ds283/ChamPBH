@@ -1,8 +1,9 @@
 # Science-readiness campaign — implementation state
 
-**Last updated:** 2026-10-02 · **Status: IN PROGRESS — 8 of 10 landed** (prompt 01, with
+**Last updated:** 2026-10-02 · **Status: IN PROGRESS — 9 of 10 landed** (prompt 01, with
 deviations; prompt 02; prompt 03, with deviations; prompt 04, with deviations; prompt 05,
-measurement only, the averaging withdrawn; prompt 06; prompt 06b, with deviations; prompt 07, with deviations). Planned on 2026-10-01 against
+measurement only, the averaging withdrawn; prompt 06; prompt 06b, with deviations; prompt 07, with deviations;
+prompt 08, documents only). Planned on 2026-10-01 against
 `main` at `6aaa706`, from a Claude Science re-evaluation kept at
 [`source/campaign_reevaluation_2026-10-01.md`](source/campaign_reevaluation_2026-10-01.md) and
 checked against the tree by the planner (README §0.3). Suites at `6aaa706`: CosmologyModels 18,
@@ -13,7 +14,7 @@ land on it.
 made before 2026.6.0 is invalid, and the science run needs a fresh datastore file (columns are
 added with no migration). `PRYM_VERSION` is `"bf24c3d+ri02+sr01"`. Suites after prompt 01:
 CosmologyModels 18, ComputeTargets 71, Datastore 17. After prompt 02: 18, 75, 21. After
-prompt 03: 18, 82, 26. After prompt 04: 18, 86, 26. After prompt 05 (no code): 18, 86, 26. After prompt 06: 18, 88, 26. After prompt 06b: 18, 91, 31. After prompt 07: 18, 103, 31.
+prompt 03: 18, 82, 26. After prompt 04: 18, 86, 26. After prompt 05 (no code): 18, 86, 26. After prompt 06: 18, 88, 26. After prompt 06b: 18, 91, 31. After prompt 07: 18, 103, 31. After prompt 08 (no code): 18, 103, 31.
 
 The campaign hands the scalar field to PRyMordial through the expansion rate alone, with a patched
 PRyMordial that has no fictitious new-physics temperature and an optional wall-clock limit. It
@@ -166,7 +167,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | 06 | [Narrow the BBN spline to PRyMordial's range](06-bbn-spline-floor.md) | **L** | Sonnet | ✍️ 2026-10-01 | ✅ 2026-10-02 | see `git log` ("Narrow the BBN spline floor to 0.2 keV") | [`logs/06-bbn-spline-floor.md`](logs/06-bbn-spline-floor.md) |
 | 06b | [Store the fixed-temperature values on the `ScalarModel` row](06b-fixed-T-values.md) (added 2026-10-02) | **V** | Opus | ✍️ 2026-10-02 | ✅ 2026-10-02 (with deviations) | see `git log` ("Store phi and the NP ratio at 1 MeV and 70 keV on ScalarModel") | [`logs/06b-fixed-T-values.md`](logs/06b-fixed-T-values.md) |
 | 07 | [Extraction and the science figures](07-extraction-and-figures.md) | **G** | Sonnet | ✍️ 2026-10-01 (re-planned 2026-10-02) | ✅ 2026-10-02 (with deviations) | see `git log` ("Add the extraction and the four science figures to plot_by_beta") | [`logs/07-extraction-and-figures.md`](logs/07-extraction-and-figures.md) |
-| 08 | [Documents](08-documents.md) | **D** | Sonnet | ✍️ 2026-10-01 | — | — | — |
+| 08 | [Documents](08-documents.md) | **D** | Sonnet | ✍️ 2026-10-01 | ✅ 2026-10-02 | see `git log` ("Document the Hubble-only BBN route and the stored observables") | [`logs/08-documents.md`](logs/08-documents.md) |
 | 09 | [Close-out verification and handover](09-close-out-verification.md) | close-out | Sonnet | ✍️ 2026-10-01 | — | — | — |
 
 ---
@@ -185,22 +186,19 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | L | **DEFECT, low** | The BBN spline reaches 0.1 eV, while PRyMordial reads to 0.363 keV. Closes `[00-bbn-spline-domain-is-far-wider-than-prymordial-uses]` (assigned). | 06 | **done** 2026-10-02 (log 06) |
 | V | **GAP** | φ and ρ_NP/ρ_R,J at 1 MeV and 70 keV are not stored on the `ScalarModel` row. Closes `[00-fixed-T-values-are-not-stored]`. Added 2026-10-02 (README §0.2, U6). | 06b | **done** 2026-10-02 (log 06b) |
 | G | **GAP** | No extraction or figures for the science run. Closes `[00-no-extraction-for-the-science-figures]`. | 07 | **done** 2026-10-02 (log 07) |
-| D | documents | Three documents describe the `NP_thermo_flag` route. Closes `[00-documents-describe-the-thermo-route]` and `[04-numerical-strategies-describes-the-removed-asinh-bbn-interface]` (assigned). | 08 | open |
+| D | documents | Three documents describe the `NP_thermo_flag` route. Closes `[00-documents-describe-the-thermo-route]` and `[04-numerical-strategies-describes-the-removed-asinh-bbn-interface]` (assigned). | 08 | **done** 2026-10-02 (log 08) |
 
 ---
 
 ## 3. Active and unresolved issues
 
 Seven opened by the planner on 2026-10-01, one per campaign item that has no issue on another
-board; prompt 01 closed three, prompt 03 one, prompt 05 one and prompt 07 one (§4), and one is open. Prompt 05
-opened two more (`[05-…]`). The re-plan of 2026-10-02 (README §0.2, U6) opened one more,
-`[00-fixed-T-values-are-not-stored]`, for prompt 06b, which closed it (§4). Seven more were assigned from other boards (§3.1); prompts 01, 02, 04
-and 06 closed five of them, prompt 05 narrowed one, and two are open.
+board; prompt 01 closed three, prompt 03 one, prompt 05 one, prompt 07 one and prompt 08 one (§4),
+and none is open. Prompt 05 opened two more (`[05-…]`), which are open. The re-plan of 2026-10-02
+(README §0.2, U6) opened one more, `[00-fixed-T-values-are-not-stored]`, for prompt 06b, which
+closed it (§4). Seven more were assigned from other boards (§3.1); prompts 01, 02, 04, 06 and 08
+closed six of them and prompt 05 narrowed one; the narrowed one stays open on its own board.
 
-- **[00-documents-describe-the-thermo-route]** *(README §1 D)*.
-  - **What.** `numerical-strategies.md` §7, `numerical-methods-for-paper.md` §4 and
-    `architecture-summary.md` §7.4 describe the `NP_thermo_flag` route and the pressure callback.
-  - **Next step.** Prompt 08, once the code is final.
 - **[05-the-ratio-spline-may-ring-at-resolved-bounce-jumps]** *(log 05, Observations)*.
   - **What.** In PRyMordial's window the ratio `ρ_NP/ρ_R,J` is a resolved sawtooth: it jumps by
     about +0.005 to +0.007 at each bounce (β = 1.6, M = 10⁻⁵, 0.3–3 keV) and drifts smoothly in
@@ -230,7 +228,7 @@ here (README §5 rule 4).
 |---|---|---|
 | `[00-initial-field-value-is-hard-coded-and-unchecked]` | `review-remediation` | 04 — **resolved 2026-10-02** (§4) |
 | `[00-bbn-spline-domain-is-far-wider-than-prymordial-uses]` | `review-remediation` | 06 — **resolved 2026-10-02** (§4) |
-| `[04-numerical-strategies-describes-the-removed-asinh-bbn-interface]` | `review-remediation` | 08 |
+| `[04-numerical-strategies-describes-the-removed-asinh-bbn-interface]` | `review-remediation` | 08 — **resolved 2026-10-02** (§4) |
 | `[02-a-short-bbn-sample-grid-escapes-compute-bbn-data]` | `run-integrity` | 01 (P4) — **resolved 2026-10-01** (§4) |
 | `[02-the-bbn-callbacks-do-not-check-their-values-for-finiteness]` | `run-integrity` | 01 (P4) — **resolved 2026-10-01** (§4) |
 | `[00-scalarmodel-failure-rows-carry-no-reason]` | `integrator-remediation` | 02 — **resolved 2026-10-01** (§4) |
@@ -239,6 +237,26 @@ here (README §5 rule 4).
 ---
 
 ## 4. Resolved issues
+
+- **[00-documents-describe-the-thermo-route]** *(README §1 D)*.
+  - **What.** `numerical-strategies.md` §7, `numerical-methods-for-paper.md` §4 and
+    `architecture-summary.md` §7.4 describe the `NP_thermo_flag` route and the pressure callback.
+  - **Next step.** Prompt 08, once the code is final.
+  - **Resolved (2026-10-02):** by prompt 08 (log 08). Dated, additive addenda, with no deletion in
+    any file (`git diff --numstat`): `numerical-strategies.md` §3.6 (what the `ScalarModel` row now
+    carries; log 05's half-period counts and the withdrawn averaging) and §7.6 (the route as it is:
+    the single ρ_NP ratio spline, the [0.2 keV, 100 MeV] window and the 20 eV pre-check, the
+    Hubble-only patch, why `p_NP` and `T_NP` are gone, the wall-clock limit, the output checks, and
+    every `PRyM/` hunk for an upgrade); `numerical-methods-for-paper.md` §4.1 (replaces "Why the
+    plasma is unaffected" by statement) and an addendum to §5; `architecture-summary.md` notes at
+    the file tree, the CLI options, the `ScalarModel` schema, §7.4 and the pipeline stages;
+    `paper-corrections-numerical-section.md` §5 (rows 10–13).
+- **[04-numerical-strategies-describes-the-removed-asinh-bbn-interface]** *(assigned from
+  `review-remediation`; §3.1)*. **Resolved (2026-10-02):** by prompt 08 (log 08).
+  `numerical-strategies.md` §7.6 states that §7.2–§7.4 (asinh, sort, `sinh`) were superseded in
+  `review-remediation` prompt 04 (`eba4473`), and then that §7.1, §7.3–§7.5 were superseded by
+  prompts 01 and 06 of this campaign; nothing above §7.6 is edited. The dated **Resolved** line is
+  also on the `review-remediation` board.
 
 - **[00-no-extraction-for-the-science-figures]** *(README §1 G)*.
   - **What.** None of the four Phase D figures, nor a per-history table, can be produced from a
