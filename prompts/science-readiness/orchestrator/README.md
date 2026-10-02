@@ -1,6 +1,6 @@
 # Orchestrator prompts — the science-readiness campaign
 
-Nine prompts, one per campaign prompt. Each dispatches one fresh-context subagent, reviews its
+Ten prompts, one per campaign prompt (06b added 2026-10-02). Each dispatches one fresh-context subagent, reviews its
 commit against fixed criteria, and either continues or stops and reports to the user.
 
 | Orchestrator | Campaign prompt | Character |
@@ -11,6 +11,7 @@ commit against fixed criteria, and either continues or stops and reports to the 
 | [`prompt-04.md`](prompt-04.md) | 04, φ\* | One option and a guard. The review: no literal left, and the arithmetic |
 | [`prompt-05.md`](prompt-05.md) | 05, bounce averages | Quadrature in the sampling. The review: the β = 1.6, M = 10⁻⁵ witness, the cost, and no point value or trajectory moved |
 | [`prompt-06.md`](prompt-06.md) | 06, the spline floor | A default. The review: the pre-check and the abundances |
+| [`prompt-06b.md`](prompt-06b.md) | 06b, the fixed-`T` values (added 2026-10-02) | Two pure functions and four columns. The review: the samples agree, the round trip under `_do_not_populate`, and no trajectory moved |
 | [`prompt-07.md`](prompt-07.md) | 07, extraction and figures | Pure functions and plotting. The review: the tests and the synthetic figures |
 | [`prompt-08.md`](prompt-08.md) | 08, documents | Additive only. The review is the `--numstat` |
 | [`prompt-09.md`](prompt-09.md) | 09, close-out | Verification only. The rule that it may not touch production code is the review |
@@ -21,7 +22,7 @@ Start a fresh context with, for example:
 
 > Read `prompts/science-readiness/orchestrator/prompt-01.md` and follow it.
 
-Run 01 → 09 in order. Each orchestrator's preconditions include the previous prompt's landing.
+Run 01 → 09 in order, with 06b between 06 and 07. Each orchestrator's preconditions include the previous prompt's landing.
 Do not start one with an earlier miss unresolved. Prompt 01's orchestrator checks that the board's
 Decisions record the user's ruling on README §0.2 P1–P9 before dispatching.
 

@@ -112,6 +112,27 @@ cell-mean field or column exists.** Where §1 A, §2 (i), (k), §3.1, §6.6 and 
 otherwise, this paragraph and the dated notes there govern. The text above them is left as
 planned.
 
+**Amended by the user, 2026-10-02 (prompt 07): U6, the fixed-temperature values belong on the
+`ScalarModel` row.**
+- **What went wrong.** Figure 4 and `histories.csv` need φ and ρ_NP/ρ_R,J at T_J = 1 MeV and
+  70 keV. The plan left them to be interpolated from the stored samples at plot time.
+  Prompt 07's first implementation (`a2deb00`) did that by removing `_do_not_populate` from
+  `plot_by_beta.py`'s `ScalarModel` and `BBNData` lookups. Every lookup then loaded a history's
+  whole sample table to produce four numbers.
+- **The ruling.** These are properties of the whole history, not of a sample, so they go on the
+  parent row, as the first bounce does (U4). `a2deb00` was reverted in `8fcb295`.
+- **The new prompt.** Prompt **06b** (item V; §2 (n)) computes the values on the dense output in
+  `compute_scalar_model` and stores them in four `ScalarModel` columns. Prompt 07 reads them with
+  `_do_not_populate` kept on every lookup.
+- **The user's answers to the planning questions.** The values are found on the dense output,
+  not by interpolating samples. The two temperatures are fixed constants, not a run option and
+  not part of the lookup key. The new prompt is numbered 06b. No 2026.6.0 store exists, so P9
+  holds and there is no bump.
+- **Log 07's deviation 2 is accepted.** `build_beta_plot` returns plain per-history records, and
+  `run_pipeline` gathers them across potentials for figure 2 and `histories.csv`.
+- Where §1, §2 (k), §3, §3.1, §6.8 and §7 say otherwise, this paragraph and the dated notes
+  there govern.
+
 ### 0.3 What the planner checked in the source, and what it found
 
 - **Its overlap with the repository holds.** β = 2, M = 10⁻⁵ gives 1 679 987 RHS, as in
@@ -180,6 +201,7 @@ fixed tree.
 | **P** | **GAP** (review H8) | φ\* = 5 M_P is a literal in three drivers. Nothing warns when A*T* > M_P. Closes `[00-initial-field-value-is-hard-coded-and-unchecked]`. | 04 |
 | **A** | **DEFECT, medium at M ≲ 10⁻⁴** (aliasing reaches PRyMordial) | Below a few keV the z grid samples the matter-era bounces at random phase. The stored ρ_NP/ρ_R,J then jumps from sample to sample by ±0.4 % (M = 10⁻⁵) to ±0.85 % (M = 10⁻³) around a median ten times smaller, and PRyMordial integrates a spline through that noise (§6.1). The source records one PRyMordial failure from it (β = 1.6, M = 10⁻⁵); the planner did not reproduce the failure, only the noise. Narrows `[00-stored-samples-alias-the-rebounds]` to its adiabatic half. | 05 |
 | **L** | **DEFECT, low** | The BBN spline runs from 100 MeV to 0.1 eV, while PRyMordial reads 10 MeV to 0.363 keV. Closes `[00-bbn-spline-domain-is-far-wider-than-prymordial-uses]`. | 06 |
+| **V** | **GAP** (a whole-history observable read from every sample) | φ and ρ_NP/ρ_R,J at T_J = 1 MeV and 70 keV are not stored. They can be read only by loading and interpolating every sample of every history. Closes `[00-fixed-T-values-are-not-stored]`. Added 2026-10-02 (§0.2, U6). | 06b |
 | **G** | **GAP** | No extraction or figure for the science run's four figures: Δ abundances against β with a running median and band, convergence in `M`, `T_deliver(β)`, and φ and ρ_NP/ρ_R at 1 MeV and 70 keV. | 07 |
 | **D** | documents | `numerical-strategies.md` §7, `numerical-methods-for-paper.md` §4 and `architecture-summary.md` §7.4 describe the `NP_thermo_flag` route and the pressure callback. Closes `[04-numerical-strategies-describes-the-removed-asinh-bbn-interface]`. | 08 |
 | — | close-out | Re-measure every §6 row on the final tree, run the roster of §6.9, and add a handover addendum. | 09 |
@@ -322,6 +344,17 @@ test on synthetic input:
 It also writes a CSV with one row per history: β, M, Λ, φ\*, the four abundances and the two
 shifts, `T_deliver`, the four fixed-`T` values, the reflection count, and the failure reasons.
 
+**Amended (2026-10-02, the user's ruling U6; §0.2).** This supersedes the figure 4 note above.
+- **Figure 4 and the CSV's fixed-`T` values** read `ScalarModel.fixed_T_values` (§2 (n), prompt
+  06b). No sample is loaded for them, and `value_at_T_Jordan` is withdrawn from this list.
+- **`_do_not_populate` stays** on every `ScalarModel`, `AdiabaticHistory` and `BBNData` lookup
+  in `plot_by_beta.py`.
+- **Accepted from the first implementation:**
+  - the figure and record builders live in `extract_common.py`, because `plot_by_beta.py`
+    parses `argv` and starts Ray at import, so a test cannot import it;
+  - `build_beta_plot` returns its records, and `run_pipeline` gathers them across potentials
+    (`store_results=True`) to draw figure 2 and write `histories.csv`.
+
 **(l) Units, conventions, the root.** As in `CLAUDE.md`. Everything runs from the repository
 root. `black` on changed files.
 
@@ -333,6 +366,41 @@ Its arguments are β, `M` in units of M_P, `--phi-init-Mp` (from prompt 04 on), 
 steps, reflections, wall time, the abundances and the failure reason, plus the first bounce from
 prompt 03 on. It grows with the prompts; each prompt that adds an output adds it to the driver.
 The planner's `planning-probes/bbn_route_probe.py` is its prototype.
+
+**(n) The fixed-temperature values (V; U6; added 2026-10-02).**
+
+The temperatures:
+- `FIXED_T_JORDAN_HIGH_MEV = 1.0` and `FIXED_T_JORDAN_LOW_MEV = 0.07`, module constants in
+  `ComputeTargets/ScalarModel.py`;
+- not a run option, and not part of the lookup key.
+
+The functions, in `ComputeTargets/ScalarModel.py`:
+- `T_Jordan_crossing(result: IntegrationResult, log_T) -> Optional[float]` walks the accepted
+  steps in order, on their own interpolants. It returns the `N` of the first step on which
+  `ln T_J − log_T` changes sign or reaches zero, located by `brentq` (`xtol=1e-15`). It returns
+  `None` if the history never reaches `log_T`.
+  - `ln T_J` is continuous across an elastic reflection, which flips π only.
+  - The Jordan temperature law is not monotonic in principle: `d ln T_J/dN` carries a
+    `1 + (d ln Ω/dφ) π` factor. A second crossing on a roster history is a stop for prompt 06b.
+- `fixed_T_values(result, policy, coupling, units) -> FixedTValues` reads the state at each
+  crossing.
+  - φ is the state's `phi_Einstein`.
+  - The ratio is `(3 M_P² H_J² − ρ_R,J (1 + f_m)) / ρ_R,J`. `H_J`, `ρ_R,J` and `f_m` come
+    from `ODEPolicy` and `HubblePolicy` as in the sampling loop. This is
+    `compute_BBN_data`'s per-sample expression, so at a sample's own `T_J` the stored ratio is
+    the one BBN sees.
+
+The type is `FixedTValues(phi_Einstein_1MeV, density_NP_ratio_1MeV, phi_Einstein_70keV,
+density_NP_ratio_70keV)`. Each field is a float, or `None` where the temperature is not reached.
+
+The rest:
+- `compute_scalar_model` returns it as `"fixed_T_values"`.
+- **The columns.** Four nullable `Float(64)` columns on the `ScalarModel` table, with the field
+  names. φ is in units of `M_P`. They are NULL where the temperature is not reached, and all four
+  are NULL on a failure row.
+- `ScalarModel.fixed_T_values` reads them back, works under `_do_not_populate`, and raises on a
+  failure row.
+- `BBNData` is unchanged.
 
 ---
 
@@ -346,6 +414,7 @@ The planner's `planning-probes/bbn_route_probe.py` is its prototype.
 | 04 | [The initial field as a run option, with a super-Planckian warning](04-initial-field-option.md) | **Sonnet** | One option read in three drivers; one pure check that only warns |
 | 05 | [Bounce averages on the dense output](05-bounce-averages.md) | **Opus** | Quadrature in the sampling loop, two columns, BBN reads the average; the β = 1.6, M = 10⁻⁵ witness |
 | 06 | [Narrow the BBN spline to PRyMordial's range](06-bbn-spline-floor.md) | **Sonnet** | A default and its pre-check, measured |
+| 06b | [Store the fixed-temperature values on the `ScalarModel` row](06b-fixed-T-values.md) (added 2026-10-02, §0.2 U6) | **Opus** | Two pure functions on the `OdeSolution`, four columns, the round trip under `_do_not_populate` |
 | 07 | [Extraction and the science figures](07-extraction-and-figures.md) | **Sonnet** | Pure extraction functions with tests; four figures and a CSV |
 | 08 | [Documents](08-documents.md) | **Sonnet** | No production code. Dated addenda; rows for the paper's corrections |
 | 09 | [Close-out verification and handover](09-close-out-verification.md) | **Sonnet** | No production code. Re-measure; the roster; an additive handover |
@@ -369,6 +438,12 @@ route  reason bounce  φ*    average floor  figures docs close-out
 - **Amended (2026-10-02).** Prompt 05 changed no code (§0.2 amendment). Prompt 06's before/after
   compares BBN on point input, against `a522005`'s code. Prompt 07 reads prompt 03's columns and
   the existing point fields.
+- **Amended (2026-10-02, U6).** The chain is now `06 ──► 06b ──► 07`.
+  - 06b comes after 03 because it follows 03's pattern and sits beside `first_bounce` in
+    `compute_scalar_model`.
+  - 06b comes before 07 because 07 reads its columns.
+  - 06b adds `ComputeTargets/ScalarModel.py`, `Datastore/SQL/ObjectFactories/ScalarModel.py`
+    and `tools/history_and_bbn.py` to the files below.
 
 Files edited by more than one prompt: `ComputeTargets/BBNData.py` (01, 05, 06),
 `ComputeTargets/ScalarModel.py` (02, 03, 05), `Datastore/SQL/ObjectFactories/ScalarModel.py`
@@ -647,7 +722,21 @@ holds a half-period.
 | D/H, Yp on β = 2, M = 0.5 and 10⁻³ against prompt 05's tree (amended 2026-10-02: prompt 05's tree has `a522005`'s code, so the reference is log 05's point-input figures) | — | **≤ 1e-5 relative**; the log quotes it | the driver |
 | a history stopped at `--T-stop-GeV 1e-8` passes the pre-check; one stopped at `1e-7` fails it with the pre-check reason | — | **as stated** | test (no solve: the pre-check returns before PRyMordial) |
 
+### 6.7b The fixed-temperature values (prompt 06b; added 2026-10-02)
+
+| quantity | now | target | witness |
+|---|---|---|---|
+| `T_Jordan_crossing` at three stored samples' own `ln T_J` (β = 2, `M = 0.5`, full history) | — | **the sample's `raw_N` to `1e-10`; φ to `1e-9` rel.; the ratio equal to `compute_BBN_data`'s expression on the sample to `1e-8` rel.** | test (about 2 s) |
+| a temperature the history does not reach (the P1 window) | — | **`None`** in all four fields | test |
+| a crossing on the step that ends at a reflection (P1 at `M = 1e-10`) | — | **found on that step; `ln T_J` continuous across the reflection to `1e-12`** | test |
+| round trip through a temporary SQLite store | — | **the four values back to the last bit; `None` back as `None`; a failure row raises; read under `_do_not_populate` returns the values** | Datastore test |
+| the driver on β = 2 at `M = 0.5` and `10⁻³`, β = 1.6 at `10⁻⁵` | not stored; the sample-interpolated value is the stand-in | **one crossing of each temperature; the four values recorded beside the stand-in; RHS, steps, bounces and first-bounce `N` unchanged** | the driver |
+
 ### 6.8 Extraction and figures (prompt 07)
+
+**Amended (2026-10-02, U6).** The edge case "`T` outside the range" is now prompt 06b's, since
+`value_at_T_Jordan` is withdrawn from §2 (k). The last row's "new columns" include 06b's four.
+The lookups keep `_do_not_populate`; the witness is a `grep` against `HEAD~1`.
 
 | quantity | target | witness |
 |---|---|---|
@@ -677,7 +766,8 @@ additively, after §4.9. It states at least:
    cell means per sample, with what each is for. **Amended (2026-10-02).** There are no cell
    means; prompt 05 withdrew them (§0.2 amendment). The handover states instead that BBN reads
    the point `H_J`. It also states log 05's finding: the z grid resolves the bounces above about
-   100 eV and aliases them below.
+   100 eV and aliases them below. **Amended (2026-10-02, U6).** A row also carries the four
+   fixed-temperature values of §2 (n), read without loading samples.
 4. **The options.** `--phi-init-Mp`, `--bbn-wall-clock-limit`, `--band-half-width`, and the
    super-Planckian warning (a warning only; such couplings are computed).
 5. **The roster's figures,** against the source's.

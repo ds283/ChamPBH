@@ -21,6 +21,23 @@
 > `plot_by_beta.py`. The first amendment above is superseded on this point. Do not dispatch this
 > prompt until it is re-planned.
 
+> **Re-planned 2026-10-02 (README §0.2, the U6 amendment; §2 (k) and (n)).** This supersedes both
+> notes above. Dispatch only after prompt 06b has landed.
+> - **Figure 4 and the CSV's four fixed-`T` values** read `ScalarModel.fixed_T_values`
+>   (log 06b). No sample is loaded for them.
+> - **`value_at_T_Jordan` is withdrawn.** There are three pure functions, not four. Test (c) is
+>   withdrawn. The "`T` outside the range" case is covered by prompt 06b's test (b).
+> - **`_do_not_populate` stays on every lookup in `plot_by_beta.py`.** Removing it from any
+>   lookup is §5's first stop condition. Stop and ask; do not record it as a deviation.
+> - **The ruled design, from the first implementation:**
+>   - The figure and record builders live in `extract_common.py`, because `plot_by_beta.py`
+>     parses `argv` and starts Ray at import.
+>   - `build_beta_plot` returns its plain records, and `run_pipeline` gathers them across
+>     potentials (`store_results=True`) to draw figure 2 and write `histories.csv`. §5's second
+>     stop condition does not apply to this.
+> - **Read first** also includes `logs/06b-fixed-T-values.md`, "State handed to the next prompt",
+>   for the property and the four column names.
+
 **Read first:**
 
 1. [`README.md`](README.md) §0.2 (U5), §0.3 (the last point), §2 (k), §5, §6.8.

@@ -1,6 +1,6 @@
 # Science-readiness campaign — implementation state
 
-**Last updated:** 2026-10-02 · **Status: IN PROGRESS — 6 of 9 landed** (prompt 01, with
+**Last updated:** 2026-10-02 · **Status: IN PROGRESS — 6 of 10 landed** (prompt 01, with
 deviations; prompt 02; prompt 03, with deviations; prompt 04, with deviations; prompt 05,
 measurement only, the averaging withdrawn; prompt 06). Planned on 2026-10-01 against
 `main` at `6aaa706`, from a Claude Science re-evaluation kept at
@@ -130,6 +130,19 @@ PRyMordial reads, and adds the extraction and the four figures of the science ru
   passed its five checks: allowed files; pure functions; tests (a)–(e), 13 OK; existing figures
   unchanged but for the caption; suites 18 / 101 / 26. Prompt 07 is suspended until re-planned;
   G and `[00-no-extraction-for-the-science-figures]` stay open.
+- **2026-10-02, the user: the re-plan (README §0.2, U6).** There is a new prompt 06b (item V)
+  between 06 and 07, with `orchestrator/prompt-06b.md`. The user's answers to the planning
+  questions:
+  - the values are found on the dense output (a `brentq` crossing of `ln T_J`), not by
+    interpolating samples;
+  - 1 MeV and 70 keV are fixed module constants, not a run option and not in the lookup key;
+  - the prompt is numbered 06b;
+  - no 2026.6.0 store exists, so there is no version bump.
+
+  Prompt 07 and its orchestrator carry dated "Re-planned" amendments: `value_at_T_Jordan` and
+  its test (c) are withdrawn, `_do_not_populate` is kept and checked, and log 07's deviation 2
+  and its builders-in-`extract_common.py` are the ruled design. The issue
+  `[00-fixed-T-values-are-not-stored]` is opened for 06b.
 
 Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
@@ -151,6 +164,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | 04 | [The initial field as a run option, with a super-Planckian warning](04-initial-field-option.md) | **P** | Sonnet | ✍️ 2026-10-01 | ✅ 2026-10-02 (with deviations) | see `git log` ("Make the initial field a run option and warn on a super-Planckian start") | [`logs/04-initial-field-option.md`](logs/04-initial-field-option.md) |
 | 05 | [Bounce averages on the dense output](05-bounce-averages.md) | **A** | Opus | ✍️ 2026-10-01 | ✅ 2026-10-02 (measurement only; the averaging withdrawn by the user's ruling) | see `git log` ("Withdraw the bounce averages: BBN's window is not aliased") | [`logs/05-bounce-averages.md`](logs/05-bounce-averages.md) |
 | 06 | [Narrow the BBN spline to PRyMordial's range](06-bbn-spline-floor.md) | **L** | Sonnet | ✍️ 2026-10-01 | ✅ 2026-10-02 | see `git log` ("Narrow the BBN spline floor to 0.2 keV") | [`logs/06-bbn-spline-floor.md`](logs/06-bbn-spline-floor.md) |
+| 06b | [Store the fixed-temperature values on the `ScalarModel` row](06b-fixed-T-values.md) (added 2026-10-02) | **V** | Opus | ✍️ 2026-10-02 | — | — | — |
 | 07 | [Extraction and the science figures](07-extraction-and-figures.md) | **G** | Sonnet | ✍️ 2026-10-01 | — | — | — |
 | 08 | [Documents](08-documents.md) | **D** | Sonnet | ✍️ 2026-10-01 | — | — | — |
 | 09 | [Close-out verification and handover](09-close-out-verification.md) | close-out | Sonnet | ✍️ 2026-10-01 | — | — | — |
@@ -169,6 +183,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | P | **GAP** | φ\* is a literal in three drivers, with no super-Planckian warning. Closes `[00-initial-field-value-is-hard-coded-and-unchecked]` (assigned). | 04 | **done** 2026-10-02 (log 04) |
 | A | **DEFECT, medium at M ≲ 10⁻⁴** | BBN integrates a spline through random-phase samples of the bounces below a few keV. Closes `[00-bbn-input-is-aliased-at-small-M]`; narrows `[00-stored-samples-alias-the-rebounds]` (assigned). | 05 | **withdrawn** 2026-10-02 (log 05): premise measured false; the user's ruling |
 | L | **DEFECT, low** | The BBN spline reaches 0.1 eV, while PRyMordial reads to 0.363 keV. Closes `[00-bbn-spline-domain-is-far-wider-than-prymordial-uses]` (assigned). | 06 | **done** 2026-10-02 (log 06) |
+| V | **GAP** | φ and ρ_NP/ρ_R,J at 1 MeV and 70 keV are not stored on the `ScalarModel` row. Closes `[00-fixed-T-values-are-not-stored]`. Added 2026-10-02 (README §0.2, U6). | 06b | open |
 | G | **GAP** | No extraction or figures for the science run. Closes `[00-no-extraction-for-the-science-figures]`. | 07 | open |
 | D | documents | Three documents describe the `NP_thermo_flag` route. Closes `[00-documents-describe-the-thermo-route]` and `[04-numerical-strategies-describes-the-removed-asinh-bbn-interface]` (assigned). | 08 | open |
 
@@ -178,9 +193,15 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
 Seven opened by the planner on 2026-10-01, one per campaign item that has no issue on another
 board; prompt 01 closed three, prompt 03 one and prompt 05 one (§4), and two are open. Prompt 05
-opened two more (`[05-…]`). Seven more were assigned from other boards (§3.1); prompts 01, 02, 04
+opened two more (`[05-…]`). The re-plan of 2026-10-02 (README §0.2, U6) opened one more,
+`[00-fixed-T-values-are-not-stored]`, for prompt 06b. Seven more were assigned from other boards (§3.1); prompts 01, 02, 04
 and 06 closed five of them, prompt 05 narrowed one, and two are open.
 
+- **[00-fixed-T-values-are-not-stored]** *(README §1 V; opened 2026-10-02 by the re-plan)*.
+  - **What.** Figure 4 and `histories.csv` need φ and ρ_NP/ρ_R,J at T_J = 1 MeV and 70 keV,
+    which are properties of the whole history. Nothing stores them. Reading them from the samples
+    means loading every sample of every history (`a2deb00`, reverted in `8fcb295`).
+  - **Next step.** Prompt 06b (README §2 (n)).
 - **[00-no-extraction-for-the-science-figures]** *(README §1 G)*.
   - **What.** None of the four Phase D figures, nor a per-history table, can be produced from a
     store.
