@@ -222,6 +222,9 @@ these 15 open; they pass to whichever campaign takes them (`.documents/review-re
   - **Assigned (2026-10-01):** to the [`science-readiness`](../science-readiness/IMPLEMENTATION_STATE.md) campaign, prompt 06. The planner measured PRyMordial's
     lowest callback query at 0.363 keV on `6aaa706` (that campaign's README §6.0); the floor moves
     to 0.2 keV, with the pre-check rule unchanged.
+  - **Resolved (2026-10-02):** by `science-readiness` prompt 06. `compute_BBN_data`'s
+    `T_BBN_keV_spline_min` defaults to 0.2 keV; the pre-check rule is unchanged, so a history must
+    reach 20 eV. PRyMordial's lowest query is 0.3628 keV (`test_bbn_spline_floor (b)`).
 - **[02-stale-derivative-and-T_LO-comments-in-the-EOS-package]** *(log 02, observation 1)*.
   - **What.** Three comments in `CosmologyModels/GenericEOS/` are wrong. None of them was in prompt
     02's allowed lines:

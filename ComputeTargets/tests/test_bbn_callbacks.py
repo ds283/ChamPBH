@@ -103,7 +103,7 @@ RHO_SM_1MEV_HI = 3.6
 UNITS_AGREEMENT_RTOL = 1e-10
 
 # (g) the stand-in history handed to compute_BBN_data: samples from 1 GeV to
-# 1e-8 keV in T_Jordan, of which those in [1e-4 keV, 100 MeV] are in the window
+# 1e-8 keV in T_Jordan, of which those in [0.2 keV, 100 MeV] are in the window
 G_N_SAMPLES = 120
 G_LOG10_T_MEV_HI = 3.0
 G_LOG10_T_MEV_LO = -11.0
@@ -339,7 +339,8 @@ class TestBBNCallbacks(unittest.TestCase):
         """(g) compute_BBN_data on a stand-in history (PRyMclass stubbed: no
         solve). Replaces the test of the Jordan-frame Hdot/H^2 expression, which
         built the pressure the Hubble-only route no longer reads (science-
-        readiness prompt 01). Each sample in [1e-4 keV, 100 MeV] is kept, with
+        readiness prompt 01). Each sample in [0.2 keV, 100 MeV] (the default
+        floor since science-readiness prompt 06; it was 1e-4 keV) is kept, with
         density_NP = 3 M_P^2 H_J^2 - rho_R,J (1 + f_m) and
         density_NP_ratio = density_NP / rho_R,J; the samples carry exactly
         raw_N, log_T_Jordan, density_NP and density_NP_ratio; PRyMclass is built
@@ -371,7 +372,7 @@ class TestBBNCallbacks(unittest.TestCase):
             )
             # the stored values are logarithms; compute_BBN_data exponentiates them
             T_s, rho_R_s, f_m_s = exp(log(T)), exp(log(rho_R)), exp(log(f_m))
-            if 1e-4 * units.keV <= T_s <= 100.0 * units.MeV:
+            if 0.2 * units.keV <= T_s <= 100.0 * units.MeV:
                 expected.append((i, T_s, rho_R_s, f_m_s, H_J))
 
         model = SimpleNamespace(

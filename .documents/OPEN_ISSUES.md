@@ -1,10 +1,10 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-02 · **26 open**: 7 on the `review-remediation` board (closed
-2026-09-30), 2 of them assigned to `science-readiness`; 2 on the `production-readiness` board
+**Last updated:** 2026-10-02 · **25 open**: 6 on the `review-remediation` board (closed
+2026-09-30), 1 of them assigned to `science-readiness`; 2 on the `production-readiness` board
 (closed 2026-09-30); 4 on the `run-integrity` board (closed 2026-09-30); 9 on the
 `integrator-remediation` board (closed 2026-10-01), 1 of them assigned to `science-readiness`;
-4 on the `science-readiness` board (planned 2026-10-01, 5 of 9 landed).
+4 on the `science-readiness` board (planned 2026-10-01, 6 of 9 landed).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -31,7 +31,7 @@ opened after that on 2026-09-29 are resolved (board §4). One opened by prompt 0
 one by prompt 04, one by prompt 05, one by prompt 06. The campaign closed on 2026-09-30; these rows
 stay here until a later campaign takes them. Four were assigned on 2026-09-30; all four are
 resolved (§1.2). Three more were assigned on 2026-09-30 to `run-integrity` (§1.4); all three
-are resolved. Three more were assigned on 2026-10-01 to `science-readiness` (§1.7).
+are resolved. Three more were assigned on 2026-10-01 to `science-readiness` (§1.7); one since resolved (prompt 06 of that campaign).
 
 - `[00-kicking-function-table-has-no-provenance-in-the-repository]` —
   `CosmologyModels/GenericEOS/Xav_EOS_data.csv` was added in commit `1759515` without the script
@@ -132,8 +132,6 @@ two were assigned on 2026-10-01 to `science-readiness` (§1.7), one of them sinc
 Assigned 2026-10-01 when the campaign was planned. Each entry stays on its own board, which
 carries the **Assigned** line; the prompt that closes one deletes its row here.
 
-- `[00-bbn-spline-domain-is-far-wider-than-prymordial-uses]` — the spline reaches 0.1 eV; PRyMordial
-  reads to 0.363 keV. `review-remediation`; prompt 06.
 - `[04-numerical-strategies-describes-the-removed-asinh-bbn-interface]` — §7.2–7.4 need a dated
   addendum. `review-remediation`; prompt 08.
 - `[00-stored-samples-alias-the-rebounds]` — the z grid samples fast bounces at random phase below

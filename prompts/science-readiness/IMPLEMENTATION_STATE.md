@@ -1,8 +1,8 @@
 # Science-readiness campaign — implementation state
 
-**Last updated:** 2026-10-02 · **Status: IN PROGRESS — 5 of 9 landed** (prompt 01, with
+**Last updated:** 2026-10-02 · **Status: IN PROGRESS — 6 of 9 landed** (prompt 01, with
 deviations; prompt 02; prompt 03, with deviations; prompt 04, with deviations; prompt 05,
-measurement only, the averaging withdrawn). Planned on 2026-10-01 against
+measurement only, the averaging withdrawn; prompt 06). Planned on 2026-10-01 against
 `main` at `6aaa706`, from a Claude Science re-evaluation kept at
 [`source/campaign_reevaluation_2026-10-01.md`](source/campaign_reevaluation_2026-10-01.md) and
 checked against the tree by the planner (README §0.3). Suites at `6aaa706`: CosmologyModels 18,
@@ -13,7 +13,7 @@ land on it.
 made before 2026.6.0 is invalid, and the science run needs a fresh datastore file (columns are
 added with no migration). `PRYM_VERSION` is `"bf24c3d+ri02+sr01"`. Suites after prompt 01:
 CosmologyModels 18, ComputeTargets 71, Datastore 17. After prompt 02: 18, 75, 21. After
-prompt 03: 18, 82, 26. After prompt 04: 18, 86, 26. After prompt 05 (no code): 18, 86, 26.
+prompt 03: 18, 82, 26. After prompt 04: 18, 86, 26. After prompt 05 (no code): 18, 86, 26. After prompt 06: 18, 88, 26.
 
 The campaign hands the scalar field to PRyMordial through the expansion rate alone, with a patched
 PRyMordial that has no fictitious new-physics temperature and an optional wall-clock limit. It
@@ -131,7 +131,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | 03 | [Store the first bounce](03-first-bounce.md) | **T** | Opus | ✍️ 2026-10-01 | ✅ 2026-10-02 (with deviations) | see `git log` ("Store the first bounce of every ScalarModel") | [`logs/03-first-bounce.md`](logs/03-first-bounce.md) |
 | 04 | [The initial field as a run option, with a super-Planckian warning](04-initial-field-option.md) | **P** | Sonnet | ✍️ 2026-10-01 | ✅ 2026-10-02 (with deviations) | see `git log` ("Make the initial field a run option and warn on a super-Planckian start") | [`logs/04-initial-field-option.md`](logs/04-initial-field-option.md) |
 | 05 | [Bounce averages on the dense output](05-bounce-averages.md) | **A** | Opus | ✍️ 2026-10-01 | ✅ 2026-10-02 (measurement only; the averaging withdrawn by the user's ruling) | see `git log` ("Withdraw the bounce averages: BBN's window is not aliased") | [`logs/05-bounce-averages.md`](logs/05-bounce-averages.md) |
-| 06 | [Narrow the BBN spline to PRyMordial's range](06-bbn-spline-floor.md) | **L** | Sonnet | ✍️ 2026-10-01 | — | — | — |
+| 06 | [Narrow the BBN spline to PRyMordial's range](06-bbn-spline-floor.md) | **L** | Sonnet | ✍️ 2026-10-01 | ✅ 2026-10-02 | see `git log` ("Narrow the BBN spline floor to 0.2 keV") | [`logs/06-bbn-spline-floor.md`](logs/06-bbn-spline-floor.md) |
 | 07 | [Extraction and the science figures](07-extraction-and-figures.md) | **G** | Sonnet | ✍️ 2026-10-01 | — | — | — |
 | 08 | [Documents](08-documents.md) | **D** | Sonnet | ✍️ 2026-10-01 | — | — | — |
 | 09 | [Close-out verification and handover](09-close-out-verification.md) | close-out | Sonnet | ✍️ 2026-10-01 | — | — | — |
@@ -149,7 +149,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | T | **GAP** | The first bounce is not stored and cannot be read from the samples at small `M`. Closes `[00-first-bounce-is-not-stored]`. | 03 | **done** 2026-10-02 (log 03) |
 | P | **GAP** | φ\* is a literal in three drivers, with no super-Planckian warning. Closes `[00-initial-field-value-is-hard-coded-and-unchecked]` (assigned). | 04 | **done** 2026-10-02 (log 04) |
 | A | **DEFECT, medium at M ≲ 10⁻⁴** | BBN integrates a spline through random-phase samples of the bounces below a few keV. Closes `[00-bbn-input-is-aliased-at-small-M]`; narrows `[00-stored-samples-alias-the-rebounds]` (assigned). | 05 | **withdrawn** 2026-10-02 (log 05): premise measured false; the user's ruling |
-| L | **DEFECT, low** | The BBN spline reaches 0.1 eV, while PRyMordial reads to 0.363 keV. Closes `[00-bbn-spline-domain-is-far-wider-than-prymordial-uses]` (assigned). | 06 | open |
+| L | **DEFECT, low** | The BBN spline reaches 0.1 eV, while PRyMordial reads to 0.363 keV. Closes `[00-bbn-spline-domain-is-far-wider-than-prymordial-uses]` (assigned). | 06 | **done** 2026-10-02 (log 06) |
 | G | **GAP** | No extraction or figures for the science run. Closes `[00-no-extraction-for-the-science-figures]`. | 07 | open |
 | D | documents | Three documents describe the `NP_thermo_flag` route. Closes `[00-documents-describe-the-thermo-route]` and `[04-numerical-strategies-describes-the-removed-asinh-bbn-interface]` (assigned). | 08 | open |
 
@@ -159,8 +159,8 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
 Seven opened by the planner on 2026-10-01, one per campaign item that has no issue on another
 board; prompt 01 closed three, prompt 03 one and prompt 05 one (§4), and two are open. Prompt 05
-opened two more (`[05-…]`). Seven more were assigned from other boards (§3.1); prompts 01, 02 and
-04 closed four of them, prompt 05 narrowed one, and three are open.
+opened two more (`[05-…]`). Seven more were assigned from other boards (§3.1); prompts 01, 02, 04
+and 06 closed five of them, prompt 05 narrowed one, and two are open.
 
 - **[00-no-extraction-for-the-science-figures]** *(README §1 G)*.
   - **What.** None of the four Phase D figures, nor a per-history table, can be produced from a
@@ -198,7 +198,7 @@ here (README §5 rule 4).
 | Issue | Board | Prompt |
 |---|---|---|
 | `[00-initial-field-value-is-hard-coded-and-unchecked]` | `review-remediation` | 04 — **resolved 2026-10-02** (§4) |
-| `[00-bbn-spline-domain-is-far-wider-than-prymordial-uses]` | `review-remediation` | 06 |
+| `[00-bbn-spline-domain-is-far-wider-than-prymordial-uses]` | `review-remediation` | 06 — **resolved 2026-10-02** (§4) |
 | `[04-numerical-strategies-describes-the-removed-asinh-bbn-interface]` | `review-remediation` | 08 |
 | `[02-a-short-bbn-sample-grid-escapes-compute-bbn-data]` | `run-integrity` | 01 (P4) — **resolved 2026-10-01** (§4) |
 | `[02-the-bbn-callbacks-do-not-check-their-values-for-finiteness]` | `run-integrity` | 01 (P4) — **resolved 2026-10-01** (§4) |
@@ -208,6 +208,14 @@ here (README §5 rule 4).
 ---
 
 ## 4. Resolved issues
+
+- **[00-bbn-spline-domain-is-far-wider-than-prymordial-uses]** *(assigned from
+  `review-remediation`; §3.1)*. **Resolved (2026-10-02):** by prompt 06 (log 06).
+  `compute_BBN_data`'s `T_BBN_keV_spline_min` defaults to 0.2 keV (was 1e-4); the pre-check rule is
+  unchanged, so a history must reach 20 eV (was 0.01 eV). PRyMordial's lowest callback query is
+  0.3628 keV (`test_bbn_spline_floor (b)`). The driver on β = 2 at M = 0.5 and 10⁻³ reproduces log
+  05's abundances to every printed digit. The dated **Resolved** line is also on the
+  `review-remediation` board.
 
 - **[00-bbn-route-integrates-a-fictitious-np-temperature]** *(README §0.3, §1 R; `PRyM_main.py`
   `:95–201` on `6aaa706`)*.

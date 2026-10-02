@@ -167,12 +167,13 @@ class TestPRyMordialPassenger(unittest.TestCase):
         """
         (d) compute_BBN_data's pre-check failure returns a failure_reason naming
         both temperatures. The body is reached through `._function` with a
-        stand-in model whose T_Jordan_stop (1 eV) is above 0.1 * T_BBN_spline_min
-        (0.01 eV); nothing past the pre-check is touched. No PRyMordial solve.
-        Unchanged by science-readiness prompt 01.
+        stand-in model whose T_Jordan_stop (100 eV) is above 0.1 * T_BBN_spline_min
+        (20 eV); nothing past the pre-check is touched. No PRyMordial solve.
+        Unchanged by science-readiness prompt 01; prompt 06 moved the default
+        floor from 1e-4 keV to 0.2 keV, and the stop from 1 eV to 100 eV with it.
         """
         units = Planck_units()
-        T_stop = SimpleNamespace(as_float=1.0 * units.eV)
+        T_stop = SimpleNamespace(as_float=100.0 * units.eV)
         model = SimpleNamespace(
             _cosmology=SimpleNamespace(units=units),
             potential=None,
@@ -189,7 +190,7 @@ class TestPRyMordialPassenger(unittest.TestCase):
         self.assertLessEqual(len(reason), DEFAULT_STRING_LENGTH)
 
         formatter = energy_formatter(units)
-        T_spline_min = 1e-4 * units.keV  # compute_BBN_data's default
+        T_spline_min = 0.2 * units.keV  # compute_BBN_data's default
         self.assertIn(formatter(T_stop), reason)
         self.assertIn(formatter(0.1 * T_spline_min), reason)
 

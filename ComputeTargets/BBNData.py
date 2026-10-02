@@ -384,7 +384,12 @@ def compute_BBN_data(
     model_proxy: ScalarModelProxy,
     task_label: str,
     T_BBN_MeV_spline_max: float = 100,  # PRyMordial default begins at 10 MeV
-    T_BBN_keV_spline_min: float = 1e-4,  # PRyMordial default ends at 1 keV, but samples at later times
+    # PRyMordial's lowest query of the callback is 0.363 keV (measured, small
+    # network, planning-probes/prym_callback_domain.py; its thermodynamic solve
+    # runs past T_end = 1 keV). The floor is 0.2 keV, below that; the pre-check
+    # below then makes a history reach 0.1 * 0.2 keV = 20 eV (science-readiness
+    # prompt 06; the floor was 1e-4 keV = 0.1 eV, needing 0.01 eV).
+    T_BBN_keV_spline_min: float = 0.2,
     small_network: bool = False,
     wall_clock_limit: Optional[float] = DEFAULT_BBN_WALL_CLOCK_LIMIT,
 ):
