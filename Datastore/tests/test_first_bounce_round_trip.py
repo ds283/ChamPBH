@@ -90,7 +90,11 @@ COLUMNS = (
 )
 
 
-def _success_payload(bounce):
+# the fixed-temperature values of a history that reaches neither temperature (prompt 06b)
+NO_FIXED_T = SM.FixedTValues(None, None, None, None)
+
+
+def _success_payload(bounce, fixed_T=NO_FIXED_T):
     """The keys of compute_scalar_model's success payload that ScalarModel.store() reads."""
     return {
         "metadata": NS(
@@ -105,6 +109,7 @@ def _success_payload(bounce):
         "sample": [],
         "reflections": 0,
         "first_bounce": bounce,
+        "fixed_T_values": fixed_T,
         "cap_fraction": 0.1,
         "cap_floor": 1e-11,
         "cap_global_max_step": 0.1,

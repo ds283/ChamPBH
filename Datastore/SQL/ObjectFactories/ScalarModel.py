@@ -25,7 +25,7 @@ from ComputeTargets import (
     ScalarModel,
     ScalarModelValue,
 )
-from ComputeTargets.ScalarModel import FirstBounce
+from ComputeTargets.ScalarModel import FirstBounce, FixedTValues
 from CosmologyConcepts import (
     redshift_array,
     redshift,
@@ -194,6 +194,14 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 sqla.Column("first_bounce_log_T_Jordan", sqla.Float(64), nullable=True),
                 sqla.Column("first_bounce_phi_Einstein", sqla.Float(64), nullable=True),
                 sqla.Column("first_bounce_reflected", sqla.Boolean, nullable=True),
+                # phi and rho_NP/rho_R,J at T_J = 1 MeV and 70 keV (science-readiness prompt 06b;
+                # README §2 (n)). phi is stored in units of the Planck mass, as
+                # first_bounce_phi_Einstein; the ratio is dimensionless. A pair is NULL when the
+                # history did not reach that temperature, and all four are NULL on a failure row
+                sqla.Column("phi_Einstein_1MeV", sqla.Float(64), nullable=True),
+                sqla.Column("density_NP_ratio_1MeV", sqla.Float(64), nullable=True),
+                sqla.Column("phi_Einstein_70keV", sqla.Float(64), nullable=True),
+                sqla.Column("density_NP_ratio_70keV", sqla.Float(64), nullable=True),
                 sqla.Column("validated", sqla.Boolean, default=False, nullable=False),
                 sqla.Column(
                     "extra_data", sqla.String(DEFAULT_STRING_LENGTH), nullable=True
@@ -253,6 +261,10 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 table.c.first_bounce_log_T_Jordan,
                 table.c.first_bounce_phi_Einstein,
                 table.c.first_bounce_reflected,
+                table.c.phi_Einstein_1MeV,
+                table.c.density_NP_ratio_1MeV,
+                table.c.phi_Einstein_70keV,
+                table.c.density_NP_ratio_70keV,
                 solver_table.c.label.label("solver_label"),
                 solver_table.c.stepping.label("solver_stepping"),
                 atol_table.c.log10_tol.label("log10_atol"),
@@ -479,6 +491,24 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                     if not failed and row_data.first_bounce_N is not None
                     else None
                 ),
+                "fixed_T_values": (
+                    FixedTValues(
+                        phi_Einstein_1MeV=(
+                            row_data.phi_Einstein_1MeV * cosmology.units.PlanckMass
+                            if row_data.phi_Einstein_1MeV is not None
+                            else None
+                        ),
+                        density_NP_ratio_1MeV=row_data.density_NP_ratio_1MeV,
+                        phi_Einstein_70keV=(
+                            row_data.phi_Einstein_70keV * cosmology.units.PlanckMass
+                            if row_data.phi_Einstein_70keV is not None
+                            else None
+                        ),
+                        density_NP_ratio_70keV=row_data.density_NP_ratio_70keV,
+                    )
+                    if not failed
+                    else None
+                ),
                 "values": values,
             },
             solver_labels=solver_labels,
@@ -556,6 +586,32 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 ),
                 "first_bounce_reflected": (
                     bool(bounce.reflected) if bounce is not None else None
+                ),
+            }
+        )
+
+        # phi and the ratio at the two fixed temperatures (science-readiness prompt 06b); NULL
+        # where the history did not reach a temperature, and on a failure row
+        fixed_T: Optional[FixedTValues] = (
+            obj._fixed_T_values if not obj._failure else None
+        )
+
+        def _phi_Mp(phi: Optional[float]) -> Optional[float]:
+            return phi / obj._units.PlanckMass if phi is not None else None
+
+        payload.update(
+            {
+                "phi_Einstein_1MeV": (
+                    _phi_Mp(fixed_T.phi_Einstein_1MeV) if fixed_T is not None else None
+                ),
+                "density_NP_ratio_1MeV": (
+                    fixed_T.density_NP_ratio_1MeV if fixed_T is not None else None
+                ),
+                "phi_Einstein_70keV": (
+                    _phi_Mp(fixed_T.phi_Einstein_70keV) if fixed_T is not None else None
+                ),
+                "density_NP_ratio_70keV": (
+                    fixed_T.density_NP_ratio_70keV if fixed_T is not None else None
                 ),
             }
         )

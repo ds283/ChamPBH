@@ -1,8 +1,8 @@
 # Science-readiness campaign — implementation state
 
-**Last updated:** 2026-10-02 · **Status: IN PROGRESS — 6 of 10 landed** (prompt 01, with
+**Last updated:** 2026-10-02 · **Status: IN PROGRESS — 7 of 10 landed** (prompt 01, with
 deviations; prompt 02; prompt 03, with deviations; prompt 04, with deviations; prompt 05,
-measurement only, the averaging withdrawn; prompt 06). Planned on 2026-10-01 against
+measurement only, the averaging withdrawn; prompt 06; prompt 06b, with deviations). Planned on 2026-10-01 against
 `main` at `6aaa706`, from a Claude Science re-evaluation kept at
 [`source/campaign_reevaluation_2026-10-01.md`](source/campaign_reevaluation_2026-10-01.md) and
 checked against the tree by the planner (README §0.3). Suites at `6aaa706`: CosmologyModels 18,
@@ -13,7 +13,7 @@ land on it.
 made before 2026.6.0 is invalid, and the science run needs a fresh datastore file (columns are
 added with no migration). `PRYM_VERSION` is `"bf24c3d+ri02+sr01"`. Suites after prompt 01:
 CosmologyModels 18, ComputeTargets 71, Datastore 17. After prompt 02: 18, 75, 21. After
-prompt 03: 18, 82, 26. After prompt 04: 18, 86, 26. After prompt 05 (no code): 18, 86, 26. After prompt 06: 18, 88, 26.
+prompt 03: 18, 82, 26. After prompt 04: 18, 86, 26. After prompt 05 (no code): 18, 86, 26. After prompt 06: 18, 88, 26. After prompt 06b: 18, 91, 31.
 
 The campaign hands the scalar field to PRyMordial through the expansion rate alone, with a patched
 PRyMordial that has no fictitious new-physics temperature and an optional wall-clock limit. It
@@ -164,7 +164,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | 04 | [The initial field as a run option, with a super-Planckian warning](04-initial-field-option.md) | **P** | Sonnet | ✍️ 2026-10-01 | ✅ 2026-10-02 (with deviations) | see `git log` ("Make the initial field a run option and warn on a super-Planckian start") | [`logs/04-initial-field-option.md`](logs/04-initial-field-option.md) |
 | 05 | [Bounce averages on the dense output](05-bounce-averages.md) | **A** | Opus | ✍️ 2026-10-01 | ✅ 2026-10-02 (measurement only; the averaging withdrawn by the user's ruling) | see `git log` ("Withdraw the bounce averages: BBN's window is not aliased") | [`logs/05-bounce-averages.md`](logs/05-bounce-averages.md) |
 | 06 | [Narrow the BBN spline to PRyMordial's range](06-bbn-spline-floor.md) | **L** | Sonnet | ✍️ 2026-10-01 | ✅ 2026-10-02 | see `git log` ("Narrow the BBN spline floor to 0.2 keV") | [`logs/06-bbn-spline-floor.md`](logs/06-bbn-spline-floor.md) |
-| 06b | [Store the fixed-temperature values on the `ScalarModel` row](06b-fixed-T-values.md) (added 2026-10-02) | **V** | Opus | ✍️ 2026-10-02 | — | — | — |
+| 06b | [Store the fixed-temperature values on the `ScalarModel` row](06b-fixed-T-values.md) (added 2026-10-02) | **V** | Opus | ✍️ 2026-10-02 | ✅ 2026-10-02 (with deviations) | see `git log` ("Store phi and the NP ratio at 1 MeV and 70 keV on ScalarModel") | [`logs/06b-fixed-T-values.md`](logs/06b-fixed-T-values.md) |
 | 07 | [Extraction and the science figures](07-extraction-and-figures.md) | **G** | Sonnet | ✍️ 2026-10-01 | — | — | — |
 | 08 | [Documents](08-documents.md) | **D** | Sonnet | ✍️ 2026-10-01 | — | — | — |
 | 09 | [Close-out verification and handover](09-close-out-verification.md) | close-out | Sonnet | ✍️ 2026-10-01 | — | — | — |
@@ -183,7 +183,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | P | **GAP** | φ\* is a literal in three drivers, with no super-Planckian warning. Closes `[00-initial-field-value-is-hard-coded-and-unchecked]` (assigned). | 04 | **done** 2026-10-02 (log 04) |
 | A | **DEFECT, medium at M ≲ 10⁻⁴** | BBN integrates a spline through random-phase samples of the bounces below a few keV. Closes `[00-bbn-input-is-aliased-at-small-M]`; narrows `[00-stored-samples-alias-the-rebounds]` (assigned). | 05 | **withdrawn** 2026-10-02 (log 05): premise measured false; the user's ruling |
 | L | **DEFECT, low** | The BBN spline reaches 0.1 eV, while PRyMordial reads to 0.363 keV. Closes `[00-bbn-spline-domain-is-far-wider-than-prymordial-uses]` (assigned). | 06 | **done** 2026-10-02 (log 06) |
-| V | **GAP** | φ and ρ_NP/ρ_R,J at 1 MeV and 70 keV are not stored on the `ScalarModel` row. Closes `[00-fixed-T-values-are-not-stored]`. Added 2026-10-02 (README §0.2, U6). | 06b | open |
+| V | **GAP** | φ and ρ_NP/ρ_R,J at 1 MeV and 70 keV are not stored on the `ScalarModel` row. Closes `[00-fixed-T-values-are-not-stored]`. Added 2026-10-02 (README §0.2, U6). | 06b | **done** 2026-10-02 (log 06b) |
 | G | **GAP** | No extraction or figures for the science run. Closes `[00-no-extraction-for-the-science-figures]`. | 07 | open |
 | D | documents | Three documents describe the `NP_thermo_flag` route. Closes `[00-documents-describe-the-thermo-route]` and `[04-numerical-strategies-describes-the-removed-asinh-bbn-interface]` (assigned). | 08 | open |
 
@@ -194,14 +194,9 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 Seven opened by the planner on 2026-10-01, one per campaign item that has no issue on another
 board; prompt 01 closed three, prompt 03 one and prompt 05 one (§4), and two are open. Prompt 05
 opened two more (`[05-…]`). The re-plan of 2026-10-02 (README §0.2, U6) opened one more,
-`[00-fixed-T-values-are-not-stored]`, for prompt 06b. Seven more were assigned from other boards (§3.1); prompts 01, 02, 04
+`[00-fixed-T-values-are-not-stored]`, for prompt 06b, which closed it (§4). Seven more were assigned from other boards (§3.1); prompts 01, 02, 04
 and 06 closed five of them, prompt 05 narrowed one, and two are open.
 
-- **[00-fixed-T-values-are-not-stored]** *(README §1 V; opened 2026-10-02 by the re-plan)*.
-  - **What.** Figure 4 and `histories.csv` need φ and ρ_NP/ρ_R,J at T_J = 1 MeV and 70 keV,
-    which are properties of the whole history. Nothing stores them. Reading them from the samples
-    means loading every sample of every history (`a2deb00`, reverted in `8fcb295`).
-  - **Next step.** Prompt 06b (README §2 (n)).
 - **[00-no-extraction-for-the-science-figures]** *(README §1 G)*.
   - **What.** None of the four Phase D figures, nor a per-history table, can be produced from a
     store.
@@ -248,6 +243,22 @@ here (README §5 rule 4).
 ---
 
 ## 4. Resolved issues
+
+- **[00-fixed-T-values-are-not-stored]** *(README §1 V; opened 2026-10-02 by the re-plan)*.
+  - **What.** Figure 4 and `histories.csv` need φ and ρ_NP/ρ_R,J at T_J = 1 MeV and 70 keV,
+    which are properties of the whole history. Nothing stores them. Reading them from the samples
+    means loading every sample of every history (`a2deb00`, reverted in `8fcb295`).
+  - **Next step.** Prompt 06b (README §2 (n)).
+  - **Resolved (2026-10-02):** by prompt 06b (log 06b). `fixed_T_values(result, policy,
+    coupling, units)` returns `FixedTValues(phi_Einstein_1MeV, density_NP_ratio_1MeV,
+    phi_Einstein_70keV, density_NP_ratio_70keV)`. It reads them at the first crossing of
+    T_J = 1 MeV and 70 keV (`T_Jordan_crossing`, `brentq` on the accepted step's interpolant),
+    with the ratio built as `compute_BBN_data` builds it. `compute_scalar_model` returns it. Four
+    nullable columns of the same names (φ in M_P) store it, and `ScalarModel.fixed_T_values`
+    reads it back under `_do_not_populate` (`test_fixed_T_values_round_trip`). At three
+    samples' own T_J (β = 2, M = 0.5) the crossing gives `raw_N` to 3.6e-15, and the ratio
+    equals BBN's per-sample ratio to 7e-13. On the three driver histories each temperature is
+    crossed once, and the trajectory is unchanged.
 
 - **[00-bbn-spline-domain-is-far-wider-than-prymordial-uses]** *(assigned from
   `review-remediation`; §3.1)*. **Resolved (2026-10-02):** by prompt 06 (log 06).

@@ -37,12 +37,18 @@ M is in units of the (reduced) Planck mass. Output lines:
 
     history beta=... M=...: RHS=... accepted_steps=... reflections=... samples=... wall=... s
     bounce beta=... M=...: N=... T_J=... MeV phi=... reflected=...
+    fixed_T beta=... M=...: 1MeV crossings=... phi=... ratio=... stand_in_phi=... stand_in_ratio=... | 70keV ...
     ratio beta=... M=... [lo,hi) keV: n=... min=... median=... max=... rms_step=...
     bbn beta=... M=...: Yp=... DoH=... He3oH=... Li7oH=... PRyM_time=... s wall=... s PRyM_version=...
 
 or `... FAILURE ...` with the reason. The bounce line is the history's first
 bounce, `first_bounce` on the dense output (science-readiness prompt 03), with
-phi in units of M_P; it reads `bounce ...: none` if there was none. The ratio
+phi in units of M_P; it reads `bounce ...: none` if there was none. The fixed_T
+line (science-readiness prompt 06b) gives, at T_J = 1 MeV and 70 keV, the
+number of sign changes of ln T_J - ln T* across the accepted steps' end points,
+the stored `fixed_T_values` (phi in M_P, rho_NP/rho_R,J, on the dense output),
+and the stand-in: the same two values interpolated linearly in ln T_J between
+the two stored samples either side of the first bracketing pair. The ratio
 lines are rho_NP / rho_R,J,
 computed from the stored samples as compute_BBN_data computes it, in four
 Jordan-temperature windows; rms_step is the root mean square of the
@@ -54,10 +60,11 @@ running the production route only. Later prompts add their outputs here.
 """
 
 import argparse
+import importlib
 import os
 import sys
 import time
-from math import exp
+from math import exp, log
 from pathlib import Path
 
 import numpy as np
@@ -72,6 +79,8 @@ from ComputeTargets.BBNData import (  # noqa: E402
     compute_BBN_data,
 )
 from ComputeTargets.ScalarModel import (  # noqa: E402
+    FIXED_T_JORDAN_HIGH_MEV,
+    FIXED_T_JORDAN_LOW_MEV,
     SampleValues,
     ScalarModelValue,
     compute_scalar_model,
@@ -165,6 +174,67 @@ def _ratio_lines(values, units, label: str):
     return lines
 
 
+def _sample_ratio(v, units) -> float:
+    """rho_NP/rho_R,J of one sample, as compute_BBN_data computes it."""
+    M_P2 = units.PlanckMass * units.PlanckMass
+    rho_R = exp(v.log_rhorad_Jordan)
+    rho_NP = 3.0 * M_P2 * v.H_Jordan * v.H_Jordan - rho_R * (1.0 + exp(v.log_fm))
+    return rho_NP / rho_R
+
+
+def _sign_changes(result, log_T: float) -> int:
+    """Sign changes of ln T_J - log_T across the accepted steps' end points."""
+    sol = result.solution
+    g = [sol.interpolants[k](t)[4] - log_T for k, t in enumerate(sol.ts[:-1])]
+    g.append(sol.interpolants[-1](sol.ts[-1])[4] - log_T)
+    signs = [x < 0.0 for x in g if x != 0.0]
+    return sum(1 for a, b in zip(signs, signs[1:]) if a != b)
+
+
+def _stand_in(values, log_T: float, units):
+    """phi (M_P) and the ratio, linear in ln T_J between the first pair of samples bracketing log_T."""
+    for a, b in zip(values, values[1:]):
+        if (a.log_T_Jordan - log_T) * (b.log_T_Jordan - log_T) <= 0.0:
+            if a.log_T_Jordan == b.log_T_Jordan:
+                w = 0.0
+            else:
+                w = (log_T - a.log_T_Jordan) / (b.log_T_Jordan - a.log_T_Jordan)
+            phi = (1.0 - w) * a.phi_Einstein + w * b.phi_Einstein
+            ratio = (1.0 - w) * _sample_ratio(a, units) + w * _sample_ratio(b, units)
+            return phi / units.PlanckMass, ratio
+    return None, None
+
+
+def _fmt(x) -> str:
+    return "None" if x is None else f"{x:.9e}"
+
+
+def _fixed_T_line(fixed_T, result, values, units, label: str) -> str:
+    parts = []
+    for name, T_MeV, phi, ratio in (
+        (
+            "1MeV",
+            FIXED_T_JORDAN_HIGH_MEV,
+            fixed_T.phi_Einstein_1MeV,
+            fixed_T.density_NP_ratio_1MeV,
+        ),
+        (
+            "70keV",
+            FIXED_T_JORDAN_LOW_MEV,
+            fixed_T.phi_Einstein_70keV,
+            fixed_T.density_NP_ratio_70keV,
+        ),
+    ):
+        log_T = log(T_MeV * units.MeV)
+        s_phi, s_ratio = _stand_in(values, log_T, units)
+        parts.append(
+            f"{name} crossings={_sign_changes(result, log_T)} "
+            f"phi={_fmt(phi / units.PlanckMass if phi is not None else None)} "
+            f"ratio={_fmt(ratio)} stand_in_phi={_fmt(s_phi)} stand_in_ratio={_fmt(s_ratio)}"
+        )
+    return f"fixed_T {label}: " + " | ".join(parts)
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("beta", type=float, help="the coupling's beta")
@@ -227,19 +297,33 @@ def main(argv=None) -> int:
     else:
         T_stop = temperature(1, args.T_stop_GeV * units.GeV)
 
-    # stage 1: the history
+    # stage 1: the history. The IntegrationResult is kept, by wrapping integrate_scalar_history
+    # for the duration of the call, so that the fixed_T line can count sign changes on it
+    SM = importlib.import_module("ComputeTargets.ScalarModel")
+    captured = []
+    integrate = SM.integrate_scalar_history
+
+    def _capturing_integrate(*a, **kw):
+        result = integrate(*a, **kw)
+        captured.append(result)
+        return result
+
+    SM.integrate_scalar_history = _capturing_integrate
     start = time.perf_counter()
-    data = compute_scalar_model._function(
-        cosmology,
-        T_init,
-        T_stop,
-        phi_value(0, args.phi_init_Mp * units.PlanckMass),
-        pi_value(0, PI_INIT),
-        _z_grid(),
-        potential,
-        coupling,
-        task_label=f"history_and_bbn-beta{beta:g}-M{M:g}",
-    )
+    try:
+        data = compute_scalar_model._function(
+            cosmology,
+            T_init,
+            T_stop,
+            phi_value(0, args.phi_init_Mp * units.PlanckMass),
+            pi_value(0, PI_INIT),
+            _z_grid(),
+            potential,
+            coupling,
+            task_label=f"history_and_bbn-beta{beta:g}-M{M:g}",
+        )
+    finally:
+        SM.integrate_scalar_history = integrate
     wall = time.perf_counter() - start
 
     if data.get("failure", False):
@@ -269,6 +353,8 @@ def main(argv=None) -> int:
         ScalarModelValue(None, z, **SampleValues._make(tuple(s))._asdict())
         for z, s in zip(data["z_grid"], data["sample"])
     ]
+    print(_fixed_T_line(data["fixed_T_values"], captured[-1], values, units, label))
+
     for line in _ratio_lines(values, units, label):
         print(line)
 

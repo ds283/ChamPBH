@@ -71,6 +71,12 @@ REFLECTIONS_KEY = "number_reflections"
 
 EXPECTED_SOL_LENGTH = 5
 
+# the two Jordan-frame temperatures, in MeV, at which fixed_T_values reads phi and
+# rho_NP/rho_R,J for the ScalarModel row (science-readiness prompt 06b; README §2 (n)).
+# Fixed constants: not a run option and not part of the lookup key
+FIXED_T_JORDAN_HIGH_MEV = 1.0
+FIXED_T_JORDAN_LOW_MEV = 0.07
+
 # the stepper label returned by compute_scalar_model; main.py pre-registers it as
 # IntegrationSolver(label="Radau+kinematic-cap", stepping=0)
 SCALAR_MODEL_STEPPER_LABEL = "Radau+kinematic-cap-stepping0"
@@ -850,6 +856,129 @@ def first_bounce(result: IntegrationResult) -> Optional[FirstBounce]:
     )
 
 
+# phi and rho_NP/rho_R,J at the history's first crossing of T_J = 1 MeV and of T_J = 70 keV
+# (science-readiness prompt 06b; README §2 (n)). phi is in the cosmology's units; the ratio is
+# dimensionless. A field is None where the history does not reach that temperature.
+FixedTValues = namedtuple(
+    "FixedTValues",
+    [
+        "phi_Einstein_1MeV",
+        "density_NP_ratio_1MeV",
+        "phi_Einstein_70keV",
+        "density_NP_ratio_70keV",
+    ],
+)
+
+
+def _T_Jordan_crossing_step(result: IntegrationResult, log_T: float):
+    """
+    (k, N) for the first crossing of ln T_J = log_T, where k indexes the accepted step it lies
+    on; or None. The body of T_Jordan_crossing, which see.
+    """
+    ts = result.solution.ts
+    interpolants = result.solution.interpolants
+
+    for k, interpolant in enumerate(interpolants):
+        t_low: float = ts[k]
+        t_high: float = ts[k + 1]
+
+        g_low: float = interpolant(t_low)[4] - log_T
+        g_high: float = interpolant(t_high)[4] - log_T
+
+        if g_low == 0.0:
+            return k, float(t_low)
+        if g_high == 0.0:
+            return k, float(t_high)
+        if (g_low < 0.0) != (g_high < 0.0):
+            N_cross: float = brentq(
+                lambda t: interpolant(t)[4] - log_T, t_low, t_high, xtol=1e-15
+            )
+            return k, float(N_cross)
+
+    return None
+
+
+def T_Jordan_crossing(result: IntegrationResult, log_T: float) -> Optional[float]:
+    """
+    The e-fold number N of the history's first crossing of ln T_J = log_T, or None if the
+    history never reaches it (science-readiness prompt 06b; README §2 (n)).
+
+    The accepted steps are walked in order, on their own interpolants, as first_bounce walks
+    them. The crossing is on the first step [t_k, t_{k+1}] on which ln T_J - log_T changes sign
+    or reaches zero at an end, and is located by brentq (xtol = 1e-15) on that step's
+    interpolant. ln T_J is continuous across an elastic reflection, which flips pi only, so a
+    reflection does not open a gap in which a crossing could be missed. The last step's
+    interpolant is read only up to the history's end (ts[-1] = N_final).
+
+    ln T_J is not monotonic in principle (d ln T_J/dN carries a factor 1 + (d ln Omega/dphi) pi);
+    only the first crossing is returned.
+
+    :param result: the IntegrationResult of integrate_scalar_history
+    :param log_T: ln of the target Jordan-frame temperature, in the cosmology's units
+    :return: N of the first crossing, or None
+    """
+    found = _T_Jordan_crossing_step(result, log_T)
+    return found[1] if found is not None else None
+
+
+def fixed_T_value_at(
+    result: IntegrationResult,
+    k: int,
+    N: float,
+    policy: ODEPolicy,
+    coupling: AbstractCoupling,
+    units: UnitsLike,
+) -> tuple:
+    """
+    (phi_Einstein, rho_NP/rho_R,J) on the history at e-fold number N, read from the interpolant
+    of accepted step k (science-readiness prompt 06b; README §2 (n)).
+
+    H_J, ln rho_R,J and f_m are built from the state exactly as compute_scalar_model's sampling
+    loop builds a SampleValues, and the ratio from them exactly as compute_BBN_data builds
+    density_NP_ratio: (3 M_P^2 H_J^2 - rho_R,J (1 + f_m)) / rho_R,J. At a stored sample's own N
+    it is therefore the ratio BBN sees there.
+    """
+    state: StateVector = StateVector._make(result.solution.interpolants[k](N))
+    data: ODEPolicyData = policy(N, state)
+    hubble_data: HubblePolicyData = HubblePolicy(coupling, units)(data, state)
+
+    log_Omega: float = coupling.log_Omega(state.phi_Einstein)
+    log_rhorad_Jordan: float = state.log_rhorad_Einstein - 4.0 * log_Omega
+
+    CONST_3_MP_SQ = 3.0 * units.PlanckMass * units.PlanckMass
+    rhorad_Jordan: float = exp(log_rhorad_Jordan)
+    H2_Jordan: float = hubble_data.H_Jordan * hubble_data.H_Jordan
+    fm: float = exp(state.log_fm)
+    density_NP: float = H2_Jordan * CONST_3_MP_SQ - rhorad_Jordan * (1.0 + fm)
+
+    return float(state.phi_Einstein), float(density_NP / rhorad_Jordan)
+
+
+def fixed_T_values(
+    result: IntegrationResult,
+    policy: ODEPolicy,
+    coupling: AbstractCoupling,
+    units: UnitsLike,
+) -> FixedTValues:
+    """
+    phi and rho_NP/rho_R,J at the history's first crossing of T_J = FIXED_T_JORDAN_HIGH_MEV and
+    of T_J = FIXED_T_JORDAN_LOW_MEV, on the dense output (science-readiness prompt 06b;
+    README §2 (n)). The crossing is T_Jordan_crossing's, and the values fixed_T_value_at's, on
+    the step the crossing lies on. A temperature the history does not reach gives None in both
+    of its fields.
+    """
+    values = []
+    for T_MeV in (FIXED_T_JORDAN_HIGH_MEV, FIXED_T_JORDAN_LOW_MEV):
+        found = _T_Jordan_crossing_step(result, log(T_MeV * units.MeV))
+        if found is None:
+            values.extend([None, None])
+        else:
+            k, N = found
+            values.extend(fixed_T_value_at(result, k, N, policy, coupling, units))
+
+    return FixedTValues._make(values)
+
+
 def _failure_payload(reason: str) -> dict:
     """
     The payload compute_scalar_model returns for a failed history: the failure flag and
@@ -1061,6 +1190,10 @@ def compute_scalar_model(
     # the first bounce, on the dense output (science-readiness prompt 03); None if there is none
     bounce: Optional[FirstBounce] = first_bounce(result)
 
+    # phi and rho_NP/rho_R,J at T_J = 1 MeV and 70 keV, on the dense output (science-readiness
+    # prompt 06b); a field is None where the history does not reach the temperature
+    fixed_T: FixedTValues = fixed_T_values(result, policy, coupling, units)
+
     collected_full_statistics = supervisor.collect_full_statistics
     return {
         "metadata": IntegrationData(
@@ -1075,6 +1208,7 @@ def compute_scalar_model(
         "sample": sample,
         "reflections": len(result.reflections),
         "first_bounce": bounce,
+        "fixed_T_values": fixed_T,
         "cap_fraction": step_control.cap_fraction,
         "cap_floor": step_control.cap_floor,
         "cap_global_max_step": step_control.global_max_step,
@@ -1193,6 +1327,7 @@ class ScalarModel(DatastoreObject):
             self._failure = None
             self._failure_reason = None
             self._first_bounce = None
+            self._fixed_T_values = None
 
         else:
             DatastoreObject.__init__(self, payload["store_id"])
@@ -1203,6 +1338,7 @@ class ScalarModel(DatastoreObject):
             self._failure: Optional[bool] = payload["failure"]
             self._failure_reason: Optional[str] = payload["failure_reason"]
             self._first_bounce: Optional[FirstBounce] = payload["first_bounce"]
+            self._fixed_T_values: Optional[FixedTValues] = payload["fixed_T_values"]
 
         # store parameters
         self._label: str = label
@@ -1310,6 +1446,24 @@ class ScalarModel(DatastoreObject):
             raise RuntimeError("first_bounce has not yet been populated")
 
         return self._first_bounce
+
+    @property
+    def fixed_T_values(self) -> FixedTValues:
+        """
+        phi and rho_NP/rho_R,J at T_J = 1 MeV and 70 keV (fixed_T_values()); a field is None
+        where the history did not reach that temperature. Stored on the ScalarModel row, so it
+        is readable on an object built with _do_not_populate. Raises on a failure row, as
+        first_bounce does. (science-readiness prompt 06b)
+        """
+        if self._failure:
+            raise RuntimeError(
+                f"ScalarModel ({self._label}): this object had an integration failure and cannot be used"
+            )
+
+        if self._failure is None:
+            raise RuntimeError("fixed_T_values has not yet been populated")
+
+        return self._fixed_T_values
 
     @property
     def solver(self) -> IntegrationSolver:
@@ -1473,12 +1627,14 @@ class ScalarModel(DatastoreObject):
                 str(data.get("failure_reason", ""))[:DEFAULT_STRING_LENGTH] or None
             )
             self._first_bounce = None
+            self._fixed_T_values = None
             self._values = []
             return True
 
         self._failure = False
         self._failure_reason = None
         self._first_bounce = data["first_bounce"]
+        self._fixed_T_values = data["fixed_T_values"]
         self._metadata = data["metadata"]
 
         sample: List[SampleValues] = data["sample"]
