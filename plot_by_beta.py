@@ -19,6 +19,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import List, Optional
 
+import numpy as np
 import pandas as pd
 import ray
 import seaborn as sns
@@ -52,6 +53,16 @@ from extract_common import (
     nice_Q_labels,
     add_BBN_info_labels,
     reflection_count,
+    adiabatic_Q_caption,
+    build_history_record,
+    kick_threshold_curve,
+    plot_abundance_shifts,
+    plot_convergence_in_M,
+    plot_T_deliver,
+    plot_fixed_T,
+    write_histories_csv,
+    BELOW_PLOTS_TOP_ROW,
+    LEFT_COLUMN,
 )
 
 DEFAULT_TIMEOUT = 60
@@ -101,9 +112,53 @@ def build_beta_plot(
     bbn_data: list[BBNData],
     scalar_data: list[ScalarModel],
     SM_baseline: Optional[dict] = None,
+    scalar_failures: Optional[dict] = None,
+    bbn_failures: Optional[dict] = None,
 ):
+    """
+    Draw this model set's figures and return its per-history records (plain dictionaries,
+    extract_common.build_history_record), which run_pipeline gathers across potentials for
+    figure 2 and histories.csv. scalar_failures and bbn_failures map a beta to the reason its
+    ScalarModel or BBNData failed or is missing. (science-readiness prompt 07)
+    """
     base_path = Path(args.output).resolve()
     base_path = base_path / f"{model_label}"
+
+    # one record per history, from the stored columns through the existing lookups
+    scalar_failures = {} if scalar_failures is None else scalar_failures
+    bbn_failures = {} if bbn_failures is None else bbn_failures
+    scalar_by_beta = {
+        m.coupling._beta.as_float: m
+        for m in scalar_data
+        if m.available and not m.failure
+    }
+    bbn_by_beta = {
+        d.coupling._beta.as_float: d for d in bbn_data if d.available and not d.failure
+    }
+    record_betas = sorted(
+        set(scalar_by_beta)
+        | set(bbn_by_beta)
+        | set(scalar_failures)
+        | set(bbn_failures)
+    )
+    records = [
+        build_history_record(
+            beta=beta,
+            M_Mp=potential._M.as_float / units.PlanckMass,
+            Lambda_eV=potential._Lambda.as_float / units.eV,
+            phi_init_Mp=args.phi_init_Mp,
+            scalar=scalar_by_beta.get(beta),
+            bbn=bbn_by_beta.get(beta),
+            baseline=SM_baseline,
+            units=units,
+            failure_reasons=[
+                reason
+                for reason in (scalar_failures.get(beta), bbn_failures.get(beta))
+                if reason is not None
+            ],
+        )
+        for beta in record_betas
+    ]
 
     PRyM_versions = set(
         [d.PRyM_version for d in bbn_data if d.available and not d.failure]
@@ -161,7 +216,7 @@ def build_beta_plot(
 
     if len(Yp_points) == 0:
         print("!! build_beta_plot: no valid BBN data to plot for '{model_label}'")
-        return
+        return records
 
     solver_time_x, solver_time_y = zip(*solver_time_points)
     bbn_time_x, bbn_time_y = zip(*bbn_time_points)
@@ -438,6 +493,17 @@ def build_beta_plot(
 
         add_beta_summary_labels(fig, model_label, potential)
 
+        # the max |Q| of a small-M history may be set by aliased late samples
+        Q_caveat = adiabatic_Q_caption(potential._M.as_float / units.PlanckMass)
+        if Q_caveat is not None:
+            fig.text(
+                LEFT_COLUMN,
+                BELOW_PLOTS_TOP_ROW,
+                f"maximum |Q| {Q_caveat}",
+                horizontalalignment="left",
+                fontsize="xx-small",
+            )
+
         ax.legend(loc="best")
 
         fig_path = (
@@ -560,6 +626,36 @@ def build_beta_plot(
 
         df.to_csv(csv_path, header=True, index=False)
 
+    # THE SCIENCE FIGURES 1, 3 and 4 (science-readiness prompt 07); figure 2 and
+    # histories.csv need every potential and are written by run_pipeline
+    plot_dir = (
+        base_path
+        / f"plots/M={potential._M.as_float / units.eV:.5g}eV_Lambda={potential._Lambda.as_float / units.eV:.5g}eV"
+    )
+    title = f"{model_label}: M = {potential._M.as_float / units.PlanckMass:.5g} M_P, Lambda = {potential._Lambda.as_float / units.eV:.5g} eV, phi* = {args.phi_init_Mp:g} M_P"
+
+    if SM_baseline is not None:
+        plot_abundance_shifts(
+            records, plot_dir / "abundance_shifts.pdf", args.band_half_width, title
+        )
+    else:
+        print(
+            f"@@ build_beta_plot '{model_label}': --no-baseline, so figure 1 (abundance shifts) is skipped"
+        )
+
+    kick_curve = None
+    if len(scalar_data) > 0:
+        # beta_th(T) = 1/sqrt(3 Sigma(T)) over the QCD range, from the model's own EOS
+        T_GeV_grid = np.logspace(np.log10(0.05), np.log10(50.0), 400)
+        T_out, beta_th = kick_threshold_curve(
+            scalar_data[0]._cosmology, [T * units.GeV for T in T_GeV_grid]
+        )
+        kick_curve = ([T / units.GeV for T in T_out], beta_th)
+    plot_T_deliver(records, plot_dir / "T_deliver.pdf", kick_curve, title)
+    plot_fixed_T(records, plot_dir / "fixed_T.pdf", title)
+
+    return records
+
 
 def run_pipeline(
     model_data,
@@ -655,7 +751,7 @@ def run_pipeline(
                     )
 
         if len(dropped) == 0:
-            return
+            return {}
 
         M_eV = potential._M.as_float / units.eV
         Lambda_eV = potential._Lambda.as_float / units.eV
@@ -666,6 +762,9 @@ def run_pipeline(
             print(
                 f"     -- beta={beta:.5g}, M={M_eV:.5g} eV, Lambda={Lambda_eV:.5g} eV: {reason}"
             )
+
+        # the reasons, for histories.csv (science-readiness prompt 07)
+        return {beta: reason for beta, reason in dropped}
 
     def report_dropped_scalar_models(
         model_label: str,
@@ -686,7 +785,7 @@ def run_pipeline(
             if not (m.available and not m.failure)
         ]
         if len(missing) == 0:
-            return
+            return {}
 
         failed_query_queue = RayWorkPool(
             pool,
@@ -724,6 +823,9 @@ def run_pipeline(
                 f"     -- beta={beta:.5g}, M={M_eV:.5g} eV, Lambda={Lambda_eV:.5g} eV: {reason}"
             )
 
+        # the reasons, for histories.csv (science-readiness prompt 07)
+        return {beta: reason for beta, reason in dropped}
+
     def build_plot_work(potential: AbstractPotential) -> ray.ObjectRef:
         # build a work queue to read in all ScalarModel instances with this potential, for the
         # couplings in Coupling_array
@@ -743,7 +845,6 @@ def run_pipeline(
                 "atol": atol,
                 "rtol": rtol,
                 "tags": tags,
-                "_do_not_populate": True,
             }
             for coupling in Coupling_array
         ]
@@ -763,7 +864,7 @@ def run_pipeline(
         )
         model_query_queue.run()
 
-        report_dropped_scalar_models(
+        scalar_failures = report_dropped_scalar_models(
             model_label, potential, model_query_batch, model_query_queue.results
         )
 
@@ -804,7 +905,6 @@ def run_pipeline(
                 "model_proxy": m,
                 "failure": False,
                 "tags": tags,
-                "_do_not_populate": True,
             }
             for m in model_proxies
         ]
@@ -825,7 +925,7 @@ def run_pipeline(
         bbn_query_queue.run()
         available_bbn = [B for B in bbn_query_queue.results if B.available]
 
-        report_dropped_bbn_models(
+        bbn_failures = report_dropped_bbn_models(
             model_label, potential, model_proxies, bbn_query_queue.results
         )
 
@@ -836,6 +936,8 @@ def run_pipeline(
             available_bbn,
             available_models,
             SM_baseline,
+            scalar_failures,
+            bbn_failures,
         )
 
     work_queue = RayWorkPool(
@@ -852,9 +954,29 @@ def run_pipeline(
         max_task_queue=10,
         notify_min_time_interval=120,
         title="GENERATING SUMMARY PLOTS BY BETA",
-        store_results=False,
+        store_results=True,
     )
     work_queue.run()
+
+    # figure 2 (convergence in M) and histories.csv span every potential this run read
+    # (science-readiness prompt 07)
+    all_records = [
+        record for records in work_queue.results if records for record in records
+    ]
+    model_path = Path(args.output).resolve() / f"{model_label}"
+    if len(all_records) > 0:
+        write_histories_csv(all_records, model_path / "histories.csv")
+        if SM_baseline is not None:
+            plot_convergence_in_M(
+                all_records,
+                model_path / "plots/M_convergence.pdf",
+                args.band_half_width,
+                f"{model_label}: phi* = {args.phi_init_Mp:g} M_P",
+            )
+        else:
+            print(
+                f"@@ plot_by_beta '{model_label}': --no-baseline, so figure 2 (convergence in M) is skipped"
+            )
 
 
 # establish a ShardedPool to orchestrate database access

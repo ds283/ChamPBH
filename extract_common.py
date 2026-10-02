@@ -13,11 +13,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import csv
+from bisect import bisect_left
 from copy import deepcopy
 from datetime import datetime
-from math import fabs, exp
-from typing import Optional, Any
+from math import fabs, exp, log, sqrt, isfinite
+from pathlib import Path
+from typing import Optional, Any, Sequence
 
+import numpy as np
+from matplotlib.figure import Figure
 from matplotlib.patches import Patch
 from numpy import nan
 
@@ -467,3 +472,407 @@ def add_redshift_xaxis_labels(
             l.append("BBN region")
 
     return h, l
+
+
+# ---------------------------------------------------------------------------------------
+# Extraction and the science figures (science-readiness prompt 07, README section 2 (k))
+#
+# Everything below takes plain floats, sequences, or stored value objects read through
+# attribute names. Nothing here holds a datastore handle, so all of it is testable on
+# synthetic input (ComputeTargets/tests/test_extraction.py).
+# ---------------------------------------------------------------------------------------
+
+DEFAULT_BAND_HALF_WIDTH = 0.025
+
+# the two temperatures at which figure 4 and the CSV read the history, in MeV
+FIXED_T_MEV = {"1MeV": 1.0, "70keV": 0.07}
+
+# One row of histories.csv per history. Units: M in M_P, Lambda in eV, phi in M_P, T in GeV;
+# the shifts are fractions ((value - SM baseline)/SM baseline), D/H is the stored 10^5 D/H.
+CSV_COLUMNS = [
+    "beta",
+    "M_Mp",
+    "Lambda_eV",
+    "phi_init_Mp",
+    "Yp_BBN",
+    "D_over_H",
+    "He3_over_H",
+    "Li7_over_H",
+    "delta_Yp",
+    "delta_D_over_H",
+    "T_deliver_GeV",
+    "phi_1MeV_Mp",
+    "phi_70keV_Mp",
+    "rho_ratio_1MeV",
+    "rho_ratio_70keV",
+    "reflections",
+    "failure_reasons",
+]
+
+ADIABATIC_Q_ALIASING_ISSUE = "post-adiabatic-Q-reads-aliased-late-samples"
+ADIABATIC_Q_ALIASING_M_MAX_MP = 1.0e-3
+
+
+def relative_shift(value: Optional[float], baseline: Optional[float]) -> float:
+    """
+    Fractional shift (value - baseline)/baseline. NaN if either is missing or non-finite,
+    or if the baseline is zero.
+    """
+    if value is None or baseline is None:
+        return nan
+    if not (isfinite(value) and isfinite(baseline)) or baseline == 0.0:
+        return nan
+    return (value - baseline) / baseline
+
+
+def running_band(x: Sequence[float], y: Sequence[float], half_width: float):
+    """
+    The median and the 16th and 84th percentiles of y over the window [x_i - h, x_i + h],
+    at every x_i. The window edges are inclusive. Non-finite y are ignored; a window with no
+    finite y gives NaN for all three. Returns three arrays, aligned with x.
+    """
+    xa = np.asarray(x, dtype=float)
+    ya = np.asarray(y, dtype=float)
+    median = np.full(xa.shape, np.nan)
+    lower = np.full(xa.shape, np.nan)
+    upper = np.full(xa.shape, np.nan)
+
+    good = np.isfinite(ya) & np.isfinite(xa)
+    for i, xi in enumerate(xa):
+        if not np.isfinite(xi):
+            continue
+        window = good & (xa >= xi - half_width) & (xa <= xi + half_width)
+        if not window.any():
+            continue
+        lower[i], median[i], upper[i] = np.percentile(ya[window], [16.0, 50.0, 84.0])
+
+    return median, lower, upper
+
+
+def value_at_T_Jordan(values: Sequence, attribute: str, T: float) -> Optional[float]:
+    """
+    The value of `attribute` of a stored history at Jordan-frame temperature T, by linear
+    interpolation in ln T_J between the two bracketing samples. `values` are objects with a
+    `log_T_Jordan` and the named attribute (ScalarModelValue, BBNDataValue); T is in the same
+    units as exp(log_T_Jordan). None for an empty list or T outside the sampled range.
+    """
+    if len(values) == 0 or not T > 0.0:
+        return None
+
+    pairs = sorted((v.log_T_Jordan, getattr(v, attribute)) for v in values)
+    xs = [p[0] for p in pairs]
+    lnT = log(T)
+
+    if lnT < xs[0] or lnT > xs[-1]:
+        return None
+
+    k = bisect_left(xs, lnT)
+    if xs[k] == lnT or k == 0:
+        return pairs[k][1]
+
+    x0, y0 = pairs[k - 1]
+    x1, y1 = pairs[k]
+    if x1 == x0:
+        return y0
+    return y0 + (y1 - y0) * (lnT - x0) / (x1 - x0)
+
+
+def kick_threshold_curve(cosmology, T_grid: Sequence[float]):
+    """
+    beta_th(T) = 1/sqrt(3 Sigma(T)) with Sigma = 1 - 3 w(T), for the cosmology's equation of
+    state, at each T of T_grid (dimensionful, in the cosmology's units). A T where
+    Sigma <= 0 is omitted. Returns (T, beta_th) as two lists.
+    """
+    T_out = []
+    beta_out = []
+    for T in T_grid:
+        Sigma = 1.0 - 3.0 * cosmology.w(T)
+        if Sigma > 0.0:
+            T_out.append(T)
+            beta_out.append(1.0 / sqrt(3.0 * Sigma))
+    return T_out, beta_out
+
+
+def adiabatic_Q_caption(M_over_Mp: float) -> Optional[str]:
+    """
+    The caveat appended to the max |Q| caption for M <~ 1e-3 M_P, else None.
+    """
+    if M_over_Mp <= ADIABATIC_Q_ALIASING_M_MAX_MP * (1.0 + 1e-9):
+        return f"may be set by aliased late samples; see [{ADIABATIC_Q_ALIASING_ISSUE}]"
+    return None
+
+
+def _positive_or_nan(x: Optional[float]) -> float:
+    # PRyMordial output that is not positive is a failure that plot_by_beta already drops
+    if x is None or not isfinite(x) or not x > 0.0:
+        return nan
+    return float(x)
+
+
+def build_history_record(
+    *,
+    beta: float,
+    M_Mp: float,
+    Lambda_eV: float,
+    phi_init_Mp: float,
+    scalar,
+    bbn,
+    baseline: Optional[dict],
+    units: UnitsLike,
+    failure_reasons: Sequence[str] = (),
+) -> dict:
+    """
+    One plain record for one history. `scalar` is a successful ScalarModel and `bbn` a
+    successful BBNData (read through attribute names), or None where that stage has no
+    successful row; `baseline` is the Standard-Model dictionary of compute_SM_baseline, or
+    None (then the shifts are NaN). The record carries one extra key, first_bounce_reflected,
+    which figure 3 reads and the CSV does not write.
+    """
+    record = {name: nan for name in CSV_COLUMNS}
+    record.update(
+        beta=beta,
+        M_Mp=M_Mp,
+        Lambda_eV=Lambda_eV,
+        phi_init_Mp=phi_init_Mp,
+        reflections=nan,
+        failure_reasons="; ".join(failure_reasons),
+        first_bounce_reflected=None,
+    )
+
+    if bbn is not None:
+        record["Yp_BBN"] = _positive_or_nan(bbn.Yp_BBN)
+        record["D_over_H"] = _positive_or_nan(bbn.DOverH)
+        record["He3_over_H"] = _positive_or_nan(bbn.He3OverH)
+        record["Li7_over_H"] = _positive_or_nan(bbn.Li7OverH)
+        if baseline is not None:
+            record["delta_Yp"] = relative_shift(record["Yp_BBN"], baseline["Yp_BBN"])
+            record["delta_D_over_H"] = relative_shift(
+                record["D_over_H"], baseline["DOverH"]
+            )
+        for tag, T_MeV in FIXED_T_MEV.items():
+            T = T_MeV * units.MeV
+            ratio = value_at_T_Jordan(bbn.values, "density_NP_ratio", T)
+            record[f"rho_ratio_{tag}"] = nan if ratio is None else ratio
+
+    if scalar is not None:
+        record["reflections"] = reflection_count(scalar.extra_metadata)
+        bounce = scalar.first_bounce
+        if bounce is not None:
+            record["T_deliver_GeV"] = exp(bounce.log_T_Jordan) / units.GeV
+            record["first_bounce_reflected"] = bool(bounce.reflected)
+        for tag, T_MeV in FIXED_T_MEV.items():
+            T = T_MeV * units.MeV
+            phi = value_at_T_Jordan(scalar.values, "phi_Einstein", T)
+            record[f"phi_{tag}_Mp"] = nan if phi is None else phi / units.PlanckMass
+
+    return record
+
+
+def _finite(records: Sequence[dict], key: str):
+    xs = np.array([r["beta"] for r in records], dtype=float)
+    ys = np.array([r[key] for r in records], dtype=float)
+    good = np.isfinite(xs) & np.isfinite(ys)
+    order = np.argsort(xs[good])
+    return xs[good][order], ys[good][order]
+
+
+def _save(fig: Figure, path: Path) -> bool:
+    path = Path(path)
+    path.parent.mkdir(exist_ok=True, parents=True)
+    try:
+        fig.savefig(path)
+        fig.savefig(path.with_suffix(".png"))
+    except OverflowError:
+        print(f"!! extract_common: could not write {path}")
+        return False
+    return True
+
+
+SHIFT_PANELS = [
+    ("delta_D_over_H", r"$\Delta(\mathrm{D}/\mathrm{H})$ [%]"),
+    ("delta_Yp", r"$\Delta Y_p$ [%]"),
+]
+
+
+def plot_abundance_shifts(
+    records: Sequence[dict],
+    path: Path,
+    half_width: float = DEFAULT_BAND_HALF_WIDTH,
+    title: str = "",
+) -> bool:
+    """
+    Figure 1. Shifts of D/H and Yp, in per cent, against beta relative to the same-path SM
+    baseline: points, the running median and its 16-84 per cent band. Returns False, writing
+    nothing, if there is no finite shift.
+    """
+    if not any(np.isfinite(r[key]) for r in records for key, _ in SHIFT_PANELS):
+        print("!! plot_abundance_shifts: no finite shifts to plot; figure 1 skipped")
+        return False
+
+    fig = Figure(figsize=(8.0, 8.0))
+    axs = fig.subplots(nrows=2, ncols=1, sharex=True)
+    for ax, (key, label) in zip(axs, SHIFT_PANELS):
+        x, y = _finite(records, key)
+        y = 100.0 * y
+        ax.plot(x, y, linestyle="none", marker=".", color="tab:blue", alpha=0.5)
+        median, lower, upper = running_band(x, y, half_width)
+        ax.plot(x, median, color="k", label="running median")
+        ax.fill_between(
+            x, lower, upper, color="tab:blue", alpha=0.25, label="16-84% band"
+        )
+        ax.axhline(0.0, color="gray", linestyle="dotted")
+        ax.set_ylabel(label)
+        ax.grid(True)
+    axs[1].set_xlabel(r"coupling $\beta$")
+    axs[0].legend(loc="best")
+    fig.suptitle(
+        f"{title}\nband half-width {half_width:g} in $\\beta$", fontsize="small"
+    )
+    return _save(fig, path)
+
+
+def plot_convergence_in_M(
+    records: Sequence[dict],
+    path: Path,
+    half_width: float = DEFAULT_BAND_HALF_WIDTH,
+    title: str = "",
+) -> bool:
+    """
+    Figure 2. The running medians of figure 1, one line per (M, Lambda) in the records,
+    D/H above and Yp below: the approach to the M-independent limit.
+    """
+    groups: dict = {}
+    for r in records:
+        groups.setdefault((r["M_Mp"], r["Lambda_eV"]), []).append(r)
+
+    if not any(np.isfinite(r[key]) for r in records for key, _ in SHIFT_PANELS):
+        print("!! plot_convergence_in_M: no finite shifts to plot; figure 2 skipped")
+        return False
+
+    fig = Figure(figsize=(8.0, 8.0))
+    axs = fig.subplots(nrows=2, ncols=1, sharex=True)
+    for (M, Lam), group in sorted(groups.items()):
+        for ax, (key, _) in zip(axs, SHIFT_PANELS):
+            x, y = _finite(group, key)
+            if len(x) == 0:
+                continue
+            median, _, _ = running_band(x, 100.0 * y, half_width)
+            ax.plot(x, median, label=rf"$M = {M:.3g}\,M_P$, $\Lambda = {Lam:.3g}$ eV")
+    for ax, (_, label) in zip(axs, SHIFT_PANELS):
+        ax.axhline(0.0, color="gray", linestyle="dotted")
+        ax.set_ylabel(f"median {label}")
+        ax.grid(True)
+    axs[1].set_xlabel(r"coupling $\beta$")
+    axs[0].legend(loc="best", fontsize="x-small")
+    fig.suptitle(
+        f"{title}\nband half-width {half_width:g} in $\\beta$", fontsize="small"
+    )
+    return _save(fig, path)
+
+
+def plot_T_deliver(
+    records: Sequence[dict],
+    path: Path,
+    kick_curve: Optional[tuple] = None,
+    title: str = "",
+) -> bool:
+    """
+    Figure 3. T_deliver, the temperature of the first bounce, in GeV against beta, with
+    reflected bounces marked, and the kick threshold beta_th(T) overlaid. `kick_curve` is
+    (T in GeV, beta_th).
+    """
+    pts = [
+        r for r in records if np.isfinite(r["beta"]) and np.isfinite(r["T_deliver_GeV"])
+    ]
+    if len(pts) == 0:
+        print("!! plot_T_deliver: no first bounce to plot; figure 3 skipped")
+        return False
+
+    fig = Figure(figsize=(8.0, 6.0))
+    ax = fig.subplots()
+    for reflected, marker, colour, label in (
+        (False, "o", "tab:blue", "first bounce (root of $\\pi$)"),
+        (True, "x", "tab:red", "first bounce, elastic reflection"),
+    ):
+        sel = [r for r in pts if bool(r["first_bounce_reflected"]) == reflected]
+        if sel:
+            ax.plot(
+                [r["beta"] for r in sel],
+                [r["T_deliver_GeV"] for r in sel],
+                linestyle="none",
+                marker=marker,
+                color=colour,
+                label=label,
+            )
+    if kick_curve is not None and len(kick_curve[0]) > 0:
+        ax.plot(
+            kick_curve[1],
+            kick_curve[0],
+            color="k",
+            linestyle="dashed",
+            label=r"$\beta_{\mathrm{th}}(T) = 1/\sqrt{3\Sigma(T)}$",
+        )
+        betas = [r["beta"] for r in pts]
+        pad = 0.1 * (max(betas) - min(betas) + 1e-3)
+        ax.set_xlim(min(betas) - pad, max(betas) + pad)
+    ax.set_yscale("log")
+    ax.set_xlabel(r"coupling $\beta$")
+    ax.set_ylabel(r"$T_{\mathrm{deliver}}$ [GeV]")
+    ax.grid(True)
+    ax.legend(loc="best", fontsize="small")
+    fig.suptitle(title, fontsize="small")
+    return _save(fig, path)
+
+
+def plot_fixed_T(records: Sequence[dict], path: Path, title: str = "") -> bool:
+    """
+    Figure 4. The point values of the field phi (in M_P) and of rho_NP/rho_R,J at 1 MeV and
+    at 70 keV, against beta.
+    """
+    panels = [
+        ("phi", r"$\phi$ [$M_P$]", "phi_{}_Mp"),
+        ("ratio", r"$\rho_{\mathrm{NP}}/\rho_{R,J}$", "rho_ratio_{}"),
+    ]
+    if not any(
+        np.isfinite(r[template.format(tag)])
+        for r in records
+        for _, _, template in panels
+        for tag in FIXED_T_MEV
+    ):
+        print("!! plot_fixed_T: no fixed-T values to plot; figure 4 skipped")
+        return False
+
+    fig = Figure(figsize=(8.0, 8.0))
+    axs = fig.subplots(nrows=2, ncols=1, sharex=True)
+    for ax, (_, ylabel, template) in zip(axs, panels):
+        for tag, colour in zip(FIXED_T_MEV, ("tab:blue", "tab:orange")):
+            x, y = _finite(records, template.format(tag))
+            keep = y > 0.0
+            ax.plot(x[keep], y[keep], marker=".", color=colour, label=f"$T_J$ = {tag}")
+        ax.set_yscale("log")
+        ax.set_ylabel(ylabel)
+        ax.grid(True)
+    axs[1].set_xlabel(r"coupling $\beta$")
+    axs[0].legend(loc="best", fontsize="small")
+    fig.suptitle(title, fontsize="small")
+    return _save(fig, path)
+
+
+def write_histories_csv(records: Sequence[dict], path: Path) -> None:
+    """
+    histories.csv: one row per record, columns CSV_COLUMNS, sorted by (M, Lambda, beta).
+    Missing values are written empty.
+    """
+    path = Path(path)
+    path.parent.mkdir(exist_ok=True, parents=True)
+
+    def cell(x):
+        if x is None or (isinstance(x, float) and not isfinite(x)):
+            return ""
+        return x
+
+    with open(path, "w", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow(CSV_COLUMNS)
+        for r in sorted(records, key=lambda r: (r["M_Mp"], r["Lambda_eV"], r["beta"])):
+            writer.writerow([cell(r[c]) for c in CSV_COLUMNS])
