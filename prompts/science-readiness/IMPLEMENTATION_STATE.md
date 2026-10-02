@@ -247,7 +247,7 @@ here (README §5 rule 4).
 | `[02-a-short-bbn-sample-grid-escapes-compute-bbn-data]` | `run-integrity` | 01 (P4) — **resolved 2026-10-01** (§4) |
 | `[02-the-bbn-callbacks-do-not-check-their-values-for-finiteness]` | `run-integrity` | 01 (P4) — **resolved 2026-10-01** (§4) |
 | `[00-scalarmodel-failure-rows-carry-no-reason]` | `integrator-remediation` | 02 — **resolved 2026-10-01** (§4) |
-| `[00-stored-samples-alias-the-rebounds]` | `integrator-remediation` | 05 — **narrowed 2026-10-02**: it has no BBN half in PRyMordial's window, where the z grid resolves the bounces (above about 100 eV); the averaging was withdrawn (log 05). The adiabatic half stays open there |
+| `[00-stored-samples-alias-the-rebounds]` | `integrator-remediation` | 05 — **narrowed 2026-10-02**: it has no BBN half in PRyMordial's window, where the z grid resolves the bounces (above about 100 eV); the averaging was withdrawn (log 05). The adiabatic half stays open there. **Returned unassigned 2026-10-02** at the close-out; the index lists it under `integrator-remediation` (§1.6) |
 
 ---
 

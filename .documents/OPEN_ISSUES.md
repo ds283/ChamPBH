@@ -3,7 +3,7 @@
 **Last updated:** 2026-10-02 · **22 open**: 5 on the `review-remediation` board (closed
 2026-09-30), none now assigned to `science-readiness`; 2 on the `production-readiness` board
 (closed 2026-09-30); 4 on the `run-integrity` board (closed 2026-09-30); 9 on the
-`integrator-remediation` board (closed 2026-10-01), 1 of them assigned to `science-readiness`;
+`integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`;
 2 on the `science-readiness` board (planned 2026-10-01; closed 2026-10-02, 10 of 10 landed,
 prompt 06b having been added 2026-10-02).
 
@@ -106,8 +106,9 @@ one the same day from the user's reflection guard G1. Prompt 01 (2026-10-01) clo
 opened two (`[01-…]`); prompt 02 (2026-10-01) closed five and opened one (`[02-…]`); prompt 03
 (2026-10-01) closed one; prompt 04, the close-out (2026-10-01), opened and closed none and the
 campaign closed; one more was opened after the close-out (2026-10-01, `[post-…]`). Nine are open;
-two were assigned on 2026-10-01 to `science-readiness` (§1.7), one of them since resolved (prompt
-02, 2026-10-01), and the eight below are not.
+two were assigned on 2026-10-01 to `science-readiness` (§1.7). One was resolved (prompt 02,
+2026-10-01). The other was narrowed (prompt 05, 2026-10-02) and came back here unassigned when that
+campaign closed (2026-10-02). All nine are below.
 
 - `[00-settling-at-physical-M-needs-a-parked-tracking-model]` — the field at φ_wall(ρ) as a
   passenger once its bounces are unresolvable: the switch criterion and the parked field's
@@ -127,15 +128,17 @@ two were assigned on 2026-10-01 to `science-readiness` (§1.7), one of them sinc
   the last silent substitution on an unphysical state; never seen.
 - `[post-adiabatic-Q-reads-aliased-late-samples]` — below 1 keV the z grid misses most bounces
   at small M (0.02–0.3 samples per half-period at 1e-5, 1e-6); max |Q| may be set by aliasing.
+- `[00-stored-samples-alias-the-rebounds]` — the z grid samples fast bounces at random phase below
+  about 100 eV; narrowed by `science-readiness` prompt 05: no BBN half (resolved in PRyMordial's
+  window); the adiabatic half stays open. Unassigned since 2026-10-02.
 
 ### 1.7 Assigned to `science-readiness` — [its board](../prompts/science-readiness/IMPLEMENTATION_STATE.md) §3.1
 
 Assigned 2026-10-01 when the campaign was planned. Each entry stays on its own board, which
 carries the **Assigned** line; the prompt that closes one deletes its row here.
 
-- `[00-stored-samples-alias-the-rebounds]` — the z grid samples fast bounces at random phase below
-  about 100 eV; narrowed by prompt 05: no BBN half (resolved in PRyMordial's window); the adiabatic
-  half stays open. `integrator-remediation`.
+None remain. Of the seven, six were resolved. The seventh, `[00-stored-samples-alias-the-rebounds]`,
+was narrowed and returned to §1.6, unassigned, when the campaign closed (2026-10-02).
 
 ### 1.8 `science-readiness` — [board §3](../prompts/science-readiness/IMPLEMENTATION_STATE.md)
 

@@ -174,6 +174,8 @@ own source.
     sub-3-keV jumps in the ratio are resolved bounces. Aliasing begins below about 100 eV. The
     cell means were measured and withdrawn by the user's ruling. The adiabatic half stays open as
     `[post-adiabatic-Q-reads-aliased-late-samples]`.
+  - **Unassigned (2026-10-02):** `science-readiness` closed (its prompt 09) with this entry
+    narrowed, not resolved. It is open here again and assigned to no campaign.
 - **[00-atol-does-not-scale-with-phi]** *(audit §6)*.
   - **What.** `atol = 1e-8` on `φ` and `π`, whose wall-side values are `~1e-4 M`. A vector
     `atol = [1e-8 M, 1e-8 M, 1e-8, 1e-8, 1e-8]` halves the first-bounce error at 1 % cost.
