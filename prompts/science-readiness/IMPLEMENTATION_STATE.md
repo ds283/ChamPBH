@@ -1,8 +1,8 @@
 # Science-readiness campaign — implementation state
 
-**Last updated:** 2026-10-02 · **Status: IN PROGRESS — 7 of 10 landed** (prompt 01, with
+**Last updated:** 2026-10-02 · **Status: IN PROGRESS — 8 of 10 landed** (prompt 01, with
 deviations; prompt 02; prompt 03, with deviations; prompt 04, with deviations; prompt 05,
-measurement only, the averaging withdrawn; prompt 06; prompt 06b, with deviations). Planned on 2026-10-01 against
+measurement only, the averaging withdrawn; prompt 06; prompt 06b, with deviations; prompt 07, with deviations). Planned on 2026-10-01 against
 `main` at `6aaa706`, from a Claude Science re-evaluation kept at
 [`source/campaign_reevaluation_2026-10-01.md`](source/campaign_reevaluation_2026-10-01.md) and
 checked against the tree by the planner (README §0.3). Suites at `6aaa706`: CosmologyModels 18,
@@ -13,7 +13,7 @@ land on it.
 made before 2026.6.0 is invalid, and the science run needs a fresh datastore file (columns are
 added with no migration). `PRYM_VERSION` is `"bf24c3d+ri02+sr01"`. Suites after prompt 01:
 CosmologyModels 18, ComputeTargets 71, Datastore 17. After prompt 02: 18, 75, 21. After
-prompt 03: 18, 82, 26. After prompt 04: 18, 86, 26. After prompt 05 (no code): 18, 86, 26. After prompt 06: 18, 88, 26. After prompt 06b: 18, 91, 31.
+prompt 03: 18, 82, 26. After prompt 04: 18, 86, 26. After prompt 05 (no code): 18, 86, 26. After prompt 06: 18, 88, 26. After prompt 06b: 18, 91, 31. After prompt 07: 18, 103, 31.
 
 The campaign hands the scalar field to PRyMordial through the expansion rate alone, with a patched
 PRyMordial that has no fictitious new-physics temperature and an optional wall-clock limit. It
@@ -165,7 +165,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | 05 | [Bounce averages on the dense output](05-bounce-averages.md) | **A** | Opus | ✍️ 2026-10-01 | ✅ 2026-10-02 (measurement only; the averaging withdrawn by the user's ruling) | see `git log` ("Withdraw the bounce averages: BBN's window is not aliased") | [`logs/05-bounce-averages.md`](logs/05-bounce-averages.md) |
 | 06 | [Narrow the BBN spline to PRyMordial's range](06-bbn-spline-floor.md) | **L** | Sonnet | ✍️ 2026-10-01 | ✅ 2026-10-02 | see `git log` ("Narrow the BBN spline floor to 0.2 keV") | [`logs/06-bbn-spline-floor.md`](logs/06-bbn-spline-floor.md) |
 | 06b | [Store the fixed-temperature values on the `ScalarModel` row](06b-fixed-T-values.md) (added 2026-10-02) | **V** | Opus | ✍️ 2026-10-02 | ✅ 2026-10-02 (with deviations) | see `git log` ("Store phi and the NP ratio at 1 MeV and 70 keV on ScalarModel") | [`logs/06b-fixed-T-values.md`](logs/06b-fixed-T-values.md) |
-| 07 | [Extraction and the science figures](07-extraction-and-figures.md) | **G** | Sonnet | ✍️ 2026-10-01 | — | — | — |
+| 07 | [Extraction and the science figures](07-extraction-and-figures.md) | **G** | Sonnet | ✍️ 2026-10-01 (re-planned 2026-10-02) | ✅ 2026-10-02 (with deviations) | see `git log` ("Add the extraction and the four science figures to plot_by_beta") | [`logs/07-extraction-and-figures.md`](logs/07-extraction-and-figures.md) |
 | 08 | [Documents](08-documents.md) | **D** | Sonnet | ✍️ 2026-10-01 | — | — | — |
 | 09 | [Close-out verification and handover](09-close-out-verification.md) | close-out | Sonnet | ✍️ 2026-10-01 | — | — | — |
 
@@ -184,7 +184,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | A | **DEFECT, medium at M ≲ 10⁻⁴** | BBN integrates a spline through random-phase samples of the bounces below a few keV. Closes `[00-bbn-input-is-aliased-at-small-M]`; narrows `[00-stored-samples-alias-the-rebounds]` (assigned). | 05 | **withdrawn** 2026-10-02 (log 05): premise measured false; the user's ruling |
 | L | **DEFECT, low** | The BBN spline reaches 0.1 eV, while PRyMordial reads to 0.363 keV. Closes `[00-bbn-spline-domain-is-far-wider-than-prymordial-uses]` (assigned). | 06 | **done** 2026-10-02 (log 06) |
 | V | **GAP** | φ and ρ_NP/ρ_R,J at 1 MeV and 70 keV are not stored on the `ScalarModel` row. Closes `[00-fixed-T-values-are-not-stored]`. Added 2026-10-02 (README §0.2, U6). | 06b | **done** 2026-10-02 (log 06b) |
-| G | **GAP** | No extraction or figures for the science run. Closes `[00-no-extraction-for-the-science-figures]`. | 07 | open |
+| G | **GAP** | No extraction or figures for the science run. Closes `[00-no-extraction-for-the-science-figures]`. | 07 | **done** 2026-10-02 (log 07) |
 | D | documents | Three documents describe the `NP_thermo_flag` route. Closes `[00-documents-describe-the-thermo-route]` and `[04-numerical-strategies-describes-the-removed-asinh-bbn-interface]` (assigned). | 08 | open |
 
 ---
@@ -192,15 +192,11 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 ## 3. Active and unresolved issues
 
 Seven opened by the planner on 2026-10-01, one per campaign item that has no issue on another
-board; prompt 01 closed three, prompt 03 one and prompt 05 one (§4), and two are open. Prompt 05
+board; prompt 01 closed three, prompt 03 one, prompt 05 one and prompt 07 one (§4), and one is open. Prompt 05
 opened two more (`[05-…]`). The re-plan of 2026-10-02 (README §0.2, U6) opened one more,
 `[00-fixed-T-values-are-not-stored]`, for prompt 06b, which closed it (§4). Seven more were assigned from other boards (§3.1); prompts 01, 02, 04
 and 06 closed five of them, prompt 05 narrowed one, and two are open.
 
-- **[00-no-extraction-for-the-science-figures]** *(README §1 G)*.
-  - **What.** None of the four Phase D figures, nor a per-history table, can be produced from a
-    store.
-  - **Next step.** Prompt 07.
 - **[00-documents-describe-the-thermo-route]** *(README §1 D)*.
   - **What.** `numerical-strategies.md` §7, `numerical-methods-for-paper.md` §4 and
     `architecture-summary.md` §7.4 describe the `NP_thermo_flag` route and the pressure callback.
@@ -243,6 +239,20 @@ here (README §5 rule 4).
 ---
 
 ## 4. Resolved issues
+
+- **[00-no-extraction-for-the-science-figures]** *(README §1 G)*.
+  - **What.** None of the four Phase D figures, nor a per-history table, can be produced from a
+    store.
+  - **Next step.** Prompt 07.
+  - **Resolved (2026-10-02):** by prompt 07 (log 07). `extract_common.py` has `relative_shift`,
+    `running_band` and `kick_threshold_curve`, the record builder `build_history_record`, the four
+    figure functions, `write_histories_csv` and `CSV_COLUMNS`. `plot_by_beta.py` draws figures 1,
+    3 and 4 per (M, Λ) and figure 2 and `histories.csv` per cosmology model, through the existing
+    lookups with `_do_not_populate` kept on all four: the fixed-`T` values are
+    `ScalarModel.fixed_T_values`, the first bounce is `ScalarModel.first_bounce`. `--band-half-width`
+    (0.025) is in the shared parser. `value_at_T_Jordan` is not in the tree (U6). Twelve tests on
+    synthetic records, no datastore; `plot_by_beta.py` itself is checked by `ast` and has not been
+    run against a store.
 
 - **[00-fixed-T-values-are-not-stored]** *(README §1 V; opened 2026-10-02 by the re-plan)*.
   - **What.** Figure 4 and `histories.csv` need φ and ρ_NP/ρ_R,J at T_J = 1 MeV and 70 keV,

@@ -134,6 +134,14 @@ def create_argument_parser() -> configargparse.ArgumentParser:
         "A start with Omega(phi*) T* > M_P is warned about and computed",
     )
     parser.add_argument(
+        "--band-half-width",
+        type=float,
+        default=0.025,
+        help="half-width h, in the coupling beta, of the window [beta - h, beta + h] over which "
+        "plot_by_beta.py takes the running median and the 16th-84th percentile band of the "
+        "abundance shifts (science-readiness prompt 07)",
+    )
+    parser.add_argument(
         "--T-stop-GeV",
         type=float,
         default=None,
