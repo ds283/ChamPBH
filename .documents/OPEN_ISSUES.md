@@ -1,10 +1,10 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-02 · **25 open**: 7 on the `review-remediation` board (closed
+**Last updated:** 2026-10-02 · **26 open**: 7 on the `review-remediation` board (closed
 2026-09-30), 2 of them assigned to `science-readiness`; 2 on the `production-readiness` board
 (closed 2026-09-30); 4 on the `run-integrity` board (closed 2026-09-30); 9 on the
 `integrator-remediation` board (closed 2026-10-01), 1 of them assigned to `science-readiness`;
-3 on the `science-readiness` board (planned 2026-10-01, 4 of 9 landed).
+4 on the `science-readiness` board (planned 2026-10-01, 5 of 9 landed).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -136,16 +136,21 @@ carries the **Assigned** line; the prompt that closes one deletes its row here.
   reads to 0.363 keV. `review-remediation`; prompt 06.
 - `[04-numerical-strategies-describes-the-removed-asinh-bbn-interface]` — §7.2–7.4 need a dated
   addendum. `review-remediation`; prompt 08.
-- `[00-stored-samples-alias-the-rebounds]` — the z grid samples fast bounces at random phase; its
-  BBN half goes to prompt 05 (cell means); the adiabatic half stays open. `integrator-remediation`.
+- `[00-stored-samples-alias-the-rebounds]` — the z grid samples fast bounces at random phase below
+  about 100 eV; narrowed by prompt 05: no BBN half (resolved in PRyMordial's window); the adiabatic
+  half stays open. `integrator-remediation`.
 
 ### 1.8 `science-readiness` — [board §3](../prompts/science-readiness/IMPLEMENTATION_STATE.md)
 
 Seven opened by the planner on 2026-10-01, one per campaign item with no issue elsewhere.
-Prompt 01 (2026-10-01) closed three and prompt 03 (2026-10-02) one (board §4).
+Prompt 01 (2026-10-01) closed three, prompt 03 (2026-10-02) one and prompt 05 (2026-10-02) one
+(board §4). Prompt 05 opened two (`[05-…]`).
 
-- `[00-bbn-input-is-aliased-at-small-M]` — below 3 keV the ratio BBN splines swings ±0.4–0.85 %
-  between samples at small M. Prompt 05.
 - `[00-no-extraction-for-the-science-figures]` — no code for the four Phase D figures. Prompt 07.
 - `[00-documents-describe-the-thermo-route]` — three documents describe the replaced route.
   Prompt 08.
+- `[05-the-ratio-spline-may-ring-at-resolved-bounce-jumps]` — the cubic spline through the
+  ratio's resolved bounce jumps may overshoot between samples; unmeasured.
+- `[05-the-value-factory-compares-stored-phi-against-pi]` — `ScalarModelValue_factory.build`
+  checks stored φ against supplied π (`Datastore/SQL/ObjectFactories/ScalarModel.py:1008` on
+  `a522005`).

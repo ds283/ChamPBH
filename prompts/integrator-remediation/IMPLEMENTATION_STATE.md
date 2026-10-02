@@ -168,6 +168,12 @@ own source.
     `H_J²` and `φ` by Gauss–Legendre on the dense output, which BBN reads (the user's choice,
     2026-10-01). The adiabatic half stays here as `[post-adiabatic-Q-reads-aliased-late-samples]`;
     prompt 05 narrows this entry rather than closing it.
+  - **Narrowed (2026-10-02):** by `science-readiness` prompt 05 (its log 05). The BBN half does not
+    exist in PRyMordial's window: the z grid resolves the bounces above about 100 eV (a median of
+    0 half-periods per sample cell from 100 MeV to 100 eV at β = 1.6 and 2, M = 10⁻⁵), and the
+    sub-3-keV jumps in the ratio are resolved bounces. Aliasing begins below about 100 eV. The
+    cell means were measured and withdrawn by the user's ruling. The adiabatic half stays open as
+    `[post-adiabatic-Q-reads-aliased-late-samples]`.
 - **[00-atol-does-not-scale-with-phi]** *(audit §6)*.
   - **What.** `atol = 1e-8` on `φ` and `π`, whose wall-side values are `~1e-4 M`. A vector
     `atol = [1e-8 M, 1e-8 M, 1e-8, 1e-8, 1e-8]` halves the first-bounce error at 1 % cost.

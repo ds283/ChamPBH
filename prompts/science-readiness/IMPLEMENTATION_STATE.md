@@ -1,7 +1,8 @@
 # Science-readiness campaign — implementation state
 
-**Last updated:** 2026-10-02 · **Status: IN PROGRESS — 4 of 9 landed** (prompt 01, with
-deviations; prompt 02; prompt 03, with deviations; prompt 04, with deviations). Planned on 2026-10-01 against
+**Last updated:** 2026-10-02 · **Status: IN PROGRESS — 5 of 9 landed** (prompt 01, with
+deviations; prompt 02; prompt 03, with deviations; prompt 04, with deviations; prompt 05,
+measurement only, the averaging withdrawn). Planned on 2026-10-01 against
 `main` at `6aaa706`, from a Claude Science re-evaluation kept at
 [`source/campaign_reevaluation_2026-10-01.md`](source/campaign_reevaluation_2026-10-01.md) and
 checked against the tree by the planner (README §0.3). Suites at `6aaa706`: CosmologyModels 18,
@@ -12,7 +13,7 @@ land on it.
 made before 2026.6.0 is invalid, and the science run needs a fresh datastore file (columns are
 added with no migration). `PRYM_VERSION` is `"bf24c3d+ri02+sr01"`. Suites after prompt 01:
 CosmologyModels 18, ComputeTargets 71, Datastore 17. After prompt 02: 18, 75, 21. After
-prompt 03: 18, 82, 26. After prompt 04: 18, 86, 26.
+prompt 03: 18, 82, 26. After prompt 04: 18, 86, 26. After prompt 05 (no code): 18, 86, 26.
 
 The campaign hands the scalar field to PRyMordial through the expansion rate alone, with a patched
 PRyMordial that has no fictitious new-physics temperature and an optional wall-clock limit. It
@@ -110,7 +111,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | 02 | [A failure reason on `ScalarModel` rows](02-scalarmodel-failure-reasons.md) | **F** | Sonnet | ✍️ 2026-10-01 | ✅ 2026-10-01 (with deviations) | see `git log` ("Store why a ScalarModel history failed") | [`logs/02-scalarmodel-failure-reasons.md`](logs/02-scalarmodel-failure-reasons.md) |
 | 03 | [Store the first bounce](03-first-bounce.md) | **T** | Opus | ✍️ 2026-10-01 | ✅ 2026-10-02 (with deviations) | see `git log` ("Store the first bounce of every ScalarModel") | [`logs/03-first-bounce.md`](logs/03-first-bounce.md) |
 | 04 | [The initial field as a run option, with a super-Planckian warning](04-initial-field-option.md) | **P** | Sonnet | ✍️ 2026-10-01 | ✅ 2026-10-02 (with deviations) | see `git log` ("Make the initial field a run option and warn on a super-Planckian start") | [`logs/04-initial-field-option.md`](logs/04-initial-field-option.md) |
-| 05 | [Bounce averages on the dense output](05-bounce-averages.md) | **A** | Opus | ✍️ 2026-10-01 | — | — | — |
+| 05 | [Bounce averages on the dense output](05-bounce-averages.md) | **A** | Opus | ✍️ 2026-10-01 | ✅ 2026-10-02 (measurement only; the averaging withdrawn by the user's ruling) | see `git log` ("Withdraw the bounce averages: BBN's window is not aliased") | [`logs/05-bounce-averages.md`](logs/05-bounce-averages.md) |
 | 06 | [Narrow the BBN spline to PRyMordial's range](06-bbn-spline-floor.md) | **L** | Sonnet | ✍️ 2026-10-01 | — | — | — |
 | 07 | [Extraction and the science figures](07-extraction-and-figures.md) | **G** | Sonnet | ✍️ 2026-10-01 | — | — | — |
 | 08 | [Documents](08-documents.md) | **D** | Sonnet | ✍️ 2026-10-01 | — | — | — |
@@ -128,7 +129,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | F | **GAP** | A `ScalarModel` failure row carries no reason. Closes `[00-scalarmodel-failure-rows-carry-no-reason]` (assigned). | 02 | **done** 2026-10-01 (log 02) |
 | T | **GAP** | The first bounce is not stored and cannot be read from the samples at small `M`. Closes `[00-first-bounce-is-not-stored]`. | 03 | **done** 2026-10-02 (log 03) |
 | P | **GAP** | φ\* is a literal in three drivers, with no super-Planckian warning. Closes `[00-initial-field-value-is-hard-coded-and-unchecked]` (assigned). | 04 | **done** 2026-10-02 (log 04) |
-| A | **DEFECT, medium at M ≲ 10⁻⁴** | BBN integrates a spline through random-phase samples of the bounces below a few keV. Closes `[00-bbn-input-is-aliased-at-small-M]`; narrows `[00-stored-samples-alias-the-rebounds]` (assigned). | 05 | open |
+| A | **DEFECT, medium at M ≲ 10⁻⁴** | BBN integrates a spline through random-phase samples of the bounces below a few keV. Closes `[00-bbn-input-is-aliased-at-small-M]`; narrows `[00-stored-samples-alias-the-rebounds]` (assigned). | 05 | **withdrawn** 2026-10-02 (log 05): premise measured false; the user's ruling |
 | L | **DEFECT, low** | The BBN spline reaches 0.1 eV, while PRyMordial reads to 0.363 keV. Closes `[00-bbn-spline-domain-is-far-wider-than-prymordial-uses]` (assigned). | 06 | open |
 | G | **GAP** | No extraction or figures for the science run. Closes `[00-no-extraction-for-the-science-figures]`. | 07 | open |
 | D | documents | Three documents describe the `NP_thermo_flag` route. Closes `[00-documents-describe-the-thermo-route]` and `[04-numerical-strategies-describes-the-removed-asinh-bbn-interface]` (assigned). | 08 | open |
@@ -138,16 +139,10 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 ## 3. Active and unresolved issues
 
 Seven opened by the planner on 2026-10-01, one per campaign item that has no issue on another
-board; prompt 01 closed three and prompt 03 one (§4), and three are open. Seven more were assigned from other boards
-(§3.1); prompts 01, 02 and 04 closed four of them, and three are open.
+board; prompt 01 closed three, prompt 03 one and prompt 05 one (§4), and two are open. Prompt 05
+opened two more (`[05-…]`). Seven more were assigned from other boards (§3.1); prompts 01, 02 and
+04 closed four of them, prompt 05 narrowed one, and three are open.
 
-- **[00-bbn-input-is-aliased-at-small-M]** *(README §1 A; the source §2; README §6.1)*.
-  - **What.** Below a few keV, `ρ_NP/ρ_R,J` jumps from sample to sample at small `M`, because the
-    samples catch the bounces at random phase: ±0.4 % at M = 10⁻⁵ and ±0.85 % at 10⁻³, around a
-    median ten times smaller (README §6.1). The source reports one PRyMordial failure from it
-    (β = 1.6, M = 10⁻⁵, low-T network); the planner did not reproduce it on `6aaa706`.
-  - **Impact.** Noise of the order of the signal in the input PRyMordial integrates below 3 keV.
-  - **Next step.** Prompt 05.
 - **[00-no-extraction-for-the-science-figures]** *(README §1 G)*.
   - **What.** None of the four Phase D figures, nor a per-history table, can be produced from a
     store.
@@ -156,6 +151,24 @@ board; prompt 01 closed three and prompt 03 one (§4), and three are open. Seven
   - **What.** `numerical-strategies.md` §7, `numerical-methods-for-paper.md` §4 and
     `architecture-summary.md` §7.4 describe the `NP_thermo_flag` route and the pressure callback.
   - **Next step.** Prompt 08, once the code is final.
+- **[05-the-ratio-spline-may-ring-at-resolved-bounce-jumps]** *(log 05, Observations)*.
+  - **What.** In PRyMordial's window the ratio `ρ_NP/ρ_R,J` is a resolved sawtooth: it jumps by
+    about +0.005 to +0.007 at each bounce (β = 1.6, M = 10⁻⁵, 0.3–3 keV) and drifts smoothly in
+    between. Each jump falls between two samples 0.0092 e-folds apart, and `build_rho_NP_callback`
+    puts a cubic spline through them. Its overshoot or ringing between samples has not been
+    measured.
+  - **Impact.** Until it is, a PRyMordial failure on point input cannot be attributed to the true
+    H rather than to our interpolation.
+  - **Next step.** On one small-M history, compare the spline's r between samples with r from the
+    dense output at the same T_J. Not assigned.
+- **[05-the-value-factory-compares-stored-phi-against-pi]** *(log 05, Observations)*.
+  - **What.** `sqla_ScalarModelValue_factory.build`, on finding an existing row, checks
+    `fabs(row_data.phi_Einstein_Mp - pi_Einstein_Mp)` (`Datastore/SQL/ObjectFactories/ScalarModel.py:1008`
+    on `a522005`) under a message about π: the stored φ against the supplied π, where
+    `row_data.pi_Einstein_Mp` was meant.
+  - **Impact.** The path raises a spurious `ValueError` whenever it is reached with φ ≠ π; nothing
+    in the tree calls it today (the `ScalarModel` factory reads values directly).
+  - **Next step.** One-word fix with a test of the existing-row path. Not assigned.
 
 ### 3.1 Assigned to this campaign from other boards
 
@@ -171,7 +184,7 @@ here (README §5 rule 4).
 | `[02-a-short-bbn-sample-grid-escapes-compute-bbn-data]` | `run-integrity` | 01 (P4) — **resolved 2026-10-01** (§4) |
 | `[02-the-bbn-callbacks-do-not-check-their-values-for-finiteness]` | `run-integrity` | 01 (P4) — **resolved 2026-10-01** (§4) |
 | `[00-scalarmodel-failure-rows-carry-no-reason]` | `integrator-remediation` | 02 — **resolved 2026-10-01** (§4) |
-| `[00-stored-samples-alias-the-rebounds]` | `integrator-remediation` | 05 (narrowed: the BBN half) |
+| `[00-stored-samples-alias-the-rebounds]` | `integrator-remediation` | 05 — **narrowed 2026-10-02**: it has no BBN half in PRyMordial's window, where the z grid resolves the bounces (above about 100 eV); the averaging was withdrawn (log 05). The adiabatic half stays open there |
 
 ---
 
@@ -253,3 +266,19 @@ here (README §5 rule 4).
   `main.py` before step 1) prints one warning per such coupling and the count and returns the
   coupling array unchanged: warn, never skip or refuse (P6). The dated **Resolved** line is also
   on the `review-remediation` board.
+- **[00-bbn-input-is-aliased-at-small-M]** *(README §1 A; the source §2; README §6.1)*.
+  - **What.** Below a few keV, `ρ_NP/ρ_R,J` jumps from sample to sample at small `M`, because the
+    samples catch the bounces at random phase: ±0.4 % at M = 10⁻⁵ and ±0.85 % at 10⁻³, around a
+    median ten times smaller (README §6.1). The source reports one PRyMordial failure from it
+    (β = 1.6, M = 10⁻⁵, low-T network); the planner did not reproduce it on `6aaa706`.
+  - **Impact.** Noise of the order of the signal in the input PRyMordial integrates below 3 keV.
+  - **Next step.** Prompt 05.
+  - **Resolved (2026-10-02):** by prompt 05 (log 05), as **not a defect** in PRyMordial's window:
+    the jumps are resolved bounces, not aliasing. At β = 1.6, M = 10⁻⁵ only 6 of 130 cells in
+    [0.3, 1) keV and 2 of 120 in [1, 3) keV contain a sign change of π; the ratio is a resolved
+    sawtooth whose 10 largest steps carry 95 % and 99 % of the rms². The orchestrator's count
+    (log 05, Verification) finds a median of 0 half-periods per cell from 100 MeV to 100 eV on
+    β = 1.6 and 2 at M = 10⁻⁵; aliasing begins below about 100 eV. Cell means of H_J² on the dense
+    output cut the rms step only to 0.71–0.84× and made β = 2, M = 10⁻⁵ fail in PRyMordial; the
+    user withdrew them (2026-10-02). Point input completes BBN on all four histories of log 05
+    (β = 2 at M = 0.5, 10⁻³, 10⁻⁵; β = 1.6 at 10⁻⁵).
