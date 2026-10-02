@@ -4,6 +4,11 @@
 **Recommended model:** **Sonnet.** No production code and no test changes. The work is
 re-measuring, running the roster, and writing an addendum the science run can act on.
 
+> **Amended 2026-10-02 (the user's ruling on prompt 05; README §0.2 amendment, §6.6, §7).** The
+> rows of README §6.6 are withdrawn: do not re-measure them. Record only the point `ratio`
+> windows; there are no averaged ones. README §7 item 3 is amended there: no cell means. The
+> handover states that BBN reads the point `H_J`, and gives log 05's sampling finding.
+
 **Read first:**
 
 1. [`README.md`](README.md) §0, §6, §7.

@@ -92,6 +92,25 @@ PRyMordial reads, and adds the extraction and the four figures of the science ru
   test (b) stops at the first driver it fails on, so on `HEAD~1` it reports `main.py:862` alone;
   the orchestrator checked out each of the other two drivers from `HEAD~1` separately and the
   test caught `plot_by_beta.py:895` and `plot_ScalarModel.py:1611`.
+- **2026-10-02, the user: prompt 05's averaging withdrawn (U3 and P7); prompt 05 lands as
+  measurement only.** The implementation agent built the cell means and stopped before
+  committing, on prompt 05 §5's first stop condition. The breakage witness fell only to 0.79× and
+  0.76× at β = 1.6, M = 10⁻⁵, against a target of ≤ 0.1. The orchestrator confirmed this on the
+  built tree. It counted the half-periods of π per sample cell: a median of 0 from 100 MeV to
+  about 100 eV, on β = 1.6 and 2 at M = 10⁻⁵ and β = 2 at M = 0.5. Aliasing begins only below
+  that. So the jumps in the ratio below 3 keV are resolved bounces. The cell means also:
+  - biased `H_J²` by +5.7e-5;
+  - moved D/H at β = 2, M = 0.5 by 1.57e-3;
+  - made β = 2, M = 10⁻⁵ fail in PRyMordial.
+
+  Point input completes BBN on all four histories. The user's reason: in PRyMordial's window the
+  point samples are the behaviour of H on the solution. If PRyMordial fails on that input, it
+  does not cope with the model, and that is a finding, not a reason to change the input. The
+  agent's commit `c242f64` has no code, schema or test. The orchestrator reviewed it: records
+  only, deviations classified, board and index in the same commit, suites 18 / 86 / 26 unchanged.
+  This ruling is carried by the README §0.2 amendment and dated notes in §2 (i), (k), §3.1, §6.6,
+  §6.7 and §7. Prompts 06–09 and `orchestrator/prompt-08.md` carry dated amendments. The two
+  issues prompt 05 opened (`[05-…]`) are unassigned.
 
 Decisions the prompts may surface, each a stop-and-ask in its prompt:
 

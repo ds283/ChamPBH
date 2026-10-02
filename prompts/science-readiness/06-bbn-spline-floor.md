@@ -6,6 +6,11 @@
 `review-remediation` board (README §5 rule 4).
 **Recommended model:** **Sonnet.** One default, one pre-check, and measurements.
 
+> **Amended 2026-10-02 (the user's ruling on prompt 05; README §0.2 amendment).** Prompt 05
+> changed no code: BBN reads the point `H_J`, and no sample is averaged. "Prompt 05's tree" and
+> "log 05's figures" below mean point-input BBN on `a522005`'s code. Log 05's "State handed to the
+> next prompt" lists them. Section 3's "no change to which samples are averaged" is moot.
+
 **Read first:**
 
 1. [`README.md`](README.md) §0.2 (P8), §2 (j), §5, §6.0, §6.7.

@@ -5,6 +5,15 @@
 **Closes:** `[00-no-extraction-for-the-science-figures]` on this board.
 **Recommended model:** **Sonnet.** Pure functions with tests, and plotting code around them.
 
+> **Amended 2026-10-02 (the user's ruling on prompt 05; README §0.2 amendment and §2 (k)
+> figure 4).** Prompt 05 added no fields or columns. Figure 4 and the CSV's fixed-`T` values
+> use the point fields:
+> - `ScalarModelValue.phi_Einstein`, through `value_at_T_Jordan`;
+> - `BBNDataValue.density_NP_ratio`, which is the point ratio.
+>
+> README §0.3's "prompt 05's averaged φ" does not exist. Log 05 has no column names to hand on;
+> take them from log 03 and the existing value classes.
+
 **Read first:**
 
 1. [`README.md`](README.md) §0.2 (U5), §0.3 (the last point), §2 (k), §5, §6.8.

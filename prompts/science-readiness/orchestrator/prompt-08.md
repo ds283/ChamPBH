@@ -7,6 +7,10 @@ code.**
 **Board item:** D · **Closes:** `[00-documents-describe-the-thermo-route]` and
 `[04-numerical-strategies-describes-the-removed-asinh-bbn-interface]` (assigned)
 
+> **Amended 2026-10-02 (the user's ruling on prompt 05).** In §3 check 2, "the cell means" reads
+> as "the §3 sampling note: log 05's measurement, and that BBN reads the point `H_J`". No cell
+> means exist.
+
 ## 1. Before you dispatch
 
 1. Prompt 07 landed with no unresolved miss; on branch `science-readiness`; `git status` clean;

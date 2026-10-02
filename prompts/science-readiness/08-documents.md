@@ -7,6 +7,16 @@ the `review-remediation` board (README §5 rule 4), and `[00-documents-describe-
 on this board.
 **Recommended model:** **Sonnet.** No production code and no test. Additions only.
 
+> **Amended 2026-10-02 (the user's ruling on prompt 05; README §0.2 amendment).** There are no
+> cell means. In the `numerical-strategies.md` addendum below:
+> - the route uses the **point** `H_J²`;
+> - the §3 (sampling) note records log 05's measurement instead of the cell means. The z grid
+>   (ΔN = 0.0092) resolves the bounces above about 100 eV: a median of 0 half-periods per cell.
+>   It aliases them below that. So the samples PRyMordial reads are not aliased, and the
+>   adiabatic stage's late samples are (`[post-adiabatic-Q-reads-aliased-late-samples]`).
+>
+> Quote log 05's table with its provenance.
+
 **Read first:**
 
 1. [`README.md`](README.md) §0, §2, §7.

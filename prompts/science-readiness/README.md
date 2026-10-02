@@ -99,6 +99,19 @@ record the ruling.
   2026.6.0 is invalid**, and because columns are added with no migration (the datastore has none),
   **the science run needs a fresh datastore file.** An old file cannot be opened by the new code.
 
+**Amended by the user, 2026-10-02 (prompt 05): U3 and P7 are withdrawn.** Prompt 05 built the
+cell means and measured them (log 05). Its premise was false. In PRyMordial's window the z grid
+resolves the bounces: there is a median of 0 half-periods per sample cell from 100 MeV down to
+about 100 eV, and aliasing begins only below that. The jumps in the ratio below 3 keV are
+resolved bounces, not phase noise. The cell means cut the rms step only to 0.71–0.84×. They
+biased `H_J²` by +5.7e-5. They also made β = 2, `M = 10⁻⁵` fail in PRyMordial. The user ruled
+that, in that window, the point samples are the behaviour of H on the solution. A PRyMordial
+failure on that input is a finding about PRyMordial, not a reason to change the input. Prompt 05
+landed as measurement only, with no code, schema or test. **BBN reads the point `H_J`. No
+cell-mean field or column exists.** Where §1 A, §2 (i), (k), §3.1, §6.6 and §7 below say
+otherwise, this paragraph and the dated notes there govern. The text above them is left as
+planned.
+
 ### 0.3 What the planner checked in the source, and what it found
 
 - **Its overlap with the repository holds.** β = 2, M = 10⁻⁵ gives 1 679 987 RHS, as in
@@ -271,6 +284,9 @@ planner's estimate; prompt 05 measures it). `compute_BBN_data` then uses
 Hubble time, not the bounce time; prompt 05 measures the residual. The point fields are unchanged
 and still stored. `AdiabaticHistory` does not read the new fields.
 
+**Withdrawn (2026-10-02, the user's ruling; §0.2 amendment, log 05).** None of (i) is in the tree.
+`compute_BBN_data` uses the point `H_J²`, as on `a522005`.
+
 **(j) The spline floor (L; P8).** `compute_BBN_data`'s `T_BBN_keV_spline_min` default goes from
 `1e-4` to `0.2`. The pre-check `T_Jordan_stop ≤ 0.1 × T_BBN_spline_min` keeps its rule, so a
 history must reach 20 eV, which `T_CMB` and `--T-stop-GeV 1e-8` both do. PRyMordial's lowest query
@@ -295,6 +311,13 @@ test on synthetic input:
 3. `T_deliver(β)` from `first_bounce`, with reflected bounces marked and `kick_threshold_curve`
    overlaid.
 4. `⟨φ⟩` and `ρ_NP/ρ_R,J` at 1 MeV and at 70 keV against β.
+
+   **Amended (2026-10-02, the user's ruling on prompt 05).** Figure 4 plots the **point** values:
+   - `ScalarModelValue.phi_Einstein`, interpolated by `value_at_T_Jordan`;
+   - `BBNDataValue.density_NP_ratio`, which is now the point ratio.
+
+   No cell mean exists. Both temperatures are in the resolved range: log 05's count is a median
+   of 0 half-periods per sample cell from 100 MeV to 100 eV.
 
 It also writes a CSV with one row per history: β, M, Λ, φ\*, the four abundances and the two
 shifts, `T_deliver`, the four fixed-`T` values, the reflection count, and the failure reasons.
@@ -343,6 +366,9 @@ route  reason bounce  φ*    average floor  figures docs close-out
   measurement is not confounded with the averaging.
 - **07 after 03 and 05.** It reads both prompts' columns.
 - **08 and 09 last**, because they describe and score the final tree.
+- **Amended (2026-10-02).** Prompt 05 changed no code (§0.2 amendment). Prompt 06's before/after
+  compares BBN on point input, against `a522005`'s code. Prompt 07 reads prompt 03's columns and
+  the existing point fields.
 
 Files edited by more than one prompt: `ComputeTargets/BBNData.py` (01, 05, 06),
 `ComputeTargets/ScalarModel.py` (02, 03, 05), `Datastore/SQL/ObjectFactories/ScalarModel.py`
@@ -593,13 +619,32 @@ is not a measure of the shipped route on a real history, where p_NP comes from �
 | cost of the history (integration plus sampling) at β = 2, M = 10⁻⁵ | 1 679 987 RHS; wall in §6.1 | **wall ≤ 1.5× prompt 04's tree**; the log quotes it | the driver |
 | `N`-average against time-average | — | **measured and quoted** at β = 2, M = 10⁻⁵ in [0.3, 3) keV (one history, scratch) | log |
 
+**Withdrawn (2026-10-02, the user's ruling; §0.2 amendment).** The rows above are not targets for
+any later prompt, and prompt 09 does not re-measure them. Log 05 holds what was measured on the
+built tree before it was discarded:
+
+| row | measured |
+|---|---|
+| breakage, β = 1.6, M = 10⁻⁵ | 0.79× and 0.76× (missed) |
+| breakage, β = 2, M = 10⁻³ | 0.84× and 0.76× (missed) |
+| β = 1.6, M = 10⁻⁵ BBN | completed |
+| β = 2, M = 0.5 D/H | 1.57e-3 relative (missed) |
+| quadrature test | exact to 1e-10 |
+| trajectory | unchanged |
+| cost | 1.02×, loaded |
+| `N` against `t` | 5.67e-5 |
+
+The parenthetical "about 20 half-periods per cell there, §4.9" in row 1 was wrong. §4.9's median
+covers 1 keV–0.1 eV, and its cold end dominates it. In [0.3, 3) keV fewer than one cell in 20
+holds a half-period.
+
 ### 6.7 The spline floor (prompt 06)
 
 | quantity | now | target | witness |
 |---|---|---|---|
 | default floor; pre-check | 1e-4 keV; `T_stop ≤ 0.01 eV` | **0.2 keV; `T_stop ≤ 20 eV`** | test of the pre-check arithmetic |
 | the domain guard on a full solve | — | **never fires** (PRyMordial's lowest query 0.363 keV) | the driver on β = 2, M = 0.5 |
-| D/H, Yp on β = 2, M = 0.5 and 10⁻³ against prompt 05's tree | — | **≤ 1e-5 relative**; the log quotes it | the driver |
+| D/H, Yp on β = 2, M = 0.5 and 10⁻³ against prompt 05's tree (amended 2026-10-02: prompt 05's tree has `a522005`'s code, so the reference is log 05's point-input figures) | — | **≤ 1e-5 relative**; the log quotes it | the driver |
 | a history stopped at `--T-stop-GeV 1e-8` passes the pre-check; one stopped at `1e-7` fails it with the pre-check reason | — | **as stated** | test (no solve: the pre-check returns before PRyMordial) |
 
 ### 6.8 Extraction and figures (prompt 07)
@@ -629,7 +674,10 @@ additively, after §4.9. It states at least:
 2. **The BBN route.** Hubble-only; `PRYM_VERSION`; the wall-clock limit and its option; the
    output checks; the spline window [0.2 keV, 100 MeV] and the 20 eV pre-check.
 3. **What a `ScalarModel` row now carries.** The failure reason, the first bounce, and the two
-   cell means per sample, with what each is for.
+   cell means per sample, with what each is for. **Amended (2026-10-02).** There are no cell
+   means; prompt 05 withdrew them (§0.2 amendment). The handover states instead that BBN reads
+   the point `H_J`. It also states log 05's finding: the z grid resolves the bounces above about
+   100 eV and aliases them below.
 4. **The options.** `--phi-init-Mp`, `--bbn-wall-clock-limit`, `--band-half-width`, and the
    super-Planckian warning (a warning only; such couplings are computed).
 5. **The roster's figures,** against the source's.
