@@ -336,6 +336,73 @@ The sample-based estimate cannot replace it: it returned 0.39 MeV for 420.76 MeV
 
 The stored `VERSION_LABEL` is `"2026.6.0"`, and every earlier store is invalid.
 
+### 4.2 Addendum (2026-10-03, `bbn-tolerance` prompts 01–03): the network and the tolerance
+
+Added by `bbn-tolerance` prompt 03. Nothing above is edited. §4 says that every BBN result used the
+full network, and §4.1's table of abundances and its baseline were measured on the full network at
+PRyMordial's default low-temperature tolerance. Both were right for the trees they describe and are
+not production's now. This addendum states what is true of the code from `5a72871`. It is again a
+description of the code, not a statement of what the paper should claim.
+
+**Provenance tags.**
+
+| Tag | What it is |
+|---|---|
+| **[bt-01]**, **[bt-01c]**, **[bt-02]**, **[bt-03]** | `prompts/bbn-tolerance/logs/01-…`, `01c-…`, `02-…`, `03-…`, on the trees those logs name (`95da274`, `893a5b1`, `2bc124b` plus the prompt's diff, and the tip of the campaign) |
+| **[ns-7.7]** | `numerical-strategies.md` §7.7, which has the tables these figures come from |
+
+**The network and the tolerance.**
+
+- **PRyMordial's small (12-reaction) network** is what production runs [bt-02]. The full network
+  fails on about 1 % of histories near T_J = 1 keV (11 of 684 φ\* = 5 histories of the 2026.6.0 run),
+  through one reaction rate that no tolerance removes, the Li8(p,d)Li7 reverse rate; the small network
+  has no Li8 and did not fail in 340 solves [bt-01, bt-01c].
+- **The low-temperature stage's relative tolerance** is now `rtol` = 10⁻⁶ on the small network (its
+  `atol` is 10⁻¹¹). Upstream passed none, so SciPy's 10⁻³ applied, and at that tolerance the D/H
+  prediction of one history scattered by up to 2×10⁻³ under a 10⁻¹² change to the input [bt-01,
+  bt-01c]. Every other stage of PRyMordial was already at 10⁻⁶ [ns-7.7].
+- **What it costs.** The serial solve time of a history is 10.1 s on the small network at 10⁻⁶,
+  against 8.9 s on the full network at its old default, a factor of 1.13 (SM baseline 1.15) [bt-01c,
+  bt-02].
+
+**What precision can be claimed for one history.** These are measured properties of PRyMordial's
+numerical response, on the small network at `rtol` 10⁻⁶, and say nothing about the nuclear-rate
+uncertainties [bt-01c, reproduced in bt-02 and bt-03]:
+
+- **Reproducibility of D/H.** Changing a history's input by 10⁻¹² or 10⁻⁹ relative moves D/H by a
+  median of 4×10⁻⁵ over the 16 histories tested and by at most 1.5×10⁻⁴ (β = 2.4, M = 10⁻⁵),
+  where it moved by a median of 1.5×10⁻³ and by up to 2.8×10⁻³ at the old tolerance. That replaces
+  the "about 10⁻⁴" of §4.1 and the "up to 7×10⁻⁴" of §4, which were measured on the full network at the
+  old tolerance.
+- **Reproducibility of Yp.** A median of 1.5×10⁻⁵ and at most 4.3×10⁻⁵. This does not depend on the
+  low-T tolerance: other stages of PRyMordial set it.
+- **Convergence of the low-T stage.** Against the same solve at `rtol` 10⁻⁸ the low-T stage's error is
+  at most 5.5×10⁻⁵ in D/H and 2×10⁻⁷ in Yp.
+- **Not included.** On the full network the a(T) stage's own tolerance shifts D/H by about
+  +4.5×10⁻⁴ on one history [bt-01, item 9]. It has not been measured on the small network, and nothing
+  here removes it. A statement of the total numerical error in D/H should not be made from these
+  figures alone.
+
+**The network offset is a systematic.** The small network gives a D/H lower than the full network's by
+2.4×10⁻⁴ to 3.6×10⁻⁴ (relative), on every input, at every converged tolerance, never higher, and a Yp
+within ±3.2×10⁻⁵ [bt-01c, row 6]. It is a property of PRyMordial's two networks, nearly the same for
+every history, so a difference between two histories on the same network is not affected at the level
+of the offset, and the Standard-Model baseline drawn beside the data is computed on the same network
+(`plot_by_beta.py`'s `BBN_SMALL_NETWORK` follows `main.py`'s). An absolute comparison with a measured
+abundance carries the offset. The baseline is now Yp 0.2468802117, D/H 2.458287893, ³He/H 1.041932695
+and ⁷Li/H 5.486373007 (×10⁻⁵, ×10⁻⁵, ×10⁻¹⁰ for the last three) [bt-01c, bt-02], against the
+§4 and §4.1 values (D/H 2.462251065), which are on the full network at the old tolerance: the D/H
+baseline is 1.6×10⁻³ lower, of which 1.35×10⁻³ is the old tolerance's own error [bt-01] and about
+2.8×10⁻⁴ the network offset.
+
+**⁷Li/H.** ⁷Li/H from the small network differs from the full network's by about 1 % and is not
+reliable; it is not used for any constraint, and the text should not quote it. The full network's
+lithium abundance is not used either (the Particle Data Group declines to quote one) [bt-01c, §0.2 U3].
+
+**Where §4 or §4.1 says "full network"** or gives a value for one, it describes the earlier trees
+named there. The bullet in §4 that the 7×10⁻⁴ noise is unresolved, and the "about 10⁻⁴" of §4.1's
+sensitivity paragraph, are superseded by the reproducibility figures above.
+
 ## 5. What is not yet fixed that the paper's text touches
 
 All of these are on the board, `prompts/review-remediation/IMPLEMENTATION_STATE.md` §3.

@@ -1176,6 +1176,186 @@ PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t 
 ./venv/bin/python tools/history_and_bbn.py 2 0.5      # and β M for each roster row, one at a time
 ```
 
+### 4.11 Addendum 2026-10-03 — the `bbn-tolerance` campaign
+
+Added by `bbn-tolerance` prompt 03, measured on `086bae5` (the tree prompts 01, 01c, 02, 01b and 02b
+left; the code in this section is unchanged by prompt 03). Nothing above this heading has been
+changed; where it is superseded, this section says so by statement. The campaign took the 11 BBN
+failures of the 2026.6.0 science run and the D/H scatter of up to 2.2×10⁻³ to their cause, moved
+production to PRyMordial's small network, set the low-temperature tolerance of both networks, and
+added a warning for BBN rows made by another PRyMordial. It did **not** bump `VERSION_LABEL` and it
+did not touch the science store: the refresh below is the user's. Its board is
+[`prompts/bbn-tolerance/IMPLEMENTATION_STATE.md`](../prompts/bbn-tolerance/IMPLEMENTATION_STATE.md);
+its plan is its [`README.md`](../prompts/bbn-tolerance/README.md) (§0.2 records the user's rulings
+U1–U5); its source is a brief,
+[`source/brief_prym_lowT_failures.md`](../prompts/bbn-tolerance/source/brief_prym_lowT_failures.md).
+The numbers and their provenance are in
+[`numerical-strategies.md` §7.7](numerical-strategies.md) and
+[`numerical-methods-for-paper.md` §4.2](numerical-methods-for-paper.md).
+
+**This supersedes**, by statement and not by edit:
+
+- **§4.10 point 2's `PRYM_VERSION`** (`"bf24c3d+ri02+sr01"`): it is `"bf24c3d+ri02+sr01+bt02"`
+  (`ComputeTargets/BBNData.py:48`). `VERSION_LABEL` is still `"2026.6.0"`.
+- **Every statement that production runs the full network.** §4.6 point 2 ("BBN solves use the
+  **full** network", with its "all pass `False`" list); §4.10 point 5's roster, which was run with
+  `tools/history_and_bbn.py` on the full network (the tool's default is now the small network, and
+  `--no-small-network` gives the full one); and the SM baseline of §4.2 item 1, §4.6 and §4.10
+  (Yp 0.2468872958, D/H 2.462251065, ³He/H 1.042050273, ⁷Li/H 5.423441017: the full network at the old
+  tolerance). Production runs the **small** network (point 1). The SM baseline `tools/bbn_baseline.py`
+  prints is now Yp 0.2468802117, D/H 2.458287893, ³He/H 1.041932695, ⁷Li/H 5.486373007. The values
+  §4.10 point 2 quotes for the constant 0.08 ρ_SM family were made at the old tolerance. At the new
+  ones they are, small network Yp 0.253669508, D/H ×10⁵ 2.649288446, and full network Yp
+  0.2536731562, D/H 2.649990509 (log 02; `numerical-strategies.md` §7.7.5), and the tests pin those.
+- **§4.10 point 6's** `[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]` and its
+  statement that β-to-β differences in D/H below about 7e-4 are not resolved (§4.3's figure): that
+  issue is resolved (board §4), and the residual is point 4.
+
+**The six points.**
+
+1. **`PRYM_VERSION`, the network and the settings.**
+   - *The network.* Production runs PRyMordial's **small** network, selected by one name,
+     `BBN_SMALL_NETWORK = True` in `main.py` (`:801`), with a matching `BBN_SMALL_NETWORK = True` in
+     `plot_by_beta.py` (`:76`) so that the baseline it draws is on the network of the data.
+     *Why:* PRyMordial's full network fails on about 1 % of histories near T_J = 1 keV (11 of 684
+     φ\* = 5 histories of the 2026.6.0 run), through its Li8(p,d)Li7 reverse rate, which no tolerance
+     removes (`[01-prymordial-li8-p-d-li7-rate-rings-near-1-kev]`). The small network has no Li8: it
+     completed all 340 solves of the scan, and all 165 solves of the 11 histories the full network
+     fails. ⁷Li/H is not used for constraints, so the small network's less reliable lithium costs
+     nothing the science needs.
+   - *The settings.* The low-T stage's `rtol` is **1e-6** on the small network (`atol` 1e-11, as
+     before) and **1e-5** on the full one (`atol` 1e-15, as before). Upstream passed none, so SciPy's
+     1e-3 applied. 1e-6 is the largest `rtol` that meets all four of the campaign's criteria on the
+     small network (reliability, scatter, convergence against 1e-8, and cost); 1e-5 is provisional, and
+     is for anyone who selects the full network.
+   - *The cost.* 1.13–1.15× the full network at its old default: 10.1 s against 8.9 s for a history,
+     8.8 s against 7.6 s for the SM baseline (log 01c, row 5; log 02, row 7).
+   - *How the full network is still selected.* Edit that one name to `False`, in `main.py` and in
+     `plot_by_beta.py`. There is deliberately no flag (README U4).
+   - *Evidence.* `ComputeTargets/tests/test_lowT_tolerance.py` intercepts every `solve_ivp` call of a
+     small- and a full-network baseline and asserts the two low-T settings, and every other call at 1e-6
+     and 1e-9. `test_network_flag.py` (c) holds the defaults in step with `main.py`. Both fail on the
+     tree before prompt 02 (log 02).
+2. **The refresh route, and the warning.** The 2026.6.0 store holds BBN rows made at the old
+   tolerance on the full network. They stay valid as stored, and nothing in the code refuses them.
+   To replace them without recomputing a single history:
+   - *Why this route.* `ScalarModel` and `AdiabaticHistory` lookups are keyed on `VERSION_LABEL`,
+     so they survive; `BBNData` lookups are keyed on it too and ignore `PRyM_version` and
+     `small_network`, so a store that is simply run again serves the old rows. `--retry-failed-bbn`
+     recomputes only the failure rows and leaves the successful rows at the old tolerance, so it is
+     not the route. A `VERSION_LABEL` bump would orphan all 710 histories, which do not depend on
+     PRyMordial. `--drop bbn-data` drops `BBNData_tags`, `BBNDataValue` and `BBNData` on every shard
+     at startup (`Datastore/SQL/Datastore.py`, `_drop_actions`), and `ScalarModel` rows, which a
+     BBN stage reads through the lookup, are found as they were.
+   - *The commands.* Run from the repository root, with a Ray cluster up, as for the science run.
+     **These have not been run**: this campaign never opens the store but read-only, and never runs
+     `main.py`. They are reasoned from `full_run_2026.6.0.sh`, which is the science run's own script.
+
+     ```bash
+     # 1. Copy the store's 17 files (science-2026.6.0.db and its 16 shards) to a new directory,
+     #    keeping their names, so that the original is kept for comparison.
+     mkdir -p ~/ChamPBH-stores-bt02
+     cp -p ~/ChamPBH-stores/science-2026.6.0.db ~/ChamPBH-stores/science-2026.6.0-shard*.db \
+           ~/ChamPBH-stores-bt02/
+
+     # 2. Make a copy of the science run's script whose FIRST main.py call, and no other, carries
+     #    --drop bbn-data.
+     cp full_run_2026.6.0.sh full_run_2026.6.0-bbn-refresh.sh
+     #    In the copy, in run(): add `DROP="--drop bbn-data"` before the function, append ` $DROP`
+     #    after `"$@"` in the main.py line, and add `DROP=""` as the function's last line.
+
+     # 3. Run it on the copy. STORE_DIR names the copy, and the script's DB, logs and figures follow it.
+     STORE_DIR=$HOME/ChamPBH-stores-bt02 ./full_run_2026.6.0-bbn-refresh.sh
+     ```
+
+     Two things matter. **The drop goes on one call only**: `--drop` empties the BBN tables of every
+     shard each time it is passed, so if it were on every call, only the last block's rows would
+     survive. And **all eight `run` blocks must be run** (C1, C4, L, the three C5 blocks, C3 and C2; the
+     script's own header says seven), because the drop empties the BBN rows of every history, not
+     only of the block that carries it. Each block finds its ScalarModel rows in the store, computes
+     only the missing BBN rows, and leaves the rest. **After an interrupted refresh, run the blocks
+     that remain without `--drop`**: the blocks already finished have their new rows, which a second
+     `--drop` would delete. The script's closing `--inventory` and `plot_by_beta.py` calls redraw the
+     figures (point 5) from the copy.
+   - *The warning on a store that was not refreshed.* `main.py` (at the end of its BBN stage) and
+     `plot_by_beta.py` (at the end of each model's pipeline) print this and go on using the rows. It
+     is what `pipeline_selection.warn_foreign_bbn_provenance` prints on stub objects standing for the
+     science store (`prompts/bbn-tolerance/logs/03-probes/refresh_commands.py`, no store opened). The
+     counts shown, 663 successes and 21 failures, are the φ\* = 5 histories the brief counted; the
+     store's real counts will show:
+
+     ```
+     !! warning: 663 stored BBNData row(s) were not made by this code's PRyMordial (PRyM_version=bf24c3d+ri02+sr01+bt02, small network); they are used as stored
+     !! warning:   663 x PRyM_version=bf24c3d+ri02+sr01, full network
+     !! warning:   21 failure row(s) store no provenance and cannot be classified
+     !! warning: to refresh BBN, copy the store and run main.py on the copy with --drop bbn-data
+     ```
+
+     A refreshed store prints nothing. A failure row stores no `PRyM_version` or network, so it is
+     counted but not classified: failures are final within a version (`run-integrity` prompt 03), and
+     the refresh recomputes them too.
+3. **What changes in the science.**
+   - **The 11 rows that were "not assessed" become assessable.** The patched tree completes all 11
+     histories, in all three input variants (log 02, 49 of 49; and again here, point 4's table).
+   - **The D/H scatter falls**, from a median of 1.45×10⁻³ over the five controls, and up to
+     2.8×10⁻³, at the old tolerance, to the residuals of point 4.
+   - **The M-convergence comparison and the β ≳ 1.6 shifts** that were limited by the solver's
+     scatter can now be read to the residual of point 4: a median of 4.4×10⁻⁵ and at most
+     1.5×10⁻⁴ in D/H. Whether a given shift is physical is for the analysis.
+   - **Every BBN row, and the SM baseline, moves.** By the network offset, D/H 2.4×10⁻⁴ to
+     3.6×10⁻⁴ lower, always, and Yp within ±3.2×10⁻⁵; and by the removal of the old tolerance's error,
+     1.35×10⁻³ in the SM baseline's D/H. The baseline moves from D/H 2.462251065 to 2.458287893.
+     After the refresh, the baseline `plot_by_beta.py` draws beside the data is on the same network
+     as the data.
+   - **⁷Li/H from the small network is not used.** It differs from the full network's by about 1 %
+     and is less reliable.
+4. **The residual floors** (measurements, not bounds, and not issues; `numerical-strategies.md` §7.7.4),
+   small network, `rtol` 1e-6:
+   - the D/H spread over the three input variants: median 4.4×10⁻⁵; 15 of 16 histories below
+     10⁻⁴; the maximum 1.51×10⁻⁴ on β = 2.4, M = 10⁻⁵, where it is 1.03×10⁻⁴ even at `rtol` 1e-8;
+   - the Yp spread: median 1.5×10⁻⁵, at most 4.3×10⁻⁵, unmoved by the low-T `rtol` (another stage
+     sets it);
+   - the low-T stage's error against `rtol` 1e-8: D/H at most 5.5×10⁻⁵, Yp at most 2.1×10⁻⁷;
+   - not measured on the small network: the a(T) stage's bias of about +4.5×10⁻⁴ in D/H, found on the
+     full network.
+5. **The `T_deliver` figure's threshold curve** now uses Σ_eff (prompt 01b, `9e51437`):
+   `kick_threshold_curve` returns √((2 + Σ)/(6Σ)) = 1/√(3Σ_eff). Its minimum over [0.05, 50] GeV moves
+   from 1.02945 to 1.10745 (the paper's 1.11), at 0.182 GeV. **Any copy of figure 3 made before that
+   commit is redrawn by re-running `plot_by_beta.py`; no store changes.** The refresh's closing
+   `plot_by_beta.py` calls do it.
+6. **What is still open,** by name:
+   - `[01-prymordial-li8-p-d-li7-rate-rings-near-1-kev]` (`bbn-tolerance`): worked around, not patched.
+     It stays for anyone who selects the full network, whose failures it causes.
+   - `[01-prymordial-dYB8dtLT-unpacks-Y-in-the-superseded-order]` (`bbn-tolerance`): B8's low-T
+     equation reads Y in the old species order, in upstream too. Effect not measured; probably
+     negligible.
+   - **The 1 output-check row and the 9 spline-floor rows** of the science store were excluded from
+     this campaign (README §0.5), and were not measured on the refresh. The output-check row,
+     β = 0.95, M = 10⁻³, returns Yp 0.51205 on both networks (log 01c), outside the output check's
+     (0, 0.5) by design.
+   - The rest of §4.10 point 6 and of `OPEN_ISSUES.md` is as it was. Two small notes from the logs:
+     `tools/bbn_baseline.py`'s module docstring still lists `--small-network` as an example, now the
+     default (log 02, Observations 2); and `main.py` prints its foreign-provenance warning at the
+     **end** of the BBN stage, after any missing rows are computed (log 02, Observations 3).
+
+**Verification table** (the campaign's README §6.3, run by prompt 03 on `086bae5`; the rows and
+their witnesses are in [`logs/03-documents-and-close-out.md`](../prompts/bbn-tolerance/logs/03-documents-and-close-out.md)).
+| README §6.3 row | target | measured |
+|---|---|---|
+| The 17-input roster, small network, `prod`, no override, on the final tree | identical to log 02's figures; all 11 complete | **17 of 17 identical in every outcome field** (status, failure stage, `t reached`, `t target`, Yp, D/H, ³He/H, ⁷Li/H, failure reason), compared as the CSV strings were written, to `02-probes/acceptance.csv`'s `prod` and SM rows, which equal `01c-probes/scan.csv`'s T1 rows at 1e-6. **0 non-ok outcomes; the 11 histories that fail on the full network all complete.** SM: Yp 0.24688021169088586, D/H 2.4582878928660548, ³He/H 1.0419326951489363, ⁷Li/H 5.48637300688257. Control β = 1.6, M = 10⁻³: Yp 0.24688971029506177, D/H 2.4609141011473543. Run 8 at a time, 17 invocations in 127 s (wall times are not acceptance rows). No `--lowT-rtol` was passed, so the tool's override changed nothing |
+| `.documents/` | additive only | `git diff --numstat` on `.documents/`: no deletion in the three documents this prompt adds to; in `OPEN_ISSUES.md`, two header lines changed (the description of this board), which the rule allows, and two lines are added under §1.10 |
+| Suites | unchanged from prompt 02 | `CosmologyModels/tests` 18 OK (65.5 s), `ComputeTargets/tests` 114 OK (246 s), `Datastore/tests` 31 OK (2.5 s), against 18, 114 and 31 before this prompt's documents (the counts after prompt 01b, and after 02b, which changed none) |
+
+**To reproduce** from the repository root (the roster takes about 2 minutes, 8 at a time; the three
+suites take several minutes):
+
+```bash
+./venv/bin/python prompts/bbn-tolerance/logs/03-probes/run_jobs.py --jobs 8       # remeasure.csv
+./venv/bin/python prompts/bbn-tolerance/logs/03-probes/compare.py                 # against log 02
+PYTHONPATH=. ./venv/bin/python prompts/bbn-tolerance/logs/03-probes/refresh_commands.py   # the warning
+PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t . && PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . && PYTHONPATH=. ./venv/bin/python -m unittest discover -s Datastore/tests -t .
+```
+
 ---
 
 ## 5. Reproduce

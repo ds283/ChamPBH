@@ -1042,6 +1042,245 @@ black-clean and was not reformatted. Source of the table: log 01, "What shipped"
   cross-check possible with `--T-stop-GeV 1e-8`; a history that runs to `T_CMB` passes under
   both. A history that stops above 20 eV stores a pre-check failure row.
 
+### 7.7 Added 2026-10-03 (`bbn-tolerance`, prompts 01–03): the network, the low-T tolerance, and what they leave
+
+Added by `bbn-tolerance` prompt 03. Nothing above this heading has been changed; where it is
+superseded, this section says so by statement. The campaign
+([`prompts/bbn-tolerance/README.md`](../prompts/bbn-tolerance/README.md); board
+[`IMPLEMENTATION_STATE.md`](../prompts/bbn-tolerance/IMPLEMENTATION_STATE.md)) started from a brief
+that traced 11 low-T failures of the 2026.6.0 science run, and a D/H scatter of up to 2.2×10⁻³, to
+PRyMordial's low-temperature nuclear network. It measured the mechanism and the tolerance (log 01,
+tree `95da274`), measured the small network (log 01c, `893a5b1`), and then moved production to the
+small network, set both low-T tolerances and added a warning (log 02, `2bc124b` plus its diff; commit
+`5a72871`). Prompts 01b and 02b are not about PRyMordial's numerics: 01b corrects the kick-threshold
+overlay (§7.7.8), 02b makes `tools/history_and_bbn.py` follow `main.py`.
+
+**This supersedes**, by statement and not by edit:
+
+- **§7.5's note of 2026-09-30**, that production passes `small_network=False`, the full network.
+  Production runs the **small** network (§7.7.1). The note's measurement of the network offset on the
+  constant 0.08 ρ_SM fixture is unaffected.
+- **§7.6.4's `PRYM_VERSION` `"bf24c3d+ri02+sr01"`.** It is `"bf24c3d+ri02+sr01+bt02"`. §7.6.4's
+  closing sentence, that no tolerance changed, describes the `sr01` hunks and stays true of them;
+  this campaign changes two tolerances (§7.7.2, §7.7.7). `VERSION_LABEL` is `"2026.6.0"`, unchanged.
+- **§7.6.5's baseline** (Yp 0.2468872958, D/H 2.462251065, ³He/H 1.042050273, ⁷Li/H 5.423441017) and
+  §7.6.2's table of abundances. They were measured on the full network at the default low-T
+  tolerance, and were right for that tree. On production's network the baseline is Yp 0.2468802117,
+  D/H 2.458287893, ³He/H 1.041932695, ⁷Li/H 5.486373007 (small network, `rtol` 1e-6; §7.7.5).
+- **§7.6.3's "an unloaded full-network solve takes about 10 s".** A small-network solve at the
+  production tolerance takes 8.8 s (SM baseline) to 10.1 s (a history) on this machine (§7.7.6).
+
+Figures are from `prompts/bbn-tolerance/logs/`, on the trees named. D/H and Yp spreads are
+(max − min)/median over the three input variants `prod`, `pert12` and `pert9` of one history: the
+production callback on the stored ratio grid, and the same on `r × (1 + 10⁻¹²)` and
+`r × (1 + 10⁻⁹)`. That is a measure of PRyMordial's response to ulp-level input changes, not of its
+accuracy.
+
+#### 7.7.1 The network
+
+Production runs PRyMordial's **small** (12-reaction) network. It is selected by one name,
+`BBN_SMALL_NETWORK = True`, assigned in `main.py`'s `run_pipeline` (`main.py:801`) and read once, in
+the BBN payload (`:807`) and the warning call (`:841`). `plot_by_beta.py` has its own module-level
+`BBN_SMALL_NETWORK = True` (`:76`), which must match `main.py`'s so that the Standard-Model baseline
+it draws is on the network the data were made on. The defaults of `compute_BBN_data`,
+`BBNData.compute`'s two payload fallbacks, `tools/bbn_baseline.py` and `tools/history_and_bbn.py` also
+say `True`, and `ComputeTargets/tests/test_network_flag.py` (c) holds them in step. The exception is
+`tools/bbn_from_store.py`, which keeps the full network as its default because the reproduction
+commands of logs 01 and 01c depend on it.
+
+*Why.* The full network fails on about 1 % of histories. On the 2026.6.0 store 11 of 684 φ\* = 5
+histories ended in `PRyMSolverFailureError: solve_ivp failed in stage 'low-T nuclear network (full)'`
+(§7.5), at T_J just above 1 keV. The cause (log 01, item 6) is one rate, `Li7dLi8p_bkwrd`
+(`PRyM/PRyM_nuclear_net63.py:1142–1147`; identical in upstream `bf24c3d`): the reverse rate of
+Li8(p,d)Li7 is α·exp(γ/T9) times a global quadratic spline of the forward-rate table. Near
+T9 = 0.0116 the table is 1e-264 to 3e-241, the spline rings in sign at about 1e-54, and the product
+reaches |1.45e39|. BDF's Newton iteration then fails at every step size, because the Jacobian it holds
+was refreshed 10⁴ s earlier and has ∂f_Li8/∂Y_Li8 of opposite sign. It is not the error test. **No
+tolerance removes it**: in log 01's scan it appeared at `rtol` 1e-6 and 1e-8, at both per-species
+`atol` settings, and once in 109 solves at 1e-5. The small network has no Li8. It never failed in 340
+solves (T1 and T2 of log 01c), and it completes all 165 solves of the 11 histories that fail on the
+full network, the default tolerance included.
+
+The ruling behind this (README §0.2 U3): the lithium abundance is not used for constraints, and what
+matters is Yp and D/H computed reliably. **⁷Li/H from the small network is less reliable and is not
+used.**
+
+*How the full network is still selected.* By editing that one name to `False` in `main.py` (and in
+`plot_by_beta.py`). There is deliberately no command-line flag (README §0.2 U4). `BBNData` treats
+PRyMordial as a black box, so that another BBN code could be swapped in, and a first-class small/full
+switch would tie client code to a PRyMordial concept; a change of code is handled by the versioning
+mechanism (`PRyM_version`). The comment at the assignment in `main.py` says why the small network is
+the default.
+
+#### 7.7.2 The low-T tolerances
+
+Upstream `bf24c3d` passes no `rtol` to either low-T `solve_ivp` call (`method='BDF', jac=…,
+atol=1.e-11` small; `atol=1.e-15` full; read from GitHub, log 01 item 10; upstream `main` has not
+changed it). SciPy's default `rtol = 1e-3` therefore applied to the stage, where the other six calls
+pass `rtol=1e-6, atol=1e-9`. As patched:
+
+| call | `rtol` | `atol` | was |
+|---|---|---|---|
+| low-T, small network | **1e-6** | 1e-11 (unchanged) | none passed: 1e-3 |
+| low-T, full network | **1e-5** | 1e-15 (unchanged) | none passed: 1e-3 |
+
+The small network's setting is the one P11's rule selects (§7.7.3). The full network's 1e-5 is log
+01's provisional setting, applied for anyone who selects that network. It does not remove the Li8
+failures. No other stage's tolerance, no rate, no Julia branch and not `_check_solve_ivp` was
+changed, and **a partial solve is never accepted**: every failure of the 11 was at 96–99 % of the
+stage's end time, after Yp and D/H had frozen, and is still stored as a failure row (README §0.2 P8).
+
+#### 7.7.3 The scans
+
+These are the measurements the settings were chosen from. The rules are criteria for choosing our own
+parameters, not bounds on PRyMordial, and no test asserts them (README §0.2 P3, P11).
+
+**The full network** (log 01, S1: 16 histories × 3 variants + the SM baseline = 49 solves per
+setting, run 9 at a time; cost serially, under moderate load):
+
+| low-T `rtol` | failed solves of 49 | D/H spread over variants: max (history) / median | SM D/H ×10⁵ | serial cost, SM / control, against the default |
+|---|---|---|---|---|
+| default (1e-3) | **11** (the 11, `prod`) | 2.83e-3 (β 1.2, M 10⁻³) / 1.45e-3, over the five controls | 2.462251065 | 1.00 / 1.00 (6.39 s / 7.42 s) |
+| 1e-4 | 0 | 1.40e-4 (β 2.1, M 0.1) / 8.43e-5 | 2.45820648 | 1.28 / 1.37 |
+| **1e-5** | 0 (1 of 109 solves at 1e-5 failed in the Yp-floor runs) | 1.22e-4 (β 2, M 10⁻⁵) / 4.09e-5 | 2.458895152 | 2.48 / 2.23 |
+| 1e-6 | **1** (β 1.1, M 0.03, `prod`) | 1.06e-4 (β 2, M 10⁻⁵) / 1.76e-5 | 2.458947441 | 4.11 / 3.74 |
+| 1e-8 | **1** (β 1.2, M 10⁻³, a control) | 1.04e-4 (β 2, M 10⁻⁵) / 2.03e-5 | 2.458917971 | 10.58 / 8.96 |
+
+The SM baseline converges: D/H is 2.458895, 2.458947 and 2.458918 at 1e-5, 1e-6 and 1e-8, within
+2.1e-5; **the default's 2.462251 is 1.35e-3 above them**, which is the default tolerance's own error
+on the baseline. Log 01's rule P3 therefore selected nothing (its criterion 3 measured distance from
+that default), and the campaign stopped, to be re-planned around the small network.
+
+**The small network** (log 01c, T1: the same 49 solves per setting; T2: 95 solves of a breadth
+sample at 1e-6, every 10th φ\* = 5 history in (M, β) order and every φ\* ≠ 5 history; **no solver
+failure in any of the 340 solves**). P11's four criteria:
+
+| low-T `rtol` | 2. D/H spread: max (history); histories missing the rule | 3. against `rtol` 1e-8: max D/H; max Yp; inputs missing 1e-4 / 1e-5 | 4. cost, SM / control, against the full network at its default | P11 |
+|---|---|---|---|---|
+| default (1e-3) | 1.91e-3 (β 1.2, M 10⁻³); 16 of 16 | 1.77e-3; 3.2e-5; 17 of 17 | 0.67 / 0.71 | fails 2, 3 |
+| 1e-4 | 6.21e-4 (β 1.7, M 0.03); 9 | 5.4e-4; 3.8e-6; 15 of 17 | 0.75 / 0.78 | fails 2, 3 |
+| 1e-5 | 1.14e-4 (β 2.12, M 10⁻⁵); 1 | 1.57e-4; 6.0e-7; 13 of 17 | 0.94 / 0.93 | fails 2, 3 |
+| **1e-6** | 1.51e-4 (β 2.4, M 10⁻⁵), 1.46× its own 1.03e-4 at 1e-8; 0 | 5.5e-5; 2.1e-7; 0 | **1.15 / 1.13** | **meets all four** |
+| 1e-8 | 1.03e-4 (β 2.4, M 10⁻⁵); 0 | the reference | 1.56 / 1.46 | meets all four |
+
+Criterion 1 (no failed solve) held at every setting. Criterion 2 is "below 1e-4, or at most 1.5× the
+history's own spread at 1e-8", the second clause allowing for a floor another stage sets. P11 takes
+the largest `rtol` that meets all four: **1e-6**.
+
+#### 7.7.4 The residuals at the production setting
+
+Measurements, with provenance (README §0.2 P9). They are properties of PRyMordial, not bounded in a
+test and not issues. Small network, `rtol` 1e-6, `atol` 1e-11: log 01c, reproduced in every printed
+digit by log 02 on the patched tree (49 of 49) and again by prompt 03 (17 of 17; log 03).
+
+- **The D/H spread over the three variants.** Median 4.4e-5 over the 16 histories; 15 of 16 are below
+  1e-4. The maximum is **1.51e-4**, on β = 2.4, M = 10⁻⁵, and that history is above 1e-4 even at
+  `rtol` 1e-8 (1.03e-4): the low-T stage does not set that floor. Log 01 found a floor of the same
+  kind on the full network, on β = 2, M = 10⁻⁵, and traced it to the thermodynamic stage (it fell
+  from 1.22e-4 to 2.4e-5 with that stage tightened alone). The small-network floor was not traced to
+  a stage.
+- **The Yp spread.** Median 1.5e-5, maximum 4.3e-5 (β = 2.4, M = 10⁻⁵). **No low-T `rtol` moves
+  it**: the same figures at 1e-5, 1e-6 and 1e-8. On the full network (log 01 item 9) no single other
+  stage removes it either; tightening the thermodynamic, a(T), high-T and mid-T stages together,
+  from 1e-6 to 1e-9, cuts it by about 100×, to 1.4e-7 to 4.6e-7.
+- **The convergence error against 1e-8**, relative, on all 17 inputs (the SM and each history's
+  `prod`): D/H at most 5.5e-5 (median 2.6e-5; β = 1.6, M = 10⁻⁵ is the largest), Yp at most 2.1e-7.
+  Only the low-T stage differs between the two solves, so this isolates its error.
+- **A bias of another stage, measured on the full network only.** Tightening the a(T) stage from its
+  `rtol` 1e-6 moves D/H by about +4.5e-4 on the control β = 1.6, M = 10⁻³ (2.461632 to 2.462733;
+  log 01 item 9). That is larger than the spreads above. It was not measured on the small network
+  and is not removed.
+- **The default tolerance's error, which the stored results carry.** At the default low-T `rtol`
+  D/H is off by up to 1.77e-3 (median 7.6e-4) against 1e-8 on the small network (log 01c), and by
+  1.35e-3 on the full network's SM baseline (log 01).
+
+#### 7.7.5 The offset between the networks, and the baseline
+
+Measured as a difference (log 01c row 6, P12: (small − full)/full per input, with log 01's full-network
+rows), not bounded:
+
+| low-T `rtol` (both networks) | inputs | Yp: range of the difference | D/H: range of the difference |
+|---|---|---|---|
+| 1e-5 | 17 | −3.17e-5 to +2.11e-5 | −4.35e-4 to −3.23e-4 |
+| 1e-6 | 16 (the full network failed β 1.1, M 0.03) | −3.21e-5 to +2.09e-5 | −3.58e-4 to −2.52e-4 |
+| 1e-8 | 16 (the full network failed β 1.2, M 10⁻³) | −3.19e-5 to +2.10e-5 | −3.06e-4 to −2.35e-4 |
+
+The small network gives D/H **2.4×10⁻⁴ to 3.6×10⁻⁴ lower** than the full network on every input at a
+converged setting, never higher, and Yp within ±3.2×10⁻⁵, which is Yp's own spread. On the SM baseline
+the D/H difference is −2.82e-4 at 1e-8. The shift is a systematic, nearly the same on every history
+(a range of about 1.1e-4 across the 16 at 1e-6). The two networks also differ in ⁷Li/H by about 1 %
+(on the constant 0.08 ρ_SM fixture, `test_network_flag (b)`: small at 1e-6 5.186233632, full at 1e-5
+5.133203422, a shift of 1.033e-2; on the SM baseline, small 5.486373007 against full 5.428643941 at
+1e-5, log 01).
+
+Every BBN row of a refreshed store, and the SM baseline, moves by this offset and by the removal of the
+default tolerance's error. The SM baseline moves from D/H 2.462251065 (full network, default; §7.6.5)
+to 2.458287893 (small, 1e-6), a fall of 1.6×10⁻³ in D/H: the 1.35e-3 error of the default (§7.7.3)
+plus about 2.8e-4 of network offset. Yp moves from 0.2468872958 to 0.2468802117, a relative 2.9e-5, which is
+within the range of the Yp offset above.
+
+**The re-pinned constants** (README §0.2 P7, P16; log 02 "What shipped" (e)). Each was re-derived from
+its stated provenance (the "honly" route on `7b518c9`), at the new settings, and re-pinned with the old
+value kept in a comment; **no bound was loosened**. For example `CONST_HONLY_SMALL_YP` is now
+0.253669508 (was 0.2536690816) and `CONST_HONLY_SMALL_D_OVER_H_E5` 2.649288446 (was 2.6481673),
+both at bound 1e-6, and `CONST_HONLY_FULL_YP` 0.2536731562 (was 0.2536754614) and
+`CONST_HONLY_FULL_D_OVER_H_E5` 2.649990509 (was 2.648809882), at bound 1e-5; `README_BASELINE` in `test_bbn_callbacks (i)` is now the small-network SM
+baseline above, at bound 1e-4, and the test calls `compute_SM_baseline(True)`.
+
+#### 7.7.6 The cost
+
+Serial medians of three repeats after a discarded warm-up, one process, in seconds (log 01c, row 5,
+at 1-minute load 4.2–9.4; log 02, row 7, at 5.9–6.4). The ratio is the quotable figure.
+
+| setting | SM baseline | control β 1.6, M 10⁻³, `prod` | against the old production (full, default) |
+|---|---|---|---|
+| **old production**: full, default | 7.61 | 8.86 | 1.00 |
+| **production now**: small, 1e-6 | 8.79 (log 02: 8.76) | 10.05 (log 02: 10.11) | **1.15 / 1.13** |
+| small, default | 5.09 | 6.30 | 0.67 / 0.71 |
+| small, 1e-8 | 11.85 | 12.95 | 1.56 / 1.46 |
+| full, 1e-5, now the full network's setting (log 01, another session) | 15.82 | 16.54 | 2.48 / 2.23 of log 01's own default (6.39 s / 7.42 s) |
+
+So the small network at its production setting costs about the same as the full network did at the
+default tolerance (1.13–1.15×). The campaign's cost target (README §0.2 P11 (4)) ranked last, behind
+getting results at all and getting correct results.
+
+#### 7.7.7 The `PRyM/` hunks, for an upgrade
+
+Two hunks, each a marker comment and one keyword argument, in `PRyM/PRyM_main.py`. Line numbers are
+those at the tip of this campaign (`5a72871` onward). Each marker is the line in the file's style
+"ChamPBH bbn-tolerance prompt 02". §7.6.4's table is extended by this note, not edited.
+
+| file:lines | hunk |
+|---|---|
+| `PRyM_main.py:1349–1350` | in the **small** network's low-T `solve_ivp`, after `jac=_limited(Jacobian, …)` and before `atol=1.0e-11`: the marker comment, and `rtol=1.0e-6,` |
+| `PRyM_main.py:1431–1432` | in the **full** network's low-T `solve_ivp`, after `jac=_limited(Jacobian_LT, …)` and before `atol=1.0e-15`: the marker comment, and `rtol=1.0e-5,` |
+
+The Julia branches are not patched (`julia_flag` is asserted false). The Li8 rate and `dYB8dtLT` are
+not patched (§7.7.8). `PRYM_VERSION` carries `+bt02` for these two hunks.
+
+#### 7.7.8 Other things recorded
+
+- **A store that was not refreshed warns, and is still used.** `BBNData` lookups are keyed on
+  `VERSION_LABEL` and ignore `PRyM_version` and `small_network`. `main.py` and `plot_by_beta.py` call
+  `pipeline_selection.warn_foreign_bbn_provenance`, which prints one warning naming each foreign
+  (`PRyM_version`, network) with its count, counting failure rows as "not stored", and ending with the
+  refresh route. No row is skipped, filtered or recomputed because of it. There is no `VERSION_LABEL`
+  bump: `ScalarModel` and `AdiabaticHistory` rows do not depend on PRyMordial, and a bump would orphan
+  all 710 histories. How to refresh BBN on the science store, without recomputing a history, is in
+  `review-remediation-verification.md` §4.11.
+- **Open, on PRyMordial's side, not patched.**
+  `[01-prymordial-li8-p-d-li7-rate-rings-near-1-kev]` (the cause of the full network's failures; it
+  stays for anyone who selects that network) and
+  `[01-prymordial-dYB8dtLT-unpacks-Y-in-the-superseded-order]` (`dYB8dtLT`, `PRyM_nuclear_net63.py:1480`,
+  unpacks Y in the superseded species order; the effect was not measured and is probably negligible,
+  since B8 stays below 1e-16 and enters no reported abundance).
+- **The `T_deliver` figure's threshold curve** (prompt 01b, `9e51437`). `kick_threshold_curve` returned
+  1/√(3Σ), the first-order form; it now returns β_th = √((2 + Σ)/(6Σ)) = 1/√(3Σ_eff), the paper's
+  reachability condition. Σ is unchanged (`cosmology.w` is the `Xav_EOS_data.csv` spline in both the
+  integration and the overlay). The curve's minimum over [0.05, 50] GeV moves from 1.02945 to 1.10745,
+  both at 0.18202 GeV, where Σ = 0.31453. Test (d) was changed and test (d2) added; both fail on the
+  old source.
+
 ---
 
 ## 8. Distributed execution and its numerical implications

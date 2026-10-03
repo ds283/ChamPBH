@@ -1,14 +1,13 @@
 # BBN-tolerance campaign — implementation state
 
-**Last updated:** 2026-10-03 · **Status: IN PROGRESS — re-planned around the small network (U3);
-prompt 01 committed BLOCKED and ruled; P10–P13 accepted; 01c landed (recommends the small network
-at low-T rtol 1e-6); the user's ruling on it complete (U4): small at rtol 1e-6, full patched
-to rtol 1e-5; prompts 02 and 03 rewritten; P14–P16 accepted; 02 landed (production on the
-small network, both low-T rtol set, the foreign-provenance warning; 49 of 49 reproduce log 01c);
-the user ruled U5 on log 02: `tools/history_and_bbn.py` follows `main.py`, as prompt 02b;
-01b landed (the kick threshold uses Σ_eff); 02b landed (the history tool runs the small
-network); 03 next** (01b added 2026-10-03, U2; 01c added 2026-10-03, U3; 02b added
-2026-10-03, U5). Planned on 2026-10-03 against
+**Last updated:** 2026-10-03 · **Status: COMPLETE — 6 of 6 prompts landed; closed 2026-10-03.**
+Re-planned around the small network (U3) after prompt 01 committed BLOCKED; 01c recommended the
+small network at low-T rtol 1e-6; the user's ruling (U4) put production on the small network at
+rtol 1e-6 and patched the full network's low-T call to 1e-5; prompt 02 landed (49 of 49 reproduce
+log 01c); the user ruled U5 (`tools/history_and_bbn.py` follows `main.py`) and 02b landed; 01b
+landed (the kick threshold uses Σ_eff); prompt 03 landed (documents, the roster re-measured, the
+handover). **Final suites: CosmologyModels 18, ComputeTargets 114, Datastore 31, all OK** (01b added
+2026-10-03, U2; 01c added 2026-10-03, U3; 02b added 2026-10-03, U5). Planned on 2026-10-03 against
 `main` at `4ae25b4`, from a Claude Science brief kept at
 [`source/brief_prym_lowT_failures.md`](source/brief_prym_lowT_failures.md) and checked against the
 tree by the planner (README §0.3). Suites at `8efc50f` (no code changed through `4ae25b4`):
@@ -35,8 +34,9 @@ histories.
 - `tools/history_and_bbn.py` (the `--small-network` default; 02b), `ComputeTargets/BBNData.py`
   (a comment; 02b);
 - `ComputeTargets/tests/` (01, 02, 02b);
-- `.documents/numerical-strategies.md`, `numerical-methods-for-paper.md`,
-  `paper-corrections-numerical-section.md`, `review-remediation-verification.md` (03, additive).
+- `.documents/numerical-strategies.md` (§7.7), `numerical-methods-for-paper.md` (§4.2),
+  `review-remediation-verification.md` (§4.11) (03, additive); `paper-corrections-numerical-section.md`
+  was a possible 03 target and was not edited (log 03, Verification).
 
 **Index:** [`.documents/OPEN_ISSUES.md`](../../.documents/OPEN_ISSUES.md) §1.9–§1.10.
 
@@ -203,6 +203,21 @@ histories.
   line in `tools/history_and_bbn.py`'s module docstring from `[--small-network]` to
   `[--no-small-network]`, classified IMPLEMENTATION CHOICE. Checks 2–4 passed. The user accepted
   the change as classified; it stays, and prompt 02b stands as landed. Prompt 03 is next.
+- **2026-10-03, prompt 03 (log 03): the campaign is closed.** No decision was needed.
+  - **What it did.** It added §7.7 to `numerical-strategies.md`, §4.2 to
+    `numerical-methods-for-paper.md` and §4.11 to `review-remediation-verification.md`, all
+    additive. §4.11 carries the six points of README §7 and the refresh route as commands for the
+    user to run. It did not edit `paper-corrections-numerical-section.md`: `Paper1.tex` states no
+    network or precision for PRyMordial (log 03, Verification, "The documents").
+  - **The re-measure.** The roster on `086bae5`, small network, `prod`, no override: 17 of 17
+    identical in every outcome field to log 02, so to log 01c at 1e-6. All 11 histories that fail on
+    the full network complete.
+  - **What it found while writing the refresh commands.** `--drop bbn-data` empties the BBN tables
+    on every shard each time it is passed, so in a multi-block refresh it goes on the first
+    `main.py` call only. `full_run_2026.6.0.sh` has eight `run` blocks, not the seven its header
+    says. Both are in §4.11 (log 03, deviation 1 and Observations 1).
+  - **Suites.** CosmologyModels 18, ComputeTargets 114, Datastore 31, before and after; no code
+    changed.
 
 Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
@@ -228,7 +243,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | 01b | [Draw the kick threshold with Σ_eff](01b-kick-threshold-sigma-eff.md) (added 2026-10-03) | **B** | Sonnet | ✍️ 2026-10-03 | ✅ 2026-10-03, **COMPLETE** (no deviations; production minimum 1.0295 → 1.1074; suites 18, 114, 31) | see `git log` ("Draw the kick threshold with Sigma_eff") | [`logs/01b-kick-threshold-sigma-eff.md`](logs/01b-kick-threshold-sigma-eff.md) |
 | 02 | [Move production to the small network, set both low-T tolerances, and warn on foreign BBN rows](02-low-T-tolerance-patch.md) | **S**, **N**, **K** | Opus | ✍️ 2026-10-03; **rewritten 2026-10-03** (U4): the small network, both low-T tolerances, the warning | ✅ 2026-10-03, **COMPLETE WITH DEVIATIONS** (six implementation choices; 49 of 49 reproduce log 01c; no stop) | see `git log` ("Move BBN to PRyMordial's small network and set low-T rtol") | [`logs/02-low-T-tolerance-patch.md`](logs/02-low-T-tolerance-patch.md) |
 | 02b | [`tools/history_and_bbn.py` runs production's network](02b-history-tool-follows-production.md) (added 2026-10-03, U5) | **H** | Sonnet | ✍️ 2026-10-03 | ✅ 2026-10-03, **COMPLETE WITH DEVIATIONS** (one implementation choice: the docstring's usage line, accepted by the user 2026-10-03; suites 18, 114, 31) | see `git log` ("Run history_and_bbn on production's network") | [`logs/02b-history-tool-follows-production.md`](logs/02b-history-tool-follows-production.md) |
-| 03 | [Documents and close-out](03-documents-and-close-out.md) | **D** | Sonnet | ✍️ 2026-10-03; **revised 2026-10-03** (U4) | — | — | — |
+| 03 | [Documents and close-out](03-documents-and-close-out.md) | **D** | Sonnet | ✍️ 2026-10-03; **revised 2026-10-03** (U4) | ✅ 2026-10-03, **COMPLETE WITH DEVIATIONS** (one structurally required deviation, the refresh route's `--drop` on one call only, and two implementation choices; roster 17 of 17 identical to log 02; suites 18, 114, 31) | see `git log` ("Close the bbn-tolerance campaign with a handover") | [`logs/03-documents-and-close-out.md`](logs/03-documents-and-close-out.md) |
 
 ---
 
@@ -243,7 +258,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | B | **DEFECT, low** | The `T_deliver` figure's kick threshold uses 1/√(3Σ), not the paper's 1/√(3Σ_eff); its minimum is 1.0295 where the paper says 1.11. Closes `[00-the-kick-threshold-overlay-uses-sigma-not-sigma-eff]`. Added 2026-10-03 (U2). | 01b | **done** (prompt 01b): `kick_threshold_curve` returns √((2 + Σ)/(6Σ)); minimum 1.1074 |
 | K | **GAP** | A store that was not refreshed serves BBN rows from an older PRyMordial with no warning. Closes `[00-a-store-serves-bbn-rows-from-another-prym-version-silently]`. | 02 | **done** (prompt 02): `warn_foreign_bbn_provenance` in both drivers |
 | H | **GAP, low** | `tools/history_and_bbn.py` defaults to the full network and says that is `main.py`'s; a comment in `_configure_PRyMordial` says production runs the full network. Added 2026-10-03 (U5). Closes `[02-two-places-still-say-production-runs-the-full-network]`. | 02b | **done** (prompt 02b): the tool's `--small-network` defaults to `True`; the comment says production runs the small network; `test_network_flag` (c) reads the tool's default |
-| D | documents | The tolerance, its measurements, the refresh route, the handover. | 03 | open |
+| D | documents | The tolerance, its measurements, the refresh route, the handover. | 03 | **done** (prompt 03): `numerical-strategies.md` §7.7, `numerical-methods-for-paper.md` §4.2, `review-remediation-verification.md` §4.11; the roster re-measured, 17 of 17 identical to log 02 |
 
 ---
 
@@ -253,7 +268,10 @@ Two opened by the planner on 2026-10-03, one per defect or gap with no issue on 
 one more the same day for prompt 01b (U2). Two opened by prompt 01 the same day (`[01-…]`). One
 assigned from another board (§3.1). Prompt 02 (2026-10-03) closed the planner's two (§4) and the
 assigned one, and opened one (`[02-…]`). Prompt 01b (2026-10-03) closed the third of the planner's
-(§4). Prompt 02b (2026-10-03) closed the one prompt 02 opened (§4).
+(§4). Prompt 02b (2026-10-03) closed the one prompt 02 opened (§4). Prompt 03 (2026-10-03) opened and
+closed none: the campaign is complete, and **the two entries below are what stays open**. Each is
+owned by this board and is **not assigned** to a future campaign. Neither blocks the science run:
+the first is worked around by production's network, and the second is probably negligible.
 
 - **[01-prymordial-li8-p-d-li7-rate-rings-near-1-kev]** *(log 01, Verification item 6; Observations 1)*.
   - **What.** `Li7dLi8p_bkwrd` (`PRyM/PRyM_nuclear_net63.py:1142–1147`; upstream `bf24c3d` is
@@ -280,6 +298,10 @@ assigned one, and opened one (`[02-…]`). Prompt 01b (2026-10-03) closed the th
     `BBN_SMALL_NETWORK = True`. The full network stays selectable by setting it to `False`, and
     its low-T call now passes `rtol` 1e-5, which does not remove this defect (log 01). The issue
     stays open for anyone who selects the full network.
+  - **Owner (2026-10-03, prompt 03).** This board; not assigned. Indexed at
+    [`OPEN_ISSUES.md`](../../.documents/OPEN_ISSUES.md) §1.10. The user rules whether to patch the
+    rate (outside P4) if the full network is ever to be used again. Recorded for an upgrade in
+    `numerical-strategies.md` §7.7.1 and `review-remediation-verification.md` §4.11 point 6.
 - **[01-prymordial-dYB8dtLT-unpacks-Y-in-the-superseded-order]** *(log 01, Observations 2)*.
   - **What.** `dYB8dtLT` (`PRyM/PRyM_nuclear_net63.py:1480`; upstream identical) unpacks Y in the
     old species order, which every other low-T equation has commented out. So in B8's equation
@@ -289,6 +311,10 @@ assigned one, and opened one (`[02-…]`). Prompt 01b (2026-10-03) closed the th
     probably negligible.
   - **Next step.** Measure it by a runtime override of `dYB8dtLT` in a probe; patch only if the
     user asks.
+  - **Owner (2026-10-03, prompt 03).** This board; not assigned. Indexed at
+    [`OPEN_ISSUES.md`](../../.documents/OPEN_ISSUES.md) §1.10. The small network, which production
+    runs, does not use `dYB8dtLT`: its low-T stage integrates eight species, with no B8
+    (`PRyM/PRyM_main.py`, the small network's `Y_prime`, `Yn_f … YBe7_f`).
 
 ### 3.1 Assigned to this campaign from other boards
 

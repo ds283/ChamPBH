@@ -6,10 +6,11 @@
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`;
 2 on the `science-readiness` board (planned 2026-10-01; closed 2026-10-02, 10 of 10 landed,
 prompt 06b having been added 2026-10-02); 2 on the `bbn-tolerance` board (planned 2026-10-03,
-4 of 6 landed (01c, 02, 01b, 02b); prompt 01 committed BLOCKED 2026-10-03 and ruled the same day: re-planned
+closed 2026-10-03, 6 of 6 landed; prompt 01 committed BLOCKED 2026-10-03 and ruled the same day: re-planned
 around PRyMordial's small network, U3; prompt 01c measured the small network 2026-10-03; prompt
 02 moved production to it and closed three, opening one, 2026-10-03; prompt 01b closed the kick
-threshold overlay issue 2026-10-03; prompt 02b closed the history-tool issue 2026-10-03).
+threshold overlay issue 2026-10-03; prompt 02b closed the history-tool issue 2026-10-03; prompt 03
+wrote the documents and the handover and closed the campaign, opening and closing none, 2026-10-03).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -171,6 +172,8 @@ prompt 02 on 2026-10-03.
 Two opened by the planner on 2026-10-03, one the same day for prompt 01b (the user's U2), two by
 prompt 01 the same day, and one by prompt 02 the same day. Prompt 02 closed the planner's two;
 prompt 01b closed the third; prompt 02b closed the one prompt 02 opened.
+Prompt 03 opened and closed none; the campaign is complete (2026-10-03), and the two rows below stay
+here, on its board, until a later campaign takes them.
 
 - `[01-prymordial-li8-p-d-li7-rate-rings-near-1-kev]` — PRyMordial's Li8(p,d)Li7 reverse rate is
   exp(γ/T9) times a ringing quadratic spline, ±1e39 near 1 keV; it stalls BDF's Newton iteration;

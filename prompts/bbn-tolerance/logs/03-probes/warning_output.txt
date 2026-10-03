@@ -1,0 +1,6 @@
+PRYM_VERSION = bf24c3d+ri02+sr01+bt02; production network: small
+!! warning: 663 stored BBNData row(s) were not made by this code's PRyMordial (PRyM_version=bf24c3d+ri02+sr01+bt02, small network); they are used as stored
+!! warning:   663 x PRyM_version=bf24c3d+ri02+sr01, full network
+!! warning:   21 failure row(s) store no provenance and cannot be classified
+!! warning: to refresh BBN, copy the store and run main.py on the copy with --drop bbn-data
+-- a refreshed store prints nothing:
