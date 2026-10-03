@@ -3,7 +3,7 @@
 **Last updated:** 2026-10-03 · **Status: IN PROGRESS — re-planned around the small network (U3);
 prompt 01 committed BLOCKED and ruled; P10–P13 accepted; 01c landed (recommends the small network
 at low-T rtol 1e-6); the user's ruling on it complete (U4): small at rtol 1e-6, full patched
-to rtol 1e-5; prompts 02 and 03 rewritten; P14–P16 await the user** (01b added
+to rtol 1e-5; prompts 02 and 03 rewritten; P14–P16 accepted; 02 next** (01b added
 2026-10-03, U2; 01c added 2026-10-03, U3). Planned on 2026-10-03 against
 `main` at `4ae25b4`, from a Claude Science brief kept at
 [`source/brief_prym_lowT_failures.md`](source/brief_prym_lowT_failures.md) and checked against the
@@ -169,7 +169,7 @@ histories.
 - **2026-10-03, the planner: prompts 02 and 03 rewritten against U4; README §0.2 P14–P16
   proposed. Awaiting the user.**
   - P14: prompt 02's acceptance runs the roster on both networks with no override, 49 small +
-    17 full solves, 8–10 at a time; the cost serially after.
+    17 full solves, 8–10 at a time; the cost serially after (revised below).
   - P15: the other production defaults follow `main.py` (`compute_BBN_data`, `BBNData.compute`'s
     fallbacks, `tools/bbn_baseline.py`); `tools/bbn_from_store.py` keeps the full network as its
     default, with its help text corrected.
@@ -177,6 +177,14 @@ histories.
     at 1e-6.
 
   Orchestrator 02 §1.1 requires the user's acceptance of P14–P16 recorded here.
+- **2026-10-03, the user: P15 and P16 accepted as proposed; P14 accepted as revised.** The user
+  asked why prompt 02 would run solves on the full network at all, when production will not use
+  it. The 17 full-network roster solves were redundant: test (a) checks the full low-T call's
+  arguments, and the re-pinned `CONST_HONLY_FULL_*` and `BUILDER_CONST_HONLY_FULL_*` are
+  full-network solves at 1e-5 against log 01's re-derived values. **P14 now runs the small
+  network only: 49 solves, 8–10 at a time; the cost serially after.** Orchestrator 02's
+  baseline drops its full-network run too. With this line the precondition of orchestrator 02
+  §1.1 is met.
 
 Decisions the prompts may surface, each a stop-and-ask in its prompt:
 

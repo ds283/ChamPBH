@@ -178,17 +178,18 @@ all and getting correct results.
   - **Accepted:** `PRYM_VERSION` `+bt02`, P5's refresh route, and the re-pins of
     `README_BASELINE` and the P7 constants.
 
-**Proposed by the planner with the rewrite of prompts 02 and 03, 2026-10-03; awaiting the user:**
+**Proposed by the planner with the rewrite of prompts 02 and 03, 2026-10-03; accepted by the
+user the same day, P14 as revised.**
 
-- **P14. Prompt 02's acceptance runs.** The patched tree, with no override, runs the roster on
-  both networks:
-  - the small network on the 16 histories × 3 variants and the SM baseline (49 solves), against
-    log 01c's T1 rows at 1e-6;
-  - the full network on the 17 inputs, `prod` (17 solves), against log 01's S1 rows at 1e-5.
-
-  That is 66 solves, 8–10 at a time as U1 and P10. The cost is measured serially afterwards. U1
-  limited prompts 02 and 03 to "the 17-input roster and nothing larger". This is that roster, on
-  two networks.
+- **P14. Prompt 02's acceptance runs: the small network only.** The patched tree, with no
+  override, runs the small network on the 16 histories × 3 variants and the SM baseline (49
+  solves), against log 01c's T1 rows at 1e-6. They run 8–10 at a time, as U1 and P10, and the cost
+  is measured serially afterwards.
+  - **No roster runs on the full network** (the user, 2026-10-03). Production does not run it.
+    Its patch is verified by prompt 02's test (a) and by the re-pinned full-network constants.
+  - *As first proposed* it also ran the full network on the 17 inputs, `prod`, against log 01's S1
+    rows at 1e-5: 66 solves in all. The user asked what those runs were for. They were redundant
+    with the tests, and were dropped.
 - **P15. The other production defaults follow `main.py`.** `test_network_flag` (c) holds four
   places in step with `main.py`'s payload, and they become `True` with it:
   - `compute_BBN_data`'s `small_network` default;
@@ -389,11 +390,11 @@ root. `black` on changed files, except `PRyM/`, which is patched, not reformatte
 | 01 | [The mechanism and the low-T tolerance scan](01-mechanism-and-tolerance-scan.md) | **Opus** | No production code. A tool with an interception, a reproduction, an instrumented solve, the scan, a recommendation |
 | 01c | [Measure the small network](01c-small-network-scan.md) (added 2026-10-03, U3) | **Opus** | No code. The small-network scan, a breadth sample, cost, the offset from the full network, a recommendation by P11 |
 | 01b | [Draw the kick threshold with Σ_eff](01b-kick-threshold-sigma-eff.md) (added 2026-10-03, U2) | **Sonnet** | One formula, its label and comment, and a test with new expected values; independent of the PRyMordial work |
-| 02 | [Move production to the small network, set both low-T tolerances, and warn on foreign BBN rows](02-low-T-tolerance-patch.md) (rewritten 2026-10-03, U4) | **Opus** | A two-line vendored patch, `small_network` to `True` with a comment on the Li8 fragility, the version string, re-pinned constants, a warning in two drivers; reproduces logs 01c (small) and 01 (full) digit for digit |
+| 02 | [Move production to the small network, set both low-T tolerances, and warn on foreign BBN rows](02-low-T-tolerance-patch.md) (rewritten 2026-10-03, U4) | **Opus** | A two-line vendored patch, `small_network` to `True` with a comment on the Li8 fragility, the version string, re-pinned constants, a warning in two drivers; reproduces log 01c digit for digit |
 | 03 | [Documents and close-out](03-documents-and-close-out.md) (revised 2026-10-03, U4) | **Sonnet** | No production code. Additive addenda, the network switch and the refresh route, the roster re-measured, a handover |
 
 **After U3 (2026-10-03).** Prompts 02 and 03 were rewritten after the user ruled on log 01c (U4,
-2026-10-03); P14–P16 came with the rewrite. The order becomes:
+2026-10-03); P14–P16 came with the rewrite and were accepted the same day. The order becomes:
 
 ```
 01 ──► 01c ──► (the user rules: P11's setting, P13) ──► 02 (rewritten) ──► 03 (revised)
@@ -661,10 +662,9 @@ Rewritten 2026-10-03 with prompt 02 (U4). The first version is in `git log` (thi
 
 | quantity | target | witness |
 |---|---|---|
-| the low-T calls' `rtol` and `atol` | **small: 1e-6, 1e-11; full: 1e-5, 1e-15**; every other call unchanged | new test intercepting `solve_ivp`; **fails on `HEAD~1`** |
+| the low-T calls' `rtol` and `atol` | **small: 1e-6, 1e-11; full: 1e-5, 1e-15**; every other call unchanged | new test intercepting `solve_ivp`; **fails on `HEAD~1`**. With the re-pinned full-network constants, this is the full network's only check: no roster runs on it (P14) |
 | production's network | **`main.py`'s one name `True`, with the Li8 comment; `plot_by_beta.py`'s baseline `True`; the defaults of P15 `True`**; no flag | `test_network_flag` (c), changed; **fails on `HEAD~1`** |
 | the patched tree, no override, small network, roster × 3 variants + SM (49) | **equal to log 01c's T1 rows at 1e-6 to every printed digit**; all 11 complete | the tool |
-| the patched tree, no override, full network, 17 inputs `prod` | **equal to log 01's S1 rows at 1e-5 to every printed digit** | the tool |
 | `PRYM_VERSION`; `VERSION_LABEL` | **`"bf24c3d+ri02+sr01+bt02"`; `"2026.6.0"` (unchanged)** | grep; the existing version test, updated |
 | the pinned constants (P7, P16) | **re-pinned from their provenance to the values logs 01 and 01c measured; bounds unchanged; old values in a comment** | the test modules pass |
 | the foreign-provenance warning (P6, U4) | **one warning with the count per foreign (`PRyM_version`, `small_network`); failure rows counted as "not stored"; no row skipped** | test of a pure function; `ast` check that `main.py` and `plot_by_beta.py` call it |

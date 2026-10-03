@@ -28,11 +28,8 @@ Read [`README.md`](README.md) and [`../README.md`](../README.md) §0.2 (P4–P9,
    main.py plot_by_beta.py tools/bbn_baseline.py tools/bbn_from_store.py ComputeTargets/tests/`.
    Record any file that is not clean already.
 6. **Your own baseline, on `HEAD` before dispatch.** Run the tool on the control β = 1.6,
-   M = 10⁻³, `prod`, twice:
-   - `--small-network --lowT-rtol 1e-6`;
-   - the default network with `--lowT-rtol 1e-5`.
-
-   Keep the abundances.
+   M = 10⁻³, `prod`, `--small-network --lowT-rtol 1e-6`. Keep the abundances. No full-network
+   runs (P14).
 
 ## 2. Dispatch
 
@@ -41,7 +38,7 @@ One fresh-context subagent, **Opus**, using the template in `README.md` with `NN
 
 > *The ruled settings are U4's, on the board's Decisions: production runs the small network; its
 > low-T call gets rtol 1e-6 (atol 1e-11 unchanged); the full network's low-T call gets rtol 1e-5
-> (atol 1e-15 unchanged). P14–P16 are accepted.*
+> (atol 1e-15 unchanged). P14 (as revised), P15 and P16 are accepted.*
 >
 > *Your diff may touch only the files in your prompt's "Allowed files" list, and in each only
 > what that list names. Your acceptance runs may go 8–10 solves at a time (P14); the cost
@@ -64,11 +61,12 @@ One fresh-context subagent, **Opus**, using the template in `README.md` with `NN
      call), not only on an import.
    - Restore both, and confirm that `git status` is clean.
 3. **The digit-for-digit check, run by you.** The tool on the control, `prod`, **no override**,
-   small network and full, must equal your §1.6 baselines to every printed digit. Then spot-check
+   `--small-network`, must equal your §1.6 baseline to every printed digit. Then spot-check
    one failure, β = 1.345 at M = 10⁻³, small network, against log 01c's T1 row at 1e-6.
-4. **The reproduction counts.** The log reports 49 of 49 small-network rows identical to log 01c
-   and 17 of 17 full-network rows identical to log 01's S1 at 1e-5. Check two of each in its
-   CSV against the logs yourself.
+4. **The reproduction count.** The log reports 49 of 49 small-network rows identical to log
+   01c's T1 rows at 1e-6. Check two in its CSV against log 01c yourself. The full network's patch
+   is checked by test (a) and by the re-pinned `CONST_HONLY_FULL_*` and
+   `BUILDER_CONST_HONLY_FULL_*` (check 5).
 5. **The bounds.** `git diff HEAD~1 -- ComputeTargets/tests/` changes constants, comments, one
    test's network (P16), `test_network_flag` (c)'s expected values, and `OVERRIDE_RTOL`. No
    tolerance literal in an assertion changed. Each re-pinned constant keeps its old value in a

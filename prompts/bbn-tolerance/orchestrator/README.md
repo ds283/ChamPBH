@@ -8,7 +8,7 @@ commit against fixed criteria, and either continues or stops and reports to the 
 | [`prompt-01.md`](prompt-01.md) | 01, the mechanism and the scan | Measurement and a tool. The review: the reproduction (run by you), the override touches one call, no production file changed, no store written, a recommendation by P3's rule |
 | [`prompt-01c.md`](prompt-01c.md) | 01c, the small network (added 2026-10-03, U3) | Measurement only. The review: the reproduction against log 01's S3 (run by you), the grid complete, no code changed, a recommendation by P11 |
 | [`prompt-01b.md`](prompt-01b.md) | 01b, the kick threshold (added 2026-10-03) | One formula. The review: the test fails on `HEAD~1` on the values, and the Σ is the cosmology's own |
-| [`prompt-02.md`](prompt-02.md) | 02, the small network and the patch (rewritten 2026-10-03, U4) | Two vendored lines, `small_network` to `True`, a version, re-pinned constants, a warning. The review: the tests fail on `HEAD~1`, the patched tree reproduces logs 01c and 01 digit for digit, bounds unchanged |
+| [`prompt-02.md`](prompt-02.md) | 02, the small network and the patch (rewritten 2026-10-03, U4) | Two vendored lines, `small_network` to `True`, a version, re-pinned constants, a warning. The review: the tests fail on `HEAD~1`, the patched tree reproduces log 01c digit for digit, bounds unchanged |
 | [`prompt-03.md`](prompt-03.md) | 03, documents and close-out (revised 2026-10-03, U4) | Additive only. The review is the `--numstat`, the roster and the handover |
 
 ## Running one
@@ -17,7 +17,7 @@ Start a fresh context with, for example:
 
 > Read `prompts/bbn-tolerance/orchestrator/prompt-01.md` and follow it.
 
-Run 01 → 01b → 02 → 03 in order. **After U3 (2026-10-03)** the order is 01 → 01c → the user's ruling on log 01c → 02 (rewritten) → 03 (revised), with 01b at any point before 03. The ruling is U4; orchestrators 02 and 03 were rewritten with their prompts on 2026-10-03, and 02 runs once the user has accepted P14–P16. **Between 01 and 02 the user rules** on log 01's recommendation (README
+Run 01 → 01b → 02 → 03 in order. **After U3 (2026-10-03)** the order is 01 → 01c → the user's ruling on log 01c → 02 (rewritten) → 03 (revised), with 01b at any point before 03. The ruling is U4; orchestrators 02 and 03 were rewritten with their prompts on 2026-10-03, and the user accepted P14 (revised), P15 and P16 the same day. **Between 01 and 02 the user rules** on log 01's recommendation (README
 §0.2 P3) and on P4–P7. Orchestrator 02 checks that the board's Decisions record that ruling. Do not
 start one with an earlier miss unresolved.
 

@@ -19,7 +19,7 @@ for anyone who selects it. Add a dated **Narrowed** line to the first saying tha
 longer runs the full network.
 
 **Recommended model:** **Opus.** The patch is two lines and a flag, but re-pinning test constants
-from their provenance, and reproducing logs 01 and 01c digit for digit, need care.
+from their provenance, and reproducing log 01c digit for digit, need care.
 
 **Precondition (the orchestrator checks it):** the board's Decisions record U4, the user's
 confirmation that `plot_by_beta.py` follows `main.py`, and the user's acceptance of P14–P16.
@@ -200,10 +200,12 @@ time; the cost run alone, afterwards.
   solves. Each row must equal `logs/01c-probes/scan.csv`'s `tag == "T1"`, `lowT_rtol == "1e-06"`
   row for the same input and variant, **to every printed digit** (as the CSV strings are written).
   This covers all 11 histories that fail on the full network; each must complete.
-- **The full network:** the 17 inputs, `prod`, at the tool's default network, 17 solves. Each row
-  must equal `logs/01-probes/scan.csv`'s `tag == "S1"`, `lowT_rtol == "1e-05"`, `prod` row to
-  every printed digit. Log 01 had no failure there.
 - **Any difference is a stop.** It means that the patch and the override are not the same change.
+- **No roster runs on the full network (P14).** Production does not run it. Its patch is verified
+  by the tests instead:
+  - test (a) checks the arguments of its low-T call;
+  - the re-pinned `CONST_HONLY_FULL_*` and `BUILDER_CONST_HONLY_FULL_*` are full-network solves
+    at 1e-5. They must equal log 01's re-derived values.
 - **Cost.** The serial median of three repeats on the control, small network, no override, must
   be within 1.2× of log 01c's 10.05 s for small at 1e-6. Record the load average as log 01c did.
 - **Suites.** All three pass. The counts are not lower: 18, 106 + the new tests, 31. `black
@@ -222,8 +224,8 @@ time; the cost run alone, afterwards.
 
 ## 5. Stop conditions — stop and ask the user
 
-- A roster row differs from log 01c's (small) or log 01's (full) at the ruled setting.
-- A small-network solve fails, or a full-network solve fails among the 17.
+- A roster row differs from log 01c's at 1e-6.
+- A small-network solve fails.
 - A re-derived constant differs from its expected value in §1 (e), or a re-pinned test fails its
   unchanged bound.
 - `small_network` or `PRyM_version` is not readable on the objects the drivers hold.
@@ -238,7 +240,7 @@ time; the cost run alone, afterwards.
     re-derived;
   - the text of `main.py`'s comment;
   - the ⁷Li/H shift `test_network_flag` (b) prints;
-  - the reproduction counts (49 + 17 identical) and the cost.
+  - the reproduction count (49 identical) and the cost.
 - **The board:**
   - S, N and K are done.
   - Move the two issues this board owns to §4 with **Resolved** lines.
