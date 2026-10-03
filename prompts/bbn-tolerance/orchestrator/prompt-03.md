@@ -1,5 +1,7 @@
 # Orchestrator — prompt 03, documents and close-out
 
+> **Do not run (U3, 2026-10-03).** Revised with prompt 02's rewrite.
+
 Read [`README.md`](README.md) and [`../README.md`](../README.md) §2 (f), §6.3, §7 first. **You do
 not write code.**
 

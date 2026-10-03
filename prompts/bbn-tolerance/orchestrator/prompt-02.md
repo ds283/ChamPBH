@@ -1,5 +1,8 @@
 # Orchestrator — prompt 02, the patch
 
+> **Do not run (U3, 2026-10-03).** Prompt 02 is rewritten after the user rules on log 01c, and
+> this orchestrator with it.
+
 Read [`README.md`](README.md) and [`../README.md`](../README.md) §0.2 (P4–P9), §2 (b), (f), §4,
 §6.2 first. **You do not write code.**
 

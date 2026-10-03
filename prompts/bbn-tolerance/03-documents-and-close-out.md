@@ -1,5 +1,8 @@
 # Prompt 03 — Documents and close-out
 
+> **To be revised (U3, 2026-10-03).** This prompt is revised with prompt 02's rewrite, after the
+> user rules on log 01c (README §0.2 U3). Do not dispatch it as written.
+
 **Campaign:** [`README.md`](README.md) · **Board item:** **D** ·
 **Board:** `IMPLEMENTATION_STATE.md`. Update your row and D; close the campaign.
 **Closes:** nothing new; confirms the board's §3 is empty or names what stays open.

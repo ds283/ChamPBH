@@ -1,7 +1,8 @@
 # BBN-tolerance campaign — implementation state
 
-**Last updated:** 2026-10-03 · **Status: IN PROGRESS — 0 of 4 landed; prompt 01 committed BLOCKED
-(no setting meets P3; the user rules)** (01b added 2026-10-03, U2). Planned on 2026-10-03 against
+**Last updated:** 2026-10-03 · **Status: IN PROGRESS — re-planned around the small network (U3);
+prompt 01 committed BLOCKED and ruled; 01c next, once P10–P13 are accepted** (01b added
+2026-10-03, U2; 01c added 2026-10-03, U3). Planned on 2026-10-03 against
 `main` at `4ae25b4`, from a Claude Science brief kept at
 [`source/brief_prym_lowT_failures.md`](source/brief_prym_lowT_failures.md) and checked against the
 tree by the planner (README §0.3). Suites at `8efc50f` (no code changed through `4ae25b4`):
@@ -85,6 +86,27 @@ histories.
     - re-pinning `test_bbn_callbacks`' `README_BASELINE`, which fails at any converged setting
       (D/H 1.38e-3 against its 1e-4 bound).
 
+- **2026-10-03, the user: U3, re-plan around the small network; ruling on log 01's stop.**
+  - **The ruling.** The full network's failures come from its lithium network, which we must
+    live with or work around. The lithium abundance is not used for cosmological constraints
+    (the PDG declines to quote one); what matters is computing Yp and D/H reliably. Production
+    is to move to PRyMordial's small network, which has no Li8. **The first step is a
+    measurement of the small network**: prompt 01c (README §0.2 U3, §2 (c′)).
+  - **Log 01's stop is resolved by this ruling.** No full-network setting is ruled. Prompts 02
+    and 03 are rewritten after the ruling on log 01c and carry a notice until then.
+  - **Log 01's deviations accepted:** 2 (the tool imports `Datastore` indirectly, through
+    `ComputeTargets.BBNData`; it opens the store only read-only) and 9 (the cost run under
+    background load; "not much we can do about this").
+- **2026-10-03, the planner: README §0.2 P10–P13 proposed after U3. Awaiting the user.**
+  - P10: prompt 01c measures and changes nothing, the tool included; about 340 solves, 8–10 at
+    a time, as U1.
+  - P11: the rule for the small network's low-T setting: reliability, scatter, convergence
+    against `rtol` 1e-8, and cost ≤ 3× today's full-network default.
+  - P12: the small network's offset from the full one is a measurement, never a bound.
+  - P13: what the rewrite of prompt 02 must settle, ruled with log 01c.
+
+  Orchestrator 01c §1.1 requires the user's acceptance of P10–P13 recorded here.
+
 Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
 - the tool does not reproduce the stored outcome (prompt 01, §8);
@@ -92,7 +114,11 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 - no setting meets P3 (prompt 01, §6);
 - **the setting itself** (P3): the user rules on log 01's recommendation before prompt 02;
 - the patched tree does not reproduce log 01 digit for digit (prompt 02, §5);
-- a re-pinned test fails its unchanged bound (prompt 02, §5).
+- a re-pinned test fails its unchanged bound (prompt 02, §5);
+- log 01c's reproduction of log 01's S3 fails, a small-network solve fails, or no setting meets
+  P11 (prompt 01c, §6);
+- **the small network's setting** (P11) and P13: the user rules on log 01c before prompt 02 is
+  rewritten.
 
 ---
 
@@ -101,9 +127,10 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
 | 01 | [The mechanism and the low-T tolerance scan](01-mechanism-and-tolerance-scan.md) | **M**; measures **S**, **N** | Opus | ✍️ 2026-10-03 | ⛔ 2026-10-03, **BLOCKED** (no setting meets P3; the user rules) | see `git log` ("Add bbn_from_store and measure PRyMordial's low-T failures") | [`logs/01-mechanism-and-tolerance-scan.md`](logs/01-mechanism-and-tolerance-scan.md) |
+| 01c | [Measure the small network](01c-small-network-scan.md) (added 2026-10-03, U3) | **Q** | Opus | ✍️ 2026-10-03 | — | — | — |
 | 01b | [Draw the kick threshold with Σ_eff](01b-kick-threshold-sigma-eff.md) (added 2026-10-03) | **B** | Sonnet | ✍️ 2026-10-03 | — | — | — |
-| 02 | [Set the low-T tolerance and warn on a stale PRyMordial version](02-low-T-tolerance-patch.md) | **S**, **N**, **K** | Opus | ✍️ 2026-10-03 | — | — | — |
-| 03 | [Documents and close-out](03-documents-and-close-out.md) | **D** | Sonnet | ✍️ 2026-10-03 | — | — | — |
+| 02 | [Set the low-T tolerance and warn on a stale PRyMordial version](02-low-T-tolerance-patch.md) | **S**, **N**, **K** | Opus | ✍️ 2026-10-03; **to be rewritten after log 01c** (U3) | — | — | — |
+| 03 | [Documents and close-out](03-documents-and-close-out.md) | **D** | Sonnet | ✍️ 2026-10-03; **to be revised with 02** (U3) | — | — | — |
 
 ---
 
@@ -112,6 +139,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | Item | Kind | Description | Prompt | Status |
 |---|---|---|---|---|
 | M | measurement | The mechanism, the tolerance scan, Yp's floor, upstream's defaults, and a recommended setting. | 01 | **measured** (log 01); recommendation withheld: no setting meets P3 |
+| Q | measurement | The small network on the roster and a breadth sample: reliability, scatter, convergence, cost, its offset from the full network, and a recommended setting by P11. Added 2026-10-03 (U3). | 01c | open |
 | S | **DEFECT, medium** | The full low-T network fails near T_J = 1 keV on 11 of 684 φ\* = 5 histories, depending on ulp-level details of the input. Closes `[00-the-low-T-network-fails-near-1-keV-on-ulp-level-input]`. | 01, 02 | open; measured (log 01): the cause is a PRyMordial rate, not the tolerance as such |
 | N | **DEFECT, low–medium** | D/H moves by up to 2.2×10⁻³ under a 10⁻¹² change to ρ_NP at the default tolerance. Closes `[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]` (assigned). | 01, 02, 03 | open; measured (log 01) |
 | B | **DEFECT, low** | The `T_deliver` figure's kick threshold uses 1/√(3Σ), not the paper's 1/√(3Σ_eff); its minimum is 1.0295 where the paper says 1.11. Closes `[00-the-kick-threshold-overlay-uses-sigma-not-sigma-eff]`. Added 2026-10-03 (U2). | 01b | open |
@@ -141,6 +169,8 @@ assigned from another board (§3.1).
     harnesses (β = 1.6, M = 10⁻⁵ failed on 2026-10-01 and completed in the `science-readiness`
     close-out).
   - **Next step.** Prompt 01 measures; prompt 02 fixes.
+    **Re-planned (2026-10-03, U3):** prompt 01c measures the small network, which lacks the
+    faulty rate; prompt 02, rewritten after the ruling on log 01c, moves production to it.
   - **Narrowed (2026-10-03, prompt 01).**
     - **Reproduced.** All 11 fail in the tool exactly as stored: same stage, same `t reached`,
       identical reason.
@@ -176,8 +206,11 @@ assigned from another board (§3.1).
   - **Impact.** It causes the 11 low-T failures of `[00-the-low-T-network-fails-near-1-keV-on-ulp-level-input]`,
     and it keeps causing about 1 % of solves to fail at every tolerance in the grid. Li8 is
     tiny, so its effect on the abundances of a completed solve is not established.
-  - **Next step.** The user rules. A patch to a PRyMordial rate is outside P4 and is a stop for
-    prompt 02 (README §4). Options:
+  - **Re-planned (2026-10-03, U3).** The user ruled to work around this rate, not patch it.
+    Production moves to the small network, which has no Li8, subject to log 01c. The issue stays
+    open: the full network keeps the defect for anyone who selects it.
+  - **Next step (as first recorded).** The user rules. A patch to a PRyMordial rate is outside P4
+    and is a stop for prompt 02 (README §4). Options:
     - interpolate the table in log space, or return 0 below its significant range;
     - clamp the reverse rate;
     - use the shadowed analytic forward rate at `:886–889`.

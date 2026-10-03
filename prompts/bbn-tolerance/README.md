@@ -97,6 +97,63 @@ without recomputing a single history.
   as issues. The assigned issue `[03-…]` closes once the scatter it describes is explained and
   reduced to the recorded level.
 
+**Ruled by the user, 2026-10-03, after log 01 (recorded on the board):**
+
+- **U3. Re-plan around PRyMordial's small network; measure it first.** Log 01 stopped because no
+  full-network setting meets P3. Its 11 failures come from the Li8(p,d)Li7 rate,
+  `[01-prymordial-li8-p-d-li7-rate-rings-near-1-kev]`, which no tolerance removes. The user's
+  reasons:
+  - The lithium abundance is not used for cosmological constraints; the PDG declines to quote one.
+    **What matters is computing Yp and D/H reliably.**
+  - The small network has no Li8, so the faulty rate is not in it. In log 01's S3 it never
+    failed, including on two histories that fail on the full network.
+  - Its offset from the full network in Yp and D/H, a few 10⁻⁵ and a few 10⁻⁴ in log 01, is a
+    property of PRyMordial and a measurement (P9), not a criterion.
+
+  The first step is prompt **01c**, a measurement of the small network on the roster. Prompts 02
+  and 03 are rewritten after the user rules on log 01c. Log 01's deviations 2 (the indirect
+  `Datastore` import) and 9 (the cost run under background load) are accepted.
+
+**Proposed by the planner after U3, 2026-10-03; awaiting the user:**
+
+- **P10. Prompt 01c measures and changes nothing.** As P1: no production code, nothing in
+  `PRyM/`, no store written. It uses `tools/bbn_from_store.py` as prompt 01 left it; a change to
+  the tool is a stop. Its scan grid is §2 (c′); it may run 8–10 solves at a time, like U1's,
+  about 340 in all. Wall times for cost are taken serially, after the scan.
+- **P11. The rule for choosing the small network's low-T setting.** It replaces P3 for the
+  production network. The recommended setting is the **largest** low-T `rtol`, with `atol`
+  `1e-11` as now, that meets all four:
+  1. **Reliability:** no failed solve in T1 or T2 (§2 (c′)).
+  2. **Scatter:** on every history, the D/H spread over the three variants is below 1×10⁻⁴, or
+     at most 1.5× the same history's spread at `rtol` 1e-8. The second clause allows for a floor
+     that another stage sets, as log 01 found on β = 2, M = 10⁻⁵.
+  3. **Convergence:** on every input (the SM baseline and each history's `prod`), D/H is within
+     1×10⁻⁴ and Yp within 1×10⁻⁵, relative, of the same input at `rtol` 1e-8. Only the low-T
+     stage differs between the two solves, so this isolates its error. This replaces P3's
+     criterion 3, which measured distance from a default that log 01 found 1.35×10⁻³ off.
+  4. **Cost:** the serial median per solve is at most 3× the **full** network's at the default
+     tolerance, today's production cost, measured in the same session.
+
+  If no setting meets all four, that is a stop. The log names the setting that meets 1 and 4 and
+  comes closest on 2 and 3. As with P3, these choose our own parameter; no test asserts them.
+- **P12. The small network's offset from the full network is a measurement.** Log 01c reports,
+  per input, the Yp and D/H difference between the networks at matched converged `rtol`, using
+  log 01's full-network rows. It is not bounded, not a stop and not an issue (P9).
+- **P13. What the rewrite of prompt 02 must settle; ruled with log 01c, not now.**
+  - How production selects the small network: `main.py`'s BBN payload, `plot_by_beta.py`'s SM
+    baseline (`small_network=False` at `:1091`) and `config/version.py`'s comment. Also whether
+    the full network stays selectable by a flag.
+  - Whether the full network's low-T call is also patched, for example to log 01's provisional
+    1e-5, for anyone who selects it.
+  - P6's warning extended to rows whose `small_network` differs from production's. The `BBNData`
+    lookup ignores the network as well as `PRyM_version`.
+  - `PRYM_VERSION` `+bt02` and P5's refresh route stand. After the switch every BBN row is
+    recomputed on the small network.
+  - `test_bbn_callbacks`' `README_BASELINE`, and the P7 constants that move.
+
+  P2, P3 and P4 stand as the record of prompt 01. P11 replaces P3 for the network production will
+  run.
+
 ### 0.3 What the planner checked in the source, and what it found
 
 - **The tolerance claim holds.** In `PRyM/PRyM_main.py`, the low-T `solve_ivp` calls (`:1332`
@@ -162,6 +219,7 @@ printed digit**.
 | ID | Severity | Description | Prompt |
 |---|---|---|---|
 | **M** | measurement | The mechanism of the low-T failures, a tolerance scan, Yp's residual floor, the upstream defaults, and a recommended setting. Opens nothing by itself, and gives the user what P3 needs to rule. | 01 |
+| **Q** | measurement (added 2026-10-03, U3) | The small network on the roster: reliability, scatter, convergence and cost against the low-T `rtol`; its offset from the full network; a recommended setting by P11. | 01c |
 | **S** | **DEFECT, medium** (results lost) | PRyMordial's full low-T network fails with "Required step size is less than spacing between numbers" on 11 of 684 φ\* = 5 histories of the 2026.6.0 run, at T_J just above 1 keV. Whether a history fails depends on ulp-level details of its input. Closes `[00-the-low-T-network-fails-near-1-keV-on-ulp-level-input]`. | 01 (measure), 02 (fix) |
 | **N** | **DEFECT, low–medium** (solver-limited comparisons) | At the default tolerance, D/H moves by up to 2.2×10⁻³ (median 8.2×10⁻⁴) under a 10⁻¹² change to ρ_NP. That is the size of the M = 10⁻³ against 10⁻⁵ differences used to argue M-independence. Closes the assigned `[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]`. | 01 (measure), 02 (fix), 03 (record) |
 | **B** | **DEFECT, low** (a wrong overlay on a science figure) | The kick-threshold curve on the `T_deliver` figure uses 1/√(3Σ); the paper's threshold is 1/√(3Σ_eff). The curve's minimum is 1.0295, where the paper says 1.11. Closes `[00-the-kick-threshold-overlay-uses-sigma-not-sigma-eff]`. Added 2026-10-03 (U2). | 01b |
@@ -210,6 +268,21 @@ on it. It adds:
 
 Every solve records: status, failure reason, stage, `t reached / t target`, Yp, D/H, ³He/H,
 ⁷Li/H, and wall time (which is under load, and so not used for cost).
+
+**(c′) The small-network grid** (P10; prompt 01c; parallel as U1; added 2026-10-03, U3).
+
+| block | network | `rtol` | `atol` | inputs | variants | solves |
+|---|---|---|---|---|---|---|
+| T1 | small | 1e-3 (none passed), 1e-4, 1e-5, 1e-6, 1e-8 | 1e-11 (as now) | 16 histories + SM | 3 (SM: 1) | 245 |
+| T2 | small | the setting T1 points to by P11 | 1e-11 | the **breadth sample**: every 10th of the 684 φ\* = 5 histories in (M, β) order (68 or 69), and every history with φ\* ≠ 5 in the store | `prod` | about 95 |
+
+- T1's `prod` rows on S3's four inputs must equal log 01's S3 rows **to every printed digit**.
+  This checks that nothing has drifted since `ad2cafb`.
+- T2 tests reliability beyond the roster. The roster holds every known full-network failure, so a
+  clean T1 says little about other histories. The breadth sample is drawn deterministically, so
+  it can be re-run. The histories are enumerated read-only through the tool's `connect_ro`.
+- Cost, as (d), for the small network at each T1 setting, with the **full network at the
+  default** as the reference.
 
 **(d) Cost.** For each candidate setting, the SM baseline and the control β = 1.6 at M = 10⁻³ are
 solved **three times each, serially, with nothing else running**. The median wall time is the cost.
@@ -261,9 +334,20 @@ root. `black` on changed files, except `PRyM/`, which is patched, not reformatte
 | # | Prompt | Model | Character |
 |---|---|---|---|
 | 01 | [The mechanism and the low-T tolerance scan](01-mechanism-and-tolerance-scan.md) | **Opus** | No production code. A tool with an interception, a reproduction, an instrumented solve, the scan, a recommendation |
+| 01c | [Measure the small network](01c-small-network-scan.md) (added 2026-10-03, U3) | **Opus** | No code. The small-network scan, a breadth sample, cost, the offset from the full network, a recommendation by P11 |
 | 01b | [Draw the kick threshold with Σ_eff](01b-kick-threshold-sigma-eff.md) (added 2026-10-03, U2) | **Sonnet** | One formula, its label and comment, and a test with new expected values; independent of the PRyMordial work |
 | 02 | [Set the low-T tolerance and warn on a stale PRyMordial version](02-low-T-tolerance-patch.md) | **Opus** | A two-line vendored patch, the version string, re-pinned constants, a warning in two drivers; reproduces log 01 digit for digit |
 | 03 | [Documents and close-out](03-documents-and-close-out.md) | **Sonnet** | No production code. Additive addenda, the refresh route, the roster re-measured, a handover |
+
+**After U3 (2026-10-03).** Prompts 02 and 03 carry a notice that they are rewritten after the
+user rules on log 01c; neither is dispatched as written. The order becomes:
+
+```
+01 ──► 01c ──► (the user rules: P11's setting, P13) ──► 02 (rewritten) ──► 03 (revised)
+                01b, independent, any time before 03
+```
+
+The dependencies as first planned, kept as the record:
 
 ### 3.1 Dependencies
 
@@ -307,6 +391,11 @@ repairs**.
     spread below 1×10⁻⁴;
   - the mechanism points somewhere other than the low-T stage, for example a kink in `T_of_t`
     (a linear `interp1d` of the thermodynamic solution) or the ratio interpolant.
+- **For prompt 01c (U3):**
+  - T1's `prod` rows do not reproduce log 01's S3 rows to every printed digit;
+  - any small-network solve fails, in T1 or T2 (record it, finish the grid, then stop);
+  - no setting meets P11;
+  - the tool would have to change.
 - **A reproduction fails.** The tool does not reproduce the control's stored Yp and D/H to every
   printed digit, or a failure's stored `t reached`.
 - **A store was written.** Any file under `~/ChamPBH-stores/` changes (orchestrator: compare
@@ -489,7 +578,24 @@ Plus the SM baseline (`compute_SM_baseline`, full network): 17 inputs.
 | the legend label; the `plot_by_beta.py` comment | 1/√(3Σ) | **1/√(3Σ_eff)** | read |
 | suites | — | **all pass; ComputeTargets +1** | suites |
 
+### 6.1c The small network (prompt 01c; added 2026-10-03, U3)
+
+| quantity | target | witness |
+|---|---|---|
+| T1 `prod` on S3's four inputs | **log 01's S3 rows to every printed digit**, at each of the five `rtol` | `logs/01c-probes/scan.csv` against `logs/01-probes/scan.csv` |
+| T1 and T2 | **every cell of §2 (c′) filled**: status, stage, `t reached / t target`, Yp, D/H, ³He/H, ⁷Li/H | `logs/01c-probes/scan.csv` and a summary table in the log |
+| failures | **counted per setting and block**; each one named with its stage and reason | log |
+| P11's four criteria | **each one's value at every T1 setting**, with provenance | log |
+| cost | **ratio of serial medians** against the full network at the default (§2 (d)) | log |
+| the offset from the full network (P12) | **per input, Yp and D/H, at 1e-5, 1e-6 and 1e-8**, from log 01's S1 rows; a measurement | log |
+| the pinned small-network values (P7) at the recommended setting | **each measured, with its bound**: `CONST_HONLY_SMALL_*`, and `test_network_flag (b)`'s ⁷Li/H shift | log |
+| the recommendation | **one small-network setting by P11**, or a stop | log |
+| suites | **unchanged**: 18, 106, 31 | suites |
+
 ### 6.2 The patch (prompt 02)
+
+> **U3 (2026-10-03).** This table is for the full-network patch as first planned. It is replaced
+> when prompt 02 is rewritten after the ruling on log 01c.
 
 | quantity | target | witness |
 |---|---|---|

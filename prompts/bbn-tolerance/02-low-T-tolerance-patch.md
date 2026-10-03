@@ -1,5 +1,9 @@
 # Prompt 02 — Set the low-T tolerance and warn on a stale PRyMordial version
 
+> **Not to be dispatched as written (U3, 2026-10-03).** The user ruled to re-plan around
+> PRyMordial's small network after log 01. This prompt is rewritten after the user rules on log
+> 01c (README §0.2 U3, P11–P13). It is kept unchanged until then as the record of the plan.
+
 **Campaign:** [`README.md`](README.md) · **Board items:** **S**, **N**, **K** ·
 **Board:** `IMPLEMENTATION_STATE.md`. Update your row and S, N, K.
 **Closes:** `[00-the-low-T-network-fails-near-1-keV-on-ulp-level-input]`,
