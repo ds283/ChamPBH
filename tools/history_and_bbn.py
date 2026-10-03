@@ -31,7 +31,7 @@ Run from the repository root, since PRyMordial reads PRyMrates/ and the EOS
 reads its tables from the working directory, one invocation at a time:
 
     ./venv/bin/python tools/history_and_bbn.py BETA M [--phi-init-Mp X] [--T-stop-GeV T] \\
-        [--small-network] [--wall-clock-limit SECS]
+        [--no-small-network] [--wall-clock-limit SECS]
 
 M is in units of the (reduced) Planck mass. Output lines:
 
@@ -254,8 +254,8 @@ def main(argv=None) -> int:
     parser.add_argument(
         "--small-network",
         action=argparse.BooleanOptionalAction,
-        default=False,
-        help="run PRyMordial's 12-reaction network (default: the full network, as main.py)",
+        default=True,
+        help="run PRyMordial's 12-reaction network (default: True, the small network, as main.py runs; --no-small-network for the full network)",
     )
     parser.add_argument(
         "--wall-clock-limit",

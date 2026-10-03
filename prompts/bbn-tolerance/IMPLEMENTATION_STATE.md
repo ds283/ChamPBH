@@ -6,7 +6,8 @@ at low-T rtol 1e-6); the user's ruling on it complete (U4): small at rtol 1e-6, 
 to rtol 1e-5; prompts 02 and 03 rewritten; P14–P16 accepted; 02 landed (production on the
 small network, both low-T rtol set, the foreign-provenance warning; 49 of 49 reproduce log 01c);
 the user ruled U5 on log 02: `tools/history_and_bbn.py` follows `main.py`, as prompt 02b;
-01b landed (the kick threshold uses Σ_eff); 02b next, then 03** (01b added 2026-10-03, U2; 01c added 2026-10-03, U3; 02b added
+01b landed (the kick threshold uses Σ_eff); 02b landed (the history tool runs the small
+network); 03 next** (01b added 2026-10-03, U2; 01c added 2026-10-03, U3; 02b added
 2026-10-03, U5). Planned on 2026-10-03 against
 `main` at `4ae25b4`, from a Claude Science brief kept at
 [`source/brief_prym_lowT_failures.md`](source/brief_prym_lowT_failures.md) and checked against the
@@ -16,7 +17,7 @@ CosmologyModels 18, ComputeTargets 103, Datastore 31.
 it.
 **`VERSION_LABEL` is `"2026.6.0"`** and does not change in this campaign (README §0.2 P5).
 **`PRYM_VERSION` was `"bf24c3d+ri02+sr01"`**; prompt 02 made it `"bf24c3d+ri02+sr01+bt02"`
-(2026-10-03). Suites after prompt 02: 18, 113, 31; after prompt 01b: 18, 114, 31.
+(2026-10-03). Suites after prompt 02: 18, 113, 31; after prompt 01b: 18, 114, 31; after prompt 02b: 18, 114, 31.
 
 The campaign finds out why PRyMordial's low-temperature network fails on 11 of 684 φ\* = 5
 histories of the 2026.6.0 science run, and why D/H scatters by up to 2.2×10⁻³ under ulp-level input
@@ -221,7 +222,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | 01c | [Measure the small network](01c-small-network-scan.md) (added 2026-10-03, U3) | **Q** | Opus | ✍️ 2026-10-03 | ✅ 2026-10-03, **COMPLETE WITH DEVIATIONS** (recommends small, rtol 1e-6; deviation 2 flagged) | see `git log` ("Measure PRyMordial's small network for bbn-tolerance") | [`logs/01c-small-network-scan.md`](logs/01c-small-network-scan.md) |
 | 01b | [Draw the kick threshold with Σ_eff](01b-kick-threshold-sigma-eff.md) (added 2026-10-03) | **B** | Sonnet | ✍️ 2026-10-03 | ✅ 2026-10-03, **COMPLETE** (no deviations; production minimum 1.0295 → 1.1074; suites 18, 114, 31) | see `git log` ("Draw the kick threshold with Sigma_eff") | [`logs/01b-kick-threshold-sigma-eff.md`](logs/01b-kick-threshold-sigma-eff.md) |
 | 02 | [Move production to the small network, set both low-T tolerances, and warn on foreign BBN rows](02-low-T-tolerance-patch.md) | **S**, **N**, **K** | Opus | ✍️ 2026-10-03; **rewritten 2026-10-03** (U4): the small network, both low-T tolerances, the warning | ✅ 2026-10-03, **COMPLETE WITH DEVIATIONS** (six implementation choices; 49 of 49 reproduce log 01c; no stop) | see `git log` ("Move BBN to PRyMordial's small network and set low-T rtol") | [`logs/02-low-T-tolerance-patch.md`](logs/02-low-T-tolerance-patch.md) |
-| 02b | [`tools/history_and_bbn.py` runs production's network](02b-history-tool-follows-production.md) (added 2026-10-03, U5) | **H** | Sonnet | ✍️ 2026-10-03 | — | — | — |
+| 02b | [`tools/history_and_bbn.py` runs production's network](02b-history-tool-follows-production.md) (added 2026-10-03, U5) | **H** | Sonnet | ✍️ 2026-10-03 | ✅ 2026-10-03, **COMPLETE WITH DEVIATIONS** (one implementation choice: the docstring's usage line; suites 18, 114, 31) | see `git log` ("Run history_and_bbn on production's network") | [`logs/02b-history-tool-follows-production.md`](logs/02b-history-tool-follows-production.md) |
 | 03 | [Documents and close-out](03-documents-and-close-out.md) | **D** | Sonnet | ✍️ 2026-10-03; **revised 2026-10-03** (U4) | — | — | — |
 
 ---
@@ -236,7 +237,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | N | **DEFECT, low–medium** | D/H moves by up to 2.2×10⁻³ under a 10⁻¹² change to ρ_NP at the default tolerance. Closes `[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]` (assigned). | 01, 02, 03 | **done** (prompt 02): D/H spread median 1.45e-3 → 4.4e-5 (max 1.5e-4); the residual is for prompt 03 to record (P9) |
 | B | **DEFECT, low** | The `T_deliver` figure's kick threshold uses 1/√(3Σ), not the paper's 1/√(3Σ_eff); its minimum is 1.0295 where the paper says 1.11. Closes `[00-the-kick-threshold-overlay-uses-sigma-not-sigma-eff]`. Added 2026-10-03 (U2). | 01b | **done** (prompt 01b): `kick_threshold_curve` returns √((2 + Σ)/(6Σ)); minimum 1.1074 |
 | K | **GAP** | A store that was not refreshed serves BBN rows from an older PRyMordial with no warning. Closes `[00-a-store-serves-bbn-rows-from-another-prym-version-silently]`. | 02 | **done** (prompt 02): `warn_foreign_bbn_provenance` in both drivers |
-| H | **GAP, low** | `tools/history_and_bbn.py` defaults to the full network and says that is `main.py`'s; a comment in `_configure_PRyMordial` says production runs the full network. Added 2026-10-03 (U5). Closes `[02-two-places-still-say-production-runs-the-full-network]`. | 02b | open |
+| H | **GAP, low** | `tools/history_and_bbn.py` defaults to the full network and says that is `main.py`'s; a comment in `_configure_PRyMordial` says production runs the full network. Added 2026-10-03 (U5). Closes `[02-two-places-still-say-production-runs-the-full-network]`. | 02b | **done** (prompt 02b): the tool's `--small-network` defaults to `True`; the comment says production runs the small network; `test_network_flag` (c) reads the tool's default |
 | D | documents | The tolerance, its measurements, the refresh route, the handover. | 03 | open |
 
 ---
@@ -247,7 +248,7 @@ Two opened by the planner on 2026-10-03, one per defect or gap with no issue on 
 one more the same day for prompt 01b (U2). Two opened by prompt 01 the same day (`[01-…]`). One
 assigned from another board (§3.1). Prompt 02 (2026-10-03) closed the planner's two (§4) and the
 assigned one, and opened one (`[02-…]`). Prompt 01b (2026-10-03) closed the third of the planner's
-(§4).
+(§4). Prompt 02b (2026-10-03) closed the one prompt 02 opened (§4).
 
 - **[01-prymordial-li8-p-d-li7-rate-rings-near-1-kev]** *(log 01, Verification item 6; Observations 1)*.
   - **What.** `Li7dLi8p_bkwrd` (`PRyM/PRyM_nuclear_net63.py:1142–1147`; upstream `bf24c3d` is
@@ -283,21 +284,6 @@ assigned one, and opened one (`[02-…]`). Prompt 01b (2026-10-03) closed the th
     probably negligible.
   - **Next step.** Measure it by a runtime override of `dYB8dtLT` in a probe; patch only if the
     user asks.
-- **[02-two-places-still-say-production-runs-the-full-network]** *(log 02, Observations 1)*.
-  - **What.**
-    - `tools/history_and_bbn.py:255–258`: `--small-network` defaults to `False`, with help
-      "(default: the full network, as main.py)". The tool runs `compute_BBN_data._function` with
-      that value.
-    - `ComputeTargets/BBNData.py:256` (`_configure_PRyMordial`): a comment says "False
-      (production) runs the full network".
-  - **Impact.** By default the tool now solves the other network from production, while its help
-    says it is production's; its results would differ by the network offset (D/H about 3e-4; log
-    01c, row 6). The comment is wrong text only.
-  - **Next step.** The user decides whether `tools/history_and_bbn.py`'s default follows
-    `main.py`, as P15 did for the other production defaults, or keeps the full network, as
-    `tools/bbn_from_store.py` does. The help text and the comment are corrected either way.
-  - **Ruled (2026-10-03, U5).** The tool follows `main.py` and runs the small network. Prompt
-    02b (item H) changes its default and help, corrects the comment, and closes this issue.
 
 ### 3.1 Assigned to this campaign from other boards
 
@@ -435,4 +421,28 @@ here (README §5 rule 4).
     - **The residual is a measurement (P9)**, set by PRyMordial's other stages, not an issue.
       Prompt 03 records it.
     - The entry and its **Resolved** line stay on the `review-remediation` board.
-
+- **[02-two-places-still-say-production-runs-the-full-network]** *(log 02, Observations 1)*.
+  - **What.**
+    - `tools/history_and_bbn.py:255–258`: `--small-network` defaults to `False`, with help
+      "(default: the full network, as main.py)". The tool runs `compute_BBN_data._function` with
+      that value.
+    - `ComputeTargets/BBNData.py:256` (`_configure_PRyMordial`): a comment says "False
+      (production) runs the full network".
+  - **Impact.** By default the tool now solves the other network from production, while its help
+    says it is production's; its results would differ by the network offset (D/H about 3e-4; log
+    01c, row 6). The comment is wrong text only.
+  - **Next step.** The user decides whether `tools/history_and_bbn.py`'s default follows
+    `main.py`, as P15 did for the other production defaults, or keeps the full network, as
+    `tools/bbn_from_store.py` does. The help text and the comment are corrected either way.
+  - **Ruled (2026-10-03, U5).** The tool follows `main.py` and runs the small network. Prompt
+    02b (item H) changes its default and help, corrects the comment, and closes this issue.
+  - **Resolved (2026-10-03, prompt 02b).** Both places now say that production runs the small
+    network.
+    - `tools/history_and_bbn.py`'s `--small-network` defaults to `True`; its help says "default:
+      True, the small network, as main.py runs; --no-small-network for the full network", and the
+      module docstring's usage line reads `[--no-small-network]`.
+    - The comment in `_configure_PRyMordial` reads "True (production since bbn-tolerance prompt
+      02) runs the small network, False the full one".
+    - `test_network_flag` (c) now reads the tool's default beside `tools/bbn_baseline.py`'s and
+      asserts `[True]`; it fails on the old tool, on the value (`[False]`) (log 02b).
+    - `tools/bbn_from_store.py` keeps the full network (P15).

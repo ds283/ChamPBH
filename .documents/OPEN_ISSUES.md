@@ -1,15 +1,15 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-03 · **24 open**: 4 on the `review-remediation` board (closed
+**Last updated:** 2026-10-03 · **23 open**: 4 on the `review-remediation` board (closed
 2026-09-30), none now assigned; 2 on the `production-readiness` board
 (closed 2026-09-30); 4 on the `run-integrity` board (closed 2026-09-30); 9 on the
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`;
 2 on the `science-readiness` board (planned 2026-10-01; closed 2026-10-02, 10 of 10 landed,
-prompt 06b having been added 2026-10-02); 3 on the `bbn-tolerance` board (planned 2026-10-03,
-3 of 5 landed (01c, 02, 01b); prompt 01 committed BLOCKED 2026-10-03 and ruled the same day: re-planned
+prompt 06b having been added 2026-10-02); 2 on the `bbn-tolerance` board (planned 2026-10-03,
+4 of 6 landed (01c, 02, 01b, 02b); prompt 01 committed BLOCKED 2026-10-03 and ruled the same day: re-planned
 around PRyMordial's small network, U3; prompt 01c measured the small network 2026-10-03; prompt
 02 moved production to it and closed three, opening one, 2026-10-03; prompt 01b closed the kick
-threshold overlay issue 2026-10-03).
+threshold overlay issue 2026-10-03; prompt 02b closed the history-tool issue 2026-10-03).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -170,7 +170,7 @@ prompt 02 on 2026-10-03.
 
 Two opened by the planner on 2026-10-03, one the same day for prompt 01b (the user's U2), two by
 prompt 01 the same day, and one by prompt 02 the same day. Prompt 02 closed the planner's two;
-prompt 01b closed the third.
+prompt 01b closed the third; prompt 02b closed the one prompt 02 opened.
 
 - `[01-prymordial-li8-p-d-li7-rate-rings-near-1-kev]` — PRyMordial's Li8(p,d)Li7 reverse rate is
   exp(γ/T9) times a ringing quadratic spline, ±1e39 near 1 keV; it stalls BDF's Newton iteration;
@@ -178,6 +178,3 @@ prompt 01b closed the third.
   network, which keeps the defect for anyone who selects it.
 - `[01-prymordial-dYB8dtLT-unpacks-Y-in-the-superseded-order]` — B8's low-T equation reads Y in
   the old species order (upstream too); effect not measured, probably negligible.
-- `[02-two-places-still-say-production-runs-the-full-network]` — `tools/history_and_bbn.py`
-  still defaults to the full network "as main.py", and a comment in `_configure_PRyMordial` says
-  production runs it; ruled 2026-10-03 (U5): the tool follows `main.py`, fixed by prompt 02b.

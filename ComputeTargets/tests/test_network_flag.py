@@ -207,11 +207,13 @@ class TestNetworkFlag(unittest.TestCase):
         """(c) The compute_BBN_data default is small_network=True, and so are
         compute_SM_baseline's result and PRyMordial's smallnet_flag when it is
         called as plot_by_beta.py calls it (PRyMclass stubbed: no solve). Also
-        main.py's BBN payload and tools/bbn_baseline.py's default, read from
-        their source, since neither can be imported without side effects. The
-        drivers pass a name, which is resolved to the literal it is assigned
-        once. Until bbn-tolerance prompt 02 (U4, P15) every one of these was
-        the full network, False."""
+        main.py's BBN payload and the --small-network defaults of
+        tools/bbn_baseline.py and tools/history_and_bbn.py (bbn-tolerance
+        prompt 02b, U5), read from their source, since none can be imported
+        without side effects. The drivers pass a name, which is resolved to
+        the literal it is assigned once. Until bbn-tolerance prompt 02 (U4,
+        P15) every one of these was the full network, False; the history tool
+        followed in prompt 02b."""
         default = (
             inspect.signature(compute_BBN_data._function)
             .parameters["small_network"]
@@ -255,17 +257,21 @@ class TestNetworkFlag(unittest.TestCase):
         )
         self.assertIn("wall_clock_limit", bbn_payloads[0])
 
-        # tools/bbn_baseline.py: the --small-network argument's default
-        flags = [
-            c
-            for c in _calls_named(_ROOT / "tools" / "bbn_baseline.py", "add_argument")
-            if c.args and ast.literal_eval(c.args[0]) == "--small-network"
-        ]
-        self.assertEqual(len(flags), 1)
-        defaults = [
-            ast.literal_eval(k.value) for k in flags[0].keywords if k.arg == "default"
-        ]
-        self.assertEqual(defaults, [True])
+        # tools/bbn_baseline.py and tools/history_and_bbn.py: the
+        # --small-network argument's default
+        for tool in ("bbn_baseline.py", "history_and_bbn.py"):
+            flags = [
+                c
+                for c in _calls_named(_ROOT / "tools" / tool, "add_argument")
+                if c.args and ast.literal_eval(c.args[0]) == "--small-network"
+            ]
+            self.assertEqual(len(flags), 1, tool)
+            defaults = [
+                ast.literal_eval(k.value)
+                for k in flags[0].keywords
+                if k.arg == "default"
+            ]
+            self.assertEqual(defaults, [True], tool)
 
 
 if __name__ == "__main__":

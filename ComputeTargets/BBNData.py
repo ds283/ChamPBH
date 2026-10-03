@@ -253,9 +253,10 @@ def _configure_PRyMordial(small_network: bool):
     PRyMini.verbose_flag = False
 
     # select the reaction network: True restricts PRyMordial to its 12-reaction network, which is
-    # faster but unreliable for Li7; False (production) runs the full network. PRyMordial reads
-    # smallnet_flag when the solve runs. Until production-readiness prompt 02 this set
-    # small_network_flag, which PRyMordial never reads, so every solve ran the full network.
+    # faster but unreliable for Li7; True (production since bbn-tolerance prompt 02) runs the
+    # small network, False the full one. PRyMordial reads smallnet_flag when the solve runs.
+    # Until production-readiness prompt 02 this set small_network_flag, which PRyMordial never
+    # reads, so every solve ran the full network.
     PRyMini.smallnet_flag = small_network
 
     # the flags the Hubble-only route relies on (science-readiness prompt 01). An
