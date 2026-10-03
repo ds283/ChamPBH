@@ -1,6 +1,6 @@
 # BBN-tolerance campaign — implementation state
 
-**Last updated:** 2026-10-03 · **Status: PLANNED — 0 of 3 landed.** Planned on 2026-10-03 against
+**Last updated:** 2026-10-03 · **Status: PLANNED — 0 of 4 landed** (01b added 2026-10-03, U2). Planned on 2026-10-03 against
 `main` at `4ae25b4`, from a Claude Science brief kept at
 [`source/brief_prym_lowT_failures.md`](source/brief_prym_lowT_failures.md) and checked against the
 tree by the planner (README §0.3). Suites at `8efc50f` (no code changed through `4ae25b4`):
@@ -22,6 +22,7 @@ histories.
 - `PRyM/PRyM_main.py` (the two low-T calls; 02); `ComputeTargets/BBNData.py` (`PRYM_VERSION`;
   02);
 - `pipeline_selection.py`, `main.py`, `plot_by_beta.py` (the warning; 02);
+- `extract_common.py` (`kick_threshold_curve`; 01b), `plot_by_beta.py` (a comment; 01b);
 - `ComputeTargets/tests/` (01, 02);
 - `.documents/numerical-strategies.md`, `numerical-methods-for-paper.md`,
   `paper-corrections-numerical-section.md`, `review-remediation-verification.md` (03, additive).
@@ -55,6 +56,13 @@ histories.
 - **2026-10-03, the user: P1–P9 accepted as proposed.** With this line the precondition of
   orchestrator 01 §1.1 is met. P3's rule stands; the setting it selects is ruled separately after
   log 01, as orchestrator 02 §1.1 requires.
+- **2026-10-03, the user: U2, add prompt 01b (item B).** The `T_deliver` figure's kick-threshold
+  curve uses β_th = 1/√(3Σ). The paper's reachability condition gives 1/√(3Σ_eff) =
+  √((2 + Σ)/(6Σ)). The fix is a separate prompt, independent of the PRyMordial work. The Claude
+  Science note that raised it also said the overlay uses a different Σ from the integration. The
+  planner checked this and found it wrong: both call the history's own `QCD_Cosmology.w`, the
+  `Xav_EOS_data.csv` spline (README §2 (h)). The issue
+  `[00-the-kick-threshold-overlay-uses-sigma-not-sigma-eff]` is opened for 01b.
 
 Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
@@ -72,6 +80,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
 | 01 | [The mechanism and the low-T tolerance scan](01-mechanism-and-tolerance-scan.md) | **M**; measures **S**, **N** | Opus | ✍️ 2026-10-03 | — | — | — |
+| 01b | [Draw the kick threshold with Σ_eff](01b-kick-threshold-sigma-eff.md) (added 2026-10-03) | **B** | Sonnet | ✍️ 2026-10-03 | — | — | — |
 | 02 | [Set the low-T tolerance and warn on a stale PRyMordial version](02-low-T-tolerance-patch.md) | **S**, **N**, **K** | Opus | ✍️ 2026-10-03 | — | — | — |
 | 03 | [Documents and close-out](03-documents-and-close-out.md) | **D** | Sonnet | ✍️ 2026-10-03 | — | — | — |
 
@@ -84,6 +93,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | M | measurement | The mechanism, the tolerance scan, Yp's floor, upstream's defaults, and a recommended setting. | 01 | open |
 | S | **DEFECT, medium** | The full low-T network fails near T_J = 1 keV on 11 of 684 φ\* = 5 histories, depending on ulp-level details of the input. Closes `[00-the-low-T-network-fails-near-1-keV-on-ulp-level-input]`. | 01, 02 | open |
 | N | **DEFECT, low–medium** | D/H moves by up to 2.2×10⁻³ under a 10⁻¹² change to ρ_NP at the default tolerance. Closes `[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]` (assigned). | 01, 02, 03 | open |
+| B | **DEFECT, low** | The `T_deliver` figure's kick threshold uses 1/√(3Σ), not the paper's 1/√(3Σ_eff); its minimum is 1.0295 where the paper says 1.11. Closes `[00-the-kick-threshold-overlay-uses-sigma-not-sigma-eff]`. Added 2026-10-03 (U2). | 01b | open |
 | K | **GAP** | A store that was not refreshed serves BBN rows from an older PRyMordial with no warning. Closes `[00-a-store-serves-bbn-rows-from-another-prym-version-silently]`. | 02 | open |
 | D | documents | The tolerance, its measurements, the refresh route, the handover. | 03 | open |
 
@@ -91,8 +101,8 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
 ## 3. Active and unresolved issues
 
-Two opened by the planner on 2026-10-03, one per defect or gap with no issue on another board. One
-assigned from another board (§3.1).
+Two opened by the planner on 2026-10-03, one per defect or gap with no issue on another board, and
+one more the same day for prompt 01b (U2). One assigned from another board (§3.1).
 
 - **[00-the-low-T-network-fails-near-1-keV-on-ulp-level-input]** *(README §1 S; the brief §1–§2)*.
   - **What.** In the 2026.6.0 science store, 11 of 684 φ\* = 5 histories have a `BBNData` failure
@@ -116,6 +126,15 @@ assigned from another board (§3.1).
   - **Impact.** After prompt 02, `plot_by_beta.py` on a store that was not refreshed would plot
     old-tolerance abundances with no sign that they are old.
   - **Next step.** Prompt 02 (README §0.2 P6): warn, do not filter.
+- **[00-the-kick-threshold-overlay-uses-sigma-not-sigma-eff]** *(README §0.2 U2, §1 B, §2 (h))*.
+  - **What.** `extract_common.kick_threshold_curve` returns 1/√(3Σ), with the same text in
+    `plot_T_deliver`'s legend and in a comment in `plot_by_beta.py`. The paper's reachability
+    condition gives β_th = 1/√(3Σ_eff) = √((2 + Σ)/(6Σ)). The Σ itself is the integration's.
+  - **Measured** (planner, `d78c9f8`). The curve's minimum is 1.0295 at the QCD peak
+    (Σ = 0.31453, 0.182 GeV); with Σ_eff it is 1.1074, the paper's 1.11.
+  - **Impact.** The dashed curve on figure 3 sits about 7 % low in β, so delivery points between
+    1.03 and 1.11 look as if they sit above the threshold.
+  - **Next step.** Prompt 01b.
 
 ### 3.1 Assigned to this campaign from other boards
 

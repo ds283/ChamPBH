@@ -11,7 +11,7 @@ Read [`README.md`](README.md) and [`../README.md`](../README.md) §0.2 (P4–P9)
 
 ## 1. Before you dispatch
 
-1. Prompt 01 landed with no unresolved miss. **The board's Decisions record the user's ruling on
+1. Prompts 01 and 01b landed with no unresolved miss. **The board's Decisions record the user's ruling on
    the setting (P3) and on P4–P7, dated after log 01.** If they do not, stop.
 2. On branch `bbn-tolerance`; `git status` clean apart from the user's untracked run files; record
    `HEAD`.

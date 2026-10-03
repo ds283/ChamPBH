@@ -1,12 +1,12 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-03 · **24 open**: 5 on the `review-remediation` board (closed
+**Last updated:** 2026-10-03 · **25 open**: 5 on the `review-remediation` board (closed
 2026-09-30), of which 1 is assigned to `bbn-tolerance` (§1.9); 2 on the `production-readiness` board
 (closed 2026-09-30); 4 on the `run-integrity` board (closed 2026-09-30); 9 on the
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`;
 2 on the `science-readiness` board (planned 2026-10-01; closed 2026-10-02, 10 of 10 landed,
-prompt 06b having been added 2026-10-02); 2 on the `bbn-tolerance` board (planned 2026-10-03,
-0 of 3 landed).
+prompt 06b having been added 2026-10-02); 3 on the `bbn-tolerance` board (planned 2026-10-03,
+0 of 4 landed).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -165,7 +165,7 @@ carries the **Assigned** line; the prompt that closes one deletes its row here.
 
 ### 1.10 `bbn-tolerance` — [board §3](../prompts/bbn-tolerance/IMPLEMENTATION_STATE.md)
 
-Two opened by the planner on 2026-10-03.
+Two opened by the planner on 2026-10-03, and one the same day for prompt 01b (the user's U2).
 
 - `[00-the-low-T-network-fails-near-1-keV-on-ulp-level-input]` — 11 of 684 φ\* = 5 histories of
   the 2026.6.0 run fail in the full low-T network at T_J just above 1 keV; a 1e-12 input change
@@ -173,3 +173,5 @@ Two opened by the planner on 2026-10-03.
 - `[00-a-store-serves-bbn-rows-from-another-prym-version-silently]` — `BBNData` lookups ignore
   `PRyM_version`, so a store that was not refreshed after a PRyMordial patch serves old rows
   unannounced.
+- `[00-the-kick-threshold-overlay-uses-sigma-not-sigma-eff]` — the `T_deliver` figure's threshold
+  curve is 1/√(3Σ), not the paper's 1/√(3Σ_eff); its minimum is 1.0295 where the paper says 1.11.

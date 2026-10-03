@@ -40,8 +40,13 @@ without recomputing a single history.
   abundances, spreads). **Wall times are measured separately**, serially, on an otherwise idle
   machine (§2 (d)). The store stays read-only throughout. The exception covers prompt 01's scan
   only; prompts 02 and 03 re-run the 17-input roster (§6.0) and nothing larger.
+- **U2 (2026-10-03, after planning). Add prompt 01b: draw the kick threshold with Σ_eff.**
+  `extract_common.kick_threshold_curve`, which draws the dashed curve on the `T_deliver` figure,
+  uses β_th = 1/√(3Σ), the first-order form of Erickcek et al. The paper's reachability condition
+  gives β_th = 1/√(3Σ_eff) = √((2 + Σ)/(6Σ)). The fix has nothing to do with PRyMordial. It is a
+  separate prompt so that it is its own revert unit. §2 (h) records what the planner checked.
 
-**Proposed by the planner, 2026-10-03; for the user to rule on before prompt 01 is dispatched:**
+**Proposed by the planner, 2026-10-03; accepted by the user as proposed the same day:**
 
 - **P1. Prompt 01 changes no production code and nothing in `PRyM/`.** It changes tolerances by
   intercepting `solve_ivp` from a tool (§2 (b)), not with a patched copy of `PRyM/` put first on
@@ -159,6 +164,7 @@ printed digit**.
 | **M** | measurement | The mechanism of the low-T failures, a tolerance scan, Yp's residual floor, the upstream defaults, and a recommended setting. Opens nothing by itself, and gives the user what P3 needs to rule. | 01 |
 | **S** | **DEFECT, medium** (results lost) | PRyMordial's full low-T network fails with "Required step size is less than spacing between numbers" on 11 of 684 φ\* = 5 histories of the 2026.6.0 run, at T_J just above 1 keV. Whether a history fails depends on ulp-level details of its input. Closes `[00-the-low-T-network-fails-near-1-keV-on-ulp-level-input]`. | 01 (measure), 02 (fix) |
 | **N** | **DEFECT, low–medium** (solver-limited comparisons) | At the default tolerance, D/H moves by up to 2.2×10⁻³ (median 8.2×10⁻⁴) under a 10⁻¹² change to ρ_NP. That is the size of the M = 10⁻³ against 10⁻⁵ differences used to argue M-independence. Closes the assigned `[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]`. | 01 (measure), 02 (fix), 03 (record) |
+| **B** | **DEFECT, low** (a wrong overlay on a science figure) | The kick-threshold curve on the `T_deliver` figure uses 1/√(3Σ); the paper's threshold is 1/√(3Σ_eff). The curve's minimum is 1.0295, where the paper says 1.11. Closes `[00-the-kick-threshold-overlay-uses-sigma-not-sigma-eff]`. Added 2026-10-03 (U2). | 01b |
 | **K** | **GAP** (silent mixed provenance) | After a PRyMordial patch, a store that was not refreshed serves old BBN rows with no warning. Closes `[00-a-store-serves-bbn-rows-from-another-prym-version-silently]`. | 02 |
 | **D** | documents and close-out | `numerical-strategies.md` §7 and the handover describe the default tolerance by omission. Add the tolerance, its measurements and the refresh route, additively; re-measure the roster on the final tree. | 03 |
 
@@ -228,6 +234,26 @@ tolerance. The original store keeps the old rows for comparison.
 **(g) Units, conventions, the root.** As in `CLAUDE.md`. Everything runs from the repository
 root. `black` on changed files, except `PRyM/`, which is patched, not reformatted.
 
+**(h) The kick threshold (B; U2; prompt 01b).**
+- **The formula.** The paper's reachability condition (`Paper1.tex`, `eq:surfing-equation`) is
+  Σ(T_J)/(1 + Σ(T_J)/2) = 1/(3β²). With Σ_eff ≡ Σ/(1 + Σ/2), the threshold is
+  β_th = 1/√(3Σ_eff) = √((2 + Σ)/(6Σ)), which the paper also writes as β_s².
+  `kick_threshold_curve` uses 1/√(3Σ). The `science-readiness` plan specified that form
+  (its README §2 (k)), and its prompt 07 built it as specified.
+- **The Σ is already right.** The source of U2 also said the overlay uses a different Σ from the
+  integration: the base-class formula 4g_s/(3g_ρ) − 1, which `[05-kicking-table-…]` says peaks at
+  0.249. That is wrong.
+  - `GenericEOSBase.w` has that formula, but `Xav_EOS_spline` overrides `w` with the spline
+    through `Xav_EOS_data.csv`.
+  - The integration's Σ = 1 − 3w(T_J) (`ComputeTargets/ScalarModel.py` RHS) and the overlay both
+    call `cosmology.w` on the history's own `QCD_Cosmology` (`plot_by_beta.py` passes
+    `scalar_data[0]._cosmology`).
+- **Measured** by the planner on `d78c9f8`, 4000 log-spaced points over [0.05, 50] GeV:
+  - `cosmology.w` gives a peak Σ of 0.31453 at 0.182 GeV;
+  - the base-class formula would give 0.24923 at 0.194 GeV;
+  - the overlay's minimum is **1.0295** (1/√(3 × 0.31453));
+  - with Σ_eff it is **1.1074**, the paper's 1.11.
+
 ---
 
 ## 3. The prompts
@@ -235,23 +261,26 @@ root. `black` on changed files, except `PRyM/`, which is patched, not reformatte
 | # | Prompt | Model | Character |
 |---|---|---|---|
 | 01 | [The mechanism and the low-T tolerance scan](01-mechanism-and-tolerance-scan.md) | **Opus** | No production code. A tool with an interception, a reproduction, an instrumented solve, the scan, a recommendation |
+| 01b | [Draw the kick threshold with Σ_eff](01b-kick-threshold-sigma-eff.md) (added 2026-10-03, U2) | **Sonnet** | One formula, its label and comment, and a test with new expected values; independent of the PRyMordial work |
 | 02 | [Set the low-T tolerance and warn on a stale PRyMordial version](02-low-T-tolerance-patch.md) | **Opus** | A two-line vendored patch, the version string, re-pinned constants, a warning in two drivers; reproduces log 01 digit for digit |
 | 03 | [Documents and close-out](03-documents-and-close-out.md) | **Sonnet** | No production code. Additive addenda, the refresh route, the roster re-measured, a handover |
 
 ### 3.1 Dependencies
 
 ```
-01 ──► (the user rules on the setting, P3, P7) ──► 02 ──► 03
-scan                                               patch   docs, close-out
+01 ──► 01b ──► (the user rules on the setting, P3, P7) ──► 02 ──► 03
+scan   β_th                                                patch   docs, close-out
 ```
 
 - **01 first.** It sets the number 02 patches in, and measures what 02 must reproduce.
+- **01b anywhere before 03.** It shares no production file with 01 or 02. It is placed after 01
+  so that it can land while the user considers log 01's recommendation.
 - **The ruling between 01 and 02 is a precondition.** Orchestrator 02 checks the board's
   Decisions record it before dispatching.
 - **03 last**, because it describes and scores the final tree.
 
 Files edited by more than one prompt: `tools/bbn_from_store.py` (01; 02 only if its output needs a
-field for the new version), `ComputeTargets/tests/` (01, 02).
+field for the new version), `ComputeTargets/tests/` (01, 01b, 02; different modules).
 
 ---
 
@@ -451,6 +480,15 @@ Plus the SM baseline (`compute_SM_baseline`, full network): 17 inputs.
 | the pinned test values (P7) at the recommended setting | **each value measured**, with the bound it would meet or miss | log |
 | the recommendation | **one setting by P3's rule**, with every criterion's measured value, or a stop | log |
 
+### 6.1b The kick threshold (prompt 01b)
+
+| quantity | now | target | witness |
+|---|---|---|---|
+| `kick_threshold_curve` on stub `w` = 7/23, 1/5, 0 | 1.958, 0.913, 0.577 | **2, 1, 1/√2** to 1e-14; Σ ≤ 0 omitted | test (d); **fails on `HEAD~1`** |
+| the production curve's minimum over [0.05, 50] GeV | **1.0295** (§2 (h)) | **1.1074 ± 5e-4**, within [0.17, 0.20] GeV | test (d2); **fails on `HEAD~1`** |
+| the legend label; the `plot_by_beta.py` comment | 1/√(3Σ) | **1/√(3Σ_eff)** | read |
+| suites | — | **all pass; ComputeTargets +1** | suites |
+
 ### 6.2 The patch (prompt 02)
 
 | quantity | target | witness |
@@ -487,4 +525,6 @@ additively, after §4.10. It states at least:
    D/H scatter falls from ~10⁻³ to the residual log 01 measured. The M-convergence comparison and
    the β ≳ 1.6 shifts become physical rather than limited by the solver, to that residual.
 4. **The residual floors** (P9), as measurements.
-5. **What is still open**, by name.
+5. **The `T_deliver` figure's threshold curve** now uses Σ_eff (prompt 01b). Any copy of figure 3
+   made before it is redrawn by re-running `plot_by_beta.py`; no store changes.
+6. **What is still open**, by name.

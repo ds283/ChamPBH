@@ -30,7 +30,7 @@ One fresh-context subagent, **Sonnet**, using the template in `README.md`. Add:
    `OPEN_ISSUES.md`'s header lines.
 3. **The roster.** The log's 17 figures equal log 02's. Re-run two yourself: the control, and
    β = 1.6 at M = 10⁻⁵.
-4. **The handover.** §4.11 carries README §7's five points. Its refresh commands name
+4. **The handover.** §4.11 carries README §7's six points. Its refresh commands name
    `--drop bbn-data` on a **copy** of the store, not `--retry-failed-bbn`, and no `VERSION_LABEL`
    bump.
 5. **Suites** unchanged from prompt 02; the store's mtimes unchanged.

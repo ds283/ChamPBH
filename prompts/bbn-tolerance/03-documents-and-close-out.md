@@ -32,7 +32,7 @@ handover.
   costs, and the D/H precision the paper may claim for a single history.
 - **`paper-corrections-numerical-section.md` §5.** A row if the paper states or implies
   PRyMordial's precision.
-- **`review-remediation-verification.md`, new §4.11**, after §4.10, carrying README §7's five
+- **`review-remediation-verification.md`, new §4.11**, after §4.10, carrying README §7's six
   points. Give the refresh route as commands the user can run. Copy the store to a new stem (17
   files) and run `main.py` with the science run's arguments plus `--drop bbn-data`; take those
   arguments from `full_run_2026.6.0.sh` if it is in the working tree, and otherwise describe them.
