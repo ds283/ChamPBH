@@ -198,6 +198,11 @@ histories.
   **02b** (item H, Sonnet), which also corrects the stale comment in `_configure_PRyMordial` and
   extends `test_network_flag` (c) to read the tool's default. `tools/bbn_from_store.py` keeps the
   full network (P15). With this line the precondition of orchestrator 02b §1.1 is met.
+- **2026-10-03, the user: log 02b's deviation 1 accepted.** Orchestrator 02b's review check 1
+  failed on one line: besides the argument's `default` and `help`, the commit changed the usage
+  line in `tools/history_and_bbn.py`'s module docstring from `[--small-network]` to
+  `[--no-small-network]`, classified IMPLEMENTATION CHOICE. Checks 2–4 passed. The user accepted
+  the change as classified; it stays, and prompt 02b stands as landed. Prompt 03 is next.
 
 Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
@@ -222,7 +227,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | 01c | [Measure the small network](01c-small-network-scan.md) (added 2026-10-03, U3) | **Q** | Opus | ✍️ 2026-10-03 | ✅ 2026-10-03, **COMPLETE WITH DEVIATIONS** (recommends small, rtol 1e-6; deviation 2 flagged) | see `git log` ("Measure PRyMordial's small network for bbn-tolerance") | [`logs/01c-small-network-scan.md`](logs/01c-small-network-scan.md) |
 | 01b | [Draw the kick threshold with Σ_eff](01b-kick-threshold-sigma-eff.md) (added 2026-10-03) | **B** | Sonnet | ✍️ 2026-10-03 | ✅ 2026-10-03, **COMPLETE** (no deviations; production minimum 1.0295 → 1.1074; suites 18, 114, 31) | see `git log` ("Draw the kick threshold with Sigma_eff") | [`logs/01b-kick-threshold-sigma-eff.md`](logs/01b-kick-threshold-sigma-eff.md) |
 | 02 | [Move production to the small network, set both low-T tolerances, and warn on foreign BBN rows](02-low-T-tolerance-patch.md) | **S**, **N**, **K** | Opus | ✍️ 2026-10-03; **rewritten 2026-10-03** (U4): the small network, both low-T tolerances, the warning | ✅ 2026-10-03, **COMPLETE WITH DEVIATIONS** (six implementation choices; 49 of 49 reproduce log 01c; no stop) | see `git log` ("Move BBN to PRyMordial's small network and set low-T rtol") | [`logs/02-low-T-tolerance-patch.md`](logs/02-low-T-tolerance-patch.md) |
-| 02b | [`tools/history_and_bbn.py` runs production's network](02b-history-tool-follows-production.md) (added 2026-10-03, U5) | **H** | Sonnet | ✍️ 2026-10-03 | ✅ 2026-10-03, **COMPLETE WITH DEVIATIONS** (one implementation choice: the docstring's usage line; suites 18, 114, 31) | see `git log` ("Run history_and_bbn on production's network") | [`logs/02b-history-tool-follows-production.md`](logs/02b-history-tool-follows-production.md) |
+| 02b | [`tools/history_and_bbn.py` runs production's network](02b-history-tool-follows-production.md) (added 2026-10-03, U5) | **H** | Sonnet | ✍️ 2026-10-03 | ✅ 2026-10-03, **COMPLETE WITH DEVIATIONS** (one implementation choice: the docstring's usage line, accepted by the user 2026-10-03; suites 18, 114, 31) | see `git log` ("Run history_and_bbn on production's network") | [`logs/02b-history-tool-follows-production.md`](logs/02b-history-tool-follows-production.md) |
 | 03 | [Documents and close-out](03-documents-and-close-out.md) | **D** | Sonnet | ✍️ 2026-10-03; **revised 2026-10-03** (U4) | — | — | — |
 
 ---
