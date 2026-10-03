@@ -218,6 +218,13 @@ histories.
     says. Both are in §4.11 (log 03, deviation 1 and Observations 1).
   - **Suites.** CosmologyModels 18, ComputeTargets 114, Datastore 31, before and after; no code
     changed.
+- **2026-10-03, the user: log 03's deviation 1 accepted; the branch merged into `main`.**
+  Deviation 1, classified STRUCTURALLY REQUIRED, refines README §2 (f), which was a stop under
+  README §4. In the refresh, `--drop bbn-data` goes on the first `main.py` call only, all eight
+  blocks of `full_run_2026.6.0.sh` then run, and an interrupted refresh resumes without `--drop`.
+  The orchestrator checked §4.11's recipe against the script: `run()` has one `main.py` line ending
+  in `"$@"`, and the C5 blocks at φ\* = 1 and 2 recompute the 26 φ\* ≠ 5 histories. Review checks
+  1–5 passed. The user accepted the deviation as classified, and the campaign stands closed.
 
 Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
@@ -243,7 +250,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | 01b | [Draw the kick threshold with Σ_eff](01b-kick-threshold-sigma-eff.md) (added 2026-10-03) | **B** | Sonnet | ✍️ 2026-10-03 | ✅ 2026-10-03, **COMPLETE** (no deviations; production minimum 1.0295 → 1.1074; suites 18, 114, 31) | see `git log` ("Draw the kick threshold with Sigma_eff") | [`logs/01b-kick-threshold-sigma-eff.md`](logs/01b-kick-threshold-sigma-eff.md) |
 | 02 | [Move production to the small network, set both low-T tolerances, and warn on foreign BBN rows](02-low-T-tolerance-patch.md) | **S**, **N**, **K** | Opus | ✍️ 2026-10-03; **rewritten 2026-10-03** (U4): the small network, both low-T tolerances, the warning | ✅ 2026-10-03, **COMPLETE WITH DEVIATIONS** (six implementation choices; 49 of 49 reproduce log 01c; no stop) | see `git log` ("Move BBN to PRyMordial's small network and set low-T rtol") | [`logs/02-low-T-tolerance-patch.md`](logs/02-low-T-tolerance-patch.md) |
 | 02b | [`tools/history_and_bbn.py` runs production's network](02b-history-tool-follows-production.md) (added 2026-10-03, U5) | **H** | Sonnet | ✍️ 2026-10-03 | ✅ 2026-10-03, **COMPLETE WITH DEVIATIONS** (one implementation choice: the docstring's usage line, accepted by the user 2026-10-03; suites 18, 114, 31) | see `git log` ("Run history_and_bbn on production's network") | [`logs/02b-history-tool-follows-production.md`](logs/02b-history-tool-follows-production.md) |
-| 03 | [Documents and close-out](03-documents-and-close-out.md) | **D** | Sonnet | ✍️ 2026-10-03; **revised 2026-10-03** (U4) | ✅ 2026-10-03, **COMPLETE WITH DEVIATIONS** (one structurally required deviation, the refresh route's `--drop` on one call only, and two implementation choices; roster 17 of 17 identical to log 02; suites 18, 114, 31) | see `git log` ("Close the bbn-tolerance campaign with a handover") | [`logs/03-documents-and-close-out.md`](logs/03-documents-and-close-out.md) |
+| 03 | [Documents and close-out](03-documents-and-close-out.md) | **D** | Sonnet | ✍️ 2026-10-03; **revised 2026-10-03** (U4) | ✅ 2026-10-03, **COMPLETE WITH DEVIATIONS** (one structurally required deviation, the refresh route's `--drop` on one call only, and two implementation choices; deviation 1 accepted by the user 2026-10-03; roster 17 of 17 identical to log 02; suites 18, 114, 31) | see `git log` ("Close the bbn-tolerance campaign with a handover") | [`logs/03-documents-and-close-out.md`](logs/03-documents-and-close-out.md) |
 
 ---
 
