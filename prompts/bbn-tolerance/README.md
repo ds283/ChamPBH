@@ -114,7 +114,9 @@ without recomputing a single history.
   and 03 are rewritten after the user rules on log 01c. Log 01's deviations 2 (the indirect
   `Datastore` import) and 9 (the cost run under background load) are accepted.
 
-**Proposed by the planner after U3, 2026-10-03; awaiting the user:**
+**Proposed by the planner after U3, 2026-10-03; accepted by the user as written the same day.**
+The user's note: cost, P11 (4), is expected to fall. It ranks last, behind getting results at
+all and getting correct results.
 
 - **P10. Prompt 01c measures and changes nothing.** As P1: no production code, nothing in
   `PRyM/`, no store written. It uses `tools/bbn_from_store.py` as prompt 01 left it; a change to

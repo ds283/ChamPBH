@@ -1,7 +1,7 @@
 # BBN-tolerance campaign — implementation state
 
 **Last updated:** 2026-10-03 · **Status: IN PROGRESS — re-planned around the small network (U3);
-prompt 01 committed BLOCKED and ruled; 01c next, once P10–P13 are accepted** (01b added
+prompt 01 committed BLOCKED and ruled; P10–P13 accepted; 01c next** (01b added
 2026-10-03, U2; 01c added 2026-10-03, U3). Planned on 2026-10-03 against
 `main` at `4ae25b4`, from a Claude Science brief kept at
 [`source/brief_prym_lowT_failures.md`](source/brief_prym_lowT_failures.md) and checked against the
@@ -97,7 +97,7 @@ histories.
   - **Log 01's deviations accepted:** 2 (the tool imports `Datastore` indirectly, through
     `ComputeTargets.BBNData`; it opens the store only read-only) and 9 (the cost run under
     background load; "not much we can do about this").
-- **2026-10-03, the planner: README §0.2 P10–P13 proposed after U3. Awaiting the user.**
+- **2026-10-03, the planner: README §0.2 P10–P13 proposed after U3.**
   - P10: prompt 01c measures and changes nothing, the tool included; about 340 solves, 8–10 at
     a time, as U1.
   - P11: the rule for the small network's low-T setting: reliability, scatter, convergence
@@ -106,6 +106,10 @@ histories.
   - P13: what the rewrite of prompt 02 must settle, ruled with log 01c.
 
   Orchestrator 01c §1.1 requires the user's acceptance of P10–P13 recorded here.
+- **2026-10-03, the user: P10–P13 accepted as written.** With this line the precondition of
+  orchestrator 01c §1.1 is met. The user's note on P11 (4): the cost is expected to fall, not
+  rise. Cost is the least important criterion. It ranks behind (a) getting results at all and
+  (b) getting correct results.
 
 Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
