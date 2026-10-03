@@ -171,12 +171,41 @@ all and getting correct results.
     - The reason: `BBNData` uses PRyMordial as a black box, so that another BBN code could be
       swapped in, and a change of code is handled by the versioning mechanism. A first-class
       small/full switch would tie client code to a PRyMordial concept.
-    - `plot_by_beta.py`'s SM baseline (`:1091`) is not named in the ruling. It must match
-      production's network; the rewrite of prompt 02 confirms this with the user.
+    - `plot_by_beta.py`'s SM baseline (`:1091`) follows `main.py` (the user, 2026-10-03, after
+      U4).
   - **P6 is extended** to rows whose `small_network` differs from production's. No new column is
     needed: the table already stores `small_network` and `PRyM_version` on successful rows.
   - **Accepted:** `PRYM_VERSION` `+bt02`, P5's refresh route, and the re-pins of
     `README_BASELINE` and the P7 constants.
+
+**Proposed by the planner with the rewrite of prompts 02 and 03, 2026-10-03; awaiting the user:**
+
+- **P14. Prompt 02's acceptance runs.** The patched tree, with no override, runs the roster on
+  both networks:
+  - the small network on the 16 histories × 3 variants and the SM baseline (49 solves), against
+    log 01c's T1 rows at 1e-6;
+  - the full network on the 17 inputs, `prod` (17 solves), against log 01's S1 rows at 1e-5.
+
+  That is 66 solves, 8–10 at a time as U1 and P10. The cost is measured serially afterwards. U1
+  limited prompts 02 and 03 to "the 17-input roster and nothing larger". This is that roster, on
+  two networks.
+- **P15. The other production defaults follow `main.py`.** `test_network_flag` (c) holds four
+  places in step with `main.py`'s payload, and they become `True` with it:
+  - `compute_BBN_data`'s `small_network` default;
+  - `BBNData.compute`'s two payload fallbacks;
+  - `plot_by_beta.py`'s SM baseline (ruled);
+  - `tools/bbn_baseline.py`'s `--small-network` default.
+
+  `tools/bbn_from_store.py` keeps the full network as its default, because the reproduction
+  commands of logs 01 and 01c depend on it; only its help text, which says "as main.py", is
+  corrected. *Alternative, not proposed:* leave the library defaults `False` and narrow test (c)
+  to `main.py` and `plot_by_beta.py`. Then every caller other than the two drivers would run the
+  full network unless it asked otherwise.
+- **P16. `test_bbn_callbacks` (i) moves to the production network.** It checks the SM baseline
+  that `plot_by_beta.py` draws. With U4 that is the small network at 1e-6, so the test calls
+  `compute_SM_baseline(True)`, and `README_BASELINE` is re-pinned to log 01c's SM row at 1e-6
+  (bound 1e-4 unchanged). *Alternative:* keep the full network and re-pin to log 01's S1 SM row
+  at 1e-5. That tests a baseline production no longer draws.
 
 ### 0.3 What the planner checked in the source, and what it found
 
@@ -360,11 +389,11 @@ root. `black` on changed files, except `PRyM/`, which is patched, not reformatte
 | 01 | [The mechanism and the low-T tolerance scan](01-mechanism-and-tolerance-scan.md) | **Opus** | No production code. A tool with an interception, a reproduction, an instrumented solve, the scan, a recommendation |
 | 01c | [Measure the small network](01c-small-network-scan.md) (added 2026-10-03, U3) | **Opus** | No code. The small-network scan, a breadth sample, cost, the offset from the full network, a recommendation by P11 |
 | 01b | [Draw the kick threshold with Σ_eff](01b-kick-threshold-sigma-eff.md) (added 2026-10-03, U2) | **Sonnet** | One formula, its label and comment, and a test with new expected values; independent of the PRyMordial work |
-| 02 | [Set the low-T tolerance and warn on a stale PRyMordial version](02-low-T-tolerance-patch.md) | **Opus** | A two-line vendored patch, the version string, re-pinned constants, a warning in two drivers; reproduces log 01 digit for digit |
-| 03 | [Documents and close-out](03-documents-and-close-out.md) | **Sonnet** | No production code. Additive addenda, the refresh route, the roster re-measured, a handover |
+| 02 | [Move production to the small network, set both low-T tolerances, and warn on foreign BBN rows](02-low-T-tolerance-patch.md) (rewritten 2026-10-03, U4) | **Opus** | A two-line vendored patch, `small_network` to `True` with a comment on the Li8 fragility, the version string, re-pinned constants, a warning in two drivers; reproduces logs 01c (small) and 01 (full) digit for digit |
+| 03 | [Documents and close-out](03-documents-and-close-out.md) (revised 2026-10-03, U4) | **Sonnet** | No production code. Additive addenda, the network switch and the refresh route, the roster re-measured, a handover |
 
-**After U3 (2026-10-03).** Prompts 02 and 03 carry a notice that they are rewritten after the
-user rules on log 01c; neither is dispatched as written. The order becomes:
+**After U3 (2026-10-03).** Prompts 02 and 03 were rewritten after the user ruled on log 01c (U4,
+2026-10-03); P14–P16 came with the rewrite. The order becomes:
 
 ```
 01 ──► 01c ──► (the user rules: P11's setting, P13) ──► 02 (rewritten) ──► 03 (revised)
@@ -420,6 +449,15 @@ repairs**.
   - any small-network solve fails, in T1 or T2 (record it, finish the grid, then stop);
   - no setting meets P11;
   - the tool would have to change.
+- **For prompt 02 (U4):** the brief's conditions above judged a full-network setting under P3,
+  and do not apply to U4's ruled settings. In particular, the SM baseline moves 1.63×10⁻³ in D/H
+  from the old default. That is the default's own error plus the network offset (log 01c,
+  Observations 3), and the user accepted it with the re-pin of `README_BASELINE`. Prompt 02's
+  stops are its own §5:
+  - a reproduction miss against log 01c or log 01;
+  - a failed solve;
+  - a re-derived constant that differs from its measured value;
+  - the fields not readable on the drivers' objects.
 - **A reproduction fails.** The tool does not reproduce the control's stored Yp and D/H to every
   printed digit, or a failure's stored `t reached`.
 - **A store was written.** Any file under `~/ChamPBH-stores/` changes (orchestrator: compare
@@ -618,24 +656,26 @@ Plus the SM baseline (`compute_SM_baseline`, full network): 17 inputs.
 
 ### 6.2 The patch (prompt 02)
 
-> **U3 (2026-10-03).** This table is for the full-network patch as first planned. It is replaced
-> when prompt 02 is rewritten after the ruling on log 01c.
+Rewritten 2026-10-03 with prompt 02 (U4). The first version is in `git log` (this file at
+`f3fa41a`).
 
 | quantity | target | witness |
 |---|---|---|
-| the low-T calls' `rtol` (and `atol`) | **the ruled setting**, both networks | new test intercepting `solve_ivp`; **fails on `HEAD~1`** |
-| the patched tree, no override, on the 17-input roster × 3 variants | **equal to log 01's override results at the ruled setting to every printed digit** | the tool |
+| the low-T calls' `rtol` and `atol` | **small: 1e-6, 1e-11; full: 1e-5, 1e-15**; every other call unchanged | new test intercepting `solve_ivp`; **fails on `HEAD~1`** |
+| production's network | **`main.py`'s one name `True`, with the Li8 comment; `plot_by_beta.py`'s baseline `True`; the defaults of P15 `True`**; no flag | `test_network_flag` (c), changed; **fails on `HEAD~1`** |
+| the patched tree, no override, small network, roster × 3 variants + SM (49) | **equal to log 01c's T1 rows at 1e-6 to every printed digit**; all 11 complete | the tool |
+| the patched tree, no override, full network, 17 inputs `prod` | **equal to log 01's S1 rows at 1e-5 to every printed digit** | the tool |
 | `PRYM_VERSION`; `VERSION_LABEL` | **`"bf24c3d+ri02+sr01+bt02"`; `"2026.6.0"` (unchanged)** | grep; the existing version test, updated |
-| the pinned constants (P7) | **re-pinned from their provenance; bounds unchanged; old values in a comment** | the three test modules pass |
-| the stale-version warning (P6) | **one warning with the count per foreign `PRyM_version`; no row skipped** | test of a pure function; `ast` or a stub check that `main.py` and `plot_by_beta.py` call it |
-| serial cost of the control | **within 1.2× of log 01's figure for the ruled setting** | the tool, idle machine |
+| the pinned constants (P7, P16) | **re-pinned from their provenance to the values logs 01 and 01c measured; bounds unchanged; old values in a comment** | the test modules pass |
+| the foreign-provenance warning (P6, U4) | **one warning with the count per foreign (`PRyM_version`, `small_network`); failure rows counted as "not stored"; no row skipped** | test of a pure function; `ast` check that `main.py` and `plot_by_beta.py` call it |
+| serial cost of the control, small network | **within 1.2× of log 01c's 10.05 s** | the tool |
 | suites | **all pass; counts not lower** | suites |
 
 ### 6.3 Close-out (prompt 03)
 
 | quantity | target | witness |
 |---|---|---|
-| the 17-input roster, `prod`, on the final tree | **identical to log 02's figures**; all 11 failures complete | the tool |
+| the 17-input roster, small network, `prod`, on the final tree | **identical to log 02's figures**; all 11 complete | the tool |
 | `.documents/` | **additive only** (`git diff --numstat` shows no deletions) | `git diff` |
 | suites | **unchanged from prompt 02** | suites |
 
@@ -646,14 +686,20 @@ Plus the SM baseline (`compute_SM_baseline`, full network): 17 inputs.
 Prompt 03 adds a dated section, §4.11, to `.documents/review-remediation-verification.md` §4,
 additively, after §4.10. It states at least:
 
-1. **`PRYM_VERSION` and the setting.** The low-T `rtol` (and `atol`), why it was chosen, and its
-   cost.
+1. **`PRYM_VERSION`, the network and the settings.** Production runs PRyMordial's small network
+   (U3, U4), and why. Both low-T settings, why each was chosen, and the cost. How the full
+   network is still selected.
 2. **The refresh route** (§2 (f)): copy the store, then run with `--drop bbn-data`; not
    `--retry-failed-bbn`; no `VERSION_LABEL` bump; the warning a store that was not refreshed will
-   print.
-3. **What changes in the science.** The 11 rows that were "not assessed" become assessable. The
-   D/H scatter falls from ~10⁻³ to the residual log 01 measured. The M-convergence comparison and
-   the β ≳ 1.6 shifts become physical rather than limited by the solver, to that residual.
+   print, for both the version and the network.
+3. **What changes in the science.**
+   - The 11 rows that were "not assessed" become assessable.
+   - The D/H scatter falls from ~10⁻³ to the residual log 01c measured.
+   - The M-convergence comparison and the β ≳ 1.6 shifts become physical rather than limited by
+     the solver, to that residual.
+   - Every BBN row, and the SM baseline, moves by the network offset: D/H by −2.4 to
+     −3.6×10⁻⁴, Yp by at most ±3.2×10⁻⁵ (P12).
+   - ⁷Li/H from the small network is not used.
 4. **The residual floors** (P9), as measurements.
 5. **The `T_deliver` figure's threshold curve** now uses Σ_eff (prompt 01b). Any copy of figure 3
    made before it is redrawn by re-running `plot_by_beta.py`; no store changes.

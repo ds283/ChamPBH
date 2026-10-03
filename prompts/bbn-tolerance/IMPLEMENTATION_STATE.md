@@ -3,7 +3,7 @@
 **Last updated:** 2026-10-03 · **Status: IN PROGRESS — re-planned around the small network (U3);
 prompt 01 committed BLOCKED and ruled; P10–P13 accepted; 01c landed (recommends the small network
 at low-T rtol 1e-6); the user's ruling on it complete (U4): small at rtol 1e-6, full patched
-to rtol 1e-5; prompt 02 to be rewritten** (01b added
+to rtol 1e-5; prompts 02 and 03 rewritten; P14–P16 await the user** (01b added
 2026-10-03, U2; 01c added 2026-10-03, U3). Planned on 2026-10-03 against
 `main` at `4ae25b4`, from a Claude Science brief kept at
 [`source/brief_prym_lowT_failures.md`](source/brief_prym_lowT_failures.md) and checked against the
@@ -164,6 +164,19 @@ histories.
     - `plot_by_beta.py`'s SM baseline (`small_network=False` at `:1091`) is not named in the
       ruling. It must match production's network to be comparable; the orchestrator reads the
       ruling as applying there too, which the rewrite of prompt 02 should confirm with the user.
+- **2026-10-03, the user: `plot_by_beta.py` follows `main.py`.** Its SM baseline runs the small
+  network, as production does.
+- **2026-10-03, the planner: prompts 02 and 03 rewritten against U4; README §0.2 P14–P16
+  proposed. Awaiting the user.**
+  - P14: prompt 02's acceptance runs the roster on both networks with no override, 49 small +
+    17 full solves, 8–10 at a time; the cost serially after.
+  - P15: the other production defaults follow `main.py` (`compute_BBN_data`, `BBNData.compute`'s
+    fallbacks, `tools/bbn_baseline.py`); `tools/bbn_from_store.py` keeps the full network as its
+    default, with its help text corrected.
+  - P16: `test_bbn_callbacks` (i) moves to the production network, re-pinned to log 01c's SM row
+    at 1e-6.
+
+  Orchestrator 02 §1.1 requires the user's acceptance of P14–P16 recorded here.
 
 Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
@@ -187,8 +200,8 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | 01 | [The mechanism and the low-T tolerance scan](01-mechanism-and-tolerance-scan.md) | **M**; measures **S**, **N** | Opus | ✍️ 2026-10-03 | ⛔ 2026-10-03, **BLOCKED** (no setting meets P3; the user rules) | see `git log` ("Add bbn_from_store and measure PRyMordial's low-T failures") | [`logs/01-mechanism-and-tolerance-scan.md`](logs/01-mechanism-and-tolerance-scan.md) |
 | 01c | [Measure the small network](01c-small-network-scan.md) (added 2026-10-03, U3) | **Q** | Opus | ✍️ 2026-10-03 | ✅ 2026-10-03, **COMPLETE WITH DEVIATIONS** (recommends small, rtol 1e-6; deviation 2 flagged) | see `git log` ("Measure PRyMordial's small network for bbn-tolerance") | [`logs/01c-small-network-scan.md`](logs/01c-small-network-scan.md) |
 | 01b | [Draw the kick threshold with Σ_eff](01b-kick-threshold-sigma-eff.md) (added 2026-10-03) | **B** | Sonnet | ✍️ 2026-10-03 | — | — | — |
-| 02 | [Set the low-T tolerance and warn on a stale PRyMordial version](02-low-T-tolerance-patch.md) | **S**, **N**, **K** | Opus | ✍️ 2026-10-03; **to be rewritten after log 01c** (U3) | — | — | — |
-| 03 | [Documents and close-out](03-documents-and-close-out.md) | **D** | Sonnet | ✍️ 2026-10-03; **to be revised with 02** (U3) | — | — | — |
+| 02 | [Move production to the small network, set both low-T tolerances, and warn on foreign BBN rows](02-low-T-tolerance-patch.md) | **S**, **N**, **K** | Opus | ✍️ 2026-10-03; **rewritten 2026-10-03** (U4): the small network, both low-T tolerances, the warning | — | — | — |
+| 03 | [Documents and close-out](03-documents-and-close-out.md) | **D** | Sonnet | ✍️ 2026-10-03; **revised 2026-10-03** (U4) | — | — | — |
 
 ---
 
