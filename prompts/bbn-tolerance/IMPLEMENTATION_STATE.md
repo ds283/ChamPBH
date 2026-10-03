@@ -5,8 +5,9 @@ prompt 01 committed BLOCKED and ruled; P10–P13 accepted; 01c landed (recommend
 at low-T rtol 1e-6); the user's ruling on it complete (U4): small at rtol 1e-6, full patched
 to rtol 1e-5; prompts 02 and 03 rewritten; P14–P16 accepted; 02 landed (production on the
 small network, both low-T rtol set, the foreign-provenance warning; 49 of 49 reproduce log 01c);
-03 next** (01b added
-2026-10-03, U2; 01c added 2026-10-03, U3). Planned on 2026-10-03 against
+the user ruled U5 on log 02: `tools/history_and_bbn.py` follows `main.py`, as prompt 02b;
+02b and 01b next, then 03** (01b added 2026-10-03, U2; 01c added 2026-10-03, U3; 02b added
+2026-10-03, U5). Planned on 2026-10-03 against
 `main` at `4ae25b4`, from a Claude Science brief kept at
 [`source/brief_prym_lowT_failures.md`](source/brief_prym_lowT_failures.md) and checked against the
 tree by the planner (README §0.3). Suites at `8efc50f` (no code changed through `4ae25b4`):
@@ -30,7 +31,9 @@ histories.
   02);
 - `pipeline_selection.py`, `main.py`, `plot_by_beta.py` (the warning; 02);
 - `extract_common.py` (`kick_threshold_curve`; 01b), `plot_by_beta.py` (a comment; 01b);
-- `ComputeTargets/tests/` (01, 02);
+- `tools/history_and_bbn.py` (the `--small-network` default; 02b), `ComputeTargets/BBNData.py`
+  (a comment; 02b);
+- `ComputeTargets/tests/` (01, 02, 02b);
 - `.documents/numerical-strategies.md`, `numerical-methods-for-paper.md`,
   `paper-corrections-numerical-section.md`, `review-remediation-verification.md` (03, additive).
 
@@ -188,6 +191,12 @@ histories.
   network only: 49 solves, 8–10 at a time; the cost serially after.** Orchestrator 02's
   baseline drops its full-network run too. With this line the precondition of orchestrator 02
   §1.1 is met.
+- **2026-10-03, the user: U5, on log 02's Observations 1 (README §0.2 U5).**
+  `tools/history_and_bbn.py`'s `--small-network` default follows `main.py` and runs the small
+  network, as P15 did for the other production defaults. It changes a default, so it is prompt
+  **02b** (item H, Sonnet), which also corrects the stale comment in `_configure_PRyMordial` and
+  extends `test_network_flag` (c) to read the tool's default. `tools/bbn_from_store.py` keeps the
+  full network (P15). With this line the precondition of orchestrator 02b §1.1 is met.
 
 Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
@@ -212,6 +221,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | 01c | [Measure the small network](01c-small-network-scan.md) (added 2026-10-03, U3) | **Q** | Opus | ✍️ 2026-10-03 | ✅ 2026-10-03, **COMPLETE WITH DEVIATIONS** (recommends small, rtol 1e-6; deviation 2 flagged) | see `git log` ("Measure PRyMordial's small network for bbn-tolerance") | [`logs/01c-small-network-scan.md`](logs/01c-small-network-scan.md) |
 | 01b | [Draw the kick threshold with Σ_eff](01b-kick-threshold-sigma-eff.md) (added 2026-10-03) | **B** | Sonnet | ✍️ 2026-10-03 | — | — | — |
 | 02 | [Move production to the small network, set both low-T tolerances, and warn on foreign BBN rows](02-low-T-tolerance-patch.md) | **S**, **N**, **K** | Opus | ✍️ 2026-10-03; **rewritten 2026-10-03** (U4): the small network, both low-T tolerances, the warning | ✅ 2026-10-03, **COMPLETE WITH DEVIATIONS** (six implementation choices; 49 of 49 reproduce log 01c; no stop) | see `git log` ("Move BBN to PRyMordial's small network and set low-T rtol") | [`logs/02-low-T-tolerance-patch.md`](logs/02-low-T-tolerance-patch.md) |
+| 02b | [`tools/history_and_bbn.py` runs production's network](02b-history-tool-follows-production.md) (added 2026-10-03, U5) | **H** | Sonnet | ✍️ 2026-10-03 | — | — | — |
 | 03 | [Documents and close-out](03-documents-and-close-out.md) | **D** | Sonnet | ✍️ 2026-10-03; **revised 2026-10-03** (U4) | — | — | — |
 
 ---
@@ -226,6 +236,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | N | **DEFECT, low–medium** | D/H moves by up to 2.2×10⁻³ under a 10⁻¹² change to ρ_NP at the default tolerance. Closes `[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]` (assigned). | 01, 02, 03 | **done** (prompt 02): D/H spread median 1.45e-3 → 4.4e-5 (max 1.5e-4); the residual is for prompt 03 to record (P9) |
 | B | **DEFECT, low** | The `T_deliver` figure's kick threshold uses 1/√(3Σ), not the paper's 1/√(3Σ_eff); its minimum is 1.0295 where the paper says 1.11. Closes `[00-the-kick-threshold-overlay-uses-sigma-not-sigma-eff]`. Added 2026-10-03 (U2). | 01b | open |
 | K | **GAP** | A store that was not refreshed serves BBN rows from an older PRyMordial with no warning. Closes `[00-a-store-serves-bbn-rows-from-another-prym-version-silently]`. | 02 | **done** (prompt 02): `warn_foreign_bbn_provenance` in both drivers |
+| H | **GAP, low** | `tools/history_and_bbn.py` defaults to the full network and says that is `main.py`'s; a comment in `_configure_PRyMordial` says production runs the full network. Added 2026-10-03 (U5). Closes `[02-two-places-still-say-production-runs-the-full-network]`. | 02b | open |
 | D | documents | The tolerance, its measurements, the refresh route, the handover. | 03 | open |
 
 ---
@@ -294,6 +305,8 @@ assigned one, and opened one (`[02-…]`).
   - **Next step.** The user decides whether `tools/history_and_bbn.py`'s default follows
     `main.py`, as P15 did for the other production defaults, or keeps the full network, as
     `tools/bbn_from_store.py` does. The help text and the comment are corrected either way.
+  - **Ruled (2026-10-03, U5).** The tool follows `main.py` and runs the small network. Prompt
+    02b (item H) changes its default and help, corrects the comment, and closes this issue.
 
 ### 3.1 Assigned to this campaign from other boards
 

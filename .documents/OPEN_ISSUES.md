@@ -180,4 +180,4 @@ prompt 01 the same day, and one by prompt 02 the same day. Prompt 02 closed the 
   curve is 1/√(3Σ), not the paper's 1/√(3Σ_eff); its minimum is 1.0295 where the paper says 1.11.
 - `[02-two-places-still-say-production-runs-the-full-network]` — `tools/history_and_bbn.py`
   still defaults to the full network "as main.py", and a comment in `_configure_PRyMordial` says
-  production runs it.
+  production runs it; ruled 2026-10-03 (U5): the tool follows `main.py`, fixed by prompt 02b.

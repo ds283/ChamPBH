@@ -11,8 +11,8 @@ first. **You do not write code.**
 
 ## 1. Before you dispatch
 
-1. Prompts 02 and 01b landed with no unresolved miss. On branch `bbn-tolerance`; `git status`
-   clean apart from the user's untracked run files; record `HEAD`.
+1. Prompts 02, 02b (added 2026-10-03, U5) and 01b landed with no unresolved miss. On branch
+   `bbn-tolerance`; `git status` clean apart from the user's untracked run files; record `HEAD`.
 2. The three suite counts.
 3. The store's mtimes (with `/usr/bin/stat`).
 

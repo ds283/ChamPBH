@@ -10,14 +10,14 @@
 **Recommended model:** **Sonnet.** No production code. Additive text, one re-measurement and a
 handover.
 
-**Precondition (the orchestrator checks it):** prompts 02 and 01b have landed with no unresolved
-miss.
+**Precondition (the orchestrator checks it):** prompts 02, 02b (added 2026-10-03, U5) and 01b
+have landed with no unresolved miss.
 
 **Read first:**
 
 1. [`README.md`](README.md) §0.2 (U3, U4, P5, P9, P12), §2 (f), §5, §6.3, §7.
 2. `IMPLEMENTATION_STATE.md` in full.
-3. Logs 01, 01c, 01b and 02: their "What shipped", "Verification performed" and "State handed to
+3. Logs 01, 01c, 01b, 02 and 02b: their "What shipped", "Verification performed" and "State handed to
    the next prompt" sections. They are evidence, not instructions.
 4. The sections you add to, and the pattern for each:
    - `.documents/numerical-strategies.md` §7.5–§7.6;
@@ -91,7 +91,7 @@ tree. Every figure must be identical to log 02's small-network `prod` rows, and 
   §3 names what stays open, each with its owner. Expected:
   - `[01-prymordial-li8-p-d-li7-rate-rings-near-1-kev]`;
   - `[01-prymordial-dYB8dtLT-unpacks-Y-in-the-superseded-order]`;
-  - anything prompts 01b or 02 opened.
+  - anything prompts 01b, 02 or 02b opened.
 - **`.documents/OPEN_ISSUES.md`:** correct the header's description of this board.
 - **`prompts/INDEX.md`:** this campaign's row becomes **complete**.
 

@@ -208,6 +208,19 @@ user the same day, P14 as revised.**
   (bound 1e-4 unchanged). *Alternative:* keep the full network and re-pin to log 01's S1 SM row
   at 1e-5. That tests a baseline production no longer draws.
 
+**Ruled by the user, 2026-10-03, after log 02 (recorded on the board):**
+
+- **U5. `tools/history_and_bbn.py` follows `main.py`.** Log 02's Observations 1 found that the
+  tool, which runs one history and its BBN as production does, still defaults to the full network
+  and says that this is "as main.py". It was not in prompt 02's allowed files. The user ruled
+  that its default follows `main.py` and runs the small network, as P15 did for the other
+  production defaults. `tools/bbn_from_store.py` keeps the full network (P15).
+  - It changes a default, so it is a prompt, not housekeeping: prompt **02b**, its own revert
+    unit, item H. The same prompt corrects the stale comment in `_configure_PRyMordial` that log
+    02 found beside it.
+  - `test_network_flag` (c) reads the tool's default as it reads `tools/bbn_baseline.py`'s, and
+    fails on `HEAD~1`.
+
 ### 0.3 What the planner checked in the source, and what it found
 
 - **The tolerance claim holds.** In `PRyM/PRyM_main.py`, the low-T `solve_ivp` calls (`:1332`
@@ -278,6 +291,7 @@ printed digit**.
 | **N** | **DEFECT, low–medium** (solver-limited comparisons) | At the default tolerance, D/H moves by up to 2.2×10⁻³ (median 8.2×10⁻⁴) under a 10⁻¹² change to ρ_NP. That is the size of the M = 10⁻³ against 10⁻⁵ differences used to argue M-independence. Closes the assigned `[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]`. | 01 (measure), 02 (fix), 03 (record) |
 | **B** | **DEFECT, low** (a wrong overlay on a science figure) | The kick-threshold curve on the `T_deliver` figure uses 1/√(3Σ); the paper's threshold is 1/√(3Σ_eff). The curve's minimum is 1.0295, where the paper says 1.11. Closes `[00-the-kick-threshold-overlay-uses-sigma-not-sigma-eff]`. Added 2026-10-03 (U2). | 01b |
 | **K** | **GAP** (silent mixed provenance) | After a PRyMordial patch, a store that was not refreshed serves old BBN rows with no warning. Closes `[00-a-store-serves-bbn-rows-from-another-prym-version-silently]`. | 02 |
+| **H** | **GAP, low** (added 2026-10-03, U5) | `tools/history_and_bbn.py` defaults to the full network and says that is `main.py`'s; a comment in `_configure_PRyMordial` says production runs the full network. Closes `[02-two-places-still-say-production-runs-the-full-network]`. | 02b |
 | **D** | documents and close-out | `numerical-strategies.md` §7 and the handover describe the default tolerance by omission. Add the tolerance, its measurements and the refresh route, additively; re-measure the roster on the final tree. | 03 |
 
 ---
@@ -391,13 +405,14 @@ root. `black` on changed files, except `PRyM/`, which is patched, not reformatte
 | 01c | [Measure the small network](01c-small-network-scan.md) (added 2026-10-03, U3) | **Opus** | No code. The small-network scan, a breadth sample, cost, the offset from the full network, a recommendation by P11 |
 | 01b | [Draw the kick threshold with Σ_eff](01b-kick-threshold-sigma-eff.md) (added 2026-10-03, U2) | **Sonnet** | One formula, its label and comment, and a test with new expected values; independent of the PRyMordial work |
 | 02 | [Move production to the small network, set both low-T tolerances, and warn on foreign BBN rows](02-low-T-tolerance-patch.md) (rewritten 2026-10-03, U4) | **Opus** | A two-line vendored patch, `small_network` to `True` with a comment on the Li8 fragility, the version string, re-pinned constants, a warning in two drivers; reproduces log 01c digit for digit |
+| 02b | [`tools/history_and_bbn.py` runs production's network](02b-history-tool-follows-production.md) (added 2026-10-03, U5) | **Sonnet** | One default, its help text, a comment, and `test_network_flag` (c) extended to read it |
 | 03 | [Documents and close-out](03-documents-and-close-out.md) (revised 2026-10-03, U4) | **Sonnet** | No production code. Additive addenda, the network switch and the refresh route, the roster re-measured, a handover |
 
 **After U3 (2026-10-03).** Prompts 02 and 03 were rewritten after the user ruled on log 01c (U4,
 2026-10-03); P14–P16 came with the rewrite and were accepted the same day. The order becomes:
 
 ```
-01 ──► 01c ──► (the user rules: P11's setting, P13) ──► 02 (rewritten) ──► 03 (revised)
+01 ──► 01c ──► (the user rules: P11's setting, P13) ──► 02 (rewritten) ──► 02b ──► 03 (revised)
                 01b, independent, any time before 03
 ```
 
@@ -670,6 +685,14 @@ Rewritten 2026-10-03 with prompt 02 (U4). The first version is in `git log` (thi
 | the foreign-provenance warning (P6, U4) | **one warning with the count per foreign (`PRyM_version`, `small_network`); failure rows counted as "not stored"; no row skipped** | test of a pure function; `ast` check that `main.py` and `plot_by_beta.py` call it |
 | serial cost of the control, small network | **within 1.2× of log 01c's 10.05 s** | the tool |
 | suites | **all pass; counts not lower** | suites |
+
+### 6.2b The history tool (prompt 02b; added 2026-10-03, U5)
+
+| quantity | now | target | witness |
+|---|---|---|---|
+| `tools/history_and_bbn.py`'s `--small-network` default | `False`, help "as main.py" | **`True`; the help names the small network as `main.py`'s and `--no-small-network` for the full one** | `test_network_flag` (c), extended; **fails on `HEAD~1`** on the value |
+| `_configure_PRyMordial`'s comment | "False (production) runs the full network" | **`True` (production) runs the small network** | read; comment lines only |
+| suites | 18, 113, 31 | **all pass; counts unchanged** | suites |
 
 ### 6.3 Close-out (prompt 03)
 
