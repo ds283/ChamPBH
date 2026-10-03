@@ -52,7 +52,9 @@ histories.
   - P8: never accept a partial solve.
   - P9: residuals are measurements.
 
-  **Awaiting the user's ruling.** Orchestrator 01 does not dispatch until it is recorded here.
+- **2026-10-03, the user: P1–P9 accepted as proposed.** With this line the precondition of
+  orchestrator 01 §1.1 is met. P3's rule stands; the setting it selects is ruled separately after
+  log 01, as orchestrator 02 §1.1 requires.
 
 Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
