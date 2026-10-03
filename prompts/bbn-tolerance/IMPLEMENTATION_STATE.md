@@ -2,8 +2,8 @@
 
 **Last updated:** 2026-10-03 · **Status: IN PROGRESS — re-planned around the small network (U3);
 prompt 01 committed BLOCKED and ruled; P10–P13 accepted; 01c landed (recommends the small network
-at low-T rtol 1e-6); its deviations and P13 (1), (3)–(5) ruled; P11's setting and P13 (2)
-to rule** (01b added
+at low-T rtol 1e-6); the user's ruling on it complete (U4): small at rtol 1e-6, full patched
+to rtol 1e-5; prompt 02 to be rewritten** (01b added
 2026-10-03, U2; 01c added 2026-10-03, U3). Planned on 2026-10-03 against
 `main` at `4ae25b4`, from a Claude Science brief kept at
 [`source/brief_prym_lowT_failures.md`](source/brief_prym_lowT_failures.md) and checked against the
@@ -145,6 +145,25 @@ histories.
        move (log 01c, row 7 and Observations 3).
   - **Still to rule before prompt 02 is rewritten:** P13 (2), and P11's setting, which log 01c
     recommends as low-T `rtol` 1e-6, `atol` 1e-11.
+- **2026-10-03, the user: U4, the ruling on log 01c completed (README §0.2 U4).** With this
+  line the ruling that prompt 02's rewrite needs is on the board.
+  - **P11's setting accepted.** The small network's low-T call runs at `rtol` 1e-6, `atol`
+    1e-11.
+  - **P13 (2): the full network's low-T call is patched too,** to `rtol` 1e-5 with `atol` 1e-15
+    as now. This is log 01's provisional setting. It does not remove the Li8 failures, which
+    stay open as `[01-prymordial-li8-p-d-li7-rate-rings-near-1-kev]`.
+  - **P13 (1), made specific: no new flag.**
+    - `main.py`'s hard-coded BBN payload (`"small_network": False` at `:787`) becomes `True`.
+    - A comment at that line documents why: PRyMordial's full network is fragile near 1 keV
+      because of the Li8(p,d)Li7 rate.
+    - The full network stays selectable by editing that value.
+    - The user's reason: `BBNData` treats PRyMordial as a black box, so that another BBN code
+      could be swapped in. A first-class small/full switch would tie client code to a
+      PRyMordial concept, and client code would need rewriting if that concept went away. A
+      change of code is handled by the versioning mechanism.
+    - `plot_by_beta.py`'s SM baseline (`small_network=False` at `:1091`) is not named in the
+      ruling. It must match production's network to be comparable; the orchestrator reads the
+      ruling as applying there too, which the rewrite of prompt 02 should confirm with the user.
 
 Decisions the prompts may surface, each a stop-and-ask in its prompt:
 

@@ -156,6 +156,28 @@ all and getting correct results.
   P2, P3 and P4 stand as the record of prompt 01. P11 replaces P3 for the network production will
   run.
 
+**Ruled by the user, 2026-10-03, after log 01c (recorded on the board):**
+
+- **U4. The settings, and how production selects the network.**
+  - **Accepted:** log 01c's deviations 2 (the output-check row is not a failed solve) and 7 (the
+    cost run under residual load).
+  - **The small network's low-T call:** `rtol` 1e-6, `atol` 1e-11, as P11 selects.
+  - **The full network's low-T call is patched too:** `rtol` 1e-5, `atol` 1e-15 as now, log 01's
+    provisional setting. The Li8 failures remain.
+  - **Selection: no new flag.**
+    - `main.py`'s hard-coded `"small_network": False` (`:787`) becomes `True`, with a comment
+      at that line on the Li8 fragility of PRyMordial's full network.
+    - The full network stays selectable by editing that value.
+    - The reason: `BBNData` uses PRyMordial as a black box, so that another BBN code could be
+      swapped in, and a change of code is handled by the versioning mechanism. A first-class
+      small/full switch would tie client code to a PRyMordial concept.
+    - `plot_by_beta.py`'s SM baseline (`:1091`) is not named in the ruling. It must match
+      production's network; the rewrite of prompt 02 confirms this with the user.
+  - **P6 is extended** to rows whose `small_network` differs from production's. No new column is
+    needed: the table already stores `small_network` and `PRyM_version` on successful rows.
+  - **Accepted:** `PRYM_VERSION` `+bt02`, P5's refresh route, and the re-pins of
+    `README_BASELINE` and the P7 constants.
+
 ### 0.3 What the planner checked in the source, and what it found
 
 - **The tolerance claim holds.** In `PRyM/PRyM_main.py`, the low-T `solve_ivp` calls (`:1332`
