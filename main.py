@@ -50,7 +50,7 @@ from Quadrature.integration_metadata import IntegrationSolver
 from RayTools.RayWorkPool import RayWorkPool
 from Units import Planck_units
 from Units.base import UnitsLike
-from config.argument_parser import create_argument_parser
+from config.argument_parser import create_argument_parser, allowed_drop_actions
 from config.defaults import (
     DEFAULT_FLOAT_PRECISION,
 )
