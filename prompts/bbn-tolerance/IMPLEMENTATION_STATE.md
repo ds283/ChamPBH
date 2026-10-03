@@ -2,7 +2,8 @@
 
 **Last updated:** 2026-10-03 · **Status: IN PROGRESS — re-planned around the small network (U3);
 prompt 01 committed BLOCKED and ruled; P10–P13 accepted; 01c landed (recommends the small network
-at low-T rtol 1e-6); the user rules on P11's setting and P13** (01b added
+at low-T rtol 1e-6); its deviations and P13 (1), (3)–(5) ruled; P11's setting and P13 (2)
+to rule** (01b added
 2026-10-03, U2; 01c added 2026-10-03, U3). Planned on 2026-10-03 against
 `main` at `4ae25b4`, from a Claude Science brief kept at
 [`source/brief_prym_lowT_failures.md`](source/brief_prym_lowT_failures.md) and checked against the
@@ -126,6 +127,24 @@ histories.
     row, β = 0.95, M = 10⁻³ (README §0.5 excludes it). It returns `Yp_BBN = 0.51205`, outside
     (0, 0.5), with every `solve_ivp` successful. Log 01c does not count it as a failed solve; a
     literal reading of the prompt's §6 would (log 01c, deviation 2).
+- **2026-10-03, the user: ruling on log 01c, in part.**
+  - **Log 01c's deviations accepted:**
+    - 2: the output-check row β = 0.95, M = 10⁻³ is not a failed solve. It does not count
+      against P11 (1), and it does not trigger prompt 01c's §6 stop.
+    - 7: the cost run was taken under residual background load and is kept.
+  - **P13, as ruled:**
+    1. **The full network stays selectable.** Production sets `small_network` to true for its
+       run.
+    2. **Patching the full network's low-T call too: not yet ruled.** The user asked for its
+       current `rtol`.
+    3. **Yes**: P6's warning is extended to rows whose `small_network` differs from
+       production's.
+    4. **Accepted**: `PRYM_VERSION` `+bt02`, and P5's refresh route, under which every BBN row
+       is recomputed on the small network.
+    5. **Accepted**: re-pin `test_bbn_callbacks`' `README_BASELINE` and the P7 constants that
+       move (log 01c, row 7 and Observations 3).
+  - **Still to rule before prompt 02 is rewritten:** P13 (2), and P11's setting, which log 01c
+    recommends as low-T `rtol` 1e-6, `atol` 1e-11.
 
 Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
