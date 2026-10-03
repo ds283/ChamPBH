@@ -1,0 +1,95 @@
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+beta=1.1 M=0.03 serial=1684 stored: PRyMordial: PRyMSolverFailureError: solve_ivp failed in stage 'low-T nuclear network (full)': status=-1, message='Required step size is less than spacing between numbers.'; t reached 1.22475e+06 of ta
+prod: failure=True PRyMordial: PRyMSolverFailureError: solve_ivp failed in stage 'low-T nuclear network (full)': status=-1, message='Required step size is less than spacing between numbers.'; t reached 1.15656e+06 of ta
+low-T call: t_span=(112.89385047147239, 1253750.8098933066) atol=1e-15 rtol=1e-06 status=-1 t_reached=1156559.5458020917 accepted steps=1756 attempts=2287
+
+accepted steps with t >= 1.19107e+06 (last 5 % of [112.894, 1.25375e+06]):
+
+attempts from the last accepted t=1156559.546: 45
+  [0] h=3.629e+04 order=2 newton=FAILED(2) tol=0.001 y_predict<0: ['He6', 'Li8', 'B8']
+      k=0: |dy/scale| rms=0.0766 rate=-; largest Li7 0.216, Li8 0.153, n 0.00629
+      k=1: |dy/scale| rms=0.1057 rate=1.38; largest Li7 0.366, d 1.12e-05, p 8.69e-10
+  [1] h=3.629e+04 order=2 newton=FAILED(2) tol=0.001 y_predict<0: ['He6', 'Li8', 'B8']
+      k=0: |dy/scale| rms=0.05424 rate=-; largest Li8 0.153, Li7 0.108, n 0.00629
+      k=1: |dy/scale| rms=0.0745 rate=1.374; largest Li7 0.258, d 2.12e-05, p 1.67e-10
+  [2] h=1.814e+04 order=2 newton=FAILED(2) tol=0.001 y_predict<0: ['He6', 'Li8', 'B8']
+      k=0: |dy/scale| rms=0.01167 rate=-; largest Li8 0.03, Li7 0.027, n 0.00143
+      k=1: |dy/scale| rms=0.01025 rate=0.8783; largest Li7 0.027, Li8 0.023, d 4.72e-06
+  [3] h=9072 order=2 newton=FAILED(2) tol=0.001 y_predict<0: ['He6', 'Li8', 'B8']
+      k=0: |dy/scale| rms=0.001902 rate=-; largest Li8 0.00563, Li7 0.00338, n 0.000391
+      k=1: |dy/scale| rms=0.002491 rate=1.309; largest Li7 0.00676, Li8 0.00536, n 2.42e-08
+  [4] h=4536 order=2 newton=FAILED(2) tol=0.001 y_predict<0: ['He6', 'Li8', 'B8']
+      k=0: |dy/scale| rms=0.0006902 rate=-; largest Li7 0.00169, Li8 0.00168, t 0.000179
+      k=1: |dy/scale| rms=0.0005365 rate=0.7773; largest Li8 0.00166, Li7 0.000845, d 8.44e-08
+  [5] h=2268 order=2 newton=FAILED(3) tol=0.001 y_predict<0: ['He6', 'Li8', 'B8']
+      k=0: |dy/scale| rms=0.000265 rate=-; largest Li8 0.000658, Li7 0.000634, t 9.26e-05
+      k=1: |dy/scale| rms=0.0002247 rate=0.8478; largest Li8 0.000654, Li7 0.000423, d 3.16e-08
+      k=2: |dy/scale| rms=0.000358 rate=1.593; largest Li7 0.00106, Li8 0.00065, d 3.16e-08
+  [6] h=1134 order=2 newton=FAILED(2) tol=0.001 y_predict<0: ['He6', 'Li8', 'B8']
+      k=0: |dy/scale| rms=0.0001166 rate=-; largest Li8 0.000301, Li7 0.000264, t 4.71e-05
+      k=1: |dy/scale| rms=0.0001497 rate=1.284; largest Li7 0.000423, Li8 0.0003, d 2.11e-08
+  [7] h=567 order=2 newton=FAILED(2) tol=0.001 y_predict<0: ['He6', 'Li8', 'B8']
+      k=0: |dy/scale| rms=6.431e-05 rate=-; largest Li7 0.000158, Li8 0.000154, t 2.37e-05
+      k=1: |dy/scale| rms=6.112e-05 rate=0.9504; largest Li8 0.000154, Li7 0.000145, d 7.91e-09
+  [8] h=283.5 order=2 newton=FAILED(2) tol=0.001 y_predict<0: ['He6', 'Li8', 'B8']
+      k=0: |dy/scale| rms=3.5e-05 rate=-; largest Li8 8.77e-05, Li7 8.25e-05, t 1.19e-05
+      k=1: |dy/scale| rms=3.676e-05 rate=1.051; largest Li7 9.24e-05, Li8 8.76e-05, d 4.28e-09
+  [9] h=141.8 order=2 newton=FAILED(2) tol=0.001 y_predict<0: ['He6', 'Li8', 'B8']
+      k=0: |dy/scale| rms=2.299e-05 rate=-; largest Li7 5.61e-05, Li8 5.6e-05, t 5.97e-06
+      k=1: |dy/scale| rms=2.255e-05 rate=0.981; largest Li8 5.6e-05, Li7 5.45e-05, d 2.64e-09
+  [10] h=70.88 order=2 newton=FAILED(2) tol=0.001 y_predict<0: ['He6', 'Li8', 'B8']
+      k=0: |dy/scale| rms=1.65e-05 rate=-; largest Li8 4.06e-05, Li7 4e-05, t 2.99e-06
+      k=1: |dy/scale| rms=1.638e-05 rate=0.9927; largest Li8 4.06e-05, Li7 3.96e-05, d 2e-09
+  [11] h=35.44 order=2 newton=FAILED(2) tol=0.001 y_predict<0: ['He6', 'Li8', 'B8']
+      k=0: |dy/scale| rms=1.336e-05 rate=-; largest Li8 3.3e-05, Li7 3.24e-05, t 1.5e-06
+      k=1: |dy/scale| rms=1.331e-05 rate=0.9959; largest Li8 3.3e-05, Li7 3.22e-05, d 1.6e-09
+  ...
+  [39] h=1.32e-07 order=2 newton=FAILED(2) tol=0.001 y_predict<0: ['He6', 'Li8', 'B8']
+      k=0: |dy/scale| rms=1.027e-05 rate=-; largest Li8 2.55e-05, Li7 2.48e-05, d 1.24e-09
+      k=1: |dy/scale| rms=1.026e-05 rate=0.9998; largest Li8 2.55e-05, Li7 2.48e-05, d 1.24e-09
+  [40] h=6.612e-08 order=2 newton=FAILED(2) tol=0.001 y_predict<0: ['He6', 'Li8', 'B8']
+      k=0: |dy/scale| rms=1.027e-05 rate=-; largest Li8 2.55e-05, Li7 2.48e-05, d 1.24e-09
+      k=1: |dy/scale| rms=1.026e-05 rate=0.9998; largest Li8 2.55e-05, Li7 2.48e-05, d 1.24e-09
+  [41] h=3.306e-08 order=2 newton=FAILED(2) tol=0.001 y_predict<0: ['He6', 'Li8', 'B8']
+      k=0: |dy/scale| rms=1.027e-05 rate=-; largest Li8 2.55e-05, Li7 2.48e-05, d 1.24e-09
+      k=1: |dy/scale| rms=1.026e-05 rate=0.9998; largest Li8 2.55e-05, Li7 2.48e-05, d 1.24e-09
+  [42] h=1.653e-08 order=2 newton=FAILED(2) tol=0.001 y_predict<0: ['He6', 'Li8', 'B8']
+      k=0: |dy/scale| rms=1.027e-05 rate=-; largest Li8 2.55e-05, Li7 2.48e-05, d 1.24e-09
+      k=1: |dy/scale| rms=1.026e-05 rate=0.9998; largest Li8 2.55e-05, Li7 2.48e-05, d 1.24e-09
+  [43] h=8.382e-09 order=2 newton=FAILED(2) tol=0.001 y_predict<0: ['He6', 'Li8', 'B8']
+      k=0: |dy/scale| rms=1.027e-05 rate=-; largest Li8 2.55e-05, Li7 2.48e-05, d 1.24e-09
+      k=1: |dy/scale| rms=1.026e-05 rate=0.9999; largest Li8 2.55e-05, Li7 2.48e-05, d 1.24e-09
+  [44] h=4.191e-09 order=2 newton=FAILED(2) tol=0.001 y_predict<0: ['He6', 'Li8', 'B8']
+      k=0: |dy/scale| rms=1.027e-05 rate=-; largest Li8 2.55e-05, Li7 2.48e-05, d 1.24e-09
+      k=1: |dy/scale| rms=1.027e-05 rate=1; largest Li8 2.55e-05, Li7 2.48e-05, d 1.24e-09
+tail summary: error-test rejections by dominant component {}; Newton failures 45
+
+smoothness of f at the last attempt (t_new=1156559.546, c=2.515e-09): f repeatable: True
+  Li7: y_p=2.6343e-11 dy0=-2.5474e-20 dy0/c=-1.0131e-11 f0=5.293653e-08
+  Li8: y_p=-1.0557e-16 dy0=2.5474e-20 dy0/c=1.0131e-11 f0=-5.293653e-08
+  B8: y_p=-2.7088e-18 dy0=1.2430e-44 dy0/c=4.9432e-36 f0=7.646786e-35
+  s=1: (f(y_p + s dy0) - f(y_p)) / s: Li7 -1.2773e-11 (J dy0 -1.2773e-11), Li8 1.2773e-11 (J dy0 1.2773e-11), B8 0.0000e+00 (J dy0 3.0300e-51)
+  s=0.1: (f(y_p + s dy0) - f(y_p)) / s: Li7 -1.2773e-11 (J dy0 -1.2773e-11), Li8 1.2773e-11 (J dy0 1.2773e-11), B8 0.0000e+00 (J dy0 3.0300e-51)
+  s=0.01: (f(y_p + s dy0) - f(y_p)) / s: Li7 -1.2773e-11 (J dy0 -1.2773e-11), Li8 1.2773e-11 (J dy0 1.2773e-11), B8 0.0000e+00 (J dy0 3.0300e-51)
+  s=0.0001: (f(y_p + s dy0) - f(y_p)) / s: Li7 -1.2773e-11 (J dy0 -1.2773e-11), Li8 1.2773e-11 (J dy0 1.2773e-11), B8 0.0000e+00 (J dy0 3.0300e-51)
+  s=1e-06: (f(y_p + s dy0) - f(y_p)) / s: Li7 -1.2773e-11 (J dy0 -1.2773e-11), Li8 1.2773e-11 (J dy0 1.2773e-11), B8 0.0000e+00 (J dy0 3.0300e-51)
+  the Jacobian in the Newton matrix (the last jac call, at t=1192847.636) against a fresh one at t_new: d f_Li8/d Y_Li8 2.0785e+12 against 5.0143e+08 (ratio fresh/stale 0.0002); predicted stiff-limit Newton rate |1 - fresh/stale| = 0.9998
+  attempt t_new from 1192847.636 (first) to 1156559.546 (last)
+  largest |J| entries: d f_p/d Y_Li8 = 5.0143e+08, d f_Li7/d Y_Li8 = -5.0143e+08, d f_Li8/d Y_Li8 = 5.0143e+08, d f_d/d Y_Li8 = -5.0143e+08, d f_n/d Y_n = -1.1323e-03
+dominant component over all converged attempts in the last 5 %: {}
+
+abundances at the last 3 accepted steps:
+  t=1047695.276: n=1.101e-15 p=7.280e-01 d=2.056e-05 t=6.611e-08 He3=7.903e-06 He4=6.797e-02 Li7=2.634e-11 Be7=3.514e-10 He6=-1.482e-19 Li8=1.189e-26 Li6=1.134e-14 B8=-2.709e-18
+    negative: ['He6', 'B8']; in [0, atol=1e-15]: ['Li8']
+  t=1120271.456: n=8.252e-16 p=7.280e-01 d=2.056e-05 t=6.611e-08 He3=7.903e-06 He4=6.797e-02 Li7=2.634e-11 Be7=3.514e-10 He6=-1.482e-19 Li8=-6.401e-17 Li6=1.134e-14 B8=-2.709e-18
+    negative: ['He6', 'Li8', 'B8']; in [0, atol=1e-15]: ['n']
+  t=1156559.546: n=7.175e-16 p=7.280e-01 d=2.056e-05 t=6.611e-08 He3=7.903e-06 He4=6.797e-02 Li7=2.634e-11 Be7=3.514e-10 He6=-1.482e-19 Li8=-1.056e-16 Li6=1.134e-14 B8=-2.709e-18
+    negative: ['He6', 'Li8', 'B8']; in [0, atol=1e-15]: ['n']
+  min y_predict over the tail attempts: n=6.338e-16 p=7.280e-01 d=2.056e-05 t=6.611e-08 He3=7.903e-06 He4=6.797e-02 Li7=2.634e-11 Be7=3.514e-10 He6=-1.482e-19 Li8=-1.535e-16 Li6=1.134e-14 B8=-2.709e-18
+
+T_of_t breakpoints (thermodynamic t_eval, 1200 points): within the last 6 accepted steps [693256.251, 1156559.546]: ['696835.1371', '709320.4938', '722029.5536', '734966.3245', '748134.8865', '761539.3927', '775184.0706', '789073.2233', '803211.2311', '817602.553', '832251.7275', '847163.3746', '862342.1972', '877792.9823', '893520.6026', '909530.0184', '925826.2786', '942414.5227', '959299.9822', '976487.9824', '993983.9439', '1011793.385', '1029921.921', '1048375.271', '1067159.254', '1086279.794', '1105742.921', '1125554.773', '1145721.599']; nearest to t_fail: ['1145721.599', '1166249.758', '1187145.725']
+T_gamma at t_fail: 1.04115 keV (T9 0.012082); at the Jacobian refresh t=1192847.636: 1.02520 keV (T9 0.011897)
+
+prod at t_fail=1156559.546: Yp=0.2718919894 D/H=2.82443837
+pert12 (status 0) at the same t: Yp=0.2718842632 D/H=2.824396514; relative prod - pert12: Yp 2.842e-05, D/H 1.482e-05
+pert12 at the stage end t=1253750.81: Yp=0.2718842632 D/H=2.824396448; change from t_fail to the end: Yp 3.879e-13, D/H 2.316e-08; stored-route result Yp=0.2718842631848581 D/H=2.82439644812292

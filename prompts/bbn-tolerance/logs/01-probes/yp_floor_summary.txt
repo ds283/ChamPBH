@@ -1,0 +1,18 @@
+beta=1.6 M=0.001 base  : Yp spread 2.097e-05 D/H spread 5.720e-05; prod Yp 0.2468928612 D/H 2.461632361; wall(prod, loaded) 30 s
+beta=1.6 M=0.001 thermo: Yp spread 1.404e-05 D/H spread 7.806e-05; prod Yp 0.2468911418 D/H 2.461829334; wall(prod, loaded) 37 s
+beta=1.6 M=0.001 aT    : Yp spread 1.582e-05 D/H spread 2.586e-05; prod Yp 0.246888339 D/H 2.462733125; wall(prod, loaded) 31 s
+beta=1.6 M=0.001 highT : Yp spread 1.240e-05 D/H spread 3.995e-05; prod Yp 0.2468901605 D/H 2.461637896; wall(prod, loaded) 30 s
+beta=1.6 M=0.001 midT  : Yp spread 1.632e-05 D/H spread 6.516e-05; prod Yp 0.24689485 D/H 2.461594663; wall(prod, loaded) 63 s
+beta=1.6 M=0.001 all   : Yp spread 4.575e-07 D/H spread 3.132e-05; prod Yp 0.2468845915 D/H 2.462673364; wall(prod, loaded) 73 s
+beta=1.6 M=1e-05 base  : Yp spread 1.531e-05 D/H spread 7.960e-05; prod Yp 0.2468863795 D/H 2.46172971; wall(prod, loaded) 30 s
+beta=1.6 M=1e-05 thermo: ['ok', 'FAILURE', 'ok'] ["pert12: PRyMordial: PRyMSolverFailureError: solve_ivp failed in stage 'low-T nuclear network (full)': status=-1, messa"]
+beta=1.6 M=1e-05 aT    : Yp spread 2.012e-05 D/H spread 7.950e-05; prod Yp 0.2468864769 D/H 2.4628145; wall(prod, loaded) 30 s
+beta=1.6 M=1e-05 highT : Yp spread 2.572e-06 D/H spread 8.530e-05; prod Yp 0.2468871297 D/H 2.461714924; wall(prod, loaded) 41 s
+beta=1.6 M=1e-05 midT  : Yp spread 5.810e-06 D/H spread 8.497e-05; prod Yp 0.2468901466 D/H 2.461695613; wall(prod, loaded) 78 s
+beta=1.6 M=1e-05 all   : Yp spread 1.444e-07 D/H spread 3.895e-05; prod Yp 0.2468782622 D/H 2.462685297; wall(prod, loaded) 91 s
+beta=2.0 M=1e-05 base  : Yp spread 4.415e-05 D/H spread 1.221e-04; prod Yp 0.2466721388 D/H 2.464103957; wall(prod, loaded) 40 s
+beta=2.0 M=1e-05 thermo: Yp spread 1.413e-05 D/H spread 2.367e-05; prod Yp 0.2466746373 D/H 2.4642173; wall(prod, loaded) 48 s
+beta=2.0 M=1e-05 aT    : Yp spread 3.667e-05 D/H spread 9.899e-05; prod Yp 0.2466714152 D/H 2.465207504; wall(prod, loaded) 42 s
+beta=2.0 M=1e-05 highT : Yp spread 4.826e-05 D/H spread 4.377e-05; prod Yp 0.2466827734 D/H 2.464280751; wall(prod, loaded) 42 s
+beta=2.0 M=1e-05 midT  : Yp spread 9.424e-06 D/H spread 8.350e-05; prod Yp 0.2466773688 D/H 2.464146072; wall(prod, loaded) 120 s
+beta=2.0 M=1e-05 all   : Yp spread 4.552e-07 D/H spread 3.723e-05; prod Yp 0.2466720297 D/H 2.46536998; wall(prod, loaded) 125 s

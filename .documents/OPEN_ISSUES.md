@@ -1,12 +1,12 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-03 · **25 open**: 5 on the `review-remediation` board (closed
+**Last updated:** 2026-10-03 · **27 open**: 5 on the `review-remediation` board (closed
 2026-09-30), of which 1 is assigned to `bbn-tolerance` (§1.9); 2 on the `production-readiness` board
 (closed 2026-09-30); 4 on the `run-integrity` board (closed 2026-09-30); 9 on the
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`;
 2 on the `science-readiness` board (planned 2026-10-01; closed 2026-10-02, 10 of 10 landed,
-prompt 06b having been added 2026-10-02); 3 on the `bbn-tolerance` board (planned 2026-10-03,
-0 of 4 landed).
+prompt 06b having been added 2026-10-02); 5 on the `bbn-tolerance` board (planned 2026-10-03,
+0 of 4 landed; prompt 01 committed BLOCKED 2026-10-03, awaiting the user's ruling).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -160,16 +160,21 @@ Assigned 2026-10-03 when the campaign was planned. Each entry stays on its own b
 carries the **Assigned** line; the prompt that closes one deletes its row here.
 
 - `[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]` (`review-remediation`) —
-  PRyMordial's Yp and D/H move by 1e-5–7e-4 under 1e-9–1e-8 changes to ρ_NP (up to 2.2e-3 under
-  1e-12 in the 2026.6.0 store, per the brief); the low-T network runs at SciPy's default rtol.
+  PRyMordial's Yp and D/H move under ulp-level changes to ρ_NP; narrowed by prompt 01: D/H scatter
+  ~1e-3 at the default low-T rtol, ~4e-5 at 1e-5; the rest is set by other stages.
 
 ### 1.10 `bbn-tolerance` — [board §3](../prompts/bbn-tolerance/IMPLEMENTATION_STATE.md)
 
-Two opened by the planner on 2026-10-03, and one the same day for prompt 01b (the user's U2).
+Two opened by the planner on 2026-10-03, one the same day for prompt 01b (the user's U2), and
+two by prompt 01 the same day.
 
 - `[00-the-low-T-network-fails-near-1-keV-on-ulp-level-input]` — 11 of 684 φ\* = 5 histories of
-  the 2026.6.0 run fail in the full low-T network at T_J just above 1 keV; a 1e-12 input change
-  cures each.
+  the 2026.6.0 run fail in the full low-T network at T_J just above 1 keV; narrowed by prompt 01:
+  caused by the Li8(p,d)Li7 rate below, and not removed by any low-T tolerance in the grid.
+- `[01-prymordial-li8-p-d-li7-rate-rings-near-1-kev]` — PRyMordial's Li8(p,d)Li7 reverse rate is
+  exp(γ/T9) times a ringing quadratic spline, ±1e39 near 1 keV; it stalls BDF's Newton iteration.
+- `[01-prymordial-dYB8dtLT-unpacks-Y-in-the-superseded-order]` — B8's low-T equation reads Y in
+  the old species order (upstream too); effect not measured, probably negligible.
 - `[00-a-store-serves-bbn-rows-from-another-prym-version-silently]` — `BBNData` lookups ignore
   `PRyM_version`, so a store that was not refreshed after a PRyMordial patch serves old rows
   unannounced.

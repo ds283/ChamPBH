@@ -1,0 +1,17 @@
+failure beta=1.1 M=0.03: stored 'low-T nuclear network (full)' t=1.22475e+06/1.25375e+06; tool 'low-T nuclear network (full)' t=1.22475e+06/1.25375e+06 (full 1224751.0749210771); MATCH; reason identical: True
+failure beta=1.05 M=0.01: stored 'low-T nuclear network (full)' t=1.07437e+06/1.08396e+06; tool 'low-T nuclear network (full)' t=1.07437e+06/1.08396e+06 (full 1074372.236259364); MATCH; reason identical: True
+failure beta=1.345 M=0.001: stored 'low-T nuclear network (full)' t=1.20714e+06/1.23748e+06; tool 'low-T nuclear network (full)' t=1.20714e+06/1.23748e+06 (full 1207142.069928131); MATCH; reason identical: True
+failure beta=2.09 M=1e-05: stored 'low-T nuclear network (full)' t=1.25704e+06/1.30035e+06; tool 'low-T nuclear network (full)' t=1.25704e+06/1.30035e+06 (full 1257036.4475458385); MATCH; reason identical: True
+failure beta=2.12 M=1e-05: stored 'low-T nuclear network (full)' t=1.2643e+06/1.31671e+06; tool 'low-T nuclear network (full)' t=1.2643e+06/1.31671e+06 (full 1264298.1096979375); MATCH; reason identical: True
+failure beta=2.4 M=1e-05: stored 'low-T nuclear network (full)' t=1.28386e+06/1.31525e+06; tool 'low-T nuclear network (full)' t=1.28386e+06/1.31525e+06 (full 1283855.3507829867); MATCH; reason identical: True
+failure beta=1.6 M=1e-05: stored 'low-T nuclear network (full)' t=1.28299e+06/1.31566e+06; tool 'low-T nuclear network (full)' t=1.28299e+06/1.31566e+06 (full 1282986.3542191312); MATCH; reason identical: True
+failure beta=2.89 M=0.001: stored 'low-T nuclear network (full)' t=1.30922e+06/1.31769e+06; tool 'low-T nuclear network (full)' t=1.30922e+06/1.31769e+06 (full 1309220.495756154); MATCH; reason identical: True
+failure beta=1.05 M=0.5: stored 'low-T nuclear network (full)' t=1.05671e+06/1.07711e+06; tool 'low-T nuclear network (full)' t=1.05671e+06/1.07711e+06 (full 1056709.3018719326); MATCH; reason identical: True
+control beta=1.2 M=0.001: stored Yp=0.2567164299 DoH=2.604772555; tool Yp=0.2567164299 DoH=2.604772555; printed MATCH, bitwise yes
+failure beta=1.7 M=0.03: stored 'low-T nuclear network (full)' t=1.28753e+06/1.30356e+06; tool 'low-T nuclear network (full)' t=1.28753e+06/1.30356e+06 (full 1287534.1005393355); MATCH; reason identical: True
+control beta=2 M=0.5: stored Yp=0.2492446765 DoH=2.559741879; tool Yp=0.2492446765 DoH=2.559741879; printed MATCH, bitwise yes
+failure beta=2.1 M=0.1: stored 'low-T nuclear network (full)' t=1.27085e+06/1.29901e+06; tool 'low-T nuclear network (full)' t=1.27085e+06/1.29901e+06 (full 1270849.5400352958); MATCH; reason identical: True
+control beta=1.05 M=1e-05: stored Yp=0.2837420802 DoH=3.598619165; tool Yp=0.2837420802 DoH=3.598619165; printed MATCH, bitwise yes
+control beta=1.6 M=0.001: stored Yp=0.246894839 DoH=2.461511946; tool Yp=0.246894839 DoH=2.461511946; printed MATCH, bitwise yes
+control beta=2 M=1e-05: stored Yp=0.2466738687 DoH=2.461868633; tool Yp=0.2466738687 DoH=2.461868633; printed MATCH, bitwise yes
+16 of 16 reproduce

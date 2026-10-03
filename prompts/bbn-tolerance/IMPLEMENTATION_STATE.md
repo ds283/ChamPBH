@@ -1,6 +1,7 @@
 # BBN-tolerance campaign — implementation state
 
-**Last updated:** 2026-10-03 · **Status: PLANNED — 0 of 4 landed** (01b added 2026-10-03, U2). Planned on 2026-10-03 against
+**Last updated:** 2026-10-03 · **Status: IN PROGRESS — 0 of 4 landed; prompt 01 committed BLOCKED
+(no setting meets P3; the user rules)** (01b added 2026-10-03, U2). Planned on 2026-10-03 against
 `main` at `4ae25b4`, from a Claude Science brief kept at
 [`source/brief_prym_lowT_failures.md`](source/brief_prym_lowT_failures.md) and checked against the
 tree by the planner (README §0.3). Suites at `8efc50f` (no code changed through `4ae25b4`):
@@ -64,6 +65,26 @@ histories.
   `Xav_EOS_data.csv` spline (README §2 (h)). The issue
   `[00-the-kick-threshold-overlay-uses-sigma-not-sigma-eff]` is opened for 01b.
 
+- **2026-10-03, prompt 01 (log 01): STOP — no setting in the grid meets P3. Awaiting the user.**
+  - **Criterion 3** (the SM moves by ≤ 1e-3 in D/H) fails at every converged setting. The
+    default's own SM D/H is 1.35e-3 above the converged value, which agrees to 2.1e-5 at rtol
+    1e-5, 1e-6 and 1e-8.
+  - **Criterion 2** (D/H spread < 1e-4 on all 16 histories) misses on β = 2, M = 10⁻⁵ at every
+    setting (1.04–1.22e-4). That floor is set by PRyMordial's thermodynamic stage.
+  - **Criterion 1** is met by 1e-4 and 1e-5 in S1, but not guaranteed by any tolerance. The
+    failures come from the Li8(p,d)Li7 rate, `[01-prymordial-li8-p-d-li7-rate-rings-near-1-kev]`,
+    and appeared at 1e-6, at 1e-8, at both S2 settings, and once at 1e-5 in the Yp-floor runs.
+  - **Criterion 4** (serial cost ≤ 3×) holds at 1e-5 (2.2–2.5×) and fails at 1e-6 (3.7–4.1×).
+  - With criterion 3 waived and criterion 2 measured against the floor, P3 would select low-T
+    **rtol 1e-5, atol unchanged**. Log 01 measured Yp's floor and the P7 values there,
+    provisionally.
+  - The ruling needed:
+    - the setting;
+    - criteria 2 and 3;
+    - whether a PRyMordial rate patch (outside P4) is allowed;
+    - re-pinning `test_bbn_callbacks`' `README_BASELINE`, which fails at any converged setting
+      (D/H 1.38e-3 against its 1e-4 bound).
+
 Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
 - the tool does not reproduce the stored outcome (prompt 01, §8);
@@ -79,7 +100,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | [The mechanism and the low-T tolerance scan](01-mechanism-and-tolerance-scan.md) | **M**; measures **S**, **N** | Opus | ✍️ 2026-10-03 | — | — | — |
+| 01 | [The mechanism and the low-T tolerance scan](01-mechanism-and-tolerance-scan.md) | **M**; measures **S**, **N** | Opus | ✍️ 2026-10-03 | ⛔ 2026-10-03, **BLOCKED** (no setting meets P3; the user rules) | see `git log` ("Add bbn_from_store and measure PRyMordial's low-T failures") | [`logs/01-mechanism-and-tolerance-scan.md`](logs/01-mechanism-and-tolerance-scan.md) |
 | 01b | [Draw the kick threshold with Σ_eff](01b-kick-threshold-sigma-eff.md) (added 2026-10-03) | **B** | Sonnet | ✍️ 2026-10-03 | — | — | — |
 | 02 | [Set the low-T tolerance and warn on a stale PRyMordial version](02-low-T-tolerance-patch.md) | **S**, **N**, **K** | Opus | ✍️ 2026-10-03 | — | — | — |
 | 03 | [Documents and close-out](03-documents-and-close-out.md) | **D** | Sonnet | ✍️ 2026-10-03 | — | — | — |
@@ -90,9 +111,9 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
 | Item | Kind | Description | Prompt | Status |
 |---|---|---|---|---|
-| M | measurement | The mechanism, the tolerance scan, Yp's floor, upstream's defaults, and a recommended setting. | 01 | open |
-| S | **DEFECT, medium** | The full low-T network fails near T_J = 1 keV on 11 of 684 φ\* = 5 histories, depending on ulp-level details of the input. Closes `[00-the-low-T-network-fails-near-1-keV-on-ulp-level-input]`. | 01, 02 | open |
-| N | **DEFECT, low–medium** | D/H moves by up to 2.2×10⁻³ under a 10⁻¹² change to ρ_NP at the default tolerance. Closes `[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]` (assigned). | 01, 02, 03 | open |
+| M | measurement | The mechanism, the tolerance scan, Yp's floor, upstream's defaults, and a recommended setting. | 01 | **measured** (log 01); recommendation withheld: no setting meets P3 |
+| S | **DEFECT, medium** | The full low-T network fails near T_J = 1 keV on 11 of 684 φ\* = 5 histories, depending on ulp-level details of the input. Closes `[00-the-low-T-network-fails-near-1-keV-on-ulp-level-input]`. | 01, 02 | open; measured (log 01): the cause is a PRyMordial rate, not the tolerance as such |
+| N | **DEFECT, low–medium** | D/H moves by up to 2.2×10⁻³ under a 10⁻¹² change to ρ_NP at the default tolerance. Closes `[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]` (assigned). | 01, 02, 03 | open; measured (log 01) |
 | B | **DEFECT, low** | The `T_deliver` figure's kick threshold uses 1/√(3Σ), not the paper's 1/√(3Σ_eff); its minimum is 1.0295 where the paper says 1.11. Closes `[00-the-kick-threshold-overlay-uses-sigma-not-sigma-eff]`. Added 2026-10-03 (U2). | 01b | open |
 | K | **GAP** | A store that was not refreshed serves BBN rows from an older PRyMordial with no warning. Closes `[00-a-store-serves-bbn-rows-from-another-prym-version-silently]`. | 02 | open |
 | D | documents | The tolerance, its measurements, the refresh route, the handover. | 03 | open |
@@ -102,7 +123,8 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 ## 3. Active and unresolved issues
 
 Two opened by the planner on 2026-10-03, one per defect or gap with no issue on another board, and
-one more the same day for prompt 01b (U2). One assigned from another board (§3.1).
+one more the same day for prompt 01b (U2). Two opened by prompt 01 the same day (`[01-…]`). One
+assigned from another board (§3.1).
 
 - **[00-the-low-T-network-fails-near-1-keV-on-ulp-level-input]** *(README §1 S; the brief §1–§2)*.
   - **What.** In the 2026.6.0 science store, 11 of 684 φ\* = 5 histories have a `BBNData` failure
@@ -119,6 +141,55 @@ one more the same day for prompt 01b (U2). One assigned from another board (§3.
     harnesses (β = 1.6, M = 10⁻⁵ failed on 2026-10-01 and completed in the `science-readiness`
     close-out).
   - **Next step.** Prompt 01 measures; prompt 02 fixes.
+  - **Narrowed (2026-10-03, prompt 01).**
+    - **Reproduced.** All 11 fail in the tool exactly as stored: same stage, same `t reached`,
+      identical reason.
+    - **The mechanism is in the low-T stage, but it is not the error test.** On β = 1.6,
+      M = 10⁻⁵ and β = 1.05, M = 0.01:
+      1. BDF's Newton iteration fails at every step size, from 1e4 s down to 3e-9 s, with
+         contraction rate → 1.07–1.09.
+      2. The Jacobian it holds was refreshed 1e4–3e4 s ahead, where
+         ∂f_Li8/∂Y_Li8 = +1.6–2.3e15 s⁻¹. At the retried t it is −1.5–2.0e14 s⁻¹.
+      3. The cause is PRyMordial's Li8(p,d)Li7 reverse rate, α·exp(γ/T9) times a global
+         quadratic spline of the forward-rate table. The spline rings in sign at ~1e-54, where
+         the table is ~1e-245. See `[01-prymordial-li8-p-d-li7-rate-rings-near-1-kev]`.
+      4. f is smooth, and no `T_of_t` breakpoint falls in the collapsing steps.
+    - **Tightening rtol does not remove it.** In the scan:
+      - 1e-4 and 1e-5 complete all 11 (0 failures in 49 solves each);
+      - 1e-6 fails β = 1.1, M = 0.03 (prod);
+      - 1e-8 fails the control β = 1.2, M = 10⁻³;
+      - each S2 setting fails one solve;
+      - 1 of 109 solves at 1e-5 failed (in the Yp-floor runs).
+    - **The provisional setting.** At rtol 1e-5 (not ruled; see Decisions) the cost is
+      2.2–2.5× the default's. The SM baseline moves −1.36e-3 in D/H (the default's own error)
+      and −2.0e-6 in Yp.
+- **[01-prymordial-li8-p-d-li7-rate-rings-near-1-kev]** *(log 01, Verification item 6; Observations 1)*.
+  - **What.** `Li7dLi8p_bkwrd` (`PRyM/PRyM_nuclear_net63.py:1142–1147`; upstream `bf24c3d` is
+    identical) is α·T9^β·exp(γ/T9)·spline(T9), with γ = 2.2274. The spline is
+    `interp1d(kind="quadratic", fill_value="extrapolate")` (`:197`) through a 500-node table of
+    the forward rate.
+    - Near T9 = 0.0116 (T ≈ 1 keV) the table is 1e-264 to 3e-241. The spline gives −6.9e-55 to
+      +3.9e-54, negative on 51 % of T9 ∈ [0.0105, 0.015].
+    - The reverse rate therefore reaches |1.45e39| and flips sign between neighbouring
+      temperatures, where it should be about 1e-160.
+    - It is the only splined rate in `PRyM_init.py` with γ > 0 (a regex scan).
+  - **Impact.** It causes the 11 low-T failures of `[00-the-low-T-network-fails-near-1-keV-on-ulp-level-input]`,
+    and it keeps causing about 1 % of solves to fail at every tolerance in the grid. Li8 is
+    tiny, so its effect on the abundances of a completed solve is not established.
+  - **Next step.** The user rules. A patch to a PRyMordial rate is outside P4 and is a stop for
+    prompt 02 (README §4). Options:
+    - interpolate the table in log space, or return 0 below its significant range;
+    - clamp the reverse rate;
+    - use the shadowed analytic forward rate at `:886–889`.
+- **[01-prymordial-dYB8dtLT-unpacks-Y-in-the-superseded-order]** *(log 01, Observations 2)*.
+  - **What.** `dYB8dtLT` (`PRyM/PRyM_nuclear_net63.py:1480`; upstream identical) unpacks Y in the
+    old species order, which every other low-T equation has commented out. So in B8's equation
+    He6 ← Y[Li7], Li6 ← Y[Be7], Li7 ← Y[He6] and Be7 ← Y[Li6]. B8's right-hand side is wrong and
+    does not match the Jacobian's B8 row.
+  - **Impact.** Not measured. B8 stays below 1e-16 and enters no reported abundance, so it is
+    probably negligible.
+  - **Next step.** Measure it by a runtime override of `dYB8dtLT` in a probe; patch only if the
+    user asks.
 - **[00-a-store-serves-bbn-rows-from-another-prym-version-silently]** *(README §0.3, §1 K)*.
   - **What.** `BBNData` lookups are keyed on `VERSION_LABEL` and ignore `PRyM_version`
     (`Datastore/SQL/ObjectFactories/BBNData.py` `build`). Only `inventory` lists the versions
@@ -145,6 +216,19 @@ here (README §5 rule 4).
 | Issue | Board | Prompt |
 |---|---|---|
 | `[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]` | `review-remediation` | 01 (measures), 02 (closes) |
+
+- **Narrowed (2026-10-03, prompt 01), `[03-…]`.**
+  - **The scatter at the default.** At the default low-T tolerance the D/H spread over prod,
+    pert12 and pert9 is 1.3e-4–2.8e-3 on the five controls (median 1.45e-3).
+  - **Most of it is the low-T rtol.** It falls to a median of 8.4e-5 at rtol 1e-4, 4.1e-5 at
+    1e-5, and 1.8–2.0e-5 at 1e-6–1e-8.
+  - **What remains is set by other stages.**
+    - The Yp spread, 1.5–4.5e-5, does not move with the low-T rtol. It falls about 100× only
+      when the thermodynamics, a(T), high-T and mid-T stages are all tightened.
+    - β = 2, M = 10⁻⁵ keeps a D/H spread of 1.04e-4 at every low-T rtol. It falls to 2.4e-5 with
+      the thermodynamic stage tightened.
+  - **A systematic offset.** The a(T) stage at its rtol 1e-6 shifts D/H by about +4.5e-4.
+  - These are measurements (P9), handed to prompt 03.
 
 ---
 

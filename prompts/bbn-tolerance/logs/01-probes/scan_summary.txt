@@ -1,0 +1,197 @@
+
+[S1] full network, low-T rtol=default atol=default: 49 solves, 11 failed
+    FAILED beta=1.6 M=1e-05 prod: low-T nuclear network (full) t=1282986.3542191312 / 1315661.1486558542 PRyMordial: PRyMSolverFailureError: solve_ivp failed in stage 'low-T nuclear network (full)': status=-1, messa
+    FAILED beta=2.09 M=1e-05 prod: low-T nuclear network (full) t=1257036.4475458385 / 1300348.8294104708 PRyMordial: PRyMSolverFailureError: solve_ivp failed in stage 'low-T nuclear network (full)': status=-1, messa
+    FAILED beta=2.12 M=1e-05 prod: low-T nuclear network (full) t=1264298.1096979375 / 1316710.8701602214 PRyMordial: PRyMSolverFailureError: solve_ivp failed in stage 'low-T nuclear network (full)': status=-1, messa
+    FAILED beta=2.4 M=1e-05 prod: low-T nuclear network (full) t=1283855.3507829867 / 1315247.697239756 PRyMordial: PRyMSolverFailureError: solve_ivp failed in stage 'low-T nuclear network (full)': status=-1, messa
+    FAILED beta=1.345 M=0.001 prod: low-T nuclear network (full) t=1207142.069928131 / 1237482.7113799423 PRyMordial: PRyMSolverFailureError: solve_ivp failed in stage 'low-T nuclear network (full)': status=-1, messa
+    FAILED beta=2.89 M=0.001 prod: low-T nuclear network (full) t=1309220.495756154 / 1317687.7656264897 PRyMordial: PRyMSolverFailureError: solve_ivp failed in stage 'low-T nuclear network (full)': status=-1, messa
+    FAILED beta=1.05 M=0.01 prod: low-T nuclear network (full) t=1074372.236259364 / 1083964.375442025 PRyMordial: PRyMSolverFailureError: solve_ivp failed in stage 'low-T nuclear network (full)': status=-1, messa
+    FAILED beta=1.1 M=0.03 prod: low-T nuclear network (full) t=1224751.0749210771 / 1253750.8098933066 PRyMordial: PRyMSolverFailureError: solve_ivp failed in stage 'low-T nuclear network (full)': status=-1, messa
+    FAILED beta=1.7 M=0.03 prod: low-T nuclear network (full) t=1287534.1005393355 / 1303558.4665254585 PRyMordial: PRyMSolverFailureError: solve_ivp failed in stage 'low-T nuclear network (full)': status=-1, messa
+    FAILED beta=2.1 M=0.1 prod: low-T nuclear network (full) t=1270849.5400352958 / 1299012.9161315518 PRyMordial: PRyMSolverFailureError: solve_ivp failed in stage 'low-T nuclear network (full)': status=-1, messa
+    FAILED beta=1.05 M=0.5 prod: low-T nuclear network (full) t=1056709.3018719326 / 1077105.131543377 PRyMordial: PRyMSolverFailureError: solve_ivp failed in stage 'low-T nuclear network (full)': status=-1, messa
+    D/H spread over 5 histories: max 2.832e-03 (beta=1.2 M=0.001), median 1.454e-03, histories >= 1e-4: 5
+    Yp  spread: max 3.761e-05 (beta=2 M=1e-05), median 1.042e-05
+    histories with a failed variant: [(1.05, 0.01), (1.05, 0.5), (1.1, 0.03), (1.345, 0.001), (1.6, 1e-05), (1.7, 0.03), (2.09, 1e-05), (2.1, 0.1), (2.12, 1e-05), (2.4, 1e-05), (2.89, 0.001)]
+    SM: Yp 0.2468872958 D/H 2.462251065 He3/H 1.042050273 Li7/H 5.423441017; shift from default: Yp 0.000e+00, D/H 0.000e+00; wall 22 s (loaded)
+      beta=1.05 M=1e-05: prod:3.598619165 pert12:3.603024435 pert9:3.600003417 D/H spread 1.22e-03 Yp spread 1.04e-05
+      beta=1.05 M=0.01: prod:FAIL pert12:3.600036607 pert9:3.604964251
+      beta=1.05 M=0.5: prod:FAIL pert12:3.646938642 pert9:3.647637701
+      beta=1.1 M=0.03: prod:FAIL pert12:2.824468438 pert9:2.825391098
+      beta=1.2 M=0.001: prod:2.604772555 pert12:2.604782624 pert9:2.597406203 D/H spread 2.83e-03 Yp spread 1.01e-05
+      beta=1.345 M=0.001: prod:FAIL pert12:2.759264242 pert9:2.756996768
+      beta=1.6 M=1e-05: prod:FAIL pert12:2.4609952 pert9:2.464565208
+      beta=1.6 M=0.001: prod:2.461511946 pert12:2.46183049 pert9:2.461647537 D/H spread 1.29e-04 Yp spread 2.02e-05
+      beta=1.7 M=0.03: prod:FAIL pert12:2.458299231 pert9:2.454848893
+      beta=2 M=1e-05: prod:2.461868633 pert12:2.46628213 pert9:2.463882154 D/H spread 1.79e-03 Yp spread 3.76e-05
+      beta=2 M=0.5: prod:2.559741879 pert12:2.559499164 pert9:2.563221781 D/H spread 1.45e-03 Yp spread 1.03e-05
+      beta=2.09 M=1e-05: prod:FAIL pert12:2.491764083 pert9:2.493177562
+      beta=2.1 M=0.1: prod:FAIL pert12:2.4968194 pert9:2.495674346
+      beta=2.12 M=1e-05: prod:FAIL pert12:2.461199823 pert9:2.465430418
+      beta=2.4 M=1e-05: prod:FAIL pert12:2.46080373 pert9:2.466192787
+      beta=2.89 M=0.001: prod:FAIL pert12:2.478919479 pert9:2.478188948
+
+[S1] full network, low-T rtol=0.0001 atol=default: 49 solves, 0 failed
+    D/H spread over 16 histories: max 1.398e-04 (beta=2.1 M=0.1), median 8.427e-05, histories >= 1e-4: 5
+    Yp  spread: max 4.859e-05 (beta=2 M=1e-05), median 1.524e-05
+    SM: Yp 0.2468863437 D/H 2.45820648 He3/H 1.041693075 Li7/H 5.429971643; shift from default: Yp 3.856e-06, D/H 1.643e-03; wall 23 s (loaded)
+      beta=1.05 M=1e-05: prod:3.599735813 pert12:3.599546511 pert9:3.599543922 D/H spread 5.33e-05 Yp spread 3.22e-06
+      beta=1.05 M=0.01: prod:3.6017043 pert12:3.601814682 pert9:3.602035614 D/H spread 9.20e-05 Yp spread 7.83e-06
+      beta=1.05 M=0.5: prod:3.648212034 pert12:3.648099652 pert9:3.648004738 D/H spread 5.68e-05 Yp spread 4.13e-06
+      beta=1.1 M=0.03: prod:2.823478392 pert12:2.82343641 pert9:2.823516035 D/H spread 2.82e-05 Yp spread 3.52e-05
+      beta=1.2 M=0.001: prod:2.601302365 pert12:2.601380788 pert9:2.601376923 D/H spread 3.01e-05 Yp spread 9.75e-06
+      beta=1.345 M=0.001: prod:2.755724372 pert12:2.755659098 pert9:2.755870051 D/H spread 7.66e-05 Yp spread 3.12e-05
+      beta=1.6 M=1e-05: prod:2.460988819 pert12:2.460754711 pert9:2.460994998 D/H spread 9.76e-05 Yp spread 1.42e-05
+      beta=1.6 M=0.001: prod:2.460831079 pert12:2.461068803 pert9:2.460778769 D/H spread 1.18e-04 Yp spread 2.62e-05
+      beta=1.7 M=0.03: prod:2.455607434 pert12:2.455696994 pert9:2.455658645 D/H spread 3.65e-05 Yp spread 1.05e-05
+      beta=2 M=1e-05: prod:2.463334757 pert12:2.463541904 pert9:2.463655133 D/H spread 1.30e-04 Yp spread 4.86e-05
+      beta=2 M=0.5: prod:2.562929935 pert12:2.562679577 pert9:2.562742179 D/H spread 9.77e-05 Yp spread 1.07e-05
+      beta=2.09 M=1e-05: prod:2.490824958 pert12:2.490718524 pert9:2.490515773 D/H spread 1.24e-04 Yp spread 1.37e-05
+      beta=2.1 M=0.1: prod:2.495875692 pert12:2.496139103 pert9:2.495790068 D/H spread 1.40e-04 Yp spread 1.86e-05
+      beta=2.12 M=1e-05: prod:2.464237016 pert12:2.46442335 pert9:2.464522038 D/H spread 1.16e-04 Yp spread 4.40e-05
+      beta=2.4 M=1e-05: prod:2.463794798 pert12:2.463788748 pert9:2.463917584 D/H spread 5.23e-05 Yp spread 1.63e-05
+      beta=2.89 M=0.001: prod:2.477335546 pert12:2.477461689 pert9:2.477351027 D/H spread 5.09e-05 Yp spread 2.03e-05
+
+[S1] full network, low-T rtol=1e-05 atol=default: 49 solves, 0 failed
+    D/H spread over 16 histories: max 1.221e-04 (beta=2 M=1e-05), median 4.093e-05, histories >= 1e-4: 1
+    Yp  spread: max 4.415e-05 (beta=2 M=1e-05), median 1.641e-05
+    SM: Yp 0.2468867911 D/H 2.458895152 He3/H 1.041751728 Li7/H 5.428643941; shift from default: Yp 2.044e-06, D/H 1.363e-03; wall 43 s (loaded)
+      beta=1.05 M=1e-05: prod:3.600585425 pert12:3.600532545 pert9:3.600533904 D/H spread 1.47e-05 Yp spread 3.08e-06
+      beta=1.05 M=0.01: prod:3.60274649 pert12:3.602663765 pert9:3.602787132 D/H spread 3.42e-05 Yp spread 4.98e-06
+      beta=1.05 M=0.5: prod:3.64904625 pert12:3.649175163 pert9:3.649071313 D/H spread 3.53e-05 Yp spread 1.74e-06
+      beta=1.1 M=0.03: prod:2.824369715 pert12:2.824391888 pert9:2.824444405 D/H spread 2.64e-05 Yp spread 3.25e-05
+      beta=1.2 M=0.001: prod:2.601863002 pert12:2.601872424 pert9:2.602000234 D/H spread 5.27e-05 Yp spread 6.58e-06
+      beta=1.345 M=0.001: prod:2.756362797 pert12:2.756354127 pert9:2.756356984 D/H spread 3.15e-06 Yp spread 3.04e-05
+      beta=1.6 M=1e-05: prod:2.46172971 pert12:2.461533764 pert9:2.461686294 D/H spread 7.96e-05 Yp spread 1.53e-05
+      beta=1.6 M=0.001: prod:2.461632361 pert12:2.461773162 pert9:2.461655243 D/H spread 5.72e-05 Yp spread 2.10e-05
+      beta=1.7 M=0.03: prod:2.456132705 pert12:2.456124334 pert9:2.456129643 D/H spread 3.41e-06 Yp spread 1.17e-05
+      beta=2 M=1e-05: prod:2.464103957 pert12:2.46437002 pert9:2.46440481 D/H spread 1.22e-04 Yp spread 4.41e-05
+      beta=2 M=0.5: prod:2.563495722 pert12:2.563511574 pert9:2.563541694 D/H spread 1.79e-05 Yp spread 1.12e-05
+      beta=2.09 M=1e-05: prod:2.491382009 pert12:2.491253004 pert9:2.491255312 D/H spread 5.18e-05 Yp spread 1.37e-05
+      beta=2.1 M=0.1: prod:2.496518478 pert12:2.496532965 pert9:2.49659136 D/H spread 2.92e-05 Yp spread 1.84e-05
+      beta=2.12 M=1e-05: prod:2.464943716 pert12:2.465090008 pert9:2.465086418 D/H spread 5.93e-05 Yp spread 4.13e-05
+      beta=2.4 M=1e-05: prod:2.464442775 pert12:2.464611788 pert9:2.464609162 D/H spread 6.86e-05 Yp spread 2.14e-05
+      beta=2.89 M=0.001: prod:2.478093296 pert12:2.478093489 pert9:2.478208632 D/H spread 4.65e-05 Yp spread 1.75e-05
+
+[S1] full network, low-T rtol=1e-06 atol=default: 49 solves, 1 failed
+    FAILED beta=1.1 M=0.03 prod: low-T nuclear network (full) t=1156559.5458020917 / 1253750.8098933066 PRyMordial: PRyMSolverFailureError: solve_ivp failed in stage 'low-T nuclear network (full)': status=-1, messa
+    D/H spread over 15 histories: max 1.058e-04 (beta=2 M=1e-05), median 1.757e-05, histories >= 1e-4: 1
+    Yp  spread: max 4.464e-05 (beta=2 M=1e-05), median 1.493e-05
+    histories with a failed variant: [(1.1, 0.03)]
+    SM: Yp 0.2468868672 D/H 2.458947441 He3/H 1.041755012 Li7/H 5.428640113; shift from default: Yp 1.736e-06, D/H 1.342e-03; wall 101 s (loaded)
+      beta=1.05 M=1e-05: prod:3.600606153 pert12:3.600609543 pert9:3.600606229 D/H spread 9.42e-07 Yp spread 3.09e-06
+      beta=1.05 M=0.01: prod:3.602768152 pert12:3.602759982 pert9:3.602762302 D/H spread 2.27e-06 Yp spread 4.46e-06
+      beta=1.05 M=0.5: prod:3.649142621 pert12:3.649134261 pert9:3.649136942 D/H spread 2.29e-06 Yp spread 1.79e-06
+      beta=1.1 M=0.03: prod:FAIL pert12:2.824396448 pert9:2.824440935
+      beta=1.2 M=0.001: prod:2.601950765 pert12:2.601957766 pert9:2.601954275 D/H spread 2.69e-06 Yp spread 6.75e-06
+      beta=1.345 M=0.001: prod:2.756420289 pert12:2.756425997 pert9:2.756463175 D/H spread 1.56e-05 Yp spread 3.06e-05
+      beta=1.6 M=1e-05: prod:2.461751259 pert12:2.461537334 pert9:2.461688326 D/H spread 8.69e-05 Yp spread 1.49e-05
+      beta=1.6 M=0.001: prod:2.461663067 pert12:2.461746674 pert9:2.461615346 D/H spread 5.33e-05 Yp spread 2.12e-05
+      beta=1.7 M=0.03: prod:2.456168028 pert12:2.456148163 pert9:2.456155088 D/H spread 8.09e-06 Yp spread 1.19e-05
+      beta=2 M=1e-05: prod:2.464156565 pert12:2.464364527 pert9:2.464417217 D/H spread 1.06e-04 Yp spread 4.46e-05
+      beta=2 M=0.5: prod:2.563534131 pert12:2.563554095 pert9:2.563556123 D/H spread 8.58e-06 Yp spread 1.14e-05
+      beta=2.09 M=1e-05: prod:2.4913622 pert12:2.491302424 pert9:2.491330301 D/H spread 2.40e-05 Yp spread 1.35e-05
+      beta=2.1 M=0.1: prod:2.496625498 pert12:2.496586331 pert9:2.496630208 D/H spread 1.76e-05 Yp spread 1.90e-05
+      beta=2.12 M=1e-05: prod:2.464995393 pert12:2.465139114 pert9:2.465111004 D/H spread 5.83e-05 Yp spread 4.10e-05
+      beta=2.4 M=1e-05: prod:2.464413146 pert12:2.464607647 pert9:2.464606509 D/H spread 7.89e-05 Yp spread 2.10e-05
+      beta=2.89 M=0.001: prod:2.47812329 pert12:2.478129728 pert9:2.478239544 D/H spread 4.69e-05 Yp spread 1.72e-05
+
+[S1] full network, low-T rtol=1e-08 atol=default: 49 solves, 1 failed
+    FAILED beta=1.2 M=0.001 prod: low-T nuclear network (full) t=1276576.0103056445 / 1294174.162297519 PRyMordial: PRyMSolverFailureError: solve_ivp failed in stage 'low-T nuclear network (full)': status=-1, messa
+    D/H spread over 15 histories: max 1.044e-04 (beta=2 M=1e-05), median 2.029e-05, histories >= 1e-4: 1
+    Yp  spread: max 4.466e-05 (beta=2 M=1e-05), median 1.722e-05
+    histories with a failed variant: [(1.2, 0.001)]
+    SM: Yp 0.2468868777 D/H 2.458917971 He3/H 1.04175192 Li7/H 5.428693212; shift from default: Yp 1.693e-06, D/H 1.354e-03; wall 140 s (loaded)
+      beta=1.05 M=1e-05: prod:3.600566263 pert12:3.600572637 pert9:3.600565483 D/H spread 1.99e-06 Yp spread 3.09e-06
+      beta=1.05 M=0.01: prod:3.60273316 pert12:3.602729554 pert9:3.602722861 D/H spread 2.86e-06 Yp spread 4.45e-06
+      beta=1.05 M=0.5: prod:3.649100481 pert12:3.649101132 pert9:3.649096827 D/H spread 1.18e-06 Yp spread 1.82e-06
+      beta=1.1 M=0.03: prod:2.824406284 pert12:2.824356324 pert9:2.824413644 D/H spread 2.03e-05 Yp spread 3.25e-05
+      beta=1.2 M=0.001: prod:FAIL pert12:2.601926517 pert9:2.601917812
+      beta=1.345 M=0.001: prod:2.75638529 pert12:2.756402047 pert9:2.75643214 D/H spread 1.70e-05 Yp spread 3.06e-05
+      beta=1.6 M=1e-05: prod:2.461716641 pert12:2.461511028 pert9:2.461664325 D/H spread 8.35e-05 Yp spread 1.50e-05
+      beta=1.6 M=0.001: prod:2.461637962 pert12:2.46172014 pert9:2.461590561 D/H spread 5.26e-05 Yp spread 2.11e-05
+      beta=1.7 M=0.03: prod:2.456137549 pert12:2.4561258 pert9:2.456123238 D/H spread 5.83e-06 Yp spread 1.19e-05
+      beta=2 M=1e-05: prod:2.46412915 pert12:2.464340889 pert9:2.464386422 D/H spread 1.04e-04 Yp spread 4.47e-05
+      beta=2 M=0.5: prod:2.563506313 pert12:2.563525924 pert9:2.563523899 D/H spread 7.65e-06 Yp spread 1.13e-05
+      beta=2.09 M=1e-05: prod:2.491333943 pert12:2.491268 pert9:2.491302683 D/H spread 2.65e-05 Yp spread 1.35e-05
+      beta=2.1 M=0.1: prod:2.496593427 pert12:2.496555777 pert9:2.496599931 D/H spread 1.77e-05 Yp spread 1.90e-05
+      beta=2.12 M=1e-05: prod:2.464964701 pert12:2.465104862 pert9:2.465076546 D/H spread 5.69e-05 Yp spread 4.10e-05
+      beta=2.4 M=1e-05: prod:2.46438266 pert12:2.464578018 pert9:2.464580498 D/H spread 8.03e-05 Yp spread 2.10e-05
+      beta=2.89 M=0.001: prod:2.47809505 pert12:2.478109937 pert9:2.478209354 D/H spread 4.61e-05 Yp spread 1.72e-05
+
+[S2] full network, low-T rtol=1e-05 atol=reported: 49 solves, 1 failed
+    FAILED beta=1.6 M=0.001 pert12: low-T nuclear network (full) t=1228064.8918900276 / 1315909.7881324056 PRyMordial: PRyMSolverFailureError: solve_ivp failed in stage 'low-T nuclear network (full)': status=-1, messa
+    D/H spread over 15 histories: max 1.082e-04 (beta=2 M=1e-05), median 4.137e-05, histories >= 1e-4: 1
+    Yp  spread: max 4.474e-05 (beta=2 M=1e-05), median 1.511e-05
+    histories with a failed variant: [(1.6, 0.001)]
+    SM: Yp 0.246886764 D/H 2.459049708 He3/H 1.041766758 Li7/H 5.428458284; shift from default: Yp 2.154e-06, D/H 1.300e-03; wall 50 s (loaded)
+      beta=1.05 M=1e-05: prod:3.600651997 pert12:3.600637426 pert9:3.600637918 D/H spread 4.05e-06 Yp spread 3.15e-06
+      beta=1.05 M=0.01: prod:3.602799473 pert12:3.602822818 pert9:3.602805747 D/H spread 6.48e-06 Yp spread 4.27e-06
+      beta=1.05 M=0.5: prod:3.649207893 pert12:3.649174529 pert9:3.649213858 D/H spread 1.08e-05 Yp spread 1.97e-06
+      beta=1.1 M=0.03: prod:2.824529046 pert12:2.824315425 pert9:2.824531751 D/H spread 7.66e-05 Yp spread 3.26e-05
+      beta=1.2 M=0.001: prod:2.601957241 pert12:2.601990821 pert9:2.602064874 D/H spread 4.14e-05 Yp spread 6.59e-06
+      beta=1.345 M=0.001: prod:2.756438954 pert12:2.756455972 pert9:2.7565027 D/H spread 2.31e-05 Yp spread 3.06e-05
+      beta=1.6 M=1e-05: prod:2.461829947 pert12:2.46159265 pert9:2.461679824 D/H spread 9.64e-05 Yp spread 1.51e-05
+      beta=1.6 M=0.001: prod:2.461713708 pert12:FAIL pert9:2.461656529
+      beta=1.7 M=0.03: prod:2.456247609 pert12:2.456210763 pert9:2.456165067 D/H spread 3.36e-05 Yp spread 1.16e-05
+      beta=2 M=1e-05: prod:2.464252471 pert12:2.464407027 pert9:2.46451916 D/H spread 1.08e-04 Yp spread 4.47e-05
+      beta=2 M=0.5: prod:2.563541734 pert12:2.563605626 pert9:2.563632672 D/H spread 3.55e-05 Yp spread 1.11e-05
+      beta=2.09 M=1e-05: prod:2.491428929 pert12:2.491304581 pert9:2.491403606 D/H spread 4.99e-05 Yp spread 1.35e-05
+      beta=2.1 M=0.1: prod:2.496675768 pert12:2.496560572 pert9:2.496667674 D/H spread 4.61e-05 Yp spread 1.93e-05
+      beta=2.12 M=1e-05: prod:2.465089162 pert12:2.465146242 pert9:2.465117747 D/H spread 2.32e-05 Yp spread 4.12e-05
+      beta=2.4 M=1e-05: prod:2.464486609 pert12:2.464678835 pert9:2.4646462 D/H spread 7.80e-05 Yp spread 2.12e-05
+      beta=2.89 M=0.001: prod:2.478111237 pert12:2.478230707 pert9:2.478270933 D/H spread 6.44e-05 Yp spread 1.73e-05
+
+[S2] full network, low-T rtol=1e-06 atol=reported: 49 solves, 1 failed
+    FAILED beta=2.09 M=1e-05 pert9: low-T nuclear network (full) t=1291315.3200004094 / 1300348.4513779192 PRyMordial: PRyMSolverFailureError: solve_ivp failed in stage 'low-T nuclear network (full)': status=-1, messa
+    D/H spread over 15 histories: max 1.037e-04 (beta=2 M=1e-05), median 1.650e-05, histories >= 1e-4: 1
+    Yp  spread: max 4.471e-05 (beta=2 M=1e-05), median 1.722e-05
+    histories with a failed variant: [(2.09, 1e-05)]
+    SM: Yp 0.2468868494 D/H 2.458929347 He3/H 1.041753592 Li7/H 5.42865625; shift from default: Yp 1.808e-06, D/H 1.349e-03; wall 93 s (loaded)
+      beta=1.05 M=1e-05: prod:3.600593323 pert12:3.600599737 pert9:3.60058861 D/H spread 3.09e-06 Yp spread 3.08e-06
+      beta=1.05 M=0.01: prod:3.602750099 pert12:3.602756522 pert9:3.602753196 D/H spread 1.78e-06 Yp spread 4.40e-06
+      beta=1.05 M=0.5: prod:3.649126066 pert12:3.649119273 pert9:3.649131373 D/H spread 3.32e-06 Yp spread 1.81e-06
+      beta=1.1 M=0.03: prod:2.824426428 pert12:2.824378501 pert9:2.824422861 D/H spread 1.70e-05 Yp spread 3.25e-05
+      beta=1.2 M=0.001: prod:2.601928446 pert12:2.601941022 pert9:2.601930036 D/H spread 4.83e-06 Yp spread 6.71e-06
+      beta=1.345 M=0.001: prod:2.756413283 pert12:2.756410419 pert9:2.756451712 D/H spread 1.50e-05 Yp spread 3.06e-05
+      beta=1.6 M=1e-05: prod:2.461730527 pert12:2.461515066 pert9:2.461678339 D/H spread 8.75e-05 Yp spread 1.50e-05
+      beta=1.6 M=0.001: prod:2.461643971 pert12:2.461734767 pert9:2.461607598 D/H spread 5.17e-05 Yp spread 2.11e-05
+      beta=1.7 M=0.03: prod:2.456154962 pert12:2.456132286 pert9:2.456132768 D/H spread 9.23e-06 Yp spread 1.19e-05
+      beta=2 M=1e-05: prod:2.464142594 pert12:2.464353219 pert9:2.464398177 D/H spread 1.04e-04 Yp spread 4.47e-05
+      beta=2 M=0.5: prod:2.563528151 pert12:2.563541137 pert9:2.563540833 D/H spread 5.07e-06 Yp spread 1.13e-05
+      beta=2.09 M=1e-05: prod:2.4913501 pert12:2.491279664 pert9:FAIL
+      beta=2.1 M=0.1: prod:2.496606166 pert12:2.496568611 pert9:2.496609813 D/H spread 1.65e-05 Yp spread 1.91e-05
+      beta=2.12 M=1e-05: prod:2.46498079 pert12:2.465117205 pert9:2.465090402 D/H spread 5.53e-05 Yp spread 4.10e-05
+      beta=2.4 M=1e-05: prod:2.464401605 pert12:2.464598097 pert9:2.464599192 D/H spread 8.02e-05 Yp spread 2.11e-05
+      beta=2.89 M=0.001: prod:2.478101393 pert12:2.478127538 pert9:2.478224464 D/H spread 4.97e-05 Yp spread 1.72e-05
+
+[S3] small network, low-T rtol=default atol=default: 4 solves, 0 failed
+    SM: Yp 0.2468818826 D/H 2.457976999 He3/H 1.041855306 Li7/H 5.486812924; shift from default: Yp 0.000e+00, D/H 0.000e+00; wall 14 s (loaded)
+      beta=1.6 M=1e-05: prod:2.460242686
+      beta=1.6 M=0.001: prod:2.460752423
+      beta=2.4 M=1e-05: prod:2.461759551
+
+[S3] small network, low-T rtol=0.0001 atol=default: 4 solves, 0 failed
+    SM: Yp 0.2468799639 D/H 2.457652507 He3/H 1.041829523 Li7/H 5.487102972; shift from default: Yp 7.771e-06, D/H 1.320e-04; wall 16 s (loaded)
+      beta=1.6 M=1e-05: prod:2.459755851
+      beta=1.6 M=0.001: prod:2.459872646
+      beta=2.4 M=1e-05: prod:2.462383891
+
+[S3] small network, low-T rtol=1e-05 atol=default: 4 solves, 0 failed
+    SM: Yp 0.2468802684 D/H 2.457881437 He3/H 1.041903946 Li7/H 5.486860475; shift from default: Yp 6.538e-06, D/H 3.888e-05; wall 21 s (loaded)
+      beta=1.6 M=1e-05: prod:2.460675949
+      beta=1.6 M=0.001: prod:2.460696694
+      beta=2.4 M=1e-05: prod:2.463389103
+
+[S3] small network, low-T rtol=1e-06 atol=default: 4 solves, 0 failed
+    SM: Yp 0.2468802117 D/H 2.458287893 He3/H 1.041932695 Li7/H 5.486373007; shift from default: Yp 6.768e-06, D/H 1.265e-04; wall 25 s (loaded)
+      beta=1.6 M=1e-05: prod:2.460869531
+      beta=1.6 M=0.001: prod:2.460914101
+      beta=2.4 M=1e-05: prod:2.463571119
+
+[S3] small network, low-T rtol=1e-08 atol=default: 4 solves, 0 failed
+    SM: Yp 0.2468802314 D/H 2.458223906 He3/H 1.041935371 Li7/H 5.486454001; shift from default: Yp 6.688e-06, D/H 1.005e-04; wall 35 s (loaded)
+      beta=1.6 M=1e-05: prod:2.461004137
+      beta=1.6 M=0.001: prod:2.460955293
+      beta=2.4 M=1e-05: prod:2.463630852

@@ -1,0 +1,55 @@
+load average before: (6.5263671875, 25.9580078125, 64.64453125)
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+  rep 0        default SM      ok Yp=0.2468872957941561 wall=6.39 s load=5.81
+  rep 0        default control ok Yp=0.24689483901116643 wall=7.42 s load=5.81
+  rep 0           1e-4 SM      ok Yp=0.24688634370480228 wall=8.20 s load=5.58
+  rep 0           1e-4 control ok Yp=0.24689304617563307 wall=10.21 s load=5.58
+  rep 0           1e-5 SM      ok Yp=0.24688679113154985 wall=15.32 s load=5.54
+  rep 0           1e-5 control ok Yp=0.2468928612042104 wall=16.51 s load=5.54
+  rep 0           1e-6 SM      ok Yp=0.246886867217807 wall=25.59 s load=16.55
+  rep 0           1e-6 control ok Yp=0.24689301372118172 wall=27.73 s load=16.55
+  rep 0           1e-8 SM      ok Yp=0.24688687769651774 wall=67.57 s load=7.72
+  rep 0           1e-8 control ok Yp=0.24689301923541943 wall=67.69 s load=7.72
+  rep 0  1e-5:reported SM      ok Yp=0.24688676395568948 wall=15.52 s load=8.01
+  rep 0  1e-5:reported control ok Yp=0.24689288855540975 wall=16.43 s load=8.01
+  rep 0  1e-6:reported SM      ok Yp=0.24688684940744943 wall=25.75 s load=7.05
+  rep 0  1e-6:reported control ok Yp=0.24689300036343784 wall=25.90 s load=7.05
+  rep 1        default SM      ok Yp=0.2468872957941561 wall=6.31 s load=7.42
+  rep 1        default control ok Yp=0.24689483901116643 wall=7.39 s load=7.42
+  rep 1           1e-4 SM      ok Yp=0.24688634370480228 wall=8.19 s load=8.65
+  rep 1           1e-4 control ok Yp=0.24689304617563307 wall=10.14 s load=8.65
+  rep 1           1e-5 SM      ok Yp=0.24688679113154985 wall=17.96 s load=31.80
+  rep 1           1e-5 control ok Yp=0.2468928612042104 wall=17.37 s load=31.80
+  rep 1           1e-6 SM      ok Yp=0.246886867217807 wall=26.26 s load=21.05
+  rep 1           1e-6 control ok Yp=0.24689301372118172 wall=26.21 s load=21.05
+  rep 1           1e-8 SM      ok Yp=0.24688687769651774 wall=66.68 s load=9.68
+  rep 1           1e-8 control ok Yp=0.24689301923541943 wall=66.48 s load=9.68
+  rep 1  1e-5:reported SM      ok Yp=0.24688676395568948 wall=15.59 s load=8.84
+  rep 1  1e-5:reported control ok Yp=0.24689288855540975 wall=16.55 s load=8.84
+  rep 1  1e-6:reported SM      ok Yp=0.24688684940744943 wall=25.81 s load=7.36
+  rep 1  1e-6:reported control ok Yp=0.24689300036343784 wall=26.58 s load=7.36
+  rep 2        default SM      ok Yp=0.2468872957941561 wall=6.41 s load=6.53
+  rep 2        default control ok Yp=0.24689483901116643 wall=7.46 s load=6.53
+  rep 2           1e-4 SM      ok Yp=0.24688634370480228 wall=8.27 s load=6.69
+  rep 2           1e-4 control ok Yp=0.24689304617563307 wall=10.07 s load=6.69
+  rep 2           1e-5 SM      ok Yp=0.24688679113154985 wall=15.82 s load=6.43
+  rep 2           1e-5 control ok Yp=0.2468928612042104 wall=16.54 s load=6.43
+  rep 2           1e-6 SM      ok Yp=0.246886867217807 wall=26.36 s load=19.34
+  rep 2           1e-6 control ok Yp=0.24689301372118172 wall=28.90 s load=19.34
+  rep 2           1e-8 SM      ok Yp=0.24688687769651774 wall=68.71 s load=6.74
+  rep 2           1e-8 control ok Yp=0.24689301923541943 wall=66.46 s load=6.74
+  rep 2  1e-5:reported SM      ok Yp=0.24688676395568948 wall=15.65 s load=6.22
+  rep 2  1e-5:reported control ok Yp=0.24689288855540975 wall=16.38 s load=6.22
+  rep 2  1e-6:reported SM      ok Yp=0.24688684940744943 wall=28.22 s load=8.20
+  rep 2  1e-6:reported control ok Yp=0.24689300036343784 wall=26.76 s load=8.20
+load average after: (8.20263671875, 10.5810546875, 27.154296875)
+
+       setting  SM median  ratio  control median  ratio
+       default       6.39   1.00            7.42   1.00
+          1e-4       8.20   1.28           10.14   1.37
+          1e-5      15.82   2.48           16.54   2.23
+          1e-6      26.26   4.11           27.73   3.74
+          1e-8      67.57  10.58           66.48   8.96
+ 1e-5:reported      15.59   2.44           16.43   2.22
+ 1e-6:reported      25.81   4.04           26.58   3.58
+(ratios against default)

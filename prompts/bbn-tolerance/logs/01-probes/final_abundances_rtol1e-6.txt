@@ -1,0 +1,26 @@
+SM baseline, low-T rtol 1e-06: low-T t_span (118.87515369080919, 1315988.5213562616), 1740 accepted points, status 0
+  n    initial  1.4287e-01 final  4.0827e-16 min  4.0827e-16 max  1.4287e-01
+  p    initial  8.5711e-01 final  7.5305e-01 min  7.5305e-01 max  8.6757e-01
+  d    initial  3.7402e-06 final  1.8517e-05 min  3.7402e-06 max  2.8998e-03
+  t    initial  2.7552e-07 final  5.9089e-08 min  5.8989e-08 max  6.1223e-05
+  He3  initial  8.2057e-10 final  7.7859e-06 min  8.2057e-10 max  8.2062e-06
+  He4  initial  7.9665e-07 final  6.1722e-02 min  7.9665e-07 max  6.1722e-02
+  Li7  initial  2.7321e-17 final  2.1506e-11 min  2.7321e-17 max  2.2733e-09
+  Be7  initial  1.3912e-23 final  3.8730e-10 min  1.3912e-23 max  4.0688e-10
+  He6  initial  1.4430e-54 final -5.4186e-17 min -6.3567e-17 max  1.4610e-17
+  Li8  initial  4.1769e-75 final  3.0155e-47 min -5.3855e-36 max  1.4721e-13
+  Li6  initial  1.5383e-20 final  8.9878e-15 min  6.5339e-21 max  7.0114e-13
+  B8   initial  1.0059e-75 final -3.4487e-18 min -1.0559e-16 max  8.7414e-17
+control beta=1.6 M=1e-3 prod, low-T rtol 1e-06: low-T t_span (118.80091454779556, 1315939.163993313), 1682 accepted points, status 0
+  n    initial  1.4286e-01 final  4.0895e-16 min  4.0895e-16 max  1.4286e-01
+  p    initial  8.5712e-01 final  7.5305e-01 min  7.5305e-01 max  8.6756e-01
+  d    initial  3.7401e-06 final  1.8537e-05 min  3.7401e-06 max  2.8965e-03
+  t    initial  2.7542e-07 final  5.9154e-08 min  5.9054e-08 max  6.1174e-05
+  He3  initial  8.2035e-10 final  7.7892e-06 min  8.2035e-10 max  8.2103e-06
+  He4  initial  7.5247e-07 final  6.1723e-02 min  7.5247e-07 max  6.1723e-02
+  Li7  initial  2.5797e-17 final  2.1525e-11 min  2.5797e-17 max  2.2742e-09
+  Be7  initial  1.3138e-23 final  3.8665e-10 min  1.3138e-23 max  4.0625e-10
+  He6  initial  1.4452e-54 final -5.7722e-17 min -3.1058e-16 max  1.3639e-16
+  Li8  initial  4.1847e-75 final  1.4301e-21 min -7.0241e-24 max  1.4694e-13
+  Li6  initial  1.4531e-20 final  8.9980e-15 min  6.2626e-21 max  7.0160e-13
+  B8   initial  1.0068e-75 final -5.7594e-22 min -1.5783e-19 max  1.1860e-18

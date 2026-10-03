@@ -1,0 +1,30 @@
+# P7 pinned values (bbn-tolerance prompt 01), tree 95da274 + the prompt's uncommitted tool; old tree 7b518c9 in a worktree
+# 1. provenance reproduced on 7b518c9, no override (pinned_reference_7b518c9.py CASE)
+builder-honly-full rtol=None atol=None: Yp=0.2536761805 DoH=2.648529359 He3oH=1.068524998 Li7oH=5.140427514 wall=25.8 s
+const-honly-full rtol=None atol=None: Yp=0.2536754614 DoH=2.648809882 He3oH=1.068554012 Li7oH=5.137924042 wall=25.5 s
+const-honly-small rtol=None atol=None: Yp=0.2536690816 DoH=2.6481673 He3oH=1.068819742 Li7oH=5.190789165 wall=18.2 s
+# 2. provenance re-derived on 7b518c9 at low-T rtol 1e-5 (pinned_reference_7b518c9.py CASE --rtol 1e-5)
+builder-honly-full rtol=1e-05 atol=None: Yp=0.2536745605 DoH=2.649973638 He3oH=1.068884734 Li7oH=5.133239543 wall=18.4 s
+const-honly-full rtol=1e-05 atol=None: Yp=0.2536731562 DoH=2.649990509 He3oH=1.068886512 Li7oH=5.133203422 wall=18.1 s
+const-honly-small rtol=1e-05 atol=None: Yp=0.2536695386 DoH=2.648913973 He3oH=1.069030279 Li7oH=5.186805306 wall=8.3 s
+# 3. the current tree's test quantities under lowT_tolerance_override(rtol=1e-5) against the CURRENT pins (pinned_values_now.py CASE --rtol 1e-5)
+callbacks-h: low-T rtol=1e-05 atol=None
+  Yp: 0.2536745605 against pin 0.2536761805: 6.386e-06 (bound 1e-06: FAIL)
+  D/H: 2.649973638 against pin 2.648529359: 5.453e-04 (bound 1e-06: FAIL)
+  wall 56.3 s
+callbacks-i: low-T rtol=1e-05 atol=None
+  Yp_BBN: 0.2468867911 against pin 0.24689: 1.300e-05 (bound 0.0001: PASS)
+  DOverH: 2.458895152 against pin 2.4623: 1.383e-03 (bound 0.0001: FAIL)
+  He3OverH: 1.041751728 against pin 1.042: 2.383e-04 (bound 0.0001: FAIL)
+  Li7OverH: 5.428643941 against pin 5.423: 1.041e-03 (bound 0.0001: FAIL)
+  wall 53.9 s
+network-b: low-T rtol=1e-05 atol=None
+  small: Yp 0.2536695386 D/H 2.648913973 7Li/H 5.186805306; full 7Li/H 5.133203422
+  7Li/H small vs full 1.044e-02 (>= 0.005: PASS)
+  full Yp: 0.2536731562 against pin 0.2536754614: 9.087e-06 (bound 1e-05: PASS)
+  full D/H: 2.649990509 against pin 2.648809882: 4.457e-04 (bound 1e-05: FAIL)
+  wall 76.9 s
+passenger-c: low-T rtol=1e-05 atol=None
+  Yp: 0.2536695386 against pin 0.2536690816: 1.802e-06 (bound 1e-06: FAIL)
+  D/H: 2.648913973 against pin 2.6481673: 2.820e-04 (bound 1e-06: FAIL)
+  wall 32.2 s
