@@ -553,9 +553,14 @@ def running_band(x: Sequence[float], y: Sequence[float], half_width: float):
 
 def kick_threshold_curve(cosmology, T_grid: Sequence[float]):
     """
-    beta_th(T) = 1/sqrt(3 Sigma(T)) with Sigma = 1 - 3 w(T), for the cosmology's equation of
-    state, at each T of T_grid (dimensionful, in the cosmology's units). A T where
-    Sigma <= 0 is omitted. Returns (T, beta_th) as two lists.
+    beta_th(T) = 1/sqrt(3 Sigma_eff(T)) = sqrt((2 + Sigma)/(6 Sigma)), with
+    Sigma_eff = Sigma/(1 + Sigma/2) and Sigma = 1 - 3 w(T), at each T of T_grid (dimensionful,
+    in the cosmology's units). This is the paper's reachability condition,
+    Sigma/(1 + Sigma/2) = 1/(3 beta^2) (Paper1.tex, eq:surfing-equation), solved for beta.
+    A T where Sigma <= 0 is omitted. Returns (T, beta_th) as two lists.
+
+    w is the model's own: for QCD_Cosmology it is the Xav_EOS_data.csv spline, the same w the
+    integration reads in ScalarModel.py's RHS, so Sigma here is the integration's Sigma.
     """
     T_out = []
     beta_out = []
@@ -563,7 +568,7 @@ def kick_threshold_curve(cosmology, T_grid: Sequence[float]):
         Sigma = 1.0 - 3.0 * cosmology.w(T)
         if Sigma > 0.0:
             T_out.append(T)
-            beta_out.append(1.0 / sqrt(3.0 * Sigma))
+            beta_out.append(sqrt((2.0 + Sigma) / (6.0 * Sigma)))
     return T_out, beta_out
 
 
@@ -784,7 +789,7 @@ def plot_T_deliver(
             kick_curve[0],
             color="k",
             linestyle="dashed",
-            label=r"$\beta_{\mathrm{th}}(T) = 1/\sqrt{3\Sigma(T)}$",
+            label=r"$\beta_{\mathrm{th}}(T) = 1/\sqrt{3\Sigma_{\mathrm{eff}}(T)}$",
         )
         betas = [r["beta"] for r in pts]
         pad = 0.1 * (max(betas) - min(betas) + 1e-3)

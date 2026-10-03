@@ -111,14 +111,39 @@ class TestRunningBand(unittest.TestCase):
 
 class TestKickThresholdCurve(unittest.TestCase):
     def test_d_beta_th_and_omitted_points(self):
-        # Sigma = 1 - 3w: w = 11/36 at T = 1 gives Sigma = 1/12 and beta_th = 1/sqrt(3/12) = 2;
-        # at T = 2 w = 0.4 gives Sigma < 0; at T = 3 w = 1/3 gives Sigma = 0. Both omitted.
-        table = {1.0: 11.0 / 36.0, 2.0: 0.4, 3.0: 1.0 / 3.0, 4.0: 0.0}
+        # beta_th = sqrt((2 + Sigma)/(6 Sigma)) = 1/sqrt(3 Sigma_eff), Sigma = 1 - 3w.
+        # w = 7/23 at T = 1 gives Sigma = 2/23 and beta_th = sqrt((48/23)/(12/23)) = 2;
+        # w = 1/5 at T = 2 gives Sigma = 2/5 and beta_th = sqrt((12/5)/(12/5)) = 1;
+        # w = 0 at T = 3 gives Sigma = 1 and beta_th = sqrt(3/6) = 1/sqrt(2);
+        # w = 0.4 at T = 4 gives Sigma < 0 and w = 1/3 at T = 5 gives Sigma = 0. Both omitted.
+        table = {1.0: 7.0 / 23.0, 2.0: 0.2, 3.0: 0.0, 4.0: 0.4, 5.0: 1.0 / 3.0}
         cosmology = SimpleNamespace(w=lambda T: table[T])
-        T, beta_th = kick_threshold_curve(cosmology, [1.0, 2.0, 3.0, 4.0])
-        self.assertEqual(T, [1.0, 4.0])
+        T, beta_th = kick_threshold_curve(cosmology, [1.0, 2.0, 3.0, 4.0, 5.0])
+        self.assertEqual(T, [1.0, 2.0, 3.0])
         self.assertAlmostEqual(beta_th[0], 2.0, delta=1e-14)
-        self.assertAlmostEqual(beta_th[1], 1.0 / sqrt(3.0), delta=1e-14)
+        self.assertAlmostEqual(beta_th[1], 1.0, delta=1e-14)
+        self.assertAlmostEqual(beta_th[2], 1.0 / sqrt(2.0), delta=1e-14)
+
+    def test_d2_production_curve_minimum(self):
+        """
+        The production QCD_Cosmology's curve, on 4000 points log-spaced over [0.05, 50] GeV,
+        has its minimum at the QCD peak of Sigma, 0.17-0.20 GeV, and the minimum is the paper's
+        1.11 (1.1074 measured on d78c9f8; 1.0295 with the first-order 1/sqrt(3 Sigma)).
+        Builds the cosmology, which takes a few seconds. No solve.
+        """
+        from CosmologyModels.GenericEOS.QCD_Cosmology import QCD_Cosmology
+        from CosmologyModels.LambdaCDM import Planck2018
+        from Units import Planck_units
+
+        units = Planck_units()
+        cosmology = QCD_Cosmology(0, units, Planck2018())
+        T_GeV = np.logspace(np.log10(0.05), np.log10(50.0), 4000)
+        T_out, beta_th = kick_threshold_curve(cosmology, [T * units.GeV for T in T_GeV])
+        self.assertGreater(len(T_out), 0)
+        k = int(np.argmin(beta_th))
+        self.assertAlmostEqual(beta_th[k], 1.1074, delta=5e-4)
+        self.assertGreaterEqual(T_out[k] / units.GeV, 0.17)
+        self.assertLessEqual(T_out[k] / units.GeV, 0.20)
 
 
 def _units():

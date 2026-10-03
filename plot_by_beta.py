@@ -653,7 +653,8 @@ def build_beta_plot(
 
     kick_curve = None
     if len(scalar_data) > 0:
-        # beta_th(T) = 1/sqrt(3 Sigma(T)) over the QCD range, from the model's own EOS
+        # beta_th(T) = 1/sqrt(3 Sigma_eff(T)) = sqrt((2 + Sigma)/(6 Sigma)) over the QCD range, from the
+        # model's own EOS
         T_GeV_grid = np.logspace(np.log10(0.05), np.log10(50.0), 400)
         T_out, beta_th = kick_threshold_curve(
             scalar_data[0]._cosmology, [T * units.GeV for T in T_GeV_grid]
