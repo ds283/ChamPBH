@@ -1,0 +1,71 @@
+setting,beta,M_Mp,shard,serial,stored_bbn_failure,variant,status,Yp,DH_x1e5
+LT rtol 1e-6 (test patch),1.6,1e-05,0011,2022,1,pert12,ok,0.2468901659,2.461537334
+LT rtol 1e-6 (test patch),1.6,1e-05,0011,2022,1,pert9,ok,0.2468872466,2.461688326
+LT rtol 1e-6 (test patch),1.6,1e-05,0011,2022,1,prod,ok,0.246886479,2.461751259
+LT rtol 1e-6 (test patch),2.4,1e-05,0011,2076,1,pert12,ok,0.2468232006,2.464607647
+LT rtol 1e-6 (test patch),2.4,1e-05,0011,2076,1,pert9,ok,0.2468202637,2.464606509
+LT rtol 1e-6 (test patch),2.4,1e-05,0011,2076,1,prod,ok,0.2468254356,2.464413146
+LT rtol 1e-6 (test patch),1.345,0.001,0000,660,1,pert12,ok,0.252562132,2.756425997
+LT rtol 1e-6 (test patch),1.345,0.001,0000,660,1,pert9,ok,0.2525643868,2.756463175
+LT rtol 1e-6 (test patch),1.345,0.001,0000,660,1,prod,ok,0.2525566472,2.756420289
+LT rtol 1e-6 (test patch),1.6,0.001,0011,93,0,pert12,ok,0.2468908061,2.461746674
+LT rtol 1e-6 (test patch),1.6,0.001,0011,93,0,pert9,ok,0.2468877872,2.461615346
+LT rtol 1e-6 (test patch),1.6,0.001,0011,93,0,prod,ok,0.2468930137,2.461663067
+LT rtol 1e-6 (test patch),2.89,0.001,0012,357,1,pert12,ok,0.2468386845,2.478129728
+LT rtol 1e-6 (test patch),2.89,0.001,0012,357,1,pert9,ok,0.2468429402,2.478239544
+LT rtol 1e-6 (test patch),2.89,0.001,0012,357,1,prod,ok,0.2468403798,2.47812329
+default LT rtol (1e-3),1.6,1e-05,0011,2022,1,linear,ok,0.2468679371,2.46268984
+default LT rtol (1e-3),1.6,1e-05,0011,2022,1,pchip,ok,0.2468693656,2.462907573
+default LT rtol (1e-3),1.6,1e-05,0011,2022,1,pert12,ok,0.2468909331,2.4609952
+default LT rtol (1e-3),1.6,1e-05,0011,2022,1,pert9,ok,0.2468885682,2.464565208
+default LT rtol (1e-3),1.6,1e-05,0011,2022,1,prod,FAILURE,,
+default LT rtol (1e-3),2.09,1e-05,0012,2130,1,linear,ok,0.2460388806,2.4903367
+default LT rtol (1e-3),2.09,1e-05,0012,2130,1,pchip,ok,0.2460216217,2.490469333
+default LT rtol (1e-3),2.09,1e-05,0012,2130,1,pert12,ok,0.2460180679,2.491764083
+default LT rtol (1e-3),2.09,1e-05,0012,2130,1,pert9,ok,0.2460137768,2.493177562
+default LT rtol (1e-3),2.09,1e-05,0012,2130,1,prod,FAILURE,,
+default LT rtol (1e-3),2.12,1e-05,0015,1940,1,linear,ok,0.2468881491,2.463670236
+default LT rtol (1e-3),2.12,1e-05,0015,1940,1,pchip,ok,0.2468853945,2.460677237
+default LT rtol (1e-3),2.12,1e-05,0015,1940,1,pert12,ok,0.246886168,2.461199823
+default LT rtol (1e-3),2.12,1e-05,0015,1940,1,pert9,ok,0.2468899573,2.465430418
+default LT rtol (1e-3),2.12,1e-05,0015,1940,1,prod,FAILURE,,
+default LT rtol (1e-3),2.4,1e-05,0011,2076,1,linear,ok,0.2468393622,2.46559086
+default LT rtol (1e-3),2.4,1e-05,0011,2076,1,pchip,ok,0.2468304512,2.462045239
+default LT rtol (1e-3),2.4,1e-05,0011,2076,1,pert12,ok,0.2468234985,2.46080373
+default LT rtol (1e-3),2.4,1e-05,0011,2076,1,pert9,ok,0.2468162258,2.466192787
+default LT rtol (1e-3),2.4,1e-05,0011,2076,1,prod,FAILURE,,
+default LT rtol (1e-3),1.345,0.001,0000,660,1,linear,ok,0.2525696543,2.752876215
+default LT rtol (1e-3),1.345,0.001,0000,660,1,pchip,ok,0.2525641832,2.756806261
+default LT rtol (1e-3),1.345,0.001,0000,660,1,pert12,ok,0.2525653745,2.759264242
+default LT rtol (1e-3),1.345,0.001,0000,660,1,pert9,ok,0.2525660171,2.756996768
+default LT rtol (1e-3),1.345,0.001,0000,660,1,prod,FAILURE,,
+default LT rtol (1e-3),2.89,0.001,0012,357,1,linear,ok,0.2468548742,2.480085746
+default LT rtol (1e-3),2.89,0.001,0012,357,1,pchip,ok,0.2468535898,2.480178281
+default LT rtol (1e-3),2.89,0.001,0012,357,1,pert12,ok,0.2468367047,2.478919479
+default LT rtol (1e-3),2.89,0.001,0012,357,1,pert9,ok,0.2468410753,2.478188948
+default LT rtol (1e-3),2.89,0.001,0012,357,1,prod,FAILURE,,
+default LT rtol (1e-3),1.05,0.01,0004,1675,1,linear,ok,0.2839315388,3.600278153
+default LT rtol (1e-3),1.05,0.01,0004,1675,1,pchip,ok,0.2839215207,3.605088043
+default LT rtol (1e-3),1.05,0.01,0004,1675,1,pert12,ok,0.2839122177,3.600036607
+default LT rtol (1e-3),1.05,0.01,0004,1675,1,pert9,ok,0.2839107721,3.604964251
+default LT rtol (1e-3),1.05,0.01,0004,1675,1,prod,FAILURE,,
+default LT rtol (1e-3),1.1,0.03,0009,1684,1,linear,ok,0.2718985515,2.8252966
+default LT rtol (1e-3),1.1,0.03,0009,1684,1,pchip,ok,0.2718902437,2.826935159
+default LT rtol (1e-3),1.1,0.03,0009,1684,1,pert12,ok,0.2718863525,2.824468438
+default LT rtol (1e-3),1.1,0.03,0009,1684,1,pert9,ok,0.2718945644,2.825391098
+default LT rtol (1e-3),1.1,0.03,0009,1684,1,prod,FAILURE,,
+default LT rtol (1e-3),1.7,0.03,0005,1666,1,linear,ok,0.2482533072,2.451921081
+default LT rtol (1e-3),1.7,0.03,0005,1666,1,pchip,ok,0.2482462602,2.455329586
+default LT rtol (1e-3),1.7,0.03,0005,1666,1,pert12,ok,0.2482401412,2.458299231
+default LT rtol (1e-3),1.7,0.03,0005,1666,1,pert9,ok,0.2482386045,2.454848893
+default LT rtol (1e-3),1.7,0.03,0005,1666,1,prod,FAILURE,,
+default LT rtol (1e-3),2.1,0.1,0013,1595,1,linear,ok,0.2466367518,2.497814564
+default LT rtol (1e-3),2.1,0.1,0013,1595,1,pchip,ok,0.2466232582,2.496316694
+default LT rtol (1e-3),2.1,0.1,0013,1595,1,pert12,ok,0.2466222518,2.4968194
+default LT rtol (1e-3),2.1,0.1,0013,1595,1,pert9,ok,0.2466235085,2.495674346
+default LT rtol (1e-3),2.1,0.1,0013,1595,1,prod,FAILURE,,
+default LT rtol (1e-3),1.05,0.5,0004,1670,1,linear,ok,0.2850954598,3.647739636
+default LT rtol (1e-3),1.05,0.5,0004,1670,1,pchip,ok,0.28508324,3.65116675
+default LT rtol (1e-3),1.05,0.5,0004,1670,1,pert12,ok,0.2850736762,3.646938642
+default LT rtol (1e-3),1.05,0.5,0004,1670,1,pert9,ok,0.2850731572,3.647637701
+default LT rtol (1e-3),1.05,0.5,0004,1670,1,prod,FAILURE,,

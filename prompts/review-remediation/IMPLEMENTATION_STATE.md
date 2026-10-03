@@ -295,6 +295,11 @@ these 15 open; they pass to whichever campaign takes them (`.documents/review-re
     - So the passing end-to-end test (`test_bbn_callbacks` (h)) sits inside PRyMordial's noise and
       could fail on another platform with no change to the code. The target was not loosened; the
       planner's decision above is still open.
+  - **Assigned (2026-10-03):** to the [`bbn-tolerance`](../bbn-tolerance/IMPLEMENTATION_STATE.md) campaign, prompts 01 (measures) and
+    02 (closes). A Claude Science brief traced a D/H scatter of up to 2.2e-3 under 1e-12 changes to
+    ρ_NP, and 11 failures in the 2026.6.0 science run, to PRyMordial's low-T network running at
+    SciPy's default `rtol = 1e-3`. The planner confirmed that the low-T calls pass no `rtol` (that
+    campaign's README §0.3).
 - **[03-bbn-solver-failures-are-undetected-and-some-exceptions-escape]** *(log 03, observation 3)*.
   - **What.**
     - None of the eight `solve_ivp` calls in `PRyM/PRyM_main.py` checks `.status` or `.success`,

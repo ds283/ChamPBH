@@ -1,11 +1,12 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-02 · **22 open**: 5 on the `review-remediation` board (closed
-2026-09-30), none now assigned to `science-readiness`; 2 on the `production-readiness` board
+**Last updated:** 2026-10-03 · **24 open**: 5 on the `review-remediation` board (closed
+2026-09-30), of which 1 is assigned to `bbn-tolerance` (§1.9); 2 on the `production-readiness` board
 (closed 2026-09-30); 4 on the `run-integrity` board (closed 2026-09-30); 9 on the
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`;
 2 on the `science-readiness` board (planned 2026-10-01; closed 2026-10-02, 10 of 10 landed,
-prompt 06b having been added 2026-10-02).
+prompt 06b having been added 2026-10-02); 2 on the `bbn-tolerance` board (planned 2026-10-03,
+0 of 3 landed).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -21,7 +22,8 @@ the two disagree, the board is right.
 [`production-readiness`](../prompts/production-readiness/IMPLEMENTATION_STATE.md) ·
 [`run-integrity`](../prompts/run-integrity/IMPLEMENTATION_STATE.md) ·
 [`integrator-remediation`](../prompts/integrator-remediation/IMPLEMENTATION_STATE.md) ·
-[`science-readiness`](../prompts/science-readiness/IMPLEMENTATION_STATE.md)
+[`science-readiness`](../prompts/science-readiness/IMPLEMENTATION_STATE.md) ·
+[`bbn-tolerance`](../prompts/bbn-tolerance/IMPLEMENTATION_STATE.md)
 
 ## 1. Open, by owning board
 
@@ -33,6 +35,7 @@ one by prompt 04, one by prompt 05, one by prompt 06. The campaign closed on 202
 stay here until a later campaign takes them. Four were assigned on 2026-09-30; all four are
 resolved (§1.2). Three more were assigned on 2026-09-30 to `run-integrity` (§1.4); all three
 are resolved. Three more were assigned on 2026-10-01 to `science-readiness` (§1.7); all three since resolved (prompts 04, 06 and 08 of that campaign).
+One more was assigned on 2026-10-03 to `bbn-tolerance`; its row is in §1.9.
 
 - `[00-kicking-function-table-has-no-provenance-in-the-repository]` —
   `CosmologyModels/GenericEOS/Xav_EOS_data.csv` was added in commit `1759515` without the script
@@ -42,9 +45,6 @@ are resolved. Three more were assigned on 2026-10-01 to `science-readiness` (§1
 - `[02-stale-derivative-and-T_LO-comments-in-the-EOS-package]` — three wrong comments in
   `CosmologyModels/GenericEOS/` (the base `dG_s_dlogT` docstring, the jax class's "1/GeV", the
   "600 keV" above `SAIKAWA_SHIRAI_T_LO`); comment-only.
-- `[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]` — PRyMordial's Yp and D/H
-  move by 1e-5–7e-4 under 1e-9–1e-8 changes to ρ_NP; prompt 04's 1e-4 D/H test passes at 8.85e-5
-  inside that band.
 - `[05-kicking-table-and-saikawa-shirai-gs-disagree-through-qcd-and-ew]` — the table's Σ peaks
   (QCD 0.3145, EW 0.0374) match neither the Σ the g's imply by conservation (0.299, 0.058) nor the
   4g_s/(3g_ρ) − 1 formula (0.249, 0.0374 at 46 GeV); a decision for the authors.
@@ -153,3 +153,23 @@ with both `[05-…]` rows still open and unassigned.
 - `[05-the-value-factory-compares-stored-phi-against-pi]` — `ScalarModelValue_factory.build`
   checks stored φ against supplied π (`Datastore/SQL/ObjectFactories/ScalarModel.py:1008` on
   `a522005`).
+
+### 1.9 Assigned to `bbn-tolerance` — [its board](../prompts/bbn-tolerance/IMPLEMENTATION_STATE.md) §3.1
+
+Assigned 2026-10-03 when the campaign was planned. Each entry stays on its own board, which
+carries the **Assigned** line; the prompt that closes one deletes its row here.
+
+- `[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]` (`review-remediation`) —
+  PRyMordial's Yp and D/H move by 1e-5–7e-4 under 1e-9–1e-8 changes to ρ_NP (up to 2.2e-3 under
+  1e-12 in the 2026.6.0 store, per the brief); the low-T network runs at SciPy's default rtol.
+
+### 1.10 `bbn-tolerance` — [board §3](../prompts/bbn-tolerance/IMPLEMENTATION_STATE.md)
+
+Two opened by the planner on 2026-10-03.
+
+- `[00-the-low-T-network-fails-near-1-keV-on-ulp-level-input]` — 11 of 684 φ\* = 5 histories of
+  the 2026.6.0 run fail in the full low-T network at T_J just above 1 keV; a 1e-12 input change
+  cures each.
+- `[00-a-store-serves-bbn-rows-from-another-prym-version-silently]` — `BBNData` lookups ignore
+  `PRyM_version`, so a store that was not refreshed after a PRyMordial patch serves old rows
+  unannounced.
