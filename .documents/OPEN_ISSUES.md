@@ -1,13 +1,14 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-03 · **27 open**: 5 on the `review-remediation` board (closed
-2026-09-30), of which 1 is assigned to `bbn-tolerance` (§1.9); 2 on the `production-readiness` board
+**Last updated:** 2026-10-03 · **25 open**: 4 on the `review-remediation` board (closed
+2026-09-30), none now assigned; 2 on the `production-readiness` board
 (closed 2026-09-30); 4 on the `run-integrity` board (closed 2026-09-30); 9 on the
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`;
 2 on the `science-readiness` board (planned 2026-10-01; closed 2026-10-02, 10 of 10 landed,
-prompt 06b having been added 2026-10-02); 5 on the `bbn-tolerance` board (planned 2026-10-03,
-1 of 5 landed (01c); prompt 01 committed BLOCKED 2026-10-03 and ruled the same day: re-planned around
-PRyMordial's small network, U3; prompt 01c measured the small network 2026-10-03).
+prompt 06b having been added 2026-10-02); 4 on the `bbn-tolerance` board (planned 2026-10-03,
+2 of 5 landed (01c, 02); prompt 01 committed BLOCKED 2026-10-03 and ruled the same day: re-planned
+around PRyMordial's small network, U3; prompt 01c measured the small network 2026-10-03; prompt
+02 moved production to it and closed three, opening one, 2026-10-03).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -36,7 +37,8 @@ one by prompt 04, one by prompt 05, one by prompt 06. The campaign closed on 202
 stay here until a later campaign takes them. Four were assigned on 2026-09-30; all four are
 resolved (§1.2). Three more were assigned on 2026-09-30 to `run-integrity` (§1.4); all three
 are resolved. Three more were assigned on 2026-10-01 to `science-readiness` (§1.7); all three since resolved (prompts 04, 06 and 08 of that campaign).
-One more was assigned on 2026-10-03 to `bbn-tolerance`; its row is in §1.9.
+One more was assigned on 2026-10-03 to `bbn-tolerance`; it was resolved by that campaign's
+prompt 02 on 2026-10-03 (§1.9).
 
 - `[00-kicking-function-table-has-no-provenance-in-the-repository]` —
   `CosmologyModels/GenericEOS/Xav_EOS_data.csv` was added in commit `1759515` without the script
@@ -160,27 +162,22 @@ with both `[05-…]` rows still open and unassigned.
 Assigned 2026-10-03 when the campaign was planned. Each entry stays on its own board, which
 carries the **Assigned** line; the prompt that closes one deletes its row here.
 
-- `[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]` (`review-remediation`) —
-  PRyMordial's Yp and D/H move under ulp-level changes to ρ_NP; narrowed by prompt 01: D/H scatter
-  ~1e-3 at the default low-T rtol, ~4e-5 at 1e-5; the rest is set by other stages.
+None open: `[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]` was resolved by
+prompt 02 on 2026-10-03.
 
 ### 1.10 `bbn-tolerance` — [board §3](../prompts/bbn-tolerance/IMPLEMENTATION_STATE.md)
 
-Two opened by the planner on 2026-10-03, one the same day for prompt 01b (the user's U2), and
-two by prompt 01 the same day.
+Two opened by the planner on 2026-10-03, one the same day for prompt 01b (the user's U2), two by
+prompt 01 the same day, and one by prompt 02 the same day. Prompt 02 closed the planner's two.
 
-- `[00-the-low-T-network-fails-near-1-keV-on-ulp-level-input]` — 11 of 684 φ\* = 5 histories of
-  the 2026.6.0 run fail in the full low-T network at T_J just above 1 keV; narrowed by prompt 01:
-  caused by the Li8(p,d)Li7 rate below, and not removed by any low-T tolerance in the grid;
-  re-planned (U3): production to move to the small network; narrowed by prompt 01c: the small
-  network completes all 11 and the breadth sample, and P11 recommends low-T rtol 1e-6.
 - `[01-prymordial-li8-p-d-li7-rate-rings-near-1-kev]` — PRyMordial's Li8(p,d)Li7 reverse rate is
   exp(γ/T9) times a ringing quadratic spline, ±1e39 near 1 keV; it stalls BDF's Newton iteration;
-  worked around, not patched (U3): the small network has no Li8.
+  worked around, not patched (U3); narrowed by prompt 02: production no longer runs the full
+  network, which keeps the defect for anyone who selects it.
 - `[01-prymordial-dYB8dtLT-unpacks-Y-in-the-superseded-order]` — B8's low-T equation reads Y in
   the old species order (upstream too); effect not measured, probably negligible.
-- `[00-a-store-serves-bbn-rows-from-another-prym-version-silently]` — `BBNData` lookups ignore
-  `PRyM_version`, so a store that was not refreshed after a PRyMordial patch serves old rows
-  unannounced.
 - `[00-the-kick-threshold-overlay-uses-sigma-not-sigma-eff]` — the `T_deliver` figure's threshold
   curve is 1/√(3Σ), not the paper's 1/√(3Σ_eff); its minimum is 1.0295 where the paper says 1.11.
+- `[02-two-places-still-say-production-runs-the-full-network]` — `tools/history_and_bbn.py`
+  still defaults to the full network "as main.py", and a comment in `_configure_PRyMordial` says
+  production runs it.

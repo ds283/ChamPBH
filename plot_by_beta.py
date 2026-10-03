@@ -27,7 +27,7 @@ from matplotlib import pyplot as plt
 from numpy import nan
 
 from ComputeTargets import ScalarModelProxy, AdiabaticHistory, BBNData, ScalarModel
-from ComputeTargets.BBNData import compute_SM_baseline
+from ComputeTargets.BBNData import PRYM_VERSION, compute_SM_baseline
 from CosmologyConcepts import temperature, phi_value, pi_value
 from CosmologyConcepts.ConformalCouplings import AbstractCoupling
 from CosmologyConcepts.Potentials import AbstractPotential
@@ -64,8 +64,16 @@ from extract_common import (
     BELOW_PLOTS_TOP_ROW,
     LEFT_COLUMN,
 )
+from pipeline_selection import warn_foreign_bbn_provenance
 
 DEFAULT_TIMEOUT = 60
+
+# The PRyMordial network of the SM baseline, and the network the stored BBN rows are
+# expected to come from. It must match main.py's BBN_SMALL_NETWORK, which is the small
+# network (bbn-tolerance prompt 02; that campaign's ruling U4): a baseline on the other
+# network is off by the network offset, about 3e-4 in D/H (bbn-tolerance log 01c, row 6),
+# which would show up as a spurious shift of every history.
+BBN_SMALL_NETWORK = True
 
 DEFAULT_T_INIT_GEV = 20000
 
@@ -675,6 +683,10 @@ def run_pipeline(
 
     print(f"\n>> RUNNING PIPELINE FOR MODEL {model_label}")
 
+    # every BBNData row read for this model, for the provenance warning
+    # (bbn-tolerance prompt 02)
+    bbn_rows_read = []
+
     def report_dropped_bbn_models(
         model_label: str,
         potential: AbstractPotential,
@@ -925,6 +937,7 @@ def run_pipeline(
             process_batch_size=20,
         )
         bbn_query_queue.run()
+        bbn_rows_read.extend(bbn_query_queue.results)
         available_bbn = [B for B in bbn_query_queue.results if B.available]
 
         bbn_failures = report_dropped_bbn_models(
@@ -959,6 +972,14 @@ def run_pipeline(
         store_results=True,
     )
     work_queue.run()
+
+    # warn, never filter, if the store served BBN rows from another PRyMordial version or
+    # network (bbn-tolerance prompt 02, README section 0.2 P6 and U4)
+    warn_foreign_bbn_provenance(
+        bbn_rows_read,
+        prym_version=PRYM_VERSION,
+        small_network=BBN_SMALL_NETWORK,
+    )
 
     # figure 2 (convergence in M) and histories.csv span every potential this run read
     # (science-readiness prompt 07)
@@ -1084,11 +1105,11 @@ with ShardedPool(
     model_list = build_model_list(pool, units)
 
     # The Standard-Model baseline: rho_NP = 0 through compute_BBN_data's PRyMordial
-    # settings, one solve, not stored. small_network=False is what main.py passes.
-    # (review-remediation prompt 04)
+    # settings, one solve, not stored, on the network main.py runs, BBN_SMALL_NETWORK
+    # (review-remediation prompt 04; bbn-tolerance prompt 02)
     SM_baseline = None
     if not args.no_baseline:
-        SM_baseline = compute_SM_baseline(small_network=False)
+        SM_baseline = compute_SM_baseline(small_network=BBN_SMALL_NETWORK)
         print(
             f"@@ plot_by_beta: SM baseline (rho_NP = 0, PRyM_version={SM_baseline['PRyM_version']}, small_network={SM_baseline['small_network']}): "
             f"Yp={SM_baseline['Yp_BBN']:.6g}, D/H x1e5={SM_baseline['DOverH']:.6g}, 3He/H x1e5={SM_baseline['He3OverH']:.6g}, 7Li/H x1e10={SM_baseline['Li7OverH']:.6g}"

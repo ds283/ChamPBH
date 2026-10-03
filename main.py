@@ -28,6 +28,7 @@ from ComputeTargets import (
     ScalarModelProxy,
     BBNData,
 )
+from ComputeTargets.BBNData import PRYM_VERSION
 from CosmologyConcepts import (
     DimensionlessQuantityArray,
     DimensionfulQuantityArray,
@@ -67,6 +68,7 @@ from pipeline_selection import (
     build_query_entries,
     select_missing,
     summarise_failure_reasons,
+    warn_foreign_bbn_provenance,
     warn_super_planckian,
 )
 from utilities import grouper, energy_formatter
@@ -552,6 +554,9 @@ def run_pipeline(
     ## COMPUTE BBN DATA FOR EACH MODEL IN THE GRID
     # counts for the stage's summary line (run-integrity prompt 03)
     bbn_counts = {"skipped_failed_models": 0, "stored_failures": 0}
+    # every BBNData row the stage's lookups return, for the provenance warning
+    # (bbn-tolerance prompt 02)
+    bbn_lookup_results = []
 
     BBN_sample_grid = itertools.product(
         Potential_array,
@@ -672,6 +677,8 @@ def run_pipeline(
             process_batch_size=20,
         )
         bbn_query_queue.run()
+        for query_outcomes in bbn_query_queue.results:
+            bbn_lookup_results.extend(query_outcomes)
 
         # pair each result with the entry it was asked for; a stored failure is final
         # within this version label unless --retry-failed-bbn is given
@@ -781,10 +788,25 @@ def run_pipeline(
         None if args.bbn_wall_clock_limit == 0 else args.bbn_wall_clock_limit
     )
 
+    # The PRyMordial network production runs: the small one (bbn-tolerance prompt 02; that
+    # campaign's ruling U4). PRyMordial's full network fails on about 1 % of histories near
+    # T_J = 1 keV. The cause is its Li8(p,d)Li7 reverse rate, exp(gamma/T9) times a quadratic
+    # spline of the forward-rate table that rings in sign there (bbn-tolerance log 01;
+    # [01-prymordial-li8-p-d-li7-rate-rings-near-1-kev]). No tolerance removes it, and the small
+    # network has no Li8. The small network's 7Li/H is less reliable, and is not used for
+    # constraints (bbn-tolerance README section 0.2 U3). Setting this to False runs the full
+    # network: its low-T rtol is 1e-5, and its failures remain. There is deliberately no
+    # command-line flag: BBNData treats PRyMordial as a black box, and a change of BBN code is
+    # handled by the versioning mechanism (PRyM_version).
+    BBN_SMALL_NETWORK = True
+
     def compute_bbn_data_batch(data: BBNData, label: str):
         return data.compute(
             label=label,
-            payload={"small_network": False, "wall_clock_limit": bbn_wall_clock_limit},
+            payload={
+                "small_network": BBN_SMALL_NETWORK,
+                "wall_clock_limit": bbn_wall_clock_limit,
+            },
         )
 
     def validate_bbn_data_batch(q: BBNData):
@@ -811,6 +833,13 @@ def run_pipeline(
         notify_min_time_interval=MIN_NOTIFY_INTERVAL,
     )
     bbn_data_queue.run()
+    # warn, never filter, if the store served BBN rows from another PRyMordial version or
+    # network (bbn-tolerance prompt 02, README section 0.2 P6 and U4)
+    warn_foreign_bbn_provenance(
+        bbn_lookup_results,
+        prym_version=PRYM_VERSION,
+        small_network=BBN_SMALL_NETWORK,
+    )
     if args.retry_failed_bbn:
         stored_failure_summary = f"{bbn_counts['stored_failures']} computations with a stored failure retried (--retry-failed-bbn)"
     else:

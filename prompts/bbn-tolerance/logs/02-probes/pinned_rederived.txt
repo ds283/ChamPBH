@@ -1,0 +1,10 @@
+# P7 re-derivation (bbn-tolerance prompt 02): provenance tree 7b518c9 in a temporary git worktree, this repository's venv,
+# logs/01-probes/pinned_reference_7b518c9.py run unmodified (CASE [--rtol X]); run 2026-10-03 with HEAD at 2bc124b
+# 1. the pins reproduced with no override
+const-honly-small rtol=None atol=None: Yp=0.2536690816 DoH=2.6481673 He3oH=1.068819742 Li7oH=5.190789165 wall=7.3 s
+const-honly-full rtol=None atol=None: Yp=0.2536754614 DoH=2.648809882 He3oH=1.068554012 Li7oH=5.137924042 wall=9.9 s
+builder-honly-full rtol=None atol=None: Yp=0.2536761805 DoH=2.648529359 He3oH=1.068524998 Li7oH=5.140427514 wall=10.3 s
+# 2. re-derived at the U4 settings: small low-T rtol 1e-6, full low-T rtol 1e-5
+const-honly-small rtol=1e-06 atol=None: Yp=0.253669508 DoH=2.649288446 He3oH=1.069074025 Li7oH=5.186233632 wall=11.1 s
+const-honly-full rtol=1e-05 atol=None: Yp=0.2536731562 DoH=2.649990509 He3oH=1.068886512 Li7oH=5.133203422 wall=21.1 s
+builder-honly-full rtol=1e-05 atol=None: Yp=0.2536745605 DoH=2.649973638 He3oH=1.068884734 Li7oH=5.133239543 wall=21.5 s

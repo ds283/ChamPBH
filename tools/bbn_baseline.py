@@ -47,8 +47,8 @@ def main(argv=None) -> int:
     parser.add_argument(
         "--small-network",
         action=argparse.BooleanOptionalAction,
-        default=False,
-        help="the small_network value passed to compute_SM_baseline (default: False, the full network, as main.py passes)",
+        default=True,
+        help="the small_network value passed to compute_SM_baseline (default: True, the small network, as main.py passes; --no-small-network for the full network)",
     )
     args = parser.parse_args(argv)
 

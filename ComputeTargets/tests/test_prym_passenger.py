@@ -74,16 +74,31 @@ OSCILLATING_WALL_BOUND_S = 60.0
 # the pressure set to -rho_NP and the density derivative to 0, so that only H
 # saw the new physics: what the patched route must reproduce, up to the third
 # (inert) LSODA component it no longer carries.
-CONST_HONLY_SMALL_YP = 0.2536690816
-CONST_HONLY_SMALL_D_OVER_H_E5 = 2.6481673
+# Re-pinned 2026-10-03 by bbn-tolerance prompt 02, which gives the small low-T
+# call rtol 1e-6 (it passed none, so SciPy's 1e-3): the same provenance
+# re-derived on 7b518c9 with that call at rtol 1e-6 by
+# prompts/bbn-tolerance/logs/01-probes/pinned_reference_7b518c9.py
+# const-honly-small --rtol 1e-6 (bbn-tolerance log 01c, row 7; log 02). The
+# values before, at the default rtol (pinned on 7b518c9, unchanged through
+# 2bc124b): Yp 0.2536690816, D/H x1e5 2.6481673. The bound is unchanged.
+CONST_HONLY_SMALL_YP = 0.253669508
+CONST_HONLY_SMALL_D_OVER_H_E5 = 2.649288446
 CONST_HONLY_RTOL = 1e-6
 
 # The same reference with the full network, for test_network_flag (b) and
 # test_bbn_callbacks (h): measured on 7b518c9 by science-readiness prompt 01
 # with the planning probe's const-honly case and small_network=False (log 01,
 # Verification).
-CONST_HONLY_FULL_YP = 0.2536754614
-CONST_HONLY_FULL_D_OVER_H_E5 = 2.648809882
+# Re-pinned 2026-10-03 by bbn-tolerance prompt 02, which gives the full low-T
+# call rtol 1e-5 (it passed none, so SciPy's 1e-3): the same provenance
+# re-derived on 7b518c9 with that call at rtol 1e-5 by
+# prompts/bbn-tolerance/logs/01-probes/pinned_reference_7b518c9.py
+# const-honly-full --rtol 1e-5 (bbn-tolerance log 01, Verification item 11;
+# log 02). The values before, at the default rtol (pinned on 7b518c9,
+# unchanged through 2bc124b): Yp 0.2536754614, D/H x1e5 2.648809882. The bound
+# is unchanged.
+CONST_HONLY_FULL_YP = 0.2536731562
+CONST_HONLY_FULL_D_OVER_H_E5 = 2.649990509
 REFERENCE_RTOL = 1e-5
 
 

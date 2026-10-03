@@ -133,17 +133,35 @@ G_STUB_RESULTS = [3.04, 0.0, 0.0, 0.245, 0.247, 2.46, 1.04, 5.42]
 # the new one, where the old tree gives the same 1.06e-4 for the same callback
 # through the honly route. That offset is PRyMordial's, not the builder's, so it
 # is printed and not bounded.
-BUILDER_CONST_HONLY_FULL_YP = 0.2536761805
-BUILDER_CONST_HONLY_FULL_D_OVER_H_E5 = 2.648529359
+#
+# Re-pinned 2026-10-03 by bbn-tolerance prompt 02, which gives the full low-T
+# call rtol 1e-5 (it passed none, so SciPy's 1e-3): the same provenance
+# re-derived on 7b518c9 with that call at rtol 1e-5 by
+# prompts/bbn-tolerance/logs/01-probes/pinned_reference_7b518c9.py
+# builder-honly-full --rtol 1e-5 (bbn-tolerance log 01, Verification item 11;
+# log 02). The values before, at the default rtol (pinned on 7b518c9,
+# unchanged through 2bc124b): Yp 0.2536761805, D/H x1e5 2.648529359. The bound
+# is unchanged.
+BUILDER_CONST_HONLY_FULL_YP = 0.2536745605
+BUILDER_CONST_HONLY_FULL_D_OVER_H_E5 = 2.649973638
 END_TO_END_RTOL = 1e-6
 
-# (i) review-remediation README section 2 (f) row 1, the SM baseline, to its
-# quoted figures
+# (i) The SM baseline plot_by_beta.py draws: the production network, which is
+# the small network since bbn-tolerance prompt 02 (that campaign's U4, P16), at
+# its low-T rtol 1e-6. The values are the SM row of
+# prompts/bbn-tolerance/logs/01c-probes/scan.csv at lowT_rtol 1e-06 (tag T1;
+# tools/bbn_from_store.py --sm-baseline --small-network --lowT-rtol 1e-6 on
+# 893a5b1), to 10 significant figures, which the patched tree reproduces with
+# no override (bbn-tolerance log 02). Re-pinned 2026-10-03 by bbn-tolerance
+# prompt 02. Before, it was review-remediation README section 2 (f) row 1 to
+# its quoted figures, the full network at the default low-T rtol (pinned by
+# review-remediation prompt 04; unchanged through 2bc124b): Yp 0.24689, D/H
+# x1e5 2.4623, 3He/H x1e5 1.042, 7Li/H x1e10 5.423. The bound is unchanged.
 README_BASELINE = {
-    "Yp_BBN": 0.24689,
-    "DOverH": 2.4623,
-    "He3OverH": 1.042,
-    "Li7OverH": 5.423,
+    "Yp_BBN": 0.2468802117,
+    "DOverH": 2.458287893,
+    "He3OverH": 1.041932695,
+    "Li7OverH": 5.486373007,
 }
 BASELINE_RTOL = 1e-4
 
@@ -458,17 +476,19 @@ class TestBBNCallbacks(unittest.TestCase):
             self.assertLessEqual(dDoH, END_TO_END_RTOL)
 
     def test_i_SM_baseline(self):
-        """(i) compute_SM_baseline(False) reproduces README section 2 (f) row 1 to
-        1e-4 relative in all four abundances, and names the PRyMordial version.
-        **Runs one PRyMordial solve, about 10 s.**"""
+        """(i) compute_SM_baseline(True), the production network since
+        bbn-tolerance prompt 02, reproduces bbn-tolerance log 01c's small-network
+        SM row at low-T rtol 1e-6 to 1e-4 relative in all four abundances, and
+        names the PRyMordial version.
+        **Runs one small-network PRyMordial solve, about 10 s.**"""
         with SavedPRyMGlobals():
-            baseline = compute_SM_baseline(False)
+            baseline = compute_SM_baseline(True)
 
         print(
             "\n[test_bbn_callbacks (i)] baseline "
             + ", ".join(f"{k} {baseline[k]:.10g}" for k in README_BASELINE)
         )
-        self.assertFalse(baseline["small_network"])
+        self.assertIs(baseline["small_network"], True)
         self.assertEqual(baseline["PRyM_version"], PRYM_VERSION)
         for key, reference in README_BASELINE.items():
             with self.subTest(key):

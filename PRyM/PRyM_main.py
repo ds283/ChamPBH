@@ -1346,6 +1346,8 @@ class PRyMclass(object):
                         wall_clock_start,
                         wall_clock_limit,
                     ),
+                    # ChamPBH bbn-tolerance prompt 02: rtol 1e-6; upstream passes no rtol, so SciPy's 1e-3 applied (measured: bbn-tolerance log 01c)
+                    rtol=1.0e-6,
                     atol=1.0e-11,
                 )
                 # ChamPBH run-integrity prompt 02: check the solve
@@ -1426,6 +1428,8 @@ class PRyMclass(object):
                         wall_clock_start,
                         wall_clock_limit,
                     ),
+                    # ChamPBH bbn-tolerance prompt 02: rtol 1e-5; upstream passes no rtol, so SciPy's 1e-3 applied (measured: bbn-tolerance log 01)
+                    rtol=1.0e-5,
                     atol=1.0e-15,
                 )
                 # ChamPBH run-integrity prompt 02: check the solve

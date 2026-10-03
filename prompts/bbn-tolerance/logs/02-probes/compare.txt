@@ -1,0 +1,7 @@
+reference rows 49; acceptance rows 49
+identical in every field: 49 of 49
+differing: 0
+reference rows with no acceptance row: 0
+non-ok outcomes: 0
+  SM SM: Yp 0.24688021169088586, D/H 2.4582878928660548, 3He/H 1.0419326951489363, 7Li/H 5.48637300688257
+  beta=1.6 M=0.001 prod: Yp 0.24688971029506177, D/H 2.4609141011473543, 3He/H 1.0423995986909247, 7Li/H 5.478212408246507

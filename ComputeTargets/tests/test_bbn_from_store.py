@@ -63,11 +63,15 @@ A_LOG10_T_MEV_LO = -4.5
 A_MIN_IN_WINDOW = 50
 
 # (b) the override's rtol, and the low-T call's arguments as PRyMordial passes
-# them on this tree (4ae25b4 through 95da274): no rtol, so SciPy's 1e-3, and
-# atol 1e-11 for the small network. A prompt that patches the call re-pins
-# LOWT_SMALL_RTOL_AS_PASSED (README section 0.2 P7); None means "not passed".
-OVERRIDE_RTOL = 1e-6
-LOWT_SMALL_RTOL_AS_PASSED = None
+# them: since bbn-tolerance prompt 02, rtol 1e-6 and atol 1e-11 for the small
+# network. A prompt that patches the call re-pins LOWT_SMALL_RTOL_AS_PASSED
+# (README section 0.2 P7); None means "not passed". Re-pinned 2026-10-03 by
+# bbn-tolerance prompt 02: on 4ae25b4 through 2bc124b the call passed no rtol
+# (None, SciPy's 1e-3), and the override's rtol was 1e-6. It is now 1e-8, a
+# value of the scan (log 01, S1), since an override of 1e-6 would be invisible
+# against a call that passes 1e-6 itself.
+OVERRIDE_RTOL = 1e-8
+LOWT_SMALL_RTOL_AS_PASSED = 1e-6
 LOWT_SMALL_ATOL_AS_PASSED = 1e-11
 
 # (b) the stages PRyMordial solves, in order, under production's flags with the
@@ -212,8 +216,9 @@ class TestBBNFromStore(unittest.TestCase):
     def test_b_override_touches_the_low_T_call_only(self):
         """(b) compute_SM_baseline(small_network=True) twice with every
         solve_ivp call recorded as SciPy receives it: once with no override,
-        once under lowT_tolerance_override(rtol=1e-6). The low-T call's rtol is
-        absent (as PRyMordial passes it on this tree), then 1e-6, and its atol
+        once under lowT_tolerance_override(rtol=OVERRIDE_RTOL). The low-T call's
+        rtol is LOWT_SMALL_RTOL_AS_PASSED (as PRyMordial passes it on this tree;
+        1e-6 since bbn-tolerance prompt 02), then OVERRIDE_RTOL, and its atol
         is 1e-11 both times; every other call's t_span, y0 and non-callable
         keyword arguments are identical between the two solves, and the
         override recognises the five stages in order.

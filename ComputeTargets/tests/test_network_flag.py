@@ -15,7 +15,8 @@
 
 """
 The `small_network` switch reaches PRyMordial, selects the network it names,
-and production passes the full network.
+and production passes the small network (the full network until bbn-tolerance
+prompt 02, whose ruling U4 moved production to the small one).
 
 Written for production-readiness prompt 02 (item P2). Before that prompt
 `_configure_PRyMordial` set `PRyM_init.small_network_flag`, which PRyMordial
@@ -78,6 +79,34 @@ def _relative(a: float, b: float) -> float:
 # science-readiness prompt 01, and PRyM_thermo's rho_NP. One helper, in
 # prym_fixtures, since that prompt.
 _SavedPRyMGlobals = SavedPRyMGlobals
+
+
+def _literal_of_name(path: Path, name: str):
+    """
+    The literal that `name` is assigned in `path`. The name must be assigned
+    exactly once, by a plain `name = <literal>` (bbn-tolerance prompt 02: the
+    drivers name the network once and use the name).
+    """
+    tree = ast.parse(path.read_text(), filename=str(path))
+    values = [
+        node.value
+        for node in ast.walk(tree)
+        if isinstance(node, (ast.Assign, ast.AnnAssign, ast.AugAssign))
+        and any(
+            isinstance(t, ast.Name) and t.id == name
+            for t in (node.targets if isinstance(node, ast.Assign) else [node.target])
+        )
+    ]
+    if len(values) != 1:
+        raise AssertionError(f"{path.name}: {name} is assigned {len(values)} times")
+    return ast.literal_eval(values[0])
+
+
+def _resolve(path: Path, node):
+    """A literal node's value, or the literal a Name node is assigned in `path`."""
+    if isinstance(node, ast.Name):
+        return _literal_of_name(path, node.id)
+    return ast.literal_eval(node)
 
 
 def _calls_named(path: Path, name: str):
@@ -174,24 +203,28 @@ class TestNetworkFlag(unittest.TestCase):
         with self.subTest("full network, pinned D/H"):
             self.assertLessEqual(r["dDoH_pin"], REFERENCE_RTOL)
 
-    def test_c_production_defaults_are_the_full_network(self):
-        """(c) The compute_BBN_data default is small_network=False, and so are
+    def test_c_production_defaults_are_the_small_network(self):
+        """(c) The compute_BBN_data default is small_network=True, and so are
         compute_SM_baseline's result and PRyMordial's smallnet_flag when it is
         called as plot_by_beta.py calls it (PRyMclass stubbed: no solve). Also
         main.py's BBN payload and tools/bbn_baseline.py's default, read from
-        their source, since neither can be imported without side effects."""
+        their source, since neither can be imported without side effects. The
+        drivers pass a name, which is resolved to the literal it is assigned
+        once. Until bbn-tolerance prompt 02 (U4, P15) every one of these was
+        the full network, False."""
         default = (
             inspect.signature(compute_BBN_data._function)
             .parameters["small_network"]
             .default
         )
-        self.assertIs(default, False)
+        self.assertIs(default, True)
 
         # plot_by_beta.py runs argparse and ray.init at import, so read its call
-        calls = list(_calls_named(_ROOT / "plot_by_beta.py", "compute_SM_baseline"))
+        plot_by_beta = _ROOT / "plot_by_beta.py"
+        calls = list(_calls_named(plot_by_beta, "compute_SM_baseline"))
         self.assertEqual(len(calls), 1)
-        args = [ast.literal_eval(a) for a in calls[0].args]
-        kwargs = {k.arg: ast.literal_eval(k.value) for k in calls[0].keywords}
+        args = [_resolve(plot_by_beta, a) for a in calls[0].args]
+        kwargs = {k.arg: _resolve(plot_by_beta, k.value) for k in calls[0].keywords}
 
         import PRyM.PRyM_init as PRyMini
         import PRyM.PRyM_main as PRyMmain
@@ -199,13 +232,13 @@ class TestNetworkFlag(unittest.TestCase):
         with _SavedPRyMGlobals():
             with mock.patch.object(PRyMmain, "PRyMclass", _StubPRyMclass):
                 baseline = compute_SM_baseline(*args, **kwargs)
-            self.assertIs(PRyMini.smallnet_flag, False)
-        self.assertIs(baseline["small_network"], False)
+            self.assertIs(PRyMini.smallnet_flag, True)
+        self.assertIs(baseline["small_network"], True)
 
         # main.py: the payload handed to BBNData.compute. Since science-readiness
         # prompt 01 it also carries the wall-clock limit, a name rather than a
         # literal, so the dict is read key by key and only small_network is
-        # evaluated
+        # evaluated (since bbn-tolerance prompt 02 through the name it is given)
         payloads = [
             {
                 ast.literal_eval(key): value
@@ -217,7 +250,9 @@ class TestNetworkFlag(unittest.TestCase):
         ]
         bbn_payloads = [p for p in payloads if "small_network" in p]
         self.assertEqual(len(bbn_payloads), 1)
-        self.assertIs(ast.literal_eval(bbn_payloads[0]["small_network"]), False)
+        self.assertIs(
+            _resolve(_ROOT / "main.py", bbn_payloads[0]["small_network"]), True
+        )
         self.assertIn("wall_clock_limit", bbn_payloads[0])
 
         # tools/bbn_baseline.py: the --small-network argument's default
@@ -230,7 +265,7 @@ class TestNetworkFlag(unittest.TestCase):
         defaults = [
             ast.literal_eval(k.value) for k in flags[0].keywords if k.arg == "default"
         ]
-        self.assertEqual(defaults, [False])
+        self.assertEqual(defaults, [True])
 
 
 if __name__ == "__main__":

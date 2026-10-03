@@ -40,8 +40,12 @@ SampleValues = namedtuple(
 # optional wall_clock_limit, past which it raises PRyMWallClockLimitError
 # (PRyM/PRyM_main.py). The "cham03" patch (review-remediation prompt 03, an
 # inert dTNPdt) was reverted by science-readiness prompt 01: with
-# PRyMordial's thermodynamic NP flag off, dTNPdt is never called.
-PRYM_VERSION = "bf24c3d+ri02+sr01"
+# PRyMordial's thermodynamic NP flag off, dTNPdt is never called. "bt02"
+# (2026-10-03) is bbn-tolerance prompt 02: the low-T nuclear network's
+# solve_ivp call, which upstream gives no rtol (so SciPy's 1e-3 applied), runs
+# at rtol 1e-6 on the small network and 1e-5 on the full one, atol unchanged
+# (PRyM/PRyM_main.py; bbn-tolerance logs 01c and 01).
+PRYM_VERSION = "bf24c3d+ri02+sr01+bt02"
 
 # The wall-clock limit on a production PRyMordial solve, in seconds
 # (science-readiness README section 0.2, P3). An unloaded full-network solve
@@ -390,7 +394,7 @@ def compute_BBN_data(
     # below then makes a history reach 0.1 * 0.2 keV = 20 eV (science-readiness
     # prompt 06; the floor was 1e-4 keV = 0.1 eV, needing 0.01 eV).
     T_BBN_keV_spline_min: float = 0.2,
-    small_network: bool = False,
+    small_network: bool = True,
     wall_clock_limit: Optional[float] = DEFAULT_BBN_WALL_CLOCK_LIMIT,
 ):
     """
@@ -739,13 +743,13 @@ class BBNData(DatastoreObject):
             self._label = label
 
         if payload is not None:
-            small_network = payload.get("small_network", False)
+            small_network = payload.get("small_network", True)
             # seconds, or None for no limit (science-readiness prompt 01)
             wall_clock_limit = payload.get(
                 "wall_clock_limit", DEFAULT_BBN_WALL_CLOCK_LIMIT
             )
         else:
-            small_network = False
+            small_network = True
             wall_clock_limit = DEFAULT_BBN_WALL_CLOCK_LIMIT
 
         self._compute_ref = compute_BBN_data.remote(

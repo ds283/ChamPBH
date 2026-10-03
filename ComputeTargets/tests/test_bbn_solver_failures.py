@@ -352,9 +352,11 @@ class TestBBNSolverFailures(unittest.TestCase):
             self.assertTrue(np.isfinite(rho_NP(1.0)))
 
     def test_e_prym_version(self):
-        """(e) The PRyMordial version string names the run-integrity and
-        science-readiness patches, and no longer the reverted cham03."""
-        self.assertEqual(PRYM_VERSION, "bf24c3d+ri02+sr01")
+        """(e) The PRyMordial version string names the run-integrity,
+        science-readiness and bbn-tolerance patches, and no longer the reverted
+        cham03. Re-pinned 2026-10-03 by bbn-tolerance prompt 02 (the low-T rtol,
+        "+bt02"); it was "bf24c3d+ri02+sr01"."""
+        self.assertEqual(PRYM_VERSION, "bf24c3d+ri02+sr01+bt02")
 
     def test_f_thermodynamics_has_two_components(self):
         """(f) rho_NP through the production flags (_configure_PRyMordial), small

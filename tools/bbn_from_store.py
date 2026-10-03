@@ -706,7 +706,8 @@ def main(argv=None) -> int:
         "--small-network",
         action=argparse.BooleanOptionalAction,
         default=False,
-        help="PRyMordial's small network (default: the full network, as main.py)",
+        help="PRyMordial's small network (default: the full network, which logs 01 and 01c's "
+        "reproduction commands assume; main.py runs the small network since bbn-tolerance prompt 02)",
     )
     parser.add_argument(
         "--wall-clock-limit",

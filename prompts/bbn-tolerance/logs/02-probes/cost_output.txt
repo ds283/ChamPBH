@@ -1,0 +1,12 @@
+load average before: (8.85693359375, 26.9794921875, 20.70849609375)
+  rep 0  small:default SM      ok Yp=0.24688021169088586 DoH=2.4582878928660548 wall=8.74 s load=6.42
+  rep 0  small:default control ok Yp=0.24688971029506177 DoH=2.4609141011473543 wall=10.02 s load=6.42
+  rep 1  small:default SM      ok Yp=0.24688021169088586 DoH=2.4582878928660548 wall=8.76 s load=6.05
+  rep 1  small:default control ok Yp=0.24688971029506177 DoH=2.4609141011473543 wall=10.11 s load=6.05
+  rep 2  small:default SM      ok Yp=0.24688021169088586 DoH=2.4582878928660548 wall=8.89 s load=5.91
+  rep 2  small:default control ok Yp=0.24688971029506177 DoH=2.4609141011473543 wall=10.12 s load=5.91
+load average after: (5.90771484375, 21.5166015625, 19.205078125)
+
+       setting  SM median  ratio  control median  ratio
+ small:default       8.76   1.00           10.11   1.00
+(ratios against small:default)

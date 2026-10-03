@@ -40,6 +40,13 @@
 # pressure_NP_MeV4 column. Every BBNData row changes. The science-readiness campaign adds columns
 # under this label with no migration, so a store made before 2026.6.0 cannot be reused: start a
 # fresh datastore file.
+# On 2026-10-03 (bbn-tolerance prompt 02), under the same label: production runs PRyMordial's
+# small network (small_network=True; the full network's Li8(p,d)Li7 rate makes it fail near
+# T_J = 1 keV), and the low-T nuclear network's solve_ivp call has rtol set, 1e-6 small and 1e-5
+# full, where upstream passed none; PRyM_version is "bf24c3d+ri02+sr01+bt02". The label is not
+# bumped, so that the stored histories stay valid: BBN rows are refreshed by copying the store and
+# running main.py on the copy with --drop bbn-data. main.py and plot_by_beta.py warn about BBN rows
+# from another PRyM_version or network.
 VERSION_LABEL = "2026.6.0"
 
 # The reserved payload key under which Datastore.object_get hands a version-keyed factory's

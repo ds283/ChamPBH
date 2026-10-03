@@ -3,7 +3,9 @@
 **Last updated:** 2026-10-03 · **Status: IN PROGRESS — re-planned around the small network (U3);
 prompt 01 committed BLOCKED and ruled; P10–P13 accepted; 01c landed (recommends the small network
 at low-T rtol 1e-6); the user's ruling on it complete (U4): small at rtol 1e-6, full patched
-to rtol 1e-5; prompts 02 and 03 rewritten; P14–P16 accepted; 02 next** (01b added
+to rtol 1e-5; prompts 02 and 03 rewritten; P14–P16 accepted; 02 landed (production on the
+small network, both low-T rtol set, the foreign-provenance warning; 49 of 49 reproduce log 01c);
+03 next** (01b added
 2026-10-03, U2; 01c added 2026-10-03, U3). Planned on 2026-10-03 against
 `main` at `4ae25b4`, from a Claude Science brief kept at
 [`source/brief_prym_lowT_failures.md`](source/brief_prym_lowT_failures.md) and checked against the
@@ -12,7 +14,8 @@ CosmologyModels 18, ComputeTargets 103, Datastore 31.
 **Target branch** `bbn-tolerance`, cut from `4ae25b4`; planning and orchestration commits land on
 it.
 **`VERSION_LABEL` is `"2026.6.0"`** and does not change in this campaign (README §0.2 P5).
-**`PRYM_VERSION` is `"bf24c3d+ri02+sr01"`**; prompt 02 makes it `"bf24c3d+ri02+sr01+bt02"`.
+**`PRYM_VERSION` was `"bf24c3d+ri02+sr01"`**; prompt 02 made it `"bf24c3d+ri02+sr01+bt02"`
+(2026-10-03). Suites after prompt 02: 18, 113, 31.
 
 The campaign finds out why PRyMordial's low-temperature network fails on 11 of 684 φ\* = 5
 histories of the 2026.6.0 science run, and why D/H scatters by up to 2.2×10⁻³ under ulp-level input
@@ -208,7 +211,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | 01 | [The mechanism and the low-T tolerance scan](01-mechanism-and-tolerance-scan.md) | **M**; measures **S**, **N** | Opus | ✍️ 2026-10-03 | ⛔ 2026-10-03, **BLOCKED** (no setting meets P3; the user rules) | see `git log` ("Add bbn_from_store and measure PRyMordial's low-T failures") | [`logs/01-mechanism-and-tolerance-scan.md`](logs/01-mechanism-and-tolerance-scan.md) |
 | 01c | [Measure the small network](01c-small-network-scan.md) (added 2026-10-03, U3) | **Q** | Opus | ✍️ 2026-10-03 | ✅ 2026-10-03, **COMPLETE WITH DEVIATIONS** (recommends small, rtol 1e-6; deviation 2 flagged) | see `git log` ("Measure PRyMordial's small network for bbn-tolerance") | [`logs/01c-small-network-scan.md`](logs/01c-small-network-scan.md) |
 | 01b | [Draw the kick threshold with Σ_eff](01b-kick-threshold-sigma-eff.md) (added 2026-10-03) | **B** | Sonnet | ✍️ 2026-10-03 | — | — | — |
-| 02 | [Move production to the small network, set both low-T tolerances, and warn on foreign BBN rows](02-low-T-tolerance-patch.md) | **S**, **N**, **K** | Opus | ✍️ 2026-10-03; **rewritten 2026-10-03** (U4): the small network, both low-T tolerances, the warning | — | — | — |
+| 02 | [Move production to the small network, set both low-T tolerances, and warn on foreign BBN rows](02-low-T-tolerance-patch.md) | **S**, **N**, **K** | Opus | ✍️ 2026-10-03; **rewritten 2026-10-03** (U4): the small network, both low-T tolerances, the warning | ✅ 2026-10-03, **COMPLETE WITH DEVIATIONS** (six implementation choices; 49 of 49 reproduce log 01c; no stop) | see `git log` ("Move BBN to PRyMordial's small network and set low-T rtol") | [`logs/02-low-T-tolerance-patch.md`](logs/02-low-T-tolerance-patch.md) |
 | 03 | [Documents and close-out](03-documents-and-close-out.md) | **D** | Sonnet | ✍️ 2026-10-03; **revised 2026-10-03** (U4) | — | — | — |
 
 ---
@@ -219,10 +222,10 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 |---|---|---|---|---|
 | M | measurement | The mechanism, the tolerance scan, Yp's floor, upstream's defaults, and a recommended setting. | 01 | **measured** (log 01); recommendation withheld: no setting meets P3 |
 | Q | measurement | The small network on the roster and a breadth sample: reliability, scatter, convergence, cost, its offset from the full network, and a recommended setting by P11. Added 2026-10-03 (U3). | 01c | **measured** (log 01c); recommends low-T rtol 1e-6, atol 1e-11; awaiting the user's ruling |
-| S | **DEFECT, medium** | The full low-T network fails near T_J = 1 keV on 11 of 684 φ\* = 5 histories, depending on ulp-level details of the input. Closes `[00-the-low-T-network-fails-near-1-keV-on-ulp-level-input]`. | 01, 02 | open; measured (log 01): the cause is a PRyMordial rate, not the tolerance as such |
-| N | **DEFECT, low–medium** | D/H moves by up to 2.2×10⁻³ under a 10⁻¹² change to ρ_NP at the default tolerance. Closes `[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]` (assigned). | 01, 02, 03 | open; measured (log 01) |
+| S | **DEFECT, medium** | The full low-T network fails near T_J = 1 keV on 11 of 684 φ\* = 5 histories, depending on ulp-level details of the input. Closes `[00-the-low-T-network-fails-near-1-keV-on-ulp-level-input]`. | 01, 02 | **done** (prompt 02): production runs the small network at low-T rtol 1e-6, which completes all 11 (log 02); the full network's cause, a PRyMordial rate, stays open as `[01-…li8…]` |
+| N | **DEFECT, low–medium** | D/H moves by up to 2.2×10⁻³ under a 10⁻¹² change to ρ_NP at the default tolerance. Closes `[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]` (assigned). | 01, 02, 03 | **done** (prompt 02): D/H spread median 1.45e-3 → 4.4e-5 (max 1.5e-4); the residual is for prompt 03 to record (P9) |
 | B | **DEFECT, low** | The `T_deliver` figure's kick threshold uses 1/√(3Σ), not the paper's 1/√(3Σ_eff); its minimum is 1.0295 where the paper says 1.11. Closes `[00-the-kick-threshold-overlay-uses-sigma-not-sigma-eff]`. Added 2026-10-03 (U2). | 01b | open |
-| K | **GAP** | A store that was not refreshed serves BBN rows from an older PRyMordial with no warning. Closes `[00-a-store-serves-bbn-rows-from-another-prym-version-silently]`. | 02 | open |
+| K | **GAP** | A store that was not refreshed serves BBN rows from an older PRyMordial with no warning. Closes `[00-a-store-serves-bbn-rows-from-another-prym-version-silently]`. | 02 | **done** (prompt 02): `warn_foreign_bbn_provenance` in both drivers |
 | D | documents | The tolerance, its measurements, the refresh route, the handover. | 03 | open |
 
 ---
@@ -231,7 +234,95 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
 Two opened by the planner on 2026-10-03, one per defect or gap with no issue on another board, and
 one more the same day for prompt 01b (U2). Two opened by prompt 01 the same day (`[01-…]`). One
-assigned from another board (§3.1).
+assigned from another board (§3.1). Prompt 02 (2026-10-03) closed the planner's two (§4) and the
+assigned one, and opened one (`[02-…]`).
+
+- **[01-prymordial-li8-p-d-li7-rate-rings-near-1-kev]** *(log 01, Verification item 6; Observations 1)*.
+  - **What.** `Li7dLi8p_bkwrd` (`PRyM/PRyM_nuclear_net63.py:1142–1147`; upstream `bf24c3d` is
+    identical) is α·T9^β·exp(γ/T9)·spline(T9), with γ = 2.2274. The spline is
+    `interp1d(kind="quadratic", fill_value="extrapolate")` (`:197`) through a 500-node table of
+    the forward rate.
+    - Near T9 = 0.0116 (T ≈ 1 keV) the table is 1e-264 to 3e-241. The spline gives −6.9e-55 to
+      +3.9e-54, negative on 51 % of T9 ∈ [0.0105, 0.015].
+    - The reverse rate therefore reaches |1.45e39| and flips sign between neighbouring
+      temperatures, where it should be about 1e-160.
+    - It is the only splined rate in `PRyM_init.py` with γ > 0 (a regex scan).
+  - **Impact.** It causes the 11 low-T failures of `[00-the-low-T-network-fails-near-1-keV-on-ulp-level-input]`,
+    and it keeps causing about 1 % of solves to fail at every tolerance in the grid. Li8 is
+    tiny, so its effect on the abundances of a completed solve is not established.
+  - **Re-planned (2026-10-03, U3).** The user ruled to work around this rate, not patch it.
+    Production moves to the small network, which has no Li8, subject to log 01c. The issue stays
+    open: the full network keeps the defect for anyone who selects it.
+  - **Next step (as first recorded).** The user rules. A patch to a PRyMordial rate is outside P4
+    and is a stop for prompt 02 (README §4). Options:
+    - interpolate the table in log space, or return 0 below its significant range;
+    - clamp the reverse rate;
+    - use the shadowed analytic forward rate at `:886–889`.
+  - **Narrowed (2026-10-03, prompt 02).** Production no longer runs the full network: `main.py`'s
+    `BBN_SMALL_NETWORK = True`. The full network stays selectable by setting it to `False`, and
+    its low-T call now passes `rtol` 1e-5, which does not remove this defect (log 01). The issue
+    stays open for anyone who selects the full network.
+- **[01-prymordial-dYB8dtLT-unpacks-Y-in-the-superseded-order]** *(log 01, Observations 2)*.
+  - **What.** `dYB8dtLT` (`PRyM/PRyM_nuclear_net63.py:1480`; upstream identical) unpacks Y in the
+    old species order, which every other low-T equation has commented out. So in B8's equation
+    He6 ← Y[Li7], Li6 ← Y[Be7], Li7 ← Y[He6] and Be7 ← Y[Li6]. B8's right-hand side is wrong and
+    does not match the Jacobian's B8 row.
+  - **Impact.** Not measured. B8 stays below 1e-16 and enters no reported abundance, so it is
+    probably negligible.
+  - **Next step.** Measure it by a runtime override of `dYB8dtLT` in a probe; patch only if the
+    user asks.
+- **[00-the-kick-threshold-overlay-uses-sigma-not-sigma-eff]** *(README §0.2 U2, §1 B, §2 (h))*.
+  - **What.** `extract_common.kick_threshold_curve` returns 1/√(3Σ), with the same text in
+    `plot_T_deliver`'s legend and in a comment in `plot_by_beta.py`. The paper's reachability
+    condition gives β_th = 1/√(3Σ_eff) = √((2 + Σ)/(6Σ)). The Σ itself is the integration's.
+  - **Measured** (planner, `d78c9f8`). The curve's minimum is 1.0295 at the QCD peak
+    (Σ = 0.31453, 0.182 GeV); with Σ_eff it is 1.1074, the paper's 1.11.
+  - **Impact.** The dashed curve on figure 3 sits about 7 % low in β, so delivery points between
+    1.03 and 1.11 look as if they sit above the threshold.
+  - **Next step.** Prompt 01b.
+
+- **[02-two-places-still-say-production-runs-the-full-network]** *(log 02, Observations 1)*.
+  - **What.**
+    - `tools/history_and_bbn.py:255–258`: `--small-network` defaults to `False`, with help
+      "(default: the full network, as main.py)". The tool runs `compute_BBN_data._function` with
+      that value.
+    - `ComputeTargets/BBNData.py:256` (`_configure_PRyMordial`): a comment says "False
+      (production) runs the full network".
+  - **Impact.** By default the tool now solves the other network from production, while its help
+    says it is production's; its results would differ by the network offset (D/H about 3e-4; log
+    01c, row 6). The comment is wrong text only.
+  - **Next step.** The user decides whether `tools/history_and_bbn.py`'s default follows
+    `main.py`, as P15 did for the other production defaults, or keeps the full network, as
+    `tools/bbn_from_store.py` does. The help text and the comment are corrected either way.
+
+### 3.1 Assigned to this campaign from other boards
+
+Each entry stays on its own board, which carries an **Assigned (2026-10-03)** line. The prompt
+that closes one adds a dated **Resolved** line there, deletes the index row, and records it in §4
+here (README §5 rule 4).
+
+| Issue | Board | Prompt |
+|---|---|---|
+| `[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]` | `review-remediation` | 01 (measures), 02 (closes) |
+
+- **Narrowed (2026-10-03, prompt 01), `[03-…]`.**
+  - **The scatter at the default.** At the default low-T tolerance the D/H spread over prod,
+    pert12 and pert9 is 1.3e-4–2.8e-3 on the five controls (median 1.45e-3).
+  - **Most of it is the low-T rtol.** It falls to a median of 8.4e-5 at rtol 1e-4, 4.1e-5 at
+    1e-5, and 1.8–2.0e-5 at 1e-6–1e-8.
+  - **What remains is set by other stages.**
+    - The Yp spread, 1.5–4.5e-5, does not move with the low-T rtol. It falls about 100× only
+      when the thermodynamics, a(T), high-T and mid-T stages are all tightened.
+    - β = 2, M = 10⁻⁵ keeps a D/H spread of 1.04e-4 at every low-T rtol. It falls to 2.4e-5 with
+      the thermodynamic stage tightened.
+  - **A systematic offset.** The a(T) stage at its rtol 1e-6 shifts D/H by about +4.5e-4.
+  - These are measurements (P9), handed to prompt 03.
+- **Resolved (2026-10-03, prompt 02), `[03-…]`.** A dated **Resolved** line is on the
+  `review-remediation` board; the index row is deleted.
+
+---
+
+## 4. Resolved issues
 
 - **[00-the-low-T-network-fails-near-1-keV-on-ulp-level-input]** *(README §1 S; the brief §1–§2)*.
   - **What.** In the 2026.6.0 science store, 11 of 684 φ\* = 5 histories have a `BBNData` failure
@@ -285,36 +376,16 @@ assigned from another board (§3.1).
       within ±3.2e-5. This is a measurement (P12).
     - **Still open.** The issue closes with the rewritten prompt 02, once production runs the
       small network.
-- **[01-prymordial-li8-p-d-li7-rate-rings-near-1-kev]** *(log 01, Verification item 6; Observations 1)*.
-  - **What.** `Li7dLi8p_bkwrd` (`PRyM/PRyM_nuclear_net63.py:1142–1147`; upstream `bf24c3d` is
-    identical) is α·T9^β·exp(γ/T9)·spline(T9), with γ = 2.2274. The spline is
-    `interp1d(kind="quadratic", fill_value="extrapolate")` (`:197`) through a 500-node table of
-    the forward rate.
-    - Near T9 = 0.0116 (T ≈ 1 keV) the table is 1e-264 to 3e-241. The spline gives −6.9e-55 to
-      +3.9e-54, negative on 51 % of T9 ∈ [0.0105, 0.015].
-    - The reverse rate therefore reaches |1.45e39| and flips sign between neighbouring
-      temperatures, where it should be about 1e-160.
-    - It is the only splined rate in `PRyM_init.py` with γ > 0 (a regex scan).
-  - **Impact.** It causes the 11 low-T failures of `[00-the-low-T-network-fails-near-1-keV-on-ulp-level-input]`,
-    and it keeps causing about 1 % of solves to fail at every tolerance in the grid. Li8 is
-    tiny, so its effect on the abundances of a completed solve is not established.
-  - **Re-planned (2026-10-03, U3).** The user ruled to work around this rate, not patch it.
-    Production moves to the small network, which has no Li8, subject to log 01c. The issue stays
-    open: the full network keeps the defect for anyone who selects it.
-  - **Next step (as first recorded).** The user rules. A patch to a PRyMordial rate is outside P4
-    and is a stop for prompt 02 (README §4). Options:
-    - interpolate the table in log space, or return 0 below its significant range;
-    - clamp the reverse rate;
-    - use the shadowed analytic forward rate at `:886–889`.
-- **[01-prymordial-dYB8dtLT-unpacks-Y-in-the-superseded-order]** *(log 01, Observations 2)*.
-  - **What.** `dYB8dtLT` (`PRyM/PRyM_nuclear_net63.py:1480`; upstream identical) unpacks Y in the
-    old species order, which every other low-T equation has commented out. So in B8's equation
-    He6 ← Y[Li7], Li6 ← Y[Be7], Li7 ← Y[He6] and Be7 ← Y[Li6]. B8's right-hand side is wrong and
-    does not match the Jacobian's B8 row.
-  - **Impact.** Not measured. B8 stays below 1e-16 and enters no reported abundance, so it is
-    probably negligible.
-  - **Next step.** Measure it by a runtime override of `dYB8dtLT` in a probe; patch only if the
-    user asks.
+  - **Resolved (2026-10-03, prompt 02).** Production no longer runs the network that fails.
+    - `main.py`'s `BBN_SMALL_NETWORK = True` selects PRyMordial's small network, whose low-T call
+      now passes `rtol` 1e-6 (`atol` 1e-11). `plot_by_beta.py`'s SM baseline and the defaults of
+      P15 follow it.
+    - The patched tree, with no override, completes all 11 histories in all three variants, and
+      reproduces log 01c's T1 rows at 1e-6 in every field (49 of 49; log 02).
+    - The full network stays selectable, and its low-T call now passes `rtol` 1e-5 (`atol`
+      1e-15). Its Li8 failures remain: `[01-prymordial-li8-p-d-li7-rate-rings-near-1-kev]`.
+    - The 11 stored failure rows of the science store stay until the user refreshes BBN (README
+      §2 (f)).
 - **[00-a-store-serves-bbn-rows-from-another-prym-version-silently]** *(README §0.3, §1 K)*.
   - **What.** `BBNData` lookups are keyed on `VERSION_LABEL` and ignore `PRyM_version`
     (`Datastore/SQL/ObjectFactories/BBNData.py` `build`). Only `inventory` lists the versions
@@ -322,41 +393,26 @@ assigned from another board (§3.1).
   - **Impact.** After prompt 02, `plot_by_beta.py` on a store that was not refreshed would plot
     old-tolerance abundances with no sign that they are old.
   - **Next step.** Prompt 02 (README §0.2 P6): warn, do not filter.
-- **[00-the-kick-threshold-overlay-uses-sigma-not-sigma-eff]** *(README §0.2 U2, §1 B, §2 (h))*.
-  - **What.** `extract_common.kick_threshold_curve` returns 1/√(3Σ), with the same text in
-    `plot_T_deliver`'s legend and in a comment in `plot_by_beta.py`. The paper's reachability
-    condition gives β_th = 1/√(3Σ_eff) = √((2 + Σ)/(6Σ)). The Σ itself is the integration's.
-  - **Measured** (planner, `d78c9f8`). The curve's minimum is 1.0295 at the QCD peak
-    (Σ = 0.31453, 0.182 GeV); with Σ_eff it is 1.1074, the paper's 1.11.
-  - **Impact.** The dashed curve on figure 3 sits about 7 % low in β, so delivery points between
-    1.03 and 1.11 look as if they sit above the threshold.
-  - **Next step.** Prompt 01b.
+  - **Resolved (2026-10-03, prompt 02).** `pipeline_selection.warn_foreign_bbn_provenance`
+    prints one warning when stored rows were made by another `PRyM_version` or another network
+    (U4 extended P6 to the network).
+    - It names each foreign pair with its count, and counts the failure rows, which store no
+      provenance.
+    - It ends with the refresh route.
+    - `main.py` calls it at the end of its BBN stage, and `plot_by_beta.py` at the end of each
+      model's pipeline. Each passes `PRYM_VERSION` and its `BBN_SMALL_NETWORK`.
+    - Nothing is skipped, filtered or recomputed.
+    - Tested on stand-ins and on rows read back from a temporary datastore with
+      `_do_not_populate` (`test_foreign_bbn_provenance`; log 02).
+- **[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]** *(assigned from
+  `review-remediation`; §3.1)*.
+  - **Resolved (2026-10-03, prompt 02).** The scatter it describes is explained and reduced.
+    - **Before.** The full network at the default low-T tolerance gave a D/H spread with a median
+      of 1.45e-3 over the five controls (log 01).
+    - **After.** The small network at low-T `rtol` 1e-6, production since prompt 02, gives a
+      median of 4.4e-5 and a maximum of 1.5e-4, on β = 2.4, M = 10⁻⁵ (log 01c). The patched tree
+      reproduces those solves in every field (log 02).
+    - **The residual is a measurement (P9)**, set by PRyMordial's other stages, not an issue.
+      Prompt 03 records it.
+    - The entry and its **Resolved** line stay on the `review-remediation` board.
 
-### 3.1 Assigned to this campaign from other boards
-
-Each entry stays on its own board, which carries an **Assigned (2026-10-03)** line. The prompt
-that closes one adds a dated **Resolved** line there, deletes the index row, and records it in §4
-here (README §5 rule 4).
-
-| Issue | Board | Prompt |
-|---|---|---|
-| `[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]` | `review-remediation` | 01 (measures), 02 (closes) |
-
-- **Narrowed (2026-10-03, prompt 01), `[03-…]`.**
-  - **The scatter at the default.** At the default low-T tolerance the D/H spread over prod,
-    pert12 and pert9 is 1.3e-4–2.8e-3 on the five controls (median 1.45e-3).
-  - **Most of it is the low-T rtol.** It falls to a median of 8.4e-5 at rtol 1e-4, 4.1e-5 at
-    1e-5, and 1.8–2.0e-5 at 1e-6–1e-8.
-  - **What remains is set by other stages.**
-    - The Yp spread, 1.5–4.5e-5, does not move with the low-T rtol. It falls about 100× only
-      when the thermodynamics, a(T), high-T and mid-T stages are all tightened.
-    - β = 2, M = 10⁻⁵ keeps a D/H spread of 1.04e-4 at every low-T rtol. It falls to 2.4e-5 with
-      the thermodynamic stage tightened.
-  - **A systematic offset.** The a(T) stage at its rtol 1e-6 shifts D/H by about +4.5e-4.
-  - These are measurements (P9), handed to prompt 03.
-
----
-
-## 4. Resolved issues
-
-None yet.

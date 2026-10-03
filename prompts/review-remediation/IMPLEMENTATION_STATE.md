@@ -300,6 +300,14 @@ these 15 open; they pass to whichever campaign takes them (`.documents/review-re
     ρ_NP, and 11 failures in the 2026.6.0 science run, to PRyMordial's low-T network running at
     SciPy's default `rtol = 1e-3`. The planner confirmed that the low-T calls pass no `rtol` (that
     campaign's README §0.3).
+  - **Resolved (2026-10-03):** by the [`bbn-tolerance`](../bbn-tolerance/IMPLEMENTATION_STATE.md)
+    campaign, prompt 02 (commit "Move BBN to PRyMordial's small network and set low-T rtol"; log
+    `prompts/bbn-tolerance/logs/02-low-T-tolerance-patch.md`). Production now runs PRyMordial's
+    small network with its low-T `rtol` set to 1e-6. The D/H spread under ulp-level changes to
+    ρ_NP fell from a median of 1.45e-3 (the full network at the default low-T tolerance, five
+    controls; bbn-tolerance log 01) to a median of 4.4e-5, maximum 1.5e-4 on β = 2.4, M = 10⁻⁵
+    (bbn-tolerance log 01c). The residual is a measurement of PRyMordial's other stages, not an
+    issue (that campaign's README §0.2 P9).
 - **[03-bbn-solver-failures-are-undetected-and-some-exceptions-escape]** *(log 03, observation 3)*.
   - **What.**
     - None of the eight `solve_ivp` calls in `PRyM/PRyM_main.py` checks `.status` or `.success`,

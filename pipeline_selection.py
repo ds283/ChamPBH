@@ -30,7 +30,7 @@ can reach the decision directly. The lookup results are read only through their
 
 from dataclasses import dataclass
 from math import exp, log
-from typing import Any, List, Sequence, Tuple
+from typing import Any, Dict, List, Sequence, Tuple
 
 
 @dataclass(frozen=True)
@@ -195,6 +195,96 @@ def super_planckian_couplings(
     ln_T = log(GetTemperature(T_init))
     ln_Mp = log(units.PlanckMass)
     return [c for c in couplings if c.log_Omega(phi) + ln_T > ln_Mp]
+
+
+@dataclass(frozen=True)
+class BBNProvenance:
+    """
+    The provenance of the BBNData rows a driver read (bbn-tolerance prompt 02).
+
+    `foreign` maps each (PRyM_version, small_network) pair that differs from the
+    driver's own to the number of successful rows carrying it. `not_stored` counts the
+    failure rows, which store neither column, so their provenance cannot be told.
+    `current` counts the successful rows that match. Rows not found in the store are
+    not counted.
+    """
+
+    foreign: Dict[Tuple[Any, Any], int]
+    not_stored: int
+    current: int
+
+
+BBN_REFRESH_ROUTE = (
+    "to refresh BBN, copy the store and run main.py on the copy with --drop bbn-data"
+)
+
+
+def foreign_bbn_provenance(
+    bbn_objects: Sequence[Any], prym_version: str, small_network: bool
+) -> BBNProvenance:
+    """
+    Count the BBNData rows whose (PRyM_version, small_network) differs from
+    (`prym_version`, `small_network`), grouped by pair. BBNData lookups are keyed on the
+    version label only, so a store that was not refreshed after a PRyMordial patch, or
+    after a change of network, serves such rows silently (bbn-tolerance README section
+    0.2 P6, U4). Only objects found in the store are considered, and `failure` is read
+    before either property, since both raise on a failure row. Nothing is filtered.
+
+    :param bbn_objects: BBNData lookup results, with or without _do_not_populate
+    :param prym_version: the driver's PRYM_VERSION
+    :param small_network: the network the driver runs
+    """
+    foreign = {}
+    not_stored = 0
+    current = 0
+    for obj in bbn_objects:
+        if not obj.available:
+            continue
+        if obj.failure:
+            not_stored += 1
+            continue
+        pair = (obj.PRyM_version, obj.small_network)
+        if pair == (prym_version, small_network):
+            current += 1
+        else:
+            foreign[pair] = foreign.get(pair, 0) + 1
+    return BBNProvenance(foreign=foreign, not_stored=not_stored, current=current)
+
+
+def warn_foreign_bbn_provenance(
+    bbn_objects: Sequence[Any], prym_version: str, small_network: bool, emit=print
+) -> None:
+    """
+    If any successful BBNData row was made by another PRyMordial version or network
+    (see `foreign_bbn_provenance`), print one warning: a line per foreign pair with its
+    count, the count of failure rows whose provenance is not stored, and the refresh
+    route. Print nothing otherwise. The rows are used as before; this only warns
+    (bbn-tolerance README section 0.2 P6, U4).
+
+    :param emit: called with each line; `print` by default
+    """
+    p = foreign_bbn_provenance(bbn_objects, prym_version, small_network)
+    if not p.foreign:
+        return None
+    network = "small" if small_network else "full"
+    emit(
+        f"!! warning: {sum(p.foreign.values())} stored BBNData row(s) were not made by this "
+        f"code's PRyMordial (PRyM_version={prym_version}, {network} network); they are used "
+        f"as stored"
+    )
+    for (version, small), count in sorted(
+        p.foreign.items(), key=lambda item: (-item[1], str(item[0]))
+    ):
+        foreign_network = {True: "small", False: "full"}.get(small, repr(small))
+        emit(
+            f"!! warning:   {count} x PRyM_version={version}, {foreign_network} network"
+        )
+    emit(
+        f"!! warning:   {p.not_stored} failure row(s) store no provenance and cannot be "
+        f"classified"
+    )
+    emit(f"!! warning: {BBN_REFRESH_ROUTE}")
+    return None
 
 
 def warn_super_planckian(
