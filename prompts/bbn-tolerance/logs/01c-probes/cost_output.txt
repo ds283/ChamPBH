@@ -1,0 +1,47 @@
+load average before: (11.19970703125, 78.986328125, 128.9541015625)
+  rep 0   full:default SM      ok Yp=0.2468872957941561 DoH=2.4622510650783114 wall=7.62 s load=8.02
+  rep 0   full:default control ok Yp=0.24689483901116643 DoH=2.4615119456330077 wall=8.86 s load=8.02
+  rep 0  small:default SM      ok Yp=0.2468818825691892 DoH=2.4579769989623 wall=5.09 s load=7.38
+  rep 0  small:default control ok Yp=0.24688599061985433 DoH=2.4607524230812983 wall=6.30 s load=7.38
+  rep 0     small:1e-4 SM      ok Yp=0.24687996393089726 DoH=2.457652507394133 wall=5.79 s load=8.73
+  rep 0     small:1e-4 control ok Yp=0.24688880980643854 DoH=2.459872646024924 wall=6.91 s load=8.73
+  rep 0     small:1e-5 SM      ok Yp=0.24688026839146177 DoH=2.457881437404021 wall=7.23 s load=7.91
+  rep 0     small:1e-5 control ok Yp=0.24688969623479054 DoH=2.4606966937606334 wall=8.28 s load=7.91
+  rep 0     small:1e-6 SM      ok Yp=0.24688021169088586 DoH=2.4582878928660548 wall=9.15 s load=8.13
+  rep 0     small:1e-6 control ok Yp=0.24688971029506177 DoH=2.4609141011473543 wall=9.98 s load=8.13
+  rep 0     small:1e-8 SM      ok Yp=0.24688023143050172 DoH=2.4582239060820337 wall=11.97 s load=6.53
+  rep 0     small:1e-8 control ok Yp=0.24688974320773707 DoH=2.4609552926195053 wall=12.99 s load=6.53
+  rep 1   full:default SM      ok Yp=0.2468872957941561 DoH=2.4622510650783114 wall=7.61 s load=5.97
+  rep 1   full:default control ok Yp=0.24689483901116643 DoH=2.4615119456330077 wall=8.86 s load=5.97
+  rep 1  small:default SM      ok Yp=0.2468818825691892 DoH=2.4579769989623 wall=5.09 s load=5.44
+  rep 1  small:default control ok Yp=0.24688599061985433 DoH=2.4607524230812983 wall=6.23 s load=5.44
+  rep 1     small:1e-4 SM      ok Yp=0.24687996393089726 DoH=2.457652507394133 wall=5.74 s load=5.28
+  rep 1     small:1e-4 control ok Yp=0.24688880980643854 DoH=2.459872646024924 wall=6.94 s load=5.28
+  rep 1     small:1e-5 SM      ok Yp=0.24688026839146177 DoH=2.457881437404021 wall=7.09 s load=6.58
+  rep 1     small:1e-5 control ok Yp=0.24688969623479054 DoH=2.4606966937606334 wall=8.29 s load=6.58
+  rep 1     small:1e-6 SM      ok Yp=0.24688021169088586 DoH=2.4582878928660548 wall=8.79 s load=9.39
+  rep 1     small:1e-6 control ok Yp=0.24688971029506177 DoH=2.4609141011473543 wall=10.09 s load=9.39
+  rep 1     small:1e-8 SM      ok Yp=0.24688023143050172 DoH=2.4582239060820337 wall=11.79 s load=7.72
+  rep 1     small:1e-8 control ok Yp=0.24688974320773707 DoH=2.4609552926195053 wall=12.95 s load=7.72
+  rep 2   full:default SM      ok Yp=0.2468872957941561 DoH=2.4622510650783114 wall=7.55 s load=7.60
+  rep 2   full:default control ok Yp=0.24689483901116643 DoH=2.4615119456330077 wall=9.06 s load=7.60
+  rep 2  small:default SM      ok Yp=0.2468818825691892 DoH=2.4579769989623 wall=5.08 s load=6.63
+  rep 2  small:default control ok Yp=0.24688599061985433 DoH=2.4607524230812983 wall=6.30 s load=6.63
+  rep 2     small:1e-4 SM      ok Yp=0.24687996393089726 DoH=2.457652507394133 wall=5.74 s load=6.06
+  rep 2     small:1e-4 control ok Yp=0.24688880980643854 DoH=2.459872646024924 wall=6.91 s load=6.06
+  rep 2     small:1e-5 SM      ok Yp=0.24688026839146177 DoH=2.457881437404021 wall=7.12 s load=5.34
+  rep 2     small:1e-5 control ok Yp=0.24688969623479054 DoH=2.4606966937606334 wall=8.24 s load=5.34
+  rep 2     small:1e-6 SM      ok Yp=0.24688021169088586 DoH=2.4582878928660548 wall=8.73 s load=4.65
+  rep 2     small:1e-6 control ok Yp=0.24688971029506177 DoH=2.4609141011473543 wall=10.05 s load=4.65
+  rep 2     small:1e-8 SM      ok Yp=0.24688023143050172 DoH=2.4582239060820337 wall=11.85 s load=4.18
+  rep 2     small:1e-8 control ok Yp=0.24688974320773707 DoH=2.4609552926195053 wall=12.94 s load=4.18
+load average after: (4.17626953125, 31.0869140625, 90.7978515625)
+
+       setting  SM median  ratio  control median  ratio
+  full:default       7.61   1.00            8.86   1.00
+ small:default       5.09   0.67            6.30   0.71
+    small:1e-4       5.74   0.75            6.91   0.78
+    small:1e-5       7.12   0.94            8.28   0.93
+    small:1e-6       8.79   1.15           10.05   1.13
+    small:1e-8      11.85   1.56           12.95   1.46
+(ratios against full:default)

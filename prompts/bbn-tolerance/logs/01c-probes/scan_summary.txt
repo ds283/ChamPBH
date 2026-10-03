@@ -1,0 +1,188 @@
+T1: 245 solves over 5 settings, 16 histories + SM
+
+[T1] small network, low-T rtol=default, atol 1e-11: 49 solves
+  1. failed solves: 0
+  2. D/H spread over 16 histories: max 1.909e-03 (beta=1.2 M=0.001), median 1.082e-03, >= 1e-4: 16; criterion 2 misses: 16 [('beta=1.05 M=0.01', '1.619e-03 (1e-8: 4.724e-06)'), ('beta=1.05 M=0.5', '9.272e-04 (1e-8: 9.817e-06)'), ('beta=1.05 M=1e-05', '1.236e-03 (1e-8: 2.294e-05)'), ('beta=1.1 M=0.03', '1.551e-03 (1e-8: 1.081e-05)'), ('beta=1.2 M=0.001', '1.909e-03 (1e-8: 1.680e-05)'), ('beta=1.345 M=0.001', '1.061e-03 (1e-8: 2.652e-05)'), ('beta=1.6 M=0.001', '1.088e-03 (1e-8: 7.915e-05)'), ('beta=1.6 M=1e-05', '1.264e-03 (1e-8: 8.398e-05)'), ('beta=1.7 M=0.03', '1.199e-03 (1e-8: 1.151e-05)'), ('beta=2 M=0.5', '6.458e-04 (1e-8: 1.106e-05)'), ('beta=2 M=1e-05', '1.017e-03 (1e-8: 8.552e-05)'), ('beta=2.09 M=1e-05', '1.651e-03 (1e-8: 1.884e-05)'), ('beta=2.1 M=0.1', '9.592e-04 (1e-8: 2.969e-05)'), ('beta=2.12 M=1e-05', '9.765e-04 (1e-8: 4.269e-05)'), ('beta=2.4 M=1e-05', '1.077e-03 (1e-8: 1.031e-04)'), ('beta=2.89 M=0.001', '8.714e-04 (1e-8: 4.940e-05)')]
+     Yp spread: max 7.144e-05 (beta=2.4 M=1e-05), median 2.496e-05
+  3. against rtol 1e-8 over 17 inputs: D/H max 1.773e-03 (beta=1.2 M=0.001), median 7.596e-04; Yp max 3.164e-05 (beta=2 M=0.5), median 6.814e-06; inputs missing 3: 17 ['SM', 'beta=1.05 M=0.01', 'beta=1.05 M=0.5', 'beta=1.05 M=1e-05', 'beta=1.1 M=0.03', 'beta=1.2 M=0.001', 'beta=1.345 M=0.001', 'beta=1.6 M=0.001', 'beta=1.6 M=1e-05', 'beta=1.7 M=0.03', 'beta=2 M=0.5', 'beta=2 M=1e-05', 'beta=2.09 M=1e-05', 'beta=2.1 M=0.1', 'beta=2.12 M=1e-05', 'beta=2.4 M=1e-05', 'beta=2.89 M=0.001']
+  SM: Yp 0.2468818826 D/H 2.457976999 He3/H 1.041855306 Li7/H 5.486812924
+      beta=1.05 M=0.01: prod:3.60452778 pert12:3.599773655 pert9:3.598698816 D/H spread 1.62e-03 Yp spread 1.49e-05 | vs 1e-8: D/H 7.33e-04 Yp 1.20e-05
+      beta=1.05 M=0.5: prod:3.642028723 pert12:3.644388259 pert9:3.645407882 D/H spread 9.27e-04 Yp spread 9.30e-06 | vs 1e-8: D/H 1.70e-03 Yp 4.36e-06
+      beta=1.05 M=1e-05: prod:3.594755168 pert12:3.595382269 pert9:3.599200628 D/H spread 1.24e-03 Yp spread 1.14e-05 | vs 1e-8: D/H 1.36e-03 Yp 1.98e-06
+      beta=1.1 M=0.03: prod:2.826731128 pert12:2.822868639 pert9:2.82235292 D/H spread 1.55e-03 Yp spread 3.14e-05 | vs 1e-8: D/H 1.10e-03 Yp 2.00e-06
+      beta=1.2 M=0.001: prod:2.596575706 pert12:2.601542691 pert9:2.601529543 D/H spread 1.91e-03 Yp spread 7.92e-06 | vs 1e-8: D/H 1.77e-03 Yp 6.81e-06
+      beta=1.345 M=0.001: prod:2.751985409 pert12:2.750467193 pert9:2.753387097 D/H spread 1.06e-03 Yp spread 3.41e-05 | vs 1e-8: D/H 1.32e-03 Yp 1.38e-05
+      beta=1.6 M=0.001: prod:2.460752423 pert12:2.459137784 pert9:2.461814009 D/H spread 1.09e-03 Yp spread 1.86e-05 | vs 1e-8: D/H 8.24e-05 Yp 1.52e-05
+      beta=1.6 M=1e-05: prod:2.460242686 pert12:2.462945101 pert9:2.459834485 D/H spread 1.26e-03 Yp spread 4.59e-05 | vs 1e-8: D/H 3.09e-04 Yp 1.91e-05
+      beta=1.7 M=0.03: prod:2.454287886 pert12:2.452487865 pert9:2.451347095 D/H spread 1.20e-03 Yp spread 3.51e-05 | vs 1e-8: D/H 4.58e-04 Yp 9.18e-06
+      beta=2 M=0.5: prod:2.562228989 pert12:2.560574599 pert9:2.561953941 D/H spread 6.46e-04 Yp spread 8.31e-06 | vs 1e-8: D/H 2.25e-04 Yp 3.16e-05
+      beta=2 M=1e-05: prod:2.461239042 pert12:2.461757602 pert9:2.459255631 D/H spread 1.02e-03 Yp spread 3.46e-05 | vs 1e-8: D/H 9.08e-04 Yp 4.72e-06
+      beta=2.09 M=1e-05: prod:2.488281139 pert12:2.489958322 pert9:2.492391756 D/H spread 1.65e-03 Yp spread 1.08e-05 | vs 1e-8: D/H 9.19e-04 Yp 5.30e-06
+      beta=2.1 M=0.1: prod:2.494692048 pert12:2.492300921 pert9:2.492913341 D/H spread 9.59e-04 Yp spread 3.93e-06 | vs 1e-8: D/H 4.82e-04 Yp 1.45e-05
+      beta=2.12 M=1e-05: prod:2.462291508 pert12:2.464698246 pert9:2.464675686 D/H spread 9.76e-04 Yp spread 3.37e-05 | vs 1e-8: D/H 8.30e-04 Yp 3.95e-06
+      beta=2.4 M=1e-05: prod:2.461759551 pert12:2.463140125 pert9:2.46048895 D/H spread 1.08e-03 Yp spread 7.14e-05 | vs 1e-8: D/H 7.60e-04 Yp 1.05e-05
+      beta=2.89 M=0.001: prod:2.476953358 pert12:2.475073443 pert9:2.477231884 D/H spread 8.71e-04 Yp spread 3.93e-05 | vs 1e-8: D/H 1.64e-04 Yp 5.66e-06
+
+[T1] small network, low-T rtol=0.0001, atol 1e-11: 49 solves
+  1. failed solves: 0
+  2. D/H spread over 16 histories: max 6.211e-04 (beta=1.7 M=0.03), median 1.411e-04, >= 1e-4: 10; criterion 2 misses: 9 [('beta=1.1 M=0.03', '3.305e-04 (1e-8: 1.081e-05)'), ('beta=1.6 M=1e-05', '1.976e-04 (1e-8: 8.398e-05)'), ('beta=1.7 M=0.03', '6.211e-04 (1e-8: 1.151e-05)'), ('beta=2 M=0.5', '3.971e-04 (1e-8: 1.106e-05)'), ('beta=2 M=1e-05', '2.380e-04 (1e-8: 8.552e-05)'), ('beta=2.09 M=1e-05', '1.777e-04 (1e-8: 1.884e-05)'), ('beta=2.12 M=1e-05', '1.222e-04 (1e-8: 4.269e-05)'), ('beta=2.4 M=1e-05', '1.601e-04 (1e-8: 1.031e-04)'), ('beta=2.89 M=0.001', '3.705e-04 (1e-8: 4.940e-05)')]
+     Yp spread: max 4.507e-05 (beta=2.4 M=1e-05), median 1.290e-05
+  3. against rtol 1e-8 over 17 inputs: D/H max 5.435e-04 (beta=2.12 M=1e-05), median 4.453e-04; Yp max 3.781e-06 (beta=1.6 M=0.001), median 1.566e-06; inputs missing 3: 15 ['SM', 'beta=1.05 M=0.01', 'beta=1.05 M=0.5', 'beta=1.05 M=1e-05', 'beta=1.1 M=0.03', 'beta=1.2 M=0.001', 'beta=1.345 M=0.001', 'beta=1.6 M=0.001', 'beta=1.6 M=1e-05', 'beta=2 M=0.5', 'beta=2 M=1e-05', 'beta=2.09 M=1e-05', 'beta=2.1 M=0.1', 'beta=2.12 M=1e-05', 'beta=2.4 M=1e-05']
+  SM: Yp 0.2468799639 D/H 2.457652507 He3/H 1.041829523 Li7/H 5.487102972
+      beta=1.05 M=0.01: prod:3.60055611 pert12:3.60036799 pert9:3.600280675 D/H spread 7.65e-05 Yp spread 3.12e-06 | vs 1e-8: D/H 3.69e-04 Yp 2.15e-06
+      beta=1.05 M=0.5: prod:3.64685141 pert12:3.646609047 pert9:3.64688593 D/H spread 7.59e-05 Yp spread 7.62e-06 | vs 1e-8: D/H 3.80e-04 Yp 5.70e-07
+      beta=1.05 M=1e-05: prod:3.598143888 pert12:3.598458122 pert9:3.598210688 D/H spread 8.73e-05 Yp spread 1.14e-05 | vs 1e-8: D/H 4.23e-04 Yp 3.01e-06
+      beta=1.1 M=0.03: prod:2.82226331 pert12:2.822341239 pert9:2.823196146 D/H spread 3.31e-04 Yp spread 1.42e-05 | vs 1e-8: D/H 4.86e-04 Yp 2.76e-06
+      beta=1.2 M=0.001: prod:2.600030521 pert12:2.599867091 pert9:2.60005294 D/H spread 7.15e-05 Yp spread 1.16e-05 | vs 1e-8: D/H 4.45e-04 Yp 1.57e-06
+      beta=1.345 M=0.001: prod:2.754276806 pert12:2.754463004 pert9:2.754217488 D/H spread 8.91e-05 Yp spread 1.21e-05 | vs 1e-8: D/H 4.89e-04 Yp 5.01e-08
+      beta=1.6 M=0.001: prod:2.459872646 pert12:2.459688146 pert9:2.45962372 D/H spread 1.01e-04 Yp spread 3.29e-05 | vs 1e-8: D/H 4.40e-04 Yp 3.78e-06
+      beta=1.6 M=1e-05: prod:2.459755851 pert12:2.459631384 pert9:2.460117486 D/H spread 1.98e-04 Yp spread 3.29e-05 | vs 1e-8: D/H 5.07e-04 Yp 3.25e-06
+      beta=1.7 M=0.03: prod:2.45545244 pert12:2.455659673 pert9:2.454134656 D/H spread 6.21e-04 Yp spread 1.19e-05 | vs 1e-8: D/H 1.60e-05 Yp 1.53e-06
+      beta=2 M=0.5: prod:2.561460918 pert12:2.561424219 pert9:2.562441467 D/H spread 3.97e-04 Yp spread 1.35e-05 | vs 1e-8: D/H 5.25e-04 Yp 1.43e-06
+      beta=2 M=1e-05: prod:2.462355111 pert12:2.462941133 pert9:2.462380904 D/H spread 2.38e-04 Yp spread 3.14e-05 | vs 1e-8: D/H 4.55e-04 Yp 1.18e-06
+      beta=2.09 M=1e-05: prod:2.489777282 pert12:2.489334931 pert9:2.489385313 D/H spread 1.78e-04 Yp spread 2.50e-05 | vs 1e-8: D/H 3.19e-04 Yp 2.08e-06
+      beta=2.1 M=0.1: prod:2.494646972 pert12:2.494664359 pert9:2.494684137 D/H spread 1.49e-05 Yp spread 1.23e-05 | vs 1e-8: D/H 5.00e-04 Yp 5.94e-08
+      beta=2.12 M=1e-05: prod:2.462997611 pert12:2.463069715 pert9:2.463298688 D/H spread 1.22e-04 Yp spread 2.88e-05 | vs 1e-8: D/H 5.43e-04 Yp 2.51e-06
+      beta=2.4 M=1e-05: prod:2.462383891 pert12:2.462609756 pert9:2.462778036 D/H spread 1.60e-04 Yp spread 4.51e-05 | vs 1e-8: D/H 5.06e-04 Yp 2.79e-06
+      beta=2.89 M=0.001: prod:2.477125026 pert12:2.476465068 pert9:2.476207383 D/H spread 3.71e-04 Yp spread 1.18e-05 | vs 1e-8: D/H 9.44e-05 Yp 1.24e-06
+
+[T1] small network, low-T rtol=1e-05, atol 1e-11: 49 solves
+  1. failed solves: 0
+  2. D/H spread over 16 histories: max 1.137e-04 (beta=2.12 M=1e-05), median 4.871e-05, >= 1e-4: 1; criterion 2 misses: 1 [('beta=2.12 M=1e-05', '1.137e-04 (1e-8: 4.269e-05)')]
+     Yp spread: max 4.345e-05 (beta=2.4 M=1e-05), median 1.546e-05
+  3. against rtol 1e-8 over 17 inputs: D/H max 1.568e-04 (beta=2.12 M=1e-05), median 1.089e-04; Yp max 5.996e-07 (beta=1.6 M=1e-05), median 2.217e-07; inputs missing 3: 13 ['SM', 'beta=1.05 M=0.01', 'beta=1.05 M=0.5', 'beta=1.2 M=0.001', 'beta=1.345 M=0.001', 'beta=1.6 M=0.001', 'beta=1.6 M=1e-05', 'beta=1.7 M=0.03', 'beta=2 M=0.5', 'beta=2 M=1e-05', 'beta=2.09 M=1e-05', 'beta=2.12 M=1e-05', 'beta=2.89 M=0.001']
+  SM: Yp 0.2468802684 D/H 2.457881437 He3/H 1.041903946 Li7/H 5.486860475
+      beta=1.05 M=0.01: prod:3.601502238 pert12:3.601592646 pert9:3.601415631 D/H spread 4.92e-05 Yp spread 2.22e-06 | vs 1e-8: D/H 1.07e-04 Yp 4.46e-07
+      beta=1.05 M=0.5: prod:3.64786959 pert12:3.647737666 pert9:3.647860542 D/H spread 3.62e-05 Yp spread 6.45e-06 | vs 1e-8: D/H 1.00e-04 Yp 3.58e-07
+      beta=1.05 M=1e-05: prod:3.599309452 pert12:3.599293919 pert9:3.599256299 D/H spread 1.48e-05 Yp spread 8.82e-06 | vs 1e-8: D/H 9.93e-05 Yp 2.47e-07
+      beta=1.1 M=0.03: prod:2.823373699 pert12:2.823307517 pert9:2.823269458 D/H spread 3.69e-05 Yp spread 1.83e-05 | vs 1e-8: D/H 9.29e-05 Yp 2.69e-07
+      beta=1.2 M=0.001: prod:2.600842239 pert12:2.600923573 pert9:2.600876174 D/H spread 3.13e-05 Yp spread 8.83e-06 | vs 1e-8: D/H 1.33e-04 Yp 8.52e-08
+      beta=1.345 M=0.001: prod:2.755335516 pert12:2.755317468 pert9:2.755374488 D/H spread 2.07e-05 Yp spread 1.70e-05 | vs 1e-8: D/H 1.05e-04 Yp 1.81e-07
+      beta=1.6 M=0.001: prod:2.460696694 pert12:2.460731972 pert9:2.460568378 D/H spread 6.65e-05 Yp spread 3.51e-05 | vs 1e-8: D/H 1.05e-04 Yp 1.90e-07
+      beta=1.6 M=1e-05: prod:2.460675949 pert12:2.460559066 pert9:2.460719732 D/H spread 6.53e-05 Yp spread 3.37e-05 | vs 1e-8: D/H 1.33e-04 Yp 6.00e-07
+      beta=1.7 M=0.03: prod:2.455081914 pert12:2.455059376 pert9:2.455185792 D/H spread 5.15e-05 Yp spread 1.24e-05 | vs 1e-8: D/H 1.35e-04 Yp 2.61e-07
+      beta=2 M=0.5: prod:2.562523463 pert12:2.562532634 pert9:2.562550079 D/H spread 1.04e-05 Yp spread 1.40e-05 | vs 1e-8: D/H 1.10e-04 Yp 1.75e-07
+      beta=2 M=1e-05: prod:2.46313124 pert12:2.463352232 pert9:2.463352525 D/H spread 8.98e-05 Yp spread 2.93e-05 | vs 1e-8: D/H 1.40e-04 Yp 1.61e-07
+      beta=2.09 M=1e-05: prod:2.490299541 pert12:2.490287222 pert9:2.490293026 D/H spread 4.95e-06 Yp spread 2.41e-05 | vs 1e-8: D/H 1.09e-04 Yp 5.24e-07
+      beta=2.1 M=0.1: prod:2.495668762 pert12:2.495528516 pert9:2.4955978 D/H spread 5.62e-05 Yp spread 8.13e-06 | vs 1e-8: D/H 9.05e-05 Yp 2.22e-07
+      beta=2.12 M=1e-05: prod:2.463950459 pert12:2.464230655 pert9:2.464040422 D/H spread 1.14e-04 Yp spread 2.66e-05 | vs 1e-8: D/H 1.57e-04 Yp 3.75e-07
+      beta=2.4 M=1e-05: prod:2.463389103 pert12:2.463539121 pert9:2.463544201 D/H spread 6.30e-05 Yp spread 4.34e-05 | vs 1e-8: D/H 9.81e-05 Yp 1.73e-07
+      beta=2.89 M=0.001: prod:2.477056019 pert12:2.477029879 pert9:2.477149452 D/H spread 4.83e-05 Yp spread 1.13e-05 | vs 1e-8: D/H 1.22e-04 Yp 1.56e-07
+
+[T1] small network, low-T rtol=1e-06, atol 1e-11: 49 solves
+  1. failed solves: 0
+  2. D/H spread over 16 histories: max 1.505e-04 (beta=2.4 M=1e-05), median 4.396e-05, >= 1e-4: 1; criterion 2 misses: 0 
+     Yp spread: max 4.310e-05 (beta=2.4 M=1e-05), median 1.527e-05
+  3. against rtol 1e-8 over 17 inputs: D/H max 5.470e-05 (beta=1.6 M=1e-05), median 2.579e-05; Yp max 2.117e-07 (beta=2.09 M=1e-05), median 6.359e-08; inputs missing 3: 0
+  SM: Yp 0.2468802117 D/H 2.458287893 He3/H 1.041932695 Li7/H 5.486373007
+      beta=1.05 M=0.01: prod:3.601743083 pert12:3.601734262 pert9:3.601747135 D/H spread 3.57e-06 Yp spread 1.54e-06 | vs 1e-8: D/H 3.96e-05 Yp 6.29e-08
+      beta=1.05 M=0.5: prod:3.648182935 pert12:3.64813044 pert9:3.648079581 D/H spread 2.83e-05 Yp spread 6.40e-06 | vs 1e-8: D/H 1.46e-05 Yp 1.48e-08
+      beta=1.05 M=1e-05: prod:3.599662745 pert12:3.599575868 pert9:3.599600718 D/H spread 2.41e-05 Yp spread 8.98e-06 | vs 1e-8: D/H 1.19e-06 Yp 5.36e-08
+      beta=1.1 M=0.03: prod:2.823581719 pert12:2.823522063 pert9:2.823567507 D/H spread 2.11e-05 Yp spread 1.79e-05 | vs 1e-8: D/H 1.93e-05 Yp 1.43e-07
+      beta=1.2 M=0.001: prod:2.601255913 pert12:2.601099173 pert9:2.601215942 D/H spread 6.03e-05 Yp spread 9.21e-06 | vs 1e-8: D/H 2.58e-05 Yp 1.01e-07
+      beta=1.345 M=0.001: prod:2.755726085 pert12:2.755578804 pert9:2.755561413 D/H spread 5.98e-05 Yp spread 1.70e-05 | vs 1e-8: D/H 3.65e-05 Yp 1.29e-07
+      beta=1.6 M=0.001: prod:2.460914101 pert12:2.46101347 pert9:2.460884329 D/H spread 5.25e-05 Yp spread 3.57e-05 | vs 1e-8: D/H 1.67e-05 Yp 1.33e-07
+      beta=1.6 M=1e-05: prod:2.460869531 pert12:2.460908368 pert9:2.461046029 D/H spread 7.17e-05 Yp spread 3.30e-05 | vs 1e-8: D/H 5.47e-05 Yp 2.55e-08
+      beta=1.7 M=0.03: prod:2.455315715 pert12:2.455337706 pert9:2.455337643 D/H spread 8.96e-06 Yp spread 1.25e-05 | vs 1e-8: D/H 3.97e-05 Yp 9.77e-09
+      beta=2 M=0.5: prod:2.56286603 pert12:2.562701778 pert9:2.562708128 D/H spread 6.41e-05 Yp spread 1.35e-05 | vs 1e-8: D/H 2.36e-05 Yp 2.04e-08
+      beta=2 M=1e-05: prod:2.463500359 pert12:2.463595527 pert9:2.463591998 D/H spread 3.86e-05 Yp spread 2.95e-05 | vs 1e-8: D/H 9.57e-06 Yp 7.71e-08
+      beta=2.09 M=1e-05: prod:2.490485793 pert12:2.490581798 pert9:2.490492068 D/H spread 3.85e-05 Yp spread 2.35e-05 | vs 1e-8: D/H 3.42e-05 Yp 2.12e-07
+      beta=2.1 M=0.1: prod:2.495912609 pert12:2.495845 pert9:2.495836889 D/H spread 3.03e-05 Yp spread 7.80e-06 | vs 1e-8: D/H 7.15e-06 Yp 6.36e-08
+      beta=2.12 M=1e-05: prod:2.464240334 pert12:2.464447029 pert9:2.464405183 D/H spread 8.39e-05 Yp spread 2.62e-05 | vs 1e-8: D/H 3.92e-05 Yp 1.27e-07
+      beta=2.4 M=1e-05: prod:2.463571119 pert12:2.463866833 pert9:2.463941963 D/H spread 1.51e-04 Yp spread 4.31e-05 | vs 1e-8: D/H 2.42e-05 Yp 4.33e-08
+      beta=2.89 M=0.001: prod:2.477282469 pert12:2.477257754 pert9:2.477379853 D/H spread 4.93e-05 Yp spread 1.17e-05 | vs 1e-8: D/H 3.09e-05 Yp 4.77e-09
+
+[T1] small network, low-T rtol=1e-08, atol 1e-11: 49 solves
+  1. failed solves: 0
+  2. D/H spread over 16 histories: max 1.031e-04 (beta=2.4 M=1e-05), median 2.473e-05, >= 1e-4: 1; criterion 2 misses: 0 
+     Yp spread: max 4.312e-05 (beta=2.4 M=1e-05), median 1.526e-05
+  3. against rtol 1e-8 over 17 inputs: D/H max 0.000e+00 (SM), median 0.000e+00; Yp max 0.000e+00 (SM), median 0.000e+00; inputs missing 3: 0
+  SM: Yp 0.2468802314 D/H 2.458223906 He3/H 1.041935371 Li7/H 5.486454001
+      beta=1.05 M=0.01: prod:3.601885864 pert12:3.60190288 pert9:3.601900541 D/H spread 4.72e-06 Yp spread 1.57e-06 | vs 1e-8: D/H 0.00e+00 Yp 0.00e+00
+      beta=1.05 M=0.5: prod:3.648236045 pert12:3.648271859 pert9:3.648240595 D/H spread 9.82e-06 Yp spread 6.42e-06 | vs 1e-8: D/H 0.00e+00 Yp 0.00e+00
+      beta=1.05 M=1e-05: prod:3.599667036 pert12:3.599749627 pert9:3.599687145 D/H spread 2.29e-05 Yp spread 8.99e-06 | vs 1e-8: D/H 0.00e+00 Yp 0.00e+00
+      beta=1.1 M=0.03: prod:2.823636096 pert12:2.823655166 pert9:2.823666609 D/H spread 1.08e-05 Yp spread 1.78e-05 | vs 1e-8: D/H 0.00e+00 Yp 0.00e+00
+      beta=1.2 M=0.001: prod:2.601188826 pert12:2.601157475 pert9:2.601201163 D/H spread 1.68e-05 Yp spread 9.12e-06 | vs 1e-8: D/H 0.00e+00 Yp 0.00e+00
+      beta=1.345 M=0.001: prod:2.755625375 pert12:2.755655604 pert9:2.755698465 D/H spread 2.65e-05 Yp spread 1.70e-05 | vs 1e-8: D/H 0.00e+00 Yp 0.00e+00
+      beta=1.6 M=0.001: prod:2.460955293 pert12:2.46101666 pert9:2.460821883 D/H spread 7.91e-05 Yp spread 3.57e-05 | vs 1e-8: D/H 0.00e+00 Yp 0.00e+00
+      beta=1.6 M=1e-05: prod:2.461004137 pert12:2.460797469 pert9:2.461001993 D/H spread 8.40e-05 Yp spread 3.31e-05 | vs 1e-8: D/H 0.00e+00 Yp 0.00e+00
+      beta=1.7 M=0.03: prod:2.455413251 pert12:2.455437145 pert9:2.455441508 D/H spread 1.15e-05 Yp spread 1.25e-05 | vs 1e-8: D/H 0.00e+00 Yp 0.00e+00
+      beta=2 M=0.5: prod:2.562805623 pert12:2.562780665 pert9:2.562809021 D/H spread 1.11e-05 Yp spread 1.35e-05 | vs 1e-8: D/H 0.00e+00 Yp 0.00e+00
+      beta=2 M=1e-05: prod:2.463476782 pert12:2.463687478 pert9:2.463682736 D/H spread 8.55e-05 Yp spread 2.95e-05 | vs 1e-8: D/H 0.00e+00 Yp 0.00e+00
+      beta=2.09 M=1e-05: prod:2.490570851 pert12:2.490562109 pert9:2.490609036 D/H spread 1.88e-05 Yp spread 2.34e-05 | vs 1e-8: D/H 0.00e+00 Yp 0.00e+00
+      beta=2.1 M=0.1: prod:2.495894753 pert12:2.495820642 pert9:2.495853837 D/H spread 2.97e-05 Yp spread 7.85e-06 | vs 1e-8: D/H 0.00e+00 Yp 0.00e+00
+      beta=2.12 M=1e-05: prod:2.464336949 pert12:2.464442144 pert9:2.464376016 D/H spread 4.27e-05 Yp spread 2.61e-05 | vs 1e-8: D/H 0.00e+00 Yp 0.00e+00
+      beta=2.4 M=1e-05: prod:2.463630852 pert12:2.463884982 pert9:2.463811621 D/H spread 1.03e-04 Yp spread 4.31e-05 | vs 1e-8: D/H 0.00e+00 Yp 0.00e+00
+      beta=2.89 M=0.001: prod:2.477358922 pert12:2.477368664 pert9:2.477481304 D/H spread 4.94e-05 Yp spread 1.16e-05 | vs 1e-8: D/H 0.00e+00 Yp 0.00e+00
+
+P11 criteria 1-3 by setting (T1):
+      rtol failed  max D/H spread crit-2 misses  max dD/H vs 1e-8  max dYp vs 1e-8 crit-3 misses
+   default      0       1.909e-03            16         1.773e-03        3.164e-05            17
+    0.0001      0       6.211e-04             9         5.435e-04        3.781e-06            15
+     1e-05      0       1.137e-04             1         1.568e-04        5.996e-07            13
+     1e-06      0       1.505e-04             0         5.470e-05        2.117e-07             0
+     1e-08      0       1.031e-04             0         0.000e+00        0.000e+00             0
+
+P12: (small - full) / full, prod (and SM), log 01's S1 for the full network
+  rtol 1e-05: 17 inputs
+    Yp:  median -1.437e-05, median |.| 1.477e-05, max |.| 3.169e-05 (beta=2.09 M=1e-05), range [-3.169e-05, +2.107e-05]
+    D/H: median -3.923e-04, median |.| 3.923e-04, max |.| 4.345e-04 (beta=2.09 M=1e-05), range [-4.345e-04, -3.225e-04]
+      SM                   Yp -2.642e-05 D/H -4.123e-04
+      beta=1.05 M=0.01     Yp -1.170e-05 D/H -3.454e-04
+      beta=1.05 M=0.5      Yp -1.477e-05 D/H -3.225e-04
+      beta=1.05 M=1e-05    Yp -1.437e-05 D/H -3.544e-04
+      beta=1.1 M=0.03      Yp -3.066e-05 D/H -3.527e-04
+      beta=1.2 M=0.001     Yp -1.023e-05 D/H -3.923e-04
+      beta=1.345 M=0.001   Yp -6.368e-06 D/H -3.727e-04
+      beta=1.6 M=0.001     Yp -1.282e-05 D/H -3.801e-04
+      beta=1.6 M=1e-05     Yp -2.342e-05 D/H -4.281e-04
+      beta=1.7 M=0.03      Yp -2.776e-05 D/H -4.278e-04
+      beta=2 M=0.5         Yp +9.720e-06 D/H -3.793e-04
+      beta=2 M=1e-05       Yp +2.335e-06 D/H -3.948e-04
+      beta=2.09 M=1e-05    Yp -3.169e-05 D/H -4.345e-04
+      beta=2.1 M=0.1       Yp -2.028e-05 D/H -3.404e-04
+      beta=2.12 M=1e-05    Yp +2.107e-05 D/H -4.030e-04
+      beta=2.4 M=1e-05     Yp -5.837e-06 D/H -4.275e-04
+      beta=2.89 M=0.001    Yp -2.211e-05 D/H -4.186e-04
+  rtol 1e-06: 16 inputs (no full-network value: beta=1.1 M=0.03)
+    Yp:  median -1.398e-05, median |.| 1.479e-05, max |.| 3.209e-05 (beta=2.09 M=1e-05), range [-3.209e-05, +2.089e-05]
+    D/H: median -2.850e-04, median |.| 2.850e-04, max |.| 3.582e-04 (beta=1.6 M=1e-05), range [-3.582e-04, -2.519e-04]
+      SM                   Yp -2.696e-05 D/H -2.682e-04
+      beta=1.05 M=0.01     Yp -1.181e-05 D/H -2.845e-04
+      beta=1.05 M=0.5      Yp -1.459e-05 D/H -2.630e-04
+      beta=1.05 M=1e-05    Yp -1.499e-05 D/H -2.620e-04
+      beta=1.2 M=0.001     Yp -1.060e-05 D/H -2.671e-04
+      beta=1.345 M=0.001   Yp -7.120e-06 D/H -2.519e-04
+      beta=1.6 M=0.001     Yp -1.338e-05 D/H -3.043e-04
+      beta=1.6 M=1e-05     Yp -2.325e-05 D/H -3.582e-04
+      beta=1.7 M=0.03      Yp -2.795e-05 D/H -3.470e-04
+      beta=2 M=0.5         Yp +9.399e-06 D/H -2.606e-04
+      beta=2 M=1e-05       Yp +2.161e-06 D/H -2.663e-04
+      beta=2.09 M=1e-05    Yp -3.209e-05 D/H -3.518e-04
+      beta=2.1 M=0.1       Yp -2.071e-05 D/H -2.855e-04
+      beta=2.12 M=1e-05    Yp +2.089e-05 D/H -3.063e-04
+      beta=2.4 M=1e-05     Yp -6.418e-06 D/H -3.417e-04
+      beta=2.89 M=0.001    Yp -2.261e-05 D/H -3.393e-04
+  rtol 1e-08: 16 inputs (no full-network value: beta=1.2 M=0.001)
+    Yp:  median -1.479e-05, median |.| 1.779e-05, max |.| 3.185e-05 (beta=2.09 M=1e-05), range [-3.185e-05, +2.097e-05]
+    D/H: median -2.765e-04, median |.| 2.765e-04, max |.| 3.063e-04 (beta=2.09 M=1e-05), range [-3.063e-04, -2.352e-04]
+      SM                   Yp -2.692e-05 D/H -2.823e-04
+      beta=1.05 M=0.01     Yp -1.174e-05 D/H -2.352e-04
+      beta=1.05 M=0.5      Yp -1.462e-05 D/H -2.369e-04
+      beta=1.05 M=1e-05    Yp -1.495e-05 D/H -2.497e-04
+      beta=1.1 M=0.03      Yp -3.094e-05 D/H -2.727e-04
+      beta=1.345 M=0.001   Yp -7.125e-06 D/H -2.757e-04
+      beta=1.6 M=0.001     Yp -1.327e-05 D/H -2.773e-04
+      beta=1.6 M=1e-05     Yp -2.323e-05 D/H -2.894e-04
+      beta=1.7 M=0.03      Yp -2.799e-05 D/H -2.949e-04
+      beta=2 M=0.5         Yp +9.324e-06 D/H -2.733e-04
+      beta=2 M=1e-05       Yp +2.254e-06 D/H -2.647e-04
+      beta=2.09 M=1e-05    Yp -3.185e-05 D/H -3.063e-04
+      beta=2.1 M=0.1       Yp -2.063e-05 D/H -2.799e-04
+      beta=2.12 M=1e-05    Yp +2.097e-05 D/H -2.547e-04
+      beta=2.4 M=1e-05     Yp -6.375e-06 D/H -3.051e-04
+      beta=2.89 M=0.001    Yp -2.260e-05 D/H -2.971e-04
+
+[T2] breadth sample, small network, prod, low-T rtol ['1e-06']: 95 solves (phi* = 5: 69, phi* != 5: 26), 1 failed
+     FAILED beta=0.95 M=0.001 prod: stage '' no failed solve_ivp; PRyMordial output: Yp_BBN=0.5120491178 is outside (0, 0.5)
+  completed: Yp in [0.245935, 0.434493], D/H in [2.44718, 10.407]

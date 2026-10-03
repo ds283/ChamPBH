@@ -1,0 +1,23 @@
+# P7 small-network pinned values (bbn-tolerance prompt 01c), tree 893a5b1; old tree 7b518c9 in a temporary worktree; scripts from logs/01-probes/ run unmodified
+# 1. provenance on 7b518c9, no override, then at low-T rtol 1e-6 (pinned_reference_7b518c9.py const-honly-small [--rtol 1e-6])
+const-honly-small rtol=None atol=None: Yp=0.2536690816 DoH=2.6481673 He3oH=1.068819742 Li7oH=5.190789165 wall=10.8 s
+const-honly-small rtol=1e-06 atol=None: Yp=0.253669508 DoH=2.649288446 He3oH=1.069074025 Li7oH=5.186233632 wall=20.0 s
+# 2. the current tree's test quantities under lowT_tolerance_override (pinned_values_now.py CASE [--rtol 1e-6]); both low-T calls overridden
+passenger-c: low-T rtol=1e-06 atol=None
+  Yp: 0.253669508 against pin 0.2536690816: 1.681e-06 (bound 1e-06: FAIL)
+  D/H: 2.649288446 against pin 2.6481673: 4.234e-04 (bound 1e-06: FAIL)
+  wall 17.7 s
+network-b: low-T rtol=1e-06 atol=None
+  small: Yp 0.253669508 D/H 2.649288446 7Li/H 5.186233632; full 7Li/H 5.133189648
+  7Li/H small vs full 1.033e-02 (>= 0.005: PASS)
+  full Yp: 0.2536731722 against pin 0.2536754614: 9.024e-06 (bound 1e-05: PASS)
+  full D/H: 2.650022996 against pin 2.648809882: 4.580e-04 (bound 1e-05: FAIL)
+  wall 77.1 s
+network-b: low-T rtol=None atol=None
+  small: Yp 0.2536690816 D/H 2.6481673 7Li/H 5.190789165; full 7Li/H 5.137924042
+  7Li/H small vs full 1.029e-02 (>= 0.005: PASS)
+  full Yp: 0.2536754614 against pin 0.2536754614: 1.304e-10 (bound 1e-05: PASS)
+  full D/H: 2.648809882 against pin 2.648809882: 6.063e-11 (bound 1e-05: PASS)
+  wall 27.4 s
+# 3. test_network_flag (b)'s 7Li/H shift with the small network at 1e-6 and the full network at the default (from the two network-b runs above)
+  7Li/H small(1e-6) 5.186233632 vs full(default) 5.137924042: 9.403e-03 (>= 0.005: PASS)

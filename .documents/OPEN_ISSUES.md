@@ -6,8 +6,8 @@
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`;
 2 on the `science-readiness` board (planned 2026-10-01; closed 2026-10-02, 10 of 10 landed,
 prompt 06b having been added 2026-10-02); 5 on the `bbn-tolerance` board (planned 2026-10-03,
-0 of 5 landed; prompt 01 committed BLOCKED 2026-10-03 and ruled the same day: re-planned around
-PRyMordial's small network, U3).
+1 of 5 landed (01c); prompt 01 committed BLOCKED 2026-10-03 and ruled the same day: re-planned around
+PRyMordial's small network, U3; prompt 01c measured the small network 2026-10-03).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -172,7 +172,8 @@ two by prompt 01 the same day.
 - `[00-the-low-T-network-fails-near-1-keV-on-ulp-level-input]` — 11 of 684 φ\* = 5 histories of
   the 2026.6.0 run fail in the full low-T network at T_J just above 1 keV; narrowed by prompt 01:
   caused by the Li8(p,d)Li7 rate below, and not removed by any low-T tolerance in the grid;
-  re-planned (U3): production to move to the small network, measured first by prompt 01c.
+  re-planned (U3): production to move to the small network; narrowed by prompt 01c: the small
+  network completes all 11 and the breadth sample, and P11 recommends low-T rtol 1e-6.
 - `[01-prymordial-li8-p-d-li7-rate-rings-near-1-kev]` — PRyMordial's Li8(p,d)Li7 reverse rate is
   exp(γ/T9) times a ringing quadratic spline, ±1e39 near 1 keV; it stalls BDF's Newton iteration;
   worked around, not patched (U3): the small network has no Li8.

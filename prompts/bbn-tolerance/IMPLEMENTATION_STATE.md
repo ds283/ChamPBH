@@ -1,7 +1,8 @@
 # BBN-tolerance campaign — implementation state
 
 **Last updated:** 2026-10-03 · **Status: IN PROGRESS — re-planned around the small network (U3);
-prompt 01 committed BLOCKED and ruled; P10–P13 accepted; 01c next** (01b added
+prompt 01 committed BLOCKED and ruled; P10–P13 accepted; 01c landed (recommends the small network
+at low-T rtol 1e-6); the user rules on P11's setting and P13** (01b added
 2026-10-03, U2; 01c added 2026-10-03, U3). Planned on 2026-10-03 against
 `main` at `4ae25b4`, from a Claude Science brief kept at
 [`source/brief_prym_lowT_failures.md`](source/brief_prym_lowT_failures.md) and checked against the
@@ -110,6 +111,21 @@ histories.
   orchestrator 01c §1.1 is met. The user's note on P11 (4): the cost is expected to fall, not
   rise. Cost is the least important criterion. It ranks behind (a) getting results at all and
   (b) getting correct results.
+- **2026-10-03, prompt 01c (log 01c): P11 selects the small network at low-T rtol 1e-6, atol
+  1e-11. Awaiting the user's ruling on the setting and on P13.**
+  - **The reproduction.** Log 01's S3 is reproduced in every field (20 of 20).
+  - **Criterion 1 (reliability).** No solver failure in 340 small-network solves. On the 11
+    full-network failures, all 165 small-network solves complete, the default tolerance
+    included.
+  - **Criterion 2 (scatter).** 15 of 16 histories are below 1e-4. β = 2.4, M = 10⁻⁵ is at 1.46×
+    its own spread at 1e-8, a 3 % margin under the 1.5× clause.
+  - **Criterion 3 (convergence).** Against 1e-8: D/H ≤ 5.5e-5, Yp ≤ 2.1e-7.
+  - **Criterion 4 (cost).** 1.13–1.15× the full network at the default.
+  - **The settings that fail.** 1e-5 and looser fail criteria 2 and 3.
+  - **For the orchestrator's review.** The breadth sample drew the store's one output-check
+    row, β = 0.95, M = 10⁻³ (README §0.5 excludes it). It returns `Yp_BBN = 0.51205`, outside
+    (0, 0.5), with every `solve_ivp` successful. Log 01c does not count it as a failed solve; a
+    literal reading of the prompt's §6 would (log 01c, deviation 2).
 
 Decisions the prompts may surface, each a stop-and-ask in its prompt:
 
@@ -131,7 +147,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
 | 01 | [The mechanism and the low-T tolerance scan](01-mechanism-and-tolerance-scan.md) | **M**; measures **S**, **N** | Opus | ✍️ 2026-10-03 | ⛔ 2026-10-03, **BLOCKED** (no setting meets P3; the user rules) | see `git log` ("Add bbn_from_store and measure PRyMordial's low-T failures") | [`logs/01-mechanism-and-tolerance-scan.md`](logs/01-mechanism-and-tolerance-scan.md) |
-| 01c | [Measure the small network](01c-small-network-scan.md) (added 2026-10-03, U3) | **Q** | Opus | ✍️ 2026-10-03 | — | — | — |
+| 01c | [Measure the small network](01c-small-network-scan.md) (added 2026-10-03, U3) | **Q** | Opus | ✍️ 2026-10-03 | ✅ 2026-10-03, **COMPLETE WITH DEVIATIONS** (recommends small, rtol 1e-6; deviation 2 flagged) | see `git log` ("Measure PRyMordial's small network for bbn-tolerance") | [`logs/01c-small-network-scan.md`](logs/01c-small-network-scan.md) |
 | 01b | [Draw the kick threshold with Σ_eff](01b-kick-threshold-sigma-eff.md) (added 2026-10-03) | **B** | Sonnet | ✍️ 2026-10-03 | — | — | — |
 | 02 | [Set the low-T tolerance and warn on a stale PRyMordial version](02-low-T-tolerance-patch.md) | **S**, **N**, **K** | Opus | ✍️ 2026-10-03; **to be rewritten after log 01c** (U3) | — | — | — |
 | 03 | [Documents and close-out](03-documents-and-close-out.md) | **D** | Sonnet | ✍️ 2026-10-03; **to be revised with 02** (U3) | — | — | — |
@@ -143,7 +159,7 @@ Decisions the prompts may surface, each a stop-and-ask in its prompt:
 | Item | Kind | Description | Prompt | Status |
 |---|---|---|---|---|
 | M | measurement | The mechanism, the tolerance scan, Yp's floor, upstream's defaults, and a recommended setting. | 01 | **measured** (log 01); recommendation withheld: no setting meets P3 |
-| Q | measurement | The small network on the roster and a breadth sample: reliability, scatter, convergence, cost, its offset from the full network, and a recommended setting by P11. Added 2026-10-03 (U3). | 01c | open |
+| Q | measurement | The small network on the roster and a breadth sample: reliability, scatter, convergence, cost, its offset from the full network, and a recommended setting by P11. Added 2026-10-03 (U3). | 01c | **measured** (log 01c); recommends low-T rtol 1e-6, atol 1e-11; awaiting the user's ruling |
 | S | **DEFECT, medium** | The full low-T network fails near T_J = 1 keV on 11 of 684 φ\* = 5 histories, depending on ulp-level details of the input. Closes `[00-the-low-T-network-fails-near-1-keV-on-ulp-level-input]`. | 01, 02 | open; measured (log 01): the cause is a PRyMordial rate, not the tolerance as such |
 | N | **DEFECT, low–medium** | D/H moves by up to 2.2×10⁻³ under a 10⁻¹² change to ρ_NP at the default tolerance. Closes `[03-prymordial-output-moves-1e-5-under-1e-9-changes-in-rho-np]` (assigned). | 01, 02, 03 | open; measured (log 01) |
 | B | **DEFECT, low** | The `T_deliver` figure's kick threshold uses 1/√(3Σ), not the paper's 1/√(3Σ_eff); its minimum is 1.0295 where the paper says 1.11. Closes `[00-the-kick-threshold-overlay-uses-sigma-not-sigma-eff]`. Added 2026-10-03 (U2). | 01b | open |
@@ -197,6 +213,19 @@ assigned from another board (§3.1).
     - **The provisional setting.** At rtol 1e-5 (not ruled; see Decisions) the cost is
       2.2–2.5× the default's. The SM baseline moves −1.36e-3 in D/H (the default's own error)
       and −2.0e-6 in Yp.
+  - **Narrowed (2026-10-03, prompt 01c).**
+    - **The small network completes all 11.** That is 165 solves: 5 low-T rtol × 3 variants,
+      the default included.
+    - **The breadth sample.** At rtol 1e-6 the breadth sample is every 10th φ\* = 5 history (69)
+      and every φ\* ≠ 5 history (26). It completes with no solver failure. The one FAILURE
+      outcome is the output-check row β = 0.95, M = 10⁻³: Yp 0.51205, as stored, with no
+      `solve_ivp` failure.
+    - **The recommendation.** P11 picks the small network at rtol 1e-6, atol 1e-11 (log 01c),
+      at 1.13–1.15× today's production cost.
+    - **The offset.** Against the full network the small one gives D/H 2.4–3.6e-4 lower and Yp
+      within ±3.2e-5. This is a measurement (P12).
+    - **Still open.** The issue closes with the rewritten prompt 02, once production runs the
+      small network.
 - **[01-prymordial-li8-p-d-li7-rate-rings-near-1-kev]** *(log 01, Verification item 6; Observations 1)*.
   - **What.** `Li7dLi8p_bkwrd` (`PRyM/PRyM_nuclear_net63.py:1142–1147`; upstream `bf24c3d` is
     identical) is α·T9^β·exp(γ/T9)·spline(T9), with γ = 2.2274. The spline is
