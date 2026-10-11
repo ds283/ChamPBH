@@ -1,7 +1,7 @@
 # Log 01 — rehearsal tooling and run provenance
 
 **Subject:** Add run provenance and the tooling for the migration rehearsals
-**Commit:** this commit, on branch `dk-and-rpk-migration`, on top of `0e64ef0`
+**Commit:** `d7791c5`, on branch `dk-and-rpk-migration`, on top of `0e64ef0`
 **Date:** 2026-10-11 to 2026-10-12, by Claude Opus 5.5
 **Result:** **COMPLETE.** T1–T3 shipped. Datastore 35 → 66 (+10 `test_package_provenance`, +21
 `test_compare_stores`); CosmologyModels 18 and ComputeTargets 114 unchanged. All five deliberate
@@ -290,7 +290,7 @@ No `STRUCTURALLY REQUIRED` and no `UNINTENDED DRIFT` deviation.
 output to the scratch directory. ComputeTargets was run as two pattern groups (`test_[a-f]*.py`,
 `test_[g-z]*.py`) to stay clear of the ten-minute cap.
 
-| Root | Dispatch baseline (`ea3d192`) | Before (this session, `0e64ef0`) | After (this commit's tree) |
+| Root | Dispatch baseline (`ea3d192`) | Before (this session, `0e64ef0`) | After (`d7791c5`'s tree) |
 |---|---|---|---|
 | `CosmologyModels/tests` | 18 OK | 18 OK (123.3 s) | 18 OK (75.1 s) |
 | `ComputeTargets/tests` | 114 OK | 61 + 53 = 114 OK (213.7 s + 141.7 s) | 61 + 53 = 114 OK (108.5 s + 137.2 s) |
@@ -317,7 +317,7 @@ from `utilities`). The line in today's venv is shown above. No driver was run.
 records every `sqlite3.connect` call and finds exactly the six `file:…?mode=ro` URIs of the two
 primaries and their four globbed shards; test 12 compares every file's SHA-256, size and
 `st_mtime_ns` before and after, and finds no new file). `compare_stores.py --help` exits 0;
-`black --check` is clean on every Python file this commit adds or changes.
+`black --check` is clean on every Python file `d7791c5` adds or changes.
 
 **T3, acceptance 3.** `build.sh --help` and `run_readers.sh --help` exit 0 under both
 `/bin/bash` 3.2.57 and MacPorts bash, and `bash -n` passes for both; with no arguments each
@@ -332,7 +332,7 @@ opened.** `~/ScienceData/` was not created.
 
 ## The deliberate-breakage record
 
-Each diff below replays with `git apply` from a clean tree at this commit. Each was checked in
+Each diff below replays with `git apply` from a clean tree at `d7791c5`. Each was checked in
 `/bin/bash` with `git apply --check` (on the clean tree) and `git apply -R --check` (after
 applying), run against the named test, and reversed with `git apply -R`; the tree was clean after
 all five.
@@ -413,6 +413,7 @@ are compared, and every row differs).
 +            "editable": vcs_info.get("editable") is True,
          }
      return packages
+ 
 ```
 
 **B5 — `main.py`'s provenance print moved after its `ShardedPool(`** (to the end of the module,
@@ -485,7 +486,7 @@ still at module level). The drivers' `ast` test fails for `main.py`: `1369 not l
   `$REHEARSAL_ROOT/logs` with `mkdir -p`, so `~/ScienceData/` comes into being on 02's first build.
 - **For 02's L2:** `--prune-unvalidated` defaults to true (Observation 1), so all three builds
   prune at open; read each build's printed prune report, not only `resumed-b`'s.
-- **Suites at this commit:** CosmologyModels 18, ComputeTargets 114, Datastore 66
+- **Suites at `d7791c5`:** CosmologyModels 18, ComputeTargets 114, Datastore 66
   (= 35 + 10 + 21).
 - **Open on this board:** §3 `[01-scalarmodelvalue-build-checks-the-stored-phi-against-pi]`
   (latent, out of the campaign's scope), indexed in `.documents/OPEN_ISSUES.md` §1.11.

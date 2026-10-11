@@ -48,7 +48,7 @@ recorded beside each proposal.
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | [Rehearsal tooling and run provenance](01-rehearsal-tooling-and-run-provenance.md) | P3, P5; README §4.1–§4.2 | Opus | ✍️ 2026-10-11 | ✅ 2026-10-12 | this commit | [log](logs/01-rehearsal-tooling-and-run-provenance.md) |
+| 01 | [Rehearsal tooling and run provenance](01-rehearsal-tooling-and-run-provenance.md) | P3, P5; README §4.1–§4.2 | Opus | ✍️ 2026-10-11 | ✅ 2026-10-12 | `d7791c5` | [log](logs/01-rehearsal-tooling-and-run-provenance.md) |
 | 02 | [Rehearse the start tree (R0)](02-rehearse-the-start-tree.md) | **R0**; §4.3's measurement | Opus | ✍️ 2026-10-11 | ⬜ | — | — |
 | 03 | [Pin `raypoolkit` `v0.2.0`](03-pin-raypoolkit-v0.2.0.md) | the RayPoolKit pin | Sonnet | ✍️ 2026-10-11 | ⬜ | — | — |
 | 04 | [Adopt `raypoolkit`](04-adopt-raypoolkit.md) | the RayPoolKit swap; **RayPoolKit G3** | Sonnet | ✍️ 2026-10-11 | ⬜ | — | — |
@@ -69,15 +69,16 @@ recorded beside each proposal.
 - **11** is written after 10's review.
 
 Orchestrator notes are written one prompt at a time, in [`orchestrator/`](orchestrator/), just
-before each dispatch.
+before each dispatch:
+- [`orchestrator/prompt-01.md`](orchestrator/prompt-01.md) (`0e64ef0`) — used for 01.
 
 ### 1.1 Items
 
 | Item | Prompt | What | State |
 |---|---|---|---|
-| **T1** | 01 | `utilities.installed_package_provenance()` and `format_package_provenance()`; one line in each driver; `Datastore/tests/test_package_provenance.py` | ✅ this commit: 10 tests; the line reads `>> packages: datastorekit not installed; raypoolkit not installed` today (format in log 01) |
-| **T2** | 01 | `tools/compare_stores.py` (comparison by value, schema snapshot) and `Datastore/tests/test_compare_stores.py` | ✅ this commit: 21 tests (with T3's); bookkeeping list and polymorphic map in log 01 |
-| **T3** | 01 | `.documents/dk-and-rpk-migration/rehearsal/`: `build.sh`, `interrupt_when.py`, `stage_counts.py`, `run_readers.sh` | ✅ this commit: usage checked; never run on a build |
+| **T1** | 01 | `utilities.installed_package_provenance()` and `format_package_provenance()`; one line in each driver; `Datastore/tests/test_package_provenance.py` | ✅ `d7791c5`: 10 tests; the line reads `>> packages: datastorekit not installed; raypoolkit not installed` today (format in log 01) |
+| **T2** | 01 | `tools/compare_stores.py` (comparison by value, schema snapshot) and `Datastore/tests/test_compare_stores.py` | ✅ `d7791c5`: 21 tests (with T3's); bookkeeping list and polymorphic map in log 01 |
+| **T3** | 01 | `.documents/dk-and-rpk-migration/rehearsal/`: `build.sh`, `interrupt_when.py`, `stage_counts.py`, `run_readers.sh` | ✅ `d7791c5`: usage checked; never run on a build |
 | **L1**–**L4** (R0) | 02 | README §4.1 at 01's tree; §4.3's reproducibility measured; L4 recorded as the baseline | ⬜ |
 | **V1** | 02 | `.documents/dk-and-rpk-migration-verification.md` created, with §1 R0; R0's schema snapshot | ⬜ |
 | **K1** | 03 | the `raypoolkit` pin in `requirements.txt` | ⬜ |
@@ -155,7 +156,7 @@ None yet.
 
 ### 5.2 After prompt 01 (2026-10-12)
 
-- **Landed:** this commit, log [`01-rehearsal-tooling-and-run-provenance.md`](logs/01-rehearsal-tooling-and-run-provenance.md).
+- **Landed:** `d7791c5`, log [`01-rehearsal-tooling-and-run-provenance.md`](logs/01-rehearsal-tooling-and-run-provenance.md).
   **COMPLETE**: T1–T3; no §4 stop met.
 - **T1.** `utilities.installed_package_provenance()` / `format_package_provenance()`; each driver
   prints one line, before `ray.init(` and its `ShardedPool(`. Today:
@@ -176,3 +177,67 @@ None yet.
 - **Opened:** §3 `[01-scalarmodelvalue-build-checks-the-stored-phi-against-pi]` (latent; indexed).
 - **For 02:** `--prune-unvalidated` defaults to true, so every build prunes at open (log 01,
   Observation 1).
+
+**Orchestrator review of prompt 01 (2026-10-12)**, by orchestrator note
+[`prompt-01.md`](orchestrator/prompt-01.md), at `d7791c5`. All ten checks pass; one residue fixed.
+- **(1) Scope.** 14 files, all on the prompt's §5 list plus the index (an issue opened). The
+  untracked set is unchanged.
+- **(2–3) T1.** The helper reads each field from its PEP 610 place. Eleven odd cases and a
+  `read_text` raising `PermissionError` all return without raising (`vcs_info`/`dir_info` a list
+  or a string; `editable` false or the string `"true"`, both `False`; no `requested_revision`; a
+  JSON list; not JSON; not UTF-8). Against the real `importlib.metadata`, with a stand-in
+  `datastorekit-0.2.3.dist-info` first on `sys.path` and no mock, a VCS install at `v0.2.3` /
+  `0de2b161…` gives every field and the line
+  `>> packages: datastorekit 0.2.3 (git+https://github.com/ds283/DatastoreKit@0de2b161ba09362adc36231a7b5b12d99dec8bb3, requested v0.2.3); raypoolkit not installed`.
+  An editable install reads `(editable, file:///…)`, and one with no `direct_url.json` reads
+  `(no recorded origin)`.
+- **(4) Drivers, by `ast` against `ea3d192`.** Each differs by one import (in `main.py`, an
+  extended one) and one module-level print, before `ray.init(` and the `with ShardedPool(`. Every
+  other top-level statement dumps identically. In `utilities.py` only the two imports, the
+  constant and the two functions are new.
+- **(5) Opens.** On 16-shard copies of the 2026-10-02 pilot store, with a logger around
+  `sqlite3.connect`: 34 opens, all `file:…?mode=ro` with `uri=True`, all inside the copies, and
+  none of the originals that the copies' `shards` tables name. The tool imports no layer, Ray or
+  SQLAlchemy, and has no `ATTACH`.
+- **(6) The pilot copy.** A against B gives exit 0: 27 client tables, ~120,000 rows, 17 s, with
+  `LambdaCDM` noted. Each perturbation was applied to B only:
+  - one `ScalarModelValue.raw_N` moved one ulp gives exit 1, paired as a near miss with both hex
+    values (relative difference 1.6e-16);
+  - `ScalarModel.label` and `compute_time` changed give exit 0, both reported as bookkeeping;
+  - `potential_type = 99` gives exit 1 and a named "unknown type value", with no traceback;
+  - one `redshift.z` on shard 7 only gives exit 1 and a named "replicated copies differ";
+  - one `BBNData` row deleted gives exit 1, with the A-only row named by its labels;
+  - one missing shard file gives exit 2;
+  - the schema snapshot round-trips, and a dropped `ScalarModel` index is reported.
+
+  The copies were deleted afterwards.
+- **(7) The maps.** Each bookkeeping entry was confirmed where it is written. The potential map
+  matches `CosmologyConcepts/Potentials/model_ids.py` (0–4), and `QCD_Cosmology.type_id` returns
+  `XAV_IMPROVED_EOS_IDENTIFIER` (3). Test 13 checks every map entry against the registered
+  factories and the identifier modules, so it is not vacuous. **D2 (the masked elapsed seconds in
+  `BBNData.failure_reason`) is accepted.** It is the prompt's own rule for `extra_data`, applied
+  to the one other column carrying a time. A wall-clock failure in one build and a result in the
+  other (README §4.3's candidate) still differ, on `failure` and on the rest of the reason.
+- **(8) Scripts and breakages.**
+  - `build.sh`'s command matches README §4.1 token for token.
+  - `interrupt_when.py` was tried on a `sleep 600`: it waited for the banner and then the 4 s
+    delay, sent `SIGTERM` to that pid only (exit 143), and left a second process alone. When the
+    process exited before the banner, it said so and returned 1.
+  - All four scripts print their usage. `stage_counts.py` parses `pilot-main.log` correctly.
+  - Replayed in bash, B1, B2, B3 and B5 fail their named tests for the stated reasons. **B4 did
+    not apply as recorded:** the log's diff had lost its trailing blank context line. With
+    `--recount` it fails `test_editable_install` on the value. *Residue, fixed in this
+    follow-up:* the context line is restored in the log, and all five now pass
+    `git apply --check`.
+- **(9) Stores.** The 52 store files under `~/ChamPBH-stores*/` and the pilot store have
+  unchanged mtimes. `~/ScienceData/` does not exist.
+- **(10) Records and suites.** The §1 row, T1–T3, §5.2, the §3 entry and index §1.11 are present
+  (the issue was confirmed at `ScalarModel.py:1063-1069`). At `d7791c5` the suites give
+  CosmologyModels 18, ComputeTargets 114 (61 + 53) and Datastore 66, all OK. `black` is clean on
+  all nine Python files.
+- **Handed to 02's note:**
+  - `--prune-unvalidated` is on by default (log 01, Observation 1), so README §4.1's flag on
+    `resumed-b` is a no-op, and L2 must read every build's prune report.
+  - A difference in a parent that cannot pair (an unmapped type value, a deleted row) lists its
+    children unpaired, thousands of rows in the JSON, alongside the named problem.
+  - `build.sh` and `run_readers.sh` refuse an existing log or readers directory.
