@@ -71,7 +71,12 @@ from pipeline_selection import (
     warn_foreign_bbn_provenance,
     warn_super_planckian,
 )
-from utilities import grouper, energy_formatter
+from utilities import (
+    grouper,
+    energy_formatter,
+    format_package_provenance,
+    installed_package_provenance,
+)
 
 MIN_NOTIFY_INTERVAL = 5 * 60
 
@@ -82,6 +87,9 @@ args = parser.parse_args()
 if args.database is None:
     parser.print_help()
     sys.exit()
+
+# which datastorekit and raypoolkit this run uses (dk-and-rpk-migration prompt 01; README P5)
+print(format_package_provenance(installed_package_provenance()), flush=True)
 
 # connect to ray cluster on supplied address; defaults to 'auto' meaning a locally running cluster
 ray.init(address=args.ray_address)

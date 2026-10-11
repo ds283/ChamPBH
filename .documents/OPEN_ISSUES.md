@@ -1,6 +1,6 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-03 · **23 open**: 4 on the `review-remediation` board (closed
+**Last updated:** 2026-10-12 · **24 open**: 4 on the `review-remediation` board (closed
 2026-09-30), none now assigned; 2 on the `production-readiness` board
 (closed 2026-09-30); 4 on the `run-integrity` board (closed 2026-09-30); 9 on the
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`;
@@ -10,7 +10,8 @@ closed 2026-10-03, 6 of 6 landed; prompt 01 committed BLOCKED 2026-10-03 and rul
 around PRyMordial's small network, U3; prompt 01c measured the small network 2026-10-03; prompt
 02 moved production to it and closed three, opening one, 2026-10-03; prompt 01b closed the kick
 threshold overlay issue 2026-10-03; prompt 02b closed the history-tool issue 2026-10-03; prompt 03
-wrote the documents and the handover and closed the campaign, opening and closing none, 2026-10-03).
+wrote the documents and the handover and closed the campaign, opening and closing none, 2026-10-03);
+1 on the `dk-and-rpk-migration` board (planned 2026-10-11; prompt 01 opened one, 2026-10-12).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -27,7 +28,8 @@ the two disagree, the board is right.
 [`run-integrity`](../prompts/run-integrity/IMPLEMENTATION_STATE.md) ·
 [`integrator-remediation`](../prompts/integrator-remediation/IMPLEMENTATION_STATE.md) ·
 [`science-readiness`](../prompts/science-readiness/IMPLEMENTATION_STATE.md) ·
-[`bbn-tolerance`](../prompts/bbn-tolerance/IMPLEMENTATION_STATE.md)
+[`bbn-tolerance`](../prompts/bbn-tolerance/IMPLEMENTATION_STATE.md) ·
+[`dk-and-rpk-migration`](../prompts/dk-and-rpk-migration/IMPLEMENTATION_STATE.md)
 
 ## 1. Open, by owning board
 
@@ -181,3 +183,11 @@ here, on its board, until a later campaign takes them.
   network, which keeps the defect for anyone who selects it.
 - `[01-prymordial-dYB8dtLT-unpacks-Y-in-the-superseded-order]` — B8's low-T equation reads Y in
   the old species order (upstream too); effect not measured, probably negligible.
+
+### 1.11 `dk-and-rpk-migration` — [board §3](../prompts/dk-and-rpk-migration/IMPLEMENTATION_STATE.md)
+
+Planned 2026-10-11. One opened by prompt 01 on 2026-10-12, seen in passing and outside the
+campaign's scope.
+
+- `[01-scalarmodelvalue-build-checks-the-stored-phi-against-pi]` — the unused lookup path of
+  `sqla_ScalarModelValue_factory.build` compares the stored φ with the expected π; latent.

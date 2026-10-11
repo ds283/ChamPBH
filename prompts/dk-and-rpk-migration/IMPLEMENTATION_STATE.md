@@ -1,6 +1,6 @@
 # dk-and-rpk-migration campaign — implementation state
 
-**Last updated:** 2026-10-11 · **Status: LIVE — 4 of 11 prompts written (01–04), none landed. P1–P17
+**Last updated:** 2026-10-12 · **Status: LIVE — 4 of 11 prompts written (01–04), 1 landed (01). P1–P17
 ruled; DatastoreKit `v0.2.3` released (README §0.3).**
 The plan is [`README.md`](README.md), written on 2026-10-11 at `52142d7` with the user's rulings
 U1–U4. Prompts 01–04 are written once the user has reviewed it (README §2.1).
@@ -48,7 +48,7 @@ recorded beside each proposal.
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | [Rehearsal tooling and run provenance](01-rehearsal-tooling-and-run-provenance.md) | P3, P5; README §4.1–§4.2 | Opus | ✍️ 2026-10-11 | ⬜ | — | — |
+| 01 | [Rehearsal tooling and run provenance](01-rehearsal-tooling-and-run-provenance.md) | P3, P5; README §4.1–§4.2 | Opus | ✍️ 2026-10-11 | ✅ 2026-10-12 | this commit | [log](logs/01-rehearsal-tooling-and-run-provenance.md) |
 | 02 | [Rehearse the start tree (R0)](02-rehearse-the-start-tree.md) | **R0**; §4.3's measurement | Opus | ✍️ 2026-10-11 | ⬜ | — | — |
 | 03 | [Pin `raypoolkit` `v0.2.0`](03-pin-raypoolkit-v0.2.0.md) | the RayPoolKit pin | Sonnet | ✍️ 2026-10-11 | ⬜ | — | — |
 | 04 | [Adopt `raypoolkit`](04-adopt-raypoolkit.md) | the RayPoolKit swap; **RayPoolKit G3** | Sonnet | ✍️ 2026-10-11 | ⬜ | — | — |
@@ -75,9 +75,9 @@ before each dispatch.
 
 | Item | Prompt | What | State |
 |---|---|---|---|
-| **T1** | 01 | `utilities.installed_package_provenance()` and `format_package_provenance()`; one line in each driver; `Datastore/tests/test_package_provenance.py` | ⬜ |
-| **T2** | 01 | `tools/compare_stores.py` (comparison by value, schema snapshot) and `Datastore/tests/test_compare_stores.py` | ⬜ |
-| **T3** | 01 | `.documents/dk-and-rpk-migration/rehearsal/`: `build.sh`, `interrupt_when.py`, `stage_counts.py`, `run_readers.sh` | ⬜ |
+| **T1** | 01 | `utilities.installed_package_provenance()` and `format_package_provenance()`; one line in each driver; `Datastore/tests/test_package_provenance.py` | ✅ this commit: 10 tests; the line reads `>> packages: datastorekit not installed; raypoolkit not installed` today (format in log 01) |
+| **T2** | 01 | `tools/compare_stores.py` (comparison by value, schema snapshot) and `Datastore/tests/test_compare_stores.py` | ✅ this commit: 21 tests (with T3's); bookkeeping list and polymorphic map in log 01 |
+| **T3** | 01 | `.documents/dk-and-rpk-migration/rehearsal/`: `build.sh`, `interrupt_when.py`, `stage_counts.py`, `run_readers.sh` | ✅ this commit: usage checked; never run on a build |
 | **L1**–**L4** (R0) | 02 | README §4.1 at 01's tree; §4.3's reproducibility measured; L4 recorded as the baseline | ⬜ |
 | **V1** | 02 | `.documents/dk-and-rpk-migration-verification.md` created, with §1 R0; R0's schema snapshot | ⬜ |
 | **K1** | 03 | the `raypoolkit` pin in `requirements.txt` | ⬜ |
@@ -109,7 +109,24 @@ here (README P16).
 
 ## 3. Active and unresolved issues
 
-None yet.
+### `[01-scalarmodelvalue-build-checks-the-stored-phi-against-pi]`
+
+**Opened:** 2026-10-12 by prompt 01 (log 01, Observation 2), seen in passing while reading the
+factories for the bookkeeping list. **Not fixed:** a factory is outside prompt 01's scope, and
+outside this campaign's (README §1, "The factories' form").
+
+- **What.** `sqla_ScalarModelValue_factory.build`, on finding a stored row, checks the stored φ
+  against the expected φ and then, meaning to check π, compares the stored **φ** with the
+  expected **π**: `fabs(row_data.phi_Einstein_Mp - pi_Einstein_Mp) > DEFAULT_FLOAT_PRECISION`
+  (`Datastore/SQL/ObjectFactories/ScalarModel.py:1063-1069`; the message prints
+  `row_data.pi_Einstein_Mp`). Present since `d132774`.
+- **Impact.** None measured, and none expected today: nothing calls
+  `object_get("ScalarModelValue", …)` (`git grep`); the value rows are written by
+  `sqla_ScalarModelFactory.store` through the inserter and read back by its `build`. If the path
+  were used, a stored row whose φ and π differ by more than `DEFAULT_FLOAT_PRECISION` would raise
+  `ValueError` spuriously, and a wrong stored π would pass unchecked. No stored value is affected.
+- **Next step.** A one-token fix (`row_data.pi_Einstein_Mp`), or deleting the unused lookup path,
+  in a later campaign that may touch the factories, with a test that drives the path.
 
 ## 4. Resolved issues
 
@@ -135,3 +152,27 @@ None yet.
   instantiations fixed too; and its observation §7.3 recorded as addressed.
 - The user ruled on P1–P17 (above). The rehearsal path moved to `~/ScienceData/`, which does not
   exist yet; 02 creates it.
+
+### 5.2 After prompt 01 (2026-10-12)
+
+- **Landed:** this commit, log [`01-rehearsal-tooling-and-run-provenance.md`](logs/01-rehearsal-tooling-and-run-provenance.md).
+  **COMPLETE**: T1–T3; no §4 stop met.
+- **T1.** `utilities.installed_package_provenance()` / `format_package_provenance()`; each driver
+  prints one line, before `ray.init(` and its `ShardedPool(`. Today:
+  `>> packages: datastorekit not installed; raypoolkit not installed`.
+- **T2.** `tools/compare_stores.py`, reading every file `mode=ro` through `sqlite3`, the shards by
+  glob and never by the `shards` table's records. Bookkeeping: `serial`, `timestamp` everywhere;
+  `label` and the timings of `ScalarModel`, `AdiabaticHistory` (including `compute_time`, which the
+  prompt's list missed) and `BBNData`; the seconds elapsed in a BBN wall-clock failure's reason
+  masked (D2, for review). Polymorphic map: `ScalarModel`'s three pairs, cosmology 3 →
+  `QCD_Cosmology` (0–2 declared unstored), potentials 0–4, coupling 0. `LambdaCDM` is a note;
+  `ExponentialCoupling` and the `*_tags` tables are sharded. A ChamPBH primary holds no client
+  table (from the code).
+- **T3.** The four rehearsal scripts; usage checked; never run on a build.
+- **Suites** (foreground, serial): CosmologyModels 18 → 18; ComputeTargets 114 → 114 (61 + 53);
+  Datastore 35 → **66** (+10 `test_package_provenance`, +21 `test_compare_stores`).
+- **Breakages:** all five of prompt §3.5 caught, each recorded in the log as a diff that
+  `git apply` replays.
+- **Opened:** §3 `[01-scalarmodelvalue-build-checks-the-stored-phi-against-pi]` (latent; indexed).
+- **For 02:** `--prune-unvalidated` defaults to true, so every build prunes at open (log 01,
+  Observation 1).

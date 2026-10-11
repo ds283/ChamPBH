@@ -65,6 +65,7 @@ from extract_common import (
     nice_Q_labels,
     add_BBN_info_labels,
 )
+from utilities import format_package_provenance, installed_package_provenance
 
 parser = create_argument_parser()
 args = parser.parse_args()
@@ -72,6 +73,9 @@ args = parser.parse_args()
 if args.database is None:
     parser.print_help()
     sys.exit()
+
+# which datastorekit and raypoolkit this run uses (dk-and-rpk-migration prompt 01; README P5)
+print(format_package_provenance(installed_package_provenance()), flush=True)
 
 # connect to ray cluster on supplied address; defaults to 'auto' meaning a locally running cluster
 ray.init(address=args.ray_address)

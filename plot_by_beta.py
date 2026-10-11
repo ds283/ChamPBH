@@ -65,6 +65,7 @@ from extract_common import (
     LEFT_COLUMN,
 )
 from pipeline_selection import warn_foreign_bbn_provenance
+from utilities import format_package_provenance, installed_package_provenance
 
 DEFAULT_TIMEOUT = 60
 
@@ -92,6 +93,9 @@ args = parser.parse_args()
 if args.database is None:
     parser.print_help()
     sys.exit()
+
+# which datastorekit and raypoolkit this run uses (dk-and-rpk-migration prompt 01; README P5)
+print(format_package_provenance(installed_package_provenance()), flush=True)
 
 # connect to ray cluster on supplied address; defaults to 'auto' meaning a locally running cluster
 ray.init(address=args.ray_address)
