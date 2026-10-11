@@ -21,9 +21,9 @@ user's rulings U1–U4 of the same day (§6.1).
   commit `0de2b16` (§0.3).
 
 §0.2 re-measures both checklists at `52142d7`. §2 fixes each prompt's charter and acceptance.
-**No prompt file is written yet**: they are written in batches after the user's review of this
-plan (§2.1). The user ruled on the proposals of §6.2 on 2026-10-11: P1–P8 and P10–P17 accepted
-(P2 amended), P9 awaiting the planner's explanation (§6.3).
+**Prompts 01–04 are written** (2026-10-11, after the user's review); the rest follow in batches
+(§2.1). The user ruled on the proposals of §6.2 on 2026-10-11: all accepted, P2 amended, P9 after
+§6.3's explanation.
 
 *Revised 2026-10-11, the same day, when the user reopened U3 (§6.1). The first draft registered the
 factories as classes in a prompt 05 of its own. That prompt is withdrawn, and the prompts after it
@@ -787,7 +787,8 @@ Accepted as proposed unless a ruling is given beside the proposal.
   it earlier would make the old layer refuse every existing store, so it waits for the swap.
 - **P9 — `VERSION_SERIAL_KEY` and `require_version_serial` come from `datastorekit.contract`** and
   are deleted from `config/version.py`; `config.version.VERSION_LABEL` stays, and test f, which
-  checks it, stays. *Awaiting the user's ruling, after the planner's explanation (§6.3).*
+  checks it, stays. *Accepted, after §6.3's explanation: `VERSION_LABEL` stays in
+  `config/version.py`; only the two layer-owned names move, and they are imported directly.*
 - **P10 — no `VERSION_LABEL` bump.** Nothing the code computes changes, and no store crosses the
   swap: the package refuses ChamPBH's, and the old layer would resolve the package's bare shard
   names against the working directory. *Accepted.* The user asked whether rows now carry a version
@@ -858,7 +859,6 @@ lookups on it since 2026-09-30. Neither comes new from the package.
 ### 6.4 Left for the user
 
 - ~~Before 07: the `v0.2.3` release~~ (U3): released 2026-10-11 (§0.3).
-- **P9**, after §6.3's explanation.
 - **At the close:**
   - the science-store rebuild (§7), and with it the run scripts;
   - removing the rehearsal stores (§3);

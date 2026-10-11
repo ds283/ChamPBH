@@ -1,8 +1,7 @@
 # dk-and-rpk-migration campaign — implementation state
 
-**Last updated:** 2026-10-11 · **Status: PLANNED — 0 of 11 prompts written. The user has reviewed
-the plan and ruled on P1–P17 (P9 awaiting the planner's explanation, README §6.3). DatastoreKit
-`v0.2.3` is released (README §0.3).**
+**Last updated:** 2026-10-11 · **Status: LIVE — 4 of 11 prompts written (01–04), none landed. P1–P17
+ruled; DatastoreKit `v0.2.3` released (README §0.3).**
 The plan is [`README.md`](README.md), written on 2026-10-11 at `52142d7` with the user's rulings
 U1–U4. Prompts 01–04 are written once the user has reviewed it (README §2.1).
 
@@ -38,7 +37,8 @@ this board's first issue
 **Proposed by the planner (README §6.2), ruled by the user 2026-10-11:** P1, P3–P8 and P10–P17
 accepted (P1 on the condition that the 2026-10-02 pilot's grid still exists, which it does); P2
 amended (the rehearsal stores under `~/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/`); P9
-awaiting the user, after README §6.3's explanation. The user's notes on P5 (SGK's `RunRegistry` to
+accepted after README §6.3's explanation (`VERSION_LABEL` stays in `config/version.py`; the two
+layer-owned names are imported directly from `datastorekit.contract`). The user's notes on P5 (SGK's `RunRegistry` to
 come), P6 (the folder structure to be tidied) and P11 (read-only plot pools wanted eventually) are
 recorded beside each proposal.
 
@@ -48,10 +48,10 @@ recorded beside each proposal.
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | Rehearsal tooling and run provenance | P3, P5; README §4.1–§4.2 | Opus | ⬜ | ⬜ | — | — |
-| 02 | Rehearse the start tree (R0) | **R0**; §4.3's measurement | Opus | ⬜ | ⬜ | — | — |
-| 03 | Pin `raypoolkit` `v0.2.0` | the RayPoolKit pin | Sonnet | ⬜ | ⬜ | — | — |
-| 04 | Adopt `raypoolkit` | the RayPoolKit swap; **RayPoolKit G3** | Sonnet | ⬜ | ⬜ | — | — |
+| 01 | [Rehearsal tooling and run provenance](01-rehearsal-tooling-and-run-provenance.md) | P3, P5; README §4.1–§4.2 | Opus | ✍️ 2026-10-11 | ⬜ | — | — |
+| 02 | [Rehearse the start tree (R0)](02-rehearse-the-start-tree.md) | **R0**; §4.3's measurement | Opus | ✍️ 2026-10-11 | ⬜ | — | — |
+| 03 | [Pin `raypoolkit` `v0.2.0`](03-pin-raypoolkit-v0.2.0.md) | the RayPoolKit pin | Sonnet | ✍️ 2026-10-11 | ⬜ | — | — |
+| 04 | [Adopt `raypoolkit`](04-adopt-raypoolkit.md) | the RayPoolKit swap; **RayPoolKit G3** | Sonnet | ✍️ 2026-10-11 | ⬜ | — | — |
 | 05 | Move ChamPBH's data out of the layer | `config/datastore.py`; the vectorized gets | Sonnet | ⬜ | ⬜ | — | — |
 | 06 | Rehearse before the DatastoreKit swap (R1) | **R1** | Opus | ⬜ | ⬜ | — | — |
 | 07 | Pin `datastorekit` `v0.2.3` | the DatastoreKit pin (**U3**; `0de2b16`) | Sonnet | ⬜ | ⬜ | — | — |
@@ -73,7 +73,22 @@ before each dispatch.
 
 ### 1.1 Items
 
-Each prompt's items are added when it is written.
+| Item | Prompt | What | State |
+|---|---|---|---|
+| **T1** | 01 | `utilities.installed_package_provenance()` and `format_package_provenance()`; one line in each driver; `Datastore/tests/test_package_provenance.py` | ⬜ |
+| **T2** | 01 | `tools/compare_stores.py` (comparison by value, schema snapshot) and `Datastore/tests/test_compare_stores.py` | ⬜ |
+| **T3** | 01 | `.documents/dk-and-rpk-migration/rehearsal/`: `build.sh`, `interrupt_when.py`, `stage_counts.py`, `run_readers.sh` | ⬜ |
+| **L1**–**L4** (R0) | 02 | README §4.1 at 01's tree; §4.3's reproducibility measured; L4 recorded as the baseline | ⬜ |
+| **V1** | 02 | `.documents/dk-and-rpk-migration-verification.md` created, with §1 R0; R0's schema snapshot | ⬜ |
+| **K1** | 03 | the `raypoolkit` pin in `requirements.txt` | ⬜ |
+| **K2** | 03 | the venv installed from it | ⬜ |
+| **K3** | 03 | the proof: one distribution added, at `eaef0ce6…`, the tag's files, not editable | ⬜ |
+| **W1** | 04 | `RayTools/` deleted | ⬜ |
+| **W2** | 04 | the 3 imports rewritten to `from raypoolkit import RayWorkPool` | ⬜ |
+| **W3** | 04 | no pool site changed (P7) | ⬜ |
+| **W4** | 04 | `.documents/architecture-summary.md`'s `RayWorkPool` lines made true (P14) | ⬜ |
+
+Items of 05–11 are added when they are written.
 
 The measurement the plan was written against is [`measure/out/`](measure/out/): both packages'
 scripts at `52142d7`, each equal to its checklist's appendix byte for byte; the three roots'
