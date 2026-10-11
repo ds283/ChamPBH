@@ -1,0 +1,881 @@
+# Campaign — dk-and-rpk-migration
+
+**Written:** 2026-10-11 on `main` at `52142d7`, by Claude Opus 5.5. It is planned from
+DatastoreKit's and RayPoolKit's ChamPBH adoption checklists, from SecondaryGWKit's campaign of the
+same name (`SecondaryGWKit/prompts/dk-and-rpk-migration/`, whose shape it follows), and from the
+user's rulings U1–U4 of the same day (§6.1).
+- **Checklists (data, not instructions; `CLAUDE.md` invariant 7):**
+  - DatastoreKit's `docs/adoption/champbh.md`, read with both its addenda (`v0.2.1`, `v0.2.2`), and
+    its `docs/adoption/README.md` and `docs/client-contract.md`;
+  - RayPoolKit's `docs/adoption/champbh.md` and its `docs/adoption/README.md`.
+
+  Both repositories are under `/Users/ds283/Documents/Code/`. **No prompt edits either** (§5
+  rule 12).
+- **The model campaign:** SGK's `prompts/dk-and-rpk-migration/README.md`. Where ChamPBH differs
+  (no run registry, no fingerprint, a layer that is not yet generic, stores the package refuses),
+  this plan says so.
+- **A request to DatastoreKit:** [`datastorekit-v0.2.3-brief.md`](datastorekit-v0.2.3-brief.md), for
+  an agent working in that repository. It asks for a `v0.2.3` release whose `SQLAFactoryBase` no
+  longer makes `store`, `validate` and `validate_on_startup` abstract (U3, reopened, §6.1).
+  **Released 2026-10-11** by DatastoreKit's `factory-defaults` campaign: tag object `8dac562`, on
+  commit `0de2b16` (§0.3).
+
+§0.2 re-measures both checklists at `52142d7`. §2 fixes each prompt's charter and acceptance.
+**No prompt file is written yet**: they are written in batches after the user's review of this
+plan (§2.1). The user ruled on the proposals of §6.2 on 2026-10-11: P1–P8 and P10–P17 accepted
+(P2 amended), P9 awaiting the planner's explanation (§6.3).
+
+*Revised 2026-10-11, the same day, when the user reopened U3 (§6.1). The first draft registered the
+factories as classes in a prompt 05 of its own. That prompt is withdrawn, and the prompts after it
+are renumbered: 11 prompts, not 12.*
+
+## 0. Why this campaign exists
+
+ChamPBH's datastore layer (`Datastore/`, `ShardedPool`) and its Ray work queue
+(`RayTools/RayWorkPool.py`) have each been extracted into a package of their own:
+- **DatastoreKit**, `datastorekit`: **`v0.2.2`** today (tag object `c32d027` on commit `6d8ee9a`);
+  this campaign pins **`v0.2.3`** (tag object `8dac562`, on commit `0de2b16`), released for it (U3);
+- **RayPoolKit**, `raypoolkit` **`v0.2.0`** (tag object `4e7eb15` on commit `eaef0ce`).
+
+SGK, ChamPBH and StochasticInstantons will all depend on them. Each package names ChamPBH's
+adoption as its gate **G3**:
+- **DatastoreKit's G3:** the 9 layer files are deleted, ChamPBH imports `datastorekit` at the
+  pinned tag, its suites pass, and **a pilot store is rebuilt through the package**. What the
+  rebuild is compared against is ChamPBH's choice (checklist item 9).
+- **RayPoolKit's G3:** `RayTools/` is gone, nothing imports it, the pin is in place and installed,
+  ChamPBH's suites pass, and every `RayWorkPool(...)` site constructs (17 at `52142d7`).
+
+### 0.1 Why ChamPBH's adoption is larger than SGK's
+
+SGK's layer had already been made generic, so SGK's swap was a deletion and an import rewrite.
+ChamPBH's has not, and the package's interface has moved on from the copy ChamPBH carries:
+
+1. **ChamPBH's own data lives inside the layer** (DatastoreKit checklist item 4): the factory
+   registry `_factories` (`Datastore/SQL/Datastore.py:94-122`), the drop groups and their order
+   (`:128-142`), the serial batch sizes (`Datastore/SQL/ClientPool.py:24-49`). They must leave
+   before the layer can be deleted. The package takes them as `ShardedPool(factories=…,
+   serial_batch_sizes=…, drop_tables=…)`.
+2. **The registry holds instances, and the package's base class refuses most of them.** The
+   package's `SQLAFactoryBase` is an ABC whose `register`, `build`, `store`, `validate` and
+   `validate_on_startup` are all abstract. 20 of ChamPBH's 23 factory classes define only
+   `register` and `build` (with `read_table` and `inventory` on three), so each would raise
+   `TypeError` where the registry is built (checklist item 5, the package's decision U32). The
+   package's layer never instantiates a factory and works with classes or instances alike
+   (contract §3); the ABC is enforced only on instantiation, so it checks nothing for a client
+   that registers classes and refuses valid factories for one that registers instances. **U3,
+   reopened:** the fix is made in DatastoreKit, as `v0.2.3`, and ChamPBH keeps its instances
+   (§6.1; the brief beside this file).
+3. **Shard keys in payloads.** ChamPBH's `object_get_vectorized` accepts a bare `beta_value` as the
+   shard key (`Datastore/SQL/ShardedPool.py:592-593`), and all 7 of `main.py`'s vectorized gets
+   pass one (`main.py:196`, `:358`, `:408`, `:476`, `:614`, `:666`, `:739`). The package takes only
+   the mapping form, `{"shard_key": beta}`, and sends each shard copies of the payloads with that
+   mapping merged in (checklist item 6, and its `v0.2.1` addendum).
+4. **The inventory interface.** ChamPBH's `--inventory` calls `pool.inventory(...)` (4 sites,
+   `main.py:1188`, `:1215`, `:1244`, `:1278`), driven by `config/sharding.py`'s `inventory_config`
+   and six factory `inventory()` hooks. The package has no `pool.inventory`: its inventory is
+   `datastorekit.store_inventory.read_inventory(primary, factories)`, read-only, on a closed store,
+   over each factory's `inventory_spec()`. No ChamPBH factory declares one yet.
+5. **Drops.** The package takes tables, not groups, and refuses a drop that leaves references.
+   `--drop scalar-model` alone is refused, since `AdiabaticHistory` and `BBNData` name
+   `ScalarModel.serial`. Today it silently leaves orphans. **U4** says what the CLI does.
+6. **Every ChamPBH store is refused by the package** (checklist item 8; decision D4: *rebuilt, not
+   migrated*). A read-write open stops first on the primary's missing `replication_in_flight`
+   table; behind that are the absolute shard records and the per-shard timestamps of replicated
+   rows. A read-only open of even a rebuilt store is refused while `replicated_tables` names
+   `LambdaCDM`, which no factory registers. **So the science store must be rebuilt after this
+   campaign**, and that rebuild is the user's (§7).
+7. **The test harness.** `_TempStoreCase` (`Datastore/tests/test_version_keyed_lookups.py:187-201`)
+   builds ChamPBH's actor with two arguments and relies on its constructor inserting the version
+   row. The package's actor takes `replicated_tables` and `factories=`, inserts no version row, and
+   refuses a keyed lookup until `set_version` has been called. The harness has five importers.
+
+And three things that SGK had and ChamPBH does not:
+- **no run registry**, so no manifest, no `begin()`, no liveness records;
+- **no fingerprint**, so no single digest to reproduce. §4.2 compares stores by value instead;
+- **no store that survives the swap**, so the rehearsal before the DatastoreKit swap and the one
+  after it must be compared through something that reads both formats. §4.2's comparison reads
+  the SQLite files directly and never through either layer.
+
+### 0.2 Reconciliation against `52142d7`
+
+Measured on 2026-10-11. The outputs are in [`measure/out/`](measure/out/).
+
+**`52142d7` is `HEAD` of `main`, and it is the checklists' commit.** Both measuring scripts, run
+from each package's root with its own venv at `--commit 52142d7`, equal their checklist's appendix
+**byte for byte**:
+- DatastoreKit's `docs/extraction/measure_client_imports.py cpbh`
+  ([`52142d7-datastorekit-measure_client_imports.md`](measure/out/52142d7-datastorekit-measure_client_imports.md)):
+  41 import statements of the layer in 38 files, none nested; 0 string literals; 0 `import_module`
+  calls; 1 factory import outside the factory package (`main.py:46`); 4 imports of the two names
+  that move into `datastorekit.contract`.
+- RayPoolKit's `docs/adoption/measure_client_pools.py cpbh`
+  ([`52142d7-raypoolkit-measure_client_pools.md`](measure/out/52142d7-raypoolkit-measure_client_pools.md)):
+  3 imports of `RayTools`, all at module level; 17 `RayWorkPool(...)` calls (14 with no compute
+  handler, 3 with one), every one "constructs"; 0 string literals; 0 test modules naming either.
+
+So every figure the checklists give is today's. A prompt re-measures at its own `HEAD` before it
+acts, and its numbers govern.
+
+**The tags are on their remotes.** `git ls-remote --tags` gives `refs/tags/v0.2.2` → `c32d027`
+(`^{}` `6d8ee9ae2c05…`) for DatastoreKit, and `refs/tags/v0.2.0` → `4e7eb15` (`^{}` `eaef0ce60e2f…`)
+for RayPoolKit. `v0.2.3` was tagged after this measurement; §0.3 records it.
+
+**The venv.**
+- Python 3.13.16 (`venv/pyvenv.cfg`), `ray==2.53.0` (`requirements.txt:78`), `SQLAlchemy==2.0.46`
+  (`requirements.txt:89`). Python and SQLAlchemy equal both packages' tested high end. **Ray 2.53.0
+  is between the tested ends (2.43.0, 2.55.1) and is not itself tested by either package**, so the
+  rehearsals under real Ray (R1, R2) are the first runs of each package at 2.53.0.
+- `pip show datastorekit raypoolkit` finds neither, and `pip check` reports nothing broken.
+  `pip freeze` is saved as [`52142d7-pip-freeze.txt`](measure/out/52142d7-pip-freeze.txt), for 03
+  and 07 to compare against.
+- Each package declares only `ray>=2.43` (and `datastorekit` `sqlalchemy>=2.0.39,<2.1`), which the
+  venv satisfies, so each pin should add one distribution and move none.
+
+**The three test roots at `52142d7`**, run in the foreground, serially
+([`52142d7-suites.txt`](measure/out/52142d7-suites.txt)):
+
+| Root | Tests | Result |
+|---|---|---|
+| `CosmologyModels/tests` | 18 | OK |
+| `ComputeTargets/tests` | 114 | OK |
+| `Datastore/tests` | 35 | OK |
+
+`Datastore/tests` by module: `test_bbn_failure_lookup` 6, `test_first_bounce_round_trip` 5,
+`test_fixed_T_values_round_trip` 5, `test_scalarmodel_failure_reason` 4,
+`test_shard_key_assignment` 4 (added at `52142d7`, after the bbn-tolerance close's 31),
+`test_version_keyed_lookups` 11. `ComputeTargets/tests/test_foreign_bbn_provenance` (6) imports
+the Datastore harness.
+
+**Why the registry holds instances, measured for U3.**
+- ChamPBH began as a copy of SGK's layer: at its initial commit `dec2d45` (2025-12-09) the base was
+  SGK's ABC with `@staticmethod @abstractmethod` hooks, and the registry named classes. Commit
+  `5ef07b4` (2026-01-05, "In progress changes") added the two quantity factories, each one class
+  serving several tables told apart by an `ObjectType` held on the instance. To do it, it made the
+  base a plain class whose hooks raise `NotImplementedError`, removed `@staticmethod` from every
+  hook of every factory, and made every registry entry an instance.
+- Today only those two hold state: `sqla_dimensionful_quantity_factory` (`ObjectType` and
+  `value_col`, `Datastore/SQL/ObjectFactories/DimensionfulQuantity.py:30-32`) and
+  `sqla_dimensionless_quantity_factory` (`ObjectType`, `DimensionlessQuantity.py:30`), which fill
+  6 of the 27 registry entries. Every other `__init__` is `pass`.
+- DatastoreKit's base is SGK's, carried over at extraction (`PROVENANCE.md`: SGK's `base.py` →
+  `datastorekit/SQL/factory_base.py`). Its decision U32 (2026-10-09) kept the ABC and asked the
+  instance-registering clients (ChamPBH, StochasticInstantons) to change. Its own contract §3
+  already describes `store` as "Not defined: the base's `NotImplementedError`", and its base already
+  gives `revalidate`, `owned_serials` and `inventory_spec` non-abstract defaults. No DatastoreKit
+  test depends on the three hooks being abstract (`git grep` at `v0.2.2`).
+
+**The stores.** None is opened by this campaign but its own rehearsal stores (§3).
+- The pilot store in the working tree, `pilot-2026.6.0.db` and 16 shards (untracked), built
+  2026-10-02 at 23:28 by the user, before `bbn-tolerance` moved production to PRyMordial's small
+  network. Its BBN rows are therefore not today's, and it is not a reference for this campaign.
+- The science store `~/ChamPBH-stores/science-2026.6.0.db` and its BBN-refresh copy
+  `~/ChamPBH-stores-bt02/`, named only.
+- **A hazard the checklist records, that this campaign cures.** ChamPBH records each shard by the
+  absolute path of the resolved primary (`Datastore/SQL/ShardedPool.py:88`, `:296`, read back as
+  is at `:342`), so a file-level copy of a ChamPBH store in another directory opens the
+  *original's* shards. The bbn-tolerance refresh route (`cp -p` to a new directory, then
+  `--drop bbn-data`; `.documents/review-remediation-verification.md` §4.11, and
+  `pipeline_selection.BBN_REFRESH_ROUTE`) is exposed to it. The package records shards by bare
+  name, so after 08 a copy opens its own shards, and the route becomes the package's
+  `copy_store` (08, P13). The campaign does not open either store to see what the refresh did.
+
+**What the swaps touch, by grep at `52142d7`.**
+- `CLAUDE.md:64-66` (test commands) and `:68-72` (`Datastore.__ray_actor_class__`) describe the
+  layer; `CLAUDE.md` names no `RayTools` path.
+- `.documents/architecture-summary.md` (1,118 lines): `RayWorkPool` at `:35-36`, `:153-165`, `:585`
+  (RayPoolKit checklist item 9); the database layer in §4 (`:213-393`) and §§12–14 (from `:975`)
+  (DatastoreKit checklist item 10).
+- `.documents/OPEN_ISSUES.md:48`, `[00-two-files-are-not-black-clean]`, names
+  `Datastore/SQL/ObjectFactories/base.py`, which 08 deletes.
+- `tools/bbn_from_store.py` reads a store's shards read-only through `sqlite3`, by the glob
+  `STEM-shard*.db` (`:257`), never through the layer. The package names shards
+  `<stem>-shard<NNNN><suffix>` (`datastorekit/shard_paths.py:58-68`), as ChamPBH does
+  (`Datastore/SQL/ShardedPool.py:113`), so the glob still holds for a `.db` primary.
+
+**No run is live.** No Ray cluster of this repository is up (the rehearsals start their own, §4.1).
+
+### 0.3 DatastoreKit `v0.2.3`, as delivered (2026-10-11)
+
+Released by DatastoreKit's `factory-defaults` campaign (closed at `83068cb`), from the brief.
+- **The tag.** `git ls-remote` gives `refs/tags/v0.2.3` → `8dac562e048bbb80f4179c49f77d3d327b5af7f8`,
+  `^{}` → `0de2b161ba09362adc36231a7b5b12d99dec8bb3`. The pin is
+  `datastorekit @ git+https://github.com/ds283/DatastoreKit@v0.2.3`.
+- **What U3 needs.** At the tag, `datastorekit/SQL/factory_base.py` keeps `register` and `build`
+  `@staticmethod @abstractmethod`, and gives `store`, `validate` and `validate_on_startup`
+  non-abstract `@staticmethod` defaults that raise `NotImplementedError`, documented as called on
+  "the registry's entry, a class or an instance alike". Read through `git show`; 07 checks it on the
+  installed package.
+- **Four points the implementing agent reported, which the brief did not ask for:**
+  1. DatastoreKit's `test_neutral_client.py` had an `ABSTRACT_HOOKS` list, corrected to
+     `("register", "build")`. Nothing for ChamPBH.
+  2. **The unit tests cannot show that a registered instance survives Ray's serialisation**, since
+     the stand-in pool pickles nothing. A new step I of DatastoreKit's smoke script showed it under
+     real Ray at both tested ends (Ray 2.43.0 and 2.55.1). ChamPBH's own evidence at Ray 2.53.0 is
+     R2 (10, acceptance 3), whose every build passes ChamPBH's 27 instances to the actors.
+  3. StochasticInstantons' three factory instantiations at import time also stop raising under
+     `v0.2.3`, and its checklist addendum says so.
+  4. DatastoreKit's extraction verification document records 07a's observation §7.3 (the contract
+     silent on instances) as addressed, in new sections §4.8 and §8.1.
+
+## 1. Scope
+
+**In scope:**
+- run provenance in the drivers' output, and the rehearsal tooling (01);
+- the three rehearsals R0, R1, R2, and their verification document (02, 06, 10);
+- `requirements.txt`: the two pins (03, 07);
+- `RayTools/`, deleted, and its 3 imports rewritten (04);
+- ChamPBH's data moved out of the layer into `config/datastore.py`, and the 7 vectorized gets put
+  in the mapping form (05);
+- the 9 layer files (two `__init__.py` kept, emptied, P6), every layer import outside `prompts/`
+  rewritten by the module map, the pool constructions, the drop policy (U4), the test harness, and
+  the tests the package now carries (08);
+- the inventory: `inventory_spec()` on the factories, a ChamPBH report over `read_inventory`, and
+  `main.py --inventory` on a closed store (09);
+- prose that a prompt's own commit makes false (P14), and the documents and handover at the close
+  (11).
+
+**Out of scope:**
+- **What the code computes.** No stored science value may change (§5 rule 9). `VERSION_LABEL`
+  stays `2026.6.0` (P10).
+- **DatastoreKit and RayPoolKit themselves** (§5 rule 12). The `v0.2.3` release is made in
+  DatastoreKit, by an agent working there from the brief; no prompt here makes it. A defect found
+  in either package stops the prompt (§5 rule 11).
+- **The factories' form.** They stay instances of classes whose hooks take `self` (U3). No hook
+  becomes a `staticmethod`, and the quantity factories keep their constructor argument.
+- **Migrating stores.** D4: ChamPBH's stores are rebuilt, not migrated. No converter is written.
+- **The science store and its refresh copy.** Not opened, read or rebuilt by any prompt. Their
+  rebuild is the user's, after the close (§7).
+- **The untracked run scripts** `full_run_2026.6.0.sh` and `full_run_2026.6.0-refresh.sh`. They are
+  the user's; 11 says what in them goes stale.
+- **Read-only pools in the plot scripts** (P11).
+- **`prompts/`**: its one layer import and 21 lines naming `RayTools` are history.
+- **`prompts/jordan-normalization/`** (untracked, a brief for a campaign not yet planned).
+- **Dated `.documents/` audits and verification records** (P14).
+
+## 2. Prompts
+
+| # | Prompt | Covers | Model |
+|---|---|---|---|
+| 01 | `01-rehearsal-tooling-and-run-provenance.md` | P5. Each driver prints the installed `datastorekit` and `raypoolkit`. `tools/compare_stores.py`, the layer-independent comparison of two stores by value (§4.2), with its tests. The rehearsal scripts under `.documents/dk-and-rpk-migration/rehearsal/` | Opus |
+| 02 | `02-rehearse-the-start-tree.md` | **R0.** §4.1's protocol at 01's tree. It measures whether two builds of one tree agree bit for bit, which sets R1's and R2's criterion (§4.3) | Opus |
+| 03 | `03-pin-raypoolkit-v0.2.0.md` | The `raypoolkit` pin in a commit of its own, installed, one distribution added | Sonnet |
+| 04 | `04-adopt-raypoolkit.md` | **The RayPoolKit swap.** `RayTools/` goes and 3 imports are rewritten; all 17 sites construct. **RayPoolKit's G3 holds** by its checklist | Sonnet |
+| 05 | `05-move-champbh-data-out-of-the-layer.md` | `config/datastore.py` holds the registry, the drop groups and the serial batch sizes, and the old layer reads them from there. The 7 vectorized gets take `{"shard_key": beta}`. On the old layer; the schema does not change | Sonnet |
+| 06 | `06-rehearse-before-the-datastore-swap.md` | **R1.** §4.1 at 05's tree: `raypoolkit` and the data move, still on ChamPBH's layer. Equal to R0 | Opus |
+| 07 | `07-pin-datastorekit-v0.2.3.md` | The `v0.2.3` pin (§0.3) in a commit of its own, installed as 03; ChamPBH's 20 partial factory classes instantiate on the installed base | Sonnet |
+| 08 | `08-adopt-datastorekit.md` | **The DatastoreKit swap.** The 9 files go (two emptied, P6); every layer import outside `prompts/` is rewritten; the pools take `factories=`, `serial_batch_sizes=` and `drop_tables=`; U4's drop refusal; `LambdaCDM` leaves `replicated_tables`; the harness is rebuilt on the package's actor; the carried tests are deleted; `--inventory` refuses until 09 | Opus |
+| 09 | `09-port-the-inventory.md` | `inventory_spec()` on the factories the report covers; `tools/inventory_report.py` over `read_inventory`; `main.py --inventory` on the closed store, before Ray; the six `inventory()` hooks and `inventory_config` deleted | Opus |
+| 10 | `10-rehearse-through-both-packages.md` | **R2.** §4.1 through both packages. Equal to R1 by §4.2. **DatastoreKit's G3 holds** | Opus |
+| 11 | `11-close-the-migration.md` | The documents (`architecture-summary.md`, `CLAUDE.md`'s test section); the final measurements; the G3 records drafted for both packages' boards; the handover of the science-store rebuild (§7); the index; the board closed | Sonnet |
+
+### 2.1 When each prompt file is written
+
+Every charter below is fixed by a checklist, by U1–U4 or by §4, so no prompt waits on another's
+*scope*. The files are still written in batches, each just before its dispatch, so that each
+carries the previous review's findings:
+- **01–04** are written first, once the user has reviewed this plan and ruled on P1–P17.
+- **05–06** follow 02's review: R0's reproducibility (§4.3) fixes 06's criterion, and 05's schema
+  check uses R0's tree.
+- **07–10** follow 06's review: 06's log fixes the counts and names they cite. `v0.2.3`'s tag and
+  commit are §0.3's; its ChamPBH checklist addendum is read when 07 and 08 are written.
+- **11** follows 10's review.
+
+`v0.2.3` was released on 2026-10-11 with what the brief asked (§0.3), so no prompt waits on it now.
+
+### 2.2 The charters
+
+**01 — Rehearsal tooling and run provenance** (Opus).
+- **What it adds.**
+  - **P5, provenance.** A helper, `utilities.installed_package_provenance(names) -> dict`, giving
+    for each distribution `None` if it is not installed, else `{"version", "url", "commit",
+    "requested_revision", "editable"}` from `importlib.metadata` and its PEP 610
+    `direct_url.json` (`None` for any field the install does not record). It is SGK's
+    `RunRegistry.package_provenance()` in shape. `main.py`, `plot_by_beta.py` and
+    `plot_ScalarModel.py` each print one line from it, for `datastorekit` and `raypoolkit`, before
+    they open a pool. It never refuses, even for an editable install.
+  - **`tools/compare_stores.py`**, §4.2's comparison, with its tests in
+    `Datastore/tests/test_compare_stores.py`, on temporary SQLite files built by `sqlite3` alone.
+    It also writes a store's **schema snapshot** (§4.2), which 05 and 08 compare.
+  - **The rehearsal scripts** under `.documents/dk-and-rpk-migration/rehearsal/` (§4.1):
+    `build.sh` (one build, given the store, the slug and whether it resumes), `interrupt_when.py`
+    (sends `SIGTERM` to a driver when its log shows a stage banner and a stated delay has passed),
+    `stage_counts.py` (each stage's queue-summary counts from a log, without the rates), and
+    `run_readers.sh` (§4.1's L3).
+- **Acceptance.**
+  1. The provenance tests, with stand-in distributions and no real install, cover four cases: not
+     installed; a VCS install at a tag; an editable install; a `direct_url.json` that is absent or
+     unreadable. In today's venv both entries print as not installed.
+  2. The comparison's tests cover: two equal stores (empty diff, exit 0); a store with one float
+     changed in its last bit (named, exit 1); a row present in one only (named); serials and shard
+     assignment that differ while content is equal (empty diff); a bookkeeping column that differs
+     (reported, not counted); a primary with absolute shard records and one with bare names (both
+     read); and that no file it reads changes (checksums before and after).
+  3. Each script runs with `--help` and is `black`-clean. No script is run on a real build yet.
+  4. Suites: CosmologyModels 18 and ComputeTargets 114 unchanged; Datastore 35 plus the new tests.
+- **Out.** Any run of `main.py` on a store (02 does that). The science store.
+
+**02 — Rehearse the start tree, R0** (Opus).
+- **What it does.** §4.1's protocol, slug prefix `dk-and-rpk-migration-02`, at 01's tree, on
+  ChamPBH's layer and `RayTools/`.
+- **Acceptance.**
+  1. §4.1's L1–L3 hold.
+  2. Every driver's provenance line names both packages as not installed.
+  3. **§4.3, measured.** `compare_stores` of `reference` against `resumed` is recorded in full. If
+     it is empty, R0 is **bitwise reproducible**, and R1 and R2 are held to bitwise equality. If
+     it is not, the log says which rows and columns differ and by how much, and the prompt stops
+     for the user to rule on R1's criterion before 05–06 are written.
+  4. L4's baseline is recorded: each stage's counts, and what the resume recomputed.
+  5. The schema snapshot of `reference` is saved, as the start tree's.
+- **Its own stop condition.** A build that fails, or an L1–L3 failure, at the start tree is
+  ChamPBH's, not this campaign's to fix. The prompt stops and reports, and nothing after it is
+  dispatched.
+- **It creates** `.documents/dk-and-rpk-migration-verification.md` and adds its §1.
+
+**03 — Pin `raypoolkit` `v0.2.0`** (Sonnet).
+- **What it changes.** `requirements.txt` gains
+  `raypoolkit @ git+https://github.com/ds283/RayPoolKit@v0.2.0`, in sorted position; nothing else.
+  The venv is installed from it (`./venv/bin/pip install -r requirements.txt`; needs the network).
+  Never `-e`, a local path, `--upgrade`, `--force-reinstall` or `--no-deps`.
+- **Acceptance.**
+  1. `pip freeze` differs from `52142d7-pip-freeze.txt` by exactly one added line, `raypoolkit` at
+     `eaef0ce60e2f…`; `pip check` is clean.
+  2. `installed_package_provenance()["raypoolkit"]` gives `0.2.0`, commit `eaef0ce6…`, requested
+     revision `v0.2.0`, `editable: false`; `["datastorekit"]` is `None`.
+  3. The installed `raypoolkit/` equals `git -C <RayPoolKit> archive v0.2.0 raypoolkit`, file by
+     file, less any test package.
+  4. The three roots give 01's counts. Nothing imports the package yet.
+- **Rollback** is the revert plus `./venv/bin/pip uninstall -y raypoolkit`.
+
+**04 — Adopt `raypoolkit`** (Sonnet).
+- **What it changes.**
+  1. It deletes `RayTools/RayWorkPool.py` and `RayTools/__init__.py`. `utilities.format_time` stays
+     ChamPBH's.
+  2. It rewrites the 3 imports (`main.py:50`, `plot_ScalarModel.py:44`, `plot_by_beta.py:38`) to
+     `from raypoolkit import RayWorkPool`. With them goes `RayTools/RayWorkPool.py:23`'s
+     `from Datastore.SQL.ShardedPool import ShardedPool`, so DatastoreKit's rewrite list loses one
+     line and no U12 exception is needed.
+  3. It changes no pool site: the 14 lookup-only sites keep `store_handler=None` (RayPoolKit's
+     advice; P7).
+  4. `.documents/architecture-summary.md`'s lines that this commit makes false (P14): the layout at
+     `:35-36`, the section title at `:153`, and the constructor table from `:157`, whose
+     `store_handler` row is the old meaning (RayPoolKit decision U10) and which has no
+     `persist_handler` row.
+- **Acceptance.**
+  1. `git ls-tree HEAD RayTools` is empty.
+  2. **By RayPoolKit's script, at the commit:** 0 imports, 0 string literals and 0 `import_module`
+     calls name `RayTools`; 17 calls, every one "constructs".
+  3. The three roots give 03's counts; `black --check` is clean on every touched file.
+  4. `main.py`, `plot_by_beta.py` and `plot_ScalarModel.py` byte-compile, and each module they
+     import resolves, by `ast` (none is executed).
+  5. The deliberate breakages of §5 rule 8 are caught. At least: one import reverted to
+     `RayTools.RayWorkPool` (the script reports it and the import fails); `raypoolkit` uninstalled
+     (the import check fails).
+  6. **The board records RayPoolKit's G3 as holding** by its checklist item 8, items 1–5. R1 (06)
+     adds the run under real Ray.
+
+**05 — Move ChamPBH's data out of the layer** (Sonnet). On ChamPBH's own layer.
+- **What it changes.**
+  1. A new `config/datastore.py` holds `factories` (the registry `_factories`, moved verbatim with
+     its imports: 27 entries, each an instance, as today), `drop_groups` (`_drop_actions`'s three
+     groups, verbatim) and `serial_batch_sizes` (`_default_serial_batch_size`, verbatim, `LambdaCDM`
+     included until 08). This is SGK's module name for the same data.
+  2. The old layer imports them from there: `Datastore/SQL/Datastore.py` its registry and drop
+     groups, `Datastore/SQL/ClientPool.py` its batch sizes. `_drop_order` stays in the layer,
+     which 08 deletes, since the package orders a drop by foreign key. Nothing else in the layer
+     changes.
+  3. The 7 vectorized gets in `main.py` pass `{"shard_key": <beta>}` in place of the bare
+     `beta_value`, which the old layer already accepts (`ShardedPool.py:595-602`). Nothing else in
+     their calls changes.
+- **Acceptance.**
+  1. **The schema does not change.** A temporary store built by the old actor at 05's tree has the
+     schema snapshot of a store built at 04's tree, table by table. The log shows both.
+  2. A test that `config.datastore`'s three objects equal what the layer held at 04's tree, captured
+     as data (the registry by name, class and constructor argument); and an `ast` test that every
+     `object_get_vectorized` call in the drivers passes a mapping as its shard key (P8).
+  3. The three roots give 04's counts plus the new tests.
+  4. Deliberate breakages caught: one vectorized get reverted to the bare key; a batch size changed;
+     a registry entry given another quantity type.
+
+**06 — Rehearse before the DatastoreKit swap, R1** (Opus).
+- **What it does.** §4.1's protocol, slug prefix `dk-and-rpk-migration-06`, at 05's tree:
+  `raypoolkit` and the data move, on ChamPBH's layer.
+- **Acceptance.**
+  1. L1–L3 hold.
+  2. Every provenance line names `raypoolkit` at `eaef0ce6…`, `editable: false`, and
+     `datastorekit` as not installed.
+  3. **Against R0, by §4.2 and §4.3:** each R1 store equals R0's `reference`.
+  4. **L4 against R0:** each stage's counts and what the resume recomputed are R0's; the queue
+     banner, progress and summary lines keep their layout (RayPoolKit's "printed lines are part of
+     the interface").
+- **If R1 misses,** the change is in 03–05, all on ChamPBH's layer. The prompt stops and records
+  the diff; the user may have a reference build run at 04's tree to tell `raypoolkit` from the
+  data move.
+
+**07 — Pin `datastorekit` `v0.2.3`** (Sonnet). As 03, for
+`datastorekit @ git+https://github.com/ds283/DatastoreKit@v0.2.3` (§0.3). It reads the release's
+ChamPBH checklist addendum, and re-checks the tag on the remote before installing.
+- **Acceptance.**
+  1. `pip freeze` differs from 03's by exactly one line, `datastorekit` at
+     `0de2b161ba09362adc36231a7b5b12d99dec8bb3`; `pip check` is clean.
+  2. Provenance gives `0.2.3`, commit `0de2b161…`, requested revision `v0.2.3`, `editable: false`.
+  3. The installed `datastorekit/` equals `git archive v0.2.3 datastorekit` less
+     `datastorekit/tests` (adoption README §3).
+  4. **What U3 needs of the release, checked on the installed package without touching ChamPBH's
+     tree:** a throwaway script, outside the repository, defines a subclass of the installed
+     `datastorekit.SQL.factory_base.SQLAFactoryBase` with only `register` and `build`, as 20 of
+     ChamPBH's classes have, and instantiates it; and a subclass without `build` still raises
+     `TypeError`. Both are shown in the log.
+  5. The three roots give 05's counts.
+
+**08 — Adopt `datastorekit`** (Opus). One commit, because the tree cannot pass between its parts.
+- **What it changes.**
+  1. **The files.** It deletes the 7 layer modules (`Datastore/object.py`,
+     `Datastore/SQL/{ClientPool,Datastore,ProfileAgent,SerialPoolBroker,ShardedPool}.py`,
+     `Datastore/SQL/ObjectFactories/base.py`) and replaces `Datastore/__init__.py` and
+     `Datastore/SQL/__init__.py` with empty files (P6). The factories stay in
+     `Datastore/SQL/ObjectFactories/`.
+  2. **The imports**, rewritten by the adoption README §2 module map, module path only:
+     `DatastoreObject` (13), `SQLAFactoryBase` (17, to `datastorekit.SQL.factory_base`),
+     `ShardedPool` (4: `main.py`, both plot scripts, `config/model_list.py`), `ProfileAgent` (3),
+     and the actor in the harness. `VERSION_SERIAL_KEY` and `require_version_serial` come from
+     `datastorekit.contract` and leave `config/version.py`, whose `VERSION_LABEL` stays (P9;
+     checklist item 3's hazard of the two `VERSION_LABEL`s).
+  3. **The factories change nothing but that import** (U3). They stay instances; their hooks keep
+     `self`; the 20 partial classes instantiate on `v0.2.3`'s base.
+  4. **The pools.** The three constructions pass `factories=config.datastore.factories` and
+     `serial_batch_sizes=…`; `main.py`'s passes `drop_tables=`; none passes `drop_actions=` or
+     `inventory_config=`. `LambdaCDM` leaves `replicated_tables` and `serial_batch_sizes` (P8).
+  5. **U4, the drop policy.** `main.py` turns `--drop` groups into tables. Before Ray starts, it
+     computes each requested table set's closure with `datastorekit.SQL.schema.dependent_tables`
+     and, if a group's dependents are not all requested, refuses with a message naming the groups
+     to add (for `scalar-model` alone: "add `--drop adiabatic-history bbn-data`"). A test pins the
+     message for `scalar-model` alone and acceptance for each closed set.
+  6. **The harness.** `_TempStoreCase.open(label)` builds the package's actor through
+     `datastorekit.SQL.Datastore.__ray_actor_class__`, with `replicated_tables` and `factories=`,
+     gets the `version` row for the label and calls `set_version` with its serial, as the pool
+     does. The worked example is the package's `test_version_keyed_lookups.TestTheActor`, read in
+     DatastoreKit's repository and not imported. Its five importers change only their imports, if
+     at all.
+  7. **The tests the package carries.** `test_shard_key_assignment.py` (4) is deleted; the package
+     pins the same fix. In `test_version_keyed_lookups.py`, d2 and d4 (layer tests the package
+     carries) are deleted; a, b, c1–c3, d, d3, e and f stay.
+  8. **`--inventory`** prints that it is unavailable until 09 and exits non-zero, before Ray
+     starts (P12). The four `pool.inventory` calls and their helpers are deleted.
+  9. **The refresh route.** `pipeline_selection.BBN_REFRESH_ROUTE` names
+     `python -m datastorekit.tools.sharded_store copy SRC DST` in place of a copy (P13).
+  10. **Prose made false by this commit** (P14): `CLAUDE.md:64-72`'s harness paragraph;
+      `.documents/OPEN_ISSUES.md:48` and its board entry narrowed, since `base.py` is deleted.
+- **Acceptance.**
+  1. **By DatastoreKit's script, at the commit.** None of the 7 deleted modules is present; the two
+     `__init__.py` are present and 0 bytes. Outside `prompts/` there are 0 import statements, 0
+     string literals and 0 `import_module` calls naming a layer module; `prompts/` still holds its
+     one. No import of `config.version`'s two moved names remains.
+  2. **The suites.** Datastore gives exactly 05's count − 4 − 2 + the tests 08 adds; the log derives
+     it by module. ComputeTargets and CosmologyModels give 05's counts. `black --check` is clean on
+     every touched file.
+  3. **Without Ray:** `config.datastore` imports, so all 27 registry entries are built on the
+     package's base; `python -m datastorekit.tools.sharded_store --help` exits 0. The drivers
+     byte-compile, and every module they import resolves (by `ast`; none is executed). A temporary
+     store built through the rebuilt harness has 05's schema snapshot, but for the columns the
+     package adds or orders differently, each listed in the log.
+  4. **The deliberate breakages of §5 rule 8**, at least: a factory's `SQLAFactoryBase` import
+     pointed back at `Datastore.SQL.ObjectFactories.base`; a `from Datastore import
+     DatastoreObject` restored; `LambdaCDM` restored to `replicated_tables`; the drop check
+     removed (U4's test fails); `set_version` dropped from the harness.
+- **Out.** The inventory (09). Any store but the harness's temporary ones; 08 runs no build.
+
+**09 — Port the inventory** (Opus).
+- **What it changes.**
+  1. Each factory whose class the report covers defines `inventory_spec()`: `version`,
+     `store_tag`, `redshift`, `tolerance`, the six quantities, the potentials, `ExponentialCoupling`,
+     `QCD_Cosmology`, `IntegrationSolver`, `ScalarModel`, `AdiabaticHistory` and `BBNData`, with
+     their tags and value tables. Every class a spec depends on declares one (contract §4). The
+     package reads it by `getattr` on the registry entry, so an instance method serves. Which
+     columns are leaves and which are parents is the prompt's to derive from each factory's `build`
+     lookup, and is recorded in the log, table by table.
+  2. A new `tools/inventory_report.py`, `format_inventory_report(inventory, db_name, units,
+     verbose=False)`, renders a `StoreInventory` and reads nothing itself. It is modelled on SGK's
+     `tools/inventory_report.py`, read in that repository and not imported. It shows at least what
+     today's report shows (P15): for each quantity, its count, timestamp range and values in its
+     default unit; for `ScalarModel`, `AdiabaticHistory` and `BBNData`, validated and unvalidated
+     counts, version labels, timestamp ranges and each record by its physical labels (T_init,
+     T_stop, φ*, π*, failure, and `PRyM_version` for BBN); and every named problem, never truncated.
+  3. `main.py --inventory` reads the closed store with `read_inventory(args.database,
+     factories)` **before `ray.init`**, prints the report, and exits. `--show-all` maps to
+     `verbose`. `--inventory` with `--drop` is refused.
+  4. The six `inventory()` hooks and `config/sharding.py`'s `inventory_config` are deleted.
+- **Acceptance.**
+  1. Tests on temporary stores built through the harness: `inventory_classes` accepts the
+     registry (no `ValueError`); each spec's leaves and parents resolve; a store with one failed
+     and one successful `ScalarModel` and a `BBNData` row renders every field of P15's table;
+     problems are printed in full.
+  2. `main.py --inventory` on a missing store fails cleanly, and needs no Ray.
+  3. The three roots give 08's counts plus the new tests.
+  4. Deliberate breakages caught: one spec's parent removed; one leaf misnamed; `--inventory`
+     moved after `ray.init` (an `ast` test).
+
+**10 — Rehearse through both packages, R2** (Opus).
+- **What it does.** §4.1's protocol, slug prefix `dk-and-rpk-migration-10`, at 09's tree.
+- **Acceptance.**
+  1. L1–L3 hold; `main.py --inventory` reports no named problem on either store.
+  2. Both provenance entries name their tag's commit, `editable: false`.
+  3. **Against R1, by §4.2 and §4.3:** each R2 store equals R1's `reference` (and so R0's). These
+     builds are also ChamPBH's evidence, at Ray 2.53.0, that its registry of instances crosses into
+     the package's actors intact (§0.3, point 2).
+  4. **L4 against R1:** the stage counts, the progress lines and what the resume recomputed are
+     R1's. The resume's prune at open is the package's code now.
+  5. **Store hygiene by the package:** `python -m datastorekit.tools.shard_key_audit` on each store
+     reports nothing; a `sharded_store copy` of `reference` opens read-only and compares equal to
+     it by §4.2; the copy is then deleted with `delete_store`.
+  6. The board records **DatastoreKit's G3 as holding**.
+
+**11 — Close the migration** (Sonnet).
+- **What it changes.**
+  1. `.documents/architecture-summary.md`: §4 "The Database Layer" and §§12–14 rewritten for the
+     packages (what ChamPBH supplies, what the package does, with pointers to the client contract
+     rather than copies of it); `RayWorkPool`'s remaining lines checked. `CLAUDE.md`'s
+     "Repository mechanics": the packages, the rule that a package defect is reported upstream and
+     never patched here, and the test commands with their counts.
+  2. The final measurements at `HEAD` by both packages' scripts, saved, with the three roots'
+     counts.
+  3. In the verification document, the G3 records for DatastoreKit's and RayPoolKit's extraction
+     boards, drafted; neither is committed there (P16).
+  4. The handover (§7), as `.documents/review-remediation-verification.md` §4.12, which is where
+     the user's next run starts.
+  5. `prompts/INDEX.md` and `.documents/OPEN_ISSUES.md`; the board closed.
+- **Acceptance.**
+  1. The index's count and date agree with its rows.
+  2. Nothing outside `prompts/` and dated `.documents/` records names a deleted file as a current
+     path.
+  3. The three roots pass.
+
+## 3. Stores
+
+**The campaign builds six throwaway stores and touches no other.** Each rehearsal builds two, at
+`~/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/NN-reference.db` and `NN-resumed.db` with their shards,
+for NN = 02, 06 and 10 (P2). They are outside the repository, so nothing can commit them, and they
+keep the `.db` suffix that `tools/bbn_from_store.py`'s glob expects. `~/ScienceData` does not
+exist on 2026-10-11; 02 creates the directory.
+
+**No prompt deletes a rehearsal store** (10's copy aside). R0's and R1's are compared with later
+ones. The user removes them after 11's review, or not.
+
+**The 02 and 06 stores are refused by the package**, like every ChamPBH store (D4). That is
+expected and is why §4.2 reads files directly. Neither 08 nor 09 opens one through the package.
+
+## 4. The interfaces between prompts
+
+- **01 ships** `utilities.installed_package_provenance()`, read by 03, 06, 07 and 10;
+  `tools/compare_stores.py` and its schema snapshot, run by 02, 05, 06, 08 and 10; and the
+  rehearsal scripts, which 06 and 10 run **unchanged**. A change to one is a deviation, logged and
+  reviewed, since L4 compares their outputs.
+- **02, 06 and 10 each add a section** to `.documents/dk-and-rpk-migration-verification.md`, which
+  02 creates: §1 R0, §2 R1, §3 R2. 11 adds §4, the close.
+- **03 and 07 ship the pins**, exactly as §2.2 gives them, in `requirements.txt` and in no other
+  file.
+- **05 ships** `config/datastore.py` with `factories`, `drop_groups` and `serial_batch_sizes`. 08
+  removes `LambdaCDM` from `serial_batch_sizes` and passes all three to the package.
+- **08 ships** the harness on the package's actor; 09's tests build their stores through it.
+- **DatastoreKit ships `v0.2.3`**, outside this campaign, from the brief. 07 reads its tag and its
+  ChamPBH checklist addendum.
+
+### 4.1 The rehearsal protocol
+
+Run by the agent in the session, by the user's ruling **U2**. It is a one-off exception to
+`CLAUDE.md`'s "no campaign prompt starts" a `main.py` run with a datastore, and to its limit of "a
+few PRyMordial solves", for prompts 02, 06 and 10 only. NN is the prompt's number.
+
+**The cluster.** Before anything, the agent checks that no Ray cluster is up (`ray status`). If one
+is, it stops and asks: the cluster may be the user's. Otherwise it starts one with
+`./venv/bin/ray start --head`, passes its address to every driver with `--ray-address`, and runs
+`./venv/bin/ray stop` at the end, and after any stop. It never stops a cluster it did not start.
+
+**The grid** is the user's pilot of 2026-10-02 (`pilot-main.log`), so that it is a configuration
+the user has already run, about 9 minutes a build there (P1):
+
+```bash
+PYTHONPATH=. ./venv/bin/python -u main.py --config exponential.yaml \
+    --database ~/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/NN-<store>.db --shards 16 \
+    --job-name dk-and-rpk-migration-NN-<build> --M-values-Mp 1e-3 \
+    --beta-values 1.1 1.15 1.2 10 25 --ray-address <address> [--prune-unvalidated]
+```
+
+Five histories, two of them super-Planckian at φ* = 5 (β = 10 and 25), which are warned about and
+computed (`[[warn-dont-filter-initial-data]]`).
+
+**The builds,** each detached, its output in `~/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/logs/`,
+with the driver's exit status appended:
+1. **`reference`**, on the `reference` store, straight through.
+2. **`resumed-a`**, on the `resumed` store. `interrupt_when.py` sends `SIGTERM` once the log shows
+   `** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS` and the stated delay has passed, so that some
+   `AdiabaticHistory` rows are stored and some are not.
+3. **`resumed-b`**, on the same store with `--prune-unvalidated`, straight through.
+
+The agent waits on each build's exit (a background task), not by polling.
+
+**What must hold.**
+- **L1 — every build ends as it should.** `reference` and `resumed-b` exit 0 with every stage's
+  "ALL WORK ITEMS COMPLETE"; `resumed-a` exits by the signal. No traceback in any log.
+- **L2 — the resume is the reference.** `compare_stores reference resumed` is §4.3's result. The
+  resume recomputed nothing it had stored (by `stage_counts.py`), and the prune at open removed only
+  unvalidated rows (by its printed report).
+- **L3 — every reader.** Run on the closed `resumed` store, writing under
+  `~/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/NN-readers/`:
+  - `main.py --inventory` (at 02 and 06 through ChamPBH's pool; at 10 through `read_inventory`);
+  - `plot_by_beta.py --phi-init-Mp 5`, whose `histories.csv` 06 and 10 compare with 02's, byte for
+    byte;
+  - `plot_ScalarModel.py`, exit 0;
+  - `tools/bbn_from_store.py` on one history (`--beta 1.15 --M-Mp 1e-3`, the `prod` variant: one
+    PRyMordial solve), whose Yp and D/H equal the stored row's.
+
+  Each exits 0. The readers open read-write pools (P11), so the check that they changed nothing is
+  `compare_stores` of the store before and after them: empty, bookkeeping aside.
+- **L4 — equal to the previous rehearsal.** Against the campaign's previous rehearsal (none for
+  R0): each stage's work-item counts, and the rows the resume pruned and recomputed. If L1–L3 pass
+  and L4 differs, that is a finding to explain, not an automatic failure.
+
+**If a comparison misses** (§4.3), the prompt stops, records `compare_stores`'s full output, and
+changes no code. R0's miss belongs to ChamPBH (02). R1's is in 03–05. R2's is reported to the
+package's repository as a defect if it is the package's (§5 rule 11), and is ChamPBH's if it is in
+08–09.
+
+### 4.2 Comparing stores by value
+
+`tools/compare_stores.py A B` compares two ChamPBH stores by what they hold, never by how they are
+laid out, and **reads both through `sqlite3` with `mode=ro` only, never through either layer**. So
+it reads a store of either format: ChamPBH's (absolute shard records) and the package's (bare
+names, `replication_in_flight`). It finds a store's shards by the glob `<stem>-shard*<suffix>`
+beside the primary, and checks the count against the primary's `shards` table.
+
+- **What it compares:** every row of every client table, on every shard. A table's rows are taken
+  as a multiset of **identities**. A row's identity is its columns but the bookkeeping ones, with
+  each foreign-key column (`PRAGMA foreign_key_list`) replaced by the identity of the row it
+  names, recursively. A float is compared by its stored bits (`float.hex`). So serials, shard
+  assignment and insertion order do not matter, and every stored science value does.
+- **Bookkeeping columns** are `serial` and `timestamp` everywhere, and any column whose value
+  carries a job name, a time or a host. 01 derives the list by reading every factory, and tests it.
+  They are reported, never compared.
+- **Not compared:** the primary's own tables, which are the layer's (`shards`, `shard_key_config`,
+  `shard_keys`, `replicated_tables`, `sharded_tables`, and `replication_in_flight` where present);
+  and a replicated table's copies on other shards, except that each shard's copy is checked equal to
+  the others' and a difference is reported.
+- **Its output:** per table, the rows in A only and in B only, each with its identity resolved to
+  physical labels; and, for a row of the same lookup key in both whose science columns differ, each
+  differing column with both values and their relative difference. Exit 0 when nothing differs, 1
+  when something does, 2 when it cannot read a store.
+- **The schema snapshot:** each client table's columns (name, type, nullability, primary key) and
+  indices, as sets, written as JSON for one store and compared for two. A difference is a finding,
+  not a miss: the package orders its prepended columns as `serial`, `version`, `timestamp`,
+  `stepping` (contract §2).
+
+It is also the tool for the user's next step: comparing the rebuilt science store with
+`~/ChamPBH-stores-bt02/` by value (§7).
+
+### 4.3 Reproducibility, and the criterion it sets
+
+Nothing in the build should depend on the layer: the histories are integrated in one Ray task each,
+and the values stored are what the integrator and PRyMordial return. So the expectation is that two
+builds of one grid agree **bit for bit**. R0 measures it rather than assuming it: `reference` and
+`resumed` compute every history independently, on one tree.
+- **If R0's two stores are equal,** R1 and R2 are held to equality with R0's `reference`.
+- **If they differ,** the cause is recorded (a candidate is a BBN solve that met
+  `--bbn-wall-clock-limit` under load, which stores a failure in one build and a result in the
+  other), and the user rules on R1's and R2's criterion before 05–06 are written. No tolerance is
+  chosen by an agent.
+
+### 4.4 Rollback
+
+Each prompt is one commit, reverted by `git revert`.
+- **The venv is shared**, so reverting 03 or 07 also needs `./venv/bin/pip uninstall -y <package>`.
+- **Reverting 04 or 08 alone needs nothing in the venv.** An installed, unimported package is inert.
+- **Reverting 08 makes the R2 stores unreadable** by the tree, as every package-written store is to
+  ChamPBH's layer. Its rehearsal stores are throwaway (§3).
+- **The campaign runs in the main checkout**, on its branch (P17), not a worktree: a worktree has no
+  venv of its own.
+
+## 5. The rules this campaign runs under
+
+The project-wide ones in `CLAUDE.md` (invariants 1–7, and "Repository mechanics"), plus:
+
+1. **One commit per prompt.** The commit boundary is the rollback boundary.
+2. **Every prompt writes a log** to `logs/NN-<name>.md`, using §5.1, classifying every deviation as
+   `STRUCTURALLY REQUIRED`, `IMPLEMENTATION CHOICE` or `UNINTENDED DRIFT`.
+3. **Every prompt updates `IMPLEMENTATION_STATE.md` in its own commit,** and
+   `.documents/OPEN_ISSUES.md` whenever a §3 or §4 entry moves, in the same commit.
+4. **Do not fix things the prompt did not ask for.** Record them, and open a §3 issue.
+5. **Commit messages** in `CLAUDE.md`'s form, ending with `Co-Authored-By:` naming the model.
+6. **Verification documents are additive.**
+7. **Existing tests are not modified**, except where a prompt names the test and the reason: 08's
+   harness and its deletions.
+8. **Deliberate breakage.** Each prompt names mutations its tests must catch. The log records each
+   as a diff, exactly as applied, so that the orchestrator can replay it with `git apply`.
+   Mutations are never committed.
+9. **No stored science value changes.** §4.2 is the measurement, and a prompt that cannot keep it
+   stops.
+10. **No test needs Ray, and no test opens a store outside a `tempfile` directory.** A rehearsal's
+    reads of its own stores are verification steps, not tests.
+11. **A defect in a package is not patched or worked around in ChamPBH.** The prompt stops and
+    records it. The user reports it to that package's repository, where it is fixed in a new
+    release, and a new pin prompt moves ChamPBH to it. U3 is the first such case, met in planning.
+12. **No change is made in DatastoreKit, RayPoolKit or SecondaryGWKit by a prompt here.** Their
+    repositories are read, and the two packages' measuring scripts run from their roots with their
+    own venvs. The `v0.2.3` release is DatastoreKit's own work, from the brief.
+13. **Pins.** Each pin is a tag, in a commit of its own, never an editable install, and ChamPBH
+    keeps its own `ray` and `SQLAlchemy` pins.
+14. **Rehearsals** follow §4.1, and only 02, 06 and 10 run `main.py` on a store (U2).
+
+### 5.1 The log template
+
+- the subject, commit and result;
+- **What shipped**;
+- **Deviations from the prompt**, each classified;
+- **Verification performed**, with every count against §0.2's;
+- **The deliberate-breakage record**;
+- **Observations not acted on**;
+- **State handed to the next prompt**.
+
+## 6. Decisions
+
+### 6.1 Ruled by the user (2026-10-11), and not reopened here
+
+| | Decided | Rejected |
+|---|---|---|
+| **U1** — the order | **RayPoolKit first**: its swap deletes `RayTools/` and rewrites 3 imports, changes no call site, and removes `RayWorkPool.py:23`'s layer import, so the DatastoreKit swap never touches `RayTools/` | DatastoreKit first, as SGK did: SGK's reason (a test edited only to be deleted) has no counterpart here, and U12's exception would be needed |
+| **U2** — the rehearsals | **The agent runs a small pilot** (§4.1): reference, killed-and-resumed, and readers, at R0, R1 and R2. A one-off exception to `CLAUDE.md`'s limits, for 02, 06 and 10 | The user runs every build, each rehearsal split around a halt. Straight-through builds only, which leave the package's prune and repair at open unexercised under real Ray |
+| **U3** — the factories (reopened, see below) | **Fix the package, not the client.** DatastoreKit releases `v0.2.3`, whose `SQLAFactoryBase` keeps `register` and `build` abstract and gives `store`, `validate` and `validate_on_startup` defaults that raise `NotImplementedError`. ChamPBH keeps its registry of instances and its hooks' `self`, and pins `v0.2.3` (07). The request is [`datastorekit-v0.2.3-brief.md`](datastorekit-v0.2.3-brief.md) | Registering the classes (the first ruling): about 60 hooks made static, and six quantity subclasses, to satisfy a check that protects nothing. A ChamPBH intermediate base, or the three hooks written out on each of the 20 classes: each works around a package defect in the client (§5 rule 11) |
+| **U4** — a drop that leaves references | **Refuse before Ray starts, naming the groups to add** (08) | Expanding the request silently, with a notice. Leaving the refusal to `ShardedPool` at open |
+
+**How U3 was reopened.** The user first ruled "register the classes", on a question the planner
+had framed as a client-side choice, following DatastoreKit's checklist. The user then asked which
+convention had changed, and why. §0.2 records the answer: ChamPBH moved to instances at `5ef07b4`
+to parameterise its quantity factories; DatastoreKit inherited SGK's ABC at extraction; the
+package's layer is indifferent to classes or instances; and the ABC is enforced only on
+instantiation, so it checks nothing for SGK and refuses valid factories for ChamPBH and
+StochasticInstantons, while the contract already treats the three hooks as optional. Relaxing it is
+backward-compatible: everything that satisfies the `v0.2.2` base satisfies the `v0.2.3` one. The
+user reopened U3 and ruled the package fix the same day. DatastoreKit's decision U32 is that
+repository's to revisit; the brief asks it to.
+
+### 6.2 Proposed by the planner; ruled by the user 2026-10-11
+
+Accepted as proposed unless a ruling is given beside the proposal.
+
+- **P1 — the rehearsal grid** is the user's 2026-10-02 pilot (§4.1), five histories at M = 10⁻³.
+  *Accepted, "if it still exists".* It does: the grid is recorded in `pilot-main.log` (untracked,
+  in the working tree), and §4.1 carries the command, so no prompt depends on the log. The pilot was
+  the user's end-to-end check of `main.py` and `plot_by_beta.py` on 2026-10-02, after
+  `science-readiness` merged (`4ae25b4`) and before the science run of 2026-10-03; its β span the
+  threshold region (1.1–1.2) and two super-Planckian starts (10, 25).
+- **P2 — the rehearsal stores** live outside the repository, with the `.db` suffix (§3). *Amended
+  by the user:* under `~/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/`.
+- **P3 — comparison by value** (§4.2), by a lasting tool in `tools/`, tested, layer-independent.
+  It is also the user's check of the science rebuild (§7).
+- **P4 — the criterion** is R0's measured reproducibility (§4.3), bitwise if R0 is bitwise, and
+  otherwise the user's ruling.
+- **P5 — run provenance in the drivers' output**, ChamPBH's counterpart of SGK's U4: one line,
+  never a refusal (01). *Accepted; the user notes that ChamPBH will eventually import SGK's
+  `RunRegistry`*, which records the same facts in a run's manifest. So 01 keeps the helper in the
+  shape of SGK's `package_provenance()`, the same fields with the same meaning, so that the move is
+  a substitution.
+- **P6 — `Datastore/__init__.py` and `Datastore/SQL/__init__.py` become empty files**, and the
+  factories stay where they are (SGK's U3). Whether a package named `Datastore` that holds no
+  datastore is renamed is left for another day. *Accepted; the user will tidy the folder structure
+  later.*
+- **P7 — the 14 lookup-only pool sites keep `store_handler=None`**, so 04's diff is the imports.
+- **P8 — `LambdaCDM` leaves `replicated_tables` and `serial_batch_sizes`** at 08. No factory
+  registers it, and the package's read-only open refuses a store whose record names it. Removing
+  it earlier would make the old layer refuse every existing store, so it waits for the swap.
+- **P9 — `VERSION_SERIAL_KEY` and `require_version_serial` come from `datastorekit.contract`** and
+  are deleted from `config/version.py`; `config.version.VERSION_LABEL` stays, and test f, which
+  checks it, stays. *Awaiting the user's ruling, after the planner's explanation (§6.3).*
+- **P10 — no `VERSION_LABEL` bump.** Nothing the code computes changes, and no store crosses the
+  swap: the package refuses ChamPBH's, and the old layer would resolve the package's bare shard
+  names against the working directory. *Accepted.* The user asked whether rows now carry a version
+  serial: they already do, and the lookups are already keyed on it (§6.3).
+- **P11 — the plot scripts keep read-write pools.** A read-only pool would refuse a miss
+  (`ReadOnlyMiss`, `ReadOnlyWrite`) where today a lookup inserts a parameter row, and finding out
+  where that happens is a change of behaviour this campaign does not need. 08 opens an issue for
+  it. *Accepted; the user wants the plot scripts on read-only pools eventually*, so 08's issue says
+  so, as a goal and not only an observation.
+- **P12 — `--inventory` refuses between 08 and 09**, with a message, rather than failing with an
+  `AttributeError`.
+- **P13 — the BBN refresh route** becomes the package's `sharded_store copy` (08). It is a message
+  only; the route itself is the user's (§7).
+- **P14 — stale prose.** A statement that a prompt's own commit makes false is corrected in that
+  commit: `architecture-summary.md`'s `RayWorkPool` lines (04), `CLAUDE.md`'s harness paragraph
+  and the black-clean issue (08). The rewrite of `architecture-summary.md`'s database sections
+  and `CLAUDE.md`'s test commands is 11's, once the inventory has landed. Dated `.documents/`
+  audits and verification records, and `prompts/`, are left as the record of the tree they
+  describe.
+- **P15 — the inventory report shows at least what today's does** (09, item 2), and every named
+  problem in full. Its layout is new, and nothing parses it.
+- **P16 — the gates.** This board records each G3 when it holds (04, 10). Recording G3 on
+  DatastoreKit's and RayPoolKit's extraction boards is a records commit in each of those
+  repositories: 11 drafts the text, and the user makes the commits, or has a session there make
+  them.
+- **P17 — the branch.** `dk-and-rpk-migration`, cut from `main`, with the planning commit on it. It
+  is merged into `main` at the close, as earlier campaigns were. *Accepted: from `52142d7`, "or
+  whatever later commit we end up at".*
+
+### 6.3 Version serials in ChamPBH, for P9 and P10
+
+ChamPBH has stamped rows with a version serial since its start, and has keyed its compute-target
+lookups on it since 2026-09-30. Neither comes new from the package.
+- **Stamping.** A factory whose `register()` says `"version": True` gets a `version` column with a
+  foreign key to the `version` table's `serial`, and every insert carries the serial of the label
+  the pool was opened with (`config/version.py`'s `VERSION_LABEL`, `2026.6.0`). ChamPBH inherited
+  this from SGK's layer: `ScalarModel` has declared it since `e4dbd13` (2025-12-15), and so do the
+  potentials, `ExponentialCoupling`, `AdiabaticHistory` and `BBNData`.
+- **Keying.** `run-integrity`'s commit `bacddd8` ("Key the compute-target lookups on the version
+  label", 2026-09-30) made `ScalarModel`, `AdiabaticHistory` and `BBNData` declare
+  `"key_on_version": True`. The actor then hands each keyed factory's `build` the lookup serial in
+  the payload, under the reserved key `VERSION_SERIAL_KEY = "_version_serial"`, and the factory
+  filters on it through `require_version_serial(payload, cls_name)`, which refuses rather than look
+  up unfiltered. So a row made under another label is a miss. Both names are defined in
+  `config/version.py:55-71` today, beside `VERSION_LABEL`, and are imported by ChamPBH's layer
+  (`Datastore/SQL/Datastore.py:85`) and the three keyed factories.
+- **The direction was ChamPBH to the package.** DatastoreKit took `key_on_version` into `v0.2.0`
+  (its extraction prompt 06) because ChamPBH uses it (its adoption README: "CPBH because its
+  factories use version-keyed lookups"). SGK's layer did not key lookups. The package's
+  `datastorekit.contract` now defines `VERSION_SERIAL_KEY` (the same string) and
+  `require_version_serial` (the same behaviour), and its actor is what sets the key.
+- **So P9.** After 08 the actor that writes `_version_serial` into the payload is the package's.
+  If ChamPBH kept its own definitions, the key would be defined twice, once by the writer and once
+  by the readers, and nothing would keep the two in step. Importing both from `datastorekit.contract`
+  makes the package the one definition, as the contract intends (contract §8: "its name is the
+  layer's, not a client's").
+- **The hazard P9 guards against.** `datastorekit.contract` also defines a `VERSION_LABEL`, but it is
+  `"label"`, the *name of the version table's label column*. ChamPBH's `config.version.VERSION_LABEL`
+  is `"2026.6.0"`, the label every driver opens the store under. A rewrite that moved every
+  `config.version` import to `datastorekit.contract` would bind the wrong one, silently. P9 moves
+  only the two names; test f already checks that the three drivers take `VERSION_LABEL` from
+  `config.version`.
+- **The alternative.** `config/version.py` could keep the two names as re-exports
+  (`from datastorekit.contract import VERSION_SERIAL_KEY, require_version_serial`), so that the
+  factories' imports stay as they are. One definition either way; the planner prefers the direct
+  import, which says where the name lives.
+
+### 6.4 Left for the user
+
+- ~~Before 07: the `v0.2.3` release~~ (U3): released 2026-10-11 (§0.3).
+- **P9**, after §6.3's explanation.
+- **At the close:**
+  - the science-store rebuild (§7), and with it the run scripts;
+  - removing the rehearsal stores (§3);
+  - the two G3 records (P16);
+  - whether the plot scripts should open read-only (P11's issue);
+  - whether to rename the `Datastore` package (P6).
+
+## 7. What this campaign hands to the user
+
+- **Every existing ChamPBH store becomes unreadable by the tree** at 08 (D4), the science store
+  and the bbn-tolerance refresh copy among them. They stay on disk, readable by any commit before
+  08, by `tools/bbn_from_store.py`, and by `tools/compare_stores.py`.
+- **The next science run is a full rebuild through the packages**, into a fresh primary. The run
+  scripts' store path, their `--inventory` step (now read-only, after the pool closes) and any
+  `--drop` (U4) are what change; 11 lists them line by line. The bbn-tolerance refresh is subsumed:
+  a fresh build computes BBN on today's small network.
+- **The check of that rebuild** is `tools/compare_stores.py` against `~/ChamPBH-stores-bt02/`: the
+  same histories, value by value, with any difference named.
+- **If `jordan-normalization` is planned next** (its brief is in `prompts/jordan-normalization/`,
+  untracked), it changes what the code computes, so the rebuild is best made once, after it.
