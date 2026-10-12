@@ -16,7 +16,7 @@
 from functools import total_ordering
 from typing import Iterable, Optional
 
-from Datastore import DatastoreObject
+from datastorekit import DatastoreObject
 
 
 @total_ordering

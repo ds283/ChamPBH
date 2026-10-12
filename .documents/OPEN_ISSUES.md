@@ -12,7 +12,8 @@ around PRyMordial's small network, U3; prompt 01c measured the small network 202
 threshold overlay issue 2026-10-03; prompt 02b closed the history-tool issue 2026-10-03; prompt 03
 wrote the documents and the handover and closed the campaign, opening and closing none, 2026-10-03);
 3 on the `dk-and-rpk-migration` board (planned 2026-10-11; prompt 01 opened one, 2026-10-12;
-the orchestrator's review of prompt 02 opened one, 2026-10-12; prompt 05 opened one, 2026-10-12).
+the orchestrator's review of prompt 02 opened one, 2026-10-12; prompt 05 opened one, 2026-10-12;
+prompt 08 closed one and opened one, 2026-10-12).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -48,8 +49,9 @@ prompt 02 on 2026-10-03 (§1.9).
 - `[00-kicking-function-table-has-no-provenance-in-the-repository]` —
   `CosmologyModels/GenericEOS/Xav_EOS_data.csv` was added in commit `1759515` without the script
   that built it.
-- `[00-two-files-are-not-black-clean]` — `Datastore/SQL/ObjectFactories/base.py` and
-  `CosmologyModels/LambdaCDM/Planck.py` at `f5896bb`; housekeeping.
+- `[00-two-files-are-not-black-clean]` — `CosmologyModels/LambdaCDM/Planck.py`; housekeeping.
+  Narrowed 2026-10-12: the other file, `Datastore/SQL/ObjectFactories/base.py`, was deleted by
+  `dk-and-rpk-migration` prompt 08.
 - `[02-stale-derivative-and-T_LO-comments-in-the-EOS-package]` — three wrong comments in
   `CosmologyModels/GenericEOS/` (the base `dG_s_dlogT` docstring, the jax class's "1/GeV", the
   "600 keV" above `SAIKAWA_SHIRAI_T_LO`); comment-only.
@@ -189,13 +191,14 @@ here, on its board, until a later campaign takes them.
 
 Planned 2026-10-11. One opened by prompt 01 on 2026-10-12, seen in passing and outside the
 campaign's scope; one opened by the orchestrator's review of prompt 02 the same day, from log 02's
-Observation 2; one opened by prompt 05 the same day, from its measurement of the import order.
+Observation 2; one opened by prompt 05 the same day, from its measurement of the import order, and
+closed by prompt 08 the same day (board §4); one opened by prompt 08 the same day, for P11.
 
 - `[01-scalarmodelvalue-build-checks-the-stored-phi-against-pi]` — the unused lookup path of
   `sqla_ScalarModelValue_factory.build` compares the stored φ with the expected π; latent.
 - `[02-scalar-stage-missing-filter-keeps-every-model]` — `main.py:223`'s "which models are
   missing?" comprehension ignores its lookup result, so every stored `ScalarModel` is looked up
   twice; no value affected.
-- `[05-config-datastore-cannot-be-imported-before-the-layer]` — a fresh `import config.datastore`
-  fails with a circular-import `ImportError`; importing the layer first works; nothing that runs
-  is affected.
+- `[08-plot-scripts-open-read-write-pools]` — `plot_by_beta.py` and `plot_ScalarModel.py` open
+  read-write pools, where a lookup may insert a parameter row; the user wants them read-only
+  eventually, once the inserting lookups are found.

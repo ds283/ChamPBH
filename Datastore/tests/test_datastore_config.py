@@ -13,30 +13,33 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""The data ChamPBH keeps in ``config/datastore.py`` (prompt 05 of dk-and-rpk-migration).
+"""The data ChamPBH keeps in ``config/datastore.py`` (prompt 05 of dk-and-rpk-migration), and how
+the drivers give it to datastorekit's pool (prompt 08).
 
-No Ray cluster and no store is needed; importing the layer builds the factories, as it always did.
-The expected values below were captured from the datastore layer's own module-level objects at
-prompt 04's tree, before ``config/datastore.py`` existed, not copied from it.
+No Ray cluster and no store is needed; importing ``config.datastore`` builds the factories. The
+expected values below were captured from the datastore layer's own module-level objects at
+prompt 04's tree, before ``config/datastore.py`` existed, not copied from it; prompt 08 removed
+``LambdaCDM`` from the batch sizes (campaign README, P8).
+
+Two tests run a subprocess from the repository root: ``import config.datastore`` alone, and
+``main.py --inventory``, which is refused before Ray starts. Each takes a few seconds.
 """
 
 import ast
-import importlib
+import os
+import subprocess
+import sys
+import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
-# The layer must be imported BEFORE config.datastore. Datastore/SQL/__init__.py imports the actor,
-# and Datastore/SQL/Datastore.py imports config.datastore; a fresh ``import config.datastore``
-# in a process that has not yet imported the layer fails with a circular-import ImportError
-# (issue 05-config-datastore-cannot-be-imported-before-the-layer; prompt 08 removes the cycle).
-import Datastore.SQL.ClientPool as client_pool_module  # noqa: E402
-from Datastore.SQL.Datastore import Datastore as _actor  # noqa: E402,F401
+import ray
+import sqlalchemy as sqla
 
-import config.datastore as config_datastore  # noqa: E402
-
-# ``import Datastore.SQL.Datastore`` binds the actor, not the module, because Datastore/SQL/__init__.py
-# re-exports the actor; the module itself is found by name.
-layer_module = importlib.import_module("Datastore.SQL.Datastore")
+import config.datastore as config_datastore
+from config.argument_parser import allowed_drop_actions
+from config.sharding import replicated_tables, sharded_tables
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
@@ -96,7 +99,6 @@ EXPECTED_SERIAL_BATCH_SIZES = {
     "ReflectingPotential": 50,
     "StarobinskyPotential": 50,
     "ReclinerPotential": 50,
-    "LambdaCDM": 5,
     "QCD_Cosmology": 5,
     "IntegrationSolver": 6,
     "ScalarModel": 20,
@@ -136,22 +138,6 @@ class TestConfigDatastoreData(unittest.TestCase):
         )
         self.assertEqual(
             list(config_datastore.serial_batch_sizes), list(EXPECTED_SERIAL_BATCH_SIZES)
-        )
-
-
-class TestLayerReadsConfig(unittest.TestCase):
-    """The old layer's names are the very objects of ``config.datastore``, not copies of them."""
-
-    def test_layer_registry_is_config_registry(self):
-        self.assertIs(layer_module._factories, config_datastore.factories)
-
-    def test_layer_drop_actions_is_config_drop_groups(self):
-        self.assertIs(layer_module._drop_actions, config_datastore.drop_groups)
-
-    def test_client_pool_batch_sizes_is_config_serial_batch_sizes(self):
-        self.assertIs(
-            client_pool_module._default_serial_batch_size,
-            config_datastore.serial_batch_sizes,
         )
 
 
@@ -205,6 +191,298 @@ class TestDriversPassShardKeyMapping(unittest.TestCase):
                         ["shard_key"],
                         f"{driver}:{lineno}: dict must have the single key 'shard_key'",
                     )
+
+
+# ------------------------------------------------------------------------------------------------
+# prompt 08: the drivers give config.datastore to datastorekit's pool
+# ------------------------------------------------------------------------------------------------
+
+DRIVERS = ("main.py", "plot_by_beta.py", "plot_ScalarModel.py")
+
+
+class _NoRay(unittest.TestCase):
+    def tearDown(self):
+        self.assertFalse(ray.is_initialized())
+
+
+class TestTablesAreDeclared(_NoRay):
+    """Every table the pool is given is a class of the registry (the package's reader refuses a store
+    that records a class the registry does not declare), and ``LambdaCDM``, which no factory
+    registers, is in none of the lists (P8)."""
+
+    def test_every_listed_table_is_registered_and_LambdaCDM_is_in_none(self):
+        for name in list(replicated_tables) + list(sharded_tables):
+            with self.subTest(table=name):
+                self.assertIn(name, config_datastore.factories)
+        self.assertNotIn("LambdaCDM", replicated_tables)
+        self.assertNotIn("LambdaCDM", sharded_tables)
+        self.assertNotIn("LambdaCDM", config_datastore.serial_batch_sizes)
+        self.assertNotIn("LambdaCDM", config_datastore.factories)
+
+
+def _names_bound(tree: ast.Module) -> dict:
+    """Each name bound at any level of ``tree``, mapped to how: ("import", module) for each
+    ``from module import name``, and "assign" for each assignment or other import."""
+    bound = {}
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ImportFrom):
+            for a in node.names:
+                bound.setdefault(a.asname or a.name, []).append(("import", node.module))
+        elif isinstance(node, ast.Import):
+            for a in node.names:
+                bound.setdefault(a.asname or a.name, []).append("assign")
+        elif isinstance(node, (ast.Assign, ast.AnnAssign, ast.AugAssign)):
+            targets = node.targets if isinstance(node, ast.Assign) else [node.target]
+            for t in targets:
+                for n in ast.walk(t):
+                    if isinstance(n, ast.Name):
+                        bound.setdefault(n.id, []).append("assign")
+    return bound
+
+
+def _sharded_pool_calls(tree: ast.Module) -> list:
+    return [
+        node
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Call)
+        and isinstance(node.func, ast.Name)
+        and node.func.id == "ShardedPool"
+    ]
+
+
+class TestPoolsAreGivenTheConfig(_NoRay):
+    """Each driver's one ``ShardedPool(...)`` passes ``factories=`` and ``serial_batch_sizes=``, each
+    bound to the name it imports from ``config.datastore`` and binds nowhere else; ``main.py``'s
+    passes ``drop_tables=``; none passes the old layer's ``drop_actions=`` or ``inventory_config=``.
+    Read by ``ast``: the drivers start Ray when run."""
+
+    def test_each_pool_is_given_config_datastore(self):
+        found = 0
+        for driver in DRIVERS:
+            with self.subTest(driver=driver):
+                tree = ast.parse((REPO_ROOT / driver).read_text(), driver)
+                calls = _sharded_pool_calls(tree)
+                self.assertEqual(len(calls), 1, f"{driver}: ShardedPool( calls")
+                found += len(calls)
+                keywords = {kw.arg: kw.value for kw in calls[0].keywords}
+                bound = _names_bound(tree)
+
+                for arg in ("factories", "serial_batch_sizes"):
+                    value = keywords.get(arg)
+                    self.assertIsInstance(
+                        value, ast.Name, f"{driver}: {arg}= is not a bare name"
+                    )
+                    self.assertEqual(
+                        bound.get(value.id),
+                        [("import", "config.datastore")],
+                        f"{driver}: {arg}={value.id} is not config.datastore's {arg}",
+                    )
+                    # imported under its own name, so it is that object and no other
+                    self.assertEqual(value.id, arg)
+
+                for arg in ("drop_actions", "inventory_config"):
+                    self.assertNotIn(arg, keywords, f"{driver} passes {arg}=")
+
+                if driver == "main.py":
+                    self.assertIn("drop_tables", keywords)
+                    self.assertIsInstance(keywords["drop_tables"], ast.Name)
+                else:
+                    self.assertNotIn("drop_tables", keywords)
+        self.assertEqual(found, len(DRIVERS))
+
+
+def _top_level_index(tree: ast.Module, predicate) -> list:
+    """The indices of the module's top-level statements that contain a node satisfying
+    ``predicate``."""
+    return [
+        i
+        for i, stmt in enumerate(tree.body)
+        if any(predicate(node) for node in ast.walk(stmt))
+    ]
+
+
+def _is_call_to(node, dotted: str) -> bool:
+    if not isinstance(node, ast.Call):
+        return False
+    func = node.func
+    if "." in dotted:
+        owner, attr = dotted.split(".")
+        return (
+            isinstance(func, ast.Attribute)
+            and func.attr == attr
+            and isinstance(func.value, ast.Name)
+            and func.value.id == owner
+        )
+    return isinstance(func, ast.Name) and func.id == dotted
+
+
+def _main_tree() -> ast.Module:
+    return ast.parse((REPO_ROOT / "main.py").read_text(), "main.py")
+
+
+SCALAR_MODEL_ALONE = (
+    "cannot drop scalar-model alone: AdiabaticHistory and BBNData name its rows; "
+    "add `--drop adiabatic-history bbn-data`"
+)
+
+
+class TestDropPolicy(_NoRay):
+    """U4: ``tables_to_drop`` refuses a ``--drop`` request that leaves rows naming dropped rows,
+    naming the groups to add, and accepts every closed request; ``main.py`` calls it before Ray
+    starts."""
+
+    def test_scalar_model_alone_is_refused_naming_the_groups_to_add(self):
+        with self.assertRaises(ValueError) as ctx:
+            config_datastore.tables_to_drop(["scalar-model"])
+        self.assertEqual(str(ctx.exception), SCALAR_MODEL_ALONE)
+
+    def test_scalar_model_with_one_dependent_group_is_refused(self):
+        for groups, message in (
+            (
+                ["scalar-model", "adiabatic-history"],
+                "cannot drop scalar-model and adiabatic-history alone: BBNData names their "
+                "rows; add `--drop bbn-data`",
+            ),
+            (
+                ["scalar-model", "bbn-data"],
+                "cannot drop scalar-model and bbn-data alone: AdiabaticHistory names their "
+                "rows; add `--drop adiabatic-history`",
+            ),
+        ):
+            with self.subTest(groups=groups):
+                with self.assertRaises(ValueError) as ctx:
+                    config_datastore.tables_to_drop(groups)
+                self.assertEqual(str(ctx.exception), message)
+
+    def test_each_closed_request_is_accepted(self):
+        groups = config_datastore.drop_groups
+        for request, expected in (
+            ([], []),
+            (["bbn-data"], groups["bbn-data"]),
+            (["adiabatic-history"], groups["adiabatic-history"]),
+            (
+                ["adiabatic-history", "bbn-data"],
+                groups["adiabatic-history"] + groups["bbn-data"],
+            ),
+            (
+                ["bbn-data", "scalar-model", "adiabatic-history"],
+                groups["scalar-model"]
+                + groups["adiabatic-history"]
+                + groups["bbn-data"],
+            ),
+        ):
+            with self.subTest(request=request):
+                self.assertEqual(config_datastore.tables_to_drop(request), expected)
+
+    def test_an_unknown_group_is_refused(self):
+        with self.assertRaises(ValueError) as ctx:
+            config_datastore.tables_to_drop(["bbn-data", "no-such-group"])
+        self.assertIn("no-such-group", str(ctx.exception))
+
+    def test_a_dependent_in_no_group_is_named_as_a_table(self):
+        """With a registry of the test's own, in which a table outside every group names
+        ``ScalarModel``: the refusal names it as a table."""
+
+        class _Orphan:
+            def register(self):
+                return {
+                    "version": False,
+                    "timestamp": False,
+                    "columns": [
+                        sqla.Column(
+                            "model_serial",
+                            sqla.Integer,
+                            sqla.ForeignKey("ScalarModel.serial"),
+                        )
+                    ],
+                }
+
+        registry = dict(config_datastore.factories)
+        registry["Orphan"] = _Orphan()
+        with mock.patch.object(config_datastore, "factories", registry):
+            with self.assertRaises(ValueError) as ctx:
+                config_datastore.tables_to_drop(
+                    ["scalar-model", "adiabatic-history", "bbn-data"]
+                )
+        self.assertEqual(
+            str(ctx.exception),
+            "cannot drop scalar-model, adiabatic-history and bbn-data alone: Orphan names "
+            "their rows; add the table Orphan, which no drop group holds",
+        )
+
+    def test_the_command_line_choices_are_the_groups(self):
+        self.assertEqual(allowed_drop_actions, list(config_datastore.drop_groups))
+
+    def test_main_computes_the_drop_before_ray_starts(self):
+        tree = _main_tree()
+        drop = _top_level_index(tree, lambda n: _is_call_to(n, "tables_to_drop"))
+        init = _top_level_index(tree, lambda n: _is_call_to(n, "ray.init"))
+        self.assertEqual(len(drop), 1, "main.py: module-level tables_to_drop calls")
+        self.assertEqual(len(init), 1, "main.py: module-level ray.init calls")
+        self.assertLess(drop[0], init[0])
+
+
+class TestConfigDatastoreImportsAlone(_NoRay):
+    """The import cycle through the old layer is gone: ``config.datastore`` imports first, alone, in
+    a fresh process (issue 05-config-datastore-cannot-be-imported-before-the-layer)."""
+
+    def test_import_config_datastore_alone(self):
+        result = subprocess.run(
+            [sys.executable, "-c", "import config.datastore"],
+            cwd=REPO_ROOT,
+            capture_output=True,
+            text=True,
+            timeout=300,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+
+class TestInventoryRefuses(_NoRay):
+    """``main.py --inventory`` is refused, before Ray starts, until prompt 09 ports the inventory
+    (README P12). Prompt 09 replaces this test."""
+
+    def test_inventory_exits_non_zero_and_creates_nothing(self):
+        with tempfile.TemporaryDirectory(prefix="champbh-inventory-test-") as tmp:
+            absent = Path(tmp) / "absent.db"
+            # an address nothing listens on: if the refusal ever came after ray.init, the run
+            # would fail to connect rather than join a cluster that happens to be running
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    "main.py",
+                    "--database",
+                    str(absent),
+                    "--ray-address",
+                    "127.0.0.1:9",
+                    "--inventory",
+                ],
+                cwd=REPO_ROOT,
+                capture_output=True,
+                text=True,
+                timeout=300,
+            )
+            self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+            self.assertIn("!! --inventory:", result.stderr)
+            self.assertIn("prompt 09", result.stderr)
+            self.assertFalse(absent.exists())
+            self.assertEqual(os.listdir(tmp), [])
+
+    def test_the_refusal_comes_before_ray_starts(self):
+        tree = _main_tree()
+
+        def refuses(node):
+            return (
+                isinstance(node, ast.If)
+                and isinstance(node.test, ast.Attribute)
+                and node.test.attr == "inventory"
+                and any(_is_call_to(n, "sys.exit") for n in ast.walk(node))
+            )
+
+        refusal = [i for i, stmt in enumerate(tree.body) if refuses(stmt)]
+        init = _top_level_index(tree, lambda n: _is_call_to(n, "ray.init"))
+        self.assertEqual(len(refusal), 1, "main.py: module-level --inventory refusals")
+        self.assertEqual(len(init), 1)
+        self.assertLess(refusal[0], init[0])
 
 
 if __name__ == "__main__":

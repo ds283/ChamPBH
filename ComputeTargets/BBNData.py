@@ -10,7 +10,7 @@ from CosmologyConcepts import redshift, redshift_array
 from CosmologyConcepts.ConformalCouplings import AbstractCoupling
 from CosmologyConcepts.Potentials import AbstractPotential
 from CosmologyModels import BaseCosmology
-from Datastore import DatastoreObject
+from datastorekit import DatastoreObject
 from MetadataConcepts import store_tag
 from Units.base import UnitsLike
 from config.defaults import DEFAULT_STRING_LENGTH

@@ -16,7 +16,7 @@
 from abc import ABC, abstractmethod
 
 from CosmologyConcepts import FieldLike
-from Datastore import DatastoreObject
+from datastorekit import DatastoreObject
 
 
 class AbstractCoupling(DatastoreObject, ABC):

@@ -66,8 +66,10 @@ invariants that hold across all of them:
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s Datastore/tests -t .
   ```
   They **must not need a Ray cluster or a persistent datastore**. A test may build a temporary
-  SQLite datastore in a `tempfile` directory, through the undecorated
-  `Datastore.__ray_actor_class__`; it must never open a production or shared database file. Call a
+  SQLite datastore in a `tempfile` directory, through `datastorekit`'s undecorated actor
+  (`standin_pool.DatastoreClass`) inside ChamPBH's stand-in cluster (`Datastore/tests/standin_pool.py`,
+  a copy of the package's; `_TempStoreCase` in `Datastore/tests/test_version_keyed_lookups.py` is
+  the harness), never through Ray; it must never open a production or shared database file. Call a
   `@ray.remote` function through its undecorated form (`fn._function` or a module-level helper)
   rather than `.remote()`. A test that
   runs a PRyMordial solve is allowed (about 10 s with the small network) but must say so in its

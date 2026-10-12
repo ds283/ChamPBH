@@ -25,10 +25,10 @@ from ComputeTargets import (
     ScalarModelProxy,
 )
 from CosmologyConcepts import redshift, redshift_array
-from Datastore.SQL.ObjectFactories.base import SQLAFactoryBase
+from datastorekit.SQL.factory_base import SQLAFactoryBase
 from MetadataConcepts import store_tag
 from config.defaults import DEFAULT_STRING_LENGTH
-from config.version import require_version_serial
+from datastorekit.contract import require_version_serial
 
 
 class sqla_AdiabaticHistoryTagAssociation_factory(SQLAFactoryBase):

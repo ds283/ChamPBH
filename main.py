@@ -36,21 +36,19 @@ from CosmologyConcepts import (
     redshift_array,
     phi_value,
     pi_value,
-    beta_value,
-    M_value,
-    Lambda_value,
 )
 from CosmologyConcepts.ConformalCouplings import AbstractCoupling
 from CosmologyConcepts.Potentials import AbstractPotential
 from CosmologyModels import BaseCosmology
 from Datastore.SQL.ObjectFactories import tolerance
-from Datastore.SQL.ProfileAgent import ProfileAgent
-from Datastore.SQL.ShardedPool import ShardedPool
+from datastorekit.SQL.ProfileAgent import ProfileAgent
+from datastorekit.SQL.ShardedPool import ShardedPool
 from Quadrature.integration_metadata import IntegrationSolver
 from raypoolkit import RayWorkPool
 from Units import Planck_units
 from Units.base import UnitsLike
 from config.argument_parser import create_argument_parser, allowed_drop_actions
+from config.datastore import factories, serial_batch_sizes, tables_to_drop
 from config.defaults import (
     DEFAULT_FLOAT_PRECISION,
 )
@@ -61,7 +59,6 @@ from config.sharding import (
     get_shard_key_store_id,
     ShardKeyType,
     read_table_config,
-    inventory_config,
 )
 from config.version import VERSION_LABEL
 from pipeline_selection import (
@@ -91,11 +88,28 @@ if args.database is None:
 # which datastorekit and raypoolkit this run uses (dk-and-rpk-migration prompt 01; README P5)
 print(format_package_provenance(installed_package_provenance()), flush=True)
 
-# connect to ray cluster on supplied address; defaults to 'auto' meaning a locally running cluster
-ray.init(address=args.ray_address)
+# --inventory read the old layer's pool.inventory(), which datastorekit's pool does not have; it is
+# refused until prompt 09 ports it, before Ray starts (dk-and-rpk-migration prompt 08; README P12)
+if args.inventory:
+    print(
+        "!! --inventory: the datastore inventory is unavailable until dk-and-rpk-migration "
+        "prompt 09 ports it to datastorekit; nothing was opened",
+        file=sys.stderr,
+    )
+    sys.exit(2)
 
+# the --drop groups become the tables the pool drops; a drop that would leave rows naming dropped
+# rows is refused here, before Ray starts (dk-and-rpk-migration prompt 08; README U4)
 specified_drop_actions = [x.lower() for x in args.drop]
 drop_actions = [x for x in specified_drop_actions if x in allowed_drop_actions]
+try:
+    drop_tables = tables_to_drop(drop_actions)
+except ValueError as e:
+    print(f"!! --drop: {e}", file=sys.stderr)
+    sys.exit(2)
+
+# connect to ray cluster on supplied address; defaults to 'auto' meaning a locally running cluster
+ray.init(address=args.ray_address)
 
 # instantiate a ProfileAgent to profile database operations; this is passed as an argument to ShardedPool below
 profile_agent = None
@@ -1193,157 +1207,6 @@ def execute(pool, units: UnitsLike):
         )
 
 
-def redshift_inventory(pool: ShardedPool):
-    print("\n   -- Redshifts")
-    data = pool.inventory("redshift")
-    sorted_values = sorted(data["values"])
-    num = len(sorted_values)
-
-    if num == 0:
-        print(f"      no values committed")
-    elif num == 1:
-        print(
-            f'      1 value committed at {data["earliest_timestamp"].strftime("%a %d %b %Y %H:%M:%S")}'
-        )
-    else:
-        print(
-            f'      {num} values committed between {data["earliest_timestamp"].strftime("%a %d %b %Y %H:%M:%S")} and {data["latest_timestamp"].strftime("%a %d %b %Y %H:%M:%S")}'
-        )
-
-    if num < 20:
-        formatted_values = [f"{v:.5g}" for v in sorted_values]
-    else:
-        low_formatted_values = [f"{v:.5g}" for v in sorted_values[:10]]
-        high_formatted_values = [f"{v:.5g}" for v in sorted_values[-10:]]
-        formatted_values = low_formatted_values + ["..."] + high_formatted_values
-
-    print(f'      values = [ {", ".join(formatted_values)} ]')
-
-
-def dimensionless_value_inventory(pool: ShardedPool, type: str, label: str):
-    print(f"\n   -- {label}")
-    data = pool.inventory(type)
-    sorted_values = sorted(data["values"])
-    num = len(sorted_values)
-
-    if num == 0:
-        print(f"      no values committed")
-    elif num == 1:
-        print(
-            f'      1 value committed at {data["earliest_timestamp"].strftime("%a %d %b %Y %H:%M:%S")}'
-        )
-    else:
-        print(
-            f'      {num} values committed between {data["earliest_timestamp"].strftime("%a %d %b %Y %H:%M:%S")} and {data["latest_timestamp"].strftime("%a %d %b %Y %H:%M:%S")}'
-        )
-
-    if num < 20:
-        formatted_values = [f"{v:.5g}" for v in sorted_values]
-    else:
-        low_formatted_values = [f"{v:.5g}" for v in sorted_values[:10]]
-        high_formatted_values = [f"{v:.5g}" for v in sorted_values[-10:]]
-        formatted_values = low_formatted_values + ["..."] + high_formatted_values
-
-    print(f'      values = [ {", ".join(formatted_values)} ]')
-
-
-def dimensionful_value_inventory(
-    pool: ShardedPool, type: str, label: str, units: UnitsLike
-):
-    print(f"\n   -- {label}")
-    data = pool.inventory(type, units)
-    sorted_values = sorted(data["values"])
-    num = len(sorted_values)
-
-    if num == 0:
-        print(f"      no values committed")
-    elif num == 1:
-        print(
-            f'      1 value committed at {data["earliest_timestamp"].strftime("%a %d %b %Y %H:%M:%S")}'
-        )
-    else:
-        print(
-            f'      {num} values committed between {data["earliest_timestamp"].strftime("%a %d %b %Y %H:%M:%S")} and {data["latest_timestamp"].strftime("%a %d %b %Y %H:%M:%S")}'
-        )
-
-    unit = data["unit"]
-    unit_value = getattr(units, unit)
-
-    if num < 20:
-        formatted_values = [f"{v/unit_value:.5g} {unit}" for v in sorted_values]
-    else:
-        low_formatted_values = [
-            f"{v/unit_value:.5g} {unit}" for v in sorted_values[:10]
-        ]
-        high_formatted_values = [
-            f"{v/unit_value:.5g} {unit}" for v in sorted_values[-10:]
-        ]
-        formatted_values = low_formatted_values + ["..."] + high_formatted_values
-
-    print(f'      values = [ {", ".join(formatted_values)} ]')
-
-
-def object_inventory(pool: ShardedPool, cls, label):
-    print(f"\n   -- {label}")
-    data = pool.inventory(cls)
-
-    def print_data(group):
-        sorted_labels = sorted(group["labels"])
-        num = len(sorted_labels)
-
-        versions = group["versions"]
-        sorted_versions = sorted(versions)
-        num_versions = len(versions)
-
-        if num == 0:
-            print(f"        no values committed")
-        elif num == 1:
-            print(
-                f'        1 value committed at {group["earliest_timestamp"].strftime("%a %d %b %Y %H:%M:%S")}, version = {versions.pop()}'
-            )
-        else:
-            print(
-                f'        {num} values committed between {group["earliest_timestamp"].strftime("%a %d %b %Y %H:%M:%S")} and {group["latest_timestamp"].strftime("%a %d %b %Y %H:%M:%S")}'
-            )
-            if num_versions == 1:
-                print(f"        version = {versions.pop()}")
-            else:
-                print(f'        versions = [ {", ".join(sorted_versions)} ]')
-
-        if num < 20 or args.show_all:
-            for value in sorted_labels:
-                print(f"        :: {value}")
-
-        else:
-            for value in sorted_labels[:10]:
-                print(f"        :: {value}")
-            print(f"      ...")
-            for value in sorted_labels[-10:]:
-                print(f"        :: {value}")
-
-    print(f"      @@ validated models")
-    print_data(data["validated"])
-    print(f"      @@ unvalidated models")
-    print_data(data["unvalidated"])
-
-
-def inventory(pool: ShardedPool, units: UnitsLike):
-    print("\n@@ DATASTORE INVENTORY")
-
-    redshift_inventory(pool)
-
-    dimensionless_value_inventory(pool, beta_value, "Beta Values")
-    dimensionful_value_inventory(pool, temperature, "Temperature Values", units)
-    dimensionful_value_inventory(pool, M_value, "M Values", units)
-    dimensionful_value_inventory(pool, Lambda_value, "Lambda Values", units)
-    dimensionful_value_inventory(pool, phi_value, "Phi Values", units)
-    dimensionful_value_inventory(pool, pi_value, "Pi Values", units)
-
-    object_inventory(pool, "ScalarModel", "Scalar Models")
-    object_inventory(pool, "AdiabaticHistory", "Adiabatic Histories")
-    object_inventory(pool, "BBNData", "BBN Data")
-
-
 # construct a ShardedPool to orchestrate database access
 with ShardedPool(
     version_label=VERSION_LABEL,
@@ -1357,15 +1220,12 @@ with ShardedPool(
     profile_agent=profile_agent,
     job_name=args.job_name,
     prune_unvalidated=args.prune_unvalidated,
-    drop_actions=drop_actions,
+    drop_tables=drop_tables,
     read_table_config=read_table_config,
-    inventory_config=inventory_config,
+    factories=factories,
+    serial_batch_sizes=serial_batch_sizes,
 ) as pool:
 
     units = Planck_units()
 
-    if args.inventory:
-        inventory(pool, units)
-
-    else:
-        execute(pool, units)
+    execute(pool, units)

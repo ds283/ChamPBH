@@ -16,7 +16,7 @@
 import sqlalchemy as sqla
 
 from CosmologyModels.GenericEOS.QCD_Cosmology import QCD_Cosmology
-from Datastore.SQL.ObjectFactories.base import SQLAFactoryBase
+from datastorekit.SQL.factory_base import SQLAFactoryBase
 from config.defaults import DEFAULT_FLOAT_PRECISION, DEFAULT_STRING_LENGTH
 
 

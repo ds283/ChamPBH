@@ -215,7 +215,9 @@ class BBNProvenance:
 
 
 BBN_REFRESH_ROUTE = (
-    "to refresh BBN, copy the store and run main.py on the copy with --drop bbn-data"
+    "to refresh BBN, copy the store with "
+    "`python -m datastorekit.tools.sharded_store copy SRC DST` "
+    "and run main.py on the copy with --drop bbn-data"
 )
 
 

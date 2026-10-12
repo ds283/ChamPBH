@@ -16,35 +16,44 @@
 """
 Version-keyed lookups of the compute targets (run-integrity prompt 01, README §6.1).
 
-No Ray cluster, no PRyMordial solve, no persistent datastore. Each test builds the
-undecorated `Datastore.__ray_actor_class__` on a SQLite file in a `tempfile`
-directory, and reopens the same file under a second version label. About 1 s.
+No Ray cluster, no PRyMordial solve, no persistent datastore. About 1 s.
 
-Rows are inserted through the datastore's own inserter,
-`store._schema[<table>]["insert"]`, so the `version` column is filled by
-production code (`Datastore._insert`). There is no serial broker, so each row is
-given an explicit serial. The objects a lookup keys on (cosmology, potential,
-coupling, parameter values, the model proxy) are stand-ins that carry only the
-attributes the factories read. The pattern is that of
-`prompts/run-integrity/planning-probes/datastore_version_probe.py`.
+The harness, `_TempStoreCase`, builds datastorekit's actor without Ray, inside ChamPBH's copy
+of the package's stand-in cluster (`Datastore/tests/standin_pool.py`), on a SQLite file in a
+`tempfile` directory (dk-and-rpk-migration prompt 08). `open(label)` first opens a real
+`ShardedPool` on one stand-in shard under `label`, which finds or writes the label's `version`
+row, and closes it; then it builds the undecorated actor (`standin_pool.DatastoreClass`) on that
+shard's file with ChamPBH's registry and replicated tables and a stand-in serial broker shared by
+every actor of the test, notifies the broker of the file's largest serials, and gives the actor the
+label's serial with `set_version`, as the pool does. Reopening the same file under a second label
+writes that label's row beside the first. The pattern is the package's
+`test_version_keyed_lookups.TestTheActor` (DatastoreKit, `v0.3.0`).
 
-`config.version` is imported inside the tests that need it, not at module level,
-so that on the tree before prompt 01 each test fails on its own assertion rather
-than the whole module failing to import.
+Rows are inserted through the actor's own inserter, `store._schema[<table>]["insert"]`, so the
+`version` column is filled by the package's `Datastore._insert`. Each row is given an explicit
+serial, so no serial is leased. The objects a lookup keys on (cosmology, potential, coupling,
+parameter values, the model proxy) are stand-ins that carry only the attributes the factories
+read. The pattern was that of `prompts/run-integrity/planning-probes/datastore_version_probe.py`.
+
+The package's own suite tests the layer: that a caller's payload is copied and the reserved key is
+the datastore's, and that `key_on_version` needs a `version` column. These tests are of ChamPBH's
+factories, registry and scripts.
 """
 
 import ast
-import shutil
+import contextlib
+import io
 import tempfile
 import unittest
 from pathlib import Path
 from types import SimpleNamespace as NS
 
+import ray
 import sqlalchemy as sqla
 
-from Datastore.SQL.Datastore import Datastore
-
-DS = Datastore.__ray_actor_class__
+from Datastore.tests import standin_pool as sp
+from config.datastore import factories, serial_batch_sizes
+from config.sharding import replicated_tables
 
 LABEL_A = "2026.3.0"
 LABEL_B = "2026.4.0"
@@ -185,19 +194,73 @@ def _insert_successful_bbn(store, serial):
 
 
 class _TempStoreCase(unittest.TestCase):
+    """
+    The package's actor on a one-shard store in a temporary directory, inside a stand-in cluster
+    (the module docstring). Each test's actors share one stand-in serial broker; every actor is
+    closed in tearDown, which also asserts that Ray was never initialised.
+    """
+
     def setUp(self):
-        self._dir = Path(tempfile.mkdtemp(prefix="champbh-datastore-test-"))
+        tmp = tempfile.TemporaryDirectory(prefix="champbh-datastore-test-")
+        self.addCleanup(tmp.cleanup)
+        self._dir = Path(tmp.name)
         self.db = self._dir / "store.db"
+
+        self.cluster = sp.StandinCluster()
+        active = self.cluster.active()
+        active.__enter__()
+        self.addCleanup(active.__exit__, None, None, None)
+
+        # one broker for every actor of the test, as a pool gives its actors one
+        self.broker = sp.Handle(
+            sp.BrokerClass(name="SerialPoolBroker"),
+            "SerialPoolBroker",
+            self.cluster,
+            None,
+        )
         self._stores = []
 
     def tearDown(self):
         for store in self._stores:
-            store._engine.dispose()
-        shutil.rmtree(self._dir, ignore_errors=True)
+            with contextlib.redirect_stdout(io.StringIO()):
+                store.__exit__(None, None, None)
+        self._stores = []
+        self.assertFalse(ray.is_initialized())
 
     def open(self, label):
-        store = DS(version_label=label, db_name=self.db)
+        """
+        The package's actor on the store's one shard, under ``label``, with the label's version
+        serial set, as ``ShardedPool`` builds and prepares each of its actors.
+        """
+        # a real pool on one stand-in shard finds or writes the label's version row
+        pool = self.cluster.open_pool(
+            self.db,
+            shards=1,
+            version_label=label,
+            serial_batch_sizes=serial_batch_sizes,
+        )
+        serial = pool._version.store_id
+        shard_file = pool._shard_db_files[0]
+        self.cluster.close_pool(pool)
+
+        with contextlib.redirect_stdout(io.StringIO()):
+            store = sp.DatastoreClass(
+                version_label=label,
+                db_name=shard_file,
+                replicated_tables=list(replicated_tables),
+                factories=factories,
+                serial_batch_sizes=serial_batch_sizes,
+                my_name=f"probe{len(self._stores):04d}-store",
+                serial_broker=self.broker,
+            )
         self._stores.append(store)
+
+        # the broker learns the file's largest serials before the actor inserts anything, and the
+        # actor is given the label's serial, as ShardedPool does at open
+        self.broker.notify_largest_store_ids.remote(
+            store.read_largest_store_ids()
+        ).get()
+        store.set_version(serial)
         return store
 
 
@@ -213,7 +276,7 @@ class TestVersionKeyedLookups(_TempStoreCase):
         self.assertTrue(m.failure)
 
         store_b = self.open(LABEL_B)
-        self.assertNotEqual(store_a._version.store_id, store_b._version.store_id)
+        self.assertNotEqual(store_a._version_serial, store_b._version_serial)
 
         m_b = store_b.object_get("ScalarModel", **_scalar_model_query())
         self.assertFalse(
@@ -345,24 +408,6 @@ class TestVersionKeyedLookups(_TempStoreCase):
                             inserters=store._inserters,
                         )
 
-    def test_d2_payload_is_copied_and_the_reserved_key_is_the_datastores(self):
-        """object_get() does not mutate the caller's payload, and refuses a caller-supplied serial."""
-        from config.version import VERSION_SERIAL_KEY
-
-        store = self.open(LABEL_A)
-        _insert_failed_scalar_model(store)
-
-        payload = _scalar_model_query()
-        before = dict(payload)
-        store.object_get("ScalarModel", payload_data=[payload])
-        self.assertEqual(payload, before)
-        self.assertNotIn(VERSION_SERIAL_KEY, payload)
-
-        with self.assertRaises(KeyError):
-            store.object_get(
-                "ScalarModel", **_scalar_model_query(**{VERSION_SERIAL_KEY: 1})
-            )
-
     def test_d3_only_the_compute_targets_are_keyed(self):
         """Exactly ScalarModel, AdiabaticHistory and BBNData are keyed; no parameter, value or tag table."""
         store = self.open(LABEL_A)
@@ -372,28 +417,6 @@ class TestVersionKeyedLookups(_TempStoreCase):
             if record.get("key_on_version", False)
         }
         self.assertEqual(keyed, KEYED_TABLES)
-
-    def test_d4_key_on_version_needs_a_version_column(self):
-        """_build_schema refuses a factory that keys on the version without a version column."""
-
-        class _BadFactory:
-            def register(self):
-                return {
-                    "version": False,
-                    "key_on_version": True,
-                    "columns": [sqla.Column("x", sqla.Integer)],
-                }
-
-        # a bare instance: only the attributes _build_schema touches
-        store = DS.__new__(DS)
-        store._factories = {"Bad": _BadFactory()}
-        store._schema = {}
-        store._tables = {}
-        store._inserters = {}
-        store._metadata = sqla.MetaData()
-
-        with self.assertRaises(RuntimeError):
-            store._build_schema()
 
     def test_e_parameter_tables_are_not_keyed(self):
         """(e) An ExponentialCoupling for the same beta under A and then B has one row and one serial.

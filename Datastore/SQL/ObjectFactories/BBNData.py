@@ -13,11 +13,11 @@ from ComputeTargets import (
 )
 from CosmologyConcepts import redshift, redshift_array
 from CosmologyModels import BaseCosmology
-from Datastore.SQL.ObjectFactories.base import SQLAFactoryBase
+from datastorekit.SQL.factory_base import SQLAFactoryBase
 from MetadataConcepts import store_tag
 from Units.base import UnitsLike
 from config.defaults import DEFAULT_STRING_LENGTH
-from config.version import require_version_serial
+from datastorekit.contract import require_version_serial
 
 
 class sqla_BBNDataTagAssociation_factory(SQLAFactoryBase):

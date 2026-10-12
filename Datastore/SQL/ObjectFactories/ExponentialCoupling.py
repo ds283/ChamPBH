@@ -18,7 +18,7 @@ from sqlalchemy.exc import MultipleResultsFound
 
 from CosmologyConcepts import beta_value
 from CosmologyConcepts.ConformalCouplings import ExponentialCoupling
-from Datastore.SQL.ObjectFactories.base import SQLAFactoryBase
+from datastorekit.SQL.factory_base import SQLAFactoryBase
 from Units.base import UnitsLike
 
 

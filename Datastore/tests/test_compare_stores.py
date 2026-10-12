@@ -705,12 +705,9 @@ class TestCompareStores(_CompareCase):
 
 
 def _registry():
-    """The factory registry: config.datastore's from dk-and-rpk-migration prompt 05 on, the
-    layer's before it. Importing it imports ray, but needs no cluster."""
-    try:
-        from config.datastore import factories
-    except ImportError:
-        from Datastore.SQL.Datastore import _factories as factories
+    """The factory registry, config.datastore's. Importing it imports ray, but needs no cluster."""
+    from config.datastore import factories
+
     return factories
 
 
@@ -1086,7 +1083,8 @@ class TestChamPBHSchema(unittest.TestCase):
     def test_14_a_store_with_champbhs_schema(self):
         """(14) On shards with exactly the tables the factories register: the polymorphic map
         resolves ScalarModel's three references (types 3, 1, 0) with no problem;
-        ExponentialCoupling and the *_tags tables are sharded; LambdaCDM is noted; a copy under
+        ExponentialCoupling and the *_tags tables are sharded; LambdaCDM is not noted, since
+        config.sharding no longer lists it (dk-and-rpk-migration P8); a copy under
         other serials, another shard, other timings and labels, and another elapsed time in a
         wall-clock failure is equal; and one ulp in one ScalarModelValue column is a near
         miss."""
@@ -1108,7 +1106,7 @@ class TestChamPBHSchema(unittest.TestCase):
         self.assertEqual(tables["ScalarModelValue"]["matched"], 2)
         self.assertEqual(tables["ScalarModel_tags"]["matched"], 1)
         self.assertNotIn("LambdaCDM", tables)
-        self.assertTrue(any("LambdaCDM" in note for note in result["notes"]))
+        self.assertFalse(any("LambdaCDM" in note for note in result["notes"]))
         self.assertEqual(
             result["bookkeeping_differences"]["ScalarModel"],
             {"compute_time": 1, "label": 1},

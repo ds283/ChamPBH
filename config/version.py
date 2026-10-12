@@ -49,23 +49,8 @@
 # from another PRyM_version or network.
 VERSION_LABEL = "2026.6.0"
 
-# The reserved payload key under which Datastore.object_get hands a version-keyed factory's
-# build() the serial of the current version label (run-integrity prompt 01). A factory registers
-# "key_on_version": True to receive it, and its build() raises if the key is absent.
-VERSION_SERIAL_KEY = "_version_serial"
-
-
-def require_version_serial(payload, cls_name: str) -> int:
-    """
-    Return the version serial that Datastore.object_get placed in a lookup payload for a
-    version-keyed factory. Raise if it is absent: a keyed lookup never falls back to an
-    unfiltered one. (run-integrity prompt 01)
-    """
-    serial = payload.get(VERSION_SERIAL_KEY, None)
-    if serial is None:
-        raise RuntimeError(
-            f"{cls_name}.build(): the lookup payload carries no version serial under "
-            f"'{VERSION_SERIAL_KEY}'. A version-keyed lookup must go through "
-            f"Datastore.object_get(), and is never made unfiltered."
-        )
-    return serial
+# The reserved payload key of a version-keyed lookup (VERSION_SERIAL_KEY) and its reader
+# (require_version_serial) were defined here until dk-and-rpk-migration prompt 08; they are
+# datastorekit's, imported from datastorekit.contract, whose actor sets the key. Do not import
+# VERSION_LABEL from there: datastorekit.contract.VERSION_LABEL is "label", the name of the version
+# table's label column, not this label (campaign README §6.3).

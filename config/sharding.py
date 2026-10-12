@@ -31,7 +31,6 @@ replicated_tables = [
     "ReflectingPotential",
     "ReclinerPotential",
     "StarobinskyPotential",
-    "LambdaCDM",
     "QCD_Cosmology",
     "IntegrationSolver",
 ]

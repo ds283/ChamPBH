@@ -36,12 +36,12 @@ from CosmologyConcepts import (
 from CosmologyConcepts.ConformalCouplings import AbstractCoupling
 from CosmologyConcepts.Potentials import AbstractPotential
 from CosmologyModels import BaseCosmology
-from Datastore.SQL.ObjectFactories.base import SQLAFactoryBase
+from datastorekit.SQL.factory_base import SQLAFactoryBase
 from MetadataConcepts import store_tag, tolerance
 from Quadrature.integration_metadata import IntegrationData, IntegrationSolver
 from Units.base import UnitsLike
 from config.defaults import DEFAULT_STRING_LENGTH, DEFAULT_FLOAT_PRECISION
-from config.version import require_version_serial
+from datastorekit.contract import require_version_serial
 
 
 class sqla_ScalarModelTagAssociation_factory(SQLAFactoryBase):

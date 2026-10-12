@@ -41,7 +41,7 @@ from CosmologyConcepts.ConformalCouplings import AbstractCoupling
 from CosmologyConcepts.Potentials import AbstractPotential
 from CosmologyModels import BaseCosmology
 from CosmologyModels.GenericEOS.LambdaCDM_GenericEOS import LambdaCDM_GenericEOS
-from Datastore import DatastoreObject
+from datastorekit import DatastoreObject
 from MetadataConcepts import tolerance, store_tag
 from Quadrature.integration_metadata import IntegrationSolver, IntegrationData
 from Quadrature.supervisors.ScalarField import (

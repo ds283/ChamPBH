@@ -1,6 +1,6 @@
 # dk-and-rpk-migration campaign — implementation state
 
-**Last updated:** 2026-10-12 · **Status: LIVE — 11 of 12 prompts written (01–10, 05a), 8 landed (01–07, 05a); R0 bitwise reproducible; R1 equals R0 bitwise; RayPoolKit G3 holds. P1–P17
+**Last updated:** 2026-10-12 · **Status: LIVE — 11 of 12 prompts written (01–10, 05a), 9 landed (01–08, 05a); R0 bitwise reproducible; R1 equals R0 bitwise; RayPoolKit G3 holds; ChamPBH's datastore layer replaced by `datastorekit` (08). P1–P17
 ruled; U5 ruled (README §6.6); U6 ruled (README §6.7): DatastoreKit `v0.3.0` is the pin (README §0.4).**
 The plan is [`README.md`](README.md), written on 2026-10-11 at `52142d7` with the user's rulings
 U1–U4. Prompts 01–04 are written once the user has reviewed it (README §2.1).
@@ -73,7 +73,7 @@ reads only what the specs declare. Measured at `12c82e8`, 09's list already cove
 | 05a | [Isolate the rehearsal cluster](05a-isolate-the-rehearsal-cluster.md) | **U5**; `ray_cluster.sh` | Sonnet | ✍️ 2026-10-12 | ✅ 2026-10-12 | `babd9d5` | [log](logs/05a-isolate-the-rehearsal-cluster.md) |
 | 06 | [Rehearse before the DatastoreKit swap (R1)](06-rehearse-before-the-datastore-swap.md) | **R1** | Opus | ✍️ 2026-10-12 | ✅ 2026-10-12 | `c9e6bc2` | [log](logs/06-rehearse-before-the-datastore-swap.md) |
 | 07 | [Pin `datastorekit` `v0.3.0`](07-pin-datastorekit-v0.3.0.md) | the DatastoreKit pin (**U3**, **U6**; `2f5417e`) | Sonnet | ✍️ 2026-10-12 | ✅ 2026-10-12 | `617a1dc` | [log](logs/07-pin-datastorekit-v0.3.0.md) |
-| 08 | [Adopt `datastorekit`](08-adopt-datastorekit.md) | the DatastoreKit swap; **U4** | Opus | ✍️ 2026-10-12 | ⬜ | — | — |
+| 08 | [Adopt `datastorekit`](08-adopt-datastorekit.md) | the DatastoreKit swap; **U4** | Opus | ✍️ 2026-10-12 | ✅ 2026-10-12 | this commit | [log](logs/08-adopt-datastorekit.md) |
 | 09 | [Port the inventory](09-port-the-inventory.md) | `inventory_spec`, `tools/inventory_report.py`; coverage (§6.5) | Opus | ✍️ 2026-10-12 | ⬜ | — | — |
 | 10 | [Rehearse through both packages (R2)](10-rehearse-through-both-packages.md) | **R2**; **DatastoreKit G3** | Opus | ✍️ 2026-10-12 | ⬜ | — | — |
 | 11 | Close the migration | documents, handover, close | Sonnet | ⬜ | ⬜ | — | — |
@@ -129,15 +129,15 @@ before each dispatch:
 | **K5** | 07 | the venv installed from it | ✅ `617a1dc`: dry run and install report only `datastorekit-0.3.0`; `raypoolkit` re-resolved and left; nothing else moved |
 | **K6** | 07 | the proof: one distribution added, at `2f5417ea…`, the tag's files, not editable | ✅ `617a1dc`: freeze differs by one line; `pip check` clean; `direct_url.json` VCS, no `dir_info`; the 20 modules equal `git archive v0.3.0`, no `tests/`; import starts no Ray |
 | **K7** | 07 | U3 and U6 on the installed base: a two-hook subclass instantiates; ChamPBH's 27 registry entries rebuilt on it instantiate; `timestamp` defaults to `None` | ✅ `617a1dc`: script run against the installed package; 27 of 27 instantiate (3 classes define all three hooks, 20 none); `timestamp` `None` and read-only |
-| **A1** | 08 | the 7 layer modules deleted; the two `__init__.py` emptied (P6) | ⬜ |
-| **A2** | 08 | the layer imports rewritten by the module map; P9's two names from `datastorekit.contract` | ⬜ |
-| **A3** | 08 | the factories change nothing but those imports (U3) | ⬜ |
-| **A4** | 08 | the three pools take `factories=`, `serial_batch_sizes=` (and `drop_tables=`); `LambdaCDM` out (P8) | ⬜ |
-| **A5** | 08 | U4: `tables_to_drop`, refusing before Ray, naming the groups to add | ⬜ |
-| **A6** | 08 | the harness on the package's actor, through ChamPBH's copy of the stand-in cluster | ⬜ |
-| **A7** | 08 | the tests the package carries deleted (4 + 2), and the 3 layer-identity tests; `_registry()`'s fallback removed | ⬜ |
-| **A8** | 08 | new tests: tables declared, pools given the config, U4, the cycle gone, `--inventory` refusing | ⬜ |
-| **A9** | 08 | `--inventory` refuses (P12); the refresh route (P13); prose (P14); the issue moves | ⬜ |
+| **A1** | 08 | the 7 layer modules deleted; the two `__init__.py` emptied (P6) | ✅ this commit: 7 `git rm`'d; both `__init__.py` 0 bytes (blob `e69de29`); the factories stay; by DatastoreKit's script at a dangling commit of the staged tree, the 7 absent |
+| **A2** | 08 | the layer imports rewritten by the module map; P9's two names from `datastorekit.contract` | ✅ this commit: 13 + 17 + 4 + 3 imports, and the 3 factories' `require_version_serial`; `config/version.py` keeps `VERSION_LABEL` alone; the script: outside `prompts/` 0 imports, 0 literals, 0 `import_module`, 0 imports of the moved names |
+| **A3** | 08 | the factories change nothing but those imports (U3) | ✅ this commit: each factory's diff is its import line(s) (20 − / 20 +); hook signatures against the package's calls by `ast`: no mismatch (log 08) |
+| **A4** | 08 | the three pools take `factories=`, `serial_batch_sizes=` (and `drop_tables=`); `LambdaCDM` out (P8) | ✅ this commit: no `drop_actions=` or `inventory_config=`; every other argument unchanged; `LambdaCDM` out of `replicated_tables` and `serial_batch_sizes` |
+| **A5** | 08 | U4: `tables_to_drop`, refusing before Ray, naming the groups to add | ✅ this commit: `config.datastore.tables_to_drop` over `dependent_tables`; `main.py --drop scalar-model` exits 2 before `ray.init` with ``cannot drop scalar-model alone: AdiabaticHistory and BBNData name its rows; add `--drop adiabatic-history bbn-data` `` |
+| **A6** | 08 | the harness on the package's actor, through ChamPBH's copy of the stand-in cluster | ✅ this commit: `Datastore/tests/standin_pool.py` (the tag's file; licence and provenance header; `open_pool`/`open_pool_output` on ChamPBH's registry); `_TempStoreCase` as `TestTheActor`, with a shared stand-in broker; the five importers unchanged; test a's one line |
+| **A7** | 08 | the tests the package carries deleted (4 + 2), and the 3 layer-identity tests; `_registry()`'s fallback removed | ✅ this commit: and test 14's `LambdaCDM` assertion inverted (A7.4 as amended) |
+| **A8** | 08 | new tests: tables declared, pools given the config, U4, the cycle gone, `--inventory` refusing | ✅ this commit: 12 tests in `test_datastore_config.py`; Datastore 73 → 76; six breakages caught (log 08) |
+| **A9** | 08 | `--inventory` refuses (P12); the refresh route (P13); prose (P14); the issue moves | ✅ this commit: `--inventory` exits 2 before Ray; `BBN_REFRESH_ROUTE` names `sharded_store copy`; `config/datastore.py`, `config/version.py`, `CLAUDE.md`, the black-clean issue; one issue closed, one opened, one narrowed |
 | **I1** | 09 | `inventory_spec()` on the 21 owners; `inventory_classes` accepts the registry | ⬜ |
 | **I2** | 09 | `tools/inventory_report.py` (P15) | ⬜ |
 | **I3** | 09 | `main.py --inventory` read-only, before Ray | ⬜ |
@@ -163,7 +163,7 @@ counts (18 / 114 / 35); and the venv's `pip freeze` (README §0.2).
 | R2 | 09's tree, through both packages, equals R1 by value | 10 | ⬜ |
 | DatastoreKit `v0.2.3` | tagged on DatastoreKit's remote, with `store`, `validate` and `validate_on_startup` defaulted (U3; made in DatastoreKit, not here) | — (07 pins it) | ✅ **released** 2026-10-11: tag object `8dac562`, commit `0de2b16`, checked on the remote and by `git show` of `factory_base.py` (README §0.3) |
 | DatastoreKit `v0.3.0` | tagged on DatastoreKit's remote; the pin (U6) | — (07 pins it) | ✅ **released** 2026-10-12: tag object `bf0a3b2`, commit `2f5417e`, checked on the remote; only `datastorekit/object.py` changed in the package since `v0.2.3` (README §0.4) |
-| DatastoreKit G3 | the 9 layer files are gone (two emptied, P6), the pin is installed, the three roots pass, and a pilot store rebuilt through the package (R2) equals R1 by value | 08, 09, 10 | ⬜ |
+| DatastoreKit G3 | the 9 layer files are gone (two emptied, P6), the pin is installed, the three roots pass, and a pilot store rebuilt through the package (R2) equals R1 by value | 08, 09, 10 | ⬜ 08's part holds (this commit): the 7 files gone and two emptied, 0 imports by DatastoreKit's script, the three roots pass (18 / 114 / 76); R2 is 10's |
 
 Recording each gate on its package's own extraction board is a commit in that repository, not
 here (README P16).
@@ -212,6 +212,35 @@ which left the question open. **Not fixed:** `main.py`'s pipeline is outside thi
   06 and 10 compare against R0's lookup pattern (5 / 2 / 5 on `resumed-b`), so a fix that lands
   before 10 changes that pattern, and L4 must say so.
 
+### `[08-plot-scripts-open-read-write-pools]`
+
+**Opened:** 2026-10-12 by prompt 08 (P11, ruled 2026-10-11: the plot scripts keep read-write pools in
+this campaign). **Not fixed:** finding which lookups insert is a change of behaviour this campaign
+does not need (README §6.2, P11).
+
+- **What.** `plot_by_beta.py` and `plot_ScalarModel.py` open read-write pools
+  (`plot_by_beta.py:1011-1025`, `plot_ScalarModel.py:1581-1595`; `prune_unvalidated=False`, no
+  `read_only=`). Their lookups go through `object_get`, which is get-or-insert: a parameter row that
+  is not in the store (a `tolerance`, a `temperature`, a `phi_value`, a potential, a coupling, the
+  cosmology; e.g. `plot_by_beta.py:1029-1030`, `:1041-1051`, `config/model_list.py:27`) is inserted
+  by a plotting run. The package can open a pool read-only (`ShardedPool(read_only=True)`,
+  `datastorekit/SQL/ShardedPool.py:121` at `v0.3.0`), which writes nothing and refuses a miss with
+  `ReadOnlyMiss` and a write with `ReadOnlyWrite` (`datastorekit/replication.py:193`, `:240`).
+- **Goal (the user's).** The plot scripts should run on read-only pools eventually, so that reading a
+  store for figures can never change it.
+- **What must be found first.** Which of the plot scripts' lookups can miss, and so insert, on a store
+  that `main.py` built for the same grid: a lookup with a value `main.py` never stored (for example a
+  `T_stop` or tolerance given only on the plot script's command line, or `plot_by_beta.py:1129`'s
+  `T_CMB`) would become a `ReadOnlyMiss`. Then whether each such lookup should be made by `main.py`
+  instead, made optional, or refused with a message.
+- **Impact.** None measured: the rehearsals' readers (R0, R1) ran the plot scripts on stores the
+  pilot had just built, and compared stores by value after. A plotting run may add parameter rows to
+  a store, and none of those rows is a science value.
+- **Next step.** Measure the inserts a plotting run makes (a stand-in or rehearsal store, row counts
+  before and after), then move both scripts to `read_only=True` in a campaign that may change them.
+
+## 4. Resolved issues
+
 ### `[05-config-datastore-cannot-be-imported-before-the-layer]`
 
 **Opened:** 2026-10-12 by prompt 05 (log 05, §"The import-order hazard"), measured at its own tree.
@@ -232,10 +261,12 @@ is 08's (P6), and `ShardedPool.py:24` imports the actor through it.
   a comment.
 - **Next step.** 08 removes the cycle by deleting the layer and emptying the two `__init__.py`
   files (P6), and its acceptance includes `python -c "import config.datastore"` from the root.
+- **Resolved (2026-10-12):** by prompt 08 (this commit), which deleted the layer and emptied
+  `Datastore/__init__.py` and `Datastore/SQL/__init__.py` (P6). `./venv/bin/python -c "import
+  config.datastore"` from the root exits 0, and `Datastore/tests/test_datastore_config.py`'s
+  `TestConfigDatastoreImportsAlone` runs it in a subprocess. `test_compare_stores._registry()` no
+  longer falls back to the layer, and `test_datastore_config.py` no longer imports it first.
 
-## 4. Resolved issues
-
-None yet.
 
 ## 5. Dispatch record
 
@@ -1168,3 +1199,55 @@ false. As written that is a §4 stop; it is the direct consequence of P8, which 
 08's A7.4 and §4, and README §2.2's charter, now name it: the assertion is inverted and the test's
 docstring says so. The Datastore count is unchanged by it (64 + the A8 tests).
 
+
+### 5.13 After prompt 08 (2026-10-12)
+
+- **Landed:** this commit, log [`08-adopt-datastorekit.md`](logs/08-adopt-datastorekit.md).
+  **COMPLETE**: A1–A9; no §4 stop met. Measured first at `63f60e1`: suites 18 / 114 (61 + 53) / 73;
+  DatastoreKit's script equal to the prompt's §1 (43 layer imports in 39 files, 1 nested, 1
+  `import_module`, 4 imports of the moved names); every `git grep` hit accounted for by §1 and the
+  orchestrator's facts; the hooks the package calls, against every ChamPBH factory's by `ast`: no
+  mismatch.
+- **The swap.** The 7 layer modules deleted, the two `__init__.py` 0 bytes; 40 import lines moved by
+  the module map, each factory's diff its import line(s) only; `config/version.py` keeps
+  `VERSION_LABEL` alone. The three pools pass `factories=` and `serial_batch_sizes=` from
+  `config.datastore` (`main.py` also `drop_tables=`), and no `drop_actions=` or `inventory_config=`;
+  `LambdaCDM` is out of `replicated_tables` and `serial_batch_sizes` (P8).
+- **U4.** `config.datastore.tables_to_drop` takes the closure from `dependent_tables`; `main.py`
+  calls it before `ray.init`. `main.py --drop scalar-model` prints
+  ``!! --drop: cannot drop scalar-model alone: AdiabaticHistory and BBNData name its rows; add `--drop adiabatic-history bbn-data` ``
+  to stderr and exits 2; the two mixed requests are refused naming the one group to add; the closed
+  sets are accepted. The message names the tables that reference the requested ones directly; the
+  closure alone decides (log D1).
+- **The harness.** ChamPBH's copy of the package's stand-in pool, `Datastore/tests/standin_pool.py`
+  (the tag's file but for its header and `open_pool`/`open_pool_output`, which open ChamPBH's
+  registry under a `version_label`). `_TempStoreCase.open(label)` lets a real one-shard pool write
+  the label's row, then builds the package's undecorated actor on the shard with a stand-in broker
+  shared by the test's actors, notifies the broker and calls `set_version`. The five importers are
+  unchanged and pass (26 tests); test a reads `_version_serial`.
+- **Tests.** Deleted: `test_shard_key_assignment` (4), d2 and d4, `TestLayerReadsConfig` (3). Changed:
+  `_registry()` (no fallback), test 14's `LambdaCDM` assertion inverted. Added: 12 in
+  `test_datastore_config.py`. **Suites: 18 / 114 (61 + 53) / 76**, all OK (73 − 4 − 2 − 3 + 12; by
+  module in the log). Loads 5–20 on 10 cores.
+- **By DatastoreKit's script** at the dangling `1216c9a` (a `commit-tree` of the staged tree, on no
+  branch): the 7 layer files absent; outside `prompts/` 0 imports, 0 literals, 0 `import_module`;
+  `prompts/`'s one kept; 0 imports of the moved names.
+- **Without Ray:** `import config.datastore` alone exits 0 (27 entries on the package's base);
+  `sharded_store --help` exits 0; `check_imports.py` 163 names, 0 failures; the drivers
+  byte-compile; `--inventory` and `--drop scalar-model` each exit 2 before `ray.init`, creating
+  nothing.
+- **The schema differences: none.** A 16-shard stand-in store under the package (label `2026.6.0`)
+  against R0's snapshot: `RESULT: the schemas agree`; the two snapshots are equal but for `source`.
+  `out/08-standin-schema.json` is the store's snapshot, for 10.
+- **Breakages** 1–6 caught (log 08, as diffs that replay with `git apply`). Under breakage 5, 27 of 30
+  errors are the actor's insert refusal and 3 its keyed-lookup refusal (three tests look up before
+  inserting); both are the package's contract.
+- **Issues:** `[05-config-datastore-cannot-be-imported-before-the-layer]` closed (§4);
+  `[08-plot-scripts-open-read-write-pools]` opened (§3, P11, stated as the user's goal);
+  `[00-two-files-are-not-black-clean]` narrowed on the `review-remediation` board to
+  `CosmologyModels/LambdaCDM/Planck.py`. The index: 26 open, 3 on this board.
+- **Deviations** D1–D11, all `IMPLEMENTATION CHOICE`; none `UNINTENDED DRIFT`.
+- **For 11:** the stale citations in `tools/compare_stores.py` (`:89-91`, `:108-110`), in
+  `architecture-summary.md`'s database sections, and in two harness importers' docstrings (log 08,
+  Observations 1–3).
+- **Rollback:** `git revert` of this commit alone; nothing in the venv (README §4.4).

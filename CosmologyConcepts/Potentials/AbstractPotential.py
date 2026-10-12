@@ -16,7 +16,7 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from Datastore import DatastoreObject
+from datastorekit import DatastoreObject
 
 
 class AbstractPotential(DatastoreObject, ABC):

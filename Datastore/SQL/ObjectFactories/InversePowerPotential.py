@@ -18,7 +18,7 @@ from sqlalchemy.exc import MultipleResultsFound
 
 from CosmologyConcepts import M_value, Lambda_value
 from CosmologyConcepts.Potentials import InversePowerPotential
-from Datastore.SQL.ObjectFactories.base import SQLAFactoryBase
+from datastorekit.SQL.factory_base import SQLAFactoryBase
 from Units.base import UnitsLike
 
 

@@ -32,12 +32,13 @@ from CosmologyConcepts import temperature, phi_value, pi_value
 from CosmologyConcepts.ConformalCouplings import AbstractCoupling
 from CosmologyConcepts.Potentials import AbstractPotential
 from CosmologyModels import BaseCosmology
-from Datastore.SQL.ProfileAgent import ProfileAgent
-from Datastore.SQL.ShardedPool import ShardedPool
+from datastorekit.SQL.ProfileAgent import ProfileAgent
+from datastorekit.SQL.ShardedPool import ShardedPool
 from MetadataConcepts import tolerance, store_tag
 from raypoolkit import RayWorkPool
 from Units import Planck_units
 from config.argument_parser import create_argument_parser
+from config.datastore import factories, serial_batch_sizes
 from config.model_list import build_model_list
 from config.sharding import (
     ShardKeyType,
@@ -45,7 +46,6 @@ from config.sharding import (
     replicated_tables,
     sharded_tables,
     read_table_config,
-    inventory_config,
 )
 from config.version import VERSION_LABEL
 from extract_common import (
@@ -1020,7 +1020,8 @@ with ShardedPool(
     job_name="plot_ScalarModel",
     prune_unvalidated=False,
     read_table_config=read_table_config,
-    inventory_config=inventory_config,
+    factories=factories,
+    serial_batch_sizes=serial_batch_sizes,
 ) as pool:
     # build absolute and relative tolerances
     atol, rtol = ray.get(

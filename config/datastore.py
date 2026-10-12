@@ -14,31 +14,33 @@
 # limitations under the License.
 
 """
-ChamPBH's datastore registries (prompts/dk-and-rpk-migration, prompt 05).
+ChamPBH's datastore registries (prompts/dk-and-rpk-migration, prompts 05 and 08).
 
-The datastore layer does not own these; this module does.
+The datastore layer is the ``datastorekit`` package, which owns none of these: each driver gives
+them to its ``ShardedPool`` (``factories=``, ``serial_batch_sizes=`` and, in ``main.py``,
+``drop_tables=``).
 
 - ``factories``: the registry of storable classes, each table name mapped to its factory instance,
   in the order the schema is built. Six entries are built on a quantity class (by the dimensionless
   and the dimensionful quantity factories), which the factory keeps as ``ObjectType``.
-- ``drop_groups``: the ``--drop`` actions, each mapped to the tables it drops, in the order
-  ``Datastore._drop_actions`` drops them.
-- ``serial_batch_sizes``: how many serials an actor leases from the broker at a time, per table.
-  ``LambdaCDM`` is listed although this project has no such table; it leaves when the layer does
-  (campaign README, P8).
+- ``drop_groups``: the ``--drop`` groups, each mapped to the tables it drops. The pool drops tables,
+  in the order their foreign keys require, so the order within a group is not the drop order.
+- ``serial_batch_sizes``: how many serials an actor leases from the broker at a time, per table; a
+  table not named here leases the package's default.
+- ``tables_to_drop(groups)``: the tables of the requested ``--drop`` groups, refused with
+  ``ValueError`` if a table outside them names the rows of one of them (the package's
+  ``datastorekit.SQL.schema.dependent_tables``), with a message naming the groups to add.
+  ``main.py`` calls it before Ray starts (campaign README, U4). The pool refuses the same drop at
+  open, as a second line that the command line never reaches.
 
-Until prompt 08 gives these to the package, the old layer reads them from here, under their old
-names: ``Datastore.SQL.Datastore`` imports ``factories`` as ``_factories`` and ``drop_groups`` as
-``_drop_actions``, and ``Datastore.SQL.ClientPool`` imports ``serial_batch_sizes`` as
-``_default_serial_batch_size``.
-
-Import-order hazard: ``Datastore/SQL/__init__.py`` imports the actor, so importing any factory
-module runs ``Datastore/SQL/Datastore.py``, which imports this module. A fresh
-``import config.datastore`` therefore fails with ``ImportError: cannot import name ... from
-partially initialized module 'config.datastore'``. Import the layer (``Datastore.SQL.Datastore``)
-first. Every driver and actor does, so nothing that runs is affected. Prompt 08 removes the cycle
-(issue ``05-config-datastore-cannot-be-imported-before-the-layer``).
+This module imports no driver, and can be imported first, alone.
 """
+
+from typing import Iterable, List
+
+import sqlalchemy as sqla
+from datastorekit.SQL.schema import build_schema, dependent_tables
+from datastorekit.store_inventory import inventory_specs
 
 from CosmologyConcepts import (
     beta_value,
@@ -152,7 +154,6 @@ serial_batch_sizes = {
     "ReflectingPotential": 50,
     "StarobinskyPotential": 50,
     "ReclinerPotential": 50,
-    "LambdaCDM": 5,
     "QCD_Cosmology": 5,
     "IntegrationSolver": 6,
     "ScalarModel": 20,
@@ -162,3 +163,90 @@ serial_batch_sizes = {
     "BBNData": 20,
     "BBNDataValue": 250,
 }
+
+
+def _names_of(tables: List[str], among: List[str]) -> List[str]:
+    """
+    Which of ``among`` name a table of ``tables`` directly, by the rule ``dependent_tables`` follows
+    transitively (a foreign key, or a parent a factory's ``inventory_spec`` declares), in registry
+    order. Used only to word ``tables_to_drop``'s refusal; which tables must go is
+    ``dependent_tables``' answer alone.
+    """
+    built = build_schema(sqla.MetaData(), factories).tables
+    named = {
+        name: {fk.column.table.name for fk in table.foreign_keys}
+        for name, table in built.items()
+    }
+    for name, spec in inventory_specs(factories).items():
+        named.setdefault(name, set()).update(spec.dependencies())
+    return [
+        name
+        for name in built
+        if name in among and not named.get(name, set()).isdisjoint(tables)
+    ]
+
+
+def _joined(items: List[str]) -> str:
+    if len(items) <= 1:
+        return "".join(items)
+    return ", ".join(items[:-1]) + " and " + items[-1]
+
+
+def tables_to_drop(groups: Iterable[str]) -> List[str]:
+    """
+    The tables of the ``--drop`` groups named by ``groups``, each once, in ``drop_groups``' order.
+
+    A name that is not a drop group raises ``ValueError`` naming it and the groups there are. A
+    request that would leave rows naming rows it drops raises ``ValueError``: the tables that must
+    go with it are ``datastorekit.SQL.schema.dependent_tables``' answer, from the registry, and the
+    message names the requested groups, the tables that name their rows, and the ``--drop`` groups
+    to add (a table that must go but is in no group is named as a table). So
+    ``tables_to_drop(["scalar-model"])`` raises, since ``AdiabaticHistory`` and ``BBNData`` name
+    ``ScalarModel`` rows; ``main.py`` calls this before Ray starts (dk-and-rpk-migration prompt 08,
+    campaign README U4).
+    """
+    requested = list(dict.fromkeys(groups))
+    unknown = [group for group in requested if group not in drop_groups]
+    if len(unknown) > 0:
+        raise ValueError(
+            f"unknown drop group(s) {unknown}: the drop groups are {list(drop_groups)}"
+        )
+
+    tables = [
+        table
+        for group, group_tables in drop_groups.items()
+        if group in requested
+        for table in group_tables
+    ]
+    dependents = [
+        table for table in dependent_tables(tables, factories) if table not in tables
+    ]
+    if len(dependents) == 0:
+        return tables
+
+    group_of = {
+        table: group
+        for group, group_tables in drop_groups.items()
+        for table in group_tables
+    }
+    asked = [group for group in drop_groups if group in requested]
+    to_add = [
+        group
+        for group in drop_groups
+        if group not in requested and any(group_of.get(t) == group for t in dependents)
+    ]
+    loose = [table for table in dependents if table not in group_of]
+    referrers = _names_of(tables, dependents)
+
+    additions = []
+    if len(to_add) > 0:
+        additions.append(f"`--drop {' '.join(to_add)}`")
+    if len(loose) > 0:
+        additions.append(
+            f"the table{'s' if len(loose) > 1 else ''} {_joined(loose)}, which no drop group holds"
+        )
+    raise ValueError(
+        f"cannot drop {_joined(asked)} alone: {_joined(referrers)} "
+        f"name{'s' if len(referrers) == 1 else ''} {'its' if len(asked) == 1 else 'their'} rows; "
+        f"add {' and '.join(additions)}"
+    )

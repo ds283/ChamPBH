@@ -213,6 +213,11 @@ these 15 open; they pass to whichever campaign takes them (`.documents/review-re
 - **[00-two-files-are-not-black-clean]** — `Datastore/SQL/ObjectFactories/base.py` and
   `CosmologyModels/LambdaCDM/Planck.py` at `f5896bb` (`black --check`, 2026-09-29). Housekeeping;
   reformat in a commit of their own, never inside a prompt's diff.
+  - **Narrowed (2026-10-12):** by `dk-and-rpk-migration` prompt 08, which deleted
+    `Datastore/SQL/ObjectFactories/base.py` with the rest of ChamPBH's datastore layer (the factories
+    now import `datastorekit.SQL.factory_base`). One file remains:
+    `CosmologyModels/LambdaCDM/Planck.py`, which `black --check` would still reformat at that
+    commit.
 - **[00-bbn-spline-domain-is-far-wider-than-prymordial-uses]** *(audit §2)* —
   `BBNData.py:47` tabulates from 100 MeV down to 0.1 eV; PRyMordial evaluates the callbacks from
   10 MeV to about 0.3 keV (`t_end = 10⁷ s`). The low end includes the matter-era re-delivery
