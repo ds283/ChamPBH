@@ -1,7 +1,7 @@
 # Log 04 — adopt `raypoolkit`
 
 **Subject:** Adopt raypoolkit's RayWorkPool and delete RayTools
-**Commit:** `this commit`, on branch `dk-and-rpk-migration`, on top of `64ef9aa` (code as at `12c82e8`)
+**Commit:** `303324b`, on branch `dk-and-rpk-migration`, on top of `64ef9aa` (code as at `12c82e8`)
 **Date:** 2026-10-12, by Claude Sonnet 5.5
 **Result:** **COMPLETE.**
 - W1: `RayTools/RayWorkPool.py` and `RayTools/__init__.py` deleted, and no `RayTools` directory
@@ -172,7 +172,7 @@ started, no driver was imported or run, and no store was opened. The venv was no
   commit changes only `prompts/dk-and-rpk-migration/README.md` (§6.5, 09's acceptance item 5) and the
   board's decisions section; it touches no code. This commit is on top of it. The measurements, the
   suites and the throwaway commits were made at `12c82e8`'s code, which `64ef9aa` leaves identical;
-  the script is also run at this commit (below).
+  the script is also run at `303324b` (below).
 - **Reading of §2.3.5** ("no test names `RayTools` or `RayWorkPool`"). `Datastore/tests/test_compare_stores.py:1163`
   is a comment in a fixture ("RayWorkPool and build.sh print; …"), added by 01. It imports and
   constructs nothing, so it is not a §4 stop, and the test is not edited.
@@ -323,7 +323,7 @@ change. Baselines are 03's (18 / 114 / 66).
 ## The deliberate-breakage record
 
 Each was applied to the working tree (on top of the staged change), shown to be caught, and
-reverted with `git apply -R`. Each diff `git apply --check`s on the clean tree at this commit and
+reverted with `git apply -R`. Each diff `git apply --check`s on the clean tree at `303324b` and
 `git apply -R --check`s on the mutated tree. Nothing was committed; the drivers' working tree
 equals the index after each.
 
@@ -431,11 +431,11 @@ import.
   (prompt 08) loses one line and needs no U12 exception.
 - Suites: 18 / 114 / 66, unchanged. The venv is as 03 left it (04 installed nothing).
 - The `raypoolkit` import is still unrun under real Ray: that is R1 (prompt 06).
-- **Rollback is `git revert` of this commit** and nothing in the venv (README §4.4): an installed
+- **Rollback is `git revert` of `303324b`** and nothing in the venv (README §4.4): an installed
   package that nothing imports is inert.
 - **The RayPoolKit G3 record**, for prompt 11 to carry into its draft for RayPoolKit's board (P16):
 
-> **RayPoolKit G3 holds for ChamPBH** (checklist item 8, items 1–5), at ChamPBH commit `this commit`
+> **RayPoolKit G3 holds for ChamPBH** (checklist item 8, items 1–5), at ChamPBH commit `303324b`
 > (branch `dk-and-rpk-migration`), 2026-10-12, by prompt 04:
 > 1. `RayTools/` is gone: `git ls-tree <commit> RayTools` is empty, and no `RayTools` directory is
 >    left in the working tree.
