@@ -1,6 +1,6 @@
 # dk-and-rpk-migration campaign — implementation state
 
-**Last updated:** 2026-10-12 · **Status: LIVE — 11 of 12 prompts written (01–10, 05a), 7 landed (01–06, 05a); R0 bitwise reproducible; R1 equals R0 bitwise; RayPoolKit G3 holds. P1–P17
+**Last updated:** 2026-10-12 · **Status: LIVE — 11 of 12 prompts written (01–10, 05a), 8 landed (01–07, 05a); R0 bitwise reproducible; R1 equals R0 bitwise; RayPoolKit G3 holds. P1–P17
 ruled; U5 ruled (README §6.6); U6 ruled (README §6.7): DatastoreKit `v0.3.0` is the pin (README §0.4).**
 The plan is [`README.md`](README.md), written on 2026-10-11 at `52142d7` with the user's rulings
 U1–U4. Prompts 01–04 are written once the user has reviewed it (README §2.1).
@@ -72,7 +72,7 @@ reads only what the specs declare. Measured at `12c82e8`, 09's list already cove
 | 05 | [Move ChamPBH's data out of the layer](05-move-champbh-data-out-of-the-layer.md) | `config/datastore.py`; the vectorized gets | Sonnet | ✍️ 2026-10-12 | ✅ 2026-10-12 | `8e77578` | [log](logs/05-move-champbh-data-out-of-the-layer.md) |
 | 05a | [Isolate the rehearsal cluster](05a-isolate-the-rehearsal-cluster.md) | **U5**; `ray_cluster.sh` | Sonnet | ✍️ 2026-10-12 | ✅ 2026-10-12 | `babd9d5` | [log](logs/05a-isolate-the-rehearsal-cluster.md) |
 | 06 | [Rehearse before the DatastoreKit swap (R1)](06-rehearse-before-the-datastore-swap.md) | **R1** | Opus | ✍️ 2026-10-12 | ✅ 2026-10-12 | `c9e6bc2` | [log](logs/06-rehearse-before-the-datastore-swap.md) |
-| 07 | [Pin `datastorekit` `v0.3.0`](07-pin-datastorekit-v0.3.0.md) | the DatastoreKit pin (**U3**, **U6**; `2f5417e`) | Sonnet | ✍️ 2026-10-12 | ⬜ | — | — |
+| 07 | [Pin `datastorekit` `v0.3.0`](07-pin-datastorekit-v0.3.0.md) | the DatastoreKit pin (**U3**, **U6**; `2f5417e`) | Sonnet | ✍️ 2026-10-12 | ✅ 2026-10-12 | this commit | [log](logs/07-pin-datastorekit-v0.3.0.md) |
 | 08 | [Adopt `datastorekit`](08-adopt-datastorekit.md) | the DatastoreKit swap; **U4** | Opus | ✍️ 2026-10-12 | ⬜ | — | — |
 | 09 | [Port the inventory](09-port-the-inventory.md) | `inventory_spec`, `tools/inventory_report.py`; coverage (§6.5) | Opus | ✍️ 2026-10-12 | ⬜ | — | — |
 | 10 | [Rehearse through both packages (R2)](10-rehearse-through-both-packages.md) | **R2**; **DatastoreKit G3** | Opus | ✍️ 2026-10-12 | ⬜ | — | — |
@@ -124,10 +124,10 @@ before each dispatch:
 | **L1**–**L4** (R1) | 06 | README §4.1 at 05's tree; each store equal to `02-reference.db`, bitwise; L4 against R0, the printed lines included | ✅ `c9e6bc2`: L1–L3 hold; **`06-reference.db` and `06-resumed.db` each `RESULT: equal` against `02-reference.db`, exit 0**, and against each other; schema agrees; L4: `compute` 5/5/5, 5/killed, 0/3/5 (lookups 5/3/5); the prune removed only `resumed-a`'s three unvalidated rows; the printed lines in R0's layout (verification §2) |
 | **V2** | 06 | `.documents/dk-and-rpk-migration-verification.md` §2 R1 | ✅ `c9e6bc2`: §2 R1 (§§2.1–2.8); `out/06-*` (11 files), `06-reference-schema.json` equal to R0's but for `source` |
 
-| **K4** | 07 | the `datastorekit` pin in `requirements.txt` | ⬜ |
-| **K5** | 07 | the venv installed from it | ⬜ |
-| **K6** | 07 | the proof: one distribution added, at `2f5417ea…`, the tag's files, not editable | ⬜ |
-| **K7** | 07 | U3 and U6 on the installed base: a two-hook subclass instantiates; ChamPBH's 27 registry entries rebuilt on it instantiate; `timestamp` defaults to `None` | ⬜ |
+| **K4** | 07 | the `datastorekit` pin in `requirements.txt` | ✅ this commit: one line at `:17`, between `cycler` and `diffrax`; the file is 101 lines |
+| **K5** | 07 | the venv installed from it | ✅ this commit: dry run and install report only `datastorekit-0.3.0`; `raypoolkit` re-resolved and left; nothing else moved |
+| **K6** | 07 | the proof: one distribution added, at `2f5417ea…`, the tag's files, not editable | ✅ this commit: freeze differs by one line; `pip check` clean; `direct_url.json` VCS, no `dir_info`; the 20 modules equal `git archive v0.3.0`, no `tests/`; import starts no Ray |
+| **K7** | 07 | U3 and U6 on the installed base: a two-hook subclass instantiates; ChamPBH's 27 registry entries rebuilt on it instantiate; `timestamp` defaults to `None` | ✅ this commit: script run against the installed package; 27 of 27 instantiate (3 classes define all three hooks, 20 none); `timestamp` `None` and read-only |
 | **A1** | 08 | the 7 layer modules deleted; the two `__init__.py` emptied (P6) | ⬜ |
 | **A2** | 08 | the layer imports rewritten by the module map; P9's two names from `datastorekit.contract` | ⬜ |
 | **A3** | 08 | the factories change nothing but those imports (U3) | ⬜ |
@@ -1072,3 +1072,28 @@ log of `--inventory`.
 - Board items K4–K7, A1–A9, I1–I5, L1–L4 (R2), V3 and H1 are added, and gate R2. 07 records
   `### 5.12`, 08 `### 5.13`, 09 `### 5.14`, 10 `### 5.15`. No issue opened;
   `.documents/OPEN_ISSUES.md` unchanged.
+
+### 5.12 After prompt 07 (2026-10-12)
+
+- **Landed:** this commit, log [`07-pin-datastorekit-v0.3.0.md`](logs/07-pin-datastorekit-v0.3.0.md).
+  **COMPLETE**: K4–K7; no §4 stop met; no code or test changed; no §3 issue opened.
+- **The pin.** `requirements.txt:17` is `datastorekit @ git+https://github.com/ds283/DatastoreKit@v0.3.0`,
+  between `cycler==0.12.1` and `diffrax==0.7.0`; the file has 101 lines.
+- **The venv** (shared, outside git). The dry run and the install each reported only
+  `datastorekit` (0.3.0); `raypoolkit` was re-resolved and left (its files keep mtime
+  `1791766684`). `pip freeze` differs from the saved one by exactly
+  `datastorekit @ git+https://github.com/ds283/DatastoreKit@2f5417ea76cdcd0d15d64d80d9085429bfacad21`;
+  `pip check` is clean. `direct_url.json` is a VCS record at that commit, requested `v0.3.0`, with
+  no `dir_info`. The 20 non-test modules equal `git archive v0.3.0`'s byte for byte and `tests/` is
+  not installed. Pip's `Resolved … to commit bf0a3b25…` is the tag object, not the commit.
+- **Provenance line:** `>> packages: datastorekit 0.3.0
+  (https://github.com/ds283/DatastoreKit@2f5417ea76cdcd0d15d64d80d9085429bfacad21, requested
+  v0.3.0); raypoolkit 0.2.0
+  (https://github.com/ds283/RayPoolKit@eaef0ce60e2fc354bb32f0ad576010e6a83c1976, requested v0.2.0)`.
+- **K7, on the installed package** (script in the log): a `register`+`build` subclass instantiates
+  and a `register`-only one raises `TypeError` naming `build`; all 27 registry entries (23 classes),
+  rebuilt on the installed base, instantiate (3 classes define `store`, `validate` and
+  `validate_on_startup`; 20 define none); `DatastoreObject.timestamp` is `None` and read-only.
+- **Suites** (after the install): 18 / 114 (61 + 53) / 73, unchanged. Nothing imports the package.
+- **Rollback:** `git revert` of this commit **plus** `./venv/bin/pip uninstall -y datastorekit`
+  (README §4.4); the venv is not in git.
