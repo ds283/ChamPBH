@@ -1,7 +1,7 @@
 # Log 08 — adopt `datastorekit`
 
 **Subject:** Adopt datastorekit and delete ChamPBH's datastore layer
-**Commit:** this commit, on branch `dk-and-rpk-migration`, on top of `63f60e1` (code as at `617a1dc`)
+**Commit:** `857ec73`, on branch `dk-and-rpk-migration`, on top of `63f60e1` (code as at `617a1dc`)
 **Date:** 2026-10-12, by Claude Opus 5.5
 **Result:** **COMPLETE.** No §4 stop condition was met.
 - A1: the 7 layer modules `git rm`'d; `Datastore/__init__.py` and `Datastore/SQL/__init__.py` are
@@ -1222,7 +1222,7 @@ measurements. The one issue opened is A9.4's `[08-plot-scripts-open-read-write-p
 
 ## State handed to the next prompt
 
-- `HEAD` is this commit on `dk-and-rpk-migration`, on top of `63f60e1`; planning and orchestration
+- `HEAD` is `857ec73` on `dk-and-rpk-migration`, on top of `63f60e1`; planning and orchestration
   commits may land after it. No tracked change is left; the untracked entries of prompt 01's gate are
   not this campaign's.
 - **The layer is gone.** `Datastore/object.py`, `Datastore/SQL/{ClientPool,Datastore,ProfileAgent,
@@ -1271,7 +1271,7 @@ measurements. The one issue opened is A9.4's `[08-plot-scripts-open-read-write-p
   in Observation 3; `CLAUDE.md`'s test commands.
 - **The venv** is as 07 left it (`datastorekit` 0.3.0, `raypoolkit` 0.2.0); nothing was installed.
   No Ray was started; no store was opened but temporary ones.
-- **Rollback** is `git revert` of this commit alone; nothing in the venv (README §4.4). The
+- **Rollback** is `git revert` of `857ec73` alone; nothing in the venv (README §4.4). The
   installed `datastorekit` stays, and is inert once nothing imports it.
 - **Nothing here has run under real Ray.** The package's pool, actors and broker in a real cluster,
   and a store built through them, are R2 (prompt 10), after 09.
