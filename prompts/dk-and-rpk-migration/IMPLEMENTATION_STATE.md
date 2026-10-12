@@ -1,6 +1,6 @@
 # dk-and-rpk-migration campaign — implementation state
 
-**Last updated:** 2026-10-12 · **Status: LIVE — 7 of 12 prompts written (01–06, 05a), 7 landed (01–06, 05a); R0 bitwise reproducible; R1 equals R0 bitwise; RayPoolKit G3 holds. P1–P17
+**Last updated:** 2026-10-12 · **Status: LIVE — 11 of 12 prompts written (01–10, 05a), 7 landed (01–06, 05a); R0 bitwise reproducible; R1 equals R0 bitwise; RayPoolKit G3 holds. P1–P17
 ruled; U5 ruled (README §6.6); U6 ruled (README §6.7): DatastoreKit `v0.3.0` is the pin (README §0.4).**
 The plan is [`README.md`](README.md), written on 2026-10-11 at `52142d7` with the user's rulings
 U1–U4. Prompts 01–04 are written once the user has reviewed it (README §2.1).
@@ -72,10 +72,10 @@ reads only what the specs declare. Measured at `12c82e8`, 09's list already cove
 | 05 | [Move ChamPBH's data out of the layer](05-move-champbh-data-out-of-the-layer.md) | `config/datastore.py`; the vectorized gets | Sonnet | ✍️ 2026-10-12 | ✅ 2026-10-12 | `8e77578` | [log](logs/05-move-champbh-data-out-of-the-layer.md) |
 | 05a | [Isolate the rehearsal cluster](05a-isolate-the-rehearsal-cluster.md) | **U5**; `ray_cluster.sh` | Sonnet | ✍️ 2026-10-12 | ✅ 2026-10-12 | `babd9d5` | [log](logs/05a-isolate-the-rehearsal-cluster.md) |
 | 06 | [Rehearse before the DatastoreKit swap (R1)](06-rehearse-before-the-datastore-swap.md) | **R1** | Opus | ✍️ 2026-10-12 | ✅ 2026-10-12 | `c9e6bc2` | [log](logs/06-rehearse-before-the-datastore-swap.md) |
-| 07 | Pin `datastorekit` `v0.3.0` | the DatastoreKit pin (**U3**, **U6**; `2f5417e`) | Sonnet | ⬜ | ⬜ | — | — |
-| 08 | Adopt `datastorekit` | the DatastoreKit swap; **U4** | Opus | ⬜ | ⬜ | — | — |
-| 09 | Port the inventory | `inventory_spec`, `tools/inventory_report.py` | Opus | ⬜ | ⬜ | — | — |
-| 10 | Rehearse through both packages (R2) | **R2**; **DatastoreKit G3** | Opus | ⬜ | ⬜ | — | — |
+| 07 | [Pin `datastorekit` `v0.3.0`](07-pin-datastorekit-v0.3.0.md) | the DatastoreKit pin (**U3**, **U6**; `2f5417e`) | Sonnet | ✍️ 2026-10-12 | ⬜ | — | — |
+| 08 | [Adopt `datastorekit`](08-adopt-datastorekit.md) | the DatastoreKit swap; **U4** | Opus | ✍️ 2026-10-12 | ⬜ | — | — |
+| 09 | [Port the inventory](09-port-the-inventory.md) | `inventory_spec`, `tools/inventory_report.py`; coverage (§6.5) | Opus | ✍️ 2026-10-12 | ⬜ | — | — |
+| 10 | [Rehearse through both packages (R2)](10-rehearse-through-both-packages.md) | **R2**; **DatastoreKit G3** | Opus | ✍️ 2026-10-12 | ⬜ | — | — |
 | 11 | Close the migration | documents, handover, close | Sonnet | ⬜ | ⬜ | — | — |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
@@ -84,7 +84,7 @@ reads only what the specs declare. Measured at `12c82e8`, 09's list already cove
 - **01–04** are written after the user's review of the plan.
 - **05–06** are written after 02's review: R0's reproducibility sets R1's criterion.
 - **05a** is written after 05's review, for U5. 06 waits on it.
-- **07–10** are written after 06's review (`v0.3.0`, the pin, is released; U6).
+- **07–10** are written after 06's review (`v0.3.0`, the pin, is released; U6). *Written 2026-10-12 (§5.11).*
 - **11** is written after 10's review.
 
 Orchestrator notes are written one prompt at a time, in [`orchestrator/`](orchestrator/), just
@@ -124,7 +124,29 @@ before each dispatch:
 | **L1**–**L4** (R1) | 06 | README §4.1 at 05's tree; each store equal to `02-reference.db`, bitwise; L4 against R0, the printed lines included | ✅ `c9e6bc2`: L1–L3 hold; **`06-reference.db` and `06-resumed.db` each `RESULT: equal` against `02-reference.db`, exit 0**, and against each other; schema agrees; L4: `compute` 5/5/5, 5/killed, 0/3/5 (lookups 5/3/5); the prune removed only `resumed-a`'s three unvalidated rows; the printed lines in R0's layout (verification §2) |
 | **V2** | 06 | `.documents/dk-and-rpk-migration-verification.md` §2 R1 | ✅ `c9e6bc2`: §2 R1 (§§2.1–2.8); `out/06-*` (11 files), `06-reference-schema.json` equal to R0's but for `source` |
 
-Items of 07–11 are added when they are written.
+| **K4** | 07 | the `datastorekit` pin in `requirements.txt` | ⬜ |
+| **K5** | 07 | the venv installed from it | ⬜ |
+| **K6** | 07 | the proof: one distribution added, at `2f5417ea…`, the tag's files, not editable | ⬜ |
+| **K7** | 07 | U3 and U6 on the installed base: a two-hook subclass instantiates; ChamPBH's 27 registry entries rebuilt on it instantiate; `timestamp` defaults to `None` | ⬜ |
+| **A1** | 08 | the 7 layer modules deleted; the two `__init__.py` emptied (P6) | ⬜ |
+| **A2** | 08 | the layer imports rewritten by the module map; P9's two names from `datastorekit.contract` | ⬜ |
+| **A3** | 08 | the factories change nothing but those imports (U3) | ⬜ |
+| **A4** | 08 | the three pools take `factories=`, `serial_batch_sizes=` (and `drop_tables=`); `LambdaCDM` out (P8) | ⬜ |
+| **A5** | 08 | U4: `tables_to_drop`, refusing before Ray, naming the groups to add | ⬜ |
+| **A6** | 08 | the harness on the package's actor, through ChamPBH's copy of the stand-in cluster | ⬜ |
+| **A7** | 08 | the tests the package carries deleted (4 + 2), and the 3 layer-identity tests; `_registry()`'s fallback removed | ⬜ |
+| **A8** | 08 | new tests: tables declared, pools given the config, U4, the cycle gone, `--inventory` refusing | ⬜ |
+| **A9** | 08 | `--inventory` refuses (P12); the refresh route (P13); prose (P14); the issue moves | ⬜ |
+| **I1** | 09 | `inventory_spec()` on the 21 owners; `inventory_classes` accepts the registry | ⬜ |
+| **I2** | 09 | `tools/inventory_report.py` (P15) | ⬜ |
+| **I3** | 09 | `main.py --inventory` read-only, before Ray | ⬜ |
+| **I4** | 09 | the six `inventory()` hooks and `inventory_config` deleted | ⬜ |
+| **I5** | 09 | coverage: every registered class has a spec, is read through one, or is excluded with a reason (§6.5) | ⬜ |
+| **L1**–**L4** (R2) | 10 | README §4.1 at 09's tree; each store equal to `06-reference.db`, bitwise; L4 against R1 | ⬜ |
+| **V3** | 10 | `.documents/dk-and-rpk-migration-verification.md` §3 R2 | ⬜ |
+| **H1** | 10 | the R2 stores by the package's tools: the shard-key audit; a copy that opens read-only, compares equal and is deleted by `delete_store` | ⬜ |
+
+Items of 11 are added when it is written.
 
 The measurement the plan was written against is [`measure/out/`](measure/out/): both packages'
 scripts at `52142d7`, each equal to its checklist's appendix byte for byte; the three roots'
@@ -137,6 +159,7 @@ counts (18 / 114 / 35); and the venv's `pip freeze` (README §0.2).
 | R0 | the start tree builds the pilot, resumes it, and its readers run (README §4.1); its reproducibility is measured (§4.3) | 02 | ✅ **holds** 2026-10-12 (`6cbf953`): bitwise reproducible, so R1 and R2 are held to bitwise equality with `02-reference.db` (P4) |
 | RayPoolKit G3 | `RayTools/` is gone, 0 imports, the pin is installed, the three roots pass, all 17 sites construct (RayPoolKit checklist item 8) | 04 (R1, 06, adds the run under real Ray) | ✅ **holds** 2026-10-12 (`303324b`), by checklist item 8, items 1–5; item 6 is 11's (P16). R1 (06) ran it under real Ray 2.53.0: three builds and three readers, stores equal to R0's, printed lines in R0's layout |
 | R1 | 05's tree equals R0 by value | 06 | ✅ **holds** 2026-10-12 (`c9e6bc2`): both R1 stores equal `02-reference.db` bitwise (`RESULT: equal`, exit 0); R2 is held to equality with `06-reference.db` |
+| R2 | 09's tree, through both packages, equals R1 by value | 10 | ⬜ |
 | DatastoreKit `v0.2.3` | tagged on DatastoreKit's remote, with `store`, `validate` and `validate_on_startup` defaulted (U3; made in DatastoreKit, not here) | — (07 pins it) | ✅ **released** 2026-10-11: tag object `8dac562`, commit `0de2b16`, checked on the remote and by `git show` of `factory_base.py` (README §0.3) |
 | DatastoreKit `v0.3.0` | tagged on DatastoreKit's remote; the pin (U6) | — (07 pins it) | ✅ **released** 2026-10-12: tag object `bf0a3b2`, commit `2f5417e`, checked on the remote; only `datastorekit/object.py` changed in the package since `v0.2.3` (README §0.4) |
 | DatastoreKit G3 | the 9 layer files are gone (two emptied, P6), the pin is installed, the three roots pass, and a pilot store rebuilt through the package (R2) equals R1 by value | 08, 09, 10 | ⬜ |
@@ -996,3 +1019,56 @@ opened. The residue is fixed in this follow-up (records only).
   - Prune reports may be deduplicated by Ray in the driver's log; 10 reads Ray's worker logs
     (`session_*/logs/old/` after the job ends) before its `stop`, or relies on the label counts.
   - 07–10 can be written (README §2.1), with `v0.3.0` the pin (U6).
+
+### 5.11 Prompts 07–10 written (2026-10-12)
+
+Written after 06's review (`fa874a5`), from a read-only measurement that day: ChamPBH at `fa874a5`,
+DatastoreKit at the tag `v0.3.0` (`git show`; its working tree is ahead), SecondaryGWKit at
+`a5a6f6d`. Nothing was changed in any repository and no store was opened but the R1 readers' text
+log of `--inventory`.
+- **07** is 03 for DatastoreKit: the pin between `cycler` (`requirements.txt:16`) and `diffrax`
+  (`:17`); the tag `bf0a3b2` / `2f5417e`; 20 non-test files installed, 54 under `tests/` not. K7 adds
+  to the charter's U3 check a stronger one: each of ChamPBH's 27 registry entries, rebuilt on the
+  installed base from its class's own namespace, instantiates.
+- **08.** DatastoreKit's script at `fa874a5` counts 43 layer imports in 39 files (42 in 38 outside
+  `prompts/`), one nested and one `import_module` call. The measurement found four things the charter
+  did not cover, and README §2.2 is amended for them:
+  - `Datastore/tests/test_datastore_config.py` (05) imports the layer at module level, its
+    `TestLayerReadsConfig` (3 tests) asserts the layer's aliases, and its batch-size literal holds
+    `LambdaCDM`. The three tests are deleted and replaced by an `ast` test that each pool is given
+    `config.datastore`'s objects, so the Datastore count is 73 − 4 − 2 − 3 + 08's tests.
+  - `test_compare_stores.py`'s `_registry()` falls back to the layer; the fallback goes.
+  - **The package's actor needs a serial broker**, and its tests supply one from
+    `datastorekit/tests/standin_pool.py`, which the wheel does not ship. ChamPBH keeps its own copy
+    (adoption README §3), changed only to open ChamPBH's registry; the harness, 08's schema check and
+    09's test stores are built through it, with no Ray.
+  - Test a reads `_version.store_id`, which the package's actor does not have: the one test body
+    that changes.
+
+  U4's refusal is `config.datastore.tables_to_drop`, after SGK's, over `dependent_tables`, before
+  `ray.init`. 08 closes `[05-config-datastore-cannot-be-imported-before-the-layer]`, narrows
+  `[00-two-files-are-not-black-clean]` and opens `[08-plot-scripts-open-read-write-pools]` (P11). It
+  leaves `tools/compare_stores.py` unchanged (README §4), though its comments cite the deleted
+  layer's lines: those are 11's.
+- **09.** All 21 owners' specs follow from their lookups, with polymorphic parents for
+  `ScalarModel`'s three type/serial pairs (DatastoreKit's `Parent(type_column=, types=)`; the maps are
+  `tools/compare_stores.py`'s). README §6.5's count holds: 21 owners and 6 tag and value tables are
+  all 27 entries. Two points of P15 cannot be met as written, and the charter is amended:
+  - the package's inventory has one timestamp range per class, and records carry none, so the report
+    gives the class's range, not one per validated group;
+  - `failure` (`ScalarModel`) and `PRyM_version` (`BBNData`) are declared as leaves beyond the
+    lookups, so that the report can show them; the stored `label` is not, since it carries the job
+    name and time. Today's report never printed `PRyM_version`; the new one does.
+
+  Today's `--inventory` was not read-only (it opened a read-write pool after `ray.init`, pruning by
+  default and creating an absent store); the new one reads a closed store before Ray. The charter's
+  `units` argument is dropped: each stored `value_<unit>` is already in its default unit.
+- **10** is 06 at 09's tree, held to `RESULT: equal` against `06-reference.db` for both stores and
+  against `02-reference.db` for `reference`. It carries R1's facts: exit 134; `S` aimed about 3 s
+  earlier than `reference`'s first row, since R1's 6 s let `resumed-a` store all five; the prune
+  reports read from the actors' logs before the stop. H1 runs the package's store tools: the
+  shard-key audit, a `sharded_store copy` that opens read-only and compares equal, and its deletion
+  by `delete_store`. The board records DatastoreKit's G3 when 10 holds.
+- Board items K4–K7, A1–A9, I1–I5, L1–L4 (R2), V3 and H1 are added, and gate R2. 07 records
+  `### 5.12`, 08 `### 5.13`, 09 `### 5.14`, 10 `### 5.15`. No issue opened;
+  `.documents/OPEN_ISSUES.md` unchanged.

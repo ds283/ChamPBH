@@ -22,7 +22,8 @@ user's rulings U1–U4 of the same day (§6.1).
 
 §0.2 re-measures both checklists at `52142d7`. §2 fixes each prompt's charter and acceptance.
 **Prompts 01–04 are written** (2026-10-11, after the user's review), **05–06** (2026-10-12,
-after 02's and 04's reviews), and **05a** (2026-10-12, for U5); the rest follow in batches (§2.1). The user ruled on the proposals of §6.2 on 2026-10-11: all accepted, P2 amended, P9 after
+after 02's and 04's reviews), **05a** (2026-10-12, for U5), and **07–10** (2026-10-12, after
+06's review); 11 follows 10's review (§2.1). The user ruled on the proposals of §6.2 on 2026-10-11: all accepted, P2 amended, P9 after
 §6.3's explanation.
 
 *Revised 2026-10-11, the same day, when the user reopened U3 (§6.1). The first draft registered the
@@ -41,6 +42,13 @@ DatastoreKit **`v0.3.0`**, not `v0.2.3`. `v0.3.0` carries `v0.2.3`'s change unch
 an optional, read-only `timestamp` on the package's `DatastoreObject` (§0.4). §0, §0.4, §2, §2.1,
 07's and 08's charters, §4 and §6.7 amended. No prompt already written changes: 06 runs on
 ChamPBH's own layer.*
+
+*Revised 2026-10-12, after 06's review, when 07–10 were written from a read-only measurement at
+`fa874a5`. §2.2's charters for 08 and 09 are amended where the measurement found them short: 08
+also changes `test_datastore_config.py` and `test_compare_stores.py`, which 05 made depend on the
+old layer, and keeps ChamPBH's own copy of the package's stand-in cluster for its harness; 09 gives
+one timestamp range per class and declares two leaves beyond the lookups, for P15. Each amendment
+is marked where it is made.*
 
 ## 0. Why this campaign exists
 
@@ -315,7 +323,7 @@ carries the previous review's findings:
 - **05a** follows 05's review and the ruling U5. *Written 2026-10-12.* 06 waits on it.
 - **07–10** follow 06's review: 06's log fixes the counts and names they cite. `v0.3.0`'s tag and
   commit are §0.4's (U6); its ChamPBH checklist addenda, `v0.2.3`'s and `v0.3.0`'s, are read when
-  07 and 08 are written.
+  07 and 08 are written. *Written 2026-10-12, after 06's review (`fa874a5`).*
 - **11** follows 10's review.
 
 `v0.2.3` was released on 2026-10-11 with what the brief asked (§0.3), and `v0.3.0`, the pin (U6),
@@ -511,10 +519,19 @@ checklist's `v0.2.3` and `v0.3.0` addenda, and re-checks the tag on the remote b
      gets the `version` row for the label and calls `set_version` with its serial, as the pool
      does. The worked example is the package's `test_version_keyed_lookups.TestTheActor`, read in
      DatastoreKit's repository and not imported. Its five importers change only their imports, if
-     at all.
+     at all. *Amended 2026-10-12:* the package's actor needs a serial broker, which its tests supply
+     from `datastorekit/tests/standin_pool.py`, which the wheel does not ship. ChamPBH keeps its own
+     copy, `Datastore/tests/standin_pool.py`, from the tag, changed only to open ChamPBH's registry
+     (adoption README §3); the harness and 09's test stores are built through it. Test a's read of
+     `_version.store_id`, which the package's actor lacks, is the one test body that changes.
   7. **The tests the package carries.** `test_shard_key_assignment.py` (4) is deleted; the package
      pins the same fix. In `test_version_keyed_lookups.py`, d2 and d4 (layer tests the package
-     carries) are deleted; a, b, c1–c3, d, d3, e and f stay.
+     carries) are deleted; a, b, c1–c3, d, d3, e and f stay. *Amended 2026-10-12:* 05's
+     `test_datastore_config.py` imports the layer at module level, and its `TestLayerReadsConfig`
+     (3 tests) asserts that the layer's names are `config.datastore`'s objects: the imports go, the
+     three tests are deleted (there is no layer to read the config), and its batch-size literal loses
+     `LambdaCDM` (P8). A new test that each pool is given `config.datastore`'s objects takes their
+     place. `test_compare_stores.py`'s `_registry()` loses its fallback to the layer.
   8. **`--inventory`** prints that it is unavailable until 09 and exits non-zero, before Ray
      starts (P12). The four `pool.inventory` calls and their helpers are deleted.
   9. **The refresh route.** `pipeline_selection.BBN_REFRESH_ROUTE` names
@@ -527,7 +544,8 @@ checklist's `v0.2.3` and `v0.3.0` addenda, and re-checks the tag on the remote b
      string literals and 0 `import_module` calls naming a layer module; `prompts/` still holds its
      one. No import of `config.version`'s two moved names remains.
   2. **The suites.** Datastore gives exactly 05's count − 4 − 2 + the tests 08 adds; the log derives
-     it by module. ComputeTargets and CosmologyModels give 05's counts. `black --check` is clean on
+     it by module. *Amended 2026-10-12:* 05's count − 4 − 2 − 3 (item 7's amendment) + the tests 08
+     adds. ComputeTargets and CosmologyModels give 05's counts. `black --check` is clean on
      every touched file.
   3. **Without Ray:** `config.datastore` imports, so all 27 registry entries are built on the
      package's base; `python -m datastorekit.tools.sharded_store --help` exits 0. The drivers
@@ -548,7 +566,10 @@ checklist's `v0.2.3` and `v0.3.0` addenda, and re-checks the tag on the remote b
      their tags and value tables. Every class a spec depends on declares one (contract §4). The
      package reads it by `getattr` on the registry entry, so an instance method serves. Which
      columns are leaves and which are parents is the prompt's to derive from each factory's `build`
-     lookup, and is recorded in the log, table by table.
+     lookup, and is recorded in the log, table by table. *Amended 2026-10-12 (P15):* beyond the
+     lookups, `ScalarModel` declares `failure` and `BBNData` declares `PRyM_version` as leaves, the
+     two fields P15 needs that a lookup does not fix; the stored `label`, which carries the job name
+     and time, is not a leaf.
   2. A new `tools/inventory_report.py`, `format_inventory_report(inventory, db_name, units,
      verbose=False)`, renders a `StoreInventory` and reads nothing itself. It is modelled on SGK's
      `tools/inventory_report.py`, read in that repository and not imported. It shows at least what
@@ -556,6 +577,9 @@ checklist's `v0.2.3` and `v0.3.0` addenda, and re-checks the tag on the remote b
      default unit; for `ScalarModel`, `AdiabaticHistory` and `BBNData`, validated and unvalidated
      counts, version labels, timestamp ranges and each record by its physical labels (T_init,
      T_stop, φ*, π*, failure, and `PRyM_version` for BBN); and every named problem, never truncated.
+     *Amended 2026-10-12:* the package's inventory carries one timestamp range per class, not one per
+     validated group, and records hold no timestamp, so the report gives the class's range. The
+     `units` argument is dropped: each stored `value_<unit>` column is already in its default unit.
   3. `main.py --inventory` reads the closed store with `read_inventory(args.database,
      factories)` **before `ray.init`**, prints the report, and exits. `--show-all` maps to
      `verbose`. `--inventory` with `--drop` is refused.
