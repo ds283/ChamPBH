@@ -50,10 +50,11 @@ Run from the repository root.
                   four ports is already held, releases the lock and exits 4, starting nothing.
                   Prints the cluster's address and the command that lists its actors.
   stop            stop ChamPBH's processes (SIGTERM to every process naming /tmp/ray-cpbh, to
-                  Ray's client server on 6380, and to their descendants; a grace period of
-                  $RAY_CLUSTER_GRACE seconds, default 15; then SIGKILL), confirm none is left and
-                  all four ports (6380, 6381, 8267, 52367) are free, then release the lock if its
-                  owner is ChamPBH's. Touches nothing if the lock is another project's.
+                  the Ray client server whose address is 127.0.0.1:6380, and to their
+                  descendants; a grace period of $RAY_CLUSTER_GRACE seconds, default 15; then
+                  SIGKILL), confirm none is left and all four ports (6380, 6381, 8267, 52367) are
+                  free, then release the lock if its owner is ChamPBH's. Touches nothing if the
+                  lock is another project's.
   status          the lock, its owner file, whether the owner's pid is alive, ChamPBH's processes
                   and its four ports.
 
@@ -201,6 +202,12 @@ alive() { kill -0 "$1" 2>/dev/null; }
 stop_cluster() {
     # stop_cluster DIR GCS_PORT CLIENT_PORT DASHBOARD_PORT AGENT_PORT. Returns 0 when nothing is
     # left and all four ports are free. (Prompt 05a, change 3: SI's checks the GCS port alone.)
+    # All five arguments are required, as in SI's script at 8e04a7c: without the check, set -u
+    # makes a shorter call abort the shell that sourced this script, not return.
+    if [ $# -ne 5 ]; then
+        err "usage: stop_cluster DIR GCS_PORT CLIENT_PORT DASHBOARD_PORT AGENT_PORT"
+        return 2
+    fi
     local dir="$1" port="$2" ports="$2 $3 $4 $5" pids p remaining left i n q held
     pids="$(list_cluster_pids "$dir" "$port" | tr '\n' ' ')"
     pids="${pids% }"
