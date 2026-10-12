@@ -72,7 +72,7 @@ reads only what the specs declare. Measured at `12c82e8`, 09's list already cove
 | 05 | [Move ChamPBH's data out of the layer](05-move-champbh-data-out-of-the-layer.md) | `config/datastore.py`; the vectorized gets | Sonnet | ✍️ 2026-10-12 | ✅ 2026-10-12 | `8e77578` | [log](logs/05-move-champbh-data-out-of-the-layer.md) |
 | 05a | [Isolate the rehearsal cluster](05a-isolate-the-rehearsal-cluster.md) | **U5**; `ray_cluster.sh` | Sonnet | ✍️ 2026-10-12 | ✅ 2026-10-12 | `babd9d5` | [log](logs/05a-isolate-the-rehearsal-cluster.md) |
 | 06 | [Rehearse before the DatastoreKit swap (R1)](06-rehearse-before-the-datastore-swap.md) | **R1** | Opus | ✍️ 2026-10-12 | ✅ 2026-10-12 | `c9e6bc2` | [log](logs/06-rehearse-before-the-datastore-swap.md) |
-| 07 | [Pin `datastorekit` `v0.3.0`](07-pin-datastorekit-v0.3.0.md) | the DatastoreKit pin (**U3**, **U6**; `2f5417e`) | Sonnet | ✍️ 2026-10-12 | ✅ 2026-10-12 | this commit | [log](logs/07-pin-datastorekit-v0.3.0.md) |
+| 07 | [Pin `datastorekit` `v0.3.0`](07-pin-datastorekit-v0.3.0.md) | the DatastoreKit pin (**U3**, **U6**; `2f5417e`) | Sonnet | ✍️ 2026-10-12 | ✅ 2026-10-12 | `617a1dc` | [log](logs/07-pin-datastorekit-v0.3.0.md) |
 | 08 | [Adopt `datastorekit`](08-adopt-datastorekit.md) | the DatastoreKit swap; **U4** | Opus | ✍️ 2026-10-12 | ⬜ | — | — |
 | 09 | [Port the inventory](09-port-the-inventory.md) | `inventory_spec`, `tools/inventory_report.py`; coverage (§6.5) | Opus | ✍️ 2026-10-12 | ⬜ | — | — |
 | 10 | [Rehearse through both packages (R2)](10-rehearse-through-both-packages.md) | **R2**; **DatastoreKit G3** | Opus | ✍️ 2026-10-12 | ⬜ | — | — |
@@ -96,6 +96,7 @@ before each dispatch:
 - [`orchestrator/prompt-05.md`](orchestrator/prompt-05.md) (`891ae82`) — used for 05.
 - [`orchestrator/prompt-05a.md`](orchestrator/prompt-05a.md) (`b114692`) — used for 05a.
 - [`orchestrator/prompt-06.md`](orchestrator/prompt-06.md) (`5bb2be6`) — used for 06.
+- [`orchestrator/prompt-07.md`](orchestrator/prompt-07.md) (`4f3f44d`) — used for 07.
 
 ### 1.1 Items
 
@@ -124,10 +125,10 @@ before each dispatch:
 | **L1**–**L4** (R1) | 06 | README §4.1 at 05's tree; each store equal to `02-reference.db`, bitwise; L4 against R0, the printed lines included | ✅ `c9e6bc2`: L1–L3 hold; **`06-reference.db` and `06-resumed.db` each `RESULT: equal` against `02-reference.db`, exit 0**, and against each other; schema agrees; L4: `compute` 5/5/5, 5/killed, 0/3/5 (lookups 5/3/5); the prune removed only `resumed-a`'s three unvalidated rows; the printed lines in R0's layout (verification §2) |
 | **V2** | 06 | `.documents/dk-and-rpk-migration-verification.md` §2 R1 | ✅ `c9e6bc2`: §2 R1 (§§2.1–2.8); `out/06-*` (11 files), `06-reference-schema.json` equal to R0's but for `source` |
 
-| **K4** | 07 | the `datastorekit` pin in `requirements.txt` | ✅ this commit: one line at `:17`, between `cycler` and `diffrax`; the file is 101 lines |
-| **K5** | 07 | the venv installed from it | ✅ this commit: dry run and install report only `datastorekit-0.3.0`; `raypoolkit` re-resolved and left; nothing else moved |
-| **K6** | 07 | the proof: one distribution added, at `2f5417ea…`, the tag's files, not editable | ✅ this commit: freeze differs by one line; `pip check` clean; `direct_url.json` VCS, no `dir_info`; the 20 modules equal `git archive v0.3.0`, no `tests/`; import starts no Ray |
-| **K7** | 07 | U3 and U6 on the installed base: a two-hook subclass instantiates; ChamPBH's 27 registry entries rebuilt on it instantiate; `timestamp` defaults to `None` | ✅ this commit: script run against the installed package; 27 of 27 instantiate (3 classes define all three hooks, 20 none); `timestamp` `None` and read-only |
+| **K4** | 07 | the `datastorekit` pin in `requirements.txt` | ✅ `617a1dc`: one line at `:17`, between `cycler` and `diffrax`; the file is 101 lines |
+| **K5** | 07 | the venv installed from it | ✅ `617a1dc`: dry run and install report only `datastorekit-0.3.0`; `raypoolkit` re-resolved and left; nothing else moved |
+| **K6** | 07 | the proof: one distribution added, at `2f5417ea…`, the tag's files, not editable | ✅ `617a1dc`: freeze differs by one line; `pip check` clean; `direct_url.json` VCS, no `dir_info`; the 20 modules equal `git archive v0.3.0`, no `tests/`; import starts no Ray |
+| **K7** | 07 | U3 and U6 on the installed base: a two-hook subclass instantiates; ChamPBH's 27 registry entries rebuilt on it instantiate; `timestamp` defaults to `None` | ✅ `617a1dc`: script run against the installed package; 27 of 27 instantiate (3 classes define all three hooks, 20 none); `timestamp` `None` and read-only |
 | **A1** | 08 | the 7 layer modules deleted; the two `__init__.py` emptied (P6) | ⬜ |
 | **A2** | 08 | the layer imports rewritten by the module map; P9's two names from `datastorekit.contract` | ⬜ |
 | **A3** | 08 | the factories change nothing but those imports (U3) | ⬜ |
@@ -1075,7 +1076,7 @@ log of `--inventory`.
 
 ### 5.12 After prompt 07 (2026-10-12)
 
-- **Landed:** this commit, log [`07-pin-datastorekit-v0.3.0.md`](logs/07-pin-datastorekit-v0.3.0.md).
+- **Landed:** `617a1dc`, log [`07-pin-datastorekit-v0.3.0.md`](logs/07-pin-datastorekit-v0.3.0.md).
   **COMPLETE**: K4–K7; no §4 stop met; no code or test changed; no §3 issue opened.
 - **The pin.** `requirements.txt:17` is `datastorekit @ git+https://github.com/ds283/DatastoreKit@v0.3.0`,
   between `cycler==0.12.1` and `diffrax==0.7.0`; the file has 101 lines.
@@ -1095,5 +1096,62 @@ log of `--inventory`.
   rebuilt on the installed base, instantiate (3 classes define `store`, `validate` and
   `validate_on_startup`; 20 define none); `DatastoreObject.timestamp` is `None` and read-only.
 - **Suites** (after the install): 18 / 114 (61 + 53) / 73, unchanged. Nothing imports the package.
-- **Rollback:** `git revert` of this commit **plus** `./venv/bin/pip uninstall -y datastorekit`
+- **Rollback:** `git revert` of `617a1dc` **plus** `./venv/bin/pip uninstall -y datastorekit`
   (README §4.4); the venv is not in git.
+
+**Orchestrator review of prompt 07 (2026-10-12)**, by orchestrator note
+[`prompt-07.md`](orchestrator/prompt-07.md), at `617a1dc`. All eleven checks pass, and no issue is
+opened. The residue is fixed in this follow-up.
+- **(1) Scope.** 3 files: `requirements.txt`, the log and the board. The index is untouched, the
+  untracked set is unchanged, and `617a1dc` is the only commit since the note.
+- **(2) K4.** One added line at `:17`, between `cycler==0.12.1` and `diffrax==0.7.0`; the file
+  now has 101 lines.
+- **(3) The freeze, read from the venv.** It differs from the **committed**
+  `measure/out/52142d7-pip-freeze.txt` by exactly two added lines, `datastorekit` at `2f5417ea…`
+  (`:17`) and 03's `raypoolkit` at `eaef0ce6…`, and from the orchestrator's pre-dispatch copy by
+  the `datastorekit` line alone. `pip check` is clean. RayPoolKit's dist-info and four modules keep
+  mtime `1791766684`: it was re-resolved, not reinstalled.
+- **(4) The origin.** `direct_url.json`, read in site-packages, is a VCS record: `url`
+  `https://github.com/ds283/DatastoreKit`, `commit_id` `2f5417ea…`, `requested_revision` `v0.3.0`,
+  and no `dir_info`. `INSTALLER` is `pip`. site-packages differs from the pre-dispatch listing by
+  `datastorekit/` and `datastorekit-0.3.0.dist-info/` only; the only `.pth` is still setuptools'.
+- **(5) The files.** The tag's archive was extracted afresh and compared with the installed
+  package, `__pycache__` aside: the same 20 `.py` paths, each identical under `cmp`, no `tests/`
+  and no other file. The `RECORD` lists 40 `datastorekit/` entries, the 20 modules and their
+  `.pyc` files; every hash it gives matches.
+- **(6) Import and helper.** The import one-liner prints `False`; `sharded_store --help` exits 0.
+  The helper gives `datastorekit` `0.3.0`, the URL, commit and revision, `editable: False`, and
+  `raypoolkit` unchanged. The line is the note's expected one:
+  `>> packages: datastorekit 0.3.0 (https://github.com/ds283/DatastoreKit@2f5417ea76cdcd0d15d64d80d9085429bfacad21, requested v0.3.0); raypoolkit 0.2.0 (https://github.com/ds283/RayPoolKit@eaef0ce60e2fc354bb32f0ad576010e6a83c1976, requested v0.2.0)`.
+  `pip show datastorekit` gives `Requires: ray, sqlalchemy`.
+- **(7) The pip account.** The dry run reports `Would install datastorekit-0.3.0` and the install
+  `Successfully installed datastorekit-0.3.0`, nothing else. The log says that both `Resolved …`
+  lines name tag objects and that RayPoolKit's re-clone is a re-resolution.
+- **(8) K7.** The agent's script imports the package from site-packages (its first line of output
+  says so), imports the layer before `config.datastore`, builds each class from its own `vars()`
+  less `__dict__` and `__weakref__` on the installed base, and passes `ObjectType` to the six
+  quantity entries. Its output: 27 of 27 instantiate; 23 classes, 3 defining all three hooks
+  (`sqla_AdiabaticHistoryFactory`, `sqla_BBNDataFactory`, `sqla_ScalarModelFactory`), 20 none, none
+  some; the `register`-only subclass's `TypeError` names `build`; `timestamp` `None` and
+  unassignable. **The orchestrator's replay**, its own pre-dispatch probe with the archive taken
+  off `sys.path`, imported the installed package and gave the same figures and messages. **U3 and
+  U6 hold on the installed release.**
+- **(9) Hygiene.** DatastoreKit `04a2ed9`, RayPoolKit `1b84df0`, SecondaryGWKit `a5a6f6d`,
+  StochasticInstantons `5fb4a1d`, each at its dispatch `HEAD` with a clean working tree. The 104
+  rehearsal-root entries (depth 2) have unchanged mtimes and sizes. No Ray process. No scratch
+  file in the repository.
+- **(10) Suites.** The agent's: 18, 114 (61 + 53), 73, all OK, at loads of 4–22. The orchestrator
+  re-ran `Datastore/tests` at `617a1dc`: 73, OK.
+- **(11) Records.** The log follows README §5.1, every §2 check with its command and output, and
+  K7's script whole. The board has the §1 row, K4–K7, §5.12 and the rollback.
+  - *Residue, fixed here:* "this commit" → `617a1dc` (board ×7, log ×2); this note added to the
+    list of orchestrator notes.
+- **Deviations D1–D3** are accepted. D3 (quantity entries found by class name) picks out exactly
+  the six entries whose factories keep `ObjectType`, as the output's table shows.
+- **Handed on to 08's note.**
+  - The provenance line above is what each driver now prints.
+  - `datastorekit` imports cleanly with no Ray started; ChamPBH's 27 registry instances are
+    accepted by the installed base as they stand (U3).
+  - `requirements.txt`'s lines after `:16` moved down by one: `ray` `:79`, `raypoolkit` `:80`,
+    `SQLAlchemy` `:91`.
+  - 08's suites start from 18 / 114 / 73.

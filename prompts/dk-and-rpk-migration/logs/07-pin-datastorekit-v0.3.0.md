@@ -1,7 +1,7 @@
 # Log 07 — pin `datastorekit` `v0.3.0`
 
 **Subject:** Pin datastorekit v0.3.0 and install it into the venv
-**Commit:** this commit, on branch `dk-and-rpk-migration`, on top of `4f3f44d`
+**Commit:** `617a1dc`, on branch `dk-and-rpk-migration`, on top of `4f3f44d`
 **Date:** 2026-10-12, by Claude Sonnet 5.5
 **Result:** **COMPLETE.**
 - K4: one line added to `requirements.txt`, in sorted position (`:17`).
@@ -378,5 +378,5 @@ fail to instantiate.
   none); `DatastoreObject.timestamp` is `None` for `DatastoreObject.__init__(self, store_id)`, and
   read-only.
 - Suites: 18 / 114 (61 + 53) / 73, unchanged.
-- **Rollback is `git revert` of this commit plus `./venv/bin/pip uninstall -y datastorekit`**: the
+- **Rollback is `git revert` of `617a1dc` plus `./venv/bin/pip uninstall -y datastorekit`**: the
   venv is outside git (README §4.4).
