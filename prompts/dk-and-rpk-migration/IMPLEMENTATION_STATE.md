@@ -1,6 +1,6 @@
 # dk-and-rpk-migration campaign — implementation state
 
-**Last updated:** 2026-10-12 · **Status: LIVE — 7 of 12 prompts written (01–06, 05a), 6 landed (01–05, 05a); R0 bitwise reproducible; RayPoolKit G3 holds. P1–P17
+**Last updated:** 2026-10-12 · **Status: LIVE — 7 of 12 prompts written (01–06, 05a), 7 landed (01–06, 05a); R0 bitwise reproducible; R1 equals R0 bitwise; RayPoolKit G3 holds. P1–P17
 ruled; U5 ruled (README §6.6); U6 ruled (README §6.7): DatastoreKit `v0.3.0` is the pin (README §0.4).**
 The plan is [`README.md`](README.md), written on 2026-10-11 at `52142d7` with the user's rulings
 U1–U4. Prompts 01–04 are written once the user has reviewed it (README §2.1).
@@ -71,7 +71,7 @@ reads only what the specs declare. Measured at `12c82e8`, 09's list already cove
 | 04 | [Adopt `raypoolkit`](04-adopt-raypoolkit.md) | the RayPoolKit swap; **RayPoolKit G3** | Sonnet | ✍️ 2026-10-11 | ✅ 2026-10-12 | `303324b` | [log](logs/04-adopt-raypoolkit.md) |
 | 05 | [Move ChamPBH's data out of the layer](05-move-champbh-data-out-of-the-layer.md) | `config/datastore.py`; the vectorized gets | Sonnet | ✍️ 2026-10-12 | ✅ 2026-10-12 | `8e77578` | [log](logs/05-move-champbh-data-out-of-the-layer.md) |
 | 05a | [Isolate the rehearsal cluster](05a-isolate-the-rehearsal-cluster.md) | **U5**; `ray_cluster.sh` | Sonnet | ✍️ 2026-10-12 | ✅ 2026-10-12 | `babd9d5` | [log](logs/05a-isolate-the-rehearsal-cluster.md) |
-| 06 | [Rehearse before the DatastoreKit swap (R1)](06-rehearse-before-the-datastore-swap.md) | **R1** | Opus | ✍️ 2026-10-12 | ⬜ | — | — |
+| 06 | [Rehearse before the DatastoreKit swap (R1)](06-rehearse-before-the-datastore-swap.md) | **R1** | Opus | ✍️ 2026-10-12 | ✅ 2026-10-12 | this commit | [log](logs/06-rehearse-before-the-datastore-swap.md) |
 | 07 | Pin `datastorekit` `v0.3.0` | the DatastoreKit pin (**U3**, **U6**; `2f5417e`) | Sonnet | ⬜ | ⬜ | — | — |
 | 08 | Adopt `datastorekit` | the DatastoreKit swap; **U4** | Opus | ⬜ | ⬜ | — | — |
 | 09 | Port the inventory | `inventory_spec`, `tools/inventory_report.py` | Opus | ⬜ | ⬜ | — | — |
@@ -120,8 +120,8 @@ before each dispatch:
 | **C1** | 05a | `.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh start\|stop\|status`, adapted from SI's at `3556148`: ChamPBH's temp dir and ports, 10 CPUs, all four ports confirmed free, a start refused on a held port | ✅ `babd9d5`: SI's file with changes 1–4 only (12 hunks, all classified; the lock functions differ by names); mode 100755; `bash -n` under 3.2 and 5.3 |
 | **C2** | 05a | Ray 2.53.0's behaviour measured: the client server's command line, `ray_current_cluster`'s place, the actor command, `gcs_server` under `SIGTERM` | ✅ `babd9d5`: all five facts agree with SI's 2.55.1 (log 05a §4.4); `gcs_server` ignores `SIGTERM`, a stop takes 17–20 s |
 | **C3** | 05a | the proof on a real cluster beside a decoy (`/tmp/ray-cpbh-decoy`, Ray's default ports), with no build; four breakages | ✅ `babd9d5`: steps 1–9 under `/bin/bash` 3.2, steps 1–3 and stop under 5.3; the decoy's set unchanged pid for pid; B1–B4 caught; the held-port refusal exercised with `nc` |
-| **L1**–**L4** (R1) | 06 | README §4.1 at 05's tree; each store equal to `02-reference.db`, bitwise; L4 against R0, the printed lines included | ⬜ |
-| **V2** | 06 | `.documents/dk-and-rpk-migration-verification.md` §2 R1 | ⬜ |
+| **L1**–**L4** (R1) | 06 | README §4.1 at 05's tree; each store equal to `02-reference.db`, bitwise; L4 against R0, the printed lines included | ✅ this commit: L1–L3 hold; **`06-reference.db` and `06-resumed.db` each `RESULT: equal` against `02-reference.db`, exit 0**, and against each other; schema agrees; L4: `compute` 5/5/5, 5/killed, 0/3/5 (lookups 5/3/5); the prune removed only `resumed-a`'s three unvalidated rows; the printed lines in R0's layout (verification §2) |
+| **V2** | 06 | `.documents/dk-and-rpk-migration-verification.md` §2 R1 | ✅ this commit: §2 R1 (§§2.1–2.8); `out/06-*` (11 files), `06-reference-schema.json` equal to R0's but for `source` |
 
 Items of 07–11 are added when they are written.
 
@@ -134,8 +134,8 @@ counts (18 / 114 / 35); and the venv's `pip freeze` (README §0.2).
 | Gate | Holds when | Prompt | State |
 |---|---|---|---|
 | R0 | the start tree builds the pilot, resumes it, and its readers run (README §4.1); its reproducibility is measured (§4.3) | 02 | ✅ **holds** 2026-10-12 (`6cbf953`): bitwise reproducible, so R1 and R2 are held to bitwise equality with `02-reference.db` (P4) |
-| RayPoolKit G3 | `RayTools/` is gone, 0 imports, the pin is installed, the three roots pass, all 17 sites construct (RayPoolKit checklist item 8) | 04 (R1, 06, adds the run under real Ray) | ✅ **holds** 2026-10-12 (`303324b`), by checklist item 8, items 1–5; item 6 is 11's (P16) |
-| R1 | 05's tree equals R0 by value | 06 | ⬜ |
+| RayPoolKit G3 | `RayTools/` is gone, 0 imports, the pin is installed, the three roots pass, all 17 sites construct (RayPoolKit checklist item 8) | 04 (R1, 06, adds the run under real Ray) | ✅ **holds** 2026-10-12 (`303324b`), by checklist item 8, items 1–5; item 6 is 11's (P16). R1 (06) ran it under real Ray 2.53.0: three builds and three readers, stores equal to R0's, printed lines in R0's layout |
+| R1 | 05's tree equals R0 by value | 06 | ✅ **holds** 2026-10-12 (this commit): both R1 stores equal `02-reference.db` bitwise (`RESULT: equal`, exit 0); R2 is held to equality with `06-reference.db` |
 | DatastoreKit `v0.2.3` | tagged on DatastoreKit's remote, with `store`, `validate` and `validate_on_startup` defaulted (U3; made in DatastoreKit, not here) | — (07 pins it) | ✅ **released** 2026-10-11: tag object `8dac562`, commit `0de2b16`, checked on the remote and by `git show` of `factory_base.py` (README §0.3) |
 | DatastoreKit `v0.3.0` | tagged on DatastoreKit's remote; the pin (U6) | — (07 pins it) | ✅ **released** 2026-10-12: tag object `bf0a3b2`, commit `2f5417e`, checked on the remote; only `datastorekit/object.py` changed in the package since `v0.2.3` (README §0.4) |
 | DatastoreKit G3 | the 9 layer files are gone (two emptied, P6), the pin is installed, the three roots pass, and a pilot store rebuilt through the package (R2) equals R1 by value | 08, 09, 10 | ⬜ |
@@ -877,3 +877,42 @@ DatastoreKit **`v0.3.0`**, not `v0.2.3`. Numbered 5.9a so that 06 keeps §5.10, 
   board's status line, decisions, §1's 07 row and the gates. No written prompt changes: 06 runs on
   ChamPBH's own layer and cites no release.
 - No issue opened; `.documents/OPEN_ISSUES.md` unchanged.
+
+### 5.10 After prompt 06 (2026-10-12)
+
+- **Landed:** this commit, log [`06-rehearse-before-the-datastore-swap.md`](logs/06-rehearse-before-the-datastore-swap.md);
+  the record is `.documents/dk-and-rpk-migration-verification.md` §2. **COMPLETE**: L1–L4 (R1),
+  V2; gate R1 holds; no §4 stop met; no code changed; no issue opened (`.documents/OPEN_ISSUES.md`
+  unchanged).
+- **The criterion.** `compare_stores` of `02-reference.db` against `06-reference.db` and against
+  `06-resumed.db`: `RESULT: equal`, exit 0, each; `06-reference.db` against `06-resumed.db` the same.
+  27 tables, every row matched, bookkeeping differing on every matched row. The schema snapshot
+  agrees with R0's. **03–05 changed nothing a build stores.**
+- **Cluster and load.** `ray_cluster.sh start "dk-and-rpk-migration 06 (R1)"` at 16:43:19 (22 s;
+  `127.0.0.1:6380`, gcs_server 80158; `ray status --address`: one node, 10 CPUs); `stop` at 17:09:48
+  (19 s, exit 0, ports free, lock released), then `status` clean. Never `ray stop`. Every driver
+  connected to 6380. The load was above 10 throughout, peaking near 160 at `reference`'s end; two
+  foreign DatastoreKit suites ran at the gate and ended before `start`.
+- **Builds.** `reference` 11 min 7 s, exit 0 (R0 10 min 43 s). `resumed-a` killed 6 s after the
+  adiabatic banner, exit 134; **it had stored all five `AdiabaticHistory` rows and validated two**
+  (β = 1.1, 1.15). `resumed-b` 2 min 42 s, exit 0: its open pruned exactly the three unvalidated
+  rows (β = 1.2, 10, 25) and it computed 0 / 3 / 5, lookups 5 / 3 / 5. Label counts:
+  `AdiabaticHistory` 2 `resumed-a` + 3 `resumed-b`.
+- **Actors.** None alive 14 s after the signal; all 34 (17 per job) dead at 28 s; 102 dead, six jobs
+  `SUCCEEDED`, before the stop.
+- **Readers.** All six steps exit 0; before/after `RESULT: equal` with no bookkeeping difference;
+  `histories.csv` SHA-256 `d7c62c37…c522`, `cmp`-equal to R0's; the β = 1.15 stored and re-solved
+  Yp and D/H are R0's.
+- **L4.** `reference` 5 / 5 / 5; the resume's pattern is R0's. The pool's printed lines keep R0's
+  layout: 10 banner and completion lines equal in text and order, and 06's progress pair (scalar
+  stage, 5m 5.89s) in R0's two shapes.
+- **Suites** (before `start`): 18 / 114 (61 + 53) / 73, unchanged.
+- **Observations not opened:**
+  1. `resumed-a` stored all five rows (the "5" case by stored rows; *k* = 2 by validated rows), so
+     no history was absent from the store at the resume; R2's `S` should allow for `resumed-a`
+     running 3 s or more ahead of `reference`;
+  2. Ray's log deduplication hid the β = 10 prune report from the driver's log; all three were
+     read from Ray's worker logs;
+  3. the killed driver's stack was in `submit_actor_task`, not `Wait()`;
+  4. the load, and the foreign suites at the gate;
+  5. the plot scripts' shard-count warning, unchanged.

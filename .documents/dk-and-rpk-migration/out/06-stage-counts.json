@@ -1,0 +1,134 @@
+{
+  "/Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/logs/06-reference.log": {
+    "stages": [
+      {
+        "stage": "CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID",
+        "complete": true,
+        "counts": {
+          "lookup": 5,
+          "compute": 5,
+          "store": 5,
+          "validation": 5
+        },
+        "no_compute": false,
+        "skipped": []
+      },
+      {
+        "stage": "CALCULATE ADIABATIC TRANSGRESSION PARAMETERS",
+        "complete": true,
+        "counts": {
+          "lookup": 5,
+          "compute": 5,
+          "store": 5,
+          "validation": 5
+        },
+        "no_compute": false,
+        "skipped": [
+          {
+            "table": "AdiabaticHistory",
+            "models_skipped": 0,
+            "line": "-- AdiabaticHistory: 0 models skipped because their ScalarModel failed"
+          }
+        ]
+      },
+      {
+        "stage": "CALCULATE BBN DATA",
+        "complete": true,
+        "counts": {
+          "lookup": 5,
+          "compute": 5,
+          "store": 5,
+          "validation": 5
+        },
+        "no_compute": false,
+        "skipped": [
+          {
+            "table": "BBNData",
+            "models_skipped": 0,
+            "line": "-- BBNData: 0 models skipped because their ScalarModel failed; 0 computations skipped because of a stored failure",
+            "stored_failures_skipped": 0
+          }
+        ]
+      }
+    ],
+    "exit_status": 0
+  },
+  "/Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/logs/06-resumed-a.log": {
+    "stages": [
+      {
+        "stage": "CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID",
+        "complete": true,
+        "counts": {
+          "lookup": 5,
+          "compute": 5,
+          "store": 5,
+          "validation": 5
+        },
+        "no_compute": false,
+        "skipped": []
+      },
+      {
+        "stage": "CALCULATE ADIABATIC TRANSGRESSION PARAMETERS",
+        "complete": false,
+        "counts": null,
+        "no_compute": false,
+        "skipped": []
+      }
+    ],
+    "exit_status": 134
+  },
+  "/Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/logs/06-resumed-b.log": {
+    "stages": [
+      {
+        "stage": "CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID",
+        "complete": true,
+        "counts": {
+          "lookup": 5,
+          "compute": 0,
+          "store": 0,
+          "validation": 0
+        },
+        "no_compute": true,
+        "skipped": []
+      },
+      {
+        "stage": "CALCULATE ADIABATIC TRANSGRESSION PARAMETERS",
+        "complete": true,
+        "counts": {
+          "lookup": 3,
+          "compute": 3,
+          "store": 3,
+          "validation": 3
+        },
+        "no_compute": false,
+        "skipped": [
+          {
+            "table": "AdiabaticHistory",
+            "models_skipped": 0,
+            "line": "-- AdiabaticHistory: 0 models skipped because their ScalarModel failed"
+          }
+        ]
+      },
+      {
+        "stage": "CALCULATE BBN DATA",
+        "complete": true,
+        "counts": {
+          "lookup": 5,
+          "compute": 5,
+          "store": 5,
+          "validation": 5
+        },
+        "no_compute": false,
+        "skipped": [
+          {
+            "table": "BBNData",
+            "models_skipped": 0,
+            "line": "-- BBNData: 0 models skipped because their ScalarModel failed; 0 computations skipped because of a stored failure",
+            "stored_failures_skipped": 0
+          }
+        ]
+      }
+    ],
+    "exit_status": 0
+  }
+}
