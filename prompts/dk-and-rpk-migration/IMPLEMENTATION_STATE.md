@@ -1,12 +1,12 @@
 # dk-and-rpk-migration campaign — implementation state
 
 **Last updated:** 2026-10-12 · **Status: LIVE — 7 of 12 prompts written (01–06, 05a), 6 landed (01–05, 05a); R0 bitwise reproducible; RayPoolKit G3 holds. P1–P17
-ruled; U5 ruled (README §6.6); DatastoreKit `v0.2.3` released (README §0.3).**
+ruled; U5 ruled (README §6.6); U6 ruled (README §6.7): DatastoreKit `v0.3.0` is the pin (README §0.4).**
 The plan is [`README.md`](README.md), written on 2026-10-11 at `52142d7` with the user's rulings
 U1–U4. Prompts 01–04 are written once the user has reviewed it (README §2.1).
 
-The campaign adopts `raypoolkit` `v0.2.0` and then `datastorekit` `v0.2.3`, a release requested
-from DatastoreKit by [`datastorekit-v0.2.3-brief.md`](datastorekit-v0.2.3-brief.md). A rehearsal by value
+The campaign adopts `raypoolkit` `v0.2.0` and then `datastorekit` `v0.3.0` (U6), which carries
+`v0.2.3`, the release requested from DatastoreKit by [`datastorekit-v0.2.3-brief.md`](datastorekit-v0.2.3-brief.md). A rehearsal by value
 comes before any change (R0), before the DatastoreKit swap (R1) and after it (R2). Each package's
 gate G3 is recorded here when it holds.
 
@@ -53,6 +53,12 @@ reads only what the specs declare. Measured at `12c82e8`, 09's list already cove
 |---|---|
 | **U5** — other projects' Ray clusters | isolate and lock. ChamPBH's cluster runs on `/tmp/ray-cpbh` and ports 6380 / 6381 / 8267 / 52367 and stops only itself, never by `ray stop`; one lock, `~/ScienceData/.rehearsal-lock`, shared with StochasticInstantons and SecondaryGWKit, lets one rehearsal run at a time. Contract: SI's `rehearsal-lock-brief.md` at `ed9399a`; ChamPBH's side is 05a |
 
+**Ruled by the user, 2026-10-12 (README §6.7):**
+
+| Decision | Decided |
+|---|---|
+| **U6** — which DatastoreKit release | **`v0.3.0`** (tag object `bf0a3b2`, commit `2f5417e`; README §0.4), in place of `v0.2.3`. It carries `v0.2.3`'s change unchanged (`factory_base.py` identical) and adds an optional, read-only `DatastoreObject.timestamp` that ChamPBH neither passes nor reads. 07 pins it |
+
 ---
 
 ## 1. Prompts
@@ -66,7 +72,7 @@ reads only what the specs declare. Measured at `12c82e8`, 09's list already cove
 | 05 | [Move ChamPBH's data out of the layer](05-move-champbh-data-out-of-the-layer.md) | `config/datastore.py`; the vectorized gets | Sonnet | ✍️ 2026-10-12 | ✅ 2026-10-12 | `8e77578` | [log](logs/05-move-champbh-data-out-of-the-layer.md) |
 | 05a | [Isolate the rehearsal cluster](05a-isolate-the-rehearsal-cluster.md) | **U5**; `ray_cluster.sh` | Sonnet | ✍️ 2026-10-12 | ✅ 2026-10-12 | `babd9d5` | [log](logs/05a-isolate-the-rehearsal-cluster.md) |
 | 06 | [Rehearse before the DatastoreKit swap (R1)](06-rehearse-before-the-datastore-swap.md) | **R1** | Opus | ✍️ 2026-10-12 | ⬜ | — | — |
-| 07 | Pin `datastorekit` `v0.2.3` | the DatastoreKit pin (**U3**; `0de2b16`) | Sonnet | ⬜ | ⬜ | — | — |
+| 07 | Pin `datastorekit` `v0.3.0` | the DatastoreKit pin (**U3**, **U6**; `2f5417e`) | Sonnet | ⬜ | ⬜ | — | — |
 | 08 | Adopt `datastorekit` | the DatastoreKit swap; **U4** | Opus | ⬜ | ⬜ | — | — |
 | 09 | Port the inventory | `inventory_spec`, `tools/inventory_report.py` | Opus | ⬜ | ⬜ | — | — |
 | 10 | Rehearse through both packages (R2) | **R2**; **DatastoreKit G3** | Opus | ⬜ | ⬜ | — | — |
@@ -78,7 +84,7 @@ reads only what the specs declare. Measured at `12c82e8`, 09's list already cove
 - **01–04** are written after the user's review of the plan.
 - **05–06** are written after 02's review: R0's reproducibility sets R1's criterion.
 - **05a** is written after 05's review, for U5. 06 waits on it.
-- **07–10** are written after 06's review (`v0.2.3` is released).
+- **07–10** are written after 06's review (`v0.3.0`, the pin, is released; U6).
 - **11** is written after 10's review.
 
 Orchestrator notes are written one prompt at a time, in [`orchestrator/`](orchestrator/), just
@@ -131,6 +137,7 @@ counts (18 / 114 / 35); and the venv's `pip freeze` (README §0.2).
 | RayPoolKit G3 | `RayTools/` is gone, 0 imports, the pin is installed, the three roots pass, all 17 sites construct (RayPoolKit checklist item 8) | 04 (R1, 06, adds the run under real Ray) | ✅ **holds** 2026-10-12 (`303324b`), by checklist item 8, items 1–5; item 6 is 11's (P16) |
 | R1 | 05's tree equals R0 by value | 06 | ⬜ |
 | DatastoreKit `v0.2.3` | tagged on DatastoreKit's remote, with `store`, `validate` and `validate_on_startup` defaulted (U3; made in DatastoreKit, not here) | — (07 pins it) | ✅ **released** 2026-10-11: tag object `8dac562`, commit `0de2b16`, checked on the remote and by `git show` of `factory_base.py` (README §0.3) |
+| DatastoreKit `v0.3.0` | tagged on DatastoreKit's remote; the pin (U6) | — (07 pins it) | ✅ **released** 2026-10-12: tag object `bf0a3b2`, commit `2f5417e`, checked on the remote; only `datastorekit/object.py` changed in the package since `v0.2.3` (README §0.4) |
 | DatastoreKit G3 | the 9 layer files are gone (two emptied, P6), the pin is installed, the three roots pass, and a pilot store rebuilt through the package (R2) equals R1 by value | 08, 09, 10 | ⬜ |
 
 Recording each gate on its package's own extraction board is a commit in that repository, not
@@ -851,4 +858,22 @@ README §6.6.
   same of a long build on this machine.
 - SI's drivers now require `--ray-address`; ChamPBH's keep `auto`. That is left for the user
   (README §6.4).
+- No issue opened; `.documents/OPEN_ISSUES.md` unchanged.
+
+### 5.9a U6 ruled: DatastoreKit `v0.3.0` is the pin (2026-10-12)
+
+The user ruled **U6** after 05's review raised the choice (README §6.7): the campaign pins
+DatastoreKit **`v0.3.0`**, not `v0.2.3`. Numbered 5.9a so that 06 keeps §5.10, as its prompt says.
+- **Checked read-only that day** (README §0.4):
+  - `git ls-remote`: `refs/tags/v0.3.0` → `bf0a3b25…`, `^{}` → `2f5417ea76cdcd0d15d64d80d9085429bfacad21`;
+    `pyproject.toml` at the tag says `0.3.0`;
+  - between `v0.2.3` and `v0.3.0` the package changes only `datastorekit/object.py` (an optional,
+    keyword-only `timestamp`, kept as `_timestamp` and read by a read-only property), plus tests
+    and the version. `datastorekit/SQL/` is unchanged, so U3 holds as at `v0.2.3`;
+  - ChamPBH's 19 `DatastoreObject.__init__(…)` calls pass the store id alone, and no ChamPBH class
+    defines or assigns `timestamp` or `_timestamp` (`git grep` at `7ed8546`).
+- **Amended:** README §0, §0.4 (new), §2's table, §2.1, 07's charter (pin, figures, and an added
+  acceptance item for the `timestamp` default), 08's citation of the base, §4 and §6.7 (new); this
+  board's status line, decisions, §1's 07 row and the gates. No written prompt changes: 06 runs on
+  ChamPBH's own layer and cites no release.
 - No issue opened; `.documents/OPEN_ISSUES.md` unchanged.
