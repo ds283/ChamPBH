@@ -47,7 +47,7 @@ from Datastore.SQL.ObjectFactories import tolerance
 from Datastore.SQL.ProfileAgent import ProfileAgent
 from Datastore.SQL.ShardedPool import ShardedPool
 from Quadrature.integration_metadata import IntegrationSolver
-from RayTools.RayWorkPool import RayWorkPool
+from raypoolkit import RayWorkPool
 from Units import Planck_units
 from Units.base import UnitsLike
 from config.argument_parser import create_argument_parser, allowed_drop_actions

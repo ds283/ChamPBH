@@ -56,7 +56,7 @@ reads only what the specs declare. Measured at `12c82e8`, 09's list already cove
 | 01 | [Rehearsal tooling and run provenance](01-rehearsal-tooling-and-run-provenance.md) | P3, P5; README §4.1–§4.2 | Opus | ✍️ 2026-10-11 | ✅ 2026-10-12 | `d7791c5` | [log](logs/01-rehearsal-tooling-and-run-provenance.md) |
 | 02 | [Rehearse the start tree (R0)](02-rehearse-the-start-tree.md) | **R0**; §4.3's measurement | Opus | ✍️ 2026-10-11 | ✅ 2026-10-12 | `6cbf953` | [log](logs/02-rehearse-the-start-tree.md) |
 | 03 | [Pin `raypoolkit` `v0.2.0`](03-pin-raypoolkit-v0.2.0.md) | the RayPoolKit pin | Sonnet | ✍️ 2026-10-11 | ✅ 2026-10-12 | `2f61943` | [log](logs/03-pin-raypoolkit-v0.2.0.md) |
-| 04 | [Adopt `raypoolkit`](04-adopt-raypoolkit.md) | the RayPoolKit swap; **RayPoolKit G3** | Sonnet | ✍️ 2026-10-11 | ⬜ | — | — |
+| 04 | [Adopt `raypoolkit`](04-adopt-raypoolkit.md) | the RayPoolKit swap; **RayPoolKit G3** | Sonnet | ✍️ 2026-10-11 | ✅ 2026-10-12 | `this commit` | [log](logs/04-adopt-raypoolkit.md) |
 | 05 | Move ChamPBH's data out of the layer | `config/datastore.py`; the vectorized gets | Sonnet | ⬜ | ⬜ | — | — |
 | 06 | Rehearse before the DatastoreKit swap (R1) | **R1** | Opus | ⬜ | ⬜ | — | — |
 | 07 | Pin `datastorekit` `v0.2.3` | the DatastoreKit pin (**U3**; `0de2b16`) | Sonnet | ⬜ | ⬜ | — | — |
@@ -91,10 +91,10 @@ before each dispatch:
 | **K1** | 03 | the `raypoolkit` pin in `requirements.txt` | ✅ `2f61943`: one line, between `ray` and `referencing` (`:79`) |
 | **K2** | 03 | the venv installed from it | ✅ `2f61943`: dry run and install report only `raypoolkit-0.2.0`; no other distribution moved |
 | **K3** | 03 | the proof: one distribution added, at `eaef0ce6…`, the tag's files, not editable | ✅ `2f61943`: freeze differs by one line; `pip check` clean; `direct_url.json` VCS, no `dir_info`; the 4 modules equal `git archive v0.2.0`, no `tests/`; import starts no Ray |
-| **W1** | 04 | `RayTools/` deleted | ⬜ |
-| **W2** | 04 | the 3 imports rewritten to `from raypoolkit import RayWorkPool` | ⬜ |
-| **W3** | 04 | no pool site changed (P7) | ⬜ |
-| **W4** | 04 | `.documents/architecture-summary.md`'s `RayWorkPool` lines made true (P14) | ⬜ |
+| **W1** | 04 | `RayTools/` deleted | ✅ `this commit`: both files `git rm`'d, and the ignored `__pycache__/` and the empty directory removed; `git ls-tree` empty |
+| **W2** | 04 | the 3 imports rewritten to `from raypoolkit import RayWorkPool` | ✅ `this commit`: `main.py:50`, `plot_ScalarModel.py:44`, `plot_by_beta.py:38`; 162 imported names resolve by `ast` and `find_spec`, drivers byte-compile |
+| **W3** | 04 | no pool site changed (P7) | ✅ `this commit`: the drivers' diff is one line each; script at the staged tree: 17 calls, `constructs` 17 |
+| **W4** | 04 | `.documents/architecture-summary.md`'s `RayWorkPool` lines made true (P14) | ✅ `this commit`: layout, §3.2 title, `pool` type, `store_handler` row and a new `persist_handler` row, the in-flight keying, the lifecycle's store/persist pair (`:195-196`, named by the brief), and `:585` |
 
 Items of 05–11 are added when they are written.
 
@@ -107,7 +107,7 @@ counts (18 / 114 / 35); and the venv's `pip freeze` (README §0.2).
 | Gate | Holds when | Prompt | State |
 |---|---|---|---|
 | R0 | the start tree builds the pilot, resumes it, and its readers run (README §4.1); its reproducibility is measured (§4.3) | 02 | ✅ **holds** 2026-10-12 (`6cbf953`): bitwise reproducible, so R1 and R2 are held to bitwise equality with `02-reference.db` (P4) |
-| RayPoolKit G3 | `RayTools/` is gone, 0 imports, the pin is installed, the three roots pass, all 17 sites construct (RayPoolKit checklist item 8) | 04 (R1, 06, adds the run under real Ray) | ⬜ |
+| RayPoolKit G3 | `RayTools/` is gone, 0 imports, the pin is installed, the three roots pass, all 17 sites construct (RayPoolKit checklist item 8) | 04 (R1, 06, adds the run under real Ray) | ✅ **holds** 2026-10-12 (`this commit`), by checklist item 8, items 1–5; item 6 is 11's (P16) |
 | R1 | 05's tree equals R0 by value | 06 | ⬜ |
 | DatastoreKit `v0.2.3` | tagged on DatastoreKit's remote, with `store`, `validate` and `validate_on_startup` defaulted (U3; made in DatastoreKit, not here) | — (07 pins it) | ✅ **released** 2026-10-11: tag object `8dac562`, commit `0de2b16`, checked on the remote and by `git show` of `factory_base.py` (README §0.3) |
 | DatastoreKit G3 | the 9 layer files are gone (two emptied, P6), the pin is installed, the three roots pass, and a pilot store rebuilt through the package (R2) equals R1 by value | 08, 09, 10 | ⬜ |
@@ -450,3 +450,36 @@ opened. The residue is fixed in this follow-up.
   - The provenance line above is what each driver now prints.
   - `raypoolkit` imports cleanly with no Ray started.
   - 04's suites start from 18 / 114 / 66.
+
+### 5.5 After prompt 04 (2026-10-12)
+
+- **Landed:** `this commit`, log [`04-adopt-raypoolkit.md`](logs/04-adopt-raypoolkit.md).
+  **COMPLETE**: W1–W4; no §4 stop met; no §3 issue opened.
+- **W1.** `RayTools/RayWorkPool.py` and `RayTools/__init__.py` are deleted, and the ignored
+  `RayTools/__pycache__/` and the empty directory with them (D1). `git grep -n RayTools --
+  ':!prompts' ':!.documents'` is empty.
+- **W2–W3.** `main.py:50`, `plot_ScalarModel.py:44` and `plot_by_beta.py:38` now read
+  `from raypoolkit import RayWorkPool`; the diff of the drivers is those three lines. No pool site
+  changed. The call lines are as at `12c82e8`.
+- **The script** (RayPoolKit's `measure_client_pools.py cpbh`, from its root with its own venv,
+  `Verdicts by: raypoolkit 0.2.0`): at `12c82e8` (before), 3 imports, 0 string literals, 0
+  `import_module`, 17 calls, `constructs` 17, differing from the `52142d7` appendix only in the call
+  lines (+8 in `main.py`, +4 in the plot scripts: 01's provenance import and print), the file counts
+  and the non-`.py` and test-module counts, each explained in the log. At a dangling commit of the
+  staged tree (`2d79710…`, built by `commit-tree` on `12c82e8`, on no branch): `RayTools/` empty, **0 imports, 0
+  string literals, 0 `import_module` calls, 17 calls, `constructs` 17**.
+- **The imports** resolve (`ast` + `find_spec`, 162 names, 0 failures; `ray.is_initialized()`
+  `False`), and `py_compile` of the three drivers succeeds.
+- **Breakages**, each caught and recorded as a diff (the fourth as a command): the old import in
+  `main.py` (import check fails; script reports 1 import); a misspelt name (`RayWorkPoool`, import
+  check fails); `store_handler=lambda obj, pool: None` at `main.py:201` (script: that site is
+  `ValueError: No compute handler was supplied, so store_handler would never be called…`,
+  `constructs` 16); `raypoolkit` unavailable (`sys.modules["raypoolkit"] = None`: all three drivers'
+  imports fail).
+- **W4.** `architecture-summary.md` corrected to `raypoolkit` `v0.2.0`'s README ("The constructor"):
+  the `store_handler` row, a `persist_handler` row, the `pool` type, the in-flight keying text, the
+  lifecycle pair and `:585`. Nothing else in the document changed.
+- **Suites:** 18 / 114 (61 + 53) / 66, unchanged, at a load of 4–12. `black --check` clean.
+- **RayPoolKit G3 holds** (§2), by checklist item 8, items 1–5. The record's text is in the log's
+  "State handed to the next prompt", for 11 to carry (P16).
+- **Rollback:** `git revert` of `this commit`; nothing in the venv (README §4.4).

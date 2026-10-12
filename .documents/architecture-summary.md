@@ -32,8 +32,7 @@ ChamPBH/
 ├── starobinsky.yaml
 ├── recliner.yaml
 │
-├── RayTools/
-│   └── RayWorkPool.py               # Generic distributed work queue
+├── (the work queue, `RayWorkPool`, is the `raypoolkit` package, pinned in requirements.txt)
 │
 ├── Datastore/
 │   ├── object.py                    # DatastoreObject base class
@@ -150,7 +149,7 @@ ChamPBH/
 
 All expensive computations are dispatched as Ray remote tasks or actors. The driver (main.py) never blocks waiting for a single result; it maintains a bounded queue of in-flight Ray `ObjectRef`s and processes completions as they arrive. This allows the driver to pipeline database lookups, compute tasks, and store tasks concurrently.
 
-### 3.2 `RayWorkPool` (`RayTools/RayWorkPool.py`)
+### 3.2 `RayWorkPool` (`raypoolkit`)
 
 `RayWorkPool` is the single generic orchestrator for all computation phases. It is instantiated with a list of work items and a set of handler callables, and its `run()` method drives a state machine until every item has been processed.
 
@@ -158,11 +157,12 @@ All expensive computations are dispatched as Ray remote tasks or actors. The dri
 
 | Parameter | Type | Default | Purpose |
 |-----------|------|---------|---------|
-| `pool` | `ShardedPool` | required | Database access |
+| `pool` | `raypoolkit.DatastorePool` (a `typing.Protocol` with one method, `object_store(obj)`; a type hint, not checked at run time) | required | Database access |
 | `task_list` | iterable | required | Items to process |
 | `task_builder` | `Callable(item) → ObjectRef \| list[ObjectRef] \| None` | required | Converts each work item to a Ray DB lookup |
 | `compute_handler` | `Callable(obj, label?, payload?) → ObjectRef` | `obj.compute()` | Dispatches ODE/computation |
-| `store_handler` | `Callable(obj, pool) → ObjectRef` | `pool.object_store(obj)` | Persists result |
+| `store_handler` | `Callable(obj, pool) → None` | `obj.store()` | Local store step, run on the driver when the compute task has completed; its return is ignored |
+| `persist_handler` | `Callable(obj, pool) → ObjectRef` | `pool.object_store(obj)` | Datastore round-trip, run straight after the store handler; the ref's value is the persisted object |
 | `available_handler` | `Callable(obj) → ObjectRef` | None | Optional: handle already-computed objects |
 | `validation_handler` | `Callable(obj) → ObjectRef` | None | Optional: post-store integrity check |
 | `post_handler` | `Callable(obj) → obj?` | None | Optional: called at task exit |
@@ -177,7 +177,7 @@ All expensive computations are dispatched as Ray remote tasks or actors. The dri
 
 **Task lifecycle (state machine):**
 
-Each work item passes through states tracked by the string tag in `self._data[ref.hex]`:
+Each work item passes through states tracked by a tag, keyed on each ref's value:
 
 ```
 task_builder(item)
@@ -192,8 +192,8 @@ task_builder(item)
     → post_handler exit
 
 "compute" completes:
-    obj.store()  (mutates obj in-place)
-    store_handler(obj) → ObjectRef tagged "store"
+    store_handler(obj, pool)  (default obj.store(); mutates obj in-place)
+    persist_handler(obj, pool) → ObjectRef tagged "store"
 
 "store" completes:
     replacement_obj = ray.get(ref)  (has store_id set)
@@ -582,7 +582,7 @@ Every compute target follows the same pattern:
 4. **Has a `store()` method** that populates the object's internal data fields after `ray.get(compute_ref)` completes.
 5. **Has a `failure` property** to indicate that computation was attempted but failed (distinguishing "not yet computed" from "failed to compute").
 
-The `RayWorkPool` handles steps 3–4 automatically via its default `compute_handler` and `store_handler`.
+The `RayWorkPool` handles steps 3–4 automatically via its three defaults: `compute_handler`, `store_handler` and `persist_handler`.
 
 ### 7.2 `ScalarModel` (`ComputeTargets/ScalarModel.py`)
 

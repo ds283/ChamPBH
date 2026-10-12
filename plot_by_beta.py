@@ -35,7 +35,7 @@ from CosmologyModels import BaseCosmology
 from Datastore.SQL.ProfileAgent import ProfileAgent
 from Datastore.SQL.ShardedPool import ShardedPool
 from MetadataConcepts import tolerance, store_tag
-from RayTools.RayWorkPool import RayWorkPool
+from raypoolkit import RayWorkPool
 from Units import Planck_units
 from config.argument_parser import create_argument_parser
 from config.model_list import build_model_list
