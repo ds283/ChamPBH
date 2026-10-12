@@ -74,7 +74,7 @@ reads only what the specs declare. Measured at `12c82e8`, 09's list already cove
 | 06 | [Rehearse before the DatastoreKit swap (R1)](06-rehearse-before-the-datastore-swap.md) | **R1** | Opus | ✍️ 2026-10-12 | ✅ 2026-10-12 | `c9e6bc2` | [log](logs/06-rehearse-before-the-datastore-swap.md) |
 | 07 | [Pin `datastorekit` `v0.3.0`](07-pin-datastorekit-v0.3.0.md) | the DatastoreKit pin (**U3**, **U6**; `2f5417e`) | Sonnet | ✍️ 2026-10-12 | ✅ 2026-10-12 | `617a1dc` | [log](logs/07-pin-datastorekit-v0.3.0.md) |
 | 08 | [Adopt `datastorekit`](08-adopt-datastorekit.md) | the DatastoreKit swap; **U4** | Opus | ✍️ 2026-10-12 | ✅ 2026-10-12 | `857ec73` | [log](logs/08-adopt-datastorekit.md) |
-| 09 | [Port the inventory](09-port-the-inventory.md) | `inventory_spec`, `tools/inventory_report.py`; coverage (§6.5) | Opus | ✍️ 2026-10-12 | ✅ 2026-10-13 | this commit | [log](logs/09-port-the-inventory.md) |
+| 09 | [Port the inventory](09-port-the-inventory.md) | `inventory_spec`, `tools/inventory_report.py`; coverage (§6.5) | Opus | ✍️ 2026-10-12 | ✅ 2026-10-13 | `47cfcfb` | [log](logs/09-port-the-inventory.md) |
 | 10 | [Rehearse through both packages (R2)](10-rehearse-through-both-packages.md) | **R2**; **DatastoreKit G3** | Opus | ✍️ 2026-10-12 | ⬜ | — | — |
 | 11 | Close the migration | documents, handover, close | Sonnet | ⬜ | ⬜ | — | — |
 
@@ -98,6 +98,7 @@ before each dispatch:
 - [`orchestrator/prompt-06.md`](orchestrator/prompt-06.md) (`5bb2be6`) — used for 06.
 - [`orchestrator/prompt-07.md`](orchestrator/prompt-07.md) (`4f3f44d`) — used for 07.
 - [`orchestrator/prompt-08.md`](orchestrator/prompt-08.md) (`63f60e1`) — used for 08.
+- [`orchestrator/prompt-09.md`](orchestrator/prompt-09.md) (`f84c3f0`) — used for 09.
 
 ### 1.1 Items
 
@@ -139,11 +140,11 @@ before each dispatch:
 | **A7** | 08 | the tests the package carries deleted (4 + 2), and the 3 layer-identity tests; `_registry()`'s fallback removed | ✅ `857ec73`: and test 14's `LambdaCDM` assertion inverted (A7.4 as amended) |
 | **A8** | 08 | new tests: tables declared, pools given the config, U4, the cycle gone, `--inventory` refusing | ✅ `857ec73`: 12 tests in `test_datastore_config.py`; Datastore 73 → 76; six breakages caught (log 08) |
 | **A9** | 08 | `--inventory` refuses (P12); the refresh route (P13); prose (P14); the issue moves | ✅ `857ec73`: `--inventory` exits 2 before Ray; `BBN_REFRESH_ROUTE` names `sharded_store copy`; `config/datastore.py`, `config/version.py`, `CLAUDE.md`, the black-clean issue; one issue closed, one opened, one narrowed |
-| **I1** | 09 | `inventory_spec()` on the 21 owners; `inventory_classes` accepts the registry | ✅ this commit: 17 definitions in the 17 factory modules, each derived from its `build` (log 09's table); `failure` and `PRyM_version` the two non-lookup leaves (§1.2); no `cross_shard`; `inventory_classes` orders the 21 as the note's prototype; no `register` or `build` changed |
-| **I2** | 09 | `tools/inventory_report.py` (P15) | ✅ this commit: `format_inventory_report(inventory, db_name, verbose=False)`, opens nothing; every class, values `.5g` with unit, models by physical labels, `PRyM_version`, tags, value counts, every problem whole (log 09's P15 table) |
-| **I3** | 09 | `main.py --inventory` read-only, before Ray | ✅ this commit: `main.py:93-111`, before `ray.init`; exit 0 on a store, 2 with `--drop`, 1 on a reader refusal (absent store: nothing created); `--show-all` → `verbose`; 08's refusal and its two tests gone |
-| **I4** | 09 | the six `inventory()` hooks and `inventory_config` deleted | ✅ this commit: deleted, with three `datetime` imports only the hooks used; the acceptance grep keeps 08's pool guard (2 lines) and `architecture-summary.md:320` (D1); empty on code |
-| **I5** | 09 | coverage: every registered class has a spec, is read through one, or is excluded with a reason (§6.5) | ✅ this commit: 21 specs + 6 read through (`tags`/`values`, checked against the owner's spec) + 0 excluded = 27; both breakages fail it by name |
+| **I1** | 09 | `inventory_spec()` on the 21 owners; `inventory_classes` accepts the registry | ✅ `47cfcfb`: 17 definitions in the 17 factory modules, each derived from its `build` (log 09's table); `failure` and `PRyM_version` the two non-lookup leaves (§1.2); no `cross_shard`; `inventory_classes` orders the 21 as the note's prototype; no `register` or `build` changed |
+| **I2** | 09 | `tools/inventory_report.py` (P15) | ✅ `47cfcfb`: `format_inventory_report(inventory, db_name, verbose=False)`, opens nothing; every class, values `.5g` with unit, models by physical labels, `PRyM_version`, tags, value counts, every problem whole (log 09's P15 table) |
+| **I3** | 09 | `main.py --inventory` read-only, before Ray | ✅ `47cfcfb`: `main.py:93-111`, before `ray.init`; exit 0 on a store, 2 with `--drop`, 1 on a reader refusal (absent store: nothing created); `--show-all` → `verbose`; 08's refusal and its two tests gone |
+| **I4** | 09 | the six `inventory()` hooks and `inventory_config` deleted | ✅ `47cfcfb`: deleted, with three `datetime` imports only the hooks used; the acceptance grep keeps 08's pool guard (2 lines) and `architecture-summary.md:320` (D1); empty on code |
+| **I5** | 09 | coverage: every registered class has a spec, is read through one, or is excluded with a reason (§6.5) | ✅ `47cfcfb`: 21 specs + 6 read through (`tags`/`values`, checked against the owner's spec) + 0 excluded = 27; both breakages fail it by name |
 | **L1**–**L4** (R2) | 10 | README §4.1 at 09's tree; each store equal to `06-reference.db`, bitwise; L4 against R1 | ⬜ |
 | **V3** | 10 | `.documents/dk-and-rpk-migration-verification.md` §3 R2 | ⬜ |
 | **H1** | 10 | the R2 stores by the package's tools: the shard-key audit; a copy that opens read-only, compares equal and is deleted by `delete_store` | ⬜ |
@@ -1378,7 +1379,7 @@ both; the Datastore count after 09 is 76 − 2 + the new tests.
 
 ### 5.14 After prompt 09 (2026-10-13)
 
-- **Landed:** this commit, log [`09-port-the-inventory.md`](logs/09-port-the-inventory.md).
+- **Landed:** `47cfcfb`, log [`09-port-the-inventory.md`](logs/09-port-the-inventory.md).
   **COMPLETE**: I1–I5; no §4 stop met. Measured first at `f84c3f0` (on a `git archive` copy, D9):
   suites 18 / 114 (61 + 53) / 76, all OK; §2.1.3's grep 26 hits, each accounted for as the note
   classified them; the spec table derived from each `build` before any spec was written.
@@ -1449,5 +1450,76 @@ both; the Datastore count after 09 is 76 − 2 + the new tests.
 - **For 10:** `--inventory` reads R2's stores (built by the package) and refuses R0's and R1's.
 - **For 11:** two unused imports left in `test_datastore_config.py`, and
   `architecture-summary.md:320` (log 09, Observations 4–5).
-- **Rollback:** `git revert` of this commit alone; nothing in the venv (README §4.4). It restores
+- **Rollback:** `git revert` of `47cfcfb` alone; nothing in the venv (README §4.4). It restores
   08's refusal.
+
+**Orchestrator review of prompt 09 (2026-10-13)**, by orchestrator note
+[`prompt-09.md`](orchestrator/prompt-09.md), at `47cfcfb`. All twelve checks pass, and no issue is
+opened beyond the agent's. The residue is fixed in this follow-up.
+- **(1) Scope.** 26 files, every one on the prompt's §5 list, with `.documents/OPEN_ISSUES.md` for
+  the issue opened. The untracked set is dispatch's 23 entries; `47cfcfb` is the only commit since
+  the note, and no branch was left. No process of the agent's was left running.
+- **(2) The specs, read.** Each of the 21 owners' specs against its `build`: leaves and parents are
+  the lookup's match columns, with `failure` and `PRyM_version` the two §1.2 additions and
+  `version` only on the three classes that key on it; the polymorphic maps are the `model_ids`
+  constants, equal to `tools/compare_stores.py`'s; the tag and value slots name each owner's column.
+  `inventory_classes` gives the note's order. The agent's table equals the orchestrator's prototype.
+- **(3) The factories by `ast`.** For each of the 17 modules, the module at `HEAD~1` and `HEAD`, less
+  the `inventory`/`inventory_spec` methods and the imports, is **identical**: 17 of 17, one spec in
+  each, no `inventory()` left. The imports added are the package's spec names (and, in
+  `ScalarModel.py`, the seven `model_ids` constants, D5); the three removed (`datetime`) are unused at
+  `HEAD`. `config/sharding.py` loses `inventory_config` and nothing else.
+- **(4) The report, read.** `tools/inventory_report.py` opens nothing (no `open`, `sqlite3`,
+  `create_engine`, `read_inventory` or `open_read_only`), imports nothing from SGK, and reads the
+  registry only to learn which leaves are floats (`build_schema`, in memory), as SGK's does. Float
+  leaves are rendered through `float.fromhex`, `.5g`, with the unit of their `value_<unit>` column.
+  Problems are emitted whole.
+- **(5) By running it.** On the orchestrator's own stand-in stores, rebuilt at `47cfcfb` from the
+  pre-dispatch prototype's rows with the committed specs: `main.py --inventory` exits 0, `problems:
+  none`, 21 classes, the three models with their temperatures, φ\*, π\*, potential class with M and
+  Λ, β, `failure`, the tag, the value count and the version label; `--show-all` exits 0. The problem
+  store prints both problems whole under `ScalarModel`, exit 0. An absent path: exit 1, the reader's
+  message after `!! --inventory:`, nothing created. `--drop bbn-data`: exit 2. The two R1 copies:
+  exit 1, each with §0's refusal (the absolute shard record; `LambdaCDM`). No Ray process after any.
+- **(6) The driver's diff.** `main.py`: the two imports, and 08's refusal and comment replaced by the
+  read-only branch above the `--drop` closure and `ray.init`; nothing else.
+- **(7) Coverage.** `coverage_failures` walks the registry's keys, places each in exactly one place,
+  checks each read-through table against its owner's spec slot, and names stale exclusions and
+  exclusions with no reason; `EXCLUDED` is empty and asserted so. Three positive controls besides
+  the two breakages.
+- **(8) The tests and the breakages.** `test_datastore_config.py` loses exactly the two
+  `TestInventoryRefuses` tests (`ast`: no surviving body changed), and its docstring is true. The
+  new tests are not vacuous on §0's points: test 3 asserts decimal text the test chose, test 4 a
+  234-character problem printed whole on one line, test 5's `ast` check one branch, before
+  `ray.init`, ending in `sys.exit(0)`; every subprocess has a timeout and an address nothing listens
+  on. The five breakage diffs, extracted from the log (equal to the agent's scratch copies) and
+  replayed: each `--check`s clean and is caught as the log says (1: 8 `KeyError: 'model'` errors and
+  the two report subprocesses; 2: test 2's `redshift: leaf zz`, and tests 3–5; 3: `39 not less than
+  38`, run alone to avoid the subprocesses' 300 s waits; 4: I5 names `tolerance`, and
+  `inventory_classes` refuses; 5: I5 names `ScratchTable`). The tree is clean after.
+- **(9) Without Ray.** `import config.datastore` alone: 27 entries, `ray.is_initialized()` `False`;
+  `check_imports.py`: 165 names, 0 failures; the drivers byte-compile; `black --check` clean on the
+  23 Python files.
+- **(10) Suites.** The agent's: 18, 114 (61 + 53), 97, all OK, at loads of 4.8–5.8. The orchestrator
+  re-ran `Datastore/tests` at `47cfcfb`: **97, OK**; `TestDropPolicy`: 7, OK.
+- **(11) Hygiene.** `pip freeze` equals the dispatch copy, `pip check` clean; the 104 rehearsal
+  entries and the user's 17 pilot files unchanged; SecondaryGWKit `a5a6f6d`, StochasticInstantons
+  `5fb4a1d`, RayPoolKit `1b84df0`, DatastoreKit `04a2ed9`, each clean; no Ray process; no scratch file
+  or new `.db` in the repository. The agent wrote and deleted one file under `/tmp` during a
+  breakage step, outside the scratchpad; it is gone.
+- **(12) Records.** The §1 row, I1–I5, §5.14 with the P15 table, the status line; the issue in §3 and
+  the index (27 open, 4 on this board, the date and the header prose). The log follows README §5.1.
+  - *Residue, fixed here:* "this commit" → `47cfcfb` (board ×8, log ×6); this note added to the list
+    of orchestrator notes.
+- **Deviations D1–D9** are accepted. **D1 is the note's omission, not the agent's:** the note kept
+  08's pool guard, which names `inventory_config=`, while acceptance 3's grep, run over the whole
+  tree outside `prompts/`, also reaches `.documents/`, which P14 gives to 11. The note should have
+  amended acceptance 3 to code at dispatch; on code the grep is empty, which is what I4 means. D9 is
+  a measurement redone, not a change.
+- **Handed on to 10's note.**
+  - R2's readers now include `main.py --inventory`, read-only and before Ray. On R2's fresh stores it
+    should read with no problem: 21 classes, and the pilot's five models, histories and BBN rows
+    validated. Its layout is new, so R2's printed lines differ from R1's there by design.
+  - R0's and R1's stores cannot be inventoried by the package (exit 1); `compare_stores` remains the
+    way to compare R2 with R1.
+  - 10's suites start from 18 / 114 / 97.

@@ -1,7 +1,7 @@
 # Log 09 — port the inventory
 
 **Subject:** Port the datastore inventory to datastorekit's read-only reader
-**Commit:** this commit, on branch `dk-and-rpk-migration`, on top of `f84c3f0` (code as at `857ec73`)
+**Commit:** `47cfcfb`, on branch `dk-and-rpk-migration`, on top of `f84c3f0` (code as at `857ec73`)
 **Date:** 2026-10-13, by Claude Opus 5.5
 **Result:** **COMPLETE.** No §4 stop condition was met.
 - I1: 17 `inventory_spec` definitions, one per factory module, serving the 21 owners; each derived
@@ -108,7 +108,7 @@ pilot files.
 
 ### I1 — the spec table
 
-Every row is derived from the factory's `build` at this commit (line numbers are this commit's). "Leaves" and "parents" make the key;
+Every row is derived from the factory's `build` at `47cfcfb` (line numbers are `47cfcfb`'s). "Leaves" and "parents" make the key;
 `tags`, `values` and `validated` are read beside it. Every parent named is on the child's shard:
 the sharded parents are `ExponentialCoupling` (named by `ScalarModel`) and `ScalarModel` (named by
 `AdiabaticHistory` and `BBNData`), and each of those children takes its shard key from the same
@@ -508,7 +508,7 @@ exactly the `git diff` of the mutation; `git apply -R --check` passed before eac
 `git apply --check` on the restored tree after it, and `git diff --quiet` was true (for breakage 3
 the `--quiet` check reported the board and index edits I had made meanwhile, unstaged; `main.py`
 itself was restored, and they were staged before breakage 4). So each replays with `git apply` from a
-clean tree at this commit. Nothing was committed.
+clean tree at `47cfcfb`. Nothing was committed.
 
 **Breakage 1 — `AdiabaticHistory`'s `model` parent removed.**
 
@@ -686,7 +686,7 @@ No §3 issue is opened for 2–7. One issue opened (1).
 
 ## State handed to the next prompt
 
-- `HEAD` is this commit on `dk-and-rpk-migration`, on top of `f84c3f0`; planning and orchestration
+- `HEAD` is `47cfcfb` on `dk-and-rpk-migration`, on top of `f84c3f0`; planning and orchestration
   commits may land after it. No tracked change is left; the untracked entries of dispatch (the
   user's 17 `pilot-2026.6.0*.db` files, `pilot-main.log`, `pilot-plot.log`, `pilot-out/`, the two
   `full_run_2026.6.0*.sh` scripts, `prompts/jordan-normalization/`) are not this campaign's.
@@ -728,5 +728,5 @@ No §3 issue is opened for 2–7. One issue opened (1).
   27 open, 4 on this board.
 - **The venv** is as 07 left it; nothing installed. No Ray started; no store opened but temporary
   ones built through the stand-in. DatastoreKit, RayPoolKit and SecondaryGWKit untouched.
-- **Rollback** is `git revert` of this commit alone; nothing in the venv (README §4.4). It restores
+- **Rollback** is `git revert` of `47cfcfb` alone; nothing in the venv (README §4.4). It restores
   08's refusal.
