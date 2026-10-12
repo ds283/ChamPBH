@@ -21,13 +21,20 @@ user's rulings U1–U4 of the same day (§6.1).
   commit `0de2b16` (§0.3).
 
 §0.2 re-measures both checklists at `52142d7`. §2 fixes each prompt's charter and acceptance.
-**Prompts 01–04 are written** (2026-10-11, after the user's review), and **05–06** (2026-10-12,
-after 02's and 04's reviews); the rest follow in batches (§2.1). The user ruled on the proposals of §6.2 on 2026-10-11: all accepted, P2 amended, P9 after
+**Prompts 01–04 are written** (2026-10-11, after the user's review), **05–06** (2026-10-12,
+after 02's and 04's reviews), and **05a** (2026-10-12, for U5); the rest follow in batches (§2.1). The user ruled on the proposals of §6.2 on 2026-10-11: all accepted, P2 amended, P9 after
 §6.3's explanation.
 
 *Revised 2026-10-11, the same day, when the user reopened U3 (§6.1). The first draft registered the
 factories as classes in a prompt 05 of its own. That prompt is withdrawn, and the prompts after it
 are renumbered: 11 prompts, not 12.*
+
+*Revised 2026-10-12, after 05's review, when the user ruled **U5** (§6.6): ChamPBH's rehearsal
+cluster is isolated from other projects' (its own temp dir and ports) and stops only itself, never
+by `ray stop`, and a lock shared with StochasticInstantons and SecondaryGWKit lets one rehearsal run
+at a time on this machine. The contract is StochasticInstantons' `rehearsal-lock-brief.md`; a new
+prompt, 05a, carries out ChamPBH's side before 06. §2, §4, §4.1, §5 (rules 12, 15 and 16) and §6.6
+amended, and prompt 06 with them. 12 prompts, the numbers otherwise unchanged.*
 
 ## 0. Why this campaign exists
 
@@ -261,6 +268,7 @@ Released by DatastoreKit's `factory-defaults` campaign (closed at `83068cb`), fr
 | 03 | `03-pin-raypoolkit-v0.2.0.md` | The `raypoolkit` pin in a commit of its own, installed, one distribution added | Sonnet |
 | 04 | `04-adopt-raypoolkit.md` | **The RayPoolKit swap.** `RayTools/` goes and 3 imports are rewritten; all 17 sites construct. **RayPoolKit's G3 holds** by its checklist | Sonnet |
 | 05 | `05-move-champbh-data-out-of-the-layer.md` | `config/datastore.py` holds the registry, the drop groups and the serial batch sizes, and the old layer reads them from there. The 7 vectorized gets take `{"shard_key": beta}`. On the old layer; the schema does not change | Sonnet |
+| 05a | `05a-isolate-the-rehearsal-cluster.md` | **U5.** `ray_cluster.sh start\|stop\|status`, adapted from StochasticInstantons': ChamPBH's cluster on its own temp dir and ports, stopped by a targeted stop, never `ray stop`, under the shared rehearsal lock. Proved on a real cluster at Ray 2.53.0 beside a decoy, with no build | Sonnet |
 | 06 | `06-rehearse-before-the-datastore-swap.md` | **R1.** §4.1 at 05's tree: `raypoolkit` and the data move, still on ChamPBH's layer. Equal to R0 | Opus |
 | 07 | `07-pin-datastorekit-v0.2.3.md` | The `v0.2.3` pin (§0.3) in a commit of its own, installed as 03; ChamPBH's 20 partial factory classes instantiate on the installed base | Sonnet |
 | 08 | `08-adopt-datastorekit.md` | **The DatastoreKit swap.** The 9 files go (two emptied, P6); every layer import outside `prompts/` is rewritten; the pools take `factories=`, `serial_batch_sizes=` and `drop_tables=`; U4's drop refusal; `LambdaCDM` leaves `replicated_tables`; the harness is rebuilt on the package's actor; the carried tests are deleted; `--inventory` refuses until 09 | Opus |
@@ -276,6 +284,7 @@ carries the previous review's findings:
 - **01–04** are written first, once the user has reviewed this plan and ruled on P1–P17.
 - **05–06** follow 02's review: R0's reproducibility (§4.3) fixes 06's criterion, and 05's schema
   check uses R0's tree.
+- **05a** follows 05's review and the ruling U5. *Written 2026-10-12.* 06 waits on it.
 - **07–10** follow 06's review: 06's log fixes the counts and names they cite. `v0.2.3`'s tag and
   commit are §0.3's; its ChamPBH checklist addendum is read when 07 and 08 are written.
 - **11** follows 10's review.
@@ -395,6 +404,19 @@ carries the previous review's findings:
   3. The three roots give 04's counts plus the new tests.
   4. Deliberate breakages caught: one vectorized get reverted to the bare key; a batch size changed;
      a registry entry given another quantity type.
+
+**05a — Isolate the rehearsal cluster** (Sonnet; added for U5).
+- **What it adds.** `.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh`, copied from
+  StochasticInstantons' at `3556148` and made ChamPBH's: `start` takes the shared lock and starts
+  ChamPBH's cluster on `/tmp/ray-cpbh`, ports 6380 / 6381 / 8267 / 52367, 10 CPUs as R0's; `stop`
+  stops it by a targeted stop, confirms all four ports free, and releases the lock; `status`
+  reports both. The contract is the brief's §2–§3 (§6.6), shared with SI and SGK.
+- **Acceptance.** A real start and stop at Ray 2.53.0, with no build: a second acquire refused; a
+  decoy on Ray's default ports, whose temp dir has ChamPBH's as a prefix, left running by ChamPBH's
+  stop; ChamPBH's actors listed by an invocation that reaches its cluster alone; a lock held by
+  another project neither broken nor released. Four breakages. The suites unchanged.
+- **Out.** Any build; any change to 01's scripts or to Python; SI and SGK, which carry out the
+  brief themselves.
 
 **06 — Rehearse before the DatastoreKit swap, R1** (Opus).
 - **What it does.** §4.1's protocol, slug prefix `dk-and-rpk-migration-06`, at 05's tree:
@@ -578,6 +600,8 @@ expected and is why §4.2 reads files directly. Neither 08 nor 09 opens one thro
   `tools/compare_stores.py` and its schema snapshot, run by 02, 05, 06, 08 and 10; and the
   rehearsal scripts, which 06 and 10 run **unchanged**. A change to one is a deviation, logged and
   reviewed, since L4 compares their outputs.
+- **05a ships** `ray_cluster.sh` (U5), with which 06 and 10 start and stop ChamPBH's cluster under
+  the shared rehearsal lock (§4.1). It joins the rehearsal scripts, and is run unchanged.
 - **02, 06 and 10 each add a section** to `.documents/dk-and-rpk-migration-verification.md`, which
   02 creates: §1 R0, §2 R1, §3 R2. 11 adds §4, the close.
 - **03 and 07 ship the pins**, exactly as §2.2 gives them, in `requirements.txt` and in no other
@@ -594,10 +618,28 @@ Run by the agent in the session, by the user's ruling **U2**. It is a one-off ex
 `CLAUDE.md`'s "no campaign prompt starts" a `main.py` run with a datastore, and to its limit of "a
 few PRyMordial solves", for prompts 02, 06 and 10 only. NN is the prompt's number.
 
-**The cluster.** Before anything, the agent checks that no Ray cluster is up (`ray status`). If one
-is, it stops and asks: the cluster may be the user's. Otherwise it starts one with
-`./venv/bin/ray start --head`, passes its address to every driver with `--ray-address`, and runs
-`./venv/bin/ray stop` at the end, and after any stop. It never stops a cluster it did not start.
+**The cluster** (*amended 2026-10-12 for U5*; §6.6).
+- Before anything, the agent starts ChamPBH's cluster with 05a's
+  `.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh start "dk-and-rpk-migration NN (Rk)"`.
+  It takes the rehearsal lock shared with StochasticInstantons and SecondaryGWKit
+  (`~/ScienceData/.rehearsal-lock`), and starts a cluster on `/tmp/ray-cpbh` and ChamPBH's own
+  ports, 10 CPUs as R0's, at `127.0.0.1:6380`. **If the lock is held, the script refuses (exit 3)
+  and prints its owner; the agent stops and asks**: another project's rehearsal is running, or a
+  stale lock needs the user. It never waits on the lock and never breaks it.
+- It passes `127.0.0.1:6380` to every driver with `--ray-address`, and gives every `ray` CLI call
+  its address (`--address 127.0.0.1:6380`), as `start` prints. A driver run without
+  `--ray-address` takes `config/argument_parser.py`'s default, `"auto"`, which follows
+  `/tmp/ray/ray_current_cluster` to another project's cluster or to none; so none is.
+- At the end, and after any stop, it runs `ray_cluster.sh stop`, as a command on its own, which
+  stops ChamPBH's processes alone, confirms its ports free and releases the lock. **No prompt runs
+  `ray stop`** (§5 rule 15): it stops every Ray process on the machine, other projects' included.
+  The stop also kills anything whose command line names `/tmp/ray-cpbh`, so no shell or background
+  task that names it (a `tail -f` of a Ray log) is left running across a stop.
+- Other projects' clusters may be up meanwhile, isolated and not rehearsing; the agent leaves them
+  alone. The lock keeps rehearsals apart, not test suites, so the agent records the load and asks
+  the user to hold other heavy work off if it is high.
+- R0 ran before U5, on Ray's default cluster (`127.0.0.1:6379`, `/tmp/ray`). Isolation changes no
+  stored value, so R1 and R2 are still compared with it.
 
 **The grid** is the user's pilot of 2026-10-02 (`pilot-main.log`), so that it is a configuration
 the user has already run, about 9 minutes a build there (P1):
@@ -726,12 +768,18 @@ The project-wide ones in `CLAUDE.md` (invariants 1–7, and "Repository mechanic
 11. **A defect in a package is not patched or worked around in ChamPBH.** The prompt stops and
     records it. The user reports it to that package's repository, where it is fixed in a new
     release, and a new pin prompt moves ChamPBH to it. U3 is the first such case, met in planning.
-12. **No change is made in DatastoreKit, RayPoolKit or SecondaryGWKit by a prompt here.** Their
-    repositories are read, and the two packages' measuring scripts run from their roots with their
+12. **No change is made in DatastoreKit, RayPoolKit, SecondaryGWKit or StochasticInstantons by a
+    prompt here.** Their repositories are read, and the two packages' measuring scripts run from their roots with their
     own venvs. The `v0.2.3` release is DatastoreKit's own work, from the brief.
 13. **Pins.** Each pin is a tag, in a commit of its own, never an editable install, and ChamPBH
     keeps its own `ray` and `SQLAlchemy` pins.
 14. **Rehearsals** follow §4.1, and only 02, 06 and 10 run `main.py` on a store (U2).
+15. **Ray** (U5, ruled 2026-10-12). **No prompt runs `ray stop`**, which stops every Ray process on
+    the machine. From 05a on, a cluster is started and stopped only by 05a's `ray_cluster.sh`, and
+    every driver and `ray` CLI call is given its address. ChamPBH's tests need no Ray (rule 10).
+16. **The rehearsal lock** (U5). A rehearsal (06, 10), and 05a's proof, hold
+    `~/ScienceData/.rehearsal-lock` from before the cluster starts until after it has stopped
+    (the brief's §2). A held lock is a stop, never a wait.
 
 ### 5.1 The log template
 
@@ -892,6 +940,43 @@ are the tag and value tables of `ScalarModel`, `AdiabaticHistory` and `BBNData`,
 owner. Nothing falls outside a spec. So for ChamPBH the ruling adds a test, not work. It changes
 no other charter and no prompt already written, and adopting RunRegistryKit stays out of this
 campaign's scope (§1).
+
+### 6.6 Ruled by the user 2026-10-12: isolate the cluster, and share a lock (U5)
+
+On 2026-10-12, SGK's `runregistry-extraction` rehearsal, SI's suites and this campaign were live on
+this machine within hours of each other. SI's orchestrator wrote the shared contract,
+`rehearsal-lock-brief.md` (`/Users/ds283/Documents/Code/StochasticInstantons/.prompts/dk-and-rpk-migration/`,
+revised at `ed9399a` after SI's prompt 01a proved it), and the user handed it to this campaign.
+
+| | Decided | Rejected |
+|---|---|---|
+| **U5** — other projects' Ray clusters | **Isolate and lock.** ChamPBH's cluster runs on `/tmp/ray-cpbh` and its own ports (GCS 6380, client 6381, dashboard 8267, dashboard agent 52367) and stops only itself, never by `ray stop`. One lock, `~/ScienceData/.rehearsal-lock`, shared with SI and SGK, lets one rehearsal run at a time. ChamPBH adopts SI's `ray_cluster.sh` (05a) | The default cluster and `ray stop`, which stop other projects' builds in flight and collide on ports and on `/tmp/ray/ray_current_cluster` |
+
+**Why each part.**
+- **`ray stop` stops every Ray process on the machine.** At ChamPBH's Ray 2.53.0, as at SI's
+  2.55.1, it takes no address (`ray stop --help`: `--force`, `--grace-period` and the log options
+  only). §4.1 ran it after every rehearsal.
+- **Two default clusters collide**: on ports 6379, 10001, 8265 and 52365, and on
+  `/tmp/ray/ray_current_cluster`, which `ray.init("auto")`, ChamPBH's drivers' default, follows.
+- **Load moves results.** ChamPBH's BBN solve has a wall-clock limit (§4.3), so a rehearsal beside
+  another project's build could store a failure where R0 stored a result. The lock keeps
+  rehearsals apart.
+
+**What was checked for 05a, read-only, on 2026-10-12.**
+- Ray 2.53.0's source agrees with what SI measured on 2.55.1 in three places:
+  - `ray start --temp-dir` writes `ray_current_cluster` into that directory
+    (`ray/_common/utils.py:237`, called from `ray/scripts/scripts.py:1126`);
+  - the client server's command line is `… -m ray.util.client.server --address=<gcs> --host=…
+    --port=<client> …` (`ray/_private/services.py:2350-2361`), so SI's seed matches it;
+  - `ray start` accepts `--temp-dir`, `--ray-client-server-port`, `--dashboard-port` and
+    `--dashboard-agent-listen-port`.
+- What is behaviour rather than source is 05a's to measure: `gcs_server` and `SIGTERM`, the actor
+  command, and the client server's address.
+- **SI's script checks only its GCS port when it stops**, where the brief's revised §3 asks for all
+  four. SI's orchestrator checked the other three by hand. 05a's copy checks all four, and the
+  difference is SI's to take up, not this campaign's.
+- R0's cluster had 10 CPUs (verification §1), so 05a's default is 10, not SI's 4.
+- No Ray process was running and none of the eight ports was held.
 
 ## 7. What this campaign hands to the user
 

@@ -3,13 +3,19 @@
 **Campaign:** [`README.md`](README.md) · **Board items:** **L1**–**L4** (R1), **V2**; gate **R1** ·
 **Board:** [`IMPLEMENTATION_STATE.md`](IMPLEMENTATION_STATE.md)
 **Written:** 2026-10-12, with prompt 05, after the reviews of 02 (`70184f1`) and 04 (`cb0c675`).
+*Amended 2026-10-12, before dispatch, for the user's ruling U5 (README §6.6): the cluster is
+started and stopped by 05a's `ray_cluster.sh` under the shared rehearsal lock, never by `ray stop`
+(§1.2).*
 **Gate:**
-- 05 landed and reviewed (board §1);
+- 05 and 05a landed and reviewed (board §1);
 - on branch `dk-and-rpk-migration`, no tracked change in `git status` (the untracked entries listed
   in prompt 01's gate are expected, and are not yours);
 - the venv holds `raypoolkit` 0.2.0 at `eaef0ce6…`, not editable, and no `datastorekit`;
-- **no Ray cluster is up** (`./venv/bin/ray status` finds none). If one is, stop and ask: it may be
-  the user's.
+- **`.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh status` shows the rehearsal lock
+  free, no ChamPBH process (`/tmp/ray-cpbh`) and ChamPBH's four ports free.** If the lock is held,
+  stop and ask: another project is rehearsing. Other projects' clusters may be up; they are
+  isolated, and you leave them alone. Do not use `ray status` for this check: without an address it
+  finds other projects' clusters, or fails when there are two.
 
 **Closes:** nothing. **Opens:** anything you find, **without fixing it**.
 **Recommended model:** **Opus**. It runs three builds and the readers under a real Ray cluster on
@@ -30,7 +36,8 @@ and no further.
 4. Prompt 02's log, and `.documents/dk-and-rpk-migration-verification.md` §1, **in full**: R0's
    numbers are what you compare against, and its "Observations not acted on" and §1.8 say what to
    expect and how `S` was found.
-5. Prompt 04's and 05's logs, "State handed to the next prompt": what changed since R0.
+5. Prompt 04's, 05's and 05a's logs, "State handed to the next prompt": what changed since R0, and
+   how 05a's script starts and stops the cluster (its actor line, its timings).
 6. RayPoolKit's README at the tag, "The printed lines are part of the interface"
    (`git -C /Users/ds283/Documents/Code/RayPoolKit show v0.2.0:README.md`). Read only.
 
@@ -70,14 +77,22 @@ value is a miss.** No tolerance is chosen by an agent.
    pid,pcpu,comm -r | head`). The orchestrator asks other sessions to hold their suites and Ray jobs
    off the machine while you build; if one runs anyway, record it and continue (R0's result held
    under a foreign suite, log 02 Observation 4).
-2. `./venv/bin/ray start --head --disable-usage-stats`, from the repository root. **At Ray 2.53.0 it
-   prints no address line.** The address is `127.0.0.1:6379` by default; read it from
-   `/tmp/ray/ray_current_cluster`, confirm with `./venv/bin/ray status`, and pass it to every driver
-   as `--ray-address`.
-3. At the end, and after any stop, `./venv/bin/ray stop`, **as a command on its own**: it kills a
-   shell whose command line names Ray's processes (log 02 Observation 6). Check afterwards, in a
-   separate command, that `pgrep -lf 'gcs_server|raylet|ray::'` finds nothing. You stop only the
-   cluster you started.
+2. `.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh start "dk-and-rpk-migration 06 (R1)"`,
+   from the repository root (README §4.1, as amended for U5). It takes the rehearsal lock and
+   starts ChamPBH's cluster on `/tmp/ray-cpbh` with 10 CPUs, as R0's. **If it exits 3, the lock is
+   held: stop and ask.** It prints the address, `127.0.0.1:6380`, and the actor line; pass the
+   address to every driver as `--ray-address`, and give every `ray` CLI call `--address
+   127.0.0.1:6380`. Confirm with `./venv/bin/ray status --address 127.0.0.1:6380` (one node, 10
+   CPUs). R0's cluster was Ray's default (`127.0.0.1:6379`, `/tmp/ray`), before U5; the temp dir
+   and the ports are all that differ, and no stored value depends on them.
+3. At the end, and after any stop, `.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh stop`,
+   **as a command on its own**. It stops ChamPBH's processes alone, confirms the four ports free and
+   releases the lock (about 20 s: `gcs_server` ignores `SIGTERM`, so the grace always runs). Then
+   `ray_cluster.sh status`, in a separate command: the lock free, no ChamPBH process. **Never run
+   `ray stop`** (README §5 rule 15): it stops every Ray process on the machine, other projects'
+   included. The stop kills anything whose command line names `/tmp/ray-cpbh`, so leave no shell or
+   background task that names it (a `tail -f` of a Ray log) running across it. If `stop` exits
+   non-zero, stop and ask; do not clean up by hand.
 
 ### 1.3 The builds
 
@@ -96,7 +111,8 @@ notified when it ends. Wait for each to end before the next. **Do not poll.**
    134**, not 143: Ray's absl failure-signal handler prints `*** SIGTERM received …` and a native
    stack, twice, then aborts. That dump is not a Python traceback and contains neither `Traceback`
    nor `Error` (log 02 Observation 1). Confirm that the killed driver's actors are gone
-   (`./venv/bin/ray list actors --filter "state=ALIVE"`), and record what you saw. If an actor of the
+   (`./venv/bin/ray list actors --address 127.0.0.1:6380 --filter "state=ALIVE"`, the actor line
+   `start` printed), and record what you saw. If an actor of the
    killed job is still alive after a minute, stop and ask. Record what `resumed-a` kept (`mode=ro`:
    which `AdiabaticHistory` rows, validated or not).
 4. **`resumed-b`:** `build.sh 06 resumed resumed-b <address> --prune-unvalidated`.
@@ -104,7 +120,7 @@ notified when it ends. Wait for each to end before the next. **Do not poll.**
 ### 1.4 After the builds
 
 1. **The readers:** `run_readers.sh 06 resumed <address>`.
-2. `ray stop` (§1.2.3). Nothing below needs the cluster.
+2. `ray_cluster.sh stop` (§1.2.3). Nothing below needs the cluster.
 3. **The comparisons**, each with `--json .documents/dk-and-rpk-migration/out/06-compare-<a>-<b>.json`
    and its text output saved beside it:
    - **`02-reference.db` against `06-reference.db`**: the criterion;
@@ -127,7 +143,7 @@ notified when it ends. Wait for each to end before the next. **Do not poll.**
   reader's log, carries the provenance line**
   `>> packages: datastorekit not installed; raypoolkit 0.2.0 (https://github.com/ds283/RayPoolKit@eaef0ce60e2fc354bb32f0ad576010e6a83c1976, requested v0.2.0)`.
   It prints no `editable` flag; the helper's `editable: False` is checked once, by
-  `utilities.installed_package_provenance()["raypoolkit"]`, before `ray start`.
+  `utilities.installed_package_provenance()["raypoolkit"]`, before the cluster starts.
 - **L2 — the resume.** From the logs, the label counts (`mode=ro`) and `stage_counts.py`:
   - what `resumed-b`'s open pruned (by `_validate_on_startup`'s report), and that it was only
     unvalidated rows;
@@ -179,14 +195,16 @@ notified when it ends. Wait for each to end before the next. **Do not poll.**
      edited (`CLAUDE.md` invariant 6);
    - `.documents/dk-and-rpk-migration/out/06-*`;
    - this board: the §1 row for 06, items L1–L4 (R1) and V2, **gate R1** in §2, and
-     `### 5.8 After prompt 06 (<date>)`;
+     `### 5.10 After prompt 06 (<date>)`;
    - a §3 entry for anything opened, with `.documents/OPEN_ISSUES.md` in the same commit.
 
 ---
 
 ## 4. Stop conditions — stop and ask
 
-- A Ray cluster is already up, or a store or directory of §1.1 already exists.
+- The rehearsal lock is held, or a ChamPBH process (`/tmp/ray-cpbh`) is already running, or a
+  store or directory of §1.1 already exists.
+- `ray_cluster.sh stop` exits non-zero, or leaves a ChamPBH process or port behind.
 - A build fails, raises, or does not end as §2 says.
 - An actor of the killed build is still alive after a minute.
 - A reader fails, or changes the store beyond bookkeeping.
@@ -209,7 +227,8 @@ notified when it ends. Wait for each to end before the next. **Do not poll.**
 - It opens no store but its own two (and the readers' copy), and R0's two read-only through
   `compare_stores`. Not the pilot store in the repository root; not `~/ChamPBH-stores/` or
   `~/ChamPBH-stores-bt02/`.
-- It installs nothing, and leaves no Ray cluster running.
+- It installs nothing, leaves no ChamPBH cluster running and the lock free, and never runs
+  `ray stop`. Other projects' clusters are not touched.
 
 ---
 
@@ -218,8 +237,8 @@ notified when it ends. Wait for each to end before the next. **Do not poll.**
 `logs/06-rehearse-before-the-datastore-swap.md`, using README §5.1. It holds the cluster's address and
 the load, each command verbatim, each build's start, end and exit status, `S` and why, the actor
 check, what `resumed-a` kept, L1–L4 with R0's figures beside each, the three comparisons in full,
-the printed-lines comparison, and the three suites at dispatch, run before `ray start` (no change
-expected: 06 changes no code, but record them, as `CLAUDE.md` asks).
+the printed-lines comparison, and the three suites at dispatch, run before the cluster starts (no
+change expected: 06 changes no code, but record them, as `CLAUDE.md` asks).
 
 **One commit**, in `CLAUDE.md`'s form, staged by explicit path only, after showing
 `git diff --cached --name-only`.

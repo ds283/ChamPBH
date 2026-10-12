@@ -1,7 +1,7 @@
 # dk-and-rpk-migration campaign — implementation state
 
-**Last updated:** 2026-10-12 · **Status: LIVE — 6 of 11 prompts written (01–06), 5 landed (01–05); R0 bitwise reproducible; RayPoolKit G3 holds. P1–P17
-ruled; DatastoreKit `v0.2.3` released (README §0.3).**
+**Last updated:** 2026-10-12 · **Status: LIVE — 7 of 12 prompts written (01–06, 05a), 5 landed (01–05); R0 bitwise reproducible; RayPoolKit G3 holds. P1–P17
+ruled; U5 ruled (README §6.6); DatastoreKit `v0.2.3` released (README §0.3).**
 The plan is [`README.md`](README.md), written on 2026-10-11 at `52142d7` with the user's rulings
 U1–U4. Prompts 01–04 are written once the user has reviewed it (README §2.1).
 
@@ -47,6 +47,12 @@ covered by a spec, read through one, or excluded with a reason (09's acceptance 
 the fingerprint of SGK's RunRegistryKit, which ChamPBH is expected to adopt after this campaign,
 reads only what the specs declare. Measured at `12c82e8`, 09's list already covers all 27 entries.
 
+**Ruled by the user, 2026-10-12 (README §6.6):**
+
+| Decision | Decided |
+|---|---|
+| **U5** — other projects' Ray clusters | isolate and lock. ChamPBH's cluster runs on `/tmp/ray-cpbh` and ports 6380 / 6381 / 8267 / 52367 and stops only itself, never by `ray stop`; one lock, `~/ScienceData/.rehearsal-lock`, shared with StochasticInstantons and SecondaryGWKit, lets one rehearsal run at a time. Contract: SI's `rehearsal-lock-brief.md` at `ed9399a`; ChamPBH's side is 05a |
+
 ---
 
 ## 1. Prompts
@@ -58,6 +64,7 @@ reads only what the specs declare. Measured at `12c82e8`, 09's list already cove
 | 03 | [Pin `raypoolkit` `v0.2.0`](03-pin-raypoolkit-v0.2.0.md) | the RayPoolKit pin | Sonnet | ✍️ 2026-10-11 | ✅ 2026-10-12 | `2f61943` | [log](logs/03-pin-raypoolkit-v0.2.0.md) |
 | 04 | [Adopt `raypoolkit`](04-adopt-raypoolkit.md) | the RayPoolKit swap; **RayPoolKit G3** | Sonnet | ✍️ 2026-10-11 | ✅ 2026-10-12 | `303324b` | [log](logs/04-adopt-raypoolkit.md) |
 | 05 | [Move ChamPBH's data out of the layer](05-move-champbh-data-out-of-the-layer.md) | `config/datastore.py`; the vectorized gets | Sonnet | ✍️ 2026-10-12 | ✅ 2026-10-12 | `8e77578` | [log](logs/05-move-champbh-data-out-of-the-layer.md) |
+| 05a | [Isolate the rehearsal cluster](05a-isolate-the-rehearsal-cluster.md) | **U5**; `ray_cluster.sh` | Sonnet | ✍️ 2026-10-12 | ⬜ | — | — |
 | 06 | [Rehearse before the DatastoreKit swap (R1)](06-rehearse-before-the-datastore-swap.md) | **R1** | Opus | ✍️ 2026-10-12 | ⬜ | — | — |
 | 07 | Pin `datastorekit` `v0.2.3` | the DatastoreKit pin (**U3**; `0de2b16`) | Sonnet | ⬜ | ⬜ | — | — |
 | 08 | Adopt `datastorekit` | the DatastoreKit swap; **U4** | Opus | ⬜ | ⬜ | — | — |
@@ -70,6 +77,7 @@ reads only what the specs declare. Measured at `12c82e8`, 09's list already cove
 **Held, by design (README §2.1).**
 - **01–04** are written after the user's review of the plan.
 - **05–06** are written after 02's review: R0's reproducibility sets R1's criterion.
+- **05a** is written after 05's review, for U5. 06 waits on it.
 - **07–10** are written after 06's review (`v0.2.3` is released).
 - **11** is written after 10's review.
 
@@ -102,6 +110,9 @@ before each dispatch:
 | **M2** | 05 | the old layer imports them under its old names; `_drop_order` stays | ✅ `8e77578`: the layer's diff is the removed definitions and imports plus two import statements; `_drop_order` kept; the schema agrees with 04's tree and with R0's snapshot |
 | **M3** | 05 | the 7 vectorized gets in `main.py` pass `{"shard_key": …}` | ✅ `8e77578`: 7 hunks; `black` splits the `AdiabaticHistory` call, so lines after `:418` move by +2 |
 | **M4** | 05 | `Datastore/tests/test_datastore_config.py`: the data captured, the layer reading it, the `ast` test of the drivers; the schema unchanged against R0's snapshot | ✅ `8e77578`: 7 tests (Datastore 66 → 73); four breakages caught (log 05) |
+| **C1** | 05a | `.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh start\|stop\|status`, adapted from SI's at `3556148`: ChamPBH's temp dir and ports, 10 CPUs, all four ports confirmed free, a start refused on a held port | ⬜ |
+| **C2** | 05a | Ray 2.53.0's behaviour measured: the client server's command line, `ray_current_cluster`'s place, the actor command, `gcs_server` under `SIGTERM` | ⬜ |
+| **C3** | 05a | the proof on a real cluster beside a decoy (`/tmp/ray-cpbh-decoy`, Ray's default ports), with no build; four breakages | ⬜ |
 | **L1**–**L4** (R1) | 06 | README §4.1 at 05's tree; each store equal to `02-reference.db`, bitwise; L4 against R0, the printed lines included | ⬜ |
 | **V2** | 06 | `.documents/dk-and-rpk-migration-verification.md` §2 R1 | ⬜ |
 
@@ -705,3 +716,26 @@ follow-up (records).
   - The suites start from 18 / 114 / 73.
   - DatastoreKit's checklist now carries a `v0.3.0` addendum: ChamPBH may pin `v0.2.3` or
     `v0.3.0`. That is the user's choice, for 07, which is written after 06's review.
+
+### 5.8 Prompt 05a written, for U5 (2026-10-12)
+
+Written after 05's review, at `7ed8546`, when the user handed this campaign StochasticInstantons'
+`rehearsal-lock-brief.md` (revised at `ed9399a`) and ruled U5 (README §6.6). The planning commit
+also amends README §2, §4, §4.1, §5 (rules 12, 15, 16) and §6.6, and prompt 06's gate, §1.2, §1.3.3,
+§1.4.2, §4 and §5, which now start and stop the cluster with 05a's script. The facts it rests on
+were measured read-only that day.
+- **Ray 2.53.0, by its source**, agrees with SI's 2.55.1 measurements: `ray_current_cluster` is
+  written into the `--temp-dir` (`ray/_common/utils.py:237`); the client server's command line is
+  `… -m ray.util.client.server --address=<gcs> --host=… --port=<client> …`
+  (`ray/_private/services.py:2350-2361`), which SI's seed matches; `ray start` takes the four port
+  options and `--temp-dir`; `ray stop` takes no address. The behaviour (`gcs_server` and
+  `SIGTERM`, the actor command, the client server's address) is 05a's to measure (C2).
+- **What 05a changes from SI's script**, besides the names: `--num-cpus` defaults to 10, R0's (SI's
+  4 suits SI's grid); the stop confirms **all four** ports free, where SI's checks only the GCS
+  port, though the brief's §3 asks for all four and SI's orchestrator checked them by hand; `start`
+  refuses a held port before `ray start`. The decoy's temp dir, `/tmp/ray-cpbh-decoy`, has
+  ChamPBH's as a prefix, so that the whole-component match is proved too.
+- **The machine.** No Ray process running; none of the eight ports held; the lock absent.
+  `/tmp/ray`, `/tmp/ray-si` and `/tmp/ray-decoy` exist from earlier runs.
+- **Renumbering.** 05a records `### 5.9`; 06's entry becomes `### 5.10` (prompt 06 §3.6 amended).
+- Board items C1–C3 added. No issue opened; `.documents/OPEN_ISSUES.md` unchanged.
