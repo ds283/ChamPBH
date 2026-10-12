@@ -1,6 +1,6 @@
 # dk-and-rpk-migration campaign — implementation state
 
-**Last updated:** 2026-10-12 · **Status: LIVE — 7 of 12 prompts written (01–06, 05a), 5 landed (01–05); R0 bitwise reproducible; RayPoolKit G3 holds. P1–P17
+**Last updated:** 2026-10-12 · **Status: LIVE — 7 of 12 prompts written (01–06, 05a), 6 landed (01–05, 05a); R0 bitwise reproducible; RayPoolKit G3 holds. P1–P17
 ruled; U5 ruled (README §6.6); DatastoreKit `v0.2.3` released (README §0.3).**
 The plan is [`README.md`](README.md), written on 2026-10-11 at `52142d7` with the user's rulings
 U1–U4. Prompts 01–04 are written once the user has reviewed it (README §2.1).
@@ -64,7 +64,7 @@ reads only what the specs declare. Measured at `12c82e8`, 09's list already cove
 | 03 | [Pin `raypoolkit` `v0.2.0`](03-pin-raypoolkit-v0.2.0.md) | the RayPoolKit pin | Sonnet | ✍️ 2026-10-11 | ✅ 2026-10-12 | `2f61943` | [log](logs/03-pin-raypoolkit-v0.2.0.md) |
 | 04 | [Adopt `raypoolkit`](04-adopt-raypoolkit.md) | the RayPoolKit swap; **RayPoolKit G3** | Sonnet | ✍️ 2026-10-11 | ✅ 2026-10-12 | `303324b` | [log](logs/04-adopt-raypoolkit.md) |
 | 05 | [Move ChamPBH's data out of the layer](05-move-champbh-data-out-of-the-layer.md) | `config/datastore.py`; the vectorized gets | Sonnet | ✍️ 2026-10-12 | ✅ 2026-10-12 | `8e77578` | [log](logs/05-move-champbh-data-out-of-the-layer.md) |
-| 05a | [Isolate the rehearsal cluster](05a-isolate-the-rehearsal-cluster.md) | **U5**; `ray_cluster.sh` | Sonnet | ✍️ 2026-10-12 | ⬜ | — | — |
+| 05a | [Isolate the rehearsal cluster](05a-isolate-the-rehearsal-cluster.md) | **U5**; `ray_cluster.sh` | Sonnet | ✍️ 2026-10-12 | ✅ 2026-10-12 | this commit | [log](logs/05a-isolate-the-rehearsal-cluster.md) |
 | 06 | [Rehearse before the DatastoreKit swap (R1)](06-rehearse-before-the-datastore-swap.md) | **R1** | Opus | ✍️ 2026-10-12 | ⬜ | — | — |
 | 07 | Pin `datastorekit` `v0.2.3` | the DatastoreKit pin (**U3**; `0de2b16`) | Sonnet | ⬜ | ⬜ | — | — |
 | 08 | Adopt `datastorekit` | the DatastoreKit swap; **U4** | Opus | ⬜ | ⬜ | — | — |
@@ -110,9 +110,9 @@ before each dispatch:
 | **M2** | 05 | the old layer imports them under its old names; `_drop_order` stays | ✅ `8e77578`: the layer's diff is the removed definitions and imports plus two import statements; `_drop_order` kept; the schema agrees with 04's tree and with R0's snapshot |
 | **M3** | 05 | the 7 vectorized gets in `main.py` pass `{"shard_key": …}` | ✅ `8e77578`: 7 hunks; `black` splits the `AdiabaticHistory` call, so lines after `:418` move by +2 |
 | **M4** | 05 | `Datastore/tests/test_datastore_config.py`: the data captured, the layer reading it, the `ast` test of the drivers; the schema unchanged against R0's snapshot | ✅ `8e77578`: 7 tests (Datastore 66 → 73); four breakages caught (log 05) |
-| **C1** | 05a | `.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh start\|stop\|status`, adapted from SI's at `3556148`: ChamPBH's temp dir and ports, 10 CPUs, all four ports confirmed free, a start refused on a held port | ⬜ |
-| **C2** | 05a | Ray 2.53.0's behaviour measured: the client server's command line, `ray_current_cluster`'s place, the actor command, `gcs_server` under `SIGTERM` | ⬜ |
-| **C3** | 05a | the proof on a real cluster beside a decoy (`/tmp/ray-cpbh-decoy`, Ray's default ports), with no build; four breakages | ⬜ |
+| **C1** | 05a | `.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh start\|stop\|status`, adapted from SI's at `3556148`: ChamPBH's temp dir and ports, 10 CPUs, all four ports confirmed free, a start refused on a held port | ✅ this commit: SI's file with changes 1–4 only (12 hunks, all classified; the lock functions differ by names); mode 100755; `bash -n` under 3.2 and 5.3 |
+| **C2** | 05a | Ray 2.53.0's behaviour measured: the client server's command line, `ray_current_cluster`'s place, the actor command, `gcs_server` under `SIGTERM` | ✅ this commit: all five facts agree with SI's 2.55.1 (log 05a §4.4); `gcs_server` ignores `SIGTERM`, a stop takes 17–20 s |
+| **C3** | 05a | the proof on a real cluster beside a decoy (`/tmp/ray-cpbh-decoy`, Ray's default ports), with no build; four breakages | ✅ this commit: steps 1–9 under `/bin/bash` 3.2, steps 1–3 and stop under 5.3; the decoy's set unchanged pid for pid; B1–B4 caught; the held-port refusal exercised with `nc` |
 | **L1**–**L4** (R1) | 06 | README §4.1 at 05's tree; each store equal to `02-reference.db`, bitwise; L4 against R0, the printed lines included | ⬜ |
 | **V2** | 06 | `.documents/dk-and-rpk-migration-verification.md` §2 R1 | ⬜ |
 
@@ -739,3 +739,33 @@ were measured read-only that day.
   `/tmp/ray`, `/tmp/ray-si` and `/tmp/ray-decoy` exist from earlier runs.
 - **Renumbering.** 05a records `### 5.9`; 06's entry becomes `### 5.10` (prompt 06 §3.6 amended).
 - Board items C1–C3 added. No issue opened; `.documents/OPEN_ISSUES.md` unchanged.
+
+### 5.9 After prompt 05a (2026-10-12)
+
+Prompt 05a wrote ChamPBH's `ray_cluster.sh` from SI's at `3556148` and proved it on a real cluster
+beside a decoy. Log: [`logs/05a-isolate-the-rehearsal-cluster.md`](logs/05a-isolate-the-rehearsal-cluster.md).
+- **State.** C1–C3 done (§1.1). No issue opened; `.documents/OPEN_ISSUES.md` unchanged. The suites
+  are 18 / 114 / 73, run with no cluster up. No Python, venv or store changed.
+- **The actor line, as `start` prints it:**
+  `>> ray_cluster: actors: ./venv/bin/ray list actors --address 127.0.0.1:6380`. It reaches
+  ChamPBH's cluster alone with the decoy up (`cpbh_actor`, not `decoy_actor`); `--address
+  127.0.0.1:6379` the reverse; the bare `ray list actors` fails ("Found multiple active Ray
+  instances"). `./venv/bin/ray status --address 127.0.0.1:6380`: one node, 10 CPUs.
+- **Where `ray_current_cluster` went.** Into `/tmp/ray-cpbh/` (`127.0.0.1:6380`), and into the
+  decoy's `/tmp/ray-cpbh-decoy/`. `/tmp/ray/ray_current_cluster` did not exist before step 2 and
+  does not exist at the end. The file survives a stop.
+- **The two process sets** (by `list_cluster_pids`, disjoint): ChamPBH's 18 at start (`gcs_server`,
+  `monitor.py`, the client server, `dashboard.py` with nine heads, `log_monitor.py`, `raylet` with
+  its `agent.py` and runtime-env agent), 24 with five idle workers and one actor worker; the
+  decoy's 18, 19 with its actor. A stop left the decoy's 19 pid for pid, and its actor answered.
+- **Timings.** A start: 13 s under a load of about 66, 3–6 s at about 25. A stop: 17–20 s (19 s
+  for the 24 processes, then the decoy's 18 s), because `gcs_server` ignores `SIGTERM`: the 15 s
+  grace runs and the `gcs_server` (and `monitor.py` in two stops) is `SIGKILL`ed.
+- **Breakages**, each caught: B1 (whole-component guard) the decoy's processes listed under
+  ChamPBH's name; B2 (`mkdir -p`) not refused by the lock, caught by the stale-process guard
+  (exit 4), whose release **removed the live cluster's lock**; B3 (owner checks) the stand-in lock
+  released; B4 (client-server seed) port 6381 still held, exit 1, lock kept.
+- **Rollback.** `git revert` of this commit alone; it adds files and changes nothing else.
+- **For 06 (R1).** Call `ray_cluster.sh start|stop|status` as §1.2 says. Exit 3: the lock is held,
+  stop and ask. Exit 4: a ChamPBH process or a port is already there, stop and ask. The brief's
+  contract needed no change for Ray 2.53.0.
