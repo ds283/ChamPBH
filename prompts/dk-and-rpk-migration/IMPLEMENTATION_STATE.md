@@ -42,6 +42,11 @@ layer-owned names are imported directly from `datastorekit.contract`). The user'
 come), P6 (the folder structure to be tidied) and P11 (read-only plot pools wanted eventually) are
 recorded beside each proposal.
 
+**Ruled by the user, 2026-10-12 (README §6.5):** 09 also proves that every registered class is
+covered by a spec, read through one, or excluded with a reason (09's acceptance item 5), because
+the fingerprint of SGK's RunRegistryKit, which ChamPBH is expected to adopt after this campaign,
+reads only what the specs declare. Measured at `12c82e8`, 09's list already covers all 27 entries.
+
 ---
 
 ## 1. Prompts

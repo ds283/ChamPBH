@@ -513,6 +513,15 @@ ChamPBH checklist addendum, and re-checks the tag on the remote before installin
   3. The three roots give 08's counts plus the new tests.
   4. Deliberate breakages caught: one spec's parent removed; one leaf misnamed; `--inventory`
      moved after `ray.init` (an `ast` test).
+  5. **Coverage, for the fingerprint** (§6.5, ruled 2026-10-12). A test walks the registry
+     (`Datastore/SQL/Datastore.py`'s `_factories`, or `config/datastore.py`'s once 05 has moved it)
+     and puts every registered class in exactly one of three places: it declares a spec; it is a
+     tag, value or parent-set table read through an owner's spec, the test naming the owner and
+     the slot; or it is excluded, by name, in a table in the test with a one-line reason. The test
+     fails on a class in none of the three, and on an exclusion naming a class no longer
+     registered. Measured at `12c82e8`, all 27 entries fall in the first two (§6.5), so the
+     exclusion table starts empty. Deliberate breakages: the spec removed from one owner, and a
+     new registered class with none, each fail it.
 
 **10 — Rehearse through both packages, R2** (Opus).
 - **What it does.** §4.1's protocol, slug prefix `dk-and-rpk-migration-10`, at 09's tree.
@@ -865,6 +874,24 @@ lookups on it since 2026-09-30. Neither comes new from the package.
   - the two G3 records (P16);
   - whether the plot scripts should open read-only (P11's issue);
   - whether to rename the `Datastore` package (P6).
+
+### 6.5 Ruled by the user 2026-10-12: a spec for every class that holds state
+
+SGK is extracting its `RunRegistry` into a package of its own, RunRegistryKit, which ChamPBH is
+expected to adopt after this campaign closes (P5's note). Its store layer fingerprints a store
+through `read_inventory`, which reads only the classes that declare `inventory_spec()` and passes
+over the rest **silently**. 09's charter covers "each factory whose class the report covers": the
+right test for a report, but a fingerprint must not omit a class that holds state. The user ruled
+that 09 also proves coverage (acceptance item 5), and that RunRegistryKit's store layer will not
+work without a fingerprinter, so this is where ChamPBH earns one. The reasoning is SGK's
+`docs/runregistry-extraction-audit.md` §0 (D4, D5) and §7.
+
+**What it costs here.** Measured read-only on 2026-10-12 at `12c82e8`: the registry
+(`Datastore/SQL/Datastore.py:94-122`) has 27 entries. 09's list names all 21 owners; the other six
+are the tag and value tables of `ScalarModel`, `AdiabaticHistory` and `BBNData`, one of each per
+owner. Nothing falls outside a spec. So for ChamPBH the ruling adds a test, not work. It changes
+no other charter and no prompt already written, and adopting RunRegistryKit stays out of this
+campaign's scope (§1).
 
 ## 7. What this campaign hands to the user
 
