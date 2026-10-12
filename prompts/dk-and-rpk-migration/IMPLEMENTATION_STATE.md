@@ -840,3 +840,15 @@ opened. The residue is fixed in this follow-up (records only).
   - Changes 3 and 4 are ChamPBH's additions to SI's script: the four-port check and the
     held-port refusal. Whether SI takes them up is SI's business (README §6.6); nothing is written
     in SI.
+
+**SI's handover (2026-10-12)**, `rehearsal-lock-handover-2026-10-12.md` at SI's `5fb4a1d`, weighed in
+README §6.6.
+- SI took changes 3 and 4 into its script (`8e04a7c`). It added a five-argument guard on
+  `stop_cluster`. ChamPBH took the guard, and corrected its usage text on the client server, as
+  housekeeping in `288b385`, checked under both shells without starting a cluster.
+- The brief, amended at SI's `d6d550b`, forbids `--ray-address auto` for any run under the lock.
+  06's protocol already gives every driver and `ray` CLI call the address. README §7 now says the
+  same of a long build on this machine.
+- SI's drivers now require `--ray-address`; ChamPBH's keep `auto`. That is left for the user
+  (README §6.4).
+- No issue opened; `.documents/OPEN_ISSUES.md` unchanged.

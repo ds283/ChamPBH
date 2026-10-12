@@ -921,7 +921,9 @@ lookups on it since 2026-09-30. Neither comes new from the package.
   - removing the rehearsal stores (§3);
   - the two G3 records (P16);
   - whether the plot scripts should open read-only (P11's issue);
-  - whether to rename the `Datastore` package (P6).
+  - whether to rename the `Datastore` package (P6);
+  - whether the drivers' `--ray-address` should become required, as SI's are, rather than default
+    to `auto` (§6.6, SI's handover).
 
 ### 6.5 Ruled by the user 2026-10-12: a spec for every class that holds state
 
@@ -978,6 +980,31 @@ revised at `ed9399a` after SI's prompt 01a proved it), and the user handed it to
 - R0's cluster had 10 CPUs (verification §1), so 05a's default is 10, not SI's 4.
 - No Ray process was running and none of the eight ports was held.
 
+**SI's handover, after 05a (2026-10-12).** SI's
+`rehearsal-lock-handover-2026-10-12.md` (at SI's `5fb4a1d`) reports three changes there, read and
+weighed the same day:
+- **The brief, amended at SI's `d6d550b`**, forbids `--ray-address auto` for any run that takes
+  the lock, a long build as much as a rehearsal. With the clusters isolated, `auto` finds no
+  `/tmp/ray/ray_current_cluster` and takes the first GCS address it finds among the running
+  raylets, with no warning. §2 of the brief, the lock, is unchanged. **ChamPBH's rehearsals
+  already meet it:** §4.1 gives every driver `--ray-address 127.0.0.1:6380` and every `ray` CLI
+  call `--address`, and `build.sh` and `run_readers.sh` pass the address through. The long builds
+  are the user's (§7).
+- **SI took 05a's changes 3 and 4 into its script** (SI's `8e04a7c`), and added a guard that
+  `stop_cluster` returns 2 unless given all five arguments. ChamPBH took the guard, and corrected
+  its usage text ("the client server on 6380": it listens on 6381, and is found by its
+  `--address=127.0.0.1:6380`), in `288b385`. In ChamPBH's script a shorter call already failed,
+  aborting a sourcing shell under `set -u`, so the guard changes the failure, not whether it is
+  seen. 06 and 10 both run the corrected script.
+- **SI made `--ray-address` required** in its drivers, by its user's ruling. **ChamPBH keeps the
+  default `auto` for now** (§6.4). Making it required changes the three drivers' interface, which
+  no prompt here asks for (§5 rule 4). The risk it removes is small here: a driver of one project
+  attaching to another's cluster fails at `ray.init` today, on the Ray or Python version check
+  (ChamPBH Ray 2.53.0, SI 2.55.1, SGK 2.43.0), and ChamPBH's tests start no Ray instance that a
+  driver could find by mistake.
+- Not acted on, with SI: `lsof` run as a user does not see a listener owned by root or another
+  user, so the port checks would miss one. Negligible on a single-user machine.
+
 ## 7. What this campaign hands to the user
 
 - **Every existing ChamPBH store becomes unreadable by the tree** at 08 (D4), the science store
@@ -987,6 +1014,11 @@ revised at `ed9399a` after SI's prompt 01a proved it), and the user handed it to
   scripts' store path, their `--inventory` step (now read-only, after the pool closes) and any
   `--drop` (U4) are what change; 11 lists them line by line. The bbn-tolerance refresh is subsumed:
   a fresh build computes BBN on today's small network.
+- **If a long build runs on this machine**, it takes the shared rehearsal lock and runs on an
+  isolated cluster (U5, §6.6), and every driver in the run scripts is given that cluster's address
+  explicitly (`--ray-address 127.0.0.1:6380` on 05a's cluster), never `auto`, as the brief requires
+  since SI's `d6d550b`. `full_run_2026.6.0.sh` and its `-refresh` variant pass no `--ray-address`
+  today, which is harmless on a machine with one cluster. 11 includes this in its list.
 - **The check of that rebuild** is `tools/compare_stores.py` against `~/ChamPBH-stores-bt02/`: the
   same histories, value by value, with any difference named.
 - **If `jordan-normalization` is planned next** (its brief is in `prompts/jordan-normalization/`,
