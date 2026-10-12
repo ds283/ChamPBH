@@ -202,7 +202,7 @@ def run_pipeline(
             pool,
             query_batch,
             task_builder=lambda x: pool.object_get_vectorized(
-                "ScalarModel", x["shard_key"], payload_data=x["payload"]
+                "ScalarModel", {"shard_key": x["shard_key"]}, payload_data=x["payload"]
             ),
             available_handler=None,
             compute_handler=None,
@@ -364,7 +364,7 @@ def run_pipeline(
             pool,
             model_query_batch,
             task_builder=lambda x: pool.object_get_vectorized(
-                "ScalarModel", x["shard_key"], payload_data=x["payload"]
+                "ScalarModel", {"shard_key": x["shard_key"]}, payload_data=x["payload"]
             ),
             available_handler=None,
             compute_handler=None,
@@ -414,7 +414,9 @@ def run_pipeline(
             pool,
             adiabatic_query_batch,
             task_builder=lambda x: pool.object_get_vectorized(
-                "AdiabaticHistory", x["shard_key"], payload_data=x["payload"]
+                "AdiabaticHistory",
+                {"shard_key": x["shard_key"]},
+                payload_data=x["payload"],
             ),
             available_handler=None,
             compute_handler=None,
@@ -482,7 +484,7 @@ def run_pipeline(
             pool,
             required_models_payload,
             task_builder=lambda x: pool.object_get_vectorized(
-                "ScalarModel", x["shard_key"], payload_data=x["payload"]
+                "ScalarModel", {"shard_key": x["shard_key"]}, payload_data=x["payload"]
             ),
             available_handler=None,
             compute_handler=None,
@@ -620,7 +622,7 @@ def run_pipeline(
             pool,
             model_query_batch,
             task_builder=lambda x: pool.object_get_vectorized(
-                "ScalarModel", x["shard_key"], payload_data=x["payload"]
+                "ScalarModel", {"shard_key": x["shard_key"]}, payload_data=x["payload"]
             ),
             available_handler=None,
             compute_handler=None,
@@ -672,7 +674,7 @@ def run_pipeline(
             pool,
             bbn_query_batch,
             task_builder=lambda x: pool.object_get_vectorized(
-                "BBNData", x["shard_key"], payload_data=x["payload"]
+                "BBNData", {"shard_key": x["shard_key"]}, payload_data=x["payload"]
             ),
             available_handler=None,
             compute_handler=None,
@@ -745,7 +747,7 @@ def run_pipeline(
             pool,
             required_models_payload,
             task_builder=lambda x: pool.object_get_vectorized(
-                "ScalarModel", x["shard_key"], payload_data=x["payload"]
+                "ScalarModel", {"shard_key": x["shard_key"]}, payload_data=x["payload"]
             ),
             available_handler=None,
             compute_handler=None,

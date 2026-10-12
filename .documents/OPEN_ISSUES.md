@@ -1,6 +1,6 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-12 · **25 open**: 4 on the `review-remediation` board (closed
+**Last updated:** 2026-10-12 · **26 open**: 4 on the `review-remediation` board (closed
 2026-09-30), none now assigned; 2 on the `production-readiness` board
 (closed 2026-09-30); 4 on the `run-integrity` board (closed 2026-09-30); 9 on the
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`;
@@ -11,8 +11,8 @@ around PRyMordial's small network, U3; prompt 01c measured the small network 202
 02 moved production to it and closed three, opening one, 2026-10-03; prompt 01b closed the kick
 threshold overlay issue 2026-10-03; prompt 02b closed the history-tool issue 2026-10-03; prompt 03
 wrote the documents and the handover and closed the campaign, opening and closing none, 2026-10-03);
-2 on the `dk-and-rpk-migration` board (planned 2026-10-11; prompt 01 opened one, 2026-10-12;
-the orchestrator's review of prompt 02 opened one, 2026-10-12).
+3 on the `dk-and-rpk-migration` board (planned 2026-10-11; prompt 01 opened one, 2026-10-12;
+the orchestrator's review of prompt 02 opened one, 2026-10-12; prompt 05 opened one, 2026-10-12).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -189,10 +189,13 @@ here, on its board, until a later campaign takes them.
 
 Planned 2026-10-11. One opened by prompt 01 on 2026-10-12, seen in passing and outside the
 campaign's scope; one opened by the orchestrator's review of prompt 02 the same day, from log 02's
-Observation 2.
+Observation 2; one opened by prompt 05 the same day, from its measurement of the import order.
 
 - `[01-scalarmodelvalue-build-checks-the-stored-phi-against-pi]` — the unused lookup path of
   `sqla_ScalarModelValue_factory.build` compares the stored φ with the expected π; latent.
 - `[02-scalar-stage-missing-filter-keeps-every-model]` — `main.py:223`'s "which models are
   missing?" comprehension ignores its lookup result, so every stored `ScalarModel` is looked up
   twice; no value affected.
+- `[05-config-datastore-cannot-be-imported-before-the-layer]` — a fresh `import config.datastore`
+  fails with a circular-import `ImportError`; importing the layer first works; nothing that runs
+  is affected.

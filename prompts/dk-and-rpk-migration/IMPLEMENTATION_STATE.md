@@ -1,6 +1,6 @@
 # dk-and-rpk-migration campaign — implementation state
 
-**Last updated:** 2026-10-12 · **Status: LIVE — 6 of 11 prompts written (01–06), 4 landed (01–04); R0 bitwise reproducible; RayPoolKit G3 holds. P1–P17
+**Last updated:** 2026-10-12 · **Status: LIVE — 6 of 11 prompts written (01–06), 5 landed (01–05); R0 bitwise reproducible; RayPoolKit G3 holds. P1–P17
 ruled; DatastoreKit `v0.2.3` released (README §0.3).**
 The plan is [`README.md`](README.md), written on 2026-10-11 at `52142d7` with the user's rulings
 U1–U4. Prompts 01–04 are written once the user has reviewed it (README §2.1).
@@ -57,7 +57,7 @@ reads only what the specs declare. Measured at `12c82e8`, 09's list already cove
 | 02 | [Rehearse the start tree (R0)](02-rehearse-the-start-tree.md) | **R0**; §4.3's measurement | Opus | ✍️ 2026-10-11 | ✅ 2026-10-12 | `6cbf953` | [log](logs/02-rehearse-the-start-tree.md) |
 | 03 | [Pin `raypoolkit` `v0.2.0`](03-pin-raypoolkit-v0.2.0.md) | the RayPoolKit pin | Sonnet | ✍️ 2026-10-11 | ✅ 2026-10-12 | `2f61943` | [log](logs/03-pin-raypoolkit-v0.2.0.md) |
 | 04 | [Adopt `raypoolkit`](04-adopt-raypoolkit.md) | the RayPoolKit swap; **RayPoolKit G3** | Sonnet | ✍️ 2026-10-11 | ✅ 2026-10-12 | `303324b` | [log](logs/04-adopt-raypoolkit.md) |
-| 05 | [Move ChamPBH's data out of the layer](05-move-champbh-data-out-of-the-layer.md) | `config/datastore.py`; the vectorized gets | Sonnet | ✍️ 2026-10-12 | ⬜ | — | — |
+| 05 | [Move ChamPBH's data out of the layer](05-move-champbh-data-out-of-the-layer.md) | `config/datastore.py`; the vectorized gets | Sonnet | ✍️ 2026-10-12 | ✅ 2026-10-12 | this commit | [log](logs/05-move-champbh-data-out-of-the-layer.md) |
 | 06 | [Rehearse before the DatastoreKit swap (R1)](06-rehearse-before-the-datastore-swap.md) | **R1** | Opus | ✍️ 2026-10-12 | ⬜ | — | — |
 | 07 | Pin `datastorekit` `v0.2.3` | the DatastoreKit pin (**U3**; `0de2b16`) | Sonnet | ⬜ | ⬜ | — | — |
 | 08 | Adopt `datastorekit` | the DatastoreKit swap; **U4** | Opus | ⬜ | ⬜ | — | — |
@@ -97,10 +97,10 @@ before each dispatch:
 | **W3** | 04 | no pool site changed (P7) | ✅ `303324b`: the drivers' diff is one line each; script at the staged tree: 17 calls, `constructs` 17 |
 | **W4** | 04 | `.documents/architecture-summary.md`'s `RayWorkPool` lines made true (P14) | ✅ `303324b`: layout, §3.2 title, `pool` type, `store_handler` row and a new `persist_handler` row, the in-flight keying, the lifecycle's store/persist pair (`:195-196`, named by the brief), and `:585` |
 
-| **M1** | 05 | `config/datastore.py`: `factories`, `drop_groups`, `serial_batch_sizes`, moved verbatim | ⬜ |
-| **M2** | 05 | the old layer imports them under its old names; `_drop_order` stays | ⬜ |
-| **M3** | 05 | the 7 vectorized gets in `main.py` pass `{"shard_key": …}` | ⬜ |
-| **M4** | 05 | `Datastore/tests/test_datastore_config.py`: the data captured, the layer reading it, the `ast` test of the drivers; the schema unchanged against R0's snapshot | ⬜ |
+| **M1** | 05 | `config/datastore.py`: `factories`, `drop_groups`, `serial_batch_sizes`, moved verbatim | ✅ this commit: 27 entries / 23 classes, 3 groups, 24 sizes with `LambdaCDM`; equal to the capture taken before the first edit |
+| **M2** | 05 | the old layer imports them under its old names; `_drop_order` stays | ✅ this commit: the layer's diff is the removed definitions and imports plus two import statements; `_drop_order` kept; the schema agrees with 04's tree and with R0's snapshot |
+| **M3** | 05 | the 7 vectorized gets in `main.py` pass `{"shard_key": …}` | ✅ this commit: 7 hunks; `black` splits the `AdiabaticHistory` call, so lines after `:418` move by +2 |
+| **M4** | 05 | `Datastore/tests/test_datastore_config.py`: the data captured, the layer reading it, the `ast` test of the drivers; the schema unchanged against R0's snapshot | ✅ this commit: 7 tests (Datastore 66 → 73); four breakages caught (log 05) |
 | **L1**–**L4** (R1) | 06 | README §4.1 at 05's tree; each store equal to `02-reference.db`, bitwise; L4 against R0, the printed lines included | ⬜ |
 | **V2** | 06 | `.documents/dk-and-rpk-migration-verification.md` §2 R1 | ⬜ |
 
@@ -166,6 +166,27 @@ which left the question open. **Not fixed:** `main.py`'s pipeline is outside thi
   campaign that may touch `main.py`, with a test that a fully stored batch returns no work.
   06 and 10 compare against R0's lookup pattern (5 / 2 / 5 on `resumed-b`), so a fix that lands
   before 10 changes that pattern, and L4 must say so.
+
+### `[05-config-datastore-cannot-be-imported-before-the-layer]`
+
+**Opened:** 2026-10-12 by prompt 05 (log 05, §"The import-order hazard"), measured at its own tree.
+**Not fixed:** the cycle is in the old layer, which 08 deletes; emptying `Datastore/SQL/__init__.py`
+is 08's (P6), and `ShardedPool.py:24` imports the actor through it.
+
+- **What.** `Datastore/SQL/__init__.py` imports the actor, so importing any factory module runs
+  `Datastore/SQL/Datastore.py`, which imports `config.datastore`, which imports the factories. A
+  fresh `import config.datastore` therefore fails with `ImportError: cannot import name
+  'serial_batch_sizes' from partially initialized module 'config.datastore'`. Importing
+  `Datastore.SQL.Datastore`, `Datastore.SQL.ClientPool` or any factory module first works.
+- **Impact.** None today: every driver and actor imports the layer first (`check_imports.py`: 162
+  names resolve). One test meets it silently: `Datastore/tests/test_compare_stores.py`'s
+  `_registry()` tries `from config.datastore import factories` first, catches the `ImportError`
+  and falls back to the layer's `_factories`, which is `config.datastore.factories` itself
+  (identity measured), so its 21 tests pass; the fallback would also hide a genuine `ImportError`
+  in `config.datastore`. `Datastore/tests/test_datastore_config.py` imports the layer first, with
+  a comment.
+- **Next step.** 08 removes the cycle by deleting the layer and emptying the two `__init__.py`
+  files (P6), and its acceptance includes `python -c "import config.datastore"` from the root.
 
 ## 4. Resolved issues
 
@@ -593,3 +614,19 @@ Written after the reviews of 02 (R0 bitwise, so R1 is held to bitwise equality w
   - `S` comes from 06's own `reference` timestamps;
   - the scalar stage's resume lookups are 5 with compute 0 (§3, the `02-…` issue).
 - Board items M1–M4, L1–L4 (R1) and V2 are added. 05 records `### 5.7`, 06 `### 5.8`.
+
+### 5.7 After prompt 05 (2026-10-12)
+
+Prompt 05 moved ChamPBH's three registries into `config/datastore.py` and made the seven
+vectorized gets pass a mapping, on the old layer. Log:
+[`logs/05-move-champbh-data-out-of-the-layer.md`](logs/05-move-champbh-data-out-of-the-layer.md).
+- **State.** M1–M4 done (§1.1). The schema agrees with 04's tree and with R0's snapshot. The
+  suites are 18 / 114 / 73 (Datastore 66 + 7). One §3 issue opened,
+  `[05-config-datastore-cannot-be-imported-before-the-layer]`.
+- **Rollback.** `git revert` of this commit alone. It touches nothing in the venv.
+- **For 06 (R1).** `main.py` moved by +2 after `:418`, because `black` splits the
+  `AdiabaticHistory` vectorized get over three lines. The `RayWorkPool(` sites are now `:201`,
+  `:284`, `:363`, `:413`, `:483`, `:543`, `:621`, `:673`, `:746`, `:830`;
+  those from `:483` on were `:481`, `:541`, `:619`, `:671`, `:744`, `:828`. The compute handlers are at `:288`, `:547`, `:834`; `with ShardedPool(` is
+  `:1348` (was `:1346`). The three compute sites (`:284`, `:543`, `:830`) keep
+  their handlers.

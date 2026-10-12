@@ -20,33 +20,7 @@ import ray
 from ray.actor import ActorHandle
 
 from Datastore.SQL.ProfileAgent import ProfileBatcher, ProfileBatchManager
-
-_default_serial_batch_size = {
-    "store_tag": 5,
-    "redshift": 200,
-    "tolerance": 5,
-    "beta_value": 200,
-    "M_value": 200,
-    "Lambda_value": 200,
-    "temperature": 200,
-    "phi_value": 200,
-    "pi_value": 200,
-    "ExponentialCoupling": 50,
-    "InversePowerPotential": 50,
-    "ExponentialPotential": 50,
-    "ReflectingPotential": 50,
-    "StarobinskyPotential": 50,
-    "ReclinerPotential": 50,
-    "LambdaCDM": 5,
-    "QCD_Cosmology": 5,
-    "IntegrationSolver": 6,
-    "ScalarModel": 20,
-    "ScalarModelValue": 250,
-    "AdiabaticHistory": 20,
-    "AdiabaticHistoryValue": 250,
-    "BBNData": 20,
-    "BBNDataValue": 250,
-}
+from config.datastore import serial_batch_sizes as _default_serial_batch_size
 
 
 class ClientPool:

@@ -24,64 +24,13 @@ import sqlalchemy as sqla
 from ray.actor import ActorHandle
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
-from CosmologyConcepts import (
-    beta_value,
-    Lambda_value,
-    M_value,
-    temperature,
-    phi_value,
-    pi_value,
-)
 from Datastore.SQL.ClientPool import SerialPoolManager, SerialLeaseManager
-from Datastore.SQL.ObjectFactories.AdiabaticHistory import (
-    sqla_AdiabaticHistoryFactory,
-    sqla_AdiabaticHistoryTagAssociation_factory,
-    sqla_AdiabaticHistoryValue_factory,
-)
-from Datastore.SQL.ObjectFactories.BBNData import (
-    sqla_BBNDataFactory,
-    sqla_BBNDataTagAssociation_factory,
-    sqla_BBNDataValue_factory,
-)
-from Datastore.SQL.ObjectFactories.DimensionfulQuantity import (
-    sqla_dimensionful_quantity_factory,
-)
-from Datastore.SQL.ObjectFactories.DimensionlessQuantity import (
-    sqla_dimensionless_quantity_factory,
-)
-from Datastore.SQL.ObjectFactories.ExponentialCoupling import (
-    sqla_ExponentialCoupling_factory,
-)
-from Datastore.SQL.ObjectFactories.ExponentialPotential import (
-    sqla_ExponentialPotential_factory,
-)
-from Datastore.SQL.ObjectFactories.InversePowerPotential import (
-    sqla_InversePowerPotential_factory,
-)
-from Datastore.SQL.ObjectFactories.QCD_Cosmology import sqla_QCDCosmology_factory
-from Datastore.SQL.ObjectFactories.ReclinerPotential import (
-    sqla_ReclinerPotential_factory,
-)
-from Datastore.SQL.ObjectFactories.ReflectingPotential import (
-    sqla_ReflectingPotential_factory,
-)
-from Datastore.SQL.ObjectFactories.ScalarModel import (
-    sqla_ScalarModelFactory,
-    sqla_ScalarModelTagAssociation_factory,
-    sqla_ScalarModelValue_factory,
-)
-from Datastore.SQL.ObjectFactories.Starobinsky import (
-    sqla_StarobinskyPotential_factory,
-)
 from Datastore.SQL.ObjectFactories.base import SQLAFactoryBase
-from Datastore.SQL.ObjectFactories.integration_metadata import (
-    sqla_IntegrationSolver_factory,
-)
-from Datastore.SQL.ObjectFactories.redshift import sqla_redshift_factory
-from Datastore.SQL.ObjectFactories.store_tag import sqla_store_tag_factory
-from Datastore.SQL.ObjectFactories.tolerance import sqla_tolerance_factory
-from Datastore.SQL.ObjectFactories.version import sqla_version_factory
 from Datastore.SQL.ProfileAgent import ProfileBatcher, ProfileBatchManager
+from config.datastore import (
+    drop_groups as _drop_actions,
+    factories as _factories,
+)
 from config.version import VERSION_SERIAL_KEY
 from utilities import WallclockTimer
 
@@ -91,49 +40,10 @@ VERSION_ID_LENGTH = 64
 PathType = Union[str, PathLike]
 
 
-_factories = {
-    "version": sqla_version_factory(),
-    "store_tag": sqla_store_tag_factory(),
-    "redshift": sqla_redshift_factory(),
-    "tolerance": sqla_tolerance_factory(),
-    "beta_value": sqla_dimensionless_quantity_factory(beta_value),
-    "M_value": sqla_dimensionful_quantity_factory(M_value),
-    "Lambda_value": sqla_dimensionful_quantity_factory(Lambda_value),
-    "temperature": sqla_dimensionful_quantity_factory(temperature),
-    "phi_value": sqla_dimensionful_quantity_factory(phi_value),
-    "pi_value": sqla_dimensionful_quantity_factory(pi_value),
-    "InversePowerPotential": sqla_InversePowerPotential_factory(),
-    "StarobinskyPotential": sqla_StarobinskyPotential_factory(),
-    "ExponentialPotential": sqla_ExponentialPotential_factory(),
-    "ReclinerPotential": sqla_ReclinerPotential_factory(),
-    "ReflectingPotential": sqla_ReflectingPotential_factory(),
-    "ExponentialCoupling": sqla_ExponentialCoupling_factory(),
-    "QCD_Cosmology": sqla_QCDCosmology_factory(),
-    "IntegrationSolver": sqla_IntegrationSolver_factory(),
-    "ScalarModel": sqla_ScalarModelFactory(),
-    "ScalarModel_tags": sqla_ScalarModelTagAssociation_factory(),
-    "ScalarModelValue": sqla_ScalarModelValue_factory(),
-    "AdiabaticHistory": sqla_AdiabaticHistoryFactory(),
-    "AdiabaticHistory_tags": sqla_AdiabaticHistoryTagAssociation_factory(),
-    "AdiabaticHistoryValue": sqla_AdiabaticHistoryValue_factory(),
-    "BBNData": sqla_BBNDataFactory(),
-    "BBNData_tags": sqla_BBNDataTagAssociation_factory(),
-    "BBNDataValue": sqla_BBNDataValue_factory(),
-}
-
 _FactoryMappingType = Mapping[str, SQLAFactoryBase]
 _TableMappingType = Mapping[str, sqla.Table]
 _InserterMappingType = Mapping[str, Callable]
 
-_drop_actions = {
-    "scalar-model": ["ScalarModel_tags", "ScalarModelValue", "ScalarModel"],
-    "adiabatic-history": [
-        "AdiabaticHistory_tags",
-        "AdiabaticHistoryValue",
-        "AdiabaticHistory",
-    ],
-    "bbn-data": ["BBNData_tags", "BBNDataValue", "BBNData"],
-}
 # should drop tables in a defined order, so that we do not violate foreign key constrints
 _drop_order = [
     "bbn-data",
