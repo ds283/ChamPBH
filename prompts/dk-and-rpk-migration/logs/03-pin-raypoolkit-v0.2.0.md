@@ -1,7 +1,7 @@
 # Log 03 — pin `raypoolkit` `v0.2.0`
 
 **Subject:** Pin raypoolkit v0.2.0 and install it into the venv
-**Commit:** this commit, on branch `dk-and-rpk-migration`, on top of `e287a40`
+**Commit:** `2f61943`, on branch `dk-and-rpk-migration`, on top of `e287a40`
 **Date:** 2026-10-12, by Claude Sonnet 5.5
 **Result:** **COMPLETE.**
 - K1: one line added to `requirements.txt`, in sorted position.
@@ -194,5 +194,5 @@ partial install would fail the byte comparison.
 - The provenance line now reads
   `>> packages: datastorekit not installed; raypoolkit 0.2.0 (https://github.com/ds283/RayPoolKit@eaef0ce60e2fc354bb32f0ad576010e6a83c1976, requested v0.2.0)`.
 - Suites: 18 / 114 / 66, unchanged.
-- **Rollback is `git revert` of this commit plus `./venv/bin/pip uninstall -y raypoolkit`**: the
+- **Rollback is `git revert` of `2f61943` plus `./venv/bin/pip uninstall -y raypoolkit`**: the
   venv is outside git (README §4.4).

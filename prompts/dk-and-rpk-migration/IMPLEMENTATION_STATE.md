@@ -50,7 +50,7 @@ recorded beside each proposal.
 |---|---|---|---|---|---|---|---|
 | 01 | [Rehearsal tooling and run provenance](01-rehearsal-tooling-and-run-provenance.md) | P3, P5; README §4.1–§4.2 | Opus | ✍️ 2026-10-11 | ✅ 2026-10-12 | `d7791c5` | [log](logs/01-rehearsal-tooling-and-run-provenance.md) |
 | 02 | [Rehearse the start tree (R0)](02-rehearse-the-start-tree.md) | **R0**; §4.3's measurement | Opus | ✍️ 2026-10-11 | ✅ 2026-10-12 | `6cbf953` | [log](logs/02-rehearse-the-start-tree.md) |
-| 03 | [Pin `raypoolkit` `v0.2.0`](03-pin-raypoolkit-v0.2.0.md) | the RayPoolKit pin | Sonnet | ✍️ 2026-10-11 | ✅ 2026-10-12 | this commit | [log](logs/03-pin-raypoolkit-v0.2.0.md) |
+| 03 | [Pin `raypoolkit` `v0.2.0`](03-pin-raypoolkit-v0.2.0.md) | the RayPoolKit pin | Sonnet | ✍️ 2026-10-11 | ✅ 2026-10-12 | `2f61943` | [log](logs/03-pin-raypoolkit-v0.2.0.md) |
 | 04 | [Adopt `raypoolkit`](04-adopt-raypoolkit.md) | the RayPoolKit swap; **RayPoolKit G3** | Sonnet | ✍️ 2026-10-11 | ⬜ | — | — |
 | 05 | Move ChamPBH's data out of the layer | `config/datastore.py`; the vectorized gets | Sonnet | ⬜ | ⬜ | — | — |
 | 06 | Rehearse before the DatastoreKit swap (R1) | **R1** | Opus | ⬜ | ⬜ | — | — |
@@ -72,6 +72,7 @@ Orchestrator notes are written one prompt at a time, in [`orchestrator/`](orches
 before each dispatch:
 - [`orchestrator/prompt-01.md`](orchestrator/prompt-01.md) (`0e64ef0`) — used for 01.
 - [`orchestrator/prompt-02.md`](orchestrator/prompt-02.md) (`a72ca5e`) — used for 02.
+- [`orchestrator/prompt-03.md`](orchestrator/prompt-03.md) (`e287a40`) — used for 03.
 
 ### 1.1 Items
 
@@ -82,9 +83,9 @@ before each dispatch:
 | **T3** | 01 | `.documents/dk-and-rpk-migration/rehearsal/`: `build.sh`, `interrupt_when.py`, `stage_counts.py`, `run_readers.sh` | ✅ `d7791c5`: usage checked; never run on a build |
 | **L1**–**L4** (R0) | 02 | README §4.1 at 01's tree; §4.3's reproducibility measured; L4 recorded as the baseline | ✅ `6cbf953`: L1–L3 hold; **§4.3 bitwise** (`compare_stores` `RESULT: equal`, exit 0); L4: `compute` 5/5/5, 5/killed, 0/2/5; the prune removed only `resumed-a`'s one unvalidated row (verification §1) |
 | **V1** | 02 | `.documents/dk-and-rpk-migration-verification.md` created, with §1 R0; R0's schema snapshot | ✅ `6cbf953`: §1 R0; `out/02-reference-schema.json` (27 client tables) |
-| **K1** | 03 | the `raypoolkit` pin in `requirements.txt` | ✅ this commit: one line, between `ray` and `referencing` (`:79`) |
-| **K2** | 03 | the venv installed from it | ✅ this commit: dry run and install report only `raypoolkit-0.2.0`; no other distribution moved |
-| **K3** | 03 | the proof: one distribution added, at `eaef0ce6…`, the tag's files, not editable | ✅ this commit: freeze differs by one line; `pip check` clean; `direct_url.json` VCS, no `dir_info`; the 4 modules equal `git archive v0.2.0`, no `tests/`; import starts no Ray |
+| **K1** | 03 | the `raypoolkit` pin in `requirements.txt` | ✅ `2f61943`: one line, between `ray` and `referencing` (`:79`) |
+| **K2** | 03 | the venv installed from it | ✅ `2f61943`: dry run and install report only `raypoolkit-0.2.0`; no other distribution moved |
+| **K3** | 03 | the proof: one distribution added, at `eaef0ce6…`, the tag's files, not editable | ✅ `2f61943`: freeze differs by one line; `pip check` clean; `direct_url.json` VCS, no `dir_info`; the 4 modules equal `git archive v0.2.0`, no `tests/`; import starts no Ray |
 | **W1** | 04 | `RayTools/` deleted | ⬜ |
 | **W2** | 04 | the 3 imports rewritten to `from raypoolkit import RayWorkPool` | ⬜ |
 | **W3** | 04 | no pool site changed (P7) | ⬜ |
@@ -377,7 +378,7 @@ in this follow-up, and one issue is opened from Observation 2.
 
 ### 5.4 After prompt 03 (2026-10-12)
 
-- **Landed:** this commit, log [`03-pin-raypoolkit-v0.2.0.md`](logs/03-pin-raypoolkit-v0.2.0.md).
+- **Landed:** `2f61943`, log [`03-pin-raypoolkit-v0.2.0.md`](logs/03-pin-raypoolkit-v0.2.0.md).
   **COMPLETE**: K1–K3; no §4 stop met; no code or test changed; no §3 issue opened.
 - **The pin.** `requirements.txt:79` is `raypoolkit @ git+https://github.com/ds283/RayPoolKit@v0.2.0`,
   between `ray==2.53.0` and `referencing==0.37.0`.
@@ -390,5 +391,57 @@ in this follow-up, and one issue is opened from Observation 2.
 - **Provenance line:** `>> packages: datastorekit not installed; raypoolkit 0.2.0
   (https://github.com/ds283/RayPoolKit@eaef0ce60e2fc354bb32f0ad576010e6a83c1976, requested v0.2.0)`.
 - **Suites** (after the install): 18 / 114 (61 + 53) / 66, unchanged. Nothing imports the package.
-- **Rollback:** `git revert` of this commit **plus** `./venv/bin/pip uninstall -y raypoolkit`
+- **Rollback:** `git revert` of `2f61943` **plus** `./venv/bin/pip uninstall -y raypoolkit`
   (README §4.4); the venv is not in git.
+
+**Orchestrator review of prompt 03 (2026-10-12)**, by orchestrator note
+[`prompt-03.md`](orchestrator/prompt-03.md), at `2f61943`. All ten checks pass, and no issue is
+opened. The residue is fixed in this follow-up.
+- **(1) Scope.** 3 files: `requirements.txt`, the log and the board. The index is untouched, the
+  untracked set is unchanged, and no Ray process is running.
+- **(2) K1.** One added line at `:79`, between `ray==2.53.0` and `referencing==0.37.0`; the file
+  now has 100 lines.
+- **(3) The freeze, read from the venv.** It differs from the **committed**
+  `measure/out/52142d7-pip-freeze.txt` by exactly the one `eaef0ce6…` line, and from the
+  orchestrator's pre-dispatch copy by the same line. `pip check` is clean.
+- **(4) The origin.** `direct_url.json`, read in site-packages, is a VCS record: `url`
+  `https://github.com/ds283/RayPoolKit`, `commit_id` `eaef0ce6…`, `requested_revision` `v0.2.0`,
+  and no `dir_info`. `INSTALLER` is `pip`. No `__editable__`, `.egg-link` or `.pth` names
+  RayPoolKit; the only `.pth` is setuptools' `distutils-precedence.pth`.
+- **(5) The files.** The tag's archive was extracted afresh and compared with the installed
+  package, `__pycache__` aside: the same four `.py` files, each identical under `cmp`, and no
+  `tests/`. The dist-info's `RECORD` lists 8 `raypoolkit/` entries: the four modules and their
+  `.pyc` files. Every hash it gives matches.
+- **(6) Import and helper.** The import one-liner prints `False`. The helper gives version `0.2.0`,
+  the URL, commit and revision, `editable: False`, and `datastorekit` `None`. `pip show` gives
+  `Requires: ray`.
+  - **Correction to the note.** The provenance line is
+    `>> packages: datastorekit not installed; raypoolkit 0.2.0 (https://github.com/ds283/RayPoolKit@eaef0ce60e2fc354bb32f0ad576010e6a83c1976, requested v0.2.0)`,
+    with no `git+`.
+  - The note expected `git+https://…`, from the line §5.2's probe printed. That probe's stand-in
+    `direct_url.json` carried a `git+` URL. PEP 610 records a VCS URL without the prefix, and pip
+    does so here. The helper prints `url` as recorded, which is right; the probe's stand-in was
+    not.
+  - Nothing is changed. §5.2's line stands as the record of that probe (`CLAUDE.md`
+    invariant 6). The log's Observation 1 is accepted as recorded.
+- **(7) The pip account.**
+  - The dry run reports `Would install raypoolkit-0.2.0` and nothing else. The install reports
+    `Successfully installed raypoolkit-0.2.0` and nothing else.
+  - The log says that `Resolved … 4e7eb153…` is the tag object.
+  - The built wheel went to a temporary directory: pip does not keep a wheel built from a tag in
+    its persistent cache (`~/Library/Caches/pip` does not hold it). It is not in the venv.
+- **(8) Hygiene.**
+  - RayPoolKit's working tree is clean, and its `HEAD` is still `1b84df0`. Its ignored
+    `raypoolkit.egg-info/` and `__pycache__/` date from 2026-10-10.
+  - The 42 rehearsal-store entries have unchanged mtimes and sizes.
+- **(9) Suites.** The agent's: 18, 114 (61 + 53, then whole in 254 s), 66, all OK, at a load of
+  about 5–8. The orchestrator re-ran `Datastore/tests` at `2f61943`: 66, OK.
+- **(10) Records.** The log follows README §5.1, with every §2 check's command and output. The
+  board has the §1 row, K1–K3, §5.4 and the rollback.
+  - *Residue, fixed here:* "this commit" → `2f61943` (board ×6, log ×2); this note added to the
+    list of orchestrator notes.
+- **D1** (ComputeTargets run split and then whole) is accepted.
+- **Handed to 04's note.**
+  - The provenance line above is what each driver now prints.
+  - `raypoolkit` imports cleanly with no Ray started.
+  - 04's suites start from 18 / 114 / 66.
