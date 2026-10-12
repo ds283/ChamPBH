@@ -1,6 +1,6 @@
 # dk-and-rpk-migration campaign — implementation state
 
-**Last updated:** 2026-10-12 · **Status: LIVE — 4 of 11 prompts written (01–04), 4 landed (01–04); R0 bitwise reproducible; RayPoolKit G3 holds. P1–P17
+**Last updated:** 2026-10-12 · **Status: LIVE — 6 of 11 prompts written (01–06), 4 landed (01–04); R0 bitwise reproducible; RayPoolKit G3 holds. P1–P17
 ruled; DatastoreKit `v0.2.3` released (README §0.3).**
 The plan is [`README.md`](README.md), written on 2026-10-11 at `52142d7` with the user's rulings
 U1–U4. Prompts 01–04 are written once the user has reviewed it (README §2.1).
@@ -57,8 +57,8 @@ reads only what the specs declare. Measured at `12c82e8`, 09's list already cove
 | 02 | [Rehearse the start tree (R0)](02-rehearse-the-start-tree.md) | **R0**; §4.3's measurement | Opus | ✍️ 2026-10-11 | ✅ 2026-10-12 | `6cbf953` | [log](logs/02-rehearse-the-start-tree.md) |
 | 03 | [Pin `raypoolkit` `v0.2.0`](03-pin-raypoolkit-v0.2.0.md) | the RayPoolKit pin | Sonnet | ✍️ 2026-10-11 | ✅ 2026-10-12 | `2f61943` | [log](logs/03-pin-raypoolkit-v0.2.0.md) |
 | 04 | [Adopt `raypoolkit`](04-adopt-raypoolkit.md) | the RayPoolKit swap; **RayPoolKit G3** | Sonnet | ✍️ 2026-10-11 | ✅ 2026-10-12 | `303324b` | [log](logs/04-adopt-raypoolkit.md) |
-| 05 | Move ChamPBH's data out of the layer | `config/datastore.py`; the vectorized gets | Sonnet | ⬜ | ⬜ | — | — |
-| 06 | Rehearse before the DatastoreKit swap (R1) | **R1** | Opus | ⬜ | ⬜ | — | — |
+| 05 | [Move ChamPBH's data out of the layer](05-move-champbh-data-out-of-the-layer.md) | `config/datastore.py`; the vectorized gets | Sonnet | ✍️ 2026-10-12 | ⬜ | — | — |
+| 06 | [Rehearse before the DatastoreKit swap (R1)](06-rehearse-before-the-datastore-swap.md) | **R1** | Opus | ✍️ 2026-10-12 | ⬜ | — | — |
 | 07 | Pin `datastorekit` `v0.2.3` | the DatastoreKit pin (**U3**; `0de2b16`) | Sonnet | ⬜ | ⬜ | — | — |
 | 08 | Adopt `datastorekit` | the DatastoreKit swap; **U4** | Opus | ⬜ | ⬜ | — | — |
 | 09 | Port the inventory | `inventory_spec`, `tools/inventory_report.py` | Opus | ⬜ | ⬜ | — | — |
@@ -97,7 +97,14 @@ before each dispatch:
 | **W3** | 04 | no pool site changed (P7) | ✅ `303324b`: the drivers' diff is one line each; script at the staged tree: 17 calls, `constructs` 17 |
 | **W4** | 04 | `.documents/architecture-summary.md`'s `RayWorkPool` lines made true (P14) | ✅ `303324b`: layout, §3.2 title, `pool` type, `store_handler` row and a new `persist_handler` row, the in-flight keying, the lifecycle's store/persist pair (`:195-196`, named by the brief), and `:585` |
 
-Items of 05–11 are added when they are written.
+| **M1** | 05 | `config/datastore.py`: `factories`, `drop_groups`, `serial_batch_sizes`, moved verbatim | ⬜ |
+| **M2** | 05 | the old layer imports them under its old names; `_drop_order` stays | ⬜ |
+| **M3** | 05 | the 7 vectorized gets in `main.py` pass `{"shard_key": …}` | ⬜ |
+| **M4** | 05 | `Datastore/tests/test_datastore_config.py`: the data captured, the layer reading it, the `ast` test of the drivers; the schema unchanged against R0's snapshot | ⬜ |
+| **L1**–**L4** (R1) | 06 | README §4.1 at 05's tree; each store equal to `02-reference.db`, bitwise; L4 against R0, the printed lines included | ⬜ |
+| **V2** | 06 | `.documents/dk-and-rpk-migration-verification.md` §2 R1 | ⬜ |
+
+Items of 07–11 are added when they are written.
 
 The measurement the plan was written against is [`measure/out/`](measure/out/): both packages'
 scripts at `52142d7`, each equal to its checklist's appendix byte for byte; the three roots'
@@ -553,3 +560,36 @@ opened. The residue is fixed in this follow-up.
   - R1 (06) is the first run of `raypoolkit` under real Ray, at Ray 2.53.0, and is held to bitwise
     equality with `02-reference.db`.
   - The suites start from 18 / 114 / 66.
+
+### 5.6 Prompts 05–06 written (2026-10-12)
+
+Written after the reviews of 02 (R0 bitwise, so R1 is held to bitwise equality with
+`02-reference.db`) and 04, at `cb0c675`. The facts they rest on were measured read-only that day.
+- **05.** Re-read at `cb0c675`:
+  - the registry, 27 instances (`Datastore/SQL/Datastore.py:94-122`);
+  - the drop groups (`:128-136`) and the drop order (`:138-142`);
+  - the serial batch sizes, 24 entries with `LambdaCDM` (`ClientPool.py:24-49`);
+  - the 7 vectorized gets, at `main.py:204` … `:747`, each passing `x["shard_key"]`. Every sharded
+    table's shard-key field is `"shard_key"` (`config/sharding.py`), so the old layer takes the
+    mapping (`ShardedPool.py:592-602`).
+
+  Three measurements shaped the prompt:
+  - **An import-order hazard.** It was found on a scratch copy of the tree with the move applied.
+    `Datastore/SQL/__init__.py` imports the actor, so importing `config.datastore` *first* fails
+    with a partially-initialised-module `ImportError`. Importing the layer first works, as every
+    driver and actor does. 05 opens it as an issue for 08 to close (P6 empties the inits) and does
+    not work around it.
+  - **The old names stay.** `test_compare_stores.py:713` imports `_factories` from the layer, so
+    the layer keeps its module-level names as aliases of `config.datastore`'s.
+  - **The schema check needs no Ray.** The undecorated actor builds a one-file store. Given a
+    one-row `shards` primary, `compare_stores --snapshot` reads it. Built so at 04's tree it
+    agrees with R0's `02-reference-schema.json`.
+- **06** is 02's protocol at 05's tree. It is held to `RESULT: equal` against `02-reference.db`
+  for both of its stores, to `histories.csv` byte for byte (SHA-256 `d7c62c37…c522`), and to R0's
+  printed-line layout. It carries R0's run facts:
+  - no address is printed by `ray start`, so the address is `127.0.0.1:6379`;
+  - `ray stop` runs alone;
+  - exit 134 under `SIGTERM`;
+  - `S` comes from 06's own `reference` timestamps;
+  - the scalar stage's resume lookups are 5 with compute 0 (§3, the `02-…` issue).
+- Board items M1–M4, L1–L4 (R1) and V2 are added. 05 records `### 5.7`, 06 `### 5.8`.

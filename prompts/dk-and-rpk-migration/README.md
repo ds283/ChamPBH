@@ -21,8 +21,8 @@ user's rulings U1–U4 of the same day (§6.1).
   commit `0de2b16` (§0.3).
 
 §0.2 re-measures both checklists at `52142d7`. §2 fixes each prompt's charter and acceptance.
-**Prompts 01–04 are written** (2026-10-11, after the user's review); the rest follow in batches
-(§2.1). The user ruled on the proposals of §6.2 on 2026-10-11: all accepted, P2 amended, P9 after
+**Prompts 01–04 are written** (2026-10-11, after the user's review), and **05–06** (2026-10-12,
+after 02's and 04's reviews); the rest follow in batches (§2.1). The user ruled on the proposals of §6.2 on 2026-10-11: all accepted, P2 amended, P9 after
 §6.3's explanation.
 
 *Revised 2026-10-11, the same day, when the user reopened U3 (§6.1). The first draft registered the
