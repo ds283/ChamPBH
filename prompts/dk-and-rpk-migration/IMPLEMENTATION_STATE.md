@@ -1344,3 +1344,14 @@ opened beyond the prompt's. The residue is fixed in this follow-up.
     that a per-store note ("listed … but no shard holds it; not compared"), not a difference, so it
     does not affect equality.
   - 09's suites start from 18 / 114 / 76.
+
+### 5.13a Prompt 09 amended at dispatch (2026-10-13)
+
+Before dispatching 09, the orchestrator prototyped §1.1's specs by attaching them to the factory
+classes at runtime in a scratch script (note [`prompt-09.md`](orchestrator/prompt-09.md) §0); the
+repository was not touched. They hold unchanged: `inventory_classes` accepts the registry, every
+column a spec names is in the built schema, U4's table does not move, and a one-shard stand-in store
+reads back with no problem. One count in the prompt was short: 08 left two tests of the
+`--inventory` refusal (`TestInventoryRefuses`), not one, and as written the second is a §4 stop. Both
+test the refusal I3 removes, so 09's I3, §2.4.1 and §4, and README §2.2's acceptance 3, now name
+both; the Datastore count after 09 is 76 − 2 + the new tests.

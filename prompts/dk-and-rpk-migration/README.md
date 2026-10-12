@@ -593,7 +593,8 @@ checklist's `v0.2.3` and `v0.3.0` addenda, and re-checks the tag on the remote b
      and one successful `ScalarModel` and a `BBNData` row renders every field of P15's table;
      problems are printed in full.
   2. `main.py --inventory` on a missing store fails cleanly, and needs no Ray.
-  3. The three roots give 08's counts plus the new tests.
+  3. The three roots give 08's counts plus the new tests. *Amended 2026-10-13 at 09's dispatch:*
+     less 08's two `--inventory` refusal tests, which 09 replaces (board §5.13a).
   4. Deliberate breakages caught: one spec's parent removed; one leaf misnamed; `--inventory`
      moved after `ray.init` (an `ast` test).
   5. **Coverage, for the fingerprint** (§6.5, ruled 2026-10-12). A test walks the registry

@@ -145,7 +145,11 @@ The new one reads, and changes nothing.
   factories)` **before `ray.init`**, prints the report, and exits 0. `--show-all` maps to `verbose`.
   `--inventory` with `--drop` is refused (stderr, exit 2). A `RuntimeError` from the reader (a
   missing store, a refused one) prints `!! --inventory: <message>` to stderr and exits 1. 08's refusal
-  and its test go.
+  and its test go. *Amended 2026-10-13 by the orchestrator, before dispatch:* 08 left **two** tests
+  of the refusal, `TestInventoryRefuses.test_inventory_exits_non_zero_and_creates_nothing` and
+  `test_the_refusal_comes_before_ray_starts` (`Datastore/tests/test_datastore_config.py:440-487`);
+  both go, the class with them, and the module docstring's sentence on its subprocess tests
+  (`:24-25`) is made true. Test 5's `ast` check takes the second one's place.
 - **I4 — what the old inventory leaves behind is deleted:** the six `inventory()` hooks and
   `config/sharding.py`'s `inventory_config` (`:58-103`), with any import of it.
 - **I5 — coverage, for the fingerprint** (README §6.5, the user's ruling). A test walks
@@ -196,7 +200,8 @@ harness's helpers to insert rows), closed, and then read by `read_inventory`; no
 
 ### 2.4 Verification
 
-1. The suites give 08's counts **minus 08's A8.5 `--inventory` refusal test, plus the new tests**,
+1. The suites give 08's counts **minus 08's two `--inventory` refusal tests (I3, as amended), plus the
+   new tests**,
    derived by module. Every new test leaves `ray.is_initialized()` `False`.
 2. The rehearsal's log of today's report (`06-readers/1-inventory.log`) beside the new report on a
    test store: field by field, what is kept, what is new (`PRyM_version`, value counts, tags,
@@ -239,7 +244,8 @@ Each applied, shown to be caught, reverted, and recorded as a diff:
 - A test store cannot be built without Ray through 08's stand-in.
 - §2.1.3 finds an inventory use that I1–I4 does not account for.
 - Anything in the package behaves otherwise than its contract says (README §5 rule 11).
-- An existing test fails, or a suite's count falls by more than the one test I3 replaces.
+- An existing test fails, or a suite's count falls by more than the two tests I3 replaces (as
+  amended).
 
 ---
 
