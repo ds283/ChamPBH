@@ -2,7 +2,7 @@
 
 **Prompt:** [`05a-isolate-the-rehearsal-cluster.md`](../05a-isolate-the-rehearsal-cluster.md) ·
 **Campaign:** `dk-and-rpk-migration` · **Board items:** C1–C3 · **Model:** Claude Sonnet 5.5 ·
-**Date:** 2026-10-12 · **Commit:** this commit (on `dk-and-rpk-migration`, parent `b114692`) ·
+**Date:** 2026-10-12 · **Commit:** `babd9d5` (on `dk-and-rpk-migration`, parent `b114692`) ·
 **Result:** the script is written and proved on a real cluster beside a decoy; C2's five facts
 measured on Ray 2.53.0; four breakages caught. No Python, no venv change, no store opened; no
 Ray process, port or lock left behind.
@@ -483,7 +483,7 @@ exit 4, no `gcs_server` started, the lock gone. The `nc` was killed afterwards.
 ## 5. The deliberate-breakage record
 
 Each applied to the script in place, shown caught, reverted (`cmp` against the saved copy
-confirmed) and never committed. The diffs are against the script at this commit, as applied, and
+confirmed) and never committed. The diffs are against the script at `babd9d5`, as applied, and
 replay by `git apply` (checked on a scratch repository holding the script: each `git apply
 --check`, `git apply`, `git apply -R --check`, `git apply -R`, and a clean `git diff`).
 

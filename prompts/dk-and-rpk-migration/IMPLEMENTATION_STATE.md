@@ -64,7 +64,7 @@ reads only what the specs declare. Measured at `12c82e8`, 09's list already cove
 | 03 | [Pin `raypoolkit` `v0.2.0`](03-pin-raypoolkit-v0.2.0.md) | the RayPoolKit pin | Sonnet | ✍️ 2026-10-11 | ✅ 2026-10-12 | `2f61943` | [log](logs/03-pin-raypoolkit-v0.2.0.md) |
 | 04 | [Adopt `raypoolkit`](04-adopt-raypoolkit.md) | the RayPoolKit swap; **RayPoolKit G3** | Sonnet | ✍️ 2026-10-11 | ✅ 2026-10-12 | `303324b` | [log](logs/04-adopt-raypoolkit.md) |
 | 05 | [Move ChamPBH's data out of the layer](05-move-champbh-data-out-of-the-layer.md) | `config/datastore.py`; the vectorized gets | Sonnet | ✍️ 2026-10-12 | ✅ 2026-10-12 | `8e77578` | [log](logs/05-move-champbh-data-out-of-the-layer.md) |
-| 05a | [Isolate the rehearsal cluster](05a-isolate-the-rehearsal-cluster.md) | **U5**; `ray_cluster.sh` | Sonnet | ✍️ 2026-10-12 | ✅ 2026-10-12 | this commit | [log](logs/05a-isolate-the-rehearsal-cluster.md) |
+| 05a | [Isolate the rehearsal cluster](05a-isolate-the-rehearsal-cluster.md) | **U5**; `ray_cluster.sh` | Sonnet | ✍️ 2026-10-12 | ✅ 2026-10-12 | `babd9d5` | [log](logs/05a-isolate-the-rehearsal-cluster.md) |
 | 06 | [Rehearse before the DatastoreKit swap (R1)](06-rehearse-before-the-datastore-swap.md) | **R1** | Opus | ✍️ 2026-10-12 | ⬜ | — | — |
 | 07 | Pin `datastorekit` `v0.2.3` | the DatastoreKit pin (**U3**; `0de2b16`) | Sonnet | ⬜ | ⬜ | — | — |
 | 08 | Adopt `datastorekit` | the DatastoreKit swap; **U4** | Opus | ⬜ | ⬜ | — | — |
@@ -88,6 +88,7 @@ before each dispatch:
 - [`orchestrator/prompt-03.md`](orchestrator/prompt-03.md) (`e287a40`) — used for 03.
 - [`orchestrator/prompt-04.md`](orchestrator/prompt-04.md) (`12c82e8`) — used for 04.
 - [`orchestrator/prompt-05.md`](orchestrator/prompt-05.md) (`891ae82`) — used for 05.
+- [`orchestrator/prompt-05a.md`](orchestrator/prompt-05a.md) (`b114692`) — used for 05a.
 
 ### 1.1 Items
 
@@ -110,9 +111,9 @@ before each dispatch:
 | **M2** | 05 | the old layer imports them under its old names; `_drop_order` stays | ✅ `8e77578`: the layer's diff is the removed definitions and imports plus two import statements; `_drop_order` kept; the schema agrees with 04's tree and with R0's snapshot |
 | **M3** | 05 | the 7 vectorized gets in `main.py` pass `{"shard_key": …}` | ✅ `8e77578`: 7 hunks; `black` splits the `AdiabaticHistory` call, so lines after `:418` move by +2 |
 | **M4** | 05 | `Datastore/tests/test_datastore_config.py`: the data captured, the layer reading it, the `ast` test of the drivers; the schema unchanged against R0's snapshot | ✅ `8e77578`: 7 tests (Datastore 66 → 73); four breakages caught (log 05) |
-| **C1** | 05a | `.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh start\|stop\|status`, adapted from SI's at `3556148`: ChamPBH's temp dir and ports, 10 CPUs, all four ports confirmed free, a start refused on a held port | ✅ this commit: SI's file with changes 1–4 only (12 hunks, all classified; the lock functions differ by names); mode 100755; `bash -n` under 3.2 and 5.3 |
-| **C2** | 05a | Ray 2.53.0's behaviour measured: the client server's command line, `ray_current_cluster`'s place, the actor command, `gcs_server` under `SIGTERM` | ✅ this commit: all five facts agree with SI's 2.55.1 (log 05a §4.4); `gcs_server` ignores `SIGTERM`, a stop takes 17–20 s |
-| **C3** | 05a | the proof on a real cluster beside a decoy (`/tmp/ray-cpbh-decoy`, Ray's default ports), with no build; four breakages | ✅ this commit: steps 1–9 under `/bin/bash` 3.2, steps 1–3 and stop under 5.3; the decoy's set unchanged pid for pid; B1–B4 caught; the held-port refusal exercised with `nc` |
+| **C1** | 05a | `.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh start\|stop\|status`, adapted from SI's at `3556148`: ChamPBH's temp dir and ports, 10 CPUs, all four ports confirmed free, a start refused on a held port | ✅ `babd9d5`: SI's file with changes 1–4 only (12 hunks, all classified; the lock functions differ by names); mode 100755; `bash -n` under 3.2 and 5.3 |
+| **C2** | 05a | Ray 2.53.0's behaviour measured: the client server's command line, `ray_current_cluster`'s place, the actor command, `gcs_server` under `SIGTERM` | ✅ `babd9d5`: all five facts agree with SI's 2.55.1 (log 05a §4.4); `gcs_server` ignores `SIGTERM`, a stop takes 17–20 s |
+| **C3** | 05a | the proof on a real cluster beside a decoy (`/tmp/ray-cpbh-decoy`, Ray's default ports), with no build; four breakages | ✅ `babd9d5`: steps 1–9 under `/bin/bash` 3.2, steps 1–3 and stop under 5.3; the decoy's set unchanged pid for pid; B1–B4 caught; the held-port refusal exercised with `nc` |
 | **L1**–**L4** (R1) | 06 | README §4.1 at 05's tree; each store equal to `02-reference.db`, bitwise; L4 against R0, the printed lines included | ⬜ |
 | **V2** | 06 | `.documents/dk-and-rpk-migration-verification.md` §2 R1 | ⬜ |
 
@@ -765,7 +766,77 @@ beside a decoy. Log: [`logs/05a-isolate-the-rehearsal-cluster.md`](logs/05a-isol
   ChamPBH's name; B2 (`mkdir -p`) not refused by the lock, caught by the stale-process guard
   (exit 4), whose release **removed the live cluster's lock**; B3 (owner checks) the stand-in lock
   released; B4 (client-server seed) port 6381 still held, exit 1, lock kept.
-- **Rollback.** `git revert` of this commit alone; it adds files and changes nothing else.
+- **Rollback.** `git revert` of `babd9d5` alone; it adds the script and changes no code, venv or store.
 - **For 06 (R1).** Call `ray_cluster.sh start|stop|status` as §1.2 says. Exit 3: the lock is held,
   stop and ask. Exit 4: a ChamPBH process or a port is already there, stop and ask. The brief's
   contract needed no change for Ray 2.53.0.
+
+**Orchestrator review of prompt 05a (2026-10-12)**, by orchestrator note
+[`prompt-05a.md`](orchestrator/prompt-05a.md), at `babd9d5`. All ten checks pass, and no issue is
+opened. The residue is fixed in this follow-up (records only).
+- **(1) Scope.** 3 files: the script (mode `100755`), the log and the board. No other commit of the
+  agent's, and no branch left behind. **The user's staged `phiref_iter.py` was unstaged by someone
+  else during the run**: at dispatch it was `A`, and at 12:07 `prompts/jordan-normalization/` was
+  untracked again. The agent's transcript has no `git` command that touches this checkout's index
+  except its own `git add` of its three files (its only `git add -A` ran in a scratch repository).
+  The file is on disk, untracked, and in neither commit.
+- **(2) The diff from SI's script.** `diff -u` against SI's at `3556148` is 12 hunks, each change 1,
+  2, 3 or 4. `acquire_lock`, `owner_field` and `print_owner` are byte-identical; `write_owner` and
+  `release_lock` differ only by `SI_` → `CPBH_` and the project name. The licence header is complete.
+  The script never invokes `ray stop`; the phrase appears only in the header comment and the usage.
+- **(3) Statically.** `bash -n` passes under 3.2.57 and 5.3.20. `--help` exits 0 and no arguments
+  exit 2 under both, with byte-identical output.
+- **(4) The re-run**, under `/bin/bash` 3.2, each step a command of its own, at a load of about 21:
+  - `status` free.
+  - `start "dk-and-rpk-migration 05a (review)"` took 5 s. The owner file has the seven keys in
+    order, with the `gcs_server`'s pid.
+  - `ray status --address 127.0.0.1:6380` shows one node, 0.0/10.0 CPU.
+  - The client server is `… -m ray.util.client.server --address=127.0.0.1:6380 --host=127.0.0.1
+    --port=6381 --mode=proxy …`, with parent 1.
+  - A second `start` exits 3, and the process set is unchanged.
+  - The decoy started. Each cluster's set has 18 pids, and the two are disjoint.
+  - A worker on each cluster made a detached actor. `ray list actors --address` lists each actor
+    under its own cluster only, and the bare form fails ("Found multiple active Ray instances").
+    With workers the sets are 24 and 19, still disjoint.
+  - `stop` took 19 s. It sent `SIGTERM` to 24 pids and `SIGKILL` to the `gcs_server` and
+    `monitor.py`. None of the 24 is alive, the four ports are free and the lock is released.
+  - The decoy's 19 pids are unchanged, and its actor answered.
+  - The decoy was stopped by the sourced `stop_cluster` with Ray's four default ports: 19 pids, the
+    same `SIGKILL` pair, exit 0.
+  - `/tmp/ray/ray_current_cluster` was absent throughout, and `/tmp/ray`'s mtime is unchanged.
+    `/tmp/ray-cpbh/ray_current_cluster` holds `127.0.0.1:6380`.
+- **(5) The breakages**, extracted from the log and replayed in `bash`. Each passes
+  `git apply --check` and `-R --check`, and the script is clean after each:
+  - **B1**, with only the decoy up, lists 19 pids where the unbroken script lists 0. 18 of them
+    are the decoy's, all but its client server. The 19th had exited by the time it was looked up.
+    It is consistent with the listing's own `awk`, whose `-v re=…/tmp/ray-cpbh` argument matches
+    once the whole-component guard is gone; the unbroken pattern does not match it.
+  - **B3**: with the stand-in lock, the unbroken `stop` exits 1 and keeps the lock. The broken
+    `stop` releases it.
+  - **B4**, on a fresh start: the broken `stop` signals 17 pids and fails with 6381 held by the
+    client server, exit 1, the lock kept. The unbroken `stop` removes that one pid and releases the
+    lock.
+  - **B2**, on a fresh start: the second `start` exits 4 on the stale-process guard, and the live
+    cluster's lock is gone, as the note predicted. The unbroken `stop` says "no lock to release".
+- **(6) Change 4.** With `nc` holding 6381, `start` prints the listener, releases the lock and exits
+  4. With `nc` on 52367, it again exits 4. Nothing started either time.
+- **(7) C2.** The log's five facts agree with check 4: the client server's command line and the
+  seed, `ray_current_cluster`'s place, `ray status`, the actor command, and `gcs_server` under
+  `SIGTERM`.
+- **(8) Suites.** The agent's are 18, 114 (61 + 53) and 73, run with no cluster up. The
+  orchestrator re-ran `Datastore/tests` at `babd9d5`: 73, OK.
+- **(9) Hygiene.** No Ray process; the eight ports free; no lock; `~/ScienceData` holds only
+  `ChamPBH-rehearsals`. `pip freeze` equals the pre-dispatch copy and `pip check` is clean. The 42
+  rehearsal entries are unchanged. SI, SGK, DatastoreKit and RayPoolKit are at their dispatch
+  `HEAD`s, clean. No scratch file is in the repository. The orchestrator ran no `ray stop`.
+- **(10) Records.** The log follows README §5.1, with every command and its output, and the
+  breakages as diffs. The board has the §1 row, C1–C3 and this §5.9.
+  - *Residue, fixed here:*
+    - "this commit" → `babd9d5` (board ×5, log ×2);
+    - the rollback line made precise;
+    - this note added to the list of orchestrator notes.
+- **Handed on.**
+  - 06 (R1) can be dispatched. Its note checks the lock, the ports and the load at dispatch.
+  - Changes 3 and 4 are ChamPBH's additions to SI's script: the four-port check and the
+    held-port refusal. Whether SI takes them up is SI's business (README §6.6); nothing is written
+    in SI.
