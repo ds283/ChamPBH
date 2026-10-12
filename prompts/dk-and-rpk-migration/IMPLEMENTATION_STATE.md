@@ -49,7 +49,7 @@ recorded beside each proposal.
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
 | 01 | [Rehearsal tooling and run provenance](01-rehearsal-tooling-and-run-provenance.md) | P3, P5; README §4.1–§4.2 | Opus | ✍️ 2026-10-11 | ✅ 2026-10-12 | `d7791c5` | [log](logs/01-rehearsal-tooling-and-run-provenance.md) |
-| 02 | [Rehearse the start tree (R0)](02-rehearse-the-start-tree.md) | **R0**; §4.3's measurement | Opus | ✍️ 2026-10-11 | ✅ 2026-10-12 | this commit | [log](logs/02-rehearse-the-start-tree.md) |
+| 02 | [Rehearse the start tree (R0)](02-rehearse-the-start-tree.md) | **R0**; §4.3's measurement | Opus | ✍️ 2026-10-11 | ✅ 2026-10-12 | `6cbf953` | [log](logs/02-rehearse-the-start-tree.md) |
 | 03 | [Pin `raypoolkit` `v0.2.0`](03-pin-raypoolkit-v0.2.0.md) | the RayPoolKit pin | Sonnet | ✍️ 2026-10-11 | ⬜ | — | — |
 | 04 | [Adopt `raypoolkit`](04-adopt-raypoolkit.md) | the RayPoolKit swap; **RayPoolKit G3** | Sonnet | ✍️ 2026-10-11 | ⬜ | — | — |
 | 05 | Move ChamPBH's data out of the layer | `config/datastore.py`; the vectorized gets | Sonnet | ⬜ | ⬜ | — | — |
@@ -71,6 +71,7 @@ recorded beside each proposal.
 Orchestrator notes are written one prompt at a time, in [`orchestrator/`](orchestrator/), just
 before each dispatch:
 - [`orchestrator/prompt-01.md`](orchestrator/prompt-01.md) (`0e64ef0`) — used for 01.
+- [`orchestrator/prompt-02.md`](orchestrator/prompt-02.md) (`a72ca5e`) — used for 02.
 
 ### 1.1 Items
 
@@ -79,8 +80,8 @@ before each dispatch:
 | **T1** | 01 | `utilities.installed_package_provenance()` and `format_package_provenance()`; one line in each driver; `Datastore/tests/test_package_provenance.py` | ✅ `d7791c5`: 10 tests; the line reads `>> packages: datastorekit not installed; raypoolkit not installed` today (format in log 01) |
 | **T2** | 01 | `tools/compare_stores.py` (comparison by value, schema snapshot) and `Datastore/tests/test_compare_stores.py` | ✅ `d7791c5`: 21 tests (with T3's); bookkeeping list and polymorphic map in log 01 |
 | **T3** | 01 | `.documents/dk-and-rpk-migration/rehearsal/`: `build.sh`, `interrupt_when.py`, `stage_counts.py`, `run_readers.sh` | ✅ `d7791c5`: usage checked; never run on a build |
-| **L1**–**L4** (R0) | 02 | README §4.1 at 01's tree; §4.3's reproducibility measured; L4 recorded as the baseline | ✅ this commit: L1–L3 hold; **§4.3 bitwise** (`compare_stores` `RESULT: equal`, exit 0); L4: `compute` 5/5/5, 5/killed, 0/2/5; the prune removed only `resumed-a`'s one unvalidated row (verification §1) |
-| **V1** | 02 | `.documents/dk-and-rpk-migration-verification.md` created, with §1 R0; R0's schema snapshot | ✅ this commit: §1 R0; `out/02-reference-schema.json` (27 client tables) |
+| **L1**–**L4** (R0) | 02 | README §4.1 at 01's tree; §4.3's reproducibility measured; L4 recorded as the baseline | ✅ `6cbf953`: L1–L3 hold; **§4.3 bitwise** (`compare_stores` `RESULT: equal`, exit 0); L4: `compute` 5/5/5, 5/killed, 0/2/5; the prune removed only `resumed-a`'s one unvalidated row (verification §1) |
+| **V1** | 02 | `.documents/dk-and-rpk-migration-verification.md` created, with §1 R0; R0's schema snapshot | ✅ `6cbf953`: §1 R0; `out/02-reference-schema.json` (27 client tables) |
 | **K1** | 03 | the `raypoolkit` pin in `requirements.txt` | ⬜ |
 | **K2** | 03 | the venv installed from it | ⬜ |
 | **K3** | 03 | the proof: one distribution added, at `eaef0ce6…`, the tag's files, not editable | ⬜ |
@@ -99,7 +100,7 @@ counts (18 / 114 / 35); and the venv's `pip freeze` (README §0.2).
 
 | Gate | Holds when | Prompt | State |
 |---|---|---|---|
-| R0 | the start tree builds the pilot, resumes it, and its readers run (README §4.1); its reproducibility is measured (§4.3) | 02 | ✅ **holds** 2026-10-12 (this commit): bitwise reproducible, so R1 and R2 are held to bitwise equality with `02-reference.db` (P4) |
+| R0 | the start tree builds the pilot, resumes it, and its readers run (README §4.1); its reproducibility is measured (§4.3) | 02 | ✅ **holds** 2026-10-12 (`6cbf953`): bitwise reproducible, so R1 and R2 are held to bitwise equality with `02-reference.db` (P4) |
 | RayPoolKit G3 | `RayTools/` is gone, 0 imports, the pin is installed, the three roots pass, all 17 sites construct (RayPoolKit checklist item 8) | 04 (R1, 06, adds the run under real Ray) | ⬜ |
 | R1 | 05's tree equals R0 by value | 06 | ⬜ |
 | DatastoreKit `v0.2.3` | tagged on DatastoreKit's remote, with `store`, `validate` and `validate_on_startup` defaulted (U3; made in DatastoreKit, not here) | — (07 pins it) | ✅ **released** 2026-10-11: tag object `8dac562`, commit `0de2b16`, checked on the remote and by `git show` of `factory_base.py` (README §0.3) |
@@ -128,6 +129,29 @@ outside this campaign's (README §1, "The factories' form").
   `ValueError` spuriously, and a wrong stored π would pass unchecked. No stored value is affected.
 - **Next step.** A one-token fix (`row_data.pi_Einstein_Mp`), or deleting the unused lookup path,
   in a later campaign that may touch the factories, with a test that drives the path.
+
+### `[02-scalar-stage-missing-filter-keeps-every-model]`
+
+**Opened:** 2026-10-12 by the orchestrator's review of prompt 02, from log 02's Observation 2,
+which left the question open. **Not fixed:** `main.py`'s pipeline is outside this campaign's scope
+(README §1), and R0's baseline is the behaviour as it stands.
+
+- **What.** `build_solver_batch`'s "which models are missing?" comprehension is
+  `[m for obj, m in zip(query_outcomes, binned_batch[key])]` (`main.py:223`, since `b662d4b`,
+  2026-01-24). It never reads `obj`, the vectorized lookup's result, so it keeps every model. Each
+  stored `ScalarModel` is then looked up a second time by its own
+  `object_get(…, _do_not_populate=True)` (`main.py:234-258`). The `num_missing == 0` early return
+  (`:229-230`) can never fire. The adiabatic stage filters with `select_missing`
+  (`main.py:432-437`), and so does the BBN stage (`:694`).
+- **Impact.** No stored value is affected: R0's resume found every stored model on the second
+  lookup and computed none (log 02, stage counts 5 lookup / 0 compute), and the two stores are
+  bitwise equal. On the five-model pilot the extra lookups cost under a second. On a re-run of a
+  large store each stored model costs one extra individual lookup. A stored *failed* `ScalarModel`
+  goes through the same second lookup, and what the pool then does with it was not measured here.
+- **Next step.** Filter on `obj.available` (or use `select_missing`, as the later stages do), in a
+  campaign that may touch `main.py`, with a test that a fully stored batch returns no work.
+  06 and 10 compare against R0's lookup pattern (5 / 2 / 5 on `resumed-b`), so a fix that lands
+  before 10 changes that pattern, and L4 must say so.
 
 ## 4. Resolved issues
 
@@ -244,7 +268,7 @@ None yet.
 
 ### 5.3 After prompt 02 (2026-10-12)
 
-- **Landed:** this commit, log [`02-rehearse-the-start-tree.md`](logs/02-rehearse-the-start-tree.md);
+- **Landed:** `6cbf953`, log [`02-rehearse-the-start-tree.md`](logs/02-rehearse-the-start-tree.md);
   the record is `.documents/dk-and-rpk-migration-verification.md` §1. **COMPLETE**: L1–L4 (R0),
   V1; gate R0 holds; no §4 stop met; no code changed.
 - **Cluster and load.** One cluster, `127.0.0.1:6379`, started 01:12:29 and stopped 01:37:44. The
@@ -275,3 +299,78 @@ None yet.
   4. the load, and the foreign suite;
   5. `bbn_from_store.py` prints its re-solve to 10 figures;
   6. `ray stop` kills a shell whose command line names Ray's processes.
+
+**Orchestrator review of prompt 02 (2026-10-12)**, by orchestrator note
+[`prompt-02.md`](orchestrator/prompt-02.md), at `6cbf953`. All ten checks pass. Residue is fixed
+in this follow-up, and one issue is opened from Observation 2.
+- **(1) Scope.** 9 files: the verification document, six `out/02-*` files (59 KB in all), the log
+  and the board. No code, and the index is untouched. The untracked set is unchanged.
+- **(2) Ray.** No Ray process remains, and `ray status` finds no instance.
+- **(3) The logs, read in full.**
+  - Each of the three has the provenance line once, with both packages not installed.
+  - `reference` and `resumed-b` end `** driver exit status 0` with every stage complete.
+    `resumed-a` ends with 134 after the adiabatic banner and before the BBN one.
+  - The note expected 143. The log shows why it is 134: Ray's absl failure-signal handler dumped
+    the main thread's native stack (waiting in `CoreWorker::Wait()`) and aborted, under pid 97614,
+    the one in `02-resumed-a.pid`.
+  - No `Traceback` or `Error` line in any build or reader log.
+- **(4) The counts, repeated.** `stage_counts.py` on the three logs gives the committed text, and
+  JSON equal to the committed JSON. Separately, a raw `sqlite3` `mode=ro` script of the
+  orchestrator's own read both stores:
+  - label counts: `reference` 5 / 5 / 5; `resumed` `ScalarModel` 5 `resumed-a`,
+    `AdiabaticHistory` 3 `resumed-a` + 2 `resumed-b`, `BBNData` 5 `resumed-b`;
+  - no unvalidated row in either store.
+
+  So *k* = 3. That agrees with `resumed-b`'s adiabatic compute count of 2, the β = 10 row having
+  been stored unvalidated, pruned and recomputed.
+- **(5) The prune.** One report in all three logs, in `resumed-b`, from `shard0002-store`. It names
+  only the unvalidated β = 10 `AdiabaticHistory` (store_id 4, 9776 of 9776 values) and says it was
+  pruned.
+- **(6) §4.3, re-run.** `compare_stores` of `02-reference.db` against `02-resumed.db` gives exit 0
+  and `RESULT: equal` in 7 s. Its text is identical to the committed file, and its JSON equal.
+  - All 27 client tables are listed with plausible counts: 5 histories, 42,617 value rows each in
+    `ScalarModelValue` and `AdiabaticHistoryValue`, 7,475 in `BBNDataValue`, 21,250 `redshift`.
+  - The differing bookkeeping columns are only `timestamp`, `label` and the timings.
+  - **Independently of the tool**, the orchestrator's script resolved each row to its β and
+    compared stored bits:
+    - the `ScalarModelValue` rows of each history (10 float columns, ordered by `z`, BLAKE2b);
+    - its `AdiabaticHistoryValue` rows;
+    - its `BBNData` abundances, `failure`, `small_network` and `PRyM_version`.
+
+    All five histories are equal on all three. **R0 is bitwise reproducible**, confirmed.
+- **(7) The readers.** `status.txt` shows steps 0–5, each exit 0. The before/after comparison is
+  `RESULT: equal`, with no bookkeeping difference. `histories.csv` has 5 rows, SHA-256
+  `d7c62c37…c522` as logged. `bbn_from_store` gives stored Yp 0.24687349447579363 and D/H
+  2.4859924812264325 for β = 1.15, and the `prod` re-solve 0.2468734945 and 2.485992481, equal to
+  the 10 figures printed. The inventory lists 5 validated rows of each kind.
+- **(8) The snapshot.** `--snapshot` of `02-reference.db` is byte-identical to
+  `out/02-reference-schema.json`.
+- **(9) Stores.** The 53 files of the note's §1 have unchanged mtimes and sizes. `$R` holds the two
+  stores (17 files each), three logs and three pidfiles, and `02-readers/`.
+- **(10) Records.** The verification document has its introduction and §1 R0 (§§1.1–1.8, with the
+  commands verbatim). The board has the §1 row, L1–L4, V1, gate R0 and §5.3. Suites 18 / 114 / 66.
+  - *Residue, fixed here:* "this commit" → `6cbf953` (board and log); the log's "five" changed
+    files → nine; this note added to the list of orchestrator notes.
+- **Deviations D1–D4** are accepted. D2 is what the note asked for. In D3 the snapshot read a
+  closed store while another build wrote a different one.
+- **Observations.**
+  - *Opened:* Observation 2, as §3 `[02-scalar-stage-missing-filter-keeps-every-model]`. The
+    comprehension at `main.py:223` never reads its lookup result.
+  - *Not opened:*
+    - Observation 1 is Ray's behaviour.
+    - Observation 3 is a housekeeping candidate that 08 overtakes.
+    - Observations 4–6 are recorded for the next notes.
+  - The foreign DatastoreKit suite (Observation 4) broke the note's gate. The bitwise result held
+    under it, and no BBN solve came near its limit.
+- **Handed to 06's note.**
+  - The criterion is bitwise equality with `02-reference.db` (P4).
+  - `resumed-a` exits 134, not 143.
+  - Run `ray stop` as a command of its own.
+  - `ray start` at Ray 2.53.0 prints no address. It is `127.0.0.1:6379` by default, from
+    `/tmp/ray/ray_current_cluster`.
+  - The adiabatic stage takes about 12 s, not the pilot's 2 min 19 s, so `S` comes from 06's own
+    `reference` timestamps.
+  - L4 compares the resume's *pattern* (label counts; computes only what was not kept; prunes
+    only unvalidated rows), with R0's lookups 5 / 2 / 5 on `resumed-b`. The figures depend on
+    the signal's timing.
+  - Hold other sessions' suites off the machine for the builds.

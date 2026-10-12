@@ -1,7 +1,7 @@
 # Log 02 — rehearse the start tree (R0)
 
 **Subject:** Record the R0 rehearsal of the start tree
-**Commit:** this commit, on branch `dk-and-rpk-migration`, on top of `a72ca5e`
+**Commit:** `6cbf953`, on branch `dk-and-rpk-migration`, on top of `a72ca5e`
 **Date:** 2026-10-12, by Claude Opus 5.5
 **Result:** **COMPLETE.**
 - L1–L3 hold, L4's baseline is recorded, and the schema snapshot is saved.
@@ -154,7 +154,7 @@ that the stores were built independently. **R0 is bitwise reproducible.**
 - `--schema … --against` the file gives `RESULT: the schemas agree`.
 
 **Hygiene.**
-- No tracked file changed but the five this commit adds or edits.
+- No tracked file changed but the nine files `6cbf953` adds or edits.
 - Only `02-reference.db`, `02-resumed.db` and `02-readers/before/` were opened (the last only by
   `run_readers.sh`'s step 5).
 - The pilot store's mtimes are unchanged (2026-10-02). No file under `~/ChamPBH-stores/` or
@@ -263,5 +263,5 @@ fail:
 - **`histories.csv`** for 06 and 10's byte comparison: SHA-256
   `d7c62c37d8ad637a63854583ab11bc737109dcbfba92168dbddbaea75182c522`, whole in
   `out/02-readers.txt`.
-- **Suites at this commit:** CosmologyModels 18, ComputeTargets 114 (61 + 53), Datastore 66.
+- **Suites at `6cbf953`:** CosmologyModels 18, ComputeTargets 114 (61 + 53), Datastore 66.
 - **No Ray cluster is running.** No §3 issue opened. The board's one open issue is unchanged.
