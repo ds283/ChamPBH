@@ -1155,3 +1155,16 @@ opened. The residue is fixed in this follow-up.
   - `requirements.txt`'s lines after `:16` moved down by one: `ray` `:79`, `raypoolkit` `:80`,
     `SQLAlchemy` `:91`.
   - 08's suites start from 18 / 114 / 73.
+
+### 5.12a Prompt 08 amended at dispatch (2026-10-12)
+
+Before dispatching 08, the orchestrator prototyped the swap on a scratch `git archive` of `c4bd666`
+(note [`prompt-08.md`](orchestrator/prompt-08.md) §0). The prompt's harness design held: the five
+harness importers pass on the package's actor with no change to their bodies, and the stand-in
+store's schema agrees with R0's snapshot outright. One test the prompt did not name failed:
+`Datastore/tests/test_compare_stores.py`'s test 14 builds its primary from
+`config.sharding.replicated_tables` and asserts (`:1111`) that `LambdaCDM` is noted, which P8 makes
+false. As written that is a §4 stop; it is the direct consequence of P8, which the user ruled, so
+08's A7.4 and §4, and README §2.2's charter, now name it: the assertion is inverted and the test's
+docstring says so. The Datastore count is unchanged by it (64 + the A8 tests).
+

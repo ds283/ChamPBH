@@ -189,7 +189,14 @@ what it should.
      read the config); `EXPECTED_SERIAL_BATCH_SIZES` loses `"LambdaCDM": 5` (P8). The data tests and
      the vectorized-get test stay as they are.
   4. In `test_compare_stores.py`, `_registry()` imports `config.datastore` directly; the fallback to
-     the layer goes, and its docstring with it. Nothing else in the module changes.
+     the layer goes, and its docstring with it. *Amended 2026-10-12 by the orchestrator, before
+     dispatch:* **test 14** (`test_14_a_store_with_champbhs_schema`) builds its primary from
+     `config.sharding.replicated_tables` and asserts at `:1111` that `LambdaCDM` is noted, which P8
+     makes false. That assertion becomes `assertFalse(…)` (a store built from today's lists names
+     no `LambdaCDM`), and its docstring's "LambdaCDM is noted" says so; `:1110` stays. The general
+     case, a listed table that no shard holds, stays pinned by
+     `test_a_listed_replicated_table_that_no_shard_holds` (`Ghost`). Nothing else in the module
+     changes.
 - **A8 — the new tests**, in `Datastore/tests/test_datastore_config.py` (one module, so the count is
   easy to derive):
   1. **The tables are declared.** Every name in `replicated_tables` and `sharded_tables` is a key of
@@ -324,8 +331,8 @@ Each applied to the working tree, shown to be caught, reverted, and recorded as 
   account for.
 - §2.1.3 finds a hook whose arguments the package passes differently from what a ChamPBH factory
   takes.
-- A test body outside A6.4 and A7 would have to change, or an existing test fails for a reason other
-  than its deletion here.
+- A test body outside A6.4 and A7 (A7.4's test 14 included) would have to change, or an existing
+  test fails for a reason other than its deletion here.
 - The schema differs from R0's in a column of ChamPBH's own.
 - Anything in the package behaves otherwise than its contract says (README §5 rule 11): record it
   and stop; never work around it here.

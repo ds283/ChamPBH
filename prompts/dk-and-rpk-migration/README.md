@@ -531,7 +531,10 @@ checklist's `v0.2.3` and `v0.3.0` addenda, and re-checks the tag on the remote b
      (3 tests) asserts that the layer's names are `config.datastore`'s objects: the imports go, the
      three tests are deleted (there is no layer to read the config), and its batch-size literal loses
      `LambdaCDM` (P8). A new test that each pool is given `config.datastore`'s objects takes their
-     place. `test_compare_stores.py`'s `_registry()` loses its fallback to the layer.
+     place. `test_compare_stores.py`'s `_registry()` loses its fallback to the layer. *Amended
+     2026-10-12 at 08's dispatch:* its test 14 builds its primary from `config.sharding` and
+     asserts that `LambdaCDM` is noted, which P8 makes false; that one assertion is inverted
+     (board §5.12a).
   8. **`--inventory`** prints that it is unavailable until 09 and exits non-zero, before Ray
      starts (P12). The four `pool.inventory` calls and their helpers are deleted.
   9. **The refresh route.** `pipeline_selection.BBN_REFRESH_ROUTE` names
