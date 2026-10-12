@@ -1,7 +1,7 @@
 # Log 05 — move ChamPBH's data out of the layer
 
 **Subject:** Move ChamPBH's data out of the layer
-**Commit:** this commit, on branch `dk-and-rpk-migration`, on top of `891ae82` (its code equals `303324b`'s)
+**Commit:** `8e77578`, on branch `dk-and-rpk-migration`, on top of `891ae82` (its code equals `303324b`'s)
 **Date:** 2026-10-12, by Claude Sonnet 5.5
 **Result:** **COMPLETE.**
 - M1: `config/datastore.py` added, holding `factories` (27 entries, 23 distinct classes),
@@ -599,7 +599,7 @@ OK
 
 Each applied to the working tree, run with `PYTHONPATH=. ./venv/bin/python -m unittest
 Datastore.tests.test_datastore_config`, and reverted (`cmp` against a copy confirms each file was
-restored). Each diff replays from a clean tree at this commit with `git apply`, and reverses with
+restored). Each diff replays from a clean tree at `8e77578` with `git apply`, and reverses with
 `git apply -R`; `git apply --check` was run for both directions.
 
 ### Breakage 1 — One vectorized get reverted to the bare key
@@ -715,7 +715,7 @@ Caught by `TestLayerReadsConfig.test_client_pool_batch_sizes_is_config_serial_ba
 
 ## State handed to the next prompt
 
-- `HEAD` is this commit on `dk-and-rpk-migration`; planning and orchestration commits may land
+- `HEAD` is `8e77578` on `dk-and-rpk-migration`; planning and orchestration commits may land
   after it. The tree holds no tracked change; the untracked entries of prompt 01's gate are not
   this campaign's.
 - **Code.** `config/datastore.py` holds `factories`, `drop_groups` and `serial_batch_sizes`. The old
@@ -732,6 +732,6 @@ Caught by `TestLayerReadsConfig.test_client_pool_batch_sizes_is_config_serial_ba
   No Ray was started and no store was opened but the temporary ones.
 - **One issue opened**, `[05-config-datastore-cannot-be-imported-before-the-layer]`: 08 removes the
   cycle (P6) and includes `python -c "import config.datastore"` from the root in its acceptance.
-- **Rollback** is `git revert` of this commit alone; nothing in the venv changes.
+- **Rollback** is `git revert` of `8e77578` alone; nothing in the venv changes.
 - **06** runs R1 at this tree: the rehearsal is held to `RESULT: equal` against `02-reference.db`
   (README §4.1, §4.3).

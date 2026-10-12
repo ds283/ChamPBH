@@ -57,7 +57,7 @@ reads only what the specs declare. Measured at `12c82e8`, 09's list already cove
 | 02 | [Rehearse the start tree (R0)](02-rehearse-the-start-tree.md) | **R0**; §4.3's measurement | Opus | ✍️ 2026-10-11 | ✅ 2026-10-12 | `6cbf953` | [log](logs/02-rehearse-the-start-tree.md) |
 | 03 | [Pin `raypoolkit` `v0.2.0`](03-pin-raypoolkit-v0.2.0.md) | the RayPoolKit pin | Sonnet | ✍️ 2026-10-11 | ✅ 2026-10-12 | `2f61943` | [log](logs/03-pin-raypoolkit-v0.2.0.md) |
 | 04 | [Adopt `raypoolkit`](04-adopt-raypoolkit.md) | the RayPoolKit swap; **RayPoolKit G3** | Sonnet | ✍️ 2026-10-11 | ✅ 2026-10-12 | `303324b` | [log](logs/04-adopt-raypoolkit.md) |
-| 05 | [Move ChamPBH's data out of the layer](05-move-champbh-data-out-of-the-layer.md) | `config/datastore.py`; the vectorized gets | Sonnet | ✍️ 2026-10-12 | ✅ 2026-10-12 | this commit | [log](logs/05-move-champbh-data-out-of-the-layer.md) |
+| 05 | [Move ChamPBH's data out of the layer](05-move-champbh-data-out-of-the-layer.md) | `config/datastore.py`; the vectorized gets | Sonnet | ✍️ 2026-10-12 | ✅ 2026-10-12 | `8e77578` | [log](logs/05-move-champbh-data-out-of-the-layer.md) |
 | 06 | [Rehearse before the DatastoreKit swap (R1)](06-rehearse-before-the-datastore-swap.md) | **R1** | Opus | ✍️ 2026-10-12 | ⬜ | — | — |
 | 07 | Pin `datastorekit` `v0.2.3` | the DatastoreKit pin (**U3**; `0de2b16`) | Sonnet | ⬜ | ⬜ | — | — |
 | 08 | Adopt `datastorekit` | the DatastoreKit swap; **U4** | Opus | ⬜ | ⬜ | — | — |
@@ -79,6 +79,7 @@ before each dispatch:
 - [`orchestrator/prompt-02.md`](orchestrator/prompt-02.md) (`a72ca5e`) — used for 02.
 - [`orchestrator/prompt-03.md`](orchestrator/prompt-03.md) (`e287a40`) — used for 03.
 - [`orchestrator/prompt-04.md`](orchestrator/prompt-04.md) (`12c82e8`) — used for 04.
+- [`orchestrator/prompt-05.md`](orchestrator/prompt-05.md) (`891ae82`) — used for 05.
 
 ### 1.1 Items
 
@@ -97,10 +98,10 @@ before each dispatch:
 | **W3** | 04 | no pool site changed (P7) | ✅ `303324b`: the drivers' diff is one line each; script at the staged tree: 17 calls, `constructs` 17 |
 | **W4** | 04 | `.documents/architecture-summary.md`'s `RayWorkPool` lines made true (P14) | ✅ `303324b`: layout, §3.2 title, `pool` type, `store_handler` row and a new `persist_handler` row, the in-flight keying, the lifecycle's store/persist pair (`:195-196`, named by the brief), and `:585` |
 
-| **M1** | 05 | `config/datastore.py`: `factories`, `drop_groups`, `serial_batch_sizes`, moved verbatim | ✅ this commit: 27 entries / 23 classes, 3 groups, 24 sizes with `LambdaCDM`; equal to the capture taken before the first edit |
-| **M2** | 05 | the old layer imports them under its old names; `_drop_order` stays | ✅ this commit: the layer's diff is the removed definitions and imports plus two import statements; `_drop_order` kept; the schema agrees with 04's tree and with R0's snapshot |
-| **M3** | 05 | the 7 vectorized gets in `main.py` pass `{"shard_key": …}` | ✅ this commit: 7 hunks; `black` splits the `AdiabaticHistory` call, so lines after `:418` move by +2 |
-| **M4** | 05 | `Datastore/tests/test_datastore_config.py`: the data captured, the layer reading it, the `ast` test of the drivers; the schema unchanged against R0's snapshot | ✅ this commit: 7 tests (Datastore 66 → 73); four breakages caught (log 05) |
+| **M1** | 05 | `config/datastore.py`: `factories`, `drop_groups`, `serial_batch_sizes`, moved verbatim | ✅ `8e77578`: 27 entries / 23 classes, 3 groups, 24 sizes with `LambdaCDM`; equal to the capture taken before the first edit |
+| **M2** | 05 | the old layer imports them under its old names; `_drop_order` stays | ✅ `8e77578`: the layer's diff is the removed definitions and imports plus two import statements; `_drop_order` kept; the schema agrees with 04's tree and with R0's snapshot |
+| **M3** | 05 | the 7 vectorized gets in `main.py` pass `{"shard_key": …}` | ✅ `8e77578`: 7 hunks; `black` splits the `AdiabaticHistory` call, so lines after `:418` move by +2 |
+| **M4** | 05 | `Datastore/tests/test_datastore_config.py`: the data captured, the layer reading it, the `ast` test of the drivers; the schema unchanged against R0's snapshot | ✅ `8e77578`: 7 tests (Datastore 66 → 73); four breakages caught (log 05) |
 | **L1**–**L4** (R1) | 06 | README §4.1 at 05's tree; each store equal to `02-reference.db`, bitwise; L4 against R0, the printed lines included | ⬜ |
 | **V2** | 06 | `.documents/dk-and-rpk-migration-verification.md` §2 R1 | ⬜ |
 
@@ -623,10 +624,84 @@ vectorized gets pass a mapping, on the old layer. Log:
 - **State.** M1–M4 done (§1.1). The schema agrees with 04's tree and with R0's snapshot. The
   suites are 18 / 114 / 73 (Datastore 66 + 7). One §3 issue opened,
   `[05-config-datastore-cannot-be-imported-before-the-layer]`.
-- **Rollback.** `git revert` of this commit alone. It touches nothing in the venv.
+- **Rollback.** `git revert` of `8e77578` alone. It touches nothing in the venv.
 - **For 06 (R1).** `main.py` moved by +2 after `:418`, because `black` splits the
   `AdiabaticHistory` vectorized get over three lines. The `RayWorkPool(` sites are now `:201`,
-  `:284`, `:363`, `:413`, `:483`, `:543`, `:621`, `:673`, `:746`, `:830`;
-  those from `:483` on were `:481`, `:541`, `:619`, `:671`, `:744`, `:828`. The compute handlers are at `:288`, `:547`, `:834`; `with ShardedPool(` is
-  `:1348` (was `:1346`). The three compute sites (`:284`, `:543`, `:830`) keep
-  their handlers.
+  `:284`, `:363`, `:413`, `:483`, `:543`, `:621`, `:673`, `:746`, `:830`; those from `:483` on
+  were `:481`, `:541`, `:619`, `:671`, `:744`, `:828`. The compute handlers are at `:288`, `:547`,
+  `:834`; `with ShardedPool(` is `:1348` (was `:1346`). The three compute sites (`:284`, `:543`,
+  `:830`) keep their handlers.
+
+**Orchestrator review of prompt 05 (2026-10-12)**, by orchestrator note
+[`prompt-05.md`](orchestrator/prompt-05.md), at `8e77578`. All twelve checks pass, and no issue is
+opened beyond the prompt's own. The residue is fixed in `e513e8c` (code comment) and in this
+follow-up (records).
+- **(1) Scope.** 8 files: the two new ones, the layer's two, `main.py`, the log, the board and the
+  index. The untracked set is unchanged (23 entries), and no branch was left behind. The agent
+  amended its own commit once, to shorten the subject; the reflog shows `4e24a85` → `8e77578` with
+  parent `891ae82` both times, so nothing else was folded in.
+- **(2) The layer's diff.** It is the removed definitions, the `CosmologyConcepts` import and the
+  17 factory-module imports, and two added imports from `config.datastore`. By an `ast` check from
+  the scratchpad, no import in either file is unused, none was unused before, and every other
+  top-level statement dumps identically to `891ae82`'s. `_drop_order` is at the layer (`:48`).
+- **(3) Verbatim.** The three dict literals in `config/datastore.py` dump by `ast` identically to
+  `_factories`, `_drop_actions` and `_default_serial_batch_size` at `891ae82`. The module imports
+  nothing it does not use. Its docstring names each object, the old layer's aliases until 08, and
+  the hazard.
+- **(4) `main.py`.** 7 hunks: 7 lines removed, 9 added. With each `object_get_vectorized` call's
+  second argument normalised, the `ast` of `main.py` equals `891ae82`'s.
+- **(5) The captured data.** The test's three literals equal the orchestrator's capture taken
+  before dispatch, entry by entry and in order. The log's `capture.py` reads the layer, not
+  `config.datastore`.
+- **(6) The tests and the breakages.** `test_datastore_config.py` imports the layer first, with
+  the comment. It checks identity against the module, found by `importlib`, and asserts 7 / 0 / 0.
+  Its 7 tests pass. The four breakage diffs, extracted from the log and replayed in `bash`, pass
+  `git apply --check` and `-R --check`. Each fails only its named test:
+  - 1, `main.py:676`, "shard key is not a dict literal";
+  - 2, the batch-size data test;
+  - 3, the registry data test;
+  - 4, only the identity test, with the data tests passing.
+
+  The tree was clean after each.
+- **(7) The schema.** The note's build script, run at `8e77578`:
+  `ray.is_initialized()` is `False`. Compared against the orchestrator's `0f1c25b` snapshot and
+  against `02-reference-schema.json`: `RESULT: the schemas agree` both times.
+- **(8) The hazard and the issue.**
+  - `import config.datastore` fails with the partially-initialised `ImportError` (on
+    `serial_batch_sizes`).
+  - `import Datastore.SQL.Datastore, config.datastore` works.
+  - `test_compare_stores` run alone passes 21.
+  - The §3 entry gives what, impact (naming `_registry()`'s fallback, and that it would hide a real
+    `ImportError`) and next step (08, P6).
+  - The index has the row under §1.11, 26 open, this board's 3, and the date.
+- **(9) The drivers.** Log 04's `check_imports.py`, extracted and re-run: 162 names, 0 failures,
+  `ray.is_initialized()` `False`. `py_compile` of `main.py` succeeds. `black --check` is clean on
+  the five files.
+- **(10) Suites.** The agent's: 18, 114 (61 + 53), 73 (66 + 7), all OK, at a load of 44–108. The
+  orchestrator re-ran `Datastore/tests` at `8e77578`: 73, OK.
+- **(11) Hygiene.**
+  - `pip freeze` equals the pre-dispatch copy, and `pip check` is clean.
+  - The 42 rehearsal entries have unchanged mtimes and sizes.
+  - RayPoolKit is at `1b84df0`, clean. DatastoreKit moved `30d2fc8` → `24051ae` → `5f972be`, and
+    SecondaryGWKit `cf978c6` → `fe16d8e`, both by other sessions' planning and record commits. Both
+    trees are clean, and nothing in either is the agent's.
+  - No scratch file was left in the repository.
+  - **A Ray cluster is up, and it is not this campaign's.** It was started at 09:19 from
+    SecondaryGWKit's venv (Python 3.12; its `ray::Datastore` workers are SGK's). The agent started
+    none.
+- **(12) Records.** The log follows README §5.1, with every command and output and the breakages as
+  diffs. The board has the §1 row, M1–M4, the §3 issue and §5.7 with the rollback and the new
+  pool-site lines.
+  - *Residue, fixed:*
+    - both new files' licence headers lacked their last line, `# limitations under the
+      License.`; restored in `e513e8c`;
+    - "this commit" → `8e77578` (board ×6, log ×4);
+    - this note added to the list of orchestrator notes;
+    - §5.7's last bullet reflowed.
+- **Handed on to 06.**
+  - R1 runs at this tree, held to `RESULT: equal` against `02-reference.db`.
+  - **README §4.1's cluster check will find SecondaryGWKit's cluster if it is still up**, and
+    must stop and ask rather than stop it. 06's note checks it at dispatch.
+  - The suites start from 18 / 114 / 73.
+  - DatastoreKit's checklist now carries a `v0.3.0` addendum: ChamPBH may pin `v0.2.3` or
+    `v0.3.0`. That is the user's choice, for 07, which is written after 06's review.
