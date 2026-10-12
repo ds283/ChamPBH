@@ -17,6 +17,7 @@ import sqlalchemy as sqla
 
 from CosmologyModels.GenericEOS.QCD_Cosmology import QCD_Cosmology
 from datastorekit.SQL.factory_base import SQLAFactoryBase
+from datastorekit.store_inventory import InventorySpec
 from config.defaults import DEFAULT_FLOAT_PRECISION, DEFAULT_STRING_LENGTH
 
 
@@ -38,6 +39,12 @@ class sqla_QCDCosmology_factory(SQLAFactoryBase):
                 sqla.Column("Neff", sqla.Float(64)),
             ],
         }
+
+    def inventory_spec(self):
+        # build() matches the six parameters, and not name (dk-and-rpk-migration prompt 09)
+        return InventorySpec(
+            leaves=("omega_m", "omega_cc", "h", "f_baryon", "T_CMB_Kelvin", "Neff")
+        )
 
     def build(self, payload, conn, table, inserter, tables, inserters):
         params = payload["params"]

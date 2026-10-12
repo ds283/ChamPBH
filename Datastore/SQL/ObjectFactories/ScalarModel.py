@@ -34,9 +34,19 @@ from CosmologyConcepts import (
     pi_value,
 )
 from CosmologyConcepts.ConformalCouplings import AbstractCoupling
+from CosmologyConcepts.ConformalCouplings.model_ids import EXPONENTIAL_COUPLING
 from CosmologyConcepts.Potentials import AbstractPotential
+from CosmologyConcepts.Potentials.model_ids import (
+    INVERSE_POWER_POTENTIAL,
+    EXPONENTIAL_POTENTIAL,
+    REFLECTING_POTENTIAL,
+    STAROBINSKY_POTENTIAL,
+    RECLINER_POTENTIAL,
+)
 from CosmologyModels import BaseCosmology
+from CosmologyModels.model_ids import XAV_IMPROVED_EOS_IDENTIFIER
 from datastorekit.SQL.factory_base import SQLAFactoryBase
+from datastorekit.store_inventory import InventorySpec, Parent
 from MetadataConcepts import store_tag, tolerance
 from Quadrature.integration_metadata import IntegrationData, IntegrationSolver
 from Units.base import UnitsLike
@@ -208,6 +218,51 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 ),
             ],
         }
+
+    def inventory_spec(self):
+        # the key is what build() matches: the three type/serial pairs, the two temperatures,
+        # the initial phi and pi, the two tolerances and the version. failure is matched only when
+        # the payload gives it, and is a leaf so that the inventory shows it (campaign README
+        # P15); the stored label, a job name and a time, is not. The polymorphic maps are those of
+        # the three model_ids modules: only XAV_IMPROVED_EOS_IDENTIFIER names a stored cosmology.
+        # The coupling is on this row's shard, since both take their shard key from beta
+        # (dk-and-rpk-migration prompt 09)
+        return InventorySpec(
+            leaves=("cosmology_type", "potential_type", "coupling_type", "failure"),
+            parents={
+                "version": Parent("version", "version"),
+                "cosmology": Parent(
+                    "cosmology_serial",
+                    type_column="cosmology_type",
+                    types={XAV_IMPROVED_EOS_IDENTIFIER: "QCD_Cosmology"},
+                ),
+                "potential": Parent(
+                    "potential_serial",
+                    type_column="potential_type",
+                    types={
+                        INVERSE_POWER_POTENTIAL: "InversePowerPotential",
+                        EXPONENTIAL_POTENTIAL: "ExponentialPotential",
+                        REFLECTING_POTENTIAL: "ReflectingPotential",
+                        STAROBINSKY_POTENTIAL: "StarobinskyPotential",
+                        RECLINER_POTENTIAL: "ReclinerPotential",
+                    },
+                ),
+                "coupling": Parent(
+                    "coupling_serial",
+                    type_column="coupling_type",
+                    types={EXPONENTIAL_COUPLING: "ExponentialCoupling"},
+                ),
+                "T_init": Parent("T_Jordan_init_serial", "temperature"),
+                "T_stop": Parent("T_Jordan_stop_serial", "temperature"),
+                "phi_init": Parent("phi_Einstein_init_serial", "phi_value"),
+                "pi_init": Parent("pi_Einstein_init_serial", "pi_value"),
+                "atol": Parent("atol_serial", "tolerance"),
+                "rtol": Parent("rtol_serial", "tolerance"),
+            },
+            tags=("ScalarModel_tags", "model_serial"),
+            values=("ScalarModelValue", "model_serial"),
+            validated="validated",
+        )
 
     def build(self, payload, conn, table, inserter, tables, inserters):
         label: Optional[str] = payload.get("label", None)
@@ -800,78 +855,6 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 )
 
         return msgs
-
-    def inventory(self, conn, table, tables):
-        version_table = tables["version"]
-        temperature_table = tables["temperature"]
-        phi_table = tables["phi_value"]
-        pi_table = tables["pi_value"]
-
-        Tinit_table = temperature_table.alias("Tinit")
-        Tstop_table = temperature_table.alias("Tstop")
-
-        query = (
-            sqla.select(
-                version_table.c.label.label("version_label"),
-                table.c.timestamp,
-                table.c.label,
-                table.c.validated,
-                table.c.failure,
-                Tinit_table.c.value_GeV.label("Tinit_GeV"),
-                Tstop_table.c.value_GeV.label("Tstop_GeV"),
-                phi_table.c.value_PlanckMass.label("phi_Einstein_init_Mp"),
-                pi_table.c.value_PlanckMass.label("pi_Einstein_init_Mp"),
-            )
-            .join(version_table, table.c.version == version_table.c.serial)
-            .join(Tinit_table, table.c.T_Jordan_init_serial == Tinit_table.c.serial)
-            .join(Tstop_table, table.c.T_Jordan_stop_serial == Tstop_table.c.serial)
-            .join(phi_table, table.c.phi_Einstein_init_serial == phi_table.c.serial)
-            .join(pi_table, table.c.pi_Einstein_init_serial == pi_table.c.serial)
-        )
-
-        rows = conn.execute(query)
-
-        data = {
-            "validated": {
-                "earliest_timestamp": None,
-                "latest_timestamp": None,
-                "versions": set(),
-                "labels": [],
-            },
-            "unvalidated": {
-                "earliest_timestamp": None,
-                "latest_timestamp": None,
-                "versions": set(),
-                "labels": [],
-            },
-        }
-
-        for item in rows:
-            if item.validated:
-                group = data["validated"]
-            else:
-                group = data["unvalidated"]
-
-            if (
-                group["latest_timestamp"] is None
-                or item.timestamp > group["latest_timestamp"]
-            ):
-                group["latest_timestamp"] = item.timestamp
-
-            if (
-                group["earliest_timestamp"] is None
-                or item.timestamp < group["earliest_timestamp"]
-            ):
-                group["earliest_timestamp"] = item.timestamp
-
-            if item.version_label not in group["versions"]:
-                group["versions"].add(item.version_label)
-
-            group["labels"].append(
-                f"{item.label} (T_init={item.Tinit_GeV:.5g} GeV, T_stop={item.Tstop_GeV:.5g} GeV, phiE_init={item.phi_Einstein_init_Mp:.5g} Mp, piE_init={item.pi_Einstein_init_Mp:.5g} Mp, failure={item.failure})"
-            )
-
-        return data
 
 
 class sqla_ScalarModelValue_factory(SQLAFactoryBase):

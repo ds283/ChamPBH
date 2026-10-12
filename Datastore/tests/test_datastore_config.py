@@ -21,8 +21,8 @@ expected values below were captured from the datastore layer's own module-level 
 prompt 04's tree, before ``config/datastore.py`` existed, not copied from it; prompt 08 removed
 ``LambdaCDM`` from the batch sizes (campaign README, P8).
 
-Two tests run a subprocess from the repository root: ``import config.datastore`` alone, and
-``main.py --inventory``, which is refused before Ray starts. Each takes a few seconds.
+One test runs a subprocess from the repository root: ``import config.datastore`` alone. It takes a
+few seconds.
 """
 
 import ast
@@ -435,54 +435,6 @@ class TestConfigDatastoreImportsAlone(_NoRay):
             timeout=300,
         )
         self.assertEqual(result.returncode, 0, result.stderr)
-
-
-class TestInventoryRefuses(_NoRay):
-    """``main.py --inventory`` is refused, before Ray starts, until prompt 09 ports the inventory
-    (README P12). Prompt 09 replaces this test."""
-
-    def test_inventory_exits_non_zero_and_creates_nothing(self):
-        with tempfile.TemporaryDirectory(prefix="champbh-inventory-test-") as tmp:
-            absent = Path(tmp) / "absent.db"
-            # an address nothing listens on: if the refusal ever came after ray.init, the run
-            # would fail to connect rather than join a cluster that happens to be running
-            result = subprocess.run(
-                [
-                    sys.executable,
-                    "main.py",
-                    "--database",
-                    str(absent),
-                    "--ray-address",
-                    "127.0.0.1:9",
-                    "--inventory",
-                ],
-                cwd=REPO_ROOT,
-                capture_output=True,
-                text=True,
-                timeout=300,
-            )
-            self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
-            self.assertIn("!! --inventory:", result.stderr)
-            self.assertIn("prompt 09", result.stderr)
-            self.assertFalse(absent.exists())
-            self.assertEqual(os.listdir(tmp), [])
-
-    def test_the_refusal_comes_before_ray_starts(self):
-        tree = _main_tree()
-
-        def refuses(node):
-            return (
-                isinstance(node, ast.If)
-                and isinstance(node.test, ast.Attribute)
-                and node.test.attr == "inventory"
-                and any(_is_call_to(n, "sys.exit") for n in ast.walk(node))
-            )
-
-        refusal = [i for i, stmt in enumerate(tree.body) if refuses(stmt)]
-        init = _top_level_index(tree, lambda n: _is_call_to(n, "ray.init"))
-        self.assertEqual(len(refusal), 1, "main.py: module-level --inventory refusals")
-        self.assertEqual(len(init), 1)
-        self.assertLess(refusal[0], init[0])
 
 
 if __name__ == "__main__":

@@ -14,6 +14,7 @@ from ComputeTargets import (
 from CosmologyConcepts import redshift, redshift_array
 from CosmologyModels import BaseCosmology
 from datastorekit.SQL.factory_base import SQLAFactoryBase
+from datastorekit.store_inventory import InventorySpec, Parent
 from MetadataConcepts import store_tag
 from Units.base import UnitsLike
 from config.defaults import DEFAULT_STRING_LENGTH
@@ -115,6 +116,23 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
                 sqla.Column("validated", sqla.Boolean, default=False, nullable=False),
             ],
         }
+
+    def inventory_spec(self):
+        # build() matches model_serial, the version and failure (False unless the payload says
+        # otherwise). PRyM_version is not matched, and is a leaf so that the inventory shows it
+        # (campaign README P15); the stored label, a job name and a time, is not. The model is on
+        # this row's shard, since both take their shard key from the coupling's beta
+        # (dk-and-rpk-migration prompt 09)
+        return InventorySpec(
+            leaves=("failure", "PRyM_version"),
+            parents={
+                "version": Parent("version", "version"),
+                "model": Parent("model_serial", "ScalarModel"),
+            },
+            tags=("BBNData_tags", "bbn_serial"),
+            values=("BBNDataValue", "bbn_serial"),
+            validated="validated",
+        )
 
     def build(self, payload, conn, table, inserter, tables, inserters):
         label: Optional[str] = payload.get("label", None)
@@ -449,66 +467,6 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
                 )
 
         return msgs
-
-    def inventory(self, conn, table, tables):
-        version_table = tables["version"]
-
-        query = sqla.select(
-            version_table.c.label.label("version_label"),
-            table.c.timestamp,
-            table.c.label,
-            table.c.validated,
-            table.c.failure,
-            table.c.PRyM_version,
-        ).join(version_table, table.c.version == version_table.c.serial)
-
-        rows = conn.execute(query)
-
-        data = {
-            "validated": {
-                "earliest_timestamp": None,
-                "latest_timestamp": None,
-                "versions": set(),
-                "PRyM_versions": set(),
-                "labels": [],
-            },
-            "unvalidated": {
-                "earliest_timestamp": None,
-                "latest_timestamp": None,
-                "versions": set(),
-                "PRyM_versions": set(),
-                "labels": [],
-            },
-        }
-
-        for item in rows:
-            if item.validated:
-                group = data["validated"]
-            else:
-                group = data["unvalidated"]
-
-            if (
-                group["latest_timestamp"] is None
-                or item.timestamp > group["latest_timestamp"]
-            ):
-                group["latest_timestamp"] = item.timestamp
-
-            if (
-                group["earliest_timestamp"] is None
-                or item.timestamp < group["earliest_timestamp"]
-            ):
-                group["earliest_timestamp"] = item.timestamp
-
-            if item.version_label not in group["versions"]:
-                group["versions"].add(item.version_label)
-
-            if item.PRyM_version is not None:
-                if item.PRyM_version not in group["PRyM_versions"]:
-                    group["PRyM_versions"].add(item.PRyM_version)
-
-            group["labels"].append(f"{item.label} (failure={item.failure})")
-
-        return data
 
 
 class sqla_BBNDataValue_factory(SQLAFactoryBase):

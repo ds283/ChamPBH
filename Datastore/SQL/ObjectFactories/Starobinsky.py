@@ -19,6 +19,7 @@ from sqlalchemy.exc import MultipleResultsFound
 from CosmologyConcepts import M_value, Lambda_value
 from CosmologyConcepts.Potentials import StarobinskyPotential
 from datastorekit.SQL.factory_base import SQLAFactoryBase
+from datastorekit.store_inventory import InventorySpec, Parent
 from Units.base import UnitsLike
 
 
@@ -47,6 +48,16 @@ class sqla_StarobinskyPotential_factory(SQLAFactoryBase):
                 ),
             ],
         }
+
+    def inventory_spec(self):
+        # build() matches M_serial and Lambda_serial, and not version
+        # (dk-and-rpk-migration prompt 09)
+        return InventorySpec(
+            parents={
+                "M": Parent("M_serial", "M_value"),
+                "Lambda": Parent("Lambda_serial", "Lambda_value"),
+            },
+        )
 
     def build(self, payload, conn, table, inserter, tables, inserters):
         M: M_value = payload["M"]

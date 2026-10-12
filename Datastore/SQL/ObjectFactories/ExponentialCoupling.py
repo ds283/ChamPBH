@@ -19,6 +19,7 @@ from sqlalchemy.exc import MultipleResultsFound
 from CosmologyConcepts import beta_value
 from CosmologyConcepts.ConformalCouplings import ExponentialCoupling
 from datastorekit.SQL.factory_base import SQLAFactoryBase
+from datastorekit.store_inventory import InventorySpec, Parent
 from Units.base import UnitsLike
 
 
@@ -40,6 +41,11 @@ class sqla_ExponentialCoupling_factory(SQLAFactoryBase):
                 ),
             ],
         }
+
+    def inventory_spec(self):
+        # build() matches beta_serial, and not version (dk-and-rpk-migration prompt 09). beta_value
+        # is replicated, so it is on this class's shard
+        return InventorySpec(parents={"beta": Parent("beta_serial", "beta_value")})
 
     def build(self, payload, conn, table, inserter, tables, inserters):
         beta: beta_value = payload["beta"]

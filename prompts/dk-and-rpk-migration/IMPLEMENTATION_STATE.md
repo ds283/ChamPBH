@@ -1,6 +1,6 @@
 # dk-and-rpk-migration campaign — implementation state
 
-**Last updated:** 2026-10-12 · **Status: LIVE — 11 of 12 prompts written (01–10, 05a), 9 landed (01–08, 05a); R0 bitwise reproducible; R1 equals R0 bitwise; RayPoolKit G3 holds; ChamPBH's datastore layer replaced by `datastorekit` (08). P1–P17
+**Last updated:** 2026-10-13 · **Status: LIVE — 11 of 12 prompts written (01–10, 05a), 10 landed (01–09, 05a); R0 bitwise reproducible; R1 equals R0 bitwise; RayPoolKit G3 holds; ChamPBH's datastore layer replaced by `datastorekit` (08); the inventory read-only on the package's reader, every class covered (09). P1–P17
 ruled; U5 ruled (README §6.6); U6 ruled (README §6.7): DatastoreKit `v0.3.0` is the pin (README §0.4).**
 The plan is [`README.md`](README.md), written on 2026-10-11 at `52142d7` with the user's rulings
 U1–U4. Prompts 01–04 are written once the user has reviewed it (README §2.1).
@@ -74,7 +74,7 @@ reads only what the specs declare. Measured at `12c82e8`, 09's list already cove
 | 06 | [Rehearse before the DatastoreKit swap (R1)](06-rehearse-before-the-datastore-swap.md) | **R1** | Opus | ✍️ 2026-10-12 | ✅ 2026-10-12 | `c9e6bc2` | [log](logs/06-rehearse-before-the-datastore-swap.md) |
 | 07 | [Pin `datastorekit` `v0.3.0`](07-pin-datastorekit-v0.3.0.md) | the DatastoreKit pin (**U3**, **U6**; `2f5417e`) | Sonnet | ✍️ 2026-10-12 | ✅ 2026-10-12 | `617a1dc` | [log](logs/07-pin-datastorekit-v0.3.0.md) |
 | 08 | [Adopt `datastorekit`](08-adopt-datastorekit.md) | the DatastoreKit swap; **U4** | Opus | ✍️ 2026-10-12 | ✅ 2026-10-12 | `857ec73` | [log](logs/08-adopt-datastorekit.md) |
-| 09 | [Port the inventory](09-port-the-inventory.md) | `inventory_spec`, `tools/inventory_report.py`; coverage (§6.5) | Opus | ✍️ 2026-10-12 | ⬜ | — | — |
+| 09 | [Port the inventory](09-port-the-inventory.md) | `inventory_spec`, `tools/inventory_report.py`; coverage (§6.5) | Opus | ✍️ 2026-10-12 | ✅ 2026-10-13 | this commit | [log](logs/09-port-the-inventory.md) |
 | 10 | [Rehearse through both packages (R2)](10-rehearse-through-both-packages.md) | **R2**; **DatastoreKit G3** | Opus | ✍️ 2026-10-12 | ⬜ | — | — |
 | 11 | Close the migration | documents, handover, close | Sonnet | ⬜ | ⬜ | — | — |
 
@@ -139,11 +139,11 @@ before each dispatch:
 | **A7** | 08 | the tests the package carries deleted (4 + 2), and the 3 layer-identity tests; `_registry()`'s fallback removed | ✅ `857ec73`: and test 14's `LambdaCDM` assertion inverted (A7.4 as amended) |
 | **A8** | 08 | new tests: tables declared, pools given the config, U4, the cycle gone, `--inventory` refusing | ✅ `857ec73`: 12 tests in `test_datastore_config.py`; Datastore 73 → 76; six breakages caught (log 08) |
 | **A9** | 08 | `--inventory` refuses (P12); the refresh route (P13); prose (P14); the issue moves | ✅ `857ec73`: `--inventory` exits 2 before Ray; `BBN_REFRESH_ROUTE` names `sharded_store copy`; `config/datastore.py`, `config/version.py`, `CLAUDE.md`, the black-clean issue; one issue closed, one opened, one narrowed |
-| **I1** | 09 | `inventory_spec()` on the 21 owners; `inventory_classes` accepts the registry | ⬜ |
-| **I2** | 09 | `tools/inventory_report.py` (P15) | ⬜ |
-| **I3** | 09 | `main.py --inventory` read-only, before Ray | ⬜ |
-| **I4** | 09 | the six `inventory()` hooks and `inventory_config` deleted | ⬜ |
-| **I5** | 09 | coverage: every registered class has a spec, is read through one, or is excluded with a reason (§6.5) | ⬜ |
+| **I1** | 09 | `inventory_spec()` on the 21 owners; `inventory_classes` accepts the registry | ✅ this commit: 17 definitions in the 17 factory modules, each derived from its `build` (log 09's table); `failure` and `PRyM_version` the two non-lookup leaves (§1.2); no `cross_shard`; `inventory_classes` orders the 21 as the note's prototype; no `register` or `build` changed |
+| **I2** | 09 | `tools/inventory_report.py` (P15) | ✅ this commit: `format_inventory_report(inventory, db_name, verbose=False)`, opens nothing; every class, values `.5g` with unit, models by physical labels, `PRyM_version`, tags, value counts, every problem whole (log 09's P15 table) |
+| **I3** | 09 | `main.py --inventory` read-only, before Ray | ✅ this commit: `main.py:93-111`, before `ray.init`; exit 0 on a store, 2 with `--drop`, 1 on a reader refusal (absent store: nothing created); `--show-all` → `verbose`; 08's refusal and its two tests gone |
+| **I4** | 09 | the six `inventory()` hooks and `inventory_config` deleted | ✅ this commit: deleted, with three `datetime` imports only the hooks used; the acceptance grep keeps 08's pool guard (2 lines) and `architecture-summary.md:320` (D1); empty on code |
+| **I5** | 09 | coverage: every registered class has a spec, is read through one, or is excluded with a reason (§6.5) | ✅ this commit: 21 specs + 6 read through (`tags`/`values`, checked against the owner's spec) + 0 excluded = 27; both breakages fail it by name |
 | **L1**–**L4** (R2) | 10 | README §4.1 at 09's tree; each store equal to `06-reference.db`, bitwise; L4 against R1 | ⬜ |
 | **V3** | 10 | `.documents/dk-and-rpk-migration-verification.md` §3 R2 | ⬜ |
 | **H1** | 10 | the R2 stores by the package's tools: the shard-key audit; a copy that opens read-only, compares equal and is deleted by `delete_store` | ⬜ |
@@ -239,6 +239,26 @@ does not need (README §6.2, P11).
   a store, and none of those rows is a science value.
 - **Next step.** Measure the inserts a plotting run makes (a stand-in or rehearsal store, row counts
   before and after), then move both scripts to `read_only=True` in a campaign that may change them.
+
+### `[09-redshift-lookup-at-zero-takes-abs-of-the-comparison]`
+
+**Opened:** 2026-10-13 by prompt 09 (log 09, Observation 1), seen while deriving `redshift`'s spec
+from its `build`. **Not fixed:** no factory's `build` is changed by prompt 09 (§5), and the factories'
+form is outside this campaign's scope (README §1).
+
+- **What.** `sqla_redshift_factory.build`'s branch for `z == 0` filters on
+  `sqla.func.abs((table.c.z - z) < DEFAULT_REDSHIFT_PRECISION)`
+  (`Datastore/SQL/ObjectFactories/redshift.py:53-54` after prompt 09; `:49-51` before it): the
+  `abs` is of the comparison, not of the difference. The intended filter is
+  `sqla.func.abs(table.c.z - z) < DEFAULT_REDSHIFT_PRECISION`, as the `z != 0` branch and
+  `DimensionlessQuantity.build` write it. The one-character misplacement dates from before this
+  campaign.
+- **Impact.** None today, and none expected: the filter selects rows with `z < precision`, which for
+  the redshifts the code stores (all `z >= 0`) is the same set as the intended `|z| < precision`. A
+  stored negative redshift would be matched as `z = 0`. No stored value is affected, and the
+  inventory (prompt 09) does not depend on it: its key is the stored `z`.
+- **Next step.** Move the parenthesis, in a later campaign that may touch the factories, with a test
+  that a lookup of `z = 0` on a store holding a small negative `z` does not match it.
 
 ## 4. Resolved issues
 
@@ -1355,3 +1375,79 @@ reads back with no problem. One count in the prompt was short: 08 left two tests
 `--inventory` refusal (`TestInventoryRefuses`), not one, and as written the second is a §4 stop. Both
 test the refusal I3 removes, so 09's I3, §2.4.1 and §4, and README §2.2's acceptance 3, now name
 both; the Datastore count after 09 is 76 − 2 + the new tests.
+
+### 5.14 After prompt 09 (2026-10-13)
+
+- **Landed:** this commit, log [`09-port-the-inventory.md`](logs/09-port-the-inventory.md).
+  **COMPLETE**: I1–I5; no §4 stop met. Measured first at `f84c3f0` (on a `git archive` copy, D9):
+  suites 18 / 114 (61 + 53) / 76, all OK; §2.1.3's grep 26 hits, each accounted for as the note
+  classified them; the spec table derived from each `build` before any spec was written.
+- **I1.** 17 `inventory_spec(self)` definitions serve the 21 owners; the six tag and value tables are
+  read through their owners. Keys are the lookups, plus `ScalarModel.failure` and
+  `BBNData.PRyM_version` (§1.2); no stored label; the potentials' and coupling's `version` column is
+  not in their keys (no `key_on_version`); `IntegrationSolver.stepping` is matched as a minimum; no
+  parent `cross_shard`. `inventory_classes` accepts the registry, in the prototype's order. **U4's
+  table did not move** (`tables_to_drop` over the eight subsets, with and without the specs:
+  identical) and `TestDropPolicy` passes unchanged.
+- **I2–I3.** `tools/inventory_report.py` (572 lines); `main.py --inventory` before `ray.init`: exit 0
+  with the report, 2 with `--drop`, 1 with `!! --inventory: <message>` on an absent or refused
+  store; `--show-all` is `verbose`. A sample report on a stand-in store is in the log, whole.
+- **I4.** The hooks and `inventory_config` are gone. Acceptance 3's grep, as written, keeps three
+  lines in files outside §5's list: 08's pool guard (`test_datastore_config.py:256`, `:283`), which
+  the note keeps, and `.documents/architecture-summary.md:320` (11's, P14); on code it is empty
+  (log D1, STRUCTURALLY REQUIRED).
+- **I5.** `Datastore/tests/test_inventory_specs.py`: 21 + 6 + 0 = 27; `EXCLUDED` empty.
+- **Tests.** Deleted: `TestInventoryRefuses` (2). Added: `test_inventory_specs` (10),
+  `test_inventory_report` (13; four `main.py` subprocesses on `127.0.0.1:9`, one `ast` check).
+  Stores built through the stand-in with serials leased from the stand-in broker, the first tests to
+  use it. **Suites: 18 / 114 (61 + 53) / 97** (76 − 2 + 23), all OK, loads 4.8–5.8 on 10 cores.
+- **Without Ray:** `check_imports.py` 165 names, 0 failures; the drivers byte-compile; `black
+  --check` clean on the 23 Python files.
+- **Breakages** 1–5 caught (log 09, as diffs that replay with `git apply`): 1 by tests 3–5
+  (`KeyError: 'model'`); 2 by test 2 (`redshift: leaf zz`); 3 by test 5's `ast` check (the four
+  subprocess tests then wait out their 300 s timeouts on `ray.init`); 4 by I5 and by
+  `inventory_classes`' refusal; 5 by I5, naming `ScratchTable`.
+- **The P15 table** (log 09 §2.4.2), in short. *Kept:* the quantities (count, range, `.5g` values
+  with unit, first and last ten); validated and unvalidated groups with counts and version labels;
+  `T_init`, `T_stop`, `phiE_init`, `piE_init`, `failure`. *New:* store and shard line, every
+  problem whole, `PRyM_version`, value counts, tags, the potential and coupling as fields, the
+  cosmology and tolerances, and the eleven classes today's report omitted; `--show-all` also
+  un-truncates the value lists. *Not kept:* the per-group timestamp ranges (one range per class in
+  the inventory) and the stored labels (not identity), both by §1.2. *Changed:* read-only, before
+  Ray, no prune, no drop, no store created; φ and π print `PlanckMass` (D2).
+
+  The table, field by field (today's report: R1's `06-readers/1-inventory.log` and
+  `fa874a5:main.py:1196-1344`; the new one: the log's sample):
+
+  | Field | Today's | The new report | |
+  |---|---|---|---|
+  | How it reads | a read-write pool after `ray.init`: prunes unvalidated rows (default), applies `--drop`, creates an absent store | `read_inventory` on the closed store, read-only, before Ray; refuses `--drop` (2), an absent or refused store (1) | changed (§1) |
+  | Store and shards | "Opened existing sharded datastore … with 16 shards" (the pool's line) | title with the store; `read-only; N shards (#…); N records in N classes` | kept, and more |
+  | Problems | — | the count; each problem whole under its class | **new** |
+  | Redshifts: count, range, values (`.5g`, first/last ten of ≥ 20) | yes | yes; header `N records \| committed between … and …`, same timestamp format; values as before | kept |
+  | β, T, M, Λ, φ, π: count, range, values with unit (`GeV`, `eV`, `eV`, `PlanckMass`, `PlanckMass`) | yes | yes, same units, `.5g` | kept |
+  | `version`, `store_tag`, `tolerance`, `QCD_Cosmology`, `IntegrationSolver`, the five potentials, `ExponentialCoupling` | not shown | each with count, range and records/values | **new** |
+  | ScalarModel / AdiabaticHistory / BBNData: validated and unvalidated groups, counts | yes | yes, and in the header | kept |
+  | … version label(s) per group | yes | yes | kept |
+  | … timestamp range per group | yes | **the class's range, once** | not kept: the inventory carries one range per class, records no timestamp (§1.2) |
+  | … each record by its stored `label` (job name and time) | yes | **not shown** | not kept: the stored label is not identity and is not in the key (§1.2) |
+  | … `T_init`, `T_stop` (GeV), `phiE_init`, `piE_init` | yes (`Mp`) | yes (`PlanckMass`, D2) | kept |
+  | … `failure` (models; BBN) | yes | yes (a leaf of each) | kept |
+  | … the potential (class, M, Λ, n) and the coupling (β) | only inside the stored label text | `potential=ExponentialPotential(M=… eV, Lambda=… eV, n_value=…)`, `coupling=ExponentialCoupling(beta=…)` | **new** as fields |
+  | … `PRyM_version` (BBN) | collected, never printed | printed on each BBN record | **new** |
+  | … value-row counts | — | per record and summed in the header | **new** |
+  | … tags | — | per record (`tags: …`; a history's or BBN row's model's in `tags=[…]`) | **new** |
+  | … cosmology, tolerances | — | "common to every model" line, or per record where they differ | **new** (D3) |
+  | An AdiabaticHistory or BBNData record | its own stored label | its model's physical labels | changed |
+  | Truncation | records: first/last ten of ≥ 20 unless `--show-all`; values: always | both: first/last ten of ≥ 20 unless `--show-all` | kept, and `--show-all` reaches the values |
+  | Empty group | `no values committed` | `validated: none` | kept |
+
+- **Issues:** `[09-redshift-lookup-at-zero-takes-abs-of-the-comparison]` opened (§3); the index: 27
+  open, 4 on this board.
+- **Deviations** D1 (STRUCTURALLY REQUIRED, the grep), D2–D8 (IMPLEMENTATION CHOICE), D9 (UNINTENDED
+  DRIFT: the first "before" run overlapped the first edits; re-measured on a clean archive).
+- **For 10:** `--inventory` reads R2's stores (built by the package) and refuses R0's and R1's.
+- **For 11:** two unused imports left in `test_datastore_config.py`, and
+  `architecture-summary.md:320` (log 09, Observations 4–5).
+- **Rollback:** `git revert` of this commit alone; nothing in the venv (README §4.4). It restores
+  08's refusal.
