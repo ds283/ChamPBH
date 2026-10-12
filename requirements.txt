@@ -76,6 +76,7 @@ pytokens==0.4.1
 pytz==2025.2
 PyYAML==6.0.3
 ray==2.53.0
+raypoolkit @ git+https://github.com/ds283/RayPoolKit@v0.2.0
 referencing==0.37.0
 requests==2.32.5
 rpds-py==0.30.0

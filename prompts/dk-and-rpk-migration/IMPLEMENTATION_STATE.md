@@ -1,6 +1,6 @@
 # dk-and-rpk-migration campaign — implementation state
 
-**Last updated:** 2026-10-12 · **Status: LIVE — 4 of 11 prompts written (01–04), 2 landed (01, 02); R0 bitwise reproducible. P1–P17
+**Last updated:** 2026-10-12 · **Status: LIVE — 4 of 11 prompts written (01–04), 3 landed (01, 02, 03); R0 bitwise reproducible. P1–P17
 ruled; DatastoreKit `v0.2.3` released (README §0.3).**
 The plan is [`README.md`](README.md), written on 2026-10-11 at `52142d7` with the user's rulings
 U1–U4. Prompts 01–04 are written once the user has reviewed it (README §2.1).
@@ -50,7 +50,7 @@ recorded beside each proposal.
 |---|---|---|---|---|---|---|---|
 | 01 | [Rehearsal tooling and run provenance](01-rehearsal-tooling-and-run-provenance.md) | P3, P5; README §4.1–§4.2 | Opus | ✍️ 2026-10-11 | ✅ 2026-10-12 | `d7791c5` | [log](logs/01-rehearsal-tooling-and-run-provenance.md) |
 | 02 | [Rehearse the start tree (R0)](02-rehearse-the-start-tree.md) | **R0**; §4.3's measurement | Opus | ✍️ 2026-10-11 | ✅ 2026-10-12 | `6cbf953` | [log](logs/02-rehearse-the-start-tree.md) |
-| 03 | [Pin `raypoolkit` `v0.2.0`](03-pin-raypoolkit-v0.2.0.md) | the RayPoolKit pin | Sonnet | ✍️ 2026-10-11 | ⬜ | — | — |
+| 03 | [Pin `raypoolkit` `v0.2.0`](03-pin-raypoolkit-v0.2.0.md) | the RayPoolKit pin | Sonnet | ✍️ 2026-10-11 | ✅ 2026-10-12 | this commit | [log](logs/03-pin-raypoolkit-v0.2.0.md) |
 | 04 | [Adopt `raypoolkit`](04-adopt-raypoolkit.md) | the RayPoolKit swap; **RayPoolKit G3** | Sonnet | ✍️ 2026-10-11 | ⬜ | — | — |
 | 05 | Move ChamPBH's data out of the layer | `config/datastore.py`; the vectorized gets | Sonnet | ⬜ | ⬜ | — | — |
 | 06 | Rehearse before the DatastoreKit swap (R1) | **R1** | Opus | ⬜ | ⬜ | — | — |
@@ -82,9 +82,9 @@ before each dispatch:
 | **T3** | 01 | `.documents/dk-and-rpk-migration/rehearsal/`: `build.sh`, `interrupt_when.py`, `stage_counts.py`, `run_readers.sh` | ✅ `d7791c5`: usage checked; never run on a build |
 | **L1**–**L4** (R0) | 02 | README §4.1 at 01's tree; §4.3's reproducibility measured; L4 recorded as the baseline | ✅ `6cbf953`: L1–L3 hold; **§4.3 bitwise** (`compare_stores` `RESULT: equal`, exit 0); L4: `compute` 5/5/5, 5/killed, 0/2/5; the prune removed only `resumed-a`'s one unvalidated row (verification §1) |
 | **V1** | 02 | `.documents/dk-and-rpk-migration-verification.md` created, with §1 R0; R0's schema snapshot | ✅ `6cbf953`: §1 R0; `out/02-reference-schema.json` (27 client tables) |
-| **K1** | 03 | the `raypoolkit` pin in `requirements.txt` | ⬜ |
-| **K2** | 03 | the venv installed from it | ⬜ |
-| **K3** | 03 | the proof: one distribution added, at `eaef0ce6…`, the tag's files, not editable | ⬜ |
+| **K1** | 03 | the `raypoolkit` pin in `requirements.txt` | ✅ this commit: one line, between `ray` and `referencing` (`:79`) |
+| **K2** | 03 | the venv installed from it | ✅ this commit: dry run and install report only `raypoolkit-0.2.0`; no other distribution moved |
+| **K3** | 03 | the proof: one distribution added, at `eaef0ce6…`, the tag's files, not editable | ✅ this commit: freeze differs by one line; `pip check` clean; `direct_url.json` VCS, no `dir_info`; the 4 modules equal `git archive v0.2.0`, no `tests/`; import starts no Ray |
 | **W1** | 04 | `RayTools/` deleted | ⬜ |
 | **W2** | 04 | the 3 imports rewritten to `from raypoolkit import RayWorkPool` | ⬜ |
 | **W3** | 04 | no pool site changed (P7) | ⬜ |
@@ -374,3 +374,21 @@ in this follow-up, and one issue is opened from Observation 2.
     only unvalidated rows), with R0's lookups 5 / 2 / 5 on `resumed-b`. The figures depend on
     the signal's timing.
   - Hold other sessions' suites off the machine for the builds.
+
+### 5.4 After prompt 03 (2026-10-12)
+
+- **Landed:** this commit, log [`03-pin-raypoolkit-v0.2.0.md`](logs/03-pin-raypoolkit-v0.2.0.md).
+  **COMPLETE**: K1–K3; no §4 stop met; no code or test changed; no §3 issue opened.
+- **The pin.** `requirements.txt:79` is `raypoolkit @ git+https://github.com/ds283/RayPoolKit@v0.2.0`,
+  between `ray==2.53.0` and `referencing==0.37.0`.
+- **The venv** (shared, outside git). The dry run and the install each reported only `raypoolkit`
+  (0.2.0). `pip freeze` differs from `measure/out/52142d7-pip-freeze.txt` by exactly
+  `raypoolkit @ git+https://github.com/ds283/RayPoolKit@eaef0ce60e2fc354bb32f0ad576010e6a83c1976`;
+  `pip check` is clean. `direct_url.json` is a VCS record at that commit, requested `v0.2.0`, with
+  no `dir_info`. The four modules equal `git archive v0.2.0`'s byte for byte and `tests/` is not
+  installed. Pip's `Resolved … to commit 4e7eb153…` is the tag object, not the commit.
+- **Provenance line:** `>> packages: datastorekit not installed; raypoolkit 0.2.0
+  (https://github.com/ds283/RayPoolKit@eaef0ce60e2fc354bb32f0ad576010e6a83c1976, requested v0.2.0)`.
+- **Suites** (after the install): 18 / 114 (61 + 53) / 66, unchanged. Nothing imports the package.
+- **Rollback:** `git revert` of this commit **plus** `./venv/bin/pip uninstall -y raypoolkit`
+  (README §4.4); the venv is not in git.
