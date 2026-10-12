@@ -71,7 +71,7 @@ reads only what the specs declare. Measured at `12c82e8`, 09's list already cove
 | 04 | [Adopt `raypoolkit`](04-adopt-raypoolkit.md) | the RayPoolKit swap; **RayPoolKit G3** | Sonnet | ✍️ 2026-10-11 | ✅ 2026-10-12 | `303324b` | [log](logs/04-adopt-raypoolkit.md) |
 | 05 | [Move ChamPBH's data out of the layer](05-move-champbh-data-out-of-the-layer.md) | `config/datastore.py`; the vectorized gets | Sonnet | ✍️ 2026-10-12 | ✅ 2026-10-12 | `8e77578` | [log](logs/05-move-champbh-data-out-of-the-layer.md) |
 | 05a | [Isolate the rehearsal cluster](05a-isolate-the-rehearsal-cluster.md) | **U5**; `ray_cluster.sh` | Sonnet | ✍️ 2026-10-12 | ✅ 2026-10-12 | `babd9d5` | [log](logs/05a-isolate-the-rehearsal-cluster.md) |
-| 06 | [Rehearse before the DatastoreKit swap (R1)](06-rehearse-before-the-datastore-swap.md) | **R1** | Opus | ✍️ 2026-10-12 | ✅ 2026-10-12 | this commit | [log](logs/06-rehearse-before-the-datastore-swap.md) |
+| 06 | [Rehearse before the DatastoreKit swap (R1)](06-rehearse-before-the-datastore-swap.md) | **R1** | Opus | ✍️ 2026-10-12 | ✅ 2026-10-12 | `c9e6bc2` | [log](logs/06-rehearse-before-the-datastore-swap.md) |
 | 07 | Pin `datastorekit` `v0.3.0` | the DatastoreKit pin (**U3**, **U6**; `2f5417e`) | Sonnet | ⬜ | ⬜ | — | — |
 | 08 | Adopt `datastorekit` | the DatastoreKit swap; **U4** | Opus | ⬜ | ⬜ | — | — |
 | 09 | Port the inventory | `inventory_spec`, `tools/inventory_report.py` | Opus | ⬜ | ⬜ | — | — |
@@ -95,6 +95,7 @@ before each dispatch:
 - [`orchestrator/prompt-04.md`](orchestrator/prompt-04.md) (`12c82e8`) — used for 04.
 - [`orchestrator/prompt-05.md`](orchestrator/prompt-05.md) (`891ae82`) — used for 05.
 - [`orchestrator/prompt-05a.md`](orchestrator/prompt-05a.md) (`b114692`) — used for 05a.
+- [`orchestrator/prompt-06.md`](orchestrator/prompt-06.md) (`5bb2be6`) — used for 06.
 
 ### 1.1 Items
 
@@ -120,8 +121,8 @@ before each dispatch:
 | **C1** | 05a | `.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh start\|stop\|status`, adapted from SI's at `3556148`: ChamPBH's temp dir and ports, 10 CPUs, all four ports confirmed free, a start refused on a held port | ✅ `babd9d5`: SI's file with changes 1–4 only (12 hunks, all classified; the lock functions differ by names); mode 100755; `bash -n` under 3.2 and 5.3 |
 | **C2** | 05a | Ray 2.53.0's behaviour measured: the client server's command line, `ray_current_cluster`'s place, the actor command, `gcs_server` under `SIGTERM` | ✅ `babd9d5`: all five facts agree with SI's 2.55.1 (log 05a §4.4); `gcs_server` ignores `SIGTERM`, a stop takes 17–20 s |
 | **C3** | 05a | the proof on a real cluster beside a decoy (`/tmp/ray-cpbh-decoy`, Ray's default ports), with no build; four breakages | ✅ `babd9d5`: steps 1–9 under `/bin/bash` 3.2, steps 1–3 and stop under 5.3; the decoy's set unchanged pid for pid; B1–B4 caught; the held-port refusal exercised with `nc` |
-| **L1**–**L4** (R1) | 06 | README §4.1 at 05's tree; each store equal to `02-reference.db`, bitwise; L4 against R0, the printed lines included | ✅ this commit: L1–L3 hold; **`06-reference.db` and `06-resumed.db` each `RESULT: equal` against `02-reference.db`, exit 0**, and against each other; schema agrees; L4: `compute` 5/5/5, 5/killed, 0/3/5 (lookups 5/3/5); the prune removed only `resumed-a`'s three unvalidated rows; the printed lines in R0's layout (verification §2) |
-| **V2** | 06 | `.documents/dk-and-rpk-migration-verification.md` §2 R1 | ✅ this commit: §2 R1 (§§2.1–2.8); `out/06-*` (11 files), `06-reference-schema.json` equal to R0's but for `source` |
+| **L1**–**L4** (R1) | 06 | README §4.1 at 05's tree; each store equal to `02-reference.db`, bitwise; L4 against R0, the printed lines included | ✅ `c9e6bc2`: L1–L3 hold; **`06-reference.db` and `06-resumed.db` each `RESULT: equal` against `02-reference.db`, exit 0**, and against each other; schema agrees; L4: `compute` 5/5/5, 5/killed, 0/3/5 (lookups 5/3/5); the prune removed only `resumed-a`'s three unvalidated rows; the printed lines in R0's layout (verification §2) |
+| **V2** | 06 | `.documents/dk-and-rpk-migration-verification.md` §2 R1 | ✅ `c9e6bc2`: §2 R1 (§§2.1–2.8); `out/06-*` (11 files), `06-reference-schema.json` equal to R0's but for `source` |
 
 Items of 07–11 are added when they are written.
 
@@ -135,7 +136,7 @@ counts (18 / 114 / 35); and the venv's `pip freeze` (README §0.2).
 |---|---|---|---|
 | R0 | the start tree builds the pilot, resumes it, and its readers run (README §4.1); its reproducibility is measured (§4.3) | 02 | ✅ **holds** 2026-10-12 (`6cbf953`): bitwise reproducible, so R1 and R2 are held to bitwise equality with `02-reference.db` (P4) |
 | RayPoolKit G3 | `RayTools/` is gone, 0 imports, the pin is installed, the three roots pass, all 17 sites construct (RayPoolKit checklist item 8) | 04 (R1, 06, adds the run under real Ray) | ✅ **holds** 2026-10-12 (`303324b`), by checklist item 8, items 1–5; item 6 is 11's (P16). R1 (06) ran it under real Ray 2.53.0: three builds and three readers, stores equal to R0's, printed lines in R0's layout |
-| R1 | 05's tree equals R0 by value | 06 | ✅ **holds** 2026-10-12 (this commit): both R1 stores equal `02-reference.db` bitwise (`RESULT: equal`, exit 0); R2 is held to equality with `06-reference.db` |
+| R1 | 05's tree equals R0 by value | 06 | ✅ **holds** 2026-10-12 (`c9e6bc2`): both R1 stores equal `02-reference.db` bitwise (`RESULT: equal`, exit 0); R2 is held to equality with `06-reference.db` |
 | DatastoreKit `v0.2.3` | tagged on DatastoreKit's remote, with `store`, `validate` and `validate_on_startup` defaulted (U3; made in DatastoreKit, not here) | — (07 pins it) | ✅ **released** 2026-10-11: tag object `8dac562`, commit `0de2b16`, checked on the remote and by `git show` of `factory_base.py` (README §0.3) |
 | DatastoreKit `v0.3.0` | tagged on DatastoreKit's remote; the pin (U6) | — (07 pins it) | ✅ **released** 2026-10-12: tag object `bf0a3b2`, commit `2f5417e`, checked on the remote; only `datastorekit/object.py` changed in the package since `v0.2.3` (README §0.4) |
 | DatastoreKit G3 | the 9 layer files are gone (two emptied, P6), the pin is installed, the three roots pass, and a pilot store rebuilt through the package (R2) equals R1 by value | 08, 09, 10 | ⬜ |
@@ -880,7 +881,7 @@ DatastoreKit **`v0.3.0`**, not `v0.2.3`. Numbered 5.9a so that 06 keeps §5.10, 
 
 ### 5.10 After prompt 06 (2026-10-12)
 
-- **Landed:** this commit, log [`06-rehearse-before-the-datastore-swap.md`](logs/06-rehearse-before-the-datastore-swap.md);
+- **Landed:** `c9e6bc2`, log [`06-rehearse-before-the-datastore-swap.md`](logs/06-rehearse-before-the-datastore-swap.md);
   the record is `.documents/dk-and-rpk-migration-verification.md` §2. **COMPLETE**: L1–L4 (R1),
   V2; gate R1 holds; no §4 stop met; no code changed; no issue opened (`.documents/OPEN_ISSUES.md`
   unchanged).
@@ -916,3 +917,82 @@ DatastoreKit **`v0.3.0`**, not `v0.2.3`. Numbered 5.9a so that 06 keeps §5.10, 
   3. the killed driver's stack was in `submit_actor_task`, not `Wait()`;
   4. the load, and the foreign suites at the gate;
   5. the plot scripts' shard-count warning, unchanged.
+
+**Orchestrator review of prompt 06 (2026-10-12)**, by orchestrator note
+[`prompt-06.md`](orchestrator/prompt-06.md), at `c9e6bc2`. All eleven checks pass, and no issue is
+opened. The residue is fixed in this follow-up (records only).
+- **(1) Scope.** 14 files: the verification document, eleven `out/06-*` files, the log and the
+  board. The verification document's diff only adds lines after §1. The untracked set is
+  unchanged; nothing staged; no other commit of the agent's, no leftover branch. The agent's
+  three stray error files from its zsh loop (log D4) are gone from `out/`.
+- **(2) The cluster.** `ray_cluster.sh status`: lock free, no process, the four ports free; no Ray
+  process on the machine. The log has `start`'s output and owner file (purpose
+  `dk-and-rpk-migration 06 (R1)`), `ray status --address` with 10 CPUs, `stop` exit 0 in 19 s, and
+  `status` after it. `ray stop` appears only as "never run".
+- **(3) The logs, read.** Each build log and each of the three Ray readers' logs has L1's
+  provenance line once (`raypoolkit 0.2.0 (…@eaef0ce6…, requested v0.2.0)`, `datastorekit not
+  installed`). Every driver connected to `127.0.0.1:6380`, dashboard 8267; no log names 6379.
+  No `Traceback` or `Error` in any build or reader log. `reference` and `resumed-b` end `** driver
+  exit status 0`, every stage complete; `resumed-a` ends 134 after the adiabatic banner, its absl
+  dump under pid 86620, the one in `06-resumed-a.pid`.
+- **(4) The counts.** `stage_counts.py` re-run on the three logs gives the committed text and
+  equal JSON. The orchestrator's own `sqlite3` `mode=ro` script gives the label counts:
+  `06-reference` 5 / 5 / 5, all `reference`; `06-resumed` `ScalarModel` 5 `resumed-a`,
+  `AdiabaticHistory` 2 `resumed-a` + 3 `resumed-b`, `BBNData` 5 `resumed-b`; every row validated.
+  So *k* = 2 validated rows kept, agreeing with `resumed-b`'s adiabatic compute of 3.
+- **(5) The prune.** Two reports reach the driver's log, β = 1.2 in full and β = 25 marked
+  `[repeated 2x across cluster]`. All three were read in full from Ray's worker logs (under
+  `/tmp/ray-cpbh/session_2026-10-12_16-43-24_306437_80134/logs/old/`, not `logs/` as log 06 says):
+  `shard0001` β = 1.2 (5002 values), `shard0002` β = 10 (9776), `shard0003` β = 25 (17917), each
+  `resumed-a`'s, each unvalidated, each pruned. Nothing validated was pruned.
+- **(6) The criterion, re-run.** The three comparisons re-run into the scratchpad: each
+  `RESULT: equal`, exit 0, text identical to the committed file but for the lines naming the
+  stores, JSON equal. 27 tables with R0's counts; the bookkeeping differences are only
+  `timestamp`, `label` and the timings. **Independently of the tool**, the orchestrator's script
+  resolved each history to its β and hashed, by stored bits: its `ScalarModel` science columns
+  (with the solver, temperatures, tolerances and initial φ, π resolved to the rows they name), its
+  `ScalarModelValue` rows ordered by `z`, its `AdiabaticHistory` and `AdiabaticHistoryValue` rows,
+  and its `BBNData` row and `BBNDataValue` rows. Run first on R0's own pair as a control, then on
+  both 06 stores: **all 35 digests of each 06 store equal `02-reference.db`'s.** The script's
+  first version hashed the raw `coupling_serial` and `solver_serial` and so failed R0's control;
+  it was corrected to resolve them, as `compare_stores` does. On a scratch copy of `06-reference`
+  with one `AdiabaticHistoryValue` float moved one ulp, it reports β = 10 differing. **R1 holds,
+  confirmed.**
+- **(7) The readers.** `status.txt` steps 0–5, each exit 0. The before/after comparison is
+  `RESULT: equal` with no bookkeeping difference. `histories.csv` SHA-256 `d7c62c37…c522`, `cmp`
+  silent against R0's. β = 1.15 stored Yp 0.24687349447579363, D/H 2.4859924812264325; `prod`
+  re-solve 0.2468734945, 2.485992481: R0's. The inventory lists 5 validated rows of each kind,
+  version `2026.6.0`, none unvalidated.
+- **(8) The schema.** `--snapshot` of `06-reference.db` is byte-identical to
+  `out/06-reference-schema.json`, which differs from `02-reference-schema.json` only in `source`.
+- **(9) L4.** The orchestrator's own extraction: `02-reference.log` against `06-reference.log`,
+  the banner, completion and summary lines equal in text and order, and both of 06's progress
+  shapes (the scalar stage's pair, at 5m 5.89s) occur in R0's; `02-resumed-b.log` against
+  `06-resumed-b.log`, equal, the no-compute line included. Not vacuous.
+- **(10) Hygiene.** Every one of the 189 entries under the rehearsal root at dispatch has its
+  mtime and size, but the root and `logs/` directories, which gained the 06 entries. The root now
+  holds also the two 06 stores (17 files each), `logs/06-*` (three logs, three pidfiles) and
+  `06-readers/`. The 53 stores and pilot logs unchanged. `pip freeze` equals the dispatch copy;
+  `pip check` clean. SI, SGK and RayPoolKit at their dispatch `HEAD`s; DatastoreKit moved
+  `5f972be` → `04a2ed9` by another session's planning commits (16:38, 16:48), nothing the
+  agent's; all clean. `/tmp/ray/ray_current_cluster` still absent. No scratch file in the
+  repository.
+- **(11) Records and suites.** Verification §2 R1 (§§2.1–2.8) in §1's shape, with the commands
+  verbatim. The board has the §1 row, L1–L4 (R1), V2, gate R1 and §5.10. The agent's suites 18 /
+  114 (61 + 53) / 73, before `start`; the orchestrator re-ran `Datastore/tests` at `c9e6bc2`: 73,
+  OK.
+  - *Residue, fixed here:* "this commit" → `c9e6bc2` (board ×5, log ×2); this note added to the
+    list of orchestrator notes.
+- **Deviations D1–D4** are accepted. D1 (`S` = 6 s) is the cause of Observation 1. D4 opened no
+  store and its files were removed.
+- **Observation 1, weighed.** The note asked for "0 or 5 stored" to be taken to the user. Here
+  `resumed-a` stored five and validated two, so the resume still tested the prune at open (three
+  rows) and the reuse of stored validated rows (two). What it did not test, and R0 did (β = 25), is
+  a history absent from the store. Reported to the user; no repeat is proposed, since R0 covered
+  that case on the same layer and R1's stores equal R0's.
+- **Handed on.**
+  - R2 (10) is held to `RESULT: equal` with `02-reference.db` (and so `06-reference.db`).
+  - 10's `S` must allow for `resumed-a` running 2–5 s ahead of its `reference` (Observation 1).
+  - Prune reports may be deduplicated by Ray in the driver's log; 10 reads Ray's worker logs
+    (`session_*/logs/old/` after the job ends) before its `stop`, or relies on the label counts.
+  - 07–10 can be written (README §2.1), with `v0.3.0` the pin (U6).

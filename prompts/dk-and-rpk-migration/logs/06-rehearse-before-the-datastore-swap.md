@@ -1,7 +1,7 @@
 # Log 06 — rehearse before the DatastoreKit swap (R1)
 
 **Subject:** Record the R1 rehearsal before the DatastoreKit swap
-**Commit:** this commit, on branch `dk-and-rpk-migration`, on top of `5bb2be6`
+**Commit:** `c9e6bc2`, on branch `dk-and-rpk-migration`, on top of `5bb2be6`
 **Date:** 2026-10-12, by Claude Opus 5.5
 **Result:** **COMPLETE.**
 - **The criterion holds: R1 equals R0 bit for bit.** `compare_stores` of `02-reference.db` against
@@ -319,6 +319,6 @@ fail:
   behaved as log 05a describes. Every driver connected to `127.0.0.1:6380`.
 - **Outputs**: `.documents/dk-and-rpk-migration/out/06-*` (11 files), including the R1 schema
   snapshot `06-reference-schema.json`, equal to R0's but for its `source`.
-- **Suites at this commit:** CosmologyModels 18, ComputeTargets 114 (61 + 53), Datastore 73.
+- **Suites at `c9e6bc2`:** CosmologyModels 18, ComputeTargets 114 (61 + 53), Datastore 73.
 - **No ChamPBH Ray process is running, the rehearsal lock is free**, and the four ports are free.
   No §3 issue opened; the board's three open issues are unchanged.
