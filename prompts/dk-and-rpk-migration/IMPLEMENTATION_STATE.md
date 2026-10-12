@@ -1,6 +1,6 @@
 # dk-and-rpk-migration campaign — implementation state
 
-**Last updated:** 2026-10-12 · **Status: LIVE — 4 of 11 prompts written (01–04), 1 landed (01). P1–P17
+**Last updated:** 2026-10-12 · **Status: LIVE — 4 of 11 prompts written (01–04), 2 landed (01, 02); R0 bitwise reproducible. P1–P17
 ruled; DatastoreKit `v0.2.3` released (README §0.3).**
 The plan is [`README.md`](README.md), written on 2026-10-11 at `52142d7` with the user's rulings
 U1–U4. Prompts 01–04 are written once the user has reviewed it (README §2.1).
@@ -49,7 +49,7 @@ recorded beside each proposal.
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
 | 01 | [Rehearsal tooling and run provenance](01-rehearsal-tooling-and-run-provenance.md) | P3, P5; README §4.1–§4.2 | Opus | ✍️ 2026-10-11 | ✅ 2026-10-12 | `d7791c5` | [log](logs/01-rehearsal-tooling-and-run-provenance.md) |
-| 02 | [Rehearse the start tree (R0)](02-rehearse-the-start-tree.md) | **R0**; §4.3's measurement | Opus | ✍️ 2026-10-11 | ⬜ | — | — |
+| 02 | [Rehearse the start tree (R0)](02-rehearse-the-start-tree.md) | **R0**; §4.3's measurement | Opus | ✍️ 2026-10-11 | ✅ 2026-10-12 | this commit | [log](logs/02-rehearse-the-start-tree.md) |
 | 03 | [Pin `raypoolkit` `v0.2.0`](03-pin-raypoolkit-v0.2.0.md) | the RayPoolKit pin | Sonnet | ✍️ 2026-10-11 | ⬜ | — | — |
 | 04 | [Adopt `raypoolkit`](04-adopt-raypoolkit.md) | the RayPoolKit swap; **RayPoolKit G3** | Sonnet | ✍️ 2026-10-11 | ⬜ | — | — |
 | 05 | Move ChamPBH's data out of the layer | `config/datastore.py`; the vectorized gets | Sonnet | ⬜ | ⬜ | — | — |
@@ -79,8 +79,8 @@ before each dispatch:
 | **T1** | 01 | `utilities.installed_package_provenance()` and `format_package_provenance()`; one line in each driver; `Datastore/tests/test_package_provenance.py` | ✅ `d7791c5`: 10 tests; the line reads `>> packages: datastorekit not installed; raypoolkit not installed` today (format in log 01) |
 | **T2** | 01 | `tools/compare_stores.py` (comparison by value, schema snapshot) and `Datastore/tests/test_compare_stores.py` | ✅ `d7791c5`: 21 tests (with T3's); bookkeeping list and polymorphic map in log 01 |
 | **T3** | 01 | `.documents/dk-and-rpk-migration/rehearsal/`: `build.sh`, `interrupt_when.py`, `stage_counts.py`, `run_readers.sh` | ✅ `d7791c5`: usage checked; never run on a build |
-| **L1**–**L4** (R0) | 02 | README §4.1 at 01's tree; §4.3's reproducibility measured; L4 recorded as the baseline | ⬜ |
-| **V1** | 02 | `.documents/dk-and-rpk-migration-verification.md` created, with §1 R0; R0's schema snapshot | ⬜ |
+| **L1**–**L4** (R0) | 02 | README §4.1 at 01's tree; §4.3's reproducibility measured; L4 recorded as the baseline | ✅ this commit: L1–L3 hold; **§4.3 bitwise** (`compare_stores` `RESULT: equal`, exit 0); L4: `compute` 5/5/5, 5/killed, 0/2/5; the prune removed only `resumed-a`'s one unvalidated row (verification §1) |
+| **V1** | 02 | `.documents/dk-and-rpk-migration-verification.md` created, with §1 R0; R0's schema snapshot | ✅ this commit: §1 R0; `out/02-reference-schema.json` (27 client tables) |
 | **K1** | 03 | the `raypoolkit` pin in `requirements.txt` | ⬜ |
 | **K2** | 03 | the venv installed from it | ⬜ |
 | **K3** | 03 | the proof: one distribution added, at `eaef0ce6…`, the tag's files, not editable | ⬜ |
@@ -99,7 +99,7 @@ counts (18 / 114 / 35); and the venv's `pip freeze` (README §0.2).
 
 | Gate | Holds when | Prompt | State |
 |---|---|---|---|
-| R0 | the start tree builds the pilot, resumes it, and its readers run (README §4.1); its reproducibility is measured (§4.3) | 02 | ⬜ |
+| R0 | the start tree builds the pilot, resumes it, and its readers run (README §4.1); its reproducibility is measured (§4.3) | 02 | ✅ **holds** 2026-10-12 (this commit): bitwise reproducible, so R1 and R2 are held to bitwise equality with `02-reference.db` (P4) |
 | RayPoolKit G3 | `RayTools/` is gone, 0 imports, the pin is installed, the three roots pass, all 17 sites construct (RayPoolKit checklist item 8) | 04 (R1, 06, adds the run under real Ray) | ⬜ |
 | R1 | 05's tree equals R0 by value | 06 | ⬜ |
 | DatastoreKit `v0.2.3` | tagged on DatastoreKit's remote, with `store`, `validate` and `validate_on_startup` defaulted (U3; made in DatastoreKit, not here) | — (07 pins it) | ✅ **released** 2026-10-11: tag object `8dac562`, commit `0de2b16`, checked on the remote and by `git show` of `factory_base.py` (README §0.3) |
@@ -241,3 +241,37 @@ None yet.
   - A difference in a parent that cannot pair (an unmapped type value, a deleted row) lists its
     children unpaired, thousands of rows in the JSON, alongside the named problem.
   - `build.sh` and `run_readers.sh` refuse an existing log or readers directory.
+
+### 5.3 After prompt 02 (2026-10-12)
+
+- **Landed:** this commit, log [`02-rehearse-the-start-tree.md`](logs/02-rehearse-the-start-tree.md);
+  the record is `.documents/dk-and-rpk-migration-verification.md` §1. **COMPLETE**: L1–L4 (R0),
+  V1; gate R0 holds; no §4 stop met; no code changed.
+- **Cluster and load.** One cluster, `127.0.0.1:6379`, started 01:12:29 and stopped 01:37:44. The
+  load average was above the 10 CPUs throughout (peak 119 / 139 / 113 at 01:24). The sources were
+  system daemons and, from 01:29:50, another session's DatastoreKit suite (log 02, Observation 4).
+- **Builds.**
+  - `reference`: 10 min 43 s, exit 0.
+  - `resumed-a`: killed by `SIGTERM` 5 s after the adiabatic banner (`S` from `reference`'s
+    timestamps: the stage took 12.6 s, rows at banner + 4.6–7.6 s). Exit 134, Ray's absl handler
+    aborting (log 02, Observation 1). It kept 3 validated `AdiabaticHistory` rows and 1 unvalidated
+    (β = 10); β = 25 was not stored.
+  - `resumed-b`: 1 min 35 s, exit 0. Its open pruned exactly the unvalidated β = 10 row. It
+    computed 0 / 2 / 5. Label counts: `AdiabaticHistory` 3 `resumed-a` + 2 `resumed-b`.
+- **Actors.** All 17 of `resumed-a`'s were dead 28 s after the signal, and none was alive before
+  `ray stop`.
+- **Readers.** All six steps exit 0, and the before/after comparison is equal with no bookkeeping
+  difference. The β = 1.15 re-solve equals the stored Yp and D/H to the 10 figures printed.
+  `histories.csv` SHA-256 `d7c62c37…c522`.
+- **§4.3: `RESULT: equal`, exit 0.** 27 tables, every row matched, bookkeeping differing on every
+  matched row. **R0 is bitwise reproducible; R1 and R2 are held to bitwise equality** with
+  `02-reference.db`.
+- **Suites** (before `ray start`): 18 / 114 (61 + 53) / 66, unchanged.
+- **Observations not opened:**
+  1. a `SIGTERM`ed driver exits 134;
+  2. the scalar stage re-looks-up every stored model, so its lookup count differs from the
+     adiabatic stage's (`main.py:219-226` against `:432-437`);
+  3. the plot scripts' cosmetic shard-count warning (they pass no `shards=`);
+  4. the load, and the foreign suite;
+  5. `bbn_from_store.py` prints its re-solve to 10 figures;
+  6. `ray stop` kills a shell whose command line names Ray's processes.
