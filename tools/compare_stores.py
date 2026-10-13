@@ -90,7 +90,8 @@ EXIT_UNREADABLE = 2
 # them in ShardedPool._write_shard_data (datastorekit/SQL/ShardedPool.py:989-995, client contract
 # section 5), replication_in_flight among them. A primary built by ChamPBH's own layer, before
 # prompt 08 of dk-and-rpk-migration, holds the other five; one built through the package holds all
-# six. Neither holds a client table (_write_shard_data creates nothing else on the primary's engine).
+# six. Neither holds a client table (_write_shard_data creates nothing else on the primary's
+# engine).
 LAYER_TABLES = frozenset(
     {
         "shards",

@@ -306,8 +306,8 @@ calls `read_inventory` on the closed store, read-only and before Ray starts, and
 | `BBNData_tags` | `sqla_BBNDataTagAssociation_factory` | with its owner (not listed) |
 | `BBNDataValue` | `sqla_BBNDataValue_factory` | Sharded |
 
-`LambdaCDM`, which the old layer's registry listed as replicated, is no longer a registered table
-(`dk-and-rpk-migration` P8).
+`LambdaCDM`, which `config/sharding.py`'s `replicated_tables` and the batch sizes listed though no
+factory registered it, is in neither since `dk-and-rpk-migration` P8 (prompt 08).
 
 ### 4.3 What the package does for a get, a store and a validate
 

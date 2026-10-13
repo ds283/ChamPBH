@@ -76,7 +76,7 @@ reads only what the specs declare. Measured at `12c82e8`, 09's list already cove
 | 08 | [Adopt `datastorekit`](08-adopt-datastorekit.md) | the DatastoreKit swap; **U4** | Opus | ✍️ 2026-10-12 | ✅ 2026-10-12 | `857ec73` | [log](logs/08-adopt-datastorekit.md) |
 | 09 | [Port the inventory](09-port-the-inventory.md) | `inventory_spec`, `tools/inventory_report.py`; coverage (§6.5) | Opus | ✍️ 2026-10-12 | ✅ 2026-10-13 | `47cfcfb` | [log](logs/09-port-the-inventory.md) |
 | 10 | [Rehearse through both packages (R2)](10-rehearse-through-both-packages.md) | **R2**; **DatastoreKit G3** | Opus | ✍️ 2026-10-12 | ✅ 2026-10-13 | `b0d258a` | [log](logs/10-rehearse-through-both-packages.md) |
-| 11 | [Close the migration](11-close-the-migration.md) | documents, measurements, G3 drafts, handover, close | Sonnet | ✍️ 2026-10-13 | ✅ 2026-10-13 | this commit | [log](logs/11-close-the-migration.md) |
+| 11 | [Close the migration](11-close-the-migration.md) | documents, measurements, G3 drafts, handover, close | Sonnet | ✍️ 2026-10-13 | ✅ 2026-10-13 | `57893be` | [log](logs/11-close-the-migration.md) |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
 
@@ -150,13 +150,13 @@ before each dispatch:
 | **L1**–**L4** (R2) | 10 | README §4.1 at 09's tree; each store equal to `06-reference.db`, bitwise; L4 against R1 | ✅ `b0d258a`: L1–L3 hold (`resumed-a` exited **15**, not 134, by Ray's own `SIGTERM` handler; verification §3.2); **`10-reference.db` and `10-resumed.db` each `RESULT: equal` against `06-reference.db`, `10-reference.db` against `02-reference.db`, exit 0**, and the two R2 stores against each other; schema agrees with 08's and R0's; L4: `compute` 5/5/5, 5/killed, 0/5/5 (lookups 5/5/5); `resumed-a` stored 1 `AdiabaticHistory` row and validated 0, and the package's prune removed exactly that row; the printed lines in R1's layout, with no progress line at this load (verification §3) |
 | **V3** | 10 | `.documents/dk-and-rpk-migration-verification.md` §3 R2 | ✅ `b0d258a`: §3 R2 (§§3.1–3.10, H1 and G3 included); `out/10-*` (20 files), `10-reference-schema.json` equal to 08's and R0's but for `source` |
 | **H1** | 10 | the R2 stores by the package's tools: the shard-key audit; a copy that opens read-only, compares equal and is deleted by `delete_store` | ✅ `b0d258a`: `shard_key_audit` `VERDICT: OK`, exit 0, on both stores; `sharded_store copy` exit 0, 16 shards named bare; the copy's `--inventory` exit 0, `problems: none`; `compare_stores` `RESULT: equal`, no bookkeeping difference; `closed_store_files` and `delete_store` the same 17 paths, none left (verification §3.8) |
-| **Z1** | 11 | `.documents/architecture-summary.md`: the tree, §4, §5.2, §9's example and §§12–14 for the packages; the `RayWorkPool` lines checked (P14) | ✅ this commit: the tree, §4 (rewritten, with a dated note; pointers to the client contract at `v0.3.0`), §5.2, §9's example (the mapping form), §§12–14; all 20 `RayWorkPool` lines read, `:999`'s rewritten (log 11) |
-| **Z2** | 11 | `CLAUDE.md`, "Repository mechanics": the packages and the upstream-defect rule; the test commands with their counts; Ray on this machine (U5) | ✅ this commit: three bullets and the command block (18 / 114 / 97, ComputeTargets in two halves 61 + 53); the Ray bullet is the orchestrator's addition (README §2.2) |
-| **Z3** | 11 | the prose in code 08–10 left: `tools/compare_stores.py`'s citations, five test modules' docstrings and comments; `ast`-equal | ✅ this commit: five modules `ast`-equal with docstrings removed; `compare_stores.py` differs in the two `GLOBAL_BOOKKEEPING` strings only; `black --check` clean |
-| **Z4** | 11 | the final measurements: both packages' scripts, the three roots, the venv (`measure/out/11-*`) | ✅ this commit: both scripts at `ee79455` equal the prompt's figures (the non-`.py` count 252, +12 in `prompts/`); suites 18 / 114 / 97 before and after; `pip freeze` 101 lines, `pip check` clean, 07's provenance line |
-| **Z5** | 11 | verification §4, the close: R0–R2, Z4, the two G3 records drafted for the packages' boards (P16) | ✅ this commit: §4.1 R0–R2; §4.2 Z4; §4.3 DatastoreKit's G3 cell and §4.4 RayPoolKit's G3 row, each a fenced block, neither committed in its repository; §4.5 what goes stale |
-| **Z6** | 11 | the handover, `.documents/review-remediation-verification.md` §4.12 (README §7): the rebuild, the run scripts line by line | ✅ this commit: §4.12 after §4.11; the two run scripts read, not edited, copied or run |
-| **Z7** | 11 | the records: this board closed, `prompts/INDEX.md`, `.documents/OPEN_ISSUES.md` | ✅ this commit: this board COMPLETE; `prompts/INDEX.md` "0 live, 7 closed"; `OPEN_ISSUES.md` 27 by counting, §1.11's 4; no row moves |
+| **Z1** | 11 | `.documents/architecture-summary.md`: the tree, §4, §5.2, §9's example and §§12–14 for the packages; the `RayWorkPool` lines checked (P14) | ✅ `57893be`: the tree, §4 (rewritten, with a dated note; pointers to the client contract at `v0.3.0`), §5.2, §9's example (the mapping form), §§12–14; all 20 `RayWorkPool` lines read, `:999`'s rewritten (log 11) |
+| **Z2** | 11 | `CLAUDE.md`, "Repository mechanics": the packages and the upstream-defect rule; the test commands with their counts; Ray on this machine (U5) | ✅ `57893be`: three bullets and the command block (18 / 114 / 97, ComputeTargets in two halves 61 + 53); the Ray bullet is the orchestrator's addition (README §2.2) |
+| **Z3** | 11 | the prose in code 08–10 left: `tools/compare_stores.py`'s citations, five test modules' docstrings and comments; `ast`-equal | ✅ `57893be`: five modules `ast`-equal with docstrings removed; `compare_stores.py` differs in the two `GLOBAL_BOOKKEEPING` strings only; `black --check` clean |
+| **Z4** | 11 | the final measurements: both packages' scripts, the three roots, the venv (`measure/out/11-*`) | ✅ `57893be`: both scripts at `ee79455` equal the prompt's figures (the non-`.py` count 252, +12 in `prompts/`); suites 18 / 114 / 97 before and after; `pip freeze` 101 lines, `pip check` clean, 07's provenance line |
+| **Z5** | 11 | verification §4, the close: R0–R2, Z4, the two G3 records drafted for the packages' boards (P16) | ✅ `57893be`: §4.1 R0–R2; §4.2 Z4; §4.3 DatastoreKit's G3 cell and §4.4 RayPoolKit's G3 row, each a fenced block, neither committed in its repository; §4.5 what goes stale |
+| **Z6** | 11 | the handover, `.documents/review-remediation-verification.md` §4.12 (README §7): the rebuild, the run scripts line by line | ✅ `57893be`: §4.12 after §4.11; the two run scripts read, not edited, copied or run |
+| **Z7** | 11 | the records: this board closed, `prompts/INDEX.md`, `.documents/OPEN_ISSUES.md` | ✅ `57893be`: this board COMPLETE; `prompts/INDEX.md` "0 live, 7 closed"; `OPEN_ISSUES.md` 27 by counting, §1.11's 4; no row moves |
 
 The measurement the plan was written against is [`measure/out/`](measure/out/): both packages'
 scripts at `52142d7`, each equal to its checklist's appendix byte for byte; the three roots'
@@ -1722,7 +1722,7 @@ outputs, and the total size equals the original's.
 
 ### 5.17 After prompt 11 (2026-10-13)
 
-- **Landed:** this commit, log [`11-close-the-migration.md`](logs/11-close-the-migration.md). **The
+- **Landed:** `57893be`, log [`11-close-the-migration.md`](logs/11-close-the-migration.md). **The
   campaign is closed:** 12 of 12 prompts landed (01–11 and 05a); gates R0, R1, R2, RayPoolKit G3 and
   DatastoreKit G3 hold. Final suites 18 / 114 (61 + 53) / 97, before and after 11's edits. Z1–Z7 landed;
   no code behaviour changed (Z3 is comments, docstrings and `tools/compare_stores.py`'s two reason
@@ -1745,3 +1745,79 @@ outputs, and the total size equals the original's.
   - whether `--ray-address` becomes required (README §6.6).
 - **Orchestrator's addition, for the user to overrule:** `CLAUDE.md`'s "Ray on this machine" bullet
   (README §2.2, amended 2026-10-13).
+
+**Orchestrator review of prompt 11 (2026-10-13)**, by orchestrator note
+[`prompt-11.md`](orchestrator/prompt-11.md), at `57893be`. All ten checks pass, and no issue is
+opened. Four errors in the prose, and some residue, are fixed in this follow-up.
+- **(1) Scope.** 24 files, exactly the note's list: the six Python files, the four documents,
+  `CLAUDE.md`, `prompts/INDEX.md`, the board, the log and ten `measure/out/11-*` files. Both
+  verification documents only gain lines (0 deletions). The untracked set is dispatch's (23
+  entries); `57893be` is the only commit since the note; no branch was left.
+- **(2) The sweep.** Re-run: 19 lines at `ee79455`, **20** at `57893be`. Eight are the lines that
+  stay. The other 12 are new: two in the dated note that opens `architecture-summary.md` §4, eight
+  in verification §4 and two in §4.12. Each names `RayTools/` or a deleted module as deleted or as
+  history. None names one as current.
+- **(3) Prose only.** `ast_prose_only.py` on each of the six files, `HEAD~1` against `HEAD`: five
+  equal; `tools/compare_stores.py` differs only in `GLOBAL_BOOKKEEPING`'s two strings. Each cites
+  lines that hold what it says in the installed package (`_insert`'s lease at `:794-806`, the
+  timestamp at `:813`, the pool's one timestamp at `:514`, `:666`; `_write_shard_data` at
+  `:989-995` creating all six primary tables). `black --check` clean on all six.
+- **(4) `architecture-summary.md`.** The tree equals `git ls-files Datastore config`, and its
+  `Starobinsky.py` is the real file name; the old tree's `StarobinskyPotential.py` was wrong. §4 points at the
+  contract by section and its claims check against it: 16 constructor parameters, rows 3, 5, 8, 11
+  and 12, §2's `validate_on_startup`, and §8's `ValueError` and "What is not keyed".
+  `_do_not_populate` is read by the `ScalarModel` and `BBNData` factories. `read_table_config`'s six
+  classes are `config/sharding.py`'s. The 98 lines of dated notes are byte-identical, and one is
+  added at §4's head. **One error:** §4.2 said `LambdaCDM` was in "the old layer's registry". No
+  factory ever registered it; it was in `config/sharding.py`'s `replicated_tables` and the batch
+  sizes. The sentence is corrected here.
+- **(5) `CLAUDE.md`.** The diff is inside "Repository mechanics": the packages bullet, the commands
+  with 18 / 114 / 97, ComputeTargets' halves with the ten-minute sentence, and the Ray bullet. One
+  over-long line is re-wrapped here.
+- **(6) The measurements**, re-run at `57893be` from each package's root. Each equals its
+  `measure/out/11-*` file but for the commit, the tracked-file count (563 → 574) and RayPoolKit's
+  non-`.py` lines (252 → 326: 37 in `.documents/`, 289 in `prompts/`), as the note foresaw. All
+  import, literal and call counts are unchanged, and the 17 calls all construct. `pip freeze`
+  equals the dispatch copy; `pip check` is clean.
+- **(7) Verification §4.** The R0–R2 table agrees with §1–§3. The DatastoreKit draft ends with the
+  board's existing notes **verbatim**, compared by script against `04a2ed9`'s cell. Each §9 part
+  maps to `857ec73`, `617a1dc`, `60e000c` and `b0d258a`. The RayPoolKit draft maps items 1–5 to
+  `303324b` and `2f61943`, with R1 and R2 as the runs under real Ray. The stale lists cover
+  DatastoreKit's §10 (5 bullets) and RayPoolKit's §9. **Two errors and one stale figure, corrected
+  here, each by an added dated sentence, not a rewrite:**
+  - §4.2's sweep bullet said 10 lines after; the committed after-file holds 20, because §4 and
+    §4.12 were written later. Both counts are now stated.
+  - The drafts named `ee79455` as the measured commit. The orchestrator's re-run at `57893be`
+    gives the same figures, so the drafts now name `57893be`, and §4.3's lead-in says so.
+  - The RayPoolKit draft said the 3 compute sites "use the defaults". They give their own
+    compute, validation and label handlers, and leave `store_handler` and `persist_handler` at
+    their defaults. Corrected.
+- **(8) §4.12.** Every line it cites matches the two scripts, which are unchanged (mtimes 2026-10-03).
+  Its statements hold at `HEAD`:
+  - `--inventory` runs before Ray and refuses `--drop`;
+  - a drop applies only when a pool opens an existing store;
+  - `--prune-unvalidated` defaults to `True`;
+  - `plot_by_beta.py` calls `ray.init` at import;
+  - `shard_key_audit` exits 0, 1 or 2, and `sharded_store` takes `copy` or `move`.
+
+  The supersessions of §4.11 are stated, not edited.
+- **(9) The records.** The status line is COMPLETE, with 18 / 114 / 97. Row 11 and Z1–Z7 are ✅. §2
+  says where both drafts are. §3's four issues are unchanged. §5.17 names those four issues and
+  every decision of README §6.4. `prompts/INDEX.md`: 0 live, 7 closed. `.documents/OPEN_ISSUES.md`:
+  27 rows by counting, and §1.11 holds 4; its header and lead-in say the campaign closed, and no row moved.
+- **(10) The suites**, re-run serially at `57893be` (with this follow-up's prose in the working
+  tree), at loads of 18–46 from other work on the machine: CosmologyModels **18** OK (170 s),
+  ComputeTargets **61 + 53 = 114** OK (227 s + 290 s), Datastore **97** OK (42 s).
+- *Residue, fixed here:*
+  - "this commit" → `57893be`: the board ×9, the index row, and the log's header. The log's prose
+    uses stay.
+  - The note was already listed as used for 11.
+  - `tools/compare_stores.py:93`'s comment re-wrapped to 100 columns. Comment only; the `ast`
+    check is unchanged.
+- **Deviations D1–D8 are accepted.** D8 ran `shard_key_audit --help`, which the tool read as a path.
+  It found nothing and opened no store.
+- **Left to the user, unchanged:** the merge into `main` (P17); the two G3 commits (P16); the
+  rebuild; the rehearsal stores; read-only plot pools; the `Datastore` rename; a required
+  `--ray-address`; and whether `CLAUDE.md` keeps the Ray bullet, which was the orchestrator's
+  addition.
+

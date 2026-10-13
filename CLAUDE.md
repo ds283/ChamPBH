@@ -79,7 +79,8 @@ invariants that hold across all of them:
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 61 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 53 tests
   ```
-  (The counts are those of 2026-10-13.) They **must not need a Ray cluster or a persistent datastore**. A test may build a temporary
+  (The counts are those of 2026-10-13.) They **must not need a Ray cluster or a persistent
+  datastore**. A test may build a temporary
   SQLite datastore in a `tempfile` directory, through `datastorekit`'s undecorated actor
   (`standin_pool.DatastoreClass`) inside ChamPBH's stand-in cluster (`Datastore/tests/standin_pool.py`,
   a copy of the package's; `_TempStoreCase` in `Datastore/tests/test_version_keyed_lookups.py` is

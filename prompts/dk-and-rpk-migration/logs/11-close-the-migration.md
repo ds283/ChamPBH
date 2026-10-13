@@ -1,6 +1,6 @@
 # Log 11 — close the migration
 
-**Prompt:** [`11-close-the-migration.md`](../11-close-the-migration.md) · **Commit:** this commit, on
+**Prompt:** [`11-close-the-migration.md`](../11-close-the-migration.md) · **Commit:** `57893be`, on
 branch `dk-and-rpk-migration`, on top of `ee79455` (the orchestrator's note; its code is `2623905`'s) ·
 **Model:** Sonnet · **Date:** 2026-10-13
 **Result:** Z1–Z7 landed. The campaign is closed. The sweep printed 19 lines before and 20 after, all
