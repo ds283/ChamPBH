@@ -1,7 +1,7 @@
 # read-only-plots campaign — implementation state
 
-**Last updated:** 2026-10-13 · **Status: LIVE — 4 of 4 prompts written, 1 landed (01). U1–U6 and P1–P8
-ruled by the user on 2026-10-13, all as proposed (README §6).**
+**Last updated:** 2026-10-13 · **Status: LIVE — 4 of 4 prompts written, 1 of 4 landed (01,
+reviewed). U1–U6 and P1–P8 ruled by the user on 2026-10-13, all as proposed (README §6).**
 The plan is [`README.md`](README.md), written on 2026-10-13 on branch `read-only-plots`, cut from
 `main` at `17fad8b`.
 
@@ -26,7 +26,7 @@ changes no file of the store it reads.
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | [Require the Ray address](01-require-the-ray-address.md) | `--ray-address` without a default; `auto` refused (U1, U2) | Sonnet | ✍️ 2026-10-13 | ✅ 2026-10-13 | this commit | [`logs/01-require-the-ray-address.md`](logs/01-require-the-ray-address.md) |
+| 01 | [Require the Ray address](01-require-the-ray-address.md) | `--ray-address` without a default; `auto` refused (U1, U2) | Sonnet | ✍️ 2026-10-13 | ✅ 2026-10-13 | `04486f4` | [`logs/01-require-the-ray-address.md`](logs/01-require-the-ray-address.md) |
 | 02 | [Read-only plot pools](02-read-only-plot-pools.md) | `plot_inputs.py`; both plot scripts `read_only=True`; misses per U3, U4; closes `[08-plot-scripts-open-read-write-pools]` | Opus | ✍️ 2026-10-13 | ⬜ | — | — |
 | 03 | [Rehearse a read-only plotting run](03-rehearse-a-read-only-plotting-run.md) | one pilot build and the readers, checksums before and after (U5) | Opus | ✍️ 2026-10-13 | ⬜ | — | — |
 | 04 | [Close](04-close.md) | documents, handover, index, board | Sonnet | ✍️ 2026-10-13 | ⬜ | — | — |
@@ -37,7 +37,8 @@ changes no file of the store it reads.
 *Written 2026-10-13 (§5.1).*
 
 Orchestrator notes are written one prompt at a time, in [`orchestrator/`](orchestrator/), just
-before each dispatch.
+before each dispatch:
+- [`orchestrator/prompt-01.md`](orchestrator/prompt-01.md) (`8c5a7f1`), used for 01.
 
 ### 1.1 Items
 
@@ -65,7 +66,7 @@ before each dispatch.
 
 | Gate | Holds when | Prompt | State |
 |---|---|---|---|
-| Ray address | every driver refuses a run that starts Ray without `--ray-address`, and refuses `auto`, before `ray.init` | 01 | ✅ this commit |
+| Ray address | every driver refuses a run that starts Ray without `--ray-address`, and refuses `auto`, before `ray.init` | 01 | ✅ `04486f4` |
 | Read-only plots | both plot scripts open `read_only=True`; on a stand-in store their lookups find every row, skip a missing potential or coupling, stop on a missing parameter, and change no file | 02 | ⬜ |
 | R | a real plotting run on a real store changes no file of it (U5) | 03 | ⬜ |
 
@@ -125,7 +126,7 @@ read of the drivers' start-up code at `bacca64`.
 
 ### 5.2 After prompt 01 (2026-10-13)
 
-Prompt 01 landed in this commit ([log](logs/01-require-the-ray-address.md)). A1–A4 done; the "Ray
+Prompt 01 landed in `04486f4` ([log](logs/01-require-the-ray-address.md)). A1–A4 done; the "Ray
 address" gate holds.
 - `--ray-address` has no default; `config.argument_parser.ray_address_problem` refuses `None`, an
   empty or blank string and `auto` (any case); each driver calls it just before `ray.init` and
@@ -135,3 +136,40 @@ address" gate holds.
   The three parse-only tests needed no change.
 - The four deliberate breakages each fail a named new test (log).
 - No issue opened; `.documents/OPEN_ISSUES.md` unchanged.
+
+**Orchestrator review of prompt 01 (2026-10-13).** Against the note's ten checks, at `04486f4`:
+1. **Scope.** The diff is the prompt's §5 list exactly; the untracked set is the user's, unchanged.
+2. **The function and the parser, by reading.** As A1 says; `DEFAULT_RAY_ADDRESS` is gone; the help
+   text names `127.0.0.1:6380` and `local`, and says `auto` is refused.
+3. **Probe.** `None`, `""`, `"   "`, `auto`, `Auto`, `"\tAUTO\n"` refused with the one message;
+   `local`, `127.0.0.1:6380`, `ray://127.0.0.1:10001` accepted, and `"local "` passed on unchanged
+   for Ray to judge, as the prompt specifies. `--ray-address=`, `--ray-address auto` and a YAML
+   `ray-address: auto` each reach the function and are refused.
+4. **`ast` against `8c5a7f1`.** Each driver's module body differs by the extended import and the
+   two statements of the check (`_ray_problem = …`, `if _ray_problem is not None:` printing to stderr
+   and `sys.exit(2)`), immediately before `ray.init`; `git diff -U0` adds only the comment.
+   `create_argument_parser` differs only in the `--ray-address` statement.
+5. **The drivers by hand**, with `RAY_ADDRESS=127.0.0.1:9`: all three, with no address, `auto`,
+   `AUTO` and `""`, exit 2 with the message and no traceback, and create no file. `main.py
+   --inventory` without the switch exits 1 with the reader's refusal of the absent store; with
+   `--drop bbn-data` it exits 2 with the `--drop` refusal.
+6. **No Ray.** `pgrep` empty after checks 5, 7 and 10; `/tmp/ray/session_*` still 160;
+   `/tmp/ray-cpbh` unchanged.
+7. **Breakages.** The log's four diffs replayed in bash, 2–4 without the subprocess tests: each
+   fails exactly the tests the log names, and each reverts to a clean tree. Every subprocess test
+   asserts the exact message and the provenance line, so an `argparse` exit 2 cannot pass it.
+8. **Prose.** `architecture-summary.md:451` only; `CLAUDE.md` inside "Ray on this machine" only.
+   Residue: the new sentence broke the paragraph's wrap past 100 columns; re-wrapped in the
+   follow-up, wording unchanged.
+9. **Records.** Row 01, A1–A4, the gate and §5.2 as required; §3 and the index untouched (27).
+10. **Suites** at `04486f4`, serially, at load 66–128: CosmologyModels 18 OK, ObjectFactories 63 OK,
+    tools 34 OK, ComputeTargets 61 OK + 70 with one failure:
+    `test_prym_passenger.test_a_oscillating_case_completes` took 77.0 s against its 60 s wall bound
+    (one PRyMordial solve, "about 9 s" by its docstring). It imports nothing 01 changed. Re-run
+    alone, it took 61.4 s at load 75 (fail) and 57.7 s at load 65 (OK), and the agent's run at the
+    same commit passed it at load 48. It is a timing bound under this machine's load, not a
+    regression; recorded here, not opened. ComputeTargets 131. `black --check` clean on the five
+    Python files; the drivers byte-compile.
+
+Handed to 02: every driver run needs `--ray-address`; 02 must leave the check and `ray.init` where
+`TestCheckPlacementByAst` expects them.

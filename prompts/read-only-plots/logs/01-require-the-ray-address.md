@@ -1,7 +1,7 @@
 # Log 01 — require the Ray address
 
 **Subject:** Require `--ray-address` before Ray starts, and refuse `auto`
-**Commit:** this commit, on branch `read-only-plots`, on top of `8c5a7f1`
+**Commit:** `04486f4`, on branch `read-only-plots`, on top of `8c5a7f1`
 **Date:** 2026-10-13, by Claude Sonnet 5.5
 **Result:** **COMPLETE.** A1–A4 shipped. ComputeTargets 114 → 131 (+17 `test_ray_address`:
 10 without a subprocess, 7 by subprocess); CosmologyModels 18, ObjectFactories 63 and tools 34
@@ -107,10 +107,10 @@ ComputeTargets: 114 → 131. No count fell.
 
 ## The deliberate-breakage record
 
-Each diff was taken against the tree at this commit (staged, before the docs), checked with
+Each diff was taken against the tree at `04486f4` (staged, before the docs), checked with
 `git apply --check` (forward, from the clean tree: exit 0) and `git apply -R --check` (exit 1 on
 the clean tree, as it must), applied, tested, and reverted with `git apply -R`. Replay from a clean
-tree at this commit with `bash -c 'git apply B.diff'` and `git apply -R B.diff` to restore.
+tree at `04486f4` with `bash -c 'git apply B.diff'` and `git apply -R B.diff` to restore.
 Breakages 2-4 ran only the non-subprocess classes (`TestRayAddressProblem`, `TestParser`,
 `TestCheckPlacementByAst`); breakage 1 ran the whole module (17 tests, 28 s), safe since the check
 still refuses `auto`.
@@ -219,7 +219,7 @@ index 819ba7a..1bb9c6d 100644
   edits the pool opening further down (`plot_by_beta.py:~1011+`, `plot_ScalarModel.py:~1581+`, line
   numbers shifted by about 6) and must leave the check and `ray.init` as they are
   (`TestCheckPlacementByAst`).
-- Suites at this commit: CosmologyModels 18, ComputeTargets 131 (61 + 70), ObjectFactories 63,
+- Suites at `04486f4`: CosmologyModels 18, ComputeTargets 131 (61 + 70), ObjectFactories 63,
   tools 34. `test_ray_address.py` is in the second half (`test_[g-z]*.py`): 53 + 17 = 70. Its
   subprocess class takes about 30 s.
 - No issue opened; `.documents/OPEN_ISSUES.md` unchanged (27).
