@@ -1,6 +1,6 @@
 # dk-and-rpk-migration campaign — implementation state
 
-**Last updated:** 2026-10-13 · **Status: LIVE — 11 of 12 prompts written (01–10, 05a), 11 landed (01–10, 05a); R0 bitwise reproducible; R1 equals R0 bitwise; RayPoolKit G3 holds; ChamPBH's datastore layer replaced by `datastorekit` (08); the inventory read-only on the package's reader, every class covered (09); R2 equals R1 and R0 bitwise through both packages, and DatastoreKit G3 holds (10). P1–P17
+**Last updated:** 2026-10-13 · **Status: LIVE — 12 of 12 prompts written (01–11, 05a), 11 landed (01–10, 05a); R0 bitwise reproducible; R1 equals R0 bitwise; RayPoolKit G3 holds; ChamPBH's datastore layer replaced by `datastorekit` (08); the inventory read-only on the package's reader, every class covered (09); R2 equals R1 and R0 bitwise through both packages, and DatastoreKit G3 holds (10). P1–P17
 ruled; U5 ruled (README §6.6); U6 ruled (README §6.7): DatastoreKit `v0.3.0` is the pin (README §0.4).**
 The plan is [`README.md`](README.md), written on 2026-10-11 at `52142d7` with the user's rulings
 U1–U4. Prompts 01–04 are written once the user has reviewed it (README §2.1).
@@ -76,7 +76,7 @@ reads only what the specs declare. Measured at `12c82e8`, 09's list already cove
 | 08 | [Adopt `datastorekit`](08-adopt-datastorekit.md) | the DatastoreKit swap; **U4** | Opus | ✍️ 2026-10-12 | ✅ 2026-10-12 | `857ec73` | [log](logs/08-adopt-datastorekit.md) |
 | 09 | [Port the inventory](09-port-the-inventory.md) | `inventory_spec`, `tools/inventory_report.py`; coverage (§6.5) | Opus | ✍️ 2026-10-12 | ✅ 2026-10-13 | `47cfcfb` | [log](logs/09-port-the-inventory.md) |
 | 10 | [Rehearse through both packages (R2)](10-rehearse-through-both-packages.md) | **R2**; **DatastoreKit G3** | Opus | ✍️ 2026-10-12 | ✅ 2026-10-13 | `b0d258a` | [log](logs/10-rehearse-through-both-packages.md) |
-| 11 | Close the migration | documents, handover, close | Sonnet | ⬜ | ⬜ | — | — |
+| 11 | [Close the migration](11-close-the-migration.md) | documents, measurements, G3 drafts, handover, close | Sonnet | ✍️ 2026-10-13 | ⬜ | — | — |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
 
@@ -85,7 +85,7 @@ reads only what the specs declare. Measured at `12c82e8`, 09's list already cove
 - **05–06** are written after 02's review: R0's reproducibility sets R1's criterion.
 - **05a** is written after 05's review, for U5. 06 waits on it.
 - **07–10** are written after 06's review (`v0.3.0`, the pin, is released; U6). *Written 2026-10-12 (§5.11).*
-- **11** is written after 10's review.
+- **11** is written after 10's review. *Written 2026-10-13 (§5.16).*
 
 Orchestrator notes are written one prompt at a time, in [`orchestrator/`](orchestrator/), just
 before each dispatch:
@@ -149,8 +149,13 @@ before each dispatch:
 | **L1**–**L4** (R2) | 10 | README §4.1 at 09's tree; each store equal to `06-reference.db`, bitwise; L4 against R1 | ✅ `b0d258a`: L1–L3 hold (`resumed-a` exited **15**, not 134, by Ray's own `SIGTERM` handler; verification §3.2); **`10-reference.db` and `10-resumed.db` each `RESULT: equal` against `06-reference.db`, `10-reference.db` against `02-reference.db`, exit 0**, and the two R2 stores against each other; schema agrees with 08's and R0's; L4: `compute` 5/5/5, 5/killed, 0/5/5 (lookups 5/5/5); `resumed-a` stored 1 `AdiabaticHistory` row and validated 0, and the package's prune removed exactly that row; the printed lines in R1's layout, with no progress line at this load (verification §3) |
 | **V3** | 10 | `.documents/dk-and-rpk-migration-verification.md` §3 R2 | ✅ `b0d258a`: §3 R2 (§§3.1–3.10, H1 and G3 included); `out/10-*` (20 files), `10-reference-schema.json` equal to 08's and R0's but for `source` |
 | **H1** | 10 | the R2 stores by the package's tools: the shard-key audit; a copy that opens read-only, compares equal and is deleted by `delete_store` | ✅ `b0d258a`: `shard_key_audit` `VERDICT: OK`, exit 0, on both stores; `sharded_store copy` exit 0, 16 shards named bare; the copy's `--inventory` exit 0, `problems: none`; `compare_stores` `RESULT: equal`, no bookkeeping difference; `closed_store_files` and `delete_store` the same 17 paths, none left (verification §3.8) |
-
-Items of 11 are added when it is written.
+| **Z1** | 11 | `.documents/architecture-summary.md`: the tree, §4, §5.2, §9's example and §§12–14 for the packages; the `RayWorkPool` lines checked (P14) | ⬜ |
+| **Z2** | 11 | `CLAUDE.md`, "Repository mechanics": the packages and the upstream-defect rule; the test commands with their counts; Ray on this machine (U5) | ⬜ |
+| **Z3** | 11 | the prose in code 08–10 left: `tools/compare_stores.py`'s citations, five test modules' docstrings and comments; `ast`-equal | ⬜ |
+| **Z4** | 11 | the final measurements: both packages' scripts, the three roots, the venv (`measure/out/11-*`) | ⬜ |
+| **Z5** | 11 | verification §4, the close: R0–R2, Z4, the two G3 records drafted for the packages' boards (P16) | ⬜ |
+| **Z6** | 11 | the handover, `.documents/review-remediation-verification.md` §4.12 (README §7): the rebuild, the run scripts line by line | ⬜ |
+| **Z7** | 11 | the records: this board closed, `prompts/INDEX.md`, `.documents/OPEN_ISSUES.md` | ⬜ |
 
 The measurement the plan was written against is [`measure/out/`](measure/out/): both packages'
 scripts at `52142d7`, each equal to its checklist's appendix byte for byte; the three roots'
@@ -1688,3 +1693,26 @@ bytes, `cmp`-identical to the rebuilt copy, and `stage_counts.py` on it gives th
 (`n10/review/10-reference.log.clobbered-json`). The ANSI codes on lines 3, 17 and 34 come from the
 agent's raw outputs and from R1's line of the same form. Every other byte is attested by those
 outputs, and the total size equals the original's.
+
+### 5.16 Prompt 11 written (2026-10-13)
+
+[`11-close-the-migration.md`](11-close-the-migration.md), written after 10's review (`3974f70`,
+`1954adf`) as README §2.1 says, from a read-only measurement at `2623905`. Board items Z1–Z7.
+- **Housekeeping first.** `2623905` removed the two unused imports log 09 left in
+  `Datastore/tests/test_datastore_config.py` (`os`, `tempfile`; Observation 4), in a commit of its
+  own. Its 14 tests pass; Datastore 97 OK at `2623905`.
+- **The measurement.** DatastoreKit's `measure_client_imports.py` and RayPoolKit's
+  `measure_client_pools.py` at `1954adf` (the code of `2623905` but for those imports): 0 layer
+  imports outside `prompts/` (1 in `prompts/`), 0 literals, 0 `import_module`; `RayTools/` absent,
+  0 imports, 17 calls all `constructs`. A stale-path sweep over tracked files outside `prompts/`
+  prints 19 lines: 11 to rewrite (`architecture-summary.md` 7, `tools/compare_stores.py` 3,
+  `test_compare_stores.py` 1) and 8 that stay (6 in dated records, 2 in
+  `test_datastore_config.py`'s guard against the old layer's arguments).
+- **README §2.2's charter for 11 amended** (marked there): item 1 also covers the tree, §5.2 and
+  §9's example, which 08 made false; the prose in code that 08–10 left for 11 is added (Z3, prose
+  only, `ast`-checked); and **`CLAUDE.md` gains how a Ray cluster is run on this machine** (U5:
+  ChamPBH's isolated cluster under the shared lock, an explicit `--ray-address`, never `ray stop`).
+  The last is the orchestrator's addition to the charter, for the user to overrule.
+- **11 closes no §3 issue.** The four open issues are outside this campaign's scope (README §1) and
+  stay open, unassigned. The merge into `main` (P17) and the G3 commits in the package
+  repositories (P16) are left to the user.

@@ -23,7 +23,7 @@ user's rulings U1–U4 of the same day (§6.1).
 §0.2 re-measures both checklists at `52142d7`. §2 fixes each prompt's charter and acceptance.
 **Prompts 01–04 are written** (2026-10-11, after the user's review), **05–06** (2026-10-12,
 after 02's and 04's reviews), **05a** (2026-10-12, for U5), and **07–10** (2026-10-12, after
-06's review); 11 follows 10's review (§2.1). The user ruled on the proposals of §6.2 on 2026-10-11: all accepted, P2 amended, P9 after
+06's review), and **11** (2026-10-13, after 10's review). The user ruled on the proposals of §6.2 on 2026-10-11: all accepted, P2 amended, P9 after
 §6.3's explanation.
 
 *Revised 2026-10-11, the same day, when the user reopened U3 (§6.1). The first draft registered the
@@ -324,7 +324,7 @@ carries the previous review's findings:
 - **07–10** follow 06's review: 06's log fixes the counts and names they cite. `v0.3.0`'s tag and
   commit are §0.4's (U6); its ChamPBH checklist addenda, `v0.2.3`'s and `v0.3.0`'s, are read when
   07 and 08 are written. *Written 2026-10-12, after 06's review (`fa874a5`).*
-- **11** follows 10's review.
+- **11** follows 10's review. *Written 2026-10-13, after 10's review (`3974f70`), at `2623905`.*
 
 `v0.2.3` was released on 2026-10-11 with what the brief asked (§0.3), and `v0.3.0`, the pin (U6),
 on 2026-10-12 (§0.4), so no prompt waits on a release.
@@ -636,6 +636,20 @@ checklist's `v0.2.3` and `v0.3.0` addenda, and re-checks the tag on the remote b
   4. The handover (§7), as `.documents/review-remediation-verification.md` §4.12, which is where
      the user's next run starts.
   5. `prompts/INDEX.md` and `.documents/OPEN_ISSUES.md`; the board closed.
+
+  *Amended 2026-10-13 at 11's writing.* Item 1 also covers the tree, §5.2 and §9's example in
+  `architecture-summary.md`, which 08 made false and the charter did not list. Two items are added:
+  - **the prose in code that 08–10 left for 11** (logs 08 and 09, "Observations not acted on"):
+    `tools/compare_stores.py`'s comment and two reason strings citing the deleted layer, and the
+    docstrings or comments of five test modules (README §5 rule 7: named here, prose only, each
+    module `ast`-equal with docstrings removed but for the two strings);
+  - **in `CLAUDE.md`, how a Ray cluster is run on this machine** (U5, §6.6): ChamPBH's isolated
+    cluster by `ray_cluster.sh` under the shared lock, an explicit `--ray-address`, and never
+    `ray stop`. U5 was ruled for this campaign's rehearsals; §7 already hands the same rule to any
+    long build on this machine, and `CLAUDE.md` is where a later session will find it.
+
+  The two unused imports of `test_datastore_config.py` (log 09, Observation 4) were removed as
+  housekeeping in `2623905`, before 11 was written.
 - **Acceptance.**
   1. The index's count and date agree with its rows.
   2. Nothing outside `prompts/` and dated `.documents/` records names a deleted file as a current
