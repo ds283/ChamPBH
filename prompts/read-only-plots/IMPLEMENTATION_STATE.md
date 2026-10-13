@@ -1,7 +1,7 @@
 # read-only-plots campaign — implementation state
 
-**Last updated:** 2026-10-13 · **Status: LIVE — 4 of 4 prompts written, 2 of 4 landed (01 and
-02, each reviewed). U1–U6 and P1–P8 ruled by the user on 2026-10-13, all as proposed (README §6).**
+**Last updated:** 2026-10-13 · **Status: LIVE — 4 of 4 prompts written, 3 of 4 landed (01 and
+02, each reviewed; 03). U1–U6 and P1–P8 ruled by the user on 2026-10-13, all as proposed (README §6).**
 The plan is [`README.md`](README.md), written on 2026-10-13 on branch `read-only-plots`, cut from
 `main` at `17fad8b`.
 
@@ -28,7 +28,7 @@ changes no file of the store it reads.
 |---|---|---|---|---|---|---|---|
 | 01 | [Require the Ray address](01-require-the-ray-address.md) | `--ray-address` without a default; `auto` refused (U1, U2) | Sonnet | ✍️ 2026-10-13 | ✅ 2026-10-13 | `04486f4` | [`logs/01-require-the-ray-address.md`](logs/01-require-the-ray-address.md) |
 | 02 | [Read-only plot pools](02-read-only-plot-pools.md) | `plot_inputs.py`; both plot scripts `read_only=True`; misses per U3, U4; closes `[08-plot-scripts-open-read-write-pools]` | Opus | ✍️ 2026-10-13 | ✅ 2026-10-13 | `9dc23db` | [`logs/02-read-only-plot-pools.md`](logs/02-read-only-plot-pools.md) |
-| 03 | [Rehearse a read-only plotting run](03-rehearse-a-read-only-plotting-run.md) | one pilot build and the readers, checksums before and after (U5) | Opus | ✍️ 2026-10-13 | ⬜ | — | — |
+| 03 | [Rehearse a read-only plotting run](03-rehearse-a-read-only-plotting-run.md) | one pilot build and the readers, checksums before and after (U5) | Opus | ✍️ 2026-10-13 | ✅ 2026-10-13 | this commit | [`logs/03-rehearse-a-read-only-plotting-run.md`](logs/03-rehearse-a-read-only-plotting-run.md) |
 | 04 | [Close](04-close.md) | documents, handover, index, board | Sonnet | ✍️ 2026-10-13 | ⬜ | — | — |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
@@ -54,10 +54,10 @@ before each dispatch:
 | **O3** | 02 | both plot scripts on `plot_inputs.py`, `read_only=True`; `--drop` refused (P3) | ✅ |
 | **O4** | 02 | `ComputeTargets/tests/test_plot_inputs.py`, on read-only stand-in stores; every file unchanged | ✅ |
 | **O5** | 02 | `[08-plot-scripts-open-read-write-pools]` closed; the text tests (P6) | ✅ |
-| **H1** | 03 | one pilot build under real Ray | ⬜ |
-| **H2** | 03 | the readers: every store file byte-identical; `histories.csv` equal to R0's | ⬜ |
-| **H3** | 03 | under real Ray: `auto` refused, a missing `T_stop` stops, `--drop` refused | ⬜ |
-| **H4** | 03 | `.documents/read-only-plots-verification.md` §1 | ⬜ |
+| **H1** | 03 | one pilot build under real Ray | ✅ |
+| **H2** | 03 | the readers: every store file byte-identical; `histories.csv` equal to R0's | ✅ |
+| **H3** | 03 | under real Ray: `auto` refused, a missing `T_stop` stops, `--drop` refused | ✅ |
+| **H4** | 03 | `.documents/read-only-plots-verification.md` §1 | ✅ |
 | **Z1** | 04 | `architecture-summary.md`: `plot_inputs.py` and read-only plot pools | ⬜ |
 | **Z2** | 04 | `CLAUDE.md` | ⬜ |
 | **Z3** | 04 | the handover, `.documents/review-remediation-verification.md` §4.13 | ⬜ |
@@ -69,7 +69,7 @@ before each dispatch:
 |---|---|---|---|
 | Ray address | every driver refuses a run that starts Ray without `--ray-address`, and refuses `auto`, before `ray.init` | 01 | ✅ `04486f4` |
 | Read-only plots | both plot scripts open `read_only=True`; on a stand-in store their lookups find every row, skip a missing potential or coupling, stop on a missing parameter, and change no file | 02 | ✅ `9dc23db` |
-| R | a real plotting run on a real store changes no file of it (U5) | 03 | ⬜ |
+| R | a real plotting run on a real store changes no file of it (U5) | 03 | ✅ this commit |
 
 ## 3. Active and unresolved issues
 
@@ -260,3 +260,33 @@ apply; 03 is where that is seen.
 
 The log's Observation 1 (`plot_by_beta.py`'s `ProfileAgent` label still says `plot_ScalarModel`)
 is cosmetic and offered to the user as housekeeping; no issue opened. Nothing else found.
+
+### 5.4 After prompt 03 (2026-10-13)
+
+Prompt 03 landed in this commit ([log](logs/03-rehearse-a-read-only-plotting-run.md)). H1–H4 done;
+the gate "R" holds. The record is `.documents/read-only-plots-verification.md` §1, with ten small
+outputs under `.documents/read-only-plots/out/03-*`.
+- **The cluster**, by `ray_cluster.sh` alone, under the shared lock (`purpose: read-only-plots 03
+  (R)`), at `127.0.0.1:6380`; `stop` exit 0 in 18 s, the lock released; `ray stop` never run. Every
+  Ray driver's log names 6380, never 6379. `start`'s exit status was not captured (zsh has no
+  `PIPESTATUS`; log deviation 1); its code path and the `status` after it show it started.
+- **H1.** `build.sh 03 reference reference`, 3 min 41 s, exit 0; 5 / 5 / 5 / 5 in each stage; R2's
+  provenance line. The job name is `dk-and-rpk-migration-03-reference` (the script unchanged).
+- **H2.** All five readers exit 0. The store's 17 files are byte-identical, with their sizes and
+  mtimes, before and after the readers and after the refusals; no journal, WAL or SHM file.
+  `compare_stores` `RESULT: equal`, bookkeeping `none`. `histories.csv` SHA-256 `d7c62c37…c522`,
+  R0's; the SM baseline, the β = 1.15 Yp and D/H and the inventory are R2's. Both plot scripts
+  print the read-only open line, once each.
+- **H3.** `--ray-address auto` exit 2 before Ray (no new job); `--T-stop-GeV 1e-7` exit 2 with 02's
+  message, through a real actor and `ray.get`, before the baseline and any figure (job
+  `04000000`, its 16 actors `DEAD`); `--drop bbn-data` exit 2 before Ray (no new job).
+- **Observed, not opened:** a read-only pool starts no `SerialPoolBroker` (the package's design,
+  `ShardedPool.py:563`); the rehearsal made seven PRyMordial solves, not one.
+- Suites before `start`: CosmologyModels 18, ComputeTargets 61 + 91 (152), ObjectFactories 63,
+  tools 34, at load 2.4–6.7. The venv unchanged (`pip freeze`, 101 lines). Nothing outside `$R`
+  written but the lock, `/tmp/ray-cpbh/` and the committed outputs.
+- `$R` = `~/ScienceData/ChamPBH-rehearsals/read-only-plots/` is kept; removing it is the user's.
+- No issue opened; `.documents/OPEN_ISSUES.md` unchanged (26).
+
+Handed to 04: the verification document §1 is the evidence for the read-only plot pools under
+Ray; the refusals' messages there are verbatim.

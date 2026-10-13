@@ -1,0 +1,320 @@
+{
+  "a": {
+    "primary": "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-readers/before/03-reference.db",
+    "shards": [
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-readers/before/03-reference-shard0000.db",
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-readers/before/03-reference-shard0001.db",
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-readers/before/03-reference-shard0002.db",
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-readers/before/03-reference-shard0003.db",
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-readers/before/03-reference-shard0004.db",
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-readers/before/03-reference-shard0005.db",
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-readers/before/03-reference-shard0006.db",
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-readers/before/03-reference-shard0007.db",
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-readers/before/03-reference-shard0008.db",
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-readers/before/03-reference-shard0009.db",
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-readers/before/03-reference-shard0010.db",
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-readers/before/03-reference-shard0011.db",
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-readers/before/03-reference-shard0012.db",
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-readers/before/03-reference-shard0013.db",
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-readers/before/03-reference-shard0014.db",
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-readers/before/03-reference-shard0015.db"
+    ]
+  },
+  "b": {
+    "primary": "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-reference.db",
+    "shards": [
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-reference-shard0000.db",
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-reference-shard0001.db",
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-reference-shard0002.db",
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-reference-shard0003.db",
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-reference-shard0004.db",
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-reference-shard0005.db",
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-reference-shard0006.db",
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-reference-shard0007.db",
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-reference-shard0008.db",
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-reference-shard0009.db",
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-reference-shard0010.db",
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-reference-shard0011.db",
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-reference-shard0012.db",
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-reference-shard0013.db",
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-reference-shard0014.db",
+      "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-reference-shard0015.db"
+    ]
+  },
+  "tables": {
+    "AdiabaticHistory": {
+      "kind_a": "sharded",
+      "kind_b": "sharded",
+      "matched": 5,
+      "a_only": 0,
+      "b_only": 0,
+      "near_misses": [],
+      "rows_a_only": [],
+      "rows_b_only": []
+    },
+    "AdiabaticHistoryValue": {
+      "kind_a": "sharded",
+      "kind_b": "sharded",
+      "matched": 42617,
+      "a_only": 0,
+      "b_only": 0,
+      "near_misses": [],
+      "rows_a_only": [],
+      "rows_b_only": []
+    },
+    "AdiabaticHistory_tags": {
+      "kind_a": "sharded",
+      "kind_b": "sharded",
+      "matched": 5,
+      "a_only": 0,
+      "b_only": 0,
+      "near_misses": [],
+      "rows_a_only": [],
+      "rows_b_only": []
+    },
+    "BBNData": {
+      "kind_a": "sharded",
+      "kind_b": "sharded",
+      "matched": 5,
+      "a_only": 0,
+      "b_only": 0,
+      "near_misses": [],
+      "rows_a_only": [],
+      "rows_b_only": []
+    },
+    "BBNDataValue": {
+      "kind_a": "sharded",
+      "kind_b": "sharded",
+      "matched": 7475,
+      "a_only": 0,
+      "b_only": 0,
+      "near_misses": [],
+      "rows_a_only": [],
+      "rows_b_only": []
+    },
+    "BBNData_tags": {
+      "kind_a": "sharded",
+      "kind_b": "sharded",
+      "matched": 5,
+      "a_only": 0,
+      "b_only": 0,
+      "near_misses": [],
+      "rows_a_only": [],
+      "rows_b_only": []
+    },
+    "ExponentialCoupling": {
+      "kind_a": "sharded",
+      "kind_b": "sharded",
+      "matched": 5,
+      "a_only": 0,
+      "b_only": 0,
+      "near_misses": [],
+      "rows_a_only": [],
+      "rows_b_only": []
+    },
+    "ExponentialPotential": {
+      "kind_a": "replicated",
+      "kind_b": "replicated",
+      "matched": 1,
+      "a_only": 0,
+      "b_only": 0,
+      "near_misses": [],
+      "rows_a_only": [],
+      "rows_b_only": []
+    },
+    "IntegrationSolver": {
+      "kind_a": "replicated",
+      "kind_b": "replicated",
+      "matched": 6,
+      "a_only": 0,
+      "b_only": 0,
+      "near_misses": [],
+      "rows_a_only": [],
+      "rows_b_only": []
+    },
+    "InversePowerPotential": {
+      "kind_a": "replicated",
+      "kind_b": "replicated",
+      "matched": 0,
+      "a_only": 0,
+      "b_only": 0,
+      "near_misses": [],
+      "rows_a_only": [],
+      "rows_b_only": []
+    },
+    "Lambda_value": {
+      "kind_a": "replicated",
+      "kind_b": "replicated",
+      "matched": 1,
+      "a_only": 0,
+      "b_only": 0,
+      "near_misses": [],
+      "rows_a_only": [],
+      "rows_b_only": []
+    },
+    "M_value": {
+      "kind_a": "replicated",
+      "kind_b": "replicated",
+      "matched": 1,
+      "a_only": 0,
+      "b_only": 0,
+      "near_misses": [],
+      "rows_a_only": [],
+      "rows_b_only": []
+    },
+    "QCD_Cosmology": {
+      "kind_a": "replicated",
+      "kind_b": "replicated",
+      "matched": 1,
+      "a_only": 0,
+      "b_only": 0,
+      "near_misses": [],
+      "rows_a_only": [],
+      "rows_b_only": []
+    },
+    "ReclinerPotential": {
+      "kind_a": "replicated",
+      "kind_b": "replicated",
+      "matched": 0,
+      "a_only": 0,
+      "b_only": 0,
+      "near_misses": [],
+      "rows_a_only": [],
+      "rows_b_only": []
+    },
+    "ReflectingPotential": {
+      "kind_a": "replicated",
+      "kind_b": "replicated",
+      "matched": 0,
+      "a_only": 0,
+      "b_only": 0,
+      "near_misses": [],
+      "rows_a_only": [],
+      "rows_b_only": []
+    },
+    "ScalarModel": {
+      "kind_a": "sharded",
+      "kind_b": "sharded",
+      "matched": 5,
+      "a_only": 0,
+      "b_only": 0,
+      "near_misses": [],
+      "rows_a_only": [],
+      "rows_b_only": []
+    },
+    "ScalarModelValue": {
+      "kind_a": "sharded",
+      "kind_b": "sharded",
+      "matched": 42617,
+      "a_only": 0,
+      "b_only": 0,
+      "near_misses": [],
+      "rows_a_only": [],
+      "rows_b_only": []
+    },
+    "ScalarModel_tags": {
+      "kind_a": "sharded",
+      "kind_b": "sharded",
+      "matched": 5,
+      "a_only": 0,
+      "b_only": 0,
+      "near_misses": [],
+      "rows_a_only": [],
+      "rows_b_only": []
+    },
+    "StarobinskyPotential": {
+      "kind_a": "replicated",
+      "kind_b": "replicated",
+      "matched": 0,
+      "a_only": 0,
+      "b_only": 0,
+      "near_misses": [],
+      "rows_a_only": [],
+      "rows_b_only": []
+    },
+    "beta_value": {
+      "kind_a": "replicated",
+      "kind_b": "replicated",
+      "matched": 5,
+      "a_only": 0,
+      "b_only": 0,
+      "near_misses": [],
+      "rows_a_only": [],
+      "rows_b_only": []
+    },
+    "phi_value": {
+      "kind_a": "replicated",
+      "kind_b": "replicated",
+      "matched": 1,
+      "a_only": 0,
+      "b_only": 0,
+      "near_misses": [],
+      "rows_a_only": [],
+      "rows_b_only": []
+    },
+    "pi_value": {
+      "kind_a": "replicated",
+      "kind_b": "replicated",
+      "matched": 1,
+      "a_only": 0,
+      "b_only": 0,
+      "near_misses": [],
+      "rows_a_only": [],
+      "rows_b_only": []
+    },
+    "redshift": {
+      "kind_a": "replicated",
+      "kind_b": "replicated",
+      "matched": 21250,
+      "a_only": 0,
+      "b_only": 0,
+      "near_misses": [],
+      "rows_a_only": [],
+      "rows_b_only": []
+    },
+    "store_tag": {
+      "kind_a": "replicated",
+      "kind_b": "replicated",
+      "matched": 1,
+      "a_only": 0,
+      "b_only": 0,
+      "near_misses": [],
+      "rows_a_only": [],
+      "rows_b_only": []
+    },
+    "temperature": {
+      "kind_a": "replicated",
+      "kind_b": "replicated",
+      "matched": 2,
+      "a_only": 0,
+      "b_only": 0,
+      "near_misses": [],
+      "rows_a_only": [],
+      "rows_b_only": []
+    },
+    "tolerance": {
+      "kind_a": "replicated",
+      "kind_b": "replicated",
+      "matched": 1,
+      "a_only": 0,
+      "b_only": 0,
+      "near_misses": [],
+      "rows_a_only": [],
+      "rows_b_only": []
+    },
+    "version": {
+      "kind_a": "replicated",
+      "kind_b": "replicated",
+      "matched": 1,
+      "a_only": 0,
+      "b_only": 0,
+      "near_misses": [],
+      "rows_a_only": [],
+      "rows_b_only": []
+    }
+  },
+  "bookkeeping_differences": {},
+  "problems": [],
+  "notes": [],
+  "equal": true
+}

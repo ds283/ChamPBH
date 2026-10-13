@@ -1,0 +1,55 @@
+# read-only-plots prompt 03: the plot and BBN readers' logs from $R/03-readers/, verbatim but for ANSI colour codes removed
+# (1-inventory.log is 03-inventory.txt; 5-compare_stores.log is 03-compare_stores.txt)
+
+## status.txt
+step 0 copy-before: exit 0
+step 1 inventory: exit 0
+step 2 plot_by_beta: exit 0
+step 3 plot_ScalarModel: exit 0
+step 4 bbn_from_store: exit 0
+step 5 compare_stores: exit 0
+
+## 2-plot_by_beta.log
+>> packages: datastorekit 0.3.0 (https://github.com/ds283/DatastoreKit@2f5417ea76cdcd0d15d64d80d9085429bfacad21, requested v0.3.0); raypoolkit 0.2.0 (https://github.com/ds283/RayPoolKit@eaef0ce60e2fc354bb32f0ad576010e6a83c1976, requested v0.2.0)
+2026-10-13 22:33:56,175	INFO worker.py:1821 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-10-13 22:33:56,193	INFO worker.py:1998 -- Connected to Ray cluster. View the dashboard at http://127.0.0.1:8267 
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/_private/worker.py:2046: FutureWarning: Tip: In future versions of Ray, Ray will no longer override accelerator visible devices env var if num_gpus=0 or num_gpus=None (default). To enable this behavior and turn off this error message, set RAY_ACCEL_ENV_VAR_OVERRIDE_ON_ZERO=0
+  warnings.warn(
+!! WARNING: number of shards read from database (=16) does not match specified number of shards (=10)
+>> Opened existing sharded datastore "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-reference.db" read-only with 16 shards (version label "2026.6.0", serial 1)
+(Datastore pid=92668) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+@@ plot_by_beta: SM baseline (rho_NP = 0, PRyM_version=bf24c3d+ri02+sr01+bt02, small_network=True): Yp=0.24688, D/H x1e5=2.45829, 3He/H x1e5=1.04193, 7Li/H x1e10=5.48637
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology
+
+** GENERATING SUMMARY PLOTS BY BETA
+(build_beta_plot pid=92792) @@ build_beta_plot 'QCD_Cosmology', M=2.436e+24 eV, Lambda=0.001 eV: no models used elastic reflections (5 model(s) checked)
+   -- ALL WORK ITEMS COMPLETE in time 5.36s
+      Queue summary: 1 lookup (avg 11.2/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+## 3-plot_ScalarModel.log
+>> packages: datastorekit 0.3.0 (https://github.com/ds283/DatastoreKit@2f5417ea76cdcd0d15d64d80d9085429bfacad21, requested v0.3.0); raypoolkit 0.2.0 (https://github.com/ds283/RayPoolKit@eaef0ce60e2fc354bb32f0ad576010e6a83c1976, requested v0.2.0)
+2026-10-13 22:34:20,146	INFO worker.py:1821 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-10-13 22:34:20,159	INFO worker.py:1998 -- Connected to Ray cluster. View the dashboard at http://127.0.0.1:8267 
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/_private/worker.py:2046: FutureWarning: Tip: In future versions of Ray, Ray will no longer override accelerator visible devices env var if num_gpus=0 or num_gpus=None (default). To enable this behavior and turn off this error message, set RAY_ACCEL_ENV_VAR_OVERRIDE_ON_ZERO=0
+  warnings.warn(
+!! WARNING: number of shards read from database (=16) does not match specified number of shards (=10)
+>> Opened existing sharded datastore "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-reference.db" read-only with 16 shards (version label "2026.6.0", serial 1)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology
+
+** GENERATING ScalarModel DATA PRODUCTS
+(Datastore pid=92886) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+   -- ALL WORK ITEMS COMPLETE in time 8.5s
+      Queue summary: 5 lookup (avg 35.31/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+## 4-bbn_from_store.log
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+store beta=1.15 M=0.001 phi=5: shard=0000 serial=1 RHS=217426 window_samples=1515 lowT rtol=default atol=default, small network
+  stored: failure=0 Yp=0.24687349447579363 DoH=2.4859924812264325 PRyM_version=bf24c3d+ri02+sr01+bt02 reason=
+  prod   Yp=0.2468734945 DoH=2.485992481 He3oH=1.046802492 Li7oH=5.403050409 wall=10.0 s
+
+## histories.csv
+d7c62c37d8ad637a63854583ab11bc737109dcbfba92168dbddbaea75182c522  histories.csv

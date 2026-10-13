@@ -1,0 +1,7 @@
+LOG /Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/logs/03-reference.log
+  CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: complete; lookup 5, compute 5, store 5, validation 5
+  CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: complete; lookup 5, compute 5, store 5, validation 5
+    -- AdiabaticHistory: 0 models skipped because their ScalarModel failed
+  CALCULATE BBN DATA: complete; lookup 5, compute 5, store 5, validation 5
+    -- BBNData: 0 models skipped because their ScalarModel failed; 0 computations skipped because of a stored failure
+  driver exit status: 0

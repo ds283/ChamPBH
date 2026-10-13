@@ -1,0 +1,130 @@
+# read-only-plots prompt 03: the cluster. ray_cluster.sh start (tail; Ray's banner omitted), status, ray status, ray list jobs, the actor counts, stop, status
+
+## ray_cluster.sh start "read-only-plots 03 (R)" (22:29:18-22:29:24), its own lines
+>> ray_cluster: address 127.0.0.1:6380
+>> ray_cluster: dashboard http://127.0.0.1:8267
+>> ray_cluster: actors: ./venv/bin/ray list actors --address 127.0.0.1:6380
+>> ray_cluster: started in 6s; gcs_server pid 89356
+
+## ray_cluster.sh status, after start
+lock: HELD (/Users/ds283/ScienceData/.rehearsal-lock)
+    project: ChamPBH
+    purpose: read-only-plots 03 (R)
+    acquired: 2026-10-13T22:29:24+01:00
+    host: mps026088
+    ray_temp_dir: /tmp/ray-cpbh
+    ray_address: 127.0.0.1:6380
+    pid: 89356
+owner pid 89356: alive
+ChamPBH cluster (/tmp/ray-cpbh): 18 process(es)
+    89356     1 /Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/core/src/ray/gcs/gcs_server --log_dir=/tmp/ray-cpbh/session_2026
+    89357     1 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -u /Users/ds283/Documents/Code/Cha
+    89358     1 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m ray.util.client.server --addres
+    89359     1 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python /Users/ds283/Documents/Code/ChamPB
+    89366 89359 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c from multiprocessing.resourc
+    89367 89359 ray-dashboard-MetricsHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c
+    89368 89359 ray-dashboard-DataHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "f
+    89369 89359 ray-dashboard-EventHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "
+    89370 89359 ray-dashboard-JobHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "fr
+    89371 89359 ray-dashboard-NodeHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "f
+    89372 89359 ray-dashboard-ReportHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c 
+    89373 89359 ray-dashboard-ServeHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "
+    89380 89359 ray-dashboard-StateHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "
+    89386 89359 ray-dashboard-TrainHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "
+    89388     1 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -u /Users/ds283/Documents/Code/Cha
+    89389     1 /Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/core/src/ray/raylet/raylet --raylet_socket_name=/tmp/ray-cpbh/se
+    89390 89389 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -u /Users/ds283/Documents/Code/Cha
+    89391 89389 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -u /Users/ds283/Documents/Code/Cha
+port 6380: held
+port 6381: held
+port 8267: held
+port 52367: held
+
+## ./venv/bin/ray status --address 127.0.0.1:6380
+======== Autoscaler status: 2026-10-13 22:29:35.710238 ========
+Node status
+---------------------------------------------------------------
+Active:
+ 1 node_d0de3140c3487e55b60f75aa8bc526d406ab7637e9fde702bbc0029a
+Pending:
+ (no pending nodes)
+Recent failures:
+ (no failures)
+
+Resources
+---------------------------------------------------------------
+Total Usage:
+ 0.0/10.0 CPU
+ 0B/8.20GiB memory
+ 0B/2.00GiB object_store_memory
+
+From request_resources:
+ (none)
+Pending Demands:
+ (no resource demands)
+
+## ./venv/bin/ray list jobs --address 127.0.0.1:6380, at the end (22:36:13)
+
+======== List: 2026-10-13 22:36:15.985290 ========
+Stats:
+------------------------------
+Total: 4
+
+Table:
+------------------------------
+      JOB_ID  SUBMISSION_ID    ENTRYPOINT                                                                                                                                                                                                                                                                                                                                                                                                           TYPE            STATUS     MESSAGE    ERROR_TYPE    DRIVER_INFO
+ 0  01000000                   /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -u main.py --config exponential.yaml --database /Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-reference.db --shards 16 --job-name dk-and-rpk-migration-03-reference --M-values-Mp 1e-3 --beta-values 1.1 1.15 1.2 10 25 --ray-address 127.0.0.1:6380                                        JobType.DRIVER  SUCCEEDED                           id: '01000000'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        node_ip_address: 127.0.0.1
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        pid: '89899'
+ 1  02000000                   /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -u plot_by_beta.py --config exponential.yaml --database /Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-reference.db --shards 16 --phi-init-Mp 5 --output /Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-readers/plot_by_beta --ray-address 127.0.0.1:6380                    JobType.DRIVER  SUCCEEDED                           id: '02000000'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        node_ip_address: 127.0.0.1
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        pid: '92635'
+ 2  03000000                   /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -u plot_ScalarModel.py --config exponential.yaml --database /Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-reference.db --shards 16 --output /Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-readers/plot_ScalarModel --ray-address 127.0.0.1:6380                            JobType.DRIVER  SUCCEEDED                           id: '03000000'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        node_ip_address: 127.0.0.1
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        pid: '92832'
+ 3  04000000                   /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -u plot_by_beta.py --config exponential.yaml --database /Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-reference.db --shards 16 --phi-init-Mp 5 --T-stop-GeV 1e-7 --output /Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-refusals/T-stop-1e-7 --ray-address 127.0.0.1:6380  JobType.DRIVER  SUCCEEDED                           id: '04000000'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        node_ip_address: 127.0.0.1
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        pid: '93762'
+
+
+## ./venv/bin/ray list actors --address 127.0.0.1:6380 --limit 200 --format json, counted by (job, class, state), at the end
+01000000 Datastore DEAD 16
+01000000 SerialPoolBroker DEAD 1
+02000000 Datastore DEAD 16
+03000000 Datastore DEAD 16
+04000000 Datastore DEAD 16
+total 65
+(--filter state=ALIVE: No resource in the cluster)
+
+## ray_cluster.sh stop (22:36:22, exit 0)
+>> ray_cluster: SIGTERM to 18 process(es) naming /tmp/ray-cpbh, and their descendants: 89356 89357 89358 89359 89366 89367 89368 89369 89370 89371 89372 89373 8
+    89356     1 /Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/core/src/ray/gcs/gcs_server --log_dir=/tmp/ray-cpbh/session_2026
+    89357     1 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -u /Users/ds283/Documents/Code/Cha
+    89358     1 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m ray.util.client.server --addres
+    89359     1 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python /Users/ds283/Documents/Code/ChamPB
+    89366 89359 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c from multiprocessing.resourc
+    89367 89359 ray-dashboard-MetricsHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c
+    89368 89359 ray-dashboard-DataHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "f
+    89369 89359 ray-dashboard-EventHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "
+    89370 89359 ray-dashboard-JobHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "fr
+    89371 89359 ray-dashboard-NodeHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "f
+    89372 89359 ray-dashboard-ReportHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c 
+    89373 89359 ray-dashboard-ServeHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "
+    89380 89359 ray-dashboard-StateHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "
+    89386 89359 ray-dashboard-TrainHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "
+    89388     1 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -u /Users/ds283/Documents/Code/Cha
+    89389     1 /Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/core/src/ray/raylet/raylet --raylet_socket_name=/tmp/ray-cpbh/se
+    89390 89389 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -u /Users/ds283/Documents/Code/Cha
+    89391 89389 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -u /Users/ds283/Documents/Code/Cha
+>> ray_cluster: grace period of 15s over; SIGKILL to: 89356 89357
+>> ray_cluster: no process names /tmp/ray-cpbh; ports 6380 6381 8267 52367 are free
+>> ray_cluster: released the rehearsal lock
+>> ray_cluster: stopped in 18s
+
+## ray_cluster.sh status, after stop (exit 0)
+lock: free (/Users/ds283/ScienceData/.rehearsal-lock does not exist)
+ChamPBH cluster (/tmp/ray-cpbh): no processes
+port 6380: free
+port 6381: free
+port 8267: free
+port 52367: free

@@ -1,0 +1,20 @@
+# read-only-plots prompt 03: the three refusals of step 7, from $R/03-refusals/, verbatim but for ANSI colour codes removed
+
+## ray-address-auto.log (exit 2)
+>> packages: datastorekit 0.3.0 (https://github.com/ds283/DatastoreKit@2f5417ea76cdcd0d15d64d80d9085429bfacad21, requested v0.3.0); raypoolkit 0.2.0 (https://github.com/ds283/RayPoolKit@eaef0ce60e2fc354bb32f0ad576010e6a83c1976, requested v0.2.0)
+!! --ray-address is required whenever Ray starts. Give the address of a running cluster (ChamPBH's on this machine is 127.0.0.1:6380, started by .documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh), or 'local' for a private instance. 'auto' is refused: with the projects' clusters isolated, it attaches to whichever cluster it finds first.
+
+## T-stop-1e-7.log (exit 2)
+>> packages: datastorekit 0.3.0 (https://github.com/ds283/DatastoreKit@2f5417ea76cdcd0d15d64d80d9085429bfacad21, requested v0.3.0); raypoolkit 0.2.0 (https://github.com/ds283/RayPoolKit@eaef0ce60e2fc354bb32f0ad576010e6a83c1976, requested v0.2.0)
+2026-10-13 22:35:37,604	INFO worker.py:1821 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-10-13 22:35:37,619	INFO worker.py:1998 -- Connected to Ray cluster. View the dashboard at http://127.0.0.1:8267 
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/_private/worker.py:2046: FutureWarning: Tip: In future versions of Ray, Ray will no longer override accelerator visible devices env var if num_gpus=0 or num_gpus=None (default). To enable this behavior and turn off this error message, set RAY_ACCEL_ENV_VAR_OVERRIDE_ON_ZERO=0
+  warnings.warn(
+!! WARNING: number of shards read from database (=16) does not match specified number of shards (=10)
+>> Opened existing sharded datastore "/Users/ds283/ScienceData/ChamPBH-rehearsals/read-only-plots/03-reference.db" read-only with 16 shards (version label "2026.6.0", serial 1)
+!! plot: the store holds no temperature for --T-stop-GeV 1e-07; main.py was not run with it, so no history in this store can match. Give the plot the options the build used
+(Datastore pid=93796) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+
+## drop-bbn-data.log (exit 2)
+>> packages: datastorekit 0.3.0 (https://github.com/ds283/DatastoreKit@2f5417ea76cdcd0d15d64d80d9085429bfacad21, requested v0.3.0); raypoolkit 0.2.0 (https://github.com/ds283/RayPoolKit@eaef0ce60e2fc354bb32f0ad576010e6a83c1976, requested v0.2.0)
+!! --drop: a plot run drops nothing, since it opens its store read-only; --drop is main.py's option
