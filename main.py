@@ -40,7 +40,7 @@ from CosmologyConcepts import (
 from CosmologyConcepts.ConformalCouplings import AbstractCoupling
 from CosmologyConcepts.Potentials import AbstractPotential
 from CosmologyModels import BaseCosmology
-from Datastore.SQL.ObjectFactories import tolerance
+from ObjectFactories import tolerance
 from datastorekit.SQL.ProfileAgent import ProfileAgent
 from datastorekit.SQL.ShardedPool import ShardedPool
 from datastorekit.store_inventory import read_inventory

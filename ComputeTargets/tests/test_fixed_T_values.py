@@ -25,7 +25,7 @@ reads phi and rho_NP/rho_R,J there, at T_J = 1 MeV and 70 keV, through `fixed_T_
 `compute_BBN_data`'s per-sample ratio. (b) and (c) drive `integrate_scalar_history` from the
 integrator audit's P1 state with the helpers of `test_kinematic_cap_loop`. No Ray cluster, no
 datastore, no PRyMordial solve. The round trip through a store is in
-`Datastore/tests/test_fixed_T_values_round_trip.py`.
+`ObjectFactories/tests/test_fixed_T_values_round_trip.py`.
 
 On `HEAD~1` there is no `T_Jordan_crossing`, `fixed_T_values` or `fixed_T_value_at`, and
 `compute_scalar_model` returns no "fixed_T_values", so every test here fails.

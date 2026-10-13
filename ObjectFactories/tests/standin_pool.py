@@ -20,7 +20,7 @@
 # licensed under the Apache License 2.0, as ChamPBH is. ChamPBH keeps a copy because the package's
 # wheel does not ship its tests (DatastoreKit's docs/adoption/README.md §3: a client whose tests
 # use the stand-in pool keeps its own copy). ChamPBH's test harness builds the package's actor
-# through it (Datastore/tests/test_version_keyed_lookups.py, _TempStoreCase).
+# through it (ObjectFactories/tests/test_version_keyed_lookups.py, _TempStoreCase).
 #
 # Changed from the tag's file only where it must be: open_pool and open_pool_output imported the
 # package's neutral test client (datastorekit.tests.client.registry), which is not installed; here

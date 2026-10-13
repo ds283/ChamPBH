@@ -36,7 +36,7 @@ through `object_get`, so the version key is present. About 1 s.
 
 import unittest
 
-from Datastore.tests.test_version_keyed_lookups import (
+from ObjectFactories.tests.test_version_keyed_lookups import (
     LABEL_A,
     _TempStoreCase,
     _insert_failed_bbn,

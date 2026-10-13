@@ -41,8 +41,8 @@ from unittest import mock
 import sqlalchemy as sqla
 
 import ComputeTargets.tests.test_kinematic_cap_loop as kcl
-from Datastore.tests.test_scalarmodel_failure_reason import _write
-from Datastore.tests.test_version_keyed_lookups import (
+from ObjectFactories.tests.test_scalarmodel_failure_reason import _write
+from ObjectFactories.tests.test_version_keyed_lookups import (
     LABEL_A,
     _TempStoreCase,
     _atol,

@@ -117,7 +117,7 @@ GLOBAL_BOOKKEEPING = {
 BOOKKEEPING_COLUMNS = {
     "ScalarModel": {
         "label": "the job name and datetime.now() (main.py build_solver_batch_label), stored as "
-        "obj.label (Datastore/SQL/ObjectFactories/ScalarModel.py store)",
+        "obj.label (ObjectFactories/ScalarModel.py store)",
         "compute_time": "supervisor.integration_time (ComputeTargets/ScalarModel.py "
         "compute_scalar_model), a perf_counter interval (Quadrature/supervisors/base.py:44-49)",
         "mean_RHS_time": "the mean wall time of an RHS evaluation "
@@ -163,11 +163,11 @@ MASKED_FRAGMENTS = {
 
 # Polymorphic references: a serial column with no foreign key, whose table is named by a type
 # column. table -> serial column -> (type column, {type value: table}). Only ScalarModel has
-# them (Datastore/SQL/ObjectFactories/ScalarModel.py register and store). The type values are
+# them (ObjectFactories/ScalarModel.py register and store). The type values are
 # each class's type_id, and the table is the class's registry name (the layer dispatches a store
 # by type(obj).__name__):
 # - cosmology (CosmologyModels/model_ids.py): QCD_Cosmology, the only stored cosmology class
-#   (Datastore/SQL/ObjectFactories/QCD_Cosmology.py), is a LambdaCDM_GenericEOS whose type_id is
+#   (ObjectFactories/QCD_Cosmology.py), is a LambdaCDM_GenericEOS whose type_id is
 #   its equation of state's (CosmologyModels/GenericEOS/LambdaCDM_GenericEOS.py:87-89), and its
 #   equation of state is always Xav_EOS_spline (CosmologyModels/GenericEOS/QCD_Cosmology.py),
 #   whose type_id is XAV_IMPROVED_EOS_IDENTIFIER = 3 (Xav_EOS_spline.py:86-88);

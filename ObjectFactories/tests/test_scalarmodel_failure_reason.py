@@ -36,7 +36,7 @@ import sqlalchemy as sqla
 
 import ComputeTargets.tests.test_kinematic_cap_loop as kcl
 from CosmologyConcepts import temperature
-from Datastore.tests.test_version_keyed_lookups import (
+from ObjectFactories.tests.test_version_keyed_lookups import (
     LABEL_A,
     _TempStoreCase,
     _atol,

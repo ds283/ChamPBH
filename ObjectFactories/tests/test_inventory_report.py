@@ -18,7 +18,7 @@ The inventory report, ``tools/inventory_report.py``, and ``main.py --inventory``
 (dk-and-rpk-migration prompt 09).
 
 No Ray cluster, no PRyMordial solve, no persistent datastore. Each store is built in a ``tempfile``
-directory through ChamPBH's stand-in cluster (``Datastore/tests/standin_pool.py``), by the harness
+directory through ChamPBH's stand-in cluster (``ObjectFactories/tests/standin_pool.py``), by the harness
 of ``test_version_keyed_lookups._TempStoreCase``: a real one-shard ``ShardedPool`` writes the
 version row and is closed, then the package's undecorated actor inserts the rows with no explicit
 serial (the stand-in broker leases each), stamped with fixed times. The actors are closed before
@@ -50,7 +50,7 @@ from datastorekit.store_inventory import read_inventory
 import CosmologyConcepts.ConformalCouplings.model_ids as coupling_ids
 import CosmologyConcepts.Potentials.model_ids as potential_ids
 import CosmologyModels.model_ids as cosmology_ids
-from Datastore.tests.test_version_keyed_lookups import _TempStoreCase
+from ObjectFactories.tests.test_version_keyed_lookups import _TempStoreCase
 from config.datastore import factories
 from tools.inventory_report import format_inventory_report
 

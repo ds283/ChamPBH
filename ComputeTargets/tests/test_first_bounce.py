@@ -22,7 +22,7 @@ first elastic reflection if that comes earlier, or None. Each test drives
 `integrate_scalar_history` from one of the integrator audit's probe states with the helpers of
 `test_kinematic_cap_loop` (`integrate`, `wall_bounces`, `interpolated_minima`). No Ray cluster,
 no datastore, no PRyMordial solve. The round trip through a store is in
-`Datastore/tests/test_first_bounce_round_trip.py`.
+`ObjectFactories/tests/test_first_bounce_round_trip.py`.
 
 (d) checks P5's premise: on every window it is run on, the first negative-to-positive turning
 point is the first wall bounce of the test helper's phi < 1.5 M rule, on the same step.

@@ -36,29 +36,25 @@ ChamPBH/
 │
 ├── (the datastore layer is the `datastorekit` package, pinned in requirements.txt; see §4)
 │
-├── Datastore/                       # ChamPBH's part of the datastore; the layer is `datastorekit`
-│   ├── __init__.py                  # empty
-│   ├── SQL/
-│   │   ├── __init__.py              # empty
-│   │   └── ObjectFactories/         # SQLAlchemy serialization factories (ChamPBH's)
-│   │       ├── __init__.py
-│   │       ├── version.py
-│   │       ├── store_tag.py
-│   │       ├── redshift.py
-│   │       ├── tolerance.py
-│   │       ├── integration_metadata.py
-│   │       ├── DimensionlessQuantity.py
-│   │       ├── DimensionfulQuantity.py
-│   │       ├── ExponentialPotential.py
-│   │       ├── InversePowerPotential.py
-│   │       ├── Starobinsky.py
-│   │       ├── ReclinerPotential.py
-│   │       ├── ReflectingPotential.py
-│   │       ├── ExponentialCoupling.py
-│   │       ├── QCD_Cosmology.py
-│   │       ├── ScalarModel.py       # Factory for main ODE output
-│   │       ├── AdiabaticHistory.py
-│   │       └── BBNData.py
+├── ObjectFactories/                 # SQLAlchemy serialization factories (ChamPBH's; the layer is `datastorekit`)
+│   ├── __init__.py
+│   ├── version.py
+│   ├── store_tag.py
+│   ├── redshift.py
+│   ├── tolerance.py
+│   ├── integration_metadata.py
+│   ├── DimensionlessQuantity.py
+│   ├── DimensionfulQuantity.py
+│   ├── ExponentialPotential.py
+│   ├── InversePowerPotential.py
+│   ├── Starobinsky.py
+│   ├── ReclinerPotential.py
+│   ├── ReflectingPotential.py
+│   ├── ExponentialCoupling.py
+│   ├── QCD_Cosmology.py
+│   ├── ScalarModel.py               # Factory for main ODE output
+│   ├── AdiabaticHistory.py
+│   ├── BBNData.py
 │   └── tests/                       # unittest modules; standin_pool.py is a copy of the package's
 │
 ├── ComputeTargets/
@@ -266,7 +262,7 @@ constraint is respected per shard. What the package provides, by module:
 | **The batch sizes**: how many serials an actor leases from the broker at a time, per table | `config/datastore.py`, `serial_batch_sizes` | `ShardedPool(serial_batch_sizes=…)` |
 | **The tables and the shard key**: `replicated_tables`, `sharded_tables`, `read_table_config`, `ShardKeyType` (`beta_value`) and `get_shard_key_store_id` (§5.2) | `config/sharding.py` | `ShardedPool(replicated_tables=…, sharded_tables=…, read_table_config=…, ShardKeyType=…, ShardKeyStoreIdGetter=…)` |
 | **The version label** | `config/version.py`, `VERSION_LABEL` | `ShardedPool(version_label=…)` |
-| **The factories' own code**: for each class, `register` and `build`, and, where the class has one, `store`, `validate`, `validate_on_startup` and `inventory_spec` | `Datastore/SQL/ObjectFactories/` | read from the registry's instances by the package's actors, pool and reader |
+| **The factories' own code**: for each class, `register` and `build`, and, where the class has one, `store`, `validate`, `validate_on_startup` and `inventory_spec` | `ObjectFactories/` | read from the registry's instances by the package's actors, pool and reader |
 
 The three drivers that open a pool (`main.py`, `plot_by_beta.py`, `plot_ScalarModel.py`) each call
 `ShardedPool(…)` in a `with` block with these arguments; the constructor's sixteen parameters, and
@@ -366,7 +362,7 @@ under (stamped by the actor's insert). The lookups of the three compute targets 
   M, Λ, T, φ, π, z, tolerances) keep one row per parameter across labels, even where they carry a
   `version` column.
 - Only `object_get` is keyed (contract §8, "What is not keyed"). It is tested by
-  `Datastore/tests/test_version_keyed_lookups.py`.
+  `ObjectFactories/tests/test_version_keyed_lookups.py`.
 
 A store opened under a new label therefore sees none of its old compute targets; they are
 recomputed and stored beside the old rows. `--inventory` still lists every version. The label is
@@ -411,7 +407,7 @@ is a compute target, its three hooks; (b) add an instance to `factories` in `con
 (and to a group of `drop_groups`, and to `serial_batch_sizes`, where it should have one); (c) add
 its table name to `replicated_tables` or `sharded_tables` in `config/sharding.py`; (d) declare an
 `inventory_spec()`, or name the class as read through an owner's spec, or excluded with a reason, in
-`Datastore/tests/test_inventory_specs.py`, which fails on a registered class in none of the three.
+`ObjectFactories/tests/test_inventory_specs.py`, which fails on a registered class in none of the three.
 
 ---
 
@@ -1047,9 +1043,9 @@ An instanton project adopts `datastorekit` and `raypoolkit` as packages, pinned 
 - `Quadrature/supervisors/ScalarField.py` → `StateVector` and event tracking for instanton
 - `ComputeTargets/AdiabaticHistory.py` → compaction function calculation
 - `ComputeTargets/BBNData.py` → PBH mass function integration
-- `Datastore/SQL/ObjectFactories/ScalarModel.py` → factory for `InstantonSolution`
-- `Datastore/SQL/ObjectFactories/AdiabaticHistory.py` → factory for `CompactionFunction`
-- `Datastore/SQL/ObjectFactories/BBNData.py` → factory for `PBHMassFunction`
+- `ObjectFactories/ScalarModel.py` → factory for `InstantonSolution`
+- `ObjectFactories/AdiabaticHistory.py` → factory for `CompactionFunction`
+- `ObjectFactories/BBNData.py` → factory for `PBHMassFunction`
 - `CosmologyConcepts/Potentials/` → inflationary potential hierarchy
 - `CosmologyConcepts/ConformalCouplings/` → may not be needed, or replaced with inflationary model parameters
 - `CosmologyModels/` → inflationary background (de Sitter, quasi-de Sitter)
@@ -1090,7 +1086,7 @@ class InstantonSolution(DatastoreObject):
         pass
 ```
 
-**Step 2 — Factory** (`Datastore/SQL/ObjectFactories/InstantonSolution.py`):
+**Step 2 — Factory** (`ObjectFactories/InstantonSolution.py`):
 
 Subclass `datastorekit.SQL.factory_base.SQLAFactoryBase` (§4.4) with:
 - `register()` returning the SQLAlchemy column schema and the keys the schema builder reads

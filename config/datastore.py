@@ -50,53 +50,53 @@ from CosmologyConcepts import (
     phi_value,
     pi_value,
 )
-from Datastore.SQL.ObjectFactories.AdiabaticHistory import (
+from ObjectFactories.AdiabaticHistory import (
     sqla_AdiabaticHistoryFactory,
     sqla_AdiabaticHistoryTagAssociation_factory,
     sqla_AdiabaticHistoryValue_factory,
 )
-from Datastore.SQL.ObjectFactories.BBNData import (
+from ObjectFactories.BBNData import (
     sqla_BBNDataFactory,
     sqla_BBNDataTagAssociation_factory,
     sqla_BBNDataValue_factory,
 )
-from Datastore.SQL.ObjectFactories.DimensionfulQuantity import (
+from ObjectFactories.DimensionfulQuantity import (
     sqla_dimensionful_quantity_factory,
 )
-from Datastore.SQL.ObjectFactories.DimensionlessQuantity import (
+from ObjectFactories.DimensionlessQuantity import (
     sqla_dimensionless_quantity_factory,
 )
-from Datastore.SQL.ObjectFactories.ExponentialCoupling import (
+from ObjectFactories.ExponentialCoupling import (
     sqla_ExponentialCoupling_factory,
 )
-from Datastore.SQL.ObjectFactories.ExponentialPotential import (
+from ObjectFactories.ExponentialPotential import (
     sqla_ExponentialPotential_factory,
 )
-from Datastore.SQL.ObjectFactories.InversePowerPotential import (
+from ObjectFactories.InversePowerPotential import (
     sqla_InversePowerPotential_factory,
 )
-from Datastore.SQL.ObjectFactories.QCD_Cosmology import sqla_QCDCosmology_factory
-from Datastore.SQL.ObjectFactories.ReclinerPotential import (
+from ObjectFactories.QCD_Cosmology import sqla_QCDCosmology_factory
+from ObjectFactories.ReclinerPotential import (
     sqla_ReclinerPotential_factory,
 )
-from Datastore.SQL.ObjectFactories.ReflectingPotential import (
+from ObjectFactories.ReflectingPotential import (
     sqla_ReflectingPotential_factory,
 )
-from Datastore.SQL.ObjectFactories.ScalarModel import (
+from ObjectFactories.ScalarModel import (
     sqla_ScalarModelFactory,
     sqla_ScalarModelTagAssociation_factory,
     sqla_ScalarModelValue_factory,
 )
-from Datastore.SQL.ObjectFactories.Starobinsky import (
+from ObjectFactories.Starobinsky import (
     sqla_StarobinskyPotential_factory,
 )
-from Datastore.SQL.ObjectFactories.integration_metadata import (
+from ObjectFactories.integration_metadata import (
     sqla_IntegrationSolver_factory,
 )
-from Datastore.SQL.ObjectFactories.redshift import sqla_redshift_factory
-from Datastore.SQL.ObjectFactories.store_tag import sqla_store_tag_factory
-from Datastore.SQL.ObjectFactories.tolerance import sqla_tolerance_factory
-from Datastore.SQL.ObjectFactories.version import sqla_version_factory
+from ObjectFactories.redshift import sqla_redshift_factory
+from ObjectFactories.store_tag import sqla_store_tag_factory
+from ObjectFactories.tolerance import sqla_tolerance_factory
+from ObjectFactories.version import sqla_version_factory
 
 factories = {
     "version": sqla_version_factory(),

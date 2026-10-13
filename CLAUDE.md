@@ -66,12 +66,16 @@ invariants that hold across all of them:
   package's repository, and ChamPBH moves to a new pin; it is never patched or worked around
   here** (`dk-and-rpk-migration` README §5 rule 11). `datastorekit` `v0.2.3`, released for ChamPBH
   so that a factory need not define the hooks it has no use for, is the precedent.
+  ChamPBH's factories are the top-level package `ObjectFactories/`, with its tests in
+  `ObjectFactories/tests/`. On 2026-10-13 they moved there from `Datastore/SQL/ObjectFactories/`
+  and `Datastore/tests/`, following SecondaryGWKit's move of 2026-10-12, and the empty `Datastore`
+  packages were deleted. Campaign records and dated documents keep the old paths.
 - **Tests** live in `<package>/tests/` as `unittest` modules (with an `__init__.py`) and run from
   the repository root:
   ```bash
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .   # 18 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 114 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s Datastore/tests -t .         # 97 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .   # 97 tests
   ```
   `ComputeTargets/tests` takes about 200 s in one run, and longer on a loaded machine; a Bash call is
   capped at ten minutes, so run it in two halves:
@@ -82,8 +86,8 @@ invariants that hold across all of them:
   (The counts are those of 2026-10-13.) They **must not need a Ray cluster or a persistent
   datastore**. A test may build a temporary
   SQLite datastore in a `tempfile` directory, through `datastorekit`'s undecorated actor
-  (`standin_pool.DatastoreClass`) inside ChamPBH's stand-in cluster (`Datastore/tests/standin_pool.py`,
-  a copy of the package's; `_TempStoreCase` in `Datastore/tests/test_version_keyed_lookups.py` is
+  (`standin_pool.DatastoreClass`) inside ChamPBH's stand-in cluster (`ObjectFactories/tests/standin_pool.py`,
+  a copy of the package's; `_TempStoreCase` in `ObjectFactories/tests/test_version_keyed_lookups.py` is
   the harness), never through Ray; it must never open a production or shared database file. Call a
   `@ray.remote` function through its undecorated form (`fn._function` or a module-level helper)
   rather than `.remote()`. A test that

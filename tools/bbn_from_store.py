@@ -19,7 +19,7 @@ PRyMordial on it, optionally with the low-temperature network's solve_ivp
 tolerances changed by interception.
 
 The history's ScalarModelValue rows are read from the store's shards
-**read-only** (sqlite3 URI `mode=ro`; the Datastore package is never used to
+**read-only** (sqlite3 URI `mode=ro`; `datastorekit` is never used to
 open the store). The ratio rho_NP / rho_R,J is rebuilt with the arithmetic of
 `sqla_ScalarModel_factory.build`'s read path and of `compute_BBN_data`, in the
 same order, so that the grid is bitwise the one production built
