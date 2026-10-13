@@ -249,6 +249,9 @@ does not need (README §6.2, P11).
   a store, and none of those rows is a science value.
 - **Next step.** Measure the inserts a plotting run makes (a stand-in or rehearsal store, row counts
   before and after), then move both scripts to `read_only=True` in a campaign that may change them.
+- **Assigned (2026-10-13):** to the [`read-only-plots`](../read-only-plots/IMPLEMENTATION_STATE.md)
+  campaign, prompt 02, planned the same day at the user's request (its README §0.3 has the
+  measurement this entry asked for). That prompt closes it here, in §4.
 
 ### `[09-redshift-lookup-at-zero-takes-abs-of-the-comparison]`
 

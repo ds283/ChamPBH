@@ -14,7 +14,8 @@ wrote the documents and the handover and closed the campaign, opening and closin
 4 on the `dk-and-rpk-migration` board (planned 2026-10-11; prompt 01 opened one, 2026-10-12;
 the orchestrator's review of prompt 02 opened one, 2026-10-12; prompt 05 opened one, 2026-10-12;
 prompt 08 closed one and opened one, 2026-10-12; prompt 09 opened one, 2026-10-13; prompts 10 and 11 opened and
-closed none; closed 2026-10-13, 12 of 12 prompts landed, none assigned).
+closed none; closed 2026-10-13, 12 of 12 prompts landed; one assigned on 2026-10-13 to `read-only-plots`,
+planned the same day, §1.12).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -32,7 +33,8 @@ the two disagree, the board is right.
 [`integrator-remediation`](../prompts/integrator-remediation/IMPLEMENTATION_STATE.md) ·
 [`science-readiness`](../prompts/science-readiness/IMPLEMENTATION_STATE.md) ·
 [`bbn-tolerance`](../prompts/bbn-tolerance/IMPLEMENTATION_STATE.md) ·
-[`dk-and-rpk-migration`](../prompts/dk-and-rpk-migration/IMPLEMENTATION_STATE.md)
+[`dk-and-rpk-migration`](../prompts/dk-and-rpk-migration/IMPLEMENTATION_STATE.md) ·
+[`read-only-plots`](../prompts/read-only-plots/IMPLEMENTATION_STATE.md)
 
 ## 1. Open, by owning board
 
@@ -191,7 +193,8 @@ here, on its board, until a later campaign takes them.
 ### 1.11 `dk-and-rpk-migration` — [board §3](../prompts/dk-and-rpk-migration/IMPLEMENTATION_STATE.md)
 
 Planned 2026-10-11; closed 2026-10-13, 12 of 12 prompts landed. Prompts 10 and 11 opened and
-closed none: the four rows below stay open, unassigned. One opened by prompt 01 on 2026-10-12, seen in passing and outside the
+closed none: four stayed open, unassigned; one of them was assigned on 2026-10-13 to
+`read-only-plots` (§1.12). One opened by prompt 01 on 2026-10-12, seen in passing and outside the
 campaign's scope; one opened by the orchestrator's review of prompt 02 the same day, from log 02's
 Observation 2; one opened by prompt 05 the same day, from its measurement of the import order, and
 closed by prompt 08 the same day (board §4); one opened by prompt 08 the same day, for P11; one
@@ -202,8 +205,16 @@ opened by prompt 09 on 2026-10-13, seen while deriving the inventory's specs.
 - `[02-scalar-stage-missing-filter-keeps-every-model]` — `main.py:223`'s "which models are
   missing?" comprehension ignores its lookup result, so every stored `ScalarModel` is looked up
   twice; no value affected.
+- `[09-redshift-lookup-at-zero-takes-abs-of-the-comparison]` — `redshift.build`'s `z == 0`
+  branch takes `abs` of the comparison, not the difference; same rows for `z >= 0`; latent.
+
+### 1.12 Assigned to `read-only-plots` — [its board](../prompts/read-only-plots/IMPLEMENTATION_STATE.md) §3.1
+
+Assigned 2026-10-13 by the user, when the campaign was planned. The entry stays on the
+`dk-and-rpk-migration` board (§3), which carries the **Assigned** line; the prompt that closes it
+deletes its row here.
+
 - `[08-plot-scripts-open-read-write-pools]` — `plot_by_beta.py` and `plot_ScalarModel.py` open
   read-write pools, where a lookup may insert a parameter row; the user wants them read-only
   eventually, once the inserting lookups are found.
-- `[09-redshift-lookup-at-zero-takes-abs-of-the-comparison]` — `redshift.build`'s `z == 0`
-  branch takes `abs` of the comparison, not the difference; same rows for `z >= 0`; latent.
+
