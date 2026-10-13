@@ -75,7 +75,7 @@ reads only what the specs declare. Measured at `12c82e8`, 09's list already cove
 | 07 | [Pin `datastorekit` `v0.3.0`](07-pin-datastorekit-v0.3.0.md) | the DatastoreKit pin (**U3**, **U6**; `2f5417e`) | Sonnet | ✍️ 2026-10-12 | ✅ 2026-10-12 | `617a1dc` | [log](logs/07-pin-datastorekit-v0.3.0.md) |
 | 08 | [Adopt `datastorekit`](08-adopt-datastorekit.md) | the DatastoreKit swap; **U4** | Opus | ✍️ 2026-10-12 | ✅ 2026-10-12 | `857ec73` | [log](logs/08-adopt-datastorekit.md) |
 | 09 | [Port the inventory](09-port-the-inventory.md) | `inventory_spec`, `tools/inventory_report.py`; coverage (§6.5) | Opus | ✍️ 2026-10-12 | ✅ 2026-10-13 | `47cfcfb` | [log](logs/09-port-the-inventory.md) |
-| 10 | [Rehearse through both packages (R2)](10-rehearse-through-both-packages.md) | **R2**; **DatastoreKit G3** | Opus | ✍️ 2026-10-12 | ✅ 2026-10-13 | this commit | [log](logs/10-rehearse-through-both-packages.md) |
+| 10 | [Rehearse through both packages (R2)](10-rehearse-through-both-packages.md) | **R2**; **DatastoreKit G3** | Opus | ✍️ 2026-10-12 | ✅ 2026-10-13 | `b0d258a` | [log](logs/10-rehearse-through-both-packages.md) |
 | 11 | Close the migration | documents, handover, close | Sonnet | ⬜ | ⬜ | — | — |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
@@ -99,6 +99,7 @@ before each dispatch:
 - [`orchestrator/prompt-07.md`](orchestrator/prompt-07.md) (`4f3f44d`) — used for 07.
 - [`orchestrator/prompt-08.md`](orchestrator/prompt-08.md) (`63f60e1`) — used for 08.
 - [`orchestrator/prompt-09.md`](orchestrator/prompt-09.md) (`f84c3f0`) — used for 09.
+- [`orchestrator/prompt-10.md`](orchestrator/prompt-10.md) (`60e000c`) — used for 10.
 
 ### 1.1 Items
 
@@ -145,9 +146,9 @@ before each dispatch:
 | **I3** | 09 | `main.py --inventory` read-only, before Ray | ✅ `47cfcfb`: `main.py:93-111`, before `ray.init`; exit 0 on a store, 2 with `--drop`, 1 on a reader refusal (absent store: nothing created); `--show-all` → `verbose`; 08's refusal and its two tests gone |
 | **I4** | 09 | the six `inventory()` hooks and `inventory_config` deleted | ✅ `47cfcfb`: deleted, with three `datetime` imports only the hooks used; the acceptance grep keeps 08's pool guard (2 lines) and `architecture-summary.md:320` (D1); empty on code |
 | **I5** | 09 | coverage: every registered class has a spec, is read through one, or is excluded with a reason (§6.5) | ✅ `47cfcfb`: 21 specs + 6 read through (`tags`/`values`, checked against the owner's spec) + 0 excluded = 27; both breakages fail it by name |
-| **L1**–**L4** (R2) | 10 | README §4.1 at 09's tree; each store equal to `06-reference.db`, bitwise; L4 against R1 | ✅ this commit: L1–L3 hold (`resumed-a` exited **15**, not 134, by Ray's own `SIGTERM` handler; verification §3.2); **`10-reference.db` and `10-resumed.db` each `RESULT: equal` against `06-reference.db`, `10-reference.db` against `02-reference.db`, exit 0**, and the two R2 stores against each other; schema agrees with 08's and R0's; L4: `compute` 5/5/5, 5/killed, 0/5/5 (lookups 5/5/5); `resumed-a` stored 1 `AdiabaticHistory` row and validated 0, and the package's prune removed exactly that row; the printed lines in R1's layout, with no progress line at this load (verification §3) |
-| **V3** | 10 | `.documents/dk-and-rpk-migration-verification.md` §3 R2 | ✅ this commit: §3 R2 (§§3.1–3.10, H1 and G3 included); `out/10-*` (20 files), `10-reference-schema.json` equal to 08's and R0's but for `source` |
-| **H1** | 10 | the R2 stores by the package's tools: the shard-key audit; a copy that opens read-only, compares equal and is deleted by `delete_store` | ✅ this commit: `shard_key_audit` `VERDICT: OK`, exit 0, on both stores; `sharded_store copy` exit 0, 16 shards named bare; the copy's `--inventory` exit 0, `problems: none`; `compare_stores` `RESULT: equal`, no bookkeeping difference; `closed_store_files` and `delete_store` the same 17 paths, none left (verification §3.8) |
+| **L1**–**L4** (R2) | 10 | README §4.1 at 09's tree; each store equal to `06-reference.db`, bitwise; L4 against R1 | ✅ `b0d258a`: L1–L3 hold (`resumed-a` exited **15**, not 134, by Ray's own `SIGTERM` handler; verification §3.2); **`10-reference.db` and `10-resumed.db` each `RESULT: equal` against `06-reference.db`, `10-reference.db` against `02-reference.db`, exit 0**, and the two R2 stores against each other; schema agrees with 08's and R0's; L4: `compute` 5/5/5, 5/killed, 0/5/5 (lookups 5/5/5); `resumed-a` stored 1 `AdiabaticHistory` row and validated 0, and the package's prune removed exactly that row; the printed lines in R1's layout, with no progress line at this load (verification §3) |
+| **V3** | 10 | `.documents/dk-and-rpk-migration-verification.md` §3 R2 | ✅ `b0d258a`: §3 R2 (§§3.1–3.10, H1 and G3 included); `out/10-*` (20 files), `10-reference-schema.json` equal to 08's and R0's but for `source` |
+| **H1** | 10 | the R2 stores by the package's tools: the shard-key audit; a copy that opens read-only, compares equal and is deleted by `delete_store` | ✅ `b0d258a`: `shard_key_audit` `VERDICT: OK`, exit 0, on both stores; `sharded_store copy` exit 0, 16 shards named bare; the copy's `--inventory` exit 0, `problems: none`; `compare_stores` `RESULT: equal`, no bookkeeping difference; `closed_store_files` and `delete_store` the same 17 paths, none left (verification §3.8) |
 
 Items of 11 are added when it is written.
 
@@ -162,10 +163,10 @@ counts (18 / 114 / 35); and the venv's `pip freeze` (README §0.2).
 | R0 | the start tree builds the pilot, resumes it, and its readers run (README §4.1); its reproducibility is measured (§4.3) | 02 | ✅ **holds** 2026-10-12 (`6cbf953`): bitwise reproducible, so R1 and R2 are held to bitwise equality with `02-reference.db` (P4) |
 | RayPoolKit G3 | `RayTools/` is gone, 0 imports, the pin is installed, the three roots pass, all 17 sites construct (RayPoolKit checklist item 8) | 04 (R1, 06, adds the run under real Ray) | ✅ **holds** 2026-10-12 (`303324b`), by checklist item 8, items 1–5; item 6 is 11's (P16). R1 (06) ran it under real Ray 2.53.0: three builds and three readers, stores equal to R0's, printed lines in R0's layout |
 | R1 | 05's tree equals R0 by value | 06 | ✅ **holds** 2026-10-12 (`c9e6bc2`): both R1 stores equal `02-reference.db` bitwise (`RESULT: equal`, exit 0); R2 is held to equality with `06-reference.db` |
-| R2 | 09's tree, through both packages, equals R1 by value | 10 | ✅ **holds** 2026-10-13 (this commit): `10-reference.db` and `10-resumed.db` each equal `06-reference.db` bitwise, and `10-reference.db` equals `02-reference.db` (`RESULT: equal`, exit 0); the first run of the package's actor, broker and pool under real Ray 2.53.0 |
+| R2 | 09's tree, through both packages, equals R1 by value | 10 | ✅ **holds** 2026-10-13 (`b0d258a`): `10-reference.db` and `10-resumed.db` each equal `06-reference.db` bitwise, and `10-reference.db` equals `02-reference.db` (`RESULT: equal`, exit 0); the first run of the package's actor, broker and pool under real Ray 2.53.0 |
 | DatastoreKit `v0.2.3` | tagged on DatastoreKit's remote, with `store`, `validate` and `validate_on_startup` defaulted (U3; made in DatastoreKit, not here) | — (07 pins it) | ✅ **released** 2026-10-11: tag object `8dac562`, commit `0de2b16`, checked on the remote and by `git show` of `factory_base.py` (README §0.3) |
 | DatastoreKit `v0.3.0` | tagged on DatastoreKit's remote; the pin (U6) | — (07 pins it) | ✅ **released** 2026-10-12: tag object `bf0a3b2`, commit `2f5417e`, checked on the remote; only `datastorekit/object.py` changed in the package since `v0.2.3` (README §0.4) |
-| DatastoreKit G3 | the 9 layer files are gone (two emptied, P6), the pin is installed, the three roots pass, and a pilot store rebuilt through the package (R2) equals R1 by value | 08, 09, 10 | ✅ **holds** 2026-10-13 (this commit), by checklist item 9: the 7 files gone and two emptied, 0 imports (08, `857ec73`); `datastorekit` `v0.3.0` pinned (`requirements.txt:17`) and installed at `2f5417ea…`, not editable (07, `617a1dc`); the three roots pass (18 / 114 / 97 at `60e000c`); the pilot rebuilt through the package (R2) equals R1 and R0 by value, bitwise. The record on DatastoreKit's board is 11's draft and the user's commit (P16); its text is in log 10 |
+| DatastoreKit G3 | the 9 layer files are gone (two emptied, P6), the pin is installed, the three roots pass, and a pilot store rebuilt through the package (R2) equals R1 by value | 08, 09, 10 | ✅ **holds** 2026-10-13 (`b0d258a`), by checklist item 9: the 7 files gone and two emptied, 0 imports (08, `857ec73`); `datastorekit` `v0.3.0` pinned (`requirements.txt:17`) and installed at `2f5417ea…`, not editable (07, `617a1dc`); the three roots pass (18 / 114 / 97 at `60e000c`); the pilot rebuilt through the package (R2) equals R1 and R0 by value, bitwise. The record on DatastoreKit's board is 11's draft and the user's commit (P16); its text is in log 10 |
 
 Recording each gate on its package's own extraction board is a commit in that repository, not
 here (README P16).
@@ -1526,7 +1527,7 @@ opened beyond the agent's. The residue is fixed in this follow-up.
 
 ### 5.15 After prompt 10 (2026-10-13)
 
-- **Landed:** this commit, log [`10-rehearse-through-both-packages.md`](logs/10-rehearse-through-both-packages.md);
+- **Landed:** `b0d258a`, log [`10-rehearse-through-both-packages.md`](logs/10-rehearse-through-both-packages.md);
   the record is `.documents/dk-and-rpk-migration-verification.md` §3. **COMPLETE**: L1–L4 (R2), V3,
   H1; gates **R2** and **DatastoreKit G3** hold; no code changed; no issue opened
   (`.documents/OPEN_ISSUES.md` unchanged). One judgement for the review: `resumed-a` exited **15**,
@@ -1576,3 +1577,105 @@ opened beyond the agent's. The residue is fixed in this follow-up.
   3. no progress line at this load, so L4's shape check is vacuous for R2;
   4. the banner's time had to come from Ray's task records;
   5. the plot scripts' shard-count warning, unchanged.
+
+**Orchestrator review of prompt 10 (2026-10-13)**, by orchestrator note
+[`prompt-10.md`](orchestrator/prompt-10.md), at `b0d258a`. All twelve checks pass, and no issue is
+opened. **R2 holds, confirmed independently.** The residue is fixed in this follow-up. One error is
+the orchestrator's own: during check 4 it overwrote R2's `reference` build log (below).
+- **(1) Scope.** 23 files: the verification document, twenty `out/10-*` files, the log and the
+  board. The verification document's diff is one hunk that adds lines after §2. The untracked set
+  is dispatch's; nothing is staged; `b0d258a` is the only commit since the note; no branch was left.
+- **(2) The cluster.** `ray_cluster.sh status`: lock free, no process, the four ports free; no Ray
+  process on the machine. The log has `start`'s output and owner file (purpose
+  `dk-and-rpk-migration 10 (R2)`), `ray status --address` with 10 CPUs, `stop` exit 0 in 18 s, and
+  `status` after it. `ray stop` appears only as "never run".
+- **(3) The logs, read.** The provenance line once in each build log, exactly the note's (both
+  tags' commits). Every driver connected to `127.0.0.1:6380`; no log names 6379. `reference` and
+  `resumed-b` end `** driver exit status 0`; `resumed-a` ends **15** after the adiabatic banner,
+  with the absl dump twice (PC `_PyErr_SetKeyError`, main thread in `submit_actor_task`'s pickler)
+  and no `Traceback`; its pid is the one in `10-resumed-a.pid`. The only `Error` hits are that PC
+  line. Ray 2.53.0's `ray.init` installs `sigterm_handler` → `sys.exit(signum)`
+  (`ray/_private/worker.py:1664-1665`); the same Ray ran R0 and R1.
+- **(4) The counts.** `stage_counts.py`'s text equals the committed `10-stage-counts.txt` (re-run
+  twice: first on the live logs, then, after the incident below, with the rebuilt `reference` log).
+  The orchestrator's own `sqlite3` `mode=ro` counts: `10-reference.db` 5 / 5 / 5, all `reference`;
+  `10-resumed.db` `ScalarModel` 5 `resumed-a`, `AdiabaticHistory` 5 `resumed-b`, `BBNData` 5
+  `resumed-b`; every row validated. So *k* = 0 validated rows kept, agreeing with `resumed-b`'s
+  adiabatic compute of 5.
+- **(5) The prune.** One report, in the driver's log in full: `shard0015-store`, `AdiabaticHistory`
+  β = 1.1, `store_id=1`, 4947 / 4947 values, pruned. That is exactly the one row `resumed-a` stored,
+  unvalidated (the agent's row listing after `resumed-a`). The recomputed row took serial 1 again.
+- **(6) The criterion, re-run.** The four comparisons re-run into the scratchpad: each `RESULT:
+  equal`, exit 0, text byte-identical to the committed file. 27 tables with R0's counts; the
+  bookkeeping differences only timestamps, labels and timings (29 columns); the one note
+  `LambdaCDM`'s, on the R0/R1 side. **Independently of the tool**, the orchestrator's digest script
+  (each history resolved to its β, every `*_serial` parent resolved; `ScalarModel`,
+  `AdiabaticHistory` and `BBNData` science columns and their value rows ordered by `z`) gives **all
+  35 digests of `10-reference.db` and `10-resumed.db` equal to `02-reference.db`'s**, with R0's own
+  pair and both R1 stores as controls; a one-ulp change on a scratch copy of `06-reference` is
+  caught (β = 1.15 `AHV`).
+- **(7) The readers.** `status.txt` steps 0–5, each exit 0; before/after `RESULT: equal`, no
+  bookkeeping difference; `histories.csv` SHA-256 `d7c62c37…c522`, `cmp` silent against R1's; β =
+  1.15 stored Yp 0.24687349447579363, D/H 2.4859924812264325, `prod` re-solve 0.2468734945,
+  2.485992481: R0's. `main.py --inventory` re-run on both R2 stores: exit 0, identical to
+  `1-inventory.log` and `1b-inventory-reference.log` below their headers; `problems: none`, 21,292
+  records in 21 classes, 5 validated of each compute target under `2026.6.0`, none unvalidated.
+- **(8) The schema.** `--snapshot` of `10-reference.db` (to the scratchpad) is byte-identical to
+  `out/10-reference-schema.json`, which differs from `08-standin-schema.json` and
+  `02-reference-schema.json` only in `source`.
+- **(9) L4.** The orchestrator's own extraction: `06-reference.log` against `10-reference.log`, the
+  banner, completion and summary lines equal in text and order (R1's progress pair aside: R2
+  printed none, every stage ending inside the 300 s notify interval, so the shape check is vacuous,
+  as the agent says); `06-resumed-b.log` against `10-resumed-b.log`, equal, the no-compute line
+  included.
+- **(10) H1.** `shard_key_audit` re-run on both R2 stores: `VERDICT: OK`, exit 0. No
+  `10-reference-copy*` file exists; `out/10-h1-delete.txt` shows `closed_store_files` and
+  `delete_store` the same 17 paths, each `10-reference-copy*`, none left.
+- **(11) Hygiene.** Every one of the 376 entries under the rehearsal root at dispatch has its mtime
+  and size, but the root and `logs/` directories, which gained the 10 entries; the root now also
+  holds the two 10 stores (17 files each), `10-readers/` and `logs/10-*`, and nothing else. The 53
+  user stores and pilot logs unchanged; `pip freeze` equals the dispatch copy, `pip check` clean;
+  the four siblings at their dispatch `HEAD`s, clean. No scratch file in the repository.
+- **(12) Records and suites.** Verification §3 R2 in §2's shape, with H1, G3 and the commands
+  verbatim; the board's §1 row, L1–L4 (R2), V3, H1, gates R2 and DatastoreKit G3, §5.15 and the
+  status line; the G3 record's text in the log. The agent's suites 18 / 114 (61 + 53) / 97 before
+  `start`; the orchestrator re-ran `Datastore/tests` at `b0d258a`: **97, OK**.
+  - *Residue, fixed here:* "this commit" → `b0d258a` (board ×7, log ×2, the G3 record's
+    `<this commit>` among them; the log's prose use stays); this note added to the list of
+    orchestrator notes.
+- **D3 weighed: exit 15 is accepted, not a stop.** §2's "(134)" recorded what R0 and R1 observed.
+  What L1 asks is that `resumed-a` end by the protocol's signal in the adiabatic stage, and it did:
+  the signal at banner + about 1 s, the absl dump, no traceback, the stage incomplete. The exit
+  status is Ray's own handler's (`sys.exit(15)`), whose `SystemExit` unwound `main.py`'s
+  `with ShardedPool`, so the package closed its actors before the driver exited. Why R1's driver
+  aborted instead is not known: its main thread was also in the pickler (`PyMemoTable_Clear`), so
+  the place of the signal does not explain it. No stored value depends on it (the resume is
+  bitwise equal), so it is recorded, not opened; it is reported to the user, who may rule
+  otherwise.
+- **D2 and the resume.** `S` = 1 s, since at this load `reference`'s rows fell at banner + 0.9–3.2 s
+  and the prompt's rule gave a negative delay. `resumed-a` stored one row and validated none: the
+  "0" case by validated rows, which the note says to take to the user. It is the complement of
+  R1's (five stored, two validated): R2's resume covered four histories absent from the store and
+  one pruned, the case R1 missed. With R0's (three kept, one pruned, one absent), the three
+  rehearsals between them cover every case. No repeat is proposed.
+- **Deviations D1–D6** are accepted. D6's glob read R1's old worker logs read-only.
+- **The orchestrator's error: `10-reference.log` overwritten.** In check 4 the orchestrator ran
+  `stage_counts.py --json $R/logs/10-reference.log $R/logs/10-resumed-a.log …`. Its `--json OUT`
+  took the reference log as the output path, so the script wrote its JSON over R2's `reference`
+  build log (01:29). The log was 35 lines, 3,233 bytes, mtime 1791850156 (the agent's
+  `root-after.txt`), and is now 80 lines of JSON. No store, no other log and nothing committed was
+  touched; every check above that reads that log used either the run made before the overwrite or
+  the rebuilt copy. **The log has been rebuilt exactly** from the agent's own tool outputs (its
+  `head` of lines 1–6, ANSI codes intact; its line-numbered `grep`; its `tail`): 35 lines and
+  3,233 bytes, all 26 grepped lines matching. The rebuilt copy is in the session scratchpad
+  (`n10/review/10-reference.log.rebuilt`); **putting it back in the rehearsal root, and with which
+  mtime, is the user's decision**, and was not done. The committed record does not depend on the
+  file: `out/10-printed-lines.txt`, `out/10-stage-counts.*` and the verification document hold
+  what was read from it.
+- **Handed on to 11.**
+  - The G3 record's text (log 10, "State handed to the next prompt"), now naming `b0d258a`, for
+    11's draft for DatastoreKit's board (P16; the user's commit).
+  - Any restatement of the protocol should say a `SIGTERM`ed driver may exit 134 or 15 (D3).
+  - R2's stores and logs are kept (README §3); `10-reference.log`'s state is as above until the
+    user rules.
+  - 11 can now be written (README §2.1).

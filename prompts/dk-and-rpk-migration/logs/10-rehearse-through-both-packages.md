@@ -1,7 +1,7 @@
 # Log 10 — rehearse through both packages (R2)
 
 **Subject:** Record the R2 rehearsal through both packages
-**Commit:** this commit, on branch `dk-and-rpk-migration`, on top of `60e000c`
+**Commit:** `b0d258a`, on branch `dk-and-rpk-migration`, on top of `60e000c`
 **Date:** 2026-10-13, by Claude Opus 5.5
 **Result:** **COMPLETE.**
 - **The criterion holds: R2 equals R1 and R0 bit for bit.** `compare_stores` of `06-reference.db`
@@ -520,7 +520,7 @@ fail:
   (P16):
 
 > **DatastoreKit G3 holds for ChamPBH** (the ChamPBH checklist's item 9, with the `v0.3.0`
-> addendum: "CPBH has adopted `v0.2.3` or later"), at ChamPBH commit `<this commit>` (branch
+> addendum: "CPBH has adopted `v0.2.3` or later"), at ChamPBH commit `b0d258a` (branch
 > `dk-and-rpk-migration`), 2026-10-13, by prompts 07–10:
 > 1. **The 9 layer files are gone, and ChamPBH imports `datastorekit` at the pinned tag.**
 >    `Datastore/object.py`, `Datastore/SQL/{ClientPool,Datastore,ProfileAgent,SerialPoolBroker,ShardedPool}.py`
