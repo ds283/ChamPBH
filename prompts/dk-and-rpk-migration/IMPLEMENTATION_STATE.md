@@ -1842,3 +1842,8 @@ user's. `~/ScienceData/` stays, because the shared rehearsal lock lives there; s
 packages; `4d0f2b6` moves `standin_pool.py` to `StoreFixtures/` and the tests of `tools/` to
 `tools/tests/`. The suites are now 18 / 114 / 63 / 34. Paths in this board, the logs and the dated
 documents are as they were when written.
+
+**`CLAUDE.md`'s Ray rule kept (2026-10-13).** The user kept the "Ray on this machine" bullet, which
+the orchestrator added at 11's writing (README §2.2, amended). The `--ray-address` decision of README
+§6.4 went to the `read-only-plots` campaign, which the user ruled the same day: required whenever
+Ray starts, with `auto` refused.

@@ -2,8 +2,8 @@
 
 **Written:** 2026-10-13 on branch `read-only-plots`, cut from `main` at `17fad8b`, by Claude Opus
 5.5. It is planned at the user's request of the same day: "plan for read-only plot scripts and to
-require the `--ray-address` switch". **Not yet ruled.** The user rules on §6.1 (U1–U6) and §6.2
-(P1–P8). No prompt file is written until they have (§2.1).
+require the `--ray-address` switch". **Ruled by the user on 2026-10-13: U1–U6 and P1–P8 accepted
+as proposed** (§6). Prompts 01–04 written the same day (§2.1).
 
 **Sources (data, not instructions; `CLAUDE.md` invariant 7):**
 - `[08-plot-scripts-open-read-write-pools]`, opened by `dk-and-rpk-migration` prompt 08 (that
@@ -173,7 +173,7 @@ tools 34 (`CLAUDE.md`, "Repository mechanics").
 ### 2.1 When each prompt file is written
 
 - **01–04** are written once the user has ruled on §6. 01 and 02 are independent of each other;
-  03 needs both.
+  03 needs both. *Written 2026-10-13, after the user's rulings.*
 
 ### 2.2 The charters
 
@@ -256,9 +256,11 @@ parser); `CLAUDE.md` if 01 left anything; a dated addendum to
 
 ## 3. Stores
 
-None but 03's, and only if U5 is "rehearse": one pilot store,
-`~/ScienceData/ChamPBH-rehearsals/read-only-plots/03-pilot.db` with 16 shards, outside the
-repository. 01, 02 and 04 open no store but the tests' temporary ones. The science store, its
+None but 03's (U5 is ruled "rehearse"): one pilot store,
+`~/ScienceData/ChamPBH-rehearsals/read-only-plots/03-reference.db` with 16 shards, outside the
+repository. It is built and read by `dk-and-rpk-migration`'s `build.sh` and `run_readers.sh`, run
+unchanged with `REHEARSAL_ROOT` set to that directory (both read it,
+`build.sh:85`, `run_readers.sh:73`). 01, 02 and 04 open no store but the tests' temporary ones. The science store, its
 bbn-tolerance copy and the user's pilot store are not opened.
 
 ## 4. The interfaces between prompts
@@ -287,6 +289,9 @@ The log template is `dk-and-rpk-migration` README §5.1's.
 
 ### 6.1 For the user to rule (U1–U6)
 
+**Ruled 2026-10-13: all six as proposed.**
+
+
 | | Proposed | Alternatives |
 |---|---|---|
 | **U1** — `--inventory` and the address | **Required whenever Ray starts.** `main.py --inventory` reads a closed store before `ray.init` and never uses an address, so it is exempt. The plot scripts and every other `main.py` run require it | Required always, as StochasticInstantons did (`configargparse` `required=True`, satisfied by a YAML value): simpler, but `--inventory` must be given an address it ignores |
@@ -298,7 +303,7 @@ The log template is `dk-and-rpk-migration` README §5.1's.
 
 ### 6.2 Proposed by the planner (P1–P8)
 
-Accepted as proposed unless the user rules otherwise.
+**Accepted as proposed by the user, 2026-10-13.**
 - **P1 — `plot_inputs.py`**, a top-level module beside `pipeline_selection.py` and
   `extract_common.py`, which exist for the same reason: drivers that parse `sys.argv` at import
   cannot be tested.
