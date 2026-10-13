@@ -1,6 +1,6 @@
 # read-only-plots campaign — implementation state
 
-**Last updated:** 2026-10-13 · **Status: LIVE — 4 of 4 prompts written, 0 landed. U1–U6 and P1–P8
+**Last updated:** 2026-10-13 · **Status: LIVE — 4 of 4 prompts written, 1 landed (01). U1–U6 and P1–P8
 ruled by the user on 2026-10-13, all as proposed (README §6).**
 The plan is [`README.md`](README.md), written on 2026-10-13 on branch `read-only-plots`, cut from
 `main` at `17fad8b`.
@@ -26,7 +26,7 @@ changes no file of the store it reads.
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | [Require the Ray address](01-require-the-ray-address.md) | `--ray-address` without a default; `auto` refused (U1, U2) | Sonnet | ✍️ 2026-10-13 | ⬜ | — | — |
+| 01 | [Require the Ray address](01-require-the-ray-address.md) | `--ray-address` without a default; `auto` refused (U1, U2) | Sonnet | ✍️ 2026-10-13 | ✅ 2026-10-13 | this commit | [`logs/01-require-the-ray-address.md`](logs/01-require-the-ray-address.md) |
 | 02 | [Read-only plot pools](02-read-only-plot-pools.md) | `plot_inputs.py`; both plot scripts `read_only=True`; misses per U3, U4; closes `[08-plot-scripts-open-read-write-pools]` | Opus | ✍️ 2026-10-13 | ⬜ | — | — |
 | 03 | [Rehearse a read-only plotting run](03-rehearse-a-read-only-plotting-run.md) | one pilot build and the readers, checksums before and after (U5) | Opus | ✍️ 2026-10-13 | ⬜ | — | — |
 | 04 | [Close](04-close.md) | documents, handover, index, board | Sonnet | ✍️ 2026-10-13 | ⬜ | — | — |
@@ -43,10 +43,10 @@ before each dispatch.
 
 | Item | Prompt | What | State |
 |---|---|---|---|
-| **A1** | 01 | `--ray-address` with no default; `ray_address_problem()` refusing a missing value and `auto` | ⬜ |
-| **A2** | 01 | the check before each driver's `ray.init`, exit 2; `main.py --inventory` exempt (U1) | ⬜ |
-| **A3** | 01 | `ComputeTargets/tests/test_ray_address.py`: the function, the parser, the drivers by subprocess and `ast` | ⬜ |
-| **A4** | 01 | `CLAUDE.md`'s "Ray on this machine"; `architecture-summary.md` §5.1 | ⬜ |
+| **A1** | 01 | `--ray-address` with no default; `ray_address_problem()` refusing a missing value and `auto` | ✅ |
+| **A2** | 01 | the check before each driver's `ray.init`, exit 2; `main.py --inventory` exempt (U1) | ✅ |
+| **A3** | 01 | `ComputeTargets/tests/test_ray_address.py`: the function, the parser, the drivers by subprocess and `ast` | ✅ |
+| **A4** | 01 | `CLAUDE.md`'s "Ray on this machine"; `architecture-summary.md` §5.1 | ✅ |
 | **O1** | 02 | `plot_inputs.py`: the shared setup as functions of a pool; potentials and couplings one at a time (P1, P2) | ⬜ |
 | **O2** | 02 | a missing parameter stops the run (U4); a missing potential or coupling is skipped with a warning (U3) | ⬜ |
 | **O3** | 02 | both plot scripts on `plot_inputs.py`, `read_only=True`; `--drop` refused (P3) | ⬜ |
@@ -65,7 +65,7 @@ before each dispatch.
 
 | Gate | Holds when | Prompt | State |
 |---|---|---|---|
-| Ray address | every driver refuses a run that starts Ray without `--ray-address`, and refuses `auto`, before `ray.init` | 01 | ⬜ |
+| Ray address | every driver refuses a run that starts Ray without `--ray-address`, and refuses `auto`, before `ray.init` | 01 | ✅ this commit |
 | Read-only plots | both plot scripts open `read_only=True`; on a stand-in store their lookups find every row, skip a missing potential or coupling, stop on a missing parameter, and change no file | 02 | ⬜ |
 | R | a real plotting run on a real store changes no file of it (U5) | 03 | ⬜ |
 
@@ -123,3 +123,15 @@ read of the drivers' start-up code at `bacca64`.
 - **The rehearsal scripts.** `build.sh` and `run_readers.sh` read `REHEARSAL_ROOT`, so 03 runs them
   unchanged under `read-only-plots/`.
 
+### 5.2 After prompt 01 (2026-10-13)
+
+Prompt 01 landed in this commit ([log](logs/01-require-the-ray-address.md)). A1–A4 done; the "Ray
+address" gate holds.
+- `--ray-address` has no default; `config.argument_parser.ray_address_problem` refuses `None`, an
+  empty or blank string and `auto` (any case); each driver calls it just before `ray.init` and
+  exits 2 with the message on stderr. `main.py --inventory` exits earlier and needs none (U1).
+- `ComputeTargets/tests/test_ray_address.py` adds 17 tests (10 without a subprocess, 7 by
+  subprocess, about 30 s): ComputeTargets 114 -> 131. The other roots are unchanged (18, 63, 34).
+  The three parse-only tests needed no change.
+- The four deliberate breakages each fail a named new test (log).
+- No issue opened; `.documents/OPEN_ISSUES.md` unchanged.

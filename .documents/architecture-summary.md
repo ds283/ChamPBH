@@ -448,7 +448,7 @@ Uses `configargparse` (a drop-in `argparse` replacement) so that every CLI argum
 *Output:*
 - `--output DIR`
 - `--inventory` (show DB contents and exit)
-- `--ray-address STR` (default 'auto')
+- `--ray-address STR` (no default; required whenever Ray starts, `auto` is refused, `main.py --inventory` needs none; `ray_address_problem()` in `config/argument_parser.py` is called before each driver's `ray.init`)
 
 > **Note, 2026-10-02 (`science-readiness`).** Three options were added to the shared parser (so
 > `main.py`, `plot_by_beta.py` and `plot_ScalarModel.py` all accept them):

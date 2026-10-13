@@ -44,7 +44,7 @@ from MetadataConcepts import tolerance, store_tag
 from raypoolkit import RayWorkPool
 from Units import Planck_units
 from Units.base import UnitsLike
-from config.argument_parser import create_argument_parser
+from config.argument_parser import create_argument_parser, ray_address_problem
 from config.datastore import factories, serial_batch_sizes
 from config.model_list import build_model_list
 from config.sharding import (
@@ -77,7 +77,12 @@ if args.database is None:
 # which datastorekit and raypoolkit this run uses (dk-and-rpk-migration prompt 01; README P5)
 print(format_package_provenance(installed_package_provenance()), flush=True)
 
-# connect to ray cluster on supplied address; defaults to 'auto' meaning a locally running cluster
+# connect to the Ray cluster at the supplied address. There is no default: a missing address or
+# 'auto' is refused before Ray starts (read-only-plots prompt 01; README U1, U2)
+_ray_problem = ray_address_problem(args.ray_address)
+if _ray_problem is not None:
+    print(_ray_problem, file=sys.stderr)
+    sys.exit(2)
 ray.init(address=args.ray_address)
 
 # instantiate a Datastore actor: this runs on its own node, and acts as a broker between

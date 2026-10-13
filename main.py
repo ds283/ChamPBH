@@ -48,7 +48,11 @@ from Quadrature.integration_metadata import IntegrationSolver
 from raypoolkit import RayWorkPool
 from Units import Planck_units
 from Units.base import UnitsLike
-from config.argument_parser import create_argument_parser, allowed_drop_actions
+from config.argument_parser import (
+    create_argument_parser,
+    allowed_drop_actions,
+    ray_address_problem,
+)
 from config.datastore import factories, serial_batch_sizes, tables_to_drop
 from config.defaults import (
     DEFAULT_FLOAT_PRECISION,
@@ -120,7 +124,12 @@ except ValueError as e:
     print(f"!! --drop: {e}", file=sys.stderr)
     sys.exit(2)
 
-# connect to ray cluster on supplied address; defaults to 'auto' meaning a locally running cluster
+# connect to the Ray cluster at the supplied address. There is no default: a missing address or
+# 'auto' is refused before Ray starts (read-only-plots prompt 01; README U1, U2)
+_ray_problem = ray_address_problem(args.ray_address)
+if _ray_problem is not None:
+    print(_ray_problem, file=sys.stderr)
+    sys.exit(2)
 ray.init(address=args.ray_address)
 
 # instantiate a ProfileAgent to profile database operations; this is passed as an argument to ShardedPool below

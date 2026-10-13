@@ -1,4 +1,5 @@
 import argparse
+from typing import Optional
 
 import configargparse
 
@@ -8,7 +9,6 @@ from config.defaults import DEFAULT_ABS_TOLERANCE, DEFAULT_REL_TOLERANCE
 DEFAULT_LABEL = "ChamPBH-test"
 DEFAULT_TIMEOUT = 60
 DEFAULT_SHARDS = 20
-DEFAULT_RAY_ADDRESS = "auto"
 
 DEFAULT_Z_END = 0.1
 DEFAULT_T_INIT_GEV = 20000
@@ -309,9 +309,31 @@ def create_argument_parser() -> configargparse.ArgumentParser:
     )
     parser.add_argument(
         "--ray-address",
-        default=DEFAULT_RAY_ADDRESS,
+        default=None,
         type=str,
-        help="specify address of Ray cluster",
+        help="address of the Ray cluster; required whenever Ray starts (main.py --inventory starts no "
+        "Ray and needs none). On this machine ChamPBH's cluster is 127.0.0.1:6380; 'local' starts a "
+        "private instance. 'auto' is refused",
     )
 
     return parser
+
+
+RAY_ADDRESS_PROBLEM = (
+    "!! --ray-address is required whenever Ray starts. Give the address of a running cluster "
+    "(ChamPBH's on this machine is 127.0.0.1:6380, started by "
+    ".documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh), or 'local' for a private instance. "
+    "'auto' is refused: with the projects' clusters isolated, it attaches to whichever cluster it "
+    "finds first."
+)
+
+
+def ray_address_problem(address: Optional[str]) -> Optional[str]:
+    """Return None if ``address`` may be passed to ``ray.init``, and otherwise the message to print.
+
+    A missing or empty address is refused, and so is 'auto' (any case, surrounding whitespace
+    ignored). Anything else is accepted unchanged; Ray checks the address itself.
+    """
+    if address is None or address.strip().lower() in ("", "auto"):
+        return RAY_ADDRESS_PROBLEM
+    return None
