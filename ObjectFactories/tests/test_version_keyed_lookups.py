@@ -19,7 +19,7 @@ Version-keyed lookups of the compute targets (run-integrity prompt 01, README §
 No Ray cluster, no PRyMordial solve, no persistent datastore. About 1 s.
 
 The harness, `_TempStoreCase`, builds datastorekit's actor without Ray, inside ChamPBH's copy
-of the package's stand-in cluster (`ObjectFactories/tests/standin_pool.py`), on a SQLite file in a
+of the package's stand-in cluster (`StoreFixtures/standin_pool.py`), on a SQLite file in a
 `tempfile` directory (dk-and-rpk-migration prompt 08). `open(label)` first opens a real
 `ShardedPool` on one stand-in shard under `label`, which finds or writes the label's `version`
 row, and closes it; then it builds the undecorated actor (`standin_pool.DatastoreClass`) on that
@@ -51,7 +51,7 @@ from types import SimpleNamespace as NS
 import ray
 import sqlalchemy as sqla
 
-from ObjectFactories.tests import standin_pool as sp
+from StoreFixtures import standin_pool as sp
 from config.datastore import factories, serial_batch_sizes
 from config.sharding import replicated_tables
 

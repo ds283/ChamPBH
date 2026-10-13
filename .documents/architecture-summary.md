@@ -55,7 +55,10 @@ ChamPBH/
 │   ├── ScalarModel.py               # Factory for main ODE output
 │   ├── AdiabaticHistory.py
 │   ├── BBNData.py
-│   └── tests/                       # unittest modules; standin_pool.py is a copy of the package's
+│   └── tests/                       # unittest modules of the factories, the registry and the harness
+│
+├── StoreFixtures/
+│   └── standin_pool.py              # the package's stand-in cluster, a copy; any test root imports it
 │
 ├── ComputeTargets/
 │   ├── ScalarModel.py               # ODE solver (Ray remote class)

@@ -18,7 +18,7 @@ The inventory report, ``tools/inventory_report.py``, and ``main.py --inventory``
 (dk-and-rpk-migration prompt 09).
 
 No Ray cluster, no PRyMordial solve, no persistent datastore. Each store is built in a ``tempfile``
-directory through ChamPBH's stand-in cluster (``ObjectFactories/tests/standin_pool.py``), by the harness
+directory through ChamPBH's stand-in cluster (``StoreFixtures/standin_pool.py``), by the harness
 of ``test_version_keyed_lookups._TempStoreCase``: a real one-shard ``ShardedPool`` writes the
 version row and is closed, then the package's undecorated actor inserts the rows with no explicit
 serial (the stand-in broker leases each), stamped with fixed times. The actors are closed before
