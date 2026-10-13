@@ -1,0 +1,24 @@
+== tools/compare_stores.py
+tools/compare_stores.py: DIFFERS with docstrings removed; differing constants:
+  line 108 -> 109:
+    - "the layer's key, leased from the serial broker at insert (Datastore/SQL/Datastore.py:309-314, :670-674); foreign keys are resolved through it"
+    + "the layer's key, leased from the serial broker at insert (datastorekit/SQL/Datastore.py:794-806, in _insert from :760); foreign keys are resolved through it"
+  line 110 -> 112:
+    - 'datetime.now() at insert (Datastore/SQL/Datastore.py:679-680)'
+    + "datetime.now() at insert (datastorekit/SQL/Datastore.py:813); a replicated row has the pool's one timestamp, the same on every shard (:514, :666)"
+exit 1
+== Datastore/tests/test_bbn_failure_lookup.py
+Datastore/tests/test_bbn_failure_lookup.py: equal with docstrings removed
+exit 0
+== ComputeTargets/tests/test_foreign_bbn_provenance.py
+ComputeTargets/tests/test_foreign_bbn_provenance.py: equal with docstrings removed
+exit 0
+== Datastore/tests/test_scalarmodel_failure_reason.py
+Datastore/tests/test_scalarmodel_failure_reason.py: equal with docstrings removed
+exit 0
+== Datastore/tests/test_compare_stores.py
+Datastore/tests/test_compare_stores.py: equal with docstrings removed
+exit 0
+== Datastore/tests/test_datastore_config.py
+Datastore/tests/test_datastore_config.py: equal with docstrings removed
+exit 0

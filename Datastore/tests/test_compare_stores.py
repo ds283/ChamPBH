@@ -841,8 +841,8 @@ class TestDeclaredMaps(unittest.TestCase):
 
 
 def _create_shard(path: Path, registry):
-    """A shard file with the tables ChamPBH's actor creates from the factories' register()
-    (Datastore/SQL/Datastore.py _build_schema), built by SQLAlchemy, not by the layer.
+    """A shard file with the tables datastorekit's actor creates from the factories' register()
+    (datastorekit/SQL/Datastore.py _build_schema), built by SQLAlchemy, not by the package.
     """
     import sqlalchemy as sqla
 

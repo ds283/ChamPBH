@@ -1,0 +1,1 @@
+Datastore/tests by module (after, verbose run): test_compare_stores 21, test_datastore_config 14, test_inventory_report 13, test_inventory_specs 10, test_package_provenance 10, test_version_keyed_lookups 9, test_bbn_failure_lookup 6, test_first_bounce_round_trip 5, test_fixed_T_values_round_trip 5, test_scalarmodel_failure_reason 4 = 97

@@ -58,14 +58,28 @@ invariants that hold across all of them:
 - **Documentation** lives in `.documents/` (there is no `docs/`). `.documents/architecture-summary.md`
   and `.documents/numerical-strategies.md` describe the code; audits and verification documents
   sit beside them.
+- **The packages.** The database layer is `datastorekit` and the work queue is `raypoolkit`, each
+  pinned to a tag in `requirements.txt` and never installed editable. ChamPBH supplies the registry
+  and the configuration (`config/datastore.py`, `config/sharding.py`), its factories and its
+  compute targets; the package's client contract (`docs/client-contract.md` in DatastoreKit, at the
+  pinned tag) says what it reads. **A defect in either package is reported to and fixed in that
+  package's repository, and ChamPBH moves to a new pin; it is never patched or worked around
+  here** (`dk-and-rpk-migration` README §5 rule 11). `datastorekit` `v0.2.3`, released for ChamPBH
+  so that a factory need not define the hooks it has no use for, is the precedent.
 - **Tests** live in `<package>/tests/` as `unittest` modules (with an `__init__.py`) and run from
   the repository root:
   ```bash
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s Datastore/tests -t .
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .   # 18 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 114 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s Datastore/tests -t .         # 97 tests
   ```
-  They **must not need a Ray cluster or a persistent datastore**. A test may build a temporary
+  `ComputeTargets/tests` takes about 200 s in one run, and longer on a loaded machine; a Bash call is
+  capped at ten minutes, so run it in two halves:
+  ```bash
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 61 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 53 tests
+  ```
+  (The counts are those of 2026-10-13.) They **must not need a Ray cluster or a persistent datastore**. A test may build a temporary
   SQLite datastore in a `tempfile` directory, through `datastorekit`'s undecorated actor
   (`standin_pool.DatastoreClass`) inside ChamPBH's stand-in cluster (`Datastore/tests/standin_pool.py`,
   a copy of the package's; `_TempStoreCase` in `Datastore/tests/test_version_keyed_lookups.py` is
@@ -93,3 +107,9 @@ invariants that hold across all of them:
 - **Long-running jobs.** Production pipeline runs (`main.py` with a datastore) are the user's and
   are made on another machine; no campaign prompt starts one. Nothing a prompt runs should take
   longer than a few PRyMordial solves. There is no run registry in this repository.
+- **Ray on this machine.** A run that needs a cluster here starts ChamPBH's isolated one with
+  `.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh start "<purpose>"` (its own temp dir
+  and ports, GCS 6380, under the rehearsal lock shared with StochasticInstantons and SecondaryGWKit),
+  passes `--ray-address 127.0.0.1:6380` to every driver (never `auto`), and stops it with the
+  script's `stop`. **No one runs `ray stop`**, which stops every Ray process on the machine, other
+  projects' builds included. The script's `--help` is the detail.

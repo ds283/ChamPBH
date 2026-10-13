@@ -13,7 +13,8 @@ threshold overlay issue 2026-10-03; prompt 02b closed the history-tool issue 202
 wrote the documents and the handover and closed the campaign, opening and closing none, 2026-10-03);
 4 on the `dk-and-rpk-migration` board (planned 2026-10-11; prompt 01 opened one, 2026-10-12;
 the orchestrator's review of prompt 02 opened one, 2026-10-12; prompt 05 opened one, 2026-10-12;
-prompt 08 closed one and opened one, 2026-10-12; prompt 09 opened one, 2026-10-13).
+prompt 08 closed one and opened one, 2026-10-12; prompt 09 opened one, 2026-10-13; prompts 10 and 11 opened and
+closed none; closed 2026-10-13, 12 of 12 prompts landed, none assigned).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -189,7 +190,8 @@ here, on its board, until a later campaign takes them.
 
 ### 1.11 `dk-and-rpk-migration` — [board §3](../prompts/dk-and-rpk-migration/IMPLEMENTATION_STATE.md)
 
-Planned 2026-10-11. One opened by prompt 01 on 2026-10-12, seen in passing and outside the
+Planned 2026-10-11; closed 2026-10-13, 12 of 12 prompts landed. Prompts 10 and 11 opened and
+closed none: the four rows below stay open, unassigned. One opened by prompt 01 on 2026-10-12, seen in passing and outside the
 campaign's scope; one opened by the orchestrator's review of prompt 02 the same day, from log 02's
 Observation 2; one opened by prompt 05 the same day, from its measurement of the import order, and
 closed by prompt 08 the same day (board §4); one opened by prompt 08 the same day, for P11; one

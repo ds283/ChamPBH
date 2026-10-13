@@ -1356,6 +1356,113 @@ PYTHONPATH=. ./venv/bin/python prompts/bbn-tolerance/logs/03-probes/refresh_comm
 PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t . && PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . && PYTHONPATH=. ./venv/bin/python -m unittest discover -s Datastore/tests -t .
 ```
 
+### 4.12 Addendum 2026-10-13 — the `dk-and-rpk-migration` campaign
+
+Added by `dk-and-rpk-migration` prompt 11, measured at `ee79455`. Nothing above this heading has
+been changed; where it is superseded, this section says so by statement. The campaign replaced
+the work queue and the database layer with two packages: `RayTools/` with `raypoolkit` `v0.2.0`
+(prompt 04, `303324b`), and ChamPBH's own datastore layer with `datastorekit` `v0.3.0` (prompt 08,
+`857ec73`), with ChamPBH's registry of factories, drop groups and batch sizes in
+`config/datastore.py` (05, `8e77578`) and `--inventory` read-only on the package's reader (09,
+`47cfcfb`). Three rehearsals of the user's 2026-10-02 pilot grid, before any change (R0), before the
+DatastoreKit swap (R1) and after both (R2), each built twice under a real Ray cluster, are equal
+by value, bit for bit, in every stored science column
+([`dk-and-rpk-migration-verification.md`](dk-and-rpk-migration-verification.md) §1–§4), so **nothing
+a build computes or stores changed**. What changed is the format of a store, and so what the
+next run does. The campaign's board is
+[`prompts/dk-and-rpk-migration/IMPLEMENTATION_STATE.md`](../prompts/dk-and-rpk-migration/IMPLEMENTATION_STATE.md);
+its plan is its [`README.md`](../prompts/dk-and-rpk-migration/README.md) (§6 records the rulings,
+§7 the handover this section carries). It did **not** bump `VERSION_LABEL` (`"2026.6.0"`,
+`config/version.py`), it started no production run and it did not touch any store but its own
+rehearsal stores: everything below is the user's.
+
+**This supersedes**, by statement and not by edit:
+
+- **§4.11 point 2's refresh route.** It copies the store with `cp -p` and runs `main.py` on the copy
+  with `--drop bbn-data`. A store built before `857ec73` is refused by the tree (point 1 below), so the
+  route cannot be run on it. `--drop` is now the pool's `drop_tables=`, built by
+  `config.datastore.tables_to_drop` (U4; the "at startup (`_drop_actions`)" of §4.11 was the old layer's),
+  and the package's own copy is `python -m datastorekit.tools.sharded_store copy SRC DST`
+  (`pipeline_selection.BBN_REFRESH_ROUTE` names it). The refresh is **subsumed by the rebuild**
+  (point 2): a fresh build computes BBN on today's small network, so nothing is left to refresh.
+- **§4.11 point 2's "They stay valid as stored, and nothing in the code refuses them."** The tree now
+  refuses every store built before `857ec73`.
+- **Any statement above that `--inventory` opens the datastore as a pool**, which applies `--drop`,
+  prunes unvalidated rows and starts Ray. `main.py --inventory` is read-only on the closed store,
+  runs before Ray, and refuses `--drop` (point 6).
+
+**The points.**
+
+1. **Every store built before `857ec73` is refused by the tree.** The science store
+   (`~/ChamPBH-stores/science-2026.6.0.db` and its 16 shards), its bbn-tolerance copy
+   (`~/ChamPBH-stores-bt02/`) and the user's pilot store (`pilot-2026.6.0.db` and its shards, in the
+   working tree) were all written by ChamPBH's own layer. The package refuses them, in an order read
+   from its code (DatastoreKit's checklist for ChamPBH, §8, D4): the primary lacks the table
+   `replication_in_flight` (`StoreSchemaMismatch`); the shard records are absolute paths, where the
+   package accepts only bare file names; each shard's copy of a replicated row carries its own
+   timestamp, where the package's check at open requires one; and, read-only, `replicated_tables`
+   names `LambdaCDM`. **They stay on disk**, unchanged, and are read by `tools/compare_stores.py`
+   (which reads both formats), by `tools/bbn_from_store.py`, and by any commit before `857ec73`.
+2. **The next science run is a full rebuild** into a fresh primary, through the packages. The
+   package makes a new store only where no primary exists. A copy made by hand of a store
+   the package wrote opens, and `copy_store` is the package's own route, but a copy of one of the old
+   stores does not: it still names the original's shards. **If `jordan-normalization` is planned next**
+   (its brief is in `prompts/jordan-normalization/`, untracked), it changes what the code computes, so
+   the rebuild is best made once, after it. The label `2026.6.0` is unchanged; a fresh primary has no
+   rows under any label.
+3. **What goes stale in each run script, line by line.** The two scripts are untracked, the user's,
+   and were **read only**: this campaign did not edit, copy or run either. They differ in `STORE_DIR`
+   (`:10`: `~/ChamPBH-stores` in `full_run_2026.6.0.sh`, `~/ChamPBH-stores-bt02` in
+   `full_run_2026.6.0-refresh.sh`) and in the refresh script's `--drop bbn-data` (`:20`, `:25`, `:26`),
+   which shifts its later lines by one, and two after `:25`. Line numbers are `full_run_2026.6.0.sh`'s,
+   then the refresh script's.
+
+   | Lines | What it says | What is stale | What it would become |
+   |---|---|---|---|
+   | `:3` / `:3` | "with a Ray cluster already up (as for the pilot)" | On this machine a cluster is ChamPBH's isolated one, started with `ray_cluster.sh` under the shared lock (point 4); nothing in the script names it | Start it first, and say so in the comment |
+   | `:7` / `:7` | "After an interrupted invocation, add --prune-unvalidated to the next one." | `--prune-unvalidated` is already the default (`config/argument_parser.py:257-261`); the package prunes at open | No flag; the advice is true of nothing now. `--no-prune-unvalidated` would turn the prune off |
+   | `:10`, `:11` / `:10`, `:11` | `STORE_DIR` `~/ChamPBH-stores` (refresh: `~/ChamPBH-stores-bt02`); `DB="$STORE_DIR/science-2026.6.0.db"` | That primary exists and is refused (point 1), and a rebuild needs a primary that does not exist. The refresh script's default is the copy the refresh was to make, and is refused too | A new directory outside the repository (`STORE_DIR` is overridable, so a new one can be passed), or a new store name; never either old path |
+   | `:20` / `:21`, `:23-24` / `:24-25` | `run()` calls `main.py --config exponential.yaml --database "$DB" --shards "$SHARDS" --job-name … --bbn-wall-clock-limit 600 "$@"` | No `--ray-address`, so the driver takes the default `auto`, which here finds no `/tmp/ray/ray_current_cluster` and attaches to the first Ray head it can find (README §6.6). `--shards` is used only when the store is created, which a fresh build does; `--bbn-wall-clock-limit 600` is the default and harmless | Add `--ray-address 127.0.0.1:6380` |
+   | — / `:20`, `:25`, `:26` | `DROP="--drop bbn-data"` on the first call only, then `DROP=""` | The refresh route (above): a drop applies when a pool opens an *existing* store, and a fresh build has none. `--drop bbn-data` alone is still accepted (`tables_to_drop` finds no table naming `BBNData`'s rows), so the script would run; but it drops nothing | Nothing: the refresh script is not needed for a rebuild, and its `cp`-based route is gone (point 1) |
+   | `:28`–`:46` / `:30`–`:48` | the seven `run` blocks C1, C4, L, C5 (three), C3, C2 | Nothing: their options (`--M-values-Mp`, `--beta-values`, `--phi-init-Mp`) are unchanged | As they are. After `jordan-normalization`, whatever it changes |
+   | `:48-49` / `:50-51` | `main.py … --inventory` on `"$DB"`, `2>&1 \| tee "$LOG/inventory.log"` | Since 09 it is read-only on the closed store (here the last block's pool has closed), runs before Ray, and refuses `--drop`; it reads the shards from the primary, so `--shards` is unused; it takes no `--ray-address` because it starts no Ray. Its report is the new format (`tools/inventory_report.py`): every class, its values and records, and every named problem whole | No change is needed. `--shards "$SHARDS"` may be dropped |
+   | `:54-57` / `:56-59` | `plot_by_beta.py … --shards "$SHARDS" --phi-init-Mp $PHI --output …` for φ* = 5, 2, 1 | No `--ray-address` (it starts Ray at import: `ray.init(address=args.ray_address)`). It opens a read-write pool on the finished store (`[08-plot-scripts-open-read-write-pools]`, open) | Add `--ray-address 127.0.0.1:6380`; the cluster must still be up |
+   | end of script | nothing stops the cluster | A cluster started with `ray_cluster.sh` is stopped with `ray_cluster.sh stop`, which also releases the lock | Run the script's `stop` after the last call; never `ray stop` |
+
+4. **A build on this machine takes the rehearsal lock and runs on ChamPBH's isolated cluster**
+   (campaign README §6.6, §7): `.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh start
+   "<purpose>"` from the repository root (it takes `~/ScienceData/.rehearsal-lock`, shared with
+   StochasticInstantons and SecondaryGWKit, and refuses if it is held; GCS 6380, client 6381,
+   dashboard 8267, agent 52367, 10 CPUs), **`--ray-address 127.0.0.1:6380` on every driver, never
+   `auto`**, and `ray_cluster.sh stop` at the end. Nobody runs `ray stop`, which stops every Ray
+   process on the machine. ChamPBH's drivers still default to `auto`; making `--ray-address`
+   required, as SI's are, is the user's (README §6.4).
+5. **The check of the rebuild** is `tools/compare_stores.py` of the new store against
+   `~/ChamPBH-stores-bt02/`'s: the same histories, value by value (`ScalarModel`,
+   `AdiabaticHistory` and `BBNData` rows and their value rows, every science column compared by its
+   stored bits, foreign keys resolved to the rows they name). The bt02 store's primary is in
+   ChamPBH's old format, which the tool reads, and the one note to expect is `LambdaCDM`'s
+   (listed as replicated by that primary and held by no shard; P8). What may legitimately differ is
+   the bookkeeping (labels, timestamps, timings; the tool reports them and never compares them),
+   anything `jordan-normalization` changes if it lands first, and the BBN rows if the bt02 store was
+   not refreshed on today's small network (§4.11 point 3 lists the shifts). A difference that none of
+   these explains is a finding. The method, and R2's equality, are in the verification document
+   §3.6 and §4.1.
+6. **What the package adds for the user.** `main.py --inventory`, read-only and before Ray, on any
+   store the tree can read; `python -m datastorekit.tools.shard_key_audit PRIMARY` (read-only; `VERDICT: OK` or
+   `INCONSISTENT`, exit 0 or 1, 2 if the store cannot be audited); `python -m
+   datastorekit.tools.sharded_store copy|move SRC DST` for a closed store (it handles the primary and its
+   shards only, and does not check that no job has the store open); and
+   `ShardedPool.closed_store_files(primary)` and `ShardedPool.delete_store(primary)` to list and retire
+   a store, the same files in the same order (verification §3.8). The package's prune at open
+   reports what it removed, with the factory's own text.
+7. **Left to the user** (README §6.4): the merge of `dk-and-rpk-migration` into `main` (P17); the two
+   `G3` records in the package repositories, drafted in verification §4.3 and §4.4 (P16); the science
+   rebuild itself and its run scripts (points 2 and 3); removing the rehearsal stores under
+   `~/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/`; whether the plot scripts should open
+   read-only (`[08-plot-scripts-open-read-write-pools]`); whether to rename the `Datastore` package
+   (P6); and whether `--ray-address` should be required (point 4).
+
 ---
 
 ## 5. Reproduce

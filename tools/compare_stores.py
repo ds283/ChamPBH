@@ -86,10 +86,11 @@ EXIT_EQUAL = 0
 EXIT_DIFFERENT = 1
 EXIT_UNREADABLE = 2
 
-# The primary's own tables, which are the layer's and are never compared: ChamPBH's
-# (Datastore/SQL/ShardedPool.py:244-291, created by _write_shard_data) and DatastoreKit's, which
-# adds replication_in_flight (client contract section 5). A ChamPBH primary holds these five and
-# no client table (ShardedPool._write_shard_data creates nothing else on the primary's engine).
+# The primary's own tables, which are the package's and are never compared: datastorekit creates
+# them in ShardedPool._write_shard_data (datastorekit/SQL/ShardedPool.py:989-995, client contract
+# section 5), replication_in_flight among them. A primary built by ChamPBH's own layer, before
+# prompt 08 of dk-and-rpk-migration, holds the other five; one built through the package holds all
+# six. Neither holds a client table (_write_shard_data creates nothing else on the primary's engine).
 LAYER_TABLES = frozenset(
     {
         "shards",
@@ -106,8 +107,10 @@ LAYER_TABLES = frozenset(
 # BOOKKEEPING_COLUMNS adds per-table ones. Each entry says why. (prompt 01 section 2.2)
 GLOBAL_BOOKKEEPING = {
     "serial": "the layer's key, leased from the serial broker at insert "
-    "(Datastore/SQL/Datastore.py:309-314, :670-674); foreign keys are resolved through it",
-    "timestamp": "datetime.now() at insert (Datastore/SQL/Datastore.py:679-680)",
+    "(datastorekit/SQL/Datastore.py:794-806, in _insert from :760); foreign keys are resolved "
+    "through it",
+    "timestamp": "datetime.now() at insert (datastorekit/SQL/Datastore.py:813); a replicated "
+    "row has the pool's one timestamp, the same on every shard (:514, :666)",
 }
 
 BOOKKEEPING_COLUMNS = {

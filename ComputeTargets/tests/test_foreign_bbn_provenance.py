@@ -35,9 +35,9 @@ or recompute a row because of it.
 
 (b1), (b2) and (b4) fail before bbn-tolerance prompt 02 by ImportError; (b3)
 fails there because neither driver calls the printer. No PRyMordial solve and
-no Ray cluster. (b4) builds the undecorated `Datastore.__ray_actor_class__` on a
-SQLite file in a `tempfile` directory, as `Datastore/tests` does, and reuses its
-stand-ins; about 1 s.
+no Ray cluster. (b4) builds the package's undecorated actor (`standin_pool.DatastoreClass`,
+datastorekit's) on a SQLite file in a `tempfile` directory, as `Datastore/tests` does, and
+reuses its stand-ins; about 1 s.
 
     PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .
 """

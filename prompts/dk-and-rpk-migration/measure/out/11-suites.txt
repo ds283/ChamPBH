@@ -1,0 +1,27 @@
+Suites at ee79455, before 11's edits (HEAD, clean tree) and after (working tree with 11's edits). Serial, foreground.
+before Cosmo: Ran 18 tests in 66.619s OK
+before CTa: Ran 61 tests in 96.099s OK
+before CTb: Ran 53 tests in 88.294s OK
+before DS: Ran 97 tests in 11.626s OK
+load before Cosmo:  8:45  up 8 days,  6:30, 2 users, load averages: 16.44 36.21 46.18
+load after Cosmo:  8:46  up 8 days,  6:31, 2 users, load averages: 11.03 30.83 43.43
+load before CTa:  8:46  up 8 days,  6:31, 2 users, load averages: 11.03 30.83 43.43
+load after CTa:  8:48  up 8 days,  6:33, 2 users, load averages: 9.30 24.64 39.62
+load before CTb:  8:48  up 8 days,  6:33, 2 users, load averages: 9.30 24.64 39.62
+load after CTb:  8:49  up 8 days,  6:34, 2 users, load averages: 12.15 21.83 37.04
+load before DS:  8:49  up 8 days,  6:34, 2 users, load averages: 12.15 21.83 37.04
+load after DS:  8:49  up 8 days,  6:34, 2 users, load averages: 11.47 21.21 36.56
+done
+after Cosmo: Ran 18 tests in 95.412s OK
+after CTa: Ran 61 tests in 341.452s OK
+after CTb: Ran 53 tests in 261.214s OK
+after DS: Ran 97 tests in 48.687s OK
+load before Cosmo:  9:02  up 8 days,  6:47, 2 users, load averages: 6.83 9.30 20.29
+load after Cosmo:  9:04  up 8 days,  6:49, 2 users, load averages: 8.18 8.95 18.93
+load before CTa:  9:04  up 8 days,  6:49, 2 users, load averages: 8.18 8.95 18.93
+load after CTa:  9:09  up 8 days,  6:54, 2 users, load averages: 26.39 26.17 23.88
+load before CTb:  9:09  up 8 days,  6:54, 2 users, load averages: 26.39 26.17 23.88
+load after CTb:  9:14  up 8 days,  6:59, 2 users, load averages: 21.67 21.62 22.28
+load before DS:  9:14  up 8 days,  6:59, 2 users, load averages: 21.67 21.62 22.28
+load after DS:  9:15  up 8 days, 7 hrs, 2 users, load averages: 26.86 22.91 22.71
+done

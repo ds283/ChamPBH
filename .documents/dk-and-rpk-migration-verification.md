@@ -1199,3 +1199,157 @@ compared by a scratch script, described in `10-printed-lines.txt`'s header.
 before have their mtimes and sizes but the root and `logs/` directories, which gained the 10
 entries. R0's and R1's files were opened only by `compare_stores.py`, `sqlite3` `mode=ro` and
 `cmp`, and none has changed.
+
+---
+
+## 4. The close (prompt 11, 2026-10-13)
+
+**Tree:** `ee79455`, whose code is `2623905`'s (a housekeeping commit that removed two unused imports
+from `Datastore/tests/test_datastore_config.py`), and 11's commit differs from it in comments, two
+documentation strings of `tools/compare_stores.py` and docstrings only (`ast`-equal with docstrings
+removed, but for those two strings). Branch `dk-and-rpk-migration`. `datastorekit` 0.3.0 at
+`2f5417ea…` and `raypoolkit` 0.2.0 at `eaef0ce6…`, neither editable; Ray 2.53.0, Python 3.13. 11
+runs no build, opens no store and starts no Ray: §4.1 is read from §1–§3, §4.2 is measured, and
+§4.3–§4.5 are records. The scripts of §4.2 read a commit, not the working tree, so they were run at
+`ee79455`, the commit 11 starts from; the orchestrator re-runs them at 11's own commit.
+
+### 4.1 R0, R1 and R2 side by side
+
+From §1.2, §1.6, §2.2, §2.6, §3.2 and §3.6. The stores are under `~/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/`
+(README §3), 16 shards each, and are kept.
+
+| | R0 (§1, prompt 02) | R1 (§2, prompt 06) | R2 (§3, prompt 10) |
+|---|---|---|---|
+| **Tree** | `a72ca5e` (code `d7791c5`): ChamPBH's own layer and `RayTools/` | `5bb2be6` (code `a4894ea`): ChamPBH's own layer, `raypoolkit` adopted, ChamPBH's data in `config/datastore.py` | `60e000c` (code `47cfcfb`): both packages adopted, `--inventory` read-only |
+| **Packages** | none | `raypoolkit` 0.2.0 at `eaef0ce6…` | `raypoolkit` 0.2.0 at `eaef0ce6…` and `datastorekit` 0.3.0 at `2f5417ea…` |
+| **Cluster** | Ray 2.53.0 default cluster (`/tmp/ray`, 6379) | Ray 2.53.0, ChamPBH's isolated cluster (`/tmp/ray-cpbh`, 6380; U5) | the same, 6380 |
+| **Stores** | `02-reference.db`, `02-resumed.db` | `06-reference.db`, `06-resumed.db` | `10-reference.db`, `10-resumed.db` |
+| **`reference` build** | exit **0** (10 min 43 s) | exit **0** (11 min 7 s) | exit **0** (3 min 33 s) |
+| **`resumed-a` (killed by `SIGTERM`)** | exit **134** (7 min 48 s); stored 4 `AdiabaticHistory` rows, validated 3 | exit **134** (8 min 14 s); stored 5, validated 2 | exit **15** (2 min 57 s; Ray's own handler closed the pool); stored 1, validated 0 |
+| **`resumed-b` (resume)** | exit **0** (1 min 35 s) | exit **0** (2 min 42 s) | exit **0** (1 min 1 s) |
+| **Comparison, by `tools/compare_stores.py`** | `02-reference` against `02-resumed`: `RESULT: equal`, exit 0 (§4.3: bitwise reproducible) | `06-reference` and `06-resumed` each against `02-reference`: `RESULT: equal`, exit 0; and against each other | `10-reference` and `10-resumed` each against `06-reference`, `10-reference` against `02-reference` and against `10-resumed`: `RESULT: equal`, exit 0 |
+| **Schema** (`--schema`) | `02-reference-schema.json` (27 client tables) | agrees with R0's (differs in `source` only) | agrees with `08-standin-schema.json` and with R0's (`source` only) |
+| **Readers** | all steps exit 0 | all steps exit 0; `histories.csv` equal to R0's | all steps exit 0; `histories.csv` SHA-256 `d7c62c37…c522`, `cmp`-equal to R1's and R0's |
+| **Landed** | `6cbf953` | `c9e6bc2` | `b0d258a` |
+
+Each comparison reads every stored science column by its bits and resolves foreign keys to the rows
+they name; the bookkeeping columns (labels, timestamps, timings; 29 of them at R1 and R2) differ on
+every matched row, so each pair was built by separate jobs. The one note in the R1 and R2 comparisons
+is `LambdaCDM`'s, listed as replicated by R0's and R1's primaries and held by no shard (P8). So
+**R2 equals R1 equals R0, bit for bit**, which is the criterion README §4.3 and P4 set.
+
+### 4.2 The final measurements (Z4)
+
+At `ee79455`, from the files `prompts/dk-and-rpk-migration/measure/out/11-*`, against the figures the
+prompt took at `1954adf` (the code of `2623905`).
+
+| Measure | At `1954adf` (prompt's §1.1) | At `ee79455` |
+|---|---|---|
+| **DatastoreKit's `measure_client_imports.py`**: layer modules absent | 7 (the two `__init__.py` present) | 7 absent, the two `__init__.py` present |
+| `.py` files read / not parsed | 204 / 0 | 204 / 0 |
+| import statements naming a layer module | 1, in `prompts/run-integrity/planning-probes/datastore_version_probe.py:18`; 0 outside `prompts/` | 1, the same line; 0 outside `prompts/` |
+| string literals / `import_module` calls | 0 / 0 | 0 / 0 |
+| factory-module imports | 18 (17 in `config/`, 1 top level) | 18 (17 in `config/`, 1 top level) |
+| imports of the moved names | 0 | 0 |
+| **RayPoolKit's `measure_client_pools.py`**: `RayTools/` | absent | absent |
+| imports / string literals / `import_module` or `__import__` calls | 0 / 0 / 0 | 0 / 0 / 0 |
+| `RayWorkPool(...)` calls; verdicts | 17; `constructs` 17 | 17; `constructs` 17 |
+| `ray.is_initialized()` after the verdicts | False | False |
+| non-`.py` lines naming `RayTools` or `RayWorkPool` | 240 (25 in `.documents/`, 215 in `prompts/`) | 252 (25 in `.documents/`, 227 in `prompts/`) |
+| **Suites**: `CosmologyModels/tests` | 18 | 18 before 11's edits, 18 after |
+| `ComputeTargets/tests` (`-p 'test_[a-f]*.py'` + `-p 'test_[g-z]*.py'`) | 114 (61 + 53) | 114 (61 + 53) before, 114 (61 + 53) after |
+| `Datastore/tests` | 97 | 97 before, 97 after |
+| **The venv**: `pip freeze` | 101 lines | 101 lines |
+| `datastorekit`, `raypoolkit` | at `2f5417ea…`, at `eaef0ce6…` | at `2f5417ea76cdcd0d15d64d80d9085429bfacad21`, at `eaef0ce60e2fc354bb32f0ad576010e6a83c1976`, both `git+https` pins, not editable |
+| `pip check` | clean | `No broken requirements found.` |
+
+- **The non-`.py` count moves by 12, all in `prompts/`**: 11's own prompt file and the
+  orchestrator's notes that name the pool, committed after `1954adf`. The script counts `prompts/`
+  records as lines, and they are history (P14). The `.documents/` figure (25 in 3 files, of which
+  `architecture-summary.md`'s 20) is of `ee79455`, before 11's documents: this §4 and
+  `review-remediation-verification.md` §4.12 name `RayTools` and `RayWorkPool` too, and the
+  orchestrator's re-run at 11's own commit counts them.
+- **The venv** is 07's: the sorted `pip freeze` differs from the baseline `52142d7-pip-freeze.txt`
+  (99 lines) by exactly the two added lines, `datastorekit` and `raypoolkit`; and
+  `utilities.format_package_provenance(installed_package_provenance())` prints exactly log 07's
+  line: `>> packages: datastorekit 0.3.0 (https://github.com/ds283/DatastoreKit@2f5417ea76cdcd0d15d64d80d9085429bfacad21, requested v0.3.0); raypoolkit 0.2.0 (https://github.com/ds283/RayPoolKit@eaef0ce60e2fc354bb32f0ad576010e6a83c1976, requested v0.2.0)`.
+- **`Datastore/tests`, by module** (the three roots' totals above): `test_compare_stores` 21, `test_datastore_config` 14, `test_inventory_report` 13, `test_inventory_specs` 10, `test_package_provenance` 10, `test_version_keyed_lookups` 9, `test_bbn_failure_lookup` 6, `test_first_bounce_round_trip` 5, `test_fixed_T_values_round_trip` 5, `test_scalarmodel_failure_reason` 4 (97).
+- **The stale-path sweep** (prompt 11 §2.1) printed 19 lines before 11's edits, in 8 files, and prints
+  10 after: the 8 in dated records and in the guard against the old layer's arguments that stay,
+  and the 2 lines of the dated note that opens §4 of `architecture-summary.md`, which name the
+  deleted modules as deleted (log 11).
+
+### 4.3 DatastoreKit's G3, drafted for its board (P16)
+
+For the cell `| **G3**: CPBH adopted `v0.2.3` or later (…) | … |` in DatastoreKit's
+`prompts/extraction/IMPLEMENTATION_STATE.md` §2 (at `04a2ed9`, where it begins `⬜` and carries
+dated italic notes). The text is in the form of that board's G2 cell, `✅ <date>: holds. …`, mapping
+each part of the checklist's §9 (and its `v0.3.0` addendum, "`v0.2.3` or later") to the ChamPBH
+commit and rehearsal that hold it, from log 10's record, and then **the cell's own notes, verbatim**
+(the notes are copied from the board, not retyped). **Neither this cell nor the next is committed in
+its repository: the user makes those commits, or has a session there make them.** The record's
+`ee79455` is the commit the measurement was taken at; the orchestrator re-runs the scripts at 11's own
+commit.
+
+```text
+✅ 2026-10-13: holds. CPBH adopted `v0.3.0` (the pin at CPBH `617a1dc`, installed at `2f5417ea…`, not editable) in its campaign `dk-and-rpk-migration`, and a rehearsal through the package reproduces, bit for bit, the rehearsals made before the swap. Against the checklist, [`docs/adoption/champbh.md`](../../docs/adoption/champbh.md) §9, with its `v0.3.0` addendum ("CPBH has adopted `v0.2.3` or later"): (1) **the 9 layer files are deleted and the tag imported**: the 7 modules removed and the two `__init__.py` emptied (0 bytes, P6) by CPBH `857ec73`; `docs/extraction/measure_client_imports.py cpbh --commit ee79455`, run from this repository with its own venv, finds the 7 absent and, outside CPBH's `prompts/` record, 0 import statements, 0 string literals, 0 `import_module` calls and 0 imports of the moved names naming a layer module (the 1 statement it counts is in `prompts/`, `prompts/run-integrity/planning-probes/datastore_version_probe.py:18`, a probe kept as history); `requirements.txt:17` holds `datastorekit @ git+https://github.com/ds283/DatastoreKit@v0.3.0`, installed at `2f5417ea76cdcd0d15d64d80d9085429bfacad21`, not editable, `pip check` clean (CPBH `617a1dc`); (2) **its suites pass**: `CosmologyModels/tests` 18, `ComputeTargets/tests` 114, `Datastore/tests` 97, all OK, at CPBH `60e000c` (R2's tree) and again at 11's tree (`prompts/dk-and-rpk-migration/measure/out/11-suites.txt`: 18 / 114 / 97); (3) **a pilot store is rebuilt through the package**: R2, CPBH `b0d258a`, the user's 2026-10-02 pilot grid (five histories at M = 10⁻³ M_P) built twice under Ray 2.53.0 through the package's `ShardedPool`, `Datastore` actors and `SerialPoolBroker`, once straight through and once killed and resumed with `--prune-unvalidated`, and read by every reader; `10-reference.db` and `10-resumed.db` each equal R1's `06-reference.db` (CPBH's own layer, before the swap) and `10-reference.db` equals R0's `02-reference.db` (the start tree), in every stored science column, by CPBH's `tools/compare_stores.py` (`RESULT: equal`, exit 0), and the schema equals R0's. Beyond §9: the package's prune at open removed exactly the unvalidated row a killed build left; `main.py --inventory` reads the stores through `read_inventory` with `problems: none`; `python -m datastorekit.tools.shard_key_audit` gives `VERDICT: OK` on both; and a `python -m datastorekit.tools.sharded_store copy` opens read-only, compares equal and is deleted by `ShardedPool.delete_store`, its 17 files and nothing else. CPBH's record is `.documents/dk-and-rpk-migration-verification.md` §3 and §4 (campaign `dk-and-rpk-migration`). *(2026-10-09: the adoption checklist is [`docs/adoption/champbh.md`](../../docs/adoption/champbh.md), measured at CPBH `52142d7` by 07a.)* *(2026-10-09: `v0.2.0` is made, annotated, on 06's commit `240028e` (tag object `9eaf542`) and pushed, after CI passed there at both ends, [run 37934881027](https://github.com/ds283/DatastoreKit/actions/runs/37934881027): Python 3.12.15 / Ray 2.43.0 / SQLAlchemy 2.0.39 and 3.13.16 / 2.55.1 / 2.0.46, SQLite 3.45.1 at both, each `Ran 458 tests … OK`. CPBH may now adopt it.)* *(2026-10-10: `v0.2.1` is ready to be tagged on extraction prompt 10's commit once CI passes there at both ends, as U23 and U28; 10 makes no tag and pushes nothing. CPBH's addendum is [`docs/adoption/champbh.md`](../../docs/adoption/champbh.md#addendum-v021-extraction-prompt-10-2026-10-10).)* *(2026-10-10: `v0.2.1` is made, annotated, on 10's commit `33778b0` (tag object `0ba2e4d`) and pushed, after CI passed there at both ends, [run 38054748108](https://github.com/ds283/DatastoreKit/actions/runs/38054748108): Python 3.12.15 / Ray 2.43.0 / SQLAlchemy 2.0.39 and 3.13.16 / 2.55.1 / 2.0.46, SQLite 3.45.1 at both, each `Ran 486 tests … OK`. CPBH may now adopt it.)* *(2026-10-11: `v0.2.2` is ready to be tagged on `actor-names` prompt 02's commit once CI passes there at both ends, as U23 and U28; 02 makes no tag and pushes nothing. CPBH's addendum is [`docs/adoption/champbh.md`](../../docs/adoption/champbh.md#addendum-v022-actor-names-prompt-02-2026-10-11).)* *(2026-10-11: `v0.2.2` is made, annotated, on 02's commit `6d8ee9a` (tag object `c32d027`) and pushed, after CI passed there at both ends, [run 38131949852](https://github.com/ds283/DatastoreKit/actions/runs/38131949852): Python 3.12.15 / Ray 2.43.0 / SQLAlchemy 2.0.39 and 3.13.16 / 2.55.1 / 2.0.46, SQLite 3.45.1 at both, each `Ran 494 tests … OK`. CPBH may now adopt it.)* *(2026-10-11: `v0.2.3` is ready to be tagged on `factory-defaults` prompt 02's commit once CI passes there at both ends, as U23 and U28; 02 makes no tag and pushes nothing. CPBH's addendum is [`docs/adoption/champbh.md`](../../docs/adoption/champbh.md#addendum-v023-factory-defaults-prompt-02-2026-10-11).)* *(2026-10-11: `v0.2.3` is made, annotated, on `factory-defaults` 02's commit `0de2b16` (tag object `8dac562`) and pushed, after CI passed there at both ends, [run 38177954330](https://github.com/ds283/DatastoreKit/actions/runs/38177954330): Python 3.12.15 / Ray 2.43.0 / SQLAlchemy 2.0.39 and 3.13.16 / 2.55.1 / 2.0.46, SQLite 3.45.1 at both, each `Ran 504 tests … OK`. CPBH may now adopt it.)* *(2026-10-12: `v0.3.0` is ready to be tagged on `object-timestamp` prompt 02's commit once CI passes there at both ends, as U23 and U28; 02 makes no tag and pushes nothing. CPBH may stay on `v0.2.3` or move to `v0.3.0`, as it chooses (`object-timestamp` U6). CPBH's addendum is [`docs/adoption/champbh.md`](../../docs/adoption/champbh.md#addendum-v030-object-timestamp-prompt-02-2026-10-12).)* *(2026-10-12: `v0.3.0` is made, annotated, on `object-timestamp` 02's commit `2f5417e` (tag object `bf0a3b2`) and pushed, after CI passed there at both ends, [run 38220924369](https://github.com/ds283/DatastoreKit/actions/runs/38220924369): Python 3.12.15 / Ray 2.43.0 / SQLAlchemy 2.0.39 and 3.13.16 / 2.55.1 / 2.0.46, SQLite 3.45.1 at both, each `Ran 509 tests … OK`. CPBH may adopt `v0.2.3` or `v0.3.0`, as it chooses (`object-timestamp` U6).)*
+```
+
+### 4.4 RayPoolKit's G3, drafted for its board (P16)
+
+For the row `| **G3** | not yet (CPBH adopts `v0.2.0`). Checklist: … |` in RayPoolKit's
+`prompts/extraction/IMPLEMENTATION_STATE.md` §2 (at `1b84df0`), in the form of its G1 and G2 cells
+(`**holds** <date>: …`): the five parts of the checklist's §8, items 1–5, each with its CPBH commit
+(`303324b`, `2f61943`) and the scripts' figures, from log 04's record; R1 and R2 as the runs under
+real Ray; and the checklist pointer the cell carries now. Item 6 of §8 is this record on that board.
+
+```text
+| **G3** | **holds** 2026-10-12: CPBH adopted `v0.2.0` in its campaign `dk-and-rpk-migration`, and the five parts of the checklist's item 8 hold. (1) `RayTools/` is gone: `git ls-tree 303324b RayTools` is empty (CPBH's prompt 04), and so it is at `ee79455`. (2) No import of it: `docs/adoption/measure_client_pools.py cpbh --commit 303324b`, run from this repository with its own venv, gives 0 imports, 0 string literals and 0 `import_module` / `__import__` calls naming `RayTools`, and the same at `ee79455`. (3) The pin is in place and the venv installed from it: `requirements.txt:80` (`:79` at `303324b`; CPBH's DatastoreKit pin, added at `617a1dc`, sits above it), `raypoolkit` 0.2.0 at `eaef0ce60e2fc354bb32f0ad576010e6a83c1976`, not editable (CPBH `2f61943`), recorded by the provenance line of every R1 and R2 build log. (4) CPBH's suites pass: at `303324b`, `CosmologyModels/tests` 18, `ComputeTargets/tests` 114, `Datastore/tests` 66, all OK; at `60e000c` 18 / 114 / 97 (the Datastore count after CPBH's DatastoreKit adoption), all OK, and the same at 11's tree (`prompts/dk-and-rpk-migration/measure/out/11-suites.txt`: 18 / 114 / 97). (5) Every site constructs: the same script gives 17 `RayWorkPool(...)` calls, every one `constructs`, at `303324b` and at `ee79455`, with `ray.is_initialized()` False; no call site changed (the three drivers' diff at `303324b` is the one import line each), the 14 lookup-only sites keep `store_handler=None` and the 3 compute sites use the defaults. R1 (CPBH `5bb2be6`) and R2 (CPBH `60e000c`) ran `raypoolkit` under real Ray 2.53.0, on ChamPBH's isolated cluster: three builds each, and three readers that start Ray at R1 and two at R2, every store equal to the start tree's, bit for bit, by `tools/compare_stores.py`, and the pool's printed lines in the start tree's layout (R1's progress lines in R0's shapes; none printed at R2's load). CPBH's record is `.documents/dk-and-rpk-migration-verification.md` §1–§4 (campaign `dk-and-rpk-migration`), and its handover §4.12 of `.documents/review-remediation-verification.md`. Checklist: [`docs/adoption/champbh.md`](../../docs/adoption/champbh.md), measured at CPBH `52142d7`; its item 8 is the acceptance |
+```
+
+Optional, in the manner of the short paragraph that followed each of SGK's G2 records under that
+board's §2 (the line after "After the close"):
+
+```text
+**G3 recorded (2026-10-13).** CPBH adopted `v0.2.0` in its campaign `dk-and-rpk-migration` (prompts 03–04, run under real Ray by 06 and 10, closed by 11). The row above takes CPBH's draft. With `RayTools/` deleted in CPBH, U5 no longer constrains it; it still freezes SI's copy until G4.
+```
+
+### 4.5 What goes stale in the two checklists, and where it was done
+
+**DatastoreKit's checklist §10** (`docs/adoption/champbh.md` at `v0.3.0`):
+
+| Item | Where done |
+|---|---|
+| `CLAUDE.md:66`, the `Datastore/tests` command: the directory keeps only CPBH's own tests (its item 7) | **08** (`857ec73`): the 4 + 2 tests the package carries and the 3 layer-identity tests deleted (A7); the command is the same and **11** gives it its count (`CLAUDE.md`, 97) |
+| `CLAUDE.md:68-72`: the undecorated actor is `datastorekit.SQL.Datastore.Datastore`, taking `replicated_tables` and `factories=`, and writing no version row | **08**: `CLAUDE.md` now says "through `datastorekit`'s undecorated actor (`standin_pool.DatastoreClass`) inside ChamPBH's stand-in cluster" (A6, A9); **11** checked it and corrected the five test modules' own docstrings (Z3) |
+| `CLAUDE.md:74-75`: record the per-package test counts, and `CLAUDE.md` itself holds none | **11** (Z2): the three commands and ComputeTargets' two halves carry their counts |
+| `.documents/architecture-summary.md`: the tree at `:38-48`, §4 (`:213-393`) and §§12–14 (from `:975`) | **04** did the pool's lines (W4); **11** (Z1): the tree, §4 rewritten for the package, §5.2, §9's example (the mapping form, 05) and §§12–14 |
+| `[00-two-files-are-not-black-clean]` (`.documents/OPEN_ISSUES.md:48`) names the deleted `base.py` | **08**: the issue narrowed to the one file left (`OPEN_ISSUES.md`); its dated entry stays as the record |
+
+**RayPoolKit's checklist §9**:
+
+| Item | Where done |
+|---|---|
+| `architecture-summary.md:35-36`, the layout's `RayTools/` and `RayWorkPool.py` | **04** (W4): the line now names the package |
+| `:153` and the constructor table from `:157` (`store_handler`'s old meaning; no `persist_handler` row) | **04**: §3.2 titled `RayWorkPool` (`raypoolkit`), the `pool` type, the `store_handler` row and a new `persist_handler` row |
+| `:585`, "handles steps 3–4 automatically via its default `compute_handler` and `store_handler`" | **04**: it names the three defaults |
+| `:648`, `:920-925`, `:1086-1094`, `:155`, `:244`, `:355`, `:829`, `:855`, `:856`, `:862`, `:868`, `:969`, `:1056`, `:1108`, `:1110`, `:1116`: true of the package | left, read line by line in **11**: all true of `raypoolkit` `v0.2.0` (log 11); the one inside §9's diagram, `payload={"small_network": True}`, is corrected by §9's dated notes and is not 11's |
+| `:999`, "`RayWorkPool` (entire file)" among components reusable with no change | **11** (Z1): §12 now says "the `raypoolkit` package (`RayWorkPool`)" |
+| `.documents/integrator-audit-2026-09-30/README.md:69` (`RayTools/RayWorkPool.py` calls `obj.store()`) | left: a dated audit, and the package's default store handler does the same |
+| Campaign records: `prompts/`, 21 lines in 11 files | left: history (P14) |
+
+### 4.6 The commands, verbatim
+
+From the repository root; the two scripts from their own repositories with their own venvs. `<sha>` is
+`ee79455` in full.
+
+```bash
+git status --short                      # nothing tracked modified before 11's edits
+for suite in Cosmology CTa CTb DS; do uptime; ./venv/bin/python -m unittest discover -s <root> -t . [-p <glob>]; done   # PYTHONPATH=.
+./venv/bin/python -I <scratch>/stale_paths.py .                    # the sweep, before and after
+./venv/bin/python -I <scratch>/ast_prose_only.py <HEAD copy> <file>  # each of the six Python files
+(cd /Users/ds283/Documents/Code/DatastoreKit && ./venv/bin/python docs/extraction/measure_client_imports.py cpbh --commit <sha>)
+(cd /Users/ds283/Documents/Code/RayPoolKit && ./venv/bin/python docs/adoption/measure_client_pools.py cpbh --commit <sha>)
+./venv/bin/pip freeze; ./venv/bin/pip check
+./venv/bin/python -I -c "import utilities; print(utilities.format_package_provenance(utilities.installed_package_provenance()))"
+```

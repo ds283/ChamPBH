@@ -1,0 +1,20 @@
+.documents/OPEN_ISSUES.md:54: Narrowed 2026-10-12: the other file, `Datastore/SQL/ObjectFactories/base.py`, was deleted by
+.documents/architecture-summary.md:216: > package. Until `857ec73` (that campaign's prompt 08) the layer was ChamPBH's own: `Datastore/object.py`
+.documents/architecture-summary.md:218: > and `ProfileAgent.py`, with the factories' base class in `ObjectFactories/base.py` and the
+.documents/dk-and-rpk-migration-verification.md:12: - **§1 R0** is the start tree: ChamPBH's own layer and `RayTools/` (prompt 02).
+.documents/dk-and-rpk-migration-verification.md:362: `raypoolkit` pin, `RayTools/` deleted and the three drivers importing `from raypoolkit import
+.documents/dk-and-rpk-migration-verification.md:620: `/tmp/ray-cpbh`, 6380 here), two pools (`RayTools` and `raypoolkit`) and two forms of the shard key
+.documents/dk-and-rpk-migration-verification.md:1223: | **Tree** | `a72ca5e` (code `d7791c5`): ChamPBH's own layer and `RayTools/` | `5bb2be6` (code `a4894ea`): ChamPBH's own layer, `raypoolkit` adopted, ChamPBH's data in `c
+.documents/dk-and-rpk-migration-verification.md:1254: | **RayPoolKit's `measure_client_pools.py`**: `RayTools/` | absent | absent |
+.documents/dk-and-rpk-migration-verification.md:1258: | non-`.py` lines naming `RayTools` or `RayWorkPool` | 240 (25 in `.documents/`, 215 in `prompts/`) | 252 (25 in `.documents/`, 227 in `prompts/`) |
+.documents/dk-and-rpk-migration-verification.md:1270: `review-remediation-verification.md` §4.12 name `RayTools` and `RayWorkPool` too, and the
+.documents/dk-and-rpk-migration-verification.md:1307: | **G3** | **holds** 2026-10-12: CPBH adopted `v0.2.0` in its campaign `dk-and-rpk-migration`, and the five parts of the checklist's item 8 hold. (1) `RayTools/` is gone:
+.documents/dk-and-rpk-migration-verification.md:1314: **G3 recorded (2026-10-13).** CPBH adopted `v0.2.0` in its campaign `dk-and-rpk-migration` (prompts 03–04, run under real Ray by 06 and 10, closed by 11). The row above t
+.documents/dk-and-rpk-migration-verification.md:1333: | `architecture-summary.md:35-36`, the layout's `RayTools/` and `RayWorkPool.py` | **04** (W4): the line now names the package |
+.documents/dk-and-rpk-migration-verification.md:1338: | `.documents/integrator-audit-2026-09-30/README.md:69` (`RayTools/RayWorkPool.py` calls `obj.store()`) | left: a dated audit, and the package's default store handler doe
+.documents/integrator-audit-2026-09-30/README.md:69: short). Only `ComputationFailureError` is caught (`:823`). `RayTools/RayWorkPool.py` calls
+.documents/review-remediation-verification.md:1248: at startup (`Datastore/SQL/Datastore.py`, `_drop_actions`), and `ScalarModel` rows, which a
+.documents/review-remediation-verification.md:1363: the work queue and the database layer with two packages: `RayTools/` with `raypoolkit` `v0.2.0`
+.documents/review-remediation-verification.md:1384: `config.datastore.tables_to_drop` (U4; the "at startup (`_drop_actions`)" of §4.11 was the old layer's),
+Datastore/tests/test_datastore_config.py:255: passes ``drop_tables=``; none passes the old layer's ``drop_actions=`` or ``inventory_config=``.
+Datastore/tests/test_datastore_config.py:282: for arg in ("drop_actions", "inventory_config"):

@@ -1,0 +1,19 @@
+.documents/OPEN_ISSUES.md:53: Narrowed 2026-10-12: the other file, `Datastore/SQL/ObjectFactories/base.py`, was deleted by
+.documents/architecture-summary.md:229: ### 4.2 `DatastoreObject` (`Datastore/object.py`)
+.documents/architecture-summary.md:246: ### 4.3 `Datastore` (`Datastore/SQL/Datastore.py`) — Ray Remote Actor
+.documents/architecture-summary.md:302: ### 4.4 `ShardedPool` (`Datastore/SQL/ShardedPool.py`)
+.documents/architecture-summary.md:320: | `inventory_config` | Merge policies for cross-shard inventory aggregation |
+.documents/architecture-summary.md:349: pool.inventory(cls) → dict
+.documents/architecture-summary.md:357: ### 4.5 `SQLAFactoryBase` (`Datastore/SQL/ObjectFactories/base.py`)
+.documents/architecture-summary.md:1068: **Step 3 — Register** in `Datastore/SQL/Datastore.py`:
+.documents/dk-and-rpk-migration-verification.md:12: - **§1 R0** is the start tree: ChamPBH's own layer and `RayTools/` (prompt 02).
+.documents/dk-and-rpk-migration-verification.md:362: `raypoolkit` pin, `RayTools/` deleted and the three drivers importing `from raypoolkit import
+.documents/dk-and-rpk-migration-verification.md:620: `/tmp/ray-cpbh`, 6380 here), two pools (`RayTools` and `raypoolkit`) and two forms of the shard key
+.documents/integrator-audit-2026-09-30/README.md:69: short). Only `ComputationFailureError` is caught (`:823`). `RayTools/RayWorkPool.py` calls
+.documents/review-remediation-verification.md:1248: at startup (`Datastore/SQL/Datastore.py`, `_drop_actions`), and `ScalarModel` rows, which a
+Datastore/tests/test_compare_stores.py:845: (Datastore/SQL/Datastore.py _build_schema), built by SQLAlchemy, not by the layer.
+Datastore/tests/test_datastore_config.py:254: passes ``drop_tables=``; none passes the old layer's ``drop_actions=`` or ``inventory_config=``.
+Datastore/tests/test_datastore_config.py:281: for arg in ("drop_actions", "inventory_config"):
+tools/compare_stores.py:90: # (Datastore/SQL/ShardedPool.py:244-291, created by _write_shard_data) and DatastoreKit's, which
+tools/compare_stores.py:109: "(Datastore/SQL/Datastore.py:309-314, :670-674); foreign keys are resolved through it",
+tools/compare_stores.py:110: "timestamp": "datetime.now() at insert (Datastore/SQL/Datastore.py:679-680)",

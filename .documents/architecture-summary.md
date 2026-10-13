@@ -34,33 +34,32 @@ ChamPBH/
 │
 ├── (the work queue, `RayWorkPool`, is the `raypoolkit` package, pinned in requirements.txt)
 │
-├── Datastore/
-│   ├── object.py                    # DatastoreObject base class
-│   └── SQL/
-│       ├── Datastore.py             # Ray actor: one SQLite shard
-│       ├── ShardedPool.py           # Manages pool of shard actors
-│       ├── SerialPoolBroker.py      # Cross-shard serial-ID coordination
-│       ├── ClientPool.py            # Serial lease management
-│       ├── ProfileAgent.py          # Optional DB profiling actor
-│       └── ObjectFactories/         # SQLAlchemy serialization factories
-│           ├── base.py              # SQLAFactoryBase abstract class
-│           ├── version.py
-│           ├── store_tag.py
-│           ├── redshift.py
-│           ├── tolerance.py
-│           ├── integration_metadata.py
-│           ├── DimensionlessQuantity.py
-│           ├── DimensionfulQuantity.py
-│           ├── ExponentialPotential.py
-│           ├── InversePowerPotential.py
-│           ├── StarobinskyPotential.py
-│           ├── ReclinerPotential.py
-│           ├── ReflectingPotential.py
-│           ├── ExponentialCoupling.py
-│           ├── QCD_Cosmology.py
-│           ├── ScalarModel.py       # Factory for main ODE output
-│           ├── AdiabaticHistory.py
-│           └── BBNData.py
+├── (the datastore layer is the `datastorekit` package, pinned in requirements.txt; see §4)
+│
+├── Datastore/                       # ChamPBH's part of the datastore; the layer is `datastorekit`
+│   ├── __init__.py                  # empty
+│   ├── SQL/
+│   │   ├── __init__.py              # empty
+│   │   └── ObjectFactories/         # SQLAlchemy serialization factories (ChamPBH's)
+│   │       ├── __init__.py
+│   │       ├── version.py
+│   │       ├── store_tag.py
+│   │       ├── redshift.py
+│   │       ├── tolerance.py
+│   │       ├── integration_metadata.py
+│   │       ├── DimensionlessQuantity.py
+│   │       ├── DimensionfulQuantity.py
+│   │       ├── ExponentialPotential.py
+│   │       ├── InversePowerPotential.py
+│   │       ├── Starobinsky.py
+│   │       ├── ReclinerPotential.py
+│   │       ├── ReflectingPotential.py
+│   │       ├── ExponentialCoupling.py
+│   │       ├── QCD_Cosmology.py
+│   │       ├── ScalarModel.py       # Factory for main ODE output
+│   │       ├── AdiabaticHistory.py
+│   │       └── BBNData.py
+│   └── tests/                       # unittest modules; standin_pool.py is a copy of the package's
 │
 ├── ComputeTargets/
 │   ├── ScalarModel.py               # ODE solver (Ray remote class)
@@ -123,6 +122,7 @@ ChamPBH/
 │
 └── config/
     ├── argument_parser.py           # configargparse CLI + YAML
+    ├── datastore.py                 # The registry of factories, drop groups, batch sizes
     ├── defaults.py                  # Tolerance/precision constants
     ├── model_list.py                # Cosmological model registry
     └── sharding.py                  # Shard-key type and table lists
@@ -212,42 +212,69 @@ task_builder(item)
 
 ## 4. The Database Layer
 
-### 4.1 Architecture
+> **Note, 2026-10-13 (`dk-and-rpk-migration`, prompt 11).** This section was rewritten for the
+> package. Until `857ec73` (that campaign's prompt 08) the layer was ChamPBH's own: `Datastore/object.py`
+> and, under `Datastore/SQL/`, `Datastore.py`, `ShardedPool.py`, `SerialPoolBroker.py`, `ClientPool.py`
+> and `ProfileAgent.py`, with the factories' base class in `ObjectFactories/base.py` and the
+> registry as `_factories` in `Datastore.py`. All seven are in git before `857ec73`. The layer is
+> now the `datastorekit` package, and this section says what ChamPBH gives it. What the package
+> does is stated in its client contract, which this section points at and does not copy.
 
-The database is a **sharded SQLite** system managed as a pool of Ray remote actors. Each actor owns one SQLite file. A separate primary SQLite file records the shard topology.
+### 4.1 The package, and where ChamPBH meets it
+
+The layer is [`datastorekit`](https://github.com/ds283/DatastoreKit), pinned to the tag `v0.3.0` in
+`requirements.txt` (never an editable install). Its specification for a client is
+`docs/client-contract.md` at that tag
+([§1](https://github.com/ds283/DatastoreKit/blob/v0.3.0/docs/client-contract.md) the pool's
+constructor, §2 the keys of `register()`, §3 the factory hooks, §4 the inventory's declarations,
+§5 the layer's own tables, §6 what the layer reads from a stored object, §7 the other entry
+points, §8 version-keyed lookups, §9 the changes after `v0.2.0`). Where this section and the
+contract differ, the contract is right.
+
+The database is a **sharded SQLite** store managed as a pool of Ray actors. Each actor owns one
+SQLite file, and a separate primary SQLite file records the shard topology. The shards are
+siblings of the primary and the primary records them by their bare file names, so a store stays
+readable when its directory is moved or copied.
 
 ```
-primary.db           ← shard topology, key→shard mapping
+primary.db           ← shard topology, key→shard mapping (the package's own tables, contract §5)
 primary-shard0000.db ← Datastore actor #0
 primary-shard0001.db ← Datastore actor #1
 ...
 primary-shardNNNN.db ← Datastore actor #N
 ```
 
-All actors run in the same Ray cluster but are independent processes, so SQLite's single-writer constraint is respected per-shard.
+All actors run in the same Ray cluster but are independent processes, so SQLite's single-writer
+constraint is respected per shard. What the package provides, by module:
 
-### 4.2 `DatastoreObject` (`Datastore/object.py`)
+| What | Where |
+|------|-------|
+| The pool, run in the driver: `ShardedPool` (`object_get`, `object_get_vectorized`, `object_read_batch`, `object_store`, `object_validate`, `read_table`) | `datastorekit.SQL.ShardedPool` |
+| The shard actor (`Datastore`, one per shard, named `shardNNNN-store`), the serial broker (`SerialPoolBroker`, named so) and the optional profiling actor (`ProfileAgent`) | `datastorekit.SQL.Datastore`, `.SerialPoolBroker`, `.ProfileAgent` (and `.ClientPool`, the actor's serial leases) |
+| `DatastoreObject` (`store_id`, `available`), the base of every stored class; `available` is the sentinel `RayWorkPool` uses to tell "already in the database" from "needs computation" | `datastorekit.object`, also `from datastorekit import DatastoreObject` |
+| `SQLAFactoryBase`, the factories' base class; the schema builder `build_schema`, `dependent_tables`, `drop_order` | `datastorekit.SQL.factory_base`, `datastorekit.SQL.schema` |
+| The read-only reader and the inventory (`open_read_only`, `read_inventory`, `InventorySpec`) | `datastorekit.store_reader`, `datastorekit.store_inventory` |
+| Whole-store operations: `ShardedPool.copy_store`, `move_store`, `closed_store_files`, `delete_store`, and the two tools `python -m datastorekit.tools.sharded_store` and `python -m datastorekit.tools.shard_key_audit` | `datastorekit.SQL.ShardedPool`, `datastorekit.tools` |
+| The names the layer owns: the version and tag tables' names, `VERSION_SERIAL_KEY`, `require_version_serial` | `datastorekit.contract` |
 
-Every persistent object inherits from `DatastoreObject`:
+### 4.2 What ChamPBH supplies
 
-```python
-class DatastoreObject:
-    def __init__(self, store_id: Optional[int])
-    
-    @property
-    def store_id(self) -> int      # raises if None
-    
-    @property
-    def available(self) -> bool    # True if store_id is not None
-```
+| What | Where in ChamPBH | How it reaches the package |
+|------|------------------|----------------------------|
+| **The registry**: every storable class's table name mapped to its factory *instance* (27 entries, in the order the schema is built; the table below) | `config/datastore.py`, `factories` | `ShardedPool(factories=…)`, and `read_inventory(path, factories)` |
+| **The drop groups** behind `--drop`, each mapped to the tables it drops, and `tables_to_drop(groups)`, which refuses a drop that would leave rows naming rows it drops, naming the groups to add (U4) | `config/datastore.py`, `drop_groups`, `tables_to_drop` | `ShardedPool(drop_tables=…)`; `main.py` calls `tables_to_drop` before Ray starts |
+| **The batch sizes**: how many serials an actor leases from the broker at a time, per table | `config/datastore.py`, `serial_batch_sizes` | `ShardedPool(serial_batch_sizes=…)` |
+| **The tables and the shard key**: `replicated_tables`, `sharded_tables`, `read_table_config`, `ShardKeyType` (`beta_value`) and `get_shard_key_store_id` (§5.2) | `config/sharding.py` | `ShardedPool(replicated_tables=…, sharded_tables=…, read_table_config=…, ShardKeyType=…, ShardKeyStoreIdGetter=…)` |
+| **The version label** | `config/version.py`, `VERSION_LABEL` | `ShardedPool(version_label=…)` |
+| **The factories' own code**: for each class, `register` and `build`, and, where the class has one, `store`, `validate`, `validate_on_startup` and `inventory_spec` | `Datastore/SQL/ObjectFactories/` | read from the registry's instances by the package's actors, pool and reader |
 
-The `available` property is the sentinel used by `RayWorkPool` to distinguish "already in database" from "needs computation".
+The three drivers that open a pool (`main.py`, `plot_by_beta.py`, `plot_ScalarModel.py`) each call
+`ShardedPool(…)` in a `with` block with these arguments; the constructor's sixteen parameters, and
+what the package does with each, are contract §1. `main.py --inventory` does not open a pool: it
+calls `read_inventory` on the closed store, read-only and before Ray starts, and prints it with
+`tools/inventory_report.py`.
 
-### 4.3 `Datastore` (`Datastore/SQL/Datastore.py`) — Ray Remote Actor
-
-A single-shard database manager. One instance per shard file.
-
-**Registered factories** (the complete set as of writing):
+**The registry, as `config/datastore.py` holds it** (the table type is `config/sharding.py`'s).
 
 | Key | Factory | Table type |
 |-----|---------|------------|
@@ -270,124 +297,121 @@ A single-shard database manager. One instance per shard file.
 | `QCD_Cosmology` | `sqla_QCDCosmology_factory` | Replicated |
 | `IntegrationSolver` | `sqla_IntegrationSolver_factory` | Replicated |
 | `ScalarModel` | `sqla_ScalarModelFactory` | Sharded |
-| `ScalarModel_tags` | `sqla_ScalarModelTagAssociation_factory` | Sharded |
+| `ScalarModel_tags` | `sqla_ScalarModelTagAssociation_factory` | with its owner (not listed in `config/sharding.py`) |
 | `ScalarModelValue` | `sqla_ScalarModelValue_factory` | Sharded |
 | `AdiabaticHistory` | `sqla_AdiabaticHistoryFactory` | Sharded |
-| `AdiabaticHistory_tags` | `sqla_AdiabaticHistoryTagAssociation_factory` | Sharded |
+| `AdiabaticHistory_tags` | `sqla_AdiabaticHistoryTagAssociation_factory` | with its owner (not listed) |
 | `AdiabaticHistoryValue` | `sqla_AdiabaticHistoryValue_factory` | Sharded |
 | `BBNData` | `sqla_BBNDataFactory` | Sharded |
-| `BBNData_tags` | `sqla_BBNDataTagAssociation_factory` | Sharded |
+| `BBNData_tags` | `sqla_BBNDataTagAssociation_factory` | with its owner (not listed) |
 | `BBNDataValue` | `sqla_BBNDataValue_factory` | Sharded |
 
-**Key actor methods:**
+`LambdaCDM`, which the old layer's registry listed as replicated, is no longer a registered table
+(`dk-and-rpk-migration` P8).
 
-- `object_get(class_name, **kwargs) → ObjectRef` — Looks up or creates an object. The factory's `construct()` method runs a `SELECT`; if nothing is found and `_do_not_populate` is not set, it calls `deconstruct()` to `INSERT` a skeleton row. Returns the object (possibly with `store_id=None` if not yet computed).
-- `object_store(obj) → ObjectRef` — Takes an object populated with computed data, writes it to the database, and returns a copy with `store_id` assigned.
-- `object_validate(obj) → ObjectRef` — Runs post-store integrity checks; returns `True`/`False`.
-- `read_largest_store_ids() → dict` — Used during startup to synchronize the serial broker.
-- `inventory(class_name) → dict` — Returns human-readable summary for `--inventory` mode.
+### 4.3 What the package does for a get, a store and a validate
 
-**The `_do_not_populate` flag:** When passed as a keyword argument to `object_get`, it suppresses the INSERT of a skeleton row. This allows a fast "does this exist?" query without side effects. Used in the two-pass pattern: first check which items exist, then enqueue only the missing ones for computation.
+The pool's `object_get` and `object_store` dispatch by the class's name; the replicated/sharded
+rule, the replication of a replicated write, the check at open, the pruning of unvalidated rows
+and the refusals are the package's, and are stated in contract §1 (the arguments that set them),
+§3 (the hooks it calls) and §6 (what it reads from an object). The points a ChamPBH reader needs:
 
-**Serial ID management:** Each object class has a monotonically increasing integer serial number. The `SerialPoolBroker` actor coordinates across shards so that serial numbers never collide between shards (critical for replicated tables that must have the same `store_id` on every shard).
+- **Replicated tables** (parameter types, potentials, cosmology, metadata) are identical on every
+  shard, with the same `store_id`. A replicated write goes to a controlling shard and is then
+  replicated to the others under the controller's serials. A replicated row carries **one
+  timestamp**, the same on every shard.
+- **Sharded tables** (compute results: `ScalarModel`, `AdiabaticHistory`, `BBNData` and their
+  value tables, and `ExponentialCoupling`) live only on the shard of their shard key. The shard
+  is assigned, load-balanced, when a `beta_value` is first inserted; a lookup table in the
+  primary maps `beta_value.store_id` to the shard.
+- **Serials** are leased from the one `SerialPoolBroker`, so serial numbers never collide between
+  shards, which replicated tables need, since their `store_id`s must agree on every shard.
+- **`object_get(class, **kwargs)`** finds or creates an object through the factory's `build`;
+  **`object_store(obj)`** writes a computed object through its factory's `store` and returns it
+  with its `store_id`; **`object_validate(obj)`** runs its `validate`. `store`, `validate` and
+  `validate_on_startup` are defaulted since `v0.2.3` (U3): a factory that does not define one
+  raises `NotImplementedError` if the layer calls it. ChamPBH's `ScalarModel`, `AdiabaticHistory`
+  and `BBNData` factories define all three, and the others none.
+- **`object_get_vectorized(class, shard_key, payload_data)`** is for sharded tables only. It takes the
+  shard key **in mapping form**, `{"shard_key": key}` (the sharded table's field name mapped to the
+  key), and sends one shard actor the list of payloads in one call.
+- **At open**, the pool checks that every shard's replicated tables agree, repairs or refuses what
+  an interrupted run left, and, under `prune_unvalidated`, deletes the unvalidated rows of the
+  classes whose factory validates at startup (contract §1, rows 5 and 11; §2, `validate_on_startup`).
 
-**Version-keyed lookups (added 2026-09-30, `run-integrity` prompt 01).** Every table registered with `"version": True` records, in its `version` column, the serial of the label the datastore was opened under (`Datastore._insert`). From this prompt the lookups of the three compute targets read it:
+**The `_do_not_populate` payload key.** It is ChamPBH's convention, not the package's: the
+`ScalarModel` and `BBNData` factories' `build` read it from the payload, and when it is set they do
+not INSERT a skeleton row. This allows a fast "does this exist?" query without side effects, and
+is used in the two-pass pattern: first check which items exist, then enqueue only the missing ones
+for computation.
 
-- **Which tables are keyed.** `ScalarModel`, `AdiabaticHistory` and `BBNData`, and only those. Each factory's `register()` declares `"key_on_version": True`; `_build_schema` refuses that flag on a table without `"version": True`. Their value and tag tables hang off the parent row's serial and carry no key of their own.
-- **How the serial reaches `build()`.** `Datastore.object_get`, the one route to every `build()` (scalar and `payload_data` alike, so also `ShardedPool.object_get_vectorized`), hands a keyed factory a *copy* of each payload with `self._version.store_id` added under the reserved key `VERSION_SERIAL_KEY` (`"_version_serial"`, in `config/version.py`). The caller's dict is not mutated, and a caller that supplies the key itself is refused (`KeyError`). The factory's `build()` adds `table.c.version == <serial>` to its query, and raises (`config.version.require_version_serial`) if the key is absent: a keyed lookup never falls back to an unfiltered one.
-- **Parameter tables are not keyed.** Couplings, potentials, cosmologies and the value tables (β, M, Λ, T, φ, π, z, tolerances) keep one row per parameter across labels, even where they carry a `version` column.
+**Version-keyed lookups (added 2026-09-30, `run-integrity` prompt 01; since `dk-and-rpk-migration`
+prompt 08 the keying is the package's, contract §8).** Every table registered with
+`"version": True` records, in its `version` column, the serial of the label the store was opened
+under (stamped by the actor's insert). The lookups of the three compute targets read it:
 
-A store opened under a new label therefore sees none of its old compute targets; they are recomputed and stored beside the old rows. `--inventory` still lists every version. The label is defined once, as `VERSION_LABEL` in `config/version.py`, and `main.py`, `plot_by_beta.py` and `plot_ScalarModel.py` import it.
+- **Which tables are keyed.** `ScalarModel`, `AdiabaticHistory` and `BBNData`, and only those. Each factory's `register()` declares
+  `"key_on_version": True`; the package's schema builder refuses that flag on a table without
+  `"version": True` (`ValueError`, contract §8). Their value and tag tables hang off the parent row's
+  serial and carry no key of their own.
+- **How the serial reaches `build()`.** The actor's `object_get`, the one route to every `build()`
+  (scalar and `payload_data` alike, so also `ShardedPool.object_get_vectorized`), hands a keyed
+  factory a *copy* of each payload with the lookup serial added under the reserved key
+  `VERSION_SERIAL_KEY` (`"_version_serial"`, now `datastorekit.contract.VERSION_SERIAL_KEY`). The
+  caller's dict is not mutated, and a caller that supplies the key itself is refused (`KeyError`).
+  The factory's `build()` adds `table.c.version == <serial>` to its query, and raises
+  (`datastorekit.contract.require_version_serial`, imported by the three factories) if the key is
+  absent: a keyed lookup never falls back to an unfiltered one.
+- **Parameter tables are not keyed.** Couplings, potentials, cosmologies and the value tables (β,
+  M, Λ, T, φ, π, z, tolerances) keep one row per parameter across labels, even where they carry a
+  `version` column.
+- Only `object_get` is keyed (contract §8, "What is not keyed"). It is tested by
+  `Datastore/tests/test_version_keyed_lookups.py`.
 
-### 4.4 `ShardedPool` (`Datastore/SQL/ShardedPool.py`)
-
-The user-facing database interface. Not a Ray actor itself — runs in the driver process and calls into the shard `Datastore` actors.
-
-**Constructor parameters (key ones):**
-
-| Parameter | Purpose |
-|-----------|---------|
-| `version_label` | String versioning tag for reproducibility |
-| `db_name` | Path to the primary SQLite file |
-| `ShardKeyType` | Python class used as the shard key (currently `beta_value`) |
-| `ShardKeyStoreIdGetter` | `Callable(key) → int` extracts `store_id` from a key object |
-| `replicated_tables` | List of table names that are identical on every shard |
-| `sharded_tables` | Dict of `{table_name: shard_key_field}` for sharded tables |
-| `shards` | Number of shards to create (fixed at creation time) |
-| `prune_unvalidated` | If True, deletes objects lacking validation on startup |
-| `drop_actions` | List of table names to drop and recreate on startup |
-| `read_table_config` | Optional custom readers for replicated tables |
-| `inventory_config` | Merge policies for cross-shard inventory aggregation |
-
-**Sharding strategy:** The shard is determined by the `shard_key` field on an object. In ChamPBH, this is always a `beta_value` object. A lookup table in the primary database maps `beta_value.store_id → shard_id`. Shard assignment is load-balanced at the time a new `beta_value` is first inserted.
-
-**Replicated vs. sharded tables:**
-
-- **Replicated tables** (all parameter types, potentials, cosmology, metadata): stored identically on every shard. When a new object is created, `ShardedPool` writes it to one randomly chosen shard and then copies it (with the same `store_id`) to all remaining shards.
-- **Sharded tables** (compute results: ScalarModel, AdiabaticHistory, BBNData): stored only on the shard determined by the `shard_key`. The `object_store` method routes the write to a single shard.
-
-**Key methods:**
-
-```python
-# Scalar lookup — works for both replicated and sharded tables
-pool.object_get(ObjectClass, **kwargs) → ObjectRef
-
-# Batch lookup — only for sharded tables, sends all items for one shard_key
-# to a single shard actor in one call
-pool.object_get_vectorized(ObjectClass, shard_key, payload_data: List[dict]) → ObjectRef
-
-# Batch lookup within a shard (alternative batching method)
-pool.object_read_batch(ObjectClass, shard_key, **payload) → ObjectRef
-
-# Store a single object or list of objects
-pool.object_store(obj) → ObjectRef
-
-# Validate after storage
-pool.object_validate(obj) → ObjectRef
-
-# Human-readable inventory (used by --inventory flag)
-pool.inventory(cls) → dict
-```
+A store opened under a new label therefore sees none of its old compute targets; they are
+recomputed and stored beside the old rows. `--inventory` still lists every version. The label is
+defined once, as `VERSION_LABEL` in `config/version.py`, and `main.py`, `plot_by_beta.py` and
+`plot_ScalarModel.py` import it.
 
 **The two-pass query pattern** used in `main.py` for all compute stages:
 
-1. Call `object_get_vectorized(..., _do_not_populate=True)` across all items in a batch. This returns skeleton objects; check `obj.available` to identify which are already computed.
-2. For missing items only, call `object_get(...)` without `_do_not_populate`. This creates skeleton rows and returns objects ready for `RayWorkPool` to compute and store.
+1. Call `object_get_vectorized(..., {"shard_key": key}, payload_data=[…])` with each payload
+   carrying `_do_not_populate=True`, across all items in a batch. This returns skeleton objects;
+   check `obj.available` to identify which are already computed.
+2. For missing items only, call `object_get(...)` without `_do_not_populate`. This creates skeleton
+   rows and returns objects ready for `RayWorkPool` to compute and store.
 
-### 4.5 `SQLAFactoryBase` (`Datastore/SQL/ObjectFactories/base.py`)
+### 4.4 A factory, and how to add a class
 
-The abstract base class for all object factories. Each factory registers one object class with the `Datastore`.
-
-**Required methods:**
+A factory is a class the package's actors call for each fact of a stored class. ChamPBH's factories
+subclass `datastorekit.SQL.factory_base.SQLAFactoryBase` and the registry holds an *instance* of each.
+The hooks and the keys of `register()` are contract §3 and §2; in outline:
 
 ```python
-class SQLAFactoryBase:
+class sqla_ExampleFactory(SQLAFactoryBase):
     def register(self) -> dict:
-        # Returns schema definition:
-        # {
-        #   "name": "TableName",
-        #   "version": int,                     # schema version for migrations
-        #   "columns": [...sqla.Column(...)],    # SQLAlchemy column definitions
-        #   "values": [...sqla.Column(...)],     # columns for value sub-table (optional)
-        #   "tags": bool,                        # whether to create a tags association table
-        # }
-    
-    def build_object(self, payload: dict, conn, table, ...):
-        # Called by object_get() when a new object must be created/fetched.
-        # Runs SELECT; if not found and not _do_not_populate, runs INSERT.
-        # Returns the Python domain object.
-    
-    def build_object_list(self, payload_list: List[dict], conn, table, ...):
-        # Vectorized version of build_object() for batch queries.
-    
-    def store_object(self, obj, conn, table, ...):
-        # Called by object_store(). Serializes computed data into the database.
-    
-    def validate_object(self, obj, conn, table, ...) -> bool:
-        # Called by object_validate(). Reads back and checks stored data.
+        # the table: "columns", and the keys the schema builder reads ("version", "timestamp",
+        # "stepping", "serial", "validate_on_startup", "key_on_version", …); contract §2
+        ...
+
+    def build(self, payload, conn, table, inserter, tables, inserters):
+        # find the object by a SELECT, or insert it through `inserter`; return the domain object.
+        # Every get comes through here, scalar and vectorized.
+        ...
+
+    # defaulted since v0.2.3 (U3); define only where the class needs them:
+    def store(self, obj, conn, table, inserter, tables, inserters): ...      # serialize computed data
+    def validate(self, obj, conn, table, tables) -> bool: ...                # read back and check
+    def validate_on_startup(self, conn, table, tables, prune=False): ...    # report / prune unvalidated rows
+    def inventory_spec(self): ...                                           # an InventorySpec (contract §4)
 ```
 
-To add a new persistent object class to a project based on this codebase, you need to: (a) write the factory, (b) register it in the `_factories` dict in `Datastore.py`, (c) add the table name to either `replicated_tables` or `sharded_tables` in `config/sharding.py`.
+To add a new persistent class to a project built on this one: (a) write the factory and, if the class
+is a compute target, its three hooks; (b) add an instance to `factories` in `config/datastore.py`
+(and to a group of `drop_groups`, and to `serial_batch_sizes`, where it should have one); (c) add
+its table name to `replicated_tables` or `sharded_tables` in `config/sharding.py`; (d) declare an
+`inventory_spec()`, or name the class as read through an owner's spec, or excluded with a reason, in
+`Datastore/tests/test_inventory_specs.py`, which fails on a registered class in none of the three.
 
 ---
 
@@ -449,7 +473,7 @@ Uses `configargparse` (a drop-in `argparse` replacement) so that every CLI argum
 
 ### 5.2 Sharding Configuration (`config/sharding.py`)
 
-This file defines what the `ShardedPool` constructor needs:
+This file defines what the `ShardedPool` constructor needs of the tables and the shard key (the registry, the drop groups and the batch sizes are in `config/datastore.py`, §4.2):
 
 ```python
 ShardKeyType = beta_value   # The type used as the shard key
@@ -460,7 +484,7 @@ replicated_tables = [
     "phi_value", "pi_value",
     "ExponentialPotential", "InversePowerPotential", "ReflectingPotential",
     "ReclinerPotential", "StarobinskyPotential",
-    "LambdaCDM", "QCD_Cosmology",
+    "QCD_Cosmology",
     "IntegrationSolver"
 ]
 
@@ -474,6 +498,12 @@ sharded_tables = {
     "BBNDataValue": "shard_key",
 }
 ```
+
+The file also holds `read_table_config` (the replicated classes whose `read_table` the pool serves,
+each with its `tables_arg`: `redshift`, `beta_value`, `M_value`, `Lambda_value`, `phi_value`,
+`pi_value`) and `get_shard_key_store_id`, which is the pool's `ShardKeyStoreIdGetter`. Its companion
+is `config/datastore.py` (added by `dk-and-rpk-migration` prompt 05): the registry `factories`, the
+`drop_groups`, `serial_batch_sizes` and `tables_to_drop` (§4.2). A new class is named in both.
 
 For a new project with a different shard key, this file is the primary place to make changes.
 
@@ -919,7 +949,9 @@ See `prompts/run-integrity/logs/03-failure-caching-and-pairing.md`.
 # Pass 1: vectorized existence check, _do_not_populate=True
 query_queue = RayWorkPool(
     pool, query_batch,
-    task_builder=lambda x: pool.object_get_vectorized("ScalarModel", x["shard_key"], x["payload"]),
+    task_builder=lambda x: pool.object_get_vectorized(
+        "ScalarModel", {"shard_key": x["shard_key"]}, payload_data=x["payload"]
+    ),
     compute_handler=None, store_handler=None,
     store_results=True,
 )
@@ -993,16 +1025,16 @@ The following table maps ChamPBH components to their natural counterparts in a s
 | `BBNDataValue` | PBH mass function values at a grid of masses |
 | `QCD_Cosmology` | Background inflationary spacetime (de Sitter or quasi-de Sitter) |
 | `config/sharding.py` | Updated with new shard key type and table lists |
+| `config/datastore.py` | The registry of the new factories, their drop groups and batch sizes |
 | `main.py` `run_pipeline()` | New pipeline: InstantonSolution → CompactionFunction → PBHMassFunction |
 
+An instanton project adopts `datastorekit` and `raypoolkit` as packages, pinned to a tag in `requirements.txt` and never patched in place. What it writes is a registry of factories, the factories, and a sharding config (§4.2).
+
 **Components that can be used with zero or minimal modification:**
-- `RayWorkPool` (entire file)
-- `ShardedPool` (entire file)
-- `Datastore` (entire file, just update `_factories`)
-- `SerialPoolBroker`, `ClientPool`, `ProfileAgent`
+- the work queue: the `raypoolkit` package (`RayWorkPool`)
+- the datastore layer: the `datastorekit` package (`ShardedPool`, the `Datastore` actor, `SerialPoolBroker`, `ClientPool`, `ProfileAgent`, `DatastoreObject`, `SQLAFactoryBase`, the read-only reader and inventory); a project supplies the registry (`config/datastore.py`) and the sharding config
 - `IntegrationSupervisor` base class and `RHS_timer`
 - `IntegrationSolver`, `IntegrationData`
-- `DatastoreObject` base class
 - `UnitsLike` and all concrete unit systems
 - `DimensionlessQuantity`, `DimensionfulQuantity` and their factories
 - `version`, `tolerance`, `store_tag` and their factories
@@ -1022,6 +1054,7 @@ The following table maps ChamPBH components to their natural counterparts in a s
 - `CosmologyConcepts/ConformalCouplings/` → may not be needed, or replaced with inflationary model parameters
 - `CosmologyModels/` → inflationary background (de Sitter, quasi-de Sitter)
 - `config/sharding.py` → updated shard key and table lists
+- `config/datastore.py` → the registry of the new factories, their drop groups and batch sizes
 - `main.py` → new pipeline driver
 - `config/model_list.py` → inflationary model list
 
@@ -1059,18 +1092,21 @@ class InstantonSolution(DatastoreObject):
 
 **Step 2 — Factory** (`Datastore/SQL/ObjectFactories/InstantonSolution.py`):
 
-Implement `SQLAFactoryBase` with:
-- `register()` returning the SQLAlchemy column schema
-- `build_object()` to SELECT / INSERT
-- `store_object()` to serialize computed results
-- `validate_object()` to verify integrity
+Subclass `datastorekit.SQL.factory_base.SQLAFactoryBase` (§4.4) with:
+- `register()` returning the SQLAlchemy column schema and the keys the schema builder reads
+- `build(payload, conn, table, inserter, tables, inserters)` to SELECT / INSERT
+- `store(obj, conn, table, inserter, tables, inserters)` to serialize computed results
+- `validate(obj, conn, table, tables)` to verify integrity
+- `validate_on_startup(...)` and `inventory_spec()`, where the class needs them
 
-**Step 3 — Register** in `Datastore/SQL/Datastore.py`:
+The hooks and keys, and what the package does when one is wrong or absent, are the client contract's §2–§4 (§4.1).
+
+**Step 3 — Register** in `config/datastore.py`, as entries of `factories` (and of `drop_groups` and `serial_batch_sizes`, where wanted):
 
 ```python
-_factories["InstantonSolution"] = sqla_InstantonSolution_factory()
-_factories["InstantonSolution_tags"] = sqla_InstantonSolutionTagAssociation_factory()
-_factories["InstantonSolutionValue"] = sqla_InstantonSolutionValue_factory()
+factories["InstantonSolution"] = sqla_InstantonSolution_factory()
+factories["InstantonSolution_tags"] = sqla_InstantonSolutionTagAssociation_factory()
+factories["InstantonSolutionValue"] = sqla_InstantonSolutionValue_factory()
 ```
 
 **Step 4 — Sharding** in `config/sharding.py`:
@@ -1099,17 +1135,17 @@ work_pool.run()
 
 ## 14. Key Invariants and Gotchas
 
-1. **Shard key must be in the database before sharded objects.** A `beta_value` (or equivalent shard key) must be inserted into the replicated tables and assigned to a shard before any `ScalarModel` (or equivalent) referencing that key can be stored. `ShardedPool._assign_shard_keys()` handles this automatically when `object_get` is called on the shard-key type.
+1. **Shard key must be in the database before sharded objects.** A `beta_value` (or equivalent shard key) must be inserted into the replicated tables and assigned to a shard before any `ScalarModel` (or equivalent) referencing that key can be stored. `ShardedPool` handles this automatically when `object_get` is called on the shard-key type (its `_assign_shard_keys`; client contract §1, row 3).
 
-2. **Replicated table `store_id`s must be identical across shards.** The `SerialPoolBroker` coordinates this. Never insert a replicated-table object directly into a shard — always go through `ShardedPool.object_get()`.
+2. **Replicated table `store_id`s must be identical across shards.** The `SerialPoolBroker` coordinates this. Never insert a replicated-table object directly into a shard — always go through `ShardedPool.object_get()` (a replicated write carries the controlling shard's serials to the others; contract §6).
 
-3. **`_do_not_populate` is advisory.** If the object already exists in the database (from a previous run), `object_get` returns it regardless of this flag. The flag only suppresses the INSERT when the object is absent.
+3. **`_do_not_populate` is advisory.** It is a payload key that ChamPBH's `ScalarModel` and `BBNData` factories read (§4.3), not the package's. If the object already exists in the database (from a previous run), `object_get` returns it regardless of this flag. The flag only suppresses the INSERT when the object is absent.
 
 4. **`compute()` must return an `ObjectRef`.** `RayWorkPool` expects a Ray future from `compute_handler`. If the computation is CPU-bound and cannot be a Ray task (rare), wrap it in `ray.remote`.
 
 5. **`store()` is called on the driver side, not in Ray.** After `ray.get(compute_ref)` completes, `RayWorkPool` calls `obj.store()` on the Python object in the driver process. This should copy data from the compute result into the object's fields. Then `pool.object_store(obj)` is called to serialize to the database.
 
-6. **Shard count is fixed at database creation time.** The number of shards cannot be changed for an existing database. Plan the shard count to match the expected parallelism and data volume.
+6. **Shard count is fixed at database creation time.** The number of shards cannot be changed for an existing database (the primary's records decide; contract §1, row 8). Plan the shard count to match the expected parallelism and data volume.
 
 7. **Ray actor naming.** Each shard `Datastore` is named `"shard{N:04d}-store"` and the `SerialPoolBroker` is named `"SerialPoolBroker"`. If reusing actor names across sessions (e.g., when `ray.init` reuses a cluster), ensure actors from previous sessions have been cleaned up.
 

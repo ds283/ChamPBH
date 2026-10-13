@@ -109,7 +109,8 @@ EXPECTED_SERIAL_BATCH_SIZES = {
 
 
 class TestConfigDatastoreData(unittest.TestCase):
-    """``config.datastore`` holds exactly the data the layer held at prompt 04's tree."""
+    """``config.datastore`` holds exactly the data the layer held at prompt 04's tree, less
+    ``LambdaCDM`` (P8), as the module docstring says."""
 
     def test_factories_registry(self):
         actual = []

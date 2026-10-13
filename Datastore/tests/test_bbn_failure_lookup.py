@@ -27,8 +27,9 @@ newest failure) and `failure=False` (the success only) are unchanged.
 pass there too: they are regression guards for the unchanged filters, and say so.
 
 No Ray cluster, no PRyMordial solve, no persistent datastore: each test builds the
-undecorated `Datastore.__ray_actor_class__` on a SQLite file in a `tempfile`
-directory, as `test_version_keyed_lookups` does, and reuses its stand-ins. Rows go
+package's undecorated actor (`standin_pool.DatastoreClass`, datastorekit's) on a SQLite
+file in a `tempfile` directory, as `test_version_keyed_lookups` does, and reuses its
+stand-ins. Rows go
 through the datastore's own inserter with explicit, increasing serials; lookups go
 through `object_get`, so the version key is present. About 1 s.
 """

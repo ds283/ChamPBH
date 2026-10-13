@@ -92,7 +92,7 @@ def _write(store, model):
             model,
             conn,
             store._tables["ScalarModel"],
-            # there is no serial broker here, so the row is given an explicit serial
+            # the harness has a stand-in broker, but the row is given an explicit serial
             lambda c, payload: store._inserters["ScalarModel"](
                 c, dict(payload, serial=1)
             ),
