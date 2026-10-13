@@ -255,7 +255,7 @@ Each run from the repository root on the same store, with its output directory a
 ### 1.7 Nothing written outside `$R`, but by design
 
 - `git status` after the stop shows the user's untracked set of the gate and nothing else (before
-  this commit's files were written).
+  `e5ef6cb`'s files were written).
 - `~/ScienceData` holds `ChamPBH-rehearsals/` alone after the stop: the lock was created by `start`
   and removed by `stop`.
 - `/tmp/ray-cpbh/` is the cluster's temp dir; `/tmp/ray/session_*` stayed 160 and

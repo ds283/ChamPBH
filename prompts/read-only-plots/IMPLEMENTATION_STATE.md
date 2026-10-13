@@ -1,7 +1,7 @@
 # read-only-plots campaign — implementation state
 
-**Last updated:** 2026-10-13 · **Status: LIVE — 4 of 4 prompts written, 3 of 4 landed (01 and
-02, each reviewed; 03). U1–U6 and P1–P8 ruled by the user on 2026-10-13, all as proposed (README §6).**
+**Last updated:** 2026-10-13 · **Status: LIVE — 4 of 4 prompts written, 3 of 4 landed (01, 02
+and 03, each reviewed). U1–U6 and P1–P8 ruled by the user on 2026-10-13, all as proposed (README §6).**
 The plan is [`README.md`](README.md), written on 2026-10-13 on branch `read-only-plots`, cut from
 `main` at `17fad8b`.
 
@@ -28,7 +28,7 @@ changes no file of the store it reads.
 |---|---|---|---|---|---|---|---|
 | 01 | [Require the Ray address](01-require-the-ray-address.md) | `--ray-address` without a default; `auto` refused (U1, U2) | Sonnet | ✍️ 2026-10-13 | ✅ 2026-10-13 | `04486f4` | [`logs/01-require-the-ray-address.md`](logs/01-require-the-ray-address.md) |
 | 02 | [Read-only plot pools](02-read-only-plot-pools.md) | `plot_inputs.py`; both plot scripts `read_only=True`; misses per U3, U4; closes `[08-plot-scripts-open-read-write-pools]` | Opus | ✍️ 2026-10-13 | ✅ 2026-10-13 | `9dc23db` | [`logs/02-read-only-plot-pools.md`](logs/02-read-only-plot-pools.md) |
-| 03 | [Rehearse a read-only plotting run](03-rehearse-a-read-only-plotting-run.md) | one pilot build and the readers, checksums before and after (U5) | Opus | ✍️ 2026-10-13 | ✅ 2026-10-13 | this commit | [`logs/03-rehearse-a-read-only-plotting-run.md`](logs/03-rehearse-a-read-only-plotting-run.md) |
+| 03 | [Rehearse a read-only plotting run](03-rehearse-a-read-only-plotting-run.md) | one pilot build and the readers, checksums before and after (U5) | Opus | ✍️ 2026-10-13 | ✅ 2026-10-13 | `e5ef6cb` | [`logs/03-rehearse-a-read-only-plotting-run.md`](logs/03-rehearse-a-read-only-plotting-run.md) |
 | 04 | [Close](04-close.md) | documents, handover, index, board | Sonnet | ✍️ 2026-10-13 | ⬜ | — | — |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
@@ -40,6 +40,7 @@ Orchestrator notes are written one prompt at a time, in [`orchestrator/`](orches
 before each dispatch:
 - [`orchestrator/prompt-01.md`](orchestrator/prompt-01.md) (`8c5a7f1`), used for 01.
 - [`orchestrator/prompt-02.md`](orchestrator/prompt-02.md) (`e0cf6f0`), used for 02.
+- [`orchestrator/prompt-03.md`](orchestrator/prompt-03.md) (`27f77d4`), used for 03.
 
 ### 1.1 Items
 
@@ -69,7 +70,7 @@ before each dispatch:
 |---|---|---|---|
 | Ray address | every driver refuses a run that starts Ray without `--ray-address`, and refuses `auto`, before `ray.init` | 01 | ✅ `04486f4` |
 | Read-only plots | both plot scripts open `read_only=True`; on a stand-in store their lookups find every row, skip a missing potential or coupling, stop on a missing parameter, and change no file | 02 | ✅ `9dc23db` |
-| R | a real plotting run on a real store changes no file of it (U5) | 03 | ✅ this commit |
+| R | a real plotting run on a real store changes no file of it (U5) | 03 | ✅ `e5ef6cb` |
 
 ## 3. Active and unresolved issues
 
@@ -263,7 +264,7 @@ is cosmetic and offered to the user as housekeeping; no issue opened. Nothing el
 
 ### 5.4 After prompt 03 (2026-10-13)
 
-Prompt 03 landed in this commit ([log](logs/03-rehearse-a-read-only-plotting-run.md)). H1–H4 done;
+Prompt 03 landed in `e5ef6cb` ([log](logs/03-rehearse-a-read-only-plotting-run.md)). H1–H4 done;
 the gate "R" holds. The record is `.documents/read-only-plots-verification.md` §1, with ten small
 outputs under `.documents/read-only-plots/out/03-*`.
 - **The cluster**, by `ray_cluster.sh` alone, under the shared lock (`purpose: read-only-plots 03
@@ -290,3 +291,59 @@ outputs under `.documents/read-only-plots/out/03-*`.
 
 Handed to 04: the verification document §1 is the evidence for the read-only plot pools under
 Ray; the refusals' messages there are verbatim.
+
+**Orchestrator review of prompt 03 (2026-10-13).** Against the note's eleven checks, at `e5ef6cb`:
+1. **Scope.** The diff is the note's §2 list exactly (13 files: the verification document, ten
+   outputs, the log, this board); no code, test or script. The ten outputs are 56 KB in all. The
+   untracked set is the user's, unchanged.
+2. **Nothing left running.** `ray_cluster.sh status` exit 0: the lock free, no ChamPBH process, the
+   four ports free; `pgrep` empty; `/tmp/ray/session_*` still 160, `/tmp/ray/ray_current_cluster`
+   absent. The log shows `start`'s output, the lock's owner file, `ray status`, and `stop`'s exit 0
+   in 18 s. No `ray stop` was run.
+3. **The address.** `grep -l 6379` over `$R/logs/`, `03-readers/*.log` and `03-refusals/*.log`
+   finds nothing. Each Ray driver's log names `127.0.0.1:6380`. The `auto` and `--drop` logs have
+   no Ray line; the `auto` one names 6380 only inside 01's message.
+4. **The build.** `** driver exit status 0`. `stage_counts.py`, re-run, gives 5 / 5 / 5 / 5 in each
+   stage, with 0 skipped. The provenance line is the first line, once, and is R2's. No `Traceback`.
+5. **The bytes, independently.** `shasum -a 256` and `stat -f '%m %z %N'` of the 17 files,
+   re-taken after the stop, equal the committed before-table (`03-checksums.txt`, `cmp` exit 0 for
+   both). Each file `cmp`s equal to its `03-readers/before/` copy, which was taken with `cp -p`
+   before any reader. No `-journal`, `-wal` or `-shm` under `$R`.
+6. **The readers.** `status.txt`: steps 0–5 exit 0.
+   - `histories.csv` is `d7c62c37…c522`.
+   - The SM baseline line, the reflections line, the β = 1.15 stored and `prod` figures, and the
+     inventory's head and per-β value counts are R2's recorded ones.
+   - `compare_stores`: `RESULT: equal`, with bookkeeping `none` (`"bookkeeping_differences": {}` in
+     the JSON).
+   - Both plot logs print the read-only open line once, and no read-write one.
+   - No `Traceback` in any log.
+7. **The refusals.** The three logs, read in full, match §0 of the note.
+   - The messages are verbatim.
+   - The `T_stop` run attached, opened read-only, and stopped with 02's message, with no baseline
+     line and no figure; its output directory is absent.
+   - `ray list jobs` shows four jobs, all `SUCCEEDED`, and no actor is `ALIVE`.
+   - **The note was wrong in one place:** it expected a `SerialPoolBroker` in the `T_stop` job.
+     A read-only pool creates none (`datastorekit/SQL/ShardedPool.py:562-563` at `v0.3.0`: "no
+     broker … `serial_broker=None`"). The agent recorded this correctly as its Observation 1.
+8. **Nothing outside `$R`.** `pip freeze` now equals the agent's before and after lists (101
+   lines). The mtimes and sizes of the user's pilot store, taken before dispatch, are unchanged,
+   and the untracked set is unchanged.
+9. **The document.** §1 holds everything H4 lists. Its commands are verbatim, its figures match
+   the outputs, and it is dated and additive.
+10. **The records.** Row 03, H1–H4, the gate and §5.4 are as required. `.documents/OPEN_ISSUES.md`
+    is untouched (26). The log is in §5.1's form, with every deviation classified. Deviation 1
+    (`start`'s exit status lost to zsh's lack of `PIPESTATUS`) is covered by `status` straight
+    after and by the script's code path; it is not a gap in the rehearsal.
+11. **The suites** were not re-run: the commit touches no code, and the agent's run before `start`
+    passed with 02's counts (18, 61 + 91, 63, 34) at loads 2.4–6.7.
+
+**Residue, fixed here:**
+- "this commit" → `e5ef6cb` on this board (×3), in the log's header and in the verification
+  document §1.7. The log's prose uses stay.
+- This note added to the list.
+- The status line.
+- `prompts/INDEX.md`'s row.
+
+The log's Observation 5 (shards 4–14 fall into two byte-identical groups) is about how the package
+lays out shards that hold only replicated rows. It does not bear on H2, and nothing was opened.
+Nothing else found.

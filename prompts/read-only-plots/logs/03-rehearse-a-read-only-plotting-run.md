@@ -1,7 +1,7 @@
 # Log 03 — rehearse a read-only plotting run
 
 **Subject:** Rehearse a read-only plotting run on a real store under Ray
-**Commit:** this commit, on branch `read-only-plots`, on top of `27f77d4`
+**Commit:** `e5ef6cb`, on branch `read-only-plots`, on top of `27f77d4`
 **Date:** 2026-10-13, by Claude Opus 5.5
 **Result:** **COMPLETE.** H1–H4 done; the gate "R" holds. The build exited 0 with 5 / 5 / 5 / 5 in
 each stage; all five readers exited 0; the store's 17 files are byte-identical, with their mtimes
