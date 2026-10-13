@@ -1679,3 +1679,12 @@ the orchestrator's own: during check 4 it overwrote R2's `reference` build log (
   - R2's stores and logs are kept (README §3); `10-reference.log`'s state is as above until the
     user rules.
   - 11 can now be written (README §2.1).
+
+**`10-reference.log` restored (2026-10-13), on the user's instruction.** The rebuilt log described
+above was copied back to `~/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/logs/10-reference.log`,
+and its mtime was set to the original's, 1791850156, as the user asked. It is 35 lines and 3,233
+bytes, `cmp`-identical to the rebuilt copy, and `stage_counts.py` on it gives the committed
+`out/10-stage-counts.txt` exactly. The overwritten JSON is kept in the session scratchpad
+(`n10/review/10-reference.log.clobbered-json`). The ANSI codes on lines 3, 17 and 34 come from the
+agent's raw outputs and from R1's line of the same form. Every other byte is attested by those
+outputs, and the total size equals the original's.
