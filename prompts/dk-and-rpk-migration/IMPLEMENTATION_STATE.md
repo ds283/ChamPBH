@@ -1821,3 +1821,14 @@ opened. Four errors in the prose, and some residue, are fixed in this follow-up.
   `--ray-address`; and whether `CLAUDE.md` keeps the Ray bullet, which was the orchestrator's
   addition.
 
+**Merged, and the rehearsal stores removed (2026-10-13, by the user's instruction).** The branch
+`dk-and-rpk-migration` was fast-forwarded into `main` at `78769a0` (P17), pushed to GitHub, and
+deleted locally and on the remote. Then the six rehearsal stores were removed, as README §3 left to
+the user. Before the move, `ray_cluster.sh status` showed the lock free and no ChamPBH process, and
+`lsof` found no open file under the root. The whole rehearsal root,
+`~/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/`, was moved to the Trash, not deleted:
+`~/.Trash/ChamPBH-rehearsals-dk-and-rpk-migration-2026-10-13`, 447 MB. It held the six stores (17
+files each), `02-readers/`, `06-readers/`, `10-readers/` and `logs/`. Emptying the Trash is the
+user's. `~/ScienceData/` stays, because the shared rehearsal lock lives there; so does the empty
+`ChamPBH-rehearsals/`. What the stores showed is kept in
+`.documents/dk-and-rpk-migration-verification.md` and `.documents/dk-and-rpk-migration/out/`.
