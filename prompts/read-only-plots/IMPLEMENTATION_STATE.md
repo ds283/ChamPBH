@@ -1,7 +1,7 @@
 # read-only-plots campaign — implementation state
 
-**Last updated:** 2026-10-13 · **Status: LIVE — 4 of 4 prompts written, 1 of 4 landed (01,
-reviewed). U1–U6 and P1–P8 ruled by the user on 2026-10-13, all as proposed (README §6).**
+**Last updated:** 2026-10-13 · **Status: LIVE — 4 of 4 prompts written, 2 of 4 landed (01,
+reviewed; 02). U1–U6 and P1–P8 ruled by the user on 2026-10-13, all as proposed (README §6).**
 The plan is [`README.md`](README.md), written on 2026-10-13 on branch `read-only-plots`, cut from
 `main` at `17fad8b`.
 
@@ -27,7 +27,7 @@ changes no file of the store it reads.
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
 | 01 | [Require the Ray address](01-require-the-ray-address.md) | `--ray-address` without a default; `auto` refused (U1, U2) | Sonnet | ✍️ 2026-10-13 | ✅ 2026-10-13 | `04486f4` | [`logs/01-require-the-ray-address.md`](logs/01-require-the-ray-address.md) |
-| 02 | [Read-only plot pools](02-read-only-plot-pools.md) | `plot_inputs.py`; both plot scripts `read_only=True`; misses per U3, U4; closes `[08-plot-scripts-open-read-write-pools]` | Opus | ✍️ 2026-10-13 | ⬜ | — | — |
+| 02 | [Read-only plot pools](02-read-only-plot-pools.md) | `plot_inputs.py`; both plot scripts `read_only=True`; misses per U3, U4; closes `[08-plot-scripts-open-read-write-pools]` | Opus | ✍️ 2026-10-13 | ✅ 2026-10-13 | this commit | [`logs/02-read-only-plot-pools.md`](logs/02-read-only-plot-pools.md) |
 | 03 | [Rehearse a read-only plotting run](03-rehearse-a-read-only-plotting-run.md) | one pilot build and the readers, checksums before and after (U5) | Opus | ✍️ 2026-10-13 | ⬜ | — | — |
 | 04 | [Close](04-close.md) | documents, handover, index, board | Sonnet | ✍️ 2026-10-13 | ⬜ | — | — |
 
@@ -48,11 +48,11 @@ before each dispatch:
 | **A2** | 01 | the check before each driver's `ray.init`, exit 2; `main.py --inventory` exempt (U1) | ✅ |
 | **A3** | 01 | `ComputeTargets/tests/test_ray_address.py`: the function, the parser, the drivers by subprocess and `ast` | ✅ |
 | **A4** | 01 | `CLAUDE.md`'s "Ray on this machine"; `architecture-summary.md` §5.1 | ✅ |
-| **O1** | 02 | `plot_inputs.py`: the shared setup as functions of a pool; potentials and couplings one at a time (P1, P2) | ⬜ |
-| **O2** | 02 | a missing parameter stops the run (U4); a missing potential or coupling is skipped with a warning (U3) | ⬜ |
-| **O3** | 02 | both plot scripts on `plot_inputs.py`, `read_only=True`; `--drop` refused (P3) | ⬜ |
-| **O4** | 02 | `ComputeTargets/tests/test_plot_inputs.py`, on read-only stand-in stores; every file unchanged | ⬜ |
-| **O5** | 02 | `[08-plot-scripts-open-read-write-pools]` closed; the text tests (P6) | ⬜ |
+| **O1** | 02 | `plot_inputs.py`: the shared setup as functions of a pool; potentials and couplings one at a time (P1, P2) | ✅ |
+| **O2** | 02 | a missing parameter stops the run (U4); a missing potential or coupling is skipped with a warning (U3) | ✅ |
+| **O3** | 02 | both plot scripts on `plot_inputs.py`, `read_only=True`; `--drop` refused (P3) | ✅ |
+| **O4** | 02 | `ComputeTargets/tests/test_plot_inputs.py`, on read-only stand-in stores; every file unchanged | ✅ |
+| **O5** | 02 | `[08-plot-scripts-open-read-write-pools]` closed; the text tests (P6) | ✅ |
 | **H1** | 03 | one pilot build under real Ray | ⬜ |
 | **H2** | 03 | the readers: every store file byte-identical; `histories.csv` equal to R0's | ⬜ |
 | **H3** | 03 | under real Ray: `auto` refused, a missing `T_stop` stops, `--drop` refused | ⬜ |
@@ -67,7 +67,7 @@ before each dispatch:
 | Gate | Holds when | Prompt | State |
 |---|---|---|---|
 | Ray address | every driver refuses a run that starts Ray without `--ray-address`, and refuses `auto`, before `ray.init` | 01 | ✅ `04486f4` |
-| Read-only plots | both plot scripts open `read_only=True`; on a stand-in store their lookups find every row, skip a missing potential or coupling, stop on a missing parameter, and change no file | 02 | ⬜ |
+| Read-only plots | both plot scripts open `read_only=True`; on a stand-in store their lookups find every row, skip a missing potential or coupling, stop on a missing parameter, and change no file | 02 | ✅ this commit |
 | R | a real plotting run on a real store changes no file of it (U5) | 03 | ⬜ |
 
 ## 3. Active and unresolved issues
@@ -76,8 +76,9 @@ None opened by this campaign.
 
 ### 3.1 Assigned to this campaign
 
-- `[08-plot-scripts-open-read-write-pools]` (on the [`dk-and-rpk-migration`](../dk-and-rpk-migration/IMPLEMENTATION_STATE.md)
-  board §3, which carries the **Assigned** line): to 02.
+None open. `[08-plot-scripts-open-read-write-pools]`, assigned to 02, was closed by 02 on
+2026-10-13 (this commit): it is on the [`dk-and-rpk-migration`](../dk-and-rpk-migration/IMPLEMENTATION_STATE.md)
+board §4, with its **Resolved** line, and its row has left `.documents/OPEN_ISSUES.md` §1.12.
 
 ## 4. Resolved issues
 
@@ -173,3 +174,37 @@ address" gate holds.
 
 Handed to 02: every driver run needs `--ray-address`; 02 must leave the check and `ray.init` where
 `TestCheckPlacementByAst` expects them.
+
+### 5.3 After prompt 02 (2026-10-13)
+
+Prompt 02 landed in this commit ([log](logs/02-read-only-plot-pools.md)). O1–O5 done; the
+"Read-only plots" gate holds.
+- **`plot_inputs.py`** (new, top level): `parameters`, `stored_grid`, `potentials`, `couplings`,
+  `models`, `T_stop`, and the exception `PlotOptionNotStored`. It parses nothing and starts no Ray
+  at import. Each potential and coupling is looked up on its own (P2); each lookup's payload is the
+  scripts' old one, key for key (log, the payload table).
+- **The misses.** A parameter row not stored (rows 1–5, 8, 9) raises `PlotOptionNotStored`, naming
+  the option or constant and the value (U4). A potential (`ReadOnlyMiss`) or a coupling
+  (`ReadOnlyWrite`, "an insert" of `ExponentialCoupling`) not stored is skipped, with one warning
+  line each and a count; the rest are returned in the old order (U3). Nothing else is caught.
+- **The scripts.** Both call `plot_inputs` in place of their setup, open `read_only=True` (other
+  pool arguments unchanged), catch `PlotOptionNotStored` around the setup and exit 2, and refuse
+  `--drop` before 01's check (P3); `plot_by_beta.py`'s `job_name` is `"plot_by_beta"`. Every
+  model's `T_stop` is looked up before the baseline and the loop, so that a miss stops the run
+  before any figure (log, deviation 1). The history lookups, `run_pipeline`, the baseline and the
+  figures are unchanged (by `ast` against `000be0c`).
+- **Tests.** `ComputeTargets/tests/test_plot_inputs.py`, 21 tests in about 4 s, on stand-in stores
+  built by `main.py`'s lookups and reopened read-only: ComputeTargets 131 -> 152 (61 + 91). The other
+  roots are unchanged (18, 63, 34). `test_datastore_config`'s `EXPECTED_COUNTS` gains
+  `plot_inputs.py` (P6); no other existing test changed.
+- **P2's cost**, stand-in, relative only: equal on test 1's store (2 potentials, 2 couplings);
+  1.29x the vectorized time on 20 β x 5 M x 4 Λ (4.9 ms against 3.8 ms; 40 actor calls against 21).
+- The four deliberate breakages each fail the named test (log).
+- `[08-plot-scripts-open-read-write-pools]` closed on the `dk-and-rpk-migration` board §4 (its
+  header: three issues stay open); `.documents/OPEN_ISSUES.md` 27 -> 26, §1.12 empty. No issue
+  opened.
+
+Handed to 03: run the scripts as 02 left them, with `--ray-address 127.0.0.1:6380`. Under real Ray
+a refused lookup reaches `ray.get` as an instance of its cause's class (Ray 2.53.0,
+`ray/_private/worker.py:1015-1016`, `:2978-2979`; `ray/exceptions.py:170-192`), so the same catches
+apply; 03 is where that is seen.

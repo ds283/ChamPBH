@@ -13,7 +13,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import itertools
+"""
+Draw the figures of a store that main.py built, reading it read-only.
+
+The store is opened with ``ShardedPool(read_only=True)``, so a plot run never changes it
+(read-only-plots prompt 02). What it reads before the histories comes from ``plot_inputs.py``: a
+parameter the build was not run with (``--abs-tol``, ``--rel-tol``, ``--T-init-GeV``,
+``--phi-init-Mp``, ``--T-stop-GeV``) stops the run with exit 2, and a potential or coupling that
+was never stored is skipped with a warning. The shared parser's ``--drop`` and
+``--prune-unvalidated`` are main.py's: a plot run refuses ``--drop`` (exit 2, before Ray starts)
+and ignores ``--prune-unvalidated``.
+"""
+
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -31,7 +42,6 @@ from ComputeTargets.BBNData import PRYM_VERSION, compute_SM_baseline
 from CosmologyConcepts import temperature, phi_value, pi_value
 from CosmologyConcepts.ConformalCouplings import AbstractCoupling
 from CosmologyConcepts.Potentials import AbstractPotential
-from CosmologyModels import BaseCosmology
 from datastorekit.SQL.ProfileAgent import ProfileAgent
 from datastorekit.SQL.ShardedPool import ShardedPool
 from MetadataConcepts import tolerance, store_tag
@@ -39,7 +49,6 @@ from raypoolkit import RayWorkPool
 from Units import Planck_units
 from config.argument_parser import create_argument_parser, ray_address_problem
 from config.datastore import factories, serial_batch_sizes
-from config.model_list import build_model_list
 from config.sharding import (
     ShardKeyType,
     get_shard_key_store_id,
@@ -65,6 +74,7 @@ from extract_common import (
     LEFT_COLUMN,
 )
 from pipeline_selection import warn_foreign_bbn_provenance
+import plot_inputs
 from utilities import format_package_provenance, installed_package_provenance
 
 DEFAULT_TIMEOUT = 60
@@ -96,6 +106,15 @@ if args.database is None:
 
 # which datastorekit and raypoolkit this run uses (dk-and-rpk-migration prompt 01; README P5)
 print(format_package_provenance(installed_package_provenance()), flush=True)
+
+# a plot run opens its store read-only and drops nothing: --drop is main.py's, refused here
+# before Ray starts (read-only-plots prompt 02; README P3)
+if len(args.drop) > 0:
+    print(
+        "!! --drop: a plot run drops nothing, since it opens its store read-only; --drop is main.py's option",
+        file=sys.stderr,
+    )
+    sys.exit(2)
 
 # connect to the Ray cluster at the supplied address. There is no default: a missing address or
 # 'auto' is refused before Ray starts (read-only-plots prompt 01; README U1, U2)
@@ -1022,98 +1041,43 @@ with ShardedPool(
     sharded_tables=sharded_tables,
     timeout=args.db_timeout,
     profile_agent=profile_agent,
-    job_name="plot_ScalarModel",
+    job_name="plot_by_beta",
     prune_unvalidated=False,
+    read_only=True,
     read_table_config=read_table_config,
     factories=factories,
     serial_batch_sizes=serial_batch_sizes,
 ) as pool:
-    # build absolute and relative tolerances
-    atol, rtol = ray.get(
-        [
-            pool.object_get(tolerance, tol=args.abs_tol),
-            pool.object_get(tolerance, tol=args.rel_tol),
-        ]
-    )
-
-    # get list of models we want to extract transfer functions for
+    # what the plot reads before the histories, from plot_inputs.py (read-only-plots prompt 02;
+    # README P1). A parameter the build was not run with stops the run here, before any figure
+    # (U4); a potential or coupling that was never stored is skipped with a warning (U3)
     units = Planck_units()
-
-    T_init_GeV: float = args.T_init_GeV
-    T_stop_GeV: float = args.T_stop_GeV
-
-    T_init = ray.get(
-        pool.object_get("temperature", value=T_init_GeV * units.GeV, units=units)
-    )
-
-    phi_init, pi_init = ray.get(
-        [
-            pool.object_get(
-                "phi_value",
-                value=args.phi_init_Mp * units.PlanckMass,
-                units=units,
-            ),
-            pool.object_get("pi_value", value=0.0, units=units),
-        ]
-    )
-
-    def convert_to_potential(M_lambda_set):
-        if args.potential_type == "Exponential":
-            return pool.object_get(
-                "ExponentialPotential",
-                payload_data=[
-                    {"M": M, "Lambda": Lambda, "n": 1, "units": units}
-                    for M, Lambda in M_lambda_set
-                ],
-            )
-        elif args.potential_type == "InversePower":
-            return pool.object_get(
-                "InversePowerPotential",
-                payload_data=[
-                    {"M": M, "Lambda": Lambda, "n": 1, "units": units}
-                    for M, Lambda in M_lambda_set
-                ],
-            )
-        elif args.potential_type == "Starobinsky":
-            return pool.object_get(
-                "StarobinskyPotential",
-                payload_data=[
-                    {"M": M, "Lambda": Lambda, "units": units}
-                    for M, Lambda in M_lambda_set
-                ],
-            )
-        elif args.potential_type == "Recliner":
-            return pool.object_get(
-                "ReclinerPotential",
-                payload_data=[
-                    {"M": M, "Lambda": Lambda, "units": units}
-                    for M, Lambda in M_lambda_set
-                ],
-            )
-        else:
-            raise ValueError(f"Unknown potential type: {args.potential_type}")
-
-    def convert_to_coupling(beta_set):
-        # ExponentialCoupling is a sharded table and needs a "shard_key" field
-        # TODO: find a better way to implement/handle
-        return pool.object_get(
-            "ExponentialCoupling",
-            payload_data=[
-                {"shard_key": beta, "beta": beta, "units": units} for beta in beta_set
-            ],
+    try:
+        atol, rtol, T_init, phi_init, pi_init = plot_inputs.parameters(
+            pool,
+            abs_tol=args.abs_tol,
+            rel_tol=args.rel_tol,
+            T_init_GeV=args.T_init_GeV,
+            phi_init_Mp=args.phi_init_Mp,
+            units=units,
         )
 
-    # read in the stored tables of beta, M, and Lambda
-    beta_table = ray.get(pool.read_table("beta_value"))
-    M_table = ray.get(pool.read_table("M_value", units))
-    Lambda_table = ray.get(pool.read_table("Lambda_value", units))
+        # read in the stored tables of beta, M, and Lambda
+        beta_table, M_table, Lambda_table = plot_inputs.stored_grid(pool, units)
 
-    M_Lambda_grid = itertools.product(M_table, Lambda_table)
-    Potential_array = ray.get(convert_to_potential(M_Lambda_grid))
+        Potential_array = plot_inputs.potentials(
+            pool, args.potential_type, M_table, Lambda_table, units
+        )
+        Coupling_array = plot_inputs.couplings(pool, beta_table, units)
 
-    Coupling_array = ray.get(convert_to_coupling(beta_table))
-
-    model_list = build_model_list(pool, units)
+        model_list = plot_inputs.models(pool, units)
+        T_stop_list = [
+            plot_inputs.T_stop(pool, args.T_stop_GeV, model_data["cosmology"], units)
+            for model_data in model_list
+        ]
+    except plot_inputs.PlotOptionNotStored as e:
+        print(str(e), file=sys.stderr)
+        sys.exit(2)
 
     # The Standard-Model baseline: rho_NP = 0 through compute_BBN_data's PRyMordial
     # settings, one solve, not stored, on the network main.py runs, BBN_SMALL_NETWORK
@@ -1126,19 +1090,7 @@ with ShardedPool(
             f"Yp={SM_baseline['Yp_BBN']:.6g}, D/H x1e5={SM_baseline['DOverH']:.6g}, 3He/H x1e5={SM_baseline['He3OverH']:.6g}, 7Li/H x1e10={SM_baseline['Li7OverH']:.6g}"
         )
 
-    for model_data in model_list:
-        cosmology: BaseCosmology = model_data["cosmology"]
-
-        if T_stop_GeV is None:
-            T_CMB = cosmology._params.T_CMB_Kelvin * units.Kelvin
-            T_stop = ray.get(pool.object_get("temperature", value=T_CMB, units=units))
-        else:
-            T_stop = ray.get(
-                pool.object_get(
-                    "temperature", value=T_stop_GeV * units.GeV, units=units
-                )
-            )
-
+    for model_data, T_stop in zip(model_list, T_stop_list):
         tags = []
 
         run_pipeline(

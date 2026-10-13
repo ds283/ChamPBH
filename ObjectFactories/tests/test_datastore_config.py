@@ -169,7 +169,13 @@ def _vectorized_shard_key_arguments(path: Path):
 class TestDriversPassShardKeyMapping(unittest.TestCase):
     """Every vectorized get in the drivers passes ``{"shard_key": ...}``, never the bare key."""
 
-    EXPECTED_COUNTS = {"main.py": 7, "plot_by_beta.py": 0, "plot_ScalarModel.py": 0}
+    # plot_inputs.py holds the plot scripts' setup since read-only-plots prompt 02 (README P6)
+    EXPECTED_COUNTS = {
+        "main.py": 7,
+        "plot_by_beta.py": 0,
+        "plot_ScalarModel.py": 0,
+        "plot_inputs.py": 0,
+    }
 
     def test_vectorized_gets_pass_a_mapping(self):
         for driver, expected_count in self.EXPECTED_COUNTS.items():

@@ -1,6 +1,6 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-13 · **27 open**: 4 on the `review-remediation` board (closed
+**Last updated:** 2026-10-13 · **26 open**: 4 on the `review-remediation` board (closed
 2026-09-30), none now assigned; 2 on the `production-readiness` board
 (closed 2026-09-30); 4 on the `run-integrity` board (closed 2026-09-30); 9 on the
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`;
@@ -11,11 +11,11 @@ around PRyMordial's small network, U3; prompt 01c measured the small network 202
 02 moved production to it and closed three, opening one, 2026-10-03; prompt 01b closed the kick
 threshold overlay issue 2026-10-03; prompt 02b closed the history-tool issue 2026-10-03; prompt 03
 wrote the documents and the handover and closed the campaign, opening and closing none, 2026-10-03);
-4 on the `dk-and-rpk-migration` board (planned 2026-10-11; prompt 01 opened one, 2026-10-12;
+3 on the `dk-and-rpk-migration` board (planned 2026-10-11; prompt 01 opened one, 2026-10-12;
 the orchestrator's review of prompt 02 opened one, 2026-10-12; prompt 05 opened one, 2026-10-12;
 prompt 08 closed one and opened one, 2026-10-12; prompt 09 opened one, 2026-10-13; prompts 10 and 11 opened and
 closed none; closed 2026-10-13, 12 of 12 prompts landed; one assigned on 2026-10-13 to `read-only-plots`,
-planned the same day, §1.12).
+planned the same day, §1.12, and resolved by its prompt 02 the same day).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -194,11 +194,12 @@ here, on its board, until a later campaign takes them.
 
 Planned 2026-10-11; closed 2026-10-13, 12 of 12 prompts landed. Prompts 10 and 11 opened and
 closed none: four stayed open, unassigned; one of them was assigned on 2026-10-13 to
-`read-only-plots` (§1.12). One opened by prompt 01 on 2026-10-12, seen in passing and outside the
-campaign's scope; one opened by the orchestrator's review of prompt 02 the same day, from log 02's
-Observation 2; one opened by prompt 05 the same day, from its measurement of the import order, and
-closed by prompt 08 the same day (board §4); one opened by prompt 08 the same day, for P11; one
-opened by prompt 09 on 2026-10-13, seen while deriving the inventory's specs.
+`read-only-plots` (§1.12), whose prompt 02 resolved it the same day (board §4). One opened by
+prompt 01 on 2026-10-12, seen in passing and outside the campaign's scope; one opened by the
+orchestrator's review of prompt 02 the same day, from log 02's Observation 2; one opened by prompt
+05 the same day, from its measurement of the import order, and closed by prompt 08 the same day
+(board §4); one opened by prompt 08 the same day, for P11; one opened by prompt 09 on 2026-10-13,
+seen while deriving the inventory's specs.
 
 - `[01-scalarmodelvalue-build-checks-the-stored-phi-against-pi]` — the unused lookup path of
   `sqla_ScalarModelValue_factory.build` compares the stored φ with the expected π; latent.
@@ -211,10 +212,9 @@ opened by prompt 09 on 2026-10-13, seen while deriving the inventory's specs.
 ### 1.12 Assigned to `read-only-plots` — [its board](../prompts/read-only-plots/IMPLEMENTATION_STATE.md) §3.1
 
 Assigned 2026-10-13 by the user, when the campaign was planned. The entry stays on the
-`dk-and-rpk-migration` board (§3), which carries the **Assigned** line; the prompt that closes it
+`dk-and-rpk-migration` board, which carries the **Assigned** line; the prompt that closes it
 deletes its row here.
 
-- `[08-plot-scripts-open-read-write-pools]` — `plot_by_beta.py` and `plot_ScalarModel.py` open
-  read-write pools, where a lookup may insert a parameter row; the user wants them read-only
-  eventually, once the inserting lookups are found.
+None open: `[08-plot-scripts-open-read-write-pools]` was resolved by prompt 02 on 2026-10-13
+(`dk-and-rpk-migration` board §4).
 

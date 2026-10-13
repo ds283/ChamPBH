@@ -1,6 +1,6 @@
 # dk-and-rpk-migration campaign — implementation state
 
-**Last updated:** 2026-10-13 · **Status: COMPLETE — 12 of 12 prompts landed (01–11, 05a); closed 2026-10-13; final suites 18 / 114 / 97; R0 bitwise reproducible; R1 equals R0 bitwise; RayPoolKit G3 holds; ChamPBH's datastore layer replaced by `datastorekit` (08); the inventory read-only on the package's reader, every class covered (09); R2 equals R1 and R0 bitwise through both packages, and DatastoreKit G3 holds (10); the documents, the final measurements, the two G3 records drafted and the handover (11). Four issues stay open, none assigned (§3). P1–P17
+**Last updated:** 2026-10-13 · **Status: COMPLETE — 12 of 12 prompts landed (01–11, 05a); closed 2026-10-13; final suites 18 / 114 / 97; R0 bitwise reproducible; R1 equals R0 bitwise; RayPoolKit G3 holds; ChamPBH's datastore layer replaced by `datastorekit` (08); the inventory read-only on the package's reader, every class covered (09); R2 equals R1 and R0 bitwise through both packages, and DatastoreKit G3 holds (10); the documents, the final measurements, the two G3 records drafted and the handover (11). Three issues stay open, none assigned (§3). P1–P17
 ruled; U5 ruled (README §6.6); U6 ruled (README §6.7): DatastoreKit `v0.3.0` is the pin (README §0.4).**
 The plan is [`README.md`](README.md), written on 2026-10-11 at `52142d7` with the user's rulings
 U1–U4. Prompts 01–04 are written once the user has reviewed it (README §2.1).
@@ -223,36 +223,6 @@ which left the question open. **Not fixed:** `main.py`'s pipeline is outside thi
   06 and 10 compare against R0's lookup pattern (5 / 2 / 5 on `resumed-b`), so a fix that lands
   before 10 changes that pattern, and L4 must say so.
 
-### `[08-plot-scripts-open-read-write-pools]`
-
-**Opened:** 2026-10-12 by prompt 08 (P11, ruled 2026-10-11: the plot scripts keep read-write pools in
-this campaign). **Not fixed:** finding which lookups insert is a change of behaviour this campaign
-does not need (README §6.2, P11).
-
-- **What.** `plot_by_beta.py` and `plot_ScalarModel.py` open read-write pools
-  (`plot_by_beta.py:1011-1025`, `plot_ScalarModel.py:1581-1595`; `prune_unvalidated=False`, no
-  `read_only=`). Their lookups go through `object_get`, which is get-or-insert: a parameter row that
-  is not in the store (a `tolerance`, a `temperature`, a `phi_value`, a potential, a coupling, the
-  cosmology; e.g. `plot_by_beta.py:1029-1030`, `:1041-1051`, `config/model_list.py:27`) is inserted
-  by a plotting run. The package can open a pool read-only (`ShardedPool(read_only=True)`,
-  `datastorekit/SQL/ShardedPool.py:121` at `v0.3.0`), which writes nothing and refuses a miss with
-  `ReadOnlyMiss` and a write with `ReadOnlyWrite` (`datastorekit/replication.py:193`, `:240`).
-- **Goal (the user's).** The plot scripts should run on read-only pools eventually, so that reading a
-  store for figures can never change it.
-- **What must be found first.** Which of the plot scripts' lookups can miss, and so insert, on a store
-  that `main.py` built for the same grid: a lookup with a value `main.py` never stored (for example a
-  `T_stop` or tolerance given only on the plot script's command line, or `plot_by_beta.py:1129`'s
-  `T_CMB`) would become a `ReadOnlyMiss`. Then whether each such lookup should be made by `main.py`
-  instead, made optional, or refused with a message.
-- **Impact.** None measured: the rehearsals' readers (R0, R1) ran the plot scripts on stores the
-  pilot had just built, and compared stores by value after. A plotting run may add parameter rows to
-  a store, and none of those rows is a science value.
-- **Next step.** Measure the inserts a plotting run makes (a stand-in or rehearsal store, row counts
-  before and after), then move both scripts to `read_only=True` in a campaign that may change them.
-- **Assigned (2026-10-13):** to the [`read-only-plots`](../read-only-plots/IMPLEMENTATION_STATE.md)
-  campaign, prompt 02, planned the same day at the user's request (its README §0.3 has the
-  measurement this entry asked for). That prompt closes it here, in §4.
-
 ### `[09-redshift-lookup-at-zero-takes-abs-of-the-comparison]`
 
 **Opened:** 2026-10-13 by prompt 09 (log 09, Observation 1), seen while deriving `redshift`'s spec
@@ -300,6 +270,56 @@ is 08's (P6), and `ShardedPool.py:24` imports the actor through it.
   config.datastore"` from the root exits 0, and `Datastore/tests/test_datastore_config.py`'s
   `TestConfigDatastoreImportsAlone` runs it in a subprocess. `test_compare_stores._registry()` no
   longer falls back to the layer, and `test_datastore_config.py` no longer imports it first.
+
+### `[08-plot-scripts-open-read-write-pools]`
+
+**Opened:** 2026-10-12 by prompt 08 (P11, ruled 2026-10-11: the plot scripts keep read-write pools in
+this campaign). **Not fixed:** finding which lookups insert is a change of behaviour this campaign
+does not need (README §6.2, P11).
+
+- **What.** `plot_by_beta.py` and `plot_ScalarModel.py` open read-write pools
+  (`plot_by_beta.py:1011-1025`, `plot_ScalarModel.py:1581-1595`; `prune_unvalidated=False`, no
+  `read_only=`). Their lookups go through `object_get`, which is get-or-insert: a parameter row that
+  is not in the store (a `tolerance`, a `temperature`, a `phi_value`, a potential, a coupling, the
+  cosmology; e.g. `plot_by_beta.py:1029-1030`, `:1041-1051`, `config/model_list.py:27`) is inserted
+  by a plotting run. The package can open a pool read-only (`ShardedPool(read_only=True)`,
+  `datastorekit/SQL/ShardedPool.py:121` at `v0.3.0`), which writes nothing and refuses a miss with
+  `ReadOnlyMiss` and a write with `ReadOnlyWrite` (`datastorekit/replication.py:193`, `:240`).
+- **Goal (the user's).** The plot scripts should run on read-only pools eventually, so that reading a
+  store for figures can never change it.
+- **What must be found first.** Which of the plot scripts' lookups can miss, and so insert, on a store
+  that `main.py` built for the same grid: a lookup with a value `main.py` never stored (for example a
+  `T_stop` or tolerance given only on the plot script's command line, or `plot_by_beta.py:1129`'s
+  `T_CMB`) would become a `ReadOnlyMiss`. Then whether each such lookup should be made by `main.py`
+  instead, made optional, or refused with a message.
+- **Impact.** None measured: the rehearsals' readers (R0, R1) ran the plot scripts on stores the
+  pilot had just built, and compared stores by value after. A plotting run may add parameter rows to
+  a store, and none of those rows is a science value.
+- **Next step.** Measure the inserts a plotting run makes (a stand-in or rehearsal store, row counts
+  before and after), then move both scripts to `read_only=True` in a campaign that may change them.
+- **Assigned (2026-10-13):** to the [`read-only-plots`](../read-only-plots/IMPLEMENTATION_STATE.md)
+  campaign, prompt 02, planned the same day at the user's request (its README §0.3 has the
+  measurement this entry asked for). That prompt closes it here, in §4.
+- **Resolved (2026-10-13):** by `read-only-plots` prompt 02 (this commit). Both plot scripts open
+  `ShardedPool(read_only=True)` and read their parameters, grid, potentials, couplings, cosmology
+  and `T_stop` through a new module, `plot_inputs.py`, tested on read-only stand-in stores
+  (`ComputeTargets/tests/test_plot_inputs.py`). What was found:
+  - **the parameter rows are found when the options match**: on a store built by `main.py`'s
+    lookups, every parameter, the cosmology and `T_stop` (`T_CMB` included) is found, with no
+    warning and no file changed (the guess above that `T_CMB` might be missing was wrong;
+    `read-only-plots` README §0.3 row 9);
+  - **a missing potential or coupling is skipped**: each combination is looked up on its own, and
+    one that was never stored (an M x Lambda cross term of two runs' grids, or a beta whose run
+    stopped before its coupling) is skipped with one warning line and a count; the rest are
+    returned in the old order;
+  - **a missing parameter stops the run**: a parameter row the build did not store raises
+    `plot_inputs.PlotOptionNotStored`, naming the option or constant and the value (tested for
+    `--T-stop-GeV`, `--rel-tol`, `T_CMB` and the cosmology; the other parameters take the same
+    path). Each script catches it around its setup, before the baseline and any figure, prints it
+    to stderr and exits 2 (read by `ast`; `read-only-plots` 03 runs it under Ray).
+
+  `--drop` is refused by both scripts before Ray starts. The log is
+  [`read-only-plots/logs/02-read-only-plot-pools.md`](../read-only-plots/logs/02-read-only-plot-pools.md).
 
 
 ## 5. Dispatch record
