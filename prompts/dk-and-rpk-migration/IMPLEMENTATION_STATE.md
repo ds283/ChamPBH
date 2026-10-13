@@ -1832,3 +1832,10 @@ files each), `02-readers/`, `06-readers/`, `10-readers/` and `logs/`. Emptying t
 user's. `~/ScienceData/` stays, because the shared rehearsal lock lives there; so does the empty
 `ChamPBH-rehearsals/`. What the stores showed is kept in
 `.documents/dk-and-rpk-migration-verification.md` and `.documents/dk-and-rpk-migration/out/`.
+
+**The `Datastore` package renamed (2026-10-13, by the user's instruction; P6).** Following SecondaryGWKit's
+`511ef5f` and `7d76d3e`, in two commits on `main` after the merge: `de57ec0` moves the factories to
+`ObjectFactories/` and their tests to `ObjectFactories/tests/`, and deletes the empty `Datastore`
+packages; `4d0f2b6` moves `standin_pool.py` to `StoreFixtures/` and the tests of `tools/` to
+`tools/tests/`. The suites are now 18 / 114 / 63 / 34. Paths in this board, the logs and the dated
+documents are as they were when written.
