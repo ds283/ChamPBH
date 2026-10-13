@@ -1,0 +1,58 @@
+>> primary: /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy.db
+>> on disk before: 17 files matching 10-reference-copy*
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0000.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0001.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0002.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0003.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0004.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0005.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0006.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0007.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0008.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0009.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0010.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0011.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0012.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0013.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0014.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0015.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy.db
+>> closed_store_files: 17 files
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0000.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0001.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0002.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0003.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0004.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0005.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0006.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0007.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0008.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0009.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0010.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0011.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0012.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0013.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0014.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0015.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy.db
+>> closed_store_files is exactly the copy's 17 files (16 shards, then the primary)
+>> delete_store returned: 17 files
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0000.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0001.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0002.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0003.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0004.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0005.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0006.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0007.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0008.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0009.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0010.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0011.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0012.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0013.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0014.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0015.db
+     /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy.db
+>> delete_store's list equals closed_store_files': True
+>> files matching 10-reference-copy* left: 0

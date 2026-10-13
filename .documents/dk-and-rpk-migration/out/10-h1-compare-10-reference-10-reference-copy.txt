@@ -1,0 +1,39 @@
+compare_stores: A = /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference.db (16 shards)
+                B = /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy.db (16 shards)
+
+tables:
+  AdiabaticHistory       sharded     matched        5  A only      0  B only      0
+  AdiabaticHistoryValue  sharded     matched    42617  A only      0  B only      0
+  AdiabaticHistory_tags  sharded     matched        5  A only      0  B only      0
+  BBNData                sharded     matched        5  A only      0  B only      0
+  BBNDataValue           sharded     matched     7475  A only      0  B only      0
+  BBNData_tags           sharded     matched        5  A only      0  B only      0
+  ExponentialCoupling    sharded     matched        5  A only      0  B only      0
+  ExponentialPotential   replicated  matched        1  A only      0  B only      0
+  IntegrationSolver      replicated  matched        6  A only      0  B only      0
+  InversePowerPotential  replicated  matched        0  A only      0  B only      0
+  Lambda_value           replicated  matched        1  A only      0  B only      0
+  M_value                replicated  matched        1  A only      0  B only      0
+  QCD_Cosmology          replicated  matched        1  A only      0  B only      0
+  ReclinerPotential      replicated  matched        0  A only      0  B only      0
+  ReflectingPotential    replicated  matched        0  A only      0  B only      0
+  ScalarModel            sharded     matched        5  A only      0  B only      0
+  ScalarModelValue       sharded     matched    42617  A only      0  B only      0
+  ScalarModel_tags       sharded     matched        5  A only      0  B only      0
+  StarobinskyPotential   replicated  matched        0  A only      0  B only      0
+  beta_value             replicated  matched        5  A only      0  B only      0
+  phi_value              replicated  matched        1  A only      0  B only      0
+  pi_value               replicated  matched        1  A only      0  B only      0
+  redshift               replicated  matched    21250  A only      0  B only      0
+  store_tag              replicated  matched        1  A only      0  B only      0
+  temperature            replicated  matched        2  A only      0  B only      0
+  tolerance              replicated  matched        1  A only      0  B only      0
+  version                replicated  matched        1  A only      0  B only      0
+
+bookkeeping columns that differ between matched rows (not compared):
+  none
+
+problems:
+  none
+
+RESULT: equal

@@ -1,6 +1,6 @@
 # dk-and-rpk-migration campaign — implementation state
 
-**Last updated:** 2026-10-13 · **Status: LIVE — 11 of 12 prompts written (01–10, 05a), 10 landed (01–09, 05a); R0 bitwise reproducible; R1 equals R0 bitwise; RayPoolKit G3 holds; ChamPBH's datastore layer replaced by `datastorekit` (08); the inventory read-only on the package's reader, every class covered (09). P1–P17
+**Last updated:** 2026-10-13 · **Status: LIVE — 11 of 12 prompts written (01–10, 05a), 11 landed (01–10, 05a); R0 bitwise reproducible; R1 equals R0 bitwise; RayPoolKit G3 holds; ChamPBH's datastore layer replaced by `datastorekit` (08); the inventory read-only on the package's reader, every class covered (09); R2 equals R1 and R0 bitwise through both packages, and DatastoreKit G3 holds (10). P1–P17
 ruled; U5 ruled (README §6.6); U6 ruled (README §6.7): DatastoreKit `v0.3.0` is the pin (README §0.4).**
 The plan is [`README.md`](README.md), written on 2026-10-11 at `52142d7` with the user's rulings
 U1–U4. Prompts 01–04 are written once the user has reviewed it (README §2.1).
@@ -75,7 +75,7 @@ reads only what the specs declare. Measured at `12c82e8`, 09's list already cove
 | 07 | [Pin `datastorekit` `v0.3.0`](07-pin-datastorekit-v0.3.0.md) | the DatastoreKit pin (**U3**, **U6**; `2f5417e`) | Sonnet | ✍️ 2026-10-12 | ✅ 2026-10-12 | `617a1dc` | [log](logs/07-pin-datastorekit-v0.3.0.md) |
 | 08 | [Adopt `datastorekit`](08-adopt-datastorekit.md) | the DatastoreKit swap; **U4** | Opus | ✍️ 2026-10-12 | ✅ 2026-10-12 | `857ec73` | [log](logs/08-adopt-datastorekit.md) |
 | 09 | [Port the inventory](09-port-the-inventory.md) | `inventory_spec`, `tools/inventory_report.py`; coverage (§6.5) | Opus | ✍️ 2026-10-12 | ✅ 2026-10-13 | `47cfcfb` | [log](logs/09-port-the-inventory.md) |
-| 10 | [Rehearse through both packages (R2)](10-rehearse-through-both-packages.md) | **R2**; **DatastoreKit G3** | Opus | ✍️ 2026-10-12 | ⬜ | — | — |
+| 10 | [Rehearse through both packages (R2)](10-rehearse-through-both-packages.md) | **R2**; **DatastoreKit G3** | Opus | ✍️ 2026-10-12 | ✅ 2026-10-13 | this commit | [log](logs/10-rehearse-through-both-packages.md) |
 | 11 | Close the migration | documents, handover, close | Sonnet | ⬜ | ⬜ | — | — |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
@@ -145,9 +145,9 @@ before each dispatch:
 | **I3** | 09 | `main.py --inventory` read-only, before Ray | ✅ `47cfcfb`: `main.py:93-111`, before `ray.init`; exit 0 on a store, 2 with `--drop`, 1 on a reader refusal (absent store: nothing created); `--show-all` → `verbose`; 08's refusal and its two tests gone |
 | **I4** | 09 | the six `inventory()` hooks and `inventory_config` deleted | ✅ `47cfcfb`: deleted, with three `datetime` imports only the hooks used; the acceptance grep keeps 08's pool guard (2 lines) and `architecture-summary.md:320` (D1); empty on code |
 | **I5** | 09 | coverage: every registered class has a spec, is read through one, or is excluded with a reason (§6.5) | ✅ `47cfcfb`: 21 specs + 6 read through (`tags`/`values`, checked against the owner's spec) + 0 excluded = 27; both breakages fail it by name |
-| **L1**–**L4** (R2) | 10 | README §4.1 at 09's tree; each store equal to `06-reference.db`, bitwise; L4 against R1 | ⬜ |
-| **V3** | 10 | `.documents/dk-and-rpk-migration-verification.md` §3 R2 | ⬜ |
-| **H1** | 10 | the R2 stores by the package's tools: the shard-key audit; a copy that opens read-only, compares equal and is deleted by `delete_store` | ⬜ |
+| **L1**–**L4** (R2) | 10 | README §4.1 at 09's tree; each store equal to `06-reference.db`, bitwise; L4 against R1 | ✅ this commit: L1–L3 hold (`resumed-a` exited **15**, not 134, by Ray's own `SIGTERM` handler; verification §3.2); **`10-reference.db` and `10-resumed.db` each `RESULT: equal` against `06-reference.db`, `10-reference.db` against `02-reference.db`, exit 0**, and the two R2 stores against each other; schema agrees with 08's and R0's; L4: `compute` 5/5/5, 5/killed, 0/5/5 (lookups 5/5/5); `resumed-a` stored 1 `AdiabaticHistory` row and validated 0, and the package's prune removed exactly that row; the printed lines in R1's layout, with no progress line at this load (verification §3) |
+| **V3** | 10 | `.documents/dk-and-rpk-migration-verification.md` §3 R2 | ✅ this commit: §3 R2 (§§3.1–3.10, H1 and G3 included); `out/10-*` (20 files), `10-reference-schema.json` equal to 08's and R0's but for `source` |
+| **H1** | 10 | the R2 stores by the package's tools: the shard-key audit; a copy that opens read-only, compares equal and is deleted by `delete_store` | ✅ this commit: `shard_key_audit` `VERDICT: OK`, exit 0, on both stores; `sharded_store copy` exit 0, 16 shards named bare; the copy's `--inventory` exit 0, `problems: none`; `compare_stores` `RESULT: equal`, no bookkeeping difference; `closed_store_files` and `delete_store` the same 17 paths, none left (verification §3.8) |
 
 Items of 11 are added when it is written.
 
@@ -162,10 +162,10 @@ counts (18 / 114 / 35); and the venv's `pip freeze` (README §0.2).
 | R0 | the start tree builds the pilot, resumes it, and its readers run (README §4.1); its reproducibility is measured (§4.3) | 02 | ✅ **holds** 2026-10-12 (`6cbf953`): bitwise reproducible, so R1 and R2 are held to bitwise equality with `02-reference.db` (P4) |
 | RayPoolKit G3 | `RayTools/` is gone, 0 imports, the pin is installed, the three roots pass, all 17 sites construct (RayPoolKit checklist item 8) | 04 (R1, 06, adds the run under real Ray) | ✅ **holds** 2026-10-12 (`303324b`), by checklist item 8, items 1–5; item 6 is 11's (P16). R1 (06) ran it under real Ray 2.53.0: three builds and three readers, stores equal to R0's, printed lines in R0's layout |
 | R1 | 05's tree equals R0 by value | 06 | ✅ **holds** 2026-10-12 (`c9e6bc2`): both R1 stores equal `02-reference.db` bitwise (`RESULT: equal`, exit 0); R2 is held to equality with `06-reference.db` |
-| R2 | 09's tree, through both packages, equals R1 by value | 10 | ⬜ |
+| R2 | 09's tree, through both packages, equals R1 by value | 10 | ✅ **holds** 2026-10-13 (this commit): `10-reference.db` and `10-resumed.db` each equal `06-reference.db` bitwise, and `10-reference.db` equals `02-reference.db` (`RESULT: equal`, exit 0); the first run of the package's actor, broker and pool under real Ray 2.53.0 |
 | DatastoreKit `v0.2.3` | tagged on DatastoreKit's remote, with `store`, `validate` and `validate_on_startup` defaulted (U3; made in DatastoreKit, not here) | — (07 pins it) | ✅ **released** 2026-10-11: tag object `8dac562`, commit `0de2b16`, checked on the remote and by `git show` of `factory_base.py` (README §0.3) |
 | DatastoreKit `v0.3.0` | tagged on DatastoreKit's remote; the pin (U6) | — (07 pins it) | ✅ **released** 2026-10-12: tag object `bf0a3b2`, commit `2f5417e`, checked on the remote; only `datastorekit/object.py` changed in the package since `v0.2.3` (README §0.4) |
-| DatastoreKit G3 | the 9 layer files are gone (two emptied, P6), the pin is installed, the three roots pass, and a pilot store rebuilt through the package (R2) equals R1 by value | 08, 09, 10 | ⬜ 08's part holds (`857ec73`): the 7 files gone and two emptied, 0 imports by DatastoreKit's script, the three roots pass (18 / 114 / 76); R2 is 10's |
+| DatastoreKit G3 | the 9 layer files are gone (two emptied, P6), the pin is installed, the three roots pass, and a pilot store rebuilt through the package (R2) equals R1 by value | 08, 09, 10 | ✅ **holds** 2026-10-13 (this commit), by checklist item 9: the 7 files gone and two emptied, 0 imports (08, `857ec73`); `datastorekit` `v0.3.0` pinned (`requirements.txt:17`) and installed at `2f5417ea…`, not editable (07, `617a1dc`); the three roots pass (18 / 114 / 97 at `60e000c`); the pilot rebuilt through the package (R2) equals R1 and R0 by value, bitwise. The record on DatastoreKit's board is 11's draft and the user's commit (P16); its text is in log 10 |
 
 Recording each gate on its package's own extraction board is a commit in that repository, not
 here (README P16).
@@ -1523,3 +1523,56 @@ opened beyond the agent's. The residue is fixed in this follow-up.
   - R0's and R1's stores cannot be inventoried by the package (exit 1); `compare_stores` remains the
     way to compare R2 with R1.
   - 10's suites start from 18 / 114 / 97.
+
+### 5.15 After prompt 10 (2026-10-13)
+
+- **Landed:** this commit, log [`10-rehearse-through-both-packages.md`](logs/10-rehearse-through-both-packages.md);
+  the record is `.documents/dk-and-rpk-migration-verification.md` §3. **COMPLETE**: L1–L4 (R2), V3,
+  H1; gates **R2** and **DatastoreKit G3** hold; no code changed; no issue opened
+  (`.documents/OPEN_ISSUES.md` unchanged). One judgement for the review: `resumed-a` exited **15**,
+  not the 134 the prompt expects (below); the agent read it as "ends by the signal" and went on
+  (log D3).
+- **The criterion.** `compare_stores` of `06-reference.db` against `10-reference.db` and against
+  `10-resumed.db`, and of `02-reference.db` against `10-reference.db`: `RESULT: equal`, exit 0, each;
+  `10-reference.db` against `10-resumed.db` the same. 27 tables, every row matched, the same 29
+  bookkeeping columns differing as at R1; the one note, `A: LambdaCDM is listed as replicated by the
+  primary but no shard holds it`, on each R0/R1 primary (P8). The schema snapshot agrees with
+  `08-standin-schema.json` and `02-reference-schema.json`. **07–09 changed nothing a build stores.**
+- **Cluster and load.** `ray_cluster.sh start "dk-and-rpk-migration 10 (R2)"` at 01:05:30 (6 s;
+  `127.0.0.1:6380`, gcs_server 3759; `ray status --address`: one node, 10 CPUs); `stop` at 01:17:58
+  (18 s, exit 0, ports free, lock released), then `status` clean. Never `ray stop`. Every Ray driver
+  connected to 6380. The load was 8 at the gate and rose to 63–68 only during the builds (their own
+  workers); no foreign suite.
+- **Builds.** `reference` 3 min 33 s, exit 0 (R1 11 min 7 s); stages 1m 54.6s · 4.35s · 21.2s.
+  `S` = 1 s (the banner dated from Ray's task records, since no progress line was printed; rows at
+  banner + 0.9–3.2 s). `resumed-a` killed at banner + about 1.1 s, **exit 15**: Ray's driver
+  `SIGTERM` handler (`sys.exit(signum)`) ran, so the `with ShardedPool` block closed the pool (all
+  16 actors' `__exit__`) before the driver exited; R0 and R1 aborted (134). **It stored one
+  `AdiabaticHistory` row (β = 1.1) and validated none**: the "0" case by validated rows, partial (1
+  of 5) by stored rows. `resumed-b` 1 min 1 s, exit 0: its open pruned exactly that row and it
+  computed 0 / 5 / 5, lookups 5 / 5 / 5. Label counts: `AdiabaticHistory` 5 `resumed-b`.
+- **The package under real Ray.** Five jobs, each 16 `shardNNNN-store` `Datastore` actors and one
+  `SerialPoolBroker`; stores written, validated, pruned at open (the factory's report, printed by the
+  package's actor, R1's text) and read back. A replicated row now carries one timestamp on every
+  shard; the primary records bare shard names and has `replication_in_flight`.
+- **Actors.** None alive 10 s after the signal; all 34 (17 per job) dead at 38 s; 85 dead, five
+  jobs `SUCCEEDED`, before the stop.
+- **Readers.** All six steps exit 0, and the second `--inventory` (on `10-reference.db`); before/after
+  `RESULT: equal` with no bookkeeping difference; both inventories `problems: none`, 21 classes, 5
+  validated `ScalarModel`, `AdiabaticHistory` and `BBNData` under `2026.6.0`, none unvalidated;
+  `histories.csv` SHA-256 `d7c62c37…c522`, `cmp`-equal to R1's and R0's; the β = 1.15 stored and
+  re-solved Yp and D/H are R0's.
+- **H1.** `shard_key_audit` `VERDICT: OK` on both stores; `sharded_store copy` exit 0; the copy's
+  `--inventory` exit 0, `problems: none`, its shards named bare; `compare_stores` `RESULT: equal`;
+  `closed_store_files` and `delete_store` the same 17 paths, none left.
+- **L4.** `reference` 5 / 5 / 5; the resume's pattern is R1's. The pool's printed lines keep R1's
+  layout: 10 banner and completion lines equal in text and order (and R0's), 11 for `resumed-b`;
+  **no progress line in R2's logs** at this load, so the shape check holds vacuously (said plainly).
+- **Suites** (before `start`): 18 / 114 (61 + 53) / 97, unchanged.
+- **Observations not opened:**
+  1. `resumed-a`'s exit 15 and the pool closed by `SystemExit` (Ray's handler; not ChamPBH's or the
+     package's);
+  2. `resumed-a` validated no row (four histories absent at the resume, one pruned);
+  3. no progress line at this load, so L4's shape check is vacuous for R2;
+  4. the banner's time had to come from Ray's task records;
+  5. the plot scripts' shard-count warning, unchanged.

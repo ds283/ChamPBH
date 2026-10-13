@@ -1,0 +1,159 @@
+# dk-and-rpk-migration prompt 10 (R2), L4: the pool's printed lines, R1 against R2
+#
+# Extracted and compared by a scratch script (not committed), by 06's method
+# (06-printed-lines.txt's header): a line is the pool's if it is a banner ("** <title>" after an
+# empty line; build.sh's "** driver exit status" excluded; main.py's own "** BUILDING GRID OF
+# MODELS TO SAMPLE" is printed the same way and is kept), a progress line
+# ("   -- <stamp> (<elapsed> running): ...") or the "      inflight: ..." line beneath it,
+# "   -- ALL WORK ITEMS COMPLETE in time ...", "      Queue summary: ...", or
+# "      (no compute items were evaluated ...)". ANSI colour codes stripped. Normalised:
+# date-time stamps -> <STAMP>; "avg <x>/<unit>" -> "avg <RATE>/<UNIT>"; durations as
+# format_time prints them -> <TIME>; every other number -> <N>.
+# Criterion (prompt 10 section 2, L4, as prompt 06's): banners and completion lines agree in
+# text and order; every progress-line shape in B occurs in A.
+#
+# Note: 10-reference.log has NO progress line. At this load every stage of reference ended in
+# under the pool's 300 s notify interval (scalar stage 1m 54.6s), so no progress pair was
+# printed; the progress-shape half of the check is vacuous for R2, and is said so plainly.
+
+########## 1. the criterion: A = 06-reference.log, B = 10-reference.log
+
+== A: /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/logs/06-reference.log: 12 pool lines
+  [banner   ] ** BUILDING GRID OF MODELS TO SAMPLE
+  [banner   ] ** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+  [progress ]    -- 2026-10-12 16:53:34 (5m 5.89s running): 0/1 work items remaining = 100.00% complete (may be waiting for compute/store/validate tasks to finish)
+  [inflight ]       inflight: 0 lookup, 0 compute, 0 store, 1 validation | completed: 5 lookup (avg 58.84/hr), 5 compute (avg 58.84/hr), 5 store (avg 58.84/hr), 4 validation (avg 47.08/hr)
+  [complete ]    -- ALL WORK ITEMS COMPLETE in time 5m 6.61s
+  [summary  ]       Queue summary: 5 lookup (avg 58.71/hr), 5 compute (avg 58.71/hr), 5 store (avg 58.71/hr), 5 validation (avg 58.71/hr)
+  [banner   ] ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+  [complete ]    -- ALL WORK ITEMS COMPLETE in time 16.2s
+  [summary  ]       Queue summary: 5 lookup (avg 18.55/min), 5 compute (avg 18.55/min), 5 store (avg 18.55/min), 5 validation (avg 18.55/min)
+  [banner   ] ** CALCULATE BBN DATA
+  [complete ]    -- ALL WORK ITEMS COMPLETE in time 1m 5.62s
+  [summary  ]       Queue summary: 5 lookup (avg 274.3/hr), 5 compute (avg 274.3/hr), 5 store (avg 274.3/hr), 5 validation (avg 274.3/hr)
+
+== B: /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/logs/10-reference.log: 10 pool lines
+  [banner   ] ** BUILDING GRID OF MODELS TO SAMPLE
+  [banner   ] ** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+  [complete ]    -- ALL WORK ITEMS COMPLETE in time 1m 54.6s
+  [summary  ]       Queue summary: 5 lookup (avg 157.1/hr), 5 compute (avg 157.1/hr), 5 store (avg 157.1/hr), 5 validation (avg 157.1/hr)
+  [banner   ] ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+  [complete ]    -- ALL WORK ITEMS COMPLETE in time 4.35s
+  [summary  ]       Queue summary: 5 lookup (avg 68.97/min), 5 compute (avg 68.97/min), 5 store (avg 68.97/min), 5 validation (avg 68.97/min)
+  [banner   ] ** CALCULATE BBN DATA
+  [complete ]    -- ALL WORK ITEMS COMPLETE in time 21.2s
+  [summary  ]       Queue summary: 5 lookup (avg 14.13/min), 5 compute (avg 14.13/min), 5 store (avg 14.13/min), 5 validation (avg 14.13/min)
+
+== normalised
+-- A
+  [banner   ] ** BUILDING GRID OF MODELS TO SAMPLE
+  [banner   ] ** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+  [progress ]    -- <STAMP> (<TIME> running): <N>/<N> work items remaining = <N>% complete (may be waiting for compute/store/validate tasks to finish)
+  [inflight ]       inflight: <N> lookup, <N> compute, <N> store, <N> validation | completed: <N> lookup (avg <RATE>/<UNIT>), <N> compute (avg <RATE>/<UNIT>), <N> store (avg <RATE>/<UNIT>), <N> validation (avg <RATE>/<UNIT>)
+  [complete ]    -- ALL WORK ITEMS COMPLETE in time <TIME>
+  [summary  ]       Queue summary: <N> lookup (avg <RATE>/<UNIT>), <N> compute (avg <RATE>/<UNIT>), <N> store (avg <RATE>/<UNIT>), <N> validation (avg <RATE>/<UNIT>)
+  [banner   ] ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+  [complete ]    -- ALL WORK ITEMS COMPLETE in time <TIME>
+  [summary  ]       Queue summary: <N> lookup (avg <RATE>/<UNIT>), <N> compute (avg <RATE>/<UNIT>), <N> store (avg <RATE>/<UNIT>), <N> validation (avg <RATE>/<UNIT>)
+  [banner   ] ** CALCULATE BBN DATA
+  [complete ]    -- ALL WORK ITEMS COMPLETE in time <TIME>
+  [summary  ]       Queue summary: <N> lookup (avg <RATE>/<UNIT>), <N> compute (avg <RATE>/<UNIT>), <N> store (avg <RATE>/<UNIT>), <N> validation (avg <RATE>/<UNIT>)
+-- B
+  [banner   ] ** BUILDING GRID OF MODELS TO SAMPLE
+  [banner   ] ** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+  [complete ]    -- ALL WORK ITEMS COMPLETE in time <TIME>
+  [summary  ]       Queue summary: <N> lookup (avg <RATE>/<UNIT>), <N> compute (avg <RATE>/<UNIT>), <N> store (avg <RATE>/<UNIT>), <N> validation (avg <RATE>/<UNIT>)
+  [banner   ] ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+  [complete ]    -- ALL WORK ITEMS COMPLETE in time <TIME>
+  [summary  ]       Queue summary: <N> lookup (avg <RATE>/<UNIT>), <N> compute (avg <RATE>/<UNIT>), <N> store (avg <RATE>/<UNIT>), <N> validation (avg <RATE>/<UNIT>)
+  [banner   ] ** CALCULATE BBN DATA
+  [complete ]    -- ALL WORK ITEMS COMPLETE in time <TIME>
+  [summary  ]       Queue summary: <N> lookup (avg <RATE>/<UNIT>), <N> compute (avg <RATE>/<UNIT>), <N> store (avg <RATE>/<UNIT>), <N> validation (avg <RATE>/<UNIT>)
+
+== banners and completion lines: A 10, B 10: AGREE in text and order
+== progress shapes: B has 0 distinct (0 lines), A has 2; B's shapes not in A: 0
+RESULT: the printed lines keep their layout
+(exit 0)
+
+########## 2. the resume: A = 06-resumed-b.log, B = 10-resumed-b.log
+
+== A: /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/logs/06-resumed-b.log: 11 pool lines
+  [banner   ] ** BUILDING GRID OF MODELS TO SAMPLE
+  [banner   ] ** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+  [complete ]    -- ALL WORK ITEMS COMPLETE in time 1.41s
+  [summary  ]       Queue summary: 5 lookup (avg 212.8/min), 0 compute (avg 0/day), 0 store (avg 0/day), 0 validation (avg 0/day)
+  [nocompute]       (no compute items were evaluated - all assets read from datastore)
+  [banner   ] ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+  [complete ]    -- ALL WORK ITEMS COMPLETE in time 12s
+  [summary  ]       Queue summary: 3 lookup (avg 15.03/min), 3 compute (avg 15.03/min), 3 store (avg 15.03/min), 3 validation (avg 15.03/min)
+  [banner   ] ** CALCULATE BBN DATA
+  [complete ]    -- ALL WORK ITEMS COMPLETE in time 56.5s
+  [summary  ]       Queue summary: 5 lookup (avg 318.8/hr), 5 compute (avg 318.8/hr), 5 store (avg 318.8/hr), 5 validation (avg 318.8/hr)
+
+== B: /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/logs/10-resumed-b.log: 11 pool lines
+  [banner   ] ** BUILDING GRID OF MODELS TO SAMPLE
+  [banner   ] ** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+  [complete ]    -- ALL WORK ITEMS COMPLETE in time 0.513s
+  [summary  ]       Queue summary: 5 lookup (avg 584.7/min), 0 compute (avg 0/day), 0 store (avg 0/day), 0 validation (avg 0/day)
+  [nocompute]       (no compute items were evaluated - all assets read from datastore)
+  [banner   ] ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+  [complete ]    -- ALL WORK ITEMS COMPLETE in time 5.16s
+  [summary  ]       Queue summary: 5 lookup (avg 58.11/min), 5 compute (avg 58.11/min), 5 store (avg 58.11/min), 5 validation (avg 58.11/min)
+  [banner   ] ** CALCULATE BBN DATA
+  [complete ]    -- ALL WORK ITEMS COMPLETE in time 21s
+  [summary  ]       Queue summary: 5 lookup (avg 14.27/min), 5 compute (avg 14.27/min), 5 store (avg 14.27/min), 5 validation (avg 14.27/min)
+
+== normalised
+-- A
+  [banner   ] ** BUILDING GRID OF MODELS TO SAMPLE
+  [banner   ] ** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+  [complete ]    -- ALL WORK ITEMS COMPLETE in time <TIME>
+  [summary  ]       Queue summary: <N> lookup (avg <RATE>/<UNIT>), <N> compute (avg <RATE>/<UNIT>), <N> store (avg <RATE>/<UNIT>), <N> validation (avg <RATE>/<UNIT>)
+  [nocompute]       (no compute items were evaluated - all assets read from datastore)
+  [banner   ] ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+  [complete ]    -- ALL WORK ITEMS COMPLETE in time <TIME>
+  [summary  ]       Queue summary: <N> lookup (avg <RATE>/<UNIT>), <N> compute (avg <RATE>/<UNIT>), <N> store (avg <RATE>/<UNIT>), <N> validation (avg <RATE>/<UNIT>)
+  [banner   ] ** CALCULATE BBN DATA
+  [complete ]    -- ALL WORK ITEMS COMPLETE in time <TIME>
+  [summary  ]       Queue summary: <N> lookup (avg <RATE>/<UNIT>), <N> compute (avg <RATE>/<UNIT>), <N> store (avg <RATE>/<UNIT>), <N> validation (avg <RATE>/<UNIT>)
+-- B
+  [banner   ] ** BUILDING GRID OF MODELS TO SAMPLE
+  [banner   ] ** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+  [complete ]    -- ALL WORK ITEMS COMPLETE in time <TIME>
+  [summary  ]       Queue summary: <N> lookup (avg <RATE>/<UNIT>), <N> compute (avg <RATE>/<UNIT>), <N> store (avg <RATE>/<UNIT>), <N> validation (avg <RATE>/<UNIT>)
+  [nocompute]       (no compute items were evaluated - all assets read from datastore)
+  [banner   ] ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+  [complete ]    -- ALL WORK ITEMS COMPLETE in time <TIME>
+  [summary  ]       Queue summary: <N> lookup (avg <RATE>/<UNIT>), <N> compute (avg <RATE>/<UNIT>), <N> store (avg <RATE>/<UNIT>), <N> validation (avg <RATE>/<UNIT>)
+  [banner   ] ** CALCULATE BBN DATA
+  [complete ]    -- ALL WORK ITEMS COMPLETE in time <TIME>
+  [summary  ]       Queue summary: <N> lookup (avg <RATE>/<UNIT>), <N> compute (avg <RATE>/<UNIT>), <N> store (avg <RATE>/<UNIT>), <N> validation (avg <RATE>/<UNIT>)
+
+== banners and completion lines: A 11, B 11: AGREE in text and order
+== progress shapes: B has 0 distinct (0 lines), A has 0; B's shapes not in A: 0
+RESULT: the printed lines keep their layout
+(exit 0)
+
+########## 3. R0 against R2, for the record (summary only): A = 02-reference.log, B = 10-reference.log
+
+== banners and completion lines: A 10, B 10: AGREE in text and order
+== progress shapes: B has 0 distinct (0 lines), A has 2; B's shapes not in A: 0
+RESULT: the printed lines keep their layout
+(exit 0)
+
+########## 4. negative control, a different line sequence (summary only): A = 10-reference.log, B = 10-resumed-b.log
+
+== banners and completion lines: A 10, B 11: DIFFER
+  --- A
+  +++ B
+  @@ -2,6 +2,7 @@
+   [banner] ** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   [complete]    -- ALL WORK ITEMS COMPLETE in time <TIME>
+   [summary]       Queue summary: <N> lookup (avg <RATE>/<UNIT>), <N> compute (avg <RATE>/<UNIT>), <N> store (avg <RATE>/<UNIT>), <N> validation (avg <RATE>/<UNIT>)
+  +[nocompute]       (no compute items were evaluated - all assets read from datastore)
+   [banner] ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   [complete]    -- ALL WORK ITEMS COMPLETE in time <TIME>
+   [summary]       Queue summary: <N> lookup (avg <RATE>/<UNIT>), <N> compute (avg <RATE>/<UNIT>), <N> store (avg <RATE>/<UNIT>), <N> validation (avg <RATE>/<UNIT>)
+== progress shapes: B has 0 distinct (0 lines), A has 0; B's shapes not in A: 0
+RESULT: the printed lines differ
+(exit 1)

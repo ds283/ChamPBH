@@ -710,3 +710,492 @@ compared by a scratch script, described in `06-printed-lines.txt`'s header.
 with 16 shards; `logs/06-{reference,resumed-a,resumed-b}.{log,pid}`; `06-readers/`, with its
 `before/` copy, the five step logs, `status.txt` and the plot outputs. R0's files were opened only by
 `compare_stores.py` (and `cmp` of R0's `histories.csv`), and none has changed.
+
+---
+
+## 3. R2 — through both packages (prompt 10, 2026-10-13)
+
+**Tree:** `60e000c`, whose code is `47cfcfb`'s (09's): `git diff --stat 47cfcfb HEAD -- .
+':!prompts'` is empty. Since R1's tree (`5bb2be6`, code `a4894ea`) the code differs by 07–09 only:
+the `datastorekit` pin (`requirements.txt:17`, `v0.3.0`), ChamPBH's layer deleted (the seven
+modules gone, `Datastore/__init__.py` and `Datastore/SQL/__init__.py` 0 bytes) and every import
+rewritten to the package, the pools given `factories=`, `serial_batch_sizes=` and `drop_tables=`,
+`LambdaCDM` out of `replicated_tables`, and `--inventory` read-only through the package's
+`read_inventory`, before Ray. `datastorekit` 0.3.0 at `2f5417ea…` and `raypoolkit` 0.2.0 at
+`eaef0ce6…`, neither editable. Ray 2.53.0, Python 3.13 (the venv, 101 lines of `pip freeze`, `pip
+check` clean). `build.sh`, `interrupt_when.py`, `stage_counts.py`, `run_readers.sh`,
+`ray_cluster.sh`, `tools/compare_stores.py`, `tools/bbn_from_store.py` and `utilities.py` are as R1
+ran them (`git diff c9e6bc2 HEAD` on them is empty).
+
+**Result: R2 holds. Both R2 stores equal `06-reference.db`, and `10-reference.db` equals
+`02-reference.db`, bit for bit in every stored science column (`compare_stores` `RESULT: equal`,
+exit 0, three times), and `10-reference.db` equals `10-resumed.db` (§4.3 again). The schema is
+08's snapshot and R0's. L1–L3 hold, and L4's counts, resume pattern and printed lines are R1's.
+So 07–09 changed nothing a build stores or reads, and the pool prints what it printed. H1 holds:
+the package's shard-key audit is clean on both stores, and a copy made by the package's tool opens
+read-only, compares equal and is deleted by `delete_store`, its 17 files and nothing else.**
+Two differences from R1 in how the resume fell, not in what it produced (§3.2): `resumed-a`'s
+driver exited **15**, not 134, through Ray's own Python `SIGTERM` handler, which closed the pool
+before the driver exited; and `resumed-a` **stored one `AdiabaticHistory` row and validated
+none**, so four histories were absent from the store at the resume and the fifth was pruned.
+
+This is the first run of the package's `Datastore` actor, `SerialPoolBroker` and `ShardedPool`
+under real Ray, and ChamPBH's evidence, at Ray 2.53.0, that its registry of factory *instances*
+crosses into the package's actors intact (README §0.3, point 2): 16 `shardNNNN-store` actors and
+one `SerialPoolBroker` per job, five jobs, stores written, validated, pruned at open and read back,
+equal to R0's by value.
+
+### 3.1 The cluster and the load
+
+- 10 CPUs, host `mps026088`.
+- **The load.** The machine was close to idle at the gate; the load during the builds is the
+  builds' own (the Ray workers of each job), and fell between them:
+
+  | When (BST) | Load average (1 / 5 / 15 min) |
+  |---|---|
+  | 01:00, the gate | 8.27 / 8.90 / 7.82 |
+  | 01:05:27, before `start` (after the suites) | 8.17 / 8.67 / 8.11 |
+  | 01:05:43, `reference` starts | 9.69 / 8.99 / 8.23 |
+  | 01:09:16, `reference` ends | 62.86 / 49.93 / 27.80 |
+  | 01:10:49, `resumed-a` starts | 20.67 / 39.00 / 25.79 |
+  | 01:13:46, `resumed-a` ends | 67.97 / 61.15 / 38.59 |
+  | 01:14:47, `resumed-b` starts | 31.25 / 51.81 / 36.63 |
+  | 01:15:48, `resumed-b` ends | 46.19 / 52.41 / 37.89 |
+  | 01:16:07 – 01:17:13, the readers | 34.60 / 49.37 / 37.13 → 31.63 / 46.16 / 36.86 |
+  | 01:18, after the stop | 16.70 / 38.96 / 34.83 |
+
+  At the gate and before `start` the top processes were macOS daemons (`searchpartyd`,
+  `spotlightknowledged`, `analyticsd`, `mediaanalysisd`, `MenuBarAgent`, `WindowServer`) and two
+  Claude Code sessions; no foreign suite, no Ray process on the machine. R1 ran at loads of 29–160.
+  Every `BBNData` row in both stores has `failure = 0`.
+- **The cluster**, started at 01:05:30 from the repository root:
+  `.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh start "dk-and-rpk-migration 10 (R2)"`,
+  exit 0, 6 s wall, ending
+  ```text
+  >> ray_cluster: address 127.0.0.1:6380
+  >> ray_cluster: dashboard http://127.0.0.1:8267
+  >> ray_cluster: actors: ./venv/bin/ray list actors --address 127.0.0.1:6380
+  >> ray_cluster: started in 5s; gcs_server pid 3759
+  ```
+  The lock's owner file: `project: ChamPBH`, `purpose: dk-and-rpk-migration 10 (R2)`,
+  `acquired: 2026-10-13T01:05:36+01:00`, `host: mps026088`, `ray_temp_dir: /tmp/ray-cpbh`,
+  `ray_address: 127.0.0.1:6380`, `pid: 3759`. `./venv/bin/ray status --address 127.0.0.1:6380`:
+  one active node, `0.0/10.0 CPU`, 8.61 GiB memory, 2.00 GiB object store, no failures.
+  `/tmp/ray-cpbh/ray_current_cluster` held `127.0.0.1:6380`; `/tmp/ray/ray_current_cluster` did not
+  exist, before or after. **Every driver that starts Ray logged `Connecting to existing Ray cluster
+  at address: 127.0.0.1:6380` and the dashboard at `http://127.0.0.1:8267`** (three builds, two
+  plot scripts); no log names 6379. The two `--inventory` runs start no Ray (09).
+- **The stop**, at 01:17:58, after the readers and the second inventory, with no build, reader or
+  background task running: `ray_cluster.sh stop`, exit 0, 18 s: `SIGTERM` to the 18 processes
+  naming `/tmp/ray-cpbh` and their descendants, the 15 s grace, `SIGKILL` to 3759 (`gcs_server`)
+  and 3771; "no process names /tmp/ray-cpbh; ports 6380 6381 8267 52367 are free"; "released the
+  rehearsal lock". Then `ray_cluster.sh status`, exit 0: the lock free, no ChamPBH process, the
+  four ports free. `ray stop` was never run.
+
+### 3.2 The builds
+
+| Build | Store | Started (BST) | Ended | Wall | Exit status | Stages' times | R1 |
+|---|---|---|---|---|---|---|---|
+| `reference` | `10-reference.db` | 01:05:43 | 01:09:16 | 3 min 33 s | **0** | 1m 54.6s · 4.35s · 21.2s | 11 min 7 s; 5m 6.61s · 16.2s · 1m 5.62s |
+| `resumed-a` | `10-resumed.db` | 01:10:49 | 01:13:46 | 2 min 57 s | **15**, by `SIGTERM` at 01:13:44 | 1m 54.8s · killed | 8 min 14 s, 134; 4m 29.7s · killed |
+| `resumed-b` | `10-resumed.db` | 01:14:47 | 01:15:48 | 1 min 1 s | **0** | 0.513s · 5.16s · 21s | 2 min 42 s; 1.41s · 12s · 56.5s |
+
+Start and end times are the `date` lines around each `build.sh`. The driver pids were 4009, 7671
+and 10377. The builds ran three times faster than R1's, at a load near the CPU count.
+
+**The interrupt delay `S` = 1 s**, chosen after `reference` ended from `10-reference.db`'s own
+`AdiabaticHistory` timestamps (`sqlite3` `mode=ro`), as the prompt asks, with the banner's time
+from Ray's task records.
+- **No progress line.** At this load the scalar stage took 1m 54.6s, under the pool's 300 s notify
+  interval, so `10-reference.log` has no progress line from which to date the banner (06's
+  method). The banner was dated instead from `./venv/bin/ray list tasks --address 127.0.0.1:6380
+  --detail --format json` (job `01000000`): the scalar stage's last `object_validate` ended at
+  01:08:48.979 and the adiabatic stage's first `object_get` was created at 01:08:49.005, so the
+  banner fell at about **01:08:49.0**. The stage's 4.35 s then ends at 01:08:53.35, where its last
+  `object_validate` ends (53.345): consistent.
+- The five `AdiabaticHistory` rows are timestamped 01:08:49.92 (β = 1.1), 50.26 (1.15), 50.36
+  (1.2), 50.68 (10) and 52.17 (25): banner + **0.9, 1.3, 1.4, 1.7 and 3.2 s**. By the task records
+  their `object_store` calls returned (the rows committed) at banner + 1.5, 2.1, 2.3, 2.9 and 4.2 s,
+  and their validations at + 2.4, 2.7, 2.8, 4.3 and 4.3 s. The stage took 4.35 s (R1: 16.2 s, rows
+  at + 5.1 – 9.8 s; R0: 12.6 s, + 4.6 – 7.6 s).
+- The prompt's rule, the earliest of `reference`'s rows less about 3 s, gives a negative delay
+  here. The signal falls at banner + `S` + (0 to 1 s), the second being the polling. **`S` = 1 s**
+  puts it at + 1 – 2 s: between `reference`'s first and third commits, before any validation, and
+  more than 2 s before β = 25's commit, so that a `resumed-a` running somewhat ahead of `reference`
+  (as at R0 and R1) should still leave rows unstored. `S` = 0 would risk no row stored; `S` = 2
+  risked four or five stored.
+
+**What `resumed-a` kept.** `interrupt_when.py` saw the banner at 01:13:43 and sent `SIGTERM` to
+pid 7671 at 01:13:44 (the driver's dump: `time=1791850424`, `logging.cc` at 01:13:44.485). By the
+task records of job `02000000`, the banner fell at about 01:13:43.36, so the signal came at about
+banner + 1.1 s; the stage ran at `reference`'s pace (its first `object_store` created at banner +
+0.90 s against `reference`'s + 0.86 s). In `10-resumed.db` (`mode=ro`), before `resumed-b`:
+
+| `AdiabaticHistory` | Timestamp | `validated` | Value rows / `z_samples` |
+|---|---|---|---|
+| β = 1.1 (shard 15, serial 1) | 01:13:44.27 | **0** | 4947 / 4947 |
+| β = 1.15, 1.2, 10, 25 | — | never stored | — |
+
+All five `ScalarModel`s were stored and validated; no `BBNData` row.
+
+**So `resumed-a` stored one row and validated none.** The first `object_store` (β = 1.1, to
+`shard0015-store`) was submitted at 01:13:44.257 and returned at 44.917, after the signal; the
+driver was pickling the arguments of its next actor call when the signal came (its stack:
+`submit_actor_task` → `prepare_args` → `_pickle_Pickler_dump`), so no second store was submitted.
+Plainly: **by validated rows this is the "0" case** the orchestrator's brief names; by stored rows
+it is partial (1 of 5). The resume therefore tests what R1's did not: four histories absent from
+the store, recomputed beside the prune at open of one unvalidated row.
+
+**The exit status is 15, not 134.** Ray's absl handler printed `*** SIGTERM received at
+time=1791850424 ***` and the native stack twice, as at R0 and R1, but the process then exited with
+status 15 rather than aborting. 15 is the signal's number: Ray's `ray.init` installs a driver
+`SIGTERM` handler, `sys.exit(signum)` (`ray/_private/worker.py:1664-1665` at 2.53.0), and here it
+ran. The `SystemExit` unwound through `main.py`'s `with ShardedPool(…)` (`main.py:1223`), so the
+package's `ShardedPool.__exit__` ran: at 01:13:44.50 it called `__exit__` on all 16 shard actors
+(each finished by 44.99; each disposes its engine and releases its serial leases), then killed
+the actors. At R0 and R1 the main thread was in native code (`CoreWorker::Wait()`,
+`submit_actor_task`) and the process aborted (134) without closing the pool; here the program
+counter was in `_PyErr_SetKeyError`, inside the pickler. Which of the two paths a `SIGTERM` takes
+was not determined; it is Ray's behaviour, not ChamPBH's or the package's. `SystemExit` prints no
+traceback, and the log has none. The resume after it is the same: the one row stored was
+unvalidated and was pruned at open.
+
+**The actor check, between `resumed-a` and `resumed-b`.** At 01:13:54, 10 s after the signal,
+`./venv/bin/ray list actors --address 127.0.0.1:6380 --filter "state=ALIVE"` printed `No resource in
+the cluster`. At 01:14:22 (38 s), `--limit 200` listed 34 actors, all `DEAD`: 17 of job `01000000`
+(`reference`) and 17 of job **`02000000` (`resumed-a`)**, each 16 `Datastore`
+(`shard0000-store` … `shard0015-store`) and one `SerialPoolBroker`. `./venv/bin/ray list jobs
+--address 127.0.0.1:6380` gave both `SUCCEEDED`, the killed driver included (as at R0 and R1).
+Before the stop (01:17:51): none alive; 85 actors, all dead, 17 for each of five jobs
+(`01`–`05000000`: the three builds, `plot_by_beta.py` and `plot_ScalarModel.py`; `--inventory`
+starts no Ray now), 80 `Datastore` and 5 `SerialPoolBroker`, all five jobs `SUCCEEDED`.
+
+### 3.3 L1 — every build ends as it should
+
+- **`reference`** and **`resumed-b`**: `** driver exit status 0`, and every stage prints
+  `-- ALL WORK ITEMS COMPLETE` and its queue summary (`stage_counts.py`: all three `complete`).
+- **`resumed-a`** ended by the signal, in the adiabatic stage: its banner is the last stage line,
+  `stage_counts.py` gives `INCOMPLETE; no queue summary`, and the status is **15** (§3.2; R0 and R1:
+  134). The absl dump appears twice (stderr and `logging.cc`), as before.
+- **No Python traceback in any log.** `grep -c Traceback` is 0 for the three build logs and the
+  six reader logs (`1-inventory`, `1b-inventory-reference`, `2-plot_by_beta`, `3-plot_ScalarModel`,
+  `4-bbn_from_store`, `5-compare_stores`). `grep -c Error` is 0 in each but `10-resumed-a.log`,
+  where its 2 hits are the absl dump's `PC: @ … _PyErr_SetKeyError` line, once in each copy of the
+  dump. The other unusual lines are the expected kinds only: Ray's `FutureWarning` about
+  `RAY_ACCEL_ENV_VAR_OVERRIDE_ON_ZERO`; the three super-Planckian warnings in each build; the
+  `@@ Parametrized equation-of-state` line from the `Datastore` actors (`[repeated 15x across
+  cluster]`); and in each plot script the 16-against-10 shard-count warning. No `(raylet) … have
+  not registered within the timeout` line appeared.
+- **The provenance line** is the first line of every build log, of each Ray reader's log and of
+  both `--inventory` logs, exactly once (counted by `grep -cxF` of the whole line):
+  `>> packages: datastorekit 0.3.0 (https://github.com/ds283/DatastoreKit@2f5417ea76cdcd0d15d64d80d9085429bfacad21, requested v0.3.0); raypoolkit 0.2.0 (https://github.com/ds283/RayPoolKit@eaef0ce60e2fc354bb32f0ad576010e6a83c1976, requested v0.2.0)`,
+  log 07's line. Before the cluster started, `utilities.installed_package_provenance()` gave both
+  entries with that commit and `requested_revision`, and **`editable: False`** for each.
+- **What R2 prints that R1 did not, by design:** the provenance line above; and nothing else in the
+  builds. `reference` and `resumed-a` print `>> Created sharded datastore "…" with 16 shards`, and
+  `resumed-b` `>> Opened existing sharded datastore "…" with 16 shards`, R1's text exactly.
+
+### 3.4 L2 — the resume
+
+**The prune at open, by the package's actor.** `reference` and `resumed-a` created their stores
+and printed no integrity report. **`resumed-b`** opened the existing store, and one `Datastore`
+actor pruned one row. Its report, read in full from both the driver's log and the actor's own Ray
+worker log
+(`/tmp/ray-cpbh/session_2026-10-13_01-05-32_375874_3758/logs/worker-04b4…-03000000-10411.out`, job
+`03000000` = `resumed-b`, by one `grep` before the stop; the file was still under `logs/`, not
+`logs/old/`):
+
+```text
+!! INTEGRITY WARNING (2026-10-13T01:14:52): datastore "shard0015-store" (physical file /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-resumed-shard0015.db)
+>> AdiabaticHistory instances
+     The following unvalidated models were detected in the datastore:
+       -- "dk-and-rpk-migration-10-resumed-a-AdiabaticHistory-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=1.1)-2026-10-13T01:13:44" (store_id=1)
+          contains 4947 z-sample values | expected=4947
+     ** Note: these values have been pruned from the datastore.
+```
+
+The text is the factory's `validate_on_startup` report, printed by the package's actor as
+ChamPBH's actor printed it at R0 and R1 (§2.4), word for word but for the names. It is exactly the
+one unvalidated row of §3.2. There was only one report, so Ray's deduplication had nothing to fold;
+no worker log of job `03000000` holds another `INTEGRITY WARNING`. No `>> Pruned the unvalidated
+rows of …` line appears in any log: the three validating classes are sharded, so the prune is the
+actors', not the pool's. None of the readers printed an integrity report.
+
+**The stage counts** (`stage_counts.py`; [`10-stage-counts.txt`](dk-and-rpk-migration/out/10-stage-counts.txt)),
+R1's beside:
+
+| Stage | `reference` | `resumed-a` | `resumed-b` | R1 `resumed-b` |
+|---|---|---|---|---|
+| scalar histories | lookup 5, compute 5, store 5, validation 5 | 5 / 5 / 5 / 5 | lookup 5, compute 0, store 0, validation 0; *no compute items evaluated* | the same |
+| adiabatic | 5 / 5 / 5 / 5 | INCOMPLETE, no summary | **lookup 5, compute 5, store 5, validation 5** | 3 / 3 / 3 / 3 |
+| BBN | 5 / 5 / 5 / 5 | not reached | 5 / 5 / 5 / 5 | the same |
+| skipped (adiabatic; BBN) | 0; 0 and 0 stored failures | — | 0; 0 and 0 stored failures | the same |
+| driver exit status | 0 | 15 | 0 | 0 |
+
+`reference` is R1's (and R0's) 5 / 5 / 5 exactly.
+
+**The label counts** (`sqlite3` `mode=ro`, all 16 shards of each store, after `resumed-b` and
+again after the readers):
+
+| Table | `10-reference.db` | `10-resumed.db` |
+|---|---|---|
+| `ScalarModel` | 5 `…-10-reference-…` | 5 `…-10-resumed-a-…` |
+| `AdiabaticHistory` | 5 `…-10-reference-…` | **5 `…-10-resumed-b-…`** |
+| `BBNData` | 5 `…-10-reference-…` | 5 `…-10-resumed-b-…` |
+
+All rows are `validated = 1`. `BBNData`: `failure = 0`, `small_network = 1`,
+`PRyM_version = bf24c3d+ri02+sr01+bt02` in all ten rows.
+
+**So `resumed-b` computed exactly what `resumed-a` had not kept**, the pattern R0 and R1 set:
+- no `ScalarModel`, since all five were kept; the scalar stage looked up all five again (lookup 5,
+  compute 0), as at R0 and R1 (board §3, `[02-scalar-stage-missing-filter-keeps-every-model]`,
+  still open);
+- five `AdiabaticHistory` rows, 5 − *k* with *k* = 0 validated rows kept (one stored and pruned,
+  four never stored); the adiabatic lookups equal its computes (5), as at R0 (2 / 2) and R1 (3 / 3);
+- all five `BBNData` rows, which `resumed-a` never reached.
+
+The comparison of `reference` against `resumed` is §3.6.
+
+### 3.5 L3 — the readers
+
+`./.documents/dk-and-rpk-migration/rehearsal/run_readers.sh 10 resumed 127.0.0.1:6380`, 01:16:07 to
+01:17:13 (1 min 6 s; R1 1 min 56 s), on the closed `10-resumed.db`. Then, separately (prompt
+§1.4.1), `main.py --config exponential.yaml --database $R/10-reference.db --inventory` into
+`$R/10-readers/1b-inventory-reference.log`, at 01:17:37, exit 0. Abridged output:
+[`10-readers.txt`](dk-and-rpk-migration/out/10-readers.txt).
+
+| Step | Exit |
+|---|---|
+| 0 copy-before | 0 |
+| 1 `main.py --inventory` | 0 |
+| 2 `plot_by_beta.py --phi-init-Mp 5` | 0 |
+| 3 `plot_ScalarModel.py` | 0 |
+| 4 `tools/bbn_from_store.py … --beta 1.15 --M-Mp 1e-3 --small-network --variant prod` | 0 |
+| 5 `compare_stores.py before/10-resumed.db 10-resumed.db` | 0 |
+| (1b) `main.py --inventory` on `10-reference.db` | 0 |
+
+- **`--inventory`** is 09's report: read-only, before Ray, `read_inventory` on the closed store.
+  Both reports head `read-only; 16 shards (#0, …, #15); 21,292 records in 21 classes` and
+  **`problems: none`**. Each lists `ScalarModel (sharded): 5 records: 5 validated, 0 unvalidated;
+  42,617 ScalarModelValue rows`, `AdiabaticHistory (sharded): 5 records: 5 validated, 0
+  unvalidated; 42,617 AdiabaticHistoryValue rows` and `BBNData (sharded): 5 records: 5 validated,
+  0 unvalidated; 7,475 BBNDataValue rows`, each group `version = 2026.6.0`, `unvalidated: none`.
+  Each record is given by its physical labels (T_init 20000 GeV, T_stop 2.3493e-13 GeV, φE 5 and
+  πE 0 `PlanckMass`, `ExponentialPotential(M=2.436e+24 eV, Lambda=0.001 eV, n_value=1)`,
+  `ExponentialCoupling(beta=…)` for β = 1.1, 1.15, 1.2, 10, 25, `failure=False`, tag
+  `SamplesPerLog10Z_250`, value counts 4947 / 4975 / 5002 / 9776 / 17917), and each BBN record
+  with `PRyM_version=bf24c3d+ri02+sr01+bt02`. The two reports are identical but for the store's
+  name and the commit times. Their layout is 09's (board §5.14's P15 table), so they are not in
+  L4's comparison.
+- **`plot_by_beta.py`.** SM baseline `Yp=0.24688, D/H x1e5=2.45829, 3He/H x1e5=1.04193,
+  7Li/H x1e10=5.48637` (small network, `PRyM_version=bf24c3d+ri02+sr01+bt02`), R0's and R1's; "no
+  models used elastic reflections (5 model(s) checked)".
+- **`histories.csv` is byte-identical to R0's and R1's.** SHA-256
+  `d7c62c37d8ad637a63854583ab11bc737109dcbfba92168dbddbaea75182c522`, and `cmp` of
+  `$R/10-readers/plot_by_beta/QCD_Cosmology/histories.csv` against
+  `$R/06-readers/plot_by_beta/QCD_Cosmology/histories.csv` and against R0's in `02-readers/` each
+  exit 0.
+- **`plot_ScalarModel.py`**: 5 lookups, no compute item evaluated (7.69 s).
+- **`bbn_from_store.py`, β = 1.15**, on shard 0000, serial 1, small network:
+
+  | | Yp | D/H (×10⁵) |
+  |---|---|---|
+  | stored row | 0.24687349447579363 | 2.4859924812264325 |
+  | `prod` re-solve | 0.2468734945 | 2.485992481 |
+
+  **R0's and R1's figures exactly**, stored and re-solved; He3/H 1.046802492 and Li7/H 5.403050409,
+  theirs. The re-solve took 8.5 s (R1 12.5 s).
+- **The store is unchanged by the readers.** Step 5 gives `RESULT: equal` with **no bookkeeping
+  column differing** and no problem (27 tables).
+
+### 3.6 The criterion — bitwise equality with R1 and R0
+
+The four comparisons (§3.10), after the cluster had stopped:
+
+| A | B | Output | Result | Exit | Time |
+|---|---|---|---|---|---|
+| `06-reference.db` | `10-reference.db` | [`10-compare-06-reference-10-reference.txt`](dk-and-rpk-migration/out/10-compare-06-reference-10-reference.txt) / [`.json`](dk-and-rpk-migration/out/10-compare-06-reference-10-reference.json) | **`RESULT: equal`** | **0** | 7 s |
+| `06-reference.db` | `10-resumed.db` | [`10-compare-06-reference-10-resumed.txt`](dk-and-rpk-migration/out/10-compare-06-reference-10-resumed.txt) / [`.json`](dk-and-rpk-migration/out/10-compare-06-reference-10-resumed.json) | **`RESULT: equal`** | **0** | 7 s |
+| `02-reference.db` | `10-reference.db` | [`10-compare-02-reference-10-reference.txt`](dk-and-rpk-migration/out/10-compare-02-reference-10-reference.txt) / [`.json`](dk-and-rpk-migration/out/10-compare-02-reference-10-reference.json) | **`RESULT: equal`** | **0** | 7 s |
+| `10-reference.db` | `10-resumed.db` | [`10-compare-10-reference-10-resumed.txt`](dk-and-rpk-migration/out/10-compare-10-reference-10-resumed.txt) / [`.json`](dk-and-rpk-migration/out/10-compare-10-reference-10-resumed.json) | **`RESULT: equal`** | **0** | 7 s |
+
+In each: 27 client tables, every row matched, none in one store only, no near miss, no problem. The
+matched counts are R0's and R1's: 5 rows each in `ScalarModel`, `AdiabaticHistory`, `BBNData` and
+their tags, 42617 in each of `ScalarModelValue` and `AdiabaticHistoryValue`, 7475 in
+`BBNDataValue`, 21250 `redshift`, 5 `ExponentialCoupling` and `beta_value`, 6 `IntegrationSolver`.
+**The only note** in the three comparisons with an R0 or R1 store is `A: LambdaCDM is listed as
+replicated by the primary but no shard holds it; not compared`: R0's and R1's primaries list
+`LambdaCDM`, R2's does not (P8; 08), so the note R1's comparisons gave for both stores is now given
+for A only. `10-reference` against `10-resumed` has no note. `10-compare-02-reference-10-reference.txt`
+differs from R1's `06-compare-02-reference-06-reference.txt` only in the line naming B and the
+dropped B note; the JSON files differ only in `b` and `notes`.
+
+**Why this is not a vacuous "equal".** The bookkeeping columns differ on every matched row in all
+four comparisons, the same 29 columns as at R1: every `label` and `timestamp` of the three record
+tables and their tags, `ScalarModel.compute_time` and its three RHS timings,
+`AdiabaticHistory.compute_time`, `BBNData.BBN_compute_time` and `NP_compute_time`, and the
+timestamps of every parameter table, the 21250 redshifts among them. So each pair was built by
+separate jobs. Every science column, the value rows included, is compared by its stored bits, with
+foreign keys resolved to the rows they name. The stores compared were written by two layers
+(ChamPBH's and the package's), in two primary formats (absolute shard records; bare names and
+`replication_in_flight`), on three clusters, two pools and three trees.
+
+**So R2 equals R1 and R0 bit for bit**, and §4.3 holds again at this tree.
+
+**The schema snapshot** of `10-reference.db` is
+[`10-reference-schema.json`](dk-and-rpk-migration/out/10-reference-schema.json) (27 client tables).
+`--schema` of the store against `08-standin-schema.json` gives **`RESULT: the schemas agree`**, and
+against `02-reference-schema.json` the same. The three JSON files are equal in `format`, `version`
+and `tables`, and differ only in `source`. 08 found no difference between the package's schema at
+this registry and R0's, so "differs from R0's only as 08 listed" means agreeing with both, which it
+does.
+
+**The primary is the package's**, as expected (prompt §0): its own tables are `shards`,
+`shard_key_config`, `shard_keys`, `replicated_tables` (17 names, no `LambdaCDM`), `sharded_tables`
+and `replication_in_flight` (0 rows); its `shards` table names `10-reference-shard0000.db` …
+`-shard0015.db`, bare; and a replicated row carries one timestamp on every shard (the first
+`beta_value` row: 1 distinct timestamp over the 16 shards of `10-reference.db`, 16 over
+`06-reference.db`'s).
+
+### 3.7 L4 — against R1
+
+**Counts and the resume's pattern.** §3.4: `reference` 5 / 5 / 5, R1's and R0's; `resumed-b` computes
+exactly what `resumed-a` did not keep (0 / 5 / 5 here, 0 / 3 / 5 at R1, 0 / 2 / 5 at R0), with
+lookups 5 / 5 / 5 (R1 5 / 3 / 5, R0 5 / 2 / 5): the scalar stage looks every stored model up again,
+and the adiabatic stage's lookups equal its computes. The prune removed only unvalidated rows (one
+here, three at R1, one at R0). The numbers differ with the signal's timing; the pattern is R1's.
+
+**The printed lines keep their layout** ([`10-printed-lines.txt`](dk-and-rpk-migration/out/10-printed-lines.txt)).
+The pool's lines were taken from `06-reference.log` and `10-reference.log` and normalised by 06's
+method (its `06-printed-lines.txt` header).
+- The banners and completion lines agree **in text and order**: 10 lines each, the three stage
+  banners (and `main.py`'s `** BUILDING GRID OF MODELS TO SAMPLE`), each stage's completion line
+  and queue summary. Against R0's `02-reference.log`, the same.
+- **`10-reference.log` has no progress line, said plainly.** Every stage ended inside the pool's
+  300 s notify interval (the scalar stage in 1m 54.6s; R1's ran 5m 6.61s and printed one pair), so
+  the check that every R2 progress shape occurs in R1's log holds vacuously. RayPoolKit is
+  unchanged since R1 (`eaef0ce6…`), whose progress pair R1 showed in R0's two shapes.
+- In addition, `06-resumed-b.log` against `10-resumed-b.log`: 11 lines agree in text and order,
+  the scalar stage's `(no compute items were evaluated - all assets read from datastore)` among
+  them; neither has a progress line.
+- The extraction is not a check that cannot fail: `10-reference.log` against `10-resumed-b.log` (a
+  different line sequence) is reported as differing, exit 1.
+
+`stage_counts.py` parsed all three of 10's logs (§3.4), which is part of the same evidence.
+
+### 3.8 H1 — the stores by the package's tools
+
+On closed stores, after the cluster's stop, with the installed `datastorekit` 0.3.0 (the tag's
+files).
+1. **The shard-key audit.** `./venv/bin/python -m datastorekit.tools.shard_key_audit
+   $R/10-reference.db`, and the same on `10-resumed.db`: each `current-generation schema (key_serial
+   present)`, `shard_keys row count: 5`, `per-shard key distribution: {0: 1, 1: 1, 2: 1, 3: 1, 15:
+   1}`, the cross-file check against its own shard #0 (`'beta_value' table (shard #0) row count:
+   5`), **`VERDICT: OK`**, exit 0 ([`10-h1-audit-10-reference.txt`](dk-and-rpk-migration/out/10-h1-audit-10-reference.txt),
+   [`10-h1-audit-10-resumed.txt`](dk-and-rpk-migration/out/10-h1-audit-10-resumed.txt)).
+2. **The copy.** `./venv/bin/python -m datastorekit.tools.sharded_store copy $R/10-reference.db
+   $R/10-reference-copy.db`: exit 0, `>> copy: "…/10-reference-copy.db" with 16 shards` and the
+   16 shard paths `10-reference-copy-shard0000.db` … `-shard0015.db` ([`10-h1-copy.txt`](dk-and-rpk-migration/out/10-h1-copy.txt));
+   17 files on disk. No `10-reference-copy*` file existed before.
+3. **The copy opens read-only.** `main.py --config exponential.yaml --database
+   $R/10-reference-copy.db --inventory`: exit 0, `read-only; 16 shards (#0, …, #15); 21,292 records
+   in 21 classes`, **`problems: none`**; from its third line on it is byte-identical to
+   `1b-inventory-reference.log` (the copy keeps every row's timestamp). Its `shards` table
+   (`sqlite3` `mode=ro`) names `10-reference-copy-shard0000.db` … `-shard0015.db` for serials 0–15:
+   its own shards, a bare name each ([`10-h1-copy-inventory.txt`](dk-and-rpk-migration/out/10-h1-copy-inventory.txt)).
+4. **It compares equal.** `tools/compare_stores.py $R/10-reference.db $R/10-reference-copy.db`:
+   **`RESULT: equal`**, exit 0, 27 tables matched, and **no bookkeeping column differing**
+   ([`10-h1-compare-10-reference-10-reference-copy.txt`](dk-and-rpk-migration/out/10-h1-compare-10-reference-10-reference-copy.txt) / [`.json`](dk-and-rpk-migration/out/10-h1-compare-10-reference-10-reference-copy.json)).
+5. **It is deleted by the package's `delete_store`.** A scratch script (quoted in log 10), run as
+   `./venv/bin/python -I <scratch>/delete_copy.py` from the repository root, listed the 17
+   `10-reference-copy*` files on disk, called `ShardedPool.closed_store_files($R/10-reference-copy.db)`
+   (17 paths: shards #0–#15, then the primary), checked that list equal to the copy's 17 files and
+   to what was on disk, then called `ShardedPool.delete_store` on the same primary. It returned the
+   same 17 paths in the same order, and **no `10-reference-copy*` file remains**
+   ([`10-h1-delete.txt`](dk-and-rpk-migration/out/10-h1-delete.txt)). This is the one deletion under
+   `$R` the campaign allows (README §3).
+
+**H1 holds.**
+
+### 3.9 DatastoreKit's G3
+
+By DatastoreKit's ChamPBH checklist, item 9 (G3): the layer's 9 files are gone (seven deleted, two
+emptied; 08, `857ec73`) and ChamPBH imports `datastorekit` at the pinned tag (`requirements.txt:17`,
+`v0.3.0`; 07, `617a1dc`); its suites pass (18 / 114 / 97 at this tree, run before the cluster
+started); and **a pilot store has been rebuilt through the package** and compared with R1's and R0's
+by value: equal, bit for bit (§3.6). **G3 holds.** The record on DatastoreKit's own extraction board
+is 11's draft and the user's commit (P16); its text is in log 10's "State handed to the next
+prompt".
+
+### 3.10 The commands, verbatim
+
+From the repository root, with `R=~/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration`:
+
+```bash
+.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh status
+PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .
+PYTHONPATH=. ./venv/bin/python -m unittest discover -s Datastore/tests -t .
+PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'
+PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'
+
+.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh start "dk-and-rpk-migration 10 (R2)"
+./venv/bin/ray status --address 127.0.0.1:6380
+./.documents/dk-and-rpk-migration/rehearsal/build.sh 10 reference reference 127.0.0.1:6380
+
+# S, from 10-reference.db (mode=ro): for each f in $R/10-reference-shard*.db and T in
+#   ScalarModel AdiabaticHistory BBNData, in Python's sqlite3 with uri=True:
+#   connect("file:$f?mode=ro").execute("select serial, timestamp, validated, label from T")
+# and the banner's time from Ray's task records:
+./venv/bin/ray list tasks --address 127.0.0.1:6380 --limit 2000 --detail --format json
+
+./.documents/dk-and-rpk-migration/rehearsal/build.sh 10 resumed resumed-a 127.0.0.1:6380
+./venv/bin/python .documents/dk-and-rpk-migration/rehearsal/interrupt_when.py $R/logs/10-resumed-a.log $R/logs/10-resumed-a.pid --banner "** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS" --after 1
+
+./venv/bin/ray list actors --address 127.0.0.1:6380 --filter "state=ALIVE"
+./venv/bin/ray list actors --address 127.0.0.1:6380 --limit 200
+./venv/bin/ray list jobs --address 127.0.0.1:6380
+./venv/bin/ray list tasks --address 127.0.0.1:6380 --limit 5000 --detail --format json --filter "job_id=02000000"
+
+./.documents/dk-and-rpk-migration/rehearsal/build.sh 10 resumed resumed-b 127.0.0.1:6380 --prune-unvalidated
+grep -h -A6 "INTEGRITY WARNING" /tmp/ray-cpbh/session_2*/logs/old/worker-*-03000000-*.out /tmp/ray-cpbh/session_2*/logs/worker-*-03000000-*.out
+./.documents/dk-and-rpk-migration/rehearsal/run_readers.sh 10 resumed 127.0.0.1:6380
+PYTHONPATH=. ./venv/bin/python -u main.py --config exponential.yaml --database $R/10-reference.db --inventory > $R/10-readers/1b-inventory-reference.log 2>&1
+./venv/bin/ray list actors --address 127.0.0.1:6380 --filter "state=ALIVE"
+.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh stop
+.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh status
+
+PYTHONPATH=. ./venv/bin/python -u tools/compare_stores.py $R/02-reference.db $R/10-reference.db --json .documents/dk-and-rpk-migration/out/10-compare-02-reference-10-reference.json > .documents/dk-and-rpk-migration/out/10-compare-02-reference-10-reference.txt 2>&1
+PYTHONPATH=. ./venv/bin/python -u tools/compare_stores.py $R/06-reference.db $R/10-reference.db --json .documents/dk-and-rpk-migration/out/10-compare-06-reference-10-reference.json > .documents/dk-and-rpk-migration/out/10-compare-06-reference-10-reference.txt 2>&1
+PYTHONPATH=. ./venv/bin/python -u tools/compare_stores.py $R/06-reference.db $R/10-resumed.db --json .documents/dk-and-rpk-migration/out/10-compare-06-reference-10-resumed.json > .documents/dk-and-rpk-migration/out/10-compare-06-reference-10-resumed.txt 2>&1
+PYTHONPATH=. ./venv/bin/python -u tools/compare_stores.py $R/10-reference.db $R/10-resumed.db --json .documents/dk-and-rpk-migration/out/10-compare-10-reference-10-resumed.json > .documents/dk-and-rpk-migration/out/10-compare-10-reference-10-resumed.txt 2>&1
+./venv/bin/python tools/compare_stores.py --snapshot $R/10-reference.db --out .documents/dk-and-rpk-migration/out/10-reference-schema.json
+./venv/bin/python tools/compare_stores.py --schema $R/10-reference.db --against .documents/dk-and-rpk-migration/out/08-standin-schema.json
+./venv/bin/python tools/compare_stores.py --schema $R/10-reference.db --against .documents/dk-and-rpk-migration/out/02-reference-schema.json
+./venv/bin/python .documents/dk-and-rpk-migration/rehearsal/stage_counts.py $R/logs/10-reference.log $R/logs/10-resumed-a.log $R/logs/10-resumed-b.log --json .documents/dk-and-rpk-migration/out/10-stage-counts.json > .documents/dk-and-rpk-migration/out/10-stage-counts.txt
+shasum -a 256 $R/10-readers/plot_by_beta/QCD_Cosmology/histories.csv
+cmp $R/10-readers/plot_by_beta/QCD_Cosmology/histories.csv $R/06-readers/plot_by_beta/QCD_Cosmology/histories.csv
+cmp $R/10-readers/plot_by_beta/QCD_Cosmology/histories.csv $R/02-readers/plot_by_beta/QCD_Cosmology/histories.csv
+
+./venv/bin/python -m datastorekit.tools.shard_key_audit $R/10-reference.db > .documents/dk-and-rpk-migration/out/10-h1-audit-10-reference.txt 2>&1
+./venv/bin/python -m datastorekit.tools.shard_key_audit $R/10-resumed.db > .documents/dk-and-rpk-migration/out/10-h1-audit-10-resumed.txt 2>&1
+./venv/bin/python -m datastorekit.tools.sharded_store copy $R/10-reference.db $R/10-reference-copy.db > .documents/dk-and-rpk-migration/out/10-h1-copy.txt 2>&1
+PYTHONPATH=. ./venv/bin/python -u main.py --config exponential.yaml --database $R/10-reference-copy.db --inventory
+sqlite3 "file:$R/10-reference-copy.db?mode=ro" "select * from shards order by 1;"
+PYTHONPATH=. ./venv/bin/python -u tools/compare_stores.py $R/10-reference.db $R/10-reference-copy.db --json .documents/dk-and-rpk-migration/out/10-h1-compare-10-reference-10-reference-copy.json > .documents/dk-and-rpk-migration/out/10-h1-compare-10-reference-10-reference-copy.txt 2>&1
+./venv/bin/python -I <scratch>/delete_copy.py > .documents/dk-and-rpk-migration/out/10-h1-delete.txt 2>&1
+```
+
+Each `build.sh` and `run_readers.sh` ran as a background task, waited on by its notification (for
+`reference`, also a `Monitor` on the log's stage and `** driver exit status` lines);
+`interrupt_when.py` ran as a second background task, started just after `resumed-a`'s `build.sh`.
+The label counts are the same `mode=ro` select over both stores' shards, grouped by the label's
+`dk-and-rpk-migration-10-<build>` prefix and `validated`. The printed lines were extracted and
+compared by a scratch script, described in `10-printed-lines.txt`'s header.
+
+**Left on disk under `$R`, none deleted but the copy** (README §3): `10-reference.db` and
+`10-resumed.db`, each with 16 shards; `logs/10-{reference,resumed-a,resumed-b}.{log,pid}`;
+`10-readers/`, with its `before/` copy, the six step logs (`1b-inventory-reference.log` among them),
+`status.txt` and the plot outputs. 188 entries named `10-*` at all depths; the 376 entries present
+before have their mtimes and sizes but the root and `logs/` directories, which gained the 10
+entries. R0's and R1's files were opened only by `compare_stores.py`, `sqlite3` `mode=ro` and
+`cmp`, and none has changed.

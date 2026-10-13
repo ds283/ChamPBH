@@ -1,0 +1,17 @@
+>> copy: "/Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy.db" with 16 shards
+>>   shard #0: /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0000.db
+>>   shard #1: /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0001.db
+>>   shard #2: /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0002.db
+>>   shard #3: /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0003.db
+>>   shard #4: /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0004.db
+>>   shard #5: /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0005.db
+>>   shard #6: /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0006.db
+>>   shard #7: /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0007.db
+>>   shard #8: /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0008.db
+>>   shard #9: /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0009.db
+>>   shard #10: /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0010.db
+>>   shard #11: /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0011.db
+>>   shard #12: /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0012.db
+>>   shard #13: /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0013.db
+>>   shard #14: /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0014.db
+>>   shard #15: /Users/ds283/ScienceData/ChamPBH-rehearsals/dk-and-rpk-migration/10-reference-copy-shard0015.db
