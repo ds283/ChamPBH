@@ -1,7 +1,7 @@
 # Log 02 — read-only plot pools
 
 **Subject:** Open the plot scripts read-only through a shared plot_inputs module
-**Commit:** this commit, on branch `read-only-plots`, on top of `e0cf6f0`
+**Commit:** `9dc23db`, on branch `read-only-plots`, on top of `e0cf6f0`
 **Date:** 2026-10-13, by Claude Opus 5.5
 **Result:** **COMPLETE.** O1–O5 shipped. ComputeTargets 131 → 152 (+21 `test_plot_inputs`);
 CosmologyModels 18, ObjectFactories 63 and tools 34 unchanged. All four deliberate breakages

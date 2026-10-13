@@ -1,7 +1,7 @@
 # read-only-plots campaign — implementation state
 
-**Last updated:** 2026-10-13 · **Status: LIVE — 4 of 4 prompts written, 2 of 4 landed (01,
-reviewed; 02). U1–U6 and P1–P8 ruled by the user on 2026-10-13, all as proposed (README §6).**
+**Last updated:** 2026-10-13 · **Status: LIVE — 4 of 4 prompts written, 2 of 4 landed (01 and
+02, each reviewed). U1–U6 and P1–P8 ruled by the user on 2026-10-13, all as proposed (README §6).**
 The plan is [`README.md`](README.md), written on 2026-10-13 on branch `read-only-plots`, cut from
 `main` at `17fad8b`.
 
@@ -27,7 +27,7 @@ changes no file of the store it reads.
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
 | 01 | [Require the Ray address](01-require-the-ray-address.md) | `--ray-address` without a default; `auto` refused (U1, U2) | Sonnet | ✍️ 2026-10-13 | ✅ 2026-10-13 | `04486f4` | [`logs/01-require-the-ray-address.md`](logs/01-require-the-ray-address.md) |
-| 02 | [Read-only plot pools](02-read-only-plot-pools.md) | `plot_inputs.py`; both plot scripts `read_only=True`; misses per U3, U4; closes `[08-plot-scripts-open-read-write-pools]` | Opus | ✍️ 2026-10-13 | ✅ 2026-10-13 | this commit | [`logs/02-read-only-plot-pools.md`](logs/02-read-only-plot-pools.md) |
+| 02 | [Read-only plot pools](02-read-only-plot-pools.md) | `plot_inputs.py`; both plot scripts `read_only=True`; misses per U3, U4; closes `[08-plot-scripts-open-read-write-pools]` | Opus | ✍️ 2026-10-13 | ✅ 2026-10-13 | `9dc23db` | [`logs/02-read-only-plot-pools.md`](logs/02-read-only-plot-pools.md) |
 | 03 | [Rehearse a read-only plotting run](03-rehearse-a-read-only-plotting-run.md) | one pilot build and the readers, checksums before and after (U5) | Opus | ✍️ 2026-10-13 | ⬜ | — | — |
 | 04 | [Close](04-close.md) | documents, handover, index, board | Sonnet | ✍️ 2026-10-13 | ⬜ | — | — |
 
@@ -39,6 +39,7 @@ changes no file of the store it reads.
 Orchestrator notes are written one prompt at a time, in [`orchestrator/`](orchestrator/), just
 before each dispatch:
 - [`orchestrator/prompt-01.md`](orchestrator/prompt-01.md) (`8c5a7f1`), used for 01.
+- [`orchestrator/prompt-02.md`](orchestrator/prompt-02.md) (`e0cf6f0`), used for 02.
 
 ### 1.1 Items
 
@@ -67,7 +68,7 @@ before each dispatch:
 | Gate | Holds when | Prompt | State |
 |---|---|---|---|
 | Ray address | every driver refuses a run that starts Ray without `--ray-address`, and refuses `auto`, before `ray.init` | 01 | ✅ `04486f4` |
-| Read-only plots | both plot scripts open `read_only=True`; on a stand-in store their lookups find every row, skip a missing potential or coupling, stop on a missing parameter, and change no file | 02 | ✅ this commit |
+| Read-only plots | both plot scripts open `read_only=True`; on a stand-in store their lookups find every row, skip a missing potential or coupling, stop on a missing parameter, and change no file | 02 | ✅ `9dc23db` |
 | R | a real plotting run on a real store changes no file of it (U5) | 03 | ⬜ |
 
 ## 3. Active and unresolved issues
@@ -77,7 +78,7 @@ None opened by this campaign.
 ### 3.1 Assigned to this campaign
 
 None open. `[08-plot-scripts-open-read-write-pools]`, assigned to 02, was closed by 02 on
-2026-10-13 (this commit): it is on the [`dk-and-rpk-migration`](../dk-and-rpk-migration/IMPLEMENTATION_STATE.md)
+2026-10-13 (`9dc23db`): it is on the [`dk-and-rpk-migration`](../dk-and-rpk-migration/IMPLEMENTATION_STATE.md)
 board §4, with its **Resolved** line, and its row has left `.documents/OPEN_ISSUES.md` §1.12.
 
 ## 4. Resolved issues
@@ -177,7 +178,7 @@ Handed to 02: every driver run needs `--ray-address`; 02 must leave the check an
 
 ### 5.3 After prompt 02 (2026-10-13)
 
-Prompt 02 landed in this commit ([log](logs/02-read-only-plot-pools.md)). O1–O5 done; the
+Prompt 02 landed in `9dc23db` ([log](logs/02-read-only-plot-pools.md)). O1–O5 done; the
 "Read-only plots" gate holds.
 - **`plot_inputs.py`** (new, top level): `parameters`, `stored_grid`, `potentials`, `couplings`,
   `models`, `T_stop`, and the exception `PlotOptionNotStored`. It parses nothing and starts no Ray
@@ -208,3 +209,54 @@ Handed to 03: run the scripts as 02 left them, with `--ray-address 127.0.0.1:638
 a refused lookup reaches `ray.get` as an instance of its cause's class (Ray 2.53.0,
 `ray/_private/worker.py:1015-1016`, `:2978-2979`; `ray/exceptions.py:170-192`), so the same catches
 apply; 03 is where that is seen.
+
+**Orchestrator review of prompt 02 (2026-10-13).** Against the note's twelve checks, at `9dc23db`:
+1. **Scope.** The diff is the prompt's §5 list exactly (nine files); the untracked set is the
+   user's, unchanged, with no stray store, journal or figure.
+2. **The module, by reading.** `plot_inputs.py` parses nothing and has no `ray.init` and no `args`
+   parameter; imported in a fresh interpreter it leaves `ray.is_initialized()` False.
+3. **The payloads.** Each moved lookup read against `000be0c`: the classes, keys and value
+   expressions are the old ones, `n = 1` only for Exponential and InversePower, and an unknown
+   type is still `ValueError` with the old message. The coupling's scalar sharded get sends the
+   actor exactly what the old vectorized path sent per β.
+4. **The misses, by reading.** Each `except` wraps the `ray.get` of one reference, and each is
+   narrowed to its own lookup's refusal (`class_name`, and for the coupling `operation == "an
+   insert"`). Ray 2.53.0's dual exception forwards attribute reads to the cause
+   (`ray/exceptions.py:182-183`, `__getattr__`), so `e.class_name` and `e.operation` read there
+   as in the stand-in. The survivors keep the old order.
+5. **The scripts by `ast` against `000be0c`.** In each, the module bodies differ only in the
+   docstring, the imports (`itertools` from `plot_by_beta.py`, `BaseCosmology` and
+   `build_model_list` from both, `plot_inputs` added), the `--drop` `If` (before 01's check) and
+   the `with` statement. Every function dumps identically. In the `with`, the pool's keywords
+   differ by `read_only=True` (and `job_name` in `plot_by_beta.py`); the setup became one `try`;
+   the baseline is unchanged; in the loop, `tags = []` and the `run_pipeline` call dump
+   identically, and only the `T_stop` lookup left it (log deviation 1). No function reads a removed
+   module global, and no name is unbound.
+6. **`--drop` by hand**, with `RAY_ADDRESS=127.0.0.1:9`, with no address and with
+   `--ray-address 127.0.0.1:9`: both scripts exit 2 with the `--drop` message and no traceback,
+   creating nothing. `--help` does not mention that `--drop` and `--prune-unvalidated` are
+   `main.py`'s; the module docstrings do, which O3 allows.
+7. **The tests.** `test_plot_inputs.py` read in full: the stores are built with `main.py`'s
+   payloads, closed, copied and reopened `read_only=True`; test 1 also asserts every object came
+   from the store (`_deserialized`), not from an insert; test 5 hashes the primary and the three
+   shards while the pool is open and after, and looks for `-journal`, `-wal` and `-shm`. Test 7,
+   run against the two pre-images, fails all six subtests.
+8. **The breakages.** The log's four diffs, extracted from the log and replayed in bash: each
+   applies cleanly and fails exactly what the log says (14; 2 errors + 4 failures; 3; 1), and each
+   reverts to a clean tree. An extra probe, the couplings read by one `ray.get` of the list, fails
+   test 3 and test 5's `no_coupling` subtest.
+9. **No Ray.** `pgrep` empty after checks 6, 8 and 11; `/tmp/ray/session_*` still 160;
+   `/tmp/ray-cpbh` unchanged.
+10. **Records.** The `dk-and-rpk-migration` entry moved whole to §4 (the old text identical, the
+    **Resolved** line added) and its header says three stay open; the index 26 by `grep -c`,
+    §1.12 empty, header and §1.11 prose consistent. Row 02, O1–O5, the gate and §5.3 as required.
+    The log in §5.1's form, every deviation classified, the Ray lines cited.
+11. **Suites** at `9dc23db`, serially, at load 4–7: CosmologyModels 18 OK, ComputeTargets 61 OK +
+    91 OK (152), ObjectFactories 63 OK, tools 34 OK. `black --check` clean on the five Python
+    files; the scripts and `plot_inputs.py` byte-compile.
+12. **Residue, fixed here:** "this commit" → `9dc23db` (board ×4, the log's header, the
+    `dk-and-rpk-migration` board's **Resolved** line; the log's prose uses stay); this note added
+    to the list; the status line; `prompts/INDEX.md`'s row, which still said "0 landed" after 01.
+
+The log's Observation 1 (`plot_by_beta.py`'s `ProfileAgent` label still says `plot_ScalarModel`)
+is cosmetic and offered to the user as housekeeping; no issue opened. Nothing else found.

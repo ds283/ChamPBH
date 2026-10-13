@@ -300,7 +300,7 @@ does not need (README §6.2, P11).
 - **Assigned (2026-10-13):** to the [`read-only-plots`](../read-only-plots/IMPLEMENTATION_STATE.md)
   campaign, prompt 02, planned the same day at the user's request (its README §0.3 has the
   measurement this entry asked for). That prompt closes it here, in §4.
-- **Resolved (2026-10-13):** by `read-only-plots` prompt 02 (this commit). Both plot scripts open
+- **Resolved (2026-10-13):** by `read-only-plots` prompt 02 (`9dc23db`). Both plot scripts open
   `ShardedPool(read_only=True)` and read their parameters, grid, potentials, couplings, cosmology
   and `T_stop` through a new module, `plot_inputs.py`, tested on read-only stand-in stores
   (`ComputeTargets/tests/test_plot_inputs.py`). What was found:
