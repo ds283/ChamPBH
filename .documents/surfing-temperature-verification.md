@@ -500,3 +500,21 @@ Each was run serially in the foreground, with its output in the agent's scratch 
 | tools | 70 OK | 12 s | 4.69 |
 
 These are the counts at 03b (board §5.4b).
+
+## 2. The figures redrawn (prompt 04b, 2026-10-14)
+
+Prompt 04b (user's ruling U8) moved the e⁺e⁻ band label clear of the edge marks. The only change to
+`tools/plot_surfing_temperature.py` is the upper panel's lower y-limit, `min(ys) / 3.0` becoming
+`min(ys) / 8.0`: the axis reaches lower, and the coldest band's label, which hangs below its cold
+edge, sits above the edge marks on the spine instead of across them. Its words, colour and band, and
+the marks, are unchanged.
+
+- **The data are unchanged.** Both figures are redrawn from the committed CSVs and sidecars, by §1.1's
+  two plot commands, which are untouched. The titles still read "git HEAD e7ed715", the tree the data
+  came from.
+- **§1.6, and the log of prompt 04, describe the figures as committed in `90d44f8`.** The account of
+  the label's second line lying across the marks at β = 2.999–3.006 is true of those figures, and is
+  not edited here.
+- **What moved.** In each PNG the upper panel's contents, and its y tick labels, lie at new positions
+  because its y range grew by a factor 8/3. The upper panel's lower limit is now 9.9e-6 (fine) and
+  7.9e-6 (full). Nothing else is drawn differently.

@@ -1,6 +1,6 @@
 # surfing-temperature campaign — implementation state
 
-**Last updated:** 2026-10-14 · **Status: LIVE — 7 of 7 prompts written, 5 of 7 landed (01, 02, 03, 03b, 04). U1–U8 and P1–P10
+**Last updated:** 2026-10-14 · **Status: LIVE — 7 of 7 prompts written, 6 of 7 landed (01, 02, 03, 03b, 04, 04b). U1–U8 and P1–P10
 ruled by the user on 2026-10-14 (README §6); P1–P10 as proposed.**
 The plan is [`README.md`](README.md), written on 2026-10-14 on `main` at `f41b104`. Its planning
 commit `8adb806` is the first on branch `surfing-temperature`, cut from `main` at `f41b104` (P10).
@@ -32,7 +32,7 @@ opened or assigned)
 | 03 | [The plot](03-plot-surfing-temperature.md) | `tools/plot_surfing_temperature.py`: roots and measured temperatures against β, two panels | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | `1f40b53` | [log](logs/03-plot-surfing-temperature.md) |
 | 03b | [Uncaptured deliveries](03b-plot-uncaptured-deliveries.md) | the first bounce of an uncaptured history drawn in the upper panel (U7) | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | `ee4a2df` | [log](logs/03b-plot-uncaptured-deliveries.md) |
 | 04 | [Run the scan](04-run-the-scan.md) | 79 β, 1.10–5.00, CSV and figure committed; verification document (U4); fine scan near β = 3.0 (U6) | Opus | ✍️ 2026-10-14, amended for U6 | ✅ 2026-10-14 | `90d44f8` | [log](logs/04-run-the-scan.md) |
-| 04b | [Tidy the band label](04b-tidy-band-label.md) | the e⁺e⁻ band label moved clear of the edge marks; both committed figures redrawn (U8) | Sonnet | ✍️ 2026-10-14 | ⬜ | — | — |
+| 04b | [Tidy the band label](04b-tidy-band-label.md) | the e⁺e⁻ band label moved clear of the edge marks; both committed figures redrawn (U8) | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | this commit | [log](logs/04b-tidy-band-label.md) |
 | 05 | [Close](05-close.md) | documents, handover, index, board | Sonnet | ✍️ 2026-10-14 | ⬜ | — | — |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
@@ -72,7 +72,7 @@ before each dispatch.
 | **S3** | 04 | two β re-run, equal as strings but for `wall_s` | ✅ |
 | **S4** | 04 | `.documents/surfing-temperature-verification.md` §1; the outputs committed (P8) | ✅ |
 | **S5** | 04 | the fine scan near β = 3.0, β = 2.980–3.040 by 0.001, its CSV and figure (U6) | ✅ |
-| **F5** | 04b | no band label overlaps an edge mark; the two committed figures redrawn from the committed CSVs (U8) | ⬜ |
+| **F5** | 04b | no band label overlaps an edge mark; the two committed figures redrawn from the committed CSVs (U8) | ✅ |
 | **Z1** | 05 | `architecture-summary.md`: the new functions and tools | ⬜ |
 | **Z2** | 05 | `CLAUDE.md`: the suites' counts | ⬜ |
 | **Z3** | 05 | the handover, `.documents/review-remediation-verification.md` §4.14 | ⬜ |
@@ -602,3 +602,19 @@ the plot script, so **prompt 04b** is inserted before 05. It:
 
 It is costed as a tidy-up: no new test, no breakage, and only the `tools` suite. 05's gate now
 includes 04b.
+
+### 5.5a After prompt 04b (2026-10-14)
+
+**04b landed in this commit** (parent `f30a3c0`; Sonnet). The log is
+[`logs/04b-tidy-band-label.md`](logs/04b-tidy-band-label.md). F5 is done. No history, Ray or store was
+used, and no issue opened.
+- **The change.** In `tools/plot_surfing_temperature.py` the upper panel's lower y-limit is
+  `min(ys) / 8.0`, from `/ 3.0`, with a comment saying why. Nothing else in the script moved.
+- **The gap.** On the fine figure the label's lowest ink is 12 blank pixel rows (about 9 pt at 100 dpi)
+  above the edge marks' top. The label covers the marks at β = 2.999–3.007.
+- **The figures.** Both are redrawn in place from the committed CSVs. Against the old PNGs the full
+  figure differs only in x 31–819, y 55–520 (the upper panel). The fine one differs in the upper panel
+  and, by sub-pixel anti-aliasing, in the lower panel (log D1: the constrained layout moves it by a
+  fraction of a pixel when the new 10⁻⁵ tick label appears).
+- **The suite.** `tools`: 70 OK, as before; `black` clean. No other suite was run.
+- **The document.** `.documents/surfing-temperature-verification.md` has a new §2; §1 is unchanged.

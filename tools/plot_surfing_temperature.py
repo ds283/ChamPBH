@@ -517,7 +517,9 @@ def build_figure(
     ys += [r[c[0]] for r in captured for c in SERIES if r[c[0]] is not None]
     ys += [T for _, T in uncaptured_deliveries]
     if ys:
-        ax.set_ylim(min(ys) / 3.0, max(ys) * 25.0)  # headroom for the threshold labels
+        # Headroom for the threshold labels above; below, a divisor of 8 leaves room under
+        # the coldest band (e+e-) for its label to clear the edge marks on the spine (04b).
+        ax.set_ylim(min(ys) / 8.0, max(ys) * 25.0)
     rx.axhline(1.0, color="k", linewidth=0.8)
     rx.set_xlabel(r"coupling $\beta$")
     rx.set_ylabel(r"$T_J\,/\,T_{\mathrm{hot}}$")
