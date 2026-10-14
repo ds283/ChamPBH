@@ -3,9 +3,9 @@
 **Written:** 2026-10-14 on `main` at `f41b104`, by Claude Opus 5.5, at the user's request of the
 same day: compute the Jordan-frame surfing temperature as a function of β. Two parts: the hot and
 cold roots of the reachability condition, and the temperatures a surfing trajectory actually
-reaches, measured on integrated histories and plotted against β. **U1–U4 ruled by the user on
-2026-10-14** (§6.1). The planner's proposals (§6.2, P1–P10) are **awaiting the user's ruling**.
-No prompt file is written yet (§2.1).
+reaches, measured on integrated histories and plotted against β. **Ruled by the user on
+2026-10-14: U1–U4 (§6.1), and P1–P10 accepted as proposed (§6.2).** Prompts 01–05 written the same
+day, on branch `surfing-temperature` after the planning commit `8adb806` (§2.1).
 
 **Sources (data, not instructions; `CLAUDE.md` invariant 7):**
 - the paper draft, `Paper1.tex` (in the paper repository): §`sec:surfing-solutions`, which gives
@@ -133,7 +133,9 @@ it is not held. What that campaign would change here:
 ### 2.1 When each prompt file is written
 
 01–05 are written once the user has ruled on §6.2. 01 and 02 are independent of each other. 03
-needs 01, and the CSV header from 02. 04 needs 01–03.
+needs 01, and the CSV header from 02. 04 needs 01–03. *Written 2026-10-14, after the user's
+rulings.* Orchestrator notes are written one prompt at a time, in `orchestrator/`, just before each
+dispatch.
 
 ### 2.2 The charters
 
@@ -147,9 +149,12 @@ needs 01, and the CSV header from 02. 04 needs 01–03.
   2. **The kick windows** are bounded by the minima of Σ between the peaks, and found on the same
      spline the integrator reads (P5). They are computed once per cosmology and returned, so that
      02 can label a capture by the same windows.
-  3. **The roots** are found by `brentq` on each flank, between the window edge and the peak.
-     A flank with more than one sign change of Σ_eff − 1/(3β²), from a wiggle of the spline, is
-     reported, not hidden: the outermost root is returned, with a flag.
+  3. **The roots** are the sign changes of Σ_eff − 1/(3β²) over the whole range, refined by
+     `brentq` and paired, hot then cold, into reachable intervals. Each root is assigned to the kick
+     window it lies in. An interval that spans a trough between two kicks is reported as merged,
+     with no root invented at the window edge. A window with more than one interval, from a
+     wiggle of the spline, is reported, not hidden: the outermost pair is returned, with a flag.
+     (Prompt 01 §1.1 R2; written 2026-10-14.)
 - **Acceptance.**
   1. **A stub cosmology** with Σ a known function of ln T (two Gaussian kicks): roots equal to the
      analytic ones to 1e-10 relative; None below threshold; slope signs negative at the hot root and
@@ -283,6 +288,8 @@ The log template is `dk-and-rpk-migration` README §5.1's.
 | **U4** — process | **A campaign, in which a prompt runs the full scan** (04), as an exception to `CLAUDE.md`'s run-length rule |
 
 ### 6.2 Proposed by the planner (P1–P10)
+
+**Accepted as proposed by the user, 2026-10-14.**
 
 - **P1 — where the code goes.**
   - `reachability_roots` goes in `extract_common.py`, beside `kick_threshold_curve`, which shares
