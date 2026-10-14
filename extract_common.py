@@ -24,6 +24,7 @@ import numpy as np
 from matplotlib.figure import Figure
 from matplotlib.patches import Patch
 from numpy import nan
+from scipy.optimize import brentq, minimize_scalar
 
 from ComputeTargets import ScalarModel, ScalarModelValue, BBNData
 from ComputeTargets.ScalarModel import REFLECTIONS_KEY
@@ -570,6 +571,248 @@ def kick_threshold_curve(cosmology, T_grid: Sequence[float]):
             T_out.append(T)
             beta_out.append(sqrt((2.0 + Sigma) / (6.0 * Sigma)))
     return T_out, beta_out
+
+
+# Surfing-temperature prompt 01: the kicks of Sigma and the roots of the reachability condition.
+KICK_SIGMA_FLOOR = (
+    1e-4  # a local maximum of Sigma below this is a spline ripple, not a kick
+)
+KICK_LABELS_PRODUCTION = (
+    "EW",
+    "QCD",
+    "mu-pi",
+    "ee",
+)  # hot to cold, on the production EOS
+REACHABILITY_N_GRID = 20000  # log-spaced points, uniform in ln T
+_EXTREMUM_XATOL = 1e-12  # in ln T
+_ROOT_XTOL = 1e-13  # in ln T, so 1e-13 relative in T
+_SLOPE_STEP = 1e-4  # in ln T, for the central-difference slope
+
+
+def _Sigma(cosmology, T: float) -> float:
+    return 1.0 - 3.0 * float(cosmology.w(T))
+
+
+def _Sigma_eff(Sigma: float) -> float:
+    return Sigma / (1.0 + 0.5 * Sigma)
+
+
+def _refine_extremum(cosmology, x_lo: float, x_hi: float, maximum: bool) -> float:
+    """
+    The ln T in [x_lo, x_hi] at which Sigma is extremal: a bounded scalar minimisation of
+    -Sigma (of Sigma, for a minimum) in ln T, then, where the cosmology has dw_dlogT, a polish
+    by brentq on d Sigma/d ln T = -3 dw/d ln T = 0 within 1e-4 of the minimiser. (The
+    minimiser alone locates a flat extremum only to about 1e-8 in ln T.)
+    """
+    sign = -1.0 if maximum else 1.0
+    result = minimize_scalar(
+        lambda x: sign * _Sigma(cosmology, exp(x)),
+        bounds=(x_lo, x_hi),
+        method="bounded",
+        options={"xatol": _EXTREMUM_XATOL},
+    )
+    x = float(result.x)
+    if hasattr(cosmology, "dw_dlogT"):
+        a = max(x_lo, x - 1e-4)
+        b = min(x_hi, x + 1e-4)
+        ga = float(cosmology.dw_dlogT(exp(a)))
+        gb = float(cosmology.dw_dlogT(exp(b)))
+        if ga * gb < 0.0:
+            x = float(
+                brentq(
+                    lambda y: float(cosmology.dw_dlogT(exp(y))),
+                    a,
+                    b,
+                    xtol=_ROOT_XTOL,
+                )
+            )
+    return x
+
+
+def _local_maxima(cosmology, T_lo: float, T_hi: float, n_grid: int):
+    """
+    Every local maximum of Sigma on a log-spaced grid over [T_lo, T_hi], refined, with no floor
+    applied. Returns (found, x, S): found is a list of (T, Sigma, grid index), hot to cold, and
+    (x, S) is the grid in ln T and Sigma on it.
+    """
+    x = np.linspace(log(T_lo), log(T_hi), n_grid)
+    S = np.array([_Sigma(cosmology, exp(xi)) for xi in x])
+    found = []
+    for i in range(1, n_grid - 1):
+        if S[i] > S[i - 1] and S[i] >= S[i + 1]:
+            xr = _refine_extremum(cosmology, x[i - 1], x[i + 1], True)
+            found.append((exp(xr), _Sigma(cosmology, exp(xr)), i))
+    found.reverse()
+    return found, x, S
+
+
+def find_kicks(cosmology, T_lo: float, T_hi: float, n_grid: int = REACHABILITY_N_GRID):
+    """
+    The kicks of Sigma(T) = 1 - 3 w(T) over [T_lo, T_hi] (dimensionful, in the cosmology's
+    units; the caller passes the table's ends, which for the production EOS are 1e-5 GeV and
+    25118.86 GeV), ordered hot to cold.
+
+    Sigma is evaluated on n_grid points uniform in ln T. Each local maximum above
+    KICK_SIGMA_FLOOR is refined (see _refine_extremum) and is a kick. A kick's window is bounded
+    by the refined minimum of Sigma between it and the next kick; the outermost edges are T_hi
+    and T_lo.
+
+    The labels are "EW", "QCD", "mu-pi", "ee" (hot to cold) if there are exactly four kicks, and
+    "kick0", "kick1", ... otherwise.
+
+    Each entry is a dict with the keys label, T_peak, Sigma_peak, T_window_hot, T_window_cold,
+    Sigma_at_hot_edge, Sigma_at_cold_edge.
+    """
+    maxima, x, S = _local_maxima(cosmology, T_lo, T_hi, n_grid)
+    peaks = [m for m in maxima if m[1] > KICK_SIGMA_FLOOR]
+    n = len(peaks)
+    if n == len(KICK_LABELS_PRODUCTION):
+        labels = list(KICK_LABELS_PRODUCTION)
+    else:
+        labels = [f"kick{k}" for k in range(n)]
+
+    # window edges, hot to cold: T_hi, the n - 1 troughs, T_lo. The peaks are ordered hot to
+    # cold, so their grid indices decrease.
+    edges = [(T_hi, _Sigma(cosmology, T_hi))]
+    for k in range(n - 1):
+        i_hot, i_cold = peaks[k][2], peaks[k + 1][2]
+        m = i_cold + int(np.argmin(S[i_cold : i_hot + 1]))
+        m = min(max(m, i_cold + 1), i_hot - 1)
+        xr = _refine_extremum(cosmology, x[m - 1], x[m + 1], False)
+        edges.append((exp(xr), _Sigma(cosmology, exp(xr))))
+    edges.append((T_lo, _Sigma(cosmology, T_lo)))
+
+    return [
+        {
+            "label": labels[k],
+            "T_peak": peaks[k][0],
+            "Sigma_peak": peaks[k][1],
+            "T_window_hot": edges[k][0],
+            "T_window_cold": edges[k + 1][0],
+            "Sigma_at_hot_edge": edges[k][1],
+            "Sigma_at_cold_edge": edges[k + 1][1],
+        }
+        for k in range(n)
+    ]
+
+
+def _dlnSigma_dlnT(cosmology, T: float) -> float:
+    """
+    d ln Sigma/d ln T at T: -3 (dw/d ln T)/Sigma from cosmology.dw_dlogT where the cosmology has
+    it, otherwise a central difference of ln Sigma in ln T (step 1e-4).
+    """
+    if hasattr(cosmology, "dw_dlogT"):
+        return -3.0 * float(cosmology.dw_dlogT(T)) / _Sigma(cosmology, T)
+    h = _SLOPE_STEP
+    up = _Sigma(cosmology, T * exp(h))
+    down = _Sigma(cosmology, T * exp(-h))
+    return (log(up) - log(down)) / (2.0 * h)
+
+
+def reachability_roots(
+    cosmology, beta: float, kicks, n_grid: int = REACHABILITY_N_GRID
+):
+    """
+    The hot and cold roots of the reachability condition Sigma_eff(T) = c, c = 1/(3 beta^2),
+    Sigma_eff = Sigma/(1 + Sigma/2), for each kick of `kicks` (find_kicks's list, computed once
+    per cosmology). Returns one dict per kick, in the order of `kicks`, with the keys
+
+        kick, beta, T_hot, T_cold, slope_hot, slope_cold, merged, multiple_crossings.
+
+    The sign changes of Sigma_eff - c are found on n_grid points uniform in ln T over
+    [T_window_cold of the coldest kick, T_window_hot of the hottest], with each kick's T_peak
+    added to the grid, and refined by brentq in ln T (xtol 1e-13). As T decreases, a crossing
+    where Sigma_eff rises through c is a hot root (an attractor: d ln Sigma/d ln T < 0) and one
+    where it falls through c is a cold root. Consecutive hot and cold roots form a reachable
+    interval [T_cold, T_hot]; it belongs to the kicks whose T_peak it contains. Sigma_eff must
+    be below c at both ends of the range (ValueError otherwise).
+
+    A kick whose interval does not exist has T_hot = T_cold = None and both slopes None. If
+    an interval holds more than one T_peak (it spans a trough), every kick in it carries the
+    interval's own T_hot and T_cold and slopes, and `merged` is the label of the other kick (a
+    tuple of labels if there are several). No root is placed at a window edge. Otherwise
+    `merged` is None. If roots of other intervals lie in a kick's window, `multiple_crossings`
+    is True and the kick's T_hot and T_cold are the outermost of its own interval's and those.
+
+    The slopes are d ln Sigma/d ln T at the roots, from cosmology.dw_dlogT where it exists
+    (-3 (dw/d ln T)/Sigma), otherwise by central difference in ln T.
+    """
+    c = 1.0 / (3.0 * beta * beta)
+    if len(kicks) == 0:
+        return []
+    T_hi = kicks[0]["T_window_hot"]
+    T_lo = kicks[-1]["T_window_cold"]
+
+    x = np.unique(
+        np.concatenate(
+            [
+                np.linspace(log(T_lo), log(T_hi), n_grid),
+                [log(k["T_peak"]) for k in kicks],
+            ]
+        )
+    )
+
+    def f(xi: float) -> float:
+        return _Sigma_eff(_Sigma(cosmology, exp(xi))) - c
+
+    F = np.array([f(xi) for xi in x])
+    if F[0] > 0.0 or F[-1] > 0.0:
+        raise ValueError(
+            "reachability_roots: Sigma_eff exceeds 1/(3 beta^2) at an end of the range"
+        )
+    positive = F > 0.0
+
+    # the sign changes, hot to cold. Sigma_eff - c is negative at both ends, so they alternate
+    # hot (Sigma_eff rises through c as T falls), cold, hot, cold, ... and consecutive pairs
+    # (hot, cold) are the reachable intervals.
+    roots = []
+    for i in range(len(x) - 1):
+        if positive[i] != positive[i + 1]:
+            roots.append(exp(float(brentq(f, x[i], x[i + 1], xtol=_ROOT_XTOL))))
+    roots.sort(reverse=True)
+    intervals = [(roots[j], roots[j + 1]) for j in range(0, len(roots) - 1, 2)]
+
+    records = []
+    for kick in kicks:
+        own = [iv for iv in intervals if iv[1] <= kick["T_peak"] <= iv[0]]
+        record = {
+            "kick": kick["label"],
+            "beta": beta,
+            "T_hot": None,
+            "T_cold": None,
+            "slope_hot": None,
+            "slope_cold": None,
+            "merged": None,
+            "multiple_crossings": False,
+        }
+        if own:
+            T_hot, T_cold = own[0]
+            others = [
+                k["label"]
+                for k in kicks
+                if k is not kick and T_cold <= k["T_peak"] <= T_hot
+            ]
+            if others:
+                record["merged"] = others[0] if len(others) == 1 else tuple(others)
+            in_window = [
+                iv
+                for iv in intervals
+                if iv is not own[0]
+                and (
+                    kick["T_window_cold"] <= iv[0] <= kick["T_window_hot"]
+                    or kick["T_window_cold"] <= iv[1] <= kick["T_window_hot"]
+                )
+            ]
+            if in_window:
+                record["multiple_crossings"] = True
+                T_hot = max([T_hot] + [iv[0] for iv in in_window])
+                T_cold = min([T_cold] + [iv[1] for iv in in_window])
+            record["T_hot"] = T_hot
+            record["T_cold"] = T_cold
+            record["slope_hot"] = _dlnSigma_dlnT(cosmology, T_hot)
+            record["slope_cold"] = _dlnSigma_dlnT(cosmology, T_cold)
+        records.append(record)
+    return records
 
 
 def adiabatic_Q_caption(M_over_Mp: float) -> Optional[str]:

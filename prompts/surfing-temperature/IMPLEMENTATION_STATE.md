@@ -1,6 +1,6 @@
 # surfing-temperature campaign — implementation state
 
-**Last updated:** 2026-10-14 · **Status: LIVE — 5 of 5 prompts written, 0 landed. U1–U5 and P1–P10
+**Last updated:** 2026-10-14 · **Status: LIVE — 5 of 5 prompts written, 1 landed (01). U1–U5 and P1–P10
 ruled by the user on 2026-10-14 (README §6); P1–P10 as proposed.**
 The plan is [`README.md`](README.md), written on 2026-10-14 on `main` at `f41b104`. Its planning
 commit `8adb806` is the first on branch `surfing-temperature`, cut from `main` at `f41b104` (P10).
@@ -27,7 +27,7 @@ opened or assigned)
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | [Reachability roots](01-reachability-roots.md) | `find_kicks`, `reachability_roots`: kick windows, hot and cold roots, stability sign, merged intervals | Sonnet | ✍️ 2026-10-14 | ⬜ | — | — |
+| 01 | [Reachability roots](01-reachability-roots.md) | `find_kicks`, `reachability_roots`: kick windows, hot and cold roots, stability sign, merged intervals | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | this commit | [log](logs/01-reachability-roots.md) |
 | 02 | [Surfing turning points and the driver](02-surfing-turning-points-and-driver.md) | `surfing_turning_points` on the dense output; `tools/surfing_scan.py`; five β run, cost projected | Opus | ✍️ 2026-10-14 | ⬜ | — | — |
 | 03 | [The plot](03-plot-surfing-temperature.md) | `tools/plot_surfing_temperature.py`: roots and measured temperatures against β, two panels | Sonnet | ✍️ 2026-10-14 | ⬜ | — | — |
 | 04 | [Run the scan](04-run-the-scan.md) | 79 β, 1.10–5.00, CSV and figure committed; verification document (U4) | Opus | ✍️ 2026-10-14 | ⬜ | — | — |
@@ -45,9 +45,9 @@ before each dispatch.
 
 | Item | Prompt | What | State |
 |---|---|---|---|
-| **R1** | 01 | `find_kicks`: Σ's peaks and the troughs between them, refined on the spline; labels EW, QCD, mu-pi, ee (P5, U5) | ⬜ |
-| **R2** | 01 | `reachability_roots`: hot and cold roots per kick, slopes, merged intervals, the `multiple_crossings` flag | ⬜ |
-| **R3** | 01 | `ComputeTargets/tests/test_reachability_roots.py`: stub Σ, a merged stub, the production EOS | ⬜ |
+| **R1** | 01 | `find_kicks`: Σ's peaks and the troughs between them, refined on the spline; labels EW, QCD, mu-pi, ee (P5, U5) | ✅ |
+| **R2** | 01 | `reachability_roots`: hot and cold roots per kick, slopes, merged intervals, the `multiple_crossings` flag | ✅ |
+| **R3** | 01 | `ComputeTargets/tests/test_reachability_roots.py`: stub Σ, a merged stub, the production EOS | ✅ |
 | **T1** | 02 | `surfing_turning_points` beside `first_bounce`; not called by production | ⬜ |
 | **T2** | 02 | `tools/surfing_scan.py`: options, CSV per README §4, sidecar, resume | ⬜ |
 | **T3** | 02 | the summary per history: capture, largest, second dip, delivery, capture kick and its roots (U1–U3) | ⬜ |
@@ -69,7 +69,7 @@ before each dispatch.
 
 | Gate | Holds when | Prompt | State |
 |---|---|---|---|
-| Roots | on a stub Σ the roots equal the analytic ones; on the production EOS the peaks and thresholds equal README §0.3's and the paper's, and β_th(root) = β | 01 | ⬜ |
+| Roots | on a stub Σ the roots equal the analytic ones; on the production EOS the peaks and thresholds equal README §0.3's and the paper's, and β_th(root) = β | 01 | ✅ 2026-10-14 (this commit) |
 | Turning points | on stub interpolants every crossing of β π/M_P = −1 is found in order and with its direction, none after the first bounce; on a real history \|1 + β π/M_P\| < 1e-8 at each, and delivery equals `first_bounce` | 02 | ⬜ |
 | Scan | every β of the grid has a CSV row (a failure is a row with its reason); every first bounce lies above T_stop; two β reproduce as strings; the figure is drawn from the CSV alone | 04 | ⬜ |
 
@@ -127,3 +127,23 @@ stopped on its §4 condition. **The user ruled it a fourth kick, `mu-pi` (U5).**
 condition and production tests, and 03's band labels, were amended before dispatch. In a merged
 interval both kicks' records carry the interval's roots, and that clarification was made with U5
 (README §6.1).
+
+### 5.2 After prompt 01 (2026-10-14)
+
+Prompt 01 landed in this commit; the log is [`logs/01-reachability-roots.md`](logs/01-reachability-roots.md).
+`find_kicks` and `reachability_roots` are in `extract_common.py`, with
+`ComputeTargets/tests/test_reachability_roots.py` (15 tests).
+- **Four kicks** on the production EOS, as U5 ruled: `EW` 53.262 GeV (Σ 0.037436), `QCD` 0.18189 GeV
+  (0.31453), `mu-pi` 43.156 MeV (0.085365), `ee` 0.16045 MeV (0.10073). Σ_peak equals README §0.3's
+  to its digits and `T_peak` the probe's. Nine local maxima in all, five of them ripples below the
+  floor (10–28 keV).
+- **The troughs:** 9.0265 GeV (Σ 0.0047411), 72.988 MeV (0.074496) and 7.5440 MeV (0.00025951).
+  Only the QCD–`mu-pi` one exceeds Σ_eff = 1/(3·5²), so intervals merge inside the β range there
+  and nowhere else. The merge is between β = 2.1 and 2.2.
+- **The gate "Roots" holds:** stub roots analytic to 1e-9; β_th(root) = β to 1e-9 on the production
+  EOS; each of the four deliberate breakages fails a named test (6, 6, 6 and 3 of the 15).
+- **Counts:** CosmologyModels 18, ComputeTargets 167 (61 + 106), ObjectFactories 69, tools 34. One
+  import is new in `extract_common.py`, `scipy.optimize`. No issue opened; the index is untouched.
+- **Deviations:** one tagged STRUCTURALLY REQUIRED (the brief's narrowing for `T_peak`) and five
+  IMPLEMENTATION CHOICE, none UNINTENDED DRIFT. The main one: extrema are polished by `brentq` on
+  `dw_dlogT`, since the bounded minimiser alone locates a flat peak only to about 1e-8 in ln T.
