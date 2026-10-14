@@ -31,7 +31,7 @@ opened or assigned)
 | 02 | [Surfing turning points and the driver](02-surfing-turning-points-and-driver.md) | `surfing_turning_points` on the dense output; `tools/surfing_scan.py`; five β run, cost projected | Opus | ✍️ 2026-10-14 | ✅ 2026-10-14 | `f166b31` | [log](logs/02-surfing-turning-points-and-driver.md) |
 | 03 | [The plot](03-plot-surfing-temperature.md) | `tools/plot_surfing_temperature.py`: roots and measured temperatures against β, two panels | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | `1f40b53` | [log](logs/03-plot-surfing-temperature.md) |
 | 03b | [Uncaptured deliveries](03b-plot-uncaptured-deliveries.md) | the first bounce of an uncaptured history drawn in the upper panel (U7) | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | `ee4a2df` | [log](logs/03b-plot-uncaptured-deliveries.md) |
-| 04 | [Run the scan](04-run-the-scan.md) | 79 β, 1.10–5.00, CSV and figure committed; verification document (U4); fine scan near β = 3.0 (U6) | Opus | ✍️ 2026-10-14, amended for U6 | ✅ 2026-10-14 | this commit | [log](logs/04-run-the-scan.md) |
+| 04 | [Run the scan](04-run-the-scan.md) | 79 β, 1.10–5.00, CSV and figure committed; verification document (U4); fine scan near β = 3.0 (U6) | Opus | ✍️ 2026-10-14, amended for U6 | ✅ 2026-10-14 | `90d44f8` | [log](logs/04-run-the-scan.md) |
 | 05 | [Close](05-close.md) | documents, handover, index, board | Sonnet | ✍️ 2026-10-14 | ⬜ | — | — |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
@@ -48,6 +48,7 @@ before each dispatch.
 | [`orchestrator/prompt-02.md`](orchestrator/prompt-02.md) | `f6440d1` | 02 (reviewed 2026-10-14) |
 | [`orchestrator/prompt-03.md`](orchestrator/prompt-03.md) | `9d6bbaa` | 03 (reviewed 2026-10-14) |
 | [`orchestrator/prompt-03b.md`](orchestrator/prompt-03b.md) | `f19332d` | 03b (reviewed 2026-10-14) |
+| [`orchestrator/prompt-04.md`](orchestrator/prompt-04.md) | `e7ed715` | 04 (reviewed 2026-10-14) |
 
 ### 1.1 Items
 
@@ -81,7 +82,7 @@ before each dispatch.
 |---|---|---|---|
 | Roots | on a stub Σ the roots equal the analytic ones; on the production EOS the peaks and thresholds equal README §0.3's and the paper's, and β_th(root) = β | 01 | ✅ 2026-10-14 (`2c98370`) |
 | Turning points | on stub interpolants every crossing of β π/M_P = −1 is found in order and with its direction, none after the first bounce; on a real history \|1 + β π/M_P\| < 1e-8 at each, and delivery equals `first_bounce` | 02 | ✅ 2026-10-14 (`f166b31`) |
-| Scan | every β of both grids (S1, S5) has a CSV row (a failure is a row with its reason); every first bounce lies above T_stop; two β reproduce as strings, and β = 3.00 is equal in both CSVs; each figure is drawn from its CSV alone | 04 | ✅ 2026-10-14 (this commit) |
+| Scan | every β of both grids (S1, S5) has a CSV row (a failure is a row with its reason); every first bounce lies above T_stop; two β reproduce as strings, and β = 3.00 is equal in both CSVs; each figure is drawn from its CSV alone | 04 | ✅ 2026-10-14 (`90d44f8`) |
 
 ## 3. Active and unresolved issues
 
@@ -493,7 +494,7 @@ uncaptured history is drawn (U7).
 
 ### 5.5 After prompt 04 (2026-10-14)
 
-**04 ran the scan in this commit** (parent `e7ed715`; Opus). The log is
+**04 ran the scan in `90d44f8`** (parent `e7ed715`; Opus). The log is
 [`logs/04-run-the-scan.md`](logs/04-run-the-scan.md), and the record is
 `.documents/surfing-temperature-verification.md` §1. S1–S5 are done, and the gate "Scan" holds. No
 code changed, and no Ray, store or PRyMordial was used.
@@ -540,3 +541,50 @@ code changed, and no Ray, store or PRyMordial was used.
   - The wall's timing sets which β near 3.0 are captured, so those edges may move with Λ after
     `jordan-normalization`.
 - **No issue opened.** `.documents/OPEN_ISSUES.md` is untouched.
+
+**Orchestrator review of prompt 04** (2026-10-14, Claude Opus 5.5, against `90d44f8`; note
+[`orchestrator/prompt-04.md`](orchestrator/prompt-04.md) §3). All eleven checks pass.
+- **Scope.** The eleven files of note 04 §0: eight outputs, the verification document, the log and
+  the board. `git diff` of `*.py` is empty, and the untracked set is unchanged.
+- **The sidecars.** One entry each, `git_head` `e7ed715`, `git_tracked_changes: false`, `resumed`
+  false, `skipped` 0. The options equal the commands, and each `beta_grid` is the prompt's grid.
+- **The CSVs.** Each header equals `COLUMNS`. There are 79 and 61 rows, with the β strings equal to
+  the grids, no duplicates, and the inputs as commanded.
+- **By reproduction** (`git diff 61e0c42 90d44f8` of the scan code is empty):
+  - all 79 S1 rows equal the orchestrator's probe `scan79.csv` (at `61e0c42`) in every column but
+    `wall_s`, as strings;
+  - the 13 β that S5 shares with `edges.csv` (at `9ab3e65`) are equal in the same way;
+  - the orchestrator's own run of β = 2.998, 3.016, 3.019 and 5.00 at `90d44f8` equals the
+    committed rows (19 s, load 6.5);
+  - β = 3.0 is equal in the two CSVs.
+- **The figures.** Both are redrawn from the committed CSVs into the scratchpad (62 s and 4 s), and
+  equal the committed PNGs pixel for pixel. Looked at:
+  - S1's is as in the reviews of 03 and 03b;
+  - S5's shows QCD to 2.998, the chain of 21 rings rising from 1.64 to 48.8 GeV, and EW from 3.020;
+  - the e⁺e⁻ label's second line crosses the edge marks at about 2.999–3.006, as the log says.
+- **The document, recomputed** by the orchestrator's own script from the committed CSVs. These
+  agree with the document to its digits:
+  - the captures per kick on both grids;
+  - the four ratio ranges per kick;
+  - the second-dip ranges;
+  - the overshoot groups. Nine rows have N_deliver − N_max ≤ 1.3e-6, and the next smallest is
+    0.022 at 1.55, so the 0.01 cut separates cleanly.
+
+  At β = 2.7, 3.15, 4.0 and 5.0 the oscillator values agree too: D, the predicted half-period, the
+  measured half-periods and the decays (3.15: 6.08 predicted against 7.20 and 6.05 measured). No
+  sentence tests a measurement against the paper or the audit.
+- **"32 of 77" (D3), resolved.** The source is note 02, which counted 32 captured β whose *last*
+  `max` crossing is the wall's (within 1e-5 e-folds of the bounce). §5.3 above restated that as the
+  *largest* T_J. It is the largest only where it is also the only maximum before a dip-free
+  bounce: the 9 rows of the log's criterion. So §5.3's sentence is the orchestrator's misstatement,
+  and the CSV is consistent with note 02. §5.3 is left as written (invariant 6).
+- **The cost.** 442 s for S1 and S5 against P7's 60 minutes. The outputs total 300 457 bytes.
+- **Suites at `90d44f8`**, serially: 18, 61 + 115, 69 and 70, all OK, at load 3.8–5.3.
+- **Residue fixed here:** the SHA for "this commit" (board and log), and the notes table.
+- **No issue opened.**
+- **For the next note (05):**
+  - **README §0.4 and §7 need qualifying in the handover.** They say the capture will not move with
+    Λ. The fine grid shows that near β = 3.0 the wall's timing decides *whether* the first episode
+    is captured (2.998–3.019; log, "Observations not acted on"). So the edges of the uncaptured
+    window may move after `jordan-normalization`, and the handover should say so.
+  - The user's ruling on the e⁺e⁻ label in the fine figure.

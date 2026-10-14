@@ -2,7 +2,7 @@
 
 **Subject:** the 79-point scan (S1), the fine scan near β = 3.0 (S5, U6), their figures (S2), the
 reproducibility check (S3), and `.documents/surfing-temperature-verification.md` (S4).
-**Commit:** this commit · **Date:** 2026-10-14 · **Branch:** `surfing-temperature`, parent `e7ed715`
+**Commit:** `90d44f8` · **Date:** 2026-10-14 · **Branch:** `surfing-temperature`, parent `e7ed715`
 · **Model:** Claude Opus 5.5 · **Result:** landed. S1–S5 done; the gate "Scan" holds. No stop
 condition fired:
 - S1 and S5 took 442 s together, against P7's 60 minutes;
@@ -280,7 +280,7 @@ a prompt whose tests must catch one).
 
 ## State handed to the next prompt
 
-- **The branch.** `surfing-temperature`, this commit on top of `e7ed715`. Nothing is staged or
+- **The branch.** `surfing-temperature`, `90d44f8` on top of `e7ed715`. Nothing is staged or
   modified after it. The untracked entries are the user's, as before: 17 `pilot-2026.6.0*.db`,
   `pilot-main.log`, `pilot-plot.log`, `pilot-out/`, `full_run_2026.6.0.sh`,
   `full_run_2026.6.0-refresh.sh`, `prompts/jordan-normalization/`.
