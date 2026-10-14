@@ -2,7 +2,7 @@
 
 **Last updated:** 2026-10-14 · **Status: COMPLETE — 7 of 7 landed (01 `2c98370`, 02 `f166b31`, 03 `1f40b53`, 03b `ee4a2df`, 04
 `90d44f8`, 04b `a65bd74`, 05 `960d098`). U1–U9 and P1–P10 ruled by the user on 2026-10-14 (README
-§6); P1–P10 as proposed. One issue open (§3, U9). Not yet merged into `main` (P10).**
+§6); P1–P10 as proposed. One issue open (§3, U9). Fast-forwarded into `main` at `7109cab` on 2026-10-14 and pushed (P10).**
 The plan is [`README.md`](README.md), written on 2026-10-14 on `main` at `f41b104`. Its planning
 commit `8adb806` is the first on branch `surfing-temperature`, cut from `main` at `f41b104` (P10).
 
@@ -750,3 +750,8 @@ blemishes: one is fixed here, and one cannot be fixed.
 - **No issue opened.** The stale "not yet merged" in `prompts/INDEX.md`'s `read-only-plots` row
   (log 05, "Observations not acted on") is housekeeping. It is fixed in a standalone commit after
   this one.
+
+**The merge (P10), 2026-10-14.** At the user's go-ahead, `main` was fast-forwarded from `f41b104`
+to `7109cab`, and this commit was pushed to GitHub with it. The branch `surfing-temperature` is
+kept. The handover's "not merged when this is written" (§4.14) was true of `960d098`, and is left as
+written (invariant 6).
