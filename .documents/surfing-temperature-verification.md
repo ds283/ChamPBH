@@ -536,3 +536,46 @@ limit at 8 is 7.93e-6, the lower panel is pixel-identical, as the comparison abo
 
 The shift cannot be seen. The user accepted divisor 8 with it (2026-10-14), and the figures are not
 redrawn.
+
+## 3. The histories near β = 3.0 (standalone, 2026-10-14)
+
+Added after the campaign closed, at the user's request. `tools/plot_surfing_histories.py`
+(`c98c90e`) draws whole histories, which the scan's CSV does not hold. It was run at `c98c90e`, from
+the repository root, at load 7.5:
+
+```bash
+./venv/bin/python tools/plot_surfing_histories.py \
+    --out .documents/surfing-temperature/out/surfing_histories_phi5_M1e-3_near3
+```
+
+The defaults are φ* = 5 M_P, M = 10⁻³ M_P, T_stop = 1 MeV and Λ = 1 meV. The β are the two captured
+edges of the uncaptured window of §1.8 and four points inside it. The run took 16 s, with each
+history taking 1.8–3.9 s, and it wrote `surfing_histories_phi5_M1e-3_near3.pdf` and `.png` beside the
+scan's figures.
+
+| β | captured | turning points | first bounce N | first bounce T_J (GeV) | min of 1 + β π/M_P |
+|---|---|---|---|---|---|
+| 2.998 | QCD | 2 | 24.5177 | 1.634 | −0.0106, just before the bounce |
+| 3.000 | no | 0 | 24.4990 | 1.68 | +0.0225 at 46.5 GeV |
+| 3.004 | no | 0 | 23.0710 | 6.955 | +0.0181 at 46.9 GeV |
+| 3.012 | no | 0 | 21.3511 | 39.19 | +0.0091 at 47.8 GeV |
+| 3.019 | no | 0 | 21.1539 | 48.77 | +0.0007 at 49.1 GeV |
+| 3.020 | EW | 2 | 21.1384 | 49.72 | −0.0014, just before the bounce |
+
+The first bounces are those of the fine scan's rows (§1.8). The test
+`TestRealHistory` checks this at β = 3.0, where both N and T_J are equal exactly. The minima of
+1 + β π/M_P were read from the tool's `--arrays` output for the same six histories. That output is in
+scratch and is not committed. The tool prints the bounce but not the minimum.
+
+What the figure shows:
+- The four uncaptured histories stall on the electroweak kick. There 1 + β π/M_P falls to a positive
+  minimum and turns back, while T_J stays just under 50 GeV. The field then reaches the wall with no
+  crossing.
+- The closer β is to the EW threshold, the deeper the stall and the earlier the wall comes, so the
+  first bounce rises from 1.68 GeV at β = 3.000 to 48.8 GeV at 3.019.
+- β = 3.020 crosses 0 at N = 12.37, its capture (`N_capture` 12.3685), and stays just below it until the
+  wall.
+- β = 2.998 stalls as β = 3.000 does. QCD captures it at N = 24.466, 0.05 e-folds before the bounce
+  (§1.7).
+
+In the T_J panel, β = 3.019 lies under β = 3.020's dashed line. They separate in the lowest panel.
