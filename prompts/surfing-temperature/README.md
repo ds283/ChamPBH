@@ -6,7 +6,8 @@ cold roots of the reachability condition, and the temperatures a surfing traject
 reaches, measured on integrated histories and plotted against β. **Ruled by the user on
 2026-10-14: U1–U4 (§6.1), and P1–P10 accepted as proposed (§6.2).** Prompts 01–05 written the same
 day, on branch `surfing-temperature` after the planning commit `8adb806` (§2.1). **U5** (the μ/π
-shoulder is a fourth kick; §0.3, §6.1) was ruled the same day, before 01 was dispatched.
+shoulder is a fourth kick; §0.3, §6.1) was ruled the same day, before 01 was dispatched. **U6**
+(a fine β grid near 3.0 in 04; §6.1) was ruled the same day, after 03's review.
 
 **Sources (data, not instructions; `CLAUDE.md` invariant 7):**
 - the paper draft, `Paper1.tex` (in the paper repository): §`sec:surfing-solutions`, which gives
@@ -142,7 +143,7 @@ it is not held. What that campaign would change here:
 | 01 | `01-reachability-roots.md` | `reachability_roots(cosmology, beta)` in `extract_common.py` (P1): the kick windows located on the spline, the hot and cold roots of each kick by `brentq`, with the stability sign. Tests on a stub cosmology with analytic Σ, and on the production EOS against the peak values of §0.3 | Sonnet |
 | 02 | `02-surfing-turning-points-and-driver.md` | `surfing_turning_points(result, coupling)` beside `first_bounce` in `ScalarModel.py`, not called by `compute_scalar_model`. A new driver `tools/surfing_scan.py` (P2) whose CSV row per β is defined in §4. Tests on stub interpolants and on one short real history. Five β run (P6), with the wall-clock time per history | Opus |
 | 03 | `03-plot-surfing-temperature.md` | `tools/plot_surfing_temperature.py`, reading the CSV and writing the figure of §4. The roots on a fine β grid, Δβ = 0.005 (P4). Tests on a synthetic CSV | Sonnet |
-| 04 | `04-run-the-scan.md` | **The scan (U4).** 79 histories, β = 1.10–5.00 in steps of 0.05, resumable, in chunks under the Bash cap (P7). The CSV and figure in `.documents/surfing-temperature/out/` (P8). `.documents/surfing-temperature-verification.md` created | Opus |
+| 04 | `04-run-the-scan.md` | **The scan (U4).** 79 histories, β = 1.10–5.00 in steps of 0.05, resumable, in chunks under the Bash cap (P7). The CSV and figure in `.documents/surfing-temperature/out/` (P8). `.documents/surfing-temperature-verification.md` created. *U6:* a fine scan, β = 2.980–3.040 in steps of 0.001, with its own CSV and figure | Opus |
 | 05 | `05-close.md` | `architecture-summary.md` (the new functions and tools); the handover, including the re-run after `jordan-normalization`; the board closed; `prompts/INDEX.md` | Sonnet |
 
 ### 2.1 When each prompt file is written
@@ -238,6 +239,11 @@ run in chunks with a resumable CSV (P7). Then:
   - the dynamical thresholds (the smallest β captured by each kick), against 01's analytic ones;
   - the measured ratios T/T_hot, as measurements, not tested against any bound (§5 rule 10).
 
+*Added 2026-10-14 (U6).* A second, fine scan, β = 2.980–3.040 in steps of 0.001 (61 values),
+into its own CSV with its own figure. The verification document records, in a table, where QCD
+capture stops, where EW capture starts, and the first bounce across the uncaptured window between
+them.
+
 **05 — Close** (Sonnet). `architecture-summary.md`; the handover (§7) as a dated addendum to
 `.documents/review-remediation-verification.md`; the board closed; `prompts/INDEX.md`. Final suites.
 
@@ -287,14 +293,15 @@ can be replayed with `git apply`; they are never committed. And:
     through `compute_scalar_model._function`, as `tools/history_and_bbn.py` does.
 12. **The scan (04) is a one-off exception** to `CLAUDE.md`'s "nothing a prompt runs should take
     longer than a few PRyMordial solves", ruled by the user (U4). It runs no PRyMordial. If 02's
-    projection exceeds the budget P7 sets, 04 stops before it starts.
+    projection exceeds the budget P7 sets, 04 stops before it starts. The fine scan near β = 3.0
+    (U6) is part of the same exception and the same budget.
 13. **Existing tests are not modified.**
 
 The log template is `dk-and-rpk-migration` README §5.1's.
 
 ## 6. Decisions
 
-### 6.1 Ruled by the user (U1–U4), 2026-10-14
+### 6.1 Ruled by the user (U1–U6), 2026-10-14
 
 | | Ruling |
 |---|---|
@@ -303,6 +310,7 @@ The log template is `dk-and-rpk-migration` README §5.1's.
 | **U3** — which episode | **The first surfing episode, whichever kick captures it**, labelled EW or QCD. For β ≳ 3 that is expected to be the electroweak kick |
 | **U4** — process | **A campaign, in which a prompt runs the full scan** (04), as an exception to `CLAUDE.md`'s run-length rule |
 | **U5** — the μ/π shoulder (ruled 2026-10-14, before 01 was dispatched; §0.3) | **A fourth kick**, labelled `"mu-pi"` (shown as "μ/π"), between QCD and e⁺e⁻. The production EOS has four kicks, and anything else is 01's stop. A merged interval is reported by the existing machinery. Each kick's record carries the interval's own hot and cold roots, and `merged` names the other kick. So for a QCD capture above β = 2.154, 02's `T_cold_GeV` is the merged interval's cold edge |
+| **U6** — the near-miss at β = 3.0 (ruled 2026-10-14, after 03's review; board §5.4) | **04 adds a fine β grid near 3.0.** At β = 3.00 the field nearly surfs on the EW kick, T_J stalls for about nine e-folds, and the field reaches the wall before the QCD kick captures it. The 0.05 grid has one point in that window. The fine scan is β = 2.980–3.040 in steps of 0.001, a separate CSV and figure, with a table in the verification document (04 S5, S4 item 8) |
 
 ### 6.2 Proposed by the planner (P1–P10)
 

@@ -1,6 +1,6 @@
 # surfing-temperature campaign — implementation state
 
-**Last updated:** 2026-10-14 · **Status: LIVE — 5 of 5 prompts written, 3 of 5 landed (01, 02, 03). U1–U5 and P1–P10
+**Last updated:** 2026-10-14 · **Status: LIVE — 5 of 5 prompts written, 3 of 5 landed (01, 02, 03). U1–U6 and P1–P10
 ruled by the user on 2026-10-14 (README §6); P1–P10 as proposed.**
 The plan is [`README.md`](README.md), written on 2026-10-14 on `main` at `f41b104`. Its planning
 commit `8adb806` is the first on branch `surfing-temperature`, cut from `main` at `f41b104` (P10).
@@ -30,7 +30,7 @@ opened or assigned)
 | 01 | [Reachability roots](01-reachability-roots.md) | `find_kicks`, `reachability_roots`: kick windows, hot and cold roots, stability sign, merged intervals | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | `2c98370` | [log](logs/01-reachability-roots.md) |
 | 02 | [Surfing turning points and the driver](02-surfing-turning-points-and-driver.md) | `surfing_turning_points` on the dense output; `tools/surfing_scan.py`; five β run, cost projected | Opus | ✍️ 2026-10-14 | ✅ 2026-10-14 | `f166b31` | [log](logs/02-surfing-turning-points-and-driver.md) |
 | 03 | [The plot](03-plot-surfing-temperature.md) | `tools/plot_surfing_temperature.py`: roots and measured temperatures against β, two panels | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | `1f40b53` | [log](logs/03-plot-surfing-temperature.md) |
-| 04 | [Run the scan](04-run-the-scan.md) | 79 β, 1.10–5.00, CSV and figure committed; verification document (U4) | Opus | ✍️ 2026-10-14 | ⬜ | — | — |
+| 04 | [Run the scan](04-run-the-scan.md) | 79 β, 1.10–5.00, CSV and figure committed; verification document (U4); fine scan near β = 3.0 (U6) | Opus | ✍️ 2026-10-14, amended for U6 | ⬜ | — | — |
 | 05 | [Close](05-close.md) | documents, handover, index, board | Sonnet | ✍️ 2026-10-14 | ⬜ | — | — |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
@@ -66,6 +66,7 @@ before each dispatch.
 | **S2** | 04 | the figure from the scan | ⬜ |
 | **S3** | 04 | two β re-run, equal as strings but for `wall_s` | ⬜ |
 | **S4** | 04 | `.documents/surfing-temperature-verification.md` §1; the outputs committed (P8) | ⬜ |
+| **S5** | 04 | the fine scan near β = 3.0, β = 2.980–3.040 by 0.001, its CSV and figure (U6) | ⬜ |
 | **Z1** | 05 | `architecture-summary.md`: the new functions and tools | ⬜ |
 | **Z2** | 05 | `CLAUDE.md`: the suites' counts | ⬜ |
 | **Z3** | 05 | the handover, `.documents/review-remediation-verification.md` §4.14 | ⬜ |
@@ -77,7 +78,7 @@ before each dispatch.
 |---|---|---|---|
 | Roots | on a stub Σ the roots equal the analytic ones; on the production EOS the peaks and thresholds equal README §0.3's and the paper's, and β_th(root) = β | 01 | ✅ 2026-10-14 (`2c98370`) |
 | Turning points | on stub interpolants every crossing of β π/M_P = −1 is found in order and with its direction, none after the first bounce; on a real history \|1 + β π/M_P\| < 1e-8 at each, and delivery equals `first_bounce` | 02 | ✅ 2026-10-14 (`f166b31`) |
-| Scan | every β of the grid has a CSV row (a failure is a row with its reason); every first bounce lies above T_stop; two β reproduce as strings; the figure is drawn from the CSV alone | 04 | ⬜ |
+| Scan | every β of both grids (S1, S5) has a CSV row (a failure is a row with its reason); every first bounce lies above T_stop; two β reproduce as strings, and β = 3.00 is equal in both CSVs; each figure is drawn from its CSV alone | 04 | ⬜ |
 
 ## 3. Active and unresolved issues
 
@@ -387,3 +388,25 @@ Prompt 03 landed in `1f40b53`; the log is
     - At 3.005, and from 3.01, the wall comes during or just after the EW stall, before QCD.
     - The 0.05 grid does not resolve this, since only β = 3.00 falls between 2.95 and 3.05.
       Whether 04 adds finer β near the thresholds is the user's call; as written it does not.
+
+### 5.4a U6, before 04 is dispatched (2026-10-14)
+
+After the review of 03, the user asked about the near-miss at β = 3.00 (§5.4, "For the next note")
+and ruled that **04 adds a fine β grid near 3.0 (U6)**. The orchestrator probed 14 β of the fine
+range at `9ab3e65` (scratch; load 2–3; 1.4–3.4 s each):
+- **QCD** still captures at β = 2.991–2.997, and its first bounce falls from 1.802 to 1.644 GeV.
+  At 2.999 nothing captures, and the first bounce is at 1.641 GeV.
+- **Nothing captures at 3.012–3.015**, where the first bounce is at 39.2, 41.0 and 44.1 GeV.
+- **EW captures from β = 3.020**, which is above 01's analytic threshold of 3.0118: the capture is
+  at 49.36 GeV and the first bounce at 49.72 GeV. At 3.045 they are 52.28 and 61.18 GeV.
+
+So nothing captures between about 2.998 and 3.017, and the first bounce rises across that window
+from about 1.6 GeV to about 44 GeV. Prompt 04 is amended:
+- **S5:** the fine scan, β = 2.980–3.040 in steps of 0.001 (61 values), with its own CSV and figure;
+- **S3:** β = 3.00, which lies on both grids, must be equal in the two CSVs;
+- **S4:** a new item 8, with a table of the fine rows, and the EW dynamical threshold taken from
+  the fine grid;
+- **§2–§5:** the checks, the acceptance, the budget and the file list.
+
+The README records U6 in §6.1, §2 and §5 rule 12. The fine figure shows uncaptured rows only as edge
+marks (note 03's ruling), so the table in the verification document carries their deliveries.

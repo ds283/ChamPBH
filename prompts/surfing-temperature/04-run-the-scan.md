@@ -1,10 +1,12 @@
 # Prompt 04 — run the scan
 
-**Campaign:** [`README.md`](README.md) · **Board items:** **S1**–**S4** ·
+**Campaign:** [`README.md`](README.md) · **Board items:** **S1**–**S5** ·
 **Board:** [`IMPLEMENTATION_STATE.md`](IMPLEMENTATION_STATE.md)
 **Written:** 2026-10-14, with 01–03 and 05, after the user's rulings. Its orchestrator note, written
 after 03's review, hands it 02's cost projection and the chunk plan. It governs where it differs
 from this file.
+**Amended:** 2026-10-14, after 03's review, for the user's ruling **U6** (README §6.1): a fine
+β grid near 3.0 (S5), with its own CSV and figure, and S3 and S4 extended to use it.
 **Gate:**
 - 01, 02 and 03 landed and reviewed, with the gates "Roots" and "Turning points" holding;
 - 02's projection of the full scan at or below P7's 60 minutes (board §5.3). If it is above, this
@@ -30,6 +32,7 @@ PRyMordial, and no Ray.
    sidecar and resume.
 4. `CLAUDE.md`: "Repository mechanics", in particular run from the root, the ten-minute Bash cap, and
    "Long-running jobs".
+5. The board's §5.4, the orchestrator's probe of the near-miss at β = 3.00, which motivates S5.
 
 ---
 
@@ -59,6 +62,8 @@ and how.
 - **S3 — reproducibility.**
   - Re-run two β, 1.50 and 4.00, into a scratch CSV.
   - Every column but `wall_s` must equal the scan's row **as a string**.
+  - β = 3.00 lies on both S1's grid and S5's. Its two rows, one in each committed CSV, must also be
+    equal as strings, `wall_s` apart.
   - A difference is a stop: the histories are expected to be bitwise reproducible, as R0 was
     (`dk-and-rpk-migration`).
 - **S4 — `.documents/surfing-temperature-verification.md`**, created, with a §1 in the additive form
@@ -84,6 +89,41 @@ and how.
   6. **The figure**, linked (the PNG), with a two-line description of what each panel shows.
   7. **What would move after `jordan-normalization`**, restated from README §0.4, with this run's
      Λ.
+  8. **Near β = 3.0 (S5).** It records:
+     - the fine scan's command, chunk, wall time and load;
+     - a table of every fine-grid row: β, `captured`, `capture_kick`, `n_crossings`,
+       `T_capture_GeV`, `T_max_GeV` and `T_deliver_GeV`;
+     - the largest β whose first episode QCD captures, and the smallest that EW captures;
+     - the window of β between them in which nothing captures;
+     - how the first bounce's temperature moves across that window, and any β at which it jumps,
+       with the rows either side;
+     - the second figure, linked, with a line saying that uncaptured rows appear only as edge
+       marks, so the table carries their delivery.
+
+     Item 3's dynamical threshold for EW is taken from this grid (to 0.001), beside the coarse grid's
+     value and 01's analytic 3.0118. As everywhere in this document, these are measurements, not
+     tests (README §5 rule 10). Describe what the CSV shows. The orchestrator's account of the
+     mechanism, in the board's §5.4, may be cited as such, but do not extend it with a probe of
+     your own.
+- **S5 — the fine scan near β = 3.0** (U6).
+  - **The command:** `tools/surfing_scan.py --beta-min 2.980 --beta-max 3.040 --beta-step 0.001`
+    with the same `--phi-init-Mp 5`, `--M 1e-3` and default `--T-stop-GeV` as S1. That is 61
+    values.
+  - **The output:** `--out .documents/surfing-temperature/out/surfing_scan_phi5_M1e-3_near3.csv`.
+    It is a separate CSV, so S1's file stays the 79-point grid and its figure is the one 03 was
+    checked on.
+  - **Where and how,** as S1: from the root, in the foreground, as one or more chunks under the
+    Bash cap, resumable, with the load recorded. The orchestrator's probe of 14 of these β took
+    1.4–3.4 s each at load 2–3, so 61 β should take about two to four minutes. S1's budget (P7,
+    60 minutes) covers S1 and S5 together.
+  - **Its figure:** `tools/plot_surfing_temperature.py --csv <the S5 CSV> --out
+    .documents/surfing-temperature/out/surfing_temperature_phi5_M1e-3_near3`. Its root grid is
+    2.95–3.05, 21 β. Look at the PNG, and record in the log anything hard to read. A change to the
+    plot script is out of scope here, as for S2.
+  - **What the probe expects** (a measurement, not a specification):
+    - QCD captures up to β ≈ 2.997, and nothing captures at 2.999–3.015;
+    - EW captures from about 3.020, above 01's analytic threshold of 3.0118;
+    - across the uncaptured window the first bounce rises from about 1.64 GeV to about 44 GeV.
 
 ---
 
@@ -98,27 +138,33 @@ and how.
    - the sidecar's options equal to the command's.
 
    Show the check's command and output in the log.
-3. **S3's comparison**, its command and output.
-4. **The outputs' sizes.** CSV, sidecar, PDF and PNG together are expected under 1 MB. If they are
-   larger, say so before committing.
+3. **The S5 CSV**, checked the same way:
+   - 61 data rows and one header;
+   - the β column equal to `beta_grid(2.980, 3.040, 0.001)` as strings;
+   - no duplicate β;
+   - the sidecar's options equal to the command's.
+4. **S3's comparisons**, their commands and output.
+5. **The outputs' sizes.** The two CSVs, two sidecars, two PDFs and two PNGs together are expected
+   under 1 MB. If they are larger, say so before committing.
 
 ## 3. Acceptance
 
-1. S1–S4 as §1.1 says.
+1. S1–S5 as §1.1 says.
 2. §2's checks, each with its command and output in the log.
 3. Suites unchanged from 03's.
 4. **One commit** containing:
-   - the four outputs under `.documents/surfing-temperature/out/`;
+   - the eight outputs under `.documents/surfing-temperature/out/` (S1's and S5's CSV, sidecar,
+     PDF and PNG);
    - the verification document;
    - the log `logs/04-run-the-scan.md` in the template of `dk-and-rpk-migration` README §5.1;
-   - the board: row 04, S1–S4, the gate "Scan", and a new `### 5.5 After prompt 04 (<date>)`.
+   - the board: row 04, S1–S5, the gate "Scan", and a new `### 5.5 After prompt 04 (<date>)`.
 
    Write "this commit" where the SHA goes. S3's scratch CSV is not committed.
 
 ## 4. Stop conditions: stop and ask
 
-- **The scan's actual time exceeds 60 minutes** (P7) before it is finished: stop between chunks,
-  with the rows so far kept.
+- **The scans' actual time, S1 and S5 together, exceeds 60 minutes** (P7) before they are
+  finished: stop between chunks, with the rows so far kept.
 - **One history cannot finish inside a chunk.**
 - **A history has a captured first episode and no bounce above T_stop.**
 - **S3 finds a difference.**
@@ -128,12 +174,12 @@ and how.
 ## 5. What this prompt does not do
 
 - **Files it changes:**
-  - the four new files under `.documents/surfing-temperature/out/`;
+  - the eight new files under `.documents/surfing-temperature/out/`;
   - `.documents/surfing-temperature-verification.md`;
   - this board, and the log.
 - It changes no code: not the tools, not `extract_common.py`, not `ScalarModel.py`.
-- It runs no PRyMordial, starts no Ray, and opens no store. It runs only the scan, S3's two
-  histories and the plot.
+- It runs no PRyMordial, starts no Ray, and opens no store. It runs only the two scans (S1, S5), S3's
+  two histories and the two plots.
 
 **One commit**, in `CLAUDE.md`'s form, staged by explicit path only, after showing
 `git diff --cached --name-only`.
