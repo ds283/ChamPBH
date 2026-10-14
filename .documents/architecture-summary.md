@@ -120,6 +120,11 @@ ChamPBH/
 ├── PRyM/                            # External BBN solver (PRyMordial)
 │   └── PRyM_main.py
 │
+├── tools/
+│   ├── surfing_scan.py              # One CSV row per beta: the T_J turning points of a surfing history (no Ray, no store)
+│   ├── plot_surfing_temperature.py  # The two-panel surfing-temperature figure, from that CSV and its sidecar
+│   └── ...
+│
 └── config/
     ├── argument_parser.py           # configargparse CLI + YAML
     ├── datastore.py                 # The registry of factories, drop groups, batch sizes
@@ -163,6 +168,30 @@ ChamPBH/
 > drops nothing; `--prune-unvalidated` is `main.py`'s and is ignored by them. A read-only pool starts
 > no `SerialPoolBroker`. Since `read-only-plots` prompt 01 every driver that starts Ray also needs
 > `--ray-address` (§5.1).
+
+> **Note, 2026-10-14 (`surfing-temperature`, prompts 01 to 04b).** The tree above gains a `tools/`
+> block that lists only the two files this campaign added; the directory holds more (`history_and_bbn.py`,
+> `bbn_baseline.py` and the others named in the notes above, and `tests/`). Nothing here is stored,
+> and no production code path calls any of it.
+> - **`find_kicks(cosmology, T_lo, T_hi, n_grid)`** (`extract_common.py:649`) locates the peaks of
+>   Σ = 1 − 3w, and the troughs between them, on the spline that `cosmology.w(T)` reads, which is the
+>   integrator's own w. It labels the four kicks `EW`, `QCD`, `mu-pi` and `ee`, hot to cold.
+>   **`reachability_roots(cosmology, beta, kicks, n_grid)`** (`:712`) gives, per kick, the hot and
+>   cold roots of Σ_eff = 1/(3β²) with Σ_eff = Σ/(1 + Σ/2), their slopes d ln Σ/d ln T, and the
+>   merged intervals (QCD and `mu-pi` merge above β = 2.154).
+> - **`surfing_turning_points(result, coupling)`** (`ComputeTargets/ScalarModel.py:878`, returning
+>   `SurfingCrossing`, `:866`) walks the accepted steps' interpolants up to and including the first
+>   bounce, and returns every turning point of T_J: where 1 + (d ln Ω/dφ) π = 0. It sits beside
+>   `first_bounce` and is **not called by `compute_scalar_model`**, so production computes and stores
+>   none of it.
+> - **`tools/surfing_scan.py`** integrates one history per β through `compute_scalar_model._function`
+>   (no PRyMordial), writes one row per β to a resumable CSV with a sidecar `.meta.json`, and
+>   **`tools/plot_surfing_temperature.py`** draws the figure from that CSV and sidecar. **Neither
+>   starts Ray or opens a store.** The scan uses the fixed Λ of `tools/history_and_bbn.py`
+>   (`LAMBDA_EV`, 1 meV) and has no option for it (board `[05-surfing-scan-runs-at-a-fixed-lambda]`).
+>   Results: [`surfing-temperature-verification.md`](surfing-temperature-verification.md); the
+>   handover, with the commands that re-run it, is §4.14 of
+>   [`review-remediation-verification.md`](review-remediation-verification.md).
 
 ---
 
@@ -745,6 +774,13 @@ SampleValues = namedtuple("SampleValues", [
 > cell-mean field or column, because the bounce averages were withdrawn (see
 > [`numerical-strategies.md` §3.6](numerical-strategies.md)). The definitions, units and values are
 > in that section.
+
+> **Note, 2026-10-14 (`surfing-temperature`).** `surfing_turning_points` walks the same step
+> interpolants as `first_bounce`, from the start to the bounce, and returns every turning point of
+> T_J. The reason T_J turns where β π/M_P = −1 is the temperature law (`ScalarModel.py:441`),
+> d ln T_J/dN = −(1 + (d ln Ω/dφ) π)/(1 + (d g_s/d ln T)/(3 g_s)), whose denominator is positive, so
+> T_J is stationary exactly where 1 + (d ln Ω/dφ) π = 0, and for the exponential coupling
+> d ln Ω/dφ = β/M_P. Production does not call it; nothing is stored.
 
 **`ScalarModelProxy`:** A lightweight reference object (just holds the model's `store_id` and key parameters, not the full solution array). Passed to downstream compute targets (AdiabaticHistory, BBNData) so they can fetch the full `ScalarModel` from the database only when needed.
 

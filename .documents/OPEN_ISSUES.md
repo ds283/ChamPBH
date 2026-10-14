@@ -19,7 +19,8 @@ planned the same day, §1.12, and resolved by its prompt 02 the same day);
 `read-only-plots` (planned 2026-10-13; closed 2026-10-14, 4 of 4 prompts landed) was assigned that one
 issue and closed it with prompt 02, opened none and leaves none open; 1 on the
 `surfing-temperature` board (planned 2026-10-14; opened by the orchestrator before prompt 05 and
-ruled by the user, U9, 2026-10-14).
+ruled by the user, U9, 2026-10-14; closed 2026-10-14, 7 of 7 prompts landed, with the one issue
+still open on its board).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -225,7 +226,9 @@ None open: `[08-plot-scripts-open-read-write-pools]` was resolved by prompt 02 o
 
 ### 1.13 `surfing-temperature` — [board §3](../prompts/surfing-temperature/IMPLEMENTATION_STATE.md)
 
-One opened by the orchestrator on 2026-10-14, while writing note 05, and ruled by the user (U9).
+The campaign closed on 2026-10-14 with 7 of 7 prompts landed. One issue was opened, by the
+orchestrator on 2026-10-14 while writing note 05, and ruled by the user (U9); it stays open on the
+board, unassigned.
 
 - `[05-surfing-scan-runs-at-a-fixed-lambda]` — `tools/surfing_scan.py` runs at the fixed
   Λ = 1 meV of `tools/history_and_bbn.py`, with no option for it, so a re-run after

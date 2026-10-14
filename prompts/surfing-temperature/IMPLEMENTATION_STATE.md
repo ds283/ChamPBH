@@ -1,8 +1,8 @@
 # surfing-temperature campaign — implementation state
 
-**Last updated:** 2026-10-14 · **Status: LIVE — 7 of 7 prompts written, 6 of 7 landed (01, 02, 03, 03b, 04, 04b). U1–U8 and P1–P10
-ruled by the user on 2026-10-14 (README §6); P1–P10 as proposed. U9 ruled 2026-10-14, before 05:
-one issue open (§3).**
+**Last updated:** 2026-10-14 · **Status: COMPLETE — 7 of 7 landed (01 `2c98370`, 02 `f166b31`, 03 `1f40b53`, 03b `ee4a2df`, 04
+`90d44f8`, 04b `a65bd74`, 05 this commit). U1–U9 and P1–P10 ruled by the user on 2026-10-14 (README
+§6); P1–P10 as proposed. One issue open (§3, U9). Not yet merged into `main` (P10).**
 The plan is [`README.md`](README.md), written on 2026-10-14 on `main` at `f41b104`. Its planning
 commit `8adb806` is the first on branch `surfing-temperature`, cut from `main` at `f41b104` (P10).
 
@@ -34,7 +34,7 @@ none assigned)
 | 03b | [Uncaptured deliveries](03b-plot-uncaptured-deliveries.md) | the first bounce of an uncaptured history drawn in the upper panel (U7) | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | `ee4a2df` | [log](logs/03b-plot-uncaptured-deliveries.md) |
 | 04 | [Run the scan](04-run-the-scan.md) | 79 β, 1.10–5.00, CSV and figure committed; verification document (U4); fine scan near β = 3.0 (U6) | Opus | ✍️ 2026-10-14, amended for U6 | ✅ 2026-10-14 | `90d44f8` | [log](logs/04-run-the-scan.md) |
 | 04b | [Tidy the band label](04b-tidy-band-label.md) | the e⁺e⁻ band label moved clear of the edge marks; both committed figures redrawn (U8) | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | `a65bd74` | [log](logs/04b-tidy-band-label.md) |
-| 05 | [Close](05-close.md) | documents, handover, index, board | Sonnet | ✍️ 2026-10-14 | ⬜ | — | — |
+| 05 | [Close](05-close.md) | documents, handover, index, board | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | this commit | [log](logs/05-close.md) |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
 
@@ -75,10 +75,10 @@ before each dispatch.
 | **S4** | 04 | `.documents/surfing-temperature-verification.md` §1; the outputs committed (P8) | ✅ |
 | **S5** | 04 | the fine scan near β = 3.0, β = 2.980–3.040 by 0.001, its CSV and figure (U6) | ✅ |
 | **F5** | 04b | no band label overlaps an edge mark; the two committed figures redrawn from the committed CSVs (U8) | ✅ |
-| **Z1** | 05 | `architecture-summary.md`: the new functions and tools | ⬜ |
-| **Z2** | 05 | `CLAUDE.md`: the suites' counts | ⬜ |
-| **Z3** | 05 | the handover, `.documents/review-remediation-verification.md` §4.14 | ⬜ |
-| **Z4** | 05 | the board closed; `prompts/INDEX.md`; `.documents/OPEN_ISSUES.md` if an issue opened | ⬜ |
+| **Z1** | 05 | `architecture-summary.md`: the new functions and tools | ✅ |
+| **Z2** | 05 | `CLAUDE.md`: the suites' counts | ✅ |
+| **Z3** | 05 | the handover, `.documents/review-remediation-verification.md` §4.14 | ✅ |
+| **Z4** | 05 | the board closed; `prompts/INDEX.md`; `.documents/OPEN_ISSUES.md` if an issue opened | ✅ |
 
 ## 2. The gates
 
@@ -682,3 +682,26 @@ so README §0.4's and §7's "a re-run after `jordan-normalization` is one comman
 campaign changes the tool. **The user ruled (U9) that the handover says so and that an issue is
 opened**, so that the planner of `jordan-normalization` finds it: `[05-surfing-scan-runs-at-a-fixed-lambda]`,
 §3 above and the index's §1.13. 05's handover names it, and 05's records count it.
+
+### 5.6 Close (2026-10-14)
+
+**05 landed in this commit** (parent `2958234`; Sonnet). The log is
+[`logs/05-close.md`](logs/05-close.md). Z1–Z4 are done, and the campaign is closed. No code changed,
+and no history, Ray, store or PRyMordial was used.
+- **Z1.** `.documents/architecture-summary.md`: a `tools/` block in the tree (the two new tools and a
+  `...` line); a dated note after the `read-only-plots` one on `find_kicks`, `reachability_roots`,
+  `surfing_turning_points` and the two tools; a short dated note in §7.2 on why T_J turns where
+  β π/M_P = −1. Every existing dated note is unchanged.
+- **Z2.** `CLAUDE.md`: the counts only (ComputeTargets 152 → 176, with the second half 91 → 115; tools
+  34 → 70). No statement of it was made false by the campaign.
+- **Z3.** `.documents/review-remediation-verification.md` §4.14: what the campaign did, the
+  re-run commands (a new output file named by the options; the scan resumes into an existing CSV), what
+  `jordan-normalization` would and would not move, that per-history values are not stored, and the
+  open issue.
+- **Z4.** This board; `prompts/INDEX.md`'s row, and its header count; `.documents/OPEN_ISSUES.md`'s
+  narrative. The issue index's count (27) and date are unchanged, since no issue opened or closed.
+- **The open issue** `[05-surfing-scan-runs-at-a-fixed-lambda]` (U9, §3) stays open, unassigned.
+- **Suites,** serially, at the close: CosmologyModels 18, ComputeTargets 176 (61 + 115),
+  ObjectFactories 69, tools 70 (log 05 has the times and the load).
+- **To come:** the review of 05 (orchestrator), and then the merge of `surfing-temperature` into
+  `main` (P10), by the orchestrator with the user's go-ahead.

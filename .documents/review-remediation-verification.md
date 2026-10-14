@@ -1566,6 +1566,97 @@ tags. No production lookup passes `tags=[]`: `main.py` and both plot scripts pas
 `SamplesPerLog10ZTag`, which every stored row carries. Changing this would mean deciding what a
 tag query means and rewriting every consumer to match; it is not planned.
 
+### 4.14 Addendum 2026-10-14 — the `surfing-temperature` campaign
+
+Added by `surfing-temperature` prompt 05, written at `2958234`. Nothing above this heading has been
+changed. The campaign measured the Jordan-frame temperature a surfing history reaches, against β, and
+changed nothing a build computes or stores. It did four things. It added the hot and cold roots of
+the reachability condition, per kick (prompt 01, `2c98370`: `find_kicks` and `reachability_roots` in
+`extract_common.py`). It added the turning points of T_J on a history's dense output (prompt 02,
+`f166b31`: `surfing_turning_points` beside `first_bounce`, not called by `compute_scalar_model`),
+with the driver `tools/surfing_scan.py`. It added the figure (prompts 03 and 03b, `1f40b53` and
+`ee4a2df`: `tools/plot_surfing_temperature.py`, with the first bounce of an uncaptured history drawn).
+And it ran the scan (prompt 04, `90d44f8`, the user's exception U4) and tidied the figure's label
+(prompt 04b, `a65bd74`). The campaign's board is
+[`prompts/surfing-temperature/IMPLEMENTATION_STATE.md`](../prompts/surfing-temperature/IMPLEMENTATION_STATE.md);
+its plan is its [`README.md`](../prompts/surfing-temperature/README.md). It did not bump
+`VERSION_LABEL`, started no Ray, opened no store, and ran no PRyMordial. The branch
+`surfing-temperature` is merged into `main` after prompt 05's review, by the orchestrator with the
+user's go-ahead (P10); **it is not merged when this is written**.
+
+**This supersedes** nothing: no point of §4.1–§4.13 is made false. (§4.10 and §4.13 point 5 were
+checked: the science rebuild is still held until `jordan-normalization` lands, and nothing here
+touches a store.)
+
+**The points.**
+
+1. **Where the results are.** The verification document is
+   [`surfing-temperature-verification.md`](surfing-temperature-verification.md). The figures, the
+   CSVs and their sidecars are in `.documents/surfing-temperature/out/`:
+   - the scan over β = 1.10–5.00 in steps of 0.05, at φ* = 5 M_P and M = 10⁻³ M_P:
+     `surfing_scan_phi5_M1e-3.csv` (with `.meta.json`) and
+     `surfing_temperature_phi5_M1e-3.pdf` and `.png`;
+   - the fine scan, β = 2.980–3.040 in steps of 0.001: `surfing_scan_phi5_M1e-3_near3.csv` (with
+     `.meta.json`) and `surfing_temperature_phi5_M1e-3_near3.pdf` and `.png`.
+
+   The document's §1.3 has the dynamical thresholds against the analytic ones, §1.4 the temperatures
+   against β, §1.8 every row of the fine scan, and §2 the figures as redrawn by 04b. Every figure is a
+   measurement and none is tested against a bound.
+2. **The command that re-runs the scan** at another φ* or M. It is read here and not run; its
+   options are those of the sidecar `surfing_scan_phi5_M1e-3.csv.meta.json` (`beta_min` 1.1,
+   `beta_max` 5.0, `beta_step` 0.05, `phi_init_Mp` 5.0, `M` 0.001, `T_stop_GeV` 0.001, the default).
+   From the repository root, with `<P>` and `<M>` the φ* in M_P and M in M_P as in the committed
+   names (`phi5`, `M1e-3`):
+
+   ```bash
+   # the coarse scan
+   ./venv/bin/python tools/surfing_scan.py --beta-min 1.10 --beta-max 5.00 --beta-step 0.05 \
+       --phi-init-Mp <P> --M <M> --out .documents/surfing-temperature/out/surfing_scan_phi<P>_M<M>.csv
+   # its figure
+   ./venv/bin/python tools/plot_surfing_temperature.py \
+       --csv .documents/surfing-temperature/out/surfing_scan_phi<P>_M<M>.csv \
+       --out .documents/surfing-temperature/out/surfing_temperature_phi<P>_M<M>
+   # optional: the fine scan near beta = 3.0 (then its figure, as above, on that CSV)
+   ./venv/bin/python tools/surfing_scan.py --beta-min 2.980 --beta-max 3.040 --beta-step 0.001 --phi-init-Mp <P> --M <M> --out .documents/surfing-temperature/out/surfing_scan_phi<P>_M<M>_near3.csv
+   ```
+
+   - **Name a new output file, as above.** The scan resumes into an existing CSV. Given the committed
+     path with the same options it skips every β and adds nothing; given it with another φ* or M it
+     exits 2, because a row's inputs differ from the options (`_INPUT_MATCH`,
+     `tools/surfing_scan.py:155`). The names carry the options, as the committed ones do.
+   - Both tools run from the repository root and start no Ray. The scan writes a sidecar beside its
+     CSV (`<csv>.meta.json`), which the plot reads.
+   - **What each cost** at φ* = 5 and M = 10⁻³ (verification §1.1): the coarse scan 287 s, the fine
+     scan 155 s, and the figures 52 s and 4 s. Other φ* and M will cost differently.
+   - **What it does today: it runs at Λ = 1 meV, whatever the tree.** The tool takes
+     `LAMBDA_EV` from `tools/history_and_bbn.py` and has no option for Λ; it has no φ_ref. So run
+     on the tree of `jordan-normalization`, it still runs at 1 meV unless that campaign changes the
+     tool. This is the open issue in point 6.
+3. **What `jordan-normalization` would move** (README §0.4, as qualified by §1.7 and §1.8 of the
+   verification document), if the scan were re-run at the tuned Λ:
+   - **The roots: nothing.** Σ is a function of T_J alone.
+   - **The capture's dynamics: nothing**, wherever the capture comes before the wall. The surfing
+     system depends only on β/M_P.
+   - **Possibly something:**
+     - *which β near 3.0 are captured at all.* The scan has QCD capturing up to β = 2.998, EW from
+       3.020, and nothing at 2.999–3.019, where the wall arrives first (§1.8). The edges of that
+       window may move;
+     - *the largest temperature, the second dip and delivery*, which the wall sets.
+
+   None of it moves unless the scan is re-run at the tuned Λ, which needs the change in point 6.
+4. **Per-history surfing values are not stored.** `compute_scalar_model` does not call
+   `surfing_turning_points`, and no `ScalarModel` column holds a capture, a largest or a second-dip
+   temperature. Storing them would be a later campaign's `ScalarModel` columns, on the science
+   rebuild after `jordan-normalization` (README §7); that campaign does not exist.
+5. **The suites at the close:** CosmologyModels 18, ComputeTargets 176 (61 + 115), ObjectFactories
+   69, tools 70 (log 05 has the times and the load). `CLAUDE.md`'s counts are these.
+6. **The one issue the campaign opened is still open.**
+   `[05-surfing-scan-runs-at-a-fixed-lambda]` (ruled U9, opened `29e34db`): `tools/surfing_scan.py`
+   runs at the fixed Λ = 1 meV and has no option to change it. It does not touch the committed
+   results (every row records `Lambda_eV` = 0.001, and the roots do not depend on Λ). It is on the
+   campaign's board, §3, and in [`OPEN_ISSUES.md`](OPEN_ISSUES.md) §1.13, for the planner of
+   `jordan-normalization` or a later campaign; it is not assigned.
+
 ---
 
 ## 5. Reproduce
