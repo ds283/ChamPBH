@@ -30,7 +30,7 @@ changes no file of the store it reads.
 | 01 | [Require the Ray address](01-require-the-ray-address.md) | `--ray-address` without a default; `auto` refused (U1, U2) | Sonnet | ✍️ 2026-10-13 | ✅ 2026-10-13 | `04486f4` | [`logs/01-require-the-ray-address.md`](logs/01-require-the-ray-address.md) |
 | 02 | [Read-only plot pools](02-read-only-plot-pools.md) | `plot_inputs.py`; both plot scripts `read_only=True`; misses per U3, U4; closes `[08-plot-scripts-open-read-write-pools]` | Opus | ✍️ 2026-10-13 | ✅ 2026-10-13 | `9dc23db` | [`logs/02-read-only-plot-pools.md`](logs/02-read-only-plot-pools.md) |
 | 03 | [Rehearse a read-only plotting run](03-rehearse-a-read-only-plotting-run.md) | one pilot build and the readers, checksums before and after (U5) | Opus | ✍️ 2026-10-13 | ✅ 2026-10-13 | `e5ef6cb` | [`logs/03-rehearse-a-read-only-plotting-run.md`](logs/03-rehearse-a-read-only-plotting-run.md) |
-| 04 | [Close](04-close.md) | documents, handover, index, board | Sonnet | ✍️ 2026-10-13 | ✅ 2026-10-14 | this commit | [`logs/04-close.md`](logs/04-close.md) |
+| 04 | [Close](04-close.md) | documents, handover, index, board | Sonnet | ✍️ 2026-10-13 | ✅ 2026-10-14 | `1905065` | [`logs/04-close.md`](logs/04-close.md) |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
 
@@ -352,7 +352,7 @@ Nothing else found.
 
 ### 5.5 After prompt 04 (2026-10-14)
 
-Prompt 04 landed in this commit ([log](logs/04-close.md)). Z1–Z4 done; **the campaign is closed**,
+Prompt 04 landed in `1905065` ([log](logs/04-close.md)). Z1–Z4 done; **the campaign is closed**,
 4 of 4 prompts landed, no issue opened, none open. It added no code and no test.
 - **Z1** `.documents/architecture-summary.md`: the tree gains `plot_inputs.py`; a dated note
   (2026-10-14) after the `science-readiness` note says what the module holds, that both plot
@@ -385,3 +385,39 @@ Prompt 04 landed in this commit ([log](logs/04-close.md)). Z1–Z4 done; **the c
 
 Offered at 02's review as housekeeping and not done: `plot_by_beta.py`'s `ProfileAgent` label still
 reads `plot_ScalarModel` (log 02, Observation 1; cosmetic).
+
+**Orchestrator review of prompt 04 (2026-10-14).** Against the note's nine checks, at `1905065`:
+1. **Scope.** `git diff --name-status`: `A` for the log, `M` for exactly the note's six files. The
+   untracked set is the user's 23 paths, unchanged; no other commit, no branch.
+2. **Additive.** `review-remediation-verification.md` 83 / 0, all between §4.12's last line and the
+   `---`; `OPEN_ISSUES.md` 4 / 2, the header only; `architecture-summary.md` 28 / 3, the §4.2 line
+   (re-wrapped) and §5.1's two lines (amendment 2).
+3. **The dated notes**, extracted at both commits by the orchestrator's own script: 11 → 12, the 11
+   present byte for byte, the one added dated and naming the campaign.
+4. **`architecture-summary.md`, by reading.** The tree line, §4.2 and §5.1 are right against the
+   code. **One error, fixed here:** the new note's list of parameters that stop a run left out the
+   constant cosmology (`QCD_Cosmology`, `plot_inputs.models`) and the cosmology's `T_CMB`, which is
+   what `T_stop` looks up when `--T-stop-GeV` is not given (`plot_inputs.T_stop`). Both are U4 stops;
+   §4.13 point 2 already names them. Two lines of the note now do too.
+5. **`CLAUDE.md`.** One bullet ("The plot scripts …"), true of the code; 114 → 152, 53 → 91, the date
+   2026-10-14; "Ray on this machine" unchanged.
+6. **§4.13 against the scripts.** Every line it cites read in both scripts: `run()`'s `main.py` call
+   (`:23-24` / `:24-26`) and the plot loop (`:54-57` / `:56-59`) exit 2 for want of `--ray-address`
+   (01's check precedes `ray.init` in all three drivers; `main.py:101` returns `--inventory` before
+   it at `:129-133`), and `set -euo pipefail` with `tee` ends the script there. The supersessions are
+   all present by statement and §4.12 is unedited. The options rule, the φ*-and-C5 dependence and the
+   rebuild held until `jordan-normalization` are stated. `main.py:1182` stores the potentials over
+   that run's `M_grid × Lambda_grid`, so with the YAML's one Λ none is skipped, as point 3 says.
+7. **Nothing run or copied.** Both scripts' SHA-256, size and mtime are those recorded before dispatch
+   (`0b27c02e…ac0d`, 3076 B, 2026-10-03 00:15; `2c70e4e3…90ed`, 3122 B, 22:55); neither is tracked.
+8. **The records.** The board COMPLETE with the final suites, row 04, Z1–Z4 and §5.5 as the note
+   asks, including log 02's `ProfileAgent` label. `prompts/INDEX.md` 0 / 0 / 8, the row complete, no
+   other row changed. `OPEN_ISSUES.md` 26 by `grep -c`, the header's count, date and clause right.
+9. **The suites** at `1905065`, serially: CosmologyModels 18 OK, ComputeTargets 61 OK + 91 OK,
+   ObjectFactories 63 OK, tools 34 OK, at load 6–39 (another session's load, not Ray: no Ray process,
+   the lock free).
+
+**Residue, fixed here:** "this commit" → `1905065` on this board (×2), in the log's header and in
+`prompts/INDEX.md`'s row (the log's prose use stays); the note's two lines (check 4). The status
+line and the notes' list were already right. Nothing opened. The merge of `read-only-plots` into
+`main` (P5) is the user's to ask for.

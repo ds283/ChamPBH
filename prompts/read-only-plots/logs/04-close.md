@@ -1,7 +1,7 @@
 # Log 04 — close
 
 **Subject:** Close the `read-only-plots` campaign: the documents, the handover and the records
-**Commit:** this commit, on branch `read-only-plots`, on top of `a95658b`
+**Commit:** `1905065`, on branch `read-only-plots`, on top of `a95658b`
 **Date:** 2026-10-14, by Claude Sonnet 5.5
 **Result:** **COMPLETE.** Z1–Z4 done; the campaign is closed, 4 of 4 prompts landed. The four roots
 pass at 18 / 152 (61 + 91) / 63 / 34 before and after. `git diff --numstat` on `.documents/` shows

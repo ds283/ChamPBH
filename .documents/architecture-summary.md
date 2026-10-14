@@ -151,7 +151,8 @@ ChamPBH/
 > reads (verified under real Ray, `.documents/read-only-plots-verification.md` §1). A read-only pool
 > refuses a lookup that would insert, and what a refusal means depends on the lookup:
 > - **a parameter** (`--abs-tol`, `--rel-tol`, `--T-init-GeV`, `--phi-init-Mp`, the constant
->   π = 0, and `--T-stop-GeV`) the build did not store stops the run: the script prints
+>   π = 0, the constant cosmology `QCD_Cosmology`, and `--T-stop-GeV` or, when it is not given,
+>   the cosmology's `T_CMB`) the build did not store stops the run: the script prints
 >   `!! plot: the store holds no …`, naming the option and its value, to stderr and exits 2, before
 >   the baseline and any figure (the plot run must be given the options the build used);
 > - **a potential or a coupling** never stored is skipped, with one warning line each and a count;
