@@ -32,7 +32,7 @@ opened or assigned)
 | 03 | [The plot](03-plot-surfing-temperature.md) | `tools/plot_surfing_temperature.py`: roots and measured temperatures against β, two panels | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | `1f40b53` | [log](logs/03-plot-surfing-temperature.md) |
 | 03b | [Uncaptured deliveries](03b-plot-uncaptured-deliveries.md) | the first bounce of an uncaptured history drawn in the upper panel (U7) | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | `ee4a2df` | [log](logs/03b-plot-uncaptured-deliveries.md) |
 | 04 | [Run the scan](04-run-the-scan.md) | 79 β, 1.10–5.00, CSV and figure committed; verification document (U4); fine scan near β = 3.0 (U6) | Opus | ✍️ 2026-10-14, amended for U6 | ✅ 2026-10-14 | `90d44f8` | [log](logs/04-run-the-scan.md) |
-| 04b | [Tidy the band label](04b-tidy-band-label.md) | the e⁺e⁻ band label moved clear of the edge marks; both committed figures redrawn (U8) | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | this commit | [log](logs/04b-tidy-band-label.md) |
+| 04b | [Tidy the band label](04b-tidy-band-label.md) | the e⁺e⁻ band label moved clear of the edge marks; both committed figures redrawn (U8) | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | `a65bd74` | [log](logs/04b-tidy-band-label.md) |
 | 05 | [Close](05-close.md) | documents, handover, index, board | Sonnet | ✍️ 2026-10-14 | ⬜ | — | — |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
@@ -50,6 +50,7 @@ before each dispatch.
 | [`orchestrator/prompt-03.md`](orchestrator/prompt-03.md) | `9d6bbaa` | 03 (reviewed 2026-10-14) |
 | [`orchestrator/prompt-03b.md`](orchestrator/prompt-03b.md) | `f19332d` | 03b (reviewed 2026-10-14) |
 | [`orchestrator/prompt-04.md`](orchestrator/prompt-04.md) | `e7ed715` | 04 (reviewed 2026-10-14) |
+| [`orchestrator/prompt-04b.md`](orchestrator/prompt-04b.md) | `f30a3c0` | 04b (reviewed 2026-10-14) |
 
 ### 1.1 Items
 
@@ -605,7 +606,7 @@ includes 04b.
 
 ### 5.5a After prompt 04b (2026-10-14)
 
-**04b landed in this commit** (parent `f30a3c0`; Sonnet). The log is
+**04b landed in `a65bd74`** (parent `f30a3c0`; Sonnet). The log is
 [`logs/04b-tidy-band-label.md`](logs/04b-tidy-band-label.md). F5 is done. No history, Ray or store was
 used, and no issue opened.
 - **The change.** In `tools/plot_surfing_temperature.py` the upper panel's lower y-limit is
@@ -618,3 +619,38 @@ used, and no issue opened.
   fraction of a pixel when the new 10⁻⁵ tick label appears).
 - **The suite.** `tools`: 70 OK, as before; `black` clean. No other suite was run.
 - **The document.** `.documents/surfing-temperature-verification.md` has a new §2; §1 is unchanged.
+
+**Orchestrator review of prompt 04b** (2026-10-14, Claude Opus 5.5, against `a65bd74`; note
+[`orchestrator/prompt-04b.md`](orchestrator/prompt-04b.md) §3). Five of six checks pass. Check 3
+found a third of a pixel more than §1.2 allows, and the user accepted it.
+- **Scope.** The eight files of the prompt's §5 list. No CSV, sidecar, test, `extract_common.py`,
+  `tools/surfing_scan.py` or index change, and the untracked set is unchanged.
+- **The script.** The diff is the y-limit line and a two-line comment. `black --check` is clean.
+- **The figures.** Redrawn by the orchestrator from the committed CSVs (63 s and 2 s), they equal
+  the committed PNGs pixel for pixel. The titles still read "git HEAD e7ed715". Against `90d44f8`:
+  - the full figure differs only inside the upper panel;
+  - **the fine figure's lower panel differs too** (rows 545–727). Measured on the axes' window
+    extents at divisors 3, 6, 8 and 10: at 8 alone, the 10⁻⁵ tick label lands on the upper panel's
+    bottom edge (lower limit 9.93e-6), and the constrained layout raises the upper panel's bottom by
+    0.6 px and lowers the lower panel's top by 0.3 px. Divisors 6 and 10 leave both panels where
+    they were. The note's "8 or 10, either acceptable" missed this, since its probe drew PNGs only
+    at 6 and 10.
+  - **Ruled by the user (2026-10-14):** divisor 8 is accepted with the shift, and nothing is
+    redrawn. Log D1 is re-tagged IMPLEMENTATION CHOICE, since the shift follows from choosing 8 and
+    is not forced. The verification document gets a new §2.1 recording the measurement, because its
+    §2 says "Nothing else is drawn differently".
+- **The clearance.** In both PNGs the e⁺e⁻ label reads and is clear of every edge mark. In the fine
+  figure, nine marks (2.999–3.007) lie under the label's span. The agent measured 12 blank pixel rows
+  between them; the note's window-extent probe gives +7.5 pt at divisor 8.
+- **The suite** at `a65bd74`: `tools` 70 OK, 13 s, at load 7.9.
+- **The records.** Row 04b, F5 and this §5.5a are as the note asks. The log is in §5.1's form. The
+  verification document's §1 is untouched (the diff only adds lines).
+- **Residue fixed here:**
+  - the SHA for "this commit" (board and log);
+  - the notes table;
+  - D1's tag;
+  - the verification document's §2.1.
+- **No issue opened.**
+- **For the next note (05):**
+  - README §0.4/§7's capture claim needs qualifying in the handover (from §5.5);
+  - the figures' lower limit is now `min(ys) / 8.0`. 05 changes no figure.

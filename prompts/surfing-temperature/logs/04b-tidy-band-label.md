@@ -1,6 +1,6 @@
 # Log — surfing-temperature 04b: move the e⁺e⁻ band label clear of the edge marks
 
-**Subject:** F5, the user's ruling U8. **Commit:** this commit · **Date:** 2026-10-14 · **Branch:**
+**Subject:** F5, the user's ruling U8. **Commit:** `a65bd74` · **Date:** 2026-10-14 · **Branch:**
 `surfing-temperature`, parent `f30a3c0` · **Model:** Claude Sonnet 5.5 · **Result:** landed. No
 stop condition fired.
 
@@ -30,7 +30,7 @@ None, except the observation below.
 
 | # | Deviation | Tag |
 |---|---|---|
-| D1 | The fine PNG's lower panel differs from the old one by sub-pixel anti-aliasing amounts (below). The note expected only the upper panel to differ. A redraw of the committed CSV by the *old* script reproduces the committed PNG exactly, so this is the change's doing, not noise. The cause is `layout="constrained"`: the new 10⁻⁵ tick label changes the upper panel's tick-label extent, and the lower panel shifts by a fraction of a pixel. I did not chase it further. | STRUCTURALLY REQUIRED |
+| D1 | The fine PNG's lower panel differs from the old one by sub-pixel anti-aliasing amounts (below). The note expected only the upper panel to differ. A redraw of the committed CSV by the *old* script reproduces the committed PNG exactly, so this is the change's doing, not noise. The cause is `layout="constrained"`: the new 10⁻⁵ tick label changes the upper panel's tick-label extent, and the lower panel shifts by a fraction of a pixel. I did not chase it further. | IMPLEMENTATION CHOICE (re-tagged at the orchestrator's review, `a65bd74`; tagged STRUCTURALLY REQUIRED by the agent: divisors 6 and 10 leave the lower panel pixel-identical, so the shift follows from choosing 8. Accepted by the user, 2026-10-14) |
 
 ## Verification performed
 
@@ -63,7 +63,7 @@ None, as the prompt says.
 
 ## State handed to the next prompt
 
-- **The branch.** `surfing-temperature`, this commit on top of `f30a3c0`. Nothing is staged or modified
+- **The branch.** `surfing-temperature`, `a65bd74` on top of `f30a3c0`. Nothing is staged or modified
   after it. The untracked entries are the user's, as before: 17 `pilot-2026.6.0*.db`, `pilot-main.log`,
   `pilot-plot.log`, `pilot-out/`, `full_run_2026.6.0.sh`, `full_run_2026.6.0-refresh.sh`,
   `prompts/jordan-normalization/`.

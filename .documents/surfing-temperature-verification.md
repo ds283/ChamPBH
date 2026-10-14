@@ -518,3 +518,21 @@ the marks, are unchanged.
 - **What moved.** In each PNG the upper panel's contents, and its y tick labels, lie at new positions
   because its y range grew by a factor 8/3. The upper panel's lower limit is now 9.9e-6 (fine) and
   7.9e-6 (full). Nothing else is drawn differently.
+
+### 2.1 The orchestrator's review of prompt 04b (2026-10-14)
+
+Against `a65bd74`. Both figures, redrawn by the orchestrator from the committed CSVs, equal the
+committed PNGs pixel for pixel. Against the PNGs of `90d44f8`:
+- **The full figure** differs only inside the upper panel (x 31–819, y 55–520 of 827 × 900).
+- **The fine figure** differs in the upper panel and, slightly, in the lower panel too (rows 545–727,
+  2204 pixels). §2's "Nothing else is drawn differently" does not hold for the fine figure's lower
+  panel.
+
+The cause was measured on the window extents of the axes at divisors 3, 6, 8 and 10. At 8 the fine
+figure's lower limit, 9.93e-6, puts the 10⁻⁵ tick label on the upper panel's bottom edge, and
+`layout="constrained"` makes room for it. The upper panel's bottom rises by 0.6 px and the lower
+panel's top falls by 0.3 px. At 3, 6 and 10 both axes sit where they did. In the full figure, whose lower
+limit at 8 is 7.93e-6, the lower panel is pixel-identical, as the comparison above shows.
+
+The shift cannot be seen. The user accepted divisor 8 with it (2026-10-14), and the figures are not
+redrawn.
