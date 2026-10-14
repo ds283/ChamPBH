@@ -2,7 +2,7 @@
 
 **Subject:** `tools/plot_surfing_temperature.py`, which reads the CSV of prompt 02 and draws the
 reachability roots and the four measured temperatures against β, and its tests.
-**Commit:** this commit · **Date:** 2026-10-14 · **Branch:** `surfing-temperature`, parent
+**Commit:** `1f40b53` · **Date:** 2026-10-14 · **Branch:** `surfing-temperature`, parent
 `9d6bbaa` · **Model:** Claude Sonnet 5.5 · **Result:** landed. F1–F3 done. No stop condition fired:
 the figure is legible on both CSVs, including the 79-row probe scan.
 
@@ -110,7 +110,7 @@ The brief's rulings govern where they differ from the prompt; the first five are
 
 ### Counts (serially, in the foreground; load from `uptime` at the start of each run)
 
-| Suite | Before (`9d6bbaa`, code of `61e0c42`) | After (this commit's tree) |
+| Suite | Before (`9d6bbaa`, code of `61e0c42`) | After (`1f40b53`) |
 |---|---|---|
 | CosmologyModels | 18 OK, 66.2 s, load 11.6 | 18 OK, 66.2 s, load 5.4 |
 | ComputeTargets `test_[a-f]*.py` | 61 OK, 97.3 s, load 7.0 | 61 OK, 103.1 s, load 7.2 |
@@ -198,7 +198,7 @@ cut (the 1 % padding).
   --label b/<path>`, and checked in `bash` with `git apply --check` (forward, on the clean tree) and
   `git apply -R --check` (after applying). They were applied, `test_plot_surfing_temperature.py`
   was run, and they were reversed; `shasum` of the two files was equal before and after the three
-  replays. Each replays with `git apply` from a clean tree at this commit.
+  replays. Each replays with `git apply` from a clean tree at `1f40b53`.
 - **The command:**
   `PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t . -p 'test_plot_surfing_temperature.py'`.
 - None was committed.
@@ -270,7 +270,7 @@ cut (the 1 % padding).
 
 ## State handed to the next prompt
 
-- **The branch.** `surfing-temperature`, this commit on top of `9d6bbaa`. Nothing is staged or
+- **The branch.** `surfing-temperature`, `1f40b53` on top of `9d6bbaa`. Nothing is staged or
   modified after it. The untracked entries are the user's, as before.
 - **Counts:** CosmologyModels 18, ComputeTargets 176 (61 + 115), ObjectFactories 69, tools 64.
 - **The command for 04**, from the repository root:
@@ -289,4 +289,4 @@ cut (the 1 % padding).
   figure handles it: a failure row is a cross on the lower edge, and a kick that a row captures
   loses its "reachable, not surfed" label. `deliver_reflected` is not drawn differently.
 - **No issue opened;** `.documents/OPEN_ISSUES.md` is untouched.
-- **The breakage diffs** are in this log, and replay from a clean tree at this commit.
+- **The breakage diffs** are in this log, and replay from a clean tree at `1f40b53`.

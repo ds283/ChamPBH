@@ -29,7 +29,7 @@ opened or assigned)
 |---|---|---|---|---|---|---|---|
 | 01 | [Reachability roots](01-reachability-roots.md) | `find_kicks`, `reachability_roots`: kick windows, hot and cold roots, stability sign, merged intervals | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | `2c98370` | [log](logs/01-reachability-roots.md) |
 | 02 | [Surfing turning points and the driver](02-surfing-turning-points-and-driver.md) | `surfing_turning_points` on the dense output; `tools/surfing_scan.py`; five β run, cost projected | Opus | ✍️ 2026-10-14 | ✅ 2026-10-14 | `f166b31` | [log](logs/02-surfing-turning-points-and-driver.md) |
-| 03 | [The plot](03-plot-surfing-temperature.md) | `tools/plot_surfing_temperature.py`: roots and measured temperatures against β, two panels | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | this commit | [log](logs/03-plot-surfing-temperature.md) |
+| 03 | [The plot](03-plot-surfing-temperature.md) | `tools/plot_surfing_temperature.py`: roots and measured temperatures against β, two panels | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | `1f40b53` | [log](logs/03-plot-surfing-temperature.md) |
 | 04 | [Run the scan](04-run-the-scan.md) | 79 β, 1.10–5.00, CSV and figure committed; verification document (U4) | Opus | ✍️ 2026-10-14 | ⬜ | — | — |
 | 05 | [Close](05-close.md) | documents, handover, index, board | Sonnet | ✍️ 2026-10-14 | ⬜ | — | — |
 
@@ -45,6 +45,7 @@ before each dispatch.
 |---|---|---|
 | [`orchestrator/prompt-01.md`](orchestrator/prompt-01.md) | `2f38193` | 01 (reviewed 2026-10-14) |
 | [`orchestrator/prompt-02.md`](orchestrator/prompt-02.md) | `f6440d1` | 02 (reviewed 2026-10-14) |
+| [`orchestrator/prompt-03.md`](orchestrator/prompt-03.md) | `9d6bbaa` | 03 (reviewed 2026-10-14) |
 
 ### 1.1 Items
 
@@ -284,7 +285,7 @@ Prompt 02 landed in `f166b31`; the log is
 
 ### 5.4 After prompt 03 (2026-10-14)
 
-Prompt 03 landed in this commit; the log is
+Prompt 03 landed in `1f40b53`; the log is
 [`logs/03-plot-surfing-temperature.md`](logs/03-plot-surfing-temperature.md).
 - **What shipped.** The new `tools/plot_surfing_temperature.py` (`--csv`, `--out`; writes
   `PREFIX.pdf` and `.png`; exit 0, 1 saving failed, 2 refused) and
@@ -309,3 +310,80 @@ Prompt 03 landed in this commit; the log is
 - **Deviations:** 5 STRUCTURALLY REQUIRED (the brief's rulings), 7 IMPLEMENTATION CHOICE and 1
   UNINTENDED DRIFT (the new module and a scratch roots run existed while the baseline suites ran;
   no count is affected). No issue opened; the index is untouched.
+
+**Orchestrator review of prompt 03** (2026-10-14, Claude Opus 5.5, against `1f40b53`; note
+[`orchestrator/prompt-03.md`](orchestrator/prompt-03.md) §3). All ten checks pass.
+- **Scope.** The four files of the prompt's §5, and the untracked set unchanged. `git diff` of
+  `extract_common.py`, `tools/surfing_scan.py`, `ComputeTargets/` and `config/` is empty. Black is
+  clean.
+- **By reading**, the script follows the prompt and the note's rulings:
+  - a row is classified by `status` first;
+  - blanks are `None`, never 0;
+  - the title lists every distinct `git_head` with its tracked-change mark;
+  - the β range is rounded outwards with a 1e-9 tolerance and built by `beta_grid`;
+  - `find_kicks` is called once;
+  - `build_figure` needs no cosmology;
+  - the PDF path is built by concatenation.
+
+  In the figure, the merged band is drawn once, from the hotter kick's record, and the lines of a
+  kick drawn alone are separate artists from the merged ones, so nothing joins the two sides.
+  "Reachable, not surfed" is decided from the rows' `capture_kick`.
+- **An independent probe** ran the committed `main` on `surfing_t5.csv` and `scan79.csv`:
+  - exit 0, 771 and 781 calls of `reachability_roots`, in 147 s and 101 s at load 8–12 (the
+    agent's 52 s and 60 s were at a lighter load);
+  - the upper markers and the lower panel's ratios equal the CSV's values and quotients exactly,
+    77 / 77 / 43 / 77 points;
+  - edge marks at 1.10 and 3.00 only;
+  - QCD's own lines end at β = 2.150 and the merged ones start at 2.155;
+  - μ/π and e⁺e⁻ labelled "reachable, not surfed", the merged band "QCD + μ/π".
+
+  A copy of T5's CSV with a failure row (blank `captured`) draws, with the red cross and its legend
+  entry. A run outside the root exits 2 and writes nothing.
+- **Legibility** (the PNGs looked at, and a greyscale copy):
+  - the figure reads at A4 width;
+  - the coincident maximum and delivery show as a triangle on a disc at β = 1.15–1.65 and 3.05;
+  - the threshold labels do not collide;
+  - in greyscale the series are told apart by shape.
+
+  The hot-root line is hidden under the markers where they ride it, and the merge leaves a
+  one-cell white gap in the QCD fill at β = 2.15. Neither hides a value. Not acted on.
+- **The breakages.** All three replay with `git apply` in bash, and each fails exactly the tests
+  the log names. The tree is clean after each. The tests also pin:
+  - the failure row's blank `captured`;
+  - the merged band's colours and the line break;
+  - the title's SHAs;
+  - the coincident markers' sizes and draw order;
+  - the fine grid's 11 calls and its ends on the real `reachability_roots`.
+- **D12** (UNINTENDED DRIFT) does not affect any count: `tools/tests` discovers only `test_*.py`, so
+  an untested module present during the baseline cannot change a count. The baseline counts equal
+  the orchestrator's.
+- **Suites at `1f40b53`**, serially: 18, 61 + 115, 69 and 64, all OK, at load 9–14.
+- **Residue fixed here:** the SHA for "this commit" (board and log), the notes table.
+- **No issue opened.**
+- **For the next note (04):**
+  - **The plot's cost.** It takes one to two and a half minutes on the full range, depending on
+    the load. The probe scan took 308 s at load 4–8, and β = 5.0 alone took 25 s against T5's
+    7.9 s. One invocation of each still fits under the cap.
+  - **The β = 3.00 near-miss** (the orchestrator's scratch probe, at the user's question):
+    - At β = 3.00 the EW peak Σ_eff (0.036748) is 2.9e-4 short of c = 1/(3β²). So the field
+      approaches the kinematic velocity without reaching it: g = 1 + βπ/M_P reaches its minimum,
+      +0.0225, at 46.5 GeV.
+    - T_J nearly stalls while g < 0.1. That lasts 9.3 e-folds, during which φ falls from 4.40 to
+      1.43.
+    - The QCD kick then starts. The field reaches the wall at 1.68 GeV with βπ/M_P = −0.875,
+      before the kick brings it to the kinematic velocity. This happens even though 1.68 GeV lies
+      inside QCD's reachable interval (hot root about 1.99 GeV).
+    - The stall lengthens as the deficit closes:
+
+      | β | g < 0.1 for (e-folds) | captured | first bounce (GeV) |
+      |---|---|---|---|
+      | 2.95 | 2.9 | yes (QCD) | 1.96 |
+      | 2.99 | 7.1 | yes (QCD) | 1.83 |
+      | 3.00 | 9.3 | no | 1.68 |
+      | 3.005 | 11.0 | no | 14.3 |
+      | 3.01 | 13.5 | no | 34.7 |
+      | 3.0115 | 13.7 | no | 38.2 |
+
+    - At 3.005, and from 3.01, the wall comes during or just after the EW stall, before QCD.
+    - The 0.05 grid does not resolve this, since only β = 3.00 falls between 2.95 and 3.05.
+      Whether 04 adds finer β near the thresholds is the user's call; as written it does not.
