@@ -1,7 +1,7 @@
 # surfing-temperature campaign — implementation state
 
 **Last updated:** 2026-10-14 · **Status: COMPLETE — 7 of 7 landed (01 `2c98370`, 02 `f166b31`, 03 `1f40b53`, 03b `ee4a2df`, 04
-`90d44f8`, 04b `a65bd74`, 05 this commit). U1–U9 and P1–P10 ruled by the user on 2026-10-14 (README
+`90d44f8`, 04b `a65bd74`, 05 `960d098`). U1–U9 and P1–P10 ruled by the user on 2026-10-14 (README
 §6); P1–P10 as proposed. One issue open (§3, U9). Not yet merged into `main` (P10).**
 The plan is [`README.md`](README.md), written on 2026-10-14 on `main` at `f41b104`. Its planning
 commit `8adb806` is the first on branch `surfing-temperature`, cut from `main` at `f41b104` (P10).
@@ -34,7 +34,7 @@ none assigned)
 | 03b | [Uncaptured deliveries](03b-plot-uncaptured-deliveries.md) | the first bounce of an uncaptured history drawn in the upper panel (U7) | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | `ee4a2df` | [log](logs/03b-plot-uncaptured-deliveries.md) |
 | 04 | [Run the scan](04-run-the-scan.md) | 79 β, 1.10–5.00, CSV and figure committed; verification document (U4); fine scan near β = 3.0 (U6) | Opus | ✍️ 2026-10-14, amended for U6 | ✅ 2026-10-14 | `90d44f8` | [log](logs/04-run-the-scan.md) |
 | 04b | [Tidy the band label](04b-tidy-band-label.md) | the e⁺e⁻ band label moved clear of the edge marks; both committed figures redrawn (U8) | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | `a65bd74` | [log](logs/04b-tidy-band-label.md) |
-| 05 | [Close](05-close.md) | documents, handover, index, board | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | this commit | [log](logs/05-close.md) |
+| 05 | [Close](05-close.md) | documents, handover, index, board | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | `960d098` | [log](logs/05-close.md) |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
 
@@ -52,6 +52,7 @@ before each dispatch.
 | [`orchestrator/prompt-03b.md`](orchestrator/prompt-03b.md) | `f19332d` | 03b (reviewed 2026-10-14) |
 | [`orchestrator/prompt-04.md`](orchestrator/prompt-04.md) | `e7ed715` | 04 (reviewed 2026-10-14) |
 | [`orchestrator/prompt-04b.md`](orchestrator/prompt-04b.md) | `f30a3c0` | 04b (reviewed 2026-10-14) |
+| [`orchestrator/prompt-05.md`](orchestrator/prompt-05.md) | `627322f`, `2958234` | 05 (reviewed 2026-10-14) |
 
 ### 1.1 Items
 
@@ -685,7 +686,7 @@ opened**, so that the planner of `jordan-normalization` finds it: `[05-surfing-s
 
 ### 5.6 Close (2026-10-14)
 
-**05 landed in this commit** (parent `2958234`; Sonnet). The log is
+**05 landed in `960d098`** (parent `2958234`; Sonnet). The log is
 [`logs/05-close.md`](logs/05-close.md). Z1–Z4 are done, and the campaign is closed. No code changed,
 and no history, Ray, store or PRyMordial was used.
 - **Z1.** `.documents/architecture-summary.md`: a `tools/` block in the tree (the two new tools and a
@@ -705,3 +706,47 @@ and no history, Ray, store or PRyMordial was used.
   ObjectFactories 69, tools 70 (log 05 has the times and the load).
 - **To come:** the review of 05 (orchestrator), and then the merge of `surfing-temperature` into
   `main` (P10), by the orchestrator with the user's go-ahead.
+
+**Orchestrator review of prompt 05** (2026-10-14, Claude Opus 5.5, against `960d098`; note
+[`orchestrator/prompt-05.md`](orchestrator/prompt-05.md) §3). All eight checks pass, with two
+blemishes: one is fixed here, and one cannot be fixed.
+- **Scope.** The commit changes the seven files of the prompt's §5 list and no `*.py`. The
+  untracked set is unchanged, at 23 entries, and the agent's first, failed `sed -i -e` left no
+  backup file.
+- **The dated blocks.** `architecture-summary.md` and `review-remediation-verification.md` have no
+  `-` line. In `CLAUDE.md`, only the numbers on `:79`, `:81` and `:87` change. `OPEN_ISSUES.md`
+  changes only its narrative, keeping 27 open and its date.
+- **Z1, by reading.** The `tools/` block, the new note and the §7.2 note are where note 05 §0.4 puts
+  them. Their statements match the code:
+  - the signatures and line numbers;
+  - Σ = 1 − 3w (`extract_common.py:569`);
+  - `find_kicks` and `reachability_roots` are called only by the two tools and the tests;
+  - `surfing_turning_points` is called only by `tools/surfing_scan.py` and the tests;
+  - neither tool imports `ray` or `ShardedPool`;
+  - the scan runs through `compute_scalar_model._function`.
+- **Z3, by reading.**
+  - The command's options and names equal the sidecars' (`--beta-min`, `--beta-max`,
+    `--beta-step`, `--phi-init-Mp`, `--M`, `--out`, and the plot's `--csv`).
+  - The output path is new, and the resume behaviour is stated as `_INPUT_MATCH` does it.
+  - What moves is stated in three parts, citing §1.7 and §1.8.
+  - The fixed Λ and the open issue are named.
+  - Every number agrees with the verification document: 287, 155, 52 and 4 s; 2.998, 2.999–3.019
+    and 3.020; the sections cited (§1.8 holds every fine-grid row).
+  - "Supersedes nothing" holds against §4.10 and §4.13.
+- **Z4 and Z2.** The board says COMPLETE, with the right commits, and §3 is still open. The index
+  row and its header (0 live, 9 closed) are right, and `CLAUDE.md`'s counts equal the suites.
+- **Suites at `960d098`**, serially: 18, 61 + 115, 69 and 70, all OK, at load 4.3–9.2 (ComputeTargets
+  116 s + 120 s).
+- **Residue fixed here:**
+  - the SHA for "this commit" (the board, the log, the index row);
+  - note 05 in the notes table;
+  - in the new dated note of `architecture-summary.md`, the parenthesis "`history_and_bbn.py`,
+    `bbn_baseline.py` and the others named in the notes above". Only those two tools are named
+    there, so it now reads "named in the first note above, three other tools". The note was 05's own
+    and is a day old, so this corrects it and does not rewrite a record.
+- **Not fixable.** The commit message of `960d098` has a garbled phrase, "surfing_temperature_turning_points'
+  siblings surfing_turning_points", where "surfing_turning_points" was meant. Amending would break
+  invariant 1, so it stands, and the agent reported it.
+- **No issue opened.** The stale "not yet merged" in `prompts/INDEX.md`'s `read-only-plots` row
+  (log 05, "Observations not acted on") is housekeeping. It is fixed in a standalone commit after
+  this one.

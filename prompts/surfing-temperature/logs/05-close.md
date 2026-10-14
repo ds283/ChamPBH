@@ -1,7 +1,7 @@
 # Log — surfing-temperature 05: close
 
 **Subject:** Z1–Z4, the documents, the handover and the records that close the campaign. **Commit:**
-this commit · **Date:** 2026-10-14 · **Branch:** `surfing-temperature`, parent `2958234` ·
+`960d098` · **Date:** 2026-10-14 · **Branch:** `surfing-temperature`, parent `2958234` ·
 **Model:** Claude Sonnet 5.5 · **Result:** landed. No stop condition fired. No Python changed.
 
 ## What shipped
@@ -112,7 +112,7 @@ None. The prompt has no tests to break; it changes no code.
 
 ## State handed to the next prompt
 
-- **The branch.** `surfing-temperature`, this commit on top of `2958234`. Nothing is staged or
+- **The branch.** `surfing-temperature`, `960d098` on top of `2958234`. Nothing is staged or
   modified after it. The untracked entries are the user's, as before: 17 `pilot-2026.6.0*.db`,
   `pilot-main.log`, `pilot-plot.log`, `pilot-out/`, `full_run_2026.6.0.sh`,
   `full_run_2026.6.0-refresh.sh`, `prompts/jordan-normalization/`.

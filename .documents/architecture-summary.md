@@ -170,9 +170,9 @@ ChamPBH/
 > `--ray-address` (§5.1).
 
 > **Note, 2026-10-14 (`surfing-temperature`, prompts 01 to 04b).** The tree above gains a `tools/`
-> block that lists only the two files this campaign added; the directory holds more (`history_and_bbn.py`,
-> `bbn_baseline.py` and the others named in the notes above, and `tests/`). Nothing here is stored,
-> and no production code path calls any of it.
+> block that lists only the two files this campaign added; the directory holds more
+> (`history_and_bbn.py` and `bbn_baseline.py`, named in the first note above, three other tools, and
+> `tests/`). Nothing here is stored, and no production code path calls any of it.
 > - **`find_kicks(cosmology, T_lo, T_hi, n_grid)`** (`extract_common.py:649`) locates the peaks of
 >   Σ = 1 − 3w, and the troughs between them, on the spline that `cosmology.w(T)` reads, which is the
 >   integrator's own w. It labels the four kicks `EW`, `QCD`, `mu-pi` and `ee`, hot to cold.
