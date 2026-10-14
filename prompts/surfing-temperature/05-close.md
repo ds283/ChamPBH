@@ -4,8 +4,10 @@
 **Board:** [`IMPLEMENTATION_STATE.md`](IMPLEMENTATION_STATE.md)
 **Written:** 2026-10-14, with 01–04, after the user's rulings. Its orchestrator note, written after
 04's review, hands it the counts and findings of 01–04. It governs where it differs from this file.
+**Amended:** 2026-10-14, for **U8**: the gate includes 04b, which tidies the e⁺e⁻ band label.
 **Gate:**
-- 01–04 landed and reviewed, with the gates "Roots", "Turning points" and "Scan" holding (board §2);
+- 01–04 and 04b landed and reviewed, with the gates "Roots", "Turning points" and "Scan" holding
+  (board §2);
 - on branch `surfing-temperature`, no tracked change in `git status`;
 - you start no Ray, and open no store.
 
@@ -15,7 +17,7 @@
 **Read first:**
 
 1. [`README.md`](README.md): §1, §2.2 (05's charter), §5, §7.
-2. This board in full; logs 01–04: "What shipped", "Observations not acted on" and "State handed
+2. This board in full; logs 01–04b: "What shipped", "Observations not acted on" and "State handed
    to the next prompt".
 3. `.documents/surfing-temperature-verification.md` §1, which 04 created.
 4. `.documents/architecture-summary.md`:
@@ -61,7 +63,7 @@ the records are closed.
     campaign's `ScalarModel` columns on the science rebuild (README §7);
   - every issue the campaign opened, if any.
 - **Z4 — the records.**
-  - **The board closed.** The status line becomes "COMPLETE", with the commits of 01–04 and this
+  - **The board closed.** The status line becomes "COMPLETE", with the commits of 01–04b and this
     one; every item and gate is ✅; a new `### 5.6 Close (<date>)`.
   - **`prompts/INDEX.md`.** The row becomes **complete**, with the landed commits, the
     verification document and the final suites, and the header count is corrected.
