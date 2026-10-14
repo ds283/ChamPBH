@@ -856,6 +856,135 @@ def first_bounce(result: IntegrationResult) -> Optional[FirstBounce]:
     )
 
 
+# a turning point of the Jordan-frame temperature before the first bounce (surfing-temperature
+# prompt 02, T1; README §0.2). T_J is stationary exactly where g = 1 + (d ln Omega/dphi) pi = 0.
+#   N:             e-fold number of the crossing
+#   phi_Einstein:  the Einstein-frame field there
+#   pi_Einstein:   the Einstein-frame field velocity dphi/dN there
+#   log_T_Jordan:  ln of the Jordan-frame temperature there, in the cosmology's units
+#   direction:     "min" where g falls through zero (T_J has a minimum), "max" where it rises
+SurfingCrossing = namedtuple(
+    "SurfingCrossing",
+    [
+        "N",
+        "phi_Einstein",
+        "pi_Einstein",
+        "log_T_Jordan",
+        "direction",
+    ],
+)
+
+
+def surfing_turning_points(
+    result: IntegrationResult,
+    coupling: AbstractCoupling,
+    interior_samples: int = 8,
+) -> List[SurfingCrossing]:
+    """
+    The turning points of the Jordan-frame temperature before the first bounce (surfing-temperature
+    prompt 02, T1), in order: the zeros of g(N) = 1 + (d ln Omega/dphi)(phi(N)) pi(N), the
+    numerator of the temperature law (ODERHS), read on the accepted steps' interpolants through
+    the coupling. For the exponential coupling g = 1 + beta pi/M_P.
+
+    The accepted steps are walked in order, as first_bounce walks them, up to the first bounce:
+    first_bounce(result).N, on the bounce's own step, or the history's end if there is none. A
+    reflection is a step boundary, and the first reflection is at or after the first bounce, so
+    the walk never crosses one. On each step g is read at its two ends and at `interior_samples`
+    equally spaced interior points, so that two zeros on one step are found rather than cancelled.
+    On SciPy's Radau dense output each component is a cubic in N on each step, so g has at most
+    three zeros on a step; the default of eight interior points splits the step into nine parts,
+    and two zeros on one step are both found unless they are closer than a ninth of it. The step
+    boundaries are read once, from the step that ends at them. Each sign change of g between
+    consecutive samples is refined by brentq (xtol = 1e-15, first_bounce's) on that step's
+    interpolant; if the two ends' signs agree when re-evaluated there (a zero on an end, seen
+    through rounding), the end where |g| is smaller is taken. A sample at which g is exactly zero
+    is a crossing there if the signs before and after it differ, and is counted once.
+
+    `direction` is "min" where g goes from positive to negative (beta pi/M_P falls through -1, and
+    T_J has a minimum) and "max" where it goes the other way. This function is not called by
+    compute_scalar_model, and nothing is stored (surfing-temperature README §5 rule 9).
+
+    :param result: the IntegrationResult of integrate_scalar_history
+    :param coupling: the history's conformal coupling
+    :param interior_samples: interior sample points per step
+    :return: list of SurfingCrossing, possibly empty
+    """
+    ts = result.solution.ts
+    interpolants = result.solution.interpolants
+
+    bounce: Optional[FirstBounce] = first_bounce(result)
+    N_end: float = bounce.N if bounce is not None else float(ts[-1])
+
+    def refine(g, a: float, b: float) -> float:
+        g_a: float = g(a)
+        g_b: float = g(b)
+        if g_a == 0.0:
+            return a
+        if g_b == 0.0:
+            return b
+        if (g_a < 0.0) == (g_b < 0.0):
+            return a if abs(g_a) <= abs(g_b) else b
+        return float(brentq(g, a, b, xtol=1e-15))
+
+    def crossing_at(interpolant, N: float, direction: str) -> SurfingCrossing:
+        y = interpolant(N)
+        return SurfingCrossing(
+            N=float(N),
+            phi_Einstein=float(y[0]),
+            pi_Einstein=float(y[1]),
+            log_T_Jordan=float(y[4]),
+            direction=direction,
+        )
+
+    crossings: List[SurfingCrossing] = []
+
+    # the sign of g at the last sample where it was non-zero, and the first sample since then at
+    # which g was exactly zero, as (interpolant, N)
+    last_sign: int = 0
+    zero_at = None
+
+    for k, interpolant in enumerate(interpolants):
+        t_low: float = float(ts[k])
+        if t_low >= N_end:
+            break
+        t_high: float = min(float(ts[k + 1]), N_end)
+
+        def g(t: float, interpolant=interpolant) -> float:
+            y = interpolant(t)
+            return 1.0 + coupling.d_logOmega_dphi(float(y[0])) * float(y[1])
+
+        Ns = np.linspace(t_low, t_high, interior_samples + 2)
+        ys = interpolant(Ns)
+        gs = [
+            1.0 + coupling.d_logOmega_dphi(float(phi)) * float(pi_)
+            for phi, pi_ in zip(ys[0], ys[1])
+        ]
+
+        # the step's start was read as the previous step's end
+        for j in range(0 if k == 0 else 1, len(Ns)):
+            g_j: float = gs[j]
+            if g_j == 0.0:
+                if zero_at is None:
+                    zero_at = (interpolant, float(Ns[j]))
+                continue
+
+            sign: int = 1 if g_j > 0.0 else -1
+            if last_sign != 0 and sign != last_sign:
+                direction: str = "min" if last_sign > 0 else "max"
+                if zero_at is not None:
+                    crossings.append(crossing_at(zero_at[0], zero_at[1], direction))
+                else:
+                    # no zero sample since the last non-zero one, so it is the previous sample,
+                    # on this step (its start, if j = 1)
+                    N_cross: float = refine(g, float(Ns[j - 1]), float(Ns[j]))
+                    crossings.append(crossing_at(interpolant, N_cross, direction))
+
+            last_sign = sign
+            zero_at = None
+
+    return crossings
+
+
 # phi and rho_NP/rho_R,J at the history's first crossing of T_J = 1 MeV and of T_J = 70 keV
 # (science-readiness prompt 06b; README §2 (n)). phi is in the cosmology's units; the ratio is
 # dimensionless. A field is None where the history does not reach that temperature.
