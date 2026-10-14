@@ -1,6 +1,6 @@
 # surfing-temperature campaign — implementation state
 
-**Last updated:** 2026-10-14 · **Status: LIVE — 6 of 6 prompts written, 4 of 6 landed (01, 02, 03, 03b). U1–U7 and P1–P10
+**Last updated:** 2026-10-14 · **Status: LIVE — 6 of 6 prompts written, 5 of 6 landed (01, 02, 03, 03b, 04). U1–U7 and P1–P10
 ruled by the user on 2026-10-14 (README §6); P1–P10 as proposed.**
 The plan is [`README.md`](README.md), written on 2026-10-14 on `main` at `f41b104`. Its planning
 commit `8adb806` is the first on branch `surfing-temperature`, cut from `main` at `f41b104` (P10).
@@ -31,7 +31,7 @@ opened or assigned)
 | 02 | [Surfing turning points and the driver](02-surfing-turning-points-and-driver.md) | `surfing_turning_points` on the dense output; `tools/surfing_scan.py`; five β run, cost projected | Opus | ✍️ 2026-10-14 | ✅ 2026-10-14 | `f166b31` | [log](logs/02-surfing-turning-points-and-driver.md) |
 | 03 | [The plot](03-plot-surfing-temperature.md) | `tools/plot_surfing_temperature.py`: roots and measured temperatures against β, two panels | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | `1f40b53` | [log](logs/03-plot-surfing-temperature.md) |
 | 03b | [Uncaptured deliveries](03b-plot-uncaptured-deliveries.md) | the first bounce of an uncaptured history drawn in the upper panel (U7) | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | `ee4a2df` | [log](logs/03b-plot-uncaptured-deliveries.md) |
-| 04 | [Run the scan](04-run-the-scan.md) | 79 β, 1.10–5.00, CSV and figure committed; verification document (U4); fine scan near β = 3.0 (U6) | Opus | ✍️ 2026-10-14, amended for U6 | ⬜ | — | — |
+| 04 | [Run the scan](04-run-the-scan.md) | 79 β, 1.10–5.00, CSV and figure committed; verification document (U4); fine scan near β = 3.0 (U6) | Opus | ✍️ 2026-10-14, amended for U6 | ✅ 2026-10-14 | this commit | [log](logs/04-run-the-scan.md) |
 | 05 | [Close](05-close.md) | documents, handover, index, board | Sonnet | ✍️ 2026-10-14 | ⬜ | — | — |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
@@ -65,11 +65,11 @@ before each dispatch.
 | **F2** | 03 | the two-panel figure of README §4 | ✅ |
 | **F3** | 03 | `tools/tests/test_plot_surfing_temperature.py` | ✅ |
 | **F4** | 03b | the first bounce of an uncaptured history, an open grey circle in the upper panel; 03's tests unchanged (U7) | ✅ |
-| **S1** | 04 | the 79-point scan, chunked and resumable (U4, P7) | ⬜ |
-| **S2** | 04 | the figure from the scan | ⬜ |
-| **S3** | 04 | two β re-run, equal as strings but for `wall_s` | ⬜ |
-| **S4** | 04 | `.documents/surfing-temperature-verification.md` §1; the outputs committed (P8) | ⬜ |
-| **S5** | 04 | the fine scan near β = 3.0, β = 2.980–3.040 by 0.001, its CSV and figure (U6) | ⬜ |
+| **S1** | 04 | the 79-point scan, chunked and resumable (U4, P7) | ✅ |
+| **S2** | 04 | the figure from the scan | ✅ |
+| **S3** | 04 | two β re-run, equal as strings but for `wall_s` | ✅ |
+| **S4** | 04 | `.documents/surfing-temperature-verification.md` §1; the outputs committed (P8) | ✅ |
+| **S5** | 04 | the fine scan near β = 3.0, β = 2.980–3.040 by 0.001, its CSV and figure (U6) | ✅ |
 | **Z1** | 05 | `architecture-summary.md`: the new functions and tools | ⬜ |
 | **Z2** | 05 | `CLAUDE.md`: the suites' counts | ⬜ |
 | **Z3** | 05 | the handover, `.documents/review-remediation-verification.md` §4.14 | ⬜ |
@@ -81,7 +81,7 @@ before each dispatch.
 |---|---|---|---|
 | Roots | on a stub Σ the roots equal the analytic ones; on the production EOS the peaks and thresholds equal README §0.3's and the paper's, and β_th(root) = β | 01 | ✅ 2026-10-14 (`2c98370`) |
 | Turning points | on stub interpolants every crossing of β π/M_P = −1 is found in order and with its direction, none after the first bounce; on a real history \|1 + β π/M_P\| < 1e-8 at each, and delivery equals `first_bounce` | 02 | ✅ 2026-10-14 (`f166b31`) |
-| Scan | every β of both grids (S1, S5) has a CSV row (a failure is a row with its reason); every first bounce lies above T_stop; two β reproduce as strings, and β = 3.00 is equal in both CSVs; each figure is drawn from its CSV alone | 04 | ⬜ |
+| Scan | every β of both grids (S1, S5) has a CSV row (a failure is a row with its reason); every first bounce lies above T_stop; two β reproduce as strings, and β = 3.00 is equal in both CSVs; each figure is drawn from its CSV alone | 04 | ✅ 2026-10-14 (this commit) |
 
 ## 3. Active and unresolved issues
 
@@ -490,3 +490,53 @@ uncaptured history is drawn (U7).
   - the plot takes 53 s on the 79-point range at load about 4, and 4 s on a 0.1-wide range;
   - the fine figure's axis is 2.95–3.05, not 2.98–3.04;
   - the label overlap above is the user's to rule on.
+
+### 5.5 After prompt 04 (2026-10-14)
+
+**04 ran the scan in this commit** (parent `e7ed715`; Opus). The log is
+[`logs/04-run-the-scan.md`](logs/04-run-the-scan.md), and the record is
+`.documents/surfing-temperature-verification.md` §1. S1–S5 are done, and the gate "Scan" holds. No
+code changed, and no Ray, store or PRyMordial was used.
+- **The runs.** All ran on `e7ed715`, whose code is `ee4a2df`'s. Each sidecar has one entry with
+  `git_tracked_changes: false`.
+  - **S1**, one chunk (load 4.79 at its start): 79 β in 287 s, exit 0, `wall_s` summing to 280 s,
+    the longest 10.3 s at β = 5.00.
+  - **S5**, one chunk (load 9.86): 61 β in 155 s, exit 0.
+
+  Together they took 442 s against P7's 60 minutes. Nothing was cut off or resumed. The figures
+  took 52 s and 4 s.
+- **The checks.** Both CSVs have their grid's β once each, as `repr` strings, in order, and every
+  row is `ok`. Each sidecar's options are the command's. S3: at β = 1.5 and 4.0, the re-run equals
+  the scan in all 23 columns but `wall_s`, and β = 3.0 is equal in the two CSVs. The eight outputs
+  total 300 457 bytes.
+- **What the scan shows** (measurements, README §5 rule 10):
+  - **S1.** QCD captures at 1.15–2.95 and EW at 3.05–5.00. Nothing captures at 1.10 or 3.00, and
+    μ/π and e⁺e⁻ never capture. Every first bounce is a turning point above T_stop; the lowest is
+    0.143 GeV at 1.10. A second dip appears at QCD 2.60–2.80 and at EW 3.15–5.00.
+    `multiple_crossings` is false everywhere.
+  - **S5.** QCD captures up to 2.998 and EW from 3.020; nothing captures at 2.999–3.019 (21 β).
+    Across that window the first bounce rises from 1.64 to 48.8 GeV, most steeply at 3.003–3.005.
+    There is no jump by the document's criterion: a change more than three times the larger of its
+    neighbours.
+  - **The dynamical thresholds.** EW's is 3.020 on the fine grid (analytic 3.0118). QCD's lies in
+    (1.10, 1.15] (analytic 1.1074).
+  - **The overshoot.** T_max/T_capture is 1.082–1.372. At 9 β the maximum is at the bounce
+    (N_deliver − N_max < 0.01). At β = 1.2 and 2.0 the ratio is 1.125 and 1.141; the audit's F1,
+    at M = 0.5, has 1.125 and 1.141 from its own table.
+  - **The oscillator.** On the 43 rows with a second dip, the second half-period is within 1.1 % of
+    π/√(D − 1/4), with D from the production cosmology at T_hot. The decays are within 3.7 % of
+    0.5 per e-fold. The first half-period differs by up to 18.5 %, at β = 3.15.
+- **Suites,** before the scans, serially: 18, 61 + 115, 69 and 70, all OK, at load 4.7–17.5. They
+  were not re-run, since no code changed.
+- **Deviations:** 1 STRUCTURALLY REQUIRED (`multiple_crossings` read from `reachability_roots`, since
+  the CSV has no such column) and 7 IMPLEMENTATION CHOICE, none UNINTENDED DRIFT.
+- **Not acted on** (the log):
+  - The e⁺e⁻ label's second line, "reachable, not surfed", lies across the edge marks at β =
+    2.999–3.006 in the fine figure. The marks are drawn over it, and no ring or captured marker is
+    hidden. This is for the user to revisit (note 04 §0).
+  - Adjacent rings overlap where the first bounce rises slowly.
+  - The fine figure's EW band starts at the root grid's 3.015.
+  - §5.3's "32 of 77" wall-type maxima is not reproduced by the log's criteria.
+  - The wall's timing sets which β near 3.0 are captured, so those edges may move with Λ after
+    `jordan-normalization`.
+- **No issue opened.** `.documents/OPEN_ISSUES.md` is untouched.
