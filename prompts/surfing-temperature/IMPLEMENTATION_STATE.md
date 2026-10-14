@@ -30,7 +30,7 @@ opened or assigned)
 | 01 | [Reachability roots](01-reachability-roots.md) | `find_kicks`, `reachability_roots`: kick windows, hot and cold roots, stability sign, merged intervals | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | `2c98370` | [log](logs/01-reachability-roots.md) |
 | 02 | [Surfing turning points and the driver](02-surfing-turning-points-and-driver.md) | `surfing_turning_points` on the dense output; `tools/surfing_scan.py`; five β run, cost projected | Opus | ✍️ 2026-10-14 | ✅ 2026-10-14 | `f166b31` | [log](logs/02-surfing-turning-points-and-driver.md) |
 | 03 | [The plot](03-plot-surfing-temperature.md) | `tools/plot_surfing_temperature.py`: roots and measured temperatures against β, two panels | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | `1f40b53` | [log](logs/03-plot-surfing-temperature.md) |
-| 03b | [Uncaptured deliveries](03b-plot-uncaptured-deliveries.md) | the first bounce of an uncaptured history drawn in the upper panel (U7) | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | this commit | [log](logs/03b-plot-uncaptured-deliveries.md) |
+| 03b | [Uncaptured deliveries](03b-plot-uncaptured-deliveries.md) | the first bounce of an uncaptured history drawn in the upper panel (U7) | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | `ee4a2df` | [log](logs/03b-plot-uncaptured-deliveries.md) |
 | 04 | [Run the scan](04-run-the-scan.md) | 79 β, 1.10–5.00, CSV and figure committed; verification document (U4); fine scan near β = 3.0 (U6) | Opus | ✍️ 2026-10-14, amended for U6 | ⬜ | — | — |
 | 05 | [Close](05-close.md) | documents, handover, index, board | Sonnet | ✍️ 2026-10-14 | ⬜ | — | — |
 
@@ -47,6 +47,7 @@ before each dispatch.
 | [`orchestrator/prompt-01.md`](orchestrator/prompt-01.md) | `2f38193` | 01 (reviewed 2026-10-14) |
 | [`orchestrator/prompt-02.md`](orchestrator/prompt-02.md) | `f6440d1` | 02 (reviewed 2026-10-14) |
 | [`orchestrator/prompt-03.md`](orchestrator/prompt-03.md) | `9d6bbaa` | 03 (reviewed 2026-10-14) |
+| [`orchestrator/prompt-03b.md`](orchestrator/prompt-03b.md) | `f19332d` | 03b (reviewed 2026-10-14) |
 
 ### 1.1 Items
 
@@ -428,7 +429,7 @@ rows.
 
 ### 5.4b After prompt 03b (2026-10-14)
 
-**03b landed in this commit** (parent `f19332d`; Sonnet). F4 is done: the first bounce of an
+**03b landed in `ee4a2df`** (parent `f19332d`; Sonnet). F4 is done: the first bounce of an
 uncaptured history is drawn (U7).
 - **What.** `build_figure` draws, in the upper panel only, an open grey circle (size 6, edge `0.45`)
   at (β, `T_deliver_GeV`) for every not-captured `ok` row that has a delivery: one `ax.plot`, gid
@@ -444,3 +445,48 @@ uncaptured history is drawn (U7).
 - **Not 03b's, for the user.** The e⁺e⁻ band label overlaps the uncaptured edge mark at β = 2.999 on
   `edges.csv`; it is not made worse. No issue opened.
 - **For 04.** Rings 0.001 apart overlap slightly at the figure's scale; look at the fine figure.
+
+**Orchestrator review of prompt 03b** (2026-10-14, Claude Opus 5.5, against `ee4a2df`; note
+[`orchestrator/prompt-03b.md`](orchestrator/prompt-03b.md) §3). All nine checks pass.
+- **Scope and rule 13.** The four files of the prompt's §5, and the untracked set unchanged. `git
+  diff` of `extract_common.py`, `tools/surfing_scan.py`, `ComputeTargets/` and `config/` is empty.
+  The test module's diff only adds lines: one in its docstring and the new class at the end. Black
+  is clean on both files.
+- **By reading.** The diff of `build_figure` is what the prompt asks:
+  - one `ax.plot` on the upper panel only, gid `marker-delivery-uncaptured`;
+  - over the `UNCAPTURED` rows whose `T_deliver_GeV` is not `None`;
+  - an open circle with a `0.45` edge, at z 7, under the captured disc's 8;
+  - a legend handle only when the series is non-empty;
+  - its points added to `ys` before `set_ylim`.
+  Nothing else in the figure is touched.
+- **By probe.** The committed script was run on `scan79.csv` (53 s) and `edges.csv` (4 s) into the
+  scratchpad, and both PNGs and greyscale copies were looked at:
+  - on `scan79.csv`, rings at 1.10 (0.143 GeV) and 3.00 (1.68 GeV); the rest is as in 03's review;
+  - on `edges.csv`, four rings, with the rise from 1.64 GeV (2.999) to 39–44 GeV (3.012–3.015)
+    plain, and 3.012 and 3.013 overlapping slightly but still two;
+  - the rings are told from the black discs by fill, in greyscale too.
+  Independently of the tests, the new artist's data, read off the upper panel, equal the CSVs'
+  uncaptured (β, `T_deliver_GeV`) pairs exactly on both files. It is absent from the lower panel and
+  from `marker-delivery`, and the upper panel has no collection added.
+- **03's 15 tests** pass unedited, run alone (2.2 s).
+- **The breakages.** All three replay with `git apply` in bash, and each fails exactly the tests the
+  log names: 7, 1 and 5. The tree is clean after each. Breakage 1 also fails 03's `test_a`, which
+  pins `marker-delivery` to captured rows; that is the pin working, not an edit.
+- **Suites at `ee4a2df`**, serially: 18, 61 + 115, 69 and 70, all OK, at load 4–36 (another
+  process loaded the machine during ComputeTargets).
+- **A correction to the log** (its "Observations not acted on", second item). The log says 04's fine
+  figure has a 0.06-wide axis, so its rings would be 1.7 times farther apart than on `edges.csv`.
+  But the plot rounds the CSV's β range outwards to 0.05 (P4), so 2.980–3.040 is drawn on
+  2.95–3.05. That is the same 0.1-wide axis as `edges.csv`. So in 04's fine figure every pair of
+  adjacent uncaptured rings overlaps as 3.012 and 3.013 do here, in a chain of about twenty across
+  2.998–3.019. The log is left as written. Not acted on: the rings stay countable, and 04's
+  verification table carries the values.
+- **Residue fixed here:** the SHA for "this commit" (board and log), the notes table.
+- **No issue opened.**
+- **For the user, before 04:** the e⁺e⁻ band's label overlaps the uncaptured edge mark at β = 2.999
+  on `edges.csv`. This was there before 03b, which leaves it unchanged. 04's fine figure will put
+  some twenty edge marks under that label.
+- **For the next note (04):**
+  - the plot takes 53 s on the 79-point range at load about 4, and 4 s on a 0.1-wide range;
+  - the fine figure's axis is 2.95–3.05, not 2.98–3.04;
+  - the label overlap above is the user's to rule on.

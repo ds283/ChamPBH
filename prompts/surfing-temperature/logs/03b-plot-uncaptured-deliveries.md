@@ -2,7 +2,7 @@
 
 **Subject:** one more series in the figure of `tools/plot_surfing_temperature.py`, the first bounce
 of a row that was not captured (F4, ruling U7), and its tests.
-**Commit:** this commit · **Date:** 2026-10-14 · **Branch:** `surfing-temperature`, parent
+**Commit:** `ee4a2df` · **Date:** 2026-10-14 · **Branch:** `surfing-temperature`, parent
 `f19332d` · **Model:** Claude Sonnet 5.5 · **Result:** landed. F4 done. No stop condition fired:
 03's 15 tests pass unedited, and the figure is legible on both CSVs.
 
