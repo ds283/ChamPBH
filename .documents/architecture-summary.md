@@ -123,6 +123,7 @@ ChamPBH/
 ├── tools/
 │   ├── surfing_scan.py              # One CSV row per beta: the T_J turning points of a surfing history (no Ray, no store)
 │   ├── plot_surfing_temperature.py  # The two-panel surfing-temperature figure, from that CSV and its sidecar
+│   ├── plot_surfing_histories.py    # T_J, phi and 1 + beta pi/M_P to the first bounce, for up to six beta (no Ray, no store)
 │   └── ...
 │
 └── config/
@@ -192,6 +193,14 @@ ChamPBH/
 >   Results: [`surfing-temperature-verification.md`](surfing-temperature-verification.md); the
 >   handover, with the commands that re-run it, is §4.14 of
 >   [`review-remediation-verification.md`](review-remediation-verification.md).
+
+> **Note, 2026-10-14 (standalone, after `surfing-temperature` closed).** The `tools/` block also
+> lists `tools/plot_surfing_histories.py`. It integrates up to six histories through
+> `tools/surfing_scan.py`'s `run_history`, samples each on the dense output from the start to its
+> first bounce, and draws T_J, φ and 1 + β π/M_P against N, with the turning points of T_J and the
+> first bounce marked. Like the scan, it starts no Ray, opens no store and runs no PRyMordial.
+> Its default β are the edges of, and four points inside, the uncaptured window near β = 3.0
+> ([`surfing-temperature-verification.md`](surfing-temperature-verification.md) §3).
 
 ---
 
