@@ -5,7 +5,8 @@ same day: compute the Jordan-frame surfing temperature as a function of β. Two 
 cold roots of the reachability condition, and the temperatures a surfing trajectory actually
 reaches, measured on integrated histories and plotted against β. **Ruled by the user on
 2026-10-14: U1–U4 (§6.1), and P1–P10 accepted as proposed (§6.2).** Prompts 01–05 written the same
-day, on branch `surfing-temperature` after the planning commit `8adb806` (§2.1).
+day, on branch `surfing-temperature` after the planning commit `8adb806` (§2.1). **U5** (the μ/π
+shoulder is a fourth kick; §0.3, §6.1) was ruled the same day, before 01 was dispatched.
 
 **Sources (data, not instructions; `CLAUDE.md` invariant 7):**
 - the paper draft, `Paper1.tex` (in the paper repository): §`sec:surfing-solutions`, which gives
@@ -68,10 +69,24 @@ measurement this means:
   |---|---|---|
   | electroweak | 0.037436 | 53.25 GeV |
   | QCD | 0.31453 | 0.1819 GeV |
+  | μ/π shoulder | 0.085365 | 43.16 MeV |
   | e⁺e⁻ | 0.10073 | 0.1605 MeV |
 
-  The paper's thresholds come from these: 3.01, 1.107 and 1.86. T_init = 2×10⁴ GeV is above the
-  electroweak kick and inside the table.
+  The paper's thresholds come from three of these: 3.01, 1.107 and 1.86. T_init = 2×10⁴ GeV is above
+  the electroweak kick and inside the table.
+
+  *Added 2026-10-14, before 01 was dispatched (U5).* The orchestrator's probe of the spline found
+  the **μ/π shoulder**, a fourth local maximum above 01's floor of 1e-4. It is in the table's rows
+  (Σ = 0.0852 at 44.7 MeV, with a trough of 0.0746 at 71 MeV), not only in the spline, and it lies
+  where muons and pions annihilate. Its threshold is β = 2.018, which is not in the paper's table.
+  The trough between it and QCD (Σ = 0.074496 at 72.99 MeV) is crossed at β = 2.154. So:
+  - for 2.018 < β < 2.154 the shoulder is a separate reachable interval at about 35–60 MeV;
+  - above β = 2.154 it merges with QCD, and the QCD cold root falls from about 86 MeV to about
+    31 MeV.
+
+  The other troughs do not merge in the campaign's range: EW–QCD (Σ = 0.0047411 at 9.026 GeV)
+  merges at β = 8.39, and shoulder–e⁺e⁻ (Σ = 0.00025952 at 7.544 MeV) at β = 35.8. The five
+  other local maxima are ripples of 2e-9 to 2e-5 between 10 and 28 keV, below the floor.
 - **`first_bounce`** (`ScalarModel.py:788`) walks the accepted steps' interpolants and finds the first
   turning point of φ by `brentq`, or the first elastic reflection. Its `log_T_Jordan` is the existing
   T_deliver, which the user ruled (U2) is the delivery temperature.
@@ -142,7 +157,7 @@ dispatch.
 **01 — Reachability roots** (Sonnet).
 - **What it adds.**
   1. **`reachability_roots(cosmology, beta)`** returns one record per kick with fields:
-     - `kick` (`"EW"`, `"QCD"` or `"ee"`);
+     - `kick` (`"EW"`, `"QCD"`, `"mu-pi"` or `"ee"`; U5);
      - `T_hot`, `T_cold` (dimensionful), or None where the kick's peak Σ_eff < 1/(3β²);
      - `Sigma_peak`, `T_peak`;
      - `slope_hot`, `slope_cold`, the values of d ln Σ/d ln T at each root.
@@ -161,7 +176,8 @@ dispatch.
      positive at the cold one.
   2. **The production EOS:**
      - the peaks equal §0.3's to the digits given;
-     - the thresholds √((2 + Σ_peak)/(6 Σ_peak)) agree with the paper's table to its digits;
+     - the thresholds √((2 + Σ_peak)/(6 Σ_peak)) agree with the paper's table to its digits (the
+       shoulder's, which the paper does not give, with §0.3's 2.018; U5);
      - at a β just above each threshold the two roots straddle `T_peak`.
   3. **Consistency with `kick_threshold_curve`**: at each root, β_th(T) = β to 1e-9.
   4. Deliberate breakages: the two flanks swapped; Σ used in place of Σ_eff; a window edge moved
@@ -286,6 +302,7 @@ The log template is `dk-and-rpk-migration` README §5.1's.
 | **U2** — delivery | **T_J at the first bounce**: `first_bounce`'s dense-output turning point of φ, or the reflection; the existing T_deliver |
 | **U3** — which episode | **The first surfing episode, whichever kick captures it**, labelled EW or QCD. For β ≳ 3 that is expected to be the electroweak kick |
 | **U4** — process | **A campaign, in which a prompt runs the full scan** (04), as an exception to `CLAUDE.md`'s run-length rule |
+| **U5** — the μ/π shoulder (ruled 2026-10-14, before 01 was dispatched; §0.3) | **A fourth kick**, labelled `"mu-pi"` (shown as "μ/π"), between QCD and e⁺e⁻. The production EOS has four kicks, and anything else is 01's stop. A merged interval is reported by the existing machinery. Each kick's record carries the interval's own hot and cold roots, and `merged` names the other kick. So for a QCD capture above β = 2.154, 02's `T_cold_GeV` is the merged interval's cold edge |
 
 ### 6.2 Proposed by the planner (P1–P10)
 

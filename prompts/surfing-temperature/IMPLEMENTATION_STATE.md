@@ -1,6 +1,6 @@
 # surfing-temperature campaign — implementation state
 
-**Last updated:** 2026-10-14 · **Status: LIVE — 5 of 5 prompts written, 0 landed. U1–U4 and P1–P10
+**Last updated:** 2026-10-14 · **Status: LIVE — 5 of 5 prompts written, 0 landed. U1–U5 and P1–P10
 ruled by the user on 2026-10-14 (README §6); P1–P10 as proposed.**
 The plan is [`README.md`](README.md), written on 2026-10-14 on `main` at `f41b104`. Its planning
 commit `8adb806` is the first on branch `surfing-temperature`, cut from `main` at `f41b104` (P10).
@@ -45,7 +45,7 @@ before each dispatch.
 
 | Item | Prompt | What | State |
 |---|---|---|---|
-| **R1** | 01 | `find_kicks`: Σ's peaks and the troughs between them, refined on the spline; labels EW, QCD, ee (P5) | ⬜ |
+| **R1** | 01 | `find_kicks`: Σ's peaks and the troughs between them, refined on the spline; labels EW, QCD, mu-pi, ee (P5, U5) | ⬜ |
 | **R2** | 01 | `reachability_roots`: hot and cold roots per kick, slopes, merged intervals, the `multiple_crossings` flag | ⬜ |
 | **R3** | 01 | `ComputeTargets/tests/test_reachability_roots.py`: stub Σ, a merged stub, the production EOS | ⬜ |
 | **T1** | 02 | `surfing_turning_points` beside `first_bounce`; not called by production | ⬜ |
@@ -116,3 +116,14 @@ One refinement of the README's charter for 01 was made in writing it, and is rec
 intervals, so that an interval spanning a trough at large β (c = 1/(3β²) = 0.0133 at β = 5) is
 reported as merged rather than cut at the window edge. The windows (P5) still assign roots and
 captures to kicks.
+
+### 5.1a U5, before 01 was dispatched (2026-10-14)
+
+The orchestrator probed the production spline while writing note 01, at `a8823a9`. It found four
+local maxima of Σ above 01's floor of 1e-4, not three. The fourth is a shoulder at 43.16 MeV
+(Σ = 0.085365), which is in the table's rows and lies where muons and pions annihilate. Its threshold
+is β = 2.018, and it merges with QCD above β = 2.154 (README §0.3). As written, 01 would have
+stopped on its §4 condition. **The user ruled it a fourth kick, `mu-pi` (U5).** 01's labels, stop
+condition and production tests, and 03's band labels, were amended before dispatch. In a merged
+interval both kicks' records carry the interval's roots, and that clarification was made with U5
+(README §6.1).

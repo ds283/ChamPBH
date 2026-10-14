@@ -3,7 +3,9 @@
 **Campaign:** [`README.md`](README.md) · **Board items:** **R1**–**R3** ·
 **Board:** [`IMPLEMENTATION_STATE.md`](IMPLEMENTATION_STATE.md)
 **Written:** 2026-10-14, after the user's rulings (README §6: U1–U4; P1–P10 as proposed). Measured
-at `8adb806`; your own measurement governs.
+at `8adb806`; your own measurement governs. **Amended the same day, before dispatch, for U5**
+(README §0.3, §6.1): the production EOS has four kicks, not three. The μ/π shoulder at 43 MeV is
+the fourth.
 **Gate:**
 - on branch `surfing-temperature`, no tracked change in `git status`. The untracked entries are the
   user's, and none is yours:
@@ -60,9 +62,9 @@ and which kick each belongs to.
   - **What counts as a kick.** A local maximum with Σ_peak > 1e-4, so that spline ripples near
     Σ = 0 are not kicks. Record in the log every local maximum you find, above and below this floor,
     with its T and Σ.
-  - **The labels.** With exactly three kicks they are `"EW"`, `"QCD"` and `"ee"`, hot to cold. With
-    any other number they are `"kick0"`, `"kick1"`, …. On the production EOS anything but three is a
-    stop (§4).
+  - **The labels.** With exactly four kicks they are `"EW"`, `"QCD"`, `"mu-pi"` and `"ee"`, hot to
+    cold (U5). With any other number they are `"kick0"`, `"kick1"`, …. On the production EOS anything
+    but four is a stop (§4).
 - **R2 — the roots, `reachability_roots(cosmology, beta, kicks)`.**
   - **The sign changes.** Let c = 1/(3β²). Find every sign change of Σ_eff(T) − c on the same grid,
     over the whole range, and refine each by `brentq` in ln T, with xtol fine enough for 1e-10
@@ -80,7 +82,11 @@ and which kick each belongs to.
       across the window edge). That is possible at large β, where c = 0.0133 at β = 5, if Σ between
       two peaks stays above it.
   - **Merged intervals.** Its hot root belongs to the hotter kick and its cold root to the colder,
-    and the record says so. Do not invent a root at the window edge.
+    and the record says so. Do not invent a root at the window edge. **Both kicks' records carry the
+    interval's own `T_hot` and `T_cold`, with their slopes** (U5). The hot root lies in the hotter
+    kick's window and the cold root in the colder's, and `merged` names the other kick. On the
+    production EOS this is QCD with `mu-pi` for every β above 2.154, so 02's `T_cold_GeV` for a QCD
+    capture is the merged interval's cold edge.
   - **More than one interval in a window.** This happens if the spline ripples across c. Return the
     outermost pair, set a flag `multiple_crossings`, and record it in the log.
   - **The slope.** Use `cosmology.dw_dlogT` where the cosmology has it, since
@@ -105,13 +111,17 @@ and which kick each belongs to.
      one interval, `merged` set on both kicks, no root at the trough.
   3. **The production EOS** (`QCD_Cosmology(0, Planck_units(), Planck2018())`; the docstring says
      building it takes a few seconds):
-     - three kicks, with the peaks of README §0.3 to the digits given there;
-     - the thresholds √((2 + Σ_peak)/(6 Σ_peak)) give 3.01, 1.107 and 1.86 to the paper's digits;
+     - four kicks, with the peaks of README §0.3 to the digits given there;
+     - the thresholds √((2 + Σ_peak)/(6 Σ_peak)) give 3.01, 1.107 and 1.86 to the paper's digits, and
+       the shoulder's gives README §0.3's 2.018;
      - at β = threshold + 0.01, each kick's two roots straddle its `T_peak`;
      - at every root, `kick_threshold_curve`'s β_th(T) equals β to 1e-9.
-     - **The troughs.** Record Σ at the two troughs in the log. If either trough's Σ_eff exceeds
+     - **The merge** (U5): at β = 2.1 the QCD and `mu-pi` records are separate intervals with
+       `merged` unset; at β = 2.2 both carry the same interval, with `merged` naming each other.
+     - **The troughs.** Record Σ at the three troughs in the log. If any trough's Σ_eff exceeds
        1/(3·5²), say so in the log: it means intervals merge inside the campaign's β range. That is
-       a measurement, not a failure (README §5 rule 10).
+       a measurement, not a failure (README §5 rule 10). README §0.3 expects it of the QCD–`mu-pi`
+       trough only.
 
 ---
 
@@ -124,7 +134,7 @@ and which kick each belongs to.
      half), the others unchanged;
    - `black --check` on every touched Python file. `extract_common.py` is black-clean at
      `8adb806`.
-3. **A table in the log** for the production EOS, at β = 1.10, 1.2, 1.5, 2, 3, 3.1, 4 and 5: each
+3. **A table in the log** for the production EOS, at β = 1.10, 1.2, 1.5, 2, 2.1, 2.2, 3, 3.1, 4 and 5: each
    kick's `T_hot` and `T_cold` in GeV, the slopes, and the flags. It is a measurement, recorded as it
    comes out.
 4. **Deliberate breakages** (README §5, `dk-and-rpk-migration` rule 8: each recorded as a diff,
@@ -147,7 +157,7 @@ and which kick each belongs to.
 
 ## 4. Stop conditions: stop and ask
 
-- **The production EOS has a number of kicks other than three** above the floor. Report every
+- **The production EOS has a number of kicks other than four** above the floor (U5). Report every
   local maximum with its T and Σ. The labelling is the user's.
 - **A production peak differs from README §0.3** by more than its last digit.
 - An existing test fails.

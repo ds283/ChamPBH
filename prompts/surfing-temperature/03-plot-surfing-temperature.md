@@ -46,7 +46,7 @@ One figure that makes the roots and the four measured temperatures readable agai
   - **The upper panel**: T_J in GeV, log axis.
     - **The roots.** For each kick, the hot root as a solid line and the cold root as a dashed line,
       in the kick's colour, with the band between them lightly filled and labelled ("EW", "QCD",
-      "e⁺e⁻").
+      "μ/π", "e⁺e⁻"; the fourth kick is `mu-pi`, README §6.1 U5).
     - **A merged interval** (log 01) is drawn as one band, with its hot and cold edges in the two
       kicks' colours.
     - **The e⁺e⁻ band** is labelled "reachable, not surfed" when no row has `capture_kick == "ee"`.
