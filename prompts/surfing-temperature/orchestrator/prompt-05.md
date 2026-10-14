@@ -23,7 +23,8 @@ board in full, from §5.5 on most closely. The conventions are note 03's
 
 ## 0. What the agent needs that the prompt does not say
 
-**This note governs where it differs from the prompt.** Six points correct or complete it.
+**This note governs where it differs from the prompt.** §0.1–§0.6 correct or complete it, and §0.7
+restates the conventions.
 
 ### 0.1 U9: one issue is open, and the handover names it
 
