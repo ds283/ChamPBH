@@ -1555,6 +1555,17 @@ interrupted. A stored BBN failure is marked validated by `validate`, so failures
 passes after it. Nothing a build computes or stores changes. The first behaviour of point 4 (two
 validated rows differing only by tag, with `tags=[]`) still holds.
 
+**Added 2026-10-14, by the user's ruling: point 4's first behaviour is by design.** `object_get`
+returns one object, and no consumer of `ScalarModel`, `AdiabaticHistory` or `BBNData` reads the
+tags of what it gets back. A tag query means "has at least these tags" (one join per tag), so a
+query that matches two validated rows differing only by tag does not say which one it means.
+Rows with different tags are different results (a different samples-per-log10-z grid, for
+instance), so picking one would let a caller mix them unseen. `MultipleResultsFound` is
+therefore the right answer to an under-specified query, and the caller resolves it by naming the
+tags. No production lookup passes `tags=[]`: `main.py` and both plot scripts pass
+`SamplesPerLog10ZTag`, which every stored row carries. Changing this would mean deciding what a
+tag query means and rewriting every consumer to match; it is not planned.
+
 ---
 
 ## 5. Reproduce

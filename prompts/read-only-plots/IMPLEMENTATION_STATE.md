@@ -433,3 +433,11 @@ line and the notes' list were already right. Nothing opened. The merge of `read-
   `--prune-unvalidated` comment) are unchanged.
 - **The merge (P5).** `main` was fast-forwarded from `17fad8b` to `5740690` and pushed to GitHub;
   the branch `read-only-plots` was deleted locally (it was never pushed).
+- **The two recorded behaviours** (README §1; §5.5 above).
+  - `AdiabaticHistory.build` and `BBNData.build` now return only validated rows, as
+    `ScalarModel.build` does (`b4f6e90`, a direct fix outside any campaign, with
+    `ObjectFactories/tests/test_validated_lookups.py`, 6 tests; ObjectFactories 63 -> 69).
+  - `MultipleResultsFound` for two validated rows differing only by tag is **by design**, by the
+    user's ruling of 2026-10-14: `object_get` returns one object and no consumer reads its tags, so
+    an under-specified tag query raises rather than picking a row. Recorded in
+    `.documents/review-remediation-verification.md` §4.13; nothing opened.
