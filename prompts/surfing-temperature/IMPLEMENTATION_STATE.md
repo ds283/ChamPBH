@@ -1,6 +1,6 @@
 # surfing-temperature campaign — implementation state
 
-**Last updated:** 2026-10-14 · **Status: LIVE — 6 of 6 prompts written, 3 of 6 landed (01, 02, 03). U1–U7 and P1–P10
+**Last updated:** 2026-10-14 · **Status: LIVE — 6 of 6 prompts written, 4 of 6 landed (01, 02, 03, 03b). U1–U7 and P1–P10
 ruled by the user on 2026-10-14 (README §6); P1–P10 as proposed.**
 The plan is [`README.md`](README.md), written on 2026-10-14 on `main` at `f41b104`. Its planning
 commit `8adb806` is the first on branch `surfing-temperature`, cut from `main` at `f41b104` (P10).
@@ -30,7 +30,7 @@ opened or assigned)
 | 01 | [Reachability roots](01-reachability-roots.md) | `find_kicks`, `reachability_roots`: kick windows, hot and cold roots, stability sign, merged intervals | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | `2c98370` | [log](logs/01-reachability-roots.md) |
 | 02 | [Surfing turning points and the driver](02-surfing-turning-points-and-driver.md) | `surfing_turning_points` on the dense output; `tools/surfing_scan.py`; five β run, cost projected | Opus | ✍️ 2026-10-14 | ✅ 2026-10-14 | `f166b31` | [log](logs/02-surfing-turning-points-and-driver.md) |
 | 03 | [The plot](03-plot-surfing-temperature.md) | `tools/plot_surfing_temperature.py`: roots and measured temperatures against β, two panels | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | `1f40b53` | [log](logs/03-plot-surfing-temperature.md) |
-| 03b | [Uncaptured deliveries](03b-plot-uncaptured-deliveries.md) | the first bounce of an uncaptured history drawn in the upper panel (U7) | Sonnet | ✍️ 2026-10-14 | ⬜ | — | — |
+| 03b | [Uncaptured deliveries](03b-plot-uncaptured-deliveries.md) | the first bounce of an uncaptured history drawn in the upper panel (U7) | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | this commit | [log](logs/03b-plot-uncaptured-deliveries.md) |
 | 04 | [Run the scan](04-run-the-scan.md) | 79 β, 1.10–5.00, CSV and figure committed; verification document (U4); fine scan near β = 3.0 (U6) | Opus | ✍️ 2026-10-14, amended for U6 | ⬜ | — | — |
 | 05 | [Close](05-close.md) | documents, handover, index, board | Sonnet | ✍️ 2026-10-14 | ⬜ | — | — |
 
@@ -63,7 +63,7 @@ before each dispatch.
 | **F1** | 03 | `tools/plot_surfing_temperature.py`: reads the CSV and sidecar, roots on Δβ = 0.005 (P4) | ✅ |
 | **F2** | 03 | the two-panel figure of README §4 | ✅ |
 | **F3** | 03 | `tools/tests/test_plot_surfing_temperature.py` | ✅ |
-| **F4** | 03b | the first bounce of an uncaptured history, an open grey circle in the upper panel; 03's tests unchanged (U7) | ⬜ |
+| **F4** | 03b | the first bounce of an uncaptured history, an open grey circle in the upper panel; 03's tests unchanged (U7) | ✅ |
 | **S1** | 04 | the 79-point scan, chunked and resumable (U4, P7) | ⬜ |
 | **S2** | 04 | the figure from the scan | ⬜ |
 | **S3** | 04 | two β re-run, equal as strings but for `wall_s` | ⬜ |
@@ -425,3 +425,22 @@ inserted before 04 to make it:
 Its figures are checked on `scan79.csv`, and on the orchestrator's 14-row probe near β = 3.0
 (`edges.csv`). 04's gate now includes 03b, and its S4 item 8 says how the fine figure shows those
 rows.
+
+### 5.4b After prompt 03b (2026-10-14)
+
+**03b landed in this commit** (parent `f19332d`; Sonnet). F4 is done: the first bounce of an
+uncaptured history is drawn (U7).
+- **What.** `build_figure` draws, in the upper panel only, an open grey circle (size 6, edge `0.45`)
+  at (β, `T_deliver_GeV`) for every not-captured `ok` row that has a delivery: one `ax.plot`, gid
+  `marker-delivery-uncaptured`, a legend entry "first bounce, not captured" only if such a point
+  exists, and the points are in the upper y-limits. The edge mark and its entry, the failure rows,
+  the lower panel and the captured series are unchanged.
+- **Tests.** One new class, `TestUncapturedDeliveries`, 6 tests. 03's 15 are unedited and pass.
+  Suites: CosmologyModels 18, ComputeTargets 61 + 115, ObjectFactories 69, tools 64 → 70.
+- **Figures** (scratch): `edges.csv` shows the four rings and the rise of the first bounce from
+  1.64 GeV (β = 2.999) to 39–44 GeV (3.012–3.015), with 3.012 and 3.013 slightly overlapping but
+  two; `scan79.csv` shows the rings at 1.10 and 3.00. Both are legible in colour and in greyscale.
+- **Breakages.** Each of the three fails a named new test (log).
+- **Not 03b's, for the user.** The e⁺e⁻ band label overlaps the uncaptured edge mark at β = 2.999 on
+  `edges.csv`; it is not made worse. No issue opened.
+- **For 04.** Rings 0.001 apart overlap slightly at the figure's scale; look at the fine figure.

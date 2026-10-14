@@ -21,6 +21,7 @@ tools/plot_surfing_temperature.py (surfing-temperature prompt 03, F1-F3).
   row (whose `captured` is blank);
 - `build_figure` on those rows with stub roots on a stub grid;
 - `main(argv)` with the cosmology, `find_kicks` and `reachability_roots` replaced by stubs;
+- `build_figure`'s first bounce of an uncaptured row (TestUncapturedDeliveries, prompt 03b, F4);
 - the fine grid, by `fine_grid` and (TestFineGridCalls) by a wrapper counting the calls of the real
   `reachability_roots` on the production cosmology.
 
@@ -528,6 +529,96 @@ class TestFineGridCalls(unittest.TestCase):
             self.assertEqual((roots_calls[0], roots_calls[-1]), (1.15, 1.2))
             np.testing.assert_allclose(np.diff(roots_calls), 0.005, atol=1e-9)
             self.assertGreater(Path(str(out) + ".pdf").stat().st_size, 0)
+
+
+class TestUncapturedDeliveries(unittest.TestCase):
+    """Prompt 03b (F4): the first bounce of a row that was not captured."""
+
+    GID = "marker-delivery-uncaptured"
+
+    def _figure(self, extra=(), keep=None):
+        rows = [dict(r) for r in SYNTHETIC_ROWS if keep is None or keep(r)]
+        rows += [dict(r) for r in extra]
+        with tempfile.TemporaryDirectory() as tmp:
+            parsed = psp.parse_rows(write_csv(tmp, rows))
+        fig = psp.build_figure(parsed, STUB_ROOTS, SIDECAR)
+        return fig, fig.axes[0], fig.axes[1]
+
+    @staticmethod
+    def _uncaptured(beta, deliver):
+        return make_row(
+            beta=beta,
+            captured="false",
+            T_deliver_GeV=deliver,
+            N_deliver=5.0,
+            deliver_reflected="false",
+            n_crossings=0,
+        )
+
+    def test_a_one_marker_per_uncaptured_delivery_in_the_upper_panel_only(self):
+        extra = [self._uncaptured(2.0, 1.6), self._uncaptured(2.001, 44.0)]
+        _, upper, lower = self._figure(extra)
+        line = one(upper, self.GID)
+        self.assertEqual(
+            list(zip(line.get_xdata(), line.get_ydata())),
+            [(1.2, 0.14), (2.0, 1.6), (2.001, 44.0)],
+        )
+        self.assertEqual(gid_artists(lower, self.GID), [])
+        self.assertEqual(
+            [a.get_gid() for a in lower.lines if "uncaptured" in (a.get_gid() or "")],
+            ["edge-uncaptured-lower"],
+        )
+        self.assertEqual(line.get_marker(), "o")
+        self.assertEqual(line.get_markerfacecolor(), "none")
+
+    def test_b_no_marker_for_a_captured_or_failure_row(self):
+        _, upper, _ = (
+            self._figure()
+        )  # the synthetic rows: one uncaptured, three captured, one failure
+        self.assertEqual(list(one(upper, self.GID).get_xdata()), [1.2])
+        # only a captured and a failure row: no series at all
+        fig, upper, _ = self._figure(
+            keep=lambda r: r["captured"] == "true" or r["status"] == "failure"
+        )
+        self.assertEqual(gid_artists(upper, self.GID), [])
+
+    def test_c_a_blank_delivery_gets_no_marker_and_no_crash(self):
+        blank = self._uncaptured(2.0, "")
+        fig, upper, lower = self._figure([blank])
+        self.assertEqual(list(one(upper, self.GID).get_xdata()), [1.2])
+        # its edge mark stays
+        self.assertEqual(
+            list(one(upper, "edge-uncaptured-upper").get_xdata()), [1.2, 2.0]
+        )
+        # and with the only uncaptured row blank there is no series and no legend entry
+        fig, upper, _ = self._figure(
+            [blank], keep=lambda r: r["captured"] != "false" or r["status"] == "failure"
+        )
+        self.assertEqual(gid_artists(upper, self.GID), [])
+        self.assertNotIn("first bounce, not captured", legend_texts(fig))
+
+    def test_d_the_legend_entry_appears_if_and_only_if_the_series_does(self):
+        label = "first bounce, not captured"
+        fig, upper, _ = self._figure()
+        self.assertEqual(len(gid_artists(upper, self.GID)), 1)
+        self.assertEqual(legend_texts(fig).count(label), 1)
+        self.assertIn("not captured", legend_texts(fig))  # the edge entry stays
+        fig, upper, _ = self._figure(keep=lambda r: r["captured"] == "true")
+        self.assertEqual(gid_artists(upper, self.GID), [])
+        self.assertNotIn(label, legend_texts(fig))
+
+    def test_e_marker_delivery_still_holds_captured_rows_only(self):
+        extra = [self._uncaptured(2.0, 1.6), self._uncaptured(2.001, 44.0)]
+        _, upper, _ = self._figure(extra)
+        captured = [float(r["beta"]) for r in SYNTHETIC_ROWS if r["captured"] == "true"]
+        self.assertEqual(list(one(upper, "marker-delivery").get_xdata()), captured)
+
+    def test_f_the_upper_limits_contain_every_new_point(self):
+        extra = [self._uncaptured(2.0, 1.0e6), self._uncaptured(2.001, 1.0e-9)]
+        _, upper, _ = self._figure(extra)
+        lo, hi = upper.get_ylim()
+        for y in one(upper, self.GID).get_ydata():
+            self.assertTrue(lo < y < hi, (lo, y, hi))
 
 
 if __name__ == "__main__":

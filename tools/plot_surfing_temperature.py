@@ -35,8 +35,11 @@ kick's colour and its cold edge in the colder kick's, and every line is broken w
 changes; a dotted vertical line at each kick's threshold beta; and, for captured rows only, the
 four measured temperatures (capture, largest, second dip, delivery). A blank is a gap, never a
 zero. A band no row captures in is labelled "reachable, not surfed". Rows that are not captured,
-and failure rows, are marks on the lower axis edge. The lower panel shows each measured
-temperature divided by `T_hot_GeV` of its row, with a line at 1.
+and failure rows, are marks on the lower axis edge; in addition a row that is not captured but
+has a `T_deliver_GeV` shows its first bounce, in the upper panel only, as an open grey circle
+("first bounce, not captured", gid `marker-delivery-uncaptured`), distinct from the filled black
+delivery disc of a captured row (prompt 03b, F4). It has no `T_hot_GeV`, so no ratio. The lower
+panel shows each measured temperature divided by `T_hot_GeV` of its row, with a line at 1.
 
 A row is classified by `status` first: a failure row has every other field blank, `captured`
 included, and a blank `captured` is read as false only where it has no meaning to read.
@@ -449,6 +452,34 @@ def build_figure(
         lower.set_gid(f"ratio-{key}")
         handles.append(Line2D([], [], label=text, **{**style, "zorder": 1}))
 
+    # ---- the first bounce of a row that was not captured (F4, prompt 03b): an open grey circle,
+    # upper panel only. It has no T_hot, so no ratio. It is its own artist, and the captured
+    # delivery series above is unchanged.
+    uncaptured_deliveries = [
+        (r["beta"], r["T_deliver_GeV"])
+        for r in rows
+        if r["kind"] == UNCAPTURED and r["T_deliver_GeV"] is not None
+    ]
+    if uncaptured_deliveries:
+        style = dict(
+            linestyle="none",
+            marker="o",
+            markersize=6.0,
+            markerfacecolor="none",
+            markeredgecolor="0.45",
+            markeredgewidth=1.3,
+            zorder=7,
+        )
+        (bounce,) = ax.plot(
+            [p[0] for p in uncaptured_deliveries],
+            [p[1] for p in uncaptured_deliveries],
+            **style,
+        )
+        bounce.set_gid("marker-delivery-uncaptured")
+        handles.append(
+            Line2D([], [], label="first bounce, not captured", **{**style, "zorder": 1})
+        )
+
     # ---- rows not drawn as measurements: marks on the lower axis edge
     for kind, key, text, marker, c in (
         (UNCAPTURED, "uncaptured", "not captured", "|", "0.25"),
@@ -484,6 +515,7 @@ def build_figure(
         if np.isfinite(v)
     ]
     ys += [r[c[0]] for r in captured for c in SERIES if r[c[0]] is not None]
+    ys += [T for _, T in uncaptured_deliveries]
     if ys:
         ax.set_ylim(min(ys) / 3.0, max(ys) * 25.0)  # headroom for the threshold labels
     rx.axhline(1.0, color="k", linewidth=0.8)
