@@ -1463,6 +1463,89 @@ rehearsal stores: everything below is the user's.
    read-only (`[08-plot-scripts-open-read-write-pools]`); whether to rename the `Datastore` package
    (P6); and whether `--ray-address` should be required (point 4).
 
+### 4.13 Addendum 2026-10-14 — the `read-only-plots` campaign
+
+Added by `read-only-plots` prompt 04, measured at `a95658b`. Nothing above this heading has been
+changed; where it is superseded, this section says so by statement. The campaign did three things
+and changed nothing a build computes or stores. **Every driver that starts Ray now requires
+`--ray-address`** (prompt 01, `04486f4`): there is no default, and a missing, empty or `auto` value
+is refused with exit 2 on stderr before `ray.init`, by `ray_address_problem()` in
+`config/argument_parser.py`; `main.py --inventory` starts no Ray and needs none. **Both plot
+scripts open their pool read-only** (prompt 02, `9dc23db`): their setup moved to `plot_inputs.py`,
+a parameter the build did not store stops the run (exit 2), a potential or coupling never stored is
+skipped with a warning, and `--drop` is refused (exit 2, before Ray). **A real plotting run changes
+no file of the store it reads** (prompt 03, `e5ef6cb`): on a pilot store built under a real Ray
+cluster, the 17 files are byte-identical, with their sizes and mtimes, after both plot scripts,
+`main.py --inventory`, `tools/bbn_from_store.py` and `tools/compare_stores.py`, and `histories.csv`
+equals R0's ([`read-only-plots-verification.md`](read-only-plots-verification.md) §1). The
+campaign's board is
+[`prompts/read-only-plots/IMPLEMENTATION_STATE.md`](../prompts/read-only-plots/IMPLEMENTATION_STATE.md);
+its plan is its [`README.md`](../prompts/read-only-plots/README.md). It did not bump
+`VERSION_LABEL`, started no production run, and did not touch the user's stores or run scripts: the
+two scripts were **read only**.
+
+**This supersedes**, by statement and not by edit:
+
+- **§4.12 point 3's `run()` row** (`:20` / `:21`, `:23-24` / `:24-25`): "the driver takes the
+  default `auto`". There is no default now. Without `--ray-address` the driver exits 2 before
+  `ray.init`.
+- **§4.12 point 3's plot-loop row** (`:54-57` / `:56-59`): "It opens a read-write pool on the
+  finished store (`[08-plot-scripts-open-read-write-pools]`, open)". It opens read-only, and the
+  issue is closed (`dk-and-rpk-migration` board §4). Its "No `--ray-address` (it starts Ray at
+  import)" stands, and is now enforced.
+- **§4.12 point 4's last sentence**: "ChamPBH's drivers still default to `auto`; making
+  `--ray-address` required, as SI's are, is the user's (README §6.4)." It is required, and `auto` is
+  refused.
+- **§4.12 point 7's two items** "whether the plot scripts should open read-only" and "whether
+  `--ray-address` should be required": both are done. (The merge of `dk-and-rpk-migration` and the
+  rename of `Datastore` in the same list were done outside this campaign, at `78769a0` and
+  `de57ec0`.)
+
+**The points.**
+
+1. **What the two run scripts now do, line by line.** The scripts are untracked, the user's, and
+   were read only. Line numbers are `full_run_2026.6.0.sh`'s, then the refresh script's. Both have
+   `set -euo pipefail` (`:8`).
+
+   | Lines | What it says | At this tree | What it needs |
+   |---|---|---|---|
+   | `:23-24` / `:24-26` | `run()` calls `main.py --config exponential.yaml --database "$DB" --shards "$SHARDS" --job-name … --bbn-wall-clock-limit 600 "$@"` (the refresh adds `$DROP` and then `DROP=""`) | **Refuses to start**: no `--ray-address`, so exit 2 before `ray.init`. With `\| tee` under `pipefail` the pipeline's status is 2 and the script ends at its first `run` (C1, `:28` / `:30`), before anything is computed | `--ray-address 127.0.0.1:6380` on this call, with the cluster started by `ray_cluster.sh` (§4.12 point 4) |
+   | `:28`–`:46` / `:30`–`:48` | the seven `run` blocks | Unchanged: each reaches the `run()` call above, so each is held up by it and by nothing else | None of their own |
+   | — / `:20`, `:25`, `:26` | `DROP="--drop bbn-data"` on the first call only | Unchanged: `--drop` goes only to `main.py`, which still accepts it, and the plot loop does not pass it, so the plot scripts' refusal of `--drop` does not touch the scripts | Nothing (§4.12 point 3: it drops nothing from a fresh store) |
+   | `:48-49` / `:50-51` | `main.py … --shards "$SHARDS" --inventory` | **Would not refuse**: it returns before the check and starts no Ray | Nothing. `--shards` is unused, as before |
+   | `:54-57` / `:56-59` | `plot_by_beta.py --config exponential.yaml --database "$DB" --shards "$SHARDS" --phi-init-Mp $PHI --output …` for φ* = 5, 2, 1 | **Refuses to start**: no `--ray-address`, exit 2, and under `pipefail` the script ends at φ* = 5. Once given one, it opens the store read-only; `--shards "$SHARDS"` is ignored by a read-only open, as on `--inventory`; harmless | `--ray-address 127.0.0.1:6380`; the cluster must still be up |
+   | end of script | nothing stops the cluster | As §4.12 point 3 | `ray_cluster.sh stop`; never `ray stop` |
+
+2. **The plot loop must be given the options the build used, or it stops.** A plot run looks up
+   its parameters in the store and, read-only, cannot insert one. The options it applies to are
+   `--abs-tol`, `--rel-tol`, `--T-init-GeV`, `--phi-init-Mp` and `--T-stop-GeV`, with the constant
+   initial momentum π = 0, and the cosmology (`--T-stop-GeV` resolves to the cosmology's `T_CMB`
+   when absent). A parameter whose row the build did not store stops the run with exit 2 and a
+   message of the form `!! plot: the store holds no <class> for <option> <value>; …`, before the
+   baseline and any figure. A potential or a coupling never stored is **not** a stop: it is skipped
+   with a warning line and a count, because the grid is read from the store (`read_table`), not from
+   the options. A history that does not exist is an unavailable object, as before.
+3. **In the scripts, the options already match.** Both the build (`run()`) and the plot loop pass
+   `--config exponential.yaml`, which gives `potential-type Exponential`, `abs-tol 1e-8`,
+   `rel-tol 1e-8` and `Lambda-values-eV 1E-3`; neither passes `--T-init-GeV` or `--T-stop-GeV`, so
+   both take the defaults (`DEFAULT_T_INIT_GEV`; the cosmology's `T_CMB`). With the one Λ of the
+   file, every M that some block stored was stored with that Λ, so no potential is skipped. What
+   remains is the **φ\*-and-C5 dependence**: the plot loop draws φ* = 5, 2, 1 (`:54` / `:56`),
+   and the build stores φ* = 5 in C1, C4, L, C3 and C2 (the default of `--phi-init-Mp`) and φ* = 1,
+   2 and 5 in the C5 loop (`:38-40` / `:40-42`). Every φ* the loop draws is stored **if C5 ran**; a
+   plot run for a φ* that no block used stops, and under `pipefail` ends the script. If a block is
+   changed to use another `--phi-init-Mp`, `--T-init-GeV`, `--T-stop-GeV` or tolerance, the plot
+   line must be given the same.
+4. **What the rebuild does not change here.** Nothing a build computes. The two lookup behaviours
+   the campaign recorded and did not open hold in both open modes: with `tags=[]`, two validated
+   rows for one model that differ only by tag raise `MultipleResultsFound`; and
+   `AdiabaticHistory.build` and `BBNData.build` do not filter on `validated`
+   (`dk-and-rpk-migration` log 09, Observation 3).
+5. **Held, and left to the user.** The science rebuild is **held until `jordan-normalization`
+   lands** (the user's ruling of 2026-10-13), so the run scripts' edits above are the user's to make
+   then. Also the user's: the merge of `read-only-plots` into `main`; removing the rehearsal store
+   `~/ScienceData/ChamPBH-rehearsals/read-only-plots/`; and the run scripts themselves.
+
 ---
 
 ## 5. Reproduce

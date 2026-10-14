@@ -1,7 +1,8 @@
 # read-only-plots campaign — implementation state
 
-**Last updated:** 2026-10-13 · **Status: LIVE — 4 of 4 prompts written, 3 of 4 landed (01, 02
-and 03, each reviewed). U1–U6 and P1–P8 ruled by the user on 2026-10-13, all as proposed (README §6).**
+**Last updated:** 2026-10-14 · **Status: COMPLETE — 4 of 4 prompts landed (01, 02 and 03 each
+reviewed; 04 closes). Final suites: CosmologyModels 18, ComputeTargets 152 (61 + 91), ObjectFactories
+63, tools 34. U1–U6 and P1–P8 ruled by the user on 2026-10-13, all as proposed (README §6).**
 The plan is [`README.md`](README.md), written on 2026-10-13 on branch `read-only-plots`, cut from
 `main` at `17fad8b`.
 
@@ -29,7 +30,7 @@ changes no file of the store it reads.
 | 01 | [Require the Ray address](01-require-the-ray-address.md) | `--ray-address` without a default; `auto` refused (U1, U2) | Sonnet | ✍️ 2026-10-13 | ✅ 2026-10-13 | `04486f4` | [`logs/01-require-the-ray-address.md`](logs/01-require-the-ray-address.md) |
 | 02 | [Read-only plot pools](02-read-only-plot-pools.md) | `plot_inputs.py`; both plot scripts `read_only=True`; misses per U3, U4; closes `[08-plot-scripts-open-read-write-pools]` | Opus | ✍️ 2026-10-13 | ✅ 2026-10-13 | `9dc23db` | [`logs/02-read-only-plot-pools.md`](logs/02-read-only-plot-pools.md) |
 | 03 | [Rehearse a read-only plotting run](03-rehearse-a-read-only-plotting-run.md) | one pilot build and the readers, checksums before and after (U5) | Opus | ✍️ 2026-10-13 | ✅ 2026-10-13 | `e5ef6cb` | [`logs/03-rehearse-a-read-only-plotting-run.md`](logs/03-rehearse-a-read-only-plotting-run.md) |
-| 04 | [Close](04-close.md) | documents, handover, index, board | Sonnet | ✍️ 2026-10-13 | ⬜ | — | — |
+| 04 | [Close](04-close.md) | documents, handover, index, board | Sonnet | ✍️ 2026-10-13 | ✅ 2026-10-14 | this commit | [`logs/04-close.md`](logs/04-close.md) |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
 
@@ -41,6 +42,7 @@ before each dispatch:
 - [`orchestrator/prompt-01.md`](orchestrator/prompt-01.md) (`8c5a7f1`), used for 01.
 - [`orchestrator/prompt-02.md`](orchestrator/prompt-02.md) (`e0cf6f0`), used for 02.
 - [`orchestrator/prompt-03.md`](orchestrator/prompt-03.md) (`27f77d4`), used for 03.
+- [`orchestrator/prompt-04.md`](orchestrator/prompt-04.md) (`a95658b`), used for 04.
 
 ### 1.1 Items
 
@@ -59,10 +61,10 @@ before each dispatch:
 | **H2** | 03 | the readers: every store file byte-identical; `histories.csv` equal to R0's | ✅ |
 | **H3** | 03 | under real Ray: `auto` refused, a missing `T_stop` stops, `--drop` refused | ✅ |
 | **H4** | 03 | `.documents/read-only-plots-verification.md` §1 | ✅ |
-| **Z1** | 04 | `architecture-summary.md`: `plot_inputs.py` and read-only plot pools | ⬜ |
-| **Z2** | 04 | `CLAUDE.md` | ⬜ |
-| **Z3** | 04 | the handover, `.documents/review-remediation-verification.md` §4.13 | ⬜ |
-| **Z4** | 04 | the board closed; `prompts/INDEX.md`; `.documents/OPEN_ISSUES.md` | ⬜ |
+| **Z1** | 04 | `architecture-summary.md`: `plot_inputs.py` and read-only plot pools | ✅ |
+| **Z2** | 04 | `CLAUDE.md` | ✅ |
+| **Z3** | 04 | the handover, `.documents/review-remediation-verification.md` §4.13 | ✅ |
+| **Z4** | 04 | the board closed; `prompts/INDEX.md`; `.documents/OPEN_ISSUES.md` | ✅ |
 
 ## 2. The gates
 
@@ -347,3 +349,39 @@ Ray; the refusals' messages there are verbatim.
 The log's Observation 5 (shards 4–14 fall into two byte-identical groups) is about how the package
 lays out shards that hold only replicated rows. It does not bear on H2, and nothing was opened.
 Nothing else found.
+
+### 5.5 After prompt 04 (2026-10-14)
+
+Prompt 04 landed in this commit ([log](logs/04-close.md)). Z1–Z4 done; **the campaign is closed**,
+4 of 4 prompts landed, no issue opened, none open. It added no code and no test.
+- **Z1** `.documents/architecture-summary.md`: the tree gains `plot_inputs.py`; a dated note
+  (2026-10-14) after the `science-readiness` note says what the module holds, that both plot
+  scripts open read-only, what a parameter miss and a potential or coupling miss each do, and that
+  `--drop` is refused; §4.2 says the plot scripts' pools are read-only; §5.1's `--prune-unvalidated`
+  and `--drop` lines say they are `main.py`'s. The 11 earlier dated notes are byte-identical.
+- **Z2** `CLAUDE.md`, "Repository mechanics" only: one bullet on the plot scripts, and the
+  ComputeTargets counts corrected to 152 and 91 (the orchestrator's addition) with the date of the
+  measurement.
+- **Z3** `.documents/review-remediation-verification.md` §4.13: what the campaign did, what it
+  supersedes in §4.12 by statement, every call in the two run scripts by line (two would now refuse
+  to start; `--inventory` would not), the rule that the plot loop must be given the build's options,
+  and the φ*-and-C5 dependence.
+- **Z4** this board; `prompts/INDEX.md` (8 campaigns: 0 planned, 0 live, 8 closed); and
+  `.documents/OPEN_ISSUES.md` (header; 26 open, by counting).
+
+**Left to the user:**
+- the merge of `read-only-plots` into `main` (P5); 04 does not merge;
+- 03's store, `~/ScienceData/ChamPBH-rehearsals/read-only-plots/`, kept; removing it is the
+  user's (README §3);
+- the run scripts' lines (§4.13 point 1): `--ray-address 127.0.0.1:6380` on `run()`'s `main.py`
+  call and on the plot line, and the cluster started and stopped with `ray_cluster.sh`;
+- the science rebuild, held until `jordan-normalization` lands (the user's ruling of 2026-10-13).
+
+**Recorded and not opened** (README §1, "Out of scope"; they hold in both open modes):
+- with `tags=[]`, two validated rows for one model that differ only by tag raise
+  `MultipleResultsFound`;
+- `AdiabaticHistory.build` and `BBNData.build` do not filter on `validated`
+  (`dk-and-rpk-migration` log 09, Observation 3).
+
+Offered at 02's review as housekeeping and not done: `plot_by_beta.py`'s `ProfileAgent` label still
+reads `plot_ScalarModel` (log 02, Observation 1; cosmetic).

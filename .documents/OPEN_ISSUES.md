@@ -1,6 +1,6 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-13 · **26 open**: 4 on the `review-remediation` board (closed
+**Last updated:** 2026-10-14 · **26 open**: 4 on the `review-remediation` board (closed
 2026-09-30), none now assigned; 2 on the `production-readiness` board
 (closed 2026-09-30); 4 on the `run-integrity` board (closed 2026-09-30); 9 on the
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`;
@@ -15,7 +15,9 @@ wrote the documents and the handover and closed the campaign, opening and closin
 the orchestrator's review of prompt 02 opened one, 2026-10-12; prompt 05 opened one, 2026-10-12;
 prompt 08 closed one and opened one, 2026-10-12; prompt 09 opened one, 2026-10-13; prompts 10 and 11 opened and
 closed none; closed 2026-10-13, 12 of 12 prompts landed; one assigned on 2026-10-13 to `read-only-plots`,
-planned the same day, §1.12, and resolved by its prompt 02 the same day).
+planned the same day, §1.12, and resolved by its prompt 02 the same day);
+`read-only-plots` (planned 2026-10-13; closed 2026-10-14, 4 of 4 prompts landed) was assigned that one
+issue and closed it with prompt 02, opened none and leaves none open.
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that

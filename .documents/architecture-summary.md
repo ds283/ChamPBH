@@ -26,6 +26,7 @@ ChamPBH/
 ├── utilities.py                     # Timing, formatting, iteration helpers
 ├── constants.py                     # Physical constants
 ├── extract_common.py                # Post-hoc data extraction for analysis
+├── plot_inputs.py                   # What the plot scripts read from a store before any history lookup (read-only)
 ├── plot_by_beta.py                  # Plotting driver (Ray remote)
 ├── plot_ScalarModel.py              # Scalar field detailed plots
 ├── exponential.yaml                 # Example run configuration
@@ -139,6 +140,28 @@ ChamPBH/
 > `kick_threshold_curve`, `build_history_record`, the four figure functions, `write_histories_csv`,
 > `CSV_COLUMNS`), so that a test can import them. `plot_by_beta.py` itself still parses `sys.argv`
 > and calls `ray.init` at import and is checked by `ast`, not run, in the tests.
+
+> **Note, 2026-10-14 (`read-only-plots`, prompts 01 to 03).** The tree above gains `plot_inputs.py`.
+> It holds what `plot_by_beta.py` and `plot_ScalarModel.py` each used to carry: the lookups they make
+> before any history, as functions of a pool, so that a test can drive them on a stand-in store.
+> They are `parameters` (the two tolerances, `T_init`, `phi_init` and `pi_init`), `stored_grid` (the
+> stored β, M and Λ, by `read_table`), `potentials`, `couplings`, `models` and `T_stop`, with the
+> exception `PlotOptionNotStored`. It parses nothing and starts no Ray at import. Both scripts now
+> open their pool with `ShardedPool(read_only=True)`, so a plot run changes no file of the store it
+> reads (verified under real Ray, `.documents/read-only-plots-verification.md` §1). A read-only pool
+> refuses a lookup that would insert, and what a refusal means depends on the lookup:
+> - **a parameter** (`--abs-tol`, `--rel-tol`, `--T-init-GeV`, `--phi-init-Mp`, the constant
+>   π = 0, and `--T-stop-GeV`) the build did not store stops the run: the script prints
+>   `!! plot: the store holds no …`, naming the option and its value, to stderr and exits 2, before
+>   the baseline and any figure (the plot run must be given the options the build used);
+> - **a potential or a coupling** never stored is skipped, with one warning line each and a count;
+>   every other combination is plotted, in the order the scripts used before.
+>
+> The history lookups cannot be refused and are unchanged: a missing history is an unavailable
+> object, as before. Both scripts also refuse `--drop` (exit 2, before Ray starts), since a plot run
+> drops nothing; `--prune-unvalidated` is `main.py`'s and is ignored by them. A read-only pool starts
+> no `SerialPoolBroker`. Since `read-only-plots` prompt 01 every driver that starts Ray also needs
+> `--ray-address` (§5.1).
 
 ---
 
@@ -269,7 +292,9 @@ constraint is respected per shard. What the package provides, by module:
 
 The three drivers that open a pool (`main.py`, `plot_by_beta.py`, `plot_ScalarModel.py`) each call
 `ShardedPool(…)` in a `with` block with these arguments; the constructor's sixteen parameters, and
-what the package does with each, are contract §1. `main.py --inventory` does not open a pool: it
+what the package does with each, are contract §1. `main.py`'s pool writes; the two plot scripts'
+pools pass `read_only=True` (and no `shards=` and no `drop_tables=`), so they read the finished
+store and change nothing in it (`plot_inputs.py`). `main.py --inventory` does not open a pool: it
 calls `read_inventory` on the closed store, read-only and before Ray starts, and prints it with
 `tools/inventory_report.py`.
 
@@ -428,8 +453,8 @@ Uses `configargparse` (a drop-in `argparse` replacement) so that every CLI argum
 - `--db-timeout SECS` (default 60)
 - `--profile-db PATH`
 - `--job-name LABEL`
-- `--prune-unvalidated` (default True)
-- `--drop {scalar-model,adiabatic-history,bbn-data}`
+- `--prune-unvalidated` (default True; `main.py`'s, ignored by the plot scripts)
+- `--drop {scalar-model,adiabatic-history,bbn-data}` (`main.py`'s: the plot scripts refuse it, exit 2, before Ray starts)
 
 *Integration:*
 - `--abs-tol FLOAT` (default 1e-8)

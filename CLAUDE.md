@@ -76,7 +76,7 @@ invariants that hold across all of them:
   the repository root:
   ```bash
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .   # 18 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 114 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 152 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .   # 63 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 34 tests
   ```
@@ -84,9 +84,9 @@ invariants that hold across all of them:
   capped at ten minutes, so run it in two halves:
   ```bash
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 61 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 53 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 91 tests
   ```
-  (The counts are those of 2026-10-13.) They **must not need a Ray cluster or a persistent
+  (The counts are those of 2026-10-14.) They **must not need a Ray cluster or a persistent
   datastore**. A test may build a temporary
   SQLite datastore in a `tempfile` directory, through `datastorekit`'s undecorated actor
   (`standin_pool.DatastoreClass`) inside ChamPBH's stand-in cluster (`StoreFixtures/standin_pool.py`,
@@ -115,6 +115,8 @@ invariants that hold across all of them:
 - **Long-running jobs.** Production pipeline runs (`main.py` with a datastore) are the user's and
   are made on another machine; no campaign prompt starts one. Nothing a prompt runs should take
   longer than a few PRyMordial solves. There is no run registry in this repository.
+- **The plot scripts** (`plot_by_beta.py`, `plot_ScalarModel.py`) read a store read-only, through
+  `plot_inputs.py`, and stop (exit 2) if their options do not match the ones the build used.
 - **Ray on this machine.** A run that needs a cluster here starts ChamPBH's isolated one with
   `.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh start "<purpose>"` (its own temp dir
   and ports, GCS 6380, under the rehearsal lock shared with StochasticInstantons and SecondaryGWKit),
