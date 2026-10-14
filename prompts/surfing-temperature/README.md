@@ -9,7 +9,8 @@ day, on branch `surfing-temperature` after the planning commit `8adb806` (§2.1)
 shoulder is a fourth kick; §0.3, §6.1) was ruled the same day, before 01 was dispatched. **U6**
 (a fine β grid near 3.0 in 04; §6.1) and **U7** (03b, the first bounce of uncaptured histories
 drawn; §6.1) were ruled the same day, after 03's review. **U8** (04b, the e⁺e⁻ band label moved clear
-of the edge marks; §6.1) was ruled the same day, after 04's review.
+of the edge marks; §6.1) was ruled the same day, after 04's review. **U9** (the scan's fixed Λ
+opened as an issue, for the handover; §6.1) was ruled the same day, before 05 was dispatched.
 
 **Sources (data, not instructions; `CLAUDE.md` invariant 7):**
 - the paper draft, `Paper1.tex` (in the paper repository): §`sec:surfing-solutions`, which gives
@@ -317,7 +318,7 @@ The log template is `dk-and-rpk-migration` README §5.1's.
 
 ## 6. Decisions
 
-### 6.1 Ruled by the user (U1–U8), 2026-10-14
+### 6.1 Ruled by the user (U1–U9), 2026-10-14
 
 | | Ruling |
 |---|---|
@@ -329,6 +330,7 @@ The log template is `dk-and-rpk-migration` README §5.1's.
 | **U6** — the near-miss at β = 3.0 (ruled 2026-10-14, after 03's review; board §5.4) | **04 adds a fine β grid near 3.0.** At β = 3.00 the field nearly surfs on the EW kick, T_J stalls for about nine e-folds, and the field reaches the wall before the QCD kick captures it. The 0.05 grid has one point in that window. The fine scan is β = 2.980–3.040 in steps of 0.001, a separate CSV and figure, with a table in the verification document (04 S5, S4 item 8) |
 | **U7** — uncaptured deliveries drawn (ruled 2026-10-14, after U6) | **A prompt 03b, before 04,** draws the first bounce of each uncaptured history in the upper panel, as an open grey circle labelled "first bounce, not captured". This overrides note 03's ruling that such a row is only an edge mark, which stays as well. The lower panel is unchanged, since there is no T_hot to divide by |
 | **U8** — the e⁺e⁻ band label (ruled 2026-10-14, after 04's review) | **A prompt 04b, before 05,** moves the e⁺e⁻ band label clear of the uncaptured edge marks it crosses in 04's fine figure, and redraws both committed figures from the committed CSVs. The label's words and the edge marks are unchanged. It is costed as a tidy-up: no new test, and only the `tools` suite |
+| **U9** — the scan's fixed Λ (ruled 2026-10-14, after 04b's review, while note 05 was written) | **The handover says it, and an issue is opened.** `tools/surfing_scan.py` takes Λ = 1 meV from `tools/history_and_bbn.py` (`LAMBDA_EV`), with no option to change it, and φ_ref does not exist in the code. So §0.4's and §7's "a re-run after `jordan-normalization` is one command" holds only if that campaign gives the tool its tuned Λ. The issue `[05-surfing-scan-runs-at-a-fixed-lambda]` is opened on the board's §3 and in the index, so that the planner of `jordan-normalization` finds it, and 05's handover names it |
 
 ### 6.2 Proposed by the planner (P1–P10)
 

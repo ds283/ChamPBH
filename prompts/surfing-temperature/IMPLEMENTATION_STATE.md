@@ -1,7 +1,8 @@
 # surfing-temperature campaign — implementation state
 
 **Last updated:** 2026-10-14 · **Status: LIVE — 7 of 7 prompts written, 6 of 7 landed (01, 02, 03, 03b, 04, 04b). U1–U8 and P1–P10
-ruled by the user on 2026-10-14 (README §6); P1–P10 as proposed.**
+ruled by the user on 2026-10-14 (README §6); P1–P10 as proposed. U9 ruled 2026-10-14, before 05:
+one issue open (§3).**
 The plan is [`README.md`](README.md), written on 2026-10-14 on `main` at `f41b104`. Its planning
 commit `8adb806` is the first on branch `surfing-temperature`, cut from `main` at `f41b104` (P10).
 
@@ -14,8 +15,8 @@ stored, and no production code path changes.
 **Code:** `extract_common.py`, `ComputeTargets/ScalarModel.py` (a new function only), new
 `tools/surfing_scan.py` and `tools/plot_surfing_temperature.py` ·
 **Verification:** `.documents/surfing-temperature-verification.md` (created by 04) ·
-**Index:** [`.documents/OPEN_ISSUES.md`](../../.documents/OPEN_ISSUES.md) (no section yet; none
-opened or assigned)
+**Index:** [`.documents/OPEN_ISSUES.md`](../../.documents/OPEN_ISSUES.md) §1.13 (one opened, U9;
+none assigned)
 
 > **Maintenance rule.** Whenever an entry is added to, narrowed in, or closed out of §3 or §4
 > below, [`.documents/OPEN_ISSUES.md`](../../.documents/OPEN_ISSUES.md) is updated **in the same
@@ -89,7 +90,27 @@ before each dispatch.
 
 ## 3. Active and unresolved issues
 
-None opened by this campaign.
+### `[05-surfing-scan-runs-at-a-fixed-lambda]`
+
+**Opened:** 2026-10-14 by the orchestrator, while writing note 05, and ruled by the user the same
+day (U9, README §6.1). **Not fixed:** the campaign's code is finished, and the change belongs to
+whichever campaign makes Λ an output.
+
+- **What.** `tools/surfing_scan.py` builds every history's potential with
+  `tools.history_and_bbn.LAMBDA_EV`, 1e-3 eV (`tools/history_and_bbn.py:111`; imported at
+  `tools/surfing_scan.py:106-112`, used at `:210-216`). It has no option to change Λ, and φ_ref does
+  not exist in the code. A resumed run is refused if a row's `Lambda_eV` differs from the tool's
+  (`_INPUT_MATCH`, `:155`), so one CSV holds one Λ. README §0.4 and §7, and the verification
+  document §1.7, say that the re-run after `jordan-normalization` is the same commands on that
+  campaign's tree. That holds only if that campaign changes the tool.
+- **Impact.** None on the committed results: every row and both sidecars record `Lambda_eV` = 0.001,
+  and the roots do not depend on Λ. What depends on Λ is set by the wall's timing: the largest
+  temperature, the second dip, delivery, and which β near 3.0 are captured at all (verification
+  §1.7, §1.8). The brief of `jordan-normalization` has Λ = 2.13 meV at β = 1.5 after tuning, and
+  there Λ is per history (β, M, φ*, n), not one value per scan.
+- **Next step.** For the planner of `jordan-normalization`, or a later campaign: give the scan the
+  tuned Λ and φ_ref per β (from that campaign's tuning, or by an option), let a CSV carry a Λ per
+  row, and then re-run §1.1's commands. Not assigned: `jordan-normalization` has no board yet.
 
 ## 4. Resolved issues
 
@@ -654,3 +675,10 @@ found a third of a pixel more than §1.2 allows, and the user accepted it.
 - **For the next note (05):**
   - README §0.4/§7's capture claim needs qualifying in the handover (from §5.5);
   - the figures' lower limit is now `min(ys) / 8.0`. 05 changes no figure.
+
+**U9, before 05 (2026-10-14).** Writing note 05, the orchestrator read how `tools/surfing_scan.py`
+sets Λ. It imports `LAMBDA_EV` = 1e-3 eV from `tools/history_and_bbn.py` and has no option for it,
+so README §0.4's and §7's "a re-run after `jordan-normalization` is one command" holds only if that
+campaign changes the tool. **The user ruled (U9) that the handover says so and that an issue is
+opened**, so that the planner of `jordan-normalization` finds it: `[05-surfing-scan-runs-at-a-fixed-lambda]`,
+§3 above and the index's §1.13. 05's handover names it, and 05's records count it.

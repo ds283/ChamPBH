@@ -1,6 +1,6 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-14 · **26 open**: 4 on the `review-remediation` board (closed
+**Last updated:** 2026-10-14 · **27 open**: 4 on the `review-remediation` board (closed
 2026-09-30), none now assigned; 2 on the `production-readiness` board
 (closed 2026-09-30); 4 on the `run-integrity` board (closed 2026-09-30); 9 on the
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`;
@@ -17,7 +17,9 @@ prompt 08 closed one and opened one, 2026-10-12; prompt 09 opened one, 2026-10-1
 closed none; closed 2026-10-13, 12 of 12 prompts landed; one assigned on 2026-10-13 to `read-only-plots`,
 planned the same day, §1.12, and resolved by its prompt 02 the same day);
 `read-only-plots` (planned 2026-10-13; closed 2026-10-14, 4 of 4 prompts landed) was assigned that one
-issue and closed it with prompt 02, opened none and leaves none open.
+issue and closed it with prompt 02, opened none and leaves none open; 1 on the
+`surfing-temperature` board (planned 2026-10-14; opened by the orchestrator before prompt 05 and
+ruled by the user, U9, 2026-10-14).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -36,7 +38,8 @@ the two disagree, the board is right.
 [`science-readiness`](../prompts/science-readiness/IMPLEMENTATION_STATE.md) ·
 [`bbn-tolerance`](../prompts/bbn-tolerance/IMPLEMENTATION_STATE.md) ·
 [`dk-and-rpk-migration`](../prompts/dk-and-rpk-migration/IMPLEMENTATION_STATE.md) ·
-[`read-only-plots`](../prompts/read-only-plots/IMPLEMENTATION_STATE.md)
+[`read-only-plots`](../prompts/read-only-plots/IMPLEMENTATION_STATE.md) ·
+[`surfing-temperature`](../prompts/surfing-temperature/IMPLEMENTATION_STATE.md)
 
 ## 1. Open, by owning board
 
@@ -219,4 +222,12 @@ deletes its row here.
 
 None open: `[08-plot-scripts-open-read-write-pools]` was resolved by prompt 02 on 2026-10-13
 (`dk-and-rpk-migration` board §4).
+
+### 1.13 `surfing-temperature` — [board §3](../prompts/surfing-temperature/IMPLEMENTATION_STATE.md)
+
+One opened by the orchestrator on 2026-10-14, while writing note 05, and ruled by the user (U9).
+
+- `[05-surfing-scan-runs-at-a-fixed-lambda]` — `tools/surfing_scan.py` runs at the fixed
+  Λ = 1 meV of `tools/history_and_bbn.py`, with no option for it, so a re-run after
+  `jordan-normalization` needs the tool given that campaign's tuned Λ; for that campaign's planner.
 
