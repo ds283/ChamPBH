@@ -1,6 +1,6 @@
 # surfing-temperature campaign — implementation state
 
-**Last updated:** 2026-10-14 · **Status: LIVE — 5 of 5 prompts written, 1 landed (01). U1–U5 and P1–P10
+**Last updated:** 2026-10-14 · **Status: LIVE — 5 of 5 prompts written, 1 of 5 landed (01). U1–U5 and P1–P10
 ruled by the user on 2026-10-14 (README §6); P1–P10 as proposed.**
 The plan is [`README.md`](README.md), written on 2026-10-14 on `main` at `f41b104`. Its planning
 commit `8adb806` is the first on branch `surfing-temperature`, cut from `main` at `f41b104` (P10).
@@ -27,7 +27,7 @@ opened or assigned)
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | [Reachability roots](01-reachability-roots.md) | `find_kicks`, `reachability_roots`: kick windows, hot and cold roots, stability sign, merged intervals | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | this commit | [log](logs/01-reachability-roots.md) |
+| 01 | [Reachability roots](01-reachability-roots.md) | `find_kicks`, `reachability_roots`: kick windows, hot and cold roots, stability sign, merged intervals | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | `2c98370` | [log](logs/01-reachability-roots.md) |
 | 02 | [Surfing turning points and the driver](02-surfing-turning-points-and-driver.md) | `surfing_turning_points` on the dense output; `tools/surfing_scan.py`; five β run, cost projected | Opus | ✍️ 2026-10-14 | ⬜ | — | — |
 | 03 | [The plot](03-plot-surfing-temperature.md) | `tools/plot_surfing_temperature.py`: roots and measured temperatures against β, two panels | Sonnet | ✍️ 2026-10-14 | ⬜ | — | — |
 | 04 | [Run the scan](04-run-the-scan.md) | 79 β, 1.10–5.00, CSV and figure committed; verification document (U4) | Opus | ✍️ 2026-10-14 | ⬜ | — | — |
@@ -40,6 +40,10 @@ opened or assigned)
 
 Orchestrator notes are written one prompt at a time, in [`orchestrator/`](orchestrator/), just
 before each dispatch.
+
+| Note | Commit | Used for |
+|---|---|---|
+| [`orchestrator/prompt-01.md`](orchestrator/prompt-01.md) | `2f38193` | 01 (reviewed 2026-10-14) |
 
 ### 1.1 Items
 
@@ -69,7 +73,7 @@ before each dispatch.
 
 | Gate | Holds when | Prompt | State |
 |---|---|---|---|
-| Roots | on a stub Σ the roots equal the analytic ones; on the production EOS the peaks and thresholds equal README §0.3's and the paper's, and β_th(root) = β | 01 | ✅ 2026-10-14 (this commit) |
+| Roots | on a stub Σ the roots equal the analytic ones; on the production EOS the peaks and thresholds equal README §0.3's and the paper's, and β_th(root) = β | 01 | ✅ 2026-10-14 (`2c98370`) |
 | Turning points | on stub interpolants every crossing of β π/M_P = −1 is found in order and with its direction, none after the first bounce; on a real history \|1 + β π/M_P\| < 1e-8 at each, and delivery equals `first_bounce` | 02 | ⬜ |
 | Scan | every β of the grid has a CSV row (a failure is a row with its reason); every first bounce lies above T_stop; two β reproduce as strings; the figure is drawn from the CSV alone | 04 | ⬜ |
 
@@ -130,7 +134,7 @@ interval both kicks' records carry the interval's roots, and that clarification 
 
 ### 5.2 After prompt 01 (2026-10-14)
 
-Prompt 01 landed in this commit; the log is [`logs/01-reachability-roots.md`](logs/01-reachability-roots.md).
+Prompt 01 landed in `2c98370`; the log is [`logs/01-reachability-roots.md`](logs/01-reachability-roots.md).
 `find_kicks` and `reachability_roots` are in `extract_common.py`, with
 `ComputeTargets/tests/test_reachability_roots.py` (15 tests).
 - **Four kicks** on the production EOS, as U5 ruled: `EW` 53.262 GeV (Σ 0.037436), `QCD` 0.18189 GeV
@@ -147,3 +151,39 @@ Prompt 01 landed in this commit; the log is [`logs/01-reachability-roots.md`](lo
 - **Deviations:** one tagged STRUCTURALLY REQUIRED (the brief's narrowing for `T_peak`) and five
   IMPLEMENTATION CHOICE, none UNINTENDED DRIFT. The main one: extrema are polished by `brentq` on
   `dw_dlogT`, since the bounded minimiser alone locates a flat peak only to about 1e-8 in ln T.
+
+**Orchestrator review of prompt 01** (2026-10-14, Claude Opus 5.5, against `2c98370`; note
+[`orchestrator/prompt-01.md`](orchestrator/prompt-01.md) §3). All ten checks pass.
+- **Scope.** The four files of the prompt's §5, and the untracked set unchanged. By `ast` against
+  `2f38193`, `extract_common.py` differs only by the `scipy.optimize` import and the new constants and
+  functions after `kick_threshold_curve`. Black is clean.
+- **By reading**, the method is sound:
+  - the roots alternate hot, cold, because Σ_eff − c < 0 at both ends;
+  - a root on a grid point is found once;
+  - each trough is the argmin between two kicks, so a ripple below the floor cannot split a window;
+  - each `T_peak` is added to the root grid, so a narrow pair just above threshold is not missed;
+  - the slope is −3 (dw/d ln T)/Σ.
+- **An independent probe** reproduces the note's table:
+  - the four `T_peak` to 2e-6 and Σ_peak to 5e-7;
+  - every root at β = 1.2, 2.0, 2.1, 2.2, 3.1 and 5.0;
+  - `merged` unset at 2.1, and QCD ↔ `mu-pi` from 2.2;
+  - β_th(root) = β to 2.4e-14;
+  - all None at β = 1.10, and only a narrow QCD pair at 1.1075.
+
+  At each threshold, and 1e-9 either side of it, there is no exception and the result is consistent
+  (None, or a degenerate pair). `n_grid` 500 and 5000 give the same kicks and roots to 1e-13.
+- **The breakages.** All four replay with `git apply` in bash and fail exactly the tests the log
+  names (6, 6, 6, 3), and the tree is clean after each. The tests pin the root order about
+  `T_peak`, the slope signs, the merged record on the production EOS at 2.2, and the four labels.
+- **Suites at `2c98370`**, serially: 18, 61 + 106, 69 and 34, all OK, at load 9–26.
+- **Residue fixed here:** the SHA for "this commit", the notes table, the status line.
+- **The agent's `/tmp/x`**, which the log owns up to, is gone, and nothing else was written outside
+  the scratchpad. No issue is opened.
+- **For the next notes:**
+  - **02.** `find_kicks` is called with the table's ends, which today are reachable only through
+    the private `cosmology._eos._T_min`/`_T_max`. The kick's key is `label`, and the record's key is
+    `kick`. `T_cold` for a QCD capture above β = 2.154 is the merged edge.
+  - **03.** `reachability_roots` costs 0.077 s per β, so the fine grid of 781 β takes about 60 s.
+    `mu-pi`, like ee, is probably never the first kick to capture, so the "reachable, not surfed"
+    label probably applies to it as well.
+

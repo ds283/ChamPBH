@@ -1,7 +1,7 @@
 # Log — surfing-temperature 01: reachability roots
 
 **Subject:** `find_kicks` and `reachability_roots` in `extract_common.py`, with their tests.
-**Commit:** this commit · **Date:** 2026-10-14 · **Branch:** `surfing-temperature`, parent `2f38193` ·
+**Commit:** `2c98370` · **Date:** 2026-10-14 · **Branch:** `surfing-temperature`, parent `2f38193` ·
 **Model:** Claude Sonnet 5.5 · **Result:** landed. R1, R2 and R3 done; the gate "Roots" holds.
 Four kicks on the production EOS (U5), the expected count, so §4's first stop did not fire.
 
@@ -165,7 +165,7 @@ Command: `PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/
 
 ## The deliberate-breakage record
 
-Each diff is against `extract_common.py` at this commit. Each was checked with `git apply --check`
+Each diff is against `extract_common.py` at `2c98370`. Each was checked with `git apply --check`
 and `git apply -R --check`, and replayed in `bash` from the final tree (applied, then reversed, and
 the file compared with the committed one). None was committed. Test command for each:
 `PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_reachability_roots.py'`.
@@ -253,7 +253,7 @@ interval's two ends instead.
 
 ## State handed to the next prompt
 
-- **Branch** `surfing-temperature`, HEAD is this commit, on top of `2f38193`. Nothing staged or
+- **Branch** `surfing-temperature`, HEAD is `2c98370`, on top of `2f38193`. Nothing staged or
   modified after it. The untracked entries are the user's, as before.
 - **Counts:** CosmologyModels 18, ComputeTargets 167 (61 + 106), ObjectFactories 69, tools 34.
 - **Available in `extract_common.py`:** `find_kicks(cosmology, T_lo, T_hi, n_grid=20000)` and
@@ -274,4 +274,4 @@ interval's two ends instead.
   `kick_threshold_curve`, `plot_by_beta.py` and every EOS class are untouched.
 - **One import is new** in `extract_common.py`, `scipy.optimize`, which both plot scripts now pay.
 - **No issue opened;** `.documents/OPEN_ISSUES.md` is untouched.
-- **The breakage diffs** are in this log and replay from a clean tree at this commit.
+- **The breakage diffs** are in this log and replay from a clean tree at `2c98370`.
