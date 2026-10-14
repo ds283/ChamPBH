@@ -149,7 +149,10 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
 
         redshift_table = tables["redshift"]
 
-        # find if there is an existing record for this model
+        # find if there is an existing record for this model; notice that we query only for
+        # validated data, as ScalarModel.build does, so a row whose write was interrupted is not
+        # found by a pool that did not prune it at open (2026-10-14). validate() marks a stored
+        # failure validated, so failures are still found
         query = sqla.select(
             table.c.serial,
             table.c.failure,
@@ -165,6 +168,7 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
             table.c.NP_compute_time,
             table.c.BBN_compute_time,
         ).filter(
+            table.c.validated == True,
             table.c.model_serial == model_proxy.store_id,
             table.c.version == version_serial,
         )

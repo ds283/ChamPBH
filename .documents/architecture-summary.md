@@ -1025,7 +1025,7 @@ def to_float(val) -> float:
 
 **`RayWorkPool` resilience:** The work pool does not bail out if individual tasks fail — it continues processing remaining items. The `_do_not_populate` two-pass pattern means failed objects are skipped in downstream stages (checked via `obj.failure`).
 
-**Database startup cleanup:** `prune_unvalidated=True` causes each `Datastore` actor to delete any objects created but not yet validated on the previous run. This prevents partial results from being presented as complete.
+**Database startup cleanup:** `prune_unvalidated=True` causes each `Datastore` actor to delete any objects created but not yet validated on the previous run. This prevents partial results from being presented as complete. The lookups do not depend on it: `ScalarModel.build`, `AdiabaticHistory.build` and `BBNData.build` return only validated rows (the last two since 2026-10-14), so a pool that does not prune, such as the plot scripts' read-only pools or `main.py --no-prune-unvalidated`, does not present one either.
 
 ---
 

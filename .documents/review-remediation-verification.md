@@ -1546,6 +1546,15 @@ two scripts were **read only**.
    then. Also the user's: the merge of `read-only-plots` into `main`; removing the rehearsal store
    `~/ScienceData/ChamPBH-rehearsals/read-only-plots/`; and the run scripts themselves.
 
+**Added 2026-10-14, after the close, by the user's instruction.** Point 4's second behaviour is
+fixed, outside any campaign: `AdiabaticHistory.build` and `BBNData.build` now return only validated
+rows, as `ScalarModel.build` does, so a pool that does not prune at open (the plot scripts'
+read-only pools, `main.py --no-prune-unvalidated`) no longer finds a row whose write was
+interrupted. A stored BBN failure is marked validated by `validate`, so failures are still found.
+`ObjectFactories/tests/test_validated_lookups.py` (6 tests) fails on the code before the fix and
+passes after it. Nothing a build computes or stores changes. The first behaviour of point 4 (two
+validated rows differing only by tag, with `tags=[]`) still holds.
+
 ---
 
 ## 5. Reproduce

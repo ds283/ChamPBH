@@ -77,7 +77,7 @@ invariants that hold across all of them:
   ```bash
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .   # 18 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 152 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .   # 63 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .   # 69 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 34 tests
   ```
   `ComputeTargets/tests` takes about 200 s in one run, and longer on a loaded machine; a Bash call is

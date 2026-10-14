@@ -146,7 +146,9 @@ class sqla_AdiabaticHistoryFactory(SQLAFactoryBase):
 
         max_Q_value_cols = [table.c[f"max_abs_Q_{label}"] for label in self._Q_labels]
 
-        # find if there is an existing record for this model
+        # find if there is an existing record for this model; notice that we query only for
+        # validated data, as ScalarModel.build does, so a row whose write was interrupted is not
+        # found by a pool that did not prune it at open (2026-10-14)
         query = sqla.select(
             table.c.serial,
             *max_Q_value_cols,
@@ -154,6 +156,7 @@ class sqla_AdiabaticHistoryFactory(SQLAFactoryBase):
             table.c.label,
             table.c.compute_time,
         ).filter(
+            table.c.validated == True,
             table.c.model_serial == model_proxy.store_id,
             table.c.version == version_serial,
         )
