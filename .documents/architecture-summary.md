@@ -245,14 +245,20 @@ task_builder(item)
 
 ### 4.1 The package, and where ChamPBH meets it
 
-The layer is [`datastorekit`](https://github.com/ds283/DatastoreKit), pinned to the tag `v0.3.0` in
+The layer is [`datastorekit`](https://github.com/ds283/DatastoreKit), pinned to the tag `v0.4.0` in
 `requirements.txt` (never an editable install). Its specification for a client is
 `docs/client-contract.md` at that tag
-([§1](https://github.com/ds283/DatastoreKit/blob/v0.3.0/docs/client-contract.md) the pool's
+([§1](https://github.com/ds283/DatastoreKit/blob/v0.4.0/docs/client-contract.md) the pool's
 constructor, §2 the keys of `register()`, §3 the factory hooks, §4 the inventory's declarations,
 §5 the layer's own tables, §6 what the layer reads from a stored object, §7 the other entry
 points, §8 version-keyed lookups, §9 the changes after `v0.2.0`). Where this section and the
 contract differ, the contract is right.
+
+The pin moved from `v0.3.0` to `v0.4.0` on 2026-10-14. The release adds one module,
+`datastorekit.store_fingerprint` (contract §9.7), which takes, compares and lists a store's
+fingerprint from what `read_inventory` returns; the layer never calls it and nothing it writes or
+reads changed, so ChamPBH's stores and code are unaffected. ChamPBH does not call the module yet:
+it is there for the RunRegistry component, which needs this release.
 
 The database is a **sharded SQLite** store managed as a pool of Ray actors. Each actor owns one
 SQLite file, and a separate primary SQLite file records the shard topology. The shards are
