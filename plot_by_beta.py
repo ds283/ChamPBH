@@ -131,7 +131,7 @@ ray.init(address=args.ray_address)
 
 profile_agent = None
 if args.profile_db is not None:
-    label = f'{VERSION_LABEL}--plot_ScalarModel-primarydb-"{args.database}"-{datetime.now().replace(microsecond=0).isoformat()}'
+    label = f'{VERSION_LABEL}--plot_by_beta-primarydb-"{args.database}"-{datetime.now().replace(microsecond=0).isoformat()}'
 
     profile_agent = ProfileAgent.options(name="ProfileAgent").remote(
         db_name=args.profile_db,
