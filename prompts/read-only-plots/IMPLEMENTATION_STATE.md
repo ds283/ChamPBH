@@ -421,3 +421,15 @@ reads `plot_ScalarModel` (log 02, Observation 1; cosmetic).
 `prompts/INDEX.md`'s row (the log's prose use stays); the note's two lines (check 4). The status
 line and the notes' list were already right. Nothing opened. The merge of `read-only-plots` into
 `main` (P5) is the user's to ask for.
+
+**After the close (2026-10-14, by the user's instruction).**
+- **The `ProfileAgent` label.** `plot_by_beta.py` now labels its profile agent `plot_by_beta`
+  (`5740690`; log 02, Observation 1). The eleven test modules that read the script pass (121 tests).
+- **The run scripts.** `full_run_2026.6.0.sh` and `full_run_2026.6.0-refresh.sh` were edited in
+  place, as §4.13 point 1 says: a variable `RAY_ADDR` (default `127.0.0.1:6380`, overridable from the
+  environment) passed as `--ray-address` to `run()`'s `main.py` call and to the plot loop, and the
+  header comment naming `ray_cluster.sh start` / `stop`. `bash -n` passes on both. They stay
+  untracked and the user's. §4.12 point 3's other stale lines (`STORE_DIR`, the
+  `--prune-unvalidated` comment) are unchanged.
+- **The merge (P5).** `main` was fast-forwarded from `17fad8b` to `5740690` and pushed to GitHub;
+  the branch `read-only-plots` was deleted locally (it was never pushed).
