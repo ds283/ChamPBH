@@ -2,7 +2,7 @@
 
 **Subject:** `surfing_turning_points` beside `first_bounce`, the driver `tools/surfing_scan.py`,
 their tests, and five β run to measure the cost.
-**Commit:** this commit · **Date:** 2026-10-14 · **Branch:** `surfing-temperature`, parent
+**Commit:** `f166b31` · **Date:** 2026-10-14 · **Branch:** `surfing-temperature`, parent
 `f6440d1` · **Model:** Claude Opus 5.5 · **Result:** landed. T1–T5 done; the gate "Turning
 points" holds. No stop condition fired. The scan is projected at 4.0 minutes against P7's 60.
 
@@ -281,7 +281,7 @@ The β = 2.5 row, as written:
 ## The deliberate-breakage record
 
 - **How the diffs were made.** Each is against the final tree, and the file it touches is
-  byte-identical in this commit. Each was made by `diff -u` with `a/` and `b/` labels, checked with
+  byte-identical in `f166b31`. Each was made by `diff -u` with `a/` and `b/` labels, checked with
   `git apply --check` and `git apply -R --check`, and replayed in `bash`: applied, both modules
   run, reversed. The two files' `shasum` was compared before and after the replay.
 - **The commands:**
@@ -397,7 +397,7 @@ after its bounce.
 
 ## State handed to the next prompt
 
-- **The branch.** `surfing-temperature`, HEAD at this commit, on top of `f6440d1`. Nothing is
+- **The branch.** `surfing-temperature`, HEAD at `f166b31`, on top of `f6440d1`. Nothing is
   staged or modified after it. The untracked entries are the user's, as before.
 - **Counts:** CosmologyModels 18, ComputeTargets 176 (61 + 115), ObjectFactories 69, tools 49.
 - **In `ComputeTargets/ScalarModel.py`:** `SurfingCrossing(N, phi_Einstein, pi_Einstein,
@@ -432,4 +432,4 @@ after its bounce.
 - **The cost.** The scan is projected at 243 s (4.0 min) for all 79 β, plus about 2 s of setup.
   The longest history is β = 5.0, at 7.9 s. One invocation fits under the ten-minute cap.
 - **No issue opened;** `.documents/OPEN_ISSUES.md` is untouched.
-- **The breakage diffs** are in this log, and replay from a clean tree at this commit.
+- **The breakage diffs** are in this log, and replay from a clean tree at `f166b31`.

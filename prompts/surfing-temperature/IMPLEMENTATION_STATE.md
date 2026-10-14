@@ -28,7 +28,7 @@ opened or assigned)
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
 | 01 | [Reachability roots](01-reachability-roots.md) | `find_kicks`, `reachability_roots`: kick windows, hot and cold roots, stability sign, merged intervals | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | `2c98370` | [log](logs/01-reachability-roots.md) |
-| 02 | [Surfing turning points and the driver](02-surfing-turning-points-and-driver.md) | `surfing_turning_points` on the dense output; `tools/surfing_scan.py`; five β run, cost projected | Opus | ✍️ 2026-10-14 | ✅ 2026-10-14 | this commit | [log](logs/02-surfing-turning-points-and-driver.md) |
+| 02 | [Surfing turning points and the driver](02-surfing-turning-points-and-driver.md) | `surfing_turning_points` on the dense output; `tools/surfing_scan.py`; five β run, cost projected | Opus | ✍️ 2026-10-14 | ✅ 2026-10-14 | `f166b31` | [log](logs/02-surfing-turning-points-and-driver.md) |
 | 03 | [The plot](03-plot-surfing-temperature.md) | `tools/plot_surfing_temperature.py`: roots and measured temperatures against β, two panels | Sonnet | ✍️ 2026-10-14 | ⬜ | — | — |
 | 04 | [Run the scan](04-run-the-scan.md) | 79 β, 1.10–5.00, CSV and figure committed; verification document (U4) | Opus | ✍️ 2026-10-14 | ⬜ | — | — |
 | 05 | [Close](05-close.md) | documents, handover, index, board | Sonnet | ✍️ 2026-10-14 | ⬜ | — | — |
@@ -44,6 +44,7 @@ before each dispatch.
 | Note | Commit | Used for |
 |---|---|---|
 | [`orchestrator/prompt-01.md`](orchestrator/prompt-01.md) | `2f38193` | 01 (reviewed 2026-10-14) |
+| [`orchestrator/prompt-02.md`](orchestrator/prompt-02.md) | `f6440d1` | 02 (reviewed 2026-10-14) |
 
 ### 1.1 Items
 
@@ -74,7 +75,7 @@ before each dispatch.
 | Gate | Holds when | Prompt | State |
 |---|---|---|---|
 | Roots | on a stub Σ the roots equal the analytic ones; on the production EOS the peaks and thresholds equal README §0.3's and the paper's, and β_th(root) = β | 01 | ✅ 2026-10-14 (`2c98370`) |
-| Turning points | on stub interpolants every crossing of β π/M_P = −1 is found in order and with its direction, none after the first bounce; on a real history \|1 + β π/M_P\| < 1e-8 at each, and delivery equals `first_bounce` | 02 | ✅ 2026-10-14 (this commit) |
+| Turning points | on stub interpolants every crossing of β π/M_P = −1 is found in order and with its direction, none after the first bounce; on a real history \|1 + β π/M_P\| < 1e-8 at each, and delivery equals `first_bounce` | 02 | ✅ 2026-10-14 (`f166b31`) |
 | Scan | every β of the grid has a CSV row (a failure is a row with its reason); every first bounce lies above T_stop; two β reproduce as strings; the figure is drawn from the CSV alone | 04 | ⬜ |
 
 ## 3. Active and unresolved issues
@@ -189,7 +190,7 @@ Prompt 01 landed in `2c98370`; the log is [`logs/01-reachability-roots.md`](logs
 
 ### 5.3 After prompt 02 (2026-10-14)
 
-Prompt 02 landed in this commit; the log is
+Prompt 02 landed in `f166b31`; the log is
 [`logs/02-surfing-turning-points-and-driver.md`](logs/02-surfing-turning-points-and-driver.md).
 - **What shipped.** `SurfingCrossing` and `surfing_turning_points(result, coupling)` after
   `first_bounce` in `ComputeTargets/ScalarModel.py` (129 lines added, none removed; not called by
@@ -224,3 +225,59 @@ Prompt 02 landed in this commit; the log is
 - **Counts:** CosmologyModels 18, ComputeTargets 176 (61 + 115), ObjectFactories 69, tools 49.
 - **The breakages:** each of the five fails a named new test (log).
 - **No issue opened;** the index is untouched.
+
+**Orchestrator review of prompt 02** (2026-10-14, Claude Opus 5.5, against `f166b31`; note
+[`orchestrator/prompt-02.md`](orchestrator/prompt-02.md) §3). All eleven checks pass.
+- **Scope.** The six files of the prompt's §5, and the untracked set unchanged. By `ast` against
+  `f6440d1`, `ScalarModel.py` differs only by `SurfingCrossing` and `surfing_turning_points`,
+  inserted after `first_bounce`. `compute_scalar_model` dumps identically.
+  `history_and_bbn.py`, `extract_common.py` and `config/` are untouched. Black is clean.
+- **By reading**, the method is sound:
+  - the walk ends at `first_bounce(result).N`, on the bounce's own step;
+  - g is read through `coupling.d_logOmega_dphi(φ)`;
+  - each step boundary is read once, so a zero there is counted once;
+  - `brentq` runs at xtol 1e-15.
+
+  `summarise` applies U1–U3 as written. It keeps delivery on an uncaptured row, labels the capture
+  by `find_kicks`'s windows and takes that kick's roots, the merged edge included. Floats are
+  written by `repr`, and the capture wrapper is removed in a `finally`.
+- **An independent probe.** The tool was run on β = 1.10, 1.15, 1.5, 2.0, 2.5, 3.0, 3.5 and 5.0,
+  on the committed code.
+  - Every row equals the note's table to its digits, step counts included, the merged `T_cold` at
+    2.5 too. At 1.10 and 3.0, `captured` is false and the delivery is present.
+  - This also covers the log's caveat that T5 ran before the function was restructured.
+  - On the same histories, `surfing_turning_points` equals the orchestrator's own finder bitwise.
+    With 0 or 32 interior samples the counts and directions are unchanged, and N moves by at most
+    2.3e-11 at β = 5. That is the conditioning of the late, shallow zeros, where |g| is at rounding
+    over that range.
+- **The tool's behaviour.**
+  - A re-run adds no row, leaves the CSV byte-identical and appends a resumed entry to the sidecar.
+  - `--phi-init-Mp 4` exits 2 and leaves the file unchanged.
+  - A run outside the root exits 2 and writes nothing.
+  - β = 1.5 and 3.5, re-run into a separate CSV, equal the first rows as strings, `wall_s` apart.
+    That is 04's S3 in miniature.
+  - `beta_grid(1.10, 5.00, 0.05)` gives 79 values, each equal to `round(1.10 + 0.05 k, 10)`.
+- **The breakages.** All five replay with `git apply` in bash, and each fails exactly the tests the
+  log names. The tree is clean after each. The stub tests pin the following:
+  - two zeros in one step;
+  - the stop at the bounce;
+  - a reflection before and between crossings;
+  - the wall-type `max` on the bounce's own step (h);
+  - g read through the coupling.
+
+  The real history pins |g| < 1e-8 and delivery's equality with `first_bounce`.
+- **Suites at `f166b31`**, serially: 18, 61 + 115, 69 and 49, all OK, at load 5–6.
+- **Residue fixed here:** the SHA for "this commit" (board and log), the notes table.
+- **Observation, not acted on.** A CSV left empty, by a run killed between creating the file and
+  writing its header, is refused on resume rather than resumed. A one-chunk scan makes this
+  unlikely, and the remedy is to delete the empty file. No issue is opened.
+- **For the next notes:**
+  - **03.**
+    - The sidecar is `{"runs": [...]}`, one entry per invocation, so a resumed CSV can carry more
+      than one `git_head`. 03's title must say which it shows.
+    - Uncaptured rows (β = 1.10 and 3.00 on the grid) carry a delivery, which F2 does not draw.
+    - At 32 of the 77 captured β, the largest T_J is the wall's turning of the field, so its
+      marker sits on the delivery marker. At β = 1.15–1.50 the two are equal to six digits.
+    - T5's CSV is in the session scratchpad at `agent02/t5/surfing_t5.csv`.
+  - **04.** The whole grid is one invocation of about 4 minutes, so the chunk plan is a single
+    chunk. `wall_s` includes the walk.
