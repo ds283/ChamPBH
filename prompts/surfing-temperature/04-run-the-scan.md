@@ -6,9 +6,10 @@
 after 03's review, hands it 02's cost projection and the chunk plan. It governs where it differs
 from this file.
 **Amended:** 2026-10-14, after 03's review, for the user's ruling **U6** (README §6.1): a fine
-β grid near 3.0 (S5), with its own CSV and figure, and S3 and S4 extended to use it.
+β grid near 3.0 (S5), with its own CSV and figure, and S3 and S4 extended to use it. Then, for
+**U7**, the gate includes 03b, which draws the first bounce of uncaptured histories.
 **Gate:**
-- 01, 02 and 03 landed and reviewed, with the gates "Roots" and "Turning points" holding;
+- 01, 02, 03 and 03b landed and reviewed, with the gates "Roots" and "Turning points" holding;
 - 02's projection of the full scan at or below P7's 60 minutes (board §5.3). If it is above, this
   prompt is not dispatched without the user's ruling;
 - on branch `surfing-temperature`, no tracked change in `git status` (the untracked set is 01's gate
@@ -26,7 +27,7 @@ PRyMordial, and no Ray.
 **Read first:**
 
 1. [`README.md`](README.md): §0.2, §0.4, §2.2 (04's charter), §4, §5 (rules 10 and 12), §6.
-2. Logs 01–03: "What shipped", "Observations not acted on" and "State handed to the next prompt".
+2. Logs 01–03b: "What shipped", "Observations not acted on" and "State handed to the next prompt".
    Log 02's T5 table and projection in particular.
 3. `tools/surfing_scan.py` and `tools/plot_surfing_temperature.py`: their options, the CSV, the
    sidecar and resume.
@@ -97,8 +98,8 @@ and how.
      - the window of β between them in which nothing captures;
      - how the first bounce's temperature moves across that window, and any β at which it jumps,
        with the rows either side;
-     - the second figure, linked, with a line saying that uncaptured rows appear only as edge
-       marks, so the table carries their delivery.
+     - the second figure, linked. An uncaptured row's first bounce appears in it as an open grey
+       circle (03b, U7), and the table carries the values.
 
      Item 3's dynamical threshold for EW is taken from this grid (to 0.001), beside the coarse grid's
      value and 01's analytic 3.0118. As everywhere in this document, these are measurements, not

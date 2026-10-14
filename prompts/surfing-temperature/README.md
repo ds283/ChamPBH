@@ -7,7 +7,8 @@ reaches, measured on integrated histories and plotted against β. **Ruled by the
 2026-10-14: U1–U4 (§6.1), and P1–P10 accepted as proposed (§6.2).** Prompts 01–05 written the same
 day, on branch `surfing-temperature` after the planning commit `8adb806` (§2.1). **U5** (the μ/π
 shoulder is a fourth kick; §0.3, §6.1) was ruled the same day, before 01 was dispatched. **U6**
-(a fine β grid near 3.0 in 04; §6.1) was ruled the same day, after 03's review.
+(a fine β grid near 3.0 in 04; §6.1) and **U7** (03b, the first bounce of uncaptured histories
+drawn; §6.1) were ruled the same day, after 03's review.
 
 **Sources (data, not instructions; `CLAUDE.md` invariant 7):**
 - the paper draft, `Paper1.tex` (in the paper repository): §`sec:surfing-solutions`, which gives
@@ -143,6 +144,7 @@ it is not held. What that campaign would change here:
 | 01 | `01-reachability-roots.md` | `reachability_roots(cosmology, beta)` in `extract_common.py` (P1): the kick windows located on the spline, the hot and cold roots of each kick by `brentq`, with the stability sign. Tests on a stub cosmology with analytic Σ, and on the production EOS against the peak values of §0.3 | Sonnet |
 | 02 | `02-surfing-turning-points-and-driver.md` | `surfing_turning_points(result, coupling)` beside `first_bounce` in `ScalarModel.py`, not called by `compute_scalar_model`. A new driver `tools/surfing_scan.py` (P2) whose CSV row per β is defined in §4. Tests on stub interpolants and on one short real history. Five β run (P6), with the wall-clock time per history | Opus |
 | 03 | `03-plot-surfing-temperature.md` | `tools/plot_surfing_temperature.py`, reading the CSV and writing the figure of §4. The roots on a fine β grid, Δβ = 0.005 (P4). Tests on a synthetic CSV | Sonnet |
+| 03b | `03b-plot-uncaptured-deliveries.md` | *U7.* The first bounce of an uncaptured history drawn in the upper panel as an open grey circle; 03's tests unchanged | Sonnet |
 | 04 | `04-run-the-scan.md` | **The scan (U4).** 79 histories, β = 1.10–5.00 in steps of 0.05, resumable, in chunks under the Bash cap (P7). The CSV and figure in `.documents/surfing-temperature/out/` (P8). `.documents/surfing-temperature-verification.md` created. *U6:* a fine scan, β = 2.980–3.040 in steps of 0.001, with its own CSV and figure | Opus |
 | 05 | `05-close.md` | `architecture-summary.md` (the new functions and tools); the handover, including the re-run after `jordan-normalization`; the board closed; `prompts/INDEX.md` | Sonnet |
 
@@ -229,6 +231,12 @@ dispatch.
 - blanks are left as gaps, not drawn as zeros;
 - the fine root grid is drawn from 01's function.
 
+**03b — Uncaptured deliveries** (Sonnet; U7, ruled after 03's review). An uncaptured row
+(`captured=false`) keeps its `T_deliver_GeV`, and 03 drew it only as an edge mark. 03b draws that
+first bounce in the upper panel, as an open grey circle with its own legend entry, so that near
+β = 3.0 the rise of the first bounce across the uncaptured window is visible (U6). The lower
+panel, the edge marks and 03's tests are unchanged.
+
 **04 — Run the scan** (Opus; U4). `tools/surfing_scan.py` over β = 1.10, 1.15, …, 5.00 (79 values),
 run in chunks with a resumable CSV (P7). Then:
 - `tools/plot_surfing_temperature.py`;
@@ -301,7 +309,7 @@ The log template is `dk-and-rpk-migration` README §5.1's.
 
 ## 6. Decisions
 
-### 6.1 Ruled by the user (U1–U6), 2026-10-14
+### 6.1 Ruled by the user (U1–U7), 2026-10-14
 
 | | Ruling |
 |---|---|
@@ -311,6 +319,7 @@ The log template is `dk-and-rpk-migration` README §5.1's.
 | **U4** — process | **A campaign, in which a prompt runs the full scan** (04), as an exception to `CLAUDE.md`'s run-length rule |
 | **U5** — the μ/π shoulder (ruled 2026-10-14, before 01 was dispatched; §0.3) | **A fourth kick**, labelled `"mu-pi"` (shown as "μ/π"), between QCD and e⁺e⁻. The production EOS has four kicks, and anything else is 01's stop. A merged interval is reported by the existing machinery. Each kick's record carries the interval's own hot and cold roots, and `merged` names the other kick. So for a QCD capture above β = 2.154, 02's `T_cold_GeV` is the merged interval's cold edge |
 | **U6** — the near-miss at β = 3.0 (ruled 2026-10-14, after 03's review; board §5.4) | **04 adds a fine β grid near 3.0.** At β = 3.00 the field nearly surfs on the EW kick, T_J stalls for about nine e-folds, and the field reaches the wall before the QCD kick captures it. The 0.05 grid has one point in that window. The fine scan is β = 2.980–3.040 in steps of 0.001, a separate CSV and figure, with a table in the verification document (04 S5, S4 item 8) |
+| **U7** — uncaptured deliveries drawn (ruled 2026-10-14, after U6) | **A prompt 03b, before 04,** draws the first bounce of each uncaptured history in the upper panel, as an open grey circle labelled "first bounce, not captured". This overrides note 03's ruling that such a row is only an edge mark, which stays as well. The lower panel is unchanged, since there is no T_hot to divide by |
 
 ### 6.2 Proposed by the planner (P1–P10)
 

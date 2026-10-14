@@ -1,6 +1,6 @@
 # surfing-temperature campaign — implementation state
 
-**Last updated:** 2026-10-14 · **Status: LIVE — 5 of 5 prompts written, 3 of 5 landed (01, 02, 03). U1–U6 and P1–P10
+**Last updated:** 2026-10-14 · **Status: LIVE — 6 of 6 prompts written, 3 of 6 landed (01, 02, 03). U1–U7 and P1–P10
 ruled by the user on 2026-10-14 (README §6); P1–P10 as proposed.**
 The plan is [`README.md`](README.md), written on 2026-10-14 on `main` at `f41b104`. Its planning
 commit `8adb806` is the first on branch `surfing-temperature`, cut from `main` at `f41b104` (P10).
@@ -30,6 +30,7 @@ opened or assigned)
 | 01 | [Reachability roots](01-reachability-roots.md) | `find_kicks`, `reachability_roots`: kick windows, hot and cold roots, stability sign, merged intervals | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | `2c98370` | [log](logs/01-reachability-roots.md) |
 | 02 | [Surfing turning points and the driver](02-surfing-turning-points-and-driver.md) | `surfing_turning_points` on the dense output; `tools/surfing_scan.py`; five β run, cost projected | Opus | ✍️ 2026-10-14 | ✅ 2026-10-14 | `f166b31` | [log](logs/02-surfing-turning-points-and-driver.md) |
 | 03 | [The plot](03-plot-surfing-temperature.md) | `tools/plot_surfing_temperature.py`: roots and measured temperatures against β, two panels | Sonnet | ✍️ 2026-10-14 | ✅ 2026-10-14 | `1f40b53` | [log](logs/03-plot-surfing-temperature.md) |
+| 03b | [Uncaptured deliveries](03b-plot-uncaptured-deliveries.md) | the first bounce of an uncaptured history drawn in the upper panel (U7) | Sonnet | ✍️ 2026-10-14 | ⬜ | — | — |
 | 04 | [Run the scan](04-run-the-scan.md) | 79 β, 1.10–5.00, CSV and figure committed; verification document (U4); fine scan near β = 3.0 (U6) | Opus | ✍️ 2026-10-14, amended for U6 | ⬜ | — | — |
 | 05 | [Close](05-close.md) | documents, handover, index, board | Sonnet | ✍️ 2026-10-14 | ⬜ | — | — |
 
@@ -62,6 +63,7 @@ before each dispatch.
 | **F1** | 03 | `tools/plot_surfing_temperature.py`: reads the CSV and sidecar, roots on Δβ = 0.005 (P4) | ✅ |
 | **F2** | 03 | the two-panel figure of README §4 | ✅ |
 | **F3** | 03 | `tools/tests/test_plot_surfing_temperature.py` | ✅ |
+| **F4** | 03b | the first bounce of an uncaptured history, an open grey circle in the upper panel; 03's tests unchanged (U7) | ⬜ |
 | **S1** | 04 | the 79-point scan, chunked and resumable (U4, P7) | ⬜ |
 | **S2** | 04 | the figure from the scan | ⬜ |
 | **S3** | 04 | two β re-run, equal as strings but for `wall_s` | ⬜ |
@@ -410,3 +412,16 @@ from about 1.6 GeV to about 44 GeV. Prompt 04 is amended:
 
 The README records U6 in §6.1, §2 and §5 rule 12. The fine figure shows uncaptured rows only as edge
 marks (note 03's ruling), so the table in the verification document carries their deliveries.
+
+**U7, the same day.** The fine figure would show the uncaptured window only as edge marks, because
+of note 03's ruling. The user therefore ruled that the first bounce of an uncaptured history is
+drawn (U7). That needs a change to the plot script, which 04 may not make, so **prompt 03b** is
+inserted before 04 to make it:
+- an open grey circle in the upper panel, with its own legend entry;
+- the edge mark kept;
+- the lower panel unchanged;
+- 03's 15 tests unchanged.
+
+Its figures are checked on `scan79.csv`, and on the orchestrator's 14-row probe near β = 3.0
+(`edges.csv`). 04's gate now includes 03b, and its S4 item 8 says how the fine figure shows those
+rows.
