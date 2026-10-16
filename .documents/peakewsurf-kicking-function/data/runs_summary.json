@@ -1,0 +1,829 @@
+{
+ "runs": [
+  {
+   "set": "scan phi_i=10, step 1e-3",
+   "beta": 2.99,
+   "variant": "ew",
+   "wall_s": 14.56,
+   "N_end": 38.933756,
+   "T_J_end_GeV": 1.97324,
+   "turning_points": [
+    {
+     "N": 22.911558650724167,
+     "T_J_GeV": 1.625680765095066,
+     "phi_Mp": 5.525718305820009,
+     "type": "min"
+    },
+    {
+     "N": 26.450194773431296,
+     "T_J_GeV": 2.04054193417402,
+     "phi_Mp": 4.26352168013046,
+     "type": "max"
+    },
+    {
+     "N": 30.050509962309075,
+     "T_J_GeV": 1.9624485034155823,
+     "phi_Mp": 3.072879143414078,
+     "type": "min"
+    },
+    {
+     "N": 33.63950199320397,
+     "T_J_GeV": 1.9751320795471614,
+     "phi_Mp": 1.8703215051395552,
+     "type": "max"
+    },
+    {
+     "N": 37.230342002236625,
+     "T_J_GeV": 1.9730178716853028,
+     "phi_Mp": 0.669741671572576,
+     "type": "min"
+    }
+   ]
+  },
+  {
+   "set": "scan phi_i=10, step 1e-3",
+   "beta": 2.995,
+   "variant": "nb",
+   "wall_s": 15.13,
+   "N_end": 38.981687,
+   "T_J_end_GeV": 1.97623,
+   "turning_points": [
+    {
+     "N": 32.86851855699802,
+     "T_J_GeV": 1.6307633495685656,
+     "phi_Mp": 2.2075776177696014,
+     "type": "min"
+    },
+    {
+     "N": 36.402423465302896,
+     "T_J_GeV": 2.047233640717754,
+     "phi_Mp": 0.9490224589589467,
+     "type": "max"
+    }
+   ]
+  },
+  {
+   "set": "scan phi_i=10, step 1e-3",
+   "beta": 2.995,
+   "variant": "pipe",
+   "wall_s": 13.74,
+   "N_end": 38.98004,
+   "T_J_end_GeV": 1.97939,
+   "turning_points": [
+    {
+     "N": 23.808517870602174,
+     "T_J_GeV": 1.6306964578772754,
+     "phi_Mp": 5.232633823515207,
+     "type": "min"
+    },
+    {
+     "N": 27.342412652050566,
+     "T_J_GeV": 2.047248801912739,
+     "phi_Mp": 3.9740652663448373,
+     "type": "max"
+    },
+    {
+     "N": 30.93811814504029,
+     "T_J_GeV": 1.9686467776777725,
+     "phi_Mp": 2.7869924735056824,
+     "type": "min"
+    },
+    {
+     "N": 34.52244634169785,
+     "T_J_GeV": 1.9814417530446398,
+     "phi_Mp": 1.5879874320183045,
+     "type": "max"
+    },
+    {
+     "N": 38.10863542982598,
+     "T_J_GeV": 1.979303964928614,
+     "phi_Mp": 0.390967699118586,
+     "type": "min"
+    }
+   ]
+  },
+  {
+   "set": "scan phi_i=10, step 1e-3",
+   "beta": 2.995,
+   "variant": "ew",
+   "wall_s": 15.1,
+   "N_end": 38.98004,
+   "T_J_end_GeV": 1.97939,
+   "turning_points": [
+    {
+     "N": 23.80853840282679,
+     "T_J_GeV": 1.6306967474283331,
+     "phi_Mp": 5.2326269060937145,
+     "type": "min"
+    },
+    {
+     "N": 27.342433127536346,
+     "T_J_GeV": 2.0472486981325932,
+     "phi_Mp": 3.974058446061124,
+     "type": "max"
+    },
+    {
+     "N": 30.938138525170075,
+     "T_J_GeV": 1.9686467750529504,
+     "phi_Mp": 2.7869856680395473,
+     "type": "min"
+    },
+    {
+     "N": 34.52246878349473,
+     "T_J_GeV": 1.9814417348306332,
+     "phi_Mp": 1.5879799408904915,
+     "type": "max"
+    },
+    {
+     "N": 38.108659974681125,
+     "T_J_GeV": 1.9793039515332915,
+     "phi_Mp": 0.3909595049647863,
+     "type": "min"
+    }
+   ]
+  },
+  {
+   "set": "scan phi_i=10, step 1e-3",
+   "beta": 3.005,
+   "variant": "nb",
+   "wall_s": 12.93,
+   "N_end": 35.678196,
+   "T_J_end_GeV": 55.1686,
+   "turning_points": [
+    {
+     "N": 11.301902292132493,
+     "T_J_GeV": 51.31468068660662,
+     "phi_Mp": 8.237403979580836,
+     "type": "min"
+    }
+   ]
+  },
+  {
+   "set": "scan phi_i=10, step 1e-3",
+   "beta": 3.005,
+   "variant": "pipe",
+   "wall_s": 13.68,
+   "N_end": 39.072165,
+   "T_J_end_GeV": 1.99261,
+   "turning_points": [
+    {
+     "N": 26.586953980557006,
+     "T_J_GeV": 1.640728200131091,
+     "phi_Mp": 4.321774446437855,
+     "type": "min"
+    },
+    {
+     "N": 30.111434310859707,
+     "T_J_GeV": 2.0606568281126645,
+     "phi_Mp": 3.0704053847165014,
+     "type": "max"
+    },
+    {
+     "N": 33.69798776609619,
+     "T_J_GeV": 1.9810356985728963,
+     "phi_Mp": 1.8904135496382244,
+     "type": "min"
+    },
+    {
+     "N": 37.2730590415417,
+     "T_J_GeV": 1.9940546672121964,
+     "phi_Mp": 0.6984547143552924,
+     "type": "max"
+    }
+   ]
+  },
+  {
+   "set": "scan phi_i=10, step 1e-3",
+   "beta": 3.005,
+   "variant": "ew",
+   "wall_s": 14.36,
+   "N_end": 39.072165,
+   "T_J_end_GeV": 1.99261,
+   "turning_points": [
+    {
+     "N": 26.586974937930986,
+     "T_J_GeV": 1.640728536738067,
+     "phi_Mp": 4.321767413595518,
+     "type": "min"
+    },
+    {
+     "N": 30.111455113582767,
+     "T_J_GeV": 2.0606567108433773,
+     "phi_Mp": 3.070398494150813,
+     "type": "max"
+    },
+    {
+     "N": 33.6980074830479,
+     "T_J_GeV": 1.9810356993543048,
+     "phi_Mp": 1.8904070007230855,
+     "type": "min"
+    },
+    {
+     "N": 37.273080958596886,
+     "T_J_GeV": 1.994054661610113,
+     "phi_Mp": 0.6984474343960957,
+     "type": "max"
+    }
+   ]
+  },
+  {
+   "set": "scan phi_i=10, step 1e-3",
+   "beta": 3.01,
+   "variant": "nb",
+   "wall_s": 12.95,
+   "N_end": 35.654332,
+   "T_J_end_GeV": 59.1425,
+   "turning_points": [
+    {
+     "N": 10.280879669510146,
+     "T_J_GeV": 52.0572979821597,
+     "phi_Mp": 8.574487459731522,
+     "type": "min"
+    }
+   ]
+  },
+  {
+   "set": "scan phi_i=10, step 1e-3",
+   "beta": 3.01,
+   "variant": "pipe",
+   "wall_s": 13.66,
+   "N_end": 39.117909,
+   "T_J_end_GeV": 1.99987,
+   "turning_points": [
+    {
+     "N": 29.092350264547207,
+     "T_J_GeV": 1.6457439307278847,
+     "phi_Mp": 3.497795969861069,
+     "type": "min"
+    },
+    {
+     "N": 32.612157238322624,
+     "T_J_GeV": 2.067358036059886,
+     "phi_Mp": 2.249998512369245,
+     "type": "max"
+    },
+    {
+     "N": 36.19416784292642,
+     "T_J_GeV": 1.9872263144855813,
+     "phi_Mp": 1.073518272521176,
+     "type": "min"
+    }
+   ]
+  },
+  {
+   "set": "scan phi_i=10, step 1e-3",
+   "beta": 3.01,
+   "variant": "ew",
+   "wall_s": 14.34,
+   "N_end": 39.117909,
+   "T_J_end_GeV": 1.99987,
+   "turning_points": [
+    {
+     "N": 29.092371223006943,
+     "T_J_GeV": 1.6457442133640694,
+     "phi_Mp": 3.49778894597066,
+     "type": "min"
+    },
+    {
+     "N": 32.61217801157666,
+     "T_J_GeV": 2.067357929234819,
+     "phi_Mp": 2.249991627049086,
+     "type": "max"
+    },
+    {
+     "N": 36.19418700145422,
+     "T_J_GeV": 1.9872263118715536,
+     "phi_Mp": 1.0735119063779908,
+     "type": "min"
+    }
+   ]
+  },
+  {
+   "set": "scan phi_i=10, step 1e-3",
+   "beta": 3.015,
+   "variant": "nb",
+   "wall_s": 12.94,
+   "N_end": 35.669976,
+   "T_J_end_GeV": 61.0765,
+   "turning_points": [
+    {
+     "N": 9.836461999759115,
+     "T_J_GeV": 52.680580971396914,
+     "phi_Mp": 8.720075411099304,
+     "type": "min"
+    }
+   ]
+  },
+  {
+   "set": "scan phi_i=10, step 1e-3",
+   "beta": 3.015,
+   "variant": "pipe",
+   "wall_s": 13.62,
+   "N_end": 39.15255,
+   "T_J_end_GeV": 2.02886,
+   "turning_points": [
+    {
+     "N": 34.08393590454655,
+     "T_J_GeV": 1.6507595363727596,
+     "phi_Mp": 1.8519470554652013,
+     "type": "min"
+    },
+    {
+     "N": 37.59909196435304,
+     "T_J_GeV": 2.0740573422565722,
+     "phi_Mp": 0.6077025965588707,
+     "type": "max"
+    }
+   ]
+  },
+  {
+   "set": "scan phi_i=10, step 1e-3",
+   "beta": 3.015,
+   "variant": "ew",
+   "wall_s": 14.24,
+   "N_end": 39.15255,
+   "T_J_end_GeV": 2.02886,
+   "turning_points": [
+    {
+     "N": 34.083957082855,
+     "T_J_GeV": 1.65075984146672,
+     "phi_Mp": 1.8519399732279844,
+     "type": "min"
+    },
+    {
+     "N": 37.599112853949954,
+     "T_J_GeV": 2.074057226252653,
+     "phi_Mp": 0.6076956964731277,
+     "type": "max"
+    }
+   ]
+  },
+  {
+   "set": "scan phi_i=10, step 1e-3",
+   "beta": 3.02,
+   "variant": "nb",
+   "wall_s": 14.39,
+   "N_end": 35.696076,
+   "T_J_end_GeV": 62.4519,
+   "turning_points": [
+    {
+     "N": 9.549749092774645,
+     "T_J_GeV": 53.2440922666953,
+     "phi_Mp": 8.813404890382705,
+     "type": "min"
+    }
+   ]
+  },
+  {
+   "set": "scan phi_i=10, step 1e-3",
+   "beta": 3.02,
+   "variant": "pipe",
+   "wall_s": 13.09,
+   "N_end": 35.895713,
+   "T_J_end_GeV": 51.6837,
+   "turning_points": [
+    {
+     "N": 12.368825051042935,
+     "T_J_GeV": 49.3572284030148,
+     "phi_Mp": 7.906520584031316,
+     "type": "min"
+    }
+   ]
+  },
+  {
+   "set": "scan phi_i=10, step 1e-3",
+   "beta": 3.02,
+   "variant": "ew",
+   "wall_s": 13.22,
+   "N_end": 35.895713,
+   "T_J_end_GeV": 51.6837,
+   "turning_points": [
+    {
+     "N": 12.368825051042935,
+     "T_J_GeV": 49.3572284030148,
+     "phi_Mp": 7.906520584031316,
+     "type": "min"
+    }
+   ]
+  },
+  {
+   "set": "scan phi_i=10, step 1e-3",
+   "beta": 3.025,
+   "variant": "nb",
+   "wall_s": 12.99,
+   "N_end": 35.726574,
+   "T_J_end_GeV": 63.5927,
+   "turning_points": [
+    {
+     "N": 9.338024487913215,
+     "T_J_GeV": 53.768400671442016,
+     "phi_Mp": 8.88193176168557,
+     "type": "min"
+    }
+   ]
+  },
+  {
+   "set": "scan phi_i=10, step 1e-3",
+   "beta": 3.025,
+   "variant": "pipe",
+   "wall_s": 12.32,
+   "N_end": 35.822837,
+   "T_J_end_GeV": 58.0301,
+   "turning_points": [
+    {
+     "N": 10.479090736961233,
+     "T_J_GeV": 50.15317196635944,
+     "phi_Mp": 8.529080349680097,
+     "type": "min"
+    }
+   ]
+  },
+  {
+   "set": "scan phi_i=10, step 1e-3",
+   "beta": 3.025,
+   "variant": "ew",
+   "wall_s": 12.66,
+   "N_end": 35.822837,
+   "T_J_end_GeV": 58.0301,
+   "turning_points": [
+    {
+     "N": 10.479090736961233,
+     "T_J_GeV": 50.15317196635944,
+     "phi_Mp": 8.529080349680097,
+     "type": "min"
+    }
+   ]
+  },
+  {
+   "set": "scan phi_i=10, step 1e-3",
+   "beta": 3.03,
+   "variant": "nb",
+   "wall_s": 12.96,
+   "N_end": 35.759478,
+   "T_J_end_GeV": 64.6071,
+   "turning_points": [
+    {
+     "N": 9.170214559546485,
+     "T_J_GeV": 54.26396172636143,
+     "phi_Mp": 8.93595836782365,
+     "type": "min"
+    }
+   ]
+  },
+  {
+   "set": "scan phi_i=10, step 1e-3",
+   "beta": 3.03,
+   "variant": "pipe",
+   "wall_s": 12.49,
+   "N_end": 35.848694,
+   "T_J_end_GeV": 59.3472,
+   "turning_points": [
+    {
+     "N": 9.96692240587275,
+     "T_J_GeV": 50.76779102117856,
+     "phi_Mp": 8.696280259259614,
+     "type": "min"
+    }
+   ]
+  },
+  {
+   "set": "scan phi_i=10, step 1e-3",
+   "beta": 3.03,
+   "variant": "ew",
+   "wall_s": 12.73,
+   "N_end": 35.848694,
+   "T_J_end_GeV": 59.3472,
+   "turning_points": [
+    {
+     "N": 9.96692240587275,
+     "T_J_GeV": 50.76779102117856,
+     "phi_Mp": 8.696280259259614,
+     "type": "min"
+    }
+   ]
+  },
+  {
+   "set": "control: unmodified notebook Sigma",
+   "beta": 3.015,
+   "variant": "raw",
+   "wall_s": 16.67,
+   "N_end": 35.669976,
+   "T_J_end_GeV": 61.0765,
+   "turning_points": [
+    {
+     "N": 9.83646196397694,
+     "T_J_GeV": 52.68058057239803,
+     "phi_Mp": 8.720075410367112,
+     "type": "min"
+    }
+   ]
+  },
+  {
+   "set": "convergence: step 1e-4",
+   "beta": 3.015,
+   "variant": "nb",
+   "wall_s": 128.2,
+   "N_end": 35.669976,
+   "T_J_end_GeV": 61.0765,
+   "turning_points": [
+    {
+     "N": 9.836461975474352,
+     "T_J_GeV": 52.68057911425673,
+     "phi_Mp": 8.720075405047655,
+     "type": "min"
+    }
+   ]
+  },
+  {
+   "set": "convergence: step 1e-4",
+   "beta": 3.015,
+   "variant": "ew",
+   "wall_s": 140.1,
+   "N_end": 39.15255,
+   "T_J_end_GeV": 2.02886,
+   "turning_points": [
+    {
+     "N": 34.08394816598802,
+     "T_J_GeV": 1.650759849411939,
+     "phi_Mp": 1.8519429524495794,
+     "type": "min"
+    },
+    {
+     "N": 37.599103995574055,
+     "T_J_GeV": 2.074057223965525,
+     "phi_Mp": 0.6076986561499277,
+     "type": "max"
+    }
+   ]
+  }
+ ],
+ "bisection": [
+  {
+   "beta": 2.995,
+   "variant": "nb",
+   "turning_points": [
+    {
+     "N": 32.86851855699802,
+     "T_J_GeV": 1.6307633495685656,
+     "phi_Mp": 2.2075776177696014,
+     "type": "min"
+    },
+    {
+     "N": 36.402423465302896,
+     "T_J_GeV": 2.047233640717754,
+     "phi_Mp": 0.9490224589589467,
+     "type": "max"
+    }
+   ],
+   "EW_captured": false
+  },
+  {
+   "beta": 3.005,
+   "variant": "nb",
+   "turning_points": [
+    {
+     "N": 11.301902292132493,
+     "T_J_GeV": 51.31468068660662,
+     "phi_Mp": 8.237403979580836,
+     "type": "min"
+    }
+   ],
+   "EW_captured": true
+  },
+  {
+   "beta": 3.0025,
+   "variant": "nb",
+   "turning_points": [],
+   "EW_captured": false
+  },
+  {
+   "beta": 3.00375,
+   "variant": "nb",
+   "turning_points": [
+    {
+     "N": 12.051666348016457,
+     "T_J_GeV": 51.08234626055683,
+     "phi_Mp": 7.988661369108646,
+     "type": "min"
+    }
+   ],
+   "EW_captured": true
+  },
+  {
+   "beta": 3.003125,
+   "variant": "nb",
+   "turning_points": [
+    {
+     "N": 13.083450384856087,
+     "T_J_GeV": 50.942999727713286,
+     "phi_Mp": 7.645636180403488,
+     "type": "min"
+    }
+   ],
+   "EW_captured": true
+  },
+  {
+   "beta": 3.0028125,
+   "variant": "nb",
+   "turning_points": [],
+   "EW_captured": false
+  },
+  {
+   "beta": 3.00296875,
+   "variant": "nb",
+   "turning_points": [
+    {
+     "N": 13.823619815230705,
+     "T_J_GeV": 50.901279383344075,
+     "phi_Mp": 7.39932350314668,
+     "type": "min"
+    }
+   ],
+   "EW_captured": true
+  },
+  {
+   "beta": 3.002890625,
+   "variant": "nb",
+   "turning_points": [
+    {
+     "N": 14.792847499724232,
+     "T_J_GeV": 50.877181884911124,
+     "phi_Mp": 7.076657987610475,
+     "type": "min"
+    }
+   ],
+   "EW_captured": true
+  },
+  {
+   "beta": 3.015,
+   "variant": "pipe",
+   "turning_points": [
+    {
+     "N": 34.08393590454655,
+     "T_J_GeV": 1.6507595363727596,
+     "phi_Mp": 1.8519470554652013,
+     "type": "min"
+    },
+    {
+     "N": 37.59909196435304,
+     "T_J_GeV": 2.0740573422565722,
+     "phi_Mp": 0.6077025965588707,
+     "type": "max"
+    }
+   ],
+   "EW_captured": false
+  },
+  {
+   "beta": 3.02,
+   "variant": "pipe",
+   "turning_points": [
+    {
+     "N": 12.368825051042935,
+     "T_J_GeV": 49.3572284030148,
+     "phi_Mp": 7.906520584031316,
+     "type": "min"
+    }
+   ],
+   "EW_captured": true
+  },
+  {
+   "beta": 3.0175,
+   "variant": "pipe",
+   "turning_points": [],
+   "EW_captured": false
+  },
+  {
+   "beta": 3.01875,
+   "variant": "pipe",
+   "turning_points": [],
+   "EW_captured": false
+  },
+  {
+   "beta": 3.019375,
+   "variant": "pipe",
+   "turning_points": [],
+   "EW_captured": false
+  },
+  {
+   "beta": 3.0196875,
+   "variant": "pipe",
+   "turning_points": [
+    {
+     "N": 13.078450403378376,
+     "T_J_GeV": 49.2840927304512,
+     "phi_Mp": 7.671825030424667,
+     "type": "min"
+    }
+   ],
+   "EW_captured": true
+  },
+  {
+   "beta": 3.01953125,
+   "variant": "pipe",
+   "turning_points": [
+    {
+     "N": 14.034949479882705,
+     "T_J_GeV": 49.240760689845125,
+     "phi_Mp": 7.355242708236244,
+     "type": "min"
+    }
+   ],
+   "EW_captured": true
+  },
+  {
+   "beta": 3.019453125,
+   "variant": "pipe",
+   "turning_points": [],
+   "EW_captured": false
+  },
+  {
+   "beta": 3.015,
+   "variant": "csvnb",
+   "turning_points": [
+    {
+     "N": 34.133961647485805,
+     "T_J_GeV": 1.6507599931560748,
+     "phi_Mp": 1.8353546923973194,
+     "type": "min"
+    },
+    {
+     "N": 37.64911752933617,
+     "T_J_GeV": 2.0740571924365865,
+     "phi_Mp": 0.5911104126933352,
+     "type": "max"
+    }
+   ],
+   "EW_captured": false
+  },
+  {
+   "beta": 3.02,
+   "variant": "csvnb",
+   "turning_points": [
+    {
+     "N": 12.292750377846565,
+     "T_J_GeV": 49.35902255285327,
+     "phi_Mp": 7.931698145547297,
+     "type": "min"
+    }
+   ],
+   "EW_captured": true
+  },
+  {
+   "beta": 3.0175,
+   "variant": "csvnb",
+   "turning_points": [],
+   "EW_captured": false
+  },
+  {
+   "beta": 3.01875,
+   "variant": "csvnb",
+   "turning_points": [],
+   "EW_captured": false
+  },
+  {
+   "beta": 3.019375,
+   "variant": "csvnb",
+   "turning_points": [],
+   "EW_captured": false
+  },
+  {
+   "beta": 3.0196875,
+   "variant": "csvnb",
+   "turning_points": [
+    {
+     "N": 12.894499355148008,
+     "T_J_GeV": 49.288074962976076,
+     "phi_Mp": 7.732713919589077,
+     "type": "min"
+    }
+   ],
+   "EW_captured": true
+  },
+  {
+   "beta": 3.01953125,
+   "variant": "csvnb",
+   "turning_points": [
+    {
+     "N": 13.534979682001604,
+     "T_J_GeV": 49.24750696781156,
+     "phi_Mp": 7.52077322194633,
+     "type": "min"
+    }
+   ],
+   "EW_captured": true
+  },
+  {
+   "beta": 3.019453125,
+   "variant": "csvnb",
+   "turning_points": [
+    {
+     "N": 14.26708035718022,
+     "T_J_GeV": 49.224238576437244,
+     "phi_Mp": 7.278413708029106,
+     "type": "min"
+    }
+   ],
+   "EW_captured": true
+  }
+ ]
+}
