@@ -176,4 +176,40 @@ for ax in (a, b):
 a.text(N73 + 1, 42, r"$\beta\phi = 220$", color=MUTED, fontsize=7.5)
 fig.savefig(os.path.join(FIG, "overflow.pdf"))
 plt.close(fig)
+
+# ---------------------------------------------------------------- Fig. 3: the matter fraction to today
+fm = pd.read_csv(os.path.join(DATA, "fm_late.csv"))
+fig, ax = plt.subplots(figsize=(W, 2.9), layout="constrained")
+ax.plot(fm.T_GeV, fm.ratio, color=C1, label=r"$f_m^{\rm nb}/f_m^{\rm pipe}$")
+ax.plot(
+    fm.T_GeV,
+    fm.w_factor,
+    color=C2,
+    ls=(0, (5, 2)),
+    label=r"$(1+w)$ factor, $(16/9)/(1+w)^2$",
+)
+ax.plot(
+    fm.T_GeV,
+    fm.rest,
+    color=C3,
+    ls=(0, (1.5, 1.5)),
+    lw=1.8,
+    label=r"the rest ($g_s \neq g_\rho$, $\rho_m/s$)",
+)
+ax.axhline(1.0, color=MUTED, lw=0.8)
+# where the runs of this report end, and matter-radiation equality
+ax.axvspan(1.6, 2e4, color=GRID, alpha=0.6, lw=0)
+ax.text(2.2, 1.19, "runs here", color=MUTED, fontsize=7.5)
+f = fm.fm_pipe.values
+T_eq = np.exp(np.interp(0.0, np.log(f[::-1]), np.log(fm.T_GeV.values[::-1])))
+ax.axvline(T_eq, color=MUTED, lw=0.8, ls=":")
+ax.text(T_eq * 1.6, 1.19, "equality", color=MUTED, fontsize=7.5)
+ax.set_xscale("log")
+ax.set_xlim(2.3e-13, 2e4)
+ax.set_ylim(0.82, 1.22)
+ax.set_xlabel(r"$T_J$ [GeV]")
+ax.set_ylabel("ratio")
+ax.legend(loc="lower right", fontsize=7.5)
+fig.savefig(os.path.join(FIG, "fm_late.pdf"))
+plt.close(fig)
 print("figures written to", os.path.abspath(FIG))

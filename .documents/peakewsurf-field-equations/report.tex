@@ -414,6 +414,80 @@ where the $\phi_i = 100\,\MP$ history falls back through $\beta\phi = 220$.}
 \end{enumerate}
 
 %======================================================================
+\section{The matter fraction at late times}
+\label{sec:fmlate}
+
+The companion report found that the notebook's closed-form matter fraction has its $(1+w)$
+dependence inverted (its \S3), and that this has no effect on the dynamics near $\beta = 3$. One
+might expect the error to matter at late times, when matter comes to dominate and the kick
+$\propto \beta(\Sigma + f_m)/(1+f_m)$ is carried by $f_m$ alone. It does not, for the two reasons
+below. A different simplification in the same formula does matter at late times, however.
+\code{scripts/nb\_fm\_late.wls} exports the notebook's $f_m$ and $w$ down to $T_{\rm CMB}$, and
+\code{scripts/fm\_late.py} compares them with the pipeline's $f_m(\TJ) = \rho_{m0}(1+z)^3/\tilde\rho$
+(\S\ref{sec:terms}). The results are in \code{data/fm\_late.csv} and \code{data/logs/fm\_late.txt}.
+
+\paragraph{The runs never reach the matter era.} Every history here ends when $\phi$ reaches
+$0.1\,\MP$, at $N \approx 36$--$39$ and $\TJ$ between $1.6$ and $60\GeV$. There $f_m \le
+4\times10^{-10}$, against $\Sigma \approx 0.03$--$0.3$ at the peaks. Matter--radiation
+equality is at $\TJ \approx 0.80\,\mathrm{eV}$, twenty or more e-folds further on, and no run in
+either report integrates that far. Whatever form $f_m$ takes, it cannot affect these histories.
+
+\paragraph{The $(1+w)$ error vanishes where $w = 1/3$.} The notebook uses
+\begin{equation}
+  f_m^{\rm nb} = \frac{4}{3}\,\frac{c}{\TJ\,(1+w)}, \qquad c = 5.213\times10^{-10}\GeV,
+\end{equation}
+whereas for a plasma at a single temperature $\tilde\rho + \tilde p = \TJ s$, which gives
+$f_m = (\rho_m/s)(1+w)/\TJ$. The notebook's form is therefore larger by $(16/9)/(1+w)^2$, a
+factor that is exactly $1$ at $w = 1/3$. It departs from $1$ only where $w$ does: by up to
+$1.178$ at the QCD peak, $1.05$ at the $e^\pm$ peak and $1.02$ at the electroweak peak
+(Fig.~\ref{fig:fmlate}). At those peaks $\Sigma$ exceeds $f_m$ by about $2\times10^4$ ($e^\pm$), $7\times10^7$ (QCD) and
+$3\times10^9$ (electroweak).
+Below $36\,\mathrm{keV}$ the notebook sets $w = 1/3$ exactly, so the factor is exactly $1$
+throughout the matter era.
+
+\paragraph{What does matter late: $g_s \ne g_\rho$.} The relation $\tilde\rho + \tilde p = \TJ s$
+holds only while the whole plasma shares one temperature. After neutrino decoupling and $e^\pm$
+annihilation the photons and neutrinos have different temperatures, and the correct late-time
+result is
+\begin{equation}
+  f_m = \frac{\rho_m}{s}\,\frac43\,\frac{g_s}{g_\rho}\,\frac{1}{\TJ},
+  \qquad \frac{g_s}{g_\rho} = \frac{3.931}{3.383} = 1.1620.
+\end{equation}
+The notebook's formula effectively sets $g_s = g_\rho$. Below $10\,\mathrm{keV}$ the ratio of the
+two codes' $f_m$ is therefore constant:
+\begin{equation}
+  \frac{f_m^{\rm nb}}{f_m^{\rm pipe}} = 0.8682
+  = \underbrace{1}_{(1+w)} \times \underbrace{0.8606}_{g_\rho/g_s}
+    \times \underbrace{1.0097}_{c/(\rho_m/s)_{\rm pipe}}
+    \times \underbrace{0.9992}_{e^{\Delta}}.
+\end{equation}
+The third factor is the difference between the notebook's constant and $\rho_m/s =
+5.163\times10^{-10}\GeV$ from the pipeline's Planck 2018 parameters. The fourth is the
+pipeline's thermodynamic offset $\Delta$ (Eq.~\ref{eq:delta}), which is constant below
+$10\,\mathrm{keV}$. This is the $0.87$ the companion report saw at $10\,\mathrm{keV}$, and it
+persists to today. Between $10\,\mathrm{keV}$ and $1\,\mathrm{MeV}$, where $g_s/g_\rho$ is
+changing, the ratio climbs to $1$ (Fig.~\ref{fig:fmlate}).
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{figures/fm_late.pdf}
+\caption{The notebook's matter fraction relative to the pipeline's, from $T_{\rm CMB}$ to
+$2\times10^4\GeV$ (solid), split into the notebook's $(1+w)$ factor (dashed) and everything else
+(dotted). The shaded band is the range of $\TJ$ the histories of this report cover; the dotted
+line is matter--radiation equality.}
+\label{fig:fmlate}
+\end{figure}
+
+\paragraph{Consequence if the notebook were run to late times.} Its $f_m$ would be $13\%$ low
+throughout the matter era. Equality, where $f_m = 1$, would fall at $\TJ = 0.695\,\mathrm{eV}$
+instead of $0.800\,\mathrm{eV}$, that is $15\%$ later in the scale factor, or $0.14$ e-folds.
+That would shift the onset of the matter-driven kick and the expansion rate around it. The error
+comes from omitting $g_s \neq g_\rho$, not from the $(1+w)$ factor. Correcting only the $(1+w)$
+placement would leave it unchanged. The pipeline is not affected: it integrates
+$\mathrm{d}\ln f_m/\mathrm{d}N = (1-\Sigma)(1+\beta y)$, whose solution includes $g_s \ne g_\rho$
+through $z(\TJ)$.
+
+%======================================================================
 \section{Observations not acted on}
 
 \begin{itemize}
@@ -445,6 +519,11 @@ where the $\phi_i = 100\,\MP$ history falls back through $\beta\phi = 220$.}
   delays the histories by $3.2\times10^{-4}$ e-folds.
 \item The notebook's $\phi_i = 100\,\MP$ results are corrupted by machine overflow
   (\S\ref{sec:overflow}).
+\item The notebook's inverted $(1+w)$ factor in $f_m$ is harmless at every temperature: it is
+  exactly $1$ wherever $w = 1/3$, including the whole matter era. Its $f_m$ is nonetheless $13\%$
+  low after $e^\pm$ annihilation, because it omits $g_s \ne g_\rho$. No run here reaches the
+  matter era, but a run that did would place equality $15\%$ late in the scale factor
+  (\S\ref{sec:fmlate}).
 \end{enumerate}
 
 \noindent We recommend:
@@ -453,12 +532,16 @@ where the $\phi_i = 100\,\MP$ history falls back through $\beta\phi = 220$.}
   through logarithms, as the log-space variant does, or keep $\beta\phi < 220$. Remove the Quiet
   around \code{NDSolve}, or at least catch \code{General::ovfl} and \code{General::munfl}.
 \item In the notebook, drop the $|\cdot|$ in $\gamma$, so that it matches the pipeline.
+\item Before the notebook is run into the matter era, replace its closed-form $f_m$ with the
+  pipeline's, $\rho_{m0}(1+z)^3/\tilde\rho_r$ (or integrate $\ln f_m$). Correcting only the $(1+w)$
+  placement, as the companion report suggested, would leave the $13\%$ error.
 \item Correct the companion report's \S4.2 and Fig.~5 with an additive note pointing here.
 \end{itemize}
 
-\paragraph{Not covered.} Regimes in which $V/\rho_r$ or $f_m$ is not negligible (late times,
-smaller $\phi$ near $M$, or the pipeline's reflections at the wall), where the normalisation
-$\Delta(\TJ)$ and the matter fraction would start to matter. Temperatures below $0.12\GeV$, where
+\paragraph{Not covered.} Integrations in regimes where $V/\rho_r$ or $f_m$ is not negligible
+(late times, smaller $\phi$ near $M$, or the pipeline's reflections at the wall). There the
+normalisation $\Delta(\TJ)$ and the matter fraction start to matter; \S\ref{sec:fmlate}
+compares the two codes' $f_m$ there but integrates nothing. Temperatures below $0.12\GeV$, where
 the two codes' $\gamma$ differ near the branch join. Couplings far from $\beta = 3$.
 
 %======================================================================
@@ -480,6 +563,9 @@ the two codes' $\gamma$ differ near the branch join. Couplings far from $\beta =
 \item \code{scripts/nb\_thermo.wls}, \code{nb\_export\_exact.wls}: export the notebook's
   thermodynamic functions; \code{thermo\_compare.py}: compares them with the pipeline's, computes
   $\Delta(\TJ)$ and writes the pipeline's functions for \code{nb\_common.wls}.
+\item \code{scripts/nb\_fm\_late.wls}, \code{fm\_late.py}: the matter fraction down to
+  $T_{\rm CMB}$ (\S\ref{sec:fmlate}); \code{fm\_late.py} reads \code{nb\_fm\_late.csv} and the
+  \code{delta\_pipe.csv} that \code{thermo\_compare.py} writes.
 \item \code{scripts/nb\_common.wls}: the notebook's integration with swapped inputs;
   \code{rhs\_phi\_dep.wls}: the overflow demonstration.
 \item \code{scripts/pipe\_runs.py}, \code{bisect\_pipe.py}, \code{dkstub.py}: the pipeline's
@@ -499,6 +585,8 @@ D=.documents/peakewsurf-field-equations/scripts
 wolframscript -file $D/nb_thermo.wls $PWD/PeakEWsurf.nb $WORK
 wolframscript -file $D/nb_export_exact.wls $PWD/PeakEWsurf.nb $WORK
 ./venv/bin/python $D/thermo_compare.py $WORK
+wolframscript -file $D/nb_fm_late.wls $PWD/PeakEWsurf.nb $WORK
+./venv/bin/python $D/fm_late.py $WORK
 export NB_THERMO_GRID=$WORK/nb_thermo_grid.csv NB_EXACT_DIR=$WORK
 B=2.99,2.995,3.0,3.0028,3.0029,3.005,3.01,3.015
 B=$B,3.0194,3.0195,3.02,3.025,3.03

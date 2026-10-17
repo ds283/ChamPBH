@@ -1,0 +1,17 @@
+rho_m/s today = 5.163e-10 GeV;  notebook constant 2.78e-9/4 = 6.95e-10 = (4/3) x 5.213e-10
+g_s/g_rho below 1e-5 GeV: 1.16199; g_rho/g_s = 0.86060
+notebook rho_m/s over pipeline's: 1.00966
+T = 2.36e-13 GeV: f_nb = 2944.9, f_pipe = 3391.9, ratio = 0.8682 = (1+w) factor 1.0000 x rest 0.8682   (w_nb = 0.33333, g_s/g_rho = 1.1620, Delta = -7.78e-04)
+T = 9.952e-10 GeV: f_nb = 0.69835, f_pipe = 0.80434, ratio = 0.8682 = (1+w) factor 1.0000 x rest 0.8682   (w_nb = 0.33333, g_s/g_rho = 1.1620, Delta = -7.78e-04)
+T = 9.952e-07 GeV: f_nb = 0.00069835, f_pipe = 0.00080434, ratio = 0.8682 = (1+w) factor 1.0000 x rest 0.8682   (w_nb = 0.33333, g_s/g_rho = 1.1620, Delta = -7.78e-04)
+T = 9.952e-05 GeV: f_nb = 7.103e-06, f_pipe = 7.6974e-06, ratio = 0.9228 = (1+w) factor 1.0345 x rest 0.8920   (w_nb = 0.31089, g_s/g_rho = 1.1118, Delta = -9.73e-04)
+T = 0.0001596 GeV: f_nb = 4.4684e-06, f_pipe = 4.5469e-06, ratio = 0.9827 = (1+w) factor 1.0523 x rest 0.9339   (w_nb = 0.29976, g_s/g_rho = 1.0525, Delta = -1.34e-03)
+T = 0.0009952 GeV: f_nb = 7.0026e-07, f_pipe = 6.9331e-07, ratio = 1.0100 = (1+w) factor 1.0055 x rest 1.0045   (w_nb = 0.32970, g_s/g_rho = 1.0003, Delta = -2.11e-03)
+T = 0.179 GeV: f_nb = 4.213e-09, f_pipe = 3.5479e-09, ratio = 1.1875 = (1+w) factor 1.1777 x rest 1.0083   (w_nb = 0.22862, g_s/g_rho = 0.9389, Delta = 1.74e-02)
+T = 0.9952 GeV: f_nb = 7.1081e-10, f_pipe = 6.8998e-10, ratio = 1.0302 = (1+w) factor 1.0360 x rest 0.9944   (w_nb = 0.30996, g_s/g_rho = 0.9860, Delta = -1.16e-02)
+T = 49.88 GeV: f_nb = 1.4066e-11, f_pipe = 1.3761e-11, ratio = 1.0222 = (1+w) factor 1.0191 x rest 1.0031   (w_nb = 0.32080, g_s/g_rho = 0.9907, Delta = -6.44e-03)
+[1e-05, 20000] GeV: (1+w) factor in [1.0000, 1.1779], rest in [0.8682, 1.0158]
+[2.36e-13, 1e-05] GeV: (1+w) factor in [1.0000, 1.0000], rest in [0.8682, 0.8682]
+notebook: T_eq = 0.6950 eV
+pipeline: T_eq = 0.8005 eV
+T_eq(nb)/T_eq(pipe) = 0.8682;  a_eq(nb)/a_eq(pipe) = 1.1518 (g_s constant there);  shift in N = 0.1413 e-folds
