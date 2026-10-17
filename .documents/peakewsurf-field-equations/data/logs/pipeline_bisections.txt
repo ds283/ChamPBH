@@ -1,0 +1,106 @@
+### bisect_pipe.py 2.995 3.005 nbsig 1e-6
+  beta=3.0050000 first min T=51.31464697870448
+  beta=2.9950000 first min T=1.6307634825068975
+  beta=3.0000000 first min T=None
+  beta=3.0025000 first min T=None
+  beta=3.0037500 first min T=51.082323899641125
+  beta=3.0031250 first min T=50.94295160785565
+  beta=3.0028125 first min T=None
+  beta=3.0029687 first min T=50.901221515006
+  beta=3.0028906 first min T=50.87712136269049
+  beta=3.0028516 first min T=None
+  beta=3.0028711 first min T=50.87020543802698
+  beta=3.0028613 first min T=50.86639258377053
+  beta=3.0028564 first min T=50.86428970976188
+  beta=3.0028540 first min T=50.863119838286444
+  beta=3.0028528 first min T=50.86244660135004
+  beta=3.0028522 first min T=None
+nbsig rtol=1e-8: beta_c in (3.0028522, 3.0028528]
+### bisect_pipe.py 2.995 3.005 nbthermo 1e-6
+  beta=3.0050000 first min T=51.31452189588964
+  beta=2.9950000 first min T=1.6307623556854378
+  beta=3.0000000 first min T=None
+  beta=3.0025000 first min T=None
+  beta=3.0037500 first min T=51.082170332150994
+  beta=3.0031250 first min T=50.94280685452441
+  beta=3.0028125 first min T=None
+  beta=3.0029687 first min T=50.9010694065978
+  beta=3.0028906 first min T=50.87695670805062
+  beta=3.0028516 first min T=None
+  beta=3.0028711 first min T=50.87003031863753
+  beta=3.0028613 first min T=50.86621107947851
+  beta=3.0028564 first min T=50.8640987847204
+  beta=3.0028540 first min T=50.862915005566364
+  beta=3.0028528 first min T=50.8622086765213
+  beta=3.0028522 first min T=None
+nbthermo rtol=1e-8: beta_c in (3.0028522, 3.0028528]
+### bisect_pipe.py 2.995 3.005 nbexact 1e-6
+  beta=3.0050000 first min T=51.31469567645684
+  beta=2.9950000 first min T=1.6307635993971874
+  beta=3.0000000 first min T=None
+  beta=3.0025000 first min T=None
+  beta=3.0037500 first min T=51.082361388637125
+  beta=3.0031250 first min T=50.94301539740683
+  beta=3.0028125 first min T=None
+  beta=3.0029687 first min T=50.90129633537876
+  beta=3.0028906 first min T=50.87715761968346
+  beta=3.0028516 first min T=None
+  beta=3.0028711 first min T=50.870294007074776
+  beta=3.0028613 first min T=50.866424424602684
+  beta=3.0028564 first min T=50.86432830910772
+  beta=3.0028540 first min T=50.863186095409304
+  beta=3.0028528 first min T=50.862510898431225
+  beta=3.0028522 first min T=None
+nbexact rtol=1e-8: beta_c in (3.0028522, 3.0028528]
+### bisect_pipe.py 3.015 3.02 pipe 1e-6
+  beta=3.0200000 first min T=49.3572216122975
+  beta=3.0150000 first min T=1.6507595505620505
+  beta=3.0175000 first min T=None
+  beta=3.0187500 first min T=None
+  beta=3.0193750 first min T=None
+  beta=3.0196875 first min T=49.28408327037473
+  beta=3.0195312 first min T=49.24075143670204
+  beta=3.0194531 first min T=None
+  beta=3.0194922 first min T=49.227935424097794
+  beta=3.0194727 first min T=49.22064323586664
+  beta=3.0194629 first min T=49.21636279340441
+  beta=3.0194580 first min T=None
+  beta=3.0194604 first min T=49.21502918165025
+  beta=3.0194592 first min T=None
+  beta=3.0194598 first min T=None
+pipe rtol=1e-8: beta_c in (3.0194598, 3.0194604]
+### bisect_pipe.py 3.015 3.02 pipe 1e-6 1e-10
+  beta=3.0200000 first min T=49.357221350610125
+  beta=3.0150000 first min T=1.6507595502412176
+  beta=3.0175000 first min T=None
+  beta=3.0187500 first min T=None
+  beta=3.0193750 first min T=None
+  beta=3.0196875 first min T=49.28408309563372
+  beta=3.0195312 first min T=49.24075124130507
+  beta=3.0194531 first min T=None
+  beta=3.0194922 first min T=49.22793514982467
+  beta=3.0194727 first min T=49.22064294658021
+  beta=3.0194629 first min T=49.21636246055926
+  beta=3.0194580 first min T=None
+  beta=3.0194604 first min T=49.21502878607591
+  beta=3.0194592 first min T=None
+  beta=3.0194598 first min T=None
+pipe rtol=1e-10: beta_c in (3.0194598, 3.0194604]
+### bisect_pipe.py 2.995 3.005 nbsig 1e-6 1e-10
+  beta=3.0050000 first min T=51.31464778369778
+  beta=2.9950000 first min T=1.6307634824320671
+  beta=3.0000000 first min T=None
+  beta=3.0025000 first min T=None
+  beta=3.0037500 first min T=51.08230432907878
+  beta=3.0031250 first min T=50.942948612752
+  beta=3.0028125 first min T=None
+  beta=3.0029687 first min T=50.90121894243253
+  beta=3.0028906 first min T=50.87711606012933
+  beta=3.0028516 first min T=None
+  beta=3.0028711 first min T=50.870201452551925
+  beta=3.0028613 first min T=50.866389786182225
+  beta=3.0028564 first min T=50.86428611281152
+  beta=3.0028540 first min T=50.86311923576674
+  beta=3.0028528 first min T=50.862447336381166
+  beta=3.0028522 first min T=None
+nbsig rtol=1e-10: beta_c in (3.0028522, 3.0028528]

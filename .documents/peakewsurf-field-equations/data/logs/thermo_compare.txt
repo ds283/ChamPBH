@@ -1,0 +1,40 @@
+== notebook vs pipeline, 1e-5 .. 2e4 GeV, 2000 pts/decade
+g_rho (raw fit, nb) vs pipe        max |rel diff| = 0.000197 at T = 0.1201 GeV
+g_rho (nb interp) vs pipe          max |rel diff| = 0.000197 at T = 0.1201 GeV
+g_s (nb interp) vs pipe            max |rel diff| = 0.000348 at T = 0.1201 GeV
+gamma = dln g_s/3dlnT (abs)        max |abs diff| = 0.0161 at T = 0.1205 GeV
+   gamma abs diff in [1e-05,0.001): 1.15e-05; gamma_pipe max 0.234
+   gamma abs diff in [0.001,2): 0.0161; gamma_pipe max 0.535
+   gamma abs diff in [2,20): 2.4e-06; gamma_pipe max 0.0326
+   gamma abs diff in [20,20000): 0.000313; gamma_pipe max 0.0619
+sign of pipeline dg_s/dlnT: min = -0.048868497098293925 at 1234.5253151706895
+sign of notebook dg_s/dlnT: min = -0.0488664853809114 at 1234.5253151706895
+Sigma nb vs pipe (abs)             max |abs diff| = 0.00406 at T = 336.9 GeV
+  pipeline: Delta(T=1000) = ln(rho_cont/rho_g) = -7.5763e-05
+  pipeline: Delta(T=100) = ln(rho_cont/rho_g) = +1.9183e-03
+  pipeline: Delta(T=50) = ln(rho_cont/rho_g) = -6.3887e-03
+  pipeline: Delta(T=20) = ln(rho_cont/rho_g) = -1.6034e-02
+  pipeline: Delta(T=5) = ln(rho_cont/rho_g) = -1.0497e-02
+  pipeline: Delta(T=1.641) = ln(rho_cont/rho_g) = -1.4165e-02
+  pipeline: Delta(T=1) = ln(rho_cont/rho_g) = -1.1677e-02
+  pipeline: Delta(T=0.1) = ln(rho_cont/rho_g) = -8.3078e-04
+  pipeline: Delta(T=0.01) = ln(rho_cont/rho_g) = -2.1208e-03
+  pipeline: Delta(T=0.001) = ln(rho_cont/rho_g) = -2.1065e-03
+  pipeline: Delta(T=0.0001) = ln(rho_cont/rho_g) = -9.7690e-04
+  notebook: Delta(T=1000) = ln(rho_cont/rho_g) = -1.4230e-03
+  notebook: Delta(T=100) = ln(rho_cont/rho_g) = -1.8508e-03
+  notebook: Delta(T=50) = ln(rho_cont/rho_g) = -9.1718e-03
+  notebook: Delta(T=20) = ln(rho_cont/rho_g) = -1.8484e-02
+  notebook: Delta(T=5) = ln(rho_cont/rho_g) = -1.2946e-02
+  notebook: Delta(T=1.641) = ln(rho_cont/rho_g) = -1.6611e-02
+  notebook: Delta(T=1) = ln(rho_cont/rho_g) = -1.4123e-02
+  notebook: Delta(T=0.1) = ln(rho_cont/rho_g) = -3.5158e-03
+  notebook: Delta(T=0.01) = ln(rho_cont/rho_g) = -4.8161e-03
+  notebook: Delta(T=0.001) = ln(rho_cont/rho_g) = -4.8018e-03
+  notebook: Delta(T=0.0001) = ln(rho_cont/rho_g) = -3.6696e-03
+  w_SS from g's: Delta(T=100) = +4.2893e-03
+  w_SS from g's: Delta(T=1) = -1.4382e-02
+  w_SS from g's: Delta(T=0.01) = -7.1985e-02
+f_m nb vs pipe(exact)              max |rel diff| = 0.187 at T = 0.1782 GeV
+max f_m/Sigma, T in [0.1 MeV, 2e4]: 0.000359
+rho_m0 [GeV^4] = 1.1542811865352645e-47  Mp = 2.436e+18
