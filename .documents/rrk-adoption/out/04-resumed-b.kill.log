@@ -1,0 +1,4 @@
+[2026-10-19T22:54:46+00:00] interrupt_when: waiting for "CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID" in /Users/ds283/Documents/Code/ChamPBH/var/rrk-adoption-04/resumed-b.log; then 20 s; then SIGKILL
+[2026-10-19T22:54:46+00:00] interrupt_when: driver pid 46306 (from /Users/ds283/Documents/Code/ChamPBH/var/rrk-adoption-04/resumed-b.pid)
+[2026-10-19T22:55:16+00:00] interrupt_when: saw "CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID"; waiting 20 s
+[2026-10-19T22:55:36+00:00] interrupt_when: sent SIGKILL to pid 46306

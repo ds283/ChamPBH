@@ -1,6 +1,6 @@
 # rrk-adoption campaign — implementation state
 
-**Last updated:** 2026-10-19 · **Status: LIVE — 5 of 5 prompts written, 3 landed (01, 02 and 03, all reviewed). R1–R7, U1–U5
+**Last updated:** 2026-10-20 · **Status: LIVE — 5 of 5 prompts written, 4 landed (01, 02 and 03 reviewed; 04 awaiting review). R1–R7, U1–U5
 and P2–P13 ruled by the user on 2026-10-19, as proposed; P1 amended (the wrapper in `RunDrivers/`)
 (README §6).**
 The plan is [`README.md`](README.md), written on 2026-10-19 on branch `rrk-adoption`, cut from
@@ -34,7 +34,7 @@ It comes before `jordan-normalization`, so that the science rebuild is a registe
 | 01 | [The pin, the config and the rules](01-pin-config-and-rules.md) | `runregistrykit[stores]@v0.2.0`; `runregistrykit.toml`; `var/` ignored; `CLAUDE.md`'s rules | Sonnet | ✍️ 2026-10-19 | ✅ 2026-10-19 | `b0f3488` | [log](logs/01-pin-config-and-rules.md) |
 | 02 | [The fingerprinter](02-the-fingerprinter.md) | `config/fingerprint.py` at format 1; `[stores]`; the format guard; a golden fingerprint | Sonnet | ✍️ 2026-10-19 | ✅ 2026-10-19 | `c9eea37` | [log](logs/02-the-fingerprinter.md) |
 | 03 | [The wrapper](03-the-wrapper.md) | `RunDrivers/registered_run.py`: register, beat from stdout, signals after `ray.init`, `main.py` by `runpy`, finish with the fingerprint | Opus | ✍️ 2026-10-19 | ✅ 2026-10-19 | `d5dd930` | [log](logs/03-the-wrapper.md) |
-| 04 | [Rehearse registered runs](04-rehearse-registered-runs.md) | a registered build; `SIGTERM` and resume; `SIGKILL`, `end` and resume; `store create`; stores compared; `histories.csv` = R0's | Opus | ✍️ 2026-10-19 | ⬜ | — | — |
+| 04 | [Rehearse registered runs](04-rehearse-registered-runs.md) | a registered build; `SIGTERM` and resume; `SIGKILL`, `end` and resume; `store create`; stores compared; `histories.csv` = R0's | Opus | ✍️ 2026-10-19 | ✅ 2026-10-20 | this commit | [log](logs/04-rehearse-registered-runs.md) |
 | 05 | [Close](05-close.md) | documents, handover, RunRegistryKit's gate drafts, indexes, board | Sonnet | ✍️ 2026-10-19 | ⬜ | — | — |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
@@ -66,12 +66,12 @@ before each dispatch:
 | **W4** | 03 | `ray.init` wrapped; the handler installed after it (P5) | ✅ |
 | **W5** | 03 | `main.py` by `runpy.run_path` (P7); `finish_after_exec` with the fingerprint (P6); `** driver exit status N` | ✅ |
 | **W6** | 03 | `RunDrivers/tests/test_registered_run*.py`, with no Ray; `CLAUDE.md`'s test command and `RunDrivers/` sentence | ✅ |
-| **H1** | 04 | `reference`, `done`; `store create` and the fingerprint | ⬜ |
-| **H2** | 04 | `resumed-a`, `SIGTERM`ed, `killed`/143, with the signal's timing (P5) | ⬜ |
-| **H3** | 04 | `resumed-b`, `SIGKILL`ed: `stale`, the resume refused, `end`, `lost` (U5) | ⬜ |
-| **H4** | 04 | `resumed-c`, `done`, its fingerprint written to the sidecar | ⬜ |
-| **H5** | 04 | the stores compared; `histories.csv` equal to R0's | ⬜ |
-| **H6** | 04 | `.documents/rrk-adoption-verification.md` §1 | ⬜ |
+| **H1** | 04 | `reference`, `done`; `store create` and the fingerprint | ✅ |
+| **H2** | 04 | `resumed-a`, `SIGTERM`ed, `killed`/143, with the signal's timing (P5) | ✅ |
+| **H3** | 04 | `resumed-b`, `SIGKILL`ed: `stale`, the resume refused, `end`, `lost` (U5) | ✅ |
+| **H4** | 04 | `resumed-c`, `done`, its fingerprint written to the sidecar | ✅ |
+| **H5** | 04 | the stores compared; `histories.csv` equal to R0's | ✅ |
+| **H6** | 04 | `.documents/rrk-adoption-verification.md` §1 | ✅ |
 | **Z1** | 05 | `architecture-summary.md` | ⬜ |
 | **Z2** | 05 | `CLAUDE.md` | ⬜ |
 | **Z3** | 05 | the handover, `.documents/review-remediation-verification.md` §4.15 | ⬜ |
@@ -85,7 +85,7 @@ before each dispatch:
 | Pin | the venv holds `runregistrykit` 0.2.0 from the tag, not editable; `list` runs on the empty runs root; `var/` is ignored | 01 | ✅ 2026-10-19 |
 | Fingerprint | the config's fingerprinter loads; the format guard and the golden fingerprint pass, and each deliberate breakage fails | 02 | ✅ 2026-10-19 |
 | Wrapper | with no Ray, a run through the wrapper is registered before its first line, beats, ends `done`/`failed`/`killed` with `main.py`'s exit code, takes its fingerprint after the program returns, and refuses a store an unfinished run names; `main.py` is unchanged | 03 | ✅ 2026-10-19 |
-| R | on the isolated cluster, the four builds are recorded as README §2.2 (04) says, the resumed store equals the reference, and `histories.csv` has R0's SHA-256 | 04 | ⬜ |
+| R | on the isolated cluster, the four builds are recorded as README §2.2 (04) says, the resumed store equals the reference, and `histories.csv` has R0's SHA-256 | 04 | ✅ 2026-10-20 |
 | RunRegistryKit G3 / G2 | recorded in RunRegistryKit, on its `extraction` and `interrupted-runs` boards, by the user from 05's drafts (P12) | 05 | ⬜ |
 
 ## 3. Active and unresolved issues
@@ -347,3 +347,41 @@ All pass.
   - the status line;
   - the notes list.
 - No issue opened.
+
+### 5.5 After prompt 04 (2026-10-20)
+
+04 landed in this commit (log: [`logs/04-rehearse-registered-runs.md`](logs/04-rehearse-registered-runs.md)),
+under the orchestrator's note for 04, whose twelve rulings governed. The rehearsal ran on
+2026-10-19, 23:34–00:07 BST, on ChamPBH's isolated cluster (`ray_cluster.sh start "rrk-adoption 04
+(R)"`, exit 0, 5 s; `stop`, exit 0, 19 s), at `07aa626`. The record is
+`.documents/rrk-adoption-verification.md` §1, with the outputs under `.documents/rrk-adoption/out/04-*`.
+- **H1.** `reference`, `rrk-adoption-04-reference-20261019T234113`: `done`/0 in 5 min 40 s, 5 / 5 /
+  5 / 5 in each stage. Its status has the fingerprint `2dd4b39b…932f` and "not written … (there is
+  none)"; its manifest `script` `main.py` with `main.py`'s SHA-256 and `results_store_id` `null`.
+  Then `store create`, `store fingerprint --write` (the same digest) and `store show`.
+- **H2.** `resumed-a`, `rrk-adoption-04-resumed-a-20261019T234840`: `SIGTERM`ed 150 s after the
+  scalar banner, `killed`/143, exit 143, with its fingerprint. Signal → `killed` record 0 s (±1 s);
+  → the final record 9 s. No `** cancelled an alarm` line. The probe (ruling 8): `ray.init` attached
+  to the external cluster installs Ray's `sigterm_handler` over `SIG_DFL`, and the wrapper's replaced
+  it (P5). Then `store create` on the resumed store.
+- **H3.** `resumed-b`, `rrk-adoption-04-resumed-b-20261019T235447`: `SIGKILL`ed 20 s after the
+  banner; no driver marker; `list` `!!`, `stale`; no Ray worker, actor or process left; the next
+  `resumed-c` refused, exit 2, one `!! ` line naming `end`, nothing created; `end` accepted,
+  verified; `lost`.
+- **H4.** `resumed-c`, `rrk-adoption-04-resumed-c-20261019T235647`: `done`/0 in 3 min 5 s,
+  computing 2 of the 5 histories; `fingerprint_sidecar` `written`; status, sidecar and `store
+  fingerprint` one digest. `resumed-b`'s and `resumed-c`'s `results_store_id` the resumed store's.
+- **H5.** `compare_stores`: `RESULT: equal`, bookkeeping columns aside. Both stores' fingerprints
+  `2dd4b39b61b9cc1b39bfcf5068ca2d00e84b52fee9da61958a11781931b0932f`. `histories.csv`
+  `d7c62c37…c522`, R0's.
+- **H6.** The verification document §1, created.
+- **Suites**, before and after: CosmologyModels 18, ComputeTargets 176 (61 + 115), ObjectFactories
+  78, tools 84, RunDrivers 61. `pip freeze` unchanged. `main.py` unchanged since `3cd2be4`.
+- **Deviations** (log): two `STRUCTURALLY REQUIRED` (the kill in the scalar stage, ruling 1; the
+  heartbeat's age read from `status.json`, since `list`'s `AGE` is the run's age), two `UNINTENDED
+  DRIFT` (one birth-time line re-read with `/usr/bin/stat`; `stop`'s exit status not echoed), the
+  rest the note's rulings as `IMPLEMENTATION CHOICE`.
+- **Observed, not opened:** in `resumed-a`, β = 10's stored row was still unvalidated 65 s after it
+  was stored, so the resume pruned and recomputed it; the log offers a likely mechanism (the queues'
+  `ray.wait` for `min(3, in flight)`), not measured. Left for the orchestrator.
+- **Gate "R"** holds. No issue opened.

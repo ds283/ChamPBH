@@ -1,0 +1,47 @@
+# rrk-adoption 04: the refused resumed-c (ruling 10)
+
+$ find var/runs | sort   (before)
+var/runs
+var/runs/rrk-adoption-04-reference-20261019T234113
+var/runs/rrk-adoption-04-reference-20261019T234113/manifest.json
+var/runs/rrk-adoption-04-reference-20261019T234113/status.json
+var/runs/rrk-adoption-04-reference-20261019T234113/stderr.log
+var/runs/rrk-adoption-04-reference-20261019T234113/stdout.log
+var/runs/rrk-adoption-04-resumed-a-20261019T234840
+var/runs/rrk-adoption-04-resumed-a-20261019T234840/manifest.json
+var/runs/rrk-adoption-04-resumed-a-20261019T234840/status.json
+var/runs/rrk-adoption-04-resumed-a-20261019T234840/stderr.log
+var/runs/rrk-adoption-04-resumed-a-20261019T234840/stdout.log
+var/runs/rrk-adoption-04-resumed-b-20261019T235447
+var/runs/rrk-adoption-04-resumed-b-20261019T235447/manifest.json
+var/runs/rrk-adoption-04-resumed-b-20261019T235447/status.json
+var/runs/rrk-adoption-04-resumed-b-20261019T235447/stderr.log
+var/runs/rrk-adoption-04-resumed-b-20261019T235447/stdout.log
+
+$ cat var/rrk-adoption-04/resumed-c-refused.log
+!! Cannot begin run rrk-adoption-04-resumed-c-20261019T235624 with results "/Users/ds283/Documents/Code/ChamPBH/var/datastores/rrk-adoption-04-resumed.db": run rrk-adoption-04-resumed-b-20261019T235447 is running (stale, pid 46306) and names this store by its results and results_store_id. A stale run is ended by a person, with `python -m runregistrykit end RUN_ID --reason TEXT`, before another run is begun on its store; the registry does not decide that a run is dead. No run directory was created
+** driver exit status 2
+** launcher saw exit status 2
+
+$ grep -c '^!! ' var/rrk-adoption-04/resumed-c-refused.log
+1
+
+$ find var/runs | sort   (after)
+var/runs
+var/runs/rrk-adoption-04-reference-20261019T234113
+var/runs/rrk-adoption-04-reference-20261019T234113/manifest.json
+var/runs/rrk-adoption-04-reference-20261019T234113/status.json
+var/runs/rrk-adoption-04-reference-20261019T234113/stderr.log
+var/runs/rrk-adoption-04-reference-20261019T234113/stdout.log
+var/runs/rrk-adoption-04-resumed-a-20261019T234840
+var/runs/rrk-adoption-04-resumed-a-20261019T234840/manifest.json
+var/runs/rrk-adoption-04-resumed-a-20261019T234840/status.json
+var/runs/rrk-adoption-04-resumed-a-20261019T234840/stderr.log
+var/runs/rrk-adoption-04-resumed-a-20261019T234840/stdout.log
+var/runs/rrk-adoption-04-resumed-b-20261019T235447
+var/runs/rrk-adoption-04-resumed-b-20261019T235447/manifest.json
+var/runs/rrk-adoption-04-resumed-b-20261019T235447/status.json
+var/runs/rrk-adoption-04-resumed-b-20261019T235447/stderr.log
+var/runs/rrk-adoption-04-resumed-b-20261019T235447/stdout.log
+$ diff <before> <after>
+diff exit 0

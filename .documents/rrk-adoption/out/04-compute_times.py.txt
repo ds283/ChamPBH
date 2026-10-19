@@ -1,0 +1,20 @@
+"""Each ScalarModel row's compute_time, with beta, from a store's shards, read through sqlite3
+with a file:...?mode=ro URI only (rrk-adoption 04, the orchestrator's note for 04, ruling 6)."""
+import glob, sqlite3, sys
+from urllib.parse import quote
+stem = sys.argv[1]  # e.g. var/datastores/rrk-adoption-04-reference
+QUERY = (
+    "SELECT b.value, s.compute_time, s.compute_steps, s.validated, s.failure, s.timestamp "
+    "FROM ScalarModel s JOIN ExponentialCoupling c ON s.coupling_serial = c.serial "
+    "JOIN beta_value b ON c.beta_serial = b.serial"
+)
+print("query:", QUERY)
+rows = []
+for f in sorted(glob.glob(stem + "-shard*.db")):
+    con = sqlite3.connect("file:" + quote(f, safe="/") + "?mode=ro", uri=True)
+    for r in con.execute(QUERY):
+        rows.append((f.rsplit("-", 1)[1], *r))
+    con.close()
+for r in sorted(rows, key=lambda r: r[2]):
+    print(f"  {r[0]}: beta {r[1]:g}  compute_time {r[2]:.2f} s  steps {r[3]}  validated {r[4]}  failure {r[5]}  timestamp {r[6]}")
+print(f"  {len(rows)} rows")

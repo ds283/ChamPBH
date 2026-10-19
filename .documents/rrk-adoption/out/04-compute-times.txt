@@ -1,0 +1,27 @@
+# rrk-adoption 04: ScalarModel compute_time by beta (ruling 6), read through sqlite3 mode=ro
+
+## reference, after H1 and its store create (23:48)
+$ ./venv/bin/python <scratch>/compute_times.py var/datastores/rrk-adoption-04-reference
+query: SELECT b.value, s.compute_time, s.compute_steps, s.validated, s.failure, s.timestamp FROM ScalarModel s JOIN ExponentialCoupling c ON s.coupling_serial = c.serial JOIN beta_value b ON c.beta_serial = b.serial
+  shard0000.db: beta 1.15  compute_time 7.28 s  steps 217426  validated 1  failure 0  timestamp 2026-10-19 23:42:25.441804
+  shard0015.db: beta 1.1  compute_time 7.33 s  steps 227521  validated 1  failure 0  timestamp 2026-10-19 23:42:26.603696
+  shard0001.db: beta 1.2  compute_time 8.12 s  steps 254491  validated 1  failure 0  timestamp 2026-10-19 23:42:27.369381
+  shard0002.db: beta 10  compute_time 50.91 s  steps 1075123  validated 1  failure 0  timestamp 2026-10-19 23:43:23.462438
+  shard0003.db: beta 25  compute_time 195.74 s  steps 2572397  validated 1  failure 0  timestamp 2026-10-19 23:45:53.841138
+  5 rows
+
+## resumed, after H2 (23:54)
+$ ./venv/bin/python <scratch>/compute_times.py var/datastores/rrk-adoption-04-resumed
+query: SELECT b.value, s.compute_time, s.compute_steps, s.validated, s.failure, s.timestamp FROM ScalarModel s JOIN ExponentialCoupling c ON s.coupling_serial = c.serial JOIN beta_value b ON c.beta_serial = b.serial
+  shard0000.db: beta 1.15  compute_time 10.41 s  steps 217426  validated 1  failure 0  timestamp 2026-10-19 23:50:44.876842
+  shard0015.db: beta 1.1  compute_time 10.60 s  steps 227521  validated 1  failure 0  timestamp 2026-10-19 23:50:47.793458
+  shard0001.db: beta 1.2  compute_time 12.32 s  steps 254491  validated 1  failure 0  timestamp 2026-10-19 23:50:49.101031
+  shard0002.db: beta 10  compute_time 62.85 s  steps 1075123  validated 0  failure 0  timestamp 2026-10-19 23:51:53.416434
+  4 rows
+
+## resumed, after H3's SIGKILL (23:56)
+query: SELECT b.value, s.compute_time, s.compute_steps, s.validated, s.failure, s.timestamp FROM ScalarModel s JOIN ExponentialCoupling c ON s.coupling_serial = c.serial JOIN beta_value b ON c.beta_serial = b.serial
+  shard0000.db: beta 1.15  compute_time 10.41 s  steps 217426  validated 1  failure 0  timestamp 2026-10-19 23:50:44.876842
+  shard0015.db: beta 1.1  compute_time 10.60 s  steps 227521  validated 1  failure 0  timestamp 2026-10-19 23:50:47.793458
+  shard0001.db: beta 1.2  compute_time 12.32 s  steps 254491  validated 1  failure 0  timestamp 2026-10-19 23:50:49.101031
+  3 rows

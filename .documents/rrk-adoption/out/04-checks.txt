@@ -1,0 +1,156 @@
+# rrk-adoption 04: the one check after each launch, list after the SIGKILL, and end
+
+(The first check's birth-time line failed: the stat first on PATH is not macOS's. /usr/bin/stat, run straight after: reference.log born 2026-10-19 23:41:11 +0100; the manifest born 2026-10-19 23:41:13 +0100.)
+
+### 2026-10-19 23:41:23 +0100 one check, reference
+manifest path: /Users/ds283/Documents/Code/ChamPBH/var/runs/rrk-adoption-04-reference-20261019T234113/manifest.json
+-rw-r--r-- 1 ds283 staff 3226 Oct 19 23:41 /Users/ds283/Documents/Code/ChamPBH/var/runs/rrk-adoption-04-reference-20261019T234113/manifest.json
+status state running pid 40540 heartbeat 2026-10-19T23:41:14+01:00 stage Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/rrk-adoption-04-reference.db" with 16 shards
+pid file: 40540
+created 2026-10-19T23:41:13+01:00
+stat: cannot read file system information for '%SB': No such file or directory
+stat: cannot read file system information for '%F %T %z': No such file or directory
+log birth: var/rrk-adoption-04/reference.log 10000120000001a ? 1a 4096 4096 242837545 13853415 13853415 561877849 554136600
+$ list
+   RUN                                        STATE      PROGRESS      AGE  PURPOSE · STAGE
+   rrk-adoption-04-reference-20261019T234113  running           -      11s  rrk-adoption 04 H1: the pilot grid straight through, the reference store  · Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datas
+
+1 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 1 alive; 0 with no host recorded.
+list exit 0
+$ head of log
+1:** registered_run: registered as rrk-adoption-04-reference-20261019T234113
+2:**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/rrk-adoption-04-reference-20261019T234113/manifest.json
+3:**   list it with: ./venv/bin/python -m runregistrykit list
+4:>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.2.0 (https://github.com/ds283/RayPoolKit@eaef0ce60e2fc354bb32f0ad576010e6a83c1976, requested v0.2.0)
+
+### 2026-10-19 23:48:54 +0100 one check, resumed-a
+manifest path: /Users/ds283/Documents/Code/ChamPBH/var/runs/rrk-adoption-04-resumed-a-20261019T234840/manifest.json
+-rw-r--r-- 1 ds283 staff 3284 Oct 19 23:48 /Users/ds283/Documents/Code/ChamPBH/var/runs/rrk-adoption-04-resumed-a-20261019T234840/manifest.json
+status state running pid 43850 heartbeat 2026-10-19T23:48:40+01:00 stage Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/rrk-adoption-04-resumed.db" with 16 shards
+pid file: 43850
+created 2026-10-19T23:48:40+01:00 results_store_id None
+log birth: 2026-10-19 23:48:39 +0100
+manifest birth: 2026-10-19 23:48:40 +0100
+$ list
+   RUN                                        STATE      PROGRESS      AGE  PURPOSE · STAGE
+   rrk-adoption-04-resumed-a-20261019T234840  running           -      15s  rrk-adoption 04 H2: the pilot grid into the resumed store, interrupted with SIGTERM in the scalar stage  · Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datas
+   rrk-adoption-04-reference-20261019T234113  done              -       8m  rrk-adoption 04 H1: the pilot grid straight through, the reference store  · CALCULATE BBN DATA, all work items complete
+
+2 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 1 alive, 1 finished; 0 with no host recorded.
+list exit 0
+$ head of log
+1:** registered_run: registered as rrk-adoption-04-resumed-a-20261019T234840
+2:**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/rrk-adoption-04-resumed-a-20261019T234840/manifest.json
+3:**   list it with: ./venv/bin/python -m runregistrykit list
+4:>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.2.0 (https://github.com/ds283/RayPoolKit@eaef0ce60e2fc354bb32f0ad576010e6a83c1976, requested v0.2.0)
+
+### 2026-10-19 23:55:16 +0100 one check, resumed-b
+manifest path: /Users/ds283/Documents/Code/ChamPBH/var/runs/rrk-adoption-04-resumed-b-20261019T235447/manifest.json
+-rw-r--r-- 1 ds283 staff 3315 Oct 19 23:54 /Users/ds283/Documents/Code/ChamPBH/var/runs/rrk-adoption-04-resumed-b-20261019T235447/manifest.json
+status state running pid 46306 heartbeat 2026-10-19T23:54:48+01:00 stage Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/rrk-adoption-04-resumed.db" with 16 shards
+pid file: 46306
+created 2026-10-19T23:54:47+01:00 results_store_id 1e9b249c0f2e4af5b0b529b0b403aaa6
+log birth: 2026-10-19 23:54:46 +0100
+manifest birth: 2026-10-19 23:54:47 +0100
+$ list
+   RUN                                        STATE      PROGRESS      AGE  PURPOSE · STAGE
+   rrk-adoption-04-resumed-b-20261019T235447  running           -      30s  rrk-adoption 04 H3: a resume of the resumed store, killed with SIGKILL in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   rrk-adoption-04-resumed-a-20261019T234840  killed            -       7m  rrk-adoption 04 H2: the pilot grid into the resumed store, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   rrk-adoption-04-reference-20261019T234113  done              -      14m  rrk-adoption 04 H1: the pilot grid straight through, the reference store  · CALCULATE BBN DATA, all work items complete
+
+3 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 1 alive, 2 finished; 0 with no host recorded.
+list exit 0
+$ head of log
+1:** registered_run: registered as rrk-adoption-04-resumed-b-20261019T235447
+2:**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/rrk-adoption-04-resumed-b-20261019T235447/manifest.json
+3:**   list it with: ./venv/bin/python -m runregistrykit list
+4:>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.2.0 (https://github.com/ds283/RayPoolKit@eaef0ce60e2fc354bb32f0ad576010e6a83c1976, requested v0.2.0)
+
+### 2026-10-19 23:57:01 +0100 one check, resumed-c
+manifest path: /Users/ds283/Documents/Code/ChamPBH/var/runs/rrk-adoption-04-resumed-c-20261019T235647/manifest.json
+-rw-r--r-- 1 ds283 staff 3283 Oct 19 23:56 /Users/ds283/Documents/Code/ChamPBH/var/runs/rrk-adoption-04-resumed-c-20261019T235647/manifest.json
+status state running pid 47488 heartbeat 2026-10-19T23:56:49+01:00 stage Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/rrk-adoption-04-resumed.db" with 16 shards
+pid file: 47488
+created 2026-10-19T23:56:47+01:00 results_store_id 1e9b249c0f2e4af5b0b529b0b403aaa6
+log birth: 2026-10-19 23:56:47 +0100
+manifest birth: 2026-10-19 23:56:48 +0100
+$ list
+   RUN                                        STATE      PROGRESS      AGE  PURPOSE · STAGE
+   rrk-adoption-04-resumed-c-20261019T235647  running           -      15s  rrk-adoption 04 H4: the last resume of the resumed store, straight through  · Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/v
+   rrk-adoption-04-resumed-b-20261019T235447  lost              -       2m  rrk-adoption 04 H3: a resume of the resumed store, killed with SIGKILL in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   rrk-adoption-04-resumed-a-20261019T234840  killed            -       8m  rrk-adoption 04 H2: the pilot grid into the resumed store, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   rrk-adoption-04-reference-20261019T234113  done              -      16m  rrk-adoption 04 H1: the pilot grid straight through, the reference store  · CALCULATE BBN DATA, all work items complete
+
+4 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 1 alive, 3 finished; 0 with no host recorded.
+list exit 0
+$ head of log
+1:** registered_run: registered as rrk-adoption-04-resumed-c-20261019T235647
+2:**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/rrk-adoption-04-resumed-c-20261019T235647/manifest.json
+3:**   list it with: ./venv/bin/python -m runregistrykit list
+4:>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.2.0 (https://github.com/ds283/RayPoolKit@eaef0ce60e2fc354bb32f0ad576010e6a83c1976, requested v0.2.0)
+
+### 2026-10-19 23:56:08 +0100 list after the SIGKILL
+$ ./venv/bin/python -m runregistrykit list
+exit 0
+-- stdout
+   RUN                                        STATE      PROGRESS      AGE  PURPOSE · STAGE
+!! rrk-adoption-04-resumed-b-20261019T235447  running           -       1m  rrk-adoption 04 H3: a resume of the resumed store, killed with SIGKILL in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   rrk-adoption-04-resumed-a-20261019T234840  killed            -       7m  rrk-adoption 04 H2: the pilot grid into the resumed store, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   rrk-adoption-04-reference-20261019T234113  done              -      15m  rrk-adoption 04 H1: the pilot grid straight through, the reference store  · CALCULATE BBN DATA, all work items complete
+
+3 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 2 finished, 1 stale; 0 with no host recorded.
+-- stderr
+!! 1 run(s) say they are running and are not: the pid does not answer kill -0, the heartbeat is older than 900 s, or this machine has rebooted since. Nothing here has killed or cleaned anything — go and look. Once you know one is over, end it with `python -m runregistrykit end RUN_ID --reason TEXT`.
+
+### 2026-10-19 23:56:38 +0100 end resumed-b
+$ kill -0 46306
+(eval):kill:1: kill 46306 failed: no such process
+kill -0 exit 1
+$ ./venv/bin/python -m runregistrykit end rrk-adoption-04-resumed-b-20261019T235447 --reason "SIGKILLed on purpose by rrk-adoption 04 to rehearse the hard-kill route"
+>> end: rrk-adoption-04-resumed-b-20261019T235447 is now lost, verified: its pid 46306 does not answer kill -0 on this host
+exit 0
+$ ./venv/bin/python -m runregistrykit list
+   RUN                                        STATE      PROGRESS      AGE  PURPOSE · STAGE
+   rrk-adoption-04-resumed-b-20261019T235447  lost              -       2m  rrk-adoption 04 H3: a resume of the resumed store, killed with SIGKILL in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   rrk-adoption-04-resumed-a-20261019T234840  killed            -       8m  rrk-adoption 04 H2: the pilot grid into the resumed store, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   rrk-adoption-04-reference-20261019T234113  done              -      15m  rrk-adoption 04 H1: the pilot grid straight through, the reference store  · CALCULATE BBN DATA, all work items complete
+
+3 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 3 finished; 0 with no host recorded.
+exit 0
+$ cat var/runs/rrk-adoption-04-resumed-b-20261019T235447/status.json
+{
+  "ended": {
+    "at": "2026-10-19T23:56:39+01:00",
+    "by": "ds283",
+    "evidence": {
+      "boot": "this",
+      "heartbeat": "2026-10-19T23:55:16+01:00",
+      "heartbeat_age": 83.147749,
+      "host": "this",
+      "pid": 46306,
+      "pid_answers": false,
+      "state": "running",
+      "status_readable": true
+    },
+    "git_head": "07aa626e9c17a140a48bc203fef6b38565dccbbd",
+    "host": {
+      "boot": "376461AF-4985-4F42-8E41-F4E914F5E3E6",
+      "id": "8d2b247824882486",
+      "name": "mps026088.phys.susx.ac.uk"
+    },
+    "not_verified_because": null,
+    "reason": "SIGKILLed on purpose by rrk-adoption 04 to rehearse the hard-kill route",
+    "verified": true
+  },
+  "exit_code": null,
+  "heartbeat": "2026-10-19T23:56:39+01:00",
+  "host": {
+    "boot": "376461AF-4985-4F42-8E41-F4E914F5E3E6",
+    "id": "8d2b247824882486"
+  },
+  "pid": 46306,
+  "stage": "CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID",
+  "state": "lost",
+  "units_done": 0,
+  "units_total": null
+}

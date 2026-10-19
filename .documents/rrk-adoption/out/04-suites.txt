@@ -1,0 +1,61 @@
+# rrk-adoption 04: the suites
+## before: CosmologyModels
+
+OK
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+## before: CT-a-f
+!! plot_abundance_shifts: no finite shifts to plot; figure 1 skipped
+!! plot_T_deliver: no first bounce to plot; figure 3 skipped
+!! plot_fixed_T: no fixed-T values to plot; figure 4 skipped
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+## before: CT-g-z
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+-- compute_scalar_model (reason-test): integration failure
+   step budget exhausted: integrate_scalar_history (reason-test) took 51 accepted steps (budget 50) at N=4.325263426, T_J=269.15 GeV, with 0 reflection(s)
+!! compute_scalar_model (reason-test): marked as total integration failure
+## before: ObjectFactories
+Ran 78 tests in 7.214s
+
+OK
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+## before: tools
+
+OK
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+## before: RunDrivers
+----------------------------------------------------------------------
+Ran 61 tests in 18.674s
+
+OK
+## after: CosmologyModels
+
+OK
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+## after: CT-a-f
+!! plot_abundance_shifts: no finite shifts to plot; figure 1 skipped
+!! plot_T_deliver: no first bounce to plot; figure 3 skipped
+!! plot_fixed_T: no fixed-T values to plot; figure 4 skipped
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+## after: CT-g-z
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+-- compute_scalar_model (reason-test): integration failure
+   step budget exhausted: integrate_scalar_history (reason-test) took 51 accepted steps (budget 50) at N=4.325263426, T_J=269.15 GeV, with 0 reflection(s)
+!! compute_scalar_model (reason-test): marked as total integration failure
+## after: ObjectFactories
+Ran 78 tests in 6.882s
+
+OK
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+## after: tools
+
+OK
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+## after: RunDrivers
+----------------------------------------------------------------------
+Ran 61 tests in 18.496s
+
+OK
