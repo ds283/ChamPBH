@@ -1,6 +1,6 @@
 # rrk-adoption campaign — implementation state
 
-**Last updated:** 2026-10-19 · **Status: LIVE — 5 of 5 prompts written, 2 landed (01 and 02, both reviewed). R1–R7, U1–U5
+**Last updated:** 2026-10-19 · **Status: LIVE — 5 of 5 prompts written, 3 landed (01 and 02 reviewed; 03 awaiting review). R1–R7, U1–U5
 and P2–P13 ruled by the user on 2026-10-19, as proposed; P1 amended (the wrapper in `RunDrivers/`)
 (README §6).**
 The plan is [`README.md`](README.md), written on 2026-10-19 on branch `rrk-adoption`, cut from
@@ -33,7 +33,7 @@ It comes before `jordan-normalization`, so that the science rebuild is a registe
 |---|---|---|---|---|---|---|---|
 | 01 | [The pin, the config and the rules](01-pin-config-and-rules.md) | `runregistrykit[stores]@v0.2.0`; `runregistrykit.toml`; `var/` ignored; `CLAUDE.md`'s rules | Sonnet | ✍️ 2026-10-19 | ✅ 2026-10-19 | `b0f3488` | [log](logs/01-pin-config-and-rules.md) |
 | 02 | [The fingerprinter](02-the-fingerprinter.md) | `config/fingerprint.py` at format 1; `[stores]`; the format guard; a golden fingerprint | Sonnet | ✍️ 2026-10-19 | ✅ 2026-10-19 | `c9eea37` | [log](logs/02-the-fingerprinter.md) |
-| 03 | [The wrapper](03-the-wrapper.md) | `RunDrivers/registered_run.py`: register, beat from stdout, signals after `ray.init`, `main.py` by `runpy`, finish with the fingerprint | Opus | ✍️ 2026-10-19 | ⬜ | — | — |
+| 03 | [The wrapper](03-the-wrapper.md) | `RunDrivers/registered_run.py`: register, beat from stdout, signals after `ray.init`, `main.py` by `runpy`, finish with the fingerprint | Opus | ✍️ 2026-10-19 | ✅ 2026-10-19 | this commit | [log](logs/03-the-wrapper.md) |
 | 04 | [Rehearse registered runs](04-rehearse-registered-runs.md) | a registered build; `SIGTERM` and resume; `SIGKILL`, `end` and resume; `store create`; stores compared; `histories.csv` = R0's | Opus | ✍️ 2026-10-19 | ⬜ | — | — |
 | 05 | [Close](05-close.md) | documents, handover, RunRegistryKit's gate drafts, indexes, board | Sonnet | ✍️ 2026-10-19 | ⬜ | — | — |
 
@@ -59,12 +59,12 @@ before each dispatch:
 | **F2** | 02 | `[stores] fingerprinter` in `runregistrykit.toml` | ✅ |
 | **F3** | 02 | `ObjectFactories/tests/test_fingerprint_format_guard.py`: the Q5 guard, keys kept by type | ✅ |
 | **F4** | 02 | `ObjectFactories/tests/test_store_fingerprint_golden.py` and its golden file; the loader and the command line | ✅ |
-| **W1** | 03 | the package `RunDrivers/` and its test root; `RunDrivers/registered_run.py` (P1 as amended) | ⬜ |
-| **W2** | 03 | the wrapper's flags and refusals before `begin()`, exit 2 (P2, P3, U2) | ⬜ |
-| **W3** | 03 | registration: `begin` with `script` = the program (U3), `scope`, `heartbeat_means`; the stream proxies | ⬜ |
-| **W4** | 03 | `ray.init` wrapped; the handler installed after it (P5) | ⬜ |
-| **W5** | 03 | `main.py` by `runpy.run_path` (P7); `finish_after_exec` with the fingerprint (P6); `** driver exit status N` | ⬜ |
-| **W6** | 03 | `RunDrivers/tests/test_registered_run*.py`, with no Ray; `CLAUDE.md`'s test command and `RunDrivers/` sentence | ⬜ |
+| **W1** | 03 | the package `RunDrivers/` and its test root; `RunDrivers/registered_run.py` (P1 as amended) | ✅ |
+| **W2** | 03 | the wrapper's flags and refusals before `begin()`, exit 2 (P2, P3, U2) | ✅ |
+| **W3** | 03 | registration: `begin` with `script` = the program (U3), `scope`, `heartbeat_means`; the stream proxies | ✅ |
+| **W4** | 03 | `ray.init` wrapped; the handler installed after it (P5) | ✅ |
+| **W5** | 03 | `main.py` by `runpy.run_path` (P7); `finish_after_exec` with the fingerprint (P6); `** driver exit status N` | ✅ |
+| **W6** | 03 | `RunDrivers/tests/test_registered_run*.py`, with no Ray; `CLAUDE.md`'s test command and `RunDrivers/` sentence | ✅ |
 | **H1** | 04 | `reference`, `done`; `store create` and the fingerprint | ⬜ |
 | **H2** | 04 | `resumed-a`, `SIGTERM`ed, `killed`/143, with the signal's timing (P5) | ⬜ |
 | **H3** | 04 | `resumed-b`, `SIGKILL`ed: `stale`, the resume refused, `end`, `lost` (U5) | ⬜ |
@@ -83,7 +83,7 @@ before each dispatch:
 |---|---|---|---|
 | Pin | the venv holds `runregistrykit` 0.2.0 from the tag, not editable; `list` runs on the empty runs root; `var/` is ignored | 01 | ✅ 2026-10-19 |
 | Fingerprint | the config's fingerprinter loads; the format guard and the golden fingerprint pass, and each deliberate breakage fails | 02 | ✅ 2026-10-19 |
-| Wrapper | with no Ray, a run through the wrapper is registered before its first line, beats, ends `done`/`failed`/`killed` with `main.py`'s exit code, takes its fingerprint after the program returns, and refuses a store an unfinished run names; `main.py` is unchanged | 03 | ⬜ |
+| Wrapper | with no Ray, a run through the wrapper is registered before its first line, beats, ends `done`/`failed`/`killed` with `main.py`'s exit code, takes its fingerprint after the program returns, and refuses a store an unfinished run names; `main.py` is unchanged | 03 | ✅ 2026-10-19 |
 | R | on the isolated cluster, the four builds are recorded as README §2.2 (04) says, the resumed store equals the reference, and `histories.csv` has R0's SHA-256 | 04 | ⬜ |
 | RunRegistryKit G3 / G2 | recorded in RunRegistryKit, on its `extraction` and `interrupted-runs` boards, by the user from 05's drafts (P12) | 05 | ⬜ |
 
@@ -264,3 +264,33 @@ pass.
   limitations under the License.`, is missing. The golden module also imports `ray` and `tempfile`
   and uses neither. Both are fixed in a housekeeping commit of their own, as with 01.
 - No issue opened.
+
+### 5.4 After prompt 03 (2026-10-19)
+
+03 landed in this commit (log: [`logs/03-the-wrapper.md`](logs/03-the-wrapper.md)), under the
+orchestrator's note for 03, whose eleven rulings governed.
+- **W1.** The package `RunDrivers/` and its test root `RunDrivers/tests/`;
+  `RunDrivers/registered_run.py`, which puts the root on `sys.path` and runs without `PYTHONPATH`.
+- **W2.** The four flags required and non-empty; `argv` split at its first `--`; both parsers'
+  `error` replaced on the instance, so that every refusal before `begin` is one `!! ` line, exit 2:
+  a missing or empty flag, no `--`, anything `main.py`'s parser refuses (a missing `--database`
+  among them, ruling 1), an empty database, `--inventory`, and an address `ray_address_problem`
+  refuses (its own `!! ` removed).
+- **W3.** `begin` with `script` = the program (`main.py` in production, U3), `results` the absolute
+  database, `scope` from the parsed arguments as given, `heartbeat_means` (the 30 s throttle, the
+  300 s floor, the workers' lines, the 900 s window), `argv` = the wrapper's path and arguments,
+  `client_root` the repository; a `ConfigError` re-raised, any other `RuntimeError` a `Refusal`.
+  The pre-Ray handler and the two proxies, each with a re-entrant lock around its bookkeeping.
+- **W4.** `ray.init` wrapped: the real call with `main.py`'s arguments unchanged, then the handler.
+- **W5.** `main.py` by `runpy.run_path`; SecondaryGWKit's `finish_after_exec`, the fingerprint only
+  after the program; `run`, the script's entry, prints `** driver exit status N` last, on a line of
+  its own (a guard added after a breakage replay found a signal can leave a line unfinished), and
+  exits with `main.py`'s status.
+- **W6.** 61 tests in six modules and the helper `stubbed_run.py`; none starts Ray. `CLAUDE.md`: the
+  new root's command and count, and the `RunDrivers/` sentence.
+- **Suites:** CosmologyModels 18, ComputeTargets 176 (61 + 115), ObjectFactories 78, tools 84, and
+  RunDrivers 61 (three runs in a row, all OK). Each of the six deliberate breakages fails a named
+  test. `git diff 3cd2be4 -- main.py plot_by_beta.py plot_ScalarModel.py utilities.py` is empty.
+- **§2.3, for 04:** the pilot's stages are each under 300 s, so it prints no progress line; its
+  longest healthy silence is the scalar-history stage, about 2¼ minutes.
+- **Gate "Wrapper"** holds. No issue opened.

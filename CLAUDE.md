@@ -71,7 +71,9 @@ invariants that hold across all of them:
   and `Datastore/tests/`, following SecondaryGWKit's move of 2026-10-12, and the empty `Datastore`
   packages were deleted. The shared store fixtures (`standin_pool.py`) moved to `StoreFixtures/`,
   a package with no test modules that any test root may import, and the tests of `tools/` to
-  `tools/tests/`. Campaign records and dated documents keep the old paths.
+  `tools/tests/`. Campaign records and dated documents keep the old paths. The launchers of
+  registered runs live in `RunDrivers/`, with their tests in `RunDrivers/tests/`, and `tools/`
+  keeps repository-level tooling.
 - **Tests** live in `<package>/tests/` as `unittest` modules (with an `__init__.py`) and run from
   the repository root:
   ```bash
@@ -79,6 +81,7 @@ invariants that hold across all of them:
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 176 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .   # 69 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 79 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .        # 61 tests
   ```
   `ComputeTargets/tests` takes about 200 s in one run, and longer on a loaded machine; a Bash call is
   capped at ten minutes, so run it in two halves:
@@ -86,8 +89,8 @@ invariants that hold across all of them:
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 61 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 115 tests
   ```
-  (The counts are those of 2026-10-14.) They **must not need a Ray cluster or a persistent
-  datastore**. A test may build a temporary
+  (The counts are those of 2026-10-14, and RunDrivers/tests' of 2026-10-19.) They **must not
+  need a Ray cluster or a persistent datastore**. A test may build a temporary
   SQLite datastore in a `tempfile` directory, through `datastorekit`'s undecorated actor
   (`standin_pool.DatastoreClass`) inside ChamPBH's stand-in cluster (`StoreFixtures/standin_pool.py`,
   a copy of the package's; `_TempStoreCase` in `ObjectFactories/tests/test_version_keyed_lookups.py` is
