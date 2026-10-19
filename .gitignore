@@ -3,3 +3,5 @@
 *.pyc
 *.sqlite
 /CodeComparisonTools/XavEOS_data_out.csv
+# The registry's run directories and this repository's datastores (rrk-adoption README 6.0, R4)
+var/

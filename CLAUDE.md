@@ -112,9 +112,6 @@ invariants that hold across all of them:
 - **Redshift.** A `ScalarModelValue`'s `z` is the Einstein-frame redshift assigned from the
   e-fold number relative to the end of the integration; the Jordan-frame temperature is
   `log_T_Jordan`. Do not treat the two as interchangeable.
-- **Long-running jobs.** Production pipeline runs (`main.py` with a datastore) are the user's and
-  are made on another machine; no campaign prompt starts one. Nothing a prompt runs should take
-  longer than a few PRyMordial solves. There is no run registry in this repository.
 - **The plot scripts** (`plot_by_beta.py`, `plot_ScalarModel.py`) read a store read-only, through
   `plot_inputs.py`, and stop (exit 2) if their options do not match the ones the build used.
 - **Ray on this machine.** A run that needs a cluster here starts ChamPBH's isolated one with
@@ -125,3 +122,45 @@ invariants that hold across all of them:
   start Ray without `--ray-address` and refuse `auto` outright (exit 2, before `ray.init`);
   `main.py --inventory` starts no Ray and needs none. **No one runs `ray stop`**, which stops every
   Ray process on the machine, other projects' builds included. The script's `--help` is the detail.
+
+## Long-running jobs — the run registry
+
+A job that takes hours must not be something a conversation owns. `runregistrykit`
+(RunRegistryKit, pinned at `v0.2.0` with its store layer) records that one exists, in
+`var/runs/<campaign>-<prompt>-<slug>-<timestamp>/`. `runregistrykit.toml` at the repository root
+configures it. RunRegistryKit's `README.md`, "The rules", tells each rule below with the failure it
+answers, and its section "Ending a run whose end was never recorded" tells rule 5. The registry
+records; it does not schedule, supervise, restart or lock. It deletes nothing but a store's own
+files, and those only through `store retire`, which a person runs.
+
+A registered run is launched through the wrapper `RunDrivers/registered_run.py`, which
+`rrk-adoption` prompt 03 adds; until it lands, no run is registered. `main.py` stays launchable on
+its own, without the registry, and a run launched that way is recorded nowhere.
+
+1. **Discovery.** Run `./venv/bin/python -m runregistrykit list` at the start of a session and
+   before launching anything long, and report anything `running` or stale. A job's existence must
+   not depend on a conversation remembering it.
+2. **Liveness.** A run is alive iff its pid answers `kill -0` **and** its heartbeat is inside the
+   staleness window, judged on the host the run recorded. **Never a command-line pattern match**:
+   `pgrep -f <name>` matches the pollers waiting on the same job. A killed process its parent has
+   not yet reaped still answers `kill -0`; a launch through `sh` is reaped by it.
+3. **Launch.** Detached (`nohup`, `disown`; `setsid` is not on macOS), manifest written *first*,
+   stdout and stderr into the run directory, pid recorded.
+4. **Do not babysit.** Launch, verify in **one** check that it started, and **end the turn**.
+   Polling a long job re-sends an entire context per poll and learns nothing.
+5. **The route after a hard kill.** A run killed by `SIGKILL`, a power loss or the OOM killer never
+   records its end. `list` shows it `stale`, and a resume's `begin` on its store is refused. A
+   person checks that it is over, then runs `./venv/bin/python -m runregistrykit end RUN_ID --reason
+   TEXT` on the host it ran on; the run is then `lost`, and the resume is begun. `Run.finish` is
+   never called by hand on a run that is not the caller's: it checks nothing.
+6. **Durability.** Records go in `var/runs/` and stores in `var/datastores/`, in the repository
+   and ignored by git. Never a session scratchpad, never `/tmp`.
+7. **Provenance.** Script hash and git SHA are taken at launch. A record whose script hash does
+   not match is discarded and recomputed, never blended and **never re-stamped**.
+
+**Stores live under `var/datastores/`.** Since `var/` is ignored, **never run `git clean` with `-x`
+or `-X`**, which deletes ignored files, the stores among them.
+
+**What stays.** Production pipeline runs (`main.py` with a datastore) are the user's and are made
+on another machine; no campaign prompt starts one except a rehearsal the campaign's plan names.
+Nothing a prompt runs should take longer than a few PRyMordial solves.

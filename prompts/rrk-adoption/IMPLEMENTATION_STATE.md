@@ -1,6 +1,6 @@
 # rrk-adoption campaign — implementation state
 
-**Last updated:** 2026-10-19 · **Status: LIVE — 5 of 5 prompts written, 0 landed. R1–R7, U1–U5
+**Last updated:** 2026-10-19 · **Status: LIVE — 5 of 5 prompts written, 1 landed (01). R1–R7, U1–U5
 and P2–P13 ruled by the user on 2026-10-19, as proposed; P1 amended (the wrapper in `RunDrivers/`)
 (README §6).**
 The plan is [`README.md`](README.md), written on 2026-10-19 on branch `rrk-adoption`, cut from
@@ -31,7 +31,7 @@ It comes before `jordan-normalization`, so that the science rebuild is a registe
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | [The pin, the config and the rules](01-pin-config-and-rules.md) | `runregistrykit[stores]@v0.2.0`; `runregistrykit.toml`; `var/` ignored; `CLAUDE.md`'s rules | Sonnet | ✍️ 2026-10-19 | ⬜ | — | — |
+| 01 | [The pin, the config and the rules](01-pin-config-and-rules.md) | `runregistrykit[stores]@v0.2.0`; `runregistrykit.toml`; `var/` ignored; `CLAUDE.md`'s rules | Sonnet | ✍️ 2026-10-19 | ✅ 2026-10-19 | this commit | [log](logs/01-pin-config-and-rules.md) |
 | 02 | [The fingerprinter](02-the-fingerprinter.md) | `config/fingerprint.py` at format 1; `[stores]`; the format guard; a golden fingerprint | Sonnet | ✍️ 2026-10-19 | ⬜ | — | — |
 | 03 | [The wrapper](03-the-wrapper.md) | `RunDrivers/registered_run.py`: register, beat from stdout, signals after `ray.init`, `main.py` by `runpy`, finish with the fingerprint | Opus | ✍️ 2026-10-19 | ⬜ | — | — |
 | 04 | [Rehearse registered runs](04-rehearse-registered-runs.md) | a registered build; `SIGTERM` and resume; `SIGKILL`, `end` and resume; `store create`; stores compared; `histories.csv` = R0's | Opus | ✍️ 2026-10-19 | ⬜ | — | — |
@@ -49,10 +49,10 @@ before each dispatch.
 
 | Item | Prompt | What | State |
 |---|---|---|---|
-| **C1** | 01 | `runregistrykit[stores] @ …@v0.2.0` in `requirements.txt`; the venv installed from it, not editable | ⬜ |
-| **C2** | 01 | `runregistrykit.toml` (roots, distributions; no `[stores]`); `var/` in `.gitignore` | ⬜ |
-| **C3** | 01 | `CLAUDE.md`: the section "Long-running jobs — the run registry", with the rules and `git clean -x` forbidden | ⬜ |
-| **C4** | 01 | `tools/tests/test_registry_config.py`: the config, the ignore rule, the pin | ⬜ |
+| **C1** | 01 | `runregistrykit[stores] @ …@v0.2.0` in `requirements.txt`; the venv installed from it, not editable | ✅ |
+| **C2** | 01 | `runregistrykit.toml` (roots, distributions; no `[stores]`); `var/` in `.gitignore` | ✅ |
+| **C3** | 01 | `CLAUDE.md`: the section "Long-running jobs — the run registry", with the rules and `git clean -x` forbidden | ✅ |
+| **C4** | 01 | `tools/tests/test_registry_config.py`: the config, the ignore rule, the pin | ✅ |
 | **F1** | 02 | `config/fingerprint.py`: `FINGERPRINT_FORMAT = 1`, `SPEC_DIGESTS`, `fingerprinter` | ⬜ |
 | **F2** | 02 | `[stores] fingerprinter` in `runregistrykit.toml` | ⬜ |
 | **F3** | 02 | `ObjectFactories/tests/test_fingerprint_format_guard.py`: the Q5 guard, keys kept by type | ⬜ |
@@ -79,7 +79,7 @@ before each dispatch.
 
 | Gate | Holds when | Prompt | State |
 |---|---|---|---|
-| Pin | the venv holds `runregistrykit` 0.2.0 from the tag, not editable; `list` runs on the empty runs root; `var/` is ignored | 01 | ⬜ |
+| Pin | the venv holds `runregistrykit` 0.2.0 from the tag, not editable; `list` runs on the empty runs root; `var/` is ignored | 01 | ✅ 2026-10-19 |
 | Fingerprint | the config's fingerprinter loads; the format guard and the golden fingerprint pass, and each deliberate breakage fails | 02 | ⬜ |
 | Wrapper | with no Ray, a run through the wrapper is registered before its first line, beats, ends `done`/`failed`/`killed` with `main.py`'s exit code, takes its fingerprint after the program returns, and refuses a store an unfinished run names; `main.py` is unchanged | 03 | ⬜ |
 | R | on the isolated cluster, the four builds are recorded as README §2.2 (04) says, the resumed store equals the reference, and `histories.csv` has R0's SHA-256 | 04 | ⬜ |
@@ -149,3 +149,18 @@ choices made while writing them, each within its charter:
   `[04-a-killed-process-not-yet-reaped-answers-kill-0]` would otherwise make `end` refuse the
   `SIGKILL`ed run. Its launch logs and pid files are under `var/rrk-adoption-04/`, beside the stores
   (R4).
+
+### 5.2 After prompt 01 (2026-10-19)
+
+01 landed in this commit (log: [`logs/01-pin-config-and-rules.md`](logs/01-pin-config-and-rules.md)).
+- **C1.** `runregistrykit[stores] @ …@v0.2.0` in `requirements.txt`; the venv installed from the
+  file. `pip freeze` differs by the one line `runregistrykit @ …@0bae3a3c501a8264ee4be5bc24f06422af38720f`;
+  `direct_url.json` names that commit and is not editable.
+- **C2.** `runregistrykit.toml` (no `[stores]`); `var/` in `.gitignore`. `list` prints `no runs
+  under …/var/runs`, exit 0, and creates no `var/`.
+- **C3.** `CLAUDE.md`: the section "Long-running jobs — the run registry", with seven rules
+  (SecondaryGWKit's numbering).
+- **C4.** `tools/tests/test_registry_config.py`: 5 tests. Suites: CosmologyModels 18, ComputeTargets
+  176 (61 + 115), ObjectFactories 69, tools 84 (79 + 5). Each of the three deliberate breakages fails
+  at least one new test.
+- **Gate "Pin"** holds. No issue opened.

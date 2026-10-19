@@ -1,0 +1,5 @@
+# Configuration of RunRegistryKit (README, "The client's root") for the `rrk-adoption` campaign:
+# where runs and datastores are recorded, and which distributions every manifest records.
+runs_root = "var/runs"
+stores_root = "var/datastores"
+distributions = ["datastorekit", "raypoolkit"]
