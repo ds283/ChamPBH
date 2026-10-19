@@ -1,6 +1,6 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-14 · **27 open**: 4 on the `review-remediation` board (closed
+**Last updated:** 2026-10-19 · **27 open**: 4 on the `review-remediation` board (closed
 2026-09-30), none now assigned; 2 on the `production-readiness` board
 (closed 2026-09-30); 4 on the `run-integrity` board (closed 2026-09-30); 9 on the
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`;
@@ -20,7 +20,8 @@ planned the same day, §1.12, and resolved by its prompt 02 the same day);
 issue and closed it with prompt 02, opened none and leaves none open; 1 on the
 `surfing-temperature` board (planned 2026-10-14; opened by the orchestrator before prompt 05 and
 ruled by the user, U9, 2026-10-14; closed 2026-10-14, 7 of 7 prompts landed, with the one issue
-still open on its board).
+still open on its board); none on the `rrk-adoption` board (planned 2026-10-19, with none
+opened or assigned).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -40,7 +41,8 @@ the two disagree, the board is right.
 [`bbn-tolerance`](../prompts/bbn-tolerance/IMPLEMENTATION_STATE.md) ·
 [`dk-and-rpk-migration`](../prompts/dk-and-rpk-migration/IMPLEMENTATION_STATE.md) ·
 [`read-only-plots`](../prompts/read-only-plots/IMPLEMENTATION_STATE.md) ·
-[`surfing-temperature`](../prompts/surfing-temperature/IMPLEMENTATION_STATE.md)
+[`surfing-temperature`](../prompts/surfing-temperature/IMPLEMENTATION_STATE.md) ·
+[`rrk-adoption`](../prompts/rrk-adoption/IMPLEMENTATION_STATE.md)
 
 ## 1. Open, by owning board
 
