@@ -1,7 +1,7 @@
 # Log 01 — the pin, the config and the rules
 
-**Subject:** Pin RunRegistryKit v0.2.0, configure it, ignore var/, and write the registry's rules
-**Commit:** this commit, on branch `rrk-adoption`, on top of `6dd54a0`
+**Subject:** Pin RunRegistryKit v0.2.0 and write the registry's rules
+**Commit:** `b0f3488`, on branch `rrk-adoption`, on top of `6dd54a0`
 **Date:** 2026-10-19, by Claude Sonnet 5.5
 **Result:** **COMPLETE.** C1–C4 shipped. tools 79 → 84 (+5); CosmologyModels 18, ComputeTargets 176
 (61 + 115) and ObjectFactories 69 unchanged. All three deliberate breakages caught. No §4 stop
@@ -106,7 +106,7 @@ each exit 0.
 
 ## The deliberate-breakage record
 
-Each diff is replayable from a clean tree at this commit with `git apply` (checked with
+Each diff is replayable from a clean tree at `b0f3488` with `git apply` (checked with
 `git apply --check` and `git apply -R --check`; run in `bash`). None is committed.
 
 ### B1 — `var/` removed from `.gitignore`

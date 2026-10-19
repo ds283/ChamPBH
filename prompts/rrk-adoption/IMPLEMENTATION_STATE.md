@@ -1,6 +1,6 @@
 # rrk-adoption campaign — implementation state
 
-**Last updated:** 2026-10-19 · **Status: LIVE — 5 of 5 prompts written, 1 landed (01). R1–R7, U1–U5
+**Last updated:** 2026-10-19 · **Status: LIVE — 5 of 5 prompts written, 1 landed (01, reviewed). R1–R7, U1–U5
 and P2–P13 ruled by the user on 2026-10-19, as proposed; P1 amended (the wrapper in `RunDrivers/`)
 (README §6).**
 The plan is [`README.md`](README.md), written on 2026-10-19 on branch `rrk-adoption`, cut from
@@ -31,7 +31,7 @@ It comes before `jordan-normalization`, so that the science rebuild is a registe
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | [The pin, the config and the rules](01-pin-config-and-rules.md) | `runregistrykit[stores]@v0.2.0`; `runregistrykit.toml`; `var/` ignored; `CLAUDE.md`'s rules | Sonnet | ✍️ 2026-10-19 | ✅ 2026-10-19 | this commit | [log](logs/01-pin-config-and-rules.md) |
+| 01 | [The pin, the config and the rules](01-pin-config-and-rules.md) | `runregistrykit[stores]@v0.2.0`; `runregistrykit.toml`; `var/` ignored; `CLAUDE.md`'s rules | Sonnet | ✍️ 2026-10-19 | ✅ 2026-10-19 | `b0f3488` | [log](logs/01-pin-config-and-rules.md) |
 | 02 | [The fingerprinter](02-the-fingerprinter.md) | `config/fingerprint.py` at format 1; `[stores]`; the format guard; a golden fingerprint | Sonnet | ✍️ 2026-10-19 | ⬜ | — | — |
 | 03 | [The wrapper](03-the-wrapper.md) | `RunDrivers/registered_run.py`: register, beat from stdout, signals after `ray.init`, `main.py` by `runpy`, finish with the fingerprint | Opus | ✍️ 2026-10-19 | ⬜ | — | — |
 | 04 | [Rehearse registered runs](04-rehearse-registered-runs.md) | a registered build; `SIGTERM` and resume; `SIGKILL`, `end` and resume; `store create`; stores compared; `histories.csv` = R0's | Opus | ✍️ 2026-10-19 | ⬜ | — | — |
@@ -43,7 +43,8 @@ It comes before `jordan-normalization`, so that the science rebuild is a registe
 *Written 2026-10-19 (§5.1).*
 
 Orchestrator notes are written one prompt at a time, in [`orchestrator/`](orchestrator/), just
-before each dispatch.
+before each dispatch:
+- [`orchestrator/prompt-01.md`](orchestrator/prompt-01.md) (`6dd54a0`), used for 01.
 
 ### 1.1 Items
 
@@ -152,7 +153,7 @@ choices made while writing them, each within its charter:
 
 ### 5.2 After prompt 01 (2026-10-19)
 
-01 landed in this commit (log: [`logs/01-pin-config-and-rules.md`](logs/01-pin-config-and-rules.md)).
+01 landed in `b0f3488` (log: [`logs/01-pin-config-and-rules.md`](logs/01-pin-config-and-rules.md)).
 - **C1.** `runregistrykit[stores] @ …@v0.2.0` in `requirements.txt`; the venv installed from the
   file. `pip freeze` differs by the one line `runregistrykit @ …@0bae3a3c501a8264ee4be5bc24f06422af38720f`;
   `direct_url.json` names that commit and is not editable.
@@ -164,3 +165,35 @@ choices made while writing them, each within its charter:
   176 (61 + 115), ObjectFactories 69, tools 84 (79 + 5). Each of the three deliberate breakages fails
   at least one new test.
 - **Gate "Pin"** holds. No issue opened.
+
+**Orchestrator review of prompt 01 (2026-10-19).** Against `b0f3488`, by note 01's ten checks. All
+pass.
+- **Scope.** The prompt's §5 files and nothing else. The untracked set is unchanged (22 entries),
+  and there is no `var/`.
+- **The pin.** `requirements.txt` gains one line, at `:85`. The orchestrator's own `pip freeze`,
+  taken before dispatch, differs from the one now by the single line
+  `runregistrykit @ …@0bae3a3c501a8264ee4be5bc24f06422af38720f`. `direct_url.json` names that commit
+  with `requested_revision` `v0.2.0` and has no `dir_info`. The package imports from the venv's
+  `site-packages`.
+- **The package, by probe.** `find_client_root(client_root=<root>)` gives the root as both record
+  and found root, the two roots under `var/`, and `("datastorekit", "raypoolkit")`. `list` prints
+  `no runs under …/var/runs` and exits 0, and creates no `var/`. `git check-ignore -v` names
+  `.gitignore:7` for both paths.
+- **`CLAUDE.md`.** The bullet is gone and the section is appended, 41 lines. Every C3 item is
+  there. The seven rules follow SecondaryGWKit's order, and no SecondaryGWKit path, history or
+  GCS-server paragraph came across. The wrapper sentence is true at this commit.
+- **The test.** Five tests, as note 01 rules them: one `check-ignore` per path, asserted to exit 0
+  exactly; the keys required ⊆ keys ⊆ known; the provenance dict compared whole.
+- **The breakages.** The three diffs were replayed in `bash` and failed as the log says (B1 2
+  failures; B2 1 failure and the package's `ConfigError`; B3 1 failure), then reverted cleanly. A
+  probe added the `[stores] fingerprinter = "config.fingerprint:fingerprinter"` table that 02 adds,
+  and the module passed. So 02 needs no edit to it.
+- **Suites** at `b0f3488`, serially: 18, 61 + 115, 69, 84 (load 3–17). `black --check` clean.
+- **Residue fixed in this follow-up:**
+  - the SHA, on the board and in the log;
+  - the log's subject line, which did not match the committed subject;
+  - the notes list.
+
+  Separately, the new module lacked the licence header that every other test module carries. It is
+  added in a housekeeping commit of its own.
+- No issue opened.
