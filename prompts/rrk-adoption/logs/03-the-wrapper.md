@@ -1,7 +1,7 @@
 # Log 03 — the wrapper
 
 **Subject:** Add the registered-run wrapper for main.py and its tests
-**Commit:** this commit, on branch `rrk-adoption`, on top of `06ae4bf`
+**Commit:** `d5dd930`, on branch `rrk-adoption`, on top of `06ae4bf`
 **Date:** 2026-10-19, by Claude Opus 5.5
 **Result:** **COMPLETE.** W1–W6 shipped. A new test root, `RunDrivers/tests`, of **61** tests,
 run three times in a row, OK each time. CosmologyModels 18, ComputeTargets 176 (61 + 115),
@@ -378,7 +378,7 @@ From `raypoolkit/RayWorkPool.py:340-360` and `:560-610`, and `main.py`'s queues:
 
 ## The deliberate-breakage record
 
-Each diff is replayable with `git apply` from a clean tree at this commit; each was checked with
+Each diff is replayable with `git apply` from a clean tree at `d5dd930`; each was checked with
 `git apply --check` before applying and `git apply -R --check` once applied, and replayed in `bash`
 (`replay.sh` in the scratch directory: apply, run `RunDrivers/tests`, reverse). None is committed.
 Every other test of the root passed under each. The tests named are of `RunDrivers/tests`.
@@ -584,7 +584,7 @@ diff --git a/RunDrivers/registered_run.py b/RunDrivers/registered_run.py
 
 ## State handed to the next prompt
 
-- Branch `rrk-adoption`; this commit is on top of `06ae4bf`. Tree clean of tracked changes; the 22
+- Branch `rrk-adoption`; `d5dd930` is on top of `06ae4bf`. Tree clean of tracked changes; the 22
   untracked entries are the user's; no `var/`.
 - `RunDrivers/registered_run.py` launches a registered `main.py` run:
   `PYTHONPATH=. ./venv/bin/python RunDrivers/registered_run.py --campaign C --prompt N --register

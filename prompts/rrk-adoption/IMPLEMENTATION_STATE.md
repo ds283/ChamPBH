@@ -1,6 +1,6 @@
 # rrk-adoption campaign — implementation state
 
-**Last updated:** 2026-10-19 · **Status: LIVE — 5 of 5 prompts written, 3 landed (01 and 02 reviewed; 03 awaiting review). R1–R7, U1–U5
+**Last updated:** 2026-10-19 · **Status: LIVE — 5 of 5 prompts written, 3 landed (01, 02 and 03, all reviewed). R1–R7, U1–U5
 and P2–P13 ruled by the user on 2026-10-19, as proposed; P1 amended (the wrapper in `RunDrivers/`)
 (README §6).**
 The plan is [`README.md`](README.md), written on 2026-10-19 on branch `rrk-adoption`, cut from
@@ -33,7 +33,7 @@ It comes before `jordan-normalization`, so that the science rebuild is a registe
 |---|---|---|---|---|---|---|---|
 | 01 | [The pin, the config and the rules](01-pin-config-and-rules.md) | `runregistrykit[stores]@v0.2.0`; `runregistrykit.toml`; `var/` ignored; `CLAUDE.md`'s rules | Sonnet | ✍️ 2026-10-19 | ✅ 2026-10-19 | `b0f3488` | [log](logs/01-pin-config-and-rules.md) |
 | 02 | [The fingerprinter](02-the-fingerprinter.md) | `config/fingerprint.py` at format 1; `[stores]`; the format guard; a golden fingerprint | Sonnet | ✍️ 2026-10-19 | ✅ 2026-10-19 | `c9eea37` | [log](logs/02-the-fingerprinter.md) |
-| 03 | [The wrapper](03-the-wrapper.md) | `RunDrivers/registered_run.py`: register, beat from stdout, signals after `ray.init`, `main.py` by `runpy`, finish with the fingerprint | Opus | ✍️ 2026-10-19 | ✅ 2026-10-19 | this commit | [log](logs/03-the-wrapper.md) |
+| 03 | [The wrapper](03-the-wrapper.md) | `RunDrivers/registered_run.py`: register, beat from stdout, signals after `ray.init`, `main.py` by `runpy`, finish with the fingerprint | Opus | ✍️ 2026-10-19 | ✅ 2026-10-19 | `d5dd930` | [log](logs/03-the-wrapper.md) |
 | 04 | [Rehearse registered runs](04-rehearse-registered-runs.md) | a registered build; `SIGTERM` and resume; `SIGKILL`, `end` and resume; `store create`; stores compared; `histories.csv` = R0's | Opus | ✍️ 2026-10-19 | ⬜ | — | — |
 | 05 | [Close](05-close.md) | documents, handover, RunRegistryKit's gate drafts, indexes, board | Sonnet | ✍️ 2026-10-19 | ⬜ | — | — |
 
@@ -46,6 +46,7 @@ Orchestrator notes are written one prompt at a time, in [`orchestrator/`](orches
 before each dispatch:
 - [`orchestrator/prompt-01.md`](orchestrator/prompt-01.md) (`6dd54a0`), used for 01.
 - [`orchestrator/prompt-02.md`](orchestrator/prompt-02.md) (`6824826`), used for 02.
+- [`orchestrator/prompt-03.md`](orchestrator/prompt-03.md) (`06ae4bf`), used for 03.
 
 ### 1.1 Items
 
@@ -267,7 +268,7 @@ pass.
 
 ### 5.4 After prompt 03 (2026-10-19)
 
-03 landed in this commit (log: [`logs/03-the-wrapper.md`](logs/03-the-wrapper.md)), under the
+03 landed in `d5dd930` (log: [`logs/03-the-wrapper.md`](logs/03-the-wrapper.md)), under the
 orchestrator's note for 03, whose eleven rulings governed.
 - **W1.** The package `RunDrivers/` and its test root `RunDrivers/tests/`;
   `RunDrivers/registered_run.py`, which puts the root on `sys.path` and runs without `PYTHONPATH`.
@@ -294,3 +295,55 @@ orchestrator's note for 03, whose eleven rulings governed.
 - **§2.3, for 04:** the pilot's stages are each under 300 s, so it prints no progress line; its
   longest healthy silence is the scalar-history stage, about 2¼ minutes.
 - **Gate "Wrapper"** holds. No issue opened.
+
+**Orchestrator review of prompt 03 (2026-10-19).** Against `d5dd930`, by note 03's twelve checks.
+All pass.
+- **Scope.** §0's files and nothing else. The untracked set is unchanged (22 entries), there is no
+  `var/`, and `git diff 3cd2be4 d5dd930 -- main.py plot_by_beta.py plot_ScalarModel.py
+  utilities.py` is empty. `CLAUDE.md`'s diff is the three edits of note 03 §0, with the count 61.
+- **The module, by reading.** `finish_after_exec` and the other functions carried over from
+  SecondaryGWKit at `031bcb4` differ from it only in wording. `parse_arguments`, `describe_scope`,
+  `run`, `stop_beating`, `mid_line` and the lock are each ruled in the note or named in the log.
+  Nothing of the substitution, the model filter or the local Ray came across. `begin`'s arguments
+  are those of rulings 4 and 6. The pilot's `scope` takes `Λ 0.001 eV` and the potential type from
+  `exponential.yaml`, and its `--M-values-Mp 1e-3` overrides the file's 0.5. So the literal is
+  right.
+- **By probe**, through `stubbed_run`, on a stand-in of the orchestrator's own. The stand-in printed
+  a banner, 50 progress lines and a `(pid=…)` worker line, then `sys.exit(3)`. Results:
+  - exit 3 and `failed`/3;
+  - the marker last in stdout and in `stdout.log`;
+  - the stage is the last progress line's sentence, neither the worker line nor the marker;
+  - `script` and `results` absolute, `argv[0]` the wrapper, `git_head` `unknown`, as ruling 4
+    says.
+
+  The real script on `-- --database x --inventory --ray-address 127.0.0.1:6380` exits 2 with one
+  `!! ` line and the marker.
+- **The tests, by reading.** Every in-process test goes through `stubbed_run.in_process`, which
+  registers a restoring cleanup before the call and observes before it restores. Each of the two
+  `Popen`s is reaped by a cleanup registered before its first read. Every case's `tearDown`
+  asserts `ray.is_initialized()` false: `_GoldenStoreCase`'s for the fingerprint module. Test 7 is
+  ruling 9's `ast` form, and test 8 expects (4, 2).
+- **The breakages.** The six diffs, extracted from the log, apply cleanly at `d5dd930`. Each was
+  replayed in `bash` and failed exactly as the log says: B1 3, B2 10, B3 4, B4 2, B5 2 and B6 2
+  failures. Each was reverted, and the tree is clean.
+- **Suites** at `d5dd930`, serially: 18, 61 + 115, 78, 84, and RunDrivers 61 twice (load 3–6).
+  `black --check` is clean on the ten files. `--help` exits 0. `list` prints no runs. There is no
+  `var/`. After the suites `pgrep` finds no Ray process and `ray_cluster.sh status` exits 0.
+- **The agent's choices beyond the note**, accepted:
+  - the marker always starts a line of its own (`mid_line`), after a replay showed a signal can
+    leave `print`'s newline unwritten;
+  - `KeyboardInterrupt` before registration gives 130;
+  - `NOTIFY_FLOOR` is pinned to `main.py`'s value by `ast`;
+  - the two-thread test.
+- **Found by the review:** `HEARTBEAT_MEANS` says that a beat comes "at most once per 30 s". The
+  proxy beats **at once** on any line that changes the stage (`changed or …`, SecondaryGWKit's
+  design, which the prompt's test 2 pins for a banner). The probe's burst of 50 progress lines
+  moved the stage on each. In production a stage changes only at a banner or a progress line,
+  300 s or more apart, so nothing breaks. But the manifest's sentence should say so. It is fixed
+  in a housekeeping commit of its own, which adds the clause and keeps the substring that
+  `test_registered_run` asserts.
+- **Residue fixed in this follow-up:**
+  - the SHA, on the board and in the log;
+  - the status line;
+  - the notes list.
+- No issue opened.
