@@ -46,8 +46,8 @@ without RunRegistryKit (campaign README §6.0, R2). What this file touches is it
 
 **What the heartbeat means, exactly** (the manifest's `heartbeat_means`, `HEARTBEAT_MEANS`). The
 work happens in Ray actors, so a beat from this process cannot say that any actor is progressing.
-A beat is taken from a line on stdout, at most once every `BEAT_MIN_INTERVAL` (30 s), and the line
-is the stage. `RayWorkPool` prints a progress line only after `ray.wait` has returned completed
+A beat is taken from a line on stdout, at most once every `BEAT_MIN_INTERVAL` (30 s), or at once
+when the line changes the stage (a banner, or a progress line), and the line is the stage. `RayWorkPool` prints a progress line only after `ray.wait` has returned completed
 work, and in this repository no more often than every `NOTIFY_FLOOR` (300 s, `main.py`'s
 `MIN_NOTIFY_INTERVAL`), so a fresh beat from it means work completed within about five minutes.
 Ray also forwards the workers' own output to the driver's stdout, from a thread of its own, so a
@@ -132,8 +132,9 @@ BEAT_MIN_INTERVAL = 30.0
 NOTIFY_FLOOR = 300.0
 
 HEARTBEAT_MEANS = (
-    "Refreshed when the run writes a line to stdout, at most once per {interval:.0f} s, and the "
-    "line it came from is the `stage` in status.json. RayWorkPool prints a progress line only "
+    "Refreshed when the run writes a line to stdout, at most once per {interval:.0f} s, or at "
+    "once when the line changes the stage, and the line it came from is the `stage` in "
+    "status.json. RayWorkPool prints a progress line only "
     "after ray.wait has returned completed work, and in this repository no more often than every "
     "{notify:.0f} s (main.py's MIN_NOTIFY_INTERVAL), so a fresh heartbeat from it means work "
     "completed within about five minutes. Ray also forwards the workers' own output to the "
