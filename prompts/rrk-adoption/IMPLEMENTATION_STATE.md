@@ -1,6 +1,6 @@
 # rrk-adoption campaign — implementation state
 
-**Last updated:** 2026-10-19 · **Status: LIVE — 5 of 5 prompts written, 2 landed (01 reviewed; 02 awaiting review). R1–R7, U1–U5
+**Last updated:** 2026-10-19 · **Status: LIVE — 5 of 5 prompts written, 2 landed (01 and 02, both reviewed). R1–R7, U1–U5
 and P2–P13 ruled by the user on 2026-10-19, as proposed; P1 amended (the wrapper in `RunDrivers/`)
 (README §6).**
 The plan is [`README.md`](README.md), written on 2026-10-19 on branch `rrk-adoption`, cut from
@@ -32,7 +32,7 @@ It comes before `jordan-normalization`, so that the science rebuild is a registe
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
 | 01 | [The pin, the config and the rules](01-pin-config-and-rules.md) | `runregistrykit[stores]@v0.2.0`; `runregistrykit.toml`; `var/` ignored; `CLAUDE.md`'s rules | Sonnet | ✍️ 2026-10-19 | ✅ 2026-10-19 | `b0f3488` | [log](logs/01-pin-config-and-rules.md) |
-| 02 | [The fingerprinter](02-the-fingerprinter.md) | `config/fingerprint.py` at format 1; `[stores]`; the format guard; a golden fingerprint | Sonnet | ✍️ 2026-10-19 | ✅ 2026-10-19 | this commit | [log](logs/02-the-fingerprinter.md) |
+| 02 | [The fingerprinter](02-the-fingerprinter.md) | `config/fingerprint.py` at format 1; `[stores]`; the format guard; a golden fingerprint | Sonnet | ✍️ 2026-10-19 | ✅ 2026-10-19 | `c9eea37` | [log](logs/02-the-fingerprinter.md) |
 | 03 | [The wrapper](03-the-wrapper.md) | `RunDrivers/registered_run.py`: register, beat from stdout, signals after `ray.init`, `main.py` by `runpy`, finish with the fingerprint | Opus | ✍️ 2026-10-19 | ⬜ | — | — |
 | 04 | [Rehearse registered runs](04-rehearse-registered-runs.md) | a registered build; `SIGTERM` and resume; `SIGKILL`, `end` and resume; `store create`; stores compared; `histories.csv` = R0's | Opus | ✍️ 2026-10-19 | ⬜ | — | — |
 | 05 | [Close](05-close.md) | documents, handover, RunRegistryKit's gate drafts, indexes, board | Sonnet | ✍️ 2026-10-19 | ⬜ | — | — |
@@ -45,6 +45,7 @@ It comes before `jordan-normalization`, so that the science rebuild is a registe
 Orchestrator notes are written one prompt at a time, in [`orchestrator/`](orchestrator/), just
 before each dispatch:
 - [`orchestrator/prompt-01.md`](orchestrator/prompt-01.md) (`6dd54a0`), used for 01.
+- [`orchestrator/prompt-02.md`](orchestrator/prompt-02.md) (`6824826`), used for 02.
 
 ### 1.1 Items
 
@@ -200,7 +201,7 @@ pass.
 
 ### 5.3 After prompt 02 (2026-10-19)
 
-02 landed in this commit (log: [`logs/02-the-fingerprinter.md`](logs/02-the-fingerprinter.md)).
+02 landed in `c9eea37` (log: [`logs/02-the-fingerprinter.md`](logs/02-the-fingerprinter.md)).
 - **F1.** `config/fingerprint.py`: `FINGERPRINT_FORMAT = 1`; `SPEC_DIGESTS[1]` of **21 pairs** (15
   distinct digests), not the 17 the prompt names, which counted `inventory_spec` definitions
   (`STRUCTURALLY REQUIRED`; the count equals `test_inventory_specs`'s); the fingerprinter. The
@@ -217,3 +218,49 @@ pass.
 - **Suites:** CosmologyModels 18, ComputeTargets 176 (61 + 115), ObjectFactories 78 (69 + 9), tools 84.
   Each of the five deliberate breakages fails the named test.
 - **Gate "Fingerprint"** holds. No issue opened.
+
+**Orchestrator review of prompt 02 (2026-10-19).** Against `c9eea37`, by note 02's ten checks. All
+pass.
+- **Scope.** The prompt's §5 files and nothing else. The untracked set is unchanged (22 entries),
+  there is no `var/`, and `main.py` is unchanged since `3cd2be4`.
+- **The config.** `runregistrykit.toml` is 01's file with the `[stores]` table appended, one key.
+- **The pin, by probe.** The recipe, written afresh in the scratchpad, gives 21 pairs equal to
+  `SPEC_DIGESTS[1]`, with 15 distinct digests, and `SPEC_DIGESTS` has the one key `1`. Importing
+  `config.fingerprint` after `config.datastore` adds 10 modules: note 02's nine and the module
+  itself. None is of Ray, SQLAlchemy or DatastoreKit, as the docstring says.
+- **The tests, by reading.**
+  - The guard is the recipe, and it fails naming the class, with SecondaryGWKit's message.
+  - The key test uses two stand-in `Parent`s and asserts the `TypeError`.
+  - The golden builder is the module's own, on `_TempStoreCase`, and imports nothing from
+    `tools.tests`. It writes every row note 02's ruling 3 asks for.
+  - `TestGolden` builds the store twice.
+  - `TestCommandLine` checks the exit, the digest, the format, the last line, and that nothing is
+    written.
+- **The agent's two choices beyond the note.** Both are sound and are accepted.
+  - `TestCommandLine` asserts that `var/` is unchanged by the command, not that `var/` is absent. An
+    absence test would fail once the user makes a first registered run.
+  - The pin-count and every-class tests.
+- **The golden file.** Its SHA-256 is `eb6a7a86…0e4e`, as logged, and its digest is
+  `146a13c3…990c`. It re-serialises byte for byte as `json.dumps(…, indent=2, sort_keys=True) +
+  "\n"`. `taken` is `null` and `problems` is `{}`. All 21 classes count at least 1, with
+  `ScalarModel` at 5.
+- **The breakages.** The five diffs were replayed in `bash` from the clean tree, and each failed
+  exactly as the log says:
+  - B1: 3 failures, 3 errors, `spec changed: tolerance`;
+  - B2: 4 failures, with the "no pin" message;
+  - B3: 6 failures, `spec changed: ScalarModel`, the golden store's `ScalarModel` unresolved;
+  - B4: 2 failures;
+  - B5: 1 failure and 1 error, the package's `ConfigError`, with `test_registry_config` passing.
+
+  Each was reverted, and the tree is clean.
+- **Suites** at `c9eea37`, serially: 18, 61 + 115, 78 (69 + 9), 84 (load 4–10). `black --check` is
+  clean on the three new files.
+- **Residue fixed in this follow-up:**
+  - the SHA, on the board and in the log;
+  - the status line, which said "02 awaiting review";
+  - the notes list.
+
+  Separately, the three new Python files have a licence header cut short: its last line, `#
+  limitations under the License.`, is missing. The golden module also imports `ray` and `tempfile`
+  and uses neither. Both are fixed in a housekeeping commit of their own, as with 01.
+- No issue opened.

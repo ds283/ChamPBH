@@ -1,7 +1,7 @@
 # Log 02 — the fingerprinter
 
 **Subject:** Add the store fingerprinter, its format guard and a golden fingerprint
-**Commit:** this commit, on branch `rrk-adoption`, on top of `6824826`
+**Commit:** `c9eea37`, on branch `rrk-adoption`, on top of `6824826`
 **Date:** 2026-10-19, by Claude Sonnet 5.5
 **Result:** **COMPLETE.** F1–F4 shipped. ObjectFactories 69 → 78 (+9); CosmologyModels 18,
 ComputeTargets 176 (61 + 115) and tools 84 unchanged. All five deliberate breakages caught. No §4
@@ -207,7 +207,7 @@ Nothing was written beside the store, under the runs root or at the repository r
 
 ## The deliberate-breakage record
 
-Each diff is replayable from a clean tree at this commit with `git apply` (each checked with `git
+Each diff is replayable from a clean tree at `c9eea37` with `git apply` (each checked with `git
 apply --check` and `git apply -R --check`, and replayed in `bash`). None is committed. The tests
 named are those of `ObjectFactories.tests.test_fingerprint_format_guard` and
 `ObjectFactories.tests.test_store_fingerprint_golden` (plus the one other module the line names).
