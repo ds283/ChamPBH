@@ -1,6 +1,6 @@
 # rrk-adoption campaign — implementation state
 
-**Last updated:** 2026-10-19 · **Status: LIVE — 5 of 5 prompts written, 1 landed (01, reviewed). R1–R7, U1–U5
+**Last updated:** 2026-10-19 · **Status: LIVE — 5 of 5 prompts written, 2 landed (01 reviewed; 02 awaiting review). R1–R7, U1–U5
 and P2–P13 ruled by the user on 2026-10-19, as proposed; P1 amended (the wrapper in `RunDrivers/`)
 (README §6).**
 The plan is [`README.md`](README.md), written on 2026-10-19 on branch `rrk-adoption`, cut from
@@ -32,7 +32,7 @@ It comes before `jordan-normalization`, so that the science rebuild is a registe
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
 | 01 | [The pin, the config and the rules](01-pin-config-and-rules.md) | `runregistrykit[stores]@v0.2.0`; `runregistrykit.toml`; `var/` ignored; `CLAUDE.md`'s rules | Sonnet | ✍️ 2026-10-19 | ✅ 2026-10-19 | `b0f3488` | [log](logs/01-pin-config-and-rules.md) |
-| 02 | [The fingerprinter](02-the-fingerprinter.md) | `config/fingerprint.py` at format 1; `[stores]`; the format guard; a golden fingerprint | Sonnet | ✍️ 2026-10-19 | ⬜ | — | — |
+| 02 | [The fingerprinter](02-the-fingerprinter.md) | `config/fingerprint.py` at format 1; `[stores]`; the format guard; a golden fingerprint | Sonnet | ✍️ 2026-10-19 | ✅ 2026-10-19 | this commit | [log](logs/02-the-fingerprinter.md) |
 | 03 | [The wrapper](03-the-wrapper.md) | `RunDrivers/registered_run.py`: register, beat from stdout, signals after `ray.init`, `main.py` by `runpy`, finish with the fingerprint | Opus | ✍️ 2026-10-19 | ⬜ | — | — |
 | 04 | [Rehearse registered runs](04-rehearse-registered-runs.md) | a registered build; `SIGTERM` and resume; `SIGKILL`, `end` and resume; `store create`; stores compared; `histories.csv` = R0's | Opus | ✍️ 2026-10-19 | ⬜ | — | — |
 | 05 | [Close](05-close.md) | documents, handover, RunRegistryKit's gate drafts, indexes, board | Sonnet | ✍️ 2026-10-19 | ⬜ | — | — |
@@ -54,10 +54,10 @@ before each dispatch:
 | **C2** | 01 | `runregistrykit.toml` (roots, distributions; no `[stores]`); `var/` in `.gitignore` | ✅ |
 | **C3** | 01 | `CLAUDE.md`: the section "Long-running jobs — the run registry", with the rules and `git clean -x` forbidden | ✅ |
 | **C4** | 01 | `tools/tests/test_registry_config.py`: the config, the ignore rule, the pin | ✅ |
-| **F1** | 02 | `config/fingerprint.py`: `FINGERPRINT_FORMAT = 1`, `SPEC_DIGESTS`, `fingerprinter` | ⬜ |
-| **F2** | 02 | `[stores] fingerprinter` in `runregistrykit.toml` | ⬜ |
-| **F3** | 02 | `ObjectFactories/tests/test_fingerprint_format_guard.py`: the Q5 guard, keys kept by type | ⬜ |
-| **F4** | 02 | `ObjectFactories/tests/test_store_fingerprint_golden.py` and its golden file; the loader and the command line | ⬜ |
+| **F1** | 02 | `config/fingerprint.py`: `FINGERPRINT_FORMAT = 1`, `SPEC_DIGESTS`, `fingerprinter` | ✅ |
+| **F2** | 02 | `[stores] fingerprinter` in `runregistrykit.toml` | ✅ |
+| **F3** | 02 | `ObjectFactories/tests/test_fingerprint_format_guard.py`: the Q5 guard, keys kept by type | ✅ |
+| **F4** | 02 | `ObjectFactories/tests/test_store_fingerprint_golden.py` and its golden file; the loader and the command line | ✅ |
 | **W1** | 03 | the package `RunDrivers/` and its test root; `RunDrivers/registered_run.py` (P1 as amended) | ⬜ |
 | **W2** | 03 | the wrapper's flags and refusals before `begin()`, exit 2 (P2, P3, U2) | ⬜ |
 | **W3** | 03 | registration: `begin` with `script` = the program (U3), `scope`, `heartbeat_means`; the stream proxies | ⬜ |
@@ -81,7 +81,7 @@ before each dispatch:
 | Gate | Holds when | Prompt | State |
 |---|---|---|---|
 | Pin | the venv holds `runregistrykit` 0.2.0 from the tag, not editable; `list` runs on the empty runs root; `var/` is ignored | 01 | ✅ 2026-10-19 |
-| Fingerprint | the config's fingerprinter loads; the format guard and the golden fingerprint pass, and each deliberate breakage fails | 02 | ⬜ |
+| Fingerprint | the config's fingerprinter loads; the format guard and the golden fingerprint pass, and each deliberate breakage fails | 02 | ✅ 2026-10-19 |
 | Wrapper | with no Ray, a run through the wrapper is registered before its first line, beats, ends `done`/`failed`/`killed` with `main.py`'s exit code, takes its fingerprint after the program returns, and refuses a store an unfinished run names; `main.py` is unchanged | 03 | ⬜ |
 | R | on the isolated cluster, the four builds are recorded as README §2.2 (04) says, the resumed store equals the reference, and `histories.csv` has R0's SHA-256 | 04 | ⬜ |
 | RunRegistryKit G3 / G2 | recorded in RunRegistryKit, on its `extraction` and `interrupted-runs` boards, by the user from 05's drafts (P12) | 05 | ⬜ |
@@ -197,3 +197,23 @@ pass.
   Separately, the new module lacked the licence header that every other test module carries. It is
   added in a housekeeping commit of its own.
 - No issue opened.
+
+### 5.3 After prompt 02 (2026-10-19)
+
+02 landed in this commit (log: [`logs/02-the-fingerprinter.md`](logs/02-the-fingerprinter.md)).
+- **F1.** `config/fingerprint.py`: `FINGERPRINT_FORMAT = 1`; `SPEC_DIGESTS[1]` of **21 pairs** (15
+  distinct digests), not the 17 the prompt names, which counted `inventory_spec` definitions
+  (`STRUCTURALLY REQUIRED`; the count equals `test_inventory_specs`'s); the fingerprinter. The
+  docstring says what importing it adds (RunRegistryKit's three modules and the standard library's
+  six, nothing of Ray, SQLAlchemy or DatastoreKit), checked by `sys.modules`.
+- **F2.** `runregistrykit.toml` gains `[stores] fingerprinter = "config.fingerprint:fingerprinter"`.
+- **F3.** The format guard, 4 tests, with a stand-in `Parent` keyed by `0` and by `"0"`.
+- **F4.** The golden test, 5 tests, on a store of its own builder (one row of each of the 21 classes
+  and a `ScalarModel` of each of the five potential types), and the golden file
+  `store_fingerprint_rrk-adoption-02.json`, digest `146a13c3cda4e4409d98fc8b97086f518c00f5301da8b21a1950455a5dbd990c`,
+  SHA-256 `eb6a7a86fba2ab8e01568c1ed6c0e26e99dc350ecec4d9a30a3b464a0f340e4e`. `TestCommandLine` runs
+  `store fingerprint` on that store: exit 0, the golden digest, `recorded: none recorded (the
+  sidecar is absent)`.
+- **Suites:** CosmologyModels 18, ComputeTargets 176 (61 + 115), ObjectFactories 78 (69 + 9), tools 84.
+  Each of the five deliberate breakages fails the named test.
+- **Gate "Fingerprint"** holds. No issue opened.
