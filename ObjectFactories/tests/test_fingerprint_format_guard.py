@@ -11,6 +11,7 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
+# limitations under the License.
 
 """Guard the fingerprint format against spec changes (rrk-adoption prompt 02; campaign README §0.3
 and §6.2, P8 and P9; RunRegistryKit's docs/adoption/README.md §6, "The Q5 guard").

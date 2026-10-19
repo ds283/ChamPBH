@@ -11,6 +11,7 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
+# limitations under the License.
 
 """This repository's golden store fingerprint, and the module that takes it (rrk-adoption prompt
 02; campaign README §0.3 and §6.2, P8).
@@ -55,12 +56,10 @@ import json
 import os
 import subprocess
 import sys
-import tempfile
 import unittest
 from datetime import datetime, timedelta
 from pathlib import Path
 
-import ray
 import sqlalchemy as sqla
 from datastorekit.store_fingerprint import ENCODING_FORMAT
 from datastorekit.store_inventory import read_inventory
