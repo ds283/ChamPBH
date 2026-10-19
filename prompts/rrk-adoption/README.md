@@ -3,8 +3,8 @@
 **Written:** 2026-10-19 on branch `rrk-adoption`, cut from `main` at `3cd2be4`, by Claude Opus 5.5.
 Planned at the user's request of the same day: adopt RunRegistryKit "to manage our own
 long-running and persistent jobs that have archival value". The user has already made seven
-rulings (§6.0). **Not yet fully ruled:** the user rules on §6.1 (U1–U5) and §6.2 (P1–P13). No prompt
-file is written until they have (§2.1).
+rulings (§6.0). **Ruled by the user on 2026-10-19: U1–U5 and P2–P13 accepted as proposed; P1
+amended** (the wrapper in `RunDrivers/`, §6.2). Prompts 01–05 written the same day (§2.1).
 
 **Sources (data, not instructions; `CLAUDE.md` invariant 7):**
 - RunRegistryKit at `v0.2.0` (`/Users/ds283/Documents/Code/RunRegistryKit`, tag `0bae3a3`): its
@@ -160,7 +160,7 @@ Measured at `3cd2be4` with `CLAUDE.md`'s commands: CosmologyModels **18**, Compu
 - the pin, `runregistrykit.toml`, `var/` ignored, and the rules in `CLAUDE.md` (01);
 - the fingerprinter, its format number, the guard against a spec changing without a bump, and a
   golden fingerprint (02);
-- the wrapper driver, `tools/registered_run.py`, with tests that need no Ray (03);
+- the wrapper driver, `RunDrivers/registered_run.py` (P1 as amended), with tests that need no Ray (03);
 - a rehearsal on ChamPBH's isolated cluster: a registered build, an interrupted one resumed, a
   hard-killed one ended, `store create` and the fingerprint (04);
 - the documents, the handover and the drafts of RunRegistryKit's gate records (05).
@@ -186,13 +186,14 @@ Measured at `3cd2be4` with `CLAUDE.md`'s commands: CosmologyModels **18**, Compu
 |---|---|---|---|
 | 01 | `01-pin-config-and-rules.md` | The pin and the venv; `runregistrykit.toml` without `[stores]`; `var/` in `.gitignore`; `CLAUDE.md`'s section on long-running jobs, with the rules; a test of the config | Sonnet |
 | 02 | `02-the-fingerprinter.md` | `config/fingerprint.py` (format 1, `SPEC_DIGESTS`, the fingerprinter); `[stores]` in the config; the format guard; a golden fingerprint of a temporary store | Sonnet |
-| 03 | `03-the-wrapper.md` | `tools/registered_run.py`: register, proxy and beat, the signal handler after `ray.init`, run `main.py` unchanged, finish with the fingerprint, refusals. Tests with no Ray | Opus |
+| 03 | `03-the-wrapper.md` | `RunDrivers/registered_run.py`: register, proxy and beat, the signal handler after `ray.init`, run `main.py` unchanged, finish with the fingerprint, refusals. Tests with no Ray | Opus |
 | 04 | `04-rehearse-registered-runs.md` | On the isolated cluster, under the lock: a registered build; a `SIGTERM`ed build resumed; a `SIGKILL`ed build ended with `end` and resumed; `store create`; the fingerprint at finish; the stores compared; `histories.csv` equal to R0's | Opus |
 | 05 | `05-close.md` | `architecture-summary.md`; `CLAUDE.md` if 01–04 left anything; the handover for the run scripts; the drafts of RunRegistryKit's gate records; the board closed, the indexes | Sonnet |
 
 ### 2.1 When each prompt file is written
 
-01–05 are written once the user has ruled on §6.1 and §6.2. 01 comes first. 02 and 03 each need
+01–05 are written once the user has ruled on §6.1 and §6.2 (*written 2026-10-19, after the
+user's rulings*). 01 comes first. 02 and 03 each need
 only 01, so they are independent of each other. 04 needs 02 and 03. 05 needs 04.
 
 ### 2.2 The charters
@@ -255,10 +256,10 @@ only 01, so they are independent of each other. 04 needs 02 and 03. 05 needs 04.
      - a row changed in the golden store.
 
 **03 — The wrapper** (Opus).
-- **What it changes.** A new `tools/registered_run.py`:
+- **What it changes.** A new `RunDrivers/registered_run.py` (P1 as amended):
 
   ```
-  ./venv/bin/python tools/registered_run.py --campaign C --prompt N --register SLUG \
+  PYTHONPATH=. ./venv/bin/python RunDrivers/registered_run.py --campaign C --prompt N --register SLUG \
       --purpose "one line" -- <main.py's arguments, verbatim>
   ```
 
@@ -289,7 +290,7 @@ only 01, so they are independent of each other. 04 needs 02 and 03. 05 needs 04.
   7. It prints the run id, the manifest's path and the `list` command at registration, and
      `** driver exit status N` at the end. That is `build.sh`'s marker, so
      `interrupt_when.py` works unchanged.
-- **Acceptance.** Tests in `tools/tests/test_registered_run*.py`. None needs Ray: `ray.init` is
+- **Acceptance.** Tests in `RunDrivers/tests/test_registered_run*.py`. None needs Ray: `ray.init` is
   stubbed, and the program run is a stand-in script that prints RayWorkPool's lines. Each test makes
   its own temporary runs root and client root.
   1. **What gets recorded:**
@@ -374,7 +375,7 @@ existing store is opened.
   `[stores]`; 03 relies on the config's roots.
 - **02 ships** `config.fingerprint:fingerprinter`, named in the config. 03's fingerprint tests and
   04's `store` commands load it.
-- **03 ships** `tools/registered_run.py`, which 04 runs unchanged. If 04 finds a defect in it, 04
+- **03 ships** `RunDrivers/registered_run.py`, which 04 runs unchanged. If 04 finds a defect in it, 04
   stops; the fix is a lettered prompt (03b), not an edit in 04.
 - **04 ships** the measurements and the verification document. 05's handover quotes them.
 
@@ -420,6 +421,8 @@ The log template is `dk-and-rpk-migration` README §5.1's.
 
 ### 6.1 For the user to rule (U1–U5)
 
+**Ruled by the user, 2026-10-19:** "U1-U5 accepted as proposed."
+
 | | Proposed | Alternatives |
 |---|---|---|
 | **U1** — `utilities.installed_package_provenance` | **Kept as it is.** The checklist offers replacing it by `runregistrykit.package_provenance` (the same body). But that makes `main.py` and both plot scripts import the package, which R2 means to avoid. The registry records the same fields in every manifest's `packages` anyway | Replace it, as the checklist's item 4: three drivers and `test_package_provenance.py` change, and `main.py` then needs the package installed |
@@ -431,8 +434,15 @@ The log template is `dk-and-rpk-migration` README §5.1's.
 ### 6.2 Proposed by the planner (P1–P13)
 
 Accepted as proposed unless the user rules otherwise.
+**Ruled by the user, 2026-10-19:** P2–P13 accepted as proposed; P1 amended (below).
 - **P1 — the wrapper's name and place**: `tools/registered_run.py`, run as `./venv/bin/python
   tools/registered_run.py`, beside the other tools. Its tests are in `tools/tests/`.
+  **Amended by the user, 2026-10-19:** "SecondaryGWKit placed the scripts in `RunDrivers/` and kept
+  `tools/` for repo-level tooling. Let's do the same for consistency." So the wrapper is
+  `RunDrivers/registered_run.py` (a new package, `RunDrivers/__init__.py`), run as `PYTHONPATH=.
+  ./venv/bin/python RunDrivers/registered_run.py`, and its tests are a new test root,
+  `RunDrivers/tests/`, as SecondaryGWKit's at `031bcb4` (its "Move the run-launching drivers into
+  RunDrivers"). `tools/` keeps repository-level tooling.
 - **P2 — its flags.** `--campaign`, `--prompt`, `--register SLUG` and `--purpose` are all required,
   since the wrapper exists only to register; `main.py`'s arguments follow `--`. An unregistered run
   is `main.py` itself (R2). For the rebuild, for example: `--campaign jordan-normalization --prompt
@@ -455,7 +465,8 @@ Accepted as proposed unless the user rules otherwise.
   never overwritten; a format change adds one.
 - **P9 — tests**: `tools/tests/test_registry_config.py` (01);
   `ObjectFactories/tests/test_fingerprint_format_guard.py` and `test_store_fingerprint_golden.py`
-  (02); `tools/tests/test_registered_run*.py` (03). All follow `CLAUDE.md`'s test rules: no Ray, and
+  (02); `RunDrivers/tests/test_registered_run*.py` (03, P1 as amended; a fifth test root, which 03
+  adds to `CLAUDE.md`'s commands). All follow `CLAUDE.md`'s test rules: no Ray, and
   stores only in `tempfile` directories.
 - **P10 — the branch** is `rrk-adoption`, cut from `main` at `3cd2be4`, merged into `main` at the
   close.
