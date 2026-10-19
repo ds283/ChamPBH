@@ -1,6 +1,6 @@
 # rrk-adoption campaign — implementation state
 
-**Last updated:** 2026-10-20 · **Status: LIVE — 5 of 5 prompts written, 4 landed (01, 02 and 03 reviewed; 04 awaiting review). R1–R7, U1–U5
+**Last updated:** 2026-10-20 · **Status: LIVE — 5 of 5 prompts written, 4 landed (01–04, all reviewed); 1 issue open (§3). R1–R7, U1–U5
 and P2–P13 ruled by the user on 2026-10-19, as proposed; P1 amended (the wrapper in `RunDrivers/`)
 (README §6).**
 The plan is [`README.md`](README.md), written on 2026-10-19 on branch `rrk-adoption`, cut from
@@ -19,7 +19,7 @@ It comes before `jordan-normalization`, so that the science rebuild is a registe
 **Code:** `requirements.txt`, `runregistrykit.toml`, `.gitignore`, `config/fingerprint.py`, a new
 `RunDrivers/registered_run.py` and its test root `RunDrivers/tests/`; `main.py` unchanged ·
 **Verification:** `.documents/rrk-adoption-verification.md` (created by 04) ·
-**Index:** [`.documents/OPEN_ISSUES.md`](../../.documents/OPEN_ISSUES.md) (no section: none opened)
+**Index:** [`.documents/OPEN_ISSUES.md`](../../.documents/OPEN_ISSUES.md) §1.14
 
 > **Maintenance rule.** Whenever an entry is added to, narrowed in, or closed out of §3 or §4
 > below, or an issue assigned to this campaign closes, [`.documents/OPEN_ISSUES.md`](../../.documents/OPEN_ISSUES.md)
@@ -34,7 +34,7 @@ It comes before `jordan-normalization`, so that the science rebuild is a registe
 | 01 | [The pin, the config and the rules](01-pin-config-and-rules.md) | `runregistrykit[stores]@v0.2.0`; `runregistrykit.toml`; `var/` ignored; `CLAUDE.md`'s rules | Sonnet | ✍️ 2026-10-19 | ✅ 2026-10-19 | `b0f3488` | [log](logs/01-pin-config-and-rules.md) |
 | 02 | [The fingerprinter](02-the-fingerprinter.md) | `config/fingerprint.py` at format 1; `[stores]`; the format guard; a golden fingerprint | Sonnet | ✍️ 2026-10-19 | ✅ 2026-10-19 | `c9eea37` | [log](logs/02-the-fingerprinter.md) |
 | 03 | [The wrapper](03-the-wrapper.md) | `RunDrivers/registered_run.py`: register, beat from stdout, signals after `ray.init`, `main.py` by `runpy`, finish with the fingerprint | Opus | ✍️ 2026-10-19 | ✅ 2026-10-19 | `d5dd930` | [log](logs/03-the-wrapper.md) |
-| 04 | [Rehearse registered runs](04-rehearse-registered-runs.md) | a registered build; `SIGTERM` and resume; `SIGKILL`, `end` and resume; `store create`; stores compared; `histories.csv` = R0's | Opus | ✍️ 2026-10-19 | ✅ 2026-10-20 | this commit | [log](logs/04-rehearse-registered-runs.md) |
+| 04 | [Rehearse registered runs](04-rehearse-registered-runs.md) | a registered build; `SIGTERM` and resume; `SIGKILL`, `end` and resume; `store create`; stores compared; `histories.csv` = R0's | Opus | ✍️ 2026-10-19 | ✅ 2026-10-20 | `d5d8c74` | [log](logs/04-rehearse-registered-runs.md) |
 | 05 | [Close](05-close.md) | documents, handover, RunRegistryKit's gate drafts, indexes, board | Sonnet | ✍️ 2026-10-19 | ⬜ | — | — |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
@@ -47,6 +47,7 @@ before each dispatch:
 - [`orchestrator/prompt-01.md`](orchestrator/prompt-01.md) (`6dd54a0`), used for 01.
 - [`orchestrator/prompt-02.md`](orchestrator/prompt-02.md) (`6824826`), used for 02.
 - [`orchestrator/prompt-03.md`](orchestrator/prompt-03.md) (`06ae4bf`), used for 03.
+- [`orchestrator/prompt-04.md`](orchestrator/prompt-04.md) (`07aa626`), used for 04.
 
 ### 1.1 Items
 
@@ -90,7 +91,39 @@ before each dispatch:
 
 ## 3. Active and unresolved issues
 
-None opened by this campaign.
+### `[04-the-pool-waits-for-every-in-flight-item-when-fewer-than-three]`
+
+**Opened:** 2026-10-20 by the orchestrator's review of prompt 04, from the agent's observation
+(log 04, "Observations not acted on"; verification document §1.11). **Not fixed here:** the code
+is RayPoolKit's, which ChamPBH never patches (`CLAUDE.md`, "The packages"), and `main.py` is
+byte-identical through this campaign (README §5).
+
+- **What.** Each pass of `RayWorkPool`'s loop blocks in `ray.wait(…,
+  num_returns=min(process_batch_size, len(inflight)))` (`raypoolkit/RayWorkPool.py:355-358` at
+  `v0.2.0`). `main.py`'s three titled queues set `process_batch_size=3`. So whenever three or fewer
+  items are in flight, the driver waits for **all** of them before it processes any. The next
+  step of an item that is already done (its store or its validation) is then held behind the
+  slowest item in flight. A validation is submitted only when the driver processes the store
+  task's result (`:489-525`), and only a validation sets a row's `validated` flag.
+- **Seen.** In `resumed-a` (04, H2), β = 10's `ScalarModel` row was written at 23:51:53, 85 s after
+  the scalar banner, and was still `validated 0` when the `SIGTERM` came at 23:52:58. In flight were
+  β = 10's store task and β = 25's compute, which took 195.7 s in `reference`. So the wait could
+  return only when β = 25 finished. `resumed-b` opened the store with `--prune-unvalidated`, which
+  pruned the row with an `INTEGRITY WARNING`, and `resumed-c` recomputed it
+  (`out/04-compute-times.txt`, `out/04-resumed-b.log`). This is one observation, read against the
+  code; the wait itself was not instrumented.
+- **Impact.** No stored value changes: the resume is equal to the reference. What it costs:
+  - completed work is thrown away after an interruption. In a long build, a history can sit
+    stored but unvalidated for as long as the slowest history in flight, and a kill in that
+    window costs its recomputation;
+  - near the end of each queue the driver submits no new work while it waits;
+  - progress lines and the heartbeat are later than the work. For `jordan-normalization`'s
+    histories (up to minutes, 3–7 integrations each), this adds to the silences P4 already
+    allows for.
+- **Next step.** For the user to rule. Either report it to RayPoolKit as a defect (for example,
+  `num_returns=1`, or a `timeout` on the wait), and ChamPBH moves to the new pin. Or a later
+  campaign that may change `main.py` (`jordan-normalization`) sets its queues'
+  `process_batch_size` with this in mind. Not assigned.
 
 ### 3.1 Assigned to this campaign
 
@@ -350,7 +383,7 @@ All pass.
 
 ### 5.5 After prompt 04 (2026-10-20)
 
-04 landed in this commit (log: [`logs/04-rehearse-registered-runs.md`](logs/04-rehearse-registered-runs.md)),
+04 landed in `d5d8c74` (log: [`logs/04-rehearse-registered-runs.md`](logs/04-rehearse-registered-runs.md)),
 under the orchestrator's note for 04, whose twelve rulings governed. The rehearsal ran on
 2026-10-19, 23:34–00:07 BST, on ChamPBH's isolated cluster (`ray_cluster.sh start "rrk-adoption 04
 (R)"`, exit 0, 5 s; `stop`, exit 0, 19 s), at `07aa626`. The record is
@@ -385,3 +418,54 @@ under the orchestrator's note for 04, whose twelve rulings governed. The rehears
   was stored, so the resume pruned and recomputed it; the log offers a likely mechanism (the queues'
   `ray.wait` for `min(3, in flight)`), not measured. Left for the orchestrator.
 - **Gate "R"** holds. No issue opened.
+
+**Orchestrator review of prompt 04 (2026-10-20).** Against `d5d8c74`, by note 04's twelve checks.
+All pass.
+- **Scope.** 33 files: the verification document, 30 files under `.documents/rrk-adoption/out/04-*`
+  (208 KB, the largest 36.5 KB), the log and the board. No code, and nothing under `var/` is
+  committed. The untracked set is unchanged (22 entries). `git diff 3cd2be4 d5d8c74 -- main.py
+  plot_by_beta.py plot_ScalarModel.py utilities.py` is empty. `pip freeze` equals the
+  orchestrator's own, taken before dispatch.
+- **The cluster.** `ray_cluster.sh status` exits 0: the lock free, no ChamPBH process, the ports
+  free. No `ray::` process is on the machine.
+- **The runs, from the registry.** `list` shows the four runs, all finished: `reference` `done`,
+  `resumed-a` `killed`, `resumed-b` `lost`, `resumed-c` `done`. Each `manifest.json` and
+  `status.json` under `var/runs/` is byte-identical to its committed copy. They agree with the
+  document on these fields:
+  - the state and exit code;
+  - `script` `main.py` with `main.py`'s SHA-256 (`243a5026…7d59`);
+  - `results`, and `results_store_id` as ruling 11 says;
+  - `git_head` `07aa626` and `git_dirty` `true`;
+  - the pilot's `scope`, and `heartbeat_means` with 03's housekeeping clause;
+  - `resumed-b`'s `ended` record, `verified: true`, with the reason.
+
+  `end` rewrote `resumed-b`'s `heartbeat` to its own time (23:56:39). The kill-time beat, 23:55:16,
+  survives in `ended.evidence.heartbeat`, which is the one the document's §1.4 quotes.
+- **The order and the signals.** In every launch log the `** registered_run:` lines come before
+  `>> packages:`. `resumed-a` has the handler's line at 23:52:58 +0100, the same second as
+  `interrupt_when`'s `sent SIGTERM` (22:52:58 UTC). Then come `SystemExit(1)`, the marker 143 and
+  the launcher's 143, with no alarm line. `resumed-b` ends with the launcher's 137 and no marker.
+  The refused launch is the `!! ` line naming `resumed-b` and `end`, then the marker 2.
+- **The delays.** A fresh read-only query of the reference shards gives the five `compute_time`s as
+  logged: 7.28, 7.33, 8.12, 50.91 and 195.74 s. Both delays follow ruling 6 from them: 150 s in the
+  β = 10 / β = 25 gap, and 20 s ≤ 25.5 s.
+- **The stores, re-measured.** `compare_stores`: `RESULT: equal`, exit 0. `store fingerprint` on
+  each store gives `2dd4b39b…932f`, and each "matches" its sidecar's: the reference's by a person at
+  23:47:55, the resumed store's by `resumed-c` at 23:59:44. `store show` names `reference` on the
+  first store, and `resumed-c`, `resumed-b` and `resumed-a` on the second. `stage_counts.py` on the
+  four logs equals the committed output. `histories.csv` is
+  `d7c62c37…c522`, R0's.
+- **The records.** The log is in §5.1's form, with fifteen deviations, each classified. The
+  document's figures match the outputs and the registry's records. It claims no history of beats.
+- **Suites** at `d5d8c74`, serially, with `var/` now present: 18, 61 + 115, 78, 84, 61 (load 5–8).
+  `var/runs/`' listing is the same before and after.
+- **Opened by this review:** `[04-the-pool-waits-for-every-in-flight-item-when-fewer-than-three]`
+  (§3). The agent's observation of β = 10's unvalidated row is explained by RayPoolKit's wait,
+  read at `v0.2.0`. Its record says "β = 10's validation" was in flight; by the code it was
+  β = 10's store task, because a validation is submitted only after the store task's result is
+  processed. The issue is the user's to rule, and not this campaign's to fix.
+- **Residue fixed in this follow-up:**
+  - the SHA, on the board and in the log;
+  - the status line;
+  - the notes list;
+  - the index.

@@ -1,7 +1,7 @@
 # Log 04 — rehearse registered runs
 
 **Subject:** Rehearse registered, interrupted and hard-killed builds
-**Commit:** this commit, on branch `rrk-adoption`, on top of `07aa626`
+**Commit:** `d5d8c74`, on branch `rrk-adoption`, on top of `07aa626`
 **Date:** 2026-10-19 (the rehearsal, 23:34–00:07 BST) and 2026-10-20 (the commit), by Claude Opus 5.5
 **Result:** **COMPLETE.** H1–H6 shipped; the gate "R" holds. Four builds through the wrapper on
 ChamPBH's isolated cluster: `reference` `done`/0; `resumed-a` `killed`/143; `resumed-b` `SIGKILL`ed,
@@ -215,7 +215,7 @@ started Ray connected to `127.0.0.1:6380`; no log names 6379.
 4. `git diff 3cd2be4 -- main.py`: empty, before and after.
 5. One commit; `git diff --cached --name-only` shown before it; `var/` not committed.
 
-`git status --short` after the stop: the 22 untracked entries and nothing else, before this commit's
+`git status --short` after the stop: the 22 untracked entries and nothing else, before `d5d8c74`'s
 files were written.
 
 ## The deliberate-breakage record
@@ -245,7 +245,7 @@ the rehearsal itself (`SIGTERM`, `SIGKILL`, the refusal).
 
 ## State handed to the next prompt
 
-- Branch `rrk-adoption`; this commit is on top of `07aa626`. No tracked change; the 22 untracked
+- Branch `rrk-adoption`; `d5d8c74` is on top of `07aa626`. No tracked change; the 22 untracked
   entries at the root are the user's. `var/` (ignored, 95 MB) holds:
   - `var/datastores/rrk-adoption-04-reference.db` and `…-resumed.db`, 16 shards each, with registry
     sidecars (`store_id` `8b8f0e389f854df4897876184dbbb307` and
