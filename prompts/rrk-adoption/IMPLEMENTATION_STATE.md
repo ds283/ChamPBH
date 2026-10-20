@@ -570,3 +570,10 @@ pass.
   - the notes list.
 - No issue opened or closed. `[04-the-pool-waits-for-every-in-flight-item-when-fewer-than-three]`
   stays open, for the user to rule.
+
+**Added 2026-10-20, after the close, by the user's instruction.** §5.6's two stale docstrings are
+fixed outside any prompt, as the sentences there proposed: `ObjectFactories/tests/test_inventory_specs.py:27-29`
+and `utilities.py:190-193`. Only the docstrings change (the files' ASTs, docstrings aside, are
+identical), so the campaign's byte-identity of `utilities.py` holds for its code. The pilot store, its
+logs and `pilot-out/` were removed from the root by the user's instruction, and the two run scripts
+are the only untracked entries left.

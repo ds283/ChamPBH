@@ -24,9 +24,9 @@ tables are the ones ``datastorekit.SQL.schema.build_schema`` builds from them, i
   references is registered and declares a spec (test 2);
 - **coverage** (campaign README §6.5, the user's ruling): every registered class declares a spec,
   or is a tag or value table read through an owner's spec, named here with its owner and slot, or
-  is excluded here by name with a reason. The fingerprint of SecondaryGWKit's RunRegistryKit, which
-  ChamPBH is expected to adopt, reads only what the specs declare and passes over the rest
-  silently, so a class in none of the three would go unfingerprinted (test 6).
+  is excluded here by name with a reason. The fingerprint of RunRegistryKit, which ChamPBH adopted
+  in `rrk-adoption` (`config/fingerprint.py`), reads only what the specs declare and passes over
+  the rest silently, so a class in none of the three would go unfingerprinted (test 6).
 """
 
 import unittest

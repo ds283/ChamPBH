@@ -187,9 +187,10 @@ def installed_package_provenance(names=RECORDED_DISTRIBUTIONS) -> dict:
       `None`;
     - `editable`: `True` when `dir_info.editable` is true, and `False` otherwise.
 
-    These are the fields, with the same meaning, of SecondaryGWKit's
-    `RunRegistry.package_provenance()`, which ChamPBH may one day import in place of this helper
-    (README P5). Only the standard library is used, and no package being described is imported.
+    These are the fields, with the same meaning, of `runregistrykit.package_provenance()`. ChamPBH
+    keeps this helper rather than importing that one, so that `main.py` and the plot scripts stay
+    launchable without the registry (`rrk-adoption` README U1). Only the standard library is used,
+    and no package being described is imported.
     An absent, unreadable or malformed `direct_url.json` (one that is not a JSON object), or a
     `vcs_info` or `dir_info` that is not an object, gives `None` for the three fields it would
     have supplied and `False` for `editable`. It never raises on odd metadata, and it never
