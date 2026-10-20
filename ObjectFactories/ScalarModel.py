@@ -37,11 +37,7 @@ from CosmologyConcepts.ConformalCouplings import AbstractCoupling
 from CosmologyConcepts.ConformalCouplings.model_ids import EXPONENTIAL_COUPLING
 from CosmologyConcepts.Potentials import AbstractPotential
 from CosmologyConcepts.Potentials.model_ids import (
-    INVERSE_POWER_POTENTIAL,
     EXPONENTIAL_POTENTIAL,
-    REFLECTING_POTENTIAL,
-    STAROBINSKY_POTENTIAL,
-    RECLINER_POTENTIAL,
 )
 from CosmologyModels import BaseCosmology
 from CosmologyModels.model_ids import XAV_IMPROVED_EOS_IDENTIFIER
@@ -240,11 +236,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                     "potential_serial",
                     type_column="potential_type",
                     types={
-                        INVERSE_POWER_POTENTIAL: "InversePowerPotential",
                         EXPONENTIAL_POTENTIAL: "ExponentialPotential",
-                        REFLECTING_POTENTIAL: "ReflectingPotential",
-                        STAROBINSKY_POTENTIAL: "StarobinskyPotential",
-                        RECLINER_POTENTIAL: "ReclinerPotential",
                     },
                 ),
                 "coupling": Parent(

@@ -30,8 +30,6 @@ ChamPBH/
 ├── plot_by_beta.py                  # Plotting driver (Ray remote)
 ├── plot_ScalarModel.py              # Scalar field detailed plots
 ├── exponential.yaml                 # Example run configuration
-├── starobinsky.yaml
-├── recliner.yaml
 ├── runregistrykit.toml              # RunRegistryKit's config: runs_root, stores_root, recorded distributions, the fingerprinter
 │
 ├── (the work queue, `RayWorkPool`, is the `raypoolkit` package, pinned in requirements.txt)
@@ -48,10 +46,6 @@ ChamPBH/
 │   ├── DimensionlessQuantity.py
 │   ├── DimensionfulQuantity.py
 │   ├── ExponentialPotential.py
-│   ├── InversePowerPotential.py
-│   ├── Starobinsky.py
-│   ├── ReclinerPotential.py
-│   ├── ReflectingPotential.py
 │   ├── ExponentialCoupling.py
 │   ├── QCD_Cosmology.py
 │   ├── ScalarModel.py               # Factory for main ODE output
@@ -90,10 +84,6 @@ ChamPBH/
 │   ├── Potentials/
 │   │   ├── AbstractPotential.py
 │   │   ├── ExponentialPotential.py
-│   │   ├── InversePowerPotential.py
-│   │   ├── StarobinskyPotential.py
-│   │   ├── ReclinerPotential.py
-│   │   ├── ReflectingPotential.py
 │   │   └── model_ids.py
 │   └── ConformalCouplings/
 │       ├── AbstractCoupling.py
@@ -424,11 +414,7 @@ calls `read_inventory` on the closed store, read-only and before Ray starts, and
 | `temperature` | `sqla_dimensionful_quantity_factory` | Replicated |
 | `phi_value` | `sqla_dimensionful_quantity_factory` | Replicated |
 | `pi_value` | `sqla_dimensionful_quantity_factory` | Replicated |
-| `InversePowerPotential` | `sqla_InversePowerPotential_factory` | Replicated |
-| `StarobinskyPotential` | `sqla_StarobinskyPotential_factory` | Replicated |
 | `ExponentialPotential` | `sqla_ExponentialPotential_factory` | Replicated |
-| `ReclinerPotential` | `sqla_ReclinerPotential_factory` | Replicated |
-| `ReflectingPotential` | `sqla_ReflectingPotential_factory` | Replicated |
 | `ExponentialCoupling` | `sqla_ExponentialCoupling_factory` | Sharded |
 | `QCD_Cosmology` | `sqla_QCDCosmology_factory` | Replicated |
 | `IntegrationSolver` | `sqla_IntegrationSolver_factory` | Replicated |
@@ -575,7 +561,7 @@ Uses `configargparse` (a drop-in `argparse` replacement) so that every CLI argum
 - `--T-stop-GeV FLOAT`
 
 *Parameter grids:*
-- `--potential-type {Exponential,InversePower,Starobinsky,Recliner}`
+- `--potential-type {Exponential}`
 - `--beta-low/high FLOAT`, `--samples-per-beta N`, `--beta-values FLOAT...`
 - `--log10-M-low/high-eV FLOAT`, `--samples-per-log10-M-eV N`, `--M-values-eV/Mp FLOAT...`
 - `--log10-Lambda-low/high-eV FLOAT`, `--Lambda-values-eV/Mp FLOAT...`
@@ -618,8 +604,7 @@ replicated_tables = [
     "version", "store_tag", "redshift", "tolerance",
     "beta_value", "M_value", "Lambda_value", "temperature",
     "phi_value", "pi_value",
-    "ExponentialPotential", "InversePowerPotential", "ReflectingPotential",
-    "ReclinerPotential", "StarobinskyPotential",
+    "ExponentialPotential",
     "QCD_Cosmology",
     "IntegrationSolver"
 ]
@@ -960,7 +945,9 @@ class AbstractPotential(DatastoreObject):
 
 > **Note, 2026-10-01 (`integrator-remediation`, prompt 01, `fc97233`).** The five `bounce_region_level{1,2}_*` and `hard_reflection_point` properties are still defined on `AbstractPotential` and its potentials, but nothing reads them since `VERSION_LABEL = "2026.5.0"`: the regions are gone (see [`numerical-strategies.md` §3.5.2](numerical-strategies.md)). The same commit added two non-abstract properties, `reflects_at_origin -> bool` (default `False`) and `log_V_floor -> Optional[float]` (default `None`), implemented on `ExponentialPotential` only; they let the integrator's elastic reflection (§3.5.3 there) run for a potential that declares it. Removing the region properties is open issue `[00-region-properties-on-the-potentials-become-unread]`.
 
-Concrete implementations: `ExponentialPotential`, `InversePowerPotential`, `StarobinskyPotential`, `ReclinerPotential`, `ReflectingPotential`.
+Concrete implementation: `ExponentialPotential`.
+
+> **Note, 2026-10-20 (`jordan-normalization`, prompt 01).** `InversePowerPotential`, `StarobinskyPotential`, `ReclinerPotential` and `ReflectingPotential` were removed, with their factories, their ids in `model_ids.py`, their registry, sharding and batch-size entries, `ScalarModel`'s spec entries, `starobinsky.yaml` and `recliner.yaml` (user ruling R11: for now, strip everything down to the exponential). `ExponentialPotential` is the only potential class, `--potential-type` accepts only `Exponential` (the option itself goes in prompt 08), and `FINGERPRINT_FORMAT` is 2. The table and the lists above and in §4 and §6 describe the tree after this commit; the dated notes before it describe it as it was.
 
 ### 8.4 Conformal Couplings (`CosmologyConcepts/ConformalCouplings/`)
 

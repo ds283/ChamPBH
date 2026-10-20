@@ -102,6 +102,10 @@ Potentials can advertise parameter-dependent tolerance overrides. For example
 when the mass scale `M/M_P < 1e-3`, recognizing that very small M makes the potential
 extremely steep and demands a trade-off between achievable accuracy and step viability.
 
+> **Note, 2026-10-20 (`jordan-normalization`, prompt 01).** `ReclinerPotential` was removed with the
+> other three non-exponential potentials (user ruling R11), so the paragraph above describes a
+> class that no longer exists. The exponential potential's overrides are the only ones left.
+
 ### 2.3 Dense output and resampling
 
 `solve_ivp` is called with `dense_output=True`. The continuous interpolant (`sol.sol`) is

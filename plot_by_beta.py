@@ -88,7 +88,7 @@ BBN_SMALL_NETWORK = True
 
 DEFAULT_T_INIT_GEV = 20000
 
-potential_types = ["Exponential", "InversePower", "Starobinsky", "Recliner"]
+potential_types = ["Exponential"]
 
 
 parser = create_argument_parser()

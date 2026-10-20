@@ -142,6 +142,9 @@ measurement below is the audit's, on `b1f64d8`, by the script named in the audit
 cited, except in the entries opened by prompts 01 and 02 (`[01-…]`, `[02-…]`), which name their
 own source.
 
+*(2026-10-20: `[00-declare-reflects-at-origin-for-the-other-potentials]` moved to §4, resolved as
+moot by `jordan-normalization` prompt 01.)*
+
 - **[00-settling-at-physical-M-needs-a-parked-tracking-model]** *(audit §3.7, §9.4)*.
   - **What.** Once the bounce amplitude is far below any scale of interest and the period far
     below the sample spacing, the field is a passenger at `φ_wall(ρ)`, the minimum of the
@@ -206,22 +209,6 @@ own source.
     [`jordan-normalization`](../jordan-normalization/IMPLEMENTATION_STATE.md) campaign, prompt 04,
     whose `AbstractModel` interface does not carry these properties over. That prompt closes it
     here, in §4, and deletes its row from `.documents/OPEN_ISSUES.md`.
-- **[00-declare-reflects-at-origin-for-the-other-potentials]** *(the user's guard G1,
-  2026-10-01)*.
-  - **What.** Prompt 01 adds `reflects_at_origin` and `log_V_floor` to `AbstractPotential` with
-    defaults `False` and `None`, and implements them only on `ExponentialPotential`.
-    `InversePowerPotential`, `ReclinerPotential`, `ReflectingPotential`, `StarobinskyPotential`
-    keep the defaults, so a history under any of them that reaches the representable-step floor
-    fails rather than reflecting.
-  - **Impact.** None for production, which uses `ExponentialPotential`. A future run with another
-    potential would need the declaration, with the floor-part formula for that potential.
-  - **Next step.** Declare the two properties on each potential whose form justifies them, with
-    a one-line derivation in the docstring. Not assigned.
-  - **Assigned (2026-10-20):** to the
-    [`jordan-normalization`](../jordan-normalization/IMPLEMENTATION_STATE.md) campaign, prompt 01,
-    which strips the four other potentials (its README R11), so the classes this entry concerns are
-    deleted and it closes as moot. That prompt closes it here, in §4, and deletes its row from
-    `.documents/OPEN_ISSUES.md`.
 - **[00-analytic-jacobian-would-remove-num-jac]** *(audit §9.4)*.
   - **What.** The stiff `(φ, π)` block's Jacobian (`V''` and the kick's `φ`-dependence) is
     available in closed form; the slow components could use finite differences under the loop's
@@ -410,3 +397,24 @@ own source.
     per-bounce `φ_min` is the dense-output minimum, which `test_d_P3_window` already asserts and
     which meets ± 2e-4 (4e-7, 1e-6, 1e-6 on prompt 01's tree). No code change; prompt 04
     re-measures (b) with that measure. Recorded on the board by prompt 02.
+- **[00-declare-reflects-at-origin-for-the-other-potentials]** *(the user's guard G1,
+  2026-10-01)*.
+  - **What.** Prompt 01 adds `reflects_at_origin` and `log_V_floor` to `AbstractPotential` with
+    defaults `False` and `None`, and implements them only on `ExponentialPotential`.
+    `InversePowerPotential`, `ReclinerPotential`, `ReflectingPotential`, `StarobinskyPotential`
+    keep the defaults, so a history under any of them that reaches the representable-step floor
+    fails rather than reflecting.
+  - **Impact.** None for production, which uses `ExponentialPotential`. A future run with another
+    potential would need the declaration, with the floor-part formula for that potential.
+  - **Next step.** Declare the two properties on each potential whose form justifies them, with
+    a one-line derivation in the docstring. Not assigned.
+  - **Assigned (2026-10-20):** to the
+    [`jordan-normalization`](../jordan-normalization/IMPLEMENTATION_STATE.md) campaign, prompt 01,
+    which strips the four other potentials (its README R11), so the classes this entry concerns are
+    deleted and it closes as moot. That prompt closes it here, in §4, and deletes its row from
+    `.documents/OPEN_ISSUES.md`.
+  - **Resolved (2026-10-20), moot:** by `jordan-normalization` prompt 01 (this commit, its log 01).
+    The four potentials the entry concerned (`InversePowerPotential`, `ReclinerPotential`,
+    `ReflectingPotential`, `StarobinskyPotential`) are deleted (R11), so nothing keeps the defaults
+    that would fail at the floor. `ExponentialPotential` declares the properties and is the only
+    potential class.

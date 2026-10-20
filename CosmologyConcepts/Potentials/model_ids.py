@@ -13,8 +13,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-INVERSE_POWER_POTENTIAL = 0
 EXPONENTIAL_POTENTIAL = 1
-REFLECTING_POTENTIAL = 2
-STAROBINSKY_POTENTIAL = 3
-RECLINER_POTENTIAL = 4

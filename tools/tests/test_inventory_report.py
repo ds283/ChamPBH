@@ -256,10 +256,10 @@ class TestReportOnAStore(_InventoryStoreCase):
 
     def test_no_problem_and_every_class(self):
         self.assertEqual(self.inventory.problems, ())
-        self.assertEqual(len(self.inventory.classes), 21)
+        self.assertEqual(len(self.inventory.classes), 17)
         self.assertIn("problems: none", self.lines)
         self.assertEqual(self.lines[0], "@@ DATASTORE INVENTORY: store.db")
-        self.assertIn("read-only; 1 shard (#0); 46 records in 21 classes", self.lines)
+        self.assertIn("read-only; 1 shard (#0); 46 records in 17 classes", self.lines)
 
     def test_the_quantities(self):
         for line in (

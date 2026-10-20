@@ -451,12 +451,8 @@ class TestThePayloads(_ReadOnlyCase):
     def test_the_potentials(self):
         Ms, Lambdas = ["M1", "M2"], ["L1"]
         with_n = lambda M, L: {"M": M, "Lambda": L, "n": 1, "units": UNITS}
-        without_n = lambda M, L: {"M": M, "Lambda": L, "units": UNITS}
         for potential_type, cls_name, payload in (
             ("Exponential", "ExponentialPotential", with_n),
-            ("InversePower", "InversePowerPotential", with_n),
-            ("Starobinsky", "StarobinskyPotential", without_n),
-            ("Recliner", "ReclinerPotential", without_n),
         ):
             with self.subTest(potential_type=potential_type):
                 pool = _RecordingPool()
@@ -466,6 +462,17 @@ class TestThePayloads(_ReadOnlyCase):
                     [(cls_name, payload(M, L)) for M in Ms for L in Lambdas],
                 )
                 self.assertEqual(found, [1, 2])
+
+        # jordan-normalization prompt 01: the other three types were removed (R11) and are refused
+        for potential_type in ("InversePower", "Starobinsky", "Recliner"):
+            with self.subTest(removed=potential_type):
+                pool = _RecordingPool()
+                with self.assertRaises(ValueError) as caught:
+                    plot_inputs.potentials(pool, potential_type, Ms, Lambdas, UNITS)
+                self.assertEqual(
+                    str(caught.exception), f"Unknown potential type: {potential_type}"
+                )
+                self.assertEqual(pool.lookups, [])
 
     def test_the_couplings(self):
         pool = _RecordingPool()

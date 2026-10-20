@@ -1,8 +1,8 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-20 · **28 open**: 4 on the `review-remediation` board (closed
+**Last updated:** 2026-10-20 · **27 open**: 4 on the `review-remediation` board (closed
 2026-09-30), none now assigned; 2 on the `production-readiness` board
-(closed 2026-09-30); 4 on the `run-integrity` board (closed 2026-09-30); 9 on the
+(closed 2026-09-30); 4 on the `run-integrity` board (closed 2026-09-30); 8 on the
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`;
 2 on the `science-readiness` board (planned 2026-10-01; closed 2026-10-02, 10 of 10 landed,
 prompt 06b having been added 2026-10-02); 2 on the `bbn-tolerance` board (planned 2026-10-03,
@@ -24,7 +24,7 @@ still open on its board); 1 on the `rrk-adoption` board (planned 2026-10-19, wit
 opened or assigned; the orchestrator's review of prompt 04 opened one, 2026-10-20; closed 2026-10-20,
 5 of 5 prompts landed, with the one issue still open on its board); none on the
 `jordan-normalization` board (planned 2026-10-20, with none opened; eight from five boards assigned
-to it the same day, §1.15).
+to it the same day, §1.15; prompt 01 closed one of them, 2026-10-20, leaving seven).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -128,11 +128,12 @@ Fourteen opened by the planner on 2026-10-01 from
 one the same day from the user's reflection guard G1. Prompt 01 (2026-10-01) closed three and
 opened two (`[01-…]`); prompt 02 (2026-10-01) closed five and opened one (`[02-…]`); prompt 03
 (2026-10-01) closed one; prompt 04, the close-out (2026-10-01), opened and closed none and the
-campaign closed; one more was opened after the close-out (2026-10-01, `[post-…]`). Nine are open;
+campaign closed; one more was opened after the close-out (2026-10-01, `[post-…]`). Eight are open;
 two were assigned on 2026-10-01 to `science-readiness` (§1.7). One was resolved (prompt 02,
 2026-10-01). The other was narrowed (prompt 05, 2026-10-02) and came back here unassigned when that
 campaign closed (2026-10-02). Two of the nine were assigned on 2026-10-20 to
-`jordan-normalization` (§1.15); the other seven are below.
+`jordan-normalization` (§1.15), and one of them was closed as moot by its prompt 01 the same day;
+the other seven are below.
 
 - `[00-settling-at-physical-M-needs-a-parked-tracking-model]` — the field at φ_wall(ρ) as a
   passenger once its bounces are unresolvable: the switch criterion and the parked field's
@@ -238,10 +239,6 @@ Assigned 2026-10-20 by the user (the campaign's README, U3), when the campaign w
 entry stays on its own board, which carries the **Assigned** line; the prompt that closes one
 deletes its row here. Each row ends with its board and the prompt that takes it.
 
-- `[00-declare-reflects-at-origin-for-the-other-potentials]` — prompt 01 declares
-  `reflects_at_origin` and `log_V_floor` on `ExponentialPotential` only; the other four
-  potentials keep the defaults and would fail at the floor rather than reflect.
-  *(`integrator-remediation`; prompt 01)*
 - `[00-region-properties-on-the-potentials-become-unread]` — `bounce_region_*`,
   `default_max_step`, `hard_reflection_point` stay defined after prompt 01; housekeeping.
   *(`integrator-remediation`; prompt 04)*

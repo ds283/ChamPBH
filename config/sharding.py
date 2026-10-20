@@ -27,10 +27,6 @@ replicated_tables = [
     "phi_value",
     "pi_value",
     "ExponentialPotential",
-    "InversePowerPotential",
-    "ReflectingPotential",
-    "ReclinerPotential",
-    "StarobinskyPotential",
     "QCD_Cosmology",
     "IntegrationSolver",
 ]

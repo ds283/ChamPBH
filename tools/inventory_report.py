@@ -83,11 +83,7 @@ INVENTORY_CATEGORIES: List[Tuple[str, List[str]]] = [
     (
         "Potentials and couplings",
         [
-            "InversePowerPotential",
-            "StarobinskyPotential",
             "ExponentialPotential",
-            "ReclinerPotential",
-            "ReflectingPotential",
             "ExponentialCoupling",
         ],
     ),

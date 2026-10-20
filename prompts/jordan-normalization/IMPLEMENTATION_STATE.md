@@ -1,7 +1,7 @@
 # jordan-normalization campaign — implementation state
 
-**Last updated:** 2026-10-20 · **Status: LIVE — 10 of 10 prompts written, 0 landed; R1–R14, U1–U5
-and P1–P20 ruled by the user 2026-10-20 (README §6). Next: the orchestrator note for 01.**
+**Last updated:** 2026-10-20 · **Status: LIVE — 10 of 10 prompts written, 1 landed (01); R1–R14, U1–U5
+and P1–P20 ruled by the user 2026-10-20 (README §6). Next: the orchestrator's review of 01, then its note for 02.**
 The plan is [`README.md`](README.md), written on 2026-10-20 on branch `jordan-normalization`, cut
 from `main` at `ac187c8`.
 
@@ -34,7 +34,7 @@ It ends in the handover for the science rebuild, which is the user's.
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | Strip to the exponential model | four potentials and their configs removed; a golden short history; format 2 | Sonnet | ⬜ | ⬜ | — | — |
+| 01 | Strip to the exponential model | four potentials and their configs removed; a golden short history; format 2 | Sonnet | ⬜ | ✅ | this commit | [`logs/01-strip-to-the-exponential-model.md`](logs/01-strip-to-the-exponential-model.md) |
 | 02 | Rename to `ScalarHistory` | classes, tables, drop group, proxies, documents; format 3 | Sonnet | ⬜ | ⬜ | — | — |
 | 03 | The sampling axis | ln(1 + z_E) on the axis, exact-multiple grid, absolute lookup, ln(1 + z_J) per sample; format 4 | Opus | ⬜ | ⬜ | — | — |
 | 04 | The model interface | `AbstractModel`, `ExponentialModel`, `RealizedModel`; consumers on it via an adapter; φ_ref = 0 bitwise; the shift law | Opus | ⬜ | ⬜ | — | — |
@@ -69,7 +69,7 @@ note in `orchestrator/`, written after the previous prompt's review.
 
 | Gate | Holds when | Prompt | State |
 |---|---|---|---|
-| Strip | only the exponential potential and coupling remain; the golden history, generated at `ac187c8`, passes bitwise | 01 | ⬜ |
+| Strip | only the exponential potential and coupling remain; the golden history, generated at `ac187c8`, passes bitwise | 01 | ✅ |
 | Rename | no `ScalarModel` name outside the records; the golden history bitwise | 02 | ⬜ |
 | Axis | the axis is ln(1 + z_E) with no overflow; ln(1 + z_J) agrees with `cosmology.z(T_J)` and with the A identity; the change in values measured | 03 | ⬜ |
 | Model | the golden history bitwise through `ExponentialModel` at φ_ref = 0, V₀ = Λ⁴; the shift law holds | 04 | ⬜ |
@@ -83,6 +83,8 @@ note in `orchestrator/`, written after the previous prompt's review.
 
 None opened by this campaign.
 
+Prompt 01 closed one assigned issue (§3.1, §4).
+
 ### 3.1 Assigned to this campaign
 
 Assigned 2026-10-20 by the user (README §6.1, U3). Each entry stays on its own board, which carries
@@ -91,7 +93,7 @@ from `.documents/OPEN_ISSUES.md` §1.15.
 
 | Issue | Its board | Prompt | Why here |
 |---|---|---|---|
-| `[00-declare-reflects-at-origin-for-the-other-potentials]` | `integrator-remediation` | 01 | moot once the four other potentials are deleted |
+| `[00-declare-reflects-at-origin-for-the-other-potentials]` | `integrator-remediation` | 01 — closed (this commit) | moot once the four other potentials are deleted |
 | `[00-region-properties-on-the-potentials-become-unread]` | `integrator-remediation` | 04 | `AbstractModel` does not carry the properties over |
 | `[01-scalarmodelvalue-build-checks-the-stored-phi-against-pi]` | `dk-and-rpk-migration` | 03 | the value factory is rewritten for the axis |
 | `[05-the-value-factory-compares-stored-phi-against-pi]` | `science-readiness` | 03 | the same defect, opened twice |
@@ -102,7 +104,9 @@ from `.documents/OPEN_ISSUES.md` §1.15.
 
 ## 4. Resolved issues
 
-None.
+- `[00-declare-reflects-at-origin-for-the-other-potentials]` — closed as moot by prompt 01 (this
+  commit): the four potentials it concerned are deleted. The entry, with its **Resolved** line, is
+  in `integrator-remediation`'s §4; its row is deleted from `.documents/OPEN_ISSUES.md` §1.15.
 
 ## 5. Dispatch record
 
@@ -142,3 +146,19 @@ user and the planner worked through on 2026-10-20.
   in the README: 07 removes the Λ options and `--T-stop-GeV` with their tables (nothing can
   consume them), fixes the wrapper's `scope` that reads them, and keeps the history-running tools
   on a fixed normalization until 08; and 06's comparison costs about an hour, not half.
+
+### 5.2 After prompt 01 (2026-10-20)
+
+Prompt 01 landed in this commit (log [`logs/01-strip-to-the-exponential-model.md`](logs/01-strip-to-the-exponential-model.md)).
+- **X1.** `ComputeTargets/tests/golden_history.py` (setup and generator), `test_golden_history.py`
+  and `data/golden_history_01.json`, generated on the tree it started from (code tree `ac187c8`'s);
+  the two histories take about 11 s together, and passed twice on the old tree and unchanged after
+  the strip.
+- **X2, X3.** The four classes, their four factories, two YAML files, ids, registry, sharding,
+  spec, parser choices and dispatch removed; `Exponential` is the only `--potential-type`.
+- **X4.** Tests cut to the exponential case (listed in the log).
+- **X5.** `FINGERPRINT_FORMAT` 2; `SPEC_DIGESTS[2]` of 17 pairs and 14 distinct digests; a new golden
+  file `store_fingerprint_jordan-normalization-01.json` beside format 1's.
+- **Suites:** CosmologyModels 18, ComputeTargets 179 (61 + 118), ObjectFactories 78, tools 84,
+  RunDrivers 61 (was 18 / 176 / 78 / 84 / 61: +3, the golden history's tests).
+- **Closed:** `[00-declare-reflects-at-origin-for-the-other-potentials]` (moot).

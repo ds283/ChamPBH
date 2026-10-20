@@ -20,9 +20,10 @@ and §6.2, P8 and P9; RunRegistryKit's docs/adoption/README.md §6, "The Q5 guar
 records changes. Nothing makes the bump happen, and the golden fingerprint says only that the data
 changed, not that the format was forgotten. This module pins, for each format that has a pin
 (`config.fingerprint.SPEC_DIGESTS`), the SHA-256 of the canonical JSON of every
-`inventory_spec()` in the registry, in registry order, as `[class, digest]` pairs: 21 of them, one
-per registered class with a spec (17 `inventory_spec` definitions serve 21 classes, as
-`test_inventory_specs.test_seventeen_definitions_serve_twenty_one_classes` says). A change to any
+`inventory_spec()` in the registry, in registry order, as `[class, digest]` pairs: 17 of them, one
+per registered class with a spec (13 `inventory_spec` definitions serve 17 classes, as
+`test_inventory_specs.test_thirteen_definitions_serve_seventeen_classes` says; 21 and 17 before
+jordan-normalization prompt 01). A change to any
 spec then fails `TestFormatGuard` naming the class, and says to bump the format.
 
 The functions are the recipe of RunRegistryKit's `docs/adoption/README.md` §6 (nothing of the guard
@@ -114,7 +115,7 @@ class TestFormatGuard(unittest.TestCase):
     def test_the_pin_has_one_pair_per_class_with_a_spec(self):
         self.assertIn(FINGERPRINT_FORMAT, SPEC_DIGESTS)
         pinned = SPEC_DIGESTS[FINGERPRINT_FORMAT]
-        self.assertEqual(len(pinned), 21)
+        self.assertEqual(len(pinned), 17)
         self.assertEqual([n for n, _ in pinned], list(inventory_specs(factories)))
 
     def test_a_key_keeps_its_type(self):

@@ -31,7 +31,7 @@ DEFAULT_LOG10_LAMBDA_HIGH_EV = 1
 DEFAULT_SAMPLES_PER_LOG10_LAMBDA_EV = 6
 
 allowed_drop_actions = ["scalar-model", "adiabatic-history", "bbn-data"]
-potential_types = ["Exponential", "InversePower", "Starobinsky", "Recliner"]
+potential_types = ["Exponential"]
 
 
 def non_negative_float(text: str) -> float:

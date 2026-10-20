@@ -320,7 +320,7 @@ class TestScope(WrapperCase):
                 "--ray-address",
                 ADDRESS,
                 "--potential-type",
-                "Recliner",
+                "Exponential",
                 "--beta-values",
                 *["0.1", "0.5", "1", "1.5", "2", "2.5", "3"],
                 "--M-values-eV",
@@ -333,7 +333,7 @@ class TestScope(WrapperCase):
         )
         self.assertEqual(
             scope,
-            "no config file; potential Recliner; β 7 values, 0.1–3; M 1e+24 eV; "
+            "no config file; potential Exponential; β 7 values, 0.1–3; M 1e+24 eV; "
             "Λ 1e-30 Mp; φ* 2.5 Mp; 20 shards; job ChamPBH-test",
         )
 

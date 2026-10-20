@@ -59,11 +59,7 @@ EXPECTED_ORDER = [
     "pi_value",
     "QCD_Cosmology",
     "IntegrationSolver",
-    "InversePowerPotential",
-    "StarobinskyPotential",
     "ExponentialPotential",
-    "ReclinerPotential",
-    "ReflectingPotential",
     "ExponentialCoupling",
     "ScalarModel",
     "AdiabaticHistory",
@@ -159,10 +155,10 @@ class TestInventoryClasses(_NoRay):
     def test_the_registry_is_accepted_and_ordered(self):
         self.assertEqual(inventory_classes(factories), EXPECTED_ORDER)
 
-    def test_seventeen_definitions_serve_twenty_one_classes(self):
+    def test_thirteen_definitions_serve_seventeen_classes(self):
         owners = [name for name, f in factories.items() if _spec(f) is not None]
-        self.assertEqual(len(owners), 21)
-        self.assertEqual(len({type(factories[n]) for n in owners}), 17)
+        self.assertEqual(len(owners), 17)
+        self.assertEqual(len({type(factories[n]) for n in owners}), 13)
         # the six quantity entries share two factory classes, each reading its own value column
         quantities = ["beta_value", "M_value", "Lambda_value", "temperature"]
         quantities += ["phi_value", "pi_value"]
@@ -230,11 +226,7 @@ class TestSpecsResolve(_NoRay):
         self.assertEqual(
             dict(parents["potential"].types),
             {
-                potential_ids.INVERSE_POWER_POTENTIAL: "InversePowerPotential",
                 potential_ids.EXPONENTIAL_POTENTIAL: "ExponentialPotential",
-                potential_ids.REFLECTING_POTENTIAL: "ReflectingPotential",
-                potential_ids.STAROBINSKY_POTENTIAL: "StarobinskyPotential",
-                potential_ids.RECLINER_POTENTIAL: "ReclinerPotential",
             },
         )
         self.assertEqual(

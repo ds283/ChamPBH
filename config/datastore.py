@@ -72,23 +72,11 @@ from ObjectFactories.ExponentialCoupling import (
 from ObjectFactories.ExponentialPotential import (
     sqla_ExponentialPotential_factory,
 )
-from ObjectFactories.InversePowerPotential import (
-    sqla_InversePowerPotential_factory,
-)
 from ObjectFactories.QCD_Cosmology import sqla_QCDCosmology_factory
-from ObjectFactories.ReclinerPotential import (
-    sqla_ReclinerPotential_factory,
-)
-from ObjectFactories.ReflectingPotential import (
-    sqla_ReflectingPotential_factory,
-)
 from ObjectFactories.ScalarModel import (
     sqla_ScalarModelFactory,
     sqla_ScalarModelTagAssociation_factory,
     sqla_ScalarModelValue_factory,
-)
-from ObjectFactories.Starobinsky import (
-    sqla_StarobinskyPotential_factory,
 )
 from ObjectFactories.integration_metadata import (
     sqla_IntegrationSolver_factory,
@@ -109,11 +97,7 @@ factories = {
     "temperature": sqla_dimensionful_quantity_factory(temperature),
     "phi_value": sqla_dimensionful_quantity_factory(phi_value),
     "pi_value": sqla_dimensionful_quantity_factory(pi_value),
-    "InversePowerPotential": sqla_InversePowerPotential_factory(),
-    "StarobinskyPotential": sqla_StarobinskyPotential_factory(),
     "ExponentialPotential": sqla_ExponentialPotential_factory(),
-    "ReclinerPotential": sqla_ReclinerPotential_factory(),
-    "ReflectingPotential": sqla_ReflectingPotential_factory(),
     "ExponentialCoupling": sqla_ExponentialCoupling_factory(),
     "QCD_Cosmology": sqla_QCDCosmology_factory(),
     "IntegrationSolver": sqla_IntegrationSolver_factory(),
@@ -149,11 +133,7 @@ serial_batch_sizes = {
     "phi_value": 200,
     "pi_value": 200,
     "ExponentialCoupling": 50,
-    "InversePowerPotential": 50,
     "ExponentialPotential": 50,
-    "ReflectingPotential": 50,
-    "StarobinskyPotential": 50,
-    "ReclinerPotential": 50,
     "QCD_Cosmology": 5,
     "IntegrationSolver": 6,
     "ScalarModel": 20,

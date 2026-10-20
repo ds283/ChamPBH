@@ -978,30 +978,6 @@ def execute(pool, units: UnitsLike):
                     for M, Lambda in M_lambda_set
                 ],
             )
-        elif args.potential_type == "InversePower":
-            return pool.object_get(
-                "InversePowerPotential",
-                payload_data=[
-                    {"M": M, "Lambda": Lambda, "n": 1, "units": units}
-                    for M, Lambda in M_lambda_set
-                ],
-            )
-        elif args.potential_type == "Starobinsky":
-            return pool.object_get(
-                "StarobinskyPotential",
-                payload_data=[
-                    {"M": M, "Lambda": Lambda, "units": units}
-                    for M, Lambda in M_lambda_set
-                ],
-            )
-        elif args.potential_type == "Recliner":
-            return pool.object_get(
-                "ReclinerPotential",
-                payload_data=[
-                    {"M": M, "Lambda": Lambda, "units": units}
-                    for M, Lambda in M_lambda_set
-                ],
-            )
         else:
             raise ValueError(f"Unknown potential type: {args.potential_type}")
 

@@ -53,9 +53,6 @@ from config.model_list import build_model_list
 # the potential class each --potential-type looks up, and whether its payload carries n = 1
 POTENTIAL_CLASSES = {
     "Exponential": ("ExponentialPotential", True),
-    "InversePower": ("InversePowerPotential", True),
-    "Starobinsky": ("StarobinskyPotential", False),
-    "Recliner": ("ReclinerPotential", False),
 }
 
 COUPLING_CLASS = "ExponentialCoupling"

@@ -178,13 +178,7 @@ POLYMORPHIC_REFERENCES = {
         "cosmology_serial": ("cosmology_type", {3: "QCD_Cosmology"}),
         "potential_serial": (
             "potential_type",
-            {
-                0: "InversePowerPotential",
-                1: "ExponentialPotential",
-                2: "ReflectingPotential",
-                3: "StarobinskyPotential",
-                4: "ReclinerPotential",
-            },
+            {1: "ExponentialPotential"},
         ),
         "coupling_serial": ("coupling_type", {0: "ExponentialCoupling"}),
     }
