@@ -79,8 +79,8 @@ invariants that hold across all of them:
   ```bash
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .   # 18 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 176 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .   # 69 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 79 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .   # 78 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 84 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .        # 61 tests
   ```
   `ComputeTargets/tests` takes about 200 s in one run, and longer on a loaded machine; a Bash call is
@@ -89,7 +89,7 @@ invariants that hold across all of them:
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 61 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 115 tests
   ```
-  (The counts are those of 2026-10-14, and RunDrivers/tests' of 2026-10-19.) They **must not
+  (The counts are those of 2026-10-20.) They **must not
   need a Ray cluster or a persistent datastore**. A test may build a temporary
   SQLite datastore in a `tempfile` directory, through `datastorekit`'s undecorated actor
   (`standin_pool.DatastoreClass`) inside ChamPBH's stand-in cluster (`StoreFixtures/standin_pool.py`,
@@ -136,9 +136,15 @@ answers, and its section "Ending a run whose end was never recorded" tells rule 
 records; it does not schedule, supervise, restart or lock. It deletes nothing but a store's own
 files, and those only through `store retire`, which a person runs.
 
-A registered run is launched through the wrapper `RunDrivers/registered_run.py`, which
-`rrk-adoption` prompt 03 adds; until it lands, no run is registered. `main.py` stays launchable on
-its own, without the registry, and a run launched that way is recorded nowhere.
+A registered run is launched through the wrapper `RunDrivers/registered_run.py`, from the repository
+root:
+
+```bash
+PYTHONPATH=. ./venv/bin/python RunDrivers/registered_run.py --campaign C --prompt N --register SLUG --purpose "…" -- <main.py's arguments>
+```
+
+`main.py` stays launchable on its own, without the registry, and a run launched that way is
+recorded nowhere.
 
 1. **Discovery.** Run `./venv/bin/python -m runregistrykit list` at the start of a session and
    before launching anything long, and report anything `running` or stale. A job's existence must

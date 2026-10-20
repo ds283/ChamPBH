@@ -566,3 +566,84 @@ shasum -a 256 $L/plot-reference/QCD_Cosmology/histories.csv
 ./venv/bin/pip freeze > <scratch>/pip-freeze-after.txt
 cmp <scratch>/pip-freeze-before.txt <scratch>/pip-freeze-after.txt
 ```
+
+---
+
+## 2. RunRegistryKit's two gate records, drafted (prompt 05, 2026-10-20)
+
+Added by `rrk-adoption` prompt 05. Nothing above this heading has been changed.
+
+The campaign's plan (README P12) has RunRegistryKit's two gates for ChamPBH recorded there, by the
+user, from drafts made here, as `dk-and-rpk-migration` did for its two packages
+([`dk-and-rpk-migration-verification.md`](dk-and-rpk-migration-verification.md) §4.3–§4.4).
+**Neither cell is committed in RunRegistryKit. Nothing was written in that repository, and the user
+makes those commits, or has a session there make them.** Each draft is one table row's text, ready
+to paste, in the form of the rows the two boards already hold for SecondaryGWKit
+(`| **G<n>** | **holds** <date>: … |`, one line each), read at RunRegistryKit's `HEAD`, `33a2cd2`
+(`v0.2.0` is `0bae3a3`), through `git show` only:
+
+- **`prompts/extraction/IMPLEMENTATION_STATE.md` §2, row `G3`**, which reads `| **G3** | not yet (CPBH
+  adopts); its checklist is [`docs/adoption/champbh.md`](../../docs/adoption/champbh.md) (07, `aaab408`) |`.
+  The draft replaces that row. It takes the checklist's item 9 (`docs/adoption/champbh.md` at the tag),
+  point by point.
+- **`prompts/interrupted-runs/IMPLEMENTATION_STATE.md` §2, row `G2`**, which reads `| **G2** | not yet
+  (CPBH adopts) |`. The draft replaces that row. It takes the six checks of the `v0.2.0` adoption note,
+  `docs/adoption/v0.2.0/README.md` §3, and the route after a hard kill (its §4).
+
+**What the drafts leave out, and what is the user's to bring up to date.**
+- **No "Read here" clause.** In both SecondaryGWKit rows that clause is the reading made in
+  RunRegistryKit by the session that recorded the gate. The session that records these adds its own.
+- **The date is the campaign's close**, 2026-10-20, as the `interrupted-runs` board's `G1` row explains
+  for SecondaryGWKit's (the draft's date there was the pin's, replaced by the close's).
+- **Both say the branch `rrk-adoption` is not merged into `main` when drafted.** Bring that clause up
+  to date when recording: if the merge has been made by then, say so, with its commit.
+- **"This commit"** stands where this prompt's own commit is, which the orchestrator replaces with the
+  SHA.
+- **The pin was not moved "in a commit of its own".** `b0f3488` also adds the config, the ignore rule,
+  `CLAUDE.md`'s section, a test and the records. What is true, and what the `G2` draft says, is that it
+  is the one commit of the campaign to touch `requirements.txt`, adding the one line `:85`.
+- **The checklist's item 9 has six points.** Point 4 (the helper) does not apply (U1), and point 6 is
+  the record itself.
+
+**Checks made for the drafts, from the repository root at `e0a52da` plus the documents of this
+commit** (read-only: `git show`, `git log` and `git grep`):
+
+```text
+$ git log --format=%h 3cd2be4..HEAD -- requirements.txt    # the campaign's commits that touch the file
+b0f3488
+$ git show b0f3488 -- requirements.txt | grep '^[+-]'      # what it changes: one line, at :85
+--- a/requirements.txt
++++ b/requirements.txt
++runregistrykit[stores] @ git+https://github.com/ds283/RunRegistryKit@v0.2.0
+$ git grep -n -E 'liveness|TERMINAL_STATES|pid_alive|names this store|is running|Run\.finish' -- RunDrivers config tools ObjectFactories
+(no output; exit 1)
+$ git grep -n pid_alive -- '*.py'
+(no output)
+$ git diff 3cd2be4 -- main.py plot_by_beta.py plot_ScalarModel.py utilities.py | wc -l
+0
+```
+
+The word `foreign` occurs in CPBH's `.py` only in the BBN-provenance code
+(`ComputeTargets/tests/test_foreign_bbn_provenance.py` and the code it tests), which is unrelated to a
+run's `liveness`.
+
+### 2.1 `extraction` board, row `G3`
+
+```text
+| **G3** | **holds** 2026-10-20: CPBH adopted `v0.2.0` directly, with the store layer, in a campaign of its own, `rrk-adoption` (branch `rrk-adoption`, cut from `main` at `3cd2be4`; **not merged into `main` when this was drafted**), and the checklist's item 9 has six points, of which four hold, one does not apply and one is this record. (1) **The pin and the venv**, CPBH `b0f3488`: `requirements.txt:85` holds `runregistrykit[stores] @ git+https://github.com/ds283/RunRegistryKit@v0.2.0` (`datastorekit` at `:17`, `v0.4.0`, and `raypoolkit` at `:80`, `v0.2.0`, did not move); the venv was installed from the file, `pip show runregistrykit` gives 0.2.0, and its `direct_url.json` names `0bae3a3c501a8264ee4be5bc24f06422af38720f` with `requested_revision` `v0.2.0` and no `dir_info`, so it is not editable (CPBH's `tools/tests/test_registry_config.py` pins the same). (2) **The config and `var/`**, `b0f3488`: `runregistrykit.toml` at CPBH's root holds `runs_root = "var/runs"`, `stores_root = "var/datastores"` and `distributions = ["datastorekit", "raypoolkit"]`, with `[stores] fingerprinter = "config.fingerprint:fingerprinter"` added by `c9eea37`; `.gitignore:7` is `var/`, and `git check-ignore` matches `var/runs/x` and `var/datastores/x.db`. (3) **A run is listed, with its `packages`**, CPBH `d5d8c74` (a rehearsal on ChamPBH's isolated Ray cluster): `python -m runregistrykit list` lists `rrk-adoption-04-reference-20261019T234113` as `done`, begun and finished through CPBH's wrapper `RunDrivers/registered_run.py`, and its manifest, committed as `.documents/rrk-adoption/out/04-reference.manifest.json`, has `packages` naming `runregistrykit` 0.2.0 (`0bae3a3c…`), `datastorekit` 0.4.0 (`c8570e84…`) and `raypoolkit` 0.2.0 (`eaef0ce6…`), each `editable: false`, the config's `distributions` beside the registry itself. (4) **The helper is not substituted, so this point does not apply**: CPBH kept `utilities.installed_package_provenance` (ruled by the user, U1, 2026-10-19), so that `main.py` and both plot scripts import nothing of the registry and stay launchable without it; `main.py`, `plot_by_beta.py`, `plot_ScalarModel.py` and `utilities.py` are byte-identical to `3cd2be4`, where the branch was cut. (5) **The store layer**: the config's fingerprinter loads (CPBH `c9eea37`: `ObjectFactories/tests/test_store_fingerprint_golden.py`, `TestConfigFingerprint`, beside the Q5 guard `test_fingerprint_format_guard.py` and a golden fingerprint, format 1), and `python -m runregistrykit store fingerprint` reads a closed store (`d5d8c74`, `.documents/rrk-adoption/out/04-store.txt`): the reference store `rrk-adoption-04-reference.db` and the resumed store `rrk-adoption-04-resumed.db` each give the digest `2dd4b39b61b9cc1b39bfcf5068ca2d00e84b52fee9da61958a11781931b0932f`, format 1, and each "matches" the fingerprint its sidecar records. (6) **This record.** Beyond the checklist: the wrapper that registers a `main.py` run and leaves `main.py` unchanged (CPBH `d5dd930`, 61 tests with no Ray), and the hard-kill route rehearsed (`d5d8c74`; the `interrupted-runs` board's `G2`). CPBH's record is `.documents/rrk-adoption-verification.md` §1 and §2 and its handover is §4.15 of `.documents/review-remediation-verification.md` (CPBH, this commit). Its checklist is [`docs/adoption/champbh.md`](../../docs/adoption/champbh.md) (07, `aaab408`) |
+```
+
+### 2.2 `interrupted-runs` board, row `G2`
+
+```text
+| **G2** | **holds** 2026-10-20: CPBH adopted `v0.2.0` directly, with the store layer, in a campaign of its own, `rrk-adoption` (branch `rrk-adoption`, cut from `main` at `3cd2be4`; **not merged into `main` when this was drafted**). **The pin:** CPBH `b0f3488` (2026-10-19) is the one commit of the campaign to touch `requirements.txt`: it added the one line `:85`, `runregistrykit[stores] @ git+https://github.com/ds283/RunRegistryKit@v0.2.0` (`git log --format=%h 3cd2be4..HEAD -- requirements.txt` gives `b0f3488` alone, and `git show b0f3488 -- requirements.txt` the one line), and `datastorekit` (`:17`) and `raypoolkit` (`:80`) did not move. It is not a commit of the pin alone: it also adds the config, the ignore rule, `CLAUDE.md`'s rules, a test and the campaign's records. The venv then held `runregistrykit` 0.2.0 at `0bae3a3c…`, `requested_revision` `v0.2.0`, not editable. **The six checks of [`docs/adoption/v0.2.0/README.md`](../../docs/adoption/v0.2.0/README.md) §3** apply to what CPBH wrote when it adopted, since none of its code predates the adoption (`git grep` of CPBH's tree at its close, this commit): (1) a comparison with `liveness`'s values: none, `liveness` is named nowhere in CPBH's `.py` and nothing compares a run's liveness with `foreign` (the word occurs only in the unrelated BBN-provenance code); (2) `TERMINAL_STATES`: named nowhere; the wrapper names the states it records, `done`, `failed` and `killed`, as arguments of `finish`, and keeps no list of terminal states; (3) a store refusal's text: `names this store`, `is running` and `Run.finish` are named nowhere in `RunDrivers`, `config`, `tools` or `ObjectFactories`, and the one test that matches a refusal, `RunDrivers/tests/test_registered_run_outcomes.py` `TestBeginsRefusal.test_refused_then_accepted_after_end`, was written for `v0.2.0`: it asserts the fragments `python -m runregistrykit end` and `No run directory was created`; (4) a test that begins two unfinished runs on one store: that same test is the one that begins a second run on a store an unfinished run names, and it asserts the refusal, then `end`, then the acceptance; all 61 tests of `RunDrivers/tests` pass under `v0.2.0`, and none expects a second `begin` to be accepted; (5) a caller of `pid_alive`: none; (6) a test that pins a record's key set: none pins a manifest's or a status's keys (`tools/tests/test_registry_config.py` pins the config's keys and the provenance entry for `runregistrykit`; the wrapper's tests read named fields). **The hard-kill route was rehearsed** on ChamPBH's isolated Ray cluster (CPBH `d5d8c74`, H3, 2026-10-19): `rrk-adoption-04-resumed-b-20261019T235447` was `SIGKILL`ed 20 s after its scalar stage began and `list` showed it `stale` with `!!`; the next registration on its store (a launch of `resumed-c`) was refused, exit 2, with one `!! ` line saying that run `rrk-adoption-04-resumed-b-20261019T235447` "is running (stale, pid 46306) and names this store", naming `python -m runregistrykit end RUN_ID --reason TEXT`, and ending `No run directory was created` (`var/runs` unchanged by `diff`); `end … --reason …` was accepted, "now lost, verified: its pid 46306 does not answer kill -0 on this host", and `list` showed it `lost`; then `rrk-adoption-04-resumed-c-20261019T235647`, begun on the same store, ran to `done` (exit 0) with `fingerprint_sidecar` `written` and the digest `2dd4b39b…932f`, which `store fingerprint` reads from the closed store and `tools/compare_stores.py` finds equal to the reference's (`RESULT: equal`). The wrapper's own `TestBeginsRefusal` shows the same refusal and `end` on a `SIGKILL`ed child. **No defect of the package was met**; neither `[04-a-killed-process-not-yet-reaped-answers-kill-0]` nor `[03-a-run-whose-manifest-cannot-be-read-names-no-store]` was: CPBH launched every rehearsal build through `sh`, which reaps the driver, so `end` was not refused by an unreaped process, and every run's `status.json` was readable. CPBH's record is `.documents/rrk-adoption-verification.md` §1 (the rehearsal) and §2, and its handover to the user, with the route written out for the run scripts, is §4.15 of `.documents/review-remediation-verification.md` (CPBH, this commit) |
+```
+
+### 2.3 What the drafts do not claim
+
+- They claim nothing about the production runs, which are the user's and are made on another machine;
+  the rehearsal's grid is the five-history pilot.
+- The hard-kill route is rehearsed with `sh` as the driver's parent. The user's scripts use `bash`,
+  whose pipeline reaps its children the same way; that is read, not rehearsed (§4.15 point 3).
+- Log 01 notes that `ClientRoot.runs_root` and `stores_root` are `str` where RunRegistryKit's README
+  says "paths". Nothing in ChamPBH depends on it, and it is not claimed as a defect.

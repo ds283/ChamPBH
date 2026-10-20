@@ -32,6 +32,7 @@ ChamPBH/
 ├── exponential.yaml                 # Example run configuration
 ├── starobinsky.yaml
 ├── recliner.yaml
+├── runregistrykit.toml              # RunRegistryKit's config: runs_root, stores_root, recorded distributions, the fingerprinter
 │
 ├── (the work queue, `RayWorkPool`, is the `raypoolkit` package, pinned in requirements.txt)
 │
@@ -120,18 +121,28 @@ ChamPBH/
 ├── PRyM/                            # External BBN solver (PRyMordial)
 │   └── PRyM_main.py
 │
+├── RunDrivers/                      # The launchers of registered runs
+│   ├── __init__.py
+│   ├── registered_run.py            # Runs main.py as a registered run (RunRegistryKit); main.py itself is unchanged
+│   └── tests/                       # unittest modules of the wrapper; none needs Ray
+│
 ├── tools/
 │   ├── surfing_scan.py              # One CSV row per beta: the T_J turning points of a surfing history (no Ray, no store)
 │   ├── plot_surfing_temperature.py  # The two-panel surfing-temperature figure, from that CSV and its sidecar
 │   ├── plot_surfing_histories.py    # T_J, phi and 1 + beta pi/M_P to the first bounce, for up to six beta (no Ray, no store)
 │   └── ...
 │
-└── config/
-    ├── argument_parser.py           # configargparse CLI + YAML
-    ├── datastore.py                 # The registry of factories, drop groups, batch sizes
-    ├── defaults.py                  # Tolerance/precision constants
-    ├── model_list.py                # Cosmological model registry
-    └── sharding.py                  # Shard-key type and table lists
+├── config/
+│   ├── argument_parser.py           # configargparse CLI + YAML
+│   ├── datastore.py                 # The registry of factories, drop groups, batch sizes
+│   ├── defaults.py                  # Tolerance/precision constants
+│   ├── fingerprint.py               # The store fingerprint's format number, its spec pins, and the fingerprinter RunRegistryKit loads
+│   ├── model_list.py                # Cosmological model registry
+│   └── sharding.py                  # Shard-key type and table lists
+│
+└── var/                             # Ignored by git (.gitignore); what registered runs write, never committed
+    ├── runs/                        # One directory per registered run: manifest.json, status.json, stdout.log, stderr.log
+    └── datastores/                  # The stores that registered builds fill, each with its sidecar <stem>.manifest.json
 ```
 
 > **Note, 2026-10-02 (`science-readiness`, prompts 01, 04 and 07).** The tree above omits three
@@ -201,6 +212,58 @@ ChamPBH/
 > first bounce marked. Like the scan, it starts no Ray, opens no store and runs no PRyMordial.
 > Its default β are the edges of, and four points inside, the uncaptured window near β = 3.0
 > ([`surfing-temperature-verification.md`](surfing-temperature-verification.md) §3).
+
+> **Note, 2026-10-20 (`rrk-adoption`, prompts 01 to 04).** The tree above gains `runregistrykit.toml`,
+> `RunDrivers/`, `config/fingerprint.py` and `var/`. The campaign adopted RunRegistryKit `v0.2.0`
+> (`runregistrykit[stores]`, pinned in `requirements.txt`, never an editable install) and changed
+> nothing a build computes or stores. `main.py`, `plot_by_beta.py`, `plot_ScalarModel.py` and
+> `utilities.py` are byte-identical to `3cd2be4`, and none of them imports the package.
+> - **What the registry records, and where.** A registered run gets a directory,
+>   `var/runs/<campaign>-<prompt>-<slug>-<YYYYMMDDTHHMMSS>/`, holding `manifest.json`, written before
+>   the work starts (the purpose, the arguments, `script` and its SHA-256, `git_head` and `git_dirty`,
+>   the installed `packages` at their commits, the host, `scope`, `heartbeat_means`), and
+>   `status.json` (the state, the pid, the heartbeat, the stage, the exit code and, at the end, the
+>   store's fingerprint), with the run's `stdout.log` and `stderr.log`. `runregistrykit.toml` names
+>   the two roots, `var/runs` and `var/datastores`, and the distributions every manifest records
+>   (`datastorekit` and `raypoolkit`, beside `runregistrykit`). `var/` is ignored by git. `python -m
+>   runregistrykit list` lists the runs, and the registry records only: it does not schedule,
+>   supervise, restart or lock.
+> - **How a run is registered.** A registered run is launched through `RunDrivers/registered_run.py`,
+>   with `--campaign`, `--prompt`, `--register SLUG` and `--purpose`, and `main.py`'s own arguments
+>   after a bare `--`. The wrapper parses those arguments with `main.py`'s parser, calls
+>   `runregistrykit.begin` before Ray starts, runs `main.py` unchanged by `runpy.run_path`, and
+>   records `done`, `failed` or `killed` when `main.py` has returned. It refuses, exit 2 and
+>   before `begin`, a run with no database, an `--inventory` run, and an address `main.py` would
+>   refuse. `begin` also refuses a store that an unfinished run names. `main.py` stays launchable
+>   without the wrapper, and a run launched that way is recorded nowhere.
+> - **What the heartbeat means.** The wrapper refreshes it when the run writes a line to stdout, at
+>   most once in 30 s, or at once when the line changes the stage. The work is in Ray actors, so a
+>   beat from the driver cannot say that any actor is progressing. `RayWorkPool` prints a progress
+>   line only after completed work, and `main.py` sets its notification interval to 300 s, so a fresh
+>   heartbeat means that work completed within about five minutes. A stage that prints nothing for
+>   longer than the staleness window (900 s) is reported `stale` while it works: stale means go and
+>   look. The manifest's `heartbeat_means` says this in the run's own record.
+> - **The fingerprint, and its guard.** `config/fingerprint.py` holds `FINGERPRINT_FORMAT` (1, the
+>   first of a history), `SPEC_DIGESTS` (the SHA-256 of each class's `inventory_spec()`, pinned for each
+>   format) and `fingerprinter`, a `runregistrykit.fingerprint.DatastoreKitFingerprinter` over
+>   `config.datastore.factories`, which `runregistrykit.toml` names under `[stores]`. What goes into a
+>   fingerprint is ChamPBH's (the specs, the registry and the format number); how it is encoded and
+>   digested is DatastoreKit's, and where it is recorded is RunRegistryKit's. A change to any
+>   `inventory_spec()` without a bump of the format and a new pin fails
+>   `ObjectFactories/tests/test_fingerprint_format_guard.py`, and
+>   `ObjectFactories/tests/test_store_fingerprint_golden.py` checks the fingerprint of a store built
+>   in a temporary directory against a golden file, which a format change adds to and never
+>   overwrites.
+> - **The store's sidecar is made by a person.** A registered run takes the store's fingerprint
+>   after `main.py` has returned and writes it into the store's sidecar only if there is one. Nothing
+>   in the pipeline makes the sidecar: `python -m runregistrykit store create STORE --purpose TEXT`
+>   makes it, by a person, once the store's first build has closed, because the package refuses a
+>   sidecar for a primary that does not exist yet, and the purpose is one only a person can give.
+>   Until then a run's `status.json` says `fingerprint_sidecar` "not written"; from then on, `written`.
+> - **The measurements, and the handover.** The rehearsal of a registered, an interrupted and a
+>   hard-killed build is in [`rrk-adoption-verification.md`](rrk-adoption-verification.md); the
+>   handover for the run scripts is §4.15 of
+>   [`review-remediation-verification.md`](review-remediation-verification.md).
 
 ---
 
@@ -295,8 +358,12 @@ contract differ, the contract is right.
 The pin moved from `v0.3.0` to `v0.4.0` on 2026-10-14. The release adds one module,
 `datastorekit.store_fingerprint` (contract §9.7), which takes, compares and lists a store's
 fingerprint from what `read_inventory` returns; the layer never calls it and nothing it writes or
-reads changed, so ChamPBH's stores and code are unaffected. ChamPBH does not call the module yet:
-it is there for the RunRegistry component, which needs this release.
+reads changed, so ChamPBH's stores and code are unaffected. ChamPBH uses the module through
+RunRegistryKit's store layer: `config/fingerprint.py`'s `fingerprinter` is a
+`runregistrykit.fingerprint.DatastoreKitFingerprinter`, whose methods import `fingerprint_of`,
+`compare_fingerprints` and `listing_lines` from `datastorekit.store_fingerprint`. ChamPBH's own code
+imports the module nowhere; one test, `ObjectFactories/tests/test_store_fingerprint_golden.py`,
+imports its `ENCODING_FORMAT` to check the golden file against it.
 
 The database is a **sharded SQLite** store managed as a pool of Ray actors. Each actor owns one
 SQLite file, and a separate primary SQLite file records the shard topology. The shards are

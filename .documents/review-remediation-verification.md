@@ -1657,6 +1657,229 @@ touches a store.)
    campaign's board, §3, and in [`OPEN_ISSUES.md`](OPEN_ISSUES.md) §1.13, for the planner of
    `jordan-normalization` or a later campaign; it is not assigned.
 
+### 4.15 Addendum 2026-10-20 — the `rrk-adoption` campaign
+
+Added by `rrk-adoption` prompt 05, written at `e0a52da`. Nothing above this heading has been changed;
+where it is superseded, this section says so by statement. The campaign adopted RunRegistryKit
+`v0.2.0`, with its store layer, and changed nothing a build computes or stores: `main.py`,
+`plot_by_beta.py`, `plot_ScalarModel.py` and `utilities.py` are byte-identical to `3cd2be4`, where the
+branch was cut. It did four things. It pinned the package and wrote the rules (prompt 01, `b0f3488`:
+`requirements.txt:85`, `runregistrykit.toml`, `var/` ignored, `CLAUDE.md`'s section). It wrote the
+store fingerprint's client side (prompt 02, `c9eea37`: `config/fingerprint.py` at format 1, a guard
+that fails on a spec change without a bump, and a golden fingerprint). It wrote the wrapper that
+registers a `main.py` run without changing `main.py` (prompt 03, `d5dd930`:
+`RunDrivers/registered_run.py`). And it rehearsed registered, interrupted and hard-killed builds on
+ChamPBH's isolated cluster (prompt 04, `d5d8c74`). The campaign's board is
+[`prompts/rrk-adoption/IMPLEMENTATION_STATE.md`](../prompts/rrk-adoption/IMPLEMENTATION_STATE.md);
+its plan is its [`README.md`](../prompts/rrk-adoption/README.md) (§6 records the rulings, §7 the
+handover this section carries); the rehearsal is in
+[`rrk-adoption-verification.md`](rrk-adoption-verification.md) §1. It did not bump `VERSION_LABEL`,
+started no production run, and did not touch the user's stores or run scripts: the two scripts were
+**read only**. The branch `rrk-adoption` **is not merged into `main` when this is written**.
+
+**This supersedes**, by statement and not by edit:
+
+- **§4.12 point 3's line numbers, and §4.13 point 1's table.** Both tables cite the run scripts at an
+  earlier text. The user edited both scripts on 2026-10-14 at 09:59:54 (`ls -lT`), after §4.13 was
+  committed (`1905065`, 01:36 that day) and before §4.14 (`960d098`, 21:56). As read on 2026-10-20 they
+  already carry what §4.13 asked for: the comment at `:3-6` naming `ray_cluster.sh start` and `stop`,
+  `RAY_ADDR="${RAY_ADDR:-127.0.0.1:6380}"` at `:17`, and `--ray-address "$RAY_ADDR"` on the `main.py`
+  call (`:28`) and on the plot loop (`:60`). So §4.13 point 1's rows that ask for `--ray-address`,
+  and §4.12 point 3's rows of `:3` (the cluster comment) and of `:20`/`:21`, are **done in the
+  scripts as they stand**. The line numbers below are of the scripts as they are today.
+- **§4.12 point 3's row for `:10`, `:11`** ("A new directory outside the repository"). The stores of
+  registered runs live in `var/datastores/` in the repository, ignored by git (README R4), and the
+  comment at `:13`, "outside the repository", is false once `STORE_DIR` points there (point 2).
+- **§4.12 point 3's row for the comment "After an interrupted invocation, add --prune-unvalidated to
+  the next one"** ("No flag; the advice is true of nothing now"). The flag is the default
+  (`config/argument_parser.py:256-261`, `BooleanOptionalAction`, `default=True`), so the comment is
+  redundant and not wrong: stating the flag changes nothing, and 04 passed it explicitly.
+- **How a build is launched.** §4.12 point 3 and §4.13 point 1 have `run()` call `main.py` directly. A
+  registered build is launched through the wrapper (point 3).
+
+**The points.**
+
+1. **The scripts as they are today.** Both are untracked, the user's, and were read only. Line
+   numbers are `full_run_2026.6.0.sh`'s, then the refresh script's.
+
+   | | `full_run_2026.6.0.sh` | `full_run_2026.6.0-refresh.sh` |
+   |---|---|---|
+   | SHA-256 | `9c25562febaa0489b5686a7a1e61414581dd710710efbe1159e4531204cd60e4` | `3e07d2e16d6510d9f8185590f1d565c00048fc438612b1d9ef798b0b263d7761` |
+   | `ls -lT` | 3459 bytes, Oct 14 09:59:54 2026 | 3505 bytes, Oct 14 09:59:54 2026 |
+
+   `diff` of the two gives four differences and no others: `:13` (`STORE_DIR` is
+   `$HOME/ChamPBH-stores`, and in the refresh script `$HOME/ChamPBH-stores-bt02`), and, in the refresh
+   script, `DROP="--drop bbn-data"` (`:24`), `$DROP` after `"$@"` (`:29`) and `DROP=""` (`:30`). Those
+   add two lines, so the refresh script's later lines are the main script's plus two (`:34` for C1
+   where the main script has `:32`). If either hash is not the one above, the text has moved again and
+   the line numbers below are of the text above.
+
+   What each line is today: `:11` `set -euo pipefail`; `:13` `STORE_DIR`; `:14` `DB="$STORE_DIR/science-2026.6.0.db"`;
+   `:15` `LOG="$STORE_DIR/logs"`; `:17` `RAY_ADDR`; `:19` `export PYTHONPATH=.`; `:24-29` / `:25-31`
+   `run()`; `:32`, `:35`, `:39`, `:43` (run three times, for φ\* = 1, 2, 5), `:47`, `:50` / `:34`, `:37`,
+   `:41`, `:45`, `:49`, `:52` the six `run` call sites C1, C4, L, C5, C3, C2; `:52-53` / `:54-55`
+   `main.py … --inventory`; `:58-61` / `:60-63` the plot loop for φ\* = 5, 2, 1. The script's header
+   (`:7`) says "seven main.py invocations"; the six call sites make eight invocations, since the C5
+   loop runs three.
+
+2. **What changes in each script, by line.**
+
+   | Lines | Today | Becomes |
+   |---|---|---|
+   | `:13` / `:13` | `STORE_DIR="${STORE_DIR:-$HOME/ChamPBH-stores}"      # outside the repository` (refresh: `…-stores-bt02`) | `STORE_DIR="${STORE_DIR:-var/datastores}"`, and the comment corrected. `var/datastores` is relative to the working directory, which is the repository root (the scripts are run from there, as the comment at `:3` says) |
+   | `:15`, `:60` / `:15`, `:62` | `LOG="$STORE_DIR/logs"`; `--output "$STORE_DIR/science-out-phi$PHI"` | See the next point. They follow `STORE_DIR` |
+   | `:27-28` / `:28-29` | `./venv/bin/python main.py --config exponential.yaml --database "$DB" --shards "$SHARDS" \` then `--ray-address "$RAY_ADDR" --job-name "$job" --bbn-wall-clock-limit 600 "$@" 2>&1 \| tee "$LOG/$job.log"` (the refresh script has `"$@" $DROP`) | The wrapped command below |
+   | after `:32` / `:34` | nothing | `store create --purpose …` on `$DB`, once C1 has closed (point 4) |
+   | `:10` / `:10` | "After an interrupted invocation, add --prune-unvalidated to the next one." | Nothing need change (above) |
+   | `:32`–`:50` / `:34`–`:52` | the six `run` call sites (eight invocations) | Nothing: each reaches `run()`, and each job name is its own slug |
+   | `:52-53` / `:54-55` | `main.py … --inventory` | Nothing: it stays unregistered (the wrapper refuses `--inventory`, exit 2, by the user's ruling U2) |
+   | `:58-61` / `:60-63` | the plot loop | Nothing but where it writes (point 5): it stays unregistered |
+
+   **The wrapped command**, written out once. Each `run` call becomes:
+
+   ```bash
+   ./venv/bin/python RunDrivers/registered_run.py --campaign <C> --prompt <N> --register "$job" \
+       --purpose "<one line>" -- --config exponential.yaml --database "$DB" --shards "$SHARDS" \
+       --ray-address "$RAY_ADDR" --job-name "$job" --bbn-wall-clock-limit 600 "$@" 2>&1 | tee "$LOG/$job.log"
+   ```
+
+   - **The refresh script** keeps `$DROP` after `"$@"`, so it stays inside `main.py`'s arguments,
+     after the bare `--`.
+   - **The slug is `--job-name`.** `runregistrykit.slugify` keeps `[A-Za-z0-9._]` and turns any other
+     run of characters into `-` (`runregistrykit/__init__.py:129-132`, at `v0.2.0`), so every job name
+     in the scripts is its own slug, `C5-nonsurfing-phi${PHI}-M1e-3` included. A run's directory is then
+     `var/runs/<campaign>-<prompt>-<job>-<time>`.
+   - **`--campaign` and `--prompt`** are those of the campaign that orders the run: for the rebuild,
+     `jordan-normalization` and its prompt (README P2). For a launch of the user's own, SecondaryGWKit's
+     form is `--campaign handover --prompt <n>` (README §0.2 item 5).
+   - **`--purpose`** is one line a stranger can read. The block's comment line (`:31`, `:34`, …) will do,
+     and `run()` can take it as a second argument (`local purpose="$1"; shift`, after `local job`).
+   - `export PYTHONPATH=.` at `:19` already serves the wrapper, which also puts the repository root on
+     `sys.path` itself.
+   - 04 launched with `python -u`; the command above has no `-u`, as the scripts' `main.py` call has
+     none. By the code, the wrapper's copy of the output in the run directory is line-buffered
+     (`registered_run.py:230`), and the heartbeat is taken at each write to the replaced `sys.stdout`
+     (`write`, `:237`, which calls `_observe`), neither depending on the flag; `-u` only keeps the
+     `tee`'d log current. This is read, not measured without `-u`.
+
+3. **Launch the whole script detached, from the repository root.** "Detached" cannot mean that each
+   block is put in the background: the blocks share one store and run in order, and `begin` refuses a
+   store that an unfinished run names, so a second block started while the first still runs is
+   refused at registration (04's refused `resumed-c`, verification §1.7 step 6). What 04's launches
+   through `sh` gave, and `CLAUDE.md` rule 3 asks for, are two properties: nothing a conversation or
+   a terminal owns, and a parent shell that reaps the driver, so that `end` is not refused after a
+   `SIGKILL` (board §5.1). So:
+
+   ```bash
+   nohup bash full_run_2026.6.0.sh > <a log path of the user's choosing> 2>&1 &
+   ```
+
+   from the repository root, with the cluster up (`ray_cluster.sh start "<purpose>"`, as `:3-6` says).
+   Each block's driver is then a foreground child of the script's `bash`, which reaps it. This is
+   read, not rehearsed in this shape: 04's launches were `nohup sh -c '…' &`, with `sh` waiting on the
+   driver, which is the same mechanism. A block run by hand is launched as 04 launched one
+   (verification §1.12), `nohup sh -c '… & echo $! > PIDFILE; wait $!' &`. Then check once that it
+   started, and end the turn (`CLAUDE.md` rule 4): `./venv/bin/python -m runregistrykit list`.
+
+4. **`store create` after the first block, and its two routes.** The package refuses a sidecar for a
+   primary that does not exist yet (`runregistrykit/stores.py:328-337`), so it can only follow C1.
+   `create_sidecar` refuses a store that already has one and overwrites nothing (`stores.py:846-875`:
+   a tombstone, a missing primary, an existing sidecar or its `.tmp`, a move that did not finish, an
+   empty purpose). A bare `store create` line after C1 in a script that is re-run would therefore end
+   the script under `set -e` on the second run. `create_sidecar` does not look for a run that names
+   the store; `store fingerprint --write`, `copy`, `move`, `retire` and `amend` do
+   (`_running_runs_naming`, `stores.py:1093`, `:1402`, `:1733`, `:2090`). Two routes, and **the
+   first is preferred**, because a step by hand is the one that gets forgotten, and a block begun
+   before the sidecar exists records no `results_store_id` (the guarded line is read, not rehearsed):
+
+   - **Guarded, in the script**, after C1's `run` call:
+
+     ```bash
+     [ -e "${DB%.db}.manifest.json" ] || ./venv/bin/python -m runregistrykit store create \
+         --purpose "<one line>" "$DB"
+     ```
+
+     The sidecar is `<stem>.manifest.json` beside the primary (`sidecar_path`, `stores.py:252-257`),
+     which `${DB%.db}.manifest.json` spells for this `$DB`; 04's reference store's is
+     `var/datastores/rrk-adoption-04-reference.manifest.json`. A re-run finds it and does nothing.
+   - **By hand**, once, after C1 closes, as 04 did (verification §1.8).
+
+   Until the sidecar exists, each block's `status.json` says `fingerprint_sidecar` "not written … (there
+   is none)", and a run's manifest has `results_store_id` `null`; from the first block begun after
+   it, `written` and the store's id (verification §1.3, §1.8). C1's own fingerprint is in its
+   `status.json` either way.
+
+5. **`STORE_DIR` under `var/datastores/` also moves `LOG` and the plot output.** `LOG` is
+   `$STORE_DIR/logs` (`:15`) and the plot loop writes `$STORE_DIR/science-out-phi$PHI` (`:60` / `:62`),
+   so with `STORE_DIR=var/datastores` both land inside the stores root. `store retire` walks the
+   stores root for sidecars (`stores.py:1550`), and neither directory holds one, so nothing breaks.
+   But the stores root then holds more than stores, and the wrapper already copies each block's
+   stdout and stderr into its run directory. The user may move `LOG` and the plot output elsewhere
+   under `var/`, for example `var/logs/` and `var/out/` (ignored with the rest). This addendum does
+   not choose for the user.
+
+6. **After a kill, under the script.** `set -euo pipefail` (`:11`) means a block that ends non-zero
+   ends the script.
+   - **A `SIGTERM`**, sent to the pid in the run's `status.json` and never to a command-line pattern
+     (`CLAUDE.md` rule 2): the block is recorded `killed`, exit code 143, within about a second
+     (verification §1.6), and the script stops. Re-launch the script. No `end` is needed.
+   - **A `SIGKILL`, the OOM killer or a power loss.** `list` shows the run `stale`, and the re-launched
+     script's next `begin` on the store is refused, with one `!! ` line naming `python -m runregistrykit
+     end` and nothing created (verification §1.7 steps 5 and 6). A person checks, on the host the run
+     recorded, that it is over (`kill -0 PID` answers "no such process"), then runs
+     `./venv/bin/python -m runregistrykit end RUN_ID --reason "…"` (`CLAUDE.md` rule 5); the run is
+     `lost`, and the script is re-launched. The prune at open is the default, and `--prune-unvalidated`
+     states it. Nothing is edited at `:10`.
+   - **Re-launching the whole script re-registers the blocks that finished.** By the script's own header
+     (`:8-9`) each looks up its work and recomputes only what is missing, so a finished block should
+     record a short `done` run that computed nothing. That is harmless, and not rehearsed for a block
+     that was complete: 04's resumes recomputed missing work. The user may instead start the script
+     from the block that was killed.
+   - **An interruption can cost completed work.** In 04, a history stored but not yet validated was
+     pruned at the resume and recomputed. The cause is read in RayPoolKit's wait, not measured, and is
+     open on the campaign's board as
+     `[04-the-pool-waits-for-every-in-flight-item-when-fewer-than-three]`; it is not fixed here.
+
+7. **What stays unregistered.** The plot loop and `main.py … --inventory` are short and read-only
+   (`--inventory` exits before Ray), and the wrapper refuses `--inventory`. A heartbeat means that
+   work completed within about five minutes and says nothing of any actor; a stage whose items each
+   take longer than the 900 s staleness window shows `stale` while it works, and `list --stale-after`
+   is the reader's remedy (README P4). That bears on `jordan-normalization`, whose histories are
+   longer.
+
+8. **The root's untracked files, and where the scripts live.** `git status --porcelain` lists 22
+   untracked entries at the root: `pilot-2026.6.0.db` and its 16 shards, `pilot-out/`,
+   `pilot-main.log`, `pilot-plot.log`, `full_run_2026.6.0.sh` and `full_run_2026.6.0-refresh.sh`
+   (1 + 16 + 1 + 2 + 2). `begin` records `git_dirty` from `git status --porcelain`, untracked files
+   included (`runregistrykit/__init__.py:163`), so every run begun from this checkout is recorded
+   dirty while any of them is there. **The scripts count too**: left untracked at the root, they
+   keep every run dirty after the stores and logs are gone. The user either keeps them outside the
+   checkout and runs them from the root (`bash ~/…/full_run.sh`: every path in them is relative to
+   the working directory), or commits them, which is the user's to do (U4). The old stores
+   (`pilot-*`, and `~/ChamPBH-stores*`, `~/ScienceData/ChamPBH-rehearsals/`) were dropped, not
+   adopted (R5), and removing them is the user's.
+
+9. **04's stores and runs are kept for the user.** Under `var/`, ignored: `var/datastores/` holds
+   `rrk-adoption-04-reference.db` and `rrk-adoption-04-resumed.db` with their shards and sidecars;
+   `var/runs/` holds the four runs `rrk-adoption-04-reference-20261019T234113`,
+   `…-resumed-a-20261019T234840`, `…-resumed-b-20261019T235447` and `…-resumed-c-20261019T235647`;
+   `var/rrk-adoption-04/` holds the launch logs. The registry deletes nothing but a store's own files,
+   and those only through `store retire`, which a person runs. **Never `git clean -x` or `-X`**
+   (`CLAUDE.md`): it deletes ignored files, the stores among them.
+
+10. **The production machine.** Records are per checkout. Pull (once `rrk-adoption` is merged into `main`),
+    reinstall the venv from `requirements.txt` (`./venv/bin/pip install -r requirements.txt`; 01 made
+    the install that way), and run `./venv/bin/python -m runregistrykit list` at the start of a session
+    there (`CLAUDE.md` rule 1).
+
+11. **Left to the user, and what comes next.** The merge of `rrk-adoption` into `main` (README P10);
+    the two RunRegistryKit gate records, drafted in
+    [`rrk-adoption-verification.md`](rrk-adoption-verification.md) §2; the run scripts, above; the
+    files at the root, the old stores, and 04's stores and runs. The campaign's board lists the two
+    stale docstrings it did not edit (board §5.6). **`jordan-normalization` comes next** (R7), and its
+    rebuild is the first production run through the wrapper. The science rebuild stays held until that
+    campaign lands (§4.13 point 5).
+
 ---
 
 ## 5. Reproduce

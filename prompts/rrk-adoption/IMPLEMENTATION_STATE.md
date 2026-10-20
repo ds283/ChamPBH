@@ -1,8 +1,9 @@
 # rrk-adoption campaign — implementation state
 
-**Last updated:** 2026-10-20 · **Status: LIVE — 5 of 5 prompts written, 4 landed (01–04, all reviewed); 1 issue open (§3). R1–R7, U1–U5
-and P2–P13 ruled by the user on 2026-10-19, as proposed; P1 amended (the wrapper in `RunDrivers/`)
-(README §6).**
+**Last updated:** 2026-10-20 · **Status: COMPLETE — 5 of 5 prompts landed (01–04 reviewed; 05 awaiting review); 1 issue open (§3).
+Final suites: CosmologyModels 18, ComputeTargets 176 (61 + 115), ObjectFactories 78, tools 84, RunDrivers 61, all OK.
+R1–R7, U1–U5 and P2–P13 ruled by the user on 2026-10-19, as proposed; P1 amended (the wrapper in
+`RunDrivers/`) (README §6).**
 The plan is [`README.md`](README.md), written on 2026-10-19 on branch `rrk-adoption`, cut from
 `main` at `3cd2be4`.
 
@@ -35,7 +36,7 @@ It comes before `jordan-normalization`, so that the science rebuild is a registe
 | 02 | [The fingerprinter](02-the-fingerprinter.md) | `config/fingerprint.py` at format 1; `[stores]`; the format guard; a golden fingerprint | Sonnet | ✍️ 2026-10-19 | ✅ 2026-10-19 | `c9eea37` | [log](logs/02-the-fingerprinter.md) |
 | 03 | [The wrapper](03-the-wrapper.md) | `RunDrivers/registered_run.py`: register, beat from stdout, signals after `ray.init`, `main.py` by `runpy`, finish with the fingerprint | Opus | ✍️ 2026-10-19 | ✅ 2026-10-19 | `d5dd930` | [log](logs/03-the-wrapper.md) |
 | 04 | [Rehearse registered runs](04-rehearse-registered-runs.md) | a registered build; `SIGTERM` and resume; `SIGKILL`, `end` and resume; `store create`; stores compared; `histories.csv` = R0's | Opus | ✍️ 2026-10-19 | ✅ 2026-10-20 | `d5d8c74` | [log](logs/04-rehearse-registered-runs.md) |
-| 05 | [Close](05-close.md) | documents, handover, RunRegistryKit's gate drafts, indexes, board | Sonnet | ✍️ 2026-10-19 | ⬜ | — | — |
+| 05 | [Close](05-close.md) | documents, handover, RunRegistryKit's gate drafts, indexes, board | Sonnet | ✍️ 2026-10-19 | ✅ 2026-10-20 | this commit | [log](logs/05-close.md) |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
 
@@ -73,11 +74,11 @@ before each dispatch:
 | **H4** | 04 | `resumed-c`, `done`, its fingerprint written to the sidecar | ✅ |
 | **H5** | 04 | the stores compared; `histories.csv` equal to R0's | ✅ |
 | **H6** | 04 | `.documents/rrk-adoption-verification.md` §1 | ✅ |
-| **Z1** | 05 | `architecture-summary.md` | ⬜ |
-| **Z2** | 05 | `CLAUDE.md` | ⬜ |
-| **Z3** | 05 | the handover, `.documents/review-remediation-verification.md` §4.15 | ⬜ |
-| **Z4** | 05 | RunRegistryKit's G3 (`extraction`) and G2 (`interrupted-runs`) drafted, in the verification document §2 | ⬜ |
-| **Z5** | 05 | the board closed; `prompts/INDEX.md`; `.documents/OPEN_ISSUES.md` | ⬜ |
+| **Z1** | 05 | `architecture-summary.md` | ✅ |
+| **Z2** | 05 | `CLAUDE.md` | ✅ |
+| **Z3** | 05 | the handover, `.documents/review-remediation-verification.md` §4.15 | ✅ |
+| **Z4** | 05 | RunRegistryKit's G3 (`extraction`) and G2 (`interrupted-runs`) drafted, in the verification document §2 | ✅ |
+| **Z5** | 05 | the board closed; `prompts/INDEX.md`; `.documents/OPEN_ISSUES.md` | ✅ |
 
 ## 2. The gates
 
@@ -87,7 +88,7 @@ before each dispatch:
 | Fingerprint | the config's fingerprinter loads; the format guard and the golden fingerprint pass, and each deliberate breakage fails | 02 | ✅ 2026-10-19 |
 | Wrapper | with no Ray, a run through the wrapper is registered before its first line, beats, ends `done`/`failed`/`killed` with `main.py`'s exit code, takes its fingerprint after the program returns, and refuses a store an unfinished run names; `main.py` is unchanged | 03 | ✅ 2026-10-19 |
 | R | on the isolated cluster, the four builds are recorded as README §2.2 (04) says, the resumed store equals the reference, and `histories.csv` has R0's SHA-256 | 04 | ✅ 2026-10-20 |
-| RunRegistryKit G3 / G2 | recorded in RunRegistryKit, on its `extraction` and `interrupted-runs` boards, by the user from 05's drafts (P12) | 05 | ⬜ |
+| RunRegistryKit G3 / G2 | recorded in RunRegistryKit, on its `extraction` and `interrupted-runs` boards, by the user from 05's drafts (P12) | 05 | drafted 2026-10-20 in `.documents/rrk-adoption-verification.md` §2; recording is the user's |
 
 ## 3. Active and unresolved issues
 
@@ -469,3 +470,47 @@ All pass.
   - the status line;
   - the notes list;
   - the index.
+
+### 5.6 After prompt 05 (2026-10-20)
+
+05 landed in this commit (log: [`logs/05-close.md`](logs/05-close.md)), under the orchestrator's
+note for 05, whose fourteen rulings governed. It added no code and no test.
+- **Z1.** `.documents/architecture-summary.md`: the tree gains `runregistrykit.toml`, `RunDrivers/`,
+  `config/fingerprint.py` and `var/`; a dated note at the end of §2; the last sentence of the §4.1
+  paragraph made true of the tree.
+- **Z2.** `CLAUDE.md`: the wrapper named with its usage line; the counts 78 and 84, with one date.
+- **Z3.** `.documents/review-remediation-verification.md` §4.15, the handover for the run scripts,
+  by line of each script as it is on disk today.
+- **Z4.** `.documents/rrk-adoption-verification.md` §2: RunRegistryKit's `extraction` G3 and
+  `interrupted-runs` G2, drafted; nothing written in that repository.
+- **Z5.** This board closed; `prompts/INDEX.md`; `.documents/OPEN_ISSUES.md` (28 open; §1.14 states
+  that the campaign closed).
+- **Suites**, before and after: 18, 61 + 115, 78, 84, 61.
+- No issue opened or closed. The one open issue is §3's.
+
+**Left to the user:**
+- **The merge** of `rrk-adoption` into `main` (P10). It is not merged.
+- **The two gate records** in RunRegistryKit (Z4): the drafts are in the verification document §2.
+  Bring each draft's "not merged into `main` when this was drafted" clause up to date when
+  recording, and add the recording session's own "Read here" clause.
+- **The run scripts** (Z3): `full_run_2026.6.0.sh` and `full_run_2026.6.0-refresh.sh`, edited by the
+  user, not by the campaign. §4.15 says what changes, by line.
+- **The files at the root**, the old stores and 04's stores and runs: the 22 untracked entries, so
+  that `git_dirty` means something (R5, R6; §4.15 points 8 and 9); `~/ChamPBH-stores*` and
+  `~/ScienceData/ChamPBH-rehearsals/` when the user wishes; and `var/datastores/`, `var/runs/` and
+  `var/rrk-adoption-04/`, kept until the user removes them. **Never `git clean -x` or `-X`.**
+- **Two stale docstrings**, not edited (existing tests are not modified, README §5, and
+  `utilities.py` is byte-identical through the campaign), and not opened as issues (housekeeping,
+  the user's call):
+  - `ObjectFactories/tests/test_inventory_specs.py:27-29`, in the bullet at `:25-29`, says "The
+    fingerprint of SecondaryGWKit's RunRegistryKit, which ChamPBH is expected to adopt, reads only
+    what the specs declare …". It would read "The fingerprint of RunRegistryKit, which ChamPBH
+    adopted in `rrk-adoption` (`config/fingerprint.py`), reads only what the specs declare …".
+  - `utilities.py:190-192`, in `installed_package_provenance`'s docstring, says "SecondaryGWKit's
+    `RunRegistry.package_provenance()`, which ChamPBH may one day import in place of this helper
+    (README P5)". SecondaryGWKit no longer has `RunRegistry/`, and the function is
+    `runregistrykit.package_provenance`. It would read "`runregistrykit.package_provenance`, which
+    ChamPBH did not import in place of this helper, so that `main.py` and the plot scripts stay
+    launchable without the registry (`rrk-adoption` U1)".
+- **`jordan-normalization`** comes next (R7). Its rebuild is the first production run through the
+  wrapper.

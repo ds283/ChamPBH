@@ -21,7 +21,8 @@ issue and closed it with prompt 02, opened none and leaves none open; 1 on the
 `surfing-temperature` board (planned 2026-10-14; opened by the orchestrator before prompt 05 and
 ruled by the user, U9, 2026-10-14; closed 2026-10-14, 7 of 7 prompts landed, with the one issue
 still open on its board); 1 on the `rrk-adoption` board (planned 2026-10-19, with none
-opened or assigned; the orchestrator's review of prompt 04 opened one, 2026-10-20).
+opened or assigned; the orchestrator's review of prompt 04 opened one, 2026-10-20; closed 2026-10-20,
+5 of 5 prompts landed, with the one issue still open on its board).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -238,7 +239,8 @@ board, unassigned.
 
 ### 1.14 `rrk-adoption` — [board §3](../prompts/rrk-adoption/IMPLEMENTATION_STATE.md)
 
-Live. One issue, opened by the orchestrator's review of prompt 04 on 2026-10-20; unassigned, for the
+The campaign closed on 2026-10-20 with 5 of 5 prompts landed. One issue was opened, by the
+orchestrator's review of prompt 04 on 2026-10-20; it stays open on the board, unassigned, for the
 user to rule.
 
 - `[04-the-pool-waits-for-every-in-flight-item-when-fewer-than-three]` — RayWorkPool's
