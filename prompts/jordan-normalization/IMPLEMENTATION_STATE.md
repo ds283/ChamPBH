@@ -1,7 +1,8 @@
 # jordan-normalization campaign — implementation state
 
-**Last updated:** 2026-10-20 · **Status: LIVE — 10 of 10 prompts written, 1 landed (01); R1–R14, U1–U5
-and P1–P20 ruled by the user 2026-10-20 (README §6). Next: the orchestrator's review of 01, then its note for 02.**
+**Last updated:** 2026-10-21 · **Status: LIVE — 10 of 10 prompts written, 1 landed (01, reviewed);
+R1–R14, U1–U5 and P1–P20 ruled by the user 2026-10-20 (README §6). Next: the orchestrator note for
+02.**
 The plan is [`README.md`](README.md), written on 2026-10-20 on branch `jordan-normalization`, cut
 from `main` at `ac187c8`.
 
@@ -34,21 +35,24 @@ It ends in the handover for the science rebuild, which is the user's.
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | Strip to the exponential model | four potentials and their configs removed; a golden short history; format 2 | Sonnet | ⬜ | ✅ | this commit | [`logs/01-strip-to-the-exponential-model.md`](logs/01-strip-to-the-exponential-model.md) |
-| 02 | Rename to `ScalarHistory` | classes, tables, drop group, proxies, documents; format 3 | Sonnet | ⬜ | ⬜ | — | — |
-| 03 | The sampling axis | ln(1 + z_E) on the axis, exact-multiple grid, absolute lookup, ln(1 + z_J) per sample; format 4 | Opus | ⬜ | ⬜ | — | — |
-| 04 | The model interface | `AbstractModel`, `ExponentialModel`, `RealizedModel`; consumers on it via an adapter; φ_ref = 0 bitwise; the shift law | Opus | ⬜ | ⬜ | — | — |
-| 05 | The Planck mass | one reduced Planck mass from PRyMordial's G_N in three unit systems; consistency tests | Sonnet | ⬜ | ⬜ | — | — |
-| 06 | The tuning layer | `integrate_history` and `tune_history`: secant, seed, residuals, failure reasons, progress lines | Opus | ⬜ | ⬜ | — | — |
-| 07 | The store | `ExponentialModel` table; `ScalarHistory`'s key and tuned outputs; format 5; `VERSION_LABEL` 2026.7.0; writers and readers moved | Opus | ⬜ | ⬜ | — | — |
-| 08 | The driver and the tools | `main.py`'s options; the super-Planckian warning; the wrapper's scope; the tools and the surfing scan on tuned histories | Opus | ⬜ | ⬜ | — | — |
-| 09 | Rehearse a tuned build | registered pilot build on the isolated cluster, interrupted and resumed, compared bitwise (if U2) | Opus | ⬜ | ⬜ | — | — |
-| 10 | Close | documents, `CLAUDE.md`, the handover for the science rebuild, indexes, board | Sonnet | ⬜ | ⬜ | — | — |
+| 01 | Strip to the exponential model | four potentials and their configs removed; a golden short history; format 2 | Sonnet | ✅ | ✅ | `a1c88b6` | [`logs/01-strip-to-the-exponential-model.md`](logs/01-strip-to-the-exponential-model.md) |
+| 02 | Rename to `ScalarHistory` | classes, tables, drop group, proxies, documents; format 3 | Sonnet | ✍️ | ⬜ | — | — |
+| 03 | The sampling axis | ln(1 + z_E) on the axis, exact-multiple grid, absolute lookup, ln(1 + z_J) per sample; format 4 | Opus | ✍️ | ⬜ | — | — |
+| 04 | The model interface | `AbstractModel`, `ExponentialModel`, `RealizedModel`; consumers on it via an adapter; φ_ref = 0 bitwise; the shift law | Opus | ✍️ | ⬜ | — | — |
+| 05 | The Planck mass | one reduced Planck mass from PRyMordial's G_N in three unit systems; consistency tests | Sonnet | ✍️ | ⬜ | — | — |
+| 06 | The tuning layer | `integrate_history` and `tune_history`: secant, seed, residuals, failure reasons, progress lines | Opus | ✍️ | ⬜ | — | — |
+| 07 | The store | `ExponentialModel` table; `ScalarHistory`'s key and tuned outputs; format 5; `VERSION_LABEL` 2026.7.0; writers and readers moved | Opus | ✍️ | ⬜ | — | — |
+| 08 | The driver and the tools | `main.py`'s options; the super-Planckian warning; the wrapper's scope; the tools and the surfing scan on tuned histories | Opus | ✍️ | ⬜ | — | — |
+| 09 | Rehearse a tuned build | registered pilot build on the isolated cluster, interrupted and resumed, compared bitwise (if U2) | Opus | ✍️ | ⬜ | — | — |
+| 10 | Close | documents, `CLAUDE.md`, the handover for the science rebuild, indexes, board | Sonnet | ✍️ | ⬜ | — | — |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
 
 **Written 2026-10-20** after the rulings (README §2.1). Each is dispatched with an orchestrator
 note in `orchestrator/`, written after the previous prompt's review.
+
+Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
+- [`orchestrator/prompt-01.md`](orchestrator/prompt-01.md) (`701ed4c`), used for 01.
 
 ### 1.1 Items
 
@@ -93,7 +97,7 @@ from `.documents/OPEN_ISSUES.md` §1.15.
 
 | Issue | Its board | Prompt | Why here |
 |---|---|---|---|
-| `[00-declare-reflects-at-origin-for-the-other-potentials]` | `integrator-remediation` | 01 — closed (this commit) | moot once the four other potentials are deleted |
+| `[00-declare-reflects-at-origin-for-the-other-potentials]` | `integrator-remediation` | 01 — closed (`a1c88b6`) | moot once the four other potentials are deleted |
 | `[00-region-properties-on-the-potentials-become-unread]` | `integrator-remediation` | 04 | `AbstractModel` does not carry the properties over |
 | `[01-scalarmodelvalue-build-checks-the-stored-phi-against-pi]` | `dk-and-rpk-migration` | 03 | the value factory is rewritten for the axis |
 | `[05-the-value-factory-compares-stored-phi-against-pi]` | `science-readiness` | 03 | the same defect, opened twice |
@@ -104,8 +108,8 @@ from `.documents/OPEN_ISSUES.md` §1.15.
 
 ## 4. Resolved issues
 
-- `[00-declare-reflects-at-origin-for-the-other-potentials]` — closed as moot by prompt 01 (this
-  commit): the four potentials it concerned are deleted. The entry, with its **Resolved** line, is
+- `[00-declare-reflects-at-origin-for-the-other-potentials]` — closed as moot by prompt 01
+  (`a1c88b6`): the four potentials it concerned are deleted. The entry, with its **Resolved** line, is
   in `integrator-remediation`'s §4; its row is deleted from `.documents/OPEN_ISSUES.md` §1.15.
 
 ## 5. Dispatch record
@@ -149,7 +153,7 @@ user and the planner worked through on 2026-10-20.
 
 ### 5.2 After prompt 01 (2026-10-20)
 
-Prompt 01 landed in this commit (log [`logs/01-strip-to-the-exponential-model.md`](logs/01-strip-to-the-exponential-model.md)).
+Prompt 01 landed in `a1c88b6` (log [`logs/01-strip-to-the-exponential-model.md`](logs/01-strip-to-the-exponential-model.md)).
 - **X1.** `ComputeTargets/tests/golden_history.py` (setup and generator), `test_golden_history.py`
   and `data/golden_history_01.json`, generated on the tree it started from (code tree `ac187c8`'s);
   the two histories take about 11 s together, and passed twice on the old tree and unchanged after
@@ -162,3 +166,47 @@ Prompt 01 landed in this commit (log [`logs/01-strip-to-the-exponential-model.md
 - **Suites:** CosmologyModels 18, ComputeTargets 179 (61 + 118), ObjectFactories 78, tools 84,
   RunDrivers 61 (was 18 / 176 / 78 / 84 / 61: +3, the golden history's tests).
 - **Closed:** `[00-declare-reflects-at-origin-for-the-other-potentials]` (moot).
+
+**Orchestrator review of prompt 01 (2026-10-21).** Against `a1c88b6`, by note 01's ten checks. All
+pass.
+- **Scope.** The prompt's §5 files and the note's ruling 4, plus `tools/tests/test_inventory_report.py`,
+  whose count literal (21 classes) moved with the registry; ruling 7's last sentence covers it. Ten
+  deletions. The tree is clean.
+- **The golden history.** The agent's generator was run by the orchestrator into the scratchpad,
+  once in a temporary worktree at `701ed4c` (the generator copied in) and once at `a1c88b6`. Both
+  records equal the committed JSON in every pinned item, and the SHAs equal the note's probe. So
+  the JSON was made on the old tree and holds on the new one. The setup and the pinned fields are
+  rulings 1 and 2, with the four wall-clock fields excluded and named.
+- **The test.** `test_golden_history` passed alone twice, 11.1 s each at load 6–8. The
+  orchestrator ran two probes of its own, each reverted. With one hex digit of β = 5.5's
+  `samples_sha256` changed, it fails and says the difference lies between excerpts. With `RTOL`
+  1.1e-8 in the generator, it fails and names sample 0's `H_Einstein`, then the counts, the
+  bounce, the fixed-T values and the SHA.
+- **The grep.** Note 01's command was wrong: with `-E`, git's `\b` matches nothing here, so the
+  command finds no line at all. The agent ran it with `-P` and recorded the change (deviation 5).
+  With `-P` the hits are format 1's pin and comment, the format-2 comment lines naming the removed
+  classes, the format-1 golden file, and the three refused names in `test_plot_inputs.py`. Every
+  one of them is meant to be there. **Later notes use `git grep -P`.**
+- **The registries and dispatch.** One case in `main.py`, `plot_inputs.py`, the parser and
+  `plot_by_beta.py`. An unknown type still raises. `compare_stores`' map is `{1: …}`, with nothing
+  added to `UNSTORED_TYPE_VALUES`. `EXPONENTIAL_POTENTIAL` is still 1.
+- **The tests.** Every changed or renamed method in the log matches its diff. None was deleted.
+  `test_kinematic_cap_loop.py`, `test_registered_run_fingerprint.py` and the format-1 golden file
+  are unchanged.
+- **The format.** `SPEC_DIGESTS[1]` equals `c6a0e72`'s. The orchestrator recomputed
+  `spec_digests(factories)` and it equals `SPEC_DIGESTS[2]`: 17 pairs, 14 distinct digests, 23
+  classes in the registry. The new golden file is format 2, with `taken` null and no problems.
+- **The breakages.** All three diffs were extracted from the log and replayed in `bash` with
+  `git apply`. Each failed as the log says (1; 4; 5 failures and 4 errors), and each was reverted
+  with the tree clean.
+- **The prose and records.** `architecture-summary.md` and `numerical-strategies.md` each carry a
+  dated note, and only the lists that describe the tree were edited. On `integrator-remediation`'s
+  board the entry moved from §3 to §4. In the index the row is gone and the count is 27, with the
+  integrator clause at 8. `black --check` passes on the 21 Python files.
+- **The suites** at `a1c88b6`, serially: 18; 61 + 118; 78; 84; 61, all passing (load 5–17).
+- **Residue, fixed in the follow-up commit.** "this commit" became `a1c88b6` in the log, this board
+  and `integrator-remediation`'s §4. The note is listed in §1. The "Written?" column, which had been
+  left ⬜ for all ten prompts, now marks 01 ✅ and 02–10 ✍️. The status line is updated.
+- **Not residue, not opened.** The agent's observations (in its log) are 08's. These are
+  `plot_by_beta.py`'s unread `potential_types`, the dead without-`n` branch of
+  `plot_inputs._potential_payload`, and `main.py`'s one-case `convert_to_potential`.

@@ -413,7 +413,7 @@ moot by `jordan-normalization` prompt 01.)*
     which strips the four other potentials (its README R11), so the classes this entry concerns are
     deleted and it closes as moot. That prompt closes it here, in §4, and deletes its row from
     `.documents/OPEN_ISSUES.md`.
-  - **Resolved (2026-10-20), moot:** by `jordan-normalization` prompt 01 (this commit, its log 01).
+  - **Resolved (2026-10-20), moot:** by `jordan-normalization` prompt 01 (`a1c88b6`, its log 01).
     The four potentials the entry concerned (`InversePowerPotential`, `ReclinerPotential`,
     `ReflectingPotential`, `StarobinskyPotential`) are deleted (R11), so nothing keeps the defaults
     that would fail at the floor. `ExponentialPotential` declares the properties and is the only

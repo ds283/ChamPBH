@@ -1,7 +1,7 @@
 # Log 01 — strip to the exponential model
 
 **Subject:** Strip the tree to the exponential potential and coupling; pin a golden history; fingerprint format 2
-**Commit:** this commit, on branch `jordan-normalization`, on top of `701ed4c`
+**Commit:** `a1c88b6`, on branch `jordan-normalization`, on top of `701ed4c`
 **Date:** 2026-10-20, by Claude Sonnet 5.5
 **Result:** **COMPLETE.** X1–X5 shipped. The golden history was generated on the unmodified tree
 (code tree `ac187c8`'s), passed twice there, and passes unchanged after the strip. CosmologyModels
@@ -220,8 +220,8 @@ a subclass of `ExponentialPotential` that is not one of the four), finds exactly
 
 ## The deliberate-breakage record
 
-Each is a diff against the tree of this commit, written with `diff -u` from a copy taken before the
-mutation, so that `git apply` replays it from a clean tree at this commit; each was reverted
+Each is a diff against the tree of `a1c88b6`, written with `diff -u` from a copy taken before the
+mutation, so that `git apply` replays it from a clean tree at `a1c88b6`; each was reverted
 (`cp` back) and never committed. Checked, after the commit, with `git apply --check` and
 `git apply -R --check` in `bash`, from the repository root (the result is in the "State" section).
 
@@ -312,7 +312,7 @@ and `test_no_parent_crosses_a_shard` (`'InversePowerPotential' not found`), and 
 
 ## State handed to the next prompt
 
-- **Tree:** this commit, on `jordan-normalization`, on top of `701ed4c`. The only potential class is
+- **Tree:** `a1c88b6`, on `jordan-normalization`, on top of `701ed4c`. The only potential class is
   `ExponentialPotential`; `--potential-type` accepts only `Exponential` (08 removes the option);
   `model_ids.EXPONENTIAL_POTENTIAL = 1`.
 - **Fingerprint:** `FINGERPRINT_FORMAT = 2`; `SPEC_DIGESTS[1]` and `[2]` (17 pairs, 14 distinct); the
@@ -335,4 +335,4 @@ and `test_no_parent_crosses_a_shard` (`'InversePowerPotential' not found`), and 
 - **Open issues:** none opened. `[00-declare-reflects-at-origin-for-the-other-potentials]` closed
   (moot); seven remain assigned to this campaign (board §3.1, `.documents/OPEN_ISSUES.md` §1.15).
 - **The closing `grep`** needs `git grep -P` for `\b` on this machine.
-- **Breakage replay:** the three diffs above apply to this commit's tree: `git apply --check` passes for each, extracted from this log, from the tree of this commit, and after applying each, `git apply -R --check` passes and the reverse leaves the tree as it was (checked in `bash`, before the commit, on the tree that the commit holds).
+- **Breakage replay:** the three diffs above apply to `a1c88b6`'s tree: `git apply --check` passes for each, extracted from this log, from the tree of `a1c88b6`, and after applying each, `git apply -R --check` passes and the reverse leaves the tree as it was (checked in `bash`, before the commit, on the tree that the commit holds).
