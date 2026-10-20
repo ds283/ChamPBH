@@ -1,6 +1,6 @@
 # rrk-adoption campaign — implementation state
 
-**Last updated:** 2026-10-20 · **Status: COMPLETE — 5 of 5 prompts landed (01–04 reviewed; 05 awaiting review); 1 issue open (§3).
+**Last updated:** 2026-10-20 · **Status: COMPLETE — 5 of 5 prompts landed (all reviewed); 1 issue open (§3).
 Final suites: CosmologyModels 18, ComputeTargets 176 (61 + 115), ObjectFactories 78, tools 84, RunDrivers 61, all OK.
 R1–R7, U1–U5 and P2–P13 ruled by the user on 2026-10-19, as proposed; P1 amended (the wrapper in
 `RunDrivers/`) (README §6).**
@@ -36,7 +36,7 @@ It comes before `jordan-normalization`, so that the science rebuild is a registe
 | 02 | [The fingerprinter](02-the-fingerprinter.md) | `config/fingerprint.py` at format 1; `[stores]`; the format guard; a golden fingerprint | Sonnet | ✍️ 2026-10-19 | ✅ 2026-10-19 | `c9eea37` | [log](logs/02-the-fingerprinter.md) |
 | 03 | [The wrapper](03-the-wrapper.md) | `RunDrivers/registered_run.py`: register, beat from stdout, signals after `ray.init`, `main.py` by `runpy`, finish with the fingerprint | Opus | ✍️ 2026-10-19 | ✅ 2026-10-19 | `d5dd930` | [log](logs/03-the-wrapper.md) |
 | 04 | [Rehearse registered runs](04-rehearse-registered-runs.md) | a registered build; `SIGTERM` and resume; `SIGKILL`, `end` and resume; `store create`; stores compared; `histories.csv` = R0's | Opus | ✍️ 2026-10-19 | ✅ 2026-10-20 | `d5d8c74` | [log](logs/04-rehearse-registered-runs.md) |
-| 05 | [Close](05-close.md) | documents, handover, RunRegistryKit's gate drafts, indexes, board | Sonnet | ✍️ 2026-10-19 | ✅ 2026-10-20 | this commit | [log](logs/05-close.md) |
+| 05 | [Close](05-close.md) | documents, handover, RunRegistryKit's gate drafts, indexes, board | Sonnet | ✍️ 2026-10-19 | ✅ 2026-10-20 | `c94c8d5` | [log](logs/05-close.md) |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
 
@@ -49,6 +49,7 @@ before each dispatch:
 - [`orchestrator/prompt-02.md`](orchestrator/prompt-02.md) (`6824826`), used for 02.
 - [`orchestrator/prompt-03.md`](orchestrator/prompt-03.md) (`06ae4bf`), used for 03.
 - [`orchestrator/prompt-04.md`](orchestrator/prompt-04.md) (`07aa626`), used for 04.
+- [`orchestrator/prompt-05.md`](orchestrator/prompt-05.md) (`e0a52da`), used for 05.
 
 ### 1.1 Items
 
@@ -473,7 +474,7 @@ All pass.
 
 ### 5.6 After prompt 05 (2026-10-20)
 
-05 landed in this commit (log: [`logs/05-close.md`](logs/05-close.md)), under the orchestrator's
+05 landed in `c94c8d5` (log: [`logs/05-close.md`](logs/05-close.md)), under the orchestrator's
 note for 05, whose fourteen rulings governed. It added no code and no test.
 - **Z1.** `.documents/architecture-summary.md`: the tree gains `runregistrykit.toml`, `RunDrivers/`,
   `config/fingerprint.py` and `var/`; a dated note at the end of §2; the last sentence of the §4.1
@@ -514,3 +515,58 @@ note for 05, whose fourteen rulings governed. It added no code and no test.
     launchable without the registry (`rrk-adoption` U1)".
 - **`jordan-normalization`** comes next (R7). Its rebuild is the first production run through the
   wrapper.
+
+**Orchestrator review of prompt 05 (2026-10-20).** Against `c94c8d5`, by note 05's ten checks. All
+pass.
+- **Scope.** The eight files of note 05 §0 and nothing else. The untracked set is unchanged (22
+  entries). `git diff 3cd2be4 c94c8d5 -- main.py plot_by_beta.py plot_ScalarModel.py utilities.py`
+  is empty. `var/runs/`' listing, `list` (4 runs, 4 finished) and `pip freeze` equal the
+  orchestrator's own, taken before dispatch. The run scripts' SHA-256s are note 05's. RunRegistryKit
+  is at `33a2cd2` with no change.
+- **Additive.** Re-extracted independently: `architecture-summary.md`'s `> **Note, …**` blocks go
+  from 15 to 16, and `diff` deletes no line. `review-remediation-verification.md` gains §4.15 as one
+  insertion after `:1659`, before the `---` above §5. The verification document at `e0a52da` is a
+  byte prefix of the new one. The only deletions under `.documents/` are the ones rulings 9, 10 and
+  13 allow: `config/`'s heading and five children (new prefixes), the two lines of §4.1's last
+  sentence, and the header sentence and §1.14 intro of `OPEN_ISSUES.md`.
+- **Z1 and Z2, by reading.** The tree's additions and the note are true of the tree: run
+  directories hold `manifest.json`, `status.json`, `stdout.log` and `stderr.log`. The §4.1 sentence
+  rests on a `git grep` re-run here. `CLAUDE.md`'s diff is ruling 11's three edits, and the wrapper's
+  `--help` exits 0.
+- **Z3, against the scripts.** Every cited line of both scripts was checked against `cat -n`, along
+  with the `diff` of the two. The code citations hold: `slugify` (`__init__.py:129-132`), `git_dirty`
+  from `git status --porcelain` (`:162`), `sidecar_path` (`stores.py:252-257`), `_primary_problems`
+  (`:328-337`), the refusals of `create_sidecar` and the four `_running_runs_naming` callers, and the
+  line-buffered copy (`registered_run.py:230`). 04's launch form matches the verification document
+  §1.12. Where §4.15 reasons rather than measures, it says so: the script's `bash` reaping its
+  driver, and a finished block re-registered as a short `done` run.
+- **Z4, against RunRegistryKit and the records.** Every commit named exists in its repository
+  (`b0f3488`, `c9eea37`, `d5dd930`, `d5d8c74`, `3cd2be4`; `aaab408`, `0bae3a3`). The venv's
+  `direct_url.json` names `0bae3a3c…` with `requested_revision` `v0.2.0` and no `dir_info`. The
+  refusal's quoted words are in `out/04-refusal.txt` and `04-resumed-c-refused.log`, and `end`'s in
+  `out/04-checks.txt:110`. `TestBeginsRefusal` does `SIGKILL` a real child and asserts both quoted
+  fragments. The §3 `git grep` finds nothing; `foreign` occurs only in the BBN-provenance tests. The
+  item 9 points and the six §3 checks are each answered once, and neither draft claims a commit of
+  the pin alone.
+- **Z5, by counting.** `OPEN_ISSUES.md` has 28 `- \`[` rows, and its header says 28. `INDEX.md` says
+  10 campaigns, 0 planned, 0 live, 10 closed, and its row agrees with this board.
+- **The log** follows `dk-and-rpk-migration` README §5.1's sections. Its deviations are classified,
+  and its commands are verbatim.
+- **Suites** at `c94c8d5`, serially: 18, 61 + 115, 78, 84, 61, all OK (load 5–8).
+- **Accepted, beyond the note:**
+  - **Ruling 10 was wrong in one clause.** `ObjectFactories/tests/test_store_fingerprint_golden.py:64`
+    imports `ENCODING_FORMAT` from `datastorekit.store_fingerprint`. The agent wrote the §4.1
+    sentence true ("ChamPBH's own code imports the module nowhere; one test … imports its
+    `ENCODING_FORMAT`") and recorded the deviation.
+  - **Ruling 4's preference** is the guarded line. `create_sidecar` was found not to look for a run
+    naming the store.
+  - **The paragraph on `-u`** is read from the code and says so.
+  - **The agent amended its own commit once** before handing back, to tighten a command in the G2
+    draft. The commit was unreviewed and is the prompt's one commit, so the rollback boundary
+    holds.
+- **Residue fixed in this follow-up:**
+  - the SHA, in the board, the log, `INDEX.md` and both drafts of the verification document §2;
+  - the status line, which said "05 awaiting review";
+  - the notes list.
+- No issue opened or closed. `[04-the-pool-waits-for-every-in-flight-item-when-fewer-than-three]`
+  stays open, for the user to rule.

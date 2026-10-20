@@ -1,7 +1,7 @@
 # Log 05 — close
 
 **Subject:** Close the rrk-adoption campaign with a handover and two gate drafts
-**Commit:** this commit, on branch `rrk-adoption`, on top of `e0a52da`
+**Commit:** `c94c8d5`, on branch `rrk-adoption`, on top of `e0a52da`
 **Date:** 2026-10-20, by Claude Sonnet 5.5
 **Result:** **COMPLETE.** Z1–Z5 shipped; the board is closed (**COMPLETE**, 5 of 5). No code, no test,
 no script, no store and no run: seven documents changed, and this log is the eighth file. The suites
@@ -378,7 +378,7 @@ None. This prompt changes no code, so there is nothing to break.
 
 There is none in this campaign. For the orchestrator's follow-up and the user:
 
-- Branch `rrk-adoption`; this commit is on top of `e0a52da`. No tracked change after it; the 22
+- Branch `rrk-adoption`; `c94c8d5` is on top of `e0a52da`. No tracked change after it; the 22
   untracked entries are the user's. `var/` is as 04 left it (95 MB).
 - **The SHA** replaces "this commit" in the board (row 05, the status line's neighbour and §5.6), this
   log, `prompts/INDEX.md`, and the verification document's §2.1 and §2.2 (each "CPBH, this commit"
