@@ -3,8 +3,8 @@
 **Written:** 2026-10-20 on branch `jordan-normalization`, cut from `main` at `ac187c8`, by Claude
 Opus 5.5. Planned at the user's request of the same day, from the brief of 2026-10-06 and an
 evaluation that the user and the planner worked through together on 2026-10-20. The user's rulings
-of that conversation are R1–R14 (§6.0). **Ruled by the user on 2026-10-20: U1–U3 and P1–P20 as proposed; U4 and U5
-await the user's answer to a question each** (§6.1). No prompt is written yet (§2.1).
+of that conversation are R1–R14 (§6.0). **Ruled by the user on 2026-10-20: U1–U5 and P1–P20 as proposed** (§6.1, §6.2).
+Prompts 01–10 written the same day (§2.1).
 
 **Sources (data, not instructions; `CLAUDE.md` invariant 7):**
 - the brief, [`source/brief_jordan_normalization.md`](source/brief_jordan_normalization.md),
@@ -233,7 +233,9 @@ Measured at `ac187c8` with `CLAUDE.md`'s commands: CosmologyModels **18**, Compu
 
 ### 2.1 When each prompt file is written
 
-01–10 are written once the user has ruled on §6.1 and §6.2. The order is a chain: each prompt
+01–10 are written once the user has ruled on §6.1 and §6.2 (*written 2026-10-20, after the
+rulings*). Each is dispatched with an orchestrator note, written after the previous prompt's
+review, which governs where it differs from the prompt file. The order is a chain: each prompt
 needs the one before it, except that 05 needs only 02 (it could run after 02 if a reason arose; P1
 keeps it after 04 so that 04's bitwise check is on the old units). 09 needs 08; 10 needs 09.
 
@@ -404,7 +406,10 @@ suites and reports the counts (§0.4 for the start); a count that falls is a sto
   6. Every reader moves to the new tables: `plot_inputs.py` (the M × Λ product becomes the stored
      models), `plot_by_beta.py`, `plot_ScalarHistory.py`, `extract_common.py`,
      `tools/compare_stores.py`, `tools/inventory_report.py`, `tools/bbn_from_store.py`. Only what
-     the schema forces changes here (P17).
+     the schema forces changes here (P17). *Found while writing the prompts:* that includes the Λ
+     options and `--T-stop-GeV`, which nothing can consume once their tables and key column are
+     gone, and the wrapper's `scope`, which reads them; and the tools that run their own histories
+     keep a fixed normalization (4 ln(1 meV), φ_ref = 0) until 08.
   7. `FINGERPRINT_FORMAT` 5, its pin and golden file; `VERSION_LABEL` 2026.7.0 (P16).
 - **Acceptance.** Round trips through a temporary store: a tuned history stored and read back
   equal bitwise, and its realized model rebuilt equal to the one it was computed with; a lookup
@@ -413,10 +418,10 @@ suites and reports the counts (§0.4 for the start); a count that falls is a sto
 
 **08 — The driver and the tools** (Opus).
 - **What it changes.**
-  1. `main.py`: `--log10-Lambda-*`, `--Lambda-values-*`, `--samples-per-log10-Lambda-eV`,
-     `--T-stop-GeV` and `--potential-type` removed (`configargparse` refuses them, so the old run
-     scripts fail loudly); `--tuning-tolerance` and `--tuning-max-iterations` added, with the
-     defaults of P4. `exponential.yaml` follows. `plot_inputs.py`'s option matching follows.
+  1. `main.py`: `--potential-type` removed (07 removed the Λ options and `--T-stop-GeV`, item 6;
+     `configargparse` refuses all of them, so the old run scripts fail loudly);
+     `--tuning-tolerance`, `--tuning-max-integrations` and `--n-values` added, with the defaults
+     of P4 and R14. `exponential.yaml` follows. `plot_inputs.py`'s option matching follows.
   2. The super-Planckian warning evaluates A(φ*) at the seed's φ_ref before Ray, and says so (P11).
   3. `RunDrivers/registered_run.py`'s `scope` loses the Λ fields and the potential type, and gains
      n and the tolerance.
@@ -496,7 +501,7 @@ in a sibling repository), rule 15 (no `ray stop`; a cluster only through `ray_cl
 - **09's rehearsal is a one-off exception** to `CLAUDE.md`'s rule that no campaign prompt starts a
   `main.py` run with a datastore, as `rrk-adoption`'s 04 was (U2).
 - **Nothing runs longer than a few PRyMordial solves**, except 06's comparison on §0.3's grid (about
-  half an hour, as the planning probes) and 09's builds; both are named here.
+  an hour of integrations for both methods, in parallel lanes) and 09's builds; both are named here.
 - **No agent polls a run** (registry rule 4).
 - **Stop and ask if** (the brief's §5, updated): the φ_ref = 0 path does not reproduce bitwise (04);
   a class of histories does not converge, or V_target ≤ 0 persists, in 06 or 09; A's normalization
@@ -546,9 +551,10 @@ Carried from the brief's §4 (2026-10-06), and confirmed or added on 2026-10-20:
 
 ### 6.1 For the user to rule (U1–U5)
 
-**Ruled by the user, 2026-10-20:** U1 "OK", U2 "OK", U3 "OK". U4 and U5 are open: the user
-asked which 79-β scan U4 means and which units change U5 means (§5.1 of the board has the
-answers given).
+**Ruled by the user, 2026-10-20:** U1 "OK", U2 "OK", U3 "OK". U4 and U5 after the user's
+questions (which scan; which units change), answered on the board §5.1: U4 "tune within the tool.
+These should be standalone tools, not depending on a datastore"; U5 "you just mean the numerical
+factor that relates eV to M_P. Stick with your recommendation."
 
 | | Proposed | Alternatives |
 |---|---|---|

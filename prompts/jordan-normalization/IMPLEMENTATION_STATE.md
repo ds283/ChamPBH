@@ -1,8 +1,7 @@
 # jordan-normalization campaign — implementation state
 
-**Last updated:** 2026-10-20 · **Status: PLANNED — 0 of 10 prompts written; R1–R14 ruled by the
-user (README §6.0); U1–U3 and P1–P20 ruled as proposed 2026-10-20; U4 and U5 open (README
-§6.1).**
+**Last updated:** 2026-10-20 · **Status: LIVE — 10 of 10 prompts written, 0 landed; R1–R14, U1–U5
+and P1–P20 ruled by the user 2026-10-20 (README §6). Next: the orchestrator note for 01.**
 The plan is [`README.md`](README.md), written on 2026-10-20 on branch `jordan-normalization`, cut
 from `main` at `ac187c8`.
 
@@ -48,8 +47,23 @@ It ends in the handover for the science rebuild, which is the user's.
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
 
-**Held, by design (README §2.1).** 01–10 are written once the user has ruled on README §6.1 and
-§6.2.
+**Written 2026-10-20** after the rulings (README §2.1). Each is dispatched with an orchestrator
+note in `orchestrator/`, written after the previous prompt's review.
+
+### 1.1 Items
+
+| Prompt | Items |
+|---|---|
+| 01 | X1 the golden history · X2 the classes deleted · X3 the registries · X4 the tests · X5 format 2 |
+| 02 | N1 the code, tables, columns and drop group · N2 format 3 · N3 the current documents · N4 the run scripts left as records |
+| 03 | Z1 the concept · Z2 the factory and format 4 · Z3 the grid · Z4 the sampling · Z5 ln(1 + z_J) · Z6 the readers · Z7 the value factory's issues |
+| 04 | M1 `AbstractModel` · M2 `RealizedModel` · M3 `ExponentialModel` · M4 the consumers · M5 the adapter · M6 the unread properties · M7 the tests |
+| 05 | K1 one constant · K2 the three unit systems · K3 the tests |
+| 06 | T1 `integrate_history` · T2 the residuals · T3 the secant and its guards · T4 the seed · T5 the failures · T6 progress · T7 the outputs |
+| 07 | S1 the model's table · S2 the key · S3 the outputs · S4 the compute path · S5 `main.py` · S6 the readers · S7 format 5 and 2026.7.0 · S8 the tests |
+| 08 | D1 the options · D2 the warning · D3 the wrapper's scope · D4 `history_and_bbn.py` · D5 the surfing tools · D6 `histories.csv` · D7 the tests |
+| 09 | H1 reference · H2 resumed · H3 the comparisons · H4 the measurements · H5 the document |
+| 10 | C1 the documents · C2 `CLAUDE.md` · C3 the handover · C4 the board and indexes · C5 the final suites |
 
 ## 2. The gates
 
@@ -120,4 +134,11 @@ user and the planner worked through on 2026-10-20.
   Answered in the conversation: U4's scan is `surfing-temperature`'s S1 (and its fine scan S5),
   a science input to the T_surf(β) figure run by `tools/surfing_scan.py`, not a test; U5's change
   is prompt 05's, the reduced Planck mass taken from PRyMordial's G_N (R3), which moves every
-  eV-labelled quantity by about 2.8 × 10⁻⁴. No prompt file is written until both are ruled.
+  eV-labelled quantity by about 2.8 × 10⁻⁴.
+- **U4 and U5 ruled** after those answers: U4 "tune within the tool. These should be standalone
+  tools, not depending on a datastore"; U5 "you just mean the numerical factor that relates eV to
+  M_P. Stick with your recommendation" (05 after 04).
+- **Prompts 01–10 written** the same day. Writing them found two corrections to the charters, made
+  in the README: 07 removes the Λ options and `--T-stop-GeV` with their tables (nothing can
+  consume them), fixes the wrapper's `scope` that reads them, and keeps the history-running tools
+  on a fixed normalization until 08; and 06's comparison costs about an hour, not half.
