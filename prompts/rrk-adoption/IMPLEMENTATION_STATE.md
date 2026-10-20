@@ -577,3 +577,9 @@ and `utilities.py:190-193`. Only the docstrings change (the files' ASTs, docstri
 identical), so the campaign's byte-identity of `utilities.py` holds for its code. The pilot store, its
 logs and `pilot-out/` were removed from the root by the user's instruction, and the two run scripts
 are the only untracked entries left.
+
+**Merged 2026-10-20, by the user's instruction (P10).** After the records above and the
+`science-runs/` commit (`32e1feb`), `rrk-adoption` was fast-forwarded into `main`, so this commit is
+`main`'s tip. `main` was pushed to GitHub, and the branch was deleted; it was never pushed. §5.6's
+"The merge … It is not merged" is therefore done. The two RunRegistryKit gate drafts still carry
+"not merged into `main` when this was drafted", for the recording session to bring up to date.
