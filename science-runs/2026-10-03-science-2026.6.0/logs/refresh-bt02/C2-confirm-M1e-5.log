@@ -1,0 +1,36 @@
+2026-10-03 23:53:08,002	INFO worker.py:1821 -- Connecting to existing Ray cluster at address: 127.0.0.1:6379...
+2026-10-03 23:53:08,019	INFO worker.py:1998 -- Connected to Ray cluster. View the dashboard at [1m[32mhttp://127.0.0.1:8265 [39m[22m
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/_private/worker.py:2046: FutureWarning: Tip: In future versions of Ray, Ray will no longer override accelerator visible devices env var if num_gpus=0 or num_gpus=None (default). To enable this behavior and turn off this error message, set RAY_ACCEL_ENV_VAR_OVERRIDE_ON_ZERO=0
+  warnings.warn(
+[36m(compute_BBN_data pid=36946)[0m [2026-10-03 23:56:48,440 E 36946 7443776] core_worker_process.cc:842: Failed to establish connection to the metrics exporter agent. Metrics will not be exported. Exporter agent status: RpcError: Running out of retries to initialize the metrics agent. rpc_code: 14
+>> Opened existing sharded datastore "/Users/ds283/ChamPBH-stores-bt02/science-2026.6.0.db" with 16 shards
+
+** BUILDING GRID OF MODELS TO SAMPLE
+   -- using potential type "Exponential"
+   -- populated beta sample grid with 201 values = [ 1, 1.01, 1.02, 1.03, 1.04, 1.05, 1.06, 1.07, 1.08, 1.09, ..., 2.91, 2.92, 2.93, 2.94, 2.95, 2.96, 2.97, 2.98, 2.99, 3 ]
+   -- populated M sample grid with 1 value = [ 1e-05 Mp ]
+   -- populated Lambda sample grid with 1 value = [ 0.001 eV ]
+   -- total number of models to integrate = 201
+[36m(Datastore pid=35244)[0m @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   -- ALL WORK ITEMS COMPLETE in time 39.2s
+      Queue summary: 201 lookup (avg 308/min), 0 compute (avg 0/day), 0 store (avg 0/day), 0 validation (avg 0/day)
+      (no compute items were evaluated - all assets read from datastore)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 19.7s
+      Queue summary: 0 lookup (avg 0/day), 0 compute (avg 0/day), 0 store (avg 0/day), 0 validation (avg 0/day)
+      (no compute items were evaluated - all assets read from datastore)
+-- AdiabaticHistory: 0 models skipped because their ScalarModel failed
+
+** CALCULATE BBN DATA
+   -- 2026-10-04 00:00:10 (5m 10.2s running): 14/26 work items remaining = 46.15% complete
+      inflight: 14 lookup, 13 compute, 5 store, 3 validation | completed: 82 lookup (avg 15.86/min), 69 compute (avg 13.34/min), 64 store (avg 12.38/min), 61 validation (avg 11.8/min)
+   -- 2026-10-04 00:05:10 (10m 10.5s running): 4/26 work items remaining = 84.62% complete
+      inflight: 6 lookup, 12 compute, 11 store, 1 validation | completed: 170 lookup (17.59/min, avg 16.71/min), 158 compute (17.79/min, avg 15.53/min), 147 store (16.59/min, avg 14.45/min), 146 validation (16.99/min, avg 14.35/min)
+   -- ALL WORK ITEMS COMPLETE in time 12m 22.1s
+      Queue summary: 201 lookup (avg 16.25/min), 201 compute (avg 16.25/min), 201 store (avg 16.25/min), 201 validation (avg 16.25/min)
+-- BBNData: 0 models skipped because their ScalarModel failed; 0 computations skipped because of a stored failure

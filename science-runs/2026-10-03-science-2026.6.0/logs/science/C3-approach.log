@@ -1,0 +1,33 @@
+2026-10-03 02:47:28,063	INFO worker.py:1821 -- Connecting to existing Ray cluster at address: 127.0.0.1:6379...
+2026-10-03 02:47:28,074	INFO worker.py:1998 -- Connected to Ray cluster. View the dashboard at [1m[32mhttp://127.0.0.1:8265 [39m[22m
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/_private/worker.py:2046: FutureWarning: Tip: In future versions of Ray, Ray will no longer override accelerator visible devices env var if num_gpus=0 or num_gpus=None (default). To enable this behavior and turn off this error message, set RAY_ACCEL_ENV_VAR_OVERRIDE_ON_ZERO=0
+  warnings.warn(
+>> Opened existing sharded datastore "/Users/ds283/ChamPBH-stores/science-2026.6.0.db" with 16 shards
+
+** BUILDING GRID OF MODELS TO SAMPLE
+   -- using potential type "Exponential"
+   -- populated beta sample grid with 41 values = [ 1, 1.05, 1.1, 1.15, 1.2, 1.25, 1.3, 1.35, 1.4, 1.45, ..., 2.55, 2.6, 2.65, 2.7, 2.75, 2.8, 2.85, 2.9, 2.95, 3 ]
+   -- populated M sample grid with 4 values = [ 0.5 Mp, 0.1 Mp, 0.03 Mp, 0.01 Mp ]
+   -- populated Lambda sample grid with 1 value = [ 0.001 eV ]
+   -- total number of models to integrate = 164
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology
+[36m(Datastore pid=36639)[0m @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   -- 2026-10-03 02:53:03 (5m 2.21s running): 7/21 work items remaining = 66.67% complete
+      inflight: 9 lookup, 17 compute, 7 store, 2 validation | completed: 103 lookup (avg 20.45/min), 86 compute (avg 17.07/min), 79 store (avg 15.68/min), 77 validation (avg 15.29/min)
+   -- ALL WORK ITEMS COMPLETE in time 8m 25.6s
+      Queue summary: 164 lookup (avg 19.46/min), 164 compute (avg 19.46/min), 164 store (avg 19.46/min), 164 validation (avg 19.46/min)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 2m 23.5s
+      Queue summary: 164 lookup (avg 68.58/min), 164 compute (avg 68.58/min), 164 store (avg 68.58/min), 164 validation (avg 68.58/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarModel failed
+
+** CALCULATE BBN DATA
+   -- 2026-10-03 03:03:51 (5m 0.907s running): 11/21 work items remaining = 47.62% complete
+      inflight: 10 lookup, 19 compute, 6 store, 1 validation | completed: 70 lookup (avg 13.96/min), 51 compute (avg 10.17/min), 45 store (avg 538.4/hr), 44 validation (avg 526.4/hr)
+   -- ALL WORK ITEMS COMPLETE in time 9m 46.4s
+      Queue summary: 164 lookup (avg 16.78/min), 164 compute (avg 16.78/min), 164 store (avg 16.78/min), 164 validation (avg 16.78/min)
+-- BBNData: 0 models skipped because their ScalarModel failed; 0 computations skipped because of a stored failure

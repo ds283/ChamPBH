@@ -1,0 +1,29 @@
+2026-10-03 02:06:06,696	INFO worker.py:1821 -- Connecting to existing Ray cluster at address: 127.0.0.1:6379...
+2026-10-03 02:06:06,717	INFO worker.py:1998 -- Connected to Ray cluster. View the dashboard at [1m[32mhttp://127.0.0.1:8265 [39m[22m
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/_private/worker.py:2046: FutureWarning: Tip: In future versions of Ray, Ray will no longer override accelerator visible devices env var if num_gpus=0 or num_gpus=None (default). To enable this behavior and turn off this error message, set RAY_ACCEL_ENV_VAR_OVERRIDE_ON_ZERO=0
+  warnings.warn(
+>> Opened existing sharded datastore "/Users/ds283/ChamPBH-stores/science-2026.6.0.db" with 16 shards
+
+** BUILDING GRID OF MODELS TO SAMPLE
+   -- using potential type "Exponential"
+   -- populated beta sample grid with 121 values = [ 1.1, 1.105, 1.11, 1.115, 1.12, 1.125, 1.13, 1.135, 1.14, 1.145, ..., 1.655, 1.66, 1.665, 1.67, 1.675, 1.68, 1.685, 1.69, 1.695, 1.7 ]
+   -- populated M sample grid with 1 value = [ 0.001 Mp ]
+   -- populated Lambda sample grid with 1 value = [ 0.001 eV ]
+   -- total number of models to integrate = 121
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology
+[36m(Datastore pid=6873)[0m @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   -- ALL WORK ITEMS COMPLETE in time 4m 57.1s
+      Queue summary: 121 lookup (avg 24.44/min), 60 compute (avg 12.12/min), 60 store (avg 12.12/min), 60 validation (avg 12.12/min)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 57.2s
+      Queue summary: 60 lookup (avg 62.95/min), 60 compute (avg 62.95/min), 60 store (avg 62.95/min), 60 validation (avg 62.95/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarModel failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 3m 45.7s
+      Queue summary: 60 lookup (avg 15.95/min), 60 compute (avg 15.95/min), 60 store (avg 15.95/min), 60 validation (avg 15.95/min)
+-- BBNData: 0 models skipped because their ScalarModel failed; 0 computations skipped because of a stored failure

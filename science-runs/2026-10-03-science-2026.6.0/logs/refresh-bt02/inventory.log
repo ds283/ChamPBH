@@ -1,0 +1,119 @@
+2026-10-04 00:07:31,765	INFO worker.py:1821 -- Connecting to existing Ray cluster at address: 127.0.0.1:6379...
+2026-10-04 00:07:31,780	INFO worker.py:1998 -- Connected to Ray cluster. View the dashboard at [1m[32mhttp://127.0.0.1:8265 [39m[22m
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/_private/worker.py:2046: FutureWarning: Tip: In future versions of Ray, Ray will no longer override accelerator visible devices env var if num_gpus=0 or num_gpus=None (default). To enable this behavior and turn off this error message, set RAY_ACCEL_ENV_VAR_OVERRIDE_ON_ZERO=0
+  warnings.warn(
+>> Opened existing sharded datastore "/Users/ds283/ChamPBH-stores-bt02/science-2026.6.0.db" with 16 shards
+
+@@ DATASTORE INVENTORY
+
+   -- Redshifts
+      21250 values committed between Sat 03 Oct 2026 01:25:34 and Sat 03 Oct 2026 01:26:02
+      values = [ 0, 0.0092533, 0.018592, 0.028018, 0.03753, 0.047131, 0.05682, 0.066599, 0.076469, 0.08643, ..., 9.2045e+84, 9.2896e+84, 9.3756e+84, 9.4623e+84, 9.5499e+84, 9.6383e+84, 9.7275e+84, 9.8175e+84, 9.9083e+84, 1e+85 ]
+
+   -- Beta Values
+      319 values committed between Sat 03 Oct 2026 01:26:16 and Sat 03 Oct 2026 02:41:54
+      values = [ 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, ..., 20.5, 21, 21.5, 22, 22.5, 23, 23.5, 24, 24.5, 25 ]
+
+   -- Temperature Values
+      2 values committed between Sat 03 Oct 2026 01:25:16 and Sat 03 Oct 2026 01:26:18
+      values = [ 2.3493e-13 GeV, 20000 GeV ]
+
+   -- M Values
+      6 values committed between Sat 03 Oct 2026 01:26:16 and Sat 03 Oct 2026 03:09:47
+      values = [ 2.436e+22 eV, 2.436e+24 eV, 2.436e+25 eV, 7.308e+25 eV, 2.436e+26 eV, 1.218e+27 eV ]
+
+   -- Lambda Values
+      1 value committed at Sat 03 Oct 2026 01:26:16
+      values = [ 0.001 eV ]
+
+   -- Phi Values
+      3 values committed between Sat 03 Oct 2026 01:25:17 and Sat 03 Oct 2026 02:43:35
+      values = [ 1 PlanckMass, 2 PlanckMass, 5 PlanckMass ]
+
+   -- Pi Values
+      1 value committed at Sat 03 Oct 2026 01:25:17
+      values = [ 0 PlanckMass ]
+
+   -- Scalar Models
+      @@ validated models
+        710 values committed between Sat 03 Oct 2026 01:26:58 and Sat 03 Oct 2026 03:57:59
+        version = 2026.6.0
+        :: C1-main-M1e-3-ScalarModel-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=1)-2026-10-03T01:30:48 (T_init=20000 GeV, T_stop=2.3493e-13 GeV, phiE_init=5 Mp, piE_init=0 Mp, failure=False)
+        :: C1-main-M1e-3-ScalarModel-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=1.01)-2026-10-03T01:35:38 (T_init=20000 GeV, T_stop=2.3493e-13 GeV, phiE_init=5 Mp, piE_init=0 Mp, failure=False)
+        :: C1-main-M1e-3-ScalarModel-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=1.02)-2026-10-03T01:26:23 (T_init=20000 GeV, T_stop=2.3493e-13 GeV, phiE_init=5 Mp, piE_init=0 Mp, failure=False)
+        :: C1-main-M1e-3-ScalarModel-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=1.03)-2026-10-03T01:31:53 (T_init=20000 GeV, T_stop=2.3493e-13 GeV, phiE_init=5 Mp, piE_init=0 Mp, failure=False)
+        :: C1-main-M1e-3-ScalarModel-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=1.04)-2026-10-03T01:27:10 (T_init=20000 GeV, T_stop=2.3493e-13 GeV, phiE_init=5 Mp, piE_init=0 Mp, failure=False)
+        :: C1-main-M1e-3-ScalarModel-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=1.05)-2026-10-03T01:33:10 (T_init=20000 GeV, T_stop=2.3493e-13 GeV, phiE_init=5 Mp, piE_init=0 Mp, failure=False)
+        :: C1-main-M1e-3-ScalarModel-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=1.06)-2026-10-03T01:26:28 (T_init=20000 GeV, T_stop=2.3493e-13 GeV, phiE_init=5 Mp, piE_init=0 Mp, failure=False)
+        :: C1-main-M1e-3-ScalarModel-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=1.07)-2026-10-03T01:26:23 (T_init=20000 GeV, T_stop=2.3493e-13 GeV, phiE_init=5 Mp, piE_init=0 Mp, failure=False)
+        :: C1-main-M1e-3-ScalarModel-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=1.08)-2026-10-03T01:26:37 (T_init=20000 GeV, T_stop=2.3493e-13 GeV, phiE_init=5 Mp, piE_init=0 Mp, failure=False)
+        :: C1-main-M1e-3-ScalarModel-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=1.09)-2026-10-03T01:47:26 (T_init=20000 GeV, T_stop=2.3493e-13 GeV, phiE_init=5 Mp, piE_init=0 Mp, failure=False)
+      ...
+        :: L-large-beta-M1e-3-ScalarModel-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=5)-2026-10-03T02:17:38 (T_init=20000 GeV, T_stop=2.3493e-13 GeV, phiE_init=5 Mp, piE_init=0 Mp, failure=False)
+        :: L-large-beta-M1e-3-ScalarModel-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=5.5)-2026-10-03T02:17:38 (T_init=20000 GeV, T_stop=2.3493e-13 GeV, phiE_init=5 Mp, piE_init=0 Mp, failure=False)
+        :: L-large-beta-M1e-3-ScalarModel-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=6)-2026-10-03T02:21:21 (T_init=20000 GeV, T_stop=2.3493e-13 GeV, phiE_init=5 Mp, piE_init=0 Mp, failure=False)
+        :: L-large-beta-M1e-3-ScalarModel-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=6.5)-2026-10-03T02:21:17 (T_init=20000 GeV, T_stop=2.3493e-13 GeV, phiE_init=5 Mp, piE_init=0 Mp, failure=False)
+        :: L-large-beta-M1e-3-ScalarModel-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=7)-2026-10-03T02:20:05 (T_init=20000 GeV, T_stop=2.3493e-13 GeV, phiE_init=5 Mp, piE_init=0 Mp, failure=False)
+        :: L-large-beta-M1e-3-ScalarModel-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=7.5)-2026-10-03T02:28:46 (T_init=20000 GeV, T_stop=2.3493e-13 GeV, phiE_init=5 Mp, piE_init=0 Mp, failure=False)
+        :: L-large-beta-M1e-3-ScalarModel-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=8)-2026-10-03T02:32:07 (T_init=20000 GeV, T_stop=2.3493e-13 GeV, phiE_init=5 Mp, piE_init=0 Mp, failure=False)
+        :: L-large-beta-M1e-3-ScalarModel-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=8.5)-2026-10-03T02:28:49 (T_init=20000 GeV, T_stop=2.3493e-13 GeV, phiE_init=5 Mp, piE_init=0 Mp, failure=False)
+        :: L-large-beta-M1e-3-ScalarModel-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=9)-2026-10-03T02:17:42 (T_init=20000 GeV, T_stop=2.3493e-13 GeV, phiE_init=5 Mp, piE_init=0 Mp, failure=False)
+        :: L-large-beta-M1e-3-ScalarModel-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=9.5)-2026-10-03T02:26:54 (T_init=20000 GeV, T_stop=2.3493e-13 GeV, phiE_init=5 Mp, piE_init=0 Mp, failure=False)
+      @@ unvalidated models
+        no values committed
+
+   -- Adiabatic Histories
+      @@ validated models
+        710 values committed between Sat 03 Oct 2026 01:48:18 and Sat 03 Oct 2026 04:02:08
+        version = 2026.6.0
+        :: C1-main-M1e-3-AdiabaticHistory-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=1)-2026-10-03T01:48:22
+        :: C1-main-M1e-3-AdiabaticHistory-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=1.01)-2026-10-03T01:48:28
+        :: C1-main-M1e-3-AdiabaticHistory-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=1.02)-2026-10-03T01:48:15
+        :: C1-main-M1e-3-AdiabaticHistory-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=1.03)-2026-10-03T01:48:19
+        :: C1-main-M1e-3-AdiabaticHistory-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=1.04)-2026-10-03T01:48:24
+        :: C1-main-M1e-3-AdiabaticHistory-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=1.05)-2026-10-03T01:48:18
+        :: C1-main-M1e-3-AdiabaticHistory-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=1.06)-2026-10-03T01:48:18
+        :: C1-main-M1e-3-AdiabaticHistory-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=1.07)-2026-10-03T01:48:25
+        :: C1-main-M1e-3-AdiabaticHistory-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=1.08)-2026-10-03T01:48:18
+        :: C1-main-M1e-3-AdiabaticHistory-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=1.09)-2026-10-03T01:48:15
+      ...
+        :: L-large-beta-M1e-3-AdiabaticHistory-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=5)-2026-10-03T02:36:08
+        :: L-large-beta-M1e-3-AdiabaticHistory-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=5.5)-2026-10-03T02:36:03
+        :: L-large-beta-M1e-3-AdiabaticHistory-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=6)-2026-10-03T02:36:08
+        :: L-large-beta-M1e-3-AdiabaticHistory-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=6.5)-2026-10-03T02:36:14
+        :: L-large-beta-M1e-3-AdiabaticHistory-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=7)-2026-10-03T02:36:12
+        :: L-large-beta-M1e-3-AdiabaticHistory-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=7.5)-2026-10-03T02:36:14
+        :: L-large-beta-M1e-3-AdiabaticHistory-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=8)-2026-10-03T02:36:08
+        :: L-large-beta-M1e-3-AdiabaticHistory-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=8.5)-2026-10-03T02:36:08
+        :: L-large-beta-M1e-3-AdiabaticHistory-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=9)-2026-10-03T02:36:18
+        :: L-large-beta-M1e-3-AdiabaticHistory-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=9.5)-2026-10-03T02:36:14
+      @@ unvalidated models
+        no values committed
+
+   -- BBN Data
+      @@ validated models
+        710 values committed between Sat 03 Oct 2026 23:06:35 and Sun 04 Oct 2026 00:07:21
+        version = 2026.6.0
+        :: C1-main-M1e-3-BBNData-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=1)-2026-10-03T23:05:56 (failure=False)
+        :: C1-main-M1e-3-BBNData-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=1.01)-2026-10-03T23:05:55 (failure=False)
+        :: C1-main-M1e-3-BBNData-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=1.02)-2026-10-03T23:05:56 (failure=False)
+        :: C1-main-M1e-3-BBNData-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=1.03)-2026-10-03T23:05:55 (failure=False)
+        :: C1-main-M1e-3-BBNData-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=1.04)-2026-10-03T23:05:53 (failure=False)
+        :: C1-main-M1e-3-BBNData-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=1.05)-2026-10-03T23:05:56 (failure=False)
+        :: C1-main-M1e-3-BBNData-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=1.06)-2026-10-03T23:05:56 (failure=False)
+        :: C1-main-M1e-3-BBNData-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=1.07)-2026-10-03T23:06:22 (failure=False)
+        :: C1-main-M1e-3-BBNData-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=1.08)-2026-10-03T23:05:56 (failure=False)
+        :: C1-main-M1e-3-BBNData-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=1.09)-2026-10-03T23:05:56 (failure=False)
+      ...
+        :: L-large-beta-M1e-3-BBNData-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=5)-2026-10-03T23:28:51 (failure=False)
+        :: L-large-beta-M1e-3-BBNData-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=5.5)-2026-10-03T23:28:31 (failure=False)
+        :: L-large-beta-M1e-3-BBNData-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=6)-2026-10-03T23:28:52 (failure=False)
+        :: L-large-beta-M1e-3-BBNData-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=6.5)-2026-10-03T23:28:52 (failure=False)
+        :: L-large-beta-M1e-3-BBNData-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=7)-2026-10-03T23:28:52 (failure=False)
+        :: L-large-beta-M1e-3-BBNData-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=7.5)-2026-10-03T23:28:31 (failure=False)
+        :: L-large-beta-M1e-3-BBNData-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=8)-2026-10-03T23:29:26 (failure=False)
+        :: L-large-beta-M1e-3-BBNData-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=8.5)-2026-10-03T23:28:51 (failure=False)
+        :: L-large-beta-M1e-3-BBNData-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=9)-2026-10-03T23:28:53 (failure=False)
+        :: L-large-beta-M1e-3-BBNData-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=9.5)-2026-10-03T23:28:53 (failure=False)
+      @@ unvalidated models
+        no values committed

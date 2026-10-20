@@ -1,0 +1,51 @@
+2026-10-03 03:09:17,607	INFO worker.py:1821 -- Connecting to existing Ray cluster at address: 127.0.0.1:6379...
+2026-10-03 03:09:17,622	INFO worker.py:1998 -- Connected to Ray cluster. View the dashboard at [1m[32mhttp://127.0.0.1:8265 [39m[22m
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/_private/worker.py:2046: FutureWarning: Tip: In future versions of Ray, Ray will no longer override accelerator visible devices env var if num_gpus=0 or num_gpus=None (default). To enable this behavior and turn off this error message, set RAY_ACCEL_ENV_VAR_OVERRIDE_ON_ZERO=0
+  warnings.warn(
+>> Opened existing sharded datastore "/Users/ds283/ChamPBH-stores/science-2026.6.0.db" with 16 shards
+
+** BUILDING GRID OF MODELS TO SAMPLE
+   -- using potential type "Exponential"
+   -- populated beta sample grid with 201 values = [ 1, 1.01, 1.02, 1.03, 1.04, 1.05, 1.06, 1.07, 1.08, 1.09, ..., 2.91, 2.92, 2.93, 2.94, 2.95, 2.96, 2.97, 2.98, 2.99, 3 ]
+   -- populated M sample grid with 1 value = [ 1e-05 Mp ]
+   -- populated Lambda sample grid with 1 value = [ 0.001 eV ]
+   -- total number of models to integrate = 201
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+[36m(Datastore pid=51885)[0m @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+   -- 2026-10-03 03:14:50 (5m 1.16s running): 20/26 work items remaining = 23.08% complete
+      inflight: 7 lookup, 11 compute, 6 store, 2 validation | completed: 41 lookup (avg 490.1/hr), 30 compute (avg 358.6/hr), 24 store (avg 286.9/hr), 22 validation (avg 263/hr)
+   -- 2026-10-03 03:20:08 (10m 19s running): 16/26 work items remaining = 38.46% complete
+      inflight: 10 lookup, 15 compute, 8 store, 0 validation | completed: 70 lookup (328.5/hr, avg 407.1/hr), 55 compute (283.2/hr, avg 319.9/hr), 47 store (260.5/hr, avg 273.4/hr), 47 validation (283.2/hr, avg 273.4/hr)
+   -- 2026-10-03 03:25:55 (16m 6.69s running): 12/26 work items remaining = 53.85% complete
+      inflight: 17 lookup, 11 compute, 10 store, 0 validation | completed: 95 lookup (258.8/hr, avg 353.8/hr), 84 compute (300.2/hr, avg 312.8/hr), 74 store (279.5/hr, avg 275.6/hr), 74 validation (279.5/hr, avg 275.6/hr)
+   -- 2026-10-03 03:31:05 (21m 16.9s running): 10/26 work items remaining = 61.54% complete
+      inflight: 14 lookup, 13 compute, 6 store, 0 validation | completed: 114 lookup (220.5/hr, avg 321.4/hr), 101 compute (197.3/hr, avg 284.7/hr), 95 store (243.7/hr, avg 267.8/hr), 95 validation (243.7/hr, avg 267.8/hr)
+   -- 2026-10-03 03:36:45 (26m 56.5s running): 8/26 work items remaining = 69.23% complete
+      inflight: 9 lookup, 18 compute, 6 store, 0 validation | completed: 135 lookup (222.6/hr, avg 300.7/hr), 117 compute (169.6/hr, avg 260.6/hr), 111 store (169.6/hr, avg 247.2/hr), 111 validation (169.6/hr, avg 247.2/hr)
+   -- 2026-10-03 03:41:50 (32m 1.89s running): 6/26 work items remaining = 76.92% complete
+      inflight: 6 lookup, 13 compute, 6 store, 1 validation | completed: 154 lookup (224/hr, avg 288.5/hr), 141 compute (282.9/hr, avg 264.1/hr), 135 store (282.9/hr, avg 252.9/hr), 134 validation (271.1/hr, avg 251/hr)
+   -- 2026-10-03 03:46:52 (37m 3.04s running): 4/26 work items remaining = 84.62% complete
+      inflight: 5 lookup, 13 compute, 7 store, 1 validation | completed: 171 lookup (203.2/hr, avg 276.9/hr), 158 compute (203.2/hr, avg 255.9/hr), 151 store (191.3/hr, avg 244.5/hr), 150 validation (191.3/hr, avg 242.9/hr)
+   -- 2026-10-03 03:51:58 (42m 9.57s running): 2/26 work items remaining = 92.31% complete
+      inflight: 4 lookup, 18 compute, 9 store, 2 validation | completed: 188 lookup (199.7/hr, avg 267.6/hr), 170 compute (140.9/hr, avg 241.9/hr), 161 store (117.4/hr, avg 229.1/hr), 159 validation (105.7/hr, avg 226.3/hr)
+   -- 2026-10-03 03:57:58 (48m 10s running): 0/26 work items remaining = 100.00% complete (may be waiting for compute/store/validate tasks to finish)
+      inflight: 0 lookup, 0 compute, 3 store, 0 validation | completed: 201 lookup (129.8/hr, avg 250.4/hr), 201 compute (309.6/hr, avg 250.4/hr), 198 store (369.6/hr, avg 246.6/hr), 198 validation (389.5/hr, avg 246.6/hr)
+   -- ALL WORK ITEMS COMPLETE in time 48m 14.9s
+      Queue summary: 201 lookup (avg 250/hr), 201 compute (avg 250/hr), 201 store (avg 250/hr), 201 validation (avg 250/hr)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 4m 10.4s
+      Queue summary: 201 lookup (avg 48.17/min), 201 compute (avg 48.17/min), 201 store (avg 48.17/min), 201 validation (avg 48.17/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarModel failed
+
+** CALCULATE BBN DATA
+   -- 2026-10-03 04:07:15 (5m 0.863s running): 14/26 work items remaining = 46.15% complete
+      inflight: 11 lookup, 15 compute, 9 store, 1 validation | completed: 85 lookup (avg 16.95/min), 70 compute (avg 13.96/min), 61 store (avg 12.16/min), 60 validation (avg 11.97/min)
+   -- 2026-10-03 04:12:21 (10m 6.97s running): 2/26 work items remaining = 92.31% complete
+      inflight: 11 lookup, 16 compute, 8 store, 0 validation | completed: 181 lookup (18.82/min, avg 17.89/min), 165 compute (18.63/min, avg 16.31/min), 157 store (18.82/min, avg 15.52/min), 157 validation (19.02/min, avg 15.52/min)
+   -- ALL WORK ITEMS COMPLETE in time 11m 38.9s
+      Queue summary: 201 lookup (avg 17.26/min), 201 compute (avg 17.26/min), 201 store (avg 17.26/min), 201 validation (avg 17.26/min)
+-- BBNData: 0 models skipped because their ScalarModel failed; 0 computations skipped because of a stored failure

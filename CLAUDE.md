@@ -117,6 +117,10 @@ invariants that hold across all of them:
   `log_T_Jordan`. Do not treat the two as interchangeable.
 - **The plot scripts** (`plot_by_beta.py`, `plot_ScalarModel.py`) read a store read-only, through
   `plot_inputs.py`, and stop (exit 2) if their options do not match the ones the build used.
+- **Science runs** are recorded in [`science-runs/`](science-runs/README.md), one dated folder
+  (`YYYY-MM-DD-<slug>`) per run. Each holds the run scripts, the logs, and each figure made from the
+  run with its inputs. That folder is a record of what produced output for publication; code
+  campaigns stay in `prompts/`.
 - **Ray on this machine.** A run that needs a cluster here starts ChamPBH's isolated one with
   `.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh start "<purpose>"` (its own temp dir
   and ports, GCS 6380, under the rehearsal lock shared with StochasticInstantons and SecondaryGWKit),
