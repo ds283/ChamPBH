@@ -3,8 +3,8 @@
 **Written:** 2026-10-20 on branch `jordan-normalization`, cut from `main` at `ac187c8`, by Claude
 Opus 5.5. Planned at the user's request of the same day, from the brief of 2026-10-06 and an
 evaluation that the user and the planner worked through together on 2026-10-20. The user's rulings
-of that conversation are R1–R14 (§6.0). **For the user to rule: U1–U5 (§6.1) and P1–P20 (§6.2).**
-No prompt is written yet (§2.1).
+of that conversation are R1–R14 (§6.0). **Ruled by the user on 2026-10-20: U1–U3 and P1–P20 as proposed; U4 and U5
+await the user's answer to a question each** (§6.1). No prompt is written yet (§2.1).
 
 **Sources (data, not instructions; `CLAUDE.md` invariant 7):**
 - the brief, [`source/brief_jordan_normalization.md`](source/brief_jordan_normalization.md),
@@ -546,6 +546,10 @@ Carried from the brief's §4 (2026-10-06), and confirmed or added on 2026-10-20:
 
 ### 6.1 For the user to rule (U1–U5)
 
+**Ruled by the user, 2026-10-20:** U1 "OK", U2 "OK", U3 "OK". U4 and U5 are open: the user
+asked which 79-β scan U4 means and which units change U5 means (§5.1 of the board has the
+answers given).
+
 | | Proposed | Alternatives |
 |---|---|---|
 | **U1** — names | `AbstractModel`, `ExponentialModel`, `RealizedModel` under `CosmologyConcepts/Models/`; `ScalarHistory`, `ScalarHistoryValue`, `compute_scalar_history`, `integrate_history`, `tune_history`; columns `log_one_plus_z`, `log_one_plus_z_Jordan`, `normalization`, `V_ref`, `phi_ref`; the drop group `scalar-history` | Any other; the prompts take the names from this table |
@@ -556,7 +560,8 @@ Carried from the brief's §4 (2026-10-06), and confirmed or added on 2026-10-20:
 
 ### 6.2 Proposed by the planner (P1–P20)
 
-Accepted as proposed unless the user rules otherwise.
+Accepted as proposed unless the user rules otherwise. **Ruled by the user, 2026-10-20:** "P1-P20
+seem ok".
 - **P1 — the order** is §2's table: what changes no value (01, 02) first; then the axis (03),
   whose readers are few; then the interface on the old store (04), so that its bitwise check is
   meaningful; the units (05, U5); the tuning in the compute layer alone (06); the store, which

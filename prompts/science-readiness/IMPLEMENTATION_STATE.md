@@ -232,6 +232,12 @@ adiabatic half.
   - **Open at close-out (2026-10-02, prompt 09).** Unchanged; `Datastore/SQL/ObjectFactories/ScalarModel.py`
     has moved since `a522005` (prompts 03 and 06b added columns), so cite the function, not the
     line.
+  - **Assigned (2026-10-20):** to the
+    [`jordan-normalization`](../jordan-normalization/IMPLEMENTATION_STATE.md) campaign, prompt 03,
+    which rewrites the value factory for the ln(1 + z) sampling axis; the same defect is
+    `dk-and-rpk-migration`'s `[01-scalarmodelvalue-build-checks-the-stored-phi-against-pi]`,
+    assigned with it. That prompt closes it here, in §4, and deletes its row from
+    `.documents/OPEN_ISSUES.md`.
 
 ### 3.1 Assigned to this campaign from other boards
 

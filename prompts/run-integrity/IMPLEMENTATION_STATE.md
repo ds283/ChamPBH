@@ -207,6 +207,11 @@ and opened one, not assigned (the `03-` entry). Prompt 04 opened one, not assign
     second pass's `object_get` returns a stored model as `available`, and `RayWorkPool` skips it.
   - **Next step.** Filter on `obj.available`, or drop the first pass. **Not in prompt 03's
     scope**, which excludes step 1.
+  - **Assigned (2026-10-20):** to the
+    [`jordan-normalization`](../jordan-normalization/IMPLEMENTATION_STATE.md) campaign, prompt 07,
+    which rewrites the scalar stage's lookups for the new history key; the same defect is
+    `dk-and-rpk-migration`'s `[02-scalar-stage-missing-filter-keeps-every-model]`, assigned with it.
+    That prompt closes it here, in §4, and deletes its row from `.documents/OPEN_ISSUES.md`.
 - **[04-adiabatichistory-lookup-ignores-do-not-populate]** *(log 04; read from
   `Datastore/SQL/ObjectFactories/AdiabaticHistory.py` on `6fd9017`; not run)*.
   - **What.** `main.py` (`:378`) and `plot_by_beta.py` (`:689`) pass `_do_not_populate` to the

@@ -112,6 +112,10 @@ whichever campaign makes Λ an output.
 - **Next step.** For the planner of `jordan-normalization`, or a later campaign: give the scan the
   tuned Λ and φ_ref per β (from that campaign's tuning, or by an option), let a CSV carry a Λ per
   row, and then re-run §1.1's commands. Not assigned: `jordan-normalization` has no board yet.
+- **Assigned (2026-10-20):** to the
+  [`jordan-normalization`](../jordan-normalization/IMPLEMENTATION_STATE.md) campaign, prompt 08,
+  which moves the surfing tools onto tuned histories. That prompt closes it here, in §4, and deletes
+  its row from `.documents/OPEN_ISSUES.md`.
 
 ## 4. Resolved issues
 

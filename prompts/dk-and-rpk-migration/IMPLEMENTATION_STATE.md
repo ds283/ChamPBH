@@ -199,6 +199,10 @@ outside this campaign's (README §1, "The factories' form").
   `ValueError` spuriously, and a wrong stored π would pass unchecked. No stored value is affected.
 - **Next step.** A one-token fix (`row_data.pi_Einstein_Mp`), or deleting the unused lookup path,
   in a later campaign that may touch the factories, with a test that drives the path.
+- **Assigned (2026-10-20):** to the
+  [`jordan-normalization`](../jordan-normalization/IMPLEMENTATION_STATE.md) campaign, prompt 03,
+  which rewrites the value factory for the ln(1 + z) sampling axis. That prompt closes it here, in
+  §4, and deletes its row from `.documents/OPEN_ISSUES.md`.
 
 ### `[02-scalar-stage-missing-filter-keeps-every-model]`
 
@@ -222,6 +226,10 @@ which left the question open. **Not fixed:** `main.py`'s pipeline is outside thi
   campaign that may touch `main.py`, with a test that a fully stored batch returns no work.
   06 and 10 compare against R0's lookup pattern (5 / 2 / 5 on `resumed-b`), so a fix that lands
   before 10 changes that pattern, and L4 must say so.
+- **Assigned (2026-10-20):** to the
+  [`jordan-normalization`](../jordan-normalization/IMPLEMENTATION_STATE.md) campaign, prompt 07,
+  which rewrites the scalar stage's lookups for the new history key. That prompt closes it here, in
+  §4, and deletes its row from `.documents/OPEN_ISSUES.md`.
 
 ### `[09-redshift-lookup-at-zero-takes-abs-of-the-comparison]`
 
@@ -242,6 +250,10 @@ form is outside this campaign's scope (README §1).
   inventory (prompt 09) does not depend on it: its key is the stored `z`.
 - **Next step.** Move the parenthesis, in a later campaign that may touch the factories, with a test
   that a lookup of `z = 0` on a store holding a small negative `z` does not match it.
+- **Assigned (2026-10-20):** to the
+  [`jordan-normalization`](../jordan-normalization/IMPLEMENTATION_STATE.md) campaign, prompt 03,
+  which replaces the redshift lookup with one on ln(1 + z) by absolute difference. That prompt
+  closes it here, in §4, and deletes its row from `.documents/OPEN_ISSUES.md`.
 
 ## 4. Resolved issues
 

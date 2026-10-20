@@ -202,6 +202,10 @@ own source.
   - **Impact.** Dead interface.
   - **Next step.** Remove them in a housekeeping prompt, with `grep` as the witness. Not
     assigned.
+  - **Assigned (2026-10-20):** to the
+    [`jordan-normalization`](../jordan-normalization/IMPLEMENTATION_STATE.md) campaign, prompt 04,
+    whose `AbstractModel` interface does not carry these properties over. That prompt closes it
+    here, in §4, and deletes its row from `.documents/OPEN_ISSUES.md`.
 - **[00-declare-reflects-at-origin-for-the-other-potentials]** *(the user's guard G1,
   2026-10-01)*.
   - **What.** Prompt 01 adds `reflects_at_origin` and `log_V_floor` to `AbstractPotential` with
@@ -213,6 +217,11 @@ own source.
     potential would need the declaration, with the floor-part formula for that potential.
   - **Next step.** Declare the two properties on each potential whose form justifies them, with
     a one-line derivation in the docstring. Not assigned.
+  - **Assigned (2026-10-20):** to the
+    [`jordan-normalization`](../jordan-normalization/IMPLEMENTATION_STATE.md) campaign, prompt 01,
+    which strips the four other potentials (its README R11), so the classes this entry concerns are
+    deleted and it closes as moot. That prompt closes it here, in §4, and deletes its row from
+    `.documents/OPEN_ISSUES.md`.
 - **[00-analytic-jacobian-would-remove-num-jac]** *(audit §9.4)*.
   - **What.** The stiff `(φ, π)` block's Jacobian (`V''` and the kick's `φ`-dependence) is
     available in closed form; the slow components could use finite differences under the loop's

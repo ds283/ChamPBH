@@ -1,7 +1,8 @@
 # jordan-normalization campaign — implementation state
 
 **Last updated:** 2026-10-20 · **Status: PLANNED — 0 of 10 prompts written; R1–R14 ruled by the
-user (README §6.0); awaiting the rulings on README §6.1 (U1–U5) and §6.2 (P1–P20).**
+user (README §6.0); U1–U3 and P1–P20 ruled as proposed 2026-10-20; U4 and U5 open (README
+§6.1).**
 The plan is [`README.md`](README.md), written on 2026-10-20 on branch `jordan-normalization`, cut
 from `main` at `ac187c8`.
 
@@ -21,8 +22,8 @@ It ends in the handover for the science rebuild, which is the user's.
 `main.py`, `plot_inputs.py`, `plot_by_beta.py`, `plot_ScalarModel.py`, `extract_common.py`,
 `pipeline_selection.py`, `RunDrivers/registered_run.py`, `tools/` ·
 **Verification:** `.documents/jordan-normalization-verification.md` (created by 09) ·
-**Index:** [`.documents/OPEN_ISSUES.md`](../../.documents/OPEN_ISSUES.md) (no section yet: none
-opened or assigned)
+**Index:** [`.documents/OPEN_ISSUES.md`](../../.documents/OPEN_ISSUES.md) §1.15 (assigned) and
+§1.16 (opened)
 
 > **Maintenance rule.** Whenever an entry is added to, narrowed in, or closed out of §3 or §4
 > below, or an issue assigned to this campaign closes, [`.documents/OPEN_ISSUES.md`](../../.documents/OPEN_ISSUES.md)
@@ -70,7 +71,20 @@ None opened by this campaign.
 
 ### 3.1 Assigned to this campaign
 
-None yet. README §6.1 U3 proposes eight, for the user's ruling.
+Assigned 2026-10-20 by the user (README §6.1, U3). Each entry stays on its own board, which carries
+the **Assigned** line; the prompt named closes it there, in that board's §4, and deletes its row
+from `.documents/OPEN_ISSUES.md` §1.15.
+
+| Issue | Its board | Prompt | Why here |
+|---|---|---|---|
+| `[00-declare-reflects-at-origin-for-the-other-potentials]` | `integrator-remediation` | 01 | moot once the four other potentials are deleted |
+| `[00-region-properties-on-the-potentials-become-unread]` | `integrator-remediation` | 04 | `AbstractModel` does not carry the properties over |
+| `[01-scalarmodelvalue-build-checks-the-stored-phi-against-pi]` | `dk-and-rpk-migration` | 03 | the value factory is rewritten for the axis |
+| `[05-the-value-factory-compares-stored-phi-against-pi]` | `science-readiness` | 03 | the same defect, opened twice |
+| `[09-redshift-lookup-at-zero-takes-abs-of-the-comparison]` | `dk-and-rpk-migration` | 03 | the lookup moves to ln(1 + z) by absolute difference |
+| `[02-scalar-stage-missing-filter-keeps-every-model]` | `dk-and-rpk-migration` | 07 | the scalar stage's lookups are rewritten for the new key |
+| `[03-step-1-first-pass-lookup-filters-nothing]` | `run-integrity` | 07 | the same code |
+| `[05-surfing-scan-runs-at-a-fixed-lambda]` | `surfing-temperature` | 08 | the surfing tools move onto tuned histories |
 
 ## 4. Resolved issues
 
@@ -96,3 +110,14 @@ user and the planner worked through on 2026-10-20.
   the rename; the secant; exponential only; ln(1 + z); no seeding between histories; n in the key.
 - **Suites at `ac187c8`:** 18 / 176 (61 + 115) / 78 / 84 / 61, all passing.
 - **No issue** opened; eight proposed for assignment (U3).
+
+### 5.1 Rulings (2026-10-20)
+
+- **U1–U3 and P1–P20 ruled as proposed** ("U1 - OK", "U2 - OK", "U3 - OK", "P1-P20 seem ok"):
+  the names; the rehearsal in 09; the eight issues assigned (§3.1, with an **Assigned** line on
+  each owning board and the rows moved to `.documents/OPEN_ISSUES.md` §1.15).
+- **U4 and U5 open.** The user asked which 79-β scan U4 means, and which units change U5 means.
+  Answered in the conversation: U4's scan is `surfing-temperature`'s S1 (and its fine scan S5),
+  a science input to the T_surf(β) figure run by `tools/surfing_scan.py`, not a test; U5's change
+  is prompt 05's, the reduced Planck mass taken from PRyMordial's G_N (R3), which moves every
+  eV-labelled quantity by about 2.8 × 10⁻⁴. No prompt file is written until both are ruled.

@@ -23,7 +23,8 @@ ruled by the user, U9, 2026-10-14; closed 2026-10-14, 7 of 7 prompts landed, wit
 still open on its board); 1 on the `rrk-adoption` board (planned 2026-10-19, with none
 opened or assigned; the orchestrator's review of prompt 04 opened one, 2026-10-20; closed 2026-10-20,
 5 of 5 prompts landed, with the one issue still open on its board); none on the
-`jordan-normalization` board (planned 2026-10-20, with none opened or assigned).
+`jordan-normalization` board (planned 2026-10-20, with none opened; eight from five boards assigned
+to it the same day, §1.15).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -108,16 +109,14 @@ prompt 03 on 2026-09-30.
 Two opened by the planner on 2026-09-30, both assigned to the campaign's own prompts; prompts 02
 and 03 resolved them (board §4). Two opened by prompt 01, two by prompt 02, one by prompt 03 and
 one by prompt 04 on 2026-09-30. Two were assigned on 2026-10-01 to `science-readiness` (§1.7);
-its prompt 01 resolved both the same day.
+its prompt 01 resolved both the same day. One, `[03-step-1-first-pass-lookup-filters-nothing]`, was
+assigned on 2026-10-20 to `jordan-normalization` (§1.15).
 
 - `[01-adiabatic-and-bbn-lookups-do-not-require-validated-rows]` — unlike `ScalarModel.build`,
   the `AdiabaticHistory` and `BBNData` lookups do not filter `validated == True`, so an
   unvalidated row left by an interrupted run is served unless `--prune-unvalidated` is passed.
 - `[01-plot-by-beta-profile-label-names-plot-scalarmodel]` — `plot_by_beta.py:87` names its
   profiling run `--plot_ScalarModel-`; cosmetic.
-- `[03-step-1-first-pass-lookup-filters-nothing]` — `build_solver_batch`'s first-pass
-  `ScalarModel` lookup keeps every pair as missing (`main.py:208`); one redundant lookup per
-  batch, no wrong result.
 - `[04-adiabatichistory-lookup-ignores-do-not-populate]` — `AdiabaticHistory.build` never reads
   `_do_not_populate`, which `main.py` and `plot_by_beta.py` pass, so every lookup reads every
   value row; a cost, not a wrong result.
@@ -132,20 +131,16 @@ opened two (`[01-…]`); prompt 02 (2026-10-01) closed five and opened one (`[02
 campaign closed; one more was opened after the close-out (2026-10-01, `[post-…]`). Nine are open;
 two were assigned on 2026-10-01 to `science-readiness` (§1.7). One was resolved (prompt 02,
 2026-10-01). The other was narrowed (prompt 05, 2026-10-02) and came back here unassigned when that
-campaign closed (2026-10-02). All nine are below.
+campaign closed (2026-10-02). Two of the nine were assigned on 2026-10-20 to
+`jordan-normalization` (§1.15); the other seven are below.
 
 - `[00-settling-at-physical-M-needs-a-parked-tracking-model]` — the field at φ_wall(ρ) as a
   passenger once its bounces are unresolvable: the switch criterion and the parked field's
   ρ_φ, p_φ; the authors' physics. Since prompt 02 its absence is a clean failure (step budget).
 - `[00-atol-does-not-scale-with-phi]` — an `atol` vector scaled by M halves the first-bounce
   error at 1 % cost; tolerance-level.
-- `[00-region-properties-on-the-potentials-become-unread]` — `bounce_region_*`,
-  `default_max_step`, `hard_reflection_point` stay defined after prompt 01; housekeeping.
 - `[00-analytic-jacobian-would-remove-num-jac]` — only if Newton failures appear in the science
   run.
-- `[00-declare-reflects-at-origin-for-the-other-potentials]` — prompt 01 declares
-  `reflects_at_origin` and `log_V_floor` on `ExponentialPotential` only; the other four
-  potentials keep the defaults and would fail at the floor rather than reflect.
 - `[01-trial-state-exception-in-radau-start-up-is-not-a-rejection]` — an RHS exception inside
   `Radau.__init__` (start or reflection restart) fails the history; never seen.
 - `[02-negative-E-is-clamped-not-raised-on-trial-states]` — `E < 0` is printed and clamped to 0,
@@ -170,13 +165,11 @@ Seven opened by the planner on 2026-10-01, one per campaign item with no issue e
 Prompt 01 (2026-10-01) closed three, prompt 03 (2026-10-02) one, prompt 05 (2026-10-02) one,
 prompt 07 (2026-10-02) one and prompt 08 (2026-10-02) one (board §4). Prompt 05 opened two (`[05-…]`). The re-plan of 2026-10-02 opened one for prompt
 06b, which closed it (2026-10-02). The campaign closed on 2026-10-02 (prompt 09, the close-out)
-with both `[05-…]` rows still open and unassigned.
+with both `[05-…]` rows still open and unassigned. One of them was assigned on 2026-10-20 to
+`jordan-normalization` (§1.15).
 
 - `[05-the-ratio-spline-may-ring-at-resolved-bounce-jumps]` — the cubic spline through the
   ratio's resolved bounce jumps may overshoot between samples; unmeasured.
-- `[05-the-value-factory-compares-stored-phi-against-pi]` — `ScalarModelValue_factory.build`
-  checks stored φ against supplied π (`Datastore/SQL/ObjectFactories/ScalarModel.py:1008` on
-  `a522005`).
 
 ### 1.9 Assigned to `bbn-tolerance` — [its board](../prompts/bbn-tolerance/IMPLEMENTATION_STATE.md) §3.1
 
@@ -210,15 +203,8 @@ prompt 01 on 2026-10-12, seen in passing and outside the campaign's scope; one o
 orchestrator's review of prompt 02 the same day, from log 02's Observation 2; one opened by prompt
 05 the same day, from its measurement of the import order, and closed by prompt 08 the same day
 (board §4); one opened by prompt 08 the same day, for P11; one opened by prompt 09 on 2026-10-13,
-seen while deriving the inventory's specs.
-
-- `[01-scalarmodelvalue-build-checks-the-stored-phi-against-pi]` — the unused lookup path of
-  `sqla_ScalarModelValue_factory.build` compares the stored φ with the expected π; latent.
-- `[02-scalar-stage-missing-filter-keeps-every-model]` — `main.py:223`'s "which models are
-  missing?" comprehension ignores its lookup result, so every stored `ScalarModel` is looked up
-  twice; no value affected.
-- `[09-redshift-lookup-at-zero-takes-abs-of-the-comparison]` — `redshift.build`'s `z == 0`
-  branch takes `abs` of the comparison, not the difference; same rows for `z >= 0`; latent.
+seen while deriving the inventory's specs. The three that remained open were assigned on
+2026-10-20 to `jordan-normalization` (§1.15), so none is below.
 
 ### 1.12 Assigned to `read-only-plots` — [its board](../prompts/read-only-plots/IMPLEMENTATION_STATE.md) §3.1
 
@@ -232,12 +218,8 @@ None open: `[08-plot-scripts-open-read-write-pools]` was resolved by prompt 02 o
 ### 1.13 `surfing-temperature` — [board §3](../prompts/surfing-temperature/IMPLEMENTATION_STATE.md)
 
 The campaign closed on 2026-10-14 with 7 of 7 prompts landed. One issue was opened, by the
-orchestrator on 2026-10-14 while writing note 05, and ruled by the user (U9); it stays open on the
-board, unassigned.
-
-- `[05-surfing-scan-runs-at-a-fixed-lambda]` — `tools/surfing_scan.py` runs at the fixed
-  Λ = 1 meV of `tools/history_and_bbn.py`, with no option for it, so a re-run after
-  `jordan-normalization` needs the tool given that campaign's tuned Λ; for that campaign's planner.
+orchestrator on 2026-10-14 while writing note 05, and ruled by the user (U9). It was assigned on 2026-10-20 to `jordan-normalization` (§1.15), whose
+planner it was left for.
 
 ### 1.14 `rrk-adoption` — [board §3](../prompts/rrk-adoption/IMPLEMENTATION_STATE.md)
 
@@ -249,3 +231,40 @@ user to rule.
   `ray.wait(num_returns=min(3, in flight))` holds a stored history's validation behind the slowest
   item in flight, so an interruption can discard completed work; RayPoolKit's, or `main.py`'s
   batch size in a later campaign.
+
+### 1.15 Assigned to `jordan-normalization` — [its board](../prompts/jordan-normalization/IMPLEMENTATION_STATE.md) §3.1
+
+Assigned 2026-10-20 by the user (the campaign's README, U3), when the campaign was planned. Each
+entry stays on its own board, which carries the **Assigned** line; the prompt that closes one
+deletes its row here. Each row ends with its board and the prompt that takes it.
+
+- `[00-declare-reflects-at-origin-for-the-other-potentials]` — prompt 01 declares
+  `reflects_at_origin` and `log_V_floor` on `ExponentialPotential` only; the other four
+  potentials keep the defaults and would fail at the floor rather than reflect.
+  *(`integrator-remediation`; prompt 01)*
+- `[00-region-properties-on-the-potentials-become-unread]` — `bounce_region_*`,
+  `default_max_step`, `hard_reflection_point` stay defined after prompt 01; housekeeping.
+  *(`integrator-remediation`; prompt 04)*
+- `[01-scalarmodelvalue-build-checks-the-stored-phi-against-pi]` — the unused lookup path of
+  `sqla_ScalarModelValue_factory.build` compares the stored φ with the expected π; latent.
+  *(`dk-and-rpk-migration`; prompt 03)*
+- `[05-the-value-factory-compares-stored-phi-against-pi]` — `ScalarModelValue_factory.build`
+  checks stored φ against supplied π (`Datastore/SQL/ObjectFactories/ScalarModel.py:1008` on
+  `a522005`). *(`science-readiness`; prompt 03)*
+- `[09-redshift-lookup-at-zero-takes-abs-of-the-comparison]` — `redshift.build`'s `z == 0`
+  branch takes `abs` of the comparison, not the difference; same rows for `z >= 0`; latent.
+  *(`dk-and-rpk-migration`; prompt 03)*
+- `[02-scalar-stage-missing-filter-keeps-every-model]` — `main.py:223`'s "which models are
+  missing?" comprehension ignores its lookup result, so every stored `ScalarModel` is looked up
+  twice; no value affected. *(`dk-and-rpk-migration`; prompt 07)*
+- `[03-step-1-first-pass-lookup-filters-nothing]` — `build_solver_batch`'s first-pass
+  `ScalarModel` lookup keeps every pair as missing (`main.py:208`); one redundant lookup per
+  batch, no wrong result. *(`run-integrity`; prompt 07)*
+- `[05-surfing-scan-runs-at-a-fixed-lambda]` — `tools/surfing_scan.py` runs at the fixed
+  Λ = 1 meV of `tools/history_and_bbn.py`, with no option for it, so a re-run after
+  `jordan-normalization` needs the tool given that campaign's tuned Λ; for that campaign's planner.
+  *(`surfing-temperature`; prompt 08)*
+
+### 1.16 `jordan-normalization` — [board §3](../prompts/jordan-normalization/IMPLEMENTATION_STATE.md)
+
+Planned 2026-10-20. None opened.
