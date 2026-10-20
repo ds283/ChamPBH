@@ -1,0 +1,16 @@
+beta=1 M=0.1 phi*=1 it=10 Lambda=1.692930 meV phi_ref=3.342794e-01 | phi0=2.835742e-01 phi_min=3.342815e-01 phi_min/phi0=1.1788 track=0.5956 1+bpi=1.2533 A0=0.950559 | H/H0-1=7.060e-07 |phi_ref/phi_min-1|=6.22e-06 refl=0 wall=1.5
+beta=1 M=0.1 phi*=1 CONVERGED it=10 total=21.0 s
+beta=1 M=0.1 phi*=2 it=10 Lambda=1.692932 meV phi_ref=3.342802e-01 | phi0=2.835748e-01 phi_min=3.342820e-01 phi_min/phi0=1.1788 track=0.5956 1+bpi=1.2533 A0=0.950559 | H/H0-1=6.236e-07 |phi_ref/phi_min-1|=5.60e-06 refl=0 wall=0.9
+beta=1 M=0.1 phi*=2 CONVERGED it=10 total=10.5 s
+beta=1 M=0.1 phi*=5 it=11 Lambda=1.692860 meV phi_ref=3.343043e-01 | phi0=2.834901e-01 phi_min=3.343052e-01 phi_min/phi0=1.1792 track=0.5958 1+bpi=1.2533 A0=0.950455 | H/H0-1=5.576e-07 |phi_ref/phi_min-1|=2.73e-06 refl=0 wall=1.3
+beta=1 M=0.1 phi*=5 CONVERGED it=11 total=16.4 s
+beta=3 M=0.1 phi*=1 it=12 Lambda=1.389305 meV phi_ref=1.477194e-01 | phi0=1.443598e-01 phi_min=1.477208e-01 phi_min/phi0=1.0233 track=0.6134 1+bpi=1.3985 A0=0.989972 | H/H0-1=-7.432e-08 |phi_ref/phi_min-1|=9.68e-06 refl=0 wall=4.1
+beta=3 M=0.1 phi*=1 CONVERGED it=12 total=53.9 s
+beta=3 M=0.1 phi*=2 it=12 Lambda=1.389305 meV phi_ref=1.477195e-01 | phi0=1.443599e-01 phi_min=1.477208e-01 phi_min/phi0=1.0233 track=0.6134 1+bpi=1.3985 A0=0.989972 | H/H0-1=1.216e-07 |phi_ref/phi_min-1|=9.46e-06 refl=0 wall=3.8
+beta=3 M=0.1 phi*=2 CONVERGED it=12 total=49.9 s
+beta=1 M=0.01 phi*=1 it=7 Lambda=2.003905 meV phi_ref=1.258389e-01 | phi0=1.105475e-01 phi_min=1.258391e-01 phi_min/phi0=1.1383 track=0.7359 1+bpi=1.1220 A0=0.984825 | H/H0-1=9.527e-07 |phi_ref/phi_min-1|=2.01e-06 refl=0 wall=2.8
+beta=1 M=0.01 phi*=1 CONVERGED it=7 total=22.8 s
+beta=1 M=0.01 phi*=2 it=7 Lambda=2.003903 meV phi_ref=1.258386e-01 | phi0=1.105478e-01 phi_min=1.258388e-01 phi_min/phi0=1.1383 track=0.7359 1+bpi=1.1220 A0=0.984825 | H/H0-1=1.069e-06 |phi_ref/phi_min-1|=1.36e-06 refl=0 wall=1.8
+beta=1 M=0.01 phi*=2 CONVERGED it=7 total=14.0 s
+beta=1 M=0.01 phi*=5 it=7 Lambda=2.004258 meV phi_ref=1.258935e-01 | phi0=1.105354e-01 phi_min=1.258940e-01 phi_min/phi0=1.1389 track=0.7344 1+bpi=1.1218 A0=0.984759 | H/H0-1=1.047e-06 |phi_ref/phi_min-1|=3.76e-06 refl=0 wall=2.0
+beta=1 M=0.01 phi*=5 CONVERGED it=7 total=16.1 s

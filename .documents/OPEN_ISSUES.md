@@ -22,7 +22,8 @@ issue and closed it with prompt 02, opened none and leaves none open; 1 on the
 ruled by the user, U9, 2026-10-14; closed 2026-10-14, 7 of 7 prompts landed, with the one issue
 still open on its board); 1 on the `rrk-adoption` board (planned 2026-10-19, with none
 opened or assigned; the orchestrator's review of prompt 04 opened one, 2026-10-20; closed 2026-10-20,
-5 of 5 prompts landed, with the one issue still open on its board).
+5 of 5 prompts landed, with the one issue still open on its board); none on the
+`jordan-normalization` board (planned 2026-10-20, with none opened or assigned).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -43,7 +44,8 @@ the two disagree, the board is right.
 [`dk-and-rpk-migration`](../prompts/dk-and-rpk-migration/IMPLEMENTATION_STATE.md) ·
 [`read-only-plots`](../prompts/read-only-plots/IMPLEMENTATION_STATE.md) ·
 [`surfing-temperature`](../prompts/surfing-temperature/IMPLEMENTATION_STATE.md) ·
-[`rrk-adoption`](../prompts/rrk-adoption/IMPLEMENTATION_STATE.md)
+[`rrk-adoption`](../prompts/rrk-adoption/IMPLEMENTATION_STATE.md) ·
+[`jordan-normalization`](../prompts/jordan-normalization/IMPLEMENTATION_STATE.md)
 
 ## 1. Open, by owning board
 

@@ -1,0 +1,16 @@
+beta=2.995 M=0.001 phi*=5 it=0 Lambda=2.248495 meV phi_ref=0.000000e+00 | phi0=2.367369e-02 phi_min=2.407692e-02 phi_min/phi0=1.0170 track=0.9119 1+bpi=1.0970 A0=1.073477 | H/H0-1=8.728e-02 |phi_ref/phi_min-1|=inf refl=0 wall=9.2
+beta=2.995 M=0.001 phi*=5 it=1 Lambda=2.097521 meV phi_ref=2.407692e-02 | phi0=2.377641e-02 phi_min=2.418535e-02 phi_min/phi0=1.0172 track=0.9115 1+bpi=1.0974 A0=0.999100 | H/H0-1=1.520e-02 |phi_ref/phi_min-1|=4.48e-03 refl=0 wall=9.0
+beta=2.995 M=0.001 phi*=5 it=2 Lambda=2.072615 meV phi_ref=2.418535e-02 | phi0=2.332105e-02 phi_min=2.370510e-02 phi_min/phi0=1.0165 track=0.9133 1+bpi=1.0957 A0=0.997415 | H/H0-1=-8.472e-04 |phi_ref/phi_min-1|=2.03e-02 refl=0 wall=8.3
+beta=2.995 M=0.001 phi*=5 it=3 Lambda=2.074014 meV phi_ref=2.370510e-02 | phi0=2.329139e-02 phi_min=2.367386e-02 phi_min/phi0=1.0164 track=0.9134 1+bpi=1.0956 A0=0.998762 | H/H0-1=-4.277e-04 |phi_ref/phi_min-1|=1.32e-03 refl=0 wall=8.3
+beta=2.995 M=0.001 phi*=5 it=4 Lambda=2.074722 meV phi_ref=2.367386e-02 | phi0=2.330100e-02 phi_min=2.368399e-02 phi_min/phi0=1.0164 track=0.9133 1+bpi=1.0956 A0=0.998884 | H/H0-1=-4.215e-06 |phi_ref/phi_min-1|=4.28e-04 refl=0 wall=8.4
+beta=2.995 M=0.001 phi*=5 it=5 Lambda=2.074728 meV phi_ref=2.368399e-02 | phi0=2.330231e-02 phi_min=2.368537e-02 phi_min/phi0=1.0164 track=0.9133 1+bpi=1.0956 A0=0.998858 | H/H0-1=1.039e-05 |phi_ref/phi_min-1|=5.82e-05 refl=0 wall=8.1
+beta=2.995 M=0.001 phi*=5 it=6 Lambda=2.074711 meV phi_ref=2.368537e-02 | phi0=2.330214e-02 phi_min=2.368519e-02 phi_min/phi0=1.0164 track=0.9133 1+bpi=1.0956 A0=0.998853 | H/H0-1=8.315e-07 |phi_ref/phi_min-1|=7.44e-06 refl=0 wall=8.2
+beta=2.995 M=0.001 phi*=5 CONVERGED it=6 total=59.4 s
+beta=3 M=0.001 phi*=5 it=0 Lambda=2.248495 meV phi_ref=0.000000e+00 | phi0=2.365283e-02 phi_min=2.405466e-02 phi_min/phi0=1.0170 track=0.9119 1+bpi=1.0971 A0=1.073537 | H/H0-1=8.736e-02 |phi_ref/phi_min-1|=inf refl=0 wall=9.4
+beta=3 M=0.001 phi*=5 it=1 Lambda=2.097380 meV phi_ref=2.405466e-02 | phi0=2.375493e-02 phi_min=2.416243e-02 phi_min/phi0=1.0172 track=0.9115 1+bpi=1.0974 A0=0.999101 | H/H0-1=1.520e-02 |phi_ref/phi_min-1|=4.46e-03 refl=0 wall=9.4
+beta=3 M=0.001 phi*=5 it=2 Lambda=2.072477 meV phi_ref=2.416243e-02 | phi0=2.329994e-02 phi_min=2.368264e-02 phi_min/phi0=1.0164 track=0.9133 1+bpi=1.0958 A0=0.997416 | H/H0-1=-8.489e-04 |phi_ref/phi_min-1|=2.03e-02 refl=0 wall=9.4
+beta=3 M=0.001 phi*=5 it=3 Lambda=2.073879 meV phi_ref=2.368264e-02 | phi0=2.327032e-02 phi_min=2.365144e-02 phi_min/phi0=1.0164 track=0.9134 1+bpi=1.0957 A0=0.998764 | H/H0-1=-4.276e-04 |phi_ref/phi_min-1|=1.32e-03 refl=0 wall=9.4
+beta=3 M=0.001 phi*=5 it=4 Lambda=2.074586 meV phi_ref=2.365144e-02 | phi0=2.327991e-02 phi_min=2.366155e-02 phi_min/phi0=1.0164 track=0.9134 1+bpi=1.0957 A0=0.998886 | H/H0-1=-4.217e-06 |phi_ref/phi_min-1|=4.27e-04 refl=0 wall=9.4
+beta=3 M=0.001 phi*=5 it=5 Lambda=2.074593 meV phi_ref=2.366155e-02 | phi0=2.328122e-02 phi_min=2.366292e-02 phi_min/phi0=1.0164 track=0.9134 1+bpi=1.0957 A0=0.998860 | H/H0-1=1.047e-05 |phi_ref/phi_min-1|=5.82e-05 refl=0 wall=9.2
+beta=3 M=0.001 phi*=5 it=6 Lambda=2.074576 meV phi_ref=2.366292e-02 | phi0=2.328106e-02 phi_min=2.366275e-02 phi_min/phi0=1.0164 track=0.9134 1+bpi=1.0957 A0=0.998855 | H/H0-1=6.417e-07 |phi_ref/phi_min-1|=7.32e-06 refl=0 wall=9.4
+beta=3 M=0.001 phi*=5 CONVERGED it=6 total=65.5 s
