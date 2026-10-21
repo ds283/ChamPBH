@@ -43,8 +43,8 @@ from types import SimpleNamespace
 
 import numpy as np
 
-# ComputeTargets re-exports the ScalarModel class under the module's name, so import the module
-SM = importlib.import_module("ComputeTargets.ScalarModel")
+# ComputeTargets re-exports the ScalarHistory class under the module's name, so import the module
+SM = importlib.import_module("ComputeTargets.ScalarHistory")
 
 D = 2.0  # the stub coupling's d ln Omega/dphi, as beta/M_P for beta = 2, M_P = 1
 

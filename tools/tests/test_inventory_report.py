@@ -110,11 +110,11 @@ class _InventoryStoreCase(_TempStoreCase):
 
     def build_store(self, problems=False):
         """
-        A store with one failed and one successful ScalarModel, an AdiabaticHistory and an
+        A store with one failed and one successful ScalarHistory, an AdiabaticHistory and an
         unvalidated BBNData row on the successful model, each of the last three with value rows.
-        With ``problems``, also five ScalarModelValue rows naming ScalarModel rows that are not
+        With ``problems``, also five ScalarHistoryValue rows naming ScalarHistory rows that are not
         there (with serials long enough to make the problem longer than any line width), and a
-        ScalarModel whose cosmology_type (0, LAMBDACDM_IDENTIFIER) names no stored class.
+        ScalarHistory whose cosmology_type (0, LAMBDACDM_IDENTIFIER) names no stored class.
         """
         store = self.open(LABEL)
 
@@ -167,10 +167,10 @@ class _InventoryStoreCase(_TempStoreCase):
             validated=True,
         )
         ins(
-            "ScalarModel",
+            "ScalarHistory",
             dict(
                 model,
-                label="job-a-ScalarModel-beta=1.1-2026-10-12T16:59:07",
+                label="job-a-ScalarHistory-beta=1.1-2026-10-12T16:59:07",
                 coupling_serial=coupling_failed,
                 failure=True,
                 failure_reason="step budget exhausted",
@@ -178,10 +178,10 @@ class _InventoryStoreCase(_TempStoreCase):
             at=T0 + timedelta(minutes=4),
         )
         ok = ins(
-            "ScalarModel",
+            "ScalarHistory",
             dict(
                 model,
-                label="job-a-ScalarModel-beta=25-2026-10-12T16:59:36",
+                label="job-a-ScalarHistory-beta=25-2026-10-12T16:59:36",
                 coupling_serial=coupling_ok,
                 failure=False,
                 solver_serial=solver,
@@ -189,13 +189,18 @@ class _InventoryStoreCase(_TempStoreCase):
             ),
             at=T0 + timedelta(minutes=8),
         )
-        ins("ScalarModel_tags", {"model_serial": ok, "tag_serial": tag})
+        ins("ScalarHistory_tags", {"history_serial": ok, "tag_serial": tag})
         for serial in z[:3]:
-            ins("ScalarModelValue", {"model_serial": ok, "z_serial": serial})
+            ins("ScalarHistoryValue", {"history_serial": ok, "z_serial": serial})
 
         history = ins(
             "AdiabaticHistory",
-            dict(model_serial=ok, label="job-b-history", z_samples=2, validated=True),
+            dict(
+                scalar_history_serial=ok,
+                label="job-b-history",
+                z_samples=2,
+                validated=True,
+            ),
             at=T0 + timedelta(minutes=10),
         )
         for serial in z[:2]:
@@ -206,7 +211,7 @@ class _InventoryStoreCase(_TempStoreCase):
         bbn = ins(
             "BBNData",
             dict(
-                model_serial=ok,
+                scalar_history_serial=ok,
                 label="job-b-BBNData",
                 failure=False,
                 PRyM_version="bf24c3d",
@@ -221,15 +226,15 @@ class _InventoryStoreCase(_TempStoreCase):
         if problems:
             for k in range(5):
                 ins(
-                    "ScalarModelValue",
-                    {"model_serial": 10**18 + k, "z_serial": z[0]},
+                    "ScalarHistoryValue",
+                    {"history_serial": 10**18 + k, "z_serial": z[0]},
                 )
             ins(
-                "ScalarModel",
+                "ScalarHistory",
                 dict(
                     model,
                     cosmology_type=cosmology_ids.LAMBDACDM_IDENTIFIER,
-                    label="job-c-ScalarModel",
+                    label="job-c-ScalarHistory",
                     coupling_serial=coupling_ok,
                     failure=True,
                 ),
@@ -244,7 +249,7 @@ def _report_lines(report: str):
 
 
 class TestReportOnAStore(_InventoryStoreCase):
-    """Test 3: a store with one failed and one successful ScalarModel, an AdiabaticHistory and a
+    """Test 3: a store with one failed and one successful ScalarHistory, an AdiabaticHistory and a
     BBNData row, each with value rows, reads back with no problem, and the report shows every field
     of P15 (as decided in prompt 09 §1.2), by value."""
 
@@ -286,10 +291,10 @@ class TestReportOnAStore(_InventoryStoreCase):
             self.lines,
         )
 
-    def test_the_scalar_models(self):
+    def test_the_scalar_histories(self):
         self.assertIn(
-            "@@ ScalarModel (sharded): 2 records: 2 validated, 0 unvalidated; "
-            "3 ScalarModelValue rows | committed between Mon 12 Oct 2026 16:59:55 and "
+            "@@ ScalarHistory (sharded): 2 records: 2 validated, 0 unvalidated; "
+            "3 ScalarHistoryValue rows | committed between Mon 12 Oct 2026 16:59:55 and "
             "Mon 12 Oct 2026 17:03:55",
             self.lines,
         )
@@ -369,11 +374,11 @@ class TestProblemsAreShownWhole(_InventoryStoreCase):
         inventory = read_inventory(self.build_store(problems=True), factories)
         problems = inventory.problems
         self.assertEqual(len(problems), 2, problems)
-        self.assertTrue(problems[0].startswith("orphan-value: ScalarModel: 5 "))
+        self.assertTrue(problems[0].startswith("orphan-value: ScalarHistory: 5 "))
         self.assertIn("1000000000000000004", problems[0])
         self.assertTrue(
             problems[1].startswith(
-                "unresolved-parent: ScalarModel: 1 row(s) on shard #0"
+                "unresolved-parent: ScalarHistory: 1 row(s) on shard #0"
             )
         )
         self.assertIn("(field(s) cosmology)", problems[1])
@@ -385,8 +390,8 @@ class TestProblemsAreShownWhole(_InventoryStoreCase):
         self.assertIn("   problems: 2, each listed in full under its class", lines)
         for problem in problems:
             self.assertIn(f"            !! {problem}", lines)
-        # under ScalarModel's section, after its header
-        header = next(i for i, l in enumerate(lines) if "@@ ScalarModel " in l)
+        # under ScalarHistory's section, after its header
+        header = next(i for i, l in enumerate(lines) if "@@ ScalarHistory " in l)
         listed = [i for i, l in enumerate(lines) if l.strip().startswith("!! ")]
         self.assertTrue(all(i > header for i in listed))
         self.assertIn("         2 problems:", lines)

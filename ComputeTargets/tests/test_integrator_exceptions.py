@@ -258,7 +258,7 @@ class TestFallbackGone(unittest.TestCase):
 
     @staticmethod
     def module_tree():
-        path = os.path.join(REPO_ROOT, "ComputeTargets", "ScalarModel.py")
+        path = os.path.join(REPO_ROOT, "ComputeTargets", "ScalarHistory.py")
         with open(path) as f:
             return ast.parse(f.read(), filename=path)
 
@@ -274,9 +274,9 @@ class TestFallbackGone(unittest.TestCase):
         names = {node.id for node in ast.walk(tree) if isinstance(node, ast.Name)}
         self.assertNotIn("solver_list", names)
 
-        # (ScalarModel's constructor keeps its solver_labels argument: the label -> IntegrationSolver
-        # dictionary that store() reads. Only compute_scalar_model's dictionary of old names goes.)
-        body = self.function(tree, "compute_scalar_model")
+        # (ScalarHistory's constructor keeps its solver_labels argument: the label -> IntegrationSolver
+        # dictionary that store() reads. Only compute_scalar_history's dictionary of old names goes.)
+        body = self.function(tree, "compute_scalar_history")
         body_names = {node.id for node in ast.walk(body) if isinstance(node, ast.Name)}
         self.assertNotIn("solver_labels", body_names)
         self.assertNotIn("success", body_names)
@@ -304,7 +304,7 @@ class TestFallbackGone(unittest.TestCase):
         self.assertEqual(
             len(runtime_errors(self.function(tree, "integrate_scalar_history"))), 0
         )
-        sites = runtime_errors(self.function(tree, "compute_scalar_model"))
+        sites = runtime_errors(self.function(tree, "compute_scalar_history"))
         self.assertEqual(len(sites), 1)
         message = ast.unparse(sites[0].exc)
         self.assertIn("largest supplied redshift", message)

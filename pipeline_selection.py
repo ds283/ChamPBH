@@ -16,10 +16,10 @@
 """
 Which work main.py's adiabatic and BBN stages schedule (run-integrity prompt 03).
 
-Both stages look up the ScalarModel for each (potential, coupling) pair in a shard
+Both stages look up the ScalarHistory for each (potential, coupling) pair in a shard
 bin, query the downstream target only for the models that did not fail, and then
 decide which of those queries found nothing. Before prompt 03 the downstream
-results were zipped against the unfiltered bin, so after a failed ScalarModel
+results were zipped against the unfiltered bin, so after a failed ScalarHistory
 every result was paired with the model before it. The helpers here keep each
 lookup result with the (potential, coupling, model) it was asked for.
 
@@ -35,7 +35,7 @@ from typing import Any, Dict, List, Sequence, Tuple
 
 @dataclass(frozen=True)
 class QueryEntry:
-    """One (potential, coupling) pair of a shard bin, with its ScalarModel lookup result."""
+    """One (potential, coupling) pair of a shard bin, with its ScalarHistory lookup result."""
 
     potential: Any
     coupling: Any
@@ -45,10 +45,10 @@ class QueryEntry:
 @dataclass(frozen=True)
 class QueryEntries:
     """
-    The entries of one shard bin whose ScalarModel exists and did not fail.
+    The entries of one shard bin whose ScalarHistory exists and did not fail.
 
-    `unavailable` holds the (potential, coupling) pairs whose ScalarModel lookup found
-    no row; `skipped_failed_models` counts those whose ScalarModel is a stored failure,
+    `unavailable` holds the (potential, coupling) pairs whose ScalarHistory lookup found
+    no row; `skipped_failed_models` counts those whose ScalarHistory is a stored failure,
     which are left out of `entries`.
     """
 
@@ -84,15 +84,15 @@ def build_query_entries(
     pairs: Sequence[Tuple[Any, Any]], model_results: Sequence[Any]
 ) -> QueryEntries:
     """
-    Pair each (potential, coupling) with its ScalarModel lookup result, in order, and
+    Pair each (potential, coupling) with its ScalarHistory lookup result, in order, and
     keep the entries whose model exists and did not fail.
 
     :param pairs: the (potential, coupling) pairs of one shard bin, in the order the
-        ScalarModel lookups were made
-    :param model_results: the ScalarModel lookup results, one per pair, in the same order
+        ScalarHistory lookups were made
+    :param model_results: the ScalarHistory lookup results, one per pair, in the same order
     :raises ValueError: if the two lengths differ
     """
-    _check_lengths("ScalarModel lookup", len(pairs), len(model_results))
+    _check_lengths("ScalarHistory lookup", len(pairs), len(model_results))
 
     entries = []
     unavailable = []

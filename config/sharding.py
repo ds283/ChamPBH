@@ -33,8 +33,8 @@ replicated_tables = [
 
 sharded_tables = {
     "ExponentialCoupling": "shard_key",
-    "ScalarModel": "shard_key",
-    "ScalarModelValue": "shard_key",
+    "ScalarHistory": "shard_key",
+    "ScalarHistoryValue": "shard_key",
     "AdiabaticHistory": "shard_key",
     "AdiabaticHistoryValue": "shard_key",
     "BBNData": "shard_key",

@@ -60,7 +60,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 # the imitation's declared maps, added to the tool's own for the duration of each test
 IMITATION_BOOKKEEPING = {
-    "Parent": {"label": "a job name and a time, as ScalarModel.label"}
+    "Parent": {"label": "a job name and a time, as ScalarHistory.label"}
 }
 IMITATION_POLYMORPHIC = {
     "Parent": {"thing_serial": ("thing_type", {0: "Alpha", 1: "Beta"})}
@@ -122,7 +122,7 @@ CONTENT = {
             "x": 0.1,
             "failure": 0,
             "failure_reason": None,
-            "label": "job-A-ScalarModel-2026-10-11T12:00:00",
+            "label": "job-A-ScalarHistory-2026-10-11T12:00:00",
             "values": [(0.5, 2.5), (0.25, 3.5), (0.125, 4.5)],
             "tags": ["SamplesPerLog10Z_100"],
             "shard": 0,
@@ -133,7 +133,7 @@ CONTENT = {
             "x": 0.2,
             "failure": 0,
             "failure_reason": None,
-            "label": "job-A-ScalarModel-2026-10-11T12:01:00",
+            "label": "job-A-ScalarHistory-2026-10-11T12:01:00",
             "values": [(0.5, 5.5), (0.25, 6.5)],
             "tags": [],
             "shard": 1,
@@ -782,10 +782,10 @@ class TestDeclaredMaps(unittest.TestCase):
             "potential_type": potential_ids,
             "coupling_type": coupling_ids,
         }
-        pairs = cs.POLYMORPHIC_REFERENCES["ScalarModel"]
+        pairs = cs.POLYMORPHIC_REFERENCES["ScalarHistory"]
         for serial_column, (type_column, mapping) in pairs.items():
             with self.subTest(type_values=type_column):
-                unstored = cs.UNSTORED_TYPE_VALUES.get("ScalarModel", {}).get(
+                unstored = cs.UNSTORED_TYPE_VALUES.get("ScalarHistory", {}).get(
                     type_column, {}
                 )
                 self.assertEqual(set(mapping) & set(unstored), set())
@@ -817,7 +817,7 @@ class TestDeclaredMaps(unittest.TestCase):
         from CosmologyConcepts.ConformalCouplings import model_ids as coupling_ids
         from CosmologyConcepts.Potentials import model_ids as potential_ids
 
-        pairs = cs.POLYMORPHIC_REFERENCES["ScalarModel"]
+        pairs = cs.POLYMORPHIC_REFERENCES["ScalarHistory"]
         for column, package, ids in (
             ("potential_serial", potentials, potential_ids),
             ("coupling_serial", couplings, coupling_ids),
@@ -887,7 +887,7 @@ TS = "2026-10-11 12:00:00.000000"
 
 
 def _fill_champbh_shard(conn, sm_shard: bool, offset: int, bbn_reason: str, bk: str):
-    """Replicated rows on every shard; one history (ScalarModel, its values, tags,
+    """Replicated rows on every shard; one history (ScalarHistory, its values, tags,
     AdiabaticHistory, BBNData) on the shard where `sm_shard` is true."""
     o = offset
     _insert(conn, "version", serial=o + 1, label="2026.6.0")
@@ -946,11 +946,11 @@ def _fill_champbh_shard(conn, sm_shard: bool, offset: int, bbn_reason: str, bk: 
     )
     _insert(
         conn,
-        "ScalarModel",
+        "ScalarHistory",
         serial=o + 30,
         version=o + 1,
         timestamp=TS,
-        label=f"{bk}-ScalarModel",
+        label=f"{bk}-ScalarHistory",
         cosmology_type=3,
         cosmology_serial=o + 15,
         potential_type=1,
@@ -977,7 +977,11 @@ def _fill_champbh_shard(conn, sm_shard: bool, offset: int, bbn_reason: str, bk: 
         extra_data=json.dumps({"reflections": 2, "accepted_steps": 900}),
     )
     _insert(
-        conn, "ScalarModel_tags", model_serial=o + 30, tag_serial=o + 2, timestamp=TS
+        conn,
+        "ScalarHistory_tags",
+        history_serial=o + 30,
+        tag_serial=o + 2,
+        timestamp=TS,
     )
     for i, z in enumerate((o + 12, o + 13)):
         values = {
@@ -1006,9 +1010,9 @@ def _fill_champbh_shard(conn, sm_shard: bool, offset: int, bbn_reason: str, bk: 
         }
         _insert(
             conn,
-            "ScalarModelValue",
+            "ScalarHistoryValue",
             serial=o + 40 + i,
-            model_serial=o + 30,
+            history_serial=o + 30,
             z_serial=z,
             **values,
         )
@@ -1018,7 +1022,7 @@ def _fill_champbh_shard(conn, sm_shard: bool, offset: int, bbn_reason: str, bk: 
         serial=o + 50,
         version=o + 1,
         timestamp=TS,
-        model_serial=o + 30,
+        scalar_history_serial=o + 30,
         compute_time=1.5 if bk == "a" else 1.75,
         max_abs_Q_kp_over_H_1E1=0.25,
         label=f"{bk}-AdiabaticHistory",
@@ -1043,7 +1047,7 @@ def _fill_champbh_shard(conn, sm_shard: bool, offset: int, bbn_reason: str, bk: 
         serial=o + 60,
         version=o + 1,
         timestamp=TS,
-        model_serial=o + 30,
+        scalar_history_serial=o + 30,
         failure=1,
         failure_reason=bbn_reason,
         label=f"{bk}-BBNData",
@@ -1082,11 +1086,11 @@ class TestChamPBHSchema(unittest.TestCase):
 
     def test_14_a_store_with_champbhs_schema(self):
         """(14) On shards with exactly the tables the factories register: the polymorphic map
-        resolves ScalarModel's three references (types 3, 1, 0) with no problem;
+        resolves ScalarHistory's three references (types 3, 1, 0) with no problem;
         ExponentialCoupling and the *_tags tables are sharded; LambdaCDM is not noted, since
         config.sharding no longer lists it (dk-and-rpk-migration P8); a copy under
         other serials, another shard, other timings and labels, and another elapsed time in a
-        wall-clock failure is equal; and one ulp in one ScalarModelValue column is a near
+        wall-clock failure is equal; and one ulp in one ScalarHistoryValue column is a near
         miss."""
         reason = (
             "PRyMordial: PRyMWallClockLimitError: wall-clock limit of 600 s exceeded in stage "
@@ -1099,16 +1103,16 @@ class TestChamPBHSchema(unittest.TestCase):
         self.assertTrue(result["equal"], cs.format_result(result))
         tables = result["tables"]
         self.assertEqual(tables["ExponentialCoupling"]["kind_a"], "sharded")
-        for tags in ("ScalarModel_tags", "AdiabaticHistory_tags", "BBNData_tags"):
+        for tags in ("ScalarHistory_tags", "AdiabaticHistory_tags", "BBNData_tags"):
             self.assertEqual(tables[tags]["kind_a"], "sharded")
         self.assertEqual(tables["QCD_Cosmology"]["kind_a"], "replicated")
-        self.assertEqual(tables["ScalarModel"]["matched"], 1)
-        self.assertEqual(tables["ScalarModelValue"]["matched"], 2)
-        self.assertEqual(tables["ScalarModel_tags"]["matched"], 1)
+        self.assertEqual(tables["ScalarHistory"]["matched"], 1)
+        self.assertEqual(tables["ScalarHistoryValue"]["matched"], 2)
+        self.assertEqual(tables["ScalarHistory_tags"]["matched"], 1)
         self.assertNotIn("LambdaCDM", tables)
         self.assertFalse(any("LambdaCDM" in note for note in result["notes"]))
         self.assertEqual(
-            result["bookkeeping_differences"]["ScalarModel"],
+            result["bookkeeping_differences"]["ScalarHistory"],
             {"compute_time": 1, "label": 1},
         )
         self.assertEqual(
@@ -1116,23 +1120,23 @@ class TestChamPBHSchema(unittest.TestCase):
             {"failure_reason": 1, "label": 1},
         )
 
-        # every ScalarModel reference is resolved to its row's labels
+        # every ScalarHistory reference is resolved to its row's labels
         conn = sqlite3.connect(self.dir / "b" / "store-shard0000.db")
         with conn:
             (value,) = conn.execute(
-                "select Sigma from ScalarModelValue where serial = 941"
+                "select Sigma from ScalarHistoryValue where serial = 941"
             ).fetchone()
             conn.execute(
-                "update ScalarModelValue set Sigma = ? where serial = 941",
+                "update ScalarHistoryValue set Sigma = ? where serial = 941",
                 (math.nextafter(value, 0.0),),
             )
         conn.close()
         result = cs.compare_stores(a, b)
         self.assertFalse(result["equal"])
-        smv = result["tables"]["ScalarModelValue"]
+        smv = result["tables"]["ScalarHistoryValue"]
         (pair,) = smv["near_misses"]
         self.assertEqual([d["column"] for d in pair["differing"]], ["Sigma"])
-        model = pair["a"]["model_serial"]["row"]
+        model = pair["a"]["history_serial"]["row"]
         self.assertEqual(model["cosmology_serial"]["table"], "QCD_Cosmology")
         self.assertEqual(model["potential_serial"]["table"], "ExponentialPotential")
         self.assertEqual(model["coupling_serial"]["table"], "ExponentialCoupling")
@@ -1191,12 +1195,12 @@ FIXTURE_COMPLETE = """\
 ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
    -- ALL WORK ITEMS COMPLETE in time 1m 1s
       Queue summary: 3 lookup (avg 177/hr), 2 compute (avg 118/hr), 2 store (avg 118/hr), 2 validation (avg 118/hr)
--- AdiabaticHistory: 1 models skipped because their ScalarModel failed
+-- AdiabaticHistory: 1 models skipped because their ScalarHistory failed
 
 ** CALCULATE BBN DATA
    -- ALL WORK ITEMS COMPLETE in time 40s
       Queue summary: 3 lookup (avg 270/hr), 1 compute (avg 90/hr), 1 store (avg 90/hr), 1 validation (avg 90/hr)
--- BBNData: 1 models skipped because their ScalarModel failed; 1 computations skipped because of a stored failure
+-- BBNData: 1 models skipped because their ScalarHistory failed; 1 computations skipped because of a stored failure
 ** driver exit status 0
 """
 

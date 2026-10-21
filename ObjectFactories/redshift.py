@@ -18,7 +18,7 @@ from typing import Optional
 import sqlalchemy as sqla
 from sqlalchemy import and_
 
-from ComputeTargets import ScalarModelProxy, ScalarModel
+from ComputeTargets import ScalarHistoryProxy, ScalarHistory
 from CosmologyConcepts import redshift
 from datastorekit.SQL.factory_base import SQLAFactoryBase
 from datastorekit.store_inventory import InventorySpec
@@ -87,7 +87,7 @@ class sqla_redshift_factory(SQLAFactoryBase):
         conn,
         table,
         tables,
-        model_proxy: Optional[ScalarModelProxy] = None,
+        model_proxy: Optional[ScalarHistoryProxy] = None,
     ):
         # query for all redshift records in the table
         query = sqla.select(
@@ -96,15 +96,15 @@ class sqla_redshift_factory(SQLAFactoryBase):
         )
 
         if model_proxy is not None:
-            bgv_table = tables["ScalarModelValue"]
-            model: ScalarModel = model_proxy.get()
+            bgv_table = tables["ScalarHistoryValue"]
+            model: ScalarHistory = model_proxy.get()
 
-            # force a join to the ScalarModelValue table, on redshift serial and matching model number
+            # force a join to the ScalarHistoryValue table, on redshift serial and matching model number
             # the net result will filter out only those redshifts that are used for the intended model
             query = query.join(
                 bgv_table,
                 and_(
-                    bgv_table.c.model_serial == model.store_id,
+                    bgv_table.c.history_serial == model.store_id,
                     bgv_table.c.z_serial == table.c.serial,
                 ),
             )

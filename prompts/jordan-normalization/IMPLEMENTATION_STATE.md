@@ -1,8 +1,8 @@
 # jordan-normalization campaign — implementation state
 
-**Last updated:** 2026-10-21 · **Status: LIVE — 10 of 10 prompts written, 1 landed (01, reviewed);
-R1–R14, U1–U5 and P1–P20 ruled by the user 2026-10-20 (README §6). Next: the orchestrator note for
-02.**
+**Last updated:** 2026-10-21 · **Status: LIVE — 10 of 10 prompts written, 2 landed (01 reviewed; 02 awaiting review);
+R1–R14, U1–U5 and P1–P20 ruled by the user 2026-10-20 (README §6). Next: the orchestrator's review of 02,
+then the note for 03.**
 The plan is [`README.md`](README.md), written on 2026-10-20 on branch `jordan-normalization`, cut
 from `main` at `ac187c8`.
 
@@ -36,7 +36,7 @@ It ends in the handover for the science rebuild, which is the user's.
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
 | 01 | Strip to the exponential model | four potentials and their configs removed; a golden short history; format 2 | Sonnet | ✅ | ✅ | `a1c88b6` | [`logs/01-strip-to-the-exponential-model.md`](logs/01-strip-to-the-exponential-model.md) |
-| 02 | Rename to `ScalarHistory` | classes, tables, drop group, proxies, documents; format 3 | Sonnet | ✍️ | ⬜ | — | — |
+| 02 | Rename to `ScalarHistory` | classes, tables, drop group, proxies, documents; format 3 | Sonnet | ✅ | ✅ | this commit | [`logs/02-rename-to-scalarhistory.md`](logs/02-rename-to-scalarhistory.md) |
 | 03 | The sampling axis | ln(1 + z_E) on the axis, exact-multiple grid, absolute lookup, ln(1 + z_J) per sample; format 4 | Opus | ✍️ | ⬜ | — | — |
 | 04 | The model interface | `AbstractModel`, `ExponentialModel`, `RealizedModel`; consumers on it via an adapter; φ_ref = 0 bitwise; the shift law | Opus | ✍️ | ⬜ | — | — |
 | 05 | The Planck mass | one reduced Planck mass from PRyMordial's G_N in three unit systems; consistency tests | Sonnet | ✍️ | ⬜ | — | — |
@@ -74,7 +74,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 | Gate | Holds when | Prompt | State |
 |---|---|---|---|
 | Strip | only the exponential potential and coupling remain; the golden history, generated at `ac187c8`, passes bitwise | 01 | ✅ |
-| Rename | no `ScalarModel` name outside the records; the golden history bitwise | 02 | ⬜ |
+| Rename | no `ScalarModel` name outside the records; the golden history bitwise | 02 | ✅ |
 | Axis | the axis is ln(1 + z_E) with no overflow; ln(1 + z_J) agrees with `cosmology.z(T_J)` and with the A identity; the change in values measured | 03 | ⬜ |
 | Model | the golden history bitwise through `ExponentialModel` at φ_ref = 0, V₀ = Λ⁴; the shift law holds | 04 | ⬜ |
 | Units | one Planck mass equal to PRyMordial's; 1 K, ħc, ħ and the kilogram consistent to ≤ 10⁻⁶ in each unit system | 05 | ⬜ |
@@ -85,9 +85,19 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 
 ## 3. Active and unresolved issues
 
-None opened by this campaign.
+Prompt 02 opened one. Prompt 01 closed one assigned issue (§3.1, §4).
 
-Prompt 01 closed one assigned issue (§3.1, §4).
+### `[02-the-scalar-history-parent-is-still-called-model]`
+
+**Opened:** 2026-10-21 by prompt 02 (ruling 3 of its orchestrator note).
+
+- **What.** The rename changed every name that says `ScalarModel`. Lowercase names that mean a scalar
+  history but do not say it were left: the parent field `"model"` in the inventory specs of
+  `AdiabaticHistory` and `BBNData`; `tools/inventory_report.py`'s `model_text_of`, `model_parts`,
+  `model_sort` and its printed `model: {…}`; the payload key `model_proxy` and the attribute
+  `_model_proxy`; locals and parameters named `model`.
+- **Impact.** None to values. Once 07 gives `model` to the Lagrangian, `model` would mean two things.
+- **Next step.** 07, which rewrites these specs and readers, renames them. Not assigned yet.
 
 ### 3.1 Assigned to this campaign
 
@@ -210,3 +220,22 @@ pass.
 - **Not residue, not opened.** The agent's observations (in its log) are 08's. These are
   `plot_by_beta.py`'s unread `potential_types`, the dead without-`n` branch of
   `plot_inputs._potential_payload`, and `main.py`'s one-case `convert_to_potential`.
+
+### 5.3 After prompt 02 (2026-10-21)
+
+Prompt 02 landed in this commit (log [`logs/02-rename-to-scalarhistory.md`](logs/02-rename-to-scalarhistory.md)).
+- **N1.** Five files moved by `git mv` (all `R` lines); classes, factories, tables, the drop group
+  `scalar-history` (`--drop scalar-model` is refused), `compute_scalar_history`; the column that
+  points at a history is `history_serial` on the value and tag tables and `scalar_history_serial`
+  on `AdiabaticHistory` and `BBNData`.
+- **N2.** `FINGERPRINT_FORMAT` 3; `SPEC_DIGESTS[3]` of 17 pairs and 14 distinct digests, with the
+  digests of `ScalarHistory`, `AdiabaticHistory` and `BBNData` moved; the golden file
+  `store_fingerprint_jordan-normalization-02.json`.
+- **N3.** `CLAUDE.md`, `.documents/architecture-summary.md` and `.documents/numerical-strategies.md`,
+  with a dated note in each. The rehearsal parser `stage_counts.py` accepts both names (the user's
+  ruling after a stop).
+- **N4.** The run scripts are not edited; they do not name the old driver or group (the log).
+- **The golden history** passes unchanged; its JSON was not written.
+- **Suites:** CosmologyModels 18, ComputeTargets 179 (61 + 118), ObjectFactories 79 (+1, the
+  refusal of `--drop scalar-model`), tools 84, RunDrivers 61.
+- **Opened:** `[02-the-scalar-history-parent-is-still-called-model]`.

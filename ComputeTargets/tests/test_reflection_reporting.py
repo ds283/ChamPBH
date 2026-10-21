@@ -18,8 +18,8 @@ import matplotlib
 matplotlib.use("Agg")
 from matplotlib import pyplot as plt
 
-from ComputeTargets.ScalarModel import REFLECTIONS_KEY, build_extra_data
-from extract_common import add_ScalarModel_labels, reflection_count
+from ComputeTargets.ScalarHistory import REFLECTIONS_KEY, build_extra_data
+from extract_common import add_ScalarHistory_labels, reflection_count
 
 RHSStats = namedtuple("RHSStats", ["a", "b", "c"])
 
@@ -87,7 +87,7 @@ def stand_in_model(extra_data: Optional[dict]):
 def caption_texts(extra_data: Optional[dict]) -> list:
     fig = plt.figure()
     try:
-        add_ScalarModel_labels(fig, stand_in_model(extra_data), "stand-in cosmology")
+        add_ScalarHistory_labels(fig, stand_in_model(extra_data), "stand-in cosmology")
         return [t.get_text() for t in fig.texts]
     finally:
         plt.close(fig)

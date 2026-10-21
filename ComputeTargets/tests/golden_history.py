@@ -3,7 +3,7 @@ The golden histories: the setup, and the record of one history, shared by the te
 (test_golden_history.py) and by a regeneration. (jordan-normalization prompt 01, X1.)
 
 Two histories are run as tools/history_and_bbn.py runs one, through
-compute_scalar_model._function with no Ray: QCD_Cosmology on Planck2018 in Planck_units;
+compute_scalar_history._function with no Ray: QCD_Cosmology on Planck2018 in Planck_units;
 ExponentialPotential(M = 1e-3 M_P, Lambda = 1 meV, n = 1); ExponentialCoupling(beta) for beta = 1.5
 and beta = 5.5; phi* = 5 M_P, pi* = 0, T* = 2e4 GeV, T_stop = 1 MeV; atol = rtol = 1e-8; and the
 production z grid, built as main.py builds it (250 samples per decade of 1 + z, up to 1e85,
@@ -44,7 +44,7 @@ from pathlib import Path
 import numpy as np
 import scipy
 
-from ComputeTargets.ScalarModel import SampleValues, compute_scalar_model
+from ComputeTargets.ScalarHistory import SampleValues, compute_scalar_history
 from CosmologyConcepts import (
     Lambda_value,
     M_value,
@@ -107,7 +107,7 @@ def make_z_grid() -> redshift_array:
 
 
 def run_history(beta: float) -> dict:
-    """Run one golden history; the payload of compute_scalar_model, which must not be a failure."""
+    """Run one golden history; the payload of compute_scalar_history, which must not be a failure."""
     units = Planck_units()
     params = Planck2018()
     cosmology = QCD_Cosmology(0, units, params)
@@ -121,7 +121,7 @@ def run_history(beta: float) -> dict:
     )
     coupling = ExponentialCoupling(0, beta_value(0, beta), units)
 
-    data = compute_scalar_model._function(
+    data = compute_scalar_history._function(
         cosmology,
         temperature(0, T_INIT_GEV * units.GeV),
         temperature(1, T_STOP_GEV * units.GeV),
@@ -150,7 +150,7 @@ def _sha256(array) -> str:
 
 
 def record_of(data: dict) -> dict:
-    """The pinned record of one history (the payload of compute_scalar_model)."""
+    """The pinned record of one history (the payload of compute_scalar_history)."""
     samples = data["sample"]
     zs = [r.z for r in data["z_grid"]]
     names = list(SampleValues._fields)

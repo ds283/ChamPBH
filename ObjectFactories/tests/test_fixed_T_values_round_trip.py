@@ -14,10 +14,10 @@
 # limitations under the License.
 
 """
-A ScalarModel row keeps its fixed-temperature values (science-readiness prompt 06b, README §2 (n),
+A ScalarHistory row keeps its fixed-temperature values (science-readiness prompt 06b, README §2 (n),
 §6.7b, test (d)).
 
-`compute_scalar_model`'s payload carries `fixed_T_values`, a `FixedTValues`. `ScalarModel.store()`
+`compute_scalar_history`'s payload carries `fixed_T_values`, a `FixedTValues`. `ScalarHistory.store()`
 takes it, the factory's `store` writes it to the four nullable columns `phi_Einstein_1MeV`,
 `density_NP_ratio_1MeV`, `phi_Einstein_70keV` and `density_NP_ratio_70keV`, and `build` reads it
 back. The tests go the whole way on a temporary SQLite file, with the helpers of
@@ -28,7 +28,7 @@ values are on the parent row, so `fixed_T_values` returns them on such an object
 
 No Ray cluster, no persistent datastore. About 1 s.
 
-On `HEAD~1` the table has none of the four columns and `ScalarModel` no `fixed_T_values`, so every
+On `HEAD~1` the table has none of the four columns and `ScalarHistory` no `fixed_T_values`, so every
 test here fails.
 """
 
@@ -43,12 +43,12 @@ from ObjectFactories.tests.test_first_bounce_round_trip import (
     _success_payload,
     _units,
 )
-from ObjectFactories.tests.test_scalarmodel_failure_reason import _write
+from ObjectFactories.tests.test_scalarhistory_failure_reason import _write
 from ObjectFactories.tests.test_version_keyed_lookups import (
     LABEL_A,
     _TempStoreCase,
     _insert,
-    _scalar_model_query,
+    _scalar_history_query,
 )
 
 # the values the driver printed for beta = 2, M = 0.5 on this prompt's tree (log 06b)
@@ -86,18 +86,18 @@ class TestFixedTValuesRoundTrip(_TempStoreCase):
         return store
 
     def _raw_columns(self, store):
-        table = store._tables["ScalarModel"]
+        table = store._tables["ScalarHistory"]
         with store._engine.begin() as conn:
             row = conn.execute(sqla.select(*(table.c[name] for name in COLUMNS))).one()
         return tuple(row)
 
     def _read_back(self, store, failure: bool, do_not_populate: bool):
-        query = _scalar_model_query(
+        query = _scalar_history_query(
             failure=failure, cosmology=_cosmology, _do_not_populate=do_not_populate
         )
         if not failure:
             query["solver_labels"] = [STEPPER]
-        got = store.object_get("ScalarModel", **query)
+        got = store.object_get("ScalarHistory", **query)
         self.assertTrue(got.available)
         return got
 
@@ -169,9 +169,9 @@ class TestFixedTValuesRoundTrip(_TempStoreCase):
 
         # the same through a fresh connection to the same file
         again = self.open(LABEL_A).object_get(
-            "ScalarModel",
+            "ScalarHistory",
             **dict(
-                _scalar_model_query(failure=False, cosmology=_cosmology),
+                _scalar_history_query(failure=False, cosmology=_cosmology),
                 solver_labels=[STEPPER],
             ),
         )
@@ -182,7 +182,8 @@ class TestFixedTValuesRoundTrip(_TempStoreCase):
         """An object with no row behind it refuses to report fixed-temperature values."""
         store = self._store()
         got = store.object_get(
-            "ScalarModel", **_scalar_model_query(failure=False, cosmology=_cosmology)
+            "ScalarHistory",
+            **_scalar_history_query(failure=False, cosmology=_cosmology),
         )
         self.assertFalse(got.available)
         with self.assertRaises(RuntimeError):

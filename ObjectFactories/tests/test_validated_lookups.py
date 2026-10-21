@@ -14,7 +14,7 @@
 # limitations under the License.
 
 """
-`AdiabaticHistory.build` and `BBNData.build` return only validated rows, as `ScalarModel.build`
+`AdiabaticHistory.build` and `BBNData.build` return only validated rows, as `ScalarHistory.build`
 does (2026-10-14; recorded by `dk-and-rpk-migration` log 09, Observation 3, and by
 `read-only-plots` README §1).
 
@@ -37,7 +37,7 @@ from ObjectFactories.tests.test_version_keyed_lookups import (
     _insert,
     _insert_adiabatic_history,
     _insert_failed_bbn,
-    _insert_failed_scalar_model,
+    _insert_failed_scalar_history,
     _model_proxy,
     _sid,
 )
@@ -49,7 +49,7 @@ def _insert_unvalidated_adiabatic_history(store, serial):
         "AdiabaticHistory",
         dict(
             serial=serial,
-            model_serial=_MODEL_SERIAL,
+            scalar_history_serial=_MODEL_SERIAL,
             label="unvalidated",
             z_samples=0,
             compute_time=1.0,
@@ -61,7 +61,7 @@ def _insert_unvalidated_adiabatic_history(store, serial):
 def _insert_bbn(store, serial, failure, validated, reason=None):
     row = dict(
         serial=serial,
-        model_serial=_MODEL_SERIAL,
+        scalar_history_serial=_MODEL_SERIAL,
         failure=failure,
         validated=validated,
     )
@@ -91,7 +91,7 @@ class TestAdiabaticHistoryValidated(_TempStoreCase):
     def test_a_an_unvalidated_history_is_not_returned(self):
         """(a) The only row is unvalidated: the lookup returns an unavailable object."""
         store = self.open(LABEL_A)
-        _insert_failed_scalar_model(store)
+        _insert_failed_scalar_history(store)
         _insert_unvalidated_adiabatic_history(store, 1)
 
         h = store.object_get("AdiabaticHistory", model_proxy=_model_proxy(), tags=[])
@@ -103,7 +103,7 @@ class TestAdiabaticHistoryValidated(_TempStoreCase):
     def test_b_the_validated_history_is_returned_beside_an_unvalidated_one(self):
         """(b) One validated and one unvalidated row: the validated one, with no MultipleResultsFound."""
         store = self.open(LABEL_A)
-        _insert_failed_scalar_model(store)
+        _insert_failed_scalar_history(store)
         _insert_unvalidated_adiabatic_history(store, 1)
         serial = _insert_adiabatic_history(store, serial=2)
 
@@ -116,7 +116,7 @@ class TestBBNDataValidated(_TempStoreCase):
     def test_a_an_unvalidated_success_is_not_returned(self):
         """(a) The only row is an unvalidated success: every lookup returns an unavailable object."""
         store = self.open(LABEL_A)
-        _insert_failed_scalar_model(store)
+        _insert_failed_scalar_history(store)
         _insert_bbn(store, 1, failure=False, validated=False)
 
         for failure in ("default", None, False):
@@ -130,7 +130,7 @@ class TestBBNDataValidated(_TempStoreCase):
     def test_b_any_row_skips_an_unvalidated_success_for_a_validated_failure(self):
         """(b) failure=None prefers a success, but not an unvalidated one: the validated failure is returned."""
         store = self.open(LABEL_A)
-        _insert_failed_scalar_model(store)
+        _insert_failed_scalar_history(store)
         failed = _insert_failed_bbn(store, 1, "validated failure")
         _insert_bbn(store, 2, failure=False, validated=False)
 
@@ -142,7 +142,7 @@ class TestBBNDataValidated(_TempStoreCase):
     def test_c_failure_true_skips_a_newer_unvalidated_failure(self):
         """(c) failure=True returns the newest failure, but only among validated rows."""
         store = self.open(LABEL_A)
-        _insert_failed_scalar_model(store)
+        _insert_failed_scalar_history(store)
         older = _insert_failed_bbn(store, 1, "validated failure")
         _insert_bbn(store, 2, failure=True, validated=False, reason="unvalidated")
 
@@ -154,7 +154,7 @@ class TestBBNDataValidated(_TempStoreCase):
     def test_d_the_validated_success_is_returned_beside_an_unvalidated_one(self):
         """(d) The default lookup (failure=False) with one validated and one unvalidated success: the validated one, with no MultipleResultsFound."""
         store = self.open(LABEL_A)
-        _insert_failed_scalar_model(store)
+        _insert_failed_scalar_history(store)
         _insert_bbn(store, 1, failure=False, validated=False)
         serial = _insert_bbn(store, 2, failure=False, validated=True)
 

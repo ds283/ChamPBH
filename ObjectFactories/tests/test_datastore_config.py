@@ -26,6 +26,8 @@ few seconds.
 """
 
 import ast
+import contextlib
+import io
 import subprocess
 import sys
 import unittest
@@ -36,7 +38,7 @@ import ray
 import sqlalchemy as sqla
 
 import config.datastore as config_datastore
-from config.argument_parser import allowed_drop_actions
+from config.argument_parser import allowed_drop_actions, create_argument_parser
 from config.sharding import replicated_tables, sharded_tables
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -56,9 +58,9 @@ EXPECTED_FACTORIES = [
     ("ExponentialCoupling", "sqla_ExponentialCoupling_factory", None),
     ("QCD_Cosmology", "sqla_QCDCosmology_factory", None),
     ("IntegrationSolver", "sqla_IntegrationSolver_factory", None),
-    ("ScalarModel", "sqla_ScalarModelFactory", None),
-    ("ScalarModel_tags", "sqla_ScalarModelTagAssociation_factory", None),
-    ("ScalarModelValue", "sqla_ScalarModelValue_factory", None),
+    ("ScalarHistory", "sqla_ScalarHistoryFactory", None),
+    ("ScalarHistory_tags", "sqla_ScalarHistoryTagAssociation_factory", None),
+    ("ScalarHistoryValue", "sqla_ScalarHistoryValue_factory", None),
     ("AdiabaticHistory", "sqla_AdiabaticHistoryFactory", None),
     ("AdiabaticHistory_tags", "sqla_AdiabaticHistoryTagAssociation_factory", None),
     ("AdiabaticHistoryValue", "sqla_AdiabaticHistoryValue_factory", None),
@@ -68,7 +70,7 @@ EXPECTED_FACTORIES = [
 ]
 
 EXPECTED_DROP_GROUPS = {
-    "scalar-model": ["ScalarModel_tags", "ScalarModelValue", "ScalarModel"],
+    "scalar-history": ["ScalarHistory_tags", "ScalarHistoryValue", "ScalarHistory"],
     "adiabatic-history": [
         "AdiabaticHistory_tags",
         "AdiabaticHistoryValue",
@@ -91,8 +93,8 @@ EXPECTED_SERIAL_BATCH_SIZES = {
     "ExponentialPotential": 50,
     "QCD_Cosmology": 5,
     "IntegrationSolver": 6,
-    "ScalarModel": 20,
-    "ScalarModelValue": 250,
+    "ScalarHistory": 20,
+    "ScalarHistoryValue": 250,
     "AdiabaticHistory": 20,
     "AdiabaticHistoryValue": 250,
     "BBNData": 20,
@@ -165,7 +167,7 @@ class TestDriversPassShardKeyMapping(unittest.TestCase):
     EXPECTED_COUNTS = {
         "main.py": 7,
         "plot_by_beta.py": 0,
-        "plot_ScalarModel.py": 0,
+        "plot_ScalarHistory.py": 0,
         "plot_inputs.py": 0,
     }
 
@@ -194,7 +196,7 @@ class TestDriversPassShardKeyMapping(unittest.TestCase):
 # prompt 08: the drivers give config.datastore to datastorekit's pool
 # ------------------------------------------------------------------------------------------------
 
-DRIVERS = ("main.py", "plot_by_beta.py", "plot_ScalarModel.py")
+DRIVERS = ("main.py", "plot_by_beta.py", "plot_ScalarHistory.py")
 
 
 class _NoRay(unittest.TestCase):
@@ -317,8 +319,8 @@ def _main_tree() -> ast.Module:
     return ast.parse((REPO_ROOT / "main.py").read_text(), "main.py")
 
 
-SCALAR_MODEL_ALONE = (
-    "cannot drop scalar-model alone: AdiabaticHistory and BBNData name its rows; "
+SCALAR_HISTORY_ALONE = (
+    "cannot drop scalar-history alone: AdiabaticHistory and BBNData name its rows; "
     "add `--drop adiabatic-history bbn-data`"
 )
 
@@ -328,21 +330,21 @@ class TestDropPolicy(_NoRay):
     naming the groups to add, and accepts every closed request; ``main.py`` calls it before Ray
     starts."""
 
-    def test_scalar_model_alone_is_refused_naming_the_groups_to_add(self):
+    def test_scalar_history_alone_is_refused_naming_the_groups_to_add(self):
         with self.assertRaises(ValueError) as ctx:
-            config_datastore.tables_to_drop(["scalar-model"])
-        self.assertEqual(str(ctx.exception), SCALAR_MODEL_ALONE)
+            config_datastore.tables_to_drop(["scalar-history"])
+        self.assertEqual(str(ctx.exception), SCALAR_HISTORY_ALONE)
 
-    def test_scalar_model_with_one_dependent_group_is_refused(self):
+    def test_scalar_history_with_one_dependent_group_is_refused(self):
         for groups, message in (
             (
-                ["scalar-model", "adiabatic-history"],
-                "cannot drop scalar-model and adiabatic-history alone: BBNData names their "
+                ["scalar-history", "adiabatic-history"],
+                "cannot drop scalar-history and adiabatic-history alone: BBNData names their "
                 "rows; add `--drop bbn-data`",
             ),
             (
-                ["scalar-model", "bbn-data"],
-                "cannot drop scalar-model and bbn-data alone: AdiabaticHistory names their "
+                ["scalar-history", "bbn-data"],
+                "cannot drop scalar-history and bbn-data alone: AdiabaticHistory names their "
                 "rows; add `--drop adiabatic-history`",
             ),
         ):
@@ -362,8 +364,8 @@ class TestDropPolicy(_NoRay):
                 groups["adiabatic-history"] + groups["bbn-data"],
             ),
             (
-                ["bbn-data", "scalar-model", "adiabatic-history"],
-                groups["scalar-model"]
+                ["bbn-data", "scalar-history", "adiabatic-history"],
+                groups["scalar-history"]
                 + groups["adiabatic-history"]
                 + groups["bbn-data"],
             ),
@@ -378,7 +380,7 @@ class TestDropPolicy(_NoRay):
 
     def test_a_dependent_in_no_group_is_named_as_a_table(self):
         """With a registry of the test's own, in which a table outside every group names
-        ``ScalarModel``: the refusal names it as a table."""
+        ``ScalarHistory``: the refusal names it as a table."""
 
         class _Orphan:
             def register(self):
@@ -387,9 +389,9 @@ class TestDropPolicy(_NoRay):
                     "timestamp": False,
                     "columns": [
                         sqla.Column(
-                            "model_serial",
+                            "scalar_history_serial",
                             sqla.Integer,
-                            sqla.ForeignKey("ScalarModel.serial"),
+                            sqla.ForeignKey("ScalarHistory.serial"),
                         )
                     ],
                 }
@@ -399,16 +401,30 @@ class TestDropPolicy(_NoRay):
         with mock.patch.object(config_datastore, "factories", registry):
             with self.assertRaises(ValueError) as ctx:
                 config_datastore.tables_to_drop(
-                    ["scalar-model", "adiabatic-history", "bbn-data"]
+                    ["scalar-history", "adiabatic-history", "bbn-data"]
                 )
         self.assertEqual(
             str(ctx.exception),
-            "cannot drop scalar-model, adiabatic-history and bbn-data alone: Orphan names "
+            "cannot drop scalar-history, adiabatic-history and bbn-data alone: Orphan names "
             "their rows; add the table Orphan, which no drop group holds",
         )
 
     def test_the_command_line_choices_are_the_groups(self):
         self.assertEqual(allowed_drop_actions, list(config_datastore.drop_groups))
+
+    def test_the_old_drop_group_name_is_refused_naming_the_new_one(self):
+        """`--drop scalar-model` (the name before jordan-normalization prompt 02) exits 2 in the
+        argument parser, and the message names the new group."""
+        stderr = io.StringIO()
+        with contextlib.redirect_stderr(stderr):
+            with self.assertRaises(SystemExit) as ctx:
+                create_argument_parser().parse_args(
+                    ["--database", "x", "--drop", "scalar-model"]
+                )
+        self.assertEqual(ctx.exception.code, 2)
+        message = stderr.getvalue()
+        self.assertIn("invalid choice: 'scalar-model'", message)
+        self.assertIn("scalar-history", message)
 
     def test_main_computes_the_drop_before_ray_starts(self):
         tree = _main_tree()

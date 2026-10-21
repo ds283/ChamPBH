@@ -12,7 +12,7 @@ The codebase has three major layers, each cleanly separable:
 
 1. **Infrastructure** — Ray-based distributed task execution and sharded SQLite persistence.
 2. **Physics integration** — ODE supervisor framework for driving `scipy.integrate.solve_ivp`.
-3. **Compute targets** — Domain-specific classes (ScalarModel, AdiabaticHistory, BBNData) that live at the intersection of infrastructure and physics.
+3. **Compute targets** — Domain-specific classes (ScalarHistory, AdiabaticHistory, BBNData) that live at the intersection of infrastructure and physics.
 
 For a new instanton project, layers 1 and 2 can be adopted wholesale, while layer 3 is replaced with instanton-specific compute targets.
 
@@ -28,7 +28,7 @@ ChamPBH/
 ├── extract_common.py                # Post-hoc data extraction for analysis
 ├── plot_inputs.py                   # What the plot scripts read from a store before any history lookup (read-only)
 ├── plot_by_beta.py                  # Plotting driver (Ray remote)
-├── plot_ScalarModel.py              # Scalar field detailed plots
+├── plot_ScalarHistory.py            # Scalar field detailed plots
 ├── exponential.yaml                 # Example run configuration
 ├── runregistrykit.toml              # RunRegistryKit's config: runs_root, stores_root, recorded distributions, the fingerprinter
 │
@@ -48,7 +48,7 @@ ChamPBH/
 │   ├── ExponentialPotential.py
 │   ├── ExponentialCoupling.py
 │   ├── QCD_Cosmology.py
-│   ├── ScalarModel.py               # Factory for main ODE output
+│   ├── ScalarHistory.py             # Factory for main ODE output
 │   ├── AdiabaticHistory.py
 │   ├── BBNData.py
 │   └── tests/                       # unittest modules of the factories, the registry and the harness
@@ -57,7 +57,7 @@ ChamPBH/
 │   └── standin_pool.py              # the package's stand-in cluster, a copy; any test root imports it
 │
 ├── ComputeTargets/
-│   ├── ScalarModel.py               # ODE solver (Ray remote class)
+│   ├── ScalarHistory.py             # ODE solver (Ray remote class)
 │   ├── AdiabaticHistory.py          # Adiabatic-mode computation
 │   ├── BBNData.py                   # BBN abundance computation
 │   ├── spline_wrappers.py
@@ -392,7 +392,7 @@ constraint is respected per shard. What the package provides, by module:
 | **The version label** | `config/version.py`, `VERSION_LABEL` | `ShardedPool(version_label=…)` |
 | **The factories' own code**: for each class, `register` and `build`, and, where the class has one, `store`, `validate`, `validate_on_startup` and `inventory_spec` | `ObjectFactories/` | read from the registry's instances by the package's actors, pool and reader |
 
-The three drivers that open a pool (`main.py`, `plot_by_beta.py`, `plot_ScalarModel.py`) each call
+The three drivers that open a pool (`main.py`, `plot_by_beta.py`, `plot_ScalarHistory.py`) each call
 `ShardedPool(…)` in a `with` block with these arguments; the constructor's sixteen parameters, and
 what the package does with each, are contract §1. `main.py`'s pool writes; the two plot scripts'
 pools pass `read_only=True` (and no `shards=` and no `drop_tables=`), so they read the finished
@@ -418,9 +418,9 @@ calls `read_inventory` on the closed store, read-only and before Ray starts, and
 | `ExponentialCoupling` | `sqla_ExponentialCoupling_factory` | Sharded |
 | `QCD_Cosmology` | `sqla_QCDCosmology_factory` | Replicated |
 | `IntegrationSolver` | `sqla_IntegrationSolver_factory` | Replicated |
-| `ScalarModel` | `sqla_ScalarModelFactory` | Sharded |
-| `ScalarModel_tags` | `sqla_ScalarModelTagAssociation_factory` | with its owner (not listed in `config/sharding.py`) |
-| `ScalarModelValue` | `sqla_ScalarModelValue_factory` | Sharded |
+| `ScalarHistory` | `sqla_ScalarHistoryFactory` | Sharded |
+| `ScalarHistory_tags` | `sqla_ScalarHistoryTagAssociation_factory` | with its owner (not listed in `config/sharding.py`) |
+| `ScalarHistoryValue` | `sqla_ScalarHistoryValue_factory` | Sharded |
 | `AdiabaticHistory` | `sqla_AdiabaticHistoryFactory` | Sharded |
 | `AdiabaticHistory_tags` | `sqla_AdiabaticHistoryTagAssociation_factory` | with its owner (not listed) |
 | `AdiabaticHistoryValue` | `sqla_AdiabaticHistoryValue_factory` | Sharded |
@@ -442,7 +442,7 @@ and the refusals are the package's, and are stated in contract §1 (the argument
   shard, with the same `store_id`. A replicated write goes to a controlling shard and is then
   replicated to the others under the controller's serials. A replicated row carries **one
   timestamp**, the same on every shard.
-- **Sharded tables** (compute results: `ScalarModel`, `AdiabaticHistory`, `BBNData` and their
+- **Sharded tables** (compute results: `ScalarHistory`, `AdiabaticHistory`, `BBNData` and their
   value tables, and `ExponentialCoupling`) live only on the shard of their shard key. The shard
   is assigned, load-balanced, when a `beta_value` is first inserted; a lookup table in the
   primary maps `beta_value.store_id` to the shard.
@@ -452,7 +452,7 @@ and the refusals are the package's, and are stated in contract §1 (the argument
   **`object_store(obj)`** writes a computed object through its factory's `store` and returns it
   with its `store_id`; **`object_validate(obj)`** runs its `validate`. `store`, `validate` and
   `validate_on_startup` are defaulted since `v0.2.3` (U3): a factory that does not define one
-  raises `NotImplementedError` if the layer calls it. ChamPBH's `ScalarModel`, `AdiabaticHistory`
+  raises `NotImplementedError` if the layer calls it. ChamPBH's `ScalarHistory`, `AdiabaticHistory`
   and `BBNData` factories define all three, and the others none.
 - **`object_get_vectorized(class, shard_key, payload_data)`** is for sharded tables only. It takes the
   shard key **in mapping form**, `{"shard_key": key}` (the sharded table's field name mapped to the
@@ -462,7 +462,7 @@ and the refusals are the package's, and are stated in contract §1 (the argument
   classes whose factory validates at startup (contract §1, rows 5 and 11; §2, `validate_on_startup`).
 
 **The `_do_not_populate` payload key.** It is ChamPBH's convention, not the package's: the
-`ScalarModel` and `BBNData` factories' `build` read it from the payload, and when it is set they do
+`ScalarHistory` and `BBNData` factories' `build` read it from the payload, and when it is set they do
 not INSERT a skeleton row. This allows a fast "does this exist?" query without side effects, and
 is used in the two-pass pattern: first check which items exist, then enqueue only the missing ones
 for computation.
@@ -472,7 +472,7 @@ prompt 08 the keying is the package's, contract §8).** Every table registered w
 `"version": True` records, in its `version` column, the serial of the label the store was opened
 under (stamped by the actor's insert). The lookups of the three compute targets read it:
 
-- **Which tables are keyed.** `ScalarModel`, `AdiabaticHistory` and `BBNData`, and only those. Each factory's `register()` declares
+- **Which tables are keyed.** `ScalarHistory`, `AdiabaticHistory` and `BBNData`, and only those. Each factory's `register()` declares
   `"key_on_version": True`; the package's schema builder refuses that flag on a table without
   `"version": True` (`ValueError`, contract §8). Their value and tag tables hang off the parent row's
   serial and carry no key of their own.
@@ -493,7 +493,7 @@ under (stamped by the actor's insert). The lookups of the three compute targets 
 A store opened under a new label therefore sees none of its old compute targets; they are
 recomputed and stored beside the old rows. `--inventory` still lists every version. The label is
 defined once, as `VERSION_LABEL` in `config/version.py`, and `main.py`, `plot_by_beta.py` and
-`plot_ScalarModel.py` import it.
+`plot_ScalarHistory.py` import it.
 
 **The two-pass query pattern** used in `main.py` for all compute stages:
 
@@ -552,7 +552,7 @@ Uses `configargparse` (a drop-in `argparse` replacement) so that every CLI argum
 - `--profile-db PATH`
 - `--job-name LABEL`
 - `--prune-unvalidated` (default True; `main.py`'s, ignored by the plot scripts)
-- `--drop {scalar-model,adiabatic-history,bbn-data}` (`main.py`'s: the plot scripts refuse it, exit 2, before Ray starts)
+- `--drop {scalar-history,adiabatic-history,bbn-data}` (`main.py`'s: the plot scripts refuse it, exit 2, before Ray starts)
 
 *Integration:*
 - `--abs-tol FLOAT` (default 1e-8)
@@ -611,8 +611,8 @@ replicated_tables = [
 
 sharded_tables = {
     "ExponentialCoupling": "shard_key",
-    "ScalarModel": "shard_key",
-    "ScalarModelValue": "shard_key",
+    "ScalarHistory": "shard_key",
+    "ScalarHistoryValue": "shard_key",
     "AdiabaticHistory": "shard_key",
     "AdiabaticHistoryValue": "shard_key",
     "BBNData": "shard_key",
@@ -735,7 +735,7 @@ Every compute target follows the same pattern:
 
 The `RayWorkPool` handles steps 3–4 automatically via its three defaults: `compute_handler`, `store_handler` and `persist_handler`.
 
-### 7.2 `ScalarModel` (`ComputeTargets/ScalarModel.py`)
+### 7.2 `ScalarHistory` (`ComputeTargets/ScalarHistory.py`)
 
 The primary compute target. Solves the chameleon scalar field ODE in an FRW background.
 
@@ -790,7 +790,7 @@ SampleValues = namedtuple("SampleValues", [
 ])
 ```
 
-**Integration procedure in `ScalarModel.compute()`:**
+**Integration procedure in `ScalarHistory.compute()`:**
 
 1. Loop over solver methods: [Radau, BDF, LSODA, DOP853]. Try each in sequence until one succeeds.
 2. For each solver attempt, call `scipy.integrate.solve_ivp` with event functions that detect: (a) temperature falling below `T_stop`, (b) field hitting the hard reflection wall, (c) entry/exit of bounce regions at two nested levels.
@@ -843,15 +843,15 @@ SampleValues = namedtuple("SampleValues", [
 > T_J is stationary exactly where 1 + (d ln Ω/dφ) π = 0, and for the exponential coupling
 > d ln Ω/dφ = β/M_P. Production does not call it; nothing is stored.
 
-**`ScalarModelProxy`:** A lightweight reference object (just holds the model's `store_id` and key parameters, not the full solution array). Passed to downstream compute targets (AdiabaticHistory, BBNData) so they can fetch the full `ScalarModel` from the database only when needed.
+**`ScalarHistoryProxy`:** A lightweight reference object (just holds the model's `store_id` and key parameters, not the full solution array). Passed to downstream compute targets (AdiabaticHistory, BBNData) so they can fetch the full `ScalarHistory` from the database only when needed.
 
 ### 7.3 `AdiabaticHistory` (`ComputeTargets/AdiabaticHistory.py`)
 
-Computes the adiabatic perturbation parameter Q (which determines whether the chameleon field is adiabatically tracking its minimum). Requires a `ScalarModelProxy` as input.
+Computes the adiabatic perturbation parameter Q (which determines whether the chameleon field is adiabatically tracking its minimum). Requires a `ScalarHistoryProxy` as input.
 
 ### 7.4 `BBNData` (`ComputeTargets/BBNData.py`)
 
-Interfaces with the external PRyMordial library to compute primordial nucleosynthesis abundances (Y_p, D/H, Li-7/H). Also requires a `ScalarModelProxy`.
+Interfaces with the external PRyMordial library to compute primordial nucleosynthesis abundances (Y_p, D/H, Li-7/H). Also requires a `ScalarHistoryProxy`.
 
 The function `compute_BBN_data` is a `@ray.remote` function (not a class method). It constructs splines of `ρ_NP(T)` and `p_NP(T)` from the scalar field history, then passes them to PRyMordial as "new physics" contributions to the Friedmann equations.
 
@@ -949,6 +949,19 @@ Concrete implementation: `ExponentialPotential`.
 
 > **Note, 2026-10-20 (`jordan-normalization`, prompt 01).** `InversePowerPotential`, `StarobinskyPotential`, `ReclinerPotential` and `ReflectingPotential` were removed, with their factories, their ids in `model_ids.py`, their registry, sharding and batch-size entries, `ScalarModel`'s spec entries, `starobinsky.yaml` and `recliner.yaml` (user ruling R11: for now, strip everything down to the exponential). `ExponentialPotential` is the only potential class, `--potential-type` accepts only `Exponential` (the option itself goes in prompt 08), and `FINGERPRINT_FORMAT` is 2. The table and the lists above and in §4 and §6 describe the tree after this commit; the dated notes before it describe it as it was.
 
+> **Note, 2026-10-21 (`jordan-normalization`, prompt 02).** `ScalarModel` was renamed `ScalarHistory`, so
+> that "model" is free for the Lagrangian (README R9). The classes `ScalarHistory`,
+> `ScalarHistoryValue` and `ScalarHistoryProxy`, the factories `sqla_ScalarHistory*`, the tables
+> `ScalarHistory`, `ScalarHistory_tags` and `ScalarHistoryValue`, `compute_scalar_history`,
+> `ComputeTargets/ScalarHistory.py`, `ObjectFactories/ScalarHistory.py` and `plot_ScalarHistory.py` carry
+> the new names. The column that pointed at a history, `model_serial`, is now `history_serial` on the
+> value and tag tables and `scalar_history_serial` on `AdiabaticHistory` and `BBNData`
+> (`AdiabaticHistoryValue` and `AdiabaticHistory_tags` already used `history_serial` for their own
+> `AdiabaticHistory` row). The drop group is `scalar-history`; `--drop scalar-model` is refused. The
+> parent field `model` in the inventory specs, `model_proxy` and the lowercase `model` names are
+> unchanged (board issue `[02-the-scalar-history-parent-is-still-called-model]`). Fingerprint format 3.
+> Nothing computed changed (the golden history is bitwise). The notes above keep the names of their day.
+
 ### 8.4 Conformal Couplings (`CosmologyConcepts/ConformalCouplings/`)
 
 `AbstractCoupling` defines:
@@ -1012,19 +1025,19 @@ STAGE 1: Scalar Field Histories
    model_sample_grid = product(Potential_array, Coupling_array)
    Batched in groups of 8, binned by shard_key (β)
    → Two-pass: vectorized existence check, then enqueue missing
-   → RayWorkPool with compute_handler = ScalarModel.compute()
+   → RayWorkPool with compute_handler = ScalarHistory.compute()
    → RayWorkPool with validation_handler = pool.object_validate()
 
 STAGE 2: Adiabatic Histories
    Same (Potential, Coupling) grid
-   → Two-pass: check ScalarModel exists (error if not), check AdiabaticHistory exists
-   → For missing: fetch ScalarModelProxy, enqueue AdiabaticHistory
+   → Two-pass: check ScalarHistory exists (error if not), check AdiabaticHistory exists
+   → For missing: fetch ScalarHistoryProxy, enqueue AdiabaticHistory
    → RayWorkPool with compute_handler = AdiabaticHistory.compute()
 
 STAGE 3: BBN Data
    Same grid
-   → Two-pass: check ScalarModel exists, check BBNData exists
-   → For missing: fetch ScalarModelProxy, enqueue BBNData
+   → Two-pass: check ScalarHistory exists, check BBNData exists
+   → For missing: fetch ScalarHistoryProxy, enqueue BBNData
    → RayWorkPool with compute_handler = BBNData.compute(payload={"small_network": True})
 ```
 
@@ -1080,7 +1093,7 @@ See `prompts/run-integrity/logs/03-failure-caching-and-pairing.md`.
 query_queue = RayWorkPool(
     pool, query_batch,
     task_builder=lambda x: pool.object_get_vectorized(
-        "ScalarModel", {"shard_key": x["shard_key"]}, payload_data=x["payload"]
+        "ScalarHistory", {"shard_key": x["shard_key"]}, payload_data=x["payload"]
     ),
     compute_handler=None, store_handler=None,
     store_results=True,
@@ -1091,7 +1104,7 @@ query_queue.run()
 missing = [(pot, coup) for obj, (pot, coup) in zip(results, batch) if not obj.available]
 
 # Pass 2: scalar object_get (creates skeleton rows) for missing items only
-work_refs = [pool.object_get("ScalarModel", shard_key=..., ...) for pot, coup in missing]
+work_refs = [pool.object_get("ScalarHistory", shard_key=..., ...) for pot, coup in missing]
 ```
 
 ---
@@ -1122,15 +1135,15 @@ def to_float(val) -> float:
 
 ## 11. Error Handling
 
-**`ComputationFailureError`** (`ComputeTargets/exceptions.py`): raised when an ODE integration produces NaN/Inf, encounters unphysical state (negative energy density, imaginary Hubble rate), or overflows exponential bounds. Caught by the solver loop in `ScalarModel.compute()`.
+**`ComputationFailureError`** (`ComputeTargets/exceptions.py`): raised when an ODE integration produces NaN/Inf, encounters unphysical state (negative energy density, imaginary Hubble rate), or overflows exponential bounds. Caught by the solver loop in `ScalarHistory.compute()`.
 
-**Solver fallback:** `ScalarModel.compute()` iterates through [Radau, BDF, LSODA, DOP853]. If one solver raises `ComputationFailureError` or `solve_ivp` fails to converge, the next solver is tried. If all solvers fail, the object is marked with `failure=True` and stored in the database as a failed record (so the system does not attempt to recompute it on subsequent runs).
+**Solver fallback:** `ScalarHistory.compute()` iterates through [Radau, BDF, LSODA, DOP853]. If one solver raises `ComputationFailureError` or `solve_ivp` fails to converge, the next solver is tried. If all solvers fail, the object is marked with `failure=True` and stored in the database as a failed record (so the system does not attempt to recompute it on subsequent runs).
 
-> **Note, 2026-10-01 (`integrator-remediation`, prompt 02, `614c41a`).** The solver fallback described here does not exist and never ran: `method="Radau"` was a literal since `f67bc3a`, so a failing history was integrated four times identically. It is deleted. `ScalarModel.compute()` runs one Radau step loop (`integrate_scalar_history`), inside one `try`; a `ComputationFailureError` from the loop or from the sampling is printed and the function returns `{"failure": True}`, which is stored as a failure row (the reason is printed, not stored). The exception table, including the new step budget, is in [`numerical-strategies.md` §3.5.5–§3.5.6](numerical-strategies.md). The paragraph above is kept as written for `b1f64d8`.
+> **Note, 2026-10-01 (`integrator-remediation`, prompt 02, `614c41a`).** The solver fallback described here does not exist and never ran: `method="Radau"` was a literal since `f67bc3a`, so a failing history was integrated four times identically. It is deleted. `ScalarHistory.compute()` runs one Radau step loop (`integrate_scalar_history`), inside one `try`; a `ComputationFailureError` from the loop or from the sampling is printed and the function returns `{"failure": True}`, which is stored as a failure row (the reason is printed, not stored). The exception table, including the new step budget, is in [`numerical-strategies.md` §3.5.5–§3.5.6](numerical-strategies.md). The paragraph above is kept as written for `b1f64d8`.
 
 **`RayWorkPool` resilience:** The work pool does not bail out if individual tasks fail — it continues processing remaining items. The `_do_not_populate` two-pass pattern means failed objects are skipped in downstream stages (checked via `obj.failure`).
 
-**Database startup cleanup:** `prune_unvalidated=True` causes each `Datastore` actor to delete any objects created but not yet validated on the previous run. This prevents partial results from being presented as complete. The lookups do not depend on it: `ScalarModel.build`, `AdiabaticHistory.build` and `BBNData.build` return only validated rows (the last two since 2026-10-14), so a pool that does not prune, such as the plot scripts' read-only pools or `main.py --no-prune-unvalidated`, does not present one either.
+**Database startup cleanup:** `prune_unvalidated=True` causes each `Datastore` actor to delete any objects created but not yet validated on the previous run. This prevents partial results from being presented as complete. The lookups do not depend on it: `ScalarHistory.build`, `AdiabaticHistory.build` and `BBNData.build` return only validated rows (the last two since 2026-10-14), so a pool that does not prune, such as the plot scripts' read-only pools or `main.py --no-prune-unvalidated`, does not present one either.
 
 ---
 
@@ -1140,10 +1153,10 @@ The following table maps ChamPBH components to their natural counterparts in a s
 
 | ChamPBH component | Instanton project equivalent |
 |-------------------|------------------------------|
-| `ScalarModel` | `InstantonSolution` — solves the instanton ODE in the inflationary background |
+| `ScalarHistory` | `InstantonSolution` — solves the instanton ODE in the inflationary background |
 | `AdiabaticHistory` | `CompactionFunction` — computes the compaction function C(r) from the instanton |
 | `BBNData` | `PBHMassFunction` — integrates to produce the PBH mass function β(M) |
-| `ScalarModelProxy` | `InstantonProxy` — lightweight reference for downstream stages |
+| `ScalarHistoryProxy` | `InstantonProxy` — lightweight reference for downstream stages |
 | `beta_value` (shard key) | Could be retained, or replaced with the relevant free parameter of the inflationary model (e.g. amplitude of perturbation, spectral index) |
 | `ExponentialCoupling` | Inflationary potential parameters (if scanning a family of potentials) |
 | `AbstractPotential` | Inflationary potential V(φ) |
@@ -1173,11 +1186,11 @@ An instanton project adopts `datastorekit` and `raypoolkit` as packages, pinned 
 - YAML/configargparse configuration pattern
 
 **Components requiring replacement:**
-- `ComputeTargets/ScalarModel.py` → instanton ODE and solution class
+- `ComputeTargets/ScalarHistory.py` → instanton ODE and solution class
 - `Quadrature/supervisors/ScalarField.py` → `StateVector` and event tracking for instanton
 - `ComputeTargets/AdiabaticHistory.py` → compaction function calculation
 - `ComputeTargets/BBNData.py` → PBH mass function integration
-- `ObjectFactories/ScalarModel.py` → factory for `InstantonSolution`
+- `ObjectFactories/ScalarHistory.py` → factory for `InstantonSolution`
 - `ObjectFactories/AdiabaticHistory.py` → factory for `CompactionFunction`
 - `ObjectFactories/BBNData.py` → factory for `PBHMassFunction`
 - `CosmologyConcepts/Potentials/` → inflationary potential hierarchy
@@ -1265,11 +1278,11 @@ work_pool.run()
 
 ## 14. Key Invariants and Gotchas
 
-1. **Shard key must be in the database before sharded objects.** A `beta_value` (or equivalent shard key) must be inserted into the replicated tables and assigned to a shard before any `ScalarModel` (or equivalent) referencing that key can be stored. `ShardedPool` handles this automatically when `object_get` is called on the shard-key type (its `_assign_shard_keys`; client contract §1, row 3).
+1. **Shard key must be in the database before sharded objects.** A `beta_value` (or equivalent shard key) must be inserted into the replicated tables and assigned to a shard before any `ScalarHistory` (or equivalent) referencing that key can be stored. `ShardedPool` handles this automatically when `object_get` is called on the shard-key type (its `_assign_shard_keys`; client contract §1, row 3).
 
 2. **Replicated table `store_id`s must be identical across shards.** The `SerialPoolBroker` coordinates this. Never insert a replicated-table object directly into a shard — always go through `ShardedPool.object_get()` (a replicated write carries the controlling shard's serials to the others; contract §6).
 
-3. **`_do_not_populate` is advisory.** It is a payload key that ChamPBH's `ScalarModel` and `BBNData` factories read (§4.3), not the package's. If the object already exists in the database (from a previous run), `object_get` returns it regardless of this flag. The flag only suppresses the INSERT when the object is absent.
+3. **`_do_not_populate` is advisory.** It is a payload key that ChamPBH's `ScalarHistory` and `BBNData` factories read (§4.3), not the package's. If the object already exists in the database (from a previous run), `object_get` returns it regardless of this flag. The flag only suppresses the INSERT when the object is absent.
 
 4. **`compute()` must return an `ObjectRef`.** `RayWorkPool` expects a Ray future from `compute_handler`. If the computation is CPU-bound and cannot be a Ray task (rare), wrap it in `ray.remote`.
 

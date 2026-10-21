@@ -112,10 +112,10 @@ invariants that hold across all of them:
 - **Units.** `units.PlanckMass` is the *reduced* Planck mass; PRyMordial's `Mpl` is the full one,
   and the factor 8π between them cancels exactly in the interface. Energies in the PRyMordial
   interface are in MeV; everywhere else they are in whatever `UnitsLike` the cosmology carries.
-- **Redshift.** A `ScalarModelValue`'s `z` is the Einstein-frame redshift assigned from the
+- **Redshift.** A `ScalarHistoryValue`'s `z` is the Einstein-frame redshift assigned from the
   e-fold number relative to the end of the integration; the Jordan-frame temperature is
   `log_T_Jordan`. Do not treat the two as interchangeable.
-- **The plot scripts** (`plot_by_beta.py`, `plot_ScalarModel.py`) read a store read-only, through
+- **The plot scripts** (`plot_by_beta.py`, `plot_ScalarHistory.py`) read a store read-only, through
   `plot_inputs.py`, and stop (exit 2) if their options do not match the ones the build used.
 - **Science runs** are recorded in [`science-runs/`](science-runs/README.md), one dated folder
   (`YYYY-MM-DD-<slug>`) per run. Each holds the run scripts, the logs, and each figure made from the
@@ -125,7 +125,7 @@ invariants that hold across all of them:
   `.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh start "<purpose>"` (its own temp dir
   and ports, GCS 6380, under the rehearsal lock shared with StochasticInstantons and SecondaryGWKit),
   passes `--ray-address 127.0.0.1:6380` to every driver (never `auto`), and stops it with the
-  script's `stop`. The drivers (`main.py`, `plot_by_beta.py`, `plot_ScalarModel.py`) refuse to
+  script's `stop`. The drivers (`main.py`, `plot_by_beta.py`, `plot_ScalarHistory.py`) refuse to
   start Ray without `--ray-address` and refuse `auto` outright (exit 2, before `ray.init`);
   `main.py --inventory` starts no Ray and needs none. **No one runs `ray stop`**, which stops every
   Ray process on the machine, other projects' builds included. The script's `--help` is the detail.

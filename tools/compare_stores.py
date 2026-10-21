@@ -115,11 +115,11 @@ GLOBAL_BOOKKEEPING = {
 }
 
 BOOKKEEPING_COLUMNS = {
-    "ScalarModel": {
+    "ScalarHistory": {
         "label": "the job name and datetime.now() (main.py build_solver_batch_label), stored as "
-        "obj.label (ObjectFactories/ScalarModel.py store)",
-        "compute_time": "supervisor.integration_time (ComputeTargets/ScalarModel.py "
-        "compute_scalar_model), a perf_counter interval (Quadrature/supervisors/base.py:44-49)",
+        "obj.label (ObjectFactories/ScalarHistory.py store)",
+        "compute_time": "supervisor.integration_time (ComputeTargets/ScalarHistory.py "
+        "compute_scalar_history), a perf_counter interval (Quadrature/supervisors/base.py:44-49)",
         "mean_RHS_time": "the mean wall time of an RHS evaluation "
         "(Quadrature/supervisors/base.py:62-77)",
         "max_RHS_time": "the longest wall time of an RHS evaluation "
@@ -162,8 +162,8 @@ MASKED_FRAGMENTS = {
 }
 
 # Polymorphic references: a serial column with no foreign key, whose table is named by a type
-# column. table -> serial column -> (type column, {type value: table}). Only ScalarModel has
-# them (ObjectFactories/ScalarModel.py register and store). The type values are
+# column. table -> serial column -> (type column, {type value: table}). Only ScalarHistory has
+# them (ObjectFactories/ScalarHistory.py register and store). The type values are
 # each class's type_id, and the table is the class's registry name (the layer dispatches a store
 # by type(obj).__name__):
 # - cosmology (CosmologyModels/model_ids.py): QCD_Cosmology, the only stored cosmology class
@@ -174,7 +174,7 @@ MASKED_FRAGMENTS = {
 # - potential (CosmologyConcepts/Potentials/model_ids.py and each class's type_id);
 # - coupling (CosmologyConcepts/ConformalCouplings/model_ids.py; ExponentialCoupling.py:41-42).
 POLYMORPHIC_REFERENCES = {
-    "ScalarModel": {
+    "ScalarHistory": {
         "cosmology_serial": ("cosmology_type", {3: "QCD_Cosmology"}),
         "potential_serial": (
             "potential_type",
@@ -187,7 +187,7 @@ POLYMORPHIC_REFERENCES = {
 # Type values the code defines but that no stored class carries. A row holding one is a named
 # problem, as is a value in neither map. table -> type column -> {value: why}
 UNSTORED_TYPE_VALUES = {
-    "ScalarModel": {
+    "ScalarHistory": {
         "cosmology_type": {
             0: "LAMBDACDM_IDENTIFIER: no class returns it",
             1: "QCD_EOS_JAX_AUTODIFF_IDENTIFIER: the type_id of a LambdaCDM_GenericEOS on "

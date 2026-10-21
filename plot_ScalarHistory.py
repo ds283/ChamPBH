@@ -39,9 +39,9 @@ from matplotlib import pyplot as plt
 from numpy import nan
 
 from ComputeTargets import (
-    ScalarModel,
-    ScalarModelValue,
-    ScalarModelProxy,
+    ScalarHistory,
+    ScalarHistoryValue,
+    ScalarHistoryProxy,
     AdiabaticHistory,
     BBNData,
     BBNDataValue,
@@ -67,7 +67,7 @@ from config.sharding import (
 from config.version import VERSION_LABEL
 from extract_common import (
     safe_fabs,
-    add_ScalarModel_labels,
+    add_ScalarHistory_labels,
     add_redshift_xaxis_labels,
     add_temperature_yaxis_labels,
     safe_fabs_positive,
@@ -112,7 +112,7 @@ ray.init(address=args.ray_address)
 
 profile_agent = None
 if args.profile_db is not None:
-    label = f'{VERSION_LABEL}--plot_ScalarModel-primarydb-"{args.database}"-{datetime.now().replace(microsecond=0).isoformat()}'
+    label = f'{VERSION_LABEL}--plot_ScalarHistory-primarydb-"{args.database}"-{datetime.now().replace(microsecond=0).isoformat()}'
 
     profile_agent = ProfileAgent.options(name="ProfileAgent").remote(
         db_name=args.profile_db,
@@ -123,7 +123,7 @@ if args.profile_db is not None:
 
 def history_plot(
     plot_path,
-    model: ScalarModel,
+    model: ScalarHistory,
     Q: AdiabaticHistory,
     model_label: str,
     get_x_coord,
@@ -255,7 +255,7 @@ def history_plot(
     T_ax.set_yscale("log")
     T_ax.grid(True)
 
-    add_ScalarModel_labels(fig, model, model_label)
+    add_ScalarHistory_labels(fig, model, model_label)
 
     h, l = add_redshift_xaxis_labels(
         phi_ax, model, temp_unit="GeV", text_labels=True, x_coord=x_coord
@@ -277,7 +277,7 @@ def history_plot(
         fig.savefig(fig_path.with_suffix(".png"))
     except OverflowError:
         print(
-            f"!! plot_ScalarModel: error occurred when generating a history plot for ScalarModel '{model.label}'"
+            f"!! plot_ScalarHistory: error occurred when generating a history plot for ScalarHistory '{model.label}'"
         )
 
     plt.close()
@@ -285,7 +285,7 @@ def history_plot(
 
 def thermo_plot(
     plot_path,
-    model: ScalarModel,
+    model: ScalarHistory,
     model_label: str,
     get_x_coord,
     x_axis_label,
@@ -377,7 +377,7 @@ def thermo_plot(
         linestyle="solid",
     )
 
-    add_ScalarModel_labels(fig, model, model_label)
+    add_ScalarHistory_labels(fig, model, model_label)
 
     h, l = add_redshift_xaxis_labels(
         gstar_ax, model, text_labels=False, x_coord=x_coord
@@ -404,7 +404,7 @@ def thermo_plot(
         fig.savefig(fig_path.with_suffix(".png"))
     except OverflowError:
         print(
-            f"!! plot_ScalarModel: error occurred when generating a thermodynamics plot for ScalarModel '{model.label}'"
+            f"!! plot_ScalarHistory: error occurred when generating a thermodynamics plot for ScalarHistory '{model.label}'"
         )
 
     plt.close()
@@ -412,7 +412,7 @@ def thermo_plot(
 
 def Hubble_plot(
     plot_path,
-    model: ScalarModel,
+    model: ScalarHistory,
     BBN: BBNData,
     model_label: str,
     _get_x_coord,
@@ -509,7 +509,7 @@ def Hubble_plot(
 
     H_ax.grid(True)
 
-    add_ScalarModel_labels(fig, model, model_label)
+    add_ScalarHistory_labels(fig, model, model_label)
     h, l = add_redshift_xaxis_labels(
         H_ax, model, temp_unit="GeV", text_labels=True, x_coord=x_coord
     )
@@ -526,7 +526,7 @@ def Hubble_plot(
         fig.savefig(fig_path.with_suffix(".png"))
     except OverflowError:
         print(
-            f"!! plot_ScalarModel: error occurred when generating a Hubble rate plot for ScalarModel '{model.label}'"
+            f"!! plot_ScalarHistory: error occurred when generating a Hubble rate plot for ScalarHistory '{model.label}'"
         )
 
     plt.close()
@@ -534,7 +534,7 @@ def Hubble_plot(
 
 def energy_plot(
     plot_path,
-    model: ScalarModel,
+    model: ScalarHistory,
     model_label: str,
     get_x_coord,
     x_axis_label,
@@ -595,7 +595,7 @@ def energy_plot(
 
     energy_ax.grid(True)
 
-    add_ScalarModel_labels(fig, model, model_label)
+    add_ScalarHistory_labels(fig, model, model_label)
     h, l = add_redshift_xaxis_labels(
         energy_ax, model, temp_unit="GeV", text_labels=True, x_coord=x_coord
     )
@@ -612,7 +612,7 @@ def energy_plot(
         fig.savefig(fig_path.with_suffix(".png"))
     except OverflowError:
         print(
-            f"!! plot_ScalarModel: error occurred when generating an energy history plot for ScalarModel '{model.label}'"
+            f"!! plot_ScalarHistory: error occurred when generating an energy history plot for ScalarHistory '{model.label}'"
         )
 
     plt.close()
@@ -620,7 +620,7 @@ def energy_plot(
 
 def ODE_terms_plot(
     plot_path,
-    model: ScalarModel,
+    model: ScalarHistory,
     model_label: str,
     get_x_coord,
     x_axis_label,
@@ -799,7 +799,7 @@ def ODE_terms_plot(
         Sigma_ax.xaxis.set_inverted(True)
     Sigma_ax.set_xlabel(x_axis_label())
 
-    add_ScalarModel_labels(fig, model, model_label)
+    add_ScalarHistory_labels(fig, model, model_label)
     add_redshift_xaxis_labels(f_ax, model, text_labels=False, x_coord=x_coord)
     add_redshift_xaxis_labels(r_ax, model, text_labels=False, x_coord=x_coord)
     add_redshift_xaxis_labels(k_ax, model, text_labels=False, x_coord=x_coord)
@@ -823,14 +823,14 @@ def ODE_terms_plot(
         fig.savefig(fig_path.with_suffix(".png"))
     except OverflowError:
         print(
-            f"!! plot_ScalarModel: error occurred when generating a plot of the ODE terms for ScalarModel '{model.label}'"
+            f"!! plot_ScalarHistory: error occurred when generating a plot of the ODE terms for ScalarHistory '{model.label}'"
         )
 
     plt.close()
 
 
 def BBN_era_plot(
-    plot_path, model: ScalarModel, model_label: str, T_Jordan_MeV, SigmaFm, H_Standard
+    plot_path, model: ScalarHistory, model_label: str, T_Jordan_MeV, SigmaFm, H_Standard
 ):
     values = model.values
     units: UnitsLike = model._units
@@ -839,7 +839,7 @@ def BBN_era_plot(
     LOG_T_BBN_MAX = log(10 * units.MeV)
     LOG_T_BBN_MIN = log(1e-3 * units.MeV)
 
-    def is_in_BBN_era(value: ScalarModelValue) -> bool:
+    def is_in_BBN_era(value: ScalarHistoryValue) -> bool:
         return LOG_T_BBN_MIN <= value.log_T_Jordan <= LOG_T_BBN_MAX
 
     abs_phi_Einstein_BBN = [
@@ -1048,7 +1048,7 @@ def BBN_era_plot(
     phi_BBN_ax.set_xscale("log")
     phi_BBN_ax.xaxis.set_inverted(True)
 
-    add_ScalarModel_labels(fig, model, model_label)
+    add_ScalarHistory_labels(fig, model, model_label)
 
     phi_BBN_ax.legend(loc="best")
     HJordan_BBN_ax.legend(loc="best")
@@ -1062,7 +1062,7 @@ def BBN_era_plot(
         fig.savefig(fig_path.with_suffix(".png"))
     except OverflowError:
         print(
-            f"!! plot_ScalarModel: error occurred when generating a BBN era plot for ScalarModel '{model.label}'"
+            f"!! plot_ScalarHistory: error occurred when generating a BBN era plot for ScalarHistory '{model.label}'"
         )
 
     plt.close()
@@ -1070,7 +1070,7 @@ def BBN_era_plot(
 
 def BBN_era_NP_plot(
     plot_path,
-    model: ScalarModel,
+    model: ScalarHistory,
     BBN: BBNData,
     model_label: str,
     T_Jordan_MeV,
@@ -1085,12 +1085,12 @@ def BBN_era_NP_plot(
     assert model.available
     assert not model.failure
 
-    # pair up BBNDataValue instances with corresponding ScalarModelValue instances
-    model_values: List[ScalarModelValue] = model.values
+    # pair up BBNDataValue instances with corresponding ScalarHistoryValue instances
+    model_values: List[ScalarHistoryValue] = model.values
     num_model_values: int = len(model_values)
     current_model_index: int = 0
 
-    BBN_value_partners: Dict[int, ScalarModelValue] = {}
+    BBN_value_partners: Dict[int, ScalarHistoryValue] = {}
     for BBN_value in BBN.values:
         while model_values[current_model_index].z.store_id != BBN_value.z.store_id:
             current_model_index += 1
@@ -1248,7 +1248,7 @@ def BBN_era_NP_plot(
     rho_NP_ax.set_xlabel("Temperature $T$ [MeV]")
     rho_NP_ax.xaxis.set_inverted(True)
 
-    add_ScalarModel_labels(fig, model, model_label)
+    add_ScalarHistory_labels(fig, model, model_label)
     add_BBN_info_labels(fig, bbn=BBN)
 
     rho_NP_ax.legend(loc="best")
@@ -1262,7 +1262,7 @@ def BBN_era_NP_plot(
         fig.savefig(fig_path.with_suffix(".png"))
     except OverflowError:
         print(
-            f"!! plot_ScalarModel: error occurred when generating a BBN NP plot for ScalarModel '{model.label}'"
+            f"!! plot_ScalarHistory: error occurred when generating a BBN NP plot for ScalarHistory '{model.label}'"
         )
 
     plt.close()
@@ -1272,7 +1272,7 @@ def write_csv_file(
     BBN: BBNData,
     Q: AdiabaticHistory,
     csv_path: Path,
-    model: ScalarModel,
+    model: ScalarHistory,
     units: UnitsLike,
 ):
     model_values = (
@@ -1367,9 +1367,9 @@ def write_csv_file(
 
 
 @ray.remote
-def plot_ScalarModel(
+def plot_ScalarHistory(
     model_label: str,
-    model: ScalarModel,
+    model: ScalarHistory,
     Q: AdiabaticHistory,
     BBN: BBNData,
     x_coord: str = "redshift",
@@ -1379,29 +1379,29 @@ def plot_ScalarModel(
 
     if not model.available:
         print(
-            f"@@ plot_ScalarModel: scalar field history for Potential={potential.name}, Coupling={coupling.name} is not available; skipping this item"
+            f"@@ plot_ScalarHistory: scalar field history for Potential={potential.name}, Coupling={coupling.name} is not available; skipping this item"
         )
         return
 
     if model.failure:
         print(
-            f"@@ plot_ScalarModel: scalar field history for Potential={potential.name}, Coupling={coupling.name} had an integration failure; skipping this item"
+            f"@@ plot_ScalarHistory: scalar field history for Potential={potential.name}, Coupling={coupling.name} had an integration failure; skipping this item"
         )
         return
 
     if BBN.failure:
         print(
-            f"@@ plot_ScalarModel: BBN data for Potential={potential.name}, Coupling={coupling.name} had an integration failure, and will not be used"
+            f"@@ plot_ScalarHistory: BBN data for Potential={potential.name}, Coupling={coupling.name} had an integration failure, and will not be used"
         )
 
     if not Q.available:
         print(
-            f"@@ plot_ScalarModel: adiabatic Q history for Potential={potential.name}, Coupling={coupling.name} is not available, and will not be plotted"
+            f"@@ plot_ScalarHistory: adiabatic Q history for Potential={potential.name}, Coupling={coupling.name} is not available, and will not be plotted"
         )
 
     if not BBN.failure and not BBN.available:
         print(
-            f"@@ plot_ScalarModel: BBN data for Potential={potential.name}, Coupling={coupling.name} is not available, and will not be plotted"
+            f"@@ plot_ScalarHistory: BBN data for Potential={potential.name}, Coupling={coupling.name} is not available, and will not be plotted"
         )
 
     if x_coord not in ["redshift", "efolds"]:
@@ -1427,7 +1427,7 @@ def plot_ScalarModel(
         / f"csv/beta={beta:.5g}/M={M/units.eV:.5g}eV_Lambda={Lambda/units.eV:.5g}eV"
     )
 
-    def get_x_coord(value: ScalarModelValue) -> float:
+    def get_x_coord(value: ScalarHistoryValue) -> float:
         if x_coord == "efolds":
             return value.raw_N
 
@@ -1439,7 +1439,7 @@ def plot_ScalarModel(
 
         return r"redshift $1+z$"
 
-    def SigmaFm(value: ScalarModelValue) -> float:
+    def SigmaFm(value: ScalarHistoryValue) -> float:
         Sigma = value.Sigma
         fm = exp(value.log_fm)
 
@@ -1448,11 +1448,11 @@ def plot_ScalarModel(
 
         return (Sigma + fm) / (1.0 + fm)
 
-    def KE(value: ScalarModelValue) -> float:
+    def KE(value: ScalarHistoryValue) -> float:
         H_Einstein2 = value.H_Einstein * value.H_Einstein
         return H_Einstein2 * value.pi_Einstein * value.pi_Einstein / 2.0
 
-    def PE(value: ScalarModelValue) -> float:
+    def PE(value: ScalarHistoryValue) -> float:
         if hasattr(potential, "V"):
             return potential.V(value.phi_Einstein)
         elif hasattr(potential, "log_V"):
@@ -1462,13 +1462,13 @@ def plot_ScalarModel(
                 f"Potential {potential.name} has no V or log_V implementation"
             )
 
-    def TotalEnergy(value: ScalarModelValue) -> float:
+    def TotalEnergy(value: ScalarHistoryValue) -> float:
         return KE(value) + PE(value)
 
-    def T_Jordan_MeV(value: Union[ScalarModelValue, BBNDataValue]) -> float:
+    def T_Jordan_MeV(value: Union[ScalarHistoryValue, BBNDataValue]) -> float:
         return exp(value.log_T_Jordan) / units.MeV
 
-    def H_Standard(value: ScalarModelValue) -> float:
+    def H_Standard(value: ScalarHistoryValue) -> float:
         rhorad_Jordan: float = exp(value.log_rhorad_Jordan)
         fm: float = exp(value.log_fm)
         H2: float = rhorad_Jordan * (1.0 + fm) / CONST_3_MP2
@@ -1556,10 +1556,10 @@ def run_pipeline(
             "tags": tags,
         }
 
-        model: ScalarModel = ray.get(
-            pool.object_get("ScalarModel", **model_query_payload)
+        model: ScalarHistory = ray.get(
+            pool.object_get("ScalarHistory", **model_query_payload)
         )
-        model_proxy: ScalarModelProxy = ScalarModelProxy(model)
+        model_proxy: ScalarHistoryProxy = ScalarHistoryProxy(model)
 
         adiabatic_query_payload = {
             "shard_key": coupling.shard_key,
@@ -1578,7 +1578,7 @@ def run_pipeline(
 
         BBN: BBNData = pool.object_get("BBNData", **BBN_query_payload)
 
-        return plot_ScalarModel.remote(model_label, model, Q, BBN, x_coord="efolds")
+        return plot_ScalarHistory.remote(model_label, model, Q, BBN, x_coord="efolds")
 
     work_grid = itertools.product(Potential_array, Coupling_array)
 
@@ -1596,7 +1596,7 @@ def run_pipeline(
         process_batch_size=10,
         notify_batch_size=50,
         notify_time_interval=120,
-        title="GENERATING ScalarModel DATA PRODUCTS",
+        title="GENERATING ScalarHistory DATA PRODUCTS",
         store_results=False,
     )
     work_queue.run()
@@ -1612,7 +1612,7 @@ with ShardedPool(
     sharded_tables=sharded_tables,
     timeout=args.db_timeout,
     profile_agent=profile_agent,
-    job_name="plot_ScalarModel",
+    job_name="plot_ScalarHistory",
     prune_unvalidated=False,
     read_only=True,
     read_table_config=read_table_config,

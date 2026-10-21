@@ -26,7 +26,7 @@ from the repository root, since the EOS reads its table from the working directo
         [--arrays]
 
 Each history is tools/surfing_scan.py's `run_history`: the setup of tools/history_and_bbn.py
-(Lambda = 1e-3 eV, pi* = 0, T* = 2e4 GeV), integrated by compute_scalar_model._function, with the
+(Lambda = 1e-3 eV, pi* = 0, T* = 2e4 GeV), integrated by compute_scalar_history._function, with the
 IntegrationResult kept. The histories are sampled on its dense output from the start to the first
 bounce, and the turning points of T_J are `surfing_turning_points`, labelled with their capture
 kick by `summarise`, as the scan's CSV is. The default beta are the two captured edges of the

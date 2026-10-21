@@ -58,7 +58,7 @@ from config.sharding import replicated_tables
 LABEL_A = "2026.3.0"
 LABEL_B = "2026.4.0"
 
-KEYED_TABLES = {"ScalarModel", "AdiabaticHistory", "BBNData"}
+KEYED_TABLES = {"ScalarHistory", "AdiabaticHistory", "BBNData"}
 
 _UNITS = NS(PlanckMass=1.0, GeV=1.0, MeV=1.0e-3)
 
@@ -77,7 +77,7 @@ _atol, _rtol = _stand_in(14), _stand_in(15)
 _MODEL_SERIAL = 1
 
 
-def _scalar_model_query(**extra):
+def _scalar_history_query(**extra):
     q = dict(
         solver_labels={},
         cosmology=_cosmology,
@@ -115,12 +115,12 @@ def _insert(store, cls_name, row):
     return serial
 
 
-def _insert_failed_scalar_model(store):
+def _insert_failed_scalar_history(store):
     for serial, log10_tol in ((14, -10.0), (15, -8.0)):
         _insert(store, "tolerance", dict(serial=serial, log10_tol=log10_tol))
     return _insert(
         store,
-        "ScalarModel",
+        "ScalarHistory",
         dict(
             serial=_MODEL_SERIAL,
             label="m",
@@ -150,7 +150,7 @@ def _insert_adiabatic_history(store, serial=1):
         "AdiabaticHistory",
         dict(
             serial=serial,
-            model_serial=_MODEL_SERIAL,
+            scalar_history_serial=_MODEL_SERIAL,
             label="h",
             z_samples=0,
             compute_time=1.0,
@@ -165,7 +165,7 @@ def _insert_failed_bbn(store, serial, reason):
         "BBNData",
         dict(
             serial=serial,
-            model_serial=_MODEL_SERIAL,
+            scalar_history_serial=_MODEL_SERIAL,
             failure=True,
             failure_reason=reason,
             validated=True,
@@ -179,7 +179,7 @@ def _insert_successful_bbn(store, serial):
         "BBNData",
         dict(
             serial=serial,
-            model_serial=_MODEL_SERIAL,
+            scalar_history_serial=_MODEL_SERIAL,
             failure=False,
             Yp_BBN=0.2468872958,
             DOverH=2.462251065,
@@ -265,12 +265,12 @@ class _TempStoreCase(unittest.TestCase):
 
 
 class TestVersionKeyedLookups(_TempStoreCase):
-    def test_a_scalar_model_is_returned_only_under_its_own_label(self):
-        """(a) A failed ScalarModel stored under label A is returned under A, and not under B."""
+    def test_a_scalar_history_is_returned_only_under_its_own_label(self):
+        """(a) A failed ScalarHistory stored under label A is returned under A, and not under B."""
         store_a = self.open(LABEL_A)
-        serial = _insert_failed_scalar_model(store_a)
+        serial = _insert_failed_scalar_history(store_a)
 
-        m = store_a.object_get("ScalarModel", **_scalar_model_query())
+        m = store_a.object_get("ScalarHistory", **_scalar_history_query())
         self.assertTrue(m.available)
         self.assertEqual(m.store_id, serial)
         self.assertTrue(m.failure)
@@ -278,23 +278,23 @@ class TestVersionKeyedLookups(_TempStoreCase):
         store_b = self.open(LABEL_B)
         self.assertNotEqual(store_a._version_serial, store_b._version_serial)
 
-        m_b = store_b.object_get("ScalarModel", **_scalar_model_query())
+        m_b = store_b.object_get("ScalarHistory", **_scalar_history_query())
         self.assertFalse(
             m_b.available,
-            f"ScalarModel stored under {LABEL_A} was returned under {LABEL_B} "
+            f"ScalarHistory stored under {LABEL_A} was returned under {LABEL_B} "
             f"(store_id={_sid(m_b)})",
         )
 
         # and the row is still there under A, unchanged
         store_a2 = self.open(LABEL_A)
-        m_a2 = store_a2.object_get("ScalarModel", **_scalar_model_query())
+        m_a2 = store_a2.object_get("ScalarHistory", **_scalar_history_query())
         self.assertTrue(m_a2.available)
         self.assertEqual(m_a2.store_id, serial)
 
     def test_b_adiabatic_history_is_returned_only_under_its_own_label(self):
-        """(b) An AdiabaticHistory keyed to a ScalarModel serial, stored under A, is returned under A, and not under B."""
+        """(b) An AdiabaticHistory keyed to a ScalarHistory serial, stored under A, is returned under A, and not under B."""
         store_a = self.open(LABEL_A)
-        _insert_failed_scalar_model(store_a)
+        _insert_failed_scalar_history(store_a)
         serial = _insert_adiabatic_history(store_a)
 
         h = store_a.object_get("AdiabaticHistory", model_proxy=_model_proxy(), tags=[])
@@ -320,7 +320,7 @@ class TestVersionKeyedLookups(_TempStoreCase):
     def test_c1_failed_bbn_row_is_returned_only_under_its_own_label(self):
         """(c) A failed BBNData row stored under A: failure=True returns it under A, not under B."""
         store_a = self.open(LABEL_A)
-        _insert_failed_scalar_model(store_a)
+        _insert_failed_scalar_history(store_a)
         serial = _insert_failed_bbn(store_a, 1, "stored under A")
 
         query = dict(
@@ -346,7 +346,7 @@ class TestVersionKeyedLookups(_TempStoreCase):
     def test_c2_successful_bbn_row_is_returned_only_under_its_own_label(self):
         """(c) A successful BBNData row stored under A: the default lookup returns it under A, not under B."""
         store_a = self.open(LABEL_A)
-        _insert_failed_scalar_model(store_a)
+        _insert_failed_scalar_history(store_a)
         serial = _insert_successful_bbn(store_a, 1)
 
         query = dict(model_proxy=_model_proxy(), tags=[], _do_not_populate=True)
@@ -368,24 +368,24 @@ class TestVersionKeyedLookups(_TempStoreCase):
     def test_c3_vectorized_lookup_is_keyed_too(self):
         """The vectorized route (payload_data=[...]) is keyed the same way as the scalar one."""
         store_a = self.open(LABEL_A)
-        serial = _insert_failed_scalar_model(store_a)
-        payloads = [_scalar_model_query(), _scalar_model_query()]
+        serial = _insert_failed_scalar_history(store_a)
+        payloads = [_scalar_history_query(), _scalar_history_query()]
 
-        got_a = store_a.object_get("ScalarModel", payload_data=payloads)
+        got_a = store_a.object_get("ScalarHistory", payload_data=payloads)
         self.assertEqual([m.store_id for m in got_a], [serial, serial])
 
-        got_b = self.open(LABEL_B).object_get("ScalarModel", payload_data=payloads)
+        got_b = self.open(LABEL_B).object_get("ScalarHistory", payload_data=payloads)
         self.assertEqual([m.available for m in got_b], [False, False])
 
     def test_d_keyed_build_without_the_serial_raises(self):
         """(d) A keyed factory's build(), called directly with a payload lacking the reserved key, raises."""
         store = self.open(LABEL_A)
-        _insert_failed_scalar_model(store)
+        _insert_failed_scalar_history(store)
         _insert_adiabatic_history(store)
         _insert_failed_bbn(store, 1, "stored under A")
 
         payloads = {
-            "ScalarModel": _scalar_model_query(),
+            "ScalarHistory": _scalar_history_query(),
             "AdiabaticHistory": dict(model_proxy=_model_proxy(), tags=[]),
             "BBNData": dict(
                 model_proxy=_model_proxy(),
@@ -409,7 +409,7 @@ class TestVersionKeyedLookups(_TempStoreCase):
                         )
 
     def test_d3_only_the_compute_targets_are_keyed(self):
-        """Exactly ScalarModel, AdiabaticHistory and BBNData are keyed; no parameter, value or tag table."""
+        """Exactly ScalarHistory, AdiabaticHistory and BBNData are keyed; no parameter, value or tag table."""
         store = self.open(LABEL_A)
         keyed = {
             name
@@ -446,10 +446,10 @@ class TestVersionKeyedLookups(_TempStoreCase):
 
 
 class TestOneVersionLabel(unittest.TestCase):
-    SCRIPTS = ("main.py", "plot_by_beta.py", "plot_ScalarModel.py")
+    SCRIPTS = ("main.py", "plot_by_beta.py", "plot_ScalarHistory.py")
 
     def test_f_scripts_import_the_label_and_define_none(self):
-        """(f) main.py, plot_by_beta.py and plot_ScalarModel.py import VERSION_LABEL from config.version and assign none.
+        """(f) main.py, plot_by_beta.py and plot_ScalarHistory.py import VERSION_LABEL from config.version and assign none.
 
         The scripts are parsed with ast, not imported: main.py calls ray.init at import.
         """

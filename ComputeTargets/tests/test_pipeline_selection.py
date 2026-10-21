@@ -17,7 +17,7 @@
 Which work main.py's adiabatic and BBN stages schedule (run-integrity prompt 03,
 README §6.3).
 
-Before prompt 03 both stages built their downstream query from the ScalarModels
+Before prompt 03 both stages built their downstream query from the ScalarHistories
 that did not fail, then zipped the results against the unfiltered shard bin. One
 failed model shifted every later result by one, and `zip` dropped the last. The
 decision now lives in `pipeline_selection`, which main.py's two stages call; it is
@@ -43,7 +43,7 @@ def _pairs():
     return [(f"V{i}", f"beta{i}") for i in range(N_MODELS)]
 
 
-def _scalar_models():
+def _scalar_histories():
     return [
         NS(i=i, available=True, failure=(i == FAILED_MODEL)) for i in range(N_MODELS)
     ]
@@ -69,11 +69,11 @@ def _names(entries):
 
 class TestPipelineSelection(unittest.TestCase):
     def test_d_the_probe_bin_schedules_V2_and_V4(self):
-        """(d) Five pairs, model 1's ScalarModel failed, models 0 and 3 have BBN rows: missing is {V2, V4}."""
+        """(d) Five pairs, model 1's ScalarHistory failed, models 0 and 3 have BBN rows: missing is {V2, V4}."""
         from pipeline_selection import build_query_entries, select_missing
 
         pairs = _pairs()
-        built = build_query_entries(pairs, _scalar_models())
+        built = build_query_entries(pairs, _scalar_histories())
 
         self.assertEqual(built.skipped_failed_models, 1)
         self.assertEqual(built.unavailable, [])
@@ -94,7 +94,7 @@ class TestPipelineSelection(unittest.TestCase):
         """(e) The same bin with V3's stored BBN row a failure: {V2, V4} without the flag, {V2, V3, V4} with it."""
         from pipeline_selection import build_query_entries, select_missing
 
-        built = build_query_entries(_pairs(), _scalar_models())
+        built = build_query_entries(_pairs(), _scalar_histories())
         results = _bbn_results(built.entries, failed_bbn={3})
 
         without = select_missing(built.entries, results)
@@ -109,18 +109,18 @@ class TestPipelineSelection(unittest.TestCase):
         """AdiabaticHistory results carry no `failure`: an available one is done, an unavailable one missing."""
         from pipeline_selection import build_query_entries, select_missing
 
-        built = build_query_entries(_pairs(), _scalar_models())
+        built = build_query_entries(_pairs(), _scalar_histories())
         results = [NS(available=(entry.model.i in HAS_BBN)) for entry in built.entries]
 
         selection = select_missing(built.entries, results, retry_failed=False)
         self.assertEqual(_names(selection.missing), ["V2", "V4"])
         self.assertEqual(selection.stored_failures, 0)
 
-    def test_e3_an_unavailable_scalar_model_is_reported_not_queried(self):
-        """A ScalarModel lookup that found no row is reported in `unavailable`, and its `failure` is not read."""
+    def test_e3_an_unavailable_scalar_history_is_reported_not_queried(self):
+        """A ScalarHistory lookup that found no row is reported in `unavailable`, and its `failure` is not read."""
         from pipeline_selection import build_query_entries
 
-        models = _scalar_models()
+        models = _scalar_histories()
         models[4] = NS(i=4, available=False)  # no `failure` attribute at all
 
         built = build_query_entries(_pairs(), models)
@@ -133,9 +133,9 @@ class TestPipelineSelection(unittest.TestCase):
         from pipeline_selection import build_query_entries, select_missing
 
         with self.assertRaises(ValueError):
-            build_query_entries(_pairs(), _scalar_models()[:-1])
+            build_query_entries(_pairs(), _scalar_histories()[:-1])
 
-        built = build_query_entries(_pairs(), _scalar_models())
+        built = build_query_entries(_pairs(), _scalar_histories())
         results = _bbn_results(built.entries)
         with self.assertRaises(ValueError):
             select_missing(built.entries, results[:-1])

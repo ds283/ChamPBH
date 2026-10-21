@@ -14,18 +14,18 @@
 # limitations under the License.
 
 """
-A ScalarModel failure row keeps its reason (science-readiness prompt 02, README §6.3 (a)).
+A ScalarHistory failure row keeps its reason (science-readiness prompt 02, README §6.3 (a)).
 
-A failed history's payload carries `failure_reason`. `ScalarModel.store()` takes it, the
+A failed history's payload carries `failure_reason`. `ScalarHistory.store()` takes it, the
 factory's `store` writes it to the new `failure_reason` column, and `build` reads it back.
 Each test goes the whole way on a temporary SQLite file, as `test_version_keyed_lookups`
-does: `ScalarModel.store()` is run with `ray.wait` and `ray.get` patched to hand it a
+does: `ScalarHistory.store()` is run with `ray.wait` and `ray.get` patched to hand it a
 payload, then the factory's `store` is called with the datastore's own inserter, and the
 row is read back through `object_get`. A success row reads back `None`.
 
 No Ray cluster, no persistent datastore. About 1 s.
 
-On `HEAD~1` the table has no `failure_reason` column and `ScalarModel` no such property, so
+On `HEAD~1` the table has no `failure_reason` column and `ScalarHistory` no such property, so
 the read-back object has no reason: the reason the history printed is not in the row.
 """
 
@@ -47,13 +47,13 @@ from ObjectFactories.tests.test_version_keyed_lookups import (
     _pi,
     _potential,
     _rtol,
-    _scalar_model_query,
+    _scalar_history_query,
     _T_init,
     _T_stop,
 )
 from config.defaults import DEFAULT_STRING_LENGTH
 
-# `import ComputeTargets.ScalarModel` gives the class (the package re-exports it); the module
+# `import ComputeTargets.ScalarHistory` gives the class (the package re-exports it); the module
 # is reached through the test helper that already does so
 SM = kcl.SM
 
@@ -61,8 +61,8 @@ REASON_300 = "step budget exhausted: " + "x" * 277
 
 
 def _model(compute_result):
-    """An unpopulated ScalarModel on the stand-ins, with store() about to resolve compute_result."""
-    model = SM.ScalarModel(
+    """An unpopulated ScalarHistory on the stand-ins, with store() about to resolve compute_result."""
+    model = SM.ScalarHistory(
         payload=None,
         solver_labels={"Radau+kinematic-cap-stepping0": NS(store_id=1)},
         cosmology=_cosmology,
@@ -86,22 +86,22 @@ def _model(compute_result):
 
 
 def _write(store, model):
-    factory = store._factories["ScalarModel"]
+    factory = store._factories["ScalarHistory"]
     with store._engine.begin() as conn:
         factory.store(
             model,
             conn,
-            store._tables["ScalarModel"],
+            store._tables["ScalarHistory"],
             # the harness has a stand-in broker, but the row is given an explicit serial
-            lambda c, payload: store._inserters["ScalarModel"](
+            lambda c, payload: store._inserters["ScalarHistory"](
                 c, dict(payload, serial=1)
             ),
             store._tables,
             store._inserters,
         )
         conn.execute(
-            sqla.update(store._tables["ScalarModel"])
-            .where(store._tables["ScalarModel"].c.serial == model.store_id)
+            sqla.update(store._tables["ScalarHistory"])
+            .where(store._tables["ScalarHistory"].c.serial == model.store_id)
             .values(validated=True)
         )
         conn.commit()
@@ -123,7 +123,7 @@ class TestFailureReasonRoundTrip(_TempStoreCase):
         self.assertEqual(model.failure_reason, REASON_300[:DEFAULT_STRING_LENGTH])
         _write(store, model)
 
-        got = store.object_get("ScalarModel", **_scalar_model_query(failure=True))
+        got = store.object_get("ScalarHistory", **_scalar_history_query(failure=True))
         self.assertTrue(got.available)
         self.assertTrue(got.failure)
         self.assertEqual(len(got.failure_reason), DEFAULT_STRING_LENGTH)
@@ -131,14 +131,14 @@ class TestFailureReasonRoundTrip(_TempStoreCase):
 
         # a fresh connection to the same file, and the vectorized route, give the same reason
         again = self.open(LABEL_A).object_get(
-            "ScalarModel", payload_data=[_scalar_model_query(failure=True)]
+            "ScalarHistory", payload_data=[_scalar_history_query(failure=True)]
         )
         self.assertEqual(again[0].failure_reason, REASON_300[:DEFAULT_STRING_LENGTH])
 
     def test_a2_a_failure_without_a_reason_reads_back_none(self):
         store = self._store_with_tolerances()
         _write(store, _model({"failure": True}))
-        got = store.object_get("ScalarModel", **_scalar_model_query(failure=True))
+        got = store.object_get("ScalarHistory", **_scalar_history_query(failure=True))
         self.assertTrue(got.failure)
         self.assertIsNone(got.failure_reason)
 
@@ -150,7 +150,7 @@ class TestFailureReasonRoundTrip(_TempStoreCase):
             dict(serial=1, label="Radau+kinematic-cap-stepping0", stepping=0),
         )
 
-        model = SM.ScalarModel(
+        model = SM.ScalarHistory(
             payload=None,
             solver_labels={},
             cosmology=_cosmology,
@@ -181,8 +181,8 @@ class TestFailureReasonRoundTrip(_TempStoreCase):
         _write(store, model)
 
         got = store.object_get(
-            "ScalarModel",
-            **_scalar_model_query(
+            "ScalarHistory",
+            **_scalar_history_query(
                 failure=False, solver_labels=["Radau+kinematic-cap-stepping0"]
             ),
         )
@@ -192,7 +192,7 @@ class TestFailureReasonRoundTrip(_TempStoreCase):
 
     def test_a4_an_unpopulated_model_refuses_to_report_a_reason(self):
         store = self._store_with_tolerances()
-        got = store.object_get("ScalarModel", **_scalar_model_query(failure=True))
+        got = store.object_get("ScalarHistory", **_scalar_history_query(failure=True))
         self.assertFalse(got.available)
         with self.assertRaises(RuntimeError):
             got.failure_reason

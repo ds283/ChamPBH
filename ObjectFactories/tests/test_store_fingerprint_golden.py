@@ -34,7 +34,7 @@ names. The model is SecondaryGWKit's `test_store_fingerprint_golden.py`.
 closed, then the package's undecorated actor inserts rows with no explicit serial, stamped with
 fixed times) and importing nothing from `tools.tests`, so that a golden store's rows cannot move
 when another module's helpers do. It holds one row of each of the 17 classes with a spec, except
-that there are two `ExponentialPotential` rows (n = 1 and n = 2) and two `ScalarModel` rows, one on
+that there are two `ExponentialPotential` rows (n = 1 and n = 2) and two `ScalarHistory` rows, one on
 each, so that the polymorphic key of the spec is resolved; the first is tagged and the second is
 not, so that two tag sets are read. Every literal is fixed.
 
@@ -43,6 +43,11 @@ was taken at format 1 from a store with five potential rows (one per potential c
 other classes are gone, so this store has two exponential rows instead, and `GOLDEN` names
 `store_fingerprint_jordan-normalization-01.json`. `LABEL` and `T0` are unchanged, so that the two
 files differ only by what the strip changed.
+
+**Format 3** (jordan-normalization prompt 02): the class of the scalar history is renamed
+`ScalarHistory`, with its value and tag tables and the columns that point at a history, so the
+specs' digests move. The store is the same one, with the rows' classes and columns renamed; `GOLDEN` names
+`store_fingerprint_jordan-normalization-02.json`. `LABEL` and `T0` are unchanged.
 
 **The golden file** is under `data/`, written once and never overwritten (P8). It was written from
 `config.fingerprint.fingerprinter.take(primary, None)` as `json.dumps(fp, indent=2, sort_keys=True)
@@ -87,13 +92,13 @@ from ObjectFactories.tests.test_version_keyed_lookups import _TempStoreCase
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DATA = Path(__file__).resolve().parent / "data"
-GOLDEN = DATA / "store_fingerprint_jordan-normalization-01.json"
+GOLDEN = DATA / "store_fingerprint_jordan-normalization-02.json"
 
 LABEL = "rrk-adoption-02-golden"
 T0 = datetime(2026, 10, 19, 12, 0, 0)
 
 # the stored potential rows: two ExponentialPotential rows (the only potential class since
-# jordan-normalization prompt 01), n = 1 and n = 2, each with its own ScalarModel
+# jordan-normalization prompt 01), n = 1 and n = 2, each with its own ScalarHistory
 POTENTIAL_CLASS = "ExponentialPotential"
 POTENTIAL_N_VALUES = (1, 2)
 
@@ -148,9 +153,9 @@ class _GoldenStoreCase(_TempStoreCase):
     def build_store(self):
         """
         The golden store: the version row, one row of each of the other 16 classes except
-        ExponentialPotential and ScalarModel, which have two rows each (n = 1 and n = 2; each
-        ScalarModel on its own potential row), the first ScalarModel tagged. The first ScalarModel, the AdiabaticHistory and the BBNData row have value
-        rows. Returns the primary file.
+        ExponentialPotential and ScalarHistory, which have two rows each (n = 1 and n = 2; each
+        ScalarHistory on its own potential row), the first ScalarHistory tagged. The first ScalarHistory, the AdiabaticHistory and the BBNData
+        row have value rows. Returns the primary file.
         """
         store = self.open(LABEL)
 
@@ -211,10 +216,10 @@ class _GoldenStoreCase(_TempStoreCase):
         ):
             models.append(
                 ins(
-                    "ScalarModel",
+                    "ScalarHistory",
                     dict(
                         model,
-                        label=f"golden-ScalarModel-{POTENTIAL_CLASS}-n{n}",
+                        label=f"golden-ScalarHistory-{POTENTIAL_CLASS}-n{n}",
                         potential_type=potential_ids.EXPONENTIAL_POTENTIAL,
                         potential_serial=potential_serial,
                     ),
@@ -222,14 +227,17 @@ class _GoldenStoreCase(_TempStoreCase):
                 )
             )
         first = models[0]
-        ins("ScalarModel_tags", {"model_serial": first, "tag_serial": tag})
+        ins("ScalarHistory_tags", {"history_serial": first, "tag_serial": tag})
         for serial in z[:3]:
-            ins("ScalarModelValue", {"model_serial": first, "z_serial": serial})
+            ins("ScalarHistoryValue", {"history_serial": first, "z_serial": serial})
 
         history = ins(
             "AdiabaticHistory",
             dict(
-                model_serial=first, label="golden-history", z_samples=2, validated=True
+                scalar_history_serial=first,
+                label="golden-history",
+                z_samples=2,
+                validated=True,
             ),
             at=T0 + timedelta(minutes=10),
         )
@@ -241,7 +249,7 @@ class _GoldenStoreCase(_TempStoreCase):
         bbn = ins(
             "BBNData",
             dict(
-                model_serial=first,
+                scalar_history_serial=first,
                 label="golden-BBNData",
                 failure=False,
                 PRyM_version="bf24c3d",
@@ -270,8 +278,8 @@ class TestGolden(_GoldenStoreCase):
         self.assertEqual(len(inventory.classes), 17)
         for name, entry in inventory.classes.items():
             self.assertGreaterEqual(entry.count, 1, name)
-        # every polymorphic key of ScalarModel's spec is resolved: one model per potential row
-        self.assertEqual(inventory["ScalarModel"].count, len(POTENTIAL_N_VALUES))
+        # every polymorphic key of ScalarHistory's spec is resolved: one model per potential row
+        self.assertEqual(inventory["ScalarHistory"].count, len(POTENTIAL_N_VALUES))
         self.assertEqual(inventory[POTENTIAL_CLASS].count, len(POTENTIAL_N_VALUES))
 
     def test_the_golden_fingerprint(self):
@@ -300,7 +308,7 @@ class TestGolden(_GoldenStoreCase):
 
     def test_two_tag_sets_are_read(self):
         fp = self.fingerprint(self.build_store(), {})
-        tag_sets = [t["tags"] for t in fp["classes"]["ScalarModel"]["tag_sets"]]
+        tag_sets = [t["tags"] for t in fp["classes"]["ScalarHistory"]["tag_sets"]]
         self.assertEqual(sorted(tag_sets), [[], ["golden"]])
 
 
@@ -357,7 +365,7 @@ class TestCommandLine(_GoldenStoreCase):
         squeezed = [" ".join(line.split()) for line in lines]
         self.assertIn(f"digest: {golden['digest']}", squeezed)
         self.assertIn(f"format: {golden['fingerprint_format']}", squeezed)
-        self.assertEqual(golden["fingerprint_format"], 2)
+        self.assertEqual(golden["fingerprint_format"], 3)
         self.assertEqual(
             lines[-1].strip(), "recorded: none recorded (the sidecar is absent)"
         )

@@ -23,9 +23,9 @@ import numpy as np
 import ray
 
 from ComputeTargets import (
-    ScalarModel,
+    ScalarHistory,
     AdiabaticHistory,
-    ScalarModelProxy,
+    ScalarHistoryProxy,
     BBNData,
 )
 from ComputeTargets.BBNData import PRYM_VERSION
@@ -204,7 +204,7 @@ def run_pipeline(
         batch_keys = list(binned_batch.keys())
 
         # query whether a stored result exists for all potential/coupling combinations
-        # ScalarModel is a sharded table and needs a "shard_key" field
+        # ScalarHistory is a sharded table and needs a "shard_key" field
         # TODO: find a better way to implement/handle
         query_batch = [
             {
@@ -237,7 +237,9 @@ def run_pipeline(
             pool,
             query_batch,
             task_builder=lambda x: pool.object_get_vectorized(
-                "ScalarModel", {"shard_key": x["shard_key"]}, payload_data=x["payload"]
+                "ScalarHistory",
+                {"shard_key": x["shard_key"]},
+                payload_data=x["payload"],
             ),
             available_handler=None,
             compute_handler=None,
@@ -270,7 +272,7 @@ def run_pipeline(
             work_refs.extend(
                 [
                     pool.object_get(
-                        "ScalarModel",
+                        "ScalarHistory",
                         shard_key=coupling.shard_key,
                         solver_labels=solvers,
                         cosmology=model_cosmology,
@@ -294,25 +296,25 @@ def run_pipeline(
 
         return work_refs
 
-    def build_solver_batch_label(m: ScalarModel):
+    def build_solver_batch_label(m: ScalarHistory):
         potential: AbstractPotential = m.potential
         coupling: AbstractCoupling = m.coupling
-        return f"{args.job_name}-ScalarModel-{potential.name}-{coupling.name}-{datetime.now().replace(microsecond=0).isoformat()}"
+        return f"{args.job_name}-ScalarHistory-{potential.name}-{coupling.name}-{datetime.now().replace(microsecond=0).isoformat()}"
 
-    def compute_solver_batch(m: ScalarModel, label: str):
+    def compute_solver_batch(m: ScalarHistory, label: str):
         return m.compute(label=label)
 
     # the reasons of the histories that failed in this run (science-readiness prompt 02)
-    scalar_model_failure_reasons: List[Any] = []
+    scalar_history_failure_reasons: List[Any] = []
 
-    def validate_solver_batch(m: ScalarModel):
+    def validate_solver_batch(m: ScalarHistory):
         if not m.available:
             raise RuntimeError(
-                "ScalarModel object passed for validation, but is not yet available"
+                "ScalarHistory object passed for validation, but is not yet available"
             )
 
         if m.failure:
-            scalar_model_failure_reasons.append(m.failure_reason)
+            scalar_history_failure_reasons.append(m.failure_reason)
 
         return pool.object_validate(m)
 
@@ -332,11 +334,11 @@ def run_pipeline(
         notify_min_time_interval=MIN_NOTIFY_INTERVAL,
     )
     solver_queue.run()
-    if len(scalar_model_failure_reasons) > 0:
+    if len(scalar_history_failure_reasons) > 0:
         print(
-            f"-- ScalarModel: {len(scalar_model_failure_reasons)} histories failed in this run"
+            f"-- ScalarHistory: {len(scalar_history_failure_reasons)} histories failed in this run"
         )
-        for clause, count in summarise_failure_reasons(scalar_model_failure_reasons):
+        for clause, count in summarise_failure_reasons(scalar_history_failure_reasons):
             print(f"     -- {count} x {clause}")
 
     ## STEP 2
@@ -399,7 +401,9 @@ def run_pipeline(
             pool,
             model_query_batch,
             task_builder=lambda x: pool.object_get_vectorized(
-                "ScalarModel", {"shard_key": x["shard_key"]}, payload_data=x["payload"]
+                "ScalarHistory",
+                {"shard_key": x["shard_key"]},
+                payload_data=x["payload"],
             ),
             available_handler=None,
             compute_handler=None,
@@ -413,7 +417,7 @@ def run_pipeline(
         )
         model_query_queue.run()
 
-        # keep each ScalarModel lookup result with the (potential, coupling) pair it was
+        # keep each ScalarHistory lookup result with the (potential, coupling) pair it was
         # asked for, and drop the models that failed (run-integrity prompt 03)
         query_entries = {
             key: build_query_entries(binned_batch[key], query_outcomes)
@@ -422,7 +426,7 @@ def run_pipeline(
         num_missing_models = sum(len(x.unavailable) for x in query_entries.values())
         if num_missing_models > 0:
             raise RuntimeError(
-                f"Some ScalarModel instances needed for AdiabaticHistory computation are missing ({num_missing_models} missing in this batch)"
+                f"Some ScalarHistory instances needed for AdiabaticHistory computation are missing ({num_missing_models} missing in this batch)"
             )
         adiabatic_counts["skipped_failed_models"] += sum(
             x.skipped_failed_models for x in query_entries.values()
@@ -433,7 +437,7 @@ def run_pipeline(
                 "shard_key": key,
                 "payload": [
                     {
-                        "model_proxy": ScalarModelProxy(entry.model),
+                        "model_proxy": ScalarHistoryProxy(entry.model),
                         "tags": [
                             SamplesPerLog10ZTag,
                         ],
@@ -487,7 +491,7 @@ def run_pipeline(
         if num_missing == 0:
             return []
 
-        # now we need to re-lookup ScalarModel insatnces for the missing elements, this time
+        # now we need to re-lookup ScalarHistory insatnces for the missing elements, this time
         # *not* with _do_not_populate
         required_models_payload = [
             {
@@ -519,7 +523,9 @@ def run_pipeline(
             pool,
             required_models_payload,
             task_builder=lambda x: pool.object_get_vectorized(
-                "ScalarModel", {"shard_key": x["shard_key"]}, payload_data=x["payload"]
+                "ScalarHistory",
+                {"shard_key": x["shard_key"]},
+                payload_data=x["payload"],
             ),
             available_handler=None,
             compute_handler=None,
@@ -535,7 +541,7 @@ def run_pipeline(
         required_models_proxies = [
             {
                 "shard_key": key,
-                "missing_proxies": [ScalarModelProxy(obj) for obj in lookup_data],
+                "missing_proxies": [ScalarHistoryProxy(obj) for obj in lookup_data],
             }
             for key, lookup_data in zip(batch_keys, required_models_queue.results)
         ]
@@ -592,7 +598,7 @@ def run_pipeline(
     )
     adiabatic_queue.run()
     print(
-        f"-- AdiabaticHistory: {adiabatic_counts['skipped_failed_models']} models skipped because their ScalarModel failed"
+        f"-- AdiabaticHistory: {adiabatic_counts['skipped_failed_models']} models skipped because their ScalarHistory failed"
     )
 
     ## STEP 3
@@ -657,7 +663,9 @@ def run_pipeline(
             pool,
             model_query_batch,
             task_builder=lambda x: pool.object_get_vectorized(
-                "ScalarModel", {"shard_key": x["shard_key"]}, payload_data=x["payload"]
+                "ScalarHistory",
+                {"shard_key": x["shard_key"]},
+                payload_data=x["payload"],
             ),
             available_handler=None,
             compute_handler=None,
@@ -671,7 +679,7 @@ def run_pipeline(
         )
         model_query_queue.run()
 
-        # keep each ScalarModel lookup result with the (potential, coupling) pair it was
+        # keep each ScalarHistory lookup result with the (potential, coupling) pair it was
         # asked for, and drop the models that failed (run-integrity prompt 03)
         query_entries = {
             key: build_query_entries(binned_batch[key], query_outcomes)
@@ -680,7 +688,7 @@ def run_pipeline(
         num_missing_models = sum(len(x.unavailable) for x in query_entries.values())
         if num_missing_models > 0:
             raise RuntimeError(
-                f"Some ScalarModel instances needed for BBN computations are missing ({num_missing_models} missing in this batch)"
+                f"Some ScalarHistory instances needed for BBN computations are missing ({num_missing_models} missing in this batch)"
             )
         bbn_counts["skipped_failed_models"] += sum(
             x.skipped_failed_models for x in query_entries.values()
@@ -691,7 +699,7 @@ def run_pipeline(
                 "shard_key": key,
                 "payload": [
                     {
-                        "model_proxy": ScalarModelProxy(entry.model),
+                        "model_proxy": ScalarHistoryProxy(entry.model),
                         "tags": [
                             SamplesPerLog10ZTag,
                         ],
@@ -750,7 +758,7 @@ def run_pipeline(
         if num_missing == 0:
             return []
 
-        # now we need to re-lookup ScalarModel instances for the missing elements, this time
+        # now we need to re-lookup ScalarHistory instances for the missing elements, this time
         # *not* with _do_not_populate
         required_models_payload = [
             {
@@ -782,7 +790,9 @@ def run_pipeline(
             pool,
             required_models_payload,
             task_builder=lambda x: pool.object_get_vectorized(
-                "ScalarModel", {"shard_key": x["shard_key"]}, payload_data=x["payload"]
+                "ScalarHistory",
+                {"shard_key": x["shard_key"]},
+                payload_data=x["payload"],
             ),
             available_handler=None,
             compute_handler=None,
@@ -798,7 +808,7 @@ def run_pipeline(
         required_models_proxies = [
             {
                 "shard_key": key,
-                "missing_proxies": [ScalarModelProxy(obj) for obj in lookup_data],
+                "missing_proxies": [ScalarHistoryProxy(obj) for obj in lookup_data],
             }
             for key, lookup_data in zip(batch_keys, required_models_queue.results)
         ]
@@ -890,7 +900,7 @@ def run_pipeline(
     else:
         stored_failure_summary = f"{bbn_counts['stored_failures']} computations skipped because of a stored failure"
     print(
-        f"-- BBNData: {bbn_counts['skipped_failed_models']} models skipped because their ScalarModel failed; {stored_failure_summary}"
+        f"-- BBNData: {bbn_counts['skipped_failed_models']} models skipped because their ScalarHistory failed; {stored_failure_summary}"
     )
 
 

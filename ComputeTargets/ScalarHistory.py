@@ -65,21 +65,21 @@ PISQ_OVER_30 = pi * pi / 30.0
 LOG_PISQ_OVER_30 = log(PISQ_OVER_30)
 
 # key under which the number of elastic reflections (the floor-triggered reflection model of
-# integrate_scalar_history) is stored in ScalarModel.extra_metadata.
+# integrate_scalar_history) is stored in ScalarHistory.extra_metadata.
 # A count of zero is never stored, so an absent key means there were none.
 REFLECTIONS_KEY = "number_reflections"
 
 EXPECTED_SOL_LENGTH = 5
 
 # the two Jordan-frame temperatures, in MeV, at which fixed_T_values reads phi and
-# rho_NP/rho_R,J for the ScalarModel row (science-readiness prompt 06b; README §2 (n)).
+# rho_NP/rho_R,J for the ScalarHistory row (science-readiness prompt 06b; README §2 (n)).
 # Fixed constants: not a run option and not part of the lookup key
 FIXED_T_JORDAN_HIGH_MEV = 1.0
 FIXED_T_JORDAN_LOW_MEV = 0.07
 
-# the stepper label returned by compute_scalar_model; main.py pre-registers it as
+# the stepper label returned by compute_scalar_history; main.py pre-registers it as
 # IntegrationSolver(label="Radau+kinematic-cap", stepping=0)
-SCALAR_MODEL_STEPPER_LABEL = "Radau+kinematic-cap-stepping0"
+SCALAR_HISTORY_STEPPER_LABEL = "Radau+kinematic-cap-stepping0"
 
 # a trial-state exception inside a Radau step is treated as a rejected step and the step halved;
 # below this step size (in e-folds) it becomes a failure of the history
@@ -467,7 +467,7 @@ class ODERHS:
                 Vprime_over_3H2Mp2: float = data.Vprime_over_3H2Mp2
 
                 print(
-                    f"!! compute_scalar_model ({self.task_label}): output from ODE RHS has infinity or NaN values at N={N:.8g}"
+                    f"!! compute_scalar_history ({self.task_label}): output from ODE RHS has infinity or NaN values at N={N:.8g}"
                 )
                 print(
                     f"     - inputs/states: phi_E={self._formatter(phi_Einstein)}, pi_E={self._formatter(pi_Einstein)}, log_rhorad_E={log_rhorad_Einstein:.5g}, log_fm={log_fm:.5g}, log_T_J={log_T_Jordan:.5g}"
@@ -491,7 +491,7 @@ class ODERHS:
                 print(f"     - state={state}")
                 print(f"     - return_state={return_state}")
                 raise ComputationFailureError(
-                    f"compute_scalar_model ({self.task_label}): output from ODE RHS has infinity or NaN values"
+                    f"compute_scalar_history ({self.task_label}): output from ODE RHS has infinity or NaN values"
                 )
 
             # print(
@@ -902,7 +902,7 @@ def surfing_turning_points(
 
     `direction` is "min" where g goes from positive to negative (beta pi/M_P falls through -1, and
     T_J has a minimum) and "max" where it goes the other way. This function is not called by
-    compute_scalar_model, and nothing is stored (surfing-temperature README §5 rule 9).
+    compute_scalar_history, and nothing is stored (surfing-temperature README §5 rule 9).
 
     :param result: the IntegrationResult of integrate_scalar_history
     :param coupling: the history's conformal coupling
@@ -1062,7 +1062,7 @@ def fixed_T_value_at(
     (phi_Einstein, rho_NP/rho_R,J) on the history at e-fold number N, read from the interpolant
     of accepted step k (science-readiness prompt 06b; README §2 (n)).
 
-    H_J, ln rho_R,J and f_m are built from the state exactly as compute_scalar_model's sampling
+    H_J, ln rho_R,J and f_m are built from the state exactly as compute_scalar_history's sampling
     loop builds a SampleValues, and the ratio from them exactly as compute_BBN_data builds
     density_NP_ratio: (3 M_P^2 H_J^2 - rho_R,J (1 + f_m)) / rho_R,J. At a stored sample's own N
     it is therefore the ratio BBN sees there.
@@ -1110,15 +1110,15 @@ def fixed_T_values(
 
 def _failure_payload(reason: str) -> dict:
     """
-    The payload compute_scalar_model returns for a failed history: the failure flag and
+    The payload compute_scalar_history returns for a failed history: the failure flag and
     the reason, truncated to DEFAULT_STRING_LENGTH, the width of the
-    ScalarModel.failure_reason column. (science-readiness prompt 02; BBNData's pattern)
+    ScalarHistory.failure_reason column. (science-readiness prompt 02; BBNData's pattern)
     """
     return {"failure": True, "failure_reason": str(reason)[:DEFAULT_STRING_LENGTH]}
 
 
 @ray.remote
-def compute_scalar_model(
+def compute_scalar_history(
     cosmology: LambdaCDM_GenericEOS,
     T_init: TemperatureLike,
     T_stop: TemperatureLike,
@@ -1127,7 +1127,7 @@ def compute_scalar_model(
     z_grid: redshift_array,
     potential: AbstractPotential,
     coupling: AbstractCoupling,
-    task_label: str = "compute_scalar_model",
+    task_label: str = "compute_scalar_history",
     atol: float = DEFAULT_ABS_TOLERANCE,
     rtol: float = DEFAULT_REL_TOLERANCE,
     verbose: bool = False,
@@ -1181,7 +1181,7 @@ def compute_scalar_model(
 
     # fm_init = exp(log_fm_init)
 
-    # print(f"-- compute_scalar_model ({task_label}): initial data")
+    # print(f"-- compute_scalar_history ({task_label}): initial data")
     # print(
     #     f"    - T_Jordan_init = {GetTemperature(T_init)/units.GeV:.5g} GeV = {GetTemperature(T_init)/units.Kelvin:.5g} K"
     # )
@@ -1236,11 +1236,11 @@ def compute_scalar_model(
         # the solution must carry the five components of StateVector; anything else is a bug
         assert (
             len(result.solution(result.N_final)) == EXPECTED_SOL_LENGTH
-        ), f"compute_scalar_model ({task_label}): solution does not have {EXPECTED_SOL_LENGTH} components"
+        ), f"compute_scalar_history ({task_label}): solution does not have {EXPECTED_SOL_LENGTH} components"
 
         if verbose and len(result.reflections) > 0:
             print(
-                f"-- compute_scalar_model ({task_label}): {len(result.reflections)} elastic reflection(s), first at N={result.reflections[0].N:.5g}"
+                f"-- compute_scalar_history ({task_label}): {len(result.reflections)} elastic reflection(s), first at N={result.reflections[0].N:.5g}"
             )
 
         # the integration should have terminated when T_Jordan = T_CMB, which ought to correspond to z = 0
@@ -1254,7 +1254,7 @@ def compute_scalar_model(
         max_N: float = log(1.0 + max_z.z)
         if max_N < final_N:
             raise RuntimeError(
-                f"compute_scalar_model: ({task_label}): largest supplied redshift z={max_z.z:.3g} is equivalent to maximum e-fold number N={max_N:.3g}, but solution required N={final_N:.3g} e-folds"
+                f"compute_scalar_history: ({task_label}): largest supplied redshift z={max_z.z:.3g} is equivalent to maximum e-fold number N={max_N:.3g}, but solution required N={final_N:.3g} e-folds"
             )
 
         sample = []
@@ -1303,16 +1303,16 @@ def compute_scalar_model(
                 )
         except OverflowError as e:
             print(
-                f"!! compute_scalar_model ({task_label}): overflow when assembling sample values; marked as total integration failure"
+                f"!! compute_scalar_history ({task_label}): overflow when assembling sample values; marked as total integration failure"
             )
             return _failure_payload(
                 f"sampling: overflow when assembling sample values: {e}"
             )
     except ComputationFailureError as e:
-        print(f"-- compute_scalar_model ({task_label}): integration failure")
+        print(f"-- compute_scalar_history ({task_label}): integration failure")
         print(f"   {e.message}")
         print(
-            f"!! compute_scalar_model ({task_label}): marked as total integration failure"
+            f"!! compute_scalar_history ({task_label}): marked as total integration failure"
         )
         return _failure_payload(e.message)
 
@@ -1353,14 +1353,14 @@ def compute_scalar_model(
         "mean_RHS_values": (
             supervisor.mean_RHS_values if collected_full_statistics else None
         ),
-        "solver_label": SCALAR_MODEL_STEPPER_LABEL,
+        "solver_label": SCALAR_HISTORY_STEPPER_LABEL,
     }
 
 
 def build_extra_data(data: dict) -> Optional[dict]:
     """
-    Assemble the ScalarModel's extra_data dictionary from the dictionary that
-    compute_scalar_model returns. Returns None if there is nothing to store.
+    Assemble the ScalarHistory's extra_data dictionary from the dictionary that
+    compute_scalar_history returns. Returns None if there is nothing to store.
     """
     extra_data = {}
 
@@ -1392,7 +1392,7 @@ def build_extra_data(data: dict) -> Optional[dict]:
     return extra_data if len(extra_data) > 0 else None
 
 
-class ScalarModel(DatastoreObject):
+class ScalarHistory(DatastoreObject):
     """
     Encapsulates the time history of a cosmological model.
     This bakes-in all the quantities we need such as the conformal time \tau (for analytic
@@ -1462,7 +1462,7 @@ class ScalarModel(DatastoreObject):
             DatastoreObject.__init__(self, payload["store_id"])
             self._metadata: Optional[IntegrationData] = payload["metadata"]
             self._solver: Optional[IntegrationSolver] = payload["solver"]
-            self._values: Optional[List[ScalarModelValue]] = payload["values"]
+            self._values: Optional[List[ScalarHistoryValue]] = payload["values"]
             self._extra_data: Optional[Dict[str, Any]] = payload["extra_data"]
             self._failure: Optional[bool] = payload["failure"]
             self._failure_reason: Optional[str] = payload["failure_reason"]
@@ -1499,7 +1499,7 @@ class ScalarModel(DatastoreObject):
         """
         if self._failure is None:
             raise RuntimeError(
-                f"ScalarModel ({self._label}): failure_reason has not yet been populated"
+                f"ScalarHistory ({self._label}): failure_reason has not yet been populated"
             )
         return self._failure_reason
 
@@ -1543,7 +1543,7 @@ class ScalarModel(DatastoreObject):
     def metadata(self) -> IntegrationData:
         if self._failure:
             raise RuntimeError(
-                f"ScalarModel ({self._label}): this object had an integration failure and cannot be used"
+                f"ScalarHistory ({self._label}): this object had an integration failure and cannot be used"
             )
 
         if self._metadata is None:
@@ -1555,7 +1555,7 @@ class ScalarModel(DatastoreObject):
     def extra_metadata(self) -> Optional[Dict[str, Any]]:
         if self._failure:
             raise RuntimeError(
-                f"ScalarModel ({self._label}): this object had an integration failure and cannot be used"
+                f"ScalarHistory ({self._label}): this object had an integration failure and cannot be used"
             )
 
         return self._extra_data
@@ -1568,7 +1568,7 @@ class ScalarModel(DatastoreObject):
         """
         if self._failure:
             raise RuntimeError(
-                f"ScalarModel ({self._label}): this object had an integration failure and cannot be used"
+                f"ScalarHistory ({self._label}): this object had an integration failure and cannot be used"
             )
 
         if self._failure is None:
@@ -1580,13 +1580,13 @@ class ScalarModel(DatastoreObject):
     def fixed_T_values(self) -> FixedTValues:
         """
         phi and rho_NP/rho_R,J at T_J = 1 MeV and 70 keV (fixed_T_values()); a field is None
-        where the history did not reach that temperature. Stored on the ScalarModel row, so it
+        where the history did not reach that temperature. Stored on the ScalarHistory row, so it
         is readable on an object built with _do_not_populate. Raises on a failure row, as
         first_bounce does. (science-readiness prompt 06b)
         """
         if self._failure:
             raise RuntimeError(
-                f"ScalarModel ({self._label}): this object had an integration failure and cannot be used"
+                f"ScalarHistory ({self._label}): this object had an integration failure and cannot be used"
             )
 
         if self._failure is None:
@@ -1598,7 +1598,7 @@ class ScalarModel(DatastoreObject):
     def solver(self) -> IntegrationSolver:
         if self._failure:
             raise RuntimeError(
-                f"ScalarModel ({self._label}): this object had an integration failure and cannot be used"
+                f"ScalarHistory ({self._label}): this object had an integration failure and cannot be used"
             )
 
         if self._solver is None:
@@ -1609,12 +1609,12 @@ class ScalarModel(DatastoreObject):
     def values(self) -> List:
         if hasattr(self, "_do_not_populate"):
             raise RuntimeError(
-                "ScalarModel: attempt to read values, but _do_not_populate is set"
+                "ScalarHistory: attempt to read values, but _do_not_populate is set"
             )
 
         if self._failure:
             raise RuntimeError(
-                f"ScalarModel ({self._label}): this object had an integration failure and cannot be used"
+                f"ScalarHistory ({self._label}): this object had an integration failure and cannot be used"
             )
 
         if self._values is None:
@@ -1625,12 +1625,12 @@ class ScalarModel(DatastoreObject):
     def functions(self) -> ModelFunctions:
         if hasattr(self, "_do_not_populate"):
             raise RuntimeError(
-                "ScalarModel: attempt to call functions(), but _do_not_populate is set"
+                "ScalarHistory: attempt to call functions(), but _do_not_populate is set"
             )
 
         if self._failure:
             raise RuntimeError(
-                f"ScalarModel ({self._label}): this object had an integration failure and cannot be used"
+                f"ScalarHistory ({self._label}): this object had an integration failure and cannot be used"
             )
 
         if self._values is None:
@@ -1644,12 +1644,12 @@ class ScalarModel(DatastoreObject):
     def _create_functions(self):
         if hasattr(self, "_do_not_populate"):
             raise RuntimeError(
-                "ScalarModel: attempt to call _create_functions(), but _do_not_populate is set"
+                "ScalarHistory: attempt to call _create_functions(), but _do_not_populate is set"
             )
 
         if self._failure:
             raise RuntimeError(
-                f"ScalarModel ({self._label}): this object had an integration failure and cannot be used"
+                f"ScalarHistory ({self._label}): this object had an integration failure and cannot be used"
             )
 
         def _build_func(attr: str):
@@ -1684,7 +1684,7 @@ class ScalarModel(DatastoreObject):
     def compute(self, label: Optional[str] = None):
         if hasattr(self, "_do_not_populate"):
             raise RuntimeError(
-                "ScalarModel: attempt to call compute(), but _do_not_populate is set"
+                "ScalarHistory: attempt to call compute(), but _do_not_populate is set"
             )
 
         if self._values is not None:
@@ -1713,7 +1713,7 @@ class ScalarModel(DatastoreObject):
         if label is not None:
             self._label = label
 
-        self._compute_ref = compute_scalar_model.remote(
+        self._compute_ref = compute_scalar_history.remote(
             self.cosmology,
             self.T_Jordan_init,
             self.T_Jordan_stop,
@@ -1735,7 +1735,7 @@ class ScalarModel(DatastoreObject):
     def store(self) -> Optional[bool]:
         if self._compute_ref is None:
             raise RuntimeError(
-                "ScalarModel: store() called, but no compute() is in progress"
+                "ScalarHistory: store() called, but no compute() is in progress"
             )
 
         # check whether the computation has actually resolved
@@ -1776,7 +1776,7 @@ class ScalarModel(DatastoreObject):
         self._values = []
         for i in range(len(sample)):
             self._values.append(
-                ScalarModelValue(
+                ScalarHistoryValue(
                     None,
                     z_grid[i],
                     raw_N=sample[i].raw_N,
@@ -1804,7 +1804,7 @@ class ScalarModel(DatastoreObject):
         return True
 
 
-class ScalarModelValue(DatastoreObject):
+class ScalarHistoryValue(DatastoreObject):
     def __init__(
         self,
         store_id: int,
@@ -1874,7 +1874,7 @@ class ScalarModelValue(DatastoreObject):
 
     @property
     def shard_key(self) -> ShardKeyType:
-        # should not get called individually, since serialization is handled by the parent ScalarModel
+        # should not get called individually, since serialization is handled by the parent ScalarHistory
         return NotImplementedError
 
     @property
@@ -1950,8 +1950,8 @@ class ScalarModelValue(DatastoreObject):
         return self._kicking_term
 
 
-class ScalarModelProxy:
-    def __init__(self, model: ScalarModel):
+class ScalarHistoryProxy:
+    def __init__(self, model: ScalarHistory):
         self._ref: ObjectRef = ray.put(model)
 
         self._store_id: int = model.store_id if model.available else None
@@ -1980,10 +1980,10 @@ class ScalarModelProxy:
     def cosmology(self) -> BaseCosmology:
         return self._cosmology
 
-    def get(self) -> ScalarModel:
+    def get(self) -> ScalarHistory:
         """
         The return value should only be held locally and not persisted, otherwise the entire
-        ScalarModel instance may be serialized when it is passed around by Ray.
+        ScalarHistory instance may be serialized when it is passed around by Ray.
         That would defeat the purpose of the proxy.
         :return:
         """

@@ -28,7 +28,7 @@ spec then fails `TestFormatGuard` naming the class, and says to bump the format.
 
 The functions are the recipe of RunRegistryKit's `docs/adoption/README.md` §6 (nothing of the guard
 is shipped by the package; it is this repository's test). `plain` writes every mapping key as its
-own JSON, so that the polymorphic `Parent.types` keys of `ScalarModel`, which are `int` (the ids of
+own JSON, so that the polymorphic `Parent.types` keys of `ScalarHistory`, which are `int` (the ids of
 the three `model_ids` modules), stay apart from the string `"0"`: `canonical_json` refuses a key
 that is not a string, and a bare `str(k)` would make the two alike and miss a change of a key's
 type. `test_a_key_keeps_its_type` pins that conversion, with stand-in `Parent`s.
@@ -125,7 +125,7 @@ class TestFormatGuard(unittest.TestCase):
         )
 
     def test_a_parent_keyed_by_an_int_keeps_its_type(self):
-        """The stand-in parents are those of `ScalarModel`'s coupling, keyed by the int 0 and by
+        """The stand-in parents are those of `ScalarHistory`'s coupling, keyed by the int 0 and by
         the string "0": their digests differ, and `canonical_json` refuses the int-keyed one
         unconverted, which is why `plain` exists."""
         by_int = Parent(

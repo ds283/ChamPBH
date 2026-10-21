@@ -17,7 +17,7 @@
 What the plot scripts read from a store before they look up any history (read-only-plots
 prompt 02; README P1, U3, U4).
 
-`plot_by_beta.py` and `plot_ScalarModel.py` open their store read-only
+`plot_by_beta.py` and `plot_ScalarHistory.py` open their store read-only
 (`ShardedPool(read_only=True)`) and call these functions in place of the setup each used to
 carry. A read-only pool refuses a lookup that would insert a row: `ReadOnlyMiss` for a replicated
 class, `ReadOnlyWrite` for a sharded one. What a refusal means depends on the lookup:

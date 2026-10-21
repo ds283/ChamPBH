@@ -73,10 +73,10 @@ from ObjectFactories.ExponentialPotential import (
     sqla_ExponentialPotential_factory,
 )
 from ObjectFactories.QCD_Cosmology import sqla_QCDCosmology_factory
-from ObjectFactories.ScalarModel import (
-    sqla_ScalarModelFactory,
-    sqla_ScalarModelTagAssociation_factory,
-    sqla_ScalarModelValue_factory,
+from ObjectFactories.ScalarHistory import (
+    sqla_ScalarHistoryFactory,
+    sqla_ScalarHistoryTagAssociation_factory,
+    sqla_ScalarHistoryValue_factory,
 )
 from ObjectFactories.integration_metadata import (
     sqla_IntegrationSolver_factory,
@@ -101,9 +101,9 @@ factories = {
     "ExponentialCoupling": sqla_ExponentialCoupling_factory(),
     "QCD_Cosmology": sqla_QCDCosmology_factory(),
     "IntegrationSolver": sqla_IntegrationSolver_factory(),
-    "ScalarModel": sqla_ScalarModelFactory(),
-    "ScalarModel_tags": sqla_ScalarModelTagAssociation_factory(),
-    "ScalarModelValue": sqla_ScalarModelValue_factory(),
+    "ScalarHistory": sqla_ScalarHistoryFactory(),
+    "ScalarHistory_tags": sqla_ScalarHistoryTagAssociation_factory(),
+    "ScalarHistoryValue": sqla_ScalarHistoryValue_factory(),
     "AdiabaticHistory": sqla_AdiabaticHistoryFactory(),
     "AdiabaticHistory_tags": sqla_AdiabaticHistoryTagAssociation_factory(),
     "AdiabaticHistoryValue": sqla_AdiabaticHistoryValue_factory(),
@@ -113,7 +113,7 @@ factories = {
 }
 
 drop_groups = {
-    "scalar-model": ["ScalarModel_tags", "ScalarModelValue", "ScalarModel"],
+    "scalar-history": ["ScalarHistory_tags", "ScalarHistoryValue", "ScalarHistory"],
     "adiabatic-history": [
         "AdiabaticHistory_tags",
         "AdiabaticHistoryValue",
@@ -136,8 +136,8 @@ serial_batch_sizes = {
     "ExponentialPotential": 50,
     "QCD_Cosmology": 5,
     "IntegrationSolver": 6,
-    "ScalarModel": 20,
-    "ScalarModelValue": 250,
+    "ScalarHistory": 20,
+    "ScalarHistoryValue": 250,
     "AdiabaticHistory": 20,
     "AdiabaticHistoryValue": 250,
     "BBNData": 20,
@@ -181,8 +181,8 @@ def tables_to_drop(groups: Iterable[str]) -> List[str]:
     go with it are ``datastorekit.SQL.schema.dependent_tables``' answer, from the registry, and the
     message names the requested groups, the tables that name their rows, and the ``--drop`` groups
     to add (a table that must go but is in no group is named as a table). So
-    ``tables_to_drop(["scalar-model"])`` raises, since ``AdiabaticHistory`` and ``BBNData`` name
-    ``ScalarModel`` rows; ``main.py`` calls this before Ray starts (dk-and-rpk-migration prompt 08,
+    ``tables_to_drop(["scalar-history"])`` raises, since ``AdiabaticHistory`` and ``BBNData`` name
+    ``ScalarHistory`` rows; ``main.py`` calls this before Ray starts (dk-and-rpk-migration prompt 08,
     campaign README U4).
     """
     requested = list(dict.fromkeys(groups))

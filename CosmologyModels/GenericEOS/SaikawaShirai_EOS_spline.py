@@ -47,7 +47,7 @@ _LOG10_SAIKAWA_SHIRAI_T_LO = np.log10(SAIKAWA_SHIRAI_T_LO)
 # d g / d log10 T. dG_rho_dlogT and dG_s_dlogT return d g / d ln T, which is
 # smaller by this factor. (review-remediation prompt 02, item R1: from 5962833
 # to that prompt the derivatives were returned undivided, and the temperature
-# law in ComputeTargets/ScalarModel.py used them as d / d ln T.)
+# law in ComputeTargets/ScalarHistory.py used them as d / d ln T.)
 _LN_10 = log(10.0)
 
 

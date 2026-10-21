@@ -17,7 +17,7 @@
 Run one scalar history and its BBN through the production code, with no Ray
 cluster and no datastore, and print one line per stage.
 
-The history is `compute_scalar_model._function` with main.py's initial data:
+The history is `compute_scalar_history._function` with main.py's initial data:
 phi* = 5 M_P, pi* = 0, T* = 2e4 GeV, T_stop = T_CMB unless --T-stop-GeV is
 given, the default tolerances, and 250 samples per decade of 1 + z from
 log10(1 + z) = 0 to 35. The cosmology is QCD_Cosmology on Planck2018, the
@@ -78,12 +78,12 @@ from ComputeTargets.BBNData import (  # noqa: E402
     DEFAULT_BBN_WALL_CLOCK_LIMIT,
     compute_BBN_data,
 )
-from ComputeTargets.ScalarModel import (  # noqa: E402
+from ComputeTargets.ScalarHistory import (  # noqa: E402
     FIXED_T_JORDAN_HIGH_MEV,
     FIXED_T_JORDAN_LOW_MEV,
     SampleValues,
-    ScalarModelValue,
-    compute_scalar_model,
+    ScalarHistoryValue,
+    compute_scalar_history,
 )
 from CosmologyConcepts import (  # noqa: E402
     Lambda_value,
@@ -118,7 +118,7 @@ RATIO_WINDOWS_KEV = ((0.3, 1.0), (1.0, 3.0), (3.0, 10.0), (10.0, 100.0))
 
 
 class _StandInModel:
-    """The attributes of a ScalarModel that compute_BBN_data reads."""
+    """The attributes of a ScalarHistory that compute_BBN_data reads."""
 
     def __init__(self, cosmology, potential, coupling, T_stop, values):
         self._cosmology = cosmology
@@ -299,7 +299,7 @@ def main(argv=None) -> int:
 
     # stage 1: the history. The IntegrationResult is kept, by wrapping integrate_scalar_history
     # for the duration of the call, so that the fixed_T line can count sign changes on it
-    SM = importlib.import_module("ComputeTargets.ScalarModel")
+    SM = importlib.import_module("ComputeTargets.ScalarHistory")
     captured = []
     integrate = SM.integrate_scalar_history
 
@@ -311,7 +311,7 @@ def main(argv=None) -> int:
     SM.integrate_scalar_history = _capturing_integrate
     start = time.perf_counter()
     try:
-        data = compute_scalar_model._function(
+        data = compute_scalar_history._function(
             cosmology,
             T_init,
             T_stop,
@@ -350,7 +350,7 @@ def main(argv=None) -> int:
         )
 
     values = [
-        ScalarModelValue(None, z, **SampleValues._make(tuple(s))._asdict())
+        ScalarHistoryValue(None, z, **SampleValues._make(tuple(s))._asdict())
         for z, s in zip(data["z_grid"], data["sample"])
     ]
     print(_fixed_T_line(data["fixed_T_values"], captured[-1], values, units, label))

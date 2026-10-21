@@ -40,7 +40,7 @@ from ObjectFactories.tests.test_version_keyed_lookups import (
     LABEL_A,
     _TempStoreCase,
     _insert_failed_bbn,
-    _insert_failed_scalar_model,
+    _insert_failed_scalar_history,
     _insert_successful_bbn,
     _model_proxy,
 )
@@ -59,7 +59,7 @@ def _lookup(store, failure):
 class TestBBNFailureLookup(_TempStoreCase):
     def _store_with_model(self):
         store = self.open(LABEL_A)
-        _insert_failed_scalar_model(store)
+        _insert_failed_scalar_history(store)
         return store
 
     def _two_failures(self):

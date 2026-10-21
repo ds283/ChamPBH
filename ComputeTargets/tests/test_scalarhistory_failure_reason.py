@@ -14,11 +14,11 @@
 # limitations under the License.
 
 """
-The reason a ScalarModel history failed (science-readiness prompt 02, README §2 (f), §6.3).
+The reason a ScalarHistory history failed (science-readiness prompt 02, README §2 (f), §6.3).
 
-(b) `compute_scalar_model._function`, from main.py's initial data at beta = 2, M = 0.5, returns
+(b) `compute_scalar_history._function`, from main.py's initial data at beta = 2, M = 0.5, returns
 a failure payload that carries the reason. The step budget is reduced to 50 by patching the
-`StepControl` that `compute_scalar_model` builds, with `mock`, because the function does not
+`StepControl` that `compute_scalar_history` builds, with `mock`, because the function does not
 take a `StepControl`: the history then fails at the 51st accepted step. No Ray, no datastore,
 no PRyMordial solve; the history stops after 50 steps, well under a second.
 
@@ -79,7 +79,7 @@ def _history(step_budget=None):
             **kw, **({} if step_budget is None else {"step_budget": step_budget})
         ),
     ):
-        return SM.compute_scalar_model._function(*args, task_label="reason-test")
+        return SM.compute_scalar_history._function(*args, task_label="reason-test")
 
 
 class TestFailurePayload(unittest.TestCase):

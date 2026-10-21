@@ -20,7 +20,7 @@ The fixed-temperature values of a history (science-readiness prompt 06b, README 
 ln T_J = log_T on the dense output, or None; `fixed_T_values(result, policy, coupling, units)`
 reads phi and rho_NP/rho_R,J there, at T_J = 1 MeV and 70 keV, through `fixed_T_value_at`.
 
-(a) runs one full history through `compute_scalar_model._function`, capturing its
+(a) runs one full history through `compute_scalar_history._function`, capturing its
 `IntegrationResult`, and ties the dense-output values to the stored samples and to
 `compute_BBN_data`'s per-sample ratio. (b) and (c) drive `integrate_scalar_history` from the
 integrator audit's P1 state with the helpers of `test_kinematic_cap_loop`. No Ray cluster, no
@@ -28,7 +28,7 @@ datastore, no PRyMordial solve. The round trip through a store is in
 `ObjectFactories/tests/test_fixed_T_values_round_trip.py`.
 
 On `HEAD~1` there is no `T_Jordan_crossing`, `fixed_T_values` or `fixed_T_value_at`, and
-`compute_scalar_model` returns no "fixed_T_values", so every test here fails.
+`compute_scalar_history` returns no "fixed_T_values", so every test here fails.
 """
 
 import contextlib
@@ -85,7 +85,7 @@ def bbn_ratio(sample) -> float:
 
 def full_history(beta: float, M: float):
     """
-    compute_scalar_model._function with main.py's initial data (phi* = 5 M_P, pi* = 0,
+    compute_scalar_history._function with main.py's initial data (phi* = 5 M_P, pi* = 0,
     T* = 2e4 GeV, T_stop = T_CMB, 250 samples per decade of 1 + z to 1e35), as
     tools/history_and_bbn.py runs it. Returns (data, result, policy, coupling), where result
     is the IntegrationResult, captured by wrapping integrate_scalar_history for the call.
@@ -113,7 +113,7 @@ def full_history(beta: float, M: float):
     with mock.patch.object(
         SM, "integrate_scalar_history", capturing
     ), contextlib.redirect_stdout(io.StringIO()):
-        data = SM.compute_scalar_model._function(
+        data = SM.compute_scalar_history._function(
             kcl._cosmology,
             kcl._T_init,
             kcl._T_stop,
@@ -157,7 +157,7 @@ class TestFixedTValues(unittest.TestCase):
             self.assertLessEqual(rel(phi, s.phi_Einstein), 1e-9)
             self.assertLessEqual(rel(ratio, bbn_ratio(s)), 1e-8)
 
-        # compute_scalar_model returns fixed_T_values on the same result, all four reached
+        # compute_scalar_history returns fixed_T_values on the same result, all four reached
         fixed_T = data["fixed_T_values"]
         self.assertIsInstance(fixed_T, SM.FixedTValues)
         self.assertEqual(fixed_T, SM.fixed_T_values(result, policy, coupling, _units))

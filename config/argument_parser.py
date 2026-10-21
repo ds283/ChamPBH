@@ -30,7 +30,7 @@ DEFAULT_LOG10_LAMBDA_LOW_EV = -2
 DEFAULT_LOG10_LAMBDA_HIGH_EV = 1
 DEFAULT_SAMPLES_PER_LOG10_LAMBDA_EV = 6
 
-allowed_drop_actions = ["scalar-model", "adiabatic-history", "bbn-data"]
+allowed_drop_actions = ["scalar-history", "adiabatic-history", "bbn-data"]
 potential_types = ["Exponential"]
 
 
@@ -265,7 +265,7 @@ def create_argument_parser() -> configargparse.ArgumentParser:
         nargs="+",
         default=[],
         choices=allowed_drop_actions,
-        help="drop one or more data categories",
+        help="drop one or more data categories (scalar-history replaced scalar-model in jordan-normalization prompt 02)",
         action="extend",
     )
     parser.add_argument(

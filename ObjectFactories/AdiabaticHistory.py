@@ -22,7 +22,7 @@ from sqlalchemy.exc import MultipleResultsFound, SQLAlchemyError
 from ComputeTargets import (
     AdiabaticHistory,
     AdiabaticHistoryValue,
-    ScalarModelProxy,
+    ScalarHistoryProxy,
 )
 from CosmologyConcepts import redshift, redshift_array
 from datastorekit.SQL.factory_base import SQLAFactoryBase
@@ -103,9 +103,9 @@ class sqla_AdiabaticHistoryFactory(SQLAFactoryBase):
             "validate_on_startup": True,
             "columns": [
                 sqla.Column(
-                    "model_serial",
+                    "scalar_history_serial",
                     sqla.Integer,
-                    sqla.ForeignKey("ScalarModel.serial"),
+                    sqla.ForeignKey("ScalarHistory.serial"),
                     index=True,
                     nullable=False,
                 ),
@@ -123,12 +123,12 @@ class sqla_AdiabaticHistoryFactory(SQLAFactoryBase):
         }
 
     def inventory_spec(self):
-        # build() matches model_serial and the version; the model is on this row's shard, since
+        # build() matches scalar_history_serial and the version; the model is on this row's shard, since
         # both take their shard key from the coupling's beta (dk-and-rpk-migration prompt 09)
         return InventorySpec(
             parents={
                 "version": Parent("version", "version"),
-                "model": Parent("model_serial", "ScalarModel"),
+                "model": Parent("scalar_history_serial", "ScalarHistory"),
             },
             tags=("AdiabaticHistory_tags", "history_serial"),
             values=("AdiabaticHistoryValue", "history_serial"),
@@ -139,7 +139,7 @@ class sqla_AdiabaticHistoryFactory(SQLAFactoryBase):
         label: Optional[str] = payload.get("label", None)
         tags: List[store_tag] = payload.get("tags", [])
 
-        model_proxy: ScalarModelProxy = payload["model_proxy"]
+        model_proxy: ScalarHistoryProxy = payload["model_proxy"]
 
         # the lookup is keyed on the version label; it may never fall back to unfiltered
         version_serial: int = require_version_serial(payload, "AdiabaticHistory")
@@ -147,7 +147,7 @@ class sqla_AdiabaticHistoryFactory(SQLAFactoryBase):
         max_Q_value_cols = [table.c[f"max_abs_Q_{label}"] for label in self._Q_labels]
 
         # find if there is an existing record for this model; notice that we query only for
-        # validated data, as ScalarModel.build does, so a row whose write was interrupted is not
+        # validated data, as ScalarHistory.build does, so a row whose write was interrupted is not
         # found by a pool that did not prune it at open (2026-10-14)
         query = sqla.select(
             table.c.serial,
@@ -157,7 +157,7 @@ class sqla_AdiabaticHistoryFactory(SQLAFactoryBase):
             table.c.compute_time,
         ).filter(
             table.c.validated == True,
-            table.c.model_serial == model_proxy.store_id,
+            table.c.scalar_history_serial == model_proxy.store_id,
             table.c.version == version_serial,
         )
 
@@ -263,7 +263,7 @@ class sqla_AdiabaticHistoryFactory(SQLAFactoryBase):
 
     def store(self, obj: AdiabaticHistory, conn, table, inserter, tables, inserters):
         payload = {
-            "model_serial": obj._model_proxy.store_id,
+            "scalar_history_serial": obj._model_proxy.store_id,
             "label": obj.label,
             "z_samples": len(obj.values),
             "compute_time": obj._compute_time,
@@ -274,7 +274,7 @@ class sqla_AdiabaticHistoryFactory(SQLAFactoryBase):
 
         store_id = inserter(conn, payload)
 
-        # set store_id on behalf of the ScalarModel instance
+        # set store_id on behalf of the ScalarHistory instance
         obj._my_id = store_id
 
         # add any tags that have been specified
@@ -340,7 +340,7 @@ class sqla_AdiabaticHistoryFactory(SQLAFactoryBase):
 
     def validate_on_startup(self, conn, table, tables, prune=False):
         # check all records in the table and ensure they are valid
-        # for AdiabaticHistory, we could check if the associated ScalarModel still exists
+        # for AdiabaticHistory, we could check if the associated ScalarHistory still exists
 
         value_table = tables["AdiabaticHistoryValue"]
         tags_table = tables["AdiabaticHistory_tags"]

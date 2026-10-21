@@ -98,8 +98,8 @@ def _tool():
 def _synthetic_samples(units):
     """
     (store rows, stand-in values): each sample's store row in the store's units,
-    formed as sqla_ScalarModelValue_factory.build writes it, and the
-    ScalarModelValue that sqla_ScalarModel_factory.build reads back from that
+    formed as sqla_ScalarHistoryValue_factory.build writes it, and the
+    ScalarHistoryValue that sqla_ScalarHistory_factory.build reads back from that
     row (its read path), which is what compute_BBN_data iterates over.
     """
     log_Mp = log(units.PlanckMass)
@@ -272,7 +272,7 @@ class TestBBNFromStore(unittest.TestCase):
     def test_c_find_model_reads_the_store_read_only(self):
         """(c) No solve. find_model on a temporary two-shard store imitating
         the science store's tables (a handful of rows): it finds the one
-        ScalarModel with the given beta, M and phi among decoys that share two
+        ScalarHistory with the given beta, M and phi among decoys that share two
         of the three, returns its samples in production's order (redshift
         descending, not insertion order) and its BBNData row; every connection
         it opens is a `mode=ro` URI; a write through connect_ro raises
@@ -301,13 +301,13 @@ class TestBBNFromStore(unittest.TestCase):
                     create table ExponentialCoupling (serial integer primary key, beta_serial integer);
                     create table ExponentialPotential (serial integer primary key, M_serial integer);
                     create table redshift (serial integer primary key, z real);
-                    create table ScalarModel (serial integer primary key, coupling_serial integer,
+                    create table ScalarHistory (serial integer primary key, coupling_serial integer,
                         potential_serial integer, phi_Einstein_init_serial integer, failure integer,
                         RHS_evaluations integer, first_bounce_log_T_Jordan real);
-                    create table ScalarModelValue (serial integer primary key, model_serial integer,
+                    create table ScalarHistoryValue (serial integer primary key, history_serial integer,
                         z_serial integer, raw_N real, log_T_Jordan_GeV real, H_Jordan_Mp real,
                         log_rhorad_Jordan_Mp4 real, log_fm real);
-                    create table BBNData (serial integer primary key, model_serial integer,
+                    create table BBNData (serial integer primary key, scalar_history_serial integer,
                         failure integer, failure_reason text, Yp_BBN real, DOverH real,
                         He3OverH real, Li7OverH real, small_network integer, PRyM_version text);
                     """)
@@ -326,7 +326,7 @@ class TestBBNFromStore(unittest.TestCase):
                         (serial, serial),
                     )
                     con.execute(
-                        "insert into ScalarModel values (?, ?, ?, ?, 0, ?, ?)",
+                        "insert into ScalarHistory values (?, ?, ?, ?, 0, ?, ?)",
                         (serial, serial, serial, serial, 1000 + serial, -0.5),
                     )
                     con.execute(
@@ -340,7 +340,7 @@ class TestBBNFromStore(unittest.TestCase):
                 for serial, *_ in models[n]:
                     for k, z in enumerate((10.0, 1000.0, 100.0)):
                         con.execute(
-                            "insert into ScalarModelValue values (?, ?, ?, ?, ?, ?, ?, ?)",
+                            "insert into ScalarHistoryValue values (?, ?, ?, ?, ?, ?, ?, ?)",
                             (
                                 v,
                                 serial,

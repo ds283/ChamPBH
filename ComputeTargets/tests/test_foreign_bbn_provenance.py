@@ -51,7 +51,7 @@ from ObjectFactories.tests.test_version_keyed_lookups import (
     _TempStoreCase,
     _insert,
     _insert_failed_bbn,
-    _insert_failed_scalar_model,
+    _insert_failed_scalar_history,
     _model_proxy,
 )
 
@@ -245,7 +245,7 @@ class TestProvenanceOnStoredRows(_TempStoreCase):
 
     def _store_with(self, success_version=None, small=None, failed=False):
         store = self.open(LABEL_A)
-        _insert_failed_scalar_model(store)
+        _insert_failed_scalar_history(store)
         if failed:
             _insert_failed_bbn(store, 1, "a failure")
         if success_version is not None:
@@ -254,7 +254,7 @@ class TestProvenanceOnStoredRows(_TempStoreCase):
                 "BBNData",
                 dict(
                     serial=2,
-                    model_serial=_model_proxy().store_id,
+                    scalar_history_serial=_model_proxy().store_id,
                     failure=False,
                     Yp_BBN=0.247,
                     DOverH=2.46,

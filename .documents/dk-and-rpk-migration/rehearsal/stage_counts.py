@@ -43,8 +43,9 @@ COMPLETE = re.compile(r"^\s*-- ALL WORK ITEMS COMPLETE\b")
 SUMMARY = re.compile(r"^\s*Queue summary: (.*)$")
 SUMMARY_ITEM = re.compile(r"(\d+) (lookup|compute|store|available|validation)\b")
 NO_COMPUTE = re.compile(r"^\s*\(no compute items were evaluated")
+# (?:ScalarModel|ScalarHistory): jordan-normalization prompt 02 renamed the class; logs made before it name the old one.
 SKIPPED = re.compile(
-    r"^-- (\w+): (\d+) models skipped because their ScalarModel failed"
+    r"^-- (\w+): (\d+) models skipped because their (?:ScalarModel|ScalarHistory) failed"
     r"(?:; (\d+) computations skipped because of a stored failure)?"
 )
 EXIT_STATUS = re.compile(r"^\*\* driver exit status (-?\d+)\s*$")

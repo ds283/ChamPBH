@@ -37,7 +37,7 @@ import seaborn as sns
 from matplotlib import pyplot as plt
 from numpy import nan
 
-from ComputeTargets import ScalarModelProxy, AdiabaticHistory, BBNData, ScalarModel
+from ComputeTargets import ScalarHistoryProxy, AdiabaticHistory, BBNData, ScalarHistory
 from ComputeTargets.BBNData import PRYM_VERSION, compute_SM_baseline
 from CosmologyConcepts import temperature, phi_value, pi_value
 from CosmologyConcepts.ConformalCouplings import AbstractCoupling
@@ -146,7 +146,7 @@ def build_beta_plot(
     potential: AbstractPotential,
     Q_data: List[AdiabaticHistory],
     bbn_data: list[BBNData],
-    scalar_data: list[ScalarModel],
+    scalar_data: list[ScalarHistory],
     SM_baseline: Optional[dict] = None,
     scalar_failures: Optional[dict] = None,
     bbn_failures: Optional[dict] = None,
@@ -155,7 +155,7 @@ def build_beta_plot(
     Draw this model set's figures and return its per-history records (plain dictionaries,
     extract_common.build_history_record), which run_pipeline gathers across potentials for
     figure 2 and histories.csv. scalar_failures and bbn_failures map a beta to the reason its
-    ScalarModel or BBNData failed or is missing. (science-readiness prompt 07)
+    ScalarHistory or BBNData failed or is missing. (science-readiness prompt 07)
     """
     base_path = Path(args.output).resolve()
     base_path = base_path / f"{model_label}"
@@ -552,7 +552,7 @@ def build_beta_plot(
             fig.savefig(fig_path.with_suffix(".png"))
         except OverflowError:
             print(
-                f"@@ build_beta_plot: error occurred when generating a max(Q) plot for ScalarModel '{model_label}'"
+                f"@@ build_beta_plot: error occurred when generating a max(Q) plot for ScalarHistory '{model_label}'"
             )
 
         plt.close()
@@ -719,7 +719,7 @@ def run_pipeline(
     def report_dropped_bbn_models(
         model_label: str,
         potential: AbstractPotential,
-        model_proxies: List[ScalarModelProxy],
+        model_proxies: List[ScalarHistoryProxy],
         bbn_results: List[BBNData],
     ):
         """
@@ -807,16 +807,16 @@ def run_pipeline(
         # the reasons, for histories.csv (science-readiness prompt 07)
         return {beta: reason for beta, reason in dropped}
 
-    def report_dropped_scalar_models(
+    def report_dropped_scalar_histories(
         model_label: str,
         potential: AbstractPotential,
         query_batch: List[dict],
-        model_results: List[ScalarModel],
+        model_results: List[ScalarHistory],
     ):
         """
         Print, once per potential, every model that no plot can show because its
-        ScalarModel history failed, with (beta, M, Lambda) and the reason the
-        ScalarModel stored, and the count. The first lookup asks for successful rows
+        ScalarHistory history failed, with (beta, M, Lambda) and the reason the
+        ScalarHistory stored, and the count. The first lookup asks for successful rows
         only, so such a model comes back unavailable; its failed row is looked up here
         (the newest, if there are several). (science-readiness prompt 02)
         """
@@ -831,7 +831,7 @@ def run_pipeline(
         failed_query_queue = RayWorkPool(
             pool,
             [dict(query, failure=True) for query in missing],
-            task_builder=lambda x: pool.object_get("ScalarModel", **x),
+            task_builder=lambda x: pool.object_get("ScalarHistory", **x),
             available_handler=None,
             compute_handler=None,
             store_handler=None,
@@ -851,13 +851,13 @@ def run_pipeline(
                 if reason is None:
                     reason = "failed, no failure_reason stored"
             else:
-                reason = "no ScalarModel row in the store"
+                reason = "no ScalarHistory row in the store"
             dropped.append((query["coupling"]._beta.as_float, reason))
 
         M_eV = potential._M.as_float / units.eV
         Lambda_eV = potential._Lambda.as_float / units.eV
         print(
-            f"!! plot_by_beta '{model_label}', M={M_eV:.5g} eV, Lambda={Lambda_eV:.5g} eV: {len(dropped)} model(s) dropped because their ScalarModel failed or is missing"
+            f"!! plot_by_beta '{model_label}', M={M_eV:.5g} eV, Lambda={Lambda_eV:.5g} eV: {len(dropped)} model(s) dropped because their ScalarHistory failed or is missing"
         )
         for beta, reason in sorted(dropped, key=lambda x: x[0]):
             print(
@@ -868,7 +868,7 @@ def run_pipeline(
         return {beta: reason for beta, reason in dropped}
 
     def build_plot_work(potential: AbstractPotential) -> ray.ObjectRef:
-        # build a work queue to read in all ScalarModel instances with this potential, for the
+        # build a work queue to read in all ScalarHistory instances with this potential, for the
         # couplings in Coupling_array
         model_query_batch = [
             {
@@ -893,7 +893,7 @@ def run_pipeline(
         model_query_queue = RayWorkPool(
             pool,
             model_query_batch,
-            task_builder=lambda x: pool.object_get("ScalarModel", **x),
+            task_builder=lambda x: pool.object_get("ScalarHistory", **x),
             available_handler=None,
             compute_handler=None,
             store_handler=None,
@@ -906,14 +906,14 @@ def run_pipeline(
         )
         model_query_queue.run()
 
-        scalar_failures = report_dropped_scalar_models(
+        scalar_failures = report_dropped_scalar_histories(
             model_label, potential, model_query_batch, model_query_queue.results
         )
 
         available_models = [
             m for m in model_query_queue.results if m.available and not m.failure
         ]
-        model_proxies = [ScalarModelProxy(m) for m in available_models]
+        model_proxies = [ScalarHistoryProxy(m) for m in available_models]
 
         adiabatic_query_batch = [
             {

@@ -46,7 +46,7 @@ import utilities
 from utilities import format_package_provenance, installed_package_provenance
 
 ROOT = Path(__file__).resolve().parents[2]
-DRIVERS = ("main.py", "plot_by_beta.py", "plot_ScalarModel.py")
+DRIVERS = ("main.py", "plot_by_beta.py", "plot_ScalarHistory.py")
 FIELDS = {"version", "url", "commit", "requested_revision", "editable"}
 
 VCS_URL = "https://github.com/ds283/DatastoreKit"

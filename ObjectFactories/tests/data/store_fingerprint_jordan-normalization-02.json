@@ -1,0 +1,203 @@
+{
+  "classes": {
+    "AdiabaticHistory": {
+      "count": 1,
+      "digest": "bb8f6de26d71ec3cdefe12ced8a5e92adcd05ac7165a06bf6f09cffd5cbef006",
+      "tag_sets": [
+        {
+          "count": 1,
+          "digest": "bb8f6de26d71ec3cdefe12ced8a5e92adcd05ac7165a06bf6f09cffd5cbef006",
+          "tags": []
+        }
+      ]
+    },
+    "BBNData": {
+      "count": 1,
+      "digest": "83cd6479d1524d9ed0c061e36660ceb06a1f8df04b71cd4dc4ba625ae0113c97",
+      "tag_sets": [
+        {
+          "count": 1,
+          "digest": "83cd6479d1524d9ed0c061e36660ceb06a1f8df04b71cd4dc4ba625ae0113c97",
+          "tags": []
+        }
+      ]
+    },
+    "ExponentialCoupling": {
+      "count": 1,
+      "digest": "7eb2f22a07ad20d36290abc96a5455005338cb83e46dc141e37b7278e18b9953",
+      "tag_sets": [
+        {
+          "count": 1,
+          "digest": "7eb2f22a07ad20d36290abc96a5455005338cb83e46dc141e37b7278e18b9953",
+          "tags": []
+        }
+      ]
+    },
+    "ExponentialPotential": {
+      "count": 2,
+      "digest": "0c580dc86596030410dfafa4f9c6b658544243aba419b798d6a023bba48e76bb",
+      "tag_sets": [
+        {
+          "count": 2,
+          "digest": "0c580dc86596030410dfafa4f9c6b658544243aba419b798d6a023bba48e76bb",
+          "tags": []
+        }
+      ]
+    },
+    "IntegrationSolver": {
+      "count": 1,
+      "digest": "e1dae956c612db4702ecf6a01171b12b912aad504ad3d3bb1f980b245a366b47",
+      "tag_sets": [
+        {
+          "count": 1,
+          "digest": "e1dae956c612db4702ecf6a01171b12b912aad504ad3d3bb1f980b245a366b47",
+          "tags": []
+        }
+      ]
+    },
+    "Lambda_value": {
+      "count": 1,
+      "digest": "b4275846684b4ccea691062c23f2270769b1c13dfbf45828489f9eb3c4b56957",
+      "tag_sets": [
+        {
+          "count": 1,
+          "digest": "b4275846684b4ccea691062c23f2270769b1c13dfbf45828489f9eb3c4b56957",
+          "tags": []
+        }
+      ]
+    },
+    "M_value": {
+      "count": 1,
+      "digest": "a02f865a0efd913ff960d00683ab148e65415f994ff332653cba72802a08a9c4",
+      "tag_sets": [
+        {
+          "count": 1,
+          "digest": "a02f865a0efd913ff960d00683ab148e65415f994ff332653cba72802a08a9c4",
+          "tags": []
+        }
+      ]
+    },
+    "QCD_Cosmology": {
+      "count": 1,
+      "digest": "e3bee9f39be4a8d8373d6341ac0f70469e4e888d3d816e7e364a013094a27c28",
+      "tag_sets": [
+        {
+          "count": 1,
+          "digest": "e3bee9f39be4a8d8373d6341ac0f70469e4e888d3d816e7e364a013094a27c28",
+          "tags": []
+        }
+      ]
+    },
+    "ScalarHistory": {
+      "count": 2,
+      "digest": "877f4ab6471d3c5d92094e2707739b907c4b1187561d8b69ad15f38714519080",
+      "tag_sets": [
+        {
+          "count": 1,
+          "digest": "927488bd407273a1608436adb7c233f37003f175a9bfb687244fa5c388302394",
+          "tags": []
+        },
+        {
+          "count": 1,
+          "digest": "a1637ad9cd99282e8a89d882e51f5437518cbe5d50578b541670212eae34dcb7",
+          "tags": [
+            "golden"
+          ]
+        }
+      ]
+    },
+    "beta_value": {
+      "count": 1,
+      "digest": "6fbc0ec4f95a77e81906fe4587217b231729812a977adb35621a840c22e26f30",
+      "tag_sets": [
+        {
+          "count": 1,
+          "digest": "6fbc0ec4f95a77e81906fe4587217b231729812a977adb35621a840c22e26f30",
+          "tags": []
+        }
+      ]
+    },
+    "phi_value": {
+      "count": 1,
+      "digest": "29e7a88b01e35866c8f102278ae2ab0eaaecef332e2fe6badec047d47894e14a",
+      "tag_sets": [
+        {
+          "count": 1,
+          "digest": "29e7a88b01e35866c8f102278ae2ab0eaaecef332e2fe6badec047d47894e14a",
+          "tags": []
+        }
+      ]
+    },
+    "pi_value": {
+      "count": 1,
+      "digest": "237cd5e9616925eae2215daa8eb602f9db5e521a4415d78f11056c39f8c74cc8",
+      "tag_sets": [
+        {
+          "count": 1,
+          "digest": "237cd5e9616925eae2215daa8eb602f9db5e521a4415d78f11056c39f8c74cc8",
+          "tags": []
+        }
+      ]
+    },
+    "redshift": {
+      "count": 5,
+      "digest": "b761e744649967999b9391557d0b0c6c613c4e19b3cb850ad148725be951578c",
+      "tag_sets": [
+        {
+          "count": 5,
+          "digest": "b761e744649967999b9391557d0b0c6c613c4e19b3cb850ad148725be951578c",
+          "tags": []
+        }
+      ]
+    },
+    "store_tag": {
+      "count": 1,
+      "digest": "ca572b5e15487944b875e4886ad5cf508ee320625174b63f6f1ca8fa15eb55e1",
+      "tag_sets": [
+        {
+          "count": 1,
+          "digest": "ca572b5e15487944b875e4886ad5cf508ee320625174b63f6f1ca8fa15eb55e1",
+          "tags": []
+        }
+      ]
+    },
+    "temperature": {
+      "count": 2,
+      "digest": "3f483b3a7f7a98914545c03305eb71e94bb967f8edcbca0ccb42746a39d05650",
+      "tag_sets": [
+        {
+          "count": 2,
+          "digest": "3f483b3a7f7a98914545c03305eb71e94bb967f8edcbca0ccb42746a39d05650",
+          "tags": []
+        }
+      ]
+    },
+    "tolerance": {
+      "count": 2,
+      "digest": "14848c763fe413fba1c77a9f121d9a83e0a8dbc4c267ac6e885bad7654f5cae6",
+      "tag_sets": [
+        {
+          "count": 2,
+          "digest": "14848c763fe413fba1c77a9f121d9a83e0a8dbc4c267ac6e885bad7654f5cae6",
+          "tags": []
+        }
+      ]
+    },
+    "version": {
+      "count": 1,
+      "digest": "66adaa5412414ad4963d8c8a0a3e9ed9c330847136b81dbfad7c1242e5d7f2f5",
+      "tag_sets": [
+        {
+          "count": 1,
+          "digest": "66adaa5412414ad4963d8c8a0a3e9ed9c330847136b81dbfad7c1242e5d7f2f5",
+          "tags": []
+        }
+      ]
+    }
+  },
+  "digest": "ebbd384efaa0796f0f5f1c3b8e9425f63ca490ec9e1182c83cc8b4f5bde28075",
+  "encoding_format": 1,
+  "fingerprint_format": 3,
+  "problems": {},
+  "taken": null
+}

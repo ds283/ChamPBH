@@ -37,14 +37,14 @@ every class of the inventory (a class no category names is shown under "Other cl
   default unit, so no units object is needed);
 - for any other class, its records, each by its physical labels: a parent by the parent's own key,
   never by a digest or a serial;
-- for ``ScalarModel``, ``AdiabaticHistory`` and ``BBNData``, the validated and unvalidated groups,
+- for ``ScalarHistory``, ``AdiabaticHistory`` and ``BBNData``, the validated and unvalidated groups,
   each with its count and version label(s), and its records by their physical labels: ``T_init``
   and ``T_stop`` (GeV), ``phiE_init`` and ``piE_init`` (Planck mass), the potential (its class, M,
   Lambda and n), the coupling (its class and beta), ``failure``, and for ``BBNData`` also its own
   ``failure`` and ``PRyM_version``; an ``AdiabaticHistory`` or ``BBNData`` record is labelled by its
   model's labels. Each record shows its tags and its value-row count. A key field that is the same
   for every model (the cosmology and the two tolerances, usually) is printed once, on the
-  ``ScalarModel`` class's "common to every model" line, and otherwise on each record's line, so
+  ``ScalarHistory`` class's "common to every model" line, and otherwise on each record's line, so
   that two different records never render as one line except where their floats agree to five
   figures;
 - every named problem, **whole**, under its class. Problems are never truncated.
@@ -87,26 +87,26 @@ INVENTORY_CATEGORIES: List[Tuple[str, List[str]]] = [
             "ExponentialCoupling",
         ],
     ),
-    ("Compute targets", ["ScalarModel", "AdiabaticHistory", "BBNData"]),
+    ("Compute targets", ["ScalarHistory", "AdiabaticHistory", "BBNData"]),
 ]
 
 # the value table each class's value_count counts: the table its factory's inventory_spec names in
 # ``values=``. Used only to name the table on the header
 VALUE_TABLES: Dict[str, str] = {
-    "ScalarModel": "ScalarModelValue",
+    "ScalarHistory": "ScalarHistoryValue",
     "AdiabaticHistory": "AdiabaticHistoryValue",
     "BBNData": "BBNDataValue",
 }
 
 # the three compute targets, whose records are shown by validated group and by their model's labels
-COMPUTE_TARGETS = ("ScalarModel", "AdiabaticHistory", "BBNData")
+COMPUTE_TARGETS = ("ScalarHistory", "AdiabaticHistory", "BBNData")
 
 # a list of this many values or records or more is shown by its first and last LIST_ENDS, unless
 # verbose
 LIST_LIMIT = 20
 LIST_ENDS = 10
 
-# a ScalarModel's key fields as the report labels them, in the order it prints them
+# a ScalarHistory's key fields as the report labels them, in the order it prints them
 MODEL_FIELDS: List[Tuple[str, str]] = [
     ("T_init", "T_init"),
     ("T_stop", "T_stop"),
@@ -117,8 +117,8 @@ MODEL_FIELDS: List[Tuple[str, str]] = [
     ("failure", "failure"),
 ]
 
-# the rest of a ScalarModel's key, printed once when every model shares it (the version is shown by
-# validated group in ScalarModel's own section). The *_type leaves are not printed: each is the
+# the rest of a ScalarHistory's key, printed once when every model shares it (the version is shown by
+# validated group in ScalarHistory's own section). The *_type leaves are not printed: each is the
 # class its polymorphic parent is printed with
 MODEL_EXTRA_FIELDS: List[Tuple[str, str]] = [
     ("cosmology", "cosmology"),
@@ -291,13 +291,13 @@ class _Renderer:
             self.value_sort(name, record, f) for f in self.field_order(name, record)
         )
 
-    # --- a ScalarModel, by its physical labels -------------------------------------------------
+    # --- a ScalarHistory, by its physical labels -------------------------------------------------
 
     def model_extras(self) -> Tuple[List[str], List[str]]:
-        """(the extra model fields every ScalarModel shares, those that vary)."""
+        """(the extra model fields every ScalarHistory shares, those that vary)."""
         records = (
-            self.cls("ScalarModel").records
-            if "ScalarModel" in self.inventory.classes
+            self.cls("ScalarHistory").records
+            if "ScalarHistory" in self.inventory.classes
             else ()
         )
         common, varying = [], []
@@ -311,12 +311,12 @@ class _Renderer:
     ) -> List[str]:
         labels = dict(MODEL_EXTRA_FIELDS)
         parts = [
-            f"{label}={self.value_text('ScalarModel', record, field)}"
+            f"{label}={self.value_text('ScalarHistory', record, field)}"
             for field, label in MODEL_FIELDS
             if field in record.key
         ]
         parts += [
-            f"{labels[field]}={self.value_text('ScalarModel', record, field)}"
+            f"{labels[field]}={self.value_text('ScalarHistory', record, field)}"
             for field in extras
             if field in record.key
         ]
@@ -327,7 +327,7 @@ class _Renderer:
             | set(MODEL_TYPE_LEAVES)
         )
         parts += [
-            f"{f}={self.value_text('ScalarModel', record, f)}"
+            f"{f}={self.value_text('ScalarHistory', record, f)}"
             for f in record.key
             if f not in known
         ]
@@ -338,9 +338,11 @@ class _Renderer:
     def model_sort(self, record: Record) -> tuple:
         order = ["coupling", "potential", "T_init", "T_stop", "phi_init", "pi_init"]
         return tuple(
-            self.value_sort("ScalarModel", record, f) for f in order if f in record.key
+            self.value_sort("ScalarHistory", record, f)
+            for f in order
+            if f in record.key
         ) + (
-            self.leaf_sort("ScalarModel", "failure", record.key.get("failure")),
+            self.leaf_sort("ScalarHistory", "failure", record.key.get("failure")),
             record.canonical_json(),
         )
 
@@ -434,12 +436,12 @@ def _version_labels(renderer: _Renderer, name: str, records: Sequence[Record]) -
 
 
 def _compute_target_lines(renderer: _Renderer, name: str) -> List[str]:
-    """ScalarModel, AdiabaticHistory or BBNData: validated groups, records by their model's labels."""
+    """ScalarHistory, AdiabaticHistory or BBNData: validated groups, records by their model's labels."""
     cls = renderer.cls(name)
     lines: List[str] = []
     common, varying = renderer.model_extras()
 
-    if name == "ScalarModel":
+    if name == "ScalarHistory":
         shared = [f for f in common if f != "version"]
         if len(shared) > 0 and cls.count > 0:
             labels = dict(MODEL_EXTRA_FIELDS)
@@ -454,7 +456,7 @@ def _compute_target_lines(renderer: _Renderer, name: str) -> List[str]:
             )
 
     def entry(record: Record) -> Tuple[tuple, str]:
-        if name == "ScalarModel":
+        if name == "ScalarHistory":
             extras = [f for f in varying if f != "version"]
             parts = renderer.model_parts(record, extras)
             return renderer.model_sort(record), ", ".join(parts)

@@ -76,7 +76,7 @@ chameleon has a very heavy effective mass near the "brick wall" of the potential
 are widely separated timescales (fast field oscillations/bounces vs. slow cosmological
 drift). An implicit, stiffly-stable method is essential.
 
-A robustness cascade is built in (`compute_scalar_model`): the solver list is
+A robustness cascade is built in (`compute_scalar_history`): the solver list is
 `["Radau", "BDF", "LSODA", "DOP853"]`. If integration fails with a `ComputationFailureError`
 under the current solver, the code falls back to the next solver in the list and retries the
 *entire* integration. The first three are stiff solvers (Radau, BDF = backward
@@ -105,6 +105,12 @@ extremely steep and demands a trade-off between achievable accuracy and step via
 > **Note, 2026-10-20 (`jordan-normalization`, prompt 01).** `ReclinerPotential` was removed with the
 > other three non-exponential potentials (user ruling R11), so the paragraph above describes a
 > class that no longer exists. The exponential potential's overrides are the only ones left.
+
+> **Note, 2026-10-21 (`jordan-normalization`, prompt 02).** `ScalarModel` was renamed `ScalarHistory`
+> (and `compute_scalar_model` `compute_scalar_history`, `ScalarModelProxy` `ScalarHistoryProxy`,
+> `ComputeTargets/ScalarModel.py` `ComputeTargets/ScalarHistory.py`, the tables likewise). Nothing
+> computed changed. The sections headed "Added" and the notes above and below keep the names of the
+> day they were written, so a path or a name in them is the old one.
 
 ### 2.3 Dense output and resampling
 
@@ -471,7 +477,7 @@ Splines appear at three distinct places, each with its own boundary strategy.
 All are `scipy.interpolate.make_interp_spline` (interpolating B-splines, cubic `k=3` by
 default).
 
-### 4.1 Output-history splines for the scalar model (`ScalarModel._create_functions`)
+### 4.1 Output-history splines for the scalar model (`ScalarHistory._create_functions`)
 
 Each stored history quantity (φ, π, log ρ_rad in both frames, log f_m, H in both frames,
 log T_Jordan, g*_ρ, g*_s, Σ) is turned into a callable spline over redshift. Two hygiene
@@ -1289,12 +1295,12 @@ not patched (§7.7.8). `PRYM_VERSION` carries `+bt02` for these two hunks.
 
 ## 8. Distributed execution and its numerical implications
 
-Every expensive computation (`compute_scalar_model`, `compute_adiabatic_values`,
+Every expensive computation (`compute_scalar_history`, `compute_adiabatic_values`,
 `compute_BBN_data`) is a Ray remote task. This is primarily an infrastructure concern, but it
 has one numerical-hygiene consequence worth noting: results are computed once and persisted
 in a sharded SQLite datastore keyed (among other things) by tolerances and solver, so a
 parameter-survey point is never silently recomputed at a different accuracy. The BBN and
-adiabatic stages consume a lightweight `ScalarModelProxy` (a Ray object reference) so that
+adiabatic stages consume a lightweight `ScalarHistoryProxy` (a Ray object reference) so that
 the large scalar history is not repeatedly serialized across workers.
 
 ---

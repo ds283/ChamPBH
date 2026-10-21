@@ -29,7 +29,7 @@ from config.argument_parser import (
 )
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-DRIVERS = ["main.py", "plot_by_beta.py", "plot_ScalarModel.py"]
+DRIVERS = ["main.py", "plot_by_beta.py", "plot_ScalarHistory.py"]
 
 
 class TestRayAddressProblem(unittest.TestCase):
@@ -121,15 +121,15 @@ class TestDriversBySubprocess(unittest.TestCase):
             )
         )
 
-    def test_plot_scalar_model_without_an_address(self):
+    def test_plot_scalar_history_without_an_address(self):
         self._assert_refused(
-            _run("plot_ScalarModel.py", "--database", str(self._absent))
+            _run("plot_ScalarHistory.py", "--database", str(self._absent))
         )
 
-    def test_plot_scalar_model_with_auto(self):
+    def test_plot_scalar_history_with_auto(self):
         self._assert_refused(
             _run(
-                "plot_ScalarModel.py",
+                "plot_ScalarHistory.py",
                 "--database",
                 str(self._absent),
                 "--ray-address",

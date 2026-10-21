@@ -18,12 +18,12 @@ Extraction and the science figures (science-readiness prompt 07, README sections
 
 (a) relative_shift; (b) running_band; (d) kick_threshold_curve; (e) the four figures and
 histories.csv, built from synthetic records into a temporary directory, with the fixed-T
-values read from ScalarModel.fixed_T_values and no sample loaded; (f) plot_by_beta.py reads
+values read from ScalarHistory.fixed_T_values and no sample loaded; (f) plot_by_beta.py reads
 the stored columns, keeps _do_not_populate on its lookups, and the parser has
 --band-half-width; the max |Q| caveat.
 
 Test (c) of the original prompt, value_at_T_Jordan, is withdrawn: the fixed-T values are
-stored on the ScalarModel row (prompt 06b) and are not interpolated from samples.
+stored on the ScalarHistory row (prompt 06b) and are not interpolated from samples.
 
 No Ray cluster, no datastore, no PRyMordial solve. A few seconds (matplotlib).
 """
@@ -38,7 +38,7 @@ from types import SimpleNamespace
 
 import numpy as np
 
-from ComputeTargets.ScalarModel import FixedTValues
+from ComputeTargets.ScalarHistory import FixedTValues
 from extract_common import (
     CSV_COLUMNS,
     adiabatic_Q_caption,
@@ -154,7 +154,7 @@ def _units():
 
 class _NoSamples(SimpleNamespace):
     """
-    A stand-in stored object whose sample values cannot be read, as a ScalarModel or BBNData
+    A stand-in stored object whose sample values cannot be read, as a ScalarHistory or BBNData
     built with _do_not_populate: touching `values` raises. The record builder must not.
     """
 
@@ -179,7 +179,7 @@ def _synthetic_records(units):
                         log_T_Jordan=log(0.7 * units.GeV), reflected=(k % 5 == 0)
                     )
                 ),
-                # as ScalarModel.fixed_T_values: phi in the cosmology's units, a pair None
+                # as ScalarHistory.fixed_T_values: phi in the cosmology's units, a pair None
                 # where the temperature is not reached
                 fixed_T_values=FixedTValues(
                     phi_Einstein_1MeV=1e-3 * beta * units.PlanckMass,
@@ -208,7 +208,7 @@ def _synthetic_records(units):
                     units=units,
                 )
             )
-    # a history whose ScalarModel failed: no values, a failure reason
+    # a history whose ScalarHistory failed: no values, a failure reason
     records.append(
         build_history_record(
             beta=9.0,
@@ -363,7 +363,7 @@ class TestDriverReadsTheColumns(unittest.TestCase):
 
         # every lookup keeps _do_not_populate: the same four literals as on the commit before
         # this prompt (git show HEAD~1:plot_by_beta.py | grep -c _do_not_populate); the
-        # fixed-T values are read from the ScalarModel row, not from the samples
+        # fixed-T values are read from the ScalarHistory row, not from the samples
         source = (ROOT / "plot_by_beta.py").read_text()
         self.assertEqual(source.count('"_do_not_populate": True'), 4)
         self.assertNotIn("value_at_T_Jordan", source)

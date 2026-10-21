@@ -17,7 +17,7 @@ from config.defaults import DEFAULT_STRING_LENGTH
 from config.sharding import ShardKeyType
 from constants import RadiationConstant
 from utilities import WallclockTimer, energy_formatter
-from .ScalarModel import ScalarModelProxy, ScalarModel, ScalarModelValue
+from .ScalarHistory import ScalarHistoryProxy, ScalarHistory, ScalarHistoryValue
 from .exceptions import ComputationFailureError
 
 SampleValues = namedtuple(
@@ -386,7 +386,7 @@ def compute_SM_baseline(small_network: bool) -> dict:
 
 @ray.remote
 def compute_BBN_data(
-    model_proxy: ScalarModelProxy,
+    model_proxy: ScalarHistoryProxy,
     task_label: str,
     T_BBN_MeV_spline_max: float = 100,  # PRyMordial default begins at 10 MeV
     # PRyMordial's lowest query of the callback is 0.363 keV (measured, small
@@ -409,7 +409,7 @@ def compute_BBN_data(
     Since science-readiness prompt 01 nothing computes p_NP: the Hubble-only
     route reads rho_NP alone. Every failure returns `_failure_payload`.
     """
-    model: ScalarModel = model_proxy.get()
+    model: ScalarHistory = model_proxy.get()
     cosmology: BaseCosmology = model._cosmology
     units: UnitsLike = cosmology.units
 
@@ -446,7 +446,7 @@ def compute_BBN_data(
     with WallclockTimer() as NP_timer:
         # first, build the "new physics" density needed by PRyMordial
         for value in model.values:
-            value: ScalarModelValue
+            value: ScalarHistoryValue
 
             T_Jordan: float = exp(value.log_T_Jordan)
 
@@ -523,12 +523,12 @@ class BBNData(DatastoreObject):
     def __init__(
         self,
         payload,
-        model_proxy: ScalarModelProxy,
+        model_proxy: ScalarHistoryProxy,
         label: Optional[str] = None,
         tags: Optional[List[store_tag]] = None,
     ):
-        self._model_proxy: ScalarModelProxy = model_proxy
-        model: ScalarModel = model_proxy.get()
+        self._model_proxy: ScalarHistoryProxy = model_proxy
+        model: ScalarHistory = model_proxy.get()
 
         self._coupling = model.coupling
         self._potential = model.potential

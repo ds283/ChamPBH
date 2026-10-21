@@ -3,9 +3,9 @@ from .AdiabaticHistory import (
     AdiabaticHistoryValue,
 )
 from .BBNData import BBNData, BBNDataValue
-from .ScalarModel import (
-    ScalarModel,
-    ScalarModelValue,
-    ScalarModelProxy,
+from .ScalarHistory import (
+    ScalarHistory,
+    ScalarHistoryValue,
+    ScalarHistoryProxy,
 )
 from .exceptions import ComputationFailureError

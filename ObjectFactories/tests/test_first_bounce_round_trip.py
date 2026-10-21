@@ -14,13 +14,13 @@
 # limitations under the License.
 
 """
-A ScalarModel row keeps its first bounce (science-readiness prompt 03, README §2 (g), §6.4 (e)).
+A ScalarHistory row keeps its first bounce (science-readiness prompt 03, README §2 (g), §6.4 (e)).
 
-`compute_scalar_model`'s payload carries `first_bounce`, a `FirstBounce` or None.
-`ScalarModel.store()` takes it, the factory's `store` writes it to the four nullable columns
+`compute_scalar_history`'s payload carries `first_bounce`, a `FirstBounce` or None.
+`ScalarHistory.store()` takes it, the factory's `store` writes it to the four nullable columns
 `first_bounce_N`, `first_bounce_log_T_Jordan`, `first_bounce_phi_Einstein` and
 `first_bounce_reflected`, and `build` reads it back. Each test goes the whole way on a temporary
-SQLite file, as `test_scalarmodel_failure_reason` does: `ScalarModel.store()` is run with
+SQLite file, as `test_scalarhistory_failure_reason` does: `ScalarHistory.store()` is run with
 `ray.wait` and `ray.get` patched to hand it a payload, the factory's `store` is called with the
 datastore's own inserter, and the row is read back through `object_get`.
 
@@ -30,7 +30,7 @@ last bit.
 
 No Ray cluster, no persistent datastore. About 1 s.
 
-On `HEAD~1` the table has no `first_bounce_*` columns and `ScalarModel` no `first_bounce`, so
+On `HEAD~1` the table has no `first_bounce_*` columns and `ScalarHistory` no `first_bounce`, so
 every test here fails.
 """
 
@@ -41,7 +41,7 @@ from unittest import mock
 import sqlalchemy as sqla
 
 import ComputeTargets.tests.test_kinematic_cap_loop as kcl
-from ObjectFactories.tests.test_scalarmodel_failure_reason import _write
+from ObjectFactories.tests.test_scalarhistory_failure_reason import _write
 from ObjectFactories.tests.test_version_keyed_lookups import (
     LABEL_A,
     _TempStoreCase,
@@ -52,7 +52,7 @@ from ObjectFactories.tests.test_version_keyed_lookups import (
     _pi,
     _potential,
     _rtol,
-    _scalar_model_query,
+    _scalar_history_query,
     _T_init,
     _T_stop,
 )
@@ -95,7 +95,7 @@ NO_FIXED_T = SM.FixedTValues(None, None, None, None)
 
 
 def _success_payload(bounce, fixed_T=NO_FIXED_T):
-    """The keys of compute_scalar_model's success payload that ScalarModel.store() reads."""
+    """The keys of compute_scalar_history's success payload that ScalarHistory.store() reads."""
     return {
         "metadata": NS(
             compute_time=1.0,
@@ -124,8 +124,8 @@ def _success_payload(bounce, fixed_T=NO_FIXED_T):
 
 
 def _model(compute_result):
-    """A ScalarModel on the stand-ins, populated by store() from compute_result."""
-    model = SM.ScalarModel(
+    """A ScalarHistory on the stand-ins, populated by store() from compute_result."""
+    model = SM.ScalarHistory(
         payload=None,
         solver_labels={STEPPER: NS(store_id=1)},
         cosmology=_cosmology,
@@ -157,16 +157,16 @@ class TestFirstBounceRoundTrip(_TempStoreCase):
         return store
 
     def _raw_columns(self, store):
-        table = store._tables["ScalarModel"]
+        table = store._tables["ScalarHistory"]
         with store._engine.begin() as conn:
             row = conn.execute(sqla.select(*(table.c[name] for name in COLUMNS))).one()
         return tuple(row)
 
     def _read_back(self, store, failure: bool):
-        query = _scalar_model_query(failure=failure, cosmology=_cosmology)
+        query = _scalar_history_query(failure=failure, cosmology=_cosmology)
         if not failure:
             query["solver_labels"] = [STEPPER]
-        got = store.object_get("ScalarModel", **query)
+        got = store.object_get("ScalarHistory", **query)
         self.assertTrue(got.available)
         return got
 
@@ -193,9 +193,9 @@ class TestFirstBounceRoundTrip(_TempStoreCase):
 
         # a fresh connection to the same file gives the same tuple
         again = self.open(LABEL_A).object_get(
-            "ScalarModel",
+            "ScalarHistory",
             **dict(
-                _scalar_model_query(failure=False, cosmology=_cosmology),
+                _scalar_history_query(failure=False, cosmology=_cosmology),
                 solver_labels=[STEPPER],
             ),
         )
@@ -237,7 +237,8 @@ class TestFirstBounceRoundTrip(_TempStoreCase):
         """An object with no row behind it refuses to report a first bounce."""
         store = self._store()
         got = store.object_get(
-            "ScalarModel", **_scalar_model_query(failure=False, cosmology=_cosmology)
+            "ScalarHistory",
+            **_scalar_history_query(failure=False, cosmology=_cosmology),
         )
         self.assertFalse(got.available)
         with self.assertRaises(RuntimeError):

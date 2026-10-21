@@ -61,7 +61,7 @@ EXPECTED_ORDER = [
     "IntegrationSolver",
     "ExponentialPotential",
     "ExponentialCoupling",
-    "ScalarModel",
+    "ScalarHistory",
     "AdiabaticHistory",
     "BBNData",
 ]
@@ -69,8 +69,8 @@ EXPECTED_ORDER = [
 # I5: the registered classes that declare no spec of their own, each read through an owner's spec,
 # by (owner, slot). The test checks that the owner's spec names the table in that slot
 READ_THROUGH: Dict[str, Tuple[str, str]] = {
-    "ScalarModel_tags": ("ScalarModel", "tags"),
-    "ScalarModelValue": ("ScalarModel", "values"),
+    "ScalarHistory_tags": ("ScalarHistory", "tags"),
+    "ScalarHistoryValue": ("ScalarHistory", "values"),
     "AdiabaticHistory_tags": ("AdiabaticHistory", "tags"),
     "AdiabaticHistoryValue": ("AdiabaticHistory", "values"),
     "BBNData_tags": ("BBNData", "tags"),
@@ -218,7 +218,7 @@ class TestSpecsResolve(_NoRay):
                     self.assertIn(referenced, self.specs)
 
     def test_the_polymorphic_maps_are_the_model_ids(self):
-        parents = self.specs["ScalarModel"].parents
+        parents = self.specs["ScalarHistory"].parents
         self.assertEqual(
             dict(parents["cosmology"].types),
             {cosmology_ids.XAV_IMPROVED_EOS_IDENTIFIER: "QCD_Cosmology"},
@@ -259,7 +259,7 @@ class TestCoverage(_NoRay):
 
     def test_a_class_in_none_of_the_three_is_named(self):
         registry = dict(factories)
-        registry["Scratch"] = factories["ScalarModelValue"]
+        registry["Scratch"] = factories["ScalarHistoryValue"]
         self.assertEqual(
             coverage_failures(registry, READ_THROUGH, EXCLUDED),
             [
@@ -278,10 +278,10 @@ class TestCoverage(_NoRay):
 
     def test_a_wrong_slot_is_named(self):
         read_through = dict(READ_THROUGH)
-        read_through["ScalarModelValue"] = ("ScalarModel", "tags")
+        read_through["ScalarHistoryValue"] = ("ScalarHistory", "tags")
         self.assertEqual(
             coverage_failures(dict(factories), read_through, EXCLUDED),
-            ["ScalarModelValue: ScalarModel's spec does not name it in tags"],
+            ["ScalarHistoryValue: ScalarHistory's spec does not name it in tags"],
         )
 
 

@@ -63,7 +63,7 @@ class AbstractPotential(DatastoreObject, ABC):
         """
         True if the potential has a purely repulsive wall somewhere in (0, phi) for every phi > 0
         at which the field can arrive moving inwards, so that nothing but the wall can turn an
-        inward-moving field. The scalar-field step loop (ComputeTargets.ScalarModel.
+        inward-moving field. The scalar-field step loop (ComputeTargets.ScalarHistory.
         integrate_scalar_history) replaces a bounce that is thinner than the representable step
         by an instantaneous elastic reflection only if this is True (guard G1, integrator-
         remediation README §2 (b')); otherwise reaching the representable-step floor is a

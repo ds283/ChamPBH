@@ -39,7 +39,7 @@ from math import exp, log
 from pathlib import Path
 
 import tools.surfing_scan as ss
-from ComputeTargets.ScalarModel import SurfingCrossing, first_bounce
+from ComputeTargets.ScalarHistory import SurfingCrossing, first_bounce
 from Units import Planck_units
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -382,7 +382,7 @@ class TestRealHistory(unittest.TestCase):
         beta = 2, phi* = 5, M = 1e-3, from T* to T_stop = 0.5 GeV, through run_history: 0.35 s
         at load 7. No PRyMordial runs.
         """
-        SM = ss.importlib.import_module("ComputeTargets.ScalarModel")
+        SM = ss.importlib.import_module("ComputeTargets.ScalarHistory")
         original = SM.integrate_scalar_history
 
         setup = ss.make_setup()

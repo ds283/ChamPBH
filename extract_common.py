@@ -26,8 +26,8 @@ from matplotlib.patches import Patch
 from numpy import nan
 from scipy.optimize import brentq, minimize_scalar
 
-from ComputeTargets import ScalarModel, ScalarModelValue, BBNData
-from ComputeTargets.ScalarModel import REFLECTIONS_KEY
+from ComputeTargets import ScalarHistory, ScalarHistoryValue, BBNData
+from ComputeTargets.ScalarHistory import REFLECTIONS_KEY
 from CosmologyConcepts.Potentials import AbstractPotential
 from CosmologyModels import BaseCosmology
 from Quadrature.integration_metadata import IntegrationSolver
@@ -174,9 +174,9 @@ def add_BBN_info_labels(
 def reflection_count(extra_data: Optional[dict]) -> int:
     """
     Return the number of elastic reflections (the floor-triggered reflection model of the
-    scalar-field step loop) recorded in a ScalarModel's extra_metadata.
+    scalar-field step loop) recorded in a ScalarHistory's extra_metadata.
 
-    ScalarModel stores the count under REFLECTIONS_KEY only when it is positive,
+    ScalarHistory stores the count under REFLECTIONS_KEY only when it is positive,
     so an absent key (or no extra_data at all) means there were none, and we return 0.
     """
     if extra_data is None:
@@ -184,7 +184,7 @@ def reflection_count(extra_data: Optional[dict]) -> int:
     return extra_data.get(REFLECTIONS_KEY, 0)
 
 
-def add_ScalarModel_labels(fig, model: ScalarModel, model_label):
+def add_ScalarHistory_labels(fig, model: ScalarHistory, model_label):
     solver: IntegrationSolver = model.solver
     now = datetime.now()
 
@@ -293,7 +293,7 @@ _T_events = {
 }
 
 
-def _find_T_event_times(model: ScalarModel):
+def _find_T_event_times(model: ScalarHistory):
     units: UnitsLike = model._units
 
     events = deepcopy(_T_events)
@@ -335,7 +335,7 @@ def _find_T_event_times(model: ScalarModel):
     return events
 
 
-def get_x_coord(value: ScalarModelValue, x_coord: str = "redshift") -> float:
+def get_x_coord(value: ScalarHistoryValue, x_coord: str = "redshift") -> float:
     if x_coord == "efolds":
         return value.raw_N
 
@@ -349,7 +349,7 @@ def get_xpos_attr(obj, x_coord: str = "redshift") -> float:
     return obj["z"]
 
 
-def add_temperature_yaxis_labels(ax, model: ScalarModel, temp_unit: str = "GeV"):
+def add_temperature_yaxis_labels(ax, model: ScalarHistory, temp_unit: str = "GeV"):
     units: UnitsLike = model._units
     cosmology: BaseCosmology = model._cosmology
 
@@ -392,7 +392,7 @@ def add_temperature_yaxis_labels(ax, model: ScalarModel, temp_unit: str = "GeV")
 
 def add_redshift_xaxis_labels(
     ax,
-    model: ScalarModel,
+    model: ScalarHistory,
     temp_unit: str = "GeV",
     text_labels: bool = True,
     x_coord: str = "redshift",
@@ -485,7 +485,7 @@ def add_redshift_xaxis_labels(
 DEFAULT_BAND_HALF_WIDTH = 0.025
 
 # the two temperatures of figure 4 and the CSV, in MeV, by the tag in the record keys. The
-# values themselves are stored on the ScalarModel row (ScalarModel.fixed_T_values; prompt 06b,
+# values themselves are stored on the ScalarHistory row (ScalarHistory.fixed_T_values; prompt 06b,
 # whose FIXED_T_JORDAN_HIGH_MEV and FIXED_T_JORDAN_LOW_MEV these tags name); nothing here
 # interpolates samples.
 FIXED_T_MEV = {"1MeV": 1.0, "70keV": 0.07}
@@ -561,7 +561,7 @@ def kick_threshold_curve(cosmology, T_grid: Sequence[float]):
     A T where Sigma <= 0 is omitted. Returns (T, beta_th) as two lists.
 
     w is the model's own: for QCD_Cosmology it is the Xav_EOS_data.csv spline, the same w the
-    integration reads in ScalarModel.py's RHS, so Sigma here is the integration's Sigma.
+    integration reads in ScalarHistory.py's RHS, so Sigma here is the integration's Sigma.
     """
     T_out = []
     beta_out = []
@@ -844,7 +844,7 @@ def build_history_record(
     failure_reasons: Sequence[str] = (),
 ) -> dict:
     """
-    One plain record for one history. `scalar` is a successful ScalarModel and `bbn` a
+    One plain record for one history. `scalar` is a successful ScalarHistory and `bbn` a
     successful BBNData (read through attribute names), or None where that stage has no
     successful row; `baseline` is the Standard-Model dictionary of compute_SM_baseline, or
     None (then the shifts are NaN). Everything is read from the parent rows' stored columns
@@ -1092,7 +1092,7 @@ def _fixed_T_figure(records: Sequence[dict], title: str = "") -> Optional[Figure
 def plot_fixed_T(records: Sequence[dict], path: Path, title: str = "") -> bool:
     """
     Figure 4. The values of the field phi (in M_P) and of rho_NP/rho_R,J at T_J = 1 MeV and
-    at 70 keV, against beta; the values stored on the ScalarModel rows. Returns False,
+    at 70 keV, against beta; the values stored on the ScalarHistory rows. Returns False,
     writing nothing, if there is no value.
     """
     fig = _fixed_T_figure(records, title)

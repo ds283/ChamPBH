@@ -127,7 +127,7 @@ def integrate_temperature_law(
 ) -> TemperatureLawResult:
     """
     Integrate the Jordan-frame temperature law exactly as `ODERHS.__call__` writes
-    it (`ComputeTargets/ScalarModel.py`), at fixed field (A' phi' = 0):
+    it (`ComputeTargets/ScalarHistory.py`), at fixed field (A' phi' = 0):
         d ln T/dN = -1 / (1 + kappa * dG_s_dlogT / G_s / 3)
     from T0 until ln T = ln T1, terminated by an event there.
 

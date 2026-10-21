@@ -1,6 +1,6 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-20 · **27 open**: 4 on the `review-remediation` board (closed
+**Last updated:** 2026-10-21 · **28 open**: 4 on the `review-remediation` board (closed
 2026-09-30), none now assigned; 2 on the `production-readiness` board
 (closed 2026-09-30); 4 on the `run-integrity` board (closed 2026-09-30); 8 on the
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`;
@@ -24,7 +24,7 @@ still open on its board); 1 on the `rrk-adoption` board (planned 2026-10-19, wit
 opened or assigned; the orchestrator's review of prompt 04 opened one, 2026-10-20; closed 2026-10-20,
 5 of 5 prompts landed, with the one issue still open on its board); none on the
 `jordan-normalization` board (planned 2026-10-20, with none opened; eight from five boards assigned
-to it the same day, §1.15; prompt 01 closed one of them, 2026-10-20, leaving seven).
+to it the same day, §1.15; prompt 01 closed one of them, 2026-10-20, leaving seven; prompt 02 opened one, 2026-10-21).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -264,4 +264,9 @@ deletes its row here. Each row ends with its board and the prompt that takes it.
 
 ### 1.16 `jordan-normalization` — [board §3](../prompts/jordan-normalization/IMPLEMENTATION_STATE.md)
 
-Planned 2026-10-20. None opened.
+Planned 2026-10-20. One opened by prompt 02, 2026-10-21.
+
+- `[02-the-scalar-history-parent-is-still-called-model]` — the `"model"` parent field of the
+  `AdiabaticHistory` and `BBNData` inventory specs, `tools/inventory_report.py`'s `model` text and
+  `model_proxy` still mean a scalar history; once 07 gives `model` to the Lagrangian they mean two
+  things. *(`jordan-normalization`; prompt 02)*

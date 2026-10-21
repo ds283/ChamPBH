@@ -16,7 +16,7 @@
 """What the source says, read with `ast` (rrk-adoption prompt 03, W6 tests 7 and 8).
 
 - **`main.py` runs without RunRegistryKit** (campaign README §6.0, R2): none of `main.py`,
-  `plot_by_beta.py`, `plot_ScalarModel.py` and `utilities.py` imports `runregistrykit` or
+  `plot_by_beta.py`, `plot_ScalarHistory.py` and `utilities.py` imports `runregistrykit` or
   `RunDrivers`. Byte-identity since `3cd2be4` is the log's and the review's `git diff`, not a test,
   so that a later campaign's legitimate edit to `main.py` does not fail it (the orchestrator's note
   for 03, ruling 9).
@@ -40,7 +40,7 @@ import ray
 from RunDrivers import registered_run
 from RunDrivers.tests.stubbed_run import REPO_ROOT, WRAPPER
 
-DRIVERS = ("main.py", "plot_by_beta.py", "plot_ScalarModel.py", "utilities.py")
+DRIVERS = ("main.py", "plot_by_beta.py", "plot_ScalarHistory.py", "utilities.py")
 FORBIDDEN = ("runregistrykit", "RunDrivers")
 
 # the wrapper's signal handlers, by name: `terminal`, installed by `register` before ray.init, and

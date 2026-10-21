@@ -19,12 +19,12 @@ temperatures a surfing trajectory reaches before its first bounce, with no Ray c
 datastore and no BBN.
 
 Written for surfing-temperature prompt 02 (T2, T3; README §2.2, §4). Each history is
-`compute_scalar_model._function` with tools/history_and_bbn.py's setup, whose constants and z
+`compute_scalar_history._function` with tools/history_and_bbn.py's setup, whose constants and z
 grid are imported from it: QCD_Cosmology on Planck2018, an exponential potential with n = 1 and
 Lambda = 1e-3 eV, an exponential coupling with the given beta, pi* = 0, T* = 2e4 GeV, the default
 tolerances and step control, and 250 samples per decade of 1 + z. The IntegrationResult is kept
 by wrapping integrate_scalar_history for the duration of the call, as history_and_bbn.py does,
-and its turning points of T_J are `surfing_turning_points` (ComputeTargets/ScalarModel.py).
+and its turning points of T_J are `surfing_turning_points` (ComputeTargets/ScalarHistory.py).
 Nothing is stored.
 
 Run from the repository root, since the EOS reads its table from the working directory:
@@ -51,7 +51,7 @@ One console line per beta:
     beta=... status=ok capture=... max=... second_dip=... deliver=... GeV crossings=... wall=... s
 
 with `-` for a blank, and a flag where a captured history has no bounce above T_stop.
-compute_scalar_model's own printing (failures only, by default) is left on the console.
+compute_scalar_history's own printing (failures only, by default) is left on the console.
 
 Exit status: 0 if every history ran and none failed, 1 if a failure row was written, 2 if the run
 was refused.
@@ -80,10 +80,10 @@ _ROOT = Path(__file__).resolve().parents[1]
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from ComputeTargets.ScalarModel import (  # noqa: E402
+from ComputeTargets.ScalarHistory import (  # noqa: E402
     FirstBounce,
     SurfingCrossing,
-    compute_scalar_model,
+    compute_scalar_history,
     surfing_turning_points,
 )
 from config.version import VERSION_LABEL  # noqa: E402
@@ -161,7 +161,7 @@ _INPUT_RTOL = 1e-12
 #   bounce:          the payload's first_bounce (first_bounce(result)), or None
 #   accepted_steps:  the payload's accepted_steps, or None on a failure
 #   reflections:     the payload's reflection count, or None on a failure
-#   wall_s:          the wall-clock time of compute_scalar_model._function and the walk, seconds
+#   wall_s:          the wall-clock time of compute_scalar_history._function and the walk, seconds
 #   result:          the captured IntegrationResult, or None
 HistoryOutcome = namedtuple(
     "HistoryOutcome",
@@ -201,7 +201,7 @@ def run_history(
     T_stop_GeV: float,
 ) -> HistoryOutcome:
     """
-    One history through compute_scalar_model._function, with the IntegrationResult captured by
+    One history through compute_scalar_history._function, with the IntegrationResult captured by
     wrapping integrate_scalar_history for the duration of the call (history_and_bbn.py's idiom;
     the wrapper is removed in a finally), and its turning points of T_J.
     """
@@ -219,7 +219,7 @@ def run_history(
     T_init = temperature(0, T_INIT_GEV * units.GeV)
     T_stop = temperature(1, T_stop_GeV * units.GeV)
 
-    SM = importlib.import_module("ComputeTargets.ScalarModel")
+    SM = importlib.import_module("ComputeTargets.ScalarHistory")
     captured = []
     integrate = SM.integrate_scalar_history
 
@@ -231,7 +231,7 @@ def run_history(
     SM.integrate_scalar_history = _capturing_integrate
     start = time.perf_counter()
     try:
-        data = compute_scalar_model._function(
+        data = compute_scalar_history._function(
             setup.cosmology,
             T_init,
             T_stop,

@@ -14,7 +14,7 @@
 # limitations under the License.
 
 # The version label under which every driver script (main.py, plot_by_beta.py,
-# plot_ScalarModel.py) opens the datastore. It is defined here once, and imported.
+# plot_ScalarHistory.py) opens the datastore. It is defined here once, and imported.
 
 # Stores made under an earlier VERSION_LABEL are invalid and must not be reused: on 2026-09-29
 # (review-remediation prompt 02) the Jordan-frame temperature law lost a spurious factor ln 10 in
@@ -25,7 +25,7 @@
 # On 2026-09-30 (production-readiness prompt 03), under the same label: from 2026.3.0 the
 # AdiabaticHistory effective mass M^2_eff includes the response of the source to delta phi, and
 # Q's numerator is computed in a form that is smooth where M^2_eff changes sign.
-# On 2026-09-30 (run-integrity prompt 01), under the same label: lookups of ScalarModel,
+# On 2026-09-30 (run-integrity prompt 01), under the same label: lookups of ScalarHistory,
 # AdiabaticHistory and BBNData return only rows made under this label, and the label is defined
 # here once.
 # On 2026-09-30 (run-integrity prompt 02), 2026.4.0: from 2026.4.0 a failed PRyMordial solve is

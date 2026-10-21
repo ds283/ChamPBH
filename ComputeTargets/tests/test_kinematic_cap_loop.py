@@ -26,8 +26,8 @@ from scipy.optimize import brentq
 
 import importlib
 
-# ComputeTargets re-exports the ScalarModel class under the module's name, so import the module
-SM = importlib.import_module("ComputeTargets.ScalarModel")
+# ComputeTargets re-exports the ScalarHistory class under the module's name, so import the module
+SM = importlib.import_module("ComputeTargets.ScalarHistory")
 
 from ComputeTargets.exceptions import ComputationFailureError
 from CosmologyConcepts import beta_value, M_value, Lambda_value, temperature
@@ -411,8 +411,10 @@ class TestStoredMetadataAndLabel(unittest.TestCase):
         )
 
     def test_g_stepper_label_registered_in_the_scripts(self):
-        self.assertEqual(SM.SCALAR_MODEL_STEPPER_LABEL, "Radau+kinematic-cap-stepping0")
-        for script in ("main.py", "plot_by_beta.py", "plot_ScalarModel.py"):
+        self.assertEqual(
+            SM.SCALAR_HISTORY_STEPPER_LABEL, "Radau+kinematic-cap-stepping0"
+        )
+        for script in ("main.py", "plot_by_beta.py", "plot_ScalarHistory.py"):
             with open(os.path.join(REPO_ROOT, script)) as f:
                 tree = ast.parse(f.read(), filename=script)
             strings = {

@@ -22,10 +22,10 @@ from sqlalchemy import and_, or_
 from sqlalchemy.exc import MultipleResultsFound, SQLAlchemyError
 
 from ComputeTargets import (
-    ScalarModel,
-    ScalarModelValue,
+    ScalarHistory,
+    ScalarHistoryValue,
 )
-from ComputeTargets.ScalarModel import FirstBounce, FixedTValues
+from ComputeTargets.ScalarHistory import FirstBounce, FixedTValues
 from CosmologyConcepts import (
     redshift_array,
     redshift,
@@ -50,7 +50,7 @@ from config.defaults import DEFAULT_STRING_LENGTH, DEFAULT_FLOAT_PRECISION
 from datastorekit.contract import require_version_serial
 
 
-class sqla_ScalarModelTagAssociation_factory(SQLAFactoryBase):
+class sqla_ScalarHistoryTagAssociation_factory(SQLAFactoryBase):
     def __init__(self):
         pass
 
@@ -62,9 +62,9 @@ class sqla_ScalarModelTagAssociation_factory(SQLAFactoryBase):
             "timestamp": True,
             "columns": [
                 sqla.Column(
-                    "model_serial",
+                    "history_serial",
                     sqla.Integer,
-                    sqla.ForeignKey("ScalarModel.serial"),
+                    sqla.ForeignKey("ScalarHistory.serial"),
                     index=True,
                     nullable=False,
                     primary_key=True,
@@ -84,28 +84,28 @@ class sqla_ScalarModelTagAssociation_factory(SQLAFactoryBase):
         raise NotImplementedError
 
     @staticmethod
-    def add_tag(conn, inserter, model: ScalarModel, tag: store_tag):
+    def add_tag(conn, inserter, model: ScalarHistory, tag: store_tag):
         inserter(
             conn,
             {
-                "model_serial": model.store_id,
+                "history_serial": model.store_id,
                 "tag_serial": tag.store_id,
             },
         )
 
     @staticmethod
-    def remove_tag(conn, table, model: ScalarModel, tag: store_tag):
+    def remove_tag(conn, table, model: ScalarHistory, tag: store_tag):
         conn.execute(
             sqla.delete(table).where(
                 and_(
-                    table.c.model_serial == model.store_id,
+                    table.c.history_serial == model.store_id,
                     table.c.tag_serial == tag.store_id,
                 )
             )
         )
 
 
-class sqla_ScalarModelFactory(SQLAFactoryBase):
+class sqla_ScalarHistoryFactory(SQLAFactoryBase):
     def __init__(self):
         pass
 
@@ -195,7 +195,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 # the first bounce (science-readiness prompt 03; README §2 (g)). All four are
                 # NULL when the history had no bounce, and on a failure row. The e-fold number
                 # is dimensionless; phi is stored in units of the Planck mass and ln T_J with T_J
-                # in GeV, as the ScalarModelValue columns phi_Einstein_Mp and log_T_Jordan_GeV
+                # in GeV, as the ScalarHistoryValue columns phi_Einstein_Mp and log_T_Jordan_GeV
                 sqla.Column("first_bounce_N", sqla.Float(64), nullable=True),
                 sqla.Column("first_bounce_log_T_Jordan", sqla.Float(64), nullable=True),
                 sqla.Column("first_bounce_phi_Einstein", sqla.Float(64), nullable=True),
@@ -251,8 +251,8 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 "atol": Parent("atol_serial", "tolerance"),
                 "rtol": Parent("rtol_serial", "tolerance"),
             },
-            tags=("ScalarModel_tags", "model_serial"),
-            values=("ScalarModelValue", "model_serial"),
+            tags=("ScalarHistory_tags", "history_serial"),
+            values=("ScalarHistoryValue", "history_serial"),
             validated="validated",
         )
 
@@ -277,7 +277,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
         solver_labels = payload["solver_labels"]
 
         # the lookup is keyed on the version label; it may never fall back to unfiltered
-        version_serial: int = require_version_serial(payload, "ScalarModel")
+        version_serial: int = require_version_serial(payload, "ScalarHistory")
 
         atol: tolerance = payload["atol"]
         rtol: tolerance = payload["rtol"]
@@ -285,7 +285,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
         atol_table = tables["tolerance"].alias("atol")
         rtol_table = tables["tolerance"].alias("rtol")
         solver_table = tables["IntegrationSolver"]
-        tag_table = tables["ScalarModel_tags"]
+        tag_table = tables["ScalarHistory_tags"]
         redshift_table = tables["redshift"]
 
         # notice that we query only for validated data
@@ -357,7 +357,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
             query = query.join(
                 tab,
                 and_(
-                    tab.c.model_serial == table.c.serial,
+                    tab.c.history_serial == table.c.serial,
                     tab.c.tag_serial == tag.store_id,
                 ),
             )
@@ -366,7 +366,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
             row_data = conn.execute(query).one_or_none()
         except MultipleResultsFound as e:
             print(
-                f"!! ScalarModel.build(): multiple results found when querying for ScalarModel"
+                f"!! ScalarHistory.build(): multiple results found when querying for ScalarHistory"
             )
             raise e
 
@@ -377,11 +377,11 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
             and not row_data.failure
             and row_data.solver_label is None
         ):
-            raise RuntimeError(f"ScalarModel {label} has no solver label")
+            raise RuntimeError(f"ScalarHistory {label} has no solver label")
 
         if row_data is None:
             # build and return an unpopulated object
-            return ScalarModel(
+            return ScalarHistory(
                 payload=None,
                 solver_labels=solver_labels,
                 cosmology=cosmology,
@@ -406,7 +406,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
         do_not_populate = payload.get("_do_not_populate", False)
         if not do_not_populate:
             # read out sample values associated with this integration
-            value_table = tables["ScalarModelValue"]
+            value_table = tables["ScalarHistoryValue"]
 
             sample_rows = conn.execute(
                 sqla.select(
@@ -437,7 +437,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                         redshift_table.c.serial == value_table.c.z_serial,
                     )
                 )
-                .filter(value_table.c.model_serial == store_id)
+                .filter(value_table.c.history_serial == store_id)
                 .order_by(redshift_table.c.z.desc())
             )
 
@@ -455,7 +455,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 )
                 z_points.append(z_value)
                 values.append(
-                    ScalarModelValue(
+                    ScalarHistoryValue(
                         store_id=row.serial,
                         z=z_value,
                         raw_N=row.raw_N,
@@ -482,7 +482,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
             if num_expected_samples is not None:
                 if len(imported_z_sample) != num_expected_samples:
                     raise RuntimeError(
-                        f'Fewer z-samples than expected were recovered from the validated ScalarModel "{store_label}"'
+                        f'Fewer z-samples than expected were recovered from the validated ScalarHistory "{store_label}"'
                     )
 
             attributes = {"_deserialized": True}
@@ -493,7 +493,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
 
         # z_grid not supplied since this object has already been computed/populated
         failed = row_data.failure
-        obj = ScalarModel(
+        obj = ScalarHistory(
             payload={
                 "store_id": store_id,
                 "failure": failed,
@@ -577,7 +577,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
 
     def store(
         self,
-        obj: ScalarModel,
+        obj: ScalarHistory,
         conn,
         table,
         inserter,
@@ -663,33 +663,35 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
             }
         )
 
-        # # because ScalarModel is a replicated table, we need to allow for the possibility that this object
+        # # because ScalarHistory is a replicated table, we need to allow for the possibility that this object
         # # is a replica, rather than a fresh insert. If so, it's _my_id field will be set.
         # if hasattr(obj, "_my_id") and obj._my_id is not None:
         #     payload.update({"serial": obj._my_id})
 
         store_id = inserter(conn, payload)
 
-        # set store_id on behalf of the ScalarModel instance
+        # set store_id on behalf of the ScalarHistory instance
         obj._my_id = store_id
 
         # add any tags that have been specified
-        tag_inserter = inserters["ScalarModel_tags"]
+        tag_inserter = inserters["ScalarHistory_tags"]
         for tag in obj.tags:
-            sqla_ScalarModelTagAssociation_factory.add_tag(conn, tag_inserter, obj, tag)
+            sqla_ScalarHistoryTagAssociation_factory.add_tag(
+                conn, tag_inserter, obj, tag
+            )
 
         # now serialize the sampled output points
         units: UnitsLike = obj._units
         log_Mp = log(units.PlanckMass)
         log_GeV = log(units.GeV)
 
-        value_inserter = inserters["ScalarModelValue"]
+        value_inserter = inserters["ScalarHistoryValue"]
         for value in obj._values:
-            value: ScalarModelValue
+            value: ScalarHistoryValue
             value_id = value_inserter(
                 conn,
                 {
-                    "model_serial": store_id,
+                    "history_serial": store_id,
                     "z_serial": value.z.store_id,
                     "raw_N": value.raw_N,
                     "phi_Einstein_Mp": value.phi_Einstein / units.PlanckMass,
@@ -711,19 +713,19 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 },
             )
 
-            # set store_id on behalf of the ScalarModelValue instance
+            # set store_id on behalf of the ScalarHistoryValue instance
             value._my_id = value_id
 
         return obj
 
     def validate(
         self,
-        obj: ScalarModel,
+        obj: ScalarHistory,
         conn,
         table,
         tables,
     ):
-        # query the row in ScalarModel corresponding to this object
+        # query the row in ScalarHistory corresponding to this object
         if not obj.available:
             raise RuntimeError(
                 "Attempt to validate a datastore object that has not yet been serialized"
@@ -738,10 +740,10 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
                 sqla.select(table.c.z_samples).filter(table.c.serial == obj.store_id)
             ).scalar()
 
-            value_table = tables["ScalarModelValue"]
+            value_table = tables["ScalarHistoryValue"]
             num_samples = conn.execute(
                 sqla.select(sqla.func.count(value_table.c.serial)).filter(
-                    value_table.c.model_serial == obj.store_id
+                    value_table.c.history_serial == obj.store_id
                 )
             ).scalar()
 
@@ -750,7 +752,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
 
         if not validated:
             print(
-                f'!! WARNING: ScalarModel "{obj.label}" did not validate after serialization (expected samples={expected_samples}, number stored={num_samples})'
+                f'!! WARNING: ScalarHistory "{obj.label}" did not validate after serialization (expected samples={expected_samples}, number stored={num_samples})'
             )
 
         conn.execute(
@@ -767,8 +769,8 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
         atol_table = tables["tolerance"].alias("atol")
         rtol_table = tables["tolerance"].alias("rtol")
         solver_table = tables["IntegrationSolver"]
-        value_table = tables["ScalarModelValue"]
-        tags_table = tables["ScalarModel_tags"]
+        value_table = tables["ScalarHistoryValue"]
+        tags_table = tables["ScalarHistory_tags"]
 
         # bake results into a list so that we can close this query; we are going to want to run
         # another one as we process the rows from this one
@@ -804,7 +806,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
             return []
 
         msgs = [
-            ">> ScalarModel instances",
+            ">> ScalarHistory instances",
             "     The following unvalidated models were detected in the datastore:",
         ]
         for model in not_validated:
@@ -813,7 +815,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
             )
             rows = conn.execute(
                 sqla.select(sqla.func.count(value_table.c.serial)).filter(
-                    value_table.c.model_serial == model.serial,
+                    value_table.c.history_serial == model.serial,
                 )
             ).scalar()
             msgs.append(
@@ -825,12 +827,12 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
             try:
                 conn.execute(
                     sqla.delete(value_table).where(
-                        value_table.c.model_serial.in_(invalid_serials)
+                        value_table.c.history_serial.in_(invalid_serials)
                     )
                 )
                 conn.execute(
                     sqla.delete(tags_table).where(
-                        tags_table.c.model_serial.in_(invalid_serials)
+                        tags_table.c.history_serial.in_(invalid_serials)
                     )
                 )
                 conn.execute(
@@ -849,7 +851,7 @@ class sqla_ScalarModelFactory(SQLAFactoryBase):
         return msgs
 
 
-class sqla_ScalarModelValue_factory(SQLAFactoryBase):
+class sqla_ScalarHistoryValue_factory(SQLAFactoryBase):
     def __init__(self):
         pass
 
@@ -860,9 +862,9 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
             "stepping": False,
             "columns": [
                 sqla.Column(
-                    "model_serial",
+                    "history_serial",
                     sqla.Integer,
-                    sqla.ForeignKey("ScalarModel.serial"),
+                    sqla.ForeignKey("ScalarHistory.serial"),
                     index=True,
                     nullable=False,
                 ),
@@ -894,7 +896,7 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
         }
 
     def build(self, payload, conn, table, inserter, tables, inserters):
-        model_serial = payload["model_serial"]
+        history_serial = payload["history_serial"]
         units: UnitsLike = payload["units"]
 
         z: redshift = payload["z"]
@@ -962,13 +964,13 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
                     table.c.reflecting_term_Mp,
                     table.c.kicking_term_Mp,
                 ).filter(
-                    table.c.model_serial == model_serial,
+                    table.c.history_serial == history_serial,
                     table.c.z_serial == z.store_id,
                 )
             ).one_or_none()
         except MultipleResultsFound as e:
             print(
-                f"!! ScalarModelValue.build(): multiple results found when querying for ScalarModelValue"
+                f"!! ScalarHistoryValue.build(): multiple results found when querying for ScalarHistoryValue"
             )
             raise e
 
@@ -976,7 +978,7 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
             store_id = inserter(
                 conn,
                 {
-                    "model_serial": model_serial,
+                    "history_serial": history_serial,
                     "z_serial": z.store_id,
                     "raw_N": raw_N,
                     "phi_Einstein_Mp": phi_Einstein_Mp,
@@ -1032,7 +1034,7 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
                 > DEFAULT_FLOAT_PRECISION
             ):
                 raise ValueError(
-                    f"Stored ScalarModel phi(Einstein)/Mp value (model store_id={model_serial}, z={z.store_id}) = {row_data.phi_Einstein_Mp}/Mp differs from expected value = {phi_Einstein_Mp}/Mp"
+                    f"Stored ScalarHistory phi(Einstein)/Mp value (model store_id={history_serial}, z={z.store_id}) = {row_data.phi_Einstein_Mp}/Mp differs from expected value = {phi_Einstein_Mp}/Mp"
                 )
 
             if (
@@ -1040,10 +1042,10 @@ class sqla_ScalarModelValue_factory(SQLAFactoryBase):
                 > DEFAULT_FLOAT_PRECISION
             ):
                 raise ValueError(
-                    f"Stored ScalarModel pi(Einstein)/Mp value (model store_id={model_serial}, z={z.store_id}) = {row_data.pi_Einstein_Mp}/Mp differs from expected value = {pi_Einstein_Mp}/Mp"
+                    f"Stored ScalarHistory pi(Einstein)/Mp value (model store_id={history_serial}, z={z.store_id}) = {row_data.pi_Einstein_Mp}/Mp differs from expected value = {pi_Einstein_Mp}/Mp"
                 )
 
-        obj = ScalarModelValue(
+        obj = ScalarHistoryValue(
             store_id=store_id,
             z=z,
             raw_N=raw_N,

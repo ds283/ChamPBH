@@ -171,7 +171,7 @@ class TestTheBeat(StreamCase):
         for line in (
             '   -- using potential type "Exponential"',
             "   -- populated M sample grid with 1 value = [ 0.001 Mp ]",
-            "!! WARNING: ScalarModel object with store_id=3 did not validate",
+            "!! WARNING: ScalarHistory object with store_id=3 did not validate",
             WORKER,
         ):
             self.assertFalse(tracker.feed(line), line)

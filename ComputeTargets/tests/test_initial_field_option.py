@@ -30,7 +30,7 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-DRIVERS = ["main.py", "plot_by_beta.py", "plot_ScalarModel.py"]
+DRIVERS = ["main.py", "plot_by_beta.py", "plot_ScalarHistory.py"]
 T_INIT_GEV = 2.0e4
 BETAS = [1.0, 6.0, 7.0, 25.0, 40.0]
 

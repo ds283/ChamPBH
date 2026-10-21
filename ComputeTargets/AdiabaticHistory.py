@@ -14,10 +14,10 @@ from Units.base import UnitsLike
 from config.sharding import ShardKeyType
 from utilities import WallclockTimer
 from .Policies import PotentialDerivativePolicy
-from .ScalarModel import (
-    ScalarModelProxy,
-    ScalarModel,
-    ScalarModelValue,
+from .ScalarHistory import (
+    ScalarHistoryProxy,
+    ScalarHistory,
+    ScalarHistoryValue,
 )
 from .exceptions import ComputationFailureError
 
@@ -41,7 +41,7 @@ def conformal_mass_over_H2(
 
     with R = (Sigma + f_m)/(1 + f_m), Sigma_T = d Sigma / d ln T_J = -3 d w / d ln T_J, and
     x = (1/3) d ln g_s / d ln T_J. The response of the source to delta phi is read off the
-    ODE (ComputeTargets/ScalarModel.py, ODERHS): d ln rho_R,E / d ln Omega = Sigma,
+    ODE (ComputeTargets/ScalarHistory.py, ODERHS): d ln rho_R,E / d ln Omega = Sigma,
     d ln rho_m,E / d ln Omega = 1, and d ln T_J / d ln Omega = -1/(1 + x) from entropy
     conservation T_J Omega a_E g_s^{1/3} = const.
 
@@ -245,9 +245,9 @@ class AdiabaticComputePolicy:
 
 @ray.remote
 def compute_adiabatic_values(
-    model_proxy: ScalarModelProxy, labels: Mapping[str, float], task_label: str
+    model_proxy: ScalarHistoryProxy, labels: Mapping[str, float], task_label: str
 ):
-    model: ScalarModel = model_proxy.get()
+    model: ScalarHistory = model_proxy.get()
     cosmology: BaseCosmology = model._cosmology
     units: UnitsLike = cosmology.units
 
@@ -272,7 +272,7 @@ def compute_adiabatic_values(
 
     with WallclockTimer() as timer:
         for value in model.values:
-            value: ScalarModelValue
+            value: ScalarHistoryValue
 
             raw_N_grid.append(value.raw_N)
             z_grid.append(value.z)
@@ -335,12 +335,12 @@ class AdiabaticHistory(DatastoreObject):
     def __init__(
         self,
         payload,
-        model_proxy: ScalarModelProxy,
+        model_proxy: ScalarHistoryProxy,
         label: Optional[str] = None,
         tags: Optional[List[store_tag]] = None,
     ):
-        self._model_proxy: ScalarModelProxy = model_proxy
-        model: ScalarModel = model_proxy.get()
+        self._model_proxy: ScalarHistoryProxy = model_proxy
+        model: ScalarHistory = model_proxy.get()
         self._coupling = model.coupling
         self._potential = model.potential
 

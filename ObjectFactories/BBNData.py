@@ -8,8 +8,8 @@ from sqlalchemy.exc import MultipleResultsFound, SQLAlchemyError
 from ComputeTargets import (
     BBNData,
     BBNDataValue,
-    ScalarModelProxy,
-    ScalarModel,
+    ScalarHistoryProxy,
+    ScalarHistory,
 )
 from CosmologyConcepts import redshift, redshift_array
 from CosmologyModels import BaseCosmology
@@ -90,9 +90,9 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
             "validate_on_startup": True,
             "columns": [
                 sqla.Column(
-                    "model_serial",
+                    "scalar_history_serial",
                     sqla.Integer,
-                    sqla.ForeignKey("ScalarModel.serial"),
+                    sqla.ForeignKey("ScalarHistory.serial"),
                     index=True,
                     nullable=False,
                 ),
@@ -118,7 +118,7 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
         }
 
     def inventory_spec(self):
-        # build() matches model_serial, the version and failure (False unless the payload says
+        # build() matches scalar_history_serial, the version and failure (False unless the payload says
         # otherwise). PRyM_version is not matched, and is a leaf so that the inventory shows it
         # (campaign README P15); the stored label, a job name and a time, is not. The model is on
         # this row's shard, since both take their shard key from the coupling's beta
@@ -127,7 +127,7 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
             leaves=("failure", "PRyM_version"),
             parents={
                 "version": Parent("version", "version"),
-                "model": Parent("model_serial", "ScalarModel"),
+                "model": Parent("scalar_history_serial", "ScalarHistory"),
             },
             tags=("BBNData_tags", "bbn_serial"),
             values=("BBNDataValue", "bbn_serial"),
@@ -138,8 +138,8 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
         label: Optional[str] = payload.get("label", None)
         tags: List[store_tag] = payload.get("tags", [])
 
-        model_proxy: ScalarModelProxy = payload["model_proxy"]
-        model: ScalarModel = model_proxy.get()
+        model_proxy: ScalarHistoryProxy = payload["model_proxy"]
+        model: ScalarHistory = model_proxy.get()
         cosmology: BaseCosmology = model.cosmology
 
         failure: Optional[bool] = payload.get("failure", False)
@@ -150,7 +150,7 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
         redshift_table = tables["redshift"]
 
         # find if there is an existing record for this model; notice that we query only for
-        # validated data, as ScalarModel.build does, so a row whose write was interrupted is not
+        # validated data, as ScalarHistory.build does, so a row whose write was interrupted is not
         # found by a pool that did not prune it at open (2026-10-14). validate() marks a stored
         # failure validated, so failures are still found
         query = sqla.select(
@@ -169,7 +169,7 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
             table.c.BBN_compute_time,
         ).filter(
             table.c.validated == True,
-            table.c.model_serial == model_proxy.store_id,
+            table.c.scalar_history_serial == model_proxy.store_id,
             table.c.version == version_serial,
         )
 
@@ -315,7 +315,7 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
 
     def store(self, obj: BBNData, conn, table, inserter, tables, inserters):
         payload = {
-            "model_serial": obj._model_proxy.store_id,
+            "scalar_history_serial": obj._model_proxy.store_id,
             "label": obj.label,
             "failure": obj._failure,
             "failure_reason": obj._failure_reason if obj._failure else None,
@@ -340,7 +340,7 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
         for tag in obj.tags:
             sqla_BBNDataTagAssociation_factory.add_tag(conn, tag_inserter, obj, tag)
 
-        model: ScalarModel = obj._model_proxy.get()
+        model: ScalarHistory = obj._model_proxy.get()
         cosmology: BaseCosmology = model.cosmology
         units: UnitsLike = cosmology.units
 

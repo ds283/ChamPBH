@@ -18,10 +18,10 @@ Rebuild a stored history's BBN input from a ChamPBH datastore and re-run
 PRyMordial on it, optionally with the low-temperature network's solve_ivp
 tolerances changed by interception.
 
-The history's ScalarModelValue rows are read from the store's shards
+The history's ScalarHistoryValue rows are read from the store's shards
 **read-only** (sqlite3 URI `mode=ro`; `datastorekit` is never used to
 open the store). The ratio rho_NP / rho_R,J is rebuilt with the arithmetic of
-`sqla_ScalarModel_factory.build`'s read path and of `compute_BBN_data`, in the
+`sqla_ScalarHistory_factory.build`'s read path and of `compute_BBN_data`, in the
 same order, so that the grid is bitwise the one production built
 (`ratio_grid`). The callback is the production `build_rho_NP_callback`, and
 the solve goes through the production boundary `_run_PRyMordial`. With
@@ -205,7 +205,7 @@ def connect_ro(path) -> sqlite3.Connection:
 
 _FIND_QUERY = """
     select sm.serial, mv.value_eV, sm.RHS_evaluations, sm.first_bounce_log_T_Jordan
-    from ScalarModel sm
+    from ScalarHistory sm
     join ExponentialCoupling c on c.serial = sm.coupling_serial
     join beta_value b on b.serial = c.beta_serial
     join ExponentialPotential p on p.serial = sm.potential_serial
@@ -214,20 +214,20 @@ _FIND_QUERY = """
     where abs(b.value - ?) < 1e-9 and abs(ph.value_PlanckMass - ?) < 1e-9
 """
 
-# production's order: sqla_ScalarModel_factory.build reads the samples ordered
+# production's order: sqla_ScalarHistory_factory.build reads the samples ordered
 # by redshift, descending
 _VALUES_QUERY = """
     select v.raw_N, v.log_T_Jordan_GeV, v.H_Jordan_Mp, v.log_rhorad_Jordan_Mp4, v.log_fm
-    from ScalarModelValue v
+    from ScalarHistoryValue v
     join redshift r on r.serial = v.z_serial
-    where v.model_serial = ?
+    where v.history_serial = ?
     order by r.z desc
 """
 
 _BBN_QUERY = """
     select failure, failure_reason, Yp_BBN, DOverH, He3OverH, Li7OverH,
            small_network, PRyM_version
-    from BBNData where model_serial = ?
+    from BBNData where scalar_history_serial = ?
 """
 _BBN_KEYS = (
     "failure",
@@ -243,7 +243,7 @@ _BBN_KEYS = (
 
 def find_model(stem, beta: float, M_Mp: float, phi_init_Mp: float = 5.0, units=None):
     """
-    The one ScalarModel in the shards `STEM-shard*.db` with this beta and
+    The one ScalarHistory in the shards `STEM-shard*.db` with this beta and
     initial phi (to 1e-9 absolute) and this M (to 1e-3 relative, M_value
     being in eV and M_Mp in units of the reduced Planck mass,
     units.PlanckMass / units.eV). Returns a StoredHistory. Raises LookupError
@@ -288,12 +288,12 @@ def find_model(stem, beta: float, M_Mp: float, phi_init_Mp: float = 5.0, units=N
 
     if len(found) == 0:
         raise LookupError(
-            f"no ScalarModel with beta={beta:g} M={M_Mp:g} phi={phi_init_Mp:g} in {stem}"
+            f"no ScalarHistory with beta={beta:g} M={M_Mp:g} phi={phi_init_Mp:g} in {stem}"
         )
     if len(found) > 1:
         where = ", ".join(f"{Path(h.shard).name}:{h.serial}" for h in found)
         raise LookupError(
-            f"{len(found)} ScalarModels match beta={beta:g} M={M_Mp:g} phi={phi_init_Mp:g}: {where}"
+            f"{len(found)} ScalarHistories match beta={beta:g} M={M_Mp:g} phi={phi_init_Mp:g}: {where}"
         )
     return found[0]
 
@@ -314,7 +314,7 @@ def ratio_grid(
     (raw_N, log_T_Jordan_GeV, H_Jordan_Mp, log_rhorad_Jordan_Mp4, log_fm) in the
     store's units and production's order. Returns two float arrays.
 
-    The arithmetic is that of sqla_ScalarModel_factory.build's read path (the
+    The arithmetic is that of sqla_ScalarHistory_factory.build's read path (the
     store's units to `units`) followed by compute_BBN_data's loop, operation for
     operation and in the same order, so that the arrays are bitwise the ones
     compute_BBN_data hands build_rho_NP_callback. Do not "simplify" it:
@@ -335,7 +335,7 @@ def ratio_grid(
 
     out_logT, out_r = [], []
     for raw_N, log_T_Jordan_GeV, H_Jordan_Mp, log_rhorad_Jordan_Mp4, log_fm in rows:
-        # ScalarModelValue as the factory builds it
+        # ScalarHistoryValue as the factory builds it
         log_rhorad_Jordan = float(log_rhorad_Jordan_Mp4) + 4.0 * log_Mp
         log_T_Jordan = float(log_T_Jordan_GeV) + log_GeV
         H_Jordan = float(H_Jordan_Mp) * units.PlanckMass

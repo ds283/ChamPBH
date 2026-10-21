@@ -17,7 +17,7 @@
 What the plot scripts read before the histories, on read-only stores (read-only-plots prompt 02;
 README P1, P2, P3, U3, U4).
 
-`plot_inputs.py` holds the setup `plot_by_beta.py` and `plot_ScalarModel.py` share. These tests
+`plot_inputs.py` holds the setup `plot_by_beta.py` and `plot_ScalarHistory.py` share. These tests
 drive it on stores built through ChamPBH's copy of the package's stand-in cluster
 (`StoreFixtures/standin_pool.py`): a real `ShardedPool`, the package's actor code, ChamPBH's
 factories and SQLite, in `tempfile` directories, with no Ray. Each store is built read-write with
@@ -69,7 +69,7 @@ from config.sharding import read_table_config
 from config.version import VERSION_LABEL
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-SCRIPTS = ("plot_by_beta.py", "plot_ScalarModel.py")
+SCRIPTS = ("plot_by_beta.py", "plot_ScalarHistory.py")
 
 UNITS = Planck_units()
 
@@ -424,7 +424,7 @@ class _RecordingPool:
 
 class TestThePayloads(_ReadOnlyCase):
     """Each lookup's class and payload, key for key, are the scripts' before this prompt
-    (`plot_by_beta.py:1031-1104` at `000be0c`, and `plot_ScalarModel.py`'s identical copy): one
+    (`plot_by_beta.py:1031-1104` at `000be0c`, and `plot_ScalarHistory.py`'s identical copy): one
     item of each vectorized payload per lookup."""
 
     def test_the_parameters(self):
@@ -694,7 +694,7 @@ class TestOtherRefusalsPropagate(_ReadOnlyCase):
             grid = plot_inputs.stored_grid(pool, UNITS)
         for error in (
             ReadOnlyWrite("shard0000", "object_get", class_name="ExponentialCoupling"),
-            ReadOnlyWrite("shard0000", "an insert", class_name="ScalarModel"),
+            ReadOnlyWrite("shard0000", "an insert", class_name="ScalarHistory"),
         ):
             with self.subTest(operation=error.operation, class_name=error.class_name):
                 with quiet(), self.assertRaises(ReadOnlyWrite) as ctx:
