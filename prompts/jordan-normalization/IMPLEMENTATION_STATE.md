@@ -1,8 +1,8 @@
 # jordan-normalization campaign — implementation state
 
-**Last updated:** 2026-10-21 · **Status: LIVE — 10 of 10 prompts written, 2 landed (01 reviewed; 02 awaiting review);
-R1–R14, U1–U5 and P1–P20 ruled by the user 2026-10-20 (README §6). Next: the orchestrator's review of 02,
-then the note for 03.**
+**Last updated:** 2026-10-21 · **Status: LIVE — 10 of 10 prompts written, 2 landed (01, 02, both
+reviewed); R1–R14, U1–U5 and P1–P20 ruled by the user 2026-10-20 (README §6). Next: the orchestrator
+note for 03.**
 The plan is [`README.md`](README.md), written on 2026-10-20 on branch `jordan-normalization`, cut
 from `main` at `ac187c8`.
 
@@ -36,7 +36,7 @@ It ends in the handover for the science rebuild, which is the user's.
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
 | 01 | Strip to the exponential model | four potentials and their configs removed; a golden short history; format 2 | Sonnet | ✅ | ✅ | `a1c88b6` | [`logs/01-strip-to-the-exponential-model.md`](logs/01-strip-to-the-exponential-model.md) |
-| 02 | Rename to `ScalarHistory` | classes, tables, drop group, proxies, documents; format 3 | Sonnet | ✅ | ✅ | this commit | [`logs/02-rename-to-scalarhistory.md`](logs/02-rename-to-scalarhistory.md) |
+| 02 | Rename to `ScalarHistory` | classes, tables, drop group, proxies, documents; format 3 | Sonnet | ✅ | ✅ | `abccc23` | [`logs/02-rename-to-scalarhistory.md`](logs/02-rename-to-scalarhistory.md) |
 | 03 | The sampling axis | ln(1 + z_E) on the axis, exact-multiple grid, absolute lookup, ln(1 + z_J) per sample; format 4 | Opus | ✍️ | ⬜ | — | — |
 | 04 | The model interface | `AbstractModel`, `ExponentialModel`, `RealizedModel`; consumers on it via an adapter; φ_ref = 0 bitwise; the shift law | Opus | ✍️ | ⬜ | — | — |
 | 05 | The Planck mass | one reduced Planck mass from PRyMordial's G_N in three unit systems; consistency tests | Sonnet | ✍️ | ⬜ | — | — |
@@ -53,6 +53,8 @@ note in `orchestrator/`, written after the previous prompt's review.
 
 Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 - [`orchestrator/prompt-01.md`](orchestrator/prompt-01.md) (`701ed4c`), used for 01.
+- [`orchestrator/prompt-02.md`](orchestrator/prompt-02.md) (`481b65e`), used for 02. Two of its
+  rulings were corrected after dispatch (§5.3).
 
 ### 1.1 Items
 
@@ -223,7 +225,7 @@ pass.
 
 ### 5.3 After prompt 02 (2026-10-21)
 
-Prompt 02 landed in this commit (log [`logs/02-rename-to-scalarhistory.md`](logs/02-rename-to-scalarhistory.md)).
+Prompt 02 landed in `abccc23` (log [`logs/02-rename-to-scalarhistory.md`](logs/02-rename-to-scalarhistory.md)).
 - **N1.** Five files moved by `git mv` (all `R` lines); classes, factories, tables, the drop group
   `scalar-history` (`--drop scalar-model` is refused), `compute_scalar_history`; the column that
   points at a history is `history_serial` on the value and tag tables and `scalar_history_serial`
@@ -239,3 +241,73 @@ Prompt 02 landed in this commit (log [`logs/02-rename-to-scalarhistory.md`](logs
 - **Suites:** CosmologyModels 18, ComputeTargets 179 (61 + 118), ObjectFactories 79 (+1, the
   refusal of `--drop scalar-model`), tools 84, RunDrivers 61.
 - **Opened:** `[02-the-scalar-history-parent-is-still-called-model]`.
+
+**The stop (2026-10-21).** The agent stopped before committing. The rehearsal parser
+`.documents/dk-and-rpk-migration/rehearsal/stage_counts.py` matches `main.py`'s literal
+`models skipped because their ScalarModel failed`, so the rename broke
+`tools/tests/test_compare_stores.py`'s stage-counts test, which loads the parser by path. Note 02's
+ruling 10 had classed all the rehearsal scripts as records, so the parser could not be edited, and
+that was wrong for this one: the parser is live tooling, tested here, and 09 runs it. The user
+ruled "Edit the parser (Recommended)". Its `SKIPPED` regex now accepts
+`(?:ScalarModel|ScalarHistory)`, so dated logs and new ones both parse. The dated outputs under
+`.documents/*/out/` are unchanged. The orchestrator ruled on two more points without a stop:
+- the format literal in `TestCommandLine.test_store_fingerprint` goes from 2 to 3, as 01 moved it
+  from 1 to 2; ruling 6 should have named it;
+- ruling 11 was wrong on the facts. The two science-run scripts name neither `plot_ScalarModel.py`
+  nor `scalar-model`; each has only a comment quoting a stored failure reason. They are not edited.
+
+**Orchestrator review of prompt 02 (2026-10-21).** Against `abccc23`, by note 02's ten checks. All
+pass.
+- **Scope.** 67 files, with five `R` lines (similarity 81–95 %) and no deletion. Note 02's 59
+  Python files, plus `stage_counts.py` by the user's ruling, plus `CLAUDE.md`, the two documents,
+  the index, this board, the golden file and the log. The tree is clean.
+- **Nothing but names.** In a temporary worktree at `abccc23`, the orchestrator undid the moves,
+  applied the inverse name map to the 59 code files, and diffed against `481b65e`. Every residual
+  line is accounted for by one of:
+  - `history_serial` on the two `ScalarHistory` child tables (ruling 2, read by eye);
+  - ruling 5's test and `--drop` help;
+  - format 3's docstring, `GOLDEN` and literal;
+  - the parser's regex;
+  - black's re-wrapping and magic trailing commas.
+
+  The map's apparent `integrate_scalar_history` → `integrate_scalar_model` residue is an artefact of
+  the map: `integrate_scalar_history` is the step loop's name since `integrator-remediation`,
+  unchanged here.
+- **The golden history.** The orchestrator ran the generator at `abccc23` into the scratchpad.
+  `histories` equals the committed JSON in every pinned item, excerpts and SHAs included. The JSON
+  is unchanged (SHA-256 `6898a432…62d6`), and `test_golden_history` passes alone.
+- **The grep.** Ruling 9's command finds only its four kinds of hit, and `CLAUDE.md` has none.
+  Every residual line in the two documents lies in a dated note (`> **Note, …`, `**Note added …`)
+  or a dated "Added" section.
+- **The columns.** The `ForeignKey`, `Parent`, query and raw-SQL uses agree with ruling 2.
+  `AdiabaticHistory`'s own `history_serial` is untouched. **Probe:** with `redshift.py`'s join
+  column changed to a name that does not exist, ObjectFactories, ComputeTargets (61 + 118) and
+  tools all pass. Tools has one failure, in `test_registry_config`, and that failure belongs to
+  running in a worktree (the registry resolves its root to the main checkout). So no test
+  exercises `sqla_redshift_factory.read_table`'s `model_proxy` join, and no code passes
+  `model_proxy` to it. This is an observation for 03, which rewrites the redshift factory (Z2),
+  not a finding.
+- **The moves and drivers.** `git log --follow` on each new path reaches its history. `main.py
+  --help` and `plot_ScalarHistory.py --help` exit 0. `--drop scalar-model` exits 2, naming
+  `scalar-history`, and creates no file.
+- **Format 3.** The orchestrator recomputed `spec_digests(factories)` and it equals
+  `SPEC_DIGESTS[3]`: 17 pairs, 14 distinct digests, 23 classes. The digests that moved are those
+  of `ScalarHistory`, `AdiabaticHistory` and `BBNData`. `[1]` and `[2]` equal `d56f908`'s. The diff
+  deletes only the format number and one comment line it extends. The new golden file is format 3,
+  with `taken` null and no problems. The two older golden files are unchanged.
+- **The breakages.** Both diffs were extracted from the log and replayed in `bash`. The first gives
+  2 failures; the second gives 3 failures and 3 errors (`KeyError: 'model_serial'`). Each matches
+  the log, and each was reverted with the tree clean.
+- **The suites** at `abccc23`, serially: 18; 61 + 118; 79; 84; 61, all passing (load 19–64).
+  `black --check` passes on the 60 Python files.
+- **The records.** This board, the index (row in §1.16, 28 open) and the log are in §5.1's form,
+  with every deviation classified.
+- **Residue, fixed in the follow-up commit.**
+  - "this commit" becomes `abccc23` in the log and on this board.
+  - The index header's `jordan-normalization` clause began "none on the … board"; it now reads
+    "1 on the".
+  - Note 02 is listed in §1, and the status line is updated.
+- **Not residue, recorded only.** The commit message's first paragraph says that `BBNData`'s own
+  `history_serial` already names an `AdiabaticHistory` row. Only `AdiabaticHistory`'s child tables
+  carry `history_serial`; `BBNData`'s use `bbn_serial`. The code and the log are right, and commits
+  are not amended (`CLAUDE.md` invariant 1).

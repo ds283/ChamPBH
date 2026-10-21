@@ -1,7 +1,7 @@
 # Log 02 — rename to `ScalarHistory`
 
 **Subject:** Rename `ScalarModel` to `ScalarHistory` throughout; fingerprint format 3
-**Commit:** this commit, on branch `jordan-normalization`, on top of `481b65e`
+**Commit:** `abccc23`, on branch `jordan-normalization`, on top of `481b65e`
 **Date:** 2026-10-21, by Claude Sonnet 5.5
 **Result:** **COMPLETE**, after one stop (Deviation 9), which the user ruled. N1–N4 shipped. The golden
 history passes unchanged (its JSON was not written). CosmologyModels 18, ComputeTargets 179
@@ -214,7 +214,7 @@ notes).
 
 ## The deliberate-breakage record
 
-Each is a `diff -u` against the tree of this commit (taken from a copy before the mutation), reverted by
+Each is a `diff -u` against the tree of `abccc23` (taken from a copy before the mutation), reverted by
 copying back, never committed. Each checked with `git apply --check`, then applied, `git apply -R --check`
 and reversed, in `bash`; the tree was byte-identical after.
 
@@ -274,7 +274,7 @@ fingerprint **errors** (`KeyError: 'model_serial'`) in `TestGolden`'s three test
 
 ## State handed to the next prompt
 
-- **Tree:** this commit, on `jordan-normalization`, on top of `481b65e`. No `ScalarModel` name remains
+- **Tree:** `abccc23`, on `jordan-normalization`, on top of `481b65e`. No `ScalarModel` name remains
   outside the records, the two older golden files, `config/fingerprint.py`'s format 1 and 2 records, the
   `--drop` help and its test, and the rehearsal parser's regex.
 - **Names:** `ComputeTargets/ScalarHistory.py`, `ObjectFactories/ScalarHistory.py`, `plot_ScalarHistory.py`;
@@ -299,6 +299,6 @@ fingerprint **errors** (`KeyError: 'model_serial'`) in `TestGolden`'s three test
 - **Open issues:** one opened, `[02-the-scalar-history-parent-is-still-called-model]` (07). Seven remain
   assigned to this campaign (board §3.1). `.documents/OPEN_ISSUES.md`: 28 open.
 - **The closing grep** is ruling 9's `git grep -n -E '…'` (no `\b`); `-P` is needed only for patterns with `\b`.
-- **Breakage replay:** the two diffs above apply to this commit's tree (`git apply --check` passes for each
-  from the tree of this commit; after applying each, `git apply -R --check` passes and the reverse restores
+- **Breakage replay:** the two diffs above apply to `abccc23`'s tree (`git apply --check` passes for each
+  from the tree of `abccc23`; after applying each, `git apply -R --check` passes and the reverse restores
   the tree), checked in `bash`.

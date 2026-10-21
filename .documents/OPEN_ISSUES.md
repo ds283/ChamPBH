@@ -22,7 +22,7 @@ issue and closed it with prompt 02, opened none and leaves none open; 1 on the
 ruled by the user, U9, 2026-10-14; closed 2026-10-14, 7 of 7 prompts landed, with the one issue
 still open on its board); 1 on the `rrk-adoption` board (planned 2026-10-19, with none
 opened or assigned; the orchestrator's review of prompt 04 opened one, 2026-10-20; closed 2026-10-20,
-5 of 5 prompts landed, with the one issue still open on its board); none on the
+5 of 5 prompts landed, with the one issue still open on its board); 1 on the
 `jordan-normalization` board (planned 2026-10-20, with none opened; eight from five boards assigned
 to it the same day, §1.15; prompt 01 closed one of them, 2026-10-20, leaving seven; prompt 02 opened one, 2026-10-21).
 
