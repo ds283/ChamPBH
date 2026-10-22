@@ -177,6 +177,14 @@ HubblePolicyData = namedtuple(
     ],
 )
 
+# one sample of a history, at a point of the sampling axis ln(1 + z_E) (jordan-normalization prompt 03).
+#   log_one_plus_z_Jordan: ln(1 + z_J), the Jordan-frame redshift counted back from the end of the
+#                          history, computed at sampling as ln(1 + z_E) + ln A(phi_0) - ln A(phi),
+#                          with phi_0 the field at the end (a_J = A a_E). It is a column, never a
+#                          key: H_J < 0 during a bounce, so a_J is not monotonic and z_J is not a
+#                          coordinate. "The end" is wherever the history stopped; once
+#                          jordan-normalization prompt 07 lands it is T_J = T_CMB for every stored
+#                          history (today a history may stop at another T_stop)
 SampleValues = namedtuple(
     "SampleValues",
     [
@@ -197,6 +205,7 @@ SampleValues = namedtuple(
         "friction_term",
         "reflecting_term",
         "kicking_term",
+        "log_one_plus_z_Jordan",
     ],
 )
 
@@ -1108,6 +1117,16 @@ def fixed_T_values(
     return FixedTValues._make(values)
 
 
+def truncate_to_history(z_grid: redshift_array, final_N: float) -> redshift_array:
+    """
+    The points of the sampling axis that a history ending at final_N e-folds reaches: those with
+    ln(1 + z) <= final_N, to redshift_array's tolerance (1e-10), so a point at most 1e-10 beyond
+    final_N is kept and sampled at N_forward >= -1e-10. (jordan-normalization prompt 03, Z4; a
+    helper so that a test can drive it with a synthetic final_N.)
+    """
+    return z_grid.truncate(final_N, keep="lower")
+
+
 def _failure_payload(reason: str) -> dict:
     """
     The payload compute_scalar_history returns for a failed history: the failure flag and
@@ -1138,7 +1157,7 @@ def compute_scalar_history(
     :param T_stop: final radiation temperature in Jordan frame (usually T_CMB)
     :param phi_init: initial Einstein-frame scalar field value phi
     :param pi_init: initial Einstein-frame scalar field derivative dphi/dN
-    :param z_grid: grid of redshifts at which to sample the solution
+    :param z_grid: the sampling axis: points ln(1 + z_E), counted back from the end of the history
     :param potential: the scalar field potential
     :param coupling: the conformal coupling
     :param task_label: label for the ray task
@@ -1243,18 +1262,16 @@ def compute_scalar_history(
                 f"-- compute_scalar_history ({task_label}): {len(result.reflections)} elastic reflection(s), first at N={result.reflections[0].N:.5g}"
             )
 
-        # the integration should have terminated when T_Jordan = T_CMB, which ought to correspond to z = 0
-        # we now work backwards and sample the integration output on the supplied z grid, using the e-fold number
-        # to assign a value of log(1 + z).
+        # the integration terminated at T_Jordan = T_stop, which is ln(1 + z_E) = 0 on the sampling
+        # axis. We work backwards and sample the integration output on the axis: a point's
+        # ln(1 + z_E) is the number of e-folds back from the end (jordan-normalization prompt 03)
         final_N = result.N_final
-        largest_z = exp(final_N) - 1.0
-        z_grid_cut = z_grid.truncate(largest_z, keep="lower")
+        z_grid_cut = truncate_to_history(z_grid, final_N)
 
         max_z: redshift = z_grid.max
-        max_N: float = log(1.0 + max_z.z)
-        if max_N < final_N:
+        if max_z.log_one_plus_z < final_N:
             raise RuntimeError(
-                f"compute_scalar_history: ({task_label}): largest supplied redshift z={max_z.z:.3g} is equivalent to maximum e-fold number N={max_N:.3g}, but solution required N={final_N:.3g} e-folds"
+                f"compute_scalar_history: ({task_label}): largest supplied redshift has ln(1 + z)={max_z.log_one_plus_z:.6g}, but solution required N={final_N:.6g} e-folds"
             )
 
         sample = []
@@ -1265,10 +1282,15 @@ def compute_scalar_history(
         solution: OdeSolution = result.solution
 
         hubble: HubblePolicy = HubblePolicy(coupling, units)
+
+        # ln A(phi_0), with phi_0 the field at the end of the history, for ln(1 + z_J)
+        phi_0: float = StateVector._make(solution(final_N)).phi_Einstein
+        log_A_0: float = coupling.log_Omega(phi_0)
+
         try:
             for z in z_grid_cut:
                 z: redshift
-                N_backward = log(1.0 + z.z)
+                N_backward = z.log_one_plus_z
                 N_forward = final_N - N_backward
 
                 state: StateVector = StateVector._make(solution(N_forward))
@@ -1299,6 +1321,7 @@ def compute_scalar_history(
                         friction_term=data.friction_term,
                         reflecting_term=data.reflecting_term,
                         kicking_term=data.kicking_term,
+                        log_one_plus_z_Jordan=N_backward + (log_A_0 - log_Omega),
                     )
                 )
         except OverflowError as e:
@@ -1796,6 +1819,7 @@ class ScalarHistory(DatastoreObject):
                     friction_term=sample[i].friction_term,
                     reflecting_term=sample[i].reflecting_term,
                     kicking_term=sample[i].kicking_term,
+                    log_one_plus_z_Jordan=sample[i].log_one_plus_z_Jordan,
                 )
             )
 
@@ -1826,10 +1850,11 @@ class ScalarHistoryValue(DatastoreObject):
         friction_term: float,
         reflecting_term: float,
         kicking_term: float,
+        log_one_plus_z_Jordan: float,
     ):
         """
         :param store_id: ID in the datastore
-        :param z: redshift at this point
+        :param z: the point of the sampling axis, ln(1 + z_E) counted back from the end
         :param raw_N: the raw e-folding time N from the ODE solver
         :param phi_Einstein: Einstein-frame scalar field value
         :param pi_Einstein: Einstein-frame scalar field derivative dphi/dN
@@ -1844,6 +1869,11 @@ class ScalarHistoryValue(DatastoreObject):
         :param dgstar_rho_dlogT: logarithmic derivative of gstar_rho with respect to temperature
         :param dgstar_s_dlogT: logarithmic derivative of gstar_s with respect to temperature
         :param Sigma: equation of state parameter (1 - 3w)
+        :param log_one_plus_z_Jordan: ln(1 + z_J), the Jordan-frame redshift counted back from the
+            end of the history, ln(1 + z_E) + ln A(phi_0) - ln A(phi) (jordan-normalization
+            prompt 03, R4). A column, never a key: H_J < 0 during a bounce, so a_J is not
+            monotonic and z_J is not a coordinate. Once prompt 07 lands, "the end" is
+            T_J = T_CMB for every stored history
         """
         DatastoreObject.__init__(self, store_id)
 
@@ -1871,6 +1901,8 @@ class ScalarHistoryValue(DatastoreObject):
         self._friction_term: float = friction_term
         self._reflecting_term: float = reflecting_term
         self._kicking_term: float = kicking_term
+
+        self._log_one_plus_z_Jordan: float = log_one_plus_z_Jordan
 
     @property
     def shard_key(self) -> ShardKeyType:
@@ -1948,6 +1980,10 @@ class ScalarHistoryValue(DatastoreObject):
     @property
     def kicking_term(self) -> float:
         return self._kicking_term
+
+    @property
+    def log_one_plus_z_Jordan(self) -> float:
+        return self._log_one_plus_z_Jordan
 
 
 class ScalarHistoryProxy:

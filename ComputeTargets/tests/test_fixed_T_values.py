@@ -48,6 +48,7 @@ from CosmologyConcepts import (
     redshift_array,
     temperature,
 )
+from CosmologyConcepts.redshift import log_one_plus_z_grid
 from CosmologyConcepts.ConformalCouplings.ExponentialCoupling import (
     ExponentialCoupling,
 )
@@ -99,8 +100,8 @@ def full_history(beta: float, M: float):
     )
     coupling = ExponentialCoupling(0, beta_value(0, beta), _units)
 
-    zs = np.logspace(0.0, 35.0, int(round(250 * 35.0 + 0.5, 0))) - 1.0
-    z_grid = redshift_array(z_array=[redshift(i, float(z)) for i, z in enumerate(zs)])
+    xs = log_one_plus_z_grid(250, 35.0)
+    z_grid = redshift_array(z_array=[redshift(i, x) for i, x in enumerate(xs)])
 
     captured = []
     integrate = SM.integrate_scalar_history

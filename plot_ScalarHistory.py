@@ -1291,7 +1291,11 @@ def write_csv_file(
         if store_id in model_values:
             value = model_values[store_id]
             return {
-                "z": float(value.z),
+                # z derived from the axis (inf past float range), and the axis itself, ln(1 + z_E);
+                # ln(1 + z_J) is a column, not a key (jordan-normalization prompt 03)
+                "z": value.z.z,
+                "log_one_plus_z": value.z.log_one_plus_z,
+                "log_one_plus_z_Jordan": value.log_one_plus_z_Jordan,
                 "raw_N": value.raw_N,
                 "phi_Einstein_Mp": value.phi_Einstein / units.PlanckMass,
                 "pi_Einstein_Mp": value.pi_Einstein / units.PlanckMass,
@@ -1317,6 +1321,8 @@ def write_csv_file(
 
         return {
             "z": nan,
+            "log_one_plus_z": nan,
+            "log_one_plus_z_Jordan": nan,
             "raw_N": nan,
             "phi_Einstein_Mp": nan,
             "pi_Einstein_Mp": nan,
@@ -1358,7 +1364,9 @@ def write_csv_file(
     ]
 
     df = pd.DataFrame(data)
-    df.sort_values(by="z", inplace=True, ascending=False, ignore_index=True)
+    df.sort_values(
+        by="log_one_plus_z", inplace=True, ascending=False, ignore_index=True
+    )
 
     csv_path = csv_path / "fields.csv"
     csv_path.parents[0].mkdir(exist_ok=True, parents=True)

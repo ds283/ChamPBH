@@ -1,26 +1,29 @@
 """
 The golden histories: the setup, and the record of one history, shared by the test
-(test_golden_history.py) and by a regeneration. (jordan-normalization prompt 01, X1.)
+(test_golden_history.py) and by a regeneration. (jordan-normalization prompt 01, X1; regenerated
+by prompt 03 as data/golden_history_03.json, beside 01's, which is the record of 01 and 02.)
 
 Two histories are run as tools/history_and_bbn.py runs one, through
 compute_scalar_history._function with no Ray: QCD_Cosmology on Planck2018 in Planck_units;
 ExponentialPotential(M = 1e-3 M_P, Lambda = 1 meV, n = 1); ExponentialCoupling(beta) for beta = 1.5
 and beta = 5.5; phi* = 5 M_P, pi* = 0, T* = 2e4 GeV, T_stop = 1 MeV; atol = rtol = 1e-8; and the
-production z grid, built as main.py builds it (250 samples per decade of 1 + z, up to 1e85,
-`num = int(round(250 * 85 + 0.5, 0))`, which is 21250 points; reproduced, not corrected).
+production sampling axis, built as main.py builds it, by CosmologyConcepts.redshift.log_one_plus_z_grid
+at 250 samples per decade of 1 + z up to 85 decades (exponential.yaml's value): ln(1 + z) = k * DELTA,
+DELTA = ln 10 / 250, k = 0 ... 21250. (Until jordan-normalization prompt 03 the grid was main.py's
+np.logspace(0, 85, 21250) - 1, whose points are not multiples of DELTA.)
 
 What is pinned, per history (see `record_of`):
   - samples_sha256: SHA-256 of numpy.asarray(samples, dtype=float64).tobytes(), row-major in
-    SampleValues order; z_sha256: the same for the sampled z values; n_samples; the field names of
-    SampleValues, in order;
+    SampleValues order; log_one_plus_z_sha256: the same for the sampled points' ln(1 + z), the
+    label of each sample; n_samples; the field names of SampleValues, in order;
   - reflections, accepted_steps, steps_rejected_by_exception, metadata.compute_steps and
     metadata.RHS_evaluations (ints);
   - first_bounce (N, phi_Einstein, log_T_Jordan as float.hex; reflected as a bool; null if None);
     fixed_T_values (four fields, float.hex or null); cap_fraction, cap_floor, cap_global_max_step,
     jacobian_factor_max (float.hex); solver_label; the three RHS-statistics blocks (null, since full
     statistics are not collected);
-  - the excerpts: the samples at indices 0, 250, 500, ... and the last, each as its index, its z
-    and its fields by name, all float.hex.
+  - the excerpts: the samples at indices 0, 250, 500, ... and the last, each as its index, its
+    ln(1 + z) and its fields by name, all float.hex.
 
 NOT pinned: metadata.compute_time, mean_RHS_time, max_RHS_time and min_RHS_time. They are wall-clock
 measurements and differ from run to run.
@@ -53,6 +56,7 @@ from CosmologyConcepts import (
     redshift_array,
     temperature,
 )
+from CosmologyConcepts.redshift import log_one_plus_z_grid
 from CosmologyConcepts.ConformalCouplings.ExponentialCoupling import (
     ExponentialCoupling,
 )
@@ -62,7 +66,7 @@ from CosmologyModels.GenericEOS.QCD_Cosmology import QCD_Cosmology
 from CosmologyModels.LambdaCDM import Planck2018
 from Units import Planck_units
 
-GOLDEN_PATH = Path(__file__).resolve().parent / "data" / "golden_history_01.json"
+GOLDEN_PATH = Path(__file__).resolve().parent / "data" / "golden_history_03.json"
 REGENERATE_COMMAND = (
     "PYTHONPATH=. ./venv/bin/python -m ComputeTargets.tests.golden_history"
 )
@@ -78,7 +82,6 @@ T_STOP_GEV = 1.0e-3
 ATOL = 1.0e-8
 RTOL = 1.0e-8
 SAMPLES_PER_LOG10_Z = 250
-LOG10_ONE_PLUS_Z_LOW = 0
 LOG10_ONE_PLUS_Z_HIGH = 85
 EXCERPT_STRIDE = 250
 
@@ -95,15 +98,9 @@ def history_key(beta: float) -> str:
 
 
 def make_z_grid() -> redshift_array:
-    """main.py's arithmetic, unchanged, with dummy store ids (the index)."""
-    num = int(
-        round(
-            SAMPLES_PER_LOG10_Z * (LOG10_ONE_PLUS_Z_HIGH - LOG10_ONE_PLUS_Z_LOW) + 0.5,
-            0,
-        )
-    )
-    zs = np.logspace(LOG10_ONE_PLUS_Z_LOW, LOG10_ONE_PLUS_Z_HIGH, num) - 1.0
-    return redshift_array(z_array=[redshift(i, float(z)) for i, z in enumerate(zs)])
+    """main.py's sampling axis, with dummy store ids (the index k)."""
+    xs = log_one_plus_z_grid(SAMPLES_PER_LOG10_Z, LOG10_ONE_PLUS_Z_HIGH)
+    return redshift_array(z_array=[redshift(i, x) for i, x in enumerate(xs)])
 
 
 def run_history(beta: float) -> dict:
@@ -152,7 +149,7 @@ def _sha256(array) -> str:
 def record_of(data: dict) -> dict:
     """The pinned record of one history (the payload of compute_scalar_history)."""
     samples = data["sample"]
-    zs = [r.z for r in data["z_grid"]]
+    labels = [r.log_one_plus_z for r in data["z_grid"]]
     names = list(SampleValues._fields)
 
     indices = list(range(0, len(samples), EXCERPT_STRIDE))
@@ -161,7 +158,7 @@ def record_of(data: dict) -> dict:
     excerpts = [
         {
             "index": i,
-            "z": _hex(zs[i]),
+            "log_one_plus_z": _hex(labels[i]),
             "fields": {n: _hex(v) for n, v in zip(names, samples[i])},
         }
         for i in indices
@@ -176,7 +173,7 @@ def record_of(data: dict) -> dict:
 
     return {
         "samples_sha256": _sha256(samples),
-        "z_sha256": _sha256(zs),
+        "log_one_plus_z_sha256": _sha256(labels),
         "n_samples": len(samples),
         "sample_fields": names,
         "reflections": int(data["reflections"]),
@@ -236,9 +233,10 @@ def first_difference(stored: dict, current: dict):
             messages.append(f"excerpt index {index} is present in only one record")
             continue
         s, c = stored_ex[index], current_ex[index]
-        if s["z"] != c["z"]:
+        if s["log_one_plus_z"] != c["log_one_plus_z"]:
             messages.append(
-                f"sample {index}: z differs: recorded {s['z']}, now {c['z']}"
+                f"sample {index}: log_one_plus_z differs: recorded "
+                f"{s['log_one_plus_z']}, now {c['log_one_plus_z']}"
             )
         for name in sorted(set(s["fields"]) | set(c["fields"])):
             if s["fields"].get(name) != c["fields"].get(name):
@@ -279,8 +277,8 @@ def main() -> int:
         "provenance": {
             "generated_at_commit": commit,
             "code_tree": (
-                "the code tree of ac187c8: git diff --stat ac187c8 HEAD -- . "
-                "':!prompts' ':!.documents' was empty at generation"
+                "jordan-normalization prompt 03's working tree, before its commit, on top "
+                "of generated_at_commit"
             ),
             "generator": "ComputeTargets/tests/golden_history.py",
             "regenerate": REGENERATE_COMMAND,

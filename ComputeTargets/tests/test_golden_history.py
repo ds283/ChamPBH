@@ -2,12 +2,16 @@
 The golden histories: the campaign's regression (jordan-normalization P3).
 
 Two histories (beta = 1.5 and beta = 5.5 at M = 1e-3 M_P, Lambda = 1 meV, n = 1, phi* = 5 M_P,
-pi* = 0, T* = 2e4 GeV, T_stop = 1 MeV, atol = rtol = 1e-8, the production z grid) are recomputed
-through compute_scalar_history._function, with no Ray, and compared exactly with
-data/golden_history_01.json: the SHA-256 of the samples and of the sampled z, the counts, the first
-bounce, the fixed-temperature values, the step-control scalars, and every excerpted sample (every
-250th and the last) field by field. The setup, and what is and is not pinned, are in
+pi* = 0, T* = 2e4 GeV, T_stop = 1 MeV, atol = rtol = 1e-8, the production sampling axis) are
+recomputed through compute_scalar_history._function, with no Ray, and compared exactly with
+data/golden_history_03.json: the SHA-256 of the samples and of the sampled ln(1 + z), the counts, the
+first bounce, the fixed-temperature values, the step-control scalars, and every excerpted sample
+(every 250th and the last) field by field. The setup, and what is and is not pinned, are in
 golden_history.py.
+
+Prompt 03 regenerated the record, as golden_history_03.json, when the grid became the ln(1 + z)
+axis and each sample gained ln(1 + z_J); 01's golden_history_01.json is kept as the record of
+prompts 01 and 02, and is never written.
 
 Cost: about 12 s for both histories at a machine load of 12-15 (0.6 s for beta = 1.5, 10-12 s for
 beta = 5.5). It runs a real integration but needs no Ray, no PRyMordial solve and no store.

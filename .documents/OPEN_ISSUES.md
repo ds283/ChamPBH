@@ -1,30 +1,32 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-22 · **27 open**: 4 on the `review-remediation` board (closed
+**Last updated:** 2026-10-22 · **25 open**: 4 on the `review-remediation` board (closed
 2026-09-30), none now assigned; 2 on the `production-readiness` board
 (closed 2026-09-30); 3 on the `run-integrity` board (closed 2026-09-30; one stale entry closed 2026-10-22, its fix having landed in `5740690`); 8 on the
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`;
-2 on the `science-readiness` board (planned 2026-10-01; closed 2026-10-02, 10 of 10 landed,
-prompt 06b having been added 2026-10-02); 2 on the `bbn-tolerance` board (planned 2026-10-03,
+1 on the `science-readiness` board (planned 2026-10-01; closed 2026-10-02, 10 of 10 landed,
+prompt 06b having been added 2026-10-02; `jordan-normalization` prompt 03 closed one, 2026-10-22); 2 on the `bbn-tolerance` board (planned 2026-10-03,
 closed 2026-10-03, 6 of 6 landed; prompt 01 committed BLOCKED 2026-10-03 and ruled the same day: re-planned
 around PRyMordial's small network, U3; prompt 01c measured the small network 2026-10-03; prompt
 02 moved production to it and closed three, opening one, 2026-10-03; prompt 01b closed the kick
 threshold overlay issue 2026-10-03; prompt 02b closed the history-tool issue 2026-10-03; prompt 03
 wrote the documents and the handover and closed the campaign, opening and closing none, 2026-10-03);
-3 on the `dk-and-rpk-migration` board (planned 2026-10-11; prompt 01 opened one, 2026-10-12;
+1 on the `dk-and-rpk-migration` board (planned 2026-10-11; prompt 01 opened one, 2026-10-12;
 the orchestrator's review of prompt 02 opened one, 2026-10-12; prompt 05 opened one, 2026-10-12;
 prompt 08 closed one and opened one, 2026-10-12; prompt 09 opened one, 2026-10-13; prompts 10 and 11 opened and
 closed none; closed 2026-10-13, 12 of 12 prompts landed; one assigned on 2026-10-13 to `read-only-plots`,
-planned the same day, §1.12, and resolved by its prompt 02 the same day);
+planned the same day, §1.12, and resolved by its prompt 02 the same day; `jordan-normalization`
+prompt 03 closed two, 2026-10-22);
 `read-only-plots` (planned 2026-10-13; closed 2026-10-14, 4 of 4 prompts landed) was assigned that one
 issue and closed it with prompt 02, opened none and leaves none open; 1 on the
 `surfing-temperature` board (planned 2026-10-14; opened by the orchestrator before prompt 05 and
 ruled by the user, U9, 2026-10-14; closed 2026-10-14, 7 of 7 prompts landed, with the one issue
 still open on its board); 1 on the `rrk-adoption` board (planned 2026-10-19, with none
 opened or assigned; the orchestrator's review of prompt 04 opened one, 2026-10-20; closed 2026-10-20,
-5 of 5 prompts landed, with the one issue still open on its board); 1 on the
+5 of 5 prompts landed, with the one issue still open on its board); 2 on the
 `jordan-normalization` board (planned 2026-10-20, with none opened; eight from five boards assigned
-to it the same day, §1.15; prompt 01 closed one of them, 2026-10-20, leaving seven; prompt 02 opened one, 2026-10-21).
+to it the same day, §1.15; prompt 01 closed one of them, 2026-10-20, leaving seven; prompt 02 opened one, 2026-10-21;
+prompt 03 closed three of them, leaving four, and opened one, 2026-10-22).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -165,7 +167,7 @@ Prompt 01 (2026-10-01) closed three, prompt 03 (2026-10-02) one, prompt 05 (2026
 prompt 07 (2026-10-02) one and prompt 08 (2026-10-02) one (board §4). Prompt 05 opened two (`[05-…]`). The re-plan of 2026-10-02 opened one for prompt
 06b, which closed it (2026-10-02). The campaign closed on 2026-10-02 (prompt 09, the close-out)
 with both `[05-…]` rows still open and unassigned. One of them was assigned on 2026-10-20 to
-`jordan-normalization` (§1.15).
+`jordan-normalization` (§1.15), whose prompt 03 closed it on 2026-10-22 (board §4).
 
 - `[05-the-ratio-spline-may-ring-at-resolved-bounce-jumps]` — the cubic spline through the
   ratio's resolved bounce jumps may overshoot between samples; unmeasured.
@@ -203,7 +205,8 @@ orchestrator's review of prompt 02 the same day, from log 02's Observation 2; on
 05 the same day, from its measurement of the import order, and closed by prompt 08 the same day
 (board §4); one opened by prompt 08 the same day, for P11; one opened by prompt 09 on 2026-10-13,
 seen while deriving the inventory's specs. The three that remained open were assigned on
-2026-10-20 to `jordan-normalization` (§1.15), so none is below.
+2026-10-20 to `jordan-normalization` (§1.15), so none is below; that campaign's prompt 03 closed two
+of them on 2026-10-22 (board §4).
 
 ### 1.12 Assigned to `read-only-plots` — [its board](../prompts/read-only-plots/IMPLEMENTATION_STATE.md) §3.1
 
@@ -235,20 +238,12 @@ user to rule.
 
 Assigned 2026-10-20 by the user (the campaign's README, U3), when the campaign was planned. Each
 entry stays on its own board, which carries the **Assigned** line; the prompt that closes one
-deletes its row here. Each row ends with its board and the prompt that takes it.
+deletes its row here. Each row ends with its board and the prompt that takes it. Prompt 01 closed
+one (2026-10-20) and prompt 03 three (2026-10-22).
 
 - `[00-region-properties-on-the-potentials-become-unread]` — `bounce_region_*`,
   `default_max_step`, `hard_reflection_point` stay defined after prompt 01; housekeeping.
   *(`integrator-remediation`; prompt 04)*
-- `[01-scalarmodelvalue-build-checks-the-stored-phi-against-pi]` — the unused lookup path of
-  `sqla_ScalarModelValue_factory.build` compares the stored φ with the expected π; latent.
-  *(`dk-and-rpk-migration`; prompt 03)*
-- `[05-the-value-factory-compares-stored-phi-against-pi]` — `ScalarModelValue_factory.build`
-  checks stored φ against supplied π (`Datastore/SQL/ObjectFactories/ScalarModel.py:1008` on
-  `a522005`). *(`science-readiness`; prompt 03)*
-- `[09-redshift-lookup-at-zero-takes-abs-of-the-comparison]` — `redshift.build`'s `z == 0`
-  branch takes `abs` of the comparison, not the difference; same rows for `z >= 0`; latent.
-  *(`dk-and-rpk-migration`; prompt 03)*
 - `[02-scalar-stage-missing-filter-keeps-every-model]` — `main.py:223`'s "which models are
   missing?" comprehension ignores its lookup result, so every stored `ScalarModel` is looked up
   twice; no value affected. *(`dk-and-rpk-migration`; prompt 07)*
@@ -262,9 +257,12 @@ deletes its row here. Each row ends with its board and the prompt that takes it.
 
 ### 1.16 `jordan-normalization` — [board §3](../prompts/jordan-normalization/IMPLEMENTATION_STATE.md)
 
-Planned 2026-10-20. One opened by prompt 02, 2026-10-21.
+Planned 2026-10-20. One opened by prompt 02, 2026-10-21; one by prompt 03, 2026-10-22.
 
 - `[02-the-scalar-history-parent-is-still-called-model]` — the `"model"` parent field of the
   `AdiabaticHistory` and `BBNData` inventory specs, `tools/inventory_report.py`'s `model` text and
   `model_proxy` still mean a scalar history; once 07 gives `model` to the Lagrangian they mean two
   things. *(`jordan-normalization`; prompt 02)*
+- `[03-scalar-history-functions-splines-z-but-evaluates-ln-one-plus-z]` — `ScalarHistory.functions`
+  builds its splines on z but `ZSplineWrapper(log_z=True)` evaluates them at ln(1 + z), and z is
+  `inf` past 709.8 e-folds; no caller today. *(`jordan-normalization`; prompt 03)*

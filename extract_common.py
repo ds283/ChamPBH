@@ -324,7 +324,13 @@ def _find_T_event_times(model: ScalarHistory):
                     ):
                         if event not in event_list:
                             event_list[event] = []
-                        event_list[event].append({"z": value.z.z, "raw_N": value.raw_N})
+                        event_list[event].append(
+                            {
+                                "z": value.z.z,
+                                "log_one_plus_z": value.z.log_one_plus_z,
+                                "raw_N": value.raw_N,
+                            }
+                        )
 
         last_T_Jordan = T_Jordan
 
@@ -339,6 +345,7 @@ def get_x_coord(value: ScalarHistoryValue, x_coord: str = "redshift") -> float:
     if x_coord == "efolds":
         return value.raw_N
 
+    # 1 + z, computed from the axis ln(1 + z) (jordan-normalization prompt 03); inf past float range
     return 1.0 + value.z.z
 
 

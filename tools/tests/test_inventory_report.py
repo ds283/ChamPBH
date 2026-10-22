@@ -122,7 +122,7 @@ class _InventoryStoreCase(_TempStoreCase):
             return self.insert(store, cls_name, row, at)
 
         tag = ins("store_tag", {"label": "pilot"})
-        z = [ins("redshift", {"z": value}) for value in REDSHIFTS]
+        z = [ins("redshift", {"log_one_plus_z": value}) for value in REDSHIFTS]
         atol = ins("tolerance", {"log10_tol": -10.0})
         rtol = ins("tolerance", {"log10_tol": -8.0})
         beta_failed = ins("beta_value", {"value": 1.1})
@@ -279,9 +279,10 @@ class TestReportOnAStore(_InventoryStoreCase):
             "label = [ pilot ]",
         ):
             self.assertIn(line, self.lines)
-        # 25 redshifts: the first and last ten
+        # 25 redshifts: the first and last ten, labelled by the leaf, ln(1 + z), so that a
+        # reader does not take them for z (jordan-normalization prompt 03)
         self.assertIn(
-            "values = [ 0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, "
+            "log_one_plus_z = [ 0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, "
             "... 5 values not shown (--show-all shows every one) ..., "
             "7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12 ]",
             self.lines,
@@ -361,7 +362,8 @@ class TestReportOnAStore(_InventoryStoreCase):
             format_inventory_report(self.inventory, "store.db", verbose=True)
         )
         self.assertIn(
-            "values = [ " + ", ".join(f"{z:.5g}" for z in REDSHIFTS) + " ]", verbose
+            "log_one_plus_z = [ " + ", ".join(f"{z:.5g}" for z in REDSHIFTS) + " ]",
+            verbose,
         )
         self.assertNotIn("not shown", "\n".join(verbose))
 

@@ -17,8 +17,10 @@ DEFAULT_STRING_LENGTH = 256
 
 DEFAULT_FLOAT_PRECISION = 1e-7
 
-DEFAULT_REDSHIFT_PRECISION = 1e-7
-DEFAULT_REDSHIFT_RELATIVE_PRECISION = 1e-7
+# the sampling axis, ln(1 + z) (jordan-normalization prompt 03, P8): the redshift factory's lookup
+# and redshift_array's truncation match by absolute difference below this. The grid spacing is
+# ln 10 / 250 = 9.2e-3, so two grid points can never collide
+DEFAULT_LOG_ONE_PLUS_Z_PRECISION = 1e-10
 
 DEFAULT_DIMENSIONLESS_QUANTITY_PRECISION = 1e-7
 DEFAULT_DIMENSIONLESS_QUANTITY_RELATIVE_PRECISION = 1e-5

@@ -39,7 +39,7 @@ import sqlite3
 import sys
 import tempfile
 import unittest
-from math import log, pi, sin, sqrt
+from math import log, log1p, pi, sin, sqrt
 from pathlib import Path
 from types import SimpleNamespace
 from unittest import mock
@@ -300,7 +300,7 @@ class TestBBNFromStore(unittest.TestCase):
                     create table phi_value (serial integer primary key, value_PlanckMass real);
                     create table ExponentialCoupling (serial integer primary key, beta_serial integer);
                     create table ExponentialPotential (serial integer primary key, M_serial integer);
-                    create table redshift (serial integer primary key, z real);
+                    create table redshift (serial integer primary key, log_one_plus_z real);
                     create table ScalarHistory (serial integer primary key, coupling_serial integer,
                         potential_serial integer, phi_Einstein_init_serial integer, failure integer,
                         RHS_evaluations integer, first_bounce_log_T_Jordan real);
@@ -335,7 +335,7 @@ class TestBBNFromStore(unittest.TestCase):
                     )
                 # three samples per model, inserted out of redshift order
                 for k, z in enumerate((10.0, 1000.0, 100.0)):
-                    con.execute("insert into redshift values (?, ?)", (k + 1, z))
+                    con.execute("insert into redshift values (?, ?)", (k + 1, log1p(z)))
                 v = 1
                 for serial, *_ in models[n]:
                     for k, z in enumerate((10.0, 1000.0, 100.0)):

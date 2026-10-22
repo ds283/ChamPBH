@@ -14,7 +14,10 @@ DEFAULT_Z_END = 0.1
 DEFAULT_T_INIT_GEV = 20000
 DEFAULT_PHI_INIT_MP = 5.0
 
-DEFAULT_LOG10_ONE_PLUS_Z_HIGH = 35
+# the sampling axis (jordan-normalization prompt 03, P8): 300 decades of 1 + z, about 691 e-folds,
+# against histories that need 80-200; the default was 35 before prompt 03. The axis is anchored at
+# the end of the history, so its lower limit is 0 and nothing else
+DEFAULT_LOG10_ONE_PLUS_Z_HIGH = 300
 DEFAULT_LOG10_ONE_PLUS_Z_LOW = 0
 DEFAULT_SAMPLES_PER_LOG10_Z = 250
 
@@ -39,6 +42,19 @@ def non_negative_float(text: str) -> float:
     value = float(text)
     if not value >= 0.0:
         raise argparse.ArgumentTypeError(f"must be a non-negative number, not {text}")
+    return value
+
+
+def anchored_log10_one_plus_z_low(text: str) -> float:
+    """
+    An argparse type for --log10-one-plus-z-low: only 0 is accepted, since the sampling axis
+    ln(1 + z) is anchored at the end of the history (jordan-normalization prompt 03, Z3).
+    """
+    value = float(text)
+    if value != 0.0:
+        raise argparse.ArgumentTypeError(
+            f"must be 0, not {text}: the redshift axis is anchored at the end of the history"
+        )
     return value
 
 
@@ -239,13 +255,13 @@ def create_argument_parser() -> configargparse.ArgumentParser:
         "--log10-one-plus-z-high",
         type=float,
         default=DEFAULT_LOG10_ONE_PLUS_Z_HIGH,
-        help="maximum value of log10(1+z) to sample",
+        help="maximum value of log10(1+z) to sample (default %(default)s)",
     )
     parser.add_argument(
         "--log10-one-plus-z-low",
-        type=float,
+        type=anchored_log10_one_plus_z_low,
         default=DEFAULT_LOG10_ONE_PLUS_Z_LOW,
-        help="minimum value of log10(1+z) to sample",
+        help="minimum value of log10(1+z) to sample; only 0 is accepted, since the redshift axis is anchored at the end of the history",
     )
     parser.add_argument(
         "--samples-per-log10-Lambda-eV",

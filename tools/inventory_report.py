@@ -407,7 +407,7 @@ def _value_lines(renderer: _Renderer, name: str) -> List[str]:
         ),
     )
     texts = [renderer.leaf_text(name, field, r.key[field]) for r in ordered]
-    label = "values" if field in ("z", "value") or field.startswith("value_") else field
+    label = "values" if field == "value" or field.startswith("value_") else field
     return [
         f"{_DETAIL_INDENT}{label} = [ {', '.join(_truncated(texts, renderer.verbose, 'value'))} ]"
     ]

@@ -112,9 +112,13 @@ invariants that hold across all of them:
 - **Units.** `units.PlanckMass` is the *reduced* Planck mass; PRyMordial's `Mpl` is the full one,
   and the factor 8π between them cancels exactly in the interface. Energies in the PRyMordial
   interface are in MeV; everywhere else they are in whatever `UnitsLike` the cosmology carries.
-- **Redshift.** A `ScalarHistoryValue`'s `z` is the Einstein-frame redshift assigned from the
-  e-fold number relative to the end of the integration; the Jordan-frame temperature is
-  `log_T_Jordan`. Do not treat the two as interchangeable.
+- **Redshift.** The stored label of a sample is ln(1 + z_E) (`redshift.log_one_plus_z`), the
+  Einstein-frame redshift counted back in e-folds from the end of the history; `redshift.z` is
+  derived from it (`inf` past float range), and `float()` of a redshift is ln(1 + z_E). Each
+  `ScalarHistoryValue` also carries ln(1 + z_J) (`log_one_plus_z_Jordan`), the Jordan-frame
+  redshift from the end, which is a column and never a key (a_J is not monotonic through a
+  bounce). The Jordan-frame temperature is `log_T_Jordan`. Do not treat any two of these as
+  interchangeable.
 - **The plot scripts** (`plot_by_beta.py`, `plot_ScalarHistory.py`) read a store read-only, through
   `plot_inputs.py`, and stop (exit 2) if their options do not match the ones the build used.
 - **Science runs** are recorded in [`science-runs/`](science-runs/README.md), one dated folder

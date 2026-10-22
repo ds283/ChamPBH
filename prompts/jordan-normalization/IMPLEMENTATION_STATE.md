@@ -1,8 +1,8 @@
 # jordan-normalization campaign — implementation state
 
-**Last updated:** 2026-10-21 · **Status: LIVE — 10 of 10 prompts written, 2 landed (01, 02, both
-reviewed); R1–R14, U1–U5 and P1–P20 ruled by the user 2026-10-20 (README §6). Next: the orchestrator
-note for 03.**
+**Last updated:** 2026-10-22 · **Status: LIVE — 10 of 10 prompts written, 3 landed (01, 02 reviewed;
+03 landed 2026-10-22, after one stop ruled by the orchestrator); R1–R14, U1–U5 and P1–P20 ruled by
+the user 2026-10-20 (README §6). Next: the orchestrator's review of 03.**
 The plan is [`README.md`](README.md), written on 2026-10-20 on branch `jordan-normalization`, cut
 from `main` at `ac187c8`.
 
@@ -37,7 +37,7 @@ It ends in the handover for the science rebuild, which is the user's.
 |---|---|---|---|---|---|---|---|
 | 01 | Strip to the exponential model | four potentials and their configs removed; a golden short history; format 2 | Sonnet | ✅ | ✅ | `a1c88b6` | [`logs/01-strip-to-the-exponential-model.md`](logs/01-strip-to-the-exponential-model.md) |
 | 02 | Rename to `ScalarHistory` | classes, tables, drop group, proxies, documents; format 3 | Sonnet | ✅ | ✅ | `abccc23` | [`logs/02-rename-to-scalarhistory.md`](logs/02-rename-to-scalarhistory.md) |
-| 03 | The sampling axis | ln(1 + z_E) on the axis, exact-multiple grid, absolute lookup, ln(1 + z_J) per sample; format 4 | Opus | ✍️ | ⬜ | — | — |
+| 03 | The sampling axis | ln(1 + z_E) on the axis, exact-multiple grid, absolute lookup, ln(1 + z_J) per sample; format 4 | Opus | ✅ | ✅ | this commit | [`logs/03-the-sampling-axis.md`](logs/03-the-sampling-axis.md) |
 | 04 | The model interface | `AbstractModel`, `ExponentialModel`, `RealizedModel`; consumers on it via an adapter; φ_ref = 0 bitwise; the shift law | Opus | ✍️ | ⬜ | — | — |
 | 05 | The Planck mass | one reduced Planck mass from PRyMordial's G_N in three unit systems; consistency tests | Sonnet | ✍️ | ⬜ | — | — |
 | 06 | The tuning layer | `integrate_history` and `tune_history`: secant, seed, residuals, failure reasons, progress lines | Opus | ✍️ | ⬜ | — | — |
@@ -62,7 +62,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 |---|---|
 | 01 | X1 the golden history · X2 the classes deleted · X3 the registries · X4 the tests · X5 format 2 |
 | 02 | N1 the code, tables, columns and drop group · N2 format 3 · N3 the current documents · N4 the run scripts left as records |
-| 03 | Z1 the concept · Z2 the factory and format 4 · Z3 the grid · Z4 the sampling · Z5 ln(1 + z_J) · Z6 the readers · Z7 the value factory's issues |
+| 03 | Z1 the concept ✅ · Z2 the factory and format 4 ✅ · Z3 the grid ✅ · Z4 the sampling ✅ · Z5 ln(1 + z_J) ✅ · Z6 the readers ✅ · Z7 the value factory's issues ✅ (all landed in this commit) |
 | 04 | M1 `AbstractModel` · M2 `RealizedModel` · M3 `ExponentialModel` · M4 the consumers · M5 the adapter · M6 the unread properties · M7 the tests |
 | 05 | K1 one constant · K2 the three unit systems · K3 the tests |
 | 06 | T1 `integrate_history` · T2 the residuals · T3 the secant and its guards · T4 the seed · T5 the failures · T6 progress · T7 the outputs |
@@ -77,7 +77,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 |---|---|---|---|
 | Strip | only the exponential potential and coupling remain; the golden history, generated at `ac187c8`, passes bitwise | 01 | ✅ |
 | Rename | no `ScalarModel` name outside the records; the golden history bitwise | 02 | ✅ |
-| Axis | the axis is ln(1 + z_E) with no overflow; ln(1 + z_J) agrees with `cosmology.z(T_J)` and with the A identity; the change in values measured | 03 | ⬜ |
+| Axis | the axis is ln(1 + z_E) with no overflow; ln(1 + z_J) agrees with `cosmology.z(T_J)` and with the A identity; the change in values measured | 03 | ✅ |
 | Model | the golden history bitwise through `ExponentialModel` at φ_ref = 0, V₀ = Λ⁴; the shift law holds | 04 | ⬜ |
 | Units | one Planck mass equal to PRyMordial's; 1 K, ħc, ħ and the kilogram consistent to ≤ 10⁻⁶ in each unit system | 05 | ⬜ |
 | Tuning | a tuned history converges inside the tolerance, deterministically; the secant is no worse than the plain update on README §0.3's grid | 06 | ⬜ |
@@ -87,7 +87,8 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 
 ## 3. Active and unresolved issues
 
-Prompt 02 opened one. Prompt 01 closed one assigned issue (§3.1, §4).
+Prompt 02 opened one and prompt 03 one. Prompt 01 closed one assigned issue and prompt 03 three
+(§3.1, §4).
 
 ### `[02-the-scalar-history-parent-is-still-called-model]`
 
@@ -101,6 +102,23 @@ Prompt 02 opened one. Prompt 01 closed one assigned issue (§3.1, §4).
 - **Impact.** None to values. Once 07 gives `model` to the Lagrangian, `model` would mean two things.
 - **Next step.** 07, which rewrites these specs and readers, renames them. Not assigned yet.
 
+### `[03-scalar-history-functions-splines-z-but-evaluates-ln-one-plus-z]`
+
+**Opened:** 2026-10-22 by prompt 03 (ruling 9 of its orchestrator note).
+
+- **What.** `ScalarHistory._create_functions` (`ComputeTargets/ScalarHistory.py:1677-1690` after
+  prompt 03) builds each spline with z as the abscissa (`(v.z.z, getattr(v, attr))`), and wraps it
+  in `ZSplineWrapper(…, log_z=True)` (`ComputeTargets/spline_wrappers.py:28-48`), which evaluates
+  the spline at ln(1 + z). The bounds are read from `self.z_sample`, which `ScalarHistory` does not
+  define. Since prompt 03, `v.z.z` is derived from the axis and is `inf` past 709.8 e-folds.
+  `git grep -n -P '\.functions\b|ZSplineWrapper' -- '*.py'` finds no caller of
+  `ScalarHistory.functions` outside the module: only the import and the one construction.
+- **Impact.** None today, since nothing calls it. A caller would get wrong values, from a spline
+  on z evaluated at ln(1 + z), and `inf` abscissae past 709.8 e-folds.
+- **Next step.** Delete `functions`, `ModelFunctions` and `ZSplineWrapper` if they are still unread,
+  or build the splines on `log_one_plus_z`. For 07, which rewrites `ScalarHistory`'s stored shape.
+  Not assigned.
+
 ### 3.1 Assigned to this campaign
 
 Assigned 2026-10-20 by the user (README §6.1, U3). Each entry stays on its own board, which carries
@@ -111,9 +129,9 @@ from `.documents/OPEN_ISSUES.md` §1.15.
 |---|---|---|---|
 | `[00-declare-reflects-at-origin-for-the-other-potentials]` | `integrator-remediation` | 01 — closed (`a1c88b6`) | moot once the four other potentials are deleted |
 | `[00-region-properties-on-the-potentials-become-unread]` | `integrator-remediation` | 04 | `AbstractModel` does not carry the properties over |
-| `[01-scalarmodelvalue-build-checks-the-stored-phi-against-pi]` | `dk-and-rpk-migration` | 03 | the value factory is rewritten for the axis |
-| `[05-the-value-factory-compares-stored-phi-against-pi]` | `science-readiness` | 03 | the same defect, opened twice |
-| `[09-redshift-lookup-at-zero-takes-abs-of-the-comparison]` | `dk-and-rpk-migration` | 03 | the lookup moves to ln(1 + z) by absolute difference |
+| `[01-scalarmodelvalue-build-checks-the-stored-phi-against-pi]` | `dk-and-rpk-migration` | 03 — closed (this commit) | the value factory is rewritten for the axis |
+| `[05-the-value-factory-compares-stored-phi-against-pi]` | `science-readiness` | 03 — closed (this commit) | the same defect, opened twice |
+| `[09-redshift-lookup-at-zero-takes-abs-of-the-comparison]` | `dk-and-rpk-migration` | 03 — closed (this commit) | the lookup moves to ln(1 + z) by absolute difference |
 | `[02-scalar-stage-missing-filter-keeps-every-model]` | `dk-and-rpk-migration` | 07 | the scalar stage's lookups are rewritten for the new key |
 | `[03-step-1-first-pass-lookup-filters-nothing]` | `run-integrity` | 07 | the same code |
 | `[05-surfing-scan-runs-at-a-fixed-lambda]` | `surfing-temperature` | 08 | the surfing tools move onto tuned histories |
@@ -123,6 +141,16 @@ from `.documents/OPEN_ISSUES.md` §1.15.
 - `[00-declare-reflects-at-origin-for-the-other-potentials]` — closed as moot by prompt 01
   (`a1c88b6`): the four potentials it concerned are deleted. The entry, with its **Resolved** line, is
   in `integrator-remediation`'s §4; its row is deleted from `.documents/OPEN_ISSUES.md` §1.15.
+- `[01-scalarmodelvalue-build-checks-the-stored-phi-against-pi]` and
+  `[05-the-value-factory-compares-stored-phi-against-pi]` (one defect, opened twice) — closed by
+  prompt 03 (this commit): `sqla_ScalarHistoryValue_factory.build` had no caller, and its body is now
+  one `NotImplementedError` naming `sqla_ScalarHistoryFactory` (note 03, ruling 11). The entries,
+  with their **Resolved** lines, are in `dk-and-rpk-migration`'s §4 and `science-readiness`'s §4;
+  their rows are deleted from `.documents/OPEN_ISSUES.md` §1.15.
+- `[09-redshift-lookup-at-zero-takes-abs-of-the-comparison]` — closed by prompt 03 (this commit):
+  the redshift lookup matches ln(1 + z) by absolute difference below 1e-10 in one branch, and a test
+  shows that a lookup at 0 does not match a row at −1e-6. The entry, with its **Resolved** line, is
+  in `dk-and-rpk-migration`'s §4; its row is deleted from `.documents/OPEN_ISSUES.md` §1.15.
 
 ## 5. Dispatch record
 
@@ -311,3 +339,49 @@ pass.
   `history_serial` already names an `AdiabaticHistory` row. Only `AdiabaticHistory`'s child tables
   carry `history_serial`; `BBNData`'s use `bbn_serial`. The code and the log are right, and commits
   are not amended (`CLAUDE.md` invariant 1).
+
+### 5.4 After prompt 03 (2026-10-22)
+
+Prompt 03 landed in this commit (log [`logs/03-the-sampling-axis.md`](logs/03-the-sampling-axis.md)),
+dispatched with orchestrator note 03, whose fourteen rulings govern.
+- **Z1.** `redshift(store_id, log_one_plus_z)`: ln(1 + z_E) is the stored label. `z` is a derived
+  property (`expm1`, `inf` past float range), and `float()` returns ln(1 + z). Ordering, sorting and
+  every truncation mode compare ln(1 + z), with tolerance 1e-10; equality and hashing stay on
+  `store_id`.
+- **Z2.** The table `redshift` stores `log_one_plus_z`. The lookup is one range filter of width
+  ±1e-10 (`DEFAULT_LOG_ONE_PLUS_Z_PRECISION`), and `EXPLAIN QUERY PLAN` shows that it searches the
+  index. 75 001 points took 7.0 s into an empty table and 5.1 s over a filled one.
+  `FINGERPRINT_FORMAT` 4: 17 pairs and 14 distinct digests, with only `redshift`'s moved. Its golden
+  file is `store_fingerprint_jordan-normalization-03.json`.
+- **Z3.** `log_one_plus_z_grid(S, H)` builds the points `k * DELTA`. `main.py`, the golden history,
+  `tools/history_and_bbn.py` and `test_fixed_T_values.py` use it. The default of
+  `--log10-one-plus-z-high` is 300 (it was 35). `--log10-one-plus-z-low` accepts only 0.
+- **Z4.** N_backward is the axis value. The truncation is the helper `truncate_to_history`. The
+  "grid too short" error compares axis values.
+- **Z5.** `log_one_plus_z_Jordan` is the last field of `SampleValues` and a non-null value column.
+  The identity holds exactly at every golden sample. Against `cosmology.z`(T_J) the largest
+  difference is 3.07e-7 at β = 1.5 and 3.72e-8 at β = 5.5, with bounces included.
+- **Z6.** The readers are moved: `extract_common`'s event records, `plot_ScalarHistory.py`'s frame,
+  `bbn_from_store.py`'s SQL and `inventory_report.py`'s label. `AdiabaticHistory` and `BBNData`
+  read the redshift only as a key, and their factories now read `log_one_plus_z`.
+- **Z7.** `sqla_ScalarHistoryValue_factory.build` now raises `NotImplementedError`.
+- **The change in values (ruling 1).**
+  - **Part A**, at fixed positions: the sample counts are equal. Every sample whose `raw_N` is
+    bitwise equal on the two trees is bitwise equal in every field. `raw_N` differs by 1 ulp of
+    `final_N` at 1 sample (β = 1.5) and at 2 samples (β = 5.5). The largest relative difference
+    there is 6.6e-12, in `reflecting_term` at β = 5.5, sample 4803.
+  - **Part B:** `n_samples` went 2722 → 2723 at β = 1.5 and stayed 4894 at β = 5.5.
+- **The golden history** was regenerated as `golden_history_03.json`; 01's file is untouched.
+  `test_golden_history` passes alone in 10.0 s.
+- **The stop (2026-10-22).** The agent stopped before committing.
+  `tools/tests/test_compare_stores.py::TestChamPBHSchema::test_14_a_store_with_champbhs_schema`
+  errored on the new non-null value column, because its fixture writes ChamPBH's real schema and
+  names the value columns. The orchestrator ruled that the fixture gains `"log_one_plus_z_Jordan"`,
+  with no assertion changed. It also confirmed that `test_inventory_report.py:284` follows `:364`.
+- **Suites:** CosmologyModels 18, ComputeTargets 188 (61 + 127, +9), ObjectFactories 86 (+7),
+  tools 84, RunDrivers 61, all passing.
+- **Closed:** `[01-scalarmodelvalue-build-checks-the-stored-phi-against-pi]`,
+  `[05-the-value-factory-compares-stored-phi-against-pi]` and
+  `[09-redshift-lookup-at-zero-takes-abs-of-the-comparison]`.
+- **Opened:** `[03-scalar-history-functions-splines-z-but-evaluates-ln-one-plus-z]`.
+- **Index:** `.documents/OPEN_ISSUES.md` goes from 27 to 25 open.

@@ -49,6 +49,12 @@ files differ only by what the strip changed.
 specs' digests move. The store is the same one, with the rows' classes and columns renamed; `GOLDEN` names
 `store_fingerprint_jordan-normalization-02.json`. `LABEL` and `T0` are unchanged.
 
+**Format 4** (jordan-normalization prompt 03): the redshift table stores `log_one_plus_z`, ln(1 + z),
+in place of `z`, so redshift's spec digest moves. The store is the same one, with the five redshift
+rows written as `log_one_plus_z` with the same five numbers (and the new value column
+`log_one_plus_z_Jordan` filled with zero, as every other); `GOLDEN` names
+`store_fingerprint_jordan-normalization-03.json`. `LABEL` and `T0` are unchanged.
+
 **The golden file** is under `data/`, written once and never overwritten (P8). It was written from
 `config.fingerprint.fingerprinter.take(primary, None)` as `json.dumps(fp, indent=2, sort_keys=True)
 + "\\n"`, so its `taken` is `null`; the tests take with `taken={}` and compare with `taken`
@@ -92,7 +98,7 @@ from ObjectFactories.tests.test_version_keyed_lookups import _TempStoreCase
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DATA = Path(__file__).resolve().parent / "data"
-GOLDEN = DATA / "store_fingerprint_jordan-normalization-02.json"
+GOLDEN = DATA / "store_fingerprint_jordan-normalization-03.json"
 
 LABEL = "rrk-adoption-02-golden"
 T0 = datetime(2026, 10, 19, 12, 0, 0)
@@ -163,7 +169,10 @@ class _GoldenStoreCase(_TempStoreCase):
             return self.insert(store, cls_name, row, at)
 
         tag = ins("store_tag", {"label": "golden"})
-        z = [ins("redshift", {"z": value}) for value in (0.0, 0.5, 1.0, 1.5, 2.0)]
+        z = [
+            ins("redshift", {"log_one_plus_z": value})
+            for value in (0.0, 0.5, 1.0, 1.5, 2.0)
+        ]
         atol = ins("tolerance", {"log10_tol": -10.0})
         rtol = ins("tolerance", {"log10_tol": -8.0})
         beta = ins("beta_value", {"value": 25.0})
@@ -365,7 +374,7 @@ class TestCommandLine(_GoldenStoreCase):
         squeezed = [" ".join(line.split()) for line in lines]
         self.assertIn(f"digest: {golden['digest']}", squeezed)
         self.assertIn(f"format: {golden['fingerprint_format']}", squeezed)
-        self.assertEqual(golden["fingerprint_format"], 3)
+        self.assertEqual(golden["fingerprint_format"], 4)
         self.assertEqual(
             lines[-1].strip(), "recorded: none recorded (the sidecar is absent)"
         )

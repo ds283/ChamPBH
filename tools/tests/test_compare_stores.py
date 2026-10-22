@@ -901,8 +901,12 @@ def _fill_champbh_shard(conn, sm_shard: bool, offset: int, bbn_reason: str, bk: 
     _insert(conn, "temperature", serial=o + 9, timestamp=TS, value_GeV=1e-7)
     _insert(conn, "phi_value", serial=o + 10, timestamp=TS, value_PlanckMass=5.0)
     _insert(conn, "pi_value", serial=o + 11, timestamp=TS, value_PlanckMass=0.0)
-    _insert(conn, "redshift", serial=o + 12, timestamp=TS, z=1e12)
-    _insert(conn, "redshift", serial=o + 13, timestamp=TS, z=1e9)
+    _insert(
+        conn, "redshift", serial=o + 12, timestamp=TS, log_one_plus_z=math.log1p(1e12)
+    )
+    _insert(
+        conn, "redshift", serial=o + 13, timestamp=TS, log_one_plus_z=math.log1p(1e9)
+    )
     _insert(
         conn,
         "ExponentialPotential",
@@ -1005,6 +1009,7 @@ def _fill_champbh_shard(conn, sm_shard: bool, offset: int, bbn_reason: str, bk: 
                     "friction_term_Mp",
                     "reflecting_term_Mp",
                     "kicking_term_Mp",
+                    "log_one_plus_z_Jordan",
                 )
             )
         }

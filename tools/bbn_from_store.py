@@ -214,14 +214,14 @@ _FIND_QUERY = """
     where abs(b.value - ?) < 1e-9 and abs(ph.value_PlanckMass - ?) < 1e-9
 """
 
-# production's order: sqla_ScalarHistory_factory.build reads the samples ordered
-# by redshift, descending
+# production's order: sqla_ScalarHistoryFactory.build reads the samples ordered
+# by ln(1 + z), descending (the axis since jordan-normalization prompt 03)
 _VALUES_QUERY = """
     select v.raw_N, v.log_T_Jordan_GeV, v.H_Jordan_Mp, v.log_rhorad_Jordan_Mp4, v.log_fm
     from ScalarHistoryValue v
     join redshift r on r.serial = v.z_serial
     where v.history_serial = ?
-    order by r.z desc
+    order by r.log_one_plus_z desc
 """
 
 _BBN_QUERY = """

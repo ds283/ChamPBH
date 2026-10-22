@@ -12,7 +12,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from math import fabs
 from typing import Optional
 
 import sqlalchemy as sqla
@@ -22,10 +21,7 @@ from ComputeTargets import ScalarHistoryProxy, ScalarHistory
 from CosmologyConcepts import redshift
 from datastorekit.SQL.factory_base import SQLAFactoryBase
 from datastorekit.store_inventory import InventorySpec
-from config.defaults import (
-    DEFAULT_REDSHIFT_RELATIVE_PRECISION,
-    DEFAULT_REDSHIFT_PRECISION,
-)
+from config.defaults import DEFAULT_LOG_ONE_PLUS_Z_PRECISION
 
 
 class sqla_redshift_factory(SQLAFactoryBase):
@@ -37,34 +33,31 @@ class sqla_redshift_factory(SQLAFactoryBase):
             "version": False,
             "timestamp": True,
             "columns": [
-                sqla.Column("z", sqla.Float(64), index=True),
+                sqla.Column("log_one_plus_z", sqla.Float(64), index=True),
             ],
         }
 
     def inventory_spec(self):
-        # build() matches z alone, relatively (dk-and-rpk-migration prompt 09)
-        return InventorySpec(leaves=("z",))
+        # build() matches log_one_plus_z alone, by absolute difference (dk-and-rpk-migration
+        # prompt 09; the leaf was z, matched relatively, until jordan-normalization prompt 03)
+        return InventorySpec(leaves=("log_one_plus_z",))
 
     def build(self, payload, conn, table, inserter, tables, inserters):
-        z = payload["z"]
+        x = payload["log_one_plus_z"]
 
-        # query for this redshift in the datastore
-        if fabs(z) == 0:
-            query = sqla.select(table.c.serial).filter(
-                sqla.func.abs((table.c.z - z) < DEFAULT_REDSHIFT_PRECISION)
-            )
-        else:
-            query = sqla.select(
-                table.c.serial,
-            ).filter(
-                sqla.func.abs((table.c.z - z) / z) < DEFAULT_REDSHIFT_RELATIVE_PRECISION
-            )
+        # query for this point of the axis: |stored - x| < tol, in one branch with no special
+        # case at zero (jordan-normalization prompt 03, P8). It is written as a range, not as
+        # abs(column - x), so that SQLite can search the column's index rather than scan the table
+        tol = DEFAULT_LOG_ONE_PLUS_Z_PRECISION
+        query = sqla.select(table.c.serial).filter(
+            (table.c.log_one_plus_z > x - tol) & (table.c.log_one_plus_z < x + tol)
+        )
 
         row_data = conn.execute(query).one_or_none()
 
         # if not present, create a new id using the provided inserter
         if row_data is None:
-            insert_data = {"z": z}
+            insert_data = {"log_one_plus_z": x}
             if "serial" in payload:
                 insert_data["serial"] = payload["serial"]
             store_id = inserter(conn, insert_data)
@@ -76,7 +69,7 @@ class sqla_redshift_factory(SQLAFactoryBase):
         # return the constructed object
         obj = redshift(
             store_id=store_id,
-            z=z,
+            log_one_plus_z=x,
         )
         for key, value in attribute_set.items():
             setattr(obj, key, value)
@@ -92,7 +85,7 @@ class sqla_redshift_factory(SQLAFactoryBase):
         # query for all redshift records in the table
         query = sqla.select(
             table.c.serial,
-            table.c.z,
+            table.c.log_one_plus_z,
         )
 
         if model_proxy is not None:
@@ -109,12 +102,12 @@ class sqla_redshift_factory(SQLAFactoryBase):
                 ),
             )
 
-        rows = conn.execute(query.order_by(table.c.z))
+        rows = conn.execute(query.order_by(table.c.log_one_plus_z))
 
         return [
             redshift(
                 store_id=row.serial,
-                z=row.z,
+                log_one_plus_z=row.log_one_plus_z,
             )
             for row in rows
         ]

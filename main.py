@@ -37,6 +37,7 @@ from CosmologyConcepts import (
     phi_value,
     pi_value,
 )
+from CosmologyConcepts.redshift import log_one_plus_z_grid
 from CosmologyConcepts.ConformalCouplings import AbstractCoupling
 from CosmologyConcepts.Potentials import AbstractPotential
 from CosmologyModels import BaseCosmology
@@ -907,7 +908,6 @@ def run_pipeline(
 def execute(pool, units: UnitsLike):
     formatter: energy_formatter = energy_formatter(units)
 
-    log10_one_plus_z_low = args.log10_one_plus_z_low
     log10_one_plus_z_high = args.log10_one_plus_z_high
     samples_per_log10_z: int = args.samples_log10_z
 
@@ -956,7 +956,7 @@ def execute(pool, units: UnitsLike):
     def convert_to_redshift(z_array):
         return pool.object_get(
             "redshift",
-            payload_data=[{"z": z} for z in z_array],
+            payload_data=[{"log_one_plus_z": x} for x in z_array],
         )
 
     def convert_to_betas(beta_sample_set):
@@ -1042,19 +1042,11 @@ def execute(pool, units: UnitsLike):
         "Radau+kinematic-cap-stepping0": Radau_kinematic_cap,
     }
 
-    # the redshift z corresponding to T = 20,000 GeV is about 6E35 in a LambdaCDM-like cosmology
-    # we set up a redshift sampling grid that covers this range
-    # we use this grid to store the scalar field histories
-    num_z_samples = int(
-        round(
-            samples_per_log10_z * (log10_one_plus_z_high - log10_one_plus_z_low) + 0.5,
-            0,
-        )
-    )
+    # the sampling axis on which the scalar field histories are stored: ln(1 + z_E) = k * DELTA,
+    # k = 0 ... K, counted back from the end of each history (jordan-normalization prompt 03)
     z_array = ray.get(
         convert_to_redshift(
-            np.logspace(log10_one_plus_z_low, log10_one_plus_z_high, num_z_samples)
-            - 1.0,
+            log_one_plus_z_grid(samples_per_log10_z, log10_one_plus_z_high)
         )
     )
     z_grid = redshift_array(z_array=z_array)

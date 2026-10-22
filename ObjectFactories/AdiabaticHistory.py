@@ -203,7 +203,7 @@ class sqla_AdiabaticHistoryFactory(SQLAFactoryBase):
             sqla.select(
                 value_table.c.serial,
                 value_table.c.z_serial,
-                redshift_table.c.z,
+                redshift_table.c.log_one_plus_z,
                 value_table.c.raw_N,
                 *value_columns,
             )
@@ -213,7 +213,7 @@ class sqla_AdiabaticHistoryFactory(SQLAFactoryBase):
                 )
             )
             .filter(value_table.c.history_serial == store_id)
-            .order_by(redshift_table.c.z.desc())
+            .order_by(redshift_table.c.log_one_plus_z.desc())
         )
 
         value_rows = conn.execute(value_query).fetchall()
@@ -223,7 +223,7 @@ class sqla_AdiabaticHistoryFactory(SQLAFactoryBase):
         for v_row in value_rows:
             z_value = redshift(
                 store_id=v_row.z_serial,
-                z=v_row.z,
+                log_one_plus_z=v_row.log_one_plus_z,
             )
             z_points.append(z_value)
             values.append(

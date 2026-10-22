@@ -232,7 +232,7 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
                 sqla.select(
                     value_table.c.serial,
                     value_table.c.z_serial,
-                    redshift_table.c.z,
+                    redshift_table.c.log_one_plus_z,
                     value_table.c.raw_N,
                     value_table.c.log_T_Jordan_MeV,
                     value_table.c.density_NP_MeV4,
@@ -245,7 +245,7 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
                     )
                 )
                 .filter(value_table.c.bbn_serial == store_id)
-                .order_by(redshift_table.c.z.desc())
+                .order_by(redshift_table.c.log_one_plus_z.desc())
             )
             value_rows = conn.execute(value_query).all()
 
@@ -260,7 +260,7 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
             for row in value_rows:
                 z_value = redshift(
                     store_id=row.z_serial,
-                    z=row.z,
+                    log_one_plus_z=row.log_one_plus_z,
                 )
                 z_points.append(z_value)
                 values.append(

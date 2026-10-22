@@ -205,9 +205,11 @@ closed six of them and prompt 05 narrowed one; the narrowed one stays open on it
 
 **Close-out (2026-10-02, prompt 09).** The campaign is complete and no issue was opened by prompt
 09. The two `[05-…]` issues below stay open, unassigned; the handover (verification §4.10, point 6)
-names both. Nothing else in §3 is open, and the one issue assigned from another board that is not
-closed (`[00-stored-samples-alias-the-rebounds]`, §3.1) stays open on its own board for its
-adiabatic half.
+names both. *(2026-10-22: `[05-the-value-factory-compares-stored-phi-against-pi]` moved to §4,
+resolved by `jordan-normalization` prompt 03; one `[05-…]` issue stays open.)* Nothing else in §3
+is open, and the one issue assigned from another board that is not closed
+(`[00-stored-samples-alias-the-rebounds]`, §3.1) stays open on its own board for its adiabatic
+half.
 
 - **[05-the-ratio-spline-may-ring-at-resolved-bounce-jumps]** *(log 05, Observations)*.
   - **What.** In PRyMordial's window the ratio `ρ_NP/ρ_R,J` is a resolved sawtooth: it jumps by
@@ -221,24 +223,6 @@ adiabatic half.
     dense output at the same T_J. Not assigned.
   - **Open at close-out (2026-10-02, prompt 09).** All ten roster histories, including β = 1.6 and
     2.0 at M = 10⁻⁵, completed BBN on point input, so no failure needs attributing today.
-- **[05-the-value-factory-compares-stored-phi-against-pi]** *(log 05, Observations)*.
-  - **What.** `sqla_ScalarModelValue_factory.build`, on finding an existing row, checks
-    `fabs(row_data.phi_Einstein_Mp - pi_Einstein_Mp)` (`Datastore/SQL/ObjectFactories/ScalarModel.py:1008`
-    on `a522005`) under a message about π: the stored φ against the supplied π, where
-    `row_data.pi_Einstein_Mp` was meant.
-  - **Impact.** The path raises a spurious `ValueError` whenever it is reached with φ ≠ π; nothing
-    in the tree calls it today (the `ScalarModel` factory reads values directly).
-  - **Next step.** One-word fix with a test of the existing-row path. Not assigned.
-  - **Open at close-out (2026-10-02, prompt 09).** Unchanged; `Datastore/SQL/ObjectFactories/ScalarModel.py`
-    has moved since `a522005` (prompts 03 and 06b added columns), so cite the function, not the
-    line.
-  - **Assigned (2026-10-20):** to the
-    [`jordan-normalization`](../jordan-normalization/IMPLEMENTATION_STATE.md) campaign, prompt 03,
-    which rewrites the value factory for the ln(1 + z) sampling axis; the same defect is
-    `dk-and-rpk-migration`'s `[01-scalarmodelvalue-build-checks-the-stored-phi-against-pi]`,
-    assigned with it. That prompt closes it here, in §4, and deletes its row from
-    `.documents/OPEN_ISSUES.md`.
-
 ### 3.1 Assigned to this campaign from other boards
 
 Each entry stays on its own board, which carries an **Assigned (2026-10-01)** line. The prompt
@@ -258,6 +242,32 @@ here (README §5 rule 4).
 ---
 
 ## 4. Resolved issues
+
+- **[05-the-value-factory-compares-stored-phi-against-pi]** *(log 05, Observations)*.
+  - **What.** `sqla_ScalarModelValue_factory.build`, on finding an existing row, checks
+    `fabs(row_data.phi_Einstein_Mp - pi_Einstein_Mp)` (`Datastore/SQL/ObjectFactories/ScalarModel.py:1008`
+    on `a522005`) under a message about π: the stored φ against the supplied π, where
+    `row_data.pi_Einstein_Mp` was meant.
+  - **Impact.** The path raises a spurious `ValueError` whenever it is reached with φ ≠ π; nothing
+    in the tree calls it today (the `ScalarModel` factory reads values directly).
+  - **Next step.** One-word fix with a test of the existing-row path. Not assigned.
+  - **Open at close-out (2026-10-02, prompt 09).** Unchanged; `Datastore/SQL/ObjectFactories/ScalarModel.py`
+    has moved since `a522005` (prompts 03 and 06b added columns), so cite the function, not the
+    line.
+  - **Assigned (2026-10-20):** to the
+    [`jordan-normalization`](../jordan-normalization/IMPLEMENTATION_STATE.md) campaign, prompt 03,
+    which rewrites the value factory for the ln(1 + z) sampling axis; the same defect is
+    `dk-and-rpk-migration`'s `[01-scalarmodelvalue-build-checks-the-stored-phi-against-pi]`,
+    assigned with it. That prompt closes it here, in §4, and deletes its row from
+    `.documents/OPEN_ISSUES.md`.
+  - **Resolved (2026-10-22):** by `jordan-normalization` prompt 03 (this commit), which deleted the
+    path (that campaign's orchestrator note 03, ruling 11). Nothing calls
+    `object_get("ScalarHistoryValue", …)`; `sqla_ScalarHistoryValue_factory.build`
+    (`ObjectFactories/ScalarHistory.py`) is now one `raise NotImplementedError` naming
+    `sqla_ScalarHistoryFactory`, through which the value rows are written and read, and the
+    φ-against-π check went with the old body. `ObjectFactories/tests/test_redshift_axis.py` asserts
+    the refusal. The dated **Resolved** line is also on the `dk-and-rpk-migration` board, under
+    `[01-scalarmodelvalue-build-checks-the-stored-phi-against-pi]`.
 
 - **[00-documents-describe-the-thermo-route]** *(README §1 D)*.
   - **What.** `numerical-strategies.md` §7, `numerical-methods-for-paper.md` §4 and

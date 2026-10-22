@@ -426,6 +426,26 @@ class TestDropPolicy(_NoRay):
         self.assertIn("invalid choice: 'scalar-model'", message)
         self.assertIn("scalar-history", message)
 
+    def test_a_nonzero_low_end_of_the_redshift_axis_is_refused(self):
+        """`--log10-one-plus-z-low 1` exits 2 in the argument parser, naming the option, since the
+        axis ln(1 + z) is anchored at the end of the history; 0 parses to 0.0, and the default
+        high end is 300 decades (jordan-normalization prompt 03, Z3)."""
+        stderr = io.StringIO()
+        with contextlib.redirect_stderr(stderr):
+            with self.assertRaises(SystemExit) as ctx:
+                create_argument_parser().parse_args(
+                    ["--database", "x", "--log10-one-plus-z-low", "1"]
+                )
+        self.assertEqual(ctx.exception.code, 2)
+        self.assertIn("--log10-one-plus-z-low", stderr.getvalue())
+
+        args = create_argument_parser().parse_args(
+            ["--database", "x", "--log10-one-plus-z-low", "0"]
+        )
+        self.assertEqual(args.log10_one_plus_z_low, 0.0)
+        self.assertIsInstance(args.log10_one_plus_z_low, float)
+        self.assertEqual(args.log10_one_plus_z_high, 300)
+
     def test_main_computes_the_drop_before_ray_starts(self):
         tree = _main_tree()
         drop = _top_level_index(tree, lambda n: _is_call_to(n, "tables_to_drop"))

@@ -181,28 +181,9 @@ the user makes the commits there, or has a session there make them.
 
 ## 3. Active and unresolved issues
 
-### `[01-scalarmodelvalue-build-checks-the-stored-phi-against-pi]`
-
-**Opened:** 2026-10-12 by prompt 01 (log 01, Observation 2), seen in passing while reading the
-factories for the bookkeeping list. **Not fixed:** a factory is outside prompt 01's scope, and
-outside this campaign's (README §1, "The factories' form").
-
-- **What.** `sqla_ScalarModelValue_factory.build`, on finding a stored row, checks the stored φ
-  against the expected φ and then, meaning to check π, compares the stored **φ** with the
-  expected **π**: `fabs(row_data.phi_Einstein_Mp - pi_Einstein_Mp) > DEFAULT_FLOAT_PRECISION`
-  (`Datastore/SQL/ObjectFactories/ScalarModel.py:1063-1069`; the message prints
-  `row_data.pi_Einstein_Mp`). Present since `d132774`.
-- **Impact.** None measured, and none expected today: nothing calls
-  `object_get("ScalarModelValue", …)` (`git grep`); the value rows are written by
-  `sqla_ScalarModelFactory.store` through the inserter and read back by its `build`. If the path
-  were used, a stored row whose φ and π differ by more than `DEFAULT_FLOAT_PRECISION` would raise
-  `ValueError` spuriously, and a wrong stored π would pass unchecked. No stored value is affected.
-- **Next step.** A one-token fix (`row_data.pi_Einstein_Mp`), or deleting the unused lookup path,
-  in a later campaign that may touch the factories, with a test that drives the path.
-- **Assigned (2026-10-20):** to the
-  [`jordan-normalization`](../jordan-normalization/IMPLEMENTATION_STATE.md) campaign, prompt 03,
-  which rewrites the value factory for the ln(1 + z) sampling axis. That prompt closes it here, in
-  §4, and deletes its row from `.documents/OPEN_ISSUES.md`.
+*(2026-10-22: `[01-scalarmodelvalue-build-checks-the-stored-phi-against-pi]` and
+`[09-redshift-lookup-at-zero-takes-abs-of-the-comparison]` moved to §4, resolved by
+`jordan-normalization` prompt 03.)*
 
 ### `[02-scalar-stage-missing-filter-keeps-every-model]`
 
@@ -230,30 +211,6 @@ which left the question open. **Not fixed:** `main.py`'s pipeline is outside thi
   [`jordan-normalization`](../jordan-normalization/IMPLEMENTATION_STATE.md) campaign, prompt 07,
   which rewrites the scalar stage's lookups for the new history key. That prompt closes it here, in
   §4, and deletes its row from `.documents/OPEN_ISSUES.md`.
-
-### `[09-redshift-lookup-at-zero-takes-abs-of-the-comparison]`
-
-**Opened:** 2026-10-13 by prompt 09 (log 09, Observation 1), seen while deriving `redshift`'s spec
-from its `build`. **Not fixed:** no factory's `build` is changed by prompt 09 (§5), and the factories'
-form is outside this campaign's scope (README §1).
-
-- **What.** `sqla_redshift_factory.build`'s branch for `z == 0` filters on
-  `sqla.func.abs((table.c.z - z) < DEFAULT_REDSHIFT_PRECISION)`
-  (`Datastore/SQL/ObjectFactories/redshift.py:53-54` after prompt 09; `:49-51` before it): the
-  `abs` is of the comparison, not of the difference. The intended filter is
-  `sqla.func.abs(table.c.z - z) < DEFAULT_REDSHIFT_PRECISION`, as the `z != 0` branch and
-  `DimensionlessQuantity.build` write it. The one-character misplacement dates from before this
-  campaign.
-- **Impact.** None today, and none expected: the filter selects rows with `z < precision`, which for
-  the redshifts the code stores (all `z >= 0`) is the same set as the intended `|z| < precision`. A
-  stored negative redshift would be matched as `z = 0`. No stored value is affected, and the
-  inventory (prompt 09) does not depend on it: its key is the stored `z`.
-- **Next step.** Move the parenthesis, in a later campaign that may touch the factories, with a test
-  that a lookup of `z = 0` on a store holding a small negative `z` does not match it.
-- **Assigned (2026-10-20):** to the
-  [`jordan-normalization`](../jordan-normalization/IMPLEMENTATION_STATE.md) campaign, prompt 03,
-  which replaces the redshift lookup with one on ln(1 + z) by absolute difference. That prompt
-  closes it here, in §4, and deletes its row from `.documents/OPEN_ISSUES.md`.
 
 ## 4. Resolved issues
 
@@ -333,6 +290,72 @@ does not need (README §6.2, P11).
   `--drop` is refused by both scripts before Ray starts. The log is
   [`read-only-plots/logs/02-read-only-plot-pools.md`](../read-only-plots/logs/02-read-only-plot-pools.md).
 
+
+### `[01-scalarmodelvalue-build-checks-the-stored-phi-against-pi]`
+
+**Opened:** 2026-10-12 by prompt 01 (log 01, Observation 2), seen in passing while reading the
+factories for the bookkeeping list. **Not fixed:** a factory is outside prompt 01's scope, and
+outside this campaign's (README §1, "The factories' form").
+
+- **What.** `sqla_ScalarModelValue_factory.build`, on finding a stored row, checks the stored φ
+  against the expected φ and then, meaning to check π, compares the stored **φ** with the
+  expected **π**: `fabs(row_data.phi_Einstein_Mp - pi_Einstein_Mp) > DEFAULT_FLOAT_PRECISION`
+  (`Datastore/SQL/ObjectFactories/ScalarModel.py:1063-1069`; the message prints
+  `row_data.pi_Einstein_Mp`). Present since `d132774`.
+- **Impact.** None measured, and none expected today: nothing calls
+  `object_get("ScalarModelValue", …)` (`git grep`); the value rows are written by
+  `sqla_ScalarModelFactory.store` through the inserter and read back by its `build`. If the path
+  were used, a stored row whose φ and π differ by more than `DEFAULT_FLOAT_PRECISION` would raise
+  `ValueError` spuriously, and a wrong stored π would pass unchecked. No stored value is affected.
+- **Next step.** A one-token fix (`row_data.pi_Einstein_Mp`), or deleting the unused lookup path,
+  in a later campaign that may touch the factories, with a test that drives the path.
+- **Assigned (2026-10-20):** to the
+  [`jordan-normalization`](../jordan-normalization/IMPLEMENTATION_STATE.md) campaign, prompt 03,
+  which rewrites the value factory for the ln(1 + z) sampling axis. That prompt closes it here, in
+  §4, and deletes its row from `.documents/OPEN_ISSUES.md`.
+- **Resolved (2026-10-22):** by `jordan-normalization` prompt 03 (this commit), which deleted the
+  path (that campaign's orchestrator note 03, ruling 11). `git grep` found no caller of
+  `object_get("ScalarHistoryValue", …)`; the value rows are written and read only through
+  `sqla_ScalarHistoryFactory`. `build` is abstract in `SQLAFactoryBase`, so
+  `sqla_ScalarHistoryValue_factory.build` (`ObjectFactories/ScalarHistory.py`) is now one
+  `raise NotImplementedError` naming `sqla_ScalarHistoryFactory`, and the φ-against-π check went
+  with the old body. `ObjectFactories/tests/test_redshift_axis.py::TestTheValueFactory` drives the
+  call and asserts the refusal. The same defect was opened again as
+  `[05-the-value-factory-compares-stored-phi-against-pi]` on `science-readiness`'s board, and closes
+  there too.
+
+### `[09-redshift-lookup-at-zero-takes-abs-of-the-comparison]`
+
+**Opened:** 2026-10-13 by prompt 09 (log 09, Observation 1), seen while deriving `redshift`'s spec
+from its `build`. **Not fixed:** no factory's `build` is changed by prompt 09 (§5), and the factories'
+form is outside this campaign's scope (README §1).
+
+- **What.** `sqla_redshift_factory.build`'s branch for `z == 0` filters on
+  `sqla.func.abs((table.c.z - z) < DEFAULT_REDSHIFT_PRECISION)`
+  (`Datastore/SQL/ObjectFactories/redshift.py:53-54` after prompt 09; `:49-51` before it): the
+  `abs` is of the comparison, not of the difference. The intended filter is
+  `sqla.func.abs(table.c.z - z) < DEFAULT_REDSHIFT_PRECISION`, as the `z != 0` branch and
+  `DimensionlessQuantity.build` write it. The one-character misplacement dates from before this
+  campaign.
+- **Impact.** None today, and none expected: the filter selects rows with `z < precision`, which for
+  the redshifts the code stores (all `z >= 0`) is the same set as the intended `|z| < precision`. A
+  stored negative redshift would be matched as `z = 0`. No stored value is affected, and the
+  inventory (prompt 09) does not depend on it: its key is the stored `z`.
+- **Next step.** Move the parenthesis, in a later campaign that may touch the factories, with a test
+  that a lookup of `z = 0` on a store holding a small negative `z` does not match it.
+- **Assigned (2026-10-20):** to the
+  [`jordan-normalization`](../jordan-normalization/IMPLEMENTATION_STATE.md) campaign, prompt 03,
+  which replaces the redshift lookup with one on ln(1 + z) by absolute difference. That prompt
+  closes it here, in §4, and deletes its row from `.documents/OPEN_ISSUES.md`.
+- **Resolved (2026-10-22):** by `jordan-normalization` prompt 03 (this commit). The table
+  `redshift` stores `log_one_plus_z`, ln(1 + z), in place of `z`, and
+  `sqla_redshift_factory.build` (`ObjectFactories/redshift.py`) matches by absolute difference in
+  one branch with no special case at zero:
+  `(log_one_plus_z > x - 1e-10) & (log_one_plus_z < x + 1e-10)`
+  (`DEFAULT_LOG_ONE_PLUS_Z_PRECISION`; the range form lets SQLite search the column's index).
+  `ObjectFactories/tests/test_redshift_axis.py::TestTheLookup` checks that a lookup at 0 does not
+  match a row at −1e-6 (it inserts a new row) and does return the serial of a row at 1e-12. Put
+  back in place by a probe, the old filter fails the first of these.
 
 ## 5. Dispatch record
 

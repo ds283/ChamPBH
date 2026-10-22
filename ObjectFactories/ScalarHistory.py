@@ -14,7 +14,7 @@
 # limitations under the License.
 
 import json
-from math import fabs, log
+from math import log
 from typing import Optional, List
 
 import sqlalchemy as sqla
@@ -46,7 +46,7 @@ from datastorekit.store_inventory import InventorySpec, Parent
 from MetadataConcepts import store_tag, tolerance
 from Quadrature.integration_metadata import IntegrationData, IntegrationSolver
 from Units.base import UnitsLike
-from config.defaults import DEFAULT_STRING_LENGTH, DEFAULT_FLOAT_PRECISION
+from config.defaults import DEFAULT_STRING_LENGTH
 from datastorekit.contract import require_version_serial
 
 
@@ -412,7 +412,7 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                 sqla.select(
                     value_table.c.serial,
                     value_table.c.z_serial,
-                    redshift_table.c.z,
+                    redshift_table.c.log_one_plus_z,
                     value_table.c.raw_N,
                     value_table.c.phi_Einstein_Mp,
                     value_table.c.pi_Einstein_Mp,
@@ -430,6 +430,7 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                     value_table.c.friction_term_Mp,
                     value_table.c.reflecting_term_Mp,
                     value_table.c.kicking_term_Mp,
+                    value_table.c.log_one_plus_z_Jordan,
                 )
                 .select_from(
                     value_table.join(
@@ -438,7 +439,7 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                     )
                 )
                 .filter(value_table.c.history_serial == store_id)
-                .order_by(redshift_table.c.z.desc())
+                .order_by(redshift_table.c.log_one_plus_z.desc())
             )
 
             z_points = []
@@ -451,7 +452,7 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
             for row in sample_rows:
                 z_value = redshift(
                     store_id=row.z_serial,
-                    z=row.z,
+                    log_one_plus_z=row.log_one_plus_z,
                 )
                 z_points.append(z_value)
                 values.append(
@@ -475,6 +476,7 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                         friction_term=row.friction_term_Mp * units.PlanckMass,
                         reflecting_term=row.reflecting_term_Mp * units.PlanckMass,
                         kicking_term=row.kicking_term_Mp * units.PlanckMass,
+                        log_one_plus_z_Jordan=row.log_one_plus_z_Jordan,
                     )
                 )
             imported_z_sample = redshift_array(z_points)
@@ -710,6 +712,7 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                     "friction_term_Mp": value.friction_term / units.PlanckMass,
                     "reflecting_term_Mp": value.reflecting_term / units.PlanckMass,
                     "kicking_term_Mp": value.kicking_term / units.PlanckMass,
+                    "log_one_plus_z_Jordan": value.log_one_plus_z_Jordan,
                 },
             )
 
@@ -892,179 +895,20 @@ class sqla_ScalarHistoryValue_factory(SQLAFactoryBase):
                 sqla.Column("friction_term_Mp", sqla.Float(64), nullable=False),
                 sqla.Column("reflecting_term_Mp", sqla.Float(64), nullable=False),
                 sqla.Column("kicking_term_Mp", sqla.Float(64), nullable=False),
+                # ln(1 + z_J), the Jordan-frame redshift from the end of the history
+                # (jordan-normalization prompt 03, R4): a column, never a key, since a_J is not
+                # monotonic through a bounce
+                sqla.Column("log_one_plus_z_Jordan", sqla.Float(64), nullable=False),
             ],
         }
 
     def build(self, payload, conn, table, inserter, tables, inserters):
-        history_serial = payload["history_serial"]
-        units: UnitsLike = payload["units"]
-
-        z: redshift = payload["z"]
-        raw_N: float = payload["raw_N"]
-
-        phi_Einstein: float = payload["phi_Einstein"]
-        pi_Einstein: float = payload["pi_Einstein"]
-
-        log_rhorad_Einstein: float = payload["log_rhorad_Einstein"]
-        log_rhorad_Jordan: float = payload["log_rhorad_Jordan"]
-        log_fm: float = payload["log_fm"]
-        log_T_Jordan: float = payload["log_T_Jordan"]
-
-        H_Einstein: float = payload["H_Einstein"]
-        H_Jordan: float = payload["H_Jordan"]
-
-        gstar_rho: float = payload["gstar_rho"]
-        gstar_s: float = payload["gstar_s"]
-        dgstar_rho_dlogT: float = payload["dgstar_rho_dlogT"]
-        dgstar_s_dlogT: float = payload["dgstar_s_dlogT"]
-
-        Sigma: float = payload["Sigma"]
-
-        friction_term: float = payload["friction_term"]
-        reflecting_term: float = payload["reflecting_term"]
-        kicking_term: float = payload["kicking_term"]
-
-        # define quantities in explicit units
-        log_Mp = log(units.PlanckMass)
-        log_GeV = log(units.GeV)
-
-        phi_Einstein_Mp: float = phi_Einstein / units.PlanckMass
-        pi_Einstein_Mp: float = pi_Einstein / units.PlanckMass
-
-        log_rhorad_Einstein_Mp4: float = log_rhorad_Einstein - 4.0 * log_Mp
-        log_rhorad_Jordan_Mp4: float = log_rhorad_Jordan - 4.0 * log_Mp
-        log_T_Jordan_GeV: float = log_T_Jordan - log_GeV
-
-        H_Einstein_Mp: float = H_Einstein / units.PlanckMass
-        H_Jordan_Mp: float = H_Jordan / units.PlanckMass
-
-        friction_term_Mp: float = friction_term / units.PlanckMass
-        reflecting_term_Mp: float = reflecting_term / units.PlanckMass
-        kicking_term_Mp: float = kicking_term / units.PlanckMass
-
-        try:
-            row_data = conn.execute(
-                sqla.select(
-                    table.c.serial,
-                    table.c.raw_N,
-                    table.c.phi_Einstein_Mp,
-                    table.c.pi_Einstein_Mp,
-                    table.c.log_rhorad_Einstein_Mp4,
-                    table.c.log_rhorad_Jordan_Mp4,
-                    table.c.log_fm,
-                    table.c.log_T_Jordan_GeV,
-                    table.c.H_Einstein_Mp,
-                    table.c.H_Jordan_Mp,
-                    table.c.gstar_rho,
-                    table.c.gstar_s,
-                    table.c.Sigma,
-                    table.c.dgstar_rho_dlogT,
-                    table.c.dgstar_s_dlogT,
-                    table.c.friction_term_Mp,
-                    table.c.reflecting_term_Mp,
-                    table.c.kicking_term_Mp,
-                ).filter(
-                    table.c.history_serial == history_serial,
-                    table.c.z_serial == z.store_id,
-                )
-            ).one_or_none()
-        except MultipleResultsFound as e:
-            print(
-                f"!! ScalarHistoryValue.build(): multiple results found when querying for ScalarHistoryValue"
-            )
-            raise e
-
-        if row_data is None:
-            store_id = inserter(
-                conn,
-                {
-                    "history_serial": history_serial,
-                    "z_serial": z.store_id,
-                    "raw_N": raw_N,
-                    "phi_Einstein_Mp": phi_Einstein_Mp,
-                    "pi_Einstein_Mp": pi_Einstein_Mp,
-                    "log_rhorad_Einstein_Mp4": log_rhorad_Einstein_Mp4,
-                    "log_rhorad_Jordan_Mp4": log_rhorad_Jordan_Mp4,
-                    "log_fm": log_fm,
-                    "log_T_Jordan_GeV": log_T_Jordan_GeV,
-                    "H_Einstein_Mp": H_Einstein_Mp,
-                    "H_Jordan_Mp": H_Jordan_Mp,
-                    "gstar_rho": gstar_rho,
-                    "gstar_s": gstar_s,
-                    "dgstar_rho_dlogT": dgstar_rho_dlogT,
-                    "dgstar_s_dlogT": dgstar_s_dlogT,
-                    "Sigma": Sigma,
-                    "friction_term_Mp": friction_term_Mp,
-                    "reflecting_term_Mp": reflecting_term_Mp,
-                    "kicking_term_Mp": kicking_term_Mp,
-                },
-            )
-        else:
-            store_id = row_data.serial
-
-            # phi_Einstein = row_data.phi_Einstein_Mp * units.PlanckMass
-            # pi_Einstein = row_data.pi_Einstein_Mp * units.PlanckMass
-
-            # replace supplied values with those read from the database
-            raw_N = row_data.raw_N
-
-            log_rhorad_Einstein = row_data.log_rhorad_Einstein_Mp4 + 4.0 * log_Mp
-            log_rhorad_Jordan = row_data.log_rhorad_Jordan_Mp4 + 4.0 * log_Mp
-            log_fm = row_data.log_fm
-            log_T_Jordan = row_data.log_T_Jordan_GeV + log_GeV
-
-            H_Einstein = row_data.H_Einstein_Mp * units.PlanckMass
-            H_Jordan = row_data.H_Jordan_Mp * units.PlanckMass
-
-            gstar_rho = row_data.gstar_rho
-            gstar_s = row_data.gstar_s
-            dgstar_rho_dlogT = row_data.dgstar_rho_dlogT
-            dgstar_s_dlogT = row_data.dgstar_s_dlogT
-
-            Sigma = row_data.Sigma
-
-            friction_term = row_data.friction_term_Mp * units.PlanckMass
-            reflecting_term = row_data.reflecting_term_Mp * units.PlanckMass
-            kicking_term = row_data.kicking_term_Mp * units.PlanckMass
-
-            # validate that recovered values match the supplied values, at least for phi and pi
-            # (we could do this for all of the values but it is laborious)
-            if (
-                fabs(row_data.phi_Einstein_Mp - phi_Einstein_Mp)
-                > DEFAULT_FLOAT_PRECISION
-            ):
-                raise ValueError(
-                    f"Stored ScalarHistory phi(Einstein)/Mp value (model store_id={history_serial}, z={z.store_id}) = {row_data.phi_Einstein_Mp}/Mp differs from expected value = {phi_Einstein_Mp}/Mp"
-                )
-
-            if (
-                fabs(row_data.phi_Einstein_Mp - pi_Einstein_Mp)
-                > DEFAULT_FLOAT_PRECISION
-            ):
-                raise ValueError(
-                    f"Stored ScalarHistory pi(Einstein)/Mp value (model store_id={history_serial}, z={z.store_id}) = {row_data.pi_Einstein_Mp}/Mp differs from expected value = {pi_Einstein_Mp}/Mp"
-                )
-
-        obj = ScalarHistoryValue(
-            store_id=store_id,
-            z=z,
-            raw_N=raw_N,
-            phi_Einstein=phi_Einstein,
-            pi_Einstein=pi_Einstein,
-            log_rhorad_Einstein=log_rhorad_Einstein,
-            log_rhorad_Jordan=log_rhorad_Jordan,
-            log_fm=log_fm,
-            log_T_Jordan=log_T_Jordan,
-            H_Einstein=H_Einstein,
-            H_Jordan=H_Jordan,
-            gstar_rho=gstar_rho,
-            gstar_s=gstar_s,
-            Sigma=Sigma,
-            dgstar_rho_dlogT=dgstar_rho_dlogT,
-            dgstar_s_dlogT=dgstar_s_dlogT,
-            friction_term=friction_term,
-            reflecting_term=reflecting_term,
-            kicking_term=kicking_term,
+        # ScalarHistoryValue rows are written by sqla_ScalarHistoryFactory.store and read by its
+        # build, with their parent; nothing reaches this path (object_get("ScalarHistoryValue", ...)
+        # has no caller). Its stored-against-expected check compared the stored phi with the
+        # expected pi, so it went in jordan-normalization prompt 03 (Z7). build is abstract in
+        # SQLAFactoryBase, so it stays, and refuses
+        raise NotImplementedError(
+            "ScalarHistoryValue rows are written and read only through "
+            "sqla_ScalarHistoryFactory (its store and build), never on their own"
         )
-        obj._deserialized = True
-        return obj

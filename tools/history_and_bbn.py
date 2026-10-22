@@ -93,6 +93,7 @@ from CosmologyConcepts import (  # noqa: E402
     redshift_array,
     temperature,
 )
+from CosmologyConcepts.redshift import log_one_plus_z_grid  # noqa: E402
 from CosmologyConcepts.ConformalCouplings.ExponentialCoupling import (  # noqa: E402
     ExponentialCoupling,
 )
@@ -104,13 +105,14 @@ from CosmologyModels.GenericEOS.QCD_Cosmology import QCD_Cosmology  # noqa: E402
 from CosmologyModels.LambdaCDM import Planck2018  # noqa: E402
 from Units import Planck_units  # noqa: E402
 
-# main.py's initial data (main.py, execute()) and z grid (config/argument_parser.py defaults)
+# main.py's initial data (main.py, execute()) and z grid: the sampling axis of
+# CosmologyConcepts.redshift.log_one_plus_z_grid, at main.py's density, to 35 decades of 1 + z
+# (the parser's default before jordan-normalization prompt 03, which made it 300)
 PHI_INIT_MP = 5.0  # the default of --phi-init-Mp
 PI_INIT = 0.0
 T_INIT_GEV = 2.0e4
 LAMBDA_EV = 1.0e-3
 SAMPLES_PER_LOG10_Z = 250
-LOG10_ONE_PLUS_Z_LOW = 0.0
 LOG10_ONE_PLUS_Z_HIGH = 35.0
 
 # the windows of the ratio lines, in keV
@@ -137,14 +139,8 @@ class _Proxy:
 
 
 def _z_grid() -> redshift_array:
-    num = int(
-        round(
-            SAMPLES_PER_LOG10_Z * (LOG10_ONE_PLUS_Z_HIGH - LOG10_ONE_PLUS_Z_LOW) + 0.5,
-            0,
-        )
-    )
-    zs = np.logspace(LOG10_ONE_PLUS_Z_LOW, LOG10_ONE_PLUS_Z_HIGH, num) - 1.0
-    return redshift_array(z_array=[redshift(i, float(z)) for i, z in enumerate(zs)])
+    xs = log_one_plus_z_grid(SAMPLES_PER_LOG10_Z, LOG10_ONE_PLUS_Z_HIGH)
+    return redshift_array(z_array=[redshift(i, x) for i, x in enumerate(xs)])
 
 
 def _ratio_lines(values, units, label: str):
