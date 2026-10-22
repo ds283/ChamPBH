@@ -1,7 +1,7 @@
 # Log 03 — the sampling axis
 
 **Subject:** Store the sampling axis as ln(1 + z) and add ln(1 + z_J) to each sample
-**Commit:** this commit, on branch `jordan-normalization`, on top of `9997eef`
+**Commit:** `bd9ae42`, on branch `jordan-normalization`, on top of `9997eef`
 **Date:** 2026-10-22, by Claude Opus 5.5
 **Result:** **COMPLETE**, after one stop (Deviation 15), which the orchestrator ruled.
 - Z1–Z7 shipped, under orchestrator note 03, whose fourteen rulings govern where they differ from
@@ -306,7 +306,7 @@ No `UNINTENDED DRIFT`.
 Load is the one-minute `uptime` figure at the start of each run. Outputs are in the scratch
 directory `agent03/` (`before/`, `after/`, `final/`).
 
-| Suite | Before (`9997eef`) | After (final, this commit's tree) | Change |
+| Suite | Before (`9997eef`) | After (final, `bd9ae42`'s tree) | Change |
 |---|---|---|---|
 | CosmologyModels | 18 OK, 82 s, load 78 | 18 OK, 74 s, load 56 | none |
 | ComputeTargets `test_[a-f]*` | 61 OK, 105 s, load 169 | 61 OK, 100 s, load 55 | none |
@@ -444,7 +444,7 @@ On the samples of the Part A new-tree runs, which are those of the golden histor
 ## The deliberate-breakage record
 
 - **How each diff was made.** By a scratch script (`difflib.unified_diff`) from the working tree that
-  this commit holds.
+  `bd9ae42` holds.
 - **How each was replayed,** in `bash`: `git apply --check`, `git apply`, `git apply -R --check`,
   the named tests, and `git apply -R`. Afterwards `git diff` was byte-identical to its state
   before.
@@ -542,7 +542,7 @@ On the samples of the Part A new-tree runs, which are those of the golden histor
   `get_x_coord` plots `1 + z`. Both are cosmetic, in a mode the driver never uses. Not changed, and
   no issue (the note offers them to the user as housekeeping).
 - **`.documents/architecture-summary.md:636`** still lists `DEFAULT_REDSHIFT_PRECISION = 1e-7`, which
-  this commit deletes. 10's C1 writes the axis into the documents; not edited here (ruling 13).
+  `bd9ae42` deletes. 10's C1 writes the axis into the documents; not edited here (ruling 13).
 - **`--samples-log10-z`'s help** says "per log10(z)"; the axis is per decade of 1 + z. The option is
   08's; not changed.
 - **`ComputeTargets/tests/golden_history.py`'s module docstring** still says the excerpts are "all
@@ -550,7 +550,7 @@ On the samples of the Part A new-tree runs, which are those of the golden histor
 
 ## State handed to the next prompt
 
-- **Tree:** this commit, on `jordan-normalization`, on top of `9997eef`.
+- **Tree:** `bd9ae42`, on `jordan-normalization`, on top of `9997eef`.
 - **The axis.**
   - `CosmologyConcepts.redshift.redshift(store_id, log_one_plus_z)`: `.log_one_plus_z` is the label,
     `.z` is `expm1` of it (`inf` past 709.78), and `float()` is ln(1 + z).
@@ -595,6 +595,6 @@ On the samples of the Part A new-tree runs, which are those of the golden histor
 - **Test fixtures that name the value columns** (`tools/tests/test_compare_stores.py`'s
   `_fill_champbh_shard`, now 18 names) must follow any further change to `ScalarHistoryValue`'s
   columns (07).
-- **Breakage replay:** the three diffs above apply to this commit's tree. `git apply --check` passes
+- **Breakage replay:** the three diffs above apply to `bd9ae42`'s tree. `git apply --check` passes
   for each, and after applying each, `git apply -R --check` passes and the reverse restores the tree.
   Checked in `bash`.

@@ -260,7 +260,7 @@ here (README §5 rule 4).
     `dk-and-rpk-migration`'s `[01-scalarmodelvalue-build-checks-the-stored-phi-against-pi]`,
     assigned with it. That prompt closes it here, in §4, and deletes its row from
     `.documents/OPEN_ISSUES.md`.
-  - **Resolved (2026-10-22):** by `jordan-normalization` prompt 03 (this commit), which deleted the
+  - **Resolved (2026-10-22):** by `jordan-normalization` prompt 03 (`bd9ae42`), which deleted the
     path (that campaign's orchestrator note 03, ruling 11). Nothing calls
     `object_get("ScalarHistoryValue", …)`; `sqla_ScalarHistoryValue_factory.build`
     (`ObjectFactories/ScalarHistory.py`) is now one `raise NotImplementedError` naming

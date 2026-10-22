@@ -313,7 +313,7 @@ outside this campaign's (README §1, "The factories' form").
   [`jordan-normalization`](../jordan-normalization/IMPLEMENTATION_STATE.md) campaign, prompt 03,
   which rewrites the value factory for the ln(1 + z) sampling axis. That prompt closes it here, in
   §4, and deletes its row from `.documents/OPEN_ISSUES.md`.
-- **Resolved (2026-10-22):** by `jordan-normalization` prompt 03 (this commit), which deleted the
+- **Resolved (2026-10-22):** by `jordan-normalization` prompt 03 (`bd9ae42`), which deleted the
   path (that campaign's orchestrator note 03, ruling 11). `git grep` found no caller of
   `object_get("ScalarHistoryValue", …)`; the value rows are written and read only through
   `sqla_ScalarHistoryFactory`. `build` is abstract in `SQLAFactoryBase`, so
@@ -347,7 +347,7 @@ form is outside this campaign's scope (README §1).
   [`jordan-normalization`](../jordan-normalization/IMPLEMENTATION_STATE.md) campaign, prompt 03,
   which replaces the redshift lookup with one on ln(1 + z) by absolute difference. That prompt
   closes it here, in §4, and deletes its row from `.documents/OPEN_ISSUES.md`.
-- **Resolved (2026-10-22):** by `jordan-normalization` prompt 03 (this commit). The table
+- **Resolved (2026-10-22):** by `jordan-normalization` prompt 03 (`bd9ae42`). The table
   `redshift` stores `log_one_plus_z`, ln(1 + z), in place of `z`, and
   `sqla_redshift_factory.build` (`ObjectFactories/redshift.py`) matches by absolute difference in
   one branch with no special case at zero:
