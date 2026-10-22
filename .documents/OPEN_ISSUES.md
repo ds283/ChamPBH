@@ -1,8 +1,8 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-21 · **28 open**: 4 on the `review-remediation` board (closed
+**Last updated:** 2026-10-22 · **27 open**: 4 on the `review-remediation` board (closed
 2026-09-30), none now assigned; 2 on the `production-readiness` board
-(closed 2026-09-30); 4 on the `run-integrity` board (closed 2026-09-30); 8 on the
+(closed 2026-09-30); 3 on the `run-integrity` board (closed 2026-09-30; one stale entry closed 2026-10-22, its fix having landed in `5740690`); 8 on the
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`;
 2 on the `science-readiness` board (planned 2026-10-01; closed 2026-10-02, 10 of 10 landed,
 prompt 06b having been added 2026-10-02); 2 on the `bbn-tolerance` board (planned 2026-10-03,
@@ -115,8 +115,6 @@ assigned on 2026-10-20 to `jordan-normalization` (§1.15).
 - `[01-adiabatic-and-bbn-lookups-do-not-require-validated-rows]` — unlike `ScalarModel.build`,
   the `AdiabaticHistory` and `BBNData` lookups do not filter `validated == True`, so an
   unvalidated row left by an interrupted run is served unless `--prune-unvalidated` is passed.
-- `[01-plot-by-beta-profile-label-names-plot-scalarmodel]` — `plot_by_beta.py:87` names its
-  profiling run `--plot_ScalarModel-`; cosmetic.
 - `[04-adiabatichistory-lookup-ignores-do-not-populate]` — `AdiabaticHistory.build` never reads
   `_do_not_populate`, which `main.py` and `plot_by_beta.py` pass, so every lookup reads every
   value row; a cost, not a wrong result.

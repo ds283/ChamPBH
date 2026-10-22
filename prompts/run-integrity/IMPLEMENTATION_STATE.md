@@ -156,12 +156,6 @@ and opened one, not assigned (the `03-` entry). Prompt 04 opened one, not assign
     unassigned. Prompt 04 re-checks the orchestrator's narrowed reading on the final tree and
     records it here (prompt 04 §3). The reading, from the code on `bacddd8`, is that an interrupted
     run cannot leave a partial row, so the served case is only a row that failed its count check.
-- **[01-plot-by-beta-profile-label-names-plot-scalarmodel]** *(log 01, observation 2)*.
-  - **What.** `plot_by_beta.py:87` builds its `ProfileAgent` label as
-    `f'{VERSION_LABEL}--plot_ScalarModel-primarydb-...'`, a copy of `plot_ScalarModel.py:86`.
-  - **Impact.** Cosmetic: only the name of a profiling run, and only with `--profile-db`.
-  - **Next step.** Say `plot_by_beta` there, in any commit that owns that line. Prompt 01 kept the
-    labels' format, as it was told to.
 - **[02-a-short-bbn-sample-grid-escapes-compute-bbn-data]** *(log 02, observation 1; a scratch
   command on `f0de762`, quoted in log 02's Verification)*.
   - **What.** `build_NP_callbacks` raises `IndexError` for an empty sample grid and `ValueError`
@@ -250,6 +244,11 @@ opened here, closed by prompts 02 and 03 and moved from §3.
   `main.py`'s BBN lookup uses it, so a stored failure counts as done. A failed BBN row is final
   within a label; a new label or `--retry-failed-bbn` retries it. Test (a) in
   `Datastore/tests/test_bbn_failure_lookup.py` raises `MultipleResultsFound` on `765e80d`.
+- **[01-plot-by-beta-profile-label-names-plot-scalarmodel]** — resolved by `5740690` (2026-10-14;
+  `read-only-plots` log 02, Observation 1), recorded here
+  on 2026-10-22 when the entry was found stale. `plot_by_beta.py` now labels its `ProfileAgent`
+  `plot_by_beta` (`:134`), so its profile rows are distinguishable from `plot_ScalarModel`'s (now
+  `plot_ScalarHistory`'s). The eleven test modules that read the file passed (121 tests).
 - **[00-a-nan-new-physics-sample-hangs-prymordial]** *(the planner, 2026-09-30;
   `planning-probes/prymordial_solver_probe.py nan` on `27a32bc`)*.
   - **What.** With ρ_NP = NaN below 0.1 MeV, PRyMordial's first two solves succeed (lines 199 and
