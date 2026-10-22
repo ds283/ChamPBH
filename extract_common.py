@@ -425,7 +425,7 @@ def add_redshift_xaxis_labels(
                         xpos, color=config["color"], linestyle=config["linestyle"]
                     )
                     if text_labels:
-                        if "x_coord" == "efolds":
+                        if x_coord == "efolds":
                             ax.text(
                                 EFOLDS_TEXT_DISPLACEMENT_SHIFT + xpos,
                                 config["ypos"],
