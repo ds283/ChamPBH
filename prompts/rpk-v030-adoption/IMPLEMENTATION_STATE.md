@@ -150,3 +150,7 @@ may take over. Nothing fails today, so no issue is opened. Residue fixed in this
 commit" replaced by `95ad91d` here and in the log; note 01 listed; the header closed. The campaign
 is closed. Merging `rpk-v030-adoption` into `main`, and `main` into `jordan-normalization` before
 its 09, is the user's (README §4.2).
+
+**Merged (2026-10-25).** At the user's request `main`, unmoved since `ac187c8`, fast-forwards to the
+commit that adds this paragraph, and `main` is then merged into `jordan-normalization` (README
+§4.2). Neither branch is pushed by that request; the branch `rpk-v030-adoption` is kept.
