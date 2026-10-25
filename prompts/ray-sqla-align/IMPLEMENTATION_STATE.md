@@ -1,8 +1,8 @@
 # ray-sqla-align campaign — implementation state
 
-**Last updated:** 2026-10-25 · **Status: 01 landed, awaiting review — 1 of 2 landed, 0 of 2
-reviewed.** U0–U4 ruled by the user the same day; P1–P12 stand as proposed unless the user rules
-otherwise. 02 is held until 01's review.
+**Last updated:** 2026-10-25 · **Status: 01 landed and reviewed — 1 of 2 landed.** U0–U4
+ruled by the user the same day; P1–P12 stand as proposed, the user having ruled none otherwise.
+02 is released by 01's review, and is dispatched when the user says so (P12).
 
 The plan is [`README.md`](README.md), written on 2026-10-25 on branch `ray-sqla-align`, cut from
 `main` at `a144c83`.
@@ -51,14 +51,15 @@ The planner's proposals, P1–P12, are in README §6.2.
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | [Move `ray` and `SQLAlchemy`, with token mode named](01-move-ray-and-sqlalchemy-with-token-mode.md) | the pins and the venv; V0; the distributions; `config/ray_auth.py`, its importers and the script; the test; V1; `CLAUDE.md` | Opus | ✍️ 2026-10-25 | ✅ 2026-10-25, awaiting review | this commit | [01](logs/01-move-ray-and-sqlalchemy-with-token-mode.md) |
-| 02 | [Rehearse registered runs under Ray 2.59](02-rehearse-registered-runs-under-ray-2.59.md) | `reference`, `resumed-a` (`SIGTERM`), `resumed-c` and `plot_by_beta.py` on 01's code; gates FP and Token | Opus | ✍️ 2026-10-25 · ⏸ until 01's review | ⬜ | — | — |
+| 01 | [Move `ray` and `SQLAlchemy`, with token mode named](01-move-ray-and-sqlalchemy-with-token-mode.md) | the pins and the venv; V0; the distributions; `config/ray_auth.py`, its importers and the script; the test; V1; `CLAUDE.md` | Opus | ✍️ 2026-10-25 | ✅ 2026-10-25, reviewed | `668d30f` | [01](logs/01-move-ray-and-sqlalchemy-with-token-mode.md) |
+| 02 | [Rehearse registered runs under Ray 2.59](02-rehearse-registered-runs-under-ray-2.59.md) | `reference`, `resumed-a` (`SIGTERM`), `resumed-c` and `plot_by_beta.py` on 01's code; gates FP and Token | Opus | ✍️ 2026-10-25 | ⬜ | — | — |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
 
 The review of 02 closes the campaign (README §2).
 
-**Orchestrator notes** are written just before dispatch, under `orchestrator/`.
+**Orchestrator notes** are written just before dispatch, under `orchestrator/`:
+[`prompt-01.md`](orchestrator/prompt-01.md) (`551b54c`), used for 01.
 
 ### 1.1 Items
 
@@ -121,7 +122,7 @@ that the rehearsal runs on a clean tree. No issue opened or assigned.
 
 ### 5.1 After prompt 01 (2026-10-25)
 
-Dispatched at `551b54c` (the orchestrator's note); landed in this commit. Log:
+Dispatched at `551b54c` (the orchestrator's note); landed in `668d30f`. Log:
 [`logs/01-move-ray-and-sqlalchemy-with-token-mode.md`](logs/01-move-ray-and-sqlalchemy-with-token-mode.md);
 outputs in `.documents/ray-sqla-align/out/01-*`.
 - **The pins.** The dry run installed `SQLAlchemy-2.0.55 ray-2.59.0` alone; the freeze moved by
@@ -141,3 +142,66 @@ outputs in `.documents/ray-sqla-align/out/01-*`.
   `ray status` answered (`0.0/10.0 CPU`, `0.0/1.0 GPU`); stopped, lock free; the token file
   unchanged (64 bytes, mode 600, 12:51:17).
 - No issue opened. Not pushed. The venv holds the new pins (README §4.1 to go back).
+
+**Orchestrator review of prompt 01 (2026-10-25, 20:25–20:31 GMT).** The ten checks of
+[`orchestrator/prompt-01.md`](orchestrator/prompt-01.md) §3, made at `668d30f`; all pass.
+1. **Scope.** `668d30f`'s parent is `551b54c`; its 32 files are §3 item 7's list (the code and
+   `CLAUDE.md`, 19 outputs under `out/01-*`, the log and the board). Nothing under
+   `ComputeTargets/`, `CosmologyModels/`, `PRyM/`, `RunDrivers/`, `StoreFixtures/`,
+   `config/datastore.py`, `config/sharding.py` or `prompts/INDEX.md` moved; nothing of `var/` is
+   committed; the tree clean; nothing pushed.
+2. **The venv**, measured here: `pip freeze` against the orchestrator's freeze before dispatch
+   differs in the `ray` and `SQLAlchemy` lines alone; the git packages unmoved, none editable;
+   `pip check` clean; a dry run of `requirements.txt` installs nothing.
+3. **The token file**: 64 bytes, mode 600, `/usr/bin/stat` `1792932677`, as at the gate. The
+   recursive `grep -F -l -f` over this campaign's records and `git grep -F -l -f` over `668d30f`'s
+   tree both exit 1.
+4. **The fix, by reading.** `config/ray_auth.py` as §2.6 says: the licence header, the
+   constant, set only when absent, the refresh only when `ray._raylet` is loaded, no Ray import, the
+   comment's points. The script: the export before `local t0=$SECONDS` with the `:-token` default
+   and its comment, the `actors:` line, the usage paragraph where the note's ruling 8 puts it, and
+   no hunk in the lock half, the stop, the ports or `ray start`'s arguments; `bash -n` 0; `--help`
+   carries the sentence. The importers: two lines each, before the repository's first import. In
+   the two plot scripts that is three third-party imports after `import ray` rather than straight
+   after it (the log's deviation 15, `IMPLEMENTATION CHOICE`). Accepted: nothing between them
+   touches Ray's config, the README's P4 is met in its "before the first import of the
+   repository's own modules", and T3 checks the property that matters.
+5. **The distributions.** Both lists name `datastorekit, raypoolkit, ray, SQLAlchemy, numpy,
+   scipy`, each with a comment naming the campaign and U3; the equality test and
+   `test_default_names` as §2.5 says. The `>> packages:` line here names `ray 2.59.0` and
+   `SQLAlchemy 2.0.55`, the four PyPI installs `(no recorded origin)`.
+6. **T3 and the breakages.** The module's nine methods read against §2.6: fresh interpreters with
+   `RAY_AUTH_MODE` removed, no Ray started, nothing written, every `subprocess.run` with a timeout.
+   B1–B4 replayed here from the committed diffs (`git apply --check` 0): B1 fails
+   `test_ray_imported_first`; B2 the two `disabled` tests; B3
+   `test_plot_by_beta_py_imports_it_before_ray_init`; B4 the script test; each reverted. B5's
+   committed diff is against the tree before the four names, so it was replayed in kind: `"scipy"`
+   removed from the toml alone fails `test_roots_and_distributions`; restored. The tree clean
+   afterwards.
+7. **V0**, from `out/01-v0.txt`: `start` 0 with Ray's `Token authentication is enabled` warning;
+   the driver refused, exit 1, 21 `InvalidAuthToken`, one `AuthenticationError`, nothing from
+   `cluster_resources()`; `stop` 0; `status` free.
+8. **V1**, from `out/01-v1.txt`: `start` 0 with no warning; the `actors:` line carries the
+   variable; `RAY_AUTH_MODE=token` for the `gcs_server` (99355) and the `raylet` (99403, a
+   `raylet` binary in `status`'s listing), each control 1; the driver, `ray` imported first, exit
+   0 and `42`, its three counts 0; `ray status` 0; `stop` 0; `status` free. **Gate V holds, and
+   so does gate Token's V1 part.** `stop` needed `SIGKILL` after the grace for the `gcs_server`,
+   as it did under Ray 2.53.0 (`rpk-v030-adoption` 01, `out/01-cluster.txt`), and, newly, for
+   99362, a `Python -u` of the venv's Ray started with the head; the script confirmed nothing
+   left and released the lock both times. Recorded, no issue: the stop's rule is unchanged and
+   held.
+9. **The records.** `CLAUDE.md`'s bullet "Ray's token mode" after "The rehearsal lock", which is
+   unchanged; the `tools/tests` count 102 and the date sentence. The board and the log as the
+   prompt's §6 and the note's ruling 12 say; every deviation classed. `OPEN_ISSUES.md` untouched,
+   no issue having opened. The message in `CLAUDE.md`'s form.
+10. **The roots** at `668d30f`, serially, no cluster up: CosmologyModels 18 OK (68 s),
+    ComputeTargets 61 OK (96 s) + 115 OK (105 s), ObjectFactories 78 OK, tools **102** OK,
+    RunDrivers 61 OK; loads 3 to 22. `black --check` clean on the eight changed `.py` files.
+    `ray_cluster.sh status`: lock free, no process, the ports free. `runregistrykit list`: no runs.
+
+The orchestrator's rulings that read the prompt otherwise than it was written: the token file's
+mtime through `/usr/bin/stat` (the shell's `stat` is GNU's), and the three driver checks as three
+methods, so `tools/tests` is 102. The SHA replaces "this commit" here and in the log. 02 is no
+longer held; it is dispatched at the user's word. Until `main` is merged into it,
+`jordan-normalization` runs on Ray 2.59.0 without the token module and must start no Ray
+(README §4.2).

@@ -1,7 +1,7 @@
 # Log 01 — move `ray` and `SQLAlchemy`, with token mode named
 
 **Subject:** Move ray to 2.59.0 and SQLAlchemy to 2.0.55, naming Ray's token mode
-**Commit:** this commit, on branch `ray-sqla-align`, on top of the dispatch commit `551b54c`
+**Commit:** `668d30f`, on branch `ray-sqla-align`, on top of the dispatch commit `551b54c`
 **Date:** 2026-10-25, by Claude Opus 5.5
 **Result:** **COMPLETE.** B1, P1, V0, D1, T1, T2, T3, V1 and C1 shipped; gate **V** holds, and
 gate **Token**'s V1 part holds. The venv holds `ray` 2.59.0 and `SQLAlchemy` 2.0.55, and nothing
@@ -118,7 +118,7 @@ to `var/ray-sqla-align-01/` (ignored) and copied at §2.11.
    -c 'PATH='` gave 1 for each. No environment was printed whole.
 7. **`NOTED`** (correction 7). The final `grep -r -F -l -f ~/.ray/auth_token
    .documents/ray-sqla-align/ prompts/ray-sqla-align/` printed nothing, exit 1, run on the tree
-   this commit records (with this log and the board written).
+   `668d30f` records (with this log and the board written).
 8. **`IMPLEMENTATION CHOICE`, ruled** (ruling 8). The usage sentence is a paragraph of its own after
    the `status` entry and before "Never runs `ray stop`.", wrapped as its neighbours are.
 9. **`NOTED`** (correction 9). pip printed `Resolved … to commit 8e7c1d77…` (DatastoreKit),
@@ -360,7 +360,7 @@ Each failed exactly the tests the prompt names.
 
 ## State handed on
 
-- Branch `ray-sqla-align` at this commit, on top of `551b54c`. **Not pushed.**
+- Branch `ray-sqla-align` at `668d30f`, on top of `551b54c`. **Not pushed.**
 - **The venv holds `ray` 2.59.0 and `SQLAlchemy` 2.0.55**, shared with `jordan-normalization`, which
   now runs on Ray 2.59.0 without the token module until the merge (README §4.2). Going back is
   `./venv/bin/pip install ray==2.53.0 SQLAlchemy==2.0.46` (README §4.1); the freeze before is in
