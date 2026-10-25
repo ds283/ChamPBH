@@ -8,7 +8,7 @@ change its status when the board closes it. The open-issue column is a snapshot 
 [`.documents/OPEN_ISSUES.md`](../.documents/OPEN_ISSUES.md) on the date in the header; the section
 pointer is the durable part.
 
-**Last updated:** 2026-10-25 · 11 campaigns: 0 planned, 0 live, 11 closed.
+**Last updated:** 2026-10-25 · 12 campaigns: 1 planned, 0 live, 11 closed.
 
 | Campaign | Status | Opened → last board update | Owns | Open issues (§ of `OPEN_ISSUES.md`; rows naming its board) |
 |---|---|---|---|---|
@@ -33,3 +33,4 @@ scope. The numerical campaign that will re-run the scalar histories and the BBN 
 corrected code is the user's, and is planned separately. Its starting point is the handover,
 §4 of `.documents/review-remediation-verification.md`, as amended by `production-readiness`'s
 close-out, which clears four issues before it.
+| [`ray-sqla-align`](ray-sqla-align/IMPLEMENTATION_STATE.md) | **planned** — 0 of 2 landed; 01 written, 02 written and held until 01's review; branch `ray-sqla-align` from `main` at `a144c83`; U0–U4 ruled by the user 2026-10-25 (SGK's and SI's versions; a campaign of its own, merged into `main` and then `jordan-normalization`; token mode named; the four distributions recorded, as SI; two prompts); P1–P12 proposed | 2026-10-25 → 2026-10-25 | `ray` 2.59.0 and `SQLAlchemy` 2.0.55; `config/ray_auth.py` and token mode named in the three drivers and `ray_cluster.sh`; `ray`, `SQLAlchemy`, `numpy`, `scipy` in the recorded distributions; the refusal measured and a registered rehearsal on the new pins | none; none opened or assigned |
