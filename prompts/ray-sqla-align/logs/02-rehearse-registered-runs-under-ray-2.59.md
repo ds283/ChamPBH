@@ -1,7 +1,7 @@
 # Log 02 — rehearse registered runs under Ray 2.59
 
 **Subject:** Rehearse registered builds under ray 2.59.0 and SQLAlchemy 2.0.55
-**Commit:** this commit, on branch `ray-sqla-align`, on top of the dispatch commit `b16c435`
+**Commit:** `e04fbb8`, on branch `ray-sqla-align`, on top of the dispatch commit `b16c435`
 **Date:** 2026-10-25 (the rehearsal, 20:53–21:23 GMT), by Claude Opus 5.5
 **Result:** **COMPLETE.** R1–R5 and W1 shipped; gate **FP** holds, and gate **Token**'s 02 part
 holds. Three builds through the wrapper on ChamPBH's isolated cluster, in Ray's token mode, under
@@ -326,7 +326,7 @@ None: this prompt changes no code and no test (the prompt's §5).
 
 ## State handed on
 
-- Branch `ray-sqla-align` at this commit, on top of `b16c435`. **Not pushed.** The orchestrator's
+- Branch `ray-sqla-align` at `e04fbb8`, on top of `b16c435`. **Not pushed.** The orchestrator's
   review of 02 closes the campaign; then `ray-sqla-align` is merged into `main` and `main` into
   `jordan-normalization` before that campaign's 09 (README §4.2), as the user directs.
 - **The stores** `var/datastores/ray-sqla-align-02-reference.db` (`store_id`

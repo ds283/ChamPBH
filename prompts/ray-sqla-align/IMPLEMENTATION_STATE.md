@@ -1,9 +1,11 @@
 # ray-sqla-align campaign — implementation state
 
-**Last updated:** 2026-10-25 · **Status: 02 landed, awaiting review — 2 of 2 landed, 1 reviewed.**
-U0–U4 ruled by the user the same day; P1–P12 stand as proposed, the user having ruled none
-otherwise. Gate FP holds, and so does gate Token; the orchestrator's review of 02 closes the
-campaign (README §2).
+**Last updated:** 2026-10-25 · **Status: closed — 2 of 2 landed and reviewed.** U0–U4 ruled
+by the user the same day; P1–P12 stood as proposed, the user having ruled none otherwise. Gates
+V, FP and Token hold. The orchestrator's review of 02 closed the campaign (README §2). What remains
+is the user's: the merge of `ray-sqla-align` into `main` and the push, then `main` into
+`jordan-normalization` before that campaign's 09 (README §4.2), and the retirement of 02's two
+stores.
 
 The plan is [`README.md`](README.md), written on 2026-10-25 on branch `ray-sqla-align`, cut from
 `main` at `a144c83`.
@@ -53,14 +55,15 @@ The planner's proposals, P1–P12, are in README §6.2.
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
 | 01 | [Move `ray` and `SQLAlchemy`, with token mode named](01-move-ray-and-sqlalchemy-with-token-mode.md) | the pins and the venv; V0; the distributions; `config/ray_auth.py`, its importers and the script; the test; V1; `CLAUDE.md` | Opus | ✍️ 2026-10-25 | ✅ 2026-10-25, reviewed | `668d30f` | [01](logs/01-move-ray-and-sqlalchemy-with-token-mode.md) |
-| 02 | [Rehearse registered runs under Ray 2.59](02-rehearse-registered-runs-under-ray-2.59.md) | `reference`, `resumed-a` (`SIGTERM`), `resumed-c` and `plot_by_beta.py` on 01's code; gates FP and Token | Opus | ✍️ 2026-10-25 | ✅ 2026-10-25 | this commit | [02](logs/02-rehearse-registered-runs-under-ray-2.59.md) |
+| 02 | [Rehearse registered runs under Ray 2.59](02-rehearse-registered-runs-under-ray-2.59.md) | `reference`, `resumed-a` (`SIGTERM`), `resumed-c` and `plot_by_beta.py` on 01's code; gates FP and Token | Opus | ✍️ 2026-10-25 | ✅ 2026-10-25, reviewed | `e04fbb8` | [02](logs/02-rehearse-registered-runs-under-ray-2.59.md) |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
 
 The review of 02 closes the campaign (README §2).
 
 **Orchestrator notes** are written just before dispatch, under `orchestrator/`:
-[`prompt-01.md`](orchestrator/prompt-01.md) (`551b54c`), used for 01.
+[`prompt-01.md`](orchestrator/prompt-01.md) (`551b54c`), used for 01;
+[`prompt-02.md`](orchestrator/prompt-02.md) (`b16c435`), used for 02.
 
 ### 1.1 Items
 
@@ -209,7 +212,7 @@ longer held; it is dispatched at the user's word. Until `main` is merged into it
 
 ### 5.2 After prompt 02 (2026-10-25)
 
-Dispatched at `b16c435` (the orchestrator's note); landed in this commit. Log:
+Dispatched at `b16c435` (the orchestrator's note); landed in `e04fbb8`. Log:
 [`logs/02-rehearse-registered-runs-under-ray-2.59.md`](logs/02-rehearse-registered-runs-under-ray-2.59.md);
 record: [`.documents/ray-sqla-align-verification.md`](../../.documents/ray-sqla-align-verification.md)
 §1; outputs in `.documents/ray-sqla-align/out/02-*`.
@@ -234,3 +237,60 @@ record: [`.documents/ray-sqla-align-verification.md`](../../.documents/ray-sqla-
 - **New in the logs**: the `>> packages:` line's four entries; Ray's accelerator `FutureWarning`
   gone; the prune report in `resumed-c`. Nothing bearing on correctness.
 - No issue opened. Not pushed. The two stores and three runs stay under `var/` for the user.
+
+**Orchestrator review of prompt 02 (2026-10-25, 21:30–21:45 GMT).** The eleven checks of
+[`orchestrator/prompt-02.md`](orchestrator/prompt-02.md) §3, made at `e04fbb8`; all pass.
+1. **Scope.** `e04fbb8`'s parent is `b16c435`; its 37 files are the note's list exactly (the
+   document, 34 outputs under `out/02-*`, the log and the board). No `.py`, `.sh`, `.toml` or
+   requirements file, `CLAUDE.md`, `prompts/INDEX.md` or `.documents/OPEN_ISSUES.md` moved;
+   nothing of `var/` is committed; the tree clean; nothing pushed.
+2. **The venv and the token**, measured here: `pip freeze` `cmp`-equal to the orchestrator's freeze
+   before dispatch; `pip check` clean. The token file 64 bytes, mode 600, `/usr/bin/stat`
+   `1792932677`. The note's ruling-17 grep and `git grep -F -l -f` over `e04fbb8` both exit 1.
+3. **The cluster.** `ray_cluster.sh status` exit 0: the lock free, no process, the four ports free.
+   The lock module's `status`: free.
+4. **The runs, from the registry.** `list`: three runs, `reference` `done`, `resumed-a` `killed`,
+   `resumed-c` `done`, all finished. Each `manifest.json` and `status.json` under `var/runs/` is
+   `cmp`-equal to its committed copy: exits 0, 143, 0; `results_store_id` `null`, `null`,
+   `9919583b…0114` (the resumed store's); `git_head` `b16c4355…`, `git_dirty` false,
+   `script_sha256` `685b615b…`, which is `main.py`'s; seven packages with `ray` 2.59.0,
+   `SQLAlchemy` 2.0.55, numpy 2.3.5, scipy 1.17.0. `fingerprint_sidecar` "not written … (there is
+   none)" for the first two and `written` for `resumed-c`.
+5. **The order and the signal.** In each launch log the three `** registered_run:` lines are lines
+   1–3 and `>> packages:` line 4. `resumed-a`'s log: the handler's line `** SIGTERM at 2026-10-25
+   21:08:36 +0000: recorded killed, exit code 143; …`, the `SystemExit(1)` line, the marker 143 and
+   the launcher's 143; `interrupt_when.py`'s `sent SIGTERM` at 21:08:36 UTC, so 0 s (±1 s). No
+   `*** SIGTERM received` banner and no alarm line.
+6. **The delay.** `compute_times.py` re-run here on the reference store (`mode=ro`): 6.65, 6.75,
+   7.66, 42.45 and 107.07 s, as logged; ruling 6 gives `(42.45 + 107.07)/2 + 20 = 94.76`, rounded
+   to 90 s, the gap 64.62 s. On the resumed store now β = 10 and 25 carry `resumed-c`'s timestamps
+   (21:11:46–47) and the three small β `resumed-a`'s (21:07:16–17), as the account of the prune and
+   `resumed-c`'s 5 / 2 / 2 / 2 says.
+7. **The stores, re-measured.** `compare_stores.py`: exit 0, `problems: none`, `RESULT: equal`.
+   `store fingerprint` without `--write`: both `2dd4b39b61b9…0932f`, each matching its sidecar
+   (the reference's taken "by a person", the resumed's by `resumed-c`). `store show` and
+   `stage_counts.py` on the three logs as logged.
+8. **`histories.csv`**: `d7c62c37d8ad…c522`. The reference store's primary and sidecar `shasum`s
+   equal to the ones `02-plot.txt` records before and after the plot.
+9. **Token, 02's part.** The four strings `grep -c` 0 in `start.txt`, the three launch logs and the
+   plot log, re-run here. `02-cluster.txt`: `RAY_AUTH_MODE=token` for the `gcs_server` (10995) and
+   for 11031, a `raylet` binary by its own `ps -o comm=`, each control 1. **Gate FP holds, and so
+   does gate Token.**
+10. **The records.** The document's figures checked against the outputs above. "What is new in the
+    logs" re-derived here for `resumed-c` against 04's by ruling 16's method: only in 04's, Ray's
+    accelerator `FutureWarning` (two lines) and the old `>> packages:` line; only in 02's, the new
+    `>> packages:` line and the six lines of the prune report. That is the log's account. The board
+    in `### 5.2` (ruling 18); the log in §5.1's form, every deviation classed. Its deviation 23
+    (`UNINTENDED DRIFT`, GNU `date -r` in a timing line of `02-plot.txt`, the times then taken
+    from the epochs) touches a record's wall time only. Accepted.
+11. **The suites** at `e04fbb8`, serially, no cluster up: CosmologyModels 18 OK (79 s),
+    ComputeTargets 61 OK (114 s) + 115 OK (124 s), ObjectFactories 78 OK, tools 102 OK,
+    RunDrivers 61 OK; loads 3 to 6. No `.py` file committed, so `black` has nothing to check.
+
+The orchestrator's rulings that read the prompt otherwise than it was written: an end wait
+repeatable once (none timed out), `S` and `L` absolute, the token grep widened to the verification
+document, and this section numbered `5.2`. The SHA replaces "this commit" here and in the log.
+**The campaign is closed.** Not pushed. The merge of `ray-sqla-align` into `main` and the push,
+then `main` into `jordan-normalization` before its 09, are the user's to direct (README §4.2);
+the two stores `var/datastores/ray-sqla-align-02-{reference,resumed}.db` and the three run
+directories stay for the user to retire.
