@@ -2,7 +2,10 @@
 # where runs and datastores are recorded, and which distributions every manifest records.
 runs_root = "var/runs"
 stores_root = "var/datastores"
-distributions = ["datastorekit", "raypoolkit"]
+# The last four (ray-sqla-align prompt 01, README U3) are there so that a manifest says which venv
+# wrote a store. The list is held equal to utilities.RECORDED_DISTRIBUTIONS by
+# tools/tests/test_registry_config.py.
+distributions = ["datastorekit", "raypoolkit", "ray", "SQLAlchemy", "numpy", "scipy"]
 
 [stores]
 fingerprinter = "config.fingerprint:fingerprinter"

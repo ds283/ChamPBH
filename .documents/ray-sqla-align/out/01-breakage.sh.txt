@@ -1,0 +1,28 @@
+#!/bin/bash
+# breakage.sh N PATH BROKEN TESTMODULE: apply breakage B<N> (PATH -> the file BROKEN) as a diff that
+# `git apply` replays, run TESTMODULE, revert with `git apply -R`, and cmp against a saved copy.
+# Everything is appended to var/ray-sqla-align-01/01-breakage.txt.
+set -u
+cd /Users/ds283/Documents/Code/ChamPBH
+N=$1; P=$2; BROKEN=$3; MOD=$4
+D=var/ray-sqla-align-01; SAVE=$D/breakage-saved; mkdir -p $SAVE
+DIFF=$D/01-B$N.diff; LOG=$D/01-breakage.txt
+cp -p "$P" "$SAVE/B$N.orig"
+diff -u --label "a/$P" --label "b/$P" "$P" "$BROKEN" > "$DIFF"
+{
+  echo "## B$N $(date '+%F %T') on $P; diff as applied: out/01-B$N.diff"
+  cat "$DIFF"
+  git apply --check "$DIFF"; echo "git apply --check: exit $?"
+  git apply -R --check "$DIFF" 2>&1; echo "git apply -R --check: exit $?"
+  git apply "$DIFF"; echo "git apply: exit $?"
+  case "$P" in *.sh) bash -n "$P"; echo "bash -n $P: exit $?";; esac
+  echo "## PYTHONPATH=. ./venv/bin/python -m unittest $MOD"
+  PYTHONPATH=. ./venv/bin/python -m unittest -v "$MOD" > "$D/B$N-test.txt" 2>&1; echo "unittest: exit $?"
+  grep -E ' \.\.\. (ok|FAIL|ERROR)$' "$D/B$N-test.txt" | grep -vE ' \.\.\. ok$'
+  grep -E '^(AssertionError|FAIL:|ERROR:)' "$D/B$N-test.txt"
+  grep -E '^(Ran |OK|FAILED)' "$D/B$N-test.txt"
+  git apply -R "$DIFF"; echo "git apply -R: exit $?"
+  cmp "$P" "$SAVE/B$N.orig"; echo "cmp $P saved copy: exit $?"
+  echo
+} >> "$LOG" 2>&1
+sed -n "/^## B$N /,\$p" "$LOG"

@@ -1,0 +1,35 @@
+#!/bin/bash
+# root.sh STAGE NAME WFLAG -- run one test root (or ComputeTargets half) from the repository root.
+# STAGE: 2.1, 2.3 or 2.8; NAME: CM, CT-af, CT-gz, OF, tools, RD; WFLAG: "" or "-W default".
+# Full output to var/ray-sqla-align-01/roots/<STAGE>-<NAME><-W>.txt; summary appended to 01-roots.txt.
+set -u
+cd /Users/ds283/Documents/Code/ChamPBH
+STAGE=$1; NAME=$2; WFLAG=${3:-}
+case $NAME in
+  CM) ARGS=(-s CosmologyModels/tests -t .);;
+  CT-af) ARGS=(-s ComputeTargets/tests -t . -p 'test_[a-f]*.py');;
+  CT-gz) ARGS=(-s ComputeTargets/tests -t . -p 'test_[g-z]*.py');;
+  OF) ARGS=(-s ObjectFactories/tests -t .);;
+  tools) ARGS=(-s tools/tests -t .);;
+  RD) ARGS=(-s RunDrivers/tests -t .);;
+esac
+SUFFIX=""; [ -n "$WFLAG" ] && SUFFIX="-W"
+mkdir -p var/ray-sqla-align-01/roots
+OUT=var/ray-sqla-align-01/roots/$STAGE-$NAME$SUFFIX.txt
+UP0=$(uptime); T0=$(date '+%T'); S0=$SECONDS
+if [ -n "$WFLAG" ]; then
+  PYTHONPATH=. ./venv/bin/python -W default -m unittest discover "${ARGS[@]}" > "$OUT" 2>&1
+else
+  PYTHONPATH=. ./venv/bin/python -m unittest discover "${ARGS[@]}" > "$OUT" 2>&1
+fi
+RC=$?
+CMD="PYTHONPATH=. ./venv/bin/python $WFLAG -m unittest discover ${ARGS[*]}"
+{
+  echo "## $STAGE $NAME $(date '+%F') $T0-$(date '+%T') ($((SECONDS - S0)) s wall): $CMD"
+  echo "uptime before: $UP0"
+  grep -E '^Ran [0-9]+ tests' "$OUT"
+  grep -E "^(OK|FAILED)( |$)" "$OUT"
+  echo "exit $RC"
+  echo
+} >> var/ray-sqla-align-01/01-roots.txt
+tail -n 6 var/ray-sqla-align-01/01-roots.txt

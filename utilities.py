@@ -171,7 +171,17 @@ def to_float(val) -> float:
 # The distributions whose installed release a driver records in its output (dk-and-rpk-migration
 # prompt 01; README P5): the two packages that campaign adopts. From the RayPoolKit swap on, a run
 # executes code that is not in this repository's tree, so its log says which release ran.
-RECORDED_DISTRIBUTIONS = ("datastorekit", "raypoolkit")
+# ray-sqla-align prompt 01 (README U3) added the last four, so that a driver's `>> packages:` line
+# says which venv ran it. The list is held equal to runregistrykit.toml's `distributions`, which
+# every manifest records, by tools/tests/test_registry_config.py.
+RECORDED_DISTRIBUTIONS = (
+    "datastorekit",
+    "raypoolkit",
+    "ray",
+    "SQLAlchemy",
+    "numpy",
+    "scipy",
+)
 
 
 def installed_package_provenance(names=RECORDED_DISTRIBUTIONS) -> dict:

@@ -38,6 +38,8 @@ import seaborn as sns
 from matplotlib import pyplot as plt
 from numpy import nan
 
+# names Ray's token mode before ray.init (config/ray_auth.py)
+import config.ray_auth  # noqa: F401
 from ComputeTargets import (
     ScalarModel,
     ScalarModelValue,

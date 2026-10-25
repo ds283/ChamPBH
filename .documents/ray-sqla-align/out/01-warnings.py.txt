@@ -1,0 +1,23 @@
+"""warnings.py A B: the Python warnings (lines 'file:line: XWarning: msg') in A and not B, and in B and not A,
+with counts; addresses (0x...) and temp paths normalised."""
+import collections, re, sys
+
+PAT = re.compile(r"^(?P<src>\S+?:\d+): (?P<cat>[A-Za-z]*Warning): (?P<msg>.*)$")
+
+def read(path):
+    c = collections.Counter()
+    for line in open(path, errors="replace"):
+        m = PAT.match(line.rstrip("\n"))
+        if m:
+            msg = re.sub(r"0x[0-9a-f]+", "0x…", m["msg"])
+            msg = re.sub(r"/(private/)?var/folders/\S+|/tmp/\S+", "<tmp>", msg)
+            c[(m["src"], m["cat"], msg)] += 1
+    return c
+
+a, b = read(sys.argv[1]), read(sys.argv[2])
+for label, x, y in (("only in " + sys.argv[1], a, b), ("only in " + sys.argv[2], b, a)):
+    keys = [k for k in x if k not in y]
+    print(f"{label}: {len(keys)} distinct")
+    for k in keys:
+        print(f"  {x[k]} x {k[0]}: {k[1]}: {k[2][:300]}")
+print(f"common: {len([k for k in a if k in b])} distinct; totals {sum(a.values())} / {sum(b.values())}")

@@ -66,6 +66,9 @@ Run from the repository root.
                   processes, as raypoolkit.rehearsal_lock sees them; then the processes `stop`
                   would signal, by this script's rule; then the four ports.
 
+The cluster runs in Ray's token mode (RAY_AUTH_MODE=token, set by start unless the environment
+holds a value), so a Ray CLI command against it needs RAY_AUTH_MODE=token in its environment.
+
 Never runs `ray stop`. Never waits on a held lock. No shell command that runs this script may
 name the temp dir (/tmp/ray-cpbh), in PURPOSE or anywhere else: the lock would then list every
 other process that shell started.
@@ -273,6 +276,10 @@ cmd_start() {
 
     trap 'err "interrupted; stopping what was started"; stop_cluster "$CPBH_TEMP_DIR" "$CPBH_GCS_PORT" "$CPBH_CLIENT_PORT" "$CPBH_DASHBOARD_PORT" "$CPBH_AGENT_PORT"; lock_release; exit 130' INT TERM
 
+    # Ray's authentication mode, named (ray-sqla-align 01). Since Ray 2.59, `ray start` infers
+    # token mode from the token file (~/.ray/auth_token) unless told; ChamPBH names it, as
+    # config/ray_auth.py does for every driver, so that the cluster and its drivers agree.
+    export RAY_AUTH_MODE="${RAY_AUTH_MODE:-token}"
     local t0=$SECONDS
     "$RAY_BIN" start --head --temp-dir "$CPBH_TEMP_DIR" --port "$CPBH_GCS_PORT" \
         --ray-client-server-port "$CPBH_CLIENT_PORT" --dashboard-port "$CPBH_DASHBOARD_PORT" \
@@ -307,7 +314,7 @@ cmd_start() {
     trap - INT TERM
     say "address $CPBH_ADDRESS"
     say "dashboard $CPBH_DASHBOARD"
-    say "actors: $RAY_BIN list actors --address $CPBH_ADDRESS"
+    say "actors: RAY_AUTH_MODE=token $RAY_BIN list actors --address $CPBH_ADDRESS"
     say "started in $((SECONDS - t0))s; gcs_server pid $gcs"
     return 0
 }
