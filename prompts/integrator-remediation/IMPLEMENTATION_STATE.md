@@ -421,7 +421,7 @@ moot by `jordan-normalization` prompt 01.)*
     [`jordan-normalization`](../jordan-normalization/IMPLEMENTATION_STATE.md) campaign, prompt 04,
     whose `AbstractModel` interface does not carry these properties over. That prompt closes it
     here, in §4, and deletes its row from `.documents/OPEN_ISSUES.md`.
-  - **Resolved (2026-10-25):** by `jordan-normalization` prompt 04 (this commit, its log 04). The
+  - **Resolved (2026-10-25):** by `jordan-normalization` prompt 04 (`597a215`, its log 04). The
     integrator reads a `RealizedModel` (`CosmologyConcepts/Models/`), whose interface does not carry
     the properties over. `bounce_region_level{1,2}_boundary`, `bounce_region_level{1,2}_max_step`
     and `hard_reflection_point` are deleted from `AbstractPotential` and `ExponentialPotential`, and

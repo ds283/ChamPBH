@@ -1,7 +1,7 @@
 # Log 04 — the model interface
 
 **Subject:** Read V and A through one realized model, with the rows behind an adapter
-**Commit:** this commit, on branch `jordan-normalization`, on top of `a0ca6a1`
+**Commit:** `597a215`, on branch `jordan-normalization`, on top of `a0ca6a1`
 **Date:** 2026-10-25, by Claude Opus 5.5
 **Result:** **COMPLETE**, after one stop, which the orchestrator ruled (Deviations 14 and 15).
 - M1–M7 shipped, under orchestrator note 04, whose sixteen rulings govern where they differ from
@@ -326,7 +326,7 @@ Load is the one-minute `uptime` figure at the start of each run. Outputs are in 
 directory `agent04/` (`before/`, `mid/`, `after/`). Every suite was run serially in the foreground,
 with CLAUDE.md's commands.
 
-| Suite | Before (`a0ca6a1`) | After (this commit's tree) | Change |
+| Suite | Before (`a0ca6a1`) | After (`597a215`'s tree) | Change |
 |---|---|---|---|
 | CosmologyModels | 18 OK, 144 s, load 10.0 | 18 OK, 208 s, load 33.0 | none |
 | ComputeTargets `test_[a-f]*` | 61 OK, 201 s, load 7.5 | 61 OK, 192 s, load 13.3 | none |
@@ -393,7 +393,7 @@ no Ray was started, and no store was opened except the tests' temporary ones.
 ## The deliberate-breakage record
 
 - **How each diff was made.** By a scratch script (`difflib.unified_diff`) from the working tree that
-  this commit holds.
+  `597a215` holds.
 - **How each was replayed,** in `bash` (`agent04/replay.sh`): `git apply --check`, `git apply`,
   `git apply -R --check`, then `test_model_interface`, `test_golden_history` and
   `test_sampling_axis` together, then `git apply -R`. Afterwards `git diff` was byte-identical to
@@ -516,7 +516,7 @@ no-op, and every test passes under it).
 
 ## State handed to the next prompt
 
-- **Tree:** this commit, on `jordan-normalization`, on top of `a0ca6a1`.
+- **Tree:** `597a215`, on `jordan-normalization`, on top of `a0ca6a1`.
 - **The interface** (`CosmologyConcepts/Models/`; import `RealizedModel` from
   `CosmologyConcepts.Models.AbstractModel` in `ComputeTargets`, because of the import cycle,
   Deviation 10).
@@ -557,7 +557,7 @@ no-op, and every test passes under it).
   - Three remain assigned to this campaign (board §3.1): two for 07 and one for 08. Two are open on
     this board.
   - `.documents/OPEN_ISSUES.md`: 24 open.
-- **Breakage replay.** The three diffs above apply to this commit's tree. `git apply --check`
+- **Breakage replay.** The three diffs above apply to `597a215`'s tree. `git apply --check`
   passes for each, and after applying each, `git apply -R --check` passes and the reverse restores
   the tree. Checked in `bash`.
 - **The flaky wall-clock test** `test_prym_passenger.test_a_oscillating_case_completes` can fail

@@ -1,8 +1,8 @@
 # jordan-normalization campaign — implementation state
 
-**Last updated:** 2026-10-25 · **Status: LIVE — 10 of 10 prompts written, 4 landed (01, 02, 03
-reviewed; 04 landed in this commit, after one stop ruled by the orchestrator); R1–R14, U1–U5 and
-P1–P20 ruled by the user 2026-10-20 (README §6). Next: the orchestrator's review of 04.**
+**Last updated:** 2026-10-25 · **Status: LIVE — 10 of 10 prompts written, 4 landed (01, 02, 03, 04,
+all reviewed; 04 after one stop ruled by the orchestrator); R1–R14, U1–U5 and P1–P20 ruled by the
+user 2026-10-20 (README §6). Next: the orchestrator note for 05.**
 The plan is [`README.md`](README.md), written on 2026-10-20 on branch `jordan-normalization`, cut
 from `main` at `ac187c8`.
 
@@ -38,7 +38,7 @@ It ends in the handover for the science rebuild, which is the user's.
 | 01 | Strip to the exponential model | four potentials and their configs removed; a golden short history; format 2 | Sonnet | ✅ | ✅ | `a1c88b6` | [`logs/01-strip-to-the-exponential-model.md`](logs/01-strip-to-the-exponential-model.md) |
 | 02 | Rename to `ScalarHistory` | classes, tables, drop group, proxies, documents; format 3 | Sonnet | ✅ | ✅ | `abccc23` | [`logs/02-rename-to-scalarhistory.md`](logs/02-rename-to-scalarhistory.md) |
 | 03 | The sampling axis | ln(1 + z_E) on the axis, exact-multiple grid, absolute lookup, ln(1 + z_J) per sample; format 4 | Opus | ✅ | ✅ | `bd9ae42` | [`logs/03-the-sampling-axis.md`](logs/03-the-sampling-axis.md) |
-| 04 | The model interface | `AbstractModel`, `ExponentialModel`, `RealizedModel`; consumers on it via an adapter; φ_ref = 0 bitwise; the shift law | Opus | ✍️ | ✅ | this commit | [`logs/04-the-model-interface.md`](logs/04-the-model-interface.md) |
+| 04 | The model interface | `AbstractModel`, `ExponentialModel`, `RealizedModel`; consumers on it via an adapter; φ_ref = 0 bitwise; the shift law | Opus | ✍️ | ✅ | `597a215` | [`logs/04-the-model-interface.md`](logs/04-the-model-interface.md) |
 | 05 | The Planck mass | one reduced Planck mass from PRyMordial's G_N in three unit systems; consistency tests | Sonnet | ✍️ | ⬜ | — | — |
 | 06 | The tuning layer | `integrate_history` and `tune_history`: secant, seed, residuals, failure reasons, progress lines | Opus | ✍️ | ⬜ | — | — |
 | 07 | The store | `ExponentialModel` table; `ScalarHistory`'s key and tuned outputs; format 5; `VERSION_LABEL` 2026.7.0; writers and readers moved | Opus | ✍️ | ⬜ | — | — |
@@ -57,6 +57,9 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
   rulings were corrected after dispatch (§5.3).
 - [`orchestrator/prompt-03.md`](orchestrator/prompt-03.md) (`9997eef`), used for 03. One gap in its
   rulings (a fixture of `test_compare_stores.py`) was ruled after the agent stopped (§5.4).
+- [`orchestrator/prompt-04.md`](orchestrator/prompt-04.md) (`a0ca6a1`), used for 04. Two gaps in its
+  rulings were ruled after the agent stopped: the second stand-in in `test_adiabatic_mass.py`, and
+  test (c)'s criterion at the T_J turning points. Its breakage 1 was a bitwise no-op (§5.5).
 
 ### 1.1 Items
 
@@ -65,7 +68,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 | 01 | X1 the golden history · X2 the classes deleted · X3 the registries · X4 the tests · X5 format 2 |
 | 02 | N1 the code, tables, columns and drop group · N2 format 3 · N3 the current documents · N4 the run scripts left as records |
 | 03 | Z1 the concept ✅ · Z2 the factory and format 4 ✅ · Z3 the grid ✅ · Z4 the sampling ✅ · Z5 ln(1 + z_J) ✅ · Z6 the readers ✅ · Z7 the value factory's issues ✅ (all landed in `bd9ae42`) |
-| 04 | M1 `AbstractModel` ✅ · M2 `RealizedModel` ✅ · M3 `ExponentialModel` ✅ · M4 the consumers ✅ · M5 the adapter ✅ · M6 the unread properties ✅ · M7 the tests ✅ (all landed in this commit) |
+| 04 | M1 `AbstractModel` ✅ · M2 `RealizedModel` ✅ · M3 `ExponentialModel` ✅ · M4 the consumers ✅ · M5 the adapter ✅ · M6 the unread properties ✅ · M7 the tests ✅ (all landed in `597a215`) |
 | 05 | K1 one constant · K2 the three unit systems · K3 the tests |
 | 06 | T1 `integrate_history` · T2 the residuals · T3 the secant and its guards · T4 the seed · T5 the failures · T6 progress · T7 the outputs |
 | 07 | S1 the model's table · S2 the key · S3 the outputs · S4 the compute path · S5 `main.py` · S6 the readers · S7 format 5 and 2026.7.0 · S8 the tests |
@@ -130,7 +133,7 @@ from `.documents/OPEN_ISSUES.md` §1.15.
 | Issue | Its board | Prompt | Why here |
 |---|---|---|---|
 | `[00-declare-reflects-at-origin-for-the-other-potentials]` | `integrator-remediation` | 01 — closed (`a1c88b6`) | moot once the four other potentials are deleted |
-| `[00-region-properties-on-the-potentials-become-unread]` | `integrator-remediation` | 04 — closed (this commit) | `AbstractModel` does not carry the properties over |
+| `[00-region-properties-on-the-potentials-become-unread]` | `integrator-remediation` | 04 — closed (`597a215`) | `AbstractModel` does not carry the properties over |
 | `[01-scalarmodelvalue-build-checks-the-stored-phi-against-pi]` | `dk-and-rpk-migration` | 03 — closed (`bd9ae42`) | the value factory is rewritten for the axis |
 | `[05-the-value-factory-compares-stored-phi-against-pi]` | `science-readiness` | 03 — closed (`bd9ae42`) | the same defect, opened twice |
 | `[09-redshift-lookup-at-zero-takes-abs-of-the-comparison]` | `dk-and-rpk-migration` | 03 — closed (`bd9ae42`) | the lookup moves to ln(1 + z) by absolute difference |
@@ -153,7 +156,7 @@ from `.documents/OPEN_ISSUES.md` §1.15.
   the redshift lookup matches ln(1 + z) by absolute difference below 1e-10 in one branch, and a test
   shows that a lookup at 0 does not match a row at −1e-6. The entry, with its **Resolved** line, is
   in `dk-and-rpk-migration`'s §4; its row is deleted from `.documents/OPEN_ISSUES.md` §1.15.
-- `[00-region-properties-on-the-potentials-become-unread]` — closed by prompt 04 (this commit): the
+- `[00-region-properties-on-the-potentials-become-unread]` — closed by prompt 04 (`597a215`): the
   five region properties are deleted from `AbstractPotential` and `ExponentialPotential`, and
   `default_max_step` from `ExponentialPotential`; the witness grep (note 04, ruling 12) finds
   nothing. The entry, with its **Resolved** line, is in `integrator-remediation`'s §4; its row is
@@ -450,7 +453,7 @@ pass.
 
 ### 5.5 After prompt 04 (2026-10-25)
 
-Prompt 04 landed in this commit (log [`logs/04-the-model-interface.md`](logs/04-the-model-interface.md)),
+Prompt 04 landed in `597a215` (log [`logs/04-the-model-interface.md`](logs/04-the-model-interface.md)),
 dispatched with orchestrator note 04, whose sixteen rulings govern, and with two more rulings made
 after a stop (below).
 - **M1–M3.** `CosmologyConcepts/Models/`:
@@ -517,3 +520,53 @@ after a stop (below).
   passed in both after-runs: in the suite, and alone in 28.4 s (load 11). The orchestrator ruled it
   not a stop: it is recorded in the log's "Observations not acted on", no issue is opened, and the
   test is not edited.
+
+**Orchestrator review of prompt 04 (2026-10-25).** Against `597a215`, by note 04's ten checks. All
+pass.
+- **Scope.** 24 files: seven added, 17 modified, none deleted; only note 04's §2 files.
+  `pipeline_selection.py`, `main.py`, `plot_by_beta.py`, `plot_ScalarHistory.py`,
+  `extract_common.py` and `ComputeTargets/BBNData.py` are unchanged. The tree is clean, and
+  `git worktree list` shows only the main checkout.
+- **The golden history.** `ComputeTargets/tests/data/` is unchanged. The orchestrator ran
+  `build_record()` at `597a215` in the scratchpad, and both histories equal
+  `golden_history_03.json`'s records, with `first_difference` empty. `test_golden_history` passed
+  in the suite.
+- **The expressions.** `ExponentialModel`'s hooks were read line by line against `a0ca6a1`'s
+  `ExponentialPotential` and `ExponentialCoupling`. They are the same expressions with
+  `_log_Lambda_4` replaced by the normalization, and the adapter's normalization is
+  `4.0 * log(float(potential._Lambda))`. Test (a) asserts with `assertEqual`.
+- **φ_ref.** It enters only `RealizedModel.__init__` (`_log_Omega_ref`) and
+  `RealizedModel.log_Omega`, and no hook takes it. Test (b) runs on `_MinimalModel` as well.
+- **The identities, rerun** through the realized model by the orchestrator's own probe. Eq. 7:
+  4.251e-14 (β = 1.5) and 6.875e-14 (β = 5.5). The shift law, formed directly at every sample of
+  both histories: 2.69e-14 and 3.08e-14. Both agree with note 04's §0 and with the log.
+- **The seeds and the minimum.** `ExponentialModel.seed` gives the following:
+  - β = 1.5, M = 1e-3: `tracking`, Λ = 2.110131124 meV;
+  - β = 1.5, M = 0.5: `static`, 1.943956227 meV;
+  - β = 3, M = 0.1: `static`, 2.050746635 meV;
+  - β = −1.5, and n = 2: `plain`, φ_ref 0.
+
+  Each equals note 04's §0 table. `effective_minimum` at β = 1.5 (Λ = 2.125913 meV, φ₀ = 0.0334 M_P)
+  agrees with the orchestrator's own bisection to 1.2e-15 (φ_min/φ₀ = 1.042).
+- **The consumers.** The remaining `potential` and `coupling` names in the compute layer and the two
+  tools are the rows kept on the objects, the adapter, labels, comments and the tools' row
+  construction. No computation reads a row. `main.py --help` exits 0.
+- **M6.** The witness grep finds nothing (exit 1). The issue is in `integrator-remediation`'s §4
+  with its **Resolved** line, and the index row is gone (24 open, the clauses and the date
+  correct).
+- **The breakages.** The log's three diffs were extracted and replayed in `bash`, against
+  `test_model_interface` and `test_golden_history`, and each was reverted with the tree clean.
+  - Breakage 1 (the one-ulp shift) fails (a) and both golden histories.
+  - Breakages 2 and 3 each fail (c) and (b), for both models.
+- **Breakage 1 as ruled was the note's error.** The orchestrator confirmed that
+  `log(exp(4.0 * log(1 meV)))` equals `4.0 * log(1 meV)` bitwise (`-0x1.17df23d5ed618p+8`). The
+  agent's substitution of a one-ulp shift is accepted as recorded (log Deviation 16).
+- **The suites** at `597a215`, serially, at load 6–35: 18; 61 + 144; 86; 93; 61, all passing.
+  `test_prym_passenger`'s wall-clock test passed. `black --check` passes on the 19 Python files.
+- **Residue, fixed in the follow-up commit.**
+  - "this commit" becomes `597a215` in the log (×5), on this board (×6) and on the
+    `integrator-remediation` board (×1).
+  - Note 04 is listed in §1, and the status line is updated.
+- **Not residue, recorded only.** The log's observations are left as they are, with no issue
+  opened: the dated audit harness, the unread `default_abs_tol`/`default_rel_tol`, the
+  diagnostic's "potential" label, and §7.2 of `architecture-summary.md` (10's).
