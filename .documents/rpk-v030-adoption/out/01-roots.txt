@@ -1,0 +1,97 @@
+# rpk-v030-adoption prompt 01: the five roots, 2026-10-25
+
+Each block: the command, uptime before and after, the verdict lines, the exit code and wall time.
+The full output of each run is in the agent's scratch directory.
+
+## 2.1 before the edits (raypoolkit v0.2.0 installed)
+
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .
+uptime before:  1:49  up 20 days, 34 mins, 2 users, load averages: 15.47 21.38 40.18
+Ran 18 tests in 156.529s
+OK
+exit 0; wall 159s
+uptime after:  1:51  up 20 days, 36 mins, 2 users, load averages: 49.34 32.00 41.15
+
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'
+uptime before:  1:51  up 20 days, 36 mins, 2 users, load averages: 47.92 32.26 41.13
+Ran 61 tests in 162.651s
+OK
+exit 0; wall 173s
+uptime after:  1:54  up 20 days, 39 mins, 2 users, load averages: 45.49 45.27 45.66
+
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'
+uptime before:  1:54  up 20 days, 39 mins, 2 users, load averages: 44.65 45.10 45.60
+Ran 115 tests in 106.382s
+OK
+exit 0; wall 109s
+uptime after:  1:56  up 20 days, 41 mins, 2 users, load averages: 27.19 38.71 43.04
+
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .
+uptime before:  1:56  up 20 days, 41 mins, 2 users, load averages: 27.57 38.60 42.97
+Ran 78 tests in 6.800s
+OK
+exit 0; wall 8s
+uptime after:  1:56  up 20 days, 41 mins, 2 users, load averages: 27.69 38.44 42.89
+
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .
+uptime before:  1:56  up 20 days, 41 mins, 2 users, load averages: 27.69 38.44 42.89
+Ran 84 tests in 15.363s
+OK
+exit 0; wall 17s
+uptime after:  1:57  up 20 days, 42 mins, 2 users, load averages: 23.28 36.74 42.18
+
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .
+uptime before:  1:57  up 20 days, 42 mins, 2 users, load averages: 23.28 36.74 42.18
+Ran 61 tests in 19.153s
+OK
+exit 0; wall 21s
+uptime after:  1:57  up 20 days, 42 mins, 2 users, load averages: 20.43 35.21 41.50
+
+## 2.7 after the edits (raypoolkit v0.3.0 installed; the script, the new test and CLAUDE.md changed)
+
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .
+uptime before:  2:06  up 20 days, 52 mins, 2 users, load averages: 12.07 20.05 30.68
+Ran 18 tests in 68.116s
+OK
+exit 0; wall 70s
+uptime after:  2:08  up 20 days, 53 mins, 2 users, load averages: 12.34 18.68 29.34
+
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'
+uptime before:  2:08  up 20 days, 53 mins, 2 users, load averages: 12.34 18.68 29.34
+Ran 61 tests in 95.892s
+OK
+exit 0; wall 98s
+uptime after:  2:09  up 20 days, 54 mins, 2 users, load averages: 11.66 16.50 27.30
+
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'
+uptime before:  2:09  up 20 days, 54 mins, 2 users, load averages: 11.85 16.46 27.22
+Ran 115 tests in 102.295s
+OK
+exit 0; wall 104s
+uptime after:  2:11  up 20 days, 56 mins, 2 users, load averages: 12.02 14.66 25.24
+
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .
+uptime before:  2:11  up 20 days, 56 mins, 2 users, load averages: 12.82 14.78 25.22
+Ran 78 tests in 7.759s
+OK
+exit 0; wall 10s
+uptime after:  2:11  up 20 days, 56 mins, 2 users, load averages: 15.36 15.25 25.26
+
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .
+uptime before:  2:11  up 20 days, 56 mins, 2 users, load averages: 15.36 15.25 25.26
+Ran 93 tests in 26.134s
+OK
+exit 0; wall 27s
+uptime after:  2:12  up 20 days, 57 mins, 2 users, load averages: 13.65 14.92 24.80
+
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .
+uptime before:  2:12  up 20 days, 57 mins, 2 users, load averages: 13.65 14.92 24.80
+Ran 61 tests in 19.059s
+OK
+exit 0; wall 20s
+uptime after:  2:12  up 20 days, 57 mins, 2 users, load averages: 12.78 14.63 24.47
+
+$ ./venv/bin/black --check tools/tests/test_ray_cluster_lock.py
+All done! ✨ 🍰 ✨
+1 file would be left unchanged.
+(exit 0)

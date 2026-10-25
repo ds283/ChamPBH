@@ -1,0 +1,484 @@
+# rpk-v030-adoption prompt 01: pip and provenance, 2026-10-25
+
+## 2.1 before the install
+
+$ ./venv/bin/pip freeze
+aiohappyeyeballs==2.6.1
+aiohttp==3.13.3
+aiohttp-cors==0.8.1
+aiosignal==1.4.0
+annotated-types==0.7.0
+attrs==25.4.0
+black==26.1.0
+certifi==2026.1.4
+cffi==2.0.0
+charset-normalizer==3.4.4
+click==8.3.1
+colorful==0.5.8
+ConfigArgParse==1.7.1
+contourpy==1.3.3
+cryptography==46.0.4
+cycler==0.12.1
+datastorekit @ git+https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005
+diffrax==0.7.0
+distlib==0.4.0
+equinox==0.13.2
+filelock==3.20.3
+fonttools==4.61.1
+frozenlist==1.8.0
+google-api-core==2.29.0
+google-auth==2.48.0
+googleapis-common-protos==1.72.0
+grpcio==1.78.0
+gvar==13.1.9
+idna==3.11
+importlib_metadata==8.7.1
+jax==0.9.0
+jaxlib==0.9.0
+jaxtyping==0.3.5
+jsonschema==4.26.0
+jsonschema-specifications==2025.9.1
+kiwisolver==1.4.9
+lineax==0.0.8
+littleutils==0.2.4
+llvmlite==0.46.0
+matplotlib==3.10.8
+ml_dtypes==0.5.4
+msgpack==1.1.2
+multidict==6.7.1
+mypy_extensions==1.1.0
+numba==0.63.1
+numdifftools==0.9.42
+numpy==2.3.5
+numpy-typing-compat==20251206.2.3
+opencensus==0.11.4
+opencensus-context==0.1.3
+opentelemetry-api==1.39.1
+opentelemetry-exporter-prometheus==0.60b1
+opentelemetry-proto==1.39.1
+opentelemetry-sdk==1.39.1
+opentelemetry-semantic-conventions==0.60b1
+opt_einsum==3.4.0
+optimistix==0.0.11
+optype==0.15.0
+packaging==26.0
+pandas==3.0.0
+pathspec==1.0.4
+pillow==12.1.0
+platformdirs==4.5.1
+prometheus_client==0.24.1
+propcache==0.4.1
+proto-plus==1.27.1
+protobuf==6.33.5
+py-spy==0.4.1
+pyasn1==0.6.2
+pyasn1_modules==0.4.2
+pycparser==3.0
+pydantic==2.12.5
+pydantic_core==2.41.5
+pyparsing==3.3.2
+python-dateutil==2.9.0.post0
+pytokens==0.4.1
+pytz==2025.2
+PyYAML==6.0.3
+ray==2.53.0
+raypoolkit @ git+https://github.com/ds283/RayPoolKit@eaef0ce60e2fc354bb32f0ad576010e6a83c1976
+referencing==0.37.0
+requests==2.32.5
+rpds-py==0.30.0
+rsa==4.9.1
+runregistrykit @ git+https://github.com/ds283/RunRegistryKit@0bae3a3c501a8264ee4be5bc24f06422af38720f
+scipy==1.17.0
+scipy-stubs==1.17.0.2
+seaborn==0.13.2
+setuptools==82.0.0
+six==1.17.0
+smart_open==7.5.0
+SQLAlchemy==2.0.46
+typing-inspection==0.4.2
+typing_extensions==4.15.0
+tzdata==2025.3
+urllib3==2.6.3
+vegas==6.4.1
+virtualenv==20.36.1
+wadler_lindig==0.1.7
+wrapt==2.1.1
+yarl==1.22.0
+zipp==3.23.0
+
+$ PYTHONPATH=. ./venv/bin/python -c "import json, utilities; print(json.dumps(utilities.installed_package_provenance(), indent=2, sort_keys=True))"
+{
+  "datastorekit": {
+    "commit": "c8570e849334d09085bbd84876095fc9e22bd005",
+    "editable": false,
+    "requested_revision": "v0.4.0",
+    "url": "https://github.com/ds283/DatastoreKit",
+    "version": "0.4.0"
+  },
+  "raypoolkit": {
+    "commit": "eaef0ce60e2fc354bb32f0ad576010e6a83c1976",
+    "editable": false,
+    "requested_revision": "v0.2.0",
+    "url": "https://github.com/ds283/RayPoolKit",
+    "version": "0.2.0"
+  }
+}
+
+## 2.2 the pin moved (requirements.txt:80 at v0.3.0)
+
+$ git diff requirements.txt
+diff --git a/requirements.txt b/requirements.txt
+index 4645802..3c4d6eb 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -77,7 +77,7 @@ pytokens==0.4.1
+ pytz==2025.2
+ PyYAML==6.0.3
+ ray==2.53.0
+-raypoolkit @ git+https://github.com/ds283/RayPoolKit@v0.2.0
++raypoolkit @ git+https://github.com/ds283/RayPoolKit@v0.3.0
+ referencing==0.37.0
+ requests==2.32.5
+ rpds-py==0.30.0
+
+$ ./venv/bin/pip install --dry-run -r requirements.txt   (exit 0)
+Collecting datastorekit @ git+https://github.com/ds283/DatastoreKit@v0.4.0 (from -r requirements.txt (line 17))
+  Cloning https://github.com/ds283/DatastoreKit (to revision v0.4.0) to /private/var/folders/tm/y9rd_z8x1ks3m09yhkjc0h7800128f/T/pip-install-ubjsx7nl/datastorekit_bcafaf7bc1e2421dbec24ec9a34e79e5
+  Running command git clone --filter=blob:none --quiet https://github.com/ds283/DatastoreKit /private/var/folders/tm/y9rd_z8x1ks3m09yhkjc0h7800128f/T/pip-install-ubjsx7nl/datastorekit_bcafaf7bc1e2421dbec24ec9a34e79e5
+  Running command git checkout -q 8e7c1d77b3792b57b98983e84b99fc68ab88cb89
+  Resolved https://github.com/ds283/DatastoreKit to commit 8e7c1d77b3792b57b98983e84b99fc68ab88cb89
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting raypoolkit @ git+https://github.com/ds283/RayPoolKit@v0.3.0 (from -r requirements.txt (line 80))
+  Cloning https://github.com/ds283/RayPoolKit (to revision v0.3.0) to /private/var/folders/tm/y9rd_z8x1ks3m09yhkjc0h7800128f/T/pip-install-ubjsx7nl/raypoolkit_dcafa353733e41eaafb11c4b4aa15ca1
+  Running command git clone --filter=blob:none --quiet https://github.com/ds283/RayPoolKit /private/var/folders/tm/y9rd_z8x1ks3m09yhkjc0h7800128f/T/pip-install-ubjsx7nl/raypoolkit_dcafa353733e41eaafb11c4b4aa15ca1
+  Running command git checkout -q caf00765f33dbad84fe2e758bfd3c0318156af3d
+  Resolved https://github.com/ds283/RayPoolKit to commit caf00765f33dbad84fe2e758bfd3c0318156af3d
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting runregistrykit @ git+https://github.com/ds283/RunRegistryKit@v0.2.0 (from runregistrykit[stores] @ git+https://github.com/ds283/RunRegistryKit@v0.2.0->-r requirements.txt (line 85))
+  Cloning https://github.com/ds283/RunRegistryKit (to revision v0.2.0) to /private/var/folders/tm/y9rd_z8x1ks3m09yhkjc0h7800128f/T/pip-install-ubjsx7nl/runregistrykit_9804ab8fa0714abb98ae8d12c6fdab5e
+  Running command git clone --filter=blob:none --quiet https://github.com/ds283/RunRegistryKit /private/var/folders/tm/y9rd_z8x1ks3m09yhkjc0h7800128f/T/pip-install-ubjsx7nl/runregistrykit_9804ab8fa0714abb98ae8d12c6fdab5e
+  Running command git checkout -q 895e3c7013ae4887011d435f3e800b8f1697a1de
+  Resolved https://github.com/ds283/RunRegistryKit to commit 895e3c7013ae4887011d435f3e800b8f1697a1de
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Requirement already satisfied: aiohappyeyeballs==2.6.1 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 1)) (2.6.1)
+Requirement already satisfied: aiohttp==3.13.3 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 2)) (3.13.3)
+Requirement already satisfied: aiohttp-cors==0.8.1 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 3)) (0.8.1)
+Requirement already satisfied: aiosignal==1.4.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 4)) (1.4.0)
+Requirement already satisfied: annotated-types==0.7.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 5)) (0.7.0)
+Requirement already satisfied: attrs==25.4.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 6)) (25.4.0)
+Requirement already satisfied: black==26.1.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 7)) (26.1.0)
+Requirement already satisfied: certifi==2026.1.4 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 8)) (2026.1.4)
+Requirement already satisfied: cffi==2.0.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 9)) (2.0.0)
+Requirement already satisfied: charset-normalizer==3.4.4 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 10)) (3.4.4)
+Requirement already satisfied: click==8.3.1 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 11)) (8.3.1)
+Requirement already satisfied: colorful==0.5.8 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 12)) (0.5.8)
+Requirement already satisfied: ConfigArgParse==1.7.1 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 13)) (1.7.1)
+Requirement already satisfied: contourpy==1.3.3 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 14)) (1.3.3)
+Requirement already satisfied: cryptography==46.0.4 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 15)) (46.0.4)
+Requirement already satisfied: cycler==0.12.1 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 16)) (0.12.1)
+Requirement already satisfied: diffrax==0.7.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 18)) (0.7.0)
+Requirement already satisfied: distlib==0.4.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 19)) (0.4.0)
+Requirement already satisfied: equinox==0.13.2 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 20)) (0.13.2)
+Requirement already satisfied: filelock==3.20.3 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 21)) (3.20.3)
+Requirement already satisfied: fonttools==4.61.1 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 22)) (4.61.1)
+Requirement already satisfied: frozenlist==1.8.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 23)) (1.8.0)
+Requirement already satisfied: google-api-core==2.29.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 24)) (2.29.0)
+Requirement already satisfied: google-auth==2.48.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 25)) (2.48.0)
+Requirement already satisfied: googleapis-common-protos==1.72.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 26)) (1.72.0)
+Requirement already satisfied: grpcio==1.78.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 27)) (1.78.0)
+Requirement already satisfied: gvar==13.1.9 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 28)) (13.1.9)
+Requirement already satisfied: idna==3.11 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 29)) (3.11)
+Requirement already satisfied: importlib_metadata==8.7.1 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 30)) (8.7.1)
+Requirement already satisfied: jax==0.9.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 31)) (0.9.0)
+Requirement already satisfied: jaxlib==0.9.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 32)) (0.9.0)
+Requirement already satisfied: jaxtyping==0.3.5 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 33)) (0.3.5)
+Requirement already satisfied: jsonschema==4.26.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 34)) (4.26.0)
+Requirement already satisfied: jsonschema-specifications==2025.9.1 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 35)) (2025.9.1)
+Requirement already satisfied: kiwisolver==1.4.9 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 36)) (1.4.9)
+Requirement already satisfied: lineax==0.0.8 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 37)) (0.0.8)
+Requirement already satisfied: littleutils==0.2.4 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 38)) (0.2.4)
+Requirement already satisfied: llvmlite==0.46.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 39)) (0.46.0)
+Requirement already satisfied: matplotlib==3.10.8 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 40)) (3.10.8)
+Requirement already satisfied: ml_dtypes==0.5.4 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 41)) (0.5.4)
+Requirement already satisfied: msgpack==1.1.2 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 42)) (1.1.2)
+Requirement already satisfied: multidict==6.7.1 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 43)) (6.7.1)
+Requirement already satisfied: mypy_extensions==1.1.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 44)) (1.1.0)
+Requirement already satisfied: numba==0.63.1 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 45)) (0.63.1)
+Requirement already satisfied: numdifftools==0.9.42 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 46)) (0.9.42)
+Requirement already satisfied: numpy==2.3.5 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 47)) (2.3.5)
+Requirement already satisfied: numpy-typing-compat==20251206.2.3 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 48)) (20251206.2.3)
+Requirement already satisfied: opencensus==0.11.4 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 49)) (0.11.4)
+Requirement already satisfied: opencensus-context==0.1.3 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 50)) (0.1.3)
+Requirement already satisfied: opentelemetry-api==1.39.1 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 51)) (1.39.1)
+Requirement already satisfied: opentelemetry-exporter-prometheus==0.60b1 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 52)) (0.60b1)
+Requirement already satisfied: opentelemetry-proto==1.39.1 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 53)) (1.39.1)
+Requirement already satisfied: opentelemetry-sdk==1.39.1 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 54)) (1.39.1)
+Requirement already satisfied: opentelemetry-semantic-conventions==0.60b1 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 55)) (0.60b1)
+Requirement already satisfied: opt_einsum==3.4.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 56)) (3.4.0)
+Requirement already satisfied: optimistix==0.0.11 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 57)) (0.0.11)
+Requirement already satisfied: optype==0.15.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 58)) (0.15.0)
+Requirement already satisfied: packaging==26.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 59)) (26.0)
+Requirement already satisfied: pandas==3.0.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 60)) (3.0.0)
+Requirement already satisfied: pathspec==1.0.4 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 61)) (1.0.4)
+Requirement already satisfied: pillow==12.1.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 62)) (12.1.0)
+Requirement already satisfied: platformdirs==4.5.1 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 63)) (4.5.1)
+Requirement already satisfied: prometheus_client==0.24.1 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 64)) (0.24.1)
+Requirement already satisfied: propcache==0.4.1 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 65)) (0.4.1)
+Requirement already satisfied: proto-plus==1.27.1 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 66)) (1.27.1)
+Requirement already satisfied: protobuf==6.33.5 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 67)) (6.33.5)
+Requirement already satisfied: py-spy==0.4.1 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 68)) (0.4.1)
+Requirement already satisfied: pyasn1==0.6.2 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 69)) (0.6.2)
+Requirement already satisfied: pyasn1_modules==0.4.2 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 70)) (0.4.2)
+Requirement already satisfied: pycparser==3.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 71)) (3.0)
+Requirement already satisfied: pydantic==2.12.5 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 72)) (2.12.5)
+Requirement already satisfied: pydantic_core==2.41.5 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 73)) (2.41.5)
+Requirement already satisfied: pyparsing==3.3.2 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 74)) (3.3.2)
+Requirement already satisfied: python-dateutil==2.9.0.post0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 75)) (2.9.0.post0)
+Requirement already satisfied: pytokens==0.4.1 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 76)) (0.4.1)
+Requirement already satisfied: pytz==2025.2 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 77)) (2025.2)
+Requirement already satisfied: PyYAML==6.0.3 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 78)) (6.0.3)
+Requirement already satisfied: ray==2.53.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 79)) (2.53.0)
+Requirement already satisfied: referencing==0.37.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 81)) (0.37.0)
+Requirement already satisfied: requests==2.32.5 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 82)) (2.32.5)
+Requirement already satisfied: rpds-py==0.30.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 83)) (0.30.0)
+Requirement already satisfied: rsa==4.9.1 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 84)) (4.9.1)
+Requirement already satisfied: scipy==1.17.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 86)) (1.17.0)
+Requirement already satisfied: scipy-stubs==1.17.0.2 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 87)) (1.17.0.2)
+Requirement already satisfied: seaborn==0.13.2 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 88)) (0.13.2)
+Requirement already satisfied: setuptools==82.0.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 89)) (82.0.0)
+Requirement already satisfied: six==1.17.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 90)) (1.17.0)
+Requirement already satisfied: smart_open==7.5.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 91)) (7.5.0)
+Requirement already satisfied: SQLAlchemy==2.0.46 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 92)) (2.0.46)
+Requirement already satisfied: typing-inspection==0.4.2 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 93)) (0.4.2)
+Requirement already satisfied: typing_extensions==4.15.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 94)) (4.15.0)
+Requirement already satisfied: tzdata==2025.3 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 95)) (2025.3)
+Requirement already satisfied: urllib3==2.6.3 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 96)) (2.6.3)
+Requirement already satisfied: vegas==6.4.1 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 97)) (6.4.1)
+Requirement already satisfied: virtualenv==20.36.1 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 98)) (20.36.1)
+Requirement already satisfied: wadler_lindig==0.1.7 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 99)) (0.1.7)
+Requirement already satisfied: wrapt==2.1.1 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 100)) (2.1.1)
+Requirement already satisfied: yarl==1.22.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 101)) (1.22.0)
+Requirement already satisfied: zipp==3.23.0 in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 102)) (3.23.0)
+Would install raypoolkit-0.3.0
+
+$ ./venv/bin/pip install -r requirements.txt   (exit 0; the lines other than "Requirement already satisfied")
+Collecting datastorekit @ git+https://github.com/ds283/DatastoreKit@v0.4.0 (from -r requirements.txt (line 17))
+  Cloning https://github.com/ds283/DatastoreKit (to revision v0.4.0) to /private/var/folders/tm/y9rd_z8x1ks3m09yhkjc0h7800128f/T/pip-install-j1t6bqhv/datastorekit_097375a780694065ade13135b9d40ff8
+  Running command git clone --filter=blob:none --quiet https://github.com/ds283/DatastoreKit /private/var/folders/tm/y9rd_z8x1ks3m09yhkjc0h7800128f/T/pip-install-j1t6bqhv/datastorekit_097375a780694065ade13135b9d40ff8
+  Running command git checkout -q 8e7c1d77b3792b57b98983e84b99fc68ab88cb89
+  Resolved https://github.com/ds283/DatastoreKit to commit 8e7c1d77b3792b57b98983e84b99fc68ab88cb89
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting raypoolkit @ git+https://github.com/ds283/RayPoolKit@v0.3.0 (from -r requirements.txt (line 80))
+  Cloning https://github.com/ds283/RayPoolKit (to revision v0.3.0) to /private/var/folders/tm/y9rd_z8x1ks3m09yhkjc0h7800128f/T/pip-install-j1t6bqhv/raypoolkit_ce0ca7efce474cbd85b7fe0785fd866e
+  Running command git clone --filter=blob:none --quiet https://github.com/ds283/RayPoolKit /private/var/folders/tm/y9rd_z8x1ks3m09yhkjc0h7800128f/T/pip-install-j1t6bqhv/raypoolkit_ce0ca7efce474cbd85b7fe0785fd866e
+  Running command git checkout -q caf00765f33dbad84fe2e758bfd3c0318156af3d
+  Resolved https://github.com/ds283/RayPoolKit to commit caf00765f33dbad84fe2e758bfd3c0318156af3d
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting runregistrykit @ git+https://github.com/ds283/RunRegistryKit@v0.2.0 (from runregistrykit[stores] @ git+https://github.com/ds283/RunRegistryKit@v0.2.0->-r requirements.txt (line 85))
+  Cloning https://github.com/ds283/RunRegistryKit (to revision v0.2.0) to /private/var/folders/tm/y9rd_z8x1ks3m09yhkjc0h7800128f/T/pip-install-j1t6bqhv/runregistrykit_627aed95f8b447baa751d71bd2e6d60a
+  Running command git clone --filter=blob:none --quiet https://github.com/ds283/RunRegistryKit /private/var/folders/tm/y9rd_z8x1ks3m09yhkjc0h7800128f/T/pip-install-j1t6bqhv/runregistrykit_627aed95f8b447baa751d71bd2e6d60a
+  Running command git checkout -q 895e3c7013ae4887011d435f3e800b8f1697a1de
+  Resolved https://github.com/ds283/RunRegistryKit to commit 895e3c7013ae4887011d435f3e800b8f1697a1de
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: raypoolkit
+  Building wheel for raypoolkit (pyproject.toml): started
+  Building wheel for raypoolkit (pyproject.toml): finished with status 'done'
+  Created wheel for raypoolkit: filename=raypoolkit-0.3.0-py3-none-any.whl size=21368 sha256=a0177d04e2a5675165f29f094eac08a45bb2fc3d74ea5bc8d3f5d2f8a80223f4
+  Stored in directory: /private/var/folders/tm/y9rd_z8x1ks3m09yhkjc0h7800128f/T/pip-ephem-wheel-cache-6glizqrg/wheels/ea/13/e1/640db7f3c27313c2d085eca352b883e7815c70a372efb11971
+Successfully built raypoolkit
+Installing collected packages: raypoolkit
+  Attempting uninstall: raypoolkit
+    Found existing installation: raypoolkit 0.2.0
+    Uninstalling raypoolkit-0.2.0:
+      Successfully uninstalled raypoolkit-0.2.0
+Successfully installed raypoolkit-0.3.0
+(99 lines "Requirement already satisfied" omitted)
+
+Note: pip's "Resolved ... to commit caf00765..." names the annotated tag object of v0.3.0;
+the commit it points at is 67a75b97a656accb98195a4bda93f64e6a5f3fb2 (git ls-remote: refs/tags/v0.3.0^{}),
+which pip freeze and the provenance record.
+
+## 2.2 after the install
+
+$ ./venv/bin/pip freeze
+aiohappyeyeballs==2.6.1
+aiohttp==3.13.3
+aiohttp-cors==0.8.1
+aiosignal==1.4.0
+annotated-types==0.7.0
+attrs==25.4.0
+black==26.1.0
+certifi==2026.1.4
+cffi==2.0.0
+charset-normalizer==3.4.4
+click==8.3.1
+colorful==0.5.8
+ConfigArgParse==1.7.1
+contourpy==1.3.3
+cryptography==46.0.4
+cycler==0.12.1
+datastorekit @ git+https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005
+diffrax==0.7.0
+distlib==0.4.0
+equinox==0.13.2
+filelock==3.20.3
+fonttools==4.61.1
+frozenlist==1.8.0
+google-api-core==2.29.0
+google-auth==2.48.0
+googleapis-common-protos==1.72.0
+grpcio==1.78.0
+gvar==13.1.9
+idna==3.11
+importlib_metadata==8.7.1
+jax==0.9.0
+jaxlib==0.9.0
+jaxtyping==0.3.5
+jsonschema==4.26.0
+jsonschema-specifications==2025.9.1
+kiwisolver==1.4.9
+lineax==0.0.8
+littleutils==0.2.4
+llvmlite==0.46.0
+matplotlib==3.10.8
+ml_dtypes==0.5.4
+msgpack==1.1.2
+multidict==6.7.1
+mypy_extensions==1.1.0
+numba==0.63.1
+numdifftools==0.9.42
+numpy==2.3.5
+numpy-typing-compat==20251206.2.3
+opencensus==0.11.4
+opencensus-context==0.1.3
+opentelemetry-api==1.39.1
+opentelemetry-exporter-prometheus==0.60b1
+opentelemetry-proto==1.39.1
+opentelemetry-sdk==1.39.1
+opentelemetry-semantic-conventions==0.60b1
+opt_einsum==3.4.0
+optimistix==0.0.11
+optype==0.15.0
+packaging==26.0
+pandas==3.0.0
+pathspec==1.0.4
+pillow==12.1.0
+platformdirs==4.5.1
+prometheus_client==0.24.1
+propcache==0.4.1
+proto-plus==1.27.1
+protobuf==6.33.5
+py-spy==0.4.1
+pyasn1==0.6.2
+pyasn1_modules==0.4.2
+pycparser==3.0
+pydantic==2.12.5
+pydantic_core==2.41.5
+pyparsing==3.3.2
+python-dateutil==2.9.0.post0
+pytokens==0.4.1
+pytz==2025.2
+PyYAML==6.0.3
+ray==2.53.0
+raypoolkit @ git+https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2
+referencing==0.37.0
+requests==2.32.5
+rpds-py==0.30.0
+rsa==4.9.1
+runregistrykit @ git+https://github.com/ds283/RunRegistryKit@0bae3a3c501a8264ee4be5bc24f06422af38720f
+scipy==1.17.0
+scipy-stubs==1.17.0.2
+seaborn==0.13.2
+setuptools==82.0.0
+six==1.17.0
+smart_open==7.5.0
+SQLAlchemy==2.0.46
+typing-inspection==0.4.2
+typing_extensions==4.15.0
+tzdata==2025.3
+urllib3==2.6.3
+vegas==6.4.1
+virtualenv==20.36.1
+wadler_lindig==0.1.7
+wrapt==2.1.1
+yarl==1.22.0
+zipp==3.23.0
+
+$ diff <(pip freeze before) <(pip freeze after)
+80c80
+< raypoolkit @ git+https://github.com/ds283/RayPoolKit@eaef0ce60e2fc354bb32f0ad576010e6a83c1976
+---
+> raypoolkit @ git+https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2
+
+$ ./venv/bin/pip check
+No broken requirements found.
+(exit 0)
+
+$ PYTHONPATH=. ./venv/bin/python -c "import json, utilities; print(json.dumps(utilities.installed_package_provenance(), indent=2, sort_keys=True))"
+{
+  "datastorekit": {
+    "commit": "c8570e849334d09085bbd84876095fc9e22bd005",
+    "editable": false,
+    "requested_revision": "v0.4.0",
+    "url": "https://github.com/ds283/DatastoreKit",
+    "version": "0.4.0"
+  },
+  "raypoolkit": {
+    "commit": "67a75b97a656accb98195a4bda93f64e6a5f3fb2",
+    "editable": false,
+    "requested_revision": "v0.3.0",
+    "url": "https://github.com/ds283/RayPoolKit",
+    "version": "0.3.0"
+  }
+}
+
+$ ./venv/bin/python -m raypoolkit.rehearsal_lock --help
+usage: python -m raypoolkit.rehearsal_lock [-h]
+                                           {acquire,set-pid,release,status,ray-processes} ...
+
+The shared rehearsal lock. Never breaks, waits for or retries a lock; a held
+lock means stop and ask the user.
+
+positional arguments:
+  {acquire,set-pid,release,status,ray-processes}
+    acquire             take the lock (exit 3 if held or the old location
+                        exists, 4 if a process is alive)
+    set-pid             record a live pid in the caller's lock
+    release             release the caller's lock (exit 1 if refused)
+    status              the lock, its owner, the old location, and the
+                        processes
+    ray-processes       the processes of a temp dir (exit 1 if any)
+
+options:
+  -h, --help            show this help message and exit
+(exit 0)
