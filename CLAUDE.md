@@ -80,7 +80,7 @@ invariants that hold across all of them:
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .   # 18 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 176 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .   # 78 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 84 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 93 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .        # 61 tests
   ```
   `ComputeTargets/tests` takes about 200 s in one run, and longer on a loaded machine; a Bash call is
@@ -89,7 +89,8 @@ invariants that hold across all of them:
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 61 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 115 tests
   ```
-  (The counts are those of 2026-10-20.) They **must not
+  (The counts are those of 2026-10-20; `tools/tests`'s is of 2026-10-25, after `rpk-v030-adoption`
+  01.) They **must not
   need a Ray cluster or a persistent datastore**. A test may build a temporary
   SQLite datastore in a `tempfile` directory, through `datastorekit`'s undecorated actor
   (`standin_pool.DatastoreClass`) inside ChamPBH's stand-in cluster (`StoreFixtures/standin_pool.py`,
@@ -133,6 +134,18 @@ invariants that hold across all of them:
   start Ray without `--ray-address` and refuse `auto` outright (exit 2, before `ray.init`);
   `main.py --inventory` starts no Ray and needs none. **No one runs `ray stop`**, which stops every
   Ray process on the machine, other projects' builds included. The script's `--help` is the detail.
+- **The rehearsal lock.** It is the directory `~/.raypoolkit/rehearsal-lock`, shared with
+  StochasticInstantons and SecondaryGWKit and kept by `raypoolkit.rehearsal_lock` of the pinned
+  `raypoolkit` (its contract is RayPoolKit's `docs/rehearsal-lock.md` at `v0.3.0`). The script
+  takes it at `start` and releases it at `stop`, with ChamPBH's values (`--project ChamPBH
+  --ray-temp-dir /tmp/ray-cpbh --ray-address 127.0.0.1:6380`); `./venv/bin/python -m
+  raypoolkit.rehearsal_lock status` looks. **Exit 3 means stop and ask the user**: never wait,
+  retry or remove the lock. It comes also while the lock's location from before `v0.3.0` exists,
+  which `status` prints as `old location: PRESENT`. Exit 4: a process of the cluster is alive; run
+  `stop`. `stop` leaves the lock held while anything of the cluster is alive, and `status` shows
+  what; a lock whose owner pid is not alive and which lists no process is removed by the user, by
+  hand. **No shell command that runs the script names `/tmp/ray-cpbh`, and one that runs a lock
+  command naming it runs nothing else**: the lock would list that shell's other children.
 
 ## Long-running jobs — the run registry
 

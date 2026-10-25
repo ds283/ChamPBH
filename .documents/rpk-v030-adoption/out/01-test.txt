@@ -1,0 +1,211 @@
+# rpk-v030-adoption prompt 01: tools/tests/test_ray_cluster_lock.py, 2026-10-25
+
+## the module, on the finished script
+
+$ PYTHONPATH=. ./venv/bin/python -m unittest tools.tests.test_ray_cluster_lock -v
+uptime before:  2:04  up 20 days, 49 mins, 2 users, load averages: 19.50 26.30 34.90
+test_01_the_scripts_values_and_pin (tools.tests.test_ray_cluster_lock.RayClusterLockPaths.test_01_the_scripts_values_and_pin)
+Guards against the script's cluster values drifting (the lock compares them as given), ... ok
+test_02_status_on_a_free_lock (tools.tests.test_ray_cluster_lock.RayClusterLockPaths.test_02_status_on_a_free_lock)
+Guards against status not being the module's (its layout, the contract's section 8), ... ok
+test_03_start_while_another_project_holds_the_lock (tools.tests.test_ray_cluster_lock.RayClusterLockPaths.test_03_start_while_another_project_holds_the_lock)
+Guards against a start that goes on past a held lock (exit 3), or touches it. ... ok
+test_04_start_while_the_old_location_exists (tools.tests.test_ray_cluster_lock.RayClusterLockPaths.test_04_start_while_the_old_location_exists)
+Guards against a start that takes the new lock while the old one may be held. ... ok
+test_05_stop_while_another_project_holds_the_lock (tools.tests.test_ray_cluster_lock.RayClusterLockPaths.test_05_stop_while_another_project_holds_the_lock)
+Guards against a stop that signals ChamPBH's cluster while the lock is another ... ok
+test_06_start_while_a_process_of_the_cluster_is_alive (tools.tests.test_ray_cluster_lock.RayClusterLockPaths.test_06_start_while_a_process_of_the_cluster_is_alive)
+Guards against a start on top of a stale cluster: exit 4, the lock released again, ... ok
+test_07_start_whose_ray_start_fails (tools.tests.test_ray_cluster_lock.RayClusterLockPaths.test_07_start_whose_ray_start_fails)
+Guards against a failed ray start that leaves the lock held, and against ray start's ... ok
+test_08_start_with_no_gcs_server (tools.tests.test_ray_cluster_lock.RayClusterLockPaths.test_08_start_with_no_gcs_server)
+Guards against a start that leaves the lock held when ray start finds no gcs_server. ... ok
+test_09_the_cycle_through_the_module (tools.tests.test_ray_cluster_lock.RayClusterLockPaths.test_09_the_cycle_through_the_module)
+Guards against a start that records no gcs_server pid (so release would not wait for ... ok
+Ran 9 tests in 11.477s
+OK
+uptime after:  2:04  up 20 days, 49 mins, 2 users, load averages: 17.35 25.61 34.56
+
+## the deliberate breakage (README section 5, rule 8; prompt section 3.1)
+
+Each mutation is applied with git apply, checked with git apply -R --check, the module run, and
+the mutation reverted with git apply -R. The diff is exactly as applied.
+
+### M1
+
+```diff
+--- a/.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh
++++ b/.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh
+@@ -254,7 +254,7 @@
+     # cluster alive, a stale cluster (the lock released again); 1 the owner file unwritable; 2 usage.
+     # acquire makes the stale-cluster check itself, by the rule release will apply.
+     lock_cmd acquire --project "$LOCK_PROJECT" --purpose "$purpose" \
+-        --ray-temp-dir "$CPBH_TEMP_DIR" --ray-address "$CPBH_ADDRESS" || return $?
++        --ray-temp-dir "$CPBH_TEMP_DIR" --ray-address "$CPBH_ADDRESS"
+ 
+     # Prompt 05a, change 4: a held port is not ours to take. Without this, a ray start that fails
+     # on a foreign listener leaves a stop whose port check cannot pass, and the lock held.
+```
+
+git apply --check: ok
+applied
+git apply -R --check: ok
+uptime:  2:04  up 20 days, 49 mins, 2 users, load averages: 17.35 25.61 34.56
+exit 1
+FAIL: test_03_start_while_another_project_holds_the_lock (tools.tests.test_ray_cluster_lock.RayClusterLockPaths.test_03_start_while_another_project_holds_the_lock)
+FAIL: test_04_start_while_the_old_location_exists (tools.tests.test_ray_cluster_lock.RayClusterLockPaths.test_04_start_while_the_old_location_exists)
+FAIL: test_06_start_while_a_process_of_the_cluster_is_alive (tools.tests.test_ray_cluster_lock.RayClusterLockPaths.test_06_start_while_a_process_of_the_cluster_is_alive)
+Ran 9 tests in 17.865s
+FAILED (failures=3)
+reverted
+
+### M2
+
+```diff
+--- a/.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh
++++ b/.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh
+@@ -314,24 +314,6 @@
+ 
+ cmd_stop() {
+     local t0=$SECONDS lock_dir
+-    # Touch nothing if the lock is another project's. The module has no command for "whose lock is
+-    # it", so its owner file is read where the pinned package says the lock is (contract sections
+-    # 2-4); a stop that cannot ask touches nothing either.
+-    if ! lock_dir="$("$LOCK_PY" -c 'from raypoolkit.rehearsal_lock import default_lock_dir; print(default_lock_dir())')" \
+-        || [ -z "$lock_dir" ]; then
+-        err "could not ask raypoolkit.rehearsal_lock where the lock is ($LOCK_PY); touching nothing"
+-        return 1
+-    fi
+-    if [ -d "$lock_dir" ]; then
+-        local proj tdir
+-        proj="$(owner_field "$lock_dir" project)"
+-        tdir="$(owner_field "$lock_dir" ray_temp_dir)"
+-        if [ "$proj" != "$LOCK_PROJECT" ] || [ "$tdir" != "$CPBH_TEMP_DIR" ]; then
+-            err "the rehearsal lock is another project's (project='$proj' ray_temp_dir='$tdir'); touching nothing. Its owner file:"
+-            print_owner "$lock_dir" >&2
+-            return 1
+-        fi
+-    fi
+     stop_cluster "$CPBH_TEMP_DIR" "$CPBH_GCS_PORT" "$CPBH_CLIENT_PORT" "$CPBH_DASHBOARD_PORT" "$CPBH_AGENT_PORT" || return 1
+     lock_release || return 1
+     say "stopped in $((SECONDS - t0))s"
+```
+
+git apply --check: ok
+applied
+git apply -R --check: ok
+uptime:  2:04  up 20 days, 49 mins, 2 users, load averages: 16.87 24.97 34.12
+exit 1
+FAIL: test_05_stop_while_another_project_holds_the_lock (tools.tests.test_ray_cluster_lock.RayClusterLockPaths.test_05_stop_while_another_project_holds_the_lock)
+Ran 9 tests in 14.456s
+FAILED (failures=1)
+reverted
+
+### M3
+
+```diff
+--- a/.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh
++++ b/.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh
+@@ -297,13 +297,6 @@
+         trap - INT TERM
+         return 1
+     fi
+-    if ! lock_cmd set-pid --project "$LOCK_PROJECT" --ray-temp-dir "$CPBH_TEMP_DIR" "$gcs"; then
+-        err "could not record the gcs_server's pid $gcs in the lock; stopping"
+-        stop_cluster "$CPBH_TEMP_DIR" "$CPBH_GCS_PORT" "$CPBH_CLIENT_PORT" "$CPBH_DASHBOARD_PORT" "$CPBH_AGENT_PORT"
+-        lock_release
+-        trap - INT TERM
+-        return 1
+-    fi
+     trap - INT TERM
+     say "address $CPBH_ADDRESS"
+     say "dashboard $CPBH_DASHBOARD"
+```
+
+git apply --check: ok
+applied
+git apply -R --check: ok
+uptime:  2:04  up 20 days, 49 mins, 2 users, load averages: 15.23 24.22 33.69
+exit 1
+FAIL: test_09_the_cycle_through_the_module (tools.tests.test_ray_cluster_lock.RayClusterLockPaths.test_09_the_cycle_through_the_module)
+Ran 9 tests in 8.049s
+FAILED (failures=1)
+reverted
+
+### M4
+
+```diff
+--- a/.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh
++++ b/.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh
+@@ -281,7 +281,6 @@
+     if [ "$rc" -ne 0 ]; then
+         err "ray start failed (exit $rc); stopping what it started and releasing the lock"
+         stop_cluster "$CPBH_TEMP_DIR" "$CPBH_GCS_PORT" "$CPBH_CLIENT_PORT" "$CPBH_DASHBOARD_PORT" "$CPBH_AGENT_PORT"
+-        lock_release
+         trap - INT TERM
+         return 1
+     fi
+```
+
+git apply --check: ok
+applied
+git apply -R --check: ok
+uptime:  2:04  up 20 days, 50 mins, 2 users, load averages: 14.73 23.81 33.43
+exit 1
+FAIL: test_07_start_whose_ray_start_fails (tools.tests.test_ray_cluster_lock.RayClusterLockPaths.test_07_start_whose_ray_start_fails)
+Ran 9 tests in 11.166s
+FAILED (failures=1)
+reverted
+
+### M5
+
+```diff
+--- a/.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh
++++ b/.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh
+@@ -74,7 +74,7 @@
+ 
+ # ---- ChamPBH's cluster (rehearsal-lock-brief.md, section 3; README section 4.1, U5) ----
+ LOCK_PROJECT="ChamPBH"
+-CPBH_TEMP_DIR="/tmp/ray-cpbh"
++CPBH_TEMP_DIR="/private/tmp/ray-cpbh"
+ CPBH_GCS_PORT=6380
+ CPBH_CLIENT_PORT=6381
+ CPBH_DASHBOARD_PORT=8267
+```
+
+git apply --check: ok
+applied
+git apply -R --check: ok
+uptime:  2:05  up 20 days, 50 mins, 2 users, load averages: 13.92 23.34 33.15
+exit 1
+FAIL: test_01_the_scripts_values_and_pin (tools.tests.test_ray_cluster_lock.RayClusterLockPaths.test_01_the_scripts_values_and_pin)
+Ran 9 tests in 11.377s
+FAILED (failures=1)
+reverted
+
+### M6
+
+```diff
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -77,7 +77,7 @@
+ pytz==2025.2
+ PyYAML==6.0.3
+ ray==2.53.0
+-raypoolkit @ git+https://github.com/ds283/RayPoolKit@v0.3.0
++raypoolkit @ git+https://github.com/ds283/RayPoolKit@v0.2.0
+ referencing==0.37.0
+ requests==2.32.5
+ rpds-py==0.30.0
+```
+
+git apply --check: ok
+applied
+git apply -R --check: ok
+uptime:  2:05  up 20 days, 50 mins, 2 users, load averages: 13.72 23.00 32.92
+exit 1
+FAIL: test_01_the_scripts_values_and_pin (tools.tests.test_ray_cluster_lock.RayClusterLockPaths.test_01_the_scripts_values_and_pin)
+Ran 9 tests in 11.457s
+FAILED (failures=1)
+reverted
+files restored byte for byte

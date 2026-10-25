@@ -1,0 +1,78 @@
+# rpk-v030-adoption prompt 01: the script, 2026-10-25
+
+## 2.3
+
+$ bash -n .documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh
+(exit 0)
+
+$ bash .documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh --help
+usage: ray_cluster.sh start PURPOSE [--num-cpus N]
+       ray_cluster.sh stop
+       ray_cluster.sh status
+       ray_cluster.sh --help
+
+Run from the repository root.
+
+  start PURPOSE   take the rehearsal lock (~/.raypoolkit/rehearsal-lock, through
+                  raypoolkit.rehearsal_lock), then start ChamPBH's Ray head on /tmp/ray-cpbh:
+                  GCS 6380, client 6381, dashboard 8267, dashboard agent 52367, N CPUs (default
+                  10: R0's cluster had 10, Ray's default on this machine, and R1 and R2 are
+                  compared with R0, wall-clock limits included). PURPOSE is written to the lock's
+                  owner file, e.g. "dk-and-rpk-migration 06 (R1)", and the gcs_server's pid once
+                  it is up. Exits 3, starting nothing, if the lock is held or the lock's location
+                  from before raypoolkit v0.3.0 still exists, printing the owner file found.
+                  Exits 4, starting nothing and releasing the lock again, if a process of the
+                  cluster is already alive or any of the four ports is already held. Prints the
+                  cluster's address and the command that lists its actors.
+  stop            stop ChamPBH's processes (SIGTERM to every process naming /tmp/ray-cpbh, to
+                  the Ray client server whose address is 127.0.0.1:6380, and to their
+                  descendants; a grace period of $RAY_CLUSTER_GRACE seconds, default 15; then
+                  SIGKILL), confirm none is left and all four ports (6380, 6381, 8267, 52367) are
+                  free, then release the lock if its owner is ChamPBH's. Touches nothing if the
+                  lock is another project's. The lock stays held while anything of the cluster
+                  is alive: the gcs_server, or any process raypoolkit.rehearsal_lock lists.
+  status          the lock, its owner file, whether the owner's pid is alive, and the cluster's
+                  processes, as raypoolkit.rehearsal_lock sees them; then the processes `stop`
+                  would signal, by this script's rule; then the four ports.
+
+Never runs `ray stop`. Never waits on a held lock. No shell command that runs this script may
+name the temp dir (/tmp/ray-cpbh), in PURPOSE or anywhere else: the lock would then list every
+other process that shell started.
+(exit 0)
+
+$ git diff --stat -- .documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh
+ .../dk-and-rpk-migration/rehearsal/ray_cluster.sh  | 193 +++++++++------------
+ 1 file changed, 86 insertions(+), 107 deletions(-)
+
+The kept parts, compared with the script at HEAD (blob eaae1e75d4aa27233ef205a75d97333aeb57ea8b):
+$ diff <(git show HEAD:.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh | sed -n '/^# ---- the targeted stop/,/^# ---- commands ----/p') <(sed -n '/^# ---- the targeted stop/,/^# ---- commands ----/p' .documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh)
+(exit 0: temp_dir_regex, list_cluster_pids, describe_pid, port_listeners, alive, stop_cluster)
+$ diff <(git show HEAD:.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh | sed -n '/^# ---- ChamPBH.s cluster/,/^RAY_BIN=/p') <(sed -n '/^# ---- ChamPBH.s cluster/,/^RAY_BIN=/p' .documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh)
+(exit 0: the cluster's values)
+$ diff <(git show HEAD:.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh | grep -E '^(say|err)\(\)') <(grep -E '^(say|err)\(\)' .documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh)
+(exit 0: say, err)
+$ diff <(git show HEAD:.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh | sed -n '/"$RAY_BIN" start --head/,/--disable-usage-stats/p') <(sed -n '/"$RAY_BIN" start --head/,/--disable-usage-stats/p' .documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh)
+(exit 0: ray start's arguments)
+$ diff <(git show HEAD:.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh | sed -n '/# Prompt 05a, change 4/,/^    done$/p') <(sed -n '/# Prompt 05a, change 4/,/^    done$/p' .documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh)
+(exit 0: start's port check)
+$ diff <(git show HEAD:.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh | sed -n '/^if \[ "${BASH_SOURCE/,$p') <(sed -n '/^if \[ "${BASH_SOURCE/,$p' .documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh)
+(exit 0: the sourcing guard)
+
+## 2.5 the checklist's grep (its item 8.2), on the working tree
+
+$ P='ScienceData|\.rehearsal-lock|rehearsal-lock-brief\.md, section 2|section 2 \(the lock\)'
+$ { git grep -n -E "$P" -- . ':!.documents' ':!.prompts' ':!prompts' ':!science-runs'
+    git grep -n -E "$P" -- .documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh; } | wc -l
+before the edits (run on the clean working tree at HEAD, before any change): 5
+.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh:21:# .prompts/dk-and-rpk-migration/rehearsal-lock-brief.md at ed9399a: section 2 (the lock) and
+.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh:44:  start PURPOSE   take the rehearsal lock (~/ScienceData/.rehearsal-lock), then start ChamPBH's Ray
+.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh:76:# ---- the shared lock (rehearsal-lock-brief.md, section 2) ----
+.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh:77:LOCK_PARENT="$HOME/ScienceData"
+.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh:78:LOCK_DIR="$LOCK_PARENT/.rehearsal-lock"
+after the edits (tracked files only; the new test is untracked until the commit): 0
+after the edits, the untracked new test included:
+$ { git grep --untracked -n -E "$P" -- . ':!.documents' ':!.prompts' ':!prompts' ':!science-runs'; git grep -n -E "$P" -- .documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh; } | wc -l
+0
+
+$ git grep -c 'raypoolkit\.rehearsal_lock' -- .documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh
+.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh:10

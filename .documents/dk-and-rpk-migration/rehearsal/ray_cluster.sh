@@ -17,10 +17,13 @@
 # ChamPBH's rehearsal cluster, and the rehearsal lock it shares with StochasticInstantons (SI) and
 # SecondaryGWKit. Written for dk-and-rpk-migration prompt 05a, under U5 (README section 4.1 and
 # section 6.6 of this campaign). Adapted from SI's script at StochasticInstantons commit 3556148
-# (.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh), and it keeps the contract of SI's
-# .prompts/dk-and-rpk-migration/rehearsal-lock-brief.md at ed9399a: section 2 (the lock) and
-# section 3 (the cluster) are followed exactly, because the contract is shared with the other
-# projects.
+# (.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh).
+#
+# The lock is raypoolkit.rehearsal_lock of the pinned raypoolkit (requirements.txt), whose contract
+# is RayPoolKit's docs/rehearsal-lock.md at v0.3.0; this script calls its commands and keeps no
+# lock of its own (rpk-v030-adoption prompt 01). The cluster follows section 3 of SI's
+# .prompts/dk-and-rpk-migration/rehearsal-lock-brief.md at ed9399a exactly, because that contract
+# is shared with the other projects.
 #
 # This script NEVER runs `ray stop`, which stops every Ray process on the machine. It stops
 # ChamPBH's cluster by signalling the processes whose command line names ChamPBH's temp dir, and
@@ -41,24 +44,31 @@ usage: ray_cluster.sh start PURPOSE [--num-cpus N]
 
 Run from the repository root.
 
-  start PURPOSE   take the rehearsal lock (~/ScienceData/.rehearsal-lock), then start ChamPBH's Ray
-                  head on /tmp/ray-cpbh: GCS 6380, client 6381, dashboard 8267, dashboard agent
-                  52367, N CPUs (default 10: R0's cluster had 10, Ray's default on this machine,
-                  and R1 and R2 are compared with R0, wall-clock limits included). PURPOSE is
-                  written to the lock's owner file, e.g. "dk-and-rpk-migration 06 (R1)". If the
-                  lock is held, prints its owner file and exits 3, starting nothing. If any of the
-                  four ports is already held, releases the lock and exits 4, starting nothing.
-                  Prints the cluster's address and the command that lists its actors.
+  start PURPOSE   take the rehearsal lock (~/.raypoolkit/rehearsal-lock, through
+                  raypoolkit.rehearsal_lock), then start ChamPBH's Ray head on /tmp/ray-cpbh:
+                  GCS 6380, client 6381, dashboard 8267, dashboard agent 52367, N CPUs (default
+                  10: R0's cluster had 10, Ray's default on this machine, and R1 and R2 are
+                  compared with R0, wall-clock limits included). PURPOSE is written to the lock's
+                  owner file, e.g. "dk-and-rpk-migration 06 (R1)", and the gcs_server's pid once
+                  it is up. Exits 3, starting nothing, if the lock is held or the lock's location
+                  from before raypoolkit v0.3.0 still exists, printing the owner file found.
+                  Exits 4, starting nothing and releasing the lock again, if a process of the
+                  cluster is already alive or any of the four ports is already held. Prints the
+                  cluster's address and the command that lists its actors.
   stop            stop ChamPBH's processes (SIGTERM to every process naming /tmp/ray-cpbh, to
                   the Ray client server whose address is 127.0.0.1:6380, and to their
                   descendants; a grace period of $RAY_CLUSTER_GRACE seconds, default 15; then
                   SIGKILL), confirm none is left and all four ports (6380, 6381, 8267, 52367) are
                   free, then release the lock if its owner is ChamPBH's. Touches nothing if the
-                  lock is another project's.
-  status          the lock, its owner file, whether the owner's pid is alive, ChamPBH's processes
-                  and its four ports.
+                  lock is another project's. The lock stays held while anything of the cluster
+                  is alive: the gcs_server, or any process raypoolkit.rehearsal_lock lists.
+  status          the lock, its owner file, whether the owner's pid is alive, and the cluster's
+                  processes, as raypoolkit.rehearsal_lock sees them; then the processes `stop`
+                  would signal, by this script's rule; then the four ports.
 
-Never runs `ray stop`. Never waits on a held lock.
+Never runs `ray stop`. Never waits on a held lock. No shell command that runs this script may
+name the temp dir (/tmp/ray-cpbh), in PURPOSE or anywhere else: the lock would then list every
+other process that shell started.
 EOF2
 }
 
@@ -73,78 +83,41 @@ CPBH_ADDRESS="127.0.0.1:${CPBH_GCS_PORT}"
 CPBH_DASHBOARD="http://127.0.0.1:${CPBH_DASHBOARD_PORT}"
 RAY_BIN="./venv/bin/ray"
 
-# ---- the shared lock (rehearsal-lock-brief.md, section 2) ----
-LOCK_PARENT="$HOME/ScienceData"
-LOCK_DIR="$LOCK_PARENT/.rehearsal-lock"
-OWNER_FILE="$LOCK_DIR/owner"
+# ---- the shared lock: raypoolkit.rehearsal_lock (RayPoolKit's docs/rehearsal-lock.md, v0.3.0) ----
+# Every call passes ChamPBH's values from the variables above, never spelled on a command line of
+# this script's own (the contract, section 6, "What it asks of a caller"). The lock compares the
+# strings as given (section 5), so the same spellings are passed every time.
+LOCK_PY="./venv/bin/python"
 
 GRACE="${RAY_CLUSTER_GRACE:-15}"
 
 say() { echo ">> ray_cluster: $*"; }
 err() { echo ">> ray_cluster: $*" >&2; }
 
-iso_now() {
-    # ISO 8601, local time with its offset as +HH:MM (macOS date gives +HHMM).
-    date +%Y-%m-%dT%H:%M:%S%z | sed -E 's/([+-][0-9]{2})([0-9]{2})$/\1:\2/'
+lock_cmd() {
+    # lock_cmd COMMAND [OPTION...]: a command of raypoolkit.rehearsal_lock, its exit code passed on.
+    "$LOCK_PY" -m raypoolkit.rehearsal_lock "$@"
+}
+
+lock_release() {
+    # Refused (exit 1, the lock left held) while anything of the cluster is alive (contract section 7).
+    lock_cmd release --project "$LOCK_PROJECT" --ray-temp-dir "$CPBH_TEMP_DIR"
 }
 
 owner_field() {
-    # owner_field KEY: the value of KEY in the owner file ("" if absent or no file).
-    [ -f "$OWNER_FILE" ] || return 0
-    sed -n "s/^$1: //p" "$OWNER_FILE" | head -n 1
-}
-
-write_owner() {
-    # write_owner PURPOSE PID: the seven keys, in the brief's order; written to owner.tmp, renamed.
-    {
-        echo "project: $LOCK_PROJECT"
-        echo "purpose: $1"
-        echo "acquired: $(iso_now)"
-        echo "host: $(hostname -s)"
-        echo "ray_temp_dir: $CPBH_TEMP_DIR"
-        echo "ray_address: $CPBH_ADDRESS"
-        echo "pid: $2"
-    } > "$LOCK_DIR/owner.tmp" && mv "$LOCK_DIR/owner.tmp" "$OWNER_FILE"
+    # owner_field LOCK_DIR KEY: the value of KEY in LOCK_DIR's owner file ("" if absent or no file).
+    # The owner file's layout is the contract's, section 4.
+    [ -f "$1/owner" ] || return 0
+    sed -n "s/^$2: //p" "$1/owner" | head -n 1
 }
 
 print_owner() {
-    if [ -f "$OWNER_FILE" ]; then
-        sed 's/^/    /' "$OWNER_FILE"
+    # print_owner LOCK_DIR: its owner file, indented.
+    if [ -f "$1/owner" ]; then
+        sed 's/^/    /' "$1/owner"
     else
         echo "    (no owner file)"
     fi
-}
-
-acquire_lock() {
-    # acquire_lock PURPOSE. mkdir WITHOUT -p: the atomic step. Returns 3 when the lock is held.
-    mkdir -p "$LOCK_PARENT" || return 1
-    if mkdir "$LOCK_DIR" 2>/dev/null; then
-        write_owner "$1" "-"
-        return 0
-    fi
-    err "the rehearsal lock is held ($LOCK_DIR); its owner file:"
-    print_owner >&2
-    err "stop and ask the user; this script never waits on, or breaks, the lock"
-    return 3
-}
-
-release_lock() {
-    # Release only if the owner's project and ray_temp_dir are ChamPBH's (brief section 2).
-    if [ ! -d "$LOCK_DIR" ]; then
-        say "no lock to release"
-        return 0
-    fi
-    local proj tdir
-    proj="$(owner_field project)"
-    tdir="$(owner_field ray_temp_dir)"
-    if [ "$proj" != "$LOCK_PROJECT" ] || [ "$tdir" != "$CPBH_TEMP_DIR" ]; then
-        err "the lock is not ChamPBH's; not releasing it. owner has project='$proj' ray_temp_dir='$tdir'; ChamPBH is project='$LOCK_PROJECT' ray_temp_dir='$CPBH_TEMP_DIR'"
-        return 1
-    fi
-    rm -f "$OWNER_FILE" "$LOCK_DIR/owner.tmp"
-    rmdir "$LOCK_DIR" || { err "could not rmdir $LOCK_DIR"; return 1; }
-    say "released the rehearsal lock"
-    return 0
 }
 
 # ---- the targeted stop (brief section 3) ----
@@ -277,15 +250,11 @@ cmd_start() {
     case "$ncpus" in ''|*[!0-9]*) err "--num-cpus must be a positive integer"; return 2 ;; esac
     [ -x "$RAY_BIN" ] || { err "$RAY_BIN not found: run from the repository root"; return 2; }
 
-    acquire_lock "$purpose" || return $?
-
-    # The lock is free but ChamPBH's temp dir is named by a live process: a stale cluster. Not ours to
-    # guess about; release the lock and say so.
-    if [ -n "$(list_cluster_pids "$CPBH_TEMP_DIR" "$CPBH_GCS_PORT")" ]; then
-        err "processes naming $CPBH_TEMP_DIR are already running (a stale cluster?); not starting. Run 'stop' first."
-        release_lock
-        return 4
-    fi
+    # 0 held; 3 held by anyone, or the old location present (nothing created); 4 a process of the
+    # cluster alive, a stale cluster (the lock released again); 1 the owner file unwritable; 2 usage.
+    # acquire makes the stale-cluster check itself, by the rule release will apply.
+    lock_cmd acquire --project "$LOCK_PROJECT" --purpose "$purpose" \
+        --ray-temp-dir "$CPBH_TEMP_DIR" --ray-address "$CPBH_ADDRESS" || return $?
 
     # Prompt 05a, change 4: a held port is not ours to take. Without this, a ray start that fails
     # on a foreign listener leaves a stop whose port check cannot pass, and the lock held.
@@ -298,11 +267,11 @@ cmd_start() {
         fi
     done
     if [ -n "$held" ]; then
-        release_lock
+        lock_release
         return 4
     fi
 
-    trap 'err "interrupted; stopping what was started"; stop_cluster "$CPBH_TEMP_DIR" "$CPBH_GCS_PORT" "$CPBH_CLIENT_PORT" "$CPBH_DASHBOARD_PORT" "$CPBH_AGENT_PORT"; release_lock; exit 130' INT TERM
+    trap 'err "interrupted; stopping what was started"; stop_cluster "$CPBH_TEMP_DIR" "$CPBH_GCS_PORT" "$CPBH_CLIENT_PORT" "$CPBH_DASHBOARD_PORT" "$CPBH_AGENT_PORT"; lock_release; exit 130' INT TERM
 
     local t0=$SECONDS
     "$RAY_BIN" start --head --temp-dir "$CPBH_TEMP_DIR" --port "$CPBH_GCS_PORT" \
@@ -312,7 +281,7 @@ cmd_start() {
     if [ "$rc" -ne 0 ]; then
         err "ray start failed (exit $rc); stopping what it started and releasing the lock"
         stop_cluster "$CPBH_TEMP_DIR" "$CPBH_GCS_PORT" "$CPBH_CLIENT_PORT" "$CPBH_DASHBOARD_PORT" "$CPBH_AGENT_PORT"
-        release_lock
+        lock_release
         trap - INT TERM
         return 1
     fi
@@ -324,11 +293,17 @@ cmd_start() {
     if [ -z "$gcs" ]; then
         err "ray start succeeded but no gcs_server names $CPBH_TEMP_DIR; stopping"
         stop_cluster "$CPBH_TEMP_DIR" "$CPBH_GCS_PORT" "$CPBH_CLIENT_PORT" "$CPBH_DASHBOARD_PORT" "$CPBH_AGENT_PORT"
-        release_lock
+        lock_release
         trap - INT TERM
         return 1
     fi
-    write_owner "$purpose" "$gcs"
+    if ! lock_cmd set-pid --project "$LOCK_PROJECT" --ray-temp-dir "$CPBH_TEMP_DIR" "$gcs"; then
+        err "could not record the gcs_server's pid $gcs in the lock; stopping"
+        stop_cluster "$CPBH_TEMP_DIR" "$CPBH_GCS_PORT" "$CPBH_CLIENT_PORT" "$CPBH_DASHBOARD_PORT" "$CPBH_AGENT_PORT"
+        lock_release
+        trap - INT TERM
+        return 1
+    fi
     trap - INT TERM
     say "address $CPBH_ADDRESS"
     say "dashboard $CPBH_DASHBOARD"
@@ -338,42 +313,42 @@ cmd_start() {
 }
 
 cmd_stop() {
-    local t0=$SECONDS
-    if [ -d "$LOCK_DIR" ]; then
+    local t0=$SECONDS lock_dir
+    # Touch nothing if the lock is another project's. The module has no command for "whose lock is
+    # it", so its owner file is read where the pinned package says the lock is (contract sections
+    # 2-4); a stop that cannot ask touches nothing either.
+    if ! lock_dir="$("$LOCK_PY" -c 'from raypoolkit.rehearsal_lock import default_lock_dir; print(default_lock_dir())')" \
+        || [ -z "$lock_dir" ]; then
+        err "could not ask raypoolkit.rehearsal_lock where the lock is ($LOCK_PY); touching nothing"
+        return 1
+    fi
+    if [ -d "$lock_dir" ]; then
         local proj tdir
-        proj="$(owner_field project)"
-        tdir="$(owner_field ray_temp_dir)"
+        proj="$(owner_field "$lock_dir" project)"
+        tdir="$(owner_field "$lock_dir" ray_temp_dir)"
         if [ "$proj" != "$LOCK_PROJECT" ] || [ "$tdir" != "$CPBH_TEMP_DIR" ]; then
             err "the rehearsal lock is another project's (project='$proj' ray_temp_dir='$tdir'); touching nothing. Its owner file:"
-            print_owner >&2
+            print_owner "$lock_dir" >&2
             return 1
         fi
     fi
     stop_cluster "$CPBH_TEMP_DIR" "$CPBH_GCS_PORT" "$CPBH_CLIENT_PORT" "$CPBH_DASHBOARD_PORT" "$CPBH_AGENT_PORT" || return 1
-    release_lock || return 1
+    lock_release || return 1
     say "stopped in $((SECONDS - t0))s"
     return 0
 }
 
 cmd_status() {
-    if [ -d "$LOCK_DIR" ]; then
-        echo "lock: HELD ($LOCK_DIR)"
-        print_owner
-        local pid
-        pid="$(owner_field pid)"
-        case "$pid" in
-            ''|-) echo "owner pid: ${pid:--} (no cluster pid recorded yet)" ;;
-            *) if alive "$pid"; then echo "owner pid $pid: alive"; else echo "owner pid $pid: NOT alive"; fi ;;
-        esac
-    else
-        echo "lock: free ($LOCK_DIR does not exist)"
-    fi
+    # The lock and the cluster's processes as raypoolkit.rehearsal_lock sees them (its layout,
+    # contract section 8); then what stop would signal, by this script's rule. Where the two
+    # listings differ, stop leaves something that release then refuses on.
+    lock_cmd status --ray-temp-dir "$CPBH_TEMP_DIR" --ray-address "$CPBH_ADDRESS"
     local pids
     pids="$(list_cluster_pids "$CPBH_TEMP_DIR" "$CPBH_GCS_PORT")"
     if [ -z "$pids" ]; then
-        echo "ChamPBH cluster ($CPBH_TEMP_DIR): no processes"
+        echo "what stop would signal (this script's rule, $CPBH_TEMP_DIR): no processes"
     else
-        echo "ChamPBH cluster ($CPBH_TEMP_DIR): $(echo "$pids" | wc -l | tr -d ' ') process(es)"
+        echo "what stop would signal (this script's rule, $CPBH_TEMP_DIR): $(echo "$pids" | wc -l | tr -d ' ') process(es)"
         local p
         for p in $pids; do describe_pid "$p" | sed 's/^/    /'; done
     fi
@@ -385,6 +360,10 @@ cmd_status() {
 }
 
 main() {
+    case "${1:-}" in
+        start|stop|status)
+            [ -x "$LOCK_PY" ] || { err "$LOCK_PY not found: run from the repository root"; return 2; } ;;
+    esac
     case "${1:-}" in
         start) shift; cmd_start "$@" ;;
         stop) shift; cmd_stop ;;
