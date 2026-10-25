@@ -154,3 +154,6 @@ its 09, is the user's (README §4.2).
 **Merged (2026-10-25).** At the user's request `main`, unmoved since `ac187c8`, fast-forwards to the
 commit that adds this paragraph, and `main` is then merged into `jordan-normalization` (README
 §4.2). Neither branch is pushed by that request; the branch `rpk-v030-adoption` is kept.
+
+**Pushed (2026-10-25).** Afterwards, at the user's request, `main` was pushed at `9d96285` and the
+branch `rpk-v030-adoption`, never pushed, was deleted.
