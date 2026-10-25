@@ -1,0 +1,37 @@
+# ray-sqla-align 02: the Ray state at three points (RAY_AUTH_MODE=token ./venv/bin/python <scratch>/ray_state.py)
+
+## baseline, after start: 2026-10-25 21:01:37 +0000
+$ ./venv/bin/ray list jobs --address 127.0.0.1:6380 --limit 1000 --format json
+No resource in the cluster
+ 
+$ ./venv/bin/ray list workers --address 127.0.0.1:6380 --limit 1000 --format json
+No resource in the cluster
+ 
+  workers: 0 recorded, 0 alive
+$ ./venv/bin/ray list actors --address 127.0.0.1:6380 --limit 1000 --format json
+No resource in the cluster
+ 
+  actors: 0 recorded, 0 ALIVE; by (job, class, state): {}
+exit 0
+
+## after resumed-a's launcher line: 2026-10-25 21:08:56 +0000
+$ ./venv/bin/ray list jobs --address 127.0.0.1:6380 --limit 1000 --format json
+  job 01000000 SUCCEEDED driver pid 11468: e ray-sqla-align-02-reference --M-values-Mp 1e-3 --beta-values 1.1 1.15 1.2 10 25 --ray-address 127.0.0.1:6380
+  job 02000000 SUCCEEDED driver pid 12370: e ray-sqla-align-02-resumed-a --M-values-Mp 1e-3 --beta-values 1.1 1.15 1.2 10 25 --ray-address 127.0.0.1:6380
+$ ./venv/bin/ray list workers --address 127.0.0.1:6380 --limit 1000 --format json
+  workers: 44 recorded, 0 alive
+$ ./venv/bin/ray list actors --address 127.0.0.1:6380 --limit 1000 --format json
+  actors: 34 recorded, 0 ALIVE; by (job, class, state): {('02000000', 'Datastore', 'DEAD'): 16, ('01000000', 'Datastore', 'DEAD'): 16, ('02000000', 'SerialPoolBroker', 'DEAD'): 1, ('01000000', 'SerialPoolBroker', 'DEAD'): 1}
+exit 0
+
+## after the plot, before stop: 2026-10-25 21:13:16 +0000
+$ ./venv/bin/ray list jobs --address 127.0.0.1:6380 --limit 1000 --format json
+  job 01000000 SUCCEEDED driver pid 11468: e ray-sqla-align-02-reference --M-values-Mp 1e-3 --beta-values 1.1 1.15 1.2 10 25 --ray-address 127.0.0.1:6380
+  job 02000000 SUCCEEDED driver pid 12370: e ray-sqla-align-02-resumed-a --M-values-Mp 1e-3 --beta-values 1.1 1.15 1.2 10 25 --ray-address 127.0.0.1:6380
+  job 03000000 SUCCEEDED driver pid 13137: resumed-c --M-values-Mp 1e-3 --beta-values 1.1 1.15 1.2 10 25 --ray-address 127.0.0.1:6380 --prune-unvalidated
+  job 04000000 SUCCEEDED driver pid 13927: --output /Users/ds283/Documents/Code/ChamPBH/var/ray-sqla-align-02/plot-reference --ray-address 127.0.0.1:6380
+$ ./venv/bin/ray list workers --address 127.0.0.1:6380 --limit 1000 --format json
+  workers: 86 recorded, 0 alive
+$ ./venv/bin/ray list actors --address 127.0.0.1:6380 --limit 1000 --format json
+  actors: 67 recorded, 0 ALIVE; by (job, class, state): {('02000000', 'Datastore', 'DEAD'): 16, ('04000000', 'Datastore', 'DEAD'): 16, ('01000000', 'Datastore', 'DEAD'): 16, ('03000000', 'Datastore', 'DEAD'): 16, ('02000000', 'SerialPoolBroker', 'DEAD'): 1, ('03000000', 'SerialPoolBroker', 'DEAD'): 1, ('01000000', 'SerialPoolBroker', 'DEAD'): 1}
+exit 0

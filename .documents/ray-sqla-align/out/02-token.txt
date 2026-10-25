@@ -1,0 +1,32 @@
+## the token checks: 2026-10-25 21:15:04 +0000
+grep -c 'Token authentication is enabled' start.txt: 0
+grep -c 'Generated new authentication token' start.txt: 0
+grep -c 'InvalidAuthToken' start.txt: 0
+grep -c 'AuthenticationError' start.txt: 0
+grep -c 'Token authentication is enabled' reference.log: 0
+grep -c 'Generated new authentication token' reference.log: 0
+grep -c 'InvalidAuthToken' reference.log: 0
+grep -c 'AuthenticationError' reference.log: 0
+grep -c 'Token authentication is enabled' resumed-a.log: 0
+grep -c 'Generated new authentication token' resumed-a.log: 0
+grep -c 'InvalidAuthToken' resumed-a.log: 0
+grep -c 'AuthenticationError' resumed-a.log: 0
+grep -c 'Token authentication is enabled' resumed-c.log: 0
+grep -c 'Generated new authentication token' resumed-c.log: 0
+grep -c 'InvalidAuthToken' resumed-c.log: 0
+grep -c 'AuthenticationError' resumed-c.log: 0
+grep -c 'Token authentication is enabled' plot-reference.log: 0
+grep -c 'Generated new authentication token' plot-reference.log: 0
+grep -c 'InvalidAuthToken' plot-reference.log: 0
+grep -c 'AuthenticationError' plot-reference.log: 0
+## ls -l ~/.ray/auth_token
+-rw------- 1 ds283 staff 64 Oct 25 12:51 /Users/ds283/.ray/auth_token
+## /usr/bin/stat -f '%m %Sm' ~/.ray/auth_token
+1792932677 Oct 25 12:51:17 2026
+## env | grep -c RAY_AUTH_MODE (the agent shell)
+0
+## the >> packages: line, each log, against out/01-distributions.txt's
+reference.log: identical to 01's
+resumed-a.log: identical to 01's
+resumed-c.log: identical to 01's
+plot-reference.log: identical to 01's

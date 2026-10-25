@@ -1,0 +1,56 @@
+"""
+ray-sqla-align 02: "What is new in the logs" (the orchestrator's note for 02, ruling 16).
+
+    ./venv/bin/python log_kinds.py NEW_LOG OLD_LOG [NEW_LOG OLD_LOG ...]
+
+For each pair, strips ANSI colour codes (as sed -E 's/\\x1b\\[[0-9;]*m//g'), replaces the run, job
+and store names' campaign prefix (ray-sqla-align-02, rrk-adoption-04) by <P>, then every run of
+digits by '#'. The result is the line's kind. Prints, for each pair, every kind in one log and
+not the other, with its count and one example line (the first). Reads the two files only.
+"""
+
+import re
+import sys
+from collections import OrderedDict
+
+ANSI = re.compile(r"\x1b\[[0-9;]*m")
+PREFIX = re.compile(r"(ray-sqla-align-02|rrk-adoption-04)")
+DIGITS = re.compile(r"[0-9]+")
+
+
+def kinds(path):
+    out = OrderedDict()
+    with open(path, errors="replace") as f:
+        for raw in f.read().splitlines():
+            line = ANSI.sub("", raw)
+            k = DIGITS.sub("#", PREFIX.sub("<P>", line))
+            if k not in out:
+                out[k] = [0, line]
+            out[k][0] += 1
+    return out
+
+
+def main(argv):
+    if len(argv) % 2:
+        print("give pairs: NEW_LOG OLD_LOG", file=sys.stderr)
+        return 2
+    for new, old in zip(argv[0::2], argv[1::2]):
+        a, b = kinds(new), kinds(old)
+        print(f"## {new} (02) against {old} (04)")
+        print(f"   kinds: {len(a)} in 02, {len(b)} in 04")
+        only_a = [k for k in a if k not in b]
+        only_b = [k for k in b if k not in a]
+        print(f"   in 02 and not in 04: {len(only_a)}")
+        for k in only_a:
+            n, ex = a[k]
+            print(f"     [{n}x] {ex}")
+        print(f"   in 04 and not in 02: {len(only_b)}")
+        for k in only_b:
+            n, ex = b[k]
+            print(f"     [{n}x] {ex}")
+        print()
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

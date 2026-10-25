@@ -1,0 +1,64 @@
+# ray-sqla-align 02: the one check after each launch
+### 2026-10-25 21:02:00 +0000 one check, reference
+manifest path: /Users/ds283/Documents/Code/ChamPBH/var/runs/ray-sqla-align-02-reference-20261025T210149/manifest.json
+-rw-r--r-- 1 ds283 staff 3873 Oct 25 21:01 /Users/ds283/Documents/Code/ChamPBH/var/runs/ray-sqla-align-02-reference-20261025T210149/manifest.json
+status state running pid 11468 heartbeat 2026-10-25T21:01:51+00:00 stage Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/ray-sqla-align-02-reference.db" with 16 shards
+created 2026-10-25T21:01:49+00:00 results_store_id None
+pid file: 11468
+log birth: 2026-10-25 21:01:48 +0000
+manifest birth: 2026-10-25 21:01:49 +0000
+$ list
+   RUN                                          STATE      PROGRESS      AGE  PURPOSE · STAGE
+   ray-sqla-align-02-reference-20261025T210149  running           -      12s  ray-sqla-align 02 R1: the pilot grid straight through under ray 2.59.0, the reference store  · Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datas
+
+1 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 1 alive; 0 with no host recorded.
+list exit 0
+$ head of log
+1:** registered_run: registered as ray-sqla-align-02-reference-20261025T210149
+2:**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/ray-sqla-align-02-reference-20261025T210149/manifest.json
+3:**   list it with: ./venv/bin/python -m runregistrykit list
+4:>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+
+### 2026-10-25 21:06:18 +0000 one check, resumed-a
+manifest path: /Users/ds283/Documents/Code/ChamPBH/var/runs/ray-sqla-align-02-resumed-a-20261025T210611/manifest.json
+-rw-r--r-- 1 ds283 staff 3931 Oct 25 21:06 /Users/ds283/Documents/Code/ChamPBH/var/runs/ray-sqla-align-02-resumed-a-20261025T210611/manifest.json
+status state running pid 12370 heartbeat 2026-10-25T21:06:12+00:00 stage Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/ray-sqla-align-02-resumed.db" with 16 shards
+created 2026-10-25T21:06:11+00:00 results_store_id None
+pid file: 12370
+log birth: 2026-10-25 21:06:10 +0000
+manifest birth: 2026-10-25 21:06:11 +0000
+$ list
+   RUN                                          STATE      PROGRESS      AGE  PURPOSE · STAGE
+   ray-sqla-align-02-resumed-a-20261025T210611  running           -       7s  ray-sqla-align 02 R2: the pilot grid into the resumed store under ray 2.59.0, interrupted with SIGTERM in the scalar stage  · Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datas
+   ray-sqla-align-02-reference-20261025T210149  done              -       4m  ray-sqla-align 02 R1: the pilot grid straight through under ray 2.59.0, the reference store  · CALCULATE BBN DATA, all work items complete
+
+2 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 1 alive, 1 finished; 0 with no host recorded.
+list exit 0
+$ head of log
+1:** registered_run: registered as ray-sqla-align-02-resumed-a-20261025T210611
+2:**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/ray-sqla-align-02-resumed-a-20261025T210611/manifest.json
+3:**   list it with: ./venv/bin/python -m runregistrykit list
+4:>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+
+### 2026-10-25 21:09:19 +0000 one check, resumed-c
+manifest path: /Users/ds283/Documents/Code/ChamPBH/var/runs/ray-sqla-align-02-resumed-c-20261025T210916/manifest.json
+-rw-r--r-- 1 ds283 staff 3920 Oct 25 21:09 /Users/ds283/Documents/Code/ChamPBH/var/runs/ray-sqla-align-02-resumed-c-20261025T210916/manifest.json
+status state running pid 13137 heartbeat 2026-10-25T21:09:17+00:00 stage Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/ray-sqla-align-02-resumed.db" with 16 shards
+created 2026-10-25T21:09:16+00:00 results_store_id 9919583b8b04499da3e286c0814a0114
+pid file: 13137
+log birth: 2026-10-25 21:09:15 +0000
+manifest birth: 2026-10-25 21:09:16 +0000
+$ list
+   RUN                                          STATE      PROGRESS      AGE  PURPOSE · STAGE
+   ray-sqla-align-02-resumed-c-20261025T210916  running           -       4s  ray-sqla-align 02 R3: the resume of the resumed store under ray 2.59.0, straight through  · Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/v
+   ray-sqla-align-02-resumed-a-20261025T210611  killed            -       3m  ray-sqla-align 02 R2: the pilot grid into the resumed store under ray 2.59.0, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   ray-sqla-align-02-reference-20261025T210149  done              -       8m  ray-sqla-align 02 R1: the pilot grid straight through under ray 2.59.0, the reference store  · CALCULATE BBN DATA, all work items complete
+
+3 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 1 alive, 2 finished; 0 with no host recorded.
+list exit 0
+$ head of log
+1:** registered_run: registered as ray-sqla-align-02-resumed-c-20261025T210916
+2:**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/ray-sqla-align-02-resumed-c-20261025T210916/manifest.json
+3:**   list it with: ./venv/bin/python -m runregistrykit list
+4:>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+

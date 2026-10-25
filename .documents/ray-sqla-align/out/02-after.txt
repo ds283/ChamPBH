@@ -1,0 +1,40 @@
+## after the suites: 2026-10-25 21:22:40 +0000
+21:22  up 20 days, 20:07, 1 user, load averages: 6.52 11.46 11.22
+$ cmp pip-freeze-before.txt pip-freeze-after.txt
+cmp exit 0
+102
+$ ./venv/bin/python -m runregistrykit list
+   RUN                                          STATE      PROGRESS      AGE  PURPOSE · STAGE
+   ray-sqla-align-02-resumed-c-20261025T210916  done              -      13m  ray-sqla-align 02 R3: the resume of the resumed store under ray 2.59.0, straight through  · CALCULATE BBN DATA, all work items complete
+   ray-sqla-align-02-resumed-a-20261025T210611  killed            -      17m  ray-sqla-align 02 R2: the pilot grid into the resumed store under ray 2.59.0, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   ray-sqla-align-02-reference-20261025T210149  done              -      21m  ray-sqla-align 02 R1: the pilot grid straight through under ray 2.59.0, the reference store  · CALCULATE BBN DATA, all work items complete
+
+3 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 3 finished; 0 with no host recorded.
+list exit 0
+$ git status --porcelain --untracked-files=all | wc -l
+0
+$ git log -1 --format=%H
+b16c4355ff91adbf8d27a08e5956e0020fc0a716
+$ git diff 668d30f -- main.py | wc -l
+0
+$ ls -A var var/runs
+.DS_Store
+datastores
+ray-sqla-align-01
+ray-sqla-align-02
+runs
+.DS_Store
+ray-sqla-align-02-reference-20261025T210149
+ray-sqla-align-02-resumed-a-20261025T210611
+ray-sqla-align-02-resumed-c-20261025T210916
+$ ls var/datastores | wc -l; the rrk-adoption sidecars untouched
+38
+-rw-r--r-- 1 ds283 staff  9836 Oct 20 08:19 var/datastores/rrk-adoption-04-reference.manifest.json
+-rw-r--r-- 1 ds283 staff 10260 Oct 20 08:19 var/datastores/rrk-adoption-04-resumed.manifest.json
+$ du -sh var/datastores var/runs var/ray-sqla-align-02
+88M	var/datastores
+60K	var/runs
+1.2M	var/ray-sqla-align-02
+$ the token
+-rw------- 1 ds283 staff 64 Oct 25 12:51 /Users/ds283/.ray/auth_token
+1792932677 Oct 25 12:51:17 2026

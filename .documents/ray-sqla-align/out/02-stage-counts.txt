@@ -1,0 +1,20 @@
+## 2026-10-25 21:14:50 +0000
+$ ./venv/bin/python .documents/dk-and-rpk-migration/rehearsal/stage_counts.py var/ray-sqla-align-02/reference.log var/ray-sqla-align-02/resumed-a.log var/ray-sqla-align-02/resumed-c.log
+LOG var/ray-sqla-align-02/reference.log
+  CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: complete; lookup 5, compute 5, store 5, validation 5
+  CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: complete; lookup 5, compute 5, store 5, validation 5
+    -- AdiabaticHistory: 0 models skipped because their ScalarModel failed
+  CALCULATE BBN DATA: complete; lookup 5, compute 5, store 5, validation 5
+    -- BBNData: 0 models skipped because their ScalarModel failed; 0 computations skipped because of a stored failure
+  driver exit status: 0
+LOG var/ray-sqla-align-02/resumed-a.log
+  CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: INCOMPLETE; no queue summary
+  driver exit status: 143
+LOG var/ray-sqla-align-02/resumed-c.log
+  CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: complete; lookup 5, compute 2, store 2, validation 2
+  CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: complete; lookup 5, compute 5, store 5, validation 5
+    -- AdiabaticHistory: 0 models skipped because their ScalarModel failed
+  CALCULATE BBN DATA: complete; lookup 5, compute 5, store 5, validation 5
+    -- BBNData: 0 models skipped because their ScalarModel failed; 0 computations skipped because of a stored failure
+  driver exit status: 0
+exit 0

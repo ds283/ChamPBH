@@ -1,8 +1,9 @@
 # ray-sqla-align campaign — implementation state
 
-**Last updated:** 2026-10-25 · **Status: 01 landed and reviewed — 1 of 2 landed.** U0–U4
-ruled by the user the same day; P1–P12 stand as proposed, the user having ruled none otherwise.
-02 is released by 01's review, and is dispatched when the user says so (P12).
+**Last updated:** 2026-10-25 · **Status: 02 landed, awaiting review — 2 of 2 landed, 1 reviewed.**
+U0–U4 ruled by the user the same day; P1–P12 stand as proposed, the user having ruled none
+otherwise. Gate FP holds, and so does gate Token; the orchestrator's review of 02 closes the
+campaign (README §2).
 
 The plan is [`README.md`](README.md), written on 2026-10-25 on branch `ray-sqla-align`, cut from
 `main` at `a144c83`.
@@ -52,7 +53,7 @@ The planner's proposals, P1–P12, are in README §6.2.
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
 | 01 | [Move `ray` and `SQLAlchemy`, with token mode named](01-move-ray-and-sqlalchemy-with-token-mode.md) | the pins and the venv; V0; the distributions; `config/ray_auth.py`, its importers and the script; the test; V1; `CLAUDE.md` | Opus | ✍️ 2026-10-25 | ✅ 2026-10-25, reviewed | `668d30f` | [01](logs/01-move-ray-and-sqlalchemy-with-token-mode.md) |
-| 02 | [Rehearse registered runs under Ray 2.59](02-rehearse-registered-runs-under-ray-2.59.md) | `reference`, `resumed-a` (`SIGTERM`), `resumed-c` and `plot_by_beta.py` on 01's code; gates FP and Token | Opus | ✍️ 2026-10-25 | ⬜ | — | — |
+| 02 | [Rehearse registered runs under Ray 2.59](02-rehearse-registered-runs-under-ray-2.59.md) | `reference`, `resumed-a` (`SIGTERM`), `resumed-c` and `plot_by_beta.py` on 01's code; gates FP and Token | Opus | ✍️ 2026-10-25 | ✅ 2026-10-25 | this commit | [02](logs/02-rehearse-registered-runs-under-ray-2.59.md) |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
 
@@ -74,20 +75,20 @@ The review of 02 closes the campaign (README §2).
 | **T3** | 01 | `tools/tests/test_ray_auth.py`, nine checks, no Ray; B1–B4 each caught | ✅ 01 |
 | **V1** | 01 | with the fix: no warning at `start`; `gcs_server` and `raylet` in token mode; a driver in the wrapper's import order attaches and runs a task | ✅ 01 |
 | **C1** | 01 | `CLAUDE.md`: the bullet "Ray's token mode"; the `tools/tests` count | ✅ 01 |
-| **R1** | 02 | `reference`: `done`/0; fingerprint `2dd4b39b…932f` | ⬜ |
-| **R2** | 02 | `resumed-a`: `SIGTERM`ed, `killed`/143, the store partial | ⬜ |
-| **R3** | 02 | `resumed-c`: `done`/0, only the missing rows computed; fingerprint `2dd4b39b…932f` | ⬜ |
-| **R4** | 02 | `compare_stores` equal; manifests `git_dirty` false, naming `ray` 2.59.0 and `SQLAlchemy` 2.0.55 | ⬜ |
-| **R5** | 02 | `plot_by_beta.py` on the reference: `histories.csv` `d7c62c37…c522`; the store unchanged | ⬜ |
-| **W1** | 02 | `.documents/ray-sqla-align-verification.md` §1 | ⬜ |
+| **R1** | 02 | `reference`: `done`/0; fingerprint `2dd4b39b…932f` | ✅ 02 |
+| **R2** | 02 | `resumed-a`: `SIGTERM`ed, `killed`/143, the store partial | ✅ 02 (`<s>` 90 s; β = 10 stored unvalidated, β = 25 absent) |
+| **R3** | 02 | `resumed-c`: `done`/0, only the missing rows computed; fingerprint `2dd4b39b…932f` | ✅ 02 (scalar 5 / 2 / 2 / 2) |
+| **R4** | 02 | `compare_stores` equal; manifests `git_dirty` false, naming `ray` 2.59.0 and `SQLAlchemy` 2.0.55 | ✅ 02 |
+| **R5** | 02 | `plot_by_beta.py` on the reference: `histories.csv` `d7c62c37…c522`; the store unchanged | ✅ 02 |
+| **W1** | 02 | `.documents/ray-sqla-align-verification.md` §1 | ✅ 02 |
 
 ## 2. The gates
 
 | Gate | Holds when | Prompt | State |
 |---|---|---|---|
 | **V** | on the pins alone the cluster is in token mode and refuses a driver attaching by address; with the fix, `start` prints no warning and a driver in the wrapper's import order attaches and runs a task | 01 | ✅ 01 (V0, V1) |
-| **FP** | 02's two stores, under `ray` 2.59.0 and `SQLAlchemy` 2.0.55, each fingerprint to `2dd4b39b…932f`; `compare_stores` equal but for bookkeeping; `histories.csv` `d7c62c37…c522` | 02 | ⬜ |
-| **Token** | no `start` output, launch log or reader log holds Ray's token warning or an authentication error; the cluster's `gcs_server` and `raylet` run with `RAY_AUTH_MODE=token`; the token file unchanged at mode 600; no record holds the token | 01 (V1), 02 | V1 part ✅ 01; 02's part ⬜ |
+| **FP** | 02's two stores, under `ray` 2.59.0 and `SQLAlchemy` 2.0.55, each fingerprint to `2dd4b39b…932f`; `compare_stores` equal but for bookkeeping; `histories.csv` `d7c62c37…c522` | 02 | ✅ 02 |
+| **Token** | no `start` output, launch log or reader log holds Ray's token warning or an authentication error; the cluster's `gcs_server` and `raylet` run with `RAY_AUTH_MODE=token`; the token file unchanged at mode 600; no record holds the token | 01 (V1), 02 | V1 part ✅ 01; 02's part ✅ 02 |
 
 If FP fails, the bisection (`ray` alone, or `SQLAlchemy` alone) is the user's call (README §2.2).
 
@@ -205,3 +206,31 @@ methods, so `tools/tests` is 102. The SHA replaces "this commit" here and in the
 longer held; it is dispatched at the user's word. Until `main` is merged into it,
 `jordan-normalization` runs on Ray 2.59.0 without the token module and must start no Ray
 (README §4.2).
+
+### 5.2 After prompt 02 (2026-10-25)
+
+Dispatched at `b16c435` (the orchestrator's note); landed in this commit. Log:
+[`logs/02-rehearse-registered-runs-under-ray-2.59.md`](logs/02-rehearse-registered-runs-under-ray-2.59.md);
+record: [`.documents/ray-sqla-align-verification.md`](../../.documents/ray-sqla-align-verification.md)
+§1; outputs in `.documents/ray-sqla-align/out/02-*`.
+- **The Gate** held at 20:53: the tree clean at `b16c435`, its code 01's; the freeze 01's; the
+  cluster stopped and the lock free; no run; the token file 64 bytes, mode 600, 12:51:17.
+- **The roots**, before `start` and after `stop`: CosmologyModels 18, ComputeTargets 61 + 115,
+  ObjectFactories 78, tools 102, RunDrivers 61, all OK.
+- **The cluster**: `start` exit 0, no token warning; `gcs_server` (10995) and `raylet` (11031)
+  `RAY_AUTH_MODE=token`; `ray status` `0.0/10.0 CPU`, `0.0/1.0 GPU`; `stop` exit 0 (`SIGKILL` to
+  the `gcs_server` and one `Python -u` after the grace, as at V1), `status` free.
+- **R1** `reference` `done`/0 (3 min 36 s); **R2** `resumed-a` `killed`/143 at `<s>` = 90 s, the
+  handler 0 s after the signal, β = 10 stored unvalidated; **R3** `resumed-c` `done`/0, the prune
+  report naming β = 10, scalar 5 / 2 / 2 / 2; `results_store_id` `null`, `null`, the resumed
+  store's.
+- **FP**: both stores `2dd4b39b…932f` (status, sidecar and `store fingerprint`), each class as 04's;
+  `compare_stores` `RESULT: equal`, its output 04's; `histories.csv` `d7c62c37…c522`; the reference
+  store unchanged by the plot. **Gate FP holds.**
+- **Token**: the four strings 0 in `start.txt`, the three launch logs and the plot log; the token
+  file unchanged; the final grep over the records exit 1. **Gate Token's 02 part holds.**
+- **R4**: every manifest `git_head` `b16c4355…`, `git_dirty` false, `script_sha256` `685b615b…`,
+  seven packages with `ray` 2.59.0 and `SQLAlchemy` 2.0.55.
+- **New in the logs**: the `>> packages:` line's four entries; Ray's accelerator `FutureWarning`
+  gone; the prune report in `resumed-c`. Nothing bearing on correctness.
+- No issue opened. Not pushed. The two stores and three runs stay under `var/` for the user.

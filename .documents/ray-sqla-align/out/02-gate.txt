@@ -1,0 +1,47 @@
+# ray-sqla-align 02: the Gate, re-checked by the agent
+## 2026-10-25 20:53:41 +0000 uptime
+20:53  up 20 days, 19:38, 1 user, load averages: 2.44 3.37 5.55
+## git log -1
+b16c4355ff91adbf8d27a08e5956e0020fc0a716 Write the orchestration note for ray-sqla-align prompt 02
+## git status --porcelain --untracked-files=all | wc -l
+0
+## git worktree list
+/Users/ds283/Documents/Code/ChamPBH b16c435 [ray-sqla-align]
+## git diff 668d30f HEAD -- '*.py' '*.sh' requirements.txt runregistrykit.toml | wc -l
+0
+## git diff --name-only 668d30f HEAD
+prompts/ray-sqla-align/IMPLEMENTATION_STATE.md
+prompts/ray-sqla-align/logs/01-move-ray-and-sqlalchemy-with-token-mode.md
+prompts/ray-sqla-align/orchestrator/prompt-02.md
+## shasum -a 256 main.py
+685b615bc85b3fbfa6ceea30f4a68865f5d97a5ca8e0cf39d980247df1307bbe  main.py
+## pip freeze | wc -l; cmp with var/ray-sqla-align-01/freeze-after.txt
+102
+cmp exit 0
+datastorekit @ git+https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005
+numpy==2.3.5
+ray==2.59.0
+raypoolkit @ git+https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2
+runregistrykit @ git+https://github.com/ds283/RunRegistryKit@0bae3a3c501a8264ee4be5bc24f06422af38720f
+scipy==1.17.0
+SQLAlchemy==2.0.55
+## pip check
+No broken requirements found.
+## runregistrykit list
+no runs under /Users/ds283/Documents/Code/ChamPBH/var/runs
+## ls -A var var/datastores var/runs
+.DS_Store
+datastores
+ray-sqla-align-01
+ray-sqla-align-02
+runs
+rrk-adoption-04-reference.manifest.json
+rrk-adoption-04-resumed.manifest.json
+.DS_Store
+## 02's paths (expect none before mkdir of $L, which this check created)
+0
+## token
+-rw------- 1 ds283 staff 64 Oct 25 12:51 /Users/ds283/.ray/auth_token
+1792932677 Oct 25 12:51:17 2026
+## env | grep -c RAY_AUTH_MODE
+0

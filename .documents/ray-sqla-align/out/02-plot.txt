@@ -1,0 +1,50 @@
+# ray-sqla-align 02: the plot, histories.csv, and the reference store before and after
+$ PYTHONPATH=. ./venv/bin/python -u plot_by_beta.py --config exponential.yaml --database $S/ray-sqla-align-02-reference.db --shards 16 --phi-init-Mp 5 --output $L/plot-reference --ray-address $ADDRESS > $L/plot-reference.log 2>&1
+(with ADDRESS=127.0.0.1:6380 S=$PWD/var/datastores L=$PWD/var/ray-sqla-align-02 exported)
+plot exit 0, 25 s, 2026-10-25 21:12:42 +0000 -> 2026-10-25 21:13:07 +0000
+$ shasum -a 256 var/ray-sqla-align-02/plot-reference/QCD_Cosmology/histories.csv
+d7c62c37d8ad637a63854583ab11bc737109dcbfba92168dbddbaea75182c522  var/ray-sqla-align-02/plot-reference/QCD_Cosmology/histories.csv
+
+$ shasum -a 256 var/datastores/ray-sqla-align-02-reference*
+## before the plot: 2026-10-25 21:12:37 +0000
+fae906850913e6c1c72bbadffa840c891e3cafb4cf360b65afd644e42580b9f8  var/datastores/ray-sqla-align-02-reference-shard0000.db
+65c414e101145c63a95ee2f5b76f7a9e9c3497ed5ebc83bf5912b955cd8a0ff4  var/datastores/ray-sqla-align-02-reference-shard0001.db
+cf079a74b1ee2d82d00dcafbe55efea4efef35ae41e0e1f838cb5a334dddb26c  var/datastores/ray-sqla-align-02-reference-shard0002.db
+5577951224d2c2f93a882e2b3acab60f7e5b2434ed124600e7afad489ff98a7d  var/datastores/ray-sqla-align-02-reference-shard0003.db
+b4c43fe5ae005853782851a970f52ca7cca713e1b257c00ae0d2c5de1a4bebf2  var/datastores/ray-sqla-align-02-reference-shard0004.db
+b4c43fe5ae005853782851a970f52ca7cca713e1b257c00ae0d2c5de1a4bebf2  var/datastores/ray-sqla-align-02-reference-shard0005.db
+b4c43fe5ae005853782851a970f52ca7cca713e1b257c00ae0d2c5de1a4bebf2  var/datastores/ray-sqla-align-02-reference-shard0006.db
+868d132f10e60bf640f95b4dfbd334d49ed11f8f30ae4b9bad3d325162cc0a6c  var/datastores/ray-sqla-align-02-reference-shard0007.db
+868d132f10e60bf640f95b4dfbd334d49ed11f8f30ae4b9bad3d325162cc0a6c  var/datastores/ray-sqla-align-02-reference-shard0008.db
+b4c43fe5ae005853782851a970f52ca7cca713e1b257c00ae0d2c5de1a4bebf2  var/datastores/ray-sqla-align-02-reference-shard0009.db
+b4c43fe5ae005853782851a970f52ca7cca713e1b257c00ae0d2c5de1a4bebf2  var/datastores/ray-sqla-align-02-reference-shard0010.db
+b4c43fe5ae005853782851a970f52ca7cca713e1b257c00ae0d2c5de1a4bebf2  var/datastores/ray-sqla-align-02-reference-shard0011.db
+868d132f10e60bf640f95b4dfbd334d49ed11f8f30ae4b9bad3d325162cc0a6c  var/datastores/ray-sqla-align-02-reference-shard0012.db
+b4c43fe5ae005853782851a970f52ca7cca713e1b257c00ae0d2c5de1a4bebf2  var/datastores/ray-sqla-align-02-reference-shard0013.db
+868d132f10e60bf640f95b4dfbd334d49ed11f8f30ae4b9bad3d325162cc0a6c  var/datastores/ray-sqla-align-02-reference-shard0014.db
+70eb8549a82da409e11f0cd13652164abb2c37cd32836cf4cc3bd681c80b743c  var/datastores/ray-sqla-align-02-reference-shard0015.db
+7bedaca3e0a4026c224d299d63dcd39e2a5560aa57b5aaff0e02ba50895c5c0f  var/datastores/ray-sqla-align-02-reference.db
+96faf5d5a729f78e3103bf80c7343579de31241262136e1f335d9b44ca3019ee  var/datastores/ray-sqla-align-02-reference.manifest.json
+
+## after the plot: 2026-10-25 21:13:12 +0000
+fae906850913e6c1c72bbadffa840c891e3cafb4cf360b65afd644e42580b9f8  var/datastores/ray-sqla-align-02-reference-shard0000.db
+65c414e101145c63a95ee2f5b76f7a9e9c3497ed5ebc83bf5912b955cd8a0ff4  var/datastores/ray-sqla-align-02-reference-shard0001.db
+cf079a74b1ee2d82d00dcafbe55efea4efef35ae41e0e1f838cb5a334dddb26c  var/datastores/ray-sqla-align-02-reference-shard0002.db
+5577951224d2c2f93a882e2b3acab60f7e5b2434ed124600e7afad489ff98a7d  var/datastores/ray-sqla-align-02-reference-shard0003.db
+b4c43fe5ae005853782851a970f52ca7cca713e1b257c00ae0d2c5de1a4bebf2  var/datastores/ray-sqla-align-02-reference-shard0004.db
+b4c43fe5ae005853782851a970f52ca7cca713e1b257c00ae0d2c5de1a4bebf2  var/datastores/ray-sqla-align-02-reference-shard0005.db
+b4c43fe5ae005853782851a970f52ca7cca713e1b257c00ae0d2c5de1a4bebf2  var/datastores/ray-sqla-align-02-reference-shard0006.db
+868d132f10e60bf640f95b4dfbd334d49ed11f8f30ae4b9bad3d325162cc0a6c  var/datastores/ray-sqla-align-02-reference-shard0007.db
+868d132f10e60bf640f95b4dfbd334d49ed11f8f30ae4b9bad3d325162cc0a6c  var/datastores/ray-sqla-align-02-reference-shard0008.db
+b4c43fe5ae005853782851a970f52ca7cca713e1b257c00ae0d2c5de1a4bebf2  var/datastores/ray-sqla-align-02-reference-shard0009.db
+b4c43fe5ae005853782851a970f52ca7cca713e1b257c00ae0d2c5de1a4bebf2  var/datastores/ray-sqla-align-02-reference-shard0010.db
+b4c43fe5ae005853782851a970f52ca7cca713e1b257c00ae0d2c5de1a4bebf2  var/datastores/ray-sqla-align-02-reference-shard0011.db
+868d132f10e60bf640f95b4dfbd334d49ed11f8f30ae4b9bad3d325162cc0a6c  var/datastores/ray-sqla-align-02-reference-shard0012.db
+b4c43fe5ae005853782851a970f52ca7cca713e1b257c00ae0d2c5de1a4bebf2  var/datastores/ray-sqla-align-02-reference-shard0013.db
+868d132f10e60bf640f95b4dfbd334d49ed11f8f30ae4b9bad3d325162cc0a6c  var/datastores/ray-sqla-align-02-reference-shard0014.db
+70eb8549a82da409e11f0cd13652164abb2c37cd32836cf4cc3bd681c80b743c  var/datastores/ray-sqla-align-02-reference-shard0015.db
+7bedaca3e0a4026c224d299d63dcd39e2a5560aa57b5aaff0e02ba50895c5c0f  var/datastores/ray-sqla-align-02-reference.db
+96faf5d5a729f78e3103bf80c7343579de31241262136e1f335d9b44ca3019ee  var/datastores/ray-sqla-align-02-reference.manifest.json
+
+$ diff (the before and after lists, less their headers)
+diff exit 0

@@ -1,0 +1,37 @@
+** registered_run: registered as ray-sqla-align-02-reference-20261025T210149
+**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/ray-sqla-align-02-reference-20261025T210149/manifest.json
+**   list it with: ./venv/bin/python -m runregistrykit list
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-10-25 21:01:50,019	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-10-25 21:01:50,062	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at http://127.0.0.1:8267 
+>> Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/ray-sqla-align-02-reference.db" with 16 shards
+
+** BUILDING GRID OF MODELS TO SAMPLE
+   -- using potential type "Exponential"
+   -- populated beta sample grid with 5 values = [ 1.1, 1.15, 1.2, 10, 25 ]
+   -- populated M sample grid with 1 value = [ 0.001 Mp ]
+   -- populated Lambda sample grid with 1 value = [ 0.001 eV ]
+!! warning: beta=10, phi*=5 M_P: Omega(phi*) T* = 4.2567e+07 M_P (super-Planckian start)
+!! warning: beta=25, phi*=5 M_P: Omega(phi*) T* = 1.5891e+40 M_P (super-Planckian start)
+!! warning: 2 of 5 couplings start super-Planckian; they are computed like the others
+   -- total number of models to integrate = 5
+(Datastore pid=11494) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   -- ALL WORK ITEMS COMPLETE in time 2m 9.96s
+      Queue summary: 5 lookup (avg 138.5/hr), 5 compute (avg 138.5/hr), 5 store (avg 138.5/hr), 5 validation (avg 138.5/hr)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 2.11s
+      Queue summary: 5 lookup (avg 141.9/min), 5 compute (avg 141.9/min), 5 store (avg 141.9/min), 5 validation (avg 141.9/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarModel failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 23s
+      Queue summary: 5 lookup (avg 13.02/min), 5 compute (avg 13.02/min), 5 store (avg 13.02/min), 5 validation (avg 13.02/min)
+-- BBNData: 0 models skipped because their ScalarModel failed; 0 computations skipped because of a stored failure
+(Datastore pid=11541) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO" [repeated 15x across cluster] (Ray deduplicates logs by default. Set RAY_DEDUP_LOGS=0 to disable log deduplication, or see https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#log-deduplication for more options.)
+** driver exit status 0
+** launcher saw exit status 0

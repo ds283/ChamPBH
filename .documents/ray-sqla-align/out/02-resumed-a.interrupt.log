@@ -1,0 +1,4 @@
+[2026-10-25T21:06:13+00:00] interrupt_when: waiting for "CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID" in /Users/ds283/Documents/Code/ChamPBH/var/ray-sqla-align-02/resumed-a.log; then 90 s; then SIGTERM
+[2026-10-25T21:06:13+00:00] interrupt_when: driver pid 12370 (from /Users/ds283/Documents/Code/ChamPBH/var/ray-sqla-align-02/resumed-a.pid)
+[2026-10-25T21:07:06+00:00] interrupt_when: saw "CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID"; waiting 90 s
+[2026-10-25T21:08:36+00:00] interrupt_when: sent SIGTERM to pid 12370
