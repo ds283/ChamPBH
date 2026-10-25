@@ -1,0 +1,21 @@
+## 2.6 T3 standalone, 20:11 (fix tree): PYTHONPATH=. ./venv/bin/python -m unittest -v tools.tests.test_ray_auth > var/ray-sqla-align-01/t3-standalone.txt 2>&1
+exit 0, wall 2 s
+test_main_py_imports_it_before_ray_init (tools.tests.test_ray_auth.TestEachDriverImportsIt.test_main_py_imports_it_before_ray_init) ... ok
+test_plot_ScalarModel_py_imports_it_before_ray_init (tools.tests.test_ray_auth.TestEachDriverImportsIt.test_plot_ScalarModel_py_imports_it_before_ray_init) ... ok
+test_plot_by_beta_py_imports_it_before_ray_init (tools.tests.test_ray_auth.TestEachDriverImportsIt.test_plot_by_beta_py_imports_it_before_ray_init) ... ok
+test_a_mode_already_set_is_what_ray_sees (tools.tests.test_ray_auth.TestRaySeesTheMode.test_a_mode_already_set_is_what_ray_sees)
+With `disabled` already set, Ray is not in token mode, whatever the module does. ... ok
+test_ray_imported_first (tools.tests.test_ray_auth.TestRaySeesTheMode.test_ray_imported_first)
+The order of the three drivers and registered_run.py: `ray`, then the module. ... ok
+test_the_module_imported_first (tools.tests.test_ray_auth.TestRaySeesTheMode.test_the_module_imported_first) ... ok
+test_ray_cluster_sh_exports_the_mode_before_ray_start (tools.tests.test_ray_auth.TestTheClusterScript.test_ray_cluster_sh_exports_the_mode_before_ray_start)
+Without it, `ray start` infers token mode from the token file rather than being told. ... ok
+test_a_mode_already_set_is_left_as_it_is (tools.tests.test_ray_auth.TestTheModuleSetsTheMode.test_a_mode_already_set_is_left_as_it_is)
+A person's explicit choice in the environment wins over ChamPBH's. ... ok
+test_an_unset_mode_becomes_token (tools.tests.test_ray_auth.TestTheModuleSetsTheMode.test_an_unset_mode_becomes_token)
+With nothing set, Ray would choose the mode itself, by how it is started. ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 2.183s
+
+OK

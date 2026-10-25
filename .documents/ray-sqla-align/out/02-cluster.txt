@@ -1,0 +1,205 @@
+# ray-sqla-align 02: the cluster (ANSI colour codes removed; each script or lock command ran alone in its Bash call, output to a file, exit by echo $? in the same call)
+
+## gate (20:53) .documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh status > var/ray-sqla-align-02/gate-status.txt 2>&1; echo $?
+exit 0
+lock: free (/Users/ds283/.raypoolkit/rehearsal-lock does not exist)
+Ray processes of /tmp/ray-cpbh: none
+what stop would signal (this script's rule, /tmp/ray-cpbh): no processes
+port 6380: free
+port 6381: free
+port 8267: free
+port 52367: free
+
+## gate ./venv/bin/python -m raypoolkit.rehearsal_lock status > var/ray-sqla-align-02/gate-lock-status.txt 2>&1; echo $?
+exit 0
+lock: free (/Users/ds283/.raypoolkit/rehearsal-lock does not exist)
+Ray processes: no temp dir given
+
+## before start
+21:01  up 20 days, 19:46, 1 user, load averages: 8.07 5.49 5.50
+env | grep -c RAY_AUTH_MODE: 0
+
+## start (21:01:04) .documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh start "ray-sqla-align 02 (R)" > var/ray-sqla-align-02/start.txt 2>&1; echo $?
+exit 0
+grep -c 'Token authentication is enabled' start.txt: 0
+grep -c 'Generated new authentication token' start.txt: 0
+grep -c 'InvalidAuthToken' start.txt: 0
+grep -c 'AuthenticationError' start.txt: 0
+grep -c -i warn start.txt: 0
+acquired the rehearsal lock (/Users/ds283/.raypoolkit/rehearsal-lock) for ChamPBH: ray-sqla-align 02 (R)
+2026-10-25 21:01:09,690	INFO usage_lib.py:448 -- Usage stats collection is disabled.
+2026-10-25 21:01:09,690	INFO scripts.py:1043 -- Local node IP: 127.0.0.1
+2026-10-25 21:01:15,192	SUCC scripts.py:1084 -- --------------------
+2026-10-25 21:01:15,193	SUCC scripts.py:1085 -- Ray runtime started.
+2026-10-25 21:01:15,193	SUCC scripts.py:1086 -- --------------------
+2026-10-25 21:01:15,193	INFO scripts.py:1088 -- Next steps
+2026-10-25 21:01:15,193	INFO cli_output_helpers.py:16 -- Note: The following commands are intended for use on
+2026-10-25 21:01:15,193	INFO cli_output_helpers.py:17 -- the head node or within the cluster network.
+2026-10-25 21:01:15,193	INFO scripts.py:1106 -- To connect to this Ray cluster:
+2026-10-25 21:01:15,193	INFO scripts.py:1108 -- import ray
+2026-10-25 21:01:15,193	INFO scripts.py:1109 -- ray.init()
+2026-10-25 21:01:15,193	INFO scripts.py:1123 -- To submit a Ray job using the Ray Jobs CLI:
+2026-10-25 21:01:15,194	INFO scripts.py:1124 --   RAY_API_SERVER_ADDRESS='http://127.0.0.1:8267' ray job submit --working-dir . -- python my_script.py
+2026-10-25 21:01:15,194	INFO scripts.py:1133 -- See https://docs.ray.io/en/latest/cluster/running-applications/job-submission/index.html 
+2026-10-25 21:01:15,194	INFO scripts.py:1137 -- for more information on submitting Ray jobs to the Ray cluster.
+2026-10-25 21:01:15,194	INFO scripts.py:1142 -- To terminate the Ray runtime, run
+2026-10-25 21:01:15,194	INFO scripts.py:1143 --   ray stop
+2026-10-25 21:01:15,194	INFO scripts.py:1146 -- To view the status of the cluster, use
+2026-10-25 21:01:15,194	INFO scripts.py:1147 --   ray status
+2026-10-25 21:01:15,194	INFO scripts.py:1151 -- To monitor and debug Ray, view the dashboard at 
+2026-10-25 21:01:15,194	INFO scripts.py:1152 --   127.0.0.1:8267
+2026-10-25 21:01:15,194	INFO scripts.py:1159 -- If connection to the dashboard fails, check your firewall settings and network configuration.
+recorded pid 10995 in /Users/ds283/.raypoolkit/rehearsal-lock/owner
+>> ray_cluster: address 127.0.0.1:6380
+>> ray_cluster: dashboard http://127.0.0.1:8267
+>> ray_cluster: actors: RAY_AUTH_MODE=token ./venv/bin/ray list actors --address 127.0.0.1:6380
+>> ray_cluster: started in 8s; gcs_server pid 10995
+
+## (pids) .documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh status > var/ray-sqla-align-02/status-up.txt 2>&1; echo $?
+exit 0
+lock: HELD (/Users/ds283/.raypoolkit/rehearsal-lock)
+    project: ChamPBH
+    purpose: ray-sqla-align 02 (R)
+    acquired: 2026-10-25T21:01:08+00:00
+    host: mps026088
+    ray_temp_dir: /tmp/ray-cpbh
+    ray_address: 127.0.0.1:6380
+    pid: 10995
+owner pid 10995: alive
+Ray processes of /tmp/ray-cpbh: 19
+    10995 1 /Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/core/src/ray/gcs/gcs_server --log_dir=/tmp/ray-cpbh/session_2026-10-25_21-01
+    11000 1 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -u /Users/ds283/Documents/Code/ChamPBH/venv/li
+    11001 1 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m ray.util.client.server --address=127.0.0.1:
+    11002 1 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python /Users/ds283/Documents/Code/ChamPBH/venv/lib/p
+    11009 11002 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c from multiprocessing.resource_tracker im
+    11010 11002 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c import sys; from multiprocessing.forkser
+    11015 11010 ray-dashboard-MetricsHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "import sys
+    11016 11010 ray-dashboard-DataHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "import sys; f
+    11017 11010 ray-dashboard-EventHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "import sys; 
+    11018 11010 ray-dashboard-JobHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "import sys; fr
+    11019 11010 ray-dashboard-NodeHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "import sys; f
+    11020 11010 ray-dashboard-ReportHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "import sys;
+    11021 11010 ray-dashboard-ServeHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "import sys; 
+    11022 11010 ray-dashboard-StateHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "import sys; 
+    11023 11010 ray-dashboard-TrainHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "import sys; 
+    11030 1 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -u /Users/ds283/Documents/Code/ChamPBH/venv/li
+    11031 1 /Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/core/src/ray/raylet/raylet --raylet_socket_name=/tmp/ray-cpbh/session_2026-1
+    11036 11031 ray::DashboardAgent                      
+    11037 11031 ray::RuntimeEnvAgent                
+what stop would signal (this script's rule, /tmp/ray-cpbh): 19 process(es)
+    10995     1 /Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/core/src/ray/gcs/gcs_server --log_dir=/tmp/ray-cpbh/session_2026
+    11000     1 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -u /Users/ds283/Documents/Code/Cha
+    11001     1 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m ray.util.client.server --addres
+    11002     1 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python /Users/ds283/Documents/Code/ChamPB
+    11009 11002 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c from multiprocessing.resourc
+    11010 11002 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c import sys; from multiproces
+    11015 11010 ray-dashboard-MetricsHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c
+    11016 11010 ray-dashboard-DataHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "i
+    11017 11010 ray-dashboard-EventHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "
+    11018 11010 ray-dashboard-JobHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "im
+    11019 11010 ray-dashboard-NodeHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "i
+    11020 11010 ray-dashboard-ReportHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c 
+    11021 11010 ray-dashboard-ServeHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "
+    11022 11010 ray-dashboard-StateHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "
+    11023 11010 ray-dashboard-TrainHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "
+    11030     1 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -u /Users/ds283/Documents/Code/Cha
+    11031     1 /Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/core/src/ray/raylet/raylet --raylet_socket_name=/tmp/ray-cpbh/se
+    11036 11031 ray::DashboardAgent                      
+    11037 11031 ray::RuntimeEnvAgent                
+port 6380: held
+port 6381: held
+port 8267: held
+port 52367: held
+
+## the ps -E checks
+## 2026-10-25 21:01:29 +0000 gcs_server 10995 (start.txt's line), raylet 11031 (status-up.txt's listing)
+## ps -o pid=,comm= -p 10995
+10995 /Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/core/src/ray/gcs/gcs_server
+## ps -E -ww -o command= -p 10995 | grep -o 'RAY_AUTH_MODE=[a-z]*'
+RAY_AUTH_MODE=token
+## ps -E -ww -o command= -p 10995 | grep -c 'PATH='
+1
+## ps -o pid=,comm= -p 11031
+11031 /Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/core/src/ray/raylet/raylet
+## ps -E -ww -o command= -p 11031 | grep -o 'RAY_AUTH_MODE=[a-z]*'
+RAY_AUTH_MODE=token
+## ps -E -ww -o command= -p 11031 | grep -c 'PATH='
+1
+
+## RAY_AUTH_MODE=token ./venv/bin/ray status --address 127.0.0.1:6380 > var/ray-sqla-align-02/ray-status.txt 2>&1; echo $?
+exit 0
+======== Autoscaler status: 2026-10-25 21:01:31.211602 ========
+Node status
+---------------------------------------------------------------
+Active:
+ 1 node_7eba7e94e060ca34b26c4d9d6535789b74451aa4baaa5974cd91c17d
+Pending:
+ (no pending nodes)
+Recent failures:
+ (no failures)
+
+Resources
+---------------------------------------------------------------
+Total Usage:
+ 0.0/10.0 CPU
+ 0.0/1.0 GPU
+ 0B/7.03GiB memory
+ 0B/2.00GiB object_store_memory
+
+From request_resources:
+ (none)
+Pending Demands:
+ (no resource demands)
+
+## before stop
+## before stop: 2026-10-25 21:13:23 +0000
+21:13  up 20 days, 19:58, 1 user, load averages: 8.35 10.42 9.46
+(eval):kill:1: kill 11468 failed: no such process
+kill -0 11468 (reference): exit 1
+(eval):kill:1: kill 12370 failed: no such process
+kill -0 12370 (resumed-a): exit 1
+(eval):kill:1: kill 13137 failed: no such process
+kill -0 13137 (resumed-c): exit 1
+1
+
+## stop .documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh stop > var/ray-sqla-align-02/stop.txt 2>&1; echo $?
+exit 0
+>> ray_cluster: SIGTERM to 19 process(es) naming /tmp/ray-cpbh, and their descendants: 10995 11000 11001 11002 11009 11010 11015 11016 11017 11018 11019 11020 11021 11022 11023 11030 11031 11036 11037
+    10995     1 /Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/core/src/ray/gcs/gcs_server --log_dir=/tmp/ray-cpbh/session_2026
+    11000     1 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -u /Users/ds283/Documents/Code/Cha
+    11001     1 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m ray.util.client.server --addres
+    11002     1 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python /Users/ds283/Documents/Code/ChamPB
+    11009 11002 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c from multiprocessing.resourc
+    11010 11002 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c import sys; from multiproces
+    11015 11010 ray-dashboard-MetricsHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c
+    11016 11010 ray-dashboard-DataHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "i
+    11017 11010 ray-dashboard-EventHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "
+    11018 11010 ray-dashboard-JobHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "im
+    11019 11010 ray-dashboard-NodeHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "i
+    11020 11010 ray-dashboard-ReportHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c 
+    11021 11010 ray-dashboard-ServeHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "
+    11022 11010 ray-dashboard-StateHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "
+    11023 11010 ray-dashboard-TrainHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "
+    11030     1 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -u /Users/ds283/Documents/Code/Cha
+    11031     1 /Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/core/src/ray/raylet/raylet --raylet_socket_name=/tmp/ray-cpbh/se
+    11036 11031 ray::DashboardAgent                      
+    11037 11031 ray::RuntimeEnvAgent                
+>> ray_cluster: grace period of 15s over; SIGKILL to: 10995 11000
+>> ray_cluster: no process names /tmp/ray-cpbh; ports 6380 6381 8267 52367 are free
+released the rehearsal lock (/Users/ds283/.raypoolkit/rehearsal-lock)
+>> ray_cluster: stopped in 20s
+
+## (21:13, after stop) .documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh status > var/ray-sqla-align-02/status-after.txt 2>&1; echo $?
+exit 0
+lock: free (/Users/ds283/.raypoolkit/rehearsal-lock does not exist)
+Ray processes of /tmp/ray-cpbh: none
+what stop would signal (this script's rule, /tmp/ray-cpbh): no processes
+port 6380: free
+port 6381: free
+port 8267: free
+port 52367: free
+
+## ./venv/bin/python -m raypoolkit.rehearsal_lock status > var/ray-sqla-align-02/lock-status-after.txt 2>&1; echo $?
+exit 0
+lock: free (/Users/ds283/.raypoolkit/rehearsal-lock does not exist)
+Ray processes: no temp dir given

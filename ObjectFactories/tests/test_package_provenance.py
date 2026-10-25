@@ -268,13 +268,13 @@ class TestInstalledPackageProvenance(_StandInCase):
         )
 
     def test_default_names(self):
-        """The default names are the two packages the campaign adopts, in this order."""
-        self.assertEqual(
-            utilities.RECORDED_DISTRIBUTIONS, ("datastorekit", "raypoolkit")
-        )
-        self.assertEqual(
-            list(installed_package_provenance()), ["datastorekit", "raypoolkit"]
-        )
+        """The default names, in this order: the two packages the dk-and-rpk-migration campaign
+        adopts, then `ray`, `SQLAlchemy`, `numpy` and `scipy`, which ray-sqla-align prompt 01
+        (README U3) added so that a driver's `>> packages:` line says which venv ran it.
+        """
+        names = ["datastorekit", "raypoolkit", "ray", "SQLAlchemy", "numpy", "scipy"]
+        self.assertEqual(utilities.RECORDED_DISTRIBUTIONS, tuple(names))
+        self.assertEqual(list(installed_package_provenance()), names)
 
 
 def _is_provenance_print(node) -> bool:

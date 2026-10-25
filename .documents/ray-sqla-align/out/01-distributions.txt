@@ -1,0 +1,3 @@
+## 2.5 step 5 2026-10-25 20:10:27 PYTHONPATH=. ./venv/bin/python -c 'import utilities; print(utilities.format_package_provenance(utilities.installed_package_provenance()))'
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+exit 0

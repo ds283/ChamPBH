@@ -1,0 +1,51 @@
+## the manifests: 2026-10-25 21:14:57 +0000
+$ shasum -a 256 main.py
+685b615bc85b3fbfa6ceea30f4a68865f5d97a5ca8e0cf39d980247df1307bbe  main.py
+run ray-sqla-align-02-reference-20261025T210149
+   script main.py
+   script_sha256 685b615bc85b3fbfa6ceea30f4a68865f5d97a5ca8e0cf39d980247df1307bbe
+   git_head b16c4355ff91adbf8d27a08e5956e0020fc0a716
+   git_dirty False
+   results var/datastores/ray-sqla-align-02-reference.db
+   results_store_id None
+   created 2026-10-25T21:01:49+00:00
+   packages: 7
+      SQLAlchemy {"commit": null, "editable": false, "requested_revision": null, "url": null, "version": "2.0.55"}
+      datastorekit {"commit": "c8570e849334d09085bbd84876095fc9e22bd005", "editable": false, "requested_revision": "v0.4.0", "url": "https://github.com/ds283/DatastoreKit", "version": "0.4.0"}
+      numpy {"commit": null, "editable": false, "requested_revision": null, "url": null, "version": "2.3.5"}
+      ray {"commit": null, "editable": false, "requested_revision": null, "url": null, "version": "2.59.0"}
+      raypoolkit {"commit": "67a75b97a656accb98195a4bda93f64e6a5f3fb2", "editable": false, "requested_revision": "v0.3.0", "url": "https://github.com/ds283/RayPoolKit", "version": "0.3.0"}
+      runregistrykit {"commit": "0bae3a3c501a8264ee4be5bc24f06422af38720f", "editable": false, "requested_revision": "v0.2.0", "url": "https://github.com/ds283/RunRegistryKit", "version": "0.2.0"}
+      scipy {"commit": null, "editable": false, "requested_revision": null, "url": null, "version": "1.17.0"}
+run ray-sqla-align-02-resumed-a-20261025T210611
+   script main.py
+   script_sha256 685b615bc85b3fbfa6ceea30f4a68865f5d97a5ca8e0cf39d980247df1307bbe
+   git_head b16c4355ff91adbf8d27a08e5956e0020fc0a716
+   git_dirty False
+   results var/datastores/ray-sqla-align-02-resumed.db
+   results_store_id None
+   created 2026-10-25T21:06:11+00:00
+   packages: 7
+      SQLAlchemy {"commit": null, "editable": false, "requested_revision": null, "url": null, "version": "2.0.55"}
+      datastorekit {"commit": "c8570e849334d09085bbd84876095fc9e22bd005", "editable": false, "requested_revision": "v0.4.0", "url": "https://github.com/ds283/DatastoreKit", "version": "0.4.0"}
+      numpy {"commit": null, "editable": false, "requested_revision": null, "url": null, "version": "2.3.5"}
+      ray {"commit": null, "editable": false, "requested_revision": null, "url": null, "version": "2.59.0"}
+      raypoolkit {"commit": "67a75b97a656accb98195a4bda93f64e6a5f3fb2", "editable": false, "requested_revision": "v0.3.0", "url": "https://github.com/ds283/RayPoolKit", "version": "0.3.0"}
+      runregistrykit {"commit": "0bae3a3c501a8264ee4be5bc24f06422af38720f", "editable": false, "requested_revision": "v0.2.0", "url": "https://github.com/ds283/RunRegistryKit", "version": "0.2.0"}
+      scipy {"commit": null, "editable": false, "requested_revision": null, "url": null, "version": "1.17.0"}
+run ray-sqla-align-02-resumed-c-20261025T210916
+   script main.py
+   script_sha256 685b615bc85b3fbfa6ceea30f4a68865f5d97a5ca8e0cf39d980247df1307bbe
+   git_head b16c4355ff91adbf8d27a08e5956e0020fc0a716
+   git_dirty False
+   results var/datastores/ray-sqla-align-02-resumed.db
+   results_store_id 9919583b8b04499da3e286c0814a0114
+   created 2026-10-25T21:09:16+00:00
+   packages: 7
+      SQLAlchemy {"commit": null, "editable": false, "requested_revision": null, "url": null, "version": "2.0.55"}
+      datastorekit {"commit": "c8570e849334d09085bbd84876095fc9e22bd005", "editable": false, "requested_revision": "v0.4.0", "url": "https://github.com/ds283/DatastoreKit", "version": "0.4.0"}
+      numpy {"commit": null, "editable": false, "requested_revision": null, "url": null, "version": "2.3.5"}
+      ray {"commit": null, "editable": false, "requested_revision": null, "url": null, "version": "2.59.0"}
+      raypoolkit {"commit": "67a75b97a656accb98195a4bda93f64e6a5f3fb2", "editable": false, "requested_revision": "v0.3.0", "url": "https://github.com/ds283/RayPoolKit", "version": "0.3.0"}
+      runregistrykit {"commit": "0bae3a3c501a8264ee4be5bc24f06422af38720f", "editable": false, "requested_revision": "v0.2.0", "url": "https://github.com/ds283/RunRegistryKit", "version": "0.2.0"}
+      scipy {"commit": null, "editable": false, "requested_revision": null, "url": null, "version": "1.17.0"}

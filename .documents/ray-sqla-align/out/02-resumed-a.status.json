@@ -1,0 +1,225 @@
+{
+  "exit_code": 143,
+  "fingerprint": {
+    "classes": {
+      "AdiabaticHistory": {
+        "count": 0,
+        "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "tag_sets": []
+      },
+      "BBNData": {
+        "count": 0,
+        "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "tag_sets": []
+      },
+      "ExponentialCoupling": {
+        "count": 5,
+        "digest": "cc1e923f4215d5a580100d096289ae4d8e33d8e8443dbd835a40cea75409ce51",
+        "tag_sets": [
+          {
+            "count": 5,
+            "digest": "cc1e923f4215d5a580100d096289ae4d8e33d8e8443dbd835a40cea75409ce51",
+            "tags": []
+          }
+        ]
+      },
+      "ExponentialPotential": {
+        "count": 1,
+        "digest": "e8f6fb31cc14bcd668de4d1cd638955e45d6d8c71b7bf5bc2d25331a1d649b91",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "e8f6fb31cc14bcd668de4d1cd638955e45d6d8c71b7bf5bc2d25331a1d649b91",
+            "tags": []
+          }
+        ]
+      },
+      "IntegrationSolver": {
+        "count": 6,
+        "digest": "223ae7361d67244aff9c12f3f5cc1954ac2c7dc717189ad15b4030c8a0650e4a",
+        "tag_sets": [
+          {
+            "count": 6,
+            "digest": "223ae7361d67244aff9c12f3f5cc1954ac2c7dc717189ad15b4030c8a0650e4a",
+            "tags": []
+          }
+        ]
+      },
+      "InversePowerPotential": {
+        "count": 0,
+        "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "tag_sets": []
+      },
+      "Lambda_value": {
+        "count": 1,
+        "digest": "b4275846684b4ccea691062c23f2270769b1c13dfbf45828489f9eb3c4b56957",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "b4275846684b4ccea691062c23f2270769b1c13dfbf45828489f9eb3c4b56957",
+            "tags": []
+          }
+        ]
+      },
+      "M_value": {
+        "count": 1,
+        "digest": "2cb2a5f22cefab57224480dac90cd635902b52581424c07def16f5f83ea490f1",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "2cb2a5f22cefab57224480dac90cd635902b52581424c07def16f5f83ea490f1",
+            "tags": []
+          }
+        ]
+      },
+      "QCD_Cosmology": {
+        "count": 1,
+        "digest": "dcbaa9d413d45bf56b63a2a6ac1da865159e363f8b5ea2a479265113b82091b2",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "dcbaa9d413d45bf56b63a2a6ac1da865159e363f8b5ea2a479265113b82091b2",
+            "tags": []
+          }
+        ]
+      },
+      "ReclinerPotential": {
+        "count": 0,
+        "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "tag_sets": []
+      },
+      "ReflectingPotential": {
+        "count": 0,
+        "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "tag_sets": []
+      },
+      "ScalarModel": {
+        "count": 4,
+        "digest": "ff744991253b5c69f663b3131d6c88d160df5c293875de7f73b2ba313db455fe",
+        "tag_sets": [
+          {
+            "count": 4,
+            "digest": "ff744991253b5c69f663b3131d6c88d160df5c293875de7f73b2ba313db455fe",
+            "tags": [
+              "SamplesPerLog10Z_250"
+            ]
+          }
+        ]
+      },
+      "StarobinskyPotential": {
+        "count": 0,
+        "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "tag_sets": []
+      },
+      "beta_value": {
+        "count": 5,
+        "digest": "83097204bfb24f121acd5a3a79df72f93103397c36eec53ce43b4b56aef0c23c",
+        "tag_sets": [
+          {
+            "count": 5,
+            "digest": "83097204bfb24f121acd5a3a79df72f93103397c36eec53ce43b4b56aef0c23c",
+            "tags": []
+          }
+        ]
+      },
+      "phi_value": {
+        "count": 1,
+        "digest": "29e7a88b01e35866c8f102278ae2ab0eaaecef332e2fe6badec047d47894e14a",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "29e7a88b01e35866c8f102278ae2ab0eaaecef332e2fe6badec047d47894e14a",
+            "tags": []
+          }
+        ]
+      },
+      "pi_value": {
+        "count": 1,
+        "digest": "237cd5e9616925eae2215daa8eb602f9db5e521a4415d78f11056c39f8c74cc8",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "237cd5e9616925eae2215daa8eb602f9db5e521a4415d78f11056c39f8c74cc8",
+            "tags": []
+          }
+        ]
+      },
+      "redshift": {
+        "count": 21250,
+        "digest": "9aaa0019f17457fc4c81295cbc4dbcf98d6e36ccb834bb1863e00874a466fdbc",
+        "tag_sets": [
+          {
+            "count": 21250,
+            "digest": "9aaa0019f17457fc4c81295cbc4dbcf98d6e36ccb834bb1863e00874a466fdbc",
+            "tags": []
+          }
+        ]
+      },
+      "store_tag": {
+        "count": 1,
+        "digest": "34407c96658d27b3334475fbcac14bdf7862190810b233d798b75c11a6450531",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "34407c96658d27b3334475fbcac14bdf7862190810b233d798b75c11a6450531",
+            "tags": []
+          }
+        ]
+      },
+      "temperature": {
+        "count": 2,
+        "digest": "21ef8ab71b75a81d7eaab37ecec977fd0822f585b198de6146601a73b2b06d18",
+        "tag_sets": [
+          {
+            "count": 2,
+            "digest": "21ef8ab71b75a81d7eaab37ecec977fd0822f585b198de6146601a73b2b06d18",
+            "tags": []
+          }
+        ]
+      },
+      "tolerance": {
+        "count": 1,
+        "digest": "3de3f231f28088daa55ff7828dd40a9a6b4aa189ecf6b1c7e23d94f2f4e80fba",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "3de3f231f28088daa55ff7828dd40a9a6b4aa189ecf6b1c7e23d94f2f4e80fba",
+            "tags": []
+          }
+        ]
+      },
+      "version": {
+        "count": 1,
+        "digest": "d997ffcc3f26dc5aaa9e024db81f84c8cdd567b1910d804ee17980ae5c993448",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "d997ffcc3f26dc5aaa9e024db81f84c8cdd567b1910d804ee17980ae5c993448",
+            "tags": []
+          }
+        ]
+      }
+    },
+    "digest": "0d612337e93525f107d5aed73b10fa14c337744b9e155057d7d8416ea34e0f13",
+    "encoding_format": 1,
+    "fingerprint_format": 1,
+    "problems": {},
+    "taken": {
+      "git_dirty": false,
+      "git_head": "b16c4355ff91adbf8d27a08e5956e0020fc0a716",
+      "run_id": "ray-sqla-align-02-resumed-a-20261025T210611",
+      "when": "2026-10-25T21:08:36+00:00"
+    }
+  },
+  "fingerprint_sidecar": "not written: /Users/ds283/Documents/Code/ChamPBH/var/datastores/ray-sqla-align-02-resumed.manifest.json is not a problem-free registry sidecar (there is none)",
+  "heartbeat": "2026-10-25T21:08:44+00:00",
+  "host": {
+    "boot": "376461AF-4985-4F42-8E41-F4E914F5E3E6",
+    "id": "8d2b247824882486"
+  },
+  "pid": 12370,
+  "stage": "CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID",
+  "state": "killed",
+  "units_done": 0,
+  "units_total": null
+}

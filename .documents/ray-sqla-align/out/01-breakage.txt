@@ -1,0 +1,141 @@
+## B5 2026-10-25 20:10:08 on runregistrykit.toml; diff as applied: out/01-B5.diff
+--- a/runregistrykit.toml
++++ b/runregistrykit.toml
+@@ -2,7 +2,7 @@
+ # where runs and datastores are recorded, and which distributions every manifest records.
+ runs_root = "var/runs"
+ stores_root = "var/datastores"
+-distributions = ["datastorekit", "raypoolkit"]
++distributions = ["datastorekit", "raypoolkit", "ray"]
+ 
+ [stores]
+ fingerprinter = "config.fingerprint:fingerprinter"
+git apply --check: exit 0
+error: patch failed: runregistrykit.toml:2
+error: runregistrykit.toml: patch does not apply
+git apply -R --check: exit 1
+git apply: exit 0
+## PYTHONPATH=. ./venv/bin/python -m unittest tools.tests.test_registry_config
+unittest: exit 1
+The package finds the repository root, and reads the roots and distributions. The ... FAIL
+FAIL: test_roots_and_distributions (tools.tests.test_registry_config.TestRegistryConfig.test_roots_and_distributions)
+AssertionError: Tuples differ: ('datastorekit', 'raypoolkit', 'ray') != ('datastorekit', 'raypoolkit')
+Ran 5 tests in 0.066s
+FAILED (failures=1)
+git apply -R: exit 0
+cmp runregistrykit.toml saved copy: exit 0
+
+## B1 2026-10-25 20:12:03 on config/ray_auth.py; diff as applied: out/01-B1.diff
+--- a/config/ray_auth.py
++++ b/config/ray_auth.py
+@@ -46,5 +46,3 @@
+ RAY_AUTH_MODE = "token"
+ if "RAY_AUTH_MODE" not in os.environ:
+     os.environ["RAY_AUTH_MODE"] = RAY_AUTH_MODE
+-    if "ray._raylet" in sys.modules:
+-        sys.modules["ray._raylet"].Config.initialize("")
+git apply --check: exit 0
+error: patch failed: config/ray_auth.py:46
+error: config/ray_auth.py: patch does not apply
+git apply -R --check: exit 1
+git apply: exit 0
+## PYTHONPATH=. ./venv/bin/python -m unittest tools.tests.test_ray_auth
+unittest: exit 1
+The order of the three drivers and registered_run.py: `ray`, then the module. ... FAIL
+FAIL: test_ray_imported_first (tools.tests.test_ray_auth.TestRaySeesTheMode.test_ray_imported_first)
+AssertionError: False is not true
+Ran 9 tests in 2.149s
+FAILED (failures=1)
+git apply -R: exit 0
+cmp config/ray_auth.py saved copy: exit 0
+
+## B2 2026-10-25 20:12:06 on config/ray_auth.py; diff as applied: out/01-B2.diff
+--- a/config/ray_auth.py
++++ b/config/ray_auth.py
+@@ -44,7 +44,7 @@
+ # The token is ~/.ray/auth_token, shared by every project of this user on the machine. Keep it at
+ # mode 600, and never print or copy it.
+ RAY_AUTH_MODE = "token"
+-if "RAY_AUTH_MODE" not in os.environ:
++if True:
+     os.environ["RAY_AUTH_MODE"] = RAY_AUTH_MODE
+     if "ray._raylet" in sys.modules:
+         sys.modules["ray._raylet"].Config.initialize("")
+git apply --check: exit 0
+error: patch failed: config/ray_auth.py:44
+error: config/ray_auth.py: patch does not apply
+git apply -R --check: exit 1
+git apply: exit 0
+## PYTHONPATH=. ./venv/bin/python -m unittest tools.tests.test_ray_auth
+unittest: exit 1
+With `disabled` already set, Ray is not in token mode, whatever the module does. ... FAIL
+A person's explicit choice in the environment wins over ChamPBH's. ... FAIL
+FAIL: test_a_mode_already_set_is_what_ray_sees (tools.tests.test_ray_auth.TestRaySeesTheMode.test_a_mode_already_set_is_what_ray_sees)
+AssertionError: True is not false
+FAIL: test_a_mode_already_set_is_left_as_it_is (tools.tests.test_ray_auth.TestTheModuleSetsTheMode.test_a_mode_already_set_is_left_as_it_is)
+AssertionError: 'token' != 'disabled'
+Ran 9 tests in 2.188s
+FAILED (failures=2)
+git apply -R: exit 0
+cmp config/ray_auth.py saved copy: exit 0
+
+## B3 2026-10-25 20:12:08 on plot_by_beta.py; diff as applied: out/01-B3.diff
+--- a/plot_by_beta.py
++++ b/plot_by_beta.py
+@@ -37,8 +37,6 @@
+ from matplotlib import pyplot as plt
+ from numpy import nan
+ 
+-# names Ray's token mode before ray.init (config/ray_auth.py)
+-import config.ray_auth  # noqa: F401
+ from ComputeTargets import ScalarModelProxy, AdiabaticHistory, BBNData, ScalarModel
+ from ComputeTargets.BBNData import PRYM_VERSION, compute_SM_baseline
+ from CosmologyConcepts import temperature, phi_value, pi_value
+git apply --check: exit 0
+error: patch failed: plot_by_beta.py:37
+error: plot_by_beta.py: patch does not apply
+git apply -R --check: exit 1
+git apply: exit 0
+## PYTHONPATH=. ./venv/bin/python -m unittest tools.tests.test_ray_auth
+unittest: exit 1
+test_plot_by_beta_py_imports_it_before_ray_init (tools.tests.test_ray_auth.TestEachDriverImportsIt.test_plot_by_beta_py_imports_it_before_ray_init) ... FAIL
+FAIL: test_plot_by_beta_py_imports_it_before_ray_init (tools.tests.test_ray_auth.TestEachDriverImportsIt.test_plot_by_beta_py_imports_it_before_ray_init)
+AssertionError: [] is not true : plot_by_beta.py does not import config.ray_auth at module level
+Ran 9 tests in 1.949s
+FAILED (failures=1)
+git apply -R: exit 0
+cmp plot_by_beta.py saved copy: exit 0
+
+## B4 2026-10-25 20:12:10 on .documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh; diff as applied: out/01-B4.diff
+--- a/.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh
++++ b/.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh
+@@ -279,12 +279,12 @@
+     # Ray's authentication mode, named (ray-sqla-align 01). Since Ray 2.59, `ray start` infers
+     # token mode from the token file (~/.ray/auth_token) unless told; ChamPBH names it, as
+     # config/ray_auth.py does for every driver, so that the cluster and its drivers agree.
+-    export RAY_AUTH_MODE="${RAY_AUTH_MODE:-token}"
+     local t0=$SECONDS
+     "$RAY_BIN" start --head --temp-dir "$CPBH_TEMP_DIR" --port "$CPBH_GCS_PORT" \
+         --ray-client-server-port "$CPBH_CLIENT_PORT" --dashboard-port "$CPBH_DASHBOARD_PORT" \
+         --dashboard-agent-listen-port "$CPBH_AGENT_PORT" --num-cpus "$ncpus" --disable-usage-stats
+     local rc=$?
++    export RAY_AUTH_MODE="${RAY_AUTH_MODE:-token}"
+     if [ "$rc" -ne 0 ]; then
+         err "ray start failed (exit $rc); stopping what it started and releasing the lock"
+         stop_cluster "$CPBH_TEMP_DIR" "$CPBH_GCS_PORT" "$CPBH_CLIENT_PORT" "$CPBH_DASHBOARD_PORT" "$CPBH_AGENT_PORT"
+git apply --check: exit 0
+error: patch failed: .documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh:279
+error: .documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh: patch does not apply
+git apply -R --check: exit 1
+git apply: exit 0
+bash -n .documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh: exit 0
+## PYTHONPATH=. ./venv/bin/python -m unittest tools.tests.test_ray_auth
+unittest: exit 1
+Without it, `ray start` infers token mode from the token file rather than being told. ... FAIL
+FAIL: test_ray_cluster_sh_exports_the_mode_before_ray_start (tools.tests.test_ray_auth.TestTheClusterScript.test_ray_cluster_sh_exports_the_mode_before_ray_start)
+AssertionError: 286 not less than 282 : ray_cluster.sh exports RAY_AUTH_MODE after its ray start
+Ran 9 tests in 1.990s
+FAILED (failures=1)
+git apply -R: exit 0
+cmp .documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh saved copy: exit 0
+

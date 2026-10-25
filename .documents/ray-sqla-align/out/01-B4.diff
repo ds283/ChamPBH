@@ -1,0 +1,16 @@
+--- a/.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh
++++ b/.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh
+@@ -279,12 +279,12 @@
+     # Ray's authentication mode, named (ray-sqla-align 01). Since Ray 2.59, `ray start` infers
+     # token mode from the token file (~/.ray/auth_token) unless told; ChamPBH names it, as
+     # config/ray_auth.py does for every driver, so that the cluster and its drivers agree.
+-    export RAY_AUTH_MODE="${RAY_AUTH_MODE:-token}"
+     local t0=$SECONDS
+     "$RAY_BIN" start --head --temp-dir "$CPBH_TEMP_DIR" --port "$CPBH_GCS_PORT" \
+         --ray-client-server-port "$CPBH_CLIENT_PORT" --dashboard-port "$CPBH_DASHBOARD_PORT" \
+         --dashboard-agent-listen-port "$CPBH_AGENT_PORT" --num-cpus "$ncpus" --disable-usage-stats
+     local rc=$?
++    export RAY_AUTH_MODE="${RAY_AUTH_MODE:-token}"
+     if [ "$rc" -ne 0 ]; then
+         err "ray start failed (exit $rc); stopping what it started and releasing the lock"
+         stop_cluster "$CPBH_TEMP_DIR" "$CPBH_GCS_PORT" "$CPBH_CLIENT_PORT" "$CPBH_DASHBOARD_PORT" "$CPBH_AGENT_PORT"

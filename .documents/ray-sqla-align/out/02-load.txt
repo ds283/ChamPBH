@@ -1,0 +1,18 @@
+# ray-sqla-align 02: the load at each point
+## reference launch 2026-10-25 21:01:48 +0000
+21:01  up 20 days, 19:46, 1 user, load averages: 5.48 5.14 5.37
+## reference ended 2026-10-25 21:05:29 +0000
+21:05  up 20 days, 19:50, 1 user, load averages: 10.84 11.90 8.67
+## resumed-a launch 2026-10-25 21:06:10 +0000
+21:06  up 20 days, 19:51, 1 user, load averages: 6.98 10.78 8.41
+## resumed-a ended 2026-10-25 21:08:51 +0000
+21:08  up 20 days, 19:53, 1 user, load averages: 10.12 12.86 9.84
+## resumed-c launch 2026-10-25 21:09:15 +0000
+21:09  up 20 days, 19:54, 1 user, load averages: 7.20 11.95 9.60
+## resumed-c ended 2026-10-25 21:12:32 +0000
+21:12  up 20 days, 19:57, 1 user, load averages: 14.55 11.63 9.81
+## plot launch 2026-10-25 21:12:42 +0000
+21:12  up 20 days, 19:57, 1 user, load averages: 13.01 11.40 9.74
+
+## before stop
+21:13  up 20 days, 19:58, 1 user, load averages: 8.35 10.42 9.46

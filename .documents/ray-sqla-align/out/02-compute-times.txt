@@ -1,0 +1,23 @@
+## reference, after store create and fingerprint --write: 2026-10-25 21:05:57 +0000
+$ ./venv/bin/python <scratch>/compute_times.py var/datastores/ray-sqla-align-02-reference
+query: SELECT b.value, s.compute_time, s.compute_steps, s.validated, s.failure, s.timestamp FROM ScalarModel s JOIN ExponentialCoupling c ON s.coupling_serial = c.serial JOIN beta_value b ON c.beta_serial = b.serial
+  shard0000.db: beta 1.15  compute_time 6.65 s  steps 217426  validated 1  failure 0  timestamp 2026-10-25 21:02:51.378028
+  shard0015.db: beta 1.1  compute_time 6.75 s  steps 227521  validated 1  failure 0  timestamp 2026-10-25 21:02:52.197791
+  shard0001.db: beta 1.2  compute_time 7.66 s  steps 254491  validated 1  failure 0  timestamp 2026-10-25 21:02:52.547047
+  shard0002.db: beta 10  compute_time 42.45 s  steps 1075123  validated 1  failure 0  timestamp 2026-10-25 21:03:37.076922
+  shard0003.db: beta 25  compute_time 107.07 s  steps 2572397  validated 1  failure 0  timestamp 2026-10-25 21:04:47.612753
+  5 rows
+exit 0
+
+ruling 6: t10 = 42.45 s, t25 = 107.07 s; t10 + 20 = 62.45 s, t25 + 20 = 127.07 s; gap = 64.62 s (>= 60, not a stop)
+(t10 + t25)/2 + 20 = 94.76 s; rounded to 10 s: 90 s
+
+## resumed store, after resumed-a, before store create: 2026-10-25 21:09:03 +0000
+$ ./venv/bin/python <scratch>/compute_times.py var/datastores/ray-sqla-align-02-resumed
+query: SELECT b.value, s.compute_time, s.compute_steps, s.validated, s.failure, s.timestamp FROM ScalarModel s JOIN ExponentialCoupling c ON s.coupling_serial = c.serial JOIN beta_value b ON c.beta_serial = b.serial
+  shard0000.db: beta 1.15  compute_time 6.50 s  steps 217426  validated 1  failure 0  timestamp 2026-10-25 21:07:16.420073
+  shard0015.db: beta 1.1  compute_time 6.64 s  steps 227521  validated 1  failure 0  timestamp 2026-10-25 21:07:17.236609
+  shard0001.db: beta 1.2  compute_time 7.45 s  steps 254491  validated 1  failure 0  timestamp 2026-10-25 21:07:17.592048
+  shard0002.db: beta 10  compute_time 43.70 s  steps 1075123  validated 0  failure 0  timestamp 2026-10-25 21:08:03.534371
+  4 rows
+exit 0

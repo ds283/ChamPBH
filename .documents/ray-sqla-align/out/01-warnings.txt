@@ -1,0 +1,80 @@
+## 2.3 'What is new': the Python warnings of each root (lines 'file:line: XWarning: msg'), by /private/tmp/claude-35086/-Users-ds283-Documents-Code-ChamPBH/74d5cbf8-e6e6-4735-98bf-51be143227b8/scratchpad/agent01/warnings.py (out/01-warnings.py.txt)
+## grep -c -i warn roots/*.txt
+roots/2.1-CT-af-W.txt:0
+roots/2.1-CM-W.txt:0
+roots/2.1-CT-af.txt:0
+roots/2.1-CM.txt:0
+roots/2.1-OF-W.txt:0
+roots/2.1-CT-gz-W.txt:0
+roots/2.1-CT-gz.txt:0
+roots/2.1-OF.txt:0
+roots/2.1-tools-W.txt:0
+roots/2.1-RD-W.txt:0
+roots/2.1-tools.txt:0
+roots/2.1-RD.txt:0
+roots/2.3-CT-gz-W.txt:0
+roots/2.3-CM-W.txt:0
+roots/2.3-CM.txt:0
+roots/2.3-RD-W.txt:0
+roots/2.3-CT-af.txt:0
+roots/2.3-CT-gz.txt:0
+roots/2.8-CM.txt:0
+roots/2.3-CT-af-W.txt:0
+roots/2.3-OF.txt:0
+roots/2.3-OF-W.txt:0
+roots/2.8-OF.txt:0
+roots/2.3-RD.txt:0
+roots/2.3-tools.txt:0
+roots/2.3-tools-W.txt:0
+roots/2.8-CT-af.txt:0
+roots/2.8-RD.txt:0
+roots/2.8-tools.txt:0
+roots/2.8-CT-gz.txt:0
+=== CM: 2.1 -W default vs 2.3 -W default
+only in roots/2.1-CM-W.txt: 0 distinct
+only in roots/2.3-CM-W.txt: 0 distinct
+common: 0 distinct; totals 0 / 0
+=== CM: 2.1 vs 2.3 (no -W)
+only in roots/2.1-CM.txt: 0 distinct
+only in roots/2.3-CM.txt: 0 distinct
+common: 0 distinct; totals 0 / 0
+=== CT-af: 2.1 -W default vs 2.3 -W default
+only in roots/2.1-CT-af-W.txt: 0 distinct
+only in roots/2.3-CT-af-W.txt: 0 distinct
+common: 0 distinct; totals 0 / 0
+=== CT-af: 2.1 vs 2.3 (no -W)
+only in roots/2.1-CT-af.txt: 0 distinct
+only in roots/2.3-CT-af.txt: 0 distinct
+common: 0 distinct; totals 0 / 0
+=== CT-gz: 2.1 -W default vs 2.3 -W default
+only in roots/2.1-CT-gz-W.txt: 0 distinct
+only in roots/2.3-CT-gz-W.txt: 0 distinct
+common: 0 distinct; totals 0 / 0
+=== CT-gz: 2.1 vs 2.3 (no -W)
+only in roots/2.1-CT-gz.txt: 0 distinct
+only in roots/2.3-CT-gz.txt: 0 distinct
+common: 0 distinct; totals 0 / 0
+=== OF: 2.1 -W default vs 2.3 -W default
+only in roots/2.1-OF-W.txt: 0 distinct
+only in roots/2.3-OF-W.txt: 0 distinct
+common: 0 distinct; totals 0 / 0
+=== OF: 2.1 vs 2.3 (no -W)
+only in roots/2.1-OF.txt: 0 distinct
+only in roots/2.3-OF.txt: 0 distinct
+common: 0 distinct; totals 0 / 0
+=== tools: 2.1 -W default vs 2.3 -W default
+only in roots/2.1-tools-W.txt: 0 distinct
+only in roots/2.3-tools-W.txt: 0 distinct
+common: 0 distinct; totals 0 / 0
+=== tools: 2.1 vs 2.3 (no -W)
+only in roots/2.1-tools.txt: 0 distinct
+only in roots/2.3-tools.txt: 0 distinct
+common: 0 distinct; totals 0 / 0
+=== RD: 2.1 -W default vs 2.3 -W default
+only in roots/2.1-RD-W.txt: 0 distinct
+only in roots/2.3-RD-W.txt: 0 distinct
+common: 0 distinct; totals 0 / 0
+=== RD: 2.1 vs 2.3 (no -W)
+only in roots/2.1-RD.txt: 0 distinct
+only in roots/2.3-RD.txt: 0 distinct
+common: 0 distinct; totals 0 / 0

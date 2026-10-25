@@ -1,0 +1,11 @@
+--- a/runregistrykit.toml
++++ b/runregistrykit.toml
+@@ -2,7 +2,7 @@
+ # where runs and datastores are recorded, and which distributions every manifest records.
+ runs_root = "var/runs"
+ stores_root = "var/datastores"
+-distributions = ["datastorekit", "raypoolkit"]
++distributions = ["datastorekit", "raypoolkit", "ray"]
+ 
+ [stores]
+ fingerprinter = "config.fingerprint:fingerprinter"

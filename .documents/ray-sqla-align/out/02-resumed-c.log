@@ -1,0 +1,42 @@
+** registered_run: registered as ray-sqla-align-02-resumed-c-20261025T210916
+**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/ray-sqla-align-02-resumed-c-20261025T210916/manifest.json
+**   list it with: ./venv/bin/python -m runregistrykit list
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-10-25 21:09:17,014	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-10-25 21:09:17,054	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at http://127.0.0.1:8267 
+>> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/ray-sqla-align-02-resumed.db" with 16 shards
+(Datastore pid=13160) !! INTEGRITY WARNING (2026-10-25T21:09:21): datastore "shard0002-store" (physical file /Users/ds283/Documents/Code/ChamPBH/var/datastores/ray-sqla-align-02-resumed-shard0002.db)
+(Datastore pid=13160) >> ScalarModel instances
+(Datastore pid=13160)      The following unvalidated models were detected in the datastore:
+(Datastore pid=13160)        -- "ray-sqla-align-02-resumed-a-ScalarModel-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=10)-2026-10-25T21:07:15" (store_id=61, log10_atol=-8.0, log10_rtol=-8.0)
+(Datastore pid=13160)           contains 9776 z-sample values | expected=9776
+(Datastore pid=13160)      ** Note: these values have been pruned from the datastore.
+
+** BUILDING GRID OF MODELS TO SAMPLE
+   -- using potential type "Exponential"
+   -- populated beta sample grid with 5 values = [ 1.1, 1.15, 1.2, 10, 25 ]
+   -- populated M sample grid with 1 value = [ 0.001 Mp ]
+   -- populated Lambda sample grid with 1 value = [ 0.001 eV ]
+!! warning: beta=10, phi*=5 M_P: Omega(phi*) T* = 4.2567e+07 M_P (super-Planckian start)
+!! warning: beta=25, phi*=5 M_P: Omega(phi*) T* = 1.5891e+40 M_P (super-Planckian start)
+!! warning: 2 of 5 couplings start super-Planckian; they are computed like the others
+   -- total number of models to integrate = 5
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+(Datastore pid=13231) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+   -- ALL WORK ITEMS COMPLETE in time 2m 2.99s
+      Queue summary: 5 lookup (avg 146.4/hr), 2 compute (avg 58.54/hr), 2 store (avg 58.54/hr), 2 validation (avg 58.54/hr)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 2.91s
+      Queue summary: 5 lookup (avg 103.2/min), 5 compute (avg 103.2/min), 5 store (avg 103.2/min), 5 validation (avg 103.2/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarModel failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 23.9s
+      Queue summary: 5 lookup (avg 12.56/min), 5 compute (avg 12.56/min), 5 store (avg 12.56/min), 5 validation (avg 12.56/min)
+-- BBNData: 0 models skipped because their ScalarModel failed; 0 computations skipped because of a stored failure
+** driver exit status 0
+** launcher saw exit status 0

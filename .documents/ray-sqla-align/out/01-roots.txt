@@ -1,0 +1,188 @@
+## 2.1 CM 2026-10-25 19:37:23-19:39:25 (122 s wall): PYTHONPATH=. ./venv/bin/python  -m unittest discover -s CosmologyModels/tests -t .
+uptime before: 19:37  up 20 days, 18:22, 1 user, load averages: 8.53 8.35 10.59
+Ran 18 tests in 119.269s
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+exit 0
+
+## 2.1 OF 2026-10-25 19:39:26-19:39:43 (17 s wall): PYTHONPATH=. ./venv/bin/python  -m unittest discover -s ObjectFactories/tests -t .
+uptime before: 19:39  up 20 days, 18:24, 1 user, load averages: 6.43 7.80 10.07
+Ran 78 tests in 15.111s
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+exit 0
+
+## 2.1 tools 2026-10-25 19:39:43-19:40:16 (33 s wall): PYTHONPATH=. ./venv/bin/python  -m unittest discover -s tools/tests -t .
+uptime before: 19:39  up 20 days, 18:24, 1 user, load averages: 7.81 8.05 10.12
+Ran 93 tests in 30.977s
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+exit 0
+
+## 2.1 RD 2026-10-25 19:40:16-19:40:44 (28 s wall): PYTHONPATH=. ./venv/bin/python  -m unittest discover -s RunDrivers/tests -t .
+uptime before: 19:40  up 20 days, 18:25, 1 user, load averages: 7.02 7.82 9.95
+Ran 61 tests in 25.873s
+OK
+exit 0
+
+verdict 2.1 CM: OK
+verdict 2.1 OF: OK
+verdict 2.1 tools: OK
+verdict 2.1 RD: OK
+## 2.1 CT-af 2026-10-25 19:40:56-19:43:11 (135 s wall): PYTHONPATH=. ./venv/bin/python  -m unittest discover -s ComputeTargets/tests -t . -p test_[a-f]*.py
+uptime before: 19:40  up 20 days, 18:25, 1 user, load averages: 8.00 7.99 9.92
+Ran 61 tests in 131.080s
+OK
+exit 0
+
+## 2.1 CT-gz 2026-10-25 19:43:15-19:45:24 (129 s wall): PYTHONPATH=. ./venv/bin/python  -m unittest discover -s ComputeTargets/tests -t . -p test_[g-z]*.py
+uptime before: 19:43  up 20 days, 18:28, 1 user, load averages: 4.08 6.44 9.00
+Ran 115 tests in 127.207s
+OK
+exit 0
+
+## 2.1 CM 2026-10-25 19:45:32-19:46:55 (83 s wall): PYTHONPATH=. ./venv/bin/python -W default -m unittest discover -s CosmologyModels/tests -t .
+uptime before: 19:45  up 20 days, 18:30, 1 user, load averages: 3.44 5.31 8.15
+Ran 18 tests in 81.944s
+OK
+exit 0
+
+## 2.1 OF 2026-10-25 19:46:55-19:47:06 (11 s wall): PYTHONPATH=. ./venv/bin/python -W default -m unittest discover -s ObjectFactories/tests -t .
+uptime before: 19:46  up 20 days, 18:31, 1 user, load averages: 5.98 5.50 7.96
+Ran 78 tests in 8.926s
+OK
+exit 0
+
+## 2.1 tools 2026-10-25 19:47:06-19:47:39 (33 s wall): PYTHONPATH=. ./venv/bin/python -W default -m unittest discover -s tools/tests -t .
+uptime before: 19:47  up 20 days, 18:32, 1 user, load averages: 5.84 5.49 7.93
+Ran 93 tests in 31.074s
+OK
+exit 0
+
+## 2.1 RD 2026-10-25 19:47:39-19:48:05 (26 s wall): PYTHONPATH=. ./venv/bin/python -W default -m unittest discover -s RunDrivers/tests -t .
+uptime before: 19:47  up 20 days, 18:32, 1 user, load averages: 5.79 5.47 7.82
+Ran 61 tests in 24.127s
+OK
+exit 0
+
+## 2.1 CT-af 2026-10-25 19:48:09-19:49:46 (97 s wall): PYTHONPATH=. ./venv/bin/python -W default -m unittest discover -s ComputeTargets/tests -t . -p test_[a-f]*.py
+uptime before: 19:48  up 20 days, 18:33, 1 user, load averages: 6.00 5.55 7.77
+Ran 61 tests in 95.516s
+OK
+exit 0
+
+## 2.1 CT-gz 2026-10-25 19:49:46-19:51:32 (106 s wall): PYTHONPATH=. ./venv/bin/python -W default -m unittest discover -s ComputeTargets/tests -t . -p test_[g-z]*.py
+uptime before: 19:49  up 20 days, 18:34, 1 user, load averages: 3.23 4.79 7.24
+Ran 115 tests in 104.316s
+OK
+exit 0
+
+## 2.3 CM 2026-10-25 19:52:34-19:53:51 (77 s wall): PYTHONPATH=. ./venv/bin/python  -m unittest discover -s CosmologyModels/tests -t .
+uptime before: 19:52  up 20 days, 18:37, 1 user, load averages: 6.78 5.12 6.88
+Ran 18 tests in 74.700s
+OK
+exit 0
+
+## 2.3 OF 2026-10-25 19:53:51-19:54:07 (16 s wall): PYTHONPATH=. ./venv/bin/python  -m unittest discover -s ObjectFactories/tests -t .
+uptime before: 19:53  up 20 days, 18:38, 1 user, load averages: 8.31 5.82 6.99
+Ran 78 tests in 10.880s
+OK
+exit 0
+
+## 2.3 tools 2026-10-25 19:54:07-19:54:55 (48 s wall): PYTHONPATH=. ./venv/bin/python  -m unittest discover -s tools/tests -t .
+uptime before: 19:54  up 20 days, 18:39, 1 user, load averages: 7.40 5.74 6.94
+Ran 93 tests in 46.439s
+OK
+exit 0
+
+## 2.3 RD 2026-10-25 19:54:55-19:55:42 (47 s wall): PYTHONPATH=. ./venv/bin/python  -m unittest discover -s RunDrivers/tests -t .
+uptime before: 19:54  up 20 days, 18:39, 1 user, load averages: 6.69 5.71 6.85
+Ran 61 tests in 40.864s
+OK
+exit 0
+
+## 2.3 CT-af 2026-10-25 19:55:47-19:57:51 (124 s wall): PYTHONPATH=. ./venv/bin/python  -m unittest discover -s ComputeTargets/tests -t . -p test_[a-f]*.py
+uptime before: 19:55  up 20 days, 18:40, 1 user, load averages: 9.91 6.90 7.24
+Ran 61 tests in 120.537s
+OK
+exit 0
+
+## 2.3 CT-gz 2026-10-25 19:57:51-19:59:44 (113 s wall): PYTHONPATH=. ./venv/bin/python  -m unittest discover -s ComputeTargets/tests -t . -p test_[g-z]*.py
+uptime before: 19:57  up 20 days, 18:42, 1 user, load averages: 4.77 6.17 6.91
+Ran 115 tests in 110.395s
+OK
+exit 0
+
+## 2.3 CM 2026-10-25 19:59:48-20:00:57 (69 s wall): PYTHONPATH=. ./venv/bin/python -W default -m unittest discover -s CosmologyModels/tests -t .
+uptime before: 19:59  up 20 days, 18:44, 1 user, load averages: 3.57 5.38 6.51
+Ran 18 tests in 68.948s
+OK
+exit 0
+
+## 2.3 OF 2026-10-25 20:00:57-20:01:08 (11 s wall): PYTHONPATH=. ./venv/bin/python -W default -m unittest discover -s ObjectFactories/tests -t .
+uptime before: 20:00  up 20 days, 18:46, 1 user, load averages: 3.04 4.82 6.21
+Ran 78 tests in 8.418s
+OK
+exit 0
+
+## 2.3 tools 2026-10-25 20:01:08-20:01:48 (40 s wall): PYTHONPATH=. ./venv/bin/python -W default -m unittest discover -s tools/tests -t .
+uptime before: 20:01  up 20 days, 18:46, 1 user, load averages: 2.95 4.74 6.16
+Ran 93 tests in 37.860s
+OK
+exit 0
+
+## 2.3 RD 2026-10-25 20:01:48-20:02:20 (32 s wall): PYTHONPATH=. ./venv/bin/python -W default -m unittest discover -s RunDrivers/tests -t .
+uptime before: 20:01  up 20 days, 18:46, 1 user, load averages: 3.36 4.62 6.05
+Ran 61 tests in 29.124s
+OK
+exit 0
+
+## 2.3 CT-af 2026-10-25 20:02:23-20:04:35 (132 s wall): PYTHONPATH=. ./venv/bin/python -W default -m unittest discover -s ComputeTargets/tests -t . -p test_[a-f]*.py
+uptime before: 20:02  up 20 days, 18:47, 1 user, load averages: 4.54 4.78 6.05
+Ran 61 tests in 129.668s
+OK
+exit 0
+
+## 2.3 CT-gz 2026-10-25 20:04:35-20:07:41 (186 s wall): PYTHONPATH=. ./venv/bin/python -W default -m unittest discover -s ComputeTargets/tests -t . -p test_[g-z]*.py
+uptime before: 20:04  up 20 days, 18:49, 1 user, load averages: 5.76 5.22 6.03
+Ran 115 tests in 182.762s
+OK
+exit 0
+
+## 2.8 CM 2026-10-25 20:12:21-20:13:27 (66 s wall): PYTHONPATH=. ./venv/bin/python  -m unittest discover -s CosmologyModels/tests -t .
+uptime before: 20:12  up 20 days, 18:57, 1 user, load averages: 12.72 17.16 12.24
+Ran 18 tests in 65.337s
+OK
+exit 0
+
+## 2.8 OF 2026-10-25 20:13:28-20:13:37 (9 s wall): PYTHONPATH=. ./venv/bin/python  -m unittest discover -s ObjectFactories/tests -t .
+uptime before: 20:13  up 20 days, 18:58, 1 user, load averages: 7.31 14.66 11.66
+Ran 78 tests in 7.221s
+OK
+exit 0
+
+## 2.8 tools 2026-10-25 20:13:37-20:14:10 (33 s wall): PYTHONPATH=. ./venv/bin/python  -m unittest discover -s tools/tests -t .
+uptime before: 20:13  up 20 days, 18:58, 1 user, load averages: 7.19 14.39 11.60
+Ran 102 tests in 31.431s
+OK
+exit 0
+
+## 2.8 RD 2026-10-25 20:14:10-20:14:34 (24 s wall): PYTHONPATH=. ./venv/bin/python  -m unittest discover -s RunDrivers/tests -t .
+uptime before: 20:14  up 20 days, 18:59, 1 user, load averages: 5.80 13.26 11.30
+Ran 61 tests in 22.399s
+OK
+exit 0
+
+## 2.8 CT-af 2026-10-25 20:14:38-20:16:16 (98 s wall): PYTHONPATH=. ./venv/bin/python  -m unittest discover -s ComputeTargets/tests -t . -p test_[a-f]*.py
+uptime before: 20:14  up 20 days, 18:59, 1 user, load averages: 5.73 12.64 11.13
+Ran 61 tests in 96.415s
+OK
+exit 0
+
+## 2.8 CT-gz 2026-10-25 20:16:17-20:18:13 (116 s wall): PYTHONPATH=. ./venv/bin/python  -m unittest discover -s ComputeTargets/tests -t . -p test_[g-z]*.py
+uptime before: 20:16  up 20 days, 19:01, 1 user, load averages: 4.58 10.21 10.34
+Ran 115 tests in 114.339s
+OK
+exit 0
+
+## 2.8 2026-10-25 20:18:25 ./venv/bin/black --check utilities.py main.py plot_by_beta.py plot_ScalarModel.py config/ray_auth.py tools/tests/test_ray_auth.py tools/tests/test_registry_config.py ObjectFactories/tests/test_package_provenance.py
+All done! ✨ 🍰 ✨
+8 files would be left unchanged.
+exit 0

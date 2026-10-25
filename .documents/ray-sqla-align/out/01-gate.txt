@@ -1,0 +1,18 @@
+## Gate 2026-10-25 19:36:42 (checked before 2.1)
+git status --porcelain --untracked-files=all | wc -l: 0
+git log --oneline 67e0346..HEAD --name-only: 551b54c Write the orchestration note for ray-sqla-align prompt 01 / prompts/ray-sqla-align/orchestrator/prompt-01.md
+git worktree list: /Users/ds283/Documents/Code/ChamPBH 551b54c [ray-sqla-align]
+./venv/bin/python -m runregistrykit list: no runs under /Users/ds283/Documents/Code/ChamPBH/var/runs
+./venv/bin/python --version: Python 3.13.16
+pip freeze (selected): ray==2.53.0 SQLAlchemy==2.0.46 numpy==2.3.5 scipy==1.17.0; the three git packages as in 01-pip.txt
+ls -l ~/.ray/auth_token: -rw------- 1 ds283 staff 64 Oct 25 12:51 /Users/ds283/.ray/auth_token
+env | grep -c RAY_AUTH_MODE: 0
+## .documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh status > var/ray-sqla-align-01/gate-status.txt 2>&1; echo $?
+exit 0
+lock: free (/Users/ds283/.raypoolkit/rehearsal-lock does not exist)
+Ray processes of /tmp/ray-cpbh: none
+what stop would signal (this script's rule, /tmp/ray-cpbh): no processes
+port 6380: free
+port 6381: free
+port 8267: free
+port 52367: free

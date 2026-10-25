@@ -18,7 +18,11 @@
 This module checks four things about the registry's adoption:
 
 1. ``runregistrykit.toml`` at the repository root puts the runs under ``var/runs`` and the
-   datastores under ``var/datastores``, and names the distributions every manifest records;
+   datastores under ``var/datastores``, and names the distributions every manifest records.
+   Those must be ``utilities.RECORDED_DISTRIBUTIONS``, the ones each driver prints on its
+   ``>> packages:`` line, so that a run's manifest and its log name the same distributions. The
+   test compares the two lists rather than naming the distributions, so a name added to one list
+   and not the other fails here (ray-sqla-align prompt 01, README U3);
 2. the file holds only keys the package knows, and the three it needs. RunRegistryKit refuses an
    unknown key as a ``ConfigError``; a ``[stores]`` table, which prompt 02 adds, is allowed;
 3. ``.gitignore`` ignores both directories, so that no run record or datastore is committed;
@@ -37,6 +41,8 @@ import unittest
 from pathlib import Path
 
 import runregistrykit
+
+import utilities
 
 ROOT = Path(__file__).resolve().parents[2]
 CONFIG = ROOT / "runregistrykit.toml"
@@ -57,11 +63,15 @@ EXPECTED_PIN = {
 
 class TestRegistryConfig(unittest.TestCase):
     def test_roots_and_distributions(self):
-        """The package finds the repository root, and reads the roots and distributions."""
+        """The package finds the repository root, and reads the roots and distributions. The
+        distributions are held equal to `utilities.RECORDED_DISTRIBUTIONS`, so that a manifest and
+        a driver's `>> packages:` line name the same distributions."""
         found = runregistrykit.find_client_root(client_root=ROOT)
         self.assertEqual(Path(found.runs_root), ROOT / "var" / "runs")
         self.assertEqual(Path(found.stores_root), ROOT / "var" / "datastores")
-        self.assertEqual(found.distributions, ("datastorekit", "raypoolkit"))
+        self.assertEqual(
+            tuple(found.distributions), tuple(utilities.RECORDED_DISTRIBUTIONS)
+        )
 
     def test_config_keys_are_known(self):
         """Every key is one the package knows, and the three it needs are present."""

@@ -1,0 +1,48 @@
+## 2026-10-25 21:15:24 +0000
+$ ./venv/bin/python <scratch>/log_kinds.py var/ray-sqla-align-02/reference.log .documents/rrk-adoption/out/04-reference.log var/ray-sqla-align-02/resumed-a.log .documents/rrk-adoption/out/04-resumed-a.log var/ray-sqla-align-02/resumed-c.log .documents/rrk-adoption/out/04-resumed-c.log var/ray-sqla-align-02/plot-reference.log .documents/rrk-adoption/out/04-plot-reference.log
+## var/ray-sqla-align-02/reference.log (02) against .documents/rrk-adoption/out/04-reference.log (04)
+   kinds: 31 in 02, 32 in 04
+   in 02 and not in 04: 2
+     [1x] >> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+     [1x]    -- ALL WORK ITEMS COMPLETE in time 23s
+   in 04 and not in 02: 3
+     [1x] >> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.2.0 (https://github.com/ds283/RayPoolKit@eaef0ce60e2fc354bb32f0ad576010e6a83c1976, requested v0.2.0)
+     [1x] /Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/_private/worker.py:2046: FutureWarning: Tip: In future versions of Ray, Ray will no longer override accelerator visible devices env var if num_gpus=0 or num_gpus=None (default). To enable this behavior and turn off this error message, set RAY_ACCEL_ENV_VAR_OVERRIDE_ON_ZERO=0
+     [1x]   warnings.warn(
+
+## var/ray-sqla-align-02/resumed-a.log (02) against .documents/rrk-adoption/out/04-resumed-a.log (04)
+   kinds: 24 in 02, 26 in 04
+   in 02 and not in 04: 1
+     [1x] >> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+   in 04 and not in 02: 3
+     [1x] >> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.2.0 (https://github.com/ds283/RayPoolKit@eaef0ce60e2fc354bb32f0ad576010e6a83c1976, requested v0.2.0)
+     [1x] /Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/_private/worker.py:2046: FutureWarning: Tip: In future versions of Ray, Ray will no longer override accelerator visible devices env var if num_gpus=0 or num_gpus=None (default). To enable this behavior and turn off this error message, set RAY_ACCEL_ENV_VAR_OVERRIDE_ON_ZERO=0
+     [1x]   warnings.warn(
+
+## var/ray-sqla-align-02/resumed-c.log (02) against .documents/rrk-adoption/out/04-resumed-c.log (04)
+   kinds: 35 in 02, 31 in 04
+   in 02 and not in 04: 7
+     [1x] >> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+     [1x] (Datastore pid=13160) !! INTEGRITY WARNING (2026-10-25T21:09:21): datastore "shard0002-store" (physical file /Users/ds283/Documents/Code/ChamPBH/var/datastores/ray-sqla-align-02-resumed-shard0002.db)
+     [1x] (Datastore pid=13160) >> ScalarModel instances
+     [1x] (Datastore pid=13160)      The following unvalidated models were detected in the datastore:
+     [1x] (Datastore pid=13160)        -- "ray-sqla-align-02-resumed-a-ScalarModel-ExponentialPotential(M=0.001Mp,Lambda=0.001eV)-ExponentialCoupling(beta=10)-2026-10-25T21:07:15" (store_id=61, log10_atol=-8.0, log10_rtol=-8.0)
+     [1x] (Datastore pid=13160)           contains 9776 z-sample values | expected=9776
+     [1x] (Datastore pid=13160)      ** Note: these values have been pruned from the datastore.
+   in 04 and not in 02: 3
+     [1x] >> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.2.0 (https://github.com/ds283/RayPoolKit@eaef0ce60e2fc354bb32f0ad576010e6a83c1976, requested v0.2.0)
+     [1x] /Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/_private/worker.py:2046: FutureWarning: Tip: In future versions of Ray, Ray will no longer override accelerator visible devices env var if num_gpus=0 or num_gpus=None (default). To enable this behavior and turn off this error message, set RAY_ACCEL_ENV_VAR_OVERRIDE_ON_ZERO=0
+     [1x]   warnings.warn(
+
+## var/ray-sqla-align-02/plot-reference.log (02) against .documents/rrk-adoption/out/04-plot-reference.log (04)
+   kinds: 14 in 02, 16 in 04
+   in 02 and not in 04: 2
+     [1x] >> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+     [1x]       Queue summary: 1 lookup (avg 12.53/min)
+   in 04 and not in 02: 4
+     [1x] >> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.2.0 (https://github.com/ds283/RayPoolKit@eaef0ce60e2fc354bb32f0ad576010e6a83c1976, requested v0.2.0)
+     [1x] /Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/_private/worker.py:2046: FutureWarning: Tip: In future versions of Ray, Ray will no longer override accelerator visible devices env var if num_gpus=0 or num_gpus=None (default). To enable this behavior and turn off this error message, set RAY_ACCEL_ENV_VAR_OVERRIDE_ON_ZERO=0
+     [1x]   warnings.warn(
+     [1x]       Queue summary: 1 lookup (avg 482.5/hr)
+
+exit 0

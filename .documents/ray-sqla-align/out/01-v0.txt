@@ -1,0 +1,138 @@
+## V0 step 1 2026-10-25 20:08:06 uptime
+20:08  up 20 days, 18:53, 1 user, load averages: 20.49 10.05 7.73
+## env | grep -c RAY_AUTH_MODE
+0
+
+## V0 step 2 (20:08:13) .documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh start "ray-sqla-align 01 (V0)" > var/ray-sqla-align-01/v0-start.txt 2>&1; echo $?
+exit 0
+acquired the rehearsal lock (/Users/ds283/.raypoolkit/rehearsal-lock) for ChamPBH: ray-sqla-align 01 (V0)
+2026-10-25 20:08:13,297	WARNING authentication_token_setup.py:85 -- Token authentication is enabled for this Ray cluster. Set RAY_AUTH_MODE=disabled to opt out. For more information, see https://docs.ray.io/en/latest/ray-security/token-auth.html
+2026-10-25 20:08:13,257	INFO usage_lib.py:448 -- Usage stats collection is disabled.
+2026-10-25 20:08:13,257	INFO scripts.py:1043 -- [37mLocal node IP[39m: [1m127.0.0.1[22m
+2026-10-25 20:08:22,961	SUCC scripts.py:1084 -- [32m--------------------[39m
+2026-10-25 20:08:22,962	SUCC scripts.py:1085 -- [32mRay runtime started.[39m
+2026-10-25 20:08:22,962	SUCC scripts.py:1086 -- [32m--------------------[39m
+2026-10-25 20:08:22,962	INFO scripts.py:1088 -- [36mNext steps[39m
+2026-10-25 20:08:22,962	INFO cli_output_helpers.py:16 -- [2mNote: The following commands are intended for use on[22m
+2026-10-25 20:08:22,962	INFO cli_output_helpers.py:17 -- [2mthe head node or within the cluster network.[22m
+2026-10-25 20:08:22,962	INFO scripts.py:1106 -- To connect to this Ray cluster:
+2026-10-25 20:08:22,962	INFO scripts.py:1108 -- [35mimport[39m[26m ray
+2026-10-25 20:08:22,962	INFO scripts.py:1109 -- ray[35m.[39m[26minit()
+2026-10-25 20:08:22,962	INFO scripts.py:1123 -- To submit a Ray job using the Ray Jobs CLI:
+2026-10-25 20:08:22,962	INFO scripts.py:1124 -- [1m  RAY_API_SERVER_ADDRESS='http://127.0.0.1:8267' ray job submit --working-dir . -- python my_script.py[22m
+2026-10-25 20:08:22,962	INFO scripts.py:1133 -- See https://docs.ray.io/en/latest/cluster/running-applications/job-submission/index.html 
+2026-10-25 20:08:22,962	INFO scripts.py:1137 -- for more information on submitting Ray jobs to the Ray cluster.
+2026-10-25 20:08:22,962	INFO scripts.py:1142 -- To terminate the Ray runtime, run
+2026-10-25 20:08:22,962	INFO scripts.py:1143 -- [1m  ray stop[22m
+2026-10-25 20:08:22,962	INFO scripts.py:1146 -- To view the status of the cluster, use
+2026-10-25 20:08:22,962	INFO scripts.py:1147 --   [1mray status[22m[26m
+2026-10-25 20:08:22,962	INFO scripts.py:1151 -- To monitor and debug Ray, view the dashboard at 
+2026-10-25 20:08:22,962	INFO scripts.py:1152 --   [1m127.0.0.1:8267[22m[26m
+2026-10-25 20:08:22,962	INFO scripts.py:1159 -- [4mIf connection to the dashboard fails, check your firewall settings and network configuration.[24m
+recorded pid 95793 in /Users/ds283/.raypoolkit/rehearsal-lock/owner
+>> ray_cluster: address 127.0.0.1:6380
+>> ray_cluster: dashboard http://127.0.0.1:8267
+>> ray_cluster: actors: ./venv/bin/ray list actors --address 127.0.0.1:6380
+>> ray_cluster: started in 13s; gcs_server pid 95793
+
+## V0 step 3 (20:08:30.989 -> 20:08:52.074, 21.08 s) timeout 300 ./venv/bin/python -c 'import ray; ray.init(address="127.0.0.1:6380"); print(ray.cluster_resources()); ray.shutdown()' > var/ray-sqla-align-01/v0-driver.txt 2>&1; echo $?
+exit 1
+grep -c InvalidAuthToken: 21; grep -c 'gcs_client.cc:210': 20; grep -c AuthenticationError: 1; lines starting '{' (cluster_resources): 0
+2026-10-25 20:08:31,665	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+[2026-10-25 20:08:31,668 W 96041 80683350] gcs_client.cc:210: Failed to get cluster ID from GCS server: Unauthenticated: RPC error: InvalidAuthToken: Authentication token is missing or incorrect
+[2026-10-25 20:08:32,676 W 96041 80683350] gcs_client.cc:210: Failed to get cluster ID from GCS server: Unauthenticated: RPC error: InvalidAuthToken: Authentication token is missing or incorrect
+[2026-10-25 20:08:33,688 W 96041 80683350] gcs_client.cc:210: Failed to get cluster ID from GCS server: Unauthenticated: RPC error: InvalidAuthToken: Authentication token is missing or incorrect
+[2026-10-25 20:08:34,697 W 96041 80683350] gcs_client.cc:210: Failed to get cluster ID from GCS server: Unauthenticated: RPC error: InvalidAuthToken: Authentication token is missing or incorrect
+[2026-10-25 20:08:35,714 W 96041 80683350] gcs_client.cc:210: Failed to get cluster ID from GCS server: Unauthenticated: RPC error: InvalidAuthToken: Authentication token is missing or incorrect
+[2026-10-25 20:08:36,730 W 96041 80683350] gcs_client.cc:210: Failed to get cluster ID from GCS server: Unauthenticated: RPC error: InvalidAuthToken: Authentication token is missing or incorrect
+[2026-10-25 20:08:37,738 W 96041 80683350] gcs_client.cc:210: Failed to get cluster ID from GCS server: Unauthenticated: RPC error: InvalidAuthToken: Authentication token is missing or incorrect
+[2026-10-25 20:08:38,754 W 96041 80683350] gcs_client.cc:210: Failed to get cluster ID from GCS server: Unauthenticated: RPC error: InvalidAuthToken: Authentication token is missing or incorrect
+[2026-10-25 20:08:39,770 W 96041 80683350] gcs_client.cc:210: Failed to get cluster ID from GCS server: Unauthenticated: RPC error: InvalidAuthToken: Authentication token is missing or incorrect
+[2026-10-25 20:08:40,781 W 96041 80683350] gcs_client.cc:210: Failed to get cluster ID from GCS server: Unauthenticated: RPC error: InvalidAuthToken: Authentication token is missing or incorrect
+[2026-10-25 20:08:41,795 W 96041 80683350] gcs_client.cc:210: Failed to get cluster ID from GCS server: Unauthenticated: RPC error: InvalidAuthToken: Authentication token is missing or incorrect
+[2026-10-25 20:08:42,808 W 96041 80683350] gcs_client.cc:210: Failed to get cluster ID from GCS server: Unauthenticated: RPC error: InvalidAuthToken: Authentication token is missing or incorrect
+[2026-10-25 20:08:43,825 W 96041 80683350] gcs_client.cc:210: Failed to get cluster ID from GCS server: Unauthenticated: RPC error: InvalidAuthToken: Authentication token is missing or incorrect
+[2026-10-25 20:08:44,840 W 96041 80683350] gcs_client.cc:210: Failed to get cluster ID from GCS server: Unauthenticated: RPC error: InvalidAuthToken: Authentication token is missing or incorrect
+[2026-10-25 20:08:45,864 W 96041 80683350] gcs_client.cc:210: Failed to get cluster ID from GCS server: Unauthenticated: RPC error: InvalidAuthToken: Authentication token is missing or incorrect
+[2026-10-25 20:08:46,890 W 96041 80683350] gcs_client.cc:210: Failed to get cluster ID from GCS server: Unauthenticated: RPC error: InvalidAuthToken: Authentication token is missing or incorrect
+[2026-10-25 20:08:47,903 W 96041 80683350] gcs_client.cc:210: Failed to get cluster ID from GCS server: Unauthenticated: RPC error: InvalidAuthToken: Authentication token is missing or incorrect
+[2026-10-25 20:08:48,916 W 96041 80683350] gcs_client.cc:210: Failed to get cluster ID from GCS server: Unauthenticated: RPC error: InvalidAuthToken: Authentication token is missing or incorrect
+[2026-10-25 20:08:49,930 W 96041 80683350] gcs_client.cc:210: Failed to get cluster ID from GCS server: Unauthenticated: RPC error: InvalidAuthToken: Authentication token is missing or incorrect
+[2026-10-25 20:08:50,943 W 96041 80683350] gcs_client.cc:210: Failed to get cluster ID from GCS server: Unauthenticated: RPC error: InvalidAuthToken: Authentication token is missing or incorrect
+Traceback (most recent call last):
+  File "/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/_private/worker.py", line 1987, in init
+    _global_node = ray._private.node.Node(
+        ray_params,
+    ...<3 lines>...
+        connect_only=True,
+    )
+  File "/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/_private/node.py", line 192, in __init__
+    self._init_gcs_client()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/_private/node.py", line 1033, in _init_gcs_client
+    raise RuntimeError(
+    ...<2 lines>...
+    )
+RuntimeError: Failed to connect to GCS. Last connection error: Traceback (most recent call last):
+  File "/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/_private/node.py", line 996, in _init_gcs_client
+    client = GcsClient(
+        address=gcs_address,
+        cluster_id=self._ray_params.cluster_id,  # Hex string
+    )
+  File "python/ray/_raylet.pyx", line 3200, in ray._raylet.GcsClient.__cinit__
+  File "python/ray/includes/gcs_client.pxi", line 74, in ray._raylet.InnerGcsClient.standalone
+  File "python/ray/includes/common.pxi", line 146, in ray._raylet.check_status_timeout_as_rpc_error
+  File "python/ray/includes/common.pxi", line 119, in ray._raylet.check_status
+ray.exceptions.AuthenticationError: RPC error: InvalidAuthToken: Authentication token is missing or incorrect. Note: RAY_AUTH_MODE is currently 'disabled' (not 'token'). Ensure that the token for the cluster is available in a local file (e.g., ~/.ray/auth_token or via RAY_AUTH_TOKEN_PATH) or as the `RAY_AUTH_TOKEN` environment variable. To generate a token for local development, use `ray get-auth-token --generate` For remote clusters, ensure that the token is propagated to all nodes of the cluster when token authentication is enabled. For more information, see: https://docs.ray.io/en/latest/ray-security/token-auth.html
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import ray; ray.init(address="127.0.0.1:6380"); print(ray.cluster_resources()); ray.shutdown()
+                ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/_private/client_mode_hook.py", line 134, in wrapper
+    return func(*args, **kwargs)
+  File "/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/_private/worker.py", line 2003, in init
+    raise ConnectionError(
+        f"Failed to connect to Ray cluster at {gcs_address}"
+    ) from e
+ConnectionError: Failed to connect to Ray cluster at 127.0.0.1:6380
+
+## V0 step 4 ray_cluster.sh stop > var/ray-sqla-align-01/v0-stop.txt 2>&1; echo $?
+exit 0
+>> ray_cluster: SIGTERM to 19 process(es) naming /tmp/ray-cpbh, and their descendants: 95793 95808 95809 95810 95821 95822 95841 95842 95843 95844 95845 95846 95847 95848 95849 95860 95861 95869 95870
+    95793     1 /Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/core/src/ray/gcs/gcs_server --log_dir=/tmp/ray-cpbh/session_2026
+    95808     1 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -u /Users/ds283/Documents/Code/Cha
+    95809     1 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m ray.util.client.server --addres
+    95810     1 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python /Users/ds283/Documents/Code/ChamPB
+    95821 95810 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c from multiprocessing.resourc
+    95822 95810 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c import sys; from multiproces
+    95841 95822 ray-dashboard-MetricsHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c
+    95842 95822 ray-dashboard-DataHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "i
+    95843 95822 ray-dashboard-EventHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "
+    95844 95822 ray-dashboard-JobHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "im
+    95845 95822 ray-dashboard-NodeHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "i
+    95846 95822 ray-dashboard-ReportHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c 
+    95847 95822 ray-dashboard-ServeHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "
+    95848 95822 ray-dashboard-StateHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "
+    95849 95822 ray-dashboard-TrainHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B -c "
+    95860     1 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -u /Users/ds283/Documents/Code/Cha
+    95861     1 /Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/core/src/ray/raylet/raylet --raylet_socket_name=/tmp/ray-cpbh/se
+    95869 95861 ray::DashboardAgent                      
+    95870 95861 ray::RuntimeEnvAgent                
+>> ray_cluster: grace period of 15s over; SIGKILL to: 95793
+>> ray_cluster: no process names /tmp/ray-cpbh; ports 6380 6381 8267 52367 are free
+released the rehearsal lock (/Users/ds283/.raypoolkit/rehearsal-lock)
+>> ray_cluster: stopped in 19s
+
+## V0 step 4 ray_cluster.sh status > var/ray-sqla-align-01/v0-status.txt 2>&1; echo $?
+exit 0
+lock: free (/Users/ds283/.raypoolkit/rehearsal-lock does not exist)
+Ray processes of /tmp/ray-cpbh: none
+what stop would signal (this script's rule, /tmp/ray-cpbh): no processes
+port 6380: free
+port 6381: free
+port 8267: free
+port 52367: free

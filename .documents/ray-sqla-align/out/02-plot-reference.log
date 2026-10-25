@@ -1,0 +1,15 @@
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-10-25 21:12:44,752	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-10-25 21:12:44,793	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at http://127.0.0.1:8267 
+!! WARNING: number of shards read from database (=16) does not match specified number of shards (=10)
+>> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/ray-sqla-align-02-reference.db" read-only with 16 shards (version label "2026.6.0", serial 1)
+(Datastore pid=13935) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+@@ plot_by_beta: SM baseline (rho_NP = 0, PRyM_version=bf24c3d+ri02+sr01+bt02, small_network=True): Yp=0.24688, D/H x1e5=2.45829, 3He/H x1e5=1.04193, 7Li/H x1e10=5.48637
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology
+
+** GENERATING SUMMARY PLOTS BY BETA
+(build_beta_plot pid=14024) @@ build_beta_plot 'QCD_Cosmology', M=2.436e+24 eV, Lambda=0.001 eV: no models used elastic reflections (5 model(s) checked)
+   -- ALL WORK ITEMS COMPLETE in time 4.79s
+      Queue summary: 1 lookup (avg 12.53/min)
+      (no compute items were evaluated - all assets read from datastore)

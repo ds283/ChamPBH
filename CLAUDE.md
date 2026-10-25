@@ -80,7 +80,7 @@ invariants that hold across all of them:
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .   # 18 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 176 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .   # 78 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 93 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 102 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .        # 61 tests
   ```
   `ComputeTargets/tests` takes about 200 s in one run, and longer on a loaded machine; a Bash call is
@@ -89,7 +89,7 @@ invariants that hold across all of them:
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 61 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 115 tests
   ```
-  (The counts are those of 2026-10-20; `tools/tests`'s is of 2026-10-25, after `rpk-v030-adoption`
+  (The counts are those of 2026-10-20; `tools/tests`'s is of 2026-10-25, after `ray-sqla-align`
   01.) They **must not
   need a Ray cluster or a persistent datastore**. A test may build a temporary
   SQLite datastore in a `tempfile` directory, through `datastorekit`'s undecorated actor
@@ -146,6 +146,14 @@ invariants that hold across all of them:
   what; a lock whose owner pid is not alive and which lists no process is removed by the user, by
   hand. **No shell command that runs the script names `/tmp/ray-cpbh`, and one that runs a lock
   command naming it runs nothing else**: the lock would list that shell's other children.
+- **Ray's token mode.** Every Ray start runs in Ray's token mode, named: by `config/ray_auth.py`,
+  which `main.py`, `plot_by_beta.py` and `plot_ScalarModel.py` import, and by `ray_cluster.sh` for
+  the cluster; `tools/tests/test_ray_auth.py` guards both. A Ray CLI command against the cluster
+  needs `RAY_AUTH_MODE=token` in its environment (`RAY_AUTH_MODE=token ./venv/bin/ray status
+  --address 127.0.0.1:6380`). The token is `~/.ray/auth_token`, shared with SecondaryGWKit and
+  StochasticInstantons; it is kept at mode 600 and never printed or copied. Why: Ray 2.59 starts
+  `ray start --head` in token mode when that file exists, but never a driver attaching by
+  address, so with the mode left to Ray the cluster refuses every driver (`ray-sqla-align` 01, V0).
 
 ## Long-running jobs — the run registry
 
