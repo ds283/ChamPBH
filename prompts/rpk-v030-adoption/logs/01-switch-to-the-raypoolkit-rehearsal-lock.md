@@ -1,7 +1,7 @@
 # Log 01 — switch to the `raypoolkit` rehearsal lock (`v0.3.0`)
 
 **Subject:** Switch the cluster script to the raypoolkit v0.3.0 rehearsal lock
-**Commit:** this commit, on branch `rpk-v030-adoption`, on top of `5478c6e`
+**Commit:** `95ad91d`, on branch `rpk-v030-adoption`, on top of `5478c6e`
 **Date:** 2026-10-25, by Claude Opus 5.5
 **Result:** **COMPLETE.** P1, S1, T1, C1, R1 and B1 shipped; gate R holds. The venv holds
 `raypoolkit` 0.3.0 at `67a75b97…`. The roots were 18, 61 + 115, 78, 84 and 61 before, and are 18,
@@ -257,10 +257,10 @@ note's expected record.
 
 ## State handed on
 
-- **The venv holds `raypoolkit` 0.3.0 at `67a75b97…`**, installed from this commit's
+- **The venv holds `raypoolkit` 0.3.0 at `67a75b97…`**, installed from `95ad91d`'s
   `requirements.txt`. `jordan-normalization` shares this venv while its `requirements.txt` still
   names `v0.2.0`, which is harmless because `RayWorkPool` is unchanged (README §4.2). A revert of
-  this commit needs `./venv/bin/pip install "raypoolkit @
+  `95ad91d` needs `./venv/bin/pip install "raypoolkit @
   git+https://github.com/ds283/RayPoolKit@v0.2.0"` too (README §4.1).
 - **The lock is free at both locations**, and no Ray process of `/tmp/ray-cpbh` is running.
 - **For `jordan-normalization` 09's note:** the script's `status` now prints the module's layout
@@ -270,4 +270,4 @@ note's expected record.
   script may name `/tmp/ray-cpbh`.
 - **Merge:** a three-way `git merge-file` of `CLAUDE.md` against `jordan-normalization` (base
   `ac187c8`) is clean. `prompts/INDEX.md` is untouched here.
-- Nothing is committed beyond this commit; the review closes the campaign.
+- Nothing is committed beyond `95ad91d`; the review closes the campaign.
