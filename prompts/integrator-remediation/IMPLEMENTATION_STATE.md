@@ -145,6 +145,9 @@ own source.
 *(2026-10-20: `[00-declare-reflects-at-origin-for-the-other-potentials]` moved to §4, resolved as
 moot by `jordan-normalization` prompt 01.)*
 
+*(2026-10-25: `[00-region-properties-on-the-potentials-become-unread]` moved to §4, resolved by
+`jordan-normalization` prompt 04.)*
+
 - **[00-settling-at-physical-M-needs-a-parked-tracking-model]** *(audit §3.7, §9.4)*.
   - **What.** Once the bounce amplitude is far below any scale of interest and the period far
     below the sample spacing, the field is a passenger at `φ_wall(ρ)`, the minimum of the
@@ -198,17 +201,6 @@ moot by `jordan-normalization` prompt 01.)*
     ScalarModel history failed"). A nullable `ScalarModel.failure_reason String(256)` column,
     written from `compute_scalar_model`'s two failure exits and read back through
     `ScalarModel.failure_reason`.
-- **[00-region-properties-on-the-potentials-become-unread]** *(after prompt 01)*.
-  - **What.** `bounce_region_level{1,2}_boundary`, `…_max_step`, `default_max_step` and
-    `hard_reflection_point` are defined on `AbstractPotential` and six potentials and read only
-    by the code prompt 01 deletes.
-  - **Impact.** Dead interface.
-  - **Next step.** Remove them in a housekeeping prompt, with `grep` as the witness. Not
-    assigned.
-  - **Assigned (2026-10-20):** to the
-    [`jordan-normalization`](../jordan-normalization/IMPLEMENTATION_STATE.md) campaign, prompt 04,
-    whose `AbstractModel` interface does not carry these properties over. That prompt closes it
-    here, in §4, and deletes its row from `.documents/OPEN_ISSUES.md`.
 - **[00-analytic-jacobian-would-remove-num-jac]** *(audit §9.4)*.
   - **What.** The stiff `(φ, π)` block's Jacobian (`V''` and the kick's `φ`-dependence) is
     available in closed form; the slow components could use finite differences under the loop's
@@ -418,3 +410,22 @@ moot by `jordan-normalization` prompt 01.)*
     `ReflectingPotential`, `StarobinskyPotential`) are deleted (R11), so nothing keeps the defaults
     that would fail at the floor. `ExponentialPotential` declares the properties and is the only
     potential class.
+- **[00-region-properties-on-the-potentials-become-unread]** *(after prompt 01)*.
+  - **What.** `bounce_region_level{1,2}_boundary`, `…_max_step`, `default_max_step` and
+    `hard_reflection_point` are defined on `AbstractPotential` and six potentials and read only
+    by the code prompt 01 deletes.
+  - **Impact.** Dead interface.
+  - **Next step.** Remove them in a housekeeping prompt, with `grep` as the witness. Not
+    assigned.
+  - **Assigned (2026-10-20):** to the
+    [`jordan-normalization`](../jordan-normalization/IMPLEMENTATION_STATE.md) campaign, prompt 04,
+    whose `AbstractModel` interface does not carry these properties over. That prompt closes it
+    here, in §4, and deletes its row from `.documents/OPEN_ISSUES.md`.
+  - **Resolved (2026-10-25):** by `jordan-normalization` prompt 04 (this commit, its log 04). The
+    integrator reads a `RealizedModel` (`CosmologyConcepts/Models/`), whose interface does not carry
+    the properties over. `bounce_region_level{1,2}_boundary`, `bounce_region_level{1,2}_max_step`
+    and `hard_reflection_point` are deleted from `AbstractPotential` and `ExponentialPotential`, and
+    `default_max_step` from `ExponentialPotential`. The witness,
+    `git grep -n -P 'bounce_region|hard_reflection_point|default_max_step' -- . ':!prompts' ':!science-runs' ':!.documents'`,
+    finds nothing. `.documents/integrator-audit-2026-09-30/harness.py`, a dated record, still reads
+    them and is not edited.

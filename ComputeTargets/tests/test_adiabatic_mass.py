@@ -184,6 +184,40 @@ class _QuadraticCoupling:
         return 2.0 * self._gamma / (self._MP * self._MP)
 
 
+class _StandInRealizedModel:
+    """
+    The realized model of a stand-in potential and a coupling, which the policy takes since
+    jordan-normalization prompt 04: V from the one and Omega from the other, delegated with
+    nothing added.
+    """
+
+    def __init__(self, potential, coupling):
+        self._potential = potential
+        self._coupling = coupling
+        self.name = f"{potential.name}-{coupling.name}"
+
+    def log_V(self, phi):
+        return self._potential.log_V(phi)
+
+    def d_logV_dphi(self, phi):
+        return self._potential.d_logV_dphi(phi)
+
+    def d2_logV_dphi2(self, phi):
+        return self._potential.d2_logV_dphi2(phi)
+
+    def log_Omega(self, phi):
+        return self._coupling.log_Omega(phi)
+
+    def Omega(self, phi):
+        return self._coupling.Omega(phi)
+
+    def d_logOmega_dphi(self, phi):
+        return self._coupling.d_logOmega_dphi(phi)
+
+    def d2_logOmega_dphi2(self, phi):
+        return self._coupling.d2_logOmega_dphi2(phi)
+
+
 class _Reference:
     """
     The reference of test (a): the central difference in phi of the source term
@@ -318,7 +352,9 @@ class TestAdiabaticMass(unittest.TestCase):
 
     def _policy(self, coupling) -> AdiabaticComputePolicy:
         return AdiabaticComputePolicy(
-            "test_adiabatic_mass", self.cosmology, self.potential, coupling
+            "test_adiabatic_mass",
+            self.cosmology,
+            _StandInRealizedModel(self.potential, coupling),
         )
 
     def _bracket_errors(self, coupling, phi0: float, fm: float, h: float):
@@ -561,7 +597,7 @@ class _StandInPolicy:
     Hdot/H^2 = -2 (radiation, H^2 proportional to e^{-4N}).
     """
 
-    def __init__(self, task_label, cosmology, potential, coupling):
+    def __init__(self, task_label, cosmology, model):
         pass
 
     def M2eff_over_H2(self, phi_Einstein, *args):
@@ -596,8 +632,7 @@ def _run_compute_adiabatic_values(N: np.ndarray, m: np.ndarray):
     ]
     model = SimpleNamespace(
         _cosmology=SimpleNamespace(units=GeV_units()),
-        potential=None,
-        coupling=None,
+        realized_model=None,
         values=values,
     )
     labels = {"kp_over_H_1E1": Q_KP_OVER_H}

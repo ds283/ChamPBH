@@ -121,9 +121,7 @@ class TestTrialStatePolicy(unittest.TestCase):
         """A NaN friction_term makes ODERHS raise ComputationFailureError. Fails on HEAD~1, where
         the diagnostic branch reads data.d_logV_dphi and raises AttributeError."""
         _, rhs, supervisor = build(P1[0], 0.5)
-        policy = NaNFrictionPolicy(
-            "test", rhs.policy.cosmology, rhs.policy.potential, rhs.policy.coupling
-        )
+        policy = NaNFrictionPolicy("test", rhs.policy.cosmology, rhs.policy.model)
         nan_rhs = SM.ODERHS("test", policy)
         buffer = io.StringIO()
         with contextlib.redirect_stdout(buffer), supervisor:
@@ -228,9 +226,7 @@ class TestQuietTimer(unittest.TestCase):
         reach the timer.)
         """
         _, rhs, supervisor = build(P1[0], 0.5)
-        policy = RaisingPolicy(
-            "test", rhs.policy.cosmology, rhs.policy.potential, rhs.policy.coupling
-        )
+        policy = RaisingPolicy("test", rhs.policy.cosmology, rhs.policy.model)
         wrapped = ArmOnFirstStep(SM.ODERHS("test", policy))
         out, err = io.StringIO(), io.StringIO()
         with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):

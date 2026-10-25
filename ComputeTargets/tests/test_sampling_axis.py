@@ -43,10 +43,8 @@ from unittest import mock
 
 from ComputeTargets.ScalarHistory import SampleValues, truncate_to_history
 from ComputeTargets.tests import golden_history as gh
-from CosmologyConcepts import beta_value, redshift, redshift_array
-from CosmologyConcepts.ConformalCouplings.ExponentialCoupling import (
-    ExponentialCoupling,
-)
+from CosmologyConcepts import redshift, redshift_array
+from CosmologyConcepts.Models.ExponentialModel import ExponentialModel
 from CosmologyConcepts.redshift import log_one_plus_z_grid
 from CosmologyModels.GenericEOS.QCD_Cosmology import QCD_Cosmology
 from CosmologyModels.LambdaCDM import Planck2018
@@ -165,7 +163,8 @@ class TestTheJordanRedshift(unittest.TestCase):
             cls.data = gh.run_history(1.5)
         cls.units = Planck_units()
         cls.cosmology = QCD_Cosmology(0, cls.units, Planck2018())
-        cls.coupling = ExponentialCoupling(0, beta_value(0, 1.5), cls.units)
+        # the realized model the history was computed with (jordan-normalization prompt 04)
+        cls.model = ExponentialModel.from_rows(*gh.rows(1.5, cls.units))
         cls.samples = cls.data["sample"]
         cls.points = list(cls.data["z_grid"])
 
@@ -179,12 +178,12 @@ class TestTheJordanRedshift(unittest.TestCase):
         """
         self.assertEqual(self.points[-1].log_one_plus_z, 0.0)
         end = self.samples[-1]
-        log_A_0 = self.coupling.log_Omega(end.phi_Einstein)
+        log_A_0 = self.model.log_Omega(end.phi_Einstein)
 
         self.assertEqual(end.log_one_plus_z_Jordan, 0.0)
         for i, (p, s) in enumerate(zip(self.points, self.samples)):
             expected = p.log_one_plus_z + (
-                log_A_0 - self.coupling.log_Omega(s.phi_Einstein)
+                log_A_0 - self.model.log_Omega(s.phi_Einstein)
             )
             self.assertEqual(s.log_one_plus_z_Jordan, expected, i)
 

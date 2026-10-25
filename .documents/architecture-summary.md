@@ -81,6 +81,10 @@ ChamPBH/
 │   ├── beta_value.py                # Also the database shard key
 │   ├── redshift.py                  # redshift, redshift_array
 │   ├── temperature.py
+│   ├── Models/                      # the model interface: one object holding V and A (§8.4a)
+│   │   ├── AbstractModel.py         # AbstractModel, RealizedModel, Seed
+│   │   ├── ExponentialModel.py
+│   │   └── model_ids.py
 │   ├── Potentials/
 │   │   ├── AbstractPotential.py
 │   │   ├── ExponentialPotential.py
@@ -930,13 +934,6 @@ class AbstractPotential(DatastoreObject):
     name: str
     type_id: int
     
-    # Bounce region tuning (chameleon-specific)
-    bounce_region_level1_boundary: float
-    bounce_region_level2_boundary: float
-    bounce_region_level1_max_step: float
-    bounce_region_level2_max_step: float
-    hard_reflection_point: float
-    
     # Required methods
     def log_V(self, phi) -> float: ...
     def d_V_dphi(self, phi) -> float: ...
@@ -962,6 +959,15 @@ Concrete implementation: `ExponentialPotential`.
 > unchanged (board issue `[02-the-scalar-history-parent-is-still-called-model]`). Fingerprint format 3.
 > Nothing computed changed (the golden history is bitwise). The notes above keep the names of their day.
 
+> **Note, 2026-10-25 (`jordan-normalization`, prompt 04).** The integrator and everything downstream
+> of it no longer read a potential: they read a `RealizedModel` (§8.4a), which gives V and the
+> conformal factor together. The potential rows still exist, and still key a history, and reach the
+> integrator through the adapter `ExponentialModel.from_rows(potential, coupling)` (normalization
+> 4 ln Λ, φ_ref = 0, bitwise the rows' values) until prompt 07 stores the model. The five
+> `bounce_region_level{1,2}_*` and `hard_reflection_point` properties, and `ExponentialPotential`'s
+> `default_max_step`, are deleted, and the listing above no longer shows them; this closes
+> `[00-region-properties-on-the-potentials-become-unread]`.
+
 ### 8.4 Conformal Couplings (`CosmologyConcepts/ConformalCouplings/`)
 
 `AbstractCoupling` defines:
@@ -979,6 +985,63 @@ class AbstractCoupling(DatastoreObject):
 ```
 
 Currently only `ExponentialCoupling` is implemented: Ω(φ) = exp(βφ/Mp).
+
+> **Note, 2026-10-25 (`jordan-normalization`, prompt 04).** The integrator now reads the conformal
+> factor from the `RealizedModel` (§8.4a), with A(φ_ref) = 1; the coupling rows reach it through the
+> adapter `ExponentialModel.from_rows` at φ_ref = 0, where A is exactly the coupling's Ω, until prompt
+> 07 stores the model. `pipeline_selection`'s super-Planckian warning still reads the coupling rows
+> (prompt 08 moves it).
+
+### 8.4a Models (`CosmologyConcepts/Models/`)
+
+*Added 2026-10-25 by `jordan-normalization` prompt 04.* A model is one Lagrangian: the potential
+V(φ) and the conformal factor A(φ) of g_J = A² g_E (README R6). Two quantities belong to each history,
+not to the model: the potential's **normalization**, which the model interprets (R7), and the
+**reference point** φ_ref at which A(φ_ref) = 1.
+
+```python
+class AbstractModel(DatastoreObject):
+    name: str
+    type_id: int
+    shard_key: ShardKeyType
+    units: UnitsLike
+
+    # hooks a model implements; none takes phi_ref
+    def _log_V(self, normalization, phi) -> float: ...
+    def _d_logV_dphi(self, normalization, phi) -> float: ...
+    def _d2_logV_dphi2(self, normalization, phi) -> float: ...
+    def _log_Omega(self, phi) -> float: ...
+    def _d_logOmega_dphi(self, phi) -> float: ...
+    def _d2_logOmega_dphi2(self, phi) -> float: ...
+    def _log_V_floor(self, normalization) -> Optional[float]: ...   # default None
+    reflects_at_origin: bool                                         # default False
+
+    def realize(self, normalization, phi_ref) -> RealizedModel: ...
+    def renormalize(self, normalization, phi, V_target): ...         # V(phi) = V_target
+    def normalization_coordinate(self, normalization) -> float: ...
+    def normalization_from_coordinate(self, x) -> normalization: ...
+    def effective_minimum(self, normalization, phi_ref, phi_0, rho_m_E_0, bracket=None) -> float: ...
+    def seed(self, cosmology) -> Seed: ...                           # Seed(kind, normalization, phi_ref)
+```
+
+- **`RealizedModel`** is what the integrator, `HubblePolicy`, `PotentialDerivativePolicy`,
+  `fixed_T_value_at`, `surfing_turning_points` and `AdiabaticComputePolicy` take. It is immutable
+  and exposes `log_V`, `d_logV_dphi`, `d2_logV_dphi2`, `log_Omega`, `Omega`, `d_logOmega_dphi`,
+  `d2_logOmega_dphi2`, `log_V_floor`, `reflects_at_origin`, `name`, `normalization`, `phi_ref` and
+  `model`. Ω is the conformal factor A; the names are the integrator's.
+- **A(φ_ref) = 1 is the base class's.** `log_Omega(φ)` is `model._log_Omega(φ) − model._log_Omega(φ_ref)`,
+  the latter computed once at realization, so no model interprets φ_ref.
+- **`effective_minimum`** is the root of V′ + (d ln A/dφ) ρ_m,E(φ₀) A(φ)/A(φ₀), by `brentq` on
+  (0.05 φ₀, 20 φ₀) by default; a bracket without a sign change raises `ValueError`. The radiation term
+  Σ ρ_R,E is left out, since Σ(T_CMB) is 0.0 exactly.
+- **`seed`** is the start of a history's tuning (P5). The base class gives `plain`:
+  normalization ln(3 M_P² H0² (1 − Ω_m)), φ_ref = 0.
+- **`ExponentialModel(store_id, M, n, beta, units)`**: V = V₀ exp((M/φ)ⁿ), A = exp(β(φ − φ_ref)/M_P).
+  - The normalization is ln V₀, and its coordinate is itself.
+  - `type_id` is `EXPONENTIAL_MODEL = 1`, and `shard_key` is the `beta_value`.
+  - Its `seed` is the tracking analytic minimum, else the static one, else `plain`, for n = 1, and
+    `plain` otherwise.
+  - The classmethod `from_rows(potential, coupling)` is the adapter (prompt 07 removes it).
 
 ### 8.5 Cosmological Models (`CosmologyModels/`)
 

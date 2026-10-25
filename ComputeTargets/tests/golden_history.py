@@ -12,6 +12,10 @@ at 250 samples per decade of 1 + z up to 85 decades (exponential.yaml's value): 
 DELTA = ln 10 / 250, k = 0 ... 21250. (Until jordan-normalization prompt 03 the grid was main.py's
 np.logspace(0, 85, 21250) - 1, whose points are not multiples of DELTA.)
 
+Since jordan-normalization prompt 04 the history is computed with the realized model, which
+run_history builds from the two rows by the adapter ExponentialModel.from_rows(potential, coupling):
+normalization 4 log Lambda, phi_ref = 0. The record is unchanged, and the test passes it bitwise.
+
 What is pinned, per history (see `record_of`):
   - samples_sha256: SHA-256 of numpy.asarray(samples, dtype=float64).tobytes(), row-major in
     SampleValues order; log_one_plus_z_sha256: the same for the sampled points' ln(1 + z), the
@@ -61,6 +65,7 @@ from CosmologyConcepts.ConformalCouplings.ExponentialCoupling import (
     ExponentialCoupling,
 )
 from CosmologyConcepts.FieldValues import phi_value, pi_value
+from CosmologyConcepts.Models.ExponentialModel import ExponentialModel
 from CosmologyConcepts.Potentials.ExponentialPotential import ExponentialPotential
 from CosmologyModels.GenericEOS.QCD_Cosmology import QCD_Cosmology
 from CosmologyModels.LambdaCDM import Planck2018
@@ -103,12 +108,8 @@ def make_z_grid() -> redshift_array:
     return redshift_array(z_array=[redshift(i, x) for i, x in enumerate(xs)])
 
 
-def run_history(beta: float) -> dict:
-    """Run one golden history; the payload of compute_scalar_history, which must not be a failure."""
-    units = Planck_units()
-    params = Planck2018()
-    cosmology = QCD_Cosmology(0, units, params)
-
+def rows(beta: float, units) -> tuple:
+    """The golden histories' potential and coupling rows, (potential, coupling), with store id 0."""
     potential = ExponentialPotential(
         0,
         M_value(0, M_OVER_MP * units.PlanckMass),
@@ -117,6 +118,19 @@ def run_history(beta: float) -> dict:
         units,
     )
     coupling = ExponentialCoupling(0, beta_value(0, beta), units)
+    return potential, coupling
+
+
+def run_history(beta: float) -> dict:
+    """
+    Run one golden history; the payload of compute_scalar_history, which must not be a failure.
+    The realized model is the adapter's, ExponentialModel.from_rows(potential, coupling).
+    """
+    units = Planck_units()
+    params = Planck2018()
+    cosmology = QCD_Cosmology(0, units, params)
+
+    potential, coupling = rows(beta, units)
 
     data = compute_scalar_history._function(
         cosmology,
@@ -125,8 +139,7 @@ def run_history(beta: float) -> dict:
         phi_value(0, PHI_INIT_OVER_MP * units.PlanckMass),
         pi_value(0, PI_INIT),
         make_z_grid(),
-        potential,
-        coupling,
+        ExponentialModel.from_rows(potential, coupling),
         task_label=f"golden_history-{history_key(beta)}",
         atol=ATOL,
         rtol=RTOL,

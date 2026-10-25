@@ -38,6 +38,7 @@ from CosmologyConcepts import (
     FieldLike,
 )
 from CosmologyConcepts.ConformalCouplings import AbstractCoupling
+from CosmologyConcepts.Models.AbstractModel import RealizedModel
 from CosmologyConcepts.Potentials import AbstractPotential
 from CosmologyModels import BaseCosmology
 from CosmologyModels.GenericEOS.LambdaCDM_GenericEOS import LambdaCDM_GenericEOS
@@ -232,18 +233,16 @@ class ODEPolicy:
         self,
         task_label: str,
         cosmology: BaseCosmology,
-        potential: AbstractPotential,
-        coupling: AbstractCoupling,
+        model: RealizedModel,
     ):
         self.task_label: str = task_label
         self.units: UnitsLike = cosmology.units
 
         self.cosmology: BaseCosmology = cosmology
-        self.potential: AbstractPotential = potential
-        self.coupling: AbstractCoupling = coupling
+        self.model: RealizedModel = model
 
         self.V_policy: PotentialDerivativePolicy = PotentialDerivativePolicy(
-            task_label, cosmology, potential
+            task_label, cosmology, model
         )
 
         self.MP = self.units.PlanckMass
@@ -307,7 +306,7 @@ class ODEPolicy:
         else:
             R = (Sigma + fm) / (1.0 + fm)
 
-        d_logOmega_dphi: float = self.coupling.d_logOmega_dphi(phi_Einstein)
+        d_logOmega_dphi: float = self.model.d_logOmega_dphi(phi_Einstein)
 
         log_V = self.V_policy.log_V(phi_Einstein)
         V_over_3H2Mp2 = self.V_policy.V_over_3H2Mp2(
@@ -361,8 +360,8 @@ class ODEPolicy:
 
 
 class HubblePolicy:
-    def __init__(self, coupling: AbstractCoupling, units: UnitsLike):
-        self.coupling: AbstractCoupling = coupling
+    def __init__(self, model: RealizedModel, units: UnitsLike):
+        self.model: RealizedModel = model
         self.units: UnitsLike = units
 
         self.MP = units.PlanckMass
@@ -390,7 +389,7 @@ class HubblePolicy:
 
         H_Einstein: float = sqrt(H2_Einstein)
 
-        Omega: float = self.coupling.Omega(state.phi_Einstein)
+        Omega: float = self.model.Omega(state.phi_Einstein)
 
         # H_Jordan can even be negative, so there is no use trying to store its logarithm
         H_Jordan: float = (
@@ -520,29 +519,29 @@ def _reflection_guards(
     the state where the floor rule asks for a reflection. Returns W/(pi^2/2); raises
     ComputationFailureError if either guard fails.
 
-    G1: the potential must declare a repulsive wall between the origin and the field
+    G1: the model must declare a repulsive wall between the origin and the field
         (reflects_at_origin). The floor rule is a time-scale test, not a wall detector, and the
         reflection is exact only if a wall exists in (0, phi).
     G2: the wall part of the potential fraction, W = 3 (V - V_floor)/(3H^2 Mp^2), must not exceed
         the kinetic fraction pi^2/(2 Mp^2). A field that arrived from outside the wall satisfies
         this; one that has already been stepped into the wall does not.
     """
-    potential = policy.potential
+    model = policy.model
     state = StateVector._make(y)
     label = f" ({task_label})" if task_label is not None else ""
 
-    if not potential.reflects_at_origin:
+    if not model.reflects_at_origin:
         raise ComputationFailureError(
             f"integrate_scalar_history{label}: the representable-step floor was reached "
             f"(N={N:.10g}, phi_E={state.phi_Einstein:.5g}, pi_E={state.pi_Einstein:.5g}), but the "
-            f"potential {potential.name} does not declare reflects_at_origin, so the elastic "
+            f"model {model.name} does not declare reflects_at_origin, so the elastic "
             f"reflection model cannot be applied"
         )
 
-    log_V_floor = potential.log_V_floor
+    log_V_floor = model.log_V_floor
     if log_V_floor is None:
         raise ComputationFailureError(
-            f"integrate_scalar_history{label}: the potential {potential.name} declares "
+            f"integrate_scalar_history{label}: the model {model.name} declares "
             f"reflects_at_origin but provides no log_V_floor, so the reflection cannot be checked"
         )
 
@@ -886,14 +885,14 @@ SurfingCrossing = namedtuple(
 
 def surfing_turning_points(
     result: IntegrationResult,
-    coupling: AbstractCoupling,
+    model: RealizedModel,
     interior_samples: int = 8,
 ) -> List[SurfingCrossing]:
     """
     The turning points of the Jordan-frame temperature before the first bounce (surfing-temperature
     prompt 02, T1), in order: the zeros of g(N) = 1 + (d ln Omega/dphi)(phi(N)) pi(N), the
     numerator of the temperature law (ODERHS), read on the accepted steps' interpolants through
-    the coupling. For the exponential coupling g = 1 + beta pi/M_P.
+    the realized model. For the exponential model g = 1 + beta pi/M_P.
 
     The accepted steps are walked in order, as first_bounce walks them, up to the first bounce:
     first_bounce(result).N, on the bounce's own step, or the history's end if there is none. A
@@ -914,7 +913,7 @@ def surfing_turning_points(
     compute_scalar_history, and nothing is stored (surfing-temperature README §5 rule 9).
 
     :param result: the IntegrationResult of integrate_scalar_history
-    :param coupling: the history's conformal coupling
+    :param model: the history's realized model
     :param interior_samples: interior sample points per step
     :return: list of SurfingCrossing, possibly empty
     """
@@ -960,12 +959,12 @@ def surfing_turning_points(
 
         def g(t: float, interpolant=interpolant) -> float:
             y = interpolant(t)
-            return 1.0 + coupling.d_logOmega_dphi(float(y[0])) * float(y[1])
+            return 1.0 + model.d_logOmega_dphi(float(y[0])) * float(y[1])
 
         Ns = np.linspace(t_low, t_high, interior_samples + 2)
         ys = interpolant(Ns)
         gs = [
-            1.0 + coupling.d_logOmega_dphi(float(phi)) * float(pi_)
+            1.0 + model.d_logOmega_dphi(float(phi)) * float(pi_)
             for phi, pi_ in zip(ys[0], ys[1])
         ]
 
@@ -1064,7 +1063,7 @@ def fixed_T_value_at(
     k: int,
     N: float,
     policy: ODEPolicy,
-    coupling: AbstractCoupling,
+    model: RealizedModel,
     units: UnitsLike,
 ) -> tuple:
     """
@@ -1078,9 +1077,9 @@ def fixed_T_value_at(
     """
     state: StateVector = StateVector._make(result.solution.interpolants[k](N))
     data: ODEPolicyData = policy(N, state)
-    hubble_data: HubblePolicyData = HubblePolicy(coupling, units)(data, state)
+    hubble_data: HubblePolicyData = HubblePolicy(model, units)(data, state)
 
-    log_Omega: float = coupling.log_Omega(state.phi_Einstein)
+    log_Omega: float = model.log_Omega(state.phi_Einstein)
     log_rhorad_Jordan: float = state.log_rhorad_Einstein - 4.0 * log_Omega
 
     CONST_3_MP_SQ = 3.0 * units.PlanckMass * units.PlanckMass
@@ -1095,7 +1094,7 @@ def fixed_T_value_at(
 def fixed_T_values(
     result: IntegrationResult,
     policy: ODEPolicy,
-    coupling: AbstractCoupling,
+    model: RealizedModel,
     units: UnitsLike,
 ) -> FixedTValues:
     """
@@ -1112,7 +1111,7 @@ def fixed_T_values(
             values.extend([None, None])
         else:
             k, N = found
-            values.extend(fixed_T_value_at(result, k, N, policy, coupling, units))
+            values.extend(fixed_T_value_at(result, k, N, policy, model, units))
 
     return FixedTValues._make(values)
 
@@ -1144,8 +1143,7 @@ def compute_scalar_history(
     phi_init: FieldLike,
     pi_init: FieldLike,
     z_grid: redshift_array,
-    potential: AbstractPotential,
-    coupling: AbstractCoupling,
+    model: RealizedModel,
     task_label: str = "compute_scalar_history",
     atol: float = DEFAULT_ABS_TOLERANCE,
     rtol: float = DEFAULT_REL_TOLERANCE,
@@ -1158,8 +1156,8 @@ def compute_scalar_history(
     :param phi_init: initial Einstein-frame scalar field value phi
     :param pi_init: initial Einstein-frame scalar field derivative dphi/dN
     :param z_grid: the sampling axis: points ln(1 + z_E), counted back from the end of the history
-    :param potential: the scalar field potential
-    :param coupling: the conformal coupling
+    :param model: the realized model: V, the conformal factor A and their derivatives
+                  (jordan-normalization prompt 04)
     :param task_label: label for the ray task
     :param atol: absolute tolerance for the ODE solver
     :param rtol: relative tolerance for the ODE solver
@@ -1180,7 +1178,7 @@ def compute_scalar_history(
     )
 
     # convert Jordan frame radiation density at T_J = T_Jordan_init to Einstein frame radiation density
-    log_rhorad_Einstein_init: float = log_rhorad_Jordan_init + 4.0 * coupling.log_Omega(
+    log_rhorad_Einstein_init: float = log_rhorad_Jordan_init + 4.0 * model.log_Omega(
         phi_init_float
     )
 
@@ -1211,7 +1209,7 @@ def compute_scalar_history(
     #     f"    - log_rho_r_Jordan_init = {log_rhorad_Jordan_init:.5g}, log_rho_r_Einstein_init = {log_rhorad_Einstein_init:.5g}"
     # )
 
-    policy = ODEPolicy(task_label, cosmology, potential, coupling)
+    policy = ODEPolicy(task_label, cosmology, model)
     RHS = ODERHS(task_label, policy)
 
     # the step loop's parameters: the defaults of StepControl, with the tolerances requested
@@ -1281,11 +1279,11 @@ def compute_scalar_history(
 
         solution: OdeSolution = result.solution
 
-        hubble: HubblePolicy = HubblePolicy(coupling, units)
+        hubble: HubblePolicy = HubblePolicy(model, units)
 
         # ln A(phi_0), with phi_0 the field at the end of the history, for ln(1 + z_J)
         phi_0: float = StateVector._make(solution(final_N)).phi_Einstein
-        log_A_0: float = coupling.log_Omega(phi_0)
+        log_A_0: float = model.log_Omega(phi_0)
 
         try:
             for z in z_grid_cut:
@@ -1299,7 +1297,7 @@ def compute_scalar_history(
 
                 T_Jordan: float = data.T_Jordan
 
-                log_Omega: float = coupling.log_Omega(state.phi_Einstein)
+                log_Omega: float = model.log_Omega(state.phi_Einstein)
                 log_rhorad_Jordan: float = state.log_rhorad_Einstein - 4.0 * log_Omega
 
                 sample.append(
@@ -1344,7 +1342,7 @@ def compute_scalar_history(
 
     # phi and rho_NP/rho_R,J at T_J = 1 MeV and 70 keV, on the dense output (science-readiness
     # prompt 06b); a field is None where the history does not reach the temperature
-    fixed_T: FixedTValues = fixed_T_values(result, policy, coupling, units)
+    fixed_T: FixedTValues = fixed_T_values(result, policy, model, units)
 
     collected_full_statistics = supervisor.collect_full_statistics
     return {
@@ -1468,6 +1466,9 @@ class ScalarHistory(DatastoreObject):
         self._potential: AbstractPotential = potential
         self._coupling: AbstractCoupling = coupling
 
+        # built from the rows on first access to realized_model (jordan-normalization prompt 04)
+        self._realized_model: Optional[RealizedModel] = None
+
         self._target_z_grid: Optional[redshift_array] = z_grid
 
         if payload is None:
@@ -1561,6 +1562,26 @@ class ScalarHistory(DatastoreObject):
     @property
     def coupling(self) -> AbstractCoupling:
         return self._coupling
+
+    @property
+    def realized_model(self) -> RealizedModel:
+        """
+        The realized model the history is computed with (jordan-normalization prompt 04, M5): the
+        adapter ExponentialModel.from_rows(potential, coupling), with the normalization
+        4 log Lambda and phi_ref = 0, so that every value is bitwise what the rows give. Built on
+        first access and cached, not in __init__: an object built for a lookup, or on stand-in
+        rows, may never need it. jordan-normalization prompt 07 stores the model and removes this
+        adapter.
+        """
+        if self._realized_model is None:
+            # imported here: CosmologyConcepts.Models.ExponentialModel imports
+            # ComputeTargets.exceptions, which initializes this package
+            from CosmologyConcepts.Models.ExponentialModel import ExponentialModel
+
+            self._realized_model = ExponentialModel.from_rows(
+                self._potential, self._coupling
+            )
+        return self._realized_model
 
     @property
     def metadata(self) -> IntegrationData:
@@ -1743,12 +1764,9 @@ class ScalarHistory(DatastoreObject):
             self.phi_Einstein_init,
             self.pi_Einstein_init,
             self._target_z_grid,
-            self.potential,
-            self.coupling,
+            self.realized_model,
             task_label=(
-                self._label
-                if self._label is not None
-                else f"{self.potential.name}-{self.coupling.name}"
+                self._label if self._label is not None else self.realized_model.name
             ),
             atol=self._atol.tol,
             rtol=self._rtol.tol,

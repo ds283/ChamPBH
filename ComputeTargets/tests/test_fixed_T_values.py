@@ -17,8 +17,9 @@
 The fixed-temperature values of a history (science-readiness prompt 06b, README §2 (n), §6.7b).
 
 `T_Jordan_crossing(result, log_T)` returns the N of the history's first crossing of
-ln T_J = log_T on the dense output, or None; `fixed_T_values(result, policy, coupling, units)`
-reads phi and rho_NP/rho_R,J there, at T_J = 1 MeV and 70 keV, through `fixed_T_value_at`.
+ln T_J = log_T on the dense output, or None; `fixed_T_values(result, policy, model, units)`
+reads phi and rho_NP/rho_R,J there, at T_J = 1 MeV and 70 keV, through `fixed_T_value_at`. (The
+realized model, since jordan-normalization prompt 04; built here from the rows by the adapter.)
 
 (a) runs one full history through `compute_scalar_history._function`, capturing its
 `IntegrationResult`, and ties the dense-output values to the stored samples and to
@@ -53,6 +54,7 @@ from CosmologyConcepts.ConformalCouplings.ExponentialCoupling import (
     ExponentialCoupling,
 )
 from CosmologyConcepts.FieldValues import phi_value, pi_value
+from CosmologyConcepts.Models.ExponentialModel import ExponentialModel
 from CosmologyConcepts.Potentials.ExponentialPotential import ExponentialPotential
 
 SM = kcl.SM
@@ -88,8 +90,9 @@ def full_history(beta: float, M: float):
     """
     compute_scalar_history._function with main.py's initial data (phi* = 5 M_P, pi* = 0,
     T* = 2e4 GeV, T_stop = T_CMB, 250 samples per decade of 1 + z to 1e35), as
-    tools/history_and_bbn.py runs it. Returns (data, result, policy, coupling), where result
-    is the IntegrationResult, captured by wrapping integrate_scalar_history for the call.
+    tools/history_and_bbn.py runs it. Returns (data, result, policy, model), where result
+    is the IntegrationResult, captured by wrapping integrate_scalar_history for the call, and
+    model the realized model of the rows (the adapter's).
     """
     potential = ExponentialPotential(
         0,
@@ -99,6 +102,7 @@ def full_history(beta: float, M: float):
         _units,
     )
     coupling = ExponentialCoupling(0, beta_value(0, beta), _units)
+    model = ExponentialModel.from_rows(potential, coupling)
 
     xs = log_one_plus_z_grid(250, 35.0)
     z_grid = redshift_array(z_array=[redshift(i, x) for i, x in enumerate(xs)])
@@ -121,13 +125,12 @@ def full_history(beta: float, M: float):
             phi_value(0, 5.0 * _units.PlanckMass),
             pi_value(0, 0.0),
             z_grid,
-            potential,
-            coupling,
+            model,
             task_label="test_fixed_T_values",
         )
 
-    policy = SM.ODEPolicy("test", kcl._cosmology, potential, coupling)
-    return data, captured[-1], policy, coupling
+    policy = SM.ODEPolicy("test", kcl._cosmology, model)
+    return data, captured[-1], policy, model
 
 
 class TestFixedTValues(unittest.TestCase):
@@ -137,7 +140,7 @@ class TestFixedTValues(unittest.TestCase):
         0.07 MeV < T_J < 1 MeV the crossing is the sample's raw_N, phi the sample's, and the
         ratio compute_BBN_data's on the sample.
         """
-        data, result, policy, coupling = full_history(2.0, 0.5)
+        data, result, policy, model = full_history(2.0, 0.5)
         self.assertFalse(data.get("failure", False))
 
         MeV = _units.MeV
@@ -154,14 +157,14 @@ class TestFixedTValues(unittest.TestCase):
 
             k, N_k = SM._T_Jordan_crossing_step(result, s.log_T_Jordan)
             self.assertEqual(N_k, N)
-            phi, ratio = SM.fixed_T_value_at(result, k, N, policy, coupling, _units)
+            phi, ratio = SM.fixed_T_value_at(result, k, N, policy, model, _units)
             self.assertLessEqual(rel(phi, s.phi_Einstein), 1e-9)
             self.assertLessEqual(rel(ratio, bbn_ratio(s)), 1e-8)
 
         # compute_scalar_history returns fixed_T_values on the same result, all four reached
         fixed_T = data["fixed_T_values"]
         self.assertIsInstance(fixed_T, SM.FixedTValues)
-        self.assertEqual(fixed_T, SM.fixed_T_values(result, policy, coupling, _units))
+        self.assertEqual(fixed_T, SM.fixed_T_values(result, policy, model, _units))
         for value in fixed_T:
             self.assertIsInstance(value, float)
 
@@ -184,7 +187,7 @@ class TestFixedTValues(unittest.TestCase):
             )
             self.assertEqual(
                 (phi, ratio),
-                SM.fixed_T_value_at(result, k, N, policy, coupling, _units),
+                SM.fixed_T_value_at(result, k, N, policy, model, _units),
             )
 
     def test_b_not_reached(self):
@@ -206,7 +209,7 @@ class TestFixedTValues(unittest.TestCase):
             SM.T_Jordan_crossing(result, 0.5 * (log_T_first + log_T_last))
         )
 
-        fixed_T = SM.fixed_T_values(result, policy, policy.coupling, _units)
+        fixed_T = SM.fixed_T_values(result, policy, policy.model, _units)
         self.assertEqual(fixed_T, SM.FixedTValues(None, None, None, None))
 
     def test_c_crossing_across_a_reflection(self):
@@ -254,7 +257,7 @@ class TestFixedTValues(unittest.TestCase):
         # and the values there are read from the post-reflection state
         policy, _, _ = kcl.build(2.0, 1e-10)
         phi, ratio = SM.fixed_T_value_at(
-            result, k_found, N, policy, policy.coupling, _units
+            result, k_found, N, policy, policy.model, _units
         )
         self.assertEqual(phi, float(interpolants[k + 1](N)[0]))
         self.assertTrue(np.isfinite(ratio))

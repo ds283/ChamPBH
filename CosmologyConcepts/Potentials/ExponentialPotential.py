@@ -15,8 +15,6 @@
 
 from math import log
 
-from numpy import inf
-
 from ComputeTargets.exceptions import ComputationFailureError
 from CosmologyConcepts import M_value, Lambda_value, FieldLike, GetFieldValue
 from CosmologyConcepts.Potentials.AbstractPotential import AbstractPotential
@@ -64,31 +62,6 @@ class ExponentialPotential(AbstractPotential):
     @property
     def default_rel_tol(self) -> float:
         return DEFAULT_REL_TOLERANCE
-
-    @property
-    def default_max_step(self) -> float:
-        # seems no need to limit initial maximum step size for this potential
-        return inf
-
-    @property
-    def bounce_region_level1_boundary(self) -> float:
-        return 1.5 * self._M_float
-
-    @property
-    def bounce_region_level2_boundary(self) -> float:
-        return 1.5 * self._M_float / 30.0
-
-    @property
-    def bounce_region_level1_max_step(self) -> float:
-        return self.bounce_region_level1_boundary / 5e2
-
-    @property
-    def bounce_region_level2_max_step(self) -> float:
-        return self.bounce_region_level2_boundary / 5e2
-
-    @property
-    def hard_reflection_point(self) -> float:
-        return 0.0
 
     @property
     def reflects_at_origin(self) -> bool:

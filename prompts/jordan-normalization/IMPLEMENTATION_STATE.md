@@ -1,8 +1,8 @@
 # jordan-normalization campaign — implementation state
 
-**Last updated:** 2026-10-22 · **Status: LIVE — 10 of 10 prompts written, 3 landed (01, 02, 03, all
-reviewed); R1–R14, U1–U5 and P1–P20 ruled by the user 2026-10-20 (README §6). Next: the orchestrator
-note for 04.**
+**Last updated:** 2026-10-25 · **Status: LIVE — 10 of 10 prompts written, 4 landed (01, 02, 03
+reviewed; 04 landed in this commit, after one stop ruled by the orchestrator); R1–R14, U1–U5 and
+P1–P20 ruled by the user 2026-10-20 (README §6). Next: the orchestrator's review of 04.**
 The plan is [`README.md`](README.md), written on 2026-10-20 on branch `jordan-normalization`, cut
 from `main` at `ac187c8`.
 
@@ -38,7 +38,7 @@ It ends in the handover for the science rebuild, which is the user's.
 | 01 | Strip to the exponential model | four potentials and their configs removed; a golden short history; format 2 | Sonnet | ✅ | ✅ | `a1c88b6` | [`logs/01-strip-to-the-exponential-model.md`](logs/01-strip-to-the-exponential-model.md) |
 | 02 | Rename to `ScalarHistory` | classes, tables, drop group, proxies, documents; format 3 | Sonnet | ✅ | ✅ | `abccc23` | [`logs/02-rename-to-scalarhistory.md`](logs/02-rename-to-scalarhistory.md) |
 | 03 | The sampling axis | ln(1 + z_E) on the axis, exact-multiple grid, absolute lookup, ln(1 + z_J) per sample; format 4 | Opus | ✅ | ✅ | `bd9ae42` | [`logs/03-the-sampling-axis.md`](logs/03-the-sampling-axis.md) |
-| 04 | The model interface | `AbstractModel`, `ExponentialModel`, `RealizedModel`; consumers on it via an adapter; φ_ref = 0 bitwise; the shift law | Opus | ✍️ | ⬜ | — | — |
+| 04 | The model interface | `AbstractModel`, `ExponentialModel`, `RealizedModel`; consumers on it via an adapter; φ_ref = 0 bitwise; the shift law | Opus | ✍️ | ✅ | this commit | [`logs/04-the-model-interface.md`](logs/04-the-model-interface.md) |
 | 05 | The Planck mass | one reduced Planck mass from PRyMordial's G_N in three unit systems; consistency tests | Sonnet | ✍️ | ⬜ | — | — |
 | 06 | The tuning layer | `integrate_history` and `tune_history`: secant, seed, residuals, failure reasons, progress lines | Opus | ✍️ | ⬜ | — | — |
 | 07 | The store | `ExponentialModel` table; `ScalarHistory`'s key and tuned outputs; format 5; `VERSION_LABEL` 2026.7.0; writers and readers moved | Opus | ✍️ | ⬜ | — | — |
@@ -65,7 +65,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 | 01 | X1 the golden history · X2 the classes deleted · X3 the registries · X4 the tests · X5 format 2 |
 | 02 | N1 the code, tables, columns and drop group · N2 format 3 · N3 the current documents · N4 the run scripts left as records |
 | 03 | Z1 the concept ✅ · Z2 the factory and format 4 ✅ · Z3 the grid ✅ · Z4 the sampling ✅ · Z5 ln(1 + z_J) ✅ · Z6 the readers ✅ · Z7 the value factory's issues ✅ (all landed in `bd9ae42`) |
-| 04 | M1 `AbstractModel` · M2 `RealizedModel` · M3 `ExponentialModel` · M4 the consumers · M5 the adapter · M6 the unread properties · M7 the tests |
+| 04 | M1 `AbstractModel` ✅ · M2 `RealizedModel` ✅ · M3 `ExponentialModel` ✅ · M4 the consumers ✅ · M5 the adapter ✅ · M6 the unread properties ✅ · M7 the tests ✅ (all landed in this commit) |
 | 05 | K1 one constant · K2 the three unit systems · K3 the tests |
 | 06 | T1 `integrate_history` · T2 the residuals · T3 the secant and its guards · T4 the seed · T5 the failures · T6 progress · T7 the outputs |
 | 07 | S1 the model's table · S2 the key · S3 the outputs · S4 the compute path · S5 `main.py` · S6 the readers · S7 format 5 and 2026.7.0 · S8 the tests |
@@ -80,7 +80,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 | Strip | only the exponential potential and coupling remain; the golden history, generated at `ac187c8`, passes bitwise | 01 | ✅ |
 | Rename | no `ScalarModel` name outside the records; the golden history bitwise | 02 | ✅ |
 | Axis | the axis is ln(1 + z_E) with no overflow; ln(1 + z_J) agrees with `cosmology.z(T_J)` and with the A identity; the change in values measured | 03 | ✅ |
-| Model | the golden history bitwise through `ExponentialModel` at φ_ref = 0, V₀ = Λ⁴; the shift law holds | 04 | ⬜ |
+| Model | the golden history bitwise through `ExponentialModel` at φ_ref = 0, V₀ = Λ⁴; the shift law holds | 04 | ✅ |
 | Units | one Planck mass equal to PRyMordial's; 1 K, ħc, ħ and the kilogram consistent to ≤ 10⁻⁶ in each unit system | 05 | ⬜ |
 | Tuning | a tuned history converges inside the tolerance, deterministically; the secant is no worse than the plain update on README §0.3's grid | 06 | ⬜ |
 | Store | a tuned history round-trips bitwise and its realized model is rebuilt equal; the golden fingerprint at format 5 | 07 | ⬜ |
@@ -89,8 +89,8 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 
 ## 3. Active and unresolved issues
 
-Prompt 02 opened one and prompt 03 one. Prompt 01 closed one assigned issue and prompt 03 three
-(§3.1, §4).
+Prompt 02 opened one and prompt 03 one. Prompt 01 closed one assigned issue, prompt 03 three and
+prompt 04 one (§3.1, §4).
 
 ### `[02-the-scalar-history-parent-is-still-called-model]`
 
@@ -130,7 +130,7 @@ from `.documents/OPEN_ISSUES.md` §1.15.
 | Issue | Its board | Prompt | Why here |
 |---|---|---|---|
 | `[00-declare-reflects-at-origin-for-the-other-potentials]` | `integrator-remediation` | 01 — closed (`a1c88b6`) | moot once the four other potentials are deleted |
-| `[00-region-properties-on-the-potentials-become-unread]` | `integrator-remediation` | 04 | `AbstractModel` does not carry the properties over |
+| `[00-region-properties-on-the-potentials-become-unread]` | `integrator-remediation` | 04 — closed (this commit) | `AbstractModel` does not carry the properties over |
 | `[01-scalarmodelvalue-build-checks-the-stored-phi-against-pi]` | `dk-and-rpk-migration` | 03 — closed (`bd9ae42`) | the value factory is rewritten for the axis |
 | `[05-the-value-factory-compares-stored-phi-against-pi]` | `science-readiness` | 03 — closed (`bd9ae42`) | the same defect, opened twice |
 | `[09-redshift-lookup-at-zero-takes-abs-of-the-comparison]` | `dk-and-rpk-migration` | 03 — closed (`bd9ae42`) | the lookup moves to ln(1 + z) by absolute difference |
@@ -153,6 +153,11 @@ from `.documents/OPEN_ISSUES.md` §1.15.
   the redshift lookup matches ln(1 + z) by absolute difference below 1e-10 in one branch, and a test
   shows that a lookup at 0 does not match a row at −1e-6. The entry, with its **Resolved** line, is
   in `dk-and-rpk-migration`'s §4; its row is deleted from `.documents/OPEN_ISSUES.md` §1.15.
+- `[00-region-properties-on-the-potentials-become-unread]` — closed by prompt 04 (this commit): the
+  five region properties are deleted from `AbstractPotential` and `ExponentialPotential`, and
+  `default_max_step` from `ExponentialPotential`; the witness grep (note 04, ruling 12) finds
+  nothing. The entry, with its **Resolved** line, is in `integrator-remediation`'s §4; its row is
+  deleted from `.documents/OPEN_ISSUES.md` §1.15.
 
 ## 5. Dispatch record
 
@@ -442,3 +447,73 @@ pass.
     `DEFAULT_REDSHIFT_PRECISION` is 10's (C1).
   - `extract_common.py:421`'s string-literal comparison (`"x_coord" == "efolds"`) is offered to the
     user as housekeeping, as note 03 said.
+
+### 5.5 After prompt 04 (2026-10-25)
+
+Prompt 04 landed in this commit (log [`logs/04-the-model-interface.md`](logs/04-the-model-interface.md)),
+dispatched with orchestrator note 04, whose sixteen rulings govern, and with two more rulings made
+after a stop (below).
+- **M1–M3.** `CosmologyConcepts/Models/`:
+  - `AbstractModel`, with hooks that take no φ_ref;
+  - `RealizedModel`, immutable, under the integrator's method names, with A(φ_ref) = 1 enforced in
+    the base class;
+  - `Seed`;
+  - `ExponentialModel(store_id, M, n, beta, units)`, with `type_id` `EXPONENTIAL_MODEL = 1` and
+    `shard_key` β;
+  - the adapter `ExponentialModel.from_rows`, with normalization `4.0 * log(float(Λ))` and φ_ref 0.0.
+
+  `effective_minimum` is the generic `brentq` (no closed form; note ruling 4). The Σ ρ_R,E term is
+  left out, since `1.0 - 3.0 * cosmology.w(T_CMB)` is 0.0 exactly (w = 0.3333333333333333).
+  `seed` gives tracking, else static, else plain.
+- **M4, M5.** The consumers take one `RealizedModel`:
+  - `ODEPolicy`, `HubblePolicy`, `PotentialDerivativePolicy` (its plain-V paths removed),
+    `fixed_T_value_at`, `fixed_T_values`, `surfing_turning_points`, `compute_scalar_history` and
+    `AdiabaticComputePolicy`;
+  - `ScalarHistory.realized_model` is lazy and cached, and `compute_adiabatic_values` reads it;
+  - `tools/history_and_bbn.py` and `tools/surfing_scan.py` pass the adapter's model.
+
+  `BBNData`, `pipeline_selection.py`, `main.py`, `plot_by_beta.py`, `plot_ScalarHistory.py` and
+  `extract_common.py` are not changed (note rulings 8–10).
+- **M6.** The region properties and `default_max_step` are deleted, and the witness grep finds
+  nothing. `[00-region-properties-on-the-potentials-become-unread]` is closed.
+- **M7.** `ComputeTargets/tests/test_model_interface.py`, 17 tests, (a)–(h):
+  - (c), the shift law: the largest difference on the scale 1 + f_m + |r| is 2.685e-14; the
+    largest plain relative difference is 2.789e-11, at sample 2024;
+  - (d), Eq. 7: 4.251e-14 (β = 1.5, sample 598) and 6.875e-14 (β = 5.5, sample 74).
+
+  Seven existing test files were changed (six test modules and `golden_history.py`; listed in
+  the log).
+- **The golden history** passes unchanged through the adapter, and no JSON was written.
+  `test_golden_history` alone took 28.4 s before (load 12) and 58.4 s and 9.5 s after (load 19 and
+  10). Back to back, a0ca6a1 took 10.9 s and 24.7 s, and this tree 13.5 s and 20.3 s. The machine's
+  load governs these times.
+- **Breakages.**
+  - Ruling 14's breakage 1, `log(exp(4 log Λ))`, is bitwise a no-op at Λ = 1 meV (and at 1001 Λ
+    in 0.5–3 meV), so every test passes under it. The log records it, and replaces it with a one-ulp
+    shift (`nextafter`), which fails (a) and both golden histories.
+  - Breakages 2 and 3 fail (b) for both models, and (c) at every sample.
+- **Suites:** CosmologyModels 18, ComputeTargets 205 (61 + 144, +17), ObjectFactories 86, tools 93,
+  RunDrivers 61, all passing.
+- **Closed:** `[00-region-properties-on-the-potentials-become-unread]`. **Opened:** none.
+- **Index:** `.documents/OPEN_ISSUES.md` goes from 25 to 24 open.
+
+**The stop (2026-10-25).** The agent stopped before committing, with two questions.
+- **Q1.** `test_adiabatic_mass.py`'s test (e) (three tests) errored:
+  - its stand-in history, a `SimpleNamespace` with `potential=None, coupling=None`, has no
+    `realized_model`;
+  - its `_StandInPolicy.__init__` took `(task_label, cosmology, potential, coupling)`.
+
+  Note ruling 13 named only `_policy`'s stand-in in that file. **Ruled by the orchestrator:** the
+  stand-in history carries `realized_model=None`, and `_StandInPolicy.__init__` takes
+  `(task_label, cosmology, model)`. No assertion changes.
+- **Q2.** Test (c) as ruling 13 built it (`fixed_T_value_at`, then 1 + r + f_m, at 1e-12 relative)
+  failed on 23–31 of the 2723 samples per δ, at most by 2.8e-11, all at the T_J turning points.
+  There 1 + βφ′/M_P ≈ −2.2e-3 and H_J ≈ 0, so 1 + r + f_m ≈ 5e-6 is a cancelled sum, and the
+  relative difference measures r's rounding. **Ruled by the orchestrator (option A):** keep
+  `fixed_T_value_at` and 1e-12, but measure against (1 + f_m + |r|) e^{−2βδ/M_P}, the rounding scale
+  of the summed terms. The orchestrator reproduced 2.7e-14 on that scale with the agent's probe.
+- **The flaky wall-clock test.** `test_prym_passenger.test_a_oscillating_case_completes` (a 60 s
+  bound) failed before any edit: 93.9 s in the suite (load 7–12) and 76.5 s alone (load 41). It
+  passed in both after-runs: in the suite, and alone in 28.4 s (load 11). The orchestrator ruled it
+  not a stop: it is recorded in the log's "Observations not acted on", no issue is opened, and the
+  test is not edited.

@@ -5,6 +5,8 @@ Each test drives the pure loop from a mid-history state of the integrator audit
 (.documents/integrator-audit-2026-09-30/README.md §2.2), with the objects built as the audit's
 harness.build does: QCD_Cosmology, Planck2018, Planck_units, ExponentialPotential(n = 1,
 Lambda = 1e-3 eV), ExponentialCoupling, ODEPolicy, ODERHS and a ScalarFieldIntegrationSupervisor.
+Since jordan-normalization prompt 04 the policy takes the realized model, built from the two rows
+by the adapter ExponentialModel.from_rows (normalization 4 log Lambda, phi_ref = 0).
 No Ray cluster and no datastore are used. Methods that integrate say how long they take.
 
 Reference values are those of integrator-remediation README §6.1, measured by the audit's probes
@@ -32,6 +34,7 @@ SM = importlib.import_module("ComputeTargets.ScalarHistory")
 from ComputeTargets.exceptions import ComputationFailureError
 from CosmologyConcepts import beta_value, M_value, Lambda_value, temperature
 from CosmologyConcepts.ConformalCouplings.ExponentialCoupling import ExponentialCoupling
+from CosmologyConcepts.Models.ExponentialModel import ExponentialModel
 from CosmologyConcepts.Potentials.ExponentialPotential import ExponentialPotential
 from CosmologyModels.GenericEOS.QCD_Cosmology import QCD_Cosmology
 from CosmologyModels.LambdaCDM import Planck2018
@@ -90,7 +93,7 @@ _log_T_stop = log(float(_params.T_CMB_Kelvin * _units.Kelvin))
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
 
-class NonReflectingExponentialPotential(ExponentialPotential):
+class NonReflectingExponentialModel(ExponentialModel):
     """A stand-in that does not declare the wall (guard G1)."""
 
     @property
@@ -98,8 +101,8 @@ class NonReflectingExponentialPotential(ExponentialPotential):
         return False
 
 
-def build(beta: float, M: float, potential_class=ExponentialPotential):
-    potential = potential_class(
+def build(beta: float, M: float, model_class=ExponentialModel):
+    potential = ExponentialPotential(
         0,
         M_value(0, M * _units.PlanckMass),
         Lambda_value(0, 1e-3 * _units.eV),
@@ -107,7 +110,8 @@ def build(beta: float, M: float, potential_class=ExponentialPotential):
         _units,
     )
     coupling = ExponentialCoupling(0, beta_value(0, beta), _units)
-    policy = SM.ODEPolicy("test", _cosmology, potential, coupling)
+    model = model_class.from_rows(potential, coupling)
+    policy = SM.ODEPolicy("test", _cosmology, model)
     rhs = SM.ODERHS("test", policy)
     supervisor = ScalarFieldIntegrationSupervisor(
         _units, _T_init, _T_stop, label="test", collect_full_statistics=False
@@ -121,13 +125,13 @@ def integrate(
     N_stop: float,
     params=SM.StepControl(),
     rhs_wrapper=None,
-    potential_class=ExponentialPotential,
+    model_class=ExponentialModel,
     N0: Optional[float] = None,
     state: Optional[tuple] = None,
 ) -> Tuple[SM.IntegrationResult, str]:
     """Run integrate_scalar_history from a probe state to N_stop; return (result, stdout)."""
     beta, probe_N0, probe_state = probe
-    policy, rhs, supervisor = build(beta, M, potential_class)
+    policy, rhs, supervisor = build(beta, M, model_class)
     if rhs_wrapper is not None:
         rhs = rhs_wrapper(rhs)
 
@@ -332,10 +336,10 @@ class TestKinematicCapLoopFailurePaths(unittest.TestCase):
                 P1,
                 1e-10,
                 21.0,
-                potential_class=NonReflectingExponentialPotential,
+                model_class=NonReflectingExponentialModel,
             )
         self.assertIn("reflects_at_origin", ctx.exception.message)
-        self.assertIn("ExponentialPotential(", ctx.exception.message)
+        self.assertIn("ExponentialModel(", ctx.exception.message)
 
     def test_h_G2_reflection_inside_the_wall_fails(self):
         """The audit's step-over state at M = 0.01 with h_floor = 1e-3, so that the floor fires at

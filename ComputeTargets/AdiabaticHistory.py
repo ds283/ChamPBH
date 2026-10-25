@@ -6,6 +6,7 @@ from scipy.interpolate import make_interp_spline
 
 from CosmologyConcepts import redshift_array, redshift
 from CosmologyConcepts.ConformalCouplings import AbstractCoupling
+from CosmologyConcepts.Models.AbstractModel import RealizedModel
 from CosmologyConcepts.Potentials import AbstractPotential
 from CosmologyModels import BaseCosmology
 from datastorekit import DatastoreObject
@@ -123,18 +124,16 @@ class AdiabaticComputePolicy:
         self,
         task_label: str,
         cosmology: BaseCosmology,
-        potential: AbstractPotential,
-        coupling: AbstractCoupling,
+        model: RealizedModel,
     ):
         self.task_label: str = task_label
         self.units: UnitsLike = cosmology.units
 
         self.cosmology: BaseCosmology = cosmology
-        self.potential: AbstractPotential = potential
-        self.coupling: AbstractCoupling = coupling
+        self.model: RealizedModel = model
 
         self.V_policy: PotentialDerivativePolicy = PotentialDerivativePolicy(
-            task_label, cosmology, potential
+            task_label, cosmology, model
         )
 
         self.MP = self.units.PlanckMass
@@ -179,8 +178,8 @@ class AdiabaticComputePolicy:
         V_over_3H2Mp2: float = self.V_policy.V_over_3H2Mp2(
             phi_Einstein, pi_Einstein, log_rhorad_Einstein, fm
         )
-        d_logOmega_dphi: float = self.coupling.d_logOmega_dphi(phi_Einstein)
-        d2_logOmega_dphi2: float = self.coupling.d2_logOmega_dphi2(phi_Einstein)
+        d_logOmega_dphi: float = self.model.d_logOmega_dphi(phi_Einstein)
+        d2_logOmega_dphi2: float = self.model.d2_logOmega_dphi2(phi_Einstein)
 
         # Sigma_T = d Sigma / d ln T_J, from the EOS's analytic derivative of the same w the
         # ODE uses; x = (1/3) d ln g_s / d ln T_J, as in the ODE's temperature law
@@ -251,8 +250,9 @@ def compute_adiabatic_values(
     cosmology: BaseCosmology = model._cosmology
     units: UnitsLike = cosmology.units
 
-    potential: AbstractPotential = model.potential
-    coupling: AbstractCoupling = model.coupling
+    # the history's realized model (jordan-normalization prompt 04): today the adapter built
+    # from its potential and coupling rows
+    realized_model: RealizedModel = model.realized_model
 
     CONST_MP_SQ = units.PlanckMass * units.PlanckMass
     CONST_3_MP_SQ = 3.0 * CONST_MP_SQ
@@ -267,7 +267,7 @@ def compute_adiabatic_values(
     Hdot_over_H2_grid: List[float] = []
 
     policy: AdiabaticComputePolicy = AdiabaticComputePolicy(
-        task_label, cosmology, potential, coupling
+        task_label, cosmology, realized_model
     )
 
     with WallclockTimer() as timer:

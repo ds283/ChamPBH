@@ -34,31 +34,6 @@ class AbstractPotential(DatastoreObject, ABC):
         raise NotImplementedError
 
     @property
-    @abstractmethod
-    def bounce_region_level1_boundary(self) -> float:
-        raise NotImplementedError
-
-    @property
-    @abstractmethod
-    def bounce_region_level2_boundary(self) -> float:
-        raise NotImplementedError
-
-    @property
-    @abstractmethod
-    def bounce_region_level1_max_step(self) -> float:
-        raise NotImplementedError
-
-    @property
-    @abstractmethod
-    def bounce_region_level2_max_step(self) -> float:
-        raise NotImplementedError
-
-    @property
-    @abstractmethod
-    def hard_reflection_point(self) -> float:
-        raise NotImplementedError
-
-    @property
     def reflects_at_origin(self) -> bool:
         """
         True if the potential has a purely repulsive wall somewhere in (0, phi) for every phi > 0

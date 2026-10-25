@@ -44,6 +44,7 @@ def _history(step_budget=None):
         ExponentialCoupling,
     )
     from CosmologyConcepts.FieldValues import phi_value, pi_value
+    from CosmologyConcepts.Models.ExponentialModel import ExponentialModel
     from CosmologyConcepts.Potentials.ExponentialPotential import ExponentialPotential
     from CosmologyModels.GenericEOS.QCD_Cosmology import QCD_Cosmology
     from CosmologyModels.LambdaCDM import Planck2018
@@ -67,8 +68,7 @@ def _history(step_budget=None):
         phi_value(0, driver.PHI_INIT_MP * units.PlanckMass),
         pi_value(0, driver.PI_INIT),
         driver._z_grid(),
-        potential,
-        coupling,
+        ExponentialModel.from_rows(potential, coupling),
     )
 
     real = SM.StepControl

@@ -98,6 +98,7 @@ from CosmologyConcepts.ConformalCouplings.ExponentialCoupling import (  # noqa: 
     ExponentialCoupling,
 )
 from CosmologyConcepts.FieldValues import phi_value, pi_value  # noqa: E402
+from CosmologyConcepts.Models.ExponentialModel import ExponentialModel  # noqa: E402
 from CosmologyConcepts.Potentials.ExponentialPotential import (  # noqa: E402
     ExponentialPotential,
 )
@@ -314,8 +315,7 @@ def main(argv=None) -> int:
             phi_value(0, args.phi_init_Mp * units.PlanckMass),
             pi_value(0, PI_INIT),
             _z_grid(),
-            potential,
-            coupling,
+            ExponentialModel.from_rows(potential, coupling),
             task_label=f"history_and_bbn-beta{beta:g}-M{M:g}",
         )
     finally:

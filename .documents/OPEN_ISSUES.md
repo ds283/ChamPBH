@@ -1,9 +1,10 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-22 · **25 open**: 4 on the `review-remediation` board (closed
+**Last updated:** 2026-10-25 · **24 open**: 4 on the `review-remediation` board (closed
 2026-09-30), none now assigned; 2 on the `production-readiness` board
-(closed 2026-09-30); 3 on the `run-integrity` board (closed 2026-09-30; one stale entry closed 2026-10-22, its fix having landed in `5740690`); 8 on the
-`integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`;
+(closed 2026-09-30); 3 on the `run-integrity` board (closed 2026-09-30; one stale entry closed 2026-10-22, its fix having landed in `5740690`); 7 on the
+`integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`
+(`jordan-normalization` prompt 04 closed one, 2026-10-25);
 1 on the `science-readiness` board (planned 2026-10-01; closed 2026-10-02, 10 of 10 landed,
 prompt 06b having been added 2026-10-02; `jordan-normalization` prompt 03 closed one, 2026-10-22); 2 on the `bbn-tolerance` board (planned 2026-10-03,
 closed 2026-10-03, 6 of 6 landed; prompt 01 committed BLOCKED 2026-10-03 and ruled the same day: re-planned
@@ -26,7 +27,8 @@ opened or assigned; the orchestrator's review of prompt 04 opened one, 2026-10-2
 5 of 5 prompts landed, with the one issue still open on its board); 2 on the
 `jordan-normalization` board (planned 2026-10-20, with none opened; eight from five boards assigned
 to it the same day, §1.15; prompt 01 closed one of them, 2026-10-20, leaving seven; prompt 02 opened one, 2026-10-21;
-prompt 03 closed three of them, leaving four, and opened one, 2026-10-22).
+prompt 03 closed three of them, leaving four, and opened one, 2026-10-22; prompt 04 closed one of
+them, leaving three, 2026-10-25).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -132,8 +134,8 @@ campaign closed; one more was opened after the close-out (2026-10-01, `[post-…
 two were assigned on 2026-10-01 to `science-readiness` (§1.7). One was resolved (prompt 02,
 2026-10-01). The other was narrowed (prompt 05, 2026-10-02) and came back here unassigned when that
 campaign closed (2026-10-02). Two of the nine were assigned on 2026-10-20 to
-`jordan-normalization` (§1.15), and one of them was closed as moot by its prompt 01 the same day;
-the other seven are below.
+`jordan-normalization` (§1.15): one of them was closed as moot by its prompt 01 the same day, and
+the other by its prompt 04 on 2026-10-25. The other seven are below, and are the seven open.
 
 - `[00-settling-at-physical-M-needs-a-parked-tracking-model]` — the field at φ_wall(ρ) as a
   passenger once its bounces are unresolvable: the switch criterion and the parked field's
@@ -239,11 +241,8 @@ user to rule.
 Assigned 2026-10-20 by the user (the campaign's README, U3), when the campaign was planned. Each
 entry stays on its own board, which carries the **Assigned** line; the prompt that closes one
 deletes its row here. Each row ends with its board and the prompt that takes it. Prompt 01 closed
-one (2026-10-20) and prompt 03 three (2026-10-22).
+one (2026-10-20), prompt 03 three (2026-10-22) and prompt 04 one (2026-10-25).
 
-- `[00-region-properties-on-the-potentials-become-unread]` — `bounce_region_*`,
-  `default_max_step`, `hard_reflection_point` stay defined after prompt 01; housekeeping.
-  *(`integrator-remediation`; prompt 04)*
 - `[02-scalar-stage-missing-filter-keeps-every-model]` — `main.py:223`'s "which models are
   missing?" comprehension ignores its lookup result, so every stored `ScalarModel` is looked up
   twice; no value affected. *(`dk-and-rpk-migration`; prompt 07)*

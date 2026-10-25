@@ -97,6 +97,7 @@ from CosmologyConcepts.ConformalCouplings.ExponentialCoupling import (  # noqa: 
     ExponentialCoupling,
 )
 from CosmologyConcepts.FieldValues import phi_value, pi_value  # noqa: E402
+from CosmologyConcepts.Models.ExponentialModel import ExponentialModel  # noqa: E402
 from CosmologyConcepts.Potentials.ExponentialPotential import (  # noqa: E402
     ExponentialPotential,
 )
@@ -157,7 +158,7 @@ _INPUT_RTOL = 1e-12
 
 # what one history returns to main
 #   failure_reason:  None, or the payload's failure_reason
-#   crossings:       surfing_turning_points(result, coupling), or None on a failure
+#   crossings:       surfing_turning_points(result, model), or None on a failure
 #   bounce:          the payload's first_bounce (first_bounce(result)), or None
 #   accepted_steps:  the payload's accepted_steps, or None on a failure
 #   reflections:     the payload's reflection count, or None on a failure
@@ -215,6 +216,8 @@ def run_history(
         units,
     )
     coupling = ExponentialCoupling(0, beta_value(0, beta), units)
+    # the realized model of the two rows, at phi_ref = 0 (jordan-normalization prompt 04)
+    model = ExponentialModel.from_rows(potential, coupling)
 
     T_init = temperature(0, T_INIT_GEV * units.GeV)
     T_stop = temperature(1, T_stop_GeV * units.GeV)
@@ -238,8 +241,7 @@ def run_history(
             phi_value(0, phi_init_Mp * units.PlanckMass),
             pi_value(0, PI_INIT),
             _z_grid(),
-            potential,
-            coupling,
+            model,
             task_label=f"surfing_scan-beta{beta:g}-M{M_Mp:g}",
         )
     finally:
@@ -259,7 +261,7 @@ def run_history(
             result=result,
         )
 
-    crossings = surfing_turning_points(result, coupling)
+    crossings = surfing_turning_points(result, model)
     wall = time.perf_counter() - start
     return HistoryOutcome(
         failure_reason=None,
