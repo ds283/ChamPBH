@@ -38,6 +38,9 @@ from pipeline_selection import NO_FAILURE_REASON, summarise_failure_reasons
 from ComputeTargets.tests.test_kinematic_cap_loop import SM
 from tools import history_and_bbn as driver
 
+# the fixed Lambda of the untuned history, in eV, held by tools/history_and_bbn.py until prompt 08
+LAMBDA_EV = 1.0e-3
+
 
 def _history(step_budget=None):
     from math import log
@@ -64,7 +67,7 @@ def _history(step_budget=None):
         phi_value(0, driver.PHI_INIT_MP * units.PlanckMass),
         pi_value(0, driver.PI_INIT),
         driver._z_grid(),
-        model.realize(4.0 * log(driver.LAMBDA_EV * units.eV), 0.0),
+        model.realize(4.0 * log(LAMBDA_EV * units.eV), 0.0),
     )
 
     real = SM.StepControl

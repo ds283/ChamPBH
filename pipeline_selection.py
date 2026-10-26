@@ -191,18 +191,19 @@ def summarise_failure_reasons(reasons: Sequence[Any]) -> List[Tuple[str, int]]:
     return sorted(counts.items(), key=lambda item: (-item[1], item[0]))
 
 
-def _log_Omega_at_zero_phi_ref(model: Any, phi: float) -> float:
+def _seed_and_log_Omega(model: Any, phi: float, cosmology: Any) -> Tuple[Any, float]:
     """
-    ln Omega(phi) of `model` realized at phi_ref = 0 (the normalization does not enter
-    Omega): for `ExponentialModel`, beta phi/M_P, bitwise what `ExponentialCoupling` gave
-    before jordan-normalization prompt 07. Prompt 08 moves the warning to the seed's
-    phi_ref (README §6.2 P11).
+    The seed of `model` on `cosmology` (`model.seed(cosmology)`, the start of its tuning; analytic
+    and cheap), and ln Omega(phi) of the model realized at the seed's phi_ref (the normalization
+    does not enter Omega). For `ExponentialModel`, ln Omega(phi) = beta (phi - phi_ref)/M_P.
+    (jordan-normalization prompt 08, P11; before it, Omega was taken at phi_ref = 0.)
     """
-    return model.realize(None, 0.0).log_Omega(phi)
+    seed = model.seed(cosmology)
+    return seed, model.realize(None, seed.phi_ref).log_Omega(phi)
 
 
 def super_planckian_couplings(
-    models: Sequence[Any], phi_init: Any, T_init: Any, units: Any
+    models: Sequence[Any], phi_init: Any, T_init: Any, units: Any, cosmology: Any
 ) -> List[Any]:
     """
     The models for which the run starts super-Planckian: those with
@@ -210,17 +211,29 @@ def super_planckian_couplings(
     temperature T* times Omega is the Einstein-frame temperature scale, which is compared
     with the reduced Planck mass `units.PlanckMass`). (science-readiness prompt 04)
 
-    Omega is the model's conformal factor at phi_ref = 0, as the coupling's was before
-    jordan-normalization prompt 07; prompt 08 evaluates it at the seed's phi_ref. For
-    `ExponentialModel`, ln Omega = beta phi/M_P, so the test is
-    beta phi*/M_P > ln(M_P/T*). With T* = 2e4 GeV, ln(M_P/T*) = 32.43, so phi* = 5 M_P
-    selects beta > 6.49 and phi* = 1 M_P selects beta > 32.43.
+    Omega is the model's conformal factor A, which is 1 at phi_ref. Since jordan-normalization
+    prompt 08 (P11) it is evaluated at the phi_ref of the model's seed on `cosmology`
+    (`model.seed(cosmology)`), which is known before any history runs; the tuned phi_ref, which a
+    stored history holds, differs from it (see `warn_super_planckian`). For `ExponentialModel`,
+    ln Omega(phi*) = beta (phi* - phi_ref)/M_P, so the test is
+
+        beta (phi* - phi_ref)/M_P > ln(M_P/T*).
+
+    With the reduced Planck mass `Units.base.REDUCED_PLANCK_MASS_EV` = 2.4353e27 eV and
+    T* = 2e4 GeV, ln(M_P/T*) = 32.4331. At phi_ref = 0 that selects beta > 6.4866 at phi* = 5 M_P
+    and beta > 32.4331 at phi* = 1 M_P. With the seed's phi_ref at M = 1e-3 M_P on Planck2018
+    (a tracking seed, phi_ref = 0.0149 M_P at the threshold for phi* = 5 and 0.0055 M_P for
+    phi* = 1) the thresholds are beta > 6.5060 at phi* = 5 M_P and beta > 32.613 at phi* = 1 M_P.
+    phi_ref grows with M (0.40 M_P for the static seed at M = 0.5 M_P near beta = 7), and a
+    larger phi_ref raises the threshold: 7.045 at phi* = 5 M_P and 39.00 at phi* = 1 M_P for
+    M = 0.5 M_P. (Computed with the seeds of this tree, jordan-normalization prompt 08.)
 
     The models come back in their original order, as the same objects; nothing is
     removed from `models`.
 
     :param phi_init: a phi_value (or float) in the cosmology's units
     :param T_init: a temperature (or float) in the cosmology's units
+    :param cosmology: the cosmology whose seed each model's phi_ref is taken from
     """
     from CosmologyConcepts.FieldValues import GetFieldValue
     from CosmologyConcepts.temperature import GetTemperature
@@ -228,7 +241,9 @@ def super_planckian_couplings(
     phi = GetFieldValue(phi_init)
     ln_T = log(GetTemperature(T_init))
     ln_Mp = log(units.PlanckMass)
-    return [m for m in models if _log_Omega_at_zero_phi_ref(m, phi) + ln_T > ln_Mp]
+    return [
+        m for m in models if _seed_and_log_Omega(m, phi, cosmology)[1] + ln_T > ln_Mp
+    ]
 
 
 @dataclass(frozen=True)
@@ -324,7 +339,12 @@ def warn_foreign_bbn_provenance(
 
 
 def warn_super_planckian(
-    models: Sequence[Any], phi_init: Any, T_init: Any, units: Any, emit=print
+    models: Sequence[Any],
+    phi_init: Any,
+    T_init: Any,
+    units: Any,
+    cosmology: Any,
+    emit=print,
 ) -> Sequence[Any]:
     """
     Print one warning per super-Planckian model (see `super_planckian_couplings`) and the
@@ -332,9 +352,14 @@ def warn_super_planckian(
     and computed, never skipped or refused (the user's ruling, science-readiness P6).
     (science-readiness prompt 04)
 
-    Omega is evaluated at phi_ref = 0; jordan-normalization prompt 08 moves it to the
-    seed's phi_ref. Since the grid is (M, beta), a flagged beta is warned about once per M.
+    Omega is evaluated at the phi_ref of the model's seed on `cosmology` (jordan-normalization
+    prompt 08, P11), and each line says so, naming the seed's kind and its phi_ref. The tuned
+    phi_ref differs from the seed's, and moves ln Omega(phi*) by -beta (phi_ref - phi_ref_seed)/M_P;
+    the count line gives the sizes measured by prompt 06 (`logs/06-probes/*_secant.log`, the first
+    and last phi_ref of each tuning). Since the grid is (M, n, beta), a flagged beta is warned
+    about once per (M, n).
 
+    :param cosmology: the cosmology whose seed each model's phi_ref is taken from
     :param emit: called with each line; `print` by default
     """
     from CosmologyConcepts.FieldValues import GetFieldValue
@@ -343,18 +368,32 @@ def warn_super_planckian(
     phi = GetFieldValue(phi_init)
     ln_T = log(GetTemperature(T_init))
     ln_Mp = log(units.PlanckMass)
-    flagged = super_planckian_couplings(models, phi_init, T_init, units)
-    for c in flagged:
-        ratio = exp(_log_Omega_at_zero_phi_ref(c, phi) + ln_T - ln_Mp)
-        beta = getattr(c, "_beta_float", None)
-        beta_text = f"{beta:.5g}" if beta is not None else getattr(c, "name", "?")
+    Mp = units.PlanckMass
+    flagged = 0
+    for m in models:
+        seed, log_Omega = _seed_and_log_Omega(m, phi, cosmology)
+        if not log_Omega + ln_T > ln_Mp:
+            continue
+        flagged += 1
+        ratio = exp(log_Omega + ln_T - ln_Mp)
+        beta = getattr(m, "_beta_float", None)
+        M = getattr(m, "_M_float", None)
+        n = getattr(m, "_n", None)
+        beta_text = f"{beta:.5g}" if beta is not None else "?"
+        M_text = f"{M / Mp:.5g} M_P" if M is not None else "?"
+        n_text = f"{n}" if n is not None else "?"
         emit(
-            f"!! warning: beta={beta_text}, phi*={phi / units.PlanckMass:.5g} M_P: "
-            f"Omega(phi*) T* = {ratio:.5g} M_P (super-Planckian start)"
+            f"!! warning: beta={beta_text}, M={M_text}, n={n_text}, "
+            f"phi*={phi / Mp:.5g} M_P: Omega(phi*) T* = {ratio:.5g} M_P "
+            f"(super-Planckian start), with Omega at the seed's phi_ref = "
+            f"{seed.phi_ref / Mp:.5g} M_P ({seed.kind} seed)"
         )
     if flagged:
         emit(
-            f"!! warning: {len(flagged)} of {len(models)} models start super-Planckian; "
-            f"they are computed like the others"
+            f"!! warning: {flagged} of {len(models)} models start super-Planckian at the seed's "
+            f"phi_ref; they are computed like the others. The tuned phi_ref differs from the "
+            f"seed's, moving ln Omega(phi*) by -beta (phi_ref - phi_ref_seed)/M_P, in size up to "
+            f"1.4e-3 at M = 1e-3 M_P with beta <= 5.5, 6.5e-3 at beta = 25, and up to 1.0 at "
+            f"M = 0.5 M_P from a static seed (jordan-normalization prompt 06's points)"
         )
     return models

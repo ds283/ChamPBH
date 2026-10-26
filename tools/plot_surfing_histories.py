@@ -15,23 +15,26 @@
 
 """
 Plot the field and Jordan-frame temperature histories of a few beta, up to each one's first
-bounce, from histories integrated here, with no Ray cluster, no datastore and no BBN.
+bounce, from histories tuned here, with no Ray cluster, no datastore and no BBN.
 
 Written 2026-10-14, after the surfing-temperature campaign closed, to show the histories near
 beta = 3.0 that are not captured (.documents/surfing-temperature-verification.md §1.8, §3). Run
 from the repository root, since the EOS reads its table from the working directory:
 
     ./venv/bin/python tools/plot_surfing_histories.py --out PREFIX \\
-        [--beta-values B [B ...]] [--phi-init-Mp X] [--M M] [--T-stop-GeV T] [--N-min N] \\
-        [--arrays]
+        [--beta-values B [B ...]] [--phi-init-Mp X] [--M M] [--T-window-low-GeV T] \\
+        [--tuning-tolerance TOL] [--tuning-max-integrations K] [--N-min N] [--arrays]
 
 Each history is tools/surfing_scan.py's `run_history`: the setup of tools/history_and_bbn.py
-(Lambda = 1e-3 eV, pi* = 0, T* = 2e4 GeV), integrated by integrate_history (until
-jordan-normalization prompt 07, compute_scalar_history._function, which now tunes the history),
-with the IntegrationResult kept. The histories are sampled on its dense output from the start to the first
-bounce, and the turning points of T_J are `surfing_turning_points`, labelled with their capture
-kick by `summarise`, as the scan's CSV is. The default beta are the two captured edges of the
-fine scan's uncaptured window (2.998 by QCD, 3.020 by EW) and four histories inside it.
+(pi* = 0, T* = 2e4 GeV), tuned to H0 at T_CMB by tune_history (jordan-normalization prompt 08;
+until then one integration at Lambda = 1e-3 eV, phi_ref = 0, stopped at --T-stop-GeV, which is
+now refused), with the final integration's IntegrationResult kept. The turning points and the
+first bounce are those inside the scan's analysis window, which ends at the history's first
+crossing of T_J = --T-window-low-GeV (default 1e-3 GeV). The histories are sampled on the dense
+output from the start to the first bounce in the window, or to the window's edge if there is no
+bounce in it, and the turning points of T_J are `surfing_turning_points`, labelled with their
+capture kick by `summarise`, as the scan's CSV is. The default beta are the two captured edges
+of the fine scan's uncaptured window (2.998 by QCD, 3.020 by EW) and four histories inside it.
 
 Three panels share the e-fold axis N, which starts at --N-min (default 4, after the initial fall
 from T*): T_J in GeV (log), phi in M_P, and 1 + (d ln Omega/d phi) pi on a symlog axis, which is
@@ -41,8 +44,11 @@ first bounce. The kick peaks inside the T_J range are dotted lines. At most six 
 since the colours are a fixed categorical order and are not cycled.
 
 It writes PREFIX.pdf and PREFIX.png, and with --arrays one PREFIX_beta<B>.npz per history (N,
-phi_Mp, pi_Mp, T_J_GeV). Exit status: 0 if every history ran and the figure was written, 1 if a
-history failed (the others are drawn) or saving failed, 2 if the run was refused.
+phi_Mp, pi_Mp, T_J_GeV). The six default beta cost about three and a half minutes (four
+tuning integrations to T_CMB each, about 8 s an integration near beta = 3, measured by
+jordan-normalization prompt 08; before it, about 2 s a beta). Exit status: 0 if every history
+ran and the figure was written, 1 if a history failed (the others are drawn) or saving failed,
+2 if the run was refused.
 """
 
 import argparse
@@ -63,12 +69,22 @@ _ROOT = Path(__file__).resolve().parents[1]
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
+from ComputeTargets.ScalarHistory import (  # noqa: E402
+    DEFAULT_TUNING_MAX_INTEGRATIONS,
+    DEFAULT_TUNING_TOLERANCE,
+)
+from config.argument_parser import (  # noqa: E402
+    RemovedOption,
+    positive_float,
+    positive_int,
+)
 from extract_common import _save, find_kicks  # noqa: E402
-from tools.history_and_bbn import LAMBDA_EV, PHI_INIT_MP  # noqa: E402
+from tools.history_and_bbn import PHI_INIT_MP  # noqa: E402
 from tools.surfing_scan import (  # noqa: E402
     EOS_TABLE,
     M_MP_DEFAULT,
-    T_STOP_GEV_DEFAULT,
+    T_STOP_REMOVED,
+    T_WINDOW_LOW_GEV_DEFAULT,
     _git,
     make_setup,
     run_history,
@@ -85,10 +101,11 @@ COLOURS = ("#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300")
 # the symlog panel: linear within +-G_LINTHRESH
 G_LINTHRESH = 1e-3
 
-# one history, sampled to its first bounce
+# one history, sampled to its first bounce in the window (or to the window's edge)
 #   N, phi_Mp, pi_Mp, T_J_GeV, g:  arrays on the dense output, g = 1 + (d ln Omega/d phi) pi
 #   turning_points:                (N, T_J_GeV, direction) per crossing, direction "min" or "max"
-#   bounce_N, bounce_T_GeV:        the first bounce
+#   bounce_N, bounce_T_GeV:        the first bounce, or the trace's end if there is no bounce in
+#                                  the window
 #   capture_kick:                  the capture's kick label, or None if not captured
 HistoryTrace = namedtuple(
     "HistoryTrace",
@@ -113,22 +130,40 @@ def trace_history(
     beta: float,
     phi_init_Mp: float,
     M_Mp: float,
-    T_stop_GeV: float,
+    T_window_low_GeV: float,
     n_samples: int = N_SAMPLES,
+    tolerance: float = DEFAULT_TUNING_TOLERANCE,
+    max_integrations: int = DEFAULT_TUNING_MAX_INTEGRATIONS,
 ) -> tuple:
     """
     (trace, None) for a history that ran, or (None, failure_reason) for one that failed. The
-    trace is sampled at n_samples points of the dense output from its first step to its first
-    bounce.
+    history is tuned to T_CMB (run_history); the trace is sampled at n_samples points of the
+    final integration's dense output from its first step to its first bounce in the window, or,
+    if there is none, to the window's edge N_window (the history's end if it never reaches the
+    edge). bounce_N and bounce_T_GeV are then the trace's end.
     """
-    outcome = run_history(setup, beta, phi_init_Mp, M_Mp, T_stop_GeV)
+    outcome = run_history(
+        setup,
+        beta,
+        phi_init_Mp,
+        M_Mp,
+        T_window_low_GeV,
+        tolerance=tolerance,
+        max_integrations=max_integrations,
+    )
     if outcome.failure_reason is not None:
         return None, outcome.failure_reason
 
     units = setup.units
     GeV, Mp = units.GeV, units.PlanckMass
     solution = outcome.result.solution
-    N = np.linspace(solution.ts[0], outcome.bounce.N, n_samples)
+    if outcome.bounce is not None:
+        N_end = outcome.bounce.N
+        T_end_GeV = exp(outcome.bounce.log_T_Jordan) / GeV
+    else:
+        N_end = outcome.N_window if outcome.N_window is not None else solution.ts[-1]
+        T_end_GeV = exp(solution(N_end)[4]) / GeV
+    N = np.linspace(solution.ts[0], N_end, n_samples)
     Y = solution(N)
     phi_Mp = Y[0] / Mp
     pi_Mp = Y[1] / Mp
@@ -145,8 +180,8 @@ def trace_history(
         turning_points=[
             (c.N, exp(c.log_T_Jordan) / GeV, c.direction) for c in outcome.crossings
         ],
-        bounce_N=outcome.bounce.N,
-        bounce_T_GeV=exp(outcome.bounce.log_T_Jordan) / GeV,
+        bounce_N=N_end,
+        bounce_T_GeV=T_end_GeV,
         capture_kick=row["capture_kick"] if row["captured"] else None,
     )
     return trace, None
@@ -263,7 +298,7 @@ def build_figure(
     return fig
 
 
-def _title(phi_init_Mp: float, M_Mp: float) -> str:
+def _title(phi_init_Mp: float, M_Mp: float, tolerance: float) -> str:
     head = _git("rev-parse", "--short=7", "HEAD")
     status = _git("status", "--porcelain", "--untracked-files=no")
     if head is None:
@@ -274,7 +309,7 @@ def _title(phi_init_Mp: float, M_Mp: float) -> str:
             provenance += " + tracked changes"
     return (
         f"Histories to the first bounce (φ* = {phi_init_Mp:g} M_P, M = {M_Mp:g} M_P, "
-        f"Λ = {LAMBDA_EV * 1e3:g} meV); {provenance}"
+        f"tuned to H0 at T_CMB, tolerance {tolerance:g}); {provenance}"
     )
 
 
@@ -302,10 +337,32 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         help="the potential's M, in units of M_P (default 1e-3)",
     )
     parser.add_argument(
+        "--T-window-low-GeV",
+        type=positive_float,
+        default=T_WINDOW_LOW_GEV_DEFAULT,
+        help="the lower edge of the analysis window on each history tuned to T_CMB, in GeV: the "
+        "trace ends at the first bounce before the history's first crossing of this Jordan-frame "
+        "temperature, or at that crossing (default %(default)s, as tools/surfing_scan.py)",
+    )
+    parser.add_argument(
+        "--tuning-tolerance",
+        type=positive_float,
+        default=DEFAULT_TUNING_TOLERANCE,
+        help="the tuning's tolerance on both residuals, |H_J(T_CMB)/H0 - 1| and "
+        "|phi_ref/phi_min - 1| (default %(default)s, as main.py)",
+    )
+    parser.add_argument(
+        "--tuning-max-integrations",
+        type=positive_int,
+        default=DEFAULT_TUNING_MAX_INTEGRATIONS,
+        help="the cap on the tuning's integrations, the seed's included (default "
+        "%(default)s, as main.py)",
+    )
+    parser.add_argument(
         "--T-stop-GeV",
-        type=float,
-        default=T_STOP_GEV_DEFAULT,
-        help="stopping temperature in the Jordan frame, in GeV (default 1e-3)",
+        action=RemovedOption,
+        removed_by="08",
+        replacement=T_STOP_REMOVED,
     )
     parser.add_argument(
         "--N-min",
@@ -355,7 +412,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     for beta in args.beta_values:
         t0 = time.time()
         trace, reason = trace_history(
-            setup, kicks, beta, args.phi_init_Mp, args.M, args.T_stop_GeV
+            setup,
+            kicks,
+            beta,
+            args.phi_init_Mp,
+            args.M,
+            args.T_window_low_GeV,
+            tolerance=args.tuning_tolerance,
+            max_integrations=args.tuning_max_integrations,
         )
         if trace is None:
             failed += 1
@@ -383,7 +447,10 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         return 1
 
     fig = build_figure(
-        traces, kick_peaks, _title(args.phi_init_Mp, args.M), N_min=args.N_min
+        traces,
+        kick_peaks,
+        _title(args.phi_init_Mp, args.M, args.tuning_tolerance),
+        N_min=args.N_min,
     )
     if not _save(fig, Path(args.out + ".pdf")):
         return 1

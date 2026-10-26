@@ -26,13 +26,13 @@ each test, and reopened `read_only=True` with
 `read_table_config=`, as the package's `datastorekit/tests/test_read_only_pool.py` does at
 `v0.3.0`. The options are the shared parser's, as a plot run is given them.
 
-1. A store `main.py`'s lookups build (two beta, two M, one potential type): every function
-   returns what the store holds, in the scripts' order, and prints no warning.
+1. A store `main.py`'s lookups build (two beta, two M, n = 1): every function returns what the
+   store holds, in the scripts' order, and prints no warning.
 2. An incomplete M x beta product (two runs' grids): the two models never stored are skipped,
    each with its warning, then the count; the rest are returned in order (U3).
 3. A beta without a model (an interrupted run): skipped with its warning (U3).
-4. A parameter not stored (`--rel-tol`, the constant tuning tolerance, and the constant
-   cosmology): `PlotOptionNotStored`, naming the option or constant and the value (U4).
+4. A parameter not stored (`--rel-tol`, `--tuning-tolerance`, and the constant cosmology):
+   `PlotOptionNotStored`, naming the option or constant and the value (U4).
 5. Nothing written: the SHA-256 of every file of each store is unchanged after tests 1-4's calls,
    and no `-journal`, `-wal` or `-shm` file appears.
 6. A missing store: the read-only open is refused, and nothing is created at the path.
@@ -40,9 +40,13 @@ each test, and reopened `read_only=True` with
    `plot_inputs` and define none of `convert_to_potential`, `convert_to_coupling` and
    `convert_to_model`; each refuses `--drop` before `ray.init`.
 
-Beside them: each lookup's class and payload, key for key, are main.py's (on a recording pool,
-for every `--potential-type`); a refusal of another class or operation propagates unchanged (on a
-refusing pool).
+Beside them: each lookup's class and payload, key for key, are main.py's (on a recording pool);
+a refusal of another class or operation propagates unchanged (on a refusing pool).
+
+Since jordan-normalization prompt 08 the scripts give `--n-values` and `--tuning-tolerance`, and
+`--potential-type` is gone (with `exponential_models`' refusal of an unknown type, whose test went
+with it): a store built at n = 2 is found at `--n-values 2`, and an n with no stored model at any
+stored (M, beta) is `PlotOptionNotStored` for `--n-values` (TestTheExponent).
 
 Since jordan-normalization prompt 07 a history is keyed by its model (an `ExponentialModel` of M,
 n and beta), its initial data and the tuning tolerance, and ends at T_CMB, so the store holds no
@@ -68,7 +72,6 @@ from datastorekit.replication import ReadOnlyMiss, ReadOnlyWrite
 import plot_inputs
 from StoreFixtures import standin_pool as sp
 from Units import Planck_units
-from ComputeTargets.ScalarHistory import DEFAULT_TUNING_TOLERANCE
 from config.argument_parser import create_argument_parser
 from config.datastore import serial_batch_sizes
 from config.model_list import build_model_list
@@ -109,13 +112,14 @@ def captured():
     lines.extend(l for l in out.getvalue().splitlines() if l.startswith("!! plot:"))
 
 
-def _build_run(pool, betas, Ms_eV, models_for=None):
+def _build_run(pool, betas, Ms_eV, models_for=None, n_values=(1,)):
     """
     One `main.py` run's lookups, read-write: the same classes and payloads as `main.py`. A model is
     stored only for the betas in `models_for` (all of them if None), as a run interrupted between
-    storing a beta and its models leaves it.
+    storing a beta and its models leaves it, and for each n of `n_values` (main.py's
+    `--n-values`).
     """
-    args = _args("--potential-type", "Exponential")
+    args = _args(*(["--n-values", *[str(n) for n in n_values]]))
 
     # main.py, execute(): T_init, phi_init and pi_init
     ray.get(
@@ -134,7 +138,7 @@ def _build_run(pool, betas, Ms_eV, models_for=None):
         [
             pool.object_get("tolerance", tol=args.abs_tol),
             pool.object_get("tolerance", tol=args.rel_tol),
-            pool.object_get("tolerance", tol=DEFAULT_TUNING_TOLERANCE),
+            pool.object_get("tolerance", tol=args.tuning_tolerance),
         ]
     )
     # the beta and M helpers
@@ -147,7 +151,7 @@ def _build_run(pool, betas, Ms_eV, models_for=None):
             payload_data=[{"value": M * UNITS.eV, "units": UNITS} for M in Ms_eV],
         )
     )
-    # convert_to_model, over this run's M x beta, M outer
+    # convert_to_model, over this run's M x n x beta, M outer and beta inner
     stored_betas = [
         b
         for b in beta_array
@@ -158,8 +162,9 @@ def _build_run(pool, betas, Ms_eV, models_for=None):
             pool.object_get(
                 "ExponentialModel",
                 payload_data=[
-                    {"shard_key": b, "M": M, "n": 1, "beta": b, "units": UNITS}
+                    {"shard_key": b, "M": M, "n": n, "beta": b, "units": UNITS}
                     for M in M_array
+                    for n in args.n_values
                     for b in stored_betas
                 ],
             )
@@ -201,6 +206,9 @@ INCOMPLETE = [
 # beta = 1.0 stored, its model not
 NO_MODEL = [dict(betas=[0.5, 1.0, 2.0], Ms_eV=[1.0e25], models_for=[0.5, 2.0])]
 
+# a run at n = 2 only (main.py --n-values 2)
+N_TWO = [dict(betas=[0.5, 1.0], Ms_eV=[1.0e25], n_values=(2,))]
+
 
 def setUpModule():
     tmp = tempfile.TemporaryDirectory()
@@ -209,6 +217,7 @@ def setUpModule():
     _MODULE["full"] = _build_store(root / "full", FULL)
     _MODULE["incomplete"] = _build_store(root / "incomplete", INCOMPLETE)
     _MODULE["no_model"] = _build_store(root / "no_model", NO_MODEL)
+    _MODULE["n_two"] = _build_store(root / "n_two", N_TWO)
 
 
 def tearDownModule():
@@ -261,7 +270,8 @@ class _ReadOnlyCase(unittest.TestCase):
 # each test's calls, shared with test 5
 
 
-def _parameters(pool, args, tuning_tol=DEFAULT_TUNING_TOLERANCE):
+def _parameters(pool, args):
+    """plot_inputs.parameters as the scripts call it, from the parsed options."""
     return plot_inputs.parameters(
         pool,
         abs_tol=args.abs_tol,
@@ -269,29 +279,33 @@ def _parameters(pool, args, tuning_tol=DEFAULT_TUNING_TOLERANCE):
         T_init_GeV=args.T_init_GeV,
         phi_init_Mp=args.phi_init_Mp,
         units=UNITS,
-        tuning_tol=tuning_tol,
+        tuning_tol=args.tuning_tolerance,
     )
 
 
 def _read_full(pool):
-    args = _args("--potential-type", "Exponential")
+    args = _args()
     with captured() as warnings:
         params = _parameters(pool, args)
         grid = plot_inputs.stored_grid(pool, UNITS)
         models = plot_inputs.exponential_models(
-            pool, args.potential_type, grid.M, grid.beta, UNITS
+            pool, grid.M, grid.beta, args.n_values, UNITS
         )
         cosmologies = plot_inputs.models(pool, UNITS)
     return params, grid, models, cosmologies, warnings
 
 
-def _read_grid_and_lookups(pool):
+def _read_grid_and_lookups(pool, n_values=(1,)):
     with captured() as warnings:
         grid = plot_inputs.stored_grid(pool, UNITS)
         models = plot_inputs.exponential_models(
-            pool, "Exponential", grid.M, grid.beta, UNITS
+            pool, grid.M, grid.beta, list(n_values), UNITS
         )
     return grid, models, warnings
+
+
+def _miss_n_value(pool):
+    return _read_grid_and_lookups(pool, n_values=(1, 2))
 
 
 def _miss_rel_tol(pool):
@@ -299,7 +313,7 @@ def _miss_rel_tol(pool):
 
 
 def _miss_tuning_tol(pool):
-    return _parameters(pool, _args(), tuning_tol=1.0e-6)
+    return _parameters(pool, _args("--tuning-tolerance", "1e-6"))
 
 
 def _eV(x):
@@ -394,37 +408,29 @@ class TestThePayloads(_ReadOnlyCase):
 
     def test_the_models(self):
         Ms, betas = ["M1", "M2"], ["b1", "b2"]
-        payload = lambda M, b: {
+        payload = lambda M, n, b: {
             "shard_key": b,
             "M": M,
-            "n": 1,
+            "n": n,
             "beta": b,
             "units": UNITS,
         }
-        for potential_type, cls_name in (("Exponential", "ExponentialModel"),):
-            with self.subTest(potential_type=potential_type):
+        # one lookup per (M, n, beta), M outer, n, beta inner, as main.py's grid
+        # (jordan-normalization prompt 08: n from --n-values; --potential-type is gone)
+        for n_values in ([1], [1, 2]):
+            with self.subTest(n_values=n_values):
                 pool = _RecordingPool()
-                found = plot_inputs.exponential_models(
-                    pool, potential_type, Ms, betas, UNITS
-                )
+                found = plot_inputs.exponential_models(pool, Ms, betas, n_values, UNITS)
                 self.assertEqual(
                     pool.lookups,
-                    [(cls_name, payload(M, b)) for M in Ms for b in betas],
+                    [
+                        ("ExponentialModel", payload(M, n, b))
+                        for M in Ms
+                        for n in n_values
+                        for b in betas
+                    ],
                 )
-                self.assertEqual(found, [1, 2, 3, 4])
-
-        # jordan-normalization prompt 01: the other three types were removed (R11) and are refused
-        for potential_type in ("InversePower", "Starobinsky", "Recliner"):
-            with self.subTest(removed=potential_type):
-                pool = _RecordingPool()
-                with self.assertRaises(ValueError) as caught:
-                    plot_inputs.exponential_models(
-                        pool, potential_type, Ms, betas, UNITS
-                    )
-                self.assertEqual(
-                    str(caught.exception), f"Unknown potential type: {potential_type}"
-                )
-                self.assertEqual(pool.lookups, [])
+                self.assertEqual(found, list(range(1, len(pool.lookups) + 1)))
 
 
 # ------------------------------------------------------------------------------------------------
@@ -538,12 +544,12 @@ class TestAParameterNotStored(_ReadOnlyCase):
             "build used",
         )
 
-    def test_a_tuning_tolerance_the_build_did_not_use_names_the_constant(self):
+    def test_a_tuning_tolerance_the_build_did_not_use_names_the_option(self):
         self.assert_stops(
             self.copy("full"),
             _miss_tuning_tol,
             "tolerance",
-            "!! plot: the store holds no tolerance for the constant tuning tolerance 1e-06; "
+            "!! plot: the store holds no tolerance for --tuning-tolerance 1e-06; "
             "main.py was not run with it, so no history in this store can match. Give the "
             "plot the options the build used",
         )
@@ -590,7 +596,7 @@ class TestOtherRefusalsPropagate(_ReadOnlyCase):
         error = ReadOnlyMiss("M_value", {"value": 1.0})
         with quiet(), self.assertRaises(ReadOnlyMiss) as ctx:
             plot_inputs.exponential_models(
-                _RefusingPool(error), "Exponential", grid.M, grid.beta, UNITS
+                _RefusingPool(error), grid.M, grid.beta, [1], UNITS
             )
         self.assertEqual(ctx.exception.class_name, "M_value")
 
@@ -605,7 +611,7 @@ class TestOtherRefusalsPropagate(_ReadOnlyCase):
             with self.subTest(operation=error.operation, class_name=error.class_name):
                 with quiet(), self.assertRaises(ReadOnlyWrite) as ctx:
                     plot_inputs.exponential_models(
-                        _RefusingPool(error), "Exponential", grid.M, grid.beta, UNITS
+                        _RefusingPool(error), grid.M, grid.beta, [1], UNITS
                     )
                 self.assertEqual(
                     (
@@ -616,10 +622,59 @@ class TestOtherRefusalsPropagate(_ReadOnlyCase):
                     (ReadOnlyWrite, error.operation, error.class_name),
                 )
 
-    def test_an_unknown_potential_type(self):
-        with self.assertRaises(ValueError) as ctx:
-            plot_inputs.exponential_models(None, None, [], [], UNITS)
-        self.assertEqual(str(ctx.exception), "Unknown potential type: None")
+
+# ------------------------------------------------------------------------------------------------
+# 4b. the exponent n (jordan-normalization prompt 08)
+# ------------------------------------------------------------------------------------------------
+
+
+def _read_n_two(pool):
+    return _read_grid_and_lookups(pool, n_values=_args("--n-values", "2").n_values)
+
+
+class TestTheExponent(_ReadOnlyCase):
+    def test_a_store_built_at_n_2_is_found_at_n_values_2(self):
+        primary = self.copy("n_two")
+        with self.read_only(primary) as pool:
+            grid, models, warnings = _read_n_two(pool)
+        self.assertEqual(warnings, [])
+        self.assertEqual(_M_n_beta(models), [(1.0e25, 2, 0.5), (1.0e25, 2, 1.0)])
+        for obj in models:
+            self.assertTrue(getattr(obj, "_deserialized", False), obj)
+
+    def test_an_n_the_build_did_not_use_stops_naming_n_values(self):
+        """--n-values 1 2 on a store holding n = 1 only: each (M, 2, beta) is skipped with its
+        warning and counted, and then PlotOptionNotStored names --n-values 2."""
+        primary = self.copy("full")
+        with self.read_only(primary) as pool:
+            # the refusal is caught inside the block, so that captured() collects the lines
+            with captured() as warnings:
+                with self.assertRaises(plot_inputs.PlotOptionNotStored) as ctx:
+                    grid = plot_inputs.stored_grid(pool, UNITS)
+                    plot_inputs.exponential_models(
+                        pool,
+                        grid.M,
+                        grid.beta,
+                        _args("--n-values", "1", "2").n_values,
+                        UNITS,
+                    )
+        e = ctx.exception
+        self.assertEqual(
+            (e.class_name, e.option, e.value), ("ExponentialModel", "--n-values", "2")
+        )
+        self.assertEqual(
+            str(e),
+            "!! plot: the store holds no ExponentialModel for --n-values 2; main.py was not "
+            "run with it, so no history in this store can match. Give the plot the options "
+            "the build used",
+        )
+        self.assertEqual(len(warnings), 5)
+        self.assertEqual(
+            warnings[-1],
+            "!! plot: 4 of 8 ExponentialModel combinations of the stored M and β are not "
+            "stored, and were skipped",
+        )
+        self.assertTrue(all("n=2" in w for w in warnings[:4]))
 
 
 # ------------------------------------------------------------------------------------------------
@@ -639,6 +694,8 @@ class TestNothingWritten(_ReadOnlyCase):
             ("full", nothing, _miss_rel_tol),
             ("full", nothing, _miss_tuning_tol),
             ("full", _delete_cosmology, _miss_cosmology),
+            ("n_two", nothing, _read_n_two),
+            ("full", nothing, _miss_n_value),
         ]
         for name, prepare, run in cases:
             with self.subTest(store=name, run=run.__name__):

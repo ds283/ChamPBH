@@ -40,7 +40,11 @@ inserters, and the row is read back through `object_get`.
 - (c) a failure row stores every tuning column NULL, reads back as a failure, and its `tuning`
   and `realized_model` raise;
 - (d) read with `_do_not_populate`, the row gives `tuning` and `realized_model`, and its `values`
-  raises.
+  raises;
+- (e) that read-back history through `extract_common.build_history_record` and
+  `write_histories_csv` into the temporary directory (jordan-normalization prompt 08, D6): the
+  header is `CSV_COLUMNS`, and each tuning cell, read back with `float`, equals the stored value
+  converted (V_ref in eV^4, phi_ref and phi_0 in M_P, the rest as stored).
 
 No Ray cluster, no persistent datastore, no PRyMordial solve. Cost: the one integration, in
 setUpModule (about 5 s unloaded; 20-30 s at a load of 10-20), and about 1-2 s per test for the
@@ -48,6 +52,7 @@ setUpModule (about 5 s unloaded; 20-30 s at a load of 10-20), and about 1-2 s pe
 """
 
 import contextlib
+import csv
 import io
 import json
 from unittest import mock
@@ -69,6 +74,7 @@ from CosmologyConcepts.FieldValues import phi_value, pi_value
 from CosmologyConcepts.Models import ExponentialModel, RealizedModel
 from CosmologyConcepts.redshift import log_one_plus_z_grid
 from ObjectFactories.tests.test_scalarhistory_failure_reason import _write
+from extract_common import CSV_COLUMNS, build_history_record, write_histories_csv
 from ObjectFactories.tests.test_version_keyed_lookups import LABEL_A, _TempStoreCase
 
 SM = kcl.SM
@@ -380,6 +386,50 @@ class TestDoNotPopulate(_TunedStoreCase):
         self.assert_same(got.realized_model.phi_ref, payload["phi_ref"], "phi_ref")
         with self.assertRaises(RuntimeError):
             got.values
+
+
+class TestTheHistoriesCsv(_TunedStoreCase):
+    def test_e_histories_csv_from_the_read_back_history(self):
+        """(e) histories.csv's tuning cells are the stored values, converted (prompt 08, D6)."""
+        payload = _MODULE["payload"]
+        self.write(payload)
+        got = self.store.object_get(
+            "ScalarHistory", **self.query(_do_not_populate=True)
+        )
+        units = self.units
+        record = build_history_record(
+            beta=gt.BETA,
+            M_Mp=gt.M_OVER_MP,
+            n=gt.N_EXPONENT,
+            phi_init_Mp=gt.PHI_INIT_OVER_MP,
+            scalar=got,
+            bbn=None,
+            baseline=None,
+            units=units,
+        )
+        path = self._dir / "csv" / "histories.csv"
+        write_histories_csv([record], path)
+        with open(path, newline="") as f:
+            rows = list(csv.reader(f))
+        self.assertEqual(rows[0], CSV_COLUMNS)
+        self.assertEqual(len(rows), 2)
+        cells = dict(zip(rows[0], rows[1]))
+
+        expected = {
+            "normalization": payload["normalization"],
+            "V_ref_eV4": payload["V_ref"] / units.eV**4,
+            "phi_ref_Mp": payload["phi_ref"] / units.PlanckMass,
+            "phi_0_Mp": payload["phi_0"] / units.PlanckMass,
+            "tracking": payload["tracking"],
+            "residual_H": payload["residual_H"],
+            "residual_phi": payload["residual_phi"],
+        }
+        for column, value in expected.items():
+            with self.subTest(column=column):
+                self.assertEqual(float(cells[column]).hex(), value.hex())
+        self.assertEqual(int(cells["tuning_iterations"]), payload["tuning_iterations"])
+        self.assertEqual(int(cells["n"]), gt.N_EXPONENT)
+        self.assertEqual(cells["Yp_BBN"], "")
 
 
 if __name__ == "__main__":

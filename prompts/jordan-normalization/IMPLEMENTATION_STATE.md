@@ -1,8 +1,8 @@
 # jordan-normalization campaign — implementation state
 
-**Last updated:** 2026-10-26 · **Status: LIVE — 10 of 10 prompts written, 7 landed (01–07, all
-reviewed; 04 after one stop ruled by the orchestrator); R1–R14, U1–U5 and P1–P20 ruled by the user
-2026-10-20 (README §6). Next: the orchestrator note for 08.**
+**Last updated:** 2026-10-26 · **Status: LIVE — 10 of 10 prompts written, 8 landed (01–07 reviewed;
+04 and 08 each after one stop ruled by the orchestrator); R1–R14, U1–U5 and P1–P20 ruled by the user
+2026-10-20 (README §6). Next: the orchestrator review of 08.**
 The plan is [`README.md`](README.md), written on 2026-10-20 on branch `jordan-normalization`, cut
 from `main` at `ac187c8`.
 
@@ -42,7 +42,7 @@ It ends in the handover for the science rebuild, which is the user's.
 | 05 | The Planck mass | one reduced Planck mass from PRyMordial's G_N in three unit systems; consistency tests | Sonnet | ✍️ | ✅ | `1675e73` | [`logs/05-the-planck-mass.md`](logs/05-the-planck-mass.md) |
 | 06 | The tuning layer | `integrate_history` and `tune_history`: secant, seed, residuals, failure reasons, progress lines | Opus | ✍️ | ✅ | `1b83bbd` | [`logs/06-the-tuning-layer.md`](logs/06-the-tuning-layer.md) |
 | 07 | The store | `ExponentialModel` table; `ScalarHistory`'s key and tuned outputs; format 5; `VERSION_LABEL` 2026.7.0; writers and readers moved | Opus | ✍️ | ✅ | `223afc6` | [`logs/07-the-store.md`](logs/07-the-store.md) |
-| 08 | The driver and the tools | `main.py`'s options; the super-Planckian warning; the wrapper's scope; the tools and the surfing scan on tuned histories | Opus | ✍️ | ⬜ | — | — |
+| 08 | The driver and the tools | `main.py`'s options; the super-Planckian warning; the wrapper's scope; the tools and the surfing scan on tuned histories | Opus | ✍️ | ✅ | this commit | [`logs/08-the-driver-and-the-tools.md`](logs/08-the-driver-and-the-tools.md) |
 | 09 | Rehearse a tuned build | registered pilot build on the isolated cluster, interrupted and resumed, compared bitwise (if U2) | Opus | ✍️ | ⬜ | — | — |
 | 10 | Close | documents, `CLAUDE.md`, the handover for the science rebuild, indexes, board | Sonnet | ✍️ | ⬜ | — | — |
 
@@ -83,7 +83,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 | 05 | K1 one constant ✅ · K2 the three unit systems ✅ · K3 the tests ✅ (all landed in `1675e73`) |
 | 06 | T1 `integrate_history` ✅ · T2 the residuals ✅ · T3 the secant and its guards ✅ · T4 the seed ✅ · T5 the failures ✅ · T6 progress ✅ · T7 the outputs ✅ (all landed in `1b83bbd`) |
 | 07 | S1 the model's table ✅ · S2 the key ✅ · S3 the outputs ✅ · S4 the compute path ✅ · S5 `main.py` ✅ · S6 the readers ✅ · S7 format 5 and 2026.7.0 ✅ · S8 the tests ✅ (all landed in `223afc6`) |
-| 08 | D1 the options · D2 the warning · D3 the wrapper's scope · D4 `history_and_bbn.py` · D5 the surfing tools · D6 `histories.csv` · D7 the tests |
+| 08 | D1 the options ✅ · D2 the warning ✅ · D3 the wrapper's scope ✅ · D4 `history_and_bbn.py` ✅ · D5 the surfing tools ✅ · D6 `histories.csv` ✅ · D7 the tests ✅ (all landed in this commit) |
 | 09 | H1 reference · H2 resumed · H3 the comparisons · H4 the measurements · H5 the document |
 | 10 | C1 the documents · C2 `CLAUDE.md` · C3 the handover · C4 the board and indexes · C5 the final suites |
 
@@ -98,13 +98,14 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 | Units | one Planck mass equal to PRyMordial's; 1 K, ħc, ħ and the kilogram consistent to ≤ 10⁻⁶ in each unit system | 05 | ✅ |
 | Tuning | a tuned history converges inside the tolerance, deterministically; the secant is no worse than the plain update on README §0.3's grid | 06 | ✅ |
 | Store | a tuned history round-trips bitwise and its realized model is rebuilt equal; the golden fingerprint at format 5 | 07 | ✅ |
-| Driver | the old options are refused; the surfing scan records tuned values with its roots unchanged | 08 | ⬜ |
+| Driver | the old options are refused; the surfing scan records tuned values with its roots unchanged | 08 | ✅ |
 | R | on the isolated cluster every history converged, the stored values equal the tuning layer's, and the resumed store equals the reference | 09 | ⬜ |
 
 ## 3. Active and unresolved issues
 
-Prompt 02 opened one and prompt 03 one; prompt 07 narrowed prompt 02's. Prompt 01 closed one
-assigned issue, prompt 03 three, prompt 04 one and prompt 07 two (§3.1, §4).
+Prompt 02 opened one, prompt 03 one and prompt 08 one; prompt 07 narrowed prompt 02's. Prompt 01
+closed one assigned issue, prompt 03 three, prompt 04 one, prompt 07 two and prompt 08 the last
+(§3.1, §4).
 
 ### `[02-the-scalar-history-parent-is-still-called-model]`
 
@@ -144,6 +145,23 @@ assigned issue, prompt 03 three, prompt 04 one and prompt 07 two (§3.1, §4).
   or build the splines on `log_one_plus_z`. For 07, which rewrites `ScalarHistory`'s stored shape.
   Not assigned.
 
+### `[08-a-history-that-did-not-converge-is-never-retried]`
+
+**Opened:** 2026-10-26 by prompt 08 (ruling 14 of its orchestrator note).
+
+- **What.** `--tuning-max-integrations` (default 30) caps one history's tuning, but it is not a key
+  of the history: `ScalarHistory.compute(label, max_integrations)` passes it to
+  `compute_scalar_history.remote`, and the factory's key holds the tuning tolerance and no cap. A
+  history that does not converge within the cap is stored as a failure under its key.
+  `pipeline_selection.missing_models` does not count a stored failure as missing (prompt 07, note
+  07 ruling 8), and `main.py` has no retry for the scalar stage (only `--retry-failed-bbn` for BBN).
+  The option's help says so.
+- **Impact.** A later run with a larger cap recomputes nothing. The only route is
+  `--drop scalar-history`, which drops every history. No history has failed to converge at any
+  point measured (prompt 06's thirteen points: 3–12 integrations).
+- **Next step.** For the user to rule: a retry flag for the scalar stage like `--retry-failed-bbn`,
+  or the cap in the key. Not assigned.
+
 ### 3.1 Assigned to this campaign
 
 Assigned 2026-10-20 by the user (README §6.1, U3). Each entry stays on its own board, which carries
@@ -159,7 +177,7 @@ from `.documents/OPEN_ISSUES.md` §1.15.
 | `[09-redshift-lookup-at-zero-takes-abs-of-the-comparison]` | `dk-and-rpk-migration` | 03 — closed (`bd9ae42`) | the lookup moves to ln(1 + z) by absolute difference |
 | `[02-scalar-stage-missing-filter-keeps-every-model]` | `dk-and-rpk-migration` | 07 — closed (`223afc6`) | the scalar stage's lookups are rewritten for the new key |
 | `[03-step-1-first-pass-lookup-filters-nothing]` | `run-integrity` | 07 — closed (`223afc6`) | the same code |
-| `[05-surfing-scan-runs-at-a-fixed-lambda]` | `surfing-temperature` | 08 | the surfing tools move onto tuned histories |
+| `[05-surfing-scan-runs-at-a-fixed-lambda]` | `surfing-temperature` | 08 — closed (this commit) | the surfing tools move onto tuned histories |
 
 ## 4. Resolved issues
 
@@ -188,6 +206,13 @@ from `.documents/OPEN_ISSUES.md` §1.15.
   `test_pipeline_selection.TestScalarStageFirstPass` (four of its five tests fail with the old
   logic put back). The entries, with their **Resolved** lines, are in `dk-and-rpk-migration`'s §4
   and `run-integrity`'s §4; their rows are deleted from `.documents/OPEN_ISSUES.md` §1.15.
+- `[05-surfing-scan-runs-at-a-fixed-lambda]` — closed by prompt 08 (this commit): the surfing tools
+  tune each β to T_CMB standalone and analyse a window ending at the first crossing of
+  T_J = 1 MeV; the CSV holds the tuned values per row, and refuses a fixed-Λ CSV on resume. A
+  short tuned scan (β = 1.50, 3.00, 4.00) reproduces the committed rows: roots to 5 × 10⁻¹⁵, capture
+  flags and kicks exactly, every other column to at most 1.1 × 10⁻⁷. The entry, with its
+  **Resolved** line, is in `surfing-temperature`'s §4; its row is deleted from
+  `.documents/OPEN_ISSUES.md` §1.15, which is now empty.
 
 ## 5. Dispatch record
 
@@ -979,3 +1004,50 @@ All pass.
     measured point. 09's rehearsal is the first run of the remote under Ray.
   - The log's other observations stand: `bbn_from_store`'s join does not check `model_type`; the
     comment in `config/sharding.py` still names Λ.
+
+### 5.9 After prompt 08 (2026-10-26)
+
+Prompt 08 landed in this commit (log [`logs/08-the-driver-and-the-tools.md`](logs/08-the-driver-and-the-tools.md)),
+dispatched with orchestrator note 08, whose sixteen rulings govern. One stop, ruled by the
+orchestrator: `test_scalarhistory_failure_reason.py` borrowed `tools.history_and_bbn.LAMBDA_EV`,
+which ruling 8 removes, and was not in the note's file list; ruled option A, the test holds its own
+`LAMBDA_EV = 1.0e-3`.
+- **D1.** The Λ options, `--T-stop-GeV` and `--potential-type` are registered hidden with
+  `config.argument_parser.RemovedOption`, whose `parser.error` names the prompt and the
+  replacement (exit 2, on the command line and in a `--config` file, and as the wrapper's refusal).
+  New: `--tuning-tolerance` (1e-5, a key), `--tuning-max-integrations` (30, not a key; its help says
+  a failure is not recomputed), `--n-values` (`[1]`, `nargs="+"`, no `extend`). `main.py` builds
+  (M, n, β), its tuning tolerance from the option, and passes the cap to `ScalarHistory.compute`.
+  `exponential.yaml` loses `potential-type` and `log10-one-plus-z-high: 85`. `plot_inputs` matches
+  `--n-values` (an n with no stored model is `PlotOptionNotStored`) and `--tuning-tolerance`.
+- **D2.** The super-Planckian warning takes the cosmology, evaluates ln A(φ*) at the seed's φ_ref,
+  runs once per cosmology, and its lines name β, M, n, φ*, the seed's φ_ref and kind; thresholds at
+  M = 10⁻³: β > 6.506 (φ* = 5), 32.61 (φ* = 1).
+- **D3.** The scope drops the potential and gains `n …` and `tuning tolerance …`; tune lines beat and
+  are never a stage (a streams test and an in-process `"tune"` stand-in run).
+- **D4.** `tools/history_and_bbn.py` tunes by default and prints a `tuning` line of the fifteen
+  outputs (repr), bitwise the tuned golden's at β = 3, M = 0.01 (22 s);
+  `--fixed-normalization NORM PHI_REF_MP` runs `integrate_history`; `--T-stop-GeV` only with it;
+  the axis is main.py's 300 decades.
+- **D5.** The surfing tools tune each β (`run_history(…, T_window_low_GeV, tolerance,
+  max_integrations)`), with the window `in_window` at the first crossing of T_J =
+  `--T-window-low-GeV`; the CSV's new columns; old-format CSVs refused by the scan and by the plot;
+  `--T-stop-GeV` refused. Closes `[05-surfing-scan-runs-at-a-fixed-lambda]`.
+- **D6.** `histories.csv` gains the normalization, V_ref (eV⁴), φ_ref and φ_0 (M_P), tracking, both
+  residuals and the integrations.
+- **D7.** New `ComputeTargets/tests/test_driver_options.py` (14) and `tools/tests/test_history_and_bbn.py`
+  (3); further tests in `test_initial_field_option` (2), `test_plot_inputs` (2, one removed),
+  `test_extraction` (1), the round trip (1), `test_surfing_scan` (6), `test_plot_surfing_histories`
+  (1), `test_plot_surfing_temperature` (3) and RunDrivers (3).
+- **Short scan** (β = 1.50, 3.00, 4.00, at a load falling from 8 to 5): 20.1, 31.7 and 65.3 s; the
+  tuned values equal the probe's bitwise; roots to 5.1 × 10⁻¹⁵; flags and kicks unchanged. Predicted
+  S1 about 55 min, S5 about 35 min.
+- **Golden histories** pass: 9.3 s and 23.1 s alone.
+- **Breakages:** five, in the log. Breakage 1's first replay ran the real wrapper and registered
+  `var/runs/rrk-adoption-03-unit-20261026T151946`, left stale for the user to end (log,
+  Observations); its replay now runs in-process tests only.
+- **Suites:** CosmologyModels 26, ComputeTargets 243 (76 + 167, +18), ObjectFactories 93 (+1),
+  tools 115 (+13), RunDrivers 64 (+3), all passing.
+- **Closed:** `[05-surfing-scan-runs-at-a-fixed-lambda]`. **Opened:**
+  `[08-a-history-that-did-not-converge-is-never-retried]`.
+- **Index:** `.documents/OPEN_ISSUES.md` stays at 22 open (one closed, one opened); §1.15 is empty.

@@ -20,10 +20,13 @@ tools/plot_surfing_histories.py (standalone, 2026-10-14).
   the turning points and bounces marked, the axes' scales, the kick peaks inside the T_J range
   only, and no more than six histories;
 - `main(argv)` with `make_setup`, `find_kicks` and `trace_history` stubbed: both files written,
-  `--arrays`, a failed history, and the refusals;
-- `trace_history` on one real history, beta = 3.0 (about 2 s; no PRyMordial): not captured, and
-  its first bounce within 1e-7 relative of the committed fine scan's row (the scan was taken on
-  the units before jordan-normalization prompt 05, which moved the bounce by 2.1e-8).
+  `--arrays`, a failed history, the tuning options passed on, the title, and the refusals
+  (--T-stop-GeV among them, jordan-normalization prompt 08);
+- `trace_history` on one real history, beta = 3.0, tuned to T_CMB (jordan-normalization prompt
+  08: four integrations, 33 s at load 5, 40 s in the probe at load 6-9; no PRyMordial): not
+  captured, and its first bounce within 1e-6 relative of the committed fine scan's row (that
+  scan was untuned, at Lambda = 1 meV, stopped at 1 MeV, and on the units before prompt 05; the
+  orchestrator's probe measured 1.1e-7).
 
 No Ray and no store. Every test runs from the repository root, as the suites do.
 """
@@ -166,7 +169,10 @@ class TestMain(unittest.TestCase):
         )
 
     def test_a_writes_both_files_and_the_arrays(self):
-        def fake(setup, kicks, beta, phi, M, T_stop):
+        calls = []
+
+        def fake(setup, kicks, beta, phi, M, T_window, **tuning):
+            calls.append((T_window, tuning))
             return make_trace(beta), None
 
         out = self.dir / "near3"
@@ -188,9 +194,14 @@ class TestMain(unittest.TestCase):
         arrays = np.load(self.dir / "near3_beta3.000.npz")
         self.assertEqual(sorted(arrays.files), ["N", "T_J_GeV", "phi_Mp", "pi_Mp"])
         np.testing.assert_array_equal(arrays["phi_Mp"], make_trace(3.0).phi_Mp)
+        # the window's edge and the tuning options reach trace_history (jordan-normalization
+        # prompt 08)
+        self.assertEqual(
+            calls, [(1e-3, {"tolerance": 1e-5, "max_integrations": 30})] * 2
+        )
 
     def test_b_a_failed_history_is_reported_and_the_rest_drawn(self):
-        def fake(setup, kicks, beta, phi, M, T_stop):
+        def fake(setup, kicks, beta, phi, M, T_window, **tuning):
             if beta == 3.01:
                 return None, "stub failure"
             return make_trace(beta), None
@@ -211,16 +222,35 @@ class TestMain(unittest.TestCase):
         betas = [str(3.0 + 0.001 * k) for k in range(7)]
         with _in_directory(ROOT), contextlib.redirect_stderr(io.StringIO()):
             self.assertEqual(psh.main(["--beta-values", *betas, "--out", str(out)]), 2)
+        # --T-stop-GeV, removed by jordan-normalization prompt 08, is refused by name
+        err = io.StringIO()
+        with _in_directory(ROOT), contextlib.redirect_stderr(err):
+            with self.assertRaises(SystemExit) as ctx:
+                psh.main(["--T-stop-GeV", "1e-3", "--out", str(out)])
+        self.assertEqual(ctx.exception.code, 2)
+        self.assertIn(
+            "--T-stop-GeV was removed by jordan-normalization prompt 08", err.getvalue()
+        )
+        self.assertIn("--T-window-low-GeV", err.getvalue())
         self.assertEqual(os.listdir(self.dir), [])
+
+    def test_d_the_title_gives_the_tuning_and_no_Lambda(self):
+        title = psh._title(5.0, 1e-3, 1e-5)
+        self.assertIn("tuned to H0 at T_CMB, tolerance 1e-05", title)
+        self.assertNotIn("Λ", title)
+        self.assertIn("φ* = 5 M_P, M = 0.001 M_P", title)
 
 
 class TestRealHistory(unittest.TestCase):
     def test_beta_3_is_not_captured_and_bounces_as_the_committed_scan(self):
         """
-        One real history at beta = 3.0 (about 2 s; no PRyMordial). Its first bounce is within 1e-7
-        relative of the committed scan's row: the scan was taken on the units before
-        jordan-normalization prompt 05 set the electronvolt from PRyMordial's G_N, and the shift is
-        2.1e-8 (the bounce's T) and 9.1e-10 (its N).
+        One real history at beta = 3.0, tuned to T_CMB (four integrations, 33 s at load 5, 40 s
+        in the probe at load 6-9; no PRyMordial). Its first bounce is within 1e-6 relative of the
+        committed scan's row: the scan was untuned, at Lambda = 1 meV, stopped at 1 MeV, on the
+        units before jordan-normalization prompt 05. Before the window V0 is negligible, and a
+        constant phi_ref rescales A, to which the dynamics there are blind. The orchestrator's
+        probe for prompt 08 measured 1.1e-7 (T_deliver). Before prompt 08: one untuned
+        integration, within 1e-7.
         """
         with open(NEAR3_CSV, newline="") as f:
             row = next(r for r in csv.DictReader(f) if float(r["beta"]) == 3.0)
@@ -240,9 +270,9 @@ class TestRealHistory(unittest.TestCase):
         self.assertEqual(row["captured"], "false")
         self.assertEqual(trace.turning_points, [])
         self.assertLessEqual(
-            abs(trace.bounce_T_GeV / float(row["T_deliver_GeV"]) - 1.0), 1e-7
+            abs(trace.bounce_T_GeV / float(row["T_deliver_GeV"]) - 1.0), 1e-6
         )
-        self.assertLessEqual(abs(trace.bounce_N / float(row["N_deliver"]) - 1.0), 1e-7)
+        self.assertLessEqual(abs(trace.bounce_N / float(row["N_deliver"]) - 1.0), 1e-6)
         self.assertEqual(trace.N[-1], trace.bounce_N)
         self.assertAlmostEqual(trace.T_J_GeV[-1], trace.bounce_T_GeV, delta=1e-9)
         self.assertAlmostEqual(trace.phi_Mp[0], 5.0, delta=1e-12)

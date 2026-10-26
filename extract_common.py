@@ -511,14 +511,25 @@ DEFAULT_BAND_HALF_WIDTH = 0.025
 FIXED_T_MEV = {"1MeV": 1.0, "70keV": 0.07}
 
 # One row of histories.csv per history. Units: M in M_P, phi in M_P, T in GeV; n is the model's
-# exponent, which took Lambda_eV's place in jordan-normalization prompt 07 (prompt 08 adds V_ref,
-# the normalization, phi_ref and the tuning's diagnostics);
+# exponent, which took Lambda_eV's place in jordan-normalization prompt 07. Prompt 08 added what
+# the history's tuning found: normalization is the model's own, unconverted (ln V0, V0 in M_P^4),
+# V_ref_eV4 is V(phi_ref) in eV^4, phi_ref_Mp and phi_0_Mp are in M_P, tracking is
+# phi_0'/(1.5 phi_0), residual_H and residual_phi are the tuning's residuals, and
+# tuning_iterations its integrations, the seed's included (blank without a successful history);
 # the shifts are fractions ((value - SM baseline)/SM baseline), D/H is the stored 10^5 D/H.
 CSV_COLUMNS = [
     "beta",
     "M_Mp",
     "n",
     "phi_init_Mp",
+    "normalization",
+    "V_ref_eV4",
+    "phi_ref_Mp",
+    "phi_0_Mp",
+    "tracking",
+    "residual_H",
+    "residual_phi",
+    "tuning_iterations",
     "Yp_BBN",
     "D_over_H",
     "He3_over_H",
@@ -870,9 +881,12 @@ def build_history_record(
     successful BBNData (read through attribute names), or None where that stage has no
     successful row; `baseline` is the Standard-Model dictionary of compute_SM_baseline, or
     None (then the shifts are NaN). Everything is read from the parent rows' stored columns
-    (abundances, first_bounce, extra_metadata, fixed_T_values), so both objects may have been
-    built with _do_not_populate and no sample is loaded. The record carries one extra key,
-    first_bounce_reflected, which figure 3 reads and the CSV does not write.
+    (abundances, first_bounce, extra_metadata, fixed_T_values, and the tuning's outputs,
+    `scalar.tuning`), so both objects may have been built with _do_not_populate and no sample is
+    loaded. The tuning's columns are converted as CSV_COLUMNS' comment says, and are NaN (a
+    blank cell) where there is no successful history (jordan-normalization prompt 08). The record
+    carries one extra key, first_bounce_reflected, which figure 3 reads and the CSV does not
+    write.
     """
     record = {name: nan for name in CSV_COLUMNS}
     record.update(
@@ -897,6 +911,15 @@ def build_history_record(
             )
 
     if scalar is not None:
+        tuning = scalar.tuning
+        record["normalization"] = tuning.normalization
+        record["V_ref_eV4"] = tuning.V_ref / units.eV**4
+        record["phi_ref_Mp"] = tuning.phi_ref / units.PlanckMass
+        record["phi_0_Mp"] = tuning.phi_0 / units.PlanckMass
+        record["tracking"] = tuning.tracking
+        record["residual_H"] = tuning.residual_H
+        record["residual_phi"] = tuning.residual_phi
+        record["tuning_iterations"] = tuning.tuning_iterations
         record["reflections"] = reflection_count(scalar.extra_metadata)
         bounce = scalar.first_bounce
         if bounce is not None:

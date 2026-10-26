@@ -77,20 +77,20 @@ invariants that hold across all of them:
 - **Tests** live in `<package>/tests/` as `unittest` modules (with an `__init__.py`) and run from
   the repository root:
   ```bash
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .   # 18 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 176 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .   # 78 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 102 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .        # 61 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .   # 26 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 243 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .   # 93 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 115 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .        # 64 tests
   ```
-  `ComputeTargets/tests` takes about 200 s in one run, and longer on a loaded machine; a Bash call is
+  `ComputeTargets/tests` takes about 320 s in one run, and longer on a loaded machine; a Bash call is
   capped at ten minutes, so run it in two halves:
   ```bash
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 61 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 115 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 76 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 167 tests
   ```
-  (The counts are those of 2026-10-20; `tools/tests`'s is of 2026-10-25, after `ray-sqla-align`
-  01.) They **must not
+  (The counts are those of 2026-10-26, after `jordan-normalization` 08. `tools/tests` now holds
+  three tuned histories, about 20-30 s each; run it alone.) They **must not
   need a Ray cluster or a persistent datastore**. A test may build a temporary
   SQLite datastore in a `tempfile` directory, through `datastorekit`'s undecorated actor
   (`standin_pool.DatastoreClass`) inside ChamPBH's stand-in cluster (`StoreFixtures/standin_pool.py`,
@@ -124,7 +124,9 @@ invariants that hold across all of them:
   bounce). The Jordan-frame temperature is `log_T_Jordan`. Do not treat any two of these as
   interchangeable.
 - **The plot scripts** (`plot_by_beta.py`, `plot_ScalarHistory.py`) read a store read-only, through
-  `plot_inputs.py`, and stop (exit 2) if their options do not match the ones the build used.
+  `plot_inputs.py`, and stop (exit 2) if their options do not match the ones the build used: the
+  tolerances, T*, φ*, `--tuning-tolerance` (a key of every history) and `--n-values` (an n with no
+  stored model). `--tuning-max-integrations` is not matched; it is not a key.
 - **Science runs** are recorded in [`science-runs/`](science-runs/README.md), one dated folder
   (`YYYY-MM-DD-<slug>`) per run. Each holds the run scripts, the logs, and each figure made from the
   run with its inputs. That folder is a record of what produced output for publication; code

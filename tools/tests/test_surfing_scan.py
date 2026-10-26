@@ -18,11 +18,16 @@ tools/surfing_scan.py (surfing-temperature prompt 02, T2-T4.2).
 
 - `summarise` on hand-built crossing lists (U1-U3), with stub kick windows and root records;
 - the beta grid, built by index;
+- the analysis window, `in_window`, on hand-built crossings (jordan-normalization prompt 08);
 - the CSV and its resume, in a `tempfile` directory, through `main(argv)` with `run_history`
-  replaced by a stub, so that no integration runs;
-- one real history: beta = 2, phi* = 5 M_P, M = 1e-3 M_P, from T* = 2e4 GeV to T_stop = 0.5 GeV,
-  below its first bounce (0.7467 GeV), through the tool's own `run_history`. 0.35 s at load 7
-  (0.77 s to T_stop = 1 MeV, measured by prompt 02). No PRyMordial, no Ray, no store.
+  replaced by a stub, so that no integration runs: the tuned columns, the tolerance and the
+  window's edge matched on resume, a CSV of before prompt 08 refused with its own message, and
+  --T-stop-GeV refused;
+- one real history (jordan-normalization prompt 08, U4): beta = 1.5, phi* = 5 M_P, M = 1e-3 M_P,
+  tuned to T_CMB through the tool's own `run_history`, four integrations, 21 s at load 4 (25 s
+  in the probe at load 6-9; before prompt 08: beta = 2, one integration to T_stop = 0.5 GeV,
+  0.35 s). Both residuals are inside the tolerance, it is captured by QCD, and its temperatures
+  and roots are within 1e-6 relative of the committed scan's row. No PRyMordial, no Ray, no store.
 
 Every test runs from the repository root, as the suites do; the main() tests build the production
 cosmology and find_kicks once per call (about a second each).
@@ -192,14 +197,79 @@ class TestBetaGrid(unittest.TestCase):
         self.assertEqual(ss.format_field(4), "4")
 
 
+class TestTheWindow(unittest.TestCase):
+    """`in_window` on hand-built crossings (jordan-normalization prompt 08)."""
+
+    def setUp(self):
+        self.crossings = [
+            crossing(14.0, 0.65, "min"),
+            crossing(18.9, 0.75, "max"),
+            crossing(26.0, 0.0009, "min"),
+        ]
+
+    def test_a_a_crossing_beyond_the_edge_is_dropped(self):
+        kept, b = ss.in_window(self.crossings, bounce(20.35, 0.7467), 25.0)
+        self.assertEqual(kept, self.crossings[:2])
+        self.assertEqual(b.N, 20.35)
+
+    def test_b_a_bounce_beyond_the_edge_is_dropped(self):
+        kept, b = ss.in_window(self.crossings[:2], bounce(30.0, 1e-4), 25.0)
+        self.assertEqual(kept, self.crossings[:2])
+        self.assertIsNone(b)
+
+    def test_c_a_crossing_and_a_bounce_at_the_edge_are_kept(self):
+        kept, b = ss.in_window(self.crossings, bounce(26.0, 0.0009), 26.0)
+        self.assertEqual(kept, self.crossings)
+        self.assertEqual(b.N, 26.0)
+
+    def test_d_no_edge_keeps_everything(self):
+        last = bounce(40.0, 1e-6)
+        kept, b = ss.in_window(self.crossings, last, None)
+        self.assertEqual(kept, self.crossings)
+        self.assertIs(b, last)
+        self.assertEqual(ss.in_window([], None, 10.0), ([], None))
+
+
+# the stub's tuning, in the cosmology's units, as tune_history returns it (TUNING_OUTPUT_KEYS)
+STUB_TUNING = {
+    "normalization": -276.85483680276144,
+    "V_ref": 2.0995228253310708e-11 * _units.eV**4,
+    "phi_ref": 0.03496226638511382 * _units.PlanckMass,
+    "phi_0": 0.033,
+    "pi_0": 0.044,
+    "tracking": 0.88,
+    "residual_H": 1.2718458641813868e-07,
+    "residual_phi": 1.7897725401727627e-06,
+    "tuning_iterations": 4,
+    "plain_steps": 1,
+    "secant_steps": 2,
+    "guard_steps": 0,
+    "seed_kind": "tracking",
+    "seed_normalization": -276.88,
+    "seed_phi_ref": 0.0343,
+}
+
+
 class _StubRuns:
-    """A stand-in for run_history that records the beta it is asked for; no integration."""
+    """A stand-in for run_history that records the beta, and the tuning options, it is asked
+    for; no integration."""
 
     def __init__(self):
         self.calls = []
+        self.options = []
 
-    def __call__(self, setup, beta, phi_init_Mp, M_Mp, T_stop_GeV):
+    def __call__(
+        self,
+        setup,
+        beta,
+        phi_init_Mp,
+        M_Mp,
+        T_window_low_GeV,
+        tolerance=ss.DEFAULT_TUNING_TOLERANCE,
+        max_integrations=ss.DEFAULT_TUNING_MAX_INTEGRATIONS,
+    ):
         self.calls.append(beta)
+        self.options.append((T_window_low_GeV, tolerance, max_integrations))
         if beta == 1.3:
             crossings = [
                 crossing(14.0, 0.65, "min"),
@@ -215,6 +285,8 @@ class _StubRuns:
                 reflections=None,
                 wall_s=0.25,
                 result=None,
+                tuning=None,
+                N_window=None,
             )
         else:
             crossings = []
@@ -227,6 +299,8 @@ class _StubRuns:
             reflections=0,
             wall_s=0.5,
             result=None,
+            tuning=dict(STUB_TUNING),
+            N_window=25.0,
         )
 
 
@@ -267,9 +341,22 @@ class TestResume(unittest.TestCase):
         self.assertEqual(first["beta"], "1.2")
         self.assertEqual(first["phi_init_Mp"], "5.0")
         self.assertEqual(first["M_Mp"], "0.001")
-        self.assertEqual(first["Lambda_eV"], "0.001")
-        self.assertEqual(first["T_stop_GeV"], "0.001")
+        self.assertEqual(first["tuning_tol"], "1e-05")
+        self.assertEqual(first["T_window_low_GeV"], "0.001")
         self.assertEqual(first["status"], "ok")
+        # the tuned columns: the normalization unconverted, V_ref in eV^4, phi_ref in M_P
+        self.assertEqual(first["normalization"], repr(STUB_TUNING["normalization"]))
+        self.assertEqual(first["V_ref_eV4"], repr(STUB_TUNING["V_ref"] / _units.eV**4))
+        self.assertEqual(
+            first["phi_ref_Mp"], repr(STUB_TUNING["phi_ref"] / _units.PlanckMass)
+        )
+        self.assertEqual(first["residual_H"], repr(STUB_TUNING["residual_H"]))
+        self.assertEqual(first["residual_phi"], repr(STUB_TUNING["residual_phi"]))
+        self.assertEqual(first["tuning_iterations"], "4")
+        self.assertEqual(
+            self.stub.options,
+            [(1e-3, 1e-5, 30), (1e-3, 1e-5, 30)],
+        )
         self.assertEqual(first["failure_reason"], "")
         self.assertEqual(first["captured"], "false")
         self.assertEqual(first["capture_kick"], "")
@@ -313,6 +400,12 @@ class TestResume(unittest.TestCase):
             self.assertIn(key, meta["runs"][0])
         self.assertEqual(meta["runs"][0]["version_label"], ss.VERSION_LABEL)
         self.assertEqual(meta["runs"][0]["options"]["phi_init_Mp"], 5.0)
+        options = meta["runs"][0]["options"]
+        self.assertEqual(options["tuning_tolerance"], 1e-5)
+        self.assertEqual(options["tuning_max_integrations"], 30)
+        self.assertEqual(options["T_window_low_GeV"], 1e-3)
+        self.assertNotIn("T_stop_GeV", options)
+        self.assertNotIn("Lambda_eV", meta["runs"][0])
 
     def test_b_phi_init_mismatch_refused(self):
         """(b) a resumed CSV whose phi* differs is refused, exit 2, and left as it was."""
@@ -325,19 +418,66 @@ class TestResume(unittest.TestCase):
         self.assertEqual(self.stub.calls, [])
         self.assertEqual(self.out.read_bytes(), before)
 
-    def test_c_T_stop_and_M_mismatch_refused(self):
-        """(c) likewise for T_stop and for M."""
+    def test_c_window_tolerance_and_M_mismatch_refused(self):
+        """(c) likewise for the window's edge, the tuning tolerance and M (jordan-normalization
+        prompt 08: the window and the tolerance took T_stop's and Lambda's places)."""
         self.assertEqual(self.run_main("--beta-values", "1.2"), 0)
         self.assertEqual(
-            self.run_main("--beta-values", "1.5", "--T-stop-GeV", "2e-3"), 2
+            self.run_main("--beta-values", "1.5", "--T-window-low-GeV", "2e-3"), 2
         )
+        self.assertIn("T_window_low_GeV=0.001", self.stdout)
+        self.assertEqual(
+            self.run_main("--beta-values", "1.5", "--tuning-tolerance", "1e-6"), 2
+        )
+        self.assertIn("tuning_tol=1e-05", self.stdout)
         self.assertEqual(self.run_main("--beta-values", "1.5", "--M", "1e-2"), 2)
         self.assertEqual(self.stub.calls, [1.2])
+        # the cap is not matched: it is no input of a row
+        self.assertEqual(
+            self.run_main("--beta-values", "1.5", "--tuning-max-integrations", "10"),
+            0,
+        )
+        self.assertEqual(self.stub.calls, [1.2, 1.5])
+        self.assertEqual(self.stub.options[-1], (1e-3, 1e-5, 10))
 
     def test_d_header_mismatch_refused(self):
         """(d) a file with another header is refused, exit 2."""
         self.out.write_text("beta,something_else\n")
         self.assertEqual(self.run_main("--beta-values", "1.2"), 2)
+        self.assertEqual(self.stub.calls, [])
+        self.assertIn("has a different header", self.stdout)
+
+    def test_d_a_csv_of_before_prompt_08_is_refused_with_its_own_message(self):
+        """(d) the committed scan's file (Lambda_eV, T_stop_GeV) is refused, exit 2, with the
+        message that a tuned scan does not resume a fixed-Lambda one, and left as it was.
+        """
+        committed = (
+            ROOT / ".documents/surfing-temperature/out/surfing_scan_phi5_M1e-3.csv"
+        )
+        self.out.write_bytes(committed.read_bytes())
+        before = self.out.read_bytes()
+        self.assertEqual(self.run_main("--beta-values", "1.2"), 2)
+        self.assertIn("was written before jordan-normalization prompt 08", self.stdout)
+        self.assertIn("a tuned scan does not resume it", self.stdout)
+        self.assertNotIn("has a different header", self.stdout)
+        self.assertEqual(self.stub.calls, [])
+        self.assertEqual(self.out.read_bytes(), before)
+        # a header holding only one of the two is refused the same way
+        self.out.write_text("beta,T_stop_GeV\n")
+        self.assertEqual(self.run_main("--beta-values", "1.2"), 2)
+        self.assertIn("was written before jordan-normalization prompt 08", self.stdout)
+
+    def test_d_T_stop_is_refused_by_name(self):
+        """(d) --T-stop-GeV is refused, exit 2, naming --T-window-low-GeV; nothing written."""
+        err = io.StringIO()
+        with contextlib.redirect_stderr(err), self.assertRaises(SystemExit) as ctx:
+            self.run_main("--beta-values", "1.2", "--T-stop-GeV", "1e-3")
+        self.assertEqual(ctx.exception.code, 2)
+        self.assertIn(
+            "--T-stop-GeV was removed by jordan-normalization prompt 08", err.getvalue()
+        )
+        self.assertIn("--T-window-low-GeV", err.getvalue())
+        self.assertFalse(self.out.exists())
         self.assertEqual(self.stub.calls, [])
 
     def test_e_failure_row(self):
@@ -350,6 +490,16 @@ class TestResume(unittest.TestCase):
         )
         self.assertEqual(row["captured"], "")
         self.assertEqual(row["T_deliver_GeV"], "")
+        for column in (
+            "normalization",
+            "V_ref_eV4",
+            "phi_ref_Mp",
+            "residual_H",
+            "residual_phi",
+            "tuning_iterations",
+        ):
+            self.assertEqual(row[column], "", column)
+        self.assertEqual(row["tuning_tol"], "1e-05")
         self.stub.calls.clear()
         self.assertEqual(self.run_main("--beta-values", "1.4"), 0)
         self.assertEqual(self.stub.calls, [])
@@ -376,55 +526,82 @@ class TestResume(unittest.TestCase):
         self.assertEqual(self.stub.calls, [])
 
 
+COMMITTED_CSV = ROOT / ".documents/surfing-temperature/out/surfing_scan_phi5_M1e-3.csv"
+
+
 class TestRealHistory(unittest.TestCase):
-    def test_beta_2(self):
+    def test_beta_1_5_tuned(self):
         """
-        beta = 2, phi* = 5, M = 1e-3, from T* to T_stop = 0.5 GeV, through run_history: 0.35 s
-        at load 7. No PRyMordial runs.
+        beta = 1.5, phi* = 5, M = 1e-3, tuned to T_CMB through run_history (jordan-normalization
+        prompt 08): four integrations, 21 s at load 4, 25 s in the probe at load 6-9. No
+        PRyMordial runs. Both residuals are inside the tolerance; it is captured by QCD;
+        T_capture, T_deliver, T_hot and T_cold are within 1e-6 relative of the committed scan's
+        row (made untuned at Lambda = 1 meV, stopped at 1 MeV; the orchestrator's probe measured
+        2.6e-8 at most); the turning points are inside the window and each is a crossing of
+        beta pi/M_P = -1 (before prompt 08: beta = 2, to T_stop = 0.5 GeV).
         """
+        with open(COMMITTED_CSV, newline="") as f:
+            committed = next(r for r in csv.DictReader(f) if float(r["beta"]) == 1.5)
+
         SM = ss.importlib.import_module("ComputeTargets.ScalarHistory")
         original = SM.integrate_scalar_history
 
         setup = ss.make_setup()
         units = setup.units
         with contextlib.redirect_stdout(io.StringIO()):
-            outcome = ss.run_history(setup, 2.0, 5.0, 1e-3, 0.5)
+            outcome = ss.run_history(setup, 1.5, 5.0, 1e-3, 1e-3)
 
         # the wrapper is removed
         self.assertIs(SM.integrate_scalar_history, original)
 
         self.assertIsNone(outcome.failure_reason)
+        tuning = outcome.tuning
+        self.assertLess(abs(tuning["residual_H"]), ss.DEFAULT_TUNING_TOLERANCE)
+        self.assertLess(abs(tuning["residual_phi"]), ss.DEFAULT_TUNING_TOLERANCE)
+        self.assertEqual(tuning["tuning_iterations"], 4)
+
         result = outcome.result
+        # the final integration runs to T_CMB, and the window ends at its first 1 MeV crossing
+        self.assertGreater(result.solution.ts[-1], outcome.N_window)
+        self.assertAlmostEqual(
+            result.solution(outcome.N_window)[4], ss.log(1e-3 * units.GeV), delta=1e-8
+        )
+
         crossings = outcome.crossings
         self.assertGreaterEqual(len(crossings), 1)
-
         bounce = first_bounce(result)
         self.assertIsNotNone(bounce)
-        self.assertLess(0.5 * units.GeV, exp(bounce.log_T_Jordan))
+        self.assertEqual(outcome.bounce.log_T_Jordan, bounce.log_T_Jordan)
+        self.assertLessEqual(bounce.N, outcome.N_window)
 
         M_P = units.PlanckMass
         for c in crossings:
             self.assertLess(c.N, bounce.N)
             y = result.solution(c.N)
-            self.assertLess(abs(1.0 + 2.0 * y[1] / M_P), 1e-8)
+            self.assertLess(abs(1.0 + 1.5 * y[1] / M_P), 1e-8)
             self.assertEqual(c.pi_Einstein, y[1])
 
-            log_T = c.log_T_Jordan
-            before = result.solution(c.N - 1e-3)[4]
-            after = result.solution(c.N + 1e-3)[4]
-            if c.direction == "min":
-                self.assertGreater(before, log_T)
-                self.assertGreater(after, log_T)
-            else:
-                self.assertEqual(c.direction, "max")
-                self.assertLess(before, log_T)
-                self.assertLess(after, log_T)
-
-        # delivery is first_bounce's, exactly
-        self.assertEqual(outcome.bounce.log_T_Jordan, bounce.log_T_Jordan)
-        row = ss.summarise(crossings, outcome.bounce, [], None, units)
-        self.assertEqual(row["T_deliver_GeV"], exp(bounce.log_T_Jordan) / units.GeV)
-        self.assertEqual(row["N_deliver"], bounce.N)
+        cosmology = setup.cosmology
+        kicks = ss.find_kicks(
+            cosmology,
+            cosmology._eos._T_min * units.GeV,
+            cosmology._eos._T_max * units.GeV,
+        )
+        row = ss.summarise(
+            crossings,
+            outcome.bounce,
+            kicks,
+            ss.reachability_roots(cosmology, 1.5, kicks),
+            units,
+        )
+        self.assertTrue(row["captured"])
+        self.assertEqual(row["capture_kick"], "QCD")
+        self.assertEqual(committed["capture_kick"], "QCD")
+        for column in ("T_capture_GeV", "T_deliver_GeV", "T_hot_GeV", "T_cold_GeV"):
+            with self.subTest(column=column):
+                self.assertLessEqual(
+                    abs(row[column] / float(committed[column]) - 1.0), 1e-6
+                )
 
 
 if __name__ == "__main__":

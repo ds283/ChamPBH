@@ -53,6 +53,17 @@ INFLIGHT = (
 COMPLETE = "   -- ALL WORK ITEMS COMPLETE in time 10m 3s"
 WORKER = "\x1b[36m(Datastore pid=89917)\x1b[0m @@ a line a worker printed"
 
+# three of tune_history's progress lines (jordan-normalization prompt 06, T6), verbatim from
+# prompts/jordan-normalization/logs/06-probes/b3_M0.01_phi5_secant.log
+TUNE_LINES = (
+    "-- tune beta=3,M=0.01,phi*=5,secant it=0 kind=seed H/H0-1=-4.058e-02 "
+    "phi_ref/phi_min-1=-3.998e-03 norm=-277.581681683 phi_ref=5.8191282360e-02 wall=9.2",
+    "-- tune beta=3,M=0.01,phi*=5,secant it=1 kind=plain H/H0-1=+5.356e-03 "
+    "phi_ref/phi_min-1=-5.453e-02 norm=-277.424585294 phi_ref=5.8424893561e-02 wall=9.2",
+    "-- tune beta=3,M=0.01,phi*=5,secant it=2 kind=secant H/H0-1=+1.832e-03 "
+    "phi_ref/phi_min-1=-1.207e-02 norm=-277.442495434 phi_ref=6.1438983465e-02 wall=9.3",
+)
+
 
 class Clock:
     """A fake `time.monotonic`."""
@@ -161,6 +172,27 @@ class TestTheBeat(StreamCase):
         # the banner, the progress line and the completion each changed the stage
         self.assertEqual(self.beats.call_count, 4)
 
+    def test_the_tuning_lines_beat_and_are_not_stages(self):
+        """tune_history's lines (jordan-normalization prompt 08, D3): after a banner, each beats
+        once the 30 s floor has passed, and the stage stays the banner's."""
+        stream = self.stream()
+        self.line(stream, BANNER, at=1000.0)
+        beats = self.beats.call_count
+        for k, line in enumerate(TUNE_LINES):
+            self.line(stream, line, at=1040.0 + 40.0 * k)
+            self.assertEqual(self.beats.call_count, beats + k + 1)
+            self.assertEqual(self.stage(), TITLE)
+        # as Ray forwards them from a worker, with its prefix, they beat and move nothing too
+        self.line(
+            stream, f"(compute_scalar_history pid=4242) {TUNE_LINES[0]}", at=1200.0
+        )
+        self.assertEqual(self.beats.call_count, beats + len(TUNE_LINES) + 1)
+        self.assertEqual(self.stage(), TITLE)
+        tracker = StageTracker()
+        for line in TUNE_LINES:
+            self.assertFalse(tracker.feed(line), line)
+        self.assertIsNone(tracker.stage)
+
     def test_main_pys_own_banners_are_stages(self):
         tracker = StageTracker()
         self.assertTrue(tracker.feed(">> RUNNING PIPELINE FOR MODEL QCD_Cosmology"))
@@ -169,7 +201,7 @@ class TestTheBeat(StreamCase):
         self.assertEqual(tracker.stage, "BUILDING GRID OF MODELS TO SAMPLE")
         # its other lines, a warning and a worker's line move nothing
         for line in (
-            '   -- using potential type "Exponential"',
+            "   -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]",
             "   -- populated M sample grid with 1 value = [ 0.001 Mp ]",
             "!! WARNING: ScalarHistory object with store_id=3 did not validate",
             WORKER,

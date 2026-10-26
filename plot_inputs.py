@@ -26,11 +26,13 @@ class, `ReadOnlyWrite` for a sharded one. What a refusal means depends on the lo
   cosmology): the plot run was given options the build did not use, and no history in the store
   can match them. The refusal becomes `PlotOptionNotStored`, whose message names the option (or
   the constant) and the value; the scripts print it to stderr and exit 2, before any figure (U4);
-- **a model** (an `ExponentialModel`, one per stored M with each stored beta at n = 1): the
-  combination was never stored, so no history can use it. It is skipped, with one warning line
-  each and a count; every other combination is returned, M outer and beta inner (U3). Each is
-  looked up on its own, and each reference is read on its own, so that one miss cannot hide the
-  others (P2).
+- **a model** (an `ExponentialModel`, one per stored M with each `--n-values` n and each stored
+  beta): the combination was never stored, so no history can use it. It is skipped, with one
+  warning line each and a count; every other combination is returned, M outer, n, and beta inner
+  (U3). Each is looked up on its own, and each reference is read on its own, so that one miss
+  cannot hide the others (P2). An n with no stored model at any stored (M, beta) is a parameter
+  the build was not run with: `PlotOptionNotStored`, naming `--n-values` (jordan-normalization
+  prompt 08).
 
 Since jordan-normalization prompt 07 a stored history is keyed by its model, its initial data and
 the tuning tolerance, and ends at T_CMB: the store holds no Lambda and no final temperature, so
@@ -55,13 +57,8 @@ from datastorekit.replication import ReadOnlyMiss, ReadOnlyWrite
 from MetadataConcepts import tolerance
 from config.model_list import build_model_list
 
-# the model class each --potential-type looks up (jordan-normalization prompt 07)
-MODEL_CLASSES = {
-    "Exponential": "ExponentialModel",
-}
-
-# the model's exponent n, the only one main.py builds
-MODEL_N = 1
+# the one model class main.py builds (jordan-normalization prompt 08 removed --potential-type)
+MODEL_CLASS = "ExponentialModel"
 
 
 class PlotOptionNotStored(RuntimeError):
@@ -70,7 +67,8 @@ class PlotOptionNotStored(RuntimeError):
     run with this option, or this constant, so no history in the store can match.
 
     `class_name` is the class that was looked up, `option` the option or constant it came from,
-    and `value` the value, as given. The `ReadOnlyMiss` the pool raised is chained as `__cause__`.
+    and `value` the value, as given. The `ReadOnlyMiss` the pool raised is chained as `__cause__`;
+    an `--n-values` n with no stored model (`exponential_models`) has no single miss to chain.
     """
 
     def __init__(self, class_name: str, option: str, value: str):
@@ -119,9 +117,9 @@ def parameters(
     """
     The tolerances, `T_init`, `phi_init` and `pi_init` (README §0.3 rows 1-5), from `--abs-tol`,
     `--rel-tol`, `--T-init-GeV`, `--phi-init-Mp` and the constant pi = 0, and the tuning tolerance
-    (jordan-normalization prompt 07), which the scripts give as the constant
-    `DEFAULT_TUNING_TOLERANCE` that main.py builds with. Every lookup is submitted first; each is
-    then read in this order, and the first that is not stored raises `PlotOptionNotStored`.
+    (jordan-normalization prompt 07), from `--tuning-tolerance` (prompt 08). Every lookup is
+    submitted first; each is then read in this order, and the first that is not stored raises
+    `PlotOptionNotStored`.
     """
     lookups = [
         (
@@ -161,7 +159,7 @@ def parameters(
         (
             pool.object_get(tolerance, tol=tuning_tol),
             "tolerance",
-            "the constant tuning tolerance",
+            "--tuning-tolerance",
             _value(tuning_tol),
         ),
     ]
@@ -184,50 +182,56 @@ def stored_grid(pool, units) -> StoredGrid:
 
 def exponential_models(
     pool,
-    potential_type: str,
     M_table: list,
     beta_table: list,
+    n_values: list,
     units,
 ) -> list:
     """
-    The `--potential-type` model of every stored M with every stored beta at n = 1
-    (jordan-normalization prompt 07, S6), in `itertools.product(M_table, beta_table)` order (M
-    outer, beta inner), as main.py builds its grid. Each combination is looked up on its own and
-    each reference read on its own (P2). The class is sharded by beta, so a read-only miss is the
-    inserter's `ReadOnlyWrite` ("an insert" of `ExponentialModel`); that combination is skipped,
-    with one warning line printed and a count line after the last (U3). Any other exception, a
-    `ReadOnlyWrite` of any other operation or class included, propagates.
-    """
-    if potential_type not in MODEL_CLASSES:
-        raise ValueError(f"Unknown potential type: {potential_type}")
-    cls_name = MODEL_CLASSES[potential_type]
+    The `ExponentialModel` of every stored M with every n of `n_values` (`--n-values`) and every
+    stored beta (jordan-normalization prompt 07, S6; prompt 08 gives n its option), in
+    `itertools.product(M_table, n_values, beta_table)` order (M outer, n, beta inner), as main.py
+    builds its grid. Each combination is looked up on its own and each reference read on its own
+    (P2). The class is sharded by beta, so a read-only miss is the inserter's `ReadOnlyWrite` ("an
+    insert" of `ExponentialModel`); that combination is skipped, with one warning line printed and
+    a count line after the last (U3). Any other exception, a `ReadOnlyWrite` of any other operation
+    or class included, propagates.
 
-    combinations = list(itertools.product(M_table, beta_table))
+    An n with no stored model at any stored (M, beta) was not built: after the count line,
+    `PlotOptionNotStored("ExponentialModel", "--n-values", n)` is raised for the first such n, as
+    for a parameter (prompt 08). With no stored (M, beta) there is nothing to judge, and nothing is
+    raised.
+    """
+    combinations = list(itertools.product(M_table, n_values, beta_table))
     refs = [
-        pool.object_get(
-            cls_name, shard_key=beta, M=M, n=MODEL_N, beta=beta, units=units
-        )
-        for M, beta in combinations
+        pool.object_get(MODEL_CLASS, shard_key=beta, M=M, n=n, beta=beta, units=units)
+        for M, n, beta in combinations
     ]
 
     found = []
+    found_n = set()
     skipped = 0
-    for (M, beta), ref in zip(combinations, refs):
+    for (M, n, beta), ref in zip(combinations, refs):
         try:
             found.append(ray.get(ref))
+            found_n.add(n)
         except ReadOnlyWrite as e:
-            if e.operation != "an insert" or e.class_name != cls_name:
+            if e.operation != "an insert" or e.class_name != MODEL_CLASS:
                 raise
             skipped += 1
             print(
-                f"!! plot: no {cls_name} stored for M={_value(M.value / units.eV)} eV, "
-                f"n={MODEL_N}, β={_value(beta.value)}; no history can use it; skipped"
+                f"!! plot: no {MODEL_CLASS} stored for M={_value(M.value / units.eV)} eV, "
+                f"n={n}, β={_value(beta.value)}; no history can use it; skipped"
             )
     if skipped > 0:
         print(
-            f"!! plot: {skipped} of {len(combinations)} {cls_name} combinations of the stored M "
-            f"and β are not stored, and were skipped"
+            f"!! plot: {skipped} of {len(combinations)} {MODEL_CLASS} combinations of the stored "
+            f"M and β are not stored, and were skipped"
         )
+    if len(M_table) > 0 and len(beta_table) > 0:
+        for n in n_values:
+            if n not in found_n:
+                raise PlotOptionNotStored(MODEL_CLASS, "--n-values", str(n))
     return found
 
 

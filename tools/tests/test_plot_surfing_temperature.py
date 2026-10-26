@@ -16,9 +16,11 @@
 """
 tools/plot_surfing_temperature.py (surfing-temperature prompt 03, F1-F3).
 
-- a synthetic CSV in tools.surfing_scan.COLUMNS' header, with a sidecar: a not-captured row, a QCD
-  capture with no second dip, a QCD capture with all four temperatures, an EW capture and a failure
-  row (whose `captured` is blank);
+- a synthetic CSV in tools.surfing_scan.COLUMNS' header (the tuned scan's, jordan-normalization
+  prompt 08), with a sidecar: a not-captured row, a QCD capture with no second dip, a QCD capture
+  with all four temperatures, an EW capture and a failure row (whose `captured` and tuned columns
+  are blank); and a CSV of before prompt 08 (the committed scan's header, with Lambda_eV),
+  refused with its own message;
 - `build_figure` on those rows with stub roots on a stub grid;
 - `main(argv)` with the cosmology, `find_kicks` and `reachability_roots` replaced by stubs;
 - `build_figure`'s first bounce of an uncaptured row (TestUncapturedDeliveries, prompt 03b, F4);
@@ -54,10 +56,19 @@ def make_row(**fields):
     row.update(
         phi_init_Mp="5.0",
         M_Mp="0.001",
-        Lambda_eV="0.001",
-        T_stop_GeV="0.001",
+        tuning_tol="1e-05",
+        T_window_low_GeV="0.001",
         status="ok",
     )
+    if fields.get("status", "ok") == "ok":
+        row.update(
+            normalization="-276.85483680276144",
+            V_ref_eV4="2.0995228253310708e-11",
+            phi_ref_Mp="0.03496226638511382",
+            residual_H="1.2718458641813868e-07",
+            residual_phi="1.7897725401727627e-06",
+            tuning_iterations="4",
+        )
     row.update({k: str(v) for k, v in fields.items()})
     return row
 
@@ -237,8 +248,37 @@ class TestParse(_TempDirCase):
     def test_b_the_header_must_be_the_scans(self):
         path = self.dir / "foreign.csv"
         path.write_text("beta,T_deliver_GeV\n1.5,0.3\n")
-        with self.assertRaises(ValueError):
+        with self.assertRaises(ValueError) as ctx:
             psp.parse_rows(path)
+        self.assertIn(
+            "the header is not tools.surfing_scan.COLUMNS", str(ctx.exception)
+        )
+
+    def test_c_the_tuned_columns_are_read(self):
+        """(jordan-normalization prompt 08) the tolerance, the window's edge and the tuned
+        values are floats; a failure row's are None."""
+        captured = self.rows[1]
+        self.assertEqual(captured["tuning_tol"], 1e-5)
+        self.assertEqual(captured["T_window_low_GeV"], 1e-3)
+        self.assertEqual(captured["normalization"], -276.85483680276144)
+        self.assertEqual(captured["V_ref_eV4"], 2.0995228253310708e-11)
+        self.assertEqual(captured["phi_ref_Mp"], 0.03496226638511382)
+        failure = self.rows[-1]
+        self.assertEqual(failure["tuning_tol"], 1e-5)
+        for key in ("normalization", "V_ref_eV4", "phi_ref_Mp", "residual_H"):
+            self.assertIsNone(failure[key], key)
+
+    def test_d_a_csv_of_before_prompt_08_is_refused_with_its_own_message(self):
+        """The committed scan's CSV (Lambda_eV, T_stop_GeV) is refused, naming its writer."""
+        committed = (
+            ROOT / ".documents/surfing-temperature/out/surfing_scan_phi5_M1e-3.csv"
+        )
+        with self.assertRaises(ValueError) as ctx:
+            psp.parse_rows(committed)
+        message = str(ctx.exception)
+        self.assertIn("before jordan-normalization prompt 08", message)
+        self.assertIn("at the commit its sidecar records", message)
+        self.assertNotIn("the header is not", message)
 
 
 class TestBuildFigure(_TempDirCase):
@@ -359,6 +399,11 @@ class TestBuildFigure(_TempDirCase):
         self.assertNotIn("61e0c42 + tracked", title)
         for text in ("5", "0.001"):
             self.assertIn(text, title)
+        # the tuning and the window, and no Lambda or T_stop (jordan-normalization prompt 08)
+        self.assertIn("tolerance 1e-05", title)
+        self.assertIn("$T_J$ = 0.001 GeV", title)
+        self.assertNotIn("Lambda", title)
+        self.assertNotIn("stop", title)
         fig = psp.build_figure(self.rows, STUB_ROOTS, None)
         self.assertIn("HEAD unknown", fig.get_suptitle())
 
@@ -474,6 +519,19 @@ class TestMain(unittest.TestCase):
         bad.write_text("beta\n1.0\n")
         with _in_directory(ROOT), contextlib.redirect_stderr(io.StringIO()):
             self.assertEqual(psp.main(["--csv", str(bad), "--out", str(out)]), 2)
+        self.assertFalse(Path(str(out) + ".pdf").exists())
+
+    def test_b_an_old_csv_is_refused_exit_2_with_its_message(self):
+        """A CSV of before jordan-normalization prompt 08 (the committed scan's): exit 2, its
+        message on stderr, nothing written."""
+        committed = (
+            ROOT / ".documents/surfing-temperature/out/surfing_scan_phi5_M1e-3.csv"
+        )
+        out = self.dir / "old"
+        err = io.StringIO()
+        with _in_directory(ROOT), contextlib.redirect_stderr(err):
+            self.assertEqual(psp.main(["--csv", str(committed), "--out", str(out)]), 2)
+        self.assertIn("before jordan-normalization prompt 08", err.getvalue())
         self.assertFalse(Path(str(out) + ".pdf").exists())
 
     def test_c_a_missing_sidecar_is_headed_unknown(self):

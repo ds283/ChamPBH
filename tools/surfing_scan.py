@@ -14,46 +14,76 @@
 # limitations under the License.
 
 """
-Integrate one scalar history per beta and write one CSV row each, holding the Jordan-frame
-temperatures a surfing trajectory reaches before its first bounce, with no Ray cluster, no
-datastore and no BBN.
+Tune one scalar history per beta to T_CMB and write one CSV row each, holding the Jordan-frame
+temperatures a surfing trajectory reaches before its first bounce inside an analysis window, with
+no Ray cluster, no datastore and no BBN.
 
-Written for surfing-temperature prompt 02 (T2, T3; README §2.2, §4). Each history is
-`integrate_history` (until jordan-normalization prompt 07, `compute_scalar_history._function`,
-which now tunes the history) with tools/history_and_bbn.py's setup, whose constants and z grid are
-imported from it: QCD_Cosmology on Planck2018, ExponentialModel with n = 1 and the given M and
-beta, realized at the fixed normalization 4 ln(Lambda), Lambda = 1e-3 eV, and phi_ref = 0
-(untuned; jordan-normalization prompt 08 moves this tool onto tuned histories), pi* = 0,
-T* = 2e4 GeV, the default tolerances and step control, and 250 samples per decade of 1 + z. The IntegrationResult is kept
-by wrapping integrate_scalar_history for the duration of the call, as history_and_bbn.py does,
-and its turning points of T_J are `surfing_turning_points` (ComputeTargets/ScalarHistory.py).
-Nothing is stored.
+Written for surfing-temperature prompt 02 (T2, T3; README §2.2, §4). Since jordan-normalization
+prompt 08 (U4, D5) each history is tuned as main.py's are: `tune_history` integrates it to
+T_J = T_CMB with `integrate_history` and adjusts the model's normalization and phi_ref until
+H_J(T_CMB) = H0 and phi_ref = phi_min(T_CMB), within --tuning-tolerance on both residuals and
+--tuning-max-integrations integrations (main.py's options and defaults, 1e-5 and 30). The setup
+is tools/history_and_bbn.py's, whose constants and z grid are imported from it: QCD_Cosmology on
+Planck2018, ExponentialModel with n = 1 and the given M and beta, pi* = 0, T* = 2e4 GeV, the
+default tolerances and step control, and 250 samples per decade of 1 + z to main.py's 300
+decades. The final integration's IntegrationResult is kept by wrapping integrate_scalar_history
+for the duration of the call, as history_and_bbn.py does, and its turning points of T_J are
+`surfing_turning_points` (ComputeTargets/ScalarHistory.py) on the tuned realization. Nothing is
+stored. (Until prompt 08 each history was one integration at the fixed normalization
+4 ln(1e-3 eV), phi_ref = 0, stopped at --T-stop-GeV: [05-surfing-scan-runs-at-a-fixed-lambda].)
+
+The analysis window. A tuned history runs to T_CMB, so the analysis is restricted to a window
+that ends at the history's first crossing of T_J = --T-window-low-GeV (default 1e-3 GeV, the old
+stopping temperature), found by `T_Jordan_crossing` on the dense output, at e-fold N_window. Only
+the turning points with N <= N_window are kept, and the first bounce only if its N <= N_window
+(`in_window`). This reproduces the old stop exactly: an integration stopped at T_stop ended at
+that same first crossing. A filter on T_J would not, since T_J is not monotonic. A history that
+never reaches the edge is analysed whole.
 
 Run from the repository root, since the EOS reads its table from the working directory:
 
     ./venv/bin/python tools/surfing_scan.py --out PATH.csv \\
         (--beta-min B0 --beta-max B1 --beta-step DB | --beta-values B [B ...]) \\
-        [--phi-init-Mp X] [--M M] [--T-stop-GeV T]
+        [--phi-init-Mp X] [--M M] [--T-window-low-GeV T] \\
+        [--tuning-tolerance TOL] [--tuning-max-integrations K]
 
 The beta grid is beta_k = beta_min + k * beta_step, rounded to 10 decimal places, for every k with
-beta_k <= beta_max. M is in units of the (reduced) Planck mass.
+beta_k <= beta_max. M is in units of the (reduced) Planck mass. --T-stop-GeV was removed by
+prompt 08 and is refused (exit 2).
 
-The CSV (README §4) has one row per beta, appended and flushed as each history ends. A blank
-field is empty; a boolean is `true` or `false`; a float is Python's repr of the value, so a row
-depends on nothing but the history (wall_s apart). If PATH.csv exists the run resumes: it is
-refused (exit 2) if the header differs or a row's phi*, M, Lambda or T_stop differs from the
-options, and every beta already in the file (to 1e-9) is skipped. A failed history is a row with
-status=failure and the payload's reason, so it is not retried. PATH.csv.meta.json records the
-git HEAD, whether a tracked file differs from it, VERSION_LABEL, the options, the start time and
-the Python and SciPy versions; it is written at the start of a run, and a resumed run adds an
-entry to it.
+The CSV (README §4) has one row per beta, appended and flushed as each history ends: the inputs
+(beta, phi_init_Mp and M_Mp in M_P, tuning_tol, T_window_low_GeV in GeV), status and
+failure_reason, the tuning's results (normalization: the model's own, ln V0 with V0 in M_P^4,
+unconverted; V_ref_eV4: V(phi_ref) in eV^4; phi_ref_Mp in M_P; residual_H, residual_phi and
+tuning_iterations, the integrations, the seed's included), then the measured columns
+(temperatures in GeV, N in e-folds from T*), reflections and accepted_steps of the final
+integration, and wall_s, the whole tuning's. The six tuned columns are blank on a failure row. A
+blank field is empty; a boolean is `true` or `false`; a float is Python's repr of the value, so a
+row depends on nothing but the history (wall_s apart). If PATH.csv exists the run resumes: a file
+whose header holds Lambda_eV or T_stop_GeV (written before prompt 08, at a fixed Lambda) is
+refused with its own message; any other header that differs is refused; a row whose phi*, M,
+tuning tolerance or window edge differs from the options is refused (all exit 2); and every beta
+already in the file (to 1e-9) is skipped. A failed history is a row with status=failure and the
+payload's reason, so it is not retried. PATH.csv.meta.json records the git HEAD, whether a
+tracked file differs from it, VERSION_LABEL, the options (the tuning tolerance, the cap and the
+window's edge among them), the start time and the Python and SciPy versions; it is written at the
+start of a run, and a resumed run adds an entry to it.
 
 One console line per beta:
 
-    beta=... status=ok capture=... max=... second_dip=... deliver=... GeV crossings=... wall=... s
+    beta=... status=ok capture=... max=... second_dip=... deliver=... GeV crossings=... \\
+        iterations=... phi_ref=... M_P V_ref=... eV^4 wall=... s
 
-with `-` for a blank, and a flag where a captured history has no bounce above T_stop.
-integrate_history's own printing (failures only, by default) is left on the console.
+with `-` for a blank, and a flag where a captured history has no bounce above T_window.
+tune_history's `-- tune` lines, one per integration, and integrate_history's own printing
+(failures only, by default) are left on the console.
+
+Costs (jordan-normalization prompt 08, measured at a load falling from 8 to 5): one integration
+to T_CMB takes about 5.0 s at beta = 1.5, 7.9 s at 3.0 and 13 s at 4.0 (against 0.5, 1.7 and
+4.8 s to 1 MeV, untuned, before prompt 08), and a tuning four or five of them: 20, 32 and 65 s a
+beta. Interpolated over the grid, at 4.3 integrations a beta, the 79-beta scan of 1.10-5.00
+(S1) takes about 55 minutes and the 61-beta scan of 2.98-3.04 (S5) about 35, against 280 s and
+150 s before.
 
 Exit status: 0 if every history ran and none failed, 1 if a failure row was written, 2 if the run
 was refused.
@@ -73,7 +103,7 @@ from datetime import datetime, timezone
 from math import exp, floor, isclose, log
 from pathlib import Path
 from types import SimpleNamespace
-from typing import List, Optional, Sequence
+from typing import List, Optional, Sequence, Tuple
 
 import scipy
 
@@ -83,10 +113,19 @@ if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
 from ComputeTargets.ScalarHistory import (  # noqa: E402
+    DEFAULT_TUNING_MAX_INTEGRATIONS,
+    DEFAULT_TUNING_TOLERANCE,
+    TUNING_OUTPUT_KEYS,
     FirstBounce,
     SurfingCrossing,
-    integrate_history,
+    T_Jordan_crossing,
     surfing_turning_points,
+    tune_history,
+)
+from config.argument_parser import (  # noqa: E402
+    RemovedOption,
+    positive_float,
+    positive_int,
 )
 from config.version import VERSION_LABEL  # noqa: E402
 from CosmologyConcepts import (  # noqa: E402
@@ -100,7 +139,6 @@ from CosmologyModels.GenericEOS.QCD_Cosmology import QCD_Cosmology  # noqa: E402
 from CosmologyModels.LambdaCDM import Planck2018  # noqa: E402
 from extract_common import find_kicks, reachability_roots  # noqa: E402
 from tools.history_and_bbn import (  # noqa: E402
-    LAMBDA_EV,
     PHI_INIT_MP,
     PI_INIT,
     T_INIT_GEV,
@@ -111,19 +149,34 @@ from Units import Planck_units  # noqa: E402
 # the file the EOS reads by a path relative to the working directory
 EOS_TABLE = Path("CosmologyModels", "GenericEOS", "Xav_EOS_data.csv")
 
-# P3: the default stopping temperature, in GeV
-T_STOP_GEV_DEFAULT = 1.0e-3
+# the default lower edge of the analysis window, in GeV: the first crossing of T_J = 1 MeV, which
+# was the stopping temperature (P3) until jordan-normalization prompt 08 tuned each history to
+# T_CMB
+T_WINDOW_LOW_GEV_DEFAULT = 1.0e-3
 M_MP_DEFAULT = 1.0e-3
 
-# README §4, in order
+# --T-stop-GeV, refused by name (jordan-normalization prompt 08)
+T_STOP_REMOVED = (
+    "each history is tuned to T_CMB; --T-window-low-GeV sets the lower edge of the analysis "
+    "window, the history's first crossing of that T_J"
+)
+
+# README §4, in order; jordan-normalization prompt 08 replaced Lambda_eV and T_stop_GeV by the
+# tuning tolerance and the window's edge, and added the tuning's six results
 COLUMNS = [
     "beta",
     "phi_init_Mp",
     "M_Mp",
-    "Lambda_eV",
-    "T_stop_GeV",
+    "tuning_tol",
+    "T_window_low_GeV",
     "status",
     "failure_reason",
+    "normalization",
+    "V_ref_eV4",
+    "phi_ref_Mp",
+    "residual_H",
+    "residual_phi",
+    "tuning_iterations",
     "captured",
     "capture_kick",
     "T_capture_GeV",
@@ -148,17 +201,23 @@ BETA_MATCH = 1e-9
 
 # the columns a resumed run must agree with the options on, and the relative tolerance (the file
 # holds repr of each value, which reads back exactly)
-_INPUT_MATCH = ("phi_init_Mp", "M_Mp", "Lambda_eV", "T_stop_GeV")
+_INPUT_MATCH = ("phi_init_Mp", "M_Mp", "tuning_tol", "T_window_low_GeV")
 _INPUT_RTOL = 1e-12
+
+# the columns of a CSV written before jordan-normalization prompt 08, at a fixed Lambda
+_OLD_FORMAT_COLUMNS = ("Lambda_eV", "T_stop_GeV")
 
 # what one history returns to main
 #   failure_reason:  None, or the payload's failure_reason
-#   crossings:       surfing_turning_points(result, model), or None on a failure
-#   bounce:          the payload's first_bounce (first_bounce(result)), or None
-#   accepted_steps:  the payload's accepted_steps, or None on a failure
-#   reflections:     the payload's reflection count, or None on a failure
-#   wall_s:          the wall-clock time of integrate_history and the walk, seconds
-#   result:          the captured IntegrationResult, or None
+#   crossings:       surfing_turning_points(result, model) inside the window, or None on a failure
+#   bounce:          the payload's first_bounce (first_bounce(result)) if inside the window, or None
+#   accepted_steps:  the final integration's accepted_steps, or None on a failure
+#   reflections:     the final integration's reflection count, or None on a failure
+#   wall_s:          the wall-clock time of the tuning and the walk, seconds
+#   result:          the captured IntegrationResult of the final integration, or None
+#   tuning:          {key: value} of TUNING_OUTPUT_KEYS from the payload, or None on a failure
+#   N_window:        the e-fold of the window's lower edge (T_Jordan_crossing), or None if the
+#                    history never reaches it (or failed)
 HistoryOutcome = namedtuple(
     "HistoryOutcome",
     [
@@ -169,6 +228,8 @@ HistoryOutcome = namedtuple(
         "reflections",
         "wall_s",
         "result",
+        "tuning",
+        "N_window",
     ],
 )
 
@@ -189,28 +250,46 @@ def make_setup() -> SimpleNamespace:
     return SimpleNamespace(units=units, params=params, cosmology=cosmology)
 
 
+def in_window(
+    crossings: Sequence[SurfingCrossing],
+    bounce: Optional[FirstBounce],
+    N_edge: Optional[float],
+) -> Tuple[List[SurfingCrossing], Optional[FirstBounce]]:
+    """
+    The analysis window (jordan-normalization prompt 08): the crossings with N <= N_edge, in
+    order, and the bounce if its N <= N_edge (else None). N_edge None is no edge: everything is
+    kept. Pure.
+    """
+    if N_edge is None:
+        return list(crossings), bounce
+    kept = [c for c in crossings if c.N <= N_edge]
+    if bounce is not None and not bounce.N <= N_edge:
+        bounce = None
+    return kept, bounce
+
+
 def run_history(
     setup: SimpleNamespace,
     beta: float,
     phi_init_Mp: float,
     M_Mp: float,
-    T_stop_GeV: float,
+    T_window_low_GeV: float,
+    tolerance: float = DEFAULT_TUNING_TOLERANCE,
+    max_integrations: int = DEFAULT_TUNING_MAX_INTEGRATIONS,
 ) -> HistoryOutcome:
     """
-    One history through integrate_history, with the IntegrationResult captured by
-    wrapping integrate_scalar_history for the duration of the call (history_and_bbn.py's idiom;
-    the wrapper is removed in a finally), and its turning points of T_J.
+    One history tuned to T_CMB through tune_history (jordan-normalization prompt 08), with the
+    final integration's IntegrationResult captured by wrapping integrate_scalar_history for the
+    duration of the call (history_and_bbn.py's idiom; only the last is kept, and the wrapper is
+    removed in a finally), and its turning points of T_J on the tuned realization, restricted to
+    the window that ends at the first crossing of T_J = T_window_low_GeV (`in_window`).
     """
     units = setup.units
 
-    # the model at the fixed normalization 4 ln(Lambda) and phi_ref = 0: the values the deleted
-    # adapter ExponentialModel.from_rows gave, bitwise (jordan-normalization prompt 07)
     model = ExponentialModel(
         0, M_value(0, M_Mp * units.PlanckMass), 1, beta_value(0, beta), units
-    ).realize(4.0 * log(LAMBDA_EV * units.eV), 0.0)
-
+    )
     T_init = temperature(0, T_INIT_GEV * units.GeV)
-    T_stop = temperature(1, T_stop_GeV * units.GeV)
 
     SM = importlib.import_module("ComputeTargets.ScalarHistory")
     captured = []
@@ -218,21 +297,22 @@ def run_history(
 
     def _capturing_integrate(*a, **kw):
         result = integrate(*a, **kw)
-        captured.append(result)
+        captured[:] = [result]
         return result
 
     SM.integrate_scalar_history = _capturing_integrate
     start = time.perf_counter()
     try:
-        data = integrate_history(
+        data = tune_history(
             setup.cosmology,
+            model,
             T_init,
-            T_stop,
             phi_value(0, phi_init_Mp * units.PlanckMass),
             pi_value(0, PI_INIT),
             _z_grid(),
-            model,
             task_label=f"surfing_scan-beta{beta:g}-M{M_Mp:g}",
+            tolerance=tolerance,
+            max_integrations=max_integrations,
         )
     finally:
         SM.integrate_scalar_history = integrate
@@ -249,19 +329,40 @@ def run_history(
             reflections=None,
             wall_s=wall,
             result=result,
+            tuning=None,
+            N_window=None,
         )
 
-    crossings = surfing_turning_points(result, model)
+    realized = model.realize(data["normalization"], data["phi_ref"])
+    N_window = T_Jordan_crossing(result, log(T_window_low_GeV * units.GeV))
+    crossings, bounce = in_window(
+        surfing_turning_points(result, realized), data["first_bounce"], N_window
+    )
     wall = time.perf_counter() - start
     return HistoryOutcome(
         failure_reason=None,
         crossings=crossings,
-        bounce=data["first_bounce"],
+        bounce=bounce,
         accepted_steps=data["accepted_steps"],
         reflections=data["reflections"],
         wall_s=wall,
         result=result,
+        tuning={key: data[key] for key in TUNING_OUTPUT_KEYS},
+        N_window=N_window,
     )
+
+
+def tuned_columns(tuning: dict, units) -> dict:
+    """The six tuned columns of a row, from a successful outcome's `tuning`: the normalization
+    unconverted, V_ref in eV^4, phi_ref in M_P, the residuals and the integrations."""
+    return {
+        "normalization": tuning["normalization"],
+        "V_ref_eV4": tuning["V_ref"] / units.eV**4,
+        "phi_ref_Mp": tuning["phi_ref"] / units.PlanckMass,
+        "residual_H": tuning["residual_H"],
+        "residual_phi": tuning["residual_phi"],
+        "tuning_iterations": tuning["tuning_iterations"],
+    }
 
 
 def summarise(
@@ -391,10 +492,11 @@ def _provenance(args, betas: Sequence[float], skipped: int, resumed: bool) -> di
             "beta_values": args.beta_values,
             "phi_init_Mp": args.phi_init_Mp,
             "M": args.M,
-            "T_stop_GeV": args.T_stop_GeV,
+            "T_window_low_GeV": args.T_window_low_GeV,
+            "tuning_tolerance": args.tuning_tolerance,
+            "tuning_max_integrations": args.tuning_max_integrations,
             "out": str(args.out),
         },
-        "Lambda_eV": LAMBDA_EV,
         "beta_grid": list(betas),
         "resumed": resumed,
         "skipped": skipped,
@@ -417,18 +519,27 @@ def _write_meta(meta_path: Path, entry: dict, resumed: bool) -> None:
 def read_existing(path: Path, args) -> Optional[List[float]]:
     """
     The beta of an existing CSV's rows, or None (with a message) if the file must not be resumed:
-    its header differs from COLUMNS, a row has the wrong number of fields, or a row's phi*, M,
-    Lambda or T_stop differs from the options.
+    its header holds Lambda_eV or T_stop_GeV (a scan made before jordan-normalization prompt 08,
+    at a fixed Lambda, which a tuned scan does not resume), its header differs from COLUMNS, a row
+    has the wrong number of fields, or a row's phi*, M, tuning tolerance or window edge differs
+    from the options.
     """
     expected = {
         "phi_init_Mp": args.phi_init_Mp,
         "M_Mp": args.M,
-        "Lambda_eV": LAMBDA_EV,
-        "T_stop_GeV": args.T_stop_GeV,
+        "tuning_tol": args.tuning_tolerance,
+        "T_window_low_GeV": args.T_window_low_GeV,
     }
     with open(path, newline="") as f:
         reader = csv.reader(f)
         header = next(reader, None)
+        if header is not None and any(c in header for c in _OLD_FORMAT_COLUMNS):
+            print(
+                f"!! surfing_scan: {path} was written before jordan-normalization prompt 08, "
+                f"by a scan of untuned histories at a fixed Lambda (its header holds Lambda_eV "
+                f"or T_stop_GeV); a tuned scan does not resume it. Give a new --out"
+            )
+            return None
         if header != COLUMNS:
             print(f"!! surfing_scan: {path} has a different header; not resumed")
             return None
@@ -478,10 +589,33 @@ def main(argv=None) -> int:
         help="the potential's M, in units of M_P (default 1e-3)",
     )
     parser.add_argument(
+        "--T-window-low-GeV",
+        type=positive_float,
+        default=T_WINDOW_LOW_GEV_DEFAULT,
+        help="the lower edge of the analysis window on each history tuned to T_CMB, in GeV: "
+        "turning points and the first bounce are kept up to the history's first crossing of "
+        "this Jordan-frame temperature (default %(default)s, where the integration stopped "
+        "before jordan-normalization prompt 08)",
+    )
+    parser.add_argument(
+        "--tuning-tolerance",
+        type=positive_float,
+        default=DEFAULT_TUNING_TOLERANCE,
+        help="the tuning's tolerance on both residuals, |H_J(T_CMB)/H0 - 1| and "
+        "|phi_ref/phi_min - 1| (default %(default)s, as main.py)",
+    )
+    parser.add_argument(
+        "--tuning-max-integrations",
+        type=positive_int,
+        default=DEFAULT_TUNING_MAX_INTEGRATIONS,
+        help="the cap on the tuning's integrations, the seed's included (default "
+        "%(default)s, as main.py)",
+    )
+    parser.add_argument(
         "--T-stop-GeV",
-        type=float,
-        default=T_STOP_GEV_DEFAULT,
-        help="stopping temperature in the Jordan frame, in GeV (default 1e-3)",
+        action=RemovedOption,
+        removed_by="08",
+        replacement=T_STOP_REMOVED,
     )
     parser.add_argument("--out", type=Path, required=True, help="the CSV path")
     args = parser.parse_args(argv)
@@ -527,7 +661,9 @@ def main(argv=None) -> int:
     _write_meta(meta_path, _provenance(args, betas, skipped, resumed), resumed)
     print(
         f"-- surfing_scan: {len(todo)} beta to run, {skipped} already in {out}; "
-        f"phi*={args.phi_init_Mp:g} M_P, M={args.M:g} M_P, T_stop={args.T_stop_GeV:g} GeV"
+        f"phi*={args.phi_init_Mp:g} M_P, M={args.M:g} M_P, tuned to T_CMB with tolerance "
+        f"{args.tuning_tolerance:g} (at most {args.tuning_max_integrations} integrations), "
+        f"window to T_J={args.T_window_low_GeV:g} GeV"
     )
 
     setup = make_setup()
@@ -548,15 +684,21 @@ def main(argv=None) -> int:
 
         for beta in todo:
             outcome = run_history(
-                setup, beta, args.phi_init_Mp, args.M, args.T_stop_GeV
+                setup,
+                beta,
+                args.phi_init_Mp,
+                args.M,
+                args.T_window_low_GeV,
+                tolerance=args.tuning_tolerance,
+                max_integrations=args.tuning_max_integrations,
             )
 
             row = {
                 "beta": float(beta),
                 "phi_init_Mp": float(args.phi_init_Mp),
                 "M_Mp": float(args.M),
-                "Lambda_eV": float(LAMBDA_EV),
-                "T_stop_GeV": float(args.T_stop_GeV),
+                "tuning_tol": float(args.tuning_tolerance),
+                "T_window_low_GeV": float(args.T_window_low_GeV),
                 "wall_s": f"{outcome.wall_s:.3f}",
             }
             flag = ""
@@ -566,6 +708,7 @@ def main(argv=None) -> int:
                 row["failure_reason"] = outcome.failure_reason
             else:
                 row["status"] = "ok"
+                row.update(tuned_columns(outcome.tuning, units))
                 roots = None
                 if any(c.direction == "min" for c in outcome.crossings):
                     roots = reachability_roots(cosmology, beta, kicks)
@@ -575,7 +718,7 @@ def main(argv=None) -> int:
                 row["reflections"] = outcome.reflections
                 row["accepted_steps"] = outcome.accepted_steps
                 if row["captured"] and outcome.bounce is None:
-                    flag = " [captured, but no bounce above T_stop]"
+                    flag = " [captured, but no bounce above T_window]"
                 elif not row["captured"]:
                     flag = " [not captured]"
 
@@ -594,7 +737,11 @@ def main(argv=None) -> int:
                     f"max={_console_T(row['T_max_GeV'])} "
                     f"second_dip={_console_T(row['T_second_dip_GeV'])} "
                     f"deliver={_console_T(row['T_deliver_GeV'])} GeV "
-                    f"crossings={row['n_crossings']} wall={outcome.wall_s:.1f} s{flag}"
+                    f"crossings={row['n_crossings']} "
+                    f"iterations={row['tuning_iterations']} "
+                    f"phi_ref={row['phi_ref_Mp']:.10e} M_P "
+                    f"V_ref={row['V_ref_eV4']:.6e} eV^4 "
+                    f"wall={outcome.wall_s:.1f} s{flag}"
                 )
             sys.stdout.flush()
 

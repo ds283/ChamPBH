@@ -18,9 +18,10 @@ Extraction and the science figures (science-readiness prompt 07, README sections
 
 (a) relative_shift; (b) running_band; (d) kick_threshold_curve; (e) the four figures and
 histories.csv, built from synthetic records into a temporary directory, with the fixed-T
-values read from ScalarHistory.fixed_T_values and no sample loaded; (f) plot_by_beta.py reads
-the stored columns, keeps _do_not_populate on its lookups, and the parser has
---band-half-width; the max |Q| caveat.
+values read from ScalarHistory.fixed_T_values and the tuning's outputs from
+ScalarHistory.tuning (jordan-normalization prompt 08), and no sample loaded; (f)
+plot_by_beta.py reads the stored columns, keeps _do_not_populate on its lookups, and the parser
+has --band-half-width; the max |Q| caveat.
 
 Test (c) of the original prompt, value_at_T_Jordan, is withdrawn: the fixed-T values are
 stored on the ScalarHistory row (prompt 06b) and are not interpolated from samples.
@@ -38,7 +39,7 @@ from types import SimpleNamespace
 
 import numpy as np
 
-from ComputeTargets.ScalarHistory import FixedTValues
+from ComputeTargets.ScalarHistory import FixedTValues, TuningValues
 from extract_common import (
     CSV_COLUMNS,
     adiabatic_Q_caption,
@@ -163,6 +164,28 @@ class _NoSamples(SimpleNamespace):
         raise RuntimeError("values have not yet been populated")
 
 
+def _tuning(beta, units):
+    """A stand-in ScalarHistory.tuning, in the cosmology's units (jordan-normalization prompt
+    08): the values are synthetic, and differ by beta."""
+    return TuningValues(
+        normalization=-277.0 + 0.01 * beta,
+        V_ref=2.0e-11 * beta * units.eV**4,
+        phi_ref=0.02 * beta * units.PlanckMass,
+        phi_0=0.019 * beta * units.PlanckMass,
+        pi_0=0.027 * beta * units.PlanckMass,
+        tracking=0.9,
+        residual_H=1.0e-7 * beta,
+        residual_phi=-2.0e-6 * beta,
+        tuning_iterations=4,
+        plain_steps=1,
+        secant_steps=2,
+        guard_steps=0,
+        seed_kind="tracking",
+        seed_normalization=-277.03,
+        seed_phi_ref=0.0198 * beta * units.PlanckMass,
+    )
+
+
 def _synthetic_records(units):
     """Two (M, n) sets of histories from stand-in stored objects (until jordan-normalization
     prompt 07, (M, Lambda))."""
@@ -190,6 +213,7 @@ def _synthetic_records(units):
                     ),
                     density_NP_ratio_70keV=None if k == 11 else 3e-3 * beta,
                 ),
+                tuning=_tuning(beta, units),
             )
             bbn = _NoSamples(
                 Yp_BBN=0.2470 * (1.0 + 0.01 * beta),
@@ -252,6 +276,37 @@ class TestFigures(unittest.TestCase):
         self.assertTrue(isnan(failed["Yp_BBN"]))
         self.assertTrue(isnan(failed["T_deliver_GeV"]))
 
+    def test_e_records_carry_the_tuning(self):
+        """(jordan-normalization prompt 08) the tuning's columns, converted: the normalization
+        as it is, V_ref in eV^4, phi_ref and phi_0 in M_P; NaN without a successful history.
+        """
+        units = _units()
+        records = _synthetic_records(units)
+        r = records[3]
+        beta = r["beta"]
+        tuning = _tuning(beta, units)
+        self.assertEqual(r["normalization"], tuning.normalization)
+        self.assertEqual(r["V_ref_eV4"], tuning.V_ref / units.eV**4)
+        self.assertAlmostEqual(r["V_ref_eV4"], 2.0e-11 * beta, delta=1e-24)
+        self.assertEqual(r["phi_ref_Mp"], tuning.phi_ref / units.PlanckMass)
+        self.assertEqual(r["phi_0_Mp"], tuning.phi_0 / units.PlanckMass)
+        self.assertEqual(r["tracking"], 0.9)
+        self.assertEqual(r["residual_H"], tuning.residual_H)
+        self.assertEqual(r["residual_phi"], tuning.residual_phi)
+        self.assertEqual(r["tuning_iterations"], 4)
+        failed = records[-1]
+        for key in (
+            "normalization",
+            "V_ref_eV4",
+            "phi_ref_Mp",
+            "phi_0_Mp",
+            "tracking",
+            "residual_H",
+            "residual_phi",
+            "tuning_iterations",
+        ):
+            self.assertTrue(isnan(failed[key]), key)
+
     def test_e_the_four_figures_and_the_csv(self):
         units = _units()
         records = _synthetic_records(units)
@@ -285,6 +340,15 @@ class TestFigures(unittest.TestCase):
                 last["failure_reasons"], "integration: step size underflow"
             )
             self.assertEqual(last["Yp_BBN"], "")
+            # the tuning's cells: blank for the failure, and the record's values otherwise,
+            # in the order (M, n, beta)
+            self.assertEqual(last["V_ref_eV4"], "")
+            self.assertEqual(last["tuning_iterations"], "")
+            first = dict(zip(rows[0], rows[1]))
+            self.assertEqual(float(first["M_Mp"]), 1e-3)
+            self.assertEqual(float(first["beta"]), 1.0)
+            self.assertEqual(float(first["phi_ref_Mp"]), 0.02)
+            self.assertEqual(int(first["tuning_iterations"]), 4)
 
     def test_e_figure_4_keeps_negative_ratios(self):
         # rho_NP/rho_R,J is negative at 1 MeV on real histories (log 06b: -4.8e-2 at

@@ -25,7 +25,11 @@ the EOS reads its table from the working directory:
 It reads PATH.csv and PATH.csv.meta.json (the sidecar), builds the production cosmology, and from
 it `find_kicks` (once) and `reachability_roots` on a fine beta grid, Delta beta = 0.005, over the
 CSV's beta range rounded outwards to 0.05. It writes PREFIX.pdf and PREFIX.png. It starts no Ray,
-opens no store and integrates no history. `main` takes one to three minutes on the full range,
+opens no store and integrates no history. It reads the columns of the tuned scan
+(jordan-normalization prompt 08), and its title gives phi*, M, the tuning tolerance and the
+window's lower edge; a CSV written before prompt 08, at a fixed Lambda (its header holds
+Lambda_eV), is refused (exit 2) with a message: draw it with this tool at the commit its sidecar
+records. `main` takes one to three minutes on the full range,
 nearly all of it in `reachability_roots`.
 
 Two panels share the beta axis. The upper panel shows T_J in GeV (log axis): each kick's hot root
@@ -119,8 +123,13 @@ FLOAT_FIELDS = [
     "beta",
     "phi_init_Mp",
     "M_Mp",
-    "Lambda_eV",
-    "T_stop_GeV",
+    "tuning_tol",
+    "T_window_low_GeV",
+    "normalization",
+    "V_ref_eV4",
+    "phi_ref_Mp",
+    "residual_H",
+    "residual_phi",
     "T_capture_GeV",
     "T_max_GeV",
     "T_second_dip_GeV",
@@ -153,11 +162,20 @@ def parse_rows(path: Path) -> List[dict]:
     Read the CSV. Each row becomes a dict with the float fields as floats or None (a blank), the
     `kind` (CAPTURED, UNCAPTURED or FAILURE, from `status` first and `captured` only for an ok
     row), `capture_kick` (None for a blank) and the raw `status`. Rows are returned in beta
-    order. ValueError if the header is not surfing_scan's, or a field cannot be read.
+    order. ValueError if the header is not surfing_scan's, or a field cannot be read; a header
+    that holds Lambda_eV (a scan written before jordan-normalization prompt 08, at a fixed
+    Lambda) is refused with its own message.
     """
     with open(path, newline="") as handle:
         reader = csv.reader(handle)
         header = next(reader, None)
+        if header is not None and "Lambda_eV" in header:
+            raise ValueError(
+                f"{path}: written by tools/surfing_scan.py before jordan-normalization prompt "
+                f"08, at a fixed Lambda (its header holds Lambda_eV); this tool reads the tuned "
+                f"scan's columns. Draw it with tools/plot_surfing_temperature.py at the commit "
+                f"its sidecar records"
+            )
         if header != COLUMNS:
             raise ValueError(f"{path}: the header is not tools.surfing_scan.COLUMNS")
         rows = []
@@ -278,7 +296,8 @@ def _title(rows: Sequence[dict], sidecar: Optional[dict]) -> str:
                 heads.append(head)
     return (
         rf"$\phi_*$ = {values('phi_init_Mp')} $M_P$,  $M$ = {values('M_Mp')} $M_P$,  "
-        rf"$\Lambda$ = {values('Lambda_eV')} eV,  $T_{{stop}}$ = {values('T_stop_GeV')} GeV"
+        rf"tuned to $H_0$ at $T_{{CMB}}$, tolerance {values('tuning_tol')},  "
+        rf"window to $T_J$ = {values('T_window_low_GeV')} GeV"
         f"\ngit HEAD {', '.join(heads)}"
     )
 

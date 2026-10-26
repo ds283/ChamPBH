@@ -52,6 +52,7 @@ from RunDrivers.tests.stubbed_run import (
     read_json,
     read_record,
     standin_program,
+    TUNE_LINES,
     wrapper_argv,
 )
 
@@ -79,8 +80,8 @@ PILOT = [
     ADDRESS,
 ]
 PILOT_SCOPE = (
-    "config exponential.yaml; potential Exponential; β 1.1, 1.15, 1.2, 10, 25; "
-    "M 0.001 Mp; φ* 5 Mp; 16 shards; job rrk-adoption-04-reference"
+    "config exponential.yaml; β 1.1, 1.15, 1.2, 10, 25; M 0.001 Mp; n 1; φ* 5 Mp; "
+    "tuning tolerance 1e-05; 16 shards; job rrk-adoption-04-reference"
 )
 
 
@@ -143,8 +144,8 @@ class TestRegistration(WrapperCase):
         self.assertIs(manifest["git_dirty"], False)
         self.assertEqual(
             manifest["scope"],
-            "no config file; potential none; β 0.1–3.0, 5 per unit; "
-            "M 10^25–10^26.5 eV, 6 per decade; φ* 5 Mp; "
+            "no config file; β 0.1–3.0, 5 per unit; "
+            "M 10^25–10^26.5 eV, 6 per decade; n 1; φ* 5 Mp; tuning tolerance 1e-05; "
             "20 shards; job ChamPBH-test",
         )
         self.assertEqual(
@@ -249,6 +250,78 @@ class TestTheProgram(WrapperCase):
         self.assertEqual(done.taken, {"stdout": True, "stderr": True, "handlers": True})
 
 
+class TestTheRemovedOptions(WrapperCase):
+    """The options jordan-normalization removed are refused by the wrapper with the shared
+    parser's message, which names the replacement (prompt 08, D3, D7), and no manifest is written.
+    In process, on the stand-in program and a temporary runs root, so that a refusal that failed
+    would run the stand-in, never `main.py`."""
+
+    def test_a_removed_option_is_refused_with_the_parsers_message(self):
+        for option, value, text in (
+            (
+                "--potential-type",
+                "Exponential",
+                "main.py's arguments: --potential-type was removed by "
+                "jordan-normalization prompt 08: ",
+            ),
+            (
+                "--Lambda-values-eV",
+                "1e-3",
+                "main.py's arguments: --Lambda-values-eV was removed by "
+                "jordan-normalization prompt 07: ",
+            ),
+        ):
+            with self.subTest(option=option):
+                argv = wrapper_argv(
+                    None,
+                    main_args=[
+                        "--database",
+                        str(self.database),
+                        "--ray-address",
+                        ADDRESS,
+                        option,
+                        value,
+                    ],
+                )
+                _, _, done = self.run_it(argv=argv)
+                self.assertIsInstance(done.outcome, registered_run.Refusal)
+                self.assertIn(text, str(done.outcome))
+                self.assertEqual(list(self.runs_root.iterdir()), [])
+                self.assertEqual(done.init.calls, [])
+
+
+class TestTheTuningLines(WrapperCase):
+    """tune_history's progress lines in a run (jordan-normalization prompt 08, D3): a stand-in
+    prints three of them between RayWorkPool's banner and its first progress line. Every stage
+    the wrapper records is the banner's or a progress line's, never a tune line."""
+
+    def test_the_recorded_stage_is_never_a_tune_line(self):
+        stages = []
+        heartbeat = runregistrykit.Run.heartbeat
+
+        def recording(run, *args, **kwargs):
+            stages.append(kwargs.get("stage"))
+            return heartbeat(run, *args, **kwargs)
+
+        with mock.patch.object(runregistrykit.Run, "heartbeat", recording):
+            _, _, done = self.run_it("tune")
+        self.assertIsNone(done.outcome, repr(done.outcome))
+        for line in TUNE_LINES:
+            self.assertIn(line, done.out.text())
+        self.assertTrue(stages)
+        for stage in stages:
+            self.assertFalse(stage is not None and "tune" in stage, stage)
+        # the program's stages, after the wrapper's own before it ran: the banner's, then its
+        # progress lines', with no stage between the banner and the first progress line but the
+        # banner's
+        ours = [s for s in stages if s is not None and s.startswith(TITLE)]
+        self.assertEqual(ours[0], TITLE)
+        self.assertEqual(ours[-1], f"{TITLE}, all work items complete")
+        self.assertEqual(stages[stages.index(TITLE) :], ours)
+        status = read_json(only_run(self.runs_root) / "status.json")
+        self.assertEqual(status["stage"], f"{TITLE}, all work items complete")
+
+
 class TestRegisterInProduction(WrapperCase):
     """U3 in its production form: `register` with `program=MAIN_PY` records `main.py`, its hash
     and this repository's `HEAD`. Nothing runs: `register` reads no `main.py` text and starts
@@ -319,20 +392,23 @@ class TestScope(WrapperCase):
                 "x.db",
                 "--ray-address",
                 ADDRESS,
-                "--potential-type",
-                "Exponential",
                 "--beta-values",
                 *["0.1", "0.5", "1", "1.5", "2", "2.5", "3"],
                 "--M-values-eV",
                 "1e24",
+                "--n-values",
+                "1",
+                "2",
+                "--tuning-tolerance",
+                "1e-6",
                 "--phi-init-Mp",
                 "2.5",
             ]
         )
         self.assertEqual(
             scope,
-            "no config file; potential Exponential; β 7 values, 0.1–3; M 1e+24 eV; "
-            "φ* 2.5 Mp; 20 shards; job ChamPBH-test",
+            "no config file; β 7 values, 0.1–3; M 1e+24 eV; n 1, 2; φ* 2.5 Mp; "
+            "tuning tolerance 1e-06; 20 shards; job ChamPBH-test",
         )
 
 

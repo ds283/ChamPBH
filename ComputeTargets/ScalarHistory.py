@@ -2167,7 +2167,20 @@ class ScalarHistory(DatastoreObject):
             Sigma=_build_func("Sigma"),
         )
 
-    def compute(self, label: Optional[str] = None):
+    def compute(
+        self,
+        label: Optional[str] = None,
+        max_integrations: int = DEFAULT_TUNING_MAX_INTEGRATIONS,
+    ):
+        """
+        Submit compute_scalar_history for this history and return its reference.
+
+        :param label: the task's label, replacing the history's own if given
+        :param max_integrations: the cap on the tuning's integrations, the seed's included. It is
+            not a key of the history (the tuning tolerance is): a history that does not converge
+            within it is stored as a failure under the same key, whatever the cap
+            (jordan-normalization prompt 08)
+        """
         if hasattr(self, "_do_not_populate"):
             raise RuntimeError(
                 "ScalarHistory: attempt to call compute(), but _do_not_populate is set"
@@ -2209,6 +2222,7 @@ class ScalarHistory(DatastoreObject):
             atol=self._atol.tol,
             rtol=self._rtol.tol,
             tolerance=self._tuning_tol.tol,
+            max_integrations=max_integrations,
         )
         return self._compute_ref
 

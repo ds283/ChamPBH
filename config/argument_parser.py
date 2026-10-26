@@ -4,6 +4,10 @@ from typing import Optional
 import configargparse
 
 from ComputeTargets.BBNData import DEFAULT_BBN_WALL_CLOCK_LIMIT
+from ComputeTargets.ScalarHistory import (
+    DEFAULT_TUNING_MAX_INTEGRATIONS,
+    DEFAULT_TUNING_TOLERANCE,
+)
 from config.defaults import DEFAULT_ABS_TOLERANCE, DEFAULT_REL_TOLERANCE
 
 DEFAULT_LABEL = "ChamPBH-test"
@@ -31,7 +35,54 @@ DEFAULT_SAMPLES_PER_LOG10_M_EV = 6
 
 
 allowed_drop_actions = ["scalar-history", "adiabatic-history", "bbn-data"]
-potential_types = ["Exponential"]
+
+# the options removed by jordan-normalization, each with what replaces it. They stay registered,
+# hidden, so that a command line or a --config YAML file that still gives one is refused with this
+# message (exit 2) rather than configargparse's "unrecognized arguments" (prompt 08, D1, D7)
+_LAMBDA_REMOVED = (
+    "each history's normalization is tuned so that H_J(T_CMB) = H0 and is stored with the "
+    "history, so no Lambda is given; --tuning-tolerance sets the tuning"
+)
+REMOVED_OPTIONS = {
+    "--log10-Lambda-low-eV": ("07", _LAMBDA_REMOVED),
+    "--log10-Lambda-high-eV": ("07", _LAMBDA_REMOVED),
+    "--samples-per-log10-Lambda-eV": ("07", _LAMBDA_REMOVED),
+    "--Lambda-values-eV": ("07", _LAMBDA_REMOVED),
+    "--Lambda-values-Mp": ("07", _LAMBDA_REMOVED),
+    "--T-stop-GeV": (
+        "07",
+        "every stored history ends at T_CMB; tools/history_and_bbn.py --fixed-normalization "
+        "NORM PHI_REF_MP --T-stop-GeV T runs an untuned history to any T",
+    ),
+    "--potential-type": (
+        "08",
+        "there is one model, ExponentialModel, V = V0 exp((M/phi)^n) with "
+        "A = exp(beta (phi - phi_ref)/M_P); --n-values gives its exponent n",
+    ),
+}
+
+
+class RemovedOption(argparse.Action):
+    """
+    An option that jordan-normalization removed (REMOVED_OPTIONS): giving it, with any number of
+    values, calls ``parser.error`` with a message naming its replacement, so the parse ends with
+    exit 2. ``parser.error`` rather than a print and an exit, so that a parser whose ``error`` is
+    replaced (RunDrivers/registered_run.py's) refuses with the same message (prompt 08, D1, D7).
+    """
+
+    def __init__(self, option_strings, dest, removed_by: str, replacement: str, **kw):
+        self.removed_by = removed_by
+        self.replacement = replacement
+        kw.setdefault("nargs", "*")
+        kw.setdefault("help", argparse.SUPPRESS)
+        kw.setdefault("default", argparse.SUPPRESS)
+        super().__init__(option_strings, dest, **kw)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        parser.error(
+            f"{option_string} was removed by jordan-normalization prompt "
+            f"{self.removed_by}: {self.replacement}"
+        )
 
 
 def non_negative_float(text: str) -> float:
@@ -39,6 +90,22 @@ def non_negative_float(text: str) -> float:
     value = float(text)
     if not value >= 0.0:
         raise argparse.ArgumentTypeError(f"must be a non-negative number, not {text}")
+    return value
+
+
+def positive_float(text: str) -> float:
+    """An argparse type: a float that is greater than zero (jordan-normalization prompt 08)."""
+    value = float(text)
+    if not value > 0.0:
+        raise argparse.ArgumentTypeError(f"must be a positive number, not {text}")
+    return value
+
+
+def positive_int(text: str) -> int:
+    """An argparse type: an int that is greater than zero (jordan-normalization prompt 08)."""
+    value = int(text)
+    if not value > 0:
+        raise argparse.ArgumentTypeError(f"must be a positive integer, not {text}")
     return value
 
 
@@ -109,16 +176,29 @@ def create_argument_parser() -> configargparse.ArgumentParser:
         help="write profiling and performance data to the specified database",
     )
     parser.add_argument(
-        "--potential-type",
-        type=str,
-        choices=potential_types,
-        help="specify potential type to use",
-    )
-    parser.add_argument(
         "--samples-log10-z",
         type=int,
         default=DEFAULT_SAMPLES_PER_LOG10_Z,
         help="specify number of z-sample points per log10(z)",
+    )
+    parser.add_argument(
+        "--tuning-tolerance",
+        type=positive_float,
+        default=DEFAULT_TUNING_TOLERANCE,
+        help="the tolerance of each history's tuning on both of its residuals, "
+        "|H_J(T_CMB)/H0 - 1| and |phi_ref/phi_min - 1| (default %(default)s). It is a key of "
+        "every stored history, so a run at another tolerance computes histories of its own "
+        "(jordan-normalization prompt 08)",
+    )
+    parser.add_argument(
+        "--tuning-max-integrations",
+        type=positive_int,
+        default=DEFAULT_TUNING_MAX_INTEGRATIONS,
+        help="the cap on the integrations of one history's tuning, the seed's included "
+        "(default %(default)s). It is not a key of the history: a history that does not "
+        "converge within it is stored as a failure, and a later run with a larger cap does "
+        "not recompute it (only --drop scalar-history, which drops every history, does) "
+        "(jordan-normalization prompt 08)",
     )
     parser.add_argument(
         "--abs-tol",
@@ -215,6 +295,14 @@ def create_argument_parser() -> configargparse.ArgumentParser:
         help="specify one or more values of M/Mp to sample",
     )
     parser.add_argument(
+        "--n-values",
+        type=positive_int,
+        nargs="+",
+        default=[1],
+        help="one or more values of the model's exponent n, V = V0 exp((M/phi)^n); n is part of "
+        "the model's key (default %(default)s; jordan-normalization prompt 08)",
+    )
+    parser.add_argument(
         "--log10-one-plus-z-high",
         type=float,
         default=DEFAULT_LOG10_ONE_PLUS_Z_HIGH,
@@ -288,6 +376,14 @@ def create_argument_parser() -> configargparse.ArgumentParser:
         "Ray and needs none). On this machine ChamPBH's cluster is 127.0.0.1:6380; 'local' starts a "
         "private instance. 'auto' is refused",
     )
+
+    for option, (removed_by, replacement) in REMOVED_OPTIONS.items():
+        parser.add_argument(
+            option,
+            action=RemovedOption,
+            removed_by=removed_by,
+            replacement=replacement,
+        )
 
     return parser
 

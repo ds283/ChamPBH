@@ -43,7 +43,6 @@ from numpy import nan
 import config.ray_auth  # noqa: F401
 from ComputeTargets import ScalarHistoryProxy, AdiabaticHistory, BBNData, ScalarHistory
 from ComputeTargets.BBNData import PRYM_VERSION, compute_SM_baseline
-from ComputeTargets.ScalarHistory import DEFAULT_TUNING_TOLERANCE
 from CosmologyConcepts import temperature, phi_value, pi_value
 from CosmologyConcepts.Models import AbstractModel
 from datastorekit.SQL.ProfileAgent import ProfileAgent
@@ -91,8 +90,6 @@ DEFAULT_TIMEOUT = 60
 BBN_SMALL_NETWORK = True
 
 DEFAULT_T_INIT_GEV = 20000
-
-potential_types = ["Exponential"]
 
 
 parser = create_argument_parser()
@@ -1063,14 +1060,14 @@ with ShardedPool(
             T_init_GeV=args.T_init_GeV,
             phi_init_Mp=args.phi_init_Mp,
             units=units,
-            tuning_tol=DEFAULT_TUNING_TOLERANCE,
+            tuning_tol=args.tuning_tolerance,
         )
 
         # read in the stored tables of beta and M
         beta_table, M_table = plot_inputs.stored_grid(pool, units)
 
         Model_array = plot_inputs.exponential_models(
-            pool, args.potential_type, M_table, beta_table, units
+            pool, M_table, beta_table, args.n_values, units
         )
 
         model_list = plot_inputs.models(pool, units)

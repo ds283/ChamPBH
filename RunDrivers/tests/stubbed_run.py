@@ -35,7 +35,9 @@ through a pipe the stand-in's banner would otherwise be block-buffered. It ends 
   temporary directory. Its first statement lists the manifests under the runs root. It records
   `sys.argv`, `__name__`, `__file__` and the `SIGTERM` handler before and after its
   `ray.init(address=...)` in `<program>.json`, prints RayWorkPool's banner and progress lines
-  (RayWorkPool's own format strings, with its timestamps), and then does what ``behaviour`` says;
+  (RayWorkPool's own format strings, with its timestamps), and then does what ``behaviour`` says
+  ("tune" prints `TUNE_LINES`, tune_history's lines, between the banner and the first progress
+  line);
 - `StringWriter`, a file-like stand-in for a real stream;
 - `Recorder`, a stand-in for `ray.init`, `ray.shutdown` or `signal.alarm`;
 - `TakeOver`, which saves and restores everything the wrapper takes over in-process;
@@ -57,8 +59,21 @@ WRAPPER = REPO_ROOT / "RunDrivers" / "registered_run.py"
 
 TITLE = "CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID"
 
-# what a stand-in program does after its banner and progress lines ("wait": after its banner)
-BEHAVIOURS = ("return", "exit-2", "exit-1", "raise", "wait", "mid-line")
+# what a stand-in program does after its banner and progress lines ("wait": after its banner;
+# "tune": prints TUNE_LINES between its banner and its first progress line, and returns)
+BEHAVIOURS = ("return", "exit-2", "exit-1", "raise", "wait", "mid-line", "tune")
+
+# three of tune_history's progress lines (jordan-normalization prompt 06, T6), verbatim from
+# prompts/jordan-normalization/logs/06-probes/b3_M0.01_phi5_secant.log; the "tune" stand-in prints
+# them as the scalar stage's workers do (jordan-normalization prompt 08, D3)
+TUNE_LINES = (
+    "-- tune beta=3,M=0.01,phi*=5,secant it=0 kind=seed H/H0-1=-4.058e-02 "
+    "phi_ref/phi_min-1=-3.998e-03 norm=-277.581681683 phi_ref=5.8191282360e-02 wall=9.2",
+    "-- tune beta=3,M=0.01,phi*=5,secant it=1 kind=plain H/H0-1=+5.356e-03 "
+    "phi_ref/phi_min-1=-5.453e-02 norm=-277.424585294 phi_ref=5.8424893561e-02 wall=9.2",
+    "-- tune beta=3,M=0.01,phi*=5,secant it=2 kind=secant H/H0-1=+1.832e-03 "
+    "phi_ref/phi_min-1=-1.207e-02 norm=-277.442495434 phi_ref=6.1438983465e-02 wall=9.3",
+)
 
 ERROR_TEXT = "the stand-in program failed on purpose"
 
@@ -114,6 +129,10 @@ if BEHAVIOUR == "wait":
         time.sleep(0.05)
     sys.exit(99)
 
+if BEHAVIOUR == "tune":
+    for line in {tune_lines!r}:
+        print(line)
+
 now = datetime.now()
 print(
     f"   -- {{now:%Y-%m-%d %H:%M:%S%z}} (5m 1s running): 3/5 work items remaining = "
@@ -154,6 +173,7 @@ def standin_program(directory, behaviour, runs_root) -> Path:
             title=TITLE,
             error=ERROR_TEXT,
             mid_line=MID_LINE,
+            tune_lines=TUNE_LINES,
         )
     )
     return path

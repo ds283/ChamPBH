@@ -31,7 +31,6 @@ from ComputeTargets import (
     BBNData,
 )
 from ComputeTargets.BBNData import PRYM_VERSION
-from ComputeTargets.ScalarHistory import DEFAULT_TUNING_TOLERANCE
 from CosmologyConcepts import (
     DimensionlessQuantityArray,
     DimensionfulQuantityArray,
@@ -298,7 +297,9 @@ def run_pipeline(
         return f"{args.job_name}-ScalarHistory-{model.name}-{datetime.now().replace(microsecond=0).isoformat()}"
 
     def compute_solver_batch(m: ScalarHistory, label: str):
-        return m.compute(label=label)
+        # the cap on the tuning's integrations is not a key of the history, so it reaches the
+        # task as an argument of compute (jordan-normalization prompt 08)
+        return m.compute(label=label, max_integrations=args.tuning_max_integrations)
 
     # the reasons of the histories that failed in this run (science-readiness prompt 02)
     scalar_history_failure_reasons: List[Any] = []
@@ -896,6 +897,7 @@ def execute(pool, units: UnitsLike):
     M_values = [M * units.eV for M in M_values_eV] + [
         M * units.PlanckMass for M in M_values_Mp
     ]
+    n_values: List[int] = args.n_values
 
     T_init_GeV: float = args.T_init_GeV
 
@@ -933,30 +935,28 @@ def execute(pool, units: UnitsLike):
             payload_data=[{"value": M, "units": units} for M in M_sample_set],
         )
 
-    def convert_to_model(M_beta_set):
-        # one ExponentialModel per (M, n = 1, beta), M outer and beta inner (jordan-normalization
-        # prompt 07, S1). The model's table is sharded by beta and needs a "shard_key" field
+    def convert_to_model(M_n_beta_set):
+        # one ExponentialModel per (M, n, beta), M outer, n, and beta inner (jordan-normalization
+        # prompt 07, S1; prompt 08 gives n its option). The model's table is sharded by beta and
+        # needs a "shard_key" field
         # TODO: find a better way to implement/handle
-        if args.potential_type == "Exponential":
-            return pool.object_get(
-                "ExponentialModel",
-                payload_data=[
-                    {"shard_key": beta, "M": M, "n": 1, "beta": beta, "units": units}
-                    for M, beta in M_beta_set
-                ],
-            )
-        else:
-            raise ValueError(f"Unknown potential type: {args.potential_type}")
+        return pool.object_get(
+            "ExponentialModel",
+            payload_data=[
+                {"shard_key": beta, "M": M, "n": n, "beta": beta, "units": units}
+                for M, n, beta in M_n_beta_set
+            ],
+        )
 
     ## DATASTORE OBJECTS
 
     # build absolute and relative tolerances, and the tuning's tolerance on both residuals, which
-    # keys every history (jordan-normalization prompt 07; its option is prompt 08's)
+    # keys every history (jordan-normalization prompt 07; --tuning-tolerance is prompt 08's)
     atol, rtol, tuning_tol = ray.get(
         [
             pool.object_get("tolerance", tol=args.abs_tol),
             pool.object_get("tolerance", tol=args.rel_tol),
-            pool.object_get("tolerance", tol=DEFAULT_TUNING_TOLERANCE),
+            pool.object_get("tolerance", tol=args.tuning_tolerance),
         ]
     )
 
@@ -1002,10 +1002,13 @@ def execute(pool, units: UnitsLike):
 
     ## STEP 1
     ## BUILD A GRID OF beta AND M VALUES AT WHICH TO SAMPLE, AND USE THIS
-    ## TO BUILD A GRID OF MODELS, ONE PER (M, n = 1, beta)
+    ## TO BUILD A GRID OF MODELS, ONE PER (M, n, beta)
 
     print("\n** BUILDING GRID OF MODELS TO SAMPLE")
-    print(f'   -- using potential type "{args.potential_type}"')
+    print(
+        f"   -- using model ExponentialModel, V = V0 exp((M/phi)^n), with "
+        f'n = [ {", ".join(str(n) for n in n_values)} ]'
+    )
 
     if len(beta_values) == 0:
         num_beta_sample = int(round(samples_per_beta * (beta_high - beta_low) + 0.5, 0))
@@ -1075,13 +1078,9 @@ def execute(pool, units: UnitsLike):
         f'   -- populated M sample grid with {len(M_array)} value{"" if len(M_array)==1 else "s"} = [ {", ".join(formatted_M_sample)} ]'
     )
 
-    M_beta_grid = itertools.product(M_grid, beta_grid)
-    Model_array = ray.get(convert_to_model(M_beta_grid))
-
-    # warn about a super-Planckian start, Omega(phi*) T* > M_P, at phi_ref = 0; warning only, the
-    # array is unchanged (science-readiness prompt 04, P6; jordan-normalization prompt 08 moves it
-    # to the seed's phi_ref)
-    Model_array = warn_super_planckian(Model_array, phi_init, T_init, units)
+    # M outer, n, beta inner: beta stays innermost, which balances the shards' load
+    M_n_beta_grid = itertools.product(M_grid, n_values, beta_grid)
+    Model_array = ray.get(convert_to_model(M_n_beta_grid))
 
     print(f"   -- total number of models to integrate = {len(Model_array)}")
 
@@ -1089,6 +1088,13 @@ def execute(pool, units: UnitsLike):
     # every history ends at its cosmology's T_CMB (README §6.0 R8), so there is no final
     # temperature to look up (jordan-normalization prompt 07)
     for model_data in model_list:
+        # warn about a super-Planckian start, Omega(phi*) T* > M_P, with Omega at the seed's
+        # phi_ref, which needs the cosmology; warning only, the array is unchanged
+        # (science-readiness prompt 04, P6; jordan-normalization prompt 08, P11)
+        Model_array = warn_super_planckian(
+            Model_array, phi_init, T_init, units, model_data["cosmology"]
+        )
+
         run_pipeline(
             pool,
             model_data,
