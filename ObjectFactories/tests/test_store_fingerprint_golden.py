@@ -33,10 +33,11 @@ names. The model is SecondaryGWKit's `test_store_fingerprint_golden.py`.
 `test_version_keyed_lookups._TempStoreCase`: a real one-shard pool writes the version row and is
 closed, then the package's undecorated actor inserts rows with no explicit serial, stamped with
 fixed times) and importing nothing from `tools.tests`, so that a golden store's rows cannot move
-when another module's helpers do. It holds one row of each of the 17 classes with a spec, except
-that there are two `ExponentialPotential` rows (n = 1 and n = 2) and two `ScalarHistory` rows, one on
+when another module's helpers do. It holds one row of each of the 15 classes with a spec, except
+that there are two `ExponentialModel` rows (n = 1 and n = 2) and two `ScalarHistory` rows, one on
 each, so that the polymorphic key of the spec is resolved; the first is tagged and the second is
-not, so that two tag sets are read. Every literal is fixed.
+not, so that two tag sets are read. Every literal is fixed. (Until format 5 the store held 17
+classes, with two `ExponentialPotential` rows where it holds two `ExponentialModel` rows.)
 
 **Format 2** (jordan-normalization prompt 01): the first golden file, `store_fingerprint_rrk-adoption-02.json`,
 was taken at format 1 from a store with five potential rows (one per potential class); the four
@@ -54,6 +55,15 @@ in place of `z`, so redshift's spec digest moves. The store is the same one, wit
 rows written as `log_one_plus_z` with the same five numbers (and the new value column
 `log_one_plus_z_Jordan` filled with zero, as every other); `GOLDEN` names
 `store_fingerprint_jordan-normalization-03.json`. `LABEL` and `T0` are unchanged.
+
+**Format 5** (jordan-normalization prompt 07): `ExponentialModel` (M, n, beta) replaces
+`ExponentialPotential`, `ExponentialCoupling` and `Lambda_value`, and a `ScalarHistory` is keyed by
+its model, its initial data and the tuning tolerance, with no `T_stop`; the AdiabaticHistory and
+BBNData specs call their parent `history`. The store holds two `ExponentialModel` rows (n = 1 and
+n = 2, on the one M and beta) where it held two potential rows, a third tolerance row (the tuning
+tolerance, 1e-5) and no `Lambda_value` or final temperature; each `ScalarHistory` has every tuning
+output column set to a fixed literal (`TUNING_COLUMNS`), which no spec names. `GOLDEN` names
+`store_fingerprint_jordan-normalization-07.json`. `LABEL` and `T0` are unchanged.
 
 **The golden file** is under `data/`, written once and never overwritten (P8). It was written from
 `config.fingerprint.fingerprinter.take(primary, None)` as `json.dumps(fp, indent=2, sort_keys=True)
@@ -87,8 +97,7 @@ from runregistrykit.fingerprint import (
     load_fingerprinter,
 )
 
-import CosmologyConcepts.ConformalCouplings.model_ids as coupling_ids
-import CosmologyConcepts.Potentials.model_ids as potential_ids
+import CosmologyConcepts.Models.model_ids as model_ids
 import CosmologyModels.model_ids as cosmology_ids
 import config.datastore
 import config.fingerprint
@@ -98,15 +107,35 @@ from ObjectFactories.tests.test_version_keyed_lookups import _TempStoreCase
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DATA = Path(__file__).resolve().parent / "data"
-GOLDEN = DATA / "store_fingerprint_jordan-normalization-03.json"
+GOLDEN = DATA / "store_fingerprint_jordan-normalization-07.json"
 
 LABEL = "rrk-adoption-02-golden"
 T0 = datetime(2026, 10, 19, 12, 0, 0)
 
-# the stored potential rows: two ExponentialPotential rows (the only potential class since
-# jordan-normalization prompt 01), n = 1 and n = 2, each with its own ScalarHistory
-POTENTIAL_CLASS = "ExponentialPotential"
-POTENTIAL_N_VALUES = (1, 2)
+# the stored model rows: two ExponentialModel rows (the only model class), n = 1 and n = 2, each
+# with its own ScalarHistory (jordan-normalization prompt 07; until then two ExponentialPotential
+# rows)
+MODEL_CLASS = "ExponentialModel"
+MODEL_N_VALUES = (1, 2)
+
+# every tuning output column of a ScalarHistory row, each set to a fixed literal (format 5)
+TUNING_COLUMNS = dict(
+    normalization=-277.4502000419897,
+    V_ref=1.5e-121,
+    phi_ref=0.06222843896351175,
+    phi_0=0.0616,
+    pi_0=0.0834,
+    tracking=0.9026,
+    residual_H=2.5e-7,
+    residual_phi=-1.25e-6,
+    tuning_iterations=5,
+    plain_steps=1,
+    secant_steps=3,
+    guard_steps=0,
+    seed_kind="tracking",
+    seed_normalization=-277.3,
+    seed_phi_ref=0.0631,
+)
 
 
 def without_taken(fingerprint) -> dict:
@@ -158,10 +187,11 @@ class _GoldenStoreCase(_TempStoreCase):
 
     def build_store(self):
         """
-        The golden store: the version row, one row of each of the other 16 classes except
-        ExponentialPotential and ScalarHistory, which have two rows each (n = 1 and n = 2; each
-        ScalarHistory on its own potential row), the first ScalarHistory tagged. The first ScalarHistory, the AdiabaticHistory and the BBNData
-        row have value rows. Returns the primary file.
+        The golden store: the version row, one row of each of the other 14 classes except
+        ExponentialModel and ScalarHistory, which have two rows each (n = 1 and n = 2; each
+        ScalarHistory on its own model row), and tolerance, which has three (atol, rtol and the
+        tuning tolerance), the first ScalarHistory tagged. The first ScalarHistory, the
+        AdiabaticHistory and the BBNData row have value rows. Returns the primary file.
         """
         store = self.open(LABEL)
 
@@ -175,11 +205,10 @@ class _GoldenStoreCase(_TempStoreCase):
         ]
         atol = ins("tolerance", {"log10_tol": -10.0})
         rtol = ins("tolerance", {"log10_tol": -8.0})
+        tuning_tol = ins("tolerance", {"log10_tol": -5.0})
         beta = ins("beta_value", {"value": 25.0})
         M = ins("M_value", {"value_eV": 2.436e24})
-        Lambda = ins("Lambda_value", {"value_eV": 1.0e-3})
         T_init = ins("temperature", {"value_GeV": 2.0e4})
-        T_stop = ins("temperature", {"value_GeV": 2.3493e-13})
         phi = ins("phi_value", {"value_PlanckMass": 5.0})
         pi = ins("pi_value", {"value_PlanckMass": 0.0})
         cosmology = ins(
@@ -195,52 +224,48 @@ class _GoldenStoreCase(_TempStoreCase):
             ),
         )
         solver = ins("IntegrationSolver", {"label": "solve_ivp+RK45", "stepping": 0})
-        coupling = ins("ExponentialCoupling", {"beta_serial": beta})
 
-        # two ExponentialPotential rows, n = 1 and n = 2
-        potential_rows = [
-            ins(POTENTIAL_CLASS, dict(M_serial=M, Lambda_serial=Lambda, n_value=n))
-            for n in POTENTIAL_N_VALUES
+        # two ExponentialModel rows, n = 1 and n = 2
+        model_rows = [
+            ins(MODEL_CLASS, dict(M_serial=M, n_value=n, beta_serial=beta))
+            for n in MODEL_N_VALUES
         ]
 
-        model = dict(
+        history = dict(
             cosmology_type=cosmology_ids.XAV_IMPROVED_EOS_IDENTIFIER,
             cosmology_serial=cosmology,
-            coupling_type=coupling_ids.EXPONENTIAL_COUPLING,
-            coupling_serial=coupling,
             atol_serial=atol,
             rtol_serial=rtol,
+            tuning_tol_serial=tuning_tol,
             phi_Einstein_init_serial=phi,
             pi_Einstein_init_serial=pi,
             T_Jordan_init_serial=T_init,
-            T_Jordan_stop_serial=T_stop,
             validated=True,
             failure=False,
             solver_serial=solver,
             z_samples=3,
+            **TUNING_COLUMNS,
         )
-        models = []
-        for k, (n, potential_serial) in enumerate(
-            zip(POTENTIAL_N_VALUES, potential_rows)
-        ):
-            models.append(
+        histories = []
+        for k, (n, model_serial) in enumerate(zip(MODEL_N_VALUES, model_rows)):
+            histories.append(
                 ins(
                     "ScalarHistory",
                     dict(
-                        model,
-                        label=f"golden-ScalarHistory-{POTENTIAL_CLASS}-n{n}",
-                        potential_type=potential_ids.EXPONENTIAL_POTENTIAL,
-                        potential_serial=potential_serial,
+                        history,
+                        label=f"golden-ScalarHistory-{MODEL_CLASS}-n{n}",
+                        model_type=model_ids.EXPONENTIAL_MODEL,
+                        model_serial=model_serial,
                     ),
                     at=T0 + timedelta(minutes=1 + k),
                 )
             )
-        first = models[0]
+        first = histories[0]
         ins("ScalarHistory_tags", {"history_serial": first, "tag_serial": tag})
         for serial in z[:3]:
             ins("ScalarHistoryValue", {"history_serial": first, "z_serial": serial})
 
-        history = ins(
+        adiabatic = ins(
             "AdiabaticHistory",
             dict(
                 scalar_history_serial=first,
@@ -252,7 +277,8 @@ class _GoldenStoreCase(_TempStoreCase):
         )
         for serial in z[:2]:
             ins(
-                "AdiabaticHistoryValue", {"history_serial": history, "z_serial": serial}
+                "AdiabaticHistoryValue",
+                {"history_serial": adiabatic, "z_serial": serial},
             )
 
         bbn = ins(
@@ -284,12 +310,12 @@ class TestGolden(_GoldenStoreCase):
         primary = self.build_store()
         inventory = read_inventory(primary, config.datastore.factories)
         self.assertEqual(inventory.problems, ())
-        self.assertEqual(len(inventory.classes), 17)
+        self.assertEqual(len(inventory.classes), 15)
         for name, entry in inventory.classes.items():
             self.assertGreaterEqual(entry.count, 1, name)
-        # every polymorphic key of ScalarHistory's spec is resolved: one model per potential row
-        self.assertEqual(inventory["ScalarHistory"].count, len(POTENTIAL_N_VALUES))
-        self.assertEqual(inventory[POTENTIAL_CLASS].count, len(POTENTIAL_N_VALUES))
+        # every polymorphic key of ScalarHistory's spec is resolved: one history per model row
+        self.assertEqual(inventory["ScalarHistory"].count, len(MODEL_N_VALUES))
+        self.assertEqual(inventory[MODEL_CLASS].count, len(MODEL_N_VALUES))
 
     def test_the_golden_fingerprint(self):
         golden = json.loads(GOLDEN.read_text())
@@ -374,7 +400,7 @@ class TestCommandLine(_GoldenStoreCase):
         squeezed = [" ".join(line.split()) for line in lines]
         self.assertIn(f"digest: {golden['digest']}", squeezed)
         self.assertIn(f"format: {golden['fingerprint_format']}", squeezed)
-        self.assertEqual(golden["fingerprint_format"], 4)
+        self.assertEqual(golden["fingerprint_format"], 5)
         self.assertEqual(
             lines[-1].strip(), "recorded: none recorded (the sidecar is absent)"
         )

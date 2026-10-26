@@ -1,0 +1,181 @@
+{
+  "classes": {
+    "AdiabaticHistory": {
+      "count": 1,
+      "digest": "59797731bc6f8fbc16cda3eeb2d9ba29276d3e324c00db367eef443edc8d58bb",
+      "tag_sets": [
+        {
+          "count": 1,
+          "digest": "59797731bc6f8fbc16cda3eeb2d9ba29276d3e324c00db367eef443edc8d58bb",
+          "tags": []
+        }
+      ]
+    },
+    "BBNData": {
+      "count": 1,
+      "digest": "d842b4b8db379b46e2094456c4c7b3340ea924e9893914540d432b327edb5ce3",
+      "tag_sets": [
+        {
+          "count": 1,
+          "digest": "d842b4b8db379b46e2094456c4c7b3340ea924e9893914540d432b327edb5ce3",
+          "tags": []
+        }
+      ]
+    },
+    "ExponentialModel": {
+      "count": 2,
+      "digest": "b437d6ae58de98eef7eb04bbcbe3c62f95e47dce41098a04e09d6e5d3b1c5376",
+      "tag_sets": [
+        {
+          "count": 2,
+          "digest": "b437d6ae58de98eef7eb04bbcbe3c62f95e47dce41098a04e09d6e5d3b1c5376",
+          "tags": []
+        }
+      ]
+    },
+    "IntegrationSolver": {
+      "count": 1,
+      "digest": "e1dae956c612db4702ecf6a01171b12b912aad504ad3d3bb1f980b245a366b47",
+      "tag_sets": [
+        {
+          "count": 1,
+          "digest": "e1dae956c612db4702ecf6a01171b12b912aad504ad3d3bb1f980b245a366b47",
+          "tags": []
+        }
+      ]
+    },
+    "M_value": {
+      "count": 1,
+      "digest": "a02f865a0efd913ff960d00683ab148e65415f994ff332653cba72802a08a9c4",
+      "tag_sets": [
+        {
+          "count": 1,
+          "digest": "a02f865a0efd913ff960d00683ab148e65415f994ff332653cba72802a08a9c4",
+          "tags": []
+        }
+      ]
+    },
+    "QCD_Cosmology": {
+      "count": 1,
+      "digest": "e3bee9f39be4a8d8373d6341ac0f70469e4e888d3d816e7e364a013094a27c28",
+      "tag_sets": [
+        {
+          "count": 1,
+          "digest": "e3bee9f39be4a8d8373d6341ac0f70469e4e888d3d816e7e364a013094a27c28",
+          "tags": []
+        }
+      ]
+    },
+    "ScalarHistory": {
+      "count": 2,
+      "digest": "cbd4c1b1c48022def8b17c5dae1f176d02508a1f614b18c4f0a9865e748cb3bb",
+      "tag_sets": [
+        {
+          "count": 1,
+          "digest": "355813791e25db69cfcabd6ccc13ce946175d8fa36587319524017d024bff650",
+          "tags": []
+        },
+        {
+          "count": 1,
+          "digest": "46055598fca1eb4a313c750811bd5d46fe0c0236443016981ecbe6bfb54cfe95",
+          "tags": [
+            "golden"
+          ]
+        }
+      ]
+    },
+    "beta_value": {
+      "count": 1,
+      "digest": "6fbc0ec4f95a77e81906fe4587217b231729812a977adb35621a840c22e26f30",
+      "tag_sets": [
+        {
+          "count": 1,
+          "digest": "6fbc0ec4f95a77e81906fe4587217b231729812a977adb35621a840c22e26f30",
+          "tags": []
+        }
+      ]
+    },
+    "phi_value": {
+      "count": 1,
+      "digest": "29e7a88b01e35866c8f102278ae2ab0eaaecef332e2fe6badec047d47894e14a",
+      "tag_sets": [
+        {
+          "count": 1,
+          "digest": "29e7a88b01e35866c8f102278ae2ab0eaaecef332e2fe6badec047d47894e14a",
+          "tags": []
+        }
+      ]
+    },
+    "pi_value": {
+      "count": 1,
+      "digest": "237cd5e9616925eae2215daa8eb602f9db5e521a4415d78f11056c39f8c74cc8",
+      "tag_sets": [
+        {
+          "count": 1,
+          "digest": "237cd5e9616925eae2215daa8eb602f9db5e521a4415d78f11056c39f8c74cc8",
+          "tags": []
+        }
+      ]
+    },
+    "redshift": {
+      "count": 5,
+      "digest": "697cdf1d4554b528b5ee91ade0982de5504336dadd53e9027dabf9be807830be",
+      "tag_sets": [
+        {
+          "count": 5,
+          "digest": "697cdf1d4554b528b5ee91ade0982de5504336dadd53e9027dabf9be807830be",
+          "tags": []
+        }
+      ]
+    },
+    "store_tag": {
+      "count": 1,
+      "digest": "ca572b5e15487944b875e4886ad5cf508ee320625174b63f6f1ca8fa15eb55e1",
+      "tag_sets": [
+        {
+          "count": 1,
+          "digest": "ca572b5e15487944b875e4886ad5cf508ee320625174b63f6f1ca8fa15eb55e1",
+          "tags": []
+        }
+      ]
+    },
+    "temperature": {
+      "count": 1,
+      "digest": "9bd0581c026ad77d80f5c76b87ad07d5299ba643855d44d4b3d27bdd06b061bf",
+      "tag_sets": [
+        {
+          "count": 1,
+          "digest": "9bd0581c026ad77d80f5c76b87ad07d5299ba643855d44d4b3d27bdd06b061bf",
+          "tags": []
+        }
+      ]
+    },
+    "tolerance": {
+      "count": 3,
+      "digest": "9863a04705c5d89f059e5e1803275a218cc7cb690f9867a2c50c533a29942e27",
+      "tag_sets": [
+        {
+          "count": 3,
+          "digest": "9863a04705c5d89f059e5e1803275a218cc7cb690f9867a2c50c533a29942e27",
+          "tags": []
+        }
+      ]
+    },
+    "version": {
+      "count": 1,
+      "digest": "66adaa5412414ad4963d8c8a0a3e9ed9c330847136b81dbfad7c1242e5d7f2f5",
+      "tag_sets": [
+        {
+          "count": 1,
+          "digest": "66adaa5412414ad4963d8c8a0a3e9ed9c330847136b81dbfad7c1242e5d7f2f5",
+          "tags": []
+        }
+      ]
+    }
+  },
+  "digest": "3ceaa632c0050cde992482b11e7d662ae89e25f8df5d4f8bfd3b736edc556a59",
+  "encoding_format": 1,
+  "fingerprint_format": 5,
+  "problems": {},
+  "taken": null
+}

@@ -22,14 +22,19 @@ prompt 02; README P1, U3, U4).
 carry. A read-only pool refuses a lookup that would insert a row: `ReadOnlyMiss` for a replicated
 class, `ReadOnlyWrite` for a sharded one. What a refusal means depends on the lookup:
 
-- **a parameter** (the tolerances, `T_init`, `phi_init`, `pi_init`, the cosmology, `T_stop`):
-  the plot run was given options the build did not use, and no history in the store can match
-  them. The refusal becomes `PlotOptionNotStored`, whose message names the option (or the
-  constant) and the value; the scripts print it to stderr and exit 2, before any figure (U4);
-- **a potential or a coupling**: the combination was never stored, so no history can use it.
-  It is skipped, with one warning line each and a count; every other combination is returned,
-  in the order the scripts used before (U3). Each is looked up on its own, and each reference is
-  read on its own, so that one miss cannot hide the others (P2).
+- **a parameter** (the tolerances, the tuning tolerance, `T_init`, `phi_init`, `pi_init`, the
+  cosmology): the plot run was given options the build did not use, and no history in the store
+  can match them. The refusal becomes `PlotOptionNotStored`, whose message names the option (or
+  the constant) and the value; the scripts print it to stderr and exit 2, before any figure (U4);
+- **a model** (an `ExponentialModel`, one per stored M with each stored beta at n = 1): the
+  combination was never stored, so no history can use it. It is skipped, with one warning line
+  each and a count; every other combination is returned, M outer and beta inner (U3). Each is
+  looked up on its own, and each reference is read on its own, so that one miss cannot hide the
+  others (P2).
+
+Since jordan-normalization prompt 07 a stored history is keyed by its model, its initial data and
+the tuning tolerance, and ends at T_CMB: the store holds no Lambda and no final temperature, so
+there is no potential, coupling or `T_stop` to look up.
 
 Any other exception propagates unchanged. Under Ray an actor's exception reaches `ray.get` as
 `RayTaskError(...).as_instanceof_cause()`, an instance of the cause's class whose attributes are
@@ -42,7 +47,7 @@ import; it calls `ray.get` as the scripts do, so a test drives it inside the sta
 """
 
 import itertools
-from typing import List, NamedTuple, Optional
+from typing import List, NamedTuple
 
 import ray
 from datastorekit.replication import ReadOnlyMiss, ReadOnlyWrite
@@ -50,12 +55,13 @@ from datastorekit.replication import ReadOnlyMiss, ReadOnlyWrite
 from MetadataConcepts import tolerance
 from config.model_list import build_model_list
 
-# the potential class each --potential-type looks up, and whether its payload carries n = 1
-POTENTIAL_CLASSES = {
-    "Exponential": ("ExponentialPotential", True),
+# the model class each --potential-type looks up (jordan-normalization prompt 07)
+MODEL_CLASSES = {
+    "Exponential": "ExponentialModel",
 }
 
-COUPLING_CLASS = "ExponentialCoupling"
+# the model's exponent n, the only one main.py builds
+MODEL_N = 1
 
 
 class PlotOptionNotStored(RuntimeError):
@@ -98,6 +104,7 @@ class PlotParameters(NamedTuple):
     T_init: object
     phi_init: object
     pi_init: object
+    tuning_tol: object
 
 
 def parameters(
@@ -107,12 +114,14 @@ def parameters(
     T_init_GeV: float,
     phi_init_Mp: float,
     units,
+    tuning_tol: float,
 ) -> PlotParameters:
     """
     The tolerances, `T_init`, `phi_init` and `pi_init` (README §0.3 rows 1-5), from `--abs-tol`,
-    `--rel-tol`, `--T-init-GeV`, `--phi-init-Mp` and the constant pi = 0. Every lookup is submitted
-    first; each is then read in this order, and the first that is not stored raises
-    `PlotOptionNotStored`.
+    `--rel-tol`, `--T-init-GeV`, `--phi-init-Mp` and the constant pi = 0, and the tuning tolerance
+    (jordan-normalization prompt 07), which the scripts give as the constant
+    `DEFAULT_TUNING_TOLERANCE` that main.py builds with. Every lookup is submitted first; each is
+    then read in this order, and the first that is not stored raises `PlotOptionNotStored`.
     """
     lookups = [
         (
@@ -149,6 +158,12 @@ def parameters(
             "the constant initial momentum",
             "pi = 0",
         ),
+        (
+            pool.object_get(tolerance, tol=tuning_tol),
+            "tolerance",
+            "the constant tuning tolerance",
+            _value(tuning_tol),
+        ),
     ]
     return PlotParameters(*(_get_parameter(*lookup) for lookup in lookups))
 
@@ -156,108 +171,62 @@ def parameters(
 class StoredGrid(NamedTuple):
     beta: list
     M: list
-    Lambda: list
 
 
 def stored_grid(pool, units) -> StoredGrid:
-    """Every stored beta, M and Lambda, by `read_table` (README §0.3 row 17), each in ascending
-    order of value as the factories' `read_table` returns it."""
+    """Every stored beta and M, by `read_table` (README §0.3 row 17), each in ascending order of
+    value as the factories' `read_table` returns it."""
     return StoredGrid(
         beta=ray.get(pool.read_table("beta_value")),
         M=ray.get(pool.read_table("M_value", units)),
-        Lambda=ray.get(pool.read_table("Lambda_value", units)),
     )
 
 
-def _potential_payload(potential_type: str, M, Lambda, units) -> dict:
-    """One item of the scripts' old `convert_to_potential` payload, unchanged."""
-    _, has_n = POTENTIAL_CLASSES[potential_type]
-    if has_n:
-        return {"M": M, "Lambda": Lambda, "n": 1, "units": units}
-    return {"M": M, "Lambda": Lambda, "units": units}
-
-
-def potentials(
+def exponential_models(
     pool,
     potential_type: str,
     M_table: list,
-    Lambda_table: list,
-    units,
-) -> list:
-    """
-    The `--potential-type` potential of every stored M with every stored Lambda (README §0.3
-    row 6), in `itertools.product(M_table, Lambda_table)` order (M outer). Each combination is
-    looked up on its own (P2); one that is not stored is skipped, with one warning line printed
-    and a count line after the last (U3). Any other exception propagates.
-    """
-    if potential_type not in POTENTIAL_CLASSES:
-        raise ValueError(f"Unknown potential type: {potential_type}")
-    cls_name, _ = POTENTIAL_CLASSES[potential_type]
-
-    combinations = list(itertools.product(M_table, Lambda_table))
-    refs = [
-        pool.object_get(
-            cls_name, **_potential_payload(potential_type, M, Lambda, units)
-        )
-        for M, Lambda in combinations
-    ]
-
-    found = []
-    skipped = 0
-    for (M, Lambda), ref in zip(combinations, refs):
-        try:
-            found.append(ray.get(ref))
-        except ReadOnlyMiss as e:
-            if e.class_name != cls_name:
-                raise
-            skipped += 1
-            print(
-                f"!! plot: no {cls_name} stored for M={_value(M.value / units.eV)} eV, "
-                f"Λ={_value(Lambda.value / units.eV)} eV; no history can use it; skipped"
-            )
-    if skipped > 0:
-        print(
-            f"!! plot: {skipped} of {len(combinations)} {cls_name} combinations of the stored M "
-            f"and Λ are not stored, and were skipped"
-        )
-    return found
-
-
-def couplings(
-    pool,
     beta_table: list,
     units,
 ) -> list:
     """
-    The `ExponentialCoupling` of every stored beta (README §0.3 row 7), in `beta_table`'s order.
-    Each is looked up on its own and each reference read on its own (P2). The class is sharded,
-    so a read-only miss is the inserter's `ReadOnlyWrite` ("an insert" of `ExponentialCoupling`);
-    that beta is skipped, with one warning line printed and a count line after the last
-    (U3). Any other exception, a `ReadOnlyWrite` of any other operation or class included,
-    propagates.
+    The `--potential-type` model of every stored M with every stored beta at n = 1
+    (jordan-normalization prompt 07, S6), in `itertools.product(M_table, beta_table)` order (M
+    outer, beta inner), as main.py builds its grid. Each combination is looked up on its own and
+    each reference read on its own (P2). The class is sharded by beta, so a read-only miss is the
+    inserter's `ReadOnlyWrite` ("an insert" of `ExponentialModel`); that combination is skipped,
+    with one warning line printed and a count line after the last (U3). Any other exception, a
+    `ReadOnlyWrite` of any other operation or class included, propagates.
     """
+    if potential_type not in MODEL_CLASSES:
+        raise ValueError(f"Unknown potential type: {potential_type}")
+    cls_name = MODEL_CLASSES[potential_type]
+
+    combinations = list(itertools.product(M_table, beta_table))
     refs = [
-        pool.object_get(COUPLING_CLASS, shard_key=beta, beta=beta, units=units)
-        for beta in beta_table
+        pool.object_get(
+            cls_name, shard_key=beta, M=M, n=MODEL_N, beta=beta, units=units
+        )
+        for M, beta in combinations
     ]
 
     found = []
     skipped = 0
-    for beta, ref in zip(beta_table, refs):
+    for (M, beta), ref in zip(combinations, refs):
         try:
             found.append(ray.get(ref))
         except ReadOnlyWrite as e:
-            if e.operation != "an insert" or e.class_name != COUPLING_CLASS:
+            if e.operation != "an insert" or e.class_name != cls_name:
                 raise
             skipped += 1
             print(
-                f"!! plot: no {COUPLING_CLASS} stored for β={_value(beta.value)}; no history "
-                f"can use it; skipped"
+                f"!! plot: no {cls_name} stored for M={_value(M.value / units.eV)} eV, "
+                f"n={MODEL_N}, β={_value(beta.value)}; no history can use it; skipped"
             )
     if skipped > 0:
         print(
-            f"!! plot: {skipped} of {len(beta_table)} stored β have no {COUPLING_CLASS}, and were "
-            f"skipped"
+            f"!! plot: {skipped} of {len(combinations)} {cls_name} combinations of the stored M "
+            f"and β are not stored, and were skipped"
         )
     return found
 
@@ -275,25 +244,3 @@ def models(pool, units) -> List[dict]:
             "the constant cosmology",
             "Planck2018 of config/model_list.py",
         ) from e
-
-
-def T_stop(pool, T_stop_GeV: Optional[float], cosmology, units):
-    """
-    The final temperature of a model (README §0.3 row 9): `--T-stop-GeV` if given, else the
-    cosmology's `T_CMB`. Not stored raises `PlotOptionNotStored`.
-    """
-    if T_stop_GeV is None:
-        T_CMB_Kelvin = cosmology._params.T_CMB_Kelvin
-        T_CMB = T_CMB_Kelvin * units.Kelvin
-        return _get_parameter(
-            pool.object_get("temperature", value=T_CMB, units=units),
-            "temperature",
-            "the cosmology's constant T_CMB",
-            f"{_value(T_CMB_Kelvin)} K (the T_stop used when --T-stop-GeV is not given)",
-        )
-    return _get_parameter(
-        pool.object_get("temperature", value=T_stop_GeV * units.GeV, units=units),
-        "temperature",
-        "--T-stop-GeV",
-        _value(T_stop_GeV),
-    )

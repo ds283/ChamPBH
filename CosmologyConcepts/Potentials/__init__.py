@@ -1,2 +1,0 @@
-from .AbstractPotential import AbstractPotential
-from .ExponentialPotential import ExponentialPotential

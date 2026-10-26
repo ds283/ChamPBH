@@ -15,12 +15,13 @@
 
 """
 The model interface (jordan-normalization prompt 04, M7): `AbstractModel`, `RealizedModel` and
-`ExponentialModel` (CosmologyConcepts/Models/), and the adapter `ExponentialModel.from_rows`.
+`ExponentialModel` (CosmologyConcepts/Models/).
 
-- (a) `TestTheAdapterIsBitwise`: through the adapter (normalization 4 log Lambda, phi_ref = 0), each
-  of the eight values the integrator reads equals the potential and coupling rows' bit for bit, at
-  a dozen phi from 1e-3 M to 10 M_P. It is the unit-level witness of the golden history's bitwise
-  check, and fails first. jordan-normalization prompt 07 deletes the rows, and removes it.
+- (a) `TestTheNames`: the model's name, type id and shard key, on the golden histories' model
+  realized at 4 log Lambda and phi_ref = 0. Until jordan-normalization prompt 07 this class was
+  `TestTheAdapterIsBitwise`, whose two other tests compared the adapter `ExponentialModel.from_rows`
+  with the potential and coupling rows bit for bit, and refused rows of another class; prompt 07
+  deleted the rows and the adapter, and those two tests with them.
 - (b) `TestTheReferencePoint`: A(phi_ref) = 1 exactly, for five phi_ref, on `ExponentialModel` and
   on `_MinimalModel`, a test-only model that implements only the hooks and does nothing about
   phi_ref. A base class that did not subtract ln A(phi_ref) fails here.
@@ -73,7 +74,7 @@ SM = importlib.import_module("ComputeTargets.ScalarHistory")
 _units = Planck_units()
 Mp = _units.PlanckMass
 
-# the methods the integrator reads, and the row each comes from
+# the methods the integrator reads: V's, and the conformal factor's
 POTENTIAL_METHODS = ("log_V", "d_logV_dphi", "d2_logV_dphi2")
 COUPLING_METHODS = ("log_Omega", "Omega", "d_logOmega_dphi", "d2_logOmega_dphi2")
 
@@ -144,42 +145,16 @@ class _MinimalModel(AbstractModel):
         return 0.0
 
 
-class TestTheAdapterIsBitwise(unittest.TestCase):
-    """(a) The adapter against the rows. jordan-normalization prompt 07 deletes the rows and this test."""
+def golden_realized_model(beta: float) -> RealizedModel:
+    """The golden histories' model, realized at their normalization and phi_ref = 0."""
+    return gh.model(beta, _units).realize(gh.normalization(_units), 0.0)
 
-    def test_a_every_value_equals_the_rows(self):
-        phis = [float(x) * Mp for x in np.logspace(-6.0, 1.0, 12)]
-        for beta in gh.BETAS + (-1.5,):
-            potential, coupling = gh.rows(beta, _units)
-            rm = ExponentialModel.from_rows(potential, coupling)
-            self.assertIsInstance(rm, RealizedModel)
-            self.assertEqual(rm.phi_ref, 0.0)
-            self.assertEqual(rm.normalization, potential._log_Lambda_4)
-            for phi in phis:
-                for method in POTENTIAL_METHODS:
-                    self.assertEqual(
-                        getattr(rm, method)(phi),
-                        getattr(potential, method)(phi),
-                        (beta, phi, method),
-                    )
-                for method in COUPLING_METHODS:
-                    self.assertEqual(
-                        getattr(rm, method)(phi),
-                        getattr(coupling, method)(phi),
-                        (beta, phi, method),
-                    )
-            self.assertEqual(rm.log_V_floor, potential.log_V_floor)
-            self.assertEqual(rm.reflects_at_origin, potential.reflects_at_origin)
 
-    def test_a_the_adapter_takes_only_the_exponential_rows(self):
-        potential, coupling = gh.rows(1.5, _units)
-        with self.assertRaises(TypeError):
-            ExponentialModel.from_rows(coupling, coupling)
-        with self.assertRaises(TypeError):
-            ExponentialModel.from_rows(potential, potential)
+class TestTheNames(unittest.TestCase):
+    """(a) The model's name, type id and shard key."""
 
     def test_a_the_names(self):
-        rm = ExponentialModel.from_rows(*gh.rows(1.5, _units))
+        rm = golden_realized_model(1.5)
         self.assertEqual(rm.model.name, "ExponentialModel(M=0.001Mp,n=1,beta=1.5)")
         self.assertTrue(rm.name.startswith(rm.model.name), rm.name)
         self.assertEqual(rm.model.type_id, 1)
@@ -222,10 +197,7 @@ class TestTheGoldenHistories(unittest.TestCase):
     def setUpClass(cls):
         with contextlib.redirect_stdout(io.StringIO()):
             cls.data = {beta: gh.run_history(beta) for beta in gh.BETAS}
-        cls.models = {
-            beta: ExponentialModel.from_rows(*gh.rows(beta, _units))
-            for beta in gh.BETAS
-        }
+        cls.models = {beta: golden_realized_model(beta) for beta in gh.BETAS}
 
     def r_and_fm(self, policy, model, s) -> tuple:
         """(r, f_m): fixed_T_value_at's r, on a stub result holding the sample's state, and f_m."""
@@ -470,7 +442,7 @@ class TestPickle(unittest.TestCase):
     """(h) A RealizedModel survives a pickle round trip, as Ray sends it to a worker."""
 
     def test_h_round_trip(self):
-        plain = ExponentialModel.from_rows(*gh.rows(5.5, _units))
+        plain = golden_realized_model(5.5)
         for rm in (plain, plain.model.realize(plain.normalization, 0.03 * Mp)):
             loaded = pickle.loads(pickle.dumps(rm))
             self.assertIsInstance(loaded, RealizedModel)

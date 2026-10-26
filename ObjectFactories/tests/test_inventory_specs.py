@@ -38,8 +38,7 @@ from datastorekit.contract import TAG_LABEL, TAG_SERIAL, TAG_TABLE
 from datastorekit.SQL.schema import build_schema
 from datastorekit.store_inventory import InventorySpec, inventory_classes
 
-import CosmologyConcepts.ConformalCouplings.model_ids as coupling_ids
-import CosmologyConcepts.Potentials.model_ids as potential_ids
+import CosmologyConcepts.Models.model_ids as model_ids
 import CosmologyModels.model_ids as cosmology_ids
 from config.datastore import factories
 from config.sharding import replicated_tables, sharded_tables
@@ -53,14 +52,12 @@ EXPECTED_ORDER = [
     "tolerance",
     "beta_value",
     "M_value",
-    "Lambda_value",
     "temperature",
     "phi_value",
     "pi_value",
     "QCD_Cosmology",
     "IntegrationSolver",
-    "ExponentialPotential",
-    "ExponentialCoupling",
+    "ExponentialModel",
     "ScalarHistory",
     "AdiabaticHistory",
     "BBNData",
@@ -155,19 +152,20 @@ class TestInventoryClasses(_NoRay):
     def test_the_registry_is_accepted_and_ordered(self):
         self.assertEqual(inventory_classes(factories), EXPECTED_ORDER)
 
-    def test_thirteen_definitions_serve_seventeen_classes(self):
+    def test_twelve_definitions_serve_fifteen_classes(self):
+        # thirteen served seventeen until jordan-normalization prompt 07, which replaced
+        # Lambda_value, ExponentialPotential and ExponentialCoupling with ExponentialModel
         owners = [name for name, f in factories.items() if _spec(f) is not None]
-        self.assertEqual(len(owners), 17)
-        self.assertEqual(len({type(factories[n]) for n in owners}), 13)
-        # the six quantity entries share two factory classes, each reading its own value column
-        quantities = ["beta_value", "M_value", "Lambda_value", "temperature"]
+        self.assertEqual(len(owners), 15)
+        self.assertEqual(len({type(factories[n]) for n in owners}), 12)
+        # the five quantity entries share two factory classes, each reading its own value column
+        quantities = ["beta_value", "M_value", "temperature"]
         quantities += ["phi_value", "pi_value"]
         self.assertEqual(
             {n: _spec(factories[n]).leaves for n in quantities},
             {
                 "beta_value": ("value",),
                 "M_value": ("value_eV",),
-                "Lambda_value": ("value_eV",),
                 "temperature": ("value_GeV",),
                 "phi_value": ("value_PlanckMass",),
                 "pi_value": ("value_PlanckMass",),
@@ -224,14 +222,8 @@ class TestSpecsResolve(_NoRay):
             {cosmology_ids.XAV_IMPROVED_EOS_IDENTIFIER: "QCD_Cosmology"},
         )
         self.assertEqual(
-            dict(parents["potential"].types),
-            {
-                potential_ids.EXPONENTIAL_POTENTIAL: "ExponentialPotential",
-            },
-        )
-        self.assertEqual(
-            dict(parents["coupling"].types),
-            {coupling_ids.EXPONENTIAL_COUPLING: "ExponentialCoupling"},
+            dict(parents["model"].types),
+            {model_ids.EXPONENTIAL_MODEL: "ExponentialModel"},
         )
 
     def test_no_parent_crosses_a_shard(self):

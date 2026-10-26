@@ -17,12 +17,15 @@
 Run one scalar history and its BBN through the production code, with no Ray
 cluster and no datastore, and print one line per stage.
 
-The history is `compute_scalar_history._function` with main.py's initial data:
-phi* = 5 M_P, pi* = 0, T* = 2e4 GeV, T_stop = T_CMB unless --T-stop-GeV is
-given, the default tolerances, and 250 samples per decade of 1 + z from
-log10(1 + z) = 0 to 35. The cosmology is QCD_Cosmology on Planck2018, the
-potential exponential with n = 1 and Lambda = 1e-3 eV, the coupling
-exponential with the given beta. The BBN stage is `compute_BBN_data._function`
+The history is `integrate_history` (until jordan-normalization prompt 07,
+`compute_scalar_history._function`, which now tunes the history) with main.py's
+initial data: phi* = 5 M_P, pi* = 0, T* = 2e4 GeV, T_stop = T_CMB unless
+--T-stop-GeV is given, the default tolerances, and 250 samples per decade of
+1 + z from log10(1 + z) = 0 to 35. The cosmology is QCD_Cosmology on
+Planck2018, the model ExponentialModel with n = 1 and the given M and beta,
+realized at the fixed normalization 4 ln(Lambda), Lambda = 1e-3 eV, and
+phi_ref = 0, untuned (jordan-normalization prompt 08 moves this tool onto
+tuned histories). The BBN stage is `compute_BBN_data._function`
 on a stand-in model holding the history's samples, through the production
 route (the Hubble-only PRyMordial route since science-readiness prompt 01).
 Nothing is stored.
@@ -83,10 +86,9 @@ from ComputeTargets.ScalarHistory import (  # noqa: E402
     FIXED_T_JORDAN_LOW_MEV,
     SampleValues,
     ScalarHistoryValue,
-    compute_scalar_history,
+    integrate_history,
 )
 from CosmologyConcepts import (  # noqa: E402
-    Lambda_value,
     M_value,
     beta_value,
     redshift,
@@ -94,14 +96,8 @@ from CosmologyConcepts import (  # noqa: E402
     temperature,
 )
 from CosmologyConcepts.redshift import log_one_plus_z_grid  # noqa: E402
-from CosmologyConcepts.ConformalCouplings.ExponentialCoupling import (  # noqa: E402
-    ExponentialCoupling,
-)
 from CosmologyConcepts.FieldValues import phi_value, pi_value  # noqa: E402
 from CosmologyConcepts.Models.ExponentialModel import ExponentialModel  # noqa: E402
-from CosmologyConcepts.Potentials.ExponentialPotential import (  # noqa: E402
-    ExponentialPotential,
-)
 from CosmologyModels.GenericEOS.QCD_Cosmology import QCD_Cosmology  # noqa: E402
 from CosmologyModels.LambdaCDM import Planck2018  # noqa: E402
 from Units import Planck_units  # noqa: E402
@@ -123,10 +119,9 @@ RATIO_WINDOWS_KEV = ((0.3, 1.0), (1.0, 3.0), (3.0, 10.0), (10.0, 100.0))
 class _StandInModel:
     """The attributes of a ScalarHistory that compute_BBN_data reads."""
 
-    def __init__(self, cosmology, potential, coupling, T_stop, values):
+    def __init__(self, cosmology, model, T_stop, values):
         self._cosmology = cosmology
-        self.potential = potential
-        self.coupling = coupling
+        self.model = model
         self.T_Jordan_stop = T_stop
         self.values = values
 
@@ -279,14 +274,12 @@ def main(argv=None) -> int:
     params = Planck2018()
     cosmology = QCD_Cosmology(0, units, params)
 
-    potential = ExponentialPotential(
-        0,
-        M_value(0, M * units.PlanckMass),
-        Lambda_value(0, LAMBDA_EV * units.eV),
-        1,
-        units,
+    # the model at the fixed normalization 4 ln(Lambda) and phi_ref = 0: the values the deleted
+    # adapter ExponentialModel.from_rows gave, bitwise (jordan-normalization prompt 07)
+    model = ExponentialModel(
+        0, M_value(0, M * units.PlanckMass), 1, beta_value(0, beta), units
     )
-    coupling = ExponentialCoupling(0, beta_value(0, beta), units)
+    realized_model = model.realize(4.0 * log(LAMBDA_EV * units.eV), 0.0)
 
     T_init = temperature(0, T_INIT_GEV * units.GeV)
     if args.T_stop_GeV is None:
@@ -308,14 +301,14 @@ def main(argv=None) -> int:
     SM.integrate_scalar_history = _capturing_integrate
     start = time.perf_counter()
     try:
-        data = compute_scalar_history._function(
+        data = integrate_history(
             cosmology,
             T_init,
             T_stop,
             phi_value(0, args.phi_init_Mp * units.PlanckMass),
             pi_value(0, PI_INIT),
             _z_grid(),
-            ExponentialModel.from_rows(potential, coupling),
+            realized_model,
             task_label=f"history_and_bbn-beta{beta:g}-M{M:g}",
         )
     finally:
@@ -355,10 +348,10 @@ def main(argv=None) -> int:
         print(line)
 
     # stage 2: BBN, through the production route
-    model = _StandInModel(cosmology, potential, coupling, T_stop, values)
+    stand_in = _StandInModel(cosmology, model, T_stop, values)
     start = time.perf_counter()
     res = compute_BBN_data._function(
-        _Proxy(model),
+        _Proxy(stand_in),
         task_label=f"history_and_bbn-beta{beta:g}-M{M:g}",
         small_network=args.small_network,
         wall_clock_limit=wall_clock_limit,

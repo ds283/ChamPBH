@@ -259,6 +259,15 @@ ChamPBH/
 >   handover for the run scripts is §4.15 of
 >   [`review-remediation-verification.md`](review-remediation-verification.md).
 
+> **Note, 2026-10-26 (`jordan-normalization`, prompt 07).** The tree above loses
+> `CosmologyConcepts/Potentials/`, `CosmologyConcepts/ConformalCouplings/` and
+> `CosmologyConcepts/Lambda_value.py`, and `ObjectFactories/ExponentialPotential.py` and
+> `ObjectFactories/ExponentialCoupling.py`; it gains `ObjectFactories/ExponentialModel.py`, the
+> factory of the model's table. The model (`CosmologyConcepts/Models/`, §8.4a) is one stored object
+> keyed by (M, n, β); the normalization of the potential and φ_ref are each history's, found by
+> tuning and stored on its row (§7.2's note of the same date). The text before this note describes
+> the tree as it was.
+
 ---
 
 ## 3. The Ray Distributed Computing Layer
@@ -434,6 +443,13 @@ calls `read_inventory` on the closed store, read-only and before Ray starts, and
 
 `LambdaCDM`, which `config/sharding.py`'s `replicated_tables` and the batch sizes listed though no
 factory registered it, is in neither since `dk-and-rpk-migration` P8 (prompt 08).
+
+> **Note, 2026-10-26 (`jordan-normalization`, prompt 07).** The registry has 21 entries: `Lambda_value`,
+> `ExponentialPotential` and `ExponentialCoupling` are gone, and `ExponentialModel`
+> (`sqla_ExponentialModel_factory`, sharded by β, batch size 50) is in `ExponentialPotential`'s place.
+> `FINGERPRINT_FORMAT` is 5 (15 spec pairs, 13 distinct digests), with the golden file
+> `store_fingerprint_jordan-normalization-07.json`. `VERSION_LABEL` is `2026.7.0`: a store made before
+> cannot be reused. The table above describes the registry as it was.
 
 ### 4.3 What the package does for a get, a store and a validate
 
@@ -631,6 +647,15 @@ is `config/datastore.py` (added by `dk-and-rpk-migration` prompt 05): the regist
 `drop_groups`, `serial_batch_sizes` and `tables_to_drop` (§4.2). A new class is named in both.
 
 For a new project with a different shard key, this file is the primary place to make changes.
+
+> **Note, 2026-10-26 (`jordan-normalization`, prompt 07).** `--log10-Lambda-low-eV`,
+> `--log10-Lambda-high-eV`, `--samples-per-log10-Lambda-eV`, `--Lambda-values-eV`,
+> `--Lambda-values-Mp` and `--T-stop-GeV` left the shared parser, so `main.py` and both plot scripts
+> refuse them (exit 2): nothing can consume them, since a history's normalization is tuned and every
+> stored history ends at T_CMB. `exponential.yaml` lost its `Lambda-values-eV` line. In
+> `config/sharding.py`, `ExponentialModel` is sharded by `shard_key` (its β row) where
+> `ExponentialCoupling` was, and `Lambda_value` and `ExponentialPotential` left `replicated_tables`
+> (and `Lambda_value` `read_table_config`).
 
 ### 5.3 Defaults (`config/defaults.py`)
 
@@ -848,6 +873,33 @@ SampleValues = namedtuple("SampleValues", [
 > d ln Ω/dφ = β/M_P. Production does not call it; nothing is stored.
 
 **`ScalarHistoryProxy`:** A lightweight reference object (just holds the model's `store_id` and key parameters, not the full solution array). Passed to downstream compute targets (AdiabaticHistory, BBNData) so they can fetch the full `ScalarHistory` from the database only when needed.
+
+> **Note, 2026-10-26 (`jordan-normalization`, prompt 07): the key, the outputs and the compute path.**
+> - **The key.** A `ScalarHistory` row is keyed by the version, the cosmology (`cosmology_type`,
+>   `cosmology_serial`), the model (`model_type`, `model_serial`: a polymorphic reference with no
+>   foreign key, `model_type` the model's `type_id`, `EXPONENTIAL_MODEL = 1` →
+>   `ExponentialModel`), φ*, π*, T_init, atol, rtol and the tuning tolerance (`tuning_tol_serial`, a
+>   `tolerance` row), with `validated == True`. `potential_*`, `coupling_*` and
+>   `T_Jordan_stop_serial` are gone: every stored history ends at the cosmology's T_CMB.
+>   `ScalarHistory.T_Jordan_stop` remains as a property only (a `temperature` with store id 0 at
+>   T_CMB), because `compute_BBN_data`'s pre-check reads it.
+> - **The outputs.** Fifteen nullable columns hold `TUNING_OUTPUT_KEYS`, NULL on a failure row:
+>   `normalization` and `seed_normalization` unconverted (ln V₀ for `ExponentialModel`, in the units
+>   of the run, Planck units for every driver), `V_ref` in M_P⁴, `phi_ref`, `phi_0`, `pi_0` and
+>   `seed_phi_ref` in M_P, and `tracking`, `residual_H`, `residual_phi`, the four counts and
+>   `seed_kind`. The object exposes them as `tuning` (a `TuningValues` namedtuple, readable with
+>   `_do_not_populate`), and `realized_model` is `model.realize(normalization, phi_ref)`. `model` and
+>   `tuning_tol` replace `potential` and `coupling`; `shard_key` is the model's β.
+> - **The compute path.** `compute_scalar_history` (the `@ray.remote` that `ScalarHistory.compute`
+>   submits) calls `tune_history`, so every stored history is tuned to H0 and φ_min at T_CMB.
+>   `integrate_history` is the untuned primitive, called by the golden histories' setup, the tests
+>   and the tools that run their own histories (`tools/history_and_bbn.py`,
+>   `tools/surfing_scan.py`, which keep the fixed normalization 4 ln(1 meV) until prompt 08).
+>   `AdiabaticHistory` and `BBNData` hold their history's `model`; the adiabatic computation reads
+>   the history's tuned `realized_model`. Their inventory specs call the parent ScalarHistory
+>   `history`.
+>
+> The text before this note describes `ScalarHistory` as it was.
 
 ### 7.3 `AdiabaticHistory` (`ComputeTargets/AdiabaticHistory.py`)
 
@@ -1180,6 +1232,19 @@ missing = [(pot, coup) for obj, (pot, coup) in zip(results, batch) if not obj.av
 # Pass 2: scalar object_get (creates skeleton rows) for missing items only
 work_refs = [pool.object_get("ScalarHistory", shard_key=..., ...) for pot, coup in missing]
 ```
+
+**Note added 2026-10-26 (`jordan-normalization` prompt 07): the grid and the stages.** The
+grid is one `ExponentialModel` per (M, n = 1, β), M outer and β inner, looked up by one vectorized
+`object_get("ExponentialModel", …)` (`convert_to_model`); there is no Λ grid and no T_stop. The
+three stages batch the models (`grouper(…, n=8)`), bin them by the model's β and look up and compute
+each history by (model, initial data, tuning tolerance); the tuning tolerance is
+`DEFAULT_TUNING_TOLERANCE` (10⁻⁵), with no option yet (prompt 08). The scalar stage's first pass now
+reads its lookup results (`pipeline_selection.missing_models`): a fully stored batch schedules no
+work. Before, the "which are missing?" filter kept every model, and only the second lookup stopped
+the work (`[02-scalar-stage-missing-filter-keeps-every-model]`,
+`[03-step-1-first-pass-lookup-filters-nothing]`). `pipeline_selection.QueryEntry` is
+`(model, history)`. The super-Planckian warning takes the models and evaluates ln A(φ*) at φ_ref = 0,
+as before; prompt 08 moves it to the seed's φ_ref.
 
 ---
 

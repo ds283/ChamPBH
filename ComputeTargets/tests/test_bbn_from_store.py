@@ -298,11 +298,11 @@ class TestBBNFromStore(unittest.TestCase):
                     create table beta_value (serial integer primary key, value real);
                     create table M_value (serial integer primary key, value_eV real);
                     create table phi_value (serial integer primary key, value_PlanckMass real);
-                    create table ExponentialCoupling (serial integer primary key, beta_serial integer);
-                    create table ExponentialPotential (serial integer primary key, M_serial integer);
+                    create table ExponentialModel (serial integer primary key, M_serial integer,
+                        beta_serial integer);
                     create table redshift (serial integer primary key, log_one_plus_z real);
-                    create table ScalarHistory (serial integer primary key, coupling_serial integer,
-                        potential_serial integer, phi_Einstein_init_serial integer, failure integer,
+                    create table ScalarHistory (serial integer primary key, model_serial integer,
+                        phi_Einstein_init_serial integer, failure integer,
                         RHS_evaluations integer, first_bounce_log_T_Jordan real);
                     create table ScalarHistoryValue (serial integer primary key, history_serial integer,
                         z_serial integer, raw_N real, log_T_Jordan_GeV real, H_Jordan_Mp real,
@@ -318,16 +318,12 @@ class TestBBNFromStore(unittest.TestCase):
                     )
                     con.execute("insert into phi_value values (?, ?)", (serial, phi))
                     con.execute(
-                        "insert into ExponentialCoupling values (?, ?)",
-                        (serial, serial),
+                        "insert into ExponentialModel values (?, ?, ?)",
+                        (serial, serial, serial),
                     )
                     con.execute(
-                        "insert into ExponentialPotential values (?, ?)",
-                        (serial, serial),
-                    )
-                    con.execute(
-                        "insert into ScalarHistory values (?, ?, ?, ?, 0, ?, ?)",
-                        (serial, serial, serial, serial, 1000 + serial, -0.5),
+                        "insert into ScalarHistory values (?, ?, ?, 0, ?, ?)",
+                        (serial, serial, serial, 1000 + serial, -0.5),
                     )
                     con.execute(
                         "insert into BBNData values (?, ?, 0, NULL, ?, ?, 1.0, 5.0, 0, 'v')",

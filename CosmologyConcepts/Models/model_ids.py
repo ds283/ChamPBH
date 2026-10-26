@@ -14,5 +14,7 @@
 # limitations under the License.
 
 # the type ids of the models (jordan-normalization prompt 04, M3). A model holds both the potential
-# and the conformal coupling; jordan-normalization prompt 07 gives each model type its own table
+# and the conformal coupling, and each model type has its own table (jordan-normalization prompt 07,
+# S1): EXPONENTIAL_MODEL's is ExponentialModel (ObjectFactories/ExponentialModel.py). A
+# ScalarHistory names its model by (model_type, model_serial), and this id is model_type
 EXPONENTIAL_MODEL = 1

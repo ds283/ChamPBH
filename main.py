@@ -17,7 +17,7 @@ import itertools
 import sys
 from datetime import datetime
 from math import fabs
-from typing import List, Tuple, Any
+from typing import List, Any
 
 import numpy as np
 import ray
@@ -31,6 +31,7 @@ from ComputeTargets import (
     BBNData,
 )
 from ComputeTargets.BBNData import PRYM_VERSION
+from ComputeTargets.ScalarHistory import DEFAULT_TUNING_TOLERANCE
 from CosmologyConcepts import (
     DimensionlessQuantityArray,
     DimensionfulQuantityArray,
@@ -40,9 +41,7 @@ from CosmologyConcepts import (
     pi_value,
 )
 from CosmologyConcepts.redshift import log_one_plus_z_grid
-from CosmologyConcepts.ConformalCouplings import AbstractCoupling
-from CosmologyConcepts.Potentials import AbstractPotential
-from CosmologyModels import BaseCosmology
+from CosmologyConcepts.Models import AbstractModel
 from ObjectFactories import tolerance
 from datastorekit.SQL.ProfileAgent import ProfileAgent
 from datastorekit.SQL.ShardedPool import ShardedPool
@@ -72,6 +71,7 @@ from config.version import VERSION_LABEL
 from tools.inventory_report import format_inventory_report
 from pipeline_selection import (
     build_query_entries,
+    missing_models,
     select_missing,
     summarise_failure_reasons,
     warn_foreign_bbn_provenance,
@@ -153,15 +153,14 @@ if args.profile_db is not None:
 def run_pipeline(
     pool: ShardedPool,
     model_data: dict,
-    Potential_array: List[AbstractPotential],
-    Coupling_array: List[AbstractCoupling],
+    Model_array: List[AbstractModel],
     T_init: temperature,
-    T_stop: temperature,
     phi_init: phi_value,
     pi_init: pi_value,
     z_grid: redshift_array,
     atol: tolerance,
     rtol: tolerance,
+    tuning_tol: tolerance,
     solvers: dict[str, IntegrationSolver],
     metadata: dict[str, Any],
 ):
@@ -184,29 +183,25 @@ def run_pipeline(
     ## STEP 1
     ## BUILD SCALAR FIELD HISTORIES FOR SAMPLE GRID
 
-    # Sharding is done on beta value, so put the coupling on the right hand side in this tensor product.
-    # The intention is that each batch will have as nearly an equal distribution of beta values as we can,
+    # Sharding is done on beta value, and Model_array is ordered M outer, beta inner. The intention
+    # is that each batch will have as nearly an equal distribution of beta values as we can,
     # which helps balance the load on each shard
-    model_sample_grid = itertools.product(
-        Potential_array,
-        Coupling_array,
-    )
-    solver_work_batches = list(grouper(model_sample_grid, n=8, incomplete="fill"))
+    solver_work_batches = list(grouper(Model_array, n=8, incomplete="fill"))
 
-    def build_solver_batch(batch: List[Tuple[AbstractPotential, AbstractCoupling]]):
+    def build_solver_batch(batch: List[AbstractModel]):
         # grouper may fill with None values, which we want to strip out
         batch = [x for x in batch if x is not None]
 
         # to allow vectorized object_get() calls to each shard, we need to bin the batch by shard
         binned_batch = {}
-        for potential, coupling in batch:
-            shard_key = coupling.shard_key
-            binned_batch.setdefault(shard_key, []).append((potential, coupling))
+        for model in batch:
+            binned_batch.setdefault(model.shard_key, []).append(model)
 
         # freeze the shard keys into a well-defined order, so we know the order in which they are returned
         batch_keys = list(binned_batch.keys())
 
-        # query whether a stored result exists for all potential/coupling combinations
+        # query whether a stored result exists for every model, keyed by (model, initial data,
+        # tuning tolerance) (jordan-normalization prompt 07)
         # ScalarHistory is a sharded table and needs a "shard_key" field
         # TODO: find a better way to implement/handle
         query_batch = [
@@ -217,12 +212,11 @@ def run_pipeline(
                         "solver_labels": [],
                         "cosmology": model_cosmology,
                         "T_Jordan_init": T_init,
-                        "T_Jordan_stop": T_stop,
                         "phi_Einstein_init": phi_init,  # currently using fixed initial value of phi_Einstein
                         "pi_Einstein_init": pi_init,  # currently all integrations begin with the field at rest
                         "z_grid": None,  # don't check which values of z we have sampled
-                        "potential": potential,
-                        "coupling": coupling,
+                        "model": model,
+                        "tuning_tol": tuning_tol,
                         "atol": atol,
                         "rtol": rtol,
                         "tags": [
@@ -230,7 +224,7 @@ def run_pipeline(
                         ],
                         "_do_not_populate": True,
                     }
-                    for potential, coupling in binned_batch[key]
+                    for model in binned_batch[key]
                 ],
             }
             for key in batch_keys
@@ -256,11 +250,12 @@ def run_pipeline(
         )
         query_queue.run()
 
-        # which models are missing?
+        # which models are missing? Those whose lookup found no row, read from the lookup
+        # results (jordan-normalization prompt 07): a fully stored batch schedules no work
         missing = [
             {
                 "shard_key": key,
-                "missing": [m for obj, m in zip(query_outcomes, binned_batch[key])],
+                "missing": missing_models(binned_batch[key], query_outcomes),
             }
             for key, query_outcomes in zip(batch_keys, query_queue.results)
         ]
@@ -276,15 +271,14 @@ def run_pipeline(
                 [
                     pool.object_get(
                         "ScalarHistory",
-                        shard_key=coupling.shard_key,
+                        shard_key=model.shard_key,
                         solver_labels=solvers,
                         cosmology=model_cosmology,
                         T_Jordan_init=T_init,
-                        T_Jordan_stop=T_stop,
                         phi_Einstein_init=phi_init,
                         pi_Einstein_init=pi_init,
-                        potential=potential,
-                        coupling=coupling,
+                        model=model,
+                        tuning_tol=tuning_tol,
                         z_grid=z_grid,
                         atol=atol,
                         rtol=rtol,
@@ -293,16 +287,15 @@ def run_pipeline(
                         ],
                         _do_not_populate=True,  # ignored if object does not already exist in database, so does not spoil work scheduling
                     )
-                    for potential, coupling in data["missing"]
+                    for model in data["missing"]
                 ]
             )
 
         return work_refs
 
     def build_solver_batch_label(m: ScalarHistory):
-        potential: AbstractPotential = m.potential
-        coupling: AbstractCoupling = m.coupling
-        return f"{args.job_name}-ScalarHistory-{potential.name}-{coupling.name}-{datetime.now().replace(microsecond=0).isoformat()}"
+        model: AbstractModel = m.model
+        return f"{args.job_name}-ScalarHistory-{model.name}-{datetime.now().replace(microsecond=0).isoformat()}"
 
     def compute_solver_batch(m: ScalarHistory, label: str):
         return m.compute(label=label)
@@ -349,15 +342,9 @@ def run_pipeline(
     # counts for the stage's summary line (run-integrity prompt 03)
     adiabatic_counts = {"skipped_failed_models": 0}
 
-    adiabatic_sample_grid = itertools.product(
-        Potential_array,
-        Coupling_array,
-    )
-    adiabatic_work_batches = list(
-        grouper(adiabatic_sample_grid, n=8, incomplete="fill")
-    )
+    adiabatic_work_batches = list(grouper(Model_array, n=8, incomplete="fill"))
 
-    def build_adiabatic_batch(batch: List[Tuple[AbstractPotential, AbstractCoupling]]):
+    def build_adiabatic_batch(batch: List[AbstractModel]):
         # grouper may fill with None values which must be filtered out
         batch = [x for x in batch if x is not None]
 
@@ -365,9 +352,8 @@ def run_pipeline(
 
         # to allow vectorized object_get() calls to each shard, we need to bin the batch by shard
         binned_batch = {}
-        for potential, coupling in batch:
-            shard_key = coupling.shard_key
-            binned_batch.setdefault(shard_key, []).append((potential, coupling))
+        for model in batch:
+            binned_batch.setdefault(model.shard_key, []).append(model)
 
         # freeze the shard keys into a well-defined order, so we know the order in which they are returned
         batch_keys = list(binned_batch.keys())
@@ -381,12 +367,11 @@ def run_pipeline(
                         "solver_labels": [],
                         "cosmology": model_cosmology,
                         "T_Jordan_init": T_init,
-                        "T_Jordan_stop": T_stop,
                         "phi_Einstein_init": phi_init,
                         "pi_Einstein_init": pi_init,
                         "z_grid": None,
-                        "potential": potential,
-                        "coupling": coupling,
+                        "model": model,
+                        "tuning_tol": tuning_tol,
                         "atol": atol,
                         "rtol": rtol,
                         "tags": [
@@ -394,7 +379,7 @@ def run_pipeline(
                         ],
                         "_do_not_populate": True,
                     }
-                    for potential, coupling in binned_batch[key]
+                    for model in binned_batch[key]
                 ],
             }
             for key in batch_keys
@@ -420,8 +405,8 @@ def run_pipeline(
         )
         model_query_queue.run()
 
-        # keep each ScalarHistory lookup result with the (potential, coupling) pair it was
-        # asked for, and drop the models that failed (run-integrity prompt 03)
+        # keep each ScalarHistory lookup result with the model it was asked for, and drop the
+        # models whose history failed (run-integrity prompt 03)
         query_entries = {
             key: build_query_entries(binned_batch[key], query_outcomes)
             for key, query_outcomes in zip(batch_keys, model_query_queue.results)
@@ -440,7 +425,7 @@ def run_pipeline(
                 "shard_key": key,
                 "payload": [
                     {
-                        "model_proxy": ScalarHistoryProxy(entry.model),
+                        "model_proxy": ScalarHistoryProxy(entry.history),
                         "tags": [
                             SamplesPerLog10ZTag,
                         ],
@@ -483,9 +468,7 @@ def run_pipeline(
         missing_adiabatic = [
             {
                 "shard_key": key,
-                "missing": [
-                    (entry.potential, entry.coupling) for entry in selection.missing
-                ],
+                "missing": [entry.model for entry in selection.missing],
             }
             for key, selection in zip(batch_keys, selections)
         ]
@@ -504,19 +487,18 @@ def run_pipeline(
                         "solver_labels": [],
                         "cosmology": model_cosmology,
                         "T_Jordan_init": T_init,
-                        "T_Jordan_stop": T_stop,
                         "phi_Einstein_init": phi_init,
                         "pi_Einstein_init": pi_init,
                         "z_grid": None,
-                        "potential": potential,
-                        "coupling": coupling,
+                        "model": model,
+                        "tuning_tol": tuning_tol,
                         "atol": atol,
                         "rtol": rtol,
                         "tags": [
                             SamplesPerLog10ZTag,
                         ],
                     }
-                    for potential, coupling in x["missing"]
+                    for model in x["missing"]
                 ],
             }
             for key, x in zip(batch_keys, missing_adiabatic)
@@ -569,9 +551,8 @@ def run_pipeline(
         return work_refs
 
     def build_adiabatic_batch_label(q: AdiabaticHistory):
-        potential: AbstractPotential = q.potential
-        coupling: AbstractCoupling = q.coupling
-        return f"{args.job_name}-AdiabaticHistory-{potential.name}-{coupling.name}-{datetime.now().replace(microsecond=0).isoformat()}"
+        model: AbstractModel = q.model
+        return f"{args.job_name}-AdiabaticHistory-{model.name}-{datetime.now().replace(microsecond=0).isoformat()}"
 
     def compute_adiabatic_batch(q: AdiabaticHistory, label: str):
         return q.compute(label=label)
@@ -612,14 +593,9 @@ def run_pipeline(
     # (bbn-tolerance prompt 02)
     bbn_lookup_results = []
 
-    BBN_sample_grid = itertools.product(
-        Potential_array,
-        Coupling_array,
-    )
+    bbn_data_work_batches = list(grouper(Model_array, n=8, incomplete="fill"))
 
-    bbn_data_work_batches = list(grouper(BBN_sample_grid, n=8, incomplete="fill"))
-
-    def build_bbn_data_batch(batch: List[Tuple[AbstractPotential, AbstractCoupling]]):
+    def build_bbn_data_batch(batch: List[AbstractModel]):
         # grouper may fill with None values which must be filtered out
         batch = [x for x in batch if x is not None]
 
@@ -627,9 +603,8 @@ def run_pipeline(
 
         # to allow vectorized object_get() calls to each shard, we need to bin the batch by shard
         binned_batch = {}
-        for potential, coupling in batch:
-            shard_key = coupling.shard_key
-            binned_batch.setdefault(shard_key, []).append((potential, coupling))
+        for model in batch:
+            binned_batch.setdefault(model.shard_key, []).append(model)
 
         # freeze the shard keys into a well-defined order, so we know the order in which they are returned
         batch_keys = list(binned_batch.keys())
@@ -643,12 +618,11 @@ def run_pipeline(
                         "solver_labels": [],
                         "cosmology": model_cosmology,
                         "T_Jordan_init": T_init,
-                        "T_Jordan_stop": T_stop,
                         "phi_Einstein_init": phi_init,
                         "pi_Einstein_init": pi_init,
                         "z_grid": None,
-                        "potential": potential,
-                        "coupling": coupling,
+                        "model": model,
+                        "tuning_tol": tuning_tol,
                         "atol": atol,
                         "rtol": rtol,
                         "tags": [
@@ -656,7 +630,7 @@ def run_pipeline(
                         ],
                         "_do_not_populate": True,
                     }
-                    for potential, coupling in binned_batch[key]
+                    for model in binned_batch[key]
                 ],
             }
             for key in batch_keys
@@ -682,8 +656,8 @@ def run_pipeline(
         )
         model_query_queue.run()
 
-        # keep each ScalarHistory lookup result with the (potential, coupling) pair it was
-        # asked for, and drop the models that failed (run-integrity prompt 03)
+        # keep each ScalarHistory lookup result with the model it was asked for, and drop the
+        # models whose history failed (run-integrity prompt 03)
         query_entries = {
             key: build_query_entries(binned_batch[key], query_outcomes)
             for key, query_outcomes in zip(batch_keys, model_query_queue.results)
@@ -702,7 +676,7 @@ def run_pipeline(
                 "shard_key": key,
                 "payload": [
                     {
-                        "model_proxy": ScalarHistoryProxy(entry.model),
+                        "model_proxy": ScalarHistoryProxy(entry.history),
                         "tags": [
                             SamplesPerLog10ZTag,
                         ],
@@ -750,9 +724,7 @@ def run_pipeline(
         missing_bbn = [
             {
                 "shard_key": key,
-                "missing": [
-                    (entry.potential, entry.coupling) for entry in selection.missing
-                ],
+                "missing": [entry.model for entry in selection.missing],
             }
             for key, selection in zip(batch_keys, selections)
         ]
@@ -771,19 +743,18 @@ def run_pipeline(
                         "solver_labels": [],
                         "cosmology": model_cosmology,
                         "T_Jordan_init": T_init,
-                        "T_Jordan_stop": T_stop,
                         "phi_Einstein_init": phi_init,
                         "pi_Einstein_init": pi_init,
                         "z_grid": None,
-                        "potential": potential,
-                        "coupling": coupling,
+                        "model": model,
+                        "tuning_tol": tuning_tol,
                         "atol": atol,
                         "rtol": rtol,
                         "tags": [
                             SamplesPerLog10ZTag,
                         ],
                     }
-                    for potential, coupling in x["missing"]
+                    for model in x["missing"]
                 ],
             }
             for key, x in zip(batch_keys, missing_bbn)
@@ -836,9 +807,8 @@ def run_pipeline(
         return work_refs
 
     def build_bbn_data_batch_label(q: BBNData):
-        potential: AbstractPotential = q.potential
-        coupling: AbstractCoupling = q.coupling
-        return f"{args.job_name}-BBNData-{potential.name}-{coupling.name}-{datetime.now().replace(microsecond=0).isoformat()}"
+        model: AbstractModel = q.model
+        return f"{args.job_name}-BBNData-{model.name}-{datetime.now().replace(microsecond=0).isoformat()}"
 
     # the wall-clock limit on each PRyMordial solve, in seconds; 0 means no limit
     # (science-readiness prompt 01)
@@ -927,17 +897,7 @@ def execute(pool, units: UnitsLike):
         M * units.PlanckMass for M in M_values_Mp
     ]
 
-    log10_Lambda_low_eV: float = args.log10_Lambda_low_eV
-    log10_Lambda_high_eV: float = args.log10_Lambda_high_eV
-    samples_per_log10_Lambda_eV: int = args.samples_per_log10_Lambda_eV
-    Lambda_values_eV: List[float] = args.Lambda_values_eV
-    Lambda_values_Mp: List[float] = args.Lambda_values_Mp
-    Lambda_values = [Lambda * units.eV for Lambda in Lambda_values_eV] + [
-        Lambda * units.PlanckMass for Lambda in Lambda_values_Mp
-    ]
-
     T_init_GeV: float = args.T_init_GeV
-    T_stop_GeV: float = args.T_stop_GeV
 
     T_init = ray.get(
         pool.object_get("temperature", value=T_init_GeV * units.GeV, units=units)
@@ -973,43 +933,30 @@ def execute(pool, units: UnitsLike):
             payload_data=[{"value": M, "units": units} for M in M_sample_set],
         )
 
-    def convert_to_Lambdas(lambda_sample_set):
-        return pool.object_get(
-            "Lambda_value",
-            payload_data=[
-                {"value": Lambda, "units": units} for Lambda in lambda_sample_set
-            ],
-        )
-
-    def convert_to_potential(M_lambda_set):
+    def convert_to_model(M_beta_set):
+        # one ExponentialModel per (M, n = 1, beta), M outer and beta inner (jordan-normalization
+        # prompt 07, S1). The model's table is sharded by beta and needs a "shard_key" field
+        # TODO: find a better way to implement/handle
         if args.potential_type == "Exponential":
             return pool.object_get(
-                "ExponentialPotential",
+                "ExponentialModel",
                 payload_data=[
-                    {"M": M, "Lambda": Lambda, "n": 1, "units": units}
-                    for M, Lambda in M_lambda_set
+                    {"shard_key": beta, "M": M, "n": 1, "beta": beta, "units": units}
+                    for M, beta in M_beta_set
                 ],
             )
         else:
             raise ValueError(f"Unknown potential type: {args.potential_type}")
 
-    def convert_to_coupling(beta_set):
-        # ExponentialCoupling is a sharded table and needs a "shard_key" field
-        # TODO: find a better way to implement/handle
-        return pool.object_get(
-            "ExponentialCoupling",
-            payload_data=[
-                {"shard_key": beta, "beta": beta, "units": units} for beta in beta_set
-            ],
-        )
-
     ## DATASTORE OBJECTS
 
-    # build absolute and relative tolerances
-    atol, rtol = ray.get(
+    # build absolute and relative tolerances, and the tuning's tolerance on both residuals, which
+    # keys every history (jordan-normalization prompt 07; its option is prompt 08's)
+    atol, rtol, tuning_tol = ray.get(
         [
             pool.object_get("tolerance", tol=args.abs_tol),
             pool.object_get("tolerance", tol=args.rel_tol),
+            pool.object_get("tolerance", tol=DEFAULT_TUNING_TOLERANCE),
         ]
     )
 
@@ -1054,8 +1001,8 @@ def execute(pool, units: UnitsLike):
     z_grid = redshift_array(z_array=z_array)
 
     ## STEP 1
-    ## BUILD A GRID OF beta, M, Lambda VALUES AT WHICH TO SAMPLE, AND USE THIS
-    ## TO BUILD A GRID OF POTENTIAL AND COUPLING FUNCTIONS
+    ## BUILD A GRID OF beta AND M VALUES AT WHICH TO SAMPLE, AND USE THIS
+    ## TO BUILD A GRID OF MODELS, ONE PER (M, n = 1, beta)
 
     print("\n** BUILDING GRID OF MODELS TO SAMPLE")
     print(f'   -- using potential type "{args.potential_type}"')
@@ -1128,82 +1075,36 @@ def execute(pool, units: UnitsLike):
         f'   -- populated M sample grid with {len(M_array)} value{"" if len(M_array)==1 else "s"} = [ {", ".join(formatted_M_sample)} ]'
     )
 
-    if len(Lambda_values) == 0:
-        num_Lambda_sample = int(
-            round(
-                samples_per_log10_Lambda_eV
-                * (log10_Lambda_high_eV - log10_Lambda_low_eV)
-                + 0.5,
-                0,
-            )
-        )
-        Lambda_pre_sample = np.logspace(
-            log10_Lambda_low_eV,
-            log10_Lambda_high_eV,
-            num_Lambda_sample,
-            endpoint=True,
-        )
-        Lambda_sample = [Lambda * units.eV for Lambda in Lambda_pre_sample]
-    else:
-        Lambda_sample = Lambda_values
+    M_beta_grid = itertools.product(M_grid, beta_grid)
+    Model_array = ray.get(convert_to_model(M_beta_grid))
 
-    Lambda_array = ray.get(convert_to_Lambdas(Lambda_sample))
-    Lambda_grid = DimensionfulQuantityArray(value_array=Lambda_array)
-    if len(Lambda_sample) <= 20:
-        formatted_Lambda_sample = [formatter(Lambda) for Lambda in Lambda_sample]
-    else:
-        formatted_Lambda_low = [formatter(Lambda) for Lambda in Lambda_sample[:10]]
-        formatted_Lambda_high = [formatter(Lambda) for Lambda in Lambda_sample[-10:]]
-        formatted_Lambda_sample = formatted_Lambda_low + ["..."] + formatted_Lambda_high
-    print(
-        f'   -- populated Lambda sample grid with {len(Lambda_array)} value{"" if len(Lambda_array)==1 else "s"} = [ {", ".join(formatted_Lambda_sample)} ]'
-    )
+    # warn about a super-Planckian start, Omega(phi*) T* > M_P, at phi_ref = 0; warning only, the
+    # array is unchanged (science-readiness prompt 04, P6; jordan-normalization prompt 08 moves it
+    # to the seed's phi_ref)
+    Model_array = warn_super_planckian(Model_array, phi_init, T_init, units)
 
-    M_lambda_grid = itertools.product(M_grid, Lambda_grid)
-    Potential_array = ray.get(convert_to_potential(M_lambda_grid))
-
-    Coupling_array = ray.get(convert_to_coupling(beta_grid))
-
-    # warn about a super-Planckian start, Omega(phi*) T* > M_P; warning only, the array is unchanged
-    # (science-readiness prompt 04, P6)
-    Coupling_array = warn_super_planckian(Coupling_array, phi_init, T_init, units)
-
-    print(
-        f"   -- total number of models to integrate = {len(Potential_array) * len(Coupling_array)}"
-    )
+    print(f"   -- total number of models to integrate = {len(Model_array)}")
 
     model_list = build_model_list(pool, units)
+    # every history ends at its cosmology's T_CMB (README §6.0 R8), so there is no final
+    # temperature to look up (jordan-normalization prompt 07)
     for model_data in model_list:
-        cosmology: BaseCosmology = model_data["cosmology"]
-
-        if T_stop_GeV is None:
-            T_CMB = cosmology._params.T_CMB_Kelvin * units.Kelvin
-            T_stop = ray.get(pool.object_get("temperature", value=T_CMB, units=units))
-        else:
-            T_stop = ray.get(
-                pool.object_get(
-                    "temperature", value=T_stop_GeV * units.GeV, units=units
-                )
-            )
-
         run_pipeline(
             pool,
             model_data,
-            Potential_array,
-            Coupling_array,
+            Model_array,
             T_init,
-            T_stop,
             phi_init,
             pi_init,
             z_grid,
             atol,
             rtol,
+            tuning_tol,
             solvers,
             {
                 "samples_per_log10_z": samples_per_log10_z,
                 "samples_per_beta": samples_per_beta,
                 "samples_per_log10_M_eV": samples_per_log10_M_eV,
-                "samples_per_log10_Lambda_eV": samples_per_log10_Lambda_eV,
             },
         )
 

@@ -7,8 +7,7 @@ import ray
 from scipy.interpolate import make_interp_spline
 
 from CosmologyConcepts import redshift, redshift_array
-from CosmologyConcepts.ConformalCouplings import AbstractCoupling
-from CosmologyConcepts.Potentials import AbstractPotential
+from CosmologyConcepts.Models.AbstractModel import AbstractModel
 from CosmologyModels import BaseCosmology
 from datastorekit import DatastoreObject
 from MetadataConcepts import store_tag
@@ -530,8 +529,7 @@ class BBNData(DatastoreObject):
         self._model_proxy: ScalarHistoryProxy = model_proxy
         model: ScalarHistory = model_proxy.get()
 
-        self._coupling = model.coupling
-        self._potential = model.potential
+        self._model: AbstractModel = model.model
 
         self._label: str = label
         self._tags: Optional[List[store_tag]] = tags if tags is not None else []
@@ -586,7 +584,7 @@ class BBNData(DatastoreObject):
 
     @property
     def shard_key(self) -> ShardKeyType:
-        return self._coupling.shard_key
+        return self._model.shard_key
 
     @property
     def failure(self) -> Optional[bool]:
@@ -613,12 +611,9 @@ class BBNData(DatastoreObject):
         return self._tags
 
     @property
-    def potential(self) -> AbstractPotential:
-        return self._potential
-
-    @property
-    def coupling(self) -> AbstractCoupling:
-        return self._coupling
+    def model(self) -> AbstractModel:
+        """The model of the history this belongs to (jordan-normalization prompt 07)."""
+        return self._model
 
     @property
     def small_network(self) -> Optional[bool]:
@@ -755,11 +750,7 @@ class BBNData(DatastoreObject):
 
         self._compute_ref = compute_BBN_data.remote(
             self._model_proxy,
-            task_label=(
-                self._label
-                if self._label is not None
-                else f"{self._potential.name}-{self._coupling.name}"
-            ),
+            task_label=(self._label if self._label is not None else self._model.name),
             small_network=small_network,
             wall_clock_limit=wall_clock_limit,
         )

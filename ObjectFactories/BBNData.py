@@ -120,14 +120,15 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
     def inventory_spec(self):
         # build() matches scalar_history_serial, the version and failure (False unless the payload says
         # otherwise). PRyM_version is not matched, and is a leaf so that the inventory shows it
-        # (campaign README P15); the stored label, a job name and a time, is not. The model is on
-        # this row's shard, since both take their shard key from the coupling's beta
-        # (dk-and-rpk-migration prompt 09)
+        # (campaign README P15); the stored label, a job name and a time, is not. The history is
+        # on this row's shard, since both take their shard key from the model's beta
+        # (dk-and-rpk-migration prompt 09). The parent is "history", the ScalarHistory, since
+        # "model" names a ScalarHistory's ExponentialModel (jordan-normalization prompt 07)
         return InventorySpec(
             leaves=("failure", "PRyM_version"),
             parents={
                 "version": Parent("version", "version"),
-                "model": Parent("scalar_history_serial", "ScalarHistory"),
+                "history": Parent("scalar_history_serial", "ScalarHistory"),
             },
             tags=("BBNData_tags", "bbn_serial"),
             values=("BBNDataValue", "bbn_serial"),

@@ -44,7 +44,6 @@ from datastorekit.store_inventory import inventory_specs
 
 from CosmologyConcepts import (
     beta_value,
-    Lambda_value,
     M_value,
     temperature,
     phi_value,
@@ -66,12 +65,7 @@ from ObjectFactories.DimensionfulQuantity import (
 from ObjectFactories.DimensionlessQuantity import (
     sqla_dimensionless_quantity_factory,
 )
-from ObjectFactories.ExponentialCoupling import (
-    sqla_ExponentialCoupling_factory,
-)
-from ObjectFactories.ExponentialPotential import (
-    sqla_ExponentialPotential_factory,
-)
+from ObjectFactories.ExponentialModel import sqla_ExponentialModel_factory
 from ObjectFactories.QCD_Cosmology import sqla_QCDCosmology_factory
 from ObjectFactories.ScalarHistory import (
     sqla_ScalarHistoryFactory,
@@ -93,12 +87,10 @@ factories = {
     "tolerance": sqla_tolerance_factory(),
     "beta_value": sqla_dimensionless_quantity_factory(beta_value),
     "M_value": sqla_dimensionful_quantity_factory(M_value),
-    "Lambda_value": sqla_dimensionful_quantity_factory(Lambda_value),
     "temperature": sqla_dimensionful_quantity_factory(temperature),
     "phi_value": sqla_dimensionful_quantity_factory(phi_value),
     "pi_value": sqla_dimensionful_quantity_factory(pi_value),
-    "ExponentialPotential": sqla_ExponentialPotential_factory(),
-    "ExponentialCoupling": sqla_ExponentialCoupling_factory(),
+    "ExponentialModel": sqla_ExponentialModel_factory(),
     "QCD_Cosmology": sqla_QCDCosmology_factory(),
     "IntegrationSolver": sqla_IntegrationSolver_factory(),
     "ScalarHistory": sqla_ScalarHistoryFactory(),
@@ -128,12 +120,10 @@ serial_batch_sizes = {
     "tolerance": 5,
     "beta_value": 200,
     "M_value": 200,
-    "Lambda_value": 200,
     "temperature": 200,
     "phi_value": 200,
     "pi_value": 200,
-    "ExponentialCoupling": 50,
-    "ExponentialPotential": 50,
+    "ExponentialModel": 50,
     "QCD_Cosmology": 5,
     "IntegrationSolver": 6,
     "ScalarHistory": 20,

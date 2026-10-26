@@ -38,9 +38,7 @@ from CosmologyConcepts import (
     GetFieldValue,
     FieldLike,
 )
-from CosmologyConcepts.ConformalCouplings import AbstractCoupling
 from CosmologyConcepts.Models.AbstractModel import AbstractModel, RealizedModel, Seed
-from CosmologyConcepts.Potentials import AbstractPotential
 from CosmologyModels import BaseCosmology
 from CosmologyModels.GenericEOS.LambdaCDM_GenericEOS import LambdaCDM_GenericEOS
 from datastorekit import DatastoreObject
@@ -1153,8 +1151,9 @@ def integrate_history(
     The primitive (jordan-normalization prompt 06, T1; README §6.0 R8): integrate one history of
     one realized model, from T_init to any T_stop, and sample it on the axis. It has no
     normalization logic: the model's normalization and phi_ref are whatever `model` was realized
-    with. tune_history calls it once per iterate; tests, diagnostics and compute_scalar_history
-    call it directly. (Until prompt 06 this was the body of compute_scalar_history.)
+    with. tune_history calls it once per iterate; tests, diagnostics and the tools that run their
+    own histories call it directly. (Until prompt 06 this was the body of compute_scalar_history,
+    which since prompt 07 tunes the history with tune_history.)
 
     :param cosmology: background cosmology
     :param T_init: initial radiation temperature in Jordan frame
@@ -1384,49 +1383,6 @@ def integrate_history(
     }
 
 
-@ray.remote
-def compute_scalar_history(
-    cosmology: LambdaCDM_GenericEOS,
-    T_init: TemperatureLike,
-    T_stop: TemperatureLike,
-    phi_init: FieldLike,
-    pi_init: FieldLike,
-    z_grid: redshift_array,
-    model: RealizedModel,
-    task_label: str = "compute_scalar_history",
-    atol: float = DEFAULT_ABS_TOLERANCE,
-    rtol: float = DEFAULT_REL_TOLERANCE,
-    verbose: bool = False,
-) -> dict:
-    """
-    :param cosmology: background cosmology
-    :param T_init: initial radiation temperature in Jordan frame
-    :param T_stop: final radiation temperature in Jordan frame (usually T_CMB)
-    :param phi_init: initial Einstein-frame scalar field value phi
-    :param pi_init: initial Einstein-frame scalar field derivative dphi/dN
-    :param z_grid: the sampling axis: points ln(1 + z_E), counted back from the end of the history
-    :param model: the realized model: V, the conformal factor A and their derivatives
-                  (jordan-normalization prompt 04)
-    :param task_label: label for the ray task
-    :param atol: absolute tolerance for the ODE solver
-    :param rtol: relative tolerance for the ODE solver
-    :return:
-    """
-    return integrate_history(
-        cosmology=cosmology,
-        T_init=T_init,
-        T_stop=T_stop,
-        phi_init=phi_init,
-        pi_init=pi_init,
-        z_grid=z_grid,
-        model=model,
-        task_label=task_label,
-        atol=atol,
-        rtol=rtol,
-        verbose=verbose,
-    )
-
-
 # ---- the tuning layer (jordan-normalization prompt 06; README §6.0 R1, R2, R8, R10, R13) ----
 
 # the defaults of tune_history: the tolerance on both residuals and the largest number of
@@ -1457,6 +1413,11 @@ TUNING_OUTPUT_KEYS = (
     "seed_normalization",
     "seed_phi_ref",
 )
+
+# what a ScalarHistory holds of its tuning (jordan-normalization prompt 07, S3): the keys of
+# TUNING_OUTPUT_KEYS, in that order, as tune_history returned them (after a round trip through
+# the store, each in the cosmology's units again)
+TuningValues = namedtuple("TuningValues", TUNING_OUTPUT_KEYS)
 
 
 def tuning_converged(residual_H: float, residual_phi: float, tolerance: float) -> bool:
@@ -1784,6 +1745,60 @@ def tune_history(
         k += 1
 
 
+@ray.remote
+def compute_scalar_history(
+    cosmology: LambdaCDM_GenericEOS,
+    model: AbstractModel,
+    T_init: TemperatureLike,
+    phi_init: FieldLike,
+    pi_init: FieldLike,
+    z_grid: redshift_array,
+    task_label: str = "compute_scalar_history",
+    atol: float = DEFAULT_ABS_TOLERANCE,
+    rtol: float = DEFAULT_REL_TOLERANCE,
+    tolerance: float = DEFAULT_TUNING_TOLERANCE,
+    max_integrations: int = DEFAULT_TUNING_MAX_INTEGRATIONS,
+    verbose: bool = False,
+) -> dict:
+    """
+    The stored path (jordan-normalization prompt 07, S4): the Ray task that ScalarHistory.compute
+    submits, and so the one that computes every history main.py stores. It tunes the history with
+    tune_history (prompt 06), which integrates it to T_J = T_CMB with integrate_history until
+    H_J(T_CMB) = H0 and phi_ref = phi_min(T_CMB), and returns tune_history's payload: the final
+    integration's, with the keys of TUNING_OUTPUT_KEYS added, or a failure.
+
+    A caller that wants one integration of a realized model to a given T_stop, untuned, calls
+    integrate_history, which has this function's former signature.
+
+    :param cosmology: background cosmology
+    :param model: the model (an AbstractModel); its normalization and phi_ref are the tuning's
+    :param T_init: initial radiation temperature in Jordan frame
+    :param phi_init: initial Einstein-frame scalar field value phi
+    :param pi_init: initial Einstein-frame scalar field derivative dphi/dN
+    :param z_grid: the sampling axis: points ln(1 + z_E), counted back from the end of the history
+    :param task_label: label for the ray task
+    :param atol: absolute tolerance for the ODE solver
+    :param rtol: relative tolerance for the ODE solver
+    :param tolerance: the tolerance on both residuals of the tuning
+    :param max_integrations: the cap on integrations, the seed's included
+    :return: tune_history's payload
+    """
+    return tune_history(
+        cosmology=cosmology,
+        model=model,
+        T_init=T_init,
+        phi_init=phi_init,
+        pi_init=pi_init,
+        z_grid=z_grid,
+        task_label=task_label,
+        atol=atol,
+        rtol=rtol,
+        tolerance=tolerance,
+        max_integrations=max_integrations,
+        verbose=verbose,
+    )
+
+
 def build_extra_data(data: dict) -> Optional[dict]:
     """
     Assemble the ScalarHistory's extra_data dictionary from the dictionary that
@@ -1834,11 +1849,10 @@ class ScalarHistory(DatastoreObject):
         solver_labels: dict,
         cosmology: BaseCosmology,
         T_Jordan_init: temperature,  # initial Jordan-frame temperature
-        T_Jordan_stop: temperature,  # Jordan-frame temperature at which to terminate the calculation
         phi_Einstein_init: phi_value,  # initial value of Einstein-frame scalar phi
         pi_Einstein_init: pi_value,  # initial value of dphi/dN
-        potential: AbstractPotential,
-        coupling: AbstractCoupling,
+        model: AbstractModel,
+        tuning_tol: tolerance,
         atol: tolerance,
         rtol: tolerance,
         z_grid: Optional[redshift_array] = None,
@@ -1850,11 +1864,11 @@ class ScalarHistory(DatastoreObject):
         :param solver_labels: dictionary mapping solver labels to IntegrationSolver objects
         :param cosmology: background cosmology
         :param T_Jordan_init: initial radiation temperature in the Jordan frame
-        :param T_Jordan_stop: final radiation temperature in the Jordan frame
         :param phi_Einstein_init: initial Einstein-frame scalar field value
         :param pi_Einstein_init: initial Einstein-frame scalar field derivative dphi/dN
-        :param potential: the scalar field potential
-        :param coupling: the conformal coupling
+        :param model: the model (jordan-normalization prompt 07): V and A with their parameters;
+                      the history's normalization and phi_ref are found by tuning
+        :param tuning_tol: the tolerance on both residuals of the tuning
         :param atol: absolute tolerance for the ODE solver
         :param rtol: relative tolerance for the ODE solver
         :param z_grid: grid of redshifts at which to sample the solution (optional)
@@ -1864,15 +1878,15 @@ class ScalarHistory(DatastoreObject):
         self._solver_labels = solver_labels
 
         self._T_Jordan_init: temperature = T_Jordan_init
-        self._T_Jordan_stop: temperature = T_Jordan_stop
 
         self._phi_Einstein_init: phi_value = phi_Einstein_init
         self._pi_Einstein_init: pi_value = pi_Einstein_init
 
-        self._potential: AbstractPotential = potential
-        self._coupling: AbstractCoupling = coupling
+        self._model: AbstractModel = model
+        self._tuning_tol: tolerance = tuning_tol
 
-        # built from the rows on first access to realized_model (jordan-normalization prompt 04)
+        # built from the model and the tuning on first access to realized_model
+        # (jordan-normalization prompt 07)
         self._realized_model: Optional[RealizedModel] = None
 
         self._target_z_grid: Optional[redshift_array] = z_grid
@@ -1887,6 +1901,7 @@ class ScalarHistory(DatastoreObject):
             self._failure_reason = None
             self._first_bounce = None
             self._fixed_T_values = None
+            self._tuning = None
 
         else:
             DatastoreObject.__init__(self, payload["store_id"])
@@ -1898,6 +1913,7 @@ class ScalarHistory(DatastoreObject):
             self._failure_reason: Optional[str] = payload["failure_reason"]
             self._first_bounce: Optional[FirstBounce] = payload["first_bounce"]
             self._fixed_T_values: Optional[FixedTValues] = payload["fixed_T_values"]
+            self._tuning: Optional[TuningValues] = payload["tuning"]
 
         # store parameters
         self._label: str = label
@@ -1915,7 +1931,7 @@ class ScalarHistory(DatastoreObject):
 
     @property
     def shard_key(self) -> ShardKeyType:
-        return self._coupling.shard_key
+        return self._model.shard_key
 
     @property
     def failure(self) -> Optional[bool]:
@@ -1951,7 +1967,14 @@ class ScalarHistory(DatastoreObject):
 
     @property
     def T_Jordan_stop(self) -> temperature:
-        return self._T_Jordan_stop
+        """
+        The Jordan-frame temperature at which the history ends: the cosmology's T_CMB, the end of
+        every stored history (README §6.0 R8) and the float tune_history stops at. It is neither a
+        parameter, a column nor part of the key (jordan-normalization prompt 07, S2), and is not
+        a stored row (store id 0). It exists because compute_BBN_data's pre-check reads it.
+        """
+        units: UnitsLike = self._cosmology.units
+        return temperature(0, self._cosmology.T_CMB_Kelvin * units.Kelvin)
 
     @property
     def phi_Einstein_init(self) -> phi_value:
@@ -1962,30 +1985,43 @@ class ScalarHistory(DatastoreObject):
         return self._pi_Einstein_init
 
     @property
-    def potential(self) -> AbstractPotential:
-        return self._potential
+    def model(self) -> AbstractModel:
+        return self._model
 
     @property
-    def coupling(self) -> AbstractCoupling:
-        return self._coupling
+    def tuning_tol(self) -> tolerance:
+        return self._tuning_tol
+
+    @property
+    def tuning(self) -> TuningValues:
+        """
+        What the tuning found (jordan-normalization prompt 07, S3): the keys of
+        TUNING_OUTPUT_KEYS, set by store() from tune_history's payload, or by the factory's build
+        from the row. Stored on the ScalarHistory row, so it is readable on an object built with
+        _do_not_populate. Raises on a failure row, as first_bounce does, and when not populated.
+        """
+        if self._failure:
+            raise RuntimeError(
+                f"ScalarHistory ({self._label}): this object had an integration failure and cannot be used"
+            )
+
+        if self._failure is None or self._tuning is None:
+            raise RuntimeError("tuning has not yet been populated")
+
+        return self._tuning
 
     @property
     def realized_model(self) -> RealizedModel:
         """
-        The realized model the history is computed with (jordan-normalization prompt 04, M5): the
-        adapter ExponentialModel.from_rows(potential, coupling), with the normalization
-        4 log Lambda and phi_ref = 0, so that every value is bitwise what the rows give. Built on
-        first access and cached, not in __init__: an object built for a lookup, or on stand-in
-        rows, may never need it. jordan-normalization prompt 07 stores the model and removes this
-        adapter.
+        The realized model the history was computed with (jordan-normalization prompt 07, S3):
+        model.realize(normalization, phi_ref), at the normalization and phi_ref the tuning found.
+        Built on first access and cached, not in __init__: an object built for a lookup may never
+        need it. Raises where `tuning` does.
         """
         if self._realized_model is None:
-            # imported here: CosmologyConcepts.Models.ExponentialModel imports
-            # ComputeTargets.exceptions, which initializes this package
-            from CosmologyConcepts.Models.ExponentialModel import ExponentialModel
-
-            self._realized_model = ExponentialModel.from_rows(
-                self._potential, self._coupling
+            tuning: TuningValues = self.tuning
+            self._realized_model = self._model.realize(
+                tuning.normalization, tuning.phi_ref
             )
         return self._realized_model
 
@@ -2152,11 +2188,10 @@ class ScalarHistory(DatastoreObject):
                 )
 
         check_required_parameter("_T_Jordan_init")
-        check_required_parameter("_T_Jordan_stop")
         check_required_parameter("_phi_Einstein_init")
         check_required_parameter("_pi_Einstein_init")
-        check_required_parameter("_potential")
-        check_required_parameter("_coupling")
+        check_required_parameter("_model")
+        check_required_parameter("_tuning_tol")
         check_required_parameter("_target_z_grid")
 
         # replace label if specified
@@ -2165,17 +2200,15 @@ class ScalarHistory(DatastoreObject):
 
         self._compute_ref = compute_scalar_history.remote(
             self.cosmology,
+            self._model,
             self.T_Jordan_init,
-            self.T_Jordan_stop,
             self.phi_Einstein_init,
             self.pi_Einstein_init,
             self._target_z_grid,
-            self.realized_model,
-            task_label=(
-                self._label if self._label is not None else self.realized_model.name
-            ),
+            task_label=(self._label if self._label is not None else self._model.name),
             atol=self._atol.tol,
             rtol=self._rtol.tol,
+            tolerance=self._tuning_tol.tol,
         )
         return self._compute_ref
 
@@ -2204,6 +2237,7 @@ class ScalarHistory(DatastoreObject):
             )
             self._first_bounce = None
             self._fixed_T_values = None
+            self._tuning = None
             self._values = []
             return True
 
@@ -2211,6 +2245,8 @@ class ScalarHistory(DatastoreObject):
         self._failure_reason = None
         self._first_bounce = data["first_bounce"]
         self._fixed_T_values = data["fixed_T_values"]
+        # what the tuning found (jordan-normalization prompt 07, S3)
+        self._tuning = TuningValues(**{key: data[key] for key in TUNING_OUTPUT_KEYS})
         self._metadata = data["metadata"]
 
         sample: List[SampleValues] = data["sample"]

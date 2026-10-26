@@ -69,7 +69,16 @@ from config.datastore import factories
 # ``log_one_plus_z``, ln(1 + z), in place of ``z``, and redshift's spec has that leaf. The value
 # table ScalarHistoryValue gains the column ``log_one_plus_z_Jordan``, which no spec names. The
 # registry keeps its classes and order.
-FINGERPRINT_FORMAT = 4
+#
+# Format 5: jordan-normalization prompt 07, the store. The registry loses Lambda_value,
+# ExponentialPotential and ExponentialCoupling and gains ExponentialModel (keyed by M, n and beta)
+# in ExponentialPotential's place. ScalarHistory's spec replaces the polymorphic parents
+# ``potential`` and ``coupling`` and the parent ``T_stop`` with the polymorphic parent ``model`` and
+# the parent ``tuning_tol``, and its leaves ``potential_type`` and ``coupling_type`` with
+# ``model_type``; the parent of AdiabaticHistory and BBNData that names their ScalarHistory is
+# ``history`` where it was ``model``. The table gains the tuning's output columns, which no spec
+# names.
+FINGERPRINT_FORMAT = 5
 
 # The spec pin (campaign README P9; RunRegistryKit's docs/adoption/README.md §6, "The Q5 guard").
 # For each format that has a pin: [class, SHA-256] for every class of the registry whose factory
@@ -91,7 +100,11 @@ FINGERPRINT_FORMAT = 4
 # ``ScalarHistory``, ``AdiabaticHistory`` and ``BBNData`` moved (table names, ``Parent`` references
 # and column names), and the other fourteen pairs equal format 2's. Format 4 has 17 pairs and 14
 # distinct digests, the same counts as format 3; only ``redshift``'s digest moved (its leaf), and the
-# other sixteen pairs equal format 3's.
+# other sixteen pairs equal format 3's. Format 5 has 15 pairs (12 definitions serve them) and 13
+# distinct digests: format 4's 14 lose ``ExponentialPotential``'s and ``ExponentialCoupling``'s and
+# gain ``ExponentialModel``'s (``M_value`` keeps the digest it shared with ``Lambda_value``); the
+# digests of ``ScalarHistory``, ``AdiabaticHistory`` and ``BBNData`` moved, and the other eleven pairs
+# equal format 4's.
 SPEC_DIGESTS = {
     1: [
         ["version", "02929e9353a2d7ed737e0c5336dd29b1bc64bf84693f865600ba6c66f455ec10"],
@@ -352,6 +365,59 @@ SPEC_DIGESTS = {
             "e797982ac96f39edc57d2c827c3c01c5e4f5f4680b68acae645e3e1d53c5e7f1",
         ],
         ["BBNData", "450ab1563d08c920fb0a2de834e4d8284ccbd89b74cb4a0c0eb11105979e6259"],
+    ],
+    5: [
+        ["version", "02929e9353a2d7ed737e0c5336dd29b1bc64bf84693f865600ba6c66f455ec10"],
+        [
+            "store_tag",
+            "02929e9353a2d7ed737e0c5336dd29b1bc64bf84693f865600ba6c66f455ec10",
+        ],
+        [
+            "redshift",
+            "b6e92df7c31835a048482e7ea8c8c82b4f14ad38f82aa0c667d283ff84c15805",
+        ],
+        [
+            "tolerance",
+            "38ff5e8bf9db7d5594c3f35c38dba28114a5661a284645cc875c4f0f93a7a55f",
+        ],
+        [
+            "beta_value",
+            "c098757d4b33da64a449820f7f13c2c04112d2d319a0501ef31b184a9dc93a4a",
+        ],
+        ["M_value", "69f2da1ff5ed83829e7696d15309949849660035804c6f3ebc6704e1dc75cada"],
+        [
+            "temperature",
+            "8df9377e3eebc060df3adad53fc2298bc88798b9da8b252b190ad8beb53a6443",
+        ],
+        [
+            "phi_value",
+            "9e45a84f17fbc77aab1013efe1901f7024986dc8e8ab9d502156ab8e64472cca",
+        ],
+        [
+            "pi_value",
+            "9e45a84f17fbc77aab1013efe1901f7024986dc8e8ab9d502156ab8e64472cca",
+        ],
+        [
+            "ExponentialModel",
+            "5bb13de42840b317e7fb77486f54a7782281f2a4c4d710c1a902084acfc280a2",
+        ],
+        [
+            "QCD_Cosmology",
+            "af013d6dd11cfa2e7e8743baf708c582bb7950f39d715cb2c9eee46f1b36e4b0",
+        ],
+        [
+            "IntegrationSolver",
+            "6b7d69e652c00050e30d75431c082d6b984460925f3280d16ca636e2b843c402",
+        ],
+        [
+            "ScalarHistory",
+            "e38a828da79f6d6841dc7ecfac0f285cef39bc443724b95bbcd4dd610c5ccfb5",
+        ],
+        [
+            "AdiabaticHistory",
+            "2e768c53e5ef4fafc0829bdc8598b1c17b1930d80184f94fe7a68afb345b8be0",
+        ],
+        ["BBNData", "acf76a00f0748895727e74cd2c907910f185bbe5ddbcd7ceea39ac37f217643d"],
     ],
 }
 

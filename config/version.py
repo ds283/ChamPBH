@@ -47,7 +47,13 @@
 # bumped, so that the stored histories stay valid: BBN rows are refreshed by copying the store and
 # running main.py on the copy with --drop bbn-data. main.py and plot_by_beta.py warn about BBN rows
 # from another PRyM_version or network.
-VERSION_LABEL = "2026.6.0"
+# On 2026-10-26 (jordan-normalization prompt 07), 2026.7.0: from 2026.7.0 each history is tuned to
+# H0 and to phi_ref = phi_min at T_CMB (tune_history), is keyed by its model (an ExponentialModel
+# row of M, n and beta), its initial data and the tuning tolerance, ends at T_CMB, and stores the
+# tuned values (the normalization, V_ref, phi_ref and the tuning's diagnostics). The store has no
+# Lambda_value, ExponentialPotential or ExponentialCoupling table. A store made before 2026.7.0
+# cannot be reused: start a fresh datastore file.
+VERSION_LABEL = "2026.7.0"
 
 # The reserved payload key of a version-keyed lookup (VERSION_SERIAL_KEY) and its reader
 # (require_version_serial) were defined here until dk-and-rpk-migration prompt 08; they are

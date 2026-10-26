@@ -28,7 +28,7 @@ from scipy.optimize import brentq, minimize_scalar
 
 from ComputeTargets import ScalarHistory, ScalarHistoryValue, BBNData
 from ComputeTargets.ScalarHistory import REFLECTIONS_KEY
-from CosmologyConcepts.Potentials import AbstractPotential
+from CosmologyConcepts.Models import AbstractModel
 from CosmologyModels import BaseCosmology
 from Quadrature.integration_metadata import IntegrationSolver
 from Units.base import UnitsLike
@@ -96,13 +96,19 @@ def safe_div(x: Optional[float], y: float) -> Optional[float]:
     return nan
 
 
-def add_beta_summary_labels(fig, model_label, potential: AbstractPotential):
+def add_beta_summary_labels(fig, model_label, group_model: AbstractModel):
+    """
+    The labels of a figure against beta: its (M, n) group, from one model of the group
+    (jordan-normalization prompt 07; until then, the potential's name), the time and the
+    cosmology.
+    """
     now = datetime.now()
+    M_text = group_model._formatter(group_model._M)
 
     fig.text(
         LEFT_COLUMN,
         ABOVE_PLOTS_MIDDLE_ROW,
-        f"Potential: {potential.name}",
+        f"Model: {type(group_model).__name__}(M={M_text},n={group_model._n})",
         horizontalalignment="left",
         fontsize="x-small",
         fontweight="semibold",
@@ -185,13 +191,20 @@ def reflection_count(extra_data: Optional[dict]) -> int:
 
 
 def add_ScalarHistory_labels(fig, model: ScalarHistory, model_label):
+    """
+    The labels of a history's figure: its model, and the V_ref and phi_ref its tuning found
+    (jordan-normalization prompt 07; until then, the coupling's and the potential's names), the
+    solver, the time and the cosmology.
+    """
     solver: IntegrationSolver = model.solver
     now = datetime.now()
+    tuning = model.tuning
+    Mp = model._units.PlanckMass
 
     fig.text(
         LEFT_COLUMN,
         ABOVE_PLOTS_TOP_ROW,
-        f"Coupling: {model._coupling.name}",
+        f"Model: {model.model.name}",
         horizontalalignment="left",
         fontsize="x-small",
         fontweight="semibold",
@@ -199,7 +212,7 @@ def add_ScalarHistory_labels(fig, model: ScalarHistory, model_label):
     fig.text(
         LEFT_COLUMN,
         ABOVE_PLOTS_MIDDLE_ROW,
-        f"Potential: {model._potential.name}",
+        f"V_ref = {tuning.V_ref / Mp**4:.6g} M_P^4, phi_ref = {tuning.phi_ref / Mp:.6g} M_P",
         horizontalalignment="left",
         fontsize="x-small",
         fontweight="semibold",
@@ -497,12 +510,14 @@ DEFAULT_BAND_HALF_WIDTH = 0.025
 # interpolates samples.
 FIXED_T_MEV = {"1MeV": 1.0, "70keV": 0.07}
 
-# One row of histories.csv per history. Units: M in M_P, Lambda in eV, phi in M_P, T in GeV;
+# One row of histories.csv per history. Units: M in M_P, phi in M_P, T in GeV; n is the model's
+# exponent, which took Lambda_eV's place in jordan-normalization prompt 07 (prompt 08 adds V_ref,
+# the normalization, phi_ref and the tuning's diagnostics);
 # the shifts are fractions ((value - SM baseline)/SM baseline), D/H is the stored 10^5 D/H.
 CSV_COLUMNS = [
     "beta",
     "M_Mp",
-    "Lambda_eV",
+    "n",
     "phi_init_Mp",
     "Yp_BBN",
     "D_over_H",
@@ -842,7 +857,7 @@ def build_history_record(
     *,
     beta: float,
     M_Mp: float,
-    Lambda_eV: float,
+    n: int,
     phi_init_Mp: float,
     scalar,
     bbn,
@@ -863,7 +878,7 @@ def build_history_record(
     record.update(
         beta=beta,
         M_Mp=M_Mp,
-        Lambda_eV=Lambda_eV,
+        n=n,
         phi_init_Mp=phi_init_Mp,
         reflections=nan,
         failure_reasons="; ".join(failure_reasons),
@@ -967,12 +982,12 @@ def plot_convergence_in_M(
     title: str = "",
 ) -> bool:
     """
-    Figure 2. The running medians of figure 1, one line per (M, Lambda) in the records,
+    Figure 2. The running medians of figure 1, one line per (M, n) in the records,
     D/H above and Yp below: the approach to the M-independent limit.
     """
     groups: dict = {}
     for r in records:
-        groups.setdefault((r["M_Mp"], r["Lambda_eV"]), []).append(r)
+        groups.setdefault((r["M_Mp"], r["n"]), []).append(r)
 
     if not any(np.isfinite(r[key]) for r in records for key, _ in SHIFT_PANELS):
         print("!! plot_convergence_in_M: no finite shifts to plot; figure 2 skipped")
@@ -980,13 +995,13 @@ def plot_convergence_in_M(
 
     fig = Figure(figsize=(8.0, 8.0))
     axs = fig.subplots(nrows=2, ncols=1, sharex=True)
-    for (M, Lam), group in sorted(groups.items()):
+    for (M, n), group in sorted(groups.items()):
         for ax, (key, _) in zip(axs, SHIFT_PANELS):
             x, y = _finite(group, key)
             if len(x) == 0:
                 continue
             median, _, _ = running_band(x, 100.0 * y, half_width)
-            ax.plot(x, median, label=rf"$M = {M:.3g}\,M_P$, $\Lambda = {Lam:.3g}$ eV")
+            ax.plot(x, median, label=rf"$M = {M:.3g}\,M_P$, $n = {n}$")
     for ax, (_, label) in zip(axs, SHIFT_PANELS):
         ax.axhline(0.0, color="gray", linestyle="dotted")
         ax.set_ylabel(f"median {label}")
@@ -1111,7 +1126,7 @@ def plot_fixed_T(records: Sequence[dict], path: Path, title: str = "") -> bool:
 
 def write_histories_csv(records: Sequence[dict], path: Path) -> None:
     """
-    histories.csv: one row per record, columns CSV_COLUMNS, sorted by (M, Lambda, beta).
+    histories.csv: one row per record, columns CSV_COLUMNS, sorted by (M, n, beta).
     Missing values are written empty.
     """
     path = Path(path)
@@ -1125,5 +1140,5 @@ def write_histories_csv(records: Sequence[dict], path: Path) -> None:
     with open(path, "w", newline="") as f:
         writer = csv.writer(f)
         writer.writerow(CSV_COLUMNS)
-        for r in sorted(records, key=lambda r: (r["M_Mp"], r["Lambda_eV"], r["beta"])):
+        for r in sorted(records, key=lambda r: (r["M_Mp"], r["n"], r["beta"])):
             writer.writerow([cell(r[c]) for c in CSV_COLUMNS])

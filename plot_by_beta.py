@@ -19,8 +19,10 @@ Draw the figures of a store that main.py built, reading it read-only.
 The store is opened with ``ShardedPool(read_only=True)``, so a plot run never changes it
 (read-only-plots prompt 02). What it reads before the histories comes from ``plot_inputs.py``: a
 parameter the build was not run with (``--abs-tol``, ``--rel-tol``, ``--T-init-GeV``,
-``--phi-init-Mp``, ``--T-stop-GeV``) stops the run with exit 2, and a potential or coupling that
-was never stored is skipped with a warning. The shared parser's ``--drop`` and
+``--phi-init-Mp``, or the constant tuning tolerance) stops the run with exit 2, and a model (an
+``ExponentialModel`` of a stored M and beta) that was never stored is skipped with a warning. The
+models are grouped by (M, n), and each group's figures are drawn against beta
+(jordan-normalization prompt 07). The shared parser's ``--drop`` and
 ``--prune-unvalidated`` are main.py's: a plot run refuses ``--drop`` (exit 2, before Ray starts)
 and ignores ``--prune-unvalidated``.
 """
@@ -41,9 +43,9 @@ from numpy import nan
 import config.ray_auth  # noqa: F401
 from ComputeTargets import ScalarHistoryProxy, AdiabaticHistory, BBNData, ScalarHistory
 from ComputeTargets.BBNData import PRYM_VERSION, compute_SM_baseline
+from ComputeTargets.ScalarHistory import DEFAULT_TUNING_TOLERANCE
 from CosmologyConcepts import temperature, phi_value, pi_value
-from CosmologyConcepts.ConformalCouplings import AbstractCoupling
-from CosmologyConcepts.Potentials import AbstractPotential
+from CosmologyConcepts.Models import AbstractModel
 from datastorekit.SQL.ProfileAgent import ProfileAgent
 from datastorekit.SQL.ShardedPool import ShardedPool
 from MetadataConcepts import tolerance, store_tag
@@ -145,7 +147,7 @@ if args.profile_db is not None:
 @ray.remote
 def build_beta_plot(
     model_label,
-    potential: AbstractPotential,
+    group_model: AbstractModel,
     Q_data: List[AdiabaticHistory],
     bbn_data: list[BBNData],
     scalar_data: list[ScalarHistory],
@@ -155,9 +157,12 @@ def build_beta_plot(
 ):
     """
     Draw this model set's figures and return its per-history records (plain dictionaries,
-    extract_common.build_history_record), which run_pipeline gathers across potentials for
+    extract_common.build_history_record), which run_pipeline gathers across (M, n) groups for
     figure 2 and histories.csv. scalar_failures and bbn_failures map a beta to the reason its
     ScalarHistory or BBNData failed or is missing. (science-readiness prompt 07)
+
+    group_model is one model of the (M, n) group, which gives the group's M and n; the
+    histories differ in beta (jordan-normalization prompt 07).
     """
     base_path = Path(args.output).resolve()
     base_path = base_path / f"{model_label}"
@@ -166,12 +171,10 @@ def build_beta_plot(
     scalar_failures = {} if scalar_failures is None else scalar_failures
     bbn_failures = {} if bbn_failures is None else bbn_failures
     scalar_by_beta = {
-        m.coupling._beta.as_float: m
-        for m in scalar_data
-        if m.available and not m.failure
+        m.model._beta.as_float: m for m in scalar_data if m.available and not m.failure
     }
     bbn_by_beta = {
-        d.coupling._beta.as_float: d for d in bbn_data if d.available and not d.failure
+        d.model._beta.as_float: d for d in bbn_data if d.available and not d.failure
     }
     record_betas = sorted(
         set(scalar_by_beta)
@@ -182,8 +185,8 @@ def build_beta_plot(
     records = [
         build_history_record(
             beta=beta,
-            M_Mp=potential._M.as_float / units.PlanckMass,
-            Lambda_eV=potential._Lambda.as_float / units.eV,
+            M_Mp=group_model._M.as_float / units.PlanckMass,
+            n=group_model._n,
             phi_init_Mp=args.phi_init_Mp,
             scalar=scalar_by_beta.get(beta),
             bbn=bbn_by_beta.get(beta),
@@ -216,19 +219,19 @@ def build_beta_plot(
     }
 
     solver_time_points = [
-        (m.coupling._beta.as_float, m.metadata.compute_time)
+        (m.model._beta.as_float, m.metadata.compute_time)
         for m in scalar_data
         if m.available and not m.failure
     ]
     bbn_time_points = [
-        (d.coupling._beta.as_float, d.BBN_compute_time)
+        (d.model._beta.as_float, d.BBN_compute_time)
         for d in bbn_data
         if d.available and not d.failure
     ]
 
     adiabatic_maxQ_points = [
         (
-            q.coupling._beta.as_float,
+            q.model._beta.as_float,
             {label: q.max_abs_Q(label) for label in AdiabaticHistory.Q_labels},
         )
         for q in Q_data
@@ -237,17 +240,17 @@ def build_beta_plot(
 
     # ignore negative values which must represent a PRyMordial integration failure
     Yp_points = [
-        (d.coupling._beta.as_float, d.Yp_BBN)
+        (d.model._beta.as_float, d.Yp_BBN)
         for d in bbn_data
         if d.available and not d.failure and d.Yp_BBN > 0
     ]
     DOverH_points = [
-        (d.coupling._beta.as_float, d.DOverH)
+        (d.model._beta.as_float, d.DOverH)
         for d in bbn_data
         if d.available and not d.failure and d.DOverH > 0
     ]
     Li7_points = [
-        (d.coupling._beta_float, d.Li7OverH)
+        (d.model._beta_float, d.Li7OverH)
         for d in bbn_data
         if d.available and not d.failure and d.Li7OverH > 0
     ]
@@ -304,7 +307,7 @@ def build_beta_plot(
         solver_ax.set_ylabel(r"time [sec]")
         solver_ax.grid(True)
 
-        add_beta_summary_labels(fig, model_label, potential)
+        add_beta_summary_labels(fig, model_label, group_model)
         add_BBN_info_labels(fig, labels=bbn_labels)
 
         solver_ax.legend(loc="best")
@@ -312,7 +315,7 @@ def build_beta_plot(
 
         fig_path = (
             base_path
-            / f"plots/M={potential._M.as_float / units.eV:.5g}eV_Lambda={potential._Lambda.as_float / units.eV:.5g}eV/timings.pdf"
+            / f"plots/M={group_model._M.as_float / units.eV:.5g}eV_n={group_model._n}/timings.pdf"
         )
         fig_path.parents[0].mkdir(exist_ok=True, parents=True)
         try:
@@ -449,7 +452,7 @@ def build_beta_plot(
 
         Yp_ax.set_xlabel(r"coupling $\beta$")
 
-        add_beta_summary_labels(fig, model_label, potential)
+        add_beta_summary_labels(fig, model_label, group_model)
         add_BBN_info_labels(fig, labels=bbn_labels)
 
         def get_max_min(data):
@@ -494,7 +497,7 @@ def build_beta_plot(
 
         fig_path = (
             base_path
-            / f"plots/M={potential._M.as_float / units.eV:.5g}eV_Lambda={potential._Lambda.as_float / units.eV:.5g}eV/BBN.pdf"
+            / f"plots/M={group_model._M.as_float / units.eV:.5g}eV_n={group_model._n}/BBN.pdf"
         )
         fig_path.parents[0].mkdir(exist_ok=True, parents=True)
         try:
@@ -529,10 +532,10 @@ def build_beta_plot(
         ax.set_ylabel(r"maximum $|Q| = |\omega_k'/\omega_k^2|$")
         ax.grid(True)
 
-        add_beta_summary_labels(fig, model_label, potential)
+        add_beta_summary_labels(fig, model_label, group_model)
 
         # the max |Q| of a small-M history may be set by aliased late samples
-        Q_caveat = adiabatic_Q_caption(potential._M.as_float / units.PlanckMass)
+        Q_caveat = adiabatic_Q_caption(group_model._M.as_float / units.PlanckMass)
         if Q_caveat is not None:
             fig.text(
                 LEFT_COLUMN,
@@ -546,7 +549,7 @@ def build_beta_plot(
 
         fig_path = (
             base_path
-            / f"plots/M={potential._M.as_float / units.eV:.5g}eV_Lambda={potential._Lambda.as_float / units.eV:.5g}eV/max_Q.pdf"
+            / f"plots/M={group_model._M.as_float / units.eV:.5g}eV_n={group_model._n}/max_Q.pdf"
         )
         fig_path.parents[0].mkdir(exist_ok=True, parents=True)
         try:
@@ -560,15 +563,13 @@ def build_beta_plot(
         plt.close()
 
         beta_to_models = {
-            m.coupling._beta.store_id: m
+            m.model._beta.store_id: m
             for m in scalar_data
             if m.available and not m.failure
         }
-        beta_to_Q = {Q.coupling._beta.store_id: Q for Q in Q_data if Q.available}
+        beta_to_Q = {Q.model._beta.store_id: Q for Q in Q_data if Q.available}
         beta_to_BBN = {
-            B.coupling._beta.store_id: B
-            for B in bbn_data
-            if B.available and not B.failure
+            B.model._beta.store_id: B for B in bbn_data if B.available and not B.failure
         }
 
         beta_keys = (
@@ -577,12 +578,12 @@ def build_beta_plot(
         data = [
             {
                 "beta": (
-                    beta_to_models[store_id].coupling._beta.as_float
+                    beta_to_models[store_id].model._beta.as_float
                     if store_id in beta_to_models
                     else (
-                        beta_to_Q[store_id].coupling._beta.as_float
+                        beta_to_Q[store_id].model._beta.as_float
                         if store_id in beta_to_Q
-                        else beta_to_BBN[store_id].coupling._beta.as_float
+                        else beta_to_BBN[store_id].model._beta.as_float
                     )
                 ),
                 "scalar_compute_time": (
@@ -630,11 +631,11 @@ def build_beta_plot(
         ]
 
         # report how many models had bounces modelled by the elastic reflection
-        M_eV = potential._M.as_float / units.eV
-        Lambda_eV = potential._Lambda.as_float / units.eV
+        M_eV = group_model._M.as_float / units.eV
+        n = group_model._n
         reflected = sorted(
             (
-                (m.coupling._beta.as_float, reflection_count(m.extra_metadata))
+                (m.model._beta.as_float, reflection_count(m.extra_metadata))
                 for m in beta_to_models.values()
             ),
             key=lambda x: x[0],
@@ -642,15 +643,15 @@ def build_beta_plot(
         reflected = [(beta, count) for beta, count in reflected if count > 0]
         if len(reflected) > 0:
             print(
-                f"!! build_beta_plot '{model_label}', M={M_eV:.5g} eV, Lambda={Lambda_eV:.5g} eV: {len(reflected)} of {len(beta_to_models)} model(s) used elastic reflections"
+                f"!! build_beta_plot '{model_label}', M={M_eV:.5g} eV, n={n}: {len(reflected)} of {len(beta_to_models)} model(s) used elastic reflections"
             )
             for beta, count in reflected:
                 print(
-                    f"     -- beta={beta:.5g}, M={M_eV:.5g} eV, Lambda={Lambda_eV:.5g} eV: {count} reflection(s)"
+                    f"     -- beta={beta:.5g}, M={M_eV:.5g} eV, n={n}: {count} reflection(s)"
                 )
         else:
             print(
-                f"@@ build_beta_plot '{model_label}', M={M_eV:.5g} eV, Lambda={Lambda_eV:.5g} eV: no models used elastic reflections ({len(beta_to_models)} model(s) checked)"
+                f"@@ build_beta_plot '{model_label}', M={M_eV:.5g} eV, n={n}: no models used elastic reflections ({len(beta_to_models)} model(s) checked)"
             )
 
         df = pd.DataFrame(data)
@@ -658,19 +659,19 @@ def build_beta_plot(
 
         csv_path = (
             base_path
-            / f"csv/M={potential._M.as_float / units.eV:.5g}eV_Lambda={potential._Lambda.as_float / units.eV:.5g}eV/data.csv"
+            / f"csv/M={group_model._M.as_float / units.eV:.5g}eV_n={group_model._n}/data.csv"
         )
         csv_path.parents[0].mkdir(exist_ok=True, parents=True)
 
         df.to_csv(csv_path, header=True, index=False)
 
     # THE SCIENCE FIGURES 1, 3 and 4 (science-readiness prompt 07); figure 2 and
-    # histories.csv need every potential and are written by run_pipeline
+    # histories.csv need every (M, n) group and are written by run_pipeline
     plot_dir = (
         base_path
-        / f"plots/M={potential._M.as_float / units.eV:.5g}eV_Lambda={potential._Lambda.as_float / units.eV:.5g}eV"
+        / f"plots/M={group_model._M.as_float / units.eV:.5g}eV_n={group_model._n}"
     )
-    title = f"{model_label}: M = {potential._M.as_float / units.PlanckMass:.5g} M_P, Lambda = {potential._Lambda.as_float / units.eV:.5g} eV, phi* = {args.phi_init_Mp:g} M_P"
+    title = f"{model_label}: M = {group_model._M.as_float / units.PlanckMass:.5g} M_P, n = {group_model._n}, phi* = {args.phi_init_Mp:g} M_P"
 
     if SM_baseline is not None:
         plot_abundance_shifts(
@@ -698,14 +699,13 @@ def build_beta_plot(
 
 def run_pipeline(
     model_data,
-    Potential_array: List[AbstractPotential],
-    Coupling_array: List[AbstractCoupling],
+    Model_array: List[AbstractModel],
     T_init: temperature,
-    T_stop: temperature,
     phi_init: phi_value,
     pi_init: pi_value,
     atol: tolerance,
     rtol: tolerance,
+    tuning_tol: tolerance,
     tags: List[store_tag],
     SM_baseline: Optional[dict],
 ):
@@ -720,13 +720,13 @@ def run_pipeline(
 
     def report_dropped_bbn_models(
         model_label: str,
-        potential: AbstractPotential,
+        group_model: AbstractModel,
         model_proxies: List[ScalarHistoryProxy],
         bbn_results: List[BBNData],
     ):
         """
-        Print, once per potential, every model the BBN plots drop, with its
-        (beta, M, Lambda) and the reason, and the count. Nothing plotted depends
+        Print, once per (M, n) group, every model the BBN plots drop, with its
+        (beta, M, n) and the reason, and the count. Nothing plotted depends
         on this. (review-remediation prompt 03)
 
         Two filters drop a model. The lookup asks for successful rows only, so a
@@ -774,7 +774,7 @@ def run_pipeline(
                         reason = "failed, no failure_reason stored"
                 else:
                     reason = "no BBNData row in the store"
-                dropped.append((F.coupling._beta.as_float, reason))
+                dropped.append((F.model._beta.as_float, reason))
 
         for B in bbn_results:
             if B.available and not B.failure:
@@ -788,7 +788,7 @@ def run_pipeline(
                     )
                     dropped.append(
                         (
-                            B.coupling._beta.as_float,
+                            B.model._beta.as_float,
                             f"non-positive {'/'.join(non_positive)} ({values}); dropped from those panels",
                         )
                     )
@@ -796,28 +796,26 @@ def run_pipeline(
         if len(dropped) == 0:
             return {}
 
-        M_eV = potential._M.as_float / units.eV
-        Lambda_eV = potential._Lambda.as_float / units.eV
+        M_eV = group_model._M.as_float / units.eV
+        n = group_model._n
         print(
-            f"!! plot_by_beta '{model_label}', M={M_eV:.5g} eV, Lambda={Lambda_eV:.5g} eV: {len(dropped)} model(s) dropped from the BBN plots"
+            f"!! plot_by_beta '{model_label}', M={M_eV:.5g} eV, n={n}: {len(dropped)} model(s) dropped from the BBN plots"
         )
         for beta, reason in sorted(dropped, key=lambda x: x[0]):
-            print(
-                f"     -- beta={beta:.5g}, M={M_eV:.5g} eV, Lambda={Lambda_eV:.5g} eV: {reason}"
-            )
+            print(f"     -- beta={beta:.5g}, M={M_eV:.5g} eV, n={n}: {reason}")
 
         # the reasons, for histories.csv (science-readiness prompt 07)
         return {beta: reason for beta, reason in dropped}
 
     def report_dropped_scalar_histories(
         model_label: str,
-        potential: AbstractPotential,
+        group_model: AbstractModel,
         query_batch: List[dict],
         model_results: List[ScalarHistory],
     ):
         """
-        Print, once per potential, every model that no plot can show because its
-        ScalarHistory history failed, with (beta, M, Lambda) and the reason the
+        Print, once per (M, n) group, every model that no plot can show because its
+        ScalarHistory history failed, with (beta, M, n) and the reason the
         ScalarHistory stored, and the count. The first lookup asks for successful rows
         only, so such a model comes back unavailable; its failed row is looked up here
         (the newest, if there are several). (science-readiness prompt 02)
@@ -854,43 +852,41 @@ def run_pipeline(
                     reason = "failed, no failure_reason stored"
             else:
                 reason = "no ScalarHistory row in the store"
-            dropped.append((query["coupling"]._beta.as_float, reason))
+            dropped.append((query["model"]._beta.as_float, reason))
 
-        M_eV = potential._M.as_float / units.eV
-        Lambda_eV = potential._Lambda.as_float / units.eV
+        M_eV = group_model._M.as_float / units.eV
+        n = group_model._n
         print(
-            f"!! plot_by_beta '{model_label}', M={M_eV:.5g} eV, Lambda={Lambda_eV:.5g} eV: {len(dropped)} model(s) dropped because their ScalarHistory failed or is missing"
+            f"!! plot_by_beta '{model_label}', M={M_eV:.5g} eV, n={n}: {len(dropped)} model(s) dropped because their ScalarHistory failed or is missing"
         )
         for beta, reason in sorted(dropped, key=lambda x: x[0]):
-            print(
-                f"     -- beta={beta:.5g}, M={M_eV:.5g} eV, Lambda={Lambda_eV:.5g} eV: {reason}"
-            )
+            print(f"     -- beta={beta:.5g}, M={M_eV:.5g} eV, n={n}: {reason}")
 
         # the reasons, for histories.csv (science-readiness prompt 07)
         return {beta: reason for beta, reason in dropped}
 
-    def build_plot_work(potential: AbstractPotential) -> ray.ObjectRef:
-        # build a work queue to read in all ScalarHistory instances with this potential, for the
-        # couplings in Coupling_array
+    def build_plot_work(group: List[AbstractModel]) -> ray.ObjectRef:
+        # build a work queue to read in the ScalarHistory instances of this (M, n) group, one per
+        # beta (jordan-normalization prompt 07)
+        group_model = group[0]
         model_query_batch = [
             {
-                "shard_key": coupling.shard_key,
+                "shard_key": model.shard_key,
                 "solver_labels": ["Radau+kinematic-cap-stepping0"],
                 "failure": False,
                 "cosmology": model_cosmology,
                 "T_Jordan_init": T_init,
-                "T_Jordan_stop": T_stop,
                 "phi_Einstein_init": phi_init,
                 "pi_Einstein_init": pi_init,
                 "z_grid": None,
-                "potential": potential,
-                "coupling": coupling,
+                "model": model,
+                "tuning_tol": tuning_tol,
                 "atol": atol,
                 "rtol": rtol,
                 "tags": tags,
                 "_do_not_populate": True,
             }
-            for coupling in Coupling_array
+            for model in group
         ]
         model_query_queue = RayWorkPool(
             pool,
@@ -909,7 +905,7 @@ def run_pipeline(
         model_query_queue.run()
 
         scalar_failures = report_dropped_scalar_histories(
-            model_label, potential, model_query_batch, model_query_queue.results
+            model_label, group_model, model_query_batch, model_query_queue.results
         )
 
         available_models = [
@@ -972,12 +968,12 @@ def run_pipeline(
         available_bbn = [B for B in bbn_query_queue.results if B.available]
 
         bbn_failures = report_dropped_bbn_models(
-            model_label, potential, model_proxies, bbn_query_queue.results
+            model_label, group_model, model_proxies, bbn_query_queue.results
         )
 
         return build_beta_plot.remote(
             model_label,
-            potential,
+            group_model,
             available_adiabatic,
             available_bbn,
             available_models,
@@ -986,9 +982,14 @@ def run_pipeline(
             bbn_failures,
         )
 
+    # the models grouped by (M, n), beta within each group, in Model_array's order (M outer)
+    groups = {}
+    for model in Model_array:
+        groups.setdefault((model._M.store_id, model._n), []).append(model)
+
     work_queue = RayWorkPool(
         pool,
-        Potential_array,
+        list(groups.values()),
         task_builder=build_plot_work,
         compute_handler=None,
         store_handler=None,
@@ -1012,7 +1013,7 @@ def run_pipeline(
         small_network=BBN_SMALL_NETWORK,
     )
 
-    # figure 2 (convergence in M) and histories.csv span every potential this run read
+    # figure 2 (convergence in M) and histories.csv span every (M, n) group this run read
     # (science-readiness prompt 07)
     all_records = [
         record for records in work_queue.results if records for record in records
@@ -1052,31 +1053,27 @@ with ShardedPool(
 ) as pool:
     # what the plot reads before the histories, from plot_inputs.py (read-only-plots prompt 02;
     # README P1). A parameter the build was not run with stops the run here, before any figure
-    # (U4); a potential or coupling that was never stored is skipped with a warning (U3)
+    # (U4); a model that was never stored is skipped with a warning (U3)
     units = Planck_units()
     try:
-        atol, rtol, T_init, phi_init, pi_init = plot_inputs.parameters(
+        atol, rtol, T_init, phi_init, pi_init, tuning_tol = plot_inputs.parameters(
             pool,
             abs_tol=args.abs_tol,
             rel_tol=args.rel_tol,
             T_init_GeV=args.T_init_GeV,
             phi_init_Mp=args.phi_init_Mp,
             units=units,
+            tuning_tol=DEFAULT_TUNING_TOLERANCE,
         )
 
-        # read in the stored tables of beta, M, and Lambda
-        beta_table, M_table, Lambda_table = plot_inputs.stored_grid(pool, units)
+        # read in the stored tables of beta and M
+        beta_table, M_table = plot_inputs.stored_grid(pool, units)
 
-        Potential_array = plot_inputs.potentials(
-            pool, args.potential_type, M_table, Lambda_table, units
+        Model_array = plot_inputs.exponential_models(
+            pool, args.potential_type, M_table, beta_table, units
         )
-        Coupling_array = plot_inputs.couplings(pool, beta_table, units)
 
         model_list = plot_inputs.models(pool, units)
-        T_stop_list = [
-            plot_inputs.T_stop(pool, args.T_stop_GeV, model_data["cosmology"], units)
-            for model_data in model_list
-        ]
     except plot_inputs.PlotOptionNotStored as e:
         print(str(e), file=sys.stderr)
         sys.exit(2)
@@ -1092,19 +1089,18 @@ with ShardedPool(
             f"Yp={SM_baseline['Yp_BBN']:.6g}, D/H x1e5={SM_baseline['DOverH']:.6g}, 3He/H x1e5={SM_baseline['He3OverH']:.6g}, 7Li/H x1e10={SM_baseline['Li7OverH']:.6g}"
         )
 
-    for model_data, T_stop in zip(model_list, T_stop_list):
+    for model_data in model_list:
         tags = []
 
         run_pipeline(
             model_data,
-            Potential_array,
-            Coupling_array,
+            Model_array,
             T_init,
-            T_stop,
             phi_init,
             pi_init,
             atol,
             rtol,
+            tuning_tol,
             tags,
             SM_baseline,
         )

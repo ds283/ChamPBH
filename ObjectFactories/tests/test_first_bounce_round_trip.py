@@ -46,15 +46,14 @@ from ObjectFactories.tests.test_version_keyed_lookups import (
     LABEL_A,
     _TempStoreCase,
     _atol,
-    _coupling,
     _insert,
     _phi,
     _pi,
-    _potential,
+    _stand_in_model,
     _rtol,
     _scalar_history_query,
     _T_init,
-    _T_stop,
+    _tuning_tol,
 )
 from Units import Planck_units
 
@@ -94,9 +93,31 @@ COLUMNS = (
 NO_FIXED_T = SM.FixedTValues(None, None, None, None)
 
 
+# the keys tune_history adds to a success payload, which ScalarHistory.store() reads since
+# jordan-normalization prompt 07 (S3); stand-in values, not asserted here
+STAND_IN_TUNING = {
+    "normalization": -277.0,
+    "V_ref": 1.0e-120,
+    "phi_ref": 0.06,
+    "phi_0": 0.059,
+    "pi_0": 0.08,
+    "tracking": 0.9,
+    "residual_H": 1.0e-6,
+    "residual_phi": -1.0e-6,
+    "tuning_iterations": 5,
+    "plain_steps": 1,
+    "secant_steps": 3,
+    "guard_steps": 0,
+    "seed_kind": "tracking",
+    "seed_normalization": -276.9,
+    "seed_phi_ref": 0.061,
+}
+
+
 def _success_payload(bounce, fixed_T=NO_FIXED_T):
     """The keys of compute_scalar_history's success payload that ScalarHistory.store() reads."""
     return {
+        **STAND_IN_TUNING,
         "metadata": NS(
             compute_time=1.0,
             compute_steps=1,
@@ -130,11 +151,10 @@ def _model(compute_result):
         solver_labels={STEPPER: NS(store_id=1)},
         cosmology=_cosmology,
         T_Jordan_init=_T_init,
-        T_Jordan_stop=_T_stop,
         phi_Einstein_init=_phi,
         pi_Einstein_init=_pi,
-        potential=_potential,
-        coupling=_coupling,
+        model=_stand_in_model,
+        tuning_tol=_tuning_tol,
         atol=_atol,
         rtol=_rtol,
         label="m",

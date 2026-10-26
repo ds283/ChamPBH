@@ -80,7 +80,7 @@ PILOT = [
 ]
 PILOT_SCOPE = (
     "config exponential.yaml; potential Exponential; β 1.1, 1.15, 1.2, 10, 25; "
-    "M 0.001 Mp; Λ 0.001 eV; φ* 5 Mp; 16 shards; job rrk-adoption-04-reference"
+    "M 0.001 Mp; φ* 5 Mp; 16 shards; job rrk-adoption-04-reference"
 )
 
 
@@ -144,7 +144,7 @@ class TestRegistration(WrapperCase):
         self.assertEqual(
             manifest["scope"],
             "no config file; potential none; β 0.1–3.0, 5 per unit; "
-            "M 10^25–10^26.5 eV, 6 per decade; Λ 10^-2–10^1 eV, 6 per decade; φ* 5 Mp; "
+            "M 10^25–10^26.5 eV, 6 per decade; φ* 5 Mp; "
             "20 shards; job ChamPBH-test",
         )
         self.assertEqual(
@@ -325,8 +325,6 @@ class TestScope(WrapperCase):
                 *["0.1", "0.5", "1", "1.5", "2", "2.5", "3"],
                 "--M-values-eV",
                 "1e24",
-                "--Lambda-values-Mp",
-                "1e-30",
                 "--phi-init-Mp",
                 "2.5",
             ]
@@ -334,7 +332,7 @@ class TestScope(WrapperCase):
         self.assertEqual(
             scope,
             "no config file; potential Exponential; β 7 values, 0.1–3; M 1e+24 eV; "
-            "Λ 1e-30 Mp; φ* 2.5 Mp; 20 shards; job ChamPBH-test",
+            "φ* 2.5 Mp; 20 shards; job ChamPBH-test",
         )
 
 

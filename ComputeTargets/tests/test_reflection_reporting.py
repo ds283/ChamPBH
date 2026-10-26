@@ -78,8 +78,11 @@ def sample_payload(**overrides) -> dict:
 def stand_in_model(extra_data: Optional[dict]):
     return SimpleNamespace(
         solver=SimpleNamespace(label="stand-in solver"),
-        _coupling=SimpleNamespace(name="stand-in coupling"),
-        _potential=SimpleNamespace(name="stand-in potential"),
+        # the model and the tuning's V_ref and phi_ref, which the labels name since
+        # jordan-normalization prompt 07 (until then the coupling's and potential's names)
+        model=SimpleNamespace(name="stand-in model"),
+        tuning=SimpleNamespace(V_ref=1.0e-120, phi_ref=0.06),
+        _units=SimpleNamespace(PlanckMass=1.0),
         extra_metadata=extra_data,
     )
 

@@ -17,10 +17,12 @@
 The initial field as a run option, with a super-Planckian warning
 (science-readiness prompt 04, README section 6.5).
 
-(a) the check, with ExponentialCoupling and Planck_units; (b) the three drivers read
-`args.phi_init_Mp` and keep no `5.0 * units.PlanckMass` literal; (c) the parser; (d) the
-warning step returns the couplings it was given, unchanged, having printed one warning per
-super-Planckian entry.
+(a) the check, with ExponentialModel (at phi_ref = 0) and Planck_units; (b) the three drivers
+read `args.phi_init_Mp` and keep no `5.0 * units.PlanckMass` literal; (c) the parser; (d) the
+warning step returns the models it was given, unchanged, having printed one warning per
+super-Planckian entry. (Until jordan-normalization prompt 07 the check took ExponentialCoupling
+objects, which that prompt deleted; the model's conformal factor at phi_ref = 0 is the
+coupling's, bit for bit.)
 
 No Ray cluster, no datastore, no PRyMordial solve. Instant.
 """
@@ -36,16 +38,18 @@ BETAS = [1.0, 6.0, 7.0, 25.0, 40.0]
 
 
 def _setup(phi_Mp):
-    from CosmologyConcepts import beta_value, temperature
-    from CosmologyConcepts.ConformalCouplings.ExponentialCoupling import (
-        ExponentialCoupling,
-    )
+    from CosmologyConcepts import M_value, beta_value, temperature
     from CosmologyConcepts.FieldValues import phi_value
+    from CosmologyConcepts.Models import ExponentialModel
     from Units import Planck_units
 
     units = Planck_units()
+    # one model per beta, at M = 1e-3 M_P and n = 1 (M does not enter the check)
     couplings = [
-        ExponentialCoupling(i, beta_value(i, b), units) for i, b in enumerate(BETAS)
+        ExponentialModel(
+            i, M_value(0, 1.0e-3 * units.PlanckMass), 1, beta_value(i, b), units
+        )
+        for i, b in enumerate(BETAS)
     ]
     phi = phi_value(0, phi_Mp * units.PlanckMass)
     T = temperature(0, T_INIT_GEV * units.GeV)

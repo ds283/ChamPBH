@@ -740,8 +740,7 @@ class TestDeclaredMaps(unittest.TestCase):
         column the factories declare; each polymorphic target is a registered table; the type
         values cover every identifier the code defines; and every *_serial column without a
         foreign key, and every *_type column, is a declared polymorphic pair."""
-        from CosmologyConcepts.ConformalCouplings import model_ids as coupling_ids
-        from CosmologyConcepts.Potentials import model_ids as potential_ids
+        from CosmologyConcepts.Models import model_ids
         from CosmologyModels import model_ids as cosmology_ids
 
         registry = _registry()
@@ -779,8 +778,7 @@ class TestDeclaredMaps(unittest.TestCase):
         # the type values: every identifier the code defines is mapped or declared unstored
         spaces = {
             "cosmology_type": cosmology_ids,
-            "potential_type": potential_ids,
-            "coupling_type": coupling_ids,
+            "model_type": model_ids,
         }
         pairs = cs.POLYMORPHIC_REFERENCES["ScalarHistory"]
         for serial_column, (type_column, mapping) in pairs.items():
@@ -805,23 +803,19 @@ class TestDeclaredMaps(unittest.TestCase):
                     with self.subTest(column=f"{table}.{column.name}"):
                         self.assertIn((table, column.name), declared_pairs)
 
-    def test_13b_the_potential_and_coupling_maps_follow_type_id(self):
-        """Each mapped potential and coupling table is the class of that name, whose type_id
-        returns the mapped value (read from the class's source with ast; nothing is
-        instantiated)."""
+    def test_13b_the_model_map_follows_type_id(self):
+        """Each mapped model table is the class of that name, whose type_id returns the mapped
+        value (read from the class's source with ast; nothing is instantiated). Until
+        jordan-normalization prompt 07 the maps were the potential's and the coupling's.
+        """
         import ast
         import inspect
 
-        import CosmologyConcepts.ConformalCouplings as couplings
-        import CosmologyConcepts.Potentials as potentials
-        from CosmologyConcepts.ConformalCouplings import model_ids as coupling_ids
-        from CosmologyConcepts.Potentials import model_ids as potential_ids
+        import CosmologyConcepts.Models as models
+        from CosmologyConcepts.Models import model_ids
 
         pairs = cs.POLYMORPHIC_REFERENCES["ScalarHistory"]
-        for column, package, ids in (
-            ("potential_serial", potentials, potential_ids),
-            ("coupling_serial", couplings, coupling_ids),
-        ):
+        for column, package, ids in (("model_serial", models, model_ids),):
             for value, table in pairs[column][1].items():
                 with self.subTest(table=table):
                     cls = getattr(package, table)
@@ -896,9 +890,9 @@ def _fill_champbh_shard(conn, sm_shard: bool, offset: int, bbn_reason: str, bk: 
     _insert(conn, "tolerance", serial=o + 4, timestamp=TS, log10_tol=-10.0)
     _insert(conn, "beta_value", serial=o + 5, timestamp=TS, value=1.15)
     _insert(conn, "M_value", serial=o + 6, timestamp=TS, value_eV=2.435e24)
-    _insert(conn, "Lambda_value", serial=o + 7, timestamp=TS, value_eV=1e-3)
+    # the tuning tolerance, in the serial Lambda_value had until jordan-normalization prompt 07
+    _insert(conn, "tolerance", serial=o + 7, timestamp=TS, log10_tol=-5.0)
     _insert(conn, "temperature", serial=o + 8, timestamp=TS, value_GeV=2e4)
-    _insert(conn, "temperature", serial=o + 9, timestamp=TS, value_GeV=1e-7)
     _insert(conn, "phi_value", serial=o + 10, timestamp=TS, value_PlanckMass=5.0)
     _insert(conn, "pi_value", serial=o + 11, timestamp=TS, value_PlanckMass=0.0)
     _insert(
@@ -906,16 +900,6 @@ def _fill_champbh_shard(conn, sm_shard: bool, offset: int, bbn_reason: str, bk: 
     )
     _insert(
         conn, "redshift", serial=o + 13, timestamp=TS, log_one_plus_z=math.log1p(1e9)
-    )
-    _insert(
-        conn,
-        "ExponentialPotential",
-        serial=o + 14,
-        version=o + 1,
-        timestamp=TS,
-        M_serial=o + 6,
-        Lambda_serial=o + 7,
-        n_value=1,
     )
     _insert(
         conn,
@@ -942,10 +926,12 @@ def _fill_champbh_shard(conn, sm_shard: bool, offset: int, bbn_reason: str, bk: 
         return
     _insert(
         conn,
-        "ExponentialCoupling",
+        "ExponentialModel",
         serial=o + 20,
         version=o + 1,
         timestamp=TS,
+        M_serial=o + 6,
+        n_value=1,
         beta_serial=o + 5,
     )
     _insert(
@@ -957,16 +943,14 @@ def _fill_champbh_shard(conn, sm_shard: bool, offset: int, bbn_reason: str, bk: 
         label=f"{bk}-ScalarHistory",
         cosmology_type=3,
         cosmology_serial=o + 15,
-        potential_type=1,
-        potential_serial=o + 14,
-        coupling_type=0,
-        coupling_serial=o + 20,
+        model_type=1,
+        model_serial=o + 20,
         atol_serial=o + 4,
         rtol_serial=o + 3,
+        tuning_tol_serial=o + 7,
         phi_Einstein_init_serial=o + 10,
         pi_Einstein_init_serial=o + 11,
         T_Jordan_init_serial=o + 8,
-        T_Jordan_stop_serial=o + 9,
         failure=0,
         solver_serial=o + 16,
         z_samples=2,
@@ -1091,8 +1075,9 @@ class TestChamPBHSchema(unittest.TestCase):
 
     def test_14_a_store_with_champbhs_schema(self):
         """(14) On shards with exactly the tables the factories register: the polymorphic map
-        resolves ScalarHistory's three references (types 3, 1, 0) with no problem;
-        ExponentialCoupling and the *_tags tables are sharded; LambdaCDM is not noted, since
+        resolves ScalarHistory's two references (types 3 and 1) with no problem;
+        ExponentialModel and the *_tags tables are sharded (until jordan-normalization prompt
+        07, three references, and ExponentialCoupling sharded); LambdaCDM is not noted, since
         config.sharding no longer lists it (dk-and-rpk-migration P8); a copy under
         other serials, another shard, other timings and labels, and another elapsed time in a
         wall-clock failure is equal; and one ulp in one ScalarHistoryValue column is a near
@@ -1107,7 +1092,7 @@ class TestChamPBHSchema(unittest.TestCase):
         self.assertEqual(result["problems"], [], cs.format_result(result))
         self.assertTrue(result["equal"], cs.format_result(result))
         tables = result["tables"]
-        self.assertEqual(tables["ExponentialCoupling"]["kind_a"], "sharded")
+        self.assertEqual(tables["ExponentialModel"]["kind_a"], "sharded")
         for tags in ("ScalarHistory_tags", "AdiabaticHistory_tags", "BBNData_tags"):
             self.assertEqual(tables[tags]["kind_a"], "sharded")
         self.assertEqual(tables["QCD_Cosmology"]["kind_a"], "replicated")
@@ -1143,10 +1128,9 @@ class TestChamPBHSchema(unittest.TestCase):
         self.assertEqual([d["column"] for d in pair["differing"]], ["Sigma"])
         model = pair["a"]["history_serial"]["row"]
         self.assertEqual(model["cosmology_serial"]["table"], "QCD_Cosmology")
-        self.assertEqual(model["potential_serial"]["table"], "ExponentialPotential")
-        self.assertEqual(model["coupling_serial"]["table"], "ExponentialCoupling")
+        self.assertEqual(model["model_serial"]["table"], "ExponentialModel")
         self.assertEqual(
-            model["coupling_serial"]["row"]["beta_serial"]["row"], {"value": 1.15}
+            model["model_serial"]["row"]["beta_serial"]["row"], {"value": 1.15}
         )
         self.assertNotIn("compute_time", model)
         self.assertEqual(model["compute_steps"], 1234)

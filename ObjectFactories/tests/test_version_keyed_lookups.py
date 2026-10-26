@@ -31,8 +31,8 @@ writes that label's row beside the first. The pattern is the package's
 
 Rows are inserted through the actor's own inserter, `store._schema[<table>]["insert"]`, so the
 `version` column is filled by the package's `Datastore._insert`. Each row is given an explicit
-serial, so no serial is leased. The objects a lookup keys on (cosmology, potential, coupling,
-parameter values, the model proxy) are stand-ins that carry only the attributes the factories
+serial, so no serial is leased. The objects a lookup keys on (cosmology, model, parameter values,
+the model proxy) are stand-ins that carry only the attributes the factories
 read. The pattern was that of `prompts/run-integrity/planning-probes/datastore_version_probe.py`.
 
 The package's own suite tests the layer: that a caller's payload is copied and the reserved key is
@@ -52,6 +52,7 @@ import ray
 import sqlalchemy as sqla
 
 from StoreFixtures import standin_pool as sp
+from Units import Planck_units
 from config.datastore import factories, serial_batch_sizes
 from config.sharding import replicated_tables
 
@@ -68,11 +69,11 @@ def _stand_in(store_id, type_id=0):
 
 
 _cosmology = _stand_in(1, 7)
-_potential = _stand_in(2, 3)
-_coupling = _stand_in(4, 5)
-_T_init, _T_stop = _stand_in(10), _stand_in(11)
+# the model (jordan-normalization prompt 07): one stand-in where the potential and the coupling were
+_stand_in_model = _stand_in(2, 3)
+_T_init = _stand_in(10)
 _phi, _pi = _stand_in(12), _stand_in(13)
-_atol, _rtol = _stand_in(14), _stand_in(15)
+_atol, _rtol, _tuning_tol = _stand_in(14), _stand_in(15), _stand_in(16)
 
 _MODEL_SERIAL = 1
 
@@ -82,11 +83,10 @@ def _scalar_history_query(**extra):
         solver_labels={},
         cosmology=_cosmology,
         T_Jordan_init=_T_init,
-        T_Jordan_stop=_T_stop,
         phi_Einstein_init=_phi,
         pi_Einstein_init=_pi,
-        potential=_potential,
-        coupling=_coupling,
+        model=_stand_in_model,
+        tuning_tol=_tuning_tol,
         atol=_atol,
         rtol=_rtol,
         z_grid=None,
@@ -100,7 +100,7 @@ def _scalar_history_query(**extra):
 def _model_proxy(store_id=_MODEL_SERIAL):
     return NS(
         store_id=store_id,
-        get=lambda: NS(cosmology=_cosmology, coupling=_coupling, potential=_potential),
+        get=lambda: NS(cosmology=_cosmology, model=_stand_in_model),
     )
 
 
@@ -116,7 +116,7 @@ def _insert(store, cls_name, row):
 
 
 def _insert_failed_scalar_history(store):
-    for serial, log10_tol in ((14, -10.0), (15, -8.0)):
+    for serial, log10_tol in ((14, -10.0), (15, -8.0), (16, -5.0)):
         _insert(store, "tolerance", dict(serial=serial, log10_tol=log10_tol))
     return _insert(
         store,
@@ -126,16 +126,14 @@ def _insert_failed_scalar_history(store):
             label="m",
             cosmology_type=7,
             cosmology_serial=1,
-            potential_type=3,
-            potential_serial=2,
-            coupling_type=5,
-            coupling_serial=4,
+            model_type=3,
+            model_serial=2,
             atol_serial=14,
             rtol_serial=15,
+            tuning_tol_serial=16,
             phi_Einstein_init_serial=12,
             pi_Einstein_init_serial=13,
             T_Jordan_init_serial=10,
-            T_Jordan_stop_serial=11,
             failure=True,
             validated=True,
         ),
@@ -419,27 +417,31 @@ class TestVersionKeyedLookups(_TempStoreCase):
         self.assertEqual(keyed, KEYED_TABLES)
 
     def test_e_parameter_tables_are_not_keyed(self):
-        """(e) An ExponentialCoupling for the same beta under A and then B has one row and one serial.
+        """(e) An ExponentialModel for the same (M, n, beta) under A and then B has one row and one serial.
 
         A regression guard: this passes on the tree before prompt 01 as well, and must
         keep passing. Parameter tables carry a version column but are not keyed on it
-        (README §0.4).
+        (README §0.4). (Until jordan-normalization prompt 07 the table was ExponentialCoupling,
+        keyed by beta alone.)
         """
+        # the model's constructor formats M, so it is given real units
+        units = Planck_units()
         store_a = self.open(LABEL_A)
         beta = store_a.object_get("beta_value", value=0.5, serial=3)
+        M = store_a.object_get("M_value", value=1.0e-3, units=units, serial=4)
         c_a = store_a.object_get(
-            "ExponentialCoupling", beta=beta, units=_UNITS, serial=21
+            "ExponentialModel", M=M, n=1, beta=beta, units=units, serial=21
         )
 
         store_b = self.open(LABEL_B)
         c_b = store_b.object_get(
-            "ExponentialCoupling", beta=beta, units=_UNITS, serial=22
+            "ExponentialModel", M=M, n=1, beta=beta, units=units, serial=22
         )
 
         self.assertEqual(c_a.store_id, 21)
         self.assertEqual(c_b.store_id, c_a.store_id)
 
-        table = store_b._tables["ExponentialCoupling"]
+        table = store_b._tables["ExponentialModel"]
         with store_b._engine.begin() as conn:
             n = conn.execute(sqla.select(sqla.func.count()).select_from(table)).scalar()
         self.assertEqual(n, 1)

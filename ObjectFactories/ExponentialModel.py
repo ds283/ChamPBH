@@ -13,17 +13,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+The exponential model's table (jordan-normalization prompt 07, S1; README §6.0 R6, R14): one row
+per (M, n, beta), every Lagrangian parameter of the model in one row. It replaces the tables of
+ExponentialPotential (M, Lambda, n) and ExponentialCoupling (beta). The normalization of the
+potential is not a parameter of the model but of each history, which finds it by tuning and stores
+it (ScalarHistory, R7), so the table holds no Lambda.
+
+The table is sharded by beta, its shard key the beta_value row, as ExponentialCoupling's was
+(config/sharding.py); a ScalarHistory takes the same shard key from its model.
+"""
+
 import sqlalchemy as sqla
 from sqlalchemy.exc import MultipleResultsFound
 
-from CosmologyConcepts import M_value, Lambda_value
-from CosmologyConcepts.Potentials import ExponentialPotential
+from CosmologyConcepts import M_value, beta_value
+from CosmologyConcepts.Models import ExponentialModel
 from datastorekit.SQL.factory_base import SQLAFactoryBase
 from datastorekit.store_inventory import InventorySpec, Parent
 from Units.base import UnitsLike
 
 
-class sqla_ExponentialPotential_factory(SQLAFactoryBase):
+class sqla_ExponentialModel_factory(SQLAFactoryBase):
     def __init__(self):
         pass
 
@@ -39,32 +50,33 @@ class sqla_ExponentialPotential_factory(SQLAFactoryBase):
                     index=True,
                     nullable=False,
                 ),
+                sqla.Column("n_value", sqla.Integer, nullable=False),
                 sqla.Column(
-                    "Lambda_serial",
+                    "beta_serial",
                     sqla.Integer,
-                    sqla.ForeignKey("Lambda_value.serial"),
+                    sqla.ForeignKey("beta_value.serial"),
                     index=True,
                     nullable=False,
                 ),
-                sqla.Column("n_value", sqla.Integer, nullable=False),
             ],
         }
 
     def inventory_spec(self):
-        # build() matches M_serial, Lambda_serial and n_value, and not version
-        # (dk-and-rpk-migration prompt 09)
+        # build() matches M_serial, n_value and beta_serial, and not version, as the factories of
+        # ExponentialPotential and ExponentialCoupling did (dk-and-rpk-migration prompt 09).
+        # M_value and beta_value are replicated, so both are on this class's shard
         return InventorySpec(
             leaves=("n_value",),
             parents={
                 "M": Parent("M_serial", "M_value"),
-                "Lambda": Parent("Lambda_serial", "Lambda_value"),
+                "beta": Parent("beta_serial", "beta_value"),
             },
         )
 
     def build(self, payload, conn, table, inserter, tables, inserters):
         M: M_value = payload["M"]
-        Lambda: Lambda_value = payload["Lambda"]
         n: int = payload["n"]
+        beta: beta_value = payload["beta"]
 
         units: UnitsLike = payload["units"]
 
@@ -72,15 +84,15 @@ class sqla_ExponentialPotential_factory(SQLAFactoryBase):
             table.c.serial,
         ).filter(
             table.c.M_serial == M.store_id,
-            table.c.Lambda_serial == Lambda.store_id,
             table.c.n_value == n,
+            table.c.beta_serial == beta.store_id,
         )
 
         try:
             row_data = conn.execute(query).one_or_none()
         except MultipleResultsFound as e:
             print(
-                f"!! ExponentialPotential.build(): multiple results found when querying for ExponentialPotential"
+                f"!! ExponentialModel.build(): multiple results found when querying for ExponentialModel"
             )
             raise e
 
@@ -88,8 +100,8 @@ class sqla_ExponentialPotential_factory(SQLAFactoryBase):
         if row_data is None:
             insert_data = {
                 "M_serial": M.store_id,
-                "Lambda_serial": Lambda.store_id,
                 "n_value": n,
+                "beta_serial": beta.store_id,
             }
             if "serial" in payload:
                 insert_data["serial"] = payload["serial"]
@@ -100,13 +112,7 @@ class sqla_ExponentialPotential_factory(SQLAFactoryBase):
             attribute_set = {"_deserialized": True}
 
         # return the constructed object
-        obj = ExponentialPotential(
-            store_id=store_id,
-            M=M,
-            Lambda=Lambda,
-            n=n,
-            units=units,
-        )
+        obj = ExponentialModel(store_id, M, n, beta, units)
         for key, value in attribute_set.items():
             setattr(obj, key, value)
         return obj

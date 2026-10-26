@@ -19,9 +19,12 @@ The fixed-temperature values of a history (science-readiness prompt 06b, README 
 `T_Jordan_crossing(result, log_T)` returns the N of the history's first crossing of
 ln T_J = log_T on the dense output, or None; `fixed_T_values(result, policy, model, units)`
 reads phi and rho_NP/rho_R,J there, at T_J = 1 MeV and 70 keV, through `fixed_T_value_at`. (The
-realized model, since jordan-normalization prompt 04; built here from the rows by the adapter.)
+realized model, since jordan-normalization prompt 04; built here as ExponentialModel realized at
+4 ln(1 meV) and phi_ref = 0, since prompt 07 deleted the rows and the adapter that built it from
+them, which gave the same values bitwise.)
 
-(a) runs one full history through `compute_scalar_history._function`, capturing its
+(a) runs one full history through `integrate_history` (until jordan-normalization prompt 07,
+`compute_scalar_history._function`, which now tunes the history), capturing its
 `IntegrationResult`, and ties the dense-output values to the stored samples and to
 `compute_BBN_data`'s per-sample ratio. (b) and (c) drive `integrate_scalar_history` from the
 integrator audit's P1 state with the helpers of `test_kinematic_cap_loop`. No Ray cluster, no
@@ -42,7 +45,6 @@ import numpy as np
 
 import ComputeTargets.tests.test_kinematic_cap_loop as kcl
 from CosmologyConcepts import (
-    Lambda_value,
     M_value,
     beta_value,
     redshift,
@@ -50,12 +52,8 @@ from CosmologyConcepts import (
     temperature,
 )
 from CosmologyConcepts.redshift import log_one_plus_z_grid
-from CosmologyConcepts.ConformalCouplings.ExponentialCoupling import (
-    ExponentialCoupling,
-)
 from CosmologyConcepts.FieldValues import phi_value, pi_value
 from CosmologyConcepts.Models.ExponentialModel import ExponentialModel
-from CosmologyConcepts.Potentials.ExponentialPotential import ExponentialPotential
 
 SM = kcl.SM
 _units = kcl._units
@@ -88,21 +86,15 @@ def bbn_ratio(sample) -> float:
 
 def full_history(beta: float, M: float):
     """
-    compute_scalar_history._function with main.py's initial data (phi* = 5 M_P, pi* = 0,
-    T* = 2e4 GeV, T_stop = T_CMB, 250 samples per decade of 1 + z to 1e35), as
-    tools/history_and_bbn.py runs it. Returns (data, result, policy, model), where result
-    is the IntegrationResult, captured by wrapping integrate_scalar_history for the call, and
-    model the realized model of the rows (the adapter's).
+    integrate_history with main.py's initial data (phi* = 5 M_P, pi* = 0, T* = 2e4 GeV,
+    T_stop = T_CMB, 250 samples per decade of 1 + z to 1e35), as tools/history_and_bbn.py runs
+    it. Returns (data, result, policy, model), where result is the IntegrationResult, captured by
+    wrapping integrate_scalar_history for the call, and model the realized model:
+    ExponentialModel(M, n = 1, beta) at the normalization 4 ln(1 meV) and phi_ref = 0.
     """
-    potential = ExponentialPotential(
-        0,
-        M_value(0, M * _units.PlanckMass),
-        Lambda_value(0, 1e-3 * _units.eV),
-        1,
-        _units,
-    )
-    coupling = ExponentialCoupling(0, beta_value(0, beta), _units)
-    model = ExponentialModel.from_rows(potential, coupling)
+    model = ExponentialModel(
+        0, M_value(0, M * _units.PlanckMass), 1, beta_value(0, beta), _units
+    ).realize(4.0 * log(1e-3 * _units.eV), 0.0)
 
     xs = log_one_plus_z_grid(250, 35.0)
     z_grid = redshift_array(z_array=[redshift(i, x) for i, x in enumerate(xs)])
@@ -118,7 +110,7 @@ def full_history(beta: float, M: float):
     with mock.patch.object(
         SM, "integrate_scalar_history", capturing
     ), contextlib.redirect_stdout(io.StringIO()):
-        data = SM.compute_scalar_history._function(
+        data = SM.integrate_history(
             kcl._cosmology,
             kcl._T_init,
             kcl._T_stop,
@@ -161,7 +153,7 @@ class TestFixedTValues(unittest.TestCase):
             self.assertLessEqual(rel(phi, s.phi_Einstein), 1e-9)
             self.assertLessEqual(rel(ratio, bbn_ratio(s)), 1e-8)
 
-        # compute_scalar_history returns fixed_T_values on the same result, all four reached
+        # integrate_history returns fixed_T_values on the same result, all four reached
         fixed_T = data["fixed_T_values"]
         self.assertIsInstance(fixed_T, SM.FixedTValues)
         self.assertEqual(fixed_T, SM.fixed_T_values(result, policy, model, _units))

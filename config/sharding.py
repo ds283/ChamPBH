@@ -22,17 +22,15 @@ replicated_tables = [
     "tolerance",
     "beta_value",
     "M_value",
-    "Lambda_value",
     "temperature",
     "phi_value",
     "pi_value",
-    "ExponentialPotential",
     "QCD_Cosmology",
     "IntegrationSolver",
 ]
 
 sharded_tables = {
-    "ExponentialCoupling": "shard_key",
+    "ExponentialModel": "shard_key",
     "ScalarHistory": "shard_key",
     "ScalarHistoryValue": "shard_key",
     "AdiabaticHistory": "shard_key",
@@ -45,7 +43,6 @@ read_table_config = {
     "redshift": {"tables_arg": True},
     "beta_value": {"tables_arg": False},
     "M_value": {"tables_arg": False},
-    "Lambda_value": {"tables_arg": False},
     "phi_value": {"tables_arg": False},
     "pi_value": {"tables_arg": False},
 }

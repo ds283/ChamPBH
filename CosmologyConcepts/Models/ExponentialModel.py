@@ -19,9 +19,11 @@ The exponential model (jordan-normalization prompt 04, M3; README §6.0 R6, R7, 
     V(phi) = V_0 exp((M/phi)^n),    A(phi) = exp(beta (phi - phi_ref)/M_P).
 
 The normalization is ln V_0 (multiplicative in V), and its secant coordinate is itself. The hooks
-are ExponentialPotential's and ExponentialCoupling's expressions, with ln Lambda^4 replaced by the
-normalization, so that through the adapter (from_rows) at phi_ref = 0 every value is bitwise what
-the potential and coupling rows give.
+are the expressions of the former ExponentialPotential and ExponentialCoupling, with ln Lambda^4
+replaced by the normalization, so that at the normalization 4 ln Lambda and phi_ref = 0 every value
+is bitwise what those rows gave (jordan-normalization prompt 04). Prompt 07 deleted the rows, their
+classes and the adapter from_rows that realized a model from them; the model is stored in its own
+table (ObjectFactories/ExponentialModel.py), keyed by (M, n, beta).
 """
 
 from math import log, sqrt
@@ -53,35 +55,6 @@ class ExponentialModel(AbstractModel):
         self._beta_float: float = float(beta)
 
         self._Mp: float = units.PlanckMass
-
-    @classmethod
-    def from_rows(cls, potential, coupling) -> RealizedModel:
-        """
-        The adapter (jordan-normalization prompt 04, M5): the realized model of today's
-        ExponentialPotential and ExponentialCoupling rows, with the normalization
-        4 log Lambda (the expression of ExponentialPotential._log_Lambda_4) and phi_ref = 0, so
-        that every value is bitwise the rows'. The model has store id 0; the rows' ids are not
-        carried. It is jordan-normalization prompt 07's to remove, once the model is stored.
-        """
-        # imported here: the rows' classes are needed only by the adapter
-        from CosmologyConcepts.ConformalCouplings.ExponentialCoupling import (
-            ExponentialCoupling,
-        )
-        from CosmologyConcepts.Potentials.ExponentialPotential import (
-            ExponentialPotential,
-        )
-
-        if not isinstance(potential, ExponentialPotential):
-            raise TypeError(
-                f"ExponentialModel.from_rows: expected an ExponentialPotential, got {type(potential).__name__}"
-            )
-        if not isinstance(coupling, ExponentialCoupling):
-            raise TypeError(
-                f"ExponentialModel.from_rows: expected an ExponentialCoupling, got {type(coupling).__name__}"
-            )
-
-        model = cls(0, potential._M, potential._n, coupling._beta, potential._units)
-        return model.realize(4.0 * log(float(potential._Lambda)), 0.0)
 
     @property
     def name(self) -> str:

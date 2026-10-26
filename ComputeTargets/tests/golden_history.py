@@ -5,18 +5,23 @@ by prompt 03 as data/golden_history_03.json, beside 01's, which is the record of
 prompt 05 as data/golden_history_05.json, which is the record of 05 on; 03's is the record of 03
 and 04.)
 
-Two histories are run as tools/history_and_bbn.py runs one, through
-compute_scalar_history._function with no Ray: QCD_Cosmology on Planck2018 in Planck_units;
-ExponentialPotential(M = 1e-3 M_P, Lambda = 1 meV, n = 1); ExponentialCoupling(beta) for beta = 1.5
-and beta = 5.5; phi* = 5 M_P, pi* = 0, T* = 2e4 GeV, T_stop = 1 MeV; atol = rtol = 1e-8; and the
+Two histories are run as tools/history_and_bbn.py runs one, through integrate_history (the
+primitive; until jordan-normalization prompt 07, compute_scalar_history._function) with no Ray:
+QCD_Cosmology on Planck2018 in Planck_units; ExponentialModel(M = 1e-3 M_P, n = 1, beta) for
+beta = 1.5 and beta = 5.5, realized at the normalization 4 ln(Lambda), Lambda = 1 meV, and
+phi_ref = 0; phi* = 5 M_P, pi* = 0, T* = 2e4 GeV, T_stop = 1 MeV; atol = rtol = 1e-8; and the
 production sampling axis, built as main.py builds it, by CosmologyConcepts.redshift.log_one_plus_z_grid
 at 250 samples per decade of 1 + z up to 85 decades (exponential.yaml's value): ln(1 + z) = k * DELTA,
 DELTA = ln 10 / 250, k = 0 ... 21250. (Until jordan-normalization prompt 03 the grid was main.py's
 np.logspace(0, 85, 21250) - 1, whose points are not multiples of DELTA.)
 
-Since jordan-normalization prompt 04 the history is computed with the realized model, which
-run_history builds from the two rows by the adapter ExponentialModel.from_rows(potential, coupling):
-normalization 4 log Lambda, phi_ref = 0. The record is unchanged, and the test passes it bitwise.
+Since jordan-normalization prompt 04 the history is computed with the realized model. Until prompt
+07 run_history built it from an ExponentialPotential and an ExponentialCoupling row by the adapter
+ExponentialModel.from_rows(potential, coupling): normalization 4 log Lambda, phi_ref = 0. Prompt 07
+deleted the rows and the adapter; run_history builds the model directly (`model`) and realizes it
+at `normalization(units)` = 4 log Lambda, the adapter's expression on the same float, and
+phi_ref = 0.0, so every value is bitwise the adapter's. The record is unchanged, and the test
+passes it bitwise.
 
 What is pinned, per history (see `record_of`):
   - samples_sha256: SHA-256 of numpy.asarray(samples, dtype=float64).tobytes(), row-major in
@@ -53,9 +58,10 @@ from pathlib import Path
 import numpy as np
 import scipy
 
-from ComputeTargets.ScalarHistory import SampleValues, compute_scalar_history
+from math import log
+
+from ComputeTargets.ScalarHistory import SampleValues, integrate_history
 from CosmologyConcepts import (
-    Lambda_value,
     M_value,
     beta_value,
     redshift,
@@ -63,12 +69,8 @@ from CosmologyConcepts import (
     temperature,
 )
 from CosmologyConcepts.redshift import log_one_plus_z_grid
-from CosmologyConcepts.ConformalCouplings.ExponentialCoupling import (
-    ExponentialCoupling,
-)
 from CosmologyConcepts.FieldValues import phi_value, pi_value
 from CosmologyConcepts.Models.ExponentialModel import ExponentialModel
-from CosmologyConcepts.Potentials.ExponentialPotential import ExponentialPotential
 from CosmologyModels.GenericEOS.QCD_Cosmology import QCD_Cosmology
 from CosmologyModels.LambdaCDM import Planck2018
 from Units import Planck_units
@@ -110,38 +112,43 @@ def make_z_grid() -> redshift_array:
     return redshift_array(z_array=[redshift(i, x) for i, x in enumerate(xs)])
 
 
-def rows(beta: float, units) -> tuple:
-    """The golden histories' potential and coupling rows, (potential, coupling), with store id 0."""
-    potential = ExponentialPotential(
+def model(beta: float, units) -> ExponentialModel:
+    """The golden histories' model, ExponentialModel(M, n, beta), with store id 0."""
+    return ExponentialModel(
         0,
         M_value(0, M_OVER_MP * units.PlanckMass),
-        Lambda_value(0, LAMBDA_OVER_EV * units.eV),
         N_EXPONENT,
+        beta_value(0, beta),
         units,
     )
-    coupling = ExponentialCoupling(0, beta_value(0, beta), units)
-    return potential, coupling
+
+
+def normalization(units) -> float:
+    """
+    The golden histories' normalization, 4 log Lambda with Lambda = LAMBDA_OVER_EV * units.eV: the
+    expression of the adapter ExponentialModel.from_rows (removed in jordan-normalization prompt
+    07), 4.0 * log(float(Lambda)), on the same float.
+    """
+    return 4.0 * log(LAMBDA_OVER_EV * units.eV)
 
 
 def run_history(beta: float) -> dict:
     """
-    Run one golden history; the payload of compute_scalar_history, which must not be a failure.
-    The realized model is the adapter's, ExponentialModel.from_rows(potential, coupling).
+    Run one golden history; the payload of integrate_history, which must not be a failure. The
+    realized model is model(beta, units) at normalization(units) and phi_ref = 0.0.
     """
     units = Planck_units()
     params = Planck2018()
     cosmology = QCD_Cosmology(0, units, params)
 
-    potential, coupling = rows(beta, units)
-
-    data = compute_scalar_history._function(
+    data = integrate_history(
         cosmology,
         temperature(0, T_INIT_GEV * units.GeV),
         temperature(1, T_STOP_GEV * units.GeV),
         phi_value(0, PHI_INIT_OVER_MP * units.PlanckMass),
         pi_value(0, PI_INIT),
         make_z_grid(),
-        ExponentialModel.from_rows(potential, coupling),
+        model(beta, units).realize(normalization(units), 0.0),
         task_label=f"golden_history-{history_key(beta)}",
         atol=ATOL,
         rtol=RTOL,
@@ -162,7 +169,7 @@ def _sha256(array) -> str:
 
 
 def record_of(data: dict) -> dict:
-    """The pinned record of one history (the payload of compute_scalar_history)."""
+    """The pinned record of one history (the payload of integrate_history)."""
     samples = data["sample"]
     labels = [r.log_one_plus_z for r in data["z_grid"]]
     names = list(SampleValues._fields)

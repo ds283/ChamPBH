@@ -164,7 +164,8 @@ class _NoSamples(SimpleNamespace):
 
 
 def _synthetic_records(units):
-    """Two (M, Lambda) sets of histories from stand-in stored objects."""
+    """Two (M, n) sets of histories from stand-in stored objects (until jordan-normalization
+    prompt 07, (M, Lambda))."""
     baseline = {"Yp_BBN": 0.2470, "DOverH": 2.55}
     records = []
     for M_Mp in (1e-3, 0.5):
@@ -200,7 +201,7 @@ def _synthetic_records(units):
                 build_history_record(
                     beta=beta,
                     M_Mp=M_Mp,
-                    Lambda_eV=1e-3,
+                    n=1,
                     phi_init_Mp=5.0,
                     scalar=scalar,
                     bbn=bbn,
@@ -213,7 +214,7 @@ def _synthetic_records(units):
         build_history_record(
             beta=9.0,
             M_Mp=0.5,
-            Lambda_eV=1e-3,
+            n=1,
             phi_init_Mp=5.0,
             scalar=None,
             bbn=None,
@@ -308,7 +309,7 @@ class TestFigures(unittest.TestCase):
             build_history_record(
                 beta=1.0,
                 M_Mp=0.5,
-                Lambda_eV=1e-3,
+                n=1,
                 phi_init_Mp=5.0,
                 scalar=None,
                 bbn=None,

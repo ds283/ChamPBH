@@ -185,6 +185,11 @@ the user makes the commits there, or has a session there make them.
 `[09-redshift-lookup-at-zero-takes-abs-of-the-comparison]` moved to §4, resolved by
 `jordan-normalization` prompt 03.)*
 
+*(2026-10-26: `[02-scalar-stage-missing-filter-keeps-every-model]` moved to §4, resolved by
+`jordan-normalization` prompt 07.)*
+
+## 4. Resolved issues
+
 ### `[02-scalar-stage-missing-filter-keeps-every-model]`
 
 **Opened:** 2026-10-12 by the orchestrator's review of prompt 02, from log 02's Observation 2,
@@ -211,8 +216,16 @@ which left the question open. **Not fixed:** `main.py`'s pipeline is outside thi
   [`jordan-normalization`](../jordan-normalization/IMPLEMENTATION_STATE.md) campaign, prompt 07,
   which rewrites the scalar stage's lookups for the new history key. That prompt closes it here, in
   §4, and deletes its row from `.documents/OPEN_ISSUES.md`.
-
-## 4. Resolved issues
+- **Resolved (2026-10-26):** by `jordan-normalization` prompt 07 (this commit). The scalar stage's
+  first pass reads its lookup results through the pure helper
+  `pipeline_selection.missing_models(models, lookups)`, which returns the models whose
+  `ScalarHistory` lookup is not `available`, in order (a stored failure is not missing, as before);
+  `build_solver_batch` calls it on each shard bin in place of the comprehension, so its
+  `num_missing == 0` return fires for a fully stored batch.
+  `ComputeTargets/tests/test_pipeline_selection.py::TestScalarStageFirstPass` (five tests, no Ray)
+  checks that a fully stored batch gives no work, one unavailable gives that one, a stored failure
+  is not missing, the order is kept and unequal lengths raise. With the old comprehension's logic
+  put back (every model returned), four of them fail.
 
 ### `[05-config-datastore-cannot-be-imported-before-the-layer]`
 

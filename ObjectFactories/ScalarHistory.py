@@ -25,7 +25,12 @@ from ComputeTargets import (
     ScalarHistory,
     ScalarHistoryValue,
 )
-from ComputeTargets.ScalarHistory import FirstBounce, FixedTValues
+from ComputeTargets.ScalarHistory import (
+    FirstBounce,
+    FixedTValues,
+    TUNING_OUTPUT_KEYS,
+    TuningValues,
+)
 from CosmologyConcepts import (
     redshift_array,
     redshift,
@@ -33,12 +38,8 @@ from CosmologyConcepts import (
     phi_value,
     pi_value,
 )
-from CosmologyConcepts.ConformalCouplings import AbstractCoupling
-from CosmologyConcepts.ConformalCouplings.model_ids import EXPONENTIAL_COUPLING
-from CosmologyConcepts.Potentials import AbstractPotential
-from CosmologyConcepts.Potentials.model_ids import (
-    EXPONENTIAL_POTENTIAL,
-)
+from CosmologyConcepts.Models import AbstractModel
+from CosmologyConcepts.Models.model_ids import EXPONENTIAL_MODEL
 from CosmologyModels import BaseCosmology
 from CosmologyModels.model_ids import XAV_IMPROVED_EOS_IDENTIFIER
 from datastorekit.SQL.factory_base import SQLAFactoryBase
@@ -48,6 +49,40 @@ from Quadrature.integration_metadata import IntegrationData, IntegrationSolver
 from Units.base import UnitsLike
 from config.defaults import DEFAULT_STRING_LENGTH
 from datastorekit.contract import require_version_serial
+
+# the tuning's outputs stored in units of the Planck mass, and in units of M_P^4
+# (jordan-normalization prompt 07, S3); the others are stored as tune_history returns them
+_TUNING_KEYS_IN_MP = ("phi_ref", "phi_0", "pi_0", "seed_phi_ref")
+_TUNING_KEYS_IN_MP4 = ("V_ref",)
+
+
+def _tuning_unit(key: str, units: UnitsLike) -> Optional[float]:
+    """The unit a tuning output is stored in: M_P, M_P^4, or None (stored as it is)."""
+    if key in _TUNING_KEYS_IN_MP:
+        return units.PlanckMass
+    if key in _TUNING_KEYS_IN_MP4:
+        return units.PlanckMass**4
+    return None
+
+
+def _tuning_columns(tuning: Optional[TuningValues], units: UnitsLike) -> dict:
+    """The columns of TUNING_OUTPUT_KEYS for a row: each in its stored unit, or all None."""
+    columns = {}
+    for key in TUNING_OUTPUT_KEYS:
+        value = None if tuning is None else getattr(tuning, key)
+        unit = _tuning_unit(key, units)
+        columns[key] = value / unit if value is not None and unit is not None else value
+    return columns
+
+
+def _tuning_from_row(row_data, units: UnitsLike) -> TuningValues:
+    """The TuningValues of a row read back: each column times its stored unit."""
+    values = {}
+    for key in TUNING_OUTPUT_KEYS:
+        value = getattr(row_data, key)
+        unit = _tuning_unit(key, units)
+        values[key] = value * unit if value is not None and unit is not None else value
+    return TuningValues(**values)
 
 
 class sqla_ScalarHistoryTagAssociation_factory(SQLAFactoryBase):
@@ -123,14 +158,11 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                 sqla.Column(
                     "cosmology_serial", sqla.Integer, index=True, nullable=False
                 ),
-                sqla.Column("potential_type", sqla.Integer, index=True, nullable=False),
-                sqla.Column(
-                    "potential_serial", sqla.Integer, index=True, nullable=False
-                ),
-                sqla.Column("coupling_type", sqla.Integer, index=True, nullable=False),
-                sqla.Column(
-                    "coupling_serial", sqla.Integer, index=True, nullable=False
-                ),
+                # the model, a polymorphic reference with no foreign key, as the cosmology
+                # (jordan-normalization prompt 07, S2): model_type is the model's type_id
+                # (CosmologyConcepts/Models/model_ids.py), which names its table
+                sqla.Column("model_type", sqla.Integer, index=True, nullable=False),
+                sqla.Column("model_serial", sqla.Integer, index=True, nullable=False),
                 sqla.Column(
                     "atol_serial",
                     sqla.Integer,
@@ -140,6 +172,16 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                 ),
                 sqla.Column(
                     "rtol_serial",
+                    sqla.Integer,
+                    sqla.ForeignKey("tolerance.serial"),
+                    index=True,
+                    nullable=False,
+                ),
+                # the tolerance on both residuals of the tuning (jordan-normalization prompt 07,
+                # S2; README §6.2 P7): part of the key, since a history tuned to another tolerance
+                # is another history
+                sqla.Column(
+                    "tuning_tol_serial",
                     sqla.Integer,
                     sqla.ForeignKey("tolerance.serial"),
                     index=True,
@@ -161,13 +203,6 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                 ),
                 sqla.Column(
                     "T_Jordan_init_serial",
-                    sqla.Integer,
-                    sqla.ForeignKey("temperature.serial"),
-                    index=True,
-                    nullable=False,
-                ),
-                sqla.Column(
-                    "T_Jordan_stop_serial",
                     sqla.Integer,
                     sqla.ForeignKey("temperature.serial"),
                     index=True,
@@ -208,6 +243,35 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                 sqla.Column("density_NP_ratio_1MeV", sqla.Float(64), nullable=True),
                 sqla.Column("phi_Einstein_70keV", sqla.Float(64), nullable=True),
                 sqla.Column("density_NP_ratio_70keV", sqla.Float(64), nullable=True),
+                # what the tuning found (jordan-normalization prompt 07, S3; README §6.2 P6): the
+                # keys of TUNING_OUTPUT_KEYS, as tune_history returns them. All are NULL on a
+                # failure row. normalization and seed_normalization are stored unconverted, since
+                # only the model can interpret them (P6): for ExponentialModel each is ln V_0 in
+                # the units of the run that stored it, which for every driver is Planck_units.
+                # V_ref = V(phi_ref) is stored in units of M_P^4; phi_ref, phi_0 (the field
+                # today), pi_0 (its velocity dphi/dN today) and seed_phi_ref in units of the
+                # Planck mass, as first_bounce_phi_Einstein. tracking = pi_0/(1.5 phi_0),
+                # residual_H = H_J/H0 - 1 and residual_phi = phi_ref/phi_min - 1 at T_CMB are
+                # dimensionless. tuning_iterations counts the integrations, the seed's included;
+                # plain_steps, secant_steps and guard_steps count the steps of each kind;
+                # seed_kind is the seed's kind (tracking, static or plain)
+                sqla.Column("normalization", sqla.Float(64), nullable=True),
+                sqla.Column("V_ref", sqla.Float(64), nullable=True),
+                sqla.Column("phi_ref", sqla.Float(64), nullable=True),
+                sqla.Column("phi_0", sqla.Float(64), nullable=True),
+                sqla.Column("pi_0", sqla.Float(64), nullable=True),
+                sqla.Column("tracking", sqla.Float(64), nullable=True),
+                sqla.Column("residual_H", sqla.Float(64), nullable=True),
+                sqla.Column("residual_phi", sqla.Float(64), nullable=True),
+                sqla.Column("tuning_iterations", sqla.Integer, nullable=True),
+                sqla.Column("plain_steps", sqla.Integer, nullable=True),
+                sqla.Column("secant_steps", sqla.Integer, nullable=True),
+                sqla.Column("guard_steps", sqla.Integer, nullable=True),
+                sqla.Column(
+                    "seed_kind", sqla.String(DEFAULT_STRING_LENGTH), nullable=True
+                ),
+                sqla.Column("seed_normalization", sqla.Float(64), nullable=True),
+                sqla.Column("seed_phi_ref", sqla.Float(64), nullable=True),
                 sqla.Column("validated", sqla.Boolean, default=False, nullable=False),
                 sqla.Column(
                     "extra_data", sqla.String(DEFAULT_STRING_LENGTH), nullable=True
@@ -216,15 +280,16 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
         }
 
     def inventory_spec(self):
-        # the key is what build() matches: the three type/serial pairs, the two temperatures,
-        # the initial phi and pi, the two tolerances and the version. failure is matched only when
-        # the payload gives it, and is a leaf so that the inventory shows it (campaign README
+        # the key is what build() matches: the two type/serial pairs (the cosmology and the
+        # model), the initial temperature, phi and pi, the three tolerances (atol, rtol and the
+        # tuning's) and the version (jordan-normalization prompt 07, S2). failure is matched only
+        # when the payload gives it, and is a leaf so that the inventory shows it (campaign README
         # P15); the stored label, a job name and a time, is not. The polymorphic maps are those of
-        # the three model_ids modules: only XAV_IMPROVED_EOS_IDENTIFIER names a stored cosmology.
-        # The coupling is on this row's shard, since both take their shard key from beta
-        # (dk-and-rpk-migration prompt 09)
+        # the two model_ids modules: only XAV_IMPROVED_EOS_IDENTIFIER names a stored cosmology.
+        # The model is on this row's shard, since both take their shard key from beta
+        # (dk-and-rpk-migration prompt 09; jordan-normalization prompt 07)
         return InventorySpec(
-            leaves=("cosmology_type", "potential_type", "coupling_type", "failure"),
+            leaves=("cosmology_type", "model_type", "failure"),
             parents={
                 "version": Parent("version", "version"),
                 "cosmology": Parent(
@@ -232,24 +297,17 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                     type_column="cosmology_type",
                     types={XAV_IMPROVED_EOS_IDENTIFIER: "QCD_Cosmology"},
                 ),
-                "potential": Parent(
-                    "potential_serial",
-                    type_column="potential_type",
-                    types={
-                        EXPONENTIAL_POTENTIAL: "ExponentialPotential",
-                    },
-                ),
-                "coupling": Parent(
-                    "coupling_serial",
-                    type_column="coupling_type",
-                    types={EXPONENTIAL_COUPLING: "ExponentialCoupling"},
+                "model": Parent(
+                    "model_serial",
+                    type_column="model_type",
+                    types={EXPONENTIAL_MODEL: "ExponentialModel"},
                 ),
                 "T_init": Parent("T_Jordan_init_serial", "temperature"),
-                "T_stop": Parent("T_Jordan_stop_serial", "temperature"),
                 "phi_init": Parent("phi_Einstein_init_serial", "phi_value"),
                 "pi_init": Parent("pi_Einstein_init_serial", "pi_value"),
                 "atol": Parent("atol_serial", "tolerance"),
                 "rtol": Parent("rtol_serial", "tolerance"),
+                "tuning_tol": Parent("tuning_tol_serial", "tolerance"),
             },
             tags=("ScalarHistory_tags", "history_serial"),
             values=("ScalarHistoryValue", "history_serial"),
@@ -263,13 +321,11 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
         cosmology: BaseCosmology = payload["cosmology"]
 
         T_init: temperature = payload.get("T_Jordan_init")
-        T_stop: temperature = payload.get("T_Jordan_stop")
 
         phi_Einstein_init: phi_value = payload.get("phi_Einstein_init")
         pi_Einstein_init: pi_value = payload.get("pi_Einstein_init")
 
-        potential: AbstractPotential = payload.get("potential")
-        coupling: AbstractCoupling = payload.get("coupling")
+        model: AbstractModel = payload.get("model")
 
         z_grid: Optional[redshift_array] = payload.get("z_grid", None)
 
@@ -281,6 +337,7 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
 
         atol: tolerance = payload["atol"]
         rtol: tolerance = payload["rtol"]
+        tuning_tol: tolerance = payload["tuning_tol"]
 
         atol_table = tables["tolerance"].alias("atol")
         rtol_table = tables["tolerance"].alias("rtol")
@@ -312,6 +369,7 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                 table.c.density_NP_ratio_1MeV,
                 table.c.phi_Einstein_70keV,
                 table.c.density_NP_ratio_70keV,
+                *(table.c[key] for key in TUNING_OUTPUT_KEYS),
                 solver_table.c.label.label("solver_label"),
                 solver_table.c.stepping.label("solver_stepping"),
                 atol_table.c.log10_tol.label("log10_atol"),
@@ -331,16 +389,14 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                 table.c.version == version_serial,
                 table.c.cosmology_type == cosmology.type_id,
                 table.c.cosmology_serial == cosmology.store_id,
-                table.c.potential_type == potential.type_id,
-                table.c.potential_serial == potential.store_id,
-                table.c.coupling_type == coupling.type_id,
-                table.c.coupling_serial == coupling.store_id,
+                table.c.model_type == model.type_id,
+                table.c.model_serial == model.store_id,
                 table.c.T_Jordan_init_serial == T_init.store_id,
-                table.c.T_Jordan_stop_serial == T_stop.store_id,
                 table.c.phi_Einstein_init_serial == phi_Einstein_init.store_id,
                 table.c.pi_Einstein_init_serial == pi_Einstein_init.store_id,
                 table.c.atol_serial == atol.store_id,
                 table.c.rtol_serial == rtol.store_id,
+                table.c.tuning_tol_serial == tuning_tol.store_id,
             )
         )
 
@@ -386,11 +442,10 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                 solver_labels=solver_labels,
                 cosmology=cosmology,
                 T_Jordan_init=T_init,
-                T_Jordan_stop=T_stop,
                 phi_Einstein_init=phi_Einstein_init,
                 pi_Einstein_init=pi_Einstein_init,
-                potential=potential,
-                coupling=coupling,
+                model=model,
+                tuning_tol=tuning_tol,
                 z_grid=z_grid,
                 atol=atol,
                 rtol=rtol,
@@ -558,16 +613,20 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                     if not failed
                     else None
                 ),
+                # what the tuning found, from the row's own columns, so that it is read with
+                # _do_not_populate too (jordan-normalization prompt 07, S3)
+                "tuning": (
+                    _tuning_from_row(row_data, cosmology.units) if not failed else None
+                ),
                 "values": values,
             },
             solver_labels=solver_labels,
             cosmology=cosmology,
             T_Jordan_init=T_init,
-            T_Jordan_stop=T_stop,
             phi_Einstein_init=phi_Einstein_init,
             pi_Einstein_init=pi_Einstein_init,
-            potential=potential,
-            coupling=coupling,
+            model=model,
+            tuning_tol=tuning_tol,
             atol=atol,
             rtol=rtol,
             label=store_label,
@@ -590,16 +649,14 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
             "label": obj.label,
             "cosmology_type": obj.cosmology.type_id,
             "cosmology_serial": obj.cosmology.store_id,
-            "potential_type": obj.potential.type_id,
-            "potential_serial": obj.potential.store_id,
-            "coupling_type": obj.coupling.type_id,
-            "coupling_serial": obj.coupling.store_id,
+            "model_type": obj.model.type_id,
+            "model_serial": obj.model.store_id,
             "T_Jordan_init_serial": obj.T_Jordan_init.store_id,
-            "T_Jordan_stop_serial": obj.T_Jordan_stop.store_id,
             "phi_Einstein_init_serial": obj.phi_Einstein_init.store_id,
             "pi_Einstein_init_serial": obj.pi_Einstein_init.store_id,
             "atol_serial": obj._atol.store_id,
             "rtol_serial": obj._rtol.store_id,
+            "tuning_tol_serial": obj.tuning_tol.store_id,
             "failure": obj._failure,
             "failure_reason": obj._failure_reason if obj._failure else None,
             "solver_serial": obj.solver.store_id if not obj._failure else None,
@@ -664,6 +721,10 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                 ),
             }
         )
+
+        # what the tuning found (jordan-normalization prompt 07, S3); NULL on a failure row
+        tuning: Optional[TuningValues] = obj._tuning if not obj._failure else None
+        payload.update(_tuning_columns(tuning, obj._units))
 
         # # because ScalarHistory is a replicated table, we need to allow for the possibility that this object
         # # is a replica, rather than a fresh insert. If so, it's _my_id field will be set.

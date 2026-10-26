@@ -6,7 +6,9 @@ Each test drives the pure loop from a mid-history state of the integrator audit
 harness.build does: QCD_Cosmology, Planck2018, Planck_units, ExponentialPotential(n = 1,
 Lambda = 1e-3 eV), ExponentialCoupling, ODEPolicy, ODERHS and a ScalarFieldIntegrationSupervisor.
 Since jordan-normalization prompt 04 the policy takes the realized model, built from the two rows
-by the adapter ExponentialModel.from_rows (normalization 4 log Lambda, phi_ref = 0).
+by the adapter ExponentialModel.from_rows (normalization 4 log Lambda, phi_ref = 0). Since prompt
+07, which deleted the rows and the adapter, the model is built directly and realized at the
+adapter's normalization, 4 log(1e-3 eV), and phi_ref = 0, which gives the same values bitwise.
 No Ray cluster and no datastore are used. Methods that integrate say how long they take.
 
 Reference values are those of integrator-remediation README §6.1, measured by the audit's probes
@@ -37,10 +39,8 @@ import importlib
 SM = importlib.import_module("ComputeTargets.ScalarHistory")
 
 from ComputeTargets.exceptions import ComputationFailureError
-from CosmologyConcepts import beta_value, M_value, Lambda_value, temperature
-from CosmologyConcepts.ConformalCouplings.ExponentialCoupling import ExponentialCoupling
+from CosmologyConcepts import beta_value, M_value, temperature
 from CosmologyConcepts.Models.ExponentialModel import ExponentialModel
-from CosmologyConcepts.Potentials.ExponentialPotential import ExponentialPotential
 from CosmologyModels.GenericEOS.QCD_Cosmology import QCD_Cosmology
 from CosmologyModels.LambdaCDM import Planck2018
 from Quadrature.supervisors.ScalarField import (
@@ -107,15 +107,9 @@ class NonReflectingExponentialModel(ExponentialModel):
 
 
 def build(beta: float, M: float, model_class=ExponentialModel):
-    potential = ExponentialPotential(
-        0,
-        M_value(0, M * _units.PlanckMass),
-        Lambda_value(0, 1e-3 * _units.eV),
-        1,
-        _units,
-    )
-    coupling = ExponentialCoupling(0, beta_value(0, beta), _units)
-    model = model_class.from_rows(potential, coupling)
+    model = model_class(
+        0, M_value(0, M * _units.PlanckMass), 1, beta_value(0, beta), _units
+    ).realize(4.0 * log(1e-3 * _units.eV), 0.0)
     policy = SM.ODEPolicy("test", _cosmology, model)
     rhs = SM.ODERHS("test", policy)
     supervisor = ScalarFieldIntegrationSupervisor(

@@ -171,16 +171,13 @@ MASKED_FRAGMENTS = {
 #   its equation of state's (CosmologyModels/GenericEOS/LambdaCDM_GenericEOS.py:87-89), and its
 #   equation of state is always Xav_EOS_spline (CosmologyModels/GenericEOS/QCD_Cosmology.py),
 #   whose type_id is XAV_IMPROVED_EOS_IDENTIFIER = 3 (Xav_EOS_spline.py:86-88);
-# - potential (CosmologyConcepts/Potentials/model_ids.py and each class's type_id);
-# - coupling (CosmologyConcepts/ConformalCouplings/model_ids.py; ExponentialCoupling.py:41-42).
+# - model (CosmologyConcepts/Models/model_ids.py and each class's type_id): ExponentialModel's is
+#   EXPONENTIAL_MODEL = 1. Until jordan-normalization prompt 07 the model was two references, the
+#   potential (ExponentialPotential, 1) and the coupling (ExponentialCoupling, 0).
 POLYMORPHIC_REFERENCES = {
     "ScalarHistory": {
         "cosmology_serial": ("cosmology_type", {3: "QCD_Cosmology"}),
-        "potential_serial": (
-            "potential_type",
-            {1: "ExponentialPotential"},
-        ),
-        "coupling_serial": ("coupling_type", {0: "ExponentialCoupling"}),
+        "model_serial": ("model_type", {1: "ExponentialModel"}),
     }
 }
 

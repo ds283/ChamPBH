@@ -16,9 +16,10 @@
 """
 The reason a ScalarHistory history failed (science-readiness prompt 02, README §2 (f), §6.3).
 
-(b) `compute_scalar_history._function`, from main.py's initial data at beta = 2, M = 0.5, returns
-a failure payload that carries the reason. The step budget is reduced to 50 by patching the
-`StepControl` that `compute_scalar_history` builds, with `mock`, because the function does not
+(b) `integrate_history` (until jordan-normalization prompt 07, `compute_scalar_history._function`,
+which now tunes the history), from main.py's initial data at beta = 2, M = 0.5, returns a failure
+payload that carries the reason. The step budget is reduced to 50 by patching the `StepControl`
+that `integrate_history` builds, with `mock`, because the function does not
 take a `StepControl`: the history then fails at the 51st accepted step. No Ray, no datastore,
 no PRyMordial solve; the history stops after 50 steps, well under a second.
 
@@ -39,13 +40,11 @@ from tools import history_and_bbn as driver
 
 
 def _history(step_budget=None):
-    from CosmologyConcepts import Lambda_value, M_value, beta_value, temperature
-    from CosmologyConcepts.ConformalCouplings.ExponentialCoupling import (
-        ExponentialCoupling,
-    )
+    from math import log
+
+    from CosmologyConcepts import M_value, beta_value, temperature
     from CosmologyConcepts.FieldValues import phi_value, pi_value
     from CosmologyConcepts.Models.ExponentialModel import ExponentialModel
-    from CosmologyConcepts.Potentials.ExponentialPotential import ExponentialPotential
     from CosmologyModels.GenericEOS.QCD_Cosmology import QCD_Cosmology
     from CosmologyModels.LambdaCDM import Planck2018
     from Units import Planck_units
@@ -53,14 +52,11 @@ def _history(step_budget=None):
     units = Planck_units()
     params = Planck2018()
     cosmology = QCD_Cosmology(0, units, params)
-    potential = ExponentialPotential(
-        0,
-        M_value(0, 0.5 * units.PlanckMass),
-        Lambda_value(0, driver.LAMBDA_EV * units.eV),
-        1,
-        units,
+    # the model at 4 ln(Lambda) and phi_ref = 0, which the adapter ExponentialModel.from_rows
+    # built from the rows until jordan-normalization prompt 07 deleted both
+    model = ExponentialModel(
+        0, M_value(0, 0.5 * units.PlanckMass), 1, beta_value(0, 2.0), units
     )
-    coupling = ExponentialCoupling(0, beta_value(0, 2.0), units)
     args = (
         cosmology,
         temperature(0, driver.T_INIT_GEV * units.GeV),
@@ -68,7 +64,7 @@ def _history(step_budget=None):
         phi_value(0, driver.PHI_INIT_MP * units.PlanckMass),
         pi_value(0, driver.PI_INIT),
         driver._z_grid(),
-        ExponentialModel.from_rows(potential, coupling),
+        model.realize(4.0 * log(driver.LAMBDA_EV * units.eV), 0.0),
     )
 
     real = SM.StepControl
@@ -79,7 +75,7 @@ def _history(step_budget=None):
             **kw, **({} if step_budget is None else {"step_budget": step_budget})
         ),
     ):
-        return SM.compute_scalar_history._function(*args, task_label="reason-test")
+        return SM.integrate_history(*args, task_label="reason-test")
 
 
 class TestFailurePayload(unittest.TestCase):

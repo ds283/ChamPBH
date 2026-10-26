@@ -19,10 +19,12 @@ temperatures a surfing trajectory reaches before its first bounce, with no Ray c
 datastore and no BBN.
 
 Written for surfing-temperature prompt 02 (T2, T3; README §2.2, §4). Each history is
-`compute_scalar_history._function` with tools/history_and_bbn.py's setup, whose constants and z
-grid are imported from it: QCD_Cosmology on Planck2018, an exponential potential with n = 1 and
-Lambda = 1e-3 eV, an exponential coupling with the given beta, pi* = 0, T* = 2e4 GeV, the default
-tolerances and step control, and 250 samples per decade of 1 + z. The IntegrationResult is kept
+`integrate_history` (until jordan-normalization prompt 07, `compute_scalar_history._function`,
+which now tunes the history) with tools/history_and_bbn.py's setup, whose constants and z grid are
+imported from it: QCD_Cosmology on Planck2018, ExponentialModel with n = 1 and the given M and
+beta, realized at the fixed normalization 4 ln(Lambda), Lambda = 1e-3 eV, and phi_ref = 0
+(untuned; jordan-normalization prompt 08 moves this tool onto tuned histories), pi* = 0,
+T* = 2e4 GeV, the default tolerances and step control, and 250 samples per decade of 1 + z. The IntegrationResult is kept
 by wrapping integrate_scalar_history for the duration of the call, as history_and_bbn.py does,
 and its turning points of T_J are `surfing_turning_points` (ComputeTargets/ScalarHistory.py).
 Nothing is stored.
@@ -51,7 +53,7 @@ One console line per beta:
     beta=... status=ok capture=... max=... second_dip=... deliver=... GeV crossings=... wall=... s
 
 with `-` for a blank, and a flag where a captured history has no bounce above T_stop.
-compute_scalar_history's own printing (failures only, by default) is left on the console.
+integrate_history's own printing (failures only, by default) is left on the console.
 
 Exit status: 0 if every history ran and none failed, 1 if a failure row was written, 2 if the run
 was refused.
@@ -68,7 +70,7 @@ import sys
 import time
 from collections import namedtuple
 from datetime import datetime, timezone
-from math import exp, floor, isclose
+from math import exp, floor, isclose, log
 from pathlib import Path
 from types import SimpleNamespace
 from typing import List, Optional, Sequence
@@ -83,24 +85,17 @@ if str(_ROOT) not in sys.path:
 from ComputeTargets.ScalarHistory import (  # noqa: E402
     FirstBounce,
     SurfingCrossing,
-    compute_scalar_history,
+    integrate_history,
     surfing_turning_points,
 )
 from config.version import VERSION_LABEL  # noqa: E402
 from CosmologyConcepts import (  # noqa: E402
-    Lambda_value,
     M_value,
     beta_value,
     temperature,
 )
-from CosmologyConcepts.ConformalCouplings.ExponentialCoupling import (  # noqa: E402
-    ExponentialCoupling,
-)
 from CosmologyConcepts.FieldValues import phi_value, pi_value  # noqa: E402
 from CosmologyConcepts.Models.ExponentialModel import ExponentialModel  # noqa: E402
-from CosmologyConcepts.Potentials.ExponentialPotential import (  # noqa: E402
-    ExponentialPotential,
-)
 from CosmologyModels.GenericEOS.QCD_Cosmology import QCD_Cosmology  # noqa: E402
 from CosmologyModels.LambdaCDM import Planck2018  # noqa: E402
 from extract_common import find_kicks, reachability_roots  # noqa: E402
@@ -162,7 +157,7 @@ _INPUT_RTOL = 1e-12
 #   bounce:          the payload's first_bounce (first_bounce(result)), or None
 #   accepted_steps:  the payload's accepted_steps, or None on a failure
 #   reflections:     the payload's reflection count, or None on a failure
-#   wall_s:          the wall-clock time of compute_scalar_history._function and the walk, seconds
+#   wall_s:          the wall-clock time of integrate_history and the walk, seconds
 #   result:          the captured IntegrationResult, or None
 HistoryOutcome = namedtuple(
     "HistoryOutcome",
@@ -202,22 +197,17 @@ def run_history(
     T_stop_GeV: float,
 ) -> HistoryOutcome:
     """
-    One history through compute_scalar_history._function, with the IntegrationResult captured by
+    One history through integrate_history, with the IntegrationResult captured by
     wrapping integrate_scalar_history for the duration of the call (history_and_bbn.py's idiom;
     the wrapper is removed in a finally), and its turning points of T_J.
     """
     units = setup.units
 
-    potential = ExponentialPotential(
-        0,
-        M_value(0, M_Mp * units.PlanckMass),
-        Lambda_value(0, LAMBDA_EV * units.eV),
-        1,
-        units,
-    )
-    coupling = ExponentialCoupling(0, beta_value(0, beta), units)
-    # the realized model of the two rows, at phi_ref = 0 (jordan-normalization prompt 04)
-    model = ExponentialModel.from_rows(potential, coupling)
+    # the model at the fixed normalization 4 ln(Lambda) and phi_ref = 0: the values the deleted
+    # adapter ExponentialModel.from_rows gave, bitwise (jordan-normalization prompt 07)
+    model = ExponentialModel(
+        0, M_value(0, M_Mp * units.PlanckMass), 1, beta_value(0, beta), units
+    ).realize(4.0 * log(LAMBDA_EV * units.eV), 0.0)
 
     T_init = temperature(0, T_INIT_GEV * units.GeV)
     T_stop = temperature(1, T_stop_GeV * units.GeV)
@@ -234,7 +224,7 @@ def run_history(
     SM.integrate_scalar_history = _capturing_integrate
     start = time.perf_counter()
     try:
-        data = compute_scalar_history._function(
+        data = integrate_history(
             setup.cosmology,
             T_init,
             T_stop,

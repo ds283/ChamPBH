@@ -671,7 +671,7 @@ def _dimensionful(values_eV, values_Mp, log10_low_eV, log10_high_eV, per_decade)
 
 def describe_scope(parsed) -> str:
     """The manifest's `scope`, from `main.py`'s parsed arguments as given: the config file, the
-    potential type, the β, M and Λ choices, φ*, the shards and the job name. A choice given as
+    potential type, the β and M choices, φ*, the shards and the job name. A choice given as
     values reads as the values, or as a count and a range when there are more than
     `SCOPE_MAX_VALUES`; a choice given as a range reads as its arguments."""
     parts = [f"config {parsed.config}" if parsed.config else "no config file"]
@@ -691,16 +691,6 @@ def describe_scope(parsed) -> str:
             parsed.log10_M_low_eV,
             parsed.log10_M_high_eV,
             parsed.samples_per_log10_M_eV,
-        )
-    )
-    parts.append(
-        "Λ "
-        + _dimensionful(
-            parsed.Lambda_values_eV,
-            parsed.Lambda_values_Mp,
-            parsed.log10_Lambda_low_eV,
-            parsed.log10_Lambda_high_eV,
-            parsed.samples_per_log10_Lambda_eV,
         )
     )
     parts.append(f"φ* {_number(parsed.phi_init_Mp)} Mp")

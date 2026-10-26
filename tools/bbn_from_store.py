@@ -206,10 +206,9 @@ def connect_ro(path) -> sqlite3.Connection:
 _FIND_QUERY = """
     select sm.serial, mv.value_eV, sm.RHS_evaluations, sm.first_bounce_log_T_Jordan
     from ScalarHistory sm
-    join ExponentialCoupling c on c.serial = sm.coupling_serial
-    join beta_value b on b.serial = c.beta_serial
-    join ExponentialPotential p on p.serial = sm.potential_serial
-    join M_value mv on mv.serial = p.M_serial
+    join ExponentialModel m on m.serial = sm.model_serial
+    join beta_value b on b.serial = m.beta_serial
+    join M_value mv on mv.serial = m.M_serial
     join phi_value ph on ph.serial = sm.phi_Einstein_init_serial
     where abs(b.value - ?) < 1e-9 and abs(ph.value_PlanckMass - ?) < 1e-9
 """

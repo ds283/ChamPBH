@@ -25,7 +25,9 @@ serial (the stand-in broker leases each), stamped with fixed times. The actors a
 the store is read, read-only, by ``datastorekit.store_inventory.read_inventory``.
 
 The store's rows are real: every parent a spec names exists, and the type columns carry the values
-of the three ``model_ids`` modules. Values are chosen here and asserted as the report prints them
+of the two ``model_ids`` modules (three until jordan-normalization prompt 07, which keyed a history
+by its ``ExponentialModel`` in place of a potential and a coupling, dropped ``T_stop``, added the
+tuning tolerance, and had the report call a history a history). Values are chosen here and asserted as the report prints them
 (decimal, ``.5g``, with their unit), never re-derived from a key.
 
 Four tests run ``main.py`` in a subprocess from the repository root, each with an address nothing
@@ -47,8 +49,7 @@ import ray
 import sqlalchemy as sqla
 from datastorekit.store_inventory import read_inventory
 
-import CosmologyConcepts.ConformalCouplings.model_ids as coupling_ids
-import CosmologyConcepts.Potentials.model_ids as potential_ids
+import CosmologyConcepts.Models.model_ids as model_ids
 import CosmologyModels.model_ids as cosmology_ids
 from ObjectFactories.tests.test_version_keyed_lookups import _TempStoreCase
 from config.datastore import factories
@@ -125,12 +126,11 @@ class _InventoryStoreCase(_TempStoreCase):
         z = [ins("redshift", {"log_one_plus_z": value}) for value in REDSHIFTS]
         atol = ins("tolerance", {"log10_tol": -10.0})
         rtol = ins("tolerance", {"log10_tol": -8.0})
+        tuning_tol = ins("tolerance", {"log10_tol": -5.0})
         beta_failed = ins("beta_value", {"value": 1.1})
         beta_ok = ins("beta_value", {"value": 25.0})
         M = ins("M_value", {"value_eV": 2.436e24})
-        Lambda = ins("Lambda_value", {"value_eV": 1.0e-3})
         T_init = ins("temperature", {"value_GeV": 2.0e4})
-        T_stop = ins("temperature", {"value_GeV": 2.3493e-13})
         phi = ins("phi_value", {"value_PlanckMass": 5.0})
         pi = ins("pi_value", {"value_PlanckMass": 0.0})
         cosmology = ins(
@@ -146,24 +146,23 @@ class _InventoryStoreCase(_TempStoreCase):
             ),
         )
         solver = ins("IntegrationSolver", {"label": "solve_ivp+RK45", "stepping": 0})
-        potential = ins(
-            "ExponentialPotential", dict(M_serial=M, Lambda_serial=Lambda, n_value=1)
+        model_failed = ins(
+            "ExponentialModel", dict(M_serial=M, n_value=1, beta_serial=beta_failed)
         )
-        coupling_failed = ins("ExponentialCoupling", {"beta_serial": beta_failed})
-        coupling_ok = ins("ExponentialCoupling", {"beta_serial": beta_ok})
+        model_ok = ins(
+            "ExponentialModel", dict(M_serial=M, n_value=1, beta_serial=beta_ok)
+        )
 
         model = dict(
             cosmology_type=cosmology_ids.XAV_IMPROVED_EOS_IDENTIFIER,
             cosmology_serial=cosmology,
-            potential_type=potential_ids.EXPONENTIAL_POTENTIAL,
-            potential_serial=potential,
-            coupling_type=coupling_ids.EXPONENTIAL_COUPLING,
+            model_type=model_ids.EXPONENTIAL_MODEL,
             atol_serial=atol,
             rtol_serial=rtol,
+            tuning_tol_serial=tuning_tol,
             phi_Einstein_init_serial=phi,
             pi_Einstein_init_serial=pi,
             T_Jordan_init_serial=T_init,
-            T_Jordan_stop_serial=T_stop,
             validated=True,
         )
         ins(
@@ -171,7 +170,7 @@ class _InventoryStoreCase(_TempStoreCase):
             dict(
                 model,
                 label="job-a-ScalarHistory-beta=1.1-2026-10-12T16:59:07",
-                coupling_serial=coupling_failed,
+                model_serial=model_failed,
                 failure=True,
                 failure_reason="step budget exhausted",
             ),
@@ -182,7 +181,7 @@ class _InventoryStoreCase(_TempStoreCase):
             dict(
                 model,
                 label="job-a-ScalarHistory-beta=25-2026-10-12T16:59:36",
-                coupling_serial=coupling_ok,
+                model_serial=model_ok,
                 failure=False,
                 solver_serial=solver,
                 z_samples=3,
@@ -235,7 +234,7 @@ class _InventoryStoreCase(_TempStoreCase):
                     model,
                     cosmology_type=cosmology_ids.LAMBDACDM_IDENTIFIER,
                     label="job-c-ScalarHistory",
-                    coupling_serial=coupling_ok,
+                    model_serial=model_ok,
                     failure=True,
                 ),
             )
@@ -261,20 +260,19 @@ class TestReportOnAStore(_InventoryStoreCase):
 
     def test_no_problem_and_every_class(self):
         self.assertEqual(self.inventory.problems, ())
-        self.assertEqual(len(self.inventory.classes), 17)
+        self.assertEqual(len(self.inventory.classes), 15)
         self.assertIn("problems: none", self.lines)
         self.assertEqual(self.lines[0], "@@ DATASTORE INVENTORY: store.db")
-        self.assertIn("read-only; 1 shard (#0); 46 records in 17 classes", self.lines)
+        self.assertIn("read-only; 1 shard (#0); 44 records in 15 classes", self.lines)
 
     def test_the_quantities(self):
         for line in (
             "values = [ 1.1, 25 ]",
-            "values = [ 2.3493e-13 GeV, 20000 GeV ]",
+            "values = [ 20000 GeV ]",
             "values = [ 2.436e+24 eV ]",
-            "values = [ 0.001 eV ]",
             "values = [ 5 PlanckMass ]",
             "values = [ 0 PlanckMass ]",
-            "log10_tol = [ -10, -8 ]",
+            "log10_tol = [ -10, -8, -5 ]",
             "label = [ 2026.6.0 ]",
             "label = [ pilot ]",
         ):
@@ -300,33 +298,29 @@ class TestReportOnAStore(_InventoryStoreCase):
             self.lines,
         )
         self.assertIn(
-            "common to every model: cosmology=QCD_Cosmology(omega_m=0.3111, "
+            "common to every history: cosmology=QCD_Cosmology(omega_m=0.3111, "
             "omega_cc=0.6889, h=0.6766, f_baryon=0.1575, T_CMB_Kelvin=2.7255, Neff=3.046), "
-            "log10_atol=-10, log10_rtol=-8",
+            "log10_atol=-10, log10_rtol=-8, log10_tuning_tol=-5",
             self.lines,
         )
         self.assertIn("validated: 2 records; version = 2026.6.0", self.lines)
         self.assertIn("unvalidated: none", self.lines)
-        common = (
-            "T_init=20000 GeV, T_stop=2.3493e-13 GeV, phiE_init=5 PlanckMass, "
-            "piE_init=0 PlanckMass, potential=ExponentialPotential(M=2.436e+24 eV, "
-            "Lambda=0.001 eV, n_value=1)"
-        )
+        common = "T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass"
         self.assertIn(
-            f"- {common}, coupling=ExponentialCoupling(beta=1.1), failure=True  | values: 0",
+            f"- {common}, model=ExponentialModel(M=2.436e+24 eV, beta=1.1, n_value=1), "
+            f"failure=True  | values: 0",
             self.lines,
         )
         self.assertIn(
-            f"- {common}, coupling=ExponentialCoupling(beta=25), failure=False  "
-            f"tags: pilot  | values: 3",
+            f"- {common}, model=ExponentialModel(M=2.436e+24 eV, beta=25, n_value=1), "
+            f"failure=False  tags: pilot  | values: 3",
             self.lines,
         )
 
     def test_the_history_and_the_bbn_data(self):
         model = (
-            "model: {T_init=20000 GeV, T_stop=2.3493e-13 GeV, phiE_init=5 PlanckMass, "
-            "piE_init=0 PlanckMass, potential=ExponentialPotential(M=2.436e+24 eV, "
-            "Lambda=0.001 eV, n_value=1), coupling=ExponentialCoupling(beta=25), "
+            "history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, "
+            "model=ExponentialModel(M=2.436e+24 eV, beta=25, n_value=1), "
             "failure=False, tags=[pilot]}"
         )
         self.assertIn(
@@ -348,9 +342,8 @@ class TestReportOnAStore(_InventoryStoreCase):
     def test_the_other_classes(self):
         for line in (
             "- label=solve_ivp+RK45, stepping=0",
-            "- M=2.436e+24 eV, Lambda=0.001 eV, n_value=1",
-            "- beta=1.1",
-            "- beta=25",
+            "- M=2.436e+24 eV, beta=1.1, n_value=1",
+            "- M=2.436e+24 eV, beta=25, n_value=1",
         ):
             self.assertIn(line, self.lines)
 

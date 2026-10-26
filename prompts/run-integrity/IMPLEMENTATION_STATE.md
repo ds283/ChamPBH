@@ -136,6 +136,8 @@ assigned (the two `01-` entries). Prompt 02 closed
 `[00-a-nan-new-physics-sample-hangs-prymordial]` (§4) and opened two, neither assigned (the two
 `02-` entries). Prompt 03 closed `[00-main-pairs-lookup-results-against-the-unfiltered-bin]` (§4)
 and opened one, not assigned (the `03-` entry). Prompt 04 opened one, not assigned (the `04-` entry).
+`jordan-normalization` prompt 07 closed `[03-step-1-first-pass-lookup-filters-nothing]` (2026-10-26;
+§4).
 
 - **[01-adiabatic-and-bbn-lookups-do-not-require-validated-rows]** *(log 01, observation 1;
   reasoned from the code on `90b2c86` + prompt 01; not run)*.
@@ -191,21 +193,6 @@ and opened one, not assigned (the `03-` entry). Prompt 04 opened one, not assign
     scalar field to PRyMordial through H alone"; its log 01). The one remaining callback, ρ_NP,
     raises `ComputationFailureError` for a non-finite value at a finite T in the domain, such as
     one from a NaN `G_rho`.
-- **[03-step-1-first-pass-lookup-filters-nothing]** *(log 03, observation 1; reasoned from
-  `main.py` on `765e80d`; not run)*.
-  - **What.** In `build_solver_batch` (step 1 of `run_pipeline`), `missing` is
-    `[m for obj, m in zip(query_outcomes, binned_batch[key])]` (`main.py:205–210`), with no
-    `if not obj.available`. Every pair goes to the second pass, and the `num_missing == 0` early
-    return fires only for an empty batch.
-  - **Impact.** One redundant vectorized `ScalarModel` lookup per batch. No wrong result: the
-    second pass's `object_get` returns a stored model as `available`, and `RayWorkPool` skips it.
-  - **Next step.** Filter on `obj.available`, or drop the first pass. **Not in prompt 03's
-    scope**, which excludes step 1.
-  - **Assigned (2026-10-20):** to the
-    [`jordan-normalization`](../jordan-normalization/IMPLEMENTATION_STATE.md) campaign, prompt 07,
-    which rewrites the scalar stage's lookups for the new history key; the same defect is
-    `dk-and-rpk-migration`'s `[02-scalar-stage-missing-filter-keeps-every-model]`, assigned with it.
-    That prompt closes it here, in §4, and deletes its row from `.documents/OPEN_ISSUES.md`.
 - **[04-adiabatichistory-lookup-ignores-do-not-populate]** *(log 04; read from
   `Datastore/SQL/ObjectFactories/AdiabaticHistory.py` on `6fd9017`; not run)*.
   - **What.** `main.py` (`:378`) and `plot_by_beta.py` (`:689`) pass `_do_not_populate` to the
@@ -296,3 +283,26 @@ opened here, closed by prompts 02 and 03 and moved from §3.
     entry and raises on a length mismatch. No zip against `binned_batch[key]` remains in either
     function. On the probe's bin the helper gives {V2, V4}; the probe's copy of the old logic
     gives {V1, V3} (test (d) in `ComputeTargets/tests/test_pipeline_selection.py`).
+- **[03-step-1-first-pass-lookup-filters-nothing]** *(log 03, observation 1; reasoned from
+  `main.py` on `765e80d`; not run)*.
+  - **What.** In `build_solver_batch` (step 1 of `run_pipeline`), `missing` is
+    `[m for obj, m in zip(query_outcomes, binned_batch[key])]` (`main.py:205–210`), with no
+    `if not obj.available`. Every pair goes to the second pass, and the `num_missing == 0` early
+    return fires only for an empty batch.
+  - **Impact.** One redundant vectorized `ScalarModel` lookup per batch. No wrong result: the
+    second pass's `object_get` returns a stored model as `available`, and `RayWorkPool` skips it.
+  - **Next step.** Filter on `obj.available`, or drop the first pass. **Not in prompt 03's
+    scope**, which excludes step 1.
+  - **Assigned (2026-10-20):** to the
+    [`jordan-normalization`](../jordan-normalization/IMPLEMENTATION_STATE.md) campaign, prompt 07,
+    which rewrites the scalar stage's lookups for the new history key; the same defect is
+    `dk-and-rpk-migration`'s `[02-scalar-stage-missing-filter-keeps-every-model]`, assigned with it.
+    That prompt closes it here, in §4, and deletes its row from `.documents/OPEN_ISSUES.md`.
+  - **Resolved (2026-10-26):** by `jordan-normalization` prompt 07 (this commit). Step 1's first
+    pass reads its lookup results through the pure helper `pipeline_selection.missing_models`,
+    which keeps the models whose `ScalarHistory` lookup is not `available`, in order (a stored
+    failure is not missing); `build_solver_batch` calls it in place of the comprehension, so the
+    `num_missing == 0` return fires for a fully stored batch. Tested in
+    `ComputeTargets/tests/test_pipeline_selection.py::TestScalarStageFirstPass`; with the old
+    comprehension's logic put back, four of its five tests fail. The same defect is
+    `dk-and-rpk-migration`'s `[02-scalar-stage-missing-filter-keeps-every-model]`, closed with it.

@@ -19,7 +19,9 @@ the drivers give it to datastorekit's pool (prompt 08).
 No Ray cluster and no store is needed; importing ``config.datastore`` builds the factories. The
 expected values below were captured from the datastore layer's own module-level objects at
 prompt 04's tree, before ``config/datastore.py`` existed, not copied from it; prompt 08 removed
-``LambdaCDM`` from the batch sizes (campaign README, P8).
+``LambdaCDM`` from the batch sizes (campaign README, P8). jordan-normalization prompt 07 replaced
+``Lambda_value``, ``ExponentialPotential`` and ``ExponentialCoupling`` with ``ExponentialModel``,
+in ``ExponentialPotential``'s place, with ``ExponentialCoupling``'s batch size.
 
 One test runs a subprocess from the repository root: ``import config.datastore`` alone. It takes a
 few seconds.
@@ -50,12 +52,10 @@ EXPECTED_FACTORIES = [
     ("tolerance", "sqla_tolerance_factory", None),
     ("beta_value", "sqla_dimensionless_quantity_factory", "beta_value"),
     ("M_value", "sqla_dimensionful_quantity_factory", "M_value"),
-    ("Lambda_value", "sqla_dimensionful_quantity_factory", "Lambda_value"),
     ("temperature", "sqla_dimensionful_quantity_factory", "temperature"),
     ("phi_value", "sqla_dimensionful_quantity_factory", "phi_value"),
     ("pi_value", "sqla_dimensionful_quantity_factory", "pi_value"),
-    ("ExponentialPotential", "sqla_ExponentialPotential_factory", None),
-    ("ExponentialCoupling", "sqla_ExponentialCoupling_factory", None),
+    ("ExponentialModel", "sqla_ExponentialModel_factory", None),
     ("QCD_Cosmology", "sqla_QCDCosmology_factory", None),
     ("IntegrationSolver", "sqla_IntegrationSolver_factory", None),
     ("ScalarHistory", "sqla_ScalarHistoryFactory", None),
@@ -85,12 +85,10 @@ EXPECTED_SERIAL_BATCH_SIZES = {
     "tolerance": 5,
     "beta_value": 200,
     "M_value": 200,
-    "Lambda_value": 200,
     "temperature": 200,
     "phi_value": 200,
     "pi_value": 200,
-    "ExponentialCoupling": 50,
-    "ExponentialPotential": 50,
+    "ExponentialModel": 50,
     "QCD_Cosmology": 5,
     "IntegrationSolver": 6,
     "ScalarHistory": 20,

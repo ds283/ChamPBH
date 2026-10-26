@@ -185,15 +185,15 @@ class AbstractModel(DatastoreObject, ABC):
     def _log_V_floor(self, normalization) -> Optional[float]:
         """
         log of the potential's value far from the wall, or None if not defined; the integrator's
-        guard G2 reads it at a reflection (see AbstractPotential.log_V_floor). Default None.
+        guard G2 reads it at a reflection (RealizedModel.log_V_floor). Default None.
         """
         return None
 
     @property
     def reflects_at_origin(self) -> bool:
         """
-        True if the potential has a purely repulsive wall in (0, phi) for every phi > 0 (see
-        AbstractPotential.reflects_at_origin); the integrator's guard G1 reads it. Default False.
+        True if the potential has a purely repulsive wall in (0, phi) for every phi > 0
+        (RealizedModel.reflects_at_origin); the integrator's guard G1 reads it. Default False.
         """
         return False
 

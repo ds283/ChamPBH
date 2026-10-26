@@ -76,10 +76,8 @@ from ComputeTargets.AdiabaticHistory import (
     AdiabaticComputePolicy,
     compute_adiabatic_values,
 )
-from CosmologyConcepts.ConformalCouplings.ExponentialCoupling import (
-    ExponentialCoupling,
-)
-from CosmologyConcepts import beta_value
+from CosmologyConcepts import M_value, beta_value
+from CosmologyConcepts.Models import ExponentialModel
 from CosmologyModels.GenericEOS.QCD_Cosmology import QCD_Cosmology
 from CosmologyModels.LambdaCDM import Planck2018
 from Units import GeV_units
@@ -307,7 +305,12 @@ class TestAdiabaticMass(unittest.TestCase):
 
         # V0 = 1e-30 GeV^4: V/rho_R < 1e-9 at 12 keV, where rho_R is smallest
         cls.potential = _StandInPotential(cls.MP, log(1e-30 * cls.GeV**4), lam=1.0)
-        cls.exponential = ExponentialCoupling(0, beta_value(0, BETA), cls.units)
+        # the exponential coupling: ExponentialModel's conformal factor at phi_ref = 0, which is
+        # the deleted ExponentialCoupling's bit for bit (jordan-normalization prompt 07); M and
+        # the normalization do not enter the conformal factor
+        cls.exponential = ExponentialModel(
+            0, M_value(0, 1.0e-3 * cls.MP), 1, beta_value(0, BETA), cls.units
+        ).realize(0.0, 0.0)
         cls.quadratic = _QuadraticCoupling(cls.MP, STANDIN_BETA, STANDIN_GAMMA)
 
         cls.Ts = _T_grid_GeV()

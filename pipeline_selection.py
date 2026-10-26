@@ -14,14 +14,22 @@
 # limitations under the License.
 
 """
-Which work main.py's adiabatic and BBN stages schedule (run-integrity prompt 03).
+Which work main.py's three stages schedule (run-integrity prompt 03; jordan-normalization
+prompt 07).
 
-Both stages look up the ScalarHistory for each (potential, coupling) pair in a shard
-bin, query the downstream target only for the models that did not fail, and then
-decide which of those queries found nothing. Before prompt 03 the downstream
-results were zipped against the unfiltered bin, so after a failed ScalarHistory
-every result was paired with the model before it. The helpers here keep each
-lookup result with the (potential, coupling, model) it was asked for.
+The scalar stage looks up the ScalarHistory of each model in a shard bin and computes
+only those whose lookup found no row (`missing_models`). Before jordan-normalization
+prompt 07 its "which are missing?" filter kept every model whatever the lookup found,
+so a fully stored batch was resubmitted and only the second lookup stopped the work
+(`[02-scalar-stage-missing-filter-keeps-every-model]`,
+`[03-step-1-first-pass-lookup-filters-nothing]`).
+
+The adiabatic and BBN stages look up the ScalarHistory for each model in a shard bin,
+query the downstream target only for the histories that did not fail, and then decide
+which of those queries found nothing. Before run-integrity prompt 03 the downstream
+results were zipped against the unfiltered bin, so after a failed ScalarHistory every
+result was paired with the model before it. The helpers here keep each lookup result
+with the (model, history) it was asked for.
 
 This module is pure: it imports neither main.py, Ray nor a datastore, so a test
 can reach the decision directly. The lookup results are read only through their
@@ -35,11 +43,10 @@ from typing import Any, Dict, List, Sequence, Tuple
 
 @dataclass(frozen=True)
 class QueryEntry:
-    """One (potential, coupling) pair of a shard bin, with its ScalarHistory lookup result."""
+    """One model of a shard bin, with its ScalarHistory lookup result (its history)."""
 
-    potential: Any
-    coupling: Any
     model: Any
+    history: Any
 
 
 @dataclass(frozen=True)
@@ -47,13 +54,13 @@ class QueryEntries:
     """
     The entries of one shard bin whose ScalarHistory exists and did not fail.
 
-    `unavailable` holds the (potential, coupling) pairs whose ScalarHistory lookup found
-    no row; `skipped_failed_models` counts those whose ScalarHistory is a stored failure,
-    which are left out of `entries`.
+    `unavailable` holds the models whose ScalarHistory lookup found no row;
+    `skipped_failed_models` counts those whose ScalarHistory is a stored failure, which
+    are left out of `entries`.
     """
 
     entries: List[QueryEntry]
-    unavailable: List[Tuple[Any, Any]]
+    unavailable: List[Any]
     skipped_failed_models: int
 
 
@@ -80,33 +87,47 @@ def _check_lengths(what: str, expected: int, got: int) -> None:
         )
 
 
-def build_query_entries(
-    pairs: Sequence[Tuple[Any, Any]], model_results: Sequence[Any]
-) -> QueryEntries:
+def missing_models(models: Sequence[Any], lookups: Sequence[Any]) -> List[Any]:
     """
-    Pair each (potential, coupling) with its ScalarHistory lookup result, in order, and
-    keep the entries whose model exists and did not fail.
+    The scalar stage's first pass (jordan-normalization prompt 07): the models whose
+    ScalarHistory lookup found no row, in order. A stored failure is not missing: the
+    stage does not recompute it (its second lookup would find it and nothing would be
+    computed). A fully stored batch gives [], so the stage schedules no work for it.
 
-    :param pairs: the (potential, coupling) pairs of one shard bin, in the order the
-        ScalarHistory lookups were made
-    :param model_results: the ScalarHistory lookup results, one per pair, in the same order
+    :param models: the models of one shard bin, in the order the lookups were made
+    :param lookups: the ScalarHistory lookup results, one per model, in the same order
     :raises ValueError: if the two lengths differ
     """
-    _check_lengths("ScalarHistory lookup", len(pairs), len(model_results))
+    _check_lengths("ScalarHistory lookup", len(models), len(lookups))
+    return [model for model, history in zip(models, lookups) if not history.available]
+
+
+def build_query_entries(
+    models: Sequence[Any], history_results: Sequence[Any]
+) -> QueryEntries:
+    """
+    Pair each model with its ScalarHistory lookup result, in order, and keep the entries
+    whose history exists and did not fail.
+
+    :param models: the models of one shard bin, in the order the ScalarHistory lookups
+        were made
+    :param history_results: the ScalarHistory lookup results, one per model, in the same
+        order
+    :raises ValueError: if the two lengths differ
+    """
+    _check_lengths("ScalarHistory lookup", len(models), len(history_results))
 
     entries = []
     unavailable = []
     skipped_failed_models = 0
 
-    for (potential, coupling), model in zip(pairs, model_results):
-        if not model.available:
-            unavailable.append((potential, coupling))
-        elif model.failure:
+    for model, history in zip(models, history_results):
+        if not history.available:
+            unavailable.append(model)
+        elif history.failure:
             skipped_failed_models += 1
         else:
-            entries.append(
-                QueryEntry(potential=potential, coupling=coupling, model=model)
-            )
+            entries.append(QueryEntry(model=model, history=history))
 
     return QueryEntries(
         entries=entries,
@@ -121,7 +142,8 @@ def select_missing(
     retry_failed: bool = False,
 ) -> MissingSelection:
     """
-    Decide which entries are missing their downstream result.
+    Decide which entries are missing their downstream result: the entries are
+    (model, history) pairs, and the result is the history's AdiabaticHistory or BBNData.
 
     An entry is missing if its lookup result is not available. With `retry_failed`, an
     entry whose result is a stored failure is missing too. A result with no `failure`
@@ -169,21 +191,33 @@ def summarise_failure_reasons(reasons: Sequence[Any]) -> List[Tuple[str, int]]:
     return sorted(counts.items(), key=lambda item: (-item[1], item[0]))
 
 
+def _log_Omega_at_zero_phi_ref(model: Any, phi: float) -> float:
+    """
+    ln Omega(phi) of `model` realized at phi_ref = 0 (the normalization does not enter
+    Omega): for `ExponentialModel`, beta phi/M_P, bitwise what `ExponentialCoupling` gave
+    before jordan-normalization prompt 07. Prompt 08 moves the warning to the seed's
+    phi_ref (README §6.2 P11).
+    """
+    return model.realize(None, 0.0).log_Omega(phi)
+
+
 def super_planckian_couplings(
-    couplings: Sequence[Any], phi_init: Any, T_init: Any, units: Any
+    models: Sequence[Any], phi_init: Any, T_init: Any, units: Any
 ) -> List[Any]:
     """
-    The couplings for which the run starts super-Planckian: those with
+    The models for which the run starts super-Planckian: those with
     ln Omega(phi*) + ln T* > ln M_P, that is Omega(phi*) T* > M_P (review H8; the Jordan
     temperature T* times Omega is the Einstein-frame temperature scale, which is compared
     with the reduced Planck mass `units.PlanckMass`). (science-readiness prompt 04)
 
-    For `ExponentialCoupling`, ln Omega = beta phi/M_P, so the test is
+    Omega is the model's conformal factor at phi_ref = 0, as the coupling's was before
+    jordan-normalization prompt 07; prompt 08 evaluates it at the seed's phi_ref. For
+    `ExponentialModel`, ln Omega = beta phi/M_P, so the test is
     beta phi*/M_P > ln(M_P/T*). With T* = 2e4 GeV, ln(M_P/T*) = 32.43, so phi* = 5 M_P
     selects beta > 6.49 and phi* = 1 M_P selects beta > 32.43.
 
-    The couplings come back in their original order, as the same objects; nothing is
-    removed from `couplings`.
+    The models come back in their original order, as the same objects; nothing is
+    removed from `models`.
 
     :param phi_init: a phi_value (or float) in the cosmology's units
     :param T_init: a temperature (or float) in the cosmology's units
@@ -194,7 +228,7 @@ def super_planckian_couplings(
     phi = GetFieldValue(phi_init)
     ln_T = log(GetTemperature(T_init))
     ln_Mp = log(units.PlanckMass)
-    return [c for c in couplings if c.log_Omega(phi) + ln_T > ln_Mp]
+    return [m for m in models if _log_Omega_at_zero_phi_ref(m, phi) + ln_T > ln_Mp]
 
 
 @dataclass(frozen=True)
@@ -290,13 +324,16 @@ def warn_foreign_bbn_provenance(
 
 
 def warn_super_planckian(
-    couplings: Sequence[Any], phi_init: Any, T_init: Any, units: Any, emit=print
+    models: Sequence[Any], phi_init: Any, T_init: Any, units: Any, emit=print
 ) -> Sequence[Any]:
     """
-    Print one warning per super-Planckian coupling (see `super_planckian_couplings`) and the
-    count, and return `couplings` itself, unchanged. A super-Planckian start is warned about
+    Print one warning per super-Planckian model (see `super_planckian_couplings`) and the
+    count, and return `models` itself, unchanged. A super-Planckian start is warned about
     and computed, never skipped or refused (the user's ruling, science-readiness P6).
     (science-readiness prompt 04)
+
+    Omega is evaluated at phi_ref = 0; jordan-normalization prompt 08 moves it to the
+    seed's phi_ref. Since the grid is (M, beta), a flagged beta is warned about once per M.
 
     :param emit: called with each line; `print` by default
     """
@@ -306,9 +343,9 @@ def warn_super_planckian(
     phi = GetFieldValue(phi_init)
     ln_T = log(GetTemperature(T_init))
     ln_Mp = log(units.PlanckMass)
-    flagged = super_planckian_couplings(couplings, phi_init, T_init, units)
+    flagged = super_planckian_couplings(models, phi_init, T_init, units)
     for c in flagged:
-        ratio = exp(c.log_Omega(phi) + ln_T - ln_Mp)
+        ratio = exp(_log_Omega_at_zero_phi_ref(c, phi) + ln_T - ln_Mp)
         beta = getattr(c, "_beta_float", None)
         beta_text = f"{beta:.5g}" if beta is not None else getattr(c, "name", "?")
         emit(
@@ -317,7 +354,7 @@ def warn_super_planckian(
         )
     if flagged:
         emit(
-            f"!! warning: {len(flagged)} of {len(couplings)} couplings start super-Planckian; "
+            f"!! warning: {len(flagged)} of {len(models)} models start super-Planckian; "
             f"they are computed like the others"
         )
-    return couplings
+    return models

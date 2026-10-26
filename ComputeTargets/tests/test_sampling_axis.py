@@ -17,14 +17,14 @@
 The sampling axis (jordan-normalization prompt 03, Z1, Z3, Z4 and Z5).
 
 A history is sampled on points ln(1 + z_E) = k * DELTA, DELTA = ln 10 / S, counted back from its
-end (`CosmologyConcepts.redshift.log_one_plus_z_grid`); `compute_scalar_history` reads N_backward
+end (`CosmologyConcepts.redshift.log_one_plus_z_grid`); `integrate_history` reads N_backward
 from the axis, and each sample carries ln(1 + z_J) = ln(1 + z_E) + ln A(phi_0) - ln A(phi).
 
 - `TestTheGrid`: the helper's points are k * DELTA bit for bit, and a grid of 400 decades
   (N about 921) cut at N = 800 by `truncate_to_history` reads `z` on every point (inf past float
   range) without raising. No integration.
 - `TestTheGridTooShort`: the configuration error when the grid ends before the history does,
-  through `compute_scalar_history._function` on the golden beta = 1.5 setup with a 5-decade grid
+  through `integrate_history` (gh.run_history) on the golden beta = 1.5 setup with a 5-decade grid
   (N = 11.5 against the history's 25.1). It integrates: about 0.6 s.
 - `TestTheJordanRedshift`: on the golden beta = 1.5 history (golden_history.py), run once in
   setUpClass (about 0.6 s), ln(1 + z_J) is the identity exactly, and agrees with the redshift of the
@@ -44,7 +44,6 @@ from unittest import mock
 from ComputeTargets.ScalarHistory import SampleValues, truncate_to_history
 from ComputeTargets.tests import golden_history as gh
 from CosmologyConcepts import redshift, redshift_array
-from CosmologyConcepts.Models.ExponentialModel import ExponentialModel
 from CosmologyConcepts.redshift import log_one_plus_z_grid
 from CosmologyModels.GenericEOS.QCD_Cosmology import QCD_Cosmology
 from CosmologyModels.LambdaCDM import Planck2018
@@ -143,7 +142,7 @@ class TestTheGrid(unittest.TestCase):
 class TestTheGridTooShort(unittest.TestCase):
     def test_a_grid_that_ends_before_the_history_is_a_configuration_error(self):
         """The golden beta = 1.5 history (final_N = 25.1) on a 5-decade grid (to N = 11.5): the
-        RuntimeError of compute_scalar_history, naming the largest supplied redshift. It runs the
+        RuntimeError of integrate_history, naming the largest supplied redshift. It runs the
         integration first: about 0.6 s."""
         with mock.patch.object(
             gh, "make_z_grid", lambda: axis(gh.SAMPLES_PER_LOG10_Z, 5)
@@ -163,8 +162,9 @@ class TestTheJordanRedshift(unittest.TestCase):
             cls.data = gh.run_history(1.5)
         cls.units = Planck_units()
         cls.cosmology = QCD_Cosmology(0, cls.units, Planck2018())
-        # the realized model the history was computed with (jordan-normalization prompt 04)
-        cls.model = ExponentialModel.from_rows(*gh.rows(1.5, cls.units))
+        # the realized model the history was computed with (jordan-normalization prompt 04; built
+        # directly since prompt 07 deleted the rows and the adapter)
+        cls.model = gh.model(1.5, cls.units).realize(gh.normalization(cls.units), 0.0)
         cls.samples = cls.data["sample"]
         cls.points = list(cls.data["z_grid"])
 

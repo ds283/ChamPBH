@@ -19,13 +19,13 @@ Draw the figures of a store that main.py built, reading it read-only.
 The store is opened with ``ShardedPool(read_only=True)``, so a plot run never changes it
 (read-only-plots prompt 02). What it reads before the histories comes from ``plot_inputs.py``: a
 parameter the build was not run with (``--abs-tol``, ``--rel-tol``, ``--T-init-GeV``,
-``--phi-init-Mp``, ``--T-stop-GeV``) stops the run with exit 2, and a potential or coupling that
-was never stored is skipped with a warning. The shared parser's ``--drop`` and
+``--phi-init-Mp``, or the constant tuning tolerance) stops the run with exit 2, and a model (an
+``ExponentialModel`` of a stored M and beta) that was never stored is skipped with a warning
+(jordan-normalization prompt 07). The shared parser's ``--drop`` and
 ``--prune-unvalidated`` are main.py's: a plot run refuses ``--drop`` (exit 2, before Ray starts)
 and ignores ``--prune-unvalidated``.
 """
 
-import itertools
 import sys
 from datetime import datetime
 from math import exp, log, sqrt
@@ -48,9 +48,9 @@ from ComputeTargets import (
     BBNData,
     BBNDataValue,
 )
+from ComputeTargets.ScalarHistory import DEFAULT_TUNING_TOLERANCE
 from CosmologyConcepts import temperature, phi_value, pi_value
-from CosmologyConcepts.ConformalCouplings import AbstractCoupling
-from CosmologyConcepts.Potentials import AbstractPotential
+from CosmologyConcepts.Models import AbstractModel
 from datastorekit.SQL.ProfileAgent import ProfileAgent
 from datastorekit.SQL.ShardedPool import ShardedPool
 from MetadataConcepts import tolerance, store_tag
@@ -1384,42 +1384,41 @@ def plot_ScalarHistory(
     BBN: BBNData,
     x_coord: str = "redshift",
 ):
-    coupling: AbstractCoupling = model.coupling
-    potential: AbstractPotential = model.potential
+    lagrangian: AbstractModel = model.model
 
     if not model.available:
         print(
-            f"@@ plot_ScalarHistory: scalar field history for Potential={potential.name}, Coupling={coupling.name} is not available; skipping this item"
+            f"@@ plot_ScalarHistory: scalar field history for Model={lagrangian.name} is not available; skipping this item"
         )
         return
 
     if model.failure:
         print(
-            f"@@ plot_ScalarHistory: scalar field history for Potential={potential.name}, Coupling={coupling.name} had an integration failure; skipping this item"
+            f"@@ plot_ScalarHistory: scalar field history for Model={lagrangian.name} had an integration failure; skipping this item"
         )
         return
 
     if BBN.failure:
         print(
-            f"@@ plot_ScalarHistory: BBN data for Potential={potential.name}, Coupling={coupling.name} had an integration failure, and will not be used"
+            f"@@ plot_ScalarHistory: BBN data for Model={lagrangian.name} had an integration failure, and will not be used"
         )
 
     if not Q.available:
         print(
-            f"@@ plot_ScalarHistory: adiabatic Q history for Potential={potential.name}, Coupling={coupling.name} is not available, and will not be plotted"
+            f"@@ plot_ScalarHistory: adiabatic Q history for Model={lagrangian.name} is not available, and will not be plotted"
         )
 
     if not BBN.failure and not BBN.available:
         print(
-            f"@@ plot_ScalarHistory: BBN data for Potential={potential.name}, Coupling={coupling.name} is not available, and will not be plotted"
+            f"@@ plot_ScalarHistory: BBN data for Model={lagrangian.name} is not available, and will not be plotted"
         )
 
     if x_coord not in ["redshift", "efolds"]:
         raise RuntimeError(f"Invalid x_coord: {x_coord}")
 
-    beta = coupling._beta.as_float
-    M = potential._M.as_float
-    Lambda = potential._Lambda.as_float
+    beta = lagrangian._beta.as_float
+    M = lagrangian._M.as_float
+    n = lagrangian._n
 
     units: UnitsLike = model._units
     CONST_MP: float = units.PlanckMass
@@ -1428,14 +1427,8 @@ def plot_ScalarHistory(
 
     base_path = Path(args.output).resolve()
     base_path = base_path / f"{model_label}"
-    plot_path = (
-        base_path
-        / f"plots/beta={beta:.5g}/M={M/units.eV:.5g}eV_Lambda={Lambda/units.eV:.5g}eV"
-    )
-    csv_path = (
-        base_path
-        / f"csv/beta={beta:.5g}/M={M/units.eV:.5g}eV_Lambda={Lambda/units.eV:.5g}eV"
-    )
+    plot_path = base_path / f"plots/beta={beta:.5g}/M={M/units.eV:.5g}eV_n={n}"
+    csv_path = base_path / f"csv/beta={beta:.5g}/M={M/units.eV:.5g}eV_n={n}"
 
     def get_x_coord(value: ScalarHistoryValue) -> float:
         if x_coord == "efolds":
@@ -1463,14 +1456,9 @@ def plot_ScalarHistory(
         return H_Einstein2 * value.pi_Einstein * value.pi_Einstein / 2.0
 
     def PE(value: ScalarHistoryValue) -> float:
-        if hasattr(potential, "V"):
-            return potential.V(value.phi_Einstein)
-        elif hasattr(potential, "log_V"):
-            return exp(potential.log_V(value.phi_Einstein))
-        else:
-            raise RuntimeError(
-                f"Potential {potential.name} has no V or log_V implementation"
-            )
+        # V along the history: the realized model the history was tuned to
+        # (jordan-normalization prompt 07)
+        return exp(model.realized_model.log_V(value.phi_Einstein))
 
     def TotalEnergy(value: ScalarHistoryValue) -> float:
         return KE(value) + PE(value)
@@ -1531,14 +1519,13 @@ def plot_ScalarHistory(
 
 def run_pipeline(
     model_data,
-    Potential_array: List[AbstractPotential],
-    Coupling_array: List[AbstractCoupling],
+    Model_array: List[AbstractModel],
     T_init: temperature,
-    T_stop: temperature,
     phi_init: phi_value,
     pi_init: pi_value,
     atol: tolerance,
     rtol: tolerance,
+    tuning_tol: tolerance,
     tags: List[store_tag],
 ):
     model_label = model_data["label"]
@@ -1546,21 +1533,18 @@ def run_pipeline(
 
     print(f"\n>> RUNNING PIPELINE FOR MODEL {model_label}")
 
-    def build_plot_work(item):
-        potential, coupling = item
-
+    def build_plot_work(lagrangian: AbstractModel):
         model_query_payload = {
-            "shard_key": coupling.shard_key,
+            "shard_key": lagrangian.shard_key,
             "solver_labels": ["Radau+kinematic-cap-stepping0"],
             "failure": False,  # skip any failed instances
             "cosmology": model_cosmology,
             "T_Jordan_init": T_init,
-            "T_Jordan_stop": T_stop,
             "phi_Einstein_init": phi_init,  # currently using fixed initial value of phi_Einstein
             "pi_Einstein_init": pi_init,  # currently all integrations begin with the field at rest
             "z_grid": None,  # don't check which values of z we have sampled
-            "potential": potential,
-            "coupling": coupling,
+            "model": lagrangian,
+            "tuning_tol": tuning_tol,
             "atol": atol,
             "rtol": rtol,
             "tags": tags,
@@ -1572,7 +1556,7 @@ def run_pipeline(
         model_proxy: ScalarHistoryProxy = ScalarHistoryProxy(model)
 
         adiabatic_query_payload = {
-            "shard_key": coupling.shard_key,
+            "shard_key": lagrangian.shard_key,
             "model_proxy": model_proxy,
         }
 
@@ -1581,7 +1565,7 @@ def run_pipeline(
         )
 
         BBN_query_payload = {
-            "shard_key": coupling.shard_key,
+            "shard_key": lagrangian.shard_key,
             "model_proxy": model_proxy,
             "failure": False,  # skip any failed instances
         }
@@ -1590,11 +1574,9 @@ def run_pipeline(
 
         return plot_ScalarHistory.remote(model_label, model, Q, BBN, x_coord="efolds")
 
-    work_grid = itertools.product(Potential_array, Coupling_array)
-
     work_queue = RayWorkPool(
         pool,
-        work_grid,
+        Model_array,
         task_builder=build_plot_work,
         compute_handler=None,
         store_handler=None,
@@ -1631,47 +1613,42 @@ with ShardedPool(
 ) as pool:
     # what the plot reads before the histories, from plot_inputs.py (read-only-plots prompt 02;
     # README P1). A parameter the build was not run with stops the run here, before any figure
-    # (U4); a potential or coupling that was never stored is skipped with a warning (U3)
+    # (U4); a model that was never stored is skipped with a warning (U3)
     units = Planck_units()
     try:
-        atol, rtol, T_init, phi_init, pi_init = plot_inputs.parameters(
+        atol, rtol, T_init, phi_init, pi_init, tuning_tol = plot_inputs.parameters(
             pool,
             abs_tol=args.abs_tol,
             rel_tol=args.rel_tol,
             T_init_GeV=args.T_init_GeV,
             phi_init_Mp=args.phi_init_Mp,
             units=units,
+            tuning_tol=DEFAULT_TUNING_TOLERANCE,
         )
 
-        # read in the stored tables of beta, M, and Lambda
-        beta_table, M_table, Lambda_table = plot_inputs.stored_grid(pool, units)
+        # read in the stored tables of beta and M
+        beta_table, M_table = plot_inputs.stored_grid(pool, units)
 
-        Potential_array = plot_inputs.potentials(
-            pool, args.potential_type, M_table, Lambda_table, units
+        Model_array = plot_inputs.exponential_models(
+            pool, args.potential_type, M_table, beta_table, units
         )
-        Coupling_array = plot_inputs.couplings(pool, beta_table, units)
 
         model_list = plot_inputs.models(pool, units)
-        T_stop_list = [
-            plot_inputs.T_stop(pool, args.T_stop_GeV, model_data["cosmology"], units)
-            for model_data in model_list
-        ]
     except plot_inputs.PlotOptionNotStored as e:
         print(str(e), file=sys.stderr)
         sys.exit(2)
 
-    for model_data, T_stop in zip(model_list, T_stop_list):
+    for model_data in model_list:
         tags = []
 
         run_pipeline(
             model_data,
-            Potential_array,
-            Coupling_array,
+            Model_array,
             T_init,
-            T_stop,
             phi_init,
             pi_init,
             atol,
             rtol,
+            tuning_tol,
             tags,
         )

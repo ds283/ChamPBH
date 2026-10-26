@@ -123,12 +123,14 @@ class sqla_AdiabaticHistoryFactory(SQLAFactoryBase):
         }
 
     def inventory_spec(self):
-        # build() matches scalar_history_serial and the version; the model is on this row's shard, since
-        # both take their shard key from the coupling's beta (dk-and-rpk-migration prompt 09)
+        # build() matches scalar_history_serial and the version; the history is on this row's
+        # shard, since both take their shard key from the model's beta (dk-and-rpk-migration
+        # prompt 09). The parent is "history", the ScalarHistory, since "model" names a
+        # ScalarHistory's ExponentialModel (jordan-normalization prompt 07)
         return InventorySpec(
             parents={
                 "version": Parent("version", "version"),
-                "model": Parent("scalar_history_serial", "ScalarHistory"),
+                "history": Parent("scalar_history_serial", "ScalarHistory"),
             },
             tags=("AdiabaticHistory_tags", "history_serial"),
             values=("AdiabaticHistoryValue", "history_serial"),

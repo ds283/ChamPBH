@@ -39,14 +39,16 @@ every class of the inventory (a class no category names is shown under "Other cl
   never by a digest or a serial;
 - for ``ScalarHistory``, ``AdiabaticHistory`` and ``BBNData``, the validated and unvalidated groups,
   each with its count and version label(s), and its records by their physical labels: ``T_init``
-  and ``T_stop`` (GeV), ``phiE_init`` and ``piE_init`` (Planck mass), the potential (its class, M,
-  Lambda and n), the coupling (its class and beta), ``failure``, and for ``BBNData`` also its own
-  ``failure`` and ``PRyM_version``; an ``AdiabaticHistory`` or ``BBNData`` record is labelled by its
-  model's labels. Each record shows its tags and its value-row count. A key field that is the same
-  for every model (the cosmology and the two tolerances, usually) is printed once, on the
-  ``ScalarHistory`` class's "common to every model" line, and otherwise on each record's line, so
-  that two different records never render as one line except where their floats agree to five
-  figures;
+  (GeV), ``phiE_init`` and ``piE_init`` (Planck mass), the model (its class, M, beta and n),
+  ``failure``, and for ``BBNData`` also its own ``failure`` and ``PRyM_version``; an
+  ``AdiabaticHistory`` or ``BBNData`` record is labelled by its history's labels. Each record shows
+  its tags and its value-row count. A key field that is the same for every history (the cosmology
+  and the three tolerances, usually) is printed once, on the ``ScalarHistory`` class's "common to
+  every history" line, and otherwise on each record's line, so that two different records never
+  render as one line except where their floats agree to five figures. (jordan-normalization prompt
+  07 keyed a history by its model, in place of a potential, a coupling and ``T_stop``, and named
+  the history a history where this report called it a model, since ``model`` now names the
+  Lagrangian);
 - every named problem, **whole**, under its class. Problems are never truncated.
 
 A list of values or records of 20 or more shows its first and last ten, unless ``verbose``
@@ -74,19 +76,12 @@ INVENTORY_CATEGORIES: List[Tuple[str, List[str]]] = [
             "beta_value",
             "temperature",
             "M_value",
-            "Lambda_value",
             "phi_value",
             "pi_value",
         ],
     ),
     ("Cosmologies and solvers", ["QCD_Cosmology", "IntegrationSolver"]),
-    (
-        "Potentials and couplings",
-        [
-            "ExponentialPotential",
-            "ExponentialCoupling",
-        ],
-    ),
+    ("Models", ["ExponentialModel"]),
     ("Compute targets", ["ScalarHistory", "AdiabaticHistory", "BBNData"]),
 ]
 
@@ -98,7 +93,8 @@ VALUE_TABLES: Dict[str, str] = {
     "BBNData": "BBNDataValue",
 }
 
-# the three compute targets, whose records are shown by validated group and by their model's labels
+# the three compute targets, whose records are shown by validated group and by their history's
+# labels
 COMPUTE_TARGETS = ("ScalarHistory", "AdiabaticHistory", "BBNData")
 
 # a list of this many values or records or more is shown by its first and last LIST_ENDS, unless
@@ -107,26 +103,25 @@ LIST_LIMIT = 20
 LIST_ENDS = 10
 
 # a ScalarHistory's key fields as the report labels them, in the order it prints them
-MODEL_FIELDS: List[Tuple[str, str]] = [
+HISTORY_FIELDS: List[Tuple[str, str]] = [
     ("T_init", "T_init"),
-    ("T_stop", "T_stop"),
     ("phi_init", "phiE_init"),
     ("pi_init", "piE_init"),
-    ("potential", "potential"),
-    ("coupling", "coupling"),
+    ("model", "model"),
     ("failure", "failure"),
 ]
 
-# the rest of a ScalarHistory's key, printed once when every model shares it (the version is shown by
-# validated group in ScalarHistory's own section). The *_type leaves are not printed: each is the
-# class its polymorphic parent is printed with
-MODEL_EXTRA_FIELDS: List[Tuple[str, str]] = [
+# the rest of a ScalarHistory's key, printed once when every history shares it (the version is
+# shown by validated group in ScalarHistory's own section). The *_type leaves are not printed: each
+# is the class its polymorphic parent is printed with
+HISTORY_EXTRA_FIELDS: List[Tuple[str, str]] = [
     ("cosmology", "cosmology"),
     ("atol", "log10_atol"),
     ("rtol", "log10_rtol"),
+    ("tuning_tol", "log10_tuning_tol"),
     ("version", "version"),
 ]
-MODEL_TYPE_LEAVES = ("cosmology_type", "potential_type", "coupling_type")
+HISTORY_TYPE_LEAVES = ("cosmology_type", "model_type")
 
 _CLASS_INDENT = "      "
 _DETAIL_INDENT = "         "
@@ -293,26 +288,26 @@ class _Renderer:
 
     # --- a ScalarHistory, by its physical labels -------------------------------------------------
 
-    def model_extras(self) -> Tuple[List[str], List[str]]:
-        """(the extra model fields every ScalarHistory shares, those that vary)."""
+    def history_extras(self) -> Tuple[List[str], List[str]]:
+        """(the extra history fields every ScalarHistory shares, those that vary)."""
         records = (
             self.cls("ScalarHistory").records
             if "ScalarHistory" in self.inventory.classes
             else ()
         )
         common, varying = [], []
-        for field, _ in MODEL_EXTRA_FIELDS:
+        for field, _ in HISTORY_EXTRA_FIELDS:
             values = {r.key.get(field) for r in records}
             (varying if len(values) > 1 else common).append(field)
         return common, varying
 
-    def model_parts(
+    def history_parts(
         self, record: Record, extras: Sequence[str], with_tags: bool = False
     ) -> List[str]:
-        labels = dict(MODEL_EXTRA_FIELDS)
+        labels = dict(HISTORY_EXTRA_FIELDS)
         parts = [
             f"{label}={self.value_text('ScalarHistory', record, field)}"
-            for field, label in MODEL_FIELDS
+            for field, label in HISTORY_FIELDS
             if field in record.key
         ]
         parts += [
@@ -322,9 +317,9 @@ class _Renderer:
         ]
         # anything else in the key, so that no field of it goes unprinted
         known = (
-            {f for f, _ in MODEL_FIELDS}
-            | {f for f, _ in MODEL_EXTRA_FIELDS}
-            | set(MODEL_TYPE_LEAVES)
+            {f for f, _ in HISTORY_FIELDS}
+            | {f for f, _ in HISTORY_EXTRA_FIELDS}
+            | set(HISTORY_TYPE_LEAVES)
         )
         parts += [
             f"{f}={self.value_text('ScalarHistory', record, f)}"
@@ -335,8 +330,8 @@ class _Renderer:
             parts.append(f"tags=[{', '.join(record.tags)}]")
         return parts
 
-    def model_sort(self, record: Record) -> tuple:
-        order = ["coupling", "potential", "T_init", "T_stop", "phi_init", "pi_init"]
+    def history_sort(self, record: Record) -> tuple:
+        order = ["model", "T_init", "phi_init", "pi_init"]
         return tuple(
             self.value_sort("ScalarHistory", record, f)
             for f in order
@@ -346,15 +341,15 @@ class _Renderer:
             record.canonical_json(),
         )
 
-    def model_text_of(self, name: str, record: Record) -> Tuple[str, tuple]:
-        """An AdiabaticHistory's or BBNData's model, by the model's labels, and its sort key."""
-        of, model, why = self.parent(name, record, "model")
-        if model is None:
-            return f"model: {why}", (9,)
-        _, varying = self.model_extras()
-        # the model's version is shown here only where the models' versions differ
-        parts = self.model_parts(model, varying, with_tags=True)
-        return "model: {" + ", ".join(parts) + "}", self.model_sort(model)
+    def history_text_of(self, name: str, record: Record) -> Tuple[str, tuple]:
+        """An AdiabaticHistory's or BBNData's history, by the history's labels, and its sort key."""
+        of, history, why = self.parent(name, record, "history")
+        if history is None:
+            return f"history: {why}", (9,)
+        _, varying = self.history_extras()
+        # the history's version is shown here only where the histories' versions differ
+        parts = self.history_parts(history, varying, with_tags=True)
+        return "history: {" + ", ".join(parts) + "}", self.history_sort(history)
 
 
 def _suffix(record: Record) -> str:
@@ -436,18 +431,18 @@ def _version_labels(renderer: _Renderer, name: str, records: Sequence[Record]) -
 
 
 def _compute_target_lines(renderer: _Renderer, name: str) -> List[str]:
-    """ScalarHistory, AdiabaticHistory or BBNData: validated groups, records by their model's labels."""
+    """ScalarHistory, AdiabaticHistory or BBNData: validated groups, records by their history's labels."""
     cls = renderer.cls(name)
     lines: List[str] = []
-    common, varying = renderer.model_extras()
+    common, varying = renderer.history_extras()
 
     if name == "ScalarHistory":
         shared = [f for f in common if f != "version"]
         if len(shared) > 0 and cls.count > 0:
-            labels = dict(MODEL_EXTRA_FIELDS)
+            labels = dict(HISTORY_EXTRA_FIELDS)
             first = cls.records[0]
             lines.append(
-                f"{_DETAIL_INDENT}common to every model: "
+                f"{_DETAIL_INDENT}common to every history: "
                 + ", ".join(
                     f"{labels[f]}={renderer.value_text(name, first, f)}"
                     for f in shared
@@ -458,21 +453,21 @@ def _compute_target_lines(renderer: _Renderer, name: str) -> List[str]:
     def entry(record: Record) -> Tuple[tuple, str]:
         if name == "ScalarHistory":
             extras = [f for f in varying if f != "version"]
-            parts = renderer.model_parts(record, extras)
-            return renderer.model_sort(record), ", ".join(parts)
-        model_text, model_sort = renderer.model_text_of(name, record)
+            parts = renderer.history_parts(record, extras)
+            return renderer.history_sort(record), ", ".join(parts)
+        history_text, history_sort = renderer.history_text_of(name, record)
         own = [
             f"{f}={renderer.value_text(name, record, f)}"
             for f in record.key
-            if f not in ("model", "version")
+            if f not in ("history", "version")
         ]
         own_sort = tuple(
             renderer.value_sort(name, record, f)
             for f in record.key
-            if f not in ("model", "version")
+            if f not in ("history", "version")
         )
-        return (model_sort, own_sort, record.canonical_json()), ", ".join(
-            own + [model_text]
+        return (history_sort, own_sort, record.canonical_json()), ", ".join(
+            own + [history_text]
         )
 
     groups = [

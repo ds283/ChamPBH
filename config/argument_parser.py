@@ -29,9 +29,6 @@ DEFAULT_LOG10_M_LOW_EV = 25
 DEFAULT_LOG10_M_HIGH_EV = 26.5
 DEFAULT_SAMPLES_PER_LOG10_M_EV = 6
 
-DEFAULT_LOG10_LAMBDA_LOW_EV = -2
-DEFAULT_LOG10_LAMBDA_HIGH_EV = 1
-DEFAULT_SAMPLES_PER_LOG10_LAMBDA_EV = 6
 
 allowed_drop_actions = ["scalar-history", "adiabatic-history", "bbn-data"]
 potential_types = ["Exponential"]
@@ -158,12 +155,6 @@ def create_argument_parser() -> configargparse.ArgumentParser:
         "abundance shifts (science-readiness prompt 07)",
     )
     parser.add_argument(
-        "--T-stop-GeV",
-        type=float,
-        default=None,
-        help="set stopping temperature in Jordan frame, specified in GeV",
-    )
-    parser.add_argument(
         "--beta-low",
         type=float,
         default=DEFAULT_BETA_LOW,
@@ -224,34 +215,6 @@ def create_argument_parser() -> configargparse.ArgumentParser:
         help="specify one or more values of M/Mp to sample",
     )
     parser.add_argument(
-        "--log10-Lambda-low-eV",
-        type=float,
-        default=DEFAULT_LOG10_LAMBDA_LOW_EV,
-        help="minimum value of log10(Lambda/eV) to sample",
-    )
-    parser.add_argument(
-        "--log10-Lambda-high-eV",
-        type=float,
-        default=DEFAULT_LOG10_LAMBDA_HIGH_EV,
-        help="maximum value of log10(Lambda/eV) to sample",
-    )
-    parser.add_argument(
-        "--Lambda-values-eV",
-        type=float,
-        nargs="*",
-        action="extend",
-        default=[],
-        help="specify one or more values of Lambda/eV to sample",
-    )
-    parser.add_argument(
-        "--Lambda-values-Mp",
-        type=float,
-        nargs="*",
-        action="extend",
-        default=[],
-        help="specify one or more values of Lambda/Mp to sample",
-    )
-    parser.add_argument(
         "--log10-one-plus-z-high",
         type=float,
         default=DEFAULT_LOG10_ONE_PLUS_Z_HIGH,
@@ -262,12 +225,6 @@ def create_argument_parser() -> configargparse.ArgumentParser:
         type=anchored_log10_one_plus_z_low,
         default=DEFAULT_LOG10_ONE_PLUS_Z_LOW,
         help="minimum value of log10(1+z) to sample; only 0 is accepted, since the redshift axis is anchored at the end of the history",
-    )
-    parser.add_argument(
-        "--samples-per-log10-Lambda-eV",
-        type=int,
-        default=DEFAULT_SAMPLES_PER_LOG10_LAMBDA_EV,
-        help="number of samples per log10(Lambda/eV)",
     )
     parser.add_argument(
         "--prune-unvalidated",

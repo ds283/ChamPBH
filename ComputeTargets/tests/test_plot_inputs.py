@@ -21,28 +21,34 @@ README P1, P2, P3, U3, U4).
 drive it on stores built through ChamPBH's copy of the package's stand-in cluster
 (`StoreFixtures/standin_pool.py`): a real `ShardedPool`, the package's actor code, ChamPBH's
 factories and SQLite, in `tempfile` directories, with no Ray. Each store is built read-write with
-the lookups `main.py` makes (`main.py:930-1016`, `:1021-1026`, `:1194`, `:1199-1207`, the same
-classes and payloads), closed, copied for each test, and reopened `read_only=True` with
+the lookups `main.py` makes (its `execute()`: the same classes and payloads), closed, copied for
+each test, and reopened `read_only=True` with
 `read_table_config=`, as the package's `datastorekit/tests/test_read_only_pool.py` does at
 `v0.3.0`. The options are the shared parser's, as a plot run is given them.
 
-1. A store `main.py`'s lookups build (two beta, two M, one Lambda, one potential type): every
-   function returns what the store holds, in the scripts' order, and prints no warning.
-2. An incomplete M x Lambda product (two runs' grids): the two combinations never stored are
-   skipped, each with its warning, then the count; the rest are returned in order (U3).
-3. A beta without a coupling (an interrupted run): skipped with its warning (U3).
-4. A parameter not stored (`--T-stop-GeV`, `--rel-tol`, and the two constants, `T_CMB` and the
+1. A store `main.py`'s lookups build (two beta, two M, one potential type): every function
+   returns what the store holds, in the scripts' order, and prints no warning.
+2. An incomplete M x beta product (two runs' grids): the two models never stored are skipped,
+   each with its warning, then the count; the rest are returned in order (U3).
+3. A beta without a model (an interrupted run): skipped with its warning (U3).
+4. A parameter not stored (`--rel-tol`, the constant tuning tolerance, and the constant
    cosmology): `PlotOptionNotStored`, naming the option or constant and the value (U4).
 5. Nothing written: the SHA-256 of every file of each store is unchanged after tests 1-4's calls,
    and no `-journal`, `-wal` or `-shm` file appears.
 6. A missing store: the read-only open is refused, and nothing is created at the path.
 7. By `ast`, the two scripts: `ShardedPool(read_only=True)` and no `drop_tables`; they call
-   `plot_inputs` and define neither `convert_to_potential` nor `convert_to_coupling`; each refuses
-   `--drop` before `ray.init`.
+   `plot_inputs` and define none of `convert_to_potential`, `convert_to_coupling` and
+   `convert_to_model`; each refuses `--drop` before `ray.init`.
 
-Beside them: each lookup's class and payload, key for key, are the scripts' before this prompt
-(on a recording pool, for every `--potential-type`); a refusal of another class or operation
-propagates unchanged (on a refusing pool).
+Beside them: each lookup's class and payload, key for key, are main.py's (on a recording pool,
+for every `--potential-type`); a refusal of another class or operation propagates unchanged (on a
+refusing pool).
+
+Since jordan-normalization prompt 07 a history is keyed by its model (an `ExponentialModel` of M,
+n and beta), its initial data and the tuning tolerance, and ends at T_CMB, so the store holds no
+Lambda, potential, coupling or final temperature: `plot_inputs.exponential_models` replaced
+`potentials` and `couplings`, and `T_stop` went. The tests of `couplings` and of `T_stop` went with
+them (the log of that prompt names each).
 
 No test runs a PRyMordial solve, and none starts Ray. About 5 s.
 """
@@ -62,6 +68,7 @@ from datastorekit.replication import ReadOnlyMiss, ReadOnlyWrite
 import plot_inputs
 from StoreFixtures import standin_pool as sp
 from Units import Planck_units
+from ComputeTargets.ScalarHistory import DEFAULT_TUNING_TOLERANCE
 from config.argument_parser import create_argument_parser
 from config.datastore import serial_batch_sizes
 from config.model_list import build_model_list
@@ -102,22 +109,15 @@ def captured():
     lines.extend(l for l in out.getvalue().splitlines() if l.startswith("!! plot:"))
 
 
-def _build_run(
-    pool,
-    betas,
-    Ms_eV,
-    Lambdas_eV,
-    couplings_for=None,
-    T_stop_GeV=None,
-):
+def _build_run(pool, betas, Ms_eV, models_for=None):
     """
-    One `main.py` run's lookups, read-write: the same classes and payloads as `main.py`. A coupling
-    is stored only for the betas in `couplings_for` (all of them if None), as a run interrupted
-    between storing a beta and its coupling leaves it.
+    One `main.py` run's lookups, read-write: the same classes and payloads as `main.py`. A model is
+    stored only for the betas in `models_for` (all of them if None), as a run interrupted between
+    storing a beta and its models leaves it.
     """
     args = _args("--potential-type", "Exponential")
 
-    # main.py:930-944
+    # main.py, execute(): T_init, phi_init and pi_init
     ray.get(
         pool.object_get("temperature", value=args.T_init_GeV * UNITS.GeV, units=UNITS)
     )
@@ -129,14 +129,15 @@ def _build_run(
             pool.object_get("pi_value", value=0.0, units=UNITS),
         ]
     )
-    # main.py:1021-1026
+    # the tolerances, and the tuning tolerance
     ray.get(
         [
             pool.object_get("tolerance", tol=args.abs_tol),
             pool.object_get("tolerance", tol=args.rel_tol),
+            pool.object_get("tolerance", tol=DEFAULT_TUNING_TOLERANCE),
         ]
     )
-    # main.py:952-970, the beta, M and Lambda helpers
+    # the beta and M helpers
     beta_array = ray.get(
         pool.object_get("beta_value", payload_data=[{"value": b} for b in betas])
     )
@@ -146,50 +147,25 @@ def _build_run(
             payload_data=[{"value": M * UNITS.eV, "units": UNITS} for M in Ms_eV],
         )
     )
-    Lambda_array = ray.get(
-        pool.object_get(
-            "Lambda_value",
-            payload_data=[{"value": L * UNITS.eV, "units": UNITS} for L in Lambdas_eV],
-        )
-    )
-    # main.py:972-1006, over this run's M x Lambda
-    ray.get(
-        pool.object_get(
-            "ExponentialPotential",
-            payload_data=[
-                {"M": M, "Lambda": L, "n": 1, "units": UNITS}
-                for M in M_array
-                for L in Lambda_array
-            ],
-        )
-    )
-    # main.py:1008-1016
-    stored_couplings = [
+    # convert_to_model, over this run's M x beta, M outer
+    stored_betas = [
         b
         for b in beta_array
-        if couplings_for is None or any(abs(b.value - c) < 1e-12 for c in couplings_for)
+        if models_for is None or any(abs(b.value - c) < 1e-12 for c in models_for)
     ]
-    if len(stored_couplings) > 0:
+    if len(stored_betas) > 0:
         ray.get(
             pool.object_get(
-                "ExponentialCoupling",
+                "ExponentialModel",
                 payload_data=[
-                    {"shard_key": b, "beta": b, "units": UNITS}
-                    for b in stored_couplings
+                    {"shard_key": b, "M": M, "n": 1, "beta": b, "units": UNITS}
+                    for M in M_array
+                    for b in stored_betas
                 ],
             )
         )
-    # main.py:1194, 1199-1207
-    for model_data in build_model_list(pool, UNITS):
-        if T_stop_GeV is None:
-            T_CMB = model_data["cosmology"]._params.T_CMB_Kelvin * UNITS.Kelvin
-            ray.get(pool.object_get("temperature", value=T_CMB, units=UNITS))
-        else:
-            ray.get(
-                pool.object_get(
-                    "temperature", value=T_stop_GeV * UNITS.GeV, units=UNITS
-                )
-            )
+    # the cosmology (build_model_list)
+    build_model_list(pool, UNITS)
 
 
 def _build_store(directory: Path, runs) -> Path:
@@ -212,25 +188,18 @@ def _build_store(directory: Path, runs) -> Path:
     return primary
 
 
-# two beta, two M, one Lambda
-FULL = [dict(betas=[0.5, 1.0], Ms_eV=[1.0e25, 1.0e26], Lambdas_eV=[1.0e-2])]
+# two beta, two M
+FULL = [dict(betas=[0.5, 1.0], Ms_eV=[1.0e25, 1.0e26])]
 
-# two runs on different grids: {M1, M2} x {L1}, then {M3} x {L1, L2}. The stored product
-# {M1, M2, M3} x {L1, L2} lacks (M1, L2) and (M2, L2)
+# two runs on different grids: {M1, M2} x {b1, b2}, then {M3} x {b1, b2, b3}. The stored
+# product {M1, M2, M3} x {b1, b2, b3} lacks (M1, b3) and (M2, b3)
 INCOMPLETE = [
-    dict(betas=[0.5, 1.0], Ms_eV=[1.0e25, 1.0e26], Lambdas_eV=[1.0e-2]),
-    dict(betas=[0.5, 1.0], Ms_eV=[1.0e27], Lambdas_eV=[1.0e-2, 1.0]),
+    dict(betas=[0.5, 1.0], Ms_eV=[1.0e25, 1.0e26]),
+    dict(betas=[0.5, 1.0, 2.0], Ms_eV=[1.0e27]),
 ]
 
-# beta = 1.0 stored, its coupling not
-NO_COUPLING = [
-    dict(
-        betas=[0.5, 1.0, 2.0],
-        Ms_eV=[1.0e25],
-        Lambdas_eV=[1.0e-2],
-        couplings_for=[0.5, 2.0],
-    )
-]
+# beta = 1.0 stored, its model not
+NO_MODEL = [dict(betas=[0.5, 1.0, 2.0], Ms_eV=[1.0e25], models_for=[0.5, 2.0])]
 
 
 def setUpModule():
@@ -239,7 +208,7 @@ def setUpModule():
     root = Path(tmp.name)
     _MODULE["full"] = _build_store(root / "full", FULL)
     _MODULE["incomplete"] = _build_store(root / "incomplete", INCOMPLETE)
-    _MODULE["no_coupling"] = _build_store(root / "no_coupling", NO_COUPLING)
+    _MODULE["no_model"] = _build_store(root / "no_model", NO_MODEL)
 
 
 def tearDownModule():
@@ -292,47 +261,7 @@ class _ReadOnlyCase(unittest.TestCase):
 # each test's calls, shared with test 5
 
 
-def _read_full(pool):
-    args = _args("--potential-type", "Exponential")
-    with captured() as warnings:
-        params = plot_inputs.parameters(
-            pool,
-            abs_tol=args.abs_tol,
-            rel_tol=args.rel_tol,
-            T_init_GeV=args.T_init_GeV,
-            phi_init_Mp=args.phi_init_Mp,
-            units=UNITS,
-        )
-        grid = plot_inputs.stored_grid(pool, UNITS)
-        potentials = plot_inputs.potentials(
-            pool, args.potential_type, grid.M, grid.Lambda, UNITS
-        )
-        couplings = plot_inputs.couplings(pool, grid.beta, UNITS)
-        models = plot_inputs.models(pool, UNITS)
-        T_stops = [
-            plot_inputs.T_stop(pool, args.T_stop_GeV, m["cosmology"], UNITS)
-            for m in models
-        ]
-    return params, grid, potentials, couplings, models, T_stops, warnings
-
-
-def _read_grid_and_lookups(pool):
-    with captured() as warnings:
-        grid = plot_inputs.stored_grid(pool, UNITS)
-        potentials = plot_inputs.potentials(
-            pool, "Exponential", grid.M, grid.Lambda, UNITS
-        )
-        couplings = plot_inputs.couplings(pool, grid.beta, UNITS)
-    return grid, potentials, couplings, warnings
-
-
-def _miss_T_stop(pool):
-    models = plot_inputs.models(pool, UNITS)
-    return plot_inputs.T_stop(pool, 1.0e-7, models[0]["cosmology"], UNITS)
-
-
-def _miss_rel_tol(pool):
-    args = _args("--rel-tol", "1e-6")
+def _parameters(pool, args, tuning_tol=DEFAULT_TUNING_TOLERANCE):
     return plot_inputs.parameters(
         pool,
         abs_tol=args.abs_tol,
@@ -340,11 +269,45 @@ def _miss_rel_tol(pool):
         T_init_GeV=args.T_init_GeV,
         phi_init_Mp=args.phi_init_Mp,
         units=UNITS,
+        tuning_tol=tuning_tol,
     )
+
+
+def _read_full(pool):
+    args = _args("--potential-type", "Exponential")
+    with captured() as warnings:
+        params = _parameters(pool, args)
+        grid = plot_inputs.stored_grid(pool, UNITS)
+        models = plot_inputs.exponential_models(
+            pool, args.potential_type, grid.M, grid.beta, UNITS
+        )
+        cosmologies = plot_inputs.models(pool, UNITS)
+    return params, grid, models, cosmologies, warnings
+
+
+def _read_grid_and_lookups(pool):
+    with captured() as warnings:
+        grid = plot_inputs.stored_grid(pool, UNITS)
+        models = plot_inputs.exponential_models(
+            pool, "Exponential", grid.M, grid.beta, UNITS
+        )
+    return grid, models, warnings
+
+
+def _miss_rel_tol(pool):
+    return _parameters(pool, _args("--rel-tol", "1e-6"))
+
+
+def _miss_tuning_tol(pool):
+    return _parameters(pool, _args(), tuning_tol=1.0e-6)
 
 
 def _eV(x):
     return x.value / UNITS.eV
+
+
+def _M_n_beta(models):
+    return [(round(_eV(m._M)), m._n, m._beta.value) for m in models]
 
 
 # ------------------------------------------------------------------------------------------------
@@ -356,9 +319,7 @@ class TestAStoreMainBuilt(_ReadOnlyCase):
     def test_every_function_returns_what_the_store_holds(self):
         primary = self.copy("full")
         with self.read_only(primary) as pool:
-            params, grid, potentials, couplings, models, T_stops, warnings = _read_full(
-                pool
-            )
+            params, grid, models, cosmologies, warnings = _read_full(pool)
 
         self.assertEqual(warnings, [])
 
@@ -371,44 +332,26 @@ class TestAStoreMainBuilt(_ReadOnlyCase):
             params.phi_init.value, args.phi_init_Mp * UNITS.PlanckMass
         )
         self.assertEqual(params.pi_init.value, 0.0)
+        self.assertAlmostEqual(params.tuning_tol.log10_tol, -5.0)
         for obj in params:
             self.assertTrue(getattr(obj, "_deserialized", False), obj)
 
         # the stored grid, in ascending order of value
         self.assertEqual([b.value for b in grid.beta], [0.5, 1.0])
         self.assertEqual([round(_eV(M)) for M in grid.M], [1.0e25, 1.0e26])
-        self.assertEqual([_eV(L) for L in grid.Lambda], [1.0e-2])
 
-        # the potentials, M outer, and the couplings in beta order: each a stored row
+        # the models, M outer and beta inner, n = 1: each a stored row
         self.assertEqual(
-            [(round(_eV(p._M)), _eV(p._Lambda)) for p in potentials],
-            [(1.0e25, 1.0e-2), (1.0e26, 1.0e-2)],
+            _M_n_beta(models),
+            [(1.0e25, 1, 0.5), (1.0e25, 1, 1.0), (1.0e26, 1, 0.5), (1.0e26, 1, 1.0)],
         )
-        self.assertEqual(
-            [type(p).__name__ for p in potentials], ["ExponentialPotential"] * 2
-        )
-        self.assertEqual([c._beta.value for c in couplings], [0.5, 1.0])
-        for obj in potentials + couplings:
+        self.assertEqual([type(m).__name__ for m in models], ["ExponentialModel"] * 4)
+        for obj in models:
             self.assertTrue(getattr(obj, "_deserialized", False), obj)
 
-        # the cosmology, and T_stop = T_CMB (no --T-stop-GeV)
-        self.assertEqual([m["label"] for m in models], ["QCD_Cosmology"])
-        self.assertTrue(getattr(models[0]["cosmology"], "_deserialized", False))
-        self.assertEqual(len(T_stops), 1)
-        self.assertAlmostEqual(
-            T_stops[0].value,
-            models[0]["cosmology"]._params.T_CMB_Kelvin * UNITS.Kelvin,
-        )
-        self.assertTrue(getattr(T_stops[0], "_deserialized", False))
-
-    def test_a_given_T_stop_the_build_used_is_found(self):
-        directory = self.root / "built-with-T-stop"
-        primary = _build_store(directory, [dict(FULL[0], T_stop_GeV=1.0e-7)])
-        with self.read_only(primary) as pool:
-            models = plot_inputs.models(pool, UNITS)
-            T_stop = plot_inputs.T_stop(pool, 1.0e-7, models[0]["cosmology"], UNITS)
-        self.assertAlmostEqual(T_stop.value, 1.0e-7 * UNITS.GeV)
-        self.assertTrue(getattr(T_stop, "_deserialized", False))
+        # the cosmology
+        self.assertEqual([m["label"] for m in cosmologies], ["QCD_Cosmology"])
+        self.assertTrue(getattr(cosmologies[0]["cosmology"], "_deserialized", False))
 
 
 class _RecordingPool:
@@ -423,9 +366,8 @@ class _RecordingPool:
 
 
 class TestThePayloads(_ReadOnlyCase):
-    """Each lookup's class and payload, key for key, are the scripts' before this prompt
-    (`plot_by_beta.py:1031-1104` at `000be0c`, and `plot_ScalarHistory.py`'s identical copy): one
-    item of each vectorized payload per lookup."""
+    """Each lookup's class and payload, key for key, are main.py's: one item of each vectorized
+    payload per lookup."""
 
     def test_the_parameters(self):
         pool = _RecordingPool()
@@ -436,6 +378,7 @@ class TestThePayloads(_ReadOnlyCase):
             T_init_GeV=2e4,
             phi_init_Mp=5.0,
             units=UNITS,
+            tuning_tol=1e-5,
         )
         self.assertEqual(
             pool.lookups,
@@ -445,64 +388,47 @@ class TestThePayloads(_ReadOnlyCase):
                 ("temperature", {"value": 2e4 * UNITS.GeV, "units": UNITS}),
                 ("phi_value", {"value": 5.0 * UNITS.PlanckMass, "units": UNITS}),
                 ("pi_value", {"value": 0.0, "units": UNITS}),
+                ("tolerance", {"tol": 1e-5}),
             ],
         )
 
-    def test_the_potentials(self):
-        Ms, Lambdas = ["M1", "M2"], ["L1"]
-        with_n = lambda M, L: {"M": M, "Lambda": L, "n": 1, "units": UNITS}
-        for potential_type, cls_name, payload in (
-            ("Exponential", "ExponentialPotential", with_n),
-        ):
+    def test_the_models(self):
+        Ms, betas = ["M1", "M2"], ["b1", "b2"]
+        payload = lambda M, b: {
+            "shard_key": b,
+            "M": M,
+            "n": 1,
+            "beta": b,
+            "units": UNITS,
+        }
+        for potential_type, cls_name in (("Exponential", "ExponentialModel"),):
             with self.subTest(potential_type=potential_type):
                 pool = _RecordingPool()
-                found = plot_inputs.potentials(pool, potential_type, Ms, Lambdas, UNITS)
+                found = plot_inputs.exponential_models(
+                    pool, potential_type, Ms, betas, UNITS
+                )
                 self.assertEqual(
                     pool.lookups,
-                    [(cls_name, payload(M, L)) for M in Ms for L in Lambdas],
+                    [(cls_name, payload(M, b)) for M in Ms for b in betas],
                 )
-                self.assertEqual(found, [1, 2])
+                self.assertEqual(found, [1, 2, 3, 4])
 
         # jordan-normalization prompt 01: the other three types were removed (R11) and are refused
         for potential_type in ("InversePower", "Starobinsky", "Recliner"):
             with self.subTest(removed=potential_type):
                 pool = _RecordingPool()
                 with self.assertRaises(ValueError) as caught:
-                    plot_inputs.potentials(pool, potential_type, Ms, Lambdas, UNITS)
+                    plot_inputs.exponential_models(
+                        pool, potential_type, Ms, betas, UNITS
+                    )
                 self.assertEqual(
                     str(caught.exception), f"Unknown potential type: {potential_type}"
                 )
                 self.assertEqual(pool.lookups, [])
 
-    def test_the_couplings(self):
-        pool = _RecordingPool()
-        plot_inputs.couplings(pool, ["b1", "b2"], UNITS)
-        self.assertEqual(
-            pool.lookups,
-            [
-                ("ExponentialCoupling", {"shard_key": b, "beta": b, "units": UNITS})
-                for b in ["b1", "b2"]
-            ],
-        )
-
-    def test_T_stop(self):
-        cosmology = types.SimpleNamespace(
-            _params=types.SimpleNamespace(T_CMB_Kelvin=2.7255)
-        )
-        pool = _RecordingPool()
-        plot_inputs.T_stop(pool, None, cosmology, UNITS)
-        plot_inputs.T_stop(pool, 1e-7, cosmology, UNITS)
-        self.assertEqual(
-            pool.lookups,
-            [
-                ("temperature", {"value": 2.7255 * UNITS.Kelvin, "units": UNITS}),
-                ("temperature", {"value": 1e-7 * UNITS.GeV, "units": UNITS}),
-            ],
-        )
-
 
 # ------------------------------------------------------------------------------------------------
-# 2. an incomplete M x Lambda product
+# 2. an incomplete M x beta product
 # ------------------------------------------------------------------------------------------------
 
 
@@ -510,48 +436,55 @@ class TestAnIncompleteProduct(_ReadOnlyCase):
     def test_the_two_missing_combinations_are_skipped_and_the_rest_returned(self):
         primary = self.copy("incomplete")
         with self.read_only(primary) as pool:
-            grid, potentials, couplings, warnings = _read_grid_and_lookups(pool)
+            grid, models, warnings = _read_grid_and_lookups(pool)
 
         self.assertEqual([round(_eV(M)) for M in grid.M], [1.0e25, 1.0e26, 1.0e27])
-        self.assertEqual([_eV(L) for L in grid.Lambda], [1.0e-2, 1.0])
+        self.assertEqual([b.value for b in grid.beta], [0.5, 1.0, 2.0])
         self.assertEqual(
-            [(round(_eV(p._M)), _eV(p._Lambda)) for p in potentials],
-            [(1.0e25, 1.0e-2), (1.0e26, 1.0e-2), (1.0e27, 1.0e-2), (1.0e27, 1.0)],
+            _M_n_beta(models),
+            [
+                (1.0e25, 1, 0.5),
+                (1.0e25, 1, 1.0),
+                (1.0e26, 1, 0.5),
+                (1.0e26, 1, 1.0),
+                (1.0e27, 1, 0.5),
+                (1.0e27, 1, 1.0),
+                (1.0e27, 1, 2.0),
+            ],
         )
-        self.assertEqual([c._beta.value for c in couplings], [0.5, 1.0])
         self.assertEqual(
             warnings,
             [
-                "!! plot: no ExponentialPotential stored for M=1e+25 eV, Λ=1 eV; no history "
+                "!! plot: no ExponentialModel stored for M=1e+25 eV, n=1, β=2; no history "
                 "can use it; skipped",
-                "!! plot: no ExponentialPotential stored for M=1e+26 eV, Λ=1 eV; no history "
+                "!! plot: no ExponentialModel stored for M=1e+26 eV, n=1, β=2; no history "
                 "can use it; skipped",
-                "!! plot: 2 of 6 ExponentialPotential combinations of the stored M and Λ are "
-                "not stored, and were skipped",
+                "!! plot: 2 of 9 ExponentialModel combinations of the stored M and β are not "
+                "stored, and were skipped",
             ],
         )
 
 
 # ------------------------------------------------------------------------------------------------
-# 3. a beta without a coupling
+# 3. a beta without a model
 # ------------------------------------------------------------------------------------------------
 
 
-class TestABetaWithoutACoupling(_ReadOnlyCase):
+class TestABetaWithoutAModel(_ReadOnlyCase):
     def test_it_is_skipped_with_its_warning(self):
-        primary = self.copy("no_coupling")
+        primary = self.copy("no_model")
         with self.read_only(primary) as pool:
-            grid, potentials, couplings, warnings = _read_grid_and_lookups(pool)
+            grid, models, warnings = _read_grid_and_lookups(pool)
 
         self.assertEqual([b.value for b in grid.beta], [0.5, 1.0, 2.0])
-        self.assertEqual([c._beta.value for c in couplings], [0.5, 2.0])
-        self.assertEqual(len(potentials), 1)
+        self.assertEqual([m._beta.value for m in models], [0.5, 2.0])
         self.assertEqual(
             warnings,
             [
-                "!! plot: no ExponentialCoupling stored for β=1; no history can use it; "
-                "skipped",
-                "!! plot: 1 of 3 stored β have no ExponentialCoupling, and were skipped",
+                "!! plot: no ExponentialModel stored for M=1e+25 eV, n=1, β=1; no history "
+                "can use it; skipped",
+                "!! plot: 1 of 3 ExponentialModel combinations of the stored M and β are not "
+                "stored, and were skipped",
             ],
         )
 
@@ -574,25 +507,9 @@ def _delete_everywhere(primary: Path, sql: str):
             conn.close()
 
 
-def _delete_T_CMB(case, primary: Path):
-    """Delete the T_CMB temperature row from every shard of `primary` (a test's own copy)."""
-    with case.read_only(primary) as pool:
-        with quiet():
-            cosmology = plot_inputs.models(pool, UNITS)[0]["cosmology"]
-            T_CMB = plot_inputs.T_stop(pool, None, cosmology, UNITS)
-    _delete_everywhere(
-        primary, f"DELETE FROM temperature WHERE serial = {T_CMB.store_id}"
-    )
-
-
 def _delete_cosmology(case, primary: Path):
     """Delete the QCD_Cosmology row from every shard of `primary` (a test's own copy)."""
     _delete_everywhere(primary, "DELETE FROM QCD_Cosmology")
-
-
-def _miss_T_CMB(pool):
-    models = plot_inputs.models(pool, UNITS)
-    return plot_inputs.T_stop(pool, None, models[0]["cosmology"], UNITS)
 
 
 def _miss_cosmology(pool):
@@ -611,16 +528,6 @@ class TestAParameterNotStored(_ReadOnlyCase):
         self.assertEqual(e.__cause__.class_name, class_name)
         return e
 
-    def test_a_T_stop_the_build_did_not_use(self):
-        self.assert_stops(
-            self.copy("full"),
-            _miss_T_stop,
-            "temperature",
-            "!! plot: the store holds no temperature for --T-stop-GeV 1e-07; main.py was not "
-            "run with it, so no history in this store can match. Give the plot the options the "
-            "build used",
-        )
-
     def test_a_rel_tol_the_build_did_not_use(self):
         self.assert_stops(
             self.copy("full"),
@@ -631,17 +538,14 @@ class TestAParameterNotStored(_ReadOnlyCase):
             "build used",
         )
 
-    def test_T_CMB_not_stored_names_the_constant(self):
-        primary = self.copy("full")
-        _delete_T_CMB(self, primary)
+    def test_a_tuning_tolerance_the_build_did_not_use_names_the_constant(self):
         self.assert_stops(
-            primary,
-            _miss_T_CMB,
-            "temperature",
-            "!! plot: the store holds no temperature for the cosmology's constant T_CMB "
-            "2.7255 K (the T_stop used when --T-stop-GeV is not given); main.py was not run "
-            "with it, so no history in this store can match. Give the plot the options the "
-            "build used",
+            self.copy("full"),
+            _miss_tuning_tol,
+            "tolerance",
+            "!! plot: the store holds no tolerance for the constant tuning tolerance 1e-06; "
+            "main.py was not run with it, so no history in this store can match. Give the "
+            "plot the options the build used",
         )
 
     def test_the_cosmology_not_stored_names_the_constant(self):
@@ -673,32 +577,36 @@ class TestOtherRefusalsPropagate(_ReadOnlyCase):
     def test_a_parameter_lookup_refused_for_another_class(self):
         error = ReadOnlyMiss("version", {"label": "x"})
         with self.assertRaises(ReadOnlyMiss) as ctx:
-            plot_inputs.parameters(_RefusingPool(error), 1e-8, 1e-8, 2e4, 5.0, UNITS)
+            plot_inputs.parameters(
+                _RefusingPool(error), 1e-8, 1e-8, 2e4, 5.0, UNITS, 1e-5
+            )
         self.assertNotIsInstance(ctx.exception, plot_inputs.PlotOptionNotStored)
         self.assertEqual(ctx.exception.class_name, "version")
 
-    def test_a_potential_lookup_refused_for_another_class(self):
+    def test_a_model_lookup_refused_for_another_class(self):
         primary = self.copy("full")
         with self.read_only(primary) as pool:
             grid = plot_inputs.stored_grid(pool, UNITS)
         error = ReadOnlyMiss("M_value", {"value": 1.0})
         with quiet(), self.assertRaises(ReadOnlyMiss) as ctx:
-            plot_inputs.potentials(
-                _RefusingPool(error), "Exponential", grid.M, grid.Lambda, UNITS
+            plot_inputs.exponential_models(
+                _RefusingPool(error), "Exponential", grid.M, grid.beta, UNITS
             )
         self.assertEqual(ctx.exception.class_name, "M_value")
 
-    def test_a_coupling_lookup_refused_as_another_write(self):
+    def test_a_model_lookup_refused_as_another_write(self):
         primary = self.copy("full")
         with self.read_only(primary) as pool:
             grid = plot_inputs.stored_grid(pool, UNITS)
         for error in (
-            ReadOnlyWrite("shard0000", "object_get", class_name="ExponentialCoupling"),
+            ReadOnlyWrite("shard0000", "object_get", class_name="ExponentialModel"),
             ReadOnlyWrite("shard0000", "an insert", class_name="ScalarHistory"),
         ):
             with self.subTest(operation=error.operation, class_name=error.class_name):
                 with quiet(), self.assertRaises(ReadOnlyWrite) as ctx:
-                    plot_inputs.couplings(_RefusingPool(error), grid.beta, UNITS)
+                    plot_inputs.exponential_models(
+                        _RefusingPool(error), "Exponential", grid.M, grid.beta, UNITS
+                    )
                 self.assertEqual(
                     (
                         type(ctx.exception),
@@ -710,7 +618,7 @@ class TestOtherRefusalsPropagate(_ReadOnlyCase):
 
     def test_an_unknown_potential_type(self):
         with self.assertRaises(ValueError) as ctx:
-            plot_inputs.potentials(None, None, [], [], UNITS)
+            plot_inputs.exponential_models(None, None, [], [], UNITS)
         self.assertEqual(str(ctx.exception), "Unknown potential type: None")
 
 
@@ -727,10 +635,9 @@ class TestNothingWritten(_ReadOnlyCase):
         cases = [
             ("full", nothing, _read_full),
             ("incomplete", nothing, _read_grid_and_lookups),
-            ("no_coupling", nothing, _read_grid_and_lookups),
-            ("full", nothing, _miss_T_stop),
+            ("no_model", nothing, _read_grid_and_lookups),
             ("full", nothing, _miss_rel_tol),
-            ("full", _delete_T_CMB, _miss_T_CMB),
+            ("full", nothing, _miss_tuning_tol),
             ("full", _delete_cosmology, _miss_cosmology),
         ]
         for name, prepare, run in cases:
@@ -826,10 +733,8 @@ class TestTheScripts(unittest.TestCase):
                 for name in (
                     "parameters",
                     "stored_grid",
-                    "potentials",
-                    "couplings",
+                    "exponential_models",
                     "models",
-                    "T_stop",
                 ):
                     self.assertIn(f"plot_inputs.{name}", called)
                 self.assertNotIn("build_model_list", called)
@@ -838,6 +743,7 @@ class TestTheScripts(unittest.TestCase):
                 }
                 self.assertNotIn("convert_to_potential", defined)
                 self.assertNotIn("convert_to_coupling", defined)
+                self.assertNotIn("convert_to_model", defined)
                 handlers = [
                     ast.unparse(h.type)
                     for n in ast.walk(tree)
