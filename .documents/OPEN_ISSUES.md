@@ -30,7 +30,8 @@ to it the same day, §1.15; prompt 01 closed one of them, 2026-10-20, leaving se
 prompt 03 closed three of them, leaving four, and opened one, 2026-10-22; prompt 04 closed one of
 them, leaving three, 2026-10-25; prompt 07 closed two of them, leaving one, and narrowed one of
 its own, 2026-10-26; prompt 08 closed the last of them and opened one, and the orchestrator's
-review of prompt 08 opened two, 2026-10-26; prompt 09 opened one, 2026-10-26).
+review of prompt 08 opened two, 2026-10-26; prompt 09 opened one, 2026-10-26; prompt 10 opened and closed
+none, and the campaign closed 2026-10-26, 10 of 10 prompts landed, with these six open).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -245,13 +246,15 @@ Assigned 2026-10-20 by the user (the campaign's README, U3), when the campaign w
 entry stays on its own board, which carries the **Assigned** line; the prompt that closes one
 deletes its row here. Each row ends with its board and the prompt that takes it. Prompt 01 closed
 one (2026-10-20), prompt 03 three (2026-10-22), prompt 04 one (2026-10-25), prompt 07 two
-(2026-10-26) and prompt 08 the last (2026-10-26). None remains.
+(2026-10-26) and prompt 08 the last (2026-10-26). None remains: the campaign closed on 2026-10-26 (prompt 10) with
+none of them left.
 
 ### 1.16 `jordan-normalization` — [board §3](../prompts/jordan-normalization/IMPLEMENTATION_STATE.md)
 
 Planned 2026-10-20. One opened by prompt 02, 2026-10-21, and narrowed by prompt 07, 2026-10-26;
 one by prompt 03, 2026-10-22; one by prompt 08 and two by the orchestrator's review of it,
-2026-10-26; one by prompt 09, 2026-10-26.
+2026-10-26; one by prompt 09, 2026-10-26. The campaign closed on 2026-10-26 with these six open; prompt 10
+opened and closed none.
 
 - `[02-the-scalar-history-parent-is-still-called-model]` — the payload key `model_proxy`, the
   attribute `_model_proxy` and locals still call a scalar history `model`, now that `model` is the

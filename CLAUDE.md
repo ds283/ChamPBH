@@ -89,8 +89,8 @@ invariants that hold across all of them:
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 76 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 167 tests
   ```
-  (The counts are those of 2026-10-26, after `jordan-normalization` 08. `tools/tests` now holds
-  three tuned histories, about 20-30 s each; run it alone.) They **must not
+  (The counts are those of 2026-10-26, after `jordan-normalization` 10, which changed no test.
+  `tools/tests` now holds three tuned histories, about 20-30 s each; run it alone.) They **must not
   need a Ray cluster or a persistent datastore**. A test may build a temporary
   SQLite datastore in a `tempfile` directory, through `datastorekit`'s undecorated actor
   (`standin_pool.DatastoreClass`) inside ChamPBH's stand-in cluster (`StoreFixtures/standin_pool.py`,

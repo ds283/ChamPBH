@@ -1880,6 +1880,226 @@ started no production run, and did not touch the user's stores or run scripts: t
     rebuild is the first production run through the wrapper. The science rebuild stays held until that
     campaign lands (§4.13 point 5).
 
+### 4.16 Addendum 2026-10-26 — the `jordan-normalization` campaign
+
+Added by `jordan-normalization` prompt 10, written at `dbfa31f`. Nothing above this heading has been
+changed; where it is superseded, this section says so by statement. The campaign changed what a
+build computes and stores, and it started no production run. It did, in order:
+
+- it stripped the model to the exponential one (prompt 01, `a1c88b6`: the four other potentials, their
+  factories and two YAML files removed; a golden short history pinned; format 2);
+- it renamed `ScalarModel` to `ScalarHistory` (02, `abccc23`: the classes, the tables, the drop group
+  `scalar-history`; format 3);
+- it moved the sampling axis to ln(1 + z_E) and put ln(1 + z_J) on every sample (03, `bd9ae42`; format 4);
+- it built the model interface, `AbstractModel`, `ExponentialModel` and `RealizedModel`, with
+  A(φ_ref) = 1 in the base class (04, `597a215`);
+- it took the Planck mass from PRyMordial's G_N in all three unit systems (05, `1675e73`);
+- it built the tuning layer, `integrate_history` and `tune_history`, with the secant (06, `1b83bbd`);
+- it moved the store: the model's table, the history's key and its fifteen tuned outputs, format 5 and
+  `VERSION_LABEL` `"2026.7.0"` (07, `223afc6`);
+- it gave the driver its new options and removed the old, moved the super-Planckian warning, the
+  wrapper's scope and the tools onto tuned histories (08, `e624f1a`);
+- it rehearsed a registered pilot build of tuned histories on ChamPBH's isolated cluster, interrupted
+  and resumed (09, `2d3520b`: the gate "R" holds);
+- and prompt 10 wrote the documents and this handover.
+
+Its board is [`prompts/jordan-normalization/IMPLEMENTATION_STATE.md`](../prompts/jordan-normalization/IMPLEMENTATION_STATE.md);
+its plan is its [`README.md`](../prompts/jordan-normalization/README.md) (§6 records the rulings, §7 the
+handover this section carries); the rehearsal is in
+[`jordan-normalization-verification.md`](jordan-normalization-verification.md) §1, and what the code
+now does is in [`numerical-strategies.md`](numerical-strategies.md) §3.7 and the dated notes of
+[`architecture-summary.md`](architecture-summary.md). It **did bump** `VERSION_LABEL`
+(`"2026.7.0"`, `config/version.py`) and `FINGERPRINT_FORMAT` (5), so a store made before it cannot be
+reused. It touched no store but its own rehearsal stores under `var/datastores/`, and it did not edit
+`science-runs/`. The branch `jordan-normalization`, cut from `main` at `ac187c8`, **is not merged
+into `main` when this is written.**
+
+**This supersedes**, by statement and not by edit:
+
+- **§4.13 point 5 and §4.15 point 11**, that "the science rebuild stays held until that campaign
+  lands". It has landed on its branch, and the rebuild is unheld (point 1).
+- **§4.12 point 5's check of the rebuild**, `tools/compare_stores.py` of the new store against
+  `~/ChamPBH-stores-bt02/`. That check cannot pass by design: the old store's histories are untuned, at
+  Λ = 1 meV and φ_ref = 0, on the electronvolt of 2.436 × 10²⁷, and every one of the new store's
+  histories carries its own tuned normalization and φ_ref (campaign README §0.1).
+- **§4.14 points 2, 3 and 6**, on the surfing scan. Point 2's "it runs at Λ = 1 meV, whatever the
+  tree", its `_INPUT_MATCH` at `tools/surfing_scan.py:155` (now `:204`) and the sidecar's `T_stop_GeV`
+  (the option is gone: `--T-window-low-GeV`, default 1e-3 GeV, replaces it) are of the tree before
+  prompt 08; point 3's "None of it moves unless the scan is re-run at the tuned Λ, which needs the
+  change in point 6" has its change; and the issue of point 6, `[05-surfing-scan-runs-at-a-fixed-lambda]`,
+  is closed (board §4). Point 4 below states the commands now.
+- **§4.15 point 7's** remark that the 900 s staleness window "bears on `jordan-normalization`, whose
+  histories are longer": prompt 09 measured it (point 3).
+
+**The points.**
+
+1. **The rebuild is unheld.** The user's ruling of 2026-10-13, restated in §4.13 point 5 and §4.15
+   point 11, held the science rebuild until this campaign landed. All ten prompts have landed on
+   `jordan-normalization`, and the rebuild can be run from a tree that holds them: the branch, or
+   `main` after the user's merge (P15; point 7). The wrapper records the tree's `git_head` and whether
+   it is dirty (§4.15 point 8), so the tree the rebuild runs from is in each run's manifest. Every
+   history of the new store is tuned (`numerical-strategies.md` §3.7), so none of 2026.6.0's values is
+   reused, and the old stores stay refused (§4.12 point 1).
+
+2. **What changes in the run scripts, by line.** The scripts are tracked records now
+   (`science-runs/2026-10-03-science-2026.6.0/`, with their hashes of §4.15 point 1,
+   `9c25562f…60e4` and `3e07d2e1…7761`, unchanged); 10 reads and does not edit them, and the new
+   scripts go in a new folder under `science-runs/` when the user writes them. Line numbers are
+   `full_run_2026.6.0.sh`'s, at those hashes; §4.15 point 2's rows for `:13`, `:15`, `:27-28` and the
+   `store create` line stand, and this table adds what the campaign changes.
+
+   | Lines | Today | Becomes |
+   |---|---|---|
+   | `:2` | "VERSION_LABEL 2026.6.0 (tree 4ae25b4 or later)" | `2026.7.0`, and a tree that holds this campaign |
+   | `:7` | "seven main.py invocations" | eight (§4.15 point 1) |
+   | `:13-14` | `STORE_DIR` outside the repository; `DB="$STORE_DIR/science-2026.6.0.db"` | `var/datastores` (§4.15 point 2), and a file name of the user's choosing: the old name says the label, which is now 2026.7.0 |
+   | `:24-29` | `run()` calls `main.py` directly | the wrapped command below, with `--campaign jordan-normalization --prompt 10` |
+   | `:27-28` | `--config exponential.yaml --database "$DB" --shards "$SHARDS" --ray-address … --job-name … --bbn-wall-clock-limit 600 "$@"` | None of these is gone and none is new. `exponential.yaml` lost `potential-type`, `Lambda-values-eV` and `log10-one-plus-z-high` (prompts 07, 08). **The script is not refused** (it passes none of the removed options): on this tree it builds tuned histories at n = 1 into whatever `$DB` names (log 08, Observation 2) |
+   | `:31-50` | the blocks C1, C4, L, C5 (three), C3, C2, with `--M-values-Mp`, `--beta-values`, `--phi-init-Mp` | Their options are unchanged and each history is now tuned. New options, at the defaults: `--tuning-tolerance` 1e-5, `--tuning-max-integrations` 30, `--n-values` 1 |
+   | `:38` | "beta >~ 6.5 starts super-Planckian at phi* = 5" | Still so, and warned and computed: Ω is taken at the seed's φ_ref, so at M = 10⁻³ M_P the threshold is β > 6.506 at φ* = 5 M_P (board §5.9, D2) |
+   | `:52-53` | `main.py … --inventory` | Nothing: it stays unregistered and starts no Ray |
+   | `:56-57` | the comment on rows reading "no ScalarModel row in the store" | `plot_by_beta.py` skips an (M, n, β) that is not stored, before any history is read, with `!! plot: no ExponentialModel stored for M=…, n=1, β=…; no history can use it; skipped` and a count line (`plot_inputs.py:213-224`; 09's plot, `.documents/jordan-normalization/out/09-plot-reference.log` lines 6-12), so no such row is made (09's `histories.csv` has six rows, verification §1.11) and there is nothing to drop |
+   | `:58-61` | the plot loop | Nothing to add: `plot_by_beta.py` and `plot_ScalarHistory.py` stop, exit 2, if `--tuning-tolerance` (default 1e-5) or `--n-values` (default 1) is one the build did not use; `--tuning-max-integrations` is accepted and not matched, since it is not a key |
+
+   The wrapped command (§4.15 point 2's, with the campaign and prompt filled in):
+
+   ```bash
+   ./venv/bin/python RunDrivers/registered_run.py --campaign jordan-normalization --prompt 10 --register "$job" \
+       --purpose "<one line>" -- --config exponential.yaml --database "$DB" --shards "$SHARDS" \
+       --ray-address "$RAY_ADDR" --job-name "$job" --bbn-wall-clock-limit 600 "$@" 2>&1 | tee "$LOG/$job.log"
+   ```
+
+   - **Gone.** `--Lambda-values-eV`, `--Lambda-values-Mp`, `--log10-Lambda-low-eV`,
+     `--log10-Lambda-high-eV`, `--samples-per-log10-Lambda-eV`, `--T-stop-GeV` (prompt 07) and
+     `--potential-type` (prompt 08) are registered hidden with `RemovedOption`
+     (`config/argument_parser.py:65`). Given on a command line or in a `--config` YAML file, each ends
+     the parse with exit 2 and a message naming its replacement; the wrapper refuses them before
+     `begin`.
+   - **New, with defaults.** `--tuning-tolerance` 1e-5 (a key of every stored history),
+     `--tuning-max-integrations` 30 (not a key: a history that does not converge within it is stored as
+     a failure and a later run with a larger cap does not recompute it, board issue
+     `[08-a-history-that-did-not-converge-is-never-retried]`) and `--n-values` 1 (the exponent n, part
+     of the model's key). The axis's `--log10-one-plus-z-high` defaults to 300 decades of 1 + z.
+   - **`--drop scalar-history`** is the group for whoever drops histories (it was `scalar-model`,
+     which is refused). It drops every history, and the groups that name them. The refresh script's
+     `--drop bbn-data` has no role in a rebuild into a new store (§4.12 point 3).
+   - **`plot_ScalarHistory.py`** is `plot_ScalarModel.py` renamed (prompt 02). Neither script calls it;
+     whoever runs it passes the options of the plot loop, with `--ray-address`.
+
+3. **The cost.** An estimate, **read and not measured**, on the machine and at the load of 2026-10-03,
+   made as follows. The 2026.6.0 histories each ran one integration to T_CMB (`--T-stop-GeV` defaulted
+   to T_CMB), so a block's scalar-stage time in its log is the time of that block's integrations;
+   a tuned history runs `tuning_iterations` of them. The tuned scalar stage of a block is therefore about
+   its 2026.6.0 time times the integrations per history that prompts 06 and 09 measured in its region
+   (`logs/06-probes/table.txt`; verification §1.3). The adiabatic and BBN stages are not tuned and cost
+   what they cost then. Each integration of a tuned history is taken to cost what a 2026.6.0 history
+   did; that is the assumption, and it is not tested.
+
+   | Block | 2026.6.0 scalar stage | Integrations per history (source) | Tuned scalar stage | Adiabatic then | BBN then |
+   |---|---|---|---|---|---|
+   | C1 (β 1.00–3.00, M = 10⁻³) | 21m 54.6s | 4 (06: β = 1.5, 3, 1.1, 0.5; 09: β = 0.5, 1.5, 3) | ≈ 88 min | 2m 52.3s | 11m 59.8s |
+   | C4 (β 1.100–1.700, M = 10⁻³) | 4m 57.1s | 4 (the same region) | ≈ 20 min | 57.2s | 3m 45.7s |
+   | L (β 3.25–25, M = 10⁻³) | 18m 24.9s | 5 (06: β = 5.5 and 25; 09: β = 5.5) | ≈ 92 min | 1m 24s | 3m 14.5s |
+   | C5 (β 0.50–1.10, φ* 1, 2, 5) | 38.1s + 51.7s + 29.1s | 4 (06: β = 0.5, φ* = 1 and β = 1.1, φ* = 2; 09: β = 0.5, φ* = 1 and 5) | ≈ 8 min | 7.5s + 8.8s + 6.8s | 39.3s + 42.4s + 14s |
+   | C3 (M = 0.5, 0.1, 0.03, 0.01) | 8m 25.6s | 5 (M ≤ 0.03, tracking seed) to 9–12 (M ≥ 0.1, static seed; 06: 9, 9, 12) | ≈ 42–101 min | 2m 23.5s | 9m 46.4s |
+   | C2 (M = 10⁻⁵) | 48m 14.9s | 3–4 (06: β = 3 and 1; 09: β = 3) | ≈ 145–193 min | 4m 10.4s | 11m 38.9s |
+   | **Total** | **104 min** | | **≈ 6.6–8.4 hours** | 12 min | 42 min |
+
+   So the scalar stages take about 3.8–4.8 times as long as in 2026.6.0 (104 min against 6.6–8.4 hours),
+   and the adiabatic and BBN stages as long as they did. The sums are read off the logs in
+   `science-runs/2026-10-03-science-2026.6.0/logs/science/` (the `ALL WORK ITEMS COMPLETE` line of each
+   stage); C3's and C2's ranges are the cheapest and dearest integration counts above.
+   - **The slowest histories.** Measured by prompt 06 at a load of 5–16: β = 25 at M = 10⁻³, 648 s for
+     five integrations (about 130 s each), and the M = 10⁻⁵ block, 214 s at β = 3 (three integrations);
+     prompt 09 saw 130 s for M = 10⁻⁵ at β = 3 and 113 s for β = 5.5 at M = 10⁻³ (verification §1.3). The
+     slowest 2026.6.0 history was one integration of 263 s (campaign README §0.3 item 7).
+   - **The heartbeat.** Every integration of a tuning prints a `-- tune` line, flushed
+     (`ComputeTargets/ScalarHistory.py:1672-1677`), Ray forwards it holding it back for at most its 5 s
+     deduplication window, and the wrapper beats on each line at most once in 30 s
+     (`RunDrivers/registered_run.py:304-312`). The silence is therefore bounded by one integration
+     (about 130 s at the slowest measured). Prompt 09's longest was **58 s** (`reference-c`, the scalar
+     stage), after the BBN stage 23–25 s for the fingerprint at finish (verification §1.10). **No
+     `--stale-after` is needed**: the default 900 s suffices. If a run shows `stale` while its pid still
+     answers `kill -0` on its host, it is a long integration and not a dead run, and
+     `./venv/bin/python -m runregistrykit list --stale-after 1800` reads it as running (read, not
+     measured: no run has shown it).
+   - **Ray's deduplication** can hold back some tune lines when histories are tuned in parallel (board
+     issue `[09-ray-deduplicates-the-tune-lines-of-parallel-histories]`); the stored `tuning_iterations`
+     is the count to read, not the number of lines in a log.
+
+4. **The surfing scans (U4).** The scans are standalone and need no Ray and no store. Their tools now
+   tune each β to T_CMB (prompt 08), so the committed outputs under
+   `.documents/surfing-temperature/out/` are **records of the fixed normalization** (Λ = 1 meV, φ_ref = 0)
+   and stay as they are. A new run needs **a new `--out`**: the tool refuses a CSV whose header holds
+   `Lambda_eV` or `T_stop_GeV` on resume (`tools/surfing_scan.py:536`; exit 2), and so refuses the
+   committed ones. The options are §4.14 point 2's, with `--T-stop-GeV` gone and `--T-window-low-GeV`
+   (default 1e-3 GeV) and the tuning's two options added at their defaults. From the repository
+   root, with `<NEW>` a directory of the user's choosing outside `.documents/surfing-temperature/out/`
+   (`mkdir -p` it first):
+
+   ```bash
+   # S1, the coarse scan (79 beta)
+   ./venv/bin/python tools/surfing_scan.py --beta-min 1.10 --beta-max 5.00 --beta-step 0.05 \
+       --phi-init-Mp 5 --M 1e-3 --out <NEW>/surfing_scan_phi5_M1e-3.csv
+   ./venv/bin/python tools/plot_surfing_temperature.py \
+       --csv <NEW>/surfing_scan_phi5_M1e-3.csv --out <NEW>/surfing_temperature_phi5_M1e-3
+   # S5, the fine scan near beta = 3.0 (61 beta), then its figure as above
+   ./venv/bin/python tools/surfing_scan.py --beta-min 2.980 --beta-max 3.040 --beta-step 0.001 \
+       --phi-init-Mp 5 --M 1e-3 --out <NEW>/surfing_scan_phi5_M1e-3_near3.csv
+   ```
+
+   Prompt 08 predicted **about 55 minutes** for S1 and **about 35 minutes** for S5, at a load of 5–8,
+   against 287 s and 155 s for the committed scans: an estimate from three tuned β (β = 1.50, 3.00 and
+   4.00 took 20.1, 31.7 and 65.3 s) at 4.3 integrations a β (log 08). On its short scan the roots agree
+   with the committed ones to 5.1 × 10⁻¹⁵, the capture flags and kicks unchanged. A result of the user's
+   for publication goes in a new folder under `science-runs/` with its inputs (`science-runs/README.md`).
+
+5. **The RayPoolKit wait (P19), with 09's measurements.** Each pass of `RayWorkPool`'s loop blocks in
+   `ray.wait(…, num_returns=min(process_batch_size, len(inflight)))` (`raypoolkit/RayWorkPool.py:354-357`
+   at the pinned `v0.3.0`), and `main.py`'s scalar queue sets `process_batch_size=3` (`main.py:330`). So
+   whenever three or fewer histories are in flight, the driver waits for **every one** before it stores
+   or validates any, and at a block's end a computed history waits for all that are still in flight.
+   Prompt 09 saw it as a history computed and not stored: β = 0.5's waited 19.5 s and 18.9 s behind
+   β = 1.5's, and **M = 0.1's waited 102.0 s and 102.5 s** behind M = 10⁻⁵'s (verification §1.10); no
+   row was stored and left unvalidated. At the rebuild's costs the wait is bounded by the slowest
+   history in flight: read from the code and not measured at those costs, up to several minutes at the
+   ends of the L and C2 blocks (about 130 s an integration, five integrations at β = 25). An interruption inside it loses the waiting
+   history, which a resume recomputes in full. It is RayPoolKit's, which ChamPBH never patches
+   (`CLAUDE.md`), and **for the user to rule upstream**:
+   `[04-the-pool-waits-for-every-in-flight-item-when-fewer-than-three]`, on `rrk-adoption`'s board §3.
+
+6. **What this campaign deferred** (campaign README §7, and out of scope in its §1): models other than
+   the exponential–exponential one (R11: each of the four stripped potentials would return as an
+   `AbstractModel` class); the storing of per-history surfing values, as columns of
+   `ScalarHistory`'s row (§4.14 point 4); and the deceleration parameter, which is an output tested
+   later through the reconstructed equation of state of dark energy and not a condition of the tuning
+   (R1).
+
+7. **Left to the user.**
+   - **The merge** of `jordan-normalization` into `main` (P15), and what follows it. `main` is not
+     pushed.
+   - **09's stores and runs.** The reference store, `var/datastores/jordan-normalization-09-reference.db`
+     (16 shards and its sidecar), and the seven runs of 09 under `var/runs/`. The resumed store was
+     retired by the user on 2026-10-26: its shards are gone and its sidecar stays as a tombstone.
+     `main.py --inventory` on the reference store runs in 29 s, starts no Ray and leaves every file of
+     the store byte-identical (10's log): 75,050 records in 15 classes, `problems: none`, six
+     `ExponentialModel` and seven `ScalarHistory` rows, all validated, label 2026.7.0. Never `git clean`
+     with `-x` or `-X` (`CLAUDE.md`).
+   - **The six open issues on this campaign's board** (`.documents/OPEN_ISSUES.md` §1.16). Two are for
+     the user to rule: `[08-a-history-that-did-not-converge-is-never-retried]` (a retry flag, or the
+     cap in the key) and `[09-ray-deduplicates-the-tune-lines-of-parallel-histories]`; the third for
+     the user to rule is the RayPoolKit wait of point 5, which is on `rrk-adoption`'s board. The other
+     four are `[02-the-scalar-history-parent-is-still-called-model]`,
+     `[03-scalar-history-functions-splines-z-but-evaluates-ln-one-plus-z]`,
+     `[08-the-wrappers-refusal-tests-run-the-real-wrapper-on-var-runs]` and
+     `[08-plot-surfing-histories-marks-the-window-edge-as-a-bounce]`, which the rebuild does not wait on.
+   - **The two paper notes**, `.documents/numerical-methods-for-paper.md` and
+     `.documents/paper-corrections-numerical-section.md`. They are dated records written for the
+     authors, and they are **not edited**. Each statement of them that this campaign makes false, by line
+     and with what is true now, is listed in prompt 10's log
+     (`prompts/jordan-normalization/logs/10-close.md`, "The paper notes") so that the authors can find
+     them when they rewrite the paper's numerical section.
+
 ---
 
 ## 5. Reproduce

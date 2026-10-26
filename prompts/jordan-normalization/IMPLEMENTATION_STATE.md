@@ -1,8 +1,8 @@
 # jordan-normalization campaign — implementation state
 
-**Last updated:** 2026-10-26 · **Status: LIVE — 10 of 10 prompts written, 9 landed (01–09, all reviewed;
-04 and 08 each after one stop ruled by the orchestrator); R1–R14, U1–U5 and P1–P20 ruled by the
-user 2026-10-20 (README §6). Next: the orchestrator note for 10.**
+**Last updated:** 2026-10-26 · **Status: CLOSED 2026-10-26 — 10 of 10 landed (01–09 reviewed, 10 awaiting
+its review; 04 and 08 each after one stop ruled by the orchestrator); R1–R14, U1–U5 and P1–P20 ruled by
+the user 2026-10-20 (README §6); the merge into `main` is the user's (P15).**
 The plan is [`README.md`](README.md), written on 2026-10-20 on branch `jordan-normalization`, cut
 from `main` at `ac187c8`.
 
@@ -19,7 +19,7 @@ It ends in the handover for the science rebuild, which is the user's.
 
 **Campaign:** [`README.md`](README.md) ·
 **Code:** `CosmologyConcepts/`, `ComputeTargets/`, `ObjectFactories/`, `Units/`, `config/`,
-`main.py`, `plot_inputs.py`, `plot_by_beta.py`, `plot_ScalarModel.py`, `extract_common.py`,
+`main.py`, `plot_inputs.py`, `plot_by_beta.py`, `plot_ScalarHistory.py`, `extract_common.py`,
 `pipeline_selection.py`, `RunDrivers/registered_run.py`, `tools/` ·
 **Verification:** `.documents/jordan-normalization-verification.md` (created by 09) ·
 **Index:** [`.documents/OPEN_ISSUES.md`](../../.documents/OPEN_ISSUES.md) §1.15 (assigned) and
@@ -44,7 +44,7 @@ It ends in the handover for the science rebuild, which is the user's.
 | 07 | The store | `ExponentialModel` table; `ScalarHistory`'s key and tuned outputs; format 5; `VERSION_LABEL` 2026.7.0; writers and readers moved | Opus | ✍️ | ✅ | `223afc6` | [`logs/07-the-store.md`](logs/07-the-store.md) |
 | 08 | The driver and the tools | `main.py`'s options; the super-Planckian warning; the wrapper's scope; the tools and the surfing scan on tuned histories | Opus | ✍️ | ✅ | `e624f1a` | [`logs/08-the-driver-and-the-tools.md`](logs/08-the-driver-and-the-tools.md) |
 | 09 | Rehearse a tuned build | registered pilot build on the isolated cluster, interrupted and resumed, compared bitwise (if U2) | Opus | ✍️ | ✅ | `2d3520b` | [`logs/09-rehearse-a-tuned-build.md`](logs/09-rehearse-a-tuned-build.md) |
-| 10 | Close | documents, `CLAUDE.md`, the handover for the science rebuild, indexes, board | Sonnet | ✍️ | ⬜ | — | — |
+| 10 | Close | documents, `CLAUDE.md`, the handover for the science rebuild, indexes, board | Sonnet | ✍️ | ✅ | this commit | [`logs/10-close.md`](logs/10-close.md) |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
 
@@ -95,7 +95,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 | 07 | S1 the model's table ✅ · S2 the key ✅ · S3 the outputs ✅ · S4 the compute path ✅ · S5 `main.py` ✅ · S6 the readers ✅ · S7 format 5 and 2026.7.0 ✅ · S8 the tests ✅ (all landed in `223afc6`) |
 | 08 | D1 the options ✅ · D2 the warning ✅ · D3 the wrapper's scope ✅ · D4 `history_and_bbn.py` ✅ · D5 the surfing tools ✅ · D6 `histories.csv` ✅ · D7 the tests ✅ (all landed in `e624f1a`) |
 | 09 | H1 reference ✅ · H2 resumed ✅ · H3 the comparisons ✅ · H4 the measurements ✅ · H5 the document ✅ (all landed in `2d3520b`) |
-| 10 | C1 the documents · C2 `CLAUDE.md` · C3 the handover · C4 the board and indexes · C5 the final suites |
+| 10 | C1 the documents ✅ · C2 `CLAUDE.md` ✅ · C3 the handover ✅ · C4 the board and indexes ✅ · C5 the final suites ✅ (all landed in this commit) |
 
 ## 2. The gates
 
@@ -116,7 +116,8 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 Prompt 02 opened one, prompt 03 one, prompt 08 one, the review of prompt 08 two and prompt 09 one;
 prompt 07 narrowed prompt 02's. Prompt 01
 closed one assigned issue, prompt 03 three, prompt 04 one, prompt 07 two and prompt 08 the last
-(§3.1, §4).
+(§3.1, §4). Prompt 10 opened and closed none: **the campaign closed on 2026-10-26 with the six
+below open**, the index's §1.16 (`.documents/OPEN_ISSUES.md`).
 
 ### `[02-the-scalar-history-parent-is-still-called-model]`
 
@@ -1278,3 +1279,37 @@ All pass.
   further opened.
 - **For the user:** 09's two stores, kept under `var/datastores/`; the stale run
   `rrk-adoption-03-unit-20261026T151946` is now `lost`.
+
+### 5.11 After prompt 10 (2026-10-26)
+
+Prompt 10 landed in this commit (log [`logs/10-close.md`](logs/10-close.md)), dispatched with
+orchestrator note 10, whose eleven rulings govern. No stop. No code changed.
+- **C1.** `architecture-summary.md`: fifteen dated notes, each at the statement it corrects (§1, §2,
+  §4.3, §5.1, §5.3, §7.2 twice, §8.2, §8.3, §8.4, §8.4a, §9, §11 and §12 twice): the options and the
+  sharding, the axis and `SampleValues`' 18th field, the two layers, the tools, the deleted classes and
+  the warning at the seed's φ_ref. `numerical-strategies.md`: §3.7 in ten sub-subsections (the model
+  and the normalization, the two layers, the conditions, the update, the failures, the progress line,
+  the stored outputs, what was measured, the axis, the Planck mass) and ten one-line dated notes at the
+  statements the grep found false. **No existing line of either document is deleted or reworded**
+  (ruling 1). The R6 audit found no statement that Planck units "scale out" M_P or that A(0) = 1; the
+  statements that z is stored (§1.1, §9 item 4, `DEFAULT_REDSHIFT_PRECISION`) have notes.
+- **C2.** `CLAUDE.md`: the parenthesis on the counts names prompt 10. The "Units", "Redshift" and
+  plot-scripts bullets were read against the code and are true.
+- **C3.** `.documents/review-remediation-verification.md` §4.16: the rebuild unheld; the run scripts'
+  changes by line, the options gone and new; the cost per block, estimated (about 6.6–8.4 hours of
+  scalar stage against 104 minutes in 2026.6.0), with the slowest histories and the heartbeat (no
+  `--stale-after` needed); the surfing scans S1 and S5 on the tuned tool, each to a new `--out`; the
+  RayPoolKit wait (P19) with 09's measurements; what the campaign deferred; and what is the user's.
+- **C4.** This board closed; `prompts/INDEX.md`'s row complete and its header 13 campaigns, 13 closed;
+  `.documents/OPEN_ISSUES.md`'s header and §1.15–§1.16 (25 open, unchanged).
+- **C5.** Suites, serially, before and after: CosmologyModels 26, ComputeTargets 243 (76 + 167),
+  ObjectFactories 93, tools 115, RunDrivers 64, all passing; `main.py --inventory` on 09's reference store
+  read it without changing a file of it.
+- **Opened:** none. **Closed:** none. **Index:** 25 open, as before.
+
+**The campaign closed on 2026-10-26.** All ten prompts landed on the branch `jordan-normalization`, cut
+from `main` at `ac187c8`; the golden histories pass at every prompt after the ones that change values,
+and the rehearsal (09) showed the tuned build equal to the standalone tool bit for bit, equal across an
+interruption and a resume. Six issues stay open (§3). **The merge into `main` is the user's (P15), and
+so are the science rebuild, from `review-remediation-verification.md` §4.16, 09's reference store, and
+the three rulings: the scalar stage's retry, the deduplication of the tune lines, and RayPoolKit's wait.**

@@ -14,6 +14,12 @@ temperature, followed by the derivation of its consequences for Big Bang Nucleos
 strength (β), so every choice below is made with an eye to robustness across a wide
 parameter survey rather than being hand-tuned to a single trajectory.
 
+> **Note, 2026-10-26 (`jordan-normalization`, prompt 10; §3.7).** The system is evaluated over
+> grids of (M, n, β), not of (M, Λ) and β: the model is one `ExponentialModel` per (M, n, β)
+> (`main.py:1082`), and the normalization of the potential, which Λ was, is found for each history by
+> tuning (§3.7.4). Every figure in the sections above this one was made before that campaign, with the
+> fixed normalization and φ_ref = 0, and is left as the record of its tree.
+
 ---
 
 ## 1. The governing ODE system and the choice of state vector
@@ -27,6 +33,12 @@ the code integrates forward in `N` starting from `N_start = 0` and works with `N
 increasing, then afterwards re-maps `N` back to redshift via `z = exp(N) - 1`. A failsafe
 upper bound of `N_failsafe = 1000` e-folds is imposed to guarantee termination even if the
 physical stopping condition is somehow never met.
+
+> **Note, 2026-10-26 (`jordan-normalization`, prompt 10; §3.7.9).** The re-map to a redshift is gone.
+> A sample's label is ln(1 + z_E) itself, a point of the sampling axis, which is anchored at the end of
+> the history: the sampling reads N_backward from the axis (`ComputeTargets/ScalarHistory.py:1296-1297`),
+> so no `exp(N) − 1` is formed, and `z` is only the derived property `redshift.z` (`inf` past 709.78
+> e-folds). The integration still runs forward in N, and every stored history ends at T_J = T_CMB.
 
 ### 1.2 State vector (`Quadrature/supervisors/ScalarField.py`, `StateVector`)
 
@@ -278,6 +290,14 @@ The reflection is a *model*, not a fallback, and it has two guards (log 01):
   wall at delivery speed `W/(½π²) ≈ 23`; on every legitimate reflection run it was at most
   `1.76e-20`.
 
+> **Note, 2026-10-26 (`jordan-normalization`, prompt 10; §3.7.1).** G1 is now the model's:
+> `reflects_at_origin` is a property of `AbstractModel` (default `False`,
+> `CosmologyConcepts/Models/AbstractModel.py:191-198`), `True` on `ExponentialModel`
+> (`ExponentialModel.py:71-75`) and read through `RealizedModel.reflects_at_origin` (`:130-132`), and
+> `log_V_floor` is the normalization ln V₀ (`ExponentialModel.py:77-79`), not Λ⁴ (the two were equal at
+> the fixed normalization 4 ln Λ). `AbstractPotential` no longer exists, and `ExponentialModel` is the one
+> model that declares it.
+
 An accepted state with `φ ≤ 0` is never reflected: under the cap it can only mean the cap was
 violated, and it is a `ComputationFailureError`. Reflections are counted, passed to the
 supervisor (`notify_reflection`) and stored as `number_reflections` (§3.5.7).
@@ -363,6 +383,13 @@ cap the tolerance does not set the cost (audit §3.6, §6). `ExponentialPotentia
 `hard_reflection_point` are still defined and nothing reads them (open issue
 `[00-region-properties-on-the-potentials-become-unread]`).
 
+> **Note, 2026-10-26 (`jordan-normalization`, prompt 10; §3.7.1).** Those properties no longer exist.
+> Prompt 04 (`597a215`) deleted the five `bounce_region_level{1,2}_*` and `hard_reflection_point`
+> properties from `AbstractPotential` and `ExponentialPotential`, and `default_max_step` from
+> `ExponentialPotential`, and closed `[00-region-properties-on-the-potentials-become-unread]`; prompt 07
+> (`223afc6`) deleted both classes. The model (§3.7.1) carries only `reflects_at_origin` and the log floor
+> that the elastic reflection of §3.5.3 reads.
+
 Every `ScalarModel` store made before `VERSION_LABEL = "2026.5.0"` is invalid, and so is every
 `AdiabaticHistory` and `BBNData` row built on one.
 
@@ -385,6 +412,12 @@ Figures are those printed by the logs named, on the trees named there
 | the failure reason (prompt 02) | `failure_reason String(256)` | both failure exits of `compute_scalar_model` return `{"failure": True, "failure_reason": …}`: the `ComputationFailureError` message, or `"sampling: overflow when assembling sample values: …"`, truncated to 256; NULL on a success | `ScalarModel.failure_reason` (readable on a failure row, `None` on a success) |
 | the first bounce (prompt 03) | `first_bounce_N`, `first_bounce_log_T_Jordan` (ln of T_J in GeV), `first_bounce_phi_Einstein` (φ in M_P), `first_bounce_reflected` | `first_bounce(result)`: the root of π, by `brentq` (`xtol=1e-15`) on the interpolant of the first accepted step with π(t_k) < 0 < π(t_{k+1}); if an elastic reflection comes first, that reflection (`reflected=True`); `None` otherwise. No `φ < 1.5 M` filter. All four NULL with no bounce and on a failure row | `ScalarModel.first_bounce` |
 | φ and ρ_NP/ρ_R,J at fixed T_J (prompt 06b) | `phi_Einstein_1MeV`, `density_NP_ratio_1MeV`, `phi_Einstein_70keV`, `density_NP_ratio_70keV` (φ in M_P) | `fixed_T_values(result, policy, coupling, units)`: the first crossing of `ln T_J = ln(1 MeV)` and `ln(0.07 MeV)` on the dense output (`T_Jordan_crossing`, `brentq` on the accepted step's interpolant), φ read there, and the ratio built as `compute_BBN_data` builds it, `(3 M_P² H_J² − ρ_R,J (1 + f_m))/ρ_R,J`. NULL where the history does not reach the temperature, and on a failure row | `ScalarModel.fixed_T_values`, also under `_do_not_populate` |
+
+> **Note, 2026-10-26 (`jordan-normalization`, prompt 10; §3.7.1).** `fixed_T_values` is
+> `fixed_T_values(result, policy, model, units)` (`ComputeTargets/ScalarHistory.py:1093`), with a
+> `RealizedModel` where the table says `coupling` (`fixed_T_value_at`, `:1060`, likewise), and the
+> row and the properties are `ScalarHistory`'s. The values on the roster below are of the fixed
+> normalization (Λ = 1 meV, φ_ref = 0) and the old electronvolt, and are not re-measured.
 
 The two temperatures are the module constants `FIXED_T_JORDAN_HIGH_MEV = 1.0` and
 `FIXED_T_JORDAN_LOW_MEV = 0.07`; they are not a run option and not part of the lookup key.
@@ -469,6 +502,304 @@ The implementation agent's own count (log 05's `diag.py`) agrees: at β = 1.6, `
   between two samples 0.0092 e-folds apart: `[05-the-ratio-spline-may-ring-at-resolved-bounce-jumps]`
   (`science-readiness` board §3).
 
+### 3.7 Added 2026-10-26 (`jordan-normalization`): the model, the tuning to H0 and φ_min, the sampling axis and the Planck mass
+
+**What this adds to.** The campaign changed what a stored history is. The potential and the
+conformal factor became one model; each history's potential normalization and reference point became
+quantities that the history finds; the sampling axis became ln(1 + z); and the electronvolt was tied
+to PRyMordial's G_N. The commits, on the branch `jordan-normalization` (cut from `main` at
+`ac187c8`): prompt 01 `a1c88b6` (the strip to the exponential model), 02 `abccc23` (the rename to
+`ScalarHistory`), 03 `bd9ae42` (the axis), 04 `597a215` (the model interface), 05 `1675e73` (the Planck
+mass), 06 `1b83bbd` (the tuning layer), 07 `223afc6` (the store: `VERSION_LABEL` `"2026.7.0"`,
+`FINGERPRINT_FORMAT` 5), 08 `e624f1a` (the driver and the tools), 09 `2d3520b` (the rehearsal) and
+10 (this section and the handover, `review-remediation-verification.md` §4.16). Code lines are those
+of `dbfa31f`. The measurements are the campaign's: its logs
+(`prompts/jordan-normalization/logs/`), its board, README §0.3 (the planner's probes at `ac187c8`)
+and [`jordan-normalization-verification.md`](jordan-normalization-verification.md) (prompt 09's
+rehearsal); each figure below names which. The branch is not merged into `main` when this is written.
+
+**This supersedes**, by statement and not by edit:
+
+- §1's "grids of potential parameters (M, Λ)" and §1.1's "re-maps `N` back to redshift via
+  `z = exp(N) - 1`" (and §9 item 4): the grids are of (M, n, β), the normalization is tuned
+  (§3.7.4), and the label is read off the axis (§3.7.9);
+- §3.5.3's G1, "new on `AbstractPotential`", and its `Λ⁴` (§3.7.1);
+- §3.6.1's `fixed_T_values(result, policy, coupling, units)`, which takes a model;
+- §4.1's `ScalarHistory._create_functions`, which no caller reaches (§3.7.9);
+- §6's "dual potential representations" and its cached `4 log Λ`;
+- §7.6.1's and §7.6.5's advice on `--T-stop-GeV`, an option that is gone (§3.7.2).
+
+Each has a one-line dated note at the statement. **Every figure above this section was made
+before the campaign**, with the fixed normalization (Λ = 1 meV: `exponential.yaml`'s
+`Lambda-values-eV` and `tools/history_and_bbn.py`'s `LAMBDA_EV` at `ac187c8`), φ_ref = 0 and the
+electronvolt of 2.436 × 10²⁷, and is a record of that tree; none is re-measured here.
+
+#### 3.7.1 The model and the normalization
+
+*The problem* (README §0.1). The model is Einstein-frame gravity with reduced Planck mass M_P, a
+canonical scalar φ, and matter coupled to the Jordan metric g_J = A²(φ) g_E. The Standard Model
+masses are constants of the Jordan-frame Lagrangian, so the Planck mass that matter sees is
+M_P/A(φ), and a laboratory that measures G_N at a field value φ_ref measures M_P/A(φ_ref). Requiring
+that M_P be the laboratory's Planck mass, the one the units use, is the condition A(φ_ref) = 1.
+Before the campaign A(0) = 1 and the two Planck masses were identified, which chose φ_ref = 0
+without saying so, and every Jordan-frame input (the Standard Model masses through g_*(T), T_init,
+T_CMB, H0, ρ_m0, ρ_r0) was then labelled by A(φ_ref) to the power of its mass dimension.
+
+*The classes.*
+
+- `AbstractModel` (`CosmologyConcepts/Models/AbstractModel.py:135`) holds the Lagrangian's hooks,
+  none of which takes φ_ref: `_log_V(normalization, φ)`, `_d_logV_dphi`, `_d2_logV_dphi2`,
+  `_log_Omega(φ)`, `_d_logOmega_dphi`, `_d2_logOmega_dphi2`, `_log_V_floor(normalization)` (default
+  `None`) and the property `reflects_at_origin` (default `False`).
+- `realize(normalization, φ_ref)` (`:202`) returns a `RealizedModel` (`:61`), the one immutable
+  object that the integrator and everything after it read.
+- `ExponentialModel(store_id, M, n, beta, units)` (`CosmologyConcepts/Models/ExponentialModel.py:40`)
+  is the one model: V = V₀ exp((M/φ)ⁿ) and A = exp(β(φ − φ_ref)/M_P), `type_id`
+  `EXPONENTIAL_MODEL = 1`, shard key β, keyed in its table by (M, n, β)
+  (`ObjectFactories/ExponentialModel.py`). The four other potentials were removed in prompt 01
+  (README R11).
+
+*A(φ_ref) = 1 is the base class's.* `RealizedModel.log_Omega(φ)` is `model._log_Omega(φ) −
+model._log_Omega(φ_ref)`, the second term computed once in `__init__` (`AbstractModel.py:77`,
+`:114-115`), so A(φ_ref) = 1 holds for any model and no model interprets φ_ref. For the exponential
+model `_log_Omega` is βφ/M_P (`ExponentialModel.py:128-130`), so d ln A/dφ = β/M_P, which φ_ref does
+not change.
+
+*The normalization is the model's to interpret* (README R7). The exponential model reads it as
+ln V₀: `_log_V` is `normalization + (M/φ)ⁿ` (`ExponentialModel.py:81-94`), `_log_V_floor` is the
+normalization, since V → V₀ far from the wall (`:77-79`), `normalization_coordinate` is the identity
+(`:149-151`), and `renormalize(normalization, φ, V_target)` is `normalization + ln V_target − ln V(φ)`
+(`:138-147`), which makes V(φ) = V_target and raises `ValueError` for V_target ≤ 0.
+
+*Where A enters, and what does not change* (README §0.2, at `ac187c8`). Outside the ODE, A enters in
+four places: `HubblePolicy` (H_J = H_E (1 + βφ′/M_P)/A), `fixed_T_value_at`, the initial
+Einstein-frame radiation density and the sampled ρ_R,J. Everything else reads only d ln A/dφ: the
+ODE, `AdiabaticHistory`'s M²_eff, `surfing_turning_points`, the reachability roots and BBN. The BBN
+interface (`compute_BBN_data` and the vendored `PRyM/`) is unchanged and `PRYM_VERSION` did not move:
+with A normalized at φ_ref, Eq. 7's ratio r = ρ_NP/ρ_R,J = (3 M_P² H_J² − ρ_R,J (1 + f_m))/ρ_R,J is the
+one PRyMordial needs (README §1).
+
+*The shift law, measured* (log 04, tests (c) and (d)). At a fixed Einstein-frame state, shifting φ_ref
+by δ multiplies 1 + r + f_m by e^{−2βδ/M_P}: the largest difference, on the scale
+(1 + f_m + |r|) e^{−2βδ/M_P}, is 2.685e-14 over the two golden histories, and Eq. 7's identity holds to
+4.251e-14 (β = 1.5) and 6.875e-14 (β = 5.5). The criterion is on that scale and not a plain relative
+one, because at the T_J turning points 1 + βφ′/M_P ≈ −2.2e-3 and 1 + r + f_m is a cancelled sum (board
+§5.5).
+
+*The effective minimum* (`AbstractModel.effective_minimum`, `:227-265`) is the root of
+V′(φ) + (d ln A/dφ) ρ_m,E(φ₀) A(φ)/A(φ₀), with ρ_m,E proportional to A at fixed Einstein-frame number
+density, on the model realized at (normalization, φ_ref). It is found by `brentq` on
+(0.05 φ₀, 20 φ₀) with `xtol` 1e-14 φ₀ and `rtol` 1e-13; a bracket without a sign change raises
+`ValueError` naming it. The radiation term Σ ρ_R,E is left out because Σ = 1 − 3w is 0.0 exactly at
+T_CMB on `QCD_Cosmology(Planck2018)` (docstring, `:243`).
+
+#### 3.7.2 The two layers
+
+`integrate_history` (`ComputeTargets/ScalarHistory.py:1137`) is the primitive (README R8): one
+integration of one `RealizedModel` from T_init to any T_stop, sampled on the axis, with no
+normalization logic; it is what `compute_scalar_history` was. `tune_history` (`:1575`) always
+integrates to `cosmology.T_CMB_Kelvin * units.Kelvin` (`:1628`), by calling it once per iterate.
+`compute_scalar_history` (`:1748`), the `@ray.remote` that `ScalarHistory.compute` submits, calls
+`tune_history`, so every stored history is tuned. A stored history therefore always ends at the
+cosmology's T_CMB: T_stop is not a key, `ScalarHistory.T_Jordan_stop` (`:1969`) is a property at
+T_CMB, and `--T-stop-GeV` is gone (refused by `RemovedOption`, exit 2). The tests, the golden
+histories' setup and `tools/history_and_bbn.py --fixed-normalization NORM PHI_REF_MP` call the
+primitive directly, and the last takes `--T-stop-GeV` for the untuned run. No driver passes
+`secant=False` to `tune_history` (`:1613-1614`).
+
+#### 3.7.3 The conditions and the residuals
+
+The history is tuned until two conditions hold at T_J = T_CMB (README R1, R2): the Jordan-frame
+Hubble rate equals today's, H_J(T_CMB) = H0 (Planck 2018, at fixed ω_m; the deceleration parameter
+is not a condition, R1), and φ_ref equals φ_min, the minimum of the Einstein-frame effective
+potential at the history's own densities today.
+
+- **Today's state** is the last sample, ln(1 + z) = 0 (`_tuning_state`, `ScalarHistory.py:1533`,
+  `:1546`).
+- **Eq. 7's V_target** is the potential at which H_J = H0 at that state:
+  V_target = A₀⁴ [3 M_P² H0² G/(A₀² b²) − ρ_R,J (1 + f_m)], with G = 1 − π₀²/(6 M_P²),
+  b = 1 + (d ln A/dφ) π₀ and A₀ = A(φ₀) (`:1554`); ρ_m,E today is A₀⁴ f_m ρ_R,J (`:1555`); and φ_min
+  is `model.effective_minimum` at that ρ_m,E (`:1556`).
+- **The residuals**, as stored: residual_H = H_J/H0 − 1 and residual_φ = φ_ref/φ_min − 1
+  (`:1564-1565`).
+- **Convergence** is `tuning_converged` (`:1423-1429`): `abs(residual_H) < tolerance and
+  abs(residual_phi) < tolerance`, strictly. The tolerance is `DEFAULT_TUNING_TOLERANCE = 1e-5`
+  (`:1391`) or `--tuning-tolerance`, and it is a key of every stored history (the `tolerance` row
+  `tuning_tol`).
+
+Measured (prompt 09, `.documents/jordan-normalization-verification.md` §1.3): every one of the
+seven stored histories has both residuals strictly inside 1e-5.
+
+#### 3.7.4 The update: the seed, the plain step, the secant, the guards and the cap
+
+*The seed* is `model.seed(cosmology)` (`:1630`), taken afresh for each tuning, with no cache and
+no use of any other history (README R13: "I'd only be happy with this if we were sure there was no
+dependence on the initial field value"; §3.7.8 gives the dependence). `ExponentialModel.seed`
+(`ExponentialModel.py:195`), for n = 1, tries the **tracking** analytic minimum (φ′ = 1.5 φ in Eq. 7 at
+A = 1), then the **static** one (the field at rest), each from a fixed-point loop (`_analytic_seed`,
+`:156-193`) that has no solution where it raises, does not converge in 200 iterations, or ends with
+V, G or 1 + βφ′/M_P not positive; and then the base class's **plain** seed, V₀ = ρ_Λ =
+3 M_P² H0² (1 − Ω_m) and φ_ref = 0 (`AbstractModel.py:267-280`). For n ≠ 1 the seed is plain.
+
+*One step* (`tune_history`, `:1639-1745`), after an integration that has not converged:
+
+1. **The guard.** If Eq. 7's V_target ≤ 0, the next iterate halves V(φ₀) through `renormalize` and sets
+   φ_ref = φ_min, and the secant's matrix is reset (a "guard" step, `:1705-1718`). V_target ≤ 0 at
+   `TUNING_GUARD_LIMIT = 4` (`:1395`) integrations running is a failure (§3.7.5). Why it exists
+   (README §0.3 item 1): with φ_ref = 0 the first history at M ≥ 0.1 has A(φ₀) = 1.6–2.3, so V_target
+   is negative before φ_ref has moved; updating φ_ref first and halving V cured it at every point
+   tried.
+2. **The cap.** After `max_integrations` integrations, the seed's included, the tuning fails
+   (`:1723-1729`). The default is `DEFAULT_TUNING_MAX_INTEGRATIONS = 30` (`:1392`), and
+   `--tuning-max-integrations` gives it; it is not a key (§3.7.5).
+3. **The step** is `TuningSecant.step` (`:1439-1515`) on x = (the normalization's coordinate,
+   φ_ref/scale), `scale` being φ_min of integration 0 (`:1702-1703`, `:1732-1738`), with G(x) the
+   plain map: the coordinate of `renormalize(normalization, φ₀, V_target)` and φ_min/scale. The
+   **first step is the plain update**, which returns G(x) and sets the matrix B = −I. Every later step is
+   **Broyden's ("good") secant** on F = G(x) − x: B += (dF − B dx) dxᵀ/|dx|², then B d = −F by Cramer's
+   rule (`_solve2`, `:1432`), and the next point is x + d. The **twice rule**: if the last step was a
+   secant step and |F| > 2 |F_previous|, B is reset and the step is plain from x (`:1488-1489`).
+
+*Measured* (prompt 06, `prompts/jordan-normalization/logs/06-probes/table.txt`; board §5.7). On the
+thirteen points of README §0.3, the secant needs 73 integrations in all against the plain update's
+116, and never more at any point: fewer at twelve, as many at one (β = 3, M = 10⁻⁵: 3 and 3).
+Tracking seeds converge in 3–5 integrations (M ≤ 0.03), static seeds in 9–12 (M = 0.1: 9; M = 0.5: 9
+and 12). The two methods agree to 4.2e-6 in ln Λ and 2.0e-5 in φ_ref (relative); the four
+differences above 1e-5 are the plain update's slack at M ≥ 0.1 and at β = 3, M = 10⁻³. The guard
+fires once, at β = 3, M = 0.5, at integration 0; the twice rule never fires. The static seed starts
+far from H0: H/H0 − 1 at integration 0 is +0.681 (β = 3, M = 0.1), +0.679 (β = 1, M = 0.5) and +1.079
+(β = 3, M = 0.5), against −7.4e-2 to −1.7e-4 for the tracking seeds (log 06, Observations).
+
+*The analytic seed, measured* (README §0.3 item 3, at `ac187c8`, on the units of the time). The
+analytic minimum V′ + (β/M_P) ρ_m0 = 0 is accurate in location and not in amplitude. At the
+converged Λ, 2βΔφ/M_P is at most 1e-6 at M = 10⁻⁵, 4.5e-4 at 10⁻³, 2.4e-3 at 10⁻², 1e-2 at 0.1 and
+1.5e-2 to 0.11 at 0.5; but V(φ_ref)/ρ_Λ at the converged history is 0.98 (M = 10⁻⁵, β = 1), 0.82
+(β = 1.5, M = 10⁻³), 0.52 (β = 25) and 0.19–0.29 (M ≥ 0.1), because H_J carries the field's kinetic
+energy and the factor (1 + βφ′/M_P)². The static seed puts φ_ref 4–38 % high at M = 10⁻³; the
+tracking seed puts it within 1.4–3.8 % there and has no solution at M ≥ 0.1. As a seed they save
+0–3 integrations. So the analytic route does not pin M_P without the dynamics, and the tuning stands.
+
+#### 3.7.5 The failures
+
+A failed tuning is stored as a failure row, whose reason's first clause is one of four (the
+docstring of `tune_history`, `:1616-1624`):
+
+- **"the normalization did not converge"**, after the cap (`:1723-1729`);
+- **"no normalization reaches H0"**, for V_target ≤ 0 at four integrations running (`:1707-1714`);
+- **"the effective minimum was not found"**, when `effective_minimum` raises `ValueError`
+  (`:1664-1670`);
+- **an integration's own reason**, with " (tuning integration k)" appended (`:1659-1662`).
+
+Each failure prints `!! tune_history (label): reason` (`:1569-1572`), and `summarise_failure_reasons`
+groups them by first clause, unchanged. **What `_tuning_state` does not catch**: only the `ValueError`
+of the effective minimum is caught (`:1666`), so another exception from its arithmetic (a
+`ComputationFailureError` from `log_V`, a `ZeroDivisionError` at 1 + βφ′/M_P = 0) would reach the
+driver through the remote and not become a failure row (log 07, Observation 2). None arose in any test, in
+prompt 06's thirteen points or in prompt 09's seven histories. **The cap is not a key**:
+`--tuning-max-integrations` reaches the remote as an argument of `ScalarHistory.compute` and not
+through the store, so a history that fails to converge within it is stored as a failure, and a later
+run with a larger cap does not recompute it; only `--drop scalar-history`, which drops every history,
+does (board issue `[08-a-history-that-did-not-converge-is-never-retried]`, open). No history failed
+to converge at any point measured.
+
+#### 3.7.6 The progress line
+
+After each integration, once the residuals are formed, `tune_history` prints and flushes one line
+(`:1672-1677`):
+
+    -- tune <label> it=<k> kind=<seed|plain|secant|guard> H/H0-1=… phi_ref/phi_min-1=… norm=… phi_ref=<M_P> wall=<s>
+
+`kind` is how the iterate was reached, and `wall` is that integration's. Ray forwards worker output
+to the driver, and the registered-run wrapper beats on each line without ever reading it as a stage.
+Ray's log deduplicator keys a line on the words that hold no digit and holds back a line whose key
+another process printed within 5 s, so tune lines of histories tuned in parallel can be collapsed
+into one "[repeated Nx across cluster]"; prompt 09 saw β = 1.5's seed line swallowed this way, in
+two runs (board issue `[09-ray-deduplicates-the-tune-lines-of-parallel-histories]`, open). The stored
+`tuning_iterations` is the count to read. Prompt 09 measured the longest heartbeat silence at 58 s
+(`reference-c`, the scalar stage), against the 900 s staleness window (verification §1.10).
+
+#### 3.7.7 The stored outputs
+
+`TUNING_OUTPUT_KEYS` (`:1399-1415`) are the fifteen values that `tune_history` returns and
+`ScalarHistory` stores as nullable columns of its own row, NULL on a failure row
+(`ObjectFactories/ScalarHistory.py:246-274`): `normalization` (the model's own value; ln V₀ for the
+exponential model, in the run's units, Planck units for every driver), `V_ref` = V(φ_ref) (stored in
+M_P⁴), `phi_ref`, `phi_0` and `pi_0` (the field and dφ/dN today) and `seed_phi_ref` (stored in M_P),
+`tracking` = π₀/(1.5 φ₀) (the matter-era tracking diagnostic), `residual_H`, `residual_phi`,
+`tuning_iterations` (the integrations, the seed's included), `plain_steps`, `secant_steps`,
+`guard_steps`, `seed_kind` and `seed_normalization`. `ScalarHistory.tuning` (`:1996`) is a
+`TuningValues` namedtuple, readable under `_do_not_populate`, and `ScalarHistory.realized_model`
+(`:2014`) is `model.realize(normalization, phi_ref)`. `histories.csv` carries the normalization,
+`V_ref_eV4`, `phi_ref_Mp`, `phi_0_Mp`, `tracking`, both residuals and the iterations
+(`extract_common.py:520`).
+
+#### 3.7.8 What was measured
+
+- **The thirteen points** (prompt 06): §3.7.4.
+- **Seven histories on the isolated cluster** (prompt 09, verification §1.3, §1.8): β = 0.5, 1.5, 3
+  and 5.5 at M = 10⁻³ M_P, φ* = 5, β = 0.5 at φ* = 1, and β = 3 at M = 0.1 and 10⁻⁵. Every one
+  converged, in 3–9 integrations (M = 10⁻⁵: 3; M = 0.1: 9; β = 5.5: 5; the others 4). **Every stored
+  tuned value equals `tools/history_and_bbn.py`'s bitwise**, 7 histories × 15 keys × 2 stores, by
+  `float.hex`. Against README §0.3, Λ is lower by 2.768–2.795 × 10⁻⁴ (the electronvolt, §3.7.10) and
+  φ_ref agrees within 1.6 × 10⁻⁵. The tuning's integrations took 3–130 s per history by the tune
+  lines seen, at a one-minute load of 2–7; M = 10⁻⁵ and β = 5.5 were the slowest (130 s and 113 s).
+- **The dependence on the initial field** (README §0.3 item 2, π* = 0, `ac187c8`). Where the history
+  surfs, every φ* falls onto one trajectory and the tuned Λ agrees to the tolerance (< 10⁻⁶ at
+  β = 1.5, M = 10⁻³ and at β = 3, M = 0.1, φ* = 5 and 2 against 1, and at β = 3, M = 10⁻³, φ* = 5
+  against 2). Where it does not surf, the memory of φ* is erased only by the late relaxation onto the
+  matter-era tracker, and survives where that has not finished by T_CMB: Λ at φ* = 5 against φ* = 1,
+  as README prints it, is +1.1e-3 at β = 0.8, +3.4e-3 at β = 0.5 and +1.6e-2 at β = 0.3
+  (M = 10⁻³). These are measurements, not defects; the
+  non-surfing block of the 2026.6.0 run (β 0.5–1.1 at φ* = 1, 2, 5) lies where they are largest.
+
+#### 3.7.9 The sampling axis
+
+- **The label** (`CosmologyConcepts/redshift.py`) is ln(1 + z_E), the Einstein-frame redshift counted
+  back in e-folds from the end of the history, T_J = T_CMB. `redshift(store_id, log_one_plus_z)`;
+  `.z` is derived by `expm1` and is `inf` past ln(1 + z) = 709.78, not an error (`:74-82`); `float()`
+  of one is ln(1 + z) (`:84`). Before prompt 03 the label was z, which `exp(final_N) − 1` overflowed
+  at N > 709.8 (README §0.3 item 4).
+- **The grid** (`log_one_plus_z_grid`, `:24-41`) is the points k Δ, k = 0 … K, with Δ = ln 10/S,
+  S = `--samples-log10-z` (default 250) and K = round(`--log10-one-plus-z-high` × S); the default
+  extent is 300 decades of 1 + z, about 690.8 e-folds, and `--log10-one-plus-z-low` accepts only 0. Each
+  point is an integer times a float and never accumulated, so every builder of the grid gets the
+  same floats bit for bit. The reference store of prompt 09 holds 75,001 points, the last 690.78
+  (`main.py --inventory`).
+- **The lookup** is by absolute difference below `DEFAULT_LOG_ONE_PLUS_Z_PRECISION = 1e-10`
+  (`config/defaults.py:23`), one range filter on the indexed column
+  (`ObjectFactories/redshift.py:51-53`); the grid spacing is 9.2e-3, so two points cannot collide.
+  Measured (board §5.4): the query plan searches the index, and 75,001 points took 7.0 s into an empty
+  table.
+- **The sampling** reads N_backward directly from the axis (`ScalarHistory.py:1296-1297`) and cuts the
+  grid at the history's end with `truncate_to_history` (`:1118`, `:1272`); a history of 800 e-folds
+  samples without overflow (log 03). A history that outruns the grid raises, as before.
+- **ln(1 + z_J)** is on every sample, `SampleValues.log_one_plus_z_Jordan` (`:208`):
+  ln(1 + z_E) + ln A(φ₀) − ln A(φ) (`:1327`), a column and never a key, since H_J < 0 during a bounce and
+  a_J is not monotonic. Measured (log 03): the identity holds exactly at every golden sample; against
+  `cosmology.z(T_J)` the largest difference is 3.07e-7 at β = 1.5 and 3.72e-8 at β = 5.5, bounces
+  included.
+- **What the axis moved** (log 03, against prompt 02): the sample counts are equal; every sample whose
+  `raw_N` is bitwise equal on the two trees is bitwise equal in every field; `raw_N` differs by one
+  ulp of `final_N` at 1 sample (β = 1.5) and at 2 (β = 5.5), and the largest relative difference is 6.6e-12
+  (`reflecting_term`, β = 5.5); `n_samples` went from 2722 to 2723 at β = 1.5 and stayed 4894 at β = 5.5.
+- **Left open:** `ScalarHistory._create_functions` (`:2130`) builds splines on `v.z.z` and reads
+  `self.z_sample`, which `ScalarHistory` does not define, and nothing calls `functions` (`:2111`):
+  board issue `[03-scalar-history-functions-splines-z-but-evaluates-ln-one-plus-z]`.
+
+#### 3.7.10 The Planck mass
+
+`units.PlanckMass` is the reduced Planck mass. Before prompt 05 the three unit systems each set the
+electronvolt from 2.436 × 10²⁷, 2.78e-4 above PRyMordial's value, so that 1 K, 1/eV and 1 kg
+disagreed with k_B, ħc, ħ and the kilogram in eV by that much (README §0.2). Now `Units/base.py`
+holds PRyMordial's G_N, `NEWTON_G_MEV_MINUS_2 = 6.70883e-45` (`:25`), and
+`REDUCED_PLANCK_MASS_EV = 1.0e6 / sqrt(8π NEWTON_G_MEV_MINUS_2)` = 2.4353236 × 10²⁷ (`:31`), from
+which `Planck_units`, `Mpc_units` and `GeV_units` set the electronvolt
+(`Units/Planck_units.py:46`, `Units/Mpc_units.py:47`, `Units/GeV_units.py:38`); the mechanism is in
+`architecture-summary.md` §8.1's note. Measured (log 05): the four relations hold to 1.70e-7 (1 K),
+4.08e-8 (ħc), 1.58e-7 (ħ) and 2.13e-7 (kg) in every system; every eV-labelled input moves by
+2.78e-4, the two golden histories' fields by at most 5.7e-4 except in the wall-amplified tail of
+β = 5.5, and prompt 09's tuned Λ lie 2.768–2.795e-4 below README §0.3's.
+
 ---
 
 ## 4. Splines: where they are used and how boundary/dynamic-range issues are handled
@@ -489,6 +820,13 @@ strategies are applied:
 - **Log abscissa.** Splines are built against `log(1+z)` rather than z (`log_z=True` in the
   `ZSplineWrapper`), matching the logarithmic spacing of the sample grid and the e-fold
   time variable, so the knot spacing is uniform in the natural variable.
+
+> **Note, 2026-10-26 (`jordan-normalization`, prompt 10; §3.7.9).** `ScalarHistory._create_functions`
+> (`ComputeTargets/ScalarHistory.py:2130`) still builds its splines on `v.z.z`, which since prompt 03 is
+> derived from the axis and is `inf` past 709.78 e-folds, and wraps them in `ZSplineWrapper(…,
+> log_z=True)`, which evaluates at ln(1 + z); it reads `self.z_sample`, which `ScalarHistory` does not
+> define. Nothing calls `ScalarHistory.functions` (`:2111`): board issue
+> `[03-scalar-history-functions-splines-z-but-evaluates-ln-one-plus-z]`, open.
 
 ### 4.2 `ZSplineWrapper` boundary cushioning (`ComputeTargets/spline_wrappers.py`)
 
@@ -736,6 +1074,14 @@ as a group:
   boundaries/step sizes are all stored in the datastore with each result, so a stored
   history is fully reproducible and self-documenting.
 
+> **Note, 2026-10-26 (`jordan-normalization`, prompt 10; §3.7.1).** Two bullets above
+> describe code that is gone. `PotentialDerivativePolicy` has only the log-potential route
+> (`ComputeTargets/Policies/PotentialDerivativePolicy.py`, docstring), reading `RealizedModel.log_V`,
+> `d_logV_dphi` and `d2_logV_dphi2`; the plain-V route is removed, and the `_disable_log_V` and
+> `_disable_V` flags are defined nowhere. And "`4 log Λ`" is not cached at construction: it is the
+> model's normalization, ln V₀, an argument of `_log_V` that each history carries. The event counts,
+> fragment counts and region boundaries of the last bullet are superseded by §3.5.7.
+
 ---
 
 ## 7. From scalar history to BBN via PRyMordial (`ComputeTargets/BBNData.py`)
@@ -943,6 +1289,15 @@ PRyMordial receives **one** callable, `rho_NP(T)` (T in MeV, result in MeV⁴), 
   (`test_bbn_spline_floor (a)`). BBN abundances on β = 2 at `M = 0.5` and `10⁻³` are unchanged by
   the narrowing, to every printed digit (log 06).
 
+> **Note, 2026-10-26 (`jordan-normalization`, prompt 10; §3.7.2).** `--T-stop-GeV` no longer
+> exists, so the advice above has no option to follow. Every stored history ends at the cosmology's
+> T_CMB, and `ScalarHistory.T_Jordan_stop` (`ComputeTargets/ScalarHistory.py:1969`) is a property at
+> that temperature, which is what `compute_BBN_data`'s pre-check reads. The rule
+> `T_Jordan_stop ≤ 0.1 × T_BBN_spline_min` is unchanged, and T_CMB = 2.7255 K, about 2.3 × 10⁻⁴ eV, is
+> far below the 20 eV it asks for. The option is refused by `RemovedOption` (exit 2);
+> `tools/history_and_bbn.py --fixed-normalization NORM PHI_REF_MP --T-stop-GeV T` runs an untuned history
+> to any T.
+
 #### 7.6.2 The Hubble-only patch, and why `p_NP` and `T_NP` are gone
 
 In the Jordan frame the plasma is minimally coupled: its energy is conserved and T_J follows the
@@ -1051,6 +1406,12 @@ black-clean and was not reformatted. Source of the table: log 01, "What shipped"
   it required 0.01 eV, `1e-11` GeV, before). That is what makes the source's physical-`M`
   cross-check possible with `--T-stop-GeV 1e-8`; a history that runs to `T_CMB` passes under
   both. A history that stops above 20 eV stores a pre-check failure row.
+
+> **Note, 2026-10-26 (`jordan-normalization`, prompt 10; §3.7.2).** `--T-stop-GeV` is gone, and
+> no stored history stops above T_CMB (the note at §7.6.1), so the pre-check cannot fail a stored
+> history. An untuned history stopped higher is run only by
+> `tools/history_and_bbn.py --fixed-normalization … --T-stop-GeV`, whose BBN stage the pre-check
+> refuses, as before.
 
 ### 7.7 Added 2026-10-03 (`bbn-tolerance`, prompts 01–03): the network, the low-T tolerance, and what they leave
 
@@ -1325,3 +1686,11 @@ publication:
    final e-fold is *identified* with z = 0 (`largest_z = exp(final_N) − 1`); any small error
    in where the T_stop event fires maps into a small global redshift calibration, which is a
    category (calibration/normalization error) not otherwise listed.
+
+> **Note, 2026-10-26 (`jordan-normalization`, prompt 10; §3.7.9).** Items 1 and 4
+> describe an integration that stops at a `T_stop` event and a label `z = exp(final_N) − 1`. Every
+> stored history stops at T_CMB (`tune_history`, `ComputeTargets/ScalarHistory.py:1628`), the crossing
+> found by the root-find of §3.5.1, and that end is the zero of the axis, ln(1 + z_E) = 0: a sample at
+> N_backward is at N_forward = final_N − N_backward (`:1296-1297`), and no `exp` of `final_N` is formed. An
+> error in where the crossing is located therefore moves every sample's N_forward and is not a
+> calibration of a z.

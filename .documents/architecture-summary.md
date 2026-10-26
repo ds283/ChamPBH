@@ -8,6 +8,13 @@
 
 ChamPBH computes the cosmological evolution of a chameleon scalar field (a dark-energy model with a screening mechanism) through the radiation-dominated epoch, then predicts observational consequences for Big Bang Nucleosynthesis (BBN). It is designed for **parameter-space surveys**: the user specifies grids of potential parameters (M, Λ), coupling strengths (β), and integration tolerances, and the system evaluates every combination, caching results persistently.
 
+> **Note, 2026-10-26 (`jordan-normalization`, prompt 10).** The grids are of (M, n, β), not of
+> (M, Λ) and β. The model is one `ExponentialModel` per (M, n, β) (§8.4a; `main.py:1082`), with n from
+> `--n-values` (default 1), and Λ is not a parameter: the normalization of the potential, which Λ was,
+> is found for each history by tuning it so that H_J(T_CMB) = H0 (`numerical-strategies.md` §3.7.4)
+> and is stored on the history's row (§7.2's note of 2026-10-26). The campaign's account is
+> [`prompts/jordan-normalization/README.md`](../prompts/jordan-normalization/README.md) §0.1.
+
 The codebase has three major layers, each cleanly separable:
 
 1. **Infrastructure** — Ray-based distributed task execution and sharded SQLite persistence.
@@ -268,6 +275,36 @@ ChamPBH/
 > tuning and stored on its row (§7.2's note of the same date). The text before this note describes
 > the tree as it was.
 
+> **Note, 2026-10-26 (`jordan-normalization`, prompt 10; prompts 03, 07 and 08): the tools,
+> the plot inputs and `histories.csv`.** What the notes above say of them, as the tree has them now
+> (read at `dbfa31f`).
+> - **`tools/history_and_bbn.py BETA M`** tunes the history by default (`tune_history`,
+>   `ComputeTargets/ScalarHistory.py:1575`), prints a `tuning` line holding the fifteen stored outputs,
+>   and runs the BBN solve. Its options are `--phi-init-Mp`, `--tuning-tolerance` (1e-5),
+>   `--tuning-max-integrations` (30), `--fixed-normalization NORM PHI_REF_MP` (one untuned history,
+>   by `integrate_history`, `:1137`), `--T-stop-GeV` (accepted only with `--fixed-normalization`),
+>   `--small-network` and `--wall-clock-limit` (`tools/history_and_bbn.py:280-330`). The first note
+>   above lists `--T-stop-GeV T` as a free option of the tool, and its history as untuned.
+> - **`tools/surfing_scan.py` and `tools/plot_surfing_histories.py`** tune each β to T_CMB (`--tuning-tolerance`,
+>   `--tuning-max-integrations`) and analyse a window that ends at the history's first crossing of
+>   T_J = `--T-window-low-GeV` (default 1e-3 GeV). The scan's CSV holds the tuned normalization, V_ref,
+>   φ_ref and both residuals beside the roots, and its inputs that a resume must match
+>   (`_INPUT_MATCH`, `tools/surfing_scan.py:204`) are φ*, M, the tuning tolerance and the window's
+>   edge. A CSV whose header holds `Lambda_eV` or `T_stop_GeV` is refused on resume, and `--T-stop-GeV`
+>   is refused by name. So "the scan uses the fixed Λ of `tools/history_and_bbn.py`", in the
+>   `surfing-temperature` note above, is of the tree before prompt 08; the board issue
+>   `[05-surfing-scan-runs-at-a-fixed-lambda]` is closed.
+> - **`plot_inputs.py`** (the read-only-plots note above) has `parameters(pool, abs_tol, rel_tol,
+>   T_init_GeV, phi_init_Mp, units, tuning_tol)`, which takes the tuning tolerance and no `T_stop`, and
+>   `exponential_models(pool, M_table, beta_table, n_values, units)` (`plot_inputs.py:183`) in place of
+>   `potentials` and `couplings`. A model that was never stored is skipped with one line (`!! plot: no
+>   ExponentialModel stored for M=…, n=…, β=…; no history can use it; skipped`) and a count; an n with no
+>   stored model at any stored (M, β) raises `PlotOptionNotStored` naming `--n-values`.
+> - **`extract_common.py`'s `histories.csv`** has the columns `n`, `normalization`, `V_ref_eV4`,
+>   `phi_ref_Mp`, `phi_0_Mp`, `tracking`, `residual_H`, `residual_phi` and `tuning_iterations` where it
+>   had `Lambda_eV` (`CSV_COLUMNS`, `extract_common.py:520`), and its rows are sorted by (M, n, β)
+>   (`:1166`).
+
 ---
 
 ## 3. The Ray Distributed Computing Layer
@@ -510,6 +547,15 @@ under (stamped by the actor's insert). The lookups of the three compute targets 
 - Only `object_get` is keyed (contract §8, "What is not keyed"). It is tested by
   `ObjectFactories/tests/test_version_keyed_lookups.py`.
 
+> **Note, 2026-10-26 (`jordan-normalization`, prompt 10; prompt 07).** Three statements of §4.3
+> are of the tree before the model's table. The replicated list names "potentials" and the sharded
+> list `ExponentialCoupling` (the first bullets of §4.3): the table that holds the Lagrangian is
+> `ExponentialModel`, keyed by (M, n, β) and sharded by β (`config/sharding.py:33`; the registry
+> note in §4.2). The parameter tables of the third bullet above no longer include Λ, a coupling or
+> a potential; `ExponentialModel` is one of them, with one row per (M, n, β) across labels. And a
+> `ScalarHistory` lookup is keyed by the version, the cosmology, the model, φ*, π*, T_init, atol,
+> rtol and the tuning tolerance (§7.2's note of the same date).
+
 A store opened under a new label therefore sees none of its old compute targets; they are
 recomputed and stored beside the old rows. `--inventory` still lists every version. The label is
 defined once, as `VERSION_LABEL` in `config/version.py`, and `main.py`, `plot_by_beta.py` and
@@ -593,6 +639,29 @@ Uses `configargparse` (a drop-in `argparse` replacement) so that every CLI argum
 - `--inventory` (show DB contents and exit)
 - `--ray-address STR` (no default; required whenever Ray starts, `auto` is refused, `main.py --inventory` needs none; `ray_address_problem()` in `config/argument_parser.py` is called before each driver's `ray.init`)
 
+> **Note, 2026-10-26 (`jordan-normalization`, prompt 10; prompts 03, 07 and 08): the options as
+> `config/argument_parser.py` has them now.**
+> - **The axis.** `--samples-log10-z N` (default 250, `:26`) is the number of grid points per decade
+>   of 1 + z, and the grid is exactly the multiples k ln 10/N of ln(1 + z) (`log_one_plus_z_grid`,
+>   `CosmologyConcepts/redshift.py:24`; the option's help still says "per log10(z)").
+>   `--log10-one-plus-z-high` defaults to 300 (`:24`; 35 before prompt 03, board §5.4), and
+>   `exponential.yaml` no longer sets it. `--log10-one-plus-z-low` accepts only 0 (`:112`): the axis
+>   is anchored at the end of the history.
+> - **The tuning.** `--tuning-tolerance` (default 1e-5; a key of every stored history),
+>   `--tuning-max-integrations` (default 30; the cap on one history's tuning, the seed's integration
+>   included, and **not** a key: a history that fails to converge within it is stored as a failure
+>   and a later run with a larger cap does not recompute it, board issue
+>   `[08-a-history-that-did-not-converge-is-never-retried]`) and `--n-values` (default `[1]`; the
+>   exponent n of V = V₀ exp((M/φ)ⁿ), part of the model's key) (`:185`, `:194`, `:298`).
+> - **Removed.** `--potential-type` (prompt 08), `--T-stop-GeV`, `--log10-Lambda-low-eV`,
+>   `--log10-Lambda-high-eV`, `--samples-per-log10-Lambda-eV`, `--Lambda-values-eV` and
+>   `--Lambda-values-Mp` (prompt 07) are registered hidden with `RemovedOption`
+>   (`config/argument_parser.py:65`), whose message names the replacement: giving one, on the command
+>   line or in a `--config` YAML file, ends the parse with exit 2. The list above, and the
+>   `science-readiness` note below on `--T-stop-GeV` and the BBN window, describe options that are
+>   gone: every stored history ends at T_CMB (§7.2's note of 2026-10-26), so the pre-check of
+>   `compute_BBN_data` passes (`numerical-strategies.md` §7.6.1's note).
+
 > **Note, 2026-10-02 (`science-readiness`).** Three options were added to the shared parser (so
 > `main.py`, `plot_by_beta.py` and `plot_ScalarModel.py` all accept them):
 >
@@ -670,6 +739,12 @@ DEFAULT_DIMENSIONFUL_QUANTITY_RELATIVE_PRECISION = 1e-5
 DEFAULT_ABS_TOLERANCE = 1e-8
 DEFAULT_REL_TOLERANCE = 1e-8
 ```
+
+> **Note, 2026-10-26 (`jordan-normalization`, prompt 10; prompt 03).** `DEFAULT_REDSHIFT_PRECISION` is
+> not in `config/defaults.py`; prompt 03 deleted it. The redshift lookup and `redshift_array`'s
+> truncation compare ln(1 + z) by absolute difference below `DEFAULT_LOG_ONE_PLUS_Z_PRECISION = 1e-10`
+> (`config/defaults.py:23`), far below the grid spacing ln 10/250 = 9.2 × 10⁻³ (§8.2's note of the
+> same date).
 
 ### 5.4 Model List (`config/model_list.py`)
 
@@ -819,6 +894,15 @@ SampleValues = namedtuple("SampleValues", [
 ])
 ```
 
+> **Note, 2026-10-26 (`jordan-normalization`, prompt 10; prompt 03).** `SampleValues` has 18 fields
+> (`ComputeTargets/ScalarHistory.py:188-210`). The last, `log_one_plus_z_Jordan`, is ln(1 + z_J), the
+> Jordan-frame redshift counted back from the end of the history, computed at sampling as
+> ln(1 + z_E) + ln A(φ₀) − ln A(φ) with φ₀ the field at the end (`:1327`). It is a column of
+> `ScalarHistoryValue` (`:2327`, `:2459`) and never a key: H_J < 0 during a bounce, so a_J is not monotonic.
+> `raw_N` is the sample's e-fold number, N_forward = final_N − N_backward (`:1296-1297`), and the
+> sample's label is its point on the axis ln(1 + z_E), not z (§8.2's note of the same date;
+> `numerical-strategies.md` §3.7.9).
+
 **Integration procedure in `ScalarHistory.compute()`:**
 
 1. Loop over solver methods: [Radau, BDF, LSODA, DOP853]. Try each in sequence until one succeeds.
@@ -900,6 +984,29 @@ SampleValues = namedtuple("SampleValues", [
 >   `history`.
 >
 > The text before this note describes `ScalarHistory` as it was.
+
+> **Note, 2026-10-26 (`jordan-normalization`, prompt 10; prompts 04, 06 and 08): the two layers and
+> what the tools now call.** Read at `dbfa31f`; it corrects the notes above.
+> - **The layers.** `integrate_history` (`ComputeTargets/ScalarHistory.py:1137`) is the primitive: one
+>   integration of one `RealizedModel` to any T_stop, with no normalization logic; it is the body
+>   that `compute_scalar_history` had. `tune_history` (`:1575`) calls it, to T_J = T_CMB
+>   (`:1628`), adjusting the model's normalization and φ_ref until H_J(T_CMB) = H0 and
+>   φ_ref = φ_min(T_CMB). `compute_scalar_history` (`:1748`), the `@ray.remote`, calls `tune_history`.
+>   The conditions, the update, the guards, the failures and the outputs are in
+>   `numerical-strategies.md` §3.7.
+> - **Who calls the primitive.** The golden histories' setup, the tests, `tune_history`, and
+>   `tools/history_and_bbn.py --fixed-normalization`. The tools that run their own histories no
+>   longer "keep the fixed normalization 4 ln(1 meV) until prompt 08", as the note above says:
+>   `tools/history_and_bbn.py` tunes by default, and `tools/surfing_scan.py` and
+>   `tools/plot_surfing_histories.py` tune each β to T_CMB (§2's note of the same date).
+> - **The fifteen outputs and the progress line.** The columns the note above lists are the keys of
+>   `TUNING_OUTPUT_KEYS` (`:1399`). Each integration of a tuning prints one `-- tune …` line
+>   (`:1672-1677`), which Ray forwards to the driver and the wrapper's heartbeat reads; Ray's log
+>   deduplication can hold lines back (board issue
+>   `[09-ray-deduplicates-the-tune-lines-of-parallel-histories]`).
+> - **The policies.** `ODEPolicy`, `HubblePolicy`, `PotentialDerivativePolicy`, `fixed_T_value_at`,
+>   `fixed_T_values` and `surfing_turning_points` take one `RealizedModel` (§8.4a) in place of a
+>   potential and a coupling, and `PotentialDerivativePolicy` has only the log-potential route.
 
 ### 7.3 `AdiabaticHistory` (`ComputeTargets/AdiabaticHistory.py`)
 
@@ -987,6 +1094,17 @@ All quantity objects (`M_value`, `temperature`, etc.) carry a reference to the `
 - `phi_value`, `pi_value`: scalar field and canonical momentum
 - `redshift` / `redshift_array`: redshift values and sorted arrays thereof
 
+> **Note, 2026-10-26 (`jordan-normalization`, prompt 10; prompts 03 and 07).** `Lambda_value` is
+> gone (prompt 07 deleted the class, its factory and its table): the potential's height is not a
+> parameter but a normalization that each history finds (`numerical-strategies.md` §3.7.1, §3.7.4).
+> `redshift` holds the label ln(1 + z_E): `redshift(store_id, log_one_plus_z)`. Its `.z` is derived by
+> `expm1` and is `inf` past ln(1 + z) = 709.78, not an error (`CosmologyConcepts/redshift.py:74-82`);
+> `float()` of one is ln(1 + z) (`:84`); its ordering, `redshift_array`'s truncation and the
+> factory's lookup compare ln(1 + z), the lookup by one range filter of half-width 1e-10 on the
+> indexed column (`ObjectFactories/redshift.py:51-53`). The axis is `log_one_plus_z_grid` (`:24`): the
+> points k ln 10/S, anchored at the end of the history. The details and the measurements are in
+> `numerical-strategies.md` §3.7.9.
+
 ### 8.3 Potentials (`CosmologyConcepts/Potentials/`)
 
 `AbstractPotential` defines the interface:
@@ -1031,6 +1149,15 @@ Concrete implementation: `ExponentialPotential`.
 > `default_max_step`, are deleted, and the listing above no longer shows them; this closes
 > `[00-region-properties-on-the-potentials-become-unread]`.
 
+> **Note, 2026-10-26 (`jordan-normalization`, prompt 10; prompt 07).**
+> `CosmologyConcepts/Potentials/` is deleted: `AbstractPotential`, `ExponentialPotential`, their
+> rows and their factory are gone, and "Concrete implementation: `ExponentialPotential`" above, and
+> the adapter in the note just above, are of the tree before. The potential's part of the interface is
+> `AbstractModel`'s `_log_V`, `_d_logV_dphi` and `_d2_logV_dphi2`, which take the normalization as an
+> argument (§8.4a); `reflects_at_origin` and `log_V_floor` are the model's
+> (`CosmologyConcepts/Models/AbstractModel.py:185-198`), and `ExponentialModel._log_V_floor` is the
+> normalization ln V₀ (`ExponentialModel.py:77-79`), where the listing's floor was Λ⁴.
+
 ### 8.4 Conformal Couplings (`CosmologyConcepts/ConformalCouplings/`)
 
 `AbstractCoupling` defines:
@@ -1054,6 +1181,16 @@ Currently only `ExponentialCoupling` is implemented: Ω(φ) = exp(βφ/Mp).
 > adapter `ExponentialModel.from_rows` at φ_ref = 0, where A is exactly the coupling's Ω, until prompt
 > 07 stores the model. `pipeline_selection`'s super-Planckian warning still reads the coupling rows
 > (prompt 08 moves it).
+
+> **Note, 2026-10-26 (`jordan-normalization`, prompt 10; prompts 07 and 08).**
+> `CosmologyConcepts/ConformalCouplings/` is deleted with `AbstractCoupling` and `ExponentialCoupling`,
+> and "Currently only `ExponentialCoupling` is implemented: Ω(φ) = exp(βφ/Mp)", and the adapter in
+> the note just above, are of the tree before. The conformal factor is the model's:
+> A(φ) = exp(β(φ − φ_ref)/M_P), with `ExponentialModel._log_Omega` = βφ/M_P and
+> `RealizedModel.log_Omega` subtracting its value at φ_ref (`AbstractModel.py:114-115`); d ln A/dφ = β/M_P is
+> unchanged. The super-Planckian warning no longer reads coupling rows: `warn_super_planckian`
+> (`pipeline_selection.py:341`) takes the models and evaluates ln A(φ*) at the φ_ref of each model's
+> seed (§9's note of the same date).
 
 ### 8.4a Models (`CosmologyConcepts/Models/`)
 
@@ -1105,6 +1242,19 @@ class AbstractModel(DatastoreObject):
   - Its `seed` is the tracking analytic minimum, else the static one, else `plain`, for n = 1, and
     `plain` otherwise.
   - The classmethod `from_rows(potential, coupling)` is the adapter (prompt 07 removes it).
+
+> **Note, 2026-10-26 (`jordan-normalization`, prompt 10; prompts 07 and 08).** `from_rows`
+> is deleted, with the rows it adapted. A model is a stored row of its own table:
+> `ExponentialModel(store_id, M, n, beta, units)` read back by `object_get("ExponentialModel", …)`
+> (`ObjectFactories/ExponentialModel.py`; `main.py:938-952`), and a history realizes it at the
+> normalization and φ_ref that it stored (`ScalarHistory.realized_model`,
+> `ComputeTargets/ScalarHistory.py:2014`). `ExponentialModel._log_V_floor(normalization)` is the
+> normalization ln V₀ (`ExponentialModel.py:77`). Its `seed` (`:195`) tries the tracking seed and then
+> the static one for n = 1, each a loop that may have no solution (`:156-193`), and otherwise gives
+> the base class's plain seed (`AbstractModel.py:267`). The model has no closed-form
+> `effective_minimum`: the generic `brentq` of `AbstractModel.effective_minimum` (`:227`) is the one
+> in use. The conditions that `tune_history` imposes on a realized model are in
+> `numerical-strategies.md` §3.7.3.
 
 ### 8.5 Cosmological Models (`CosmologyModels/`)
 
@@ -1246,6 +1396,28 @@ the work (`[02-scalar-stage-missing-filter-keeps-every-model]`,
 `(model, history)`. The super-Planckian warning takes the models and evaluates ln A(φ*) at φ_ref = 0,
 as before; prompt 08 moves it to the seed's φ_ref.
 
+> **Note, 2026-10-26 (`jordan-normalization`, prompt 10; prompt 08): the options, the warning and
+> the scope.** Read at `dbfa31f`. It replaces step 3's "(β, M, Λ)", step 5's `Potential_array` and
+> `Coupling_array` and the stages' `product(Potential_array, Coupling_array)` above (the note just
+> above has the grid).
+> - **The grid and the options.** `Model_array` is `itertools.product(M_grid, n_values, beta_grid)`
+>   realized as `ExponentialModel` rows (`main.py:1082-1083`), with n from `--n-values`. The tuning
+>   tolerance is `--tuning-tolerance` (`main.py:955-960`), not the fixed `DEFAULT_TUNING_TOLERANCE`
+>   that the note just above gives, and `--tuning-max-integrations` reaches the remote as the argument
+>   `max_integrations` of `ScalarHistory.compute` (`main.py:302`), not through the store.
+> - **The warning.** `warn_super_planckian(Model_array, phi_init, T_init, units, cosmology)` runs once
+>   per cosmology before the stages (`main.py:1094`; `pipeline_selection.py:341`). For each model whose
+>   Ω(φ*) T* exceeds M_P, with Ω taken at the φ_ref of the model's seed on that cosmology (the φ_ref
+>   that the history is tuned to differs from it), it prints one line naming β, M, n, φ*, the seed's
+>   φ_ref and its kind, and then a count; it returns the array unchanged and nothing is skipped. The
+>   `science-readiness` paragraph above, which has it called on the coupling array with Ω at
+>   φ_ref = 0, is of the tree before. At M = 10⁻³ M_P the thresholds are β > 6.506 at φ* = 5 M_P and
+>   β > 32.61 at φ* = 1 M_P (the docstring of `super_planckian_couplings`, `pipeline_selection.py:205`;
+>   board §5.9).
+> - **The scope.** The wrapper's manifest `scope` reads `config …; β …; M …; n …; φ* … Mp; tuning
+>   tolerance …; N shards; job …` (`RunDrivers/registered_run.py:672-701`): the potential type and the
+>   Λ fields are gone, and n and the tolerance are added.
+
 ---
 
 ## 10. Utilities (`utilities.py`)
@@ -1280,6 +1452,16 @@ def to_float(val) -> float:
 
 > **Note, 2026-10-01 (`integrator-remediation`, prompt 02, `614c41a`).** The solver fallback described here does not exist and never ran: `method="Radau"` was a literal since `f67bc3a`, so a failing history was integrated four times identically. It is deleted. `ScalarHistory.compute()` runs one Radau step loop (`integrate_scalar_history`), inside one `try`; a `ComputationFailureError` from the loop or from the sampling is printed and the function returns `{"failure": True}`, which is stored as a failure row (the reason is printed, not stored). The exception table, including the new step budget, is in [`numerical-strategies.md` §3.5.5–§3.5.6](numerical-strategies.md). The paragraph above is kept as written for `b1f64d8`.
 
+> **Note, 2026-10-26 (`jordan-normalization`, prompt 10; prompt 06).** Since prompt 07 a
+> stored history can fail inside `tune_history` as well as inside the integration. A failed tuning is
+> a failure row whose reason's first clause is one of "the normalization did not converge", "no
+> normalization reaches H0", "the effective minimum was not found", or an integration's own reason
+> with " (tuning integration k)" appended (`ComputeTargets/ScalarHistory.py:1575-1745`);
+> `summarise_failure_reasons` groups them by first clause, unchanged. `_tuning_state` catches only the
+> `ValueError` of the effective minimum (`:1666`), so any other exception from its arithmetic would
+> reach the driver and not become a failure row (log 07, Observation 2; none has arisen at any
+> point measured). See `numerical-strategies.md` §3.7.5.
+
 **`RayWorkPool` resilience:** The work pool does not bail out if individual tasks fail — it continues processing remaining items. The `_do_not_populate` two-pass pattern means failed objects are skipped in downstream stages (checked via `obj.failure`).
 
 **Database startup cleanup:** `prune_unvalidated=True` causes each `Datastore` actor to delete any objects created but not yet validated on the previous run. This prevents partial results from being presented as complete. The lookups do not depend on it: `ScalarHistory.build`, `AdiabaticHistory.build` and `BBNData.build` return only validated rows (the last two since 2026-10-14), so a pool that does not prune, such as the plot scripts' read-only pools or `main.py --no-prune-unvalidated`, does not present one either.
@@ -1310,6 +1492,11 @@ The following table maps ChamPBH components to their natural counterparts in a s
 | `config/datastore.py` | The registry of the new factories, their drop groups and batch sizes |
 | `main.py` `run_pipeline()` | New pipeline: InstantonSolution → CompactionFunction → PBHMassFunction |
 
+> **Note, 2026-10-26 (`jordan-normalization`, prompt 10; prompt 07).** The rows for
+> `ExponentialCoupling` and `AbstractPotential` name classes that prompt 07 deleted. Their counterparts
+> are `ExponentialModel`, a stored row keyed by (M, n, β), and `AbstractModel`, the interface
+> (§8.4a).
+
 An instanton project adopts `datastorekit` and `raypoolkit` as packages, pinned to a tag in `requirements.txt` and never patched in place. What it writes is a registry of factories, the factories, and a sharding config (§4.2).
 
 **Components that can be used with zero or minimal modification:**
@@ -1339,6 +1526,11 @@ An instanton project adopts `datastorekit` and `raypoolkit` as packages, pinned 
 - `config/datastore.py` → the registry of the new factories, their drop groups and batch sizes
 - `main.py` → new pipeline driver
 - `config/model_list.py` → inflationary model list
+
+> **Note, 2026-10-26 (`jordan-normalization`, prompt 10; prompt 07).**
+> `CosmologyConcepts/Potentials/` and `CosmologyConcepts/ConformalCouplings/` are deleted; the interface
+> they held is `CosmologyConcepts/Models/` (§8.4a), and an inflationary project's counterpart is a new
+> `AbstractModel` class and its table.
 
 ---
 
