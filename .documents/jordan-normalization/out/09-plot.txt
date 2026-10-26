@@ -1,0 +1,53 @@
+$ shasum -a 256 <plot-reference>/QCD_Cosmology/histories.csv
+02400fd7caadaffe6ed996c6cb717472514f7987c42c0e760630d5c431f7c77d  var/jordan-normalization-09/plot-reference/QCD_Cosmology/histories.csv
+histories.csv: 6 rows
+  beta=3.0 M_Mp=9.999999999999999e-06 phi*=5.0: normalization -276.6688542394928 vs stored -0x1.14ab3a080c69ap+8: equal; phi_ref_Mp 0.0026704769065684884 vs stored 0x1.5e0655f4f56b8p-9: equal; Yp 0.24556269740662948; failure_reasons -
+  beta=0.5 M_Mp=0.001 phi*=5.0: normalization -276.7305358530105 vs stored -0x1.14bb0465cd3c5p+8: equal; phi_ref_Mp 0.06421012992791278 vs stored 0x1.07013381cbf72p-4: equal; Yp -; failure_reasons PRyMordial: ComputationFailureError: T_in_MeV=0.00019824 MeV is smaller than T_BBN_spline_
+  beta=1.5 M_Mp=0.001 phi*=5.0: normalization -276.85483680276144 vs stored -0x1.14dad695af471p+8: equal; phi_ref_Mp 0.03496226638511382 vs stored 0x1.1e692fd6fab54p-5: equal; Yp 0.23756494579531887; failure_reasons -
+  beta=3.0 M_Mp=0.001 phi*=5.0: normalization -276.95262086751717 vs stored -0x1.14f3def60f793p+8: equal; phi_ref_Mp 0.02366290357111863 vs stored 0x1.83b1693dd8c76p-6: equal; Yp 0.2343979348127241; failure_reasons -
+  beta=5.5 M_Mp=0.001 phi*=5.0: normalization -277.0569213884148 vs stored -0x1.150e92666daf4p+8: equal; phi_ref_Mp 0.016719361292186364 vs stored 0x1.11ee157d6fccdp-6: equal; Yp 0.2307605350754677; failure_reasons -
+  beta=3.0 M_Mp=0.1 phi*=5.0: normalization -278.5564275362755 vs stored -0x1.168e7208f6e5bp+8: equal; phi_ref_Mp 0.14772170282642422 vs stored 0x1.2e88b7546431ap-3: equal; Yp 0.1724216306592671; failure_reasons -
+all equal
+
+### before the plot 2026-10-26 20:16:04 +0000
+a9a4222d2300b2cc14ba26260f7a103606152da72cb6f213503801c2924d171b  var/datastores/jordan-normalization-09-reference-shard0000.db
+c87cdad375135bd781047ae06ea4ef4035b4a65295af6b5de2d89c12c3f6a3f4  var/datastores/jordan-normalization-09-reference-shard0001.db
+eefe18bb1d6a292c102a5df5281f1a7d56fd0c3386758e49cf093f09f0b0fe0f  var/datastores/jordan-normalization-09-reference-shard0002.db
+fcfe91a371abb595b1ff05dcbcad343698061da994ba9fea9a5976b72f11641d  var/datastores/jordan-normalization-09-reference-shard0003.db
+fcfe91a371abb595b1ff05dcbcad343698061da994ba9fea9a5976b72f11641d  var/datastores/jordan-normalization-09-reference-shard0004.db
+e8d57c883406263512e993c7ddc677ff69ed88d4615a171b2f46454e36c1594e  var/datastores/jordan-normalization-09-reference-shard0005.db
+fcfe91a371abb595b1ff05dcbcad343698061da994ba9fea9a5976b72f11641d  var/datastores/jordan-normalization-09-reference-shard0006.db
+8733e3400e4700e87522f1f710b6073e6f959cd1ec9eafdccc54f20cff4e4061  var/datastores/jordan-normalization-09-reference-shard0007.db
+fcfe91a371abb595b1ff05dcbcad343698061da994ba9fea9a5976b72f11641d  var/datastores/jordan-normalization-09-reference-shard0008.db
+fcfe91a371abb595b1ff05dcbcad343698061da994ba9fea9a5976b72f11641d  var/datastores/jordan-normalization-09-reference-shard0009.db
+fcfe91a371abb595b1ff05dcbcad343698061da994ba9fea9a5976b72f11641d  var/datastores/jordan-normalization-09-reference-shard0010.db
+fcfe91a371abb595b1ff05dcbcad343698061da994ba9fea9a5976b72f11641d  var/datastores/jordan-normalization-09-reference-shard0011.db
+8733e3400e4700e87522f1f710b6073e6f959cd1ec9eafdccc54f20cff4e4061  var/datastores/jordan-normalization-09-reference-shard0012.db
+e8d57c883406263512e993c7ddc677ff69ed88d4615a171b2f46454e36c1594e  var/datastores/jordan-normalization-09-reference-shard0013.db
+8733e3400e4700e87522f1f710b6073e6f959cd1ec9eafdccc54f20cff4e4061  var/datastores/jordan-normalization-09-reference-shard0014.db
+d55722e8c5d7dd3bf7c74b59658d24429b3409da9dec717f9b275b1afac8346b  var/datastores/jordan-normalization-09-reference-shard0015.db
+736479c695446c5cdeea80d576e94b314aa78d370eb5e6fb30256e0611151f67  var/datastores/jordan-normalization-09-reference.db
+57d6876e003910a055bf16b00c46ea0ad5d8e3c9dfac676aec7bb95de3449934  var/datastores/jordan-normalization-09-reference.manifest.json
+
+### after the plot 2026-10-26 20:16:32 +0000
+a9a4222d2300b2cc14ba26260f7a103606152da72cb6f213503801c2924d171b  var/datastores/jordan-normalization-09-reference-shard0000.db
+c87cdad375135bd781047ae06ea4ef4035b4a65295af6b5de2d89c12c3f6a3f4  var/datastores/jordan-normalization-09-reference-shard0001.db
+eefe18bb1d6a292c102a5df5281f1a7d56fd0c3386758e49cf093f09f0b0fe0f  var/datastores/jordan-normalization-09-reference-shard0002.db
+fcfe91a371abb595b1ff05dcbcad343698061da994ba9fea9a5976b72f11641d  var/datastores/jordan-normalization-09-reference-shard0003.db
+fcfe91a371abb595b1ff05dcbcad343698061da994ba9fea9a5976b72f11641d  var/datastores/jordan-normalization-09-reference-shard0004.db
+e8d57c883406263512e993c7ddc677ff69ed88d4615a171b2f46454e36c1594e  var/datastores/jordan-normalization-09-reference-shard0005.db
+fcfe91a371abb595b1ff05dcbcad343698061da994ba9fea9a5976b72f11641d  var/datastores/jordan-normalization-09-reference-shard0006.db
+8733e3400e4700e87522f1f710b6073e6f959cd1ec9eafdccc54f20cff4e4061  var/datastores/jordan-normalization-09-reference-shard0007.db
+fcfe91a371abb595b1ff05dcbcad343698061da994ba9fea9a5976b72f11641d  var/datastores/jordan-normalization-09-reference-shard0008.db
+fcfe91a371abb595b1ff05dcbcad343698061da994ba9fea9a5976b72f11641d  var/datastores/jordan-normalization-09-reference-shard0009.db
+fcfe91a371abb595b1ff05dcbcad343698061da994ba9fea9a5976b72f11641d  var/datastores/jordan-normalization-09-reference-shard0010.db
+fcfe91a371abb595b1ff05dcbcad343698061da994ba9fea9a5976b72f11641d  var/datastores/jordan-normalization-09-reference-shard0011.db
+8733e3400e4700e87522f1f710b6073e6f959cd1ec9eafdccc54f20cff4e4061  var/datastores/jordan-normalization-09-reference-shard0012.db
+e8d57c883406263512e993c7ddc677ff69ed88d4615a171b2f46454e36c1594e  var/datastores/jordan-normalization-09-reference-shard0013.db
+8733e3400e4700e87522f1f710b6073e6f959cd1ec9eafdccc54f20cff4e4061  var/datastores/jordan-normalization-09-reference-shard0014.db
+d55722e8c5d7dd3bf7c74b59658d24429b3409da9dec717f9b275b1afac8346b  var/datastores/jordan-normalization-09-reference-shard0015.db
+736479c695446c5cdeea80d576e94b314aa78d370eb5e6fb30256e0611151f67  var/datastores/jordan-normalization-09-reference.db
+57d6876e003910a055bf16b00c46ea0ad5d8e3c9dfac676aec7bb95de3449934  var/datastores/jordan-normalization-09-reference.manifest.json
+
+$ diff <before> <after> (headers removed)
+diff exit 0

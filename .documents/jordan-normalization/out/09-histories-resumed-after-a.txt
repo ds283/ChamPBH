@@ -1,0 +1,110 @@
+store var/datastores/jordan-normalization-09-resumed: 16 shard files
+
+ScalarHistory shard0015.db serial 1: jordan-normalization-09-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=0.5)-2026-10-26T20:05:28
+  model_type 1 model_serial 1
+  M_value_eV = 2.4353235955263043e+24 (0x1.01d9940d10e2cp+81)
+  n_value = 1
+  beta = 0.5 (0x1.0000000000000p-1)
+  phi_init_Mp = 5.0 (0x1.4000000000000p+2)
+  pi_init_Mp = 0.0 (0x0.0p+0)
+  T_init_GeV = 20000.0 (0x1.3880000000000p+14)
+  log10_atol = -8.0 (-0x1.0000000000000p+3)  -> 1e-08
+  log10_rtol = -8.0 (-0x1.0000000000000p+3)  -> 1e-08
+  log10_tuning_tol = -5.0 (-0x1.4000000000000p+2)  -> 1e-05
+  validated = 1
+  failure = 0
+  failure_reason = NULL
+  z_samples = 4620
+  compute_time = 0.6565354589838535 (0x1.50256a6a00000p-1)
+  compute_steps = 24309
+  timestamp = '2026-10-26 20:05:52.565027'
+  normalization = -276.7305358530105 (-0x1.14bb0465cd3c5p+8)
+  V_ref = 6.671430241172124e-121 (0x1.b904d53274a3fp-400)
+  phi_ref = 0.06421012992791278 (0x1.07013381cbf72p-4)
+  phi_0 = 0.05568261410958742 (0x1.c826e7d1ce921p-5)
+  pi_0 = 0.05291204161274784 (0x1.b174980952aebp-5)
+  tracking = 0.6334956605858231 (0x1.44598b10bf806p-1)
+  residual_H = -6.581715529141441e-06 (-0x1.b9b1030520000p-18)
+  residual_phi = 6.279225380323439e-06 (0x1.a5644546c0000p-18)
+  tuning_iterations = 4
+  plain_steps = 1
+  secant_steps = 2
+  guard_steps = 0
+  seed_kind = 'tracking'
+  seed_normalization = -276.7841498114068 (-0x1.14c8be0ac3282p+8)
+  seed_phi_ref = 0.062129003658643864 (0x1.fcf5f6db1a216p-5)
+
+ScalarHistory shard0000.db serial 21: jordan-normalization-09-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=1.5)-2026-10-26T20:05:28
+  model_type 1 model_serial 51
+  M_value_eV = 2.4353235955263043e+24 (0x1.01d9940d10e2cp+81)
+  n_value = 1
+  beta = 1.5 (0x1.8000000000000p+0)
+  phi_init_Mp = 5.0 (0x1.4000000000000p+2)
+  pi_init_Mp = 0.0 (0x0.0p+0)
+  T_init_GeV = 20000.0 (0x1.3880000000000p+14)
+  log10_atol = -8.0 (-0x1.0000000000000p+3)  -> 1e-08
+  log10_rtol = -8.0 (-0x1.0000000000000p+3)  -> 1e-08
+  log10_tuning_tol = -5.0 (-0x1.4000000000000p+2)  -> 1e-05
+  validated = 1
+  failure = 0
+  failure_reason = NULL
+  z_samples = 5161
+  compute_time = 5.115319584030658 (0x1.4761656480000p+2)
+  compute_steps = 194746
+  timestamp = '2026-10-26 20:05:52.863688'
+  normalization = -276.85483680276144 (-0x1.14dad695af471p+8)
+  V_ref = 5.9688943800676226e-121 (0x1.8a93cb9e0234dp-400)
+  phi_ref = 0.03496226638511382 (0x1.1e692fd6fab54p-5)
+  phi_0 = 0.033428459080018603 (0x1.11d88f5023ab5p-5)
+  pi_0 = 0.04404438417254562 (0x1.68cfc4b2fe4eep-5)
+  tracking = 0.8783809840414798 (0x1.c1bb26ffc5dd4p-1)
+  residual_H = 1.2718458641813868e-07 (0x1.1120774000000p-23)
+  residual_phi = 1.7897725401727627e-06 (0x1.e0703b8100000p-20)
+  tuning_iterations = 4
+  plain_steps = 1
+  secant_steps = 2
+  guard_steps = 0
+  seed_kind = 'tracking'
+  seed_normalization = -276.8846401994391 (-0x1.14e277c7b5516p+8)
+  seed_phi_ref = 0.03433537145080339 (0x1.19467e2f45537p-5)
+
+ScalarHistory shard0001.db serial 41: jordan-normalization-09-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=3)-2026-10-26T20:05:28
+  model_type 1 model_serial 151
+  M_value_eV = 2.4353235955263043e+24 (0x1.01d9940d10e2cp+81)
+  n_value = 1
+  beta = 3.0 (0x1.8000000000000p+1)
+  phi_init_Mp = 5.0 (0x1.4000000000000p+2)
+  pi_init_Mp = 0.0 (0x0.0p+0)
+  T_init_GeV = 20000.0 (0x1.3880000000000p+14)
+  log10_atol = -8.0 (-0x1.0000000000000p+3)  -> 1e-08
+  log10_rtol = -8.0 (-0x1.0000000000000p+3)  -> 1e-08
+  log10_tuning_tol = -5.0 (-0x1.4000000000000p+2)  -> 1e-05
+  validated = 1
+  failure = 0
+  failure_reason = NULL
+  z_samples = 5973
+  compute_time = 8.22540087485686 (0x1.07367be540000p+3)
+  compute_steps = 293177
+  timestamp = '2026-10-26 20:06:04.992644'
+  normalization = -276.95262086751717 (-0x1.14f3def60f793p+8)
+  V_ref = 5.487296126901317e-121 (0x1.6abdb13d7d85dp-400)
+  phi_ref = 0.02366290357111863 (0x1.83b1693dd8c76p-6)
+  phi_0 = 0.023280991616860532 (0x1.7d6f8e673932fp-6)
+  pi_0 = 0.031896563818617406 (0x1.054bf14e95693p-5)
+  tracking = 0.9133793022664125 (0x1.d3a673b027b36p-1)
+  residual_H = -1.4399086215588497e-06 (-0x1.8285c45b80000p-20)
+  residual_phi = 9.425299244414376e-06 (0x1.3c42b43aa0000p-17)
+  tuning_iterations = 4
+  plain_steps = 1
+  secant_steps = 2
+  guard_steps = 0
+  seed_kind = 'tracking'
+  seed_normalization = -276.9786915156285 (-0x1.14fa8b86f47f4p+8)
+  seed_phi_ref = 0.02332328854885997 (0x1.7e20f6635c914p-6)
+
+counts: ExponentialModel 4, AdiabaticHistory 0, BBNData 0, ScalarHistory 3
+BBNData rows: 0
+
+JSON {"M_value_eV": {"hex": "0x1.01d9940d10e2cp+81", "repr": "2.4353235955263043e+24"}, "T_init_GeV": {"hex": "0x1.3880000000000p+14", "repr": "20000.0"}, "V_ref": {"hex": "0x1.b904d53274a3fp-400", "repr": "6.671430241172124e-121"}, "beta": {"hex": "0x1.0000000000000p-1", "repr": "0.5"}, "compute_steps": 24309, "compute_time": {"hex": "0x1.50256a6a00000p-1", "repr": "0.6565354589838535"}, "failure": 0, "failure_reason": null, "guard_steps": 0, "label": "jordan-normalization-09-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=0.5)-2026-10-26T20:05:28", "log10_atol": {"hex": "-0x1.0000000000000p+3", "repr": "-8.0"}, "log10_rtol": {"hex": "-0x1.0000000000000p+3", "repr": "-8.0"}, "log10_tuning_tol": {"hex": "-0x1.4000000000000p+2", "repr": "-5.0"}, "model_serial": 1, "model_type": 1, "n_value": 1, "normalization": {"hex": "-0x1.14bb0465cd3c5p+8", "repr": "-276.7305358530105"}, "phi_0": {"hex": "0x1.c826e7d1ce921p-5", "repr": "0.05568261410958742"}, "phi_init_Mp": {"hex": "0x1.4000000000000p+2", "repr": "5.0"}, "phi_ref": {"hex": "0x1.07013381cbf72p-4", "repr": "0.06421012992791278"}, "pi_0": {"hex": "0x1.b174980952aebp-5", "repr": "0.05291204161274784"}, "pi_init_Mp": {"hex": "0x0.0p+0", "repr": "0.0"}, "plain_steps": 1, "residual_H": {"hex": "-0x1.b9b1030520000p-18", "repr": "-6.581715529141441e-06"}, "residual_phi": {"hex": "0x1.a5644546c0000p-18", "repr": "6.279225380323439e-06"}, "secant_steps": 2, "seed_kind": "tracking", "seed_normalization": {"hex": "-0x1.14c8be0ac3282p+8", "repr": "-276.7841498114068"}, "seed_phi_ref": {"hex": "0x1.fcf5f6db1a216p-5", "repr": "0.062129003658643864"}, "serial": 1, "shard": "shard0015.db", "timestamp": "2026-10-26 20:05:52.565027", "tracking": {"hex": "0x1.44598b10bf806p-1", "repr": "0.6334956605858231"}, "tuning_iterations": 4, "validated": 1, "z_samples": 4620}
+JSON {"M_value_eV": {"hex": "0x1.01d9940d10e2cp+81", "repr": "2.4353235955263043e+24"}, "T_init_GeV": {"hex": "0x1.3880000000000p+14", "repr": "20000.0"}, "V_ref": {"hex": "0x1.8a93cb9e0234dp-400", "repr": "5.9688943800676226e-121"}, "beta": {"hex": "0x1.8000000000000p+0", "repr": "1.5"}, "compute_steps": 194746, "compute_time": {"hex": "0x1.4761656480000p+2", "repr": "5.115319584030658"}, "failure": 0, "failure_reason": null, "guard_steps": 0, "label": "jordan-normalization-09-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=1.5)-2026-10-26T20:05:28", "log10_atol": {"hex": "-0x1.0000000000000p+3", "repr": "-8.0"}, "log10_rtol": {"hex": "-0x1.0000000000000p+3", "repr": "-8.0"}, "log10_tuning_tol": {"hex": "-0x1.4000000000000p+2", "repr": "-5.0"}, "model_serial": 51, "model_type": 1, "n_value": 1, "normalization": {"hex": "-0x1.14dad695af471p+8", "repr": "-276.85483680276144"}, "phi_0": {"hex": "0x1.11d88f5023ab5p-5", "repr": "0.033428459080018603"}, "phi_init_Mp": {"hex": "0x1.4000000000000p+2", "repr": "5.0"}, "phi_ref": {"hex": "0x1.1e692fd6fab54p-5", "repr": "0.03496226638511382"}, "pi_0": {"hex": "0x1.68cfc4b2fe4eep-5", "repr": "0.04404438417254562"}, "pi_init_Mp": {"hex": "0x0.0p+0", "repr": "0.0"}, "plain_steps": 1, "residual_H": {"hex": "0x1.1120774000000p-23", "repr": "1.2718458641813868e-07"}, "residual_phi": {"hex": "0x1.e0703b8100000p-20", "repr": "1.7897725401727627e-06"}, "secant_steps": 2, "seed_kind": "tracking", "seed_normalization": {"hex": "-0x1.14e277c7b5516p+8", "repr": "-276.8846401994391"}, "seed_phi_ref": {"hex": "0x1.19467e2f45537p-5", "repr": "0.03433537145080339"}, "serial": 21, "shard": "shard0000.db", "timestamp": "2026-10-26 20:05:52.863688", "tracking": {"hex": "0x1.c1bb26ffc5dd4p-1", "repr": "0.8783809840414798"}, "tuning_iterations": 4, "validated": 1, "z_samples": 5161}
+JSON {"M_value_eV": {"hex": "0x1.01d9940d10e2cp+81", "repr": "2.4353235955263043e+24"}, "T_init_GeV": {"hex": "0x1.3880000000000p+14", "repr": "20000.0"}, "V_ref": {"hex": "0x1.6abdb13d7d85dp-400", "repr": "5.487296126901317e-121"}, "beta": {"hex": "0x1.8000000000000p+1", "repr": "3.0"}, "compute_steps": 293177, "compute_time": {"hex": "0x1.07367be540000p+3", "repr": "8.22540087485686"}, "failure": 0, "failure_reason": null, "guard_steps": 0, "label": "jordan-normalization-09-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=3)-2026-10-26T20:05:28", "log10_atol": {"hex": "-0x1.0000000000000p+3", "repr": "-8.0"}, "log10_rtol": {"hex": "-0x1.0000000000000p+3", "repr": "-8.0"}, "log10_tuning_tol": {"hex": "-0x1.4000000000000p+2", "repr": "-5.0"}, "model_serial": 151, "model_type": 1, "n_value": 1, "normalization": {"hex": "-0x1.14f3def60f793p+8", "repr": "-276.95262086751717"}, "phi_0": {"hex": "0x1.7d6f8e673932fp-6", "repr": "0.023280991616860532"}, "phi_init_Mp": {"hex": "0x1.4000000000000p+2", "repr": "5.0"}, "phi_ref": {"hex": "0x1.83b1693dd8c76p-6", "repr": "0.02366290357111863"}, "pi_0": {"hex": "0x1.054bf14e95693p-5", "repr": "0.031896563818617406"}, "pi_init_Mp": {"hex": "0x0.0p+0", "repr": "0.0"}, "plain_steps": 1, "residual_H": {"hex": "-0x1.8285c45b80000p-20", "repr": "-1.4399086215588497e-06"}, "residual_phi": {"hex": "0x1.3c42b43aa0000p-17", "repr": "9.425299244414376e-06"}, "secant_steps": 2, "seed_kind": "tracking", "seed_normalization": {"hex": "-0x1.14fa8b86f47f4p+8", "repr": "-276.9786915156285"}, "seed_phi_ref": {"hex": "0x1.7e20f6635c914p-6", "repr": "0.02332328854885997"}, "serial": 41, "shard": "shard0001.db", "timestamp": "2026-10-26 20:06:04.992644", "tracking": {"hex": "0x1.d3a673b027b36p-1", "repr": "0.9133793022664125"}, "tuning_iterations": 4, "validated": 1, "z_samples": 5973}

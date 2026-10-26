@@ -1,0 +1,189 @@
+### 2026-10-26 19:55:45 +0000 one check, reference-a
+manifest path: /Users/ds283/Documents/Code/ChamPBH/var/runs/jordan-normalization-09-reference-a-20261026T195544/manifest.json
+-rw-r--r-- 1 ds283 staff 3938 Oct 26 19:55 /Users/ds283/Documents/Code/ChamPBH/var/runs/jordan-normalization-09-reference-a-20261026T195544/manifest.json
+status state running pid 35782 heartbeat 2026-10-26T19:55:44+00:00 stage packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+created 2026-10-26T19:55:44+00:00 results_store_id None
+pid file: 35782
+log birth: 2026-10-26 19:55:43 +0000
+manifest birth: 2026-10-26 19:55:44 +0000
+$ list
+   RUN                                                  STATE      PROGRESS      AGE  PURPOSE · STAGE
+   jordan-normalization-09-reference-a-20261026T195544  running           -       2s  jordan-normalization 09 H1: run a of the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5)  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   rrk-adoption-03-unit-20261026T151946                 lost              -   4h 36m  a test run of the wrapper, in a temporary directory  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   ray-sqla-align-02-resumed-c-20261025T210916          done              -  22h 46m  ray-sqla-align 02 R3: the resume of the resumed store under ray 2.59.0, straight through  · CALCULATE BBN DATA, all work items complete
+   ray-sqla-align-02-resumed-a-20261025T210611          killed            -  22h 49m  ray-sqla-align 02 R2: the pilot grid into the resumed store under ray 2.59.0, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   ray-sqla-align-02-reference-20261025T210149          done              -  22h 53m  ray-sqla-align 02 R1: the pilot grid straight through under ray 2.59.0, the reference store  · CALCULATE BBN DATA, all work items complete
+
+5 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 1 alive, 4 finished; 0 with no host recorded.
+list exit 0
+$ head of log
+1:** registered_run: registered as jordan-normalization-09-reference-a-20261026T195544
+2:**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/jordan-normalization-09-reference-a-20261026T195544/manifest.json
+3:**   list it with: ./venv/bin/python -m runregistrykit list
+4:>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+
+### 2026-10-26 20:00:15 +0000 one check, reference-b
+manifest path: /Users/ds283/Documents/Code/ChamPBH/var/runs/jordan-normalization-09-reference-b-20261026T200014/manifest.json
+-rw-r--r-- 1 ds283 staff 3904 Oct 26 20:00 /Users/ds283/Documents/Code/ChamPBH/var/runs/jordan-normalization-09-reference-b-20261026T200014/manifest.json
+status state running pid 36512 heartbeat 2026-10-26T20:00:14+00:00 stage packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+created 2026-10-26T20:00:14+00:00 results_store_id b5721a5e4c544f02bfb78e1b9ea7e9d9
+pid file: 36512
+log birth: 2026-10-26 20:00:12 +0000
+manifest birth: 2026-10-26 20:00:14 +0000
+$ list
+   RUN                                                  STATE      PROGRESS      AGE  PURPOSE · STAGE
+   jordan-normalization-09-reference-b-20261026T200014  running           -       2s  jordan-normalization 09 H1: run b of the reference build (beta 0.5 at M 1e-3 Mp, phi* 1)  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   jordan-normalization-09-reference-a-20261026T195544  done              -       5m  jordan-normalization 09 H1: run a of the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   rrk-adoption-03-unit-20261026T151946                 lost              -   4h 40m  a test run of the wrapper, in a temporary directory  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   ray-sqla-align-02-resumed-c-20261025T210916          done              -  22h 50m  ray-sqla-align 02 R3: the resume of the resumed store under ray 2.59.0, straight through  · CALCULATE BBN DATA, all work items complete
+   ray-sqla-align-02-resumed-a-20261025T210611          killed            -  22h 54m  ray-sqla-align 02 R2: the pilot grid into the resumed store under ray 2.59.0, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   ray-sqla-align-02-reference-20261025T210149          done              -  22h 58m  ray-sqla-align 02 R1: the pilot grid straight through under ray 2.59.0, the reference store  · CALCULATE BBN DATA, all work items complete
+
+6 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 1 alive, 5 finished; 0 with no host recorded.
+list exit 0
+$ head of log
+1:** registered_run: registered as jordan-normalization-09-reference-b-20261026T200014
+2:**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/jordan-normalization-09-reference-b-20261026T200014/manifest.json
+3:**   list it with: ./venv/bin/python -m runregistrykit list
+4:>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+
+### 2026-10-26 20:01:33 +0000 one check, reference-c
+manifest path: /Users/ds283/Documents/Code/ChamPBH/var/runs/jordan-normalization-09-reference-c-20261026T200132/manifest.json
+-rw-r--r-- 1 ds283 staff 3928 Oct 26 20:01 /Users/ds283/Documents/Code/ChamPBH/var/runs/jordan-normalization-09-reference-c-20261026T200132/manifest.json
+status state running pid 36956 heartbeat 2026-10-26T20:01:32+00:00 stage packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+created 2026-10-26T20:01:32+00:00 results_store_id b5721a5e4c544f02bfb78e1b9ea7e9d9
+pid file: 36956
+log birth: 2026-10-26 20:01:31 +0000
+manifest birth: 2026-10-26 20:01:32 +0000
+$ list
+   RUN                                                  STATE      PROGRESS      AGE  PURPOSE · STAGE
+   jordan-normalization-09-reference-c-20261026T200132  running           -       2s  jordan-normalization 09 H1: run c of the reference build (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   jordan-normalization-09-reference-b-20261026T200014  done              -       1m  jordan-normalization 09 H1: run b of the reference build (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-a-20261026T195544  done              -       6m  jordan-normalization 09 H1: run a of the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   rrk-adoption-03-unit-20261026T151946                 lost              -   4h 41m  a test run of the wrapper, in a temporary directory  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   ray-sqla-align-02-resumed-c-20261025T210916          done              -  22h 52m  ray-sqla-align 02 R3: the resume of the resumed store under ray 2.59.0, straight through  · CALCULATE BBN DATA, all work items complete
+   ray-sqla-align-02-resumed-a-20261025T210611          killed            -  22h 55m  ray-sqla-align 02 R2: the pilot grid into the resumed store under ray 2.59.0, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   ray-sqla-align-02-reference-20261025T210149          done              -  22h 59m  ray-sqla-align 02 R1: the pilot grid straight through under ray 2.59.0, the reference store  · CALCULATE BBN DATA, all work items complete
+
+7 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 1 alive, 6 finished; 0 with no host recorded.
+list exit 0
+$ head of log
+1:** registered_run: registered as jordan-normalization-09-reference-c-20261026T200132
+2:**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/jordan-normalization-09-reference-c-20261026T200132/manifest.json
+3:**   list it with: ./venv/bin/python -m runregistrykit list
+4:>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+
+### 2026-10-26 20:04:58 +0000 one check, resumed-a
+manifest path: /Users/ds283/Documents/Code/ChamPBH/var/runs/jordan-normalization-09-resumed-a-20261026T200457/manifest.json
+-rw-r--r-- 1 ds283 staff 3934 Oct 26 20:04 /Users/ds283/Documents/Code/ChamPBH/var/runs/jordan-normalization-09-resumed-a-20261026T200457/manifest.json
+status state running pid 37417 heartbeat 2026-10-26T20:04:57+00:00 stage Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/jordan-normalization-09-resumed.db" with 16 shards
+created 2026-10-26T20:04:57+00:00 results_store_id None
+pid file: 37417
+log birth: 2026-10-26 20:04:56 +0000
+manifest birth: 2026-10-26 20:04:57 +0000
+$ list
+   RUN                                                  STATE      PROGRESS      AGE  PURPOSE · STAGE
+   jordan-normalization-09-resumed-a-20261026T200457    running           -       2s  jordan-normalization 09 H2: run a into the resumed store, interrupted with SIGTERM in the scalar stage  · Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datas
+   jordan-normalization-09-reference-c-20261026T200132  done              -       3m  jordan-normalization 09 H1: run c of the reference build (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-b-20261026T200014  done              -       5m  jordan-normalization 09 H1: run b of the reference build (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-a-20261026T195544  done              -       9m  jordan-normalization 09 H1: run a of the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   rrk-adoption-03-unit-20261026T151946                 lost              -   4h 45m  a test run of the wrapper, in a temporary directory  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   ray-sqla-align-02-resumed-c-20261025T210916          done              -  22h 55m  ray-sqla-align 02 R3: the resume of the resumed store under ray 2.59.0, straight through  · CALCULATE BBN DATA, all work items complete
+   ray-sqla-align-02-resumed-a-20261025T210611          killed            -  22h 58m  ray-sqla-align 02 R2: the pilot grid into the resumed store under ray 2.59.0, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   ray-sqla-align-02-reference-20261025T210149          done              -  23h 03m  ray-sqla-align 02 R1: the pilot grid straight through under ray 2.59.0, the reference store  · CALCULATE BBN DATA, all work items complete
+
+8 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 1 alive, 7 finished; 0 with no host recorded.
+list exit 0
+$ head of log
+1:** registered_run: registered as jordan-normalization-09-resumed-a-20261026T200457
+2:**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/jordan-normalization-09-resumed-a-20261026T200457/manifest.json
+3:**   list it with: ./venv/bin/python -m runregistrykit list
+4:>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+
+### 2026-10-26 20:08:25 +0000 one check, resumed-a2
+manifest path: /Users/ds283/Documents/Code/ChamPBH/var/runs/jordan-normalization-09-resumed-a2-20261026T200824/manifest.json
+-rw-r--r-- 1 ds283 staff 3967 Oct 26 20:08 /Users/ds283/Documents/Code/ChamPBH/var/runs/jordan-normalization-09-resumed-a2-20261026T200824/manifest.json
+status state running pid 37955 heartbeat 2026-10-26T20:08:25+00:00 stage packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+created 2026-10-26T20:08:24+00:00 results_store_id 5f9ffeeba8994e4ba41504eb24040cc0
+pid file: 37955
+log birth: 2026-10-26 20:08:23 +0000
+manifest birth: 2026-10-26 20:08:24 +0000
+$ list
+   RUN                                                  STATE      PROGRESS      AGE  PURPOSE · STAGE
+   jordan-normalization-09-resumed-a2-20261026T200824   running           -       2s  jordan-normalization 09 H2: run a again into the resumed store, the resume after SIGTERM  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   jordan-normalization-09-resumed-a-20261026T200457    killed            -       3m  jordan-normalization 09 H2: run a into the resumed store, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   jordan-normalization-09-reference-c-20261026T200132  done              -       7m  jordan-normalization 09 H1: run c of the reference build (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-b-20261026T200014  done              -       8m  jordan-normalization 09 H1: run b of the reference build (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-a-20261026T195544  done              -      13m  jordan-normalization 09 H1: run a of the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   rrk-adoption-03-unit-20261026T151946                 lost              -   4h 48m  a test run of the wrapper, in a temporary directory  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   ray-sqla-align-02-resumed-c-20261025T210916          done              -  22h 59m  ray-sqla-align 02 R3: the resume of the resumed store under ray 2.59.0, straight through  · CALCULATE BBN DATA, all work items complete
+   ray-sqla-align-02-resumed-a-20261025T210611          killed            -  23h 02m  ray-sqla-align 02 R2: the pilot grid into the resumed store under ray 2.59.0, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   ray-sqla-align-02-reference-20261025T210149          done              -  23h 06m  ray-sqla-align 02 R1: the pilot grid straight through under ray 2.59.0, the reference store  · CALCULATE BBN DATA, all work items complete
+
+9 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 1 alive, 8 finished; 0 with no host recorded.
+list exit 0
+$ head of log
+1:** registered_run: registered as jordan-normalization-09-resumed-a2-20261026T200824
+2:**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/jordan-normalization-09-resumed-a2-20261026T200824/manifest.json
+3:**   list it with: ./venv/bin/python -m runregistrykit list
+4:>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+
+### 2026-10-26 20:11:31 +0000 one check, resumed-b
+manifest path: /Users/ds283/Documents/Code/ChamPBH/var/runs/jordan-normalization-09-resumed-b-20261026T201130/manifest.json
+-rw-r--r-- 1 ds283 staff 3892 Oct 26 20:11 /Users/ds283/Documents/Code/ChamPBH/var/runs/jordan-normalization-09-resumed-b-20261026T201130/manifest.json
+status state running pid 38353 heartbeat 2026-10-26T20:11:30+00:00 stage packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+created 2026-10-26T20:11:30+00:00 results_store_id 5f9ffeeba8994e4ba41504eb24040cc0
+pid file: 38353
+log birth: 2026-10-26 20:11:28 +0000
+manifest birth: 2026-10-26 20:11:30 +0000
+$ list
+   RUN                                                  STATE      PROGRESS      AGE  PURPOSE · STAGE
+   jordan-normalization-09-resumed-b-20261026T201130    running           -       2s  jordan-normalization 09 H2: run b into the resumed store (beta 0.5 at M 1e-3 Mp, phi* 1)  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   jordan-normalization-09-resumed-a2-20261026T200824   done              -       3m  jordan-normalization 09 H2: run a again into the resumed store, the resume after SIGTERM  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a-20261026T200457    killed            -       7m  jordan-normalization 09 H2: run a into the resumed store, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   jordan-normalization-09-reference-c-20261026T200132  done              -      10m  jordan-normalization 09 H1: run c of the reference build (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-b-20261026T200014  done              -      11m  jordan-normalization 09 H1: run b of the reference build (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-a-20261026T195544  done              -      16m  jordan-normalization 09 H1: run a of the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   rrk-adoption-03-unit-20261026T151946                 lost              -   4h 51m  a test run of the wrapper, in a temporary directory  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   ray-sqla-align-02-resumed-c-20261025T210916          done              -  23h 02m  ray-sqla-align 02 R3: the resume of the resumed store under ray 2.59.0, straight through  · CALCULATE BBN DATA, all work items complete
+   ray-sqla-align-02-resumed-a-20261025T210611          killed            -  23h 05m  ray-sqla-align 02 R2: the pilot grid into the resumed store under ray 2.59.0, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   ray-sqla-align-02-reference-20261025T210149          done              -  23h 09m  ray-sqla-align 02 R1: the pilot grid straight through under ray 2.59.0, the reference store  · CALCULATE BBN DATA, all work items complete
+
+10 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 1 alive, 9 finished; 0 with no host recorded.
+list exit 0
+$ head of log
+1:** registered_run: registered as jordan-normalization-09-resumed-b-20261026T201130
+2:**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/jordan-normalization-09-resumed-b-20261026T201130/manifest.json
+3:**   list it with: ./venv/bin/python -m runregistrykit list
+4:>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+
+### 2026-10-26 20:12:50 +0000 one check, resumed-c
+manifest path: /Users/ds283/Documents/Code/ChamPBH/var/runs/jordan-normalization-09-resumed-c-20261026T201250/manifest.json
+-rw-r--r-- 1 ds283 staff 3916 Oct 26 20:12 /Users/ds283/Documents/Code/ChamPBH/var/runs/jordan-normalization-09-resumed-c-20261026T201250/manifest.json
+status state running pid 38606 heartbeat 2026-10-26T20:12:50+00:00 stage packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+created 2026-10-26T20:12:50+00:00 results_store_id 5f9ffeeba8994e4ba41504eb24040cc0
+pid file: 38606
+log birth: 2026-10-26 20:12:48 +0000
+manifest birth: 2026-10-26 20:12:50 +0000
+$ list
+   RUN                                                  STATE      PROGRESS      AGE  PURPOSE · STAGE
+   jordan-normalization-09-resumed-c-20261026T201250    running           -       1s  jordan-normalization 09 H2: run c into the resumed store (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   jordan-normalization-09-resumed-b-20261026T201130    done              -       1m  jordan-normalization 09 H2: run b into the resumed store (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a2-20261026T200824   done              -       4m  jordan-normalization 09 H2: run a again into the resumed store, the resume after SIGTERM  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a-20261026T200457    killed            -       8m  jordan-normalization 09 H2: run a into the resumed store, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   jordan-normalization-09-reference-c-20261026T200132  done              -      11m  jordan-normalization 09 H1: run c of the reference build (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-b-20261026T200014  done              -      13m  jordan-normalization 09 H1: run b of the reference build (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-a-20261026T195544  done              -      17m  jordan-normalization 09 H1: run a of the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   rrk-adoption-03-unit-20261026T151946                 lost              -   4h 53m  a test run of the wrapper, in a temporary directory  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   ray-sqla-align-02-resumed-c-20261025T210916          done              -  23h 03m  ray-sqla-align 02 R3: the resume of the resumed store under ray 2.59.0, straight through  · CALCULATE BBN DATA, all work items complete
+   ray-sqla-align-02-resumed-a-20261025T210611          killed            -  23h 06m  ray-sqla-align 02 R2: the pilot grid into the resumed store under ray 2.59.0, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   ray-sqla-align-02-reference-20261025T210149          done              -  23h 11m  ray-sqla-align 02 R1: the pilot grid straight through under ray 2.59.0, the reference store  · CALCULATE BBN DATA, all work items complete
+
+11 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 1 alive, 10 finished; 0 with no host recorded.
+list exit 0
+$ head of log
+1:** registered_run: registered as jordan-normalization-09-resumed-c-20261026T201250
+2:**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/jordan-normalization-09-resumed-c-20261026T201250/manifest.json
+3:**   list it with: ./venv/bin/python -m runregistrykit list
+4:>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+

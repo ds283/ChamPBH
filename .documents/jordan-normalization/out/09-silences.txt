@@ -1,0 +1,191 @@
+$ ./venv/bin/python <scratch>/silences.py <the seven .beats>
+=== var/jordan-normalization-09/reference-a.beats
+  records: 50 log lines, 12 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/var/jordan-normalization-09/reference-a.log, runs var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-10-26 19:55:44+00:00 running; final status: hb 2026-10-26 19:59:23+00:00 done (CALCULATE BBN DATA, all work items complete)
+  (a) longest heartbeat silence: 46 s, from hb 19:57:23 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID) to hb 19:58:09 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 28.239 s, 19:55:46.757 -> 19:56:14.996
+         after: >> Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/jordan-normalization-09-reference.db" with 16 shards
+         before: 
+      BUILDING GRID OF MODELS TO SAMPLE: 0.505 s, 19:56:14.996 -> 19:56:15.501
+         after:    -- total number of models to integrate = 4
+         before: (Datastore pid=35805) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038)
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 23.721 s, 19:57:46.704 -> 19:58:10.425
+         after: (compute_scalar_history pid=35917) -- tune jordan-normalization-09-reference-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-10-26T19:56:39 it=2 k
+         before: (compute_scalar_history pid=35917) -- tune jordan-normalization-09-reference-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-10-26T19:56:39 it=3 k
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 2.581 s, 19:58:36.142 -> 19:58:38.723
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before:    -- ALL WORK ITEMS COMPLETE in time 2.37s
+      CALCULATE BBN DATA: 24.706 s, 19:58:59.405 -> 19:59:24.111
+         after: -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+         before: ** driver exit status 0
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 19:56:14.996, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 140.641 s (19:56:15.501 -> 19:58:36.142; line: -- ALL WORK ITEMS COMPLETE in time 2m 20.7s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 2.581 s (19:58:36.142 -> 19:58:38.723; line: -- ALL WORK ITEMS COMPLETE in time 2.37s)
+      CALCULATE BBN DATA: 20.681 s (19:58:38.723 -> 19:58:59.404; line: -- ALL WORK ITEMS COMPLETE in time 20.7s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):
+      jordan-normalization-09-reference-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=0.5)-2026-10-26T19:56:15: 4 lines (0:seed 1:plain 2:secant 3:secant); wall sum 3.3 s; last at 19:56:21.049, +5.5 s
+      jordan-normalization-09-reference-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=1.5)-2026-10-26T19:56:15: 3 lines (1:plain 2:secant 3:secant); wall sum 16.4 s; last at 19:56:40.200, +24.7 s
+      jordan-normalization-09-reference-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=3)-2026-10-26T19:56:15: 4 lines (0:seed 1:plain 2:secant 3:secant); wall sum 34.4 s; last at 19:56:52.292, +36.8 s
+      jordan-normalization-09-reference-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-10-26T19:56:39: 5 lines (0:seed 1:plain 2:secant 3:secant 4:secant); wall sum 113.3 s; last at 19:58:33.627, +138.1 s
+=== var/jordan-normalization-09/reference-b.beats
+  records: 36 log lines, 8 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/var/jordan-normalization-09/reference-b.log, runs var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-10-26 20:00:14+00:00 running; final status: hb 2026-10-26 20:01:14+00:00 done (CALCULATE BBN DATA, all work items complete)
+  (a) longest heartbeat silence: 24 s, from hb 20:00:50 (running, stage: CALCULATE BBN DATA, all work items complete) to hb 20:01:14 (done, stage: CALCULATE BBN DATA, all work items complete)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 10.584 s, 20:00:17.107 -> 20:00:27.691
+         after: >> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/jordan-normalization-09-reference.db" with 16 shards
+         before: 
+      BUILDING GRID OF MODELS TO SAMPLE: 0.001 s, 20:00:27.691 -> 20:00:27.692
+         after: >> RUNNING PIPELINE FOR MODEL QCD_Cosmology
+         before: 
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 4.534 s, 20:00:27.692 -> 20:00:32.226
+         after: (Datastore pid=36601) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038)
+         before: (compute_scalar_history pid=36618) -- tune jordan-normalization-09-reference-b-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=0.5)-2026-10-26T20:00:27 it=0 k
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 0.504 s, 20:00:41.801 -> 20:00:42.305
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before:    -- ALL WORK ITEMS COMPLETE in time 0.358s
+      CALCULATE BBN DATA: 24.196 s, 20:00:50.878 -> 20:01:15.074
+         after: -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+         before: ** driver exit status 0
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 20:00:27.691, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 14.109 s (20:00:27.692 -> 20:00:41.801; line: -- ALL WORK ITEMS COMPLETE in time 14.4s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 0.504 s (20:00:41.801 -> 20:00:42.305; line: -- ALL WORK ITEMS COMPLETE in time 0.358s)
+      CALCULATE BBN DATA: 8.571 s (20:00:42.307 -> 20:00:50.878; line: -- ALL WORK ITEMS COMPLETE in time 8.68s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):
+      jordan-normalization-09-reference-b-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=0.5)-2026-10-26T20:00:27: 4 lines (0:seed 1:plain 2:secant 3:secant); wall sum 11.3 s; last at 20:00:40.791, +13.1 s
+=== var/jordan-normalization-09/reference-c.beats
+  records: 44 log lines, 11 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/var/jordan-normalization-09/reference-c.log, runs var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-10-26 20:01:32+00:00 running; final status: hb 2026-10-26 20:04:37+00:00 done (CALCULATE BBN DATA, all work items complete)
+  (a) longest heartbeat silence: 58 s, from hb 20:02:19 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID) to hb 20:03:17 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 13.108 s, 20:01:34.868 -> 20:01:47.976
+         after: >> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/jordan-normalization-09-reference.db" with 16 shards
+         before: 
+      BUILDING GRID OF MODELS TO SAMPLE: 0.000 s, 20:01:47.976 -> 20:01:47.976
+         after: ** BUILDING GRID OF MODELS TO SAMPLE
+         before:    -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 42.827 s, 20:02:34.817 -> 20:03:17.644
+         after: (compute_scalar_history pid=37102) -- tune jordan-normalization-09-reference-c-ScalarHistory-ExponentialModel(M=1e-05Mp,n=1,beta=3)-2026-10-26T20:01:48 it=0 kin
+         before: (compute_scalar_history pid=37102) -- tune jordan-normalization-09-reference-c-ScalarHistory-ExponentialModel(M=1e-05Mp,n=1,beta=3)-2026-10-26T20:01:48 it=1 kin
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 0.501 s, 20:04:02.985 -> 20:04:03.486
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before:    -- ALL WORK ITEMS COMPLETE in time 0.837s
+      CALCULATE BBN DATA: 23.667 s, 20:04:14.070 -> 20:04:37.737
+         after: -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+         before: ** driver exit status 0
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 20:01:47.976, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 135.009 s (20:01:47.976 -> 20:04:02.985; line: -- ALL WORK ITEMS COMPLETE in time 2m 15s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 0.501 s (20:04:02.985 -> 20:04:03.486; line: -- ALL WORK ITEMS COMPLETE in time 0.837s)
+      CALCULATE BBN DATA: 10.584 s (20:04:03.486 -> 20:04:14.070; line: -- ALL WORK ITEMS COMPLETE in time 10.4s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):
+      jordan-normalization-09-reference-c-ScalarHistory-ExponentialModel(M=0.1Mp,n=1,beta=3)-2026-10-26T20:01:48: 9 lines (0:seed 1:plain 2:secant 3:secant 4:secant 5:secant 6:secant 7:secant 8:secant); wall sum 29.2 s; last at 20:02:19.197, +31.2 s
+      jordan-normalization-09-reference-c-ScalarHistory-ExponentialModel(M=1e-05Mp,n=1,beta=3)-2026-10-26T20:01:48: 3 lines (0:seed 1:plain 2:secant); wall sum 129.6 s; last at 20:03:59.961, +132.0 s
+=== var/jordan-normalization-09/resumed-a.beats
+  records: 38 log lines, 8 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/var/jordan-normalization-09/resumed-a.log, runs var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-10-26 20:04:57+00:00 running; final status: hb 2026-10-26 20:07:24+00:00 killed (CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID)
+  (a) longest heartbeat silence: 36 s, from hb 20:05:28 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID) to hb 20:06:04 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 29.748 s, 20:04:58.349 -> 20:05:28.097
+         after: >> Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/jordan-normalization-09-resumed.db" with 16 shards
+         before: 
+      BUILDING GRID OF MODELS TO SAMPLE: 0.000 s, 20:05:28.097 -> 20:05:28.097
+         after: ** BUILDING GRID OF MODELS TO SAMPLE
+         before:    -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 22.165 s, 20:06:35.650 -> 20:06:57.815
+         after: (compute_scalar_history pid=37553) -- tune jordan-normalization-09-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-10-26T20:05:51 it=1 kin
+         before: (compute_scalar_history pid=37553) -- tune jordan-normalization-09-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-10-26T20:05:51 it=2 kin
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 20:05:28.097, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: banner at 20:05:28.097, no completion line
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):
+      jordan-normalization-09-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=0.5)-2026-10-26T20:05:28: 4 lines (0:seed 1:plain 2:secant 3:secant); wall sum 3.2 s; last at 20:05:33.644, +5.5 s
+      jordan-normalization-09-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=1.5)-2026-10-26T20:05:28: 3 lines (1:plain 2:secant 3:secant); wall sum 16.0 s; last at 20:05:51.792, +23.7 s
+      jordan-normalization-09-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=3)-2026-10-26T20:05:28: 4 lines (0:seed 1:plain 2:secant 3:secant); wall sum 34.0 s; last at 20:06:04.900, +36.8 s
+      jordan-normalization-09-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-10-26T20:05:51: 4 lines (0:seed 1:plain 2:secant 3:secant); wall sum 87.1 s; last at 20:07:19.489, +111.4 s
+=== var/jordan-normalization-09/resumed-a2.beats
+  records: 37 log lines, 10 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/var/jordan-normalization-09/resumed-a2.log, runs var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-10-26 20:08:24+00:00 running; final status: hb 2026-10-26 20:11:12+00:00 done (CALCULATE BBN DATA, all work items complete)
+  (a) longest heartbeat silence: 45 s, from hb 20:08:37 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID) to hb 20:09:22 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 10.076 s, 20:08:27.608 -> 20:08:37.684
+         after: >> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/jordan-normalization-09-resumed.db" with 16 shards
+         before: 
+      BUILDING GRID OF MODELS TO SAMPLE: 0.000 s, 20:08:37.684 -> 20:08:37.684
+         after: ** BUILDING GRID OF MODELS TO SAMPLE
+         before:    -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 23.686 s, 20:08:38.186 -> 20:09:01.872
+         after: (Datastore pid=38004) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038)
+         before: (compute_scalar_history pid=38063) -- tune jordan-normalization-09-resumed-a2-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-10-26T20:08:37 it=0 ki
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.512 s, 20:10:29.064 -> 20:10:30.576
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before:    -- ALL WORK ITEMS COMPLETE in time 1.53s
+      CALCULATE BBN DATA: 24.176 s, 20:10:48.707 -> 20:11:12.883
+         after: -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+         before: ** driver exit status 0
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 20:08:37.684, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 111.380 s (20:08:37.684 -> 20:10:29.064; line: -- ALL WORK ITEMS COMPLETE in time 1m 51.1s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.512 s (20:10:29.064 -> 20:10:30.576; line: -- ALL WORK ITEMS COMPLETE in time 1.53s)
+      CALCULATE BBN DATA: 18.131 s (20:10:30.576 -> 20:10:48.707; line: -- ALL WORK ITEMS COMPLETE in time 18.4s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):
+      jordan-normalization-09-resumed-a2-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-10-26T20:08:37: 5 lines (0:seed 1:plain 2:secant 3:secant 4:secant); wall sum 107.1 s; last at 20:10:26.542, +108.9 s
+=== var/jordan-normalization-09/resumed-b.beats
+  records: 36 log lines, 8 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/var/jordan-normalization-09/resumed-b.log, runs var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-10-26 20:11:30+00:00 running; final status: hb 2026-10-26 20:12:31+00:00 done (CALCULATE BBN DATA, all work items complete)
+  (a) longest heartbeat silence: 24 s, from hb 20:12:07 (running, stage: CALCULATE BBN DATA, all work items complete) to hb 20:12:31 (done, stage: CALCULATE BBN DATA, all work items complete)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 10.084 s, 20:11:32.593 -> 20:11:42.677
+         after: >> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/jordan-normalization-09-resumed.db" with 16 shards
+         before: 
+      BUILDING GRID OF MODELS TO SAMPLE: 0.503 s, 20:11:42.677 -> 20:11:43.180
+         after:    -- total number of models to integrate = 1
+         before: 
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 4.525 s, 20:11:43.180 -> 20:11:47.705
+         after: (Datastore pid=38436) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038)
+         before: (compute_scalar_history pid=38467) -- tune jordan-normalization-09-resumed-b-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=0.5)-2026-10-26T20:11:42 it=0 kin
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 0.504 s, 20:11:58.307 -> 20:11:58.811
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before:    -- ALL WORK ITEMS COMPLETE in time 0.357s
+      CALCULATE BBN DATA: 24.720 s, 20:12:07.885 -> 20:12:32.605
+         after: -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+         before: ** driver exit status 0
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 20:11:42.677, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 15.127 s (20:11:43.180 -> 20:11:58.307; line: -- ALL WORK ITEMS COMPLETE in time 15.5s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 0.504 s (20:11:58.307 -> 20:11:58.811; line: -- ALL WORK ITEMS COMPLETE in time 0.357s)
+      CALCULATE BBN DATA: 9.074 s (20:11:58.811 -> 20:12:07.885; line: -- ALL WORK ITEMS COMPLETE in time 8.89s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):
+      jordan-normalization-09-resumed-b-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=0.5)-2026-10-26T20:11:42: 4 lines (0:seed 1:plain 2:secant 3:secant); wall sum 12.3 s; last at 20:11:57.302, +14.1 s
+=== var/jordan-normalization-09/resumed-c.beats
+  records: 44 log lines, 11 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/var/jordan-normalization-09/resumed-c.log, runs var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-10-26 20:12:50+00:00 running; final status: hb 2026-10-26 20:15:52+00:00 done (CALCULATE BBN DATA, all work items complete)
+  (a) longest heartbeat silence: 46 s, from hb 20:13:03 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID) to hb 20:13:49 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 10.594 s, 20:12:52.732 -> 20:13:03.326
+         after: >> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/jordan-normalization-09-resumed.db" with 16 shards
+         before: 
+      BUILDING GRID OF MODELS TO SAMPLE: 0.000 s, 20:13:03.326 -> 20:13:03.326
+         after: ** BUILDING GRID OF MODELS TO SAMPLE
+         before:    -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 42.837 s, 20:13:49.188 -> 20:14:32.025
+         after: (compute_scalar_history pid=38711) -- tune jordan-normalization-09-resumed-c-ScalarHistory-ExponentialModel(M=1e-05Mp,n=1,beta=3)-2026-10-26T20:13:03 it=0 kind=
+         before: (compute_scalar_history pid=38711) -- tune jordan-normalization-09-resumed-c-ScalarHistory-ExponentialModel(M=1e-05Mp,n=1,beta=3)-2026-10-26T20:13:03 it=1 kind=
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.010 s, 20:15:17.391 -> 20:15:18.401
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before:    -- ALL WORK ITEMS COMPLETE in time 1s
+      CALCULATE BBN DATA: 23.684 s, 20:15:28.973 -> 20:15:52.657
+         after: -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+         before: ** driver exit status 0
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 20:13:03.326, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 134.065 s (20:13:03.326 -> 20:15:17.391; line: -- ALL WORK ITEMS COMPLETE in time 2m 13.9s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.010 s (20:15:17.391 -> 20:15:18.401; line: -- ALL WORK ITEMS COMPLETE in time 1s)
+      CALCULATE BBN DATA: 10.571 s (20:15:18.402 -> 20:15:28.973; line: -- ALL WORK ITEMS COMPLETE in time 10.3s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):
+      jordan-normalization-09-resumed-c-ScalarHistory-ExponentialModel(M=0.1Mp,n=1,beta=3)-2026-10-26T20:13:03: 9 lines (0:seed 1:plain 2:secant 3:secant 4:secant 5:secant 6:secant 7:secant 8:secant); wall sum 27.3 s; last at 20:13:33.069, +29.7 s
+      jordan-normalization-09-resumed-c-ScalarHistory-ExponentialModel(M=1e-05Mp,n=1,beta=3)-2026-10-26T20:13:03: 3 lines (0:seed 1:plain 2:secant); wall sum 128.8 s; last at 20:15:14.364, +131.0 s
+exit 0

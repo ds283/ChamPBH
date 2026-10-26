@@ -1,0 +1,199 @@
+{
+  "exit_code": 0,
+  "fingerprint": {
+    "classes": {
+      "AdiabaticHistory": {
+        "count": 5,
+        "digest": "5d0bb0e892eb87907cceb8e1f66431cf510df3edc9a72e8d4cbf8d470266d796",
+        "tag_sets": [
+          {
+            "count": 5,
+            "digest": "5d0bb0e892eb87907cceb8e1f66431cf510df3edc9a72e8d4cbf8d470266d796",
+            "tags": [
+              "SamplesPerLog10Z_250"
+            ]
+          }
+        ]
+      },
+      "BBNData": {
+        "count": 5,
+        "digest": "98ad0157a19bf3e78dac8d7c8732509a2ce0bce5b7b9e59fca4a4904038c132e",
+        "tag_sets": [
+          {
+            "count": 5,
+            "digest": "98ad0157a19bf3e78dac8d7c8732509a2ce0bce5b7b9e59fca4a4904038c132e",
+            "tags": [
+              "SamplesPerLog10Z_250"
+            ]
+          }
+        ]
+      },
+      "ExponentialModel": {
+        "count": 4,
+        "digest": "6f8f262ddf6209a8af51e6c61e7b09f45b434a47c3571741901d320a7b2743cc",
+        "tag_sets": [
+          {
+            "count": 4,
+            "digest": "6f8f262ddf6209a8af51e6c61e7b09f45b434a47c3571741901d320a7b2743cc",
+            "tags": []
+          }
+        ]
+      },
+      "IntegrationSolver": {
+        "count": 6,
+        "digest": "223ae7361d67244aff9c12f3f5cc1954ac2c7dc717189ad15b4030c8a0650e4a",
+        "tag_sets": [
+          {
+            "count": 6,
+            "digest": "223ae7361d67244aff9c12f3f5cc1954ac2c7dc717189ad15b4030c8a0650e4a",
+            "tags": []
+          }
+        ]
+      },
+      "M_value": {
+        "count": 1,
+        "digest": "f2e0248b8a3722cd73969903876cf6361752613de0bc580ea93fee340dae654f",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "f2e0248b8a3722cd73969903876cf6361752613de0bc580ea93fee340dae654f",
+            "tags": []
+          }
+        ]
+      },
+      "QCD_Cosmology": {
+        "count": 1,
+        "digest": "dcbaa9d413d45bf56b63a2a6ac1da865159e363f8b5ea2a479265113b82091b2",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "dcbaa9d413d45bf56b63a2a6ac1da865159e363f8b5ea2a479265113b82091b2",
+            "tags": []
+          }
+        ]
+      },
+      "ScalarHistory": {
+        "count": 5,
+        "digest": "57d03b6958cd9c4012c6372d32843d6886432f090cba85466be7cfabb7c17d93",
+        "tag_sets": [
+          {
+            "count": 5,
+            "digest": "57d03b6958cd9c4012c6372d32843d6886432f090cba85466be7cfabb7c17d93",
+            "tags": [
+              "SamplesPerLog10Z_250"
+            ]
+          }
+        ]
+      },
+      "beta_value": {
+        "count": 4,
+        "digest": "298221e43b4d28868469b42b79abd4d78a3b4f16f372855e3ffaa0d72cc39b1a",
+        "tag_sets": [
+          {
+            "count": 4,
+            "digest": "298221e43b4d28868469b42b79abd4d78a3b4f16f372855e3ffaa0d72cc39b1a",
+            "tags": []
+          }
+        ]
+      },
+      "phi_value": {
+        "count": 2,
+        "digest": "15472544d9c8934828aed53d43e0cf14907232b1a04e4fbe86c16771aa3e178a",
+        "tag_sets": [
+          {
+            "count": 2,
+            "digest": "15472544d9c8934828aed53d43e0cf14907232b1a04e4fbe86c16771aa3e178a",
+            "tags": []
+          }
+        ]
+      },
+      "pi_value": {
+        "count": 1,
+        "digest": "237cd5e9616925eae2215daa8eb602f9db5e521a4415d78f11056c39f8c74cc8",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "237cd5e9616925eae2215daa8eb602f9db5e521a4415d78f11056c39f8c74cc8",
+            "tags": []
+          }
+        ]
+      },
+      "redshift": {
+        "count": 75001,
+        "digest": "8dad579a1ae8f2a82a70c62838d7200adc490a4205dc7976074a17f3012b450d",
+        "tag_sets": [
+          {
+            "count": 75001,
+            "digest": "8dad579a1ae8f2a82a70c62838d7200adc490a4205dc7976074a17f3012b450d",
+            "tags": []
+          }
+        ]
+      },
+      "store_tag": {
+        "count": 1,
+        "digest": "34407c96658d27b3334475fbcac14bdf7862190810b233d798b75c11a6450531",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "34407c96658d27b3334475fbcac14bdf7862190810b233d798b75c11a6450531",
+            "tags": []
+          }
+        ]
+      },
+      "temperature": {
+        "count": 1,
+        "digest": "9bd0581c026ad77d80f5c76b87ad07d5299ba643855d44d4b3d27bdd06b061bf",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "9bd0581c026ad77d80f5c76b87ad07d5299ba643855d44d4b3d27bdd06b061bf",
+            "tags": []
+          }
+        ]
+      },
+      "tolerance": {
+        "count": 2,
+        "digest": "a6a6f286796401ec6660c96b91e9635bbf6cad6951285cbbf48b5d1ea823c5ef",
+        "tag_sets": [
+          {
+            "count": 2,
+            "digest": "a6a6f286796401ec6660c96b91e9635bbf6cad6951285cbbf48b5d1ea823c5ef",
+            "tags": []
+          }
+        ]
+      },
+      "version": {
+        "count": 1,
+        "digest": "bd01381952f16539dd78b315ad5e13132cc7bde5f558715c6aac59415d793791",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "bd01381952f16539dd78b315ad5e13132cc7bde5f558715c6aac59415d793791",
+            "tags": []
+          }
+        ]
+      }
+    },
+    "digest": "f953123a9748393869d1b0ffb8a29ab663cf9fb0b871233d2479f0151ea80985",
+    "encoding_format": 1,
+    "fingerprint_format": 5,
+    "problems": {},
+    "taken": {
+      "git_dirty": false,
+      "git_head": "4dc31eae6d3a523abd58346aa9628ea24ad97cfe",
+      "run_id": "jordan-normalization-09-resumed-b-20261026T201130",
+      "when": "2026-10-26T20:12:07+00:00"
+    }
+  },
+  "fingerprint_sidecar": "written",
+  "heartbeat": "2026-10-26T20:12:31+00:00",
+  "host": {
+    "boot": "376461AF-4985-4F42-8E41-F4E914F5E3E6",
+    "id": "8d2b247824882486"
+  },
+  "pid": 38353,
+  "stage": "CALCULATE BBN DATA, all work items complete",
+  "state": "done",
+  "units_done": 0,
+  "units_total": null
+}

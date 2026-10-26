@@ -1,0 +1,25 @@
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-10-26 20:16:07,686	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-10-26 20:16:07,725	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at http://127.0.0.1:8267 
+!! WARNING: number of shards read from database (=16) does not match specified number of shards (=10)
+>> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/jordan-normalization-09-reference.db" read-only with 16 shards (version label "2026.7.0", serial 1)
+!! plot: no ExponentialModel stored for M=2.435323596e+22 eV, n=1, β=0.5; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+22 eV, n=1, β=1.5; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+22 eV, n=1, β=5.5; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+26 eV, n=1, β=0.5; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+26 eV, n=1, β=1.5; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+26 eV, n=1, β=5.5; no history can use it; skipped
+!! plot: 6 of 12 ExponentialModel combinations of the stored M and β are not stored, and were skipped
+(Datastore pid=39171) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+@@ plot_by_beta: SM baseline (rho_NP = 0, PRyM_version=bf24c3d+ri02+sr01+bt02, small_network=True): Yp=0.24688, D/H x1e5=2.45829, 3He/H x1e5=1.04193, 7Li/H x1e10=5.48637
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology
+
+** GENERATING SUMMARY PLOTS BY BETA
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e+24 eV, n=1: 1 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e+24 eV, n=1: PRyMordial: ComputationFailureError: T_in_MeV=0.00019824 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+(build_beta_plot pid=39225) @@ build_beta_plot 'QCD_Cosmology', M=2.4353e+24 eV, n=1: no models used elastic reflections (4 model(s) checked)
+   -- ALL WORK ITEMS COMPLETE in time 4.22s
+      Queue summary: 3 lookup (avg 42.68/min)
+      (no compute items were evaluated - all assets read from datastore)
+(build_beta_plot pid=39227) @@ build_beta_plot 'QCD_Cosmology', M=2.4353e+26 eV, n=1: no models used elastic reflections (1 model(s) checked) [repeated 2x across cluster] (Ray deduplicates logs by default. Set RAY_DEDUP_LOGS=0 to disable log deduplication, or see https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#log-deduplication for more options.)

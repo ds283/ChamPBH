@@ -1,0 +1,62 @@
+### 2026-10-26 20:17:26 +0000
+$ PYTHONPATH=. ./venv/bin/python tools/compare_stores.py var/datastores/jordan-normalization-09-reference.db var/datastores/jordan-normalization-09-resumed.db
+compare_stores: A = /Users/ds283/Documents/Code/ChamPBH/var/datastores/jordan-normalization-09-reference.db (16 shards)
+                B = /Users/ds283/Documents/Code/ChamPBH/var/datastores/jordan-normalization-09-resumed.db (16 shards)
+
+tables:
+  AdiabaticHistory       sharded     matched        7  A only      0  B only      0
+  AdiabaticHistoryValue  sharded     matched    39397  A only      0  B only      0
+  AdiabaticHistory_tags  sharded     matched        7  A only      0  B only      0
+  BBNData                sharded     matched        7  A only      0  B only      0
+  BBNDataValue           sharded     matched     8910  A only      0  B only      0
+  BBNData_tags           sharded     matched        7  A only      0  B only      0
+  ExponentialModel       sharded     matched        6  A only      0  B only      0
+  IntegrationSolver      replicated  matched        6  A only      0  B only      0
+  M_value                replicated  matched        3  A only      0  B only      0
+  QCD_Cosmology          replicated  matched        1  A only      0  B only      0
+  ScalarHistory          sharded     matched        7  A only      0  B only      0
+  ScalarHistoryValue     sharded     matched    39397  A only      0  B only      0
+  ScalarHistory_tags     sharded     matched        7  A only      0  B only      0
+  beta_value             replicated  matched        4  A only      0  B only      0
+  phi_value              replicated  matched        2  A only      0  B only      0
+  pi_value               replicated  matched        1  A only      0  B only      0
+  redshift               replicated  matched    75001  A only      0  B only      0
+  store_tag              replicated  matched        1  A only      0  B only      0
+  temperature            replicated  matched        1  A only      0  B only      0
+  tolerance              replicated  matched        2  A only      0  B only      0
+  version                replicated  matched        1  A only      0  B only      0
+
+bookkeeping columns that differ between matched rows (not compared):
+  AdiabaticHistory.compute_time: 7 matched row(s)
+  AdiabaticHistory.label: 7 matched row(s)
+  AdiabaticHistory.timestamp: 7 matched row(s)
+  AdiabaticHistory_tags.timestamp: 7 matched row(s)
+  BBNData.BBN_compute_time: 6 matched row(s)
+  BBNData.NP_compute_time: 6 matched row(s)
+  BBNData.label: 7 matched row(s)
+  BBNData.timestamp: 7 matched row(s)
+  BBNData_tags.timestamp: 7 matched row(s)
+  ExponentialModel.timestamp: 6 matched row(s)
+  IntegrationSolver.timestamp: 6 matched row(s)
+  M_value.timestamp: 3 matched row(s)
+  QCD_Cosmology.timestamp: 1 matched row(s)
+  ScalarHistory.compute_time: 7 matched row(s)
+  ScalarHistory.label: 7 matched row(s)
+  ScalarHistory.max_RHS_time: 7 matched row(s)
+  ScalarHistory.mean_RHS_time: 7 matched row(s)
+  ScalarHistory.min_RHS_time: 7 matched row(s)
+  ScalarHistory.timestamp: 7 matched row(s)
+  ScalarHistory_tags.timestamp: 7 matched row(s)
+  beta_value.timestamp: 4 matched row(s)
+  phi_value.timestamp: 2 matched row(s)
+  pi_value.timestamp: 1 matched row(s)
+  redshift.timestamp: 75001 matched row(s)
+  store_tag.timestamp: 1 matched row(s)
+  temperature.timestamp: 1 matched row(s)
+  tolerance.timestamp: 2 matched row(s)
+
+problems:
+  none
+
+RESULT: equal
+exit 0

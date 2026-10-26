@@ -1,0 +1,49 @@
+### token-mode and warning greps 2026-10-26 20:27:53 +0000
+start.txt | Token authentication is enabled: 0
+start.txt | Generated new authentication token: 0
+start.txt | InvalidAuthToken: 0
+start.txt | AuthenticationError: 0
+reference-a.log | Token authentication is enabled: 0
+reference-a.log | Generated new authentication token: 0
+reference-a.log | InvalidAuthToken: 0
+reference-a.log | AuthenticationError: 0
+reference-b.log | Token authentication is enabled: 0
+reference-b.log | Generated new authentication token: 0
+reference-b.log | InvalidAuthToken: 0
+reference-b.log | AuthenticationError: 0
+reference-c.log | Token authentication is enabled: 0
+reference-c.log | Generated new authentication token: 0
+reference-c.log | InvalidAuthToken: 0
+reference-c.log | AuthenticationError: 0
+resumed-a.log | Token authentication is enabled: 0
+resumed-a.log | Generated new authentication token: 0
+resumed-a.log | InvalidAuthToken: 0
+resumed-a.log | AuthenticationError: 0
+resumed-a2.log | Token authentication is enabled: 0
+resumed-a2.log | Generated new authentication token: 0
+resumed-a2.log | InvalidAuthToken: 0
+resumed-a2.log | AuthenticationError: 0
+resumed-b.log | Token authentication is enabled: 0
+resumed-b.log | Generated new authentication token: 0
+resumed-b.log | InvalidAuthToken: 0
+resumed-b.log | AuthenticationError: 0
+resumed-c.log | Token authentication is enabled: 0
+resumed-c.log | Generated new authentication token: 0
+resumed-c.log | InvalidAuthToken: 0
+resumed-c.log | AuthenticationError: 0
+plot-reference.log | Token authentication is enabled: 0
+plot-reference.log | Generated new authentication token: 0
+plot-reference.log | InvalidAuthToken: 0
+plot-reference.log | AuthenticationError: 0
+super-Planckian / '!! warning' lines per launch log:
+reference-a: 0 super-Planckian, 0 '!! warning', 0 Traceback, 1 connected, 0 6379, 0 alarm/received, 0 INTEGRITY WARNING, 2 'repeated'
+reference-b: 0 super-Planckian, 0 '!! warning', 0 Traceback, 1 connected, 0 6379, 0 alarm/received, 0 INTEGRITY WARNING, 0 'repeated'
+reference-c: 0 super-Planckian, 0 '!! warning', 0 Traceback, 1 connected, 0 6379, 0 alarm/received, 0 INTEGRITY WARNING, 0 'repeated'
+resumed-a: 0 super-Planckian, 0 '!! warning', 0 Traceback, 1 connected, 0 6379, 0 alarm/received, 0 INTEGRITY WARNING, 2 'repeated'
+resumed-a2: 0 super-Planckian, 0 '!! warning', 0 Traceback, 1 connected, 0 6379, 0 alarm/received, 0 INTEGRITY WARNING, 0 'repeated'
+resumed-b: 0 super-Planckian, 0 '!! warning', 0 Traceback, 1 connected, 0 6379, 0 alarm/received, 0 INTEGRITY WARNING, 0 'repeated'
+resumed-c: 0 super-Planckian, 0 '!! warning', 0 Traceback, 1 connected, 0 6379, 0 alarm/received, 0 INTEGRITY WARNING, 0 'repeated'
+token file:
+-rw------- 1 ds283 staff 64 Oct 25 12:51 /Users/ds283/.ray/auth_token
+1792932677 Oct 25 12:51:17 2026
+env RAY_AUTH_MODE count: 0

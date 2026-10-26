@@ -1,0 +1,17 @@
+before start: 2026-10-26 19:54:53 +0000 19:54  up 21 days, 18:39, 2 users, load averages: 3.59 4.35 4.03
+reference-a launch: 2026-10-26 19:55:42 +0000 19:55  up 21 days, 18:40, 2 users, load averages: 2.44 3.96 3.91
+reference-a ended: 2026-10-26 19:59:27 +0000 19:59  up 21 days, 18:44, 2 users, load averages: 7.47 6.44 5.10
+reference-b launch: 2026-10-26 20:00:12 +0000 20:00  up 21 days, 18:45, 2 users, load averages: 5.90 6.19 5.08
+reference-b ended: 2026-10-26 20:01:20 +0000 20:01  up 21 days, 18:46, 2 users, load averages: 3.41 5.45 4.88
+reference-c launch: 2026-10-26 20:01:31 +0000 20:01  up 21 days, 18:46, 2 users, load averages: 3.13 5.32 4.84
+reference-c ended: 2026-10-26 20:04:42 +0000 20:04  up 21 days, 18:49, 2 users, load averages: 3.52 4.71 4.70
+resumed-a launch: 2026-10-26 20:04:56 +0000 20:04  up 21 days, 18:49, 2 users, load averages: 3.20 4.61 4.67
+resumed-a ended: 2026-10-26 20:07:39 +0000 20:07  up 21 days, 18:52, 2 users, load averages: 4.68 5.74 5.22
+resumed-a2 launch: 2026-10-26 20:08:23 +0000 20:08  up 21 days, 18:53, 2 users, load averages: 4.96 5.67 5.22
+resumed-a2 ended: 2026-10-26 20:11:18 +0000 20:11  up 21 days, 18:56, 2 users, load averages: 3.69 4.61 4.85
+resumed-b launch: 2026-10-26 20:11:28 +0000 20:11  up 21 days, 18:56, 2 users, load averages: 3.43 4.52 4.81
+resumed-b ended: 2026-10-26 20:12:38 +0000 20:12  up 21 days, 18:57, 2 users, load averages: 5.08 4.82 4.90
+resumed-c launch: 2026-10-26 20:12:48 +0000 20:12  up 21 days, 18:57, 2 users, load averages: 4.62 4.73 4.87
+resumed-c ended: 2026-10-26 20:15:58 +0000 20:15  up 21 days, 19:01, 2 users, load averages: 4.73 5.15 5.03
+plot: 2026-10-26 20:16:05 +0000 20:16  up 21 days, 19:01, 2 users, load averages: 4.99 5.20 5.05
+before stop: 2026-10-26 20:16:49 +0000 20:16  up 21 days, 19:01, 2 users, load averages: 6.21 5.53 5.18

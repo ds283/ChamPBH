@@ -1,0 +1,91 @@
+=== jordan-normalization-09-reference-a-20261026T195544
+  script: main.py
+  script_sha256: ec6144aa02f5014dbc1aaecee81dd22efa030b2ae507c4eb6b7965b9e489f87d
+  git_head: 4dc31eae6d3a523abd58346aa9628ea24ad97cfe
+  git_dirty: False
+  results: var/datastores/jordan-normalization-09-reference.db
+  results_store_id: None
+  scope: config exponential.yaml; β 0.5, 1.5, 3, 5.5; M 0.001 Mp; n 1; φ* 5 Mp; tuning tolerance 1e-05; 16 shards; job jordan-normalization-09-reference-a
+  created: 2026-10-26T19:55:44+00:00
+  packages: SQLAlchemy 2.0.55 (editable False, commit -, requested -); datastorekit 0.4.0 (editable False, commit c8570e84, requested v0.4.0); numpy 2.3.5 (editable False, commit -, requested -); ray 2.59.0 (editable False, commit -, requested -); raypoolkit 0.3.0 (editable False, commit 67a75b97, requested v0.3.0); runregistrykit 0.2.0 (editable False, commit 0bae3a3c, requested v0.2.0); scipy 1.17.0 (editable False, commit -, requested -)
+  status: state done exit_code 0 pid 35782 heartbeat 2026-10-26T19:59:23+00:00 stage CALCULATE BBN DATA, all work items complete
+  fingerprint: 752c6c0712c74f63c1e429c8336eb20fb5e54676ab69ff9a5109774aa0297838 taken 2026-10-26T19:58:59+00:00 by jordan-normalization-09-reference-a-20261026T195544 problems {}
+  fingerprint_sidecar: not written: /Users/ds283/Documents/Code/ChamPBH/var/datastores/jordan-normalization-09-reference.manifest.json is not a problem-free registry sidecar (there is none)
+=== jordan-normalization-09-reference-b-20261026T200014
+  script: main.py
+  script_sha256: ec6144aa02f5014dbc1aaecee81dd22efa030b2ae507c4eb6b7965b9e489f87d
+  git_head: 4dc31eae6d3a523abd58346aa9628ea24ad97cfe
+  git_dirty: False
+  results: var/datastores/jordan-normalization-09-reference.db
+  results_store_id: b5721a5e4c544f02bfb78e1b9ea7e9d9
+  scope: config exponential.yaml; β 0.5; M 0.001 Mp; n 1; φ* 1 Mp; tuning tolerance 1e-05; 16 shards; job jordan-normalization-09-reference-b
+  created: 2026-10-26T20:00:14+00:00
+  packages: SQLAlchemy 2.0.55 (editable False, commit -, requested -); datastorekit 0.4.0 (editable False, commit c8570e84, requested v0.4.0); numpy 2.3.5 (editable False, commit -, requested -); ray 2.59.0 (editable False, commit -, requested -); raypoolkit 0.3.0 (editable False, commit 67a75b97, requested v0.3.0); runregistrykit 0.2.0 (editable False, commit 0bae3a3c, requested v0.2.0); scipy 1.17.0 (editable False, commit -, requested -)
+  status: state done exit_code 0 pid 36512 heartbeat 2026-10-26T20:01:14+00:00 stage CALCULATE BBN DATA, all work items complete
+  fingerprint: f953123a9748393869d1b0ffb8a29ab663cf9fb0b871233d2479f0151ea80985 taken 2026-10-26T20:00:50+00:00 by jordan-normalization-09-reference-b-20261026T200014 problems {}
+  fingerprint_sidecar: written
+=== jordan-normalization-09-reference-c-20261026T200132
+  script: main.py
+  script_sha256: ec6144aa02f5014dbc1aaecee81dd22efa030b2ae507c4eb6b7965b9e489f87d
+  git_head: 4dc31eae6d3a523abd58346aa9628ea24ad97cfe
+  git_dirty: False
+  results: var/datastores/jordan-normalization-09-reference.db
+  results_store_id: b5721a5e4c544f02bfb78e1b9ea7e9d9
+  scope: config exponential.yaml; β 3; M 0.1, 1e-05 Mp; n 1; φ* 5 Mp; tuning tolerance 1e-05; 16 shards; job jordan-normalization-09-reference-c
+  created: 2026-10-26T20:01:32+00:00
+  packages: SQLAlchemy 2.0.55 (editable False, commit -, requested -); datastorekit 0.4.0 (editable False, commit c8570e84, requested v0.4.0); numpy 2.3.5 (editable False, commit -, requested -); ray 2.59.0 (editable False, commit -, requested -); raypoolkit 0.3.0 (editable False, commit 67a75b97, requested v0.3.0); runregistrykit 0.2.0 (editable False, commit 0bae3a3c, requested v0.2.0); scipy 1.17.0 (editable False, commit -, requested -)
+  status: state done exit_code 0 pid 36956 heartbeat 2026-10-26T20:04:37+00:00 stage CALCULATE BBN DATA, all work items complete
+  fingerprint: 3b92d064512079e30bb2291d6d82732fed10c187e50c61e4b3d54cb47b3415a7 taken 2026-10-26T20:04:14+00:00 by jordan-normalization-09-reference-c-20261026T200132 problems {}
+  fingerprint_sidecar: written
+=== jordan-normalization-09-resumed-a-20261026T200457
+  script: main.py
+  script_sha256: ec6144aa02f5014dbc1aaecee81dd22efa030b2ae507c4eb6b7965b9e489f87d
+  git_head: 4dc31eae6d3a523abd58346aa9628ea24ad97cfe
+  git_dirty: False
+  results: var/datastores/jordan-normalization-09-resumed.db
+  results_store_id: None
+  scope: config exponential.yaml; β 0.5, 1.5, 3, 5.5; M 0.001 Mp; n 1; φ* 5 Mp; tuning tolerance 1e-05; 16 shards; job jordan-normalization-09-resumed-a
+  created: 2026-10-26T20:04:57+00:00
+  packages: SQLAlchemy 2.0.55 (editable False, commit -, requested -); datastorekit 0.4.0 (editable False, commit c8570e84, requested v0.4.0); numpy 2.3.5 (editable False, commit -, requested -); ray 2.59.0 (editable False, commit -, requested -); raypoolkit 0.3.0 (editable False, commit 67a75b97, requested v0.3.0); runregistrykit 0.2.0 (editable False, commit 0bae3a3c, requested v0.2.0); scipy 1.17.0 (editable False, commit -, requested -)
+  status: state killed exit_code 143 pid 37417 heartbeat 2026-10-26T20:07:24+00:00 stage CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+  fingerprint: 454e3435c1dfa287e144307b1b3bac926610e47ecbad9693b42e3ea4bcabc2b6 taken 2026-10-26T20:06:59+00:00 by jordan-normalization-09-resumed-a-20261026T200457 problems {}
+  fingerprint_sidecar: not written: /Users/ds283/Documents/Code/ChamPBH/var/datastores/jordan-normalization-09-resumed.manifest.json is not a problem-free registry sidecar (there is none)
+=== jordan-normalization-09-resumed-a2-20261026T200824
+  script: main.py
+  script_sha256: ec6144aa02f5014dbc1aaecee81dd22efa030b2ae507c4eb6b7965b9e489f87d
+  git_head: 4dc31eae6d3a523abd58346aa9628ea24ad97cfe
+  git_dirty: False
+  results: var/datastores/jordan-normalization-09-resumed.db
+  results_store_id: 5f9ffeeba8994e4ba41504eb24040cc0
+  scope: config exponential.yaml; β 0.5, 1.5, 3, 5.5; M 0.001 Mp; n 1; φ* 5 Mp; tuning tolerance 1e-05; 16 shards; job jordan-normalization-09-resumed-a2
+  created: 2026-10-26T20:08:24+00:00
+  packages: SQLAlchemy 2.0.55 (editable False, commit -, requested -); datastorekit 0.4.0 (editable False, commit c8570e84, requested v0.4.0); numpy 2.3.5 (editable False, commit -, requested -); ray 2.59.0 (editable False, commit -, requested -); raypoolkit 0.3.0 (editable False, commit 67a75b97, requested v0.3.0); runregistrykit 0.2.0 (editable False, commit 0bae3a3c, requested v0.2.0); scipy 1.17.0 (editable False, commit -, requested -)
+  status: state done exit_code 0 pid 37955 heartbeat 2026-10-26T20:11:12+00:00 stage CALCULATE BBN DATA, all work items complete
+  fingerprint: 752c6c0712c74f63c1e429c8336eb20fb5e54676ab69ff9a5109774aa0297838 taken 2026-10-26T20:10:48+00:00 by jordan-normalization-09-resumed-a2-20261026T200824 problems {}
+  fingerprint_sidecar: written
+=== jordan-normalization-09-resumed-b-20261026T201130
+  script: main.py
+  script_sha256: ec6144aa02f5014dbc1aaecee81dd22efa030b2ae507c4eb6b7965b9e489f87d
+  git_head: 4dc31eae6d3a523abd58346aa9628ea24ad97cfe
+  git_dirty: False
+  results: var/datastores/jordan-normalization-09-resumed.db
+  results_store_id: 5f9ffeeba8994e4ba41504eb24040cc0
+  scope: config exponential.yaml; β 0.5; M 0.001 Mp; n 1; φ* 1 Mp; tuning tolerance 1e-05; 16 shards; job jordan-normalization-09-resumed-b
+  created: 2026-10-26T20:11:30+00:00
+  packages: SQLAlchemy 2.0.55 (editable False, commit -, requested -); datastorekit 0.4.0 (editable False, commit c8570e84, requested v0.4.0); numpy 2.3.5 (editable False, commit -, requested -); ray 2.59.0 (editable False, commit -, requested -); raypoolkit 0.3.0 (editable False, commit 67a75b97, requested v0.3.0); runregistrykit 0.2.0 (editable False, commit 0bae3a3c, requested v0.2.0); scipy 1.17.0 (editable False, commit -, requested -)
+  status: state done exit_code 0 pid 38353 heartbeat 2026-10-26T20:12:31+00:00 stage CALCULATE BBN DATA, all work items complete
+  fingerprint: f953123a9748393869d1b0ffb8a29ab663cf9fb0b871233d2479f0151ea80985 taken 2026-10-26T20:12:07+00:00 by jordan-normalization-09-resumed-b-20261026T201130 problems {}
+  fingerprint_sidecar: written
+=== jordan-normalization-09-resumed-c-20261026T201250
+  script: main.py
+  script_sha256: ec6144aa02f5014dbc1aaecee81dd22efa030b2ae507c4eb6b7965b9e489f87d
+  git_head: 4dc31eae6d3a523abd58346aa9628ea24ad97cfe
+  git_dirty: False
+  results: var/datastores/jordan-normalization-09-resumed.db
+  results_store_id: 5f9ffeeba8994e4ba41504eb24040cc0
+  scope: config exponential.yaml; β 3; M 0.1, 1e-05 Mp; n 1; φ* 5 Mp; tuning tolerance 1e-05; 16 shards; job jordan-normalization-09-resumed-c
+  created: 2026-10-26T20:12:50+00:00
+  packages: SQLAlchemy 2.0.55 (editable False, commit -, requested -); datastorekit 0.4.0 (editable False, commit c8570e84, requested v0.4.0); numpy 2.3.5 (editable False, commit -, requested -); ray 2.59.0 (editable False, commit -, requested -); raypoolkit 0.3.0 (editable False, commit 67a75b97, requested v0.3.0); runregistrykit 0.2.0 (editable False, commit 0bae3a3c, requested v0.2.0); scipy 1.17.0 (editable False, commit -, requested -)
+  status: state done exit_code 0 pid 38606 heartbeat 2026-10-26T20:15:52+00:00 stage CALCULATE BBN DATA, all work items complete
+  fingerprint: 3b92d064512079e30bb2291d6d82732fed10c187e50c61e4b3d54cb47b3415a7 taken 2026-10-26T20:15:28+00:00 by jordan-normalization-09-resumed-c-20261026T201250 problems {}
+  fingerprint_sidecar: written

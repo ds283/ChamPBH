@@ -1,0 +1,46 @@
+2026-10-26T20:00:13.061+00:00 X recorder started: log /Users/ds283/Documents/Code/ChamPBH/var/jordan-normalization-09/reference-b.log, runs var/runs, poll 0.5 s
+2026-10-26T20:00:14.575+00:00 L ** registered_run: registered as jordan-normalization-09-reference-b-20261026T200014
+2026-10-26T20:00:14.575+00:00 L **   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/jordan-normalization-09-reference-b-20261026T200014/manifest.json
+2026-10-26T20:00:14.575+00:00 L **   list it with: ./venv/bin/python -m runregistrykit list
+2026-10-26T20:00:14.575+00:00 H 2026-10-26T20:00:14+00:00 running list it with: ./venv/bin/python -m runregistrykit list
+2026-10-26T20:00:15.080+00:00 L >> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-10-26T20:00:15.080+00:00 L 2026-10-26 20:00:14,900	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-10-26T20:00:15.081+00:00 L 2026-10-26 20:00:14,946	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at http://127.0.0.1:8267 
+2026-10-26T20:00:15.081+00:00 H 2026-10-26T20:00:14+00:00 running packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-10-26T20:00:17.107+00:00 L >> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/jordan-normalization-09-reference.db" with 16 shards
+2026-10-26T20:00:17.107+00:00 H 2026-10-26T20:00:17+00:00 running Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/jordan-normalization-09-reference.db" with 16 shards
+2026-10-26T20:00:27.691+00:00 L 
+2026-10-26T20:00:27.691+00:00 L ** BUILDING GRID OF MODELS TO SAMPLE
+2026-10-26T20:00:27.691+00:00 L    -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+2026-10-26T20:00:27.691+00:00 L    -- populated beta sample grid with 1 value = [ 0.5 ]
+2026-10-26T20:00:27.691+00:00 L    -- populated M sample grid with 1 value = [ 0.001 Mp ]
+2026-10-26T20:00:27.691+00:00 L    -- total number of models to integrate = 1
+2026-10-26T20:00:27.691+00:00 L 
+2026-10-26T20:00:27.691+00:00 L >> RUNNING PIPELINE FOR MODEL QCD_Cosmology
+2026-10-26T20:00:27.692+00:00 L 
+2026-10-26T20:00:27.692+00:00 L ** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-10-26T20:00:27.692+00:00 L (Datastore pid=36601) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+2026-10-26T20:00:27.692+00:00 H 2026-10-26T20:00:27+00:00 running CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-10-26T20:00:32.226+00:00 L (compute_scalar_history pid=36618) -- tune jordan-normalization-09-reference-b-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=0.5)-2026-10-26T20:00:27 it=0 kind=seed H/H0-1=-1.355e-02 phi_ref/phi_min-1=-6.298e-03 norm=-276.784149811 phi_ref=6.2129003659e-02 wall=2.8
+2026-10-26T20:00:34.740+00:00 L (compute_scalar_history pid=36618) -- tune jordan-normalization-09-reference-b-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=0.5)-2026-10-26T20:00:27 it=1 kind=plain H/H0-1=+7.431e-05 phi_ref/phi_min-1=-1.955e-02 norm=-276.743277453 phi_ref=6.2522784584e-02 wall=2.8
+2026-10-26T20:00:37.765+00:00 L (compute_scalar_history pid=36618) -- tune jordan-normalization-09-reference-b-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=0.5)-2026-10-26T20:00:27 it=2 kind=secant H/H0-1=+2.246e-04 phi_ref/phi_min-1=+2.739e-04 norm=-276.74351482 phi_ref=6.3860714535e-02 wall=2.8
+2026-10-26T20:00:40.791+00:00 L (compute_scalar_history pid=36618) -- tune jordan-normalization-09-reference-b-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=0.5)-2026-10-26T20:00:27 it=3 kind=secant H/H0-1=+9.519e-07 phi_ref/phi_min-1=+3.826e-06 norm=-276.744159646 phi_ref=6.3821650482e-02 wall=2.9
+2026-10-26T20:00:41.801+00:00 L    -- ALL WORK ITEMS COMPLETE in time 14.4s
+2026-10-26T20:00:41.801+00:00 L       Queue summary: 1 lookup (avg 249.6/hr), 1 compute (avg 249.6/hr), 1 store (avg 249.6/hr), 1 validation (avg 249.6/hr)
+2026-10-26T20:00:41.801+00:00 L 
+2026-10-26T20:00:41.801+00:00 L ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+2026-10-26T20:00:41.801+00:00 H 2026-10-26T20:00:41+00:00 running CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+2026-10-26T20:00:42.305+00:00 L    -- ALL WORK ITEMS COMPLETE in time 0.358s
+2026-10-26T20:00:42.305+00:00 L       Queue summary: 1 lookup (avg 167.7/min), 1 compute (avg 167.7/min), 1 store (avg 167.7/min), 1 validation (avg 167.7/min)
+2026-10-26T20:00:42.305+00:00 L -- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+2026-10-26T20:00:42.306+00:00 L 
+2026-10-26T20:00:42.307+00:00 L ** CALCULATE BBN DATA
+2026-10-26T20:00:42.307+00:00 H 2026-10-26T20:00:42+00:00 running CALCULATE BBN DATA
+2026-10-26T20:00:50.878+00:00 L    -- ALL WORK ITEMS COMPLETE in time 8.68s
+2026-10-26T20:00:50.878+00:00 L       Queue summary: 1 lookup (avg 414.6/hr), 1 compute (avg 414.6/hr), 1 store (avg 414.6/hr), 1 validation (avg 414.6/hr)
+2026-10-26T20:00:50.878+00:00 L -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+2026-10-26T20:00:50.883+00:00 H 2026-10-26T20:00:50+00:00 running CALCULATE BBN DATA, all work items complete
+2026-10-26T20:01:15.074+00:00 L ** driver exit status 0
+2026-10-26T20:01:15.074+00:00 L ** launcher saw exit status 0
+2026-10-26T20:01:15.075+00:00 H 2026-10-26T20:01:14+00:00 done CALCULATE BBN DATA, all work items complete
+2026-10-26T20:01:15.075+00:00 X exit: the launcher's line was seen; status.json read once more

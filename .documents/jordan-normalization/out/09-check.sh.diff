@@ -1,0 +1,16 @@
+2c2
+< # ray-sqla-align 02: the one check after a launch (the orchestrator's note for 02, ruling 4).
+---
+> # jordan-normalization 09: the one check after a launch (the orchestrator's note for 09, ruling 4).
+4,6c4,6
+< # Starts nothing and signals nothing. Appends to var/ray-sqla-align-02/02-checks.txt.
+< #   sh var/ray-sqla-align-02/tools/check.sh SLUG
+< L=var/ray-sqla-align-02
+---
+> # Starts nothing and signals nothing. Appends to var/jordan-normalization-09/09-checks.txt.
+> #   sh var/jordan-normalization-09/tools/check.sh SLUG
+> L=var/jordan-normalization-09
+32c32
+< } >> $L/02-checks.txt 2>&1
+---
+> } >> $L/09-checks.txt 2>&1

@@ -1,0 +1,19 @@
+uptime: 20:18  up 21 days, 19:04, 2 users, load averages: 8.60 6.17 5.44
+start: 2026-10-26 20:18:59 +0000
+$ PYTHONPATH=. ./venv/bin/python tools/history_and_bbn.py 0.5 1e-3 --phi-init-Mp 5
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+-- tune history_and_bbn-beta0.5-M0.001 it=0 kind=seed H/H0-1=-1.846e-02 phi_ref/phi_min-1=-6.128e-03 norm=-276.784149811 phi_ref=6.2129003659e-02 wall=0.8
+-- tune history_and_bbn-beta0.5-M0.001 it=1 kind=plain H/H0-1=+3.785e-04 phi_ref/phi_min-1=-2.584e-02 norm=-276.728464084 phi_ref=6.2512054436e-02 wall=0.8
+-- tune history_and_bbn-beta0.5-M0.001 it=2 kind=secant H/H0-1=+3.165e-04 phi_ref/phi_min-1=-2.024e-04 norm=-276.729623281 phi_ref=6.4224833863e-02 wall=0.8
+-- tune history_and_bbn-beta0.5-M0.001 it=3 kind=secant H/H0-1=-6.582e-06 phi_ref/phi_min-1=+6.279e-06 norm=-276.730535853 phi_ref=6.4210129928e-02 wall=0.8
+history beta=0.5 M=0.001: RHS=24309 accepted_steps=2868 reflections=0 samples=4620 integrations=4 wall=3.1 s
+tuning beta=0.5 M=0.001: normalization=-276.7305358530105 V_ref=6.671430241172124e-121 phi_ref=0.06421012992791278 phi_0=0.05568261410958742 pi_0=0.05291204161274784 tracking=0.6334956605858231 residual_H=-6.581715529141441e-06 residual_phi=6.279225380323439e-06 tuning_iterations=4 plain_steps=1 secant_steps=2 guard_steps=0 seed_kind=tracking seed_normalization=-276.7841498114068 seed_phi_ref=0.062129003658643864
+bounce beta=0.5 M=0.001: N=36.955071745 T_J=0.000000 MeV phi=6.996332e-05 reflected=False
+fixed_T beta=0.5 M=0.001: 1MeV crossings=1 phi=3.835253226e+00 ratio=4.191912797e+01 stand_in_phi=3.835253194e+00 stand_in_ratio=4.191911966e+01 | 70keV crossings=1 phi=3.647276578e+00 ratio=3.180149533e+01 stand_in_phi=3.647277270e+00 stand_in_ratio=3.180153159e+01
+ratio beta=0.5 M=0.001 [0.3,1) keV: n=130 min=31.58 median=31.6 max=31.61 rms_step=0.0002602
+ratio beta=0.5 M=0.001 [1,3) keV: n=120 min=31.61 median=31.62 max=31.62 rms_step=8.095e-05
+ratio beta=0.5 M=0.001 [3,10) keV: n=131 min=31.62 median=31.62 max=31.63 rms_step=2.376e-05
+ratio beta=0.5 M=0.001 [10,100) keV: n=264 min=31.62 median=31.63 max=32.68 rms_step=0.008587
+bbn beta=0.5 M=0.001: FAILURE network=small wall=1.0 s reason=PRyMordial: ComputationFailureError: T_in_MeV=0.00019824 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+exit 1
+end: 2026-10-26 20:19:05 +0000

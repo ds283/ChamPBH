@@ -1,0 +1,168 @@
+"""
+The stored-values reader of jordan-normalization prompt 09 (the orchestrator's note for 09,
+ruling 13). Stdlib only.
+
+    ./venv/bin/python histories.py STORE_STEM
+
+STORE_STEM is the store's path without `.db` (e.g. var/datastores/jordan-normalization-09-reference).
+Every shard (`<stem>-shard*.db`) is read through sqlite3 with `file:...?mode=ro` URIs only; the
+primary is not opened, and no file is written.
+
+Per ScalarHistory row it prints: M (M_value, as stored, in eV), n, beta, phi*, pi*, T* (the floats
+as stored, and their float.hex); atol, rtol and the tuning tolerance (tolerance.log10_tol, and
+10**log10_tol); validated, failure, failure_reason, z_samples, compute_time, timestamp; and the
+fifteen TUNING_OUTPUT_KEYS columns, floats by float.hex, ints and seed_kind as stored. It counts
+the rows of ExponentialModel, AdiabaticHistory and BBNData and gives each BBNData row's failure and
+reason. Last, one `JSON {...}` line per ScalarHistory row, for the comparison.
+"""
+
+import glob
+import json
+import sqlite3
+import sys
+from urllib.parse import quote
+
+TUNING_OUTPUT_KEYS = (
+    "normalization",
+    "V_ref",
+    "phi_ref",
+    "phi_0",
+    "pi_0",
+    "tracking",
+    "residual_H",
+    "residual_phi",
+    "tuning_iterations",
+    "plain_steps",
+    "secant_steps",
+    "guard_steps",
+    "seed_kind",
+    "seed_normalization",
+    "seed_phi_ref",
+)
+
+
+def ro(path):
+    return sqlite3.connect("file:" + quote(path, safe="/") + "?mode=ro", uri=True)
+
+
+def h(x):
+    if x is None:
+        return "NULL"
+    if isinstance(x, float):
+        return f"{x!r} ({x.hex()})"
+    return repr(x)
+
+
+def value_col(conn, table):
+    cols = [r[1] for r in conn.execute(f'PRAGMA table_info("{table}")')]
+    vs = [c for c in cols if c.startswith("value")]
+    return vs[0]
+
+
+def one(conn, table, serial, col=None):
+    col = col or value_col(conn, table)
+    r = conn.execute(f'SELECT "{col}" FROM "{table}" WHERE serial = ?', (serial,)).fetchone()
+    return None if r is None else r[0]
+
+
+def main(argv):
+    stem = argv[0]
+    shards = sorted(glob.glob(glob.escape(stem) + "-shard*.db"))
+    print(f"store {stem}: {len(shards)} shard files")
+    rows = []
+    counts = {"ExponentialModel": 0, "AdiabaticHistory": 0, "BBNData": 0, "ScalarHistory": 0}
+    bbn = []
+    for path in shards:
+        conn = ro(path)
+        conn.row_factory = sqlite3.Row
+        tables = {r[0] for r in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+        for t in counts:
+            if t in tables:
+                counts[t] += conn.execute(f'SELECT COUNT(*) FROM "{t}"').fetchone()[0]
+        if "BBNData" in tables:
+            for r in conn.execute(
+                'SELECT b.serial, b.scalar_history_serial, b.failure, b.failure_reason, b.validated, '
+                'b.Yp_BBN, b.DOverH, b.small_network, b.z_samples, b.timestamp, s.label '
+                'FROM "BBNData" b LEFT JOIN "ScalarHistory" s ON s.serial = b.scalar_history_serial'
+            ):
+                bbn.append((path.rsplit("-", 1)[-1], dict(r)))
+        if "ScalarHistory" not in tables:
+            conn.close()
+            continue
+        for r in conn.execute('SELECT * FROM "ScalarHistory" ORDER BY serial'):
+            r = dict(r)
+            em = conn.execute(
+                'SELECT * FROM "ExponentialModel" WHERE serial = ?', (r["model_serial"],)
+            ).fetchone()
+            em = dict(em) if em is not None else {}
+            M = one(conn, "M_value", em.get("M_serial")) if em else None
+            beta = one(conn, "beta_value", em.get("beta_serial")) if em else None
+            phi = one(conn, "phi_value", r["phi_Einstein_init_serial"])
+            pi = one(conn, "pi_value", r["pi_Einstein_init_serial"])
+            T = one(conn, "temperature", r["T_Jordan_init_serial"])
+            atol = one(conn, "tolerance", r["atol_serial"], "log10_tol")
+            rtol = one(conn, "tolerance", r["rtol_serial"], "log10_tol")
+            ttol = one(conn, "tolerance", r["tuning_tol_serial"], "log10_tol")
+            rec = {
+                "shard": path.rsplit("-", 1)[-1],
+                "serial": r["serial"],
+                "label": r["label"],
+                "model_type": r["model_type"],
+                "model_serial": r["model_serial"],
+                "M_value_eV": M,
+                "n_value": em.get("n_value"),
+                "beta": beta,
+                "phi_init_Mp": phi,
+                "pi_init_Mp": pi,
+                "T_init_GeV": T,
+                "log10_atol": atol,
+                "log10_rtol": rtol,
+                "log10_tuning_tol": ttol,
+                "validated": r["validated"],
+                "failure": r["failure"],
+                "failure_reason": r["failure_reason"],
+                "z_samples": r["z_samples"],
+                "compute_time": r["compute_time"],
+                "compute_steps": r["compute_steps"],
+                "timestamp": r["timestamp"],
+            }
+            for k in TUNING_OUTPUT_KEYS:
+                rec[k] = r[k]
+            rows.append(rec)
+        conn.close()
+
+    rows.sort(key=lambda x: (x["M_value_eV"] or 0, x["beta"] or 0, x["phi_init_Mp"] or 0))
+    for rec in rows:
+        print()
+        print(f"ScalarHistory {rec['shard']} serial {rec['serial']}: {rec['label']}")
+        print(f"  model_type {rec['model_type']} model_serial {rec['model_serial']}")
+        for k in ("M_value_eV", "n_value", "beta", "phi_init_Mp", "pi_init_Mp", "T_init_GeV"):
+            print(f"  {k} = {h(rec[k])}")
+        for k in ("log10_atol", "log10_rtol", "log10_tuning_tol"):
+            v = rec[k]
+            print(f"  {k} = {h(v)}  -> {10.0 ** v!r}" if v is not None else f"  {k} = NULL")
+        for k in ("validated", "failure", "failure_reason", "z_samples", "compute_time", "compute_steps", "timestamp"):
+            print(f"  {k} = {h(rec[k])}")
+        for k in TUNING_OUTPUT_KEYS:
+            print(f"  {k} = {h(rec[k])}")
+
+    print()
+    print("counts: " + ", ".join(f"{k} {v}" for k, v in counts.items()))
+    print(f"BBNData rows: {len(bbn)}")
+    for shard, b in sorted(bbn, key=lambda x: (x[1]["label"] or "")):
+        print(
+            f"  {shard} serial {b['serial']} history {b['scalar_history_serial']} ({b['label']}): "
+            f"failure {b['failure']} validated {b['validated']} small_network {b['small_network']} "
+            f"z_samples {b['z_samples']} Yp {b['Yp_BBN']!r} D/H {b['DOverH']!r} reason {b['failure_reason']!r}"
+        )
+    print()
+    for rec in rows:
+        out = {}
+        for k, v in rec.items():
+            out[k] = {"hex": v.hex(), "repr": repr(v)} if isinstance(v, float) else v
+        print("JSON " + json.dumps(out, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

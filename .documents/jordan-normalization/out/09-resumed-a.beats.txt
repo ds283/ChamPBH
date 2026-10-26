@@ -1,0 +1,48 @@
+2026-10-26T20:04:56.329+00:00 X recorder started: log /Users/ds283/Documents/Code/ChamPBH/var/jordan-normalization-09/resumed-a.log, runs var/runs, poll 0.5 s
+2026-10-26T20:04:57.844+00:00 L ** registered_run: registered as jordan-normalization-09-resumed-a-20261026T200457
+2026-10-26T20:04:57.844+00:00 L **   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/jordan-normalization-09-resumed-a-20261026T200457/manifest.json
+2026-10-26T20:04:57.844+00:00 L **   list it with: ./venv/bin/python -m runregistrykit list
+2026-10-26T20:04:57.844+00:00 H 2026-10-26T20:04:57+00:00 running list it with: ./venv/bin/python -m runregistrykit list
+2026-10-26T20:04:58.349+00:00 L >> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-10-26T20:04:58.349+00:00 L 2026-10-26 20:04:57,932	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-10-26T20:04:58.349+00:00 L 2026-10-26 20:04:57,968	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at http://127.0.0.1:8267 
+2026-10-26T20:04:58.349+00:00 L >> Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/jordan-normalization-09-resumed.db" with 16 shards
+2026-10-26T20:04:58.350+00:00 H 2026-10-26T20:04:57+00:00 running Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/jordan-normalization-09-resumed.db" with 16 shards
+2026-10-26T20:05:28.097+00:00 L 
+2026-10-26T20:05:28.097+00:00 L ** BUILDING GRID OF MODELS TO SAMPLE
+2026-10-26T20:05:28.097+00:00 L    -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+2026-10-26T20:05:28.097+00:00 L    -- populated beta sample grid with 4 values = [ 0.5, 1.5, 3, 5.5 ]
+2026-10-26T20:05:28.097+00:00 L    -- populated M sample grid with 1 value = [ 0.001 Mp ]
+2026-10-26T20:05:28.097+00:00 L    -- total number of models to integrate = 4
+2026-10-26T20:05:28.097+00:00 L (Datastore pid=37448) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+2026-10-26T20:05:28.097+00:00 L 
+2026-10-26T20:05:28.097+00:00 L >> RUNNING PIPELINE FOR MODEL QCD_Cosmology
+2026-10-26T20:05:28.097+00:00 L 
+2026-10-26T20:05:28.097+00:00 L ** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-10-26T20:05:28.097+00:00 H 2026-10-26T20:05:28+00:00 running CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-10-26T20:05:31.626+00:00 L (compute_scalar_history pid=37554) -- tune jordan-normalization-09-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=0.5)-2026-10-26T20:05:28 it=0 kind=seed H/H0-1=-1.846e-02 phi_ref/phi_min-1=-6.128e-03 norm=-276.784149811 phi_ref=6.2129003659e-02 wall=0.8
+2026-10-26T20:05:32.131+00:00 L (compute_scalar_history pid=37554) -- tune jordan-normalization-09-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=0.5)-2026-10-26T20:05:28 it=1 kind=plain H/H0-1=+3.785e-04 phi_ref/phi_min-1=-2.584e-02 norm=-276.728464084 phi_ref=6.2512054436e-02 wall=0.8
+2026-10-26T20:05:33.140+00:00 L (compute_scalar_history pid=37554) -- tune jordan-normalization-09-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=0.5)-2026-10-26T20:05:28 it=2 kind=secant H/H0-1=+3.165e-04 phi_ref/phi_min-1=-2.024e-04 norm=-276.729623281 phi_ref=6.4224833863e-02 wall=0.8
+2026-10-26T20:05:33.644+00:00 L (compute_scalar_history pid=37554) -- tune jordan-normalization-09-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=0.5)-2026-10-26T20:05:28 it=3 kind=secant H/H0-1=-6.582e-06 phi_ref/phi_min-1=+6.279e-06 norm=-276.730535853 phi_ref=6.4210129928e-02 wall=0.8
+2026-10-26T20:05:33.645+00:00 L (Datastore pid=37516) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO" [repeated 15x across cluster] (Ray deduplicates logs by default. Set RAY_DEDUP_LOGS=0 to disable log deduplication, or see https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#log-deduplication for more options.)
+2026-10-26T20:05:39.192+00:00 L (compute_scalar_history pid=37552) -- tune jordan-normalization-09-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=3)-2026-10-26T20:05:28 it=0 kind=seed H/H0-1=-8.953e-03 phi_ref/phi_min-1=-1.419e-03 norm=-276.978691516 phi_ref=2.3323288549e-02 wall=8.5 [repeated 2x across cluster]
+2026-10-26T20:05:41.205+00:00 L (compute_scalar_history pid=37553) -- tune jordan-normalization-09-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=1.5)-2026-10-26T20:05:28 it=1 kind=plain H/H0-1=+3.779e-04 phi_ref/phi_min-1=-1.448e-02 norm=-276.852912877 phi_ref=3.4437015144e-02 wall=5.4
+2026-10-26T20:05:46.750+00:00 L (compute_scalar_history pid=37553) -- tune jordan-normalization-09-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=1.5)-2026-10-26T20:05:28 it=2 kind=secant H/H0-1=+2.425e-04 phi_ref/phi_min-1=-7.560e-04 norm=-276.854087304 phi_ref=3.4946037449e-02 wall=5.3
+2026-10-26T20:05:47.757+00:00 L (compute_scalar_history pid=37552) -- tune jordan-normalization-09-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=3)-2026-10-26T20:05:28 it=1 kind=plain H/H0-1=+6.028e-04 phi_ref/phi_min-1=-1.254e-02 norm=-276.949888952 phi_ref=2.3356428996e-02 wall=8.7
+2026-10-26T20:05:51.792+00:00 L (compute_scalar_history pid=37553) -- tune jordan-normalization-09-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=1.5)-2026-10-26T20:05:28 it=3 kind=secant H/H0-1=+1.272e-07 phi_ref/phi_min-1=+1.790e-06 norm=-276.854836803 phi_ref=3.4962266385e-02 wall=5.3
+2026-10-26T20:05:55.825+00:00 L (compute_scalar_history pid=37552) -- tune jordan-normalization-09-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=3)-2026-10-26T20:05:28 it=2 kind=secant H/H0-1=+2.730e-04 phi_ref/phi_min-1=-1.215e-03 norm=-276.951729281 phi_ref=2.3640261674e-02 wall=8.2
+2026-10-26T20:06:04.900+00:00 L (compute_scalar_history pid=37552) -- tune jordan-normalization-09-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=3)-2026-10-26T20:05:28 it=3 kind=secant H/H0-1=-1.440e-06 phi_ref/phi_min-1=+9.425e-06 norm=-276.952620868 phi_ref=2.3662903571e-02 wall=8.6
+2026-10-26T20:06:04.900+00:00 H 2026-10-26T20:06:04+00:00 running CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-10-26T20:06:14.479+00:00 L (compute_scalar_history pid=37553) -- tune jordan-normalization-09-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-10-26T20:05:51 it=0 kind=seed H/H0-1=-1.025e-02 phi_ref/phi_min-1=-6.533e-04 norm=-277.086864556 phi_ref=1.6464851041e-02 wall=22.3
+2026-10-26T20:06:35.650+00:00 L (compute_scalar_history pid=37553) -- tune jordan-normalization-09-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-10-26T20:05:51 it=1 kind=plain H/H0-1=+9.675e-04 phi_ref/phi_min-1=-1.412e-02 norm=-277.052687849 phi_ref=1.6475613804e-02 wall=21.1
+2026-10-26T20:06:35.650+00:00 H 2026-10-26T20:06:35+00:00 running CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-10-26T20:06:57.815+00:00 L (compute_scalar_history pid=37553) -- tune jordan-normalization-09-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-10-26T20:05:51 it=2 kind=secant H/H0-1=+3.803e-04 phi_ref/phi_min-1=-1.870e-03 norm=-277.05563084 phi_ref=1.6692999168e-02 wall=21.8
+2026-10-26T20:06:59.831+00:00 L ** SIGTERM at 2026-10-26 20:06:59 +0000: recorded killed, exit code 143; stopping main.py; the process will exit with status 143
+2026-10-26T20:06:59.831+00:00 L ** SIGTERM: main.py ended with SystemExit(1); recording killed, exit code 143
+2026-10-26T20:06:59.831+00:00 H 2026-10-26T20:06:59+00:00 killed CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-10-26T20:07:19.489+00:00 L (compute_scalar_history pid=37553) -- tune jordan-normalization-09-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-10-26T20:05:51 it=3 kind=secant H/H0-1=-5.377e-06 phi_ref/phi_min-1=+2.855e-05 norm=-277.056939828 phi_ref=1.6719773356e-02 wall=21.9
+2026-10-26T20:07:19.490+00:00 H 2026-10-26T20:07:19+00:00 killed CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-10-26T20:07:24.531+00:00 H 2026-10-26T20:07:24+00:00 killed CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-10-26T20:07:34.616+00:00 L ** driver exit status 143
+2026-10-26T20:07:35.121+00:00 L ** launcher saw exit status 143
+2026-10-26T20:07:35.121+00:00 X exit: the launcher's line was seen; status.json read once more

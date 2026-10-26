@@ -1,0 +1,174 @@
+$ PYTHONPATH=. ./venv/bin/python <scratch>/compare_tool.py <ref> <res> <tool> prompts/jordan-normalization/logs/06-probes
+T* as the build stores it: (2e4 * GeV) / GeV = 20000.0 (0x1.3880000000000p+14); 2e4 * GeV = 8.212460979206235e-15 (0x1.27e2953c2b870p-47)
+rows: reference 7, resumed 7
+
+=== beta=0.5 M=0.001 M_P phi*=5  (tool 0.5-1e-3-phi5.txt; load at its start 8.60 6.17 5.44)
+    history beta=0.5 M=0.001: RHS=24309 accepted_steps=2868 reflections=0 samples=4620 integrations=4 wall=3.1 s
+    bbn beta=0.5 M=0.001: FAILURE network=small wall=1.0 s reason=PRyMordial: ComputationFailureError: T_in_MeV=0.00019824 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+  reference: inputs OK (z_samples 4620 vs samples=4620); converged True (|res_H| 6.582e-06, |res_phi| 6.279e-06 < 1e-05); 15 keys: all equal
+  resumed: inputs OK (z_samples 4620 vs samples=4620); converged True (|res_H| 6.582e-06, |res_phi| 6.279e-06 < 1e-05); 15 keys: all equal
+    key-by-key (tool's printed repr | its float.hex | reference stored hex | resumed stored hex):
+      normalization       -276.7305358530105 | -0x1.14bb0465cd3c5p+8 | -0x1.14bb0465cd3c5p+8 | -0x1.14bb0465cd3c5p+8
+      V_ref               6.671430241172124e-121 | 0x1.b904d53274a3fp-400 | 0x1.b904d53274a3fp-400 | 0x1.b904d53274a3fp-400
+      phi_ref             0.06421012992791278 | 0x1.07013381cbf72p-4 | 0x1.07013381cbf72p-4 | 0x1.07013381cbf72p-4
+      phi_0               0.05568261410958742 | 0x1.c826e7d1ce921p-5 | 0x1.c826e7d1ce921p-5 | 0x1.c826e7d1ce921p-5
+      pi_0                0.05291204161274784 | 0x1.b174980952aebp-5 | 0x1.b174980952aebp-5 | 0x1.b174980952aebp-5
+      tracking            0.6334956605858231 | 0x1.44598b10bf806p-1 | 0x1.44598b10bf806p-1 | 0x1.44598b10bf806p-1
+      residual_H          -6.581715529141441e-06 | -0x1.b9b1030520000p-18 | -0x1.b9b1030520000p-18 | -0x1.b9b1030520000p-18
+      residual_phi        6.279225380323439e-06 | 0x1.a5644546c0000p-18 | 0x1.a5644546c0000p-18 | 0x1.a5644546c0000p-18
+      tuning_iterations   4 | - | 4 | 4
+      plain_steps         1 | - | 1 | 1
+      secant_steps        2 | - | 2 | 2
+      guard_steps         0 | - | 0 | 0
+      seed_kind           tracking | - | tracking | tracking
+      seed_normalization  -276.7841498114068 | -0x1.14c8be0ac3282p+8 | -0x1.14c8be0ac3282p+8 | -0x1.14c8be0ac3282p+8
+      seed_phi_ref        0.062129003658643864 | 0x1.fcf5f6db1a216p-5 | 0x1.fcf5f6db1a216p-5 | 0x1.fcf5f6db1a216p-5
+    note 09's probe line: normalization -276.7305358530105 (-0x1.14bb0465cd3c5p+8) vs stored -0x1.14bb0465cd3c5p+8: equal; phi_ref 0.06421012992791278 (0x1.07013381cbf72p-4) vs stored 0x1.07013381cbf72p-4: equal
+    section 0.3: no entry; Lambda 2.1924036 meV, phi_ref 0.0642101
+
+=== beta=1.5 M=0.001 M_P phi*=5  (tool 1.5-1e-3-phi5.txt; load at its start 10.73 6.83 5.70)
+    history beta=1.5 M=0.001: RHS=194746 accepted_steps=19958 reflections=0 samples=5161 integrations=4 wall=21.3 s
+    bbn beta=1.5 M=0.001: Yp=0.2375649458 DoH=2.22274769 He3oH=1.007194204 Li7oH=5.881808751 network=small PRyM_time=8.9 s wall=8.9 s PRyM_version=bf24c3d+ri02+sr01+bt02
+  reference: inputs OK (z_samples 5161 vs samples=5161); converged True (|res_H| 1.272e-07, |res_phi| 1.790e-06 < 1e-05); 15 keys: all equal
+  resumed: inputs OK (z_samples 5161 vs samples=5161); converged True (|res_H| 1.272e-07, |res_phi| 1.790e-06 < 1e-05); 15 keys: all equal
+    key-by-key (tool's printed repr | its float.hex | reference stored hex | resumed stored hex):
+      normalization       -276.85483680276144 | -0x1.14dad695af471p+8 | -0x1.14dad695af471p+8 | -0x1.14dad695af471p+8
+      V_ref               5.9688943800676226e-121 | 0x1.8a93cb9e0234dp-400 | 0x1.8a93cb9e0234dp-400 | 0x1.8a93cb9e0234dp-400
+      phi_ref             0.03496226638511382 | 0x1.1e692fd6fab54p-5 | 0x1.1e692fd6fab54p-5 | 0x1.1e692fd6fab54p-5
+      phi_0               0.033428459080018603 | 0x1.11d88f5023ab5p-5 | 0x1.11d88f5023ab5p-5 | 0x1.11d88f5023ab5p-5
+      pi_0                0.04404438417254562 | 0x1.68cfc4b2fe4eep-5 | 0x1.68cfc4b2fe4eep-5 | 0x1.68cfc4b2fe4eep-5
+      tracking            0.8783809840414798 | 0x1.c1bb26ffc5dd4p-1 | 0x1.c1bb26ffc5dd4p-1 | 0x1.c1bb26ffc5dd4p-1
+      residual_H          1.2718458641813868e-07 | 0x1.1120774000000p-23 | 0x1.1120774000000p-23 | 0x1.1120774000000p-23
+      residual_phi        1.7897725401727627e-06 | 0x1.e0703b8100000p-20 | 0x1.e0703b8100000p-20 | 0x1.e0703b8100000p-20
+      tuning_iterations   4 | - | 4 | 4
+      plain_steps         1 | - | 1 | 1
+      secant_steps        2 | - | 2 | 2
+      guard_steps         0 | - | 0 | 0
+      seed_kind           tracking | - | tracking | tracking
+      seed_normalization  -276.8846401994391 | -0x1.14e277c7b5516p+8 | -0x1.14e277c7b5516p+8 | -0x1.14e277c7b5516p+8
+      seed_phi_ref        0.03433537145080339 | 0x1.19467e2f45537p-5 | 0x1.19467e2f45537p-5 | 0x1.19467e2f45537p-5
+    06 (b1.5_M1e-3_phi5_secant.log): normalization -0x1.14dad695af471p+8 vs stored -0x1.14dad695af471p+8: equal; phi_ref 0x1.1e692fd6fab54p-5 vs stored 0x1.1e692fd6fab54p-5: equal
+    section 0.3: Lambda 2.1253218 meV vs 2.125913 -> Lambda/Lambda_03 - 1 = -2.7809e-04; phi_ref 0.0349623 vs 0.0349624 -> -3.822e-06
+
+=== beta=3 M=0.001 M_P phi*=5  (tool 3-1e-3-phi5.txt; load at its start 8.08 6.61 5.66)
+    history beta=3 M=0.001: RHS=293177 accepted_steps=30867 reflections=0 samples=5973 integrations=4 wall=32.8 s
+    bbn beta=3 M=0.001: Yp=0.2343979348 DoH=2.145602813 He3oH=0.9951790797 Li7oH=6.021397219 network=small PRyM_time=10.0 s wall=10.0 s PRyM_version=bf24c3d+ri02+sr01+bt02
+  reference: inputs OK (z_samples 5973 vs samples=5973); converged True (|res_H| 1.440e-06, |res_phi| 9.425e-06 < 1e-05); 15 keys: all equal
+  resumed: inputs OK (z_samples 5973 vs samples=5973); converged True (|res_H| 1.440e-06, |res_phi| 9.425e-06 < 1e-05); 15 keys: all equal
+    key-by-key (tool's printed repr | its float.hex | reference stored hex | resumed stored hex):
+      normalization       -276.95262086751717 | -0x1.14f3def60f793p+8 | -0x1.14f3def60f793p+8 | -0x1.14f3def60f793p+8
+      V_ref               5.487296126901317e-121 | 0x1.6abdb13d7d85dp-400 | 0x1.6abdb13d7d85dp-400 | 0x1.6abdb13d7d85dp-400
+      phi_ref             0.02366290357111863 | 0x1.83b1693dd8c76p-6 | 0x1.83b1693dd8c76p-6 | 0x1.83b1693dd8c76p-6
+      phi_0               0.023280991616860532 | 0x1.7d6f8e673932fp-6 | 0x1.7d6f8e673932fp-6 | 0x1.7d6f8e673932fp-6
+      pi_0                0.031896563818617406 | 0x1.054bf14e95693p-5 | 0x1.054bf14e95693p-5 | 0x1.054bf14e95693p-5
+      tracking            0.9133793022664125 | 0x1.d3a673b027b36p-1 | 0x1.d3a673b027b36p-1 | 0x1.d3a673b027b36p-1
+      residual_H          -1.4399086215588497e-06 | -0x1.8285c45b80000p-20 | -0x1.8285c45b80000p-20 | -0x1.8285c45b80000p-20
+      residual_phi        9.425299244414376e-06 | 0x1.3c42b43aa0000p-17 | 0x1.3c42b43aa0000p-17 | 0x1.3c42b43aa0000p-17
+      tuning_iterations   4 | - | 4 | 4
+      plain_steps         1 | - | 1 | 1
+      secant_steps        2 | - | 2 | 2
+      guard_steps         0 | - | 0 | 0
+      seed_kind           tracking | - | tracking | tracking
+      seed_normalization  -276.9786915156285 | -0x1.14fa8b86f47f4p+8 | -0x1.14fa8b86f47f4p+8 | -0x1.14fa8b86f47f4p+8
+      seed_phi_ref        0.02332328854885997 | 0x1.7e20f6635c914p-6 | 0x1.7e20f6635c914p-6 | 0x1.7e20f6635c914p-6
+    06 (b3_M1e-3_phi5_secant.log): normalization -0x1.14f3def60f793p+8 vs stored -0x1.14f3def60f793p+8: equal; phi_ref 0x1.83b1693dd8c76p-6 vs stored 0x1.83b1693dd8c76p-6: equal
+    section 0.3: Lambda 2.0739961 meV vs 2.074576 -> Lambda/Lambda_03 - 1 = -2.7954e-04; phi_ref 0.0236629 vs 0.0236629 -> +1.509e-07
+
+=== beta=5.5 M=0.001 M_P phi*=5  (tool 5.5-1e-3-phi5.txt; load at its start 7.33 6.68 5.74)
+    history beta=5.5 M=0.001: RHS=605244 accepted_steps=63354 reflections=0 samples=7328 integrations=5 wall=108.4 s
+    bbn beta=5.5 M=0.001: Yp=0.2307605351 DoH=2.052524898 He3oH=0.9816348403 Li7oH=6.192018785 network=small PRyM_time=9.7 s wall=9.7 s PRyM_version=bf24c3d+ri02+sr01+bt02
+  reference: inputs OK (z_samples 7328 vs samples=7328); converged True (|res_H| 9.983e-10, |res_phi| 5.114e-08 < 1e-05); 15 keys: all equal
+  resumed: inputs OK (z_samples 7328 vs samples=7328); converged True (|res_H| 9.983e-10, |res_phi| 5.114e-08 < 1e-05); 15 keys: all equal
+    key-by-key (tool's printed repr | its float.hex | reference stored hex | resumed stored hex):
+      normalization       -277.0569213884148 | -0x1.150e92666daf4p+8 | -0x1.150e92666daf4p+8 | -0x1.150e92666daf4p+8
+      V_ref               5.031337035894283e-121 | 0x1.4c997b5021f81p-400 | 0x1.4c997b5021f81p-400 | 0x1.4c997b5021f81p-400
+      phi_ref             0.016719361292186364 | 0x1.11ee157d6fccdp-6 | 0x1.11ee157d6fccdp-6 | 0x1.11ee157d6fccdp-6
+      phi_0               0.016618734018497824 | 0x1.104805c71050cp-6 | 0x1.104805c71050cp-6 | 0x1.104805c71050cp-6
+      pi_0                0.022856495781590585 | 0x1.767b1778849abp-6 | 0x1.767b1778849abp-6 | 0x1.767b1778849abp-6
+      tracking            0.9168967887345165 | 0x1.d5737ef2d826ap-1 | 0x1.d5737ef2d826ap-1 | 0x1.d5737ef2d826ap-1
+      residual_H          -9.983243121070018e-10 | -0x1.126ad40000000p-30 | -0x1.126ad40000000p-30 | -0x1.126ad40000000p-30
+      residual_phi        5.1137542644852374e-08 | 0x1.b744a54000000p-25 | 0x1.b744a54000000p-25 | 0x1.b744a54000000p-25
+      tuning_iterations   5 | - | 5 | 5
+      plain_steps         1 | - | 1 | 1
+      secant_steps        3 | - | 3 | 3
+      guard_steps         0 | - | 0 | 0
+      seed_kind           tracking | - | tracking | tracking
+      seed_normalization  -277.0868645556504 | -0x1.15163cc169b33p+8 | -0x1.15163cc169b33p+8 | -0x1.15163cc169b33p+8
+      seed_phi_ref        0.016464851040791605 | 0x1.0dc297303ccf3p-6 | 0x1.0dc297303ccf3p-6 | 0x1.0dc297303ccf3p-6
+    06 (b5.5_M1e-3_phi5_secant.log): normalization -0x1.150e92666daf4p+8 vs stored -0x1.150e92666daf4p+8: equal; phi_ref 0x1.11ee157d6fccdp-6 vs stored 0x1.11ee157d6fccdp-6: equal
+    section 0.3: Lambda 2.0206153 meV vs 2.021177 -> Lambda/Lambda_03 - 1 = -2.7789e-04; phi_ref 0.0167194 vs 0.0167195 -> -8.296e-06
+
+=== beta=0.5 M=0.001 M_P phi*=1  (tool 0.5-1e-3-phi1.txt; load at its start 7.96 7.22 6.07)
+    history beta=0.5 M=0.001: RHS=107541 accepted_steps=11414 reflections=0 samples=4403 integrations=4 wall=11.4 s
+    bbn beta=0.5 M=0.001: Yp=0.2463547923 DoH=2.400797749 He3oH=1.033897169 Li7oH=5.626903249 network=small PRyM_time=8.0 s wall=8.0 s PRyM_version=bf24c3d+ri02+sr01+bt02
+  reference: inputs OK (z_samples 4403 vs samples=4403); converged True (|res_H| 9.519e-07, |res_phi| 3.826e-06 < 1e-05); 15 keys: all equal
+  resumed: inputs OK (z_samples 4403 vs samples=4403); converged True (|res_H| 9.519e-07, |res_phi| 3.826e-06 < 1e-05); 15 keys: all equal
+    key-by-key (tool's printed repr | its float.hex | reference stored hex | resumed stored hex):
+      normalization       -276.74415964649995 | -0x1.14be813f20b86p+8 | -0x1.14be813f20b86p+8 | -0x1.14be813f20b86p+8
+      V_ref               6.581780291902322e-121 | 0x1.b317af0b7cd91p-400 | 0x1.b317af0b7cd91p-400 | 0x1.b317af0b7cd91p-400
+      phi_ref             0.06382165048150604 | 0x1.0569d9d98458ap-4 | 0x1.0569d9d98458ap-4 | 0x1.0569d9d98458ap-4
+      phi_0               0.05436359501460411 | 0x1.bd58b8d5c8674p-5 | 0x1.bd58b8d5c8674p-5 | 0x1.bd58b8d5c8674p-5
+      pi_0                0.061562388505771254 | 0x1.f851afa9784a4p-5 | 0x1.f851afa9784a4p-5 | 0x1.f851afa9784a4p-5
+      tracking            0.754946252655946 | 0x1.828850b2ca42dp-1 | 0x1.828850b2ca42dp-1 | 0x1.828850b2ca42dp-1
+      residual_H          9.519404822189159e-07 | 0x1.ff11b42200000p-21 | 0x1.ff11b42200000p-21 | 0x1.ff11b42200000p-21
+      residual_phi        3.82648485230952e-06 | 0x1.00ca825ac0000p-18 | 0x1.00ca825ac0000p-18 | 0x1.00ca825ac0000p-18
+      tuning_iterations   4 | - | 4 | 4
+      plain_steps         1 | - | 1 | 1
+      secant_steps        2 | - | 2 | 2
+      guard_steps         0 | - | 0 | 0
+      seed_kind           tracking | - | tracking | tracking
+      seed_normalization  -276.7841498114068 | -0x1.14c8be0ac3282p+8 | -0x1.14c8be0ac3282p+8 | -0x1.14c8be0ac3282p+8
+      seed_phi_ref        0.062129003658643864 | 0x1.fcf5f6db1a216p-5 | 0x1.fcf5f6db1a216p-5 | 0x1.fcf5f6db1a216p-5
+    06 (b0.5_M1e-3_phi1_secant.log): normalization -0x1.14be813f20b86p+8 vs stored -0x1.14be813f20b86p+8: equal; phi_ref 0x1.0569d9d98458ap-4 vs stored 0x1.0569d9d98458ap-4: equal
+    section 0.3: Lambda 2.1849491 meV vs 2.185554 -> Lambda/Lambda_03 - 1 = -2.7679e-04; phi_ref 0.0638217 vs 0.0638212 -> +7.058e-06
+
+=== beta=3 M=0.1 M_P phi*=5  (tool 3-0.1-phi5.txt; load at its start 7.96 7.25 6.11)
+    history beta=3 M=0.1: RHS=82922 accepted_steps=9068 reflections=0 samples=5933 integrations=9 wall=26.3 s
+    bbn beta=3 M=0.1: Yp=0.1724216307 DoH=1.011877092 He3oH=0.802990883 Li7oH=8.0813928 network=small PRyM_time=9.5 s wall=9.5 s PRyM_version=bf24c3d+ri02+sr01+bt02
+  reference: inputs OK (z_samples 5933 vs samples=5933); converged True (|res_H| 1.278e-08, |res_phi| 2.884e-07 < 1e-05); 15 keys: all equal
+  resumed: inputs OK (z_samples 5933 vs samples=5933); converged True (|res_H| 1.278e-08, |res_phi| 2.884e-07 < 1e-05); 15 keys: all equal
+    key-by-key (tool's printed repr | its float.hex | reference stored hex | resumed stored hex):
+      normalization       -278.5564275362755 | -0x1.168e7208f6e5bp+8 | -0x1.168e7208f6e5bp+8 | -0x1.168e7208f6e5bp+8
+      V_ref               2.0819757372766204e-121 | 0x1.1342aff8836cep-401 | 0x1.1342aff8836cep-401 | 0x1.1342aff8836cep-401
+      phi_ref             0.14772170282642422 | 0x1.2e88b7546431ap-3 | 0x1.2e88b7546431ap-3 | 0x1.2e88b7546431ap-3
+      phi_0               0.14436069379032904 | 0x1.27a6945542381p-3 | 0x1.27a6945542381p-3 | 0x1.27a6945542381p-3
+      pi_0                0.13283116241825746 | 0x1.1009c8d3cf031p-3 | 0x1.1009c8d3cf031p-3 | 0x1.1009c8d3cf031p-3
+      tracking            0.6134225733734364 | 0x1.3a12860688bd6p-1 | 0x1.3a12860688bd6p-1 | 0x1.3a12860688bd6p-1
+      residual_H          1.2778967439786015e-08 | 0x1.b714fc8000000p-27 | 0x1.b714fc8000000p-27 | 0x1.b714fc8000000p-27
+      residual_phi        -2.884490346577451e-07 | -0x1.35b8445400000p-22 | -0x1.35b8445400000p-22 | -0x1.35b8445400000p-22
+      tuning_iterations   9 | - | 9 | 9
+      plain_steps         1 | - | 1 | 1
+      secant_steps        7 | - | 7 | 7
+      guard_steps         0 | - | 0 | 0
+      seed_kind           static | - | static | static
+      seed_normalization  -276.9988248029974 | -0x1.14ffb2fb774ebp+8 | -0x1.14ffb2fb774ebp+8 | -0x1.14ffb2fb774ebp+8
+      seed_phi_ref        0.27166810621948445 | 0x1.163029fe50d5ap-2 | 0x1.163029fe50d5ap-2 | 0x1.163029fe50d5ap-2
+    06 (b3_M0.1_phi5_secant.log): normalization -0x1.168e7208f6e5bp+8 vs stored -0x1.168e7208f6e5bp+8: equal; phi_ref 0x1.2e88b7546431ap-3 vs stored 0x1.2e88b7546431ap-3: equal
+    section 0.3: Lambda 1.3889187 meV vs 1.389305 -> Lambda/Lambda_03 - 1 = -2.7804e-04; phi_ref 0.1477217 vs 0.1477194 -> +1.559e-05
+
+=== beta=3 M=1e-05 M_P phi*=5  (tool 3-1e-5-phi5.txt; load at its start 6.61 7.00 6.07)
+    history beta=3 M=1e-05: RHS=1673809 accepted_steps=161638 reflections=0 samples=5979 integrations=3 wall=128.9 s
+    bbn beta=3 M=1e-05: Yp=0.2455626974 DoH=2.423846085 He3oH=1.03645703 Li7oH=5.546154975 network=small PRyM_time=9.3 s wall=9.3 s PRyM_version=bf24c3d+ri02+sr01+bt02
+  reference: inputs OK (z_samples 5979 vs samples=5979); converged True (|res_H| 8.998e-07, |res_phi| 3.999e-06 < 1e-05); 15 keys: all equal
+  resumed: inputs OK (z_samples 5979 vs samples=5979); converged True (|res_H| 8.998e-07, |res_phi| 3.999e-06 < 1e-05); 15 keys: all equal
+    key-by-key (tool's printed repr | its float.hex | reference stored hex | resumed stored hex):
+      normalization       -276.6688542394928 | -0x1.14ab3a080c69ap+8 | -0x1.14ab3a080c69ap+8 | -0x1.14ab3a080c69ap+8
+      V_ref               7.012446645127295e-121 | 0x1.cf8fdd55d55d2p-400 | 0x1.cf8fdd55d55d2p-400 | 0x1.cf8fdd55d55d2p-400
+      phi_ref             0.0026704769065684884 | 0x1.5e0655f4f56b8p-9 | 0x1.5e0655f4f56b8p-9 | 0x1.5e0655f4f56b8p-9
+      phi_0               0.0026632375660229917 | 0x1.5d136c7ebe881p-9 | 0x1.5d136c7ebe881p-9 | 0x1.5d136c7ebe881p-9
+      pi_0                0.0039450458599520144 | 0x1.028ae2f320769p-8 | 0x1.028ae2f320769p-8 | 0x1.028ae2f320769p-8
+      tracking            0.9875313441259254 | 0x1.f99db555976f5p-1 | 0x1.f99db555976f5p-1 | 0x1.f99db555976f5p-1
+      residual_H          8.998463381093558e-07 | 0x1.e319f06200000p-21 | 0x1.e319f06200000p-21 | 0x1.e319f06200000p-21
+      residual_phi        3.9990675269052645e-06 | 0x1.0c5f74fc00000p-18 | 0x1.0c5f74fc00000p-18 | 0x1.0c5f74fc00000p-18
+      tuning_iterations   3 | - | 3 | 3
+      plain_steps         1 | - | 1 | 1
+      secant_steps        1 | - | 1 | 1
+      guard_steps         0 | - | 0 | 0
+      seed_kind           tracking | - | tracking | tracking
+      seed_normalization  -276.6693430709154 | -0x1.14ab5a114762cp+8 | -0x1.14ab5a114762cp+8 | -0x1.14ab5a114762cp+8
+      seed_phi_ref        0.0026697278787383445 | 0x1.5ded33db57544p-9 | 0x1.5ded33db57544p-9 | 0x1.5ded33db57544p-9
+    06 (b3_M1e-5_phi5_secant.log): normalization -0x1.14ab3a080c69ap+8 vs stored -0x1.14ab3a080c69ap+8: equal; phi_ref 0x1.5e0655f4f56b8p-9 vs stored 0x1.5e0655f4f56b8p-9: equal
+    section 0.3: Lambda 2.2264733 meV vs 2.227091 -> Lambda/Lambda_03 - 1 = -2.7734e-04; phi_ref 0.0026705 vs 0.0026705 -> -8.648e-06
+
+SUMMARY: inputs all as the tool; converged all; bitwise all 7 x 15 x 2 equal
+exit 0

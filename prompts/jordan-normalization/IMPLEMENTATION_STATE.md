@@ -1,8 +1,8 @@
 # jordan-normalization campaign — implementation state
 
-**Last updated:** 2026-10-26 · **Status: LIVE — 10 of 10 prompts written, 8 landed (01–08, all reviewed;
-04 and 08 each after one stop ruled by the orchestrator); R1–R14, U1–U5 and P1–P20 ruled by the user
-2026-10-20 (README §6). Next: the orchestrator note for 09.**
+**Last updated:** 2026-10-26 · **Status: LIVE — 10 of 10 prompts written, 9 landed (01–08 reviewed;
+04 and 08 each after one stop ruled by the orchestrator; 09 awaiting review); R1–R14, U1–U5 and
+P1–P20 ruled by the user 2026-10-20 (README §6). Next: the orchestrator's review of 09.**
 The plan is [`README.md`](README.md), written on 2026-10-20 on branch `jordan-normalization`, cut
 from `main` at `ac187c8`.
 
@@ -43,7 +43,7 @@ It ends in the handover for the science rebuild, which is the user's.
 | 06 | The tuning layer | `integrate_history` and `tune_history`: secant, seed, residuals, failure reasons, progress lines | Opus | ✍️ | ✅ | `1b83bbd` | [`logs/06-the-tuning-layer.md`](logs/06-the-tuning-layer.md) |
 | 07 | The store | `ExponentialModel` table; `ScalarHistory`'s key and tuned outputs; format 5; `VERSION_LABEL` 2026.7.0; writers and readers moved | Opus | ✍️ | ✅ | `223afc6` | [`logs/07-the-store.md`](logs/07-the-store.md) |
 | 08 | The driver and the tools | `main.py`'s options; the super-Planckian warning; the wrapper's scope; the tools and the surfing scan on tuned histories | Opus | ✍️ | ✅ | `e624f1a` | [`logs/08-the-driver-and-the-tools.md`](logs/08-the-driver-and-the-tools.md) |
-| 09 | Rehearse a tuned build | registered pilot build on the isolated cluster, interrupted and resumed, compared bitwise (if U2) | Opus | ✍️ | ⬜ | — | — |
+| 09 | Rehearse a tuned build | registered pilot build on the isolated cluster, interrupted and resumed, compared bitwise (if U2) | Opus | ✍️ | ✅ | this commit | [`logs/09-rehearse-a-tuned-build.md`](logs/09-rehearse-a-tuned-build.md) |
 | 10 | Close | documents, `CLAUDE.md`, the handover for the science rebuild, indexes, board | Sonnet | ✍️ | ⬜ | — | — |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
@@ -89,7 +89,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 | 06 | T1 `integrate_history` ✅ · T2 the residuals ✅ · T3 the secant and its guards ✅ · T4 the seed ✅ · T5 the failures ✅ · T6 progress ✅ · T7 the outputs ✅ (all landed in `1b83bbd`) |
 | 07 | S1 the model's table ✅ · S2 the key ✅ · S3 the outputs ✅ · S4 the compute path ✅ · S5 `main.py` ✅ · S6 the readers ✅ · S7 format 5 and 2026.7.0 ✅ · S8 the tests ✅ (all landed in `223afc6`) |
 | 08 | D1 the options ✅ · D2 the warning ✅ · D3 the wrapper's scope ✅ · D4 `history_and_bbn.py` ✅ · D5 the surfing tools ✅ · D6 `histories.csv` ✅ · D7 the tests ✅ (all landed in `e624f1a`) |
-| 09 | H1 reference · H2 resumed · H3 the comparisons · H4 the measurements · H5 the document |
+| 09 | H1 reference ✅ · H2 resumed ✅ · H3 the comparisons ✅ · H4 the measurements ✅ · H5 the document ✅ (all landed in this commit) |
 | 10 | C1 the documents · C2 `CLAUDE.md` · C3 the handover · C4 the board and indexes · C5 the final suites |
 
 ## 2. The gates
@@ -104,12 +104,12 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 | Tuning | a tuned history converges inside the tolerance, deterministically; the secant is no worse than the plain update on README §0.3's grid | 06 | ✅ |
 | Store | a tuned history round-trips bitwise and its realized model is rebuilt equal; the golden fingerprint at format 5 | 07 | ✅ |
 | Driver | the old options are refused; the surfing scan records tuned values with its roots unchanged | 08 | ✅ |
-| R | on the isolated cluster every history converged, the stored values equal the tuning layer's, and the resumed store equals the reference | 09 | ⬜ |
+| R | on the isolated cluster every history converged, the stored values equal the tuning layer's, and the resumed store equals the reference | 09 | ✅ |
 
 ## 3. Active and unresolved issues
 
-Prompt 02 opened one, prompt 03 one and prompt 08 one, and the review of prompt 08 two; prompt 07
-narrowed prompt 02's. Prompt 01
+Prompt 02 opened one, prompt 03 one, prompt 08 one, the review of prompt 08 two and prompt 09 one;
+prompt 07 narrowed prompt 02's. Prompt 01
 closed one assigned issue, prompt 03 three, prompt 04 one, prompt 07 two and prompt 08 the last
 (§3.1, §4).
 
@@ -201,6 +201,28 @@ closed one assigned issue, prompt 03 three, prompt 04 one, prompt 07 two and pro
   in the window would be drawn with a bounce that did not happen. (Before 08 the tool raised on such
   a β, reading `.N` of None.)
 - **Next step.** Carry whether the trace ended at a bounce, and mark only real bounces. Not
+  assigned.
+
+### `[09-ray-deduplicates-the-tune-lines-of-parallel-histories]`
+
+**Opened:** 2026-10-26 by prompt 09 (its log's Observation 1).
+
+- **What.** Ray forwards worker output to the driver through a deduplicator
+  (`ray/_private/ray_logging/__init__.py` of the pinned `ray` 2.59.0: `_canonicalise_log_line`,
+  `LogDeduplicator`) that keys a line on its words holding no digit, and holds back a line whose
+  key another process printed within 5 s (`RAY_DEDUP_LOGS_AGG_WINDOW_S`), printing only the latest
+  with `[repeated Nx across cluster]`. The tuning's progress line (`-- tune <label> it=… kind=…
+  H/H0-1=… … wall=…`, `ComputeTargets/ScalarHistory.py:1672-1677`) differs between histories only in
+  words that hold digits, so lines of histories tuned in parallel share one key. In 09's
+  `reference-a` and `resumed-a`, β = 1.5's seed line was swallowed into β = 3's `… it=0 kind=seed …
+  [repeated 2x across cluster]` (`.documents/jordan-normalization/out/09-reference-a.log`).
+- **Impact.** None to values or to the heartbeat. P12's "one line per integration" does not reach
+  the log whole when histories run in parallel, as they will in the science rebuild, so a history's
+  iteration count or tuning time read from the log can be short, and the aggregated line arrives
+  up to 5 s late.
+- **Next step.** Make the tune lines survive deduplication (for example `RAY_DEDUP_LOGS=0` in the
+  drivers' or the cluster's environment, or a `RAY_DEDUP_LOGS_ALLOW_REGEX` matching `-- tune`), or
+  record that the stored `tuning_iterations` is the count to read. For the user to rule. Not
   assigned.
 
 ### 3.1 Assigned to this campaign
@@ -1169,3 +1191,32 @@ All pass.
   the final integration's to T_CMB.
 - **For the user:** the stale run `rrk-adoption-03-unit-20261026T151946`, to be ended by registry
   rule 5.
+
+### 5.10 After prompt 09 (2026-10-26)
+
+Prompt 09 landed in this commit (log [`logs/09-rehearse-a-tuned-build.md`](logs/09-rehearse-a-tuned-build.md);
+record [`.documents/jordan-normalization-verification.md`](../../.documents/jordan-normalization-verification.md) §1),
+dispatched with orchestrator note 09, whose twenty-one rulings govern. No stop. No code changed.
+- **H1.** `reference-a`, `-b`, `-c` through the wrapper on the isolated cluster, each `done`/0, into
+  `var/datastores/jordan-normalization-09-reference.db` (`store_id` `b5721a5e…`, created after
+  `reference-a`). Seven histories, six models (ruling 1). `plot_by_beta.py --phi-init-Mp 5`, exit 0,
+  read-only (the store's 17 files and sidecar unchanged); `histories.csv` SHA-256
+  `02400fd7caadaffe6ed996c6cb717472514f7987c42c0e760630d5c431f7c77d`, six rows.
+- **H2.** `resumed-a` `SIGTERM`ed 90 s into its scalar stage (t₃ = 36.8 s, t₄ = 138.1 s): `killed`/143,
+  the handler's record 1 s after the signal, the final one 26 s after; β = 0.5, 1.5 and 3 stored and
+  validated. `resumed-a2` (`--prune-unvalidated`; no prune report) computed only β = 5.5;
+  `resumed-b` and `resumed-c` `done`/0. `store_id` `5f9ffeeb…`.
+- **H3.** `compare_stores`: `RESULT: equal`; both stores fingerprint to `3b92d064…15a7`. Every
+  history converged (3–9 integrations). The stored tuned values equal `tools/history_and_bbn.py`'s
+  bitwise, 7 × 15 × 2, on the tool's inputs; six equal 06's RESULT hex and one note 09's probe.
+  Against §0.3: Λ −2.768 to −2.795 × 10⁻⁴, φ_ref within 1.6 × 10⁻⁵. One BBN failure (β = 0.5 at
+  φ* = 5, the spline floor), the same in both stores.
+- **H4.** Longest heartbeat silence 58 s (`reference-c`, scalar stage) against 900 s; the
+  fingerprint at finish 23–25 s per run; stage times 2m 20.7s / 2.37s / 20.7s (`reference-a`);
+  tuning walls 3–130 s per history by the tune lines seen; a computed history waited up to 102.5 s
+  to be stored (P19); after the kill, no worker or actor alive; `git_dirty` false throughout.
+- **H5.** The document, §1, and `.documents/jordan-normalization/out/09-*`.
+- **Suites:** CosmologyModels 26, ComputeTargets 243 (76 + 167), ObjectFactories 93, tools 115,
+  RunDrivers 64, all passing before `start` and after `stop`.
+- **Opened:** `[09-ray-deduplicates-the-tune-lines-of-parallel-histories]` (§3). **Index:**
+  `.documents/OPEN_ISSUES.md` 24 → 25 open.

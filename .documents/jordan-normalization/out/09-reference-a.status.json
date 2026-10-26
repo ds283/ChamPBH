@@ -1,0 +1,199 @@
+{
+  "exit_code": 0,
+  "fingerprint": {
+    "classes": {
+      "AdiabaticHistory": {
+        "count": 4,
+        "digest": "2e299790ce7c8e16d04c4e12af2ce841010122d29285993ece46fb2b04b1fecb",
+        "tag_sets": [
+          {
+            "count": 4,
+            "digest": "2e299790ce7c8e16d04c4e12af2ce841010122d29285993ece46fb2b04b1fecb",
+            "tags": [
+              "SamplesPerLog10Z_250"
+            ]
+          }
+        ]
+      },
+      "BBNData": {
+        "count": 4,
+        "digest": "f290e3ef0fcae116f38cef131e78655e4d7fc7bd4fa6850605f7cffb3fe7a0a5",
+        "tag_sets": [
+          {
+            "count": 4,
+            "digest": "f290e3ef0fcae116f38cef131e78655e4d7fc7bd4fa6850605f7cffb3fe7a0a5",
+            "tags": [
+              "SamplesPerLog10Z_250"
+            ]
+          }
+        ]
+      },
+      "ExponentialModel": {
+        "count": 4,
+        "digest": "6f8f262ddf6209a8af51e6c61e7b09f45b434a47c3571741901d320a7b2743cc",
+        "tag_sets": [
+          {
+            "count": 4,
+            "digest": "6f8f262ddf6209a8af51e6c61e7b09f45b434a47c3571741901d320a7b2743cc",
+            "tags": []
+          }
+        ]
+      },
+      "IntegrationSolver": {
+        "count": 6,
+        "digest": "223ae7361d67244aff9c12f3f5cc1954ac2c7dc717189ad15b4030c8a0650e4a",
+        "tag_sets": [
+          {
+            "count": 6,
+            "digest": "223ae7361d67244aff9c12f3f5cc1954ac2c7dc717189ad15b4030c8a0650e4a",
+            "tags": []
+          }
+        ]
+      },
+      "M_value": {
+        "count": 1,
+        "digest": "f2e0248b8a3722cd73969903876cf6361752613de0bc580ea93fee340dae654f",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "f2e0248b8a3722cd73969903876cf6361752613de0bc580ea93fee340dae654f",
+            "tags": []
+          }
+        ]
+      },
+      "QCD_Cosmology": {
+        "count": 1,
+        "digest": "dcbaa9d413d45bf56b63a2a6ac1da865159e363f8b5ea2a479265113b82091b2",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "dcbaa9d413d45bf56b63a2a6ac1da865159e363f8b5ea2a479265113b82091b2",
+            "tags": []
+          }
+        ]
+      },
+      "ScalarHistory": {
+        "count": 4,
+        "digest": "167e850caafc1ffd6c6120f4e6ef09098bb04a4d3d9057ee7b8406a3d9ae92ea",
+        "tag_sets": [
+          {
+            "count": 4,
+            "digest": "167e850caafc1ffd6c6120f4e6ef09098bb04a4d3d9057ee7b8406a3d9ae92ea",
+            "tags": [
+              "SamplesPerLog10Z_250"
+            ]
+          }
+        ]
+      },
+      "beta_value": {
+        "count": 4,
+        "digest": "298221e43b4d28868469b42b79abd4d78a3b4f16f372855e3ffaa0d72cc39b1a",
+        "tag_sets": [
+          {
+            "count": 4,
+            "digest": "298221e43b4d28868469b42b79abd4d78a3b4f16f372855e3ffaa0d72cc39b1a",
+            "tags": []
+          }
+        ]
+      },
+      "phi_value": {
+        "count": 1,
+        "digest": "29e7a88b01e35866c8f102278ae2ab0eaaecef332e2fe6badec047d47894e14a",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "29e7a88b01e35866c8f102278ae2ab0eaaecef332e2fe6badec047d47894e14a",
+            "tags": []
+          }
+        ]
+      },
+      "pi_value": {
+        "count": 1,
+        "digest": "237cd5e9616925eae2215daa8eb602f9db5e521a4415d78f11056c39f8c74cc8",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "237cd5e9616925eae2215daa8eb602f9db5e521a4415d78f11056c39f8c74cc8",
+            "tags": []
+          }
+        ]
+      },
+      "redshift": {
+        "count": 75001,
+        "digest": "8dad579a1ae8f2a82a70c62838d7200adc490a4205dc7976074a17f3012b450d",
+        "tag_sets": [
+          {
+            "count": 75001,
+            "digest": "8dad579a1ae8f2a82a70c62838d7200adc490a4205dc7976074a17f3012b450d",
+            "tags": []
+          }
+        ]
+      },
+      "store_tag": {
+        "count": 1,
+        "digest": "34407c96658d27b3334475fbcac14bdf7862190810b233d798b75c11a6450531",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "34407c96658d27b3334475fbcac14bdf7862190810b233d798b75c11a6450531",
+            "tags": []
+          }
+        ]
+      },
+      "temperature": {
+        "count": 1,
+        "digest": "9bd0581c026ad77d80f5c76b87ad07d5299ba643855d44d4b3d27bdd06b061bf",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "9bd0581c026ad77d80f5c76b87ad07d5299ba643855d44d4b3d27bdd06b061bf",
+            "tags": []
+          }
+        ]
+      },
+      "tolerance": {
+        "count": 2,
+        "digest": "a6a6f286796401ec6660c96b91e9635bbf6cad6951285cbbf48b5d1ea823c5ef",
+        "tag_sets": [
+          {
+            "count": 2,
+            "digest": "a6a6f286796401ec6660c96b91e9635bbf6cad6951285cbbf48b5d1ea823c5ef",
+            "tags": []
+          }
+        ]
+      },
+      "version": {
+        "count": 1,
+        "digest": "bd01381952f16539dd78b315ad5e13132cc7bde5f558715c6aac59415d793791",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "bd01381952f16539dd78b315ad5e13132cc7bde5f558715c6aac59415d793791",
+            "tags": []
+          }
+        ]
+      }
+    },
+    "digest": "752c6c0712c74f63c1e429c8336eb20fb5e54676ab69ff9a5109774aa0297838",
+    "encoding_format": 1,
+    "fingerprint_format": 5,
+    "problems": {},
+    "taken": {
+      "git_dirty": false,
+      "git_head": "4dc31eae6d3a523abd58346aa9628ea24ad97cfe",
+      "run_id": "jordan-normalization-09-reference-a-20261026T195544",
+      "when": "2026-10-26T19:58:59+00:00"
+    }
+  },
+  "fingerprint_sidecar": "not written: /Users/ds283/Documents/Code/ChamPBH/var/datastores/jordan-normalization-09-reference.manifest.json is not a problem-free registry sidecar (there is none)",
+  "heartbeat": "2026-10-26T19:59:23+00:00",
+  "host": {
+    "boot": "376461AF-4985-4F42-8E41-F4E914F5E3E6",
+    "id": "8d2b247824882486"
+  },
+  "pid": 35782,
+  "stage": "CALCULATE BBN DATA, all work items complete",
+  "state": "done",
+  "units_done": 0,
+  "units_total": null
+}

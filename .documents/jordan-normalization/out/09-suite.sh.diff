@@ -1,0 +1,22 @@
+2,6c2,6
+< # ray-sqla-align 02: run one CLAUDE.md suite command from the repository root, its output to
+< # var/ray-sqla-align-02/suites/<point>-<name>.txt, and a summary (the command, uptime before,
+< # the wall time, Ran, the verdict, the exit) appended to var/ray-sqla-align-02/02-suites.txt.
+< #   sh var/ray-sqla-align-02/tools/suite.sh POINT NAME DIR [PATTERN]
+< L=var/ray-sqla-align-02
+---
+> # jordan-normalization 09: run one CLAUDE.md suite command from the repository root, its output to
+> # var/jordan-normalization-09/suites/<point>-<name>.txt, and a summary (the command, uptime before,
+> # the wall time, Ran, the verdict, the exit) appended to var/jordan-normalization-09/09-suites.txt.
+> #   sh var/jordan-normalization-09/tools/suite.sh POINT NAME DIR [PATTERN]
+> L=var/jordan-normalization-09
+18c18
+< } >> $L/02-suites.txt
+---
+> } >> $L/09-suites.txt
+33,34c33,34
+< } >> $L/02-suites.txt
+< tail -6 $L/02-suites.txt
+---
+> } >> $L/09-suites.txt
+> tail -6 $L/09-suites.txt

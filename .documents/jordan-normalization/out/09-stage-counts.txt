@@ -1,0 +1,48 @@
+### 2026-10-26 20:18:43 +0000
+$ ./venv/bin/python .documents/dk-and-rpk-migration/rehearsal/stage_counts.py <the seven logs>
+LOG var/jordan-normalization-09/reference-a.log
+  CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: complete; lookup 4, compute 4, store 4, validation 4
+  CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: complete; lookup 4, compute 4, store 4, validation 4
+    -- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+  CALCULATE BBN DATA: complete; lookup 4, compute 4, store 4, validation 4
+    -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+  driver exit status: 0
+LOG var/jordan-normalization-09/reference-b.log
+  CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: complete; lookup 1, compute 1, store 1, validation 1
+  CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: complete; lookup 1, compute 1, store 1, validation 1
+    -- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+  CALCULATE BBN DATA: complete; lookup 1, compute 1, store 1, validation 1
+    -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+  driver exit status: 0
+LOG var/jordan-normalization-09/reference-c.log
+  CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: complete; lookup 2, compute 2, store 2, validation 2
+  CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: complete; lookup 2, compute 2, store 2, validation 2
+    -- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+  CALCULATE BBN DATA: complete; lookup 2, compute 2, store 2, validation 2
+    -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+  driver exit status: 0
+LOG var/jordan-normalization-09/resumed-a.log
+  CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: INCOMPLETE; no queue summary
+  driver exit status: 143
+LOG var/jordan-normalization-09/resumed-a2.log
+  CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: complete; lookup 1, compute 1, store 1, validation 1
+  CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: complete; lookup 4, compute 4, store 4, validation 4
+    -- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+  CALCULATE BBN DATA: complete; lookup 4, compute 4, store 4, validation 4
+    -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+  driver exit status: 0
+LOG var/jordan-normalization-09/resumed-b.log
+  CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: complete; lookup 1, compute 1, store 1, validation 1
+  CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: complete; lookup 1, compute 1, store 1, validation 1
+    -- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+  CALCULATE BBN DATA: complete; lookup 1, compute 1, store 1, validation 1
+    -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+  driver exit status: 0
+LOG var/jordan-normalization-09/resumed-c.log
+  CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: complete; lookup 2, compute 2, store 2, validation 2
+  CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: complete; lookup 2, compute 2, store 2, validation 2
+    -- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+  CALCULATE BBN DATA: complete; lookup 2, compute 2, store 2, validation 2
+    -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+  driver exit status: 0
+exit 0

@@ -1,0 +1,38 @@
+### after start 2026-10-26 19:55:28 +0000
+$ ./venv/bin/ray list jobs --address 127.0.0.1:6380 --limit 1000 --format json
+No resource in the cluster
+ 
+$ ./venv/bin/ray list workers --address 127.0.0.1:6380 --limit 1000 --format json
+No resource in the cluster
+ 
+  workers: 0 recorded, 0 alive
+$ ./venv/bin/ray list actors --address 127.0.0.1:6380 --limit 1000 --format json
+No resource in the cluster
+ 
+  actors: 0 recorded, 0 ALIVE; by (job, class, state): {}
+
+### after resumed-a's launcher line 2026-10-26 20:07:45 +0000
+$ ./venv/bin/ray list jobs --address 127.0.0.1:6380 --limit 1000 --format json
+  job 01000000 SUCCEEDED driver pid 35782: ion-09-reference-a --ray-address 127.0.0.1:6380 --M-values-Mp 1e-3 --beta-values 0.5 1.5 3 5.5 --phi-init-Mp 5
+  job 02000000 SUCCEEDED driver pid 36512: normalization-09-reference-b --ray-address 127.0.0.1:6380 --M-values-Mp 1e-3 --beta-values 0.5 --phi-init-Mp 1
+  job 03000000 SUCCEEDED driver pid 36956: rmalization-09-reference-c --ray-address 127.0.0.1:6380 --M-values-Mp 0.1 1e-5 --beta-values 3 --phi-init-Mp 5
+  job 04000000 SUCCEEDED driver pid 37417: ation-09-resumed-a --ray-address 127.0.0.1:6380 --M-values-Mp 1e-3 --beta-values 0.5 1.5 3 5.5 --phi-init-Mp 5
+$ ./venv/bin/ray list workers --address 127.0.0.1:6380 --limit 1000 --format json
+  workers: 85 recorded, 0 alive
+$ ./venv/bin/ray list actors --address 127.0.0.1:6380 --limit 1000 --format json
+  actors: 68 recorded, 0 ALIVE; by (job, class, state): {('02000000', 'Datastore', 'DEAD'): 16, ('01000000', 'Datastore', 'DEAD'): 16, ('04000000', 'SerialPoolBroker', 'DEAD'): 1, ('03000000', 'Datastore', 'DEAD'): 16, ('04000000', 'Datastore', 'DEAD'): 16, ('03000000', 'SerialPoolBroker', 'DEAD'): 1, ('02000000', 'SerialPoolBroker', 'DEAD'): 1, ('01000000', 'SerialPoolBroker', 'DEAD'): 1}
+
+### after the plot, before stop 2026-10-26 20:16:42 +0000
+$ ./venv/bin/ray list jobs --address 127.0.0.1:6380 --limit 1000 --format json
+  job 01000000 SUCCEEDED driver pid 35782: ion-09-reference-a --ray-address 127.0.0.1:6380 --M-values-Mp 1e-3 --beta-values 0.5 1.5 3 5.5 --phi-init-Mp 5
+  job 02000000 SUCCEEDED driver pid 36512: normalization-09-reference-b --ray-address 127.0.0.1:6380 --M-values-Mp 1e-3 --beta-values 0.5 --phi-init-Mp 1
+  job 03000000 SUCCEEDED driver pid 36956: rmalization-09-reference-c --ray-address 127.0.0.1:6380 --M-values-Mp 0.1 1e-5 --beta-values 3 --phi-init-Mp 5
+  job 04000000 SUCCEEDED driver pid 37417: ation-09-resumed-a --ray-address 127.0.0.1:6380 --M-values-Mp 1e-3 --beta-values 0.5 1.5 3 5.5 --phi-init-Mp 5
+  job 05000000 SUCCEEDED driver pid 37955: -ray-address 127.0.0.1:6380 --M-values-Mp 1e-3 --beta-values 0.5 1.5 3 5.5 --phi-init-Mp 5 --prune-unvalidated
+  job 06000000 SUCCEEDED driver pid 38353: n-normalization-09-resumed-b --ray-address 127.0.0.1:6380 --M-values-Mp 1e-3 --beta-values 0.5 --phi-init-Mp 1
+  job 07000000 SUCCEEDED driver pid 38606: normalization-09-resumed-c --ray-address 127.0.0.1:6380 --M-values-Mp 0.1 1e-5 --beta-values 3 --phi-init-Mp 5
+  job 08000000 SUCCEEDED driver pid 39163: ut /Users/ds283/Documents/Code/ChamPBH/var/jordan-normalization-09/plot-reference --ray-address 127.0.0.1:6380
+$ ./venv/bin/ray list workers --address 127.0.0.1:6380 --limit 1000 --format json
+  workers: 169 recorded, 0 alive
+$ ./venv/bin/ray list actors --address 127.0.0.1:6380 --limit 1000 --format json
+  actors: 135 recorded, 0 ALIVE; by (job, class, state): {('02000000', 'Datastore', 'DEAD'): 16, ('01000000', 'Datastore', 'DEAD'): 16, ('04000000', 'SerialPoolBroker', 'DEAD'): 1, ('03000000', 'Datastore', 'DEAD'): 16, ('06000000', 'Datastore', 'DEAD'): 16, ('08000000', 'Datastore', 'DEAD'): 16, ('04000000', 'Datastore', 'DEAD'): 16, ('05000000', 'Datastore', 'DEAD'): 16, ('07000000', 'Datastore', 'DEAD'): 16, ('03000000', 'SerialPoolBroker', 'DEAD'): 1, ('02000000', 'SerialPoolBroker', 'DEAD'): 1, ('06000000', 'SerialPoolBroker', 'DEAD'): 1, ('01000000', 'SerialPoolBroker', 'DEAD'): 1, ('07000000', 'SerialPoolBroker', 'DEAD'): 1, ('05000000', 'SerialPoolBroker', 'DEAD'): 1}

@@ -1,0 +1,96 @@
+## before CosmologyModels: 2026-10-26 19:45:46 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .
+uptime: 19:45  up 21 days, 18:30, 2 users, load averages: 3.07 3.77 3.67
+wall: 68 s
+Ran 26 tests in 66.962s
+verdict: OK
+exit: 0
+
+## before ComputeTargets-a-f: 2026-10-26 19:46:54 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'
+uptime: 19:46  up 21 days, 18:31, 2 users, load averages: 3.06 3.66 3.63
+wall: 98 s
+Ran 76 tests in 95.199s
+verdict: OK
+exit: 0
+
+## before ComputeTargets-g-z: 2026-10-26 19:48:32 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'
+uptime: 19:48  up 21 days, 18:33, 2 users, load averages: 2.92 3.56 3.60
+wall: 219 s
+Ran 167 tests in 216.220s
+verdict: OK
+exit: 0
+
+## before ObjectFactories: 2026-10-26 19:52:11 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .
+uptime: 19:52  up 21 days, 18:37, 2 users, load averages: 8.36 5.18 4.21
+wall: 17 s
+Ran 93 tests in 14.208s
+verdict: OK
+exit: 0
+
+## before tools: 2026-10-26 19:52:28 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .
+uptime: 19:52  up 21 days, 18:37, 2 users, load averages: 7.69 5.19 4.23
+wall: 116 s
+Ran 115 tests in 113.922s
+verdict: OK
+exit: 0
+
+## before RunDrivers: 2026-10-26 19:54:24 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .
+uptime: 19:54  up 21 days, 18:39, 2 users, load averages: 3.40 4.39 4.03
+wall: 25 s
+Ran 64 tests in 23.332s
+verdict: OK
+exit: 0
+
+## after CosmologyModels: 2026-10-26 20:28:04 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .
+uptime: 20:28  up 21 days, 19:13, 2 users, load averages: 3.31 5.48 5.71
+wall: 65 s
+Ran 26 tests in 64.358s
+verdict: OK
+exit: 0
+
+## after ComputeTargets-a-f: 2026-10-26 20:29:09 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'
+uptime: 20:29  up 21 days, 19:14, 2 users, load averages: 4.29 5.30 5.62
+wall: 97 s
+Ran 76 tests in 94.389s
+verdict: OK
+exit: 0
+
+## after ComputeTargets-g-z: 2026-10-26 20:30:46 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'
+uptime: 20:30  up 21 days, 19:15, 2 users, load averages: 3.76 4.97 5.47
+wall: 217 s
+Ran 167 tests in 214.892s
+verdict: OK
+exit: 0
+
+## after ObjectFactories: 2026-10-26 20:34:24 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .
+uptime: 20:34  up 21 days, 19:19, 2 users, load averages: 7.73 5.73 5.61
+wall: 16 s
+Ran 93 tests in 14.328s
+verdict: OK
+exit: 0
+
+## after tools: 2026-10-26 20:34:40 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .
+uptime: 20:34  up 21 days, 19:19, 2 users, load averages: 6.40 5.55 5.54
+wall: 118 s
+Ran 115 tests in 115.824s
+verdict: OK
+exit: 0
+
+## after RunDrivers: 2026-10-26 20:36:39 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .
+uptime: 20:36  up 21 days, 19:21, 2 users, load averages: 6.02 5.48 5.50
+wall: 26 s
+Ran 64 tests in 24.566s
+verdict: OK
+exit: 0
+

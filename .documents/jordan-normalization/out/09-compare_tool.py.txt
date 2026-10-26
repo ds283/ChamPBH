@@ -1,0 +1,214 @@
+"""
+The comparison of jordan-normalization prompt 09 (the orchestrator's note for 09, rulings 13, 14
+and 15). Run from the repository root with PYTHONPATH=. (it imports Units, for the unit
+conversions, and nothing that starts Ray or opens a store):
+
+    PYTHONPATH=. ./venv/bin/python compare_tool.py REF.txt RES.txt TOOLDIR PROBEDIR
+
+REF.txt and RES.txt are histories.py's outputs on the two stores (its JSON lines are read);
+TOOLDIR holds the seven outputs of tools/history_and_bbn.py, named <beta>-<M>-phi<X>.txt; PROBEDIR
+is prompts/jordan-normalization/logs/06-probes. Reads only; writes nothing but its output.
+
+1. The inputs (ruling 13): atol, rtol, the tuning tolerance, T*, pi*, phi*, M, beta, and z_samples
+   against the tool's samples=.
+2. Convergence (ruling 13): failure 0, validated 1, abs(residual) < tolerance for both residuals,
+   the inequality of ComputeTargets.ScalarHistory.tuning_converged.
+3. The bitwise comparison (ruling 14): each tool `tuning` line's fifteen values against both
+   stores' row: a float by float.hex of the printed repr, an int and the string exactly; a NaN
+   printed where the store holds NULL counts as equal and is said.
+4. Measured (ruling 14): the stored normalization and phi_ref against 06's *_secant.log RESULT hex,
+   and beta = 0.5 at phi* = 5 against the orchestrator's probe line.
+5. Measured (ruling 15): Lambda = exp(normalization/4) M_P in meV and phi_ref against README
+   section 0.3's table.
+"""
+
+import json
+import math
+import re
+import sys
+from pathlib import Path
+
+from Units import Planck_units
+from Units.base import REDUCED_PLANCK_MASS_EV
+
+KEYS = (
+    "normalization", "V_ref", "phi_ref", "phi_0", "pi_0", "tracking", "residual_H",
+    "residual_phi", "tuning_iterations", "plain_steps", "secant_steps", "guard_steps",
+    "seed_kind", "seed_normalization", "seed_phi_ref",
+)
+INTS = {"tuning_iterations", "plain_steps", "secant_steps", "guard_steps"}
+STRS = {"seed_kind"}
+
+# the seven histories: (beta, M/M_P, phi*, tool file, 06 probe file or None)
+POINTS = [
+    (0.5, 1e-3, 5.0, "0.5-1e-3-phi5.txt", None),
+    (1.5, 1e-3, 5.0, "1.5-1e-3-phi5.txt", "b1.5_M1e-3_phi5_secant.log"),
+    (3.0, 1e-3, 5.0, "3-1e-3-phi5.txt", "b3_M1e-3_phi5_secant.log"),
+    (5.5, 1e-3, 5.0, "5.5-1e-3-phi5.txt", "b5.5_M1e-3_phi5_secant.log"),
+    (0.5, 1e-3, 1.0, "0.5-1e-3-phi1.txt", "b0.5_M1e-3_phi1_secant.log"),
+    (3.0, 0.1, 5.0, "3-0.1-phi5.txt", "b3_M0.1_phi5_secant.log"),
+    (3.0, 1e-5, 5.0, "3-1e-5-phi5.txt", "b3_M1e-5_phi5_secant.log"),
+]
+
+# the orchestrator's probe line for beta = 0.5 at phi* = 5 (note 09, section 0), as printed
+PROBE_05_PHI5 = {"normalization": "-276.7305358530105", "phi_ref": "0.06421012992791278"}
+
+# README section 0.3 item 1: (beta, M, phi*) -> (tuned Lambda in meV, phi_ref/M_P)
+SEC03 = {
+    (1.5, 1e-3, 5.0): (2.125913, 0.0349624),
+    (5.5, 1e-3, 5.0): (2.021177, 0.0167195),
+    (3.0, 1e-3, 5.0): (2.074576, 0.0236629),
+    (0.5, 1e-3, 1.0): (2.185554, 0.0638212),
+    (3.0, 1e-5, 5.0): (2.227091, 0.0026705),
+    (3.0, 0.1, 5.0): (1.389305, 0.1477194),
+}
+
+
+def rows(path):
+    out = []
+    for line in Path(path).read_text().splitlines():
+        if line.startswith("JSON "):
+            out.append(json.loads(line[5:]))
+    return out
+
+
+def fval(rec, key):
+    v = rec[key]
+    if isinstance(v, dict):
+        return float.fromhex(v["hex"])
+    return v
+
+
+def find(recs, beta, M_eV, phi):
+    hits = [
+        r for r in recs
+        if fval(r, "beta") == beta and fval(r, "phi_init_Mp") == phi and fval(r, "M_value_eV") == M_eV
+    ]
+    return hits
+
+
+def tool_lines(path):
+    text = Path(path).read_text()
+    tuning = re.search(r"^tuning [^:]*: (.*)$", text, re.M).group(1)
+    vals = dict(kv.split("=", 1) for kv in tuning.split(" "))
+    samples = int(re.search(r"^history [^:]*: .* samples=(\d+) ", text, re.M).group(1))
+    hist = re.search(r"^history .*$", text, re.M).group(0)
+    bbn = re.search(r"^bbn .*$", text, re.M).group(0)
+    up = re.search(r"^uptime: .*load averages: (.*)$", text, re.M).group(1)
+    return vals, samples, hist, bbn, up
+
+
+def main(argv):
+    ref, res = rows(argv[0]), rows(argv[1])
+    tooldir, probedir = Path(argv[2]), Path(argv[3])
+    units = Planck_units()
+    stores = (("reference", ref), ("resumed", res))
+    T_hex = (2.0e4 * units.GeV / units.GeV).hex()
+    print(f"T* as the build stores it: (2e4 * GeV) / GeV = {2.0e4 * units.GeV / units.GeV!r} ({T_hex}); "
+          f"2e4 * GeV = {2.0e4 * units.GeV!r} ({(2.0e4 * units.GeV).hex()})")
+    print(f"rows: reference {len(ref)}, resumed {len(res)}")
+    all_equal = True
+    all_inputs = True
+    all_conv = True
+    for beta, M, phi, tf, probe in POINTS:
+        M_eV = (M * units.PlanckMass) / units.eV
+        vals, samples, hist, bbn, up = tool_lines(tooldir / tf)
+        print()
+        print(f"=== beta={beta:g} M={M:g} M_P phi*={phi:g}  (tool {tf}; load at its start {up})")
+        print(f"    {hist}")
+        print(f"    {bbn[:220]}")
+        for name, recs in stores:
+            hits = find(recs, beta, M_eV, phi)
+            if len(hits) != 1:
+                print(f"  {name}: {len(hits)} rows match; STOP")
+                all_equal = False
+                continue
+            r = hits[0]
+            # 1. inputs
+            ins = {
+                "log10_atol": fval(r, "log10_atol") == -8.0,
+                "log10_rtol": fval(r, "log10_rtol") == -8.0,
+                "log10_tuning_tol": fval(r, "log10_tuning_tol") == -5.0,
+                "T*": fval(r, "T_init_GeV").hex() == T_hex
+                and (fval(r, "T_init_GeV") * units.GeV).hex() == (2.0e4 * units.GeV).hex(),
+                "pi*": fval(r, "pi_init_Mp") == 0.0,
+                "phi*": fval(r, "phi_init_Mp") == phi,
+                "M": fval(r, "M_value_eV").hex() == M_eV.hex(),
+                "beta": fval(r, "beta") == beta,
+                "n": r["n_value"] == 1,
+                "z_samples": r["z_samples"] == samples,
+            }
+            ok_in = all(ins.values())
+            all_inputs &= ok_in
+            # 2. convergence
+            tol = 10.0 ** fval(r, "log10_tuning_tol")
+            rH, rP = fval(r, "residual_H"), fval(r, "residual_phi")
+            conv = r["failure"] == 0 and r["validated"] == 1 and abs(rH) < tol and abs(rP) < tol
+            all_conv &= conv
+            # 3. bitwise
+            diffs, nan_null = [], []
+            for k in KEYS:
+                printed = vals[k]
+                stored = fval(r, k)
+                if k in INTS:
+                    same = stored == int(printed)
+                elif k in STRS:
+                    same = stored == printed
+                else:
+                    p = float(printed)
+                    if math.isnan(p):
+                        same = stored is None
+                        if same:
+                            nan_null.append(k)
+                    else:
+                        same = stored is not None and stored.hex() == p.hex()
+                if not same:
+                    diffs.append(f"{k}: tool {printed} stored {r[k]}")
+            all_equal &= not diffs
+            print(f"  {name}: inputs {'OK' if ok_in else 'DIFFER ' + str([k for k, v in ins.items() if not v])} "
+                  f"(z_samples {r['z_samples']} vs samples={samples}); converged {conv} "
+                  f"(|res_H| {abs(rH):.3e}, |res_phi| {abs(rP):.3e} < {tol:g}); "
+                  f"15 keys: {'all equal' if not diffs else 'DIFFER: ' + '; '.join(diffs)}"
+                  + (f"; NaN printed / NULL stored: {nan_null}" if nan_null else ""))
+        # the per-key table, from the reference row
+        r = find(ref, beta, M_eV, phi)[0]
+        print("    key-by-key (tool's printed repr | its float.hex | reference stored hex | resumed stored hex):")
+        s = find(res, beta, M_eV, phi)[0]
+        for k in KEYS:
+            p = vals[k]
+            if k in INTS or k in STRS:
+                print(f"      {k:19s} {p} | - | {r[k]} | {s[k]}")
+            else:
+                print(f"      {k:19s} {p} | {float(p).hex()} | {r[k]['hex'] if isinstance(r[k], dict) else r[k]} | "
+                      f"{s[k]['hex'] if isinstance(s[k], dict) else s[k]}")
+        # 4. against 06 and the probe
+        norm, pref = fval(r, "normalization"), fval(r, "phi_ref")
+        if probe:
+            line = next(l for l in (probedir / probe).read_text().splitlines() if " RESULT " in l)
+            n06 = re.search(r"normalization=(\S+)", line).group(1)
+            p06 = re.search(r" phi_ref=(\S+)", line).group(1)
+            print(f"    06 ({probe}): normalization {n06} vs stored {norm.hex()}: "
+                  f"{'equal' if float.fromhex(n06) == norm else 'DIFFERENT'}; phi_ref {p06} vs stored {pref.hex()}: "
+                  f"{'equal' if float.fromhex(p06) == pref else 'DIFFERENT'}")
+        else:
+            pn, pp = float(PROBE_05_PHI5["normalization"]), float(PROBE_05_PHI5["phi_ref"])
+            print(f"    note 09's probe line: normalization {PROBE_05_PHI5['normalization']} ({pn.hex()}) vs stored {norm.hex()}: "
+                  f"{'equal' if pn == norm else 'DIFFERENT'}; phi_ref {PROBE_05_PHI5['phi_ref']} ({pp.hex()}) vs stored {pref.hex()}: "
+                  f"{'equal' if pp == pref else 'DIFFERENT'}")
+        # 5. against section 0.3
+        lam = math.exp(norm / 4.0) * REDUCED_PLANCK_MASS_EV * 1.0e3
+        key = (beta, M, phi)
+        if key in SEC03:
+            L03, p03 = SEC03[key]
+            print(f"    section 0.3: Lambda {lam:.7f} meV vs {L03} -> Lambda/Lambda_03 - 1 = {lam / L03 - 1:+.4e}; "
+                  f"phi_ref {pref:.7f} vs {p03} -> {pref / p03 - 1:+.3e}")
+        else:
+            print(f"    section 0.3: no entry; Lambda {lam:.7f} meV, phi_ref {pref:.7f}")
+    print()
+    print(f"SUMMARY: inputs {'all as the tool' if all_inputs else 'DIFFER'}; converged {'all' if all_conv else 'NOT ALL'}; "
+          f"bitwise {'all 7 x 15 x 2 equal' if all_equal else 'DIFFERENCES FOUND'}")
+    return 0 if (all_equal and all_inputs and all_conv) else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))
