@@ -1,7 +1,7 @@
 # Log 07 — the store
 
 **Subject:** Key each history on its model and store what its tuning found
-**Commit:** this commit, on branch `jordan-normalization`, on top of `83569ce`
+**Commit:** `223afc6`, on branch `jordan-normalization`, on top of `83569ce`
 **Date:** 2026-10-26, by Claude Opus 5.5
 **Result:** **COMPLETE**, with no stop.
 - S1–S8 shipped under orchestrator note 07, whose sixteen rulings govern where they differ from
@@ -214,7 +214,7 @@ null, no problems. `VERSION_LABEL = "2026.7.0"` with a dated paragraph in `confi
 - `ComputeTargets/tests/test_plot_inputs.py::TestAParameterNotStored::test_a_tuning_tolerance_the_build_did_not_use_names_the_constant`
   (ruling 14): an unstored tuning tolerance (1e-6) is `PlotOptionNotStored` with its message.
 
-**Removed** (ruling 14; each tested code this commit deletes):
+**Removed** (ruling 14; each tested code `223afc6` deletes):
 - `test_model_interface.TestTheAdapterIsBitwise.test_a_every_value_equals_the_rows` (the adapter
   against the potential and coupling rows, eight methods at twelve φ, bitwise) and
   `test_a_the_adapter_takes_only_the_exponential_rows` (the adapter's `TypeError` for rows of the
@@ -419,7 +419,7 @@ Times alone, after (load 5.9–6.9): `test_golden_history` 11.61 s; `test_e_the_
 
 ## The deliberate-breakage record
 
-Each diff is relative to this commit's tree; each was checked with `git apply --check` and `git
+Each diff is relative to `223afc6`'s tree; each was checked with `git apply --check` and `git
 apply -R --check`, replayed in `bash`, and reverted, with the tree as before (`black --check` clean).
 
 **Breakage 1: the tuning tolerance left out of the key.**
@@ -519,7 +519,7 @@ each `AssertionError: '-0x1.1573400000000p+8' != '-0x1.1573404f5900fp+8'`.
 
 ## State handed to the next prompt
 
-- **Tree:** this commit, on `jordan-normalization`, on top of `83569ce`.
+- **Tree:** `223afc6`, on `jordan-normalization`, on top of `83569ce`.
 - **The model's table.** `ExponentialModel` (M_serial, n_value, beta_serial), sharded by β, batch 50;
   `object_get("ExponentialModel", shard_key=β, M=…, n=…, beta=…, units=…)`. No `Lambda_value`,
   `ExponentialPotential`, `ExponentialCoupling`, `CosmologyConcepts/Potentials/` or
@@ -551,4 +551,4 @@ each `AssertionError: '-0x1.1573400000000p+8' != '-0x1.1573404f5900fp+8'`.
   `[03-step-1-first-pass-lookup-filters-nothing]`. Narrowed:
   `[02-the-scalar-history-parent-is-still-called-model]` (to `model_proxy`, `_model_proxy` and
   locals). Index: 22 open.
-- **Breakage replay.** The four diffs above apply to this commit's tree, checked in `bash`.
+- **Breakage replay.** The four diffs above apply to `223afc6`'s tree, checked in `bash`.

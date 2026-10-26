@@ -1,8 +1,8 @@
 # jordan-normalization campaign — implementation state
 
-**Last updated:** 2026-10-26 · **Status: LIVE — 10 of 10 prompts written, 7 landed (01–06 reviewed;
-04 after one stop ruled by the orchestrator; 07 landed, awaiting review); R1–R14, U1–U5 and P1–P20
-ruled by the user 2026-10-20 (README §6). Next: the orchestrator's review of 07.**
+**Last updated:** 2026-10-26 · **Status: LIVE — 10 of 10 prompts written, 7 landed (01–07, all
+reviewed; 04 after one stop ruled by the orchestrator); R1–R14, U1–U5 and P1–P20 ruled by the user
+2026-10-20 (README §6). Next: the orchestrator note for 08.**
 The plan is [`README.md`](README.md), written on 2026-10-20 on branch `jordan-normalization`, cut
 from `main` at `ac187c8`.
 
@@ -41,7 +41,7 @@ It ends in the handover for the science rebuild, which is the user's.
 | 04 | The model interface | `AbstractModel`, `ExponentialModel`, `RealizedModel`; consumers on it via an adapter; φ_ref = 0 bitwise; the shift law | Opus | ✍️ | ✅ | `597a215` | [`logs/04-the-model-interface.md`](logs/04-the-model-interface.md) |
 | 05 | The Planck mass | one reduced Planck mass from PRyMordial's G_N in three unit systems; consistency tests | Sonnet | ✍️ | ✅ | `1675e73` | [`logs/05-the-planck-mass.md`](logs/05-the-planck-mass.md) |
 | 06 | The tuning layer | `integrate_history` and `tune_history`: secant, seed, residuals, failure reasons, progress lines | Opus | ✍️ | ✅ | `1b83bbd` | [`logs/06-the-tuning-layer.md`](logs/06-the-tuning-layer.md) |
-| 07 | The store | `ExponentialModel` table; `ScalarHistory`'s key and tuned outputs; format 5; `VERSION_LABEL` 2026.7.0; writers and readers moved | Opus | ✍️ | ✅ | this commit | [`logs/07-the-store.md`](logs/07-the-store.md) |
+| 07 | The store | `ExponentialModel` table; `ScalarHistory`'s key and tuned outputs; format 5; `VERSION_LABEL` 2026.7.0; writers and readers moved | Opus | ✍️ | ✅ | `223afc6` | [`logs/07-the-store.md`](logs/07-the-store.md) |
 | 08 | The driver and the tools | `main.py`'s options; the super-Planckian warning; the wrapper's scope; the tools and the surfing scan on tuned histories | Opus | ✍️ | ⬜ | — | — |
 | 09 | Rehearse a tuned build | registered pilot build on the isolated cluster, interrupted and resumed, compared bitwise (if U2) | Opus | ✍️ | ⬜ | — | — |
 | 10 | Close | documents, `CLAUDE.md`, the handover for the science rebuild, indexes, board | Sonnet | ✍️ | ⬜ | — | — |
@@ -66,6 +66,11 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 - [`orchestrator/prompt-06.md`](orchestrator/prompt-06.md) (`8db352b`), used for 06. The
   orchestrator built the tuning loop and ran the thirteen points with both methods before
   dispatch; the agent's comparison equals it to the digit; no stop (§5.7).
+- [`orchestrator/prompt-07.md`](orchestrator/prompt-07.md) (`83569ce`), used for 07. Its probe
+  showed that one integration at the tuned golden's stored values reproduces its record, so the
+  round-trip test needs no re-tuning, and that SQLite ignores `Float(32)`. Its dispatch brief
+  excluded `test_golden_history.py`, whose docstring ruling 5 named; the review corrected it. No
+  stop (§5.8).
 
 ### 1.1 Items
 
@@ -77,7 +82,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 | 04 | M1 `AbstractModel` ✅ · M2 `RealizedModel` ✅ · M3 `ExponentialModel` ✅ · M4 the consumers ✅ · M5 the adapter ✅ · M6 the unread properties ✅ · M7 the tests ✅ (all landed in `597a215`) |
 | 05 | K1 one constant ✅ · K2 the three unit systems ✅ · K3 the tests ✅ (all landed in `1675e73`) |
 | 06 | T1 `integrate_history` ✅ · T2 the residuals ✅ · T3 the secant and its guards ✅ · T4 the seed ✅ · T5 the failures ✅ · T6 progress ✅ · T7 the outputs ✅ (all landed in `1b83bbd`) |
-| 07 | S1 the model's table ✅ · S2 the key ✅ · S3 the outputs ✅ · S4 the compute path ✅ · S5 `main.py` ✅ · S6 the readers ✅ · S7 format 5 and 2026.7.0 ✅ · S8 the tests ✅ (all landed in this commit) |
+| 07 | S1 the model's table ✅ · S2 the key ✅ · S3 the outputs ✅ · S4 the compute path ✅ · S5 `main.py` ✅ · S6 the readers ✅ · S7 format 5 and 2026.7.0 ✅ · S8 the tests ✅ (all landed in `223afc6`) |
 | 08 | D1 the options · D2 the warning · D3 the wrapper's scope · D4 `history_and_bbn.py` · D5 the surfing tools · D6 `histories.csv` · D7 the tests |
 | 09 | H1 reference · H2 resumed · H3 the comparisons · H4 the measurements · H5 the document |
 | 10 | C1 the documents · C2 `CLAUDE.md` · C3 the handover · C4 the board and indexes · C5 the final suites |
@@ -112,7 +117,7 @@ assigned issue, prompt 03 three, prompt 04 one and prompt 07 two (§3.1, §4).
   `_model_proxy`; locals and parameters named `model`.
 - **Impact.** None to values. Once 07 gives `model` to the Lagrangian, `model` would mean two things.
 - **Next step.** 07, which rewrites these specs and readers, renames them. Not assigned yet.
-- **Narrowed (2026-10-26) by prompt 07** (this commit; note 07, ruling 13): the parent field
+- **Narrowed (2026-10-26) by prompt 07** (`223afc6`; note 07, ruling 13): the parent field
   `"model"` of the `AdiabaticHistory` and `BBNData` specs is `"history"` (the column
   `scalar_history_serial` is unchanged), and `tools/inventory_report.py` says "history" where it
   said "model" (`history_text_of`, `history_parts`, `history_sort`, `history_extras`,
@@ -152,8 +157,8 @@ from `.documents/OPEN_ISSUES.md` §1.15.
 | `[01-scalarmodelvalue-build-checks-the-stored-phi-against-pi]` | `dk-and-rpk-migration` | 03 — closed (`bd9ae42`) | the value factory is rewritten for the axis |
 | `[05-the-value-factory-compares-stored-phi-against-pi]` | `science-readiness` | 03 — closed (`bd9ae42`) | the same defect, opened twice |
 | `[09-redshift-lookup-at-zero-takes-abs-of-the-comparison]` | `dk-and-rpk-migration` | 03 — closed (`bd9ae42`) | the lookup moves to ln(1 + z) by absolute difference |
-| `[02-scalar-stage-missing-filter-keeps-every-model]` | `dk-and-rpk-migration` | 07 — closed (this commit) | the scalar stage's lookups are rewritten for the new key |
-| `[03-step-1-first-pass-lookup-filters-nothing]` | `run-integrity` | 07 — closed (this commit) | the same code |
+| `[02-scalar-stage-missing-filter-keeps-every-model]` | `dk-and-rpk-migration` | 07 — closed (`223afc6`) | the scalar stage's lookups are rewritten for the new key |
+| `[03-step-1-first-pass-lookup-filters-nothing]` | `run-integrity` | 07 — closed (`223afc6`) | the same code |
 | `[05-surfing-scan-runs-at-a-fixed-lambda]` | `surfing-temperature` | 08 | the surfing tools move onto tuned histories |
 
 ## 4. Resolved issues
@@ -178,7 +183,7 @@ from `.documents/OPEN_ISSUES.md` §1.15.
   deleted from `.documents/OPEN_ISSUES.md` §1.15.
 - `[02-scalar-stage-missing-filter-keeps-every-model]` and
   `[03-step-1-first-pass-lookup-filters-nothing]` (one defect, opened twice) — closed by prompt 07
-  (this commit): the scalar stage's first pass reads its lookup results through
+  (`223afc6`): the scalar stage's first pass reads its lookup results through
   `pipeline_selection.missing_models`, so a fully stored batch schedules no work, tested by
   `test_pipeline_selection.TestScalarStageFirstPass` (four of its five tests fail with the old
   logic put back). The entries, with their **Resolved** lines, are in `dk-and-rpk-migration`'s §4
@@ -863,7 +868,7 @@ pass.
 
 ### 5.8 After prompt 07 (2026-10-26)
 
-Prompt 07 landed in this commit (log [`logs/07-the-store.md`](logs/07-the-store.md)), dispatched with
+Prompt 07 landed in `223afc6` (log [`logs/07-the-store.md`](logs/07-the-store.md)), dispatched with
 orchestrator note 07, whose sixteen rulings govern. No stop; the run was cut off once by an API rate
 limit and resumed on the same working tree.
 - **S1.** `ObjectFactories/ExponentialModel.py` (M, n, β; sharded by β, batch 50) in
@@ -905,3 +910,72 @@ limit and resumed on the same working tree.
 - **Index:** `.documents/OPEN_ISSUES.md` goes from 24 to 22 open.
 - **For the review.** The log's Deviation 8: `test_golden_history.py`'s docstring still names
   `compute_scalar_history._function`, since the dispatch brief excluded the file that ruling 5 named.
+
+**Before dispatch (2026-10-26).** The orchestrator read every writer and reader of the store at
+`1a66efc` before writing note 07, and ruled sixteen points: six callers of
+`compute_scalar_history._function` and nine files using the adapter move to `integrate_history`
+and a directly built model at 4 ln Λ, φ_ref = 0, bitwise; `ScalarHistory` keeps a derived
+`T_Jordan_stop` for the BBN pre-check; the super-Planckian warning iterates models at φ_ref = 0;
+n takes Λ's place in paths, labels and `histories.csv`; the adiabatic and BBN specs' parent becomes
+`"history"`. Two probes: one `integrate_history` at `golden_history_06_tuned.json`'s stored
+normalization and φ_ref reproduces its record with no difference (5.3 s), and SQLite stores a
+`Float(32)` column's value unrounded, so the prompt's float32 breakage was ruled as a rounding of
+the value. Baselines at `1a66efc`: 26; 61 + 165; 86; 102; 61.
+
+**Orchestrator review of prompt 07 (2026-10-26).** Against `223afc6`, by note 07's eleven checks.
+All pass.
+- **Scope.** 71 files: note 07's §2 files and ruling 1's deletions (`git rm`; git pairs the deleted
+  `ObjectFactories/ExponentialPotential.py` with the new `ExponentialModel.py` as a rename).
+  `ComputeTargets/BBNData.py` changes only its object (ruling 6); its pre-check is untouched. The
+  tree is clean and no Ray process runs.
+- **The schema.** The three factories, `config/datastore.py` and `config/sharding.py` read against
+  rulings 1–3: the model's columns, spec and match; the history's key, its fifteen nullable columns
+  with their units, and `build`'s filter (the key, `validated` and the version only).
+- **The object and the compute path.** `ScalarHistory`, `compute_scalar_history` (tune_history's
+  order, every argument by name), `compute` and `store` against rulings 4–5; `AdiabaticHistory` and
+  `BBNData` against ruling 6. No caller passes the old signature; the remaining mentions of
+  `compute_scalar_history._function` are docstrings that say what changed.
+- **The golden histories.** `test_golden_history` 11.1 s and the tuned golden's test (e) 27.2 s
+  alone, both passing; the four golden-history JSONs, their generators and the four older
+  fingerprint files are unchanged from `83569ce`.
+- **The round trip.** `test_tuned_history_round_trip.py` read against ruling 14 and run alone
+  (6 tests, 8.2 s). The orchestrator's own probe tuned the golden point through
+  `compute_scalar_history._function` (26.9 s): its history record equals the JSON's with no
+  difference and its tuning record equals the JSON's; written through the test's harness and read
+  back, all fifteen tuning values and the realized model (normalization, φ_ref, A(φ_ref) = 1, and
+  four methods at three field values) equal the tuning's own, bitwise.
+- **`main.py` and the issues.** The grid (M outer, β inner, n = 1), the tuning tolerance row, the
+  three stages and `missing_models` read against rulings 7–8.
+- **The readers.** `plot_inputs.exponential_models` and `parameters(…, tuning_tol)`; the plot
+  scripts' `M=…eV_n=…` paths and the tuned V in `plot_ScalarHistory.py`; the tools against
+  ruling 11. The history tools' tests pass in the suite.
+- **The fingerprint.** `spec_digests(config.datastore.factories)` equals `SPEC_DIGESTS[5]` (15
+  pairs, 13 distinct digests); pins 1–4 kept; `GOLDEN` names the new file; `VERSION_LABEL`
+  `2026.7.0`.
+- **The drivers.** `main.py`, both plot scripts and the wrapper `--help` exit 0; `--Lambda-values-eV`
+  and `--T-stop-GeV` are refused with exit 2, creating no file. The agent's `main.py --inventory` on
+  `test_inventory_report`'s temporary store shows 44 records in 15 classes, `log10_tol` −10, −8, −5.
+- **The breakages.** The log's four diffs (checked equal to the agent's scratch diffs) replayed in
+  `bash` and reverted, the tree clean after each: the tolerance out of the filter fails (b)'s
+  "another tuning tolerance"; `Float(32)` fails nothing; the float32 rounding fails three tests
+  with `'-0x1.1573400000000p+8' != '-0x1.1573404f5900fp+8'`; the old filter fails four of
+  `TestScalarStageFirstPass`. All as the log says.
+- **The records and the suites.** This board, the `dk-and-rpk-migration` and `run-integrity` boards,
+  the index (22 open) and the log in §5.1's form, every deviation classified. §2 item 3's grep
+  finds only the hits the log lists, with `ObjectFactories/ExponentialModel.py`'s docstring and spec
+  comment (which say what the table replaces) besides. The suites at `223afc6`, serially, at load
+  3–5: 26; 61 + 164; 92; 102; 61, all passing, `test_prym_passenger`'s wall-clock test included.
+  `black --check` passes on the 53 changed or new Python files.
+- **Residue, fixed in the follow-up commit.**
+  - "this commit" becomes `223afc6` in the log (×5), on this board (×7) and on the
+    `dk-and-rpk-migration` and `run-integrity` boards (×1 each).
+  - `test_golden_history.py`'s docstring names `integrate_history` (Deviation 8). Ruling 5 named the
+    file and the dispatch brief excluded it; the contradiction was the orchestrator's.
+  - Note 07 is listed in §1, and the status line is updated.
+  - This paragraph and the one before it.
+- **Not residue, recorded only (for 08's note).**
+  - The log's Observation 2 stands: an exception that escapes `tune_history`'s arithmetic would now
+    reach the driver through the remote rather than become a failure row. None arises at any
+    measured point. 09's rehearsal is the first run of the remote under Ray.
+  - The log's other observations stand: `bbn_from_store`'s join does not check `model_type`; the
+    comment in `config/sharding.py` still names Λ.

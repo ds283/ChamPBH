@@ -298,7 +298,7 @@ opened here, closed by prompts 02 and 03 and moved from §3.
     which rewrites the scalar stage's lookups for the new history key; the same defect is
     `dk-and-rpk-migration`'s `[02-scalar-stage-missing-filter-keeps-every-model]`, assigned with it.
     That prompt closes it here, in §4, and deletes its row from `.documents/OPEN_ISSUES.md`.
-  - **Resolved (2026-10-26):** by `jordan-normalization` prompt 07 (this commit). Step 1's first
+  - **Resolved (2026-10-26):** by `jordan-normalization` prompt 07 (`223afc6`). Step 1's first
     pass reads its lookup results through the pure helper `pipeline_selection.missing_models`,
     which keeps the models whose `ScalarHistory` lookup is not `available`, in order (a stored
     failure is not missing); `build_solver_batch` calls it in place of the comprehension, so the

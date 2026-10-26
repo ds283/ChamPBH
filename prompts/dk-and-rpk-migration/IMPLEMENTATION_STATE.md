@@ -216,7 +216,7 @@ which left the question open. **Not fixed:** `main.py`'s pipeline is outside thi
   [`jordan-normalization`](../jordan-normalization/IMPLEMENTATION_STATE.md) campaign, prompt 07,
   which rewrites the scalar stage's lookups for the new history key. That prompt closes it here, in
   §4, and deletes its row from `.documents/OPEN_ISSUES.md`.
-- **Resolved (2026-10-26):** by `jordan-normalization` prompt 07 (this commit). The scalar stage's
+- **Resolved (2026-10-26):** by `jordan-normalization` prompt 07 (`223afc6`). The scalar stage's
   first pass reads its lookup results through the pure helper
   `pipeline_selection.missing_models(models, lookups)`, which returns the models whose
   `ScalarHistory` lookup is not `available`, in order (a stored failure is not missing, as before);
