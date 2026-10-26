@@ -274,8 +274,9 @@ class TestFallbackGone(unittest.TestCase):
         self.assertNotIn("solver_list", names)
 
         # (ScalarHistory's constructor keeps its solver_labels argument: the label -> IntegrationSolver
-        # dictionary that store() reads. Only compute_scalar_history's dictionary of old names goes.)
-        body = self.function(tree, "compute_scalar_history")
+        # dictionary that store() reads. Only integrate_history's dictionary of old names goes. The
+        # body of compute_scalar_history moved into integrate_history in jordan-normalization 06.)
+        body = self.function(tree, "integrate_history")
         body_names = {node.id for node in ast.walk(body) if isinstance(node, ast.Name)}
         self.assertNotIn("solver_labels", body_names)
         self.assertNotIn("success", body_names)
@@ -303,7 +304,7 @@ class TestFallbackGone(unittest.TestCase):
         self.assertEqual(
             len(runtime_errors(self.function(tree, "integrate_scalar_history"))), 0
         )
-        sites = runtime_errors(self.function(tree, "compute_scalar_history"))
+        sites = runtime_errors(self.function(tree, "integrate_history"))
         self.assertEqual(len(sites), 1)
         message = ast.unparse(sites[0].exc)
         self.assertIn("largest supplied redshift", message)

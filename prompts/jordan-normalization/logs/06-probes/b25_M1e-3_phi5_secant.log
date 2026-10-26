@@ -1,0 +1,8 @@
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+beta=25,M=0.001,phi*=5,secant seed=tracking norm=-277.5090687500584 phi_ref=0.006547353474058649
+-- tune beta=25,M=0.001,phi*=5,secant it=0 kind=seed H/H0-1=-2.710e-02 phi_ref/phi_min-1=-6.290e-05 norm=-277.50906875 phi_ref=6.5473534741e-03 wall=146.3
+-- tune beta=25,M=0.001,phi*=5,secant it=1 kind=plain H/H0-1=+4.505e-03 phi_ref/phi_min-1=-3.614e-02 norm=-277.405434575 phi_ref=6.5477653198e-03 wall=178.3
+-- tune beta=25,M=0.001,phi*=5,secant it=2 kind=secant H/H0-1=+1.288e-03 phi_ref/phi_min-1=-7.379e-03 norm=-277.419930584 phi_ref=6.7589974012e-03 wall=110.8
+-- tune beta=25,M=0.001,phi*=5,secant it=3 kind=secant H/H0-1=-2.197e-05 phi_ref/phi_min-1=+1.552e-04 norm=-277.425140037 phi_ref=6.8100465492e-03 wall=105.3
+-- tune beta=25,M=0.001,phi*=5,secant it=4 kind=secant H/H0-1=-4.987e-07 phi_ref/phi_min-1=+1.648e-06 norm=-277.425048974 phi_ref=6.8089580195e-03 wall=107.1
+beta=25,M=0.001,phi*=5,secant RESULT integrations=5 plain=1 secant=3 guard=0 seed=tracking normalization=-0x1.156cd00272760p+8 phi_ref=0x1.be3b5c0379f9dp-8 residual_H=-4.986798e-07 residual_phi=+1.647854e-06 Lambda_meV=1.842955 phi_ref_Mp=6.8089580e-03 tracking=0.8624 total=647.8

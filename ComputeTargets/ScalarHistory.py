@@ -16,6 +16,7 @@
 from bisect import bisect_left
 from collections import namedtuple
 from math import log, pi, exp, expm1, sqrt, isinf, isnan
+from time import perf_counter
 from typing import Optional, List, Dict, Any
 
 import numpy as np
@@ -38,7 +39,7 @@ from CosmologyConcepts import (
     FieldLike,
 )
 from CosmologyConcepts.ConformalCouplings import AbstractCoupling
-from CosmologyConcepts.Models.AbstractModel import RealizedModel
+from CosmologyConcepts.Models.AbstractModel import AbstractModel, RealizedModel, Seed
 from CosmologyConcepts.Potentials import AbstractPotential
 from CosmologyModels import BaseCosmology
 from CosmologyModels.GenericEOS.LambdaCDM_GenericEOS import LambdaCDM_GenericEOS
@@ -1135,8 +1136,7 @@ def _failure_payload(reason: str) -> dict:
     return {"failure": True, "failure_reason": str(reason)[:DEFAULT_STRING_LENGTH]}
 
 
-@ray.remote
-def compute_scalar_history(
+def integrate_history(
     cosmology: LambdaCDM_GenericEOS,
     T_init: TemperatureLike,
     T_stop: TemperatureLike,
@@ -1144,12 +1144,18 @@ def compute_scalar_history(
     pi_init: FieldLike,
     z_grid: redshift_array,
     model: RealizedModel,
-    task_label: str = "compute_scalar_history",
+    task_label: str = "integrate_history",
     atol: float = DEFAULT_ABS_TOLERANCE,
     rtol: float = DEFAULT_REL_TOLERANCE,
     verbose: bool = False,
 ) -> dict:
     """
+    The primitive (jordan-normalization prompt 06, T1; README §6.0 R8): integrate one history of
+    one realized model, from T_init to any T_stop, and sample it on the axis. It has no
+    normalization logic: the model's normalization and phi_ref are whatever `model` was realized
+    with. tune_history calls it once per iterate; tests, diagnostics and compute_scalar_history
+    call it directly. (Until prompt 06 this was the body of compute_scalar_history.)
+
     :param cosmology: background cosmology
     :param T_init: initial radiation temperature in Jordan frame
     :param T_stop: final radiation temperature in Jordan frame (usually T_CMB)
@@ -1253,11 +1259,11 @@ def compute_scalar_history(
         # the solution must carry the five components of StateVector; anything else is a bug
         assert (
             len(result.solution(result.N_final)) == EXPECTED_SOL_LENGTH
-        ), f"compute_scalar_history ({task_label}): solution does not have {EXPECTED_SOL_LENGTH} components"
+        ), f"integrate_history ({task_label}): solution does not have {EXPECTED_SOL_LENGTH} components"
 
         if verbose and len(result.reflections) > 0:
             print(
-                f"-- compute_scalar_history ({task_label}): {len(result.reflections)} elastic reflection(s), first at N={result.reflections[0].N:.5g}"
+                f"-- integrate_history ({task_label}): {len(result.reflections)} elastic reflection(s), first at N={result.reflections[0].N:.5g}"
             )
 
         # the integration terminated at T_Jordan = T_stop, which is ln(1 + z_E) = 0 on the sampling
@@ -1269,7 +1275,7 @@ def compute_scalar_history(
         max_z: redshift = z_grid.max
         if max_z.log_one_plus_z < final_N:
             raise RuntimeError(
-                f"compute_scalar_history: ({task_label}): largest supplied redshift has ln(1 + z)={max_z.log_one_plus_z:.6g}, but solution required N={final_N:.6g} e-folds"
+                f"integrate_history: ({task_label}): largest supplied redshift has ln(1 + z)={max_z.log_one_plus_z:.6g}, but solution required N={final_N:.6g} e-folds"
             )
 
         sample = []
@@ -1324,16 +1330,16 @@ def compute_scalar_history(
                 )
         except OverflowError as e:
             print(
-                f"!! compute_scalar_history ({task_label}): overflow when assembling sample values; marked as total integration failure"
+                f"!! integrate_history ({task_label}): overflow when assembling sample values; marked as total integration failure"
             )
             return _failure_payload(
                 f"sampling: overflow when assembling sample values: {e}"
             )
     except ComputationFailureError as e:
-        print(f"-- compute_scalar_history ({task_label}): integration failure")
+        print(f"-- integrate_history ({task_label}): integration failure")
         print(f"   {e.message}")
         print(
-            f"!! compute_scalar_history ({task_label}): marked as total integration failure"
+            f"!! integrate_history ({task_label}): marked as total integration failure"
         )
         return _failure_payload(e.message)
 
@@ -1376,6 +1382,406 @@ def compute_scalar_history(
         ),
         "solver_label": SCALAR_HISTORY_STEPPER_LABEL,
     }
+
+
+@ray.remote
+def compute_scalar_history(
+    cosmology: LambdaCDM_GenericEOS,
+    T_init: TemperatureLike,
+    T_stop: TemperatureLike,
+    phi_init: FieldLike,
+    pi_init: FieldLike,
+    z_grid: redshift_array,
+    model: RealizedModel,
+    task_label: str = "compute_scalar_history",
+    atol: float = DEFAULT_ABS_TOLERANCE,
+    rtol: float = DEFAULT_REL_TOLERANCE,
+    verbose: bool = False,
+) -> dict:
+    """
+    :param cosmology: background cosmology
+    :param T_init: initial radiation temperature in Jordan frame
+    :param T_stop: final radiation temperature in Jordan frame (usually T_CMB)
+    :param phi_init: initial Einstein-frame scalar field value phi
+    :param pi_init: initial Einstein-frame scalar field derivative dphi/dN
+    :param z_grid: the sampling axis: points ln(1 + z_E), counted back from the end of the history
+    :param model: the realized model: V, the conformal factor A and their derivatives
+                  (jordan-normalization prompt 04)
+    :param task_label: label for the ray task
+    :param atol: absolute tolerance for the ODE solver
+    :param rtol: relative tolerance for the ODE solver
+    :return:
+    """
+    return integrate_history(
+        cosmology=cosmology,
+        T_init=T_init,
+        T_stop=T_stop,
+        phi_init=phi_init,
+        pi_init=pi_init,
+        z_grid=z_grid,
+        model=model,
+        task_label=task_label,
+        atol=atol,
+        rtol=rtol,
+        verbose=verbose,
+    )
+
+
+# ---- the tuning layer (jordan-normalization prompt 06; README §6.0 R1, R2, R8, R10, R13) ----
+
+# the defaults of tune_history: the tolerance on both residuals and the largest number of
+# integrations, the seed's included (README §6.2 P4). jordan-normalization prompt 08 gives them
+# options
+DEFAULT_TUNING_TOLERANCE = 1.0e-5
+DEFAULT_TUNING_MAX_INTEGRATIONS = 30
+
+# Eq. 7's V_target <= 0 at this many integrations running is a failure of the tuning
+TUNING_GUARD_LIMIT = 4
+
+# the keys tune_history adds to the final integration's payload (README §6.2 P6); each is a
+# Python float, int or str. jordan-normalization prompt 07 stores exactly these
+TUNING_OUTPUT_KEYS = (
+    "normalization",
+    "V_ref",
+    "phi_ref",
+    "phi_0",
+    "pi_0",
+    "tracking",
+    "residual_H",
+    "residual_phi",
+    "tuning_iterations",
+    "plain_steps",
+    "secant_steps",
+    "guard_steps",
+    "seed_kind",
+    "seed_normalization",
+    "seed_phi_ref",
+)
+
+
+def tuning_converged(residual_H: float, residual_phi: float, tolerance: float) -> bool:
+    """
+    The tuning's convergence test (jordan-normalization prompt 06, T2): true iff both residuals,
+    residual_H = H_J/H0 - 1 and residual_phi = phi_ref/phi_min - 1 at T_J = T_CMB, are inside
+    the tolerance. The tolerance itself is outside.
+    """
+    return abs(residual_H) < tolerance and abs(residual_phi) < tolerance
+
+
+def _solve2(B, F):
+    """d with B d = -F, for a 2x2 B, by Cramer's rule."""
+    (a, b), (c, d) = B
+    det = a * d - b * c
+    return ((-F[0] * d + F[1] * b) / det, (-a * F[1] + c * F[0]) / det)
+
+
+class TuningSecant:
+    """
+    The step of the tuning (jordan-normalization prompt 06, T3; README §6.0 R10, §6.2 P4): Broyden's
+    ("good") method on the fixed-point residual F(x) = G(x) - x of the plain map G, in two
+    variables. It holds the Broyden matrix B, the last point stepped from and its F, and nothing
+    else: no integration, no model, no count.
+
+    The caller supplies x = (normalization_coordinate, phi_ref/scale) and G(x), the plain map at
+    x: the frozen-state renormalization to Eq. 7's V_target and phi_ref <- phi_min, in the same
+    coordinates. step(x, G) returns the next point and the kind of step, "plain" or "secant":
+      - a plain step sets B = -I and returns G(x) itself, so the first step is the plain update;
+      - a secant step, taken when the secant is on and B is set, updates B by Broyden's rule,
+        B += (dF - B dx) dx^T / |dx|^2, with dx and dF the changes in x and F since the last
+        step, solves B d = -F by Cramer's rule, and returns x + d;
+      - the twice rule: if x came from a secant step and |F| > 2 |F_prev| (Euclidean, in x's
+        coordinates), B is reset and the step is plain, from x.
+    guard() resets B and the last point, so that the next step is plain; the tuning calls it when
+    Eq. 7 has no positive V_target and it moves the iterate itself.
+
+    With secant=False every step is plain (the comparison of prompt 06 §2, and diagnostics).
+    """
+
+    def __init__(self, secant: bool = True):
+        self._secant = bool(secant)
+        self._B = None
+        self._x_prev = None
+        self._F_prev = None
+        self._last_kind = None
+
+    @property
+    def B(self):
+        """A copy of the Broyden matrix, as a list of two rows, or None when it is not set."""
+        return None if self._B is None else [list(row) for row in self._B]
+
+    def guard(self):
+        """Forget B and the last point: the next step is plain."""
+        self._B = None
+        self._x_prev = None
+        self._F_prev = None
+        self._last_kind = None
+
+    def step(self, x, G):
+        """The next point from x, given G = G(x), and the kind of step: (x_new, kind)."""
+        F = (G[0] - x[0], G[1] - x[1])
+        nF = sqrt(F[0] ** 2 + F[1] ** 2)
+
+        kind = "plain"
+        if self._secant and self._B is not None:
+            Fp = self._F_prev
+            if self._last_kind == "secant" and nF > 2.0 * sqrt(Fp[0] ** 2 + Fp[1] ** 2):
+                self._B = None
+            else:
+                B, xp = self._B, self._x_prev
+                dx = (x[0] - xp[0], x[1] - xp[1])
+                dF = (F[0] - Fp[0], F[1] - Fp[1])
+                Bdx = (
+                    B[0][0] * dx[0] + B[0][1] * dx[1],
+                    B[1][0] * dx[0] + B[1][1] * dx[1],
+                )
+                u = (dF[0] - Bdx[0], dF[1] - Bdx[1])
+                dd = dx[0] ** 2 + dx[1] ** 2
+                self._B = [
+                    [B[0][0] + u[0] * dx[0] / dd, B[0][1] + u[0] * dx[1] / dd],
+                    [B[1][0] + u[1] * dx[0] / dd, B[1][1] + u[1] * dx[1] / dd],
+                ]
+                kind = "secant"
+
+        if kind == "plain":
+            self._B = [[-1.0, 0.0], [0.0, -1.0]]
+            x_new = (G[0], G[1])
+        else:
+            d = _solve2(self._B, F)
+            x_new = (x[0] + d[0], x[1] + d[1])
+
+        self._x_prev, self._F_prev = (x[0], x[1]), F
+        self._last_kind = kind
+        return x_new, kind
+
+
+# today's state of one integration, and the residuals (jordan-normalization prompt 06, T2)
+TuningState = namedtuple(
+    "TuningState",
+    [
+        "phi_0",
+        "pi_0",
+        "log_V",
+        "V_target",
+        "phi_min",
+        "residual_H",
+        "residual_phi",
+    ],
+)
+
+
+def _tuning_state(
+    cosmology, model: AbstractModel, rm: RealizedModel, data: dict
+) -> TuningState:
+    """
+    Today's state from the last sample of an integration (ln(1 + z) = 0, T_J = T_CMB), Eq. 7's
+    V_target (the potential at which H_J = H0 at that state), the effective minimum at the
+    history's own rho_m,E today, and the two residuals. The expressions are fixed by orchestrator
+    note 06, ruling 5. effective_minimum's ValueError propagates.
+    """
+    Mp = cosmology.units.PlanckMass
+    H0 = cosmology.H0
+    norm, phi_ref = rm.normalization, rm.phi_ref
+
+    s = SampleValues._make(tuple(data["sample"][-1]))
+    phi0, pi0 = s.phi_Einstein, s.pi_Einstein
+    A0 = rm.Omega(phi0)
+    rho_RJ = exp(s.log_rhorad_Jordan)
+    fm = exp(s.log_fm)
+    logV = rm.log_V(phi0)
+    bp = 1.0 + rm.d_logOmega_dphi(phi0) * pi0
+    G = 1.0 - pi0 * pi0 / (6.0 * Mp * Mp)
+    V_target = A0**4 * (3.0 * Mp**2 * H0**2 * G / (A0**2 * bp**2) - rho_RJ * (1.0 + fm))
+    rho_mE0 = A0**4 * fm * rho_RJ
+    phi_min = model.effective_minimum(norm, phi_ref, phi0, rho_mE0)
+
+    return TuningState(
+        phi_0=phi0,
+        pi_0=pi0,
+        log_V=logV,
+        V_target=V_target,
+        phi_min=phi_min,
+        residual_H=s.H_Jordan / H0 - 1.0,
+        residual_phi=phi_ref / phi_min - 1.0,
+    )
+
+
+def _tuning_failure(task_label: str, reason: str) -> dict:
+    """A failed tuning: the line, and _failure_payload's payload."""
+    print(f"!! tune_history ({task_label}): {reason}", flush=True)
+    return _failure_payload(reason)
+
+
+def tune_history(
+    cosmology: LambdaCDM_GenericEOS,
+    model: AbstractModel,
+    T_init: TemperatureLike,
+    phi_init: FieldLike,
+    pi_init: FieldLike,
+    z_grid: redshift_array,
+    task_label: str = "tune_history",
+    atol: float = DEFAULT_ABS_TOLERANCE,
+    rtol: float = DEFAULT_REL_TOLERANCE,
+    tolerance: float = DEFAULT_TUNING_TOLERANCE,
+    max_integrations: int = DEFAULT_TUNING_MAX_INTEGRATIONS,
+    secant: bool = True,
+    verbose: bool = False,
+) -> dict:
+    """
+    The tuning layer (jordan-normalization prompt 06; README §6.0 R1, R2, R8, R10, R13): integrate
+    the history to T_J = T_CMB with integrate_history and adjust the model's normalization and
+    phi_ref until H_J(T_CMB) = H0 and phi_ref = phi_min(T_CMB), the minimum of the Einstein-frame
+    effective potential at the history's own state today.
+
+    The model is read only through realize, renormalize, normalization_coordinate,
+    normalization_from_coordinate, effective_minimum, seed and the RealizedModel's methods; the
+    tuning never reads the model's parameters.
+
+    - It starts from model.seed(cosmology) (R13: the history's own inputs, no cache) and stops at
+      T_stop = cosmology.T_CMB_Kelvin * cosmology.units.Kelvin, the float main.py uses.
+    - After each integration k (k = 0 is the seed's) it forms today's state and the residuals
+      residual_H = H_J/H0 - 1 and residual_phi = phi_ref/phi_min - 1, and prints one line
+          -- tune <task_label> it=<k> kind=<seed|plain|secant|guard> H/H0-1=... phi_ref/phi_min-1=... norm=... phi_ref=<phi_ref/M_P> wall=<s>
+      If tuning_converged(residual_H, residual_phi, tolerance), it returns.
+    - If Eq. 7's V_target <= 0 (no positive potential gives H0 at today's state), the next iterate
+      halves V(phi_0) through renormalize and sets phi_ref = phi_min, and the step's matrix is
+      reset (a "guard" step). V_target <= 0 at TUNING_GUARD_LIMIT integrations running fails.
+    - Otherwise TuningSecant takes the step, "plain" or "secant", on
+      x = (normalization_coordinate, phi_ref/scale), scale being phi_min of integration 0.
+    - After max_integrations integrations, the seed's included, it fails.
+
+    secant=False takes the plain step at every iterate. It exists for the comparison of prompt 06
+    §2 and for diagnostics; no driver passes it.
+
+    :return: on success, the final integration's payload (every key integrate_history returns),
+             with the keys of TUNING_OUTPUT_KEYS added: normalization, V_ref = V(phi_ref) on the
+             final realization, phi_ref, phi_0, pi_0, tracking = pi_0/(1.5 phi_0), residual_H,
+             residual_phi, tuning_iterations (the integrations, the seed's included),
+             plain_steps, secant_steps, guard_steps, seed_kind, seed_normalization and
+             seed_phi_ref. On failure, _failure_payload's payload, whose reason's first clause
+             is one of "the normalization did not converge", "no normalization reaches H0",
+             "the effective minimum was not found", or an integration's own reason with
+             " (tuning integration k)" appended.
+    """
+    units: UnitsLike = cosmology.units
+    Mp: float = units.PlanckMass
+    T_stop: float = cosmology.T_CMB_Kelvin * units.Kelvin
+
+    seed: Seed = model.seed(cosmology)
+    norm, phi_ref = seed.normalization, seed.phi_ref
+
+    stepper = TuningSecant(secant=secant)
+    steps = {"plain": 0, "secant": 0, "guard": 0}
+    kind = "seed"
+    scale: Optional[float] = None
+    guards_running = 0
+
+    k = 0
+    while True:
+        rm: RealizedModel = model.realize(norm, phi_ref)
+
+        start = perf_counter()
+        data = integrate_history(
+            cosmology,
+            T_init,
+            T_stop,
+            phi_init,
+            pi_init,
+            z_grid,
+            rm,
+            task_label=task_label,
+            atol=atol,
+            rtol=rtol,
+            verbose=verbose,
+        )
+        wall = perf_counter() - start
+
+        if data.get("failure", False):
+            return _tuning_failure(
+                task_label, f"{data['failure_reason']} (tuning integration {k})"
+            )
+
+        try:
+            state: TuningState = _tuning_state(cosmology, model, rm, data)
+        except ValueError as e:
+            return _tuning_failure(
+                task_label,
+                f"the effective minimum was not found: {e} (tuning integration {k})",
+            )
+
+        print(
+            f"-- tune {task_label} it={k} kind={kind} H/H0-1={state.residual_H:+.3e} "
+            f"phi_ref/phi_min-1={state.residual_phi:+.3e} norm={norm:.12g} "
+            f"phi_ref={phi_ref / Mp:.10e} wall={wall:.1f}",
+            flush=True,
+        )
+
+        if tuning_converged(state.residual_H, state.residual_phi, tolerance):
+            payload = dict(data)
+            payload.update(
+                {
+                    "normalization": float(norm),
+                    "V_ref": float(exp(rm.log_V(phi_ref))),
+                    "phi_ref": float(phi_ref),
+                    "phi_0": float(state.phi_0),
+                    "pi_0": float(state.pi_0),
+                    "tracking": float(state.pi_0 / (1.5 * state.phi_0)),
+                    "residual_H": float(state.residual_H),
+                    "residual_phi": float(state.residual_phi),
+                    "tuning_iterations": k + 1,
+                    "plain_steps": steps["plain"],
+                    "secant_steps": steps["secant"],
+                    "guard_steps": steps["guard"],
+                    "seed_kind": str(seed.kind),
+                    "seed_normalization": float(seed.normalization),
+                    "seed_phi_ref": float(seed.phi_ref),
+                }
+            )
+            return payload
+
+        if scale is None:
+            scale = state.phi_min
+
+        # Eq. 7 has no positive V_target: halve V(phi_0) and move phi_ref to phi_min (a guard
+        # step), and forget the step's matrix. Ruling 7 of orchestrator note 06 fixes the order
+        if state.V_target <= 0.0:
+            guards_running += 1
+            if guards_running >= TUNING_GUARD_LIMIT:
+                return _tuning_failure(
+                    task_label,
+                    f"no normalization reaches H0: V_target <= 0 at {TUNING_GUARD_LIMIT} "
+                    f"integrations running, the last at integration {k}",
+                )
+            next_norm = model.renormalize(norm, state.phi_0, 0.5 * exp(state.log_V))
+            next_phi_ref = state.phi_min
+            stepper.guard()
+            next_kind = "guard"
+        else:
+            guards_running = 0
+            next_kind = None
+
+        if k + 1 >= max_integrations:
+            return _tuning_failure(
+                task_label,
+                f"the normalization did not converge: after {k + 1} integrations, "
+                f"H/H0-1={state.residual_H:+.3e}, "
+                f"phi_ref/phi_min-1={state.residual_phi:+.3e}",
+            )
+
+        if next_kind is None:
+            x = (model.normalization_coordinate(norm), phi_ref / scale)
+            G = (
+                model.normalization_coordinate(
+                    model.renormalize(norm, state.phi_0, state.V_target)
+                ),
+                state.phi_min / scale,
+            )
+            x_new, next_kind = stepper.step(x, G)
+            next_norm = model.normalization_from_coordinate(x_new[0])
+            next_phi_ref = x_new[1] * scale
+
+        norm, phi_ref, kind = next_norm, next_phi_ref, next_kind
+        steps[kind] += 1
+        k += 1
 
 
 def build_extra_data(data: dict) -> Optional[dict]:

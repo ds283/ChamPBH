@@ -1,0 +1,26 @@
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+beta=3,M=0.5,phi*=5,plain seed=static norm=-277.4538167395558 phi_ref=0.6074683528254007
+-- tune beta=3,M=0.5,phi*=5,plain it=0 kind=seed H/H0-1=+1.079e+00 phi_ref/phi_min-1=-3.921e-02 norm=-277.45381674 phi_ref=6.0746835283e-01 wall=2.2
+-- tune beta=3,M=0.5,phi*=5,plain it=1 kind=guard H/H0-1=+7.242e-01 phi_ref/phi_min-1=+4.388e-02 norm=-278.14696392 phi_ref=6.3225742489e-01 wall=2.2
+-- tune beta=3,M=0.5,phi*=5,plain it=2 kind=plain H/H0-1=-1.367e-01 phi_ref/phi_min-1=+3.872e-01 norm=-280.614387479 phi_ref=6.0567924591e-01 wall=2.3
+-- tune beta=3,M=0.5,phi*=5,plain it=3 kind=plain H/H0-1=-3.870e-02 phi_ref/phi_min-1=+2.234e-01 norm=-280.135756864 phi_ref=4.3661346181e-01 wall=2.6
+-- tune beta=3,M=0.5,phi*=5,plain it=4 kind=plain H/H0-1=+9.206e-03 phi_ref/phi_min-1=+1.137e-01 norm=-279.967830979 phi_ref=3.5688187492e-01 wall=2.6
+-- tune beta=3,M=0.5,phi*=5,plain it=5 kind=plain H/H0-1=+6.711e-03 phi_ref/phi_min-1=+6.990e-02 norm=-280.015025915 phi_ref=3.2045893737e-01 wall=2.7
+-- tune beta=3,M=0.5,phi*=5,plain it=6 kind=plain H/H0-1=+4.966e-03 phi_ref/phi_min-1=+4.160e-02 norm=-280.052548863 phi_ref=2.9952329220e-01 wall=2.7
+-- tune beta=3,M=0.5,phi*=5,plain it=7 kind=plain H/H0-1=+2.996e-03 phi_ref/phi_min-1=+2.485e-02 norm=-280.081841913 phi_ref=2.8756106057e-01 wall=2.9
+-- tune beta=3,M=0.5,phi*=5,plain it=8 kind=plain H/H0-1=+1.879e-03 phi_ref/phi_min-1=+1.463e-02 norm=-280.10007393 phi_ref=2.8058770039e-01 wall=2.8
+-- tune beta=3,M=0.5,phi*=5,plain it=9 kind=plain H/H0-1=+1.099e-03 phi_ref/phi_min-1=+8.635e-03 norm=-280.111727425 phi_ref=2.7654157325e-01 wall=2.9
+-- tune beta=3,M=0.5,phi*=5,plain it=10 kind=plain H/H0-1=+6.630e-04 phi_ref/phi_min-1=+5.059e-03 norm=-280.118619431 phi_ref=2.7417419795e-01 wall=3.1
+-- tune beta=3,M=0.5,phi*=5,plain it=11 kind=plain H/H0-1=+3.854e-04 phi_ref/phi_min-1=+2.972e-03 norm=-280.122802052 phi_ref=2.7279402934e-01 wall=3.1
+-- tune beta=3,M=0.5,phi*=5,plain it=12 kind=plain H/H0-1=+2.287e-04 phi_ref/phi_min-1=+1.739e-03 norm=-280.125242881 phi_ref=2.7198569886e-01 wall=3.3
+-- tune beta=3,M=0.5,phi*=5,plain it=13 kind=plain H/H0-1=+1.335e-04 phi_ref/phi_min-1=+1.019e-03 norm=-280.126694542 phi_ref=2.7151359350e-01 wall=3.2
+-- tune beta=3,M=0.5,phi*=5,plain it=14 kind=plain H/H0-1=+7.806e-05 phi_ref/phi_min-1=+5.963e-04 norm=-280.127542713 phi_ref=2.7123711729e-01 wall=3.1
+-- tune beta=3,M=0.5,phi*=5,plain it=15 kind=plain H/H0-1=+4.623e-05 phi_ref/phi_min-1=+3.490e-04 norm=-280.128039134 phi_ref=2.7107546515e-01 wall=3.1
+-- tune beta=3,M=0.5,phi*=5,plain it=16 kind=plain H/H0-1=+2.664e-05 phi_ref/phi_min-1=+2.046e-04 norm=-280.128333235 phi_ref=2.7098089976e-01 wall=3.1
+-- tune beta=3,M=0.5,phi*=5,plain it=17 kind=plain H/H0-1=+1.575e-05 phi_ref/phi_min-1=+1.195e-04 norm=-280.128502787 phi_ref=2.7092547734e-01 wall=3.3
+-- tune beta=3,M=0.5,phi*=5,plain it=18 kind=plain H/H0-1=+9.364e-06 phi_ref/phi_min-1=+7.004e-05 norm=-280.128603048 phi_ref=2.7089311621e-01 wall=3.4
+-- tune beta=3,M=0.5,phi*=5,plain it=19 kind=plain H/H0-1=+5.162e-06 phi_ref/phi_min-1=+4.105e-05 norm=-280.128662651 phi_ref=2.7087414361e-01 wall=3.4
+-- tune beta=3,M=0.5,phi*=5,plain it=20 kind=plain H/H0-1=+3.235e-06 phi_ref/phi_min-1=+2.381e-05 norm=-280.128695508 phi_ref=2.7086302570e-01 wall=3.6
+-- tune beta=3,M=0.5,phi*=5,plain it=21 kind=plain H/H0-1=+1.787e-06 phi_ref/phi_min-1=+1.401e-05 norm=-280.128716104 phi_ref=2.7085657555e-01 wall=3.6
+-- tune beta=3,M=0.5,phi*=5,plain it=22 kind=plain H/H0-1=+1.232e-06 phi_ref/phi_min-1=+8.223e-06 norm=-280.128727477 phi_ref=2.7085277969e-01 wall=3.5
+beta=3,M=0.5,phi*=5,plain RESULT integrations=23 plain=21 secant=0 guard=1 seed=static normalization=-0x1.1820f448aed3ep+8 phi_ref=0x1.155a6e5b3a9c3p-2 residual_H=+1.231563e-06 residual_phi=+8.223058e-06 Lambda_meV=0.937490 phi_ref_Mp=2.7085278e-01 tracking=0.4158 total=68.6

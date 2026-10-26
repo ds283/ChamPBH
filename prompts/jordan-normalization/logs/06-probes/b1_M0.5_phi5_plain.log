@@ -1,0 +1,24 @@
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+beta=1,M=0.5,phi*=5,plain seed=static norm=-277.10593875641104 phi_ref=1.052166051083771
+-- tune beta=1,M=0.5,phi*=5,plain it=0 kind=seed H/H0-1=+6.791e-01 phi_ref/phi_min-1=-1.436e-01 norm=-277.105938756 phi_ref=1.0521660511e+00 wall=1.5
+-- tune beta=1,M=0.5,phi*=5,plain it=1 kind=plain H/H0-1=+1.088e-01 phi_ref/phi_min-1=+1.609e-01 norm=-278.580199206 phi_ref=1.2285765779e+00 wall=1.5
+-- tune beta=1,M=0.5,phi*=5,plain it=2 kind=plain H/H0-1=-8.835e-03 phi_ref/phi_min-1=+2.111e-01 norm=-278.855630587 phi_ref=1.0583063811e+00 wall=1.6
+-- tune beta=1,M=0.5,phi*=5,plain it=3 kind=plain H/H0-1=-2.118e-02 phi_ref/phi_min-1=+1.576e-01 norm=-278.829641819 phi_ref=8.7387126130e-01 wall=1.7
+-- tune beta=1,M=0.5,phi*=5,plain it=4 kind=plain H/H0-1=-8.725e-03 phi_ref/phi_min-1=+8.850e-02 norm=-278.759220981 phi_ref=7.5492351639e-01 wall=1.7
+-- tune beta=1,M=0.5,phi*=5,plain it=5 kind=plain H/H0-1=-2.290e-03 phi_ref/phi_min-1=+4.604e-02 norm=-278.727649438 phi_ref=6.9354387515e-01 wall=1.6
+-- tune beta=1,M=0.5,phi*=5,plain it=6 kind=plain H/H0-1=+1.644e-04 phi_ref/phi_min-1=+2.420e-02 norm=-278.718944475 phi_ref=6.6302067837e-01 wall=1.7
+-- tune beta=1,M=0.5,phi*=5,plain it=7 kind=plain H/H0-1=+3.599e-04 phi_ref/phi_min-1=+1.351e-02 norm=-278.719586826 phi_ref=6.4735208480e-01 wall=1.7
+-- tune beta=1,M=0.5,phi*=5,plain it=8 kind=plain H/H0-1=+2.248e-04 phi_ref/phi_min-1=+7.668e-03 norm=-278.721014225 phi_ref=6.3872327380e-01 wall=1.7
+-- tune beta=1,M=0.5,phi*=5,plain it=9 kind=plain H/H0-1=+1.261e-04 phi_ref/phi_min-1=+4.340e-03 norm=-278.721913291 phi_ref=6.3386251958e-01 wall=1.7
+-- tune beta=1,M=0.5,phi*=5,plain it=10 kind=plain H/H0-1=+6.911e-05 phi_ref/phi_min-1=+2.445e-03 norm=-278.72242031 phi_ref=6.3112349176e-01 wall=1.7
+-- tune beta=1,M=0.5,phi*=5,plain it=11 kind=plain H/H0-1=+3.820e-05 phi_ref/phi_min-1=+1.372e-03 norm=-278.722698874 phi_ref=6.2958432787e-01 wall=1.6
+-- tune beta=1,M=0.5,phi*=5,plain it=12 kind=plain H/H0-1=+2.117e-05 phi_ref/phi_min-1=+7.686e-04 norm=-278.722853108 phi_ref=6.2872159653e-01 wall=1.6
+-- tune beta=1,M=0.5,phi*=5,plain it=13 kind=plain H/H0-1=+1.237e-05 phi_ref/phi_min-1=+4.305e-04 norm=-278.72293866 phi_ref=6.2823871311e-01 wall=1.7
+-- tune beta=1,M=0.5,phi*=5,plain it=14 kind=plain H/H0-1=+6.411e-06 phi_ref/phi_min-1=+2.410e-04 norm=-278.722988675 phi_ref=6.2796836698e-01 wall=1.7
+-- tune beta=1,M=0.5,phi*=5,plain it=15 kind=plain H/H0-1=+3.623e-06 phi_ref/phi_min-1=+1.345e-04 norm=-278.723014598 phi_ref=6.2781703433e-01 wall=1.6
+-- tune beta=1,M=0.5,phi*=5,plain it=16 kind=plain H/H0-1=+2.584e-06 phi_ref/phi_min-1=+7.558e-05 norm=-278.72302925 phi_ref=6.2773258415e-01 wall=1.6
+-- tune beta=1,M=0.5,phi*=5,plain it=17 kind=plain H/H0-1=+9.853e-07 phi_ref/phi_min-1=+4.254e-05 norm=-278.723039702 phi_ref=6.2768514462e-01 wall=1.6
+-- tune beta=1,M=0.5,phi*=5,plain it=18 kind=plain H/H0-1=+5.594e-07 phi_ref/phi_min-1=+2.354e-05 norm=-278.723043688 phi_ref=6.2765844541e-01 wall=1.5
+-- tune beta=1,M=0.5,phi*=5,plain it=19 kind=plain H/H0-1=+2.124e-07 phi_ref/phi_min-1=+1.296e-05 norm=-278.72304595 phi_ref=6.2764366922e-01 wall=1.4
+-- tune beta=1,M=0.5,phi*=5,plain it=20 kind=plain H/H0-1=+1.134e-07 phi_ref/phi_min-1=+7.054e-06 norm=-278.72304681 phi_ref=6.2763553379e-01 wall=1.4
+beta=1,M=0.5,phi*=5,plain RESULT integrations=21 plain=20 secant=0 guard=0 seed=static normalization=-0x1.16b91998811adp+8 phi_ref=0x1.415971d6e09dcp-1 residual_H=+1.133536e-07 residual_phi=+7.053813e-06 Lambda_meV=1.332252 phi_ref_Mp=6.2763553e-01 tracking=0.4625 total=33.9

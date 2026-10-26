@@ -1,0 +1,12 @@
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+beta=1,M=0.5,phi*=5,secant seed=static norm=-277.10593875641104 phi_ref=1.052166051083771
+-- tune beta=1,M=0.5,phi*=5,secant it=0 kind=seed H/H0-1=+6.791e-01 phi_ref/phi_min-1=-1.436e-01 norm=-277.105938756 phi_ref=1.0521660511e+00 wall=1.6
+-- tune beta=1,M=0.5,phi*=5,secant it=1 kind=plain H/H0-1=+1.088e-01 phi_ref/phi_min-1=+1.609e-01 norm=-278.580199206 phi_ref=1.2285765779e+00 wall=1.4
+-- tune beta=1,M=0.5,phi*=5,secant it=2 kind=secant H/H0-1=-2.939e-02 phi_ref/phi_min-1=+2.191e-01 norm=-278.914461046 phi_ref=1.0219377081e+00 wall=1.5
+-- tune beta=1,M=0.5,phi*=5,secant it=3 kind=secant H/H0-1=-1.700e-02 phi_ref/phi_min-1=+1.515e-01 norm=-278.812353188 phi_ref=8.6860165417e-01 wall=1.6
+-- tune beta=1,M=0.5,phi*=5,secant it=4 kind=secant H/H0-1=+2.044e-02 phi_ref/phi_min-1=-2.527e-02 norm=-278.641173357 phi_ref=6.1683067731e-01 wall=1.9
+-- tune beta=1,M=0.5,phi*=5,secant it=5 kind=secant H/H0-1=-4.066e-04 phi_ref/phi_min-1=-4.467e-04 norm=-278.724823753 phi_ref=6.2651272058e-01 wall=1.6
+-- tune beta=1,M=0.5,phi*=5,secant it=6 kind=secant H/H0-1=-7.686e-05 phi_ref/phi_min-1=+9.466e-05 norm=-278.723359489 phi_ref=6.2766381586e-01 wall=1.6
+-- tune beta=1,M=0.5,phi*=5,secant it=7 kind=secant H/H0-1=+1.158e-05 phi_ref/phi_min-1=-1.564e-05 norm=-278.723000984 phi_ref=6.2761823606e-01 wall=1.5
+-- tune beta=1,M=0.5,phi*=5,secant it=8 kind=secant H/H0-1=+1.691e-07 phi_ref/phi_min-1=+2.608e-07 norm=-278.723047971 phi_ref=6.2762590690e-01 wall=1.6
+beta=1,M=0.5,phi*=5,secant RESULT integrations=9 plain=1 secant=7 guard=0 seed=static normalization=-0x1.16b919abff002p+8 phi_ref=0x1.41582ed07fc3dp-1 residual_H=+1.691345e-07 residual_phi=+2.608197e-07 Lambda_meV=1.332252 phi_ref_Mp=6.2762591e-01 tracking=0.4625 total=14.4

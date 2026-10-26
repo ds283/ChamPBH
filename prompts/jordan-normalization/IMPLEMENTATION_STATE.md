@@ -1,8 +1,8 @@
 # jordan-normalization campaign — implementation state
 
-**Last updated:** 2026-10-26 · **Status: LIVE — 10 of 10 prompts written, 5 landed (01–05, all
-reviewed; 04 after one stop ruled by the orchestrator); R1–R14, U1–U5 and P1–P20 ruled by the user
-2026-10-20 (README §6). Next: the orchestrator note for 06.**
+**Last updated:** 2026-10-26 · **Status: LIVE — 10 of 10 prompts written, 6 landed (01–05
+reviewed, 04 after one stop ruled by the orchestrator; 06 awaiting review); R1–R14, U1–U5 and
+P1–P20 ruled by the user 2026-10-20 (README §6). Next: the orchestrator's review of 06.**
 The plan is [`README.md`](README.md), written on 2026-10-20 on branch `jordan-normalization`, cut
 from `main` at `ac187c8`.
 
@@ -40,7 +40,7 @@ It ends in the handover for the science rebuild, which is the user's.
 | 03 | The sampling axis | ln(1 + z_E) on the axis, exact-multiple grid, absolute lookup, ln(1 + z_J) per sample; format 4 | Opus | ✅ | ✅ | `bd9ae42` | [`logs/03-the-sampling-axis.md`](logs/03-the-sampling-axis.md) |
 | 04 | The model interface | `AbstractModel`, `ExponentialModel`, `RealizedModel`; consumers on it via an adapter; φ_ref = 0 bitwise; the shift law | Opus | ✍️ | ✅ | `597a215` | [`logs/04-the-model-interface.md`](logs/04-the-model-interface.md) |
 | 05 | The Planck mass | one reduced Planck mass from PRyMordial's G_N in three unit systems; consistency tests | Sonnet | ✍️ | ✅ | `1675e73` | [`logs/05-the-planck-mass.md`](logs/05-the-planck-mass.md) |
-| 06 | The tuning layer | `integrate_history` and `tune_history`: secant, seed, residuals, failure reasons, progress lines | Opus | ✍️ | ⬜ | — | — |
+| 06 | The tuning layer | `integrate_history` and `tune_history`: secant, seed, residuals, failure reasons, progress lines | Opus | ✍️ | ✅ | this commit | [`logs/06-the-tuning-layer.md`](logs/06-the-tuning-layer.md) |
 | 07 | The store | `ExponentialModel` table; `ScalarHistory`'s key and tuned outputs; format 5; `VERSION_LABEL` 2026.7.0; writers and readers moved | Opus | ✍️ | ⬜ | — | — |
 | 08 | The driver and the tools | `main.py`'s options; the super-Planckian warning; the wrapper's scope; the tools and the surfing scan on tuned histories | Opus | ✍️ | ⬜ | — | — |
 | 09 | Rehearse a tuned build | registered pilot build on the isolated cluster, interrupted and resumed, compared bitwise (if U2) | Opus | ✍️ | ⬜ | — | — |
@@ -73,7 +73,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 | 03 | Z1 the concept ✅ · Z2 the factory and format 4 ✅ · Z3 the grid ✅ · Z4 the sampling ✅ · Z5 ln(1 + z_J) ✅ · Z6 the readers ✅ · Z7 the value factory's issues ✅ (all landed in `bd9ae42`) |
 | 04 | M1 `AbstractModel` ✅ · M2 `RealizedModel` ✅ · M3 `ExponentialModel` ✅ · M4 the consumers ✅ · M5 the adapter ✅ · M6 the unread properties ✅ · M7 the tests ✅ (all landed in `597a215`) |
 | 05 | K1 one constant ✅ · K2 the three unit systems ✅ · K3 the tests ✅ (all landed in `1675e73`) |
-| 06 | T1 `integrate_history` · T2 the residuals · T3 the secant and its guards · T4 the seed · T5 the failures · T6 progress · T7 the outputs |
+| 06 | T1 `integrate_history` ✅ · T2 the residuals ✅ · T3 the secant and its guards ✅ · T4 the seed ✅ · T5 the failures ✅ · T6 progress ✅ · T7 the outputs ✅ (all landed in this commit) |
 | 07 | S1 the model's table · S2 the key · S3 the outputs · S4 the compute path · S5 `main.py` · S6 the readers · S7 format 5 and 2026.7.0 · S8 the tests |
 | 08 | D1 the options · D2 the warning · D3 the wrapper's scope · D4 `history_and_bbn.py` · D5 the surfing tools · D6 `histories.csv` · D7 the tests |
 | 09 | H1 reference · H2 resumed · H3 the comparisons · H4 the measurements · H5 the document |
@@ -88,7 +88,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 | Axis | the axis is ln(1 + z_E) with no overflow; ln(1 + z_J) agrees with `cosmology.z(T_J)` and with the A identity; the change in values measured | 03 | ✅ |
 | Model | the golden history bitwise through `ExponentialModel` at φ_ref = 0, V₀ = Λ⁴; the shift law holds | 04 | ✅ |
 | Units | one Planck mass equal to PRyMordial's; 1 K, ħc, ħ and the kilogram consistent to ≤ 10⁻⁶ in each unit system | 05 | ✅ |
-| Tuning | a tuned history converges inside the tolerance, deterministically; the secant is no worse than the plain update on README §0.3's grid | 06 | ⬜ |
+| Tuning | a tuned history converges inside the tolerance, deterministically; the secant is no worse than the plain update on README §0.3's grid | 06 | ✅ |
 | Store | a tuned history round-trips bitwise and its realized model is rebuilt equal; the golden fingerprint at format 5 | 07 | ⬜ |
 | Driver | the old options are refused; the surfing scan records tuned values with its roots unchanged | 08 | ⬜ |
 | R | on the isolated cluster every history converged, the stored values equal the tuning layer's, and the resumed store equals the reference | 09 | ⬜ |
@@ -707,3 +707,78 @@ pass.
 - **Not residue, recorded only.** The log's three observations stand, with no issue opened:
   PRyMordial's `GN` is one ulp below the literal; the golden setup's T_stop is the 1 MeV fixed
   temperature; and the two fixtures' stored M is now 1.000278 × 10⁻³ M_P.
+
+### 5.7 After prompt 06 (2026-10-26)
+
+Prompt 06 landed in this commit (log [`logs/06-the-tuning-layer.md`](logs/06-the-tuning-layer.md)),
+dispatched with orchestrator note 06, whose seventeen rulings govern. No stop.
+- **T1.** `integrate_history`, a plain function with `compute_scalar_history`'s signature, holds
+  its body, moved unchanged but for its own name in six strings. `compute_scalar_history` stays
+  the `@ray.remote`, with its signature and docstring, and calls it by name. `main.py` and every
+  caller are unchanged. `TestFallbackGone` reads `integrate_history` (ruling 3).
+- **T2.** `tuning_converged(residual_H, residual_phi, tolerance)`, with `residual_H = H_J/H0 − 1`
+  and `residual_phi = φ_ref/φ_min − 1` from the last sample, by ruling 5's expressions.
+- **T3.** `TuningSecant`, Broyden's step in (normalization coordinate, φ_ref/scale): plain first
+  (B = −I, G(x) itself), then secant; the twice rule; `guard()` resets. `tune_history`'s guard on
+  V_target ≤ 0 halves V(φ₀) and sets φ_ref = φ_min.
+- **T4.** The seed is `model.seed(cosmology)`, per tuning, with no cache.
+- **T5.** Four first clauses: "the normalization did not converge", "no normalization reaches H0",
+  "the effective minimum was not found", and an integration's own reason with
+  " (tuning integration k)".
+- **T6.** One line per integration, `-- tune <label> it=<k> kind=<seed|plain|secant|guard> …`.
+  `StageTracker` ignores it (test (c)).
+- **T7.** The final payload plus `TUNING_OUTPUT_KEYS` (fifteen keys, each a `float`, `int` or
+  `str`), which 07 stores.
+- **The tests.** `ComputeTargets/tests/test_tuning.py`, 21 tests, (a)–(j) of ruling 11, 87.5 s
+  alone at load 4.7. The tuned golden history is `golden_history_06_tuned.json`, made by
+  `golden_tuned_history.py`: β = 3, M = 0.01 M_P, φ* = 5 M_P, five integrations (plain 1, secant
+  3), normalization −277.4502000419897 and φ_ref 0.06222843896351175 M_P.
+- **The golden history** `golden_history_05.json` passes unchanged through `integrate_history`
+  (9.226 s alone after, 9.354 s before). No existing golden JSON was written.
+- **The comparison** (§2 item 2, ruling 13), 26 tunings in eight lanes in 12 minutes at load
+  5–16, recorded in [`logs/06-probes/`](logs/06-probes/README.md). **Both tables equal note 06's
+  §0 in every integration count, step count and digit shown**, the wall times aside.
+
+| β | M/M_P | φ* | seed | plain: integrations (steps) | secant: integrations (steps) | Λ plain (meV) | Λ secant (meV) | φ_ref/M_P plain | φ_ref/M_P secant |
+|---|---|---|---|---|---|---|---|---|---|
+| 1.5 | 1e-3 | 5 | tracking | 6 (plain 5) | 4 (plain 1, secant 2) | 2.125321 | 2.125322 | 3.4962045e-02 | 3.4962266e-02 |
+| 25 | 1e-3 | 5 | tracking | 6 (plain 5) | 5 (plain 1, secant 3) | 1.842954 | 1.842955 | 6.8089327e-03 | 6.8089580e-03 |
+| 5.5 | 1e-3 | 5 | tracking | 6 (plain 5) | 5 (plain 1, secant 3) | 2.020615 | 2.020615 | 1.6719234e-02 | 1.6719361e-02 |
+| 3 | 1e-3 | 5 | tracking | 6 (plain 5) | 4 (plain 1, secant 2) | 2.073998 | 2.073996 | 2.3662575e-02 | 2.3662904e-02 |
+| 1.1 | 1e-3 | 2 | tracking | 6 (plain 5) | 4 (plain 1, secant 2) | 2.144994 | 2.144996 | 4.1533670e-02 | 4.1533944e-02 |
+| 0.5 | 1e-3 | 1 | tracking | 6 (plain 5) | 4 (plain 1, secant 2) | 2.184947 | 2.184949 | 6.3821123e-02 | 6.3821650e-02 |
+| 3 | 1e-5 | 5 | tracking | 3 (plain 2) | 3 (plain 1, secant 1) | 2.226473 | 2.226473 | 2.6704632e-03 | 2.6704769e-03 |
+| 1 | 1e-5 | 5 | tracking | 5 (plain 4) | 4 (plain 1, secant 2) | 2.236588 | 2.236588 | 4.6642085e-03 | 4.6642162e-03 |
+| 3 | 0.01 | 5 | tracking | 7 (plain 6) | 5 (plain 1, secant 3) | 1.831404 | 1.831403 | 6.2228103e-02 | 6.2228439e-02 |
+| 1 | 0.03 | 5 | tracking | 8 (plain 7) | 5 (plain 1, secant 3) | 1.881162 | 1.881157 | 2.0284503e-01 | 2.0284635e-01 |
+| 3 | 0.1 | 5 | static | 13 (plain 12) | 9 (plain 1, secant 7) | 1.388919 | 1.388919 | 1.4772415e-01 | 1.4772170e-01 |
+| 1 | 0.5 | 5 | static | 21 (plain 20) | 9 (plain 1, secant 7) | 1.332252 | 1.332252 | 6.2763553e-01 | 6.2762591e-01 |
+| 3 | 0.5 | 5 | static | 23 (guard 1, plain 21) | 12 (guard 1, plain 1, secant 9) | 0.937490 | 0.937486 | 2.7085278e-01 | 2.7084733e-01 |
+
+| β | M/M_P | φ* | \|Δ ln Λ\| | \|Δφ_ref\|/φ_ref | plain's last \|φ_ref/φ_min − 1\| | Λ_secant/Λ_planning − 1 | φ_ref,secant/φ_ref,planning − 1 | wall plain, secant (s) |
+|---|---|---|---|---|---|---|---|---|
+| 1.5 | 1e-3 | 5 | 3.2e-07 | 6.3e-06 | 2.9e-06 | -2.781e-04 | -3.8e-06 | 66, 43 |
+| 25 | 1e-3 | 5 | 3.4e-07 | 3.7e-06 | 7.0e-07 | -2.767e-04 | -6.2e-06 | 732, 648 |
+| 5.5 | 1e-3 | 5 | 1.4e-07 | 7.6e-06 | 6.1e-06 | -2.779e-04 | -8.3e-06 | 217, 173 |
+| 3 | 1e-3 | 5 | 1.1e-06 | 1.4e-05 | 4.6e-06 | -2.795e-04 | +1.5e-07 | 77, 57 |
+| 1.1 | 1e-3 | 2 | 7.8e-07 | 6.6e-06 | 2.7e-06 | -2.774e-04 | +1.0e-06 | 60, 40 |
+| 0.5 | 1e-3 | 1 | 1.0e-06 | 8.3e-06 | 1.5e-06 | -2.768e-04 | +7.1e-06 | 36, 24 |
+| 3 | 1e-5 | 5 | 2.9e-08 | 5.1e-06 | 1.2e-06 | -2.773e-04 | -8.6e-06 | 213, 214 |
+| 1 | 1e-5 | 5 | 3.3e-08 | 1.6e-06 | 1.6e-06 | -2.776e-04 | +3.5e-06 | 43, 35 |
+| 3 | 0.01 | 5 | 5.7e-07 | 5.4e-06 | 1.3e-07 | -2.783e-04 | +3.8e-06 | 64, 46 |
+| 1 | 0.03 | 5 | 2.2e-06 | 6.5e-06 | 1.1e-06 | -2.894e-04 | +2.7e-06 | 20, 14 |
+| 3 | 0.1 | 5 | 1.2e-07 | 1.7e-05 | 9.7e-06 | -2.780e-04 | +1.6e-05 | 77, 56 |
+| 1 | 0.5 | 5 | 2.9e-07 | 1.5e-05 | 7.1e-06 | -2.772e-04 | +1.6e-05 | 34, 14 |
+| 3 | 0.5 | 5 | 4.2e-06 | 2.0e-05 | 8.2e-06 | -2.647e-04 | +1.2e-05 | 69, 32 |
+
+  The wall times are this machine's at load 5–16. The secant needs fewer integrations at twelve
+  points and as many at one (β = 3, M = 10⁻⁵): 73 against 116. The methods differ by at most
+  4.2e-6 in ln Λ and 2.0e-5 in φ_ref, against the 1e-4 stop; the four differences above 1e-5 are
+  the plain update's slack at M ≥ 0.1 and at β = 3, M = 10⁻³. Λ is 2.77–2.80 × 10⁻⁴ below the
+  planning probes at eleven points (05's units). The guard fires only at β = 3, M = 0.5, at
+  integration 0, and the twice rule never fires.
+- **Breakages.** Convergence on `residual_H` alone fails (a) twice. A seed cached at module level
+  fails (h). A `guard()` that keeps B fails (b)'s after-guard test.
+- **Suites:** CosmologyModels 26, ComputeTargets 226 (61 + 165, +21), ObjectFactories 86, tools
+  102, RunDrivers 61, all passing.
+- **Closed:** none. **Opened:** none. `.documents/OPEN_ISSUES.md` is unchanged.
