@@ -29,7 +29,7 @@ What this pins, and why:
   interpreter in both import orders: without the refresh, the drivers' order keeps `disabled`
   (SecondaryGWKit's issue
   [02-the-token-mode-setting-comes-after-import-ray-so-every-ray-start-fails]).
-- Each of `main.py`, `plot_by_beta.py` and `plot_ScalarModel.py` imports the module at module
+- Each of `main.py`, `plot_by_beta.py` and `plot_ScalarHistory.py` imports the module at module
   level, before the top-level statement holding its `ray.init`. Read by `ast`; one test per driver,
   so that a failure names the file.
 - `ray_cluster.sh` exports the mode, defaulting to `token`, before its one `ray start`. Read as
@@ -158,8 +158,8 @@ class TestEachDriverImportsIt(unittest.TestCase):
     def test_plot_by_beta_py_imports_it_before_ray_init(self):
         self._check("plot_by_beta.py")
 
-    def test_plot_ScalarModel_py_imports_it_before_ray_init(self):
-        self._check("plot_ScalarModel.py")
+    def test_plot_ScalarHistory_py_imports_it_before_ray_init(self):
+        self._check("plot_ScalarHistory.py")
 
 
 class TestTheClusterScript(unittest.TestCase):

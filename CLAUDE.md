@@ -147,7 +147,7 @@ invariants that hold across all of them:
   hand. **No shell command that runs the script names `/tmp/ray-cpbh`, and one that runs a lock
   command naming it runs nothing else**: the lock would list that shell's other children.
 - **Ray's token mode.** Every Ray start runs in Ray's token mode, named: by `config/ray_auth.py`,
-  which `main.py`, `plot_by_beta.py` and `plot_ScalarModel.py` import, and by `ray_cluster.sh` for
+  which `main.py`, `plot_by_beta.py` and `plot_ScalarHistory.py` import, and by `ray_cluster.sh` for
   the cluster; `tools/tests/test_ray_auth.py` guards both. A Ray CLI command against the cluster
   needs `RAY_AUTH_MODE=token` in its environment (`RAY_AUTH_MODE=token ./venv/bin/ray status
   --address 127.0.0.1:6380`). The token is `~/.ray/auth_token`, shared with SecondaryGWKit and

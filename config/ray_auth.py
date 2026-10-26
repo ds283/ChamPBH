@@ -25,7 +25,7 @@ import sys
 # - `ray start --head` runs in token mode, with the same warning, whenever the token file exists;
 # - a driver attaching to an explicit host:port never turns token mode on.
 # ChamPBH takes the second and third routes: ray_cluster.sh runs `ray start --head`, and main.py,
-# plot_by_beta.py and plot_ScalarModel.py attach with --ray-address. So on Ray 2.59 alone its
+# plot_by_beta.py and plot_ScalarHistory.py attach with --ray-address. So on Ray 2.59 alone its
 # cluster came up in token mode and refused a driver attaching by address with AuthenticationError
 # (ray-sqla-align 01, V0). With the mode named, the cluster and its drivers agree, a driver sends
 # the token, and Ray logs nothing.
