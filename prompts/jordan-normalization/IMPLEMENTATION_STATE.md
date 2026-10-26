@@ -1,8 +1,8 @@
 # jordan-normalization campaign — implementation state
 
-**Last updated:** 2026-10-26 · **Status: LIVE — 10 of 10 prompts written, 9 landed (01–08 reviewed;
-04 and 08 each after one stop ruled by the orchestrator; 09 awaiting review); R1–R14, U1–U5 and
-P1–P20 ruled by the user 2026-10-20 (README §6). Next: the orchestrator's review of 09.**
+**Last updated:** 2026-10-26 · **Status: LIVE — 10 of 10 prompts written, 9 landed (01–09, all reviewed;
+04 and 08 each after one stop ruled by the orchestrator); R1–R14, U1–U5 and P1–P20 ruled by the
+user 2026-10-20 (README §6). Next: the orchestrator note for 10.**
 The plan is [`README.md`](README.md), written on 2026-10-20 on branch `jordan-normalization`, cut
 from `main` at `ac187c8`.
 
@@ -43,7 +43,7 @@ It ends in the handover for the science rebuild, which is the user's.
 | 06 | The tuning layer | `integrate_history` and `tune_history`: secant, seed, residuals, failure reasons, progress lines | Opus | ✍️ | ✅ | `1b83bbd` | [`logs/06-the-tuning-layer.md`](logs/06-the-tuning-layer.md) |
 | 07 | The store | `ExponentialModel` table; `ScalarHistory`'s key and tuned outputs; format 5; `VERSION_LABEL` 2026.7.0; writers and readers moved | Opus | ✍️ | ✅ | `223afc6` | [`logs/07-the-store.md`](logs/07-the-store.md) |
 | 08 | The driver and the tools | `main.py`'s options; the super-Planckian warning; the wrapper's scope; the tools and the surfing scan on tuned histories | Opus | ✍️ | ✅ | `e624f1a` | [`logs/08-the-driver-and-the-tools.md`](logs/08-the-driver-and-the-tools.md) |
-| 09 | Rehearse a tuned build | registered pilot build on the isolated cluster, interrupted and resumed, compared bitwise (if U2) | Opus | ✍️ | ✅ | this commit | [`logs/09-rehearse-a-tuned-build.md`](logs/09-rehearse-a-tuned-build.md) |
+| 09 | Rehearse a tuned build | registered pilot build on the isolated cluster, interrupted and resumed, compared bitwise (if U2) | Opus | ✍️ | ✅ | `2d3520b` | [`logs/09-rehearse-a-tuned-build.md`](logs/09-rehearse-a-tuned-build.md) |
 | 10 | Close | documents, `CLAUDE.md`, the handover for the science rebuild, indexes, board | Sonnet | ✍️ | ⬜ | — | — |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
@@ -76,6 +76,11 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
   (they agree to 5e-15), so its stop was re-read; the agent's scan equals the probe bitwise. Its
   file list missed `test_scalarhistory_failure_reason.py`, which borrowed `LAMBDA_EV` from the
   history tool; ruled after the agent stopped (§5.9).
+- [`orchestrator/prompt-09.md`](orchestrator/prompt-09.md) (`4dc31ea`), used for 09. Its probe
+  reproduced 06's β = 0.5, φ* = 1 point bitwise with the history tool, and found the BBN failure at
+  β = 0.5, φ* = 5 (the spline floor, as in the 2026.6.0 run), which it ruled expected; it read the
+  prompt's eight histories as seven, timed the interruption from the tune lines, and measured the
+  heartbeat's silences with a recorder. No stop (§5.10).
 
 ### 1.1 Items
 
@@ -89,7 +94,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 | 06 | T1 `integrate_history` ✅ · T2 the residuals ✅ · T3 the secant and its guards ✅ · T4 the seed ✅ · T5 the failures ✅ · T6 progress ✅ · T7 the outputs ✅ (all landed in `1b83bbd`) |
 | 07 | S1 the model's table ✅ · S2 the key ✅ · S3 the outputs ✅ · S4 the compute path ✅ · S5 `main.py` ✅ · S6 the readers ✅ · S7 format 5 and 2026.7.0 ✅ · S8 the tests ✅ (all landed in `223afc6`) |
 | 08 | D1 the options ✅ · D2 the warning ✅ · D3 the wrapper's scope ✅ · D4 `history_and_bbn.py` ✅ · D5 the surfing tools ✅ · D6 `histories.csv` ✅ · D7 the tests ✅ (all landed in `e624f1a`) |
-| 09 | H1 reference ✅ · H2 resumed ✅ · H3 the comparisons ✅ · H4 the measurements ✅ · H5 the document ✅ (all landed in this commit) |
+| 09 | H1 reference ✅ · H2 resumed ✅ · H3 the comparisons ✅ · H4 the measurements ✅ · H5 the document ✅ (all landed in `2d3520b`) |
 | 10 | C1 the documents · C2 `CLAUDE.md` · C3 the handover · C4 the board and indexes · C5 the final suites |
 
 ## 2. The gates
@@ -1194,7 +1199,7 @@ All pass.
 
 ### 5.10 After prompt 09 (2026-10-26)
 
-Prompt 09 landed in this commit (log [`logs/09-rehearse-a-tuned-build.md`](logs/09-rehearse-a-tuned-build.md);
+Prompt 09 landed in `2d3520b` (log [`logs/09-rehearse-a-tuned-build.md`](logs/09-rehearse-a-tuned-build.md);
 record [`.documents/jordan-normalization-verification.md`](../../.documents/jordan-normalization-verification.md) §1),
 dispatched with orchestrator note 09, whose twenty-one rulings govern. No stop. No code changed.
 - **H1.** `reference-a`, `-b`, `-c` through the wrapper on the isolated cluster, each `done`/0, into
@@ -1220,3 +1225,56 @@ dispatched with orchestrator note 09, whose twenty-one rulings govern. No stop. 
   RunDrivers 64, all passing before `start` and after `stop`.
 - **Opened:** `[09-ray-deduplicates-the-tune-lines-of-parallel-histories]` (§3). **Index:**
   `.documents/OPEN_ISSUES.md` 24 → 25 open.
+
+**Orchestrator review of prompt 09 (2026-10-26).** Against `2d3520b`, by note 09's eleven checks.
+All pass.
+- **Scope.** 71 files: ruling 21's list and `OPEN_ISSUES.md`; the parent is `4dc31ea`; no `.py`,
+  `.sh`, `.toml` or `.yaml` file, `requirements.txt`, `CLAUDE.md` or `prompts/INDEX.md` changed;
+  nothing under `var/` committed; the tree clean; nothing pushed.
+- **The cluster and the token.** `ray_cluster.sh status`: the lock free, no process, the four ports
+  free; the lock module's `status`: free. Ruling 20's grep and `git grep` of `2d3520b` exit 1.
+- **The runs.** `list`: eleven runs, none running or stale; 09's seven as logged, `resumed-a`
+  `killed`/143, the others `done`/0. Each `manifest.json` and `status.json` under `var/runs/` equals
+  its committed copy; `script_sha256` is `shasum -a 256 main.py`'s; `git_head` `4dc31ea`,
+  `git_dirty` false, the seven packages, the scope strings and `results_store_id` as ruling 3 says.
+- **The order and the signal.** In all seven launch logs `** registered_run:` precedes `>> packages:`.
+  `resumed-a`'s log carries the handler's line, the `SystemExit` line, the driver's 143 and the
+  launcher's 143; signal 20:06:58 → record 20:06:59 (1 s) → final heartbeat 20:07:24 (26 s). The
+  committed logs differ from `var/`'s only by the ANSI colour codes the document says were removed.
+- **The delay.** `silences.py` re-run on the seven recorder outputs equals `09-silences.txt` but for
+  its command and exit lines; t₃ = 36.8 s, t₄ = 138.1 s, so `<s>` = 90 s by ruling 8. The reader's
+  output after `resumed-a` (three validated rows) and `resumed-a2`'s stage counts agree.
+- **The stores.** `compare_stores.py`: `RESULT: equal`, the row counts as logged. `store fingerprint`
+  without `--write`: `3b92d064…15a7` for both, each matching its sidecar. `store show` and
+  `stage_counts.py`: as logged.
+- **The stored values.** `histories.py` re-run on both stores equals its committed outputs. An
+  independent read-only reader of the orchestrator's: seven rows in each store, equal key by key;
+  every one `failure` 0, `validated` 1, atol and rtol 10⁻⁸, tolerance 10⁻⁵, both residuals strictly
+  inside it. All six of 06's secant RESULT hex pairs equal the stores'. Two tool runs here (β = 1.5
+  at M = 10⁻³, β = 3 at M = 10⁻⁵; load 7–8): all 15 keys equal both stores' by `float.hex`; the
+  seven committed tool outputs equal the stores likewise.
+- **§0.3 and the silences.** From the stored hex: β = 1.5, Λ −2.7809 × 10⁻⁴ and φ_ref −3.8 × 10⁻⁶;
+  β = 3 at M = 10⁻⁵, Λ −2.7734 × 10⁻⁴ and φ_ref −8.6 × 10⁻⁶, as logged. `reference-c`'s longest
+  heartbeat silence recomputed from its recorder output by an independent script: 58 s
+  (20:02:19 → 20:03:17).
+- **The plot.** `histories.csv` SHA-256 `02400fd7…7c77d`, as logged (the committed blob, LF, hashes
+  to `124328fe…457d`, as the document says); its six rows' `normalization` and `phi_ref_Mp` equal the
+  stores' by `float.hex`; the reference store's files hash as recorded after the plot.
+- **The records.** The document §1, the board and the log read against the outputs; the log in
+  §5.1's form with every deviation classed. The new issue's mechanism was read in the pinned `ray`'s
+  `_canonicalise_log_line`, and two tune lines carry `[repeated 2x across cluster]` in `reference-a`
+  and `resumed-a`. The account of M = 0.1's 102 s wait to be stored matches `reference-c`'s
+  recorder. The message is in `CLAUDE.md`'s form.
+- **The suites** at `2d3520b`, serially, no cluster up, load 3–9: 26; 76 + 167; 93; 115; 64, all
+  passing.
+- **Residue, fixed in the follow-up commit.**
+  - "this commit" becomes `2d3520b` in the log (×2) and on this board (×3); the document had none.
+  - Note 09 is listed in §1, and the status line is updated.
+  - This paragraph.
+- **Not residue.** The log's Drift (the gate's file written into a directory made in the same call;
+  a recorder self-test left in `var/`) touches no record. Its other observations stand as records
+  for 10's handover: the RayPoolKit wait in its "computed, not stored" form, the worker running on
+  after a `SIGTERM`, the fingerprint's 23–25 s at finish, and the plot's shard warning. Nothing
+  further opened.
+- **For the user:** 09's two stores, kept under `var/datastores/`; the stale run
+  `rrk-adoption-03-unit-20261026T151946` is now `lost`.

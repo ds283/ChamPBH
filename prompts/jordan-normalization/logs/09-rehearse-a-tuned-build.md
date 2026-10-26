@@ -1,7 +1,7 @@
 # Log 09 — rehearse a tuned build
 
 **Subject:** Rehearse a registered, interrupted and resumed tuned build
-**Commit:** this commit, on branch `jordan-normalization`, on top of `4dc31ea`
+**Commit:** `2d3520b`, on branch `jordan-normalization`, on top of `4dc31ea`
 **Date:** 2026-10-26 (the rehearsal, 19:43–20:37 GMT), by Claude Opus 5.5
 **Result:** **COMPLETE.** H1–H5 shipped; the gate "R" holds. No stop condition was met.
 - Seven builds through the wrapper on ChamPBH's isolated cluster: `reference-a`, `-b`, `-c`
@@ -251,7 +251,7 @@ the rehearsal's `SIGTERM`.
 
 ## State handed to the next prompt
 
-- **Tree:** this commit, on `jordan-normalization`, on top of `4dc31ea`. No code changed since
+- **Tree:** `2d3520b`, on `jordan-normalization`, on top of `4dc31ea`. No code changed since
   `e624f1a`. `git status` clean after the commit; nothing pushed.
 - **The stores**, kept for the user (README §3, §7):
   - `var/datastores/jordan-normalization-09-reference.db`, 16 shards, sidecar `store_id`
