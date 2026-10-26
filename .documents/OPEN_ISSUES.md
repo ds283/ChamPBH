@@ -1,6 +1,6 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-26 · **22 open**: 4 on the `review-remediation` board (closed
+**Last updated:** 2026-10-26 · **24 open**: 4 on the `review-remediation` board (closed
 2026-09-30), none now assigned; 2 on the `production-readiness` board
 (closed 2026-09-30); 2 on the `run-integrity` board (closed 2026-09-30; one stale entry closed 2026-10-22, its fix having landed in `5740690`; `jordan-normalization` prompt 07 closed one, 2026-10-26); 7 on the
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`
@@ -24,12 +24,13 @@ issue and closed it with prompt 02, opened none and leaves none open; none on th
 ruled by the user, U9, 2026-10-14; closed 2026-10-14, 7 of 7 prompts landed, with the one issue
 still open on its board; `jordan-normalization` prompt 08 closed it, 2026-10-26); 1 on the `rrk-adoption` board (planned 2026-10-19, with none
 opened or assigned; the orchestrator's review of prompt 04 opened one, 2026-10-20; closed 2026-10-20,
-5 of 5 prompts landed, with the one issue still open on its board); 3 on the
+5 of 5 prompts landed, with the one issue still open on its board); 5 on the
 `jordan-normalization` board (planned 2026-10-20, with none opened; eight from five boards assigned
 to it the same day, §1.15; prompt 01 closed one of them, 2026-10-20, leaving seven; prompt 02 opened one, 2026-10-21;
 prompt 03 closed three of them, leaving four, and opened one, 2026-10-22; prompt 04 closed one of
 them, leaving three, 2026-10-25; prompt 07 closed two of them, leaving one, and narrowed one of
-its own, 2026-10-26; prompt 08 closed the last of them and opened one, 2026-10-26).
+its own, 2026-10-26; prompt 08 closed the last of them and opened one, and the orchestrator's
+review of prompt 08 opened two, 2026-10-26).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -249,7 +250,8 @@ one (2026-10-20), prompt 03 three (2026-10-22), prompt 04 one (2026-10-25), prom
 ### 1.16 `jordan-normalization` — [board §3](../prompts/jordan-normalization/IMPLEMENTATION_STATE.md)
 
 Planned 2026-10-20. One opened by prompt 02, 2026-10-21, and narrowed by prompt 07, 2026-10-26;
-one by prompt 03, 2026-10-22; one by prompt 08, 2026-10-26.
+one by prompt 03, 2026-10-22; one by prompt 08 and two by the orchestrator's review of it,
+2026-10-26.
 
 - `[02-the-scalar-history-parent-is-still-called-model]` — the payload key `model_proxy`, the
   attribute `_model_proxy` and locals still call a scalar history `model`, now that `model` is the
@@ -262,3 +264,10 @@ one by prompt 03, 2026-10-22; one by prompt 08, 2026-10-26.
   that holds no `--tuning-max-integrations`, and the scalar stage does not recompute a stored
   failure, so a run with a larger cap recomputes nothing short of `--drop scalar-history`; a retry
   flag or the cap in the key, for the user to rule. *(`jordan-normalization`; prompt 08)*
+- `[08-the-wrappers-refusal-tests-run-the-real-wrapper-on-var-runs]` — `TestTheRefusalsBeforeBegin`
+  runs the real wrapper on the real `var/runs`, so a refusal that breaks registers a real run and
+  launches `main.py` to `ray.init` (it happened once in 08's breakage replay).
+  *(`jordan-normalization`; review of prompt 08)*
+- `[08-plot-surfing-histories-marks-the-window-edge-as-a-bounce]` — a β with no bounce in the
+  analysis window would be drawn with a bounce at the window's edge; none at the default β.
+  *(`jordan-normalization`; review of prompt 08)*

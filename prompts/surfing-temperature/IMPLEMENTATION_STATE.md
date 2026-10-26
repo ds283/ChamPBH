@@ -121,7 +121,7 @@ whichever campaign makes Λ an output.
   [`jordan-normalization`](../jordan-normalization/IMPLEMENTATION_STATE.md) campaign, prompt 08,
   which moves the surfing tools onto tuned histories. That prompt closes it here, in §4, and deletes
   its row from `.documents/OPEN_ISSUES.md`.
-- **Resolved (2026-10-26):** by `jordan-normalization` prompt 08 (this commit). `tools/surfing_scan.py`
+- **Resolved (2026-10-26):** by `jordan-normalization` prompt 08 (`e624f1a`). `tools/surfing_scan.py`
   tunes each β to T_CMB with `tune_history` (H_J(T_CMB) = H0, φ_ref = φ_min(T_CMB)), standalone with
   no store, and analyses the final integration on a window that ends at the history's first
   crossing of T_J = `--T-window-low-GeV` (1 MeV by default; the old stopping temperature). Its CSV

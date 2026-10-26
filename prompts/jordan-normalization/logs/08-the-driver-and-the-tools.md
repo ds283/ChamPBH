@@ -1,7 +1,7 @@
 # Log 08 — the driver and the tools
 
 **Subject:** Give the driver its tuning options and tune the tools' histories
-**Commit:** this commit, on branch `jordan-normalization`, on top of `3229c53`
+**Commit:** `e624f1a`, on branch `jordan-normalization`, on top of `3229c53`
 **Date:** 2026-10-26, by Claude Opus 5.5
 **Result:** **COMPLETE**, after one stop ruled by the orchestrator.
 - D1–D7 shipped under orchestrator note 08, whose sixteen rulings govern where they differ from
@@ -18,7 +18,7 @@
   relative. Predicted full scans: S1 about 55 minutes, S5 about 35.
 - Counts: CosmologyModels 26, ComputeTargets 243 (76 + 167, +18), ObjectFactories 93 (+1), tools
   115 (+13), RunDrivers 64 (+3). One test removed, `test_an_unknown_potential_type`, whose subject
-  this commit deletes (ruling 15).
+  `e624f1a` deletes (ruling 15).
 - Closed: `[05-surfing-scan-runs-at-a-fixed-lambda]` (`surfing-temperature`). Opened:
   `[08-a-history-that-did-not-converge-is-never-retried]` (ruling 14). The index stays at 22 open.
 - **An incident** during the breakage replay registered a run in `var/runs` (Observations,
@@ -257,7 +257,7 @@
 **Removed**
 - `test_plot_inputs.TestOtherRefusalsPropagate.test_an_unknown_potential_type`: it asserted
   `exponential_models(None, None, …)` raises "Unknown potential type: None". Its subject, the
-  potential-type argument, is deleted by this commit (ruling 15). The removed-types subtests of
+  potential-type argument, is deleted by `e624f1a` (ruling 15). The removed-types subtests of
   `test_the_models`, inside a kept test, went with it.
 
 ### The prose
@@ -299,7 +299,7 @@ Every ruling cited is in orchestrator note 08, §0.
    (`TestTheRemovedOptions`). It was first written as a subprocess test in
    `test_registered_run_outcomes.TestTheRefusalsBeforeBegin`, beside the existing refusals, and moved
    after the incident of Observation 1, so that a broken refusal runs the stand-in and never
-   `main.py`. That file is unchanged by this commit.
+   `main.py`. That file is unchanged by `e624f1a`.
 8. **`STRUCTURALLY REQUIRED` (ruling 8).** `tools/history_and_bbn.py`. Implementation choices:
    - the refusal of `--T-stop-GeV` prints to stderr and returns 2 (not `parser.error`), as the
      tool's other refusals do;
@@ -349,7 +349,7 @@ Every ruling cited is in orchestrator note 08, §0.
 Golden tests alone, at load 4.4–4.8: `test_golden_history` 11.1 s OK; `test_tuning…test_e` 26.6 s
 OK.
 
-**After** (this commit's tree), serially, each with `uptime`:
+**After** (`e624f1a`'s tree), serially, each with `uptime`:
 
 | Suite | Count | Result | Load |
 |---|---|---|---|
@@ -511,7 +511,7 @@ Each is under a minute.
 
 ## The deliberate-breakage record
 
-Each diff is relative to this commit's tree. Each was checked with `git apply --check` and
+Each diff is relative to `e624f1a`'s tree. Each was checked with `git apply --check` and
 `git apply -R --check`, replayed in `bash`, and reversed, leaving the tree as before.
 
 **Breakage 1: an old option accepted silently.**
@@ -666,7 +666,7 @@ Replayed on `test_driver_options`, `test_plot_inputs`, `test_registered_run.Test
 
 ## State handed to the next prompt
 
-- **Tree:** this commit, on `jordan-normalization`, on top of `3229c53`.
+- **Tree:** `e624f1a`, on `jordan-normalization`, on top of `3229c53`.
 - **The driver.**
   - `main.py` builds `ExponentialModel` over `product(M, --n-values, β)`, its tuning tolerance
     from `--tuning-tolerance` (default 1e-5, a key), and passes `--tuning-max-integrations`
@@ -700,5 +700,5 @@ Replayed on `test_driver_options`, `test_plot_inputs`, `test_registered_run.Test
   §1.15 is empty.
 - **For the user:** the stale run `rrk-adoption-03-unit-20261026T151946` in `var/runs`
   (Observation 1), to be ended by registry rule 5.
-- **Breakage replay.** The five diffs above apply to this commit's tree, checked in `bash`.
+- **Breakage replay.** The five diffs above apply to `e624f1a`'s tree, checked in `bash`.
   Breakage 1 is replayed only on in-process tests.

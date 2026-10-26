@@ -1,8 +1,8 @@
 # jordan-normalization campaign — implementation state
 
-**Last updated:** 2026-10-26 · **Status: LIVE — 10 of 10 prompts written, 8 landed (01–07 reviewed;
+**Last updated:** 2026-10-26 · **Status: LIVE — 10 of 10 prompts written, 8 landed (01–08, all reviewed;
 04 and 08 each after one stop ruled by the orchestrator); R1–R14, U1–U5 and P1–P20 ruled by the user
-2026-10-20 (README §6). Next: the orchestrator review of 08.**
+2026-10-20 (README §6). Next: the orchestrator note for 09.**
 The plan is [`README.md`](README.md), written on 2026-10-20 on branch `jordan-normalization`, cut
 from `main` at `ac187c8`.
 
@@ -42,7 +42,7 @@ It ends in the handover for the science rebuild, which is the user's.
 | 05 | The Planck mass | one reduced Planck mass from PRyMordial's G_N in three unit systems; consistency tests | Sonnet | ✍️ | ✅ | `1675e73` | [`logs/05-the-planck-mass.md`](logs/05-the-planck-mass.md) |
 | 06 | The tuning layer | `integrate_history` and `tune_history`: secant, seed, residuals, failure reasons, progress lines | Opus | ✍️ | ✅ | `1b83bbd` | [`logs/06-the-tuning-layer.md`](logs/06-the-tuning-layer.md) |
 | 07 | The store | `ExponentialModel` table; `ScalarHistory`'s key and tuned outputs; format 5; `VERSION_LABEL` 2026.7.0; writers and readers moved | Opus | ✍️ | ✅ | `223afc6` | [`logs/07-the-store.md`](logs/07-the-store.md) |
-| 08 | The driver and the tools | `main.py`'s options; the super-Planckian warning; the wrapper's scope; the tools and the surfing scan on tuned histories | Opus | ✍️ | ✅ | this commit | [`logs/08-the-driver-and-the-tools.md`](logs/08-the-driver-and-the-tools.md) |
+| 08 | The driver and the tools | `main.py`'s options; the super-Planckian warning; the wrapper's scope; the tools and the surfing scan on tuned histories | Opus | ✍️ | ✅ | `e624f1a` | [`logs/08-the-driver-and-the-tools.md`](logs/08-the-driver-and-the-tools.md) |
 | 09 | Rehearse a tuned build | registered pilot build on the isolated cluster, interrupted and resumed, compared bitwise (if U2) | Opus | ✍️ | ⬜ | — | — |
 | 10 | Close | documents, `CLAUDE.md`, the handover for the science rebuild, indexes, board | Sonnet | ✍️ | ⬜ | — | — |
 
@@ -71,6 +71,11 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
   round-trip test needs no re-tuning, and that SQLite ignores `Float(32)`. Its dispatch brief
   excluded `test_golden_history.py`, whose docstring ruling 5 named; the review corrected it. No
   stop (§5.8).
+- [`orchestrator/prompt-08.md`](orchestrator/prompt-08.md) (`3229c53`), used for 08. Its probe tuned
+  the short surfing scan before dispatch and found that the roots cannot move by the units shift
+  (they agree to 5e-15), so its stop was re-read; the agent's scan equals the probe bitwise. Its
+  file list missed `test_scalarhistory_failure_reason.py`, which borrowed `LAMBDA_EV` from the
+  history tool; ruled after the agent stopped (§5.9).
 
 ### 1.1 Items
 
@@ -83,7 +88,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 | 05 | K1 one constant ✅ · K2 the three unit systems ✅ · K3 the tests ✅ (all landed in `1675e73`) |
 | 06 | T1 `integrate_history` ✅ · T2 the residuals ✅ · T3 the secant and its guards ✅ · T4 the seed ✅ · T5 the failures ✅ · T6 progress ✅ · T7 the outputs ✅ (all landed in `1b83bbd`) |
 | 07 | S1 the model's table ✅ · S2 the key ✅ · S3 the outputs ✅ · S4 the compute path ✅ · S5 `main.py` ✅ · S6 the readers ✅ · S7 format 5 and 2026.7.0 ✅ · S8 the tests ✅ (all landed in `223afc6`) |
-| 08 | D1 the options ✅ · D2 the warning ✅ · D3 the wrapper's scope ✅ · D4 `history_and_bbn.py` ✅ · D5 the surfing tools ✅ · D6 `histories.csv` ✅ · D7 the tests ✅ (all landed in this commit) |
+| 08 | D1 the options ✅ · D2 the warning ✅ · D3 the wrapper's scope ✅ · D4 `history_and_bbn.py` ✅ · D5 the surfing tools ✅ · D6 `histories.csv` ✅ · D7 the tests ✅ (all landed in `e624f1a`) |
 | 09 | H1 reference · H2 resumed · H3 the comparisons · H4 the measurements · H5 the document |
 | 10 | C1 the documents · C2 `CLAUDE.md` · C3 the handover · C4 the board and indexes · C5 the final suites |
 
@@ -103,7 +108,8 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 
 ## 3. Active and unresolved issues
 
-Prompt 02 opened one, prompt 03 one and prompt 08 one; prompt 07 narrowed prompt 02's. Prompt 01
+Prompt 02 opened one, prompt 03 one and prompt 08 one, and the review of prompt 08 two; prompt 07
+narrowed prompt 02's. Prompt 01
 closed one assigned issue, prompt 03 three, prompt 04 one, prompt 07 two and prompt 08 the last
 (§3.1, §4).
 
@@ -162,6 +168,41 @@ closed one assigned issue, prompt 03 three, prompt 04 one, prompt 07 two and pro
 - **Next step.** For the user to rule: a retry flag for the scalar stage like `--retry-failed-bbn`,
   or the cap in the key. Not assigned.
 
+### `[08-the-wrappers-refusal-tests-run-the-real-wrapper-on-var-runs]`
+
+**Opened:** 2026-10-26 by the orchestrator's review of prompt 08 (the log's Observation 1).
+
+- **What.** `RunDrivers/tests/test_registered_run_outcomes.TestTheRefusalsBeforeBegin` (and
+  `run_the_script` in `RunDrivers/tests/stubbed_run.py:386-402`) run the real
+  `RunDrivers/registered_run.py` as a subprocess from the repository root, with no stub and the
+  real runs root, `var/runs`. Each test expects a refusal before `begin` and checks afterwards that
+  `var/` is unchanged (`var_state`). If a refusal stops working, the wrapper registers a run in the
+  real `var/runs` and launches the real `main.py`, which reaches `ray.init`; the subprocess is
+  killed by its 300 s timeout and the run is left `running`, then stale.
+- **Impact.** It happened once, during 08's replay of its breakage 1 (the removed-option refusal made
+  a no-op), with a test of the same form that 08 added and then moved in process:
+  `var/runs/rrk-adoption-03-unit-20261026T151946` was registered, `main.py` reached `ray.init` with
+  no cluster up, and the run was left for the user to end by registry rule 5. No Ray process ran.
+  A deliberate breakage of any refusal those tests cover, or a real regression, would do the same,
+  and a cluster at 127.0.0.1:6380 would be attached to.
+- **Next step.** Point the subprocess tests at a temporary runs root and a stand-in program, as the
+  in-process tests do, so that a refusal that fails cannot register a real run or reach `main.py`;
+  or replay breakages only on in-process tests (08's log does so). Not assigned.
+
+### `[08-plot-surfing-histories-marks-the-window-edge-as-a-bounce]`
+
+**Opened:** 2026-10-26 by the orchestrator's review of prompt 08 (the log's Observation 3).
+
+- **What.** `tools/plot_surfing_histories.trace_history` ends a trace at the first bounce inside the
+  analysis window, or at the window's edge `N_window` when there is none, and in both cases stores
+  the end in `bounce_N` and `bounce_T_GeV`. `build_figure` then marks that point as a bounce, and
+  the console line reports "bounce at N = …".
+- **Impact.** None at the tool's six default β, each of which bounces above 1 MeV. A β with no bounce
+  in the window would be drawn with a bounce that did not happen. (Before 08 the tool raised on such
+  a β, reading `.N` of None.)
+- **Next step.** Carry whether the trace ended at a bounce, and mark only real bounces. Not
+  assigned.
+
 ### 3.1 Assigned to this campaign
 
 Assigned 2026-10-20 by the user (README §6.1, U3). Each entry stays on its own board, which carries
@@ -177,7 +218,7 @@ from `.documents/OPEN_ISSUES.md` §1.15.
 | `[09-redshift-lookup-at-zero-takes-abs-of-the-comparison]` | `dk-and-rpk-migration` | 03 — closed (`bd9ae42`) | the lookup moves to ln(1 + z) by absolute difference |
 | `[02-scalar-stage-missing-filter-keeps-every-model]` | `dk-and-rpk-migration` | 07 — closed (`223afc6`) | the scalar stage's lookups are rewritten for the new key |
 | `[03-step-1-first-pass-lookup-filters-nothing]` | `run-integrity` | 07 — closed (`223afc6`) | the same code |
-| `[05-surfing-scan-runs-at-a-fixed-lambda]` | `surfing-temperature` | 08 — closed (this commit) | the surfing tools move onto tuned histories |
+| `[05-surfing-scan-runs-at-a-fixed-lambda]` | `surfing-temperature` | 08 — closed (`e624f1a`) | the surfing tools move onto tuned histories |
 
 ## 4. Resolved issues
 
@@ -206,7 +247,7 @@ from `.documents/OPEN_ISSUES.md` §1.15.
   `test_pipeline_selection.TestScalarStageFirstPass` (four of its five tests fail with the old
   logic put back). The entries, with their **Resolved** lines, are in `dk-and-rpk-migration`'s §4
   and `run-integrity`'s §4; their rows are deleted from `.documents/OPEN_ISSUES.md` §1.15.
-- `[05-surfing-scan-runs-at-a-fixed-lambda]` — closed by prompt 08 (this commit): the surfing tools
+- `[05-surfing-scan-runs-at-a-fixed-lambda]` — closed by prompt 08 (`e624f1a`): the surfing tools
   tune each β to T_CMB standalone and analyse a window ending at the first crossing of
   T_J = 1 MeV; the CSV holds the tuned values per row, and refuses a fixed-Λ CSV on resume. A
   short tuned scan (β = 1.50, 3.00, 4.00) reproduces the committed rows: roots to 5 × 10⁻¹⁵, capture
@@ -1007,7 +1048,7 @@ All pass.
 
 ### 5.9 After prompt 08 (2026-10-26)
 
-Prompt 08 landed in this commit (log [`logs/08-the-driver-and-the-tools.md`](logs/08-the-driver-and-the-tools.md)),
+Prompt 08 landed in `e624f1a` (log [`logs/08-the-driver-and-the-tools.md`](logs/08-the-driver-and-the-tools.md)),
 dispatched with orchestrator note 08, whose sixteen rulings govern. One stop, ruled by the
 orchestrator: `test_scalarhistory_failure_reason.py` borrowed `tools.history_and_bbn.LAMBDA_EV`,
 which ruling 8 removes, and was not in the note's file list; ruled option A, the test holds its own
@@ -1051,3 +1092,80 @@ which ruling 8 removes, and was not in the note's file list; ruled option A, the
 - **Closed:** `[05-surfing-scan-runs-at-a-fixed-lambda]`. **Opened:**
   `[08-a-history-that-did-not-converge-is-never-retried]`.
 - **Index:** `.documents/OPEN_ISSUES.md` stays at 22 open (one closed, one opened); §1.15 is empty.
+
+**Before dispatch (2026-10-26).** The orchestrator read every file the prompt names at `f8fced8`
+and ruled sixteen points in note 08 (`3229c53`). A probe, `probe_tuned_surfing.py`, tuned the short
+scan's three β (1.5, 3.0, 4.0 at M = 10⁻³, φ* = 5) to T_CMB and analysed each on a window ending at
+the first crossing of T_J = 1 MeV: the roots agree with the committed scan to 5 × 10⁻¹⁵, not to the
+2.8 × 10⁻⁴ the prompt expected (05's units shift cancels in them), every other column moves by at
+most 1.1 × 10⁻⁷, and no capture changes; the note read the prompt's stop as "a root moves by more
+than 10⁻¹², or a capture changes". The other findings it ruled on: the tuning cap reaches the remote
+as an argument of `ScalarHistory.compute`, since passing it through the store would change a
+factory; a history that does not converge is never recomputed (ruling 14's issue); `configargparse`
+names no replacement for a removed option, and `extend` appends to a non-empty default; the YAML's
+85-decade axis and `history_and_bbn.py`'s 35-decade one change no tuned value and go; the warning's
+seed needs the cosmology. Baselines from 07's review: 26; 61 + 164; 92; 102; 61.
+
+**The stop (2026-10-26).** The agent stopped once before committing:
+`test_scalarhistory_failure_reason.test_b_step_budget_failure_carries_its_reason` built its
+untuned model from `tools.history_and_bbn.LAMBDA_EV`, which ruling 8 removes, and the note's file
+list did not name the file. The orchestrator ruled the agent's option A (the test holds its own
+`LAMBDA_EV = 1.0e-3`; values bitwise as before), a gap in the note. The agent also reported that its
+first replay of breakage 1 had run the real wrapper and registered
+`var/runs/rrk-adoption-03-unit-20261026T151946`, whose `main.py` reached `ray.init` with no cluster
+and was killed; the run was left for the user to end (registry rule 5), and the agent moved its test
+in process.
+
+**Orchestrator review of prompt 08 (2026-10-26).** Against `e624f1a`, by note 08's eleven checks.
+All pass.
+- **Scope.** 32 files, all within note 08 §2's list and the stop's ruling; no factory, golden JSON,
+  fingerprint file or `config/` file but `argument_parser.py` changed. The tree is clean and no Ray
+  process runs.
+- **The parser and `main.py`.** `RemovedOption` (calls `parser.error`, hidden, `nargs="*"`) for the
+  seven options; `--tuning-tolerance`, `--tuning-max-integrations` and `--n-values` with the
+  imported defaults; the grid `product(M, n, β)`, the tolerance row from the option, and the cap
+  through `compute`; the YAML without either line. In a scratch parse `--n-values 2` gives `[2]`,
+  `--n-values 0` and a removed option on the command line or as a YAML key exit 2 naming the
+  replacement; `main.py --potential-type …` and `--T-stop-GeV …` exit 2 and create no file.
+- **The plots.** `plot_inputs.exponential_models(pool, M_table, beta_table, n_values, units)` and
+  its n rule; both scripts pass `args.n_values` and `args.tuning_tolerance` inside the
+  `PlotOptionNotStored` guard.
+- **The warning.** Computed by hand on Planck2018: β = 7 at M = 10⁻³ has a tracking seed with
+  φ_ref = 0.014292 M_P, so Ω(φ*) T* = 11.785 M_P (13.025 at φ_ref = 0), as the line prints; at
+  M = 0.5 the static seed (φ_ref = 0.3977 M_P) unflags β = 7 (0.805) and keeps β = 7.2 (2.10).
+- **The wrapper.** `describe_scope` and its tests as ruled; the three `TUNE_LINES` are verbatim from
+  `logs/06-probes/b3_M0.01_phi5_secant.log`; `TestTheRemovedOptions` runs in process on the
+  stand-in and writes no manifest.
+- **`history_and_bbn.py`.** Run by hand with PRyMordial: tuned at `3 0.01` (load 3–7), five
+  integrations in 23.2 s, its `tuning` line equal to `golden_history_06_tuned.json`'s record for all
+  15 keys, BBN in 10.0 s; with `--fixed-normalization` at that record's values and
+  `--T-stop-GeV 1e-3`, one integration (1.6 s) whose bounce equals the tuned history's to the
+  printed digit, and BBN refused by its pre-check at 1 MeV, as before; `--T-stop-GeV` alone exits 2.
+- **The surfing tools.** `in_window`, `run_history`, the columns and units, and both old-format
+  refusals read against ruling 9. §2 item 2 re-run from the log's command into the orchestrator's
+  scratch directory (load 6 → 3): its CSV equals the agent's in every field but `wall_s`, and the
+  probe's `out.json` in every tuned and measured value.
+- **`histories.csv`.** Read against ruling 10; the round-trip module alone, 7 tests, 9 s.
+- **The golden histories.** `test_golden_history` 11 s and the tuned golden's test (e) 24 s alone,
+  both passing; the golden JSONs and fingerprint files unchanged from `3229c53`.
+- **The breakages.** The log's five diffs replayed in `bash` on in-process tests only and reverted,
+  the tree clean and `var/runs` unchanged after each: 14, 2, 1, 2 and 4 failures, each as the log
+  says.
+- **The records and the suites.** This board, the `surfing-temperature` board, the index (22) and
+  `CLAUDE.md`; the log in §5.1's form, with every deviation classified. The suites at `e624f1a`,
+  serially, at load 3–5: 26; 76 + 167; 93; 115; 64, all passing, `test_prym_passenger`'s
+  wall-clock test included. Every `--help` of `main.py`, both plot scripts, the wrapper and the four
+  tools exits 0; `black --check` passes on the 26 changed or new Python files.
+- **Residue, fixed in the follow-up commit.**
+  - "this commit" becomes `e624f1a` in the log (×8), on this board (×5) and on the
+    `surfing-temperature` board (×1).
+  - Note 08 is listed in §1, and the status line is updated.
+  - This paragraph and the two before it.
+- **Not residue, opened here** (§3, and the index, 22 → 24):
+  `[08-the-wrappers-refusal-tests-run-the-real-wrapper-on-var-runs]` (the log's Observation 1) and
+  `[08-plot-surfing-histories-marks-the-window-edge-as-a-bounce]` (its Observation 3). The log's
+  other observations stand as records: the 2026.6.0 run script names no removed option (10's
+  handover), the plot scripts accept the cap unread, and the surfing CSV's `accepted_steps` is now
+  the final integration's to T_CMB.
+- **For the user:** the stale run `rrk-adoption-03-unit-20261026T151946`, to be ended by registry
+  rule 5.
