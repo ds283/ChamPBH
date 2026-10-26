@@ -1,7 +1,7 @@
 # Log 06 — the tuning layer
 
 **Subject:** Tune each history's normalization and reference point to H0 at T_CMB
-**Commit:** this commit, on branch `jordan-normalization`, on top of `8db352b`
+**Commit:** `1b83bbd`, on branch `jordan-normalization`, on top of `8db352b`
 **Date:** 2026-10-26, by Claude Opus 5.5
 **Result:** **COMPLETE**, with no stop.
 - T1–T7 shipped under orchestrator note 06, whose seventeen rulings govern where they differ from
@@ -298,7 +298,7 @@ directory `impl06/` (`suites-before/`, `suites-after/`, `compare-logs/`, `check/
 suite was run serially in the foreground of one script, with `CLAUDE.md`'s commands, and never
 while the comparison ran.
 
-| Suite | Before (`8db352b`) | After (this commit's tree) | Change |
+| Suite | Before (`8db352b`) | After (`1b83bbd`'s tree) | Change |
 |---|---|---|---|
 | CosmologyModels | 26 OK, 69 s, load 7.5 | 26 OK, 63 s, load 4.5 | none |
 | ComputeTargets `test_[a-f]*` | 61 OK, 100 s, load 8.6 | 61 OK, 95 s, load 4.7 | none |
@@ -408,7 +408,7 @@ The wall times are this machine's at load 5–16, not note 06's (load 60–160).
 
 ### `black`
 
-`black --check` passes on the six Python files this commit adds or changes:
+`black --check` passes on the six Python files `1b83bbd` adds or changes:
 - `ComputeTargets/ScalarHistory.py`;
 - `ComputeTargets/tests/test_integrator_exceptions.py`;
 - `ComputeTargets/tests/test_tuning.py`;
@@ -506,7 +506,7 @@ only test that sees the reset.
          self._last_kind = None
 ```
 
-Each diff applies to this commit's tree: `git apply --check` passes for each, and after applying
+Each diff applies to `1b83bbd`'s tree: `git apply --check` passes for each, and after applying
 each, `git apply -R --check` passes and the reverse restores the tree. Checked in `bash`.
 
 ## Observations not acted on
@@ -525,7 +525,7 @@ each, `git apply -R --check` passes and the reverse restores the tree. Checked i
 
 ## State handed to the next prompt
 
-- **Tree:** this commit, on `jordan-normalization`, on top of `8db352b`.
+- **Tree:** `1b83bbd`, on `jordan-normalization`, on top of `8db352b`.
 - **The two layers** (`ComputeTargets/ScalarHistory.py`):
   - `integrate_history(cosmology, T_init, T_stop, phi_init, pi_init, z_grid, model: RealizedModel, task_label=…, atol=…, rtol=…, verbose=False)`
     is the primitive: today's integration of one realized model to any T_stop, returning today's
@@ -558,6 +558,6 @@ each, `git apply -R --check` passes and the reverse restores the tree. Checked i
 - **Counts:** CosmologyModels 26, ComputeTargets 226 (61 + 165), ObjectFactories 86, tools 102,
   RunDrivers 61.
 - **Open issues.** None closed or opened. `.documents/OPEN_ISSUES.md` is unchanged.
-- **Breakage replay.** The three diffs above apply to this commit's tree, checked in `bash`.
+- **Breakage replay.** The three diffs above apply to `1b83bbd`'s tree, checked in `bash`.
 - **The flaky wall-clock test** `test_prym_passenger.test_a_oscillating_case_completes` passed in
   both of this prompt's suite runs.

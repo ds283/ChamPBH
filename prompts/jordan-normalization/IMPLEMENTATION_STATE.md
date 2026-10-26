@@ -1,8 +1,8 @@
 # jordan-normalization campaign — implementation state
 
-**Last updated:** 2026-10-26 · **Status: LIVE — 10 of 10 prompts written, 6 landed (01–05
-reviewed, 04 after one stop ruled by the orchestrator; 06 awaiting review); R1–R14, U1–U5 and
-P1–P20 ruled by the user 2026-10-20 (README §6). Next: the orchestrator's review of 06.**
+**Last updated:** 2026-10-26 · **Status: LIVE — 10 of 10 prompts written, 6 landed (01–06, all
+reviewed; 04 after one stop ruled by the orchestrator); R1–R14, U1–U5 and P1–P20 ruled by the user
+2026-10-20 (README §6). Next: the orchestrator note for 07.**
 The plan is [`README.md`](README.md), written on 2026-10-20 on branch `jordan-normalization`, cut
 from `main` at `ac187c8`.
 
@@ -40,7 +40,7 @@ It ends in the handover for the science rebuild, which is the user's.
 | 03 | The sampling axis | ln(1 + z_E) on the axis, exact-multiple grid, absolute lookup, ln(1 + z_J) per sample; format 4 | Opus | ✅ | ✅ | `bd9ae42` | [`logs/03-the-sampling-axis.md`](logs/03-the-sampling-axis.md) |
 | 04 | The model interface | `AbstractModel`, `ExponentialModel`, `RealizedModel`; consumers on it via an adapter; φ_ref = 0 bitwise; the shift law | Opus | ✍️ | ✅ | `597a215` | [`logs/04-the-model-interface.md`](logs/04-the-model-interface.md) |
 | 05 | The Planck mass | one reduced Planck mass from PRyMordial's G_N in three unit systems; consistency tests | Sonnet | ✍️ | ✅ | `1675e73` | [`logs/05-the-planck-mass.md`](logs/05-the-planck-mass.md) |
-| 06 | The tuning layer | `integrate_history` and `tune_history`: secant, seed, residuals, failure reasons, progress lines | Opus | ✍️ | ✅ | this commit | [`logs/06-the-tuning-layer.md`](logs/06-the-tuning-layer.md) |
+| 06 | The tuning layer | `integrate_history` and `tune_history`: secant, seed, residuals, failure reasons, progress lines | Opus | ✍️ | ✅ | `1b83bbd` | [`logs/06-the-tuning-layer.md`](logs/06-the-tuning-layer.md) |
 | 07 | The store | `ExponentialModel` table; `ScalarHistory`'s key and tuned outputs; format 5; `VERSION_LABEL` 2026.7.0; writers and readers moved | Opus | ✍️ | ⬜ | — | — |
 | 08 | The driver and the tools | `main.py`'s options; the super-Planckian warning; the wrapper's scope; the tools and the surfing scan on tuned histories | Opus | ✍️ | ⬜ | — | — |
 | 09 | Rehearse a tuned build | registered pilot build on the isolated cluster, interrupted and resumed, compared bitwise (if U2) | Opus | ✍️ | ⬜ | — | — |
@@ -63,6 +63,9 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 - [`orchestrator/prompt-05.md`](orchestrator/prompt-05.md) (`91fcbf9`), used for 05. Its probe
   found twelve existing tests pinning values on the old units, which the user ruled re-pinned in
   05 (its ruling 13); no stop (§5.6).
+- [`orchestrator/prompt-06.md`](orchestrator/prompt-06.md) (`8db352b`), used for 06. The
+  orchestrator built the tuning loop and ran the thirteen points with both methods before
+  dispatch; the agent's comparison equals it to the digit; no stop (§5.7).
 
 ### 1.1 Items
 
@@ -73,7 +76,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 | 03 | Z1 the concept ✅ · Z2 the factory and format 4 ✅ · Z3 the grid ✅ · Z4 the sampling ✅ · Z5 ln(1 + z_J) ✅ · Z6 the readers ✅ · Z7 the value factory's issues ✅ (all landed in `bd9ae42`) |
 | 04 | M1 `AbstractModel` ✅ · M2 `RealizedModel` ✅ · M3 `ExponentialModel` ✅ · M4 the consumers ✅ · M5 the adapter ✅ · M6 the unread properties ✅ · M7 the tests ✅ (all landed in `597a215`) |
 | 05 | K1 one constant ✅ · K2 the three unit systems ✅ · K3 the tests ✅ (all landed in `1675e73`) |
-| 06 | T1 `integrate_history` ✅ · T2 the residuals ✅ · T3 the secant and its guards ✅ · T4 the seed ✅ · T5 the failures ✅ · T6 progress ✅ · T7 the outputs ✅ (all landed in this commit) |
+| 06 | T1 `integrate_history` ✅ · T2 the residuals ✅ · T3 the secant and its guards ✅ · T4 the seed ✅ · T5 the failures ✅ · T6 progress ✅ · T7 the outputs ✅ (all landed in `1b83bbd`) |
 | 07 | S1 the model's table · S2 the key · S3 the outputs · S4 the compute path · S5 `main.py` · S6 the readers · S7 format 5 and 2026.7.0 · S8 the tests |
 | 08 | D1 the options · D2 the warning · D3 the wrapper's scope · D4 `history_and_bbn.py` · D5 the surfing tools · D6 `histories.csv` · D7 the tests |
 | 09 | H1 reference · H2 resumed · H3 the comparisons · H4 the measurements · H5 the document |
@@ -710,7 +713,7 @@ pass.
 
 ### 5.7 After prompt 06 (2026-10-26)
 
-Prompt 06 landed in this commit (log [`logs/06-the-tuning-layer.md`](logs/06-the-tuning-layer.md)),
+Prompt 06 landed in `1b83bbd` (log [`logs/06-the-tuning-layer.md`](logs/06-the-tuning-layer.md)),
 dispatched with orchestrator note 06, whose seventeen rulings govern. No stop.
 - **T1.** `integrate_history`, a plain function with `compute_scalar_history`'s signature, holds
   its body, moved unchanged but for its own name in six strings. `compute_scalar_history` stays
@@ -782,3 +785,62 @@ dispatched with orchestrator note 06, whose seventeen rulings govern. No stop.
 - **Suites:** CosmologyModels 26, ComputeTargets 226 (61 + 165, +21), ObjectFactories 86, tools
   102, RunDrivers 61, all passing.
 - **Closed:** none. **Opened:** none. `.documents/OPEN_ISSUES.md` is unchanged.
+
+**Before dispatch (2026-10-26).** The orchestrator built the tuning loop as a prototype in the
+session scratchpad, at `65af27d`, and ran README §0.3's thirteen points with the plain update and
+with the secant (note 06's §0). The secant needed no more integrations at any point, so the
+prompt's stop did not arise, and the note fixed the expressions so that the agent's table had to
+equal the prototype's. The probe also found that the prompt's `>> tune` line would be read as a
+stage banner, that two existing tests read `compute_scalar_history`'s body by name, and that the
+prompt's breakage of the guard's reset would fail nothing on the grid. The note ruled all three
+(rulings 3, 6, 9 and 14). Baselines at `65af27d`: 26; 61 + 144; 86; 102; 61.
+
+**Orchestrator review of prompt 06 (2026-10-26).** Against `1b83bbd`, by note 06's ten checks. All
+pass.
+- **Scope.** 39 files, all note 06's §2 files: `ScalarHistory.py`, `test_integrator_exceptions.py`,
+  the new `test_tuning.py`, `golden_tuned_history.py` and `golden_history_06_tuned.json`, this board,
+  the log and `logs/06-probes/` (the script, `run_all.sh`, `table.py`, the 26 logs, `driver.log`,
+  `table.txt` and a README). `CosmologyConcepts/Models/` and `pipeline_selection.py` are unchanged.
+  The tree is clean, and `git worktree list` shows only the main checkout.
+- **The move.** `integrate_history`'s body is `compute_scalar_history`'s, with the function's name
+  changed in its five printed or raised strings and in the assertion's message (Deviation 1,
+  accepted: it names the function it is in). `compute_scalar_history` passes every argument by name.
+  `golden_history.py`, `test_golden_history.py` and `golden_history_01/03/05.json` are unchanged,
+  and the golden history passes in the suite.
+- **The loop.** `tune_history`, `_tuning_state`, `TuningSecant` and `tuning_converged` were read
+  against rulings 5–10. The expressions are the prototype's, and the order is ruling 7's. The model
+  is read only through ruling 4's methods.
+- **The comparison, rerun in part.** The orchestrator ran `1b83bbd`'s `tune_history` on β = 3 at
+  M = 0.01, 0.1 and 0.5, with both methods. Each result equals the prototype's by `repr`, with 7/5,
+  13/9 and 23/12 integrations (plain/secant). Each of the 69 progress lines equals the agent's log
+  line for line, the wall time aside.
+- **The tests.** `test_tuning.py`'s 21 tests are ruling 11's (a)–(j). They passed in the suite;
+  the agent's time alone was 87.5 s at load 4.7.
+- **The tuned golden.** Its normalization −277.4502000419897 and φ_ref 0.06222843896351175 equal
+  the prototype's at β = 3, M = 0.01 by `repr`, with five integrations (plain 1, secant 3) from the
+  tracking seed. Test (e) compares the file with a fresh tuning and passed in the suite.
+- **The progress line.** The 189 `-- tune` lines of `logs/06-probes/`, fed to `StageTracker`,
+  move no stage, and none matches `_STAGE_BANNER`, `_QUEUE_PROGRESS` or `_QUEUE_COMPLETE`.
+  `>> tune …` would match the banner.
+- **The breakages.** The log's three diffs were extracted and replayed in `bash`, and each was
+  reverted with the tree clean. Breakage 1 fails (a) twice. Breakage 3 fails (b)'s after-guard
+  test. Breakage 2 fails (h) with `'-277.581681683' != '-276.998824803'`. All three are as the log
+  says.
+- **The record.** The orchestrator's own `table.py`, run on its prototype's logs, gives the first
+  table identical to `logs/06-probes/table.txt`, and the second identical except the wall times.
+- **The suites** at `1b83bbd`, serially, at load 10–23: 26; 61 + 165; 86; 102; 61, all passing,
+  `test_prym_passenger`'s wall-clock test included. `black --check` passes on the six Python files.
+- **Residue, fixed in the follow-up commit.**
+  - "this commit" becomes `1b83bbd` in the log (×6) and on this board (×3).
+  - Note 06 is listed in §1, and the status line is updated.
+  - This paragraph and the one before it.
+- **Not residue, recorded only (for 07's note).**
+  - Ruling 8's clauses cover the failures that tuning was expected to meet. But `_tuning_state`
+    catches every `ValueError` from the state, not only `effective_minimum`'s, under "the effective
+    minimum was not found". The state's other arithmetic, and `renormalize`, can raise things that
+    no clause catches: a `ComputationFailureError` from `log_V`, or a `ZeroDivisionError` at
+    1 + βφ′/M_P = 0. None arises at any measured point, and none is plausible at T_CMB. When 07
+    makes `tune_history` the remote's body, an exception that escapes would reach the driver
+    instead of a failure row. No issue is opened.
+  - The log's observations stand: Ray's deduplication of worker lines, which 09 sees; the static
+    seed's distance from H0 at M ≥ 0.1; and the plain update's slack.
