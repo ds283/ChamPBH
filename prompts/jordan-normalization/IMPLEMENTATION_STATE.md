@@ -1,8 +1,8 @@
 # jordan-normalization campaign — implementation state
 
-**Last updated:** 2026-10-26 · **Status: LIVE — 10 of 10 prompts written, 5 landed (01, 02, 03, 04,
-all reviewed, and 05, awaiting review; 04 after one stop ruled by the orchestrator); R1–R14, U1–U5 and P1–P20 ruled by the
-user 2026-10-20 (README §6). Next: the orchestrator's review of 05.**
+**Last updated:** 2026-10-26 · **Status: LIVE — 10 of 10 prompts written, 5 landed (01–05, all
+reviewed; 04 after one stop ruled by the orchestrator); R1–R14, U1–U5 and P1–P20 ruled by the user
+2026-10-20 (README §6). Next: the orchestrator note for 06.**
 The plan is [`README.md`](README.md), written on 2026-10-20 on branch `jordan-normalization`, cut
 from `main` at `ac187c8`.
 
@@ -39,7 +39,7 @@ It ends in the handover for the science rebuild, which is the user's.
 | 02 | Rename to `ScalarHistory` | classes, tables, drop group, proxies, documents; format 3 | Sonnet | ✅ | ✅ | `abccc23` | [`logs/02-rename-to-scalarhistory.md`](logs/02-rename-to-scalarhistory.md) |
 | 03 | The sampling axis | ln(1 + z_E) on the axis, exact-multiple grid, absolute lookup, ln(1 + z_J) per sample; format 4 | Opus | ✅ | ✅ | `bd9ae42` | [`logs/03-the-sampling-axis.md`](logs/03-the-sampling-axis.md) |
 | 04 | The model interface | `AbstractModel`, `ExponentialModel`, `RealizedModel`; consumers on it via an adapter; φ_ref = 0 bitwise; the shift law | Opus | ✍️ | ✅ | `597a215` | [`logs/04-the-model-interface.md`](logs/04-the-model-interface.md) |
-| 05 | The Planck mass | one reduced Planck mass from PRyMordial's G_N in three unit systems; consistency tests | Sonnet | ✍️ | ✅ | this commit | [`logs/05-the-planck-mass.md`](logs/05-the-planck-mass.md) |
+| 05 | The Planck mass | one reduced Planck mass from PRyMordial's G_N in three unit systems; consistency tests | Sonnet | ✍️ | ✅ | `1675e73` | [`logs/05-the-planck-mass.md`](logs/05-the-planck-mass.md) |
 | 06 | The tuning layer | `integrate_history` and `tune_history`: secant, seed, residuals, failure reasons, progress lines | Opus | ✍️ | ⬜ | — | — |
 | 07 | The store | `ExponentialModel` table; `ScalarHistory`'s key and tuned outputs; format 5; `VERSION_LABEL` 2026.7.0; writers and readers moved | Opus | ✍️ | ⬜ | — | — |
 | 08 | The driver and the tools | `main.py`'s options; the super-Planckian warning; the wrapper's scope; the tools and the surfing scan on tuned histories | Opus | ✍️ | ⬜ | — | — |
@@ -60,6 +60,9 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 - [`orchestrator/prompt-04.md`](orchestrator/prompt-04.md) (`a0ca6a1`), used for 04. Two gaps in its
   rulings were ruled after the agent stopped: the second stand-in in `test_adiabatic_mass.py`, and
   test (c)'s criterion at the T_J turning points. Its breakage 1 was a bitwise no-op (§5.5).
+- [`orchestrator/prompt-05.md`](orchestrator/prompt-05.md) (`91fcbf9`), used for 05. Its probe
+  found twelve existing tests pinning values on the old units, which the user ruled re-pinned in
+  05 (its ruling 13); no stop (§5.6).
 
 ### 1.1 Items
 
@@ -69,7 +72,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 | 02 | N1 the code, tables, columns and drop group · N2 format 3 · N3 the current documents · N4 the run scripts left as records |
 | 03 | Z1 the concept ✅ · Z2 the factory and format 4 ✅ · Z3 the grid ✅ · Z4 the sampling ✅ · Z5 ln(1 + z_J) ✅ · Z6 the readers ✅ · Z7 the value factory's issues ✅ (all landed in `bd9ae42`) |
 | 04 | M1 `AbstractModel` ✅ · M2 `RealizedModel` ✅ · M3 `ExponentialModel` ✅ · M4 the consumers ✅ · M5 the adapter ✅ · M6 the unread properties ✅ · M7 the tests ✅ (all landed in `597a215`) |
-| 05 | K1 one constant ✅ · K2 the three unit systems ✅ · K3 the tests ✅ (all landed in this commit) |
+| 05 | K1 one constant ✅ · K2 the three unit systems ✅ · K3 the tests ✅ (all landed in `1675e73`) |
 | 06 | T1 `integrate_history` · T2 the residuals · T3 the secant and its guards · T4 the seed · T5 the failures · T6 progress · T7 the outputs |
 | 07 | S1 the model's table · S2 the key · S3 the outputs · S4 the compute path · S5 `main.py` · S6 the readers · S7 format 5 and 2026.7.0 · S8 the tests |
 | 08 | D1 the options · D2 the warning · D3 the wrapper's scope · D4 `history_and_bbn.py` · D5 the surfing tools · D6 `histories.csv` · D7 the tests |
@@ -573,7 +576,7 @@ pass.
 
 ### 5.6 After prompt 05 (2026-10-26)
 
-Prompt 05 landed in this commit (log [`logs/05-the-planck-mass.md`](logs/05-the-planck-mass.md)),
+Prompt 05 landed in `1675e73` (log [`logs/05-the-planck-mass.md`](logs/05-the-planck-mass.md)),
 dispatched with orchestrator note 05, whose fourteen rulings govern, and with the user's ruling
 "Re-pin in 05" (ruling 13).
 - **K1.** `Units/base.py`: `NEWTON_G_MEV_MINUS_2 = 6.70883e-45` (PRyMordial's `GN`, MeV⁻²) and
@@ -641,3 +644,66 @@ dispatched with orchestrator note 05, whose fourteen rulings govern, and with th
 - **Suites:** CosmologyModels 26 (+8), ComputeTargets 205 (61 + 144), ObjectFactories 86, tools 102,
   RunDrivers 61, all passing.
 - **Closed:** none. **Opened:** none. `.documents/OPEN_ISSUES.md` is unchanged.
+
+**Before dispatch (2026-10-26).** Two things were settled before note 05 was committed (`91fcbf9`).
+- **The merge's broken test.** At `5fc02a6` the tools suite ran 102 tests with one error:
+  `ray-sqla-align`'s `test_ray_auth.py` read `plot_ScalarModel.py`, which this branch renamed in
+  02. At the user's word ("Housekeeping commit now"), the orchestrator fixed it in `cfd2e11`, a
+  commit of its own. The test, its method name, the comment in `config/ray_auth.py` and
+  `CLAUDE.md`'s token-mode bullet now name `plot_ScalarHistory.py`.
+- **Twelve old-unit pins.** The note's probe of the units change found twelve existing tests
+  pinning values on the old units, besides the golden histories:
+  - nine in `test_kinematic_cap_loop.py`;
+  - three in `test_integrator_exceptions.py`;
+  - one in `test_first_bounce.py`;
+  - one in `tools/tests/test_plot_surfing_histories.py`, which compares bitwise with the
+    committed fine scan.
+
+  These are the integrator audit's references at 10⁻⁵ (one at 10⁻¹⁰). The units change moves
+  them by 1–4 × 10⁻⁴, and P2's wall bounces go 19 → 20. The user ruled "Re-pin in 05" (note
+  ruling 13, with its table of old and new literals).
+
+**Orchestrator review of prompt 05 (2026-10-26).** Against `1675e73`, by note 05's ten checks. All
+pass.
+- **Scope.** 16 files: three added, 13 modified, none deleted. They are note 05's §2 files, and
+  the three tests of ruling 5 are untouched. The tree is clean, and `git worktree list` shows only
+  the main checkout.
+- **The expressions.** The `Units/` diff is rulings 1 and 2, with no literal changed.
+  `REDUCED_PLANCK_MASS_EV` is `0x1.f79cf52984fafp+90`.
+- **The PRyMordial test.** The orchestrator pointed the module at a scratch copy of
+  `PRyM_init.py`, and ran five probes:
+  - a changed mantissa fails (a) and (c);
+  - the exponents redistributed (`6.70883*1.e-38*1.e-7`) pass, since the number is the same;
+  - a second `GN` line fails (a) and (c);
+  - a redefined `Mpl` fails (b);
+  - the unchanged copy passes.
+- **The consistency.** Rerun by the orchestrator's own probe, the values are 1.700870e-7,
+  4.080485e-8, 1.580230e-7 and 2.130484e-7 in each of the three systems, as the log says.
+- **The golden history.** The orchestrator's dump at `1675e73` is **bitwise equal** to its probe
+  tree's, in samples, labels and fixed-T values, for both histories. §0's tables therefore hold
+  as measured. `first_difference` against `golden_history_05.json` is empty for both. Its
+  provenance is `91fcbf9`, 05's working tree. `golden_history_01.json` and `_03.json` are
+  unchanged.
+- **The re-pins.** The diff of the four files changes only ruling 13's literals, the surfing
+  test's two assertions, and the prose ruling 13 names. The orchestrator's re-pin probe at
+  `1675e73` is byte-identical to the probe tree's, so every new literal is the tree's own value.
+- **The grep.** It finds only ruling 6's stored literals: `test_inventory_report.py` at lines
+  130, 273, 312, 328 and 351, and `test_store_fingerprint_golden.py:179`.
+- **The breakages.** Both diffs were extracted from the log and replayed in `bash` against six
+  modules (52 tests), and each was reverted with the tree clean.
+  - Breakage 1 fails five of `test_planck_mass`'s tests.
+  - Breakage 2 fails (a) and (c), both golden histories, and `test_c_physical_values_unchanged`.
+
+  Both are as the log says.
+- **The prose.** `CLAUDE.md` gains the one sentence. `architecture-summary.md` §8.1 gains the
+  dated note, and nothing else in either file changes.
+- **The suites** at `1675e73`, serially, at load 5–51: 26; 61 + 144; 86; 102; 61, all passing.
+  `black --check` passes on the 11 Python files.
+- **Residue, fixed in the follow-up commit.**
+  - "this commit" becomes `1675e73` in the log (×5) and on this board (×3).
+  - Note 05 is listed in §1, and the status line is updated: the agent's line said "awaiting
+    review", over the line width.
+  - This paragraph and the one before it.
+- **Not residue, recorded only.** The log's three observations stand, with no issue opened:
+  PRyMordial's `GN` is one ulp below the literal; the golden setup's T_stop is the 1 MeV fixed
+  temperature; and the two fixtures' stored M is now 1.000278 × 10⁻³ M_P.

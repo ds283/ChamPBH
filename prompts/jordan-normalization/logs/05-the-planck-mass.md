@@ -1,7 +1,7 @@
 # Log 05 — the Planck mass
 
 **Subject:** One reduced Planck mass from PRyMordial's G_N, in the three unit systems
-**Commit:** this commit, on branch `jordan-normalization`, on top of `91fcbf9`
+**Commit:** `1675e73`, on branch `jordan-normalization`, on top of `91fcbf9`
 **Date:** 2026-10-26, by Claude Sonnet 5.5
 **Result:** **COMPLETE**, with no stop.
 - K1–K3 shipped under orchestrator note 05, whose fourteen rulings govern where they differ from
@@ -233,7 +233,7 @@ All passing. No test failed in either run, `test_prym_passenger`'s wall-clock te
 I did not run the suites between K1/K2 and the re-pins, so the failures note 05's §0 names on the
 probe tree were not reproduced by me; the re-pinned modules (41 tests) and the new golden record
 were each run after being applied, and passed.
-`black --check` passes on every Python file this commit changes or adds.
+`black --check` passes on every Python file `1675e73` changes or adds.
 
 **5. The grep** (ruling 6), `git grep -n -P '2\.436e\+?2[47]' -- . ':!prompts' ':!.documents' ':!science-runs'`:
 ```
@@ -268,7 +268,7 @@ records, by file only:
 - **How each was replayed,** in `bash` (`agent05/work/br/replay.sh`): `git apply --check`,
   `git apply`, `git apply -R --check`, then six modules (`test_planck_mass`, `test_golden_history`,
   and the four modules of ruling 13: 52 tests), then `git apply -R`. Afterwards `git diff --stat --
-  Units` was as before. Both diffs apply to this commit's tree.
+  Units` was as before. Both diffs apply to `1675e73`'s tree.
 
 **1. `GeV_units` left at 2.436e27** (ruling 10.1).
 - **`test_planck_mass`**, 5 failures, every one with `system='GeV_units'` and none for another
@@ -343,7 +343,7 @@ records, by file only:
 
 ## State handed to the next prompt
 
-- **Tree:** this commit, on `jordan-normalization`, on top of `91fcbf9`.
+- **Tree:** `1675e73`, on `jordan-normalization`, on top of `91fcbf9`.
 - **The Planck mass.** `Units/base.py` holds `NEWTON_G_MEV_MINUS_2 = 6.70883e-45` (MeV⁻², PRyMordial's
   `GN`) and `REDUCED_PLANCK_MASS_EV = 2.4353235955263046e+27` (`1.0e6 / sqrt(8.0 * pi *
   NEWTON_G_MEV_MINUS_2)`). `Planck_units.eV`, `Mpc_units.eV` and `GeV_units.PlanckMass` are set
@@ -362,7 +362,7 @@ records, by file only:
 - **Counts:** CosmologyModels 26, ComputeTargets 205 (61 + 144), ObjectFactories 86, tools 102,
   RunDrivers 61.
 - **Open issues.** None closed or opened. `.documents/OPEN_ISSUES.md` is unchanged.
-- **Breakage replay.** The two diffs above apply to this commit's tree: `git apply --check` passes
+- **Breakage replay.** The two diffs above apply to `1675e73`'s tree: `git apply --check` passes
   for each, and after applying each `git apply -R --check` passes and the reverse restores the
   tree. Checked in `bash`.
 - **The flaky wall-clock test** `test_prym_passenger.test_a_oscillating_case_completes` passed in
