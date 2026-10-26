@@ -50,8 +50,8 @@ class TestFirstBounce(unittest.TestCase):
 
         self.assertIsInstance(bounce, SM.FirstBounce)
         self.assertFalse(bounce.reflected)
-        self.assertLessEqual(abs(bounce.N - 20.343028), 1e-5)
-        self.assertLessEqual(rel(bounce.phi_Einstein, 4.57371e-3), 1e-4)
+        self.assertLessEqual(abs(bounce.N - 20.343018), 1e-5)
+        self.assertLessEqual(rel(bounce.phi_Einstein, 4.57375e-3), 1e-4)
 
         # the dense-output minimum of the test helper, located the same way
         N_min, phi_min = kcl.interpolated_minima(result, 0.5)[0]

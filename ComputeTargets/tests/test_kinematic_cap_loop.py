@@ -13,6 +13,11 @@ Reference values are those of integrator-remediation README §6.1, measured by t
 on b1f64d8; where more digits were needed (pi at N = 21 from P1 at M = 0.5) they were measured
 on 918590e with the audit's harness.run_fragment_loop(strategy="regions") at atol = rtol = 1e-8
 and 1e-12, which agree to 1e-9 relative: phi(21) = 1.2203834e-1, pi(21) = -1.2971527e-1.
+
+The references in this module were re-measured by jordan-normalization prompt 05, when the
+electronvolt was set from PRyMordial's G_N (Units/base.py: REDUCED_PLANCK_MASS_EV, 2.78e-4 below
+the round number the audit's units used), on the same probe states. The audit's values, as they
+were, are in that prompt's log (prompts/jordan-normalization/logs/05-the-planck-mass.md).
 """
 
 import ast
@@ -229,30 +234,30 @@ class TestKinematicCapLoopP1(unittest.TestCase):
         bounces = wall_bounces(result, 0.5)
         self.assertGreaterEqual(len(bounces), 1)
         N_b, phi_min = bounces[0][0], bounces[0][1]
-        self.assertLessEqual(abs(N_b - 20.343028), 1e-5)
-        self.assertLessEqual(rel(phi_min, 4.57371e-3), 1e-4)
-        self.check_common(result, 1.2203834e-1)
-        self.assertLessEqual(rel(result.final_state.pi_Einstein, -1.2971527e-1), 1e-5)
+        self.assertLessEqual(abs(N_b - 20.343018), 1e-5)
+        self.assertLessEqual(rel(phi_min, 4.57375e-3), 1e-4)
+        self.check_common(result, 1.2202350e-1)
+        self.assertLessEqual(rel(result.final_state.pi_Einstein, -1.2979552e-1), 1e-5)
         self.assertEqual(len(result.reflections), 0)
 
     def test_a_M_0p01(self):
-        """P1 at M = 0.01, 2120 RHS; about 0.2 s."""
+        """P1 at M = 0.01, 2117 RHS; about 0.2 s."""
         result, _ = integrate(P1, 0.01, 21.0)
         self.assertLessEqual(result.nfev, 3500)
         bounces = wall_bounces(result, 0.01)
         self.assertGreaterEqual(len(bounces), 1)
         self.assertLessEqual(rel(bounces[0][1], 9.1505e-5), 1e-4)
-        self.check_common(result, 1.185154e-1)
+        self.check_common(result, 1.185015e-1)
         self.assertEqual(len(result.reflections), 0)
 
     def test_a_M_0p001(self):
-        """P1 at M = 0.001, 2275 RHS; about 0.2 s."""
+        """P1 at M = 0.001, 2262 RHS; about 0.2 s."""
         result, _ = integrate(P1, 0.001, 21.0)
         self.assertLessEqual(result.nfev, 3500)
         bounces = wall_bounces(result, 0.001)
         self.assertGreaterEqual(len(bounces), 1)
-        self.assertLessEqual(rel(bounces[0][1], 9.1505e-6), 1e-4)
-        self.check_common(result, 1.184501e-1)
+        self.assertLessEqual(rel(bounces[0][1], 9.1506e-6), 1e-4)
+        self.check_common(result, 1.184362e-1)
         self.assertEqual(len(result.reflections), 0)
 
     def check_reflected(self, M: float):
@@ -262,7 +267,7 @@ class TestKinematicCapLoopP1(unittest.TestCase):
         self.assertLessEqual(result.reflections[0].phi_Einstein, 1e-10)
         self.assertLess(result.reflections[0].pi_Einstein_in, 0.0)
         self.assertIsNotNone(result.max_wall_to_kinetic_ratio)
-        self.check_common(result, 1.184428e-1)
+        self.check_common(result, 1.184289e-1)
 
     def test_b_M_1em10(self):
         """P1 at M = 1e-10: one elastic reflection, about 0.2 s. Fails on HEAD~1 ("Required step
@@ -280,37 +285,37 @@ class TestKinematicCapLoopP1(unittest.TestCase):
         result, _ = integrate(P1, 0.5, 21.0, params=SM.StepControl(cap_fraction=0.02))
         bounces = wall_bounces(result, 0.5)
         self.assertGreaterEqual(len(bounces), 1)
-        self.assertLessEqual(abs(bounces[0][0] - 20.343028), 1e-5)
-        self.assertLessEqual(rel(bounces[0][1], 4.57371e-3), 1e-4)
-        self.check_common(result, 1.2203834e-1)
+        self.assertLessEqual(abs(bounces[0][0] - 20.343018), 1e-5)
+        self.assertLessEqual(rel(bounces[0][1], 4.57375e-3), 1e-4)
+        self.check_common(result, 1.2202350e-1)
 
 
 class TestKinematicCapLoopWindows(unittest.TestCase):
     """README §6.1 (b), (c): the P3 grazing window and the P2 parked window."""
 
     def test_d_P3_window(self):
-        """P3 (beta = 1.2, M = 0.01) to N = 37.5: 38 547 RHS, about 2.5 s."""
+        """P3 (beta = 1.2, M = 0.01) to N = 37.5: 38 761 RHS, about 2.5 s."""
         result, _ = integrate(P3, 0.01, 37.5)
         self.assertLessEqual(result.nfev, 60000)
         self.assertEqual(len(result.reflections), 0)
         self.assertEqual(len(wall_bounces(result, 0.01)), 51)
-        self.assertLessEqual(rel(result.final_state.phi_Einstein, 5.8078e-4), 1e-4)
+        self.assertLessEqual(rel(result.final_state.phi_Einstein, 5.8100e-4), 1e-4)
 
         # phi_min of bounces 1, 2, 8: the minimum of phi on the dense output (see the log of
         # prompt 01 for why the value at the accepted step after the turn is not used here)
         minima = interpolated_minima(result, 0.01)
         self.assertEqual(len(minima), 51)
-        for index, reference in ((0, 2.79886e-4), (1, 3.03650e-4), (7, 3.66368e-4)):
+        for index, reference in ((0, 2.79895e-4), (1, 3.03661e-4), (7, 3.66383e-4)):
             self.assertLessEqual(rel(minima[index][1], reference), 2e-4)
 
     def test_e_P2_window_and_jacobian_clamp(self):
-        """P2 (beta = 2, M = 0.5) to N = 40: 18 880 RHS, about 2.5 s. No T_Jordan = 0
+        """P2 (beta = 2, M = 0.5) to N = 40: 19 030 RHS, about 2.5 s. No T_Jordan = 0
         substitution is printed (35 without the clamp and the cap, audit §8 F2)."""
         result, captured = integrate(P2, 0.5, 40.0)
         self.assertLessEqual(result.nfev, 25000)
         self.assertNotIn("T_Jordan = 0", captured)
-        self.assertEqual(len(wall_bounces(result, 0.5)), 19)
-        self.assertLessEqual(rel(result.final_state.phi_Einstein, 1.909693e-2), 1e-5)
+        self.assertEqual(len(wall_bounces(result, 0.5)), 20)
+        self.assertLessEqual(rel(result.final_state.phi_Einstein, 1.909720e-2), 1e-5)
         self.assertEqual(len(result.reflections), 0)
 
 
@@ -327,7 +332,7 @@ class TestKinematicCapLoopFailurePaths(unittest.TestCase):
         """Three injected RHS failures on trial states from P1 at M = 0.5; about 0.2 s."""
         result, _ = integrate(P1, 0.5, 21.0, rhs_wrapper=FailFirstStepCalls)
         self.assertGreaterEqual(result.steps_rejected_by_exception, 1)
-        self.assertLessEqual(rel(result.final_state.phi_Einstein, 1.2203834e-1), 1e-5)
+        self.assertLessEqual(rel(result.final_state.phi_Einstein, 1.2202350e-1), 1e-5)
 
     def test_h_G1_undeclared_wall_fails_at_the_floor(self):
         """P1 at M = 1e-10 under a potential that does not declare reflects_at_origin; about 0.1 s."""

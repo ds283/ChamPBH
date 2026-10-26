@@ -6,9 +6,11 @@ The states, the builder and the helpers are those of prompt 01's test module
 (test_kinematic_cap_loop.py), imported rather than duplicated. No Ray cluster and no datastore
 are used. Methods that integrate say how long they take.
 
-The reference values of (c) are the floats prompt 01's tree (fc97233) gives for P1 at M = 0.5 to
+The reference values of (c) are the floats prompt 01's tree (fc97233) gave for P1 at M = 0.5 to
 N = 21, printed with repr() (log 01 "State handed to the next prompt" for phi and pi; the
-first-bounce pair measured on an export of fc97233 by prompt 02, with the same helpers).
+first-bounce pair measured on an export of fc97233 by prompt 02, with the same helpers). They are
+now those of jordan-normalization prompt 05's tree, re-measured from prompt 01's after the units
+changed (the electronvolt was set from PRyMordial's G_N); the old values are in that prompt's log.
 """
 
 import ast
@@ -36,11 +38,12 @@ from ComputeTargets.tests.test_kinematic_cap_loop import (
 )
 from Quadrature.supervisors.ScalarField import StateVector
 
-# P1 at M = 0.5 to N = 21 on prompt 01's tree (fc97233), repr() of the floats
-P1_M0p5_PHI_21 = 0.12203833994225839
-P1_M0p5_PI_21 = -0.12971527073457434
-P1_M0p5_FIRST_BOUNCE_N = 20.343034651924082
-P1_M0p5_FIRST_BOUNCE_PHI = 0.004573794758933947
+# P1 at M = 0.5 to N = 21 on jordan-normalization prompt 05's tree, repr() of the floats; these are
+# prompt 01's (fc97233) values re-measured after the units changed
+P1_M0p5_PHI_21 = 0.12202349644648677
+P1_M0p5_PI_21 = -0.1297955195199084
+P1_M0p5_FIRST_BOUNCE_N = 20.343024418098206
+P1_M0p5_FIRST_BOUNCE_PHI = 0.004573834433278705
 
 # text that the traceback prints removed by prompt 02 produced: print(f"type={exc_type}, ...")
 # writes "type=<class ...", and traceback.print_tb writes '  File "...", line N, in ...' lines.
@@ -142,7 +145,7 @@ class TestTrialStatePolicy(unittest.TestCase):
         self.assertIn("T_Jordan = 0", ctx.exception.message)
 
     def test_c_physical_values_unchanged(self):
-        """P1 at M = 0.5 to N = 21 reproduces prompt 01's tree to 1e-10 relative; about 0.2 s."""
+        """P1 at M = 0.5 to N = 21 reproduces prompt 05's tree to 1e-10 relative; about 0.2 s."""
         result, captured = integrate(P1, 0.5, 21.0)
         self.assertEqual(result.N_final, 21.0)
         self.assertLessEqual(

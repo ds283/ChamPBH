@@ -22,7 +22,8 @@ tools/plot_surfing_histories.py (standalone, 2026-10-14).
 - `main(argv)` with `make_setup`, `find_kicks` and `trace_history` stubbed: both files written,
   `--arrays`, a failed history, and the refusals;
 - `trace_history` on one real history, beta = 3.0 (about 2 s; no PRyMordial): not captured, and
-  its first bounce equal to the committed fine scan's row.
+  its first bounce within 1e-7 relative of the committed fine scan's row (the scan was taken on
+  the units before jordan-normalization prompt 05, which moved the bounce by 2.1e-8).
 
 No Ray and no store. Every test runs from the repository root, as the suites do.
 """
@@ -215,7 +216,12 @@ class TestMain(unittest.TestCase):
 
 class TestRealHistory(unittest.TestCase):
     def test_beta_3_is_not_captured_and_bounces_as_the_committed_scan(self):
-        """One real history at beta = 3.0 (about 2 s; no PRyMordial)."""
+        """
+        One real history at beta = 3.0 (about 2 s; no PRyMordial). Its first bounce is within 1e-7
+        relative of the committed scan's row: the scan was taken on the units before
+        jordan-normalization prompt 05 set the electronvolt from PRyMordial's G_N, and the shift is
+        2.1e-8 (the bounce's T) and 9.1e-10 (its N).
+        """
         with open(NEAR3_CSV, newline="") as f:
             row = next(r for r in csv.DictReader(f) if float(r["beta"]) == 3.0)
         with _in_directory(ROOT):
@@ -233,8 +239,10 @@ class TestRealHistory(unittest.TestCase):
         self.assertIsNone(trace.capture_kick)
         self.assertEqual(row["captured"], "false")
         self.assertEqual(trace.turning_points, [])
-        self.assertEqual(trace.bounce_T_GeV, float(row["T_deliver_GeV"]))
-        self.assertEqual(trace.bounce_N, float(row["N_deliver"]))
+        self.assertLessEqual(
+            abs(trace.bounce_T_GeV / float(row["T_deliver_GeV"]) - 1.0), 1e-7
+        )
+        self.assertLessEqual(abs(trace.bounce_N / float(row["N_deliver"]) - 1.0), 1e-7)
         self.assertEqual(trace.N[-1], trace.bounce_N)
         self.assertAlmostEqual(trace.T_J_GeV[-1], trace.bounce_T_GeV, delta=1e-9)
         self.assertAlmostEqual(trace.phi_Mp[0], 5.0, delta=1e-12)

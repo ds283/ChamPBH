@@ -14,6 +14,21 @@
 # limitations under the License.
 
 from abc import ABC, abstractmethod
+from math import pi, sqrt
+
+# Newton's constant G_N in MeV^-2, as PRyMordial has it: `GN = 6.70883*1.e-39*1.e-6` in
+# PRyM/PRyM_init.py, the PDG value 6.70883e-39 GeV^-2 expressed in MeV^-2. It is CODATA 2018's
+# G = 6.67430e-11 m^3 kg^-1 s^-2, which is the G from which the Planck length, mass, time and
+# temperature literals of the three unit systems (Planck_units, Mpc_units, GeV_units) are derived.
+# It is written out here and not imported: PRyM_init reads files from the working directory at
+# import.
+NEWTON_G_MEV_MINUS_2 = 6.70883e-45
+
+# The reduced Planck mass in eV: 1/sqrt(8 pi G_N), converted from MeV to eV. PRyMordial's
+# `Mpl = 1./np.sqrt(GN)` is the full Planck mass from the same G_N, sqrt(8 pi) times this, so that
+# ChamPBH's M_P and PRyMordial's Mpl are one G_N. The three unit systems set the electronvolt (or,
+# in GeV_units, the Planck mass) from this number.
+REDUCED_PLANCK_MASS_EV = 1.0e6 / sqrt(8.0 * pi * NEWTON_G_MEV_MINUS_2)
 
 
 class UnitsLike(ABC):

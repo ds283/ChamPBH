@@ -1,8 +1,8 @@
 # jordan-normalization campaign — implementation state
 
-**Last updated:** 2026-10-25 · **Status: LIVE — 10 of 10 prompts written, 4 landed (01, 02, 03, 04,
-all reviewed; 04 after one stop ruled by the orchestrator); R1–R14, U1–U5 and P1–P20 ruled by the
-user 2026-10-20 (README §6). Next: the orchestrator note for 05.**
+**Last updated:** 2026-10-26 · **Status: LIVE — 10 of 10 prompts written, 5 landed (01, 02, 03, 04,
+all reviewed, and 05, awaiting review; 04 after one stop ruled by the orchestrator); R1–R14, U1–U5 and P1–P20 ruled by the
+user 2026-10-20 (README §6). Next: the orchestrator's review of 05.**
 The plan is [`README.md`](README.md), written on 2026-10-20 on branch `jordan-normalization`, cut
 from `main` at `ac187c8`.
 
@@ -39,7 +39,7 @@ It ends in the handover for the science rebuild, which is the user's.
 | 02 | Rename to `ScalarHistory` | classes, tables, drop group, proxies, documents; format 3 | Sonnet | ✅ | ✅ | `abccc23` | [`logs/02-rename-to-scalarhistory.md`](logs/02-rename-to-scalarhistory.md) |
 | 03 | The sampling axis | ln(1 + z_E) on the axis, exact-multiple grid, absolute lookup, ln(1 + z_J) per sample; format 4 | Opus | ✅ | ✅ | `bd9ae42` | [`logs/03-the-sampling-axis.md`](logs/03-the-sampling-axis.md) |
 | 04 | The model interface | `AbstractModel`, `ExponentialModel`, `RealizedModel`; consumers on it via an adapter; φ_ref = 0 bitwise; the shift law | Opus | ✍️ | ✅ | `597a215` | [`logs/04-the-model-interface.md`](logs/04-the-model-interface.md) |
-| 05 | The Planck mass | one reduced Planck mass from PRyMordial's G_N in three unit systems; consistency tests | Sonnet | ✍️ | ⬜ | — | — |
+| 05 | The Planck mass | one reduced Planck mass from PRyMordial's G_N in three unit systems; consistency tests | Sonnet | ✍️ | ✅ | this commit | [`logs/05-the-planck-mass.md`](logs/05-the-planck-mass.md) |
 | 06 | The tuning layer | `integrate_history` and `tune_history`: secant, seed, residuals, failure reasons, progress lines | Opus | ✍️ | ⬜ | — | — |
 | 07 | The store | `ExponentialModel` table; `ScalarHistory`'s key and tuned outputs; format 5; `VERSION_LABEL` 2026.7.0; writers and readers moved | Opus | ✍️ | ⬜ | — | — |
 | 08 | The driver and the tools | `main.py`'s options; the super-Planckian warning; the wrapper's scope; the tools and the surfing scan on tuned histories | Opus | ✍️ | ⬜ | — | — |
@@ -69,7 +69,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 | 02 | N1 the code, tables, columns and drop group · N2 format 3 · N3 the current documents · N4 the run scripts left as records |
 | 03 | Z1 the concept ✅ · Z2 the factory and format 4 ✅ · Z3 the grid ✅ · Z4 the sampling ✅ · Z5 ln(1 + z_J) ✅ · Z6 the readers ✅ · Z7 the value factory's issues ✅ (all landed in `bd9ae42`) |
 | 04 | M1 `AbstractModel` ✅ · M2 `RealizedModel` ✅ · M3 `ExponentialModel` ✅ · M4 the consumers ✅ · M5 the adapter ✅ · M6 the unread properties ✅ · M7 the tests ✅ (all landed in `597a215`) |
-| 05 | K1 one constant · K2 the three unit systems · K3 the tests |
+| 05 | K1 one constant ✅ · K2 the three unit systems ✅ · K3 the tests ✅ (all landed in this commit) |
 | 06 | T1 `integrate_history` · T2 the residuals · T3 the secant and its guards · T4 the seed · T5 the failures · T6 progress · T7 the outputs |
 | 07 | S1 the model's table · S2 the key · S3 the outputs · S4 the compute path · S5 `main.py` · S6 the readers · S7 format 5 and 2026.7.0 · S8 the tests |
 | 08 | D1 the options · D2 the warning · D3 the wrapper's scope · D4 `history_and_bbn.py` · D5 the surfing tools · D6 `histories.csv` · D7 the tests |
@@ -84,7 +84,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 | Rename | no `ScalarModel` name outside the records; the golden history bitwise | 02 | ✅ |
 | Axis | the axis is ln(1 + z_E) with no overflow; ln(1 + z_J) agrees with `cosmology.z(T_J)` and with the A identity; the change in values measured | 03 | ✅ |
 | Model | the golden history bitwise through `ExponentialModel` at φ_ref = 0, V₀ = Λ⁴; the shift law holds | 04 | ✅ |
-| Units | one Planck mass equal to PRyMordial's; 1 K, ħc, ħ and the kilogram consistent to ≤ 10⁻⁶ in each unit system | 05 | ⬜ |
+| Units | one Planck mass equal to PRyMordial's; 1 K, ħc, ħ and the kilogram consistent to ≤ 10⁻⁶ in each unit system | 05 | ✅ |
 | Tuning | a tuned history converges inside the tolerance, deterministically; the secant is no worse than the plain update on README §0.3's grid | 06 | ⬜ |
 | Store | a tuned history round-trips bitwise and its realized model is rebuilt equal; the golden fingerprint at format 5 | 07 | ⬜ |
 | Driver | the old options are refused; the surfing scan records tuned values with its roots unchanged | 08 | ⬜ |
@@ -570,3 +570,74 @@ pass.
 - **Not residue, recorded only.** The log's observations are left as they are, with no issue
   opened: the dated audit harness, the unread `default_abs_tol`/`default_rel_tol`, the
   diagnostic's "potential" label, and §7.2 of `architecture-summary.md` (10's).
+
+### 5.6 After prompt 05 (2026-10-26)
+
+Prompt 05 landed in this commit (log [`logs/05-the-planck-mass.md`](logs/05-the-planck-mass.md)),
+dispatched with orchestrator note 05, whose fourteen rulings govern, and with the user's ruling
+"Re-pin in 05" (ruling 13).
+- **K1.** `Units/base.py`: `NEWTON_G_MEV_MINUS_2 = 6.70883e-45` (PRyMordial's `GN`, MeV⁻²) and
+  `REDUCED_PLANCK_MASS_EV = 1.0e6 / sqrt(8.0 * pi * NEWTON_G_MEV_MINUS_2)` = 2.4353235955263046e+27
+  (`0x1.f79cf52984fafp+90`), 2.7775e-4 below 2.436e27.
+- **K2.** `Planck_units.eV` and `Mpc_units.eV` are `PlanckMass / REDUCED_PLANCK_MASS_EV`, and
+  `GeV_units.PlanckMass` is `REDUCED_PLANCK_MASS_EV * eV`. No literal changed.
+- **K3.** `CosmologyModels/tests/test_planck_mass.py`, 8 tests:
+  - PRyMordial's `GN`, parsed from the text of `PRyM/PRyM_init.py` and compared as decimals (its
+    expression is one ulp below the literal), `Mpl = 1./np.sqrt(GN)` present, and
+    √(8π) M_P equal to 1e6/√G to 1e-15;
+  - in each system, `PlanckMass / eV` equal to the constant to 1e-15, and 1 K, 1/eV (m, s) and
+    1 kg against CODATA 2018 to 1e-6 (measured 1.70e-7, 4.08e-8, 1.58e-7, 2.13e-7; 2.78e-4 before).
+- **The change in values** (both golden histories, old against new at equal index; labels equal,
+  `n_samples` 2723 and 4894 unchanged). The table is the agent's, and equals note 05's §0 in every
+  digit shown.
+
+| field | β = 1.5: max (sample) | > 10⁻² | β = 5.5: max (sample) | > 10⁻² |
+|---|---|---|---|---|
+| `raw_N` | 1.388e-04 (0) | 0 | 6.977e-06 (0) | 0 |
+| `phi_Einstein` | 4.743e-05 (2024) | 0 | 1.502e-03 (4642) | 0 |
+| `pi_Einstein` | 1.388e-04 (0) | 0 | 4.105e-01 (4696) | 7 |
+| `log_rhorad_Einstein` | 1.155e-05 (0) | 0 | 6.842e-05 (0) | 0 |
+| `log_rhorad_Jordan` | 8.805e-06 (0) | 0 | 8.798e-06 (0) | 0 |
+| `log_fm` | 1.958e-05 (2722) | 0 | 1.958e-05 (4893) | 0 |
+| `H_Einstein` | 5.554e-04 (1782) | 0 | 5.552e-04 (4287) | 0 |
+| `H_Jordan` | 5.719e-04 (1576) | 0 | 6.512e-04 (2440) | 0 |
+| `log_T_Jordan` | 8.565e-06 (0) | 0 | 8.558e-06 (0) | 0 |
+| `gstar_rho` | 1.533e-07 (2160) | 0 | 9.737e-08 (4327) | 0 |
+| `gstar_s` | 1.451e-07 (2135) | 0 | 9.228e-08 (4327) | 0 |
+| `dgstar_s_dlogT` | 3.883e-05 (364) | 0 | 8.184e-05 (187) | 0 |
+| `dgstar_rho_dlogT` | 2.334e-05 (180) | 0 | 7.227e-05 (408) | 0 |
+| `Sigma` | 4.441e-07 (2168) | 0 | 1.539e-06 (4642) | 0 |
+| `friction_term` | 1.388e-04 (0) | 0 | 4.105e-01 (4696) | 7 |
+| `reflecting_term` | 1.374e-04 (2024) | 0 | 1.023e-01 (4623) | 120 |
+| `kicking_term` | 4.481e-07 (2168) | 0 | 1.560e-06 (4642) | 0 |
+| `log_one_plus_z_Jordan` | 2.820e-08 (2314) | 0 | 1.541e-05 (4892) | 0 |
+
+  At β = 5.5 three fields exceed 1e-2, in the tail (samples 4308–4893, φ against the wall at
+  M/φ ≈ 37–60): `reflecting_term` ∝ e^(M/φ), and `pi_Einstein` and `friction_term` at turning
+  points of π inside a bounce (note 05's §0). Amplifications of the 2.8e-4 input, not errors.
+
+  | | β = 1.5 old → new | β = 5.5 old → new |
+  |---|---|---|
+  | `accepted_steps` | 1231 → 1233 | 26343 → 26331 |
+  | `compute_steps` = `RHS_evaluations` | 9887 → 9870 | 232810 → 232530 |
+  | first bounce N | 18.64397081911504 → 18.64397081911831 | 32.10765422995129 → 32.10765422995111 |
+  | first bounce ln T_J | −43.35467531703388 → −43.35439760833413 | −37.03892534804545 → −37.03864763934282 |
+  | `fixed_T_values` | (0.0023279537090081345, −0.05135980555622314, None, None) → (None × 4) | (None × 4) → (1.904834518987192e-05, 0.017290191260207102, None, None) |
+
+  The 1 MeV fixed-T values flip because T_stop is `FIXED_T_JORDAN_HIGH_MEV` in the golden setup
+  (a property of the setup, not of 05).
+- **The golden history** is `golden_history_05.json`; `_01` and `_03` are byte-identical.
+  `test_golden_history` alone took 9.57 s before (load 5.7) and 9.74 s after (load 10.2).
+- **Twelve old-unit pins re-pinned** (the user's ruling), in `test_kinematic_cap_loop.py`,
+  `test_integrator_exceptions.py`, `test_first_bounce.py` and `tools/tests/test_plot_surfing_histories.py`
+  (the committed scan's row is compared to 1e-7, not bitwise: the shift is 2.1e-8). P2's wall bounces
+  to N = 40 go from 19 to 20.
+- **Not edited** (ruling 5): `test_inventory_report.py`, `test_compare_stores.py`,
+  `test_store_fingerprint_golden.py`. They pass unedited.
+- **Breakages.** 1: `GeV_units` at 2.436e27 fails five of `test_planck_mass`'s tests, for
+  `GeV_units` only. 2: G = 6.70884e-45 fails the decimal comparison and the 1e-15 comparison, both
+  golden histories and `test_integrator_exceptions.test_c_physical_values_unchanged`; ruling 4's
+  four tests do not fail (7.5e-7 < 1e-6).
+- **Suites:** CosmologyModels 26 (+8), ComputeTargets 205 (61 + 144), ObjectFactories 86, tools 102,
+  RunDrivers 61, all passing.
+- **Closed:** none. **Opened:** none. `.documents/OPEN_ISSUES.md` is unchanged.

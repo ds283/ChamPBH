@@ -1,7 +1,9 @@
 """
 The golden histories: the setup, and the record of one history, shared by the test
 (test_golden_history.py) and by a regeneration. (jordan-normalization prompt 01, X1; regenerated
-by prompt 03 as data/golden_history_03.json, beside 01's, which is the record of 01 and 02.)
+by prompt 03 as data/golden_history_03.json, beside 01's, which is the record of 01 and 02, and by
+prompt 05 as data/golden_history_05.json, which is the record of 05 on; 03's is the record of 03
+and 04.)
 
 Two histories are run as tools/history_and_bbn.py runs one, through
 compute_scalar_history._function with no Ray: QCD_Cosmology on Planck2018 in Planck_units;
@@ -71,7 +73,7 @@ from CosmologyModels.GenericEOS.QCD_Cosmology import QCD_Cosmology
 from CosmologyModels.LambdaCDM import Planck2018
 from Units import Planck_units
 
-GOLDEN_PATH = Path(__file__).resolve().parent / "data" / "golden_history_03.json"
+GOLDEN_PATH = Path(__file__).resolve().parent / "data" / "golden_history_05.json"
 REGENERATE_COMMAND = (
     "PYTHONPATH=. ./venv/bin/python -m ComputeTargets.tests.golden_history"
 )
@@ -290,7 +292,7 @@ def main() -> int:
         "provenance": {
             "generated_at_commit": commit,
             "code_tree": (
-                "jordan-normalization prompt 03's working tree, before its commit, on top "
+                "jordan-normalization prompt 05's working tree, before its commit, on top "
                 "of generated_at_commit"
             ),
             "generator": "ComputeTargets/tests/golden_history.py",

@@ -113,6 +113,9 @@ invariants that hold across all of them:
 - **Units.** `units.PlanckMass` is the *reduced* Planck mass; PRyMordial's `Mpl` is the full one,
   and the factor 8π between them cancels exactly in the interface. Energies in the PRyMordial
   interface are in MeV; everywhere else they are in whatever `UnitsLike` the cosmology carries.
+  The electronvolt is set from PRyMordial's G_N (`REDUCED_PLANCK_MASS_EV` in `Units/base.py`), so
+  ChamPBH's M_P and PRyMordial's `Mpl` come from the same G_N, and the factor 8π between them still
+  cancels.
 - **Redshift.** The stored label of a sample is ln(1 + z_E) (`redshift.log_one_plus_z`), the
   Einstein-frame redshift counted back in e-folds from the end of the history; `redshift.z` is
   derived from it (`inf` past float range), and `float()` of a redshift is ln(1 + z_E). Each

@@ -15,24 +15,27 @@
 
 from math import pi, sqrt
 
-from Units.base import UnitsLike
+from Units.base import REDUCED_PLANCK_MASS_EV, UnitsLike
 
 
 class GeV_units(UnitsLike):
     def __init__(self):
         UnitsLike.__init__(self, "GeV units")
 
-    # numerical values obtained from https://en.wikipedia.org/wiki/Planck_units,
+    # numerical values obtained from https://en.wikipedia.org/wiki/Planck_units (CODATA 2018),
     # assuming c = hbar = k_B = 1
     # That leaves a single dimensionful unit in which we measure mass, length, energy, time
-    # We can choose this to be whatever we like; often it is GeV, but here we are choosing it
-    # to be Mpc instead.
+    # We can choose this to be whatever we like; here we are choosing it to be the GeV.
+    #
+    # The Planck length 1.616255e-35 m, mass 2.176434e-8 kg, time 5.391247e-44 s and temperature
+    # 1.416784e32 K are CODATA 2018's, the megaparsec is 3.08567758e22 m, and the reduced Planck
+    # mass is REDUCED_PLANCK_MASS_EV electronvolts, which is PRyMordial's G_N (Units/base.py).
 
     _GeV = 1.0
     eV = _GeV / 1e9
     # keV, MeV, GeV are set by base UnitsLike
 
-    PlanckMass = 2.436e27 * eV
+    PlanckMass = REDUCED_PLANCK_MASS_EV * eV
 
     sqrt_NewtonG = sqrt(1.0 / (8.0 * pi)) / PlanckMass
 

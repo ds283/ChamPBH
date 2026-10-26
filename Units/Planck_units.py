@@ -15,18 +15,22 @@
 
 from math import pi, sqrt
 
-from Units.base import UnitsLike
+from Units.base import REDUCED_PLANCK_MASS_EV, UnitsLike
 
 
 class Planck_units(UnitsLike):
     def __init__(self):
         UnitsLike.__init__(self, "Planck units")
 
-    # numerical values obtained from https://en.wikipedia.org/wiki/Planck_units,
+    # numerical values obtained from https://en.wikipedia.org/wiki/Planck_units (CODATA 2018),
     # assuming c = hbar = k_B = 1
     # That leaves a single dimensionful unit in which we measure mass, length, energy, time
-    # We can choose this to be whatever we like; often it is GeV, but here we are choosing it
-    # to be Mpc instead.
+    # We can choose this to be whatever we like; here we are choosing it to be the reduced Planck
+    # mass.
+    #
+    # The Planck length 1.616255e-35 m, mass 2.176434e-8 kg, time 5.391247e-44 s and temperature
+    # 1.416784e32 K are CODATA 2018's, the megaparsec is 3.08567758e22 m, and the electronvolt
+    # is set from REDUCED_PLANCK_MASS_EV, which is PRyMordial's G_N (Units/base.py).
 
     PlanckMass = 1.0
     sqrt_NewtonG = sqrt(1.0 / (8.0 * pi)) / PlanckMass
@@ -39,7 +43,7 @@ class Planck_units(UnitsLike):
     Second = sqrt_NewtonG / 5.391247e-44
     Kelvin = 1.0 / (1.416784e32 * sqrt_NewtonG)
 
-    eV = PlanckMass / 2.436e27
+    eV = PlanckMass / REDUCED_PLANCK_MASS_EV
     # keV, MeV, GeV are set by base UnitsLike
 
     # c should be unity for consistency, since we have assumed c = hbar = k_B = 1 in writing some of the equations above

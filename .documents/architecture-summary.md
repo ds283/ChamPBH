@@ -910,6 +910,17 @@ class UnitsLike:
 
 All quantity objects (`M_value`, `temperature`, etc.) carry a reference to the `UnitsLike` instance under which they were created, for unit-safe arithmetic.
 
+> **Note, 2026-10-26 (jordan-normalization prompt 05):** the electronvolt is set from one constant
+> in `Units/base.py`. `NEWTON_G_MEV_MINUS_2 = 6.70883e-45` is PRyMordial's `GN` (`PRyM/PRyM_init.py`,
+> the PDG value), in MeV⁻² and written out there because `PRyM_init` reads files from the working
+> directory at import; `REDUCED_PLANCK_MASS_EV = 1.0e6 / sqrt(8 π NEWTON_G_MEV_MINUS_2)`
+> (2.4353236 × 10²⁷) is the reduced Planck mass in eV. `Planck_units.eV` and `Mpc_units.eV` are
+> `PlanckMass / REDUCED_PLANCK_MASS_EV`, and `GeV_units.PlanckMass` is
+> `REDUCED_PLANCK_MASS_EV * eV`. Each system's Planck length, mass, time and temperature literals
+> are CODATA 2018's and are unchanged. Before this note the three systems used 2.436 × 10²⁷, which
+> is 2.78 × 10⁻⁴ above this, so that 1 K, 1/eV and 1 kg disagreed with k_B, ħc, ħ and the kilogram
+> in eV by that much. PRyMordial's `Mpl = 1/√G_N` is √(8π) times `REDUCED_PLANCK_MASS_EV`.
+
 ### 8.2 Quantity Classes (`CosmologyConcepts/`)
 
 **`DimensionlessQuantity`:** Abstract base for parameters like `beta_value`. Stores a single float; equality uses a configurable relative tolerance.
