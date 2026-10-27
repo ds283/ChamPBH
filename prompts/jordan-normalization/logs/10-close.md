@@ -1,7 +1,7 @@
 # Log 10 — close
 
 **Subject:** Close the `jordan-normalization` campaign: the documents, `CLAUDE.md`, the handover, the indexes
-**Commit:** this commit, on branch `jordan-normalization`, on top of `dbfa31f`
+**Commit:** `d638738`, on branch `jordan-normalization`, on top of `dbfa31f`
 **Date:** 2026-10-26, by Claude Sonnet 5.5
 **Result:** **COMPLETE.** C1–C5 shipped; no stop condition was met; no code changed.
 - `architecture-summary.md`: 15 dated notes; `numerical-strategies.md`: §3.7 (ten sub-subsections) and ten one-line
@@ -35,7 +35,7 @@ classified below.
   gone and new, `--drop scalar-history`, `plot_ScalarHistory.py`; (3) the cost table per block, the slowest
   histories, the heartbeat; (4) S1 and S5 on the tuned tool, each to a new `--out`; (5) the RayPoolKit wait (P19);
   (6) what the campaign deferred; (7) left to the user.
-- **C4.** Board: row 10 ✅ "this commit", C1–C5 ✅, status line CLOSED, §3's paragraph (closed with six open), §5.11 and the
+- **C4.** Board: row 10 ✅ "`d638738`", C1–C5 ✅, status line CLOSED, §3's paragraph (closed with six open), §5.11 and the
   closing paragraph, header's `plot_ScalarModel.py` → `plot_ScalarHistory.py`. `prompts/INDEX.md`: the row complete, header
   "2026-10-26 · 13 campaigns: 0 planned, 0 live, 13 closed". `.documents/OPEN_ISSUES.md`: header clause, §1.15, §1.16.
 - **C5.** Suites below.
@@ -118,15 +118,15 @@ with its log or record, or an estimate said to be one.
 
 Commands: for each pattern, `grep -n -F -e PATTERN FILE` over `.documents/architecture-summary.md`,
 `.documents/numerical-strategies.md` and `CLAUDE.md`, the working files as committed; classified by
-`var/jordan-normalization-10/audit_grep.py` (a hit inside a blockquote note is "a dated record, left"; this commit's
+`var/jordan-normalization-10/audit_grep.py` (a hit inside a blockquote note is "a dated record, left"; `d638738`'s
 own notes are `P10`; undated text has a hand disposition). The patterns: `Lambda`, `Λ`, `T_stop`, `T-stop`, `potential-type`,
 `Potentials/`, `ConformalCouplings`, `ExponentialPotential`, `ExponentialCoupling`, `from_rows`, `z_serial`,
 `REDSHIFT_PRECISION`, `logspace`, `exp(N)`, `2.436`, `ScalarModel`, `scale out`, `A(0)`, `Ω(0)`, `2βφ`, `Planck units`.
-Format: file | pattern | hits | dispositions with line numbers. `P10` = this commit's own text (the notes, §3.7).
+Format: file | pattern | hits | dispositions with line numbers. `P10` = `d638738`'s own text (the notes, §3.7).
 `CLAUDE.md` has no hit for any pattern. **`scale out`, `A(0)`, `Ω(0)`, `2βφ`, `z_serial`: no hit outside this
 commit's own text (§3.7.1's description of the old state): the R6 audit finds nothing to correct.** The statement that z is stored
 (`exp(N) - 1`, `largest_z`, `DEFAULT_REDSHIFT_PRECISION`) has notes. Extra greps (`largest_z`, `z_sample`, `compute_scalar_model`,
-`Lambda_eV`, `fixed Λ`, `1 meV`): every hit in a dated record or this commit's text.
+`Lambda_eV`, `fixed Λ`, `1 meV`): every hit in a dated record or `d638738`'s text.
 
 ```
 architecture-summary.md | Lambda | 22 | P10 6: 293,305,656,657,658,1097; a dated record, left 8: 271,484,720,721,722,724,726,727; already noted at :269 (prompt 07's note on the tree) 1: 87; already noted at :484 (prompt 07's note on the registry) 1: 463; already noted at :720 (prompt 07's note on the options and sharding) 2: 694,713; noted at :1097 (§8.2) 1: 1092; noted at :642 (§5.1) 1: 633; true (LambdaCDM, the cosmology; not the potential's Λ) 2: 106,481
@@ -201,10 +201,10 @@ CLAUDE.md | Planck units | 0 |
 | 01 | the dated notes of `architecture-summary.md` describe the potentials | left | invariant 6; the notes at §8.3, §5.1 say what changed |
 | 02 | `run_readers.sh` names `plot_ScalarModel.py`; the dated outputs say `ScalarModel` | left | records |
 | 02 | `[02-the-scalar-history-parent-is-still-called-model]` | 07 narrowed it | open on the board |
-| 03 | `architecture-summary.md` `DEFAULT_REDSHIFT_PRECISION` | this commit (§5.3 note) | C1 |
+| 03 | `architecture-summary.md` `DEFAULT_REDSHIFT_PRECISION` | `d638738` (§5.3 note) | C1 |
 | 03 | `ScalarHistory._create_functions` | noted (num.-strat. §4.1) | open issue |
 | 03 | `--samples-log10-z` help "per log10(z)" | left | a help string in code outside 10's files, imprecise before 03 too (the grid was a `logspace` in 1 + z): not a stop; noted in §5.1's note |
-| 03 | `extract_common.py:421` | left | cosmetic, housekeeping |
+| 03 | `extract_common.py:421` | fixed as housekeeping (`807f175`, 2026-10-22) | the review of 10 corrected this row, which said "left" |
 | 04 | `architecture-summary.md` §7.2 `ODERHS` "passed to `solve_ivp`" | already noted at the integrator-remediation note (§7.2) | not made false by 04 |
 | 04 | `integrator-audit-2026-09-30/harness.py` reads deleted properties | left | dated record |
 | 04 | `default_abs_tol`/`default_rel_tol`, the diagnostic's "potential" label | left | code, outside 10 |
@@ -216,7 +216,7 @@ CLAUDE.md | Planck units | 0 |
 | 08 | the 2026.6.0 run script is not refused | §4.16 point 2 | handover |
 | 08 | plot scripts accept `--tuning-max-integrations` | true | `CLAUDE.md` says so |
 | 08 | surfing CSV's `accepted_steps` is now to T_CMB | §4.16 point 4 context | measurement note |
-| 08 | "The prose": README, `architecture-summary.md`, `numerical-strategies.md` are 10's | this commit | C1 |
+| 08 | "The prose": README, `architecture-summary.md`, `numerical-strategies.md` are 10's | `d638738` | C1 |
 | 09 | none made false | — | observations are in §4.16 and §3.7.6 |
 
 None needs a code change; the prompt's second stop does not arise.
@@ -258,7 +258,7 @@ None: no code changed.
 ## State handed to the next prompt
 
 The campaign is closed; there is no next prompt. For the user:
-- **Tree:** this commit, on `jordan-normalization`, on top of `dbfa31f`; nothing pushed; `main` not merged (P15, the user's).
+- **Tree:** `d638738`, on `jordan-normalization`, on top of `dbfa31f`; nothing pushed; `main` not merged (P15, the user's).
 - **The rebuild** is unheld and described in `.documents/review-remediation-verification.md` §4.16: the run scripts' changes by line, the cost (about 6.6–8.4 hours of scalar stage, estimated), the heartbeat (no `--stale-after`), the surfing scans S1 (about 55 min) and S5 (about 35 min) to new `--out`s, the RayPoolKit wait.
 - **Stores and runs:** `var/datastores/jordan-normalization-09-reference.db` (16 shards, sidecar), unchanged by `--inventory`; the resumed store retired by the user (sidecar a tombstone); the eleven runs under `var/runs/`, all finished.
 - **Open issues:** six on this board (`.documents/OPEN_ISSUES.md` §1.16); 25 open in the index. For the user to rule: `[08-a-history-that-did-not-converge-is-never-retried]`, `[09-ray-deduplicates-the-tune-lines-of-parallel-histories]`, and RayPoolKit's wait.

@@ -1,8 +1,8 @@
 # jordan-normalization campaign — implementation state
 
-**Last updated:** 2026-10-26 · **Status: CLOSED 2026-10-26 — 10 of 10 landed (01–09 reviewed, 10 awaiting
-its review; 04 and 08 each after one stop ruled by the orchestrator); R1–R14, U1–U5 and P1–P20 ruled by
-the user 2026-10-20 (README §6); the merge into `main` is the user's (P15).**
+**Last updated:** 2026-10-27 · **Status: CLOSED 2026-10-26 — 10 of 10 landed and reviewed (04 and 08
+each after one stop ruled by the orchestrator); R1–R14, U1–U5 and P1–P20 ruled by the user 2026-10-20
+(README §6); the merge into `main` is the user's (P15).**
 The plan is [`README.md`](README.md), written on 2026-10-20 on branch `jordan-normalization`, cut
 from `main` at `ac187c8`.
 
@@ -44,7 +44,7 @@ It ends in the handover for the science rebuild, which is the user's.
 | 07 | The store | `ExponentialModel` table; `ScalarHistory`'s key and tuned outputs; format 5; `VERSION_LABEL` 2026.7.0; writers and readers moved | Opus | ✍️ | ✅ | `223afc6` | [`logs/07-the-store.md`](logs/07-the-store.md) |
 | 08 | The driver and the tools | `main.py`'s options; the super-Planckian warning; the wrapper's scope; the tools and the surfing scan on tuned histories | Opus | ✍️ | ✅ | `e624f1a` | [`logs/08-the-driver-and-the-tools.md`](logs/08-the-driver-and-the-tools.md) |
 | 09 | Rehearse a tuned build | registered pilot build on the isolated cluster, interrupted and resumed, compared bitwise (if U2) | Opus | ✍️ | ✅ | `2d3520b` | [`logs/09-rehearse-a-tuned-build.md`](logs/09-rehearse-a-tuned-build.md) |
-| 10 | Close | documents, `CLAUDE.md`, the handover for the science rebuild, indexes, board | Sonnet | ✍️ | ✅ | this commit | [`logs/10-close.md`](logs/10-close.md) |
+| 10 | Close | documents, `CLAUDE.md`, the handover for the science rebuild, indexes, board | Sonnet | ✍️ | ✅ | `d638738` | [`logs/10-close.md`](logs/10-close.md) |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
 
@@ -81,6 +81,12 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
   β = 0.5, φ* = 5 (the spline floor, as in the 2026.6.0 run), which it ruled expected; it read the
   prompt's eight histories as seven, timed the interruption from the tune lines, and measured the
   heartbeat's silences with a recorder. No stop (§5.10).
+- [`orchestrator/prompt-10.md`](orchestrator/prompt-10.md) (`dbfa31f`), used for 10. It ruled the
+  documents corrected by dated notes and one dated subsection, never by rewording; read the logs'
+  "made false" lines as the observations about documents, docstrings, comments and help text, so that
+  `--samples-log10-z`'s help (imprecise before 03) is no stop; kept the two paper notes as records,
+  listed in the log; and estimated the rebuild's cost block by block. The agent was stopped once by
+  an API rate limit and resumed by message. No stop (§5.11).
 
 ### 1.1 Items
 
@@ -95,7 +101,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 | 07 | S1 the model's table ✅ · S2 the key ✅ · S3 the outputs ✅ · S4 the compute path ✅ · S5 `main.py` ✅ · S6 the readers ✅ · S7 format 5 and 2026.7.0 ✅ · S8 the tests ✅ (all landed in `223afc6`) |
 | 08 | D1 the options ✅ · D2 the warning ✅ · D3 the wrapper's scope ✅ · D4 `history_and_bbn.py` ✅ · D5 the surfing tools ✅ · D6 `histories.csv` ✅ · D7 the tests ✅ (all landed in `e624f1a`) |
 | 09 | H1 reference ✅ · H2 resumed ✅ · H3 the comparisons ✅ · H4 the measurements ✅ · H5 the document ✅ (all landed in `2d3520b`) |
-| 10 | C1 the documents ✅ · C2 `CLAUDE.md` ✅ · C3 the handover ✅ · C4 the board and indexes ✅ · C5 the final suites ✅ (all landed in this commit) |
+| 10 | C1 the documents ✅ · C2 `CLAUDE.md` ✅ · C3 the handover ✅ · C4 the board and indexes ✅ · C5 the final suites ✅ (all landed in `d638738`) |
 
 ## 2. The gates
 
@@ -1282,7 +1288,7 @@ All pass.
 
 ### 5.11 After prompt 10 (2026-10-26)
 
-Prompt 10 landed in this commit (log [`logs/10-close.md`](logs/10-close.md)), dispatched with
+Prompt 10 landed in `d638738` (log [`logs/10-close.md`](logs/10-close.md)), dispatched with
 orchestrator note 10, whose eleven rulings govern. No stop. No code changed.
 - **C1.** `architecture-summary.md`: fifteen dated notes, each at the statement it corrects (§1, §2,
   §4.3, §5.1, §5.3, §7.2 twice, §8.2, §8.3, §8.4, §8.4a, §9, §11 and §12 twice): the options and the
@@ -1313,3 +1319,45 @@ and the rehearsal (09) showed the tuned build equal to the standalone tool bit f
 interruption and a resume. Six issues stay open (§3). **The merge into `main` is the user's (P15), and
 so are the science rebuild, from `review-remediation-verification.md` §4.16, 09's reference store, and
 the three rulings: the scalar stage's retry, the deduplication of the tune lines, and RayPoolKit's wait.**
+
+**Orchestrator review of prompt 10 (2026-10-27).** Against `d638738`, by note 10's ten checks. All
+pass.
+- **Scope.** Eight files, exactly the prompt's list; the parent is `dbfa31f`; no `.py`, `.sh`, `.toml`
+  or `.yaml` file, `requirements.txt`, `science-runs/`, `orchestrator/` or the README changed; the tree
+  clean; nothing pushed (`github/main` is still `a144c83`).
+- **Additive.** The three documents' diffs have no deleted line; §4.16 begins after §4.15's last line.
+- **The code claims.** Over thirty `file:line` references of §3.7 and the new notes read in the code at
+  `d638738`, among them `tune_history`'s guard, cap and four failure clauses (`:1659-1729`),
+  `TuningSecant` with its plain first step (B = −I), Broyden update and twice rule (`:1439-1515`),
+  `_tuning_state`'s V_target and residuals (`:1542-1566`), `RealizedModel.log_Omega`'s subtraction
+  (`AbstractModel.py:77`, `:114-115`), the seeds (`ExponentialModel.py:156-195`, `AbstractModel.py:267-280`),
+  `effective_minimum`'s bracket and tolerances, the axis (`redshift.py:74-84`,
+  `ObjectFactories/redshift.py:51-53`, `config/defaults.py:23`), `main.py:302`, `:955-960`,
+  `:1082-1083`, `:1094`, `config/argument_parser.py:24-26`, `:65`, `:185`, `:194`, `:298`,
+  `tools/surfing_scan.py:204`, `:208`, `:536`, `RunDrivers/registered_run.py:304-312`,
+  `main.py:330`'s `process_batch_size=3`. Each says what the text says.
+- **The numbers.** Traced to their records: 06's table (73 against 116, 4.2e-6 and 2.0e-5, the one
+  guard), log 04's 2.685e-14, 4.251e-14 and 6.875e-14, log 03's 3.07e-7, 3.72e-8 and 6.6e-12, log
+  05's four consistency figures, board §5.4's 7.0 s, log 08's 20.1, 31.7 and 65.3 s, and the cost
+  table, which equals the orchestrator's block by block. The agent's "load 5–16" for 06's walls is
+  06's log's; note 10's "6–12" was README §0.3's.
+- **The grep.** The orchestrator's own scan of the two documents for ruling 3's terms, flagging any
+  hit outside a dated note or section with no note of 2026-10-26 before the next heading: every
+  flag is inside a dated note or section, or is §3.7's own text.
+- **The handover's commands.** Every `--help` exit 0 (at `dbfa31f`, the code unchanged since);
+  the reference store's 18 files hash as before `--inventory`; C3's wrapped arguments parsed by
+  `create_argument_parser` give M `[0.5, 0.1, 0.03, 0.01]`, 41 β from 1.0 to 3.0, φ* 5.0, n `[1]`,
+  tolerance 1e-5, cap 30, 300 decades at 250, prune on.
+- **The "made false" table** agrees with note 10's list and the logs but for one row (residue below).
+- **`CLAUDE.md`, the board and the indexes.** As rulings 5, 8 and 9 say: INDEX's header 13 of 13,
+  with 13 rows; OPEN_ISSUES 25, with 25 rows in §1; the `ray-sqla-align` row untouched.
+- **The log** in §5.1's form, fourteen deviations classed, note 10's rulings among them; its drift
+  (two "before" counts lost to a `tail`) touches no record and is made good by the after-run.
+- **The suites** at `d638738`, serially, no cluster up, load 3–16: 26; 76 + 167; 93; 115; 64, all
+  passing.
+- **Residue, fixed in this commit.** "this commit" becomes `d638738` in the log (×8), on this board (×3)
+  and in `prompts/INDEX.md`'s row; the log's "made false" row for `extract_common.py:421` said "left",
+  and housekeeping `807f175` fixed it on 2026-10-22; note 10 is listed in §1; the status line.
+- **For the user:** the merge into `main` and the push (P15); the rebuild from §4.16; the reference
+  store; and two housekeeping items offered, `--samples-log10-z`'s help and the `ray-sqla-align` row
+  of `prompts/INDEX.md`.
