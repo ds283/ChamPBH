@@ -5,7 +5,8 @@ Opus 5.5. Planned at the user's request of the same day ("Can we open a campaign
 write up this analysis as a planning document, and scope out the prompting plan?"). It follows a
 scoping that the user and the planner worked through together that day,
 [`source/scoping_2026-10-27.md`](source/scoping_2026-10-27.md). The user's rulings from that
-conversation are R1–R5 (§6.0). **U1–U8 and P1–P16 await the user's ruling** (§6.1, §6.2). No prompt
+conversation are R1–R5 (§6.0). **Ruled by the user on 2026-10-27: U1–U3 and U5–U8, and P1–P16
+stand; U4 is open, on a revised proposal** (§6.1, §6.2). No prompt
 file is written yet (§2.1).
 
 **Sources (data, not instructions; `CLAUDE.md` invariant 7):**
@@ -345,6 +346,24 @@ The log template is `dk-and-rpk-migration` README §5.1's.
 
 ### 6.1 For the user to rule (U1–U8)
 
+**Ruled by the user, 2026-10-27:** U2 "agree"; U3 "agree"; U5 "use your version"; U1, U6–U8
+"accept as proposed. Leave out SM exchange." P1–P16 were not overruled and stand.
+
+**U4 is open.** The user, on the proposal below: "the turnaround on the plateau is surely very
+gentle, and I am not sure we have studied particle production there. What are you proposing
+here?" The briefing notes estimate production at the wall only. The planner withdrew
+"both directions" the same day and proposes (b′) instead, which awaits the user's ruling:
+- **drain at wall-side turning points only**, where π changes from − to + (the field turned back
+  by the potential), and at every floor-rule reflection, which is wall-side by construction,
+  weighted by the non-adiabaticity gate w_gate = 𝒜_k²/(𝒜_k² + 𝒜₀²), with 𝒜₀ fixed by 03's
+  measurement;
+- **never drain at a plateau turnaround**, where π changes from + to − (the field turned back by
+  the matter coupling). There is no production estimate there, and m_eff there can be at or
+  below H, where a quantum is not defined. 03 records 𝒜_k and m_eff/H at each plateau
+  turnaround as a diagnostic, so that the question can be answered from the data later.
+
+The table below is the proposal as first written.
+
 | | Proposed | Alternatives |
 |---|---|---|
 | **U1** — name and branch | `inelastic-reflection`, cut from `main` at `6f635e6` with the planning commit; merged into `main` at the user's word | another name |
@@ -362,6 +381,26 @@ Accepted as proposed unless the user rules otherwise.
 - **P1 — the ledger.** ρ_χ,E(N) = K(N) e^{−4N}, with K piecewise constant and changed only at a
   restart, so the state stays five-dimensional. A sixth component would change Radau's error norm,
   an RMS over the components, and break α = 0 bitwise.
+
+  **The frame, and what the law assumes** (the user asked on 2026-10-27; this does not change the
+  plan). ρ_χ,E is the Einstein-frame energy density, and N is the integrator's own variable, the
+  Einstein-frame e-fold count N_E = ln a_E. ΔK_j = Δρ_χ,E,j e^{4N_j}.
+  - **Why the Einstein frame.** φ is minimally coupled and canonical in the Einstein frame, and
+    ρ_χ,E is the quantity that enters the Einstein-frame constraint, from which H is rebuilt.
+  - **The Jordan frame.** For massless quanta the law is the same there:
+    ρ_χ,J = A⁻⁴ρ_χ,E and a_J = A a_E, so ρ_χ,J a_J⁴ = ρ_χ,E a_E⁴. a_J is not monotonic through a
+    bounce, so N_J is not a usable clock. BBN sees ρ_χ through H_J.
+  - **The ratio** ρ_χ/ρ_R is the same in both frames, because both densities carry A⁻⁴.
+
+  The law assumes:
+  - **massless quanta**, which the margin of 04 certifies;
+  - **collisionless quanta**: no rescattering, no exchange with the SM bath (U7), and no Hartree
+    force from the condensate, which is suppressed by (m/p)²;
+  - **homogeneous and isotropic quanta**, so their pressure is ρ_χ/3;
+  - **instantaneous injection**, at the drain point.
+
+  The SM bath does not obey this law: ρ_R,E departs from a_E⁻⁴ through Σ and g_s. ρ_χ,E obeys it
+  exactly.
 - **P2 — the expressions.**
   - **V/3H²M_P² = G/(1 + (ρ_R(1 + f_m) + ρ_χ)/V)**, in the existing log-safe form.
   - **E = G − V/3H²M_P² − ρ_χ/3H²M_P²**, so that the kick stays the trace of matter.

@@ -1,7 +1,8 @@
 # inelastic-reflection campaign — implementation state
 
 **Last updated:** 2026-10-27 · **Status: PLANNED — 0 of 8 prompts written; R1–R5 ruled by the user
-2026-10-27; awaiting the user's ruling on README §6.1 (U1–U8) and §6.2 (P1–P16).**
+2026-10-27; U1–U3, U5–U8 ruled the same day and P1–P16 stand; awaiting the user's ruling on U4,
+on the revised proposal (b′) of README §6.1.**
 The plan is [`README.md`](README.md), written on 2026-10-27 on branch `inelastic-reflection`, cut
 from `main` at `6f635e6` with the planning commit (U1). Its physics basis is
 [`source/scoping_2026-10-27.md`](source/scoping_2026-10-27.md).
