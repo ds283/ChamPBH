@@ -396,6 +396,9 @@ def main(argv=None) -> int:
                 task_label=task_label,
                 tolerance=args.tuning_tolerance,
                 max_integrations=args.tuning_max_integrations,
+                # one line per integration, as before (tuning-followups prompt 02, U2); the
+                # default is quiet, for main.py's heartbeat
+                progress="every",
             )
         else:
             normalization, phi_ref_Mp = args.fixed_normalization

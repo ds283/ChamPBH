@@ -2100,6 +2100,65 @@ into `main` when this is written.**
      (`prompts/jordan-normalization/logs/10-close.md`, "The paper notes") so that the authors can find
      them when they rewrite the paper's numerical section.
 
+### 4.17 Addendum 2026-10-27 — the `tuning-followups` campaign
+
+Added by `tuning-followups` prompt 02. Nothing above this heading has been changed; where it is
+superseded, this section says so by statement. The campaign carried out two rulings of the user's of
+2026-10-27, before the science rebuild, and it changed no stored value and started no run. It did, in
+order:
+
+- it added `--retry-failed-scalar` and ordered the `ScalarHistory` lookup as `BBNData`'s is (prompt 01,
+  `8b2a29c`; reviewed `8f92987`; the option's help, `2c92d77`);
+- it made the tune lines quiet (prompt 02, this commit).
+
+Its board is [`prompts/tuning-followups/IMPLEMENTATION_STATE.md`](../prompts/tuning-followups/IMPLEMENTATION_STATE.md);
+its plan is its [`README.md`](../prompts/tuning-followups/README.md). The branch `tuning-followups` was
+cut from `jordan-normalization` at `4ad15fe` and **is not merged into `main` when this is written.**
+
+**This supersedes**, by statement and not by edit:
+
+- **§4.16 point 3's** "Every integration of a tuning prints a `-- tune` line", and the heartbeat bullet
+  that follows it, whose "silence is therefore bounded by one integration" and 58 s measurement were for
+  the every-line tree (point 4 below).
+- **§4.16 point 7's** list of issues for the user to rule: `[08-a-history-that-did-not-converge-is-never-retried]`
+  is done (point 1), `[09-ray-deduplicates-the-tune-lines-of-parallel-histories]` is closed as superseded
+  (point 2), and the RayPoolKit wait is reported (point 3). §4.16 point 3's remark that a later run with
+  a larger cap "does not recompute" a failed history is true only without the new flag.
+
+**The points.**
+
+1. **`--retry-failed-scalar`, and when to use it.** A history whose tuning hit `--tuning-max-integrations`
+   is stored as a failure, and a plain run counts it as done. Use the flag **after a run whose summary
+   line reports stored scalar failures** (`-- ScalarHistory: N histories skipped because of a stored
+   failure`), with a larger `--tuning-max-integrations`: the failed histories are recomputed, and the
+   success is stored beside the old failure, which every lookup then passes over (`ObjectFactories/ScalarHistory.py`,
+   ordered as `BBNData`'s). With the flag the summary line reads `N histories with a stored failure
+   retried`. The cap is not a key. `architecture-summary.md` §4.3, §5.1 and §9 and `numerical-strategies.md`
+   §3.7.5 carry the dated notes. (Prompt 01's log: `prompts/tuning-followups/logs/01-retry-failed-scalar.md`.)
+
+2. **The quiet lines.** `tune_history` takes `progress` (`"quiet"` by default, `"every"`) and a `clock`, and
+   a history prints integration k's line only if 120 s (`TUNE_LINE_INTERVAL_S`) have passed since its last
+   line or its start, or from its 10th integration (`TUNE_LINE_SLOW_INTEGRATIONS`), or if it was reached by
+   a guard step or by the twice rule's reset. The user's ruling: "120s and 10 integrations … we can adjust
+   later". The line's form, the `!!` line and every stored value are unchanged, the golden histories and
+   the golden fingerprint pass unchanged, `main.py`'s histories are quiet, and the three standalone tools
+   pass `progress="every"` and print as before. `numerical-strategies.md` §3.7.6 carries the note.
+
+3. **RayPoolKit's report.** The wait of §4.16 point 5 is reported to RayPoolKit, as
+   `[00-a-pass-blocks-until-process-batch-size-tasks-complete]` on its `client-reports` board (RayPoolKit
+   `cf77234`, on its `main`, not pushed; `rrk-adoption`'s board §3, the issue's **Reported** line). The
+   client-side alternative, `process_batch_size=1` at the three titled queues of `main.py`, **this campaign
+   did not take**; it is in ChamPBH's hands and for the user to rule.
+
+4. **The heartbeat's bound under the quiet rule.** Both bounds are **read, not measured**: no Ray was
+   started. While a tuning runs, its longest silence is at most `TUNE_LINE_INTERVAL_S` plus one
+   integration, about 130 s at the slowest measured (point 3 of §4.16). The run's longest silence is at most
+   `RayWorkPool`'s 300 s floor between its progress lines (`RunDrivers/registered_run.py`'s `NOTIFY_FLOOR`)
+   plus that, about 430 s, because histories that converge in under 10 integrations and 120 s no longer fill
+   the time between the pool's lines. Both are inside the unchanged 900 s staleness window, so **no
+   `--stale-after` is needed**. With `--tuning-max-integrations` under 10, a fast tuning that fails at its
+   cap prints only its `!!` line.
+
 ---
 
 ## 5. Reproduce

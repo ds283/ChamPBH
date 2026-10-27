@@ -1394,6 +1394,16 @@ DEFAULT_TUNING_MAX_INTEGRATIONS = 30
 # Eq. 7's V_target <= 0 at this many integrations running is a failure of the tuning
 TUNING_GUARD_LIMIT = 4
 
+# when a quiet tuning prints a tune line (tuning-followups prompt 02; README §6.0 R2, P6): at least
+# this many seconds since its last line (or its start), or from this integration on (k + 1 >= it),
+# or on a guard or reset step. The user's ruling: "120s and 10 integrations ... we can adjust later"
+TUNE_LINE_INTERVAL_S = 120.0
+TUNE_LINE_SLOW_INTEGRATIONS = 10
+
+# the values of tune_history's `progress` (tuning-followups prompt 02, R2): "quiet" prints by the
+# rule above, "every" prints one line per integration (the standalone tools, U2)
+TUNE_LINE_PROGRESS = ("quiet", "every")
+
 # the keys tune_history adds to the final integration's payload (README §6.2 P6); each is a
 # Python float, int or str. jordan-normalization prompt 07 stores exactly these
 TUNING_OUTPUT_KEYS = (
@@ -1464,11 +1474,22 @@ class TuningSecant:
         self._x_prev = None
         self._F_prev = None
         self._last_kind = None
+        self._reset = False
 
     @property
     def B(self):
         """A copy of the Broyden matrix, as a list of two rows, or None when it is not set."""
         return None if self._B is None else [list(row) for row in self._B]
+
+    @property
+    def reset(self) -> bool:
+        """
+        True iff the last step() was the twice rule's reset (a plain step that discarded B because
+        |F| more than doubled after a secant step); false before any step, after any other step
+        and after guard(). Read-only; it changes no return and no count (tuning-followups prompt 02,
+        ruling 2 of its note).
+        """
+        return self._reset
 
     def guard(self):
         """Forget B and the last point: the next step is plain."""
@@ -1476,17 +1497,20 @@ class TuningSecant:
         self._x_prev = None
         self._F_prev = None
         self._last_kind = None
+        self._reset = False
 
     def step(self, x, G):
         """The next point from x, given G = G(x), and the kind of step: (x_new, kind)."""
         F = (G[0] - x[0], G[1] - x[1])
         nF = sqrt(F[0] ** 2 + F[1] ** 2)
 
+        self._reset = False
         kind = "plain"
         if self._secant and self._B is not None:
             Fp = self._F_prev
             if self._last_kind == "secant" and nF > 2.0 * sqrt(Fp[0] ** 2 + Fp[1] ** 2):
                 self._B = None
+                self._reset = True
             else:
                 B, xp = self._B, self._x_prev
                 dx = (x[0] - xp[0], x[1] - xp[1])
@@ -1572,6 +1596,38 @@ def _tuning_failure(task_label: str, reason: str) -> dict:
     return _failure_payload(reason)
 
 
+def tune_line_due(
+    progress: str,
+    k: int,
+    kind: str,
+    reset: bool,
+    now: float,
+    last_line: float,
+) -> bool:
+    """
+    Whether integration k of a tuning prints its tune line (tuning-followups prompt 02; README §6.0
+    R2, P6). kind is the step that reached the integration ("seed", "plain", "secant" or "guard"),
+    reset whether the twice rule's reset reached it, now the clock at its end and last_line the
+    clock when the tuning last printed a line (its start, if none).
+      - "every": always;
+      - "quiet": iff now - last_line >= TUNE_LINE_INTERVAL_S, or k + 1 >= TUNE_LINE_SLOW_INTEGRATIONS,
+        or kind == "guard", or reset;
+      - anything else: ValueError.
+    """
+    if progress == "every":
+        return True
+    if progress == "quiet":
+        return (
+            now - last_line >= TUNE_LINE_INTERVAL_S
+            or k + 1 >= TUNE_LINE_SLOW_INTEGRATIONS
+            or kind == "guard"
+            or bool(reset)
+        )
+    raise ValueError(
+        f"tune_history: progress must be one of {TUNE_LINE_PROGRESS}, not {progress!r}"
+    )
+
+
 def tune_history(
     cosmology: LambdaCDM_GenericEOS,
     model: AbstractModel,
@@ -1586,6 +1642,8 @@ def tune_history(
     max_integrations: int = DEFAULT_TUNING_MAX_INTEGRATIONS,
     secant: bool = True,
     verbose: bool = False,
+    progress: str = "quiet",
+    clock=perf_counter,
 ) -> dict:
     """
     The tuning layer (jordan-normalization prompt 06; README §6.0 R1, R2, R8, R10, R13): integrate
@@ -1600,8 +1658,20 @@ def tune_history(
     - It starts from model.seed(cosmology) (R13: the history's own inputs, no cache) and stops at
       T_stop = cosmology.T_CMB_Kelvin * cosmology.units.Kelvin, the float main.py uses.
     - After each integration k (k = 0 is the seed's) it forms today's state and the residuals
-      residual_H = H_J/H0 - 1 and residual_phi = phi_ref/phi_min - 1, and prints one line
+      residual_H = H_J/H0 - 1 and residual_phi = phi_ref/phi_min - 1, and, when tune_line_due
+      says so, prints one line
           -- tune <task_label> it=<k> kind=<seed|plain|secant|guard> H/H0-1=... phi_ref/phi_min-1=... norm=... phi_ref=<phi_ref/M_P> wall=<s>
+      With progress="quiet" (the default; compute_scalar_history, so main.py, passes nothing else)
+      the line is printed only if clock() has advanced TUNE_LINE_INTERVAL_S (120 s) since the
+      tuning's last line (or its start), or from the TUNE_LINE_SLOW_INTEGRATIONS-th (10th)
+      integration on, or if the integration was reached by a guard step or by the twice rule's reset
+      of the secant. With progress="every" every integration prints (the standalone tools). Any other
+      progress is a ValueError at entry, before the seed. The lines exist for the heartbeat of a
+      registered run, which beats only on a stdout line (jordan-normalization P12); the rule keeps
+      them to the slow or unusual tunings, so while a tuning runs its longest silence is at most
+      TUNE_LINE_INTERVAL_S plus one integration. A failure's "!!" line is printed whatever the rule
+      says. clock (default perf_counter) is called once before the loop and once before and once
+      after each integration, and times both the rule and each line's wall=.
       If tuning_converged(residual_H, residual_phi, tolerance), it returns.
     - If Eq. 7's V_target <= 0 (no positive potential gives H0 at today's state), the next iterate
       halves V(phi_0) through renormalize and sets phi_ref = phi_min, and the step's matrix is
@@ -1623,6 +1693,11 @@ def tune_history(
              "the effective minimum was not found", or an integration's own reason with
              " (tuning integration k)" appended.
     """
+    if progress not in TUNE_LINE_PROGRESS:
+        raise ValueError(
+            f"tune_history: progress must be one of {TUNE_LINE_PROGRESS}, not {progress!r}"
+        )
+
     units: UnitsLike = cosmology.units
     Mp: float = units.PlanckMass
     T_stop: float = cosmology.T_CMB_Kelvin * units.Kelvin
@@ -1635,12 +1710,14 @@ def tune_history(
     kind = "seed"
     scale: Optional[float] = None
     guards_running = 0
+    reset = False
+    last_line = clock()
 
     k = 0
     while True:
         rm: RealizedModel = model.realize(norm, phi_ref)
 
-        start = perf_counter()
+        start = clock()
         data = integrate_history(
             cosmology,
             T_init,
@@ -1654,7 +1731,8 @@ def tune_history(
             rtol=rtol,
             verbose=verbose,
         )
-        wall = perf_counter() - start
+        end = clock()
+        wall = end - start
 
         if data.get("failure", False):
             return _tuning_failure(
@@ -1669,12 +1747,14 @@ def tune_history(
                 f"the effective minimum was not found: {e} (tuning integration {k})",
             )
 
-        print(
-            f"-- tune {task_label} it={k} kind={kind} H/H0-1={state.residual_H:+.3e} "
-            f"phi_ref/phi_min-1={state.residual_phi:+.3e} norm={norm:.12g} "
-            f"phi_ref={phi_ref / Mp:.10e} wall={wall:.1f}",
-            flush=True,
-        )
+        if tune_line_due(progress, k, kind, reset, end, last_line):
+            print(
+                f"-- tune {task_label} it={k} kind={kind} H/H0-1={state.residual_H:+.3e} "
+                f"phi_ref/phi_min-1={state.residual_phi:+.3e} norm={norm:.12g} "
+                f"phi_ref={phi_ref / Mp:.10e} wall={wall:.1f}",
+                flush=True,
+            )
+            last_line = end
 
         if tuning_converged(state.residual_H, state.residual_phi, tolerance):
             payload = dict(data)
@@ -1716,6 +1796,7 @@ def tune_history(
             next_phi_ref = state.phi_min
             stepper.guard()
             next_kind = "guard"
+            next_reset = False
         else:
             guards_running = 0
             next_kind = None
@@ -1737,10 +1818,11 @@ def tune_history(
                 state.phi_min / scale,
             )
             x_new, next_kind = stepper.step(x, G)
+            next_reset = stepper.reset
             next_norm = model.normalization_from_coordinate(x_new[0])
             next_phi_ref = x_new[1] * scale
 
-        norm, phi_ref, kind = next_norm, next_phi_ref, next_kind
+        norm, phi_ref, kind, reset = next_norm, next_phi_ref, next_kind, next_reset
         steps[kind] += 1
         k += 1
 

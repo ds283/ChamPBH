@@ -727,6 +727,31 @@ two runs (board issue `[09-ray-deduplicates-the-tune-lines-of-parallel-histories
 `tuning_iterations` is the count to read. Prompt 09 measured the longest heartbeat silence at 58 s
 (`reference-c`, the scalar stage), against the 900 s staleness window (verification §1.10).
 
+> **Note, 2026-10-27 (`tuning-followups`, prompt 02): the line is printed only when the tuning is
+> slow or unusual, and the paragraph above is of the tree before.** `tune_history` takes
+> `progress="quiet"` (the default) or `"every"` and a `clock` (default `perf_counter`), and prints
+> integration k's line (`tune_line_due`) when **any** of these holds: the clock has advanced
+> `TUNE_LINE_INTERVAL_S` = 120 s since the history's last printed line (or since the tuning began, if
+> it has printed none); k + 1 ≥ `TUNE_LINE_SLOW_INTEGRATIONS` = 10; the integration was reached by a
+> guard step; or it was reached by the twice rule's reset of the secant (`TuningSecant.reset`, read after
+> `step`). The line's form, the `!!` line of a failure, `compute_scalar_history` and every stored value
+> are unchanged, so `main.py`'s histories are quiet; the three standalone tools
+> (`tools/history_and_bbn.py`, `tools/surfing_scan.py` and, through it, `tools/plot_surfing_histories.py`)
+> pass `progress="every"` and print one line per integration as before. The constants are the user's
+> ruling of 2026-10-27 ("120s and 10 integrations … we can adjust later"). The lines exist for the
+> heartbeat, which beats only on a stdout line, and the rule keeps the heartbeat inside its window while
+> a tuning is slow: **while a tuning runs, its longest silence is at most `TUNE_LINE_INTERVAL_S` plus one
+> integration, about 130 s at the slowest measured.** Between tunings, histories that converge in under
+> 10 integrations and 120 s print nothing, and the only other line is `RayWorkPool`'s progress line,
+> never sooner than `notify_min_time_interval` after the last (300 s, `RunDrivers/registered_run.py`'s
+> `NOTIFY_FLOOR`), so **the run's longest silence is at most that floor plus the per-tuning bound, about
+> 430 s.** Both bounds are **read, not measured** (no Ray was started), and both are inside the unchanged
+> 900 s window, so no `--stale-after` is needed. With `--tuning-max-integrations` under 10, a fast tuning
+> that fails at its cap prints only its `!!` line, which carries the last residuals. The board issue
+> `[09-ray-deduplicates-the-tune-lines-of-parallel-histories]` is closed as superseded: the quiet lines
+> are few and spread out, Ray's deduplication stays on, and the stored `tuning_iterations` is still the
+> count to read.
+
 #### 3.7.7 The stored outputs
 
 `TUNING_OUTPUT_KEYS` (`:1399-1415`) are the fifteen values that `tune_history` returns and

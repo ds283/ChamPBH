@@ -313,6 +313,9 @@ def run_history(
             task_label=f"surfing_scan-beta{beta:g}-M{M_Mp:g}",
             tolerance=tolerance,
             max_integrations=max_integrations,
+            # one line per integration, as before (tuning-followups prompt 02, U2); the default is
+            # quiet, for main.py's heartbeat
+            progress="every",
         )
     finally:
         SM.integrate_scalar_history = integrate

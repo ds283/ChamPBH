@@ -305,6 +305,12 @@ ChamPBH/
 >   had `Lambda_eV` (`CSV_COLUMNS`, `extract_common.py:520`), and its rows are sorted by (M, n, β)
 >   (`:1166`).
 
+> **Note, 2026-10-27 (`tuning-followups`, prompt 02): the tools print one tune line per integration.**
+> `tools/history_and_bbn.py` and `tools/surfing_scan.py` (and `tools/plot_surfing_histories.py`, which
+> reaches `tune_history` only through `surfing_scan.run_history`) pass `progress="every"` to
+> `tune_history`, so the note above's tuned runs of them print as they did. `tune_history`'s own default
+> is now `"quiet"` (§7.2's note of this date), which is what `main.py`'s histories get.
+
 ---
 
 ## 3. The Ray Distributed Computing Layer
@@ -1033,6 +1039,16 @@ SampleValues = namedtuple("SampleValues", [
 >   (`:1672-1677`), which Ray forwards to the driver and the wrapper's heartbeat reads; Ray's log
 >   deduplication can hold lines back (board issue
 >   `[09-ray-deduplicates-the-tune-lines-of-parallel-histories]`).
+>
+> **Note, 2026-10-27 (`tuning-followups`, prompt 02): the line is quiet.** The bullet above, "Each
+> integration of a tuning prints one `-- tune …` line", is of the tree before. `tune_history` now takes
+> `progress` (`"quiet"` by default, or `"every"`) and `clock`, and a history prints integration k's line
+> only if `tune_line_due` says so: 120 s (`TUNE_LINE_INTERVAL_S`) since its last line or its start, or
+> from its 10th integration (`TUNE_LINE_SLOW_INTEGRATIONS`), or on a guard or reset step
+> (`TuningSecant.reset`). `compute_scalar_history` passes nothing new, so `main.py`'s histories are quiet;
+> the standalone tools pass `"every"` (§2's note of this date). The form, the `!!` line and every stored
+> value are unchanged. The bounds on the heartbeat's silence and the closure of the Ray-deduplication
+> issue are in `numerical-strategies.md` §3.7.6's note of this date.
 > - **The policies.** `ODEPolicy`, `HubblePolicy`, `PotentialDerivativePolicy`, `fixed_T_value_at`,
 >   `fixed_T_values` and `surfing_turning_points` take one `RealizedModel` (§8.4a) in place of a
 >   potential and a coupling, and `PotentialDerivativePolicy` has only the log-potential route.

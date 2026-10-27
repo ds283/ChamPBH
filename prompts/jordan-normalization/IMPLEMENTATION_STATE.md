@@ -126,7 +126,10 @@ closed one assigned issue, prompt 03 three, prompt 04 one, prompt 07 two and pro
 below open**, the index's §1.16 (`.documents/OPEN_ISSUES.md`). On 2026-10-27 the user ruled two of
 them, which were assigned to `tuning-followups` (index §1.17).
 On 2026-10-27 `tuning-followups` prompt 01 closed one of those two,
-`[08-a-history-that-did-not-converge-is-never-retried]`, whose entry is now in §4; five remain below.
+`[08-a-history-that-did-not-converge-is-never-retried]`, whose entry is now in §4; five remained.
+On 2026-10-27 `tuning-followups` prompt 02 closed the other,
+`[09-ray-deduplicates-the-tune-lines-of-parallel-histories]`, as superseded; its entry is in §4 too,
+and four remain below.
 
 ### `[02-the-scalar-history-parent-is-still-called-model]`
 
@@ -200,36 +203,6 @@ On 2026-10-27 `tuning-followups` prompt 01 closed one of those two,
   a β, reading `.N` of None.)
 - **Next step.** Carry whether the trace ended at a bounce, and mark only real bounces. Not
   assigned.
-
-### `[09-ray-deduplicates-the-tune-lines-of-parallel-histories]`
-
-**Opened:** 2026-10-26 by prompt 09 (its log's Observation 1).
-
-- **What.** Ray forwards worker output to the driver through a deduplicator
-  (`ray/_private/ray_logging/__init__.py` of the pinned `ray` 2.59.0: `_canonicalise_log_line`,
-  `LogDeduplicator`) that keys a line on its words holding no digit, and holds back a line whose
-  key another process printed within 5 s (`RAY_DEDUP_LOGS_AGG_WINDOW_S`), printing only the latest
-  with `[repeated Nx across cluster]`. The tuning's progress line (`-- tune <label> it=… kind=…
-  H/H0-1=… … wall=…`, `ComputeTargets/ScalarHistory.py:1672-1677`) differs between histories only in
-  words that hold digits, so lines of histories tuned in parallel share one key. In 09's
-  `reference-a` and `resumed-a`, β = 1.5's seed line was swallowed into β = 3's `… it=0 kind=seed …
-  [repeated 2x across cluster]` (`.documents/jordan-normalization/out/09-reference-a.log`).
-- **Impact.** None to values or to the heartbeat. P12's "one line per integration" does not reach
-  the log whole when histories run in parallel, as they will in the science rebuild, so a history's
-  iteration count or tuning time read from the log can be short, and the aggregated line arrives
-  up to 5 s late.
-- **Next step.** Make the tune lines survive deduplication (for example `RAY_DEDUP_LOGS=0` in the
-  drivers' or the cluster's environment, or a `RAY_DEDUP_LOGS_ALLOW_REGEX` matching `-- tune`), or
-  record that the stored `tuning_iterations` is the count to read. For the user to rule. Not
-  assigned.
-- **Ruled (2026-10-27) by the user:** Ray's deduplication stays on ("then the logs become crowded
-  with near-duplicate output"), and the tune lines become quiet instead: a history prints a line only
-  when at least 120 s have passed since its last one, on an unusual event, or from its 10th
-  integration on ("I'd prefer the quieter design. 120s and 10 integrations seems reasonable to start
-  with. We can adjust later if needed."). The stored `tuning_iterations` is the count to read.
-- **Assigned (2026-10-27):** to `tuning-followups` prompt 02, which makes the tune lines quiet and
-  closes this issue as superseded by the ruling
-  ([its board](../tuning-followups/IMPLEMENTATION_STATE.md) §3.1).
 
 ### 3.1 Assigned to this campaign
 
@@ -318,6 +291,45 @@ from `.documents/OPEN_ISSUES.md` §1.15.
   guards and parser tests; no Ray was started. The row is deleted from
   `.documents/OPEN_ISSUES.md` §1.17; [`tuning-followups`'s board](../tuning-followups/IMPLEMENTATION_STATE.md)
   §5.2 and its log 01 hold the record.
+
+### `[09-ray-deduplicates-the-tune-lines-of-parallel-histories]`
+
+**Opened:** 2026-10-26 by prompt 09 (its log's Observation 1).
+
+- **What.** Ray forwards worker output to the driver through a deduplicator
+  (`ray/_private/ray_logging/__init__.py` of the pinned `ray` 2.59.0: `_canonicalise_log_line`,
+  `LogDeduplicator`) that keys a line on its words holding no digit, and holds back a line whose
+  key another process printed within 5 s (`RAY_DEDUP_LOGS_AGG_WINDOW_S`), printing only the latest
+  with `[repeated Nx across cluster]`. The tuning's progress line (`-- tune <label> it=… kind=…
+  H/H0-1=… … wall=…`, `ComputeTargets/ScalarHistory.py:1672-1677`) differs between histories only in
+  words that hold digits, so lines of histories tuned in parallel share one key. In 09's
+  `reference-a` and `resumed-a`, β = 1.5's seed line was swallowed into β = 3's `… it=0 kind=seed …
+  [repeated 2x across cluster]` (`.documents/jordan-normalization/out/09-reference-a.log`).
+- **Impact.** None to values or to the heartbeat. P12's "one line per integration" does not reach
+  the log whole when histories run in parallel, as they will in the science rebuild, so a history's
+  iteration count or tuning time read from the log can be short, and the aggregated line arrives
+  up to 5 s late.
+- **Next step.** Make the tune lines survive deduplication (for example `RAY_DEDUP_LOGS=0` in the
+  drivers' or the cluster's environment, or a `RAY_DEDUP_LOGS_ALLOW_REGEX` matching `-- tune`), or
+  record that the stored `tuning_iterations` is the count to read. For the user to rule. Not
+  assigned.
+- **Ruled (2026-10-27) by the user:** Ray's deduplication stays on ("then the logs become crowded
+  with near-duplicate output"), and the tune lines become quiet instead: a history prints a line only
+  when at least 120 s have passed since its last one, on an unusual event, or from its 10th
+  integration on ("I'd prefer the quieter design. 120s and 10 integrations seems reasonable to start
+  with. We can adjust later if needed."). The stored `tuning_iterations` is the count to read.
+- **Assigned (2026-10-27):** to `tuning-followups` prompt 02, which makes the tune lines quiet and
+  closes this issue as superseded by the ruling
+  ([its board](../tuning-followups/IMPLEMENTATION_STATE.md) §3.1).
+- **Resolved (2026-10-27) by `tuning-followups` prompt 02** (this commit), as **superseded by
+  `tuning-followups` R2**: the tune lines are now quiet (`tune_history`'s `progress="quiet"`, the default
+  for `main.py`'s histories), so a history prints a line only after 120 s since its last, from its 10th
+  integration, or on a guard or reset step. The lines that remain are few and spread out; Ray's
+  deduplication stays on; and the stored `tuning_iterations` is the count to read, not the number of
+  lines in a log. The three standalone tools pass `progress="every"` and print as before. The row is
+  deleted from `.documents/OPEN_ISSUES.md` §1.17, which is now empty;
+  [`tuning-followups`'s board](../tuning-followups/IMPLEMENTATION_STATE.md) §5.3 and its log 02 hold the
+  record.
 
 ## 5. Dispatch record
 

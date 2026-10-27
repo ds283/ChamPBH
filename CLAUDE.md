@@ -78,18 +78,20 @@ invariants that hold across all of them:
   the repository root:
   ```bash
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .   # 26 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 243 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .   # 93 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 269 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .   # 103 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 115 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .        # 64 tests
   ```
   `ComputeTargets/tests` takes about 320 s in one run, and longer on a loaded machine; a Bash call is
   capped at ten minutes, so run it in two halves:
   ```bash
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 76 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 167 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 77 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 192 tests
   ```
-  (The counts are those of 2026-10-26, after `jordan-normalization` 10, which changed no test.
+  (The counts are those of 2026-10-27, after `tuning-followups` 02, which added 19 tests to
+  `ComputeTargets/tests/test_tuning.py`; 01 had added 7 to `ComputeTargets/tests` and 10 to
+  `ObjectFactories/tests`.
   `tools/tests` now holds three tuned histories, about 20-30 s each; run it alone.) They **must not
   need a Ray cluster or a persistent datastore**. A test may build a temporary
   SQLite datastore in a `tempfile` directory, through `datastorekit`'s undecorated actor
