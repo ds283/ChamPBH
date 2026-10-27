@@ -1,0 +1,24 @@
+beta=  0.1: phi_ref=3.297, beta*phi: 0.000402 (20 TeV) -> 0.33 (today); m*a falls by 5.92e+14 overall; worst rise x1.192 (T 3.02e-05 -> 2.8e-05 GeV); gamma today 1.241
+        late (T < 1 eV): worst rise x1, ending at z = 4.25e+03
+beta=  0.5: phi_ref=1.475, beta*phi: 0.00199 (20 TeV) -> 0.737 (today); m*a falls by 2.93e+14 overall; worst rise x1.192 (T 3.02e-05 -> 2.8e-05 GeV); gamma today 1.044
+        late (T < 1 eV): worst rise x1, ending at z = 4.25e+03
+beta=  1.0: phi_ref=1.043, beta*phi: 0.00396 (20 TeV) -> 1.04 (today); m*a falls by 1.99e+14 overall; worst rise x1.192 (T 3.02e-05 -> 2.8e-05 GeV); gamma today 0.943
+        late (T < 1 eV): worst rise x1, ending at z = 4.25e+03
+beta=  1.2: phi_ref=0.952, beta*phi: 0.00475 (20 TeV) -> 1.14 (today); m*a falls by 1.77e+14 overall; worst rise x1.192 (T 3.02e-05 -> 2.8e-05 GeV); gamma today 0.916
+        late (T < 1 eV): worst rise x1, ending at z = 4.25e+03
+beta=  2.0: phi_ref=0.737, beta*phi: 0.0079 (20 TeV) -> 1.47 (today); m*a falls by 1.25e+14 overall; worst rise x1.191 (T 3.02e-05 -> 2.8e-05 GeV); gamma today 0.840
+        late (T < 1 eV): worst rise x1, ending at z = 4.25e+03
+beta=  5.0: phi_ref=0.466, beta*phi: 0.0197 (20 TeV) -> 2.33 (today); m*a falls by 5.72e+13 overall; worst rise x1.191 (T 3.02e-05 -> 2.8e-05 GeV); gamma today 0.711
+        late (T < 1 eV): worst rise x1, ending at z = 4.25e+03
+beta= 10.0: phi_ref=0.330, beta*phi: 0.0393 (20 TeV) -> 3.3 (today); m*a falls by 2.67e+13 overall; worst rise x1.191 (T 3.02e-05 -> 2.8e-05 GeV); gamma today 0.625
+        late (T < 1 eV): worst rise x1.006, ending at z = 1.11e-15
+beta= 25.0: phi_ref=0.209, beta*phi: 0.0983 (20 TeV) -> 5.21 (today); m*a falls by 7.07e+12 overall; worst rise x1.191 (T 3.02e-05 -> 2.8e-05 GeV); gamma today 0.531
+        late (T < 1 eV): worst rise x1.093, ending at z = 1.11e-15
+
+T [keV], Sigma, g, gs, N  near the 30 keV feature:
+  32.986  8.75e-05  3.3833  3.9312  -18.76157
+  31.315  1.49e-05  3.3831  3.9311  -18.70958
+  29.729  5.5e-06  3.3831  3.9311  -18.65760
+  28.223  1.96e-05  3.383  3.931  -18.60562
+  26.794  1.65e-05  3.383  3.931  -18.55364
+  25.437  3.16e-06  3.383  3.931  -18.50167

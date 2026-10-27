@@ -1,0 +1,19 @@
+table range (GeV): 1e-05 25118.864315095823
+
+== Sigma*rho_r + rho_m: d ln rho_c / dN
+  T in [1000,20000] GeV: max slope -1.982 at T = 1.902e+04 GeV (Sigma=1.74e-06)
+  T in [1,1000] GeV: max slope -2.058 at T = 999.8 GeV (Sigma=0.000604)
+  T in [0.1,1] GeV: max slope -2.627 at T = 0.2418 GeV (Sigma=0.243)
+  T in [0.001,0.1] GeV: max slope -2.594 at T = 0.001064 GeV (Sigma=0.00965)
+  T in [1e-05,0.001] GeV: max slope -2.596 at T = 0.0008531 GeV (Sigma=0.0143)
+  gamma=1.0: max growth of m*a = factor 1, from T=1.998e+04 to T=1.801e+04 GeV
+  gamma=1.5: max growth of m*a = factor 1, from T=2e+04 to T=2e+04 GeV
+
+== Sigma*rho_r only: d ln rho_c / dN
+  T in [1000,20000] GeV: max slope -1.981 at T = 1.902e+04 GeV (Sigma=1.74e-06)
+  T in [1,1000] GeV: max slope -2.058 at T = 999.8 GeV (Sigma=0.000604)
+  T in [0.1,1] GeV: max slope -2.627 at T = 0.2418 GeV (Sigma=0.243)
+  T in [0.001,0.1] GeV: max slope -1.990 at T = 0.004289 GeV (Sigma=0.000661)
+  T in [1e-05,0.001] GeV: max slope +328587.045 at T = 2.281e-05 GeV (Sigma=1.68e-08)
+  gamma=1.0: max growth of m*a = factor 1.3e+138, from T=2.501e-05 to T=2.173e-05 GeV
+  gamma=1.5: max growth of m*a = factor 1.38e+207, from T=2.501e-05 to T=2.175e-05 GeV

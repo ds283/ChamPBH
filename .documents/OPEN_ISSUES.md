@@ -1,6 +1,6 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-27 · **24 open**: 4 on the `review-remediation` board (closed
+**Last updated:** 2026-10-27 · **25 open**: 4 on the `review-remediation` board (closed
 2026-09-30), none now assigned; 2 on the `production-readiness` board
 (closed 2026-09-30); 2 on the `run-integrity` board (closed 2026-09-30; one stale entry closed 2026-10-22, its fix having landed in `5740690`; `jordan-normalization` prompt 07 closed one, 2026-10-26); 7 on the
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`
@@ -36,7 +36,8 @@ were assigned to `tuning-followups` on 2026-10-27, §1.17, and its prompts 01 an
 2026-10-27); 1 on the `tuning-followups` board (planned 2026-10-27, with none opened and two
 assigned from `jordan-normalization`; prompt 01 opened one, 2026-10-27, §1.18; prompt 02 opened none
 and closed the second assigned issue, 2026-10-27; closed 2026-10-27, 2 of 2 prompts landed, with the
-one issue still open on its board).
+one issue still open on its board); 1 on the `inelastic-reflection` board (planned 2026-10-27; the
+planner opened one, §1.19).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -59,7 +60,8 @@ the two disagree, the board is right.
 [`surfing-temperature`](../prompts/surfing-temperature/IMPLEMENTATION_STATE.md) ·
 [`rrk-adoption`](../prompts/rrk-adoption/IMPLEMENTATION_STATE.md) ·
 [`jordan-normalization`](../prompts/jordan-normalization/IMPLEMENTATION_STATE.md) ·
-[`tuning-followups`](../prompts/tuning-followups/IMPLEMENTATION_STATE.md)
+[`tuning-followups`](../prompts/tuning-followups/IMPLEMENTATION_STATE.md) ·
+[`inelastic-reflection`](../prompts/inelastic-reflection/IMPLEMENTATION_STATE.md)
 
 ## 1. Open, by owning board
 
@@ -296,3 +298,12 @@ Planned 2026-10-27. One opened by prompt 01, 2026-10-27, found by its orchestrat
   BBN query has no `failure` filter or order, so the tool stops with `LookupError` on a history
   whose BBN computation was retried with `--retry-failed-bbn`; a diagnostic only, the pipeline and
   plot scripts unaffected. *(`tuning-followups`; prompt 01)*
+
+### 1.19 `inelastic-reflection` — [board §3](../prompts/inelastic-reflection/IMPLEMENTATION_STATE.md)
+
+Planned 2026-10-27. One opened by the planner, found by a planning probe.
+
+- `[00-xav-sigma-is-non-monotone-at-25-35-keV]` — Σ from `Xav_EOS_spline` swings between 3×10⁻⁶
+  and 9×10⁻⁵ at 25–33 keV (an irregular table and a ringing cubic spline), comparable to the matter
+  trace inside the BBN window; effect on stored values not measured; not fixed by the campaign.
+  *(`inelastic-reflection`; planner)*
