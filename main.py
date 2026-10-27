@@ -70,6 +70,7 @@ from config.version import VERSION_LABEL
 from tools.inventory_report import format_inventory_report
 from pipeline_selection import (
     build_query_entries,
+    count_stored_failures,
     missing_models,
     select_missing,
     summarise_failure_reasons,
@@ -249,12 +250,24 @@ def run_pipeline(
         )
         query_queue.run()
 
+        # count the stored failures for the stage's summary line, before the early return, so
+        # that a batch with nothing missing still counts (tuning-followups prompt 01)
+        scalar_counts["stored_failures"] += sum(
+            count_stored_failures(query_outcomes)
+            for query_outcomes in query_queue.results
+        )
+
         # which models are missing? Those whose lookup found no row, read from the lookup
-        # results (jordan-normalization prompt 07): a fully stored batch schedules no work
+        # results (jordan-normalization prompt 07): a fully stored batch schedules no work.
+        # With --retry-failed-scalar a stored failure is missing too (tuning-followups prompt 01)
         missing = [
             {
                 "shard_key": key,
-                "missing": missing_models(binned_batch[key], query_outcomes),
+                "missing": missing_models(
+                    binned_batch[key],
+                    query_outcomes,
+                    retry_failed=args.retry_failed_scalar,
+                ),
             }
             for key, query_outcomes in zip(batch_keys, query_queue.results)
         ]
@@ -264,6 +277,13 @@ def run_pipeline(
             return []
 
         work_refs = []
+
+        # With --retry-failed-scalar the second lookup asks for a success only: with no
+        # `failure` in its payload the factory would return the stored failure, and nothing
+        # would be computed. Asking for failure=False finds no row, so an unpopulated history
+        # is returned, computed, and stored beside the failure (tuning-followups prompt 01).
+        # Without the flag the payload is exactly as before
+        retry_payload = {"failure": False} if args.retry_failed_scalar else {}
 
         for key, data in zip(batch_keys, missing):
             work_refs.extend(
@@ -285,6 +305,7 @@ def run_pipeline(
                             SamplesPerLog10ZTag,
                         ],
                         _do_not_populate=True,  # ignored if object does not already exist in database, so does not spoil work scheduling
+                        **retry_payload,
                     )
                     for model in data["missing"]
                 ]
@@ -303,6 +324,8 @@ def run_pipeline(
 
     # the reasons of the histories that failed in this run (science-readiness prompt 02)
     scalar_history_failure_reasons: List[Any] = []
+    # the stored failures the first pass found, across batches (tuning-followups prompt 01)
+    scalar_counts = {"stored_failures": 0}
 
     def validate_solver_batch(m: ScalarHistory):
         if not m.available:
@@ -337,6 +360,17 @@ def run_pipeline(
         )
         for clause, count in summarise_failure_reasons(scalar_history_failure_reasons):
             print(f"     -- {count} x {clause}")
+    # the stored failures the first pass found, retried or skipped; nothing when there were
+    # none, so a clean run prints what it did before (tuning-followups prompt 01)
+    if scalar_counts["stored_failures"] > 0:
+        if args.retry_failed_scalar:
+            print(
+                f"-- ScalarHistory: {scalar_counts['stored_failures']} histories with a stored failure retried (--retry-failed-scalar)"
+            )
+        else:
+            print(
+                f"-- ScalarHistory: {scalar_counts['stored_failures']} histories skipped because of a stored failure"
+            )
 
     ## STEP 2
     ## CALCULATE THE ADIABATIC TRANSGRESSION PARAMETER Q FOR EACH MODEL IN THE GRID

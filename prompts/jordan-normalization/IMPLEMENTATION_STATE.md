@@ -125,6 +125,8 @@ closed one assigned issue, prompt 03 three, prompt 04 one, prompt 07 two and pro
 (§3.1, §4). Prompt 10 opened and closed none: **the campaign closed on 2026-10-26 with the six
 below open**, the index's §1.16 (`.documents/OPEN_ISSUES.md`). On 2026-10-27 the user ruled two of
 them, which were assigned to `tuning-followups` (index §1.17).
+On 2026-10-27 `tuning-followups` prompt 01 closed one of those two,
+`[08-a-history-that-did-not-converge-is-never-retried]`, whose entry is now in §4; five remain below.
 
 ### `[02-the-scalar-history-parent-is-still-called-model]`
 
@@ -163,28 +165,6 @@ them, which were assigned to `tuning-followups` (index §1.17).
 - **Next step.** Delete `functions`, `ModelFunctions` and `ZSplineWrapper` if they are still unread,
   or build the splines on `log_one_plus_z`. For 07, which rewrites `ScalarHistory`'s stored shape.
   Not assigned.
-
-### `[08-a-history-that-did-not-converge-is-never-retried]`
-
-**Opened:** 2026-10-26 by prompt 08 (ruling 14 of its orchestrator note).
-
-- **What.** `--tuning-max-integrations` (default 30) caps one history's tuning, but it is not a key
-  of the history: `ScalarHistory.compute(label, max_integrations)` passes it to
-  `compute_scalar_history.remote`, and the factory's key holds the tuning tolerance and no cap. A
-  history that does not converge within the cap is stored as a failure under its key.
-  `pipeline_selection.missing_models` does not count a stored failure as missing (prompt 07, note
-  07 ruling 8), and `main.py` has no retry for the scalar stage (only `--retry-failed-bbn` for BBN).
-  The option's help says so.
-- **Impact.** A later run with a larger cap recomputes nothing. The only route is
-  `--drop scalar-history`, which drops every history. No history has failed to converge at any
-  point measured (prompt 06's thirteen points: 3–12 integrations).
-- **Next step.** For the user to rule: a retry flag for the scalar stage like `--retry-failed-bbn`,
-  or the cap in the key. Not assigned.
-- **Ruled (2026-10-27) by the user:** a retry flag, `--retry-failed-scalar`, like
-  `--retry-failed-bbn` ("I think we want `--retry-failed-scalar`"). The cap stays out of the key.
-- **Assigned (2026-10-27):** to `tuning-followups` prompt 01, a small campaign the user asked for
-  that day, which carries out this ruling before the science rebuild
-  ([its board](../tuning-followups/IMPLEMENTATION_STATE.md) §3.1).
 
 ### `[08-the-wrappers-refusal-tests-run-the-real-wrapper-on-var-runs]`
 
@@ -302,6 +282,41 @@ from `.documents/OPEN_ISSUES.md` §1.15.
   flags and kicks exactly, every other column to at most 1.1 × 10⁻⁷. The entry, with its
   **Resolved** line, is in `surfing-temperature`'s §4; its row is deleted from
   `.documents/OPEN_ISSUES.md` §1.15, which is now empty.
+
+### `[08-a-history-that-did-not-converge-is-never-retried]`
+
+**Opened:** 2026-10-26 by prompt 08 (ruling 14 of its orchestrator note).
+
+- **What.** `--tuning-max-integrations` (default 30) caps one history's tuning, but it is not a key
+  of the history: `ScalarHistory.compute(label, max_integrations)` passes it to
+  `compute_scalar_history.remote`, and the factory's key holds the tuning tolerance and no cap. A
+  history that does not converge within the cap is stored as a failure under its key.
+  `pipeline_selection.missing_models` does not count a stored failure as missing (prompt 07, note
+  07 ruling 8), and `main.py` has no retry for the scalar stage (only `--retry-failed-bbn` for BBN).
+  The option's help says so.
+- **Impact.** A later run with a larger cap recomputes nothing. The only route is
+  `--drop scalar-history`, which drops every history. No history has failed to converge at any
+  point measured (prompt 06's thirteen points: 3–12 integrations).
+- **Next step.** For the user to rule: a retry flag for the scalar stage like `--retry-failed-bbn`,
+  or the cap in the key. Not assigned.
+- **Ruled (2026-10-27) by the user:** a retry flag, `--retry-failed-scalar`, like
+  `--retry-failed-bbn` ("I think we want `--retry-failed-scalar`"). The cap stays out of the key.
+- **Assigned (2026-10-27):** to `tuning-followups` prompt 01, a small campaign the user asked for
+  that day, which carries out this ruling before the science rebuild
+  ([its board](../tuning-followups/IMPLEMENTATION_STATE.md) §3.1).
+- **Resolved (2026-10-27) by `tuning-followups` prompt 01** (this commit): `--retry-failed-scalar`
+  (default off, not a key) makes the scalar stage's first pass count a stored failure as missing
+  (`missing_models(…, retry_failed=True)`), and its second lookup ask for a success only
+  (`failure=False`), so the history is recomputed and stored beside the failure.
+  `sqla_ScalarHistoryFactory.build` now orders its lookup as `BBNData`'s does (the success if one
+  exists, else the newest failure), so a key holding both rows looks up without raising;
+  `tools/bbn_from_store.py` reads successes only. The stage prints how many stored failures it
+  retried or skipped. Tested on temporary stores and by stand-ins
+  (`ObjectFactories/tests/test_scalar_history_failure_lookup.py`,
+  `test_pipeline_selection.TestRetryFailedScalar`, `test_bbn_from_store` (d)), each shown to fail
+  with its subject broken; no Ray was started. The row is deleted from
+  `.documents/OPEN_ISSUES.md` §1.17; [`tuning-followups`'s board](../tuning-followups/IMPLEMENTATION_STATE.md)
+  §5.2 and its log 01 hold the record.
 
 ## 5. Dispatch record
 

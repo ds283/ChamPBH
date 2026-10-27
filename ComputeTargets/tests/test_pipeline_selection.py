@@ -36,10 +36,22 @@ schedules {V1, V3}. Test (g) reads the argument parser, and no config file. Sinc
 jordan-normalization prompt 07 an entry is (model, history), the model "V<i>" a
 stand-in string where it was the pair ("V<i>", "beta<i>").
 
-No Ray cluster, no datastore, no PRyMordial solve. Instant.
+`TestRetryFailedScalar` and `TestRetryFailedScalarFlag` (tuning-followups prompt 01):
+`missing_models(…, retry_failed=True)` counts a stored failure as missing, the default is
+unchanged, `count_stored_failures` counts the stored failures for the stage's summary
+line, and the parser and `main.py --help` carry `--retry-failed-scalar`. Before prompt 01
+neither the keyword, the function nor the flag existed.
+
+No Ray cluster, no datastore, no PRyMordial solve. Instant, but for
+`test_i_main_py_help_lists_it`, which runs `main.py --help` in a subprocess (about 1.3 s;
+argparse exits before `ray.init`).
 """
 
+import os
+import subprocess
+import sys
 import unittest
+from pathlib import Path
 from types import SimpleNamespace as NS
 
 N_MODELS = 5
@@ -199,6 +211,91 @@ class TestScalarStageFirstPass(unittest.TestCase):
             missing_models(_models(), lookups[:-1])
         with self.assertRaises(ValueError):
             missing_models(_models(), lookups + [lookups[0]])
+
+
+class TestRetryFailedScalar(unittest.TestCase):
+    """The scalar stage's first pass under --retry-failed-scalar (tuning-followups prompt 01)."""
+
+    def _lookups(self):
+        # V0 stored, V1 a stored failure, V2 not stored (no `failure` attribute at all),
+        # V3 stored, V4 a stored failure
+        lookups = [NS(available=True, failure=False) for _ in range(N_MODELS)]
+        lookups[1] = NS(available=True, failure=True)
+        lookups[2] = NS(available=False)
+        lookups[4] = NS(available=True, failure=True)
+        return lookups
+
+    def test_h_a_stored_failure_is_missing_under_the_flag(self):
+        """(h) With retry_failed, the stored failures are missing, beside the model with no row, in order."""
+        from pipeline_selection import missing_models
+
+        self.assertEqual(
+            missing_models(_models(), self._lookups(), retry_failed=True),
+            ["V1", "V2", "V4"],
+        )
+
+    def test_h_a_stored_success_is_not_missing_under_the_flag(self):
+        """(h) With retry_failed, a fully stored batch of successes still gives no work."""
+        from pipeline_selection import missing_models
+
+        stored = [NS(available=True, failure=False) for _ in range(N_MODELS)]
+        self.assertEqual(missing_models(_models(), stored, retry_failed=True), [])
+
+    def test_h_the_default_is_unchanged(self):
+        """(h) Without retry_failed, or with it False, only the model with no row is missing."""
+        from pipeline_selection import missing_models
+
+        self.assertEqual(missing_models(_models(), self._lookups()), ["V2"])
+        self.assertEqual(
+            missing_models(_models(), self._lookups(), retry_failed=False), ["V2"]
+        )
+
+    def test_h_count_stored_failures(self):
+        """(h) count_stored_failures counts the lookups that found a stored failure, and nothing else."""
+        from pipeline_selection import count_stored_failures
+
+        self.assertEqual(count_stored_failures(self._lookups()), 2)
+        self.assertEqual(
+            count_stored_failures(
+                [NS(available=True, failure=False), NS(available=False)]
+            ),
+            0,
+        )
+        self.assertEqual(count_stored_failures([]), 0)
+
+
+class TestRetryFailedScalarFlag(unittest.TestCase):
+    def test_i_the_flag_parses(self):
+        """(i) create_argument_parser() parses --retry-failed-scalar to True, and its absence to False."""
+        from config.argument_parser import create_argument_parser
+
+        base = ["--database", "unused.db"]
+
+        args = create_argument_parser().parse_args(base)
+        self.assertIs(args.retry_failed_scalar, False)
+
+        args = create_argument_parser().parse_args(base + ["--retry-failed-scalar"])
+        self.assertIs(args.retry_failed_scalar, True)
+        # the two retry flags are independent
+        self.assertIs(args.retry_failed_bbn, False)
+
+    def test_i_main_py_help_lists_it(self):
+        """(i) main.py --help lists --retry-failed-scalar. A subprocess, from the repository root; argparse exits before ray.init."""
+        root = Path(__file__).resolve().parents[2]
+        env = dict(os.environ, PYTHONPATH=str(root))
+        result = subprocess.run(
+            [sys.executable, "main.py", "--help"],
+            cwd=root,
+            env=env,
+            capture_output=True,
+            text=True,
+            timeout=120,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("--retry-failed-scalar", result.stdout)
+        help_text = " ".join(result.stdout.split())
+        self.assertIn("--tuning-max-integrations", help_text)
+        self.assertIn("a stored scalar failure counts as done", help_text)
 
 
 class TestRetryFailedBBNFlag(unittest.TestCase):

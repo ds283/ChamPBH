@@ -203,6 +203,9 @@ def connect_ro(path) -> sqlite3.Connection:
     return sqlite3.connect(f"file:{os.fspath(path)}?mode=ro", uri=True)
 
 
+# the tool reads a success's samples, so it asks for successes only: a history retried with
+# --retry-failed-scalar has its failure row beside its success, under the same key, and a
+# failure has no samples (tuning-followups prompt 01)
 _FIND_QUERY = """
     select sm.serial, mv.value_eV, sm.RHS_evaluations, sm.first_bounce_log_T_Jordan
     from ScalarHistory sm
@@ -211,6 +214,7 @@ _FIND_QUERY = """
     join M_value mv on mv.serial = m.M_serial
     join phi_value ph on ph.serial = sm.phi_Einstein_init_serial
     where abs(b.value - ?) < 1e-9 and abs(ph.value_PlanckMass - ?) < 1e-9
+      and sm.failure = 0
 """
 
 # production's order: sqla_ScalarHistoryFactory.build reads the samples ordered
@@ -242,12 +246,12 @@ _BBN_KEYS = (
 
 def find_model(stem, beta: float, M_Mp: float, phi_init_Mp: float = 5.0, units=None):
     """
-    The one ScalarHistory in the shards `STEM-shard*.db` with this beta and
-    initial phi (to 1e-9 absolute) and this M (to 1e-3 relative, M_value
-    being in eV and M_Mp in units of the reduced Planck mass,
-    units.PlanckMass / units.eV). Returns a StoredHistory. Raises LookupError
-    if there is no match or more than one. Every shard is opened by
-    `connect_ro`.
+    The one successful ScalarHistory (`failure = 0`; tuning-followups prompt 01)
+    in the shards `STEM-shard*.db` with this beta and initial phi (to 1e-9
+    absolute) and this M (to 1e-3 relative, M_value being in eV and M_Mp in
+    units of the reduced Planck mass, units.PlanckMass / units.eV). Returns a
+    StoredHistory. Raises LookupError if there is no match or more than one.
+    Every shard is opened by `connect_ro`.
     """
     if units is None:
         units = Planck_units()

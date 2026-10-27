@@ -24,11 +24,17 @@ none of these can fail on the tree before it except by ImportError; the
 stand-in for a breakage test is the prompt's reproduction of the stored
 outcomes (log 01, Verification).
 
+Test (d) (tuning-followups prompt 01) adds a failure row beside test (c)'s
+target, as a history retried with --retry-failed-scalar leaves it; on the
+tree before that prompt find_model finds both and raises LookupError. Test
+(c)'s store is built by `_write_imitation_store`, factored out of it by that
+prompt with its assertions unchanged.
+
 Test (a) runs no solve (`build_rho_NP_callback` is intercepted). **Test (b)
-runs two small-network PRyMordial solves, about 10 s.** Test (c) builds a
-temporary SQLite file imitating the store's tables; no test reads a real
-store. Run from the repository root, since PRyMordial reads `PRyMrates/` from
-the working directory:
+runs two small-network PRyMordial solves, about 10 s.** Tests (c) and (d)
+build a temporary SQLite file imitating the store's tables; no test reads a
+real store. Run from the repository root, since PRyMordial reads `PRyMrates/`
+from the working directory:
 
     PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .
 """
@@ -159,6 +165,90 @@ def _plain(kwargs: dict) -> dict:
     return {k: v for k, v in kwargs.items() if not callable(v)}
 
 
+def _write_imitation_store(tmp, Mp_eV, failed_rows=()):
+    """
+    Test (c)'s two-shard store imitating the science store's tables, in the
+    directory `tmp`; returns (stem, shards). Factored out of test (c) by
+    tuning-followups prompt 01, unchanged, so that test (d) can add
+    `failed_rows` to shard 1: each (serial, model_serial, phi_serial) is a
+    ScalarHistory failure row (failure 1, NULL RHS evaluations and bounce), with
+    no samples and no BBNData row.
+    """
+    stem = os.path.join(tmp, "imitation")
+    shards = [f"{stem}-shard{n:04d}.db" for n in range(2)]
+    # shard 0: same beta and phi, other M; shard 1: the target (serial
+    # 7), a decoy with the target's M and beta but phi 2, and one with
+    # the target's M and phi but another beta
+    models = {
+        0: [(3, 1.6, 1e-5, 5.0)],
+        1: [(5, 1.6, 1e-3, 2.0), (7, 1.6, 1e-3, 5.0), (9, 2.0, 1e-3, 5.0)],
+    }
+    for n, path in enumerate(shards):
+        con = sqlite3.connect(path)
+        con.executescript("""
+            create table beta_value (serial integer primary key, value real);
+            create table M_value (serial integer primary key, value_eV real);
+            create table phi_value (serial integer primary key, value_PlanckMass real);
+            create table ExponentialModel (serial integer primary key, M_serial integer,
+                beta_serial integer);
+            create table redshift (serial integer primary key, log_one_plus_z real);
+            create table ScalarHistory (serial integer primary key, model_serial integer,
+                phi_Einstein_init_serial integer, failure integer,
+                RHS_evaluations integer, first_bounce_log_T_Jordan real);
+            create table ScalarHistoryValue (serial integer primary key, history_serial integer,
+                z_serial integer, raw_N real, log_T_Jordan_GeV real, H_Jordan_Mp real,
+                log_rhorad_Jordan_Mp4 real, log_fm real);
+            create table BBNData (serial integer primary key, scalar_history_serial integer,
+                failure integer, failure_reason text, Yp_BBN real, DOverH real,
+                He3OverH real, Li7OverH real, small_network integer, PRyM_version text);
+            """)
+        for serial, beta, M, phi in models[n]:
+            con.execute("insert into beta_value values (?, ?)", (serial, beta))
+            con.execute("insert into M_value values (?, ?)", (serial, M * Mp_eV))
+            con.execute("insert into phi_value values (?, ?)", (serial, phi))
+            con.execute(
+                "insert into ExponentialModel values (?, ?, ?)",
+                (serial, serial, serial),
+            )
+            con.execute(
+                "insert into ScalarHistory values (?, ?, ?, 0, ?, ?)",
+                (serial, serial, serial, 1000 + serial, -0.5),
+            )
+            con.execute(
+                "insert into BBNData values (?, ?, 0, NULL, ?, ?, 1.0, 5.0, 0, 'v')",
+                (serial, serial, 0.24 + serial * 1e-3, 2.4 + serial * 1e-2),
+            )
+        # three samples per model, inserted out of redshift order
+        for k, z in enumerate((10.0, 1000.0, 100.0)):
+            con.execute("insert into redshift values (?, ?)", (k + 1, log1p(z)))
+        v = 1
+        for serial, *_ in models[n]:
+            for k, z in enumerate((10.0, 1000.0, 100.0)):
+                con.execute(
+                    "insert into ScalarHistoryValue values (?, ?, ?, ?, ?, ?, ?, ?)",
+                    (
+                        v,
+                        serial,
+                        k + 1,
+                        1.0 / z,
+                        log(z),
+                        1e-30 * z,
+                        -150.0 + k,
+                        -3.0,
+                    ),
+                )
+                v += 1
+        if n == 1:
+            for serial, model_serial, phi_serial in failed_rows:
+                con.execute(
+                    "insert into ScalarHistory values (?, ?, ?, 1, NULL, NULL)",
+                    (serial, model_serial, phi_serial),
+                )
+        con.commit()
+        con.close()
+    return stem, shards
+
+
 class TestBBNFromStore(unittest.TestCase):
     def test_a_ratio_grid_is_the_production_grid(self):
         """(a) No solve. compute_BBN_data._function on a stand-in history,
@@ -283,74 +373,7 @@ class TestBBNFromStore(unittest.TestCase):
         Mp_eV = units.PlanckMass / units.eV
 
         with tempfile.TemporaryDirectory() as tmp:
-            stem = os.path.join(tmp, "imitation")
-            shards = [f"{stem}-shard{n:04d}.db" for n in range(2)]
-            # shard 0: same beta and phi, other M; shard 1: the target (serial
-            # 7), a decoy with the target's M and beta but phi 2, and one with
-            # the target's M and phi but another beta
-            models = {
-                0: [(3, 1.6, 1e-5, 5.0)],
-                1: [(5, 1.6, 1e-3, 2.0), (7, 1.6, 1e-3, 5.0), (9, 2.0, 1e-3, 5.0)],
-            }
-            for n, path in enumerate(shards):
-                con = sqlite3.connect(path)
-                con.executescript("""
-                    create table beta_value (serial integer primary key, value real);
-                    create table M_value (serial integer primary key, value_eV real);
-                    create table phi_value (serial integer primary key, value_PlanckMass real);
-                    create table ExponentialModel (serial integer primary key, M_serial integer,
-                        beta_serial integer);
-                    create table redshift (serial integer primary key, log_one_plus_z real);
-                    create table ScalarHistory (serial integer primary key, model_serial integer,
-                        phi_Einstein_init_serial integer, failure integer,
-                        RHS_evaluations integer, first_bounce_log_T_Jordan real);
-                    create table ScalarHistoryValue (serial integer primary key, history_serial integer,
-                        z_serial integer, raw_N real, log_T_Jordan_GeV real, H_Jordan_Mp real,
-                        log_rhorad_Jordan_Mp4 real, log_fm real);
-                    create table BBNData (serial integer primary key, scalar_history_serial integer,
-                        failure integer, failure_reason text, Yp_BBN real, DOverH real,
-                        He3OverH real, Li7OverH real, small_network integer, PRyM_version text);
-                    """)
-                for serial, beta, M, phi in models[n]:
-                    con.execute("insert into beta_value values (?, ?)", (serial, beta))
-                    con.execute(
-                        "insert into M_value values (?, ?)", (serial, M * Mp_eV)
-                    )
-                    con.execute("insert into phi_value values (?, ?)", (serial, phi))
-                    con.execute(
-                        "insert into ExponentialModel values (?, ?, ?)",
-                        (serial, serial, serial),
-                    )
-                    con.execute(
-                        "insert into ScalarHistory values (?, ?, ?, 0, ?, ?)",
-                        (serial, serial, serial, 1000 + serial, -0.5),
-                    )
-                    con.execute(
-                        "insert into BBNData values (?, ?, 0, NULL, ?, ?, 1.0, 5.0, 0, 'v')",
-                        (serial, serial, 0.24 + serial * 1e-3, 2.4 + serial * 1e-2),
-                    )
-                # three samples per model, inserted out of redshift order
-                for k, z in enumerate((10.0, 1000.0, 100.0)):
-                    con.execute("insert into redshift values (?, ?)", (k + 1, log1p(z)))
-                v = 1
-                for serial, *_ in models[n]:
-                    for k, z in enumerate((10.0, 1000.0, 100.0)):
-                        con.execute(
-                            "insert into ScalarHistoryValue values (?, ?, ?, ?, ?, ?, ?, ?)",
-                            (
-                                v,
-                                serial,
-                                k + 1,
-                                1.0 / z,
-                                log(z),
-                                1e-30 * z,
-                                -150.0 + k,
-                                -3.0,
-                            ),
-                        )
-                        v += 1
-                con.commit()
-                con.close()
+            stem, shards = _write_imitation_store(tmp, Mp_eV)
 
             digests = [hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in shards]
 
@@ -395,6 +418,27 @@ class TestBBNFromStore(unittest.TestCase):
 
             after = [hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in shards]
             self.assertEqual(digests, after)
+
+    def test_d_a_failure_beside_the_success_is_not_found(self):
+        """(d) No solve. On test (c)'s store with a ScalarHistory failure row
+        (serial 6, failure 1, no samples, no BBNData row) under the target's
+        beta, M and phi, as a history retried with --retry-failed-scalar leaves
+        it: find_model returns the success, serial 7, with its samples and its
+        BBNData row, and raises no LookupError (tuning-followups prompt 01)."""
+        tool = _tool()
+        units = Planck_units()
+        Mp_eV = units.PlanckMass / units.eV
+
+        with tempfile.TemporaryDirectory() as tmp:
+            stem, shards = _write_imitation_store(tmp, Mp_eV, failed_rows=[(6, 7, 7)])
+
+            h = tool.find_model(stem, 1.6, 1e-3, 5.0, units)
+
+            self.assertEqual(h.serial, 7)
+            self.assertEqual(Path(h.shard).name, "imitation-shard0001.db")
+            self.assertEqual(h.RHS_evaluations, 1007)
+            self.assertEqual(h.rows.shape, (3, 5))
+            self.assertEqual(h.bbn["Yp_BBN"], 0.24 + 7 * 1e-3)
 
 
 if __name__ == "__main__":

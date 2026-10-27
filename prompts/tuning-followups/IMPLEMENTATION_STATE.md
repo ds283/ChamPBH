@@ -1,8 +1,7 @@
 # tuning-followups campaign — implementation state
 
-**Last updated:** 2026-10-27 · **Status: LIVE — 2 of 2 prompts written, 0 landed; R1–R4 and U1–U4
-ruled by the user 2026-10-27, P1–P12 standing as proposed (README §6). Next: the orchestrator note
-for 01.**
+**Last updated:** 2026-10-27 · **Status: LIVE — 01 landed, awaiting review; 02 written. R1–R4 and
+U1–U4 ruled by the user 2026-10-27, P1–P12 standing as proposed (README §6).**
 The plan is [`README.md`](README.md), written on 2026-10-27 on branch `tuning-followups`, cut from
 `jordan-normalization` at `4ad15fe`.
 
@@ -29,7 +28,7 @@ The campaign carries out two of the user's rulings of 2026-10-27, before the sci
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | [Retry failed scalar histories](01-retry-failed-scalar.md) | `--retry-failed-scalar`; the first and second passes; the ordered lookup; `bbn_from_store`; tests; notes | Opus | ✍️ | ⬜ | — | — |
+| 01 | [Retry failed scalar histories](01-retry-failed-scalar.md) | `--retry-failed-scalar`; the first and second passes; the ordered lookup; `bbn_from_store`; tests; notes | Opus | ✍️ | ✅ | this commit | [01](logs/01-retry-failed-scalar.md) |
 | 02 | [Quiet tune lines](02-quiet-tune-lines.md) | the print rule (120 s, 10 integrations, guard, reset); the tools; tests; notes; §4.17; `CLAUDE.md` | Sonnet | ✍️ | ⬜ | — | — |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
@@ -41,19 +40,36 @@ U4).
 
 | Prompt | Items |
 |---|---|
-| 01 | F1 the flag · F2 the first pass · F3 the second pass · F4 the ordered lookup · F5 `bbn_from_store` · F6 the summary line · F7 the tests · F8 the notes |
+| 01 | ✅ F1 the flag · ✅ F2 the first pass · ✅ F3 the second pass (verified by reading; its premise tested) · ✅ F4 the ordered lookup · ✅ F5 `bbn_from_store` · ✅ F6 the summary line · ✅ F7 the tests · ✅ F8 the notes |
 | 02 | Q1 the rule and its constants · Q2 the tools · Q3 the tests · Q4 the notes · Q5 §4.17 · Q6 `CLAUDE.md` |
 
 ## 2. The gates
 
 | Gate | Holds when | Prompt | State |
 |---|---|---|---|
-| Retry | with the flag, a stored scalar failure is recomputed and the success is what every lookup returns; without it, nothing is recomputed; a key with a success and older failures, or two failures, looks up without raising | 01 | ⬜ |
+| Retry | with the flag, a stored scalar failure is recomputed and the success is what every lookup returns; without it, nothing is recomputed; a key with a success and older failures, or two failures, looks up without raising | 01 | ✅ holds (01): the lookups on a temporary store, `object_get` and the vectorized route; the first pass by stand-ins; the second pass's wiring by reading, its premise (`failure=False` on a stored failure finds nothing) on a temporary store; no Ray (U3) |
 | Quiet | a tuning under 10 integrations and 120 s prints no tune line; past either it prints by the rule; a guard or reset step prints; the stored values bitwise unchanged | 02 | ⬜ |
 
 ## 3. Active and unresolved issues
 
-None opened.
+Prompt 01 opened one.
+
+### `[01-bbn-from-store-refuses-a-history-with-a-retried-bbn-row]`
+
+**Opened:** 2026-10-27 by prompt 01 (ruling 8 of its orchestrator note, which found it).
+
+- **What.** `tools/bbn_from_store.py`'s `_BBN_QUERY` (`:230-234` after prompt 01; `:226-230`
+  before) selects a history's `BBNData` rows with no `failure` filter and no order, and
+  `find_model` raises `LookupError` when it finds more than one (`:272-277`; `:268-273` before).
+  `--retry-failed-bbn` stores a recomputed BBN row beside the failure, under the same history, as it
+  has since `run-integrity` prompt 03. A scalar retry cannot cause it: the retried success has a new
+  serial and its own BBN rows, and a failure has none.
+- **Impact.** `bbn_from_store.py` stops with `LookupError` on any history whose BBN computation was
+  retried with `--retry-failed-bbn` and so holds a failure and a success. The tool is a diagnostic;
+  the pipeline and the plot scripts are unaffected, since they look up through
+  `sqla_BBNDataFactory.build`, which orders.
+- **Next step.** For the user: order `_BBN_QUERY` as the factory does (the success if one exists,
+  else the newest failure), or filter it to the success. Not assigned.
 
 ### 3.1 Assigned to this campaign
 
@@ -63,12 +79,14 @@ board's §4, and deletes its row from `.documents/OPEN_ISSUES.md` §1.17.
 
 | Issue | Its board | Prompt | Why here |
 |---|---|---|---|
-| `[08-a-history-that-did-not-converge-is-never-retried]` | `jordan-normalization` | 01 | R1: `--retry-failed-scalar` |
+| `[08-a-history-that-did-not-converge-is-never-retried]` | `jordan-normalization` | 01 — closed by 01 (this commit) | R1: `--retry-failed-scalar` |
 | `[09-ray-deduplicates-the-tune-lines-of-parallel-histories]` | `jordan-normalization` | 02 | R2: quiet tune lines supersede it |
 
 ## 4. Resolved issues
 
-None.
+None of this board's own. The assigned `[08-a-history-that-did-not-converge-is-never-retried]` was
+closed by prompt 01 (this commit); its entry, with its **Resolved** line, is in
+`jordan-normalization`'s §4, and its row is deleted from `.documents/OPEN_ISSUES.md` §1.17.
 
 ## 5. Dispatch record
 
@@ -104,3 +122,26 @@ it there"): RayPoolKit `cf77234`, a board with no prompts, `client-reports`, hol
 its behaviour, with a default of 1 (RayPoolKit `README.md:161`); ChamPBH passes 3 to its three
 titled queues (`main.py:330`, `:581`, `:861`). Changing ChamPBH's `process_batch_size` is not in
 this campaign; it is recorded on `rrk-adoption`'s board for the user.
+
+### 5.2 After prompt 01 (2026-10-27)
+
+Prompt 01 landed in this commit, under orchestrator note 01 (twelve rulings), on top of `f0db26c`;
+its log is [`logs/01-retry-failed-scalar.md`](logs/01-retry-failed-scalar.md).
+- **What landed.** `--retry-failed-scalar` (F1); `missing_models(…, retry_failed)` and
+  `count_stored_failures` (F2); the second pass's `failure=False` under the flag (F3, verified by
+  reading); the ordered lookup in `sqla_ScalarHistoryFactory.build`, `BBNData`'s rule (F4);
+  `bbn_from_store`'s `sm.failure = 0` (F5); the summary line, printed only when the first pass found
+  a stored failure (F6); 17 new tests (F7); dated notes in `architecture-summary.md` §4.3, §5.1 and
+  §9 and `numerical-strategies.md` §3.7.5 (F8). No spec, schema or stored value moved:
+  `FINGERPRINT_FORMAT` and `VERSION_LABEL` are unchanged and the golden fingerprint and both golden
+  histories pass.
+- **Counts**, before and after, serially: CosmologyModels 26 → 26; ComputeTargets 243 → 250
+  (76 + 167 → 77 + 173); ObjectFactories 93 → 103; tools 115 → 115; RunDrivers 64 → 64. All passing.
+- **Breakages.** B1–B6 (the prompt's four, and the note's B5 and B6), each applied, run and
+  reverted; each made its test fail, as the log records. None committed.
+- **Found.** The tag join cannot duplicate a row before the `limit`: `ScalarHistory_tags`' primary
+  key is (history, tag), and a second insert of one pair is refused. Two failures under one key are
+  named `duplicate` by the inventory, all kept, as for `BBNData` (a probe, not committed).
+- **Issues.** Closed `[08-a-history-that-did-not-converge-is-never-retried]` (`jordan-normalization`
+  §4); opened `[01-bbn-from-store-refuses-a-history-with-a-retried-bbn-row]` (§3; index §1.18). The
+  index stays at 25 open.

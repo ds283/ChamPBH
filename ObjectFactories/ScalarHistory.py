@@ -418,6 +418,22 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                 ),
             )
 
+        # A key may hold more than one row once --retry-failed-scalar stores a recomputed history
+        # beside its failure, or a retry fails again. Order as sqla_BBNDataFactory.build does
+        # (run-integrity prompt 03; tuning-followups prompt 01): with failure=True, the newest
+        # failure; with failure=None (every lookup but the retry's second pass), the success if one
+        # exists, else the newest failure. failure=False is a filter only, as before. While a key
+        # holds one row, as every store made before tuning-followups does, the ordering is
+        # invisible. Each join is many-to-one or a single tag pair, so the limit counts histories.
+        if failure is True:
+            query = query.order_by(table.c.timestamp.desc(), table.c.serial.desc())
+            query = query.limit(1)
+        elif failure is None:
+            query = query.order_by(
+                table.c.failure.asc(), table.c.timestamp.desc(), table.c.serial.desc()
+            )
+            query = query.limit(1)
+
         try:
             row_data = conn.execute(query).one_or_none()
         except MultipleResultsFound as e:

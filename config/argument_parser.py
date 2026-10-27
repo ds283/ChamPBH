@@ -338,6 +338,15 @@ def create_argument_parser() -> configargparse.ArgumentParser:
         "this flag a stored BBN failure counts as done and is not retried",
     )
     parser.add_argument(
+        "--retry-failed-scalar",
+        action="store_true",
+        default=False,
+        help="retry scalar histories that failed under the current version label (for example "
+        "after raising --tuning-max-integrations); the new history is stored beside the failure. "
+        "Without this flag a stored scalar failure counts as done and is not retried. Not a key "
+        "(tuning-followups prompt 01)",
+    )
+    parser.add_argument(
         "--bbn-wall-clock-limit",
         type=non_negative_float,
         default=DEFAULT_BBN_WALL_CLOCK_LIMIT,

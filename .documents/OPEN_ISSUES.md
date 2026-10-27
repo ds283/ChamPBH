@@ -24,7 +24,7 @@ issue and closed it with prompt 02, opened none and leaves none open; none on th
 ruled by the user, U9, 2026-10-14; closed 2026-10-14, 7 of 7 prompts landed, with the one issue
 still open on its board; `jordan-normalization` prompt 08 closed it, 2026-10-26); 1 on the `rrk-adoption` board (planned 2026-10-19, with none
 opened or assigned; the orchestrator's review of prompt 04 opened one, 2026-10-20; closed 2026-10-20,
-5 of 5 prompts landed, with the one issue still open on its board); 6 on the
+5 of 5 prompts landed, with the one issue still open on its board); 5 on the
 `jordan-normalization` board (planned 2026-10-20, with none opened; eight from five boards assigned
 to it the same day, §1.15; prompt 01 closed one of them, 2026-10-20, leaving seven; prompt 02 opened one, 2026-10-21;
 prompt 03 closed three of them, leaving four, and opened one, 2026-10-22; prompt 04 closed one of
@@ -32,8 +32,9 @@ them, leaving three, 2026-10-25; prompt 07 closed two of them, leaving one, and 
 its own, 2026-10-26; prompt 08 closed the last of them and opened one, and the orchestrator's
 review of prompt 08 opened two, 2026-10-26; prompt 09 opened one, 2026-10-26; prompt 10 opened and closed
 none, and the campaign closed 2026-10-26, 10 of 10 prompts landed, with these six open; two of them
-were assigned to `tuning-followups` on 2026-10-27, §1.17); none on the `tuning-followups` board
-(planned 2026-10-27, with none opened and two assigned from `jordan-normalization`).
+were assigned to `tuning-followups` on 2026-10-27, §1.17, and its prompt 01 closed one of the two,
+2026-10-27); 1 on the `tuning-followups` board (planned 2026-10-27, with none opened and two
+assigned from `jordan-normalization`; prompt 01 opened one, 2026-10-27, §1.18).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -259,7 +260,8 @@ Planned 2026-10-20. One opened by prompt 02, 2026-10-21, and narrowed by prompt 
 one by prompt 03, 2026-10-22; one by prompt 08 and two by the orchestrator's review of it,
 2026-10-26; one by prompt 09, 2026-10-26. The campaign closed on 2026-10-26 with these six open; prompt 10
 opened and closed none. Two of the six were assigned to `tuning-followups` on 2026-10-27 and are
-listed in §1.17; four remain here.
+listed in §1.17; four remain here. `tuning-followups` prompt 01 closed one of the two on 2026-10-27
+(board §4), leaving five open on the board.
 
 - `[02-the-scalar-history-parent-is-still-called-model]` — the payload key `model_proxy`, the
   attribute `_model_proxy` and locals still call a scalar history `model`, now that `model` is the
@@ -280,14 +282,20 @@ listed in §1.17; four remain here.
 
 Planned 2026-10-27, from the user's rulings of that day. Two of `jordan-normalization`'s issues
 were assigned to it at planning; each stays on that board, which carries its **Ruled** and
-**Assigned** lines, and the prompt named deletes its row here.
+**Assigned** lines, and the prompt named deletes its row here. Prompt 01 closed
+`[08-a-history-that-did-not-converge-is-never-retried]` on 2026-10-27; one remains.
 
-- `[08-a-history-that-did-not-converge-is-never-retried]` — a tuning failure is stored under a key
-  that holds no `--tuning-max-integrations`, and the scalar stage does not recompute a stored
-  failure, so a run with a larger cap recomputes nothing short of `--drop scalar-history`; a retry
-  flag or the cap in the key; ruled 2026-10-27: `--retry-failed-scalar`. *(`jordan-normalization`; prompt 08; for `tuning-followups` 01)*
 - `[09-ray-deduplicates-the-tune-lines-of-parallel-histories]` — Ray's log deduplication holds
   back tune lines of histories tuned in parallel (they differ only in words with digits), so the
   log loses some of P12's one line per integration; values and heartbeat unaffected; ruled
   2026-10-27: deduplication stays on, the tune lines become quiet (120 s, 10 integrations).
   *(`jordan-normalization`; prompt 09; for `tuning-followups` 02)*
+
+### 1.18 `tuning-followups` — [board §3](../prompts/tuning-followups/IMPLEMENTATION_STATE.md)
+
+Planned 2026-10-27. One opened by prompt 01, 2026-10-27, found by its orchestrator note.
+
+- `[01-bbn-from-store-refuses-a-history-with-a-retried-bbn-row]` — `tools/bbn_from_store.py`'s
+  BBN query has no `failure` filter or order, so the tool stops with `LookupError` on a history
+  whose BBN computation was retried with `--retry-failed-bbn`; a diagnostic only, the pipeline and
+  plot scripts unaffected. *(`tuning-followups`; prompt 01)*

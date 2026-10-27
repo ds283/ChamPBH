@@ -702,6 +702,15 @@ run with a larger cap does not recompute it; only `--drop scalar-history`, which
 does (board issue `[08-a-history-that-did-not-converge-is-never-retried]`, open). No history failed
 to converge at any point measured.
 
+> **Note, 2026-10-27 (`tuning-followups`, prompt 01): the retry route.** The cap is still not a key,
+> but a failed history can now be recomputed without dropping the others: a run with
+> `--retry-failed-scalar` (and, typically, a larger `--tuning-max-integrations`) counts a stored
+> scalar failure as missing and recomputes it, and the new row is stored beside the failure under
+> the same key. Every lookup then returns the success if one exists, else the newest failure, as the
+> `BBNData` lookup does for `--retry-failed-bbn` (`architecture-summary.md` §4.3's and §9's notes of
+> this date). Without the flag the paragraph above stands: a stored failure counts as done. The
+> board issue `[08-a-history-that-did-not-converge-is-never-retried]` is closed by this prompt.
+
 #### 3.7.6 The progress line
 
 After each integration, once the residuals are formed, `tune_history` prints and flushes one line

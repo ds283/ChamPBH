@@ -87,19 +87,44 @@ def _check_lengths(what: str, expected: int, got: int) -> None:
         )
 
 
-def missing_models(models: Sequence[Any], lookups: Sequence[Any]) -> List[Any]:
+def missing_models(
+    models: Sequence[Any], lookups: Sequence[Any], retry_failed: bool = False
+) -> List[Any]:
     """
     The scalar stage's first pass (jordan-normalization prompt 07): the models whose
-    ScalarHistory lookup found no row, in order. A stored failure is not missing: the
-    stage does not recompute it (its second lookup would find it and nothing would be
-    computed). A fully stored batch gives [], so the stage schedules no work for it.
+    ScalarHistory lookup found no row, in order. A fully stored batch gives [], so the
+    stage schedules no work for it.
+
+    Without `retry_failed` a stored failure is not missing: the stage does not recompute
+    it (its second lookup would find it and nothing would be computed). With it
+    (`--retry-failed-scalar`, tuning-followups prompt 01) a stored failure is missing
+    too: the stage's second lookup then asks for a success only, finds none, and the
+    history is computed and stored beside the failure. `count_stored_failures` counts the
+    stored failures for the stage's summary line.
 
     :param models: the models of one shard bin, in the order the lookups were made
     :param lookups: the ScalarHistory lookup results, one per model, in the same order
+    :param retry_failed: count a stored failure as missing
     :raises ValueError: if the two lengths differ
     """
     _check_lengths("ScalarHistory lookup", len(models), len(lookups))
-    return [model for model, history in zip(models, lookups) if not history.available]
+    return [
+        model
+        for model, history in zip(models, lookups)
+        if not history.available or (retry_failed and history.failure)
+    ]
+
+
+def count_stored_failures(lookups: Sequence[Any]) -> int:
+    """
+    The number of ScalarHistory lookup results that found a stored failure: `available`
+    and `failure` both true. The scalar stage counts them across its batches for its
+    summary line, retried with `--retry-failed-scalar` or skipped without it
+    (tuning-followups prompt 01).
+
+    :param lookups: the ScalarHistory lookup results of one shard bin
+    """
+    return sum(1 for history in lookups if history.available and history.failure)
 
 
 def build_query_entries(

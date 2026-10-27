@@ -569,6 +569,24 @@ defined once, as `VERSION_LABEL` in `config/version.py`, and `main.py`, `plot_by
 2. For missing items only, call `object_get(...)` without `_do_not_populate`. This creates skeleton
    rows and returns objects ready for `RayWorkPool` to compute and store.
 
+> **Note, 2026-10-27 (`tuning-followups`, prompt 01): the ordered `ScalarHistory` lookup.** A key
+> may now hold more than one `ScalarHistory` row: `--retry-failed-scalar` (§5.1's note of this date)
+> stores a recomputed history beside its failure. `sqla_ScalarHistoryFactory.build`
+> (`ObjectFactories/ScalarHistory.py:421-435`) therefore orders its lookup as
+> `sqla_BBNDataFactory.build` has since `run-integrity` prompt 03: with no `failure` in the payload
+> (`failure=None`, the lookup of every stage, of the scalar stage's first pass and of both plot
+> scripts) it returns the success if one exists, else the newest failure (`order by failure`, then
+> `timestamp` and `serial` descending, `limit 1`); with `failure=True`, the newest failure; with
+> `failure=False`, a filter as before. Before, it took no order and called `one_or_none()`, so a key
+> holding two rows raised `MultipleResultsFound` on every lookup. While a key holds one row, as on
+> every store made before this prompt, the ordering is invisible: nothing in the spec, the schema
+> or a stored value changes, and neither `FINGERPRINT_FORMAT` nor `VERSION_LABEL` moves. The `limit`
+> counts histories: the solver and tolerance joins are many-to-one, and `ScalarHistory_tags` holds
+> each (history, tag) pair once (its primary key). A retry that fails again leaves two failures
+> under the key, which the inventory names a `duplicate` ("all kept"), as for `BBNData` after
+> `--retry-failed-bbn`; nothing refuses it. Tested by
+> `ObjectFactories/tests/test_scalar_history_failure_lookup.py`.
+
 ### 4.4 A factory, and how to add a class
 
 A factory is a class the package's actors call for each fact of a stored class. ChamPBH's factories
@@ -681,6 +699,17 @@ Uses `configargparse` (a drop-in `argparse` replacement) so that every CLI argum
 > `compute_BBN_data`'s pre-check (`--T-stop-GeV 1e-8` passes, `1e-7` fails; the default, `T_CMB`,
 > passes). The same prompt-01 and prompt-06 statements are in
 > [`numerical-strategies.md` §7.6](numerical-strategies.md).
+
+> **Note, 2026-10-27 (`tuning-followups`, prompt 01).** `--retry-failed-scalar` (`store_true`,
+> default off; `config/argument_parser.py:340-348`) sits beside `--retry-failed-bbn` and is its
+> counterpart for the scalar stage: a history stored as a failure under the current version label
+> (for example one that hit `--tuning-max-integrations`) is recomputed, and the new row is stored
+> beside the failure. Without it a stored scalar failure counts as done, as before. It is not a key.
+> The plot scripts accept it, from the shared parser, and do not read it; the wrapper's `scope` does
+> not name it. So the `jordan-normalization` note above, which says a later run with a larger cap
+> does not recompute a failed history, now holds only without the flag
+> (`[08-a-history-that-did-not-converge-is-never-retried]`, closed by this prompt). §9's note of this
+> date has the stage; §4.3's the lookup.
 
 ### 5.2 Sharding Configuration (`config/sharding.py`)
 
@@ -1417,6 +1446,26 @@ as before; prompt 08 moves it to the seed's φ_ref.
 > - **The scope.** The wrapper's manifest `scope` reads `config …; β …; M …; n …; φ* … Mp; tuning
 >   tolerance …; N shards; job …` (`RunDrivers/registered_run.py:672-701`): the potential type and the
 >   Λ fields are gone, and n and the tolerance are added.
+
+> **Note, 2026-10-27 (`tuning-followups`, prompt 01): the scalar stage under `--retry-failed-scalar`.**
+> - **The first pass.** `missing_models(models, lookups, retry_failed=args.retry_failed_scalar)`
+>   (`pipeline_selection.py:90`, `main.py:263-273`): with the flag, a lookup that found a stored
+>   failure counts as missing, beside the models with no row; without it, as before. The lookup
+>   returns the success if a key holds one beside a failure (§4.3's note of this date), so a history
+>   once retried successfully is not retried again.
+> - **The second pass.** With the flag its `object_get` adds `failure=False` to the payload
+>   (`main.py:281-308`), so the factory does not find the stored failure, returns an unpopulated
+>   history, and the pool computes it and stores it beside the failure (the factory's `store`
+>   inserts unconditionally). Without the flag the payload is exactly as before.
+> - **The summary line.** The first pass counts the stored failures it finds, across batches
+>   (`pipeline_selection.count_stored_failures`, `main.py:253-258`), and after the queue, beside
+>   the "histories failed in this run" lines, prints `-- ScalarHistory: N histories with a stored
+>   failure retried (--retry-failed-scalar)` with the flag, or `-- ScalarHistory: N histories
+>   skipped because of a stored failure` without it (`main.py:363-373`). Nothing is printed when N
+>   is 0, so a run with no stored failure prints what it printed before.
+> - **`tools/bbn_from_store.py`**, the one reader that selects `ScalarHistory` rows by SQL rather
+>   than through the factory, asks for successes only (`and sm.failure = 0`, `:217`), so a retried
+>   history is found once. A key holding only a failure is now "no ScalarHistory with …" there.
 
 ---
 
