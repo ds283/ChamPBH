@@ -1,7 +1,7 @@
 # Log 01 — retry failed scalar histories
 
 **Subject:** Add --retry-failed-scalar and order the ScalarHistory lookup
-**Commit:** this commit, on branch `tuning-followups`, on top of `f0db26c`
+**Commit:** `8b2a29c`, on branch `tuning-followups`, on top of `f0db26c`
 **Date:** 2026-10-27, by Claude Opus 5.5
 **Result:** **COMPLETE.** No stop.
 - F1–F8 shipped under orchestrator note 01, whose twelve rulings govern where they differ from the
@@ -139,7 +139,7 @@ Four dated notes, each opening `> **Note, 2026-10-27 (`tuning-followups`, prompt
 
 ### The records
 - `jordan-normalization`'s board: the issue's entry moved from §3 to §4 with a **Resolved** line
-  naming this prompt and "this commit". One sentence was added to §3's introduction.
+  naming this prompt and "this commit" (now `8b2a29c`). One sentence was added to §3's introduction.
 - `.documents/OPEN_ISSUES.md`:
   - §1.17's row deleted, with a sentence saying so;
   - §1.16 notes the closure;
@@ -178,7 +178,7 @@ Every ruling cited is in orchestrator note 01.
    `find_model`'s docstring says "successful". (c) is otherwise unchanged and passes.
 7. **`NOTED` (ruling 7).** The inventory probe, below.
 8. **`NOTED` (ruling 8).** `[01-bbn-from-store-refuses-a-history-with-a-retried-bbn-row]` opened on
-   this board's §3, with the lines before and after this commit (`:226-230` → `:230-234`,
+   this board's §3, with the lines before and after `8b2a29c` (`:226-230` → `:230-234`,
    `:268-273` → `:272-277`), and in the index's new §1.18.
 9. **`NOTED` (ruling 9).** Counts below.
 10. **`STRUCTURALLY REQUIRED` (ruling 10).** B1–B6, below.
@@ -272,7 +272,7 @@ reader of `ScalarHistory` (`from ScalarHistory`, `join ScalarHistory`, `tables["
 
 ## The deliberate-breakage record
 
-Each diff is against this commit's tree, written by `var/tuning-followups-01/make_breakages.py` and
+Each diff is against `8b2a29c`'s tree, written by `var/tuning-followups-01/make_breakages.py` and
 saved there as `B1.diff`–`B6.diff`. Each was checked with `git apply --check` again just before
 staging, applied with `git apply`, run, and reversed with `git apply -R`. `git status` afterwards
 showed only this prompt's changes. None is committed.
@@ -410,7 +410,7 @@ failure).
 
 ## State handed to the next prompt
 
-- **Tree:** this commit, on `tuning-followups`, on top of `f0db26c`.
+- **Tree:** `8b2a29c`, on `tuning-followups`, on top of `f0db26c`.
 - **The retry.**
   - `main.py --retry-failed-scalar` recomputes a history stored as a failure under the current
     label and stores the new row beside it. Without the flag nothing changes but the summary line
@@ -435,4 +435,4 @@ failure).
     assigned).
   - The index holds 25. `[09-ray-deduplicates-the-tune-lines-of-parallel-histories]` waits for 02.
 - **For the orchestrator:** Observation 1, the `--tuning-max-integrations` help.
-- **Breakage replay.** `var/tuning-followups-01/B1.diff`–`B6.diff` apply to this commit's tree.
+- **Breakage replay.** `var/tuning-followups-01/B1.diff`–`B6.diff` apply to `8b2a29c`'s tree.

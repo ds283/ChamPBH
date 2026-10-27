@@ -304,7 +304,7 @@ from `.documents/OPEN_ISSUES.md` §1.15.
 - **Assigned (2026-10-27):** to `tuning-followups` prompt 01, a small campaign the user asked for
   that day, which carries out this ruling before the science rebuild
   ([its board](../tuning-followups/IMPLEMENTATION_STATE.md) §3.1).
-- **Resolved (2026-10-27) by `tuning-followups` prompt 01** (this commit): `--retry-failed-scalar`
+- **Resolved (2026-10-27) by `tuning-followups` prompt 01** (`8b2a29c`): `--retry-failed-scalar`
   (default off, not a key) makes the scalar stage's first pass count a stored failure as missing
   (`missing_models(…, retry_failed=True)`), and its second lookup ask for a success only
   (`failure=False`), so the history is recomputed and stored beside the failure.
@@ -313,8 +313,9 @@ from `.documents/OPEN_ISSUES.md` §1.15.
   `tools/bbn_from_store.py` reads successes only. The stage prints how many stored failures it
   retried or skipped. Tested on temporary stores and by stand-ins
   (`ObjectFactories/tests/test_scalar_history_failure_lookup.py`,
-  `test_pipeline_selection.TestRetryFailedScalar`, `test_bbn_from_store` (d)), each shown to fail
-  with its subject broken; no Ray was started. The row is deleted from
+  `test_pipeline_selection.TestRetryFailedScalar`, `test_bbn_from_store` (d)); eleven of the 17 new
+  tests were shown to fail with their subject broken (B1–B6), and the other six are regression
+  guards and parser tests; no Ray was started. The row is deleted from
   `.documents/OPEN_ISSUES.md` §1.17; [`tuning-followups`'s board](../tuning-followups/IMPLEMENTATION_STATE.md)
   §5.2 and its log 01 hold the record.
 

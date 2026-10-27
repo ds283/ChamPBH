@@ -1,7 +1,8 @@
 # tuning-followups campaign — implementation state
 
-**Last updated:** 2026-10-27 · **Status: LIVE — 01 landed, awaiting review; 02 written. R1–R4 and
-U1–U4 ruled by the user 2026-10-27, P1–P12 standing as proposed (README §6).**
+**Last updated:** 2026-10-27 · **Status: LIVE — 1 of 2 landed and reviewed (01 `8b2a29c`); 02 written.
+Next: the orchestrator note for 02. R1–R4 and U1–U4 ruled by the user 2026-10-27, P1–P12 standing
+as proposed (README §6).**
 The plan is [`README.md`](README.md), written on 2026-10-27 on branch `tuning-followups`, cut from
 `jordan-normalization` at `4ad15fe`.
 
@@ -28,13 +29,16 @@ The campaign carries out two of the user's rulings of 2026-10-27, before the sci
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | [Retry failed scalar histories](01-retry-failed-scalar.md) | `--retry-failed-scalar`; the first and second passes; the ordered lookup; `bbn_from_store`; tests; notes | Opus | ✍️ | ✅ | this commit | [01](logs/01-retry-failed-scalar.md) |
+| 01 | [Retry failed scalar histories](01-retry-failed-scalar.md) | `--retry-failed-scalar`; the first and second passes; the ordered lookup; `bbn_from_store`; tests; notes | Opus | ✍️ | ✅ | `8b2a29c` | [01](logs/01-retry-failed-scalar.md) |
 | 02 | [Quiet tune lines](02-quiet-tune-lines.md) | the print rule (120 s, 10 integrations, guard, reset); the tools; tests; notes; §4.17; `CLAUDE.md` | Sonnet | ✍️ | ⬜ | — | — |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
 
 Written 2026-10-27, after the user ruled U1–U4. The review of 02 closes the campaign (README §2,
 U4).
+
+Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
+- [`orchestrator/prompt-01.md`](orchestrator/prompt-01.md) (`f0db26c`), used for 01.
 
 ### 1.1 Items
 
@@ -79,13 +83,13 @@ board's §4, and deletes its row from `.documents/OPEN_ISSUES.md` §1.17.
 
 | Issue | Its board | Prompt | Why here |
 |---|---|---|---|
-| `[08-a-history-that-did-not-converge-is-never-retried]` | `jordan-normalization` | 01 — closed by 01 (this commit) | R1: `--retry-failed-scalar` |
+| `[08-a-history-that-did-not-converge-is-never-retried]` | `jordan-normalization` | 01 — closed by 01 (`8b2a29c`) | R1: `--retry-failed-scalar` |
 | `[09-ray-deduplicates-the-tune-lines-of-parallel-histories]` | `jordan-normalization` | 02 | R2: quiet tune lines supersede it |
 
 ## 4. Resolved issues
 
 None of this board's own. The assigned `[08-a-history-that-did-not-converge-is-never-retried]` was
-closed by prompt 01 (this commit); its entry, with its **Resolved** line, is in
+closed by prompt 01 (`8b2a29c`); its entry, with its **Resolved** line, is in
 `jordan-normalization`'s §4, and its row is deleted from `.documents/OPEN_ISSUES.md` §1.17.
 
 ## 5. Dispatch record
@@ -125,7 +129,7 @@ this campaign; it is recorded on `rrk-adoption`'s board for the user.
 
 ### 5.2 After prompt 01 (2026-10-27)
 
-Prompt 01 landed in this commit, under orchestrator note 01 (twelve rulings), on top of `f0db26c`;
+Prompt 01 landed in `8b2a29c`, under orchestrator note 01 (twelve rulings), on top of `f0db26c`;
 its log is [`logs/01-retry-failed-scalar.md`](logs/01-retry-failed-scalar.md).
 - **What landed.** `--retry-failed-scalar` (F1); `missing_models(…, retry_failed)` and
   `count_stored_failures` (F2); the second pass's `failure=False` under the flag (F3, verified by
@@ -145,3 +149,45 @@ its log is [`logs/01-retry-failed-scalar.md`](logs/01-retry-failed-scalar.md).
 - **Issues.** Closed `[08-a-history-that-did-not-converge-is-never-retried]` (`jordan-normalization`
   §4); opened `[01-bbn-from-store-refuses-a-history-with-a-retried-bbn-row]` (§3; index §1.18). The
   index stays at 25 open.
+
+*Orchestrator review of prompt 01 (2026-10-27).* The note's nine checks, at `8b2a29c`:
+1. **Scope.** The commit's 14 files are the note's list exactly; its parent is `f0db26c`; the tree
+   clean; nothing pushed. No change to `ComputeTargets/ScalarHistory.py`, `config/fingerprint.py`,
+   `RunDrivers/`, the plot scripts, `plot_inputs.py`, `CLAUDE.md`, `prompts/INDEX.md`, the README or
+   `orchestrator/`. The trailer appears once in the message (the agent's report of a second was
+   wrong).
+2. **The factory.** The three branches are `BBNData.py:195-210`'s, with its order keys and `limit 1`;
+   `failure=False` is a filter, as before. B1 replayed: (a), (a2), (b), (c), (d1) raise
+   `MultipleResultsFound`; B4: (d1) fails, `1 != 2`.
+3. **The passes.** The counter is incremented before the early return (ruling 1); the second
+   lookup's arguments are today's without the flag, `**retry_payload` being empty (ruling 3); the two
+   summary lines are ruling 2's, in `main.py:872-877`'s form. B2 replayed: `Lists differ: ['V2'] !=
+   ['V1', 'V2', 'V4']`; B6: `0 != 2`.
+4. **The premise, and the gate end to end.** The new module passes alone (10 tests, 0.7 s); B5
+   replayed: (f) fails, (e1) and (e2) raise. A probe of the orchestrator's (session scratchpad,
+   `probe_retry.py`, not committed) on a `_TempStoreCase` store, through the factory's own `store`
+   and `validate`: a stored failure is found by the first pass's lookup; `failure=False` finds
+   nothing; a success stored beside it is then returned by the default lookup, the vectorized one
+   and `failure=False`, while `failure=True` returns the failure; a later failure leaves the success
+   returned. **The gate "Retry" holds**, short of Ray (U3).
+5. **`bbn_from_store`.** The filter and its comment; (d) passes, (c)'s assertions unchanged. B3
+   replayed: (d) raises `LookupError: 2 ScalarHistories match …`.
+6. **The flag.** `main.py --help`, `plot_by_beta.py --help` and `plot_ScalarHistory.py --help` list
+   it; only `main.py` reads `args.retry_failed_scalar`; `RunDrivers/registered_run.py` does not name
+   it.
+7. **Values.** Under `config/` and `ComputeTargets/` (tests aside) only the parser changed; the
+   golden histories and the golden fingerprint pass in the suites below.
+8. **The records.** The log is in §5.1's form, every ruling classed; both documents' diffs remove no
+   line; the boards and the index agree (25 open, §1.17 one row, §1.18 one row). Residue fixed in
+   this review's commit: "this commit" → `8b2a29c` in the log (×5) and on this board (×4) and
+   `jordan-normalization`'s (×1); the **Resolved** line's "each shown to fail with its subject
+   broken" corrected to eleven of the 17 (the other six are regression guards and parser tests, as
+   the log says).
+9. **The suites** at `8b2a29c`, serially: CosmologyModels 26, ComputeTargets 77 + 173,
+   ObjectFactories 103, tools 115, RunDrivers 64, all passing (one-minute load 4–11), the agent's
+   counts. `black --check` on the eight changed
+   `.py` files: unchanged.
+
+The log's Observation 1 (`--tuning-max-integrations`' help still says a larger cap does not
+recompute a failure) is cosmetic: fixed in a standalone housekeeping commit after this one, the help
+naming `--retry-failed-scalar`, with no issue opened.
