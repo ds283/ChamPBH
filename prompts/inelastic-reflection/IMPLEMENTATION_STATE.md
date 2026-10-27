@@ -1,8 +1,8 @@
 # inelastic-reflection campaign — implementation state
 
 **Last updated:** 2026-10-27 · **Status: PLANNED — 0 of 8 prompts written; R1–R5 ruled by the user
-2026-10-27; U1–U3, U5–U8 ruled the same day and P1–P16 stand; awaiting the user's ruling on U4,
-on the revised proposal (b′) of README §6.1.**
+2026-10-27; U1–U8 ruled the same day (U4 as the revised proposal (b′): wall-side turning points
+only) and P1–P16 stand. The prompt files are next (README §2.1).**
 The plan is [`README.md`](README.md), written on 2026-10-27 on branch `inelastic-reflection`, cut
 from `main` at `6f635e6` with the planning commit (U1). Its physics basis is
 [`source/scoping_2026-10-27.md`](source/scoping_2026-10-27.md).
@@ -32,7 +32,7 @@ bitwise the old code's.
 |---|---|---|---|---|---|---|---|
 | 01 | Dark-radiation component | the ledger; ρ_χ in V/3H²M_P², Ḣ/H², E, `HubblePolicy`, V_target; K = 0 bitwise | Opus | ⬜ | ⬜ | — | — |
 | 02 | Injection at turning points | turning points in the step loop; the drain at the KE maximum; the restart; the floor-rule drain; the record; α in `integrate_history`/`tune_history` | Opus | ⬜ | ⬜ | — | — |
-| 03 | Gate and stopping rule | 𝒜_k measured, then the gate (U4); the tapered stopping rule (U5); the residual's continuity | Opus | ⬜ | ⬜ | — | — |
+| 03 | Gate and stopping rule | 𝒜_k measured, then the gate at wall-side turning points (U4 (b′)); the plateau diagnostic; the tapered stopping rule (U5); the residual's continuity | Opus | ⬜ | ⬜ | — | — |
 | 04 | Relativistic margin | generation momenta; m_eff on the trajectory; the margin to today; the warning | Opus | ⬜ | ⬜ | — | — |
 | 05 | Store | α as a key (U3); per-sample ρ_χ/ρ_R; whole-history columns; `AdiabaticHistory`; format 6, 2026.8.0 | Opus | ⬜ | ⬜ | — | — |
 | 06 | Driver and readers | `--alpha-values`; `main.py`; plot matching; the wrapper's scope; the inventory; the tool; the figures (U8) | Sonnet | ⬜ | ⬜ | — | — |

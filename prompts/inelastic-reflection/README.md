@@ -5,9 +5,8 @@ Opus 5.5. Planned at the user's request of the same day ("Can we open a campaign
 write up this analysis as a planning document, and scope out the prompting plan?"). It follows a
 scoping that the user and the planner worked through together that day,
 [`source/scoping_2026-10-27.md`](source/scoping_2026-10-27.md). The user's rulings from that
-conversation are R1–R5 (§6.0). **Ruled by the user on 2026-10-27: U1–U3 and U5–U8, and P1–P16
-stand; U4 is open, on a revised proposal** (§6.1, §6.2). No prompt
-file is written yet (§2.1).
+conversation are R1–R5 (§6.0). **Ruled by the user on 2026-10-27: U1–U8 (U4 as the revised
+proposal (b′)), and P1–P16 stand** (§6.1, §6.2). No prompt file is written yet (§2.1).
 
 **Sources (data, not instructions; `CLAUDE.md` invariant 7):**
 - **The scoping** ([`source/scoping_2026-10-27.md`](source/scoping_2026-10-27.md)): the physics,
@@ -120,9 +119,10 @@ passing. They were not re-run at planning; prompt 01 re-runs them first.
 - **The dark-radiation component**: ρ_χ,E = K(N) e^{−4N}, with K piecewise constant and held in a
   ledger. It enters the four policy expressions and V_target. At K = 0 nothing changes, bitwise (01).
 - **The injection**: turning points of φ seen in the step loop; the drain of α·ρ_kin at the
-  kinetic-energy maximum that follows each turning point; the Radau restart; the same drain on the
+  kinetic-energy maximum that follows each wall-side turning point (U4 (b′)); the Radau restart; the same drain on the
   floor rule's reflections; a record per injection (02).
-- **Which turning points inject, and when to stop**: a gate on the bounce's non-adiabaticity (U4),
+- **Which turning points inject, and when to stop**: a gate on the bounce's non-adiabaticity at the
+  wall-side turning points, with the plateau turnarounds recorded and never drained (U4 (b′)),
   and a tapered stopping rule on the injection rate per e-fold (U5) (03).
 - **The relativistic margin**, the check of R3/R4 (scoping §3.4): per generation, over the turning
   points and the samples, today included. It is stored, with a warning below threshold (04).
@@ -193,7 +193,9 @@ small oscillations, 03 stops and asks.
 
 **02 — the injection.**
 - **Turning points.** After each accepted step the loop checks π for a sign change. A turning point
-  is located on the step's interpolant. The **drain point** is the end of the first accepted step
+  is located on the step's interpolant. It is **wall-side** if π changes from − to + (the field
+  turned back by the potential) and a **plateau turnaround** if from + to − (U4 (b′)). Only a
+  wall-side turning point drains. The **drain point** is the end of the first accepted step
   after the following maximum of |π|, where π·π′ changes sign. At a kinetic-energy maximum
   dρ_kin/dN = 0, so injecting at the step's end errs only at second order in the step (P3).
 - **The drain.** At the drain point, π → √(1 − α_eff) π and ΔK = α_eff ½H_E²π² e^{4N}, then a new
@@ -203,7 +205,8 @@ small oscillations, 03 stops and asks.
 - **The record.** `IntegrationResult` gains a list of `Injection` records (P4). `reflections` keeps
   its meaning: elastic floor-rule events only.
 - **The parameter.** α enters `integrate_history` and `tune_history` as a parameter, default 0.0. In
-  02, α_eff = α at every turning point; 03 adds the weights.
+  02, α_eff = α at every wall-side turning point and floor-rule reflection; 03 adds the weights.
+  Plateau turnarounds are counted and never drain.
 - **Measured:** the number of turning points and drain points, and the cost in steps and restarts,
   for β ∈ {1.2, 2, 5, 25} at α = 0.1.
 - **Tests:** H continuous across each injection; Σ ΔK equals the ledger; α = 0 bitwise; a
@@ -214,7 +217,9 @@ small oscillations, 03 stops and asks.
 **03 — the gate and the stopping rule.**
 - **First, measure.** On the histories of 02, measure 𝒜_k = max |ṁ_eff|/m_eff² over the
   half-oscillation that ends at turning point k, for wall bounces and small oscillations. Then fix
-  the gate of U4 and its constant 𝒜₀ (P6), or stop and ask.
+  the gate of U4 (b′), w_gate = 𝒜_k²/(𝒜_k² + 𝒜₀²), and its constant 𝒜₀ (P6), or stop and ask.
+- **The plateau diagnostic** (U4 (b′)): 𝒜_k and m_eff/H at each plateau turnaround, recorded on
+  the history and reported in 07, never drained.
 - **The stopping rule of U5.** S_k = Σ Δρ/ρ_R over the injections in the trailing e-fold of N_E,
   the candidate included. Its weight is w_rate = 1/(1 + (ε/S_k)²) with ε = 10⁻⁴, so it re-arms by
   construction. The effective fraction is α_eff = α · w_gate · w_rate.
@@ -349,10 +354,11 @@ The log template is `dk-and-rpk-migration` README §5.1's.
 **Ruled by the user, 2026-10-27:** U2 "agree"; U3 "agree"; U5 "use your version"; U1, U6–U8
 "accept as proposed. Leave out SM exchange." P1–P16 were not overruled and stand.
 
-**U4 is open.** The user, on the proposal below: "the turnaround on the plateau is surely very
+**U4 ruled (b′).** The user, on the proposal below: "the turnaround on the plateau is surely very
 gentle, and I am not sure we have studied particle production there. What are you proposing
 here?" The briefing notes estimate production at the wall only. The planner withdrew
-"both directions" the same day and proposes (b′) instead, which awaits the user's ruling:
+"both directions" the same day and proposed (b′) instead, which the user ruled: "Yes, (b') for
+U4."
 - **drain at wall-side turning points only**, where π changes from − to + (the field turned back
   by the potential), and at every floor-rule reflection, which is wall-side by construction,
   weighted by the non-adiabaticity gate w_gate = 𝒜_k²/(𝒜_k² + 𝒜₀²), with 𝒜₀ fixed by 03's
@@ -362,7 +368,7 @@ here?" The briefing notes estimate production at the wall only. The planner with
   below H, where a quantum is not defined. 03 records 𝒜_k and m_eff/H at each plateau
   turnaround as a diagnostic, so that the question can be answered from the data later.
 
-The table below is the proposal as first written.
+The table below is the proposal as first written; its U4 row is superseded by (b′).
 
 | | Proposed | Alternatives |
 |---|---|---|
