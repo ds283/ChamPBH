@@ -130,6 +130,14 @@ byte-identical through this campaign (README §5).
   moves to the new pin when it is released ("we want to pass this upstream"; the user first named
   DatastoreKit, and confirmed RayPoolKit, whose code it is). No ChamPBH code changes for it. The
   report is not yet filed.
+- **Reported (2026-10-27)** to RayPoolKit at the user's word ("add the issue directly to RayPoolKit
+  and commit it there"), as `[00-a-pass-blocks-until-process-batch-size-tasks-complete]` on a new
+  board with no prompts, `prompts/client-reports/` (RayPoolKit `cf77234`, on its `main`, not
+  pushed). Reading the package for the report showed the wait is its **documented** behaviour:
+  `process_batch_size` is "how many completed tasks one pass asks `ray.wait` for and handles"
+  (RayPoolKit `README.md:161`), default 1 (`raypoolkit/RayWorkPool.py:27`). ChamPBH's titled
+  queues pass 3 (`main.py:330`, `:581`, `:861`). The report proposes the bound semantics upstream;
+  a client-side alternative, `process_batch_size=1`, is in ChamPBH's hands.
 
 ### 3.1 Assigned to this campaign
 

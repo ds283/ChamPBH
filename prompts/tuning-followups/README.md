@@ -106,7 +106,7 @@ then only `--samples-log10-z`'s help (`abe8b24`) and records changed; RunDrivers
 **Out of scope:**
 - **RayPoolKit's wait.** Ruled upstream (`rrk-adoption` board, **Ruled** 2026-10-27). No ChamPBH
   code changes for it here; `main.py`'s `process_batch_size` is not touched. Filing the report is
-  the user's, or a step of its own at the user's word.
+  done (RayPoolKit `cf77234`, its `client-reports` board).
 - **The cap in the key**, which the user did not choose; `--tuning-max-integrations` stays out of it.
 - **What a build computes or stores.** No stored value, no column, no spec: `FINGERPRINT_FORMAT`
   and `VERSION_LABEL` do not move (P4). Every golden history and the golden fingerprint pass
@@ -124,7 +124,7 @@ then only `--samples-log10-z`'s help (`abe8b24`) and records changed; RunDrivers
 | 01 | `01-retry-failed-scalar.md` | `--retry-failed-scalar`; `missing_models` with `retry_failed`; the second pass with `failure=False`; the ordered lookup in `sqla_ScalarHistoryFactory.build`; `bbn_from_store`'s query; the summary line; tests; notes | Opus |
 | 02 | `02-quiet-tune-lines.md` | the print rule in `tune_history` (120 s, 10 integrations, guard and reset steps), its constants and clock; the tools' choice; tests; notes; §4.17; `CLAUDE.md`'s counts | Sonnet |
 
-Written once the user has ruled U1–U4 and P1–P12. Each is dispatched with an orchestrator note.
+Written 2026-10-27, after the user ruled U1–U4. Each is dispatched with an orchestrator note.
 There is no close prompt (U4): 02 writes the handover addendum, and the orchestrator's review of 02,
 in its own commit, closes the campaign. 01 and 02 touch disjoint code but both touch the documents
 and the board, so they run in order.
@@ -169,10 +169,15 @@ The log template is `dk-and-rpk-migration` README §5.1's.
   key.
 - **R2 — the tune lines**: quiet, by the rule "120 s and 10 integrations", adjustable later;
   Ray's deduplication stays on.
-- **R3 — RayPoolKit's wait**: reported upstream to RayPoolKit; not this campaign's.
+- **R3 — RayPoolKit's wait**: reported upstream to RayPoolKit; not this campaign's. Filed the same
+  day, at the user's word, on RayPoolKit's `client-reports` board (`cf77234`).
 - **R4 — the shape**: a small campaign of its own.
 
 ### 6.1 For the user to rule (U1–U4)
+
+**Ruled by the user, 2026-10-27:** U1 "don't care. `tuning-followups` is fine"; U2 "yes, quiet by
+default. Keep one line per integration, initially" (the tools); U3 "I think we don't need a
+rehearsal"; U4 "OK". P1–P12 stand as proposed. Prompts 01 and 02 written the same day.
 
 | | Proposed | Alternatives |
 |---|---|---|

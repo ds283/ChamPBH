@@ -1,7 +1,8 @@
 # tuning-followups campaign — implementation state
 
-**Last updated:** 2026-10-27 · **Status: PLANNED — 0 of 2 prompts written; R1–R4 ruled by the user
-2026-10-27; U1–U4 and P1–P12 for the user to rule (README §6).**
+**Last updated:** 2026-10-27 · **Status: LIVE — 2 of 2 prompts written, 0 landed; R1–R4 and U1–U4
+ruled by the user 2026-10-27, P1–P12 standing as proposed (README §6). Next: the orchestrator note
+for 01.**
 The plan is [`README.md`](README.md), written on 2026-10-27 on branch `tuning-followups`, cut from
 `jordan-normalization` at `4ad15fe`.
 
@@ -28,13 +29,13 @@ The campaign carries out two of the user's rulings of 2026-10-27, before the sci
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | Retry failed scalar histories | `--retry-failed-scalar`; the first and second passes; the ordered lookup; `bbn_from_store`; tests; notes | Opus | ⬜ | ⬜ | — | — |
-| 02 | Quiet tune lines | the print rule (120 s, 10 integrations, guard, reset); the tools; tests; notes; §4.17; `CLAUDE.md` | Sonnet | ⬜ | ⬜ | — | — |
+| 01 | [Retry failed scalar histories](01-retry-failed-scalar.md) | `--retry-failed-scalar`; the first and second passes; the ordered lookup; `bbn_from_store`; tests; notes | Opus | ✍️ | ⬜ | — | — |
+| 02 | [Quiet tune lines](02-quiet-tune-lines.md) | the print rule (120 s, 10 integrations, guard, reset); the tools; tests; notes; §4.17; `CLAUDE.md` | Sonnet | ✍️ | ⬜ | — | — |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
 
-The prompts are written once the user has ruled U1–U4 and P1–P12. The review of 02 closes the
-campaign (README §2, U4).
+Written 2026-10-27, after the user ruled U1–U4. The review of 02 closes the campaign (README §2,
+U4).
 
 ### 1.1 Items
 
@@ -89,3 +90,17 @@ Asked by the user on 2026-10-27, after `jordan-normalization` closed (10 landed 
 
 No issue opened; two assigned (§3.1). `.documents/OPEN_ISSUES.md`: 25 open, two of them now in
 §1.17.
+
+### 5.1 Rulings and prompts (2026-10-27)
+
+The user ruled U1–U4 the same day: U1 "don't care. `tuning-followups` is fine"; U2 "yes, quiet by
+default. Keep one line per integration, initially" (the three standalone tools pass
+`progress="every"`); U3 "I think we don't need a rehearsal"; U4 "OK" (two prompts, the review of 02
+closes). P1–P12 stand. Prompts 01 and 02 written.
+
+R3 was carried out at the user's word ("If you can add the issue directly to RayPoolKit and commit
+it there"): RayPoolKit `cf77234`, a board with no prompts, `client-reports`, holding
+`[00-a-pass-blocks-until-process-batch-size-tasks-complete]`. The package documents the wait as
+its behaviour, with a default of 1 (RayPoolKit `README.md:161`); ChamPBH passes 3 to its three
+titled queues (`main.py:330`, `:581`, `:861`). Changing ChamPBH's `process_batch_size` is not in
+this campaign; it is recorded on `rrk-adoption`'s board for the user.

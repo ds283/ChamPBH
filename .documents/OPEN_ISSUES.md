@@ -240,8 +240,9 @@ user ruled it on 2026-10-27 (report it upstream to RayPoolKit).
 
 - `[04-the-pool-waits-for-every-in-flight-item-when-fewer-than-three]` — RayWorkPool's
   `ray.wait(num_returns=min(3, in flight))` holds a stored history's validation behind the slowest
-  item in flight, so an interruption can discard completed work; ruled 2026-10-27: to be
-  reported upstream to RayPoolKit (not yet filed), and ChamPBH moves to the new pin.
+  item in flight, so an interruption can discard completed work; ruled 2026-10-27: reported
+  upstream to RayPoolKit (its `client-reports` board, `cf77234`), and ChamPBH moves to the new pin;
+  documented behaviour there, and `process_batch_size=1` would avoid it here.
 
 ### 1.15 Assigned to `jordan-normalization` — [its board](../prompts/jordan-normalization/IMPLEMENTATION_STATE.md) §3.1
 
