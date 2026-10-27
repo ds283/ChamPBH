@@ -31,7 +31,9 @@ prompt 03 closed three of them, leaving four, and opened one, 2026-10-22; prompt
 them, leaving three, 2026-10-25; prompt 07 closed two of them, leaving one, and narrowed one of
 its own, 2026-10-26; prompt 08 closed the last of them and opened one, and the orchestrator's
 review of prompt 08 opened two, 2026-10-26; prompt 09 opened one, 2026-10-26; prompt 10 opened and closed
-none, and the campaign closed 2026-10-26, 10 of 10 prompts landed, with these six open).
+none, and the campaign closed 2026-10-26, 10 of 10 prompts landed, with these six open; two of them
+were assigned to `tuning-followups` on 2026-10-27, §1.17); none on the `tuning-followups` board
+(planned 2026-10-27, with none opened and two assigned from `jordan-normalization`).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -53,7 +55,8 @@ the two disagree, the board is right.
 [`read-only-plots`](../prompts/read-only-plots/IMPLEMENTATION_STATE.md) ·
 [`surfing-temperature`](../prompts/surfing-temperature/IMPLEMENTATION_STATE.md) ·
 [`rrk-adoption`](../prompts/rrk-adoption/IMPLEMENTATION_STATE.md) ·
-[`jordan-normalization`](../prompts/jordan-normalization/IMPLEMENTATION_STATE.md)
+[`jordan-normalization`](../prompts/jordan-normalization/IMPLEMENTATION_STATE.md) ·
+[`tuning-followups`](../prompts/tuning-followups/IMPLEMENTATION_STATE.md)
 
 ## 1. Open, by owning board
 
@@ -254,7 +257,8 @@ none of them left.
 Planned 2026-10-20. One opened by prompt 02, 2026-10-21, and narrowed by prompt 07, 2026-10-26;
 one by prompt 03, 2026-10-22; one by prompt 08 and two by the orchestrator's review of it,
 2026-10-26; one by prompt 09, 2026-10-26. The campaign closed on 2026-10-26 with these six open; prompt 10
-opened and closed none.
+opened and closed none. Two of the six were assigned to `tuning-followups` on 2026-10-27 and are
+listed in §1.17; four remain here.
 
 - `[02-the-scalar-history-parent-is-still-called-model]` — the payload key `model_proxy`, the
   attribute `_model_proxy` and locals still call a scalar history `model`, now that `model` is the
@@ -263,10 +267,6 @@ opened and closed none.
 - `[03-scalar-history-functions-splines-z-but-evaluates-ln-one-plus-z]` — `ScalarHistory.functions`
   builds its splines on z but `ZSplineWrapper(log_z=True)` evaluates them at ln(1 + z), and z is
   `inf` past 709.8 e-folds; no caller today. *(`jordan-normalization`; prompt 03)*
-- `[08-a-history-that-did-not-converge-is-never-retried]` — a tuning failure is stored under a key
-  that holds no `--tuning-max-integrations`, and the scalar stage does not recompute a stored
-  failure, so a run with a larger cap recomputes nothing short of `--drop scalar-history`; a retry
-  flag or the cap in the key; ruled 2026-10-27: `--retry-failed-scalar`. *(`jordan-normalization`; prompt 08)*
 - `[08-the-wrappers-refusal-tests-run-the-real-wrapper-on-var-runs]` — `TestTheRefusalsBeforeBegin`
   runs the real wrapper on the real `var/runs`, so a refusal that breaks registers a real run and
   launches `main.py` to `ray.init` (it happened once in 08's breakage replay).
@@ -274,8 +274,19 @@ opened and closed none.
 - `[08-plot-surfing-histories-marks-the-window-edge-as-a-bounce]` — a β with no bounce in the
   analysis window would be drawn with a bounce at the window's edge; none at the default β.
   *(`jordan-normalization`; review of prompt 08)*
+
+### 1.17 Assigned to `tuning-followups` — [its board](../prompts/tuning-followups/IMPLEMENTATION_STATE.md) §3.1
+
+Planned 2026-10-27, from the user's rulings of that day. Two of `jordan-normalization`'s issues
+were assigned to it at planning; each stays on that board, which carries its **Ruled** and
+**Assigned** lines, and the prompt named deletes its row here.
+
+- `[08-a-history-that-did-not-converge-is-never-retried]` — a tuning failure is stored under a key
+  that holds no `--tuning-max-integrations`, and the scalar stage does not recompute a stored
+  failure, so a run with a larger cap recomputes nothing short of `--drop scalar-history`; a retry
+  flag or the cap in the key; ruled 2026-10-27: `--retry-failed-scalar`. *(`jordan-normalization`; prompt 08; for `tuning-followups` 01)*
 - `[09-ray-deduplicates-the-tune-lines-of-parallel-histories]` — Ray's log deduplication holds
   back tune lines of histories tuned in parallel (they differ only in words with digits), so the
   log loses some of P12's one line per integration; values and heartbeat unaffected; ruled
   2026-10-27: deduplication stays on, the tune lines become quiet (120 s, 10 integrations).
-  *(`jordan-normalization`; prompt 09)*
+  *(`jordan-normalization`; prompt 09; for `tuning-followups` 02)*

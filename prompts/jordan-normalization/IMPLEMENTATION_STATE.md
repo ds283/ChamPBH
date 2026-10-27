@@ -123,7 +123,8 @@ Prompt 02 opened one, prompt 03 one, prompt 08 one, the review of prompt 08 two 
 prompt 07 narrowed prompt 02's. Prompt 01
 closed one assigned issue, prompt 03 three, prompt 04 one, prompt 07 two and prompt 08 the last
 (§3.1, §4). Prompt 10 opened and closed none: **the campaign closed on 2026-10-26 with the six
-below open**, the index's §1.16 (`.documents/OPEN_ISSUES.md`).
+below open**, the index's §1.16 (`.documents/OPEN_ISSUES.md`). On 2026-10-27 the user ruled two of
+them, which were assigned to `tuning-followups` (index §1.17).
 
 ### `[02-the-scalar-history-parent-is-still-called-model]`
 
@@ -181,6 +182,9 @@ below open**, the index's §1.16 (`.documents/OPEN_ISSUES.md`).
   or the cap in the key. Not assigned.
 - **Ruled (2026-10-27) by the user:** a retry flag, `--retry-failed-scalar`, like
   `--retry-failed-bbn` ("I think we want `--retry-failed-scalar`"). The cap stays out of the key.
+- **Assigned (2026-10-27):** to `tuning-followups` prompt 01, a small campaign the user asked for
+  that day, which carries out this ruling before the science rebuild
+  ([its board](../tuning-followups/IMPLEMENTATION_STATE.md) §3.1).
 
 ### `[08-the-wrappers-refusal-tests-run-the-real-wrapper-on-var-runs]`
 
@@ -243,6 +247,9 @@ below open**, the index's §1.16 (`.documents/OPEN_ISSUES.md`).
   when at least 120 s have passed since its last one, on an unusual event, or from its 10th
   integration on ("I'd prefer the quieter design. 120s and 10 integrations seems reasonable to start
   with. We can adjust later if needed."). The stored `tuning_iterations` is the count to read.
+- **Assigned (2026-10-27):** to `tuning-followups` prompt 02, which makes the tune lines quiet and
+  closes this issue as superseded by the ruling
+  ([its board](../tuning-followups/IMPLEMENTATION_STATE.md) §3.1).
 
 ### 3.1 Assigned to this campaign
 
