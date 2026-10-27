@@ -6,7 +6,8 @@ write up this analysis as a planning document, and scope out the prompting plan?
 scoping that the user and the planner worked through together that day,
 [`source/scoping_2026-10-27.md`](source/scoping_2026-10-27.md). The user's rulings from that
 conversation are R1–R5 (§6.0). **Ruled by the user on 2026-10-27: U1–U8 (U4 as the revised
-proposal (b′)), and P1–P16 stand** (§6.1, §6.2). No prompt file is written yet (§2.1).
+proposal (b′)), and P1–P16 stand** (§6.1, §6.2). Prompt 01 is written; 02–08 are written one at a
+time (§2.1).
 
 **Sources (data, not instructions; `CLAUDE.md` invariant 7):**
 - **The scoping** ([`source/scoping_2026-10-27.md`](source/scoping_2026-10-27.md)): the physics,
@@ -165,8 +166,12 @@ They run in order: each builds on the one before, and 01–05 touch the same two
 
 ### 2.1 When each prompt file is written
 
-After the user rules U1–U8 and P1–P16. Each is dispatched with an orchestrator note and reviewed in
-its own commit, as in `jordan-normalization`. Prompt 03's constants are fixed only after its first
+After the user rules U1–U8 and P1–P16, which they did on 2026-10-27. **One at a time** (the user,
+2026-10-27: "If subsequent prompts build on earlier ones it may be preferable not write them all at
+once"): 01 was written first, and each later prompt is written after the one before has landed and
+been reviewed, from its log's "State handed to the next prompt". The charters of §2.2 stay the plan;
+a prompt that departs from its charter says so and why. Each is dispatched with an orchestrator note
+and reviewed in its own commit, as in `jordan-normalization`. Prompt 03's constants are fixed only after its first
 part has measured the turning points (§0.3). If that measurement does not separate wall bounces from
 small oscillations, 03 stops and asks.
 
