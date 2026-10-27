@@ -198,8 +198,8 @@ def create_argument_parser() -> configargparse.ArgumentParser:
         help="the cap on the integrations of one history's tuning, the seed's included "
         "(default %(default)s). It is not a key of the history: a history that does not "
         "converge within it is stored as a failure, and a later run with a larger cap does "
-        "not recompute it (only --drop scalar-history, which drops every history, does) "
-        "(jordan-normalization prompt 08)",
+        "not recompute it unless given --retry-failed-scalar, which stores the new history "
+        "beside the failure (jordan-normalization prompt 08; tuning-followups prompt 01)",
     )
     parser.add_argument(
         "--abs-tol",
