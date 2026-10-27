@@ -179,7 +179,8 @@ def create_argument_parser() -> configargparse.ArgumentParser:
         "--samples-log10-z",
         type=int,
         default=DEFAULT_SAMPLES_PER_LOG10_Z,
-        help="specify number of z-sample points per log10(z)",
+        help="specify number of sample points per decade of 1 + z (the axis is ln(1 + z) at "
+        "multiples of ln(10)/N)",
     )
     parser.add_argument(
         "--tuning-tolerance",
