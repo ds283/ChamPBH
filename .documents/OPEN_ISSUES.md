@@ -1,6 +1,6 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-26 · **25 open**: 4 on the `review-remediation` board (closed
+**Last updated:** 2026-10-27 · **25 open**: 4 on the `review-remediation` board (closed
 2026-09-30), none now assigned; 2 on the `production-readiness` board
 (closed 2026-09-30); 2 on the `run-integrity` board (closed 2026-09-30; one stale entry closed 2026-10-22, its fix having landed in `5740690`; `jordan-normalization` prompt 07 closed one, 2026-10-26); 7 on the
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`
@@ -232,13 +232,13 @@ prompt 08 closed it on 2026-10-26 (board §4).
 ### 1.14 `rrk-adoption` — [board §3](../prompts/rrk-adoption/IMPLEMENTATION_STATE.md)
 
 The campaign closed on 2026-10-20 with 5 of 5 prompts landed. One issue was opened, by the
-orchestrator's review of prompt 04 on 2026-10-20; it stays open on the board, unassigned, for the
-user to rule.
+orchestrator's review of prompt 04 on 2026-10-20; it stays open on the board, unassigned; the
+user ruled it on 2026-10-27 (report it upstream to RayPoolKit).
 
 - `[04-the-pool-waits-for-every-in-flight-item-when-fewer-than-three]` — RayWorkPool's
   `ray.wait(num_returns=min(3, in flight))` holds a stored history's validation behind the slowest
-  item in flight, so an interruption can discard completed work; RayPoolKit's, or `main.py`'s
-  batch size in a later campaign.
+  item in flight, so an interruption can discard completed work; ruled 2026-10-27: to be
+  reported upstream to RayPoolKit (not yet filed), and ChamPBH moves to the new pin.
 
 ### 1.15 Assigned to `jordan-normalization` — [its board](../prompts/jordan-normalization/IMPLEMENTATION_STATE.md) §3.1
 
@@ -266,7 +266,7 @@ opened and closed none.
 - `[08-a-history-that-did-not-converge-is-never-retried]` — a tuning failure is stored under a key
   that holds no `--tuning-max-integrations`, and the scalar stage does not recompute a stored
   failure, so a run with a larger cap recomputes nothing short of `--drop scalar-history`; a retry
-  flag or the cap in the key, for the user to rule. *(`jordan-normalization`; prompt 08)*
+  flag or the cap in the key; ruled 2026-10-27: `--retry-failed-scalar`. *(`jordan-normalization`; prompt 08)*
 - `[08-the-wrappers-refusal-tests-run-the-real-wrapper-on-var-runs]` — `TestTheRefusalsBeforeBegin`
   runs the real wrapper on the real `var/runs`, so a refusal that breaks registers a real run and
   launches `main.py` to `ray.init` (it happened once in 08's breakage replay).
@@ -276,5 +276,6 @@ opened and closed none.
   *(`jordan-normalization`; review of prompt 08)*
 - `[09-ray-deduplicates-the-tune-lines-of-parallel-histories]` — Ray's log deduplication holds
   back tune lines of histories tuned in parallel (they differ only in words with digits), so the
-  log loses some of P12's one line per integration; values and heartbeat unaffected.
+  log loses some of P12's one line per integration; values and heartbeat unaffected; ruled
+  2026-10-27: deduplication stays on, the tune lines become quiet (120 s, 10 integrations).
   *(`jordan-normalization`; prompt 09)*

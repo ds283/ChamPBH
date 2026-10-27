@@ -126,6 +126,10 @@ byte-identical through this campaign (README §5).
   `num_returns=1`, or a `timeout` on the wait), and ChamPBH moves to the new pin. Or a later
   campaign that may change `main.py` (`jordan-normalization`) sets its queues'
   `process_batch_size` with this in mind. Not assigned.
+- **Ruled (2026-10-27) by the user:** reported upstream to RayPoolKit as a defect, and ChamPBH
+  moves to the new pin when it is released ("we want to pass this upstream"; the user first named
+  DatastoreKit, and confirmed RayPoolKit, whose code it is). No ChamPBH code changes for it. The
+  report is not yet filed.
 
 ### 3.1 Assigned to this campaign
 

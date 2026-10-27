@@ -179,6 +179,8 @@ below open**, the index's §1.16 (`.documents/OPEN_ISSUES.md`).
   point measured (prompt 06's thirteen points: 3–12 integrations).
 - **Next step.** For the user to rule: a retry flag for the scalar stage like `--retry-failed-bbn`,
   or the cap in the key. Not assigned.
+- **Ruled (2026-10-27) by the user:** a retry flag, `--retry-failed-scalar`, like
+  `--retry-failed-bbn` ("I think we want `--retry-failed-scalar`"). The cap stays out of the key.
 
 ### `[08-the-wrappers-refusal-tests-run-the-real-wrapper-on-var-runs]`
 
@@ -236,6 +238,11 @@ below open**, the index's §1.16 (`.documents/OPEN_ISSUES.md`).
   drivers' or the cluster's environment, or a `RAY_DEDUP_LOGS_ALLOW_REGEX` matching `-- tune`), or
   record that the stored `tuning_iterations` is the count to read. For the user to rule. Not
   assigned.
+- **Ruled (2026-10-27) by the user:** Ray's deduplication stays on ("then the logs become crowded
+  with near-duplicate output"), and the tune lines become quiet instead: a history prints a line only
+  when at least 120 s have passed since its last one, on an unusual event, or from its 10th
+  integration on ("I'd prefer the quieter design. 120s and 10 integrations seems reasonable to start
+  with. We can adjust later if needed."). The stored `tuning_iterations` is the count to read.
 
 ### 3.1 Assigned to this campaign
 
