@@ -1,7 +1,9 @@
 # tuning-followups campaign — implementation state
 
-**Last updated:** 2026-10-27 · **Status: LIVE — 2 of 2 landed; 02 awaiting review, which closes the
-campaign.** 01 landed `8b2a29c` (reviewed `8f92987`); 02 landed in this commit. R1–R4 and U1–U4 ruled
+**Last updated:** 2026-10-27 · **Status: CLOSED 2026-10-27 — 2 of 2 landed and
+reviewed.** 01 landed `8b2a29c` (reviewed `8f92987`); 02 landed in `1103443` (reviewed in the
+commit that closes the campaign). One issue left open on this board (§3); none assigned. The merge
+into `main`, with `jordan-normalization`, is the user's (U1). R1–R4 and U1–U4 ruled
 by the user 2026-10-27, P1–P12 standing as proposed (README §6).
 The plan is [`README.md`](README.md), written on 2026-10-27 on branch `tuning-followups`, cut from
 `jordan-normalization` at `4ad15fe`.
@@ -30,7 +32,7 @@ The campaign carries out two of the user's rulings of 2026-10-27, before the sci
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
 | 01 | [Retry failed scalar histories](01-retry-failed-scalar.md) | `--retry-failed-scalar`; the first and second passes; the ordered lookup; `bbn_from_store`; tests; notes | Opus | ✍️ | ✅ | `8b2a29c` | [01](logs/01-retry-failed-scalar.md) |
-| 02 | [Quiet tune lines](02-quiet-tune-lines.md) | the print rule (120 s, 10 integrations, guard, reset); the tools; tests; notes; §4.17; `CLAUDE.md` | Sonnet | ✍️ | ✅ | this commit | [02](logs/02-quiet-tune-lines.md) |
+| 02 | [Quiet tune lines](02-quiet-tune-lines.md) | the print rule (120 s, 10 integrations, guard, reset); the tools; tests; notes; §4.17; `CLAUDE.md` | Sonnet | ✍️ | ✅ | `1103443` | [02](logs/02-quiet-tune-lines.md) |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
 
@@ -39,6 +41,7 @@ U4).
 
 Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 - [`orchestrator/prompt-01.md`](orchestrator/prompt-01.md) (`f0db26c`), used for 01.
+- [`orchestrator/prompt-02.md`](orchestrator/prompt-02.md) (`0eabc7a`), used for 02.
 
 ### 1.1 Items
 
@@ -84,13 +87,13 @@ board's §4, and deletes its row from `.documents/OPEN_ISSUES.md` §1.17.
 | Issue | Its board | Prompt | Why here |
 |---|---|---|---|
 | `[08-a-history-that-did-not-converge-is-never-retried]` | `jordan-normalization` | 01 — closed by 01 (`8b2a29c`) | R1: `--retry-failed-scalar` |
-| `[09-ray-deduplicates-the-tune-lines-of-parallel-histories]` | `jordan-normalization` | 02 — closed by 02 (this commit) | R2: quiet tune lines supersede it |
+| `[09-ray-deduplicates-the-tune-lines-of-parallel-histories]` | `jordan-normalization` | 02 — closed by 02 (`1103443`) | R2: quiet tune lines supersede it |
 
 ## 4. Resolved issues
 
 None of this board's own. The assigned `[08-a-history-that-did-not-converge-is-never-retried]` was
 closed by prompt 01 (`8b2a29c`) and `[09-ray-deduplicates-the-tune-lines-of-parallel-histories]`, as
-superseded by R2, by prompt 02 (this commit); each entry, with its **Resolved** line, is in
+superseded by R2, by prompt 02 (`1103443`); each entry, with its **Resolved** line, is in
 `jordan-normalization`'s §4, and each row is deleted from `.documents/OPEN_ISSUES.md` §1.17, which is
 now empty.
 
@@ -196,7 +199,7 @@ naming `--retry-failed-scalar`, with no issue opened.
 
 ### 5.3 After prompt 02 (2026-10-27)
 
-Prompt 02 landed in this commit, under orchestrator note 02 (twelve rulings), on top of `0eabc7a`; its
+Prompt 02 landed in `1103443`, under orchestrator note 02 (twelve rulings), on top of `0eabc7a`; its
 log is [`logs/02-quiet-tune-lines.md`](logs/02-quiet-tune-lines.md).
 - **What landed.** `tune_line_due` and the constants `TUNE_LINE_INTERVAL_S` (120 s),
   `TUNE_LINE_SLOW_INTEGRATIONS` (10) and `TUNE_LINE_PROGRESS` (Q1); `tune_history(…, progress="quiet",
@@ -216,3 +219,50 @@ log is [`logs/02-quiet-tune-lines.md`](logs/02-quiet-tune-lines.md).
   named tests fail. None committed.
 - **Issues.** Closed `[09-ray-deduplicates-the-tune-lines-of-parallel-histories]` as superseded by R2
   (`jordan-normalization` §4); opened none. The index goes 25 → 24 open, §1.17 empty.
+
+*Orchestrator review of prompt 02 (2026-10-27), which closes the campaign.* The note's nine checks,
+at `1103443`:
+1. **Scope.** The commit's 13 files are the note's list exactly; its parent is `0eabc7a`; the tree
+   clean; nothing pushed. No change under `config/`, `main.py`, `RunDrivers/`, `ObjectFactories/`,
+   `pipeline_selection.py`, `tools/tests/`, `golden_tuned_history.py` or the golden data.
+2. **The rule.** `tune_line_due` and the three constants are ruling 1's; the clock is called once
+   before the loop and once either side of each integration, `wall = end - start`, `now = end`, and
+   `last_line` moves only on a printed line; the line's f-string is `2c92d77`'s byte for byte; the
+   `!!` lines untouched; `progress` refused before the seed; `compute_scalar_history` unchanged.
+   B1 replayed: 11 failures (6 of (k), 5 of (m)); B2: 3; B3: 3.
+3. **The reset and the guard.** `TuningSecant.reset` is ruling 2's, the (b) tests unmodified; the
+   carry in `tune_history` is read after `step` and false on a guard round. B4: 2 failures; B4b: 1
+   ((m) guard); B5: 2 (both (l)); B6: 1 ((m) reset).
+4. **The default, and the gate end to end.** B7: 5 failures of (m). A probe of the orchestrator's
+   (session scratchpad, `probe_quiet.py`, not committed) at the golden point: through
+   `compute_scalar_history`'s undecorated function, with nothing new passed (`main.py`'s path short
+   of Ray), **no** tune line in 21.8 s; through `tune_history`'s default with a clock advancing 200 s
+   per call, five lines in today's form (`wall=200.0`, kinds seed, plain, secant ×3); both runs
+   bitwise the golden record. **The gate "Quiet" holds**, short of Ray (U3).
+5. **The tools.** Both calls pass `"every"` with the comment; `plot_surfing_histories.py` reaches
+   `tune_history` only through `surfing_scan.run_history`. `tools/tests/test_history_and_bbn.py` (a)
+   alone: OK, 22.4 s, five lines. Besides these, `tune_history` is called only by
+   `compute_scalar_history`, `golden_tuned_history.run_tuning` and `jordan-normalization`'s dated probe
+   `logs/06-probes/compare.py`, which would now run quiet; a record, left as written.
+6. **The changed tests.** Among the existing tests only (c)'s setUpClass, (d), (f), (g), (h) and the
+   module docstring changed, each as ruling 3 says and as the log lists; (d)'s bitwise assertions are
+   factored into a helper unchanged and run first.
+7. **Values.** (d), (e) and (n) pass bitwise, and the golden fingerprint and `golden_history_05` in
+   the suites below; (d) did not skip.
+8. **The records.** The log is in §5.1's form, every ruling classed; the three documents' diffs remove
+   no line; §4.17 carries Q5's content and ruling 4's two bounds; `CLAUDE.md`'s counts are the suites';
+   the index holds 24 rows, as its header says, §1.17 empty. Residue fixed in this review's commit:
+   "this commit" → `1103443` in the log (×8), on this board (×5), on `jordan-normalization`'s (×1), in
+   `prompts/INDEX.md` (×1) and in §4.17 (×1); the index's §1.17 paragraph, which read as if both
+   issues had been superseded by the quiet lines, and its header's "opened and closed none, and
+   closed", reworded. The commit message's "each shown to fail with its subject broken" holds for 13
+   of the 19 new tests (the agent's own report): `every`, the unknown-`progress` tests, (l)'s first
+   and (n) are regression guards no breakage targets. The message is not amended.
+9. **The suites** at `1103443`, serially: CosmologyModels 26, ComputeTargets 77 + 192, ObjectFactories
+   103, tools 115, RunDrivers 64, all passing (one-minute load 2–12), the agent's counts. `black
+   --check` on the four changed `.py` files: unchanged.
+
+**The campaign closes** with this review: 2 of 2 prompts landed and reviewed, both gates holding,
+both assigned issues closed, one opened (§3, index §1.18) and left for the user. Not done here: the
+merge of `tuning-followups` (which contains `jordan-normalization`) into `main` (U1), and the
+client-side `process_batch_size` alternative to RayPoolKit's wait (§4.17 point 3), both the user's.

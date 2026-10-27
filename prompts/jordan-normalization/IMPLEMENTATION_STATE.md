@@ -321,7 +321,7 @@ from `.documents/OPEN_ISSUES.md` §1.15.
 - **Assigned (2026-10-27):** to `tuning-followups` prompt 02, which makes the tune lines quiet and
   closes this issue as superseded by the ruling
   ([its board](../tuning-followups/IMPLEMENTATION_STATE.md) §3.1).
-- **Resolved (2026-10-27) by `tuning-followups` prompt 02** (this commit), as **superseded by
+- **Resolved (2026-10-27) by `tuning-followups` prompt 02** (`1103443`), as **superseded by
   `tuning-followups` R2**: the tune lines are now quiet (`tune_history`'s `progress="quiet"`, the default
   for `main.py`'s histories), so a history prints a line only after 120 s since its last, from its 10th
   integration, or on a guard or reset step. The lines that remain are few and spread out; Ray's

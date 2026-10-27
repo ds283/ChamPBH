@@ -34,8 +34,9 @@ review of prompt 08 opened two, 2026-10-26; prompt 09 opened one, 2026-10-26; pr
 none, and the campaign closed 2026-10-26, 10 of 10 prompts landed, with these six open; two of them
 were assigned to `tuning-followups` on 2026-10-27, §1.17, and its prompts 01 and 02 closed them,
 2026-10-27); 1 on the `tuning-followups` board (planned 2026-10-27, with none opened and two
-assigned from `jordan-normalization`; prompt 01 opened one, 2026-10-27, §1.18; prompt 02 opened and closed none, and closed the second
-assigned issue, 2026-10-27).
+assigned from `jordan-normalization`; prompt 01 opened one, 2026-10-27, §1.18; prompt 02 opened none
+and closed the second assigned issue, 2026-10-27; closed 2026-10-27, 2 of 2 prompts landed, with the
+one issue still open on its board).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -284,8 +285,8 @@ listed in §1.17; four remain here. `tuning-followups` prompts 01 and 02 closed 
 Planned 2026-10-27, from the user's rulings of that day. Two of `jordan-normalization`'s issues
 were assigned to it at planning; each stayed on that board, which carries its **Ruled** and
 **Assigned** lines. Prompt 01 closed `[08-a-history-that-did-not-converge-is-never-retried]` and
-prompt 02 closed `[09-ray-deduplicates-the-tune-lines-of-parallel-histories]`, both on 2026-10-27,
-as superseded by the user's ruling for quiet tune lines; none is left here.
+prompt 02 closed `[09-ray-deduplicates-the-tune-lines-of-parallel-histories]`, the second as
+superseded by the user's ruling for quiet tune lines, both on 2026-10-27; none is left here.
 
 ### 1.18 `tuning-followups` — [board §3](../prompts/tuning-followups/IMPLEMENTATION_STATE.md)
 

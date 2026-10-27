@@ -1,7 +1,7 @@
 # Log 02 — quiet tune lines
 
 **Subject:** Make the tune lines quiet for main.py's histories
-**Commit:** this commit, on branch `tuning-followups`, on top of `0eabc7a`
+**Commit:** `1103443`, on branch `tuning-followups`, on top of `0eabc7a`
 **Date:** 2026-10-27, by Claude Sonnet 5.5
 **Result:** **COMPLETE.** No stop.
 - Q1-Q6 shipped under orchestrator note 02, whose twelve rulings govern where they differ from the
@@ -112,7 +112,7 @@ campaign", between §4.16's last line and `## 5. Reproduce`, in §4.16's form: t
 supersedes by statement (§4.16 point 3's every-integration line and its heartbeat bullet; point 7's
 list of issues), and four points: `--retry-failed-scalar` and when to use it; the quiet lines;
 RayPoolKit's report (`cf77234`; `process_batch_size=1` not taken); the two bounds (130 s per tuning,
-430 s per run), read not measured. The commits named: `8b2a29c`, `8f92987`, `2c92d77`, and this commit.
+430 s per run), read not measured. The commits named: `8b2a29c`, `8f92987`, `2c92d77`, and `1103443`.
 Empty `-` diff, as above.
 
 ### Q6 - `CLAUDE.md`
@@ -124,7 +124,7 @@ false.
 ### The records
 - `jordan-normalization`'s board: `[09-ray-deduplicates-the-tune-lines-of-parallel-histories]` moved
   from §3 to §4 with a **Resolved** line ("superseded by `tuning-followups` R2"), naming this prompt
-  and this commit; §3's introduction says four remain.
+  and `1103443`; §3's introduction says four remain.
 - `.documents/OPEN_ISSUES.md`: the §1.17 row deleted and the heading left empty with a sentence; §1.16
   "leaving four open"; the header 25 -> 24, its sentences on `jordan-normalization` (5 -> 4) and
   `tuning-followups`; the date stays 2026-10-27. 24 rows counted.
@@ -193,7 +193,7 @@ baselines: load 6.58 (07:03); at the start of the after run: load 1.72 (07:18); 
 ## The deliberate-breakage record
 
 Each diff is saved under `var/tuning-followups-02/` (`B1.diff` ... `B7.diff`, `B4b.diff`), made against
-the tree before the commit; `git apply` replays them from this commit (`ScalarHistory.py`'s lines are
+the tree before the commit; `git apply` replays them from `1103443` (`ScalarHistory.py`'s lines are
 unchanged by the commit's own later edits: it was last edited before the breakages). Each was applied,
 run, reverted. The fast tests are `TestTheTuneLineRule`, `TestTheResetReport` and `TestTheWiring` (18
 tests, 0.1 s); no real tuning was run for B1-B6, since each named test is a millisecond one. None is
@@ -231,9 +231,9 @@ tunings.
 ## State handed to the next prompt
 
 There is no next prompt: the orchestrator's review of 02 closes the campaign (U4).
-- HEAD after this commit is this commit, on top of `0eabc7a`; branch `tuning-followups`; nothing
-  pushed. The tree was clean before the work and holds nothing but this commit's files after it.
-- Suites at this commit, serially: CosmologyModels 26, ComputeTargets 269 (77 + 192), ObjectFactories
+- HEAD after the commit is `1103443`, on top of `0eabc7a`; branch `tuning-followups`; nothing
+  pushed. The tree was clean before the work and holds nothing but `1103443`'s files after it.
+- Suites at `1103443`, serially: CosmologyModels 26, ComputeTargets 269 (77 + 192), ObjectFactories
   103, tools 115, RunDrivers 64, all passing.
 - The gate "Quiet" holds (board §2). `main.py`'s histories are quiet; the standalone tools print one
   line per integration. The heartbeat's bounds (130 s per tuning, 430 s per run) are read, not

@@ -2109,7 +2109,7 @@ order:
 
 - it added `--retry-failed-scalar` and ordered the `ScalarHistory` lookup as `BBNData`'s is (prompt 01,
   `8b2a29c`; reviewed `8f92987`; the option's help, `2c92d77`);
-- it made the tune lines quiet (prompt 02, this commit).
+- it made the tune lines quiet (prompt 02, `1103443`).
 
 Its board is [`prompts/tuning-followups/IMPLEMENTATION_STATE.md`](../prompts/tuning-followups/IMPLEMENTATION_STATE.md);
 its plan is its [`README.md`](../prompts/tuning-followups/README.md). The branch `tuning-followups` was
