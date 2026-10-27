@@ -2,8 +2,9 @@
 
 **Last updated:** 2026-10-27 · **Status: CLOSED 2026-10-27 — 2 of 2 landed and
 reviewed.** 01 landed `8b2a29c` (reviewed `8f92987`); 02 landed in `1103443` (reviewed in the
-commit that closes the campaign). One issue left open on this board (§3); none assigned. The merge
-into `main`, with `jordan-normalization`, is the user's (U1). R1–R4 and U1–U4 ruled
+commit that closes the campaign). One issue left open on this board (§3); none assigned. Merged
+into `main`, with `jordan-normalization`, and pushed 2026-10-27 at the user's request (U1; the note
+after §5.3). R1–R4 and U1–U4 ruled
 by the user 2026-10-27, P1–P12 standing as proposed (README §6).
 The plan is [`README.md`](README.md), written on 2026-10-27 on branch `tuning-followups`, cut from
 `jordan-normalization` at `4ad15fe`.
@@ -266,3 +267,10 @@ at `1103443`:
 both assigned issues closed, one opened (§3, index §1.18) and left for the user. Not done here: the
 merge of `tuning-followups` (which contains `jordan-normalization`) into `main` (U1), and the
 client-side `process_batch_size` alternative to RayPoolKit's wait (§4.17 point 3), both the user's.
+
+**Merged and pushed (2026-10-27).** At the user's request `main`, at `396526b` and an ancestor of
+this branch, fast-forwards to the commit that adds this paragraph, which brings `jordan-normalization`
+with it, and `main` is pushed to GitHub (`github/main` was `a144c83`, so the push carries
+`ray-sqla-align` too). The branches `tuning-followups` and `jordan-normalization`, never pushed and
+both contained in `main`, are deleted. The user does not want the client-side `process_batch_size=1`
+alternative for now (§4.17 point 3); RayPoolKit's report (`cf77234`) stays in RayPoolKit.

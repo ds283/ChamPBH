@@ -2,7 +2,7 @@
 
 **Last updated:** 2026-10-27 · **Status: CLOSED 2026-10-26 — 10 of 10 landed and reviewed (04 and 08
 each after one stop ruled by the orchestrator); R1–R14, U1–U5 and P1–P20 ruled by the user 2026-10-20
-(README §6); the merge into `main` is the user's (P15).**
+(README §6); merged into `main` with `tuning-followups` and pushed 2026-10-27 (P15).**
 The plan is [`README.md`](README.md), written on 2026-10-20 on branch `jordan-normalization`, cut
 from `main` at `ac187c8`.
 
@@ -1403,3 +1403,8 @@ pass.
 - **For the user:** the merge into `main` and the push (P15); the rebuild from §4.16; the reference
   store; and two housekeeping items offered, `--samples-log10-z`'s help and the `ray-sqla-align` row
   of `prompts/INDEX.md`.
+
+**Merged and pushed (2026-10-27).** At the user's request this branch reached `main` inside
+`tuning-followups`, which was cut from it at `4ad15fe`: `main` fast-forwarded to that campaign's
+closing record and was pushed to GitHub (`tuning-followups` board, the note after §5.3). The branch
+`jordan-normalization`, never pushed, is deleted.
