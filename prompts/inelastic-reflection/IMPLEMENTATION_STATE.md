@@ -3,7 +3,8 @@
 **Last updated:** 2026-10-28 · **Status: LIVE — 01 landed in `85661b5` and reviewed (2026-10-28;
 gate DR holds); 02 landed in `fe2a944` and reviewed (2026-10-28; gate Inject holds), after one
 stop and the user's ruling of interior sampling; 3 of 8 prompts written: 03 written 2026-10-28
-from log 02 §8, after the user ruled 𝒜₀ = 1 (README §6.1), ready to dispatch.
+from log 02 §8, after the user ruled 𝒜₀ = 1 (README §6.1); 03 landed in this commit (2026-10-28;
+gate Taper holds, as restated when the user withdrew the stopping rule mid-prompt, note 03 ruling 16).
 R1–R5 ruled by the user 2026-10-27; U1–U8 ruled the same
 day (U4 as the revised proposal (b′): wall-side turning points only) and P1–P16 stand. The prompts
 are written one at a time, each after the one before has landed and been reviewed (README §2.1).**
@@ -36,7 +37,7 @@ bitwise the old code's.
 |---|---|---|---|---|---|---|---|
 | 01 | [Dark-radiation component](01-dark-radiation-component.md) | the ledger; ρ_χ in V/3H²M_P², Ḣ/H², E, `HubblePolicy`, V_target; K = 0 bitwise | Opus | ✍️ 2026-10-27 | ✅ 2026-10-28 | `85661b5` | [01](logs/01-dark-radiation-component.md) |
 | 02 | [Injection at turning points](02-injection-at-turning-points.md) | turning points in the step loop; the drain at the KE maximum; the restart; the floor-rule drain; the record; α in `integrate_history`/`tune_history` | Opus | ✍️ 2026-10-28 | ✅ 2026-10-28 | `fe2a944` | [02](logs/02-injection-at-turning-points.md) |
-| 03 | [Gate and stopping rule](03-gate-and-stopping-rule.md) | 𝒜_k measured, then the gate at wall-side turning points (U4 (b′), 𝒜₀ = 1); the plateau diagnostic; the tapered stopping rule (U5, P17); the residual's continuity | Opus | ✍️ 2026-10-28 | ⬜ | — | — |
+| 03 | [Gate and stopping rule](03-gate-and-stopping-rule.md) | 𝒜_k measured, then the gate at wall-side turning points (U4 (b′), 𝒜₀ = 1); the plateau diagnostic; ~~the tapered stopping rule (U5, P17)~~ withdrawn by the user (ruling 16); the residual's continuity | Opus | ✍️ 2026-10-28 | ✅ 2026-10-28 | this commit | [03](logs/03-gate-and-stopping-rule.md) |
 | 04 | Relativistic margin | generation momenta; m_eff on the trajectory; the margin to today; the warning | Opus | ⬜ | ⬜ | — | — |
 | 05 | Store | α as a key (U3); per-sample ρ_χ/ρ_R; whole-history columns; `AdiabaticHistory`; format 6, 2026.8.0 | Opus | ⬜ | ⬜ | — | — |
 | 06 | Driver and readers | `--alpha-values`; `main.py`; plot matching; the wrapper's scope; the inventory; the tool; the figures (U8) | Sonnet | ⬜ | ⬜ | — | — |
@@ -60,7 +61,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 |---|---|---|---|
 | DR | at K = 0 both golden histories bitwise; with an initial ρ_χ constraint and continuity agree, the radiation limit holds, a tuned history meets both conditions | 01 | ✅ 2026-10-28 (log 01 §4) |
 | Inject | at α = 0 both golden histories bitwise; at α > 0 H_E continuous across every injection, ledger = Σ drains; a floor-rule drain exact | 02 | ✅ 2026-10-28 (log 02 §1.2, §4, §6) |
-| Taper | weights equal hand values; the tuning residual continuous across a threshold; the omitted fraction within its bound | 03 | ⬜ |
+| Taper | weights equal hand values; the tuning residual continuous across a threshold; the omitted fraction within its bound. *Since ruling 16 (2026-10-28, the stopping rule withdrawn): w_gate equals its hand values, and the residual is continuous across a threshold* | 03 | ✅ 2026-10-28, as restated (log 03 §4, §5.3) |
 | Margin | the margin equals a hand computation; reported on real histories; below ln 10 warns | 04 | ⬜ |
 | Store | key and columns round-trip; two α are distinct rows; the new golden fingerprint; `AdiabaticHistory` bitwise at α = 0 | 05 | ⬜ |
 | Driver | α reaches every stage; an unstored α exits 2 in the plots; scope and inventory name α | 06 | ⬜ |
@@ -352,3 +353,47 @@ The detection's cost at α = 0 (+11% on the golden history, about 20 µs per acc
 every history `main.py` builds. It is recorded in log 02 §7, and is by the prompt's design.
 `CLAUDE.md`'s counts (269; 77 + 192) are stale. They are 08's to update; 03's baselines are
 26 / 305 (96 + 209) / 103 / 115 / 64.
+
+### 5.3 After prompt 03 (2026-10-28)
+
+03 landed in this commit, under orchestrator note 03 (rulings 1–15) and ruling 16, the user's,
+which arrived while the agent worked. Log:
+[`logs/03-gate-and-stopping-rule.md`](logs/03-gate-and-stopping-rule.md).
+- **Ruling 16: the stopping rule withdrawn.** The user, after asking how w_rate prevents a restart:
+  "I'd drop `w_rate`". w_rate is never zero, so it never saved a restart, its one stated benefit,
+  and only withheld up to (π/2)ε per e-fold of energy. So α_eff = α · w_gate; ε, the window, S, the
+  omitted part and P17 are not in the code; prompt items 4–6 and breakages B2, B3, B4 and B7 were
+  dropped. The agent had written the stopping rule and removed it. The gate "Taper" now holds when
+  w_gate equals its hand values and the tuning residual is continuous across a threshold.
+- **What shipped** (`ComputeTargets/ScalarHistory.py`):
+  - `log_m_eff_squared` (ln m_eff², m_eff² = V″ + [(ln A)″ + (ln A)′²] ρ_R,E(Σ + f_m); 04 reuses it),
+    `step_nonadiabaticity` and `gate_weight`, module-level; `NONADIABATICITY_SCALE = 1.0`.
+  - At α > 0 only: ln m_eff² and H_E at the ten samples of every appended step (10 policy calls, no
+    RHS), 𝒜 = H_E|d ln m_eff²/dN|/2m_eff, its maximum over each half-oscillation (N_{k−1}, N_k];
+    every drain point and floor reflection a candidate at α_eff = α · w_gate(𝒜_k).
+  - `TurningPoint` gains `nonadiabaticity` and `m_eff_over_H`; `Injection` (one per candidate)
+    `nonadiabaticity` and `w_gate`; `IntegrationResult` `dropped_drains`, and the payload
+    `"dropped_drains"`. Nothing is stored.
+  - At α = 0 nothing of it runs; the golden histories are bitwise and their time did not move.
+- **Gate Taper holds, as restated.**
+  - w_gate is within 2 ε of exact rationals at 𝒜 = 0, 10⁻³, 1, 10, 10³, 10²⁰⁰.
+  - The residual scans at α = 0.1 deviate from a cubic by 0.039 (β = 2) and 1.2e-3 (β = 5) of the
+    tolerance, against 0.052 and 1.8e-3 at α = 0. The ±10⁻³ scans crossed no gated count change. The
+    agent searched: none at β = 2 in 13 integrations (to ±3% in residual_H); at β = 5 one, 173 → 172
+    wall-side points, and the scan across it deviates by 2.0e-3 with no resolved jump.
+- **𝒜_k against an independent reference** (33 points per step, its own mass expression):
+  |Δw_gate| ≤ 1.5e-3 at every turning point of β = 2, α = 0.1 (tolerance 0.05); 𝒜_k within 3%.
+- **Measured** at M = 0.5 M_P, α = 0.1: 𝒜_k at wall-side points falls from 10²–10³ to 10⁻³–10⁻⁵;
+  candidates 7, 28, 155 and 296 for β = 1.2, 2, 5, 25, all drained, none dropped; Σ Δρ/ρ_R and r_χ
+  within 5% of 02's (the early bounces carry the energy); the floor harness's w_gate is 0.80.
+- **The near-stall pair** at β = 5 is gone under the gate. Item 11 of `test_injection.py` was
+  rebuilt on β = 10, α = 0.1 (step 9333, T_J ≈ 36 MeV), found in the 7th integration of a search;
+  B9 still fails it.
+- **Tuning** at α = 0.1 converges: β = 2 in 11 integrations, β = 5 in 20 (three guards).
+- **Cost at α = 0.1**: about 180 µs per accepted step, 1.37–1.89 × the dispatch commit's time; it
+  does not double, so H_E is computed at every sample.
+- **Breakages:** B1, B5, B6, B8, B9 and B10, each failing a named test. B10 failed item 3 only after
+  the agent added an m_eff/H_E check to it (D3).
+- **Counts:** 26 / 305 (96 + 209) / 103 / 115 / 64 before; 26 / **317** (96 + 221) / 103 / 115 / 64
+  after, all passing.
+- **Issues:** none opened, none closed.

@@ -34,7 +34,11 @@ Radau from the drained state. The items are those of prompt §1.5:
   (10) the payload at alpha = 0.1 pickles;
   (11) a plateau and wall-side pair inside one step is found by the interior sampling of pi
        (orchestrator note 02, ruling 15), and no step shows more sign changes at 17 points than
-       the loop recorded on it.
+       the loop recorded on it. Since inelastic-reflection prompt 03 gated the drains, the history
+       is beta = 10 (log 03 §2).
+
+Since prompt 03 a drain's fraction is alpha_eff = alpha * w_gate, not alpha: items (2), (5) and (8)
+check alpha_eff (log 03 §2 lists the edits).
 
 Items (2)-(7) and (10) share one history, integrated once in setUpClass: M = 0.5 M_P, n = 1,
 beta = 2, at the model's seed realization (untuned), phi* = 5 M_P, pi* = 0, T* = 2e4 GeV, to
@@ -322,14 +326,15 @@ class TestARealHistoryAtAlpha(unittest.TestCase):
         """
         Each wall-side turning point is followed by exactly one injection of kind "turning_point",
         before the next turning point (the history's last turning point, if wall-side, by at most
-        one); every injection follows a wall-side turning point, at alpha_eff = alpha.
+        one); every injection follows a wall-side turning point, at alpha_eff = alpha * w_gate
+        (inelastic-reflection prompt 03).
         """
         tps = self.result.turning_points
         injections = self.result.injections
         self.assertGreaterEqual(len(injections), 10)
         for i in injections:
             self.assertEqual(i.kind, "turning_point")
-            self.assertEqual(i.alpha_eff, ALPHA)
+            self.assertEqual(i.alpha_eff, ALPHA * i.w_gate)
 
         walls = {t.N: t for t in tps if t.kind == "wall"}
         for i in injections:
@@ -414,8 +419,8 @@ class TestARealHistoryAtAlpha(unittest.TestCase):
     def test_5_the_ledger_is_the_sum_of_the_drains(self):
         """
         ledger.injections equals [(N, delta_K)] exactly, the same floats; pi_after is
-        sqrt(1 - alpha) pi_before exactly, computed the same way; and each delta_K is
-        alpha H_before^2 pi_before^2 e^{4N}/2, computed here by products, to delta_K_bound.
+        sqrt(1 - alpha_eff) pi_before exactly, computed the same way; and each delta_K is
+        alpha_eff H_before^2 pi_before^2 e^{4N}/2, computed here by products, to delta_K_bound.
         Microseconds.
         """
         self.assertEqual(
@@ -423,9 +428,13 @@ class TestARealHistoryAtAlpha(unittest.TestCase):
             tuple((i.N, i.delta_K) for i in self.result.injections),
         )
         for i in self.result.injections:
-            self.assertEqual(i.pi_after, sqrt(1.0 - ALPHA) * i.pi_before)
+            self.assertEqual(i.pi_after, sqrt(1.0 - i.alpha_eff) * i.pi_before)
             direct = (
-                ALPHA * 0.5 * i.H_Einstein_before**2 * i.pi_before**2 * exp(4.0 * i.N)
+                i.alpha_eff
+                * 0.5
+                * i.H_Einstein_before**2
+                * i.pi_before**2
+                * exp(4.0 * i.N)
             )
             self.assertLessEqual(abs(i.delta_K / direct - 1.0), delta_K_bound(i), i)
 
@@ -490,16 +499,18 @@ class TestARealHistoryAtAlpha(unittest.TestCase):
 
 class TestTwoTurningPointsOnOneStep(unittest.TestCase):
     """
-    (11) The interior sampling of pi (orchestrator note 02, ruling 15). At M = 0.5 M_P, beta = 5,
-    alpha = 0.1 (the module's setup otherwise) the field nearly stalls at T_J ~ 0.7 MeV, and on
-    one accepted step pi dips from +1.9e-6 to -1.0e-6 and back to +1.2e-6: a plateau turnaround and
-    a wall-side turning point inside one step, with pi > 0 at both ends. Detection at the step ends
-    only (the breakage B9) misses both. One integration, about 3 s at a load of 25.
+    (11) The interior sampling of pi (orchestrator note 02, ruling 15). Prompt 02 found the pair at
+    M = 0.5 M_P, beta = 5, alpha = 0.1, at T_J ~ 0.7 MeV. Under prompt 03's gate that trajectory
+    holds none, and neither do beta = 3, 4, 6 and 8 at alpha = 0.1 nor beta = 5 at alpha = 0.05,
+    0.2 and 0.3 (log 03 §2). At beta = 10, alpha = 0.1 (the module's setup otherwise) the field
+    nearly stalls at T_J ~ 36 MeV, N ~ 63.853: one accepted step holds a plateau turnaround and a
+    wall-side turning point, with pi > 0 at both ends. Detection at the step ends only (the
+    breakage B9) misses both. One integration, about 8 s at a load of 13.
     """
 
     @classmethod
     def setUpClass(cls):
-        cls.data, cls.result, _ = integrate_captured(5.0, 0.5, ALPHA)
+        cls.data, cls.result, _ = integrate_captured(10.0, 0.5, ALPHA)
         cls.ts = list(cls.result.solution.ts)
         cls.interpolants = cls.result.solution.interpolants
 
@@ -614,15 +625,15 @@ class TestAFloorRuleDrain(unittest.TestCase):
         self.assertEqual(i.N_turn, reflection.N)
         self.assertEqual(i.phi_turn, reflection.phi_Einstein)
         self.assertEqual(i.pi_before, pi_in)
-        self.assertEqual(i.pi_after, -(sqrt(1.0 - ALPHA) * pi_in))
+        self.assertEqual(i.pi_after, -(sqrt(1.0 - i.alpha_eff) * pi_in))
         self.assertEqual(result.solution(i.N)[1], i.pi_after)
-        self.assertEqual(i.alpha_eff, ALPHA)
+        self.assertEqual(i.alpha_eff, ALPHA * i.w_gate)
 
         self.assertEqual(
             ledger.injections, tuple((x.N, x.delta_K) for x in result.injections)
         )
         self.assertEqual(ledger.injections[0], (i.N, i.delta_K))
-        direct = ALPHA * 0.5 * i.H_Einstein_before**2 * pi_in**2 * exp(4.0 * i.N)
+        direct = i.alpha_eff * 0.5 * i.H_Einstein_before**2 * pi_in**2 * exp(4.0 * i.N)
         self.assertLessEqual(abs(i.delta_K / direct - 1.0), delta_K_bound(i))
 
         bound, c = H_bound(i, policy, result.solution(i.N))

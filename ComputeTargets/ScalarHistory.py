@@ -15,7 +15,7 @@
 
 from bisect import bisect_left
 from collections import namedtuple
-from math import log, pi, exp, expm1, sqrt, isinf, isnan
+from math import log, pi, exp, expm1, sqrt, isinf, isnan, isfinite
 from time import perf_counter
 from typing import Optional, List, Dict, Any
 
@@ -85,6 +85,13 @@ FIXED_T_JORDAN_LOW_MEV = 0.07
 # unless they are closer than a ninth of it
 TURNING_POINT_INTERIOR_SAMPLES = 8
 
+# the gate (inelastic-reflection prompt 03; README §6.1 U4 (b'), §6.2 P6), applied at alpha > 0 only:
+# A_0 of w_gate = A_k^2/(A_k^2 + A_0^2), on the non-adiabaticity A_k = max |dm_eff/dt|/m_eff^2 over the
+# half-oscillation ending at the candidate. The user ruled A_0 = 1 on 2026-10-28 (README §6.1), the
+# physical threshold |m'|/m^2 = 1 below which production is adiabatically suppressed. There is no
+# stopping rule: the user withdrew w_rate the same day (orchestrator note 03, ruling 16)
+NONADIABATICITY_SCALE = 1.0
+
 # the stepper label returned by compute_scalar_history; main.py pre-registers it as
 # IntegrationSolver(label="Radau+kinematic-cap", stepping=0)
 SCALAR_HISTORY_STEPPER_LABEL = "Radau+kinematic-cap-stepping0"
@@ -146,6 +153,11 @@ Reflection = namedtuple(
 #   log_T_Jordan:  ln of the Jordan-frame temperature there, in the cosmology's units
 #   kind:          "wall" where pi goes from - to + (turned back by the potential), "plateau" where
 #                  it goes from + to - (turned back by the matter coupling)
+#   nonadiabaticity: A_k, the largest non-adiabaticity H_E |d ln m_eff^2/dN|/(2 m_eff) over the
+#                  samples of the half-oscillation that ends here (inelastic-reflection prompt 03);
+#                  None at alpha = 0
+#   m_eff_over_H:  m_eff/H_E at the turning point itself (prompt 03); None at alpha = 0. With
+#                  nonadiabaticity, the plateau diagnostic of README §6.1 U4 (b')
 TurningPoint = namedtuple(
     "TurningPoint",
     [
@@ -153,24 +165,33 @@ TurningPoint = namedtuple(
         "phi_Einstein",
         "log_T_Jordan",
         "kind",
+        "nonadiabaticity",
+        "m_eff_over_H",
     ],
 )
 
-# one drain of the condensate's kinetic energy into the dark-radiation ledger (inelastic-reflection
-# prompt 02; README §6.2 P4, the fields prompt 02 can fill)
+# one candidate for a drain of the condensate's kinetic energy into the dark-radiation ledger
+# (inelastic-reflection prompts 02 and 03; README §6.2 P4, the fields prompts 02 and 03 can fill).
+# At alpha > 0 every drain point and every floor reflection is one, alpha_eff = 0.0 included
+# (prompt 03); the ledger holds exactly those with alpha_eff > 0.0
 #   N:                       the drain point: the end of the accepted step at which the drain was
 #                            made, or the floor reflection's N
 #   kind:                    "turning_point" (after a wall-side TurningPoint) or "floor" (a
 #                            floor-rule reflection)
 #   N_turn:                  the turning point's N, or N for a floor event
 #   phi_turn:                phi at the turning point, or at the reflection
-#   pi_before, pi_after:     pi at the drain, before and after it
+#   pi_before, pi_after:     pi at the drain, before and after it; pi_after is pi_before (-pi_before
+#                            at a floor) when alpha_eff == 0.0
 #   log_rho_kin:             ln rho_kin,E = ln(H_E^2 pi_before^2/2) before the drain
-#   alpha_eff:               the fraction drained
-#   delta_K:                 the ledger's entry, alpha_eff rho_kin,E e^{4N}
-#   delta_rho_over_rho_rad:  alpha_eff rho_kin,E/rho_R,E
+#   alpha_eff:               the fraction drained, alpha * w_gate (prompt 03)
+#   delta_K:                 the ledger's entry, alpha_eff rho_kin,E e^{4N}; 0.0 if alpha_eff == 0.0
+#   delta_rho_over_rho_rad:  alpha_eff rho_kin,E/rho_R,E; 0.0 if alpha_eff == 0.0
 #   H_Einstein_before:       H_E from the state and the ledger before the drain
-#   H_Einstein_after:        H_E from the state and the ledger after it
+#   H_Einstein_after:        H_E from the state and the ledger after it (the same float as
+#                            H_Einstein_before when alpha_eff == 0.0)
+#   nonadiabaticity:         A_k of the half-oscillation that ends at the candidate: the wall-side
+#                            TurningPoint's, or the infall's up to a floor reflection (prompt 03)
+#   w_gate:                  A_k^2/(A_k^2 + NONADIABATICITY_SCALE^2) (gate_weight)
 Injection = namedtuple(
     "Injection",
     [
@@ -186,6 +207,8 @@ Injection = namedtuple(
         "delta_rho_over_rho_rad",
         "H_Einstein_before",
         "H_Einstein_after",
+        "nonadiabaticity",
+        "w_gate",
     ],
 )
 
@@ -203,7 +226,13 @@ Injection = namedtuple(
 #   turning_points:              list of TurningPoint, in order, at every alpha
 #                                (inelastic-reflection prompt 02)
 #   injections:                  list of Injection, in order; empty at alpha = 0
-#                                (inelastic-reflection prompt 02)
+#                                (inelastic-reflection prompt 02). At alpha > 0, one per candidate,
+#                                alpha_eff = 0.0 included (prompt 03)
+#   dropped_drains:              the drains armed by a wall-side TurningPoint that never reached a
+#                                drain point: dropped by a later turning point, a floor reflection
+#                                or the history's end (inelastic-reflection prompt 03). Counted at
+#                                every alpha, alpha = 0 included; at alpha > 0 it is the wall-side
+#                                turning points less the "turning_point" candidates
 IntegrationResult = namedtuple(
     "IntegrationResult",
     [
@@ -217,6 +246,7 @@ IntegrationResult = namedtuple(
         "max_wall_to_kinetic_ratio",
         "turning_points",
         "injections",
+        "dropped_drains",
     ],
 )
 
@@ -679,6 +709,121 @@ def _reflection_guards(
     return ratio
 
 
+# ---- the gate (inelastic-reflection prompt 03) ----
+#
+# Module-level, so that they can be tested on synthetic values without an integration, and so that
+# integrate_scalar_history, which calls each of them by its module name at call time, can be
+# intercepted by unittest.mock.patch (orchestrator note 03, ruling 1)
+
+
+def log_m_eff_squared(
+    model: RealizedModel,
+    phi_Einstein: float,
+    log_rhorad_Einstein: float,
+    log_fm: float,
+    Sigma: float,
+) -> float:
+    """
+    ln m_eff^2, the local mass of a chameleon quantum at one state (inelastic-reflection prompt 03
+    §1.1; log 03 §1.1 derives it):
+
+        m_eff^2 = V''(phi) + [(ln A)'' + (ln A)'^2] rho_R,E (Sigma + f_m),
+
+    the curvature of V_eff = V + A rho~_c at fixed rho~_c = rho_R,E (Sigma + f_m)/A, the Einstein-frame
+    trace that ODERHS couples to. V'' = V [(ln V)'' + (ln V)'^2]. It is not
+    AdiabaticComputePolicy.M2eff_over_H2, the perturbation's mass, which carries the source's response
+    and -(2 + Hdot/H^2).
+
+    It takes no cosmology and no N, so that a stored sample (phi, ln rho_R,E, ln f_m, Sigma) is
+    enough: inelastic-reflection prompt 04 calls it for m_ta. It returns the logarithm: the loop
+    needs ln m_eff^2 for d ln m_eff^2/dN, and each term is formed as a sign and the log of its
+    magnitude, ln V + ln|(ln V)'' + (ln V)'^2| and ln rho_R,E + ln|[...] (Sigma + f_m)|, summed
+    relative to the larger, so that neither V nor rho_R,E is exponentiated and nothing overflows.
+
+    A non-positive or non-finite m_eff^2 is a ComputationFailureError naming the state.
+    """
+
+    def failure(reason: str) -> ComputationFailureError:
+        return ComputationFailureError(
+            f"log_m_eff_squared: {reason} at phi_E = {phi_Einstein:.10g}, "
+            f"ln rho_R,E = {log_rhorad_Einstein:.10g}, ln f_m = {log_fm:.10g}, "
+            f"Sigma = {Sigma:.10g} ({model.name})"
+        )
+
+    d1_V: float = model.d_logV_dphi(phi_Einstein)
+    q_V: float = model.d2_logV_dphi2(phi_Einstein) + d1_V * d1_V
+
+    d1_A: float = model.d_logOmega_dphi(phi_Einstein)
+    q_A: float = model.d2_logOmega_dphi2(phi_Einstein) + d1_A * d1_A
+
+    try:
+        q_trace: float = q_A * (Sigma + exp(log_fm))
+    except OverflowError as e:
+        raise failure("overflow in f_m") from e
+
+    # (ln|term|, sign) of V'' and of the trace term; a term exactly 0.0 is left out
+    terms = []
+    if q_V != 0.0:
+        terms.append(
+            (model.log_V(phi_Einstein) + log(abs(q_V)), 1.0 if q_V > 0.0 else -1.0)
+        )
+    if q_trace != 0.0:
+        terms.append(
+            (log_rhorad_Einstein + log(abs(q_trace)), 1.0 if q_trace > 0.0 else -1.0)
+        )
+    if len(terms) == 0:
+        raise failure("m_eff^2 = 0")
+
+    L: float = max(t[0] for t in terms)
+    if not isfinite(L):
+        raise failure(f"a non-finite term of m_eff^2 (ln = {L!r})")
+    total: float = sum(sign * exp(t - L) for t, sign in terms)
+    if not (total > 0.0):
+        raise failure(f"m_eff^2 <= 0 (m_eff^2 = {total:.5g} e^{L:.10g})")
+
+    return L + log(total)
+
+
+def step_nonadiabaticity(
+    N_samples: np.ndarray, log_m2_samples: np.ndarray, H_samples: np.ndarray
+) -> np.ndarray:
+    """
+    The non-adiabaticity A = |dm_eff/dt|/m_eff^2 = H_E |d ln m_eff^2/dN|/(2 m_eff) at the samples of
+    one accepted step (inelastic-reflection prompt 03 §1.1), given their N, ln m_eff^2 and H_E.
+    d ln m_eff^2/dN is np.gradient over these samples, in N: nothing is differenced across a step
+    boundary (orchestrator note 03, ruling 3). A non-finite value is a ComputationFailureError
+    (ruling 8).
+    """
+    d_log_m2 = np.gradient(log_m2_samples, N_samples)
+    with np.errstate(over="ignore", invalid="ignore"):
+        A = 0.5 * H_samples * np.abs(d_log_m2) * np.exp(-0.5 * log_m2_samples)
+    if not np.isfinite(A).all():
+        raise ComputationFailureError(
+            f"step_nonadiabaticity: a non-finite non-adiabaticity on the step "
+            f"[{N_samples[0]:.10g}, {N_samples[-1]:.10g}]: {A!r}"
+        )
+    return A
+
+
+def gate_weight(nonadiabaticity: float) -> float:
+    """
+    The gate w_gate = A^2/(A^2 + A_0^2), A_0 = NONADIABATICITY_SCALE (inelastic-reflection prompt 03
+    §1.2). Above A_0 it is computed as 1/(1 + (A_0/A)^2), which overflows nowhere, so that it is
+    finite and in [0, 1] for every finite A >= 0 (orchestrator note 03, ruling 8). A negative or
+    non-finite A is a ComputationFailureError.
+    """
+    A: float = nonadiabaticity
+    if not (A >= 0.0 and isfinite(A)):
+        raise ComputationFailureError(
+            f"gate_weight: the non-adiabaticity must be finite and >= 0, not {A!r}"
+        )
+    A0: float = NONADIABATICITY_SCALE
+    if A > A0:
+        r: float = A0 / A
+        return 1.0 / (1.0 + r * r)
+    return (A * A) / (A * A + A0 * A0)
+
+
 def integrate_scalar_history(
     RHS,
     supervisor: ScalarFieldIntegrationSupervisor,
@@ -739,6 +884,23 @@ def integrate_scalar_history(
     nodes (OdeSolution with alt_segment=True), so at a drain node it returns the drained state,
     which the ledger's rule N_j <= N pairs with the new K.
 
+    The gate (inelastic-reflection prompt 03), at alpha > 0 only. Every drain point and every floor
+    reflection is a candidate, recorded as an Injection whatever its alpha_eff, and
+    alpha_eff = alpha * w_gate replaces alpha above:
+      - on every appended step, ln m_eff^2 (log_m_eff_squared) and H_E are computed at the ten
+        samples of pi, and the non-adiabaticity A = H_E |d ln m_eff^2/dN|/(2 m_eff)
+        (step_nonadiabaticity) is folded into a running maximum over the half-oscillation in
+        progress. A turning point or a floor reflection ends one, at its N, and its maximum is
+        that turning point's A_k (0.0 if it holds no sample); each TurningPoint records it with
+        m_eff/H_E at the turning point;
+      - w_gate = gate_weight(A_k), with A_k the wall-side turning point's for a drain point and
+        the infall's for a floor reflection. Plateau turnarounds never drain;
+      - a candidate with alpha_eff == 0.0 is recorded with no ledger entry, no change to pi and
+        no restart (a floor reflection's elastic restart stays).
+    None of this runs at alpha = 0: no mass, H_E or A is computed and no candidate is recorded,
+    and the TurningPoints' two new fields are None. dropped_drains counts the armed drains that
+    never reached a drain point, at every alpha.
+
     :param RHS: callable RHS(N, state, supervisor), normally an ODERHS
     :param supervisor: the ScalarFieldIntegrationSupervisor (already entered)
     :param initial_state: the state at N_start
@@ -750,8 +912,9 @@ def integrate_scalar_history(
     :param task_label: label used in failure messages
     :param N_stop: optional e-fold number at which to end the integration successfully
     :param alpha: the fraction of the condensate's kinetic energy drained at each drain point and
-                  floor reflection (inelastic-reflection prompt 02), 0 <= alpha < 1. At alpha > 0
-                  policy.dark_radiation receives the drains, and must be the ledger the RHS reads
+                  floor reflection (inelastic-reflection prompt 02), 0 <= alpha < 1, before the
+                  gate w_gate of prompt 03. At alpha > 0 policy.dark_radiation
+                  receives the drains, and must be the ledger the RHS reads
     :return: IntegrationResult
     """
     if not (0.0 <= alpha < 1.0):
@@ -825,37 +988,160 @@ def integrate_scalar_history(
     armed: Optional[TurningPoint] = None
 
     hubble = HubblePolicy(policy.model, policy.units)
+    model: RealizedModel = policy.model
 
-    def alpha_effective() -> float:
-        # the fraction drained at one drain point or floor reflection. In inelastic-reflection
-        # prompt 02 it is alpha at every one; this is the one place prompt 03 multiplies in its
-        # weights w_gate and w_rate
-        return alpha
+    # the gate (inelastic-reflection prompt 03), at alpha > 0 only (orchestrator note 03, ruling
+    # 1); neither of these is touched at alpha = 0
+    #   running_max: the largest non-adiabaticity over the samples of the half-oscillation in
+    #                progress, or None while it holds none (then A_k = 0.0; ruling 6)
+    #   boundary_N:  the N at which that half-oscillation began: N_start, a turning point or a floor
+    #                reflection. It holds the samples with boundary_N < N <= N_k (ruling 3)
+    running_max: Optional[float] = None
+    boundary_N: float = float(N_start)
+
+    # the drains armed by a wall-side turning point and dropped before their drain point
+    # (orchestrator note 03, ruling 7). Counted at every alpha, alpha = 0 included
+    dropped_drains = 0
 
     def H_Einstein_at(N_: float, y_: np.ndarray) -> float:
         state_ = StateVector._make(y_)
         return hubble(policy(N_, state_), state_).H_Einstein
 
+    def mass_and_H_at(N_: float, y_: np.ndarray):
+        """
+        (ln m_eff^2, H_E) at (N_, y_), from one policy call: Sigma from its ODEPolicyData, H_E from
+        HubblePolicy on the same data with the ledger as it stands (orchestrator note 03, rulings 2
+        and 5). Never through fun or the RHS, so nfev and the supervisor's records are untouched.
+        """
+        state_ = StateVector._make(y_)
+        data_ = policy(N_, state_)
+        H_: float = hubble(data_, state_).H_Einstein
+        log_m2_: float = log_m_eff_squared(
+            model,
+            state_.phi_Einstein,
+            state_.log_rhorad_Einstein,
+            state_.log_fm,
+            data_.Sigma,
+        )
+        return log_m2_, H_
+
+    def fold(N_samples: np.ndarray, A_samples: np.ndarray, upto: float) -> None:
+        """Fold the samples with boundary_N < N <= upto into the running maximum (ruling 3)."""
+        nonlocal running_max
+        for N_j, A_j in zip(N_samples, A_samples):
+            if boundary_N < N_j <= upto:
+                A_j = float(A_j)
+                running_max = A_j if running_max is None else max(running_max, A_j)
+
+    def close_half_oscillation(N_end: float) -> float:
+        """
+        End the half-oscillation in progress at N_end (a turning point or a floor reflection) and
+        return its A_k, 0.0 if it holds no sample (ruling 6); the next begins at N_end.
+        """
+        nonlocal running_max, boundary_N
+        A_k: float = 0.0 if running_max is None else running_max
+        running_max = None
+        boundary_N = float(N_end)
+        return A_k
+
+    def alpha_effective(nonadiabaticity: float):
+        """
+        The fraction drained at one candidate, alpha_eff = alpha * w_gate (inelastic-reflection
+        prompt 03; orchestrator note 03, ruling 4 as amended by ruling 16): the gate on the
+        half-oscillation's A_k. Returns (alpha_eff, w_gate). At alpha = 0 it returns 0.0 before the
+        weight is computed (ruling 1); the loop does not call it there.
+        """
+        if alpha == 0.0:
+            return 0.0, None
+
+        w_gate: float = gate_weight(nonadiabaticity)
+        alpha_eff: float = alpha * w_gate
+        return alpha_eff, w_gate
+
+    def candidate(
+        N_: float,
+        y_: np.ndarray,
+        nonadiabaticity: float,
+        kind: str,
+        N_turn: float,
+        phi_turn: float,
+        sign: float,
+    ) -> Optional[np.ndarray]:
+        """
+        One candidate at alpha > 0, a drain point or a floor reflection, in ruling 4's order, with
+        the state and the ledger before any change: H_E and ln rho_kin,E (prompt 02's
+        expressions); then alpha_effective; then, if alpha_eff > 0.0, prompt 02's drain, which
+        records it and returns the drained state. If alpha_eff == 0.0 the candidate is recorded
+        with pi_after = sign pi_before, delta_K = delta_rho/rho_R = 0.0 and H_after = H_before,
+        nothing is added to the ledger, and None is returned: the caller makes no restart beyond
+        what alpha = 0 makes there.
+        """
+        pi_before: float = float(y_[1])
+        H_before: float = H_Einstein_at(N_, y_)
+
+        # rho_kin,E = H_E^2 pi^2/2, in logs (prompt 02)
+        log_rho_kin: float = 2.0 * log(H_before) + 2.0 * log(abs(pi_before)) - LOG_2
+
+        alpha_eff, w_gate = alpha_effective(nonadiabaticity)
+        weights = dict(nonadiabaticity=float(nonadiabaticity), w_gate=w_gate)
+
+        if alpha_eff > 0.0:
+            return drain(
+                N_,
+                y_,
+                H_before,
+                log_rho_kin,
+                alpha_eff,
+                kind,
+                N_turn,
+                phi_turn,
+                sign,
+                weights,
+            )
+
+        injections.append(
+            Injection(
+                N=float(N_),
+                kind=kind,
+                N_turn=float(N_turn),
+                phi_turn=float(phi_turn),
+                pi_before=pi_before,
+                pi_after=sign * pi_before,
+                log_rho_kin=log_rho_kin,
+                alpha_eff=alpha_eff,
+                delta_K=0.0,
+                delta_rho_over_rho_rad=0.0,
+                H_Einstein_before=H_before,
+                H_Einstein_after=H_before,
+                **weights,
+            )
+        )
+        return None
+
     def drain(
         N_: float,
         y_: np.ndarray,
+        H_before: float,
+        log_rho_kin: float,
         alpha_eff: float,
         kind: str,
         N_turn: float,
         phi_turn: float,
         sign: float,
+        weights: dict,
     ) -> np.ndarray:
         """
         Drain alpha_eff of rho_kin,E at (N_, y_) into the ledger, and return the drained state, with
         pi -> sign sqrt(1 - alpha_eff) pi (sign = -1 for a floor reflection). The ledger is added
-        to here, before the caller builds the new Radau instance.
+        to here, before the caller builds the new Radau instance. H_before and ln rho_kin,E are the
+        candidate's, from the state and the ledger before the drain (inelastic-reflection prompt 03
+        moved their computation, unchanged, to candidate(), which records them when alpha_eff is
+        0.0 as well).
         """
         pi_before: float = float(y_[1])
-        H_before: float = H_Einstein_at(N_, y_)
 
-        # rho_kin,E = H_E^2 pi^2/2 and Delta K = alpha_eff rho_kin,E e^{4N}, in logs, so that no
-        # intermediate overflows or underflows
-        log_rho_kin: float = 2.0 * log(H_before) + 2.0 * log(abs(pi_before)) - LOG_2
+        # Delta K = alpha_eff rho_kin,E e^{4N}, in logs, so that no intermediate overflows or
+        # underflows
         log_alpha: float = log(alpha_eff)
         delta_K: float = exp(log_alpha + log_rho_kin + 4.0 * N_)
         delta_rho_over_rho_rad: float = exp(log_alpha + log_rho_kin - float(y_[2]))
@@ -880,6 +1166,7 @@ def integrate_scalar_history(
                 delta_rho_over_rho_rad=delta_rho_over_rho_rad,
                 H_Einstein_before=H_before,
                 H_Einstein_after=H_after,
+                **weights,
             )
         )
         return y_drained
@@ -899,23 +1186,57 @@ def integrate_scalar_history(
             on either side of it (within the step) differ, counted once; a touch is not one.
         "wall" where pi goes from - to +, "plateau" where it goes from + to -. Records and returns
         the list, possibly empty.
+
+        At alpha > 0 (inelastic-reflection prompt 03; orchestrator note 03, rulings 3 and 5) the
+        same ten samples are read as full states, and ln m_eff^2 and H_E are computed at each
+        (mass_and_H_at), before any drain at the step's end; step_nonadiabaticity gives A at each.
+        The samples are folded into the running maximum of the half-oscillation in progress: those
+        at or before a turning point found on the step into the half-oscillation that ends there,
+        whose A_k the TurningPoint records with m_eff/H_E at the turning point itself, and those
+        after it into the next.
         """
         k: int = len(interpolants) - 1
         interpolant_ = interpolants[k]
         t_low: float = ts[k]
         t_high: float = ts[k + 1]
 
-        pi_low: float = interpolant_(t_low)[1]
-        pi_high: float = interpolant_(t_high)[1]
+        y_low = interpolant_(t_low)
+        y_high = interpolant_(t_high)
+        pi_low: float = y_low[1]
+        pi_high: float = y_high[1]
         N_interior = np.linspace(t_low, t_high, TURNING_POINT_INTERIOR_SAMPLES + 2)[
             1:-1
         ]
-        pi_interior = interpolant_(N_interior)[1]
+        y_interior = interpolant_(N_interior)
+        pi_interior = y_interior[1]
+
+        # the non-adiabaticity at the step's ten samples (prompt 03), at alpha > 0 only
+        N_samples = None
+        A_samples = None
+        if alpha > 0.0:
+            n_samples: int = TURNING_POINT_INTERIOR_SAMPLES + 2
+            N_samples = np.empty(n_samples)
+            N_samples[0] = t_low
+            N_samples[1:-1] = N_interior
+            N_samples[-1] = t_high
+            log_m2_samples = np.empty(n_samples)
+            H_samples = np.empty(n_samples)
+            for j in range(n_samples):
+                if j == 0:
+                    y_j = y_low
+                elif j == n_samples - 1:
+                    y_j = y_high
+                else:
+                    y_j = y_interior[:, j - 1]
+                log_m2_samples[j], H_samples[j] = mass_and_H_at(N_samples[j], y_j)
+            A_samples = step_nonadiabaticity(N_samples, log_m2_samples, H_samples)
 
         # the common case, decided in numpy: every sample strictly of one sign, so no change
         if (pi_low > 0.0 and pi_high > 0.0 and (pi_interior > 0.0).all()) or (
             pi_low < 0.0 and pi_high < 0.0 and (pi_interior < 0.0).all()
         ):
+            if alpha > 0.0:
+                fold(N_samples, A_samples, float("inf"))
             return []
 
         Ns = [t_low] + [float(x) for x in N_interior] + [t_high]
@@ -970,14 +1291,25 @@ def integrate_scalar_history(
         found = []
         for N_turn, kind in roots:
             y_turn = interpolant_(N_turn)
+            A_k: Optional[float] = None
+            m_eff_over_H: Optional[float] = None
+            if alpha > 0.0:
+                fold(N_samples, A_samples, N_turn)
+                A_k = close_half_oscillation(N_turn)
+                log_m2_turn, H_turn = mass_and_H_at(N_turn, y_turn)
+                m_eff_over_H = exp(0.5 * log_m2_turn - log(H_turn))
             found.append(
                 TurningPoint(
                     N=float(N_turn),
                     phi_Einstein=float(y_turn[0]),
                     log_T_Jordan=float(y_turn[4]),
                     kind=kind,
+                    nonadiabaticity=A_k,
+                    m_eff_over_H=m_eff_over_H,
                 )
             )
+        if alpha > 0.0:
+            fold(N_samples, A_samples, float("inf"))
         turning_points.extend(found)
         return found
 
@@ -997,14 +1329,20 @@ def integrate_scalar_history(
             supervisor.notify_reflection(N)
 
             # a drain still armed is dropped: the field turned inwards before its drain point
+            if armed is not None:
+                dropped_drains += 1
             armed = None
 
-            alpha_eff: float = alpha_effective()
-            if alpha_eff == 0.0:
+            # at alpha > 0 the reflection is a candidate (prompt 03): it ends the half-oscillation
+            # of the infall, whose A_k gates it. If its alpha_eff is 0.0, or at alpha = 0, the
+            # restart is the elastic one
+            y_reflected: Optional[np.ndarray] = None
+            if alpha > 0.0:
+                A_k: float = close_half_oscillation(N)
+                y_reflected = candidate(N, solver.y, A_k, "floor", N, phi, -1.0)
+            if y_reflected is None:
                 y_reflected = solver.y.copy()
                 y_reflected[1] = -pi_
-            else:
-                y_reflected = drain(N, solver.y, alpha_eff, "floor", N, phi, -1.0)
             solver = new_solver(N, y_reflected)
             continue
 
@@ -1089,8 +1427,12 @@ def integrate_scalar_history(
                 N_final = brentq(crossing, N_low, N_high) if g_low > 0.0 else N_low
                 ts.append(N_final)
                 interpolants.append(interpolant)
-                # the step that ends the history is classified up to N_final, and never drains
-                observe_turning_points()
+                # the step that ends the history is classified up to N_final, and never drains: a
+                # wall-side turning point on it arms a drain that is dropped below (ruling 7)
+                for turning_point in observe_turning_points():
+                    if armed is not None:
+                        dropped_drains += 1
+                    armed = turning_point if turning_point.kind == "wall" else None
             final_state = StateVector._make(interpolant(N_final))
             break
 
@@ -1098,9 +1440,11 @@ def integrate_scalar_history(
         interpolants.append(interpolant)
 
         # turning points (inelastic-reflection prompt 02; orchestrator note 02, rulings 1, 3 and
-        # 15), in order along the step: a wall-side one arms a drain, and a plateau turnaround
-        # drops one still armed
+        # 15), in order along the step: a wall-side one arms a drain, and any turning point drops
+        # one still armed (counted; orchestrator note 03, ruling 7)
         for turning_point in observe_turning_points():
+            if armed is not None:
+                dropped_drains += 1
             armed = turning_point if turning_point.kind == "wall" else None
 
         if solver.status == "finished":
@@ -1116,20 +1460,26 @@ def integrate_scalar_history(
 
         # the drain point (README §6.2 P3; orchestrator note 02, ruling 2): the first accepted state
         # since the wall-side turning point with pi > 0 and pi' <= 0, read before any restart
+        # At alpha > 0 it is a candidate (prompt 03), gated on the wall-side turning point's A_k;
+        # at alpha = 0, or if its alpha_eff is 0.0, nothing is drained and no restart is made
         if armed is not None and solver.y[1] > 0.0 and solver.f[1] <= 0.0:
-            alpha_eff = alpha_effective()
-            if alpha_eff != 0.0:
-                y_drained = drain(
+            if alpha > 0.0:
+                y_drained = candidate(
                     solver.t,
                     solver.y,
-                    alpha_eff,
+                    armed.nonadiabaticity,
                     "turning_point",
                     armed.N,
                     armed.phi_Einstein,
                     1.0,
                 )
-                solver = new_solver(solver.t, y_drained)
+                if y_drained is not None:
+                    solver = new_solver(solver.t, y_drained)
             armed = None
+
+    # a drain still armed when the history ends is dropped (ruling 7)
+    if armed is not None:
+        dropped_drains += 1
 
     return IntegrationResult(
         # right-continuous at the nodes (inelastic-reflection prompt 02, §1.4): at a drain or a
@@ -1145,6 +1495,7 @@ def integrate_scalar_history(
         max_wall_to_kinetic_ratio=max_ratio,
         turning_points=turning_points,
         injections=injections,
+        dropped_drains=dropped_drains,
     )
 
 
@@ -1555,7 +1906,8 @@ def integrate_history(
     :return: the payload; on success it carries "dark_radiation", the history's
              DarkRadiationLedger (inelastic-reflection prompt 01), and "turning_points" and
              "injections", the IntegrationResult's lists of TurningPoint and Injection
-             (inelastic-reflection prompt 02). No store reads any of the three
+             (inelastic-reflection prompt 02), and "dropped_drains", its count of armed drains
+             that never reached a drain point (prompt 03). No store reads any of the four
     """
     if not (0.0 <= alpha < 1.0):
         raise ValueError(
@@ -1790,6 +2142,9 @@ def integrate_history(
         # "reflections" above stays the count of floor-rule events
         "turning_points": result.turning_points,
         "injections": result.injections,
+        # the armed drains that never reached a drain point (inelastic-reflection prompt 03); not
+        # stored either
+        "dropped_drains": result.dropped_drains,
     }
 
 

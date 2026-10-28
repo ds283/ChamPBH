@@ -1094,6 +1094,28 @@ SampleValues = namedtuple("SampleValues", [
 >   `ScalarHistory.store` and `build_extra_data` read named keys only, so nothing new is stored, and
 >   `"reflections"` stays the count of floor events. `first_bounce` is unchanged.
 
+> **Note, 2026-10-28 (`inelastic-reflection`, prompt 03): the gate's records and the payload key.**
+> At α > 0 each drain is weighted by the non-adiabaticity gate, α_eff = α · w_gate
+> (`numerical-strategies.md` §6.3). The prompt's stopping rule (w_rate) was withdrawn by the user
+> before it shipped.
+> - **Module-level functions** in `ComputeTargets/ScalarHistory.py`, called by the loop through
+>   their module names: `log_m_eff_squared` (ln m_eff² at one state, from the realized model and
+>   (φ_E, ln ρ_R,E, ln f_m, Σ); prompt 04 reuses it), `step_nonadiabaticity` and `gate_weight`. The
+>   constant is `NONADIABATICITY_SCALE = 1.0`.
+> - **`TurningPoint`** gains `nonadiabaticity` (𝒜_k of the half-oscillation that ends at it) and
+>   `m_eff_over_H` (at it), appended last; both `None` at α = 0.
+> - **`Injection`** is now one per **candidate** at α > 0 (every drain point and floor reflection),
+>   α_eff = 0.0 included, and gains `nonadiabaticity` and `w_gate`, appended last. `alpha_eff` is
+>   α · w_gate. The ledger holds exactly the records with α_eff > 0.0; a record with α_eff == 0.0
+>   has ΔK = Δρ/ρ_R = 0.0, π unchanged and H_after = H_before.
+> - **`IntegrationResult`** gains `dropped_drains`, appended last: the drains armed by a wall-side
+>   turning point that never reached a drain point (dropped by a later turning point, a floor
+>   reflection or the history's end). It is counted at every α; at α > 0 it is the wall-side
+>   turning points less the "turning_point" candidates.
+> - **The payload** gains `"dropped_drains"` beside `"injections"`. `ScalarHistory.store`,
+>   `build_extra_data`, `golden_history.record_of` and `TUNING_OUTPUT_KEYS` are unchanged, so
+>   nothing new is stored.
+
 ### 7.3 `AdiabaticHistory` (`ComputeTargets/AdiabaticHistory.py`)
 
 Computes the adiabatic perturbation parameter Q (which determines whether the chameleon field is adiabatically tracking its minimum). Requires a `ScalarHistoryProxy` as input.

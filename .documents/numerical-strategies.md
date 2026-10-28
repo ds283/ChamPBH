@@ -1209,6 +1209,45 @@ not by `compute_scalar_history`, so no stored history has α > 0. The record is
 - **The counts at M = 0.5 M_P** (untuned, to T_CMB, α = 0.1): 7, 27, 86 and 75 drains for
   β = 1.2, 2, 5 and 25. At α = 0 there are 9, 23, 141 and 353 wall-side turning points.
 
+### 6.3 Added 2026-10-28 (`inelastic-reflection` prompt 03): the non-adiabaticity gate
+
+Prompt 03 weights each drain of §6.2 by the non-adiabaticity of the bounce that precedes it. At
+α > 0 every drain point and every floor reflection is a **candidate**, drained at
+α_eff = α · w_gate. The prompt also specified a tapered stopping rule (w_rate, on the injection rate
+per e-fold); the user withdrew it the same day, before it shipped, because w_rate is never zero and
+so never saved the restart it was meant to save. Nothing of it is in the code. The record is
+`prompts/inelastic-reflection/logs/03-gate-and-stopping-rule.md`.
+
+- **The mass.** `log_m_eff_squared(model, φ_E, ln ρ_R,E, ln f_m, Σ)` returns ln m_eff², with
+  m_eff² = V″(φ) + [(ln A)″ + (ln A)′²] ρ_R,E (Σ + f_m), the curvature of V_eff = V + A ρ̃_c at
+  fixed ρ̃_c = ρ_R,E(Σ + f_m)/A: the Einstein-frame trace that `ODERHS` couples to. V″ is
+  V[(ln V)″ + (ln V)′²]. Each term is formed as a sign and a log magnitude and summed relative to the
+  larger, so nothing overflows. m_eff² ≤ 0 is a `ComputationFailureError`. It takes no cosmology
+  and no N, so a stored sample is enough (prompt 04 reuses it). It is not
+  `AdiabaticComputePolicy.M2eff_over_H2`, the perturbation's mass, which adds the source's
+  response, (ln A)′²ρ_R,E(Σ² − Σ − Σ_T/(1 + x)), and −(2 + Ḣ/H²)H².
+- **The non-adiabaticity.** On every appended step, at α > 0 only, the ten samples at which §6.2
+  reads π are read as full states. At each, one `ODEPolicy` call gives Σ, and `HubblePolicy` on the
+  same data gives H_E, with the ledger as it stands before any drain at the step's end. Then
+  𝒜 = H_E |d ln m_eff²/dN|/(2 m_eff), the derivative `np.gradient` over the step's own samples
+  (`step_nonadiabaticity`). These calls never go through the RHS, so `nfev` is unchanged.
+- **The half-oscillation.** A turning point of either kind, a floor reflection, or N_start begins
+  one. A sample belongs to the half-oscillation (N_{k−1}, N_k] that contains its N. 𝒜_k is the
+  largest 𝒜 over it (0.0 if it holds no sample; never seen at M = 0.5 M_P). Every `TurningPoint`
+  records 𝒜_k and m_eff/H_E at the turning point itself: the plateau diagnostic of U4 (b′).
+- **The gate.** w_gate = 𝒜_k²/(𝒜_k² + 𝒜₀²), with 𝒜₀ = `NONADIABATICITY_SCALE` = 1, the user's
+  ruling (the threshold |ṁ|/m² = 1). It is computed as 1/(1 + (𝒜₀/𝒜)²) above 𝒜₀, so it is finite
+  for every finite 𝒜 ≥ 0. A drain point takes the 𝒜_k of its wall-side turning point. A floor
+  reflection takes the infall's: there the wall is thinner than a step, so 𝒜_k is a lower bound.
+  Plateau turnarounds never drain.
+- **α_eff == 0.0** (only by underflow): the candidate is recorded with no ledger entry, no change
+  to π and no restart (the floor's elastic restart stays).
+- **At α = 0** nothing of this runs: no mass, H_E or 𝒜 is computed, and the golden histories are
+  bitwise. Their wall time did not move measurably (log 03 §4).
+- **Measured** at M = 0.5 M_P, α = 0.1 (untuned, to T_CMB): 𝒜_k falls from 10²–10³ at the first
+  bounce to 10⁻⁴ at the last, so the gate passes the early bounces whole and switches the late ones
+  off. See log 03 §5 for the tables.
+
 ---
 
 ## 7. From scalar history to BBN via PRyMordial (`ComputeTargets/BBNData.py`)
