@@ -580,7 +580,7 @@ class TestTheTuningState(unittest.TestCase):
         With V_target in the Einstein-frame constraint, 3 M_P^2 H_E^2 G = V_target + rho_R,E (1 + f_m)
         + rho_chi,E and H_J = H_E (1 + (d ln A/dphi) pi)/A, |H_J/H0 - 1| <= 4 rounding_bound(ln rho_R,E):
         V_target subtracts the matter (Omega_m ~ 0.3 of the total) from the total, which cancels
-        by at most a factor 1/0.7, and rho_R,E is exp(285); the 4 covers the square root and the
+        by at most a factor 1/0.7, and rho_R,E is exp(-285); the 4 covers the square root and the
         factor. Leaving r_chi out of V_target puts H_J/H0 - 1 at about r_chi Omega_R/2 ~ 2e-5.
         """
         s, model, rm = _last_golden_sample()

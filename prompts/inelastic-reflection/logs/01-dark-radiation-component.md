@@ -1,7 +1,7 @@
 # Log 01 — the dark-radiation component
 
 **Subject:** Carry a dark-radiation component in the policy expressions
-**Commit:** this commit, on branch `inelastic-reflection`, on top of `00c17f4`
+**Commit:** `85661b5`, on branch `inelastic-reflection`, on top of `00c17f4`
 **Date:** 2026-10-28, by Claude Opus 5.5
 **Result:** **COMPLETE.** No stop.
 - §1.1–§1.5 shipped under orchestrator note 01, whose eleven rulings govern where they differ from
