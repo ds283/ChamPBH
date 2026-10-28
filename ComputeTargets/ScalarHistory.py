@@ -58,6 +58,7 @@ from config.defaults import (
 from config.sharding import ShardKeyType
 from utilities import energy_formatter
 from .Policies import PotentialDerivativePolicy
+from .dark_radiation import DarkRadiationLedger
 from .exceptions import ComputationFailureError
 
 # useful constants, calculated once and cached to speed up the numerical integration
@@ -153,6 +154,10 @@ IntegrationResult = namedtuple(
 )
 
 # using named tuples ensures that we never get the fields in the wrong order
+#   rho_chi_over_rho_rad: r_chi = rho_chi,E/rho_R,E, the ratio of the dark-radiation component to the
+#                         bath that the policy used at this (N, state); 0.0 when it had none
+#                         (inelastic-reflection prompt 01; appended last, orchestrator note 01
+#                         ruling 6). HubblePolicy reads it in its V = 0 branch
 ODEPolicyData = namedtuple(
     "ODEPolicyData",
     [
@@ -166,6 +171,7 @@ ODEPolicyData = namedtuple(
         "friction_term",
         "reflecting_term",
         "kicking_term",
+        "rho_chi_over_rho_rad",
     ],
 )
 
@@ -233,12 +239,22 @@ class ODEPolicy:
         task_label: str,
         cosmology: BaseCosmology,
         model: RealizedModel,
+        dark_radiation: Optional[DarkRadiationLedger] = None,
     ):
+        """
+        :param dark_radiation: the ledger of the dark-radiation component rho_chi,E = K(N) e^{-4N}
+                               (inelastic-reflection prompt 01), read at the N each call is made
+                               with. None (the default), or a ledger with K(N) = 0, takes exactly the
+                               old operations. integrate_history always passes its ledger, empty
+                               when the history has no rho_chi, so that the one policy it builds sees
+                               an injection that prompt 02 adds while Radau runs.
+        """
         self.task_label: str = task_label
         self.units: UnitsLike = cosmology.units
 
         self.cosmology: BaseCosmology = cosmology
         self.model: RealizedModel = model
+        self.dark_radiation: Optional[DarkRadiationLedger] = dark_radiation
 
         self.V_policy: PotentialDerivativePolicy = PotentialDerivativePolicy(
             task_label, cosmology, model
@@ -281,6 +297,22 @@ class ODEPolicy:
 
         return T_Jordan
 
+    def _get_r_chi(self, N: float, state: StateVector) -> float:
+        """
+        r_chi = rho_chi,E/rho_R,E at (N, state), from the ledger; exactly 0.0, with no exp or log, when
+        there is no ledger or K(N) = 0.
+        """
+        ledger = self.dark_radiation
+        if ledger is None or ledger.is_zero(N):
+            return 0.0
+
+        try:
+            return ledger.ratio(N, state.log_rhorad_Einstein)
+        except OverflowError as e:
+            msg = f"!! ODEPolicy ({self.task_label}): math overflow in rho_chi/rho_rad, log_rhorad_Einstein = {state.log_rhorad_Einstein:.5g} | N = {N:.5g}, phi_Einstein = {state.phi_Einstein / self.MP:.5g} Mp, pi_Einstein = {state.pi_Einstein / self.MP:.5g} Mp"
+            print(msg)
+            raise ComputationFailureError(msg) from e
+
     def __call__(self, N: float, state: StateVector) -> ODEPolicyData:
         if any((isnan(x) or isinf(x)) for x in state):
             msg = f"!! ODEPolicy ({self.task_label}): input to ODE RHS has infinity or NaN values at N={N:.8g}"
@@ -294,6 +326,10 @@ class ODEPolicy:
 
         fm = self._get_fm(N, state)
         T_Jordan = self._get_T_Jordan(N, state)
+
+        # the dark-radiation component (inelastic-reflection prompt 01): 0.0 when there is none, and
+        # then every expression below takes exactly the old operations
+        r_chi: float = self._get_r_chi(N, state)
 
         Sigma: float = 1.0 - 3.0 * self.cosmology.w(T_Jordan)
 
@@ -309,10 +345,10 @@ class ODEPolicy:
 
         log_V = self.V_policy.log_V(phi_Einstein)
         V_over_3H2Mp2 = self.V_policy.V_over_3H2Mp2(
-            phi_Einstein, pi_Einstein, log_rhorad_Einstein, fm
+            phi_Einstein, pi_Einstein, log_rhorad_Einstein, fm, r_chi=r_chi
         )
         Vprime_over_3H2Mp2 = self.V_policy.Vprime_over_3H2Mp2(
-            phi_Einstein, pi_Einstein, log_rhorad_Einstein, fm
+            phi_Einstein, pi_Einstein, log_rhorad_Einstein, fm, r_chi=r_chi
         )
         D: float = self.CONST_3_MP_SQ * Vprime_over_3H2Mp2
 
@@ -326,7 +362,16 @@ class ODEPolicy:
             print(msg)
             raise ComputationFailureError(msg)
 
-        E: float = G - V_over_3H2Mp2
+        # E = rho_R (1 + f_m)/3H^2 M_P^2, the matter-and-bath factor of the kick. With dark radiation
+        # (inelastic-reflection prompt 01) G - V/3H^2 M_P^2 holds rho_chi/3H^2 M_P^2 as well, which is
+        # taken out: the quanta are traceless, and must not reach the kick
+        E: float
+        if r_chi == 0.0:
+            E = G - V_over_3H2Mp2
+        else:
+            E, _ = self.V_policy.matter_and_dark_radiation_fractions(
+                G, V_over_3H2Mp2, fm, r_chi
+            )
         # E must be positive, because it is proportional to rho_R/H^2
         if E < 0.0:
             # unclear whether we should treat this as a genuine computational error, or whether it just means that rho_r is very small
@@ -337,7 +382,7 @@ class ODEPolicy:
             E = 0.0
 
         dotH_over_H2_plus_3: float = self.V_policy.Hdot_over_H2_plus_3(
-            phi_Einstein, pi_Einstein, log_rhorad_Einstein, Sigma, fm
+            phi_Einstein, pi_Einstein, log_rhorad_Einstein, Sigma, fm, r_chi=r_chi
         )
 
         friction_term = -pi_Einstein * dotH_over_H2_plus_3
@@ -355,6 +400,7 @@ class ODEPolicy:
             friction_term=friction_term,
             reflecting_term=reflecting_term,
             kicking_term=kicking_term,
+            rho_chi_over_rho_rad=r_chi,
         )
 
 
@@ -383,7 +429,14 @@ class HubblePolicy:
             fm: float = exp(state.log_fm)
             pi_Einstein: float = state.pi_Einstein
             G: float = 1.0 - pi_Einstein * pi_Einstein / self.CONST_6_MP_SQ
-            ThreeH2Mp2: float = rho_rad * (1.0 + fm) / G
+            # 3 H^2 M_P^2 G = rho_R (1 + f_m) + rho_chi, with rho_chi = r_chi rho_R
+            # (inelastic-reflection prompt 01); r_chi is the one ODEPolicy used for this state
+            r_chi: float = data.rho_chi_over_rho_rad
+            ThreeH2Mp2: float
+            if r_chi == 0.0:
+                ThreeH2Mp2 = rho_rad * (1.0 + fm) / G
+            else:
+                ThreeH2Mp2 = rho_rad * (1.0 + fm + r_chi) / G
             H2_Einstein: float = ThreeH2Mp2 / self.CONST_3_MP_SQ
 
         H_Einstein: float = sqrt(H2_Einstein)
@@ -1146,6 +1199,7 @@ def integrate_history(
     atol: float = DEFAULT_ABS_TOLERANCE,
     rtol: float = DEFAULT_REL_TOLERANCE,
     verbose: bool = False,
+    rho_chi_ratio_init: float = 0.0,
 ) -> dict:
     """
     The primitive (jordan-normalization prompt 06, T1; README §6.0 R8): integrate one history of
@@ -1166,7 +1220,15 @@ def integrate_history(
     :param task_label: label for the ray task
     :param atol: absolute tolerance for the ODE solver
     :param rtol: relative tolerance for the ODE solver
-    :return:
+    :param rho_chi_ratio_init: a TEST HARNESS (inelastic-reflection prompt 01): r_0, the ratio
+                               rho_chi,E/rho_R,E of a dark-radiation component at T_init. The
+                               history's DarkRadiationLedger then holds K_0 = r_0 rho_R,E,init
+                               e^{4 N_start}, present at every N. 0.0 (the default) gives an empty
+                               ledger, and every value is the old code's bitwise.
+                               compute_scalar_history does not take it, so no history a driver
+                               launches, and none that is stored, has an initial rho_chi.
+    :return: the payload; on success it carries "dark_radiation", the history's
+             DarkRadiationLedger (inelastic-reflection prompt 01), which no store reads
     """
     units: UnitsLike = cosmology.units
 
@@ -1214,14 +1276,22 @@ def integrate_history(
     #     f"    - log_rho_r_Jordan_init = {log_rhorad_Jordan_init:.5g}, log_rho_r_Einstein_init = {log_rhorad_Einstein_init:.5g}"
     # )
 
-    policy = ODEPolicy(task_label, cosmology, model)
+    N_failsafe = 1000.0  # terminate after 1000 e-folds as a failsafe
+    N_start = 0.0
+
+    # the dark-radiation component (inelastic-reflection prompt 01; orchestrator note 01, rulings 1
+    # and 3): always a ledger, held by the one ODEPolicy below, empty unless the test harness
+    # rho_chi_ratio_init gives an initial K_0 = r_0 rho_R,E,init e^{4 N_start}
+    K_initial: float = 0.0
+    if rho_chi_ratio_init != 0.0:
+        K_initial = rho_chi_ratio_init * exp(log_rhorad_Einstein_init + 4.0 * N_start)
+    dark_radiation = DarkRadiationLedger(K_initial)
+
+    policy = ODEPolicy(task_label, cosmology, model, dark_radiation=dark_radiation)
     RHS = ODERHS(task_label, policy)
 
     # the step loop's parameters: the defaults of StepControl, with the tolerances requested
     step_control = StepControl(atol=atol, rtol=rtol)
-
-    N_failsafe = 1000.0  # terminate after 1000 e-folds as a failsafe
-    N_start = 0.0
 
     # prepare the initial state
     initial_state = StateVector(
@@ -1380,6 +1450,9 @@ def integrate_history(
             supervisor.mean_RHS_values if collected_full_statistics else None
         ),
         "solver_label": SCALAR_HISTORY_STEPPER_LABEL,
+        # the history's dark-radiation ledger (inelastic-reflection prompt 01): _tuning_state reads
+        # it; ScalarHistory.store and build_extra_data read named keys only, so it is not stored
+        "dark_radiation": dark_radiation,
     }
 
 
@@ -1562,6 +1635,12 @@ def _tuning_state(
     V_target (the potential at which H_J = H0 at that state), the effective minimum at the
     history's own rho_m,E today, and the two residuals. The expressions are fixed by orchestrator
     note 06, ruling 5. effective_minimum's ValueError propagates.
+
+    The bracket of Eq. 7 subtracts the dark-radiation component as well (inelastic-reflection
+    prompt 01): rho_chi,J = r_chi rho_R,J, with r_chi = rho_chi,E/rho_R,E read from the payload's
+    ledger at the last sample's N and ln rho_R,E (r_chi is the same in both frames). With no dark
+    radiation the expression is exactly the old one. effective_minimum reads rho_m,E only: massless
+    quanta are traceless and do not move the minimum.
     """
     Mp = cosmology.units.PlanckMass
     H0 = cosmology.H0
@@ -1575,7 +1654,16 @@ def _tuning_state(
     logV = rm.log_V(phi0)
     bp = 1.0 + rm.d_logOmega_dphi(phi0) * pi0
     G = 1.0 - pi0 * pi0 / (6.0 * Mp * Mp)
-    V_target = A0**4 * (3.0 * Mp**2 * H0**2 * G / (A0**2 * bp**2) - rho_RJ * (1.0 + fm))
+    ledger: DarkRadiationLedger = data["dark_radiation"]
+    if ledger.is_zero(s.raw_N):
+        V_target = A0**4 * (
+            3.0 * Mp**2 * H0**2 * G / (A0**2 * bp**2) - rho_RJ * (1.0 + fm)
+        )
+    else:
+        r_chi = ledger.ratio(s.raw_N, s.log_rhorad_Einstein)
+        V_target = A0**4 * (
+            3.0 * Mp**2 * H0**2 * G / (A0**2 * bp**2) - rho_RJ * (1.0 + fm + r_chi)
+        )
     rho_mE0 = A0**4 * fm * rho_RJ
     phi_min = model.effective_minimum(norm, phi_ref, phi0, rho_mE0)
 
@@ -1644,6 +1732,7 @@ def tune_history(
     verbose: bool = False,
     progress: str = "quiet",
     clock=perf_counter,
+    rho_chi_ratio_init: float = 0.0,
 ) -> dict:
     """
     The tuning layer (jordan-normalization prompt 06; README §6.0 R1, R2, R8, R10, R13): integrate
@@ -1682,6 +1771,11 @@ def tune_history(
 
     secant=False takes the plain step at every iterate. It exists for the comparison of prompt 06
     §2 and for diagnostics; no driver passes it.
+
+    rho_chi_ratio_init is a TEST HARNESS (inelastic-reflection prompt 01): r_0 = rho_chi,E/rho_R,E
+    at T_init, passed to every integration, each of which builds its own ledger from it (see
+    integrate_history). Eq. 7's V_target subtracts the component today (_tuning_state). 0.0 (the
+    default) is the old tuning bitwise. compute_scalar_history does not take it.
 
     :return: on success, the final integration's payload (every key integrate_history returns),
              with the keys of TUNING_OUTPUT_KEYS added: normalization, V_ref = V(phi_ref) on the
@@ -1730,6 +1824,7 @@ def tune_history(
             atol=atol,
             rtol=rtol,
             verbose=verbose,
+            rho_chi_ratio_init=rho_chi_ratio_init,
         )
         end = clock()
         wall = end - start

@@ -37,18 +37,29 @@ class PotentialDerivativePolicy:
         pi_Einstein: float,
         log_rhorad_Einstein: float,
         fm: float,
+        r_chi: float = 0.0,
     ) -> float:
         log_V = self.model.log_V(phi_Einstein)
         # can assume log_V is not nan or inf at this stage
 
         log_rhorad_over_V: float = log_rhorad_Einstein - log_V
 
+        # T = V/(V + rho_R (1 + f_m) + rho_chi) = 1/(1 + (rho_R/V)(1 + f_m + r_chi)), with
+        # r_chi = rho_chi,E/rho_R,E (inelastic-reflection prompt 01). With no dark radiation
+        # (r_chi == 0.0) each branch takes exactly the operations it took before, so that K = 0 is
+        # the old code bitwise (README §5)
         if log_rhorad_over_V > 2.0:
             V_over_rhorad: float = exp(-log_rhorad_over_V)
-            T = V_over_rhorad / (V_over_rhorad + 1.0 + fm)
+            if r_chi == 0.0:
+                T = V_over_rhorad / (V_over_rhorad + 1.0 + fm)
+            else:
+                T = V_over_rhorad / (V_over_rhorad + 1.0 + fm + r_chi)
         else:
             rhorad_over_V: float = exp(log_rhorad_over_V)
-            T = 1.0 / (1.0 + rhorad_over_V * (1.0 + fm))
+            if r_chi == 0.0:
+                T = 1.0 / (1.0 + rhorad_over_V * (1.0 + fm))
+            else:
+                T = 1.0 / (1.0 + rhorad_over_V * (1.0 + fm + r_chi))
 
         G: float = 1.0 - pi_Einstein * pi_Einstein / self.CONST_6_MP_SQ
         if G < 0.0:
@@ -66,6 +77,7 @@ class PotentialDerivativePolicy:
         pi_Einstein: float,
         log_rhorad_Einstein: float,
         fm: float,
+        r_chi: float = 0.0,
     ) -> float:
         # obtain value of scalar potential
         log_V: float = self.model.log_V(phi_Einstein)
@@ -79,7 +91,7 @@ class PotentialDerivativePolicy:
             raise ComputationFailureError(msg)
 
         return self._evaluate_V_over_3H2Mp2_using_log_V(
-            phi_Einstein, pi_Einstein, log_rhorad_Einstein, fm
+            phi_Einstein, pi_Einstein, log_rhorad_Einstein, fm, r_chi=r_chi
         )
 
     def _evaluate_Vprime_over_3H2Mp2_using_log_V(
@@ -88,6 +100,7 @@ class PotentialDerivativePolicy:
         pi_Einstein: float,
         log_rhorad_Einstein: float,
         fm: float,
+        r_chi: float = 0.0,
     ) -> float:
         Vprime_over_V: float = self.model.d_logV_dphi(phi_Einstein)
 
@@ -100,7 +113,7 @@ class PotentialDerivativePolicy:
             raise ComputationFailureError(msg)
 
         V_over_3H2Mp2: float = self.V_over_3H2Mp2(
-            phi_Einstein, pi_Einstein, log_rhorad_Einstein, fm
+            phi_Einstein, pi_Einstein, log_rhorad_Einstein, fm, r_chi=r_chi
         )
 
         return Vprime_over_V * V_over_3H2Mp2
@@ -111,6 +124,7 @@ class PotentialDerivativePolicy:
         pi_Einstein: float,
         log_rhorad_Einstein: float,
         fm: float,
+        r_chi: float = 0.0,
     ) -> float:
         # obtain value of scalar potential
         log_V: float = self.model.log_V(phi_Einstein)
@@ -124,7 +138,7 @@ class PotentialDerivativePolicy:
             raise ComputationFailureError(msg)
 
         return self._evaluate_Vprime_over_3H2Mp2_using_log_V(
-            phi_Einstein, pi_Einstein, log_rhorad_Einstein, fm
+            phi_Einstein, pi_Einstein, log_rhorad_Einstein, fm, r_chi=r_chi
         )
 
     def _evaluate_Vprimeprime_over_3H2Mp2_using_log_V(
@@ -133,6 +147,7 @@ class PotentialDerivativePolicy:
         pi_Einstein: float,
         log_rhorad_Einstein: float,
         fm: float,
+        r_chi: float = 0.0,
     ) -> float:
         logV_prime: float = self.model.d_logV_dphi(phi_Einstein)
         logV_primeprime: float = self.model.d2_logV_dphi2(phi_Einstein)
@@ -146,7 +161,7 @@ class PotentialDerivativePolicy:
             raise ComputationFailureError(msg)
 
         V_over_3H2Mp2: float = self.V_over_3H2Mp2(
-            phi_Einstein, pi_Einstein, log_rhorad_Einstein, fm
+            phi_Einstein, pi_Einstein, log_rhorad_Einstein, fm, r_chi=r_chi
         )
 
         Vprimeprime_over_V = logV_primeprime + logV_prime * logV_prime
@@ -159,6 +174,7 @@ class PotentialDerivativePolicy:
         pi_Einstein: float,
         log_rhorad_Einstein: float,
         fm: float,
+        r_chi: float = 0.0,
     ) -> float:
         # obtain value of scalar potential
         log_V: float = self.model.log_V(phi_Einstein)
@@ -172,8 +188,30 @@ class PotentialDerivativePolicy:
             raise ComputationFailureError(msg)
 
         return self._evaluate_Vprimeprime_over_3H2Mp2_using_log_V(
-            phi_Einstein, pi_Einstein, log_rhorad_Einstein, fm
+            phi_Einstein, pi_Einstein, log_rhorad_Einstein, fm, r_chi=r_chi
         )
+
+    @staticmethod
+    def matter_and_dark_radiation_fractions(
+        G: float, V_over_3H2Mp2: float, fm: float, r_chi: float
+    ) -> tuple:
+        """
+        (E, Y) = (rho_R (1 + f_m), rho_chi)/3H^2 M_P^2, for r_chi = rho_chi,E/rho_R,E != 0
+        (inelastic-reflection prompt 01). The constraint 3 M_P^2 H^2 G = V + rho_R (1 + f_m) + rho_chi
+        gives G - V/3H^2 M_P^2 = E + Y, and E : Y = (1 + f_m) : r_chi, so
+
+            E = (G - V/3H^2 M_P^2) (1 + f_m)/(1 + f_m + r_chi),
+            Y = (G - V/3H^2 M_P^2) r_chi/(1 + f_m + r_chi).
+
+        Each is a product and a quotient of G - V/3H^2 M_P^2, so neither adds a cancellation to the
+        one that difference carries when V dominates. E = (G - V/3H^2 M_P^2) - Y would add one, of
+        two terms whose ratio tends to 1 as r_chi grows (the derivation is in the prompt's log).
+        """
+        G_minus_U: float = G - V_over_3H2Mp2
+        denominator: float = 1.0 + fm + r_chi
+        E: float = G_minus_U * (1.0 + fm) / denominator
+        Y: float = G_minus_U * r_chi / denominator
+        return E, Y
 
     def Hdot_over_H2_plus_3(
         self,
@@ -182,6 +220,7 @@ class PotentialDerivativePolicy:
         log_rhorad_Einstein: float,
         Sigma,
         fm: float,
+        r_chi: float = 0.0,
     ):
         # G must be positive in order that H_Einstein^2 is also positive
         # this gives a limit pi_Einstein < sqrt(6) Mp
@@ -204,9 +243,17 @@ class PotentialDerivativePolicy:
         A2: float = 4.0 - R
 
         V_over_3H2Mp2 = self.V_over_3H2Mp2(
-            phi_Einstein, pi_Einstein, log_rhorad_Einstein, fm
+            phi_Einstein, pi_Einstein, log_rhorad_Einstein, fm, r_chi=r_chi
         )
 
         C: float = V_over_3H2Mp2 / 2.0
 
-        return G * A1 + C * A2
+        if r_chi == 0.0:
+            # no dark radiation: exactly the old operations (README §5, "alpha = 0 is the old code")
+            return G * A1 + C * A2
+
+        # dark radiation, w = 1/3 (inelastic-reflection prompt 01): with Y = rho_chi/3H^2 M_P^2,
+        # Hdot/H^2 + 3 = G A1 + C A2 - Y R/2. The term vanishes when R = 0 (a radiation bath), where
+        # Hdot/H^2 = -2 whatever rho_chi is
+        _, Y = self.matter_and_dark_radiation_fractions(G, V_over_3H2Mp2, fm, r_chi)
+        return G * A1 + C * A2 - Y * R / 2.0

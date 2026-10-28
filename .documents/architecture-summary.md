@@ -1053,6 +1053,26 @@ SampleValues = namedtuple("SampleValues", [
 >   `fixed_T_values` and `surfing_turning_points` take one `RealizedModel` (§8.4a) in place of a
 >   potential and a coupling, and `PotentialDerivativePolicy` has only the log-potential route.
 
+> **Note, 2026-10-28 (`inelastic-reflection`, prompt 01): the dark-radiation ledger.** A new module,
+> `ComputeTargets/dark_radiation.py`, holds `DarkRadiationLedger`: the record of a dark-radiation
+> component ρ_χ,E(N) = K(N) e^{−4N}, with K(N) = K₀ + Σ_{N_j ≤ N} ΔK_j. K₀ is the history's initial
+> condition, present at every N; the injections (N_j, ΔK_j) are appended by `add(N, delta_K)` in
+> increasing N_j (prompt 02 will call it at each reflection; prompt 01 injects nothing). It returns
+> `K(N)`, `rho_chi(N)` and `ratio(N, log_rhorad_Einstein)` = r_χ, answers `is_zero(N)` without an
+> exp or a log, and exposes `K_initial` and `injections` read-only. It pickles.
+> - **Who holds it.** `integrate_history` always builds one, empty unless its test harness
+>   `rho_chi_ratio_init` (r₀ at T_init; `tune_history` passes it to each integration) gives K₀, and
+>   hands it to the one `ODEPolicy` it builds (`ODEPolicy(..., dark_radiation=ledger)`, default
+>   `None`). `ODEPolicy` reads r_χ at each call and passes it to `PotentialDerivativePolicy`'s
+>   methods as the keyword `r_chi` (default 0.0); `ODEPolicyData` gains `rho_chi_over_rho_rad`,
+>   its last field, which `HubblePolicy` reads. The expressions are in `numerical-strategies.md`
+>   §6.1.
+> - **The payload.** A successful integration's payload carries `"dark_radiation"`, the ledger;
+>   `_tuning_state` reads it for V_target. Nothing on the way to the store iterates over the
+>   payload's keys (`ScalarHistory.store` and `build_extra_data` read named keys), so it is not
+>   stored. `compute_scalar_history` does not take the harness, so no history a driver launches
+>   has a nonzero ρ_χ. `AdiabaticHistory` is unchanged.
+
 ### 7.3 `AdiabaticHistory` (`ComputeTargets/AdiabaticHistory.py`)
 
 Computes the adiabatic perturbation parameter Q (which determines whether the chameleon field is adiabatically tracking its minimum). Requires a `ScalarHistoryProxy` as input.

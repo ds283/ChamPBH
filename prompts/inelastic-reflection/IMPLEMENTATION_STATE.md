@@ -1,9 +1,9 @@
 # inelastic-reflection campaign — implementation state
 
-**Last updated:** 2026-10-27 · **Status: PLANNED — 1 of 8 prompts written (01); R1–R5 ruled by the
-user 2026-10-27; U1–U8 ruled the same day (U4 as the revised proposal (b′): wall-side turning points
-only) and P1–P16 stand. The prompts are written one at a time, each after the one before has landed
-and been reviewed (README §2.1). 01 is ready to dispatch.**
+**Last updated:** 2026-10-28 · **Status: LIVE — 01 landed (this commit, 2026-10-28; gate DR holds),
+awaiting review; 1 of 8 prompts written. R1–R5 ruled by the user 2026-10-27; U1–U8 ruled the same
+day (U4 as the revised proposal (b′): wall-side turning points only) and P1–P16 stand. The prompts
+are written one at a time, each after the one before has landed and been reviewed (README §2.1).**
 The plan is [`README.md`](README.md), written on 2026-10-27 on branch `inelastic-reflection`, cut
 from `main` at `6f635e6` with the planning commit (U1). Its physics basis is
 [`source/scoping_2026-10-27.md`](source/scoping_2026-10-27.md).
@@ -31,7 +31,7 @@ bitwise the old code's.
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | [Dark-radiation component](01-dark-radiation-component.md) | the ledger; ρ_χ in V/3H²M_P², Ḣ/H², E, `HubblePolicy`, V_target; K = 0 bitwise | Opus | ✍️ 2026-10-27 | ⬜ | — | — |
+| 01 | [Dark-radiation component](01-dark-radiation-component.md) | the ledger; ρ_χ in V/3H²M_P², Ḣ/H², E, `HubblePolicy`, V_target; K = 0 bitwise | Opus | ✍️ 2026-10-27 | ✅ 2026-10-28 | this commit | [01](logs/01-dark-radiation-component.md) |
 | 02 | Injection at turning points | turning points in the step loop; the drain at the KE maximum; the restart; the floor-rule drain; the record; α in `integrate_history`/`tune_history` | Opus | ⬜ | ⬜ | — | — |
 | 03 | Gate and stopping rule | 𝒜_k measured, then the gate at wall-side turning points (U4 (b′)); the plateau diagnostic; the tapered stopping rule (U5); the residual's continuity | Opus | ⬜ | ⬜ | — | — |
 | 04 | Relativistic margin | generation momenta; m_eff on the trajectory; the margin to today; the warning | Opus | ⬜ | ⬜ | — | — |
@@ -51,7 +51,7 @@ the one before has landed and been reviewed, from what its log hands on.
 
 | Gate | Holds when | Prompt | State |
 |---|---|---|---|
-| DR | at K = 0 both golden histories bitwise; with an initial ρ_χ constraint and continuity agree, the radiation limit holds, a tuned history meets both conditions | 01 | ⬜ |
+| DR | at K = 0 both golden histories bitwise; with an initial ρ_χ constraint and continuity agree, the radiation limit holds, a tuned history meets both conditions | 01 | ✅ 2026-10-28 (log 01 §4) |
 | Inject | at α = 0 both golden histories bitwise; at α > 0 H_E continuous across every injection, ledger = Σ drains; a floor-rule drain exact | 02 | ⬜ |
 | Taper | weights equal hand values; the tuning residual continuous across a threshold; the omitted fraction within its bound | 03 | ⬜ |
 | Margin | the margin equals a hand computation; reported on real histories; below ln 10 warns | 04 | ⬜ |
@@ -107,3 +107,29 @@ run beyond the three planning probes, which read the EOS only and started no Ray
 - **No run registered**: `runregistrykit list` showed 11 finished runs and nothing running.
 - **Suites at `6f635e6`** (from `tuning-followups` 02's review, not re-run): 26 / 269 (77 + 192) /
   103 / 115 / 64.
+
+### 5.1 After prompt 01 (2026-10-28)
+
+01 landed in this commit, under orchestrator note 01 (eleven rulings), with no stop. Log:
+[`logs/01-dark-radiation-component.md`](logs/01-dark-radiation-component.md).
+- **What shipped.** `ComputeTargets/dark_radiation.py` (`DarkRadiationLedger`: K(N) = K₀ +
+  Σ_{N_j ≤ N} ΔK_j, K₀ present at every N); r_χ = ρ_χ,E/ρ_R,E in V/3H²M_P², V′/3H²M_P², Ḣ/H² + 3
+  (−Y·R/2), E (taken out of the kick) and `HubblePolicy`'s V = 0 branch, through `ODEPolicy`'s
+  `dark_radiation` and `ODEPolicyData.rho_chi_over_rho_rad`; V_target subtracts ρ_χ,J; the test
+  harness `rho_chi_ratio_init` on `integrate_history` and `tune_history`; the payload key
+  `"dark_radiation"`. `compute_scalar_history` is unchanged; nothing injects and nothing is stored.
+- **The derivations** of every §1.2 expression are in the log and agree with the planner's. E uses
+  (G − V/3H²M_P²)(1 + f_m)/(1 + f_m + r_χ), which adds no cancellation.
+- **Gate DR holds.** Both golden histories bitwise at K = 0; the constraint to rounding at 40
+  constructed states and every sample of a real history; d ln H_E/dN on the dense output equal to
+  the policy's Ḣ/H² to 2e-6 (Y·R/2 peaks at 9.5e-3 at T_J = 0.19 GeV for r₀ = 0.1); Ḣ/H² = −2
+  exactly in the radiation limit; a tuning with r₀ = 1 converges in five integrations.
+- **Breakages** (P11): five, each failing a named test; leaving ρ_χ out of V_target also fails the
+  tuned test after 30 integrations (H_J/H₀ stalls at 1 + 2.6e-5).
+- **Cost at K = 0:** golden minima 10.9 s → 10.9 s, tuned 23.3 s → 24.1 s, inside the spread of the
+  tree before.
+- **Counts:** 26 / 269 (77 + 192) / 103 / 115 / 64 before; 26 / **288** (96 + 192) / 103 / 115 / 64
+  after, all passing. `CLAUDE.md`'s counts are 08's to update.
+- **Issues:** none opened, none closed.
+- **For 02** (log 01 §7): the ledger's API; the policy holds the ledger, so an `add` while Radau runs
+  is seen with no new policy; the N_j ≤ N edge at an interpolant ending at N_j is 02's to settle.

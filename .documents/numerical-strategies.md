@@ -1116,6 +1116,47 @@ as a group:
 > model's normalization, ln V₀, an argument of `_log_V` that each history carries. The event counts,
 > fragment counts and region boundaries of the last bullet are superseded by §3.5.7.
 
+### 6.1 Added 2026-10-28 (`inelastic-reflection` prompt 01): a dark-radiation component in the policy expressions
+
+`inelastic-reflection` carries the quanta a reflection produces as dark radiation,
+ρ_χ,E = K(N) e^{−4N}, with K piecewise constant and held in a `DarkRadiationLedger`
+(`ComputeTargets/dark_radiation.py`; `architecture-summary.md` §7.2's note of this date). Prompt 01
+puts ρ_χ into every policy expression that is built from the constraint, and injects nothing:
+the only way to give a history a nonzero ρ_χ is the test harness `rho_chi_ratio_init` of
+`integrate_history` and `tune_history`. The derivations are in
+`prompts/inelastic-reflection/logs/01-dark-radiation-component.md`.
+
+With r_χ = ρ_χ,E/ρ_R,E (the same in both frames), Y = ρ_χ/3H²M_P² and G = 1 − π²/6M_P², the
+constraint is 3M_P²H²G = V + ρ_R(1 + f_m) + ρ_χ, and:
+
+- **V/3H²M_P²** = G·T, with T = 1/(1 + (ρ_R/V)(1 + f_m + r_χ)), or
+  (V/ρ_R)/(V/ρ_R + 1 + f_m + r_χ) in the branch ln(ρ_R/V) > 2 described above. Every policy
+  quantity built from it (V′/3H²M_P², V″/3H²M_P², `HubblePolicy`'s log branch, the reflection
+  guard's W) sees ρ_χ through it.
+- **E**, the matter-and-bath factor of the kick −3M_P² E (d ln A/dφ) R, stays
+  ρ_R(1 + f_m)/3H²M_P²: E = (G − V/3H²M_P²)(1 + f_m)/(1 + f_m + r_χ). The quanta are traceless and
+  do not reach the kick. The form is a product and a quotient of G − V/3H²M_P², so it adds no
+  cancellation to the one that difference already carries when V dominates; the alternative
+  (G − V/3H²M_P²) − Y would subtract two terms whose ratio tends to 1 as r_χ grows.
+  `PotentialDerivativePolicy.matter_and_dark_radiation_fractions` returns (E, Y).
+- **Ḣ/H² + 3** = G·A₁ + C·A₂ − Y·R/2, with A₁, A₂, C and R as before. The new term vanishes for
+  a radiation bath (R = 0), where Ḣ/H² = −2 whatever ρ_χ is.
+- **`HubblePolicy`'s V = 0 branch**: 3H²M_P² = ρ_R(1 + f_m + r_χ)/G, reading the r_χ the
+  `ODEPolicy` used (`ODEPolicyData.rho_chi_over_rho_rad`). The branch is taken when V/3H²M_P²
+  underflows to 0.0, which needs ln(ρ_R/V) ≥ 746: `exp(−745.13)` is still a subnormal.
+- **`_tuning_state`'s V_target** (Eq. 7, §3.7.3) subtracts ρ_χ,J = r_χ ρ_R,J inside the bracket,
+  with r_χ read from the payload's ledger at the last sample.
+- **Unchanged**: `effective_minimum` (ρ_m,E only), d ln ρ_R/dN, d ln f_m/dN, d ln T_J/dN (none
+  involves H), and `AdiabaticHistory`'s own E (prompt 05 of the campaign). `fixed_T_value_at`'s
+  ρ_NP = 3M_P²H_J² − ρ_R,J(1 + f_m) includes ρ_χ through H_J, by design: it is the ratio BBN sees.
+
+**Exactness at K = 0.** When the ledger is absent or K(N) = 0, `ODEPolicy` passes r_χ = 0.0, and each
+expression branches on `r_chi == 0.0` to exactly its old operations; the ledger answers K(N) = 0
+without an exp or a log. Both golden histories pass unchanged, bitwise. Their wall time, three runs
+each alternating with the tree before (load 3.7–5.8), had minima 10.9 s and 10.9 s (the two
+untuned histories) and 23.3 s and 24.1 s (the tuned one), inside the spread of the tree before
+(10.9–11.8 s and 23.3–24.9 s); one `ODEPolicy` call took 7.7–7.8 µs against 7.3–7.8 µs before.
+
 ---
 
 ## 7. From scalar history to BBN via PRyMordial (`ComputeTargets/BBNData.py`)
