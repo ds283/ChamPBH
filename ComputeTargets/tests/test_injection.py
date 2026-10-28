@@ -397,9 +397,11 @@ class TestARealHistoryAtAlpha(unittest.TestCase):
         """
         |H_after - H_before|/H_before <= H_bound (its docstring derives it; log 02 §1.2) at every
         injection, and the largest ratio, with the c and the bound at it, is written to stderr
-        (orchestrator note 02, ruling 8a). On this history every ratio measured 0.0, at c up to
-        0.043 against bounds of 99-120 EPS; the one nonzero ratio of log 02's measurement is at
-        beta = 25, 1.414e-14 (one ulp of the exponent, halved) at c = 9.7e-8 against 97 EPS.
+        (orchestrator note 02, ruling 8a). Under prompt 02's drains every ratio on this history
+        measured 0.0, at c up to 0.043 against bounds of 99-120 EPS; the one nonzero ratio of log
+        02's measurement is at beta = 25, 1.414e-14 (one ulp of the exponent, halved) at c = 9.7e-8
+        against 97 EPS. Under prompt 03's gate one ratio here is 1.43e-14, against a bound of
+        115 EPS (log 03 §7).
         Microseconds per injection.
         """
         worst = None
@@ -501,7 +503,7 @@ class TestTwoTurningPointsOnOneStep(unittest.TestCase):
     """
     (11) The interior sampling of pi (orchestrator note 02, ruling 15). Prompt 02 found the pair at
     M = 0.5 M_P, beta = 5, alpha = 0.1, at T_J ~ 0.7 MeV. Under prompt 03's gate that trajectory
-    holds none, and neither do beta = 3, 4, 6 and 8 at alpha = 0.1 nor beta = 5 at alpha = 0.05,
+    holds none, and neither do beta = 4, 6 and 8 at alpha = 0.1 nor beta = 5 at alpha = 0.05,
     0.2 and 0.3 (log 03 §2). At beta = 10, alpha = 0.1 (the module's setup otherwise) the field
     nearly stalls at T_J ~ 36 MeV, N ~ 63.853: one accepted step holds a plateau turnaround and a
     wall-side turning point, with pi > 0 at both ends. Detection at the step ends only (the
