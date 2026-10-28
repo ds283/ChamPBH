@@ -242,6 +242,31 @@ this tree. What it found, where the prompt is silent, loose or wrong:
   resumes with `SendMessage`.
 - **Other sessions** may land commits on this branch. The agent does not assume `HEAD` is its own.
 
+## 0a. The stopping rule withdrawn (2026-10-28, during the implementation)
+
+After dispatch the user asked how w_rate prevents a solver restart, since it is never zero. It does
+not. The loop skips a drain and its restart only when α_eff is exactly 0.0, which only underflow
+gives. So w_rate saved no restart, the one benefit the scoping gave it (§6: "Stopping saves the
+restarts, not the bounces"); it only withheld up to (π/2)ε per e-fold of energy. Log 02 §5 shows
+restarts are cheap at M = 0.5 M_P. The orchestrator offered three options: drop w_rate; keep the
+taper with a hard cut-off δ; or keep it and document it. The user ruled: "I'd drop `w_rate`". The
+ruling was sent to the agent by `SendMessage` while it worked, and recorded in README §6.1.
+
+16. **α_eff = α · w_gate.** *STRUCTURALLY REQUIRED*, ruled by the user.
+    - **Gone:** w_rate, S, the window, ε and the omitted part, with `RATE_EPSILON` and
+      `RATE_WINDOW_EFOLDS`; P17; prompt §1.3's S and w_rate and all of §1.4.
+    - **Rulings withdrawn:** ruling 9 entirely; ruling 8's S clauses (w_gate's edges stay); ruling
+      4's window clauses.
+    - **`Injection`** gains `nonadiabaticity` and `w_gate` only. `delta_rho_over_rho_rad` is the
+      candidate's size.
+    - **Tests:** items 4, 5 and 6 are dropped. Item 2 keeps w_gate. Item 7 asserts
+      α_eff = α · w_gate exactly, with `delta_rho_over_rho_rad` against α_eff · ρ_kin/ρ_R from the
+      record to a stated bound.
+    - **Breakages:** B2, B3, B4 and B7 are dropped.
+    - **Measurement:** no w_rate, Σ c or Σ o columns. Ruling 11's comparison patch is w_gate → 1.0.
+    - **The gate Taper** loses its omitted-fraction clause, and the stop on the bound goes.
+    - **Review:** in §3, checks 4, 6 and 7 lose their w_rate, S, o and bound clauses.
+
 ## 1. Before you dispatch
 
 Done at `80dac75`, before this note was committed:

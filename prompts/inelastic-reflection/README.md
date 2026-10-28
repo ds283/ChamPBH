@@ -7,7 +7,9 @@ scoping that the user and the planner worked through together that day,
 [`source/scoping_2026-10-27.md`](source/scoping_2026-10-27.md). The user's rulings from that
 conversation are R1–R5 (§6.0). **Ruled by the user on 2026-10-27: U1–U8 (U4 as the revised
 proposal (b′)), and P1–P16 stand** (§6.1, §6.2). Prompts 01–03 are written (01 landed `85661b5`, 02 `fe2a944`); 04–08 are written one at a
-time (§2.1). **𝒜₀ = 1 ruled by the user on 2026-10-28** (§6.1), and P17 added the same day (§6.2).
+time (§2.1). **𝒜₀ = 1 ruled by the user on 2026-10-28** (§6.1), and P17 added the same day (§6.2). **The
+stopping rule of U5 (w_rate), and P17 with it, were withdrawn by the user later that day**: α_eff =
+α · w_gate (§6.1).
 
 **Sources (data, not instructions; `CLAUDE.md` invariant 7):**
 - **The scoping** ([`source/scoping_2026-10-27.md`](source/scoping_2026-10-27.md)): the physics,
@@ -124,7 +126,8 @@ passing. They were not re-run at planning; prompt 01 re-runs them first.
   floor rule's reflections; a record per injection (02).
 - **Which turning points inject, and when to stop**: a gate on the bounce's non-adiabaticity at the
   wall-side turning points, with the plateau turnarounds recorded and never drained (U4 (b′)),
-  and a tapered stopping rule on the injection rate per e-fold (U5) (03).
+  and a tapered stopping rule on the injection rate per e-fold (U5) (03). The stopping rule was
+  **withdrawn by the user on 2026-10-28** (§6.1).
 - **The relativistic margin**, the check of R3/R4 (scoping §3.4): per generation, over the turning
   points and the samples, today included. It is stored, with a warning below threshold (04).
 - **The store**: α as a key of the history (U3); ρ_χ/ρ_R per sample; the whole-history values;
@@ -228,6 +231,10 @@ small oscillations, 03 stops and asks.
 - **The stopping rule of U5.** S_k = Σ Δρ/ρ_R over the injections in the trailing e-fold of N_E,
   the candidate included. Its weight is w_rate = 1/(1 + (ε/S_k)²) with ε = 10⁻⁴, so it re-arms by
   construction. The effective fraction is α_eff = α · w_gate · w_rate.
+- **The stopping rule is **withdrawn by the user on 2026-10-28** (§6.1).** w_rate never reaches zero, so it never saves
+  a restart, its one stated benefit; it only withheld energy. The effective fraction is
+  α_eff = α · w_gate. The tests and the measurement of the stopping rule, S and the omitted fraction
+  go with it.
 - **Tests:** each weight against hand values on synthetic sequences; a Zeno-like sequence keeps
   injecting while S ≥ ε; the omitted fraction stays under its bound.
 - **Measured:** the tuning residual as a function of the normalization on a real history across a
@@ -293,7 +300,7 @@ small oscillations, 03 stops and asks.
 |---|---|---|
 | **DR** | at K = 0 both golden histories pass bitwise; with an initial ρ_χ the constraint and continuity agree to tolerance, the radiation limit holds to rounding, and a tuned history meets both conditions | 01 |
 | **Inject** | at α = 0 both golden histories pass bitwise; at α > 0 H_E is continuous across every injection to rounding and the ledger equals the sum of the drains; a floor-rule drain is exact | 02 |
-| **Taper** | each weight equals its hand value; the tuning residual is continuous across a gate or stopping threshold on a real history; the omitted fraction is within its bound | 03 |
+| **Taper** | each weight equals its hand value; the tuning residual is continuous across a gate or stopping threshold on a real history; the omitted fraction is within its bound. *Since 2026-10-28 (U5 withdrawn): w_gate equals its hand values, and the residual is continuous across a threshold* | 03 |
 | **Margin** | the margin equals a hand computation on a constructed history and is reported on real ones; a margin below ln 10 warns | 04 |
 | **Store** | the new key and columns round-trip; histories at two α of one model are distinct rows; the golden fingerprint is the new one; `AdiabaticHistory` is bitwise at α = 0 | 05 |
 | **Driver** | `--alpha-values` reaches every stage; a plot asked for an unstored α exits 2; the scope and the inventory name α | 06 |
@@ -380,6 +387,17 @@ So 𝒜₀ could not be read off the measurement, as §2.1 and P6 assumed. The p
 options: 𝒜₀ = 1, no gate, or a wider probe first. The user chose "𝒜₀ = 1", the physical threshold
 |ṁ|/m² = 1. Prompt 03 measures 𝒜_k and does not re-fit it.
 
+**U5 withdrawn, 2026-10-28.** While prompt 03 was being implemented, the user asked how w_rate
+prevents a solver restart, since it is never zero. It does not: the loop skips a drain and its restart
+only when α_eff is exactly 0.0, which only underflow gives. So the stopping rule never delivered the
+benefit the scoping gave it (§6: "Stopping saves the restarts, not the bounces"). Its only effect was
+to keep up to (π/2)ε per e-fold of energy in the condensate. Restarts are cheap at M = 0.5 M_P:
+02's drained histories ran faster than at α = 0 (log 02 §5). The orchestrator offered three
+options: drop w_rate; keep the taper with a hard cut-off; or keep it and document it. The user
+ruled: "I'd drop `w_rate`". So **α_eff = α · w_gate**, every candidate drains its gated amount,
+nothing is omitted, and ε, the trailing window, P17 and the `omitted_fraction` column of P7 go.
+Orchestrator note 03, ruling 16, carries it to prompt 03.
+
 The table below is the proposal as first written; its U4 row is superseded by (b′).
 
 | | Proposed | Alternatives |
@@ -436,9 +454,10 @@ Accepted as proposed unless the user rules otherwise.
   apart from a reflection's.
 - **P6 — the constants**, module constants in `ComputeTargets/ScalarHistory.py`: ε = 10⁻⁴, a
   trailing window of 1 e-fold of N_E, 𝒜₀ from 03's measurement, and a margin warning at ln 10.
+  (ε and the window were withdrawn with U5 on 2026-10-28.)
 - **P7 — the whole-history columns** (nullable, NULL at α = 0 where undefined): `injections`,
   `injected_fraction` (Σ Δρ/ρ_R at injection), `omitted_fraction` (the bound of what the tapers
-  left out), `rho_chi_ratio_1MeV`, `rho_chi_ratio_70keV`, `rho_chi_ratio_today`, `Delta_N_eff`
+  left out; withdrawn with U5 on 2026-10-28), `rho_chi_ratio_1MeV`, `rho_chi_ratio_70keV`, `rho_chi_ratio_today`, `Delta_N_eff`
   (today, (ρ_χ/ρ_R) g_ρ(T_CMB)/[(7/4)(4/11)^{4/3}] from the EOS's own g_ρ, about 7.45 ρ_χ/ρ_R),
   `relativistic_margin`,
   `relativistic_margin_N`.
@@ -472,6 +491,7 @@ Accepted as proposed unless the user rules otherwise.
   - **The bound.** With c_j, the part the taper omits in any one-e-fold window is at most (π/2)ε.
   - **Its standing.** It clarifies "the planner's version" that the user ruled for U5, so that the
     version keeps its own bound. It stands unless the user rules otherwise.
+  - **Withdrawn, 2026-10-28**, with the stopping rule itself (§6.1, "U5 withdrawn").
 
 ## 7. What this campaign hands to the user
 
