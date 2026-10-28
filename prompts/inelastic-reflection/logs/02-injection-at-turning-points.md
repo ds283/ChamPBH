@@ -1,7 +1,7 @@
 # Log 02 — injection at turning points
 
 **Subject:** Drain the condensate's kinetic energy at turning points
-**Commit:** this commit, on branch `inelastic-reflection`, on top of `77af9c8`
+**Commit:** `fe2a944`, on branch `inelastic-reflection`, on top of `77af9c8`
 **Date:** 2026-10-28, by Claude Opus 5.5
 **Result:** **COMPLETE, after one stop.**
 - §1.1–§1.5 shipped under orchestrator note 02, whose rulings 1–14 govern where they differ from the

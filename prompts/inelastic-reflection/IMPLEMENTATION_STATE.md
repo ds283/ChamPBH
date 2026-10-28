@@ -1,8 +1,8 @@
 # inelastic-reflection campaign — implementation state
 
 **Last updated:** 2026-10-28 · **Status: LIVE — 01 landed in `85661b5` and reviewed (2026-10-28;
-gate DR holds); 02 landed in this commit (2026-10-28; gate Inject holds), after one stop and the
-user's ruling of interior sampling; 2 of 8 prompts written.
+gate DR holds); 02 landed in `fe2a944` and reviewed (2026-10-28; gate Inject holds), after one
+stop and the user's ruling of interior sampling; 2 of 8 prompts written; 03 is written next.
 R1–R5 ruled by the user 2026-10-27; U1–U8 ruled the same
 day (U4 as the revised proposal (b′): wall-side turning points only) and P1–P16 stand. The prompts
 are written one at a time, each after the one before has landed and been reviewed (README §2.1).**
@@ -34,7 +34,7 @@ bitwise the old code's.
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
 | 01 | [Dark-radiation component](01-dark-radiation-component.md) | the ledger; ρ_χ in V/3H²M_P², Ḣ/H², E, `HubblePolicy`, V_target; K = 0 bitwise | Opus | ✍️ 2026-10-27 | ✅ 2026-10-28 | `85661b5` | [01](logs/01-dark-radiation-component.md) |
-| 02 | [Injection at turning points](02-injection-at-turning-points.md) | turning points in the step loop; the drain at the KE maximum; the restart; the floor-rule drain; the record; α in `integrate_history`/`tune_history` | Opus | ✍️ 2026-10-28 | ✅ 2026-10-28 | this commit | [02](logs/02-injection-at-turning-points.md) |
+| 02 | [Injection at turning points](02-injection-at-turning-points.md) | turning points in the step loop; the drain at the KE maximum; the restart; the floor-rule drain; the record; α in `integrate_history`/`tune_history` | Opus | ✍️ 2026-10-28 | ✅ 2026-10-28 | `fe2a944` | [02](logs/02-injection-at-turning-points.md) |
 | 03 | Gate and stopping rule | 𝒜_k measured, then the gate at wall-side turning points (U4 (b′)); the plateau diagnostic; the tapered stopping rule (U5); the residual's continuity | Opus | ⬜ | ⬜ | — | — |
 | 04 | Relativistic margin | generation momenta; m_eff on the trajectory; the margin to today; the warning | Opus | ⬜ | ⬜ | — | — |
 | 05 | Store | α as a key (U3); per-sample ρ_χ/ρ_R; whole-history columns; `AdiabaticHistory`; format 6, 2026.8.0 | Opus | ⬜ | ⬜ | — | — |
@@ -51,6 +51,7 @@ the one before has landed and been reviewed, from what its log hands on.
 
 Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 - [`orchestrator/prompt-01.md`](orchestrator/prompt-01.md) (`00c17f4`), used for 01.
+- [`orchestrator/prompt-02.md`](orchestrator/prompt-02.md) (`77af9c8`; §0a, rulings 15 and 8a, added at the review), used for 02.
 
 ## 2. The gates
 
@@ -209,7 +210,7 @@ Residue fixed in this review's commit:
 
 ### 5.2 After prompt 02 (2026-10-28)
 
-02 landed in this commit, under orchestrator note 02 (rulings 1–14). It stopped once; ruling 15 (the
+02 landed in `fe2a944`, under orchestrator note 02 (rulings 1–14). It stopped once; ruling 15 (the
 user's) and ruling 8a (the coordinator's) followed. Log:
 [`logs/02-injection-at-turning-points.md`](logs/02-injection-at-turning-points.md).
 - **The stop.** The §2 measurement found a step at β = 5, α = 0.1 (step 6051, T_J ≈ 0.7 MeV) on
@@ -252,3 +253,101 @@ user's) and ruling 8a (the coordinator's) followed. Log:
 - **For 03** (log 02 §8): α_eff is set in `alpha_effective()`, the one place for w_gate·w_rate.
   Dropped drains are derived, and need a count once a weight can be zero. The near-stall pair at
   β = 5 is the first measured small oscillation.
+
+*Orchestrator review of prompt 02 (2026-10-28).* The note's ten checks, at `fe2a944`, run serially.
+The load was 3–108 (other workloads share the machine):
+1. **Scope.**
+   - The commit's 6 files are the prompt's §6 list exactly, and its parent is `77af9c8`.
+   - The tree is clean, `git worktree list` shows the main checkout alone, and nothing is pushed.
+   - There is no change to `AdiabaticHistory.py`, `Policies/`, `dark_radiation.py`, `Quadrature/`,
+     `ObjectFactories/`, `config/`, `main.py`, `tools/`, `RunDrivers/`, `plot_inputs.py`, the golden
+     generators or `ComputeTargets/tests/data`.
+   - `compute_scalar_history`, `build_extra_data` and `ScalarHistory.store` are byte-identical to
+     `77af9c8`'s.
+2. **The golden histories.** Two runs, all passing:
+   - `test_golden_history`, `test_first_bounce`, `test_surfing_turning_points` and
+     `test_kinematic_cap_loop`, run together: 34 tests in 14.7 s, all unedited;
+   - the tuned golden test (`test_tuning.py` (e)) with `test_injection`: 18 tests in 31.3 s.
+
+   The golden JSONs are byte-identical to `77af9c8`'s.
+3. **The loop.** Every changed line of `integrate_scalar_history` was read against rulings 1–6 and 15.
+   - **Classification.** The end values are scalar calls at `ts[k]` and `ts[k + 1]`. An end-to-end
+     change uses `first_bounce`'s whole-step `brentq`.
+   - **The drain.** The drain-point test reads `solver.y[1]` and `solver.f[1]`.
+   - **The order.** Append, classify, the `finished` exit, drain, then restart. `ledger.add` comes
+     before `new_solver`, and the last step never drains.
+   - **At α = 0** there is no ledger call, no restart and no change to y. The floor branch performs
+     `77af9c8`'s two lines.
+4. **The drain.** ΔK and Δρ/ρ_R are formed in logs (D3), and ρ_kin uses H_E with the ledger before
+   the drain. A probe of my own (session scratchpad, not committed) at M = 0.5 M_P, α = 0.1, for
+   β = 2 and 5 recomputed each drain from the definitions, with H from
+   H² = (V + ρ_R(1 + f_m) + K e^{−4N})/(3M_P²G):
+   - H_after/H_before − 1 ≤ 2.2e-16;
+   - the policy's H against the definitions to 7.6e-15;
+   - ΔK against α·½H²π²e^{4N} to 3.7e-14;
+   - `ledger.injections` equal to the drains as the same floats, and K(N_final) = Σ ΔK exactly;
+   - `solution(N_j)[1]` equal to `pi_after` bitwise.
+5. **The breakages.** B1–B9 were replayed in `bash` from the agent's diffs, with `git apply --check`
+   and `-R --check`, the source's md5 checked restored after each. Each fails the tests the log
+   names:
+   - B1: 4 tests;
+   - B2: 3;
+   - B3: 3;
+   - B4: 2;
+   - B5: 1;
+   - B6: 2;
+   - B7: 3;
+   - B8: the two golden histories and the tuned one;
+   - B9: both item-11 tests.
+
+   B6's diff isolates the order (D8): it re-adds the drain after `new_solver`, and only item 7
+   fails for the reason intended.
+6. **The numerics of the tests.**
+   - **Ruling 8a.** `H_bound` is derived term by term, and its exponent term ε|x| covers the β = 25
+     drain at 64 ε. One ulp of x ≈ −180 is 128 ε on H², which is 64 ε on H. The test reports its
+     worst ratio (0 at c = 0.043, bound 99 ε, on β = 2).
+   - **Ruling 6.** Item 6 asserts the drained state bitwise.
+   - **Item 7.** It fails under B6.
+7. **The measurement.** My probe re-ran β = 2 and β = 5 at α = 0.1, and both agree with the log:
+   - β = 2: 3 836 steps, 27/26 turning points, 27 injections;
+   - β = 5: 7 494 steps, 86/85, 86 injections, with the kinds alternating.
+
+   The α = 0 counts in the log equal prompt §0's table, and no step is left with more sign changes
+   than the loop recorded. The tuning at β = 2, α = 0.1 is reported as measured: it converges in
+   11 integrations.
+8. **Nothing reaches the store.** `store`, `build_extra_data`, `golden_history.record_of` and
+   `TUNING_OUTPUT_KEYS` are unchanged; the new payload keys are read by nothing on the way to the
+   store. The ObjectFactories, tools and RunDrivers counts are unchanged.
+9. **The records.**
+   - The log is in §5.1's form, with the H_E argument (§1.1) and the bounds (§1.2).
+   - It classes note 02's rulings R1–R15 with 8a, and the agent's D1–D8, with no UNINTENDED DRIFT.
+   - The two `.documents/` notes are dated and additive only (no removed line):
+     a dated note in `architecture-summary.md` §7.2, and a new `numerical-strategies.md` §6.2.
+   - Nothing was opened, so `.documents/OPEN_ISSUES.md` is untouched.
+10. **The suites** at `fe2a944`, serially, all passing:
+    - CosmologyModels 26 (66 s);
+    - ComputeTargets 96 + 209 (127 s + 267 s);
+    - ObjectFactories 103 (16 s);
+    - tools 115 (161 s);
+    - RunDrivers 64 (26 s).
+
+    ComputeTargets rose by the 17 new tests only. `black --check` is clean on the two changed `.py`
+    files.
+
+Residue fixed in this review's commit:
+- "this commit" → `fe2a944` in the log and on this board;
+- note 02 gains §0a, which records rulings 15 (the user's) and 8a (mine) as they were sent to the
+  agent after the stop.
+
+One observation of the review's, not opened. It is the neighbour of note 02 ruling 7 and needs an
+exact equality:
+- **The case.** The termination branch's `g_low == 0.0` case (ln T_J exactly at log_T_stop at a step
+  end) ends the history at the previous node without appending the last step. If a drain had been
+  made at that node, ts[-1] would be the drain point.
+- **What goes wrong.** `solution(N_final)`, and so the sample at z = 0, would read the pre-drain
+  interpolant against the post-drain K, while `final_state` is the drained state.
+
+The detection's cost at α = 0 (+11% on the golden history, about 20 µs per accepted step) applies to
+every history `main.py` builds. It is recorded in log 02 §7, and is by the prompt's design.
+`CLAUDE.md`'s counts (269; 77 + 192) are stale. They are 08's to update; 03's baselines are
+26 / 305 (96 + 209) / 103 / 115 / 64.

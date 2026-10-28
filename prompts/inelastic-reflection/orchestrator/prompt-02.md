@@ -172,6 +172,31 @@ found, where the prompt is silent, loose or wrong:
   resumes with `SendMessage`.
 - **Other sessions** may land commits on this branch. The agent does not assume `HEAD` is its own.
 
+## 0a. After the stop (2026-10-28, added at the review)
+
+The agent stopped once, on prompt §5's third condition. In the §2 measurement at β = 5, α = 0.1,
+step 6051 of 7487 (T_J ≈ 0.71 MeV, φ ≈ 0.0166 M), π is +1.9e-6 at the start and +1.2e-6 at the end,
+and dips to −1.0e-6 inside the step. The end-point test missed a plateau turnaround and the
+wall-side turning point after it. The orchestrator reproduced the step with the agent's script. It
+then put three options to the user: interior sampling, accept and record, or first check that the
+dip is real. Two rulings followed, sent to the agent by `SendMessage`.
+
+15. **Interior sampling of π.** The user chose this option ("Interior sampling") on 2026-10-28.
+    - On each appended step, π is read at its two ends by ruling 1's scalar calls, and at 8 equally
+      spaced interior points in one vectorized call.
+    - One sign change running end to end is bracketed by the whole step, as `first_bounce` does.
+      Two or more are each refined on their own sub-interval. Exact zeros are handled as in
+      `surfing_turning_points`.
+    - `first_bounce` is unchanged.
+    - The stop is narrowed to a step whose 17-point count exceeds the loop's record.
+    - It adds a test (item 11) and the breakage B9.
+
+    *STRUCTURALLY REQUIRED*, ruled by the user.
+8a. **The H_E bound is the agent's derived, term-by-term bound**, which replaces ruling 8's
+    k·ε·(1 + c). Its term ε|x| comes from rounding the exponent x = ln(3H²M_P²) ≈ −180 that
+    `HubblePolicy` passes to exp. No small k can cover it: at β = 25 one drain has
+    |ΔH/H| = 1.414e-14 = 64 ε at c = 9.7e-8. *STRUCTURALLY REQUIRED*, ruled by the orchestrator.
+
 ## 1. Before you dispatch
 
 Done at `63918a4`, before this note was committed:
