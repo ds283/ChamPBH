@@ -1157,6 +1157,58 @@ each alternating with the tree before (load 3.7–5.8), had minima 10.9 s and 10
 untuned histories) and 23.3 s and 24.1 s (the tuned one), inside the spread of the tree before
 (10.9–11.8 s and 23.3–24.9 s); one `ODEPolicy` call took 7.7–7.8 µs against 7.3–7.8 µs before.
 
+### 6.2 Added 2026-10-28 (`inelastic-reflection` prompt 02): the drain in the step loop
+
+Prompt 02 makes `integrate_scalar_history` see the turning points of φ and drain a fraction α of the
+condensate's kinetic energy into the §6.1 ledger. The parameter `alpha` (default 0.0; 0 ≤ α < 1, else a
+`ValueError` at entry) is taken by `integrate_scalar_history`, `integrate_history` and `tune_history`,
+not by `compute_scalar_history`, so no stored history has α > 0. The record is
+`prompts/inelastic-reflection/logs/02-injection-at-turning-points.md`.
+
+- **Turning points, at every α.** After each accepted step that is appended to the dense output
+  (the last one up to N_final), π is read on the step's interpolant at its two ends by scalar calls,
+  as `first_bounce` reads it, and at 8 equally spaced interior points in one vectorized call
+  (`TURNING_POINT_INTERIOR_SAMPLES`, as `surfing_turning_points` samples g). A single sign change
+  running end to end is located by `brentq` over the whole step (xtol = 1e-15), exactly as
+  `first_bounce` locates it. Two or more changes on one step are each refined on their own
+  sub-interval; a sample exactly 0.0 is a turning point only if the signs either side differ. Each is a
+  `TurningPoint`, "wall" (π − → +) or "plateau" (+ → −). The interior samples were added at the user's
+  ruling, after a near-stall at β = 5, α = 0.1, M = 0.5 M_P put a plateau and a wall-side point inside
+  one step (π > 0 at both ends, a dip to −1e-6 between). Detection reads the interpolant only and does
+  not touch the solver.
+- **The drain point** (P3). A wall-side turning point arms a drain. A plateau turnaround, a floor
+  reflection or the history's end drops it. The drain point is the end of the first accepted step,
+  counting from the turning point's own, at which the accepted state has π > 0 and
+  π′ = `solver.f[1]` ≤ 0: the first step end past the maximum of |π|. On the measured histories no
+  drain was dropped, and none was made on the turning point's own step.
+- **The drain.** At (N, y), with α_eff = α (the one place prompt 03 multiplies in its weights):
+  1. ρ_kin,E = ½H_E²π², with H_E from `HubblePolicy` with the ledger before the drain;
+  2. ΔK = α_eff ρ_kin,E e^{4N}, computed in logs;
+  3. `ledger.add(N, ΔK)`;
+  4. π → √(1 − α_eff) π;
+  5. a new Radau instance at (N, y_drained).
+
+  The ledger is added to before the restart, because Radau's constructor evaluates the RHS at
+  (N, y_drained) and must see the new K. The step that ends the history never drains.
+- **The floor rule** drains in its own restart: π_out = −√(1 − α_eff) π_in, with ΔK from the state and
+  ledger before it. At α_eff = 0 the restart is the old one exactly.
+- **H_E is continuous.** 3M_P²H²G = V + ρ_R(1 + f_m) + ρ_χ holds at the same H for (π, ρ_χ) and
+  (√(1 − α)π, ρ_χ + αρ_kin), since 3M_P²H²·απ²/6M_P² = αρ_kin. In floats, H_after equalled H_before
+  bitwise at 194 of the 195 drains measured. The other differed by 1.4e-14, one ulp of the exponent
+  ln(3H²M_P²) ≈ −180 that `HubblePolicy` exponentiates. So the rounding bound on H's jump is set by
+  that ulp (about 64 ε), not by G's condition. H_J jumps, because π does (P14).
+- **The dense output is right-continuous** (`OdeSolution(ts, interpolants, alt_segment=True)`). At a
+  drain or reflection node it returns interpolant k + 1 at its start, the restarted state exactly. The
+  ledger's rule N_j ≤ N pairs that state with the new K. At α = 0 only a query exactly at an interior
+  node could see a difference, and neither golden history makes one.
+- **At α = 0** nothing is drained, and no restart is made. Both golden histories pass bitwise.
+  The detection adds 451 `brentq` calls to them (6 at β = 1.5, 445 at β = 5.5), and two scalar and
+  one 8-point interpolant evaluation per accepted step, about 20 µs. It costs about 10% of their
+  wall time (9.7 → 10.8 s on the minima of three alternating runs). A restart at each would-be drain point with y unchanged is not free:
+  it changes both golden histories (β = 1.5: 1233 → 1237 steps).
+- **The counts at M = 0.5 M_P** (untuned, to T_CMB, α = 0.1): 7, 27, 86 and 75 drains for
+  β = 1.2, 2, 5 and 25. At α = 0 there are 9, 23, 141 and 353 wall-side turning points.
+
 ---
 
 ## 7. From scalar history to BBN via PRyMordial (`ComputeTargets/BBNData.py`)

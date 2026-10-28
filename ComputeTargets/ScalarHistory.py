@@ -64,6 +64,7 @@ from .exceptions import ComputationFailureError
 # useful constants, calculated once and cached to speed up the numerical integration
 PISQ_OVER_30 = pi * pi / 30.0
 LOG_PISQ_OVER_30 = log(PISQ_OVER_30)
+LOG_2 = log(2.0)
 
 # key under which the number of elastic reflections (the floor-triggered reflection model of
 # integrate_scalar_history) is stored in ScalarHistory.extra_metadata.
@@ -77,6 +78,12 @@ EXPECTED_SOL_LENGTH = 5
 # Fixed constants: not a run option and not part of the lookup key
 FIXED_T_JORDAN_HIGH_MEV = 1.0
 FIXED_T_JORDAN_LOW_MEV = 0.07
+
+# the interior points at which integrate_scalar_history samples pi on each accepted step, besides
+# its two ends, to find turning points (inelastic-reflection prompt 02; orchestrator note 02,
+# ruling 15, as surfing_turning_points samples g): two sign changes on one step are both found
+# unless they are closer than a ninth of it
+TURNING_POINT_INTERIOR_SAMPLES = 8
 
 # the stepper label returned by compute_scalar_history; main.py pre-registers it as
 # IntegrationSolver(label="Radau+kinematic-cap", stepping=0)
@@ -130,15 +137,73 @@ Reflection = namedtuple(
     ],
 )
 
+# one turning point of phi seen by integrate_scalar_history (inelastic-reflection prompt 02): a sign
+# change of pi on an accepted step's interpolant, sampled at its two ends and at
+# TURNING_POINT_INTERIOR_SAMPLES interior points, located at the root of pi (brentq,
+# xtol = 1e-15); a single end-to-end change is located exactly as first_bounce locates one
+#   N:             e-fold number of the turning point
+#   phi_Einstein:  the Einstein-frame field there
+#   log_T_Jordan:  ln of the Jordan-frame temperature there, in the cosmology's units
+#   kind:          "wall" where pi goes from - to + (turned back by the potential), "plateau" where
+#                  it goes from + to - (turned back by the matter coupling)
+TurningPoint = namedtuple(
+    "TurningPoint",
+    [
+        "N",
+        "phi_Einstein",
+        "log_T_Jordan",
+        "kind",
+    ],
+)
+
+# one drain of the condensate's kinetic energy into the dark-radiation ledger (inelastic-reflection
+# prompt 02; README §6.2 P4, the fields prompt 02 can fill)
+#   N:                       the drain point: the end of the accepted step at which the drain was
+#                            made, or the floor reflection's N
+#   kind:                    "turning_point" (after a wall-side TurningPoint) or "floor" (a
+#                            floor-rule reflection)
+#   N_turn:                  the turning point's N, or N for a floor event
+#   phi_turn:                phi at the turning point, or at the reflection
+#   pi_before, pi_after:     pi at the drain, before and after it
+#   log_rho_kin:             ln rho_kin,E = ln(H_E^2 pi_before^2/2) before the drain
+#   alpha_eff:               the fraction drained
+#   delta_K:                 the ledger's entry, alpha_eff rho_kin,E e^{4N}
+#   delta_rho_over_rho_rad:  alpha_eff rho_kin,E/rho_R,E
+#   H_Einstein_before:       H_E from the state and the ledger before the drain
+#   H_Einstein_after:        H_E from the state and the ledger after it
+Injection = namedtuple(
+    "Injection",
+    [
+        "N",
+        "kind",
+        "N_turn",
+        "phi_turn",
+        "pi_before",
+        "pi_after",
+        "log_rho_kin",
+        "alpha_eff",
+        "delta_K",
+        "delta_rho_over_rho_rad",
+        "H_Einstein_before",
+        "H_Einstein_after",
+    ],
+)
+
 # what integrate_scalar_history returns
-#   solution:                    scipy OdeSolution over [N_start, N_final]
+#   solution:                    scipy OdeSolution over [N_start, N_final], right-continuous at its
+#                                nodes (alt_segment=True; inelastic-reflection prompt 02): at a
+#                                drain or a reflection it returns the state after it
 #   N_final:                     e-fold number at which ln T_J crossed log_T_stop
 #   final_state:                 StateVector at N_final
 #   nfev:                        RHS evaluations requested by the loop (including Jacobian probes)
 #   accepted_steps:              accepted Radau steps
 #   steps_rejected_by_exception: step attempts abandoned because the RHS raised on a trial state
-#   reflections:                 list of Reflection
+#   reflections:                 list of Reflection (floor-rule events only)
 #   max_wall_to_kinetic_ratio:   largest W/(pi^2/2) at a reflection (guard G2), or None
+#   turning_points:              list of TurningPoint, in order, at every alpha
+#                                (inelastic-reflection prompt 02)
+#   injections:                  list of Injection, in order; empty at alpha = 0
+#                                (inelastic-reflection prompt 02)
 IntegrationResult = namedtuple(
     "IntegrationResult",
     [
@@ -150,6 +215,8 @@ IntegrationResult = namedtuple(
         "steps_rejected_by_exception",
         "reflections",
         "max_wall_to_kinetic_ratio",
+        "turning_points",
+        "injections",
     ],
 )
 
@@ -623,6 +690,7 @@ def integrate_scalar_history(
     policy: Optional[ODEPolicy] = None,
     task_label: Optional[str] = None,
     N_stop: Optional[float] = None,
+    alpha: float = 0.0,
 ) -> IntegrationResult:
     """
     Integrate the scalar-field history from (N_start, initial_state) until ln T_J falls below
@@ -647,6 +715,30 @@ def integrate_scalar_history(
     test), Radau's bound is min(N_stop, N_failsafe) and reaching N_stop ends the integration
     successfully at N_stop, unless ln T_J has fallen below log_T_stop first.
 
+    Turning points and the drain (inelastic-reflection prompt 02). After every accepted step that
+    is appended to the dense output, pi is read on the step's interpolant at its two ends (the
+    last step's end is N_final) and at TURNING_POINT_INTERIOR_SAMPLES interior points, and each
+    sign change is a TurningPoint, located by brentq (xtol = 1e-15): "wall" for pi from - to +,
+    "plateau" for + to -. A single change running end to end is located exactly as first_bounce
+    locates one; two or more on one step are each refined on their own sub-interval
+    (orchestrator note 02, ruling 15). This runs at every alpha and does not touch the solver.
+    At alpha > 0:
+      - a wall-side turning point arms a drain. The drain point is the end of the first accepted
+        step, counting from the turning point's own, at which the accepted state has pi > 0 and
+        pi' = solver.f[1] <= 0: the first step end past the maximum of |pi| (README §6.2 P3).
+        There, with alpha_eff = alpha, rho_kin,E = H_E^2 pi^2/2 (H_E from HubblePolicy with the
+        ledger before the drain), Delta K = alpha_eff rho_kin,E e^{4N} is added to the ledger,
+        pi -> sqrt(1 - alpha_eff) pi, and Radau is restarted from the drained state. The ledger is
+        added to before the new Radau instance is built, so its first RHS evaluation sees the new
+        K. A plateau turnaround, a floor reflection or the history's end before the drain point
+        drops the armed drain. The step that ends the history never drains;
+      - a floor-rule reflection drains in its own restart: pi_out = -sqrt(1 - alpha_eff) pi_in,
+        with Delta K = alpha_eff H_E^2 pi_in^2 e^{4N}/2 from the state and ledger before it.
+    Each drain is an Injection. At alpha = 0 nothing is drained, the ledger is not touched, no
+    restart is made and every value is the old code's. The dense output is right-continuous at its
+    nodes (OdeSolution with alt_segment=True), so at a drain node it returns the drained state,
+    which the ledger's rule N_j <= N pairs with the new K.
+
     :param RHS: callable RHS(N, state, supervisor), normally an ODERHS
     :param supervisor: the ScalarFieldIntegrationSupervisor (already entered)
     :param initial_state: the state at N_start
@@ -657,10 +749,37 @@ def integrate_scalar_history(
     :param policy: the ODEPolicy used for the reflection guard; defaults to RHS.policy
     :param task_label: label used in failure messages
     :param N_stop: optional e-fold number at which to end the integration successfully
+    :param alpha: the fraction of the condensate's kinetic energy drained at each drain point and
+                  floor reflection (inelastic-reflection prompt 02), 0 <= alpha < 1. At alpha > 0
+                  policy.dark_radiation receives the drains, and must be the ledger the RHS reads
     :return: IntegrationResult
     """
+    if not (0.0 <= alpha < 1.0):
+        raise ValueError(
+            f"integrate_scalar_history: alpha must satisfy 0 <= alpha < 1, not {alpha!r}"
+        )
+
     if policy is None:
         policy = RHS.policy
+
+    # the ledger the drains go to (orchestrator note 02, ruling 5): at alpha > 0 it must exist, and
+    # it must be the one the RHS reads, or a drain would change pi without changing the expansion
+    ledger: Optional[DarkRadiationLedger] = None
+    if alpha > 0.0:
+        ledger = policy.dark_radiation
+        if ledger is None:
+            raise ValueError(
+                "integrate_scalar_history: alpha > 0 needs a policy with a DarkRadiationLedger"
+            )
+        RHS_policy = getattr(RHS, "policy", None)
+        if (
+            RHS_policy is not None
+            and getattr(RHS_policy, "dark_radiation", None) is not ledger
+        ):
+            raise ValueError(
+                "integrate_scalar_history: the policy's DarkRadiationLedger is not the one the "
+                "RHS reads"
+            )
 
     f_cap: float = params.cap_fraction
     h_floor: float = params.cap_floor
@@ -696,9 +815,171 @@ def integrate_scalar_history(
     ts = [solver.t]
     interpolants = []
     reflections = []
+    turning_points = []
+    injections = []
     max_ratio: Optional[float] = None
     accepted_steps = 0
     steps_rejected_by_exception = 0
+
+    # the wall-side TurningPoint whose drain is armed, or None (inelastic-reflection prompt 02)
+    armed: Optional[TurningPoint] = None
+
+    hubble = HubblePolicy(policy.model, policy.units)
+
+    def alpha_effective() -> float:
+        # the fraction drained at one drain point or floor reflection. In inelastic-reflection
+        # prompt 02 it is alpha at every one; this is the one place prompt 03 multiplies in its
+        # weights w_gate and w_rate
+        return alpha
+
+    def H_Einstein_at(N_: float, y_: np.ndarray) -> float:
+        state_ = StateVector._make(y_)
+        return hubble(policy(N_, state_), state_).H_Einstein
+
+    def drain(
+        N_: float,
+        y_: np.ndarray,
+        alpha_eff: float,
+        kind: str,
+        N_turn: float,
+        phi_turn: float,
+        sign: float,
+    ) -> np.ndarray:
+        """
+        Drain alpha_eff of rho_kin,E at (N_, y_) into the ledger, and return the drained state, with
+        pi -> sign sqrt(1 - alpha_eff) pi (sign = -1 for a floor reflection). The ledger is added
+        to here, before the caller builds the new Radau instance.
+        """
+        pi_before: float = float(y_[1])
+        H_before: float = H_Einstein_at(N_, y_)
+
+        # rho_kin,E = H_E^2 pi^2/2 and Delta K = alpha_eff rho_kin,E e^{4N}, in logs, so that no
+        # intermediate overflows or underflows
+        log_rho_kin: float = 2.0 * log(H_before) + 2.0 * log(abs(pi_before)) - LOG_2
+        log_alpha: float = log(alpha_eff)
+        delta_K: float = exp(log_alpha + log_rho_kin + 4.0 * N_)
+        delta_rho_over_rho_rad: float = exp(log_alpha + log_rho_kin - float(y_[2]))
+
+        ledger.add(N_, delta_K)
+
+        y_drained = y_.copy()
+        y_drained[1] = sign * (sqrt(1.0 - alpha_eff) * pi_before)
+        H_after: float = H_Einstein_at(N_, y_drained)
+
+        injections.append(
+            Injection(
+                N=float(N_),
+                kind=kind,
+                N_turn=float(N_turn),
+                phi_turn=float(phi_turn),
+                pi_before=pi_before,
+                pi_after=float(y_drained[1]),
+                log_rho_kin=log_rho_kin,
+                alpha_eff=alpha_eff,
+                delta_K=delta_K,
+                delta_rho_over_rho_rad=delta_rho_over_rho_rad,
+                H_Einstein_before=H_before,
+                H_Einstein_after=H_after,
+            )
+        )
+        return y_drained
+
+    def observe_turning_points() -> List[TurningPoint]:
+        """
+        The turning points on the step just appended, in order (orchestrator note 02, rulings 1
+        and 15). pi is read at the step's two ends by scalar calls, interpolant(ts[k]) and
+        interpolant(ts[k + 1]) (ts[k + 1] = N_final on the last step), as first_bounce reads it,
+        and at TURNING_POINT_INTERIOR_SAMPLES equally spaced interior points in one vectorized
+        call, as surfing_turning_points samples g.
+          - One sign change across the samples, running end to end (pi_low and pi_high of opposite
+            signs): the root is bracketed by the whole step, brentq(xtol = 1e-15), exactly as
+            first_bounce brackets it.
+          - Otherwise each sign change between consecutive samples is refined by brentq on its
+            sub-interval. A sample at which pi is exactly 0.0 is the turning point if the signs
+            on either side of it (within the step) differ, counted once; a touch is not one.
+        "wall" where pi goes from - to +, "plateau" where it goes from + to -. Records and returns
+        the list, possibly empty.
+        """
+        k: int = len(interpolants) - 1
+        interpolant_ = interpolants[k]
+        t_low: float = ts[k]
+        t_high: float = ts[k + 1]
+
+        pi_low: float = interpolant_(t_low)[1]
+        pi_high: float = interpolant_(t_high)[1]
+        N_interior = np.linspace(t_low, t_high, TURNING_POINT_INTERIOR_SAMPLES + 2)[
+            1:-1
+        ]
+        pi_interior = interpolant_(N_interior)[1]
+
+        # the common case, decided in numpy: every sample strictly of one sign, so no change
+        if (pi_low > 0.0 and pi_high > 0.0 and (pi_interior > 0.0).all()) or (
+            pi_low < 0.0 and pi_high < 0.0 and (pi_interior < 0.0).all()
+        ):
+            return []
+
+        Ns = [t_low] + [float(x) for x in N_interior] + [t_high]
+        pis = [pi_low] + [float(x) for x in pi_interior] + [pi_high]
+
+        # the sign changes between consecutive samples: (j_before, j_after, j_zero or None, kind),
+        # where j_zero is the first sample exactly 0.0 since the last non-zero one
+        changes = []
+        last_sign: int = 0
+        last_j: Optional[int] = None
+        zero_j: Optional[int] = None
+        for j, pi_j in enumerate(pis):
+            if pi_j == 0.0:
+                if zero_j is None:
+                    zero_j = j
+                continue
+            sign: int = 1 if pi_j > 0.0 else -1
+            if last_sign != 0 and sign != last_sign:
+                changes.append(
+                    (last_j, j, zero_j, "wall" if last_sign < 0 else "plateau")
+                )
+            last_sign = sign
+            last_j = j
+            zero_j = None
+
+        def pi_of(t: float) -> float:
+            return interpolant_(t)[1]
+
+        roots = []
+        if len(changes) == 1 and (pi_low < 0.0 < pi_high or pi_low > 0.0 > pi_high):
+            # end to end: the whole step is the bracket, as first_bounce takes it
+            roots.append((brentq(pi_of, t_low, t_high, xtol=1e-15), changes[0][3]))
+        else:
+            for j_before, j_after, j_zero, kind in changes:
+                if j_zero is not None:
+                    roots.append((Ns[j_zero], kind))
+                    continue
+                a, b = Ns[j_before], Ns[j_after]
+                # re-read the sub-interval's ends by scalar calls: a vectorized interior sample
+                # can differ from the scalar one by rounding
+                pi_a, pi_b = pi_of(a), pi_of(b)
+                if pi_a == 0.0:
+                    root = a
+                elif pi_b == 0.0:
+                    root = b
+                elif (pi_a < 0.0) == (pi_b < 0.0):
+                    root = a if abs(pi_a) <= abs(pi_b) else b
+                else:
+                    root = brentq(pi_of, a, b, xtol=1e-15)
+                roots.append((root, kind))
+
+        found = []
+        for N_turn, kind in roots:
+            y_turn = interpolant_(N_turn)
+            found.append(
+                TurningPoint(
+                    N=float(N_turn),
+                    phi_Einstein=float(y_turn[0]),
+                    log_T_Jordan=float(y_turn[4]),
+                    kind=kind,
+                )
+            )
+        turning_points.extend(found)
+        return found
 
     while True:
         N: float = solver.t
@@ -706,7 +987,8 @@ def integrate_scalar_history(
         pi_: float = solver.y[1]
 
         # the floor rule: an inward-moving field whose velocity cap would fall below the
-        # representable step is reflected elastically (README §2 (b))
+        # representable step is reflected elastically (README §2 (b)); at alpha > 0 the reflection
+        # is also the drain point (inelastic-reflection prompt 02; README §6.2 P3)
         if pi_ < 0.0 and f_cap * phi / (-pi_) < h_floor:
             ratio = _reflection_guards(policy, N, solver.y, task_label)
             max_ratio = ratio if max_ratio is None else max(max_ratio, ratio)
@@ -714,8 +996,15 @@ def integrate_scalar_history(
             reflections.append(Reflection(N=N, phi_Einstein=phi, pi_Einstein_in=pi_))
             supervisor.notify_reflection(N)
 
-            y_reflected = solver.y.copy()
-            y_reflected[1] = -pi_
+            # a drain still armed is dropped: the field turned inwards before its drain point
+            armed = None
+
+            alpha_eff: float = alpha_effective()
+            if alpha_eff == 0.0:
+                y_reflected = solver.y.copy()
+                y_reflected[1] = -pi_
+            else:
+                y_reflected = drain(N, solver.y, alpha_eff, "floor", N, phi, -1.0)
             solver = new_solver(N, y_reflected)
             continue
 
@@ -800,11 +1089,19 @@ def integrate_scalar_history(
                 N_final = brentq(crossing, N_low, N_high) if g_low > 0.0 else N_low
                 ts.append(N_final)
                 interpolants.append(interpolant)
+                # the step that ends the history is classified up to N_final, and never drains
+                observe_turning_points()
             final_state = StateVector._make(interpolant(N_final))
             break
 
         ts.append(solver.t)
         interpolants.append(interpolant)
+
+        # turning points (inelastic-reflection prompt 02; orchestrator note 02, rulings 1, 3 and
+        # 15), in order along the step: a wall-side one arms a drain, and a plateau turnaround
+        # drops one still armed
+        for turning_point in observe_turning_points():
+            armed = turning_point if turning_point.kind == "wall" else None
 
         if solver.status == "finished":
             if stop_at_bound:
@@ -817,8 +1114,28 @@ def integrate_scalar_history(
                 f"without ln T_J falling below log_T_stop={log_T_stop:.5g} (ln T_J={solver.y[4]:.5g})"
             )
 
+        # the drain point (README §6.2 P3; orchestrator note 02, ruling 2): the first accepted state
+        # since the wall-side turning point with pi > 0 and pi' <= 0, read before any restart
+        if armed is not None and solver.y[1] > 0.0 and solver.f[1] <= 0.0:
+            alpha_eff = alpha_effective()
+            if alpha_eff != 0.0:
+                y_drained = drain(
+                    solver.t,
+                    solver.y,
+                    alpha_eff,
+                    "turning_point",
+                    armed.N,
+                    armed.phi_Einstein,
+                    1.0,
+                )
+                solver = new_solver(solver.t, y_drained)
+            armed = None
+
     return IntegrationResult(
-        solution=OdeSolution(ts, interpolants),
+        # right-continuous at the nodes (inelastic-reflection prompt 02, §1.4): at a drain or a
+        # reflection it returns the state after it, which the ledger's N_j <= N pairs with the new
+        # K. At alpha = 0 only a query at an interior node exactly could see a difference
+        solution=OdeSolution(ts, interpolants, alt_segment=True),
         N_final=N_final,
         final_state=final_state,
         nfev=nfev,
@@ -826,6 +1143,8 @@ def integrate_scalar_history(
         steps_rejected_by_exception=steps_rejected_by_exception,
         reflections=reflections,
         max_wall_to_kinetic_ratio=max_ratio,
+        turning_points=turning_points,
+        injections=injections,
     )
 
 
@@ -1200,6 +1519,7 @@ def integrate_history(
     rtol: float = DEFAULT_REL_TOLERANCE,
     verbose: bool = False,
     rho_chi_ratio_init: float = 0.0,
+    alpha: float = 0.0,
 ) -> dict:
     """
     The primitive (jordan-normalization prompt 06, T1; README §6.0 R8): integrate one history of
@@ -1227,9 +1547,21 @@ def integrate_history(
                                ledger, and every value is the old code's bitwise.
                                compute_scalar_history does not take it, so no history a driver
                                launches, and none that is stored, has an initial rho_chi.
+    :param alpha: the fraction of the condensate's kinetic energy drained at each drain point and
+                  floor reflection (inelastic-reflection prompt 02; see integrate_scalar_history),
+                  0 <= alpha < 1, else a ValueError before any integration. 0.0 (the default) is
+                  the old code bitwise. compute_scalar_history does not take it (README §2.2: a
+                  stored history must have its alpha in its key, which is prompt 05's)
     :return: the payload; on success it carries "dark_radiation", the history's
-             DarkRadiationLedger (inelastic-reflection prompt 01), which no store reads
+             DarkRadiationLedger (inelastic-reflection prompt 01), and "turning_points" and
+             "injections", the IntegrationResult's lists of TurningPoint and Injection
+             (inelastic-reflection prompt 02). No store reads any of the three
     """
+    if not (0.0 <= alpha < 1.0):
+        raise ValueError(
+            f"integrate_history: alpha must satisfy 0 <= alpha < 1, not {alpha!r}"
+        )
+
     units: UnitsLike = cosmology.units
 
     log_T_init: float = log(GetTemperature(T_init))
@@ -1323,6 +1655,7 @@ def integrate_history(
                 N_failsafe=N_failsafe,
                 policy=policy,
                 task_label=task_label,
+                alpha=alpha,
             )
 
         # the solution must carry the five components of StateVector; anything else is a bug
@@ -1453,6 +1786,10 @@ def integrate_history(
         # the history's dark-radiation ledger (inelastic-reflection prompt 01): _tuning_state reads
         # it; ScalarHistory.store and build_extra_data read named keys only, so it is not stored
         "dark_radiation": dark_radiation,
+        # the turning points and the drains (inelastic-reflection prompt 02); not stored either.
+        # "reflections" above stays the count of floor-rule events
+        "turning_points": result.turning_points,
+        "injections": result.injections,
     }
 
 
@@ -1733,6 +2070,7 @@ def tune_history(
     progress: str = "quiet",
     clock=perf_counter,
     rho_chi_ratio_init: float = 0.0,
+    alpha: float = 0.0,
 ) -> dict:
     """
     The tuning layer (jordan-normalization prompt 06; README §6.0 R1, R2, R8, R10, R13): integrate
@@ -1777,6 +2115,11 @@ def tune_history(
     integrate_history). Eq. 7's V_target subtracts the component today (_tuning_state). 0.0 (the
     default) is the old tuning bitwise. compute_scalar_history does not take it.
 
+    alpha (inelastic-reflection prompt 02) is passed to every integration, each of which drains into
+    its own ledger (see integrate_scalar_history). A value outside 0 <= alpha < 1 is a ValueError
+    at entry, before the seed. 0.0 (the default) is the old tuning bitwise. compute_scalar_history
+    does not take it.
+
     :return: on success, the final integration's payload (every key integrate_history returns),
              with the keys of TUNING_OUTPUT_KEYS added: normalization, V_ref = V(phi_ref) on the
              final realization, phi_ref, phi_0, pi_0, tracking = pi_0/(1.5 phi_0), residual_H,
@@ -1790,6 +2133,10 @@ def tune_history(
     if progress not in TUNE_LINE_PROGRESS:
         raise ValueError(
             f"tune_history: progress must be one of {TUNE_LINE_PROGRESS}, not {progress!r}"
+        )
+    if not (0.0 <= alpha < 1.0):
+        raise ValueError(
+            f"tune_history: alpha must satisfy 0 <= alpha < 1, not {alpha!r}"
         )
 
     units: UnitsLike = cosmology.units
@@ -1825,6 +2172,7 @@ def tune_history(
             rtol=rtol,
             verbose=verbose,
             rho_chi_ratio_init=rho_chi_ratio_init,
+            alpha=alpha,
         )
         end = clock()
         wall = end - start

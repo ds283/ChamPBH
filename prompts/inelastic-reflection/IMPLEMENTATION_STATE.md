@@ -1,7 +1,8 @@
 # inelastic-reflection campaign — implementation state
 
 **Last updated:** 2026-10-28 · **Status: LIVE — 01 landed in `85661b5` and reviewed (2026-10-28;
-gate DR holds); 2 of 8 prompts written: 02 written 2026-10-28 from log 01 §7, ready to dispatch.
+gate DR holds); 02 landed in this commit (2026-10-28; gate Inject holds), after one stop and the
+user's ruling of interior sampling; 2 of 8 prompts written.
 R1–R5 ruled by the user 2026-10-27; U1–U8 ruled the same
 day (U4 as the revised proposal (b′): wall-side turning points only) and P1–P16 stand. The prompts
 are written one at a time, each after the one before has landed and been reviewed (README §2.1).**
@@ -33,7 +34,7 @@ bitwise the old code's.
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
 | 01 | [Dark-radiation component](01-dark-radiation-component.md) | the ledger; ρ_χ in V/3H²M_P², Ḣ/H², E, `HubblePolicy`, V_target; K = 0 bitwise | Opus | ✍️ 2026-10-27 | ✅ 2026-10-28 | `85661b5` | [01](logs/01-dark-radiation-component.md) |
-| 02 | [Injection at turning points](02-injection-at-turning-points.md) | turning points in the step loop; the drain at the KE maximum; the restart; the floor-rule drain; the record; α in `integrate_history`/`tune_history` | Opus | ✍️ 2026-10-28 | ⬜ | — | — |
+| 02 | [Injection at turning points](02-injection-at-turning-points.md) | turning points in the step loop; the drain at the KE maximum; the restart; the floor-rule drain; the record; α in `integrate_history`/`tune_history` | Opus | ✍️ 2026-10-28 | ✅ 2026-10-28 | this commit | [02](logs/02-injection-at-turning-points.md) |
 | 03 | Gate and stopping rule | 𝒜_k measured, then the gate at wall-side turning points (U4 (b′)); the plateau diagnostic; the tapered stopping rule (U5); the residual's continuity | Opus | ⬜ | ⬜ | — | — |
 | 04 | Relativistic margin | generation momenta; m_eff on the trajectory; the margin to today; the warning | Opus | ⬜ | ⬜ | — | — |
 | 05 | Store | α as a key (U3); per-sample ρ_χ/ρ_R; whole-history columns; `AdiabaticHistory`; format 6, 2026.8.0 | Opus | ⬜ | ⬜ | — | — |
@@ -56,7 +57,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 | Gate | Holds when | Prompt | State |
 |---|---|---|---|
 | DR | at K = 0 both golden histories bitwise; with an initial ρ_χ constraint and continuity agree, the radiation limit holds, a tuned history meets both conditions | 01 | ✅ 2026-10-28 (log 01 §4) |
-| Inject | at α = 0 both golden histories bitwise; at α > 0 H_E continuous across every injection, ledger = Σ drains; a floor-rule drain exact | 02 | ⬜ |
+| Inject | at α = 0 both golden histories bitwise; at α > 0 H_E continuous across every injection, ledger = Σ drains; a floor-rule drain exact | 02 | ✅ 2026-10-28 (log 02 §1.2, §4, §6) |
 | Taper | weights equal hand values; the tuning residual continuous across a threshold; the omitted fraction within its bound | 03 | ⬜ |
 | Margin | the margin equals a hand computation; reported on real histories; below ln 10 warns | 04 | ⬜ |
 | Store | key and columns round-trip; two α are distinct rows; the new golden fingerprint; `AdiabaticHistory` bitwise at α = 0 | 05 | ⬜ |
@@ -205,3 +206,49 @@ Residue fixed in this review's commit:
 
 `CLAUDE.md`'s ComputeTargets counts (269; 77 in the [a-f] half) are stale. They are 08's to update
 (README §2.2); 02's prompt, when written, takes its baselines as 26 / 288 (96 + 192) / 103 / 115 / 64.
+
+### 5.2 After prompt 02 (2026-10-28)
+
+02 landed in this commit, under orchestrator note 02 (rulings 1–14). It stopped once; ruling 15 (the
+user's) and ruling 8a (the coordinator's) followed. Log:
+[`logs/02-injection-at-turning-points.md`](logs/02-injection-at-turning-points.md).
+- **The stop.** The §2 measurement found a step at β = 5, α = 0.1 (step 6051, T_J ≈ 0.7 MeV) on
+  which π dips from +1.9e-6 to −1.0e-6 and back inside one step. That is a plateau and a wall-side
+  turning point that the end-point test missed: prompt §5's third stop. The user chose interior
+  sampling (ruling 15). The coordinator accepted my derived H bound in place of k·ε·(1 + c)
+  (ruling 8a).
+- **What shipped** (`ComputeTargets/ScalarHistory.py`):
+  - `TurningPoint` and `Injection` records. `IntegrationResult.turning_points` and `.injections`
+    are appended last, and the payload carries the same two keys.
+  - The detection: on every appended step, π at the two ends (scalar calls, `first_bounce`'s) and
+    at 8 interior points. One end-to-end change is bracketed as `first_bounce` brackets it; two or
+    more are refined on their sub-intervals.
+  - The drain at the first step end past |π|'s maximum after each wall-side point, with the ledger
+    added to before the restart. The floor rule drains in its own restart, with
+    π_out = −√(1 − α)π_in.
+  - The dense output is right-continuous (`alt_segment=True`).
+  - `alpha` (default 0.0) on `integrate_scalar_history`, `integrate_history` and `tune_history`,
+    checked at entry. `compute_scalar_history`, `store`, `build_extra_data` and `first_bounce` are
+    unchanged.
+- **Gate Inject holds.**
+  - Both golden histories are bitwise at α = 0.
+  - H_E is equal bitwise across 194 of 195 drains, and the other is one ulp of the exponent apart
+    (1.414e-14 at β = 25, against a derived bound of 97 ε).
+  - The ledger equals the drains exactly, and the floor drain is exact.
+- **Breakages:** B1–B9, each failing a named test. B8 (a restart at α = 0 with y unchanged) changes
+  both golden histories and the tuned one, so a restart is not free.
+- **Measured** at M = 0.5 M_P, untuned, to T_CMB:
+  - at α = 0 the counts equal prompt §0's table exactly;
+  - at α = 0.1 there are 7, 27, 86 and 75 drains for β = 1.2, 2, 5 and 25, none dropped, with
+    Σ Δρ/ρ_R = 1.5e-2, 1.2e-2, 2.0e-3 and 4.4e-4;
+  - the tuning at β = 2, α = 0.1 converges in 11 integrations.
+- **Cost at α = 0:** golden 9.73 → 10.76 s (+11%, measurable), tuned 23.2 → 25.3 s (inside HEAD's
+  spread at a load of 5–15). The detection adds 451 `brentq` calls to the golden histories.
+- **Counts:** 26 / 288 (96 + 192) / 103 / 115 / 64 before; 26 / **305** (96 + 209) / 103 / 115 / 64
+  after, all passing.
+- **Issues:** none opened, none closed. The loop's first wall point can differ from `first_bounce`
+  if an interior pair ever precedes the first end-to-end wall point. That is recorded in log 02 §7
+  and §8, not opened.
+- **For 03** (log 02 §8): α_eff is set in `alpha_effective()`, the one place for w_gate·w_rate.
+  Dropped drains are derived, and need a count once a weight can be zero. The near-stall pair at
+  β = 5 is the first measured small oscillation.
