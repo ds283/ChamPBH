@@ -1,7 +1,7 @@
 # Log 03 — the gate and the stopping rule
 
 **Subject:** Gate each drain on the bounce's non-adiabaticity
-**Commit:** this commit, on branch `inelastic-reflection`, on top of `c3fcfdf`
+**Commit:** `0afa199`, on branch `inelastic-reflection`, on top of `c3fcfdf`
 **Date:** 2026-10-28, by Claude Opus 5.5
 **Result:** **COMPLETE, with the stopping rule withdrawn by the user mid-prompt (ruling 16).**
 - **The gate ships; the stopping rule does not.** At α > 0 every drain point and every floor

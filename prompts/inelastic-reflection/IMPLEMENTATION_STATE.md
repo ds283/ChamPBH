@@ -3,7 +3,7 @@
 **Last updated:** 2026-10-28 · **Status: LIVE — 01 landed in `85661b5` and reviewed (2026-10-28;
 gate DR holds); 02 landed in `fe2a944` and reviewed (2026-10-28; gate Inject holds), after one
 stop and the user's ruling of interior sampling; 3 of 8 prompts written: 03 written 2026-10-28
-from log 02 §8, after the user ruled 𝒜₀ = 1 (README §6.1); 03 landed in this commit (2026-10-28;
+from log 02 §8, after the user ruled 𝒜₀ = 1 (README §6.1); 03 landed in `0afa199` and reviewed (2026-10-28;
 gate Taper holds, as restated when the user withdrew the stopping rule mid-prompt, note 03 ruling 16).
 R1–R5 ruled by the user 2026-10-27; U1–U8 ruled the same
 day (U4 as the revised proposal (b′): wall-side turning points only) and P1–P16 stand. The prompts
@@ -37,7 +37,7 @@ bitwise the old code's.
 |---|---|---|---|---|---|---|---|
 | 01 | [Dark-radiation component](01-dark-radiation-component.md) | the ledger; ρ_χ in V/3H²M_P², Ḣ/H², E, `HubblePolicy`, V_target; K = 0 bitwise | Opus | ✍️ 2026-10-27 | ✅ 2026-10-28 | `85661b5` | [01](logs/01-dark-radiation-component.md) |
 | 02 | [Injection at turning points](02-injection-at-turning-points.md) | turning points in the step loop; the drain at the KE maximum; the restart; the floor-rule drain; the record; α in `integrate_history`/`tune_history` | Opus | ✍️ 2026-10-28 | ✅ 2026-10-28 | `fe2a944` | [02](logs/02-injection-at-turning-points.md) |
-| 03 | [Gate and stopping rule](03-gate-and-stopping-rule.md) | 𝒜_k measured, then the gate at wall-side turning points (U4 (b′), 𝒜₀ = 1); the plateau diagnostic; ~~the tapered stopping rule (U5, P17)~~ withdrawn by the user (ruling 16); the residual's continuity | Opus | ✍️ 2026-10-28 | ✅ 2026-10-28 | this commit | [03](logs/03-gate-and-stopping-rule.md) |
+| 03 | [Gate and stopping rule](03-gate-and-stopping-rule.md) | 𝒜_k measured, then the gate at wall-side turning points (U4 (b′), 𝒜₀ = 1); the plateau diagnostic; ~~the tapered stopping rule (U5, P17)~~ withdrawn by the user (ruling 16); the residual's continuity | Opus | ✍️ 2026-10-28 | ✅ 2026-10-28 | `0afa199` | [03](logs/03-gate-and-stopping-rule.md) |
 | 04 | Relativistic margin | generation momenta; m_eff on the trajectory; the margin to today; the warning | Opus | ⬜ | ⬜ | — | — |
 | 05 | Store | α as a key (U3); per-sample ρ_χ/ρ_R; whole-history columns; `AdiabaticHistory`; format 6, 2026.8.0 | Opus | ⬜ | ⬜ | — | — |
 | 06 | Driver and readers | `--alpha-values`; `main.py`; plot matching; the wrapper's scope; the inventory; the tool; the figures (U8) | Sonnet | ⬜ | ⬜ | — | — |
@@ -54,6 +54,7 @@ the one before has landed and been reviewed, from what its log hands on.
 Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 - [`orchestrator/prompt-01.md`](orchestrator/prompt-01.md) (`00c17f4`), used for 01.
 - [`orchestrator/prompt-02.md`](orchestrator/prompt-02.md) (`77af9c8`; §0a, rulings 15 and 8a, added at the review), used for 02.
+- [`orchestrator/prompt-03.md`](orchestrator/prompt-03.md) (`1d3b0c6`; §0a, the user's ruling 16, added `c3fcfdf`), used for 03.
 
 ## 2. The gates
 
@@ -356,7 +357,7 @@ every history `main.py` builds. It is recorded in log 02 §7, and is by the prom
 
 ### 5.3 After prompt 03 (2026-10-28)
 
-03 landed in this commit, under orchestrator note 03 (rulings 1–15) and ruling 16, the user's,
+03 landed in `0afa199`, under orchestrator note 03 (rulings 1–15) and ruling 16, the user's,
 which arrived while the agent worked. Log:
 [`logs/03-gate-and-stopping-rule.md`](logs/03-gate-and-stopping-rule.md).
 - **Ruling 16: the stopping rule withdrawn.** The user, after asking how w_rate prevents a restart:
@@ -397,3 +398,109 @@ which arrived while the agent worked. Log:
 - **Counts:** 26 / 305 (96 + 209) / 103 / 115 / 64 before; 26 / **317** (96 + 221) / 103 / 115 / 64
   after, all passing.
 - **Issues:** none opened, none closed.
+
+*Orchestrator review of prompt 03 (2026-10-28).* The note's ten checks, as ruling 16 trims them, at
+`0afa199`, run serially. The load was 12–114 (other workloads share the machine):
+1. **Scope.**
+   - The commit's 7 files are the prompt's §6 list exactly, and its parent is `c3fcfdf`, the
+     orchestrator's record of ruling 16.
+   - The tree is clean, `git worktree list` shows the main checkout alone, and nothing is pushed.
+   - There is no change to `AdiabaticHistory.py`, `Policies/`, `dark_radiation.py`, `Quadrature/`,
+     `ObjectFactories/`, `config/`, `main.py`, `tools/`, `RunDrivers/`, `plot_inputs.py`, the golden
+     generators or `ComputeTargets/tests/data`.
+   - `compute_scalar_history`, `build_extra_data`, `store`, `first_bounce`,
+     `surfing_turning_points`, `_tuning_state`, `fixed_T_value_at` and `TUNING_OUTPUT_KEYS` are
+     byte-identical to `c3fcfdf`'s (compared by AST source segment).
+2. **α = 0.** The golden tests, the tuned golden test, `test_first_bounce`,
+   `test_surfing_turning_points` and `test_kinematic_cap_loop` are unedited and pass (check 10), and
+   the golden JSONs are unchanged. I read the α = 0 path of every changed line:
+   - the step-end reads are the same scalar calls, kept whole;
+   - the mass, H_E and 𝒜 are computed only under `alpha > 0.0`;
+   - the drain-point and floor branches call `candidate` only under `alpha > 0.0`, and the floor's
+     elastic restart is `c3fcfdf`'s two lines;
+   - `dropped_drains` is a counter and touches no state.
+3. **The loop**, against rulings 3–7 and 16:
+   - the samples are 02's ten reads, folded on the fast path too, and go through `policy` and
+     `hubble` only, before any drain at the step's end;
+   - attribution is half-open, (`boundary_N`, N_k], closed at each turning point and floor
+     reflection;
+   - a candidate's order is H_E and ln ρ_kin, then w_gate, then α_eff = α · w_gate, then 02's
+     drain, or the α_eff == 0.0 record with no ledger entry and no restart;
+   - the three functions are called by module name, so a patch intercepts them.
+4. **The mass and 𝒜.**
+   - `log_m_eff_squared` is the form of §1 item 2, summed in logs with signs, and the hand value on a
+     stand-in with (ln A)″ = 3 is m² = 8 = 1 + 7.
+   - A probe of my own (session scratchpad, not committed) at β = 5, α = 0.1, M = 0.5 M_P:
+     - every record's w_gate, recomputed by its own expression, agrees to 2.5e-16 relative;
+     - α_eff == 0.1 · w_gate exactly;
+     - π_after == √(1 − α_eff) π_before;
+     - the ledger equals the records with α_eff > 0;
+     - `dropped_drains` equals the walls no record names.
+   - The 33-point reference at β = 5, a second history beside item 3's β = 2, gives |Δw_gate| ≤
+     1.6e-3 (wall) and 1.3e-3 (plateau), and 𝒜_k within 1.8%.
+5. **The breakages.** B1, B5, B6, B8, B9 and B10 were replayed in `bash` from the log's diffs, with
+   `git apply --check` and `-R --check`, the source's md5 checked restored at the end. Each fails
+   the tests the log names:
+   - B1: the hand values, item 9, item 11;
+   - B5: item 3, item 9, item 11;
+   - B6: item 3, item 9, item 11;
+   - B8: item 1 only, with both golden histories and the tuned one passing;
+   - B9: both item-11 tests;
+   - B10: item 3, the hand value and the generic state.
+
+   B10 fails item 3 through D3's m_eff/H_E check. That check is needed: w_gate saturates where the
+   trace term dominates, so the gate alone does not see B10 (log 03 §3, D3).
+6. **The numerics of the tests.**
+   - Ruling 8's edges, 𝒜 = 10²⁰⁰ and 5e-324, are asserted exactly.
+   - The 2 ε bound on w_gate is derived for both branches.
+   - Item 7's Δρ/ρ_R bound is 02's `delta_K_bound` argument.
+   - Item 3 measured 1.50e-3 (wall) and 1.31e-3 (plateau) against 0.05.
+   - Ruling 10's conditional restrictions were not reached (smallest α_eff on β = 2 is 2.3e-3).
+7. **The measurement.**
+   - My probe re-ran β = 5 at α = 0.1 and agrees with log 03 §5.1 in every column it computes:
+     155/154 turning points, 155 candidates, 0 dropped, 9 270 steps, 91 558 RHS evaluations,
+     𝒜_k 1.14e-3/0.149/842, w_gate 49/91/15, m/H at plateau points 0.637/112/225 with 2 below 1,
+     and Σ Δρ/ρ_R = 1.966e-3.
+   - `17>loop` is 0 on every history.
+   - The tunings at β = 2 and 5 converge (11 and 20 integrations).
+   - Ruling 11: every scan, the two across the β = 5 count change included, deviates from its cubic
+     by under 0.1 of the tolerance, and α = 0.1 by no more than the α = 0 baseline, so the clause
+     holds without the review's judgement that ruling 11 reserved.
+   - The scans do not discriminate the gate from 02's rule: under the comparison patch (α_eff = α)
+     the count changes crossed show no jump either, because the candidates that appear there are
+     near-stall ones whose ρ_kin is small. The continuity is measured, not attributed to the gate.
+8. **Nothing reaches the store.** `store`, `build_extra_data`, `golden_history.record_of` (no change
+   to the file) and `TUNING_OUTPUT_KEYS` are unchanged, and `"dropped_drains"` is read by nothing on
+   the way to the store. The ObjectFactories, tools and RunDrivers counts are unchanged.
+9. **The records.**
+   - The log is in §5.1's form, with m_eff²'s derivation and how it differs from `M2eff_over_H2`
+     (§1.1).
+   - It classes note 03's rulings R1–R16, R16 quoting the user, and the agent's D1–D8, with no
+     UNINTENDED DRIFT.
+   - The two `.documents/` notes are dated and additive only (no removed line).
+   - Nothing was opened, so `.documents/OPEN_ISSUES.md` is untouched.
+10. **The suites** at `0afa199`, serially, all passing:
+    - CosmologyModels 26 (84 s);
+    - ComputeTargets 96 + 221 (151 s + 418 s);
+    - ObjectFactories 103 (16 s);
+    - tools 115 (131 s);
+    - RunDrivers 64 (27 s).
+
+    ComputeTargets rose by the 12 new tests only. `black --check` is clean on the three changed
+    `.py` files.
+
+Residue fixed:
+- "this commit" → `0afa199` in the log and on this board, in this review's commit;
+- two stale docstrings in `test_injection.py`, in `67cb5f8`:
+  - item 11's class listed β = 3 among the gated searches, but β = 3 was searched only under the
+    withdrawn w_rate code;
+  - test 4's said every H_E ratio on β = 2 measured 0.0, true only under 02's drains.
+
+What the gate changes, for 04 and 07, recorded and not opened:
+- **The late oscillations are no longer damped.** At β = 5 and 25 the gated histories have more
+  wall-side turning points than 02's (155 against 86, 296 against 75) and more steps (+24%, +34%),
+  because the small late oscillations now drain almost nothing.
+- **The energy is carried by the early bounces.** Σ Δρ/ρ_R and r_χ stay within 5% of 02's at every
+  β.
+- **The cost.** At α = 0.1 the cost is 1.37–1.89 × the dispatch commit's, about 180 µs per accepted
+  step. It is within the prompt's "does not double", and 05's builds inherit it.
