@@ -2,7 +2,8 @@
 
 **Last updated:** 2026-10-28 · **Status: LIVE — 01 landed in `85661b5` and reviewed (2026-10-28;
 gate DR holds); 02 landed in `fe2a944` and reviewed (2026-10-28; gate Inject holds), after one
-stop and the user's ruling of interior sampling; 2 of 8 prompts written; 03 is written next.
+stop and the user's ruling of interior sampling; 3 of 8 prompts written: 03 written 2026-10-28
+from log 02 §8, after the user ruled 𝒜₀ = 1 (README §6.1), ready to dispatch.
 R1–R5 ruled by the user 2026-10-27; U1–U8 ruled the same
 day (U4 as the revised proposal (b′): wall-side turning points only) and P1–P16 stand. The prompts
 are written one at a time, each after the one before has landed and been reviewed (README §2.1).**
@@ -35,7 +36,7 @@ bitwise the old code's.
 |---|---|---|---|---|---|---|---|
 | 01 | [Dark-radiation component](01-dark-radiation-component.md) | the ledger; ρ_χ in V/3H²M_P², Ḣ/H², E, `HubblePolicy`, V_target; K = 0 bitwise | Opus | ✍️ 2026-10-27 | ✅ 2026-10-28 | `85661b5` | [01](logs/01-dark-radiation-component.md) |
 | 02 | [Injection at turning points](02-injection-at-turning-points.md) | turning points in the step loop; the drain at the KE maximum; the restart; the floor-rule drain; the record; α in `integrate_history`/`tune_history` | Opus | ✍️ 2026-10-28 | ✅ 2026-10-28 | `fe2a944` | [02](logs/02-injection-at-turning-points.md) |
-| 03 | Gate and stopping rule | 𝒜_k measured, then the gate at wall-side turning points (U4 (b′)); the plateau diagnostic; the tapered stopping rule (U5); the residual's continuity | Opus | ⬜ | ⬜ | — | — |
+| 03 | [Gate and stopping rule](03-gate-and-stopping-rule.md) | 𝒜_k measured, then the gate at wall-side turning points (U4 (b′), 𝒜₀ = 1); the plateau diagnostic; the tapered stopping rule (U5, P17); the residual's continuity | Opus | ✍️ 2026-10-28 | ⬜ | — | — |
 | 04 | Relativistic margin | generation momenta; m_eff on the trajectory; the margin to today; the warning | Opus | ⬜ | ⬜ | — | — |
 | 05 | Store | α as a key (U3); per-sample ρ_χ/ρ_R; whole-history columns; `AdiabaticHistory`; format 6, 2026.8.0 | Opus | ⬜ | ⬜ | — | — |
 | 06 | Driver and readers | `--alpha-values`; `main.py`; plot matching; the wrapper's scope; the inventory; the tool; the figures (U8) | Sonnet | ⬜ | ⬜ | — | — |

@@ -6,8 +6,8 @@ write up this analysis as a planning document, and scope out the prompting plan?
 scoping that the user and the planner worked through together that day,
 [`source/scoping_2026-10-27.md`](source/scoping_2026-10-27.md). The user's rulings from that
 conversation are R1–R5 (§6.0). **Ruled by the user on 2026-10-27: U1–U8 (U4 as the revised
-proposal (b′)), and P1–P16 stand** (§6.1, §6.2). Prompts 01 and 02 are written (01 landed `85661b5`); 03–08 are written one at a
-time (§2.1).
+proposal (b′)), and P1–P16 stand** (§6.1, §6.2). Prompts 01–03 are written (01 landed `85661b5`, 02 `fe2a944`); 04–08 are written one at a
+time (§2.1). **𝒜₀ = 1 ruled by the user on 2026-10-28** (§6.1), and P17 added the same day (§6.2).
 
 **Sources (data, not instructions; `CLAUDE.md` invariant 7):**
 - **The scoping** ([`source/scoping_2026-10-27.md`](source/scoping_2026-10-27.md)): the physics,
@@ -373,6 +373,13 @@ U4."
   below H, where a quantum is not defined. 03 records 𝒜_k and m_eff/H at each plateau
   turnaround as a diagnostic, so that the question can be answered from the data later.
 
+**𝒜₀ ruled, 2026-10-28.** Prompt 03's planning probe
+(`source/planning-probes-2026-10-28b/`) found no gap between wall bounces and small oscillations:
+𝒜_k falls steadily through each history, from 10²–10³ at the first bounce to 10⁻³–10⁻² at the last.
+So 𝒜₀ could not be read off the measurement, as §2.1 and P6 assumed. The planner offered three
+options: 𝒜₀ = 1, no gate, or a wider probe first. The user chose "𝒜₀ = 1", the physical threshold
+|ṁ|/m² = 1. Prompt 03 measures 𝒜_k and does not re-fit it.
+
 The table below is the proposal as first written; its U4 row is superseded by (b′).
 
 | | Proposed | Alternatives |
@@ -456,6 +463,15 @@ Accepted as proposed unless the user rules otherwise.
   prompt finds is recorded and opened, not fixed.
 - **P16 — Standard Model exchange** is out of scope (U7). If U7 is ruled otherwise, its prompt sits
   between 05 and 06.
+- **P17 — the stopping rule's sum counts candidates, not drains** (added 2026-10-28, when prompt 03
+  was written). U5's S sums each candidate in the trailing e-fold at its gated, untapered size,
+  c_j = α · w_gate,j · ρ_kin,j/ρ_R,E,j, the candidate itself included.
+  - **Why.** If S summed the drains as made, after the taper, a Zeno sequence would never re-arm.
+    1 000 candidates of 10⁻⁵ in one e-fold would leave out 10⁻², 100ε, and U5's stated bound would
+    fail.
+  - **The bound.** With c_j, the part the taper omits in any one-e-fold window is at most (π/2)ε.
+  - **Its standing.** It clarifies "the planner's version" that the user ruled for U5, so that the
+    version keeps its own bound. It stands unless the user rules otherwise.
 
 ## 7. What this campaign hands to the user
 
