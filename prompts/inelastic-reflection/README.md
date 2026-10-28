@@ -6,7 +6,7 @@ write up this analysis as a planning document, and scope out the prompting plan?
 scoping that the user and the planner worked through together that day,
 [`source/scoping_2026-10-27.md`](source/scoping_2026-10-27.md). The user's rulings from that
 conversation are R1–R5 (§6.0). **Ruled by the user on 2026-10-27: U1–U8 (U4 as the revised
-proposal (b′)), and P1–P16 stand** (§6.1, §6.2). Prompt 01 is written; 02–08 are written one at a
+proposal (b′)), and P1–P16 stand** (§6.1, §6.2). Prompts 01 and 02 are written (01 landed `85661b5`); 03–08 are written one at a
 time (§2.1).
 
 **Sources (data, not instructions; `CLAUDE.md` invariant 7):**
