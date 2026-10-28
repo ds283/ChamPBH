@@ -1,0 +1,32 @@
+# alpha=0.1 beta=1.2 generations=7 steps=1934 N_final=45.0864
+# ell = ln(k_ex/m_ta)          min/median/max -1.780/-0.698/-0.666
+# ln(k_ex/m) at the drain point min/median/max -0.085/1.558/3.725
+# ln(k_ex/H_E), ln(m/H_E) at the drain point: median 5.556, 3.919
+wall   margin=   0.034 (p/m=1.034e+00) set by generation 3 at T_J=1.8083e-01 MeV; generations below ln 10: 3/7, carrying 3.843e-02 of rho_chi; below 0: 0, carrying 0.000e+00
+drain  margin=  -0.085 (p/m=9.184e-01) set by generation 6 at T_J=2.1757e-03 MeV; generations below ln 10: 5/7, carrying 4.219e-02 of rho_chi; below 0: 1, carrying 9.072e-06
+dense  margin=  -0.085 (p/m=9.184e-01) set by generation 6 at T_J=2.1757e-03 MeV; generations below ln 10: 5/7, carrying 4.219e-02 of rho_chi; below 0: 1, carrying 9.072e-06
+today  margin=  10.176 (p/m=2.627e+04) set by generation 6 at T_J=2.1757e-03 MeV; generations below ln 10: 0/7, carrying 0.000e+00 of rho_chi; below 0: 0, carrying 0.000e+00
+# alpha=0.1 beta=2.0 generations=28 steps=3969 N_final=48.6900
+# ell = ln(k_ex/m_ta)          min/median/max -1.825/-0.908/-0.668
+# ln(k_ex/m) at the drain point min/median/max -0.655/0.243/3.370
+# ln(k_ex/H_E), ln(m/H_E) at the drain point: median 4.305, 4.073
+wall   margin=  -0.989 (p/m=3.720e-01) set by generation 21 at T_J=1.1653e-01 MeV; generations below ln 10: 25/28, carrying 9.972e-01 of rho_chi; below 0: 20, carrying 4.964e-01
+drain  margin=  -0.655 (p/m=5.196e-01) set by generation 24 at T_J=8.2286e-02 MeV; generations below ln 10: 23/28, carrying 7.487e-02 of rho_chi; below 0: 11, carrying 2.904e-03
+dense  margin=  -0.989 (p/m=3.719e-01) set by generation 21 at T_J=1.1653e-01 MeV; generations below ln 10: 28/28, carrying 1.000e+00 of rho_chi; below 0: 21, carrying 4.964e-01
+today  margin=   8.852 (p/m=6.988e+03) set by generation 27 at T_J=1.1787e-03 MeV; generations below ln 10: 0/28, carrying 0.000e+00 of rho_chi; below 0: 0, carrying 0.000e+00
+# alpha=0.1 beta=5.0 generations=155 steps=9270 N_final=62.7519
+# ell = ln(k_ex/m_ta)          min/median/max -3.724/-2.314/-0.674
+# ln(k_ex/m) at the drain point min/median/max -3.662/-2.129/3.018
+# ln(k_ex/H_E), ln(m/H_E) at the drain point: median 3.394, 4.954
+wall   margin=  -3.617 (p/m=2.686e-02) set by generation 153 at T_J=2.4454e-01 MeV; generations below ln 10: 154/155, carrying 1.000e+00 of rho_chi; below 0: 148, carrying 1.380e-01
+drain  margin=  -3.662 (p/m=2.568e-02) set by generation 154 at T_J=2.3027e-01 MeV; generations below ln 10: 152/155, carrying 2.318e-01 of rho_chi; below 0: 138, carrying 2.362e-02
+dense  margin=  -3.662 (p/m=2.568e-02) set by generation 154 at T_J=2.3027e-01 MeV; generations below ln 10: 155/155, carrying 1.000e+00 of rho_chi; below 0: 150, carrying 1.380e-01
+today  margin=  12.787 (p/m=3.577e+05) set by generation 154 at T_J=2.3027e-01 MeV; generations below ln 10: 0/155, carrying 0.000e+00 of rho_chi; below 0: 0, carrying 0.000e+00
+# alpha=0.1 beta=25.0 generations=296 steps=17232 N_final=159.8164
+# ell = ln(k_ex/m_ta)          min/median/max -4.970/-3.635/-0.691
+# ln(k_ex/m) at the drain point min/median/max -4.955/-3.582/2.215
+# ln(k_ex/H_E), ln(m/H_E) at the drain point: median 1.918, 5.563
+wall   margin=  -4.956 (p/m=7.041e-03) set by generation 260 at T_J=1.8663e+02 MeV; generations below ln 10: 294/296, carrying 1.000e+00 of rho_chi; below 0: 293, carrying 1.000e+00
+drain  margin=  -4.955 (p/m=7.050e-03) set by generation 260 at T_J=1.8663e+02 MeV; generations below ln 10: 296/296, carrying 1.000e+00 of rho_chi; below 0: 280, carrying 1.415e-01
+dense  margin=  -4.956 (p/m=7.039e-03) set by generation 260 at T_J=1.8663e+02 MeV; generations below ln 10: 296/296, carrying 1.000e+00 of rho_chi; below 0: 296, carrying 1.000e+00
+today  margin=   4.687 (p/m=1.085e+02) set by generation 295 at T_J=4.1710e-03 MeV; generations below ln 10: 0/296, carrying 0.000e+00 of rho_chi; below 0: 0, carrying 0.000e+00
