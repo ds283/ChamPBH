@@ -617,6 +617,15 @@ Each in the user's words, from the conversation of 2026-10-29.
   `m/H < 10`").
 - **The tuning** is not changed. Whether it converges on its first integration at small M is
   "just something we learn by testing".
+- **R17 — parking at large M** (2026-10-29, after prompt 06 was written; added here because it extends
+  R14). The orchestrator's probes found that the switch to parking also fires at M = 0.5 M_P, at
+  β ≥ 5, and at M = 10⁻³ M_P. It fires at resolved drain points, where the gate drains little, so it ends
+  oscillations that would have gone on. The user ruled that R14's condition applies at every M: "At
+  large M, the dissipative mode is 'unofficial'. It is not clear it corresponds to anything physical.
+  I think we stick with the first option (the same parking condition applies at large M, even if it
+  does terminate oscillations that could have kept going), and simply document the behaviour. It's up
+  to end users to decide whether the answer represents something meaningful for whatever problem they
+  are trying to solve."
 
 ### 8.2 Proposed by the planner (P18–P26)
 

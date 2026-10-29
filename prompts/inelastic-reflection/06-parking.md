@@ -120,7 +120,13 @@ At M = 10⁻³ it fires at a drain point too (β = 1.2, 2 and 3: #6 at 11.5 keV,
 23 MeV, m/H = 20–1 500). The cut is R14's as ruled: these firings are its consequence, not a departure.
 At a resolved drain point the gate, not w_gate = 1, drained the cascade before the cut, so P19's reason
 ("the rest of the cascade would have drained it") holds there only in its bound: the leftover is at
-most ε ρ_R,E. The orchestrator reports this to the user; it changes nothing here unless they rule.
+most ε ρ_R,E. The cut ends oscillations there that would have gone on.
+
+**The user has ruled that this stands** (README §8.1 R17): "At large M, the dissipative mode is
+'unofficial'. It is not clear it corresponds to anything physical. I think we stick with the first
+option (the same parking condition applies at large M, even if it does terminate oscillations that
+could have kept going), and simply document the behaviour." So the cut is the same at every M, and the
+behaviour is documented (§4 item 4).
 
 ### 0.3 Departures from README §8.4's charter, and why
 
@@ -388,7 +394,12 @@ Ray.
    - a dated note in `.documents/architecture-summary.md` beside 05's (the parked phase, the parking
      record and the payload key);
    - a dated subsection 6.5 in `.documents/numerical-strategies.md`, after 05's 6.4 (the cut, the
-     tracker's velocity, the reduced system and its dense output).
+     tracker's velocity, the reduced system and its dense output);
+   - in both, the behaviour at large M (R17): the same cut applies at every M; at large M it fires at
+     resolved drain points, where the gate drained little, and ends oscillations that would have gone
+     on, putting at most ε ρ_R,E into the ledger; dissipation mode at large M is not claimed to be
+     physical, and whether its answer means anything is for the user of the result to judge. Give the
+     M = 0.5 and 10⁻³ histories of §2.2 and §2.3 that park, with where.
 5. **The board:**
    - row 06 and the gate Park, in §1 and §2;
    - `### 5.7 After prompt 06 (<date>)` in §5;

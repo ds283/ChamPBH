@@ -877,4 +877,5 @@ What the probes found, and the prompt's departures from the charter (its §0.2, 
   the tracker falls below m/H = 10 at 9.65 MeV, so in 06 that history fails there and 07 releases it.
   Two existing tests (`test_injection` (11), β = 10; `test_gate_and_taper` (9), β = 5) therefore run
   with the cut disabled (ε = 0). At such a drain point the gate, not w_gate = 1, drained the cascade, so
-  P19's reason holds only in its bound, ε ρ_R. Reported to the user; nothing changes unless they rule.
+  P19's reason holds only in its bound, ε ρ_R. The user ruled the same day that the cut applies at
+  every M, and that the behaviour is documented (README §8.1 R17); 06's §0.2 and §4 item 4 now say so.
