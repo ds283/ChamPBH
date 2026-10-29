@@ -1,0 +1,24 @@
+b1.2_M1e-30_a0.1.json | total steps 36799
+    eps=1e-06: #9 N=32.811 T_J~0.1226 keV steps=2660 drain left 6.7e-05
+    eps=1e-08: #53 N=34.398 T_J~0.02764 keV steps=10448 drain left 6.5e-07
+    eps=1e-10: #97 N=34.473 T_J~0.02568 keV steps=17082 drain left 6.3e-09
+b1.2_M1e-30_a0.9.json | total steps 3153
+    eps=1e-06: #6 N=18.693 T_J~1.099e+05 keV steps=1623 drain left 3.4e-06
+    eps=1e-08: #8 N=18.697 T_J~1.096e+05 keV steps=1933 drain left 7.2e-08
+    eps=1e-10: #11 N=18.698 T_J~1.096e+05 keV steps=2327 drain left 2.3e-10
+b2_M1e-30_a0.1.json | total steps 46709
+    eps=1e-06: #51 N=29.279 T_J~202.2 keV steps=10092 drain left 9.7e-05
+    eps=1e-08: #110 N=29.463 T_J~173.8 keV steps=19322 drain left 9.9e-07
+    eps=1e-10: #169 N=29.481 T_J~171.3 keV steps=27228 drain left 9.9e-09
+b2_M1e-30_a0.9.json | total steps 8729
+    eps=1e-06: #15 N=21.514 T_J~2.619e+05 keV steps=3158 drain left 1.8e-05
+    eps=1e-08: #24 N=21.525 T_J~2.598e+05 keV steps=4485 drain left 2.2e-07
+    eps=1e-10: #34 N=21.526 T_J~2.596e+05 keV steps=5734 drain left 1.8e-09
+b3_M1e-30_a0.1.json | total steps 61710
+    eps=1e-06: #61 N=33.452 T_J~423.9 keV steps=12213 drain left 2.0e-04
+    eps=1e-08: #140 N=33.757 T_J~320.9 keV steps=24693 drain left 2.0e-06
+    eps=1e-10: #221 N=33.784 T_J~313.4 keV steps=35602 drain left 2.0e-08
+b3_M1e-30_a0.9.json | total steps 7164
+    eps=1e-06: #12 N=25.427 T_J~6.951e+05 keV steps=2681 drain left 4.3e-05
+    eps=1e-08: #19 N=25.438 T_J~6.888e+05 keV steps=3734 drain left 5.4e-07
+    eps=1e-10: #26 N=25.440 T_J~6.881e+05 keV steps=4637 drain left 6.8e-09

@@ -1,0 +1,61 @@
+== b1.2_M1e-30_a0.1.json: beta=1.2 M=1e-30 alpha=0.1 19s steps=36799 tps=515 inj=515
+   failure: integrate_scalar_history (floor probe): reflection requested inside the wall: W/(pi^2/2) = 1.0042 at N=34.48136598, phi_E=7.9445e-23, pi_E=-1.9848e-12 (W = 1.978e-24, pi^2/2 = 1.9698e-24)
+   candidates {'floor': 515, 'turning_point': 0}; sum drho/rho_R = 1.5027e-02 = 0.115 x ceiling 0.1309
+   first candidate N=17.6679 T_J~115.9 MeV, drho/rho_R=1.380e-02
+   w_gate: min 0.674 p10 0.931 median 1.000 max 1.000
+   drain share of first k: {1: 0.918, 3: 0.984, 10: 1.0, 30: 1.0, 100: 1.0}
+   cut (eps=1e-06) at floor #29: N=34.146987 T_J~3.524e-05 MeV, steps=6386 of 36799; cascade from #0 (N=17.6679, |pi|=8.529e-01) 29 bounces; per-bounce |pi| ratio 0.7877 vs sqrt(1-median a_eff) 0.9487
+   after the cut: 486 more floor reflections, drho/rho_R 1.22e-07, 30413 more steps, N span 3.34e-01
+== b1.2_M1e-30_a0.9.json: beta=1.2 M=1e-30 alpha=0.9 2s steps=3153 tps=57 inj=58
+   failure: integrate_scalar_history (floor probe): phi <= 0 in an accepted state (the step cap was violated) at N=18.69829108, phi_E=-5.2474e-24, pi_E=-2.5904e-12
+   candidates {'floor': 58, 'turning_point': 0}; sum drho/rho_R = 1.3273e-01 = 1.014 x ceiling 0.1309
+   first candidate N=17.6679 T_J~185.7 MeV, drho/rho_R=1.242e-01
+   w_gate: min 0.834 p10 0.947 median 0.949 max 1.000
+   drain share of first k: {1: 0.936, 3: 0.999, 10: 1.0, 30: 1.0}
+   cut (eps=1e-06) at floor #7: N=18.696124 T_J~109.7 MeV, steps=1783 of 3153; cascade from #0 (N=17.6679, |pi|=8.529e-01) 7 bounces; per-bounce |pi| ratio 0.3542 vs sqrt(1-median a_eff) 0.3832
+   after the cut: 51 more floor reflections, drho/rho_R 6.56e-08, 1370 more steps, N span 2.17e-03
+== b2_M1e-30_a0.1.json: beta=2.0 M=1e-30 alpha=0.1 31s steps=46709 tps=701 inj=701
+   failure: integrate_scalar_history (floor probe): phi <= 0 in an accepted state (the step cap was violated) at N=29.482792, phi_E=-1.0855e-24, pi_E=-6.1678e-12
+   candidates {'floor': 701, 'turning_point': 0}; sum drho/rho_R = 9.4612e-03 = 0.218 x ceiling 0.0435
+   first candidate N=20.3521 T_J~379.9 MeV, drho/rho_R=4.305e-03
+   w_gate: min 0.511 p10 0.741 median 1.000 max 1.000
+   drain share of first k: {1: 0.455, 3: 0.803, 10: 0.998, 30: 0.999, 100: 1.0}
+   cut (eps=1e-06) at floor #191: N=29.481950 T_J~0.1712 MeV, steps=29832 of 46709; cascade from #11 (N=27.8497, |pi|=1.037e-02) 180 bounces; per-bounce |pi| ratio 0.9622 vs sqrt(1-median a_eff) 0.9619
+   after the cut: 510 more floor reflections, drho/rho_R 1.69e-11, 16877 more steps, N span 8.42e-04
+== b2_M1e-30_a0.9.json: beta=2.0 M=1e-30 alpha=0.9 6s steps=8729 tps=156 inj=157
+   failure: integrate_scalar_history (floor probe): phi <= 0 in an accepted state (the step cap was violated) at N=21.52631959, phi_E=-2.3441e-23, pi_E=-9.7208e-12
+   candidates {'floor': 157, 'turning_point': 0}; sum drho/rho_R = 4.2525e-02 = 0.978 x ceiling 0.0435
+   first candidate N=20.3521 T_J~572.5 MeV, drho/rho_R=3.874e-02
+   w_gate: min 0.414 p10 0.421 median 0.424 max 1.000
+   drain share of first k: {1: 0.911, 3: 0.985, 10: 1.0, 30: 1.0, 100: 1.0}
+   cut (eps=1e-06) at floor #21: N=21.523535 T_J~260.1 MeV, steps=4064 of 8729; cascade from #0 (N=20.3521, |pi|=4.976e-01) 21 bounces; per-bounce |pi| ratio 0.7188 vs sqrt(1-median a_eff) 0.7731
+   after the cut: 136 more floor reflections, drho/rho_R 4.07e-08, 4665 more steps, N span 2.78e-03
+== b3_M1e-30_a0.1.json: beta=3.0 M=1e-30 alpha=0.1 42s steps=61710 tps=828 inj=828
+   failure: integrate_scalar_history (floor probe): phi <= 0 in an accepted state (the step cap was violated) at N=33.78667922, phi_E=-1.4918e-24, pi_E=-5.9669e-12
+   candidates {'floor': 828, 'turning_point': 0}; sum drho/rho_R = 4.9194e-03 = 0.261 x ceiling 0.0189
+   first candidate N=24.4990 T_J~963.2 MeV, drho/rho_R=1.439e-03
+   w_gate: min 0.293 p10 0.549 median 0.608 max 1.000
+   drain share of first k: {1: 0.292, 3: 0.521, 10: 0.841, 30: 0.999, 100: 1.0}
+   cut (eps=1e-06) at floor #276: N=33.786064 T_J~0.3128 MeV, steps=41967 of 61710; cascade from #32 (N=32.2558, |pi|=5.215e-03) 244 bounces; per-bounce |pi| ratio 0.9720 vs sqrt(1-median a_eff) 0.9719
+   after the cut: 552 more floor reflections, drho/rho_R 4.38e-12, 19743 more steps, N span 6.16e-04
+== b3_M1e-30_a0.9.json: beta=3.0 M=1e-30 alpha=0.9 4s steps=7164 tps=126 inj=127
+   failure: integrate_scalar_history (floor probe): phi <= 0 in an accepted state (the step cap was violated) at N=25.4397713, phi_E=-5.6382e-24, pi_E=-6.1987e-12
+   candidates {'floor': 127, 'turning_point': 0}; sum drho/rho_R = 1.4289e-02 = 0.757 x ceiling 0.0189
+   first candidate N=24.4990 T_J~1366 MeV, drho/rho_R=1.295e-02
+   w_gate: min 0.476 p10 0.513 median 0.515 max 1.000
+   drain share of first k: {1: 0.906, 3: 0.983, 10: 1.0, 30: 1.0, 100: 1.0}
+   cut (eps=1e-06) at floor #18: N=25.437823 T_J~689 MeV, steps=3593 of 7164; cascade from #0 (N=24.4990, |pi|=2.917e-01) 18 bounces; per-bounce |pi| ratio 0.6811 vs sqrt(1-median a_eff) 0.7274
+   after the cut: 109 more floor reflections, drho/rho_R 1.42e-08, 3571 more steps, N span 1.95e-03
+== b2_M1e-12_a0.1.json: beta=2.0 M=1e-12 alpha=0.1 102s steps=120396 tps=15635 inj=7008
+   failure: integrate_scalar_history (floor probe): Radau step failed at N=29.98772322, phi_E=1.7152e-14, pi_E=-1.3458e-07: "Required step size is less than spacing between numbers."
+   candidates {'floor': 109, 'turning_point': 6899}; sum drho/rho_R = 9.4615e-03 = 0.218 x ceiling 0.0435
+   first candidate N=20.3521 T_J~379.9 MeV, drho/rho_R=4.305e-03
+   w_gate: min 0.000 p10 0.001 median 0.589 max 1.000
+   drain share of first k: {1: 0.455, 3: 0.803, 10: 0.998, 30: 1.0, 100: 1.0}
+   no cut reached
+== b2_M1e-6_a0.1.json: beta=2.0 M=1e-06 alpha=0.1 13s steps=15852 tps=547 inj=270
+   failure: None
+   candidates {'floor': 0, 'turning_point': 270}; sum drho/rho_R = 1.2617e-02 = 0.290 x ceiling 0.0435
+   first candidate N=20.3521 T_J~379.9 MeV, drho/rho_R=4.305e-03
+   w_gate: min 0.000 p10 0.044 median 0.974 max 1.000
+   drain share of first k: {1: 0.341, 3: 0.79, 10: 0.987, 30: 0.999, 100: 1.0}
