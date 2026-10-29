@@ -1,6 +1,7 @@
 # inelastic-reflection campaign — implementation state
 
-**Last updated:** 2026-10-28 · **Status: LIVE — 01 landed in `85661b5` and reviewed (2026-10-28;
+**Last updated:** 2026-10-29 · **Status: LIVE, RE-PLANNED 2026-10-29 (README §8): 04–12 replace
+the old 04–08; the campaign now reaches laboratory M through a parking switch. Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
 gate DR holds); 02 landed in `fe2a944` and reviewed (2026-10-28; gate Inject holds), after one
 stop and the user's ruling of interior sampling; 3 of 8 prompts written: 03 written 2026-10-28
 from log 02 §8, after the user ruled 𝒜₀ = 1 (README §6.1); 03 landed in `0afa199` and reviewed (2026-10-28;
@@ -38,11 +39,18 @@ bitwise the old code's.
 | 01 | [Dark-radiation component](01-dark-radiation-component.md) | the ledger; ρ_χ in V/3H²M_P², Ḣ/H², E, `HubblePolicy`, V_target; K = 0 bitwise | Opus | ✍️ 2026-10-27 | ✅ 2026-10-28 | `85661b5` | [01](logs/01-dark-radiation-component.md) |
 | 02 | [Injection at turning points](02-injection-at-turning-points.md) | turning points in the step loop; the drain at the KE maximum; the restart; the floor-rule drain; the record; α in `integrate_history`/`tune_history` | Opus | ✍️ 2026-10-28 | ✅ 2026-10-28 | `fe2a944` | [02](logs/02-injection-at-turning-points.md) |
 | 03 | [Gate and stopping rule](03-gate-and-stopping-rule.md) | 𝒜_k measured, then the gate at wall-side turning points (U4 (b′), 𝒜₀ = 1); the plateau diagnostic; ~~the tapered stopping rule (U5, P17)~~ withdrawn by the user (ruling 16); the residual's continuity | Opus | ✍️ 2026-10-28 | ✅ 2026-10-28 | `0afa199` | [03](logs/03-gate-and-stopping-rule.md) |
-| 04 | Relativistic margin | generation momenta; m_eff on the trajectory; the margin to today; the warning | Opus | ⬜ | ⬜ | — | — |
-| 05 | Store | α as a key (U3); per-sample ρ_χ/ρ_R; whole-history columns; `AdiabaticHistory`; format 6, 2026.8.0 | Opus | ⬜ | ⬜ | — | — |
-| 06 | Driver and readers | `--alpha-values`; `main.py`; plot matching; the wrapper's scope; the inventory; the tool; the figures (U8) | Sonnet | ⬜ | ⬜ | — | — |
-| 07 | Measure | the sensitivity scan by the tools; the rehearsal (U6); the verification document | Opus | ⬜ | ⬜ | — | — |
-| 08 | Close | documents, `CLAUDE.md`, handover §4.18, indexes, board | Sonnet | ⬜ | ⬜ | — | — |
+| 04 | The wall through the model | φ_t, V″, 𝓡, the one-loop turnaround, the full-trace minimum and dφ_min/dN as model methods with generic defaults (R9) | Opus | ⬜ | ⬜ | — | — |
+| 05 | Unresolved turnarounds | φ_t < 10⁻⁸ M_P or 𝓡 > 1 → reflect at 3φ_t (R8); w_gate = 1 there and at the floor rule (R10, P20); the records; the warnings (P23) | Opus | ⬜ | ⬜ | — | — |
+| 06 | Parking | the cut ρ_kin/ρ_R < ε (R14, P19, P21); the parked phase to T_CMB through the dense-output interface (R15); the tuning at small M measured | Opus | ⬜ | ⬜ | — | — |
+| 07 | Unparking | the release at m/H < 10 (R16, P24) | Opus | ⬜ | ⬜ | — | — |
+| 08 | Spectrum peak and margins | the peak by 𝓡 (R7, P25); ℓ; the energy weight (U9); three worst margins and the first failure (R13) | Opus | ⬜ | ⬜ | — | — |
+| 09 | Store | α as a key (U3); the per-sample ratio; ΔN_eff at T_CMB and 1 MeV, the margins, parking and release as columns; JSON details; `AdiabaticHistory`; format 6, 2026.8.0 | Opus | ⬜ | ⬜ | — | — |
+| 10 | Driver and readers | `--alpha-values`; plot matching; Δg* and ΔN_eff figures (R12); scope; inventory; the tool | Sonnet | ⬜ | ⬜ | — | — |
+| 11 | Measure | the grid of U10; the rehearsal (U11); the verification document | Opus | ⬜ | ⬜ | — | — |
+| 12 | Close | documents, `CLAUDE.md`, handover §4.18, indexes, board | Sonnet | ⬜ | ⬜ | — | — |
+
+*The rows for the old 04–08 (relativistic margin, store, driver and readers, measure, close), none of
+them written, were replaced by the re-plan of 2026-10-29 (README §8).*
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
 
@@ -63,11 +71,18 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 | DR | at K = 0 both golden histories bitwise; with an initial ρ_χ constraint and continuity agree, the radiation limit holds, a tuned history meets both conditions | 01 | ✅ 2026-10-28 (log 01 §4) |
 | Inject | at α = 0 both golden histories bitwise; at α > 0 H_E continuous across every injection, ledger = Σ drains; a floor-rule drain exact | 02 | ✅ 2026-10-28 (log 02 §1.2, §4, §6) |
 | Taper | weights equal hand values; the tuning residual continuous across a threshold; the omitted fraction within its bound. *Since ruling 16 (2026-10-28, the stopping rule withdrawn): w_gate equals its hand values, and the residual is continuous across a threshold* | 03 | ✅ 2026-10-28, as restated (log 03 §4, §5.3) |
-| Margin | the margin equals a hand computation; reported on real histories; below ln 10 warns | 04 | ⬜ |
-| Store | key and columns round-trip; two α are distinct rows; the new golden fingerprint; `AdiabaticHistory` bitwise at α = 0 | 05 | ⬜ |
-| Driver | α reaches every stage; an unstored α exits 2 in the plots; scope and inventory name α | 06 | ⬜ |
-| Sensitivity | every scan point has a row; ΔN_eff rises with α; margins reported; α = 0 reproduces 2026.7.0 | 07 | ⬜ |
-| R (if U6) | the rehearsal's stores equal after interruption and resume | 07 | ⬜ |
+| Wall | φ_t and 𝓡 equal the exponential closed form; the notes' table (classical wall y ≈ 105, one-loop stopping point y ≈ 40 at 1 meV) reproduced; an n = 2 model needs no closed form; φ_min and dφ_min/dN checked | 04 | ⬜ |
+| Unresolved | α = 0 bitwise; an unresolved reflection is made at 3φ_t with w_gate = 1; the reflected history equals the resolved one in the probe's band; the warnings | 05 | ⬜ |
+| Park | α = 0 bitwise; an M = 10⁻³⁰ drained history reaches T_CMB; parked samples on φ_min; H_E continuous at the switch; the leftover in the ledger; the guard | 06 | ⬜ |
+| Release | a parked field released at m/H < 10 continues; continuity at the release; the lag after it as estimated | 07 | ⬜ |
+| Margin | the three margins equal a hand computation; energy-weighted; the classical birth margin negative by construction; NULL at α = 0 | 08 | ⬜ |
+| Store | key and columns round-trip; two α are distinct rows; the new golden fingerprint; `AdiabaticHistory` bitwise at α = 0 and computed on parked samples | 09 | ⬜ |
+| Driver | α reaches every stage; an unstored α exits 2 in the plots; scope and inventory name α | 10 | ⬜ |
+| Measure | every point has a row; the drain independent of M below 10⁻¹² to 10⁻³; ΔN_eff rises with α; margins reported; α = 0 reproduces 2026.7.0 | 11 | ⬜ |
+| R (U11) | the rehearsal's stores equal after interruption and resume | 11 | ⬜ |
+
+*The gates Margin, Store, Driver, Sensitivity and R of the old 04–07 were replaced by the re-plan of
+2026-10-29 (README §8.4).*
 
 ## 3. Active and unresolved issues
 
@@ -94,6 +109,13 @@ One opened by the planner.
   matter-free plasma). Then decide whether the table is regenerated or the spline replaced. Fixing
   it changes every history and needs its own ruling, so it is not in this campaign (README P15). Not
   assigned. `Xav_EOS_data.csv` has no generating script (`[00-kicking-function-table-has-no-provenance-in-the-repository]`, `review-remediation` board).
+
+### 3.1 Assigned to this campaign
+
+- **`[00-settling-at-physical-M-needs-a-parked-tracking-model]`** (`integrator-remediation` board
+  §3), assigned 2026-10-29 by the re-plan (README §8.6): prompts 06 and 07 build the parked tracker,
+  with the switch criterion supplied by the drain. The entry stays on its own board until it is
+  closed.
 
 ## 4. Resolved issues
 
@@ -504,3 +526,21 @@ What the gate changes, for 04 and 07, recorded and not opened:
   β.
 - **The cost.** At α = 0.1 the cost is 1.37–1.89 × the dispatch commit's, about 180 µs per accepted
   step. It is within the prompt's "does not double", and 05's builds inherit it.
+
+### 5.4 Re-plan (2026-10-29)
+
+At the user's word ("Campaign scope: sure, we need to replan. That's life."), after the handoff
+[`source/handoff_2026-10-29_large-M-stand-in.md`](source/handoff_2026-10-29_large-M-stand-in.md)
+and the probes of [`source/planning-probes-2026-10-29b/`](source/planning-probes-2026-10-29b/README.md)
+(`6cab14d`, `920b79e`). The plan is README §8. Nothing in the code changed.
+- **Ruled by the user** (README §8.1): R6 the two modes, U2 superseded; R7 the peak estimate chosen by
+  𝓡, one-loop with ln(k_ex/m_ta) and no renormalization scale; R8 unresolved below φ_t = 10⁻⁸ M_P or
+  above 𝓡 = 1, reflected at 3φ_t; R9 no closed forms of the potential; R10 w_gate = 1 when unresolved;
+  R11 the quanta as dark radiation; R12 ΔN_eff at T_CMB and 1 MeV, Δg* continuous; R13 the flags as
+  worst margins in SQL columns, energy-weighted; R14 the parking cut; R15 the parked tracker; R16
+  unparking at m/H < 10.
+- **Proposed** (P18–P26, standing unless overruled) and **for the user** (U9 the energy weight, U10
+  the measurement grid, U11 the rehearsal).
+- **Assigned:** `[00-settling-at-physical-M-needs-a-parked-tracking-model]` from the
+  `integrator-remediation` board (§3.1 above), with `.documents/OPEN_ISSUES.md` §1.20.
+- **No run registered**: `runregistrykit list` showed 11 finished runs and nothing running.

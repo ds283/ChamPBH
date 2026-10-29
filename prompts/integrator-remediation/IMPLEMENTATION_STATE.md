@@ -161,6 +161,11 @@ moot by `jordan-normalization` prompt 01.)*
     model is now a clean failure: such a history fails with "step budget exhausted" after
     `2×10⁶` accepted steps and is stored as a failure row, instead of running for days. The model
     itself is still open.
+  - **Assigned (2026-10-29):** to the [`inelastic-reflection`](../inelastic-reflection/IMPLEMENTATION_STATE.md)
+    campaign, re-planned that day (its README §8): prompts 06 and 07 build the parked tracker, with the
+    switch criterion supplied by the drain of a fraction α of the condensate's kinetic energy at each
+    reflection, and the release at m/H < 10. The user ruled it ("Campaign scope: sure, we need to
+    replan").
 - **[00-stored-samples-alias-the-rebounds]** *(audit §7)*.
   - **What.** The z grid is `ΔN ≈ 0.0092`. Turning points are 0.080 e-folds apart on P2 (8.7
     samples per half-period) and 0.022 on P3 (2.4). The brief's 1–2 samples in the 1–100 MeV

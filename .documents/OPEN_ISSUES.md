@@ -1,10 +1,11 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-27 · **25 open**: 4 on the `review-remediation` board (closed
+**Last updated:** 2026-10-29 · **25 open**: 4 on the `review-remediation` board (closed
 2026-09-30), none now assigned; 2 on the `production-readiness` board
 (closed 2026-09-30); 2 on the `run-integrity` board (closed 2026-09-30; one stale entry closed 2026-10-22, its fix having landed in `5740690`; `jordan-normalization` prompt 07 closed one, 2026-10-26); 7 on the
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`
-(`jordan-normalization` prompt 04 closed one, 2026-10-25);
+(`jordan-normalization` prompt 04 closed one, 2026-10-25), one assigned to `inelastic-reflection`
+on 2026-10-29, §1.20;
 1 on the `science-readiness` board (planned 2026-10-01; closed 2026-10-02, 10 of 10 landed,
 prompt 06b having been added 2026-10-02; `jordan-normalization` prompt 03 closed one, 2026-10-22); 2 on the `bbn-tolerance` board (planned 2026-10-03,
 closed 2026-10-03, 6 of 6 landed; prompt 01 committed BLOCKED 2026-10-03 and ruled the same day: re-planned
@@ -37,7 +38,8 @@ were assigned to `tuning-followups` on 2026-10-27, §1.17, and its prompts 01 an
 assigned from `jordan-normalization`; prompt 01 opened one, 2026-10-27, §1.18; prompt 02 opened none
 and closed the second assigned issue, 2026-10-27; closed 2026-10-27, 2 of 2 prompts landed, with the
 one issue still open on its board); 1 on the `inelastic-reflection` board (planned 2026-10-27; the
-planner opened one, §1.19).
+planner opened one, §1.19; re-planned 2026-10-29, when one `integrator-remediation` issue was
+assigned to it, §1.20).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -147,11 +149,9 @@ two were assigned on 2026-10-01 to `science-readiness` (§1.7). One was resolved
 2026-10-01). The other was narrowed (prompt 05, 2026-10-02) and came back here unassigned when that
 campaign closed (2026-10-02). Two of the nine were assigned on 2026-10-20 to
 `jordan-normalization` (§1.15): one of them was closed as moot by its prompt 01 the same day, and
-the other by its prompt 04 on 2026-10-25. The other seven are below, and are the seven open.
+the other by its prompt 04 on 2026-10-25. The other seven are the seven open. One of them was
+assigned on 2026-10-29 to `inelastic-reflection` (§1.20); the other six are below.
 
-- `[00-settling-at-physical-M-needs-a-parked-tracking-model]` — the field at φ_wall(ρ) as a
-  passenger once its bounces are unresolvable: the switch criterion and the parked field's
-  ρ_φ, p_φ; the authors' physics. Since prompt 02 its absence is a clean failure (step budget).
 - `[00-atol-does-not-scale-with-phi]` — an `atol` vector scaled by M halves the first-bounce
   error at 1 % cost; tolerance-level.
 - `[00-analytic-jacobian-would-remove-num-jac]` — only if Newton failures appear in the science
@@ -307,3 +307,11 @@ Planned 2026-10-27. One opened by the planner, found by a planning probe.
   and 9×10⁻⁵ at 25–33 keV (an irregular table and a ringing cubic spline), comparable to the matter
   trace inside the BBN window; effect on stored values not measured; not fixed by the campaign.
   *(`inelastic-reflection`; planner)*
+
+### 1.20 Assigned to `inelastic-reflection` — [its board](../prompts/inelastic-reflection/IMPLEMENTATION_STATE.md) §3.1
+
+Re-planned 2026-10-29 to reach laboratory M through a parking switch (its README §8).
+
+- `[00-settling-at-physical-M-needs-a-parked-tracking-model]` — the field at φ_wall(ρ) as a
+  passenger once its bounces are unresolvable; the drain supplies the switch, prompts 06 and 07
+  build the parked tracker and its release. *(`integrator-remediation`; audit §3.7, §9.4)*

@@ -9,7 +9,8 @@ conversation are R1–R5 (§6.0). **Ruled by the user on 2026-10-27: U1–U8 (U4
 proposal (b′)), and P1–P16 stand** (§6.1, §6.2). Prompts 01–03 are written (01 landed `85661b5`, 02 `fe2a944`); 04–08 are written one at a
 time (§2.1). **𝒜₀ = 1 ruled by the user on 2026-10-28** (§6.1), and P17 added the same day (§6.2). **The
 stopping rule of U5 (w_rate), and P17 with it, were withdrawn by the user later that day**: α_eff =
-α · w_gate (§6.1).
+α · w_gate (§6.1). **Re-planned on 2026-10-29, after 03 landed (§8):** the campaign now covers
+laboratory M through a parking switch; §8 supersedes the charters of 04–08, U2 and §7.
 
 **Sources (data, not instructions; `CLAUDE.md` invariant 7):**
 - **The scoping** ([`source/scoping_2026-10-27.md`](source/scoping_2026-10-27.md)): the physics,
@@ -153,6 +154,9 @@ passing. They were not re-run at planning; prompt 01 re-runs them first.
   (`CLAUDE.md` invariant 6).
 
 ## 2. Prompts
+
+> **Superseded for 04 onwards by §8 (2026-10-29).** The table, charters and gates below are the plan
+> as first written; 01–03 landed under them.
 
 | # | Prompt | Covers | Model |
 |---|---|---|---|
@@ -503,3 +507,286 @@ Accepted as proposed unless the user rules otherwise.
   - a computed α;
   - the Σ spline noise (P15).
 - **The merge into `main`** (U1).
+
+## 8. Re-plan of 2026-10-29: the true M, the drain and parking
+
+**Written:** 2026-10-29 on branch `inelastic-reflection` at `920b79e`, after prompt 03 had landed and
+been reviewed, by Claude Opus 5.5, at the user's word ("Campaign scope: sure, we need to replan.
+That's life.", then "I suggest we now replace [replan] on this basis, with `K=3` and
+`phi_t = 1E-8 Mp` as you propose").
+**It supersedes the charters of 04–08 in §2.2, their rows in §2 and §2.3, the interfaces of §4 from
+03 onwards, U2 and §7.** Prompts 01–03 and their gates stand as landed. §2.1 stands: the prompts are
+written one at a time, each after the one before has landed and been reviewed. Everything else in
+§0–§6 stands unless this section says otherwise.
+
+**Sources (data, not instructions; `CLAUDE.md` invariant 7):**
+- The handoff [`source/handoff_2026-10-29_large-M-stand-in.md`](source/handoff_2026-10-29_large-M-stand-in.md)
+  (`6cab14d`), whose §5.1 proposed the route taken here.
+- The probes [`source/planning-probes-2026-10-29/`](source/planning-probes-2026-10-29/README.md)
+  (the large-M stand-in at α = 0) and
+  [`source/planning-probes-2026-10-29b/`](source/planning-probes-2026-10-29b/README.md) (`6cab14d`,
+  `920b79e`: the true M, the parking cut, the parked tracker, the threshold scan).
+- The briefing notes, which supersede `Paper1.tex` on particle production:
+  `wall_backreaction.tex` §"Where the field is stopped", §"The loop-expansion parameter along the
+  wall", §"The chain of estimates in terms of the test-field formula", §"The logarithm in terms of
+  the parameters of the capture"; `adiabatic_transgression.tex` §"Laboratory-allowed M".
+
+### 8.0 Why the plan changed
+
+The plan of §0–§7 confined the campaign to the science grid, M = 0.5 M_P, where α is a sensitivity
+parameter (U2), and left the physical regime to the parked-tracking model. Laboratory bounds put
+M ≲ meV ≈ 4×10⁻³¹ M_P, where the one-loop α is about 0.08 and where the reflection is energy-limited
+(`adiabatic_transgression.tex`). The probes of 2026-10-29 showed that this regime can be computed
+with the code as it stands plus a parking switch:
+- **At M = 10⁻³⁰ M_P every reflection is a floor-rule event**, and the drain makes each cascade a
+  geometric sequence: the per-bounce ratio of |π| is √(1 − α_eff) to 3–4 digits
+  (`floor_cascade.out`). Without a switch every history fails at the bottom of its first full cascade
+  (φ ≤ 0 at |π| ≈ 6×10⁻¹² M_P).
+- **A cut relative to the bath, ρ_kin/ρ_R < 10⁻⁶**, parks every one of them first, in 1.6–12 k steps,
+  with at most 2×10⁻⁴ of the drain still to come (`cut_rhoR.out`).
+- **The zero-lag tracker is adiabatic to today for M ≤ 10⁻⁷**: m/H ≥ 37 everywhere from 2 GeV to
+  T_CMB at β = 0.5–5, and its lag reproduces the lags of the α = 0 histories to 5–40 %
+  (`parked_tracker.out`). At M = 0.5 it stops being adiabatic at about 10–20 MeV.
+- **Turnarounds too thin for Radau.** With the cut, 80 of 82 drained histories from M = 10⁻⁸ to 10⁻¹⁷
+  parked. The two failures were at M = 10⁻¹⁰, where a classical wall with φ_t ≈ 10⁻¹² M_P was
+  resolved and failed on Radau's float spacing (`r_criterion.out`).
+- **The fix for them is numerical, not physical.** The test-field ratio 𝓡 never exceeded 1 where
+  the field reached the wall: 𝓡 ∝ M⁻⁴ crosses 1 only near M ≈ 3×10⁻¹⁶, where today's floor rule
+  already reflects the field far outside the wall. Reflecting a wall with φ_t < 10⁻⁸ M_P at 3 φ_t
+  reproduces the resolved histories wherever both exist, and removes the failures; reflecting at
+  10 φ_t shifts the branch of the bounce sequence at M = 3×10⁻¹⁰–10⁻⁹ (`phi_t_scan.out`,
+  `scan_K_compare.out`).
+- **The drain converges in M.** Σ Δρ/ρ_R is the same to about 10⁻³ for every M ≤ 3×10⁻¹¹ and every
+  treatment of the wall: 0.115, 0.218 and 0.261 of the first-impact ceiling 1/(6β² − 1) at β = 1.2,
+  2 and 3, α = 0.1. It is not α × the ceiling: the first impact gives 30–92 % of the total, and
+  Hubble friction takes most of what is left.
+
+### 8.1 Ruled by the user, 2026-10-29
+
+Each in the user's words, from the conversation of 2026-10-29.
+
+- **R6 — two modes.** "A 'natural' mode where there is no dissipation, so `alpha = 0`. In this mode
+  we can only handle 'large' values of `M`", and "A 'dissipation' mode with specified `alpha > 0`.
+  In this mode we can handle 'small' values of `M`. If dissipation mode is used with `M > M_crit`
+  then the code should warn that the dynamics are expected to be nearly elastic in this regime, but
+  should not actually refuse the run." Natural mode at small M: "Warn and let the run fail, if
+  that's what it does." **U2 is superseded**: "Campaign scope: sure, we need to replan."
+- **R7 — the estimate of the spectrum's peak.** "If the turnaround is resolved, we estimate the mass
+  at turnaround and the position of the peak of the produced spectrum from the potential and the
+  details of the wall at the turnaround point"; "If the turnaround is not resolved, we estimate the
+  mass at turnaround and the position of the peak from the 1-loop estimate based on the field's
+  incoming kinetic energy." Which of the two is used is decided physically, by 𝓡 ("Which estimate
+  of the spectral peak to use is decided physically: agree"). The one-loop logarithm takes no
+  renormalization scale: "The turnaround comes from the state-dependent 'dynamic' contribution,
+  and for that the logarithm is `ln(k_ex / m_ta)`." The logarithm is recorded ("agree").
+- **R8 — what counts as unresolved.** "Resolved vs unresolved: agree", then, after the scan, "with
+  `K=3` and `phi_t = 1E-8 Mp` as you propose": a turnaround whose classical turning point lies
+  below 10⁻⁸ M_P, or whose 𝓡 exceeds 1, is reflected at 3 φ_t without being resolved.
+- **R9 — no closed forms of the potential.** "They depend on the potential, which is pluggable. They
+  won't apply for a different potential." The turning point, 𝓡, the one-loop turnaround and the
+  minimum are computed through the model's interface.
+- **R10 — the gate at an unresolved turnaround** is w_gate = 1: "Use `w_gate=1` rather than an
+  analytic `A_k`: OK".
+- **R11 — the quanta.** "At each reflection we assume that a fraction `alpha` of the KE is deposited
+  in dark radiation", which "always redshifts like radiation in the Jordan frame. It does not feel
+  the Standard Model kicking function." This is prompt 01's ledger (P1).
+- **R12 — ΔN_eff and Δg*.** Point values of ΔN_eff at T_CMB and at 1 MeV ("Keep the point samples of
+  `Delta N_eff`"), and Δg*, the effective bosonic degrees of freedom of the quanta at T_J, as a
+  continuous variable ("I like the idea of being able to plot `Delta g*` continuously"). Both are
+  "just for presentation and interpretation purposes": ρ_χ reaches BBN only through H_J.
+- **R13 — the relativistic flags.** "If the peak of the spectrum is not in the relativistic regime,
+  we set a flag on the history"; "probably we want two flags, so we know which kind of failure it
+  was: reflection or tracker", "and we can store details of the first encountered failure in the
+  JSON blob". "Flags: SQL columns are OK", storing "the worst margin". On resolved turnarounds the
+  flag at birth fires on every history "by design. For these histories `alpha=0` makes the most
+  physical sense." The momenta checked are energy-weighted ("OK. It was bothering me that the list
+  of peaks to check would become long").
+- **R14 — the parking cut.** Relative to the bath, ρ_kin/ρ_R < ε ("My first guess is relative to
+  `rho_R`, although the exact value of `epsilon` used may need to be tuned"), with the three
+  conditions ("I agree with all your three conditions"): tested only where the energy is all
+  kinetic, never before the first impact, and only where the zero-lag tracker is adiabatic. A
+  guard on small |π| is a sign of a bug ("Agree with your proposal"). Parking is irreversible
+  ("agree, this is the intended outcome").
+- **R15 — the parked field** "tracks this evolving effective minimum with zero lag", with
+  π = dφ_min/dN, and "the reduced integration can populate all the variables we need (`rho_R`,
+  `f_m`, `T_J`, `H_J`) and we find `phi` and `pi` by solving algebraically for them", delivered
+  "through the existing interface". The samples and the fixed-temperature values are filled from
+  it, there are no turning points, and `AdiabaticHistory` computes Q on it ("happy to compute `Q`
+  from the parking condition").
+- **R16 — unparking.** When "the zero-lag tracker [is] no longer adiabatic", at m/H < 10 ("I suggest
+  `m/H < 10`").
+- **The tuning** is not changed. Whether it converges on its first integration at small M is
+  "just something we learn by testing".
+
+### 8.2 Proposed by the planner (P18–P26)
+
+Accepted as proposed unless the user rules otherwise.
+- **P18 — the constants**, module constants in `ComputeTargets/ScalarHistory.py` under
+  `VERSION_LABEL`, as P6: the parking ε = 10⁻⁶; K = 3; the unresolved threshold φ_t < 10⁻⁸ M_P; the
+  unparking threshold m/H = 10, also the cut's adiabaticity condition; the |π| guard at 10⁻⁹ M_P.
+  None is a key.
+- **P19 — the leftover kinetic energy goes into the ledger** at the cut, so that energy is conserved
+  exactly. The rest of the cascade would have drained it, Hubble friction being negligible in its
+  fast tail; it is at most ε ρ_R.
+- **P20 — every floor-rule reflection is unresolved**, with w_gate = 1, as the reflections of R8.
+  The probes found that the gate at a floor reflection reads the infall, never the wall, and gave
+  w = 0.29–1 at M = 10⁻³⁰: an artefact of where the floor puts the reflection.
+- **P21 — the guard.** |π| < 10⁻⁹ M_P at a reflection, the cut not having fired, is a failure of the
+  history with its reason.
+- **P22 — natural mode is the old code.** At α = 0 nothing of this section runs: no φ_t, no 𝓡, no
+  cut, no parking. Both golden histories stay bitwise. The two warnings of R6 are printed lines,
+  never values.
+- **P23 — the warnings are per history and generic.** Dissipation mode warns "nearly elastic" when
+  𝓡 < 1 at the first impact; natural mode warns, at its first wall-side turnaround, when
+  φ_t < 10⁻⁸ M_P, that the history is expected to fail on the step budget. Neither names an M, which
+  depends on the potential.
+- **P24 — one park, one release.** A released field is integrated in full to T_CMB, draining at its
+  reflections, and never parks again.
+- **P25 — the classical peak** is the briefing notes' k_ex = λ|φ̇_in|/2√2 (`wall_backreaction.tex`
+  §"Where the field is stopped"), with λ the wall's local steepness at the classical turning point.
+  The one-loop peak is the same expression at the one-loop turnaround φ_ta (§"The chain of
+  estimates"). The margin at birth is ln(k_ex/m_ta).
+- **P26 — Δg* is derived, not stored**: Δg* = g_ρ(T_J) ρ_χ/ρ_R from the per-sample ratio and the
+  cosmology's g_ρ, in the readers. ΔN_eff at T_CMB and 1 MeV are whole-history columns.
+
+### 8.3 For the user to rule (U9–U11)
+
+| | Proposed | Alternatives |
+|---|---|---|
+| **U9** — the energy weight | the margins run over the generations carrying at least 10⁻³ of the history's final ρ_χ; the fraction of ρ_χ in generations that fail is stored beside each worst margin | a different share; or every generation, with the failing fraction only |
+| **U10** — the measurement | dissipation mode at M = 4×10⁻³¹ M_P (1 meV) and 10⁻¹² M_P, β ∈ {1.2, 2, 3, 5}, α ∈ {0.03, 0.1, 0.3, 0.9}; natural mode at M = 0.5 and 10⁻⁷ as the reference; ΔN_eff, Yp, D/H, the margins and the cost, by the tools; and ε ∈ {10⁻⁴, 10⁻⁶, 10⁻⁸} at one point per β | a smaller grid; or the science grid's β |
+| **U11** — the rehearsal | U6 stands: a short registered build on the isolated cluster, now one natural and one dissipation history, interrupted and resumed | none |
+
+### 8.4 The prompts
+
+| # | Prompt | Covers | Model |
+|---|---|---|---|
+| 01–03 | as landed | the ledger; the injection; the gate | — |
+| 04 | `04-the-wall-through-the-model.md` | the classical turning point, V″, 𝓡, the one-loop turnaround and the full-trace minimum with dφ_min/dN, as model methods with generic defaults | Opus |
+| 05 | `05-unresolved-turnarounds.md` | the unresolved rule (R8, P20) in the step loop at α > 0; w_gate = 1 there; the records; the two warnings (P23) | Opus |
+| 06 | `06-parking.md` | the cut (R14, P19, P21); the parked phase (R15) to T_CMB through the dense-output interface; the tuning at small M measured | Opus |
+| 07 | `07-unparking.md` | the release at m/H < 10 (R16, P24) and the full integration after it | Opus |
+| 08 | `08-spectrum-peak-and-margins.md` | the peak per generation by 𝓡 (R7, P25); ℓ; the energy weight (U9); the three worst margins and the first failure (R13) | Opus |
+| 09 | `09-store.md` | α as a key (U3); the per-sample ratio; ΔN_eff, the margins, the parking and release, 𝓡 at the first impact as columns; the JSON details; `AdiabaticHistory` on parked samples; format 6, 2026.8.0 | Opus |
+| 10 | `10-driver-and-readers.md` | `--alpha-values`; the plot matching; Δg* on `plot_ScalarHistory.py`; ΔN_eff(β) per α on `plot_by_beta.py`; the scope; the inventory; the tool | Sonnet |
+| 11 | `11-measure.md` | the measurement of U10; the rehearsal (U11); `.documents/inelastic-reflection-verification.md` | Opus |
+| 12 | `12-close.md` | the documents, `CLAUDE.md`, the handover §4.18, the indexes, the board | Sonnet |
+
+They run in order; 04–09 touch `ComputeTargets/ScalarHistory.py`.
+
+**04 — the wall through the model.** No change to the integrator.
+- **Methods on the model**, each a generic default through the existing hooks (`log_V`,
+  `log_V_floor`, `d_logV_dphi`, `d2_logV_dphi2`, `log_Omega` and its derivatives,
+  `reflects_at_origin`), which a model may override with a closed form, as `effective_minimum` is
+  built:
+  - the classical turning point φ_t, the root of V(φ_t) − V_floor = E inwards from φ, and V″ there;
+  - 𝓡 = V″(φ_t)²/8π²E;
+  - the one-loop turnaround φ_ta, where the dressing m⁴ ln(k_ex/m)/32π², m² = V″, equals E, with
+    m_ta, k_ex and ℓ = ln(k_ex/m_ta), transcribed from the briefing notes with its derivation in the
+    log;
+  - the minimum on the full trace, V′ + (ln A)′ A ρ̃_c = 0 with ρ̃_c from ρ_R,E(Σ + f_m), and
+    dφ_min/dN by the implicit function theorem along the background's derivatives.
+- **Tests:**
+  - φ_t and 𝓡 against the exponential closed form (the probe found 10⁻¹² in φ_t);
+  - the notes' table at M = 1 meV, V₀ = 10⁻⁴⁸ GeV⁴, β = 1.2: the classical wall at y ≈ 105 and the
+    one-loop stopping point at y ≈ 40;
+  - a model with n = 2, so that no n = 1 closed form is used;
+  - φ_min against `effective_minimum` where Σ = 0, and dφ_min/dN against a finite difference.
+- **Gate "Wall".**
+
+**05 — unresolved turnarounds.**
+- **At α > 0**, on an infalling step, φ_t is computed through 04 from E = H_E²π²/2. If
+  φ_t < 10⁻⁸ M_P or 𝓡 > 1, the field is reflected as soon as φ < 3φ_t, through the floor branch
+  (guards, drain, restart). Today's floor rule stays.
+- **Every unresolved reflection, the floor rule's included, drains with w_gate = 1** (R10, P20).
+- **The record:** each candidate gains resolved or unresolved, φ_t, 𝓡 and E.
+- **The warnings** of P23, printed once per history.
+- **Tests:** both golden histories bitwise at α = 0; an unresolved reflection at M = 10⁻¹⁰ on the
+  P1 harness, which changes `test_injection` item (8), with its reason; the band of the probe, where
+  the reflected history equals the resolved one at M = 10⁻⁹, β = 2, run to a window's end; the
+  warnings.
+- **Gate "Unresolved".**
+
+**06 — parking.**
+- **The cut** (R14): ρ_kin/ρ_R,E < ε at a floor or unresolved reflection (on π_in) or a drain point,
+  after the first impact, where m_eff/H on the tracker is at least 10. The leftover kinetic energy
+  goes into the ledger (P19). The guard of P21.
+- **The parked phase** (R15): a reduced integration of (ln ρ_R,E, ln f_m, ln T_J) with the existing
+  right-hand side at φ = φ_min(N), π = dφ_min/dN from 04, to T_CMB. Its interpolant returns the full
+  five-component state, so that the samples, the fixed-temperature values, `first_bounce` and the
+  surfing readers need no change. In 06 a parked tracker that loses adiabaticity (m/H < 10) is a
+  failure with its reason; 07 replaces that with the release.
+- **Measured:** the tuning at M = 10⁻³⁰ and 10⁻⁷ (its integrations and residuals), and the cost.
+- **Tests:** α = 0 bitwise; an M = 10⁻³⁰ history at α = 0.1 runs to T_CMB (it fails today); φ on
+  the parked samples equals φ_min to rounding; H_E continuous across the switch to the order of
+  the leftover; the ledger holds the leftover; the guard.
+- **Gate "Park".**
+
+**07 — unparking.**
+- **The release** at m/H < 10 on the parked tracker, from (φ_min, dφ_min/dN), with a new Radau
+  instance; drains continue at later reflections; the field never parks again (P24).
+- **Tests:** a history that parks and is released (dissipation mode at M = 10⁻³, where the probe
+  put the loss of adiabaticity near 30–40 keV); continuity at the release; the lag after it against
+  the first-order estimate.
+- **Gate "Release".**
+
+**08 — the spectrum's peak and the margins** (§2.2's 04, rewritten).
+- **Per generation:** the peak by 𝓡 (classical below 1, one-loop above, R7, P25), its comoving
+  ln q_j, ℓ_j and the energy share ΔK_j/K.
+- **Three margins**, each the worst over the generations of U9 and stored with its N:
+  - **at birth**, ln(k_ex/m_ta);
+  - **at the reflections**, ln(p/m_eff) at every later wall-side turnaround and reflection;
+  - **on the tracker**, ln(p/m_eff) on the parked or late tracker, today included (R4).
+  The details of the first failure of each kind go to the JSON metadata. A margin below ln 10 is
+  printed as a warning and never refuses a history.
+- **Tests:** a constructed history against a hand computation; the energy weight; the classical
+  birth margin negative by construction on a resolved turnaround; NULL at α = 0.
+- **Gate "Margin".**
+
+**09 — the store** (§2.2's 05, extended).
+- **The key and the per-sample ratio** as §2.2's 05. **Whole-history columns:** P7's (without
+  `omitted_fraction`), ΔN_eff at T_CMB and at 1 MeV, the three worst margins with their N, the
+  failing fractions of U9, 𝓡 at the first impact, the N and T_J of parking and of release, the
+  counts of resolved and unresolved candidates. **JSON metadata:** the first failure of each margin.
+- **`AdiabaticHistory`** computes Q on the parked samples like any others.
+- **The version.** `FINGERPRINT_FORMAT` 6 and `VERSION_LABEL` 2026.8.0 (P8).
+- **Gate "Store"**, as §2.3, with the new columns.
+
+**10 — the driver and the readers** (§2.2's 06). As there, with the figures of R12 in place of U8:
+Δg*(T_J) on `plot_ScalarHistory.py`'s density panel, and ΔN_eff(β) per α on `plot_by_beta.py`.
+**Gate "Driver".**
+
+**11 — the measurement** (§2.2's 07). The grid of U10 by `tools/history_and_bbn.py`; the rehearsal
+of U11; the verification document. **Gates "Measure"**: every point has a row, a failure with its
+reason; at M ≤ 10⁻¹² the drain is independent of M to the probes' 10⁻³; ΔN_eff rises with α; every
+margin is reported; α = 0 reproduces 2026.7.0. **"R"** as §2.3.
+
+**12 — the close** (§2.2's 08).
+
+### 8.5 The interfaces
+
+- **03 → 04:** the gate's records; `log_m_eff_squared`.
+- **04 → 05, 06, 08:** the model methods and their names.
+- **05 → 06:** the reflection kinds and the candidate record.
+- **06 → 07:** the parked phase's state and its interpolant.
+- **07 → 08:** the trajectory with parked and released phases; the generations.
+- **08 → 09:** the values to store and their names.
+- **09 → 10, 10 → 11, to `main`, to the rebuild:** as §4.
+
+### 8.6 What this campaign now hands to the user
+
+- **α as a key of every history**, with two modes: natural (α = 0) at large M, and dissipation
+  (α > 0) down to laboratory M through parking.
+- **ΔN_eff at T_CMB and 1 MeV, and Δg* as a continuous variable**; three relativistic margins per
+  history.
+- **The measurement** of U10, in the verification document.
+- **Closed here:** `[00-settling-at-physical-M-needs-a-parked-tracking-model]`
+  (`integrator-remediation` board), assigned to this campaign on 2026-10-29: 06 and 07 build the
+  parked-tracking model, with the switch criterion supplied by the drain.
+- **What stays open:**
+  - a computed α (2.7/ℓ is recorded, not used);
+  - the reflection at laboratory M, which lies outside the low-energy theory: α is bracketed, not
+    predicted (handoff §2.2);
+  - the Σ spline noise (P15), which sets the release point at M = 10⁻³ (`parked_tracker.out`);
+  - the handoff's observation that BBN yields at M ≥ 10⁻³ are not in the hard-wall limit (§2.2 of
+    the handoff), which is the user's to place.
