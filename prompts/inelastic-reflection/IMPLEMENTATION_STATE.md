@@ -541,7 +541,8 @@ and the probes of [`source/planning-probes-2026-10-29b/`](source/planning-probes
   unparking at m/H < 10.
 - **Proposed** (P18–P26, standing unless overruled) and **for the user** (U9 the energy weight, U10
   the measurement grid, U11 the rehearsal).
-- **Ruled the same day:** U9 "agree" and U11 "agree"; U10 open.
+- **Ruled the same day:** U9 "agree" and U11 "agree"; then U10 at its full size, about 52 tuned
+  histories and 1–3 hours ("U10 is fine. 1-3 hours is fine.").
 - **Assigned:** `[00-settling-at-physical-M-needs-a-parked-tracking-model]` from the
   `integrator-remediation` board (§3.1 above), with `.documents/OPEN_ISSUES.md` §1.20.
 - **No run registered**: `runregistrykit list` showed 11 finished runs and nothing running.

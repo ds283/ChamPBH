@@ -651,8 +651,12 @@ Accepted as proposed unless the user rules otherwise.
 
 ### 8.3 For the user to rule (U9–U11)
 
-**Ruled by the user, 2026-10-29:** U9 "agree"; U11 "agree". U10 is open: the user asked what the
-measurement is for.
+**Ruled by the user, 2026-10-29:** U9 "agree"; U11 "agree"; U10, as proposed and at its full size,
+after the planner explained that it is a verification run, not a science run, and estimated it at
+about 52 tuned histories and 1–3 hours: "U10 is fine. 1-3 hours is fine." So §5's run-length rule
+does not bind prompt 11's measurement. The user added that some of the rules in `CLAUDE.md` were
+never specified or agreed by them; that is for them to settle, and this plan does not lean on the
+run-length rule for anything else.
 
 | | Proposed | Alternatives |
 |---|---|---|
