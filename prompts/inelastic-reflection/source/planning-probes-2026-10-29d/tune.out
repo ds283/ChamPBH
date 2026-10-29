@@ -1,0 +1,54 @@
+== beta=1.2 M=0.001 wall=6.7s failure=None iterations=4 residual_H=-5.537074770800565e-06 residual_phi=3.200085555432608e-06
+    !! tune_history (b=1.2 M=0.001): dissipation mode: the reflections are expected to be nearly elastic in this regime: the test-field ratio R = 10^-49.665 < 1 at the first impact (phi_t = 9.786e-06 M_P)
+    -- tune b=1.2 M=0.001 it=0 kind=seed H/H0-1=-2.119e-02 phi_ref/phi_min-1=-1.873e-03 norm=-276.859936687 phi_ref=3.8800141785e-02 wall=1.7
+    -- tune b=1.2 M=0.001 it=1 kind=plain H/H0-1=-5.531e-04 phi_ref/phi_min-1=-2.997e-02 norm=-276.794283551 phi_ref=3.8872945805e-02 wall=1.6
+    -- tune b=1.2 M=0.001 it=2 kind=secant H/H0-1=+4.672e-04 phi_ref/phi_min-1=-2.352e-03 norm=-276.792536587 phi_ref=4.0122557350e-02 wall=1.7
+    -- tune b=1.2 M=0.001 it=3 kind=secant H/H0-1=-5.537e-06 phi_ref/phi_min-1=+3.200e-06 norm=-276.794067394 phi_ref=4.0195410764e-02 wall=1.7
+   integration 0 parked N 28.371912 released (N, T_J MeV) (45.910203, 2.664694821616952e-10)
+   integration 1 parked N 28.371779 released (N, T_J MeV) (45.888201, 2.723973581709296e-10)
+   integration 2 parked N 28.371847 released (N, T_J MeV) (45.88562, 2.731014818364819e-10)
+   integration 3 parked N 28.371855 released (N, T_J MeV) (45.886013, 2.7299402960666747e-10)
+== beta=5.0 M=0.5 wall=131.2s failure=None iterations=21 residual_H=-1.7647358852013184e-07 residual_phi=1.3922786687992073e-06
+    !! tune_history (b=5.0 M=0.5): dissipation mode: the reflections are expected to be nearly elastic in this regime: the test-field ratio R = 10^-53.351 < 1 at the first impact (phi_t = 0.004229 M_P)
+    -- tune b=5.0 M=0.5 it=0 kind=seed H/H0-1=+1.263e+00 phi_ref/phi_min-1=-1.587e-02 norm=-277.693330821 phi_ref=4.7054296277e-01 wall=6.0
+    -- tune b=5.0 M=0.5 it=1 kind=guard H/H0-1=+8.755e-01 phi_ref/phi_min-1=+4.662e-02 norm=-278.386478001 phi_ref=4.7812901118e-01 wall=5.9
+    -- tune b=5.0 M=0.5 it=2 kind=guard H/H0-1=+5.350e-01 phi_ref/phi_min-1=+1.030e-01 norm=-279.079625182 phi_ref=4.5683338711e-01 wall=6.0
+    -- tune b=5.0 M=0.5 it=3 kind=plain H/H0-1=-1.510e-01 phi_ref/phi_min-1=+3.436e-01 norm=-281.271917748 phi_ref=4.1415870007e-01 wall=5.9
+    -- tune b=5.0 M=0.5 it=4 kind=secant H/H0-1=-4.564e-02 phi_ref/phi_min-1=+2.200e-01 norm=-280.813764671 phi_ref=3.3000492283e-01 wall=5.9
+    -- tune b=5.0 M=0.5 it=5 kind=secant H/H0-1=+4.673e-02 phi_ref/phi_min-1=+6.359e-02 norm=-280.545493787 phi_ref=2.4497425061e-01 wall=6.1
+    -- tune b=5.0 M=0.5 it=6 kind=secant H/H0-1=+4.514e-03 phi_ref/phi_min-1=+9.290e-02 norm=-280.7209853 phi_ref=2.4897662379e-01 wall=6.3
+    -- tune b=5.0 M=0.5 it=7 kind=secant H/H0-1=+1.487e-02 phi_ref/phi_min-1=+4.527e-02 norm=-280.750488399 phi_ref=2.2389641870e-01 wall=6.3
+    -- tune b=5.0 M=0.5 it=8 kind=secant H/H0-1=+8.124e-01 phi_ref/phi_min-1=-2.718e+00 norm=-282.746724219 phi_ref=-1.3034401236e-01 wall=6.6
+    -- tune b=5.0 M=0.5 it=9 kind=guard H/H0-1=-1.408e-01 phi_ref/phi_min-1=-3.073e-01 norm=-283.4398714 phi_ref=7.5871157367e-02 wall=7.0
+    -- tune b=5.0 M=0.5 it=10 kind=plain H/H0-1=-4.817e-02 phi_ref/phi_min-1=-2.213e-01 norm=-281.982224622 phi_ref=1.0952797101e-01 wall=6.3
+    -- tune b=5.0 M=0.5 it=11 kind=secant H/H0-1=-1.162e-02 phi_ref/phi_min-1=-9.037e-02 norm=-281.254353128 phi_ref=1.5626991079e-01 wall=6.6
+    -- tune b=5.0 M=0.5 it=12 kind=secant H/H0-1=-7.585e-03 phi_ref/phi_min-1=-3.250e-02 norm=-281.068725052 phi_ref=1.7982998139e-01 wall=6.0
+    -- tune b=5.0 M=0.5 it=13 kind=secant H/H0-1=+1.738e-02 phi_ref/phi_min-1=+8.077e-03 norm=-280.812456964 phi_ref=2.0512106084e-01 wall=6.2
+    -- tune b=5.0 M=0.5 it=14 kind=plain H/H0-1=-5.993e-03 phi_ref/phi_min-1=+1.839e-02 norm=-280.933850029 phi_ref=2.0347747430e-01 wall=6.3
+    -- tune b=5.0 M=0.5 it=15 kind=secant H/H0-1=+2.827e-03 phi_ref/phi_min-1=+7.515e-03 norm=-280.903127602 phi_ref=2.0072739363e-01 wall=5.9
+    -- tune b=5.0 M=0.5 it=16 kind=secant H/H0-1=+2.063e-03 phi_ref/phi_min-1=+5.158e-03 norm=-280.913376032 phi_ref=1.9937543130e-01 wall=6.2
+    -- tune b=5.0 M=0.5 it=17 kind=secant H/H0-1=-1.526e-04 phi_ref/phi_min-1=-6.351e-04 norm=-280.941027241 phi_ref=1.9600413547e-01 wall=6.5
+    -- tune b=5.0 M=0.5 it=18 kind=secant H/H0-1=-4.819e-05 phi_ref/phi_min-1=-8.835e-05 norm=-280.939025572 phi_ref=1.9629286557e-01 wall=6.3
+    -- tune b=5.0 M=0.5 it=19 kind=secant H/H0-1=+2.910e-05 phi_ref/phi_min-1=+6.025e-05 norm=-280.938188183 phi_ref=1.9638386339e-01 wall=6.3
+    -- tune b=5.0 M=0.5 it=20 kind=secant H/H0-1=-1.765e-07 phi_ref/phi_min-1=+1.392e-06 norm=-280.938504642 phi_ref=1.9634860840e-01 wall=6.4
+   integration 0 parked N 38.004408 released (N, T_J MeV) (40.254538, 9.745356583409428)
+   integration 1 parked N 37.977307 released (N, T_J MeV) (40.25712, 9.722949079198989)
+   integration 2 parked N 37.972682 released (N, T_J MeV) (40.26247, 9.676543108794055)
+   integration 3 parked N 37.925289 released (N, T_J MeV) (40.277184, 9.549249312978185)
+   integration 4 parked N 37.917369 released (N, T_J MeV) (40.28317, 9.497494783656416)
+   integration 5 parked N 37.854909 released (N, T_J MeV) (40.290247, 9.436483042134133)
+   integration 6 parked N 37.850912 released (N, T_J MeV) (40.290721, 9.432397517123583)
+   integration 7 parked N 37.873131 released (N, T_J MeV) (40.293367, 9.409616694213133)
+   integration 8 parked N 37.732491 released (N, T_J MeV) (40.339947, 9.012722886248868)
+   integration 9 parked N 37.776433 released (N, T_J MeV) (40.322174, 9.163053760168257)
+   integration 10 parked N 37.815898 released (N, T_J MeV) (40.311187, 9.256773635645816)
+   integration 11 parked N 37.840021 released (N, T_J MeV) (40.302704, 9.3293779113888)
+   integration 12 parked N 37.823631 released (N, T_J MeV) (40.299383, 9.357874659368608)
+   integration 13 parked N 37.854622 released (N, T_J MeV) (40.295556, 9.390793086756299)
+   integration 14 parked N 37.848168 released (N, T_J MeV) (40.29633, 9.384142762701895)
+   integration 15 parked N 37.846882 released (N, T_J MeV) (40.296454, 9.383095911605055)
+   integration 16 parked N 37.845617 released (N, T_J MeV) (40.296639, 9.381486708554954)
+   integration 17 parked N 37.842334 released (N, T_J MeV) (40.297109, 9.377381793133765)
+   integration 18 parked N 37.842179 released (N, T_J MeV) (40.297076, 9.37771845828545)
+   integration 19 parked N 37.842348 released (N, T_J MeV) (40.297061, 9.377833043763392)
+   integration 20 parked N 37.842194 released (N, T_J MeV) (40.297068, 9.377789134139462)

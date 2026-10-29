@@ -1,0 +1,4 @@
+beta=5.0 M=0.5: N_rel=40.2545382734; segment types ParkedSegment | RadauDenseOutput; ts monotone True
+   left == right bitwise: True; dense output == right: True; max |diff| 0
+   m_eff/H_E at the release 10.000000000001041 (10 - it = -1.04e-12)
+   one m/H evaluation on the segment: 82.5 us

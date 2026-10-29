@@ -1,0 +1,34 @@
+b0.5_M0.001_release: OK N_final=42.548405 steps=2944 nfev=25547 candidates=13 reflections=0 turning_points=25 wall=2.6 s
+b1.2_M0.001_eps0: OK N_final=46.031566 steps=10598 nfev=109618 candidates=363 reflections=0 turning_points=725 wall=7.8 s
+b1.2_M0.001_release: OK N_final=46.030378 steps=2044 nfev=18582 candidates=7 reflections=0 turning_points=13 wall=2.5 s
+   parked at #6 N=28.371912 T_J=0.011467 MeV m/H=19.63; parked steps 176, min m/H 9.364
+   released at N=45.91020343 T_J=2.6647e-10 MeV (step (np.float64(45.852421576703776), np.float64(45.95242157670378)), m/H at its end 9.364); phi=0.0326619 Mp pi=0.04734 Mp; steps before release 2031
+   after release: 0 turning points (0 wall), 0 candidates (), 0 reflections; sum drho/rho_R after = 0
+b10_M0.5_eps0: OK N_final=86.757139 steps=11996 nfev=114263 candidates=229 reflections=0 turning_points=457 wall=10.2 s
+b10_M0.5_release: OK N_final=86.757136 steps=8473 nfev=81754 candidates=119 reflections=0 turning_points=237 wall=7.9 s
+   parked at #99 N=61.095895 T_J=358.04 MeV m/H=267.2; parked steps 46, min m/H 9.549
+   released at N=65.32726739 T_J=8.6955 MeV (step (np.float64(65.25546838129665), np.float64(65.34552793235426)), m/H at its end 9.5492); phi=0.00786735 Mp pi=0.001057 Mp; steps before release 6225
+   after release: 38 turning points (19 wall), 19 candidates (turning_point), 0 reflections; sum drho/rho_R after = 2.15e-10
+      #100 turning_point N=66.09923 T_J=4.008 MeV alpha_eff=0.00124 w=0.012399728104735752 A=0.112 drho/rho=1.3e-10 ratio=1.05e-07
+      #101 turning_point N=66.50086 T_J=2.68 MeV alpha_eff=0.000401 w=0.004006471846213769 A=0.0634 drho/rho=4.11e-11 ratio=1.03e-07
+      #102 turning_point N=66.77404 T_J=2.039 MeV alpha_eff=0.000187 w=0.0018662804708611655 A=0.0432 drho/rho=1.97e-11 ratio=1.06e-07
+      #103 turning_point N=67.00429 T_J=1.62 MeV alpha_eff=9.1e-05 w=0.0009099304770626681 A=0.0302 drho/rho=9.21e-12 ratio=1.01e-07
+      #104 turning_point N=67.18696 T_J=1.35 MeV alpha_eff=4.81e-05 w=0.0004805800705535535 A=0.0219 drho/rho=4.89e-12 ratio=1.02e-07
+      #105 turning_point N=67.34576 T_J=1.153 MeV alpha_eff=3.1e-05 w=0.0003099455290143288 A=0.0176 drho/rho=3.28e-12 ratio=1.06e-07
+b25_M0.5_eps0: OK N_final=159.816411 steps=17232 nfev=159966 candidates=296 reflections=0 turning_points=591 wall=14.0 s
+b25_M0.5_release: OK N_final=159.816401 steps=8246 nfev=78438 candidates=85 reflections=0 turning_points=169 wall=8.2 s
+   parked at #83 N=132.550768 T_J=9971.8 MeV m/H=77.96; parked steps 140, min m/H 9.195
+   released at N=145.77928589 T_J=0.040273 MeV (step (np.float64(145.73575524041334), np.float64(145.7894435748676)), m/H at its end 9.1946); phi=0.0134461 Mp pi=0.006857 Mp; steps before release 6784
+   after release: 2 turning points (1 wall), 1 candidates (turning_point), 0 reflections; sum drho/rho_R after = 1.042e-08
+      #84 turning_point N=147.89273 T_J=0.004394 MeV alpha_eff=0.00475 w=0.047501802750449885 A=0.223 drho/rho=1.04e-08 ratio=2.19e-06
+b5_M0.5_eps0: OK N_final=62.751856 steps=9270 nfev=91558 candidates=155 reflections=0 turning_points=309 wall=8.4 s
+b5_M0.5_release: OK N_final=62.751855 steps=8310 nfev=82069 candidates=121 reflections=0 turning_points=241 wall=7.7 s
+   parked at #105 N=38.004408 T_J=81.199 MeV m/H=122.7; parked steps 23, min m/H 8.937
+   released at N=40.25453827 T_J=9.7454 MeV (step (np.float64(40.19089006185816), np.float64(40.290890061858164)), m/H at its end 8.9373); phi=0.00745282 Mp pi=0.001125 Mp; steps before release 6606
+   after release: 30 turning points (15 wall), 15 candidates (turning_point), 0 reflections; sum drho/rho_R after = 3.369e-10
+      #106 turning_point N=41.30109 T_J=3.417 MeV alpha_eff=0.00234 w=0.023404693405851797 A=0.155 drho/rho=2.28e-10 ratio=9.75e-08
+      #107 turning_point N=41.74818 T_J=2.186 MeV alpha_eff=0.000597 w=0.005970907214311161 A=0.0775 drho/rho=5.89e-11 ratio=9.86e-08
+      #108 turning_point N=42.05832 T_J=1.604 MeV alpha_eff=0.000255 w=0.002548145009926434 A=0.0505 drho/rho=2.5e-11 ratio=9.83e-08
+      #109 turning_point N=42.30307 T_J=1.257 MeV alpha_eff=0.000118 w=0.0011757631473102372 A=0.0343 drho/rho=1.13e-11 ratio=9.63e-08
+      #110 turning_point N=42.50634 T_J=1.027 MeV alpha_eff=5.88e-05 w=0.0005876535648158016 A=0.0242 drho/rho=5.48e-12 ratio=9.32e-08
+      #111 turning_point N=42.67470 T_J=0.8698 MeV alpha_eff=3.15e-05 w=0.000314773693377918 A=0.0177 drho/rho=2.97e-12 ratio=9.44e-08

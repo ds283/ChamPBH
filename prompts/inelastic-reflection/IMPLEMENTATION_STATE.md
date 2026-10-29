@@ -1,7 +1,7 @@
 # inelastic-reflection campaign — implementation state
 
 **Last updated:** 2026-10-29 · **Status: LIVE, RE-PLANNED 2026-10-29 (README §8): 04–12 replace
-the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29, landed in `e967cb7` and reviewed (2026-10-29; gate Park holds; one issue narrowed). Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
+the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29, landed in `e967cb7` and reviewed (2026-10-29; gate Park holds; one issue narrowed). 07 written 2026-10-29. Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
 gate DR holds); 02 landed in `fe2a944` and reviewed (2026-10-28; gate Inject holds), after one
 stop and the user's ruling of interior sampling; 3 of 8 prompts written: 03 written 2026-10-28
 from log 02 §8, after the user ruled 𝒜₀ = 1 (README §6.1); 03 landed in `0afa199` and reviewed (2026-10-28;
@@ -42,7 +42,7 @@ bitwise the old code's.
 | 04 | [The wall through the model](04-the-wall-through-the-model.md) | φ_t, V″, 𝓡, the one-loop turnaround, the full-trace minimum and ∂φ_min/∂ ln T as model methods with generic defaults (R9); dφ_min/dN moves to 06 | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | `81b933f` | [04](logs/04-the-wall-through-the-model.md) |
 | 05 | [Unresolved turnarounds](05-unresolved-turnarounds.md) | φ_t < 10⁻⁸ M_P or 𝓡 > 1 → reflect at 3φ_t (R8); w_gate = 1 there and at the floor rule (R10, P20); the records; the warnings (P23) | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | `9c2483b` | [05](logs/05-unresolved-turnarounds.md) |
 | 06 | [Parking](06-parking.md) | the cut ρ_kin/ρ_R < ε (R14, P19, P21); the parked phase to T_CMB through the dense-output interface (R15); the tuning at small M measured | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | `e967cb7` | [06](logs/06-parking.md) |
-| 07 | Unparking | the release at m/H < 10 (R16, P24) | Opus | ⬜ | ⬜ | — | — |
+| 07 | [Unparking](07-unparking.md) | the release at the root of m/H = 10 on the parked step (R16, P24); the oscillating phase resumes; no second parking | Opus | ✍️ 2026-10-29 | ⬜ | — | — |
 | 08 | Spectrum peak and margins | the peak by 𝓡 (R7, P25); ℓ; the energy weight (U9); three worst margins and the first failure (R13) | Opus | ⬜ | ⬜ | — | — |
 | 09 | Store | α as a key (U3); the per-sample ratio; ΔN_eff at T_CMB and 1 MeV, the margins, parking and release as columns; JSON details; `AdiabaticHistory`; format 6, 2026.8.0 | Opus | ⬜ | ⬜ | — | — |
 | 10 | Driver and readers | `--alpha-values`; plot matching; Δg* and ΔN_eff figures (R12); scope; inventory; the tool | Sonnet | ⬜ | ⬜ | — | — |
@@ -1028,3 +1028,38 @@ a load of 4–11:
 Residue fixed in this review's commit: "this commit" → `e967cb7` in the log and on this board, and
 this note added to the list of orchestrator notes. Nothing else was found, and nothing is opened.
 **The gate Park holds.** Prompt 07 (release) is written next, from log 06 §8.
+
+**Prompt 07 written** the same day, at the user's word ("Please write prompt 07"). It is written from:
+- log 06 §8;
+- README §8.4's charter for 07;
+- the orchestrator's probes at `7b75ae7`
+  ([`source/planning-probes-2026-10-29d/`](source/planning-probes-2026-10-29d/README.md)). The probes
+  are a string-replaced copy of the loop with a release added.
+
+What the probes found:
+- **All four histories that 06 fails on the tracker's loss of adiabaticity reach T_CMB** once released at
+  the root of m/H = 10:
+  - M = 0.5 at β = 5, 10 and 25, released at 9.75 MeV, 8.70 MeV and 40.3 keV;
+  - M = 10⁻³ at β = 1.2, released at 0.27 eV.
+
+  Each takes fewer steps than its never-parked history, and no reflection follows a release.
+- **The release is continuous to the bit.** The last parked segment and the first Radau segment return
+  the same floats at N_rel.
+- **P24 binds at β = 5 and 10.** After the release the field oscillates with ρ_kin/ρ_R ≈ 10⁻⁷ < ε, and
+  the tracker's m/H climbs back above 10 within an e-fold. Under the ruling it is not parked again; 07
+  measures how often it would have been.
+- **The field oscillates after the release.** It is released at zero lag, so it swings about the lagged
+  tracker with a half-swing of 23–75 times the first-order lag δ₁. Averaged per oscillation, φ − φ_min
+  is 0.99–1.36 δ₁ at β = 5 and 10.
+- **The tuning converges on released histories**: in 4 integrations at M = 10⁻³, β = 1.2, and in 21
+  (131 s) at M = 0.5, β = 5.
+
+The prompt departs from the charter in four places, each stated in its §0.3:
+- the release is at the root on the parked step, not at the step end;
+- the tests use M = 0.5, β = 5 and M = 10⁻³, β = 1.2. The charter's M = 10⁻³ case at 30–40 keV was
+  β = 0.5, which never parks;
+- the lag is compared per oscillation;
+- `[00-settling-at-physical-M-needs-a-parked-tracking-model]` is narrowed by 07 and closed by 09. The
+  issue's next step names the adiabatic diagnostic, which R15 gives to 09.
+
+One existing test changes: `test_parking`'s β = 5 failure becomes the release.

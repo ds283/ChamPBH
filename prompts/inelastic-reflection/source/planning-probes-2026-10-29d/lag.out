@@ -1,0 +1,46 @@
+beta=5.0 M=0.5: released at N=40.254538; window 3.0 e-folds; m/H from 10 to 61.76
+   at release: delta1/phi_min = 0.002192; pi_min/phi_min = 0.151
+   [41.1136, 41.6240] m/H~12.2: mean(phi-phi_min)/phi_min=-0.0002957, mean delta1/phi_min=-0.00025, ratio 1.1825; half-swing/|delta1| 23.1
+   [41.6240, 41.9670] m/H~18.2: mean(phi-phi_min)/phi_min=-0.000126, mean delta1/phi_min=-0.0001058, ratio 1.1913; half-swing/|delta1| 35
+   [41.9670, 42.2272] m/H~23.9: mean(phi-phi_min)/phi_min=-7.609e-05, mean delta1/phi_min=-6.658e-05, ratio 1.1429; half-swing/|delta1| 40.3
+   [42.2272, 42.4379] m/H~29.6: mean(phi-phi_min)/phi_min=-5e-05, mean delta1/phi_min=-4.755e-05, ratio 1.0514; half-swing/|delta1| 43.3
+   [42.4379, 42.6152] m/H~35: mean(phi-phi_min)/phi_min=-3.992e-05, mean delta1/phi_min=-3.721e-05, ratio 1.0726; half-swing/|delta1| 44.6
+   [42.6152, 42.7703] m/H~40.3: mean(phi-phi_min)/phi_min=-2.887e-05, mean delta1/phi_min=-2.626e-05, ratio 1.0995; half-swing/|delta1| 53.5
+   [42.7703, 42.9079] m/H~45.4: mean(phi-phi_min)/phi_min=-2.176e-05, mean delta1/phi_min=-2.198e-05, ratio 0.9901; half-swing/|delta1| 56
+   [42.9079, 43.0316] m/H~50.3: mean(phi-phi_min)/phi_min=-2.112e-05, mean delta1/phi_min=-2.056e-05, ratio 1.0272; half-swing/|delta1| 52.5
+beta=10.0 M=0.5: released at N=65.327267; window 3.0 e-folds; m/H from 10 to 90.55
+   at release: delta1/phi_min = -0.001782; pi_min/phi_min = 0.1343
+   [65.9366, 66.3789] m/H~14.1: mean(phi-phi_min)/phi_min=-0.0002428, mean delta1/phi_min=-0.0001782, ratio 1.3627; half-swing/|delta1| 27.6
+   [66.3789, 66.6888] m/H~20.1: mean(phi-phi_min)/phi_min=-0.0001126, mean delta1/phi_min=-8.453e-05, ratio 1.3324; half-swing/|delta1| 39.4
+   [66.6888, 66.9286] m/H~26: mean(phi-phi_min)/phi_min=-6.631e-05, mean delta1/phi_min=-5.648e-05, ratio 1.1740; half-swing/|delta1| 43.7
+   [66.9286, 67.1246] m/H~31.7: mean(phi-phi_min)/phi_min=-4.882e-05, mean delta1/phi_min=-4.197e-05, ratio 1.1632; half-swing/|delta1| 45.8
+   [67.1246, 67.2913] m/H~37.4: mean(phi-phi_min)/phi_min=-3.637e-05, mean delta1/phi_min=-2.999e-05, ratio 1.2126; half-swing/|delta1| 52.7
+   [67.2913, 67.4377] m/H~42.9: mean(phi-phi_min)/phi_min=-2.239e-05, mean delta1/phi_min=-1.997e-05, ratio 1.1213; half-swing/|delta1| 68.6
+   [67.4377, 67.5664] m/H~48.4: mean(phi-phi_min)/phi_min=-2.244e-05, mean delta1/phi_min=-2.15e-05, ratio 1.0439; half-swing/|delta1| 55.5
+   [67.5664, 67.6832] m/H~53.6: mean(phi-phi_min)/phi_min=-1.395e-05, mean delta1/phi_min=-1.403e-05, ratio 0.9945; half-swing/|delta1| 75.3
+beta=25.0 M=0.5: released at N=145.779286; window 3.0 e-folds; m/H from 10 to 7.121
+   at release: delta1/phi_min = 0.0004639; pi_min/phi_min = 0.51
+   N=145.7793 m/H=10 (phi-phi_min)/phi_min=0 delta1/phi_min=0.0004639
+   N=146.0793 m/H=2.84 (phi-phi_min)/phi_min=0.01897 delta1/phi_min=-0.5408
+   N=146.3793 m/H=2.6 (phi-phi_min)/phi_min=0.04804 delta1/phi_min=-0.03198
+   N=146.6793 m/H=2.93 (phi-phi_min)/phi_min=0.05667 delta1/phi_min=-0.01059
+   N=146.9793 m/H=3.33 (phi-phi_min)/phi_min=0.03885 delta1/phi_min=-0.009673
+   N=147.2793 m/H=3.76 (phi-phi_min)/phi_min=0.001279 delta1/phi_min=-0.007818
+   N=147.5793 m/H=4.25 (phi-phi_min)/phi_min=-0.02787 delta1/phi_min=-0.006291
+   N=147.8793 m/H=4.85 (phi-phi_min)/phi_min=-0.006732 delta1/phi_min=-0.004952
+   N=148.1793 m/H=5.55 (phi-phi_min)/phi_min=0.01377 delta1/phi_min=-0.003923
+   N=148.4793 m/H=6.28 (phi-phi_min)/phi_min=-0.001838 delta1/phi_min=-0.003169
+   N=148.7793 m/H=7.12 (phi-phi_min)/phi_min=-0.0106 delta1/phi_min=-0.002541
+beta=1.2 M=0.001: released at N=45.910203; window 0.12 e-folds; m/H from 10 to 8.253
+   at release: delta1/phi_min = -0.05593; pi_min/phi_min = 1.449
+   N=45.9102 m/H=10 (phi-phi_min)/phi_min=0 delta1/phi_min=-0.05593
+   N=45.9222 m/H=9.82 (phi-phi_min)/phi_min=-0.0003943 delta1/phi_min=-0.05825
+   N=45.9342 m/H=9.64 (phi-phi_min)/phi_min=-0.001541 delta1/phi_min=-0.06068
+   N=45.9462 m/H=9.46 (phi-phi_min)/phi_min=-0.003383 delta1/phi_min=-0.06324
+   N=45.9582 m/H=9.28 (phi-phi_min)/phi_min=-0.005855 delta1/phi_min=-0.06592
+   N=45.9702 m/H=9.1 (phi-phi_min)/phi_min=-0.008891 delta1/phi_min=-0.06874
+   N=45.9822 m/H=8.93 (phi-phi_min)/phi_min=-0.01242 delta1/phi_min=-0.07169
+   N=45.9942 m/H=8.76 (phi-phi_min)/phi_min=-0.01638 delta1/phi_min=-0.07478
+   N=46.0062 m/H=8.59 (phi-phi_min)/phi_min=-0.02071 delta1/phi_min=-0.07803
+   N=46.0182 m/H=8.42 (phi-phi_min)/phi_min=-0.02533 delta1/phi_min=-0.08144
+   N=46.0302 m/H=8.25 (phi-phi_min)/phi_min=-0.03019 delta1/phi_min=-0.085
