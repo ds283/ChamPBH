@@ -1116,6 +1116,39 @@ SampleValues = namedtuple("SampleValues", [
 >   `build_extra_data`, `golden_history.record_of` and `TUNING_OUTPUT_KEYS` are unchanged, so
 >   nothing new is stored.
 
+> **Note, 2026-10-29 (`inelastic-reflection`, prompt 05): unresolved turnarounds, the reflection
+> kinds and the warnings.** At α > 0, on a model with a wall, the step loop assesses the wall ahead
+> of every infalling step and reflects the field at K φ_t, unresolved, when its classical turning
+> point lies below 10⁻⁸ M_P or 𝓡 > 1 (`numerical-strategies.md` §6.4). Every reflection drains with
+> w_gate = 1. Nothing of it runs at α = 0.
+> - **Module level** in `ComputeTargets/ScalarHistory.py`: the constants
+>   `UNRESOLVED_REFLECTION_FACTOR = 3.0` (K) and `UNRESOLVED_PHI_T_THRESHOLD_MP = 1.0e-8` (in units of
+>   M_P), neither a key; `assess_infall(model, φ, ln ρ_kin,E)` → (ln E, `ClassicalTurningPoint` or
+>   `None`); `unresolved_turnaround(φ, turning point, M_P)`; the four warning phrases `WARNING_*`,
+>   `WARNING_KINDS` and `warning_kind(line)`.
+> - **`Reflection`** gains `kind`, `"floor"` or `"unresolved"`, appended last with the namedtuple
+>   default `None` (a test's stub builds it by keyword); the loop always sets it. At α = 0 every
+>   reflection is `"floor"`.
+> - **`Injection`** gains `resolved`, `phi_assessed`, `log_E_assessed` and `classical_turning_point`
+>   (the model's record: φ_t, ln ω_t², ln 𝓡, λ_t, ln k_ex, ℓ_t), appended last; its `kind` is
+>   `"turning_point"`, `"floor"` or `"unresolved"`. A reflection of either kind is unresolved, with
+>   `w_gate` exactly 1.0 and α_eff = α. The assessment is the reflection's own step start's, or a
+>   drain point's infall's last; `None` in all three where the infall was never assessed.
+> - **`IntegrationResult`** gains `warnings`, a tuple of lines. A `ComputationFailureError` raised
+>   by the loop carries the warnings collected before it as its attribute `warnings`.
+> - **The payload** of `integrate_history` gains `"warnings"`, on success and on a failure
+>   (`_failure_payload` takes them as an optional argument); it is not stored. `"reflections"` now
+>   counts both kinds (also `REFLECTIONS_KEY` in `extra_metadata`; at α = 0 the count is unchanged,
+>   and no α > 0 history is stored before prompt 09).
+> - **The warnings** (README §8.1 R6, §8.2 P23): dissipation mode's "nearly elastic" line (with 𝓡 at
+>   the first impact) or "could not be assessed"; natural mode's "classical turning point lies
+>   below" line or "the wall could not be assessed". `integrate_history` prints none of them;
+>   `tune_history` prints the first line of each kind once per history, as
+>   `!! tune_history (<label>): <line>`, before a failure's line. The tools that call
+>   `integrate_history` directly print nothing new.
+> - `ScalarHistory.store`, `build_extra_data`, `golden_history.record_of` and `TUNING_OUTPUT_KEYS`
+>   are unchanged.
+
 ### 7.3 `AdiabaticHistory` (`ComputeTargets/AdiabaticHistory.py`)
 
 Computes the adiabatic perturbation parameter Q (which determines whether the chameleon field is adiabatically tracking its minimum). Requires a `ScalarHistoryProxy` as input.

@@ -441,13 +441,17 @@ class TestARealHistoryAtAlpha(unittest.TestCase):
 
 
 class TestAFloorRuleCandidate(unittest.TestCase):
-    """(8) test_injection's P1 harness at M = 1e-10, with a ledger, at alpha = 0.1. About 0.3 s."""
+    """
+    (8) test_injection's P1 harness at M = 1e-10, with a ledger, at alpha = 0.1. About 0.3 s. Since
+    inelastic-reflection prompt 05 (README §8.2 P20) a floor reflection is unresolved: it is not
+    gated, and drains with w_gate = 1.0 exactly, its A_k still recorded (log 05 lists the edit).
+    """
 
-    def test_8_the_floor_reflection_is_a_gated_candidate(self):
+    def test_8_the_floor_reflection_is_an_unresolved_candidate(self):
         """
         The one floor reflection is a candidate whose record carries A_k (the infall's, up to the
-        reflection; a lower bound, since the wall is thinner than a step) and w_gate;
-        alpha_eff = alpha * w_gate; the ledger holds it if and only if alpha_eff > 0; and
+        reflection; a lower bound, since the wall is thinner than a step) and w_gate = 1.0, with
+        resolved False; alpha_eff = alpha; the ledger holds it if and only if alpha_eff > 0; and
         pi_out = -sqrt(1 - alpha_eff) pi_in exactly. The A_k and w_gate it gets are written to
         stderr.
         """
@@ -457,11 +461,13 @@ class TestAFloorRuleCandidate(unittest.TestCase):
         self.assertEqual(len(floors), 1)
         i = floors[0]
         reflection = result.reflections[0]
+        self.assertEqual(reflection.kind, "floor")
         self.assertEqual(i.N, reflection.N)
         for value in (i.nonadiabaticity, i.w_gate):
             self.assertTrue(value is not None and isfinite(value), i)
-        self.assertEqual(i.w_gate, SM.gate_weight(i.nonadiabaticity))
-        self.assertEqual(i.alpha_eff, ALPHA * i.w_gate)
+        self.assertFalse(i.resolved)
+        self.assertEqual(i.w_gate, 1.0)
+        self.assertEqual(i.alpha_eff, ALPHA)
         self.assertEqual(
             i.pi_after, -(sqrt(1.0 - i.alpha_eff) * reflection.pi_Einstein_in)
         )

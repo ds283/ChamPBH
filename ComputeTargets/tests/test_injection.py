@@ -612,7 +612,11 @@ def integrate_floor(alpha: float):
 
 
 class TestAFloorRuleDrain(unittest.TestCase):
-    """(8) The P1 harness at M = 1e-10: one floor reflection. Two runs, about 0.5 s."""
+    """
+    (8) The P1 harness at M = 1e-10: one floor reflection. Two runs, about 0.5 s. Since
+    inelastic-reflection prompt 05 (README §8.2 P20) a floor reflection is unresolved: it drains
+    with w_gate = 1.0 exactly, so alpha_eff = alpha (log 05 lists the edit).
+    """
 
     def test_8_the_floor_reflection_drains(self):
         result, policy, ledger = integrate_floor(ALPHA)
@@ -623,13 +627,17 @@ class TestAFloorRuleDrain(unittest.TestCase):
         reflection = result.reflections[0]
         pi_in = reflection.pi_Einstein_in
 
+        self.assertEqual(reflection.kind, "floor")
         self.assertEqual(i.N, reflection.N)
         self.assertEqual(i.N_turn, reflection.N)
         self.assertEqual(i.phi_turn, reflection.phi_Einstein)
         self.assertEqual(i.pi_before, pi_in)
         self.assertEqual(i.pi_after, -(sqrt(1.0 - i.alpha_eff) * pi_in))
         self.assertEqual(result.solution(i.N)[1], i.pi_after)
-        self.assertEqual(i.alpha_eff, ALPHA * i.w_gate)
+        self.assertFalse(i.resolved)
+        self.assertEqual(i.w_gate, 1.0)
+        self.assertEqual(i.alpha_eff, ALPHA)
+        self.assertTrue(i.nonadiabaticity is not None and i.nonadiabaticity > 0.0, i)
 
         self.assertEqual(
             ledger.injections, tuple((x.N, x.delta_K) for x in result.injections)

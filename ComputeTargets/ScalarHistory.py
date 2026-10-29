@@ -15,9 +15,9 @@
 
 from bisect import bisect_left
 from collections import namedtuple
-from math import log, pi, exp, expm1, sqrt, isinf, isnan, isfinite
+from math import log, log1p, pi, exp, expm1, sqrt, isinf, isnan, isfinite
 from time import perf_counter
-from typing import Optional, List, Dict, Any
+from typing import Optional, List, Dict, Any, Tuple
 
 import numpy as np
 import ray
@@ -38,7 +38,12 @@ from CosmologyConcepts import (
     GetFieldValue,
     FieldLike,
 )
-from CosmologyConcepts.Models.AbstractModel import AbstractModel, RealizedModel, Seed
+from CosmologyConcepts.Models.AbstractModel import (
+    AbstractModel,
+    ClassicalTurningPoint,
+    RealizedModel,
+    Seed,
+)
 from CosmologyModels import BaseCosmology
 from CosmologyModels.GenericEOS.LambdaCDM_GenericEOS import LambdaCDM_GenericEOS
 from datastorekit import DatastoreObject
@@ -92,6 +97,41 @@ TURNING_POINT_INTERIOR_SAMPLES = 8
 # stopping rule: the user withdrew w_rate the same day (orchestrator note 03, ruling 16)
 NONADIABATICITY_SCALE = 1.0
 
+# the unresolved turnaround (inelastic-reflection prompt 05; README §8.1 R8, §8.2 P18), at alpha > 0
+# only. The user ruled "with `K=3` and `phi_t = 1E-8 Mp` as you propose": an infalling field whose
+# classical turning point phi_t lies below the threshold, or whose test-field ratio R exceeds 1, is
+# reflected as soon as phi < K phi_t, without its turnaround being resolved. Neither is a key.
+#   UNRESOLVED_REFLECTION_FACTOR:      K
+#   UNRESOLVED_PHI_T_THRESHOLD_MP:     the threshold on phi_t, in units of M_P; multiplied by the
+#                                      units' PlanckMass where it is used
+# unresolved_turnaround reads both at call time, so that a patch of either changes the rule
+UNRESOLVED_REFLECTION_FACTOR = 3.0
+UNRESOLVED_PHI_T_THRESHOLD_MP = 1.0e-8
+
+# the warnings of a history (inelastic-reflection prompt 05; README §8.1 R6, §8.2 P23), returned by
+# integrate_scalar_history and printed once per history by tune_history. Each line begins with one
+# of these fixed phrases, one per kind, and warning_kind returns it; tune_history prints the first
+# line of each kind it sees and no other of that kind (orchestrator note 05, ruling 1). None names
+# an M: where the regimes meet depends on the potential
+#   WARNING_NEARLY_ELASTIC:       dissipation mode, R < 1 at the first impact
+#   WARNING_REGIME_UNASSESSED:    dissipation mode, the first impact has no assessment
+#   WARNING_TURNING_POINT_BELOW:  natural mode, a classical turning point below the threshold
+#   WARNING_WALL_UNASSESSED:      natural mode, the model call at the first floor reflection failed
+WARNING_NEARLY_ELASTIC = (
+    "dissipation mode: the reflections are expected to be nearly elastic in this regime"
+)
+WARNING_REGIME_UNASSESSED = (
+    "dissipation mode: the regime could not be assessed at the first impact"
+)
+WARNING_TURNING_POINT_BELOW = "natural mode: the classical turning point lies below"
+WARNING_WALL_UNASSESSED = "natural mode: the wall could not be assessed"
+WARNING_KINDS = (
+    WARNING_NEARLY_ELASTIC,
+    WARNING_REGIME_UNASSESSED,
+    WARNING_TURNING_POINT_BELOW,
+    WARNING_WALL_UNASSESSED,
+)
+
 # the stepper label returned by compute_scalar_history; main.py pre-registers it as
 # IntegrationSolver(label="Radau+kinematic-cap", stepping=0)
 SCALAR_HISTORY_STEPPER_LABEL = "Radau+kinematic-cap-stepping0"
@@ -133,15 +173,23 @@ StepControl = namedtuple(
     ],
 )
 
-# one elastic reflection performed by integrate_scalar_history: the e-fold number, the field
-# value and the (negative) inward velocity at which it was performed
+# one reflection performed by integrate_scalar_history: the e-fold number, the field value and the
+# (negative) inward velocity at which it was performed. Elastic at alpha = 0; at alpha > 0 it drains
+# (inelastic-reflection prompt 02)
+#   kind:  "floor" (the floor rule: the wall is thinner than a representable step) or "unresolved"
+#          (inelastic-reflection prompt 05: at alpha > 0, phi < K phi_t with phi_t below the
+#          threshold or R > 1). Every reflection at alpha = 0 is "floor". The loop always passes it;
+#          the default None exists only so that a Reflection built by keyword without it, as a test's
+#          stub does, still builds (orchestrator note 05, ruling 5)
 Reflection = namedtuple(
     "Reflection",
     [
         "N",
         "phi_Einstein",
         "pi_Einstein_in",
+        "kind",
     ],
+    defaults=[None],
 )
 
 # one turning point of phi seen by integrate_scalar_history (inelastic-reflection prompt 02): a sign
@@ -171,17 +219,17 @@ TurningPoint = namedtuple(
 )
 
 # one candidate for a drain of the condensate's kinetic energy into the dark-radiation ledger
-# (inelastic-reflection prompts 02 and 03; README §6.2 P4, the fields prompts 02 and 03 can fill).
-# At alpha > 0 every drain point and every floor reflection is one, alpha_eff = 0.0 included
+# (inelastic-reflection prompts 02, 03 and 05; README §6.2 P4, the fields prompts 02 and 03 can
+# fill). At alpha > 0 every drain point and every reflection is one, alpha_eff = 0.0 included
 # (prompt 03); the ledger holds exactly those with alpha_eff > 0.0
 #   N:                       the drain point: the end of the accepted step at which the drain was
-#                            made, or the floor reflection's N
-#   kind:                    "turning_point" (after a wall-side TurningPoint) or "floor" (a
-#                            floor-rule reflection)
-#   N_turn:                  the turning point's N, or N for a floor event
+#                            made, or the reflection's N
+#   kind:                    "turning_point" (after a wall-side TurningPoint), "floor" (a floor-rule
+#                            reflection) or "unresolved" (a reflection at phi < K phi_t, prompt 05)
+#   N_turn:                  the turning point's N, or N for a reflection
 #   phi_turn:                phi at the turning point, or at the reflection
 #   pi_before, pi_after:     pi at the drain, before and after it; pi_after is pi_before (-pi_before
-#                            at a floor) when alpha_eff == 0.0
+#                            at a reflection) when alpha_eff == 0.0
 #   log_rho_kin:             ln rho_kin,E = ln(H_E^2 pi_before^2/2) before the drain
 #   alpha_eff:               the fraction drained, alpha * w_gate (prompt 03)
 #   delta_K:                 the ledger's entry, alpha_eff rho_kin,E e^{4N}; 0.0 if alpha_eff == 0.0
@@ -190,8 +238,25 @@ TurningPoint = namedtuple(
 #   H_Einstein_after:        H_E from the state and the ledger after it (the same float as
 #                            H_Einstein_before when alpha_eff == 0.0)
 #   nonadiabaticity:         A_k of the half-oscillation that ends at the candidate: the wall-side
-#                            TurningPoint's, or the infall's up to a floor reflection (prompt 03)
-#   w_gate:                  A_k^2/(A_k^2 + NONADIABATICITY_SCALE^2) (gate_weight)
+#                            TurningPoint's, or the infall's up to a reflection (prompt 03). Recorded
+#                            at an unresolved candidate too, where the gate does not read it
+#   w_gate:                  A_k^2/(A_k^2 + NONADIABATICITY_SCALE^2) (gate_weight) at a resolved
+#                            candidate; exactly 1.0 at an unresolved one, floor reflections included
+#                            (prompt 05; README §8.1 R10, §8.2 P20), where gate_weight is not called
+#   resolved:                True for a drain point after a wall-side TurningPoint, False for a
+#                            reflection of either kind (prompt 05)
+#   phi_assessed:            phi at the step start where the assessment the candidate was judged on
+#                            was made (prompt 05): a reflection's own step start, or, if the
+#                            assessment there returned None, the infall's latest; for a drain point
+#                            the last assessment of the infall that ended at its wall-side turning
+#                            point. None if the infall was never assessed (a model without a wall,
+#                            or None at every step of it); then log_E_assessed and
+#                            classical_turning_point are None too
+#   log_E_assessed:          ln E there, E = H_E^2 pi^2/2 + V(phi) - V_floor, the energy that reaches
+#                            the wall (prompt 05 §0.2)
+#   classical_turning_point: the model's ClassicalTurningPoint for (phi_assessed, E): phi_t,
+#                            ln omega_t^2, ln R, lambda_t, ln k_ex and ell_t (inelastic-reflection
+#                            prompt 04)
 Injection = namedtuple(
     "Injection",
     [
@@ -209,6 +274,10 @@ Injection = namedtuple(
         "H_Einstein_after",
         "nonadiabaticity",
         "w_gate",
+        "resolved",
+        "phi_assessed",
+        "log_E_assessed",
+        "classical_turning_point",
     ],
 )
 
@@ -221,7 +290,8 @@ Injection = namedtuple(
 #   nfev:                        RHS evaluations requested by the loop (including Jacobian probes)
 #   accepted_steps:              accepted Radau steps
 #   steps_rejected_by_exception: step attempts abandoned because the RHS raised on a trial state
-#   reflections:                 list of Reflection (floor-rule events only)
+#   reflections:                 list of Reflection, of both kinds: floor-rule events and, at
+#                                alpha > 0, unresolved reflections (inelastic-reflection prompt 05)
 #   max_wall_to_kinetic_ratio:   largest W/(pi^2/2) at a reflection (guard G2), or None
 #   turning_points:              list of TurningPoint, in order, at every alpha
 #                                (inelastic-reflection prompt 02)
@@ -233,6 +303,10 @@ Injection = namedtuple(
 #                                or the history's end (inelastic-reflection prompt 03). Counted at
 #                                every alpha, alpha = 0 included; at alpha > 0 it is the wall-side
 #                                turning points less the "turning_point" candidates
+#   warnings:                    tuple of the history's warning lines (inelastic-reflection prompt
+#                                05), each beginning with one of WARNING_KINDS; empty when there are
+#                                none. A ComputationFailureError raised by the loop carries the
+#                                warnings collected before it as its attribute `warnings`
 IntegrationResult = namedtuple(
     "IntegrationResult",
     [
@@ -247,6 +321,7 @@ IntegrationResult = namedtuple(
         "turning_points",
         "injections",
         "dropped_drains",
+        "warnings",
     ],
 )
 
@@ -824,6 +899,74 @@ def gate_weight(nonadiabaticity: float) -> float:
     return (A * A) / (A * A + A0 * A0)
 
 
+# ---- the unresolved turnaround (inelastic-reflection prompt 05) ----
+#
+# Module-level, called by integrate_scalar_history through their module names at call time, so that
+# they can be tested on synthetic values and patched (orchestrator note 05, ruling 6), as the gate's
+# are
+
+
+def assess_infall(
+    model: RealizedModel, phi_Einstein: float, log_rho_kin: float
+) -> Tuple[float, Optional[ClassicalTurningPoint]]:
+    """
+    The assessment of the wall ahead of an infalling field (inelastic-reflection prompt 05 §1.2):
+    (ln E, the model's classical_turning_point(phi, ln E)).
+
+    E is the energy that reaches the wall, rho_kin,E + V(phi) - V_floor (prompt §0.2): across the
+    crossing rho_kin + V is conserved (expansion is neglected, as the model's methods neglect it),
+    and far out V = V_floor, so the turning point where V(phi_t) - V_floor = E is the same from every
+    point of the infall. With rho_kin alone, phi_t would drift outwards as the field climbs the wall.
+    ln E is formed in logs from ln rho_kin,E (given), and the model's log_V and log_V_floor, with
+    ln(V - V_floor) = -inf where V rounds to V_floor or below; then ln E = ln rho_kin,E exactly.
+
+    The classical turning point is None if V(phi) - V_floor >= E, which with this E means rho_kin,E
+    is below the rounding of V - V_floor: the field is at its turning point to rounding. A
+    ComputationFailureError from the model propagates. The model must have a wall
+    (reflects_at_origin) and a log_V_floor; the caller does not assess one without.
+    """
+    log_V_floor: float = model.log_V_floor
+    log_V: float = model.log_V(phi_Einstein)
+
+    if log_V > log_V_floor:
+        log_W: float = log_V + log(-expm1(log_V_floor - log_V))
+        if log_W > log_rho_kin:
+            log_E: float = log_W + log1p(exp(log_rho_kin - log_W))
+        else:
+            log_E = log_rho_kin + log1p(exp(log_W - log_rho_kin))
+    else:
+        log_E = log_rho_kin
+
+    return log_E, model.classical_turning_point(phi_Einstein, log_E)
+
+
+def unresolved_turnaround(
+    phi_Einstein: float, turning_point: ClassicalTurningPoint, PlanckMass: float
+) -> bool:
+    """
+    The decision (inelastic-reflection prompt 05 §1.3; README §8.1 R8): True iff
+    phi < K phi_t, and either phi_t < UNRESOLVED_PHI_T_THRESHOLD_MP M_P or ln R > 0. All three
+    comparisons are strict. K and the threshold are read here, at call time.
+    """
+    phi_t: float = turning_point.phi_t
+    if not phi_Einstein < UNRESOLVED_REFLECTION_FACTOR * phi_t:
+        return False
+    return (
+        phi_t < UNRESOLVED_PHI_T_THRESHOLD_MP * PlanckMass or turning_point.log_R > 0.0
+    )
+
+
+def warning_kind(line: str) -> str:
+    """
+    The kind of a warning line: the fixed phrase of WARNING_KINDS it begins with (orchestrator note
+    05, ruling 1). A line that begins with none of them is a ValueError.
+    """
+    for kind in WARNING_KINDS:
+        if line.startswith(kind):
+            return kind
+    raise ValueError(f"warning_kind: not a history warning: {line!r}")
+
+
 def integrate_scalar_history(
     RHS,
     supervisor: ScalarFieldIntegrationSupervisor,
@@ -893,13 +1036,47 @@ def integrate_scalar_history(
         progress. A turning point or a floor reflection ends one, at its N, and its maximum is
         that turning point's A_k (0.0 if it holds no sample); each TurningPoint records it with
         m_eff/H_E at the turning point;
-      - w_gate = gate_weight(A_k), with A_k the wall-side turning point's for a drain point and
-        the infall's for a floor reflection. Plateau turnarounds never drain;
+      - w_gate = gate_weight(A_k), with A_k the wall-side turning point's, for a drain point. Since
+        prompt 05 a reflection is unresolved and drains with w_gate = 1.0 (below); the infall's A_k
+        is still recorded on it. Plateau turnarounds never drain;
       - a candidate with alpha_eff == 0.0 is recorded with no ledger entry, no change to pi and
         no restart (a floor reflection's elastic restart stays).
     None of this runs at alpha = 0: no mass, H_E or A is computed and no candidate is recorded,
     and the TurningPoints' two new fields are None. dropped_drains counts the armed drains that
     never reached a drain point, at every alpha.
+
+    Unresolved turnarounds (inelastic-reflection prompt 05; README §8.1 R8, R10, §8.2 P20, P22), at
+    alpha > 0 only, and only for a model with a wall (reflects_at_origin and a log_V_floor):
+      - at the start of every step with pi < 0, before the floor rule, the wall ahead is assessed:
+        assess_infall(model, phi, ln rho_kin,E), with rho_kin,E = H_E^2 pi^2/2 from policy and
+        hubble (never fun), gives ln E = ln(rho_kin,E + V - V_floor) and the classical turning point.
+        A None turning point makes no decision at that step, and the infall's latest assessment
+        stands. A ComputationFailureError from the model is the history's failure;
+      - unresolved_turnaround(phi, turning point, M_P) decides: phi < K phi_t, and phi_t below the
+        threshold or ln R > 0. If it fires the field is reflected there, through the floor branch
+        (the guards, a Reflection of kind "unresolved", the drop of an armed drain, the close of the
+        half-oscillation, the candidate, the restart from -sqrt(1 - alpha_eff) pi_in); otherwise the
+        floor rule is tested as before, and its reflection is of kind "floor";
+      - every reflection, of either kind, is an unresolved candidate: it drains with w_gate = 1.0
+        exactly, alpha_eff = alpha, and gate_weight is not called for it; its A_k is recorded. A
+        drain point after a wall-side turning point keeps the gate;
+      - each candidate records whether it was resolved and the assessment it was judged on: a
+        reflection its own step start's (or the infall's latest, if that was None), a drain point
+        the last of the infall that ended at its wall-side turning point. A plateau turnaround or a
+        reflection starts a new infall.
+    At alpha = 0 no assessment is made and the floor rule is the old code.
+
+    The warnings (README §8.1 R6, §8.2 P23), returned in IntegrationResult.warnings, one line each,
+    at most one per kind:
+      - at alpha > 0, at the first candidate: WARNING_NEARLY_ELASTIC with R if its assessment has
+        ln R < 0, WARNING_REGIME_UNASSESSED if it has none;
+      - at alpha = 0, at the first of: a wall-side TurningPoint with phi below the threshold (there
+        phi is phi_t, and nothing is computed), or the first floor reflection, at which the model's
+        classical turning point is computed once, from the E above, and found below the threshold.
+        A ComputationFailureError from that one call gives WARNING_WALL_UNASSESSED instead and the
+        history goes on. It changes no value of the history.
+    A ComputationFailureError that the loop raises carries the warnings collected before it as its
+    attribute `warnings` (orchestrator note 05, ruling 2).
 
     :param RHS: callable RHS(N, state, supervisor), normally an ODERHS
     :param supervisor: the ScalarFieldIntegrationSupervisor (already entered)
@@ -1003,6 +1180,28 @@ def integrate_scalar_history(
     # (orchestrator note 03, ruling 7). Counted at every alpha, alpha = 0 included
     dropped_drains = 0
 
+    # the unresolved turnaround (inelastic-reflection prompt 05), at alpha > 0 on a model with a wall
+    # only; at alpha = 0, or without a wall, nothing is assessed and the floor rule is the old code
+    #   infall_assessment:  the infall's latest assessment (phi, ln E, ClassicalTurningPoint), or None;
+    #                       a turning point or a reflection starts a new infall
+    #   armed_assessment:   the infall's assessment, captured by the wall-side TurningPoint that armed
+    #                       the drain in `armed`
+    Mp: float = policy.units.PlanckMass
+    assess_wall: bool = (
+        alpha > 0.0 and model.reflects_at_origin and model.log_V_floor is not None
+    )
+    infall_assessment: Optional[Tuple[float, float, ClassicalTurningPoint]] = None
+    armed_assessment: Optional[Tuple[float, float, ClassicalTurningPoint]] = None
+
+    # the warnings (inelastic-reflection prompt 05; README §8.1 R6, §8.2 P23), at most one per kind
+    #   first_candidate_seen: dissipation mode; its warning is made at the history's first candidate
+    #   natural_warned:       natural mode; a warning has been made, so neither test runs again
+    #   natural_floor_called: natural mode; the one model call, at the first floor reflection, is made
+    warnings: List[str] = []
+    first_candidate_seen = False
+    natural_warned = False
+    natural_floor_called = False
+
     def H_Einstein_at(N_: float, y_: np.ndarray) -> float:
         state_ = StateVector._make(y_)
         return hubble(policy(N_, state_), state_).H_Einstein
@@ -1044,19 +1243,44 @@ def integrate_scalar_history(
         boundary_N = float(N_end)
         return A_k
 
-    def alpha_effective(nonadiabaticity: float):
+    def alpha_effective(nonadiabaticity: float, resolved: bool):
         """
         The fraction drained at one candidate, alpha_eff = alpha * w_gate (inelastic-reflection
         prompt 03; orchestrator note 03, ruling 4 as amended by ruling 16): the gate on the
-        half-oscillation's A_k. Returns (alpha_eff, w_gate). At alpha = 0 it returns 0.0 before the
-        weight is computed (ruling 1); the loop does not call it there.
+        half-oscillation's A_k at a resolved candidate, and w_gate = 1.0 exactly at an unresolved
+        one, where gate_weight is not called (prompt 05; README §8.1 R10, §8.2 P20). Returns
+        (alpha_eff, w_gate). At alpha = 0 it returns 0.0 before the weight is computed (ruling 1);
+        the loop does not call it there.
         """
         if alpha == 0.0:
             return 0.0, None
 
-        w_gate: float = gate_weight(nonadiabaticity)
+        w_gate: float = gate_weight(nonadiabaticity) if resolved else 1.0
         alpha_eff: float = alpha * w_gate
         return alpha_eff, w_gate
+
+    def first_candidate_warning(assessment) -> None:
+        """
+        Dissipation mode's warning (prompt 05 §1.5), at the history's first candidate, its first
+        impact: nearly elastic if its assessment has ln R < 0, unassessed if it has none.
+        """
+        nonlocal first_candidate_seen
+        if first_candidate_seen:
+            return
+        first_candidate_seen = True
+        if assessment is None:
+            warnings.append(
+                f"{WARNING_REGIME_UNASSESSED}: the first impact has no assessment of the wall "
+                f"(the model has no wall, or every assessment of the infall returned None)"
+            )
+            return
+        phi_a, log_E_a, turning_point_a = assessment
+        if turning_point_a.log_R < 0.0:
+            warnings.append(
+                f"{WARNING_NEARLY_ELASTIC}: the test-field ratio R = 10^"
+                f"{turning_point_a.log_R / log(10.0):.3f} < 1 at the first impact "
+                f"(phi_t = {turning_point_a.phi_t / Mp:.4g} M_P)"
+            )
 
     def candidate(
         N_: float,
@@ -1066,24 +1290,40 @@ def integrate_scalar_history(
         N_turn: float,
         phi_turn: float,
         sign: float,
+        resolved: bool,
+        assessment,
     ) -> Optional[np.ndarray]:
         """
-        One candidate at alpha > 0, a drain point or a floor reflection, in ruling 4's order, with
+        One candidate at alpha > 0, a drain point or a reflection, in ruling 4's order, with
         the state and the ledger before any change: H_E and ln rho_kin,E (prompt 02's
         expressions); then alpha_effective; then, if alpha_eff > 0.0, prompt 02's drain, which
         records it and returns the drained state. If alpha_eff == 0.0 the candidate is recorded
         with pi_after = sign pi_before, delta_K = delta_rho/rho_R = 0.0 and H_after = H_before,
         nothing is added to the ledger, and None is returned: the caller makes no restart beyond
-        what alpha = 0 makes there.
+        what alpha = 0 makes there. resolved and the assessment (phi, ln E, ClassicalTurningPoint),
+        or None, are recorded (prompt 05); the first candidate of the history makes dissipation
+        mode's warning.
         """
+        first_candidate_warning(assessment)
+
         pi_before: float = float(y_[1])
         H_before: float = H_Einstein_at(N_, y_)
 
         # rho_kin,E = H_E^2 pi^2/2, in logs (prompt 02)
         log_rho_kin: float = 2.0 * log(H_before) + 2.0 * log(abs(pi_before)) - LOG_2
 
-        alpha_eff, w_gate = alpha_effective(nonadiabaticity)
-        weights = dict(nonadiabaticity=float(nonadiabaticity), w_gate=w_gate)
+        alpha_eff, w_gate = alpha_effective(nonadiabaticity, resolved)
+        phi_a, log_E_a, turning_point_a = (
+            (None, None, None) if assessment is None else assessment
+        )
+        weights = dict(
+            nonadiabaticity=float(nonadiabaticity),
+            w_gate=w_gate,
+            resolved=resolved,
+            phi_assessed=phi_a,
+            log_E_assessed=log_E_a,
+            classical_turning_point=turning_point_a,
+        )
 
         if alpha_eff > 0.0:
             return drain(
@@ -1313,169 +1553,288 @@ def integrate_scalar_history(
         turning_points.extend(found)
         return found
 
-    while True:
-        N: float = solver.t
-        phi: float = solver.y[0]
-        pi_: float = solver.y[1]
-
-        # the floor rule: an inward-moving field whose velocity cap would fall below the
-        # representable step is reflected elastically (README §2 (b)); at alpha > 0 the reflection
-        # is also the drain point (inelastic-reflection prompt 02; README §6.2 P3)
-        if pi_ < 0.0 and f_cap * phi / (-pi_) < h_floor:
-            ratio = _reflection_guards(policy, N, solver.y, task_label)
-            max_ratio = ratio if max_ratio is None else max(max_ratio, ratio)
-
-            reflections.append(Reflection(N=N, phi_Einstein=phi, pi_Einstein_in=pi_))
-            supervisor.notify_reflection(N)
-
-            # a drain still armed is dropped: the field turned inwards before its drain point
-            if armed is not None:
-                dropped_drains += 1
+    def handle_turning_point(turning_point: TurningPoint) -> None:
+        """
+        One turning point, in order along its step (prompts 02 and 03): a wall-side one arms a drain
+        and any turning point drops one still armed (counted; orchestrator note 03, ruling 7). Since
+        prompt 05 the armed wall-side point captures the infall's latest assessment, and every
+        turning point starts a new infall. At alpha = 0, a wall-side turning point below the
+        threshold makes natural mode's warning: there the field is at rest, so phi is phi_t.
+        """
+        nonlocal armed, armed_assessment, infall_assessment, dropped_drains
+        nonlocal natural_warned
+        if armed is not None:
+            dropped_drains += 1
+        if turning_point.kind == "wall":
+            armed = turning_point
+            armed_assessment = infall_assessment
+        else:
             armed = None
+            armed_assessment = None
+        infall_assessment = None
 
-            # at alpha > 0 the reflection is a candidate (prompt 03): it ends the half-oscillation
-            # of the infall, whose A_k gates it. If its alpha_eff is 0.0, or at alpha = 0, the
-            # restart is the elastic one
-            y_reflected: Optional[np.ndarray] = None
-            if alpha > 0.0:
-                A_k: float = close_half_oscillation(N)
-                y_reflected = candidate(N, solver.y, A_k, "floor", N, phi, -1.0)
-            if y_reflected is None:
-                y_reflected = solver.y.copy()
-                y_reflected[1] = -pi_
-            solver = new_solver(N, y_reflected)
-            continue
+        if (
+            alpha == 0.0
+            and not natural_warned
+            and turning_point.kind == "wall"
+            and turning_point.phi_Einstein < UNRESOLVED_PHI_T_THRESHOLD_MP * Mp
+        ):
+            natural_warned = True
+            warnings.append(
+                f"{WARNING_TURNING_POINT_BELOW} {UNRESOLVED_PHI_T_THRESHOLD_MP:.3g} M_P "
+                f"(phi_t = {turning_point.phi_Einstein / Mp:.4g} M_P at the wall-side turning "
+                f"point at N = {turning_point.N:.10g}), where dissipation mode would reflect "
+                f"without resolving it; this history may fail on Radau's float spacing or the "
+                f"step budget"
+            )
 
-        # the kinematic cap (README §2 (a)): the inward displacement in a step is at most
-        # max(-pi, 0) h + 1/2 max(-pi', 0) h^2; require it to be at most f*phi
-        cap: float = global_max_step
-        if pi_ < 0.0:
-            cap = min(cap, f_cap * phi / (-pi_))
-        a_in: float = -solver.f[1]
-        if a_in > 0.0:
-            cap = min(cap, sqrt(2.0 * f_cap * phi / a_in))
-        cap = max(cap, h_floor)
+    def natural_floor_warning(N_: float, y_: np.ndarray) -> None:
+        """
+        Natural mode's warning at its first floor reflection (prompt 05 §1.5; orchestrator note 05,
+        ruling 8): the model's classical turning point, from E = H_E^2 pi^2/2 + V - V_floor, is
+        computed once, and below the threshold makes the warning. A None turning point means the
+        field is at its turning point to rounding, and phi is taken for phi_t. A
+        ComputationFailureError from H_E or the model makes the "could not be assessed" warning,
+        and the history goes on; any other exception propagates. It changes no value.
+        """
+        nonlocal natural_warned, natural_floor_called
+        if natural_warned or natural_floor_called:
+            return
+        natural_floor_called = True
 
-        solver.max_step = cap
-        if solver.h_abs > cap:
-            solver.h_abs = cap
-        supervisor.notify_step_cap(cap)
-
+        phi_: float = float(y_[0])
         try:
-            message = solver.step()
+            H_: float = H_Einstein_at(N_, y_)
+            log_rho_kin_: float = 2.0 * log(H_) + 2.0 * log(abs(float(y_[1]))) - LOG_2
+            _, turning_point_ = assess_infall(model, phi_, log_rho_kin_)
         except ComputationFailureError as e:
-            # the RHS raised on a trial state (a Newton iterate or a Jacobian probe): reject the step
-            steps_rejected_by_exception += 1
-            solver.h_abs *= 0.5
-            if solver.h_abs < MIN_STEP_AFTER_TRIAL_EXCEPTION:
+            natural_warned = True
+            warnings.append(
+                f"{WARNING_WALL_UNASSESSED} at the first floor reflection (N = {N_:.10g}, "
+                f"phi = {phi_ / Mp:.4g} M_P): {e.message}; the history goes on"
+            )
+            return
+
+        phi_t_: float = phi_ if turning_point_ is None else turning_point_.phi_t
+        if phi_t_ < UNRESOLVED_PHI_T_THRESHOLD_MP * Mp:
+            natural_warned = True
+            warnings.append(
+                f"{WARNING_TURNING_POINT_BELOW} {UNRESOLVED_PHI_T_THRESHOLD_MP:.3g} M_P "
+                f"(phi_t = {phi_t_ / Mp:.4g} M_P at the floor reflection at N = {N_:.10g}), "
+                f"where dissipation mode would reflect without resolving it; this history may "
+                f"fail on Radau's float spacing or the step budget"
+            )
+
+    try:
+        while True:
+            N: float = solver.t
+            phi: float = solver.y[0]
+            pi_: float = solver.y[1]
+
+            # the unresolved turnaround (inelastic-reflection prompt 05): at alpha > 0, on a model
+            # with a wall, every step start with pi < 0 assesses the wall ahead before the floor
+            # rule is tested. A None turning point makes no decision, and the infall's latest
+            # assessment stands (orchestrator note 05, ruling 7)
+            unresolved: bool = False
+            if assess_wall and pi_ < 0.0:
+                H_start: float = H_Einstein_at(N, solver.y)
+                log_rho_kin_start: float = 2.0 * log(H_start) + 2.0 * log(-pi_) - LOG_2
+                log_E_start, turning_point_start = assess_infall(
+                    model, float(phi), log_rho_kin_start
+                )
+                if turning_point_start is not None:
+                    infall_assessment = (
+                        float(phi),
+                        log_E_start,
+                        turning_point_start,
+                    )
+                    unresolved = unresolved_turnaround(phi, turning_point_start, Mp)
+
+            # the floor rule: an inward-moving field whose velocity cap would fall below the
+            # representable step is reflected elastically (README §2 (b)); at alpha > 0 the
+            # reflection is also the drain point (inelastic-reflection prompt 02; README §6.2 P3).
+            # An unresolved turnaround (prompt 05) is reflected through the same branch, first
+            if unresolved or (pi_ < 0.0 and f_cap * phi / (-pi_) < h_floor):
+                kind: str = "unresolved" if unresolved else "floor"
+                ratio = _reflection_guards(policy, N, solver.y, task_label)
+                max_ratio = ratio if max_ratio is None else max(max_ratio, ratio)
+
+                reflections.append(
+                    Reflection(N=N, phi_Einstein=phi, pi_Einstein_in=pi_, kind=kind)
+                )
+                supervisor.notify_reflection(N)
+
+                # a drain still armed is dropped: the field turned inwards before its drain point
+                if armed is not None:
+                    dropped_drains += 1
+                armed = None
+                armed_assessment = None
+
+                # at alpha > 0 the reflection is a candidate (prompt 03): it ends the
+                # half-oscillation of the infall, whose A_k it records. Since prompt 05 it is
+                # unresolved, with w_gate = 1.0, and records the infall's assessment. If its
+                # alpha_eff is 0.0, or at alpha = 0, the restart is the elastic one; at alpha = 0
+                # the first floor reflection makes natural mode's warning, changing nothing
+                y_reflected: Optional[np.ndarray] = None
+                if alpha > 0.0:
+                    A_k: float = close_half_oscillation(N)
+                    y_reflected = candidate(
+                        N,
+                        solver.y,
+                        A_k,
+                        kind,
+                        N,
+                        phi,
+                        -1.0,
+                        False,
+                        infall_assessment,
+                    )
+                else:
+                    natural_floor_warning(N, solver.y)
+                infall_assessment = None
+                if y_reflected is None:
+                    y_reflected = solver.y.copy()
+                    y_reflected[1] = -pi_
+                solver = new_solver(N, y_reflected)
+                continue
+
+            # the kinematic cap (README §2 (a)): the inward displacement in a step is at most
+            # max(-pi, 0) h + 1/2 max(-pi', 0) h^2; require it to be at most f*phi
+            cap: float = global_max_step
+            if pi_ < 0.0:
+                cap = min(cap, f_cap * phi / (-pi_))
+            a_in: float = -solver.f[1]
+            if a_in > 0.0:
+                cap = min(cap, sqrt(2.0 * f_cap * phi / a_in))
+            cap = max(cap, h_floor)
+
+            solver.max_step = cap
+            if solver.h_abs > cap:
+                solver.h_abs = cap
+            supervisor.notify_step_cap(cap)
+
+            try:
+                message = solver.step()
+            except ComputationFailureError as e:
+                # the RHS raised on a trial state (a Newton iterate or a Jacobian probe): reject the step
+                steps_rejected_by_exception += 1
+                solver.h_abs *= 0.5
+                if solver.h_abs < MIN_STEP_AFTER_TRIAL_EXCEPTION:
+                    raise ComputationFailureError(
+                        f"integrate_scalar_history{label}: step size fell below "
+                        f"{MIN_STEP_AFTER_TRIAL_EXCEPTION:.3g} e-folds after repeated trial-state "
+                        f"exceptions at N={N:.10g}, phi_E={phi:.5g}, pi_E={pi_:.5g}: {e.message}"
+                    ) from e
+                continue
+
+            if message is not None:
                 raise ComputationFailureError(
-                    f"integrate_scalar_history{label}: step size fell below "
-                    f"{MIN_STEP_AFTER_TRIAL_EXCEPTION:.3g} e-folds after repeated trial-state "
-                    f"exceptions at N={N:.10g}, phi_E={phi:.5g}, pi_E={pi_:.5g}: {e.message}"
-                ) from e
-            continue
-
-        if message is not None:
-            raise ComputationFailureError(
-                f'integrate_scalar_history{label}: Radau step failed at N={solver.t:.10g}, phi_E={solver.y[0]:.5g}, pi_E={solver.y[1]:.5g}: "{message}"'
-            )
-
-        accepted_steps += 1
-
-        # the step budget (README §2 (h)): without a parked-tracking model a history whose
-        # bounces are unresolvable (physical M, beta >= 1.2) would run for days; fail it cleanly
-        if accepted_steps > step_budget:
-            raise ComputationFailureError(
-                f"step budget exhausted: integrate_scalar_history{label} took {accepted_steps} "
-                f"accepted steps (budget {step_budget}) at N={solver.t:.10g}, "
-                f"T_J={exp(solver.y[4]) / policy.GeV:.5g} GeV, with {len(reflections)} "
-                f"reflection(s)"
-            )
-
-        # scipy's num_jac multiplies a component's perturbation factor by 10 whenever its
-        # Jacobian column is (nearly) zero, with no upper clamp; clamp it (README §2 (f))
-        if solver.jac_factor is not None:
-            np.minimum(solver.jac_factor, jacobian_factor_max, out=solver.jac_factor)
-
-        if solver.y[0] <= 0.0:
-            raise ComputationFailureError(
-                f"integrate_scalar_history{label}: phi <= 0 in an accepted state (the step cap was "
-                f"violated) at N={solver.t:.10g}, phi_E={solver.y[0]:.5g}, pi_E={solver.y[1]:.5g}"
-            )
-
-        interpolant = solver.dense_output()
-
-        if solver.y[4] < log_T_stop:
-            N_low: float = solver.t_old
-            N_high: float = solver.t
-
-            def crossing(N_):
-                return interpolant(N_)[4] - log_T_stop
-
-            g_low = crossing(N_low)
-            g_high = crossing(N_high)
-            if not (g_low >= 0.0 and g_high < 0.0):
-                raise ComputationFailureError(
-                    f"integrate_scalar_history{label}: cannot bracket the termination root on the "
-                    f"last step [{N_low:.10g}, {N_high:.10g}] (ln T_J - log_T_stop = {g_low:.5g}, {g_high:.5g})"
+                    f'integrate_scalar_history{label}: Radau step failed at N={solver.t:.10g}, phi_E={solver.y[0]:.5g}, pi_E={solver.y[1]:.5g}: "{message}"'
                 )
 
-            if g_low == 0.0 and len(interpolants) > 0:
-                # the previous accepted state sits exactly on log_T_stop: it is the final node
-                N_final = N_low
-            else:
-                N_final = brentq(crossing, N_low, N_high) if g_low > 0.0 else N_low
-                ts.append(N_final)
-                interpolants.append(interpolant)
-                # the step that ends the history is classified up to N_final, and never drains: a
-                # wall-side turning point on it arms a drain that is dropped below (ruling 7)
-                for turning_point in observe_turning_points():
-                    if armed is not None:
-                        dropped_drains += 1
-                    armed = turning_point if turning_point.kind == "wall" else None
-            final_state = StateVector._make(interpolant(N_final))
-            break
+            accepted_steps += 1
 
-        ts.append(solver.t)
-        interpolants.append(interpolant)
+            # the step budget (README §2 (h)): without a parked-tracking model a history whose
+            # bounces are unresolvable (physical M, beta >= 1.2) would run for days; fail it cleanly
+            if accepted_steps > step_budget:
+                raise ComputationFailureError(
+                    f"step budget exhausted: integrate_scalar_history{label} took {accepted_steps} "
+                    f"accepted steps (budget {step_budget}) at N={solver.t:.10g}, "
+                    f"T_J={exp(solver.y[4]) / policy.GeV:.5g} GeV, with {len(reflections)} "
+                    f"reflection(s)"
+                )
 
-        # turning points (inelastic-reflection prompt 02; orchestrator note 02, rulings 1, 3 and
-        # 15), in order along the step: a wall-side one arms a drain, and any turning point drops
-        # one still armed (counted; orchestrator note 03, ruling 7)
-        for turning_point in observe_turning_points():
-            if armed is not None:
-                dropped_drains += 1
-            armed = turning_point if turning_point.kind == "wall" else None
+            # scipy's num_jac multiplies a component's perturbation factor by 10 whenever its
+            # Jacobian column is (nearly) zero, with no upper clamp; clamp it (README §2 (f))
+            if solver.jac_factor is not None:
+                np.minimum(
+                    solver.jac_factor, jacobian_factor_max, out=solver.jac_factor
+                )
 
-        if solver.status == "finished":
-            if stop_at_bound:
-                N_final = solver.t
-                final_state = StateVector._make(solver.y)
+            if solver.y[0] <= 0.0:
+                raise ComputationFailureError(
+                    f"integrate_scalar_history{label}: phi <= 0 in an accepted state (the step cap was "
+                    f"violated) at N={solver.t:.10g}, phi_E={solver.y[0]:.5g}, pi_E={solver.y[1]:.5g}"
+                )
+
+            interpolant = solver.dense_output()
+
+            if solver.y[4] < log_T_stop:
+                N_low: float = solver.t_old
+                N_high: float = solver.t
+
+                def crossing(N_):
+                    return interpolant(N_)[4] - log_T_stop
+
+                g_low = crossing(N_low)
+                g_high = crossing(N_high)
+                if not (g_low >= 0.0 and g_high < 0.0):
+                    raise ComputationFailureError(
+                        f"integrate_scalar_history{label}: cannot bracket the termination root on the "
+                        f"last step [{N_low:.10g}, {N_high:.10g}] (ln T_J - log_T_stop = {g_low:.5g}, {g_high:.5g})"
+                    )
+
+                if g_low == 0.0 and len(interpolants) > 0:
+                    # the previous accepted state sits exactly on log_T_stop: it is the final node
+                    N_final = N_low
+                else:
+                    N_final = brentq(crossing, N_low, N_high) if g_low > 0.0 else N_low
+                    ts.append(N_final)
+                    interpolants.append(interpolant)
+                    # the step that ends the history is classified up to N_final, and never drains: a
+                    # wall-side turning point on it arms a drain that is dropped below (ruling 7)
+                    for turning_point in observe_turning_points():
+                        handle_turning_point(turning_point)
+                final_state = StateVector._make(interpolant(N_final))
                 break
 
-            raise ComputationFailureError(
-                f"integrate_scalar_history{label}: the failsafe N={N_failsafe:.5g} was reached "
-                f"without ln T_J falling below log_T_stop={log_T_stop:.5g} (ln T_J={solver.y[4]:.5g})"
-            )
+            ts.append(solver.t)
+            interpolants.append(interpolant)
 
-        # the drain point (README §6.2 P3; orchestrator note 02, ruling 2): the first accepted state
-        # since the wall-side turning point with pi > 0 and pi' <= 0, read before any restart
-        # At alpha > 0 it is a candidate (prompt 03), gated on the wall-side turning point's A_k;
-        # at alpha = 0, or if its alpha_eff is 0.0, nothing is drained and no restart is made
-        if armed is not None and solver.y[1] > 0.0 and solver.f[1] <= 0.0:
-            if alpha > 0.0:
-                y_drained = candidate(
-                    solver.t,
-                    solver.y,
-                    armed.nonadiabaticity,
-                    "turning_point",
-                    armed.N,
-                    armed.phi_Einstein,
-                    1.0,
+            # turning points (inelastic-reflection prompt 02; orchestrator note 02, rulings 1, 3 and
+            # 15), in order along the step: a wall-side one arms a drain, and any turning point drops
+            # one still armed (counted; orchestrator note 03, ruling 7)
+            for turning_point in observe_turning_points():
+                handle_turning_point(turning_point)
+
+            if solver.status == "finished":
+                if stop_at_bound:
+                    N_final = solver.t
+                    final_state = StateVector._make(solver.y)
+                    break
+
+                raise ComputationFailureError(
+                    f"integrate_scalar_history{label}: the failsafe N={N_failsafe:.5g} was reached "
+                    f"without ln T_J falling below log_T_stop={log_T_stop:.5g} (ln T_J={solver.y[4]:.5g})"
                 )
-                if y_drained is not None:
-                    solver = new_solver(solver.t, y_drained)
-            armed = None
+
+            # the drain point (README §6.2 P3; orchestrator note 02, ruling 2): the first accepted state
+            # since the wall-side turning point with pi > 0 and pi' <= 0, read before any restart
+            # At alpha > 0 it is a candidate (prompt 03), gated on the wall-side turning point's A_k;
+            # at alpha = 0, or if its alpha_eff is 0.0, nothing is drained and no restart is made
+            if armed is not None and solver.y[1] > 0.0 and solver.f[1] <= 0.0:
+                if alpha > 0.0:
+                    y_drained = candidate(
+                        solver.t,
+                        solver.y,
+                        armed.nonadiabaticity,
+                        "turning_point",
+                        armed.N,
+                        armed.phi_Einstein,
+                        1.0,
+                        True,
+                        armed_assessment,
+                    )
+                    if y_drained is not None:
+                        solver = new_solver(solver.t, y_drained)
+                armed = None
+                armed_assessment = None
+    except ComputationFailureError as e:
+        # the warnings survive a failure (orchestrator note 05, ruling 2): the same exception,
+        # carrying the warnings collected before it, so that integrate_history's failure payload and
+        # tune_history can report them
+        e.warnings = tuple(warnings)
+        raise
 
     # a drain still armed when the history ends is dropped (ruling 7)
     if armed is not None:
@@ -1496,6 +1855,7 @@ def integrate_scalar_history(
         turning_points=turning_points,
         injections=injections,
         dropped_drains=dropped_drains,
+        warnings=tuple(warnings),
     )
 
 
@@ -1848,13 +2208,19 @@ def truncate_to_history(z_grid: redshift_array, final_N: float) -> redshift_arra
     return z_grid.truncate(final_N, keep="lower")
 
 
-def _failure_payload(reason: str) -> dict:
+def _failure_payload(reason: str, warnings: Optional[Tuple[str, ...]] = None) -> dict:
     """
     The payload compute_scalar_history returns for a failed history: the failure flag and
     the reason, truncated to DEFAULT_STRING_LENGTH, the width of the
     ScalarHistory.failure_reason column. (science-readiness prompt 02; BBNData's pattern)
+
+    If warnings is given (integrate_history's failures; inelastic-reflection prompt 05,
+    orchestrator note 05 ruling 2), the payload carries them under "warnings", which is not stored.
     """
-    return {"failure": True, "failure_reason": str(reason)[:DEFAULT_STRING_LENGTH]}
+    payload = {"failure": True, "failure_reason": str(reason)[:DEFAULT_STRING_LENGTH]}
+    if warnings is not None:
+        payload["warnings"] = tuple(warnings)
+    return payload
 
 
 def integrate_history(
@@ -1907,7 +2273,8 @@ def integrate_history(
              DarkRadiationLedger (inelastic-reflection prompt 01), and "turning_points" and
              "injections", the IntegrationResult's lists of TurningPoint and Injection
              (inelastic-reflection prompt 02), and "dropped_drains", its count of armed drains
-             that never reached a drain point (prompt 03). No store reads any of the four
+             that never reached a drain point (prompt 03), and "warnings", its warning lines
+             (prompt 05), which a failure's payload carries too. No store reads any of the five
     """
     if not (0.0 <= alpha < 1.0):
         raise ValueError(
@@ -2087,7 +2454,8 @@ def integrate_history(
                 f"!! integrate_history ({task_label}): overflow when assembling sample values; marked as total integration failure"
             )
             return _failure_payload(
-                f"sampling: overflow when assembling sample values: {e}"
+                f"sampling: overflow when assembling sample values: {e}",
+                warnings=result.warnings,
             )
     except ComputationFailureError as e:
         print(f"-- integrate_history ({task_label}): integration failure")
@@ -2095,7 +2463,9 @@ def integrate_history(
         print(
             f"!! integrate_history ({task_label}): marked as total integration failure"
         )
-        return _failure_payload(e.message)
+        # the warnings collected before the failure (inelastic-reflection prompt 05; orchestrator
+        # note 05, ruling 2); none if the failure came from outside the step loop
+        return _failure_payload(e.message, warnings=getattr(e, "warnings", ()))
 
     # the first bounce, on the dense output (science-readiness prompt 03); None if there is none
     bounce: Optional[FirstBounce] = first_bounce(result)
@@ -2139,12 +2509,16 @@ def integrate_history(
         # it; ScalarHistory.store and build_extra_data read named keys only, so it is not stored
         "dark_radiation": dark_radiation,
         # the turning points and the drains (inelastic-reflection prompt 02); not stored either.
-        # "reflections" above stays the count of floor-rule events
+        # "reflections" above counts every reflection, of both kinds (prompt 05): at alpha = 0 every
+        # reflection is a floor-rule one, so the count there is unchanged
         "turning_points": result.turning_points,
         "injections": result.injections,
         # the armed drains that never reached a drain point (inelastic-reflection prompt 03); not
         # stored either
         "dropped_drains": result.dropped_drains,
+        # the history's warnings, a tuple of lines (inelastic-reflection prompt 05); printed by
+        # tune_history, never here, and not stored
+        "warnings": result.warnings,
     }
 
 
@@ -2454,6 +2828,11 @@ def tune_history(
       TUNE_LINE_INTERVAL_S plus one integration. A failure's "!!" line is printed whatever the rule
       says. clock (default perf_counter) is called once before the loop and once before and once
       after each integration, and times both the rule and each line's wall=.
+    - The history's warnings (inelastic-reflection prompt 05): each integration's payload, failed or
+      not, carries its warning lines under "warnings". The first line of each kind (warning_kind)
+      is printed, as "!! tune_history (<task_label>): <line>", from the first integration that
+      returns it, whatever progress is, and no later line of that kind; a failure's warnings are
+      printed before its "!!" failure line.
       If tuning_converged(residual_H, residual_phi, tolerance), it returns.
     - If Eq. 7's V_target <= 0 (no positive potential gives H0 at today's state), the next iterate
       halves V(phi_0) through renormalize and sets phi_ref = phi_min, and the step's matrix is
@@ -2509,6 +2888,10 @@ def tune_history(
     reset = False
     last_line = clock()
 
+    # the kinds of warning already printed for this history (inelastic-reflection prompt 05;
+    # orchestrator note 05, ruling 1)
+    warned_kinds = set()
+
     k = 0
     while True:
         rm: RealizedModel = model.realize(norm, phi_ref)
@@ -2531,6 +2914,15 @@ def tune_history(
         )
         end = clock()
         wall = end - start
+
+        # the history's warnings (inelastic-reflection prompt 05; README §8.1 R6, §8.2 P23): the first
+        # line of each kind, from the first integration that returns it, whatever progress is, and
+        # before a failure's line (orchestrator note 05, rulings 1, 2 and 9)
+        for line in data.get("warnings", ()):
+            line_kind = warning_kind(line)
+            if line_kind not in warned_kinds:
+                warned_kinds.add(line_kind)
+                print(f"!! tune_history ({task_label}): {line}", flush=True)
 
         if data.get("failure", False):
             return _tuning_failure(

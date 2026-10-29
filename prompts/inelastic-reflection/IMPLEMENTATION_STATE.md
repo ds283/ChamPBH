@@ -1,7 +1,7 @@
 # inelastic-reflection campaign — implementation state
 
 **Last updated:** 2026-10-29 · **Status: LIVE, RE-PLANNED 2026-10-29 (README §8): 04–12 replace
-the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29. Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
+the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, and landed in this commit (2026-10-29; gate Unresolved holds; one issue opened). Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
 gate DR holds); 02 landed in `fe2a944` and reviewed (2026-10-28; gate Inject holds), after one
 stop and the user's ruling of interior sampling; 3 of 8 prompts written: 03 written 2026-10-28
 from log 02 §8, after the user ruled 𝒜₀ = 1 (README §6.1); 03 landed in `0afa199` and reviewed (2026-10-28;
@@ -40,7 +40,7 @@ bitwise the old code's.
 | 02 | [Injection at turning points](02-injection-at-turning-points.md) | turning points in the step loop; the drain at the KE maximum; the restart; the floor-rule drain; the record; α in `integrate_history`/`tune_history` | Opus | ✍️ 2026-10-28 | ✅ 2026-10-28 | `fe2a944` | [02](logs/02-injection-at-turning-points.md) |
 | 03 | [Gate and stopping rule](03-gate-and-stopping-rule.md) | 𝒜_k measured, then the gate at wall-side turning points (U4 (b′), 𝒜₀ = 1); the plateau diagnostic; ~~the tapered stopping rule (U5, P17)~~ withdrawn by the user (ruling 16); the residual's continuity | Opus | ✍️ 2026-10-28 | ✅ 2026-10-28 | `0afa199` | [03](logs/03-gate-and-stopping-rule.md) |
 | 04 | [The wall through the model](04-the-wall-through-the-model.md) | φ_t, V″, 𝓡, the one-loop turnaround, the full-trace minimum and ∂φ_min/∂ ln T as model methods with generic defaults (R9); dφ_min/dN moves to 06 | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | `81b933f` | [04](logs/04-the-wall-through-the-model.md) |
-| 05 | [Unresolved turnarounds](05-unresolved-turnarounds.md) | φ_t < 10⁻⁸ M_P or 𝓡 > 1 → reflect at 3φ_t (R8); w_gate = 1 there and at the floor rule (R10, P20); the records; the warnings (P23) | Opus | ✍️ 2026-10-29 | ⬜ | — | — |
+| 05 | [Unresolved turnarounds](05-unresolved-turnarounds.md) | φ_t < 10⁻⁸ M_P or 𝓡 > 1 → reflect at 3φ_t (R8); w_gate = 1 there and at the floor rule (R10, P20); the records; the warnings (P23) | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | this commit | [05](logs/05-unresolved-turnarounds.md) |
 | 06 | Parking | the cut ρ_kin/ρ_R < ε (R14, P19, P21); the parked phase to T_CMB through the dense-output interface (R15); the tuning at small M measured | Opus | ⬜ | ⬜ | — | — |
 | 07 | Unparking | the release at m/H < 10 (R16, P24) | Opus | ⬜ | ⬜ | — | — |
 | 08 | Spectrum peak and margins | the peak by 𝓡 (R7, P25); ℓ; the energy weight (U9); three worst margins and the first failure (R13) | Opus | ⬜ | ⬜ | — | — |
@@ -73,7 +73,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 | Inject | at α = 0 both golden histories bitwise; at α > 0 H_E continuous across every injection, ledger = Σ drains; a floor-rule drain exact | 02 | ✅ 2026-10-28 (log 02 §1.2, §4, §6) |
 | Taper | weights equal hand values; the tuning residual continuous across a threshold; the omitted fraction within its bound. *Since ruling 16 (2026-10-28, the stopping rule withdrawn): w_gate equals its hand values, and the residual is continuous across a threshold* | 03 | ✅ 2026-10-28, as restated (log 03 §4, §5.3) |
 | Wall | φ_t and 𝓡 equal the exponential closed form; the notes' table (classical wall y ≈ 105, one-loop stopping point y ≈ 40 at 1 meV) reproduced; an n = 2 model needs no closed form; φ_min and dφ_min/dN checked. *As prompt 04 §0.2 reads it: y = 39.1 is the chain's (`sec:chain`), and 04 checks ∂φ_min/∂ ln T, dφ_min/dN being 06's* | 04 | ✅ 2026-10-29 (log 04 §1.5, §4.2, §4.3, §5.1) |
-| Unresolved | α = 0 bitwise; an unresolved reflection is made at 3φ_t with w_gate = 1; the reflected history equals the resolved one in the probe's band; the warnings | 05 | ⬜ |
+| Unresolved | α = 0 bitwise; an unresolved reflection is made at 3φ_t with w_gate = 1; the reflected history equals the resolved one in the probe's band; the warnings | 05 | ✅ 2026-10-29 (log 05 §4, §5.4; at M = 3×10⁻¹¹ the resolved comparison run itself fails, as the planner's did) |
 | Park | α = 0 bitwise; an M = 10⁻³⁰ drained history reaches T_CMB; parked samples on φ_min; H_E continuous at the switch; the leftover in the ledger; the guard | 06 | ⬜ |
 | Release | a parked field released at m/H < 10 continues; continuity at the release; the lag after it as estimated | 07 | ⬜ |
 | Margin | the three margins equal a hand computation; energy-weighted; the classical birth margin negative by construction; NULL at α = 0 | 08 | ⬜ |
@@ -87,7 +87,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 
 ## 3. Active and unresolved issues
 
-One opened by the planner, one by prompt 04.
+One opened by the planner, one by prompt 04, one by prompt 05.
 
 ### `[00-xav-sigma-is-non-monotone-at-25-35-keV]`
 
@@ -140,6 +140,26 @@ One opened by the planner, one by prompt 04.
   - a flag on generations in the gap.
 
   At the edge the two k_ex differ by 4 %, so the first two differ little in ln q. Not assigned.
+
+### `[05-the-wall-search-refuses-a-wall-below-the-rounding-of-ln-V]`
+
+**Opened:** 2026-10-29 by prompt 05, found by its measurement down to laboratory M (log 05 §5.5).
+
+- **What.** 04's generic `classical_turning_point` forms V − V_floor from ln V and ln V_floor. Where
+  M/φ is below a few ulps of ln V, ln V − ln V_floor is quantized: on the exponential at
+  ln V ≈ −276.6 it is exactly 5.68×10⁻¹⁴ (one ulp) at both φ = 3.43×10⁻¹⁷ M_P and φ/e (M = 10⁻³⁰ M_P).
+  `_search_log_field` then sees the same finite residual at two probes and raises "the searched
+  quantity is not monotone". Further out, where the difference is 0.0, the residual is −∞, which the
+  search allows. The method is right; its input has no resolution there.
+- **Impact.** At α > 0 the step loop calls it at every infalling step start, and a raise fails the
+  history. All three M = 10⁻³⁰ histories of log 05 §5.5 (β = 1.2, 2, 3) failed this way. Each did so
+  at the bottom of its cascade, once |π| ≈ 4×10⁻⁷ M_P put the floor reflection at φ ≈ 3×10⁻¹⁷ M_P,
+  0.25–5.6 e-folds after ρ_kin/ρ_R had fallen below 10⁻⁶. So 06's cut comes first on every history
+  measured. 08's per-generation calls would meet the same at any state with M/φ ≈ 10⁻¹⁴–10⁻¹³.
+- **Next step.** For 06 to confirm that the cut always comes first, and for the methods' owner: treat
+  a residual within the rounding of ln V as −∞, or give the search a tolerance on equal values, or a
+  closed-form override in `ExponentialModel`. A change to 04's methods is not 05's (its §5). Not
+  assigned.
 
 ### 3.1 Assigned to this campaign
 
@@ -732,3 +752,49 @@ README §8.4's charter for 05. It departs from the charter in these places, each
 - the warnings are returned by the loop and printed once per history by `tune_history`;
 - an unresolved reflection is a `Reflection`, with a kind, so that `first_bounce` and the counts see
   it.
+
+### 5.6 After prompt 05 (2026-10-29)
+
+05 landed in this commit, under orchestrator note 05 (rulings 1–13). Log:
+[`logs/05-unresolved-turnarounds.md`](logs/05-unresolved-turnarounds.md).
+- **What shipped** (`ComputeTargets/ScalarHistory.py`):
+  - the constants `UNRESOLVED_REFLECTION_FACTOR = 3.0` and `UNRESOLVED_PHI_T_THRESHOLD_MP = 1.0e-8`;
+  - `assess_infall(model, φ, ln ρ_kin,E)` → (ln E, `ClassicalTurningPoint` or `None`), with
+    E = ρ_kin,E + V − V_floor;
+  - `unresolved_turnaround(φ, turning point, M_P)`;
+  - the four warning phrases, with `warning_kind`.
+
+  At α > 0, on a model with a wall, every step start with π < 0 is assessed before the floor rule,
+  and φ < 3φ_t with φ_t < 10⁻⁸ M_P or ln 𝓡 > 0 is reflected there through the floor branch, as kind
+  `"unresolved"`. Every reflection drains with w_gate = 1.0 (R10, P20). The records:
+  - `Reflection.kind`;
+  - `Injection.resolved`, `phi_assessed`, `log_E_assessed` and `classical_turning_point`;
+  - `IntegrationResult.warnings`, and the payload's `"warnings"`, kept through a failure (ruling 2);
+  - `tune_history` prints each kind once per history (ruling 1).
+
+  α = 0 is the old code, but for one model call at natural mode's first floor reflection.
+- **Gate Unresolved holds.**
+  - α = 0 is bitwise: the golden tests pass unedited; the model is called 0 times on a golden
+    history and once on the P1 harness, whose run equals `kcl.integrate`'s.
+  - At M = 10⁻⁸ the first wall approach is reflected at 2.959 φ_t, with w_gate = 1 and α_eff = α.
+  - In the band (β = 2) the rule agrees with the resolved run to 7.5e-7 at M = 10⁻⁹, 5.6e-9 at
+    3×10⁻¹⁰ and 1.4e-6 at 10⁻¹⁰, with equal candidates. At 3×10⁻¹¹ the resolved run loses 10⁹ of
+    the kinetic energy at a resolved wall with φ_t = 5×10⁻¹³ M_P, as the planner's "R only" did. The
+    agent did not take this as prompt §5's stop (log 05 D14).
+  - The warnings print once per history.
+- **α > 0 at M = 0.5 is 03's**, bitwise, at β = 1.2, 2, 5, 25. Every candidate is resolved and
+  assessed, and each history warns "nearly elastic" (log₁₀ 𝓡 = −62.5 to −53.4).
+- **Measured** (log 05 §5):
+  - under P20, K is invisible in Σ (K = 10 against 3: 1.6e-8);
+  - the drain to the cut is 0.1153, 0.2902 and 0.4219 of the ceiling at β = 1.2, 2, 3, the same at
+    every M from 10⁻⁷ to 10⁻³⁰, against README §8.0's gated 0.115, 0.218 and 0.261;
+  - without parking every small-M history fails 0.25–5.6 e-folds after the cut: on G2 at an
+    unresolved reflection where E ≈ V − V_floor, or (M = 10⁻³⁰) in the model's search;
+  - the smallest φ/φ_t at an unresolved reflection before the cut is 2.70008.
+- **Costs**: about 30 µs per assessment (H_E 11 µs, `assess_infall` 16–22 µs); +4.6 % on the
+  M = 0.5, β = 2 history.
+- **Breakages:** B1–B11, each failing named tests. B1 (K = 10) fails item 3, as ruling 3 asks.
+- **Counts:** 26 / 339 (96 + 243) / 103 / 115 / 64 before; 26 / **374** (96 + **278**) / 103 / 115 /
+  64 after, all passing.
+- **Issues:** opened `[05-the-wall-search-refuses-a-wall-below-the-rounding-of-ln-V]` (§3), with
+  `.documents/OPEN_ISSUES.md` §1.19; closed none.

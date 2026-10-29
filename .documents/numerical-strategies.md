@@ -1248,6 +1248,48 @@ so never saved the restart it was meant to save. Nothing of it is in the code. T
   bounce to 10⁻⁴ at the last, so the gate passes the early bounces whole and switches the late ones
   off. See log 03 §5 for the tables.
 
+### 6.4 Added 2026-10-29 (`inelastic-reflection` prompt 05): unresolved turnarounds
+
+At laboratory M the wall is thinner than Radau can resolve: φ_t ≈ 10⁻¹²–10⁻¹⁴ M_P at
+M = 10⁻¹⁰–10⁻¹² M_P, where histories failed on Radau's float spacing. The user ruled (README §8.1
+R8) that in dissipation mode a turnaround whose classical turning point lies below 10⁻⁸ M_P, or
+whose test-field ratio 𝓡 exceeds 1, is reflected at 3 φ_t without being resolved. The record is
+`prompts/inelastic-reflection/logs/05-unresolved-turnarounds.md`.
+
+- **The assessment.** At α > 0, on a model with a wall (`reflects_at_origin` and a `log_V_floor`),
+  at the start of every step with π < 0, `assess_infall(model, φ, ln ρ_kin,E)` forms
+  ln E = ln(ρ_kin,E + V(φ) − V_floor) in logs and calls the model's `classical_turning_point(φ, ln E)`
+  (§8.4a of `architecture-summary.md`). ρ_kin,E = H_E²π²/2, with H_E from `ODEPolicy` and
+  `HubblePolicy` on the state and the ledger as they stand, never through the RHS, so `nfev` is
+  unchanged.
+- **Why E includes the wall.** Across the crossing ρ_kin + V is conserved (expansion neglected, as
+  the model's methods neglect it), and far out V = V_floor, so E = ρ_kin + V − V_floor is the same
+  from every point of the infall and V(φ_t) − V_floor = E has the same root. With ρ_kin alone, φ_t
+  drifts outwards as the field climbs the wall: on a power-law wall V₀(M/φ)², V − V_floor is E/9 at
+  3 φ_t. On the exponential wall at these M it is below 10⁻¹⁵ of E there.
+- **The decision.** `unresolved_turnaround(φ, turning point, M_P)`: φ < K φ_t, and either
+  φ_t < 10⁻⁸ M_P or ln 𝓡 > 0, every comparison strict, with K = `UNRESOLVED_REFLECTION_FACTOR` = 3
+  and the threshold `UNRESOLVED_PHI_T_THRESHOLD_MP` = 10⁻⁸, read at call time. A `None` turning
+  point (ρ_kin below the rounding of V − V_floor) makes no decision.
+- **The order at a step start**: the assessment, the unresolved rule, the floor rule. Either rule's
+  reflection goes through the floor branch: the guards G1 and G2, a `Reflection`, the drop of an
+  armed drain, the close of the half-oscillation (§6.3), the candidate, and the restart from
+  π_out = −√(1 − α_eff) π_in. The kinematic cap moves the field inwards by at most fφ per step
+  (f = 0.1), so an unresolved reflection lies in [(1 − f) 3 φ_t, 3 φ_t), up to the change of φ_t
+  between the two step starts.
+- **The weight.** Every reflection, the floor rule's included (P20), drains with w_gate = 1.0
+  exactly, so α_eff = α: at a floor reflection 𝒜_k reads the infall, never the wall. Its 𝒜_k is
+  still recorded. Drain points after a resolved wall-side turning point keep §6.3's gate.
+- **At α = 0** nothing of this runs, and the floor rule is the old code. Natural mode's warning
+  needs φ_t at most once: at a resolved wall-side turning point φ is φ_t, and at the first floor
+  reflection the model is called once, its failure caught and turned into a warning.
+- **Measured.** In the probe's band (β = 2, α = 0.1) the reflected history equals the resolved one
+  to 1.4×10⁻⁶ or better in Σ Δρ/ρ_R, with the same wall approaches, at M = 10⁻⁹–10⁻¹⁰ M_P. At
+  3×10⁻¹¹ the resolved run itself fails on a wall with φ_t = 5×10⁻¹³ M_P. Under P20, K no longer
+  moves Σ. An assessment costs about 30 µs, 4.6 % of an M = 0.5 M_P history at β = 2. Without
+  parking, every history measured at M ≤ 10⁻⁷ fails at the bottom of its cascade, after
+  ρ_kin/ρ_R < 10⁻⁶. See log 05 §5.
+
 ---
 
 ## 7. From scalar history to BBN via PRyMordial (`ComputeTargets/BBNData.py`)
