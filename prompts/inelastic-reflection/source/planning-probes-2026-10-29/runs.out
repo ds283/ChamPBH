@@ -4,3 +4,15 @@ done beta=3.0 M=1e-06: steps=336399 tps=17855 wall=111.2s total=125.5s rss=320MB
 done beta=3.0 M=1e-05: steps=161621 tps=9663 wall=53.7s total=60.3s rss=245MB
 done beta=2.0 M=1e-06: steps=247672 tps=12543 wall=80.7s total=91.0s rss=206MB
 done beta=2.0 M=1e-05: steps=125564 tps=6499 wall=40.6s total=47.2s rss=185MB
+done beta=1.2 M=1e-07: steps=150847 tps=3655 wall=43.5s total=52.8s rss=175MB
+done beta=1.2 M=1e-06: steps=105755 tps=2793 wall=45.6s total=52.3s rss=161MB
+done beta=1.2 M=1e-05: steps=70068 tps=2037 wall=20.1s total=23.0s rss=161MB
+done beta=1.2 M=0.0001: steps=41681 tps=1325 wall=17.7s total=20.4s rss=161MB
+done beta=1.2 M=0.001: steps=21301 tps=721 wall=10.3s total=11.7s rss=159MB
+done beta=1.2 M=0.0001: steps=41671 tps=1325 wall=69.6s total=71.9s rss=208MB
+done beta=2.0 M=0.0001: steps=56216 tps=3171 wall=17.5s total=19.8s rss=157MB
+done beta=2.0 M=0.001: steps=23339 tps=1255 wall=8.1s total=10.0s rss=166MB
+done beta=2.0 M=0.0001: steps=56166 tps=3169 wall=103.9s total=106.8s rss=232MB
+done beta=3.0 M=0.0001: steps=69397 tps=4365 wall=22.0s total=24.8s rss=160MB
+done beta=3.0 M=0.001: steps=30355 tps=1627 wall=15.8s total=18.2s rss=166MB
+done beta=3.0 M=0.0001: steps=69406 tps=4363 wall=120.2s total=123.6s rss=232MB

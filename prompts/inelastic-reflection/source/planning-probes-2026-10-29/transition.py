@@ -10,7 +10,11 @@
 #       and BBN's r = (3 M_P^2 H_J^2 - rho_R,J (1 + f_m))/rho_R,J; the same r averaged over each cell
 #       of the stored z grid, and r at the stored samples themselves (what BBN reads);
 #   (d) today: phi_0, pi_0, pi_0/(1.5 phi_0), and _tuning_state's residual_H and phi_min.
-# Usage: transition.py BETA M_OVER_MP OUT.json
+# Usage: transition.py BETA M_OVER_MP OUT.json [tuned]
+#   tuned: tune the history with tune_history's defaults (H_J(T_CMB) = H0, phi_ref = phi_min) and
+#          analyse its final integration, instead of the untuned seed realization
+import contextlib
+import io
 import json
 import resource
 import sys
@@ -19,19 +23,45 @@ from math import exp, log
 
 import numpy as np
 from scipy.optimize import brentq
+from unittest import mock
 
 from ComputeTargets.tests import test_injection as T
-from CosmologyConcepts import M_value, beta_value
+from CosmologyConcepts import M_value, beta_value, phi_value, pi_value, temperature
 from CosmologyConcepts.Models.ExponentialModel import ExponentialModel
 from Quadrature.supervisors.ScalarField import StateVector
 
 SM = T.SM
 beta, M_Mp, out = float(sys.argv[1]), float(sys.argv[2]), sys.argv[3]
-record = {"beta": beta, "M_over_Mp": M_Mp, "alpha": 0.0, "code": "20bfafa"}
+tuned = len(sys.argv) > 4 and sys.argv[4] == "tuned"
+record = {"beta": beta, "M_over_Mp": M_Mp, "alpha": 0.0, "code": "20bfafa", "tuned": tuned}
+
+
+def run_tuned():
+    """tune_history at test_injection's setup; returns (payload, the final IntegrationResult)."""
+    cos_ = T.gth.make_cosmology()
+    u_ = cos_.units
+    model_ = ExponentialModel(0, M_value(0, M_Mp * u_.PlanckMass), 1, beta_value(0, beta), u_)
+    captured = []
+    integrate = SM.integrate_scalar_history
+
+    def capturing(*args, **kwargs):
+        res = integrate(*args, **kwargs)
+        captured.append(res)
+        return res
+
+    with mock.patch.object(SM, "integrate_scalar_history", capturing), contextlib.redirect_stdout(io.StringIO()):
+        payload = SM.tune_history(cos_, model_, temperature(0, 2.0e4 * u_.GeV), phi_value(0, 5.0 * u_.PlanckMass),
+                                  pi_value(0, 0.0), T.gth.make_z_grid(), task_label="transition probe")
+    if payload.get("failure", False):
+        raise RuntimeError(f"tuning failed: {payload['failure_reason']}")
+    return payload, captured[-1]
 
 t0 = time.perf_counter()
 try:
-    data, r, _ = T.integrate_captured(beta, M_Mp, 0.0)
+    if tuned:
+        data, r = run_tuned()
+    else:
+        data, r, _ = T.integrate_captured(beta, M_Mp, 0.0)
 except Exception as e:  # a failed history (the step budget, say) is a result
     record.update(failure=repr(e), wall_time_s=time.perf_counter() - t0)
     json.dump(record, open(out, "w"), indent=1)
@@ -44,8 +74,13 @@ record.update(accepted_steps=r.accepted_steps, nfev=r.nfev, N_final=r.N_final,
 cos = T.gth.make_cosmology()
 u = cos.units
 _model = ExponentialModel(0, M_value(0, M_Mp * u.PlanckMass), 1, beta_value(0, beta), u)
-_seed = _model.seed(cos)
-rm = _model.realize(_seed.normalization, _seed.phi_ref)
+if tuned:
+    rm = _model.realize(data["normalization"], data["phi_ref"])
+    record.update(tuning_iterations=data["tuning_iterations"], tuned_residual_H=data["residual_H"],
+                  tuned_residual_phi=data["residual_phi"])
+else:
+    _seed = _model.seed(cos)
+    rm = _model.realize(_seed.normalization, _seed.phi_ref)
 policy = SM.ODEPolicy("probe", cos, rm, dark_radiation=data["dark_radiation"])
 Mp = u.PlanckMass
 M = rm._model._M_float

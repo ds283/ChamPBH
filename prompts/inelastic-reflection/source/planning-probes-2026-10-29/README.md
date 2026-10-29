@@ -23,4 +23,16 @@ were set: the user asked to see what the results do.
   (0.13–0.49 million accepted steps, at most 363 MB). The JSON records are in the git-ignored
   `var/probes/transition-2026-10-29/`.
 
-What it shows is in the orchestrator's report to the user of 2026-10-29.
+## Second pass (2026-10-29, from 01:03 GMT)
+
+At the user's word ("let's try the remainder of the first run"): β = 1.2 at all five M, β = 2 and 3 at
+M = 1e-3 and 1e-4, and one tuned history per β at M = 1e-4 (`transition.py ... tuned`, which runs
+`tune_history` with its defaults and analyses its final integration). Each took 10–124 s. All
+fifteen untuned histories and the three tuned ones completed; none reflected.
+
+    PYTHONPATH=. ./venv/bin/python -I prompts/inelastic-reflection/source/planning-probes-2026-10-29/compare.py DIR 1e-3,1e-4,1e-5,1e-6,1e-7 1.2 2 3
+
+Its output is **`compare_all.out`**, whose section (e) is the tuned check. `compare.out` is the first
+pass's, kept as it was. `runs.out` lists every run of both passes.
+
+What it shows is in the orchestrator's reports to the user of 2026-10-29.

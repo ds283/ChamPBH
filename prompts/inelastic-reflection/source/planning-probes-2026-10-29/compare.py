@@ -1,13 +1,14 @@
 # Side-by-side comparison of transition.py's histories across M, per beta. No thresholds.
-# Usage: compare.py DIR BETA [BETA ...]
+# Usage: compare.py DIR MLIST BETA [BETA ...], MLIST comma-separated (the last is the reference);
+# a file betaB_M1e-4_tuned.json, if present, is compared with its untuned twin at the end
 import json
 import sys
 import numpy as np
 from math import exp, log
 
 D = sys.argv[1]
-Ms = ["1e-5", "1e-6", "1e-7"]
-for beta in sys.argv[2:]:
+Ms = sys.argv[2].split(",")
+for beta in sys.argv[3:]:
     runs = {m: json.load(open(f"{D}/beta{beta}_M{m}.json")) for m in Ms}
     print(f"\n######## beta = {beta}")
     for m, d in runs.items():
@@ -33,7 +34,8 @@ for beta in sys.argv[2:]:
         above = np.nonzero(~(ratio < 1.0))[0]
         Ns_settle[m] = (rows[above[-1] + 1][0], rows[above[-1] + 1][3]) if len(above) and above[-1] + 1 < len(rows) else None
     nmax = int(max(max(r[0] for r in s) for s in stats.values())) + 1
-    for nb in range(20, nmax + 1):
+    nmin = int(min(min(r[0] for r in s) for s in stats.values()))
+    for nb in range(nmin, nmax + 1):
         cells = []
         for m in Ms:
             sel = [r for r in stats[m] if nb <= r[0] < nb + 1]
@@ -63,8 +65,8 @@ for beta in sys.argv[2:]:
             T = exp(e0["ln_TJ_MeV"][j0]) if j0 is not None else np.nan
             print(f"    N {nb:3d} T_J {T:9.3e} MeV: " + "  ".join(f"{v:+.6e}" for v in vals))
     # BBN window: r at the stored samples (what BBN reads) and cell means, 10 MeV - 1 keV
-    print("\n(b) BBN window, 10 MeV to 1 keV, against M = 1e-7, on the stored samples' T_J")
-    ref = runs["1e-7"]["stored_samples"]
+    print(f"\n(b) BBN window, 10 MeV to 1 keV, against M = {Ms[-1]}, on the stored samples' T_J")
+    ref = runs[Ms[-1]]["stored_samples"]
     for m in Ms:
         s = runs[m]["stored_samples"]; c = runs[m]["cells"]
         lT = np.array(s["ln_TJ_MeV"]); r = np.array(s["r"])
@@ -75,10 +77,37 @@ for beta in sys.argv[2:]:
         rref = np.interp(lT[w], lTr[o], rr[o])
         cl = np.array(c["ln_TJ_MeV_upper"]); cm = np.array(c["r_mean"]); cw = (cl <= log(10.0)) & (cl >= log(1e-3))
         print(f"  M={m}: {w.sum()} samples; r: median {np.median(r[w]):+.4e}, min {r[w].min():+.4e}, max {r[w].max():+.4e}; "
-              f"|r - r(1e-7)| median {np.median(np.abs(r[w]-rref)):.3e}, max {np.abs(r[w]-rref).max():.3e}; "
+              f"|r - r(ref)| median {np.median(np.abs(r[w]-rref)):.3e}, max {np.abs(r[w]-rref).max():.3e}; "
               f"cell means: median {np.median(cm[cw]):+.4e}, min {cm[cw].min():+.4e}, max {cm[cw].max():+.4e}")
     print("\n(d) today")
     for m in Ms:
         t = runs[m]["today"]
         print(f"  M={m}: phi_0/M {t['phi_0_over_M']:.6f}, phi_min/M {t['phi_min_over_M']:.6f}, pi_0 {t['pi_0']:+.6e}, "
               f"tracking {t['tracking']:.6f}, residual_H {t['residual_H']:+.6e}; seed normalization {runs[m]['normalization']:.6f}")
+
+    # the tuned check: tuned against untuned at M = 1e-4, beside the 1e-4 -> 1e-5 difference
+    import os
+    ft = f"{D}/beta{beta}_M1e-4_tuned.json"
+    if os.path.exists(ft) and "1e-4" in runs:
+        tu = json.load(open(ft)); un = runs["1e-4"]; nx = runs.get("1e-5")
+        print(f"\n(e) tuned against untuned at M = 1e-4 (and untuned 1e-4 against untuned 1e-5)")
+        if "failure" in tu:
+            print(f"  tuned FAILED: {tu['failure']}")
+        else:
+            print(f"  tuned: {tu['tuning_iterations']} integrations, residual_H {tu['tuned_residual_H']:+.3e}, "
+                  f"residual_phi {tu['tuned_residual_phi']:+.3e}; normalization {tu['normalization']:.6f} against the seed's {un['normalization']:.6f}; "
+                  f"turning points {tu['turning_points']} against {un['turning_points']}")
+            bt = dict(zip(tu["efold_bins"]["N"], range(len(tu["efold_bins"]["N"]))))
+            bu = dict(zip(un["efold_bins"]["N"], range(len(un["efold_bins"]["N"]))))
+            bx = dict(zip(nx["efold_bins"]["N"], range(len(nx["efold_bins"]["N"])))) if nx else {}
+            for key in keys:
+                dt, dm = [], []
+                for N, j in bu.items():
+                    if N in bt:
+                        dt.append(abs(tu["efold_bins"][key][bt[N]] - un["efold_bins"][key][j]))
+                    if N in bx:
+                        dm.append(abs(nx["efold_bins"][key][bx[N]] - un["efold_bins"][key][j]))
+                print(f"  {key:20s} max over e-folds |tuned - untuned| {max(dt):.3e} (median {np.median(dt):.3e});"
+                      f" |1e-5 - 1e-4| {max(dm) if dm else float('nan'):.3e} (median {np.median(dm) if dm else float('nan'):.3e})")
+            t, v = tu["today"], un["today"]
+            print(f"  today: phi_0/M {t['phi_0_over_M']:.6f} against {v['phi_0_over_M']:.6f}; tracking {t['tracking']:.6f} against {v['tracking']:.6f}")
