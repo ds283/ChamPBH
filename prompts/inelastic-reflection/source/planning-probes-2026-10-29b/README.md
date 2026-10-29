@@ -81,3 +81,39 @@ Outputs:
   approach never came within K φ_t of the wall: today's floor rule reflected it further out.
 
 What the probes show is in the planner's reports to the user of 2026-10-29.
+
+## 4. Scan of the threshold PHI_NUM, and of the reflection point K (`phi_t_scan.py`)
+
+At the user's word of 2026-10-29 ("let's do the job properly and try to scan the threshold for
+`phi_t`"). §3 set PHI_NUM = 10⁻¹⁰ M_P without a scan; this section scans it. §3 stands as it was run.
+
+    PYTHONPATH=. ./venv/bin/python prompts/inelastic-reflection/source/planning-probes-2026-10-29b/phi_t_scan.py BETA M ALPHA PHI_NUM GATE BUDGET OUT.json [K]
+    PYTHONPATH=. ./venv/bin/python prompts/inelastic-reflection/source/planning-probes-2026-10-29b/phi_t_scan.py check
+
+`r_criterion.py`'s mode "RN", changed in two ways:
+- **No closed form of the potential.** φ_t is the root of V(φ_t) − V_floor = E, found in ln φ inwards
+  from the field through `RealizedModel.log_V` and `log_V_floor`. 𝓡 = ω_t⁴/8π²E, with
+  ω_t² = V″(φ_t) = V[(ln V)″ + (ln V)′²] from `d_logV_dphi` and `d2_logV_dphi2`. It needs
+  `reflects_at_origin`. **`check`** compares both with the exponential model's closed form: φ_t agrees
+  to 10⁻¹², and log₁₀ 𝓡 differs by 0.01–0.02, the term 2M/φ³ of V″ that §3's closed form,
+  λ = y_t²/M, leaves out.
+- **PHI_NUM, GATE and K are arguments.**
+  - GATE "gate" keeps prompt 03's gate on resolved drain points; "w1" gives every drain point
+    w_gate = 1.
+  - K (default 10) sets where an unresolved reflection is made: as soon as φ < K φ_t.
+
+Outputs:
+- **`phi_t_scan_runs.out`**: the 440 run lines. PHI_NUM ∈ {0 ("R only"), 10⁻¹², 3×10⁻¹², …, 10⁻⁸} M_P ×
+  M ∈ {10⁻⁷, 3×10⁻⁸, …, 10⁻¹²} M_P. Every combination runs at β ∈ {1.2, 2, 3} with GATE "gate", and at
+  β = 2 with "w1"; all at α = 0.1 and K = 10. 434 parked. The 6 failures are all at M = 10⁻¹⁰ with
+  PHI_NUM ≤ 10⁻¹² (β = 2 and 3, and β = 2 with w1), with Radau's "step size less than spacing".
+- **`scan_summary.py DIR`** → **`phi_t_scan.out`**: grids of M against PHI_NUM, one per (β, GATE): Σ Δρ/ρ_R
+  against the ceiling, the parking temperature, the accepted steps, and the reflections judged
+  unresolved. The "φ_t range" column gives the classical turning points of the approaches that came
+  within K φ_t.
+- **`scan_K_compare.py DIR`** → **`scan_K_compare.out`**: the band M = 10⁻⁹ to 3×10⁻¹¹, where the
+  results of the grid depend on PHI_NUM. It compares "R only" with PHI_NUM = 10⁻⁸ (every wall
+  reflected) at K = 10, 3 and 1.5. The K = 3 and 1.5 runs are in `var/probes/…/scanK/`. The column
+  "w<1" counts the floor reflections that drained with w_gate < 1. Those are today's floor rule,
+  whose gate the probe leaves reading the infall; only the reflections judged unresolved drain with
+  w_gate = 1.
