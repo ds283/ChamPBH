@@ -40,7 +40,7 @@ and closed the second assigned issue, 2026-10-27; closed 2026-10-27, 2 of 2 prom
 one issue still open on its board); 3 on the `inelastic-reflection` board (planned 2026-10-27; the
 planner opened one, §1.19; re-planned 2026-10-29, when one `integrator-remediation` issue was
 assigned to it, §1.20; prompt 04 opened one, 2026-10-29, §1.19; prompt 05 opened one, 2026-10-29,
-§1.19).
+§1.19; prompt 06 opened none and narrowed prompt 05's, 2026-10-29).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -315,7 +315,8 @@ Planned 2026-10-27. One opened by the planner, found by a planning probe; one by
 - `[05-the-wall-search-refuses-a-wall-below-the-rounding-of-ln-V]` — the model's generic
   `classical_turning_point` raises "not monotone" where V − V_floor is a few ulps of ln V
   (M/φ ≈ 3×10⁻¹⁴); it failed the M = 10⁻³⁰ histories at the bottom of their cascades, after the
-  cut. *(`inelastic-reflection`; prompt 05)*
+  cut. Narrowed by prompt 06: with parking the search never raised on the 22 histories measured
+  (M = 10⁻³ to 10⁻³⁰ M_P); the 21 whose cascade empties park first. *(`inelastic-reflection`; prompt 05)*
 
 ### 1.20 Assigned to `inelastic-reflection` — [its board](../prompts/inelastic-reflection/IMPLEMENTATION_STATE.md) §3.1
 

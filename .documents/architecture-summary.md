@@ -1149,6 +1149,43 @@ SampleValues = namedtuple("SampleValues", [
 > - `ScalarHistory.store`, `build_extra_data`, `golden_history.record_of` and `TUNING_OUTPUT_KEYS`
 >   are unchanged.
 
+> **Note, 2026-10-29 (`inelastic-reflection`, prompt 06): parking.** At α > 0, on a model with a
+> wall, every candidate after the history's first is tested by the cut ρ_kin,E/ρ_R,E < ε; where it
+> holds and the zero-lag tracker is adiabatic (m_eff/H_E ≥ 10), the leftover kinetic energy goes
+> into the ledger and the history continues in a **parked phase** to its end
+> (`numerical-strategies.md` §6.5). Nothing of it runs at α = 0.
+> - **Module level** in `ComputeTargets/ScalarHistory.py`: the constants `PARKING_EPSILON = 1e-6`,
+>   `PARKING_ADIABATICITY_THRESHOLD = 10.0` and `PARKING_PI_GUARD_MP = 1e-9` (none a key); the
+>   decisions `parking_ratio_test(index, ratio)`, `tracker_adiabatic(m/H)` and
+>   `parking_guard(π_in, M_P)`; the tracker `log_trace`, `tracker_velocity_terms` /
+>   `tracker_velocity` (π_min = dφ_min/dN), `parked_tracker`, `tracker_m_eff_over_H`, `cut_tracker`
+>   (with its record `CutTracker`) and `parking_leftover`; and two classes, `ParkedRHS` (the reduced
+>   right-hand side) and `ParkedSegment` (a `scipy.integrate.DenseOutput`).
+> - **The parked phase** integrates (ln ρ_R,E, ln f_m, ln T_J) with DOP853, on ODERHS's components
+>   2–4 at (φ_min, π_min). Each accepted step appends a `ParkedSegment` to the history's
+>   `OdeSolution`, which returns the full five-component state, (5,) for a scalar N and (5, n) for
+>   an array, so `first_bounce`, `surfing_turning_points`, the fixed-temperature readers and
+>   `integrate_history`'s sampling read it unchanged. Its value at N depends on N alone. In prompt 06
+>   a parked step end with m_eff/H_E < 10 fails the history; prompt 07 replaces that with a release.
+> - **`Parking`**, a namedtuple of floats and ints, records the switch: N and ln T_J, the candidate's
+>   index, φ and π before it, φ_min and π_min, ρ_kin/ρ_R,E, the leftover's ΔK and Δρ/ρ_R,E, m_eff/H_E,
+>   H_E before the candidate and at the parked state, Δ ln A, and the parked phase's steps and smallest
+>   m_eff/H_E. **`IntegrationResult`** gains `parking` (the record or `None`), appended last; the
+>   payload of `integrate_history` gains `"parking"`, which is not stored.
+> - **The guard** (P21): |π_in| < 10⁻⁹ M_P at a reflection where the cut did not fire fails the
+>   history.
+> - **At large M** (README §8.1 R17) the same cut applies. At M = 0.5 M_P it fires at resolved drain
+>   points, where the gate, not w_gate = 1, drained the cascade, and ends oscillations that would have
+>   gone on, putting at most ε ρ_R,E into the ledger: at β = 5 (candidate 105, N = 38.004, 81.2 MeV),
+>   then failing where the tracker loses adiabaticity at N = 40.29 (9.40 MeV), and at β = 25 (candidate
+>   83, N = 132.55, 9.97 GeV), failing at N = 145.79 (39.8 keV); not at β = 1.2 or 2. At M = 10⁻³ M_P
+>   it parks at β = 1.2 (candidate 6, 11.5 keV; failing at 0.25 eV), 2 (candidate 48, 81.8 keV) and 3
+>   (candidate 58, 23.0 MeV), all at drain points, and not at β = 0.5. Dissipation mode at large M is
+>   not claimed to be physical: whether its answer means anything is for the user of the result to
+>   judge.
+> - `ScalarHistory.store`, `build_extra_data`, `golden_history.record_of`, `TUNING_OUTPUT_KEYS`,
+>   `"reflections"` and the existing records' fields are unchanged.
+
 ### 7.3 `AdiabaticHistory` (`ComputeTargets/AdiabaticHistory.py`)
 
 Computes the adiabatic perturbation parameter Q (which determines whether the chameleon field is adiabatically tracking its minimum). Requires a `ScalarHistoryProxy` as input.

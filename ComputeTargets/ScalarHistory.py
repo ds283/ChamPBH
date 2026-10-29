@@ -22,7 +22,7 @@ from typing import Optional, List, Dict, Any, Tuple
 import numpy as np
 import ray
 from ray import ObjectRef
-from scipy.integrate import OdeSolution, Radau
+from scipy.integrate import DenseOutput, DOP853, OdeSolution, Radau
 from scipy.interpolate import make_interp_spline
 from scipy.optimize import brentq
 
@@ -107,6 +107,23 @@ NONADIABATICITY_SCALE = 1.0
 # unresolved_turnaround reads both at call time, so that a patch of either changes the rule
 UNRESOLVED_REFLECTION_FACTOR = 3.0
 UNRESOLVED_PHI_T_THRESHOLD_MP = 1.0e-8
+
+# the parking cut (inelastic-reflection prompt 06; README §8.1 R14, R16, §8.2 P18, P21), at alpha > 0 on
+# a model with a wall only (P22: natural mode runs none of it). None is a key. Each is read where it is
+# used, at call time, so that a patch of any of them changes it
+#   PARKING_EPSILON:                 epsilon of the cut rho_kin,E/rho_R,E < epsilon, tested at every
+#                                    candidate after the history's first (R14: "relative to `rho_R`,
+#                                    although the exact value of `epsilon` used may need to be tuned")
+#   PARKING_ADIABATICITY_THRESHOLD:  m_eff/H_E of the zero-lag tracker: the cut parks only where it is at
+#                                    least this (R14), and a parked step end below it is a failure of
+#                                    the history in prompt 06. It is also prompt 07's release (R16: "I
+#                                    suggest `m/H < 10`")
+#   PARKING_PI_GUARD_MP:             P21's guard: |pi_in| below this, in units of M_P, at a reflection
+#                                    where the cut did not fire is a failure of the history ("a sign of
+#                                    a bug", R14); multiplied by the units' PlanckMass where it is used
+PARKING_EPSILON = 1.0e-6
+PARKING_ADIABATICITY_THRESHOLD = 10.0
+PARKING_PI_GUARD_MP = 1.0e-9
 
 # the warnings of a history (inelastic-reflection prompt 05; README §8.1 R6, §8.2 P23), returned by
 # integrate_scalar_history and printed once per history by tune_history. Each line begins with one
@@ -281,6 +298,51 @@ Injection = namedtuple(
     ],
 )
 
+# the switch to the parked phase (inelastic-reflection prompt 06; README §8.1 R14, R15, §8.2 P19), on
+# IntegrationResult.parking; None if the history did not park. Floats and ints only (orchestrator note
+# 06, ruling 6): nothing callable, so that it crosses Ray in integrate_history's payload
+#   N, log_T_Jordan:           the switch: the cut candidate's N, and ln T_J there
+#   candidate_index:           the cut candidate's index in IntegrationResult.injections (never 0)
+#   phi_Einstein, pi_Einstein: the field just before the switch: the candidate's state after its drain
+#                              (pi is the candidate's pi_after)
+#   phi_min, pi_min:           the parked state's field: phi_min on the trace there (the model's
+#                              minimum_on_trace) and pi_min = d phi_min/dN (tracker_velocity). They are
+#                              the parked phase's own value at N, which its dense output returns there
+#   rho_kin_over_rho_rad:      rho_kin,E/rho_R,E at the test, rho_kin,E the candidate's log_rho_kin
+#   delta_K:                   the leftover's ledger entry (P19): the drained state's rho_kin,E e^{4N},
+#                              rho_kin,E = H_E^2 pi^2/2 from the candidate's H_Einstein_after, pi_after
+#   delta_rho_over_rho_rad:    the leftover's rho_kin,E/rho_R,E
+#   m_eff_over_H:              m_eff/H_E of the tracker at the switch, the value the cut was decided on
+#                              (the ledger after the candidate's drain, before the leftover)
+#   H_Einstein_before:         H_E before the candidate (its H_Einstein_before)
+#   H_Einstein_parked:         H_E at the parked state, with the leftover in the ledger
+#   delta_log_A:               ln A(phi_min) - ln A(phi_Einstein), the switch's move of the coupling
+#   parked_steps:              the parked phase's accepted steps (IntegrationResult.accepted_steps
+#                              counts both phases)
+#   min_m_eff_over_H:          the smallest m_eff/H_E of the tracker: the switch's and that of every
+#                              parked step end, the history's end included
+Parking = namedtuple(
+    "Parking",
+    [
+        "N",
+        "log_T_Jordan",
+        "candidate_index",
+        "phi_Einstein",
+        "pi_Einstein",
+        "phi_min",
+        "pi_min",
+        "rho_kin_over_rho_rad",
+        "delta_K",
+        "delta_rho_over_rho_rad",
+        "m_eff_over_H",
+        "H_Einstein_before",
+        "H_Einstein_parked",
+        "delta_log_A",
+        "parked_steps",
+        "min_m_eff_over_H",
+    ],
+)
+
 # what integrate_scalar_history returns
 #   solution:                    scipy OdeSolution over [N_start, N_final], right-continuous at its
 #                                nodes (alt_segment=True; inelastic-reflection prompt 02): at a
@@ -307,6 +369,9 @@ Injection = namedtuple(
 #                                05), each beginning with one of WARNING_KINDS; empty when there are
 #                                none. A ComputationFailureError raised by the loop carries the
 #                                warnings collected before it as its attribute `warnings`
+#   parking:                     the Parking record of the switch to the parked phase
+#                                (inelastic-reflection prompt 06), or None if the history did not
+#                                park. After the switch the solution's segments are ParkedSegments
 IntegrationResult = namedtuple(
     "IntegrationResult",
     [
@@ -322,6 +387,7 @@ IntegrationResult = namedtuple(
         "injections",
         "dropped_drains",
         "warnings",
+        "parking",
     ],
 )
 
@@ -967,6 +1033,307 @@ def warning_kind(line: str) -> str:
     raise ValueError(f"warning_kind: not a history warning: {line!r}")
 
 
+# ---- parking (inelastic-reflection prompt 06; README §8.1 R14, R15, §8.2 P18, P19, P21) ----
+#
+# Module-level, called by integrate_scalar_history through their module names at call time, so that
+# they can be tested on synthetic values and patched (orchestrator note 06, rulings 1 and 4), as the
+# gate's and the unresolved turnaround's are
+
+
+def parking_ratio_test(candidate_index: int, ratio: float) -> bool:
+    """
+    The cut's ratio test (prompt 06 §1.2; README §8.1 R14): True iff the candidate is not the
+    history's first (its first impact, index 0 in IntegrationResult.injections) and
+    rho_kin,E/rho_R,E < PARKING_EPSILON, strictly. The ratio is the candidate's, rho_kin,E from
+    before its drain. PARKING_EPSILON is read here, at call time (orchestrator note 06, ruling 1).
+    """
+    if candidate_index == 0:
+        return False
+    return ratio < PARKING_EPSILON
+
+
+def tracker_adiabatic(m_eff_over_H: float) -> bool:
+    """
+    The zero-lag tracker's adiabaticity (prompt 06 §1.2, §1.3; README §8.1 R14, R16): True iff
+    m_eff/H_E >= PARKING_ADIABATICITY_THRESHOLD. The cut parks only where it is True, and a parked
+    step end where it is False is a failure of the history (orchestrator note 06, ruling 1; prompt 07
+    replaces that failure with the release). A NaN is False. The threshold is read at call time.
+    """
+    return m_eff_over_H >= PARKING_ADIABATICITY_THRESHOLD
+
+
+def parking_guard(pi_in: float, PlanckMass: float) -> bool:
+    """
+    P21's guard (README §8.2): True iff |pi_in| < PARKING_PI_GUARD_MP M_P, strictly, at a reflection
+    where the cut did not fire; the loop then fails the history. The threshold is read at call time.
+    """
+    return abs(pi_in) < PARKING_PI_GUARD_MP * PlanckMass
+
+
+def _log_trace(
+    log_rhorad_Einstein: float, Sigma: float, fm: float, context: str
+) -> float:
+    """
+    ln T, T = rho_R,E (Sigma + f_m), the Einstein-frame trace that ODERHS couples to and that the
+    model's minimum_on_trace reads (inelastic-reflection prompt 04). Sigma + f_m <= 0, or a ln T that
+    is not finite, is a ComputationFailureError (orchestrator note 06, ruling 2).
+    """
+    total: float = Sigma + fm
+    if not (total > 0.0):
+        raise ComputationFailureError(
+            f"{context}: the trace is not positive: Sigma + f_m = {total!r} "
+            f"(Sigma = {Sigma!r}, f_m = {fm!r})"
+        )
+    log_T: float = log_rhorad_Einstein + log(total)
+    if not isfinite(log_T):
+        raise ComputationFailureError(f"{context}: ln T = {log_T!r} is not finite")
+    return log_T
+
+
+def log_trace(cosmology: BaseCosmology, reduced_state) -> Tuple[float, float, float]:
+    """
+    (ln T, Sigma, f_m) at a reduced state (ln rho_R,E, ln f_m, ln T_J) (prompt 06 §1.3), with
+    Sigma = 1 - 3w(T_J) and f_m formed exactly as ODEPolicy forms them, so that at one state they are
+    the policy's floats.
+    """
+    log_rhorad_Einstein, log_fm, log_T_Jordan = (float(x) for x in reduced_state)
+    try:
+        T_Jordan: float = exp(log_T_Jordan)
+        fm: float = exp(log_fm)
+    except OverflowError as e:
+        raise ComputationFailureError(
+            f"log_trace: overflow at ln f_m = {log_fm!r}, ln T_J = {log_T_Jordan!r}"
+        ) from e
+    Sigma: float = 1.0 - 3.0 * float(cosmology.w(T_Jordan))
+    return _log_trace(log_rhorad_Einstein, Sigma, fm, "log_trace"), Sigma, fm
+
+
+# the tracker's velocity at one state (prompt 06 §1.4): pi_min = s a/(1 - s b), with d ln T/dN = a + b pi
+# the right-hand side's d ln T/dN at that state and s = d phi_min/d ln T (the model's
+# d_minimum_d_log_trace); log_T is ln T there. The parts are returned so that a test can form
+# a + b pi_min against the right-hand side
+TrackerVelocity = namedtuple("TrackerVelocity", ["pi_min", "a", "b", "s", "log_T"])
+
+
+def tracker_velocity_terms(
+    model: RealizedModel, cosmology: BaseCosmology, phi_min: float, reduced_state
+) -> TrackerVelocity:
+    """
+    pi_min = d phi_min/dN of the zero-lag tracker at (phi_min, the reduced state
+    (ln rho_R,E, ln f_m, ln T_J)), solved as linear algebra, never by differencing phi_min
+    (inelastic-reflection prompt 06 §1.4; log 06 §1.2 derives it). With g = 1 + (ln A)' pi,
+    D = 1 + (d ln g_s/d ln T_J)/3 and w' = dw/d ln T_J, ODERHS gives
+
+        d ln rho_R,E/dN = Sigma g - 4,   d ln f_m/dN = (1 - Sigma) g,   d ln T_J/dN = -g/D,
+
+    and dSigma/dN = -3 w' d ln T_J/dN = 3 w' g/D. With ln T = ln rho_R,E + ln(Sigma + f_m),
+
+        d ln T/dN = -4 + c g = a + b pi,  c = Sigma + (3 w'/D + f_m (1 - Sigma))/(Sigma + f_m),
+        a = c - 4,  b = c (ln A)'(phi_min),
+
+    and pi = s (a + b pi), s = d phi_min/d ln T from the model's d_minimum_d_log_trace (no (ln A)'^2
+    term in its denominator), so pi_min = s a/(1 - s b). A non-finite pi_min, or 1 - s b = 0, is a
+    ComputationFailureError; so is any the model raises.
+    """
+    log_T, Sigma, fm = log_trace(cosmology, reduced_state)
+    T_Jordan: float = exp(float(reduced_state[2]))
+
+    D: float = (
+        1.0
+        + float(cosmology.dG_s_dlogT(T_Jordan)) / float(cosmology.G_s(T_Jordan)) / 3.0
+    )
+    w_prime: float = float(cosmology.dw_dlogT(T_Jordan))
+    c: float = Sigma + (3.0 * w_prime / D + fm * (1.0 - Sigma)) / (Sigma + fm)
+    a: float = c - 4.0
+    b: float = c * float(model.d_logOmega_dphi(phi_min))
+
+    s: float = float(model.d_minimum_d_log_trace(phi_min, log_T))
+    denominator: float = 1.0 - s * b
+    if denominator == 0.0 or not isfinite(denominator):
+        raise ComputationFailureError(
+            f"tracker_velocity: 1 - s b = {denominator!r} at phi_min = {phi_min!r}, "
+            f"ln T = {log_T!r} (s = {s!r}, b = {b!r})"
+        )
+    pi_min: float = s * a / denominator
+    if not isfinite(pi_min):
+        raise ComputationFailureError(
+            f"tracker_velocity: pi_min = {pi_min!r} is not finite at phi_min = {phi_min!r}, "
+            f"ln T = {log_T!r} (s = {s!r}, a = {a!r}, b = {b!r})"
+        )
+    return TrackerVelocity(pi_min=pi_min, a=a, b=b, s=s, log_T=log_T)
+
+
+def tracker_velocity(
+    model: RealizedModel, cosmology: BaseCosmology, phi_min: float, reduced_state
+) -> float:
+    """pi_min = d phi_min/dN at (phi_min, the reduced state); tracker_velocity_terms's."""
+    return tracker_velocity_terms(model, cosmology, phi_min, reduced_state).pi_min
+
+
+def parked_tracker(
+    model: RealizedModel, cosmology: BaseCosmology, phi_start: float, reduced_state
+) -> Tuple[float, float]:
+    """
+    (phi_min, pi_min) of the zero-lag tracker at a reduced state (prompt 06 §1.3): phi_min the
+    model's minimum_on_trace on the state's trace, searched from phi_start, and pi_min
+    tracker_velocity's there. The parked phase passes a phi_start that is fixed per step (orchestrator
+    note 06, ruling 3), so that the value depends on the state alone.
+    """
+    log_T, _, _ = log_trace(cosmology, reduced_state)
+    phi_min: float = model.minimum_on_trace(phi_start, log_T)
+    return phi_min, tracker_velocity(model, cosmology, phi_min, reduced_state)
+
+
+def tracker_m_eff_over_H(
+    policy: "ODEPolicy", hubble: "HubblePolicy", N: float, y: np.ndarray
+) -> Tuple[float, float]:
+    """
+    (m_eff/H_E, H_E) at a full state (N, y) (prompt 06 §1.2 step 3, §1.3): m_eff from
+    log_m_eff_squared at (phi, ln rho_R,E, ln f_m, Sigma), H_E from HubblePolicy with the ledger as it
+    stands, from one policy call. Never through the right-hand side.
+    """
+    state = StateVector._make(y)
+    data: ODEPolicyData = policy(N, state)
+    H_Einstein: float = hubble(data, state).H_Einstein
+    log_m2: float = log_m_eff_squared(
+        policy.model,
+        state.phi_Einstein,
+        state.log_rhorad_Einstein,
+        state.log_fm,
+        data.Sigma,
+    )
+    return exp(0.5 * log_m2 - log(H_Einstein)), H_Einstein
+
+
+# the tracker at a cut candidate (prompt 06 §1.2 step 3; orchestrator note 06, ruling 2)
+#   phi_root:         minimum_on_trace on the candidate's trace, searched from the field; the parked
+#                     phase's first start
+#   phi_min, pi_min:  the parked state, parked_tracker from phi_root: the parked phase's own value at
+#                     the switch's N, so that the dense output there returns it bitwise
+#   log_T:            ln T at the candidate, from the policy's Sigma and f_m
+#   m_eff_over_H:     m_eff/H_E at (phi_min, pi_min), the value the cut is decided on
+#   H_Einstein:       H_E there, with the ledger after the candidate's drain and before the leftover
+CutTracker = namedtuple(
+    "CutTracker",
+    ["phi_root", "phi_min", "pi_min", "log_T", "m_eff_over_H", "H_Einstein"],
+)
+
+
+def cut_tracker(
+    policy: "ODEPolicy", hubble: "HubblePolicy", N: float, y: np.ndarray
+) -> CutTracker:
+    """
+    The zero-lag tracker at a cut candidate's state after its drain (prompt 06 §1.2 step 3;
+    orchestrator note 06, ruling 2): Sigma and f_m from one policy call, ln T = ln rho_R,E +
+    ln(Sigma + f_m); phi_min by the model's minimum_on_trace from the field; pi_min (§1.4); and
+    m_eff/H_E there, with the ledger as it stands. pi in y is not used. A ComputationFailureError from
+    the policy or the model propagates.
+    """
+    state = StateVector._make(y)
+    model: RealizedModel = policy.model
+    data: ODEPolicyData = policy(N, state)
+    log_T: float = _log_trace(
+        state.log_rhorad_Einstein, data.Sigma, data.fm, "cut_tracker"
+    )
+    phi_root: float = model.minimum_on_trace(float(state.phi_Einstein), log_T)
+    reduced = (state.log_rhorad_Einstein, state.log_fm, state.log_T_Jordan)
+    phi_min, pi_min = parked_tracker(model, policy.cosmology, phi_root, reduced)
+    y_parked = np.array([phi_min, pi_min, *reduced], dtype=float)
+    m_eff_over_H, H_Einstein = tracker_m_eff_over_H(policy, hubble, N, y_parked)
+    return CutTracker(
+        phi_root=phi_root,
+        phi_min=phi_min,
+        pi_min=pi_min,
+        log_T=log_T,
+        m_eff_over_H=m_eff_over_H,
+        H_Einstein=H_Einstein,
+    )
+
+
+def parking_leftover(
+    H_Einstein: float, pi_Einstein: float, N: float, log_rhorad_Einstein: float
+) -> Tuple[float, float]:
+    """
+    The leftover kinetic energy at the switch (prompt 06 §1.2 step 4; README §8.2 P19): the drained
+    state's rho_kin,E = H_E^2 pi^2/2, with H_E and pi the candidate's H_Einstein_after and pi_after.
+    Returns (Delta K, Delta rho/rho_R,E) = (rho_kin,E e^{4N}, rho_kin,E/rho_R,E), formed in logs as the
+    drain forms them, so that nothing overflows (orchestrator note 06, ruling 2).
+    """
+    log_rho_kin: float = 2.0 * log(H_Einstein) + 2.0 * log(abs(pi_Einstein)) - LOG_2
+    return exp(log_rho_kin + 4.0 * N), exp(log_rho_kin - log_rhorad_Einstein)
+
+
+class ParkedRHS:
+    """
+    The parked phase's right-hand side (prompt 06 §1.3; orchestrator note 06, ruling 4): the
+    derivatives of the reduced state (ln rho_R,E, ln f_m, ln T_J), ODERHS's components 2-4, evaluated
+    through `fun` (the loop's, so that nfev and the supervisor count them) at the full state
+    (phi_min, pi_min, the reduced state), with phi_min and pi_min solved by parked_tracker from
+    phi_anchor. The loop sets phi_anchor to the step's left-node phi_min before each step (ruling 3),
+    so that every evaluation of one step searches from the same float.
+    """
+
+    def __init__(self, fun, model: RealizedModel, cosmology, phi_anchor: float):
+        self.fun = fun
+        self.model: RealizedModel = model
+        self.cosmology = cosmology
+        self.phi_anchor: float = float(phi_anchor)
+
+    def full_state(self, N: float, reduced_state) -> np.ndarray:
+        """The full state (phi_min, pi_min, ln rho_R,E, ln f_m, ln T_J) of the tracker at (N, reduced)."""
+        phi_min, pi_min = parked_tracker(
+            self.model, self.cosmology, self.phi_anchor, reduced_state
+        )
+        return np.array(
+            [phi_min, pi_min, reduced_state[0], reduced_state[1], reduced_state[2]],
+            dtype=float,
+        )
+
+    def __call__(self, N, reduced_state) -> np.ndarray:
+        y = self.full_state(float(N), reduced_state)
+        derivatives = self.fun(N, y)
+        return np.array([derivatives[2], derivatives[3], derivatives[4]], dtype=float)
+
+
+class ParkedSegment(DenseOutput):
+    """
+    One accepted step of the parked phase, as a segment of the history's OdeSolution (prompt 06
+    §1.3): for each N it reads the step's interpolant of the reduced state by a scalar call and
+    returns the full state (phi_min, pi_min, ln rho_R,E, ln f_m, ln T_J), phi_min and pi_min solved
+    by parked_tracker from phi_anchor, the phi_min at the step's left node, fixed for the segment.
+    Shape (5,) for a scalar N and (5, n) for an array, which is a loop of the scalar evaluations, so
+    that the value at N depends on N alone: not on the order of calls, and not on whether N came in
+    an array (orchestrator note 06, ruling 3; SciPy's interpolants do not give that by themselves).
+    It holds no state that a call changes.
+    """
+
+    def __init__(
+        self, reduced_interpolant, phi_anchor: float, model: RealizedModel, cosmology
+    ):
+        super().__init__(reduced_interpolant.t_old, reduced_interpolant.t)
+        self.reduced_interpolant = reduced_interpolant
+        self.phi_anchor: float = float(phi_anchor)
+        self.model: RealizedModel = model
+        self.cosmology = cosmology
+
+    def state_at(self, N: float) -> np.ndarray:
+        reduced = self.reduced_interpolant(N)
+        phi_min, pi_min = parked_tracker(
+            self.model, self.cosmology, self.phi_anchor, reduced
+        )
+        return np.array(
+            [phi_min, pi_min, reduced[0], reduced[1], reduced[2]], dtype=float
+        )
+
+    def _call_impl(self, t):
+        if t.ndim == 0:
+            return self.state_at(float(t))
+        values = np.empty((EXPECTED_SOL_LENGTH, t.shape[0]))
+        for j in range(t.shape[0]):
+            values[:, j] = self.state_at(float(t[j]))
+        return values
+
+
 def integrate_scalar_history(
     RHS,
     supervisor: ScalarFieldIntegrationSupervisor,
@@ -1077,6 +1444,25 @@ def integrate_scalar_history(
         history goes on. It changes no value of the history.
     A ComputationFailureError that the loop raises carries the warnings collected before it as its
     attribute `warnings` (orchestrator note 05, ruling 2).
+
+    Parking (inelastic-reflection prompt 06; README §8.1 R14, R15, R17, §8.2 P19, P21), at alpha > 0
+    on a model with a wall only, at every M. After each candidate is recorded and drained:
+      - the ratio test (parking_ratio_test): not the history's first candidate, and
+        rho_kin,E/rho_R,E < PARKING_EPSILON, rho_kin,E the candidate's log_rho_kin;
+      - if it passes, the zero-lag tracker at the drained state (cut_tracker): phi_min on the trace
+        T = rho_R,E (Sigma + f_m), pi_min = d phi_min/dN (tracker_velocity) and m_eff/H_E there, and
+        the decision tracker_adiabatic (m_eff/H_E >= PARKING_ADIABATICITY_THRESHOLD);
+      - if both hold, the switch: the leftover kinetic energy of the drained state goes into the
+        ledger at the same N (parking_leftover; P19), and the history continues in the parked phase
+        from (phi_min, pi_min) and the drained state's ln rho_R,E, ln f_m and ln T_J, recorded in a
+        Parking. The parked phase integrates (ln rho_R,E, ln f_m, ln T_J) by DOP853 on ParkedRHS, the
+        right-hand side's components 2-4 at the tracker, to the history's end, and appends one
+        ParkedSegment per accepted step to the dense output, each returning the full five-component
+        state. Nothing else runs there: no turning points, candidates or assessments. A step end at
+        which the tracker's m_eff/H_E falls below the threshold is a failure of the history;
+      - at a reflection where the cut did not fire, |pi_in| < PARKING_PI_GUARD_MP M_P is a failure of
+        the history (parking_guard; P21).
+    At alpha = 0 none of this runs (P22).
 
     :param RHS: callable RHS(N, state, supervisor), normally an ODERHS
     :param supervisor: the ScalarFieldIntegrationSupervisor (already entered)
@@ -1625,6 +2011,232 @@ def integrate_scalar_history(
                 f"fail on Radau's float spacing or the step budget"
             )
 
+    # parking (inelastic-reflection prompt 06; README §8.1 R14, R15, §8.2 P19, P21), at alpha > 0 on a
+    # model with a wall only (assess_wall); at alpha = 0 none of it runs (P22)
+    #   parking:  the Parking record of the switch, or None; the switch is made at most once, and the
+    #             history then ends in the parked phase
+    parking: Optional[Parking] = None
+
+    def run_parked_phase(record: Parking, phi_anchor: float, y_parked: np.ndarray):
+        """
+        The parked phase (prompt 06 §1.3; orchestrator note 06, rulings 3, 7, 9 and 11), from the
+        switch's N and the parked state y_parked to the history's end. Returns (N_final, final_state,
+        the parked steps, the smallest m_eff/H_E of the tracker).
+
+        The reduced state (ln rho_R,E, ln f_m, ln T_J) is integrated by DOP853 with params.rtol,
+        params.atol and params.global_max_step as its largest step, on ParkedRHS, which evaluates
+        ODERHS's components 2-4 through fun at the tracker (phi_min, pi_min). Before each step after
+        the first, the start of minimum_on_trace is set to the phi_min at the step's left node, carried
+        from the previous step's end, and the solver's derivative there is re-evaluated with it, so
+        that every evaluation of one step, and its segment, searches from the same float. Each
+        accepted step appends a ParkedSegment to ts and interpolants. At the end of every accepted step
+        (at N_final on the step that ends the history) the tracker's m_eff/H_E < the threshold is a
+        failure of the history. The end is the oscillating phase's: the first step with
+        ln T_J < log_T_stop, at the root on its interpolant; N_stop; or N_failsafe, a failure. The step
+        budget counts both phases. A ComputationFailureError from the right-hand side, the model or the
+        tracker is the history's failure, with no step halving or retry: every failure reason here
+        names the switch.
+        """
+        nonlocal accepted_steps
+        cosmology_ = policy.cosmology
+        MeV: float = policy.units.MeV
+        switch_text: str = (
+            f"parked at N = {record.N:.10g}, T_J = {exp(record.log_T_Jordan) / MeV:.5g} MeV, "
+            f"at candidate #{record.candidate_index}"
+        )
+
+        def failure(reason: str) -> ComputationFailureError:
+            return ComputationFailureError(
+                f"integrate_scalar_history{label}: in the parked phase ({switch_text}): {reason}"
+            )
+
+        def guarded(f, *args, **kwargs):
+            try:
+                return f(*args, **kwargs)
+            except ComputationFailureError as e:
+                raise failure(e.message) from e
+
+        parked_steps = 0
+        min_m_eff_over_H: float = record.m_eff_over_H
+
+        def check(N_: float, y_: np.ndarray) -> None:
+            """The tracker's adiabaticity at a step end (ruling 11), with the ledger as it stands."""
+            nonlocal min_m_eff_over_H
+            m_eff_over_H_, _ = guarded(tracker_m_eff_over_H, policy, hubble, N_, y_)
+            if not (m_eff_over_H_ >= min_m_eff_over_H):
+                min_m_eff_over_H = m_eff_over_H_
+            if not tracker_adiabatic(m_eff_over_H_):
+                raise failure(
+                    f"the parked tracker lost adiabaticity: m_eff/H_E = {m_eff_over_H_:.5g} < "
+                    f"{PARKING_ADIABATICITY_THRESHOLD:.3g} at N = {N_:.10g}, "
+                    f"T_J = {exp(y_[4]) / MeV:.5g} MeV"
+                )
+
+        anchor: float = float(phi_anchor)
+        rhs_parked = ParkedRHS(fun, model, cosmology_, anchor)
+        psolver = guarded(
+            DOP853,
+            rhs_parked,
+            record.N,
+            np.array(y_parked[2:], dtype=float),
+            N_bound,
+            max_step=global_max_step,
+            rtol=params.rtol,
+            atol=params.atol,
+        )
+
+        while True:
+            if parked_steps > 0:
+                rhs_parked.phi_anchor = anchor
+                psolver.f = guarded(psolver.fun, psolver.t, psolver.y)
+
+            message = guarded(psolver.step)
+            if message is not None:
+                raise failure(
+                    f'DOP853 step failed at N = {psolver.t:.10g}: "{message}"'
+                )
+
+            accepted_steps += 1
+            parked_steps += 1
+            if accepted_steps > step_budget:
+                raise ComputationFailureError(
+                    f"step budget exhausted: integrate_scalar_history{label} took {accepted_steps} "
+                    f"accepted steps (budget {step_budget}) at N={psolver.t:.10g}, "
+                    f"T_J={exp(psolver.y[2]) / policy.GeV:.5g} GeV, with {len(reflections)} "
+                    f"reflection(s), {parked_steps} of the steps in the parked phase ({switch_text})"
+                )
+
+            reduced_interpolant = guarded(psolver.dense_output)
+            segment = ParkedSegment(reduced_interpolant, anchor, model, cosmology_)
+
+            if psolver.y[2] < log_T_stop:
+                N_low: float = psolver.t_old
+                N_high: float = psolver.t
+
+                def crossing(N_):
+                    return reduced_interpolant(N_)[2] - log_T_stop
+
+                g_low = crossing(N_low)
+                g_high = crossing(N_high)
+                if not (g_low >= 0.0 and g_high < 0.0):
+                    raise failure(
+                        f"cannot bracket the termination root on the last step [{N_low:.10g}, "
+                        f"{N_high:.10g}] (ln T_J - log_T_stop = {g_low:.5g}, {g_high:.5g})"
+                    )
+                if g_low == 0.0:
+                    # the previous accepted state sits exactly on log_T_stop: it is the final node
+                    N_end: float = N_low
+                else:
+                    N_end = brentq(crossing, N_low, N_high)
+                    ts.append(N_end)
+                    interpolants.append(segment)
+                y_end = guarded(segment, N_end)
+                check(N_end, y_end)
+                return (
+                    N_end,
+                    StateVector._make(y_end),
+                    parked_steps,
+                    min_m_eff_over_H,
+                )
+
+            ts.append(psolver.t)
+            interpolants.append(segment)
+
+            phi_end, pi_end = guarded(
+                parked_tracker, model, cosmology_, anchor, psolver.y
+            )
+            y_end = np.array([phi_end, pi_end, *psolver.y], dtype=float)
+            check(psolver.t, y_end)
+            anchor = phi_end
+
+            if psolver.status == "finished":
+                if stop_at_bound:
+                    return (
+                        psolver.t,
+                        StateVector._make(y_end),
+                        parked_steps,
+                        min_m_eff_over_H,
+                    )
+                raise failure(
+                    f"the failsafe N={N_failsafe:.5g} was reached without ln T_J falling below "
+                    f"log_T_stop={log_T_stop:.5g} (ln T_J={psolver.y[2]:.5g})"
+                )
+
+    def cut(N_: float, y_post: np.ndarray, kind: str, pi_in: Optional[float]):
+        """
+        The cut at a candidate (prompt 06 §1.2; orchestrator note 06, ruling 2), after candidate()
+        has recorded it and made its drain; y_post is the state after it (pi is not read). Returns
+        None if the history goes on, or (N_final, final_state) once the parked phase has ended it.
+          - the ratio test on the candidate's index and rho_kin,E/rho_R,E, rho_kin,E its log_rho_kin
+            (from before its drain), rho_R,E the state's;
+          - if it passes, the tracker at y_post (cut_tracker), and the decision on its m_eff/H_E;
+          - if both hold, the switch: the leftover (the drained state's rho_kin,E, from the candidate's
+            H_Einstein_after and pi_after) into the ledger at the same N (P19); H_E at the parked state
+            with it; the record; armed cleared; the parked phase;
+          - at a reflection (pi_in given) where the cut did not fire, the guard (P21).
+        """
+        nonlocal parking, armed, armed_assessment
+        index: int = len(injections) - 1
+        record_: Injection = injections[index]
+        ratio: float = exp(record_.log_rho_kin - float(y_post[2]))
+
+        tracker: Optional[CutTracker] = None
+        if parking_ratio_test(index, ratio):
+            tracker = cut_tracker(policy, hubble, N_, y_post)
+            if tracker_adiabatic(tracker.m_eff_over_H):
+                delta_K, delta_rho_over_rho_rad = parking_leftover(
+                    record_.H_Einstein_after, record_.pi_after, N_, float(y_post[2])
+                )
+                ledger.add(N_, delta_K)
+
+                y_parked = np.array(
+                    [tracker.phi_min, tracker.pi_min, y_post[2], y_post[3], y_post[4]],
+                    dtype=float,
+                )
+                H_parked: float = H_Einstein_at(N_, y_parked)
+                armed = None
+                armed_assessment = None
+                parking = Parking(
+                    N=float(N_),
+                    log_T_Jordan=float(y_post[4]),
+                    candidate_index=index,
+                    phi_Einstein=float(y_post[0]),
+                    pi_Einstein=float(y_post[1]),
+                    phi_min=tracker.phi_min,
+                    pi_min=tracker.pi_min,
+                    rho_kin_over_rho_rad=ratio,
+                    delta_K=delta_K,
+                    delta_rho_over_rho_rad=delta_rho_over_rho_rad,
+                    m_eff_over_H=tracker.m_eff_over_H,
+                    H_Einstein_before=record_.H_Einstein_before,
+                    H_Einstein_parked=H_parked,
+                    delta_log_A=model.log_Omega(tracker.phi_min)
+                    - model.log_Omega(float(y_post[0])),
+                    parked_steps=0,
+                    min_m_eff_over_H=tracker.m_eff_over_H,
+                )
+                N_end, final_state_, parked_steps, min_m_eff_over_H = run_parked_phase(
+                    parking, tracker.phi_root, y_parked
+                )
+                parking = parking._replace(
+                    parked_steps=parked_steps, min_m_eff_over_H=min_m_eff_over_H
+                )
+                return N_end, final_state_
+
+        if pi_in is not None and parking_guard(pi_in, Mp):
+            m_text: str = (
+                "not computed (the ratio test did not pass)"
+                if tracker is None
+                else f"{tracker.m_eff_over_H:.5g}"
+            )
+            raise ComputationFailureError(
+                f"integrate_scalar_history{label}: the |pi| guard (P21): a reflection of kind "
+                f"{kind} at N = {N_:.10g} with |pi_in| = {abs(pi_in) / Mp:.5g} M_P < "
+                f"{PARKING_PI_GUARD_MP:.3g} M_P, where the cut did not fire "
+                f"(rho_kin/rho_R,E = {ratio:.5g}, m_eff/H_E = {m_text})"
+            )
+        return None
+
     try:
         while True:
             N: float = solver.t
@@ -1695,6 +2307,15 @@ def integrate_scalar_history(
                 if y_reflected is None:
                     y_reflected = solver.y.copy()
                     y_reflected[1] = -pi_
+
+                # the cut (inelastic-reflection prompt 06), after the candidate; where it does not
+                # fire, the |pi| guard (P21). At alpha = 0, or without a wall, neither runs
+                if assess_wall:
+                    parked = cut(N, y_reflected, kind, pi_)
+                    if parked is not None:
+                        N_final, final_state = parked
+                        break
+
                 solver = new_solver(N, y_reflected)
                 continue
 
@@ -1825,6 +2446,18 @@ def integrate_scalar_history(
                         True,
                         armed_assessment,
                     )
+                    # the cut (inelastic-reflection prompt 06), after the candidate, whether or
+                    # not it drained; a switch clears armed and ends the history in the parked phase
+                    if assess_wall:
+                        parked = cut(
+                            solver.t,
+                            solver.y if y_drained is None else y_drained,
+                            "turning_point",
+                            None,
+                        )
+                        if parked is not None:
+                            N_final, final_state = parked
+                            break
                     if y_drained is not None:
                         solver = new_solver(solver.t, y_drained)
                 armed = None
@@ -1856,6 +2489,7 @@ def integrate_scalar_history(
         injections=injections,
         dropped_drains=dropped_drains,
         warnings=tuple(warnings),
+        parking=parking,
     )
 
 
@@ -2274,7 +2908,8 @@ def integrate_history(
              "injections", the IntegrationResult's lists of TurningPoint and Injection
              (inelastic-reflection prompt 02), and "dropped_drains", its count of armed drains
              that never reached a drain point (prompt 03), and "warnings", its warning lines
-             (prompt 05), which a failure's payload carries too. No store reads any of the five
+             (prompt 05), which a failure's payload carries too, and "parking", its Parking record
+             or None (prompt 06). No store reads any of the six
     """
     if not (0.0 <= alpha < 1.0):
         raise ValueError(
@@ -2519,6 +3154,9 @@ def integrate_history(
         # the history's warnings, a tuple of lines (inelastic-reflection prompt 05); printed by
         # tune_history, never here, and not stored
         "warnings": result.warnings,
+        # the switch to the parked phase, a Parking record of floats and ints, or None if the history
+        # did not park (inelastic-reflection prompt 06); not stored
+        "parking": result.parking,
     }
 
 

@@ -507,12 +507,15 @@ class TestTwoTurningPointsOnOneStep(unittest.TestCase):
     0.2 and 0.3 (log 03 §2). At beta = 10, alpha = 0.1 (the module's setup otherwise) the field
     nearly stalls at T_J ~ 36 MeV, N ~ 63.853: one accepted step holds a plateau turnaround and a
     wall-side turning point, with pi > 0 at both ends. Detection at the step ends only (the
-    breakage B9) misses both. One integration, about 8 s at a load of 13.
+    breakage B9) misses both. One integration, about 8 s at a load of 13. Since
+    inelastic-reflection prompt 06 the parking cut would end this history's oscillation at 358 MeV,
+    before the near-stall, so it runs with the cut disabled (PARKING_EPSILON = 0.0).
     """
 
     @classmethod
     def setUpClass(cls):
-        cls.data, cls.result, _ = integrate_captured(10.0, 0.5, ALPHA)
+        with mock.patch.object(SM, "PARKING_EPSILON", 0.0):
+            cls.data, cls.result, _ = integrate_captured(10.0, 0.5, ALPHA)
         cls.ts = list(cls.result.solution.ts)
         cls.interpolants = cls.result.solution.interpolants
 

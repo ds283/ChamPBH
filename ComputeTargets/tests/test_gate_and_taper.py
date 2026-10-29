@@ -488,12 +488,14 @@ class TestAFloorRuleCandidate(unittest.TestCase):
 class TestTheNearStallIsGated(unittest.TestCase):
     """
     (9) M = 0.5 M_P, beta = 5, alpha = 0.1 (the module's setup otherwise). One integration, about
-    6 s at a load of 13.
+    6 s at a load of 13. Since inelastic-reflection prompt 06 this history parks at 81 MeV and then
+    fails when its tracker loses adiabaticity, so it runs with the cut disabled (PARKING_EPSILON = 0.0).
     """
 
     @classmethod
     def setUpClass(cls):
-        cls.data, cls.result, _ = ti.integrate_captured(5.0, 0.5, ALPHA)
+        with mock.patch.object(SM, "PARKING_EPSILON", 0.0):
+            cls.data, cls.result, _ = ti.integrate_captured(5.0, 0.5, ALPHA)
 
     def test_9_a_wall_side_turning_point_with_small_A_k_is_gated_off(self):
         """

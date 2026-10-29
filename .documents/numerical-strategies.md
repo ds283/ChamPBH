@@ -1290,6 +1290,66 @@ whose test-field ratio 𝓡 exceeds 1, is reflected at 3 φ_t without being reso
   parking, every history measured at M ≤ 10⁻⁷ fails at the bottom of its cascade, after
   ρ_kin/ρ_R < 10⁻⁶. See log 05 §5.
 
+### 6.5 Added 2026-10-29 (`inelastic-reflection` prompt 06): parking
+
+In dissipation mode each cascade of bounces is a geometric sequence, and without a switch every
+small-M history failed at the bottom of its first one. The user ruled (README §8.1 R14, R15) that
+once ρ_kin/ρ_R < ε the field is parked: the leftover kinetic energy goes to the ledger (P19), and the
+field tracks the minimum of its effective potential with zero lag. The record is
+`prompts/inelastic-reflection/logs/06-parking.md`.
+
+- **The cut.** At α > 0, on a model with a wall, after every candidate (drain point or reflection of
+  either kind) is recorded and drained: `parking_ratio_test(index, ρ_kin,E/ρ_R,E)`, false at the
+  history's first candidate and otherwise ratio < `PARKING_EPSILON` = 10⁻⁶, strictly, ρ_kin,E the
+  candidate's `log_rho_kin` from before its drain. If it passes, `cut_tracker` finds the tracker at
+  the drained state: Σ and f_m from one policy call, T = ρ_R,E(Σ + f_m), φ_min from the model's
+  `minimum_on_trace` searched from the field, π_min below, and m_eff/H_E there (H_E with the ledger
+  as it stands). `tracker_adiabatic` parks only where m_eff/H_E ≥ 10.
+- **The switch.** The drained state's ρ_kin,E = H_after²π_after²/2 goes into the ledger at the same N,
+  a second entry beside the candidate's own drain (`parking_leftover`), and the parked phase starts
+  from (φ_min, π_min) and the drained ln ρ_R,E, ln f_m and ln T_J. With the leftover in the ledger H_E
+  moves only by V(φ_min) − V(φ) and the tracker's kinetic energy: by 0 to 4×10⁻¹² at M ≤ 10⁻⁷ M_P,
+  against the leftover's 4.5–8.4×10⁻⁷ of ρ_R. Δ ln A at the switch is 10⁻¹³–8×10⁻⁹ there, against the
+  2×10⁻⁵–7×10⁻³ that ln A spans over the oscillation it replaces.
+- **The tracker's velocity** is linear algebra, not a difference. With g = 1 + (ln A)′π the
+  right-hand side gives d ln ρ_R,E/dN = Σg − 4, d ln f_m/dN = (1 − Σ)g, d ln T_J/dN = −g/D
+  (D = 1 + (d ln g_s/d ln T)/3), and dΣ/dN = 3w′g/D. So d ln T/dN = a + bπ with c = Σ + (3w′/D +
+  f_m(1 − Σ))/(Σ + f_m), a = c − 4, b = c (ln A)′(φ_min); and π = s(a + bπ) with
+  s = `d_minimum_d_log_trace` (no (ln A)′² term) gives π_min = s a/(1 − s b).
+- **The reduced system** (ln ρ_R,E, ln f_m, ln T_J) is integrated by SciPy's DOP853 with the
+  history's rtol, atol and global_max_step (0.1) as its largest step. `ParkedRHS` evaluates ODERHS's
+  components 2–4 through the loop's `fun` at (φ_min, π_min). The system has no fast mode: a parked
+  history to T_CMB takes 124–257 steps.
+- **The dense output.** Each accepted step appends a `ParkedSegment`, which reads the step's reduced
+  interpolant by a scalar call at each N and returns (φ_min, π_min, the reduced state). Its
+  `minimum_on_trace` start is fixed per segment, the φ_min at the step's left node carried from the
+  previous step's end, and the solver's derivative at the left node is re-evaluated with it, so a
+  segment's value at N depends on N alone; an array call is a loop of scalar calls. SciPy's own
+  interpolants do not give a scalar and an array call the same floats.
+- **The end and the checks.** The history ends as before: at the root of ln T_J = ln T_stop on the
+  step's interpolant, at N_stop, or at N_failsafe (a failure); the step budget counts both phases. At
+  the end of every parked step (at N_final on the last) m_eff/H_E < 10 fails the history, with the
+  switch named in the reason; prompt 07 replaces this with the release. Any `ComputationFailureError`
+  in the parked phase is the history's failure, with no retry. At a reflection where the cut did not
+  fire, |π_in| < 10⁻⁹ M_P fails the history (P21).
+- **π_min jumps at T_J = 10 keV**, the lower end of the equation-of-state table, where dw/d ln T
+  steps from −3.6×10⁻⁸ to 0. φ_min is continuous there; only its derivative steps.
+- **At large M** (README §8.1 R17) the same cut applies. It fires at resolved drain points, where the
+  gate drained little, and ends oscillations that would have gone on, putting at most ε ρ_R,E into
+  the ledger. At M = 0.5 M_P: β = 5 parks at 81.2 MeV and fails at 9.40 MeV, β = 25 parks at 9.97 GeV
+  and fails at 39.8 keV, where the tracker loses adiabaticity; β = 1.2 and 2 never park. At
+  M = 10⁻³ M_P: β = 1.2 parks at 11.5 keV (and fails at 0.25 eV), β = 2 at 81.8 keV and β = 3 at
+  23.0 MeV; β = 0.5 never parks. There (V − V_floor)/ρ_kin at the cut is 1.1–41, not ≪ 1. Dissipation
+  mode at large M is not claimed to be physical; whether its answer means anything is for the user
+  of the result to judge.
+- **Measured.** Every history of log 05 §5.5's grid (β = 1.2, 2, 3; M = 10⁻⁷–10⁻³⁰ M_P) parks at the
+  candidate log 05 named and reaches T_CMB, in 1.6–8 s. The parked ln T_J differs from the oscillating
+  history's by 1.1×10⁻³ at β = 1.2 and at most 1.7×10⁻⁵ at β = 2 and 3, over the windows 05's
+  histories survive. A parked right-hand-side evaluation costs about 50 µs (ODERHS's 20 µs, a
+  `minimum_on_trace` from the step's start and the velocity), a parked step about 0.5–0.9 ms, and the
+  cut's tracker about 80 µs where the ratio test passes; the M = 0.5 M_P, β = 2 history costs the
+  same as before (2.65 s against 2.66 s). See log 06 §5.
+
 ---
 
 ## 7. From scalar history to BBN via PRyMordial (`ComputeTargets/BBNData.py`)

@@ -1,7 +1,7 @@
 # inelastic-reflection campaign — implementation state
 
 **Last updated:** 2026-10-29 · **Status: LIVE, RE-PLANNED 2026-10-29 (README §8): 04–12 replace
-the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29. Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
+the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29 and landed in this commit (gate Park holds; one issue narrowed). Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
 gate DR holds); 02 landed in `fe2a944` and reviewed (2026-10-28; gate Inject holds), after one
 stop and the user's ruling of interior sampling; 3 of 8 prompts written: 03 written 2026-10-28
 from log 02 §8, after the user ruled 𝒜₀ = 1 (README §6.1); 03 landed in `0afa199` and reviewed (2026-10-28;
@@ -41,7 +41,7 @@ bitwise the old code's.
 | 03 | [Gate and stopping rule](03-gate-and-stopping-rule.md) | 𝒜_k measured, then the gate at wall-side turning points (U4 (b′), 𝒜₀ = 1); the plateau diagnostic; ~~the tapered stopping rule (U5, P17)~~ withdrawn by the user (ruling 16); the residual's continuity | Opus | ✍️ 2026-10-28 | ✅ 2026-10-28 | `0afa199` | [03](logs/03-gate-and-stopping-rule.md) |
 | 04 | [The wall through the model](04-the-wall-through-the-model.md) | φ_t, V″, 𝓡, the one-loop turnaround, the full-trace minimum and ∂φ_min/∂ ln T as model methods with generic defaults (R9); dφ_min/dN moves to 06 | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | `81b933f` | [04](logs/04-the-wall-through-the-model.md) |
 | 05 | [Unresolved turnarounds](05-unresolved-turnarounds.md) | φ_t < 10⁻⁸ M_P or 𝓡 > 1 → reflect at 3φ_t (R8); w_gate = 1 there and at the floor rule (R10, P20); the records; the warnings (P23) | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | `9c2483b` | [05](logs/05-unresolved-turnarounds.md) |
-| 06 | [Parking](06-parking.md) | the cut ρ_kin/ρ_R < ε (R14, P19, P21); the parked phase to T_CMB through the dense-output interface (R15); the tuning at small M measured | Opus | ✍️ 2026-10-29 | ⬜ | — | — |
+| 06 | [Parking](06-parking.md) | the cut ρ_kin/ρ_R < ε (R14, P19, P21); the parked phase to T_CMB through the dense-output interface (R15); the tuning at small M measured | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | this commit | [06](logs/06-parking.md) |
 | 07 | Unparking | the release at m/H < 10 (R16, P24) | Opus | ⬜ | ⬜ | — | — |
 | 08 | Spectrum peak and margins | the peak by 𝓡 (R7, P25); ℓ; the energy weight (U9); three worst margins and the first failure (R13) | Opus | ⬜ | ⬜ | — | — |
 | 09 | Store | α as a key (U3); the per-sample ratio; ΔN_eff at T_CMB and 1 MeV, the margins, parking and release as columns; JSON details; `AdiabaticHistory`; format 6, 2026.8.0 | Opus | ⬜ | ⬜ | — | — |
@@ -75,7 +75,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 | Taper | weights equal hand values; the tuning residual continuous across a threshold; the omitted fraction within its bound. *Since ruling 16 (2026-10-28, the stopping rule withdrawn): w_gate equals its hand values, and the residual is continuous across a threshold* | 03 | ✅ 2026-10-28, as restated (log 03 §4, §5.3) |
 | Wall | φ_t and 𝓡 equal the exponential closed form; the notes' table (classical wall y ≈ 105, one-loop stopping point y ≈ 40 at 1 meV) reproduced; an n = 2 model needs no closed form; φ_min and dφ_min/dN checked. *As prompt 04 §0.2 reads it: y = 39.1 is the chain's (`sec:chain`), and 04 checks ∂φ_min/∂ ln T, dφ_min/dN being 06's* | 04 | ✅ 2026-10-29 (log 04 §1.5, §4.2, §4.3, §5.1) |
 | Unresolved | α = 0 bitwise; an unresolved reflection is made at 3φ_t with w_gate = 1; the reflected history equals the resolved one in the probe's band; the warnings | 05 | ✅ 2026-10-29 (log 05 §4, §5.4; at M = 3×10⁻¹¹ the resolved comparison run itself fails, as the planner's did; D14 accepted by the user) |
-| Park | α = 0 bitwise; an M = 10⁻³⁰ drained history reaches T_CMB; parked samples on φ_min; H_E continuous at the switch; the leftover in the ledger; the guard | 06 | ⬜ |
+| Park | α = 0 bitwise; an M = 10⁻³⁰ drained history reaches T_CMB; parked samples on φ_min; H_E continuous at the switch; the leftover in the ledger; the guard | 06 | ✅ 2026-10-29 (log 06 §1.4, §2, §5.4; the guard tested with its threshold raised by a patch, as the prompt allows) |
 | Release | a parked field released at m/H < 10 continues; continuity at the release; the lag after it as estimated | 07 | ⬜ |
 | Margin | the three margins equal a hand computation; energy-weighted; the classical birth margin negative by construction; NULL at α = 0 | 08 | ⬜ |
 | Store | key and columns round-trip; two α are distinct rows; the new golden fingerprint; `AdiabaticHistory` bitwise at α = 0 and computed on parked samples | 09 | ⬜ |
@@ -161,6 +161,11 @@ One opened by the planner, one by prompt 04, one by prompt 05.
   a residual within the rounding of ln V as −∞, or give the search a tolerance on equal values, or a
   closed-form override in `ExponentialModel`. A change to 04's methods is not 05's (its §5). Not
   assigned.
+- **Narrowed (2026-10-29, prompt 06).** With parking the cut comes first on every history measured:
+  log 05 §5.5's 18 (β = 1.2, 2, 3; M = 10⁻⁷, 10⁻⁸, 10⁻⁹, 10⁻¹⁰, 10⁻¹², 10⁻³⁰ M_P) park at candidates 6,
+  48 and 58 and reach T_CMB, as do β = 2 and 3 at M = 10⁻³; β = 1.2 there parks too, and β = 0.5
+  never empties its cascade (log 06 §5.4, §5.3). The model's search never raised on any of the 22, and the parked phase calls only `minimum_on_trace`, never the wall search. The
+  defect stays: 08's per-generation calls, or a history that does not park, can still meet it.
 
 ### 3.1 Assigned to this campaign
 
@@ -879,3 +884,57 @@ What the probes found, and the prompt's departures from the charter (its §0.2, 
   with the cut disabled (ε = 0). At such a drain point the gate, not w_gate = 1, drained the cascade, so
   P19's reason holds only in its bound, ε ρ_R. The user ruled the same day that the cut applies at
   every M, and that the behaviour is documented (README §8.1 R17); 06's §0.2 and §4 item 4 now say so.
+
+### 5.7 After prompt 06 (2026-10-29)
+
+06 landed in this commit, under orchestrator note 06 (rulings 1–17). Log:
+[`logs/06-parking.md`](logs/06-parking.md).
+- **What shipped** (`ComputeTargets/ScalarHistory.py`):
+  - the constants `PARKING_EPSILON = 1e-6`, `PARKING_ADIABATICITY_THRESHOLD = 10.0` and
+    `PARKING_PI_GUARD_MP = 1e-9`, none a key;
+  - the decisions `parking_ratio_test(index, ratio)`, `tracker_adiabatic(m/H)` and
+    `parking_guard(π_in, M_P)`;
+  - the tracker: `log_trace`, `tracker_velocity_terms` / `tracker_velocity` (π_min = s a/(1 − s b),
+    solved, never differenced), `parked_tracker`, `tracker_m_eff_over_H`, `cut_tracker`,
+    `parking_leftover`; the classes `ParkedRHS` and `ParkedSegment`;
+  - the record `Parking` on `IntegrationResult.parking`, and the payload's `"parking"`, not stored.
+
+  At α > 0 on a model with a wall, after every candidate after the first: the ratio test, the tracker,
+  and where both hold the switch (the leftover into the ledger at the same N) and a parked phase
+  integrated by DOP853 to the history's end, its steps `ParkedSegment`s of the dense output, which
+  return the full state and depend on N alone. A parked step end with m/H < 10 fails the history. At a
+  reflection where the cut did not fire, |π_in| < 10⁻⁹ M_P fails it. Nothing runs at α = 0.
+- **Gate Park holds.**
+  - α = 0 is bitwise: the golden tests, `test_first_bounce`, `test_surfing_turning_points`,
+    `test_kinematic_cap_loop` and `test_unresolved_turnarounds` pass unedited; `minimum_on_trace` is
+    called 0 times at α = 0, also with two floor reflections and the cut opened wide.
+  - M = 10⁻³⁰, β = 2 reaches T_CMB, parking at candidate 48 (N = 30.3493), bitwise the cut-disabled
+    history before it.
+  - The parked samples lie on φ_min to the root's tolerance; π on them is π_min bitwise.
+  - H_E at the switch: bitwise at M = 10⁻³⁰, 2.2×10⁻¹² at 10⁻⁷, within the bound from V(φ_min) − V(φ)
+    and the tracker's kinetic energy; the leftover is the ledger's second entry at the switch.
+  - The guard fails a history with its reason (threshold raised by a patch: G2 or the wall search
+    comes first on every real history).
+- **α > 0 at M = 0.5 is 05's**: bitwise with the cut disabled at β = 1.2, 2, 5, 25; with it on at
+  β = 1.2 and 2 (no parking); up to the switch at β = 5 and 25, which park at drain points (81.2 MeV,
+  9.97 GeV) and fail where the tracker loses adiabaticity (9.40 MeV, 39.8 keV). Natural mode bitwise.
+- **Measured** (log 06 §5):
+  - all 18 histories of log 05 §5.5's grid park at the candidates and N log 05 named and reach T_CMB,
+    in 1.6–8 s; none of log 05's bottom-of-cascade failures occurs;
+  - Σ + leftover is 0.11531, 0.29019 and 0.42197 of the ceiling at β = 1.2, 2, 3, the same at every M
+    to ≤ 1.3×10⁻⁷; Δ ln A ≤ 6.8×10⁻⁹ against ln A ranges of 2×10⁻⁵–7×10⁻³;
+  - the parked ln T_J differs from the oscillating one by 1.1×10⁻³ at β = 1.2 and ≤ 1.7×10⁻⁵ at β = 2
+    and 3; at β = 1.2, M = 10⁻⁷, ε = 10⁻⁴ and 10⁻⁶ park at the same candidate, ε = 10⁻⁸ at #44
+    (51 eV) with 5×10⁻⁷;
+  - at M = 10⁻³ β = 1.2, 2, 3 park at drain points; β = 1.2 fails at 0.25 eV (for 07); β = 0.5 never
+    parks;
+  - the tuning converges on its seed (one integration) at M = 10⁻³⁰ (β = 1.2, 2, 3) and 10⁻⁷ (β = 2).
+- **Costs**: ratio test 0.13 µs; tracker 75–90 µs where the ratio passes; parked right-hand side about
+  50 µs; parked step 0.5–0.9 ms; the M = 0.5, β = 2 history unchanged (2.65 s against 2.66 s).
+- **Breakages:** B1–B11, each failing named tests.
+- **Edits to existing tests:** `test_injection` (11) and `test_gate_and_taper` (9) run with ε = 0.0
+  (ruling 14).
+- **Counts:** 26 / 374 (96 + 278) / 103 / 115 / 64 before; 26 / **408** (96 + **312**) / 103 / 115 /
+  64 after, all passing.
+- **Issues:** opened none; narrowed `[05-the-wall-search-refuses-a-wall-below-the-rounding-of-ln-V]`
+  (§3), with `.documents/OPEN_ISSUES.md` §1.19.
