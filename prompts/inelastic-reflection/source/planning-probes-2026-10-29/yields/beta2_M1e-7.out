@@ -1,0 +1,11 @@
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+-- tune history_and_bbn-beta2-M1e-07 it=0 kind=seed H/H0-1=-2.502e-06 phi_ref/phi_min-1=-4.234e-08 norm=-276.633923568 phi_ref=3.3224301799e-04 wall=135.2
+history beta=2 M=1e-07: RHS=4101536 accepted_steps=408566 reflections=0 samples=5437 integrations=1 wall=135.3 s
+tuning beta=2 M=1e-07: normalization=-276.6339235675963 V_ref=7.236760555537246e-121 phi_ref=0.0003322430179890352 phi_0=0.00033206538131717183 pi_0=0.0004969591561588104 tracking=0.9977134707379417 residual_H=-2.5015576721187927e-06 residual_phi=-4.234202155561917e-08 tuning_iterations=1 plain_steps=0 secant_steps=0 guard_steps=0 seed_kind=tracking seed_normalization=-276.6339235675963 seed_phi_ref=0.0003322430179890352
+bounce beta=2 M=1e-07: N=20.352100381 T_J=746.686378 MeV phi=9.430028e-10 reflected=False
+fixed_T beta=2 M=1e-07: 1MeV crossings=1 phi=3.508742236e-03 ratio=-7.942590745e-02 stand_in_phi=3.508356834e-03 stand_in_ratio=-7.942931765e-02 | 70keV crossings=1 phi=6.361660375e-04 ratio=-6.934902885e-04 stand_in_phi=6.349245833e-04 stand_in_ratio=-6.708235276e-04
+ratio beta=2 M=1e-07 [0.3,1) keV: n=131 min=-0.0102 median=0.0006822 max=0.007772 rms_step=0.002236
+ratio beta=2 M=1e-07 [1,3) keV: n=119 min=-0.01037 median=-0.002553 max=0.007662 rms_step=0.001664
+ratio beta=2 M=1e-07 [3,10) keV: n=131 min=0.001961 median=0.004851 max=0.006441 rms_step=3.641e-05
+ratio beta=2 M=1e-07 [10,100) keV: n=257 min=-0.07957 median=0.007075 max=0.07174 rms_step=0.01599
+bbn beta=2 M=1e-07: Yp=0.2465096843 DoH=2.461463032 He3oH=1.042614163 Li7oH=5.464895529 network=small PRyM_time=10.6 s wall=10.6 s PRyM_version=bf24c3d+ri02+sr01+bt02

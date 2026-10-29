@@ -1,0 +1,13 @@
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+-- tune history_and_bbn-beta1.2-M1e-06 it=0 kind=seed H/H0-1=-2.949e-05 phi_ref/phi_min-1=-8.013e-06 norm=-276.638541768 phi_ref=1.3535443152e-03 wall=44.1
+-- tune history_and_bbn-beta1.2-M1e-06 it=1 kind=plain H/H0-1=-4.034e-06 phi_ref/phi_min-1=-4.349e-05 norm=-276.63845596 phi_ref=1.3535551613e-03 wall=34.5
+-- tune history_and_bbn-beta1.2-M1e-06 it=2 kind=secant H/H0-1=-2.936e-07 phi_ref/phi_min-1=+2.708e-06 norm=-276.6384416 phi_ref=1.3536271757e-03 wall=30.7
+history beta=1.2 M=1e-06: RHS=996480 accepted_steps=105917 reflections=0 samples=5003 integrations=3 wall=109.4 s
+tuning beta=1.2 M=1e-06: normalization=-276.63844159977793 V_ref=7.207292843750795e-121 phi_ref=0.0013536271757166223 phi_0=0.0013489214822033312 pi_0=0.001998853801847544 tracking=0.9878775146015726 residual_H=-2.9361910558467486e-07 residual_phi=2.7079457707301913e-06 tuning_iterations=3 plain_steps=1 secant_steps=1 guard_steps=0 seed_kind=tracking seed_normalization=-276.6385417676142 seed_phi_ref=0.0013535443151912756
+bounce beta=1.2 M=1e-06: N=17.667942076 T_J=231.107600 MeV phi=9.790038e-09 reflected=False
+fixed_T beta=1.2 M=1e-06: 1MeV crossings=1 phi=1.212145983e-01 ratio=3.012183564e-01 stand_in_phi=1.212143100e-01 stand_in_ratio=3.012162718e-01 | 70keV crossings=1 phi=2.440451317e-02 ratio=7.173308359e-02 stand_in_phi=2.440378311e-02 stand_in_ratio=7.174089350e-02
+ratio beta=1.2 M=1e-06 [0.3,1) keV: n=132 min=0.01201 median=0.02262 max=0.02848 rms_step=0.0001328
+ratio beta=1.2 M=1e-06 [1,3) keV: n=119 min=0.02854 median=0.03149 max=0.03321 rms_step=4.142e-05
+ratio beta=1.2 M=1e-06 [3,10) keV: n=131 min=0.03323 median=0.0343 max=0.03488 rms_step=1.339e-05
+ratio beta=1.2 M=1e-06 [10,100) keV: n=256 min=0.03489 median=0.03538 max=0.2293 rms_step=0.001647
+bbn beta=1.2 M=1e-06: Yp=0.2565458 DoH=2.593455318 He3oH=1.062605001 Li7oH=5.393921224 network=small PRyM_time=12.9 s wall=12.9 s PRyM_version=bf24c3d+ri02+sr01+bt02

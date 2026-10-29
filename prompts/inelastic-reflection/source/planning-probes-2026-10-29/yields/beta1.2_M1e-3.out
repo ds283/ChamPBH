@@ -1,0 +1,14 @@
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+-- tune history_and_bbn-beta1.2-M0.001 it=0 kind=seed H/H0-1=-1.091e-02 phi_ref/phi_min-1=-3.588e-03 norm=-276.859936687 phi_ref=3.8800141785e-02 wall=11.7
+-- tune history_and_bbn-beta1.2-M0.001 it=1 kind=plain H/H0-1=+3.082e-04 phi_ref/phi_min-1=-1.558e-02 norm=-276.826182962 phi_ref=3.8939866625e-02 wall=11.1
+-- tune history_and_bbn-beta1.2-M0.001 it=2 kind=secant H/H0-1=+2.402e-04 phi_ref/phi_min-1=-5.951e-04 norm=-276.82714723 phi_ref=3.9570005612e-02 wall=12.0
+-- tune history_and_bbn-beta1.2-M0.001 it=3 kind=secant H/H0-1=+5.721e-07 phi_ref/phi_min-1=+1.524e-06 norm=-276.827877911 phi_ref=3.9581423687e-02 wall=20.8
+history beta=1.2 M=0.001: RHS=204355 accepted_steps=21298 reflections=0 samples=4998 integrations=4 wall=55.8 s
+tuning beta=1.2 M=0.001: normalization=-276.8278779108175 V_ref=6.111564024217376e-121 phi_ref=0.03958142368684666 phi_0=0.037270578249549526 pi_0=0.04802858498896967 tracking=0.859097394328732 residual_H=5.720782649820677e-07 residual_phi=1.5240297674967707e-06 tuning_iterations=4 plain_steps=1 secant_steps=2 guard_steps=0 seed_kind=tracking seed_normalization=-276.85993668689315 seed_phi_ref=0.03880014178514885
+bounce beta=1.2 M=0.001: N=17.667930768 T_J=231.107521 MeV phi=9.789464e-06 reflected=False
+fixed_T beta=1.2 M=0.001: 1MeV crossings=1 phi=1.212276724e-01 ratio=1.871861742e-01 stand_in_phi=1.212276210e-01 stand_in_ratio=1.871858354e-01 | 70keV crossings=1 phi=2.442040781e-02 ratio=-2.218010758e-02 stand_in_phi=2.441954828e-02 stand_in_ratio=-2.217169230e-02
+ratio beta=1.2 M=0.001 [0.3,1) keV: n=131 min=-0.07677 median=-0.0671 max=-0.06173 rms_step=0.0001221
+ratio beta=1.2 M=0.001 [1,3) keV: n=119 min=-0.06167 median=-0.05894 max=-0.05736 rms_step=3.832e-05
+ratio beta=1.2 M=0.001 [3,10) keV: n=131 min=-0.05734 median=-0.05635 max=-0.05581 rms_step=1.239e-05
+ratio beta=1.2 M=0.001 [10,100) keV: n=257 min=-0.05581 median=-0.05535 max=0.1253 rms_step=0.001526
+bbn beta=1.2 M=0.001: Yp=0.2481640198 DoH=2.369632823 He3oH=1.03042014 Li7oH=5.760971642 network=small PRyM_time=26.7 s wall=26.7 s PRyM_version=bf24c3d+ri02+sr01+bt02

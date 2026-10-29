@@ -1,0 +1,13 @@
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+-- tune history_and_bbn-beta3-M1e-06 it=0 kind=seed H/H0-1=-1.805e-05 phi_ref/phi_min-1=-3.421e-06 norm=-276.643059973 phi_ref=8.5430925107e-04 wall=104.1
+-- tune history_and_bbn-beta3-M1e-06 it=1 kind=plain H/H0-1=+9.785e-08 phi_ref/phi_min-1=-2.616e-05 norm=-276.643007378 phi_ref=8.5431217374e-04 wall=112.4
+-- tune history_and_bbn-beta3-M1e-06 it=2 kind=secant H/H0-1=+1.983e-07 phi_ref/phi_min-1=+6.939e-07 norm=-276.643007671 phi_ref=8.5433514309e-04 wall=120.6
+history beta=3 M=1e-06: RHS=3443412 accepted_steps=334813 reflections=0 samples=5980 integrations=3 wall=337.2 s
+tuning beta=3 M=1e-06: normalization=-276.6430076713571 V_ref=7.177557052352892e-121 phi_ref=0.0008543351430874903 phi_0=0.0008535612476398816 pi_0=0.0012751284976577004 tracking=0.9959281392584797 residual_H=1.9830729169889594e-07 residual_phi=6.938694625535646e-07 tuning_iterations=3 plain_steps=1 secant_steps=1 guard_steps=0 seed_kind=tracking seed_normalization=-276.643059972517 seed_phi_ref=0.000854309251070032
+bounce beta=3 M=1e-06: N=24.499004646 T_J=1680.005547 MeV phi=9.233001e-09 reflected=False
+fixed_T beta=3 M=1e-06: 1MeV crossings=1 phi=1.703567302e-03 ratio=-4.448184084e-02 stand_in_phi=1.702763114e-03 stand_in_ratio=-4.449015222e-02 | 70keV crossings=1 phi=1.035875872e-04 ratio=3.197157636e-02 stand_in_phi=1.033261697e-04 stand_in_ratio=3.197863885e-02
+ratio beta=3 M=1e-06 [0.3,1) keV: n=131 min=-0.01632 median=-0.004608 max=0.005842 rms_step=0.004326
+ratio beta=3 M=1e-06 [1,3) keV: n=119 min=-0.01631 median=-0.008259 max=0.005982 rms_step=0.002068
+ratio beta=3 M=1e-06 [3,10) keV: n=131 min=-0.007169 median=-0.0007204 max=0.00284 rms_step=8.129e-05
+ratio beta=3 M=1e-06 [10,100) keV: n=257 min=-0.08367 median=0.004777 max=0.06864 rms_step=0.02284
+bbn beta=3 M=1e-06: Yp=0.2464288111 DoH=2.453138356 He3oH=1.040409497 Li7oH=5.495999753 network=small PRyM_time=10.8 s wall=10.8 s PRyM_version=bf24c3d+ri02+sr01+bt02

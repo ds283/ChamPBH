@@ -35,4 +35,17 @@ fifteen untuned histories and the three tuned ones completed; none reflected.
 Its output is **`compare_all.out`**, whose section (e) is the tuned check. `compare.out` is the first
 pass's, kept as it was. `runs.out` lists every run of both passes.
 
+## Third pass (2026-10-29, from 01:18 GMT): M between the decades, and yields
+
+At the user's word ("add a few `M` between the existing points, and a sampling of PRyMordial
+yields"):
+- **Untuned histories between the decades** (`transition.py`): 3e-4, 3e-5, 3e-6 and 3e-7 at every β;
+  2e-6 and 5e-6 at β = 2 and 2e-7 and 5e-7 at β = 3, around the branchings of the first pass. All
+  sixteen completed. The comparisons are **`compare_dense_b1.2.out`**, **`compare_dense_b2.out`** and
+  **`compare_dense_b3.out`**.
+- **Yields** at β = 1.2, 2 and 3 and M = 1e-3 to 1e-7 by decades: `tools/history_and_bbn.py BETA M`,
+  tuned as main.py's histories are (H_J(T_CMB) = H0, φ_ref = φ_min), with the production PRyMordial
+  route and its small network. All fifteen completed (1–6 minutes each, 3–4 tuning integrations;
+  1 at M = 1e-7, whose seed was already inside the tolerance). Their outputs are in **`yields/`**.
+
 What it shows is in the orchestrator's reports to the user of 2026-10-29.
