@@ -1,7 +1,7 @@
 # inelastic-reflection campaign — implementation state
 
 **Last updated:** 2026-10-29 · **Status: LIVE, RE-PLANNED 2026-10-29 (README §8): 04–12 replace
-the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
+the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29. Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
 gate DR holds); 02 landed in `fe2a944` and reviewed (2026-10-28; gate Inject holds), after one
 stop and the user's ruling of interior sampling; 3 of 8 prompts written: 03 written 2026-10-28
 from log 02 §8, after the user ruled 𝒜₀ = 1 (README §6.1); 03 landed in `0afa199` and reviewed (2026-10-28;
@@ -40,7 +40,7 @@ bitwise the old code's.
 | 02 | [Injection at turning points](02-injection-at-turning-points.md) | turning points in the step loop; the drain at the KE maximum; the restart; the floor-rule drain; the record; α in `integrate_history`/`tune_history` | Opus | ✍️ 2026-10-28 | ✅ 2026-10-28 | `fe2a944` | [02](logs/02-injection-at-turning-points.md) |
 | 03 | [Gate and stopping rule](03-gate-and-stopping-rule.md) | 𝒜_k measured, then the gate at wall-side turning points (U4 (b′), 𝒜₀ = 1); the plateau diagnostic; ~~the tapered stopping rule (U5, P17)~~ withdrawn by the user (ruling 16); the residual's continuity | Opus | ✍️ 2026-10-28 | ✅ 2026-10-28 | `0afa199` | [03](logs/03-gate-and-stopping-rule.md) |
 | 04 | [The wall through the model](04-the-wall-through-the-model.md) | φ_t, V″, 𝓡, the one-loop turnaround, the full-trace minimum and ∂φ_min/∂ ln T as model methods with generic defaults (R9); dφ_min/dN moves to 06 | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | `81b933f` | [04](logs/04-the-wall-through-the-model.md) |
-| 05 | Unresolved turnarounds | φ_t < 10⁻⁸ M_P or 𝓡 > 1 → reflect at 3φ_t (R8); w_gate = 1 there and at the floor rule (R10, P20); the records; the warnings (P23) | Opus | ⬜ | ⬜ | — | — |
+| 05 | [Unresolved turnarounds](05-unresolved-turnarounds.md) | φ_t < 10⁻⁸ M_P or 𝓡 > 1 → reflect at 3φ_t (R8); w_gate = 1 there and at the floor rule (R10, P20); the records; the warnings (P23) | Opus | ✍️ 2026-10-29 | ⬜ | — | — |
 | 06 | Parking | the cut ρ_kin/ρ_R < ε (R14, P19, P21); the parked phase to T_CMB through the dense-output interface (R15); the tuning at small M measured | Opus | ⬜ | ⬜ | — | — |
 | 07 | Unparking | the release at m/H < 10 (R16, P24) | Opus | ⬜ | ⬜ | — | — |
 | 08 | Spectrum peak and margins | the peak by 𝓡 (R7, P25); ℓ; the energy weight (U9); three worst margins and the first failure (R13) | Opus | ⬜ | ⬜ | — | — |
@@ -717,3 +717,18 @@ else was found. **The gate Wall holds.**
 The issue `[04-one-loop-chain-has-no-solution-just-above-R-equals-1]` stays open and unassigned. It
 does not touch 05, which needs only φ_t and 𝓡, and those exist everywhere. Before 08 is written,
 the user rules how R7's choice of the peak estimate treats the band 1 < 𝓡 ≲ 10^2.9.
+
+**Prompt 05 written** the same day, at the user's word ("Please write prompt 05"), from log 04 §8 and
+README §8.4's charter for 05. It departs from the charter in these places, each stated in its §0.2:
+- E is the energy that reaches the wall, ρ_kin + (V − V_floor), not H_E²π²/2 alone. They differ by
+  about (V₀/E)^{2/3} at 3φ_t on the exponential, but not on a gentler wall;
+- the reflection is made at a step start, so in [2.7 φ_t, 3 φ_t);
+- the P1 harness at M = 10⁻¹⁰ keeps a floor-rule reflection (the floor fires outside 3 φ_t). P20
+  changes its weight to 1, which is the change to `test_injection` (8) and `test_gate_and_taper` (8);
+- natural mode evaluates φ_t at most once, for its warning, and never fails a history on it (P22
+  against P23);
+- the natural-mode warning says "may fail": M = 10⁻⁷, U10's reference, lies below 10⁻⁸ M_P and
+  resolves;
+- the warnings are returned by the loop and printed once per history by `tune_history`;
+- an unresolved reflection is a `Reflection`, with a kind, so that `first_bounce` and the counts see
+  it.
