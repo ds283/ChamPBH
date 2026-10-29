@@ -1,0 +1,6 @@
+done beta=3.0 M=1e-07: steps=493615 tps=16741 wall=150.8s total=171.4s rss=363MB
+done beta=2.0 M=1e-07: steps=408566 tps=16209 wall=127.7s total=146.6s rss=306MB
+done beta=3.0 M=1e-06: steps=336399 tps=17855 wall=111.2s total=125.5s rss=320MB
+done beta=3.0 M=1e-05: steps=161621 tps=9663 wall=53.7s total=60.3s rss=245MB
+done beta=2.0 M=1e-06: steps=247672 tps=12543 wall=80.7s total=91.0s rss=206MB
+done beta=2.0 M=1e-05: steps=125564 tps=6499 wall=40.6s total=47.2s rss=185MB
