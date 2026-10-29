@@ -651,6 +651,9 @@ Accepted as proposed unless the user rules otherwise.
 
 ### 8.3 For the user to rule (U9–U11)
 
+**Ruled by the user, 2026-10-29:** U9 "agree"; U11 "agree". U10 is open: the user asked what the
+measurement is for.
+
 | | Proposed | Alternatives |
 |---|---|---|
 | **U9** — the energy weight | the margins run over the generations carrying at least 10⁻³ of the history's final ρ_χ; the fraction of ρ_χ in generations that fail is stored beside each worst margin | a different share; or every generation, with the failing fraction only |
