@@ -39,7 +39,7 @@ bitwise the old code's.
 | 01 | [Dark-radiation component](01-dark-radiation-component.md) | the ledger; ρ_χ in V/3H²M_P², Ḣ/H², E, `HubblePolicy`, V_target; K = 0 bitwise | Opus | ✍️ 2026-10-27 | ✅ 2026-10-28 | `85661b5` | [01](logs/01-dark-radiation-component.md) |
 | 02 | [Injection at turning points](02-injection-at-turning-points.md) | turning points in the step loop; the drain at the KE maximum; the restart; the floor-rule drain; the record; α in `integrate_history`/`tune_history` | Opus | ✍️ 2026-10-28 | ✅ 2026-10-28 | `fe2a944` | [02](logs/02-injection-at-turning-points.md) |
 | 03 | [Gate and stopping rule](03-gate-and-stopping-rule.md) | 𝒜_k measured, then the gate at wall-side turning points (U4 (b′), 𝒜₀ = 1); the plateau diagnostic; ~~the tapered stopping rule (U5, P17)~~ withdrawn by the user (ruling 16); the residual's continuity | Opus | ✍️ 2026-10-28 | ✅ 2026-10-28 | `0afa199` | [03](logs/03-gate-and-stopping-rule.md) |
-| 04 | The wall through the model | φ_t, V″, 𝓡, the one-loop turnaround, the full-trace minimum and dφ_min/dN as model methods with generic defaults (R9) | Opus | ⬜ | ⬜ | — | — |
+| 04 | [The wall through the model](04-the-wall-through-the-model.md) | φ_t, V″, 𝓡, the one-loop turnaround, the full-trace minimum and ∂φ_min/∂ ln T as model methods with generic defaults (R9); dφ_min/dN moves to 06 | Opus | ✍️ 2026-10-29 | ⬜ | — | — |
 | 05 | Unresolved turnarounds | φ_t < 10⁻⁸ M_P or 𝓡 > 1 → reflect at 3φ_t (R8); w_gate = 1 there and at the floor rule (R10, P20); the records; the warnings (P23) | Opus | ⬜ | ⬜ | — | — |
 | 06 | Parking | the cut ρ_kin/ρ_R < ε (R14, P19, P21); the parked phase to T_CMB through the dense-output interface (R15); the tuning at small M measured | Opus | ⬜ | ⬜ | — | — |
 | 07 | Unparking | the release at m/H < 10 (R16, P24) | Opus | ⬜ | ⬜ | — | — |
@@ -543,6 +543,12 @@ and the probes of [`source/planning-probes-2026-10-29b/`](source/planning-probes
   the measurement grid, U11 the rehearsal).
 - **Ruled the same day:** U9 "agree" and U11 "agree"; then U10 at its full size, about 52 tuned
   histories and 1–3 hours ("U10 is fine. 1-3 hours is fine.").
+- **Prompt 04 written** the same day, at the user's word ("can we now write prompt 04?"), from log 03
+  §8 and README §8.4. It departs from the charter in three places, each stated in its §0.2:
+  - dφ_min/dN along the trajectory moves to 06, and 04 gives ∂φ_min/∂ ln T;
+  - λ is the notes' −d ln V/dφ;
+  - the one-loop turnaround is `sec:chain`'s, whose worked example gives y = 39.1. The gate's
+    "y ≈ 40" is §`sec:stop`'s κ condition.
 - **Assigned:** `[00-settling-at-physical-M-needs-a-parked-tracking-model]` from the
   `integrator-remediation` board (§3.1 above), with `.documents/OPEN_ISSUES.md` §1.20.
 - **No run registered**: `runregistrykit list` showed 11 finished runs and nothing running.
