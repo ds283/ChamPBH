@@ -1,7 +1,7 @@
 # inelastic-reflection campaign — implementation state
 
 **Last updated:** 2026-10-29 · **Status: LIVE, RE-PLANNED 2026-10-29 (README §8): 04–12 replace
-the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29 and landed in this commit (gate Park holds; one issue narrowed). Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
+the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29, landed in `e967cb7` and reviewed (2026-10-29; gate Park holds; one issue narrowed). Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
 gate DR holds); 02 landed in `fe2a944` and reviewed (2026-10-28; gate Inject holds), after one
 stop and the user's ruling of interior sampling; 3 of 8 prompts written: 03 written 2026-10-28
 from log 02 §8, after the user ruled 𝒜₀ = 1 (README §6.1); 03 landed in `0afa199` and reviewed (2026-10-28;
@@ -41,7 +41,7 @@ bitwise the old code's.
 | 03 | [Gate and stopping rule](03-gate-and-stopping-rule.md) | 𝒜_k measured, then the gate at wall-side turning points (U4 (b′), 𝒜₀ = 1); the plateau diagnostic; ~~the tapered stopping rule (U5, P17)~~ withdrawn by the user (ruling 16); the residual's continuity | Opus | ✍️ 2026-10-28 | ✅ 2026-10-28 | `0afa199` | [03](logs/03-gate-and-stopping-rule.md) |
 | 04 | [The wall through the model](04-the-wall-through-the-model.md) | φ_t, V″, 𝓡, the one-loop turnaround, the full-trace minimum and ∂φ_min/∂ ln T as model methods with generic defaults (R9); dφ_min/dN moves to 06 | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | `81b933f` | [04](logs/04-the-wall-through-the-model.md) |
 | 05 | [Unresolved turnarounds](05-unresolved-turnarounds.md) | φ_t < 10⁻⁸ M_P or 𝓡 > 1 → reflect at 3φ_t (R8); w_gate = 1 there and at the floor rule (R10, P20); the records; the warnings (P23) | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | `9c2483b` | [05](logs/05-unresolved-turnarounds.md) |
-| 06 | [Parking](06-parking.md) | the cut ρ_kin/ρ_R < ε (R14, P19, P21); the parked phase to T_CMB through the dense-output interface (R15); the tuning at small M measured | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | this commit | [06](logs/06-parking.md) |
+| 06 | [Parking](06-parking.md) | the cut ρ_kin/ρ_R < ε (R14, P19, P21); the parked phase to T_CMB through the dense-output interface (R15); the tuning at small M measured | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | `e967cb7` | [06](logs/06-parking.md) |
 | 07 | Unparking | the release at m/H < 10 (R16, P24) | Opus | ⬜ | ⬜ | — | — |
 | 08 | Spectrum peak and margins | the peak by 𝓡 (R7, P25); ℓ; the energy weight (U9); three worst margins and the first failure (R13) | Opus | ⬜ | ⬜ | — | — |
 | 09 | Store | α as a key (U3); the per-sample ratio; ΔN_eff at T_CMB and 1 MeV, the margins, parking and release as columns; JSON details; `AdiabaticHistory`; format 6, 2026.8.0 | Opus | ⬜ | ⬜ | — | — |
@@ -65,6 +65,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 - [`orchestrator/prompt-03.md`](orchestrator/prompt-03.md) (`1d3b0c6`; §0a, the user's ruling 16, added `c3fcfdf`), used for 03.
 - [`orchestrator/prompt-04.md`](orchestrator/prompt-04.md) (`a8e0406`), used for 04.
 - [`orchestrator/prompt-05.md`](orchestrator/prompt-05.md) (`cd19768`), used for 05.
+- [`orchestrator/prompt-06.md`](orchestrator/prompt-06.md) (`7094056`), used for 06.
 
 ## 2. The gates
 
@@ -887,7 +888,7 @@ What the probes found, and the prompt's departures from the charter (its §0.2, 
 
 ### 5.7 After prompt 06 (2026-10-29)
 
-06 landed in this commit, under orchestrator note 06 (rulings 1–17). Log:
+06 landed in `e967cb7`, under orchestrator note 06 (rulings 1–17). Log:
 [`logs/06-parking.md`](logs/06-parking.md).
 - **What shipped** (`ComputeTargets/ScalarHistory.py`):
   - the constants `PARKING_EPSILON = 1e-6`, `PARKING_ADIABATICITY_THRESHOLD = 10.0` and
@@ -938,3 +939,92 @@ What the probes found, and the prompt's departures from the charter (its §0.2, 
   64 after, all passing.
 - **Issues:** opened none; narrowed `[05-the-wall-search-refuses-a-wall-below-the-rounding-of-ln-V]`
   (§3), with `.documents/OPEN_ISSUES.md` §1.19.
+
+*Orchestrator review of prompt 06 (2026-10-29).* The note's ten checks at `e967cb7`, run serially, at
+a load of 4–11:
+1. **Scope.**
+   - The commit's 9 files are the prompt's §6 list plus `.documents/OPEN_ISSUES.md`, for the
+     narrowing. Its parent is `7094056`; the tree is clean and nothing is pushed.
+   - Ruling 16's files are byte-identical to `7094056`: `CosmologyConcepts/Models/`, `Policies/`,
+     `dark_radiation.py`, `exceptions.py`, `AdiabaticHistory.py`, the golden files, the five named
+     tests, `tools/`, `RunDrivers/`, `CosmologyModels/` and `ObjectFactories/`.
+   - `test_injection` (11) and `test_gate_and_taper` (9) each change one `setUpClass`, wrapped in
+     `PARKING_EPSILON = 0.0`, and one docstring sentence.
+2. **α = 0.** The cut and the guard run only under `assess_wall` (α > 0, and a model with a wall and a
+   floor). Nothing new runs at α = 0, and the tests 06 must not edit pass unedited (check 10).
+3. **The loop**, read line by line against prompt §1 and rulings 1–11:
+   - At a reflection, `cut` follows `candidate()`, also when α_eff = 0 (elastic restart state). At a
+     drain point it reads the drained state, or `solver.y` if nothing drained.
+   - The comparisons are strict, and the three constants are read at call time.
+   - The leftover is formed in logs from the candidate's `H_Einstein_after` and `pi_after`, and added
+     to the ledger at the same N.
+   - The parking record holds only floats and ints, and `armed` is cleared at the switch.
+   - The parked phase runs inside the loop's `try`, so its failures carry the warnings. Its DOP853
+     step has no halving, and every failure names the switch. The step budget counts both phases, and
+     `nfev` is counted through `fun`.
+   - The adiabaticity check runs at every step end and at N_final.
+   - The anchor is fixed per step, and the left node is re-evaluated with it (D4). Array calls are a
+     loop of scalar calls.
+   - One edge: if the previous node lies exactly on log_T_stop, the final state is read from the new
+     segment, with the new anchor. That is consistent with D4 and harmless.
+4. **An independent probe** (scratchpad, not committed):
+   - **β = 2, M = 10⁻³⁰ to T_CMB.** It parks at #48 (floor), N = 30.349329, with m/H = 4.80×10¹⁴, and
+     ends at ln T_J = ln T_CMB exactly.
+     - H_E is equal before and after the switch, bitwise. The ledger's last entry is the leftover,
+       and my own leftover from the record agrees bitwise.
+     - From 10 keV down, ρ_χ/ρ_R is 7.04×10⁻³ and constant.
+     - The history is bitwise the ε = 0 history at 3 000 points before the switch.
+     - Over the window to 30.9, parked ln T_J differs from oscillating ln T_J by at most 1.71×10⁻⁵,
+       and by 4.0×10⁻⁸ at the window's end. That is log §5.5's 1.71×10⁻⁵ | 4.9×10⁻⁸ on another sampling.
+   - **The segment determinism.** At 107 N, shuffled scalar calls and one array call give the same
+     values bitwise.
+   - **φ and π on 300 parked samples.**
+     - φ agrees with my own `minimum_on_trace`, started 7 % away, to 4×10⁻¹⁴.
+     - π agrees with s·(d ln T/dN) to 8×10⁻⁸. I took d ln T/dN by a five-point difference of my own
+       ln T along the dense output, not from the a, b formula.
+   - **M = 0.5, β = 5.** It parks at #105, N = 38.004408 (81.2 MeV, m/H = 122.7). It fails at
+     N = 40.29089 (9.396 MeV, m/H = 8.94), and the reason names the switch.
+   - **M = 0.5, β = 2.** Full history, with the cut on and at ε = 0, bitwise the dispatch commit's
+     over records, samples, nfev and steps.
+   - **M = 0.5, β = 5 at ε = 0.** Window to N = 39.0, bitwise the dispatch commit's. Both comparisons
+     ran in a temporary worktree of `7094056`, since removed.
+   - All of this agrees with the log and with the planning probes (`probe_large_M.out`).
+5. **The breakages.** I replayed B1, B4, B5, B6, B7, B10 and B11 with `git apply`, against
+   `test_parking`, from the agent's diffs. I read those diffs: B5 adds (ln A)′ to the denominator
+   divided by (ln A)′ T, which is the mass's (ln A)′² term. Each fails exactly the tests the log
+   names, and the checkout was restored by md5 each time.
+6. **The numerics of the tests.**
+   - **H_E bound.** I re-derived it. The ledger gains the candidate's kinetic energy, except for
+     (1 − α_eff) π_in² (H_after² − H_before²)/2. B3, which drops the leftover from the ledger, moves H
+     by about half the leftover fraction, 10³ times the test's second bound.
+   - **Item 3's finite difference.** Its tolerance is |D(2h) − D(h)| plus the roots' error. It rests
+     on a measured h³–h⁴ convergence, and it is required to lie below B5's change/10 at M = 0.5.
+   - **My note's estimate of B5 was wrong.** Ruling 5's estimate, βφ_min/(2 M_P), assumed φ ≫ M,
+     where V″/|V′| ≈ 2/φ. At M = 0.5 the field sits at φ ≈ 6×10⁻³ M_P ≪ M, where V″/|V′| ≈ M/φ², so
+     B5's change is |(ln A)′ s| ≈ 1–6×10⁻⁴. The agent's correction (log §1.2) is right.
+   - The root tolerance is brentq's bound, doubled. The β = 5 failure window is derived from the two
+     crossings plus one step.
+7. **The measurement.**
+   - §5.4 has all 18 histories at T_CMB, parked at log 05's candidates, with ruling 12's W/E column.
+   - §5.5 has the parked against the oscillating histories and the three ε.
+   - §5.6 gives each tuning's integrations and residuals.
+   - §5.2 says what is bitwise and where each history parks or fails.
+8. **The derivation.** Re-derived from `ODERHS`:
+   - d ln T/dN = −4 + c g, with g = 1 + (ln A)′π;
+   - c = Σ + (3w′/D + f_m(1 − Σ))/(Σ + f_m), and D = 1 + G_s′/(3G_s);
+   - hence a = c − 4, b = c(ln A)′(φ_min), and π_min = s a/(1 − s b), as coded in
+     `tracker_velocity_terms`.
+9. **The records.**
+   - The log is in §5.1's form, and every deviation is classed (D1–D9 and rulings 1–17; no
+     UNINTENDED DRIFT).
+   - The `.documents/` notes are dated and additive. The only lines removed are the issue row's last
+     line, which is extended in place.
+   - The board, the narrowing of `[05-the-wall-search-refuses-a-wall-below-the-rounding-of-ln-V]` and
+     `.documents/OPEN_ISSUES.md` agree.
+10. **The suites.** 26 / 408 (96 + 312) / 103 / 115 / 64, all OK. These are the log's counts, and
+    ComputeTargets rose by the 34 new tests only. `black --check` is clean on the 4 changed `.py`
+    files.
+
+Residue fixed in this review's commit: "this commit" → `e967cb7` in the log and on this board, and
+this note added to the list of orchestrator notes. Nothing else was found, and nothing is opened.
+**The gate Park holds.** Prompt 07 (release) is written next, from log 06 §8.

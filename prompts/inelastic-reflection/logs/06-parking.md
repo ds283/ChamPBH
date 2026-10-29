@@ -1,7 +1,7 @@
 # Log 06 — parking
 
 **Subject:** Park the field on its zero-lag tracker once the drain has emptied the cascade
-**Commit:** this commit, on branch `inelastic-reflection`, on top of `7094056`
+**Commit:** `e967cb7`, on branch `inelastic-reflection`, on top of `7094056`
 **Date:** 2026-10-29, by Claude Opus 5.5
 **Result:** **COMPLETE.** The gate "Park" holds. No issue opened; one narrowed.
 - **The cut ships, at α > 0 on a model with a wall only.** After every candidate after the
