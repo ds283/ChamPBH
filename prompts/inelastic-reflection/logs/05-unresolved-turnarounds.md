@@ -1,7 +1,7 @@
 # Log 05 — unresolved turnarounds
 
 **Subject:** Reflect unresolved turnarounds at three classical turning points
-**Commit:** this commit, on branch `inelastic-reflection`, on top of `cd19768`
+**Commit:** `9c2483b`, on branch `inelastic-reflection`, on top of `cd19768`
 **Date:** 2026-10-29, by Claude Opus 5.5
 **Result:** **COMPLETE.** The gate "Unresolved" holds. One issue opened.
 - **The rule ships, at α > 0 only.** At the start of every step with π < 0, on a model with a wall,
@@ -365,7 +365,7 @@ and the final tree back to back, three rounds, load 11–16:
 | | round 1 | round 2 | round 3 | minimum |
 |---|---|---|---|---|
 | `cd19768` | 2.41 s | 2.38 s | 2.38 s | 2.38 s |
-| this commit | 2.58 s | 2.55 s | 2.49 s | 2.49 s (+4.6 %) |
+| `9c2483b` | 2.58 s | 2.55 s | 2.49 s | 2.49 s (+4.6 %) |
 
 1723 assessments × about 30 µs is 0.05 s of the 0.11 s.
 

@@ -1,7 +1,7 @@
 # inelastic-reflection campaign — implementation state
 
 **Last updated:** 2026-10-29 · **Status: LIVE, RE-PLANNED 2026-10-29 (README §8): 04–12 replace
-the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, and landed in this commit (2026-10-29; gate Unresolved holds; one issue opened). 06 written 2026-10-29. Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
+the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29. Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
 gate DR holds); 02 landed in `fe2a944` and reviewed (2026-10-28; gate Inject holds), after one
 stop and the user's ruling of interior sampling; 3 of 8 prompts written: 03 written 2026-10-28
 from log 02 §8, after the user ruled 𝒜₀ = 1 (README §6.1); 03 landed in `0afa199` and reviewed (2026-10-28;
@@ -40,7 +40,7 @@ bitwise the old code's.
 | 02 | [Injection at turning points](02-injection-at-turning-points.md) | turning points in the step loop; the drain at the KE maximum; the restart; the floor-rule drain; the record; α in `integrate_history`/`tune_history` | Opus | ✍️ 2026-10-28 | ✅ 2026-10-28 | `fe2a944` | [02](logs/02-injection-at-turning-points.md) |
 | 03 | [Gate and stopping rule](03-gate-and-stopping-rule.md) | 𝒜_k measured, then the gate at wall-side turning points (U4 (b′), 𝒜₀ = 1); the plateau diagnostic; ~~the tapered stopping rule (U5, P17)~~ withdrawn by the user (ruling 16); the residual's continuity | Opus | ✍️ 2026-10-28 | ✅ 2026-10-28 | `0afa199` | [03](logs/03-gate-and-stopping-rule.md) |
 | 04 | [The wall through the model](04-the-wall-through-the-model.md) | φ_t, V″, 𝓡, the one-loop turnaround, the full-trace minimum and ∂φ_min/∂ ln T as model methods with generic defaults (R9); dφ_min/dN moves to 06 | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | `81b933f` | [04](logs/04-the-wall-through-the-model.md) |
-| 05 | [Unresolved turnarounds](05-unresolved-turnarounds.md) | φ_t < 10⁻⁸ M_P or 𝓡 > 1 → reflect at 3φ_t (R8); w_gate = 1 there and at the floor rule (R10, P20); the records; the warnings (P23) | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | this commit | [05](logs/05-unresolved-turnarounds.md) |
+| 05 | [Unresolved turnarounds](05-unresolved-turnarounds.md) | φ_t < 10⁻⁸ M_P or 𝓡 > 1 → reflect at 3φ_t (R8); w_gate = 1 there and at the floor rule (R10, P20); the records; the warnings (P23) | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | `9c2483b` | [05](logs/05-unresolved-turnarounds.md) |
 | 06 | [Parking](06-parking.md) | the cut ρ_kin/ρ_R < ε (R14, P19, P21); the parked phase to T_CMB through the dense-output interface (R15); the tuning at small M measured | Opus | ✍️ 2026-10-29 | ⬜ | — | — |
 | 07 | Unparking | the release at m/H < 10 (R16, P24) | Opus | ⬜ | ⬜ | — | — |
 | 08 | Spectrum peak and margins | the peak by 𝓡 (R7, P25); ℓ; the energy weight (U9); three worst margins and the first failure (R13) | Opus | ⬜ | ⬜ | — | — |
@@ -64,6 +64,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 - [`orchestrator/prompt-02.md`](orchestrator/prompt-02.md) (`77af9c8`; §0a, rulings 15 and 8a, added at the review), used for 02.
 - [`orchestrator/prompt-03.md`](orchestrator/prompt-03.md) (`1d3b0c6`; §0a, the user's ruling 16, added `c3fcfdf`), used for 03.
 - [`orchestrator/prompt-04.md`](orchestrator/prompt-04.md) (`a8e0406`), used for 04.
+- [`orchestrator/prompt-05.md`](orchestrator/prompt-05.md) (`cd19768`), used for 05.
 
 ## 2. The gates
 
@@ -73,7 +74,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 | Inject | at α = 0 both golden histories bitwise; at α > 0 H_E continuous across every injection, ledger = Σ drains; a floor-rule drain exact | 02 | ✅ 2026-10-28 (log 02 §1.2, §4, §6) |
 | Taper | weights equal hand values; the tuning residual continuous across a threshold; the omitted fraction within its bound. *Since ruling 16 (2026-10-28, the stopping rule withdrawn): w_gate equals its hand values, and the residual is continuous across a threshold* | 03 | ✅ 2026-10-28, as restated (log 03 §4, §5.3) |
 | Wall | φ_t and 𝓡 equal the exponential closed form; the notes' table (classical wall y ≈ 105, one-loop stopping point y ≈ 40 at 1 meV) reproduced; an n = 2 model needs no closed form; φ_min and dφ_min/dN checked. *As prompt 04 §0.2 reads it: y = 39.1 is the chain's (`sec:chain`), and 04 checks ∂φ_min/∂ ln T, dφ_min/dN being 06's* | 04 | ✅ 2026-10-29 (log 04 §1.5, §4.2, §4.3, §5.1) |
-| Unresolved | α = 0 bitwise; an unresolved reflection is made at 3φ_t with w_gate = 1; the reflected history equals the resolved one in the probe's band; the warnings | 05 | ✅ 2026-10-29 (log 05 §4, §5.4; at M = 3×10⁻¹¹ the resolved comparison run itself fails, as the planner's did) |
+| Unresolved | α = 0 bitwise; an unresolved reflection is made at 3φ_t with w_gate = 1; the reflected history equals the resolved one in the probe's band; the warnings | 05 | ✅ 2026-10-29 (log 05 §4, §5.4; at M = 3×10⁻¹¹ the resolved comparison run itself fails, as the planner's did; D14 accepted by the user) |
 | Park | α = 0 bitwise; an M = 10⁻³⁰ drained history reaches T_CMB; parked samples on φ_min; H_E continuous at the switch; the leftover in the ledger; the guard | 06 | ⬜ |
 | Release | a parked field released at m/H < 10 continues; continuity at the release; the lag after it as estimated | 07 | ⬜ |
 | Margin | the three margins equal a hand computation; energy-weighted; the classical birth margin negative by construction; NULL at α = 0 | 08 | ⬜ |
@@ -755,7 +756,7 @@ README §8.4's charter for 05. It departs from the charter in these places, each
 
 ### 5.6 After prompt 05 (2026-10-29)
 
-05 landed in this commit, under orchestrator note 05 (rulings 1–13). Log:
+05 landed in `9c2483b`, under orchestrator note 05 (rulings 1–13). Log:
 [`logs/05-unresolved-turnarounds.md`](logs/05-unresolved-turnarounds.md).
 - **What shipped** (`ComputeTargets/ScalarHistory.py`):
   - the constants `UNRESOLVED_REFLECTION_FACTOR = 3.0` and `UNRESOLVED_PHI_T_THRESHOLD_MP = 1.0e-8`;
@@ -799,10 +800,69 @@ README §8.4's charter for 05. It departs from the charter in these places, each
 - **Issues:** opened `[05-the-wall-search-refuses-a-wall-below-the-rounding-of-ln-V]` (§3), with
   `.documents/OPEN_ISSUES.md` §1.19; closed none.
 
+*Orchestrator review of prompt 05 (2026-10-29).* The note's nine checks at `9c2483b`, run serially.
+The load was 4–120 (other workloads share the machine):
+1. **Scope.**
+   - The commit's 9 files are the prompt's §6 list plus `.documents/OPEN_ISSUES.md`, for the issue
+     opened. Its parent is `cd19768`, the orchestration note.
+   - The edits to `test_injection.py` and `test_gate_and_taper.py` are item (8) only: w_gate == 1.0,
+     α_eff == α, resolved False, kind "floor".
+   - The files ruling 12 protects are byte-identical. The tree is clean, `git worktree list` shows the
+     main checkout alone, nothing is pushed, and no Ray process is running.
+2. **α = 0.** The golden tests, `test_first_bounce`, `test_surfing_turning_points` and
+   `test_kinematic_cap_loop` pass unedited.
+3. **The loop**, read against prompt §1 and rulings 1–9:
+   - the assessment comes before the floor rule, at α > 0 on a model with a wall only;
+   - `unresolved_turnaround` is strict in all three comparisons and reads K and the threshold at call
+     time;
+   - every reflection drains with w_gate = 1.0, and `gate_weight` is not called for it;
+   - a `None` assessment leaves the infall's latest standing (ruling 7);
+   - natural mode's one model call is made at the first floor reflection and catches only
+     `ComputationFailureError` (ruling 8);
+   - the loop's failures carry `e.warnings`, and `integrate_history`'s failure payload carries them
+     (ruling 2).
+4. **An independent probe** (session scratchpad, not committed), against the code before 05 where
+   needed:
+   - at M = 10⁻⁸ the first reflection is unresolved, at N = 20.352100 and φ/φ_t = 2.95900, with
+     w_gate = 1 and α_eff = 0.1;
+   - at M = 10⁻⁹, to N = 30.3, the rule gives Σ = 0.012615740892 and the resolved run 0.012615731446
+     (7.49e-7), with 46 candidates each; K = 10 differs from K = 3 by 1.3e-8;
+   - at M = 0.5, β = 2, α = 0.1, the turning points, every pre-05 field of every injection, the final
+     state, N_final, nfev, the steps and the samples are bitwise `cd19768`'s, in a temporary worktree
+     that was removed afterwards;
+   - **D14**: on `cd19768`'s code, at M = 3×10⁻¹¹ the resolved run (threshold 0) reaches the cut at
+     N = 30.0096 after 34 floor reflections, with Σ = 0.012611199925 to 10 digits. The rule gives 48
+     reflections and Σ = 0.0126159746, which matches the other masses to 3×10⁻¹⁰. The different
+     count is the resolved run's own float-spacing failure, which R8 removes.
+5. **The breakages.** B1–B11 were replayed from the log's diffs in a separate worktree, removed
+   afterwards. Each failed the tests the log names, and each reverted cleanly. B1 (K = 10) fails
+   item 3 and the constants' and decision's tests, as ruling 3 asks. B6 fails item 3's setUpClass and
+   item 5's count. The clean module ran 35 tests OK in 34 s.
+6. **The numerics of the tests.** Each tolerance is derived in its docstring and log §1. Item 3's lower
+   bound on φ/φ_t has the slack of ruling 4, and item 5's tolerance is set from the measured 7.5e-7.
+7. **The measurement.** The tables of log §5 are complete. §5.4 sets the planner's values beside 05's,
+   and says which differences come from the planner's kinetic E, gated floor reflections and parking.
+8. **The records.** The log is in §5.1's form, with the energy argument, D1–D14 classed and no
+   UNINTENDED DRIFT. The documents' notes are dated and additive. The board's §3 entry and
+   `.documents/OPEN_ISSUES.md` agree.
+9. **The suites** at `9c2483b`, serially: CosmologyModels 26 (80 s), ComputeTargets 96 (136 s) + 278
+   (350 s), ObjectFactories 103 (25 s), tools 115 (142 s), RunDrivers 64 (26 s), all OK.
+   ComputeTargets rose by the 35 new tests only. `black --check` is clean on the 4 changed `.py` files.
+
+**D14, ruled by the user.** Prompt §5's band stop ("Σ Δρ/ρ_R by more than 1 %, or a different number
+of wall approaches") is met literally at M = 3×10⁻¹¹, where the resolved comparison run itself fails.
+The agent did not take it as a stop. The user ruled: "Yes, accept D14."
+
+Residue fixed in this review's commit: "this commit" → `9c2483b` in the log and on this board. Nothing
+else was found. **The gate Unresolved holds.**
+
+The issue `[05-the-wall-search-refuses-a-wall-below-the-rounding-of-ln-V]` stays open and unassigned.
+The cut comes first on every history measured, which 06 confirms (its §4.5).
+
 **Prompt 06 written** the same day, at the user's word ("Please can you write prompt 06?"), from log
 05 §8, README §8.4's charter for 06 and the orchestrator's probes at `9c2483b`
 ([`source/planning-probes-2026-10-29c/`](source/planning-probes-2026-10-29c/README.md)). The orchestrator's
-review of 05 is not yet committed: it waits on the user's ruling on log 05 D14, and 06's gate requires it.
+review of 05 was committed after it, once the user had ruled on D14; 06's gate requires it.
 What the probes found, and the prompt's departures from the charter (its §0.2, §0.3):
 - the field never reaches φ_min: every reflection is made outside it (1.7–2.5 φ_min under the
   unresolved rule, up to 10¹⁸ φ_min under the floor rule). The switch moves ln A by at most 7×10⁻⁹,
