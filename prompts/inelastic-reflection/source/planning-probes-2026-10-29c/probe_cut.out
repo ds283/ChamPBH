@@ -1,0 +1,91 @@
+beta=1.2 M=1e-30 window to 29.5: 7 candidates, 2035 steps, 1.4 s
+cut at candidate 6 (floor), N=28.364056, T_J=0.011558 MeV, rho_kin/rho_R=5.004e-07, alpha_eff=0.1, phi=1.6253e-13 Mp
+  phi_min=3.9355e-27 Mp (phi/phi_min=4.13e+13), pi_min=5.9012e-27 Mp, dphi_min/dlnT=-1.968e-27 Mp, a=-2.999, b*Mp=1.201, minimum_on_trace 53 us
+  m_eff/H_E at phi_min = 3.544e+11; Sigma=-1.665e-09, f_m=6.924e-05
+  H_park/H_before - 1 = -2.480e-07 (ledger not given the leftover; leftover/rho_R = 4.504e-07)
+  Delta ln A at the switch = -1.950e-13
+  phi over the oscillation since the previous candidate: [1.6253e-13, 6.2100e-03] Mp; phi_min inside: False; ln A range 7.452e-03
+  reduced DOP853 over [28.3641, 29.5000]: 0 182 RHS, 12 steps, 0.01 s, minimum_on_trace 20 us/call
+    ln rho_R,E: parked - oscillating: end -1.313e-11, max |.| 1.617e-11
+    ln f_m: parked - oscillating: end -1.120e-03, max |.| 1.120e-03
+    ln T_J: parked - oscillating: end +1.120e-03, max |.| 1.120e-03
+    ln A: oscillating mean over window 7.217690e-04, parked mean -1.630009e-15, diff +7.218e-04
+    pi_min vs finite difference of phi_min: median rel 3.02e-06, max rel 2.21e-04; pi_min range [5.901e-27, 3.244e-26] Mp
+beta=1.2 M=1e-07 window to 29.5: 7 candidates, 1594 steps, 1.1 s
+cut at candidate 6 (unresolved), N=28.363886, T_J=0.011559 MeV, rho_kin/rho_R=5.006e-07, alpha_eff=0.1, phi=5.7629e-09 Mp
+  phi_min=3.3752e-09 Mp (phi/phi_min=1.707), pi_min=3.2008e-10 Mp, dphi_min/dlnT=-1.067e-10 Mp, a=-2.999, b*Mp=1.201, minimum_on_trace 52 us
+  m_eff/H_E at phi_min = 1521; Sigma=-1.672e-09, f_m=6.923e-05
+  H_park/H_before - 1 = -2.481e-07 (ledger not given the leftover; leftover/rho_R = 4.506e-07)
+  Delta ln A at the switch = -2.865e-09
+  phi over the oscillation since the previous candidate: [4.7970e-09, 6.2100e-03] Mp; phi_min inside: False; ln A range 7.452e-03
+  reduced DOP853 over [28.3639, 29.5000]: 0 182 RHS, 12 steps, 0.01 s, minimum_on_trace 24 us/call
+    ln rho_R,E: parked - oscillating: end +1.990e-12, max |.| 2.046e-12
+    ln f_m: parked - oscillating: end -1.121e-03, max |.| 1.121e-03
+    ln T_J: parked - oscillating: end +1.121e-03, max |.| 1.121e-03
+    ln A: oscillating mean over window 2.071114e-04, parked mean -5.148721e-04, diff +7.220e-04
+    pi_min vs finite difference of phi_min: median rel 7.54e-08, max rel 2.35e-04; pi_min range [3.201e-10, 3.988e-10] Mp
+beta=2.0 M=1e-30 window to 30.9: 98 candidates, 18104 steps, 10.3 s
+cut at candidate 48 (floor), N=30.349329, T_J=0.08363 MeV, rho_kin/rho_R=9.324e-07, alpha_eff=0.1, phi=2.2159e-13 Mp
+  phi_min=2.6421e-30 Mp (phi/phi_min=8.387e+16), pi_min=7.2795e-30 Mp, dphi_min/dlnT=-1.111e-30 Mp, a=-6.553, b*Mp=-5.107, minimum_on_trace 71 us
+  m_eff/H_E at phi_min = 4.802e+14; Sigma=0.04299, f_m=9.33e-06
+  H_park/H_before - 1 = -4.629e-07 (ledger not given the leftover; leftover/rho_R = 8.392e-07)
+  Delta ln A at the switch = -4.432e-13
+  phi over the oscillation since the previous candidate: [2.2159e-13, 1.0825e-05] Mp; phi_min inside: False; ln A range 2.165e-05
+  reduced DOP853 over [30.3493, 30.9000]: 0 107 RHS, 7 steps, 0.01 s, minimum_on_trace 21 us/call
+    ln rho_R,E: parked - oscillating: end -1.002e-08, max |.| 8.194e-07
+    ln f_m: parked - oscillating: end -4.060e-08, max |.| 1.866e-05
+    ln T_J: parked - oscillating: end +6.593e-08, max |.| 1.708e-05
+    ln A: oscillating mean over window 3.677904e-06, parked mean -2.104332e-15, diff +3.678e-06
+    pi_min vs finite difference of phi_min: median rel 1.02e-05, max rel 3.15e-05; pi_min range [7.279e-30, 1.433e-28] Mp
+beta=2.0 M=1e-12 window to 30.9: 98 candidates, 17747 steps, 10.5 s
+cut at candidate 48 (floor), N=30.349329, T_J=0.08363 MeV, rho_kin/rho_R=9.324e-07, alpha_eff=0.1, phi=2.2160e-13 Mp
+  phi_min=3.0400e-14 Mp (phi/phi_min=7.289), pi_min=5.7090e-15 Mp, dphi_min/dlnT=-8.712e-16 Mp, a=-6.553, b*Mp=-5.107, minimum_on_trace 60 us
+  m_eff/H_E at phi_min = 1.715e+07; Sigma=0.04299, f_m=9.33e-06
+  H_park/H_before - 1 = -4.629e-07 (ledger not given the leftover; leftover/rho_R = 8.392e-07)
+  Delta ln A at the switch = -3.824e-13
+  phi over the oscillation since the previous candidate: [2.2160e-13, 1.0825e-05] Mp; phi_min inside: False; ln A range 2.165e-05
+  reduced DOP853 over [30.3493, 30.9000]: 0 107 RHS, 7 steps, 0.01 s, minimum_on_trace 22 us/call
+    ln rho_R,E: parked - oscillating: end -1.002e-08, max |.| 8.194e-07
+    ln f_m: parked - oscillating: end -4.060e-08, max |.| 1.866e-05
+    ln T_J: parked - oscillating: end +6.593e-08, max |.| 1.708e-05
+    ln A: oscillating mean over window 1.573582e-06, parked mean -2.104322e-06, diff +3.678e-06
+    pi_min vs finite difference of phi_min: median rel 2.55e-06, max rel 3.22e-05; pi_min range [5.709e-15, 1.331e-14] Mp
+beta=2.0 M=1e-07 window to 30.9: 98 candidates, 8623 steps, 5.3 s
+cut at candidate 48 (unresolved), N=30.349328, T_J=0.08363 MeV, rho_kin/rho_R=9.324e-07, alpha_eff=0.1, phi=5.3385e-09 Mp
+  phi_min=2.2813e-09 Mp (phi/phi_min=2.34), pi_min=3.2617e-10 Mp, dphi_min/dlnT=-4.977e-11 Mp, a=-6.553, b*Mp=-5.107, minimum_on_trace 51 us
+  m_eff/H_E at phi_min = 7.174e+04; Sigma=0.04299, f_m=9.33e-06
+  H_park/H_before - 1 = -4.629e-07 (ledger not given the leftover; leftover/rho_R = 8.391e-07)
+  Delta ln A at the switch = -6.114e-09
+  phi over the oscillation since the previous candidate: [4.8169e-09, 1.0830e-05] Mp; phi_min inside: False; ln A range 2.165e-05
+  reduced DOP853 over [30.3493, 30.9000]: 0 107 RHS, 7 steps, 0.01 s, minimum_on_trace 24 us/call
+    ln rho_R,E: parked - oscillating: end -1.007e-08, max |.| 8.194e-07
+    ln f_m: parked - oscillating: end -5.648e-08, max |.| 1.866e-05
+    ln T_J: parked - oscillating: end +8.167e-08, max |.| 1.708e-05
+    ln A: oscillating mean over window -6.607975e-04, parked mean -6.644812e-04, diff +3.684e-06
+    pi_min vs finite difference of phi_min: median rel 2.46e-06, max rel 3.20e-05; pi_min range [3.262e-10, 7.106e-10] Mp
+beta=3.0 M=1e-30 window to 29.6: 94 candidates, 17037 steps, 10.2 s
+cut at candidate 58 (floor), N=29.394255, T_J=23.322 MeV, rho_kin/rho_R=9.366e-07, alpha_eff=0.1, phi=2.3390e-13 Mp
+  phi_min=5.9270e-32 Mp (phi/phi_min=3.946e+18), pi_min=1.8964e-32 Mp, dphi_min/dlnT=-3.141e-33 Mp, a=-6.038, b*Mp=-6.114, minimum_on_trace 83 us
+  m_eff/H_E at phi_min = 1.136e+16; Sigma=0.04527, f_m=2.924e-08
+  H_park/H_before - 1 = -4.659e-07 (ledger not given the leftover; leftover/rho_R = 8.429e-07)
+  Delta ln A at the switch = -7.017e-13
+  phi over the oscillation since the previous candidate: [2.3386e-13, 6.8960e-06] Mp; phi_min inside: False; ln A range 2.069e-05
+  reduced DOP853 over [29.3943, 29.6000]: 0 47 RHS, 3 steps, 0.00 s, minimum_on_trace 31 us/call
+    ln rho_R,E: parked - oscillating: end -5.003e-09, max |.| 8.328e-07
+    ln f_m: parked - oscillating: end -1.634e-07, max |.| 1.778e-05
+    ln T_J: parked - oscillating: end +1.541e-07, max |.| 1.734e-05
+    ln A: oscillating mean over window 4.881025e-06, parked mean -2.577270e-15, diff +4.881e-06
+    pi_min vs finite difference of phi_min: median rel 1.87e-07, max rel 3.70e-07; pi_min range [1.896e-32, 2.544e-32] Mp
+beta=3.0 M=1e-07 window to 29.6: 94 candidates, 9120 steps, 5.6 s
+cut at candidate 58 (unresolved), N=29.394254, T_J=23.322 MeV, rho_kin/rho_R=9.366e-07, alpha_eff=0.1, phi=3.7455e-09 Mp
+  phi_min=1.4909e-09 Mp (phi/phi_min=2.512), pi_min=1.3033e-10 Mp, dphi_min/dlnT=-2.159e-11 Mp, a=-6.038, b*Mp=-6.114, minimum_on_trace 56 us
+  m_eff/H_E at phi_min = 1.37e+05; Sigma=0.04527, f_m=2.924e-08
+  H_park/H_before - 1 = -4.659e-07 (ledger not given the leftover; leftover/rho_R = 8.429e-07)
+  Delta ln A at the switch = -6.764e-09
+  phi over the oscillation since the previous candidate: [3.3905e-09, 6.8995e-06] Mp; phi_min inside: False; ln A range 2.069e-05
+  reduced DOP853 over [29.3943, 29.6000]: 0 47 RHS, 3 steps, 0.00 s, minimum_on_trace 26 us/call
+    ln rho_R,E: parked - oscillating: end -5.168e-09, max |.| 8.327e-07
+    ln f_m: parked - oscillating: end -1.694e-07, max |.| 1.778e-05
+    ln T_J: parked - oscillating: end +1.599e-07, max |.| 1.734e-05
+    ln A: oscillating mean over window -8.086699e-04, parked mean -8.135572e-04, diff +4.887e-06
+    pi_min vs finite difference of phi_min: median rel 1.31e-07, max rel 2.96e-07; pi_min range [1.303e-10, 1.582e-10] Mp

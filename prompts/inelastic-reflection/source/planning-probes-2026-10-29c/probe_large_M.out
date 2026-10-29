@@ -1,0 +1,32 @@
+beta=1.2 M=0.5: 7 candidates, N_final=45.0864; smallest rho_kin/rho_R after the first: #6 7.97e-07, #5 3.33e-04, #4 7.83e-04
+   eps=0.0001: first #6 (turning_point) N=30.0176 T_J=0.002176 MeV ratio 7.97e-07, phi=0.01373, phi_min=0.01403 Mp, m/H at phi_min 1.8770970170267567
+   eps=1e-06: first #6 (turning_point) N=30.0176 T_J=0.002176 MeV ratio 7.97e-07, phi=0.01373, phi_min=0.01403 Mp, m/H at phi_min 1.8770970170267567
+   eps=1e-08: never
+beta=2.0 M=0.5: 28 candidates, N_final=48.6900; smallest rho_kin/rho_R after the first: #27 8.74e-07, #26 3.55e-06, #25 8.23e-06
+   eps=0.0001: first #15 (turning_point) N=29.2453 T_J=0.2057 MeV ratio 8.78e-05, phi=0.008559, phi_min=0.008547 Mp, m/H at phi_min 62.669735925326655
+   eps=1e-06: first #27 (turning_point) N=34.6173 T_J=0.001179 MeV ratio 8.74e-07, phi=0.01486, phi_min=0.01501 Mp, m/H at phi_min 3.0859021853436546
+   eps=1e-08: never
+beta=5.0 M=0.5: 155 candidates, N_final=62.7519; smallest rho_kin/rho_R after the first: #141 1.51e-07, #138 1.51e-07, #139 1.51e-07
+   eps=0.0001: first #15 (turning_point) N=34.8847 T_J=1131 MeV ratio 9.20e-05, phi=0.005448, phi_min=0.005447 Mp, m/H at phi_min 127.98725826511871
+   eps=1e-06: first #105 (turning_point) N=38.0044 T_J=81.2 MeV ratio 9.47e-07, phi=0.006229, phi_min=0.006229 Mp, m/H at phi_min 122.69119113724499
+   eps=1e-08: never
+beta=10.0 M=0.5: 229 candidates, N_final=86.7571; smallest rho_kin/rho_R after the first: #203 9.85e-08, #204 9.97e-08, #206 1.00e-07
+   eps=0.0001: first #16 (turning_point) N=56.9208 T_J=2.039e+04 MeV ratio 8.57e-05, phi=0.005035, phi_min=0.005035 Mp, m/H at phi_min 98.55774977345399
+   eps=1e-06: first #99 (turning_point) N=61.0959 T_J=358 MeV ratio 9.99e-07, phi=0.005856, phi_min=0.005856 Mp, m/H at phi_min 267.1855686129706
+   eps=1e-08: never
+beta=25.0 M=0.5: 296 candidates, N_final=159.8164; smallest rho_kin/rho_R after the first: #286 7.39e-08, #287 7.79e-08, #288 7.83e-08
+   eps=0.0001: first #16 (turning_point) N=130.1223 T_J=1.064e+05 MeV ratio 9.09e-05, phi=0.00496, phi_min=0.004955 Mp, m/H at phi_min 198.85517416930813
+   eps=1e-06: first #83 (turning_point) N=132.5508 T_J=9972 MeV ratio 8.96e-07, phi=0.005567, phi_min=0.005565 Mp, m/H at phi_min 77.96363746642793
+   eps=1e-08: never
+beta=1.2 M=0.001: 363 candidates, N_final=46.0316; smallest rho_kin/rho_R after the first: #307 1.55e-09, #314 1.57e-09, #304 1.57e-09
+   eps=0.0001: first #6 (turning_point) N=28.3719 T_J=0.01147 MeV ratio 4.94e-07, phi=2.493e-05, phi_min=2.608e-05 Mp, m/H at phi_min 19.625676581590106
+   eps=1e-06: first #6 (turning_point) N=28.3719 T_J=0.01147 MeV ratio 4.94e-07, phi=2.493e-05, phi_min=2.608e-05 Mp, m/H at phi_min 19.625676581590106
+   eps=1e-08: first #62 (turning_point) N=34.7538 T_J=1.94e-05 MeV ratio 9.81e-09, phi=4.916e-05, phi_min=4.889e-05 Mp, m/H at phi_min 254.82788773514406
+beta=2.0 M=0.001: 171 candidates, N_final=50.0186; smallest rho_kin/rho_R after the first: #165 1.22e-11, #162 1.32e-11, #156 1.43e-11
+   eps=0.0001: first #16 (turning_point) N=29.1831 T_J=0.2201 MeV ratio 9.94e-05, phi=1.747e-05, phi_min=1.729e-05 Mp, m/H at phi_min 1357.9117712561351
+   eps=1e-06: first #48 (turning_point) N=30.3740 T_J=0.08184 MeV ratio 8.68e-07, phi=1.904e-05, phi_min=1.902e-05 Mp, m/H at phi_min 829.4436191441674
+   eps=1e-08: first #72 (turning_point) N=30.9547 T_J=0.04726 MeV ratio 7.41e-09, phi=2.112e-05, phi_min=2.108e-05 Mp, m/H at phi_min 166.1151387084311
+beta=3.0 M=0.001: 931 candidates, N_final=55.0067; smallest rho_kin/rho_R after the first: #823 4.70e-12, #804 5.32e-12, #795 5.62e-12
+   eps=0.0001: first #24 (turning_point) N=28.4782 T_J=53.95 MeV ratio 9.35e-05, phi=1.249e-05, phi_min=1.247e-05 Mp, m/H at phi_min 2187.49018517934
+   eps=1e-06: first #58 (turning_point) N=29.4083 T_J=23.02 MeV ratio 9.02e-07, phi=1.322e-05, phi_min=1.316e-05 Mp, m/H at phi_min 1527.526609862969
+   eps=1e-08: first #98 (turning_point) N=29.7385 T_J=16.82 MeV ratio 9.54e-09, phi=1.36e-05, phi_min=1.355e-05 Mp, m/H at phi_min 911.5135821820304

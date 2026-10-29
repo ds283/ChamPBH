@@ -1,7 +1,7 @@
 # inelastic-reflection campaign — implementation state
 
 **Last updated:** 2026-10-29 · **Status: LIVE, RE-PLANNED 2026-10-29 (README §8): 04–12 replace
-the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, and landed in this commit (2026-10-29; gate Unresolved holds; one issue opened). Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
+the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, and landed in this commit (2026-10-29; gate Unresolved holds; one issue opened). 06 written 2026-10-29. Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
 gate DR holds); 02 landed in `fe2a944` and reviewed (2026-10-28; gate Inject holds), after one
 stop and the user's ruling of interior sampling; 3 of 8 prompts written: 03 written 2026-10-28
 from log 02 §8, after the user ruled 𝒜₀ = 1 (README §6.1); 03 landed in `0afa199` and reviewed (2026-10-28;
@@ -41,7 +41,7 @@ bitwise the old code's.
 | 03 | [Gate and stopping rule](03-gate-and-stopping-rule.md) | 𝒜_k measured, then the gate at wall-side turning points (U4 (b′), 𝒜₀ = 1); the plateau diagnostic; ~~the tapered stopping rule (U5, P17)~~ withdrawn by the user (ruling 16); the residual's continuity | Opus | ✍️ 2026-10-28 | ✅ 2026-10-28 | `0afa199` | [03](logs/03-gate-and-stopping-rule.md) |
 | 04 | [The wall through the model](04-the-wall-through-the-model.md) | φ_t, V″, 𝓡, the one-loop turnaround, the full-trace minimum and ∂φ_min/∂ ln T as model methods with generic defaults (R9); dφ_min/dN moves to 06 | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | `81b933f` | [04](logs/04-the-wall-through-the-model.md) |
 | 05 | [Unresolved turnarounds](05-unresolved-turnarounds.md) | φ_t < 10⁻⁸ M_P or 𝓡 > 1 → reflect at 3φ_t (R8); w_gate = 1 there and at the floor rule (R10, P20); the records; the warnings (P23) | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | this commit | [05](logs/05-unresolved-turnarounds.md) |
-| 06 | Parking | the cut ρ_kin/ρ_R < ε (R14, P19, P21); the parked phase to T_CMB through the dense-output interface (R15); the tuning at small M measured | Opus | ⬜ | ⬜ | — | — |
+| 06 | [Parking](06-parking.md) | the cut ρ_kin/ρ_R < ε (R14, P19, P21); the parked phase to T_CMB through the dense-output interface (R15); the tuning at small M measured | Opus | ✍️ 2026-10-29 | ⬜ | — | — |
 | 07 | Unparking | the release at m/H < 10 (R16, P24) | Opus | ⬜ | ⬜ | — | — |
 | 08 | Spectrum peak and margins | the peak by 𝓡 (R7, P25); ℓ; the energy weight (U9); three worst margins and the first failure (R13) | Opus | ⬜ | ⬜ | — | — |
 | 09 | Store | α as a key (U3); the per-sample ratio; ΔN_eff at T_CMB and 1 MeV, the margins, parking and release as columns; JSON details; `AdiabaticHistory`; format 6, 2026.8.0 | Opus | ⬜ | ⬜ | — | — |
@@ -798,3 +798,23 @@ README §8.4's charter for 05. It departs from the charter in these places, each
   64 after, all passing.
 - **Issues:** opened `[05-the-wall-search-refuses-a-wall-below-the-rounding-of-ln-V]` (§3), with
   `.documents/OPEN_ISSUES.md` §1.19; closed none.
+
+**Prompt 06 written** the same day, at the user's word ("Please can you write prompt 06?"), from log
+05 §8, README §8.4's charter for 06 and the orchestrator's probes at `9c2483b`
+([`source/planning-probes-2026-10-29c/`](source/planning-probes-2026-10-29c/README.md)). The orchestrator's
+review of 05 is not yet committed: it waits on the user's ruling on log 05 D14, and 06's gate requires it.
+What the probes found, and the prompt's departures from the charter (its §0.2, §0.3):
+- the field never reaches φ_min: every reflection is made outside it (1.7–2.5 φ_min under the
+  unresolved rule, up to 10¹⁸ φ_min under the floor rule). The switch moves ln A by at most 7×10⁻⁹,
+  against the 2×10⁻⁵–7×10⁻³ that ln A spans over the oscillation it replaces. That comparison is the
+  switch's measure, not φ;
+- π_min = dφ_min/dN is solved algebraically: d ln T/dN is linear in π;
+- at β = 1.2 the cut oscillation is wide (to 6×10⁻³ M_P at ρ_kin/ρ_R = 5×10⁻⁷), and the parked ln T_J
+  differs from the oscillating one by 1.1×10⁻³; at β = 2 and 3 by at most 1.7×10⁻⁵. 06 measures it at
+  ε = 10⁻⁴, 10⁻⁶ and 10⁻⁸;
+- **the cut fires at M = 0.5 M_P** at β = 5, 10 and 25 (at 81 MeV, 358 MeV and 10 GeV, m/H = 78–267),
+  at a resolved drain point, as R14 is ruled; at β = 1.2 and 2 it does not (m/H = 1.9, 3.1). At β = 5
+  the tracker falls below m/H = 10 at 9.65 MeV, so in 06 that history fails there and 07 releases it.
+  Two existing tests (`test_injection` (11), β = 10; `test_gate_and_taper` (9), β = 5) therefore run
+  with the cut disabled (ε = 0). At such a drain point the gate, not w_gate = 1, drained the cascade, so
+  P19's reason holds only in its bound, ε ρ_R. Reported to the user; nothing changes unless they rule.
