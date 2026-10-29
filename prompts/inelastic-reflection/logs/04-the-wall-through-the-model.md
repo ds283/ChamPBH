@@ -1,7 +1,7 @@
 # Log 04 — the wall through the model
 
 **Subject:** Add the wall and the minimum to the model interface
-**Commit:** this commit, on branch `inelastic-reflection`, on top of `a8e0406`
+**Commit:** `81b933f`, on branch `inelastic-reflection`, on top of `a8e0406`
 **Date:** 2026-10-29, by Claude Opus 5.5
 **Result:** **COMPLETE.** The gate "Wall" holds, as prompt §0.2 reads it. One issue opened.
 - **Four methods on `AbstractModel`**, generic defaults through the hooks alone (README §8.1 R9), each

@@ -1,7 +1,7 @@
 # inelastic-reflection campaign — implementation state
 
 **Last updated:** 2026-10-29 · **Status: LIVE, RE-PLANNED 2026-10-29 (README §8): 04–12 replace
-the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in this commit (2026-10-29; gate Wall holds; one issue opened). Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
+the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
 gate DR holds); 02 landed in `fe2a944` and reviewed (2026-10-28; gate Inject holds), after one
 stop and the user's ruling of interior sampling; 3 of 8 prompts written: 03 written 2026-10-28
 from log 02 §8, after the user ruled 𝒜₀ = 1 (README §6.1); 03 landed in `0afa199` and reviewed (2026-10-28;
@@ -39,7 +39,7 @@ bitwise the old code's.
 | 01 | [Dark-radiation component](01-dark-radiation-component.md) | the ledger; ρ_χ in V/3H²M_P², Ḣ/H², E, `HubblePolicy`, V_target; K = 0 bitwise | Opus | ✍️ 2026-10-27 | ✅ 2026-10-28 | `85661b5` | [01](logs/01-dark-radiation-component.md) |
 | 02 | [Injection at turning points](02-injection-at-turning-points.md) | turning points in the step loop; the drain at the KE maximum; the restart; the floor-rule drain; the record; α in `integrate_history`/`tune_history` | Opus | ✍️ 2026-10-28 | ✅ 2026-10-28 | `fe2a944` | [02](logs/02-injection-at-turning-points.md) |
 | 03 | [Gate and stopping rule](03-gate-and-stopping-rule.md) | 𝒜_k measured, then the gate at wall-side turning points (U4 (b′), 𝒜₀ = 1); the plateau diagnostic; ~~the tapered stopping rule (U5, P17)~~ withdrawn by the user (ruling 16); the residual's continuity | Opus | ✍️ 2026-10-28 | ✅ 2026-10-28 | `0afa199` | [03](logs/03-gate-and-stopping-rule.md) |
-| 04 | [The wall through the model](04-the-wall-through-the-model.md) | φ_t, V″, 𝓡, the one-loop turnaround, the full-trace minimum and ∂φ_min/∂ ln T as model methods with generic defaults (R9); dφ_min/dN moves to 06 | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | this commit | [04](logs/04-the-wall-through-the-model.md) |
+| 04 | [The wall through the model](04-the-wall-through-the-model.md) | φ_t, V″, 𝓡, the one-loop turnaround, the full-trace minimum and ∂φ_min/∂ ln T as model methods with generic defaults (R9); dφ_min/dN moves to 06 | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | `81b933f` | [04](logs/04-the-wall-through-the-model.md) |
 | 05 | Unresolved turnarounds | φ_t < 10⁻⁸ M_P or 𝓡 > 1 → reflect at 3φ_t (R8); w_gate = 1 there and at the floor rule (R10, P20); the records; the warnings (P23) | Opus | ⬜ | ⬜ | — | — |
 | 06 | Parking | the cut ρ_kin/ρ_R < ε (R14, P19, P21); the parked phase to T_CMB through the dense-output interface (R15); the tuning at small M measured | Opus | ⬜ | ⬜ | — | — |
 | 07 | Unparking | the release at m/H < 10 (R16, P24) | Opus | ⬜ | ⬜ | — | — |
@@ -63,6 +63,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 - [`orchestrator/prompt-01.md`](orchestrator/prompt-01.md) (`00c17f4`), used for 01.
 - [`orchestrator/prompt-02.md`](orchestrator/prompt-02.md) (`77af9c8`; §0a, rulings 15 and 8a, added at the review), used for 02.
 - [`orchestrator/prompt-03.md`](orchestrator/prompt-03.md) (`1d3b0c6`; §0a, the user's ruling 16, added `c3fcfdf`), used for 03.
+- [`orchestrator/prompt-04.md`](orchestrator/prompt-04.md) (`a8e0406`), used for 04.
 
 ## 2. The gates
 
@@ -585,7 +586,7 @@ and the probes of [`source/planning-probes-2026-10-29b/`](source/planning-probes
 
 ### 5.5 After prompt 04 (2026-10-29)
 
-04 landed in this commit, under orchestrator note 04 (rulings 1–12). Log:
+04 landed in `81b933f`, under orchestrator note 04 (rulings 1–12). Log:
 [`logs/04-the-wall-through-the-model.md`](logs/04-the-wall-through-the-model.md).
 - **What shipped** (`CosmologyConcepts/Models/AbstractModel.py`): four generic methods through the
   hooks, mirrored on `RealizedModel`. `ExponentialModel` overrides none.
@@ -624,3 +625,95 @@ and the probes of [`source/planning-probes-2026-10-29b/`](source/planning-probes
   64 after, all passing.
 - **Issues:** opened `[04-one-loop-chain-has-no-solution-just-above-R-equals-1]` (§3), with
   `.documents/OPEN_ISSUES.md` §1.19; closed none.
+
+*Orchestrator review of prompt 04 (2026-10-29).* The note's nine checks at `81b933f`, run serially.
+The load was 7–20 (other workloads share the machine):
+1. **Scope.**
+   - The commit's 6 files are the prompt's §6 list plus `.documents/OPEN_ISSUES.md`, for the issue
+     opened. Its parent is `a8e0406`, the orchestration note.
+   - The tree is clean, `git worktree list` shows the main checkout alone, and nothing is pushed.
+   - Outside the prompt's files, the only change under `ComputeTargets`, `CosmologyModels`,
+     `ExponentialModel.py`, `Models/__init__.py`, `ObjectFactories`, `config`, `main.py`, `tools`,
+     `RunDrivers` and `plot_inputs.py` is the new `test_wall_model.py`.
+2. **The import.** `import CosmologyConcepts.Models` succeeds in a fresh interpreter, both alone and
+   after `import ComputeTargets`. `AbstractModel.py` has no module-top import of `ComputeTargets`;
+   the exception is imported inside `_failure` (ruling 1).
+3. **The methods**, read line by line against the prompt and rulings 2–7:
+   - every quantity is in logs;
+   - one search (`_search_log_field`) serves all three roots. It doubles from the start, checks
+     monotonicity on values at every probe and halving midpoint, and ends with a chained
+     `ComputationFailureError` when a probe leaves the normal float range or a hook raises;
+   - brentq uses rtol 4ε and xtol 10⁻¹⁴;
+   - the `None` cases are prompt §1.1's and ruling 4's;
+   - the one-loop iteration raises on ℓ ≤ 0 or after 100 iterations, with ℓ's history in the
+     message;
+   - the minimum's sign logic searches outwards when V′ + (ln A)′T < 0, and inwards otherwise;
+   - the derivative is formed as −1/(V″/((ln A)′T) + (ln A)″/(ln A)′), with the ratio in logs;
+   - the docstrings set fixed T against `log_m_eff_squared`'s fixed ρ̃_c.
+
+   D3 (`outside_classical` by one evaluation) equals φ_ta > φ_t wherever the classical search's
+   monotonicity holds, and is right where the classical point is behind the field.
+4. **An independent probe** (session scratchpad, not committed): bisection to the last halving in
+   ln φ through the hooks, with no brentq and no code of the agent's.
+   - Item 1's 12 points: φ_t, ln 𝓡 and ln k_ex agree with the methods to 7.2e-15, 3.1e-12 and 2.1e-14,
+     and φ_t with the closed form to 7.3e-15.
+   - The worked example: y_t = 105.307438, y = 39.079956, ℓ = 32.39563882539746 (the reference
+     differs in the 15th digit), 6 iterations each, k_ex = 5.6247×10¹³ GeV, m_ta² = 0.22999 GeV²,
+     `outside_classical` True.
+   - n = 2 and the power-law wall at M = 10⁻³⁰ and 10⁻²⁰, ln E = −180 and −120: φ_t, ln 𝓡, φ_ta and ℓ
+     agree to ≤ 1.4e-14, 5.9e-12, 1.4e-14 and 4.3e-14.
+   - The minimum on the exponential and the power-law wall (with γ), at M = 10⁻³⁰ and 0.5, at
+     ln T = ln ρ_m0 and −200: φ_min agrees to ≤ 2.5e-14; ∂φ_min/∂ ln T agrees with the reference's
+     closed expression to ≤ 1.8e-13, and with a centred difference (h = 10⁻³) to ≤ 4.2e-8.
+5. **The breakages.** B1–B9 were replayed from the log's diffs in `bash`, running
+   `test_wall_model` under each. Each failed exactly the tests the log names, and the two files'
+   md5s were restored afterwards:
+   - B1: 9 errors;
+   - B2: 4 failures;
+   - B3: 1 failure and 3 errors (test_3 classical on n = 2);
+   - B4: the derivative test, on the power-law wall;
+   - B5: test_1 and test_3 classical;
+   - B6: test_2's chain, test_3 one-loop and test_5's no-solution case;
+   - B7: test_1;
+   - B8: the bump test;
+   - B9: the import-alone test.
+
+   B7 fails at (10⁻¹⁰, −180), not at the note's (10⁻¹⁶, −120): the agent's search halves its bracket
+   before brentq, so the bracket brentq starts from differs from the probe's. Ruling 2 allowed for
+   this ("or name the point").
+6. **The numerics of the tests.**
+   - Item 1's tolerances are the prompt's, with the conditioning stated.
+   - Item 3's bounds are derived in the test's docstring and log §1.5. The largest measured ratio is
+     0.49, on m_ta⁴ℓ.
+   - The worked example is evaluated by the test's own loop (`_the_notes_chain`), never by the
+     methods (ruling 10).
+   - Item 4's step h = 10⁻³ has a truncation of about 2e-8 and a rounding of about 5e-12, against
+     its 10⁻⁶.
+   - D7's start-independence bound was corrected from 2τ to 2(τ + R/S) after one failure, before
+     any suite run. The missing term is the residual's rounding, which a root's position does carry,
+     so this is a correction of the derivation, not a loosening. It is not one of item 3's bounds.
+7. **The measurement.** I recomputed the crossover from the reference alone, at the worked example's
+   E and at E × 10⁻⁴:
+   - 𝓡 = 1 at M = 10^−15.378 and 10^−16.457 M_P;
+   - the one-loop chain's edge at 10^−16.110 and 10^−17.191, where 𝓡 = 10^2.93;
+   - at the edge ℓ ≈ 0.27, Δ ln k_ex = −0.037 and −0.041, and ln m_ta − ln ω_t ≈ −1.01.
+
+   This agrees with log 04 §5.2 (10^−16.109 and 10^−17.190, −0.039 and −0.043, −1.05). The small
+   differences are how close to the saddle-node each search gets. The gap 1 < 𝓡 ≲ 10^2.9 is real.
+8. **The records.**
+   - The log is in §5.1's form, with each method's derivation by equation label and the bounds.
+     Rulings 1–12 are classed, along with D1–D12; there is no UNINTENDED DRIFT.
+   - The `architecture-summary.md` note is dated and additive.
+   - The board's §3 entry and `.documents/OPEN_ISSUES.md` §1.19 agree, and the count went 25 → 26.
+9. **The suites** at `81b933f`, serially: CosmologyModels 26 (70 s), ComputeTargets 96 (124 s) +
+   243 (292 s), ObjectFactories 103 (16 s), tools 115 (130 s), RunDrivers 64 (25 s), all OK.
+   - ComputeTargets rose by the 22 new tests only.
+   - The golden tests pass unchanged.
+   - `black --check` is clean on the two changed `.py` files.
+
+Residue fixed in this review's commit: "this commit" → `81b933f` in the log and on this board. Nothing
+else was found. **The gate Wall holds.**
+
+The issue `[04-one-loop-chain-has-no-solution-just-above-R-equals-1]` stays open and unassigned. It
+does not touch 05, which needs only φ_t and 𝓡, and those exist everywhere. Before 08 is written,
+the user rules how R7's choice of the peak estimate treats the band 1 < 𝓡 ≲ 10^2.9.
