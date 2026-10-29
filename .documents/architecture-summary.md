@@ -1364,6 +1364,36 @@ class AbstractModel(DatastoreObject):
 > in use. The conditions that `tune_history` imposes on a realized model are in
 > `numerical-strategies.md` §3.7.3.
 
+> **Note, 2026-10-29 (`inelastic-reflection`, prompt 04).** The model gains four methods for the
+> wall and the minimum. Each is a generic default on `AbstractModel`, built on the hooks alone (that
+> campaign's README §8.1 R9: no closed form of any potential), which a model may override with a
+> closed form, as `effective_minimum` is built. `ExponentialModel` overrides none. Each takes the
+> normalization and no φ_ref, and `RealizedModel` mirrors it without the normalization:
+> - `classical_turning_point(normalization, phi, log_E)` returns
+>   `ClassicalTurningPoint(phi_t, log_omega_t_squared, log_R, lambda_t, log_k_ex, ell_t)`:
+>   - φ_t is the root of V − V_floor = E inwards from φ;
+>   - ln V″ there, and ln 𝓡 = 2 ln V″ − ln 8π² − ln E;
+>   - λ_t = −d ln V/dφ;
+>   - k_ex = λ_t E^{1/2}/2;
+>   - it returns `None` if the field is already inside φ_t.
+> - `one_loop_turnaround(normalization, phi, log_E)` returns
+>   `OneLoopTurnaround(phi_ta, log_m_ta, lambda_ta, log_k_ex, ell, iterations, outside_classical)`:
+>   - the fixed point m_ta⁴ℓ = 32π²E, V″(φ_ta) = m_ta², ℓ = ln(k_ex/m_ta), from ℓ = 32
+>     (wall_backreaction.tex `eq:chain-turn`);
+>   - it returns `None` if the field is inside φ_ta;
+>   - it raises where the chain has no solution.
+> - `minimum_on_trace(normalization, phi_start, log_T)` is the root of V′ + (ln A)′T = 0, with T the
+>   Einstein-frame trace ρ_R,E(Σ + f_m), searched from the caller's start.
+> - `d_minimum_d_log_trace(normalization, phi_min, log_T)` is −(ln A)′T/(V″ + (ln A)″T) at that
+>   root, at fixed T. It has no (ln A)′² term, unlike `ScalarHistory.log_m_eff_squared`.
+>
+> E is the Einstein-frame ρ_kin at the infall. Every root is found by doubling in ln φ from the start,
+> with the searched quantity checked to move monotonically, then brentq with rtol = 4ε and
+> xtol = 10⁻¹⁴ (`WALL_ROOT_RTOL`, `WALL_ROOT_XTOL`). A failure is a `ComputationFailureError`
+> naming the model, the inputs and the reason. The exception is imported inside the module's
+> `_failure`, because a top-level import would make `import CosmologyConcepts.Models` circular.
+> Nothing in the integrator calls these yet; they are tested in `ComputeTargets/tests/test_wall_model.py`.
+
 ### 8.5 Cosmological Models (`CosmologyModels/`)
 
 `BaseCosmology` is the abstract base:

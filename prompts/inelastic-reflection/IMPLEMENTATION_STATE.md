@@ -1,7 +1,7 @@
 # inelastic-reflection campaign — implementation state
 
 **Last updated:** 2026-10-29 · **Status: LIVE, RE-PLANNED 2026-10-29 (README §8): 04–12 replace
-the old 04–08; the campaign now reaches laboratory M through a parking switch. Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
+the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in this commit (2026-10-29; gate Wall holds; one issue opened). Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
 gate DR holds); 02 landed in `fe2a944` and reviewed (2026-10-28; gate Inject holds), after one
 stop and the user's ruling of interior sampling; 3 of 8 prompts written: 03 written 2026-10-28
 from log 02 §8, after the user ruled 𝒜₀ = 1 (README §6.1); 03 landed in `0afa199` and reviewed (2026-10-28;
@@ -39,7 +39,7 @@ bitwise the old code's.
 | 01 | [Dark-radiation component](01-dark-radiation-component.md) | the ledger; ρ_χ in V/3H²M_P², Ḣ/H², E, `HubblePolicy`, V_target; K = 0 bitwise | Opus | ✍️ 2026-10-27 | ✅ 2026-10-28 | `85661b5` | [01](logs/01-dark-radiation-component.md) |
 | 02 | [Injection at turning points](02-injection-at-turning-points.md) | turning points in the step loop; the drain at the KE maximum; the restart; the floor-rule drain; the record; α in `integrate_history`/`tune_history` | Opus | ✍️ 2026-10-28 | ✅ 2026-10-28 | `fe2a944` | [02](logs/02-injection-at-turning-points.md) |
 | 03 | [Gate and stopping rule](03-gate-and-stopping-rule.md) | 𝒜_k measured, then the gate at wall-side turning points (U4 (b′), 𝒜₀ = 1); the plateau diagnostic; ~~the tapered stopping rule (U5, P17)~~ withdrawn by the user (ruling 16); the residual's continuity | Opus | ✍️ 2026-10-28 | ✅ 2026-10-28 | `0afa199` | [03](logs/03-gate-and-stopping-rule.md) |
-| 04 | [The wall through the model](04-the-wall-through-the-model.md) | φ_t, V″, 𝓡, the one-loop turnaround, the full-trace minimum and ∂φ_min/∂ ln T as model methods with generic defaults (R9); dφ_min/dN moves to 06 | Opus | ✍️ 2026-10-29 | ⬜ | — | — |
+| 04 | [The wall through the model](04-the-wall-through-the-model.md) | φ_t, V″, 𝓡, the one-loop turnaround, the full-trace minimum and ∂φ_min/∂ ln T as model methods with generic defaults (R9); dφ_min/dN moves to 06 | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | this commit | [04](logs/04-the-wall-through-the-model.md) |
 | 05 | Unresolved turnarounds | φ_t < 10⁻⁸ M_P or 𝓡 > 1 → reflect at 3φ_t (R8); w_gate = 1 there and at the floor rule (R10, P20); the records; the warnings (P23) | Opus | ⬜ | ⬜ | — | — |
 | 06 | Parking | the cut ρ_kin/ρ_R < ε (R14, P19, P21); the parked phase to T_CMB through the dense-output interface (R15); the tuning at small M measured | Opus | ⬜ | ⬜ | — | — |
 | 07 | Unparking | the release at m/H < 10 (R16, P24) | Opus | ⬜ | ⬜ | — | — |
@@ -71,7 +71,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 | DR | at K = 0 both golden histories bitwise; with an initial ρ_χ constraint and continuity agree, the radiation limit holds, a tuned history meets both conditions | 01 | ✅ 2026-10-28 (log 01 §4) |
 | Inject | at α = 0 both golden histories bitwise; at α > 0 H_E continuous across every injection, ledger = Σ drains; a floor-rule drain exact | 02 | ✅ 2026-10-28 (log 02 §1.2, §4, §6) |
 | Taper | weights equal hand values; the tuning residual continuous across a threshold; the omitted fraction within its bound. *Since ruling 16 (2026-10-28, the stopping rule withdrawn): w_gate equals its hand values, and the residual is continuous across a threshold* | 03 | ✅ 2026-10-28, as restated (log 03 §4, §5.3) |
-| Wall | φ_t and 𝓡 equal the exponential closed form; the notes' table (classical wall y ≈ 105, one-loop stopping point y ≈ 40 at 1 meV) reproduced; an n = 2 model needs no closed form; φ_min and dφ_min/dN checked | 04 | ⬜ |
+| Wall | φ_t and 𝓡 equal the exponential closed form; the notes' table (classical wall y ≈ 105, one-loop stopping point y ≈ 40 at 1 meV) reproduced; an n = 2 model needs no closed form; φ_min and dφ_min/dN checked. *As prompt 04 §0.2 reads it: y = 39.1 is the chain's (`sec:chain`), and 04 checks ∂φ_min/∂ ln T, dφ_min/dN being 06's* | 04 | ✅ 2026-10-29 (log 04 §1.5, §4.2, §4.3, §5.1) |
 | Unresolved | α = 0 bitwise; an unresolved reflection is made at 3φ_t with w_gate = 1; the reflected history equals the resolved one in the probe's band; the warnings | 05 | ⬜ |
 | Park | α = 0 bitwise; an M = 10⁻³⁰ drained history reaches T_CMB; parked samples on φ_min; H_E continuous at the switch; the leftover in the ledger; the guard | 06 | ⬜ |
 | Release | a parked field released at m/H < 10 continues; continuity at the release; the lag after it as estimated | 07 | ⬜ |
@@ -86,7 +86,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 
 ## 3. Active and unresolved issues
 
-One opened by the planner.
+One opened by the planner, one by prompt 04.
 
 ### `[00-xav-sigma-is-non-monotone-at-25-35-keV]`
 
@@ -109,6 +109,36 @@ One opened by the planner.
   matter-free plasma). Then decide whether the table is regenerated or the spline replaced. Fixing
   it changes every history and needs its own ruling, so it is not in this campaign (README P15). Not
   assigned. `Xav_EOS_data.csv` has no generating script (`[00-kicking-function-table-has-no-provenance-in-the-repository]`, `review-remediation` board).
+
+### `[04-one-loop-chain-has-no-solution-just-above-R-equals-1]`
+
+**Opened:** 2026-10-29 by prompt 04, found by its measurement of the 𝓡 = 1 crossover (log 04 §5.2).
+
+- **What.** R7 and README §8.4's charter for 08 choose the spectrum's peak by 𝓡: the classical estimate
+  below 𝓡 = 1, the one-loop estimate above. On the exponential wall (n = 1, V₀ = 10⁻⁴⁸ GeV⁴), the
+  one-loop chain of `wall_backreaction.tex` §"The chain of estimates" has **no solution for
+  1 < 𝓡 ≲ 10^2.9**:
+  - At the worked example's E, 𝓡 = 1 at M = 10^−15.378 M_P (1.02 TeV).
+  - The fixed point m_ta⁴ℓ = 32π²E, ℓ = ln(k_ex/m_ta) exists only from M = 10^−16.109 M_P (190 GeV)
+    downwards. It disappears there as a saddle-node at ℓ ≈ 0.24, with the field still outside the
+    classical wall.
+  - At E × 10⁻⁴ the gap is the same 0.73 decades of M (𝓡 = 1 at 10^−16.457, the chain's edge at
+    10^−17.190).
+  - At 𝓡 = 1 itself the first iterate already gives ℓ = −0.20.
+  - At the chain's edge the one-loop ln k_ex is 0.039–0.043 below the classical one, and
+    ln m_ta − ln ω_t = −1.05.
+  - Prompt 04 §1.3 expected the chain to reach below 𝓡 = 1. The notes (`sec:params`) put its end where
+    y reaches L, at M_crit; measured, it ends first, at ℓ ≈ 0.24.
+- **Impact.** For 1 < 𝓡 ≲ 10³ the estimate R7 names does not exist, and `one_loop_turnaround` raises
+  there. Nothing calls it yet. 05 needs only 𝓡 and φ_t, which exist everywhere. Per history, how many
+  generations fall in the gap is not measured; at laboratory M (10⁻³⁰ M_P) 𝓡 is 10^50 or more, far
+  from it.
+- **Next step.** For 08's prompt, and the user if it changes the gate "Margin". The options include:
+  - the classical estimate up to the chain's edge;
+  - the one-loop estimate where it exists and the classical one elsewhere, with the switch recorded;
+  - a flag on generations in the gap.
+
+  At the edge the two k_ex differ by 4 %, so the first two differ little in ln q. Not assigned.
 
 ### 3.1 Assigned to this campaign
 
@@ -552,3 +582,45 @@ and the probes of [`source/planning-probes-2026-10-29b/`](source/planning-probes
 - **Assigned:** `[00-settling-at-physical-M-needs-a-parked-tracking-model]` from the
   `integrator-remediation` board (§3.1 above), with `.documents/OPEN_ISSUES.md` §1.20.
 - **No run registered**: `runregistrykit list` showed 11 finished runs and nothing running.
+
+### 5.5 After prompt 04 (2026-10-29)
+
+04 landed in this commit, under orchestrator note 04 (rulings 1–12). Log:
+[`logs/04-the-wall-through-the-model.md`](logs/04-the-wall-through-the-model.md).
+- **What shipped** (`CosmologyConcepts/Models/AbstractModel.py`): four generic methods through the
+  hooks, mirrored on `RealizedModel`. `ExponentialModel` overrides none.
+  - `classical_turning_point` returns `ClassicalTurningPoint(phi_t, log_omega_t_squared, log_R,
+    lambda_t, log_k_ex, ell_t)`, or `None` inside φ_t.
+  - `one_loop_turnaround` returns `OneLoopTurnaround(phi_ta, log_m_ta, lambda_ta, log_k_ex, ell,
+    iterations, outside_classical)`, or `None` inside φ_ta.
+  - `minimum_on_trace` returns the root of V′ + (ln A)′T = 0.
+  - `d_minimum_d_log_trace` is ∂φ_min/∂ ln T at fixed T, with no (ln A)′² term.
+
+  The search doubles in ln φ, checks monotonicity on values (ruling 3), halves 4 times, then uses
+  brentq with rtol 4ε and xtol 10⁻¹⁴ (ruling 2). The exception is imported inside the module
+  (ruling 1). The integrator is untouched.
+- **Gate Wall holds.**
+  - Item 1: φ_t, ln 𝓡 and k_ex within 7.4e-15, 3.3e-12 and 1.4e-14 of the closed form at 12 points.
+  - The worked example: classical y_t = 105.307; one-loop y = 39.080, Λ = 53.792,
+    k_ex = 5.625×10¹³ GeV, ℓ = 32.3956 in 6 iterations, against the notes' 105, 39.1, 53.8 and
+    5.6×10¹³.
+  - m_ta² is 0.2300 GeV² at the chain's ℓ, and 0.2314 GeV² at ℓ = 32, where the notes print 0.25.
+  - The n = 2 exponential and a power-law wall meet every defining equation within derived rounding
+    bounds (largest ratio 0.49, on m_ta⁴ℓ).
+  - The minimum equals `effective_minimum` today to ≤ 1.9e-14, and ∂φ_min/∂ ln T equals a centred
+    difference to ≤ 4.2e-8.
+- **Measured** (log 04 §5.2): **the one-loop chain stops above 𝓡 = 1**, at 𝓡 ≈ 10^2.9, 0.73 decades of
+  M below the point where 𝓡 = 1, at both E. So prompt §2.2's jump at 𝓡 = 1 cannot be measured. At
+  the chain's edge, Δ ln k_ex = −0.039.
+- **Costs per call:**
+  - classical: 21–24 µs (about 12 % of 03's per-step cost at α > 0);
+  - one-loop: 167–482 µs;
+  - minimum: 14–18 µs;
+  - derivative: 4.5 µs.
+- **Breakages:** B1–B9, each failing named tests.
+  - B7 (prompt §1.5's tolerance) fails item 1 at (10⁻¹⁰, −180), not at (10⁻¹⁶, −120).
+  - B9 (a top-level import) fails ruling 1's import test.
+- **Counts:** 26 / 317 (96 + 221) / 103 / 115 / 64 before; 26 / **339** (96 + **243**) / 103 / 115 /
+  64 after, all passing.
+- **Issues:** opened `[04-one-loop-chain-has-no-solution-just-above-R-equals-1]` (§3), with
+  `.documents/OPEN_ISSUES.md` §1.19; closed none.
