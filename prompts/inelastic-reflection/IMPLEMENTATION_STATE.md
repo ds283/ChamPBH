@@ -1,7 +1,7 @@
 # inelastic-reflection campaign — implementation state
 
 **Last updated:** 2026-10-30 · **Status: LIVE, RE-PLANNED 2026-10-29 (README §8): 04–12 replace
-the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29, landed in `e967cb7` and reviewed (2026-10-29; gate Park holds; one issue narrowed). 07 written 2026-10-29, landed in `5397f8f` (2026-10-30; gate Release holds, the lag as a sign-and-order test by the user's ruling of option (c); one issue narrowed) and reviewed (`0b8f420`). 07b inserted 2026-10-30 at the user's word (README §8.1 R18) and written, before 08: the wall search across 10⁻²⁵–10⁻¹³ M_P; landed in this commit (2026-10-30; gate Band holds; one issue closed). Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
+the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29, landed in `e967cb7` and reviewed (2026-10-29; gate Park holds; one issue narrowed). 07 written 2026-10-29, landed in `5397f8f` (2026-10-30; gate Release holds, the lag as a sign-and-order test by the user's ruling of option (c); one issue narrowed) and reviewed (`0b8f420`). 07b inserted 2026-10-30 at the user's word (README §8.1 R18) and written, before 08: the wall search across 10⁻²⁵–10⁻¹³ M_P; landed in `92f41f2` and reviewed (2026-10-30; gate Band holds; one issue closed). Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
 gate DR holds); 02 landed in `fe2a944` and reviewed (2026-10-28; gate Inject holds), after one
 stop and the user's ruling of interior sampling; 3 of 8 prompts written: 03 written 2026-10-28
 from log 02 §8, after the user ruled 𝒜₀ = 1 (README §6.1); 03 landed in `0afa199` and reviewed (2026-10-28;
@@ -43,7 +43,7 @@ bitwise the old code's.
 | 05 | [Unresolved turnarounds](05-unresolved-turnarounds.md) | φ_t < 10⁻⁸ M_P or 𝓡 > 1 → reflect at 3φ_t (R8); w_gate = 1 there and at the floor rule (R10, P20); the records; the warnings (P23) | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | `9c2483b` | [05](logs/05-unresolved-turnarounds.md) |
 | 06 | [Parking](06-parking.md) | the cut ρ_kin/ρ_R < ε (R14, P19, P21); the parked phase to T_CMB through the dense-output interface (R15); the tuning at small M measured | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | `e967cb7` | [06](logs/06-parking.md) |
 | 07 | [Unparking](07-unparking.md) | the release at the root of m/H = 10 on the parked step (R16, P24); the oscillating phase resumes; no second parking | Opus | ✍️ 2026-10-29 | ✅ 2026-10-30 | `5397f8f` | [07](logs/07-unparking.md) |
-| 07b | [The wall search at the rounding of ln V](07b-the-wall-search-at-the-rounding-of-ln-V.md) | the wall search's helper returns −∞ within the rounding of ln V (R18), with its width derived; dissipation mode measured across 10⁻²⁵–10⁻¹³ M_P; the one-loop gap measured for 08 | Opus | ✍️ 2026-10-30 | ✅ 2026-10-30 | this commit | [07b](logs/07b-the-wall-search-at-the-rounding-of-ln-V.md) |
+| 07b | [The wall search at the rounding of ln V](07b-the-wall-search-at-the-rounding-of-ln-V.md) | the wall search's helper returns −∞ within the rounding of ln V (R18), with its width derived; dissipation mode measured across 10⁻²⁵–10⁻¹³ M_P; the one-loop gap measured for 08 | Opus | ✍️ 2026-10-30 | ✅ 2026-10-30 | `92f41f2` | [07b](logs/07b-the-wall-search-at-the-rounding-of-ln-V.md) |
 | 08 | Spectrum peak and margins | the peak by 𝓡 (R7, P25); ℓ; the energy weight (U9); three worst margins and the first failure (R13) | Opus | ⬜ | ⬜ | — | — |
 | 09 | Store | α as a key (U3); the per-sample ratio; ΔN_eff at T_CMB and 1 MeV, the margins, parking and release as columns; JSON details; `AdiabaticHistory`; format 6, 2026.8.0 | Opus | ⬜ | ⬜ | — | — |
 | 10 | Driver and readers | `--alpha-values`; plot matching; Δg* and ΔN_eff figures (R12); scope; inventory; the tool | Sonnet | ⬜ | ⬜ | — | — |
@@ -68,6 +68,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 - [`orchestrator/prompt-05.md`](orchestrator/prompt-05.md) (`cd19768`), used for 05.
 - [`orchestrator/prompt-06.md`](orchestrator/prompt-06.md) (`7094056`), used for 06.
 - [`orchestrator/prompt-07.md`](orchestrator/prompt-07.md) (`35a103c`; ruling 9 amended at the user's word in `0994a10`), used for 07.
+- [`orchestrator/prompt-07b.md`](orchestrator/prompt-07b.md) (`c2aac94`), used for 07b.
 
 ## 2. The gates
 
@@ -204,7 +205,7 @@ One opened by the planner, one by prompt 04. Prompt 05's was closed by prompt 07
   reach T_CMB, and leaves four histories outside the band bitwise.
 - **Assigned (2026-10-30)** to this campaign's prompt 07b, inserted before 08 at the user's word (README
   §8.1 R18), which closes it.
-- **Closed (2026-10-30, prompt 07b, this commit).** `_log_V_minus_floor` returns −∞ where
+- **Closed (2026-10-30, prompt 07b, `92f41f2`).** `_log_V_minus_floor` returns −∞ where
   ln V − ln V_floor ≤ 16 ulp(max(|ln V|, |ln V_floor|)) (`WALL_ROUNDING_QUANTA`), the width derived
   from the search's closest comparison of two finite values (log 07b §1). All 30 dissipation histories
   of β = 1.2, 2, 3 × M = 10⁻¹³–10⁻²⁷ M_P reach T_CMB, 27 of which failed before. Every history outside
@@ -1252,7 +1253,7 @@ probes' `peaks.out`.
 
 ### 5.9 After prompt 07b (2026-10-30)
 
-07b landed in this commit, under orchestrator note 07b (rulings 1–11). Log:
+07b landed in `92f41f2`, under orchestrator note 07b (rulings 1–11). Log:
 [`logs/07b-the-wall-search-at-the-rounding-of-ln-V.md`](logs/07b-the-wall-search-at-the-rounding-of-ln-V.md).
 - **What shipped** (`CosmologyConcepts/Models/AbstractModel.py`):
   - `_log_V_minus_floor` returns −∞ where ln V − ln V_floor ≤ K ulp(max(|ln V|, |ln V_floor|)), with
@@ -1292,3 +1293,81 @@ probes' `peaks.out`.
 - **Issues:** closed `[05-the-wall-search-refuses-a-wall-below-the-rounding-of-ln-V]` (§4), with its
   row removed from `.documents/OPEN_ISSUES.md` §1.19; opened none. Recorded the gap's measurement on
   `[04-one-loop-chain-has-no-solution-just-above-R-equals-1]` (§3).
+
+**Orchestrator review of prompt 07b** (2026-10-30, at `92f41f2`, under note 07b §3). It passes. Each check:
+1. **Scope.**
+   - `git show --stat 92f41f2` lists exactly the prompt's §6 seven files, and its parent is `c2aac94`.
+   - The tree is clean, the main checkout is the only worktree, and nothing is pushed.
+   - `git diff c2aac94 92f41f2` on `AbstractModel.py` touches only the `ulp` import, the constant with
+     its comment, the helper, and `_evaluate`'s docstring phrase (ruling 3). No code line of
+     `_evaluate`, `_search_log_field`, `classical_turning_point` or `one_loop_turnaround` changes.
+2. **α = 0 and the frozen tests.**
+   - No existing test module is in the diff.
+   - The golden tests, `test_wall_model` (the bump test included) and the integrator's tests pass at
+     `92f41f2` (check 9).
+3. **The helper** matches prompt §1.1:
+   - the comparison is ≤;
+   - the width is K · ulp of the larger magnitude;
+   - it is −∞ where ln V ≤ ln V_floor;
+   - it returns the shipped expression unchanged elsewhere.
+
+   D1, the `width < inf` guard, only keeps ln V = +∞ at +∞, as shipped.
+4. **The derivation**, re-derived independently. The binding comparison is a halving midpoint
+   2⁻⁴ e-folds from a finite end: (K + ½)(e^{1/16} − 1) > 1, so K > 15.0052, and the constant is 16.
+   - The doubling needs K ≥ 1 only, which agrees with the orchestrator's K = 1 probe for the note.
+   - Condition (3) is a sufficient bound on the root (18.35 quanta), not a tight one. The scan's edge
+     and my sweep lie below it.
+   - In practice K = 16 does not extend the roots the search can find. It replaces a ragged region of
+     failures between 4 and 15 quanta by a sharp edge at 17. Above that edge, a "not monotone" from two
+     finite probes can then only mean a non-monotone model. The log says this (§1.3).
+5. **An independent probe** (session scratchpad, not committed).
+   - **The twelve inputs.** `classical_turning_point` at all twelve `band_shipped.out` inputs agrees
+     with the closed form to ≤ 7.1×10⁻¹⁵ in ln φ_t.
+   - **A sweep of the root** (D_t = 15–25 quanta, 60 fields per root) raises only for D_t ≤ 16.99q,
+     each time with "a midpoint … is not between its ends". The log's scan gives 16.94q failing and
+     17.01q succeeding.
+   - **One band history.** β = 2, M = 10⁻¹⁶ reaches T_CMB at `92f41f2` and parks at #48 at
+     N = 30.349329, with no release. At `c2aac94` it fails with "not monotone". β = 2, M = 10⁻¹⁷ also
+     reaches T_CMB.
+   - **Bitwise against `c2aac94`**, in a temporary worktree, since removed: β = 2 at M = 10⁻¹²,
+     β = 5 at M = 0.5, β = 3 at M = 10⁻³⁰, and natural mode at M = 0.5, β = 2. They are equal by `repr`
+     on all 39 keys (the `IntegrationResult` fields, `ts` and the payload, warnings included). The
+     only exceptions are `metadata`'s compute times and `z_grid`'s object address.
+6. **The breakages.** The log's four diffs are identical to the agent's scratch files. Each was
+   replayed with `git apply` in `bash`, in a worktree of `92f41f2`, and reverted. They fail exactly the
+   tests the log names:
+   - B1: 16 (4 failures and the 12 item-2 subtests as errors);
+   - B2: 2;
+   - B3: 1;
+   - B4: 16.
+
+   `test_wall_model` passed under all four. B2 is caught by item 1 alone because K is derived inside
+   the test (D4). The log's argument that no input can catch it at the binding comparison agrees with
+   check 4.
+7. **The numerics of the tests.**
+   - Item 1 builds j quanta with `nextafter` and asserts the difference is j · 2⁻⁴⁴ exactly.
+   - Item 2's tolerance is a sum of named terms (6.6×10⁻¹⁴ or more), against measured errors of
+     7.1×10⁻¹⁵ or less.
+   - Item 3 uses ruling 6's 8.2×10⁻¹⁰ and measures −9.8×10⁻¹².
+8. **The measurement and the records.**
+   - **§2:** the tables are complete. §2.1 has thirty histories at both trees. §2.2 is per quarter
+     decade and contiguous, with the upper edge as predicted. §2.3 is the gap table. §2.4 and §2.5
+     are bitwise, warnings included. §2.6 is given, and ruling 5's counts and margins are reported
+     (smallest m_D = 25.18 against 0.137).
+   - **The log:** it is in §5.1's form, with D1–D9 classed and the note's rulings recorded.
+   - **`.documents/`:** the notes are dated and additive only (architecture note, numerical
+     strategies §6.7).
+   - **The issue:** it is moved to §4 with its Closed line, its index row is deleted, and the count is
+     corrected 27 → 26.
+9. **The suites** at `92f41f2`, run serially:
+   - CosmologyModels 26 OK (79 s);
+   - ComputeTargets 96 OK (143 s) + 343 OK (603 s);
+   - ObjectFactories 103 OK;
+   - tools 115 OK;
+   - RunDrivers 64 OK.
+
+   The load averages ranged from 4 to 81, with other work on the machine. ComputeTargets rose by the
+   12 new tests only. `black --check` is clean on both changed `.py` files.
+
+Residue fixed in this review's commit: "this commit" → `92f41f2` in the log and on this board, and note
+07b added to the list of orchestrator notes. Nothing opened.

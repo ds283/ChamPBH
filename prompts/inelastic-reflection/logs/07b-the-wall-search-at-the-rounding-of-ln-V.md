@@ -1,7 +1,7 @@
 # Log 07b — the wall search at the rounding of ln V
 
 **Subject:** Treat a difference within ln V's rounding as no difference in the wall search
-**Commit:** this commit, on branch `inelastic-reflection`, on top of `c2aac94`
+**Commit:** `92f41f2`, on branch `inelastic-reflection`, on top of `c2aac94`
 **Date:** 2026-10-30, by Claude Opus 5.5
 **Result:** **COMPLETE.** The gate "Band" holds. One issue closed, none opened.
 - **The fix is the helper's width.** `_log_V_minus_floor` returns −∞ where
