@@ -638,6 +638,20 @@ Each in the user's words, from the conversation of 2026-10-29.
   (`[04-one-loop-chain-has-no-solution-just-above-R-equals-1]`), the user chose "Classical, flagged".
   That is the one-loop estimate where 𝓡 > 1 and the chain has a solution, and the classical estimate
   elsewhere, gap included, with each generation recording which estimate it got.
+- **R20 — the tracker margin is the late tracker's** (2026-10-30, when prompt 08 was written). The
+  orchestrator offered three masses for R13's tracker margin, with its probe's measurements
+  ([`source/planning-probes-2026-10-30b/`](source/planning-probes-2026-10-30b/README.md)):
+  - A, the tracker's mass at every sample after birth;
+  - B, the tracker's mass on the late tracker only, after the last turning point or generation;
+  - C, the field's own mass at every sample.
+
+  The user chose B: "B is cleanest, provided we are sure that checking at the reflections safely covers the
+  time period before the last generation event." So 08 adds the plateau turning points to the reflection
+  margin, derives the bound by which the turnarounds cover the samples before the late tracker, and
+  measures it on every history, with a stop.
+- **R21 — the parking leftover is unassessed** (2026-10-30). The leftover of P19 has no bounce. Asked
+  how the margins treat it, the user chose "Unassessed, share reported": it gets no peak and no margins,
+  and its share of ρ_χ is reported beside the failing shares.
 
 ### 8.2 Proposed by the planner (P18–P26)
 
@@ -773,6 +787,10 @@ They run in order; 04–09 touch `ComputeTargets/ScalarHistory.py`.
 - **Gate "Band".**
 
 **08 — the spectrum's peak and the margins** (§2.2's 04, rewritten).
+*Amended 2026-10-30, when 08 was written (R20, R21).* The reflection margin also runs over the
+plateau turning points. The tracker margin runs only on the late tracker, after the last turning point or
+generation, and today. The leftover is unassessed. The gate adds the coverage measured within its derived
+bound, and 08 closes `[04-one-loop-chain-has-no-solution-just-above-R-equals-1]` (R19).
 - **Per generation:** the peak by 𝓡 (classical below 1, one-loop above, R7, P25), its comoving
   ln q_j, ℓ_j and the energy share ΔK_j/K.
 - **Three margins**, each the worst over the generations of U9 and stored with its N:

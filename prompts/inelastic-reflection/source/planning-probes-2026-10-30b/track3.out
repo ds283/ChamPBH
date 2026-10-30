@@ -1,0 +1,56 @@
+b1.2_M0.001_a0.1: ok N_final=46.0304 wall=1.8s; generations 7 (classical 7, one-loop 0, gap 0, no assessment 0); weighted (>=1e-3) 6 carrying 0.9999; leftover share 5.05e-05; parked=True released=True
+   ln R / ln 10 from -76.10 to -49.67; ell_cl -0.714..-0.703
+   worst birth -0.709 (gen #5 at N=26.2843; failing share 1)
+   worst refl  +0.005 (gen #3 at N=25.8465; failing share 0.0404)
+   worst track +4.534 (gen #5 at N=26.2926; failing share 0)
+   today: ln m on tracker -136.6365, on the field -136.5908; cost: peaks 0.0 ms, tracker over 4998 samples 156 ms
+   gen #0 turning_point classical N_turn=17.6679 share=0.878 lnR/ln10=-49.67 birth=-0.703 refl=+2.982 track=+7.120@17.727
+   gen #1 turning_point classical N_turn=19.9038 share=0.0775 lnR/ln10=-55.01 birth=-0.704 refl=+5.449 track=+6.206@19.910
+   gen #2 turning_point classical N_turn=24.7818 share=0.0172 lnR/ln10=-65.05 birth=-0.707 refl=+0.098 track=+5.273@24.782
+   gen #3 turning_point classical N_turn=25.4039 share=0.014 lnR/ln10=-66.35 birth=-0.708 refl=+0.005 track=+4.886@25.408
+   TRACK3 b1.2_M0.001_a0.1: A(tracker, all after birth) +4.534 fail 0 | B(late tracker only, N>28.369) +10.199 fail 0 | C(field mass) +10.199 fail 0
+b2_M0.5_a0.1: ok N_final=48.6900 wall=2.9s; generations 28 (classical 28, one-loop 0, gap 0, no assessment 0); weighted (>=1e-3) 16 carrying 0.9971; leftover share 0; parked=False released=False
+   ln R / ln 10 from -92.95 to -61.30; ell_cl -0.720..-0.703
+   worst birth -0.709 (gen #15 at N=29.2286; failing share 0.997)
+   worst refl  -0.527 (gen #15 at N=29.3509; failing share 0.994)
+   worst track +0.245 (gen #15 at N=29.2378; failing share 0.072)
+   today: ln m on tracker -137.7702, on the field -137.4630; cost: peaks 0.1 ms, tracker over 5287 samples 221 ms
+   gen #0 turning_point classical N_turn=20.3423 share=0.286 lnR/ln10=-61.30 birth=-0.703 refl=+0.512 track=+3.649@20.350
+   gen #1 turning_point classical N_turn=21.3713 share=0.234 lnR/ln10=-63.33 birth=-0.703 refl=-0.130 track=+3.028@21.372
+   gen #2 turning_point classical N_turn=21.8743 share=0.22 lnR/ln10=-64.30 birth=-0.704 refl=-0.047 track=+2.677@21.879
+   gen #3 turning_point classical N_turn=22.2594 share=0.139 lnR/ln10=-65.24 birth=-0.704 refl=+0.433 track=+2.486@22.266
+   TRACK3 b2_M0.5_a0.1: A(tracker, all after birth) +0.245 fail 0.072 | B(late tracker only, N>33.861) +8.144 fail 0 | C(field mass) -0.707 fail 0.491
+b2_M1e-12_a0.1: ok N_final=50.0756 wall=6.6s; generations 49 (classical 49, one-loop 0, gap 0, no assessment 0); weighted (>=1e-3) 18 carrying 0.9924; leftover share 0.000118; parked=True released=False
+   ln R / ln 10 from -35.66 to -11.76; ell_cl -0.711..-0.702
+   worst birth -0.708 (gen #17 at N=29.2667; failing share 0.992)
+   worst refl  -0.555 (gen #17 at N=29.3425; failing share 0.989)
+   worst track +13.979 (gen #17 at N=29.2695; failing share 0)
+   today: ln m on tracker -131.1373, on the field -131.1373; cost: peaks 0.1 ms, tracker over 5437 samples 178 ms
+   gen #0 floor classical N_turn=20.3521 share=0.281 lnR/ln10=-11.76 birth=-0.702 refl=+0.508 track=+17.475@20.354
+   gen #1 floor classical N_turn=21.3809 share=0.231 lnR/ln10=-13.78 birth=-0.703 refl=-0.132 track=+16.869@21.385
+   gen #2 floor classical N_turn=21.8836 share=0.218 lnR/ln10=-14.75 birth=-0.703 refl=-0.052 track=+16.527@21.892
+   gen #3 floor classical N_turn=22.2675 share=0.139 lnR/ln10=-15.68 birth=-0.703 refl=+0.422 track=+16.332@22.270
+   TRACK3 b2_M1e-12_a0.1: A(tracker, all after birth) +13.979 fail 0 | B(late tracker only, N>30.349) +15.549 fail 0 | C(field mass) +15.549 fail 0
+b2_M1e-30_a0.1: ok N_final=50.0756 wall=6.7s; generations 49 (classical 0, one-loop 49, gap 0, no assessment 0); weighted (>=1e-3) 18 carrying 0.9924; leftover share 0.000118; parked=True released=False
+   ln R / ln 10 from 36.34 to 60.24; ell_cl -0.711..-0.702
+   one-loop ell 18.31..32.52; ln k_ol - ln k_cl -2.277..-1.972
+   worst birth +20.904 (gen #17 at N=29.2667; failing share 0)
+   worst refl  +20.935 (gen #17 at N=29.3425; failing share 0)
+   worst track +35.105 (gen #17 at N=29.2695; failing share 0)
+   today: ln m on tracker -120.7757, on the field -120.7757; cost: peaks 9.1 ms, tracker over 5437 samples 175 ms
+   gen #0 floor one_loop N_turn=20.3521 share=0.281 lnR/ln10=60.24 birth=+32.525 refl=+32.565 track=+37.027@20.354
+   gen #1 floor one_loop N_turn=21.3809 share=0.231 lnR/ln10=58.22 birth=+31.337 refl=+31.346 track=+36.457@21.385
+   gen #2 floor one_loop N_turn=21.8836 share=0.218 lnR/ln10=57.25 birth=+30.766 refl=+30.875 track=+36.131@21.892
+   gen #3 floor one_loop N_turn=22.2675 share=0.139 lnR/ln10=56.32 birth=+30.215 refl=+30.478 track=+35.959@22.270
+   TRACK3 b2_M1e-30_a0.1: A(tracker, all after birth) +35.105 fail 0 | B(late tracker only, N>30.349) +37.656 fail 0 | C(field mass) +37.656 fail 0
+b5_M0.5_a0.1: ok N_final=62.7519 wall=6.1s; generations 121 (classical 121, one-loop 0, gap 0, no assessment 0); weighted (>=1e-3) 24 carrying 0.9914; leftover share 0.000876; parked=True released=True
+   ln R / ln 10 from -81.80 to -53.35; ell_cl -0.710..-0.702
+   worst birth -0.704 (gen #23 at N=35.3208; failing share 0.991)
+   worst refl  -0.640 (gen #23 at N=35.3675; failing share 0.991)
+   worst track -0.039 (gen #23 at N=35.3235; failing share 0.224)
+   today: ln m on tracker -136.7587, on the field -136.6944; cost: peaks 0.2 ms, tracker over 6814 samples 187 ms
+   gen #0 turning_point classical N_turn=29.7152 share=0.329 lnR/ln10=-53.35 birth=-0.702 refl=+0.364 track=+3.302@29.871
+   gen #1 turning_point classical N_turn=30.6212 share=0.271 lnR/ln10=-55.12 birth=-0.702 refl=+0.153 track=+2.720@30.626
+   gen #2 turning_point classical N_turn=31.1913 share=0.168 lnR/ln10=-56.40 birth=-0.702 refl=+0.278 track=+2.431@31.197
+   gen #3 turning_point classical N_turn=31.7295 share=0.0765 lnR/ln10=-57.77 birth=-0.702 refl=+0.875 track=+2.234@31.731
+   TRACK3 b5_M0.5_a0.1: A(tracker, all after birth) -0.039 fail 0.224 | B(late tracker only, N>43.606) +8.586 fail 0 | C(field mass) -0.703 fail 0.391
