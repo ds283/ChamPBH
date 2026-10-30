@@ -48,7 +48,7 @@ None assumes a form of the potential.
 import sys
 from abc import ABC, abstractmethod
 from collections import namedtuple
-from math import exp, expm1, isfinite, isnan, log, pi
+from math import exp, expm1, isfinite, isnan, log, pi, ulp
 from typing import Callable, List, Optional, Tuple
 
 from scipy.optimize import brentq
@@ -103,6 +103,13 @@ WALL_ROOT_XTOL = 1.0e-14
 # outer end's value is -inf, which brentq's interpolation cannot use
 WALL_SEARCH_MAX_DOUBLINGS = 64
 WALL_SEARCH_HALVINGS = 4
+# the width of ln V's rounding (inelastic-reflection prompt 07b; log 07b §1): _log_V_minus_floor is
+# -inf where ln V - ln V_floor <= K ulp(max(|ln V|, |ln V_floor|)). Two finite probes 2^-H e-folds
+# apart (H = WALL_SEARCH_HALVINGS, a halving midpoint against an end, the closest the search
+# compares) are ordered if (e^{s 2^-H} - 1)(K + 1 - rho) > 2 rho, for a model whose ln V - ln V_floor
+# is rounded within rho quanta and has |d ln(ln V - ln V_floor)/d ln phi| >= s. The exponential
+# (s = n = 1, rho = 1/2) needs K > 15.005; K = 16 is the next integer, with no margin beyond its 6 %
+WALL_ROUNDING_QUANTA = 16
 # the one-loop fixed point: from ell_0 = 32 (eq:chain-turn) until |delta ell| <= 1e-12 ell
 ONE_LOOP_ELL_START = 32.0
 ONE_LOOP_ELL_RTOL = 1.0e-12
@@ -128,8 +135,16 @@ def _failure(message: str):
 
 
 def _log_V_minus_floor(log_V: float, log_V_floor: float) -> float:
-    """ln(V - V_floor) from ln V and ln V_floor, -inf where V rounds to V_floor or below."""
+    """
+    ln(V - V_floor) from ln V and ln V_floor; -inf where V is below V_floor, or V rounds to V_floor,
+    or lies within K quanta of it: ln V - ln V_floor <= K ulp(max(|ln V|, |ln V_floor|)), K =
+    WALL_ROUNDING_QUANTA (inelastic-reflection prompt 07b). A difference that small is not resolved
+    by ln V's rounding. ln V = +inf has an infinite width and is not within it: it returns +inf.
+    """
     if not log_V > log_V_floor:
+        return _NEG_INF
+    width = WALL_ROUNDING_QUANTA * ulp(max(abs(log_V), abs(log_V_floor)))
+    if log_V - log_V_floor <= width < float("inf"):
         return _NEG_INF
     return log_V + log(-expm1(log_V_floor - log_V))
 
@@ -139,7 +154,8 @@ def _evaluate(residual: Callable[[float], float], x: float, context: str) -> flo
     residual(phi) at phi = e^x. A phi that is not a positive normal float, a hook that raises, or a
     value that is NaN or +inf ends the search as a ComputationFailureError naming the probe, with the
     hook's own exception chained (orchestrator note 04, ruling 3). -inf is allowed: it is
-    ln(V - V_floor) where V rounds to V_floor, or the minimum's residual where V' >= 0.
+    ln(V - V_floor) where V rounds to V_floor, or lies within K quanta of it, or the minimum's
+    residual where V' >= 0.
     """
     try:
         phi = exp(x)

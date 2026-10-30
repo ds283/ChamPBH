@@ -1,7 +1,7 @@
 # inelastic-reflection campaign — implementation state
 
 **Last updated:** 2026-10-30 · **Status: LIVE, RE-PLANNED 2026-10-29 (README §8): 04–12 replace
-the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29, landed in `e967cb7` and reviewed (2026-10-29; gate Park holds; one issue narrowed). 07 written 2026-10-29, landed in `5397f8f` (2026-10-30; gate Release holds, the lag as a sign-and-order test by the user's ruling of option (c); one issue narrowed) and reviewed (`0b8f420`). 07b inserted 2026-10-30 at the user's word (README §8.1 R18) and written, before 08: the wall search across 10⁻²⁵–10⁻¹³ M_P. Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
+the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29, landed in `e967cb7` and reviewed (2026-10-29; gate Park holds; one issue narrowed). 07 written 2026-10-29, landed in `5397f8f` (2026-10-30; gate Release holds, the lag as a sign-and-order test by the user's ruling of option (c); one issue narrowed) and reviewed (`0b8f420`). 07b inserted 2026-10-30 at the user's word (README §8.1 R18) and written, before 08: the wall search across 10⁻²⁵–10⁻¹³ M_P; landed in this commit (2026-10-30; gate Band holds; one issue closed). Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
 gate DR holds); 02 landed in `fe2a944` and reviewed (2026-10-28; gate Inject holds), after one
 stop and the user's ruling of interior sampling; 3 of 8 prompts written: 03 written 2026-10-28
 from log 02 §8, after the user ruled 𝒜₀ = 1 (README §6.1); 03 landed in `0afa199` and reviewed (2026-10-28;
@@ -43,7 +43,7 @@ bitwise the old code's.
 | 05 | [Unresolved turnarounds](05-unresolved-turnarounds.md) | φ_t < 10⁻⁸ M_P or 𝓡 > 1 → reflect at 3φ_t (R8); w_gate = 1 there and at the floor rule (R10, P20); the records; the warnings (P23) | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | `9c2483b` | [05](logs/05-unresolved-turnarounds.md) |
 | 06 | [Parking](06-parking.md) | the cut ρ_kin/ρ_R < ε (R14, P19, P21); the parked phase to T_CMB through the dense-output interface (R15); the tuning at small M measured | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | `e967cb7` | [06](logs/06-parking.md) |
 | 07 | [Unparking](07-unparking.md) | the release at the root of m/H = 10 on the parked step (R16, P24); the oscillating phase resumes; no second parking | Opus | ✍️ 2026-10-29 | ✅ 2026-10-30 | `5397f8f` | [07](logs/07-unparking.md) |
-| 07b | [The wall search at the rounding of ln V](07b-the-wall-search-at-the-rounding-of-ln-V.md) | the wall search's helper returns −∞ within the rounding of ln V (R18), with its width derived; dissipation mode measured across 10⁻²⁵–10⁻¹³ M_P; the one-loop gap measured for 08 | Opus | ✍️ 2026-10-30 | ⬜ | — | — |
+| 07b | [The wall search at the rounding of ln V](07b-the-wall-search-at-the-rounding-of-ln-V.md) | the wall search's helper returns −∞ within the rounding of ln V (R18), with its width derived; dissipation mode measured across 10⁻²⁵–10⁻¹³ M_P; the one-loop gap measured for 08 | Opus | ✍️ 2026-10-30 | ✅ 2026-10-30 | this commit | [07b](logs/07b-the-wall-search-at-the-rounding-of-ln-V.md) |
 | 08 | Spectrum peak and margins | the peak by 𝓡 (R7, P25); ℓ; the energy weight (U9); three worst margins and the first failure (R13) | Opus | ⬜ | ⬜ | — | — |
 | 09 | Store | α as a key (U3); the per-sample ratio; ΔN_eff at T_CMB and 1 MeV, the margins, parking and release as columns; JSON details; `AdiabaticHistory`; format 6, 2026.8.0 | Opus | ⬜ | ⬜ | — | — |
 | 10 | Driver and readers | `--alpha-values`; plot matching; Δg* and ΔN_eff figures (R12); scope; inventory; the tool | Sonnet | ⬜ | ⬜ | — | — |
@@ -80,7 +80,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 | Unresolved | α = 0 bitwise; an unresolved reflection is made at 3φ_t with w_gate = 1; the reflected history equals the resolved one in the probe's band; the warnings | 05 | ✅ 2026-10-29 (log 05 §4, §5.4; at M = 3×10⁻¹¹ the resolved comparison run itself fails, as the planner's did; D14 accepted by the user) |
 | Park | α = 0 bitwise; an M = 10⁻³⁰ drained history reaches T_CMB; parked samples on φ_min; H_E continuous at the switch; the leftover in the ledger; the guard | 06 | ✅ 2026-10-29 (log 06 §1.4, §2, §5.4; the guard tested with its threshold raised by a patch, as the prompt allows) |
 | Release | a parked field released at m/H < 10 continues; continuity at the release; the lag after it as estimated. *As ruled by the user (ruling 9, option (c)): the lag after the release has the sign of δ₁ and lies within the bound derived from each oscillation* | 07 | ✅ 2026-10-30 (log 07 §1.2, §1.4, §4, §5.2, §5.5) |
-| Band | α = 0 bitwise; every history outside the band bitwise 07's; every history of the band (β = 1.2, 2, 3 × M = 10⁻²⁷–10⁻¹³ M_P) reaches T_CMB; the width derived | 07b | ⬜ |
+| Band | α = 0 bitwise; every history outside the band bitwise 07's; every history of the band (β = 1.2, 2, 3 × M = 10⁻²⁷–10⁻¹³ M_P) reaches T_CMB; the width derived | 07b | ✅ 2026-10-30 (log 07b §1.2, §5.1, §5.4, §5.5) |
 | Margin | the three margins equal a hand computation; energy-weighted; the classical birth margin negative by construction; NULL at α = 0 | 08 | ⬜ |
 | Store | key and columns round-trip; two α are distinct rows; the new golden fingerprint; `AdiabaticHistory` bitwise at α = 0 and computed on parked samples | 09 | ⬜ |
 | Driver | α reaches every stage; an unstored α exits 2 in the plots; scope and inventory name α | 10 | ⬜ |
@@ -92,7 +92,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 
 ## 3. Active and unresolved issues
 
-One opened by the planner, one by prompt 04, one by prompt 05.
+One opened by the planner, one by prompt 04. Prompt 05's was closed by prompt 07b (§4).
 
 ### `[00-xav-sigma-is-non-monotone-at-25-35-keV]`
 
@@ -152,6 +152,25 @@ One opened by the planner, one by prompt 04, one by prompt 05.
   Histories that cross it lie near M = 10⁻¹⁵–10⁻¹⁷ M_P (ln 𝓡 from −19.7 to +4.2 decades at 10⁻¹⁶), inside
   the band where `[05-the-wall-search-refuses-a-wall-below-the-rounding-of-ln-V]` fails them. 07b
   measures the gap there, and 08 closes this issue.
+- **Measured (2026-10-30, prompt 07b, log 07b §5.3).** On the 30 band histories the chain raises
+  ("ell fell to …") on every candidate with 0.05 ≤ log₁₀ 𝓡 ≤ 2.92 and solves every one with
+  log₁₀ 𝓡 ≥ 3.00. The histories that cross the gap are β = 1.2 at M = 10⁻¹⁶, 10⁻¹⁷, 10⁻²⁰; β = 2 at
+  10⁻¹⁵–10⁻²⁰; β = 3 at 10⁻¹⁵–10⁻¹⁸. At M = 10⁻¹⁶ the generations in the gap carry 0.88, 0.59 and 0.52
+  of K (β = 1.2, 2, 3).
+
+### 3.1 Assigned to this campaign
+
+- **`[00-settling-at-physical-M-needs-a-parked-tracking-model]`** (`integrator-remediation` board
+  §3), assigned 2026-10-29 by the re-plan (README §8.6): prompts 06 and 07 build the parked tracker,
+  with the switch criterion supplied by the drain. The entry stays on its own board until it is
+  closed.
+  - **Narrowed (2026-10-30, prompt 07):** the switch, the tracker and the release are built and
+    measured (logs 06 and 07): every history of log 05's grid parks and reaches T_CMB, and the four
+    large-M histories whose tracker loses adiabaticity are released at m/H = 10 and reach T_CMB. What
+    remains is Q on the parked samples (`AdiabaticHistory`), which is 09's (README §8.1 R15). So 07
+    narrows it, and 09 closes it.
+
+## 4. Resolved issues
 
 ### `[05-the-wall-search-refuses-a-wall-below-the-rounding-of-ln-V]`
 
@@ -185,22 +204,12 @@ One opened by the planner, one by prompt 04, one by prompt 05.
   reach T_CMB, and leaves four histories outside the band bitwise.
 - **Assigned (2026-10-30)** to this campaign's prompt 07b, inserted before 08 at the user's word (README
   §8.1 R18), which closes it.
-
-### 3.1 Assigned to this campaign
-
-- **`[00-settling-at-physical-M-needs-a-parked-tracking-model]`** (`integrator-remediation` board
-  §3), assigned 2026-10-29 by the re-plan (README §8.6): prompts 06 and 07 build the parked tracker,
-  with the switch criterion supplied by the drain. The entry stays on its own board until it is
-  closed.
-  - **Narrowed (2026-10-30, prompt 07):** the switch, the tracker and the release are built and
-    measured (logs 06 and 07): every history of log 05's grid parks and reaches T_CMB, and the four
-    large-M histories whose tracker loses adiabaticity are released at m/H = 10 and reach T_CMB. What
-    remains is Q on the parked samples (`AdiabaticHistory`), which is 09's (README §8.1 R15). So 07
-    narrows it, and 09 closes it.
-
-## 4. Resolved issues
-
-None.
+- **Closed (2026-10-30, prompt 07b, this commit).** `_log_V_minus_floor` returns −∞ where
+  ln V − ln V_floor ≤ 16 ulp(max(|ln V|, |ln V_floor|)) (`WALL_ROUNDING_QUANTA`), the width derived
+  from the search's closest comparison of two finite values (log 07b §1). All 30 dissipation histories
+  of β = 1.2, 2, 3 × M = 10⁻¹³–10⁻²⁷ M_P reach T_CMB, 27 of which failed before. Every history outside
+  the band, and α = 0, is bitwise the dispatch commit's (log 07b §5). The width gives up roots with
+  E ≲ 10⁻¹² V_floor, which no measured history comes near.
 
 ## 5. Dispatch record
 
@@ -1240,3 +1249,46 @@ Asked two questions, the user chose:
 
 08 is written after 07b has landed and been reviewed (README §2.1), from log 07 §8, log 07b §8 and the
 probes' `peaks.out`.
+
+### 5.9 After prompt 07b (2026-10-30)
+
+07b landed in this commit, under orchestrator note 07b (rulings 1–11). Log:
+[`logs/07b-the-wall-search-at-the-rounding-of-ln-V.md`](logs/07b-the-wall-search-at-the-rounding-of-ln-V.md).
+- **What shipped** (`CosmologyConcepts/Models/AbstractModel.py`):
+  - `_log_V_minus_floor` returns −∞ where ln V − ln V_floor ≤ K ulp(max(|ln V|, |ln V_floor|)), with
+    K = `WALL_ROUNDING_QUANTA` = 16. Elsewhere it returns the shipped expression bitwise, and +∞ stays
+    +∞;
+  - the helper's docstring and `_evaluate`'s phrase say what −∞ now means. Beyond that, only the `ulp`
+    import changed.
+
+  The search, its constants, the methods, `assess_infall`, G2 and every model are unchanged.
+- **K derived** (log 07b §1). A halving midpoint 1/16 e-fold from a finite end binds:
+  (e^{1/16} − 1)(K + ½) > 1, so K > 15.005, for ρ = ½ quantum of rounding and slope s = n = 1. The
+  doubling's comparison, where every observed failure was, needs only K ≥ 1. The roots the width gives
+  up are D_t ≲ 17 quanta (E ≲ 10⁻¹² V_floor), measured by a synthetic scan; the edge is sharp at
+  K ≥ 15 and ragged at K = 0 and 1.
+- **Gate Band holds**:
+  - α = 0 bitwise, in the band too (M = 10⁻¹⁶, β = 2), warnings included;
+  - the 28 histories of prompt §2.4 bitwise the dispatch commit's on 27 keys, warnings included, and 12
+    more that ran at both trees;
+  - all 30 band histories (β = 1.2, 2, 3 × M = 10⁻¹³–10⁻²⁷) reach T_CMB, 27 of which failed at the
+    dispatch commit. They park at #6, #48 and #58 as log 06's do, with Σ + leftover within 3.4×10⁻⁸ of
+    M = 10⁻³⁰'s;
+  - K derived.
+- **The edges** at β = 2, at the dispatch commit: failures from 10⁻¹³·⁰⁰ to 10⁻²⁶·⁰⁰, contiguous on the
+  quarter-decade grid. 10⁻¹²·⁷⁵ and 10⁻²⁶·²⁵ run.
+- **For 08** (log 07b §5.3): the chain raises on every candidate with 0.05 ≤ log₁₀ 𝓡 ≤ 2.92 and solves
+  every one above. The histories that cross the gap are M = 10⁻¹⁵–10⁻²⁰. At M = 10⁻¹⁶ 52–88 % of K is
+  in the gap.
+- **Ruling 5:** the smallest margin of a root above the width is m_D = 25.18 (m = 25.22), against the
+  0.137 condition (3) needs. M = 10⁻¹² and 10⁻³⁰ have 367–2 760 reclassified helper calls and are
+  bitwise.
+- **Costs:** the helper is 172–188 ns per call against 94–98 ns. A band history takes 5.9 s against
+  6.2 s at M = 10⁻³⁰ (β = 2).
+- **Breakages:** B1 (16 failures), B2 (2), B3 (1), B4 (16). B2 is caught by item 1 alone; no input can
+  catch it at the binding comparison (log 07b §2).
+- **Counts:** 26 / 427 (96 + 331) / 103 / 115 / 64 before; 26 / **439** (96 + **343**) / 103 / 115 /
+  64 after, all passing.
+- **Issues:** closed `[05-the-wall-search-refuses-a-wall-below-the-rounding-of-ln-V]` (§4), with its
+  row removed from `.documents/OPEN_ISSUES.md` §1.19; opened none. Recorded the gap's measurement on
+  `[04-one-loop-chain-has-no-solution-just-above-R-equals-1]` (§3).

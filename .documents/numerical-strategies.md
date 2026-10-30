@@ -1399,6 +1399,60 @@ full to T_CMB and never parks again. The record is `prompts/inelastic-reflection
   ln T_J (2×10⁻⁴ to 10⁻²) is set before the release, by the parking. No history at M ≤ 10⁻⁷ M_P
   releases, and every history that does not release is bitwise prompt 06's. See log 07 §5.
 
+### 6.7 Added 2026-10-30 (`inelastic-reflection` prompt 07b): the wall search at the rounding of ln V
+
+The turning points' search (§6.4; `AbstractModel._search_log_field`) compares the residual
+ln(V − V_floor) − ln E at successive probes and refuses a probe that does not move towards the target.
+ln(V − V_floor) is formed from ln V and ln V_floor. The user ruled (README §8.1 R18) that the defect this
+caused is fixed before the peak and the margins. The record is
+`prompts/inelastic-reflection/logs/07b-the-wall-search-at-the-rounding-of-ln-V.md`.
+
+- **The quantization.** On the exponential, ln V = normalization + (M/φ)ⁿ is one rounded sum and
+  ln V_floor is the normalization, exactly. While both lie in one binade the difference D̂ is exact
+  (Sterbenz) and a whole number of quanta q = ulp(|ln V_floor|), 2⁻⁴⁴ = 5.68×10⁻¹⁴ at ln V₀ ≈ −276.6,
+  the nearest to the true D = (M/φ)ⁿ. So D̂ is within ρ = ½ quantum of D, and ln(V − V_floor) carries a
+  relative rounding of about 1/(2j) at j quanta. Two differences are ordered if their true values
+  differ by more than 2ρ quanta. The shipped helper returned −∞ only at D̂ = 0. A field at
+  u₀ = M/φ ∈ [0.50, 0.552)q has D̂ = 1, and the search's first probe, one e-fold in at e·u₀ < 1.5q, has
+  D̂ = 1 too. The equal residuals raised "not monotone", and the history failed.
+- **The width.** The helper returns −∞ where D̂ ≤ K ulp(max(|ln V|, |ln V_floor|)). A finite value
+  then has D ≥ (K + 1 − ρ)q. The search compares two finite values at three kinds of place. With s the
+  slope of ln D in ln φ (s = n on the exponential, at every u), these are:
+  1. consecutive doubling probes, at least 1 e-fold apart;
+  2. a halving midpoint against a finite end, at least 2^−H e-folds apart (H = 4 halvings);
+  3. while the outer end is −∞, a midpoint past the root against the inner end.
+
+  Places (1) and (2) are strict for every input if (e^{s·sep} − 1)(K + 1 − ρ) > 2ρ. Place (2) binds:
+  (e^{1/16} − 1)(K + ½) > 1, so K > 15.005 and **K = 16**. The 6 % headroom of the integer step covers
+  the ε-relative roundings of M/φ, e^x and the midpoints. Place (1) alone gives K ≥ 1, and every
+  failure seen was at place (1), so K = 1 also fixes those failures; it leaves place (2) unguarded
+  for roots within about 15 quanta.
+- **The unresolvable region.** Place (3) depends on the root, not on K. Let D_t = ln(1 + E/V_floor)
+  and t = D_t/((K + ρ)q). It is strict if (K + ρ) t (√t − 1) > 2ρ, which at K = 16 is D_t > 18.35q, or
+  ln(D_t/(Kq)) > 0.137. A synthetic scan of fields 0.3–60q and roots 0.4–80q gives a sharp edge:
+  - at K = 16, every root above 17.0q is found and every one below 16.9q raises ("a midpoint … is not
+    between its ends");
+  - at K = 0 and 1 the failures are ragged up to 15q;
+  - at K = 64 the edge is at 65q.
+
+  So the width costs roots with E ≲ 10⁻¹² V_floor. On every history measured the smallest root lies
+  31–32 e-folds above the edge in ln D_t (25 at M = 10⁻³ M_P, β = 0.5).
+- **The band, before and after** (test_injection's setup, α = 0.1):
+  - Shipped: every history fails, at its first infall or soon after, at β = 1.2, 2 and 3 for every M
+    from 10⁻¹³ to 10⁻²⁵ M_P. At β = 2 the failures run from 10⁻¹³·⁰⁰ to 10⁻²⁶·⁰⁰ by quarter
+    decades, contiguously. 10⁻¹²·⁷⁵ and 10⁻²⁶·²⁵ run. The upper edge is where a field starting at
+    φ* = 5 M_P first meets u₀ = 0.552q: M ≈ 1.6×10⁻¹³ M_P.
+  - With the width: all of these reach T_CMB. They park at candidates 6, 48 and 58 (β = 1.2, 2, 3) at
+    N = 28.364, 30.349 and 29.394, with Σ Δρ/ρ_R and the leftover equal to the M = 10⁻³⁰ value
+    within 1.6×10⁻⁸, 3.1×10⁻¹³ and 3.4×10⁻⁸ relative.
+  - The candidates' 𝓡 crosses the one-loop gap near M = 10⁻¹⁵–10⁻²⁰ M_P, and the one-loop chain
+    raises on every candidate with 1 < 𝓡 < 10^2.92 (log 07b §5.3, for prompt 08).
+- **What does not change.** The 28 histories outside the band (log 05's grid, M = 0.5 and 10⁻³ M_P,
+  natural mode) are bitwise the shipped code's, warnings included. At M = 10⁻¹² and 10⁻³⁰ M_P the
+  width reclassifies 367–2 760 helper calls per history, and the search reaches the same roots.
+  `assess_infall` keeps its own expression for ln E, so ln E is unchanged everywhere. The helper costs
+  about 90 ns more per call (180 against 95 ns), about 17 ms on a β = 2 history of 190 000 calls.
+
 ---
 
 ## 7. From scalar history to BBN via PRyMordial (`ComputeTargets/BBNData.py`)

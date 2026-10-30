@@ -1496,6 +1496,29 @@ class AbstractModel(DatastoreObject):
 > `_failure`, because a top-level import would make `import CosmologyConcepts.Models` circular.
 > Nothing in the integrator calls these yet; they are tested in `ComputeTargets/tests/test_wall_model.py`.
 
+> **Note, 2026-10-30 (`inelastic-reflection`, prompt 07b).** The turning points form ln(V − V_floor)
+> from ln V and ln V_floor in one helper, `_log_V_minus_floor`. It now returns −∞ where
+> ln V − ln V_floor ≤ K ulp(max(|ln V|, |ln V_floor|)), with K = `WALL_ROUNDING_QUANTA` = 16, as well
+> as where V is at or below V_floor. So −∞ means "V rounds to V_floor, or lies within K quanta of it":
+> a difference that ln V's rounding does not resolve.
+> - **Why.** Where M/φ is a few ulps of ln V (5.68×10⁻¹⁴ at ln V ≈ −276.6) the difference is a whole
+>   number of quanta, and two probes of the search could see the same residual and raise "not
+>   monotone". At α > 0 every infalling step start is assessed, so the raise failed the history. With
+>   the shipped helper every dissipation history failed this way at its first infall or soon after,
+>   from M = 10⁻¹³ to 10⁻²⁶ M_P at β = 2 (the edges at a quarter decade), and at every M tried from
+>   10⁻¹³ to 10⁻²⁵ at β = 1.2 and 3. With the width all of them reach T_CMB and park where the
+>   histories at M = 10⁻³⁰ do.
+> - **The width** is derived, not chosen (log 07b §1): it is the smallest integer for which every
+>   comparison the search makes between two finite values is strict, given half a quantum of rounding
+>   and a slope of 1 in ln φ. `numerical-strategies.md` §6.7 has the derivation.
+> - **What does not change.** The search, its constants, the methods' signatures and every model; no
+>   model overrides the helper. `ScalarHistory.assess_infall` forms ln E with its own expression and
+>   is unchanged. Every history outside the band, and α = 0, is bitwise what it was.
+> - **The cost of the width.** A root that lies within about 17 quanta of the floor
+>   (E ≲ 10⁻¹² V_floor) cannot be found: the search raises. In `one_loop_turnaround`,
+>   `outside_classical` is True where V(φ_ta) is within the width. Tests:
+>   `ComputeTargets/tests/test_wall_rounding.py`.
+
 ### 8.5 Cosmological Models (`CosmologyModels/`)
 
 `BaseCosmology` is the abstract base:
