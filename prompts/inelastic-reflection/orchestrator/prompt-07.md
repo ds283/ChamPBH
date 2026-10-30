@@ -192,6 +192,19 @@ outputs, and the probes. What it found, where the prompt is silent, loose or wro
    breakages. **If the derived tolerance cannot fail δ₁ × 2 on some oscillation, stop and ask**: the
    prompt's two requirements then conflict, and which gives way is the user's. β = 10 is measured
    (§2.4), not tested. *IMPLEMENTATION CHOICE*, ruled here, with the stop.
+
+   **Amended 2026-10-30, at the user's word ("OK, go with (c). I am not sure this matters a
+   lot."), after the agent stopped on this ruling.** The derived per-oscillation tolerance is the
+   non-closure term plus the anharmonic shift from the half-swing, 1.9–3.7 |⟨δ₁⟩| on the first
+   eight oscillations at β = 5. It cannot fail δ₁ × 2 or × ½. The test is therefore a
+   sign-and-order test:
+   - on every oscillation, ⟨φ − φ_min⟩ has the sign of ⟨δ₁⟩;
+   - on every oscillation, |⟨φ − φ_min⟩ − ⟨δ₁⟩| is within that derived bound.
+
+   δ₁ × −1 must fail it. × 2 and × ½ are recorded in the log as not catchable, with the bound
+   beside them. The measured ratios (0.99–1.19 at β = 5, and β = 10's) are reported in §2.4 as a
+   measurement. Neither the bound nor the ratios are fitted. *IMPLEMENTATION CHOICE*, ruled by the
+   user.
 10. **§2.5 against the dispatch commit**, in one temporary worktree of this note's commit, removed
     afterwards:
     - every history that does not release, whole, against the dispatch commit, bitwise: the records,
