@@ -115,15 +115,24 @@ UNRESOLVED_PHI_T_THRESHOLD_MP = 1.0e-8
 #                                    candidate after the history's first (R14: "relative to `rho_R`,
 #                                    although the exact value of `epsilon` used may need to be tuned")
 #   PARKING_ADIABATICITY_THRESHOLD:  m_eff/H_E of the zero-lag tracker: the cut parks only where it is at
-#                                    least this (R14), and a parked step end below it is a failure of
-#                                    the history in prompt 06. It is also prompt 07's release (R16: "I
-#                                    suggest `m/H < 10`")
+#                                    least this (R14). A parked step end below it was a failure of the
+#                                    history in prompt 06; since prompt 07 the field is released there,
+#                                    at the root of m_eff/H_E = this on the step (R16: "I suggest
+#                                    `m/H < 10`")
 #   PARKING_PI_GUARD_MP:             P21's guard: |pi_in| below this, in units of M_P, at a reflection
 #                                    where the cut did not fire is a failure of the history ("a sign of
 #                                    a bug", R14); multiplied by the units' PlanckMass where it is used
 PARKING_EPSILON = 1.0e-6
 PARKING_ADIABATICITY_THRESHOLD = 10.0
 PARKING_PI_GUARD_MP = 1.0e-9
+
+# the release (inelastic-reflection prompt 07; README §8.1 R16): brentq's tolerances for the root of
+# m_eff/H_E = PARKING_ADIABATICITY_THRESHOLD on a parked step's segment, in N (orchestrator note 07,
+# ruling 2). Neither is a key. RELEASE_ROOT_RTOL is the smallest brentq accepts; at N ~ 40-150 it and
+# RELEASE_ROOT_XTOL put the root within about 1e-13 e-folds, so that m_eff/H_E there is the threshold
+# to |d(m_eff/H_E)/dN| times that, about 1e-12 (log 07 §1.2 derives it)
+RELEASE_ROOT_XTOL = 1.0e-14
+RELEASE_ROOT_RTOL = 4.0 * float(np.finfo(float).eps)
 
 # the warnings of a history (inelastic-reflection prompt 05; README §8.1 R6, §8.2 P23), returned by
 # integrate_scalar_history and printed once per history by tune_history. Each line begins with one
@@ -318,9 +327,13 @@ Injection = namedtuple(
 #   H_Einstein_parked:         H_E at the parked state, with the leftover in the ledger
 #   delta_log_A:               ln A(phi_min) - ln A(phi_Einstein), the switch's move of the coupling
 #   parked_steps:              the parked phase's accepted steps (IntegrationResult.accepted_steps
-#                              counts both phases)
+#                              counts both phases). For a released history (prompt 07) the parked
+#                              steps up to and including the one the release falls in
 #   min_m_eff_over_H:          the smallest m_eff/H_E of the tracker: the switch's and that of every
-#                              parked step end, the history's end included
+#                              parked step end, the history's end included. For a released history
+#                              (prompt 07) the switch's, the checks that passed and the release's own
+#                              (Release.m_eff_over_H); the check that failed lies after the release,
+#                              is not part of the parked phase, and is in Release.m_eff_over_H_check
 Parking = namedtuple(
     "Parking",
     [
@@ -342,6 +355,52 @@ Parking = namedtuple(
         "min_m_eff_over_H",
     ],
 )
+
+# the release of a parked field (inelastic-reflection prompt 07; README §8.1 R16, §8.2 P24), on
+# IntegrationResult.release; None if the history was not released. Floats and ints only (orchestrator
+# note 07, ruling 11): nothing callable, so that it crosses Ray in integrate_history's payload. The
+# release is at the root of m_eff/H_E = PARKING_ADIABATICITY_THRESHOLD on the parked step whose end
+# check found the tracker below it; the oscillating loop resumes there with a new Radau instance, and
+# the field never parks again (P24)
+#   N, log_T_Jordan:           the release, N_rel, the root; and ln T_J there. It is the last node of
+#                              the parked phase in the solution's ts, and the first of the oscillating
+#                              phase that resumes
+#   phi_Einstein, pi_Einstein: the tracker's (phi_min, pi_min) at N_rel: the released state's field,
+#                              the parked segment's value there, from which the new Radau starts
+#   m_eff_over_H:              m_eff/H_E of the tracker at N_rel, the root's value (the threshold to the
+#                              root's tolerance)
+#   N_check:                   the N of the check that failed: the parked step's end, or N_final on
+#                              the step that ends the history
+#   m_eff_over_H_check:        m_eff/H_E there, below the threshold
+#   H_Einstein:                H_E at N_rel, with the ledger as it stands (nothing is drained or added
+#                              at the release)
+#   candidate_index:           the index in IntegrationResult.injections of the first candidate after
+#                              the release, which is the number of candidates before it; equal to
+#                              len(injections) if no candidate follows
+#   steps_after:               the accepted steps after the release, all oscillating
+#                              (IntegrationResult.accepted_steps counts every phase)
+Release = namedtuple(
+    "Release",
+    [
+        "N",
+        "log_T_Jordan",
+        "phi_Einstein",
+        "pi_Einstein",
+        "m_eff_over_H",
+        "N_check",
+        "m_eff_over_H_check",
+        "H_Einstein",
+        "candidate_index",
+        "steps_after",
+    ],
+)
+
+# the end of a parked phase, handed back from the parked phase to the loop (prompt 07; orchestrator note
+# 07, ruling 1): a return value, never an exception
+#   N, state:  the history's end (released False), or the release's N_rel and its state, the parked
+#              segment's value there, from which the oscillating loop resumes (released True)
+#   released:  whether the field was released
+_ParkedPhaseEnd = namedtuple("_ParkedPhaseEnd", ["N", "state", "released"])
 
 # what integrate_scalar_history returns
 #   solution:                    scipy OdeSolution over [N_start, N_final], right-continuous at its
@@ -372,6 +431,9 @@ Parking = namedtuple(
 #   parking:                     the Parking record of the switch to the parked phase
 #                                (inelastic-reflection prompt 06), or None if the history did not
 #                                park. After the switch the solution's segments are ParkedSegments
+#   release:                     the Release record of the release of the parked field (inelastic-
+#                                reflection prompt 07), or None if the history was not released. Its
+#                                segments from Release.N on are Radau's again
 IntegrationResult = namedtuple(
     "IntegrationResult",
     [
@@ -388,6 +450,7 @@ IntegrationResult = namedtuple(
         "dropped_drains",
         "warnings",
         "parking",
+        "release",
     ],
 )
 
@@ -1056,8 +1119,8 @@ def tracker_adiabatic(m_eff_over_H: float) -> bool:
     """
     The zero-lag tracker's adiabaticity (prompt 06 §1.2, §1.3; README §8.1 R14, R16): True iff
     m_eff/H_E >= PARKING_ADIABATICITY_THRESHOLD. The cut parks only where it is True, and a parked
-    step end where it is False is a failure of the history (orchestrator note 06, ruling 1; prompt 07
-    replaces that failure with the release). A NaN is False. The threshold is read at call time.
+    step end where it is False releases the field (prompt 07; it was a failure of the history in
+    prompt 06, orchestrator note 06, ruling 1). A NaN is False. The threshold is read at call time.
     """
     return m_eff_over_H >= PARKING_ADIABATICITY_THRESHOLD
 
@@ -1458,11 +1521,22 @@ def integrate_scalar_history(
         Parking. The parked phase integrates (ln rho_R,E, ln f_m, ln T_J) by DOP853 on ParkedRHS, the
         right-hand side's components 2-4 at the tracker, to the history's end, and appends one
         ParkedSegment per accepted step to the dense output, each returning the full five-component
-        state. Nothing else runs there: no turning points, candidates or assessments. A step end at
-        which the tracker's m_eff/H_E falls below the threshold is a failure of the history;
+        state. Nothing else runs there: no turning points, candidates or assessments;
       - at a reflection where the cut did not fire, |pi_in| < PARKING_PI_GUARD_MP M_P is a failure of
         the history (parking_guard; P21).
     At alpha = 0 none of this runs (P22).
+
+    The release (inelastic-reflection prompt 07; README §8.1 R16, §8.2 P24). A parked step end (or
+    N_final on the step that ends the history) at which the tracker's m_eff/H_E is below
+    PARKING_ADIABATICITY_THRESHOLD releases the field: at N_rel, the root of m_eff/H_E = the threshold
+    on that step's ParkedSegment (brentq, RELEASE_ROOT_XTOL, RELEASE_ROOT_RTOL), which becomes the
+    step's node in ts. The released state is the segment's at N_rel; nothing is drained or added to
+    the ledger. The parked phase returns it to the loop, which starts a new Radau instance there, as
+    after a drain, with no drain armed, no infall assessment, and the gate's half-oscillation begun
+    at N_rel with no sample. The history then goes on to its end in the oscillating phase, draining
+    at its candidates, and never parks again: after the release no candidate makes the ratio test or
+    calls the tracker (P24). The guard still runs at every reflection. The Release record is
+    IntegrationResult.release.
 
     :param RHS: callable RHS(N, state, supervisor), normally an ODERHS
     :param supervisor: the ScalarFieldIntegrationSupervisor (already entered)
@@ -2014,14 +2088,21 @@ def integrate_scalar_history(
     # parking (inelastic-reflection prompt 06; README §8.1 R14, R15, §8.2 P19, P21), at alpha > 0 on a
     # model with a wall only (assess_wall); at alpha = 0 none of it runs (P22)
     #   parking:  the Parking record of the switch, or None; the switch is made at most once, and the
-    #             history then ends in the parked phase
+    #             history then ends in the parked phase, or is released (prompt 07)
+    #   release:  the Release record of the release (inelastic-reflection prompt 07; README §8.1 R16,
+    #             §8.2 P24), or None; once it is set no candidate makes the ratio test or calls the
+    #             tracker, so the field never parks again
+    #   accepted_at_release: accepted_steps at the release, from which Release.steps_after is counted
     parking: Optional[Parking] = None
+    release: Optional[Release] = None
+    accepted_at_release: int = 0
 
     def run_parked_phase(record: Parking, phi_anchor: float, y_parked: np.ndarray):
         """
         The parked phase (prompt 06 §1.3; orchestrator note 06, rulings 3, 7, 9 and 11), from the
-        switch's N and the parked state y_parked to the history's end. Returns (N_final, final_state,
-        the parked steps, the smallest m_eff/H_E of the tracker).
+        switch's N and the parked state y_parked to the history's end or to the release (prompt 07).
+        Returns (_ParkedPhaseEnd, the parked steps, the smallest m_eff/H_E of the tracker); at a
+        release it also sets `release`.
 
         The reduced state (ln rho_R,E, ln f_m, ln T_J) is integrated by DOP853 with params.rtol,
         params.atol and params.global_max_step as its largest step, on ParkedRHS, which evaluates
@@ -2030,10 +2111,14 @@ def integrate_scalar_history(
         from the previous step's end, and the solver's derivative there is re-evaluated with it, so
         that every evaluation of one step, and its segment, searches from the same float. Each
         accepted step appends a ParkedSegment to ts and interpolants. At the end of every accepted step
-        (at N_final on the step that ends the history) the tracker's m_eff/H_E < the threshold is a
-        failure of the history. The end is the oscillating phase's: the first step with
-        ln T_J < log_T_stop, at the root on its interpolant; N_stop; or N_failsafe, a failure. The step
-        budget counts both phases. A ComputationFailureError from the right-hand side, the model or the
+        (at N_final on the step that ends the history) the tracker's m_eff/H_E is checked; below the
+        threshold the field is released on that step (prompt 07; README §8.1 R16): at the root N_rel
+        of m_eff/H_E = PARKING_ADIABATICITY_THRESHOLD on the step's ParkedSegment, between its left
+        node and the point checked (release_on_step). Otherwise the end is the oscillating phase's: the
+        first step with ln T_J < log_T_stop, at the root on its interpolant; N_stop; or N_failsafe, a
+        failure. On the step that ends the history the check at N_final comes first, so a tracker below
+        the threshold there is released, and the oscillating phase ends the history. The step budget
+        counts both phases. A ComputationFailureError from the right-hand side, the model or the
         tracker is the history's failure, with no step halving or retry: every failure reason here
         names the switch.
         """
@@ -2059,18 +2144,93 @@ def integrate_scalar_history(
         parked_steps = 0
         min_m_eff_over_H: float = record.m_eff_over_H
 
-        def check(N_: float, y_: np.ndarray) -> None:
-            """The tracker's adiabaticity at a step end (ruling 11), with the ledger as it stands."""
+        def fold_minimum(m_eff_over_H_: float) -> None:
             nonlocal min_m_eff_over_H
-            m_eff_over_H_, _ = guarded(tracker_m_eff_over_H, policy, hubble, N_, y_)
             if not (m_eff_over_H_ >= min_m_eff_over_H):
                 min_m_eff_over_H = m_eff_over_H_
+
+        def check(N_: float, y_: np.ndarray) -> Optional[float]:
+            """
+            The tracker's adiabaticity at a step end (ruling 11), with the ledger as it stands.
+            Returns None where it holds, its m_eff/H_E folded into the minimum; and m_eff/H_E where it
+            does not, unfolded: that check lies after the release, and is not part of the parked
+            phase (orchestrator note 07, ruling 4).
+            """
+            m_eff_over_H_, _ = guarded(tracker_m_eff_over_H, policy, hubble, N_, y_)
             if not tracker_adiabatic(m_eff_over_H_):
-                raise failure(
-                    f"the parked tracker lost adiabaticity: m_eff/H_E = {m_eff_over_H_:.5g} < "
-                    f"{PARKING_ADIABATICITY_THRESHOLD:.3g} at N = {N_:.10g}, "
-                    f"T_J = {exp(y_[4]) / MeV:.5g} MeV"
+                return m_eff_over_H_
+            fold_minimum(m_eff_over_H_)
+            return None
+
+        def release_on_step(
+            segment_: ParkedSegment,
+            appended: bool,
+            N_check: float,
+            m_eff_over_H_check: float,
+        ) -> _ParkedPhaseEnd:
+            """
+            The release (prompt 07 §1.1; orchestrator note 07, rulings 2-4), on the step whose check at
+            N_check gave m_eff/H_E = m_eff_over_H_check below the threshold. g(N) = m_eff/H_E of the
+            tracker at segment_(N), a scalar call, less PARKING_ADIABATICITY_THRESHOLD, with the ledger
+            as it stands; evaluated at the step's left node on the segment, not taken from the check
+            there. If g > 0 there, N_rel is brentq's root on [left node, N_check] with
+            RELEASE_ROOT_XTOL and RELEASE_ROOT_RTOL, and it replaces the step's node in ts (N_check,
+            or N_end on the step that ends the history: never appended twice); the segment stays. If
+            g <= 0 there, the release is at the left node, and the step's segment, if appended, is
+            removed: no zero-length segment. The released state is segment_(N_rel), one scalar call,
+            the floats the root's last evaluation there saw. Nothing is drained and nothing is added
+            to the ledger. The step stays counted in accepted_steps and parked_steps.
+            """
+            nonlocal release, accepted_at_release
+            N_left: float = float(segment_.t_min)
+
+            def g(N__: float) -> float:
+                y__ = guarded(segment_, N__)
+                m__, _ = guarded(tracker_m_eff_over_H, policy, hubble, N__, y__)
+                return m__ - PARKING_ADIABATICITY_THRESHOLD
+
+            g_left: float = g(N_left)
+            if g_left > 0.0:
+                g_check: float = g(N_check)
+                if not (g_check < 0.0):
+                    raise failure(
+                        f"cannot bracket the release on the step [{N_left:.10g}, {N_check:.10g}] "
+                        f"(m_eff/H_E - {PARKING_ADIABATICITY_THRESHOLD:.3g} = {g_left:.5g}, "
+                        f"{g_check:.5g} on the segment; {m_eff_over_H_check:.5g} at the check)"
+                    )
+                N_rel: float = float(
+                    brentq(
+                        g,
+                        N_left,
+                        N_check,
+                        xtol=RELEASE_ROOT_XTOL,
+                        rtol=RELEASE_ROOT_RTOL,
+                    )
                 )
+                ts[-1] = N_rel
+            else:
+                N_rel = N_left
+                if appended:
+                    ts.pop()
+                    interpolants.pop()
+
+            y_rel = guarded(segment_, N_rel)
+            m_rel, H_rel = guarded(tracker_m_eff_over_H, policy, hubble, N_rel, y_rel)
+            fold_minimum(m_rel)
+            release = Release(
+                N=N_rel,
+                log_T_Jordan=float(y_rel[4]),
+                phi_Einstein=float(y_rel[0]),
+                pi_Einstein=float(y_rel[1]),
+                m_eff_over_H=m_rel,
+                N_check=float(N_check),
+                m_eff_over_H_check=float(m_eff_over_H_check),
+                H_Einstein=H_rel,
+                candidate_index=len(injections),
+                steps_after=0,
+            )
+            accepted_at_release = accepted_steps
+            return _ParkedPhaseEnd(N=N_rel, state=y_rel, released=True)
 
         anchor: float = float(phi_anchor)
         rhs_parked = ParkedRHS(fun, model, cosmology_, anchor)
@@ -2123,7 +2283,8 @@ def integrate_scalar_history(
                         f"cannot bracket the termination root on the last step [{N_low:.10g}, "
                         f"{N_high:.10g}] (ln T_J - log_T_stop = {g_low:.5g}, {g_high:.5g})"
                     )
-                if g_low == 0.0:
+                appended: bool = g_low != 0.0
+                if not appended:
                     # the previous accepted state sits exactly on log_T_stop: it is the final node
                     N_end: float = N_low
                 else:
@@ -2131,10 +2292,16 @@ def integrate_scalar_history(
                     ts.append(N_end)
                     interpolants.append(segment)
                 y_end = guarded(segment, N_end)
-                check(N_end, y_end)
+                m_failed = check(N_end, y_end)
+                if m_failed is not None:
+                    # the release comes first, and the oscillating phase ends the history (prompt 07
+                    # §1.1 item 5)
+                    released_ = release_on_step(segment, appended, N_end, m_failed)
+                    return released_, parked_steps, min_m_eff_over_H
                 return (
-                    N_end,
-                    StateVector._make(y_end),
+                    _ParkedPhaseEnd(
+                        N=N_end, state=StateVector._make(y_end), released=False
+                    ),
                     parked_steps,
                     min_m_eff_over_H,
                 )
@@ -2146,14 +2313,18 @@ def integrate_scalar_history(
                 parked_tracker, model, cosmology_, anchor, psolver.y
             )
             y_end = np.array([phi_end, pi_end, *psolver.y], dtype=float)
-            check(psolver.t, y_end)
+            m_failed = check(psolver.t, y_end)
+            if m_failed is not None:
+                released_ = release_on_step(segment, True, psolver.t, m_failed)
+                return released_, parked_steps, min_m_eff_over_H
             anchor = phi_end
 
             if psolver.status == "finished":
                 if stop_at_bound:
                     return (
-                        psolver.t,
-                        StateVector._make(y_end),
+                        _ParkedPhaseEnd(
+                            N=psolver.t, state=StateVector._make(y_end), released=False
+                        ),
                         parked_steps,
                         min_m_eff_over_H,
                     )
@@ -2166,14 +2337,18 @@ def integrate_scalar_history(
         """
         The cut at a candidate (prompt 06 §1.2; orchestrator note 06, ruling 2), after candidate()
         has recorded it and made its drain; y_post is the state after it (pi is not read). Returns
-        None if the history goes on, or (N_final, final_state) once the parked phase has ended it.
+        None if the history goes on, or the parked phase's _ParkedPhaseEnd: the history's end
+        (released False), or the release (released True), from which the loop resumes (prompt 07;
+        orchestrator note 07, ruling 1).
           - the ratio test on the candidate's index and rho_kin,E/rho_R,E, rho_kin,E its log_rho_kin
-            (from before its drain), rho_R,E the state's;
+            (from before its drain), rho_R,E the state's. After a release (prompt 07; README §8.2
+            P24) neither the ratio test nor the tracker is called: the field never parks again;
           - if it passes, the tracker at y_post (cut_tracker), and the decision on its m_eff/H_E;
           - if both hold, the switch: the leftover (the drained state's rho_kin,E, from the candidate's
             H_Einstein_after and pi_after) into the ledger at the same N (P19); H_E at the parked state
             with it; the record; armed cleared; the parked phase;
-          - at a reflection (pi_in given) where the cut did not fire, the guard (P21).
+          - at a reflection (pi_in given) where the cut did not fire, the guard (P21), after a
+            release too; its reason then says that the field was released, and where.
         """
         nonlocal parking, armed, armed_assessment
         index: int = len(injections) - 1
@@ -2181,7 +2356,7 @@ def integrate_scalar_history(
         ratio: float = exp(record_.log_rho_kin - float(y_post[2]))
 
         tracker: Optional[CutTracker] = None
-        if parking_ratio_test(index, ratio):
+        if release is None and parking_ratio_test(index, ratio):
             tracker = cut_tracker(policy, hubble, N_, y_post)
             if tracker_adiabatic(tracker.m_eff_over_H):
                 delta_K, delta_rho_over_rho_rad = parking_leftover(
@@ -2215,20 +2390,23 @@ def integrate_scalar_history(
                     parked_steps=0,
                     min_m_eff_over_H=tracker.m_eff_over_H,
                 )
-                N_end, final_state_, parked_steps, min_m_eff_over_H = run_parked_phase(
+                end_, parked_steps, min_m_eff_over_H = run_parked_phase(
                     parking, tracker.phi_root, y_parked
                 )
                 parking = parking._replace(
                     parked_steps=parked_steps, min_m_eff_over_H=min_m_eff_over_H
                 )
-                return N_end, final_state_
+                return end_
 
         if pi_in is not None and parking_guard(pi_in, Mp):
-            m_text: str = (
-                "not computed (the ratio test did not pass)"
-                if tracker is None
-                else f"{tracker.m_eff_over_H:.5g}"
-            )
+            if tracker is not None:
+                m_text: str = f"{tracker.m_eff_over_H:.5g}"
+            elif release is not None:
+                m_text = (
+                    f"not computed (the field was released at N = {release.N:.10g})"
+                )
+            else:
+                m_text = "not computed (the ratio test did not pass)"
             raise ComputationFailureError(
                 f"integrate_scalar_history{label}: the |pi| guard (P21): a reflection of kind "
                 f"{kind} at N = {N_:.10g} with |pi_in| = {abs(pi_in) / Mp:.5g} M_P < "
@@ -2236,6 +2414,22 @@ def integrate_scalar_history(
                 f"(rho_kin/rho_R,E = {ratio:.5g}, m_eff/H_E = {m_text})"
             )
         return None
+
+    def resume_after_release(end_: _ParkedPhaseEnd):
+        """
+        The hand-back of a release to the oscillating loop (prompt 07 §1.1 items 5 and 6; orchestrator
+        note 07, ruling 1): a new Radau instance from the released state at N_rel, as after a drain,
+        and the state the loop carries reset: no drain armed, no infall assessment, and the gate's
+        half-oscillation begins at N_rel with no sample, so that no sample from before the switch
+        reaches a candidate after the release. The warnings already made stand.
+        """
+        nonlocal armed, armed_assessment, infall_assessment, running_max, boundary_N
+        armed = None
+        armed_assessment = None
+        infall_assessment = None
+        running_max = None
+        boundary_N = float(end_.N)
+        return new_solver(float(end_.N), np.array(end_.state, dtype=float))
 
     try:
         while True:
@@ -2313,7 +2507,12 @@ def integrate_scalar_history(
                 if assess_wall:
                     parked = cut(N, y_reflected, kind, pi_)
                     if parked is not None:
-                        N_final, final_state = parked
+                        if parked.released:
+                            # the release (prompt 07): the loop resumes from the released state,
+                            # not from y_reflected
+                            solver = resume_after_release(parked)
+                            continue
+                        N_final, final_state = parked.N, parked.state
                         break
 
                 solver = new_solver(N, y_reflected)
@@ -2456,8 +2655,14 @@ def integrate_scalar_history(
                             None,
                         )
                         if parked is not None:
-                            N_final, final_state = parked
-                            break
+                            if parked.released:
+                                # the release (prompt 07): the loop resumes from the released
+                                # state, and makes no restart from y_drained
+                                solver = resume_after_release(parked)
+                                y_drained = None
+                            else:
+                                N_final, final_state = parked.N, parked.state
+                                break
                     if y_drained is not None:
                         solver = new_solver(solver.t, y_drained)
                 armed = None
@@ -2490,6 +2695,11 @@ def integrate_scalar_history(
         dropped_drains=dropped_drains,
         warnings=tuple(warnings),
         parking=parking,
+        release=(
+            None
+            if release is None
+            else release._replace(steps_after=accepted_steps - accepted_at_release)
+        ),
     )
 
 
@@ -3157,6 +3367,9 @@ def integrate_history(
         # the switch to the parked phase, a Parking record of floats and ints, or None if the history
         # did not park (inelastic-reflection prompt 06); not stored
         "parking": result.parking,
+        # the release of the parked field, a Release record of floats and ints, or None if the
+        # history was not released (inelastic-reflection prompt 07); not stored
+        "release": result.release,
     }
 
 

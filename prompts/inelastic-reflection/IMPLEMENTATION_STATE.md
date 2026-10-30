@@ -1,7 +1,7 @@
 # inelastic-reflection campaign — implementation state
 
-**Last updated:** 2026-10-29 · **Status: LIVE, RE-PLANNED 2026-10-29 (README §8): 04–12 replace
-the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29, landed in `e967cb7` and reviewed (2026-10-29; gate Park holds; one issue narrowed). 07 written 2026-10-29. Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
+**Last updated:** 2026-10-30 · **Status: LIVE, RE-PLANNED 2026-10-29 (README §8): 04–12 replace
+the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29, landed in `e967cb7` and reviewed (2026-10-29; gate Park holds; one issue narrowed). 07 written 2026-10-29, landed in this commit (2026-10-30; gate Release holds, the lag as a sign-and-order test by the user's ruling of option (c); one issue narrowed). Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
 gate DR holds); 02 landed in `fe2a944` and reviewed (2026-10-28; gate Inject holds), after one
 stop and the user's ruling of interior sampling; 3 of 8 prompts written: 03 written 2026-10-28
 from log 02 §8, after the user ruled 𝒜₀ = 1 (README §6.1); 03 landed in `0afa199` and reviewed (2026-10-28;
@@ -42,7 +42,7 @@ bitwise the old code's.
 | 04 | [The wall through the model](04-the-wall-through-the-model.md) | φ_t, V″, 𝓡, the one-loop turnaround, the full-trace minimum and ∂φ_min/∂ ln T as model methods with generic defaults (R9); dφ_min/dN moves to 06 | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | `81b933f` | [04](logs/04-the-wall-through-the-model.md) |
 | 05 | [Unresolved turnarounds](05-unresolved-turnarounds.md) | φ_t < 10⁻⁸ M_P or 𝓡 > 1 → reflect at 3φ_t (R8); w_gate = 1 there and at the floor rule (R10, P20); the records; the warnings (P23) | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | `9c2483b` | [05](logs/05-unresolved-turnarounds.md) |
 | 06 | [Parking](06-parking.md) | the cut ρ_kin/ρ_R < ε (R14, P19, P21); the parked phase to T_CMB through the dense-output interface (R15); the tuning at small M measured | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | `e967cb7` | [06](logs/06-parking.md) |
-| 07 | [Unparking](07-unparking.md) | the release at the root of m/H = 10 on the parked step (R16, P24); the oscillating phase resumes; no second parking | Opus | ✍️ 2026-10-29 | ⬜ | — | — |
+| 07 | [Unparking](07-unparking.md) | the release at the root of m/H = 10 on the parked step (R16, P24); the oscillating phase resumes; no second parking | Opus | ✍️ 2026-10-29 | ✅ 2026-10-30 | this commit | [07](logs/07-unparking.md) |
 | 08 | Spectrum peak and margins | the peak by 𝓡 (R7, P25); ℓ; the energy weight (U9); three worst margins and the first failure (R13) | Opus | ⬜ | ⬜ | — | — |
 | 09 | Store | α as a key (U3); the per-sample ratio; ΔN_eff at T_CMB and 1 MeV, the margins, parking and release as columns; JSON details; `AdiabaticHistory`; format 6, 2026.8.0 | Opus | ⬜ | ⬜ | — | — |
 | 10 | Driver and readers | `--alpha-values`; plot matching; Δg* and ΔN_eff figures (R12); scope; inventory; the tool | Sonnet | ⬜ | ⬜ | — | — |
@@ -77,7 +77,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 | Wall | φ_t and 𝓡 equal the exponential closed form; the notes' table (classical wall y ≈ 105, one-loop stopping point y ≈ 40 at 1 meV) reproduced; an n = 2 model needs no closed form; φ_min and dφ_min/dN checked. *As prompt 04 §0.2 reads it: y = 39.1 is the chain's (`sec:chain`), and 04 checks ∂φ_min/∂ ln T, dφ_min/dN being 06's* | 04 | ✅ 2026-10-29 (log 04 §1.5, §4.2, §4.3, §5.1) |
 | Unresolved | α = 0 bitwise; an unresolved reflection is made at 3φ_t with w_gate = 1; the reflected history equals the resolved one in the probe's band; the warnings | 05 | ✅ 2026-10-29 (log 05 §4, §5.4; at M = 3×10⁻¹¹ the resolved comparison run itself fails, as the planner's did; D14 accepted by the user) |
 | Park | α = 0 bitwise; an M = 10⁻³⁰ drained history reaches T_CMB; parked samples on φ_min; H_E continuous at the switch; the leftover in the ledger; the guard | 06 | ✅ 2026-10-29 (log 06 §1.4, §2, §5.4; the guard tested with its threshold raised by a patch, as the prompt allows) |
-| Release | a parked field released at m/H < 10 continues; continuity at the release; the lag after it as estimated | 07 | ⬜ |
+| Release | a parked field released at m/H < 10 continues; continuity at the release; the lag after it as estimated. *As ruled by the user (ruling 9, option (c)): the lag after the release has the sign of δ₁ and lies within the bound derived from each oscillation* | 07 | ✅ 2026-10-30 (log 07 §1.2, §1.4, §4, §5.2, §5.5) |
 | Margin | the three margins equal a hand computation; energy-weighted; the classical birth margin negative by construction; NULL at α = 0 | 08 | ⬜ |
 | Store | key and columns round-trip; two α are distinct rows; the new golden fingerprint; `AdiabaticHistory` bitwise at α = 0 and computed on parked samples | 09 | ⬜ |
 | Driver | α reaches every stage; an unstored α exits 2 in the plots; scope and inventory name α | 10 | ⬜ |
@@ -174,6 +174,11 @@ One opened by the planner, one by prompt 04, one by prompt 05.
   §3), assigned 2026-10-29 by the re-plan (README §8.6): prompts 06 and 07 build the parked tracker,
   with the switch criterion supplied by the drain. The entry stays on its own board until it is
   closed.
+  - **Narrowed (2026-10-30, prompt 07):** the switch, the tracker and the release are built and
+    measured (logs 06 and 07): every history of log 05's grid parks and reaches T_CMB, and the four
+    large-M histories whose tracker loses adiabaticity are released at m/H = 10 and reach T_CMB. What
+    remains is Q on the parked samples (`AdiabaticHistory`), which is 09's (README §8.1 R15). So 07
+    narrows it, and 09 closes it.
 
 ## 4. Resolved issues
 
@@ -1063,3 +1068,56 @@ The prompt departs from the charter in four places, each stated in its §0.3:
   issue's next step names the adiabatic diagnostic, which R15 gives to 09.
 
 One existing test changes: `test_parking`'s β = 5 failure becomes the release.
+
+### 5.8 After prompt 07 (2026-10-30)
+
+07 landed in this commit, under orchestrator note 07 (rulings 1–14), with ruling 9 amended by the
+user after the agent's stop (option (c): "OK, go with (c). I am not sure this matters a lot.").
+Log: [`logs/07-unparking.md`](logs/07-unparking.md).
+- **What shipped** (`ComputeTargets/ScalarHistory.py`):
+  - the release. A parked step end (or N_final) with the tracker's m_eff/H_E below 10 releases the
+    field at the root of m_eff/H_E = 10 on that step's `ParkedSegment` (brentq, `RELEASE_ROOT_XTOL`
+    10⁻¹⁴, `RELEASE_ROOT_RTOL` 4ε). The root replaces the step's node in `ts`;
+  - the hand-back. `_ParkedPhaseEnd` is returned through `cut` to both branches of the loop, which
+    start a new Radau instance from the segment's state at N_rel. The drain is disarmed, the infall
+    cleared, and the gate's half-oscillation begins at N_rel;
+  - P24: no ratio test or tracker after a release. The guard's reason names the release;
+  - the record `Release` on `IntegrationResult.release` and the payload's `"release"`, not stored.
+    `Parking.min_m_eff_over_H` excludes the failing check.
+
+  06's adiabaticity failure is gone. Nothing runs at α = 0.
+- **Gate Release holds**, as ruled:
+  - α = 0 bitwise;
+  - the 24 non-releasing histories of §2.5 bitwise the dispatch commit's, and the four released ones
+    bitwise through a window in the parked phase;
+  - each released history reaches T_CMB, released at m/H = 10 to ≤ 2.1×10⁻¹² (derived bound
+    2.6×10⁻¹¹ at β = 5);
+  - the state, H_E and the ledger bitwise continuous at N_rel;
+  - no second parking, although every candidate after the release would pass the cut at β = 5 and
+    10;
+  - the lag has the sign of δ₁ and lies within the derived bound T1 + T2 on each of eight oscillations
+    (ratio 0.98–1.20 at β = 5; 1.05–1.36 at β = 10, measured). δ₁ × −1 is caught; × 2 and × ½ are
+    not catchable (bound 1.9–3.7 |δ₁|).
+- **The released histories** (log 07 §5.2):
+  - M = 0.5, β = 5: N = 40.25454, 9.745 MeV, 15 drains after;
+  - β = 10: N = 65.32727, 8.695 MeV, 19 after;
+  - β = 25: N = 145.77929, 40.3 keV, 1 after;
+  - M = 10⁻³, β = 1.2: N = 45.91020, 0.27 meV, none after.
+
+  Each release lies inside the parked step on which 06 failed, whose check the record names to 06's
+  printed digits. The tuning converges on released histories (4 integrations at M = 10⁻³, β = 1.2;
+  20 at M = 0.5, β = 5).
+- **Costs**: root 0.4–0.7 ms and new Radau 0.2 ms per release. A released history is cheaper than
+  the never-parked one: 5.4 against 6.3 s at β = 5, 1.6 against 5.9 s at M = 10⁻³. β = 2 is unchanged
+  (2.58 against 2.60 s).
+- **Breakages:** B1–B7 and the lag check C1 (δ₁ × −1), each failing named tests.
+- **Edits to existing tests:** `test_parking`'s item-7 test at β = 5 asserts the release (prompt §1.6
+  item 9), with its class docstring and the module docstring's item (7).
+- **Counts:** 26 / 408 (96 + 312) / 103 / 115 / 64 before; 26 / **427** (96 + **331**) / 103 / 115 /
+  64 after, all passing.
+- **Issues:** opened none; narrowed `[00-settling-at-physical-M-needs-a-parked-tracking-model]`
+  (§3.1, its `integrator-remediation` entry, `.documents/OPEN_ISSUES.md` §1.20).
+- **Found:**
+  - the M = 10⁻³, β = 1.2 release (06's failure) is at 0.27 meV, not 0.27 eV as prompt 07 and log 06
+    printed;
+  - the anharmonic shift the lag's bound allows does not appear in the data (log 07 §7).

@@ -1,6 +1,6 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-29 · **27 open**: 4 on the `review-remediation` board (closed
+**Last updated:** 2026-10-30 · **27 open**: 4 on the `review-remediation` board (closed
 2026-09-30), none now assigned; 2 on the `production-readiness` board
 (closed 2026-09-30); 2 on the `run-integrity` board (closed 2026-09-30; one stale entry closed 2026-10-22, its fix having landed in `5740690`; `jordan-normalization` prompt 07 closed one, 2026-10-26); 7 on the
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`
@@ -40,7 +40,8 @@ and closed the second assigned issue, 2026-10-27; closed 2026-10-27, 2 of 2 prom
 one issue still open on its board); 3 on the `inelastic-reflection` board (planned 2026-10-27; the
 planner opened one, §1.19; re-planned 2026-10-29, when one `integrator-remediation` issue was
 assigned to it, §1.20; prompt 04 opened one, 2026-10-29, §1.19; prompt 05 opened one, 2026-10-29,
-§1.19; prompt 06 opened none and narrowed prompt 05's, 2026-10-29).
+§1.19; prompt 06 opened none and narrowed prompt 05's, 2026-10-29; prompt 07 opened none and
+narrowed the assigned one, 2026-10-30, §1.20).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -324,4 +325,6 @@ Re-planned 2026-10-29 to reach laboratory M through a parking switch (its README
 
 - `[00-settling-at-physical-M-needs-a-parked-tracking-model]` — the field at φ_wall(ρ) as a
   passenger once its bounces are unresolvable; the drain supplies the switch, prompts 06 and 07
-  build the parked tracker and its release. *(`integrator-remediation`; audit §3.7, §9.4)*
+  build the parked tracker and its release. Narrowed by prompt 07: the switch, the tracker and the
+  release are built and measured; what remains is Q on the parked samples, prompt 09's.
+  *(`integrator-remediation`; audit §3.7, §9.4)*

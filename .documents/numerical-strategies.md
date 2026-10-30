@@ -1350,6 +1350,55 @@ field tracks the minimum of its effective potential with zero lag. The record is
   cut's tracker about 80 µs where the ratio test passes; the M = 0.5 M_P, β = 2 history costs the
   same as before (2.65 s against 2.66 s). See log 06 §5.
 
+### 6.6 Added 2026-10-30 (`inelastic-reflection` prompt 07): the release
+
+A parked tracker that stops being adiabatic failed the history in prompt 06. The user ruled (README
+§8.1 R16) that the field is released there instead, and P24 that a released field is integrated in
+full to T_CMB and never parks again. The record is `prompts/inelastic-reflection/logs/07-unparking.md`.
+
+- **The release point.** At each parked step end (and at N_final on the step that ends the history)
+  the check of §6.5 is made; where m_eff/H_E < 10 the field is released at the root N_rel of
+  g(N) = m_eff/H_E − 10 on that step's `ParkedSegment`, between its left node and the point checked,
+  rather than at the step end. g is evaluated on the segment by scalar calls; brentq with xtol 10⁻¹⁴
+  and rtol 4ε puts N_rel within 2(xtol + 4ε|N|) ≈ 10⁻¹³ e-folds of a sign change of g. g's own noise is
+  the jitter of φ_min's root (`minimum_on_trace`'s xtol and rtol) through |∂(m/H)/∂ ln φ|: 10⁻¹¹ at
+  M = 0.5 M_P, β = 5. So m/H at the root is 10 to about 3×10⁻¹¹ there (measured 5×10⁻¹³), and N_rel
+  does not depend on the parked step grid. If g ≤ 0 already at the left node the release is there and
+  the step's segment is dropped; it did not arise on any history measured. The root costs about 1 ms
+  (10 evaluations of g at 50–70 µs).
+- **The hand-back.** The released state is the segment's value at N_rel, one scalar call, and N_rel
+  replaces the step's node in `ts`; nothing is drained or added to the ledger. The parked phase
+  returns it to the loop as a value (`_ParkedPhaseEnd`), never as an exception, in both branches that
+  can park (a reflection, a drain point). The loop starts a new Radau instance there (0.2 ms), as after
+  a drain. SciPy's Radau dense output at its left node returns the state it was built from, so the
+  last parked segment, the first Radau segment and the history's dense output (right-continuous at
+  the node) return the same floats at N_rel, and H_E either side is the same float.
+- **The reset.** At the release no drain is armed, no infall assessment is kept, and the gate's
+  half-oscillation begins at N_rel with no sample, so that the non-adiabaticity sampled before the
+  switch (folded since the wall-side turning point that armed the cut candidate) never reaches a
+  candidate after the release. On the measured histories the reset changes nothing by itself (at
+  β = 5 the carried maximum is 0.13, below the first turning point's own 0.69); a sentinel on those
+  samples shows it.
+- **P24.** After a release no candidate makes the ratio test or calls the tracker. The guard (P21)
+  still runs at every reflection; its reason then says the field was released, and where. At M = 0.5
+  M_P, β = 5 and 10 every candidate after the release would pass both of the cut's conditions; the
+  released histories are still cheaper than the never-parked ones (8 295 against 9 270 steps at β = 5).
+- **The lag after the release.** The field is released at zero lag, so it oscillates about the lagged
+  tracker φ_min + δ₁, δ₁ the first-order lag from the right-hand side's π′ linearised about the tracker.
+  The half-swing is 23–75 |δ₁|, so the lag is compared per oscillation, wall-side turning point to
+  wall-side turning point: over the first eight after the release ⟨φ − φ_min⟩/⟨δ₁⟩ is 0.98–1.20 at
+  β = 5 and 1.05–1.36 at β = 10, approaching 1 as m/H grows. The bound one can derive from the
+  oscillation itself, its non-closure |Δ(φ − φ_min)|/2π plus the anharmonic shift
+  |F_φφ/F_φ| S²/4 of a half-swing S, is 1.9–3.7 |δ₁|: it holds the sign of the lag, not its size
+  (the test is a sign-and-order test, by the user's ruling). The anharmonic shift that bound allows,
+  0.9–2.2 |δ₁| outwards, does not appear in the data.
+- **At large M** (R17) the histories that failed in prompt 06 are released and reach T_CMB: at M =
+  0.5 M_P β = 5 (released at 9.745 MeV), 10 (8.695 MeV) and 25 (40.3 keV), and at M = 10⁻³ M_P β = 1.2
+  (0.27 meV; §6.5 printed its failure as 0.25 eV, which was 0.25 meV). Against the same histories never
+  parked (ε = 0) N_final moves by 10⁻⁶–10⁻³ and Σ Δρ/ρ_R by 6×10⁻⁶–2×10⁻³; the largest difference in
+  ln T_J (2×10⁻⁴ to 10⁻²) is set before the release, by the parking. No history at M ≤ 10⁻⁷ M_P
+  releases, and every history that does not release is bitwise prompt 06's. See log 07 §5.
+
 ---
 
 ## 7. From scalar history to BBN via PRyMordial (`ComputeTargets/BBNData.py`)

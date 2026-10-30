@@ -166,6 +166,13 @@ moot by `jordan-normalization` prompt 01.)*
     switch criterion supplied by the drain of a fraction α of the condensate's kinetic energy at each
     reflection, and the release at m/H < 10. The user ruled it ("Campaign scope: sure, we need to
     replan").
+  - **Narrowed (2026-10-30):** by `inelastic-reflection` prompts 06 and 07 (their logs 06 and 07). The
+    switch (the drain's cut ρ_kin/ρ_R < 10⁻⁶ where the zero-lag tracker has m/H ≥ 10), the parked
+    tracker φ = φ_min(N), π = dφ_min/dN, and its release at m/H = 10 are built and measured: every
+    history of the grid β = 1.2, 2, 3 × M = 10⁻⁷–10⁻³⁰ M_P parks and reaches T_CMB at α = 0.1, and the
+    four large-M histories whose tracker loses adiabaticity are released and reach T_CMB. What
+    remains is what the parked field contributes to the adiabatic diagnostic: `AdiabaticHistory`'s Q
+    on the parked samples, which is `inelastic-reflection` prompt 09's (its README §8.1 R15).
 - **[00-stored-samples-alias-the-rebounds]** *(audit §7)*.
   - **What.** The z grid is `ΔN ≈ 0.0092`. Turning points are 0.080 e-folds apart on P2 (8.7
     samples per half-period) and 0.022 on P3 (2.4). The brief's 1–2 samples in the 1–100 MeV

@@ -1186,6 +1186,38 @@ SampleValues = namedtuple("SampleValues", [
 > - `ScalarHistory.store`, `build_extra_data`, `golden_history.record_of`, `TUNING_OUTPUT_KEYS`,
 >   `"reflections"` and the existing records' fields are unchanged.
 
+> **Note, 2026-10-30 (`inelastic-reflection`, prompt 07): the release.** A parked step end (or N_final
+> on the step that ends the history) at which the tracker's m_eff/H_E is below
+> `PARKING_ADIABATICITY_THRESHOLD` (10) no longer fails the history: the field is **released** at the
+> root of m_eff/H_E = 10 on that step's `ParkedSegment`, and the history goes on in the oscillating
+> phase to its end, draining at its candidates. It never parks again (README §8.2 P24). Nothing of it
+> runs at α = 0 (`numerical-strategies.md` §6.6).
+> - **Module level**: the root's tolerances `RELEASE_ROOT_XTOL = 1e-14` and `RELEASE_ROOT_RTOL = 4ε`
+>   (neither a key); the record `Release`; and `_ParkedPhaseEnd`, the value the parked phase hands back
+>   to the loop (N, state, released). No exception carries the release.
+> - **`Release`**, a namedtuple of floats and ints: `N` and `log_T_Jordan` (the release, N_rel, the root;
+>   the last node of the parked phase in `ts`), `phi_Einstein` and `pi_Einstein` (the tracker's φ_min and
+>   π_min there, the released state's field), `m_eff_over_H` (the root's value), `N_check` and
+>   `m_eff_over_H_check` (the check that failed), `H_Einstein` (at N_rel), `candidate_index` (the index in
+>   `injections` of the first candidate after the release, = the candidates before it) and `steps_after`
+>   (the accepted steps after it). **`IntegrationResult`** gains `release` (the record or `None`), appended
+>   last; the payload of `integrate_history` gains `"release"`, which is not stored.
+> - **`Parking`** keeps its fields. For a released history `parked_steps` counts the parked steps up to
+>   and including the one the release falls in, and `min_m_eff_over_H` is the smallest of the switch's,
+>   the checks that passed and the release's own; the failing check lies after the release.
+> - **How a reader tells the phases apart**: segments of the solution from `Parking.N` up to
+>   `Release.N` are `ParkedSegment`s, and every segment after is Radau's; candidates with index
+>   ≥ `Release.candidate_index` are after the release.
+> - **At large M** (README §8.1 R17) the histories that failed in prompt 06 are now released and reach
+>   T_CMB: at M = 0.5 M_P, β = 5 (parks at candidate 105, 81.2 MeV; released at N = 40.2545, 9.745 MeV),
+>   β = 10 (candidate 99, 358 MeV; N = 65.3273, 8.695 MeV) and β = 25 (candidate 83, 9.97 GeV;
+>   N = 145.7793, 40.3 keV); and at M = 10⁻³ M_P, β = 1.2 (candidate 6, 11.5 keV; N = 45.9102,
+>   T_J = 0.27 meV, just above T_CMB; prompt 06's note above printed its failure as 0.25 eV, which was
+>   0.25 meV). After the release at β = 5 and 10 every candidate would satisfy the cut again (ρ_kin/ρ_R ≈
+>   10⁻⁷, tracker m/H ≥ 10), and is not parked again (P24). No history at M ≤ 10⁻⁷ M_P releases.
+> - `ScalarHistory.store`, `build_extra_data`, `golden_history.record_of`, `TUNING_OUTPUT_KEYS`,
+>   `"reflections"`, `"parking"` and the existing records' fields are unchanged.
+
 ### 7.3 `AdiabaticHistory` (`ComputeTargets/AdiabaticHistory.py`)
 
 Computes the adiabatic perturbation parameter Q (which determines whether the chameleon field is adiabatically tracking its minimum). Requires a `ScalarHistoryProxy` as input.

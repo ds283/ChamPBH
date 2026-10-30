@@ -37,8 +37,9 @@ The items are those of prompt §1.7, with orchestrator note 06's additions:
   (5) the switch: H_E continuous, the ledger, the dense output at the switch;
   (6) the parked samples on phi_min, pi on them, the segments deterministic, integrate_history's
       readers;
-  (7) M = 0.5 M_P: no parking at beta = 2; at beta = 5 a park at a drain point and a failure where
-      the tracker loses adiabaticity;
+  (7) M = 0.5 M_P: no parking at beta = 2; at beta = 5 a park at a drain point and, where the
+      tracker loses adiabaticity, a release (inelastic-reflection prompt 07, which replaced 06's
+      failure there; test_release tests the release itself);
   (8) N_stop inside the parked phase;
   (9) the guard (P21).
 Item (10) is the setup of test_injection's TestTwoTurningPointsOnOneStep and test_gate_and_taper's
@@ -854,7 +855,8 @@ BETA_5_CROSSING_SLACK = 1e-3
 class TestAtHalfThePlanckMass(unittest.TestCase):
     """
     (7) M = 0.5 M_P, alpha = 0.1. beta = 2 with the cut on and disabled (about 3 + 3 s); beta = 5 to
-    T_CMB (it fails, about 5 s) and to N = 40.0 (after its switch, about 4 s); at a load of about 10.
+    T_CMB (it is released and reaches T_CMB since prompt 07, about 6 s; at 06 it failed) and to
+    N = 40.0 (after its switch, about 4 s); at a load of about 10.
     """
 
     @classmethod
@@ -903,25 +905,31 @@ class TestAtHalfThePlanckMass(unittest.TestCase):
         self.assertGreaterEqual(p.m_eff_over_H, SM.PARKING_ADIABATICITY_THRESHOLD)
         self.assertEqual(self.window5.N_final, 40.0)
 
-    def test_7_at_beta_5_it_fails_where_the_tracker_loses_adiabaticity(self):
+    def test_7_at_beta_5_it_is_released_where_the_tracker_loses_adiabaticity(self):
+        """
+        Prompt 07 §1.6 item 9: where 06 failed the history, the field is released, inside the window
+        that 06's failure lay in, and the history succeeds.
+        """
         data = self.data5
-        self.assertTrue(data.get("failure", False), "the history did not fail")
-        reason = data["failure_reason"]
-        p = self.window5.parking
-        self.assertIn("in the parked phase", reason)
-        self.assertIn(f"at candidate #{p.candidate_index}", reason)
-        self.assertIn(f"parked at N = {p.N:.10g}", reason)
-        self.assertIn("the parked tracker lost adiabaticity: m_eff/H_E = ", reason)
-        m_over_H = float(reason.split("m_eff/H_E = ")[1].split(" ")[0])
-        self.assertLess(m_over_H, SM.PARKING_ADIABATICITY_THRESHOLD)
-        N_fail = float(reason.split("at N = ")[-1].split(",")[0])
-        self.assertGreater(N_fail, BETA_5_CROSSING_N - BETA_5_CROSSING_SLACK)
-        self.assertLessEqual(
-            N_fail,
-            BETA_5_CROSSING_N
-            + BETA_5_CROSSING_SLACK
-            + SM.StepControl().global_max_step,
+        self.assertFalse(data.get("failure", False), data)
+        release = data["release"]
+        self.assertIsNotNone(release)
+        self.assertEqual(
+            data["parking"],
+            self.window5.parking._replace(
+                parked_steps=data["parking"].parked_steps,
+                min_m_eff_over_H=data["parking"].min_m_eff_over_H,
+            ),
         )
+        self.assertLess(release.m_eff_over_H_check, SM.PARKING_ADIABATICITY_THRESHOLD)
+        for N in (release.N, release.N_check):
+            self.assertGreater(N, BETA_5_CROSSING_N - BETA_5_CROSSING_SLACK)
+            self.assertLessEqual(
+                N,
+                BETA_5_CROSSING_N
+                + BETA_5_CROSSING_SLACK
+                + SM.StepControl().global_max_step,
+            )
         self.assertEqual(len(data["warnings"]), 1)
 
 
