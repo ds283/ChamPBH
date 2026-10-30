@@ -1,0 +1,12 @@
+b1.2_M1e-16_K64 ok N_final=46.07564 steps=2193 wall=1.7s candidates={'floor': 7} parks=#6 N=28.3641 released=False log10R -24.00..2.41
+b1.2_M1e-20_K64 ok N_final=46.07564 steps=2189 wall=1.7s candidates={'floor': 7} parks=#6 N=28.3641 released=False log10R -8.00..18.41
+b2_M1e-13_K64 ok N_final=50.07564 steps=9929 wall=6.3s candidates={'floor': 49} parks=#48 N=30.3493 released=False log10R -31.66..-7.76
+b2_M1e-14_K64 ok N_final=50.07564 steps=9929 wall=6.4s candidates={'floor': 49} parks=#48 N=30.3493 released=False log10R -27.66..-3.76
+b2_M1e-15_K64 ok N_final=50.07564 steps=9929 wall=6.3s candidates={'floor': 49} parks=#48 N=30.3493 released=False log10R -23.66..0.24
+b2_M1e-16_K64 ok N_final=50.07564 steps=9929 wall=6.3s candidates={'floor': 49} parks=#48 N=30.3493 released=False log10R -19.66..4.24
+b2_M1e-18_K64 ok N_final=50.07564 steps=9929 wall=6.4s candidates={'floor': 49} parks=#48 N=30.3493 released=False log10R -11.66..12.24
+b2_M1e-20_K64 ok N_final=50.07564 steps=9929 wall=6.4s candidates={'floor': 49} parks=#48 N=30.3493 released=False log10R -3.66..20.24
+b2_M1e-22_K64 ok N_final=50.07564 steps=9929 wall=6.3s candidates={'floor': 49} parks=#48 N=30.3493 released=False log10R 4.34..28.24
+b2_M1e-25_K64 ok N_final=50.07564 steps=9929 wall=6.4s candidates={'floor': 49} parks=#48 N=30.3493 released=False log10R 16.34..40.24
+b3_M1e-16_K64 ok N_final=55.07564 steps=11558 wall=7.5s candidates={'floor': 59} parks=#58 N=29.3943 released=False log10R -8.18..5.29
+b3_M1e-20_K64 ok N_final=55.07564 steps=11561 wall=7.5s candidates={'floor': 59} parks=#58 N=29.3943 released=False log10R 7.82..21.29

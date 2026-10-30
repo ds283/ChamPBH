@@ -1,0 +1,5 @@
+# fixprobe.py at K = 0 (the shipped search) against K = 64, whole history: equal by repr
+b2_M1e-12 {'N_final': True, 'final': True, 'ts': True, 'nfev': True, 'inj': True, 'refl': True, 'parking': True, 'release': True, 'sample': True, 'ct': True}
+b2_M1e-30 {'N_final': True, 'final': True, 'ts': True, 'nfev': True, 'inj': True, 'refl': True, 'parking': True, 'release': True, 'sample': True, 'ct': True}
+b5_M0.5 {'N_final': True, 'final': True, 'ts': True, 'nfev': True, 'inj': True, 'refl': True, 'parking': True, 'release': True, 'sample': True, 'ct': True}
+b1.2_M1e-07 {'N_final': True, 'final': True, 'ts': True, 'nfev': True, 'inj': True, 'refl': True, 'parking': True, 'release': True, 'sample': True, 'ct': True}

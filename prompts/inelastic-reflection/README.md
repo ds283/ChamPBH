@@ -626,6 +626,18 @@ Each in the user's words, from the conversation of 2026-10-29.
   does terminate oscillations that could have kept going), and simply document the behaviour. It's up
   to end users to decide whether the answer represents something meaningful for whatever problem they
   are trying to solve."
+- **R18 — the wall search is fixed before 08** (2026-10-30, after prompt 07 was reviewed). The
+  orchestrator's probes for 08
+  ([`source/planning-probes-2026-10-30/`](source/planning-probes-2026-10-30/README.md)) found that
+  dissipation mode fails at its first infall, or soon after, at every M tried from 10⁻²⁵ to
+  10⁻¹³ M_P. The cause is `[05-the-wall-search-refuses-a-wall-below-the-rounding-of-ln-V]`. Asked
+  whether to fix it before 08, fix it before 11, or leave it documented, the user chose "Insert 07b
+  before 08". Prompt 07b is inserted (§8.4).
+- **R19 — the peak in the one-loop gap** (2026-10-30). Asked which estimate 08 uses where
+  1 < 𝓡 ≲ 10^2.9 and the one-loop chain has no solution
+  (`[04-one-loop-chain-has-no-solution-just-above-R-equals-1]`), the user chose "Classical, flagged".
+  That is the one-loop estimate where 𝓡 > 1 and the chain has a solution, and the classical estimate
+  elsewhere, gap included, with each generation recording which estimate it got.
 
 ### 8.2 Proposed by the planner (P18–P26)
 
@@ -682,6 +694,7 @@ run-length rule for anything else.
 | 05 | `05-unresolved-turnarounds.md` | the unresolved rule (R8, P20) in the step loop at α > 0; w_gate = 1 there; the records; the two warnings (P23) | Opus |
 | 06 | `06-parking.md` | the cut (R14, P19, P21); the parked phase (R15) to T_CMB through the dense-output interface; the tuning at small M measured | Opus |
 | 07 | `07-unparking.md` | the release at m/H < 10 (R16, P24) and the full integration after it | Opus |
+| 07b | `07b-the-wall-search-at-the-rounding-of-ln-V.md` | the wall search where V − V_floor is lost in the rounding of ln V (R18); dissipation mode measured across 10⁻²⁵–10⁻¹³ M_P | Opus |
 | 08 | `08-spectrum-peak-and-margins.md` | the peak per generation by 𝓡 (R7, P25); ℓ; the energy weight (U9); the three worst margins and the first failure (R13) | Opus |
 | 09 | `09-store.md` | α as a key (U3); the per-sample ratio; ΔN_eff, the margins, the parking and release, 𝓡 at the first impact as columns; the JSON details; `AdiabaticHistory` on parked samples; format 6, 2026.8.0 | Opus |
 | 10 | `10-driver-and-readers.md` | `--alpha-values`; the plot matching; Δg* on `plot_ScalarHistory.py`; ΔN_eff(β) per α on `plot_by_beta.py`; the scope; the inventory; the tool | Sonnet |
@@ -745,6 +758,19 @@ They run in order; 04–09 touch `ComputeTargets/ScalarHistory.py`.
   put the loss of adiabaticity near 30–40 keV); continuity at the release; the lag after it against
   the first-order estimate.
 - **Gate "Release".**
+
+**07b — the wall search at the rounding of ln V** (inserted 2026-10-30, R18).
+- **The fix**, generic, in 04's `_log_V_minus_floor`: a difference ln V − ln V_floor within the
+  rounding of ln V is no difference, and returns −∞, as a V that rounds to V_floor does. The width
+  is a module constant derived from the search's geometry and the rounding of ln V. No closed form
+  of the potential is used (R9).
+- **Measured:** dissipation mode across the band 10⁻²⁵–10⁻¹³ M_P at β = 1.2, 2, 3, and the
+  candidates' 𝓡 there, so that 08 knows which histories cross the one-loop gap.
+- **Tests:** the helper at the edge of its width; `classical_turning_point` at the inputs on which
+  the shipped search fails, against the exponential's closed form; one history in the band to
+  T_CMB. Every history outside the band, and α = 0, bitwise 07's.
+- **Closes** `[05-the-wall-search-refuses-a-wall-below-the-rounding-of-ln-V]`.
+- **Gate "Band".**
 
 **08 — the spectrum's peak and the margins** (§2.2's 04, rewritten).
 - **Per generation:** the peak by 𝓡 (classical below 1, one-loop above, R7, P25), its comoving

@@ -1,7 +1,7 @@
 # inelastic-reflection campaign — implementation state
 
 **Last updated:** 2026-10-30 · **Status: LIVE, RE-PLANNED 2026-10-29 (README §8): 04–12 replace
-the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29, landed in `e967cb7` and reviewed (2026-10-29; gate Park holds; one issue narrowed). 07 written 2026-10-29, landed in `5397f8f` (2026-10-30; gate Release holds, the lag as a sign-and-order test by the user's ruling of option (c); one issue narrowed). Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
+the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29, landed in `e967cb7` and reviewed (2026-10-29; gate Park holds; one issue narrowed). 07 written 2026-10-29, landed in `5397f8f` (2026-10-30; gate Release holds, the lag as a sign-and-order test by the user's ruling of option (c); one issue narrowed) and reviewed (`0b8f420`). 07b inserted 2026-10-30 at the user's word (README §8.1 R18) and written, before 08: the wall search across 10⁻²⁵–10⁻¹³ M_P. Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
 gate DR holds); 02 landed in `fe2a944` and reviewed (2026-10-28; gate Inject holds), after one
 stop and the user's ruling of interior sampling; 3 of 8 prompts written: 03 written 2026-10-28
 from log 02 §8, after the user ruled 𝒜₀ = 1 (README §6.1); 03 landed in `0afa199` and reviewed (2026-10-28;
@@ -43,6 +43,7 @@ bitwise the old code's.
 | 05 | [Unresolved turnarounds](05-unresolved-turnarounds.md) | φ_t < 10⁻⁸ M_P or 𝓡 > 1 → reflect at 3φ_t (R8); w_gate = 1 there and at the floor rule (R10, P20); the records; the warnings (P23) | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | `9c2483b` | [05](logs/05-unresolved-turnarounds.md) |
 | 06 | [Parking](06-parking.md) | the cut ρ_kin/ρ_R < ε (R14, P19, P21); the parked phase to T_CMB through the dense-output interface (R15); the tuning at small M measured | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | `e967cb7` | [06](logs/06-parking.md) |
 | 07 | [Unparking](07-unparking.md) | the release at the root of m/H = 10 on the parked step (R16, P24); the oscillating phase resumes; no second parking | Opus | ✍️ 2026-10-29 | ✅ 2026-10-30 | `5397f8f` | [07](logs/07-unparking.md) |
+| 07b | [The wall search at the rounding of ln V](07b-the-wall-search-at-the-rounding-of-ln-V.md) | the wall search's helper returns −∞ within the rounding of ln V (R18), with its width derived; dissipation mode measured across 10⁻²⁵–10⁻¹³ M_P; the one-loop gap measured for 08 | Opus | ✍️ 2026-10-30 | ⬜ | — | — |
 | 08 | Spectrum peak and margins | the peak by 𝓡 (R7, P25); ℓ; the energy weight (U9); three worst margins and the first failure (R13) | Opus | ⬜ | ⬜ | — | — |
 | 09 | Store | α as a key (U3); the per-sample ratio; ΔN_eff at T_CMB and 1 MeV, the margins, parking and release as columns; JSON details; `AdiabaticHistory`; format 6, 2026.8.0 | Opus | ⬜ | ⬜ | — | — |
 | 10 | Driver and readers | `--alpha-values`; plot matching; Δg* and ΔN_eff figures (R12); scope; inventory; the tool | Sonnet | ⬜ | ⬜ | — | — |
@@ -79,6 +80,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 | Unresolved | α = 0 bitwise; an unresolved reflection is made at 3φ_t with w_gate = 1; the reflected history equals the resolved one in the probe's band; the warnings | 05 | ✅ 2026-10-29 (log 05 §4, §5.4; at M = 3×10⁻¹¹ the resolved comparison run itself fails, as the planner's did; D14 accepted by the user) |
 | Park | α = 0 bitwise; an M = 10⁻³⁰ drained history reaches T_CMB; parked samples on φ_min; H_E continuous at the switch; the leftover in the ledger; the guard | 06 | ✅ 2026-10-29 (log 06 §1.4, §2, §5.4; the guard tested with its threshold raised by a patch, as the prompt allows) |
 | Release | a parked field released at m/H < 10 continues; continuity at the release; the lag after it as estimated. *As ruled by the user (ruling 9, option (c)): the lag after the release has the sign of δ₁ and lies within the bound derived from each oscillation* | 07 | ✅ 2026-10-30 (log 07 §1.2, §1.4, §4, §5.2, §5.5) |
+| Band | α = 0 bitwise; every history outside the band bitwise 07's; every history of the band (β = 1.2, 2, 3 × M = 10⁻²⁷–10⁻¹³ M_P) reaches T_CMB; the width derived | 07b | ⬜ |
 | Margin | the three margins equal a hand computation; energy-weighted; the classical birth margin negative by construction; NULL at α = 0 | 08 | ⬜ |
 | Store | key and columns round-trip; two α are distinct rows; the new golden fingerprint; `AdiabaticHistory` bitwise at α = 0 and computed on parked samples | 09 | ⬜ |
 | Driver | α reaches every stage; an unstored α exits 2 in the plots; scope and inventory name α | 10 | ⬜ |
@@ -143,6 +145,13 @@ One opened by the planner, one by prompt 04, one by prompt 05.
   - a flag on generations in the gap.
 
   At the edge the two k_ex differ by 4 %, so the first two differ little in ln q. Not assigned.
+- **Ruled (2026-10-30, README §8.1 R19).** The user chose "Classical, flagged": 08 uses the one-loop
+  estimate where 𝓡 > 1 and the chain has a solution, and the classical estimate elsewhere, gap included,
+  with each generation recording which estimate it got. The orchestrator's probes
+  (`source/planning-probes-2026-10-30/`) found no generation in the gap on the histories that ran.
+  Histories that cross it lie near M = 10⁻¹⁵–10⁻¹⁷ M_P (ln 𝓡 from −19.7 to +4.2 decades at 10⁻¹⁶), inside
+  the band where `[05-the-wall-search-refuses-a-wall-below-the-rounding-of-ln-V]` fails them. 07b
+  measures the gap there, and 08 closes this issue.
 
 ### `[05-the-wall-search-refuses-a-wall-below-the-rounding-of-ln-V]`
 
@@ -168,6 +177,14 @@ One opened by the planner, one by prompt 04, one by prompt 05.
   48 and 58 and reach T_CMB, as do β = 2 and 3 at M = 10⁻³; β = 1.2 there parks too, and β = 0.5
   never empties its cascade (log 06 §5.4, §5.3). The model's search never raised on any of the 22, and the parked phase calls only `minimum_on_trace`, never the wall search. The
   defect stays: 08's per-generation calls, or a history that does not park, can still meet it.
+- **Measured (2026-10-30, the orchestrator's probes for 08, `source/planning-probes-2026-10-30/` §1).**
+  The impact is wider than recorded. Every dissipation history fails, at its first infall or soon after,
+  at every M tried from 10⁻²⁵ to 10⁻¹³ M_P (β = 2 at eight M; β = 1.2 and 3 at two). In each, the
+  infall's search meets M/φ ≈ 3×10⁻¹⁴ on its way in. β = 2 runs at 3×10⁻¹³ and 10⁻²⁸. Log 05's and
+  log 06's grids lay outside the band. Treating a difference within 64 ulps of ln V as −∞ makes all twelve
+  reach T_CMB, and leaves four histories outside the band bitwise.
+- **Assigned (2026-10-30)** to this campaign's prompt 07b, inserted before 08 at the user's word (README
+  §8.1 R18), which closes it.
 
 ### 3.1 Assigned to this campaign
 
@@ -1211,3 +1228,15 @@ note added to the list of orchestrator notes. Nothing else was found, and nothin
 Release holds**, with the lag as the user's sign-and-order test. Prompt 08 (the spectrum's peak and the
 margins) is written next, from log 07 §8. `[04-one-loop-chain-has-no-solution-just-above-R-equals-1]` is
 still the user's to rule before 08.
+
+**Prompt 07b inserted and written** (2026-10-30). The user asked for prompt 08 ("Please write prompt
+08"). The orchestrator's probes for it ([`source/planning-probes-2026-10-30/`](source/planning-probes-2026-10-30/README.md))
+measured the peak and the margins on fourteen histories. They also found every dissipation history from
+M = 10⁻²⁵ to 10⁻¹³ M_P failing on `[05-the-wall-search-refuses-a-wall-below-the-rounding-of-ln-V]`.
+Asked two questions, the user chose:
+- "Insert 07b before 08" (README §8.1 R18): prompt 07b fixes the search's helper, generically, and
+  measures the band;
+- "Classical, flagged" for the one-loop gap (R19), which 08 implements.
+
+08 is written after 07b has landed and been reviewed (README §2.1), from log 07 §8, log 07b §8 and the
+probes' `peaks.out`.

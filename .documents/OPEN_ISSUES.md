@@ -41,7 +41,7 @@ one issue still open on its board); 3 on the `inelastic-reflection` board (plann
 planner opened one, §1.19; re-planned 2026-10-29, when one `integrator-remediation` issue was
 assigned to it, §1.20; prompt 04 opened one, 2026-10-29, §1.19; prompt 05 opened one, 2026-10-29,
 §1.19; prompt 06 opened none and narrowed prompt 05's, 2026-10-29; prompt 07 opened none and
-narrowed the assigned one, 2026-10-30, §1.20).
+narrowed the assigned one, 2026-10-30, §1.20; the user ruled one and assigned another to the inserted prompt 07b, 2026-10-30, §1.19).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -312,12 +312,15 @@ Planned 2026-10-27. One opened by the planner, found by a planning probe; one by
   *(`inelastic-reflection`; planner)*
 - `[04-one-loop-chain-has-no-solution-just-above-R-equals-1]` — the one-loop turnaround of the
   briefing notes' chain has no solution for 1 < 𝓡 ≲ 10^2.9 on the exponential wall, so the peak
-  estimate R7 names is missing there; for 08 to decide. *(`inelastic-reflection`; prompt 04)*
+  estimate R7 names is missing there. Ruled 2026-10-30 (R19): the classical estimate there, flagged;
+  08 closes it. *(`inelastic-reflection`; prompt 04)*
 - `[05-the-wall-search-refuses-a-wall-below-the-rounding-of-ln-V]` — the model's generic
   `classical_turning_point` raises "not monotone" where V − V_floor is a few ulps of ln V
   (M/φ ≈ 3×10⁻¹⁴); it failed the M = 10⁻³⁰ histories at the bottom of their cascades, after the
   cut. Narrowed by prompt 06: with parking the search never raised on the 22 histories measured
-  (M = 10⁻³ to 10⁻³⁰ M_P); the 21 whose cascade empties park first. *(`inelastic-reflection`; prompt 05)*
+  (M = 10⁻³ to 10⁻³⁰ M_P); the 21 whose cascade empties park first. Measured 2026-10-30: it fails every
+  dissipation history from M = 10⁻²⁵ to 10⁻¹³ M_P at its first infall; assigned to prompt 07b (R18),
+  which closes it. *(`inelastic-reflection`; prompt 05)*
 
 ### 1.20 Assigned to `inelastic-reflection` — [its board](../prompts/inelastic-reflection/IMPLEMENTATION_STATE.md) §3.1
 
