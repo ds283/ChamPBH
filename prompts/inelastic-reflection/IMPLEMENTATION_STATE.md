@@ -1,7 +1,7 @@
 # inelastic-reflection campaign — implementation state
 
 **Last updated:** 2026-10-30 · **Status: LIVE, RE-PLANNED 2026-10-29 (README §8): 04–12 replace
-the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29, landed in `e967cb7` and reviewed (2026-10-29; gate Park holds; one issue narrowed). 07 written 2026-10-29, landed in this commit (2026-10-30; gate Release holds, the lag as a sign-and-order test by the user's ruling of option (c); one issue narrowed). Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
+the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29, landed in `e967cb7` and reviewed (2026-10-29; gate Park holds; one issue narrowed). 07 written 2026-10-29, landed in `5397f8f` (2026-10-30; gate Release holds, the lag as a sign-and-order test by the user's ruling of option (c); one issue narrowed). Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
 gate DR holds); 02 landed in `fe2a944` and reviewed (2026-10-28; gate Inject holds), after one
 stop and the user's ruling of interior sampling; 3 of 8 prompts written: 03 written 2026-10-28
 from log 02 §8, after the user ruled 𝒜₀ = 1 (README §6.1); 03 landed in `0afa199` and reviewed (2026-10-28;
@@ -42,7 +42,7 @@ bitwise the old code's.
 | 04 | [The wall through the model](04-the-wall-through-the-model.md) | φ_t, V″, 𝓡, the one-loop turnaround, the full-trace minimum and ∂φ_min/∂ ln T as model methods with generic defaults (R9); dφ_min/dN moves to 06 | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | `81b933f` | [04](logs/04-the-wall-through-the-model.md) |
 | 05 | [Unresolved turnarounds](05-unresolved-turnarounds.md) | φ_t < 10⁻⁸ M_P or 𝓡 > 1 → reflect at 3φ_t (R8); w_gate = 1 there and at the floor rule (R10, P20); the records; the warnings (P23) | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | `9c2483b` | [05](logs/05-unresolved-turnarounds.md) |
 | 06 | [Parking](06-parking.md) | the cut ρ_kin/ρ_R < ε (R14, P19, P21); the parked phase to T_CMB through the dense-output interface (R15); the tuning at small M measured | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | `e967cb7` | [06](logs/06-parking.md) |
-| 07 | [Unparking](07-unparking.md) | the release at the root of m/H = 10 on the parked step (R16, P24); the oscillating phase resumes; no second parking | Opus | ✍️ 2026-10-29 | ✅ 2026-10-30 | this commit | [07](logs/07-unparking.md) |
+| 07 | [Unparking](07-unparking.md) | the release at the root of m/H = 10 on the parked step (R16, P24); the oscillating phase resumes; no second parking | Opus | ✍️ 2026-10-29 | ✅ 2026-10-30 | `5397f8f` | [07](logs/07-unparking.md) |
 | 08 | Spectrum peak and margins | the peak by 𝓡 (R7, P25); ℓ; the energy weight (U9); three worst margins and the first failure (R13) | Opus | ⬜ | ⬜ | — | — |
 | 09 | Store | α as a key (U3); the per-sample ratio; ΔN_eff at T_CMB and 1 MeV, the margins, parking and release as columns; JSON details; `AdiabaticHistory`; format 6, 2026.8.0 | Opus | ⬜ | ⬜ | — | — |
 | 10 | Driver and readers | `--alpha-values`; plot matching; Δg* and ΔN_eff figures (R12); scope; inventory; the tool | Sonnet | ⬜ | ⬜ | — | — |
@@ -66,6 +66,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 - [`orchestrator/prompt-04.md`](orchestrator/prompt-04.md) (`a8e0406`), used for 04.
 - [`orchestrator/prompt-05.md`](orchestrator/prompt-05.md) (`cd19768`), used for 05.
 - [`orchestrator/prompt-06.md`](orchestrator/prompt-06.md) (`7094056`), used for 06.
+- [`orchestrator/prompt-07.md`](orchestrator/prompt-07.md) (`35a103c`; ruling 9 amended at the user's word in `0994a10`), used for 07.
 
 ## 2. The gates
 
@@ -1071,7 +1072,7 @@ One existing test changes: `test_parking`'s β = 5 failure becomes the release.
 
 ### 5.8 After prompt 07 (2026-10-30)
 
-07 landed in this commit, under orchestrator note 07 (rulings 1–14), with ruling 9 amended by the
+07 landed in `5397f8f`, under orchestrator note 07 (rulings 1–14), with ruling 9 amended by the
 user after the agent's stop (option (c): "OK, go with (c). I am not sure this matters a lot.").
 Log: [`logs/07-unparking.md`](logs/07-unparking.md).
 - **What shipped** (`ComputeTargets/ScalarHistory.py`):
@@ -1121,3 +1122,92 @@ Log: [`logs/07-unparking.md`](logs/07-unparking.md).
   - the M = 10⁻³, β = 1.2 release (06's failure) is at 0.27 meV, not 0.27 eV as prompt 07 and log 06
     printed;
   - the anharmonic shift the lag's bound allows does not appear in the data (log 07 §7).
+
+*Orchestrator review of prompt 07 (2026-10-30).* The note's ten checks at `5397f8f`, run serially, at
+loads of 5–28:
+1. **Scope.**
+   - `git show --stat 5397f8f` lists exactly the prompt's §6 files (9), and its parent is `0994a10`, the
+     orchestrator's record of the user's ruling.
+   - The tree is clean, `git worktree list` shows the main checkout alone, and nothing is pushed.
+   - `git diff 35a103c 5397f8f` is empty on ruling 13's files. Under `ComputeTargets/tests/` it touches
+     only `test_release.py` (new) and `test_parking.py`. That edit is confined to item 9's test, its
+     class docstring and the module docstring's item (7).
+2. **α = 0, and what does not release.** The golden tests, `test_first_bounce`,
+   `test_surfing_turning_points`, `test_kinematic_cap_loop`, `test_unresolved_turnarounds`,
+   `test_injection` and `test_gate_and_taper` pass unedited (check 10). At α = 0 `cut` is never called
+   (`assess_wall` is False), so nothing new runs. In a parked phase that stays adiabatic the only new
+   code is `check`'s return value and the `released` test of its end; the minimum is folded as before.
+3. **The loop**, read line by line against prompt §1 and rulings 1–5, 11 and 12:
+   - the root is brentq on [`segment.t_min`, N_check] of m/H on the segment by scalar calls, with g at
+     the left node read on the segment. If g ≤ 0 there, the release is at the left node and the segment
+     is popped;
+   - `ts[-1] = N_rel` and the released state is `segment(N_rel)`, the same float. On the step that ends
+     the history the appended `N_end` is replaced, never appended twice;
+   - `_ParkedPhaseEnd` is a return value through `cut` to both branches. `resume_after_release` resets
+     `armed`, `armed_assessment`, `infall_assessment`, `running_max` and `boundary_N` and builds the new
+     Radau. The drain-point branch sets `y_drained = None`; the reflection branch `continue`s before
+     `new_solver(N, y_reflected)`;
+   - P24 is `release is None and parking_ratio_test(...)`. The guard's reason after a release names
+     it;
+   - `check` folds only passing values, and the root's value is folded. `Release` holds floats and
+     ints only and is the payload's `"release"`; `steps_after` is counted from `accepted_at_release`.
+4. **An independent probe** (session scratchpad, my own setup through `integrate_history`):
+   - M = 0.5, β = 5 to T_CMB: parks at #105 and is released at N = 40.254538273373846 (9.7454 MeV),
+     m/H 10 − 5.2×10⁻¹³. The failing check is at 40.290890061858164 (8.9373). My own bisection of g on
+     the segment lands 7×10⁻¹⁵ from N_rel. The parked segment, the Radau segment and the dense output
+     at N_rel are bitwise equal, H_E either side is the same float, and K is unchanged across N_rel.
+     There are 15 drain points after the release and no reflection. N_final = 62.7518551, 8 295 steps.
+     All of this agrees with `probe_release.out` and with the log;
+   - M = 10⁻³, β = 1.2: parks at #6, is released at N = 45.91020343 at T_J = 2.66×10⁻¹⁰ MeV
+     (0.27 meV, confirming the log's D5), with no candidate after it, and reaches T_CMB;
+   - M = 0.5, β = 2 and M = 10⁻³⁰, β = 2 at the dispatch commit `35a103c` (temporary worktree,
+     removed) against `5397f8f`: bitwise in every record, the samples, the fixed-T values, the final
+     state, `nfev`, the steps and `ts`; the M = 10⁻³⁰ parking record is equal.
+5. **The breakages**, replayed with `git apply` in bash in a temporary worktree of `5397f8f`
+   (removed), each checked with `--check` and `-R --check` and reverted to a clean tree:
+   - B1 fails item 2's threshold and in-step tests;
+   - B3 fails item 5's spy test;
+   - B4 fails `test_5_the_first_turning_point_and_candidate_after_the_release`, the sentinel test of
+     ruling 6;
+   - B5 fails item 8's T_final-inside-the-step test;
+   - B7 fails the reflection-branch test of ruling 7;
+   - C1 (δ₁ × −1) fails item 6.
+6. **The numerics of the tests.**
+   - The root's tolerance on N is 2(xtol + rtol|N|) plus g's noise over the slope. On m/H it is
+     |slope| times that, plus twice the noise, plus 10³ε × 10. The measured residuals (5×10⁻¹³ and
+     10⁻¹³) are well inside the derived 2.6×10⁻¹¹ and 4.6×10⁻¹².
+   - Item 2's window is 5×10⁻⁶ plus the root's tolerance, as ruling 8 has it.
+   - Item 8's N_stop-inside-the-step bound adds the DOP853 interpolant's tolerance through ∂(m/H)/∂y,
+     over the slope (D6): 5.9×10⁻⁷ against a measured 2.9×10⁻⁷.
+   - The lag test forms T1 = |x(b) − x(a)|/2π and T2 = |F_φφ/F_φ|S²/4 per oscillation from the
+     history itself, with no constant read off `lag.out`. It is the sign-and-order test of the user's
+     option (c).
+7. **The measurement.** §5's tables are complete:
+   - all four released histories reach T_CMB, released inside the step on which 06 failed. Their N_check
+     and m/H equal the dispatch commit's failure reasons as printed;
+   - the would-park counts are 15/15, 19/19, 0/1 and none;
+   - released against never parked and the lag agree with `compare.out` and `lag.out`;
+   - §5.5 is bitwise for the 24 non-releasing histories and through windows for the four released;
+   - the three tunings converge.
+8. **The derivation.** The root's tolerance re-derived from `RELEASE_ROOT_XTOL`, `RELEASE_ROOT_RTOL` and
+   the slope, as coded in `release_tolerances`. The lag bound re-read against `lag_by_oscillation`:
+   T1 at the turning points themselves, T2 from the means of the central differences over the
+   oscillation.
+9. **The records.**
+   - The log is in §5.1's form. Every deviation is classed (D1–D12 and rulings 1–14, ruling 9 as the
+     user's), with one UNINTENDED DRIFT (D8, the main checkout edited while a baseline suite ran, with
+     no effect on the baselines).
+   - The `.documents/` notes and the `integrator-remediation` entry are dated and additive: no line is
+     removed.
+   - The narrowing of `[00-settling-at-physical-M-needs-a-parked-tracking-model]` agrees on this board,
+     on the `integrator-remediation` board and in `.documents/OPEN_ISSUES.md` §1.20. All three give Q on
+     the parked samples to 09. The index count stays 27.
+10. **The suites** at `5397f8f`, serially: 26 / 427 (96 + 331) / 103 / 115 / 64, all OK. These are the
+    log's counts. ComputeTargets rose by the 19 new tests only. The times were 70 / 131 + 442 / 21 /
+    134 / 28 s. `black --check` is clean on the 3 changed `.py` files.
+
+Residue fixed in this review's commit: "this commit" → `5397f8f` in the log and on this board, and this
+note added to the list of orchestrator notes. Nothing else was found, and nothing is opened. **The gate
+Release holds**, with the lag as the user's sign-and-order test. Prompt 08 (the spectrum's peak and the
+margins) is written next, from log 07 §8. `[04-one-loop-chain-has-no-solution-just-above-R-equals-1]` is
+still the user's to rule before 08.

@@ -1,7 +1,7 @@
 # Log 07 — unparking
 
 **Subject:** Release a parked field where its tracker loses adiabaticity
-**Commit:** this commit, on branch `inelastic-reflection`, on top of `0994a10`
+**Commit:** `5397f8f`, on branch `inelastic-reflection`, on top of `0994a10`
 **Date:** 2026-10-30, by Claude Opus 5.5
 **Result:** **COMPLETE**, after one stop (ruling 9), ruled by the user as option (c). The gate
 "Release" holds, with the lag tested for its sign and order. No issue opened; one narrowed.
