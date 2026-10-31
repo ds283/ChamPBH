@@ -1,7 +1,7 @@
 # inelastic-reflection campaign — implementation state
 
 **Last updated:** 2026-10-31 · **Status: LIVE, RE-PLANNED 2026-10-29 (README §8): 04–12 replace
-the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29, landed in `e967cb7` and reviewed (2026-10-29; gate Park holds; one issue narrowed). 07 written 2026-10-29, landed in `5397f8f` (2026-10-30; gate Release holds, the lag as a sign-and-order test by the user's ruling of option (c); one issue narrowed) and reviewed (`0b8f420`). 07b inserted 2026-10-30 at the user's word (README §8.1 R18) and written, before 08: the wall search across 10⁻²⁵–10⁻¹³ M_P; landed in `92f41f2` and reviewed (2026-10-30; gate Band holds; one issue closed). 08 written 2026-10-30 at the user's word, after the user ruled R20 (the tracker margin on the late tracker, with the reflections shown to cover the time before it) and R21 (the leftover unassessed); landed in `86fc526` and reviewed (2026-10-31; gate Margin holds; one issue closed, none opened). 09 written 2026-10-31 at the user's word, after the user ruled R22–R25 (ΔN_eff at 1 MeV with T_ν = T_γ; `extra_data` widened; zeros at α = 0 where defined; the margins' columns the charter's and the unassessed share); landed in this commit (2026-10-31; gate Store holds; one stop, ruled by the user: option (b), `test_adiabatic_mass` gains r_χ = 0.0; the assigned issue closed, none opened). Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
+the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29, landed in `e967cb7` and reviewed (2026-10-29; gate Park holds; one issue narrowed). 07 written 2026-10-29, landed in `5397f8f` (2026-10-30; gate Release holds, the lag as a sign-and-order test by the user's ruling of option (c); one issue narrowed) and reviewed (`0b8f420`). 07b inserted 2026-10-30 at the user's word (README §8.1 R18) and written, before 08: the wall search across 10⁻²⁵–10⁻¹³ M_P; landed in `92f41f2` and reviewed (2026-10-30; gate Band holds; one issue closed). 08 written 2026-10-30 at the user's word, after the user ruled R20 (the tracker margin on the late tracker, with the reflections shown to cover the time before it) and R21 (the leftover unassessed); landed in `86fc526` and reviewed (2026-10-31; gate Margin holds; one issue closed, none opened). 09 written 2026-10-31 at the user's word, after the user ruled R22–R25 (ΔN_eff at 1 MeV with T_ν = T_γ; `extra_data` widened; zeros at α = 0 where defined; the margins' columns the charter's and the unassessed share); landed in `3984ec5` and reviewed (2026-10-31; gate Store holds; one stop, ruled by the user: option (b), `test_adiabatic_mass` gains r_χ = 0.0; the assigned issue closed, none opened by the prompt; the review opened one). Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
 gate DR holds); 02 landed in `fe2a944` and reviewed (2026-10-28; gate Inject holds), after one
 stop and the user's ruling of interior sampling; 3 of 8 prompts written: 03 written 2026-10-28
 from log 02 §8, after the user ruled 𝒜₀ = 1 (README §6.1); 03 landed in `0afa199` and reviewed (2026-10-28;
@@ -45,7 +45,7 @@ bitwise the old code's.
 | 07 | [Unparking](07-unparking.md) | the release at the root of m/H = 10 on the parked step (R16, P24); the oscillating phase resumes; no second parking | Opus | ✍️ 2026-10-29 | ✅ 2026-10-30 | `5397f8f` | [07](logs/07-unparking.md) |
 | 07b | [The wall search at the rounding of ln V](07b-the-wall-search-at-the-rounding-of-ln-V.md) | the wall search's helper returns −∞ within the rounding of ln V (R18), with its width derived; dissipation mode measured across 10⁻²⁵–10⁻¹³ M_P; the one-loop gap measured for 08 | Opus | ✍️ 2026-10-30 | ✅ 2026-10-30 | `92f41f2` | [07b](logs/07b-the-wall-search-at-the-rounding-of-ln-V.md) |
 | 08 | [Spectrum peak and margins](08-spectrum-peak-and-margins.md) | the peak by 𝓡 (R7, P25), the gap flagged (R19); ℓ; the energy weight (U9); three worst margins with the first failure (R13), the reflection margin over plateau turning points too and the tracker margin on the late tracker (R20), the leftover unassessed (R21); the coverage bound measured | Opus | ✍️ 2026-10-30 | ✅ 2026-10-31 | `86fc526` | [08](logs/08-spectrum-peak-and-margins.md) |
-| 09 | [Store](09-store.md) | α as a key in its own table (U3, P28); the per-sample ratio as a payload key of its own (P27); ΔN_eff at T_CMB and 1 MeV (R22), the margins (R25), parking and release as columns, zeros at α = 0 where defined (R24); the first failures in `extra_data`, widened (R23); `AdiabaticHistory` with ρ_χ (P29) and on parked samples; every reader at α = 0 (P30); format 6, 2026.8.0 | Opus | ✍️ 2026-10-31 | ✅ 2026-10-31 | this commit | [09](logs/09-store.md) |
+| 09 | [Store](09-store.md) | α as a key in its own table (U3, P28); the per-sample ratio as a payload key of its own (P27); ΔN_eff at T_CMB and 1 MeV (R22), the margins (R25), parking and release as columns, zeros at α = 0 where defined (R24); the first failures in `extra_data`, widened (R23); `AdiabaticHistory` with ρ_χ (P29) and on parked samples; every reader at α = 0 (P30); format 6, 2026.8.0 | Opus | ✍️ 2026-10-31 | ✅ 2026-10-31 | `3984ec5` | [09](logs/09-store.md) |
 | 10 | Driver and readers | `--alpha-values`; plot matching; Δg* and ΔN_eff figures (R12); scope; inventory; the tool | Sonnet | ⬜ | ⬜ | — | — |
 | 11 | Measure | the grid of U10; the rehearsal (U11); the verification document | Opus | ⬜ | ⬜ | — | — |
 | 12 | Close | documents, `CLAUDE.md`, handover §4.18, indexes, board | Sonnet | ⬜ | ⬜ | — | — |
@@ -70,6 +70,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 - [`orchestrator/prompt-07.md`](orchestrator/prompt-07.md) (`35a103c`; ruling 9 amended at the user's word in `0994a10`), used for 07.
 - [`orchestrator/prompt-07b.md`](orchestrator/prompt-07b.md) (`c2aac94`), used for 07b.
 - [`orchestrator/prompt-08.md`](orchestrator/prompt-08.md) (`f0c139d`), used for 08.
+- [`orchestrator/prompt-09.md`](orchestrator/prompt-09.md) (`03b769e`), used for 09.
 
 ## 2. The gates
 
@@ -94,8 +95,8 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 
 ## 3. Active and unresolved issues
 
-One opened by the planner. Prompt 04's was closed by prompt 08, and prompt 05's by prompt 07b (§4). The
-one assigned (§3.1) was closed by prompt 09 (§4).
+One opened by the planner, and one by the orchestrator's review of prompt 09. Prompt 04's was closed by
+prompt 08, and prompt 05's by prompt 07b (§4). The one assigned (§3.1) was closed by prompt 09 (§4).
 
 ### `[00-xav-sigma-is-non-monotone-at-25-35-keV]`
 
@@ -119,6 +120,35 @@ one assigned (§3.1) was closed by prompt 09 (§4).
   it changes every history and needs its own ruling, so it is not in this campaign (README P15). Not
   assigned. `Xav_EOS_data.csv` has no generating script (`[00-kicking-function-table-has-no-provenance-in-the-repository]`, `review-remediation` board).
 
+### `[09-the-bath-drifts-from-g-rho-T4-by-about-1e-3]`
+
+**Opened:** 2026-10-31 by the orchestrator's review of prompt 09, from log 09 §5.2 and §7.
+
+- **What.** Along a history the stored ρ_R,J departs from (π²/30) g_ρ(T_J) T_J⁴, the bath the cosmology's
+  own tables give at the history's T_J.
+  - **Measured (log 09 §5.2, §7):** −0.210 % at T_J = 1 MeV and −0.078 % today, on M = 0.5 M_P, β = 2,
+    α = 0.1. The ODE sets ρ_R from g_ρ T⁴ only at T* and evolves it through Σ = 1 − 3w, while T_J follows
+    entropy conservation with g_s. The temperature law holds to 2×10⁻¹⁰.
+  - **The cause, as far as the review measured.** The relation g_s = (3/4)(1 + w) g_ρ holds exactly while
+    every species shares one temperature. `Xav_EOS_spline`'s three functions miss it:
+    g_s/((3/4)(1 + w) g_ρ) − 1 is −6.7×10⁻⁵ at 10 GeV, +3.6×10⁻³ at 1 GeV, −9.1×10⁻⁴ at 100 MeV,
+    +1.6×10⁻⁴ at 10 MeV and +3.0×10⁻³ at 1 MeV. (Below about 0.1 MeV the relation does not apply,
+    since T_ν ≠ T_γ there; it reaches 0.16.) Part of the value at 1 MeV may be the start of
+    e± annihilation, which the relation does not cover.
+- **Impact.**
+  - It is the whole of ruling 12's residual, −1.328×10⁻³ on every history (log 09 §5.2). Every ΔN_eff
+    column (R12, R22) carries it at about 10⁻³ relative. Those columns are for presentation (R12).
+  - ρ_NP reaches PRyMordial as r ρ_SM(T) (`build_rho_NP_callback`), with r relative to the stored
+    ρ_R,J. So the offset enters BBN's expansion rate only through r: at r = 0 BBN is plain PRyMordial.
+  - The history's own H, and so its dynamics, carries the bath's offset at about 10⁻³. That is not
+    measured.
+  - It is every history's, at every α, and predates this campaign.
+- **Next step.** For the user. Decide whether to make the table's w consistent with its g_ρ and g_s, or to
+  hold ρ_R to g_ρ T⁴ along the history. Either changes every history and needs its own ruling, so it is
+  not in this campaign (README P15). It is related to `[00-xav-sigma-is-non-monotone-at-25-35-keV]` (the
+  same table, another defect) and `[00-kicking-function-table-has-no-provenance-in-the-repository]`
+  (`review-remediation` board). Not assigned.
+
 ### 3.1 Assigned to this campaign
 
 None now. `[00-settling-at-physical-M-needs-a-parked-tracking-model]` was closed by prompt 09 (§4).
@@ -138,7 +168,7 @@ Assigned from the `integrator-remediation` board (its §3, now its §4).
     large-M histories whose tracker loses adiabaticity are released at m/H = 10 and reach T_CMB. What
     remains is Q on the parked samples (`AdiabaticHistory`), which is 09's (README §8.1 R15). So 07
     narrows it, and 09 closes it.
-  - **Closed (2026-10-31, prompt 09, this commit):** `AdiabaticHistory` reads each stored sample's
+  - **Closed (2026-10-31, prompt 09, `3984ec5`):** `AdiabaticHistory` reads each stored sample's
     ρ_χ/ρ_R and computes Q on the parked samples as on any other (R15). Q is finite on every parked sample
     measured: 2 142 at β = 2, M = 10⁻³⁰ and 10⁻¹⁶; 1 904 at M = 10⁻³, β = 1.2 (released); 244 at M = 0.5,
     β = 5 (released) (log 09 §5.3; test 8 (c)). The entry is closed on the `integrator-remediation` board
@@ -1534,7 +1564,7 @@ rests on it.
 
 ### 5.11 After prompt 09 (2026-10-31)
 
-09 landed in this commit, under orchestrator note 09 (rulings 1–17). Log: [`logs/09-store.md`](logs/09-store.md).
+09 landed in `3984ec5`, under orchestrator note 09 (rulings 1–17). Log: [`logs/09-store.md`](logs/09-store.md).
 - **The stop.** Ruling 9's required `r_chi`, and `compute_adiabatic_values` reading the stored ratio, fail
   `test_adiabatic_mass`, which the prompt and ruling 16 froze: 11 errors in 9 tests. The agent stopped. The
   user ruled, 2026-10-31: "(b) is fine". `_M2eff` passes r_χ = 0.0 when the signature has it, and the stand-in
@@ -1588,3 +1618,97 @@ rests on it.
   - closed `[00-settling-at-physical-M-needs-a-parked-tracking-model]` (§3.1 → §4; `integrator-remediation`
     §3 → §4; index §1.20 emptied, count 25 → 24);
   - opened none. Log 09 §7 records the ρ_R,J drift and F's absence from ΔN_eff for the user.
+
+*Orchestrator review of prompt 09* (2026-10-31, at `3984ec5`, against orchestrator note 09 §3):
+1. **Scope.**
+   - `git show --stat 3984ec5` lists 38 files. They are ruling 16's: the prompt's §6 list,
+     `tools/history_and_bbn.py` (ruling 4), the registry pins of ruling 1, and `test_adiabatic_mass.py` by
+     the user's ruling.
+   - Its parent is `03b769e`, note 09's commit. The tree is clean, the main checkout is the only worktree,
+     and nothing is pushed.
+   - In `ScalarHistory.py` the diff touches only an import, the new record, functions and constants
+     (:3077–:3268), `integrate_history`'s sampling append, call and payload, `tune_history`'s docstring,
+     `compute_scalar_history`, `build_extra_data`, `ScalarHistory` and `ScalarHistoryValue`. The step loop,
+     `IntegrationResult`, the records of 02–08 and `SampleValues` are untouched.
+2. **α = 0 and the frozen tests.**
+   - Both golden histories, the tuned one included, and the eight modules ruling 16 froze pass unedited.
+   - Every edit to an existing test is an α row, a registry pin, format 6 or 2026.8.0, or the user's
+     ruling (log 09 §3).
+   - D3, `test_inventory_report`'s expectations moving by the α row, is accepted. The tool is unchanged,
+     and it prints every key field generically.
+3. **The schema**, line by line against prompt §1.1–§1.4 and rulings 2–8: it agrees.
+   - `alpha_value` follows `beta_value` in the registry, the batch sizes and the replicated tables.
+   - `alpha_serial` is a non-null foreign key, filtered in `build`, with the parent `alpha`.
+   - The 24 columns are the table's names, all nullable, filled by `dissipation_values` from the
+     payload with `.get`. An absent ratio key with samples raises `RuntimeError`.
+   - `extra_data` is `Text`, and `"margins"` holds the 13 keys and nothing else of `Generation`.
+4. **The physics.**
+   - Log 09 §1.1 agrees with the orchestrator's own derivation: ρ_χ enters M²_eff/H² through H² in
+     V″/H², through Ḣ/H², and through E's normalization. The code takes `ODEPolicy`'s branch on
+     `r_chi == 0.0` verbatim.
+   - F = A²(1 + (ln A)′π)²/G and ruling 12's closed form are as note 09 §0 derived them.
+5. **An independent probe** (`review_probe.py`, session scratchpad).
+   - M = 0.5, β = 5 and β = 2, M = 10⁻³⁰, at α = 0.1, were stored on a temporary store. Every one of the 24
+     columns was recomputed without the agent's functions: the crossing by the orchestrator's own brentq,
+     r_χ from the ledger as K e^{−4N}/ρ_R,E, the fraction by `fsum`. The largest relative difference is
+     2.9×10⁻¹⁴.
+   - Every per-sample ratio (6 814 and 5 437) equals the ledger's.
+   - The `"margins"` key equals the payload's first failures.
+   - Q on the parked samples of the read-back objects is finite at every label. Its maxima (0.1859 and
+     2.0985×10⁻⁸ at k/H = 10) agree with the orchestrator's dispatch-tree probe to the 0.15 % that ρ_χ
+     moves them.
+   - At α = 0, every payload key of golden β = 5.5 and of natural mode at M = 0.5, β = 2 hashes by
+     `repr` as at `03b769e`, compared in a temporary worktree that was then removed. Only
+     `"rho_chi_over_rho_rad"` and `"dark_radiation_values"` are new.
+6. **The breakages.** B1–B8, replayed with `git apply` in `bash` in a temporary worktree of `3984ec5`, and
+   reverted with the tree left clean. Each fails what the log names:
+   - B1: 2;
+   - B2: 1;
+   - B3: 1;
+   - B4: 1;
+   - B5: 1;
+   - B6: 2;
+   - B7: 6 (the test and 5 subtests);
+   - B8: 1 failure and 9 errors.
+
+   The clean run passes 20/20. The log's B8 diff had lost its trailing context line and did not apply.
+   Restored in this review's commit; it now passes `git apply --check`.
+7. **The numerics of the tests.**
+   - Test 6 repeats the code's operations, so it is bitwise.
+   - Test 9's bound is derived in log 09 §1.2. Its largest miss over the bound is 0.032 and 0.037, with
+     F = 0.0094–0.0111 at β = 5.
+   - Test 8 (a)'s pins were taken at `03b769e` by the script the log quotes.
+   - Ruling 7: object == payload held bitwise on every converted column measured.
+8. **The version.**
+   - `FINGERPRINT_FORMAT` 6. `SPEC_DIGESTS[6]` was regenerated by the guard's `spec_digests` and is equal:
+     16 pairs, only `ScalarHistory`'s digest moved, and `alpha_value` is new.
+   - The one new golden file sits beside the old ones, which are unchanged.
+   - `VERSION_LABEL` is 2026.8.0, with its history line.
+9. **The measurement and the records.**
+   - §2.1 has the 8 histories, §2.2 ruling 12's residuals and F, §2.3 ruling 13's locations, and §2.4
+     both measures. §2.5 is bitwise on four setups, and §2.6 has three rounds in both trees.
+   - The log is in §5.1's form, with D1–D9 classed and the seventeen rulings recorded.
+   - The `.documents/` notes are dated and additive.
+   - The issue is closed on both boards with its Closed lines. Its index row is deleted, and the count went
+     25 → 24 before this review.
+10. **The suites** at `3984ec5`, run serially:
+    - CosmologyModels 26 OK (64 s);
+    - ComputeTargets 98 OK (129 s) + 375 OK (457 s);
+    - ObjectFactories 121 OK (66 s);
+    - tools 115 OK (127 s);
+    - RunDrivers 64 OK (23 s).
+
+    The load averages ran 3–9. The counts rose by the 20 new tests only. `black --check` is clean on the 31
+    changed `.py` files, and the four `--help`s exit 0.
+
+Residue fixed in this review's commit:
+- "this commit" → `3984ec5` in the log, on this board and on the `integrator-remediation` board;
+- note 09 added to the list of orchestrator notes;
+- the log's B8 diff restored.
+
+**Opened** in this review's commit: `[09-the-bath-drifts-from-g-rho-T4-by-about-1e-3]` (§3; index §1.19,
+count 24 → 25). Log 09 §7 found the stored ρ_R,J below (π²/30) g_ρ T_J⁴ by 0.21 % at 1 MeV. The review
+traced it to `Xav_EOS_spline`'s w, g_ρ and g_s, which miss g_s = (3/4)(1 + w) g_ρ by up to 3.6×10⁻³ above
+1 MeV. It is every history's and predates the campaign, so it is opened, not residue. Log 09 §7's other
+observation, that ΔN_eff(1 MeV) does not carry BBN's frame factor F (0.93–1.02 at small M, down to
+4.4×10⁻⁵ at M = 0.5, β = 25), is for the user under R22 and is not opened.

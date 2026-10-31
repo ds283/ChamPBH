@@ -1,7 +1,7 @@
 # Log 09 — the store
 
 **Subject:** Store dissipation mode and key every history by alpha
-**Commit:** this commit, on branch `inelastic-reflection`, on top of `03b769e`
+**Commit:** `3984ec5`, on branch `inelastic-reflection`, on top of `03b769e`
 **Date:** 2026-10-31, by Claude Opus 5.5
 **Result:** **COMPLETE**, after one stop that the user ruled (D1). The gate "Store" holds. One issue
 closed, none opened.
@@ -764,6 +764,7 @@ subtests (the three ratios and the two ΔN_eff) plus the test itself.
 +                json.dumps(obj._extra_data)[:256] if obj._extra_data is not None else None
              ),
          }
+ 
 ```
 
 ## 7. Observations not acted on

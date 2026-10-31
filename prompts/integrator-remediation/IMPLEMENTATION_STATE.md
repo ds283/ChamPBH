@@ -273,7 +273,7 @@ moot by `jordan-normalization` prompt 01.)*
     remains is what the parked field contributes to the adiabatic diagnostic: `AdiabaticHistory`'s Q
     on the parked samples, which is `inelastic-reflection` prompt 09's (its README §8.1 R15).
   - **Closed (2026-10-31):** by `inelastic-reflection` prompt 09 (its log
-    [`09-store.md`](../inelastic-reflection/logs/09-store.md), this commit). `AdiabaticHistory` reads each
+    [`09-store.md`](../inelastic-reflection/logs/09-store.md), `3984ec5`). `AdiabaticHistory` reads each
     stored sample's ρ_χ/ρ_R and computes Q on the parked samples as on any other (README §8.1 R15): Q is
     finite on every parked sample measured (2 142 at β = 2, M = 10⁻³⁰ and 10⁻¹⁶; 1 904 at M = 10⁻³,
     β = 1.2, released; 244 at M = 0.5 M_P, β = 5, released; log 09 §5.3), and the parked field's
