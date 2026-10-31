@@ -56,7 +56,11 @@ from MetadataConcepts import tolerance, store_tag
 from raypoolkit import RayWorkPool
 from Units import Planck_units
 from Units.base import UnitsLike
-from config.argument_parser import create_argument_parser, ray_address_problem
+from config.argument_parser import (
+    create_argument_parser,
+    distinct_values,
+    ray_address_problem,
+)
 from config.datastore import factories, serial_batch_sizes
 from config.sharding import (
     ShardKeyType,
@@ -69,6 +73,8 @@ from config.version import VERSION_LABEL
 from extract_common import (
     safe_fabs,
     add_ScalarHistory_labels,
+    alpha_path,
+    plot_dark_radiation,
     add_redshift_xaxis_labels,
     add_temperature_yaxis_labels,
     safe_fabs_positive,
@@ -256,7 +262,7 @@ def history_plot(
     T_ax.set_yscale("log")
     T_ax.grid(True)
 
-    add_ScalarHistory_labels(fig, model, model_label)
+    add_ScalarHistory_labels(fig, model, model_label, alpha=model.alpha.value)
 
     h, l = add_redshift_xaxis_labels(
         phi_ax, model, temp_unit="GeV", text_labels=True, x_coord=x_coord
@@ -378,7 +384,7 @@ def thermo_plot(
         linestyle="solid",
     )
 
-    add_ScalarHistory_labels(fig, model, model_label)
+    add_ScalarHistory_labels(fig, model, model_label, alpha=model.alpha.value)
 
     h, l = add_redshift_xaxis_labels(
         gstar_ax, model, text_labels=False, x_coord=x_coord
@@ -510,7 +516,7 @@ def Hubble_plot(
 
     H_ax.grid(True)
 
-    add_ScalarHistory_labels(fig, model, model_label)
+    add_ScalarHistory_labels(fig, model, model_label, alpha=model.alpha.value)
     h, l = add_redshift_xaxis_labels(
         H_ax, model, temp_unit="GeV", text_labels=True, x_coord=x_coord
     )
@@ -596,7 +602,7 @@ def energy_plot(
 
     energy_ax.grid(True)
 
-    add_ScalarHistory_labels(fig, model, model_label)
+    add_ScalarHistory_labels(fig, model, model_label, alpha=model.alpha.value)
     h, l = add_redshift_xaxis_labels(
         energy_ax, model, temp_unit="GeV", text_labels=True, x_coord=x_coord
     )
@@ -800,7 +806,7 @@ def ODE_terms_plot(
         Sigma_ax.xaxis.set_inverted(True)
     Sigma_ax.set_xlabel(x_axis_label())
 
-    add_ScalarHistory_labels(fig, model, model_label)
+    add_ScalarHistory_labels(fig, model, model_label, alpha=model.alpha.value)
     add_redshift_xaxis_labels(f_ax, model, text_labels=False, x_coord=x_coord)
     add_redshift_xaxis_labels(r_ax, model, text_labels=False, x_coord=x_coord)
     add_redshift_xaxis_labels(k_ax, model, text_labels=False, x_coord=x_coord)
@@ -1049,7 +1055,7 @@ def BBN_era_plot(
     phi_BBN_ax.set_xscale("log")
     phi_BBN_ax.xaxis.set_inverted(True)
 
-    add_ScalarHistory_labels(fig, model, model_label)
+    add_ScalarHistory_labels(fig, model, model_label, alpha=model.alpha.value)
 
     phi_BBN_ax.legend(loc="best")
     HJordan_BBN_ax.legend(loc="best")
@@ -1249,7 +1255,7 @@ def BBN_era_NP_plot(
     rho_NP_ax.set_xlabel("Temperature $T$ [MeV]")
     rho_NP_ax.xaxis.set_inverted(True)
 
-    add_ScalarHistory_labels(fig, model, model_label)
+    add_ScalarHistory_labels(fig, model, model_label, alpha=model.alpha.value)
     add_BBN_info_labels(fig, bbn=BBN)
 
     rho_NP_ax.legend(loc="best")
@@ -1318,6 +1324,10 @@ def write_csv_file(
                 "friction_term_Mp": value.friction_term / units.PlanckMass,
                 "reflecting_term_Mp": value.reflecting_term / units.PlanckMass,
                 "kicking_term_Mp": value.kicking_term / units.PlanckMass,
+                # the dark radiation (inelastic-reflection prompt 10, R27): r_chi per sample and
+                # Delta g* = gstar_rho * r_chi, both 0.0 at alpha = 0
+                "rho_chi_over_rho_rad": value.rho_chi_over_rho_rad,
+                "Delta_gstar": value.gstar_rho * value.rho_chi_over_rho_rad,
             }
 
         return {
@@ -1345,6 +1355,8 @@ def write_csv_file(
             "friction_term_Mp": nan,
             "reflecting_term_Mp": nan,
             "kicking_term_Mp": nan,
+            "rho_chi_over_rho_rad": nan,
+            "Delta_gstar": nan,
         }
 
     def Q_columns(store_id):
@@ -1424,8 +1436,10 @@ def plot_ScalarHistory(
     CONST_MP2: float = CONST_MP * CONST_MP
     CONST_3_MP2: float = 3.0 * CONST_MP2
 
+    # every per-alpha product goes under <output>/<label>/alpha=<alpha>/, alpha being the history's
+    # row (inelastic-reflection prompt 10, R26, ruling 3)
     base_path = Path(args.output).resolve()
-    base_path = base_path / f"{model_label}"
+    base_path = alpha_path(base_path / f"{model_label}", model.alpha.value)
     plot_path = base_path / f"plots/beta={beta:.5g}/M={M/units.eV:.5g}eV_n={n}"
     csv_path = base_path / f"csv/beta={beta:.5g}/M={M/units.eV:.5g}eV_n={n}"
 
@@ -1512,6 +1526,10 @@ def plot_ScalarHistory(
     )
     BBN_era_plot(plot_path, model, model_label, T_Jordan_MeV, SigmaFm, H_Standard)
     BBN_era_NP_plot(plot_path, model, BBN, model_label, T_Jordan_MeV, H_Standard)
+    # the dark radiation, at alpha > 0 only (R27)
+    plot_dark_radiation(
+        model, model_label, plot_path / "dark_radiation.pdf", x_coord=x_coord
+    )
 
     write_csv_file(BBN, Q, csv_path, model, units)
 
@@ -1531,7 +1549,7 @@ def run_pipeline(
     model_label = model_data["label"]
     model_cosmology = model_data["cosmology"]
 
-    print(f"\n>> RUNNING PIPELINE FOR MODEL {model_label}")
+    print(f"\n>> RUNNING PIPELINE FOR MODEL {model_label}, alpha = {alpha.value:g}")
 
     def build_plot_work(lagrangian: AbstractModel):
         model_query_payload = {
@@ -1617,7 +1635,8 @@ with ShardedPool(
     # (U4); a model that was never stored is skipped with a warning (U3)
     units = Planck_units()
     try:
-        atol, rtol, T_init, phi_init, pi_init, tuning_tol, alpha = (
+        alpha_values = distinct_values(args.alpha_values)
+        atol, rtol, T_init, phi_init, pi_init, tuning_tol, alpha_rows = (
             plot_inputs.parameters(
                 pool,
                 abs_tol=args.abs_tol,
@@ -1626,6 +1645,7 @@ with ShardedPool(
                 phi_init_Mp=args.phi_init_Mp,
                 units=units,
                 tuning_tol=args.tuning_tolerance,
+                alpha_values=alpha_values,
             )
         )
 
@@ -1641,18 +1661,24 @@ with ShardedPool(
         print(str(e), file=sys.stderr)
         sys.exit(2)
 
+    print(
+        f"@@ plot_ScalarHistory: alpha values {', '.join(f'{a.value:.5g}' for a in alpha_rows)}"
+    )
+
     for model_data in model_list:
         tags = []
 
-        run_pipeline(
-            model_data,
-            Model_array,
-            T_init,
-            phi_init,
-            pi_init,
-            atol,
-            rtol,
-            tuning_tol,
-            alpha,
-            tags,
-        )
+        # one pipeline per alpha row, in the order of --alpha-values
+        for alpha in alpha_rows:
+            run_pipeline(
+                model_data,
+                Model_array,
+                T_init,
+                phi_init,
+                pi_init,
+                atol,
+                rtol,
+                tuning_tol,
+                alpha,
+                tags,
+            )

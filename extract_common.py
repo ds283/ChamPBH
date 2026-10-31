@@ -96,11 +96,30 @@ def safe_div(x: Optional[float], y: float) -> Optional[float]:
     return nan
 
 
-def add_beta_summary_labels(fig, model_label, group_model: AbstractModel):
+def _cosmology_line(model_label, alpha: Optional[float]) -> str:
+    """The label line that names the cosmology, with the drained fraction when it is given."""
+    if alpha is None:
+        return f"Cosmology: {model_label}"
+    return f"Cosmology: {model_label}, α = {alpha:g}"
+
+
+def alpha_path(base, alpha: float) -> Path:
+    """
+    The directory of every per-alpha product of a plot script: ``base / "alpha=<α:.5g>"``, alpha = 0
+    included (`alpha=0`). The alpha is the stored row's value, never the float the user typed
+    (inelastic-reflection prompt 10, R26, ruling 3).
+    """
+    return Path(base) / f"alpha={alpha:.5g}"
+
+
+def add_beta_summary_labels(
+    fig, model_label, group_model: AbstractModel, alpha: Optional[float] = None
+):
     """
     The labels of a figure against beta: its (M, n) group, from one model of the group
     (jordan-normalization prompt 07; until then, the potential's name), the time and the
-    cosmology.
+    cosmology. With ``alpha`` the cosmology's line also says the drained fraction, `Cosmology:
+    <label>, α = <α:g>`; without it the line is as before (inelastic-reflection prompt 10, ruling 2).
     """
     now = datetime.now()
     M_text = group_model._formatter(group_model._M)
@@ -124,7 +143,7 @@ def add_beta_summary_labels(fig, model_label, group_model: AbstractModel):
     fig.text(
         RIGHT_COLUMN,
         ABOVE_PLOTS_BOTTOM_ROW,
-        f"Cosmology: {model_label}",
+        _cosmology_line(model_label, alpha),
         horizontalalignment="right",
         fontsize="x-small",
     )
@@ -190,11 +209,14 @@ def reflection_count(extra_data: Optional[dict]) -> int:
     return extra_data.get(REFLECTIONS_KEY, 0)
 
 
-def add_ScalarHistory_labels(fig, model: ScalarHistory, model_label):
+def add_ScalarHistory_labels(
+    fig, model: ScalarHistory, model_label, alpha: Optional[float] = None
+):
     """
     The labels of a history's figure: its model, and the V_ref and phi_ref its tuning found
     (jordan-normalization prompt 07; until then, the coupling's and the potential's names), the
-    solver, the time and the cosmology.
+    solver, the time and the cosmology. With ``alpha`` the cosmology's line also says the drained
+    fraction (inelastic-reflection prompt 10, ruling 2).
     """
     solver: IntegrationSolver = model.solver
     now = datetime.now()
@@ -236,7 +258,7 @@ def add_ScalarHistory_labels(fig, model: ScalarHistory, model_label):
     fig.text(
         RIGHT_COLUMN,
         ABOVE_PLOTS_BOTTOM_ROW,
-        f"Cosmology: {model_label}",
+        _cosmology_line(model_label, alpha),
         horizontalalignment="right",
         fontsize="x-small",
     )
@@ -517,11 +539,15 @@ FIXED_T_MEV = {"1MeV": 1.0, "70keV": 0.07}
 # phi_0'/(1.5 phi_0), residual_H and residual_phi are the tuning's residuals, and
 # tuning_iterations its integrations, the seed's included (blank without a successful history);
 # the shifts are fractions ((value - SM baseline)/SM baseline), D/H is the stored 10^5 D/H.
+# inelastic-reflection prompt 10 added alpha, the drained fraction that keys the history, and the
+# history's two Delta N_eff (the `dissipation` record's, at T_CMB and at 1 MeV with T_nu = T_gamma;
+# blank where there is no value, and 0 at alpha = 0).
 CSV_COLUMNS = [
     "beta",
     "M_Mp",
     "n",
     "phi_init_Mp",
+    "alpha",
     "normalization",
     "V_ref_eV4",
     "phi_ref_Mp",
@@ -541,6 +567,8 @@ CSV_COLUMNS = [
     "phi_70keV_Mp",
     "rho_ratio_1MeV",
     "rho_ratio_70keV",
+    "Delta_N_eff_today",
+    "Delta_N_eff_1MeV",
     "reflections",
     "failure_reasons",
 ]
@@ -870,6 +898,7 @@ def build_history_record(
     M_Mp: float,
     n: int,
     phi_init_Mp: float,
+    alpha: float,
     scalar,
     bbn,
     baseline: Optional[dict],
@@ -886,7 +915,10 @@ def build_history_record(
     loaded. The tuning's columns are converted as CSV_COLUMNS' comment says, and are NaN (a
     blank cell) where there is no successful history (jordan-normalization prompt 08). The record
     carries one extra key, first_bounce_reflected, which figure 3 reads and the CSV does not
-    write.
+    write. ``alpha`` is the value of the alpha row the history was read at, given by the caller
+    for every record, a failure's included (a failure has no ``scalar`` to read it from); the
+    two Delta N_eff are `scalar.dissipation`'s fields of those names, NaN where ``scalar`` is None,
+    its ``dissipation`` is None or the field is None (inelastic-reflection prompt 10, ruling 1).
     """
     record = {name: nan for name in CSV_COLUMNS}
     record.update(
@@ -894,6 +926,7 @@ def build_history_record(
         M_Mp=M_Mp,
         n=n,
         phi_init_Mp=phi_init_Mp,
+        alpha=alpha,
         reflections=nan,
         failure_reasons="; ".join(failure_reasons),
         first_bounce_reflected=None,
@@ -921,6 +954,11 @@ def build_history_record(
         record["residual_phi"] = tuning.residual_phi
         record["tuning_iterations"] = tuning.tuning_iterations
         record["reflections"] = reflection_count(scalar.extra_metadata)
+        dissipation = scalar.dissipation
+        if dissipation is not None:
+            for key in ("Delta_N_eff_today", "Delta_N_eff_1MeV"):
+                value = getattr(dissipation, key)
+                record[key] = nan if value is None else value
         bounce = scalar.first_bounce
         if bounce is not None:
             record["T_deliver_GeV"] = exp(bounce.log_T_Jordan) / units.GeV
@@ -1149,7 +1187,7 @@ def plot_fixed_T(records: Sequence[dict], path: Path, title: str = "") -> bool:
 
 def write_histories_csv(records: Sequence[dict], path: Path) -> None:
     """
-    histories.csv: one row per record, columns CSV_COLUMNS, sorted by (M, n, beta).
+    histories.csv: one row per record, columns CSV_COLUMNS, sorted by (alpha, M, n, beta).
     Missing values are written empty.
     """
     path = Path(path)
@@ -1163,5 +1201,158 @@ def write_histories_csv(records: Sequence[dict], path: Path) -> None:
     with open(path, "w", newline="") as f:
         writer = csv.writer(f)
         writer.writerow(CSV_COLUMNS)
-        for r in sorted(records, key=lambda r: (r["M_Mp"], r["n"], r["beta"])):
+        for r in sorted(
+            records, key=lambda r: (r["alpha"], r["M_Mp"], r["n"], r["beta"])
+        ):
             writer.writerow([cell(r[c]) for c in CSV_COLUMNS])
+
+
+# ---------------------------------------------------------------------------------------
+# The dissipation figures (inelastic-reflection prompt 10, R27, R28)
+# ---------------------------------------------------------------------------------------
+
+DELTA_N_EFF_PANELS = [
+    (
+        "Delta_N_eff_today",
+        r"$\Delta N_{\mathrm{eff}}(T_{\mathrm{CMB}})$, $(4/7)\,g_\rho\,(11/4)^{4/3}\,\rho_\chi/\rho_R$",
+    ),
+    (
+        "Delta_N_eff_1MeV",
+        r"$\Delta N_{\mathrm{eff}}$(1 MeV), $T_\nu = T_\gamma$",
+    ),
+]
+
+
+def plot_Delta_N_eff(records: Sequence[dict], path: Path, title: str = "") -> bool:
+    """
+    Delta N_eff against beta (R28): two panels sharing the beta axis, Delta N_eff at T_CMB above and at
+    1 MeV below, each on a log axis, one curve with markers per alpha > 0 present in ``records``, in
+    increasing alpha. A value that is NULL (a failure, or a history that did not reach 1 MeV) or not
+    positive is left out of its panel; one line is printed with the number left out of each. Returns
+    False, writing nothing, if no record has alpha > 0 (a store at alpha = 0 alone).
+    """
+    alphas = sorted({r["alpha"] for r in records if r["alpha"] > 0.0})
+    if len(alphas) == 0:
+        print(
+            "!! plot_Delta_N_eff: no record has alpha > 0; Delta N_eff figure skipped"
+        )
+        return False
+
+    fig = Figure(figsize=(8.0, 8.0))
+    axs = fig.subplots(nrows=2, ncols=1, sharex=True)
+    left_out = []
+    for ax, (key, ylabel) in zip(axs, DELTA_N_EFF_PANELS):
+        omitted = 0
+        for alpha in alphas:
+            group = [r for r in records if r["alpha"] == alpha]
+            xs = np.array([r["beta"] for r in group], dtype=float)
+            ys = np.array([r[key] for r in group], dtype=float)
+            good = np.isfinite(xs) & np.isfinite(ys) & (ys > 0.0)
+            omitted += int(np.count_nonzero(~good))
+            order = np.argsort(xs[good])
+            ax.plot(
+                xs[good][order],
+                ys[good][order],
+                marker="o",
+                label=rf"$\alpha$ = {alpha:g}",
+            )
+        left_out.append(omitted)
+        ax.set_yscale("log")
+        ax.set_ylabel(ylabel)
+        ax.grid(True)
+    axs[1].set_xlabel(r"coupling $\beta$")
+    axs[0].legend(loc="best")
+    fig.suptitle(title, fontsize="small")
+    print(
+        f"@@ plot_Delta_N_eff: left out (NULL or not positive): {left_out[0]} from the T_CMB panel, "
+        f"{left_out[1]} from the 1 MeV panel"
+    )
+    return _save(fig, path)
+
+
+def _event_x(values, N: float, x_coord: str) -> Optional[float]:
+    """
+    Where an event at e-fold N is drawn: N itself in e-folds, and in redshift the x of the first
+    sample whose raw_N is at or after N, as `_find_T_event_times` places its events at a sample;
+    None if no sample is.
+    """
+    if x_coord == "efolds":
+        return N
+    for value in sorted(values, key=lambda v: v.raw_N):
+        if value.raw_N >= N:
+            return get_x_coord(value, x_coord)
+    return None
+
+
+def plot_dark_radiation(
+    model: ScalarHistory, model_label: str, path: Path, x_coord: str = "redshift"
+) -> bool:
+    """
+    The dark radiation of a history at alpha > 0 (R27, P26): two panels sharing the x axis (redshift
+    or e-folds, with the temperature labels of the other history figures), Delta g*(T_J) =
+    gstar_rho * rho_chi_over_rho_rad per sample above and rho_chi/rho_R below, both on log axes.
+    A sample whose ratio is 0.0 (before the first drain) is left out, and so is one whose Delta g* is
+    not positive. Vertical lines mark `dissipation.parking_N` and `dissipation.release_N`, each where
+    it is not None (ruling 5). Returns False, writing nothing, if the history's alpha is not above 0.
+    """
+    if x_coord not in ("redshift", "efolds"):
+        raise RuntimeError(f"Invalid x_coord: {x_coord}")
+    alpha = model.alpha.value
+    if not alpha > 0.0:
+        print(
+            f"@@ plot_dark_radiation: alpha = {alpha:g}, no dark radiation to plot; figure skipped"
+        )
+        return False
+
+    values = model.values
+    points = [
+        (
+            get_x_coord(v, x_coord),
+            v.gstar_rho * v.rho_chi_over_rho_rad,
+            v.rho_chi_over_rho_rad,
+        )
+        for v in values
+        if v.rho_chi_over_rho_rad > 0.0 and v.gstar_rho * v.rho_chi_over_rho_rad > 0.0
+    ]
+
+    fig = Figure(figsize=(8.0, 8.0))
+    gstar_ax, ratio_ax = fig.subplots(nrows=2, ncols=1, sharex=True)
+    if len(points) > 0:
+        x, dg, r = zip(*points)
+        gstar_ax.plot(x, dg, color="tab:blue", label=r"$\Delta g_*$")
+        ratio_ax.plot(x, r, color="tab:blue", label=r"$\rho_\chi/\rho_R$")
+    gstar_ax.set_yscale("log")
+    ratio_ax.set_yscale("log")
+    gstar_ax.set_ylabel(r"$\Delta g_* = g_{*\rho}\,\rho_\chi/\rho_R$")
+    ratio_ax.set_ylabel(r"$\rho_\chi/\rho_R$")
+    for ax in (gstar_ax, ratio_ax):
+        ax.grid(True)
+    if x_coord == "redshift":
+        ratio_ax.set_xscale("log")
+        ratio_ax.set_xlabel(r"redshift $1+z$")
+    else:
+        ratio_ax.set_xlabel(r"e-folds $N$")
+
+    dissipation = model.dissipation
+    for name, N, colour in (
+        ("parking", dissipation.parking_N, "tab:red"),
+        ("release", dissipation.release_N, "tab:green"),
+    ):
+        if N is None:
+            continue
+        xpos = _event_x(values, N, x_coord)
+        if xpos is None:
+            continue
+        for ax in (gstar_ax, ratio_ax):
+            ax.axvline(
+                xpos,
+                color=colour,
+                linestyle="dashed",
+                label=f"{name}, N = {N:.4g}" if ax is gstar_ax else None,
+            )
+
+    add_redshift_xaxis_labels(gstar_ax, model, text_labels=True, x_coord=x_coord)
+    add_redshift_xaxis_labels(ratio_ax, model, text_labels=False, x_coord=x_coord)
+    add_ScalarHistory_labels(fig, model, model_label, alpha=alpha)
+    gstar_ax.legend(loc="best", fontsize="small")
+    return _save(fig, path)

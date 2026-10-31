@@ -304,7 +304,7 @@ class TestReportOnAStore(_InventoryStoreCase):
         self.assertIn(
             "common to every history: cosmology=QCD_Cosmology(omega_m=0.3111, "
             "omega_cc=0.6889, h=0.6766, f_baryon=0.1575, T_CMB_Kelvin=2.7255, Neff=3.046), "
-            "log10_atol=-10, log10_rtol=-8, log10_tuning_tol=-5",
+            "log10_atol=-10, log10_rtol=-8, log10_tuning_tol=-5, alpha=0",
             self.lines,
         )
         self.assertIn("validated: 2 records; version = 2026.6.0", self.lines)
@@ -312,12 +312,12 @@ class TestReportOnAStore(_InventoryStoreCase):
         common = "T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass"
         self.assertIn(
             f"- {common}, model=ExponentialModel(M=2.436e+24 eV, beta=1.1, n_value=1), "
-            f"failure=True, alpha=0  | values: 0",
+            f"failure=True  | values: 0",
             self.lines,
         )
         self.assertIn(
             f"- {common}, model=ExponentialModel(M=2.436e+24 eV, beta=25, n_value=1), "
-            f"failure=False, alpha=0  tags: pilot  | values: 3",
+            f"failure=False  tags: pilot  | values: 3",
             self.lines,
         )
 
@@ -325,7 +325,7 @@ class TestReportOnAStore(_InventoryStoreCase):
         model = (
             "history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, "
             "model=ExponentialModel(M=2.436e+24 eV, beta=25, n_value=1), "
-            "failure=False, alpha=0, tags=[pilot]}"
+            "failure=False, tags=[pilot]}"
         )
         self.assertIn(
             "@@ AdiabaticHistory (sharded): 1 record: 1 validated, 0 unvalidated; "

@@ -671,7 +671,8 @@ def _dimensionful(values_eV, values_Mp, log10_low_eV, log10_high_eV, per_decade)
 
 def describe_scope(parsed) -> str:
     """The manifest's `scope`, from `main.py`'s parsed arguments as given: the config file, the
-    β and M choices, the model's exponents n, φ*, the tuning tolerance, the shards and the job
+    β and M choices, the model's exponents n, φ*, the tuning tolerance, the drained fractions α
+    (inelastic-reflection prompt 10, P37; as given, duplicates included), the shards and the job
     name. A choice given as values reads as the values, or as a count and a range when there are
     more than `SCOPE_MAX_VALUES`; a choice given as a range reads as its arguments.
     (jordan-normalization prompt 08 dropped the potential type, which is gone, and added n and the
@@ -696,6 +697,7 @@ def describe_scope(parsed) -> str:
     parts.append(f"n {_values(parsed.n_values)}")
     parts.append(f"φ* {_number(parsed.phi_init_Mp)} Mp")
     parts.append(f"tuning tolerance {_number(parsed.tuning_tolerance)}")
+    parts.append(f"α {_values(parsed.alpha_values)}")
     parts.append(f"{parsed.shards} shards")
     parts.append(f"job {parsed.job_name}")
     return "; ".join(parts)

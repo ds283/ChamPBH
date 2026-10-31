@@ -109,6 +109,33 @@ def positive_int(text: str) -> int:
     return value
 
 
+def alpha_fraction(text: str) -> float:
+    """
+    An argparse type for --alpha-values: the drained fraction alpha, 0 <= alpha < 1
+    (inelastic-reflection prompt 10, P32). A value out of range is refused here, at parse and
+    before Ray, since integrate_history refuses it inside a Ray task. ``-0`` is returned as 0.0, so
+    that the alpha row, and the path built from it, have one spelling of zero.
+    """
+    value = float(text) + 0.0
+    if not (0.0 <= value < 1.0):
+        raise argparse.ArgumentTypeError(
+            f"must be a fraction with 0 <= alpha < 1, not {text}"
+        )
+    return value
+
+
+def distinct_values(values) -> list:
+    """
+    ``values`` without exact duplicates, in the order of first appearance. The drivers apply it once
+    to --alpha-values and use only its result (inelastic-reflection prompt 10, P32).
+    """
+    seen = []
+    for value in values:
+        if value not in seen:
+            seen.append(value)
+    return seen
+
+
 def anchored_log10_one_plus_z_low(text: str) -> float:
     """
     An argparse type for --log10-one-plus-z-low: only 0 is accepted, since the sampling axis
@@ -190,6 +217,16 @@ def create_argument_parser() -> configargparse.ArgumentParser:
         "|H_J(T_CMB)/H0 - 1| and |phi_ref/phi_min - 1| (default %(default)s). It is a key of "
         "every stored history, so a run at another tolerance computes histories of its own "
         "(jordan-normalization prompt 08)",
+    )
+    parser.add_argument(
+        "--alpha-values",
+        type=alpha_fraction,
+        nargs="+",
+        default=[0.0],
+        help="one or more values of the drained fraction alpha, 0 <= alpha < 1: the fraction of the "
+        "condensate's kinetic energy that dissipation mode drains at each candidate. It is a key of "
+        "every stored history; 0 is natural mode (the default %(default)s), and a given list "
+        "replaces the default (inelastic-reflection prompt 10)",
     )
     parser.add_argument(
         "--tuning-max-integrations",

@@ -281,6 +281,7 @@ def _parameters(pool, args):
         phi_init_Mp=args.phi_init_Mp,
         units=UNITS,
         tuning_tol=args.tuning_tolerance,
+        alpha_values=args.alpha_values,
     )
 
 
@@ -348,8 +349,8 @@ class TestAStoreMainBuilt(_ReadOnlyCase):
         )
         self.assertEqual(params.pi_init.value, 0.0)
         self.assertAlmostEqual(params.tuning_tol.log10_tol, -5.0)
-        self.assertEqual(params.alpha.value, 0.0)
-        for obj in params:
+        self.assertEqual([a.value for a in params.alphas], [0.0])
+        for obj in (*params[:-1], *params.alphas):
             self.assertTrue(getattr(obj, "_deserialized", False), obj)
 
         # the stored grid, in ascending order of value
@@ -395,6 +396,7 @@ class TestThePayloads(_ReadOnlyCase):
             phi_init_Mp=5.0,
             units=UNITS,
             tuning_tol=1e-5,
+            alpha_values=[0.0],
         )
         self.assertEqual(
             pool.lookups,
@@ -587,7 +589,7 @@ class TestOtherRefusalsPropagate(_ReadOnlyCase):
         error = ReadOnlyMiss("version", {"label": "x"})
         with self.assertRaises(ReadOnlyMiss) as ctx:
             plot_inputs.parameters(
-                _RefusingPool(error), 1e-8, 1e-8, 2e4, 5.0, UNITS, 1e-5
+                _RefusingPool(error), 1e-8, 1e-8, 2e4, 5.0, UNITS, 1e-5, [0.0]
             )
         self.assertNotIsInstance(ctx.exception, plot_inputs.PlotOptionNotStored)
         self.assertEqual(ctx.exception.class_name, "version")

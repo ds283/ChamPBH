@@ -35,8 +35,8 @@ class, `ReadOnlyWrite` for a sharded one. What a refusal means depends on the lo
   prompt 08).
 
 Since jordan-normalization prompt 07 a stored history is keyed by its model, its initial data and
-the tuning tolerance, and since inelastic-reflection prompt 09 by α too (the constant α = 0 until
-prompt 10 gives the plots an option), and ends at T_CMB: the store holds no Lambda and no final temperature, so
+the tuning tolerance, and since inelastic-reflection prompt 09 by α too (`--alpha-values`, since
+prompt 10), and ends at T_CMB: the store holds no Lambda and no final temperature, so
 there is no potential, coupling or `T_stop` to look up.
 
 Any other exception propagates unchanged. Under Ray an actor's exception reaches `ray.get` as
@@ -50,7 +50,7 @@ import; it calls `ray.get` as the scripts do, so a test drives it inside the sta
 """
 
 import itertools
-from typing import List, NamedTuple
+from typing import List, NamedTuple, Sequence
 
 import ray
 from datastorekit.replication import ReadOnlyMiss, ReadOnlyWrite
@@ -104,7 +104,8 @@ class PlotParameters(NamedTuple):
     phi_init: object
     pi_init: object
     tuning_tol: object
-    alpha: object
+    # one `alpha_value` row per distinct --alpha-values value, in the drivers' order (a tuple)
+    alphas: tuple
 
 
 def parameters(
@@ -115,14 +116,16 @@ def parameters(
     phi_init_Mp: float,
     units,
     tuning_tol: float,
+    alpha_values: Sequence[float],
 ) -> PlotParameters:
     """
     The tolerances, `T_init`, `phi_init` and `pi_init` (README §0.3 rows 1-5), from `--abs-tol`,
     `--rel-tol`, `--T-init-GeV`, `--phi-init-Mp` and the constant pi = 0, the tuning tolerance
-    (jordan-normalization prompt 07), from `--tuning-tolerance` (prompt 08), and the constant
-    alpha = 0, a key of every history (inelastic-reflection prompt 09, P30). Every lookup is
-    submitted first; each is then read in this order, and the first that is not stored raises
-    `PlotOptionNotStored`.
+    (jordan-normalization prompt 07), from `--tuning-tolerance` (prompt 08), and one row per
+    alpha of `alpha_values` (`--alpha-values`, deduplicated by the caller), a key of every history
+    (inelastic-reflection prompt 09, P30; prompt 10, P34). Every lookup is submitted first; each is
+    then read in this order, the alphas last and in the order given, and the first that is not
+    stored raises `PlotOptionNotStored`. `alphas` is the tuple of the alpha rows.
     """
     lookups = [
         (
@@ -165,14 +168,17 @@ def parameters(
             "--tuning-tolerance",
             _value(tuning_tol),
         ),
+    ] + [
         (
-            pool.object_get("alpha_value", value=0.0),
+            pool.object_get("alpha_value", value=a),
             "alpha_value",
-            "the constant α",
-            "α = 0",
-        ),
+            "--alpha-values",
+            _value(a),
+        )
+        for a in alpha_values
     ]
-    return PlotParameters(*(_get_parameter(*lookup) for lookup in lookups))
+    rows = [_get_parameter(*lookup) for lookup in lookups]
+    return PlotParameters(*rows[:6], tuple(rows[6:]))
 
 
 class StoredGrid(NamedTuple):

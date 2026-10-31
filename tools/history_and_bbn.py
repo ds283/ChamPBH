@@ -45,7 +45,7 @@ reads its tables from the working directory, one invocation at a time:
 
     ./venv/bin/python tools/history_and_bbn.py BETA M [--phi-init-Mp X] \\
         [--tuning-tolerance TOL] [--tuning-max-integrations K] \\
-        [--fixed-normalization NORM PHI_REF_MP [--T-stop-GeV T]] \\
+        [--fixed-normalization NORM PHI_REF_MP [--T-stop-GeV T]] [--alpha A] \\
         [--no-small-network] [--wall-clock-limit SECS]
 
 M is in units of the (reduced) Planck mass. Output lines:
@@ -54,6 +54,7 @@ M is in units of the (reduced) Planck mass. Output lines:
     history beta=... M=...: RHS=... accepted_steps=... reflections=... samples=... integrations=... wall=... s
     tuning beta=... M=...: normalization=... V_ref=... phi_ref=... ... seed_phi_ref=...       (tuned only)
     bounce beta=... M=...: N=... T_J=... MeV phi=... reflected=...
+    dissipation beta=... M=...: injections=... ... unassessed_share=...                       (alpha > 0 only)
     fixed_T beta=... M=...: 1MeV crossings=... phi=... ratio=... stand_in_phi=... stand_in_ratio=... | 70keV ...
     ratio beta=... M=... [lo,hi) keV: n=... min=... median=... max=... rms_step=...
     bbn beta=... M=...: Yp=... DoH=... He3oH=... Li7oH=... PRyM_time=... s wall=... s PRyM_version=...
@@ -75,6 +76,14 @@ the two stored samples either side of the first bracketing pair. The ratio lines
 rho_NP / rho_R,J, computed from the stored samples as compute_BBN_data computes it, in four
 Jordan-temperature windows; rms_step is the root mean square of the sample-to-sample
 difference.
+
+--alpha A (0 <= A < 1, default 0) is the drained fraction of dissipation mode, passed to the tuning
+or the integration (inelastic-reflection prompt 10, P10). At A = 0 nothing changes: no line gains
+a field. At A > 0 the history line gains `alpha=A` just before `wall=`, and a `dissipation` line
+follows the bounce line: `name=value` for every field of `dissipation_values(data)`, in the order
+of `DissipationValues._fields`, each value `:.6g` (None as `None`); the two ln T_J fields are
+printed converted as the store converts them (minus ln GeV), as `parking_log_T_Jordan_GeV` and
+`release_log_T_Jordan_GeV`.
 
 Costs, measured by jordan-normalization prompt 08 at a load of about 10: tuned at beta = 3,
 M = 0.01, five integrations, 22 s (up to about 28 s under more load); one integration
@@ -112,6 +121,7 @@ from ComputeTargets.ScalarHistory import (  # noqa: E402
     FIXED_T_JORDAN_LOW_MEV,
     TUNING_OUTPUT_KEYS,
     SampleValues,
+    dissipation_values,
     ScalarHistoryValue,
     integrate_history,
     tune_history,
@@ -131,6 +141,7 @@ from CosmologyModels.LambdaCDM import Planck2018  # noqa: E402
 from Units import Planck_units  # noqa: E402
 from config.argument_parser import (  # noqa: E402
     DEFAULT_LOG10_ONE_PLUS_Z_HIGH,
+    alpha_fraction,
     positive_float,
     positive_int,
 )
@@ -273,6 +284,38 @@ def tuning_line(data: dict, label: str) -> str:
     return f"tuning {label}: " + " ".join(parts)
 
 
+# the two fields of DissipationValues in the cosmology's units, which the store converts to GeV
+_LOG_T_FIELDS = {
+    "parking_log_T_Jordan": "parking_log_T_Jordan_GeV",
+    "release_log_T_Jordan": "release_log_T_Jordan_GeV",
+}
+
+
+def dissipation_values_printed(data: dict, units) -> dict:
+    """
+    {name: value} for every field of `dissipation_values(data)`, in the order of
+    `DissipationValues._fields`, with the two ln T_J fields converted as the store converts them
+    (minus ln GeV) and renamed (prompt 10, ruling 7). A value is None where the field is.
+    """
+    values = dissipation_values(data)._asdict()
+    out = {}
+    for name, value in values.items():
+        if name in _LOG_T_FIELDS:
+            name = _LOG_T_FIELDS[name]
+            if value is not None:
+                value = value - log(units.GeV)
+        out[name] = value
+    return out
+
+
+def dissipation_line(data: dict, label: str, units) -> str:
+    """The `dissipation` line: name=value, each value `:.6g`, None as None (alpha > 0 only)."""
+    return f"dissipation {label}: " + " ".join(
+        f"{name}={'None' if value is None else format(value, '.6g')}"
+        for name, value in dissipation_values_printed(data, units).items()
+    )
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("beta", type=float, help="the coupling's beta")
@@ -282,6 +325,13 @@ def main(argv=None) -> int:
         type=float,
         default=PHI_INIT_MP,
         help="initial value of the scalar field in units of M_P (default 5, as main.py)",
+    )
+    parser.add_argument(
+        "--alpha",
+        type=alpha_fraction,
+        default=0.0,
+        help="the drained fraction alpha of dissipation mode, 0 <= alpha < 1 (default %(default)s: "
+        "natural mode), passed to the tuning, or to the integration with --fixed-normalization",
     )
     parser.add_argument(
         "--tuning-tolerance",
@@ -396,6 +446,7 @@ def main(argv=None) -> int:
                 task_label=task_label,
                 tolerance=args.tuning_tolerance,
                 max_integrations=args.tuning_max_integrations,
+                alpha=args.alpha,
                 # one line per integration, as before (tuning-followups prompt 02, U2); the
                 # default is quiet, for main.py's heartbeat
                 progress="every",
@@ -411,6 +462,7 @@ def main(argv=None) -> int:
                 _z_grid(),
                 model.realize(normalization, phi_ref_Mp * units.PlanckMass),
                 task_label=task_label,
+                alpha=args.alpha,
             )
     finally:
         SM.integrate_scalar_history = integrate
@@ -423,10 +475,13 @@ def main(argv=None) -> int:
 
     metadata = data["metadata"]
     integrations = data["tuning_iterations"] if tuned else 1
+    # alpha is named only where it is not 0, so that every line at alpha = 0 is as before
+    alpha_field = f"alpha={args.alpha:g} " if args.alpha > 0.0 else ""
     print(
         f"history {label}: RHS={metadata.RHS_evaluations} "
         f"accepted_steps={data['accepted_steps']} reflections={data['reflections']} "
-        f"samples={len(data['sample'])} integrations={integrations} wall={wall:.1f} s"
+        f"samples={len(data['sample'])} integrations={integrations} {alpha_field}"
+        f"wall={wall:.1f} s"
     )
     if tuned:
         print(tuning_line(data, label))
@@ -441,6 +496,9 @@ def main(argv=None) -> int:
             f"phi={bounce.phi_Einstein / units.PlanckMass:.6e} "
             f"reflected={bounce.reflected}"
         )
+
+    if args.alpha > 0.0:
+        print(dissipation_line(data, label, units))
 
     # the payload's r_chi at each sample, which ScalarHistoryValue requires (inelastic-reflection
     # prompt 09, P27): 0.0 at alpha = 0, so the output there is unchanged

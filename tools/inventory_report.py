@@ -74,6 +74,7 @@ INVENTORY_CATEGORIES: List[Tuple[str, List[str]]] = [
             "redshift",
             "tolerance",
             "beta_value",
+            "alpha_value",
             "temperature",
             "M_value",
             "phi_value",
@@ -119,6 +120,7 @@ HISTORY_EXTRA_FIELDS: List[Tuple[str, str]] = [
     ("atol", "log10_atol"),
     ("rtol", "log10_rtol"),
     ("tuning_tol", "log10_tuning_tol"),
+    ("alpha", "alpha"),
     ("version", "version"),
 ]
 HISTORY_TYPE_LEAVES = ("cosmology_type", "model_type")

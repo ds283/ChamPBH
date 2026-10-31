@@ -1262,6 +1262,62 @@ SampleValues = namedtuple("SampleValues", [
 >   `VERSION_LABEL = "2026.8.0"`. Tests: `ObjectFactories/tests/test_dissipation_store.py`,
 >   `test_adiabatic_dark_radiation.py`, `ComputeTargets/tests/test_bbn_sees_dark_radiation.py`.
 
+> **Note, 2026-10-31 (`inelastic-reflection`, prompt 10): α reaches the drivers and the readers.**
+> Nothing computed or stored changes (README §8.1 R26–R28, §8.2 P32–P39).
+> - **The option.** `--alpha-values` (`config/argument_parser.py`): `nargs="+"`, `default=[0.0]`, the
+>   default action, so a given list replaces the default as `--n-values` does (an `extend` would give
+>   `[0.0, 0.1]`). Its type `alpha_fraction` returns `float(text) + 0.0` (so `-0` is `0.0`) and refuses
+>   anything outside 0 ≤ α < 1, including `nan` and `inf`, at parse, exit 2, with the option named and
+>   before Ray (`integrate_history` would refuse it inside a task). The YAML key `alpha-values` works as
+>   any option's. `distinct_values` removes exact duplicates in the order of first appearance; `main.py`
+>   and both plot scripts apply it once and use only its result.
+> - **One pipeline per α.** `main.py` fetches one `alpha_value` row per distinct α in the tolerances'
+>   `ray.get` and prints `-- populated alpha grid …` beside the β and M grids. Inside its loop over the
+>   cosmologies, after `warn_super_planckian`, it calls `run_pipeline` once per row, in the order given;
+>   `run_pipeline`'s signature is unchanged and its banner reads `>> RUNNING PIPELINE FOR MODEL <label>,
+>   alpha = <α:g>`. The plot scripts do the same. `plot_inputs.parameters` takes `alpha_values` and
+>   returns `PlotParameters.alphas`, a tuple of rows in that order; an α with no stored row is
+>   `PlotOptionNotStored("alpha_value", "--alpha-values", <α>)` (exit 2, after `ray.init` as every
+>   unstored option is, before any figure). An α stored but with no stored history for a model is that
+>   model's existing "not stored, skipped".
+> - **Paths (R26).** Every per-α product is under `<output>/<label>/alpha=<α:.5g>/`, α = 0 included
+>   (`alpha=0/`), built by `extract_common.alpha_path` from the row's value (`alpha.value`, and
+>   `model.alpha.value` in `plot_ScalarHistory`), never the float the user typed. `plot_by_beta.py`'s
+>   `M_convergence.pdf` moves down with them; `histories.csv` and `Delta_N_eff.pdf` span α and stay at
+>   `<label>/` and `<label>/plots/M=…eV_n=…/`. `plot_by_beta.run_pipeline` now returns its records and no
+>   longer writes `histories.csv`; the driver block gathers the records of every α and writes both
+>   products once, after the last α. `add_beta_summary_labels` and `add_ScalarHistory_labels` take an
+>   optional `alpha`, and every call passes it: the cosmology's line reads `Cosmology: <label>, α = <α:g>`.
+> - **The records.** `build_history_record` takes `alpha` as a required keyword (a failure has no
+>   history to read it from) and the two ΔN_eff from `scalar.dissipation` (NaN where missing).
+>   `histories.csv` gains `alpha` after `phi_init_Mp` and `Delta_N_eff_today`, `Delta_N_eff_1MeV` after
+>   `rho_ratio_70keV`, and sorts by (α, M, n, β). `plot_ScalarHistory`'s `fields.csv` gains
+>   `rho_chi_over_rho_rad` and `Delta_gstar`.
+> - **The figures** (in `extract_common.py`, so a test draws them without Ray).
+>   - `plot_Delta_N_eff` (R28): two panels sharing β, ΔN_eff at T_CMB above (P7's (11/4)^{4/3}) and at
+>     1 MeV below (T_ν = T_γ, R22), log axes, one curve with markers per α > 0; a NULL or non-positive
+>     value is left out and counted in one printed line; no α > 0, no file and `False`.
+>   - `plot_dark_radiation` (R27, P26): Δg* = `gstar_rho * rho_chi_over_rho_rad` above and ρ_χ/ρ_R below, log
+>     axes, samples with a ratio of 0.0 left out, vertical lines at `dissipation.parking_N` and
+>     `release_N` (exact in e-folds, which is what `plot_ScalarHistory` uses; at the first sample at or
+>     after N in redshift). Written at α > 0 only.
+> - **The wrapper's scope** reads `α <values>` after the tuning tolerance (`α 0` by default), as given,
+>   duplicates included.
+> - **The inventory.** `alpha_value` is in "Redshifts, tolerances and parameter values" after `beta_value`
+>   (it left "Other classes"), and `("alpha", "alpha")` joins `HISTORY_EXTRA_FIELDS`, so one shared α is
+>   printed once on the common line and several are printed on each history line.
+> - **The tools.** `tools/history_and_bbn.py --alpha` goes to `tune_history` or `integrate_history`; at
+>   α > 0 the `history` line gains `alpha=<α:g>` before `wall=`, and a `dissipation` line follows the
+>   bounce line with every field of `dissipation_values(data)`, `:.6g` (the two ln T_J fields as
+>   `*_log_T_Jordan_GeV`); at α = 0 no line changes. `tools/bbn_from_store.py --alpha` (`find_model(…,
+>   *, alpha=0.0)`) joins `alpha_value` and matches as the dimensionless factory does (absolute at 0,
+>   relative otherwise); a shard with no `alpha_value` table, as in a store of before α was a key, holds
+>   α = 0 only. The surfing tools stay at α = 0.
+> - Tests: `ComputeTargets/tests/test_alpha_option.py`, `test_alpha_plot_inputs.py`,
+>   `test_bbn_from_store_alpha.py`; `ObjectFactories/tests/test_alpha_figures.py`;
+>   `RunDrivers/tests/test_scope_alpha.py`; `tools/tests/test_inventory_alpha.py`,
+>   `test_history_and_bbn_alpha.py`.
+
 ### 7.3 `AdiabaticHistory` (`ComputeTargets/AdiabaticHistory.py`)
 
 Computes the adiabatic perturbation parameter Q (which determines whether the chameleon field is adiabatically tracking its minimum). Requires a `ScalarHistoryProxy` as input.

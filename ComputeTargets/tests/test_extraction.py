@@ -214,6 +214,7 @@ def _synthetic_records(units):
                     density_NP_ratio_70keV=None if k == 11 else 3e-3 * beta,
                 ),
                 tuning=_tuning(beta, units),
+                dissipation=None,
             )
             bbn = _NoSamples(
                 Yp_BBN=0.2470 * (1.0 + 0.01 * beta),
@@ -227,6 +228,7 @@ def _synthetic_records(units):
                     M_Mp=M_Mp,
                     n=1,
                     phi_init_Mp=5.0,
+                    alpha=0.0,
                     scalar=scalar,
                     bbn=bbn,
                     baseline=baseline,
@@ -240,6 +242,7 @@ def _synthetic_records(units):
             M_Mp=0.5,
             n=1,
             phi_init_Mp=5.0,
+            alpha=0.0,
             scalar=None,
             bbn=None,
             baseline=baseline,
@@ -375,6 +378,7 @@ class TestFigures(unittest.TestCase):
                 M_Mp=0.5,
                 n=1,
                 phi_init_Mp=5.0,
+                alpha=0.0,
                 scalar=None,
                 bbn=None,
                 baseline=None,

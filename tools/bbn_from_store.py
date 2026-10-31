@@ -37,7 +37,7 @@ Run from the repository root, since PRyMordial reads PRyMrates/ and the EOS its
 table from the working directory:
 
     ./venv/bin/python tools/bbn_from_store.py STORE_STEM --beta B --M-Mp M \\
-        [--phi-init-Mp 5] [--variant prod pert12 pert9 ...] [--small-network] \\
+        [--phi-init-Mp 5] [--alpha A] [--variant prod pert12 pert9 ...] [--small-network] \\
         [--wall-clock-limit SECS] [--lowT-rtol X] [--lowT-atol X|NAME] \\
         [--csv PATH] [--tag TEXT]
     ./venv/bin/python tools/bbn_from_store.py --sm-baseline [--small-network] \\
@@ -53,7 +53,8 @@ limit; the SM baseline never has one, as in production. `--csv` appends one row
 per solve (`CSV_FIELDS`), under an exclusive lock, so several invocations may
 share a file.
 
-Prints one header line per history, then one line per variant:
+Prints one header line per history (`alpha=A` after `phi=` only at A > 0, inelastic-reflection
+prompt 10), then one line per variant:
 
     store beta=... M=... phi=...: shard=... serial=... RHS=... window_samples=... stored: ...
       prod   Yp=... DoH=... He3oH=... Li7oH=... wall=... s
@@ -88,6 +89,11 @@ if str(_ROOT) not in sys.path:
 
 import PRyM.PRyM_main as PRyMmain  # noqa: E402
 from Units import Planck_units  # noqa: E402
+from config.argument_parser import alpha_fraction  # noqa: E402
+from config.defaults import (  # noqa: E402
+    DEFAULT_DIMENSIONLESS_QUANTITY_PRECISION,
+    DEFAULT_DIMENSIONLESS_QUANTITY_RELATIVE_PRECISION,
+)
 
 # the module, not the BBNData class the package re-exports under the same name
 B = importlib.import_module("ComputeTargets.BBNData")
@@ -213,9 +219,53 @@ _FIND_QUERY = """
     join beta_value b on b.serial = m.beta_serial
     join M_value mv on mv.serial = m.M_serial
     join phi_value ph on ph.serial = sm.phi_Einstein_init_serial
+    join alpha_value a on a.serial = sm.alpha_serial
     where abs(b.value - ?) < 1e-9 and abs(ph.value_PlanckMass - ?) < 1e-9
       and sm.failure = 0
 """
+
+# the history's alpha (the drained fraction, a key since inelastic-reflection prompt 09) is matched
+# as the dimensionless factory matches a value: absolutely at 0, relatively otherwise, with
+# config.defaults' precisions (prompt 10, ruling 8)
+_ALPHA_ZERO = f" and abs(a.value - ?) < {DEFAULT_DIMENSIONLESS_QUANTITY_PRECISION!r}"
+_ALPHA_RELATIVE = f" and abs((a.value - ?) / ?) < {DEFAULT_DIMENSIONLESS_QUANTITY_RELATIVE_PRECISION!r}"
+
+# a shard with no alpha_value table holds histories of before alpha was a key, which are alpha = 0
+# (a store of before inelastic-reflection prompt 09, or an imitation of one): the query without
+# its alpha join, for alpha = 0 only
+_FIND_QUERY_WITHOUT_ALPHA = """
+    select sm.serial, mv.value_eV, sm.RHS_evaluations, sm.first_bounce_log_T_Jordan
+    from ScalarHistory sm
+    join ExponentialModel m on m.serial = sm.model_serial
+    join beta_value b on b.serial = m.beta_serial
+    join M_value mv on mv.serial = m.M_serial
+    join phi_value ph on ph.serial = sm.phi_Einstein_init_serial
+    where abs(b.value - ?) < 1e-9 and abs(ph.value_PlanckMass - ?) < 1e-9
+      and sm.failure = 0
+"""
+
+
+def _find_query(con, beta, phi_init_Mp, alpha):
+    """(sql, parameters) of the shard's find query for this alpha; None if the shard cannot hold it."""
+    has_alpha = (
+        con.execute(
+            "select 1 from sqlite_master where type = 'table' and name = 'alpha_value'"
+        ).fetchone()
+        is not None
+    )
+    if not has_alpha:
+        if alpha == 0.0:
+            return _FIND_QUERY_WITHOUT_ALPHA, (beta, phi_init_Mp)
+        return None
+    if alpha == 0.0:
+        return _FIND_QUERY + _ALPHA_ZERO, (beta, phi_init_Mp, alpha)
+    return _FIND_QUERY + _ALPHA_RELATIVE, (beta, phi_init_Mp, alpha, alpha)
+
+
+def _alpha_text(alpha: float) -> str:
+    """` alpha=<α:g>` at alpha > 0, and nothing at 0, so that every message at 0 is as before."""
+    return f" alpha={alpha:g}" if alpha > 0.0 else ""
+
 
 # production's order: sqla_ScalarHistoryFactory.build reads the samples ordered
 # by ln(1 + z), descending (the axis since jordan-normalization prompt 03)
@@ -244,14 +294,19 @@ _BBN_KEYS = (
 )
 
 
-def find_model(stem, beta: float, M_Mp: float, phi_init_Mp: float = 5.0, units=None):
+def find_model(
+    stem, beta: float, M_Mp: float, phi_init_Mp: float = 5.0, units=None, *, alpha=0.0
+):
     """
     The one successful ScalarHistory (`failure = 0`; tuning-followups prompt 01)
     in the shards `STEM-shard*.db` with this beta and initial phi (to 1e-9
     absolute) and this M (to 1e-3 relative, M_value being in eV and M_Mp in
     units of the reduced Planck mass, units.PlanckMass / units.eV). Returns a
     StoredHistory. Raises LookupError if there is no match or more than one.
-    Every shard is opened by `connect_ro`.
+    Every shard is opened by `connect_ro`. ``alpha`` (keyword only, default 0) is the history's
+    drained fraction, matched as the dimensionless factory matches it: to
+    DEFAULT_DIMENSIONLESS_QUANTITY_PRECISION absolutely at 0, to the relative precision otherwise
+    (inelastic-reflection prompt 10, ruling 8).
     """
     if units is None:
         units = Planck_units()
@@ -265,8 +320,9 @@ def find_model(stem, beta: float, M_Mp: float, phi_init_Mp: float = 5.0, units=N
     for shard in shards:
         con = connect_ro(shard)
         try:
-            for serial, M_eV, rhs, fb_logT in con.execute(
-                _FIND_QUERY, (beta, phi_init_Mp)
+            query = _find_query(con, beta, phi_init_Mp, alpha)
+            for serial, M_eV, rhs, fb_logT in (
+                con.execute(*query) if query is not None else ()
             ):
                 if abs(M_eV / Mp_eV / M_Mp - 1.0) < 1e-3:
                     rows = con.execute(_VALUES_QUERY, (serial,)).fetchall()
@@ -291,12 +347,12 @@ def find_model(stem, beta: float, M_Mp: float, phi_init_Mp: float = 5.0, units=N
 
     if len(found) == 0:
         raise LookupError(
-            f"no ScalarHistory with beta={beta:g} M={M_Mp:g} phi={phi_init_Mp:g} in {stem}"
+            f"no ScalarHistory with beta={beta:g} M={M_Mp:g} phi={phi_init_Mp:g}{_alpha_text(alpha)} in {stem}"
         )
     if len(found) > 1:
         where = ", ".join(f"{Path(h.shard).name}:{h.serial}" for h in found)
         raise LookupError(
-            f"{len(found)} ScalarHistories match beta={beta:g} M={M_Mp:g} phi={phi_init_Mp:g}: {where}"
+            f"{len(found)} ScalarHistories match beta={beta:g} M={M_Mp:g} phi={phi_init_Mp:g}{_alpha_text(alpha)}: {where}"
         )
     return found[0]
 
@@ -695,6 +751,12 @@ def main(argv=None) -> int:
         help="initial phi in units of M_P (default 5)",
     )
     parser.add_argument(
+        "--alpha",
+        type=alpha_fraction,
+        default=0.0,
+        help="the history's drained fraction alpha, 0 <= alpha < 1 (default 0: natural mode)",
+    )
+    parser.add_argument(
         "--sm-baseline",
         action="store_true",
         help="run compute_SM_baseline (rho_NP = 0) instead of a stored history",
@@ -778,7 +840,9 @@ def main(argv=None) -> int:
 
     cosmology = QCD_Cosmology(0, units, Planck2018())
     stem = os.path.expanduser(args.stem)
-    h = find_model(stem, args.beta, args.M_Mp, args.phi_init_Mp, units)
+    h = find_model(
+        stem, args.beta, args.M_Mp, args.phi_init_Mp, units, alpha=args.alpha
+    )
     logT, r = ratio_grid(h.rows, units)
     T_min_MeV, T_max_MeV = callback_domain_MeV(units)
     rho_SM = B.thermodynamic_rho_SM(cosmology, units)
@@ -790,7 +854,8 @@ def main(argv=None) -> int:
     )
     shard_id = Path(h.shard).name[-7:-3]
     print(
-        f"store beta={args.beta:g} M={args.M_Mp:g} phi={args.phi_init_Mp:g}: "
+        f"store beta={args.beta:g} M={args.M_Mp:g} phi={args.phi_init_Mp:g}"
+        f"{_alpha_text(args.alpha)}: "
         f"shard={shard_id} serial={h.serial} RHS={h.RHS_evaluations} "
         f"window_samples={len(r)} {setting}\n  stored: {stored}",
         flush=True,
