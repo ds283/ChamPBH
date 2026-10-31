@@ -1,7 +1,7 @@
 # inelastic-reflection campaign — implementation state
 
-**Last updated:** 2026-10-30 · **Status: LIVE, RE-PLANNED 2026-10-29 (README §8): 04–12 replace
-the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29, landed in `e967cb7` and reviewed (2026-10-29; gate Park holds; one issue narrowed). 07 written 2026-10-29, landed in `5397f8f` (2026-10-30; gate Release holds, the lag as a sign-and-order test by the user's ruling of option (c); one issue narrowed) and reviewed (`0b8f420`). 07b inserted 2026-10-30 at the user's word (README §8.1 R18) and written, before 08: the wall search across 10⁻²⁵–10⁻¹³ M_P; landed in `92f41f2` and reviewed (2026-10-30; gate Band holds; one issue closed). 08 written 2026-10-30 at the user's word, after the user ruled R20 (the tracker margin on the late tracker, with the reflections shown to cover the time before it) and R21 (the leftover unassessed). Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
+**Last updated:** 2026-10-31 · **Status: LIVE, RE-PLANNED 2026-10-29 (README §8): 04–12 replace
+the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29, landed in `e967cb7` and reviewed (2026-10-29; gate Park holds; one issue narrowed). 07 written 2026-10-29, landed in `5397f8f` (2026-10-30; gate Release holds, the lag as a sign-and-order test by the user's ruling of option (c); one issue narrowed) and reviewed (`0b8f420`). 07b inserted 2026-10-30 at the user's word (README §8.1 R18) and written, before 08: the wall search across 10⁻²⁵–10⁻¹³ M_P; landed in `92f41f2` and reviewed (2026-10-30; gate Band holds; one issue closed). 08 written 2026-10-30 at the user's word, after the user ruled R20 (the tracker margin on the late tracker, with the reflections shown to cover the time before it) and R21 (the leftover unassessed); landed in this commit (2026-10-31; gate Margin holds; one issue closed, none opened). Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
 gate DR holds); 02 landed in `fe2a944` and reviewed (2026-10-28; gate Inject holds), after one
 stop and the user's ruling of interior sampling; 3 of 8 prompts written: 03 written 2026-10-28
 from log 02 §8, after the user ruled 𝒜₀ = 1 (README §6.1); 03 landed in `0afa199` and reviewed (2026-10-28;
@@ -44,7 +44,7 @@ bitwise the old code's.
 | 06 | [Parking](06-parking.md) | the cut ρ_kin/ρ_R < ε (R14, P19, P21); the parked phase to T_CMB through the dense-output interface (R15); the tuning at small M measured | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | `e967cb7` | [06](logs/06-parking.md) |
 | 07 | [Unparking](07-unparking.md) | the release at the root of m/H = 10 on the parked step (R16, P24); the oscillating phase resumes; no second parking | Opus | ✍️ 2026-10-29 | ✅ 2026-10-30 | `5397f8f` | [07](logs/07-unparking.md) |
 | 07b | [The wall search at the rounding of ln V](07b-the-wall-search-at-the-rounding-of-ln-V.md) | the wall search's helper returns −∞ within the rounding of ln V (R18), with its width derived; dissipation mode measured across 10⁻²⁵–10⁻¹³ M_P; the one-loop gap measured for 08 | Opus | ✍️ 2026-10-30 | ✅ 2026-10-30 | `92f41f2` | [07b](logs/07b-the-wall-search-at-the-rounding-of-ln-V.md) |
-| 08 | [Spectrum peak and margins](08-spectrum-peak-and-margins.md) | the peak by 𝓡 (R7, P25), the gap flagged (R19); ℓ; the energy weight (U9); three worst margins with the first failure (R13), the reflection margin over plateau turning points too and the tracker margin on the late tracker (R20), the leftover unassessed (R21); the coverage bound measured | Opus | ✍️ 2026-10-30 | ⬜ | — | — |
+| 08 | [Spectrum peak and margins](08-spectrum-peak-and-margins.md) | the peak by 𝓡 (R7, P25), the gap flagged (R19); ℓ; the energy weight (U9); three worst margins with the first failure (R13), the reflection margin over plateau turning points too and the tracker margin on the late tracker (R20), the leftover unassessed (R21); the coverage bound measured | Opus | ✍️ 2026-10-30 | ✅ 2026-10-31 | this commit | [08](logs/08-spectrum-peak-and-margins.md) |
 | 09 | Store | α as a key (U3); the per-sample ratio; ΔN_eff at T_CMB and 1 MeV, the margins, parking and release as columns; JSON details; `AdiabaticHistory`; format 6, 2026.8.0 | Opus | ⬜ | ⬜ | — | — |
 | 10 | Driver and readers | `--alpha-values`; plot matching; Δg* and ΔN_eff figures (R12); scope; inventory; the tool | Sonnet | ⬜ | ⬜ | — | — |
 | 11 | Measure | the grid of U10; the rehearsal (U11); the verification document | Opus | ⬜ | ⬜ | — | — |
@@ -82,7 +82,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 | Park | α = 0 bitwise; an M = 10⁻³⁰ drained history reaches T_CMB; parked samples on φ_min; H_E continuous at the switch; the leftover in the ledger; the guard | 06 | ✅ 2026-10-29 (log 06 §1.4, §2, §5.4; the guard tested with its threshold raised by a patch, as the prompt allows) |
 | Release | a parked field released at m/H < 10 continues; continuity at the release; the lag after it as estimated. *As ruled by the user (ruling 9, option (c)): the lag after the release has the sign of δ₁ and lies within the bound derived from each oscillation* | 07 | ✅ 2026-10-30 (log 07 §1.2, §1.4, §4, §5.2, §5.5) |
 | Band | α = 0 bitwise; every history outside the band bitwise 07's; every history of the band (β = 1.2, 2, 3 × M = 10⁻²⁷–10⁻¹³ M_P) reaches T_CMB; the width derived | 07b | ✅ 2026-10-30 (log 07b §1.2, §5.1, §5.4, §5.5) |
-| Margin | the three margins equal a hand computation; energy-weighted; the classical birth margin negative by construction; NULL at α = 0. *As written 2026-10-30 (R19–R21): the estimate chosen by 𝓡 with the gap flagged; the coverage of the samples before the late tracker measured within its derived bound; every value of the integration bitwise* | 08 | ⬜ |
+| Margin | the three margins equal a hand computation; energy-weighted; the classical birth margin negative by construction; NULL at α = 0. *As written 2026-10-30 (R19–R21): the estimate chosen by 𝓡 with the gap flagged; the coverage of the samples before the late tracker measured within its derived bound; every value of the integration bitwise* | 08 | ✅ 2026-10-31 (log 08 §1, §2, §5.1, §5.3, §5.5) |
 | Store | key and columns round-trip; two α are distinct rows; the new golden fingerprint; `AdiabaticHistory` bitwise at α = 0 and computed on parked samples | 09 | ⬜ |
 | Driver | α reaches every stage; an unstored α exits 2 in the plots; scope and inventory name α | 10 | ⬜ |
 | Measure | every point has a row; the drain independent of M below 10⁻¹² to 10⁻³; ΔN_eff rises with α; margins reported; α = 0 reproduces 2026.7.0 | 11 | ⬜ |
@@ -93,7 +93,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 
 ## 3. Active and unresolved issues
 
-One opened by the planner, one by prompt 04. Prompt 05's was closed by prompt 07b (§4).
+One opened by the planner. Prompt 04's was closed by prompt 08, and prompt 05's by prompt 07b (§4).
 
 ### `[00-xav-sigma-is-non-monotone-at-25-35-keV]`
 
@@ -116,6 +116,20 @@ One opened by the planner, one by prompt 04. Prompt 05's was closed by prompt 07
   matter-free plasma). Then decide whether the table is regenerated or the spline replaced. Fixing
   it changes every history and needs its own ruling, so it is not in this campaign (README P15). Not
   assigned. `Xav_EOS_data.csv` has no generating script (`[00-kicking-function-table-has-no-provenance-in-the-repository]`, `review-remediation` board).
+
+### 3.1 Assigned to this campaign
+
+- **`[00-settling-at-physical-M-needs-a-parked-tracking-model]`** (`integrator-remediation` board
+  §3), assigned 2026-10-29 by the re-plan (README §8.6): prompts 06 and 07 build the parked tracker,
+  with the switch criterion supplied by the drain. The entry stays on its own board until it is
+  closed.
+  - **Narrowed (2026-10-30, prompt 07):** the switch, the tracker and the release are built and
+    measured (logs 06 and 07): every history of log 05's grid parks and reaches T_CMB, and the four
+    large-M histories whose tracker loses adiabaticity are released at m/H = 10 and reach T_CMB. What
+    remains is Q on the parked samples (`AdiabaticHistory`), which is 09's (README §8.1 R15). So 07
+    narrows it, and 09 closes it.
+
+## 4. Resolved issues
 
 ### `[04-one-loop-chain-has-no-solution-just-above-R-equals-1]`
 
@@ -158,20 +172,13 @@ One opened by the planner, one by prompt 04. Prompt 05's was closed by prompt 07
   log₁₀ 𝓡 ≥ 3.00. The histories that cross the gap are β = 1.2 at M = 10⁻¹⁶, 10⁻¹⁷, 10⁻²⁰; β = 2 at
   10⁻¹⁵–10⁻²⁰; β = 3 at 10⁻¹⁵–10⁻¹⁸. At M = 10⁻¹⁶ the generations in the gap carry 0.88, 0.59 and 0.52
   of K (β = 1.2, 2, 3).
-
-### 3.1 Assigned to this campaign
-
-- **`[00-settling-at-physical-M-needs-a-parked-tracking-model]`** (`integrator-remediation` board
-  §3), assigned 2026-10-29 by the re-plan (README §8.6): prompts 06 and 07 build the parked tracker,
-  with the switch criterion supplied by the drain. The entry stays on its own board until it is
-  closed.
-  - **Narrowed (2026-10-30, prompt 07):** the switch, the tracker and the release are built and
-    measured (logs 06 and 07): every history of log 05's grid parks and reaches T_CMB, and the four
-    large-M histories whose tracker loses adiabaticity are released at m/H = 10 and reach T_CMB. What
-    remains is Q on the parked samples (`AdiabaticHistory`), which is 09's (README §8.1 R15). So 07
-    narrows it, and 09 closes it.
-
-## 4. Resolved issues
+- **Closed (2026-10-31, prompt 08, this commit).** `peak_estimate` takes the one-loop estimate where
+  ln 𝓡 > 0 and `one_loop_turnaround` returns one, and the classical estimate elsewhere, flagged
+  `"classical_gap"` where the chain raises or returns `None` (R19). Each generation records its
+  estimate. On the 51 histories of log 08 §5.1, every gap generation's reason is the saddle-node ("ell
+  fell to …"); no raise lies at log₁₀ 𝓡 ≥ 3.00, and no solution has ℓ ≤ 0 (the smallest is 0.341, at
+  log₁₀ 𝓡 = 2.996). At M = 10⁻¹⁶, β = 2, the three gap generations carry 0.5877 of K and the one-loop
+  one 0.2812, as log 07b §5.3 found (log 08 §5.2).
 
 ### `[05-the-wall-search-refuses-a-wall-below-the-rounding-of-ln-V]`
 
@@ -1371,3 +1378,53 @@ probes' `peaks.out`.
 
 Residue fixed in this review's commit: "this commit" → `92f41f2` in the log and on this board, and note
 07b added to the list of orchestrator notes. Nothing opened.
+
+### 5.10 After prompt 08 (2026-10-31)
+
+08 landed in this commit, under orchestrator note 08 (rulings 1–16). Log:
+[`logs/08-spectrum-peak-and-margins.md`](logs/08-spectrum-peak-and-margins.md).
+- **What shipped** (`ComputeTargets/ScalarHistory.py`). After the integration, and under the step loop's
+  own condition (α > 0 on a model with a wall), `integrate_history` calls `history_margins`, a gatherer,
+  which calls the pure core `relativistic_margins`. The payload gains three keys, none stored:
+  - `"generations"`, a tuple of `Generation`;
+  - `"margins"`, a `Margins` record;
+  - `"margin_warnings"`, the four new kinds' lines (ruling 1).
+
+  `"warnings"` is the loop's, bitwise. `tune_history` prints from both keys through one set of kinds.
+  The constants are `MARGIN_THRESHOLD = ln 10` (P6) and `MARGIN_WEIGHT_SHARE = 1e-3` (U9). The step loop,
+  `IntegrationResult` and every record the loop builds are unchanged.
+- **The definitions.** A generation is a candidate with ΔK > 0 and an assessment, its peak by 𝓡:
+  classical (ln 𝓡 ≤ 0), one-loop, or classical flagged `"classical_gap"` where the chain raises (R19).
+  ln q = ln k_ex + N_turn. The margins:
+  - birth, ℓ_t or ℓ bitwise;
+  - reflection, over every later candidate, plateau turning point and wall-side turning point with no
+    candidate;
+  - tracker, over the samples after N_late and today, with the zero-lag tracker's mass (R20).
+
+  The worst, the failing share and the first failure of each run over the generations carrying at
+  least 10⁻³ of K. The leftover and K_0 are unassessed (R21).
+- **Gate Margin holds**:
+  - the hand computation (`TestAConstructedHistory`) and the weight at its edge;
+  - the estimate by 𝓡 at M = 10⁻¹⁶, β = 2: 3 gap generations carrying 0.5877, one one-loop carrying
+    0.2812 with ℓ = 1.392;
+  - the classical birth margin ℓ_t bitwise, −0.70 to −0.71 (−3.0 at M = 10⁻³, β = 0.5);
+  - the coverage: no sample of 51 histories below §1's bound. The largest shortfall is 1.8×10⁻³ against
+    a bound of 0.225; the parked segments' bound is 0.006–0.021, against 2.3–13.2 e-folds;
+  - `None`, `None`, `()` at α = 0;
+  - 27 histories bitwise on 37 keys against `f0c139d`, `"warnings"` included.
+- **The derivation** (log 08 §1). On the exponential V'' falls strictly with φ (V is completely
+  monotone) and (ln A)'' = 0, so m_eff² peaks at a swing's inner end at fixed trace. The shortfall is at
+  most (ΔN if outward) + τ + max(0, δ), τ the trace's term and δ the estimate's mass against the field's
+  own. δ ≤ +0.0037 at resolved turning points and −6.5 to −52 at reflections. The parked segment is
+  bounded through d ln m_tr/dN ≤ −1, measured ≤ −1.02 (β = 25).
+- **Measured**: at M ≥ 10⁻¹³–10⁻¹⁵ every generation is classical, and the birth and reflection margins
+  fail; the tracker passes except at M = 10⁻³, β = 0.5. At M ≤ 10⁻²² (β = 1.2, 2) and ≤ 10⁻²⁰ (β = 3)
+  every margin passes. The cost is 4–83 ms per history, 0.2–2.9 %.
+- **Rulings applied**: all sixteen (log 08 §3). Deviations D1–D7; D2 (the K = 0 guard) is STRUCTURALLY
+  REQUIRED, found by B7's first replay.
+- **Breakages**: B1 (1), B2 (2), B3 (3), B4 (3), B5 (2, one an error), B6 (1), B7 (3),
+  B8 (item 8's class, in setUpClass). B1 was caught by nothing until D3.
+- **Counts:** 26 / 439 (96 + 343) / 103 / 115 / 64 before; 26 / **471** (96 + **375**) / 103 / 115 / 64 after,
+  all passing.
+- **Issues:** closed `[04-one-loop-chain-has-no-solution-just-above-R-equals-1]` (§4), with its row
+  removed from `.documents/OPEN_ISSUES.md` §1.19 and the count corrected 26 → 25; opened none.

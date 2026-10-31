@@ -1453,6 +1453,65 @@ caused is fixed before the peak and the margins. The record is
   `assess_infall` keeps its own expression for ln E, so ln E is unchanged everywhere. The helper costs
   about 90 ns more per call (180 against 95 ns), about 17 ms on a β = 2 history of 190 000 calls.
 
+### 6.8 Added 2026-10-31 (`inelastic-reflection` prompt 08): the spectrum's peak and the relativistic margins
+
+After the integration, and outside its loop, `integrate_history` asks whether each generation of quanta
+stays relativistic (README §8.1 R3, R4, R13). It runs at α > 0 on a model with a wall only, the step
+loop's own condition, and reads the history without changing it: every value of the integration is
+bitwise what it was. The record is `prompts/inelastic-reflection/logs/08-spectrum-peak-and-margins.md`.
+
+- **The definitions.** Every momentum and mass is Einstein-frame (a_E = e^N); p/m is frame-independent.
+  - A **generation** is a candidate with ΔK > 0 and an assessment. Its peak is chosen by 𝓡 (R7, R19):
+    the classical estimate, ln k_ex and ln m = ln ω_t, where ln 𝓡 ≤ 0; the one-loop estimate, ln k_ex
+    and ln m_ta from `one_loop_turnaround`, where ln 𝓡 > 0 and the chain has a solution; the classical
+    estimate, flagged `"classical_gap"`, where it raises or returns None. Its comoving momentum is
+    ln q = ln k_ex + N_turn, and its share is ΔK_j/K(N_final).
+  - **Birth:** b_j = ln k_ex − ln m, which is ℓ_t or ℓ bitwise.
+  - **Reflection:** r_j, the minimum of ln q − N_k − ln m_k over every event with N_k > N_turn: every
+    later candidate (ΔK = 0 included, with its estimate's mass), every plateau turning point and every
+    wall-side turning point without a candidate (the field's own m_eff on the dense output there).
+  - **Tracker:** t_j, the minimum of ln q − N − ln m_tr over the stored samples after N_late and
+    today. N_late is the last turning point or candidate (R20); m_tr is the zero-lag tracker's mass,
+    `minimum_on_trace` searched from the sample's own field on its stored trace.
+  - The worst of each kind runs over the generations with share ≥ 10⁻³ (U9). The failing share sums
+    the shares below ln 10 (P6). The parking leftover (R21) and K_0 are unassessed: no peak, their
+    share reported. The shares partition K.
+- **The coverage bound (R20's proviso).** Between consecutive events φ is monotone: a turning point is a
+  sign change of π, a reflection flips it, a drain only scales it. On the exponential, (ln A)'' = 0 and
+  V is completely monotone ((M/φ)ⁿ is, and exp of a completely monotone function is), so V'' falls
+  strictly with φ. At fixed trace, m_eff² is then largest at the swing's inner end. With the trace's
+  largest value T_max on the swing and its fraction ε of m² at the inner end, ln m ≤ ln m_in + τ,
+  τ = ½ log1p(ε(T_max/T_in − 1)). So the field's own margin falls below min(b_j, r_j) by at most
+  (N_b − N_a if the swing is outward) + τ + max(0, δ), with δ = ln m_field − ln m_estimate at the inner
+  end. A generic model needs m_eff² to peak at an end of each swing at fixed trace, and
+  (ln A)'' + (ln A)'² ≥ 0.
+  - At resolved turning points δ = 0 to +0.0037: the field sits at φ_t to 2×10⁻⁴ and the estimate
+    omits the trace term. At floor and unresolved reflections δ = −6.5 to −52, because the code turns
+    the field back outside φ_t (φ/φ_t = 1.19 to 5×10²¹). The estimate's mass is then the bounce's
+    physical one, and the code's samples lie above the bound.
+  - The parked segment of a released history is bounded separately: on the tracker
+    dμ/dN = −1 − d ln m_tr/dN, so where d ln m_tr/dN ≤ −1 the margin does not fall after the switch.
+    The bound there is (Parking.N − N_turn,cut) + max(0, ln m_tr(Parking.N) − ln m_cut): 0.006–0.021
+    against the segments' 2.3–13.2 e-folds. On the exponential's tracker V'' ∝ T^{(n+2)/(n+1)}, so
+    d ln m_tr/d ln T is ½ (trace-dominated) to ¾ (n = 1). Measured, d ln m_tr/dN ≤ −1.02 on every
+    parked segment that lies before N_late.
+  - Measured on 51 dissipation histories: no sample falls below its bound. The largest shortfall is
+    1.8×10⁻³ against a bound of 0.225 (M = 10⁻³ M_P, β = 0.5), and 3.0×10⁻⁴ against 0.015 at
+    M = 0.5 M_P, β = 25. The plateau turning points never bind.
+- **Measured across M** (test_injection's setup, α = 0.1, untuned):
+  - M ≥ 10⁻¹⁵ M_P (β = 1.2) or 10⁻¹³ (β = 2, 3): every generation classical. The worst birth margin is
+    −0.70 to −0.71, and −3.0 at M = 10⁻³, β = 0.5, R13's expected "by design" flag. The worst
+    reflection margin is −0.67 to +0.014, and −2.4 at M = 10⁻³, β = 0.5. The tracker passes (+4.1 to
+    +25) except at M = 10⁻³, β = 0.5 (−2.2).
+  - The gap: histories at M = 10⁻¹⁵–10⁻²⁰ M_P carry gap generations, up to 0.88 of K at β = 1.2,
+    M = 10⁻¹⁶. Every one is "ell fell", the saddle-node of log 04 §5.2; none returns None.
+  - M ≤ 10⁻²² M_P (β = 1.2, 2) and ≤ 10⁻²⁰ (β = 3): every weighted generation one-loop, and every
+    margin passes; the worst birth margin is +3.2 to +27.
+  - The cost is 4–83 ms per history, 0.2–2.9 % of its 1.7–9.2 s, nearly all of it the tracker's
+    samples. The one-loop calls are at most 43 ms.
+- **Nothing is stored.** The payload's `"generations"`, `"margins"` and `"margin_warnings"` are not read
+  by any store; prompt 09 stores the record.
+
 ---
 
 ## 7. From scalar history to BBN via PRyMordial (`ComputeTargets/BBNData.py`)

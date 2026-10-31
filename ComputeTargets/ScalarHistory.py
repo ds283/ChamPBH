@@ -134,6 +134,15 @@ PARKING_PI_GUARD_MP = 1.0e-9
 RELEASE_ROOT_XTOL = 1.0e-14
 RELEASE_ROOT_RTOL = 4.0 * float(np.finfo(float).eps)
 
+# the relativistic margins (inelastic-reflection prompt 08; README §6.2 P6, §8.1 R13, §8.3 U9), computed by
+# integrate_history after the integration, at alpha > 0 on a model with a wall only. Neither is a key
+#   MARGIN_THRESHOLD:     ln 10 (P6): a margin ln(p/m) below it is a failure of its kind, warned of and never
+#                         refused (R13)
+#   MARGIN_WEIGHT_SHARE:  U9's energy weight: the worst margins and the failing shares run over the
+#                         generations with Delta K_j/K(N_final) >= this
+MARGIN_THRESHOLD = log(10.0)
+MARGIN_WEIGHT_SHARE = 1.0e-3
+
 # the warnings of a history (inelastic-reflection prompt 05; README §8.1 R6, §8.2 P23), returned by
 # integrate_scalar_history and printed once per history by tune_history. Each line begins with one
 # of these fixed phrases, one per kind, and warning_kind returns it; tune_history prints the first
@@ -143,6 +152,12 @@ RELEASE_ROOT_RTOL = 4.0 * float(np.finfo(float).eps)
 #   WARNING_REGIME_UNASSESSED:    dissipation mode, the first impact has no assessment
 #   WARNING_TURNING_POINT_BELOW:  natural mode, a classical turning point below the threshold
 #   WARNING_WALL_UNASSESSED:      natural mode, the model call at the first floor reflection failed
+# and the margins' kinds (inelastic-reflection prompt 08 §1.5; README §8.1 R13), whose lines are on the
+# payload's "margin_warnings", never on "warnings" (orchestrator note 08, ruling 1)
+#   WARNING_BIRTH_MARGIN:         dissipation mode, a worst birth margin below ln 10
+#   WARNING_REFLECTION_MARGIN:    dissipation mode, a worst reflection margin below ln 10
+#   WARNING_TRACKER_MARGIN:       dissipation mode, a worst tracker margin below ln 10
+#   WARNING_MARGINS_FAILED:       dissipation mode, the margins could not be computed
 WARNING_NEARLY_ELASTIC = (
     "dissipation mode: the reflections are expected to be nearly elastic in this regime"
 )
@@ -151,11 +166,27 @@ WARNING_REGIME_UNASSESSED = (
 )
 WARNING_TURNING_POINT_BELOW = "natural mode: the classical turning point lies below"
 WARNING_WALL_UNASSESSED = "natural mode: the wall could not be assessed"
+WARNING_BIRTH_MARGIN = (
+    "dissipation mode: the spectrum's peak is not relativistic at its birth"
+)
+WARNING_REFLECTION_MARGIN = (
+    "dissipation mode: the spectrum's peak is not relativistic at a later bounce"
+)
+WARNING_TRACKER_MARGIN = (
+    "dissipation mode: the spectrum's peak is not relativistic on the late tracker"
+)
+WARNING_MARGINS_FAILED = (
+    "dissipation mode: the relativistic margins could not be computed"
+)
 WARNING_KINDS = (
     WARNING_NEARLY_ELASTIC,
     WARNING_REGIME_UNASSESSED,
     WARNING_TURNING_POINT_BELOW,
     WARNING_WALL_UNASSESSED,
+    WARNING_BIRTH_MARGIN,
+    WARNING_REFLECTION_MARGIN,
+    WARNING_TRACKER_MARGIN,
+    WARNING_MARGINS_FAILED,
 )
 
 # the stepper label returned by compute_scalar_history; main.py pre-registers it as
@@ -3042,6 +3073,569 @@ def fixed_T_values(
     return FixedTValues._make(values)
 
 
+# ---- the spectrum's peak and the relativistic margins (inelastic-reflection prompt 08) ----
+#
+# README §8.1 R7, R13, R19, R20, R21, §8.2 P25, §8.3 U9; log 08 §1 gives the definitions and the coverage
+# bound. Computed by integrate_history after the integration, outside the step loop (README §6.0 R3),
+# at alpha > 0 on a model with a wall only, from the IntegrationResult, the samples and the dense output;
+# they read the history and never change it. Module-level, so that the core can be tested on constructed
+# values and the masses patched through their module names (orchestrator note 08, rulings 4 and 8).
+# Every momentum and mass is Einstein-frame (a_E = e^N); p/m is frame-independent. Nothing is stored
+# (prompt 09 stores the record)
+
+# the estimates of a candidate's peak (R7, R19): by its ln R, with the one-loop chain's gap flagged
+ESTIMATE_CLASSICAL = "classical"
+ESTIMATE_ONE_LOOP = "one_loop"
+ESTIMATE_CLASSICAL_GAP = "classical_gap"
+
+# a candidate's peak (peak_estimate): the estimate, ln k_ex and ln m of it, the candidate's ln R, and, for
+# "classical_gap", why the one-loop estimate was not used (the ComputationFailureError's message, or the
+# phrase for a None); None otherwise
+PeakEstimate = namedtuple(
+    "PeakEstimate", ["estimate", "log_k_ex", "log_m", "log_R", "gap_reason"]
+)
+
+# one candidate as the core reads it (relativistic_margins): its index in IntegrationResult.injections, its
+# kind, N_turn and delta_K, and its peak. estimate is None for a candidate with no assessment; then log_m
+# is the field's own m_eff at its state at N_turn (field_log_m), and log_k_ex, log_R and gap_reason are
+# None
+MarginCandidate = namedtuple(
+    "MarginCandidate",
+    [
+        "index",
+        "kind",
+        "N_turn",
+        "delta_K",
+        "estimate",
+        "log_k_ex",
+        "log_m",
+        "log_R",
+        "gap_reason",
+    ],
+)
+
+# one event of the reflection margin that is not a candidate (orchestrator note 08, ruling 5): a plateau
+# turning point ("plateau"), or a wall-side turning point that has no candidate ("wall", a dropped
+# drain); log_m is the field's own m_eff at its state on the dense output
+MarginEvent = namedtuple("MarginEvent", ["N", "log_m", "source"])
+
+# one generation (prompt 08 §1.1, §1.2): a candidate with delta_K > 0 and an assessment
+#   index:                the candidate's index in IntegrationResult.injections
+#   kind:                 the candidate's kind ("turning_point", "floor" or "unresolved")
+#   estimate:             ESTIMATE_CLASSICAL, ESTIMATE_ONE_LOOP or ESTIMATE_CLASSICAL_GAP
+#   N_turn:               its birth
+#   log_q:                ln q = ln k_ex + N_turn, the comoving peak momentum
+#   log_k_ex, log_m:      the estimate's ln k_ex and ln m (ln m = ln omega_t, or ln m_ta)
+#   log_R:                the candidate's ln R
+#   share:                delta_K/K(N_final)
+#   weighted:             share >= MARGIN_WEIGHT_SHARE (U9)
+#   birth_margin:         ln k_ex - ln m, at N_turn (ell_t or ell, bitwise)
+#   reflection_margin:    the smallest ln q - N_k - ln m_k over the events with N_k > N_turn, or None if
+#                         there is none; reflection_margin_N its N_k
+#   tracker_margin:       the smallest ln q - N - ln m_tr(N) over the late samples (N > N_late) and today;
+#                         tracker_margin_N its N
+#   gap_reason:           the PeakEstimate's
+Generation = namedtuple(
+    "Generation",
+    [
+        "index",
+        "kind",
+        "estimate",
+        "N_turn",
+        "log_q",
+        "log_k_ex",
+        "log_m",
+        "log_R",
+        "share",
+        "weighted",
+        "birth_margin",
+        "reflection_margin",
+        "reflection_margin_N",
+        "tracker_margin",
+        "tracker_margin_N",
+        "gap_reason",
+    ],
+)
+
+# the first failure of one kind (R13: "we can store details of the first encountered failure in the JSON
+# blob"): the earliest N at which a weighted generation's margin of that kind falls below
+# MARGIN_THRESHOLD (birth: its N_turn; reflection: the first event N_k; tracker: the first late sample, or
+# today); the generation's index, that N, the margin there, the generation's ln q, the ln m there, and
+# the generation's estimate. Prompt 09 stores it as JSON (_asdict)
+MarginFailure = namedtuple(
+    "MarginFailure", ["index", "N", "margin", "log_q", "log_m", "estimate"]
+)
+
+# the history's margins (prompt 08 §1.3), returned by history_margins with the generations, on the
+# payload's "margins" (not stored; prompt 09 stores the worst margins, their N and the failing shares as
+# columns, and the first failures as JSON). Floats, ints, strings, None and MarginFailure: nothing
+# callable, so that it crosses Ray. For each kind (birth, reflection, tracker):
+#   worst_<kind>_margin, worst_<kind>_margin_N, worst_<kind>_margin_index:
+#                          the smallest margin over the weighted generations, its N and its generation's
+#                          index (the lowest index on a tie); None if no weighted generation has one
+#   <kind>_failing_share:  the sum of the shares of the weighted generations whose margin of that kind is
+#                          below MARGIN_THRESHOLD (a margin of None is not failing)
+#   first_<kind>_failure:  MarginFailure, or None
+# and
+#   weighted_share, below_weight_share, unassessed_share:
+#                          the shares of K(N_final) in the weighted generations, in the generations below
+#                          the weight, and unassessed: the candidates with delta_K > 0 and no
+#                          assessment, the parking leftover (R21) and the initial K_0 (a test harness;
+#                          orchestrator note 08, ruling 9). They partition K
+#   classical_generations, one_loop_generations, classical_gap_generations:
+#                          the generations per estimate, weighted or not
+#   weighted_generations:  the generations with share >= MARGIN_WEIGHT_SHARE
+#   unassessed_candidates: the candidates with delta_K > 0 and no assessment
+#   plateau_events, wall_events:
+#                          the events of the reflection margin that are not candidates: plateau turning
+#                          points, and wall-side turning points without a candidate
+#   N_late:                the largest N among the turning points and the candidates' N_turn (R20); -inf
+#                          if there are none
+#   late_points:           the points of the tracker margin: the samples with N > N_late, and today
+Margins = namedtuple(
+    "Margins",
+    [
+        "worst_birth_margin",
+        "worst_birth_margin_N",
+        "worst_birth_margin_index",
+        "birth_failing_share",
+        "first_birth_failure",
+        "worst_reflection_margin",
+        "worst_reflection_margin_N",
+        "worst_reflection_margin_index",
+        "reflection_failing_share",
+        "first_reflection_failure",
+        "worst_tracker_margin",
+        "worst_tracker_margin_N",
+        "worst_tracker_margin_index",
+        "tracker_failing_share",
+        "first_tracker_failure",
+        "weighted_share",
+        "below_weight_share",
+        "unassessed_share",
+        "classical_generations",
+        "one_loop_generations",
+        "classical_gap_generations",
+        "weighted_generations",
+        "unassessed_candidates",
+        "plateau_events",
+        "wall_events",
+        "N_late",
+        "late_points",
+    ],
+)
+
+# the three kinds, in the order of the record and of the warning lines
+MARGIN_KINDS = ("birth", "reflection", "tracker")
+
+
+def peak_estimate(model: RealizedModel, injection: Injection) -> Optional[PeakEstimate]:
+    """
+    The peak of a candidate's spectrum, by its ln R (prompt 08 §1.1; README §8.1 R7, R19, §8.2 P25). None
+    if the candidate has no assessment (classical_turning_point None).
+
+    - ln R <= 0: the classical estimate, ln k_ex and ln m = ln omega_t = ln omega_t^2/2 of the
+      candidate's ClassicalTurningPoint.
+    - ln R > 0: the model's one_loop_turnaround at (phi_assessed, ln E_assessed): its ln k_ex and ln m_ta.
+      If it raises ComputationFailureError (the chain has no solution, the gap of 1 < R < 10^2.9) or
+      returns None, the classical estimate, flagged ESTIMATE_CLASSICAL_GAP with the reason ("Classical,
+      flagged", R19). Any other exception propagates.
+    """
+    ct: Optional[ClassicalTurningPoint] = injection.classical_turning_point
+    if ct is None:
+        return None
+    log_m_classical: float = 0.5 * ct.log_omega_t_squared
+    if ct.log_R <= 0.0:
+        return PeakEstimate(
+            ESTIMATE_CLASSICAL, ct.log_k_ex, log_m_classical, ct.log_R, None
+        )
+    try:
+        turnaround = model.one_loop_turnaround(
+            injection.phi_assessed, injection.log_E_assessed
+        )
+    except ComputationFailureError as e:
+        return PeakEstimate(
+            ESTIMATE_CLASSICAL_GAP, ct.log_k_ex, log_m_classical, ct.log_R, e.message
+        )
+    if turnaround is None:
+        return PeakEstimate(
+            ESTIMATE_CLASSICAL_GAP,
+            ct.log_k_ex,
+            log_m_classical,
+            ct.log_R,
+            "one_loop_turnaround returned None",
+        )
+    return PeakEstimate(
+        ESTIMATE_ONE_LOOP, turnaround.log_k_ex, turnaround.log_m_ta, ct.log_R, None
+    )
+
+
+def tracker_log_m(
+    model: RealizedModel,
+    phi_start: float,
+    log_rhorad_Einstein: float,
+    log_fm: float,
+    Sigma: float,
+) -> float:
+    """
+    ln m_tr, the zero-lag tracker's m_eff at one state (prompt 08 §1.2; README §8.1 R20): phi_min the
+    model's minimum_on_trace on the trace T = rho_R,E (Sigma + f_m), searched from phi_start, and
+    ln m_eff^2/2 (log_m_eff_squared) at phi_min on the same state. history_margins passes the state's
+    own field as phi_start (orchestrator note 08, ruling 3), so that the value depends on the state alone.
+    A ComputationFailureError from the model propagates.
+    """
+    try:
+        fm: float = exp(log_fm)
+    except OverflowError as e:
+        raise ComputationFailureError(
+            f"tracker_log_m: overflow at ln f_m = {log_fm!r}"
+        ) from e
+    log_T: float = _log_trace(log_rhorad_Einstein, Sigma, fm, "tracker_log_m")
+    phi_min: float = model.minimum_on_trace(phi_start, log_T)
+    return 0.5 * log_m_eff_squared(model, phi_min, log_rhorad_Einstein, log_fm, Sigma)
+
+
+def field_log_m(model: RealizedModel, cosmology: BaseCosmology, state) -> float:
+    """
+    ln m_eff of the field itself at a full state (phi, pi, ln rho_R,E, ln f_m, ln T_J) of the dense output
+    (prompt 08 §1.2): ln m_eff^2/2 (log_m_eff_squared) at its own phi, with Sigma from log_trace, as the
+    policy forms it. The mass of a plateau turning point, of a wall-side turning point with no candidate,
+    and of a candidate with no assessment.
+    """
+    _, Sigma, _ = log_trace(cosmology, (state[2], state[3], state[4]))
+    return 0.5 * log_m_eff_squared(
+        model, float(state[0]), float(state[2]), float(state[3]), Sigma
+    )
+
+
+def _earliest_failure(failures: List[MarginFailure]) -> Optional[MarginFailure]:
+    """The earliest N; on a tie the smallest margin there, then the lowest index (orchestrator note 08, ruling 8)."""
+    if len(failures) == 0:
+        return None
+    return min(failures, key=lambda f: (f.N, f.margin, f.index))
+
+
+def relativistic_margins(
+    candidates,
+    events,
+    N_late: float,
+    samples,
+    today: Tuple[float, float],
+    K_final: float,
+    K_unassessed: float,
+) -> Tuple[Tuple[Generation, ...], Margins]:
+    """
+    The pure core of the margins (prompt 08 §1.2, §1.3; orchestrator note 08, rulings 5, 8, 9 and 10): plain
+    values in, the generations and the record out. No model, cosmology or dense output is read.
+
+    :param candidates: every candidate, in the order of IntegrationResult.injections, as MarginCandidate
+    :param events: the events of the reflection margin that are not candidates, as MarginEvent
+    :param N_late: the late tracker's start (R20)
+    :param samples: (N, ln m_tr) of the stored samples, in N order; those with N > N_late are the tracker
+                    margin's points
+    :param today: (N_final, ln m_tr) at the final state, always a point of the tracker margin
+    :param K_final: K(N_final), the ledger's, the parking leftover and K_0 included
+    :param K_unassessed: the parking leftover's delta_K plus K_0
+
+    A generation is a candidate with delta_K > 0 and an estimate; its share is delta_K/K_final, and it is
+    weighted if share >= MARGIN_WEIGHT_SHARE. Its margins:
+      - birth: ln k_ex - ln m;
+      - reflection: the minimum of ln q - N_k - ln m_k over every candidate (delta_K = 0 included, at its
+        N_turn with its log_m) and every event with N_k > N_turn; None if there is none;
+      - tracker: the minimum of ln q - N - ln m_tr over the samples with N > N_late, and today.
+    Minima are taken in N order with a strict comparison, so a tie keeps the earliest; the worst margin
+    of a kind is taken over the weighted generations in index order, so a tie keeps the lowest index.
+    """
+    threshold: float = MARGIN_THRESHOLD
+    weight: float = MARGIN_WEIGHT_SHARE
+
+    # the events of the reflection margin, in N order (a stable sort: a candidate before an event at the
+    # same N)
+    all_events = sorted(
+        [(float(c.N_turn), float(c.log_m)) for c in candidates]
+        + [(float(e.N), float(e.log_m)) for e in events],
+        key=lambda e: e[0],
+    )
+    late = [(float(N), float(lm)) for N, lm in samples if N > N_late]
+    late.append((float(today[0]), float(today[1])))
+
+    generations: List[Generation] = []
+    failures: Dict[str, List[MarginFailure]] = {kind: [] for kind in MARGIN_KINDS}
+    # a history that drained nothing has K_final = 0 and no generation: every share is then 0.0 (a
+    # candidate with delta_K > 0 implies K_final > 0)
+    unassessed_share: float = K_unassessed / K_final if K_final > 0.0 else 0.0
+    unassessed_candidates = 0
+    counts = {
+        ESTIMATE_CLASSICAL: 0,
+        ESTIMATE_ONE_LOOP: 0,
+        ESTIMATE_CLASSICAL_GAP: 0,
+    }
+
+    def minimum(log_q: float, points, after: float):
+        """(the smallest ln q - N - ln m, its N, the first point below the threshold or None)."""
+        smallest, smallest_N, first = None, None, None
+        for N, lm in points:
+            if not N > after:
+                continue
+            value: float = log_q - N - lm
+            if smallest is None or value < smallest:
+                smallest, smallest_N = value, N
+            if first is None and value < threshold:
+                first = (N, value, lm)
+        return smallest, smallest_N, first
+
+    for c in candidates:
+        if not c.delta_K > 0.0:
+            continue
+        share: float = c.delta_K / K_final
+        if c.estimate is None:
+            unassessed_share += share
+            unassessed_candidates += 1
+            continue
+        counts[c.estimate] += 1
+        log_q: float = c.log_k_ex + c.N_turn
+        birth: float = c.log_k_ex - c.log_m
+        reflection, reflection_N, reflection_first = minimum(
+            log_q, all_events, c.N_turn
+        )
+        tracker, tracker_N, tracker_first = minimum(log_q, late, float("-inf"))
+        weighted: bool = share >= weight
+        generations.append(
+            Generation(
+                index=c.index,
+                kind=c.kind,
+                estimate=c.estimate,
+                N_turn=c.N_turn,
+                log_q=log_q,
+                log_k_ex=c.log_k_ex,
+                log_m=c.log_m,
+                log_R=c.log_R,
+                share=share,
+                weighted=weighted,
+                birth_margin=birth,
+                reflection_margin=reflection,
+                reflection_margin_N=reflection_N,
+                tracker_margin=tracker,
+                tracker_margin_N=tracker_N,
+                gap_reason=c.gap_reason,
+            )
+        )
+        if not weighted:
+            continue
+        if birth < threshold:
+            failures["birth"].append(
+                MarginFailure(c.index, c.N_turn, birth, log_q, c.log_m, c.estimate)
+            )
+        for kind, first in (
+            ("reflection", reflection_first),
+            ("tracker", tracker_first),
+        ):
+            if first is not None:
+                failures[kind].append(
+                    MarginFailure(
+                        c.index, first[0], first[1], log_q, first[2], c.estimate
+                    )
+                )
+
+    weighted_generations = [g for g in generations if g.weighted]
+    values: Dict[str, Any] = {}
+    for kind in MARGIN_KINDS:
+        worst: Optional[Generation] = None
+        failing_share: float = 0.0
+        for g in weighted_generations:
+            margin = getattr(g, f"{kind}_margin")
+            if margin is None:
+                continue
+            if worst is None or margin < getattr(worst, f"{kind}_margin"):
+                worst = g
+            if margin < threshold:
+                failing_share += g.share
+        if worst is None:
+            values[f"worst_{kind}_margin"] = None
+            values[f"worst_{kind}_margin_N"] = None
+            values[f"worst_{kind}_margin_index"] = None
+        else:
+            values[f"worst_{kind}_margin"] = getattr(worst, f"{kind}_margin")
+            values[f"worst_{kind}_margin_N"] = (
+                worst.N_turn if kind == "birth" else getattr(worst, f"{kind}_margin_N")
+            )
+            values[f"worst_{kind}_margin_index"] = worst.index
+        values[f"{kind}_failing_share"] = failing_share
+        values[f"first_{kind}_failure"] = _earliest_failure(failures[kind])
+
+    weighted_share: float = 0.0
+    below_weight_share: float = 0.0
+    for g in generations:
+        if g.weighted:
+            weighted_share += g.share
+        else:
+            below_weight_share += g.share
+
+    margins = Margins(
+        weighted_share=weighted_share,
+        below_weight_share=below_weight_share,
+        unassessed_share=unassessed_share,
+        classical_generations=counts[ESTIMATE_CLASSICAL],
+        one_loop_generations=counts[ESTIMATE_ONE_LOOP],
+        classical_gap_generations=counts[ESTIMATE_CLASSICAL_GAP],
+        weighted_generations=len(weighted_generations),
+        unassessed_candidates=unassessed_candidates,
+        plateau_events=sum(1 for e in events if e.source == "plateau"),
+        wall_events=sum(1 for e in events if e.source == "wall"),
+        N_late=float(N_late),
+        late_points=len(late),
+        **values,
+    )
+    return tuple(generations), margins
+
+
+def history_margins(
+    result: IntegrationResult, sample, policy: ODEPolicy
+) -> Tuple[Tuple[Generation, ...], Margins]:
+    """
+    The gatherer (prompt 08 §1.4): the core's values from a history, and the core's result.
+
+    - Each candidate's peak, once (peak_estimate), used both for its generation and as an event
+      (orchestrator note 08, ruling 5); a candidate with no assessment takes the field's own mass at its
+      state at N_turn on the dense output (field_log_m).
+    - The events that are not candidates: every plateau turning point, and every wall-side turning point
+      whose N is no "turning_point" candidate's N_turn, with the field's own mass on the dense output.
+    - N_late, the largest N among the turning points and the candidates' N_turn (R20).
+    - The tracker's mass (tracker_log_m) at every stored sample with N > N_late, searched from the
+      sample's own field, with the trace from its stored ln rho_R,E, ln f_m and Sigma; and today's, at the
+      final state, with Sigma from log_trace (ruling 3).
+    - K(N_final) from the policy's ledger; the unassessed K is the parking leftover's delta_K plus K_0.
+
+    A ComputationFailureError (a model call, the tracker's minimum) propagates to the caller, which
+    reports it as a warning (§1.4).
+    """
+    model: RealizedModel = policy.model
+    cosmology = policy.cosmology
+    ledger: DarkRadiationLedger = policy.dark_radiation
+    solution = result.solution
+
+    candidates: List[MarginCandidate] = []
+    for index, injection in enumerate(result.injections):
+        estimate = peak_estimate(model, injection)
+        if estimate is None:
+            candidates.append(
+                MarginCandidate(
+                    index=index,
+                    kind=injection.kind,
+                    N_turn=injection.N_turn,
+                    delta_K=injection.delta_K,
+                    estimate=None,
+                    log_k_ex=None,
+                    log_m=field_log_m(model, cosmology, solution(injection.N_turn)),
+                    log_R=None,
+                    gap_reason=None,
+                )
+            )
+        else:
+            candidates.append(
+                MarginCandidate(
+                    index=index,
+                    kind=injection.kind,
+                    N_turn=injection.N_turn,
+                    delta_K=injection.delta_K,
+                    estimate=estimate.estimate,
+                    log_k_ex=estimate.log_k_ex,
+                    log_m=estimate.log_m,
+                    log_R=estimate.log_R,
+                    gap_reason=estimate.gap_reason,
+                )
+            )
+
+    drained_turns = {
+        injection.N_turn
+        for injection in result.injections
+        if injection.kind == "turning_point"
+    }
+    events: List[MarginEvent] = []
+    for tp in result.turning_points:
+        if tp.kind == "plateau":
+            source = "plateau"
+        elif tp.N not in drained_turns:
+            source = "wall"
+        else:
+            continue
+        events.append(
+            MarginEvent(tp.N, field_log_m(model, cosmology, solution(tp.N)), source)
+        )
+
+    Ns = [tp.N for tp in result.turning_points] + [
+        injection.N_turn for injection in result.injections
+    ]
+    N_late: float = max(Ns) if len(Ns) > 0 else float("-inf")
+
+    late_samples = []
+    for s in sorted(sample, key=lambda s: s.raw_N):
+        if s.raw_N > N_late:
+            late_samples.append(
+                (
+                    s.raw_N,
+                    tracker_log_m(
+                        model, s.phi_Einstein, s.log_rhorad_Einstein, s.log_fm, s.Sigma
+                    ),
+                )
+            )
+
+    final: StateVector = result.final_state
+    _, Sigma_final, _ = log_trace(
+        cosmology, (final.log_rhorad_Einstein, final.log_fm, final.log_T_Jordan)
+    )
+    today = (
+        result.N_final,
+        tracker_log_m(
+            model,
+            final.phi_Einstein,
+            final.log_rhorad_Einstein,
+            final.log_fm,
+            Sigma_final,
+        ),
+    )
+
+    K_unassessed: float = ledger.K_initial
+    if result.parking is not None:
+        K_unassessed += result.parking.delta_K
+
+    return relativistic_margins(
+        candidates,
+        events,
+        N_late,
+        late_samples,
+        today,
+        ledger.K(result.N_final),
+        K_unassessed,
+    )
+
+
+def margin_warning_lines(margins: Margins) -> Tuple[str, ...]:
+    """
+    The margins' warning lines (prompt 08 §1.5; orchestrator note 08, ruling 1): one per kind whose worst
+    margin is below MARGIN_THRESHOLD, in the order birth, reflection, tracker, each beginning with its
+    phrase of WARNING_KINDS and giving the worst margin, its N, its generation and the failing share. They
+    go on the payload's "margin_warnings", never on "warnings".
+    """
+    phrases = {
+        "birth": WARNING_BIRTH_MARGIN,
+        "reflection": WARNING_REFLECTION_MARGIN,
+        "tracker": WARNING_TRACKER_MARGIN,
+    }
+    lines = []
+    for kind in MARGIN_KINDS:
+        worst = getattr(margins, f"worst_{kind}_margin")
+        if worst is None or not worst < MARGIN_THRESHOLD:
+            continue
+        lines.append(
+            f"{phrases[kind]}: the worst margin ln(p/m) = {worst:.4f} < ln 10 at "
+            f"N = {getattr(margins, f'worst_{kind}_margin_N'):.10g} (generation "
+            f"{getattr(margins, f'worst_{kind}_margin_index')}); the generations below ln 10 "
+            f"carry {getattr(margins, f'{kind}_failing_share'):.4g} of K"
+        )
+    return tuple(lines)
+
+
 def truncate_to_history(z_grid: redshift_array, final_N: float) -> redshift_array:
     """
     The points of the sampling axis that a history ending at final_N e-folds reaches: those with
@@ -3119,7 +3713,9 @@ def integrate_history(
              (inelastic-reflection prompt 02), and "dropped_drains", its count of armed drains
              that never reached a drain point (prompt 03), and "warnings", its warning lines
              (prompt 05), which a failure's payload carries too, and "parking", its Parking record
-             or None (prompt 06). No store reads any of the six
+             or None (prompt 06), and "generations", "margins" and "margin_warnings", the spectrum's
+             peaks and the relativistic margins (prompt 08; None, None and () at alpha = 0), which a
+             failure's payload does not carry. No store reads any of them
     """
     if not (0.0 <= alpha < 1.0):
         raise ValueError(
@@ -3319,6 +3915,21 @@ def integrate_history(
     # prompt 06b); a field is None where the history does not reach the temperature
     fixed_T: FixedTValues = fixed_T_values(result, policy, model, units)
 
+    # the spectrum's peak and the relativistic margins (inelastic-reflection prompt 08), after the
+    # integration and outside its loop, under the step loop's own condition for assessing the wall
+    # (orchestrator note 08, ruling 2): at alpha = 0, or on a model without a wall, nothing is computed
+    # (P22). A ComputationFailureError inside them is one warning line, never the history's failure
+    generations: Optional[Tuple[Generation, ...]] = None
+    margins: Optional[Margins] = None
+    margin_warnings: Tuple[str, ...] = ()
+    if alpha > 0.0 and model.reflects_at_origin and model.log_V_floor is not None:
+        try:
+            generations, margins = history_margins(result, sample, policy)
+            margin_warnings = margin_warning_lines(margins)
+        except ComputationFailureError as e:
+            generations, margins = None, None
+            margin_warnings = (f"{WARNING_MARGINS_FAILED}: {e.message}",)
+
     collected_full_statistics = supervisor.collect_full_statistics
     return {
         "metadata": IntegrationData(
@@ -3370,6 +3981,13 @@ def integrate_history(
         # the release of the parked field, a Release record of floats and ints, or None if the
         # history was not released (inelastic-reflection prompt 07); not stored
         "release": result.release,
+        # the generations, a tuple of Generation, and the history's Margins record, or None at alpha = 0,
+        # on a model without a wall, or where the margins failed; and the margins' warning lines, a
+        # tuple, () where none fires, printed by tune_history beside "warnings" (inelastic-reflection
+        # prompt 08; orchestrator note 08, rulings 1 and 2). None is stored (prompt 09's)
+        "generations": generations,
+        "margins": margins,
+        "margin_warnings": margin_warnings,
     }
 
 
@@ -3683,7 +4301,8 @@ def tune_history(
       not, carries its warning lines under "warnings". The first line of each kind (warning_kind)
       is printed, as "!! tune_history (<task_label>): <line>", from the first integration that
       returns it, whatever progress is, and no later line of that kind; a failure's warnings are
-      printed before its "!!" failure line.
+      printed before its "!!" failure line. The lines of "margin_warnings" (inelastic-reflection
+      prompt 08) follow those of "warnings", through the same set of printed kinds.
       If tuning_converged(residual_H, residual_phi, tolerance), it returns.
     - If Eq. 7's V_target <= 0 (no positive potential gives H0 at today's state), the next iterate
       halves V(phi_0) through renormalize and sets phi_ref = phi_min, and the step's matrix is
@@ -3768,8 +4387,10 @@ def tune_history(
 
         # the history's warnings (inelastic-reflection prompt 05; README §8.1 R6, §8.2 P23): the first
         # line of each kind, from the first integration that returns it, whatever progress is, and
-        # before a failure's line (orchestrator note 05, rulings 1, 2 and 9)
-        for line in data.get("warnings", ()):
+        # before a failure's line (orchestrator note 05, rulings 1, 2 and 9); then the margins' lines,
+        # through the same set of printed kinds (inelastic-reflection prompt 08; orchestrator note 08,
+        # ruling 1)
+        for line in (*data.get("warnings", ()), *data.get("margin_warnings", ())):
             line_kind = warning_kind(line)
             if line_kind not in warned_kinds:
                 warned_kinds.add(line_kind)

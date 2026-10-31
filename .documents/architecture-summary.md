@@ -1519,6 +1519,34 @@ class AbstractModel(DatastoreObject):
 >   `outside_classical` is True where V(φ_ta) is within the width. Tests:
 >   `ComputeTargets/tests/test_wall_rounding.py`.
 
+> **Note, 2026-10-31 (`inelastic-reflection`, prompt 08).** `ComputeTargets/ScalarHistory.py` uses these
+> methods once more, after the integration: `integrate_history` computes the spectrum's peak per
+> generation and three relativistic margins per history (README §8.1 R7, R13, R19–R21), at α > 0 on a
+> model with a wall only (the step loop's own condition), and never inside the step loop.
+> - **The generations and their peaks.** A generation is a candidate with ΔK > 0 and an assessment.
+>   `peak_estimate` takes the classical estimate (k_ex, ω_t) where ln 𝓡 ≤ 0, and `one_loop_turnaround`'s
+>   (k_ex, m_ta) where ln 𝓡 > 0, falling back to the classical one, flagged `"classical_gap"`, where the
+>   chain raises or returns None (R19). ln q = ln k_ex + N_turn, Einstein-frame.
+> - **The margins**, each ln(p/m): at birth (ℓ_t or ℓ); at every later event, which are candidates,
+>   plateau turning points and wall-side turning points with no candidate; and on the late tracker,
+>   the stored samples after the last turning point or candidate, and today (R20). The zero-lag
+>   tracker's mass is `tracker_log_m`, the field's own `field_log_m`.
+> - **The code.** A pure core, `relativistic_margins`, takes plain values (`MarginCandidate`,
+>   `MarginEvent`, the tracker's points) and returns the `Generation`s and the `Margins` record. A
+>   gatherer, `history_margins`, builds those values from the `IntegrationResult`, the samples, the
+>   policy and the dense output. `margin_warning_lines` makes the warnings.
+> - **The record** (`Margins`, floats, ints, `None` and `MarginFailure`, so that it crosses Ray). For
+>   each kind it holds the worst margin over the generations carrying at least 10⁻³ of K (U9), with its
+>   N and generation, the failing share below ln 10 (P6) and the first failure. It also holds the
+>   weighted, below-weight and unassessed shares (the leftover, R21), and the counts per estimate.
+> - **The payload** gains `"generations"`, `"margins"` and `"margin_warnings"`: `None`, `None`, `()`
+>   at α = 0. Four new kinds join `WARNING_KINDS`. The margins' lines go on `"margin_warnings"` only,
+>   so `"warnings"` stays the loop's, and `tune_history` prints the first line of each kind from either.
+>   A `ComputationFailureError` in the margins is one warning line, never the history's failure.
+> - **Nothing is stored yet**: no store reads the three keys. Prompt 09 stores the record. Tests:
+>   `ComputeTargets/tests/test_margins.py`; `numerical-strategies.md` §6.8 has the definitions and
+>   the coverage bound.
+
 ### 8.5 Cosmological Models (`CosmologyModels/`)
 
 `BaseCosmology` is the abstract base:
