@@ -1,7 +1,7 @@
 # Log 10 — the driver and the readers
 
 **Subject:** Give α an option and carry it through the drivers, the plots, the scope, the inventory and the tools
-**Commit:** this commit, on branch `inelastic-reflection`, on top of `d097745`
+**Commit:** `8c12afa`, on branch `inelastic-reflection`, on top of `d097745`
 **Date:** 2026-10-31, by Claude Sonnet 5.5
 **Result:** **COMPLETE.** The gate "Driver" holds. No stop was needed. None opened, none closed.
 - **What shipped.**
@@ -213,7 +213,7 @@ integrations, no PRyMordial); every other new module under 1 s. The new modules 
 | D2 | `parameters`' `alpha_values` has no default, so four calls in `test_plot_inputs.py` gain an argument (§2.1) and `PlotParameters.alphas` is a tuple, so one loop of that module's first test iterates `(*params[:-1], *params.alphas)`. Listed in §2.1; all of it is "the α lookup by option" | STRUCTURALLY REQUIRED |
 | D3 | `plot_by_beta.py` gains `write_alpha_summaries(model_label, records)` for the two products that span α, which the driver block calls once per cosmology. `extract_common.py` gains `_cosmology_line`, `_event_x` and `DELTA_N_EFF_PANELS` | IMPLEMENTATION CHOICE |
 | D4 | `plot_Delta_N_eff` prints its count line every time it draws, not only when something was left out. `plot_dark_radiation` prints one line at α = 0 per history (the scripts call it for every history) | IMPLEMENTATION CHOICE |
-| D5 | Stale prose corrected where this commit makes it false: `plot_inputs.py`'s module docstring ("the constant α = 0 until prompt 10") and `parameters`' docstring; `describe_scope`'s docstring; `tools/history_and_bbn.py`'s and `tools/bbn_from_store.py`'s module docstrings (the option and the lines) | IMPLEMENTATION CHOICE |
+| D5 | Stale prose corrected where `8c12afa` makes it false: `plot_inputs.py`'s module docstring ("the constant α = 0 until prompt 10") and `parameters`' docstring; `describe_scope`'s docstring; `tools/history_and_bbn.py`'s and `tools/bbn_from_store.py`'s module docstrings (the option and the lines) | IMPLEMENTATION CHOICE |
 | D6 | `tools/history_and_bbn.py` gains `dissipation_values_printed` and `dissipation_line`, module-level so that the test can import them; the test compares against its own conversion from `DissipationValues` | IMPLEMENTATION CHOICE |
 | D7 | `test_alpha_plot_inputs.py` builds its store with `test_plot_inputs`' own `_build_run`, then one `alpha_value` row for 0.1, and registers it in that module's `_MODULE` so `_ReadOnlyCase.copy` finds it | IMPLEMENTATION CHOICE |
 | D8 | `ComputeTargets/tests/test_driver_options.py` was not edited: its four `ast` assertions on `main.py` (`itertools.product`, `m.compute`, `pool.object_get('tolerance', tol=args.tuning_tolerance)`, `warn_super_planckian`) still hold with the α loop around `run_pipeline`, and `tuning_tol=args.tuning_tolerance` is still in the `plot_inputs.parameters` call | IMPLEMENTATION CHOICE |

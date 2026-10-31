@@ -1,7 +1,7 @@
 # inelastic-reflection campaign — implementation state
 
 **Last updated:** 2026-10-31 · **Status: LIVE, RE-PLANNED 2026-10-29 (README §8): 04–12 replace
-the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29, landed in `e967cb7` and reviewed (2026-10-29; gate Park holds; one issue narrowed). 07 written 2026-10-29, landed in `5397f8f` (2026-10-30; gate Release holds, the lag as a sign-and-order test by the user's ruling of option (c); one issue narrowed) and reviewed (`0b8f420`). 07b inserted 2026-10-30 at the user's word (README §8.1 R18) and written, before 08: the wall search across 10⁻²⁵–10⁻¹³ M_P; landed in `92f41f2` and reviewed (2026-10-30; gate Band holds; one issue closed). 08 written 2026-10-30 at the user's word, after the user ruled R20 (the tracker margin on the late tracker, with the reflections shown to cover the time before it) and R21 (the leftover unassessed); landed in `86fc526` and reviewed (2026-10-31; gate Margin holds; one issue closed, none opened). 09 written 2026-10-31 at the user's word, after the user ruled R22–R25 (ΔN_eff at 1 MeV with T_ν = T_γ; `extra_data` widened; zeros at α = 0 where defined; the margins' columns the charter's and the unassessed share); landed in `3984ec5` and reviewed (2026-10-31; gate Store holds; one stop, ruled by the user: option (b), `test_adiabatic_mass` gains r_χ = 0.0; the assigned issue closed, none opened by the prompt; the review opened one). 10 written 2026-10-31 at the user's word, after the user ruled R26–R28 (the `alpha=<α>/` output level for every α; Δg* in a new `dark_radiation.pdf`; ΔN_eff(β) in two panels, today and 1 MeV); landed in this commit (2026-10-31; gate Driver holds; no stop; none opened). Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
+the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29, landed in `e967cb7` and reviewed (2026-10-29; gate Park holds; one issue narrowed). 07 written 2026-10-29, landed in `5397f8f` (2026-10-30; gate Release holds, the lag as a sign-and-order test by the user's ruling of option (c); one issue narrowed) and reviewed (`0b8f420`). 07b inserted 2026-10-30 at the user's word (README §8.1 R18) and written, before 08: the wall search across 10⁻²⁵–10⁻¹³ M_P; landed in `92f41f2` and reviewed (2026-10-30; gate Band holds; one issue closed). 08 written 2026-10-30 at the user's word, after the user ruled R20 (the tracker margin on the late tracker, with the reflections shown to cover the time before it) and R21 (the leftover unassessed); landed in `86fc526` and reviewed (2026-10-31; gate Margin holds; one issue closed, none opened). 09 written 2026-10-31 at the user's word, after the user ruled R22–R25 (ΔN_eff at 1 MeV with T_ν = T_γ; `extra_data` widened; zeros at α = 0 where defined; the margins' columns the charter's and the unassessed share); landed in `3984ec5` and reviewed (2026-10-31; gate Store holds; one stop, ruled by the user: option (b), `test_adiabatic_mass` gains r_χ = 0.0; the assigned issue closed, none opened by the prompt; the review opened one). 10 written 2026-10-31 at the user's word, after the user ruled R26–R28 (the `alpha=<α>/` output level for every α; Δg* in a new `dark_radiation.pdf`; ΔN_eff(β) in two panels, today and 1 MeV); landed in `8c12afa` and reviewed (2026-10-31; gate Driver holds; no stop; none opened; D1 accepted at review). Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
 gate DR holds); 02 landed in `fe2a944` and reviewed (2026-10-28; gate Inject holds), after one
 stop and the user's ruling of interior sampling; 3 of 8 prompts written: 03 written 2026-10-28
 from log 02 §8, after the user ruled 𝒜₀ = 1 (README §6.1); 03 landed in `0afa199` and reviewed (2026-10-28;
@@ -46,7 +46,7 @@ bitwise the old code's.
 | 07b | [The wall search at the rounding of ln V](07b-the-wall-search-at-the-rounding-of-ln-V.md) | the wall search's helper returns −∞ within the rounding of ln V (R18), with its width derived; dissipation mode measured across 10⁻²⁵–10⁻¹³ M_P; the one-loop gap measured for 08 | Opus | ✍️ 2026-10-30 | ✅ 2026-10-30 | `92f41f2` | [07b](logs/07b-the-wall-search-at-the-rounding-of-ln-V.md) |
 | 08 | [Spectrum peak and margins](08-spectrum-peak-and-margins.md) | the peak by 𝓡 (R7, P25), the gap flagged (R19); ℓ; the energy weight (U9); three worst margins with the first failure (R13), the reflection margin over plateau turning points too and the tracker margin on the late tracker (R20), the leftover unassessed (R21); the coverage bound measured | Opus | ✍️ 2026-10-30 | ✅ 2026-10-31 | `86fc526` | [08](logs/08-spectrum-peak-and-margins.md) |
 | 09 | [Store](09-store.md) | α as a key in its own table (U3, P28); the per-sample ratio as a payload key of its own (P27); ΔN_eff at T_CMB and 1 MeV (R22), the margins (R25), parking and release as columns, zeros at α = 0 where defined (R24); the first failures in `extra_data`, widened (R23); `AdiabaticHistory` with ρ_χ (P29) and on parked samples; every reader at α = 0 (P30); format 6, 2026.8.0 | Opus | ✍️ 2026-10-31 | ✅ 2026-10-31 | `3984ec5` | [09](logs/09-store.md) |
-| 10 | [Driver and readers](10-driver-and-readers.md) | `--alpha-values` (P32); one pipeline per α in each driver (P33); the plots' matching (P34) and `alpha=<α>/` paths (R26); `dark_radiation.pdf` with Δg* (R27) and `Delta_N_eff.pdf`, two panels (R28); the scope, the inventory, both tools' `--alpha` (P37–P39) | Sonnet | ✍️ 2026-10-31 | ✅ 2026-10-31 | this commit | [10](logs/10-driver-and-readers.md) |
+| 10 | [Driver and readers](10-driver-and-readers.md) | `--alpha-values` (P32); one pipeline per α in each driver (P33); the plots' matching (P34) and `alpha=<α>/` paths (R26); `dark_radiation.pdf` with Δg* (R27) and `Delta_N_eff.pdf`, two panels (R28); the scope, the inventory, both tools' `--alpha` (P37–P39) | Sonnet | ✍️ 2026-10-31 | ✅ 2026-10-31 | `8c12afa` | [10](logs/10-driver-and-readers.md) |
 | 11 | Measure | the grid of U10; the rehearsal (U11); the verification document | Opus | ⬜ | ⬜ | — | — |
 | 12 | Close | documents, `CLAUDE.md`, handover §4.18, indexes, board | Sonnet | ⬜ | ⬜ | — | — |
 
@@ -71,6 +71,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 - [`orchestrator/prompt-07b.md`](orchestrator/prompt-07b.md) (`c2aac94`), used for 07b.
 - [`orchestrator/prompt-08.md`](orchestrator/prompt-08.md) (`f0c139d`), used for 08.
 - [`orchestrator/prompt-09.md`](orchestrator/prompt-09.md) (`03b769e`), used for 09.
+- [`orchestrator/prompt-10.md`](orchestrator/prompt-10.md) (`d097745`), used for 10.
 
 ## 2. The gates
 
@@ -1751,7 +1752,7 @@ observation, that ΔN_eff(1 MeV) does not carry BBN's frame factor F (0.93–1.0
 
 ### 5.12 After prompt 10 (2026-10-31)
 
-10 landed in this commit, under orchestrator note 10 (rulings 1–13). Log: [`logs/10-driver-and-readers.md`](logs/10-driver-and-readers.md).
+10 landed in `8c12afa`, under orchestrator note 10 (rulings 1–13). Log: [`logs/10-driver-and-readers.md`](logs/10-driver-and-readers.md).
 - **No stop.** Prompt §5 and the note's amendments were not reached. One existing-test constraint is a deviation to
   review (log 10 D1): `test_bbn_from_store`'s imitation store has no `alpha_value` table, so `find_model` takes a
   shard without the table as holding α = 0 only, rather than the unconditional join of ruling 8. The alternative is
@@ -1787,3 +1788,88 @@ observation, that ΔN_eff(1 MeV) does not carry BBN's frame factor F (0.93–1.0
   all passing. 44 new tests.
 - **Issues:** opened none, closed none; the index is unchanged (count 25). Log 10 §7 records the five-figure α
   directory name, the missing α in `bbn_from_store.py`'s CSV rows, and that the drivers' first run with α is 11's.
+
+*Orchestrator review of prompt 10* (2026-10-31, at `8c12afa`, against orchestrator note 10 §3):
+1. **Scope.**
+   - `git show --stat 8c12afa` lists 25 files: the prompt's §6 list, and ruling 1's two test modules.
+   - Its parent is `d097745`, the note's commit. The tree is clean, `git worktree list` shows the main
+     checkout alone, and nothing is pushed.
+2. **α = 0 and the frozen tests.**
+   - `git diff --stat d097745 8c12afa` is empty on every file ruling 12 freezes: the code under
+     `ComputeTargets/` and `ObjectFactories/` outside `tests/`, the goldens, `test_reflection_reporting`,
+     `test_dissipation_store`, `test_adiabatic_dark_radiation`, `test_bbn_sees_dark_radiation`,
+     `dissipation_histories.py`, `test_driver_options`, `test_registered_run_streams`, `test_bbn_from_store`,
+     the surfing tools and `CLAUDE.md`.
+   - The five existing test modules edited are each §1.10's class or ruling 1's, and nothing else:
+     - `test_plot_inputs`: `alphas` and `alpha_values`;
+     - `test_extraction` and `test_tuned_history_round_trip`: `alpha=0.0` and `dissipation=None`;
+     - `test_registered_run`: `α 0`;
+     - `test_inventory_report`: `alpha=0` moved to the common line.
+3. **The code** against prompt §1 and rulings 1–10, read line by line in the diff: it matches. **D1 is
+   accepted** as an *IMPLEMENTATION CHOICE*.
+   - `find_model` takes a shard with no `alpha_value` table as one written before format 6, whose histories
+     are α = 0 by construction. That is right for any such store, and narrower than editing
+     `test_bbn_from_store`'s imitation store, which ruling 12 froze.
+   - A shard that has the table takes ruling 8's join and match exactly. The note's §0 counted five
+     `build_history_record` calls in `test_extraction`; there are three, and all three gained `alpha=0.0`.
+4. **The independent probe** (session scratchpad, `review10/probe.py`, not committed).
+   - **The option:**
+     - the default is `[0.0]`, a given list replaces it, and the YAML key gives the same list;
+     - `-0` parses to `0.0`, and duplicates collapse in order;
+     - −0.1, 1, `nan` and `inf` exit 2 with the message naming the range.
+   - **The store**, with M = 0.5, β = 2 at α = 0 and 0.1, and M = 10⁻³, β = 1.2 at α = 0.1, on 09's harness:
+     - `find_model` finds serial 1 by default and at α = 0, and serial 2 at α = 0.1 and 0.1000005;
+     - α = 0.3 is a `LookupError` naming it;
+     - `plot_inputs.parameters([0.1, 0.0])` returns both rows in that order.
+   - **`plot_dark_radiation`** on the read-back histories:
+     - Δg* equals my own `gstar_rho * rho_chi_over_rho_rad` by `==` on all 3 078 and 3 080 drawn samples;
+     - the parking and release lines sit at the stored `parking_N` = 28.371911595351886 and `release_N` =
+       45.91020342925626 exactly, and there is no line where the history does not park;
+     - at α = 0 it returns `False`.
+   - **The records:** each ΔN_eff equals `ScalarHistory.dissipation`'s, and α = 0 gives 0.0.
+     `histories.csv` sorts by (α, M, n, β).
+   - **α = 0 unchanged:** `tools/history_and_bbn.py 2 0.5 --fixed-normalization …` at `d097745`, in a
+     temporary worktree I then removed, and at `8c12afa`, both with the real PRyMordial solve. After ruling 7's
+     mask they are byte-identical, 1 227 bytes.
+   - **α = 0.1:** at M = 10⁻³, β = 1.2 the `history` line carries `alpha=0.1` before `wall=`, and the
+     `dissipation` line prints all 24 fields in order, the ln T_J in GeV.
+5. **The breakages.** Each of B1–B8 was replayed from the agent's diffs with `git apply` in `bash`, then
+   reverted, leaving the tree clean. Each fails what the log names: B1 3 tests (5 entries), B2 1, B3 5, B4 2,
+   B5 2, B6 1, B7 6 (three existing), B8 4 (1 failure, 5 errors).
+6. **The figures.** I looked at the PNGs of `dark_radiation_b1.2_M1e-3` (both coordinates) and
+   `Delta_N_eff_M0.5_n1`.
+   - The ΔN_eff curves fall with β, and α = 0.1 lies above α = 0.03 in both panels, the two closing up at
+     β = 25.
+   - Δg* runs 0.030–0.62, with the parking line at the start of the plateau and the release at N = 45.9, as
+     log 09 §5.2 puts them.
+   - Two cosmetic points of the redshift mode, which no script calls, are left as observations, not opened:
+     - its x axis is not inverted as the other history figures' are;
+     - its temperature lines sit at z (`get_xpos_attr`) while its curve and its own lines are at 1 + z
+       (`get_x_coord`). That offset is `extract_common`'s and predates the campaign.
+7. **The records.**
+   - The log is in §5.1's form, with every ruling recorded and D1–D9 classed. "State handed to the next
+     prompt" covers prompt §4.3's list.
+   - The architecture note is dated, after 09's, with no line removed.
+   - §5.12 and the gate are filled. No issue was opened, so the index is untouched (25).
+8. **The suites** at `8c12afa`, run serially:
+   - CosmologyModels 26 OK (75 s);
+   - ComputeTargets 122 OK (164 s) + 375 OK (474 s);
+   - ObjectFactories 129 OK (81 s);
+   - tools 123 OK (133 s);
+   - RunDrivers 68 OK (31 s).
+
+   The loads were 6–91 (another workload peaked during the first ComputeTargets half). The counts rose by the
+   44 new tests only. `black --check` is clean on the 22 changed `.py` files. The six `--help`s exit 0, and
+   each shows `--alpha-values` or `--alpha`.
+9. **The inventory** of a temporary store holding the two α of check 4, given a stand-in `QCD_Cosmology` row:
+   - it was read by `read_inventory` and `format_inventory_report`, the two calls `main.py --inventory` makes;
+   - `problems: none`;
+   - `alpha_value` is under "Redshifts, tolerances and parameter values";
+   - the common line has no α, and the history lines end `alpha=0` and `alpha=0.1`.
+
+Residue fixed in this review's commit:
+- "this commit" → `8c12afa` in the log and on this board;
+- note 10 added to the list of orchestrator notes.
+
+**Opened:** none. The drivers' first run with α is 11's rehearsal (U11), as log 10 §4.4 says. 11 is written next,
+from log 10 §8 (README §2.1).
