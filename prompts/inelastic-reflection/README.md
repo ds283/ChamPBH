@@ -652,8 +652,26 @@ Each in the user's words, from the conversation of 2026-10-29.
 - **R21 — the parking leftover is unassessed** (2026-10-30). The leftover of P19 has no bounce. Asked
   how the margins treat it, the user chose "Unassessed, share reported": it gets no peak and no margins,
   and its share of ρ_χ is reported beside the failing shares.
+- **R22 — ΔN_eff at 1 MeV** (2026-10-31, when prompt 09 was written). P7's expression,
+  (4/7) g_ρ (11/4)^{4/3} ρ_χ/ρ_R, takes T_ν/T_γ = (4/11)^{1/3}, true only after e± annihilation.
+  Asked which convention 09 stores at 1 MeV, the user chose "(4/7) g_ρ r at 1 MeV":
+  ΔN_eff(1 MeV) = (4/7) g_ρ(1 MeV) ρ_χ/ρ_R, taking T_ν = T_γ (the scoping's own expression), and
+  ΔN_eff(T_CMB) = (4/7) g_ρ(T_CMB) (11/4)^{4/3} ρ_χ/ρ_R, P7's. The orchestrator's probe
+  ([`source/planning-probes-2026-10-31/`](source/planning-probes-2026-10-31/README.md)) gives 0.050
+  and 0.052 at M = 10⁻³⁰ M_P, β = 2, α = 0.1, apart by what is injected after 1 MeV. P7's expression
+  at 1 MeV would give 0.19.
+- **R23 — the JSON blob** (2026-10-31). `extra_data` is declared `String(256)` and holds about 145
+  characters; the first failures of R13 need about 550 more. The user chose "Widen extra_data": it
+  becomes a `Text` column, and the first failures go under their own key in it.
+- **R24 — α = 0 rows** (2026-10-31). The user chose "Zeros where defined": at α = 0, ρ_χ/ρ_R, ΔN_eff
+  and the counts are 0.0 or 0, since there is exactly no dark radiation. The margins, 𝓡 at the first
+  impact, the parking and the release are NULL, since none is computed (P22).
+- **R25 — the margins' columns** (2026-10-31). The user chose "Charter + unassessed share": the three
+  worst margins, their N, the three failing shares and the unassessed share are columns. The
+  per-estimate counts, the weighted and below-weight shares and the worst generations' indices go to
+  the JSON with the first failures.
 
-### 8.2 Proposed by the planner (P18–P26)
+### 8.2 Proposed by the planner (P18–P31)
 
 Accepted as proposed unless the user rules otherwise.
 - **P18 — the constants**, module constants in `ComputeTargets/ScalarHistory.py` under
@@ -683,6 +701,24 @@ Accepted as proposed unless the user rules otherwise.
   estimates"). The margin at birth is ln(k_ex/m_ta).
 - **P26 — Δg* is derived, not stored**: Δg* = g_ρ(T_J) ρ_χ/ρ_R from the per-sample ratio and the
   cosmology's g_ρ, in the readers. ΔN_eff at T_CMB and 1 MeV are whole-history columns.
+- **P27 — the per-sample ratio travels beside the samples** (added 2026-10-31, when prompt 09 was
+  written). `integrate_history`'s payload gains `"rho_chi_over_rho_rad"`, a tuple parallel to
+  `"sample"` holding the policy's own r_χ at each sample. `SampleValues` does not change: both golden
+  histories hash its fields, so a new field would break them at α = 0 (README §5).
+- **P28 — α's row** (2026-10-31). A new dimensionless table, `alpha_value`, built by the existing
+  dimensionless-quantity factory, replicated as `beta_value` and `tolerance` are. `ScalarHistory`
+  gains `alpha_serial`, and its inventory spec the parent `alpha`. α = 0 is a row like any other.
+- **P29 — `AdiabaticHistory` reads ρ_χ** (2026-10-31). Since 01, the potential policy takes r_χ, but
+  `AdiabaticComputePolicy` calls it without, so at α > 0 its M²_eff/H² and Ḣ/H² treat ρ_χ as absent.
+  09 passes each sample's stored ratio. The quanta do not couple to φ, so the conformal mass reads
+  the matter and bath part E alone, never E + Y; 09 derives it in its log. At r_χ = 0.0 every
+  expression takes its old operations, so α = 0 is bitwise.
+- **P30 — the readers at α = 0** (2026-10-31). In 09 every lookup of a history (`main.py`, the plot
+  scripts, `plot_inputs.py`, the tools) passes the α = 0 row, as far as the schema forces, as
+  `jordan-normalization` 07 did for its key. The option, the matching and the figures are 10's.
+- **P31 — the values at 1 MeV and 70 keV** (2026-10-31) are taken at the history's first crossing of
+  T_J, as `fixed_T_values` takes φ and ρ_NP/ρ_R,J, with r_χ the policy's at the dense output's state
+  there and g_ρ the cosmology's at that T_J.
 
 ### 8.3 For the user to rule (U9–U11)
 
@@ -804,6 +840,11 @@ bound, and 08 closes `[04-one-loop-chain-has-no-solution-just-above-R-equals-1]`
 - **Gate "Margin".**
 
 **09 — the store** (§2.2's 05, extended).
+*Amended 2026-10-31, when 09 was written (R22–R25, P27–P31).* ΔN_eff at 1 MeV takes T_ν = T_γ;
+`extra_data` becomes `Text`; an α = 0 row holds zeros where they are defined and NULL elsewhere; the
+margins' columns are the charter's and the unassessed share. The per-sample ratio is a payload key of
+its own, α has its own row, `AdiabaticHistory` reads ρ_χ, and every reader passes α = 0 until 10.
+09 closes `[00-settling-at-physical-M-needs-a-parked-tracking-model]`.
 - **The key and the per-sample ratio** as §2.2's 05. **Whole-history columns:** P7's (without
   `omitted_fraction`), ΔN_eff at T_CMB and at 1 MeV, the three worst margins with their N, the
   failing fractions of U9, 𝓡 at the first impact, the N and T_J of parking and of release, the
