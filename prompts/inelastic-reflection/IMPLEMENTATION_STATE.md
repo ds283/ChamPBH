@@ -1,7 +1,7 @@
 # inelastic-reflection campaign — implementation state
 
 **Last updated:** 2026-10-31 · **Status: LIVE, RE-PLANNED 2026-10-29 (README §8): 04–12 replace
-the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29, landed in `e967cb7` and reviewed (2026-10-29; gate Park holds; one issue narrowed). 07 written 2026-10-29, landed in `5397f8f` (2026-10-30; gate Release holds, the lag as a sign-and-order test by the user's ruling of option (c); one issue narrowed) and reviewed (`0b8f420`). 07b inserted 2026-10-30 at the user's word (README §8.1 R18) and written, before 08: the wall search across 10⁻²⁵–10⁻¹³ M_P; landed in `92f41f2` and reviewed (2026-10-30; gate Band holds; one issue closed). 08 written 2026-10-30 at the user's word, after the user ruled R20 (the tracker margin on the late tracker, with the reflections shown to cover the time before it) and R21 (the leftover unassessed); landed in this commit (2026-10-31; gate Margin holds; one issue closed, none opened). Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
+the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29, landed in `e967cb7` and reviewed (2026-10-29; gate Park holds; one issue narrowed). 07 written 2026-10-29, landed in `5397f8f` (2026-10-30; gate Release holds, the lag as a sign-and-order test by the user's ruling of option (c); one issue narrowed) and reviewed (`0b8f420`). 07b inserted 2026-10-30 at the user's word (README §8.1 R18) and written, before 08: the wall search across 10⁻²⁵–10⁻¹³ M_P; landed in `92f41f2` and reviewed (2026-10-30; gate Band holds; one issue closed). 08 written 2026-10-30 at the user's word, after the user ruled R20 (the tracker margin on the late tracker, with the reflections shown to cover the time before it) and R21 (the leftover unassessed); landed in `86fc526` and reviewed (2026-10-31; gate Margin holds; one issue closed, none opened). Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
 gate DR holds); 02 landed in `fe2a944` and reviewed (2026-10-28; gate Inject holds), after one
 stop and the user's ruling of interior sampling; 3 of 8 prompts written: 03 written 2026-10-28
 from log 02 §8, after the user ruled 𝒜₀ = 1 (README §6.1); 03 landed in `0afa199` and reviewed (2026-10-28;
@@ -44,7 +44,7 @@ bitwise the old code's.
 | 06 | [Parking](06-parking.md) | the cut ρ_kin/ρ_R < ε (R14, P19, P21); the parked phase to T_CMB through the dense-output interface (R15); the tuning at small M measured | Opus | ✍️ 2026-10-29 | ✅ 2026-10-29 | `e967cb7` | [06](logs/06-parking.md) |
 | 07 | [Unparking](07-unparking.md) | the release at the root of m/H = 10 on the parked step (R16, P24); the oscillating phase resumes; no second parking | Opus | ✍️ 2026-10-29 | ✅ 2026-10-30 | `5397f8f` | [07](logs/07-unparking.md) |
 | 07b | [The wall search at the rounding of ln V](07b-the-wall-search-at-the-rounding-of-ln-V.md) | the wall search's helper returns −∞ within the rounding of ln V (R18), with its width derived; dissipation mode measured across 10⁻²⁵–10⁻¹³ M_P; the one-loop gap measured for 08 | Opus | ✍️ 2026-10-30 | ✅ 2026-10-30 | `92f41f2` | [07b](logs/07b-the-wall-search-at-the-rounding-of-ln-V.md) |
-| 08 | [Spectrum peak and margins](08-spectrum-peak-and-margins.md) | the peak by 𝓡 (R7, P25), the gap flagged (R19); ℓ; the energy weight (U9); three worst margins with the first failure (R13), the reflection margin over plateau turning points too and the tracker margin on the late tracker (R20), the leftover unassessed (R21); the coverage bound measured | Opus | ✍️ 2026-10-30 | ✅ 2026-10-31 | this commit | [08](logs/08-spectrum-peak-and-margins.md) |
+| 08 | [Spectrum peak and margins](08-spectrum-peak-and-margins.md) | the peak by 𝓡 (R7, P25), the gap flagged (R19); ℓ; the energy weight (U9); three worst margins with the first failure (R13), the reflection margin over plateau turning points too and the tracker margin on the late tracker (R20), the leftover unassessed (R21); the coverage bound measured | Opus | ✍️ 2026-10-30 | ✅ 2026-10-31 | `86fc526` | [08](logs/08-spectrum-peak-and-margins.md) |
 | 09 | Store | α as a key (U3); the per-sample ratio; ΔN_eff at T_CMB and 1 MeV, the margins, parking and release as columns; JSON details; `AdiabaticHistory`; format 6, 2026.8.0 | Opus | ⬜ | ⬜ | — | — |
 | 10 | Driver and readers | `--alpha-values`; plot matching; Δg* and ΔN_eff figures (R12); scope; inventory; the tool | Sonnet | ⬜ | ⬜ | — | — |
 | 11 | Measure | the grid of U10; the rehearsal (U11); the verification document | Opus | ⬜ | ⬜ | — | — |
@@ -69,6 +69,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 - [`orchestrator/prompt-06.md`](orchestrator/prompt-06.md) (`7094056`), used for 06.
 - [`orchestrator/prompt-07.md`](orchestrator/prompt-07.md) (`35a103c`; ruling 9 amended at the user's word in `0994a10`), used for 07.
 - [`orchestrator/prompt-07b.md`](orchestrator/prompt-07b.md) (`c2aac94`), used for 07b.
+- [`orchestrator/prompt-08.md`](orchestrator/prompt-08.md) (`f0c139d`), used for 08.
 
 ## 2. The gates
 
@@ -172,7 +173,7 @@ One opened by the planner. Prompt 04's was closed by prompt 08, and prompt 05's 
   log₁₀ 𝓡 ≥ 3.00. The histories that cross the gap are β = 1.2 at M = 10⁻¹⁶, 10⁻¹⁷, 10⁻²⁰; β = 2 at
   10⁻¹⁵–10⁻²⁰; β = 3 at 10⁻¹⁵–10⁻¹⁸. At M = 10⁻¹⁶ the generations in the gap carry 0.88, 0.59 and 0.52
   of K (β = 1.2, 2, 3).
-- **Closed (2026-10-31, prompt 08, this commit).** `peak_estimate` takes the one-loop estimate where
+- **Closed (2026-10-31, prompt 08, `86fc526`).** `peak_estimate` takes the one-loop estimate where
   ln 𝓡 > 0 and `one_loop_turnaround` returns one, and the classical estimate elsewhere, flagged
   `"classical_gap"` where the chain raises or returns `None` (R19). Each generation records its
   estimate. On the 51 histories of log 08 §5.1, every gap generation's reason is the saddle-node ("ell
@@ -1381,7 +1382,7 @@ Residue fixed in this review's commit: "this commit" → `92f41f2` in the log an
 
 ### 5.10 After prompt 08 (2026-10-31)
 
-08 landed in this commit, under orchestrator note 08 (rulings 1–16). Log:
+08 landed in `86fc526`, under orchestrator note 08 (rulings 1–16). Log:
 [`logs/08-spectrum-peak-and-margins.md`](logs/08-spectrum-peak-and-margins.md).
 - **What shipped** (`ComputeTargets/ScalarHistory.py`). After the integration, and under the step loop's
   own condition (α > 0 on a model with a wall), `integrate_history` calls `history_margins`, a gatherer,
@@ -1428,3 +1429,92 @@ Residue fixed in this review's commit: "this commit" → `92f41f2` in the log an
   all passing.
 - **Issues:** closed `[04-one-loop-chain-has-no-solution-just-above-R-equals-1]` (§4), with its row
   removed from `.documents/OPEN_ISSUES.md` §1.19 and the count corrected 26 → 25; opened none.
+
+**Orchestrator review of prompt 08** (2026-10-31, at `86fc526`, under note 08 §3). It passes. Each check:
+1. **Scope.**
+   - `git show --stat 86fc526` lists exactly the prompt's §6 seven files, and its parent is `f0c139d`.
+   - The tree is clean, the main checkout is the only worktree, and nothing is pushed.
+   - Ruling 15: the hunks of `ScalarHistory.py` are the new constants, `WARNING_KINDS` and its comment,
+     the new block after `fixed_T_values`, `integrate_history`'s docstring, call and payload, and
+     `tune_history`'s docstring and printing loop. `integrate_scalar_history`, `IntegrationResult` and
+     the loop's records are untouched. `CosmologyConcepts/` and every existing test module are
+     unchanged.
+2. **α = 0 and the frozen tests.** The tests of prompt §1.8 item 9 pass unedited at `86fc526` (check 9),
+   `test_unresolved_turnarounds:592` and `test_parking:933` among them. That is ruling 1's purpose.
+3. **The definitions** match prompt §1.1–§1.3 and rulings 2–6 and 8–10, line by line:
+   - `peak_estimate` takes ln 𝓡 ≤ 0 as classical. It flags `"classical_gap"` on a
+     `ComputationFailureError` or `None`, and lets anything else propagate.
+   - ln q uses `N_turn`. The events are the later candidates, plateau turning points, and wall-side
+     turning points with no candidate, taken with a strict N > N_turn.
+   - N_late is the largest turning-point N or candidate `N_turn`. The tracker is searched from each
+     sample's own φ, and today from the final state's.
+   - The weight uses ≥, K is the ledger's K(N_final), and the leftover and K_0 are unassessed.
+   - Ties go to the lowest index. A first failure is the minimum of (N, margin, index). The threshold is
+     ln 10.
+   - The caller's condition is the loop's `assess_wall` expression verbatim, and only
+     `ComputationFailureError` is caught there.
+4. **The derivation**, re-derived independently for the exponential. It is sound.
+   - V'' falls strictly with φ, since V is completely monotone, and (ln A)'' = 0. So m_eff² peaks at a
+     swing's inner end at fixed trace.
+   - The trace's term τ = ½ log1p(ε_in(T_max/T_in − 1)) follows from m² ≤ V''(φ_in) + Q T_max.
+   - The bound is ΔN on an outward swing and none on an inward one, plus τ + max(0, δ_in). The inward
+     swing is tighter than the prompt's "N_b − N_a".
+   - The parked bound B_park = (Parking.N − N_turn,cut) + max(0, ln m_tr(Parking.N) − ln m_cut) follows
+     from d ln m_tr/dN ≤ −1.
+   - The tracker exponent (n + 2)/(2(n + 1)) = ¾ for the V'' term, and ½ for the trace's, check.
+   - The log's general range for d ln m_tr/dN (−3 to −1.5) does not hold at β = 25. The log says so and
+     relies on the measured −1.02 there, with 2 % to spare.
+5. **An independent probe** (session scratchpad, not committed). It uses only the records, the model
+   methods and `log_m_eff_squared`.
+   - **The margins.** On β = 2 at M = 10⁻¹⁶ and 10⁻³⁰, and M = 0.5 at β = 2, 5 and 25, it recomputes
+     every generation's estimate, ln q and birth, reflection and tracker margins. It also recomputes the
+     worst margins with their indices, and the failing shares. All equal the payload's, with a
+     difference of exactly 0. The shares partition K to 2.2×10⁻¹⁶.
+   - **The coverage.** The largest shortfall outside a parked segment is +3.05×10⁻⁴ (β = 25, #27, at
+     N = 130.48), as the log has. Elsewhere it is ≤ −2.7×10⁻⁴. The parked segments' field-own margins
+     lie 3.30 (β = 5) and 3.29 (β = 25) above min(b, r).
+   - **Bitwise against `f0c139d`**, in a temporary worktree, since removed. β = 2 at M = 10⁻¹⁶, β = 5 at
+     M = 0.5, and natural mode at M = 0.5, β = 2 are equal by `repr` on all 35 shared keys: the
+     `IntegrationResult` fields, `ts` and the payload, `"warnings"` included. `metadata` and `z_grid` are
+     excluded. At α = 0 the new keys are `None`, `None`, `()`.
+6. **The breakages.** The log's eight diffs are identical to the agent's scratch files. Each was replayed
+   with `git apply` in `bash`, in a worktree of `86fc526`, and reverted. Each fails exactly the tests the
+   log names:
+   - B1: 1;
+   - B2: 2;
+   - B3: 3;
+   - B4: 3;
+   - B5: 1 failure and 1 error;
+   - B6: 1;
+   - B7: 3;
+   - B8: `setUpClass` of item 8, with 30 tests run.
+
+   The clean run passes 32/32.
+7. **The numerics of the tests.**
+   - Item 1 builds every expected value by the same operations and asserts equality. The partition is
+     held to 6ε for six terms.
+   - Item 2's boundary is `nextafter(1e-3, 0)` against 1e-3 exactly, at K = 1.
+   - Item 3 holds 5×10⁻⁵ (ruling 9), measured at 4.4×10⁻⁵ and 4.8×10⁻⁵.
+8. **The measurement and the records.**
+   - **§2:** the tables are complete. §2.1 has 51 histories, the prompt's 45 and more. §2.2 tabulates
+     the raise texts, all of them "ell … fell to". §2.3 has the parked segments. §2.4–§2.7 are given,
+     with ruling 12's comparison.
+   - **The log:** it is in §5.1's form, with D1–D7 classed and the sixteen rulings recorded.
+   - **`.documents/`:** the notes are dated and additive only (+28 and +59 lines, nothing removed).
+   - **The issue:** it is moved to §4 with its Closed line, its index row is deleted, and the count is
+     corrected 26 → 25.
+9. **The suites** at `86fc526`, run serially:
+   - CosmologyModels 26 OK (67 s);
+   - ComputeTargets 96 OK (124 s) + 375 OK (440 s);
+   - ObjectFactories 103 OK;
+   - tools 115 OK;
+   - RunDrivers 64 OK.
+
+   The load averages ranged from 7 to 24. ComputeTargets rose by the 32 new tests only. `black --check` is
+   clean on both changed `.py` files.
+
+Residue fixed in this review's commit: "this commit" → `86fc526` in the log and on this board, and note 08
+added to the list of orchestrator notes. Nothing opened. The log's observation that the parked bound's
+condition fails in the Σ wiggle at 23–35 keV is recorded there against
+`[00-xav-sigma-is-non-monotone-at-25-35-keV]`. No measured parked segment crosses that band, so nothing
+rests on it.

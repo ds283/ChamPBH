@@ -1,7 +1,7 @@
 # Log 08 — the spectrum's peak and the relativistic margins
 
 **Subject:** Compute the spectrum's peak and the relativistic margins per history
-**Commit:** this commit, on branch `inelastic-reflection`, on top of `f0c139d`
+**Commit:** `86fc526`, on branch `inelastic-reflection`, on top of `f0c139d`
 **Date:** 2026-10-30/31, by Claude Opus 5.5
 **Result:** **COMPLETE.** The gate "Margin" holds. One issue closed, none opened.
 - **What shipped.** `integrate_history` computes, after the integration and outside its loop, each
