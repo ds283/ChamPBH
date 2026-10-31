@@ -670,8 +670,18 @@ Each in the user's words, from the conversation of 2026-10-29.
   worst margins, their N, the three failing shares and the unassessed share are columns. The
   per-estimate counts, the weighted and below-weight shares and the worst generations' indices go to
   the JSON with the first failures.
+- **R26 — the plot scripts' paths with several α** (2026-10-31, when prompt 10 was written). With several
+  α in one run the outputs would overwrite each other. The user chose "alpha=<α>/ level, every α": every
+  per-α product goes under `<output>/<label>/alpha=<α>/`, α = 0 included, and a product that spans α sits
+  at `<output>/<label>/`.
+- **R27 — where Δg* is drawn** (2026-10-31). `plot_ScalarHistory.py` has no single density panel. The user
+  chose "New dark_radiation.pdf": Δg*(T_J) above and ρ_χ/ρ_R below, log-scale, with the parking and
+  release marked, written only at α > 0.
+- **R28 — ΔN_eff(β)** (2026-10-31). The user chose "Both, two panels": one `Delta_N_eff.pdf` per (M, n)
+  group, ΔN_eff today and at 1 MeV against β, one curve per α > 0; `histories.csv` gains α and both
+  ΔN_eff columns. BBN's frame factor F (log 09 §1.2) is not drawn.
 
-### 8.2 Proposed by the planner (P18–P31)
+### 8.2 Proposed by the planner (P18–P39)
 
 Accepted as proposed unless the user rules otherwise.
 - **P18 — the constants**, module constants in `ComputeTargets/ScalarHistory.py` under
@@ -719,6 +729,25 @@ Accepted as proposed unless the user rules otherwise.
 - **P31 — the values at 1 MeV and 70 keV** (2026-10-31) are taken at the history's first crossing of
   T_J, as `fixed_T_values` takes φ and ρ_NP/ρ_R,J, with r_χ the policy's at the dense output's state
   there and g_ρ the cosmology's at that T_J.
+
+- **P32 — `--alpha-values`** (2026-10-31, when prompt 10 was written). In the shared parser, `nargs="+"`,
+  default `[0.0]`, the default action, so that a given list replaces the default as `--n-values`'s does
+  (`action="extend"` would append to it). A validator refuses α outside [0, 1) at parse, exit 2, before
+  Ray, since `integrate_history` would raise inside a task.
+- **P33 — one pipeline per α.** Each driver calls its `run_pipeline` once per α row, inside its loop over
+  cosmologies. The work items, batches, sharding and stage order do not change.
+- **P34 — `plot_inputs`** returns `alphas`, one row per given α; a miss is `PlotOptionNotStored` naming
+  `--alpha-values`, exit 2.
+- **P35 — the paths** of R26, with α formatted `:.5g`. `histories.csv` and `Delta_N_eff.pdf` span α;
+  figure 2 (`M_convergence.pdf`) is per α.
+- **P36 — the figures are functions of `extract_common.py`**, so that a test draws them without Ray, as
+  `plot_fixed_T`. Δg* is `gstar_rho * rho_chi_over_rho_rad` per sample (P26). `plot_ScalarHistory.py`'s CSV
+  gains both columns at every α.
+- **P37 — the scope** names α, always.
+- **P38 — the inventory** files `alpha_value` with the parameter values and prints α as a history extra
+  field: once on the common line when shared, per history otherwise.
+- **P39 — the tools.** `tools/history_and_bbn.py --alpha` (P10), with a `dissipation` line at α > 0 for 11;
+  `tools/bbn_from_store.py --alpha`, matching α in its raw SQL as the factory matches it.
 
 ### 8.3 For the user to rule (U9–U11)
 
@@ -856,6 +885,10 @@ its own, α has its own row, `AdiabaticHistory` reads ρ_χ, and every reader pa
 **10 — the driver and the readers** (§2.2's 06). As there, with the figures of R12 in place of U8:
 Δg*(T_J) on `plot_ScalarHistory.py`'s density panel, and ΔN_eff(β) per α on `plot_by_beta.py`.
 **Gate "Driver".**
+*Amended 2026-10-31, when 10 was written (R26–R28, P32–P39).* Δg* gets a figure of its own,
+`dark_radiation.pdf`, since the script has no single density panel. ΔN_eff(β) has two panels, today and
+1 MeV. Every per-α product goes under an `alpha=<α>/` level. The tools gain `--alpha`, and
+`tools/bbn_from_store.py` matches α.
 
 **11 — the measurement** (§2.2's 07). The grid of U10 by `tools/history_and_bbn.py`; the rehearsal
 of U11; the verification document. **Gates "Measure"**: every point has a row, a failure with its
