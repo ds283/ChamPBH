@@ -135,19 +135,55 @@ prompt 08, and prompt 05's by prompt 07b (§4). The one assigned (§3.1) was clo
     +1.6×10⁻⁴ at 10 MeV and +3.0×10⁻³ at 1 MeV. (Below about 0.1 MeV the relation does not apply,
     since T_ν ≠ T_γ there; it reaches 0.16.) Part of the value at 1 MeV may be the start of
     e± annihilation, which the relation does not cover.
+  - **Corrected, 2026-10-31 (after the review, at the user's question).** The algebraic relation above
+    is the single-temperature special case. It is not the condition the ODE needs, and it fails after
+    neutrino decoupling by construction (`SaikawaShirai_EOS_spline.w` is that relation solved for w, and
+    is frozen at 2 MeV for that reason). The condition that holds at every temperature follows from
+    energy and entropy conservation of the whole plasma. With x = (1/3) d ln g_s/d ln T:
+
+      4 + d ln g_ρ/d ln T = 3(1 + w)(1 + x).
+
+    Its residual, integrated over the tables alone from T* = 2×10⁴ GeV (no history), is the drift of
+    ln ρ_R from ln(g_ρ T⁴):
+
+    | T (GeV) | 100 | 1 | 0.1 | 10⁻² | 10⁻³ | 10⁻⁴ | today |
+    |---|---|---|---|---|---|---|---|
+    | cumulative drift | +0.19 % | **−1.17 %** | −0.08 % | −0.21 % | **−0.211 %** | −0.098 % | **−0.078 %** |
+
+    It reproduces log 09's −0.210 % at 1 MeV and −0.078 % today, so the cause is confirmed: the
+    tabulated w (Xav's table) and the Saikawa–Shirai fits for g_ρ and g_s disagree on the shape of the
+    QCD transition. The error is not about 10⁻³ throughout. It peaks at −1.2 % in ρ_R near 1 GeV, where
+    the QCD-era kicks act. Most of it is undone by 0.1 GeV. The issue's name keeps its first wording.
 - **Impact.**
   - It is the whole of ruling 12's residual, −1.328×10⁻³ on every history (log 09 §5.2). Every ΔN_eff
     column (R12, R22) carries it at about 10⁻³ relative. Those columns are for presentation (R12).
   - ρ_NP reaches PRyMordial as r ρ_SM(T) (`build_rho_NP_callback`), with r relative to the stored
     ρ_R,J. So the offset enters BBN's expansion rate only through r: at r = 0 BBN is plain PRyMordial.
-  - The history's own H, and so its dynamics, carries the bath's offset at about 10⁻³. That is not
-    measured.
+  - The history's own H, and so its dynamics, carries the bath's offset. *Corrected, 2026-10-31:* that
+    is up to about 0.6 % in H (1.2 % in ρ_R) near 1 GeV, and about 10⁻³ at BBN. Its effect on φ, H_J and
+    the yields is not measured.
   - It is every history's, at every α, and predates this campaign.
 - **Next step.** For the user. Decide whether to make the table's w consistent with its g_ρ and g_s, or to
   hold ρ_R to g_ρ T⁴ along the history. Either changes every history and needs its own ruling, so it is
   not in this campaign (README P15). It is related to `[00-xav-sigma-is-non-monotone-at-25-35-keV]` (the
   same table, another defect) and `[00-kicking-function-table-has-no-provenance-in-the-repository]`
   (`review-remediation` board). Not assigned.
+  - **The options**, as put to the user on 2026-10-31:
+    1. derive g_s from w and g_ρ by integrating the condition above, from a high-T anchor where
+       g_s = (3/4)(1 + w) g_ρ;
+    2. derive w from g_ρ and g_s (Σ would become a difference of the fits' derivatives, noise-dominated
+       in the BBN window);
+    3. derive g_ρ from w and g_s (g_ρ also feeds BBN's ρ_SM, `gstar_rho` and ΔN_eff);
+    4. set ρ_R = (π²/30) g_ρ T_J⁴ from T_J and drop it from the ODE's state (it breaks the golden
+       histories and the bath's energy conservation);
+    5. rebuild the table from one p(T), with neutrino decoupling explicit, which would also answer the
+       Σ issue and the provenance issue;
+    6. leave it documented.
+
+    The orchestrator recommended measuring first: one history with option 1's g_s against the current
+    tables, compared in φ, H_J, Yp and D/H.
+  - **Ruled by the user, 2026-10-31:** "For now, though, I'm going just to leave it documented." Option 6.
+    The issue stays open and not assigned.
 
 ### 3.1 Assigned to this campaign
 

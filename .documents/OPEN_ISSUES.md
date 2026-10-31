@@ -313,9 +313,10 @@ Planned 2026-10-27. One opened by the planner, found by a planning probe; one by
   and 9×10⁻⁵ at 25–33 keV (an irregular table and a ringing cubic spline), comparable to the matter
   trace inside the BBN window; effect on stored values not measured; not fixed by the campaign.
   *(`inelastic-reflection`; planner)*
-- `[09-the-bath-drifts-from-g-rho-T4-by-about-1e-3]` — the stored ρ_R,J falls below
-  (π²/30) g_ρ T_J⁴ by 0.21 % at 1 MeV and 0.08 % today; `Xav_EOS_spline`'s w, g_ρ and g_s miss
-  g_s = (3/4)(1 + w) g_ρ by up to 3.6×10⁻³ above 1 MeV; ΔN_eff carries it at 10⁻³; every history.
+- `[09-the-bath-drifts-from-g-rho-T4-by-about-1e-3]` — Xav's w and the Saikawa–Shirai g_ρ, g_s
+  break the adiabatic condition 4 + d ln g_ρ/d ln T = 3(1 + w)(1 + x), so the stored ρ_R,J drifts
+  from (π²/30) g_ρ T_J⁴: −1.2 % near 1 GeV, −0.21 % at 1 MeV, −0.08 % today; every history; left
+  documented by the user, 2026-10-31.
   *(`inelastic-reflection`; review of prompt 09)*
 
 ### 1.20 Assigned to `inelastic-reflection` — [its board](../prompts/inelastic-reflection/IMPLEMENTATION_STATE.md) §3.1
