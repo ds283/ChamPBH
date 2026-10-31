@@ -3,5 +3,6 @@ from .DimensionlessQuantity import DimensionlessQuantity, DimensionlessQuantityA
 from .FieldValues import phi_value, pi_value, FieldLike, GetFieldValue
 from .M_value import M_value
 from .beta_value import beta_value
+from .alpha_value import alpha_value
 from .redshift import redshift, redshift_array
 from .temperature import temperature, TemperatureLike, GetTemperature

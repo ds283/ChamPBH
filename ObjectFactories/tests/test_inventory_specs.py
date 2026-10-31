@@ -51,6 +51,7 @@ EXPECTED_ORDER = [
     "redshift",
     "tolerance",
     "beta_value",
+    "alpha_value",
     "M_value",
     "temperature",
     "phi_value",
@@ -152,19 +153,21 @@ class TestInventoryClasses(_NoRay):
     def test_the_registry_is_accepted_and_ordered(self):
         self.assertEqual(inventory_classes(factories), EXPECTED_ORDER)
 
-    def test_twelve_definitions_serve_fifteen_classes(self):
+    def test_twelve_definitions_serve_sixteen_classes(self):
         # thirteen served seventeen until jordan-normalization prompt 07, which replaced
-        # Lambda_value, ExponentialPotential and ExponentialCoupling with ExponentialModel
+        # Lambda_value, ExponentialPotential and ExponentialCoupling with ExponentialModel; twelve
+        # served fifteen until inelastic-reflection prompt 09 added alpha_value
         owners = [name for name, f in factories.items() if _spec(f) is not None]
-        self.assertEqual(len(owners), 15)
+        self.assertEqual(len(owners), 16)
         self.assertEqual(len({type(factories[n]) for n in owners}), 12)
-        # the five quantity entries share two factory classes, each reading its own value column
-        quantities = ["beta_value", "M_value", "temperature"]
+        # the six quantity entries share two factory classes, each reading its own value column
+        quantities = ["beta_value", "alpha_value", "M_value", "temperature"]
         quantities += ["phi_value", "pi_value"]
         self.assertEqual(
             {n: _spec(factories[n]).leaves for n in quantities},
             {
                 "beta_value": ("value",),
+                "alpha_value": ("value",),
                 "M_value": ("value_eV",),
                 "temperature": ("value_GeV",),
                 "phi_value": ("value_PlanckMass",),

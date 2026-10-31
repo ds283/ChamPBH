@@ -74,6 +74,8 @@ _stand_in_model = _stand_in(2, 3)
 _T_init = _stand_in(10)
 _phi, _pi = _stand_in(12), _stand_in(13)
 _atol, _rtol, _tuning_tol = _stand_in(14), _stand_in(15), _stand_in(16)
+# alpha, a key of every history (inelastic-reflection prompt 09); an alpha_value serial
+_alpha = _stand_in(17)
 
 _MODEL_SERIAL = 1
 
@@ -87,6 +89,7 @@ def _scalar_history_query(**extra):
         pi_Einstein_init=_pi,
         model=_stand_in_model,
         tuning_tol=_tuning_tol,
+        alpha=_alpha,
         atol=_atol,
         rtol=_rtol,
         z_grid=None,
@@ -131,6 +134,7 @@ def _insert_failed_scalar_history(store):
             atol_serial=14,
             rtol_serial=15,
             tuning_tol_serial=16,
+            alpha_serial=17,
             phi_Einstein_init_serial=12,
             pi_Einstein_init_serial=13,
             T_Jordan_init_serial=10,

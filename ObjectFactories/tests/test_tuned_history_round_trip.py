@@ -148,6 +148,8 @@ class _TunedStoreCase(_TempStoreCase):
         self.atol = get("tolerance", tol=gt.ATOL)
         self.rtol = get("tolerance", tol=gt.RTOL)
         self.tuning_tol = get("tolerance", tol=gt.TOLERANCE)
+        # natural mode, alpha = 0, a key of every history (inelastic-reflection prompt 09)
+        self.alpha = get("alpha_value", value=0.0)
         self.T_init = get("temperature", value=gt.T_INIT_GEV * units.GeV, units=units)
         self.phi = get(
             "phi_value", value=gt.PHI_INIT_OVER_MP * units.PlanckMass, units=units
@@ -178,6 +180,7 @@ class _TunedStoreCase(_TempStoreCase):
             pi_Einstein_init=self.pi,
             model=self.model,
             tuning_tol=self.tuning_tol,
+            alpha=self.alpha,
             atol=self.atol,
             rtol=self.rtol,
             z_grid=None,
@@ -198,6 +201,7 @@ class _TunedStoreCase(_TempStoreCase):
             pi_Einstein_init=self.pi,
             model=self.model if model is None else model,
             tuning_tol=self.tuning_tol,
+            alpha=self.alpha,
             atol=self.atol,
             rtol=self.rtol,
             label="tuned",

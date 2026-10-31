@@ -32,6 +32,7 @@ from ComputeTargets import (
 )
 from ComputeTargets.BBNData import PRYM_VERSION
 from CosmologyConcepts import (
+    alpha_value,
     DimensionlessQuantityArray,
     DimensionfulQuantityArray,
     temperature,
@@ -161,6 +162,7 @@ def run_pipeline(
     atol: tolerance,
     rtol: tolerance,
     tuning_tol: tolerance,
+    alpha: alpha_value,
     solvers: dict[str, IntegrationSolver],
     metadata: dict[str, Any],
 ):
@@ -217,6 +219,7 @@ def run_pipeline(
                         "z_grid": None,  # don't check which values of z we have sampled
                         "model": model,
                         "tuning_tol": tuning_tol,
+                        "alpha": alpha,
                         "atol": atol,
                         "rtol": rtol,
                         "tags": [
@@ -298,6 +301,7 @@ def run_pipeline(
                         pi_Einstein_init=pi_init,
                         model=model,
                         tuning_tol=tuning_tol,
+                        alpha=alpha,
                         z_grid=z_grid,
                         atol=atol,
                         rtol=rtol,
@@ -407,6 +411,7 @@ def run_pipeline(
                         "z_grid": None,
                         "model": model,
                         "tuning_tol": tuning_tol,
+                        "alpha": alpha,
                         "atol": atol,
                         "rtol": rtol,
                         "tags": [
@@ -527,6 +532,7 @@ def run_pipeline(
                         "z_grid": None,
                         "model": model,
                         "tuning_tol": tuning_tol,
+                        "alpha": alpha,
                         "atol": atol,
                         "rtol": rtol,
                         "tags": [
@@ -658,6 +664,7 @@ def run_pipeline(
                         "z_grid": None,
                         "model": model,
                         "tuning_tol": tuning_tol,
+                        "alpha": alpha,
                         "atol": atol,
                         "rtol": rtol,
                         "tags": [
@@ -783,6 +790,7 @@ def run_pipeline(
                         "z_grid": None,
                         "model": model,
                         "tuning_tol": tuning_tol,
+                        "alpha": alpha,
                         "atol": atol,
                         "rtol": rtol,
                         "tags": [
@@ -985,12 +993,15 @@ def execute(pool, units: UnitsLike):
     ## DATASTORE OBJECTS
 
     # build absolute and relative tolerances, and the tuning's tolerance on both residuals, which
-    # keys every history (jordan-normalization prompt 07; --tuning-tolerance is prompt 08's)
-    atol, rtol, tuning_tol = ray.get(
+    # keys every history (jordan-normalization prompt 07; --tuning-tolerance is prompt 08's); and the
+    # drained fraction alpha, which keys every history too: alpha = 0, natural mode, until
+    # inelastic-reflection prompt 10 gives it an option (prompt 09, P30)
+    atol, rtol, tuning_tol, alpha = ray.get(
         [
             pool.object_get("tolerance", tol=args.abs_tol),
             pool.object_get("tolerance", tol=args.rel_tol),
             pool.object_get("tolerance", tol=args.tuning_tolerance),
+            pool.object_get("alpha_value", value=0.0),
         ]
     )
 
@@ -1140,6 +1151,7 @@ def execute(pool, units: UnitsLike):
             atol,
             rtol,
             tuning_tol,
+            alpha,
             solvers,
             {
                 "samples_per_log10_z": samples_per_log10_z,

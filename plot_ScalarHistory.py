@@ -48,7 +48,7 @@ from ComputeTargets import (
     BBNData,
     BBNDataValue,
 )
-from CosmologyConcepts import temperature, phi_value, pi_value
+from CosmologyConcepts import alpha_value, temperature, phi_value, pi_value
 from CosmologyConcepts.Models import AbstractModel
 from datastorekit.SQL.ProfileAgent import ProfileAgent
 from datastorekit.SQL.ShardedPool import ShardedPool
@@ -1525,6 +1525,7 @@ def run_pipeline(
     atol: tolerance,
     rtol: tolerance,
     tuning_tol: tolerance,
+    alpha: alpha_value,
     tags: List[store_tag],
 ):
     model_label = model_data["label"]
@@ -1544,6 +1545,7 @@ def run_pipeline(
             "z_grid": None,  # don't check which values of z we have sampled
             "model": lagrangian,
             "tuning_tol": tuning_tol,
+            "alpha": alpha,
             "atol": atol,
             "rtol": rtol,
             "tags": tags,
@@ -1615,14 +1617,16 @@ with ShardedPool(
     # (U4); a model that was never stored is skipped with a warning (U3)
     units = Planck_units()
     try:
-        atol, rtol, T_init, phi_init, pi_init, tuning_tol = plot_inputs.parameters(
-            pool,
-            abs_tol=args.abs_tol,
-            rel_tol=args.rel_tol,
-            T_init_GeV=args.T_init_GeV,
-            phi_init_Mp=args.phi_init_Mp,
-            units=units,
-            tuning_tol=args.tuning_tolerance,
+        atol, rtol, T_init, phi_init, pi_init, tuning_tol, alpha = (
+            plot_inputs.parameters(
+                pool,
+                abs_tol=args.abs_tol,
+                rel_tol=args.rel_tol,
+                T_init_GeV=args.T_init_GeV,
+                phi_init_Mp=args.phi_init_Mp,
+                units=units,
+                tuning_tol=args.tuning_tolerance,
+            )
         )
 
         # read in the stored tables of beta and M
@@ -1649,5 +1653,6 @@ with ShardedPool(
             atol,
             rtol,
             tuning_tol,
+            alpha,
             tags,
         )

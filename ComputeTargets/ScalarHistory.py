@@ -28,6 +28,7 @@ from scipy.optimize import brentq
 
 from ComputeTargets.spline_wrappers import ZSplineWrapper
 from CosmologyConcepts import (
+    alpha_value,
     redshift,
     temperature,
     TemperatureLike,
@@ -3073,6 +3074,198 @@ def fixed_T_values(
     return FixedTValues._make(values)
 
 
+# ---- the dark radiation and the whole-history values of dissipation mode (inelastic-reflection prompt
+# 09) ----
+#
+# README §8.1 R12, R22-R25, §8.2 P26, P27, P31; orchestrator note 09, rulings 3, 5, 6 and 8. Computed after
+# the integration, from the IntegrationResult and the payload; they read the history and never change it
+
+# Delta N_eff = NEFF_PER_G_RHO g_rho r_chi at T_J = 1 MeV, taking T_nu = T_gamma there (R22), and
+# NEFF_PER_G_RHO g_rho NEFF_NEUTRINO_HEATING r_chi today, where T_nu/T_gamma = (4/11)^(1/3) (P7): one
+# neutrino species carries (7/8) 2 (pi^2/30) T_nu^4, so rho_chi = Delta N_eff (7/4) (pi^2/30) T_nu^4
+# against rho_R = g_rho (pi^2/30) T_gamma^4
+NEFF_PER_G_RHO = 4.0 / 7.0
+NEFF_NEUTRINO_HEATING = (11.0 / 4.0) ** (4.0 / 3.0)
+
+# the dark radiation at the history's first crossing of T_J = FIXED_T_JORDAN_HIGH_MEV (1 MeV) and
+# FIXED_T_JORDAN_LOW_MEV (70 keV), and at N_final (today), on the payload's "dark_radiation_values"
+# (P31; orchestrator note 09, ruling 3):
+#   rho_chi_ratio_1MeV, rho_chi_ratio_70keV, rho_chi_ratio_today:
+#       r_chi = rho_chi/rho_R, the policy's at the dense output's state there; None at a temperature
+#       the history does not reach
+#   Delta_N_eff_1MeV:  NEFF_PER_G_RHO g_rho r_chi at 1 MeV (R22), None if not reached
+#   Delta_N_eff_today: NEFF_PER_G_RHO g_rho NEFF_NEUTRINO_HEATING r_chi at N_final (P7)
+# g_rho is the cosmology's G_rho at the T_J the policy reads there. At alpha = 0 the ledger is empty, so
+# every ratio is exactly 0.0, and each Delta N_eff is too
+DarkRadiationValues = namedtuple(
+    "DarkRadiationValues",
+    [
+        "rho_chi_ratio_1MeV",
+        "rho_chi_ratio_70keV",
+        "rho_chi_ratio_today",
+        "Delta_N_eff_1MeV",
+        "Delta_N_eff_today",
+    ],
+)
+
+
+def dark_radiation_values(
+    result: IntegrationResult, policy: ODEPolicy, cosmology: BaseCosmology
+) -> DarkRadiationValues:
+    """
+    r_chi and Delta N_eff at the history's first crossing of T_J = 1 MeV and 70 keV, and at N_final
+    (inelastic-reflection prompt 09; README §8.1 R22, §8.2 P31; orchestrator note 09, ruling 3).
+
+    The crossing is fixed_T_values', _T_Jordan_crossing_step on the dense output, so its N is
+    fixed_T_values' bitwise; the state there is the step's interpolant's, as fixed_T_value_at reads it.
+    Today's state is result.solution(result.N_final), as the sampling loop reads the last sample's.
+    r_chi is policy(N, state).rho_chi_over_rho_rad, and g_rho cosmology.G_rho at that call's T_J, as
+    the sampling loop takes gstar_rho. Nothing branches on alpha.
+    """
+    units: UnitsLike = cosmology.units
+
+    def r_and_g(N: float, state: StateVector) -> Tuple[float, float]:
+        data: ODEPolicyData = policy(N, state)
+        return data.rho_chi_over_rho_rad, cosmology.G_rho(data.T_Jordan)
+
+    ratios = []
+    g_rho_1MeV = None
+    for T_MeV in (FIXED_T_JORDAN_HIGH_MEV, FIXED_T_JORDAN_LOW_MEV):
+        found = _T_Jordan_crossing_step(result, log(T_MeV * units.MeV))
+        if found is None:
+            ratios.append(None)
+            continue
+        k, N = found
+        r, g = r_and_g(N, StateVector._make(result.solution.interpolants[k](N)))
+        ratios.append(r)
+        if T_MeV == FIXED_T_JORDAN_HIGH_MEV:
+            g_rho_1MeV = g
+
+    r_today, g_today = r_and_g(
+        result.N_final, StateVector._make(result.solution(result.N_final))
+    )
+
+    r_1MeV = ratios[0]
+    return DarkRadiationValues(
+        rho_chi_ratio_1MeV=r_1MeV,
+        rho_chi_ratio_70keV=ratios[1],
+        rho_chi_ratio_today=r_today,
+        Delta_N_eff_1MeV=(
+            NEFF_PER_G_RHO * g_rho_1MeV * r_1MeV if r_1MeV is not None else None
+        ),
+        Delta_N_eff_today=NEFF_PER_G_RHO * g_today * NEFF_NEUTRINO_HEATING * r_today,
+    )
+
+
+# the whole-history values of dissipation mode, as ScalarHistory exposes them (ScalarHistory.dissipation)
+# and stores them, one column each, in this order (prompt 09 §1.3; orchestrator note 09, rulings 6 and 8).
+# Formed by dissipation_values from the payload; None on a failure:
+#   injections:            the candidates with delta_K > 0
+#   resolved_candidates, unresolved_candidates: every candidate, by Injection.resolved
+#   injected_fraction:     the sum, left to right from 0.0, of every candidate's delta_rho_over_rho_rad,
+#                          then of the parking leftover's (Parking.delta_rho_over_rho_rad) if parked
+#   rho_chi_ratio_1MeV, rho_chi_ratio_70keV, rho_chi_ratio_today, Delta_N_eff_1MeV, Delta_N_eff_today:
+#                          DarkRadiationValues'
+#   log_R_first_impact:    ln R of the first candidate's ClassicalTurningPoint; None if there is no
+#                          candidate or it has no assessment
+#   parking_N, parking_log_T_Jordan, release_N, release_log_T_Jordan:
+#                          Parking's and Release's N and ln T_J (the cosmology's units); None if the
+#                          history did not park, or was not released
+#   worst_<kind>_margin, worst_<kind>_margin_N, <kind>_failing_share for birth, reflection and tracker,
+#   unassessed_share:      Margins' fields of the same names; None where the payload's margins is None
+# Each is None where its payload key is absent (a stand-in payload): zeros are never inferred from an
+# absent key (ruling 5). A real payload carries every key, so at alpha = 0 the counts are 0 and the
+# fraction, ratios and Delta N_eff 0.0 (R24)
+DissipationValues = namedtuple(
+    "DissipationValues",
+    [
+        "injections",
+        "resolved_candidates",
+        "unresolved_candidates",
+        "injected_fraction",
+        "rho_chi_ratio_1MeV",
+        "rho_chi_ratio_70keV",
+        "rho_chi_ratio_today",
+        "Delta_N_eff_1MeV",
+        "Delta_N_eff_today",
+        "log_R_first_impact",
+        "parking_N",
+        "parking_log_T_Jordan",
+        "release_N",
+        "release_log_T_Jordan",
+        "worst_birth_margin",
+        "worst_birth_margin_N",
+        "birth_failing_share",
+        "worst_reflection_margin",
+        "worst_reflection_margin_N",
+        "reflection_failing_share",
+        "worst_tracker_margin",
+        "worst_tracker_margin_N",
+        "tracker_failing_share",
+        "unassessed_share",
+    ],
+)
+
+# the fields of DissipationValues read from the payload's Margins record, by the same names
+_DISSIPATION_MARGIN_FIELDS = (
+    "worst_birth_margin",
+    "worst_birth_margin_N",
+    "birth_failing_share",
+    "worst_reflection_margin",
+    "worst_reflection_margin_N",
+    "reflection_failing_share",
+    "worst_tracker_margin",
+    "worst_tracker_margin_N",
+    "tracker_failing_share",
+    "unassessed_share",
+)
+
+
+def dissipation_values(data: dict) -> DissipationValues:
+    """
+    The whole-history values of a success payload (DissipationValues; orchestrator note 09, rulings 5
+    and 6), each read with .get: a key that is absent gives None in its fields.
+    """
+    values = dict.fromkeys(DissipationValues._fields)
+
+    injections = data.get("injections")
+    if injections is not None:
+        values["injections"] = sum(1 for c in injections if c.delta_K > 0.0)
+        values["resolved_candidates"] = sum(1 for c in injections if c.resolved)
+        values["unresolved_candidates"] = sum(1 for c in injections if not c.resolved)
+        if len(injections) > 0 and injections[0].classical_turning_point is not None:
+            values["log_R_first_impact"] = injections[0].classical_turning_point.log_R
+
+    if "parking" in data:
+        parking: Optional[Parking] = data["parking"]
+        if injections is not None:
+            injected = 0.0
+            for c in injections:
+                injected = injected + c.delta_rho_over_rho_rad
+            if parking is not None:
+                injected = injected + parking.delta_rho_over_rho_rad
+            values["injected_fraction"] = injected
+        if parking is not None:
+            values["parking_N"] = parking.N
+            values["parking_log_T_Jordan"] = parking.log_T_Jordan
+
+    release: Optional[Release] = data.get("release")
+    if release is not None:
+        values["release_N"] = release.N
+        values["release_log_T_Jordan"] = release.log_T_Jordan
+
+    dark: Optional[DarkRadiationValues] = data.get("dark_radiation_values")
+    if dark is not None:
+        values.update(dark._asdict())
+
+    margins = data.get("margins")
+    if margins is not None:
+        for key in _DISSIPATION_MARGIN_FIELDS:
+            values[key] = getattr(margins, key)
+
+    return DissipationValues(**values)
+
+
 # ---- the spectrum's peak and the relativistic margins (inelastic-reflection prompt 08) ----
 #
 # README §8.1 R7, R13, R19, R20, R21, §8.2 P25, §8.3 U9; log 08 §1 gives the definitions and the coverage
@@ -3705,8 +3898,8 @@ def integrate_history(
     :param alpha: the fraction of the condensate's kinetic energy drained at each drain point and
                   floor reflection (inelastic-reflection prompt 02; see integrate_scalar_history),
                   0 <= alpha < 1, else a ValueError before any integration. 0.0 (the default) is
-                  the old code bitwise. compute_scalar_history does not take it (README §2.2: a
-                  stored history must have its alpha in its key, which is prompt 05's)
+                  the old code bitwise. compute_scalar_history passes it through tune_history since
+                  inelastic-reflection prompt 09, which makes it a key of every stored history
     :return: the payload; on success it carries "dark_radiation", the history's
              DarkRadiationLedger (inelastic-reflection prompt 01), and "turning_points" and
              "injections", the IntegrationResult's lists of TurningPoint and Injection
@@ -3715,7 +3908,10 @@ def integrate_history(
              (prompt 05), which a failure's payload carries too, and "parking", its Parking record
              or None (prompt 06), and "generations", "margins" and "margin_warnings", the spectrum's
              peaks and the relativistic margins (prompt 08; None, None and () at alpha = 0), which a
-             failure's payload does not carry. No store reads any of them
+             failure's payload does not carry, and "rho_chi_over_rho_rad", r_chi at each sample,
+             and "dark_radiation_values", a DarkRadiationValues (prompt 09), which a failure's
+             payload does not carry either. ScalarHistory.store reads "injections", "parking",
+             "release", "margins" and the last two (prompt 09); no store reads the others
     """
     if not (0.0 <= alpha < 1.0):
         raise ValueError(
@@ -3841,6 +4037,10 @@ def integrate_history(
             )
 
         sample = []
+        # r_chi = rho_chi/rho_R at each sample, parallel to sample: the policy's own float, exactly
+        # 0.0 at alpha = 0 (inelastic-reflection prompt 09, P27). SampleValues does not change, since
+        # both golden histories hash its fields
+        rho_chi_ratios = []
 
         # loop over the required z sample grid.
         # Note that we will work from high z to low z.
@@ -3890,6 +4090,7 @@ def integrate_history(
                         log_one_plus_z_Jordan=N_backward + (log_A_0 - log_Omega),
                     )
                 )
+                rho_chi_ratios.append(data.rho_chi_over_rho_rad)
         except OverflowError as e:
             print(
                 f"!! integrate_history ({task_label}): overflow when assembling sample values; marked as total integration failure"
@@ -3914,6 +4115,10 @@ def integrate_history(
     # phi and rho_NP/rho_R,J at T_J = 1 MeV and 70 keV, on the dense output (science-readiness
     # prompt 06b); a field is None where the history does not reach the temperature
     fixed_T: FixedTValues = fixed_T_values(result, policy, model, units)
+
+    # r_chi and Delta N_eff at T_J = 1 MeV, 70 keV and today, on the dense output (inelastic-reflection
+    # prompt 09; README §8.1 R22, §8.2 P31); computed at every alpha, 0.0 at alpha = 0
+    dark_values: DarkRadiationValues = dark_radiation_values(result, policy, cosmology)
 
     # the spectrum's peak and the relativistic margins (inelastic-reflection prompt 08), after the
     # integration and outside its loop, under the step loop's own condition for assessing the wall
@@ -3988,6 +4193,11 @@ def integrate_history(
         "generations": generations,
         "margins": margins,
         "margin_warnings": margin_warnings,
+        # r_chi at each sample, a tuple parallel to "sample", and the dark radiation at 1 MeV, 70 keV
+        # and today, a DarkRadiationValues (inelastic-reflection prompt 09; P27, R22, P31). Both are
+        # stored by ScalarHistory.store, as are the records above
+        "rho_chi_over_rho_rad": tuple(rho_chi_ratios),
+        "dark_radiation_values": dark_values,
     }
 
 
@@ -4322,7 +4532,7 @@ def tune_history(
     alpha (inelastic-reflection prompt 02) is passed to every integration, each of which drains into
     its own ledger (see integrate_scalar_history). A value outside 0 <= alpha < 1 is a ValueError
     at entry, before the seed. 0.0 (the default) is the old tuning bitwise. compute_scalar_history
-    does not take it.
+    passes its own (inelastic-reflection prompt 09).
 
     :return: on success, the final integration's payload (every key integrate_history returns),
              with the keys of TUNING_OUTPUT_KEYS added: normalization, V_ref = V(phi_ref) on the
@@ -4503,6 +4713,7 @@ def compute_scalar_history(
     tolerance: float = DEFAULT_TUNING_TOLERANCE,
     max_integrations: int = DEFAULT_TUNING_MAX_INTEGRATIONS,
     verbose: bool = False,
+    alpha: float = 0.0,
 ) -> dict:
     """
     The stored path (jordan-normalization prompt 07, S4): the Ray task that ScalarHistory.compute
@@ -4525,6 +4736,9 @@ def compute_scalar_history(
     :param rtol: relative tolerance for the ODE solver
     :param tolerance: the tolerance on both residuals of the tuning
     :param max_integrations: the cap on integrations, the seed's included
+    :param alpha: the fraction of the condensate's kinetic energy drained at each candidate, passed to
+                  tune_history (inelastic-reflection prompt 09); 0.0, the default, is natural mode,
+                  the old code bitwise
     :return: tune_history's payload
     """
     return tune_history(
@@ -4540,6 +4754,7 @@ def compute_scalar_history(
         tolerance=tolerance,
         max_integrations=max_integrations,
         verbose=verbose,
+        alpha=alpha,
     )
 
 
@@ -4575,6 +4790,33 @@ def build_extra_data(data: dict) -> Optional[dict]:
     if mean_RHS_values is not None:
         extra_data["mean_RHS_values"] = mean_RHS_values._asdict()
 
+    # what of the relativistic margins is not a column (inelastic-reflection prompt 09; README §8.1
+    # R13, R25): each kind's first failure, as MarginFailure._asdict() or None, the worst generations'
+    # indices, the counts per estimate and the weighted and below-weight shares. Only where the payload
+    # carries a Margins record (dissipation mode on a model with a wall, the margins computed); read
+    # with .get, so that a payload without the key stores what it stored before
+    margins = data.get("margins")
+    if margins is not None:
+
+        def failure(record: Optional[MarginFailure]) -> Optional[dict]:
+            return dict(record._asdict()) if record is not None else None
+
+        extra_data["margins"] = {
+            "first_birth_failure": failure(margins.first_birth_failure),
+            "first_reflection_failure": failure(margins.first_reflection_failure),
+            "first_tracker_failure": failure(margins.first_tracker_failure),
+            "worst_birth_margin_index": margins.worst_birth_margin_index,
+            "worst_reflection_margin_index": margins.worst_reflection_margin_index,
+            "worst_tracker_margin_index": margins.worst_tracker_margin_index,
+            "classical_generations": margins.classical_generations,
+            "one_loop_generations": margins.one_loop_generations,
+            "classical_gap_generations": margins.classical_gap_generations,
+            "weighted_generations": margins.weighted_generations,
+            "unassessed_candidates": margins.unassessed_candidates,
+            "weighted_share": margins.weighted_share,
+            "below_weight_share": margins.below_weight_share,
+        }
+
     return extra_data if len(extra_data) > 0 else None
 
 
@@ -4597,6 +4839,7 @@ class ScalarHistory(DatastoreObject):
         pi_Einstein_init: pi_value,  # initial value of dphi/dN
         model: AbstractModel,
         tuning_tol: tolerance,
+        alpha: alpha_value,
         atol: tolerance,
         rtol: tolerance,
         z_grid: Optional[redshift_array] = None,
@@ -4613,6 +4856,9 @@ class ScalarHistory(DatastoreObject):
         :param model: the model (jordan-normalization prompt 07): V and A with their parameters;
                       the history's normalization and phi_ref are found by tuning
         :param tuning_tol: the tolerance on both residuals of the tuning
+        :param alpha: the fraction of the condensate's kinetic energy drained at each candidate, a
+                      key of the history (inelastic-reflection prompt 09; README §6.1 U3); its
+                      value 0 is natural mode
         :param atol: absolute tolerance for the ODE solver
         :param rtol: relative tolerance for the ODE solver
         :param z_grid: grid of redshifts at which to sample the solution (optional)
@@ -4628,6 +4874,7 @@ class ScalarHistory(DatastoreObject):
 
         self._model: AbstractModel = model
         self._tuning_tol: tolerance = tuning_tol
+        self._alpha: alpha_value = alpha
 
         # built from the model and the tuning on first access to realized_model
         # (jordan-normalization prompt 07)
@@ -4646,6 +4893,7 @@ class ScalarHistory(DatastoreObject):
             self._first_bounce = None
             self._fixed_T_values = None
             self._tuning = None
+            self._dissipation = None
 
         else:
             DatastoreObject.__init__(self, payload["store_id"])
@@ -4658,6 +4906,7 @@ class ScalarHistory(DatastoreObject):
             self._first_bounce: Optional[FirstBounce] = payload["first_bounce"]
             self._fixed_T_values: Optional[FixedTValues] = payload["fixed_T_values"]
             self._tuning: Optional[TuningValues] = payload["tuning"]
+            self._dissipation: Optional[DissipationValues] = payload["dissipation"]
 
         # store parameters
         self._label: str = label
@@ -4735,6 +4984,24 @@ class ScalarHistory(DatastoreObject):
     @property
     def tuning_tol(self) -> tolerance:
         return self._tuning_tol
+
+    @property
+    def alpha(self) -> alpha_value:
+        """The drained fraction alpha, a key of the history (inelastic-reflection prompt 09)."""
+        return self._alpha
+
+    @property
+    def dissipation(self) -> Optional[DissipationValues]:
+        """
+        The whole-history values of dissipation mode (inelastic-reflection prompt 09, §1.3), set by
+        store() from the payload, or by the factory's build from the row's columns, so that they are
+        readable on an object built with _do_not_populate, as `tuning` is. ln T_J is in the
+        cosmology's units. None on a failure row; raises when not populated.
+        """
+        if self._failure is None:
+            raise RuntimeError("dissipation has not yet been populated")
+
+        return self._dissipation
 
     @property
     def tuning(self) -> TuningValues:
@@ -4949,6 +5216,7 @@ class ScalarHistory(DatastoreObject):
         check_required_parameter("_pi_Einstein_init")
         check_required_parameter("_model")
         check_required_parameter("_tuning_tol")
+        check_required_parameter("_alpha")
         check_required_parameter("_target_z_grid")
 
         # replace label if specified
@@ -4967,6 +5235,7 @@ class ScalarHistory(DatastoreObject):
             rtol=self._rtol.tol,
             tolerance=self._tuning_tol.tol,
             max_integrations=max_integrations,
+            alpha=self._alpha.value,
         )
         return self._compute_ref
 
@@ -4996,6 +5265,7 @@ class ScalarHistory(DatastoreObject):
             self._first_bounce = None
             self._fixed_T_values = None
             self._tuning = None
+            self._dissipation = None
             self._values = []
             return True
 
@@ -5007,8 +5277,21 @@ class ScalarHistory(DatastoreObject):
         self._tuning = TuningValues(**{key: data[key] for key in TUNING_OUTPUT_KEYS})
         self._metadata = data["metadata"]
 
+        # the whole-history values of dissipation mode (inelastic-reflection prompt 09); each read
+        # with .get, so that a key the payload does not carry stores NULL (orchestrator note 09,
+        # ruling 5)
+        self._dissipation = dissipation_values(data)
+
         sample: List[SampleValues] = data["sample"]
         z_grid: redshift_array = data["z_grid"]
+
+        # r_chi at each sample (P27): a payload with samples must carry it, and no default is taken
+        ratios = data.get("rho_chi_over_rho_rad")
+        if ratios is None and len(sample) > 0:
+            raise RuntimeError(
+                f"ScalarHistory ({self._label}): the payload has {len(sample)} samples but no "
+                f'"rho_chi_over_rho_rad"'
+            )
 
         extra_data = build_extra_data(data)
         if extra_data is not None:
@@ -5038,6 +5321,7 @@ class ScalarHistory(DatastoreObject):
                     reflecting_term=sample[i].reflecting_term,
                     kicking_term=sample[i].kicking_term,
                     log_one_plus_z_Jordan=sample[i].log_one_plus_z_Jordan,
+                    rho_chi_over_rho_rad=ratios[i],
                 )
             )
 
@@ -5069,6 +5353,8 @@ class ScalarHistoryValue(DatastoreObject):
         reflecting_term: float,
         kicking_term: float,
         log_one_plus_z_Jordan: float,
+        *,
+        rho_chi_over_rho_rad: float,
     ):
         """
         :param store_id: ID in the datastore
@@ -5092,6 +5378,10 @@ class ScalarHistoryValue(DatastoreObject):
             prompt 03, R4). A column, never a key: H_J < 0 during a bounce, so a_J is not
             monotonic and z_J is not a coordinate. Once prompt 07 lands, "the end" is
             T_J = T_CMB for every stored history
+        :param rho_chi_over_rho_rad: r_chi = rho_chi/rho_R, the ratio of the dark radiation to the
+            bath that the policy used at the sample, exactly 0.0 at alpha = 0
+            (inelastic-reflection prompt 09, P27). A required keyword with no default, so that no
+            caller passes a dissipation history's samples with the ratio silently zero
         """
         DatastoreObject.__init__(self, store_id)
 
@@ -5121,6 +5411,8 @@ class ScalarHistoryValue(DatastoreObject):
         self._kicking_term: float = kicking_term
 
         self._log_one_plus_z_Jordan: float = log_one_plus_z_Jordan
+
+        self._rho_chi_over_rho_rad: float = rho_chi_over_rho_rad
 
     @property
     def shard_key(self) -> ShardKeyType:
@@ -5202,6 +5494,10 @@ class ScalarHistoryValue(DatastoreObject):
     @property
     def log_one_plus_z_Jordan(self) -> float:
         return self._log_one_plus_z_Jordan
+
+    @property
+    def rho_chi_over_rho_rad(self) -> float:
+        return self._rho_chi_over_rho_rad
 
 
 class ScalarHistoryProxy:

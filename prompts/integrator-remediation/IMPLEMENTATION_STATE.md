@@ -148,31 +148,9 @@ moot by `jordan-normalization` prompt 01.)*
 *(2026-10-25: `[00-region-properties-on-the-potentials-become-unread]` moved to §4, resolved by
 `jordan-normalization` prompt 04.)*
 
-- **[00-settling-at-physical-M-needs-a-parked-tracking-model]** *(audit §3.7, §9.4)*.
-  - **What.** Once the bounce amplitude is far below any scale of interest and the period far
-    below the sample spacing, the field is a passenger at `φ_wall(ρ)`, the minimum of the
-    effective potential. No code path models that; the integrator follows every bounce.
-  - **Impact.** No physical-`M` history with β ≥ 1.2 can be produced until it exists. After
-    prompt 02 such a run fails on the budget.
-  - **Next step.** The authors: a switch criterion (an amplitude, or a bounce period against the
-    sample spacing), the tracking solution `φ = φ_wall(ρ(N))`, `π = dφ_wall/dN`, and what the
-    parked field contributes to `ρ_φ`, `p_φ` and the adiabatic diagnostic. Not assigned.
-  - **Narrowed (2026-10-01):** prompt 02 (log 02) landed the step budget, so the absence of the
-    model is now a clean failure: such a history fails with "step budget exhausted" after
-    `2×10⁶` accepted steps and is stored as a failure row, instead of running for days. The model
-    itself is still open.
-  - **Assigned (2026-10-29):** to the [`inelastic-reflection`](../inelastic-reflection/IMPLEMENTATION_STATE.md)
-    campaign, re-planned that day (its README §8): prompts 06 and 07 build the parked tracker, with the
-    switch criterion supplied by the drain of a fraction α of the condensate's kinetic energy at each
-    reflection, and the release at m/H < 10. The user ruled it ("Campaign scope: sure, we need to
-    replan").
-  - **Narrowed (2026-10-30):** by `inelastic-reflection` prompts 06 and 07 (their logs 06 and 07). The
-    switch (the drain's cut ρ_kin/ρ_R < 10⁻⁶ where the zero-lag tracker has m/H ≥ 10), the parked
-    tracker φ = φ_min(N), π = dφ_min/dN, and its release at m/H = 10 are built and measured: every
-    history of the grid β = 1.2, 2, 3 × M = 10⁻⁷–10⁻³⁰ M_P parks and reaches T_CMB at α = 0.1, and the
-    four large-M histories whose tracker loses adiabaticity are released and reach T_CMB. What
-    remains is what the parked field contributes to the adiabatic diagnostic: `AdiabaticHistory`'s Q
-    on the parked samples, which is `inelastic-reflection` prompt 09's (its README §8.1 R15).
+*(2026-10-31: `[00-settling-at-physical-M-needs-a-parked-tracking-model]` moved to §4, closed by
+`inelastic-reflection` prompt 09.)*
+
 - **[00-stored-samples-alias-the-rebounds]** *(audit §7)*.
   - **What.** The z grid is `ΔN ≈ 0.0092`. Turning points are 0.080 e-folds apart on P2 (8.7
     samples per half-period) and 0.022 on P3 (2.4). The brief's 1–2 samples in the 1–100 MeV
@@ -269,6 +247,38 @@ moot by `jordan-normalization` prompt 01.)*
 
 ## 4. Resolved issues
 
+- **[00-settling-at-physical-M-needs-a-parked-tracking-model]** *(audit §3.7, §9.4)*.
+  - **What.** Once the bounce amplitude is far below any scale of interest and the period far
+    below the sample spacing, the field is a passenger at `φ_wall(ρ)`, the minimum of the
+    effective potential. No code path models that; the integrator follows every bounce.
+  - **Impact.** No physical-`M` history with β ≥ 1.2 can be produced until it exists. After
+    prompt 02 such a run fails on the budget.
+  - **Next step.** The authors: a switch criterion (an amplitude, or a bounce period against the
+    sample spacing), the tracking solution `φ = φ_wall(ρ(N))`, `π = dφ_wall/dN`, and what the
+    parked field contributes to `ρ_φ`, `p_φ` and the adiabatic diagnostic. Not assigned.
+  - **Narrowed (2026-10-01):** prompt 02 (log 02) landed the step budget, so the absence of the
+    model is now a clean failure: such a history fails with "step budget exhausted" after
+    `2×10⁶` accepted steps and is stored as a failure row, instead of running for days. The model
+    itself is still open.
+  - **Assigned (2026-10-29):** to the [`inelastic-reflection`](../inelastic-reflection/IMPLEMENTATION_STATE.md)
+    campaign, re-planned that day (its README §8): prompts 06 and 07 build the parked tracker, with the
+    switch criterion supplied by the drain of a fraction α of the condensate's kinetic energy at each
+    reflection, and the release at m/H < 10. The user ruled it ("Campaign scope: sure, we need to
+    replan").
+  - **Narrowed (2026-10-30):** by `inelastic-reflection` prompts 06 and 07 (their logs 06 and 07). The
+    switch (the drain's cut ρ_kin/ρ_R < 10⁻⁶ where the zero-lag tracker has m/H ≥ 10), the parked
+    tracker φ = φ_min(N), π = dφ_min/dN, and its release at m/H = 10 are built and measured: every
+    history of the grid β = 1.2, 2, 3 × M = 10⁻⁷–10⁻³⁰ M_P parks and reaches T_CMB at α = 0.1, and the
+    four large-M histories whose tracker loses adiabaticity are released and reach T_CMB. What
+    remains is what the parked field contributes to the adiabatic diagnostic: `AdiabaticHistory`'s Q
+    on the parked samples, which is `inelastic-reflection` prompt 09's (its README §8.1 R15).
+  - **Closed (2026-10-31):** by `inelastic-reflection` prompt 09 (its log
+    [`09-store.md`](../inelastic-reflection/logs/09-store.md), this commit). `AdiabaticHistory` reads each
+    stored sample's ρ_χ/ρ_R and computes Q on the parked samples as on any other (README §8.1 R15): Q is
+    finite on every parked sample measured (2 142 at β = 2, M = 10⁻³⁰ and 10⁻¹⁶; 1 904 at M = 10⁻³,
+    β = 1.2, released; 244 at M = 0.5 M_P, β = 5, released; log 09 §5.3), and the parked field's
+    contribution to ρ_φ and p_φ is the tracker's, built by prompts 06 and 07. Tests:
+    `ObjectFactories/tests/test_adiabatic_dark_radiation.py` (c).
 - **[00-paper-and-documents-describe-a-scheme-the-code-does-not-run]** *(audit §1, §11)*.
   - **What.** `Paper1.tex` `NumericalSection`: outside cap `10⁻²` (code: `inf`), region caps
     `10⁻⁵`/`10⁻⁶` (code: `3e-3 M`, `1e-4 M`), relaxed tolerances for `M ≲ 10⁻³` (not in the

@@ -1512,6 +1512,42 @@ bitwise what it was. The record is `prompts/inelastic-reflection/logs/08-spectru
 - **Nothing is stored.** The payload's `"generations"`, `"margins"` and `"margin_warnings"` are not read
   by any store; prompt 09 stores the record.
 
+### 6.9 Added 2026-10-31 (`inelastic-reflection` prompt 09): ΔN_eff, and the conformal mass with ρ_χ
+
+Prompt 09 stores what 01–08 compute and makes α a key. Two things it adds are numerical: the
+dark radiation's ΔN_eff at two temperatures, and ρ_χ in `AdiabaticHistory`'s effective mass. The record
+is `prompts/inelastic-reflection/logs/09-store.md`.
+
+- **ΔN_eff's two conventions (README §8.1 R22).** One neutrino species carries (7/8)·2·(π²/30)T_ν⁴, so
+  ρ_χ = ΔN_eff (7/4)(π²/30)T_ν⁴ against ρ_R = g_ρ(π²/30)T_γ⁴, and ΔN_eff = (4/7) g_ρ (T_γ/T_ν)⁴ r_χ.
+  - At T_J = 1 MeV the neutrinos have not decoupled from the e± heating: T_ν = T_γ, and
+    ΔN_eff(1 MeV) = (4/7) g_ρ(1 MeV) r_χ.
+  - Today T_ν/T_γ = (4/11)^{1/3}: ΔN_eff(T_CMB) = (4/7) g_ρ(T_CMB) (11/4)^{4/3} r_χ, P7's.
+  - P7's expression at 1 MeV would be (11/4)^{4/3} ≈ 3.85 times too large.
+- **The crossing (P31).** The values at 1 MeV and 70 keV are taken at the history's *first* crossing of
+  T_J, on the dense output, exactly where `fixed_T_values` takes φ and ρ_NP/ρ_R,J (its N bitwise), with
+  r_χ the policy's at the interpolant's state there and g_ρ the cosmology's `G_rho` at that T_J. Today's
+  are at N_final, where they equal the last sample's bitwise.
+- **The two values agree up to the injection after 1 MeV.** ρ_χ,J a_J⁴ = K is constant between drains
+  (P1), and T_J a_J g_s^{1/3} is constant (the temperature law), so r_χ ∝ K g_s^{4/3}/g_ρ, and
+
+  ΔN_eff(T_CMB)/ΔN_eff(1 MeV) = [K(N_final)/K(N_1MeV)] · [(11/4) g_s(T_CMB)/g_s(1 MeV)]^{4/3},
+
+  whose second factor is near 1 (e± annihilation moves g_s by 11/4). Measured on the eight histories of
+  log 09 §5.1, the stored ratio differs from this closed form by −1.328×10⁻³ (relative), the same on
+  each. The residual is not the temperature law, which holds to 2×10⁻¹⁰ in ln(T_J a_J g_s^{1/3}); it is that the stored ρ_R,J is not (π²/30) g_ρ(T_J) T_J⁴ of the EOS's g_ρ: it lies 0.210 % below it at 1 MeV and 0.078 % below today, and that ratio, 1.00133, is the residual. The bath's ρ_R is evolved through Σ = 1 − 3w, so it drifts from the EOS's (π²/30) g_ρ T_J⁴ by about 10⁻³ over the history; not acted on (log 09 §5.2, §7).
+- **BBN sees ρ_χ through H_J with a weight F** (P9; orchestrator note 09, ruling 11). BBN's ratio
+  (3M_P²H_J² − ρ_R,J(1 + f_m))/ρ_R,J holds ρ_χ as F r_χ, F = A²(1 + (ln A)′π)²/G, exactly, at one state.
+  F is not near 1: at the 1 MeV crossing it is 0.93 (β = 2, M ≤ 10⁻¹²), 1.02 (β = 1.2, M = 10⁻³), 0.11, 0.049, 0.0099 and 4.4×10⁻⁵ at M = 0.5 M_P for β = 1.2, 2, 5 and 25. So at large M BBN counts the quanta far below their ΔN_eff. ΔN_eff (R22) does not carry F; BBN does, through H_J, and is not changed.
+- **The conformal mass with ρ_χ (P29).** The quanta are collisionless and do not couple to φ, so
+  δρ_χ,E/δφ = 0 at fixed a_E and ρ_χ is absent from V′_eff and from its φ-derivative. It enters
+  M²_eff/H² only through H: in V″/H², in the gravitational term 1 − (Ḣ/H² + 3) (ρ_χ + p_χ = (4/3)ρ_χ in
+  Ḣ), and in the normalization of the conformal term's E = ρ_R,E(1 + f_m)/3H²M_P². So E is
+  `matter_and_dark_radiation_fractions`'s E, never G − V/3H²M_P², which holds ρ_χ/3H²M_P² as well. At
+  r_χ = 0.0 the old operations are taken, so α = 0 is bitwise. Measured: against the tree before, ρ_χ moves M²_eff/H² by at most 12 % in relative terms, near a zero of it (m = −6×10⁻⁴ at M = 10⁻³ M_P, β = 1.2), and by at most 1.25 % of max(|m|, 1); Ḣ/H² by at most 10⁻³; max |Q| by at most 0.8 %.
+- **Q on the parked samples (R15).** A parked sample has φ = φ_min and π = dφ_min/dN, and Q is computed
+  on it as on any other: finite on every parked sample of the histories measured, 1 904–2 142 at β = 2, M = 10⁻¹⁶ and 10⁻³⁰ and at M = 10⁻³, β = 1.2, and 244 at M = 0.5, β = 5. The largest parked |Q| at k/H = 10 is 2.28, 0.0022 e-folds after the switch at M = 10⁻³, β = 1.2, where the spline of asinh m carries the switch's step; at β = 2 it is at the last sample, 2×10⁻⁸ to 7×10⁻⁵.
+
 ---
 
 ## 7. From scalar history to BBN via PRyMordial (`ComputeTargets/BBNData.py`)

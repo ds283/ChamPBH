@@ -1218,6 +1218,50 @@ SampleValues = namedtuple("SampleValues", [
 > - `ScalarHistory.store`, `build_extra_data`, `golden_history.record_of`, `TUNING_OUTPUT_KEYS`,
 >   `"reflections"`, `"parking"` and the existing records' fields are unchanged.
 
+> **Note, 2026-10-31 (`inelastic-reflection`, prompt 09): the store of dissipation mode.** Everything
+> 01–08 compute is now stored, and α is a key of every history (README §6.1 U3, §8.1 R22–R25, §8.2
+> P27–P31; `numerical-strategies.md` §6.9).
+> - **The key and its table.** A new dimensionless table `alpha_value` (`CosmologyConcepts/alpha_value.py`,
+>   built by `sqla_dimensionless_quantity_factory`, registered immediately after `beta_value` with
+>   serial batch size 200, replicated as `beta_value` is). `ScalarHistory` gains `alpha_serial` (a
+>   foreign key, not null, indexed): `build` filters on it, and `inventory_spec` gains the parent
+>   `"alpha"`. α = 0 is a row like any other. It is in no `--drop` group: it is a parent of
+>   `ScalarHistory`, not a child. The object takes `alpha` (an `alpha_value`) as a required argument
+>   beside `tuning_tol`, exposes it as `alpha`, and `compute` passes `alpha=self._alpha.value` to
+>   `compute_scalar_history`, which gains `alpha` (default 0.0) and passes it to `tune_history`.
+> - **The per-sample ratio.** `integrate_history`'s payload gains `"rho_chi_over_rho_rad"`, a tuple
+>   parallel to `"sample"` of the policy's own r_χ = ρ_χ/ρ_R at each sample (0.0 at α = 0).
+>   `SampleValues` does not change, since both golden histories hash its fields. `ScalarHistoryValue`
+>   takes `rho_chi_over_rho_rad` as a required keyword with no default, and `ScalarHistoryValue` rows
+>   have the column (Float(64), not null).
+> - **The whole-history values.** The payload gains `"dark_radiation_values"`, a `DarkRadiationValues`
+>   (`dark_radiation_values`): r_χ at the first crossing of T_J = 1 MeV and 70 keV and at N_final, and
+>   ΔN_eff = (4/7) g_ρ r_χ at 1 MeV (T_ν = T_γ, R22) and (4/7) g_ρ (11/4)^{4/3} r_χ today (P7).
+>   `ScalarHistory.store()` forms a `DissipationValues` record (`dissipation_values`) from the payload's
+>   `"injections"`, `"parking"`, `"release"`, `"margins"` and `"dark_radiation_values"`, each read with
+>   `.get`: the counts of candidates, the injected fraction (the leftover's included), the ratios and
+>   ΔN_eff, ln 𝓡 at the first impact, the N and ln T_J of parking and release, the three worst margins
+>   with their N and failing shares, and the unassessed share. Its 24 fields are 24 nullable columns of
+>   `ScalarHistory`, in the same order; ln T_J is stored with T_J in GeV. They are read back with
+>   `_do_not_populate` as `ScalarHistory.dissipation`, `None` on a failure. At α = 0 the counts are 0
+>   and the fraction, ratios and ΔN_eff 0.0; ln 𝓡, parking, release and the margins are NULL (R24).
+> - **The JSON.** `extra_data` is `Text` (it was `String(256)`). `build_extra_data` adds `"margins"`
+>   where the payload's `margins` is not `None`: the three first failures (`MarginFailure._asdict()`
+>   or `null`), the worst generations' indices, the counts per estimate, and the weighted and
+>   below-weight shares.
+> - **`AdiabaticHistory`** reads each sample's ratio: `M2eff_over_H2` and `Hdot_over_H2` take a
+>   required `r_chi`, pass it to every potential-policy call, and form the conformal mass's E as the
+>   ODE forms the kick's (G − V/3H²M_P² at r_χ = 0.0, else `matter_and_dark_radiation_fractions`'s E).
+>   At α = 0 every value is the old code's bitwise. Q is computed on parked samples as on any other.
+> - **The readers** pass the α = 0 row and nothing else (P30): `main.py` fetches it beside the
+>   tolerances, `plot_inputs.parameters` returns it as `alpha` (the constant α = 0), and the plot
+>   scripts pass it on. `tools/history_and_bbn.py` passes the payload's ratio to `ScalarHistoryValue`.
+>   `tools/bbn_from_store.py`'s raw SQL is not keyed on α (prompt 10's).
+> - **The version.** `FINGERPRINT_FORMAT` 6 (`alpha_value` in the registry, the parent `alpha`), golden
+>   `ObjectFactories/tests/data/store_fingerprint_inelastic-reflection-09.json`, and
+>   `VERSION_LABEL = "2026.8.0"`. Tests: `ObjectFactories/tests/test_dissipation_store.py`,
+>   `test_adiabatic_dark_radiation.py`, `ComputeTargets/tests/test_bbn_sees_dark_radiation.py`.
+
 ### 7.3 `AdiabaticHistory` (`ComputeTargets/AdiabaticHistory.py`)
 
 Computes the adiabatic perturbation parameter Q (which determines whether the chameleon field is adiabatically tracking its minimum). Requires a `ScalarHistoryProxy` as input.

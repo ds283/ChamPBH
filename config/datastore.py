@@ -21,7 +21,7 @@ them to its ``ShardedPool`` (``factories=``, ``serial_batch_sizes=`` and, in ``m
 ``drop_tables=``).
 
 - ``factories``: the registry of storable classes, each table name mapped to its factory instance,
-  in the order the schema is built. Six entries are built on a quantity class (by the dimensionless
+  in the order the schema is built. Seven entries are built on a quantity class (by the dimensionless
   and the dimensionful quantity factories), which the factory keeps as ``ObjectType``.
 - ``drop_groups``: the ``--drop`` groups, each mapped to the tables it drops. The pool drops tables,
   in the order their foreign keys require, so the order within a group is not the drop order.
@@ -43,6 +43,7 @@ from datastorekit.SQL.schema import build_schema, dependent_tables
 from datastorekit.store_inventory import inventory_specs
 
 from CosmologyConcepts import (
+    alpha_value,
     beta_value,
     M_value,
     temperature,
@@ -86,6 +87,8 @@ factories = {
     "redshift": sqla_redshift_factory(),
     "tolerance": sqla_tolerance_factory(),
     "beta_value": sqla_dimensionless_quantity_factory(beta_value),
+    # alpha, a key of every ScalarHistory (inelastic-reflection prompt 09, P28)
+    "alpha_value": sqla_dimensionless_quantity_factory(alpha_value),
     "M_value": sqla_dimensionful_quantity_factory(M_value),
     "temperature": sqla_dimensionful_quantity_factory(temperature),
     "phi_value": sqla_dimensionful_quantity_factory(phi_value),
@@ -119,6 +122,7 @@ serial_batch_sizes = {
     "redshift": 200,
     "tolerance": 5,
     "beta_value": 200,
+    "alpha_value": 200,
     "M_value": 200,
     "temperature": 200,
     "phi_value": 200,

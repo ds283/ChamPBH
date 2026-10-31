@@ -26,12 +26,14 @@ from ComputeTargets import (
     ScalarHistoryValue,
 )
 from ComputeTargets.ScalarHistory import (
+    DissipationValues,
     FirstBounce,
     FixedTValues,
     TUNING_OUTPUT_KEYS,
     TuningValues,
 )
 from CosmologyConcepts import (
+    alpha_value,
     redshift_array,
     redshift,
     temperature,
@@ -83,6 +85,37 @@ def _tuning_from_row(row_data, units: UnitsLike) -> TuningValues:
         unit = _tuning_unit(key, units)
         values[key] = value * unit if value is not None and unit is not None else value
     return TuningValues(**values)
+
+
+# the whole-history values of dissipation mode stored as ln T_J with T_J in GeV, as
+# first_bounce_log_T_Jordan (inelastic-reflection prompt 09, §1.3); every other field of
+# DissipationValues is dimensionless, and is stored as the payload has it
+_DISSIPATION_KEYS_LOG_T_IN_GEV = ("parking_log_T_Jordan", "release_log_T_Jordan")
+
+
+def _dissipation_columns(record: Optional[DissipationValues], units: UnitsLike) -> dict:
+    """The columns of DissipationValues for a row: each in its stored unit; all None if
+    record is None (a failure row)."""
+    log_GeV = log(units.GeV)
+    columns = {}
+    for key in DissipationValues._fields:
+        value = None if record is None else getattr(record, key)
+        if value is not None and key in _DISSIPATION_KEYS_LOG_T_IN_GEV:
+            value = value - log_GeV
+        columns[key] = value
+    return columns
+
+
+def _dissipation_from_row(row_data, units: UnitsLike) -> DissipationValues:
+    """The DissipationValues of a row read back: ln T_J back in the cosmology's units."""
+    log_GeV = log(units.GeV)
+    values = {}
+    for key in DissipationValues._fields:
+        value = getattr(row_data, key)
+        if value is not None and key in _DISSIPATION_KEYS_LOG_T_IN_GEV:
+            value = value + log_GeV
+        values[key] = value
+    return DissipationValues(**values)
 
 
 class sqla_ScalarHistoryTagAssociation_factory(SQLAFactoryBase):
@@ -187,6 +220,16 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                     index=True,
                     nullable=False,
                 ),
+                # the fraction alpha of the condensate's kinetic energy drained at each candidate
+                # (inelastic-reflection prompt 09; README §6.1 U3, §8.2 P28): part of the key, as the
+                # tuning tolerance is. alpha = 0 (natural mode) is a row like any other
+                sqla.Column(
+                    "alpha_serial",
+                    sqla.Integer,
+                    sqla.ForeignKey("alpha_value.serial"),
+                    index=True,
+                    nullable=False,
+                ),
                 sqla.Column(
                     "phi_Einstein_init_serial",
                     sqla.Integer,
@@ -272,17 +315,58 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                 ),
                 sqla.Column("seed_normalization", sqla.Float(64), nullable=True),
                 sqla.Column("seed_phi_ref", sqla.Float(64), nullable=True),
+                # the whole-history values of dissipation mode, the fields of DissipationValues
+                # (inelastic-reflection prompt 09, §1.3; README §8.1 R12, R13, R21-R25, §8.2 P7,
+                # P31). All are NULL on a failure row. At alpha = 0 the counts are 0 and the
+                # fraction, the ratios and Delta N_eff 0.0, since there is exactly no dark
+                # radiation; ln R at the first impact, the parking, the release and the margins are
+                # NULL, since none is computed (R24). injections counts the candidates with
+                # delta_K > 0, resolved_candidates and unresolved_candidates every candidate by
+                # Injection.resolved; injected_fraction is the sum of their delta rho/rho_R and the
+                # parking leftover's; the ratios are rho_chi/rho_R at the first crossing of
+                # T_J = 1 MeV and 70 keV and at N_final, with Delta N_eff at 1 MeV
+                # (4/7) g_rho rho_chi/rho_R (T_nu = T_gamma, R22) and today (4/7) g_rho
+                # (11/4)^(4/3) rho_chi/rho_R (P7); a ratio and its Delta N_eff are NULL where the
+                # history did not reach the temperature. N is dimensionless, and parking_log_T_Jordan
+                # and release_log_T_Jordan are ln T_J with T_J in GeV, as first_bounce_log_T_Jordan.
+                # The margins are those of the payload's Margins record (prompt 08), NULL where it
+                # is None (alpha = 0, no wall, or the margins failed), unassessed_share included
+                sqla.Column("injections", sqla.Integer, nullable=True),
+                sqla.Column("resolved_candidates", sqla.Integer, nullable=True),
+                sqla.Column("unresolved_candidates", sqla.Integer, nullable=True),
+                sqla.Column("injected_fraction", sqla.Float(64), nullable=True),
+                sqla.Column("rho_chi_ratio_1MeV", sqla.Float(64), nullable=True),
+                sqla.Column("rho_chi_ratio_70keV", sqla.Float(64), nullable=True),
+                sqla.Column("rho_chi_ratio_today", sqla.Float(64), nullable=True),
+                sqla.Column("Delta_N_eff_1MeV", sqla.Float(64), nullable=True),
+                sqla.Column("Delta_N_eff_today", sqla.Float(64), nullable=True),
+                sqla.Column("log_R_first_impact", sqla.Float(64), nullable=True),
+                sqla.Column("parking_N", sqla.Float(64), nullable=True),
+                sqla.Column("parking_log_T_Jordan", sqla.Float(64), nullable=True),
+                sqla.Column("release_N", sqla.Float(64), nullable=True),
+                sqla.Column("release_log_T_Jordan", sqla.Float(64), nullable=True),
+                sqla.Column("worst_birth_margin", sqla.Float(64), nullable=True),
+                sqla.Column("worst_birth_margin_N", sqla.Float(64), nullable=True),
+                sqla.Column("birth_failing_share", sqla.Float(64), nullable=True),
+                sqla.Column("worst_reflection_margin", sqla.Float(64), nullable=True),
+                sqla.Column("worst_reflection_margin_N", sqla.Float(64), nullable=True),
+                sqla.Column("reflection_failing_share", sqla.Float(64), nullable=True),
+                sqla.Column("worst_tracker_margin", sqla.Float(64), nullable=True),
+                sqla.Column("worst_tracker_margin_N", sqla.Float(64), nullable=True),
+                sqla.Column("tracker_failing_share", sqla.Float(64), nullable=True),
+                sqla.Column("unassessed_share", sqla.Float(64), nullable=True),
                 sqla.Column("validated", sqla.Boolean, default=False, nullable=False),
-                sqla.Column(
-                    "extra_data", sqla.String(DEFAULT_STRING_LENGTH), nullable=True
-                ),
+                # the JSON of build_extra_data: Text since inelastic-reflection prompt 09 (R23),
+                # which adds the margins' first failures under "margins"; String(256) before
+                sqla.Column("extra_data", sqla.Text, nullable=True),
             ],
         }
 
     def inventory_spec(self):
         # the key is what build() matches: the two type/serial pairs (the cosmology and the
         # model), the initial temperature, phi and pi, the three tolerances (atol, rtol and the
-        # tuning's) and the version (jordan-normalization prompt 07, S2). failure is matched only
+        # tuning's), alpha (inelastic-reflection prompt 09, P28) and the version
+        # (jordan-normalization prompt 07, S2). failure is matched only
         # when the payload gives it, and is a leaf so that the inventory shows it (campaign README
         # P15); the stored label, a job name and a time, is not. The polymorphic maps are those of
         # the two model_ids modules: only XAV_IMPROVED_EOS_IDENTIFIER names a stored cosmology.
@@ -308,6 +392,7 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                 "atol": Parent("atol_serial", "tolerance"),
                 "rtol": Parent("rtol_serial", "tolerance"),
                 "tuning_tol": Parent("tuning_tol_serial", "tolerance"),
+                "alpha": Parent("alpha_serial", "alpha_value"),
             },
             tags=("ScalarHistory_tags", "history_serial"),
             values=("ScalarHistoryValue", "history_serial"),
@@ -338,6 +423,8 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
         atol: tolerance = payload["atol"]
         rtol: tolerance = payload["rtol"]
         tuning_tol: tolerance = payload["tuning_tol"]
+        # the drained fraction, a key (inelastic-reflection prompt 09, P28)
+        alpha: alpha_value = payload["alpha"]
 
         atol_table = tables["tolerance"].alias("atol")
         rtol_table = tables["tolerance"].alias("rtol")
@@ -370,6 +457,7 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                 table.c.phi_Einstein_70keV,
                 table.c.density_NP_ratio_70keV,
                 *(table.c[key] for key in TUNING_OUTPUT_KEYS),
+                *(table.c[key] for key in DissipationValues._fields),
                 solver_table.c.label.label("solver_label"),
                 solver_table.c.stepping.label("solver_stepping"),
                 atol_table.c.log10_tol.label("log10_atol"),
@@ -397,6 +485,7 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                 table.c.atol_serial == atol.store_id,
                 table.c.rtol_serial == rtol.store_id,
                 table.c.tuning_tol_serial == tuning_tol.store_id,
+                table.c.alpha_serial == alpha.store_id,
             )
         )
 
@@ -462,6 +551,7 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                 pi_Einstein_init=pi_Einstein_init,
                 model=model,
                 tuning_tol=tuning_tol,
+                alpha=alpha,
                 z_grid=z_grid,
                 atol=atol,
                 rtol=rtol,
@@ -502,6 +592,7 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                     value_table.c.reflecting_term_Mp,
                     value_table.c.kicking_term_Mp,
                     value_table.c.log_one_plus_z_Jordan,
+                    value_table.c.rho_chi_over_rho_rad,
                 )
                 .select_from(
                     value_table.join(
@@ -548,6 +639,7 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                         reflecting_term=row.reflecting_term_Mp * units.PlanckMass,
                         kicking_term=row.kicking_term_Mp * units.PlanckMass,
                         log_one_plus_z_Jordan=row.log_one_plus_z_Jordan,
+                        rho_chi_over_rho_rad=row.rho_chi_over_rho_rad,
                     )
                 )
             imported_z_sample = redshift_array(z_points)
@@ -634,6 +726,14 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                 "tuning": (
                     _tuning_from_row(row_data, cosmology.units) if not failed else None
                 ),
+                # the whole-history values of dissipation mode, from the row's own columns, so
+                # that they are read with _do_not_populate too; None on a failure row
+                # (inelastic-reflection prompt 09, §1.3)
+                "dissipation": (
+                    _dissipation_from_row(row_data, cosmology.units)
+                    if not failed
+                    else None
+                ),
                 "values": values,
             },
             solver_labels=solver_labels,
@@ -643,6 +743,7 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
             pi_Einstein_init=pi_Einstein_init,
             model=model,
             tuning_tol=tuning_tol,
+            alpha=alpha,
             atol=atol,
             rtol=rtol,
             label=store_label,
@@ -673,6 +774,7 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
             "atol_serial": obj._atol.store_id,
             "rtol_serial": obj._rtol.store_id,
             "tuning_tol_serial": obj.tuning_tol.store_id,
+            "alpha_serial": obj.alpha.store_id,
             "failure": obj._failure,
             "failure_reason": obj._failure_reason if obj._failure else None,
             "solver_serial": obj.solver.store_id if not obj._failure else None,
@@ -742,6 +844,13 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
         tuning: Optional[TuningValues] = obj._tuning if not obj._failure else None
         payload.update(_tuning_columns(tuning, obj._units))
 
+        # the whole-history values of dissipation mode (inelastic-reflection prompt 09); NULL on a
+        # failure row, and each NULL where store() found its payload key absent
+        dissipation: Optional[DissipationValues] = (
+            obj._dissipation if not obj._failure else None
+        )
+        payload.update(_dissipation_columns(dissipation, obj._units))
+
         # # because ScalarHistory is a replicated table, we need to allow for the possibility that this object
         # # is a replica, rather than a fresh insert. If so, it's _my_id field will be set.
         # if hasattr(obj, "_my_id") and obj._my_id is not None:
@@ -790,6 +899,7 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                     "reflecting_term_Mp": value.reflecting_term / units.PlanckMass,
                     "kicking_term_Mp": value.kicking_term / units.PlanckMass,
                     "log_one_plus_z_Jordan": value.log_one_plus_z_Jordan,
+                    "rho_chi_over_rho_rad": value.rho_chi_over_rho_rad,
                 },
             )
 
@@ -976,6 +1086,10 @@ class sqla_ScalarHistoryValue_factory(SQLAFactoryBase):
                 # (jordan-normalization prompt 03, R4): a column, never a key, since a_J is not
                 # monotonic through a bounce
                 sqla.Column("log_one_plus_z_Jordan", sqla.Float(64), nullable=False),
+                # r_chi = rho_chi/rho_R, the ratio of the dark radiation to the bath that the policy
+                # used at the sample, the same in both frames; exactly 0.0 at alpha = 0
+                # (inelastic-reflection prompt 09, P27). Dimensionless
+                sqla.Column("rho_chi_over_rho_rad", sqla.Float(64), nullable=False),
             ],
         }
 

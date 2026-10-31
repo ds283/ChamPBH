@@ -33,11 +33,12 @@ names. The model is SecondaryGWKit's `test_store_fingerprint_golden.py`.
 `test_version_keyed_lookups._TempStoreCase`: a real one-shard pool writes the version row and is
 closed, then the package's undecorated actor inserts rows with no explicit serial, stamped with
 fixed times) and importing nothing from `tools.tests`, so that a golden store's rows cannot move
-when another module's helpers do. It holds one row of each of the 15 classes with a spec, except
+when another module's helpers do. It holds one row of each of the 16 classes with a spec, except
 that there are two `ExponentialModel` rows (n = 1 and n = 2) and two `ScalarHistory` rows, one on
 each, so that the polymorphic key of the spec is resolved; the first is tagged and the second is
 not, so that two tag sets are read. Every literal is fixed. (Until format 5 the store held 17
-classes, with two `ExponentialPotential` rows where it holds two `ExponentialModel` rows.)
+classes, with two `ExponentialPotential` rows where it holds two `ExponentialModel` rows; at format 5
+it held 15, without `alpha_value`.)
 
 **Format 2** (jordan-normalization prompt 01): the first golden file, `store_fingerprint_rrk-adoption-02.json`,
 was taken at format 1 from a store with five potential rows (one per potential class); the four
@@ -64,6 +65,13 @@ n = 2, on the one M and beta) where it held two potential rows, a third toleranc
 tolerance, 1e-5) and no `Lambda_value` or final temperature; each `ScalarHistory` has every tuning
 output column set to a fixed literal (`TUNING_COLUMNS`), which no spec names. `GOLDEN` names
 `store_fingerprint_jordan-normalization-07.json`. `LABEL` and `T0` are unchanged.
+
+**Format 6** (inelastic-reflection prompt 09): a `ScalarHistory` is keyed by α as well, a row of the
+new replicated table `alpha_value`, which its spec names as the parent `alpha`. The store gains one
+`alpha_value` row (α = 0), which both `ScalarHistory` rows name; each `ScalarHistory` has every new
+column of dissipation mode set to a fixed literal (`DISSIPATION_COLUMNS`), and the new value column
+`rho_chi_over_rho_rad` is filled with zero, as every other, neither of which any spec names. `GOLDEN`
+names `store_fingerprint_inelastic-reflection-09.json`. `LABEL` and `T0` are unchanged.
 
 **The golden file** is under `data/`, written once and never overwritten (P8). It was written from
 `config.fingerprint.fingerprinter.take(primary, None)` as `json.dumps(fp, indent=2, sort_keys=True)
@@ -107,7 +115,7 @@ from ObjectFactories.tests.test_version_keyed_lookups import _TempStoreCase
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DATA = Path(__file__).resolve().parent / "data"
-GOLDEN = DATA / "store_fingerprint_jordan-normalization-07.json"
+GOLDEN = DATA / "store_fingerprint_inelastic-reflection-09.json"
 
 LABEL = "rrk-adoption-02-golden"
 T0 = datetime(2026, 10, 19, 12, 0, 0)
@@ -135,6 +143,35 @@ TUNING_COLUMNS = dict(
     seed_kind="tracking",
     seed_normalization=-277.3,
     seed_phi_ref=0.0631,
+)
+
+# every column of dissipation mode of a ScalarHistory row, each set to a fixed literal (format 6;
+# ComputeTargets.ScalarHistory.DissipationValues)
+DISSIPATION_COLUMNS = dict(
+    injections=12,
+    resolved_candidates=9,
+    unresolved_candidates=4,
+    injected_fraction=0.03125,
+    rho_chi_ratio_1MeV=0.0078125,
+    rho_chi_ratio_70keV=0.0080078125,
+    rho_chi_ratio_today=0.008203125,
+    Delta_N_eff_1MeV=0.048,
+    Delta_N_eff_today=0.0505,
+    log_R_first_impact=-3.5,
+    parking_N=30.25,
+    parking_log_T_Jordan=-7.5,
+    release_N=40.25,
+    release_log_T_Jordan=-11.5,
+    worst_birth_margin=-0.703125,
+    worst_birth_margin_N=20.5,
+    birth_failing_share=0.875,
+    worst_reflection_margin=-0.671875,
+    worst_reflection_margin_N=21.5,
+    reflection_failing_share=0.75,
+    worst_tracker_margin=4.125,
+    worst_tracker_margin_N=50.5,
+    tracker_failing_share=0.0,
+    unassessed_share=0.0625,
 )
 
 
@@ -187,7 +224,7 @@ class _GoldenStoreCase(_TempStoreCase):
 
     def build_store(self):
         """
-        The golden store: the version row, one row of each of the other 14 classes except
+        The golden store: the version row, one row of each of the other 15 classes except
         ExponentialModel and ScalarHistory, which have two rows each (n = 1 and n = 2; each
         ScalarHistory on its own model row), and tolerance, which has three (atol, rtol and the
         tuning tolerance), the first ScalarHistory tagged. The first ScalarHistory, the
@@ -207,6 +244,7 @@ class _GoldenStoreCase(_TempStoreCase):
         rtol = ins("tolerance", {"log10_tol": -8.0})
         tuning_tol = ins("tolerance", {"log10_tol": -5.0})
         beta = ins("beta_value", {"value": 25.0})
+        alpha = ins("alpha_value", {"value": 0.0})
         M = ins("M_value", {"value_eV": 2.436e24})
         T_init = ins("temperature", {"value_GeV": 2.0e4})
         phi = ins("phi_value", {"value_PlanckMass": 5.0})
@@ -237,6 +275,7 @@ class _GoldenStoreCase(_TempStoreCase):
             atol_serial=atol,
             rtol_serial=rtol,
             tuning_tol_serial=tuning_tol,
+            alpha_serial=alpha,
             phi_Einstein_init_serial=phi,
             pi_Einstein_init_serial=pi,
             T_Jordan_init_serial=T_init,
@@ -245,6 +284,7 @@ class _GoldenStoreCase(_TempStoreCase):
             solver_serial=solver,
             z_samples=3,
             **TUNING_COLUMNS,
+            **DISSIPATION_COLUMNS,
         )
         histories = []
         for k, (n, model_serial) in enumerate(zip(MODEL_N_VALUES, model_rows)):
@@ -310,7 +350,7 @@ class TestGolden(_GoldenStoreCase):
         primary = self.build_store()
         inventory = read_inventory(primary, config.datastore.factories)
         self.assertEqual(inventory.problems, ())
-        self.assertEqual(len(inventory.classes), 15)
+        self.assertEqual(len(inventory.classes), 16)
         for name, entry in inventory.classes.items():
             self.assertGreaterEqual(entry.count, 1, name)
         # every polymorphic key of ScalarHistory's spec is resolved: one history per model row
@@ -400,7 +440,7 @@ class TestCommandLine(_GoldenStoreCase):
         squeezed = [" ".join(line.split()) for line in lines]
         self.assertIn(f"digest: {golden['digest']}", squeezed)
         self.assertIn(f"format: {golden['fingerprint_format']}", squeezed)
-        self.assertEqual(golden["fingerprint_format"], 5)
+        self.assertEqual(golden["fingerprint_format"], 6)
         self.assertEqual(
             lines[-1].strip(), "recorded: none recorded (the sidecar is absent)"
         )

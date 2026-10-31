@@ -65,6 +65,7 @@ def _key_columns():
         atol_serial=14,
         rtol_serial=15,
         tuning_tol_serial=16,
+        alpha_serial=17,
         phi_Einstein_init_serial=12,
         pi_Einstein_init_serial=13,
         T_Jordan_init_serial=10,

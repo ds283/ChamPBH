@@ -1,11 +1,11 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-10-31 · **25 open**: 4 on the `review-remediation` board (closed
+**Last updated:** 2026-10-31 · **24 open**: 4 on the `review-remediation` board (closed
 2026-09-30), none now assigned; 2 on the `production-readiness` board
-(closed 2026-09-30); 2 on the `run-integrity` board (closed 2026-09-30; one stale entry closed 2026-10-22, its fix having landed in `5740690`; `jordan-normalization` prompt 07 closed one, 2026-10-26); 7 on the
+(closed 2026-09-30); 2 on the `run-integrity` board (closed 2026-09-30; one stale entry closed 2026-10-22, its fix having landed in `5740690`; `jordan-normalization` prompt 07 closed one, 2026-10-26); 6 on the
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`
-(`jordan-normalization` prompt 04 closed one, 2026-10-25), one assigned to `inelastic-reflection`
-on 2026-10-29, §1.20;
+(`jordan-normalization` prompt 04 closed one, 2026-10-25), and the one assigned to
+`inelastic-reflection` on 2026-10-29 closed by its prompt 09, 2026-10-31;
 1 on the `science-readiness` board (planned 2026-10-01; closed 2026-10-02, 10 of 10 landed,
 prompt 06b having been added 2026-10-02; `jordan-normalization` prompt 03 closed one, 2026-10-22); 2 on the `bbn-tolerance` board (planned 2026-10-03,
 closed 2026-10-03, 6 of 6 landed; prompt 01 committed BLOCKED 2026-10-03 and ruled the same day: re-planned
@@ -41,7 +41,8 @@ one issue still open on its board); 1 on the `inelastic-reflection` board (plann
 planner opened one, §1.19; re-planned 2026-10-29, when one `integrator-remediation` issue was
 assigned to it, §1.20; prompt 04 opened one, 2026-10-29, §1.19; prompt 05 opened one, 2026-10-29,
 §1.19; prompt 06 opened none and narrowed prompt 05's, 2026-10-29; prompt 07 opened none and
-narrowed the assigned one, 2026-10-30, §1.20; the user ruled one and assigned another to the inserted prompt 07b, 2026-10-30, §1.19; prompt 07b closed that one and opened none, 2026-10-30; prompt 08 closed prompt 04's and opened none, 2026-10-31).
+narrowed the assigned one, 2026-10-30, §1.20; the user ruled one and assigned another to the inserted prompt 07b, 2026-10-30, §1.19; prompt 07b closed that one and opened none, 2026-10-30; prompt 08 closed prompt 04's and opened none, 2026-10-31; prompt 09 closed the assigned one and
+opened none, 2026-10-31).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -151,8 +152,9 @@ two were assigned on 2026-10-01 to `science-readiness` (§1.7). One was resolved
 2026-10-01). The other was narrowed (prompt 05, 2026-10-02) and came back here unassigned when that
 campaign closed (2026-10-02). Two of the nine were assigned on 2026-10-20 to
 `jordan-normalization` (§1.15): one of them was closed as moot by its prompt 01 the same day, and
-the other by its prompt 04 on 2026-10-25. The other seven are the seven open. One of them was
-assigned on 2026-10-29 to `inelastic-reflection` (§1.20); the other six are below.
+the other by its prompt 04 on 2026-10-25. One of the seven left was assigned on 2026-10-29 to
+`inelastic-reflection` and closed by its prompt 09 on 2026-10-31. The other six are the six open,
+below.
 
 - `[00-atol-does-not-scale-with-phi]` — an `atol` vector scaled by M halves the first-bounce
   error at 1 % cost; tolerance-level.
@@ -314,10 +316,6 @@ Planned 2026-10-27. One opened by the planner, found by a planning probe; one by
 
 ### 1.20 Assigned to `inelastic-reflection` — [its board](../prompts/inelastic-reflection/IMPLEMENTATION_STATE.md) §3.1
 
-Re-planned 2026-10-29 to reach laboratory M through a parking switch (its README §8).
-
-- `[00-settling-at-physical-M-needs-a-parked-tracking-model]` — the field at φ_wall(ρ) as a
-  passenger once its bounces are unresolvable; the drain supplies the switch, prompts 06 and 07
-  build the parked tracker and its release. Narrowed by prompt 07: the switch, the tracker and the
-  release are built and measured; what remains is Q on the parked samples, prompt 09's.
-  *(`integrator-remediation`; audit §3.7, §9.4)*
+Re-planned 2026-10-29 to reach laboratory M through a parking switch (its README §8). The one
+issue assigned, `[00-settling-at-physical-M-needs-a-parked-tracking-model]`, was closed by prompt 09
+on 2026-10-31. None is assigned now.

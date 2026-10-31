@@ -49,6 +49,7 @@ from ObjectFactories.tests.test_version_keyed_lookups import (
     _scalar_history_query,
     _T_init,
     _tuning_tol,
+    _alpha,
 )
 from config.defaults import DEFAULT_STRING_LENGTH
 
@@ -70,6 +71,7 @@ def _model(compute_result):
         pi_Einstein_init=_pi,
         model=_stand_in_model,
         tuning_tol=_tuning_tol,
+        alpha=_alpha,
         atol=_atol,
         rtol=_rtol,
         label="m",
@@ -157,6 +159,7 @@ class TestFailureReasonRoundTrip(_TempStoreCase):
             pi_Einstein_init=_pi,
             model=_stand_in_model,
             tuning_tol=_tuning_tol,
+            alpha=_alpha,
             atol=_atol,
             rtol=_rtol,
             label="m",

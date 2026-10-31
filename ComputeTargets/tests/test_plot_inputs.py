@@ -133,12 +133,13 @@ def _build_run(pool, betas, Ms_eV, models_for=None, n_values=(1,)):
             pool.object_get("pi_value", value=0.0, units=UNITS),
         ]
     )
-    # the tolerances, and the tuning tolerance
+    # the tolerances, the tuning tolerance, and alpha = 0 (inelastic-reflection prompt 09)
     ray.get(
         [
             pool.object_get("tolerance", tol=args.abs_tol),
             pool.object_get("tolerance", tol=args.rel_tol),
             pool.object_get("tolerance", tol=args.tuning_tolerance),
+            pool.object_get("alpha_value", value=0.0),
         ]
     )
     # the beta and M helpers
@@ -347,6 +348,7 @@ class TestAStoreMainBuilt(_ReadOnlyCase):
         )
         self.assertEqual(params.pi_init.value, 0.0)
         self.assertAlmostEqual(params.tuning_tol.log10_tol, -5.0)
+        self.assertEqual(params.alpha.value, 0.0)
         for obj in params:
             self.assertTrue(getattr(obj, "_deserialized", False), obj)
 
@@ -403,6 +405,7 @@ class TestThePayloads(_ReadOnlyCase):
                 ("phi_value", {"value": 5.0 * UNITS.PlanckMass, "units": UNITS}),
                 ("pi_value", {"value": 0.0, "units": UNITS}),
                 ("tolerance", {"tol": 1e-5}),
+                ("alpha_value", {"value": 0.0}),
             ],
         )
 

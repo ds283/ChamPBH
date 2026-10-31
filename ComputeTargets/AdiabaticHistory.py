@@ -51,7 +51,10 @@ def conformal_mass_over_H2(
     Derivation: prompts/production-readiness/logs/03-adiabatic-source-response.md, section 1.
 
     :param three_MP_sq: 3 M_P^2 (reduced Planck mass) in the cosmology's units
-    :param E: E = G - V/(3 H^2 M_P^2), so that 3 M_P^2 H^2 E = rho_R,E (1 + f_m)
+    :param E: E = rho_R,E (1 + f_m)/(3 H^2 M_P^2), the bath's and matter's share of 3 H^2 M_P^2:
+              G - V/(3 H^2 M_P^2) with no dark radiation, and that times
+              (1 + f_m)/(1 + f_m + r_chi) with it (inelastic-reflection prompt 09, log 09 §1.1:
+              the quanta do not couple to phi, so rho_chi enters only through H)
     :param Sigma: Sigma = 1 - 3 w(T_J), the kicking function the ODE uses
     :param fm: f_m = rho_m,E / rho_R,E
     :param d_logOmega_dphi: (ln Omega)'
@@ -150,6 +153,7 @@ class AdiabaticComputePolicy:
         Sigma: float,
         fm: float,
         T_Jordan: float,
+        r_chi: float,
     ):
         # compute the effective mass of the chameleon field normalized to H^2
         #
@@ -169,12 +173,19 @@ class AdiabaticComputePolicy:
         #
         # T_Jordan is exp(log_T_Jordan) of the sample, never derived from z; it supplies
         # Sigma_T = d Sigma / d ln T_J and x = (1/3) d ln g_s / d ln T_J.
+        #
+        # r_chi = rho_chi/rho_R is the sample's stored ratio of the dark radiation to the bath
+        # (inelastic-reflection prompt 09, P29). The quanta are collisionless and do not couple to
+        # phi, so delta rho_chi/delta phi = 0 at fixed a_E and rho_chi enters M^2_eff/H^2 only
+        # through H: in V''/H^2, in Hdot/H^2 (the gravitational term), and in the normalization of
+        # the conformal term's E, never in its numerator (log 09 §1.1). At r_chi = 0.0 every call
+        # takes its old operations
 
         Vpp_over_3H2Mp2: float = self.V_policy.Vprimeprime_over_3H2Mp2(
-            phi_Einstein, pi_Einstein, log_rhorad_Einstein, fm
+            phi_Einstein, pi_Einstein, log_rhorad_Einstein, fm, r_chi=r_chi
         )
         V_over_3H2Mp2: float = self.V_policy.V_over_3H2Mp2(
-            phi_Einstein, pi_Einstein, log_rhorad_Einstein, fm
+            phi_Einstein, pi_Einstein, log_rhorad_Einstein, fm, r_chi=r_chi
         )
         d_logOmega_dphi: float = self.model.d_logOmega_dphi(phi_Einstein)
         d2_logOmega_dphi2: float = self.model.d2_logOmega_dphi2(phi_Einstein)
@@ -196,7 +207,16 @@ class AdiabaticComputePolicy:
 
         self_mass = self.CONST_3_MP_SQ * Vpp_over_3H2Mp2
 
-        E: float = G - V_over_3H2Mp2
+        # E = rho_R,E (1 + f_m)/3 H^2 M_P^2, formed as ODEPolicy.__call__ forms the kick's: with dark
+        # radiation G - V/3H^2 M_P^2 holds rho_chi/3H^2 M_P^2 as well, which is taken out
+        # (inelastic-reflection prompt 09; orchestrator note 09, ruling 9)
+        E: float
+        if r_chi == 0.0:
+            E = G - V_over_3H2Mp2
+        else:
+            E, _ = self.V_policy.matter_and_dark_radiation_fractions(
+                G, V_over_3H2Mp2, fm, r_chi
+            )
         if E < 0.0:
             # unclear whether we should treat this as a genuine computational error, or whether it just means that rho_r is very small
             # (e.g. at the end of the integration) and should harmlessly be treated as zero
@@ -217,7 +237,7 @@ class AdiabaticComputePolicy:
         )
 
         gravitational_mass: float = 1.0 - self.V_policy.Hdot_over_H2_plus_3(
-            phi_Einstein, pi_Einstein, log_rhorad_Einstein, Sigma, fm
+            phi_Einstein, pi_Einstein, log_rhorad_Einstein, Sigma, fm, r_chi=r_chi
         )
 
         return self_mass + conformal_mass + gravitational_mass
@@ -229,12 +249,14 @@ class AdiabaticComputePolicy:
         log_rhorad_Einstein: float,
         Sigma: float,
         fm: float,
+        r_chi: float,
     ) -> float:
         # Einstein-frame Hdot/H^2 = (Hdot/H^2 + 3) - 3, the same quantity the ODE's friction
-        # term and the gravitational mass use (production-readiness prompt 03)
+        # term and the gravitational mass use (production-readiness prompt 03), with the sample's
+        # dark radiation r_chi (inelastic-reflection prompt 09)
         return (
             self.V_policy.Hdot_over_H2_plus_3(
-                phi_Einstein, pi_Einstein, log_rhorad_Einstein, Sigma, fm
+                phi_Einstein, pi_Einstein, log_rhorad_Einstein, Sigma, fm, r_chi=r_chi
             )
             - 3.0
         )
@@ -284,11 +306,21 @@ def compute_adiabatic_values(
             # the Jordan-frame temperature of the sample, never derived from z
             T_Jordan: float = exp(value.log_T_Jordan)
 
+            # the sample's stored rho_chi/rho_R (inelastic-reflection prompt 09, P29); 0.0 at
+            # alpha = 0, and on a parked sample as on any other (R15)
+            r_chi: float = value.rho_chi_over_rho_rad
+
             M2eff_over_H2: float = policy.M2eff_over_H2(
-                phi_Einstein, pi_Einstein, log_rhorad_Einstein, Sigma, fm, T_Jordan
+                phi_Einstein,
+                pi_Einstein,
+                log_rhorad_Einstein,
+                Sigma,
+                fm,
+                T_Jordan,
+                r_chi,
             )
             Hdot_over_H2: float = policy.Hdot_over_H2(
-                phi_Einstein, pi_Einstein, log_rhorad_Einstein, Sigma, fm
+                phi_Einstein, pi_Einstein, log_rhorad_Einstein, Sigma, fm, r_chi
             )
 
             M2eff_over_H2_grid.append(M2eff_over_H2)

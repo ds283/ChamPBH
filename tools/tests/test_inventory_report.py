@@ -129,6 +129,8 @@ class _InventoryStoreCase(_TempStoreCase):
         tuning_tol = ins("tolerance", {"log10_tol": -5.0})
         beta_failed = ins("beta_value", {"value": 1.1})
         beta_ok = ins("beta_value", {"value": 25.0})
+        # alpha = 0, a key of every history since inelastic-reflection prompt 09
+        alpha = ins("alpha_value", {"value": 0.0})
         M = ins("M_value", {"value_eV": 2.436e24})
         T_init = ins("temperature", {"value_GeV": 2.0e4})
         phi = ins("phi_value", {"value_PlanckMass": 5.0})
@@ -160,6 +162,7 @@ class _InventoryStoreCase(_TempStoreCase):
             atol_serial=atol,
             rtol_serial=rtol,
             tuning_tol_serial=tuning_tol,
+            alpha_serial=alpha,
             phi_Einstein_init_serial=phi,
             pi_Einstein_init_serial=pi,
             T_Jordan_init_serial=T_init,
@@ -260,10 +263,11 @@ class TestReportOnAStore(_InventoryStoreCase):
 
     def test_no_problem_and_every_class(self):
         self.assertEqual(self.inventory.problems, ())
-        self.assertEqual(len(self.inventory.classes), 15)
+        # 16 classes and 45 records with the alpha_value row (inelastic-reflection prompt 09)
+        self.assertEqual(len(self.inventory.classes), 16)
         self.assertIn("problems: none", self.lines)
         self.assertEqual(self.lines[0], "@@ DATASTORE INVENTORY: store.db")
-        self.assertIn("read-only; 1 shard (#0); 44 records in 15 classes", self.lines)
+        self.assertIn("read-only; 1 shard (#0); 45 records in 16 classes", self.lines)
 
     def test_the_quantities(self):
         for line in (
@@ -308,12 +312,12 @@ class TestReportOnAStore(_InventoryStoreCase):
         common = "T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass"
         self.assertIn(
             f"- {common}, model=ExponentialModel(M=2.436e+24 eV, beta=1.1, n_value=1), "
-            f"failure=True  | values: 0",
+            f"failure=True, alpha=0  | values: 0",
             self.lines,
         )
         self.assertIn(
             f"- {common}, model=ExponentialModel(M=2.436e+24 eV, beta=25, n_value=1), "
-            f"failure=False  tags: pilot  | values: 3",
+            f"failure=False, alpha=0  tags: pilot  | values: 3",
             self.lines,
         )
 
@@ -321,7 +325,7 @@ class TestReportOnAStore(_InventoryStoreCase):
         model = (
             "history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, "
             "model=ExponentialModel(M=2.436e+24 eV, beta=25, n_value=1), "
-            "failure=False, tags=[pilot]}"
+            "failure=False, alpha=0, tags=[pilot]}"
         )
         self.assertIn(
             "@@ AdiabaticHistory (sharded): 1 record: 1 validated, 0 unvalidated; "

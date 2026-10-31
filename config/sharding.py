@@ -21,6 +21,7 @@ replicated_tables = [
     "redshift",
     "tolerance",
     "beta_value",
+    "alpha_value",
     "M_value",
     "temperature",
     "phi_value",

@@ -1,7 +1,7 @@
 # inelastic-reflection campaign — implementation state
 
 **Last updated:** 2026-10-31 · **Status: LIVE, RE-PLANNED 2026-10-29 (README §8): 04–12 replace
-the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29, landed in `e967cb7` and reviewed (2026-10-29; gate Park holds; one issue narrowed). 07 written 2026-10-29, landed in `5397f8f` (2026-10-30; gate Release holds, the lag as a sign-and-order test by the user's ruling of option (c); one issue narrowed) and reviewed (`0b8f420`). 07b inserted 2026-10-30 at the user's word (README §8.1 R18) and written, before 08: the wall search across 10⁻²⁵–10⁻¹³ M_P; landed in `92f41f2` and reviewed (2026-10-30; gate Band holds; one issue closed). 08 written 2026-10-30 at the user's word, after the user ruled R20 (the tracker margin on the late tracker, with the reflections shown to cover the time before it) and R21 (the leftover unassessed); landed in `86fc526` and reviewed (2026-10-31; gate Margin holds; one issue closed, none opened). 09 written 2026-10-31 at the user's word, after the user ruled R22–R25 (ΔN_eff at 1 MeV with T_ν = T_γ; `extra_data` widened; zeros at α = 0 where defined; the margins' columns the charter's and the unassessed share). Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
+the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29, landed in `e967cb7` and reviewed (2026-10-29; gate Park holds; one issue narrowed). 07 written 2026-10-29, landed in `5397f8f` (2026-10-30; gate Release holds, the lag as a sign-and-order test by the user's ruling of option (c); one issue narrowed) and reviewed (`0b8f420`). 07b inserted 2026-10-30 at the user's word (README §8.1 R18) and written, before 08: the wall search across 10⁻²⁵–10⁻¹³ M_P; landed in `92f41f2` and reviewed (2026-10-30; gate Band holds; one issue closed). 08 written 2026-10-30 at the user's word, after the user ruled R20 (the tracker margin on the late tracker, with the reflections shown to cover the time before it) and R21 (the leftover unassessed); landed in `86fc526` and reviewed (2026-10-31; gate Margin holds; one issue closed, none opened). 09 written 2026-10-31 at the user's word, after the user ruled R22–R25 (ΔN_eff at 1 MeV with T_ν = T_γ; `extra_data` widened; zeros at α = 0 where defined; the margins' columns the charter's and the unassessed share); landed in this commit (2026-10-31; gate Store holds; one stop, ruled by the user: option (b), `test_adiabatic_mass` gains r_χ = 0.0; the assigned issue closed, none opened). Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
 gate DR holds); 02 landed in `fe2a944` and reviewed (2026-10-28; gate Inject holds), after one
 stop and the user's ruling of interior sampling; 3 of 8 prompts written: 03 written 2026-10-28
 from log 02 §8, after the user ruled 𝒜₀ = 1 (README §6.1); 03 landed in `0afa199` and reviewed (2026-10-28;
@@ -45,7 +45,7 @@ bitwise the old code's.
 | 07 | [Unparking](07-unparking.md) | the release at the root of m/H = 10 on the parked step (R16, P24); the oscillating phase resumes; no second parking | Opus | ✍️ 2026-10-29 | ✅ 2026-10-30 | `5397f8f` | [07](logs/07-unparking.md) |
 | 07b | [The wall search at the rounding of ln V](07b-the-wall-search-at-the-rounding-of-ln-V.md) | the wall search's helper returns −∞ within the rounding of ln V (R18), with its width derived; dissipation mode measured across 10⁻²⁵–10⁻¹³ M_P; the one-loop gap measured for 08 | Opus | ✍️ 2026-10-30 | ✅ 2026-10-30 | `92f41f2` | [07b](logs/07b-the-wall-search-at-the-rounding-of-ln-V.md) |
 | 08 | [Spectrum peak and margins](08-spectrum-peak-and-margins.md) | the peak by 𝓡 (R7, P25), the gap flagged (R19); ℓ; the energy weight (U9); three worst margins with the first failure (R13), the reflection margin over plateau turning points too and the tracker margin on the late tracker (R20), the leftover unassessed (R21); the coverage bound measured | Opus | ✍️ 2026-10-30 | ✅ 2026-10-31 | `86fc526` | [08](logs/08-spectrum-peak-and-margins.md) |
-| 09 | [Store](09-store.md) | α as a key in its own table (U3, P28); the per-sample ratio as a payload key of its own (P27); ΔN_eff at T_CMB and 1 MeV (R22), the margins (R25), parking and release as columns, zeros at α = 0 where defined (R24); the first failures in `extra_data`, widened (R23); `AdiabaticHistory` with ρ_χ (P29) and on parked samples; every reader at α = 0 (P30); format 6, 2026.8.0 | Opus | ✍️ 2026-10-31 | ⬜ | — | — |
+| 09 | [Store](09-store.md) | α as a key in its own table (U3, P28); the per-sample ratio as a payload key of its own (P27); ΔN_eff at T_CMB and 1 MeV (R22), the margins (R25), parking and release as columns, zeros at α = 0 where defined (R24); the first failures in `extra_data`, widened (R23); `AdiabaticHistory` with ρ_χ (P29) and on parked samples; every reader at α = 0 (P30); format 6, 2026.8.0 | Opus | ✍️ 2026-10-31 | ✅ 2026-10-31 | this commit | [09](logs/09-store.md) |
 | 10 | Driver and readers | `--alpha-values`; plot matching; Δg* and ΔN_eff figures (R12); scope; inventory; the tool | Sonnet | ⬜ | ⬜ | — | — |
 | 11 | Measure | the grid of U10; the rehearsal (U11); the verification document | Opus | ⬜ | ⬜ | — | — |
 | 12 | Close | documents, `CLAUDE.md`, handover §4.18, indexes, board | Sonnet | ⬜ | ⬜ | — | — |
@@ -84,7 +84,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 | Release | a parked field released at m/H < 10 continues; continuity at the release; the lag after it as estimated. *As ruled by the user (ruling 9, option (c)): the lag after the release has the sign of δ₁ and lies within the bound derived from each oscillation* | 07 | ✅ 2026-10-30 (log 07 §1.2, §1.4, §4, §5.2, §5.5) |
 | Band | α = 0 bitwise; every history outside the band bitwise 07's; every history of the band (β = 1.2, 2, 3 × M = 10⁻²⁷–10⁻¹³ M_P) reaches T_CMB; the width derived | 07b | ✅ 2026-10-30 (log 07b §1.2, §5.1, §5.4, §5.5) |
 | Margin | the three margins equal a hand computation; energy-weighted; the classical birth margin negative by construction; NULL at α = 0. *As written 2026-10-30 (R19–R21): the estimate chosen by 𝓡 with the gap flagged; the coverage of the samples before the late tracker measured within its derived bound; every value of the integration bitwise* | 08 | ✅ 2026-10-31 (log 08 §1, §2, §5.1, §5.3, §5.5) |
-| Store | key and columns round-trip; two α are distinct rows; the new golden fingerprint; `AdiabaticHistory` bitwise at α = 0 and computed on parked samples. *As written 2026-10-31 (R22–R25): an α = 0 row holds R24's zeros and NULLs; both golden histories bitwise* | 09 | ⬜ |
+| Store | key and columns round-trip; two α are distinct rows; the new golden fingerprint; `AdiabaticHistory` bitwise at α = 0 and computed on parked samples. *As written 2026-10-31 (R22–R25): an α = 0 row holds R24's zeros and NULLs; both golden histories bitwise* | 09 | ✅ 2026-10-31 (log 09 §4, §5.1, §5.3, §5.5) |
 | Driver | α reaches every stage; an unstored α exits 2 in the plots; scope and inventory name α | 10 | ⬜ |
 | Measure | every point has a row; the drain independent of M below 10⁻¹² to 10⁻³; ΔN_eff rises with α; margins reported; α = 0 reproduces 2026.7.0 | 11 | ⬜ |
 | R (U11) | the rehearsal's stores equal after interruption and resume | 11 | ⬜ |
@@ -94,7 +94,8 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 
 ## 3. Active and unresolved issues
 
-One opened by the planner. Prompt 04's was closed by prompt 08, and prompt 05's by prompt 07b (§4).
+One opened by the planner. Prompt 04's was closed by prompt 08, and prompt 05's by prompt 07b (§4). The
+one assigned (§3.1) was closed by prompt 09 (§4).
 
 ### `[00-xav-sigma-is-non-monotone-at-25-35-keV]`
 
@@ -120,6 +121,14 @@ One opened by the planner. Prompt 04's was closed by prompt 08, and prompt 05's 
 
 ### 3.1 Assigned to this campaign
 
+None now. `[00-settling-at-physical-M-needs-a-parked-tracking-model]` was closed by prompt 09 (§4).
+
+## 4. Resolved issues
+
+### `[00-settling-at-physical-M-needs-a-parked-tracking-model]`
+
+Assigned from the `integrator-remediation` board (its §3, now its §4).
+
 - **`[00-settling-at-physical-M-needs-a-parked-tracking-model]`** (`integrator-remediation` board
   §3), assigned 2026-10-29 by the re-plan (README §8.6): prompts 06 and 07 build the parked tracker,
   with the switch criterion supplied by the drain. The entry stays on its own board until it is
@@ -129,8 +138,12 @@ One opened by the planner. Prompt 04's was closed by prompt 08, and prompt 05's 
     large-M histories whose tracker loses adiabaticity are released at m/H = 10 and reach T_CMB. What
     remains is Q on the parked samples (`AdiabaticHistory`), which is 09's (README §8.1 R15). So 07
     narrows it, and 09 closes it.
-
-## 4. Resolved issues
+  - **Closed (2026-10-31, prompt 09, this commit):** `AdiabaticHistory` reads each stored sample's
+    ρ_χ/ρ_R and computes Q on the parked samples as on any other (R15). Q is finite on every parked sample
+    measured: 2 142 at β = 2, M = 10⁻³⁰ and 10⁻¹⁶; 1 904 at M = 10⁻³, β = 1.2 (released); 244 at M = 0.5,
+    β = 5 (released) (log 09 §5.3; test 8 (c)). The entry is closed on the `integrator-remediation` board
+    too (moved to its §4), and its row is deleted from `.documents/OPEN_ISSUES.md` §1.20, the count
+    corrected 25 → 24.
 
 ### `[04-one-loop-chain-has-no-solution-just-above-R-equals-1]`
 
@@ -1518,3 +1531,60 @@ added to the list of orchestrator notes. Nothing opened. The log's observation t
 condition fails in the Σ wiggle at 23–35 keV is recorded there against
 `[00-xav-sigma-is-non-monotone-at-25-35-keV]`. No measured parked segment crosses that band, so nothing
 rests on it.
+
+### 5.11 After prompt 09 (2026-10-31)
+
+09 landed in this commit, under orchestrator note 09 (rulings 1–17). Log: [`logs/09-store.md`](logs/09-store.md).
+- **The stop.** Ruling 9's required `r_chi`, and `compute_adiabatic_values` reading the stored ratio, fail
+  `test_adiabatic_mass`, which the prompt and ruling 16 froze: 11 errors in 9 tests. The agent stopped. The
+  user ruled, 2026-10-31: "(b) is fine". `_M2eff` passes r_χ = 0.0 when the signature has it, and the stand-in
+  samples gain `rho_chi_over_rho_rad=0.0`. Ruling 9 stands (log 09 D1).
+- **What shipped:**
+  - α is a key of every history: a new replicated table `alpha_value`, and `ScalarHistory.alpha_serial`
+    with the inventory parent `alpha` (U3, P28).
+  - The payload gains `"rho_chi_over_rho_rad"`, stored as a column of `ScalarHistoryValue` (P27), and
+    `"dark_radiation_values"` (R22, P31).
+  - There are 24 whole-history columns: the counts, the injected fraction, r_χ and ΔN_eff at 1 MeV,
+    70 keV and today, ln 𝓡 at the first impact, the parking and the release, and the margins of R25. On the
+    object they are `ScalarHistory.dissipation`, read with `_do_not_populate`. At α = 0 they hold zeros
+    where defined and NULL elsewhere (R24).
+  - `extra_data` is `Text`, with `"margins"` (R23).
+  - `AdiabaticHistory` reads ρ_χ through H only, with E the bath's share (P29; log 09 §1.1).
+  - Every reader passes the α = 0 row (P30).
+  - Format 6, with its golden file, and 2026.8.0.
+- **Gate Store holds:**
+  - The round trip is bitwise on every column and sample of eight histories (§5.1), and in tests 1 and 2.
+  - Two α are two rows, and α = 0.3 finds neither (test 3).
+  - R24 holds (test 4).
+  - Format 6, its golden file and 2026.8.0 are in place.
+  - `AdiabaticHistory` is bitwise at α = 0: it equals the pins taken at `03b769e` (test 8 (a)), and §5.5
+    compares four setups by `repr`.
+  - Q is finite on 6 332 parked samples (§5.3).
+  - Both golden histories pass unedited.
+- **Measured:**
+  - ΔN_eff(1 MeV) is 0.049–0.061 at β ≤ 2 and 0.0058 / 0.0012 at β = 5 / 25, M = 0.5.
+  - ΔN_eff(today)/ΔN_eff(1 MeV) is the closed form (K_f/K₁)[(11/4) g_s(T_CMB)/g_s(1 MeV)]^{4/3}, to
+    −1.328×10⁻³ on every history. The residual is the bath's ρ_R,J drifting from (π²/30) g_ρ T_J⁴ by
+    about 10⁻³ (log 09 §5.2, §7).
+  - BBN's frame factor F at 1 MeV is 0.93–1.02 at small M, and 0.11 down to 4.4×10⁻⁵ at M = 0.5 for
+    β = 1.2–25. Test 9 asserts the identity Δr_BBN = F r_χ.
+  - ρ_χ moves M²_eff/H² by at most 12 % (relative), near a zero of it; by at most 1.25 % of max(|m|, 1);
+    and max |Q| by at most 0.8 %.
+  - The cost is +1–3 % on the store and on `compute_adiabatic_values`.
+- **Rulings applied:** all seventeen (log 09 §3). Deviations D1–D9; D1 (the stop), D3 (the inventory test's
+  expectations move by the α row) and D4 (an import) are STRUCTURALLY REQUIRED.
+- **Breakages**, by the number of tests each fails:
+  - B1: 2;
+  - B2: 1;
+  - B3: 1;
+  - B4: 1;
+  - B5: 1;
+  - B6: 2;
+  - B7: 1, in 5 subtests;
+  - B8: 1 failure and 9 errors.
+- **Counts:** 26 / 471 (96 + 375) / 103 / 115 / 64 before; 26 / **473** (**98** + 375) / **121** / 115 / 64
+  after, all passing.
+- **Issues:**
+  - closed `[00-settling-at-physical-M-needs-a-parked-tracking-model]` (§3.1 → §4; `integrator-remediation`
+    §3 → §4; index §1.20 emptied, count 25 → 24);
+  - opened none. Log 09 §7 records the ρ_R,J drift and F's absence from ΔN_eff for the user.

@@ -889,6 +889,8 @@ def _fill_champbh_shard(conn, sm_shard: bool, offset: int, bbn_reason: str, bk: 
     _insert(conn, "tolerance", serial=o + 3, timestamp=TS, log10_tol=-8.0)
     _insert(conn, "tolerance", serial=o + 4, timestamp=TS, log10_tol=-10.0)
     _insert(conn, "beta_value", serial=o + 5, timestamp=TS, value=1.15)
+    # alpha = 0, a key of every history since inelastic-reflection prompt 09
+    _insert(conn, "alpha_value", serial=o + 9, timestamp=TS, value=0.0)
     _insert(conn, "M_value", serial=o + 6, timestamp=TS, value_eV=2.435e24)
     # the tuning tolerance, in the serial Lambda_value had until jordan-normalization prompt 07
     _insert(conn, "tolerance", serial=o + 7, timestamp=TS, log10_tol=-5.0)
@@ -948,6 +950,7 @@ def _fill_champbh_shard(conn, sm_shard: bool, offset: int, bbn_reason: str, bk: 
         atol_serial=o + 4,
         rtol_serial=o + 3,
         tuning_tol_serial=o + 7,
+        alpha_serial=o + 9,
         phi_Einstein_init_serial=o + 10,
         pi_Einstein_init_serial=o + 11,
         T_Jordan_init_serial=o + 8,
@@ -994,6 +997,7 @@ def _fill_champbh_shard(conn, sm_shard: bool, offset: int, bbn_reason: str, bk: 
                     "reflecting_term_Mp",
                     "kicking_term_Mp",
                     "log_one_plus_z_Jordan",
+                    "rho_chi_over_rho_rad",
                 )
             )
         }

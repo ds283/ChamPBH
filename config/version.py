@@ -53,7 +53,13 @@
 # tuned values (the normalization, V_ref, phi_ref and the tuning's diagnostics). The store has no
 # Lambda_value, ExponentialPotential or ExponentialCoupling table. A store made before 2026.7.0
 # cannot be reused: start a fresh datastore file.
-VERSION_LABEL = "2026.7.0"
+# On 2026-10-31 (inelastic-reflection prompt 09), 2026.8.0: from 2026.8.0 each history is keyed by
+# alpha as well, the fraction of the condensate's kinetic energy drained into chameleon quanta (a row
+# of the new table alpha_value; 0 is natural mode, the old code bitwise), its samples carry
+# rho_chi/rho_R, the history row stores the dark radiation, Delta N_eff, the parking, the release and
+# the relativistic margins, extra_data is Text, and AdiabaticHistory reads rho_chi. A store made
+# before 2026.8.0 cannot be reused: start a fresh datastore file.
+VERSION_LABEL = "2026.8.0"
 
 # The reserved payload key of a version-keyed lookup (VERSION_SERIAL_KEY) and its reader
 # (require_version_serial) were defined here until dk-and-rpk-migration prompt 08; they are

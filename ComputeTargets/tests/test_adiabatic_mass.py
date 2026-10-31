@@ -289,6 +289,8 @@ def _M2eff(policy, phi, pi_E, log_rho, Sigma, fm, T_Jordan):
     Call M2eff_over_H2 with T_Jordan if it takes it. On the tree before prompt 03 it
     does not, and the old formula is scored (module docstring).
     """
+    if "r_chi" in inspect.signature(policy.M2eff_over_H2).parameters:
+        return policy.M2eff_over_H2(phi, pi_E, log_rho, Sigma, fm, T_Jordan, 0.0)
     if "T_Jordan" in inspect.signature(policy.M2eff_over_H2).parameters:
         return policy.M2eff_over_H2(phi, pi_E, log_rho, Sigma, fm, T_Jordan)
     return policy.M2eff_over_H2(phi, pi_E, log_rho, Sigma, fm)
@@ -630,6 +632,7 @@ def _run_compute_adiabatic_values(N: np.ndarray, m: np.ndarray):
             log_rhorad_Einstein=0.0,
             log_T_Jordan=0.0,
             H_Einstein=exp(-2.0 * float(Ni)),
+            rho_chi_over_rho_rad=0.0,
         )
         for Ni, mi in zip(N, m)
     ]

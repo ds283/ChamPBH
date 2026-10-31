@@ -22,7 +22,7 @@ prompt 02; README P1, U3, U4).
 carry. A read-only pool refuses a lookup that would insert a row: `ReadOnlyMiss` for a replicated
 class, `ReadOnlyWrite` for a sharded one. What a refusal means depends on the lookup:
 
-- **a parameter** (the tolerances, the tuning tolerance, `T_init`, `phi_init`, `pi_init`, the
+- **a parameter** (the tolerances, the tuning tolerance, `T_init`, `phi_init`, `pi_init`, α, the
   cosmology): the plot run was given options the build did not use, and no history in the store
   can match them. The refusal becomes `PlotOptionNotStored`, whose message names the option (or
   the constant) and the value; the scripts print it to stderr and exit 2, before any figure (U4);
@@ -35,7 +35,8 @@ class, `ReadOnlyWrite` for a sharded one. What a refusal means depends on the lo
   prompt 08).
 
 Since jordan-normalization prompt 07 a stored history is keyed by its model, its initial data and
-the tuning tolerance, and ends at T_CMB: the store holds no Lambda and no final temperature, so
+the tuning tolerance, and since inelastic-reflection prompt 09 by α too (the constant α = 0 until
+prompt 10 gives the plots an option), and ends at T_CMB: the store holds no Lambda and no final temperature, so
 there is no potential, coupling or `T_stop` to look up.
 
 Any other exception propagates unchanged. Under Ray an actor's exception reaches `ray.get` as
@@ -103,6 +104,7 @@ class PlotParameters(NamedTuple):
     phi_init: object
     pi_init: object
     tuning_tol: object
+    alpha: object
 
 
 def parameters(
@@ -116,8 +118,9 @@ def parameters(
 ) -> PlotParameters:
     """
     The tolerances, `T_init`, `phi_init` and `pi_init` (README §0.3 rows 1-5), from `--abs-tol`,
-    `--rel-tol`, `--T-init-GeV`, `--phi-init-Mp` and the constant pi = 0, and the tuning tolerance
-    (jordan-normalization prompt 07), from `--tuning-tolerance` (prompt 08). Every lookup is
+    `--rel-tol`, `--T-init-GeV`, `--phi-init-Mp` and the constant pi = 0, the tuning tolerance
+    (jordan-normalization prompt 07), from `--tuning-tolerance` (prompt 08), and the constant
+    alpha = 0, a key of every history (inelastic-reflection prompt 09, P30). Every lookup is
     submitted first; each is then read in this order, and the first that is not stored raises
     `PlotOptionNotStored`.
     """
@@ -161,6 +164,12 @@ def parameters(
             "tolerance",
             "--tuning-tolerance",
             _value(tuning_tol),
+        ),
+        (
+            pool.object_get("alpha_value", value=0.0),
+            "alpha_value",
+            "the constant α",
+            "α = 0",
         ),
     ]
     return PlotParameters(*(_get_parameter(*lookup) for lookup in lookups))

@@ -442,9 +442,16 @@ def main(argv=None) -> int:
             f"reflected={bounce.reflected}"
         )
 
+    # the payload's r_chi at each sample, which ScalarHistoryValue requires (inelastic-reflection
+    # prompt 09, P27): 0.0 at alpha = 0, so the output there is unchanged
     values = [
-        ScalarHistoryValue(None, z, **SampleValues._make(tuple(s))._asdict())
-        for z, s in zip(data["z_grid"], data["sample"])
+        ScalarHistoryValue(
+            None,
+            z,
+            rho_chi_over_rho_rad=r,
+            **SampleValues._make(tuple(s))._asdict(),
+        )
+        for z, s, r in zip(data["z_grid"], data["sample"], data["rho_chi_over_rho_rad"])
     ]
     print(_fixed_T_line(data["fixed_T_values"], captured[-1], values, units, label))
 
