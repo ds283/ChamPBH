@@ -1,0 +1,47 @@
+SM baseline (rho_NP = 0, bf24c3d+ri02+sr01+bt02, small network): Yp=0.24688021 D/H x1e5=2.4582879
+
+== S: small alpha at M = 4e-31, with prompt 11's alpha = 0.1 and 0.03 (ref)
+ref b=1.2 a=0.1          exit=0                wall=   12.1s steps=   2196 refl=     7 inj=     7 inj_frac= 0.0150926 park=     11.56keV release=no dNeff_today= 0.0656722 dNeff_1MeV= 0.0607917 fail_shares=0,0,0 dYp= +1.0559% dDH= +1.4753%
+ref b=1.2 a=0.03         exit=0                wall=   26.2s steps=  30564 refl=   176 inj=   176 inj_frac=0.00477057 park= 0.0005665keV release=no dNeff_today= 0.0214876 dNeff_1MeV= 0.0182809 fail_shares=0,0,0 dYp= +2.8265% dDH= +2.4641%
+b=1.2 a=0.01             exit=0                wall=   12.0s steps=   1791 refl=     5 inj=     5 inj_frac=0.00153607 park=     1.512keV release=no dNeff_today=0.00675937 dNeff_1MeV=0.00609389 fail_shares=0,0,0 dYp= +3.7018% dDH= +2.7020%
+b=1.2 a=0.003            exit=0                wall=   90.3s steps= 161874 refl=  1034 inj=  1034 inj_frac=0.000483264 park= 0.0001302keV release=no dNeff_today=0.00219503 dNeff_1MeV=0.00182807 fail_shares=0,0,0 dYp= +3.9053% dDH= +4.9094%
+b=1.2 a=0.001            exit=0                wall=  265.0s steps= 515943 refl=  3549 inj=  3549 inj_frac=0.000188457 park= 1.391e-05keV release=no dNeff_today=0.000935528 dNeff_1MeV=0.000609344 fail_shares=0,0,0 dYp= +3.9450% dDH= +5.5062%
+
+ref b=2 a=0.1            exit=0                wall=   18.2s steps=   9929 refl=    49 inj=    49 inj_frac= 0.0126169 park=     83.63keV release=no dNeff_today= 0.0524405 dNeff_1MeV= 0.0496484 fail_shares=0,0,0 dYp= +0.0864% dDH= +0.5800%
+ref b=2 a=0.03           exit=0                wall=   14.1s steps=   5179 refl=    22 inj=    22 inj_frac=0.00400321 park=     25.41keV release=no dNeff_today= 0.0169484 dNeff_1MeV=  0.015602 fail_shares=0,0,0 dYp= -0.2090% dDH= +0.6079%
+b=2 a=0.01               exit=0                wall=   24.1s steps=  16389 refl=    85 inj=    85 inj_frac=0.00131282 park=     65.37keV release=no dNeff_today=0.00548245 dNeff_1MeV=0.00526067 fail_shares=0,0,0 dYp= +0.0264% dDH= +0.0626%
+b=2 a=0.003              exit=0                wall=   18.0s steps=   7594 refl=    35 inj=    35 inj_frac=0.000398994 park=     7.134keV release=no dNeff_today=0.00167697 dNeff_1MeV=0.00158651 fail_shares=0,0,0 dYp= +0.0141% dDH= +0.2432%
+b=2 a=0.001              exit=0                wall=   18.1s steps=   6672 refl=    30 inj=    30 inj_frac=0.000133621 park=     4.457keV release=no dNeff_today=0.000563009 dNeff_1MeV=0.000529036 fail_shares=0,0,0 dYp= -0.0725% dDH= +0.3600%
+
+ref b=3 a=0.1            exit=0                wall=   17.2s steps=  11558 refl=    59 inj=    59 inj_frac=0.00796211 park= 2.332e+04keV release=no dNeff_today= 0.0315756 dNeff_1MeV=    0.0306 fail_shares=0,0,0 dYp= +0.1709% dDH= +0.4144%
+ref b=3 a=0.03           exit=0                wall=   25.3s steps=  22146 refl=   118 inj=   118 inj_frac=0.00295705 park=     90.01keV release=no dNeff_today= 0.0122874 dNeff_1MeV=   0.01165 fail_shares=0,0,0 dYp= +0.0203% dDH= +0.1291%
+b=3 a=0.01               exit=0                wall=   24.1s steps=  19350 refl=   100 inj=   100 inj_frac=0.00103478 park=     55.08keV release=no dNeff_today=0.00434028 dNeff_1MeV=0.00409514 fail_shares=0,0,0 dYp= +0.0215% dDH= +0.0241%
+b=3 a=0.003              exit=0                wall=   32.1s steps=  30474 refl=   166 inj=   166 inj_frac=0.000313241 park=     71.04keV release=no dNeff_today=0.00131252 dNeff_1MeV= 0.0012497 fail_shares=0,0,0 dYp= +0.0330% dDH= +0.0232%
+b=3 a=0.001              exit=0                wall=   26.1s steps=  16618 refl=    84 inj=    84 inj_frac=0.000105829 park=     32.53keV release=no dNeff_today=0.00044608 dNeff_1MeV=0.000418873 fail_shares=0,0,0 dYp= -0.0073% dDH= -0.0047%
+
+== L: lower M at alpha = 0.1, with prompt 11's M = 4e-31 (ref)
+ref b=1.2 M=4e-31        exit=0                wall=   12.1s steps=   2196 refl=     7 inj=     7 inj_frac= 0.0150926 park=     11.56keV release=no dNeff_today= 0.0656722 dNeff_1MeV= 0.0607917 fail_shares=0,0,0 dYp= +1.0559% dDH= +1.4753%
+b=1.2 M=1e-32            exit=0                wall=   12.0s steps=   2196 refl=     7 inj=     7 inj_frac= 0.0150926 park=     11.56keV release=no dNeff_today= 0.0656722 dNeff_1MeV= 0.0607917 fail_shares=0,0,0 dYp= +1.0564% dDH= +1.4800%
+b=1.2 M=1e-33            exit=0                wall=   12.1s steps=   2196 refl=     7 inj=     7 inj_frac= 0.0150926 park=     11.56keV release=no dNeff_today= 0.0656722 dNeff_1MeV= 0.0607917 fail_shares=0,0,0 dYp= +1.0553% dDH= +1.4759%
+
+ref b=2 M=4e-31          exit=0                wall=   18.2s steps=   9929 refl=    49 inj=    49 inj_frac= 0.0126169 park=     83.63keV release=no dNeff_today= 0.0524405 dNeff_1MeV= 0.0496484 fail_shares=0,0,0 dYp= +0.0864% dDH= +0.5800%
+b=2 M=1e-32              exit=0                wall=   18.1s steps=   9929 refl=    49 inj=    49 inj_frac= 0.0126169 park=     83.63keV release=no dNeff_today= 0.0524405 dNeff_1MeV= 0.0496484 fail_shares=0,0,0 dYp= +0.0876% dDH= +0.5843%
+b=2 M=1e-33              exit=0                wall=   18.1s steps=   9929 refl=    49 inj=    49 inj_frac= 0.0126169 park=     83.63keV release=no dNeff_today= 0.0524405 dNeff_1MeV= 0.0496484 fail_shares=0,0,0 dYp= +0.0841% dDH= +0.5817%
+
+ref b=3 M=4e-31          exit=0                wall=   17.2s steps=  11558 refl=    59 inj=    59 inj_frac=0.00796211 park= 2.332e+04keV release=no dNeff_today= 0.0315756 dNeff_1MeV=    0.0306 fail_shares=0,0,0 dYp= +0.1709% dDH= +0.4144%
+b=3 M=1e-32              exit=0                wall=   18.1s steps=  11558 refl=    59 inj=    59 inj_frac=0.00796211 park= 2.332e+04keV release=no dNeff_today= 0.0315756 dNeff_1MeV=    0.0306 fail_shares=0,0,0 dYp= +0.1711% dDH= +0.4101%
+b=3 M=1e-33              exit=0                wall=   18.1s steps=  11558 refl=    59 inj=    59 inj_frac=0.00796211 park= 2.332e+04keV release=no dNeff_today= 0.0315756 dNeff_1MeV=    0.0306 fail_shares=0,0,0 dYp= +0.1710% dDH= +0.4113%
+
+== N: non-surfing at M = 4e-31
+b=0.6 a=0.1              exit=1                wall=   36.1s steps=  22051 refl=   133 inj=   133 inj_frac=    1.0591 park= 9.962e-07keV release=no dNeff_today=   7.88822 dNeff_1MeV=         0 fail_shares=0.644106,0.888187,0 dYp=    +nan% dDH=    +nan%
+b=0.6 a=0.01             exit=1                wall=    6.0s steps=      - refl=     - inj=     - inj_frac=         - park=       nankeV release=no dNeff_today=         - dNeff_1MeV=         - fail_shares=-,-,- dYp=    +nan% dDH=    +nan%
+b=1.0 a=0.1              exit=0                wall=   20.0s steps=  17906 refl=   103 inj=   103 inj_frac= 0.0448104 park= 4.518e-05keV release=no dNeff_today=  0.333749 dNeff_1MeV=         0 fail_shares=0.0698021,0.419224,0 dYp=+75.9923% dDH=+323.3431%
+b=1.0 a=0.01             exit=0                wall=   90.4s steps= 157304 refl=  1066 inj=  1066 inj_frac= 0.0444221 park= 6.392e-07keV release=no dNeff_today=  0.330857 dNeff_1MeV=         0 fail_shares=0.710124,0.861068,0 dYp=+75.9926% dDH=+323.3373%
+
+== T: the tail at M = 4e-31, with prompt 11's beta = 5 (ref)
+ref b=5 a=0.1            exit=0                wall=   17.2s steps=  11460 refl=    60 inj=    60 inj_frac=0.00206365 park=  6.16e+05keV release=no dNeff_today=0.00626553 dNeff_1MeV=0.00607194 fail_shares=0,0,0 dYp= +0.0367% dDH= +0.0753%
+ref b=5 a=0.03           exit=0                wall=   31.3s steps=  32000 refl=   187 inj=   187 inj_frac=0.000839868 park= 1.974e+05keV release=no dNeff_today=0.00268595 dNeff_1MeV=0.00260296 fail_shares=0,0,0 dYp= +0.0161% dDH= +0.0214%
+b=10 a=0.1               exit=0                wall=   26.1s steps=  10327 refl=    50 inj=    50 inj_frac=0.00150192 park= 4.017e+06keV release=no dNeff_today= 0.0044885 dNeff_1MeV=0.00434982 fail_shares=0,0,0 dYp= +0.0258% dDH= +0.0512%
+b=10 a=0.01              exit=0                wall=   62.2s steps=  77779 refl=   481 inj=   481 inj_frac=0.000317428 park= 2.074e+05keV release=no dNeff_today=0.00102123 dNeff_1MeV=0.000989679 fail_shares=0,0,0 dYp= +0.0061% dDH= +0.0046%
+b=20 a=0.1               exit=0                wall=   20.0s steps=  12564 refl=    64 inj=    64 inj_frac=0.000740154 park= 5.546e+07keV release=no dNeff_today=0.00218009 dNeff_1MeV=0.00211273 fail_shares=0,0,0 dYp= +0.0133% dDH= +0.0167%
+b=20 a=0.01              exit=0                wall=   56.2s steps=  68520 refl=   409 inj=   409 inj_frac=0.000248807 park= 7.755e+05keV release=no dNeff_today=0.000756244 dNeff_1MeV=0.000732879 fail_shares=0,0,0 dYp= +0.0047% dDH= -0.0025%

@@ -1,0 +1,14 @@
+## command: PYTHONPATH=. ./venv/bin/python -u tools/history_and_bbn.py 0.6 4e-31 --alpha 0.01
+## git rev-parse HEAD: d992d428465489d0d1ec85deca95872454ff7fe4
+## git status --porcelain lines: 2
+## start (UTC): 2026-11-01T10:59:53+00:00
+## uptime: 10:59  up 1 day, 13:20, 1 user, load averages: 6.47 7.01 8.40
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+!! tune_history (history_and_bbn-beta0.6-M4e-31): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -10.2832 < ln 10 at N = 43.06598196 (generation 40); the generations below ln 10 carry 0.8821 of K
+!! tune_history (history_and_bbn-beta0.6-M4e-31): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = -9.6411 < ln 10 at N = 43.06598196 (generation 39); the generations below ln 10 carry 0.9498 of K
+!! tune_history (history_and_bbn-beta0.6-M4e-31): the effective minimum was not found: effective_minimum (ExponentialModel(M=0.00097413eV,n=1,beta=0.6)): V_eff' does not change sign on the bracket [8.07036e-06, 0.00322814] (values 1.96735e-121, 1.97116e-121) (tuning integration 0)
+history beta=0.6 M=4e-31: FAILURE wall=4.3 s reason=the effective minimum was not found: effective_minimum (ExponentialModel(M=0.00097413eV,n=1,beta=0.6)): V_eff' does not change sign on the bracket [8.07036e-06, 0.00322814] (values 1.96735e-121, 1.97116e-121) (tuning integration 0)
+## end (UTC): 2026-11-01T10:59:59+00:00
+## uptime: 10:59  up 1 day, 13:20, 1 user, load averages: 6.27 6.96 8.38
+## exit status: 1
+## wall: 6.0 s
