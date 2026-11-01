@@ -1,0 +1,18 @@
+{
+  "created": "2026-11-01T03:03:59+00:00",
+  "datastore": "inelastic-reflection-11-reference.db",
+  "history": [
+    {
+      "from": null,
+      "git_dirty": true,
+      "git_head": "6d1a77c046b0fda2003df0a1b7e35abba148be3d",
+      "operation": "create",
+      "to": "var/datastores/inelastic-reflection-11-reference.db",
+      "when": "2026-11-01T03:03:59+00:00"
+    }
+  ],
+  "name": "inelastic-reflection-11-reference",
+  "purpose": "inelastic-reflection 11 R1: the reference build of jordan-normalization 09's run a at alpha 0 and 0.1, kept for the user",
+  "sidecar_format": 1,
+  "store_id": "7b179dfa36b94700b8c15ea48aa39c02"
+}

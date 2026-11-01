@@ -1,0 +1,137 @@
+"""
+The recorders' summariser of jordan-normalization prompt 09 (the orchestrator's note for 09,
+ruling 7).
+
+    ./venv/bin/python silences.py OUT [OUT ...]
+
+For each recorder output (beat_times.py's), prints:
+  (a) the longest heartbeat silence: the largest difference between consecutive recorded
+      `heartbeat` values while `state` was `running` (the earlier record running), which includes
+      the one from the last of them to the run's final record, with the stage it fell in;
+  (b) the longest gap between consecutive log lines (their arrival), per stage, with both lines;
+  (c) each stage's time, from its banner's arrival to its `ALL WORK ITEMS COMPLETE` line's;
+  (d) per history: its label, its `-- tune` lines' count, the sum of their `wall=`, and its last
+      tune line's arrival after the scalar banner.
+Reads only the files it is given.
+"""
+
+import re
+import sys
+from datetime import datetime
+
+BANNERS = (
+    "** BUILDING GRID OF MODELS TO SAMPLE",
+    "** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID",
+    "** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS",
+    "** CALCULATE BBN DATA",
+)
+SCALAR = "** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID"
+COMPLETE = "ALL WORK ITEMS COMPLETE"
+TUNE = re.compile(r"-- tune (?P<label>.*?) it=(?P<it>\d+) kind=(?P<kind>\S+) .*wall=(?P<wall>[0-9.]+)")
+
+
+def _t(s):
+    return datetime.fromisoformat(s)
+
+
+def read(path):
+    L, H, X = [], [], []
+    with open(path, encoding="utf-8") as f:
+        for raw in f:
+            raw = raw.rstrip("\n")
+            parts = raw.split(" ", 2)
+            if len(parts) < 2:
+                continue
+            when, kind = _t(parts[0]), parts[1]
+            rest = parts[2] if len(parts) > 2 else ""
+            if kind == "L":
+                L.append((when, rest))
+            elif kind == "H":
+                hb, state, stage = (rest.split(" ", 2) + ["", "", ""])[:3]
+                H.append((when, _t(hb) if hb not in ("None", "") else None, state, stage))
+            elif kind == "X":
+                X.append((when, rest))
+    return L, H, X
+
+
+def summarise(path):
+    L, H, X = read(path)
+    print(f"=== {path}")
+    print(f"  records: {len(L)} log lines, {len(H)} status changes; first X: {X[0][1] if X else '-'}; last X: {X[-1][1] if X else '-'}")
+    if H:
+        print(f"  first status: hb {H[0][1]} {H[0][2]}; final status: hb {H[-1][1]} {H[-1][2]} ({H[-1][3]})")
+
+    # (a)
+    best = None
+    distinct = [h for h in H if h[1] is not None]
+    for prev, nxt in zip(distinct, distinct[1:]):
+        if prev[2] != "running":
+            continue
+        gap = (nxt[1] - prev[1]).total_seconds()
+        if best is None or gap > best[0]:
+            best = (gap, prev, nxt)
+    if best:
+        gap, prev, nxt = best
+        print(f"  (a) longest heartbeat silence: {gap:.0f} s, from hb {prev[1].strftime('%H:%M:%S')} ({prev[2]}, stage: {prev[3]})"
+              f" to hb {nxt[1].strftime('%H:%M:%S')} ({nxt[2]}, stage: {nxt[3]})")
+    else:
+        print("  (a) no two heartbeats recorded")
+
+    # stages by banner
+    stage = "start"
+    gaps = {}
+    banner_at, complete_at = {}, {}
+    for (t0, l0), (t1, l1) in zip(L, L[1:]):
+        for b in BANNERS:
+            if l0.startswith(b):
+                stage = b[3:]
+        g = (t1 - t0).total_seconds()
+        if stage not in gaps or g > gaps[stage][0]:
+            gaps[stage] = (g, t0, l0, t1, l1)
+    stage = None
+    for t, l in L:
+        for b in BANNERS:
+            if l.startswith(b):
+                stage = b[3:]
+                banner_at.setdefault(stage, t)
+        if COMPLETE in l and stage is not None:
+            complete_at.setdefault(stage, (t, l.strip()))
+    print("  (b) longest gap between log lines, per stage (the stage in force at the earlier line):")
+    for s, (g, t0, l0, t1, l1) in gaps.items():
+        print(f"      {s}: {g:.3f} s, {t0.strftime('%H:%M:%S.%f')[:-3]} -> {t1.strftime('%H:%M:%S.%f')[:-3]}")
+        print(f"         after: {l0[:160]}")
+        print(f"         before: {l1[:160]}")
+    print("  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):")
+    for s, t in banner_at.items():
+        if s in complete_at:
+            tc, lc = complete_at[s]
+            print(f"      {s}: {(tc - t).total_seconds():.3f} s ({t.strftime('%H:%M:%S.%f')[:-3]} -> {tc.strftime('%H:%M:%S.%f')[:-3]}; line: {lc})")
+        else:
+            print(f"      {s}: banner at {t.strftime('%H:%M:%S.%f')[:-3]}, no completion line")
+
+    # (d)
+    scalar_at = banner_at.get(SCALAR[3:])
+    hist = {}
+    for t, l in L:
+        m = TUNE.search(l)
+        if not m:
+            continue
+        h = hist.setdefault(m["label"], {"n": 0, "wall": 0.0, "last": None, "kinds": []})
+        h["n"] += 1
+        h["wall"] += float(m["wall"])
+        h["last"] = t
+        h["kinds"].append(f"{m['it']}:{m['kind']}")
+    print("  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):")
+    for lab, h in sorted(hist.items(), key=lambda kv: kv[1]["last"]):
+        after = (h["last"] - scalar_at).total_seconds() if scalar_at else float("nan")
+        print(f"      {lab}: {h['n']} lines ({' '.join(h['kinds'])}); wall sum {h['wall']:.1f} s; last at {h['last'].strftime('%H:%M:%S.%f')[:-3]}, +{after:.1f} s")
+
+
+def main(argv):
+    for p in argv:
+        summarise(p)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

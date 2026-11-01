@@ -1,0 +1,20 @@
+## command: PYTHONPATH=. ./venv/bin/python -u tools/history_and_bbn.py 1.2 1e-07
+## git rev-parse HEAD: 6d1a77c046b0fda2003df0a1b7e35abba148be3d
+## start (UTC): 2026-11-01T03:22:15+00:00
+## uptime: 3:22  up 1 day,  5:42, 1 user, load averages: 9.76 8.34 9.75
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+!! tune_history (history_and_bbn-beta1.2-M1e-07): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 9.79e-10 M_P at the wall-side turning point at N = 17.66794209), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune history_and_bbn-beta1.2-M1e-07 it=0 kind=seed H/H0-1=-1.028e-07 phi_ref/phi_min-1=-6.807e-07 norm=-276.633204142 phi_ref=4.2906363805e-04 wall=41.7
+history beta=1.2 M=1e-07: RHS=1394840 accepted_steps=150847 reflections=0 samples=5003 integrations=1 wall=41.8 s
+tuning beta=1.2 M=1e-07: normalization=-276.6332041418759 V_ref=7.241476890997358e-121 phi_ref=0.0004290636380477304 phi_0=0.00042848346209246364 pi_0=0.000643135725658348 tracking=1.0006387372457701 residual_H=-1.0276484374571737e-07 residual_phi=-6.806776923218294e-07 tuning_iterations=1 plain_steps=0 secant_steps=0 guard_steps=0 seed_kind=tracking seed_normalization=-276.6332041418759 seed_phi_ref=0.0004290636380477304
+bounce beta=1.2 M=1e-07: N=17.667942086 T_J=231.107600 MeV phi=9.790115e-10 reflected=False
+fixed_T beta=1.2 M=1e-07: 1MeV crossings=1 phi=1.212146365e-01 ratio=3.041090273e-01 stand_in_phi=1.212144063e-01 stand_in_ratio=3.041073584e-01 | 70keV crossings=1 phi=2.440451234e-02 ratio=7.411412872e-02 stand_in_phi=2.440364633e-02 stand_in_ratio=7.412342459e-02
+ratio beta=1.2 M=1e-07 [0.3,1) keV: n=132 min=0.01423 median=0.02488 max=0.03076 rms_step=0.0001332
+ratio beta=1.2 M=1e-07 [1,3) keV: n=119 min=0.03082 median=0.03378 max=0.0355 rms_step=4.155e-05
+ratio beta=1.2 M=1e-07 [3,10) keV: n=131 min=0.03553 median=0.03659 max=0.03718 rms_step=1.344e-05
+ratio beta=1.2 M=1e-07 [10,100) keV: n=256 min=0.03719 median=0.03768 max=0.2313 rms_step=0.001646
+bbn beta=1.2 M=1e-07: Yp=0.2567120943 DoH=2.598914815 He3oH=1.063376743 Li7oH=5.384505252 network=small PRyM_time=8.5 s wall=8.5 s PRyM_version=bf24c3d+ri02+sr01+bt02
+## end (UTC): 2026-11-01T03:23:08+00:00
+## uptime: 3:23  up 1 day,  5:43, 1 user, load averages: 14.56 9.72 10.17
+## exit status: 0
+## wall: 53.5 s

@@ -1,0 +1,14 @@
+===== run_grid.py --only dis-M4e-31-b2-a0.1 dis-M1e-12-b2-a0.1 (first)
+[2026-11-01T02:57:51+00:00] run_grid pid=52236 jobs=3 points=2 head=6d1a77c046b0fda2003df0a1b7e35abba148be3d uptime: 2:57  up 1 day,  5:18, 1 user, load averages: 17.64 16.60 11.63
+[2026-11-01T02:57:51+00:00] started dis-M4e-31-b2-a0.1 pid=52240
+[2026-11-01T02:57:51+00:00] started dis-M1e-12-b2-a0.1 pid=52242
+[2026-11-01T02:58:09+00:00] ended dis-M4e-31-b2-a0.1 status=0 wall=18.2 s
+[2026-11-01T02:58:09+00:00] ended dis-M1e-12-b2-a0.1 status=0 wall=18.2 s
+[2026-11-01T02:58:09+00:00] uptime: 2:58  up 1 day,  5:18, 1 user, load averages: 20.16 17.26 11.99
+[2026-11-01T02:58:09+00:00] ** grid done
+===== the same again (the skip)
+[2026-11-01T02:58:10+00:00] run_grid pid=52265 jobs=3 points=2 head=6d1a77c046b0fda2003df0a1b7e35abba148be3d uptime: 2:58  up 1 day,  5:18, 1 user, load averages: 20.16 17.26 11.99
+[2026-11-01T02:58:10+00:00] skipped dis-M4e-31-b2-a0.1: dis-M4e-31-b2-a0.1.txt exists
+[2026-11-01T02:58:10+00:00] skipped dis-M1e-12-b2-a0.1: dis-M1e-12-b2-a0.1.txt exists
+[2026-11-01T02:58:10+00:00] uptime: 2:58  up 1 day,  5:18, 1 user, load averages: 20.16 17.26 11.99
+[2026-11-01T02:58:10+00:00] ** grid done

@@ -1,0 +1,27 @@
+## command: PYTHONPATH=. ./venv/bin/python -u tools/history_and_bbn.py 1.2 0.5
+## git rev-parse HEAD: 6d1a77c046b0fda2003df0a1b7e35abba148be3d
+## start (UTC): 2026-11-01T03:21:45+00:00
+## uptime: 3:21  up 1 day,  5:42, 1 user, load averages: 5.31 7.40 9.48
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+-- tune history_and_bbn-beta1.2-M0.5 it=0 kind=seed H/H0-1=+7.335e-01 phi_ref/phi_min-1=-1.234e-01 norm=-277.151295245 phi_ref=9.6049180070e-01 wall=0.9
+-- tune history_and_bbn-beta1.2-M0.5 it=1 kind=plain H/H0-1=+8.343e-02 phi_ref/phi_min-1=+1.989e-01 norm=-278.818048001 phi_ref=1.0957396284e+00 wall=0.9
+-- tune history_and_bbn-beta1.2-M0.5 it=2 kind=secant H/H0-1=-2.677e-02 phi_ref/phi_min-1=+2.264e-01 norm=-279.072512864 phi_ref=8.8784381245e-01 wall=0.9
+-- tune history_and_bbn-beta1.2-M0.5 it=3 kind=secant H/H0-1=-1.231e-02 phi_ref/phi_min-1=+1.465e-01 norm=-278.970939187 phi_ref=7.3510942712e-01 wall=0.9
+-- tune history_and_bbn-beta1.2-M0.5 it=4 kind=secant H/H0-1=+2.012e-02 phi_ref/phi_min-1=-2.717e-02 norm=-278.844517624 phi_ref=5.2391619919e-01 wall=1.0
+-- tune history_and_bbn-beta1.2-M0.5 it=5 kind=secant H/H0-1=+2.141e-03 phi_ref/phi_min-1=-2.182e-02 norm=-278.922723762 phi_ref=5.1352792082e-01 wall=1.0
+-- tune history_and_bbn-beta1.2-M0.5 it=6 kind=secant H/H0-1=-2.141e-03 phi_ref/phi_min-1=+5.478e-03 norm=-278.93319741 phi_ref=5.4054019122e-01 wall=0.9
+-- tune history_and_bbn-beta1.2-M0.5 it=7 kind=secant H/H0-1=-1.819e-04 phi_ref/phi_min-1=+3.316e-04 norm=-278.925975895 phi_ref=5.3644459841e-01 wall=1.0
+-- tune history_and_bbn-beta1.2-M0.5 it=8 kind=secant H/H0-1=-1.177e-06 phi_ref/phi_min-1=+5.631e-06 norm=-278.925265375 phi_ref=5.3624183275e-01 wall=0.9
+history beta=1.2 M=0.5: RHS=21487 accepted_steps=2451 reflections=0 samples=4940 integrations=9 wall=8.5 s
+tuning beta=1.2 M=0.5: normalization=-278.925265375307 V_ref=1.8588276816528665e-121 phi_ref=0.5362418327521531 phi_0=0.48169154232461064 pi_0=0.3380181914703627 tracking=0.4678210871063667 residual_H=-1.177385875350545e-06 residual_phi=5.631367351766059e-06 tuning_iterations=9 plain_steps=1 secant_steps=7 guard_steps=0 seed_kind=static seed_normalization=-277.15129524501475 seed_phi_ref=0.9604918006995238
+bounce beta=1.2 M=0.5: N=17.662268016 T_J=231.067725 MeV phi=4.907364e-03 reflected=False
+fixed_T beta=1.2 M=0.5: 1MeV crossings=1 phi=1.277730889e-01 ratio=-6.337852943e-01 stand_in_phi=1.277729833e-01 stand_in_ratio=-6.337855085e-01 | 70keV crossings=1 phi=3.239073244e-02 ratio=-6.969724556e-01 stand_in_phi=3.239003500e-02 stand_in_ratio=-6.969703546e-01
+ratio beta=1.2 M=0.5 [0.3,1) keV: n=131 min=-0.7157 median=-0.7119 max=-0.7098 rms_step=4.826e-05
+ratio beta=1.2 M=0.5 [1,3) keV: n=120 min=-0.7098 median=-0.7087 max=-0.708 rms_step=1.508e-05
+ratio beta=1.2 M=0.5 [3,10) keV: n=130 min=-0.708 median=-0.7076 max=-0.7074 rms_step=4.86e-06
+ratio beta=1.2 M=0.5 [10,100) keV: n=257 min=-0.7074 median=-0.7073 max=-0.6515 rms_step=0.0004711
+bbn beta=1.2 M=0.5: Yp=0.1481088904 DoH=0.6881632458 He3oH=0.7357348941 Li7oH=8.525684881 network=small PRyM_time=8.9 s wall=8.9 s PRyM_version=bf24c3d+ri02+sr01+bt02
+## end (UTC): 2026-11-01T03:22:04+00:00
+## uptime: 3:22  up 1 day,  5:42, 1 user, load averages: 9.83 8.30 9.75
+## exit status: 0
+## wall: 19.2 s

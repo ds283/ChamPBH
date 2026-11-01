@@ -1,0 +1,56 @@
+"""
+Wait until LOG holds a line containing TEXT (rrk-adoption prompt 04, the orchestrator's note for
+04, section 0 ruling 3). Reads LOG only: no pgrep, no kill -0, no Ray, and nothing started.
+
+    ./venv/bin/python wait_for_line.py LOG TEXT --timeout SECONDS [--poll SECONDS]
+
+Prints the first matching line with the time (UTC and local) and exits 0; at the deadline prints
+that it timed out and exits 1. A LOG that does not exist yet is read as empty.
+"""
+
+import argparse
+import sys
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+
+
+def _now():
+    utc = datetime.now(timezone.utc)
+    return f"{utc.isoformat(timespec='seconds')} ({utc.astimezone().strftime('%H:%M:%S %z')})"
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description="Wait for a line containing TEXT in LOG.")
+    parser.add_argument("log", type=Path)
+    parser.add_argument("text")
+    parser.add_argument("--timeout", type=float, required=True)
+    parser.add_argument("--poll", type=float, default=1.0)
+    args = parser.parse_args(argv)
+
+    start = time.monotonic()
+    deadline = start + args.timeout
+    while True:
+        try:
+            lines = args.log.read_text(errors="replace").splitlines()
+        except OSError:
+            lines = []
+        for line in lines:
+            if args.text in line:
+                print(
+                    f"[{_now()}] wait_for_line: after {time.monotonic() - start:.1f} s: {line}",
+                    flush=True,
+                )
+                return 0
+        if time.monotonic() >= deadline:
+            print(
+                f"[{_now()}] wait_for_line: timed out after {args.timeout:g} s waiting for "
+                f'"{args.text}" in {args.log}',
+                flush=True,
+            )
+            return 1
+        time.sleep(min(args.poll, max(deadline - time.monotonic(), 0.0)))
+
+
+if __name__ == "__main__":
+    sys.exit(main())

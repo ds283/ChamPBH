@@ -1,0 +1,96 @@
+### 2026-11-01 02:59:07 +0000 one check, reference-a
+manifest path: /Users/ds283/Documents/Code/ChamPBH/var/runs/inelastic-reflection-11-reference-a-20261101T025902/manifest.json
+-rw-r--r-- 1 ds283 staff 4010 Nov  1 02:59 /Users/ds283/Documents/Code/ChamPBH/var/runs/inelastic-reflection-11-reference-a-20261101T025902/manifest.json
+status state running pid 52705 heartbeat 2026-11-01T02:59:04+00:00 stage Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/inelastic-reflection-11-reference.db" with 16 shards
+created 2026-11-01T02:59:02+00:00 results_store_id None
+pid file: 52705
+log birth: 2026-11-01 02:59:01 +0000
+manifest birth: 2026-11-01 02:59:02 +0000
+$ list
+   RUN                                                  STATE      PROGRESS      AGE  PURPOSE · STAGE
+   inelastic-reflection-11-reference-a-20261101T025902  running           -       6s  inelastic-reflection 11 R1: the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5, alpha 0 and 0.1)  · Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datas
+   jordan-normalization-09-resumed-c-20261026T201250    done              -   5d 06h  jordan-normalization 09 H2: run c into the resumed store (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-b-20261026T201130    done              -   5d 06h  jordan-normalization 09 H2: run b into the resumed store (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a2-20261026T200824   done              -   5d 06h  jordan-normalization 09 H2: run a again into the resumed store, the resume after SIGTERM  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a-20261026T200457    killed            -   5d 06h  jordan-normalization 09 H2: run a into the resumed store, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   jordan-normalization-09-reference-c-20261026T200132  done              -   5d 06h  jordan-normalization 09 H1: run c of the reference build (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-b-20261026T200014  done              -   5d 06h  jordan-normalization 09 H1: run b of the reference build (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-a-20261026T195544  done              -   5d 07h  jordan-normalization 09 H1: run a of the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   rrk-adoption-03-unit-20261026T151946                 lost              -   5d 11h  a test run of the wrapper, in a temporary directory  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   ray-sqla-align-02-resumed-c-20261025T210916          done              -   6d 05h  ray-sqla-align 02 R3: the resume of the resumed store under ray 2.59.0, straight through  · CALCULATE BBN DATA, all work items complete
+   ray-sqla-align-02-resumed-a-20261025T210611          killed            -   6d 05h  ray-sqla-align 02 R2: the pilot grid into the resumed store under ray 2.59.0, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   ray-sqla-align-02-reference-20261025T210149          done              -   6d 05h  ray-sqla-align 02 R1: the pilot grid straight through under ray 2.59.0, the reference store  · CALCULATE BBN DATA, all work items complete
+
+12 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 1 alive, 11 finished; 0 with no host recorded.
+list exit 0
+$ head of log
+1:** registered_run: registered as inelastic-reflection-11-reference-a-20261101T025902
+2:**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/inelastic-reflection-11-reference-a-20261101T025902/manifest.json
+3:**   list it with: ./venv/bin/python -m runregistrykit list
+4:>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+
+### 2026-11-01 03:04:33 +0000 one check, resumed-a
+manifest path: /Users/ds283/Documents/Code/ChamPBH/var/runs/inelastic-reflection-11-resumed-a-20261101T030431/manifest.json
+-rw-r--r-- 1 ds283 staff 4022 Nov  1 03:04 /Users/ds283/Documents/Code/ChamPBH/var/runs/inelastic-reflection-11-resumed-a-20261101T030431/manifest.json
+status state running pid 53257 heartbeat 2026-11-01T03:04:31+00:00 stage Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/inelastic-reflection-11-resumed.db" with 16 shards
+created 2026-11-01T03:04:31+00:00 results_store_id None
+pid file: 53257
+log birth: 2026-11-01 03:04:29 +0000
+manifest birth: 2026-11-01 03:04:31 +0000
+$ list
+   RUN                                                  STATE      PROGRESS      AGE  PURPOSE · STAGE
+   inelastic-reflection-11-resumed-a-20261101T030431    running           -       3s  inelastic-reflection 11 R2: the build into the resumed store, interrupted with SIGTERM in the alpha = 0.1 scalar stage  · Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datas
+   inelastic-reflection-11-reference-a-20261101T025902  done              -       6m  inelastic-reflection 11 R1: the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5, alpha 0 and 0.1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-c-20261026T201250    done              -   5d 06h  jordan-normalization 09 H2: run c into the resumed store (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-b-20261026T201130    done              -   5d 06h  jordan-normalization 09 H2: run b into the resumed store (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a2-20261026T200824   done              -   5d 06h  jordan-normalization 09 H2: run a again into the resumed store, the resume after SIGTERM  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a-20261026T200457    killed            -   5d 06h  jordan-normalization 09 H2: run a into the resumed store, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   jordan-normalization-09-reference-c-20261026T200132  done              -   5d 07h  jordan-normalization 09 H1: run c of the reference build (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-b-20261026T200014  done              -   5d 07h  jordan-normalization 09 H1: run b of the reference build (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-a-20261026T195544  done              -   5d 07h  jordan-normalization 09 H1: run a of the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   rrk-adoption-03-unit-20261026T151946                 lost              -   5d 11h  a test run of the wrapper, in a temporary directory  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   ray-sqla-align-02-resumed-c-20261025T210916          done              -   6d 05h  ray-sqla-align 02 R3: the resume of the resumed store under ray 2.59.0, straight through  · CALCULATE BBN DATA, all work items complete
+   ray-sqla-align-02-resumed-a-20261025T210611          killed            -   6d 05h  ray-sqla-align 02 R2: the pilot grid into the resumed store under ray 2.59.0, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   ray-sqla-align-02-reference-20261025T210149          done              -   6d 06h  ray-sqla-align 02 R1: the pilot grid straight through under ray 2.59.0, the reference store  · CALCULATE BBN DATA, all work items complete
+
+13 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 1 alive, 12 finished; 0 with no host recorded.
+list exit 0
+$ head of log
+1:** registered_run: registered as inelastic-reflection-11-resumed-a-20261101T030431
+2:**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/inelastic-reflection-11-resumed-a-20261101T030431/manifest.json
+3:**   list it with: ./venv/bin/python -m runregistrykit list
+4:>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+
+### 2026-11-01 03:09:32 +0000 one check, resumed-a2
+manifest path: /Users/ds283/Documents/Code/ChamPBH/var/runs/inelastic-reflection-11-resumed-a2-20261101T030928/manifest.json
+-rw-r--r-- 1 ds283 staff 4041 Nov  1 03:09 /Users/ds283/Documents/Code/ChamPBH/var/runs/inelastic-reflection-11-resumed-a2-20261101T030928/manifest.json
+status state running pid 53954 heartbeat 2026-11-01T03:09:30+00:00 stage Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/inelastic-reflection-11-resumed.db" with 16 shards
+created 2026-11-01T03:09:28+00:00 results_store_id 191efe9e778e4235b6460df5731a0cab
+pid file: 53954
+log birth: 2026-11-01 03:09:27 +0000
+manifest birth: 2026-11-01 03:09:28 +0000
+$ list
+   RUN                                                  STATE      PROGRESS      AGE  PURPOSE · STAGE
+   inelastic-reflection-11-resumed-a2-20261101T030928   running           -       5s  inelastic-reflection 11 R2: the same build again into the resumed store, the resume after SIGTERM  · Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/v
+   inelastic-reflection-11-resumed-a-20261101T030431    killed            -       5m  inelastic-reflection 11 R2: the build into the resumed store, interrupted with SIGTERM in the alpha = 0.1 scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   inelastic-reflection-11-reference-a-20261101T025902  done              -      11m  inelastic-reflection 11 R1: the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5, alpha 0 and 0.1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-c-20261026T201250    done              -   5d 06h  jordan-normalization 09 H2: run c into the resumed store (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-b-20261026T201130    done              -   5d 06h  jordan-normalization 09 H2: run b into the resumed store (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a2-20261026T200824   done              -   5d 07h  jordan-normalization 09 H2: run a again into the resumed store, the resume after SIGTERM  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a-20261026T200457    killed            -   5d 07h  jordan-normalization 09 H2: run a into the resumed store, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   jordan-normalization-09-reference-c-20261026T200132  done              -   5d 07h  jordan-normalization 09 H1: run c of the reference build (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-b-20261026T200014  done              -   5d 07h  jordan-normalization 09 H1: run b of the reference build (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-a-20261026T195544  done              -   5d 07h  jordan-normalization 09 H1: run a of the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   rrk-adoption-03-unit-20261026T151946                 lost              -   5d 11h  a test run of the wrapper, in a temporary directory  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   ray-sqla-align-02-resumed-c-20261025T210916          done              -   6d 06h  ray-sqla-align 02 R3: the resume of the resumed store under ray 2.59.0, straight through  · CALCULATE BBN DATA, all work items complete
+   ray-sqla-align-02-resumed-a-20261025T210611          killed            -   6d 06h  ray-sqla-align 02 R2: the pilot grid into the resumed store under ray 2.59.0, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   ray-sqla-align-02-reference-20261025T210149          done              -   6d 06h  ray-sqla-align 02 R1: the pilot grid straight through under ray 2.59.0, the reference store  · CALCULATE BBN DATA, all work items complete
+
+14 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 1 alive, 13 finished; 0 with no host recorded.
+list exit 0
+$ head of log
+1:** registered_run: registered as inelastic-reflection-11-resumed-a2-20261101T030928
+2:**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/inelastic-reflection-11-resumed-a2-20261101T030928/manifest.json
+3:**   list it with: ./venv/bin/python -m runregistrykit list
+4:>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+

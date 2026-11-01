@@ -1,0 +1,59 @@
+2026-11-01T03:04:29.892+00:00 X recorder started: log /Users/ds283/Documents/Code/ChamPBH/var/inelastic-reflection-11/rehearsal/resumed-a.log, runs var/runs, poll 0.5 s
+2026-11-01T03:04:31.417+00:00 L ** registered_run: registered as inelastic-reflection-11-resumed-a-20261101T030431
+2026-11-01T03:04:31.417+00:00 L **   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/inelastic-reflection-11-resumed-a-20261101T030431/manifest.json
+2026-11-01T03:04:31.417+00:00 L **   list it with: ./venv/bin/python -m runregistrykit list
+2026-11-01T03:04:31.418+00:00 H 2026-11-01T03:04:31+00:00 running list it with: ./venv/bin/python -m runregistrykit list
+2026-11-01T03:04:31.931+00:00 L >> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-01T03:04:31.931+00:00 L 2026-11-01 03:04:31,596	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-01T03:04:31.931+00:00 L 2026-11-01 03:04:31,628	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at http://127.0.0.1:8267 
+2026-11-01T03:04:31.931+00:00 L >> Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/inelastic-reflection-11-resumed.db" with 16 shards
+2026-11-01T03:04:31.931+00:00 H 2026-11-01T03:04:31+00:00 running Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/inelastic-reflection-11-resumed.db" with 16 shards
+2026-11-01T03:04:58.857+00:00 L 
+2026-11-01T03:04:58.857+00:00 L ** BUILDING GRID OF MODELS TO SAMPLE
+2026-11-01T03:04:58.857+00:00 L    -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+2026-11-01T03:04:58.857+00:00 L    -- populated beta sample grid with 4 values = [ 0.5, 1.5, 3, 5.5 ]
+2026-11-01T03:04:58.857+00:00 L    -- populated M sample grid with 1 value = [ 0.001 Mp ]
+2026-11-01T03:04:58.857+00:00 L    -- populated alpha grid with 2 values = [ 0, 0.1 ]
+2026-11-01T03:04:58.857+00:00 L    -- total number of models to integrate = 4
+2026-11-01T03:04:58.857+00:00 L (Datastore pid=53289) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+2026-11-01T03:04:58.857+00:00 L 
+2026-11-01T03:04:58.857+00:00 L >> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0
+2026-11-01T03:04:58.857+00:00 L 
+2026-11-01T03:04:58.857+00:00 L ** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-11-01T03:04:58.857+00:00 H 2026-11-01T03:04:58+00:00 running CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-11-01T03:07:31.699+00:00 L (compute_scalar_history pid=53512) -- tune inelastic-reflection-11-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-11-01T03:05:26 it=4 kind=secant H/H0-1=-9.983e-10 phi_ref/phi_min-1=+5.114e-08 norm=-277.056921388 phi_ref=1.6719361292e-02 wall=24.7
+2026-11-01T03:07:31.702+00:00 L (Datastore pid=53344) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO" [repeated 15x across cluster] (Ray deduplicates logs by default. Set RAY_DEDUP_LOGS=0 to disable log deduplication, or see https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#log-deduplication for more options.)
+2026-11-01T03:07:31.704+00:00 H 2026-11-01T03:07:31+00:00 running CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-11-01T03:07:33.733+00:00 L    -- ALL WORK ITEMS COMPLETE in time 2m 34.9s
+2026-11-01T03:07:33.733+00:00 L       Queue summary: 4 lookup (avg 92.95/hr), 4 compute (avg 92.95/hr), 4 store (avg 92.95/hr), 4 validation (avg 92.95/hr)
+2026-11-01T03:07:33.733+00:00 L 
+2026-11-01T03:07:33.733+00:00 L ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+2026-11-01T03:07:33.734+00:00 H 2026-11-01T03:07:33+00:00 running CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+2026-11-01T03:07:34.754+00:00 L    -- ALL WORK ITEMS COMPLETE in time 0.96s
+2026-11-01T03:07:34.754+00:00 L       Queue summary: 4 lookup (avg 249.9/min), 4 compute (avg 249.9/min), 4 store (avg 249.9/min), 4 validation (avg 249.9/min)
+2026-11-01T03:07:34.754+00:00 L -- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+2026-11-01T03:07:34.754+00:00 L 
+2026-11-01T03:07:34.754+00:00 L ** CALCULATE BBN DATA
+2026-11-01T03:07:34.754+00:00 H 2026-11-01T03:07:34+00:00 running CALCULATE BBN DATA
+2026-11-01T03:07:53.039+00:00 L    -- ALL WORK ITEMS COMPLETE in time 18.4s
+2026-11-01T03:07:53.039+00:00 L       Queue summary: 4 lookup (avg 13.07/min), 4 compute (avg 13.07/min), 4 store (avg 13.07/min), 4 validation (avg 13.07/min)
+2026-11-01T03:07:53.039+00:00 L -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+2026-11-01T03:07:53.039+00:00 L 
+2026-11-01T03:07:53.039+00:00 L >> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.1
+2026-11-01T03:07:53.039+00:00 L 
+2026-11-01T03:07:53.039+00:00 L ** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-11-01T03:07:53.039+00:00 H 2026-11-01T03:07:52+00:00 running CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-11-01T03:07:55.567+00:00 L (compute_scalar_history pid=53514) !! tune_history (inelastic-reflection-11-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=0.5)-2026-11-01T03:07:53): dissipation mode: the reflections are expected to be nearly elastic in this regime: the test-field ratio R = 10^-94.502 < 1 at the first impact (phi_t = 6.968e-05 M_P)
+2026-11-01T03:07:55.567+00:00 L (compute_scalar_history pid=53514) !! tune_history (inelastic-reflection-11-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=0.5)-2026-11-01T03:07:53): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -2.9990 < ln 10 at N = 41.15611815 (generation 11); the generations below ln 10 carry 0.9998 of K
+2026-11-01T03:07:55.567+00:00 L (compute_scalar_history pid=53514) !! tune_history (inelastic-reflection-11-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=0.5)-2026-11-01T03:07:53): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = -2.3749 < ln 10 at N = 41.49192599 (generation 11); the generations below ln 10 carry 0.9998 of K
+2026-11-01T03:07:55.567+00:00 L (compute_scalar_history pid=53514) !! tune_history (inelastic-reflection-11-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=0.5)-2026-11-01T03:07:53): dissipation mode: the spectrum's peak is not relativistic on the late tracker: the worst margin ln(p/m) = -2.2113 < ln 10 at N = 41.49842613 (generation 11); the generations below ln 10 carry 0.0673 of K
+2026-11-01T03:08:13.319+00:00 L (compute_scalar_history pid=53512) !! tune_history (inelastic-reflection-11-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-11-01T03:08:07): dissipation mode: the reflections are expected to be nearly elastic in this regime: the test-field ratio R = 10^-38.278 < 1 at the first impact (phi_t = 7.88e-06 M_P) [repeated 3x across cluster]
+2026-11-01T03:08:13.319+00:00 L (compute_scalar_history pid=53512) !! tune_history (inelastic-reflection-11-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-11-01T03:08:07): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.7031 < ln 10 at N = 37.5648442 (generation 30); the generations below ln 10 carry 0.9905 of K [repeated 3x across cluster]
+2026-11-01T03:08:13.319+00:00 L (compute_scalar_history pid=53512) !! tune_history (inelastic-reflection-11-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-11-01T03:08:07): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = -0.6291 < ln 10 at N = 37.5821427 (generation 30); the generations below ln 10 carry 0.9905 of K [repeated 3x across cluster]
+2026-11-01T03:08:21.933+00:00 L ** SIGTERM at 2026-11-01 03:08:21 +0000: recorded killed, exit code 143; stopping main.py; the process will exit with status 143
+2026-11-01T03:08:21.933+00:00 L ** SIGTERM: main.py ended with SystemExit(1); recording killed, exit code 143
+2026-11-01T03:08:21.933+00:00 H 2026-11-01T03:08:21+00:00 killed CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-11-01T03:08:46.253+00:00 H 2026-11-01T03:08:45+00:00 killed CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-11-01T03:08:46.763+00:00 L ** driver exit status 143
+2026-11-01T03:08:46.764+00:00 L ** launcher saw exit status 143
+2026-11-01T03:08:46.764+00:00 X exit: the launcher's line was seen; status.json read once more

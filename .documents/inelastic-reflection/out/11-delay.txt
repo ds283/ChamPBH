@@ -1,0 +1,9 @@
+reference-a's recorder (UTC): '>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.1' arrived 2026-11-01T03:02:23.291+00:00
+ScalarHistory.timestamp of each alpha = 0.1 row of the reference store (UTC, histories-reference.txt), from the banner:
+  beta = 0.5: 2026-11-01 03:02:38.171967 -> +14.881 s
+  beta = 1.5: 2026-11-01 03:02:38.559802 -> +15.269 s
+  beta = 3: 2026-11-01 03:02:47.916845 -> +24.626 s
+  beta = 5.5: 2026-11-01 03:03:05.157522 -> +41.867 s
+t1 = +14.881 s (first stored), t4 = +41.867 s (last stored); t4 - t1 = 26.986 s (>= 4 s: the window is not short)
+(t1 + t4)/2 = 28.374 s -> delay 28 s
+expected at the signal: the alpha = 0.1 histories stored before +28 s (beta 0.5, 1.5, 3 in the reference), beta 5.5 not

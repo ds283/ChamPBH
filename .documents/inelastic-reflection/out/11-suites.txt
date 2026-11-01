@@ -1,0 +1,108 @@
+## before CosmologyModels: 2026-11-01 02:41:41 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .
+uptime:  2:41  up 1 day,  5:02, 1 user, load averages: 2.71 3.64 5.91
+wall: 65 s
+uptime after:  2:42  up 1 day,  5:03, 1 user, load averages: 2.23 3.34 5.63
+Ran 26 tests in 64.394s
+verdict: OK
+exit: 0
+
+## before ComputeTargets-a-f: 2026-11-01 02:42:49 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'
+uptime:  2:42  up 1 day,  5:03, 1 user, load averages: 2.23 3.34 5.63
+wall: 134 s
+uptime after:  2:45  up 1 day,  5:05, 1 user, load averages: 13.76 6.73 6.58
+Ran 122 tests in 131.126s
+verdict: OK
+exit: 0
+
+## before ComputeTargets-g-z: 2026-11-01 02:45:07 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'
+uptime:  2:45  up 1 day,  5:05, 1 user, load averages: 12.98 6.69 6.56
+wall: 450 s
+uptime after:  2:52  up 1 day,  5:13, 1 user, load averages: 14.35 10.64 8.20
+Ran 375 tests in 447.014s
+verdict: OK
+exit: 0
+
+## before ObjectFactories: 2026-11-01 02:52:44 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .
+uptime:  2:52  up 1 day,  5:13, 1 user, load averages: 14.00 10.62 8.21
+wall: 81 s
+uptime after:  2:54  up 1 day,  5:14, 1 user, load averages: 13.60 11.31 8.69
+Ran 129 tests in 78.158s
+verdict: OK
+exit: 0
+
+## before tools: 2026-11-01 02:54:17 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .
+uptime:  2:54  up 1 day,  5:15, 1 user, load averages: 13.03 11.32 8.74
+wall: 132 s
+uptime after:  2:56  up 1 day,  5:17, 1 user, load averages: 26.94 15.89 10.83
+Ran 123 tests in 130.219s
+verdict: OK
+exit: 0
+
+## before RunDrivers: 2026-11-01 02:56:33 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .
+uptime:  2:56  up 1 day,  5:17, 1 user, load averages: 33.91 17.51 11.44
+wall: 24 s
+uptime after:  2:56  up 1 day,  5:17, 1 user, load averages: 29.85 17.95 11.77
+Ran 68 tests in 22.413s
+verdict: OK
+exit: 0
+
+## after CosmologyModels: 2026-11-01 03:33:09 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .
+uptime:  3:33  up 1 day,  5:53, 1 user, load averages: 16.13 13.36 11.98
+wall: 65 s
+uptime after:  3:34  up 1 day,  5:54, 1 user, load averages: 13.14 12.80 11.86
+Ran 26 tests in 64.030s
+verdict: OK
+exit: 0
+
+## after ComputeTargets-a-f: 2026-11-01 03:34:18 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'
+uptime:  3:34  up 1 day,  5:55, 1 user, load averages: 12.33 12.64 11.80
+wall: 132 s
+uptime after:  3:36  up 1 day,  5:57, 1 user, load averages: 16.96 13.20 12.05
+Ran 122 tests in 129.947s
+verdict: OK
+exit: 0
+
+## after ComputeTargets-g-z: 2026-11-01 03:36:34 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'
+uptime:  3:36  up 1 day,  5:57, 1 user, load averages: 15.76 13.01 11.99
+wall: 449 s
+uptime after:  3:44  up 1 day,  6:04, 1 user, load averages: 12.84 13.20 12.55
+Ran 375 tests in 446.223s
+verdict: OK
+exit: 0
+
+## after ObjectFactories: 2026-11-01 03:44:17 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .
+uptime:  3:44  up 1 day,  6:05, 1 user, load averages: 10.92 12.76 12.41
+wall: 80 s
+uptime after:  3:45  up 1 day,  6:06, 1 user, load averages: 8.79 11.68 12.02
+Ran 129 tests in 77.906s
+verdict: OK
+exit: 0
+
+## after tools: 2026-11-01 03:45:42 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .
+uptime:  3:45  up 1 day,  6:06, 1 user, load averages: 8.33 11.53 11.97
+wall: 132 s
+uptime after:  3:47  up 1 day,  6:08, 1 user, load averages: 8.04 10.42 11.46
+Ran 123 tests in 129.770s
+verdict: OK
+exit: 0
+
+## after RunDrivers: 2026-11-01 03:47:54 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .
+uptime:  3:47  up 1 day,  6:08, 1 user, load averages: 8.04 10.42 11.46
+wall: 24 s
+uptime after:  3:48  up 1 day,  6:09, 1 user, load averages: 6.80 9.95 11.26
+Ran 68 tests in 22.443s
+verdict: OK
+exit: 0
+

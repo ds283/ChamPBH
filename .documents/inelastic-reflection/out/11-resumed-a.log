@@ -1,0 +1,48 @@
+** registered_run: registered as inelastic-reflection-11-resumed-a-20261101T030431
+**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/inelastic-reflection-11-resumed-a-20261101T030431/manifest.json
+**   list it with: ./venv/bin/python -m runregistrykit list
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-01 03:04:31,596	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-01 03:04:31,628	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at http://127.0.0.1:8267 
+>> Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/inelastic-reflection-11-resumed.db" with 16 shards
+
+** BUILDING GRID OF MODELS TO SAMPLE
+   -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+   -- populated beta sample grid with 4 values = [ 0.5, 1.5, 3, 5.5 ]
+   -- populated M sample grid with 1 value = [ 0.001 Mp ]
+   -- populated alpha grid with 2 values = [ 0, 0.1 ]
+   -- total number of models to integrate = 4
+(Datastore pid=53289) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+(compute_scalar_history pid=53512) -- tune inelastic-reflection-11-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-11-01T03:05:26 it=4 kind=secant H/H0-1=-9.983e-10 phi_ref/phi_min-1=+5.114e-08 norm=-277.056921388 phi_ref=1.6719361292e-02 wall=24.7
+(Datastore pid=53344) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO" [repeated 15x across cluster] (Ray deduplicates logs by default. Set RAY_DEDUP_LOGS=0 to disable log deduplication, or see https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#log-deduplication for more options.)
+   -- ALL WORK ITEMS COMPLETE in time 2m 34.9s
+      Queue summary: 4 lookup (avg 92.95/hr), 4 compute (avg 92.95/hr), 4 store (avg 92.95/hr), 4 validation (avg 92.95/hr)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 0.96s
+      Queue summary: 4 lookup (avg 249.9/min), 4 compute (avg 249.9/min), 4 store (avg 249.9/min), 4 validation (avg 249.9/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 18.4s
+      Queue summary: 4 lookup (avg 13.07/min), 4 compute (avg 13.07/min), 4 store (avg 13.07/min), 4 validation (avg 13.07/min)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.1
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+(compute_scalar_history pid=53514) !! tune_history (inelastic-reflection-11-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=0.5)-2026-11-01T03:07:53): dissipation mode: the reflections are expected to be nearly elastic in this regime: the test-field ratio R = 10^-94.502 < 1 at the first impact (phi_t = 6.968e-05 M_P)
+(compute_scalar_history pid=53514) !! tune_history (inelastic-reflection-11-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=0.5)-2026-11-01T03:07:53): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -2.9990 < ln 10 at N = 41.15611815 (generation 11); the generations below ln 10 carry 0.9998 of K
+(compute_scalar_history pid=53514) !! tune_history (inelastic-reflection-11-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=0.5)-2026-11-01T03:07:53): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = -2.3749 < ln 10 at N = 41.49192599 (generation 11); the generations below ln 10 carry 0.9998 of K
+(compute_scalar_history pid=53514) !! tune_history (inelastic-reflection-11-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=0.5)-2026-11-01T03:07:53): dissipation mode: the spectrum's peak is not relativistic on the late tracker: the worst margin ln(p/m) = -2.2113 < ln 10 at N = 41.49842613 (generation 11); the generations below ln 10 carry 0.0673 of K
+(compute_scalar_history pid=53512) !! tune_history (inelastic-reflection-11-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-11-01T03:08:07): dissipation mode: the reflections are expected to be nearly elastic in this regime: the test-field ratio R = 10^-38.278 < 1 at the first impact (phi_t = 7.88e-06 M_P) [repeated 3x across cluster]
+(compute_scalar_history pid=53512) !! tune_history (inelastic-reflection-11-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-11-01T03:08:07): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.7031 < ln 10 at N = 37.5648442 (generation 30); the generations below ln 10 carry 0.9905 of K [repeated 3x across cluster]
+(compute_scalar_history pid=53512) !! tune_history (inelastic-reflection-11-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-11-01T03:08:07): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = -0.6291 < ln 10 at N = 37.5821427 (generation 30); the generations below ln 10 carry 0.9905 of K [repeated 3x across cluster]
+** SIGTERM at 2026-11-01 03:08:21 +0000: recorded killed, exit code 143; stopping main.py; the process will exit with status 143
+** SIGTERM: main.py ended with SystemExit(1); recording killed, exit code 143
+** driver exit status 143
+** launcher saw exit status 143

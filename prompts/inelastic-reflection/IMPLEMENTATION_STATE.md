@@ -1,7 +1,7 @@
 # inelastic-reflection campaign — implementation state
 
 **Last updated:** 2026-11-01 · **Status: LIVE, RE-PLANNED 2026-10-29 (README §8): 04–12 replace
-the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29, landed in `e967cb7` and reviewed (2026-10-29; gate Park holds; one issue narrowed). 07 written 2026-10-29, landed in `5397f8f` (2026-10-30; gate Release holds, the lag as a sign-and-order test by the user's ruling of option (c); one issue narrowed) and reviewed (`0b8f420`). 07b inserted 2026-10-30 at the user's word (README §8.1 R18) and written, before 08: the wall search across 10⁻²⁵–10⁻¹³ M_P; landed in `92f41f2` and reviewed (2026-10-30; gate Band holds; one issue closed). 08 written 2026-10-30 at the user's word, after the user ruled R20 (the tracker margin on the late tracker, with the reflections shown to cover the time before it) and R21 (the leftover unassessed); landed in `86fc526` and reviewed (2026-10-31; gate Margin holds; one issue closed, none opened). 09 written 2026-10-31 at the user's word, after the user ruled R22–R25 (ΔN_eff at 1 MeV with T_ν = T_γ; `extra_data` widened; zeros at α = 0 where defined; the margins' columns the charter's and the unassessed share); landed in `3984ec5` and reviewed (2026-10-31; gate Store holds; one stop, ruled by the user: option (b), `test_adiabatic_mass` gains r_χ = 0.0; the assigned issue closed, none opened by the prompt; the review opened one). 10 written 2026-10-31 at the user's word, after the user ruled R26–R28 (the `alpha=<α>/` output level for every α; Δg* in a new `dark_radiation.pdf`; ΔN_eff(β) in two panels, today and 1 MeV); landed in `8c12afa` and reviewed (2026-10-31; gate Driver holds; no stop; none opened; D1 accepted at review). 11 written 2026-11-01 at the user's word, after the user ruled R29–R31 (the grid as a detached, resumable batch; the ε scan by patching `PARKING_EPSILON` from a measurement script; the rehearsal as `jordan-normalization` 09's run `a` at α = 0 and 0.1, compared with its 2026.7.0 store). Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
+the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29, landed in `e967cb7` and reviewed (2026-10-29; gate Park holds; one issue narrowed). 07 written 2026-10-29, landed in `5397f8f` (2026-10-30; gate Release holds, the lag as a sign-and-order test by the user's ruling of option (c); one issue narrowed) and reviewed (`0b8f420`). 07b inserted 2026-10-30 at the user's word (README §8.1 R18) and written, before 08: the wall search across 10⁻²⁵–10⁻¹³ M_P; landed in `92f41f2` and reviewed (2026-10-30; gate Band holds; one issue closed). 08 written 2026-10-30 at the user's word, after the user ruled R20 (the tracker margin on the late tracker, with the reflections shown to cover the time before it) and R21 (the leftover unassessed); landed in `86fc526` and reviewed (2026-10-31; gate Margin holds; one issue closed, none opened). 09 written 2026-10-31 at the user's word, after the user ruled R22–R25 (ΔN_eff at 1 MeV with T_ν = T_γ; `extra_data` widened; zeros at α = 0 where defined; the margins' columns the charter's and the unassessed share); landed in `3984ec5` and reviewed (2026-10-31; gate Store holds; one stop, ruled by the user: option (b), `test_adiabatic_mass` gains r_χ = 0.0; the assigned issue closed, none opened by the prompt; the review opened one). 10 written 2026-10-31 at the user's word, after the user ruled R26–R28 (the `alpha=<α>/` output level for every α; Δg* in a new `dark_radiation.pdf`; ΔN_eff(β) in two panels, today and 1 MeV); landed in `8c12afa` and reviewed (2026-10-31; gate Driver holds; no stop; none opened; D1 accepted at review). 11 written 2026-11-01 at the user's word, after the user ruled R29–R31 (the grid as a detached, resumable batch; the ε scan by patching `PARKING_EPSILON` from a measurement script; the rehearsal as `jordan-normalization` 09's run `a` at α = 0 and 0.1, compared with its 2026.7.0 store). 11 landed in this commit (2026-11-01; gates Measure and R hold; no stop; two issues opened). Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
 gate DR holds); 02 landed in `fe2a944` and reviewed (2026-10-28; gate Inject holds), after one
 stop and the user's ruling of interior sampling; 3 of 8 prompts written: 03 written 2026-10-28
 from log 02 §8, after the user ruled 𝒜₀ = 1 (README §6.1); 03 landed in `0afa199` and reviewed (2026-10-28;
@@ -47,7 +47,7 @@ bitwise the old code's.
 | 08 | [Spectrum peak and margins](08-spectrum-peak-and-margins.md) | the peak by 𝓡 (R7, P25), the gap flagged (R19); ℓ; the energy weight (U9); three worst margins with the first failure (R13), the reflection margin over plateau turning points too and the tracker margin on the late tracker (R20), the leftover unassessed (R21); the coverage bound measured | Opus | ✍️ 2026-10-30 | ✅ 2026-10-31 | `86fc526` | [08](logs/08-spectrum-peak-and-margins.md) |
 | 09 | [Store](09-store.md) | α as a key in its own table (U3, P28); the per-sample ratio as a payload key of its own (P27); ΔN_eff at T_CMB and 1 MeV (R22), the margins (R25), parking and release as columns, zeros at α = 0 where defined (R24); the first failures in `extra_data`, widened (R23); `AdiabaticHistory` with ρ_χ (P29) and on parked samples; every reader at α = 0 (P30); format 6, 2026.8.0 | Opus | ✍️ 2026-10-31 | ✅ 2026-10-31 | `3984ec5` | [09](logs/09-store.md) |
 | 10 | [Driver and readers](10-driver-and-readers.md) | `--alpha-values` (P32); one pipeline per α in each driver (P33); the plots' matching (P34) and `alpha=<α>/` paths (R26); `dark_radiation.pdf` with Δg* (R27) and `Delta_N_eff.pdf`, two panels (R28); the scope, the inventory, both tools' `--alpha` (P37–P39) | Sonnet | ✍️ 2026-10-31 | ✅ 2026-10-31 | `8c12afa` | [10](logs/10-driver-and-readers.md) |
-| 11 | [Measure](11-measure.md) | the grid of U10, 48 tool runs as a detached batch (R29, P40, P41); the ε scan by patch (R30, P42); the rehearsal of `jordan-normalization` 09's run `a` at two α, interrupted and resumed, α = 0 against its 2026.7.0 store, and the readers' first run with α (R31); the verification document | Opus | ✍️ 2026-11-01 | ⬜ | — | — |
+| 11 | [Measure](11-measure.md) | the grid of U10, 48 tool runs as a detached batch (R29, P40, P41); the ε scan by patch (R30, P42); the rehearsal of `jordan-normalization` 09's run `a` at two α, interrupted and resumed, α = 0 against its 2026.7.0 store, and the readers' first run with α (R31); the verification document | Opus | ✍️ 2026-11-01 | ✅ 2026-11-01 | this commit | [11](logs/11-measure.md) |
 | 12 | Close | documents, `CLAUDE.md`, handover §4.18, indexes, board | Sonnet | ⬜ | ⬜ | — | — |
 
 *The rows for the old 04–08 (relativistic margin, store, driver and readers, measure, close), none of
@@ -88,16 +88,16 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 | Margin | the three margins equal a hand computation; energy-weighted; the classical birth margin negative by construction; NULL at α = 0. *As written 2026-10-30 (R19–R21): the estimate chosen by 𝓡 with the gap flagged; the coverage of the samples before the late tracker measured within its derived bound; every value of the integration bitwise* | 08 | ✅ 2026-10-31 (log 08 §1, §2, §5.1, §5.3, §5.5) |
 | Store | key and columns round-trip; two α are distinct rows; the new golden fingerprint; `AdiabaticHistory` bitwise at α = 0 and computed on parked samples. *As written 2026-10-31 (R22–R25): an α = 0 row holds R24's zeros and NULLs; both golden histories bitwise* | 09 | ✅ 2026-10-31 (log 09 §4, §5.1, §5.3, §5.5) |
 | Driver | α reaches every stage; an unstored α exits 2 in the plots; scope and inventory name α. *As written 2026-10-31 (R26–R28): the `alpha=<α>/` paths, `dark_radiation.pdf` and `Delta_N_eff.pdf`; both golden histories bitwise and the tools' α = 0 output byte-identical* | 10 | ✅ 2026-10-31 (log 10 §4, §5.1, §5.2) |
-| Measure | every point has a row; the drain independent of M below 10⁻¹² to 10⁻³; ΔN_eff rises with α; margins reported; α = 0 reproduces 2026.7.0. *As written 2026-11-01 (R31, P44): the drain compared at M = 10⁻¹² and 4×10⁻³¹ per (β, α); ΔN_eff today strictly rising; α = 0 bitwise against `jordan-normalization` 09's reference store* | 11 | ⬜ |
-| R (U11) | the rehearsal's stores equal after interruption and resume. *As written 2026-11-01 (R31): the two α distinct histories; the readers' first run with α as log 10 says* | 11 | ⬜ |
+| Measure | every point has a row; the drain independent of M below 10⁻¹² to 10⁻³; ΔN_eff rises with α; margins reported; α = 0 reproduces 2026.7.0. *As written 2026-11-01 (R31, P44): the drain compared at M = 10⁻¹² and 4×10⁻³¹ per (β, α); ΔN_eff today strictly rising; α = 0 bitwise against `jordan-normalization` 09's reference store* | 11 | ✅ 2026-11-01 (log 11 §0; verification §1, §2.4) |
+| R (U11) | the rehearsal's stores equal after interruption and resume. *As written 2026-11-01 (R31): the two α distinct histories; the readers' first run with α as log 10 says* | 11 | ✅ 2026-11-01 (log 11 §0; verification §2) |
 
 *The gates Margin, Store, Driver, Sensitivity and R of the old 04–07 were replaced by the re-plan of
 2026-10-29 (README §8.4).*
 
 ## 3. Active and unresolved issues
 
-One opened by the planner, and one by the orchestrator's review of prompt 09. Prompt 04's was closed by
-prompt 08, and prompt 05's by prompt 07b (§4). The one assigned (§3.1) was closed by prompt 09 (§4).
+One opened by the planner, one by the orchestrator's review of prompt 09, and two by prompt 11. Prompt 04's
+was closed by prompt 08, and prompt 05's by prompt 07b (§4). The one assigned (§3.1) was closed by prompt 09 (§4).
 
 ### `[00-xav-sigma-is-non-monotone-at-25-35-keV]`
 
@@ -185,6 +185,48 @@ prompt 08, and prompt 05's by prompt 07b (§4). The one assigned (§3.1) was clo
     tables, compared in φ, H_J, Yp and D/H.
   - **Ruled by the user, 2026-10-31:** "For now, though, I'm going just to leave it documented." Option 6.
     The issue stays open and not assigned.
+
+### `[11-the-ratio-steps-at-injections-and-parking-in-the-10-100-keV-window]`
+
+**Opened:** 2026-11-01 by prompt 11, as README P14 and P46 ask ("an effect is recorded and opened, not fixed").
+
+- **What.** The ratio ρ_NP/ρ_R,J that BBN's spline reads steps at each injection and at the switch to parking,
+  since π, and so H_J, is discontinuous there (P14). The tool's `ratio` lines measure it per window
+  (verification §3; `out/11-grid-tables.md` §2.9).
+  - **Measured, 10–100 keV window,** rms_step of consecutive samples against natural mode at M = 10⁻⁷, the same
+    β: β = 1.2, α = 0.03 (injecting through the window, parks at 0.57 eV) **6.4×** (0.0106 against 0.00165);
+    β = 1.2, α = 0.1 (parks at 11.6 keV) **8.4×**; β = 1.2, α = 0.3 (parks at 44.2 keV) **2.9×**; β = 2,
+    α = 0.03 (parks at 25.4 keV) **1.26×**. The same at M = 10⁻¹² and 4×10⁻³¹.
+  - Everywhere else it is below natural mode's (0.26× to 3×10⁻⁵×): the history parked above 100 keV, and a
+    parked history's ratio is flat (rms_step about 10⁻¹⁴).
+- **Impact.** Not measured. The steps are of the size of natural mode's own resolved-bounce steps
+  (`[05-the-ratio-spline-may-ring-at-resolved-bounce-jumps]`, `jordan-normalization` board) and up to 8×
+  larger. Whether PRyMordial's spline rings on them, and by how much Yp and D/H move, is not known. Yp at
+  β = 1.2 is not monotonic in α (0.25386, 0.24949, 0.24952, 0.25411 at α = 0.03, 0.1, 0.3, 0.9), which may or
+  may not be this.
+- **Next step.** For the user. Compare Yp and D/H from the stored samples with those from a spline that
+  respects the steps (or from samples refined around each injection), at β = 1.2, α = 0.03 and 0.1. Not
+  assigned.
+
+### `[11-ray-deduplicates-the-dissipation-warnings-of-parallel-histories]`
+
+**Opened:** 2026-11-01 by prompt 11 (log 11 §6; verification §6).
+
+- **What.** Ray forwards worker output through a deduplicator that keys a line on its words without digits
+  and, for a key already seen from another process within 5 s, prints only the latest with
+  `[repeated Nx across cluster]` (`jordan-normalization` verification §1.13). The history's warnings (R6's
+  "nearly elastic", P23's, R13's margin lines) carry the history's label, but their words are the same across
+  histories. In `reference-a` the α = 0.1 histories β = 1.5 and 3 printed three warnings each (the standalone
+  tool prints them: `out/11-tool-1.5-a0.1.txt`, `out/11-tool-3-a0.1.txt`), and the build's log holds them
+  only inside β = 5.5's lines, `[repeated 3x across cluster]`.
+- **Impact.** A registered build's log does not show which histories warned. The stored columns (𝓡 at the
+  first impact, the margins and their shares, R25) hold the same facts, and the inventory and the tools read
+  them. `[09-ray-deduplicates-the-tune-lines-of-parallel-histories]` (`jordan-normalization`) was closed by
+  `tuning-followups` 02 as superseded by quiet tune lines; the warnings are printed whatever the quiet rule
+  says, so they are now what is lost.
+- **Next step.** For the user: accept it (the columns are the record), or have the drivers set Ray's
+  `RAY_DEDUP_LOGS=0`, or print a per-history summary of the warnings from the stored row after each batch.
+  Not assigned.
 
 ### 3.1 Assigned to this campaign
 
@@ -1873,3 +1915,35 @@ Residue fixed in this review's commit:
 
 **Opened:** none. The drivers' first run with α is 11's rehearsal (U11), as log 10 §4.4 says. 11 is written next,
 from log 10 §8 (README §2.1).
+
+### 5.13 After prompt 11 (2026-11-01)
+
+11 landed in this commit, under orchestrator note 11 (rulings 1–9). Log: [`logs/11-measure.md`](logs/11-measure.md).
+Record: [`.documents/inelastic-reflection-verification.md`](../../.documents/inelastic-reflection-verification.md).
+- **No stop.** Prompt §5 was not reached: no lock refusal, no driver failure, no gate item failed, every history
+  converged, no stall.
+- **What shipped:** no code. The measurement scripts under `.documents/inelastic-reflection/measure/`
+  (`points.py`, `eps_point.py`, `run_grid.py`, `summarise_grid.py`, `histories.py`, `compare_jn09.py`); the
+  verification document §1–§6; `.documents/inelastic-reflection/out/` (the 48 points' outputs, the tables, the
+  rehearsal's records, the helpers). The stores `inelastic-reflection-11-reference` and `…-resumed` are kept under
+  `var/datastores/` for the user, each with its sidecar.
+- **Gate Measure holds:** 48 of 48 points, all exit 0; the drain's M-independence 1.47×10⁻⁵ at worst against 10⁻³;
+  ΔN_eff today strictly rising in α at all 8 (M, β); the ten margin fields at every dissipation point; α = 0
+  bitwise 2026.7.0 over 548 922 values.
+- **Gate R holds:** `compare_stores` `RESULT: equal`, both stores `afd2f329…1264`; the signal (28 s after the α = 0.1
+  banner) found three of four α = 0.1 histories stored and the resume computed the fourth; the two α are eight
+  distinct rows; the inventory, both plot scripts (23 s, 18 s) and the unstored α (exit 2, nothing written) as log
+  10 says, the store byte-identical across each; the tool and both stores bitwise on 8 × 15 × 2 tuning values.
+- **Measured:** dissipation at M ≤ 10⁻¹² converges on its seed in 11–31 s, every reflection unresolved, every
+  history parked and none released; ΔN_eff today 0.0027–0.565, saturating in α at β ≥ 2; at M = 10⁻¹² every birth
+  margin fails (−0.70 to −0.74), at 4×10⁻³¹ none; ε = 10⁻⁸ parks 5.416 e-folds later at β = 1.2 as log 06 §5.5 found,
+  and ε moves the drain by ≤ 2.5×10⁻³; natural mode at 10⁻⁷ warns (P23) at every β and reaches T_CMB; the grid is
+  23.4 min serial. At M = 10⁻³ the rehearsal's β = 1.5 parks and is released at today's temperature, and β = 0.5
+  ends with ΔN_eff = 8.95 (log 11 §6).
+- **Rulings applied:** all nine (log 11 §2). Deviations D1–D8: D2 STRUCTURALLY REQUIRED (`git_dirty` manifests);
+  D3 and D8 UNINTENDED DRIFT, corrected or harmless (the first ε points patched a class, and ran again; a stray
+  wait); the rest IMPLEMENTATION CHOICE.
+- **Counts:** 26 / 497 (122 + 375) / 129 / 123 / 68 before and after, all passing.
+- **Issues:** opened `[11-the-ratio-steps-at-injections-and-parking-in-the-10-100-keV-window]` (P14's effect, up to
+  8.4× natural mode's rms_step in 10–100 keV) and `[11-ray-deduplicates-the-dissipation-warnings-of-parallel-histories]`;
+  closed none. Index 25 → 27.

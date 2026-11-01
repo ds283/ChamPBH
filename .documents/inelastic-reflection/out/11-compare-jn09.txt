@@ -1,0 +1,87 @@
+new store: var/datastores/inelastic-reflection-11-reference
+old store: var/datastores/jordan-normalization-09-reference
+left out, by name: serial and every *_serial column; version; label; timestamp; compute_time; mean_RHS_time; max_RHS_time; min_RHS_time; NP_compute_time; BBN_compute_time
+
+=== beta=0.5 M=0.001 phi*=5: 1 new row(s) at alpha = 0, 1 old row(s)
+    new shard0015.db serial 1 (inelastic-reflection-11-reference-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=0.5)-2026-11-01T02:59:30)
+    old shard0015.db serial 1 (jordan-normalization-09-reference-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=0.5)-2026-10-26T19:56:15)
+    M_value as stored: new 2.4353235955263043e+24 (0x1.01d9940d10e2cp+81), old 2.4353235955263043e+24 (0x1.01d9940d10e2cp+81): equal
+    ScalarHistory: compared columns (31 + extra_data): cosmology_type, model_type, failure, failure_reason, z_samples, compute_steps, RHS_evaluations, first_bounce_N, first_bounce_log_T_Jordan, first_bounce_phi_Einstein, first_bounce_reflected, phi_Einstein_1MeV, density_NP_ratio_1MeV, phi_Einstein_70keV, density_NP_ratio_70keV, normalization, V_ref, phi_ref, phi_0, pi_0, tracking, residual_H, residual_phi, tuning_iterations, plain_steps, secant_steps, guard_steps, seed_kind, seed_normalization, seed_phi_ref, validated
+    ScalarHistory: left out, held by both: serial, version, timestamp, label, cosmology_serial, model_serial, atol_serial, rtol_serial, tuning_tol_serial, phi_Einstein_init_serial, pi_Einstein_init_serial, T_Jordan_init_serial, solver_serial, compute_time, mean_RHS_time, max_RHS_time, min_RHS_time
+    ScalarHistory: new columns, not compared: alpha_serial, injections, resolved_candidates, unresolved_candidates, injected_fraction, rho_chi_ratio_1MeV, rho_chi_ratio_70keV, rho_chi_ratio_today, Delta_N_eff_1MeV, Delta_N_eff_today, log_R_first_impact, parking_N, parking_log_T_Jordan, release_N, release_log_T_Jordan, worst_birth_margin, worst_birth_margin_N, birth_failing_share, worst_reflection_margin, worst_reflection_margin_N, reflection_failing_share, worst_tracker_margin, worst_tracker_margin_N, tracker_failing_share, unassessed_share
+    ScalarHistory: old-only columns: none
+    extra_data: keys compared ['cap_fraction', 'cap_floor', 'cap_global_max_step', 'jacobian_factor_max', 'accepted_steps']; only new []; only old []
+    ScalarHistoryValue: new 4620 samples, old 4620, matched 4620 by ln(1+z); only new 0, only old 0; duplicate z new 0 old 0
+    ScalarHistoryValue: compared columns: raw_N, phi_Einstein_Mp, pi_Einstein_Mp, log_rhorad_Einstein_Mp4, log_rhorad_Jordan_Mp4, log_fm, log_T_Jordan_GeV, H_Einstein_Mp, H_Jordan_Mp, gstar_rho, gstar_s, dgstar_rho_dlogT, dgstar_s_dlogT, Sigma, friction_term_Mp, reflecting_term_Mp, kicking_term_Mp, log_one_plus_z_Jordan
+    ScalarHistoryValue: left out: serial, history_serial, z_serial
+    ScalarHistoryValue: new columns, not compared: rho_chi_over_rho_rad
+    ScalarHistoryValue.rho_chi_over_rho_rad (new only): 4620 of 4620 samples are 0.0
+    AdiabaticHistory: new 1 row(s), old 1
+    AdiabaticHistory: compared columns: max_abs_Q_kp_over_H_1E1, max_abs_Q_kp_over_H_1E2, max_abs_Q_kp_over_H_1E3, max_abs_Q_kp_over_H_1E4, z_samples, validated
+    AdiabaticHistory: left out: serial, version, timestamp, scalar_history_serial, compute_time, label
+    AdiabaticHistory: new columns, not compared: none
+    AdiabaticHistoryValue: new 4620, old 4620, matched 4620 by ln(1+z); duplicate z new 0 old 0
+    AdiabaticHistoryValue: compared columns: raw_N, abs_Q_kp_over_H_1E1, abs_Q_kp_over_H_1E2, abs_Q_kp_over_H_1E3, abs_Q_kp_over_H_1E4
+    AdiabaticHistoryValue: left out: serial, history_serial, z_serial
+    BBNData: new 1 row(s), old 1
+    BBNData: compared columns: failure, failure_reason, Yp_BBN, DOverH, He3OverH, Li7OverH, small_network, PRyM_version, z_samples, validated
+    BBNData: left out: serial, version, timestamp, scalar_history_serial, label, NP_compute_time, BBN_compute_time
+    BBNData: new columns, not compared: none
+    BBNDataValue: new 0, old 0, matched 0 by ln(1+z); duplicate z new 0 old 0
+
+=== beta=1.5 M=0.001 phi*=5: 1 new row(s) at alpha = 0, 1 old row(s)
+    new shard0000.db serial 21 (inelastic-reflection-11-reference-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=1.5)-2026-11-01T02:59:31)
+    old shard0000.db serial 21 (jordan-normalization-09-reference-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=1.5)-2026-10-26T19:56:15)
+    M_value as stored: new 2.4353235955263043e+24 (0x1.01d9940d10e2cp+81), old 2.4353235955263043e+24 (0x1.01d9940d10e2cp+81): equal
+    extra_data: keys compared ['cap_fraction', 'cap_floor', 'cap_global_max_step', 'jacobian_factor_max', 'accepted_steps']; only new []; only old []
+    ScalarHistoryValue: new 5161 samples, old 5161, matched 5161 by ln(1+z); only new 0, only old 0; duplicate z new 0 old 0
+    ScalarHistoryValue.rho_chi_over_rho_rad (new only): 5161 of 5161 samples are 0.0
+    AdiabaticHistory: new 1 row(s), old 1
+    AdiabaticHistoryValue: new 5161, old 5161, matched 5161 by ln(1+z); duplicate z new 0 old 0
+    BBNData: new 1 row(s), old 1
+    BBNDataValue: new 1497, old 1497, matched 1497 by ln(1+z); duplicate z new 0 old 0
+    BBNDataValue: compared columns: raw_N, log_T_Jordan_MeV, density_NP_MeV4, density_NP_ratio
+    BBNDataValue: left out: serial, bbn_serial, z_serial
+
+=== beta=3 M=0.001 phi*=5: 1 new row(s) at alpha = 0, 1 old row(s)
+    new shard0001.db serial 41 (inelastic-reflection-11-reference-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=3)-2026-11-01T02:59:31)
+    old shard0001.db serial 41 (jordan-normalization-09-reference-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=3)-2026-10-26T19:56:15)
+    M_value as stored: new 2.4353235955263043e+24 (0x1.01d9940d10e2cp+81), old 2.4353235955263043e+24 (0x1.01d9940d10e2cp+81): equal
+    extra_data: keys compared ['cap_fraction', 'cap_floor', 'cap_global_max_step', 'jacobian_factor_max', 'accepted_steps']; only new []; only old []
+    ScalarHistoryValue: new 5973 samples, old 5973, matched 5973 by ln(1+z); only new 0, only old 0; duplicate z new 0 old 0
+    ScalarHistoryValue.rho_chi_over_rho_rad (new only): 5973 of 5973 samples are 0.0
+    AdiabaticHistory: new 1 row(s), old 1
+    AdiabaticHistoryValue: new 5973, old 5973, matched 5973 by ln(1+z); duplicate z new 0 old 0
+    BBNData: new 1 row(s), old 1
+    BBNDataValue: new 1481, old 1481, matched 1481 by ln(1+z); duplicate z new 0 old 0
+
+=== beta=5.5 M=0.001 phi*=5: 1 new row(s) at alpha = 0, 1 old row(s)
+    new shard0002.db serial 61 (inelastic-reflection-11-reference-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-11-01T02:59:57)
+    old shard0002.db serial 61 (jordan-normalization-09-reference-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-10-26T19:56:39)
+    M_value as stored: new 2.4353235955263043e+24 (0x1.01d9940d10e2cp+81), old 2.4353235955263043e+24 (0x1.01d9940d10e2cp+81): equal
+    extra_data: keys compared ['cap_fraction', 'cap_floor', 'cap_global_max_step', 'jacobian_factor_max', 'accepted_steps']; only new []; only old []
+    ScalarHistoryValue: new 7328 samples, old 7328, matched 7328 by ln(1+z); only new 0, only old 0; duplicate z new 0 old 0
+    ScalarHistoryValue.rho_chi_over_rho_rad (new only): 7328 of 7328 samples are 0.0
+    AdiabaticHistory: new 1 row(s), old 1
+    AdiabaticHistoryValue: new 7328, old 7328, matched 7328 by ln(1+z); duplicate z new 0 old 0
+    BBNData: new 1 row(s), old 1
+    BBNDataValue: new 1479, old 1479, matched 1479 by ln(1+z); duplicate z new 0 old 0
+
+New ScalarHistory columns at alpha = 0 (listed, not compared):
+  beta=0.5 M=0.001 phi*=5: alpha_serial=1 injections=0 resolved_candidates=0 unresolved_candidates=0 injected_fraction=0.0 rho_chi_ratio_1MeV=0.0 rho_chi_ratio_70keV=0.0 rho_chi_ratio_today=0.0 Delta_N_eff_1MeV=0.0 Delta_N_eff_today=0.0 log_R_first_impact=None parking_N=None parking_log_T_Jordan=None release_N=None release_log_T_Jordan=None worst_birth_margin=None worst_birth_margin_N=None birth_failing_share=None worst_reflection_margin=None worst_reflection_margin_N=None reflection_failing_share=None worst_tracker_margin=None worst_tracker_margin_N=None tracker_failing_share=None unassessed_share=None
+  beta=1.5 M=0.001 phi*=5: alpha_serial=1 injections=0 resolved_candidates=0 unresolved_candidates=0 injected_fraction=0.0 rho_chi_ratio_1MeV=0.0 rho_chi_ratio_70keV=0.0 rho_chi_ratio_today=0.0 Delta_N_eff_1MeV=0.0 Delta_N_eff_today=0.0 log_R_first_impact=None parking_N=None parking_log_T_Jordan=None release_N=None release_log_T_Jordan=None worst_birth_margin=None worst_birth_margin_N=None birth_failing_share=None worst_reflection_margin=None worst_reflection_margin_N=None reflection_failing_share=None worst_tracker_margin=None worst_tracker_margin_N=None tracker_failing_share=None unassessed_share=None
+  beta=3 M=0.001 phi*=5: alpha_serial=1 injections=0 resolved_candidates=0 unresolved_candidates=0 injected_fraction=0.0 rho_chi_ratio_1MeV=0.0 rho_chi_ratio_70keV=0.0 rho_chi_ratio_today=0.0 Delta_N_eff_1MeV=0.0 Delta_N_eff_today=0.0 log_R_first_impact=None parking_N=None parking_log_T_Jordan=None release_N=None release_log_T_Jordan=None worst_birth_margin=None worst_birth_margin_N=None birth_failing_share=None worst_reflection_margin=None worst_reflection_margin_N=None reflection_failing_share=None worst_tracker_margin=None worst_tracker_margin_N=None tracker_failing_share=None unassessed_share=None
+  beta=5.5 M=0.001 phi*=5: alpha_serial=1 injections=0 resolved_candidates=0 unresolved_candidates=0 injected_fraction=0.0 rho_chi_ratio_1MeV=0.0 rho_chi_ratio_70keV=0.0 rho_chi_ratio_today=0.0 Delta_N_eff_1MeV=0.0 Delta_N_eff_today=0.0 log_R_first_impact=None parking_N=None parking_log_T_Jordan=None release_N=None release_log_T_Jordan=None worst_birth_margin=None worst_birth_margin_N=None birth_failing_share=None worst_reflection_margin=None worst_reflection_margin_N=None reflection_failing_share=None worst_tracker_margin=None worst_tracker_margin_N=None tracker_failing_share=None unassessed_share=None
+
+Values compared, per table:
+  ScalarHistory: 124
+  ScalarHistory.extra_data: 20
+  ScalarHistoryValue: 415476
+  AdiabaticHistory: 24
+  AdiabaticHistoryValue: 115410
+  BBNData: 40
+  BBNDataValue: 17828
+  total: 548922
+
+DIFFERENCES: none
+RESULT: every compared value bitwise equal

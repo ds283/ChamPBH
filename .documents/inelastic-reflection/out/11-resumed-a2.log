@@ -1,0 +1,55 @@
+** registered_run: registered as inelastic-reflection-11-resumed-a2-20261101T030928
+**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/inelastic-reflection-11-resumed-a2-20261101T030928/manifest.json
+**   list it with: ./venv/bin/python -m runregistrykit list
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-01 03:09:29,258	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-01 03:09:29,289	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at http://127.0.0.1:8267 
+>> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/inelastic-reflection-11-resumed.db" with 16 shards
+
+** BUILDING GRID OF MODELS TO SAMPLE
+   -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+   -- populated beta sample grid with 4 values = [ 0.5, 1.5, 3, 5.5 ]
+   -- populated M sample grid with 1 value = [ 0.001 Mp ]
+   -- populated alpha grid with 2 values = [ 0, 0.1 ]
+   -- total number of models to integrate = 4
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+(Datastore pid=53976) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"   -- ALL WORK ITEMS COMPLETE in time 0.0111s
+
+      Queue summary: 0 lookup (avg 0/day), 0 compute (avg 0/day), 0 store (avg 0/day), 0 validation (avg 0/day)
+      (no compute items were evaluated - all assets read from datastore)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 0.113s
+      Queue summary: 0 lookup (avg 0/day), 0 compute (avg 0/day), 0 store (avg 0/day), 0 validation (avg 0/day)
+      (no compute items were evaluated - all assets read from datastore)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 0.0158s
+      Queue summary: 0 lookup (avg 0/day), 0 compute (avg 0/day), 0 store (avg 0/day), 0 validation (avg 0/day)
+      (no compute items were evaluated - all assets read from datastore)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 1 computations skipped because of a stored failure
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.1
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+(compute_scalar_history pid=54080) !! tune_history (inelastic-reflection-11-resumed-a2-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-11-01T03:09:41): dissipation mode: the reflections are expected to be nearly elastic in this regime: the test-field ratio R = 10^-38.278 < 1 at the first impact (phi_t = 7.88e-06 M_P)
+(compute_scalar_history pid=54080) !! tune_history (inelastic-reflection-11-resumed-a2-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-11-01T03:09:41): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.7031 < ln 10 at N = 37.5648442 (generation 30); the generations below ln 10 carry 0.9905 of K
+(compute_scalar_history pid=54080) !! tune_history (inelastic-reflection-11-resumed-a2-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-11-01T03:09:41): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = -0.6291 < ln 10 at N = 37.5821427 (generation 30); the generations below ln 10 carry 0.9905 of K
+   -- ALL WORK ITEMS COMPLETE in time 31s
+      Queue summary: 1 lookup (avg 116.3/hr), 1 compute (avg 116.3/hr), 1 store (avg 116.3/hr), 1 validation (avg 116.3/hr)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 1.47s
+      Queue summary: 4 lookup (avg 163.7/min), 4 compute (avg 163.7/min), 4 store (avg 163.7/min), 4 validation (avg 163.7/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 16.7s
+      Queue summary: 4 lookup (avg 14.34/min), 4 compute (avg 14.34/min), 4 store (avg 14.34/min), 4 validation (avg 14.34/min)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+** driver exit status 0
+** launcher saw exit status 0

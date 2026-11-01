@@ -1,0 +1,80 @@
+=== var/inelastic-reflection-11/rehearsal/reference-a.beats
+  records: 58 log lines, 12 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/var/inelastic-reflection-11/rehearsal/reference-a.log, runs var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-11-01 02:59:02+00:00 running; final status: hb 2026-11-01 03:03:46+00:00 done (CALCULATE BBN DATA, all work items complete)
+  (a) longest heartbeat silence: 151 s, from hb 02:59:30 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID) to hb 03:02:01 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 25.903 s, 02:59:04.716 -> 02:59:30.619
+         after: >> Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/inelastic-reflection-11-reference.db" with 16 shards
+         before: 
+      BUILDING GRID OF MODELS TO SAMPLE: 0.000 s, 02:59:30.619 -> 02:59:30.619
+         after: ** BUILDING GRID OF MODELS TO SAMPLE
+         before:    -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 150.848 s, 02:59:30.619 -> 03:02:01.467
+         after: ** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+         before: (compute_scalar_history pid=52929) -- tune inelastic-reflection-11-reference-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-11-01T02:59:57 it=4 k
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.012 s, 03:02:04.007 -> 03:02:05.019
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before:    -- ALL WORK ITEMS COMPLETE in time 0.974s
+      CALCULATE BBN DATA: 24.345 s, 03:03:23.198 -> 03:03:47.543
+         after: -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+         before: ** driver exit status 0
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 02:59:30.619, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 153.387 s (02:59:30.619 -> 03:02:04.006; line: -- ALL WORK ITEMS COMPLETE in time 2m 33.1s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.012 s (03:02:04.007 -> 03:02:05.019; line: -- ALL WORK ITEMS COMPLETE in time 0.974s)
+      CALCULATE BBN DATA: 18.272 s (03:02:05.019 -> 03:02:23.291; line: -- ALL WORK ITEMS COMPLETE in time 18.5s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):
+      inelastic-reflection-11-reference-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-11-01T02:59:57: 1 lines (4:secant); wall sum 24.5 s; last at 03:02:01.467, +150.8 s
+=== var/inelastic-reflection-11/rehearsal/resumed-a.beats
+  records: 48 log lines, 9 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/var/inelastic-reflection-11/rehearsal/resumed-a.log, runs var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-11-01 03:04:31+00:00 running; final status: hb 2026-11-01 03:08:45+00:00 killed (CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID)
+  (a) longest heartbeat silence: 153 s, from hb 03:04:58 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID) to hb 03:07:31 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 26.926 s, 03:04:31.931 -> 03:04:58.857
+         after: >> Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/inelastic-reflection-11-resumed.db" with 16 shards
+         before: 
+      BUILDING GRID OF MODELS TO SAMPLE: 0.000 s, 03:04:58.857 -> 03:04:58.857
+         after: ** BUILDING GRID OF MODELS TO SAMPLE
+         before:    -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 152.842 s, 03:04:58.857 -> 03:07:31.699
+         after: ** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+         before: (compute_scalar_history pid=53512) -- tune inelastic-reflection-11-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-11-01T03:05:26 it=4 kin
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.021 s, 03:07:33.733 -> 03:07:34.754
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before:    -- ALL WORK ITEMS COMPLETE in time 0.96s
+      CALCULATE BBN DATA: 18.285 s, 03:07:34.754 -> 03:07:53.039
+         after: ** CALCULATE BBN DATA
+         before:    -- ALL WORK ITEMS COMPLETE in time 18.4s
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 03:04:58.857, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 154.876 s (03:04:58.857 -> 03:07:33.733; line: -- ALL WORK ITEMS COMPLETE in time 2m 34.9s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.021 s (03:07:33.733 -> 03:07:34.754; line: -- ALL WORK ITEMS COMPLETE in time 0.96s)
+      CALCULATE BBN DATA: 18.285 s (03:07:34.754 -> 03:07:53.039; line: -- ALL WORK ITEMS COMPLETE in time 18.4s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):
+      inelastic-reflection-11-resumed-a-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-11-01T03:05:26: 1 lines (4:secant); wall sum 24.7 s; last at 03:07:31.699, +152.8 s
+=== var/inelastic-reflection-11/rehearsal/resumed-a2.beats
+  records: 55 log lines, 7 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/var/inelastic-reflection-11/rehearsal/resumed-a2.log, runs var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-11-01 03:09:29+00:00 running; final status: hb 2026-11-01 03:10:53+00:00 done (CALCULATE BBN DATA, all work items complete)
+  (a) longest heartbeat silence: 31 s, from hb 03:09:41 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID) to hb 03:10:12 (running, stage: CALCULATE ADIABATIC TRANSGRESSION PARAMETERS)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 10.141 s, 03:09:31.293 -> 03:09:41.434
+         after: >> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/inelastic-reflection-11-resumed.db" with 16 shards
+         before: 
+      BUILDING GRID OF MODELS TO SAMPLE: 0.000 s, 03:09:41.434 -> 03:09:41.434
+         after: ** BUILDING GRID OF MODELS TO SAMPLE
+         before:    -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 23.838 s, 03:09:48.554 -> 03:10:12.392
+         after: (compute_scalar_history pid=54080) !! tune_history (inelastic-reflection-11-resumed-a2-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-11-01T03:09:4
+         before:    -- ALL WORK ITEMS COMPLETE in time 31s
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.515 s, 03:10:12.392 -> 03:10:13.907
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before:    -- ALL WORK ITEMS COMPLETE in time 1.47s
+      CALCULATE BBN DATA: 23.362 s, 03:10:30.674 -> 03:10:54.036
+         after: -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+         before: ** driver exit status 0
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 03:09:41.434, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 0.000 s (03:09:41.434 -> 03:09:41.434; line: (Datastore pid=53976) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"   -- ALL WORK ITEMS COMPLETE in time 0.0111s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 0.000 s (03:09:41.434 -> 03:09:41.434; line: -- ALL WORK ITEMS COMPLETE in time 0.113s)
+      CALCULATE BBN DATA: 0.000 s (03:09:41.434 -> 03:09:41.434; line: -- ALL WORK ITEMS COMPLETE in time 0.0158s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):

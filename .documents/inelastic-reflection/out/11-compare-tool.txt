@@ -1,0 +1,188 @@
+T* as the build stores it: (2e4 * GeV) / GeV = 20000.0 (0x1.3880000000000p+14); 2e4 * GeV = 8.212460979206235e-15 (0x1.27e2953c2b870p-47)
+rows: reference 8, resumed 8
+
+=== beta=0.5 M=0.001 M_P phi*=5 alpha=0  (tool 0.5-a0.txt; load at its start 8.48 11.04 11.58)
+    history beta=0.5 M=0.001: RHS=24309 accepted_steps=2868 reflections=0 samples=4620 integrations=4 wall=3.6 s
+    bbn beta=0.5 M=0.001: FAILURE network=small wall=0.8 s reason=PRyMordial: ComputationFailureError: T_in_MeV=0.00019824 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+  reference: inputs OK (z_samples 4620 vs samples=4620); converged True (|res_H| 6.582e-06, |res_phi| 6.279e-06 < 1e-05); 15 keys: all equal
+  resumed: inputs OK (z_samples 4620 vs samples=4620); converged True (|res_H| 6.582e-06, |res_phi| 6.279e-06 < 1e-05); 15 keys: all equal
+    key-by-key (tool's printed repr | its float.hex | reference stored hex | resumed stored hex):
+      normalization       -276.7305358530105 | -0x1.14bb0465cd3c5p+8 | -0x1.14bb0465cd3c5p+8 | -0x1.14bb0465cd3c5p+8
+      V_ref               6.671430241172124e-121 | 0x1.b904d53274a3fp-400 | 0x1.b904d53274a3fp-400 | 0x1.b904d53274a3fp-400
+      phi_ref             0.06421012992791278 | 0x1.07013381cbf72p-4 | 0x1.07013381cbf72p-4 | 0x1.07013381cbf72p-4
+      phi_0               0.05568261410958742 | 0x1.c826e7d1ce921p-5 | 0x1.c826e7d1ce921p-5 | 0x1.c826e7d1ce921p-5
+      pi_0                0.05291204161274784 | 0x1.b174980952aebp-5 | 0x1.b174980952aebp-5 | 0x1.b174980952aebp-5
+      tracking            0.6334956605858231 | 0x1.44598b10bf806p-1 | 0x1.44598b10bf806p-1 | 0x1.44598b10bf806p-1
+      residual_H          -6.581715529141441e-06 | -0x1.b9b1030520000p-18 | -0x1.b9b1030520000p-18 | -0x1.b9b1030520000p-18
+      residual_phi        6.279225380323439e-06 | 0x1.a5644546c0000p-18 | 0x1.a5644546c0000p-18 | 0x1.a5644546c0000p-18
+      tuning_iterations   4 | - | 4 | 4
+      plain_steps         1 | - | 1 | 1
+      secant_steps        2 | - | 2 | 2
+      guard_steps         0 | - | 0 | 0
+      seed_kind           tracking | - | tracking | tracking
+      seed_normalization  -276.7841498114068 | -0x1.14c8be0ac3282p+8 | -0x1.14c8be0ac3282p+8 | -0x1.14c8be0ac3282p+8
+      seed_phi_ref        0.062129003658643864 | 0x1.fcf5f6db1a216p-5 | 0x1.fcf5f6db1a216p-5 | 0x1.fcf5f6db1a216p-5
+
+=== beta=1.5 M=0.001 M_P phi*=5 alpha=0  (tool 1.5-a0.txt; load at its start 6.90 10.52 11.38)
+    history beta=1.5 M=0.001: RHS=194746 accepted_steps=19958 reflections=0 samples=5161 integrations=4 wall=23.5 s
+    bbn beta=1.5 M=0.001: Yp=0.2375649458 DoH=2.22274769 He3oH=1.007194204 Li7oH=5.881808751 network=small PRyM_time=8.4 s wall=8.4 s PRyM_version=bf24c3d+ri02+sr01+bt02
+  reference: inputs OK (z_samples 5161 vs samples=5161); converged True (|res_H| 1.272e-07, |res_phi| 1.790e-06 < 1e-05); 15 keys: all equal
+  resumed: inputs OK (z_samples 5161 vs samples=5161); converged True (|res_H| 1.272e-07, |res_phi| 1.790e-06 < 1e-05); 15 keys: all equal
+    key-by-key (tool's printed repr | its float.hex | reference stored hex | resumed stored hex):
+      normalization       -276.85483680276144 | -0x1.14dad695af471p+8 | -0x1.14dad695af471p+8 | -0x1.14dad695af471p+8
+      V_ref               5.9688943800676226e-121 | 0x1.8a93cb9e0234dp-400 | 0x1.8a93cb9e0234dp-400 | 0x1.8a93cb9e0234dp-400
+      phi_ref             0.03496226638511382 | 0x1.1e692fd6fab54p-5 | 0x1.1e692fd6fab54p-5 | 0x1.1e692fd6fab54p-5
+      phi_0               0.033428459080018603 | 0x1.11d88f5023ab5p-5 | 0x1.11d88f5023ab5p-5 | 0x1.11d88f5023ab5p-5
+      pi_0                0.04404438417254562 | 0x1.68cfc4b2fe4eep-5 | 0x1.68cfc4b2fe4eep-5 | 0x1.68cfc4b2fe4eep-5
+      tracking            0.8783809840414798 | 0x1.c1bb26ffc5dd4p-1 | 0x1.c1bb26ffc5dd4p-1 | 0x1.c1bb26ffc5dd4p-1
+      residual_H          1.2718458641813868e-07 | 0x1.1120774000000p-23 | 0x1.1120774000000p-23 | 0x1.1120774000000p-23
+      residual_phi        1.7897725401727627e-06 | 0x1.e0703b8100000p-20 | 0x1.e0703b8100000p-20 | 0x1.e0703b8100000p-20
+      tuning_iterations   4 | - | 4 | 4
+      plain_steps         1 | - | 1 | 1
+      secant_steps        2 | - | 2 | 2
+      guard_steps         0 | - | 0 | 0
+      seed_kind           tracking | - | tracking | tracking
+      seed_normalization  -276.8846401994391 | -0x1.14e277c7b5516p+8 | -0x1.14e277c7b5516p+8 | -0x1.14e277c7b5516p+8
+      seed_phi_ref        0.03433537145080339 | 0x1.19467e2f45537p-5 | 0x1.19467e2f45537p-5 | 0x1.19467e2f45537p-5
+
+=== beta=3 M=0.001 M_P phi*=5 alpha=0  (tool 3-a0.txt; load at its start 6.25 9.92 11.12)
+    history beta=3 M=0.001: RHS=293177 accepted_steps=30867 reflections=0 samples=5973 integrations=4 wall=37.3 s
+    bbn beta=3 M=0.001: Yp=0.2343979348 DoH=2.145602813 He3oH=0.9951790797 Li7oH=6.021397219 network=small PRyM_time=9.6 s wall=9.6 s PRyM_version=bf24c3d+ri02+sr01+bt02
+  reference: inputs OK (z_samples 5973 vs samples=5973); converged True (|res_H| 1.440e-06, |res_phi| 9.425e-06 < 1e-05); 15 keys: all equal
+  resumed: inputs OK (z_samples 5973 vs samples=5973); converged True (|res_H| 1.440e-06, |res_phi| 9.425e-06 < 1e-05); 15 keys: all equal
+    key-by-key (tool's printed repr | its float.hex | reference stored hex | resumed stored hex):
+      normalization       -276.95262086751717 | -0x1.14f3def60f793p+8 | -0x1.14f3def60f793p+8 | -0x1.14f3def60f793p+8
+      V_ref               5.487296126901317e-121 | 0x1.6abdb13d7d85dp-400 | 0x1.6abdb13d7d85dp-400 | 0x1.6abdb13d7d85dp-400
+      phi_ref             0.02366290357111863 | 0x1.83b1693dd8c76p-6 | 0x1.83b1693dd8c76p-6 | 0x1.83b1693dd8c76p-6
+      phi_0               0.023280991616860532 | 0x1.7d6f8e673932fp-6 | 0x1.7d6f8e673932fp-6 | 0x1.7d6f8e673932fp-6
+      pi_0                0.031896563818617406 | 0x1.054bf14e95693p-5 | 0x1.054bf14e95693p-5 | 0x1.054bf14e95693p-5
+      tracking            0.9133793022664125 | 0x1.d3a673b027b36p-1 | 0x1.d3a673b027b36p-1 | 0x1.d3a673b027b36p-1
+      residual_H          -1.4399086215588497e-06 | -0x1.8285c45b80000p-20 | -0x1.8285c45b80000p-20 | -0x1.8285c45b80000p-20
+      residual_phi        9.425299244414376e-06 | 0x1.3c42b43aa0000p-17 | 0x1.3c42b43aa0000p-17 | 0x1.3c42b43aa0000p-17
+      tuning_iterations   4 | - | 4 | 4
+      plain_steps         1 | - | 1 | 1
+      secant_steps        2 | - | 2 | 2
+      guard_steps         0 | - | 0 | 0
+      seed_kind           tracking | - | tracking | tracking
+      seed_normalization  -276.9786915156285 | -0x1.14fa8b86f47f4p+8 | -0x1.14fa8b86f47f4p+8 | -0x1.14fa8b86f47f4p+8
+      seed_phi_ref        0.02332328854885997 | 0x1.7e20f6635c914p-6 | 0x1.7e20f6635c914p-6 | 0x1.7e20f6635c914p-6
+
+=== beta=5.5 M=0.001 M_P phi*=5 alpha=0  (tool 5.5-a0.txt; load at its start 5.25 9.07 10.74)
+    history beta=5.5 M=0.001: RHS=605244 accepted_steps=63354 reflections=0 samples=7328 integrations=5 wall=120.5 s
+    bbn beta=5.5 M=0.001: Yp=0.2307605351 DoH=2.052524898 He3oH=0.9816348403 Li7oH=6.192018785 network=small PRyM_time=9.7 s wall=9.7 s PRyM_version=bf24c3d+ri02+sr01+bt02
+  reference: inputs OK (z_samples 7328 vs samples=7328); converged True (|res_H| 9.983e-10, |res_phi| 5.114e-08 < 1e-05); 15 keys: all equal
+  resumed: inputs OK (z_samples 7328 vs samples=7328); converged True (|res_H| 9.983e-10, |res_phi| 5.114e-08 < 1e-05); 15 keys: all equal
+    key-by-key (tool's printed repr | its float.hex | reference stored hex | resumed stored hex):
+      normalization       -277.0569213884148 | -0x1.150e92666daf4p+8 | -0x1.150e92666daf4p+8 | -0x1.150e92666daf4p+8
+      V_ref               5.031337035894283e-121 | 0x1.4c997b5021f81p-400 | 0x1.4c997b5021f81p-400 | 0x1.4c997b5021f81p-400
+      phi_ref             0.016719361292186364 | 0x1.11ee157d6fccdp-6 | 0x1.11ee157d6fccdp-6 | 0x1.11ee157d6fccdp-6
+      phi_0               0.016618734018497824 | 0x1.104805c71050cp-6 | 0x1.104805c71050cp-6 | 0x1.104805c71050cp-6
+      pi_0                0.022856495781590585 | 0x1.767b1778849abp-6 | 0x1.767b1778849abp-6 | 0x1.767b1778849abp-6
+      tracking            0.9168967887345165 | 0x1.d5737ef2d826ap-1 | 0x1.d5737ef2d826ap-1 | 0x1.d5737ef2d826ap-1
+      residual_H          -9.983243121070018e-10 | -0x1.126ad40000000p-30 | -0x1.126ad40000000p-30 | -0x1.126ad40000000p-30
+      residual_phi        5.1137542644852374e-08 | 0x1.b744a54000000p-25 | 0x1.b744a54000000p-25 | 0x1.b744a54000000p-25
+      tuning_iterations   5 | - | 5 | 5
+      plain_steps         1 | - | 1 | 1
+      secant_steps        3 | - | 3 | 3
+      guard_steps         0 | - | 0 | 0
+      seed_kind           tracking | - | tracking | tracking
+      seed_normalization  -277.0868645556504 | -0x1.15163cc169b33p+8 | -0x1.15163cc169b33p+8 | -0x1.15163cc169b33p+8
+      seed_phi_ref        0.016464851040791605 | 0x1.0dc297303ccf3p-6 | 0x1.0dc297303ccf3p-6 | 0x1.0dc297303ccf3p-6
+
+=== beta=0.5 M=0.001 M_P phi*=5 alpha=0.1  (tool 0.5-a0.1.txt; load at its start 9.56 9.45 10.65)
+    history beta=0.5 M=0.001: RHS=25311 accepted_steps=2937 reflections=0 samples=4620 integrations=4 alpha=0.1 wall=6.0 s
+    bbn beta=0.5 M=0.001: FAILURE network=small wall=0.7 s reason=PRyMordial: ComputationFailureError: T_in_MeV=0.00019824 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+  reference: inputs OK (z_samples 4620 vs samples=4620); converged True (|res_H| 1.661e-06, |res_phi| 3.935e-06 < 1e-05); 15 keys: all equal
+  reference: dissipation line, 24 fields at :.6g: all equal
+  resumed: inputs OK (z_samples 4620 vs samples=4620); converged True (|res_H| 1.661e-06, |res_phi| 3.935e-06 < 1e-05); 15 keys: all equal
+  resumed: dissipation line, 24 fields at :.6g: all equal
+    key-by-key (tool's printed repr | its float.hex | reference stored hex | resumed stored hex):
+      normalization       -276.74625408343474 | -0x1.14bf0a81f2dbdp+8 | -0x1.14bf0a81f2dbdp+8 | -0x1.14bf0a81f2dbdp+8
+      V_ref               6.5681874379768054e-121 | 0x1.b231a6c5d5553p-400 | 0x1.b231a6c5d5553p-400 | 0x1.b231a6c5d5553p-400
+      phi_ref             0.06371155096662517 | 0x1.04f6673c77298p-4 | 0x1.04f6673c77298p-4 | 0x1.04f6673c77298p-4
+      phi_0               0.055176740545029 | 0x1.c4020304813e5p-5 | 0x1.c4020304813e5p-5 | 0x1.c4020304813e5p-5
+      pi_0                0.06336427245153534 | 0x1.038a415ea0792p-4 | 0x1.038a415ea0792p-4 | 0x1.038a415ea0792p-4
+      tracking            0.7655915859428074 | 0x1.87fb9ecf6f2bdp-1 | 0x1.87fb9ecf6f2bdp-1 | 0x1.87fb9ecf6f2bdp-1
+      residual_H          -1.6609964206271144e-06 | -0x1.bddece0d00000p-20 | -0x1.bddece0d00000p-20 | -0x1.bddece0d00000p-20
+      residual_phi        3.934972919950042e-06 | 0x1.081251ec00000p-18 | 0x1.081251ec00000p-18 | 0x1.081251ec00000p-18
+      tuning_iterations   4 | - | 4 | 4
+      plain_steps         1 | - | 1 | 1
+      secant_steps        2 | - | 2 | 2
+      guard_steps         0 | - | 0 | 0
+      seed_kind           tracking | - | tracking | tracking
+      seed_normalization  -276.7841498114068 | -0x1.14c8be0ac3282p+8 | -0x1.14c8be0ac3282p+8 | -0x1.14c8be0ac3282p+8
+      seed_phi_ref        0.062129003658643864 | 0x1.fcf5f6db1a216p-5 | 0x1.fcf5f6db1a216p-5 | 0x1.fcf5f6db1a216p-5
+
+=== beta=1.5 M=0.001 M_P phi*=5 alpha=0.1  (tool 1.5-a0.1.txt; load at its start 8.93 9.31 10.59)
+    history beta=1.5 M=0.001: RHS=39251 accepted_steps=4276 reflections=0 samples=5160 integrations=5 alpha=0.1 wall=13.0 s
+    bbn beta=1.5 M=0.001: Yp=0.2385699182 DoH=2.29456435 He3oH=1.019527377 Li7oH=5.680091594 network=small PRyM_time=8.2 s wall=8.2 s PRyM_version=bf24c3d+ri02+sr01+bt02
+  reference: inputs OK (z_samples 5160 vs samples=5160); converged True (|res_H| 3.523e-08, |res_phi| 2.124e-08 < 1e-05); 15 keys: all equal
+  reference: dissipation line, 24 fields at :.6g: all equal
+  resumed: inputs OK (z_samples 5160 vs samples=5160); converged True (|res_H| 3.523e-08, |res_phi| 2.124e-08 < 1e-05); 15 keys: all equal
+  resumed: dissipation line, 24 fields at :.6g: all equal
+    key-by-key (tool's printed repr | its float.hex | reference stored hex | resumed stored hex):
+      normalization       -276.8688984501351 | -0x1.14de7020fae01p+8 | -0x1.14de7020fae01p+8 | -0x1.14de7020fae01p+8
+      V_ref               5.887294738085568e-121 | 0x1.852ee1c8423b5p-400 | 0x1.852ee1c8423b5p-400 | 0x1.852ee1c8423b5p-400
+      phi_ref             0.03460352184426362 | 0x1.1b78d854b898fp-5 | 0x1.1b78d854b898fp-5 | 0x1.1b78d854b898fp-5
+      phi_0               0.03459367383815649 | 0x1.1b64313911641p-5 | 0x1.1b64313911641p-5 | 0x1.1b64313911641p-5
+      pi_0                0.04795893086765879 | 0x1.88e12af416470p-5 | 0x1.88e12af416470p-5 | 0x1.88e12af416470p-5
+      tracking            0.9242331626302639 | 0x1.d93516cec052fp-1 | 0x1.d93516cec052fp-1 | 0x1.d93516cec052fp-1
+      residual_H          -3.5233643336241016e-08 | -0x1.2ea799e000000p-25 | -0x1.2ea799e000000p-25 | -0x1.2ea799e000000p-25
+      residual_phi        -2.1237883451874495e-08 | -0x1.6cdd330000000p-26 | -0x1.6cdd330000000p-26 | -0x1.6cdd330000000p-26
+      tuning_iterations   5 | - | 5 | 5
+      plain_steps         1 | - | 1 | 1
+      secant_steps        3 | - | 3 | 3
+      guard_steps         0 | - | 0 | 0
+      seed_kind           tracking | - | tracking | tracking
+      seed_normalization  -276.8846401994391 | -0x1.14e277c7b5516p+8 | -0x1.14e277c7b5516p+8 | -0x1.14e277c7b5516p+8
+      seed_phi_ref        0.03433537145080339 | 0x1.19467e2f45537p-5 | 0x1.19467e2f45537p-5 | 0x1.19467e2f45537p-5
+
+=== beta=3 M=0.001 M_P phi*=5 alpha=0.1  (tool 3-a0.1.txt; load at its start 7.57 8.97 10.43)
+    history beta=3 M=0.001: RHS=75132 accepted_steps=7989 reflections=0 samples=5973 integrations=4 alpha=0.1 wall=22.4 s
+    bbn beta=3 M=0.001: Yp=0.2349475983 DoH=2.150627273 He3oH=0.996556107 Li7oH=6.015410634 network=small PRyM_time=8.2 s wall=8.2 s PRyM_version=bf24c3d+ri02+sr01+bt02
+  reference: inputs OK (z_samples 5973 vs samples=5973); converged True (|res_H| 1.699e-06, |res_phi| 9.702e-06 < 1e-05); 15 keys: all equal
+  reference: dissipation line, 24 fields at :.6g: all equal
+  resumed: inputs OK (z_samples 5973 vs samples=5973); converged True (|res_H| 1.699e-06, |res_phi| 9.702e-06 < 1e-05); 15 keys: all equal
+  resumed: dissipation line, 24 fields at :.6g: all equal
+    key-by-key (tool's printed repr | its float.hex | reference stored hex | resumed stored hex):
+      normalization       -276.96406238560587 | -0x1.14f6cccae17b2p+8 | -0x1.14f6cccae17b2p+8 | -0x1.14f6cccae17b2p+8
+      V_ref               5.426547249756097e-121 | 0x1.66b9a3193ecf9p-400 | 0x1.66b9a3193ecf9p-400 | 0x1.66b9a3193ecf9p-400
+      phi_ref             0.02349116294618413 | 0x1.80e1142653d9dp-6 | 0x1.80e1142653d9dp-6 | 0x1.80e1142653d9dp-6
+      phi_0               0.023490935041087044 | 0x1.80e01f7040609p-6 | 0x1.80e01f7040609p-6 | 0x1.80e01f7040609p-6
+      pi_0                0.03335134426942321 | 0x1.1136d69d461f0p-5 | 0x1.1136d69d461f0p-5 | 0x1.1136d69d461f0p-5
+      tracking            0.9465025327454959 | 0x1.e49bfadf7236cp-1 | 0x1.e49bfadf7236cp-1 | 0x1.e49bfadf7236cp-1
+      residual_H          -1.6991809669297808e-06 | -0x1.c81ed3b180000p-20 | -0x1.c81ed3b180000p-20 | -0x1.c81ed3b180000p-20
+      residual_phi        9.701831628294855e-06 | 0x1.458a195f40000p-17 | 0x1.458a195f40000p-17 | 0x1.458a195f40000p-17
+      tuning_iterations   4 | - | 4 | 4
+      plain_steps         1 | - | 1 | 1
+      secant_steps        2 | - | 2 | 2
+      guard_steps         0 | - | 0 | 0
+      seed_kind           tracking | - | tracking | tracking
+      seed_normalization  -276.9786915156285 | -0x1.14fa8b86f47f4p+8 | -0x1.14fa8b86f47f4p+8 | -0x1.14fa8b86f47f4p+8
+      seed_phi_ref        0.02332328854885997 | 0x1.7e20f6635c914p-6 | 0x1.7e20f6635c914p-6 | 0x1.7e20f6635c914p-6
+
+=== beta=5.5 M=0.001 M_P phi*=5 alpha=0.1  (tool 5.5-a0.1.txt; load at its start 6.40 8.55 10.23)
+    history beta=5.5 M=0.001: RHS=67886 accepted_steps=7067 reflections=0 samples=7327 integrations=5 alpha=0.1 wall=25.4 s
+    bbn beta=5.5 M=0.001: Yp=0.2309233158 DoH=2.055765592 He3oH=0.982139542 Li7oH=6.186702081 network=small PRyM_time=7.6 s wall=7.6 s PRyM_version=bf24c3d+ri02+sr01+bt02
+  reference: inputs OK (z_samples 7327 vs samples=7327); converged True (|res_H| 3.292e-10, |res_phi| 3.089e-08 < 1e-05); 15 keys: all equal
+  reference: dissipation line, 24 fields at :.6g: all equal
+  resumed: inputs OK (z_samples 7327 vs samples=7327); converged True (|res_H| 3.292e-10, |res_phi| 3.089e-08 < 1e-05); 15 keys: all equal
+  resumed: dissipation line, 24 fields at :.6g: all equal
+    key-by-key (tool's printed repr | its float.hex | reference stored hex | resumed stored hex):
+      normalization       -277.06242978373325 | -0x1.150ffb65f76e4p+8 | -0x1.150ffb65f76e4p+8 | -0x1.150ffb65f76e4p+8
+      V_ref               5.004744772070272e-121 | 0x1.4ad775be88127p-400 | 0x1.4ad775be88127p-400 | 0x1.4ad775be88127p-400
+      phi_ref             0.0166611273057651 | 0x1.10f9d53922e06p-6 | 0x1.10f9d53922e06p-6 | 0x1.10f9d53922e06p-6
+      phi_0               0.016661126791178687 | 0x1.10f9d4abb013bp-6 | 0x1.10f9d4abb013bp-6 | 0x1.10f9d4abb013bp-6
+      pi_0                0.02323018965219321 | 0x1.7c9a7a3581cd3p-6 | 0x1.7c9a7a3581cd3p-6 | 0x1.7c9a7a3581cd3p-6
+      tracking            0.9295165504449374 | 0x1.dbe997e280e42p-1 | 0x1.dbe997e280e42p-1 | 0x1.dbe997e280e42p-1
+      residual_H          -3.2922775616839317e-10 | -0x1.69fd600000000p-32 | -0x1.69fd600000000p-32 | -0x1.69fd600000000p-32
+      residual_phi        3.0885439761263456e-08 | 0x1.094dcce000000p-25 | 0x1.094dcce000000p-25 | 0x1.094dcce000000p-25
+      tuning_iterations   5 | - | 5 | 5
+      plain_steps         1 | - | 1 | 1
+      secant_steps        3 | - | 3 | 3
+      guard_steps         0 | - | 0 | 0
+      seed_kind           tracking | - | tracking | tracking
+      seed_normalization  -277.0868645556504 | -0x1.15163cc169b33p+8 | -0x1.15163cc169b33p+8 | -0x1.15163cc169b33p+8
+      seed_phi_ref        0.016464851040791605 | 0x1.0dc297303ccf3p-6 | 0x1.0dc297303ccf3p-6 | 0x1.0dc297303ccf3p-6
+
+SUMMARY: inputs all as the tool; converged all; bitwise all 8 x 15 x 2 equal; dissipation lines (measured, :.6g) all equal

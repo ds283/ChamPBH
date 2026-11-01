@@ -1,0 +1,92 @@
+## inelastic-reflection 11 gate: 2026-11-01 02:41:36 +0000 / 2026-11-01 02:41:36 UTC
+uptime:  2:41  up 1 day,  5:02, 1 user, load averages: 2.85 3.68 5.94
+$ git branch --show-current
+inelastic-reflection
+$ git log --oneline -3
+6d1a77c Write the orchestration note for inelastic-reflection prompt 11
+0a47ec4 Write inelastic-reflection prompt 11, the measurement and the rehearsal
+5f7c3af Record the orchestrator's review of inelastic-reflection prompt 10
+$ git rev-parse HEAD
+6d1a77c046b0fda2003df0a1b7e35abba148be3d
+$ git status --porcelain --untracked-files=all (before var/inelastic-reflection-11 was made; var is ignored)
+$ git worktree list
+/Users/ds283/Documents/Code/ChamPBH 6d1a77c [inelastic-reflection]
+$ ray_cluster.sh status (exit 0)
+lock: free (/Users/ds283/.raypoolkit/rehearsal-lock does not exist)
+Ray processes of /tmp/ray-cpbh: none
+what stop would signal (this script's rule, /tmp/ray-cpbh): no processes
+port 6380: free
+port 6381: free
+port 8267: free
+port 52367: free
+$ raypoolkit.rehearsal_lock status (exit 0)
+lock: free (/Users/ds283/.raypoolkit/rehearsal-lock does not exist)
+Ray processes: no temp dir given
+$ runregistrykit list
+   RUN                                                  STATE      PROGRESS      AGE  PURPOSE · STAGE
+   jordan-normalization-09-resumed-c-20261026T201250    done              -   5d 06h  jordan-normalization 09 H2: run c into the resumed store (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-b-20261026T201130    done              -   5d 06h  jordan-normalization 09 H2: run b into the resumed store (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a2-20261026T200824   done              -   5d 06h  jordan-normalization 09 H2: run a again into the resumed store, the resume after SIGTERM  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a-20261026T200457    killed            -   5d 06h  jordan-normalization 09 H2: run a into the resumed store, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   jordan-normalization-09-reference-c-20261026T200132  done              -   5d 06h  jordan-normalization 09 H1: run c of the reference build (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-b-20261026T200014  done              -   5d 06h  jordan-normalization 09 H1: run b of the reference build (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-a-20261026T195544  done              -   5d 06h  jordan-normalization 09 H1: run a of the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   rrk-adoption-03-unit-20261026T151946                 lost              -   5d 11h  a test run of the wrapper, in a temporary directory  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   ray-sqla-align-02-resumed-c-20261025T210916          done              -   6d 05h  ray-sqla-align 02 R3: the resume of the resumed store under ray 2.59.0, straight through  · CALCULATE BBN DATA, all work items complete
+   ray-sqla-align-02-resumed-a-20261025T210611          killed            -   6d 05h  ray-sqla-align 02 R2: the pilot grid into the resumed store under ray 2.59.0, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   ray-sqla-align-02-reference-20261025T210149          done              -   6d 05h  ray-sqla-align 02 R1: the pilot grid straight through under ray 2.59.0, the reference store  · CALCULATE BBN DATA, all work items complete
+
+11 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 11 finished; 0 with no host recorded.
+$ ls var/datastores
+jordan-normalization-09-reference-shard0000.db
+jordan-normalization-09-reference-shard0001.db
+jordan-normalization-09-reference-shard0002.db
+jordan-normalization-09-reference-shard0003.db
+jordan-normalization-09-reference-shard0004.db
+jordan-normalization-09-reference-shard0005.db
+jordan-normalization-09-reference-shard0006.db
+jordan-normalization-09-reference-shard0007.db
+jordan-normalization-09-reference-shard0008.db
+jordan-normalization-09-reference-shard0009.db
+jordan-normalization-09-reference-shard0010.db
+jordan-normalization-09-reference-shard0011.db
+jordan-normalization-09-reference-shard0012.db
+jordan-normalization-09-reference-shard0013.db
+jordan-normalization-09-reference-shard0014.db
+jordan-normalization-09-reference-shard0015.db
+jordan-normalization-09-reference.db
+jordan-normalization-09-reference.manifest.json
+jordan-normalization-09-resumed.manifest.json
+ray-sqla-align-02-reference.manifest.json
+ray-sqla-align-02-resumed.manifest.json
+rrk-adoption-04-reference.manifest.json
+rrk-adoption-04-resumed.manifest.json
+$ shasum -a 256 var/datastores/jordan-normalization-09-reference*
+a9a4222d2300b2cc14ba26260f7a103606152da72cb6f213503801c2924d171b  var/datastores/jordan-normalization-09-reference-shard0000.db
+c87cdad375135bd781047ae06ea4ef4035b4a65295af6b5de2d89c12c3f6a3f4  var/datastores/jordan-normalization-09-reference-shard0001.db
+eefe18bb1d6a292c102a5df5281f1a7d56fd0c3386758e49cf093f09f0b0fe0f  var/datastores/jordan-normalization-09-reference-shard0002.db
+fcfe91a371abb595b1ff05dcbcad343698061da994ba9fea9a5976b72f11641d  var/datastores/jordan-normalization-09-reference-shard0003.db
+fcfe91a371abb595b1ff05dcbcad343698061da994ba9fea9a5976b72f11641d  var/datastores/jordan-normalization-09-reference-shard0004.db
+e8d57c883406263512e993c7ddc677ff69ed88d4615a171b2f46454e36c1594e  var/datastores/jordan-normalization-09-reference-shard0005.db
+fcfe91a371abb595b1ff05dcbcad343698061da994ba9fea9a5976b72f11641d  var/datastores/jordan-normalization-09-reference-shard0006.db
+8733e3400e4700e87522f1f710b6073e6f959cd1ec9eafdccc54f20cff4e4061  var/datastores/jordan-normalization-09-reference-shard0007.db
+fcfe91a371abb595b1ff05dcbcad343698061da994ba9fea9a5976b72f11641d  var/datastores/jordan-normalization-09-reference-shard0008.db
+fcfe91a371abb595b1ff05dcbcad343698061da994ba9fea9a5976b72f11641d  var/datastores/jordan-normalization-09-reference-shard0009.db
+fcfe91a371abb595b1ff05dcbcad343698061da994ba9fea9a5976b72f11641d  var/datastores/jordan-normalization-09-reference-shard0010.db
+fcfe91a371abb595b1ff05dcbcad343698061da994ba9fea9a5976b72f11641d  var/datastores/jordan-normalization-09-reference-shard0011.db
+8733e3400e4700e87522f1f710b6073e6f959cd1ec9eafdccc54f20cff4e4061  var/datastores/jordan-normalization-09-reference-shard0012.db
+e8d57c883406263512e993c7ddc677ff69ed88d4615a171b2f46454e36c1594e  var/datastores/jordan-normalization-09-reference-shard0013.db
+8733e3400e4700e87522f1f710b6073e6f959cd1ec9eafdccc54f20cff4e4061  var/datastores/jordan-normalization-09-reference-shard0014.db
+d55722e8c5d7dd3bf7c74b59658d24429b3409da9dec717f9b275b1afac8346b  var/datastores/jordan-normalization-09-reference-shard0015.db
+736479c695446c5cdeea80d576e94b314aa78d370eb5e6fb30256e0611151f67  var/datastores/jordan-normalization-09-reference.db
+57d6876e003910a055bf16b00c46ea0ad5d8e3c9dfac676aec7bb95de3449934  var/datastores/jordan-normalization-09-reference.manifest.json
+$ store show jordan-normalization-09-reference.db | head -3
+sidecar:  /Users/ds283/Documents/Code/ChamPBH/var/datastores/jordan-normalization-09-reference.manifest.json
+kind:     registry
+problems: none
+$ shasum -a 256 main.py
+7ec588228a58bf2ebb594953a42a818f54b73b0a087175bd95d2fe8ed5e72226  main.py
+$ token file stat
+-rw------- 64 1792932677 Oct 25 12:51:17 2026
+$ grep PARKING_EPSILON ComputeTargets/ScalarHistory.py
+126:PARKING_EPSILON = 1.0e-6

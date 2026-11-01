@@ -1,0 +1,4 @@
+[2026-11-01T03:04:29+00:00] interrupt_when: waiting for "RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.1" in /Users/ds283/Documents/Code/ChamPBH/var/inelastic-reflection-11/rehearsal/resumed-a.log; then 28 s; then SIGTERM
+[2026-11-01T03:04:29+00:00] interrupt_when: driver pid 53257 (from /Users/ds283/Documents/Code/ChamPBH/var/inelastic-reflection-11/rehearsal/resumed-a.pid)
+[2026-11-01T03:07:53+00:00] interrupt_when: saw "RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.1"; waiting 28 s
+[2026-11-01T03:08:21+00:00] interrupt_when: sent SIGTERM to pid 53257

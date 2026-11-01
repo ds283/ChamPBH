@@ -1,0 +1,27 @@
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-01 03:12:41,412	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-01 03:12:41,440	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at http://127.0.0.1:8267 
+!! WARNING: number of shards read from database (=16) does not match specified number of shards (=10)
+>> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/inelastic-reflection-11-reference.db" read-only with 16 shards (version label "2026.8.0", serial 1)
+@@ plot_ScalarHistory: alpha values 0, 0.1
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0
+
+** GENERATING ScalarHistory DATA PRODUCTS
+(Datastore pid=54558) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+(plot_ScalarHistory pid=54572) @@ plot_ScalarHistory: BBN data for Model=ExponentialModel(M=0.001Mp,n=1,beta=0.5) is not available, and will not be plotted
+(plot_ScalarHistory pid=54572) @@ plot_dark_radiation: alpha = 0, no dark radiation to plot; figure skipped
+(plot_ScalarHistory pid=54571) 
+   -- ALL WORK ITEMS COMPLETE in time 5.71s
+      Queue summary: 4 lookup (avg 42/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.1
+
+** GENERATING ScalarHistory DATA PRODUCTS
+   -- ALL WORK ITEMS COMPLETE in time 3.95s
+      Queue summary: 4 lookup (avg 60.72/min)
+      (no compute items were evaluated - all assets read from datastore)
+(plot_ScalarHistory pid=54574) @@ plot_ScalarHistory: BBN data for Model=ExponentialModel(M=0.001Mp,n=1,beta=0.5) is not available, and will not be plotted
+(plot_ScalarHistory pid=54574) @@ plot_dark_radiation: alpha = 0, no dark radiation to plot; figure skipped [repeated 3x across cluster] (Ray deduplicates logs by default. Set RAY_DEDUP_LOGS=0 to disable log deduplication, or see https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#log-deduplication for more options.)
+exit 0 wall 18 s

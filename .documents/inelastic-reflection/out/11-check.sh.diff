@@ -1,0 +1,16 @@
+2c2
+< # jordan-normalization 09: the one check after a launch (the orchestrator's note for 09, ruling 4).
+---
+> # inelastic-reflection 11: the one check after a launch (as jordan-normalization 09; the orchestrator's note for 09, ruling 4).
+4,6c4,6
+< # Starts nothing and signals nothing. Appends to var/jordan-normalization-09/09-checks.txt.
+< #   sh var/jordan-normalization-09/tools/check.sh SLUG
+< L=var/jordan-normalization-09
+---
+> # Starts nothing and signals nothing. Appends to var/inelastic-reflection-11/rehearsal/11-checks.txt.
+> #   sh var/inelastic-reflection-11/tools/check.sh SLUG
+> L=var/inelastic-reflection-11/rehearsal
+32c32
+< } >> $L/09-checks.txt 2>&1
+---
+> } >> $L/11-checks.txt 2>&1

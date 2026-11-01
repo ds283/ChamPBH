@@ -1,0 +1,23 @@
+uptime:  3:18  up 1 day,  5:38, 1 user, load averages: 9.56 9.45 10.65
+$ PYTHONPATH=. ./venv/bin/python tools/history_and_bbn.py 0.5 1e-3 --phi-init-Mp 5 --alpha 0.1
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+!! tune_history (history_and_bbn-beta0.5-M0.001): dissipation mode: the reflections are expected to be nearly elastic in this regime: the test-field ratio R = 10^-94.502 < 1 at the first impact (phi_t = 6.968e-05 M_P)
+!! tune_history (history_and_bbn-beta0.5-M0.001): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -2.9990 < ln 10 at N = 41.15611815 (generation 11); the generations below ln 10 carry 0.9998 of K
+!! tune_history (history_and_bbn-beta0.5-M0.001): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = -2.3749 < ln 10 at N = 41.49192599 (generation 11); the generations below ln 10 carry 0.9998 of K
+!! tune_history (history_and_bbn-beta0.5-M0.001): dissipation mode: the spectrum's peak is not relativistic on the late tracker: the worst margin ln(p/m) = -2.2113 < ln 10 at N = 41.49842613 (generation 11); the generations below ln 10 carry 0.0673 of K
+-- tune history_and_bbn-beta0.5-M0.001 it=0 kind=seed H/H0-1=-1.385e-02 phi_ref/phi_min-1=-5.591e-03 norm=-276.784149811 phi_ref=6.2129003659e-02 wall=1.5
+-- tune history_and_bbn-beta0.5-M0.001 it=1 kind=plain H/H0-1=+1.135e-03 phi_ref/phi_min-1=-2.003e-02 norm=-276.742345994 phi_ref=6.2478316906e-02 wall=1.5
+-- tune history_and_bbn-beta0.5-M0.001 it=2 kind=secant H/H0-1=+2.142e-04 phi_ref/phi_min-1=+8.843e-05 norm=-276.745675325 phi_ref=6.3736046015e-02 wall=1.5
+-- tune history_and_bbn-beta0.5-M0.001 it=3 kind=secant H/H0-1=-1.661e-06 phi_ref/phi_min-1=+3.935e-06 norm=-276.746254083 phi_ref=6.3711550967e-02 wall=1.5
+history beta=0.5 M=0.001: RHS=25311 accepted_steps=2937 reflections=0 samples=4620 integrations=4 alpha=0.1 wall=6.0 s
+tuning beta=0.5 M=0.001: normalization=-276.74625408343474 V_ref=6.5681874379768054e-121 phi_ref=0.06371155096662517 phi_0=0.055176740545029 pi_0=0.06336427245153534 tracking=0.7655915859428074 residual_H=-1.6609964206271144e-06 residual_phi=3.934972919950042e-06 tuning_iterations=4 plain_steps=1 secant_steps=2 guard_steps=0 seed_kind=tracking seed_normalization=-276.7841498114068 seed_phi_ref=0.062129003658643864
+bounce beta=0.5 M=0.001: N=36.955071815 T_J=0.000000 MeV phi=6.988160e-05 reflected=False
+dissipation beta=0.5 M=0.001: injections=13 resolved_candidates=13 unresolved_candidates=0 injected_fraction=1.20199 rho_chi_ratio_1MeV=0 rho_chi_ratio_70keV=0 rho_chi_ratio_today=1.20199 Delta_N_eff_1MeV=0 Delta_N_eff_today=8.95247 log_R_first_impact=-217.625 parking_N=None parking_log_T_Jordan_GeV=None release_N=None release_log_T_Jordan_GeV=None worst_birth_margin=-3.03807 worst_birth_margin_N=41.167 birth_failing_share=0.999831 worst_reflection_margin=-2.40826 worst_reflection_margin_N=41.5063 reflection_failing_share=0.999831 worst_tracker_margin=-2.26562 worst_tracker_margin_N=41.5073 tracker_failing_share=0.120399 unassessed_share=0
+fixed_T beta=0.5 M=0.001: 1MeV crossings=1 phi=3.835253225e+00 ratio=4.194053174e+01 stand_in_phi=3.835253191e+00 stand_in_ratio=4.194052261e+01 | 70keV crossings=1 phi=3.647276575e+00 ratio=3.181785341e+01 stand_in_phi=3.647277314e+00 stand_in_ratio=3.181789215e+01
+ratio beta=0.5 M=0.001 [0.3,1) keV: n=131 min=31.6 median=31.62 max=31.63 rms_step=0.0002596
+ratio beta=0.5 M=0.001 [1,3) keV: n=119 min=31.63 median=31.64 max=31.64 rms_step=8.051e-05
+ratio beta=0.5 M=0.001 [3,10) keV: n=131 min=31.64 median=31.64 max=31.64 rms_step=2.378e-05
+ratio beta=0.5 M=0.001 [10,100) keV: n=264 min=31.64 median=31.64 max=32.69 rms_step=0.008586
+bbn beta=0.5 M=0.001: FAILURE network=small wall=0.7 s reason=PRyMordial: ComputationFailureError: T_in_MeV=0.00019824 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+exit: 1
+uptime after:  3:18  up 1 day,  5:39, 1 user, load averages: 8.93 9.31 10.59

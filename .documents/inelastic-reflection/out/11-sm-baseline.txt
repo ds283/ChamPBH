@@ -1,0 +1,6 @@
+uptime:  3:21  up 1 day,  5:42, 1 user, load averages: 5.76 7.59 9.58
+$ PYTHONPATH=. ./venv/bin/python tools/bbn_from_store.py --sm-baseline --small-network
+SM baseline (rho_NP = 0), lowT rtol=default atol=default, small network
+  SM     Yp=0.2468802117 DoH=2.458287893 He3oH=1.041932695 Li7oH=5.486373007 wall=7.8 s
+exit: 0
+uptime after:  3:21  up 1 day,  5:42, 1 user, load averages: 5.42 7.46 9.51

@@ -1,0 +1,105 @@
+"""
+The recorder of jordan-normalization prompt 09 (the orchestrator's note for 09, ruling 7).
+
+    ./venv/bin/python -u beat_times.py LOG OUT [--runs var/runs] [--poll 0.5] [--limit 3600]
+
+Reads only. It waits for LOG to exist, then appends to OUT one line per complete line of LOG as it
+appears,
+
+    <UTC ISO time, ms> L <the line, ANSI stripped>
+
+polling every --poll seconds. Once LOG holds `** registered_run: registered as <RUN_ID>`, it also
+reads <runs>/<RUN_ID>/status.json at each poll (a failed read is skipped) and appends
+
+    <UTC ISO time, ms> H <heartbeat> <state> <stage>
+
+whenever (heartbeat, state, stage) changes. It exits after LOG's `** launcher saw exit status` line
+and one last read of status.json, or after --limit seconds whatever happens, writing why it exited
+as its last line (`<UTC> X <reason>`). It starts nothing, signals nothing and opens no store.
+"""
+
+import argparse
+import json
+import re
+import sys
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+
+ANSI = re.compile(r"\x1b\[[0-9;]*m")
+REGISTERED = "** registered_run: registered as "
+LAUNCHER = "** launcher saw exit status"
+
+
+def _utc():
+    return datetime.now(timezone.utc).isoformat(timespec="milliseconds")
+
+
+def main(argv=None):
+    p = argparse.ArgumentParser(description="Record a launch log's lines and heartbeats.")
+    p.add_argument("log", type=Path)
+    p.add_argument("out", type=Path)
+    p.add_argument("--runs", type=Path, default=Path("var/runs"))
+    p.add_argument("--poll", type=float, default=0.5)
+    p.add_argument("--limit", type=float, default=3600.0)
+    args = p.parse_args(argv)
+
+    start = time.monotonic()
+    deadline = start + args.limit
+    out = open(args.out, "a", buffering=1, encoding="utf-8")
+
+    def emit(kind, text):
+        out.write(f"{_utc()} {kind} {text}\n")
+
+    emit("X", f"recorder started: log {args.log}, runs {args.runs}, poll {args.poll:g} s")
+
+    offset = 0
+    pending = b""
+    run_id = None
+    last_status = None
+    saw_launcher = False
+
+    def read_status():
+        nonlocal last_status
+        if run_id is None:
+            return
+        try:
+            s = json.loads((args.runs / run_id / "status.json").read_text())
+        except Exception:  # noqa: BLE001 - a failed read is skipped
+            return
+        key = (s.get("heartbeat"), s.get("state"), s.get("stage"))
+        if key != last_status:
+            last_status = key
+            emit("H", f"{key[0]} {key[1]} {key[2]}")
+
+    while True:
+        if time.monotonic() >= deadline:
+            read_status()
+            emit("X", f"exit: the limit of {args.limit:g} s passed")
+            return 1
+        try:
+            with open(args.log, "rb") as f:
+                f.seek(offset)
+                chunk = f.read()
+        except OSError:
+            chunk = None
+        if chunk:
+            offset += len(chunk)
+            pending += chunk
+            *lines, pending = pending.split(b"\n")
+            for raw in lines:
+                line = ANSI.sub("", raw.decode("utf-8", errors="replace")).rstrip("\r")
+                emit("L", line)
+                if run_id is None and REGISTERED in line:
+                    run_id = line.split(REGISTERED, 1)[1].strip().split()[0]
+                if LAUNCHER in line:
+                    saw_launcher = True
+        read_status()
+        if saw_launcher:
+            emit("X", "exit: the launcher's line was seen; status.json read once more")
+            return 0
+        time.sleep(args.poll)
+
+
+if __name__ == "__main__":
+    sys.exit(main())

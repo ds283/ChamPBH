@@ -1,0 +1,66 @@
+## inelastic-reflection 11 token and end checks, 2026-11-01 03:49:24 UTC
+start.txt: grep -c 'Token authentication is enabled' = 0
+start.txt: grep -c 'Generated new authentication token' = 0
+start.txt: grep -c 'InvalidAuthToken' = 0
+start.txt: grep -c 'AuthenticationError' = 0
+start.txt: grep -c 'Connected to Ray cluster' = 0
+reference-a.log: grep -c 'Token authentication is enabled' = 0
+reference-a.log: grep -c 'Generated new authentication token' = 0
+reference-a.log: grep -c 'InvalidAuthToken' = 0
+reference-a.log: grep -c 'AuthenticationError' = 0
+reference-a.log: grep -c 'Connected to Ray cluster' = 1
+resumed-a.log: grep -c 'Token authentication is enabled' = 0
+resumed-a.log: grep -c 'Generated new authentication token' = 0
+resumed-a.log: grep -c 'InvalidAuthToken' = 0
+resumed-a.log: grep -c 'AuthenticationError' = 0
+resumed-a.log: grep -c 'Connected to Ray cluster' = 1
+resumed-a2.log: grep -c 'Token authentication is enabled' = 0
+resumed-a2.log: grep -c 'Generated new authentication token' = 0
+resumed-a2.log: grep -c 'InvalidAuthToken' = 0
+resumed-a2.log: grep -c 'AuthenticationError' = 0
+resumed-a2.log: grep -c 'Connected to Ray cluster' = 1
+inventory.log: grep -c 'Token authentication is enabled' = 0
+inventory.log: grep -c 'Generated new authentication token' = 0
+inventory.log: grep -c 'InvalidAuthToken' = 0
+inventory.log: grep -c 'AuthenticationError' = 0
+inventory.log: grep -c 'Connected to Ray cluster' = 0
+plot-by-beta.log: grep -c 'Token authentication is enabled' = 0
+plot-by-beta.log: grep -c 'Generated new authentication token' = 0
+plot-by-beta.log: grep -c 'InvalidAuthToken' = 0
+plot-by-beta.log: grep -c 'AuthenticationError' = 0
+plot-by-beta.log: grep -c 'Connected to Ray cluster' = 1
+plot-history.log: grep -c 'Token authentication is enabled' = 0
+plot-history.log: grep -c 'Generated new authentication token' = 0
+plot-history.log: grep -c 'InvalidAuthToken' = 0
+plot-history.log: grep -c 'AuthenticationError' = 0
+plot-history.log: grep -c 'Connected to Ray cluster' = 1
+plot-unstored.log: grep -c 'Token authentication is enabled' = 0
+plot-unstored.log: grep -c 'Generated new authentication token' = 0
+plot-unstored.log: grep -c 'InvalidAuthToken' = 0
+plot-unstored.log: grep -c 'AuthenticationError' = 0
+plot-unstored.log: grep -c 'Connected to Ray cluster' = 1
+$ token file mode and mtime
+-rw------- 64 1792932677 Oct 25 12:51:17 2026
+$ runregistrykit list (after)
+   RUN                                                  STATE      PROGRESS      AGE  PURPOSE · STAGE
+   inelastic-reflection-11-resumed-a2-20261101T030928   done              -      39m  inelastic-reflection 11 R2: the same build again into the resumed store, the resume after SIGTERM  · CALCULATE BBN DATA, all work items complete
+   inelastic-reflection-11-resumed-a-20261101T030431    killed            -      44m  inelastic-reflection 11 R2: the build into the resumed store, interrupted with SIGTERM in the alpha = 0.1 scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   inelastic-reflection-11-reference-a-20261101T025902  done              -      49m  inelastic-reflection 11 R1: the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5, alpha 0 and 0.1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-c-20261026T201250    done              -   5d 07h  jordan-normalization 09 H2: run c into the resumed store (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-b-20261026T201130    done              -   5d 07h  jordan-normalization 09 H2: run b into the resumed store (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a2-20261026T200824   done              -   5d 07h  jordan-normalization 09 H2: run a again into the resumed store, the resume after SIGTERM  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a-20261026T200457    killed            -   5d 07h  jordan-normalization 09 H2: run a into the resumed store, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   jordan-normalization-09-reference-c-20261026T200132  done              -   5d 07h  jordan-normalization 09 H1: run c of the reference build (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-b-20261026T200014  done              -   5d 07h  jordan-normalization 09 H1: run b of the reference build (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-a-20261026T195544  done              -   5d 07h  jordan-normalization 09 H1: run a of the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   rrk-adoption-03-unit-20261026T151946                 lost              -   5d 12h  a test run of the wrapper, in a temporary directory  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   ray-sqla-align-02-resumed-c-20261025T210916          done              -   6d 06h  ray-sqla-align 02 R3: the resume of the resumed store under ray 2.59.0, straight through  · CALCULATE BBN DATA, all work items complete
+   ray-sqla-align-02-resumed-a-20261025T210611          killed            -   6d 06h  ray-sqla-align 02 R2: the pilot grid into the resumed store under ray 2.59.0, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   ray-sqla-align-02-reference-20261025T210149          done              -   6d 06h  ray-sqla-align 02 R1: the pilot grid straight through under ray 2.59.0, the reference store  · CALCULATE BBN DATA, all work items complete
+
+14 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 14 finished; 0 with no host recorded.
+$ raypoolkit.rehearsal_lock status (end; exit 0)
+lock: free (/Users/ds283/.raypoolkit/rehearsal-lock does not exist)
+Ray processes: no temp dir given
+$ grep -r -F -l -f ~/.ray/auth_token .documents/inelastic-reflection/ .documents/inelastic-reflection-verification.md prompts/inelastic-reflection/logs/11-measure.md prompts/inelastic-reflection/IMPLEMENTATION_STATE.md .documents/OPEN_ISSUES.md
+(no output) exit 1

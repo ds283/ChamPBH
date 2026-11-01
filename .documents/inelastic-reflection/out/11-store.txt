@@ -1,0 +1,160 @@
+$ store create reference
+>> create: var/datastores/inelastic-reflection-11-reference.manifest.json
+{
+  "created": "2026-11-01T03:03:59+00:00",
+  "datastore": "inelastic-reflection-11-reference.db",
+  "history": [
+    {
+      "from": null,
+      "git_dirty": true,
+      "git_head": "6d1a77c046b0fda2003df0a1b7e35abba148be3d",
+      "operation": "create",
+      "to": "var/datastores/inelastic-reflection-11-reference.db",
+      "when": "2026-11-01T03:03:59+00:00"
+    }
+  ],
+  "name": "inelastic-reflection-11-reference",
+  "purpose": "inelastic-reflection 11 R1: the reference build of jordan-normalization 09's run a at alpha 0 and 0.1, kept for the user",
+  "sidecar_format": 1,
+  "store_id": "7b179dfa36b94700b8c15ea48aa39c02"
+}
+exit 0
+$ store show reference
+sidecar:  /Users/ds283/Documents/Code/ChamPBH/var/datastores/inelastic-reflection-11-reference.manifest.json
+kind:     registry
+problems: none
+datastore: 'inelastic-reflection-11-reference.db'
+fields:
+  {
+    "created": "2026-11-01T03:03:59+00:00",
+    "datastore": "inelastic-reflection-11-reference.db",
+    "history": [
+    ],
+    "name": "inelastic-reflection-11-reference",
+    "purpose": "inelastic-reflection 11 R1: the reference build of jordan-normalization 09's run a at alpha 0 and 0.1, kept for the user",
+    "sidecar_format": 1,
+    "store_id": "7b179dfa36b94700b8c15ea48aa39c02"
+  }
+runs naming this store, under /Users/ds283/Documents/Code/ChamPBH/var/runs:
+  inelastic-reflection-11-reference-a-20261101T025902  done      finished  by results
+exit 0
+$ store create resumed
+>> create: var/datastores/inelastic-reflection-11-resumed.manifest.json
+{
+  "created": "2026-11-01T03:09:16+00:00",
+  "datastore": "inelastic-reflection-11-resumed.db",
+  "history": [
+    {
+      "from": null,
+      "git_dirty": true,
+      "git_head": "6d1a77c046b0fda2003df0a1b7e35abba148be3d",
+      "operation": "create",
+      "to": "var/datastores/inelastic-reflection-11-resumed.db",
+      "when": "2026-11-01T03:09:16+00:00"
+    }
+  ],
+  "name": "inelastic-reflection-11-resumed",
+  "purpose": "inelastic-reflection 11 R2: the reference build's grid built by a resume after SIGTERM in the alpha = 0.1 scalar stage (runs a, a2), kept for the user",
+  "sidecar_format": 1,
+  "store_id": "191efe9e778e4235b6460df5731a0cab"
+}
+exit 0
+$ store show resumed
+sidecar:  /Users/ds283/Documents/Code/ChamPBH/var/datastores/inelastic-reflection-11-resumed.manifest.json
+kind:     registry
+problems: none
+datastore: 'inelastic-reflection-11-resumed.db'
+fields:
+  {
+    "created": "2026-11-01T03:09:16+00:00",
+    "datastore": "inelastic-reflection-11-resumed.db",
+    "history": [
+    ],
+    "name": "inelastic-reflection-11-resumed",
+    "purpose": "inelastic-reflection 11 R2: the reference build's grid built by a resume after SIGTERM in the alpha = 0.1 scalar stage (runs a, a2), kept for the user",
+    "sidecar_format": 1,
+    "store_id": "191efe9e778e4235b6460df5731a0cab"
+  }
+runs naming this store, under /Users/ds283/Documents/Code/ChamPBH/var/runs:
+  inelastic-reflection-11-resumed-a-20261101T030431  killed    finished  by results
+exit 0
+$ store fingerprint reference
+store:    /Users/ds283/Documents/Code/ChamPBH/var/datastores/inelastic-reflection-11-reference.db
+digest:   afd2f329d79b3b3e65fd7af53dd1ef33b80f60f74e49eb1d77698da0ea6f1264
+format:   6
+classes:  (count, digest; then each tag set)
+  version                  1  c902dde1662c
+                           1  c902dde1662c  []
+  store_tag                1  34407c96658d
+                           1  34407c96658d  []
+  redshift             75001  8dad579a1ae8
+                       75001  8dad579a1ae8  []
+  tolerance                2  a6a6f2867964
+                           2  a6a6f2867964  []
+  beta_value               4  298221e43b4d
+                           4  298221e43b4d  []
+  alpha_value              2  2d20742d6220
+                           2  2d20742d6220  []
+  M_value                  1  f2e0248b8a37
+                           1  f2e0248b8a37  []
+  temperature              1  9bd0581c026a
+                           1  9bd0581c026a  []
+  phi_value                1  29e7a88b01e3
+                           1  29e7a88b01e3  []
+  pi_value                 1  237cd5e96169
+                           1  237cd5e96169  []
+  QCD_Cosmology            1  dcbaa9d413d4
+                           1  dcbaa9d413d4  []
+  IntegrationSolver        6  223ae7361d67
+                           6  223ae7361d67  []
+  ExponentialModel         4  6f8f262ddf62
+                           4  6f8f262ddf62  []
+  ScalarHistory            8  697f71924c04
+                           8  697f71924c04  [SamplesPerLog10Z_250]
+  AdiabaticHistory         8  bf476e04d8c6
+                           8  bf476e04d8c6  [SamplesPerLog10Z_250]
+  BBNData                  8  05fe7a129591
+                           8  05fe7a129591  [SamplesPerLog10Z_250]
+problems: none
+recorded: none recorded (the sidecar is registry)
+exit 0
+$ store fingerprint resumed
+store:    /Users/ds283/Documents/Code/ChamPBH/var/datastores/inelastic-reflection-11-resumed.db
+digest:   afd2f329d79b3b3e65fd7af53dd1ef33b80f60f74e49eb1d77698da0ea6f1264
+format:   6
+classes:  (count, digest; then each tag set)
+  version                  1  c902dde1662c
+                           1  c902dde1662c  []
+  store_tag                1  34407c96658d
+                           1  34407c96658d  []
+  redshift             75001  8dad579a1ae8
+                       75001  8dad579a1ae8  []
+  tolerance                2  a6a6f2867964
+                           2  a6a6f2867964  []
+  beta_value               4  298221e43b4d
+                           4  298221e43b4d  []
+  alpha_value              2  2d20742d6220
+                           2  2d20742d6220  []
+  M_value                  1  f2e0248b8a37
+                           1  f2e0248b8a37  []
+  temperature              1  9bd0581c026a
+                           1  9bd0581c026a  []
+  phi_value                1  29e7a88b01e3
+                           1  29e7a88b01e3  []
+  pi_value                 1  237cd5e96169
+                           1  237cd5e96169  []
+  QCD_Cosmology            1  dcbaa9d413d4
+                           1  dcbaa9d413d4  []
+  IntegrationSolver        6  223ae7361d67
+                           6  223ae7361d67  []
+  ExponentialModel         4  6f8f262ddf62
+                           4  6f8f262ddf62  []
+  ScalarHistory            8  697f71924c04
+                           8  697f71924c04  [SamplesPerLog10Z_250]
+  AdiabaticHistory         8  bf476e04d8c6
+                           8  bf476e04d8c6  [SamplesPerLog10Z_250]
+  BBNData                  8  05fe7a129591
+                           8  05fe7a129591  [SamplesPerLog10Z_250]
+problems: none
+recorded: matches the fingerprint taken 2026-11-01T03:10:30+00:00 by run inelastic-reflection-11-resumed-a2-20261101T030928, at 6d1a77c046b0fda2003df0a1b7e35abba148be3d (dirty)
+exit 0

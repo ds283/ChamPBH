@@ -1,0 +1,179 @@
+2,3c2,5
+< The stored-values reader of jordan-normalization prompt 09 (the orchestrator's note for 09,
+< ruling 13). Stdlib only.
+---
+> The stored-values reader of inelastic-reflection prompt 11 (§2.6), adapted from
+> `jordan-normalization` prompt 09's `histories.py` (committed there as
+> `.documents/jordan-normalization/out/09-histories.py.txt`) to read alpha and the dissipation
+> columns. Stdlib only.
+5c7
+<     ./venv/bin/python histories.py STORE_STEM
+---
+>     ./venv/bin/python .documents/inelastic-reflection/measure/histories.py STORE_STEM
+7c9
+< STORE_STEM is the store's path without `.db` (e.g. var/datastores/jordan-normalization-09-reference).
+---
+> STORE_STEM is the store's path without `.db` (e.g. var/datastores/inelastic-reflection-11-reference).
+9c11,12
+< primary is not opened, and no file is written.
+---
+> primary is not opened, and no file is written. Its output goes to stdout; prompt 11 sends it to a
+> file under var/inelastic-reflection-11/.
+11,16c14,21
+< Per ScalarHistory row it prints: M (M_value, as stored, in eV), n, beta, phi*, pi*, T* (the floats
+< as stored, and their float.hex); atol, rtol and the tuning tolerance (tolerance.log10_tol, and
+< 10**log10_tol); validated, failure, failure_reason, z_samples, compute_time, timestamp; and the
+< fifteen TUNING_OUTPUT_KEYS columns, floats by float.hex, ints and seed_kind as stored. It counts
+< the rows of ExponentialModel, AdiabaticHistory and BBNData and gives each BBNData row's failure and
+< reason. Last, one `JSON {...}` line per ScalarHistory row, for the comparison.
+---
+> Per ScalarHistory row it prints what 09's reader printed (M as stored in eV, n, beta, phi*, pi*,
+> T*, the three tolerances, validated, failure, failure_reason, z_samples, compute_time,
+> compute_steps, timestamp, and the fifteen TUNING_OUTPUT_KEYS columns, floats with float.hex), and
+> also: alpha (alpha_value.value; a shard with no alpha_value table holds alpha = 0 only, log 10
+> D1), RHS_evaluations, the first bounce, the fixed-temperature values, the 24 dissipation columns
+> (the ln T_J ones as stored, in GeV) and extra_data. It counts the rows of ExponentialModel,
+> ScalarHistory, AdiabaticHistory and BBNData and gives each BBNData row's failure, Yp, D/H and
+> reason. Last, one `JSON {...}` line per ScalarHistory row, for the comparisons.
+42a48,58
+> OTHER_KEYS = (
+>     "RHS_evaluations",
+>     "first_bounce_N",
+>     "first_bounce_log_T_Jordan",
+>     "first_bounce_phi_Einstein",
+>     "first_bounce_reflected",
+>     "phi_Einstein_1MeV",
+>     "density_NP_ratio_1MeV",
+>     "phi_Einstein_70keV",
+>     "density_NP_ratio_70keV",
+> )
+43a60,87
+> DISSIPATION_KEYS = (
+>     "injections",
+>     "resolved_candidates",
+>     "unresolved_candidates",
+>     "injected_fraction",
+>     "rho_chi_ratio_1MeV",
+>     "rho_chi_ratio_70keV",
+>     "rho_chi_ratio_today",
+>     "Delta_N_eff_1MeV",
+>     "Delta_N_eff_today",
+>     "log_R_first_impact",
+>     "parking_N",
+>     "parking_log_T_Jordan",
+>     "release_N",
+>     "release_log_T_Jordan",
+>     "worst_birth_margin",
+>     "worst_birth_margin_N",
+>     "birth_failing_share",
+>     "worst_reflection_margin",
+>     "worst_reflection_margin_N",
+>     "reflection_failing_share",
+>     "worst_tracker_margin",
+>     "worst_tracker_margin_N",
+>     "tracker_failing_share",
+>     "unassessed_share",
+> )
+> 
+> 
+64c108,110
+<     r = conn.execute(f'SELECT "{col}" FROM "{table}" WHERE serial = ?', (serial,)).fetchone()
+---
+>     r = conn.execute(
+>         f'SELECT "{col}" FROM "{table}" WHERE serial = ?', (serial,)
+>     ).fetchone()
+73c119,124
+<     counts = {"ExponentialModel": 0, "AdiabaticHistory": 0, "BBNData": 0, "ScalarHistory": 0}
+---
+>     counts = {
+>         "ExponentialModel": 0,
+>         "ScalarHistory": 0,
+>         "AdiabaticHistory": 0,
+>         "BBNData": 0,
+>     }
+78c129,132
+<         tables = {r[0] for r in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+---
+>         tables = {
+>             r[0]
+>             for r in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")
+>         }
+84,85c138,139
+<                 'SELECT b.serial, b.scalar_history_serial, b.failure, b.failure_reason, b.validated, '
+<                 'b.Yp_BBN, b.DOverH, b.small_network, b.z_samples, b.timestamp, s.label '
+---
+>                 "SELECT b.serial, b.scalar_history_serial, b.failure, b.failure_reason, b.validated, "
+>                 "b.Yp_BBN, b.DOverH, b.small_network, b.z_samples, b.timestamp, s.label "
+91a146
+>         sh_cols = {r[1] for r in conn.execute('PRAGMA table_info("ScalarHistory")')}
+95c150,151
+<                 'SELECT * FROM "ExponentialModel" WHERE serial = ?', (r["model_serial"],)
+---
+>                 'SELECT * FROM "ExponentialModel" WHERE serial = ?',
+>                 (r["model_serial"],),
+105a162,165
+>             if "alpha_serial" in sh_cols and "alpha_value" in tables:
+>                 alpha = one(conn, "alpha_value", r["alpha_serial"])
+>             else:
+>                 alpha = 0.0
+114a175
+>                 "alpha": alpha,
+129,130c190,192
+<             for k in TUNING_OUTPUT_KEYS:
+<                 rec[k] = r[k]
+---
+>             for k in TUNING_OUTPUT_KEYS + OTHER_KEYS + DISSIPATION_KEYS:
+>                 rec[k] = r.get(k)
+>             rec["extra_data"] = r.get("extra_data")
+134c196,203
+<     rows.sort(key=lambda x: (x["M_value_eV"] or 0, x["beta"] or 0, x["phi_init_Mp"] or 0))
+---
+>     rows.sort(
+>         key=lambda x: (
+>             x["alpha"] or 0,
+>             x["M_value_eV"] or 0,
+>             x["beta"] or 0,
+>             x["phi_init_Mp"] or 0,
+>         )
+>     )
+139c208,216
+<         for k in ("M_value_eV", "n_value", "beta", "phi_init_Mp", "pi_init_Mp", "T_init_GeV"):
+---
+>         for k in (
+>             "M_value_eV",
+>             "n_value",
+>             "beta",
+>             "alpha",
+>             "phi_init_Mp",
+>             "pi_init_Mp",
+>             "T_init_GeV",
+>         ):
+143,144c220,233
+<             print(f"  {k} = {h(v)}  -> {10.0 ** v!r}" if v is not None else f"  {k} = NULL")
+<         for k in ("validated", "failure", "failure_reason", "z_samples", "compute_time", "compute_steps", "timestamp"):
+---
+>             print(
+>                 f"  {k} = {h(v)}  -> {10.0 ** v!r}"
+>                 if v is not None
+>                 else f"  {k} = NULL"
+>             )
+>         for k in (
+>             "validated",
+>             "failure",
+>             "failure_reason",
+>             "z_samples",
+>             "compute_time",
+>             "compute_steps",
+>             "timestamp",
+>         ):
+146c235
+<         for k in TUNING_OUTPUT_KEYS:
+---
+>         for k in TUNING_OUTPUT_KEYS + OTHER_KEYS + DISSIPATION_KEYS:
+147a237
+>         print(f"  extra_data = {rec['extra_data']}")
+156c246,247
+<             f"z_samples {b['z_samples']} Yp {b['Yp_BBN']!r} D/H {b['DOverH']!r} reason {b['failure_reason']!r}"
+---
+>             f"z_samples {b['z_samples']} Yp {b['Yp_BBN']!r} D/H {b['DOverH']!r} "
+>             f"timestamp {b['timestamp']} reason {b['failure_reason']!r}"
