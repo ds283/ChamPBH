@@ -72,8 +72,9 @@ PISQ_OVER_30 = pi * pi / 30.0
 LOG_PISQ_OVER_30 = log(PISQ_OVER_30)
 LOG_2 = log(2.0)
 
-# key under which the number of elastic reflections (the floor-triggered reflection model of
-# integrate_scalar_history) is stored in ScalarHistory.extra_metadata.
+# key under which the number of reflections of integrate_scalar_history (floor-rule reflections and
+# unresolved turnarounds, inelastic-reflection prompt 05) is stored in ScalarHistory.extra_metadata.
+# They are elastic at alpha = 0; at alpha > 0 each drains.
 # A count of zero is never stored, so an absent key means there were none.
 REFLECTIONS_KEY = "number_reflections"
 
@@ -4021,7 +4022,7 @@ def integrate_history(
 
         if verbose and len(result.reflections) > 0:
             print(
-                f"-- integrate_history ({task_label}): {len(result.reflections)} elastic reflection(s), first at N={result.reflections[0].N:.5g}"
+                f"-- integrate_history ({task_label}): {len(result.reflections)} reflection(s), first at N={result.reflections[0].N:.5g}"
             )
 
         # the integration terminated at T_Jordan = T_stop, which is ln(1 + z_E) = 0 on the sampling
