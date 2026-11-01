@@ -2001,3 +2001,11 @@ Residue fixed in this review's commit:
 **Opened:** none by the review. **For the user:** the rehearsal's β = 0.5 history at M = 10⁻³, α = 0.1 ends with
 ΔN_eff today = 8.95 (log 11 §6). It is in R17's unofficial large-M regime and is recorded, not opened. 12, which closes
 the campaign, is written next, from log 11 §7 (README §2.1).
+
+**The stores, 2026-11-01, after the review.** The user retired two stores with `runregistrykit store retire`; each
+sidecar now holds the tombstone. `inelastic-reflection-11-resumed` was retired with its fingerprint matched
+(`afd2f329…1264`). `jordan-normalization-09-reference` was retired `--without-fingerprint`: it predates this
+campaign's schema, so the current code cannot read it (`StoreSchemaMismatch`, the error recorded in the
+tombstone); 11's α = 0 histories are bitwise equal to it (§2.4 of the verification document).
+`inelastic-reflection-11-reference` is kept, and is now the reference store at 2026.8.0. The paragraphs above,
+which say both of 11's stores are kept, were true when written.

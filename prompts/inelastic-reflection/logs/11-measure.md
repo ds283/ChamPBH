@@ -248,6 +248,8 @@ For 12, the close:
   `resumed-a2`); both fingerprint `afd2f329…1264`, format 6, label 2026.8.0. JN 09's reference store was only
   read. The runs are in `var/runs/inelastic-reflection-11-*`; the figures and full outputs in
   `var/inelastic-reflection-11/`.
+  *Added 2026-11-01, after the review:* the user has since retired `inelastic-reflection-11-resumed` and JN 09's
+  reference store (board §5.13, "The stores"); `inelastic-reflection-11-reference` is kept.
 - **The verification document's sections:** §1 the measurement (§1.1 scripts and checks, §1.2 the run, §1.3
   dissipation, §1.4 M-independence, §1.5 ΔN_eff(α), §1.6 natural mode, §1.7 ε); §2 the rehearsal (§2.1 builds,
   §2.2 interruption, §2.3 histories, §2.4 against 2026.7.0, §2.5 stores and tool, §2.6 readers); §3 P14; §4 U7;
