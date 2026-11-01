@@ -50,9 +50,7 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-RAY_CLUSTER_SH = (
-    ROOT / ".documents" / "dk-and-rpk-migration" / "rehearsal" / "ray_cluster.sh"
-)
+RAY_CLUSTER_SH = ROOT / "tools" / "ray_cluster.sh"
 TIMEOUT = 120  # seconds: a hang fails a test instead of blocking the suite
 
 

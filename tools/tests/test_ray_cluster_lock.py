@@ -15,7 +15,7 @@
 
 """
 The lock paths of ChamPBH's cluster script,
-`.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh` (rpk-v030-adoption prompt 01, item
+`tools/ray_cluster.sh` (rpk-v030-adoption prompt 01, item
 T1; README section 6.2, P4). From that prompt the script keeps no lock of its own: it calls
 `raypoolkit.rehearsal_lock` of the pinned `raypoolkit`, whose contract is RayPoolKit's
 `docs/rehearsal-lock.md` at `v0.3.0`.
@@ -61,13 +61,13 @@ from unittest import mock
 from raypoolkit import rehearsal_lock
 
 REPO = Path(__file__).resolve().parents[2]
-SCRIPT = ".documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh"
+SCRIPT = "tools/ray_cluster.sh"
 LOCK_PY = "./venv/bin/python"
 TIMEOUT = 60  # seconds: a hang fails a test instead of blocking the suite
 
 HARNESS = r"""
 set -u
-. ./.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh
+. ./tools/ray_cluster.sh
 CPBH_TEMP_DIR="$TEST_CLUSTER_TEMP_DIR"
 CPBH_GCS_PORT="$TEST_GCS_PORT"
 CPBH_CLIENT_PORT="$TEST_CLIENT_PORT"

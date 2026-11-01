@@ -438,7 +438,7 @@ def create_argument_parser() -> configargparse.ArgumentParser:
 RAY_ADDRESS_PROBLEM = (
     "!! --ray-address is required whenever Ray starts. Give the address of a running cluster "
     "(ChamPBH's on this machine is 127.0.0.1:6380, started by "
-    ".documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh), or 'local' for a private instance. "
+    "tools/ray_cluster.sh), or 'local' for a private instance. "
     "'auto' is refused: with the projects' clusters isolated, it attaches to whichever cluster it "
     "finds first."
 )

@@ -141,10 +141,11 @@ invariants that hold across all of them:
   run with its inputs. That folder is a record of what produced output for publication; code
   campaigns stay in `prompts/`.
 - **Ray on this machine.** A run that needs a cluster here starts ChamPBH's isolated one with
-  `.documents/dk-and-rpk-migration/rehearsal/ray_cluster.sh start "<purpose>"` (its own temp dir
+  `tools/ray_cluster.sh start "<purpose>"` (its own temp dir
   and ports, GCS 6380, under the rehearsal lock shared with StochasticInstantons and SecondaryGWKit),
   passes `--ray-address 127.0.0.1:6380` to every driver (never `auto`), and stops it with the
-  script's `stop`. The drivers (`main.py`, `plot_by_beta.py`, `plot_ScalarHistory.py`) refuse to
+  script's `stop`. The script moved there from `.documents/dk-and-rpk-migration/rehearsal/` on
+  2026-11-01; campaign records and dated documents keep the old path. The drivers (`main.py`, `plot_by_beta.py`, `plot_ScalarHistory.py`) refuse to
   start Ray without `--ray-address` and refuse `auto` outright (exit 2, before `ray.init`);
   `main.py --inventory` starts no Ray and needs none. **No one runs `ray stop`**, which stops every
   Ray process on the machine, other projects' builds included. The script's `--help` is the detail.

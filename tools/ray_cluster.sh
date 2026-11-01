@@ -32,6 +32,9 @@
 #
 # It may be sourced (its functions used, its main skipped): the proof of prompt 05a stops a decoy
 # cluster by calling stop_cluster with the decoy's temp dir and ports.
+#
+# Moved to tools/ from .documents/dk-and-rpk-migration/rehearsal/ on 2026-11-01, at the user's
+# request; campaign records and dated documents name the old path.
 
 set -u
 
