@@ -2337,6 +2337,18 @@ written.**
        their shares). Next, for the user: accept it, or set Ray's `RAY_DEDUP_LOGS=0` in the drivers, or print
        a per-history summary of the warnings from the stored row after each batch.
 
+   > **Note, 2026-11-01 (after the close; [`bbn-ratio-spline-2026-11-01/`](bbn-ratio-spline-2026-11-01/README.md)).**
+   > `[11-the-ratio-steps-at-injections-and-parking-in-the-10-100-keV-window]` was measured, and the user closed it
+   > as measured with no fix planned, together with `science-readiness`'s
+   > `[05-the-ratio-spline-may-ring-at-resolved-bounce-jumps]`. For a rebuild:
+   > - the cubic spline's ringing at the reflections' jumps moves Yp by at most 3.7×10⁻⁵ relative, and D/H
+   >   within PRyMordial's scatter;
+   > - the jumps' unresolved positions on the 250-per-decade axis move Yp by up to 4.8×10⁻⁴ and D/H by up to
+   >   6.2×10⁻⁴, relative, on the six histories measured. That is a systematic of the stored yields, in natural
+   >   mode as well as in dissipation mode.
+   >
+   > Three issues of this board stay open, and one of them bears on a rebuild.
+
 7. **The merge into `main` is the user's** (U1). At the time of writing `git merge-base main
    inelastic-reflection` is `6f635e6`, which is `main` itself, so the merge is a fast-forward; `main` is level
    with `github/main`, and `inelastic-reflection` has no upstream and is not pushed.

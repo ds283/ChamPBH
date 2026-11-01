@@ -1,6 +1,6 @@
 # Science-readiness campaign — implementation state
 
-**Last updated:** 2026-10-02 · **Status: COMPLETE — 10 of 10 landed** (prompt 01, with
+**Last updated:** 2026-11-01 · **Status: COMPLETE — 10 of 10 landed** (prompt 01, with
 deviations; prompt 02; prompt 03, with deviations; prompt 04, with deviations; prompt 05,
 measurement only, the averaging withdrawn; prompt 06; prompt 06b, with deviations; prompt 07, with deviations;
 prompt 08, documents only; prompt 09, the close-out, with deviations). Final suites on `8efc50f`,
@@ -206,23 +206,12 @@ closed six of them and prompt 05 narrowed one; the narrowed one stays open on it
 **Close-out (2026-10-02, prompt 09).** The campaign is complete and no issue was opened by prompt
 09. The two `[05-…]` issues below stay open, unassigned; the handover (verification §4.10, point 6)
 names both. *(2026-10-22: `[05-the-value-factory-compares-stored-phi-against-pi]` moved to §4,
-resolved by `jordan-normalization` prompt 03; one `[05-…]` issue stays open.)* Nothing else in §3
+resolved by `jordan-normalization` prompt 03; one `[05-…]` issue stays open.)* *(2026-11-01: `[05-the-ratio-spline-may-ring-at-resolved-bounce-jumps]` moved to §4,
+measured and closed as measured; no `[05-…]` issue stays open.)* Nothing else in §3
 is open, and the one issue assigned from another board that is not closed
 (`[00-stored-samples-alias-the-rebounds]`, §3.1) stays open on its own board for its adiabatic
 half.
 
-- **[05-the-ratio-spline-may-ring-at-resolved-bounce-jumps]** *(log 05, Observations)*.
-  - **What.** In PRyMordial's window the ratio `ρ_NP/ρ_R,J` is a resolved sawtooth: it jumps by
-    about +0.005 to +0.007 at each bounce (β = 1.6, M = 10⁻⁵, 0.3–3 keV) and drifts smoothly in
-    between. Each jump falls between two samples 0.0092 e-folds apart, and `build_rho_NP_callback`
-    puts a cubic spline through them. Its overshoot or ringing between samples has not been
-    measured.
-  - **Impact.** Until it is, a PRyMordial failure on point input cannot be attributed to the true
-    H rather than to our interpolation.
-  - **Next step.** On one small-M history, compare the spline's r between samples with r from the
-    dense output at the same T_J. Not assigned.
-  - **Open at close-out (2026-10-02, prompt 09).** All ten roster histories, including β = 1.6 and
-    2.0 at M = 10⁻⁵, completed BBN on point input, so no failure needs attributing today.
 ### 3.1 Assigned to this campaign from other boards
 
 Each entry stays on its own board, which carries an **Assigned (2026-10-01)** line. The prompt
@@ -242,6 +231,32 @@ here (README §5 rule 4).
 ---
 
 ## 4. Resolved issues
+
+- **[05-the-ratio-spline-may-ring-at-resolved-bounce-jumps]** *(log 05, Observations)*.
+  - **What.** In PRyMordial's window the ratio `ρ_NP/ρ_R,J` is a resolved sawtooth: it jumps by
+    about +0.005 to +0.007 at each bounce (β = 1.6, M = 10⁻⁵, 0.3–3 keV) and drifts smoothly in
+    between. Each jump falls between two samples 0.0092 e-folds apart, and `build_rho_NP_callback`
+    puts a cubic spline through them. Its overshoot or ringing between samples has not been
+    measured.
+  - **Impact.** Until it is, a PRyMordial failure on point input cannot be attributed to the true
+    H rather than to our interpolation.
+  - **Next step.** On one small-M history, compare the spline's r between samples with r from the
+    dense output at the same T_J. Not assigned.
+  - **Open at close-out (2026-10-02, prompt 09).** All ten roster histories, including β = 1.6 and
+    2.0 at M = 10⁻⁵, completed BBN on point input, so no failure needs attributing today.
+  - **Resolved (2026-11-01):** measured, and closed as measured by the user ("please record the
+    measurements and close the issues as measured. i won't plan a fix at the moment"). The record is
+    [`.documents/bbn-ratio-spline-2026-11-01/`](../../.documents/bbn-ratio-spline-2026-11-01/README.md), a
+    probe outside any campaign on six tuned histories, natural and dissipation mode, this issue's
+    β = 1.6, M = 10⁻⁵ among them. Every resolved reflection makes r jump by about 1 between two samples
+    (the 0.3–3 keV steps above are the small ones). The cubic spline rings next to each jump by 15–20 % of
+    it, falling about 3.7 per interval, but cubic, linear and PCHIP on the same samples give Yp within
+    3.7×10⁻⁵ relative and D/H within PRyMordial's own scatter; all 40 solves succeeded. The larger term is
+    where the jump falls inside its interval: sampling 100× finer moves Yp by up to 4.8×10⁻⁴ and D/H by up
+    to 6.2×10⁻⁴, relative (−1.9×10⁻⁶ and +6.5×10⁻⁵ on this issue's case). No fix is planned. The same
+    record closes `inelastic-reflection`'s
+    `[11-the-ratio-steps-at-injections-and-parking-in-the-10-100-keV-window]`, whose board and verification
+    document §3 name this issue as the `jordan-normalization` board's; it is this board's.
 
 - **[05-the-value-factory-compares-stored-phi-against-pi]** *(log 05, Observations)*.
   - **What.** `sqla_ScalarModelValue_factory.build`, on finding an existing row, checks

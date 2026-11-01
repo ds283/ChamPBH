@@ -1,0 +1,44 @@
+== 1.2 4e-31 0.1 100000   9:47  up 1 day, 12:08, 1 user, load averages: 11.61 15.87 12.77
+[beta=1.2 M=4e-31 alpha=0.1] tuned in 1.5 s, 1 integrations
+[beta=1.2 M=4e-31 alpha=0.1] fine integration in 29.5 s, 608604 samples
+[beta=1.2 M=4e-31 alpha=0.1] production samples equal to the tuned run's: 5003, different: 0
+[beta=1.2 M=4e-31 alpha=0.1] window: 1506 production samples, 602572 fine; fine T_J non-decreasing pairs: 0
+[beta=1.2 M=4e-31 alpha=0.1] jumps found (fine step > 0.001; median fine step 4.14e-07): 6 in 6 production intervals
+[beta=1.2 M=4e-31 alpha=0.1] production rms_step / max |step|: 0.03355 / 1.06 at T=3.665e+04 keV (r -0.4562 -> 0.6034)
+[beta=1.2 M=4e-31 alpha=0.1] worst cubic interval: T=36331-36647 keV, production r 0.6034 -> -0.4562, fine r in it min -0.4578 max 0.6077 over 401 points
+  > [0.3,1) keV: 131 production samples, 0 with a jump
+  > [1,3) keV: 119 production samples, 0 with a jump
+  > [3,10) keV: 131 production samples, 0 with a jump
+  > [10,100) keV: 258 production samples, 2 with a jump
+  > [100,1000) keV: 285 production samples, 3 with a jump
+  > [1000,10000) keV: 252 production samples, 0 with a jump
+  > [10000,100000) keV: 286 production samples, 1 with a jump
+[beta=1.2 M=4e-31 alpha=0.1] cubic  |interp - fine| in jump: max 0.8; next to jump: max 0.159; 2 away: max 0.0424; further: max 0.0113; mean -0.000219
+  > cubic  [0.3,1) keV: n=52288 max|e|=3.78e-14 rms e=1.26e-14 mean e=+1.97e-16 max|r|=0.00882
+  > cubic  [1,3) keV: n=47712 max|e|=3.64e-14 rms e=1.24e-14 mean e=+4.39e-16 max|r|=0.00882
+  > cubic  [3,10) keV: n=52288 max|e|=7e-13 rms e=3.04e-14 mean e=+1.96e-16 max|r|=0.00882
+  > cubic  [10,100) keV: n=103166 max|e|=0.197 rms e=0.00651 mean e=-0.000277 max|r|=0.122
+  > cubic  [100,1000) keV: n=114236 max|e|=0.467 rms e=0.0187 mean e=-0.000474 max|r|=0.26
+  > cubic  [1000,10000) keV: n=100631 max|e|=5.47e-09 rms e=4.47e-10 mean e=-8.5e-12 max|r|=0.186
+  > cubic  [10000,100000) keV: n=114248 max|e|=0.8 rms e=0.0221 mean e=-0.000428 max|r|=0.608
+[beta=1.2 M=4e-31 alpha=0.1] linear |interp - fine| in jump: max 0.742; next to jump: max 1.25e-05; 2 away: max 1.24e-05; further: max 1.96e-05; mean -0.000241
+  > linear [0.3,1) keV: n=52288 max|e|=3.49e-14 rms e=1.18e-14 mean e=+1.93e-16 max|r|=0.00882
+  > linear [1,3) keV: n=47712 max|e|=3.56e-14 rms e=1.18e-14 mean e=+4.39e-16 max|r|=0.00882
+  > linear [3,10) keV: n=52288 max|e|=3.46e-14 rms e=1.14e-14 mean e=-1.96e-16 max|r|=0.00882
+  > linear [10,100) keV: n=103166 max|e|=0.189 rms e=0.00619 mean e=-0.000279 max|r|=0.122
+  > linear [100,1000) keV: n=114236 max|e|=0.458 rms e=0.018 mean e=-0.000514 max|r|=0.26
+  > linear [1000,10000) keV: n=100631 max|e|=1.91e-06 rms e=5.17e-07 mean e=-2.98e-07 max|r|=0.186
+  > linear [10000,100000) keV: n=114248 max|e|=0.742 rms e=0.0205 mean e=-0.000504 max|r|=0.608
+[beta=1.2 M=4e-31 alpha=0.1] pchip  |interp - fine| in jump: max 0.83; next to jump: max 0.00128; 2 away: max 8.47e-08; further: max 2.48e-07; mean -0.000253
+  > pchip  [0.3,1) keV: n=52288 max|e|=3.53e-14 rms e=1.22e-14 mean e=+1.93e-16 max|r|=0.00882
+  > pchip  [1,3) keV: n=47712 max|e|=3.58e-14 rms e=1.21e-14 mean e=+4.42e-16 max|r|=0.00882
+  > pchip  [3,10) keV: n=52288 max|e|=3.48e-14 rms e=1.17e-14 mean e=-2.25e-16 max|r|=0.00882
+  > pchip  [10,100) keV: n=103166 max|e|=0.209 rms e=0.00648 mean e=-0.000282 max|r|=0.122
+  > pchip  [100,1000) keV: n=114236 max|e|=0.477 rms e=0.0182 mean e=-0.000526 max|r|=0.26
+  > pchip  [1000,10000) keV: n=100631 max|e|=6.66e-09 rms e=8.79e-10 mean e=-1.78e-11 max|r|=0.186
+  > pchip  [10000,100000) keV: n=114248 max|e|=0.83 rms e=0.0197 mean e=-0.000555 max|r|=0.608
+[beta=1.2 M=4e-31 alpha=0.1] bbn production cubic (the code's route): Yp=0.2494882175 DoH=2.494698477 (9.0 s)
+[beta=1.2 M=4e-31 alpha=0.1] bbn production linear: Yp=0.2494966134 DoH=2.494962353 (7.6 s)
+[beta=1.2 M=4e-31 alpha=0.1] bbn production pchip: Yp=0.2494877141 DoH=2.49494423 (7.8 s)
+[beta=1.2 M=4e-31 alpha=0.1] bbn fine cubic: Yp=0.2495417069 DoH=2.495054155 (8.2 s)
+[beta=1.2 M=4e-31 alpha=0.1] bbn fine linear: Yp=0.2495452207 DoH=2.494904702 (9.0 s)

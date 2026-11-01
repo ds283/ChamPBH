@@ -1,13 +1,13 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-11-01 · **27 open**: 4 on the `review-remediation` board (closed
+**Last updated:** 2026-11-01 · **25 open**: 4 on the `review-remediation` board (closed
 2026-09-30), none now assigned; 2 on the `production-readiness` board
 (closed 2026-09-30); 2 on the `run-integrity` board (closed 2026-09-30; one stale entry closed 2026-10-22, its fix having landed in `5740690`; `jordan-normalization` prompt 07 closed one, 2026-10-26); 6 on the
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`
 (`jordan-normalization` prompt 04 closed one, 2026-10-25), and the one assigned to
 `inelastic-reflection` on 2026-10-29 closed by its prompt 09, 2026-10-31;
-1 on the `science-readiness` board (planned 2026-10-01; closed 2026-10-02, 10 of 10 landed,
-prompt 06b having been added 2026-10-02; `jordan-normalization` prompt 03 closed one, 2026-10-22); 2 on the `bbn-tolerance` board (planned 2026-10-03,
+none on the `science-readiness` board (planned 2026-10-01; closed 2026-10-02, 10 of 10 landed,
+prompt 06b having been added 2026-10-02; `jordan-normalization` prompt 03 closed one, 2026-10-22; the last closed as measured, 2026-11-01); 2 on the `bbn-tolerance` board (planned 2026-10-03,
 closed 2026-10-03, 6 of 6 landed; prompt 01 committed BLOCKED 2026-10-03 and ruled the same day: re-planned
 around PRyMordial's small network, U3; prompt 01c measured the small network 2026-10-03; prompt
 02 moved production to it and closed three, opening one, 2026-10-03; prompt 01b closed the kick
@@ -37,14 +37,15 @@ were assigned to `tuning-followups` on 2026-10-27, §1.17, and its prompts 01 an
 2026-10-27); 1 on the `tuning-followups` board (planned 2026-10-27, with none opened and two
 assigned from `jordan-normalization`; prompt 01 opened one, 2026-10-27, §1.18; prompt 02 opened none
 and closed the second assigned issue, 2026-10-27; closed 2026-10-27, 2 of 2 prompts landed, with the
-one issue still open on its board); 4 on the `inelastic-reflection` board (planned 2026-10-27; the
+one issue still open on its board); 3 on the `inelastic-reflection` board (planned 2026-10-27; the
 planner opened one, §1.19; re-planned 2026-10-29, when one `integrator-remediation` issue was
 assigned to it, §1.20; prompt 04 opened one, 2026-10-29, §1.19; prompt 05 opened one, 2026-10-29,
 §1.19; prompt 06 opened none and narrowed prompt 05's, 2026-10-29; prompt 07 opened none and
 narrowed the assigned one, 2026-10-30, §1.20; the user ruled one and assigned another to the inserted prompt 07b, 2026-10-30, §1.19; prompt 07b closed that one and opened none, 2026-10-30; prompt 08 closed prompt 04's and opened none, 2026-10-31; prompt 09 closed the assigned one and
 opened none, 2026-10-31; the orchestrator's review of prompt 09 opened one, 2026-10-31, §1.19; prompt 11
 opened two, 2026-11-01, §1.19; prompt 12 opened and closed none, and the campaign closed 2026-11-01, 13 of 13
-prompts landed, with these four open and none assigned).
+prompts landed, with these four open and none assigned; one of them closed as measured, 2026-11-01, with
+`science-readiness`'s last, both from one measurement, `.documents/bbn-ratio-spline-2026-11-01/`).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -187,10 +188,9 @@ Prompt 01 (2026-10-01) closed three, prompt 03 (2026-10-02) one, prompt 05 (2026
 prompt 07 (2026-10-02) one and prompt 08 (2026-10-02) one (board §4). Prompt 05 opened two (`[05-…]`). The re-plan of 2026-10-02 opened one for prompt
 06b, which closed it (2026-10-02). The campaign closed on 2026-10-02 (prompt 09, the close-out)
 with both `[05-…]` rows still open and unassigned. One of them was assigned on 2026-10-20 to
-`jordan-normalization` (§1.15), whose prompt 03 closed it on 2026-10-22 (board §4).
-
-- `[05-the-ratio-spline-may-ring-at-resolved-bounce-jumps]` — the cubic spline through the
-  ratio's resolved bounce jumps may overshoot between samples; unmeasured.
+`jordan-normalization` (§1.15), whose prompt 03 closed it on 2026-10-22 (board §4). The other,
+`[05-the-ratio-spline-may-ring-at-resolved-bounce-jumps]`, was measured and closed as measured on
+2026-11-01 (board §4; `.documents/bbn-ratio-spline-2026-11-01/`). None is open.
 
 ### 1.9 Assigned to `bbn-tolerance` — [its board](../prompts/bbn-tolerance/IMPLEMENTATION_STATE.md) §3.1
 
@@ -310,7 +310,9 @@ Planned 2026-10-27. One opened by prompt 01, 2026-10-27, found by its orchestrat
 Planned 2026-10-27. One opened by the planner, found by a planning probe; one by prompt 04
 (2026-10-29), closed by prompt 08 (2026-10-31); one by prompt 05 (2026-10-29), closed by prompt 07b
 (2026-10-30); one by the orchestrator's review of prompt 09 (2026-10-31); two by prompt 11 (2026-11-01). The campaign closed on 2026-11-01, 13 of 13 prompts landed; prompt 12
-opened and closed none, and these four stay open.
+opened and closed none, and these four stayed open. One of them,
+`[11-the-ratio-steps-at-injections-and-parking-in-the-10-100-keV-window]`, was measured and closed as
+measured on 2026-11-01 (board §4; `.documents/bbn-ratio-spline-2026-11-01/`); three stay open.
 
 - `[00-xav-sigma-is-non-monotone-at-25-35-keV]` — Σ from `Xav_EOS_spline` swings between 3×10⁻⁶
   and 9×10⁻⁵ at 25–33 keV (an irregular table and a ringing cubic spline), comparable to the matter
@@ -321,10 +323,6 @@ opened and closed none, and these four stay open.
   from (π²/30) g_ρ T_J⁴: −1.2 % near 1 GeV, −0.21 % at 1 MeV, −0.08 % today; every history; left
   documented by the user, 2026-10-31.
   *(`inelastic-reflection`; review of prompt 09)*
-- `[11-the-ratio-steps-at-injections-and-parking-in-the-10-100-keV-window]` — BBN's ratio steps at each
-  injection and at parking (P14); in the 10–100 keV window its rms_step reaches 1.3–8.4× natural mode's
-  where a history injects or parks there; effect on Yp and D/H not measured; not fixed (P14).
-  *(`inelastic-reflection`; prompt 11)*
 - `[11-ray-deduplicates-the-dissipation-warnings-of-parallel-histories]` — under Ray the "nearly elastic",
   P23 and margin warnings of histories run in parallel collapse into one `[repeated Nx across cluster]`
   line, so a build's log does not show which histories warned; the stored columns do.

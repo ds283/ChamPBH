@@ -1,7 +1,7 @@
 # inelastic-reflection campaign — implementation state
 
 **Last updated:** 2026-11-01 · **Status: CLOSED 2026-11-01 — 13 of 13 prompts landed and reviewed (01–11 with 07b, and 12, the close); every
-gate holds; four issues open, none assigned; the merge into `main` is the user's (U1).**
+gate holds; three issues open, none assigned (a fourth closed as measured after the close); the merge into `main` is the user's (U1).**
 The plan is [`README.md`](README.md), written on 2026-10-27 on branch `inelastic-reflection`, cut
 from `main` at `6f635e6` with the planning commit (U1). Its physics basis is
 [`source/scoping_2026-10-27.md`](source/scoping_2026-10-27.md).
@@ -95,6 +95,8 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 ## 3. Active and unresolved issues
 
 The campaign closed on 2026-11-01 with these four open and none assigned; prompt 12 opened and closed none.
+*(2026-11-01, after the close: `[11-the-ratio-steps-at-injections-and-parking-in-the-10-100-keV-window]` was
+measured and closed as measured by the user (§4); three stay open.)*
 One was opened by the planner, one by the orchestrator's review of prompt 09, and two by prompt 11. Prompt 04's
 was closed by prompt 08, and prompt 05's by prompt 07b (§4). The one assigned (§3.1) was closed by prompt 09 (§4).
 
@@ -185,28 +187,6 @@ was closed by prompt 08, and prompt 05's by prompt 07b (§4). The one assigned (
   - **Ruled by the user, 2026-10-31:** "For now, though, I'm going just to leave it documented." Option 6.
     The issue stays open and not assigned.
 
-### `[11-the-ratio-steps-at-injections-and-parking-in-the-10-100-keV-window]`
-
-**Opened:** 2026-11-01 by prompt 11, as README P14 and P46 ask ("an effect is recorded and opened, not fixed").
-
-- **What.** The ratio ρ_NP/ρ_R,J that BBN's spline reads steps at each injection and at the switch to parking,
-  since π, and so H_J, is discontinuous there (P14). The tool's `ratio` lines measure it per window
-  (verification §3; `out/11-grid-tables.md` §2.9).
-  - **Measured, 10–100 keV window,** rms_step of consecutive samples against natural mode at M = 10⁻⁷, the same
-    β: β = 1.2, α = 0.03 (injecting through the window, parks at 0.57 eV) **6.4×** (0.0106 against 0.00165);
-    β = 1.2, α = 0.1 (parks at 11.6 keV) **8.4×**; β = 1.2, α = 0.3 (parks at 44.2 keV) **2.9×**; β = 2,
-    α = 0.03 (parks at 25.4 keV) **1.26×**. The same at M = 10⁻¹² and 4×10⁻³¹.
-  - Everywhere else it is below natural mode's (0.26× to 3×10⁻⁵×): the history parked above 100 keV, and a
-    parked history's ratio is flat (rms_step about 10⁻¹⁴).
-- **Impact.** Not measured. The steps are of the size of natural mode's own resolved-bounce steps
-  (`[05-the-ratio-spline-may-ring-at-resolved-bounce-jumps]`, `jordan-normalization` board) and up to 8×
-  larger. Whether PRyMordial's spline rings on them, and by how much Yp and D/H move, is not known. Yp at
-  β = 1.2 is not monotonic in α (0.25386, 0.24949, 0.24952, 0.25411 at α = 0.03, 0.1, 0.3, 0.9), which may or
-  may not be this.
-- **Next step.** For the user. Compare Yp and D/H from the stored samples with those from a spline that
-  respects the steps (or from samples refined around each injection), at β = 1.2, α = 0.03 and 0.1. Not
-  assigned.
-
 ### `[11-ray-deduplicates-the-dissipation-warnings-of-parallel-histories]`
 
 **Opened:** 2026-11-01 by prompt 11 (log 11 §6; verification §6).
@@ -232,6 +212,45 @@ was closed by prompt 08, and prompt 05's by prompt 07b (§4). The one assigned (
 None now. `[00-settling-at-physical-M-needs-a-parked-tracking-model]` was closed by prompt 09 (§4).
 
 ## 4. Resolved issues
+
+### `[11-the-ratio-steps-at-injections-and-parking-in-the-10-100-keV-window]`
+
+**Opened:** 2026-11-01 by prompt 11, as README P14 and P46 ask ("an effect is recorded and opened, not fixed").
+
+- **What.** The ratio ρ_NP/ρ_R,J that BBN's spline reads steps at each injection and at the switch to parking,
+  since π, and so H_J, is discontinuous there (P14). The tool's `ratio` lines measure it per window
+  (verification §3; `out/11-grid-tables.md` §2.9).
+  - **Measured, 10–100 keV window,** rms_step of consecutive samples against natural mode at M = 10⁻⁷, the same
+    β: β = 1.2, α = 0.03 (injecting through the window, parks at 0.57 eV) **6.4×** (0.0106 against 0.00165);
+    β = 1.2, α = 0.1 (parks at 11.6 keV) **8.4×**; β = 1.2, α = 0.3 (parks at 44.2 keV) **2.9×**; β = 2,
+    α = 0.03 (parks at 25.4 keV) **1.26×**. The same at M = 10⁻¹² and 4×10⁻³¹.
+  - Everywhere else it is below natural mode's (0.26× to 3×10⁻⁵×): the history parked above 100 keV, and a
+    parked history's ratio is flat (rms_step about 10⁻¹⁴).
+- **Impact.** Not measured. The steps are of the size of natural mode's own resolved-bounce steps
+  (`[05-the-ratio-spline-may-ring-at-resolved-bounce-jumps]`, `jordan-normalization` board) and up to 8×
+  larger. Whether PRyMordial's spline rings on them, and by how much Yp and D/H move, is not known. Yp at
+  β = 1.2 is not monotonic in α (0.25386, 0.24949, 0.24952, 0.25411 at α = 0.03, 0.1, 0.3, 0.9), which may or
+  may not be this.
+- **Next step.** For the user. Compare Yp and D/H from the stored samples with those from a spline that
+  respects the steps (or from samples refined around each injection), at β = 1.2, α = 0.03 and 0.1. Not
+  assigned.
+
+- **Closed (2026-11-01, measured, outside any campaign):** closed as measured by the user ("please record
+  the measurements and close the issues as measured. i won't plan a fix at the moment"). The record is
+  [`.documents/bbn-ratio-spline-2026-11-01/`](../../.documents/bbn-ratio-spline-2026-11-01/README.md): six
+  tuned histories (dissipation at M = 4×10⁻³¹ for β = 1.2, α = 0.1 and 0.03 and β = 2, α = 0.03; natural
+  mode at M = 10⁻⁷ for β = 1.2 and 2, and at β = 1.6, M = 10⁻⁵), each sampled again 100× finer inside BBN's
+  window.
+  - The steps that matter are the reflections' jumps, about 1 in r between two samples, which natural mode
+    has too; a drain is a much smaller step.
+  - The cubic spline rings next to each jump (15–20 % of it), but cubic, linear and PCHIP on the same
+    samples give Yp within 3.7×10⁻⁵ relative and D/H within PRyMordial's scatter.
+  - Where each jump falls inside its interval moves Yp by up to 4.8×10⁻⁴ and D/H by up to 6.2×10⁻⁴,
+    relative, converging tenfold per tenfold in density. That is too small to explain the non-monotonic Yp
+    at β = 1.2 above.
+  - No fix is planned. The same record closes `[05-the-ratio-spline-may-ring-at-resolved-bounce-jumps]`,
+    which this entry and verification §3 call the `jordan-normalization` board's; it is the
+    `science-readiness` board's (its §4).
 
 ### `[00-settling-at-physical-M-needs-a-parked-tracking-model]`
 

@@ -1,0 +1,44 @@
+== 1.6 1e-5 0 25000   9:58  up 1 day, 12:18, 1 user, load averages: 6.55 9.48 11.24
+[beta=1.6 M=1e-05 alpha=0] tuned in 95.8 s, 4 integrations
+[beta=1.6 M=1e-05 alpha=0] fine integration in 28.5 s, 154622 samples
+[beta=1.6 M=1e-05 alpha=0] production samples equal to the tuned run's: 5220, different: 0
+[beta=1.6 M=1e-05 alpha=0] window: 1491 production samples, 149059 fine; fine T_J non-decreasing pairs: 0
+[beta=1.6 M=1e-05 alpha=0] jumps found (fine step > 0.001; median fine step 3.72e-06): 42 in 40 production intervals
+[beta=1.6 M=1e-05 alpha=0] production rms_step / max |step|: 0.04504 / 1.356 at T=7.821e+04 keV (r -0.5655 -> 0.79)
+[beta=1.6 M=1e-05 alpha=0] worst cubic interval: T=31916-32248 keV, production r 0.539 -> -0.4417, fine r in it min -0.4419 max 0.5507 over 99 points
+  > [0.3,1) keV: 131 production samples, 0 with a jump
+  > [1,3) keV: 119 production samples, 1 with a jump
+  > [3,10) keV: 131 production samples, 0 with a jump
+  > [10,100) keV: 257 production samples, 8 with a jump
+  > [100,1000) keV: 279 production samples, 28 with a jump
+  > [1000,10000) keV: 254 production samples, 1 with a jump
+  > [10000,100000) keV: 276 production samples, 2 with a jump
+[beta=1.6 M=1e-05 alpha=0] cubic  |interp - fine| in jump: max 0.982; next to jump: max 0.275; 2 away: max 0.073; further: max 0.0194; mean -0.000247
+  > cubic  [0.3,1) keV: n=13072 max|e|=0.00149 rms e=0.000233 mean e=-1.78e-05 max|r|=0.0125
+  > cubic  [1,3) keV: n=11928 max|e|=0.00153 rms e=0.000155 mean e=-1.28e-05 max|r|=0.0125
+  > cubic  [3,10) keV: n=13072 max|e|=0.00134 rms e=6.29e-05 mean e=-3.98e-06 max|r|=0.0125
+  > cubic  [10,100) keV: n=25722 max|e|=0.052 rms e=0.00367 mean e=-3.61e-05 max|r|=0.0416
+  > cubic  [100,1000) keV: n=27875 max|e|=0.0914 rms e=0.0116 mean e=-0.000111 max|r|=0.0591
+  > cubic  [1000,10000) keV: n=25393 max|e|=0.0599 rms e=0.00196 mean e=-8.4e-05 max|r|=0.0473
+  > cubic  [10000,100000) keV: n=27544 max|e|=0.982 rms e=0.0435 mean e=-0.0011 max|r|=0.794
+[beta=1.6 M=1e-05 alpha=0] linear |interp - fine| in jump: max 0.972; next to jump: max 2.28e-05; 2 away: max 2.27e-05; further: max 0.00148; mean -0.000293
+  > linear [0.3,1) keV: n=13072 max|e|=0.00145 rms e=0.000225 mean e=-1.9e-05 max|r|=0.0125
+  > linear [1,3) keV: n=11928 max|e|=0.0015 rms e=0.000149 mean e=-1.2e-05 max|r|=0.0125
+  > linear [3,10) keV: n=13072 max|e|=0.00128 rms e=6.02e-05 mean e=-4e-06 max|r|=0.0125
+  > linear [10,100) keV: n=25722 max|e|=0.0498 rms e=0.00352 mean e=-3.13e-05 max|r|=0.0416
+  > linear [100,1000) keV: n=27875 max|e|=0.0897 rms e=0.0111 mean e=-0.00013 max|r|=0.0591
+  > linear [1000,10000) keV: n=25393 max|e|=0.0573 rms e=0.00188 mean e=-8.49e-05 max|r|=0.0473
+  > linear [10000,100000) keV: n=27544 max|e|=0.972 rms e=0.041 mean e=-0.00133 max|r|=0.794
+[beta=1.6 M=1e-05 alpha=0] pchip  |interp - fine| in jump: max 0.991; next to jump: max 0.00212; 2 away: max 1.58e-07; further: max 0.00154; mean -0.000313
+  > pchip  [0.3,1) keV: n=13072 max|e|=0.00154 rms e=0.000225 mean e=-1.84e-05 max|r|=0.0125
+  > pchip  [1,3) keV: n=11928 max|e|=0.00157 rms e=0.000154 mean e=-1.24e-05 max|r|=0.0125
+  > pchip  [3,10) keV: n=13072 max|e|=0.00143 rms e=6.29e-05 mean e=-3.98e-06 max|r|=0.0125
+  > pchip  [10,100) keV: n=25722 max|e|=0.0546 rms e=0.00364 mean e=-3.46e-05 max|r|=0.0416
+  > pchip  [100,1000) keV: n=27875 max|e|=0.0939 rms e=0.0113 mean e=-0.00013 max|r|=0.0591
+  > pchip  [1000,10000) keV: n=25393 max|e|=0.0642 rms e=0.00194 mean e=-8.46e-05 max|r|=0.0473
+  > pchip  [10000,100000) keV: n=27544 max|e|=0.991 rms e=0.0406 mean e=-0.00144 max|r|=0.794
+[beta=1.6 M=1e-05 alpha=0] bbn production cubic (the code's route): Yp=0.2458467913 DoH=2.432023092 (8.9 s)
+[beta=1.6 M=1e-05 alpha=0] bbn production linear: Yp=0.2458406772 DoH=2.43194565 (8.0 s)
+[beta=1.6 M=1e-05 alpha=0] bbn production pchip: Yp=0.2458415726 DoH=2.432087747 (8.1 s)
+[beta=1.6 M=1e-05 alpha=0] bbn fine cubic: Yp=0.2458490955 DoH=2.432293826 (8.5 s)
+[beta=1.6 M=1e-05 alpha=0] bbn fine linear: Yp=0.2458463261 DoH=2.432180738 (8.7 s)

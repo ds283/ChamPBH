@@ -479,6 +479,13 @@ same β ([`11-grid-tables.md`](inelastic-reflection/out/11-grid-tables.md) §2.9
   here. Opened as `[11-the-ratio-steps-at-injections-and-parking-in-the-10-100-keV-window]` (board §3); not
   fixed (P14).
 
+> **Note, 2026-11-01 (after the campaign closed).** Both issues above are measured in
+> [`bbn-ratio-spline-2026-11-01/`](bbn-ratio-spline-2026-11-01/README.md), and the user closed both as
+> measured. `[05-the-ratio-spline-may-ring-at-resolved-bounce-jumps]` is the `science-readiness` board's,
+> not `jordan-normalization`'s as this section says. The steps that move the yields are the reflections'
+> jumps, in both modes. Their positions within the sampling interval move Yp by up to 4.8×10⁻⁴ and D/H by up
+> to 6.2×10⁻⁴, relative. The cubic spline's ringing at them moves Yp by at most 3.7×10⁻⁵.
+
 ## 4. The Standard Model exchange (U7)
 
 Quoted as data from the scoping (`prompts/inelastic-reflection/source/scoping_2026-10-27.md` §7, "The

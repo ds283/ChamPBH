@@ -504,6 +504,13 @@ The implementation agent's own count (log 05's `diag.py`) agrees: at β = 1.6, `
   between two samples 0.0092 e-folds apart: `[05-the-ratio-spline-may-ring-at-resolved-bounce-jumps]`
   (`science-readiness` board §3).
 
+  > **Note, 2026-11-01 (a measurement outside any campaign; `bbn-ratio-spline-2026-11-01/`).** Measured, and
+  > closed as measured by the user. The cubic spline overshoots by 15–20 % of the jump in the next interval, and
+  > the overshoot falls about 3.7× per interval; cubic, linear and PCHIP interpolants of the same samples give
+  > Yp within 3.7×10⁻⁵ relative and D/H within PRyMordial's scatter. On the tuned histories of today's tree,
+  > the jumps at resolved reflections are about 1 in r, mostly at 0.1–1 MeV and 10–100 MeV. Where each falls
+  > inside its interval moves Yp by up to 4.8×10⁻⁴ and D/H by up to 6.2×10⁻⁴, relative.
+
 ### 3.7 Added 2026-10-26 (`jordan-normalization`): the model, the tuning to H0 and φ_min, the sampling axis and the Planck mass
 
 **What this adds to.** The campaign changed what a stored history is. The potential and the
@@ -1608,6 +1615,11 @@ every BBN solve a success (§1). The machine was shared, with the one-minute loa
   and β = 2 at α = 0.03, the histories that inject or park there. Whether PRyMordial's spline rings on
   these steps, and what that does to Yp and D/H, is not measured: board issue
   `[11-the-ratio-steps-at-injections-and-parking-in-the-10-100-keV-window]`.
+
+  > **Note, 2026-11-01 (a measurement outside any campaign; `bbn-ratio-spline-2026-11-01/`).** Measured since,
+  > and closed as measured by the user. The cubic spline rings next to each reflection's jump in r (15–20 % of
+  > the jump), but that moves Yp by at most 3.7×10⁻⁵ relative. The jumps' positions within the sampling
+  > interval move Yp by up to 4.8×10⁻⁴ and D/H by up to 6.2×10⁻⁴, relative, in both modes.
 - **At M = 10⁻³ M_P, from the rehearsal (§2.3).** β = 1.5 at α = 0.1 parks at 17.7 eV (N = 36.34) and is
   released at N = 47.51, T_J = 2.37×10⁻¹⁰ MeV; β = 3 and 5.5 park and are not released; β = 0.5 never
   parks, its 13 drains are resolved and all after 1 MeV, and it ends with ΔN_eff today 8.95. That is R17's
@@ -2033,6 +2045,10 @@ black-clean and was not reformatted. Source of the table: log 01, "What shipped"
   ⁷Li/H 5.423441017).
 - `[05-the-ratio-spline-may-ring-at-resolved-bounce-jumps]`: until measured, a PRyMordial failure
   on this input cannot be attributed to the true H rather than to the spline (§3.6.2).
+
+  > **Note, 2026-11-01.** Measured and closed (§3.6.2's note of this date;
+  > `bbn-ratio-spline-2026-11-01/`). A monotone interpolant that cannot overshoot gives the same yields, and
+  > all 40 solves of the measurement succeeded.
 - The pre-check now accepts a history that stops as high as 20 eV (`--T-stop-GeV 1e-8` passes;
   it required 0.01 eV, `1e-11` GeV, before). That is what makes the source's physical-`M`
   cross-check possible with `--T-stop-GeV 1e-8`; a history that runs to `T_CMB` passes under

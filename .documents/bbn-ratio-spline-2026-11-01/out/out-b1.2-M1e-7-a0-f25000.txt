@@ -1,0 +1,45 @@
+== 1.2 1e-7 0 25000   9:51  up 1 day, 12:11, 1 user, load averages: 15.35 16.78 13.88
+!! tune_history (probe-tune): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 9.79e-10 M_P at the wall-side turning point at N = 17.66794209), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+[beta=1.2 M=1e-07 alpha=0] tuned in 39.9 s, 1 integrations
+[beta=1.2 M=1e-07 alpha=0] fine integration in 44.3 s, 156205 samples
+[beta=1.2 M=1e-07 alpha=0] production samples equal to the tuned run's: 5003, different: 0
+[beta=1.2 M=1e-07 alpha=0] window: 1509 production samples, 150903 fine; fine T_J non-decreasing pairs: 0
+[beta=1.2 M=1e-07 alpha=0] jumps found (fine step > 0.001; median fine step 2.52e-06): 3 in 3 production intervals
+[beta=1.2 M=1e-07 alpha=0] production rms_step / max |step|: 0.03815 / 1.099 at T=3.072e+04 keV (r -0.4657 -> 0.6328)
+[beta=1.2 M=1e-07 alpha=0] worst cubic interval: T=30502-30720 keV, production r 0.6328 -> -0.4657, fine r in it min -0.468 max 0.6341 over 99 points
+  > [0.3,1) keV: 132 production samples, 0 with a jump
+  > [1,3) keV: 119 production samples, 0 with a jump
+  > [3,10) keV: 131 production samples, 0 with a jump
+  > [10,100) keV: 256 production samples, 0 with a jump
+  > [100,1000) keV: 293 production samples, 2 with a jump
+  > [1000,10000) keV: 248 production samples, 0 with a jump
+  > [10000,100000) keV: 286 production samples, 1 with a jump
+[beta=1.2 M=1e-07 alpha=0] cubic  |interp - fine| in jump: max 0.727; next to jump: max 0.218; 2 away: max 0.0581; further: max 0.0155; mean +0.000242
+  > cubic  [0.3,1) keV: n=13117 max|e|=4.65e-10 rms e=5.04e-11 mean e=-1.54e-12 max|r|=0.0308
+  > cubic  [1,3) keV: n=11945 max|e|=1.22e-10 rms e=1.59e-11 mean e=+8.46e-13 max|r|=0.0355
+  > cubic  [3,10) keV: n=13090 max|e|=6.07e-11 rms e=5.76e-12 mean e=-8.5e-14 max|r|=0.0372
+  > cubic  [10,100) keV: n=25632 max|e|=3.94e-08 rms e=2.04e-09 mean e=-5.74e-11 max|r|=0.236
+  > cubic  [100,1000) keV: n=29294 max|e|=0.619 rms e=0.0236 mean e=+0.00029 max|r|=0.448
+  > cubic  [1000,10000) keV: n=24753 max|e|=4.81e-09 rms e=4.83e-10 mean e=+1.44e-11 max|r|=0.369
+  > cubic  [10000,100000) keV: n=28572 max|e|=0.727 rms e=0.0236 mean e=+0.000978 max|r|=0.679
+[beta=1.2 M=1e-07 alpha=0] linear |interp - fine| in jump: max 0.728; next to jump: max 1.58e-05; 2 away: max 1.53e-05; further: max 2.15e-05; mean +0.000202
+  > linear [0.3,1) keV: n=13117 max|e|=2.42e-07 rms e=1.1e-07 mean e=-9.55e-08 max|r|=0.0308
+  > linear [1,3) keV: n=11945 max|e|=7.46e-08 rms e=3.49e-08 mean e=-3.05e-08 max|r|=0.0355
+  > linear [3,10) keV: n=13090 max|e|=2.5e-08 rms e=1.13e-08 mean e=-9.77e-09 max|r|=0.0372
+  > linear [10,100) keV: n=25632 max|e|=1.39e-05 rms e=4.07e-06 mean e=+1.99e-06 max|r|=0.236
+  > linear [100,1000) keV: n=29294 max|e|=0.579 rms e=0.0224 mean e=+0.00021 max|r|=0.448
+  > linear [1000,10000) keV: n=24753 max|e|=2.24e-06 rms e=6.12e-07 mean e=-3.68e-07 max|r|=0.369
+  > linear [10000,100000) keV: n=28572 max|e|=0.728 rms e=0.0228 mean e=+0.000851 max|r|=0.679
+[beta=1.2 M=1e-07 alpha=0] pchip  |interp - fine| in jump: max 0.807; next to jump: max 0.00122; 2 away: max 9.28e-08; further: max 2.77e-07; mean +0.000187
+  > pchip  [0.3,1) keV: n=13117 max|e|=5.15e-10 rms e=8.22e-11 mean e=-2.07e-12 max|r|=0.0308
+  > pchip  [1,3) keV: n=11945 max|e|=1.33e-10 rms e=2.57e-11 mean e=+5.75e-13 max|r|=0.0355
+  > pchip  [3,10) keV: n=13090 max|e|=6.66e-11 rms e=9.19e-12 mean e=-1.36e-13 max|r|=0.0372
+  > pchip  [10,100) keV: n=25632 max|e|=9.37e-08 rms e=1.95e-08 mean e=+2.83e-10 max|r|=0.236
+  > pchip  [100,1000) keV: n=29294 max|e|=0.65 rms e=0.0227 mean e=+0.000184 max|r|=0.448
+  > pchip  [1000,10000) keV: n=24753 max|e|=6.96e-09 rms e=1.08e-09 mean e=+1.21e-11 max|r|=0.369
+  > pchip  [10000,100000) keV: n=28572 max|e|=0.807 rms e=0.0219 mean e=+0.0008 max|r|=0.679
+[beta=1.2 M=1e-07 alpha=0] bbn production cubic (the code's route): Yp=0.2567128067 DoH=2.599078048 (8.1 s)
+[beta=1.2 M=1e-07 alpha=0] bbn production linear: Yp=0.2567222027 DoH=2.59901523 (7.5 s)
+[beta=1.2 M=1e-07 alpha=0] bbn production pchip: Yp=0.2567207296 DoH=2.598984973 (7.6 s)
+[beta=1.2 M=1e-07 alpha=0] bbn fine cubic: Yp=0.2566782965 DoH=2.598842398 (8.3 s)
+[beta=1.2 M=1e-07 alpha=0] bbn fine linear: Yp=0.2566784091 DoH=2.598828594 (8.6 s)
