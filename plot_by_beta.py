@@ -263,7 +263,10 @@ def build_beta_plot(
     ]
 
     if len(Yp_points) == 0:
-        print("!! build_beta_plot: no valid BBN data to plot for '{model_label}'")
+        print(
+            f"!! build_beta_plot '{model_label}', M={group_model._M.as_float / units.eV:.5g} eV, "
+            f"n={group_model._n}, alpha={alpha:g}: no valid BBN data to plot"
+        )
         return records
 
     solver_time_x, solver_time_y = zip(*solver_time_points)
