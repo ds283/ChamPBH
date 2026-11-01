@@ -78,21 +78,22 @@ invariants that hold across all of them:
   the repository root:
   ```bash
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .   # 26 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 269 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .   # 103 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 115 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .        # 64 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 497 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .   # 129 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 123 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .        # 68 tests
   ```
-  `ComputeTargets/tests` takes about 320 s in one run, and longer on a loaded machine; a Bash call is
+  `ComputeTargets/tests` took 590 s on 2026-11-01 (the two halves below, 135.8 s and 454.6 s, at one-minute
+  loads of 6.1 and 11.2 at their starts), and longer on a loaded machine; a Bash call is
   capped at ten minutes, so run it in two halves:
   ```bash
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 77 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 192 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 122 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 375 tests
   ```
-  (The counts are those of 2026-10-27, after `tuning-followups` 02, which added 19 tests to
-  `ComputeTargets/tests/test_tuning.py`; 01 had added 7 to `ComputeTargets/tests` and 10 to
-  `ObjectFactories/tests`.
-  `tools/tests` now holds three tuned histories, about 20-30 s each; run it alone.) They **must not
+  (The counts are those of 2026-11-01, after `inelastic-reflection` 12. That campaign added 228 tests to
+  `ComputeTargets/tests`, 26 to `ObjectFactories/tests`, 8 to `tools/tests` and 4 to `RunDrivers/tests`, and
+  none to `CosmologyModels/tests`. `tools/tests` holds tuned histories and took 131.7 s on 2026-11-01, at a
+  one-minute load of 25.0 at its start; run it alone.) They **must not
   need a Ray cluster or a persistent datastore**. A test may build a temporary
   SQLite datastore in a `tempfile` directory, through `datastorekit`'s undecorated actor
   (`standin_pool.DatastoreClass`) inside ChamPBH's stand-in cluster (`StoreFixtures/standin_pool.py`,
@@ -124,11 +125,17 @@ invariants that hold across all of them:
   `ScalarHistoryValue` also carries ln(1 + z_J) (`log_one_plus_z_Jordan`), the Jordan-frame
   redshift from the end, which is a column and never a key (a_J is not monotonic through a
   bounce). The Jordan-frame temperature is `log_T_Jordan`. Do not treat any two of these as
-  interchangeable.
+  interchangeable. The dark radiation of dissipation mode is ρ_χ,E = K e^{−4N} in the Einstein frame, K a
+  piecewise-constant ledger (`DarkRadiationLedger`, `ComputeTargets/dark_radiation.py`); ρ_χ/ρ_R is the
+  same in both frames. ΔN_eff is stored for each history at T_CMB and at 1 MeV, the 1 MeV value under the
+  convention T_ν = T_γ. The per-sample ρ_χ/ρ_R is a payload key beside the samples, not a field of
+  `SampleValues`, and a `ScalarHistoryValue` column. α is a key of every history, in its own table
+  `alpha_value`.
 - **The plot scripts** (`plot_by_beta.py`, `plot_ScalarHistory.py`) read a store read-only, through
   `plot_inputs.py`, and stop (exit 2) if their options do not match the ones the build used: the
-  tolerances, T*, φ*, `--tuning-tolerance` (a key of every history) and `--n-values` (an n with no
-  stored model). `--tuning-max-integrations` is not matched; it is not a key.
+  tolerances, T*, φ*, `--tuning-tolerance` (a key of every history), `--alpha-values` (an α with no stored
+  `alpha_value` row; each α's output goes under `<label>/alpha=<α>/`, α = 0 included) and `--n-values` (an n
+  with no stored model). `--tuning-max-integrations` is not matched; it is not a key.
 - **Science runs** are recorded in [`science-runs/`](science-runs/README.md), one dated folder
   (`YYYY-MM-DD-<slug>`) per run. Each holds the run scripts, the logs, and each figure made from the
   run with its inputs. That folder is a record of what produced output for publication; code

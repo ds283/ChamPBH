@@ -311,6 +311,14 @@ ChamPBH/
 > `tune_history`, so the note above's tuned runs of them print as they did. `tune_history`'s own default
 > is now `"quiet"` (§7.2's note of this date), which is what `main.py`'s histories get.
 
+> **Note, 2026-11-01 (`inelastic-reflection`, prompt 12): the tree above gains two files.**
+> `ComputeTargets/dark_radiation.py` (`DarkRadiationLedger`; §7.2's note of 2026-10-28) and
+> `CosmologyConcepts/alpha_value.py` (`alpha_value`; §7.2's note of 2026-10-31, §8.2's note of this date).
+> `ComputeTargets/ScalarHistory.py`, `ComputeTargets/Policies/PotentialDerivativePolicy.py`,
+> `ComputeTargets/AdiabaticHistory.py` and `CosmologyConcepts/Models/AbstractModel.py` keep their names
+> and gain the code that §7.2's map of this date lists. The campaign's measurement scripts and outputs are
+> under `.documents/inelastic-reflection/` (`measure/`, `out/`), outside the tree above.
+
 ---
 
 ## 3. The Ray Distributed Computing Layer
@@ -761,6 +769,14 @@ For a new project with a different shard key, this file is the primary place to 
 > `ExponentialCoupling` was, and `Lambda_value` and `ExponentialPotential` left `replicated_tables`
 > (and `Lambda_value` `read_table_config`).
 
+> **Note, 2026-11-01 (`inelastic-reflection`, prompt 12): `alpha_value`, and the shard key is still β.**
+> `replicated_tables` (`config/sharding.py:18`) gains `"alpha_value"` (`:24`), after `"beta_value"`, which
+> prompt 09's note in §7.2 says in a clause ("replicated as `beta_value` is"). `ShardKeyType` is still
+> `beta_value` (`:54`) and `sharded_tables` is unchanged, so the α = 0 and the α = 0.1 histories of one model
+> sit on one shard, the one of the model's β, and `alpha_value` has a row on every shard. `read_table_config`
+> does not name it. The registry entry is `config/datastore.py:91` and its serial batch size, 200, `:125`.
+> The listing above is of the tree of its day.
+
 ### 5.3 Defaults (`config/defaults.py`)
 
 ```python
@@ -983,6 +999,14 @@ SampleValues = namedtuple("SampleValues", [
 > cell-mean field or column, because the bounce averages were withdrawn (see
 > [`numerical-strategies.md` §3.6](numerical-strategies.md)). The definitions, units and values are
 > in that section.
+
+> **Note, 2026-11-01 (`inelastic-reflection`, prompt 12): `first_bounce_reflected`, and the table's width.**
+> `first_bounce` (`ComputeTargets/ScalarHistory.py:2754`) sets the flag from the history's first
+> reflection, which since prompt 05 is of either kind, a floor-rule reflection or an unresolved turnaround
+> (`Reflection.kind`; §7.2's note of 2026-10-29). At α = 0 that is the elastic reflection the table's row
+> names. At α > 0 a reflection drains, π_out = −√(1 − α_eff) π_in (`numerical-strategies.md` §6.2), so
+> it is not elastic. The table has also gained `alpha_serial` and the 24 columns of dissipation mode, so its
+> column count above is of its day (§7.2's note of 2026-10-31).
 
 > **Note, 2026-10-14 (`surfing-temperature`).** `surfing_turning_points` walks the same step
 > interpolants as `first_bounce`, from the start to the bounce, and returns every turning point of
@@ -1318,6 +1342,58 @@ SampleValues = namedtuple("SampleValues", [
 >   `RunDrivers/tests/test_scope_alpha.py`; `tools/tests/test_inventory_alpha.py`,
 >   `test_history_and_bbn_alpha.py`.
 
+> **Note, 2026-11-01 (`inelastic-reflection`, prompt 12): dissipation mode on the code, by piece.** Each
+> piece names its module, its public functions and classes, and its payload keys or columns, read at the
+> dispatch commit `7cfced4`; the line numbers of the notes it points to are this file's at that commit,
+> before this note. The order in which a history meets the pieces is `numerical-strategies.md` §6.11.1.
+> 1. **The ledger.** `ComputeTargets/dark_radiation.py`: `DarkRadiationLedger(K_initial=0.0)` with `add`
+>    (`:103`), `K` (`:134`), `is_zero`, `rho_chi`, `ratio`, and the read-only `K_initial`, `injections`
+>    and `is_empty`. Payload key `"dark_radiation"`. Note `:1056`.
+> 2. **The policies.** `ComputeTargets/ScalarHistory.py`: `ODEPolicy(…, dark_radiation=None)` (`:569`),
+>    `HubblePolicy` (`:740`); `ComputeTargets/Policies/PotentialDerivativePolicy.py`:
+>    `matter_and_dark_radiation_fractions` (`:195`) and the keyword `r_chi` of its methods. Note `:1056`;
+>    `numerical-strategies.md` §6.1.
+> 3. **The step loop.** `integrate_scalar_history` (`:1432`), `integrate_history` (`:3857`) and
+>    `tune_history` (`:4464`) take `alpha`. Records: `TurningPoint` (`:267`), `Reflection` (`:242`, with
+>    `kind`), `Injection` (`:318`), `Parking` (`:369`), `Release` (`:414`), `IntegrationResult` (`:469`).
+>    Functions: `log_m_eff_squared` (`:955`), `step_nonadiabaticity` (`:1023`), `gate_weight` (`:1044`),
+>    `assess_infall` (`:1070`), `unresolved_turnaround` (`:1104`), `warning_kind` (`:1120`),
+>    `parking_ratio_test` (`:1138`), `tracker_adiabatic` (`:1150`), `parking_guard` (`:1160`),
+>    `log_trace`, `tracker_velocity`, `parked_tracker`, `tracker_m_eff_over_H`, `cut_tracker` (`:1317`),
+>    `parking_leftover` (`:1348`); classes `ParkedRHS` (`:1361`) and `ParkedSegment` (`:1393`). Constants
+>    `NONADIABATICITY_SCALE`, `UNRESOLVED_REFLECTION_FACTOR`, `UNRESOLVED_PHI_T_THRESHOLD_MP`,
+>    `PARKING_EPSILON`, `PARKING_ADIABATICITY_THRESHOLD`, `PARKING_PI_GUARD_MP`, `RELEASE_ROOT_XTOL`,
+>    `RELEASE_ROOT_RTOL` (`:99`–`:136`), none a key. Payload keys: `"turning_points"`, `"injections"`,
+>    `"dropped_drains"`, `"warnings"`, `"parking"`, `"release"`. Notes `:1076`, `:1097`, `:1119`, `:1152`,
+>    `:1189`.
+> 4. **The model.** `CosmologyConcepts/Models/AbstractModel.py`: `classical_turning_point` (`:351`),
+>    `one_loop_turnaround` (`:356`), `minimum_on_trace` (`:361`) and `d_minimum_d_log_trace` (`:364`) on
+>    `AbstractModel`, mirrored on `RealizedModel`; the records `ClassicalTurningPoint` (`:71`) and
+>    `OneLoopTurnaround` (`:80`); the search `_search_log_field` (`:183`) and its width helper
+>    `_log_V_minus_floor` (`:137`, `WALL_ROUNDING_QUANTA`, `:112`). Notes `:1569`, `:1599`.
+> 5. **The peak and the margins.** `ComputeTargets/ScalarHistory.py`: `peak_estimate` (`:3425`),
+>    `tracker_log_m` (`:3466`), `field_log_m` (`:3491`), `relativistic_margins` (`:3511`),
+>    `history_margins` (`:3685`), `margin_warning_lines` (`:3806`); records `PeakEstimate`,
+>    `MarginCandidate`, `MarginEvent`, `Generation`, `MarginFailure`, `Margins`. Payload keys
+>    `"generations"`, `"margins"`, `"margin_warnings"`. Note `:1622`.
+> 6. **The stored values.** `dark_radiation_values` (`:3112`) and `dissipation_values` (`:3224`), the
+>    records `DarkRadiationValues` and `DissipationValues` (24 fields); `build_extra_data` (`:4761`) adds
+>    `"margins"`. Payload keys `"rho_chi_over_rho_rad"` and `"dark_radiation_values"`. The columns:
+>    `ScalarHistory.alpha_serial` and the 24 dissipation columns, `extra_data` as `Text`
+>    (`ObjectFactories/ScalarHistory.py:227`, `:361`), `ScalarHistoryValue.rho_chi_over_rho_rad`; the
+>    accessors `ScalarHistory.alpha` and `.dissipation`; the key's table `alpha_value`
+>    (`CosmologyConcepts/alpha_value.py`, `config/datastore.py:91`). `AdiabaticHistory.py` takes `r_chi`
+>    in `M2eff_over_H2` and `Hdot_over_H2`. Note `:1221`.
+> 7. **The drivers and the readers.** `config/argument_parser.py`: `alpha_fraction` (`:112`),
+>    `distinct_values` (`:127`), `--alpha-values` (`:222`); `main.py`: `run_pipeline(…, alpha, …)`
+>    (`:166`) once per α (`:1000`); `plot_inputs.py`: `PlotParameters.alphas`; `extract_common.py`:
+>    `alpha_path` (`:106`), `build_history_record` (`:895`), `plot_Delta_N_eff` (`:1226`),
+>    `plot_dark_radiation` (`:1287`); `RunDrivers/registered_run.py`: the scope's `α` term (`:700`);
+>    `tools/history_and_bbn.py --alpha` (`:330`) and its `dissipation` line, `tools/bbn_from_store.py
+>    --alpha` (`:754`), `tools/inventory_report.py`'s `alpha=` field. Output: `alpha=<α>/` levels,
+>    `dark_radiation.pdf`, `Delta_N_eff.pdf`, `histories.csv`'s `alpha`, `Delta_N_eff_today` and
+>    `Delta_N_eff_1MeV`. Note `:1265`.
+
 ### 7.3 `AdiabaticHistory` (`ComputeTargets/AdiabaticHistory.py`)
 
 Computes the adiabatic perturbation parameter Q (which determines whether the chameleon field is adiabatically tracking its minimum). Requires a `ScalarHistoryProxy` as input.
@@ -1414,6 +1490,12 @@ All quantity objects (`M_value`, `temperature`, etc.) carry a reference to the `
 > indexed column (`ObjectFactories/redshift.py:51-53`). The axis is `log_one_plus_z_grid` (`:24`): the
 > points k ln 10/S, anchored at the end of the history. The details and the measurements are in
 > `numerical-strategies.md` §3.7.9.
+
+> **Note, 2026-11-01 (`inelastic-reflection`, prompt 12): `alpha_value`.** `CosmologyConcepts/alpha_value.py`
+> defines `alpha_value(DimensionlessQuantity)`, built as `alpha_value(store_id, value)`: the fraction α of
+> the condensate's kinetic energy drained into chameleon quanta at each candidate. It is a key of every
+> `ScalarHistory`, stored in its own replicated table, and α = 0 (natural mode) is a row like any other.
+> It is not the shard key (§5.2's note of this date). The list above is of the classes of its day.
 
 ### 8.3 Potentials (`CosmologyConcepts/Potentials/`)
 
@@ -2037,3 +2119,21 @@ work_pool.run()
 8. **`store_results=True` in `RayWorkPool` is only for query-only passes.** When `task_builder` returns lists of refs (the vectorized case), the indices break. Use `store_results=True` only with scalar-returning `task_builder`s.
 
 9. **The `grouper` + bin-by-shard pattern.** The main pipeline groups work items into batches of 8, then within each batch bins by `shard_key`. This minimizes round-trips by sending multiple items to the same shard in one call. For best efficiency in a new project, maintain this pattern.
+
+> **Note, 2026-11-01 (`inelastic-reflection`, prompt 12): two properties of `ComputeTargets.ScalarHistory`.**
+> - **The module is reached through `importlib`, since the name `ComputeTargets.ScalarHistory` as an
+>   `import … as` target is the class.** `ComputeTargets/__init__.py` exports the class `ScalarHistory`
+>   (`:6`–`:7`) under the module's name, so `import ComputeTargets.ScalarHistory as X` binds the class,
+>   and `X.PARKING_EPSILON = …` sets an attribute of the class that nothing reads. The module itself is
+>   `importlib.import_module("ComputeTargets.ScalarHistory")` or `sys.modules["ComputeTargets.ScalarHistory"]`.
+>   At `7cfced4`, `grep -rl import_module` over `ComputeTargets`, `ObjectFactories`, `tools`,
+>   `RunDrivers`, `StoreFixtures` and `CosmologyModels`, narrowed to the files that name `ScalarHistory`,
+>   finds 17: twelve test modules and the helper `dissipation_histories.py` in `ComputeTargets/tests`,
+>   `tools/tests/test_surfing_scan.py`, and `tools/bbn_from_store.py`, `tools/history_and_bbn.py` and
+>   `tools/surfing_scan.py`. Prompt 11's first ε script took the class for the module, and its eight
+>   ε points ran at the default (verification §1.1; log 11 D3).
+> - **`PARKING_EPSILON` is read at call time**, by `parking_ratio_test`
+>   (`ComputeTargets/ScalarHistory.py:1138`, the read at `:1147`), the function the step loop calls at
+>   each candidate (`:2391`). A value set on the module object before a call is the cut's ε for that call.
+>   It is a module constant and not a key: a store does not record the ε its histories were made with
+>   (`numerical-strategies.md` §6.10 gives the measured effect of changing it).

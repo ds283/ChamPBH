@@ -43,7 +43,8 @@ assigned to it, §1.20; prompt 04 opened one, 2026-10-29, §1.19; prompt 05 open
 §1.19; prompt 06 opened none and narrowed prompt 05's, 2026-10-29; prompt 07 opened none and
 narrowed the assigned one, 2026-10-30, §1.20; the user ruled one and assigned another to the inserted prompt 07b, 2026-10-30, §1.19; prompt 07b closed that one and opened none, 2026-10-30; prompt 08 closed prompt 04's and opened none, 2026-10-31; prompt 09 closed the assigned one and
 opened none, 2026-10-31; the orchestrator's review of prompt 09 opened one, 2026-10-31, §1.19; prompt 11
-opened two, 2026-11-01, §1.19).
+opened two, 2026-11-01, §1.19; prompt 12 opened and closed none, and the campaign closed 2026-11-01, 13 of 13
+prompts landed, with these four open and none assigned).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -308,7 +309,8 @@ Planned 2026-10-27. One opened by prompt 01, 2026-10-27, found by its orchestrat
 
 Planned 2026-10-27. One opened by the planner, found by a planning probe; one by prompt 04
 (2026-10-29), closed by prompt 08 (2026-10-31); one by prompt 05 (2026-10-29), closed by prompt 07b
-(2026-10-30); one by the orchestrator's review of prompt 09 (2026-10-31); two by prompt 11 (2026-11-01).
+(2026-10-30); one by the orchestrator's review of prompt 09 (2026-10-31); two by prompt 11 (2026-11-01). The campaign closed on 2026-11-01, 13 of 13 prompts landed; prompt 12
+opened and closed none, and these four stay open.
 
 - `[00-xav-sigma-is-non-monotone-at-25-35-keV]` — Σ from `Xav_EOS_spline` swings between 3×10⁻⁶
   and 9×10⁻⁵ at 25–33 keV (an irregular table and a ringing cubic spline), comparable to the matter
@@ -332,4 +334,4 @@ Planned 2026-10-27. One opened by the planner, found by a planning probe; one by
 
 Re-planned 2026-10-29 to reach laboratory M through a parking switch (its README §8). The one
 issue assigned, `[00-settling-at-physical-M-needs-a-parked-tracking-model]`, was closed by prompt 09
-on 2026-10-31. None is assigned now.
+on 2026-10-31. None is assigned now, and the campaign closed on 2026-11-01.

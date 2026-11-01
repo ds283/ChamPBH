@@ -278,6 +278,8 @@ from `1e-6` to `4.1e-28`, resolved at `1e-6` and `1e-8`, reflected at `φ = 4.70
 (audit §3.7). The shipped reflection at `φ = 0` agreed only for `M ≲ 1e-13` and failed or ran on
 at `φ < 0` above that (audit §3.5); it is gone.
 
+> **Note, 2026-11-01 (`inelastic-reflection`, prompt 12; §6.11).** At α > 0 the floor rule drains: the restart is π ← −√(1 − α_eff) π (§6.2), so the reflection there is not elastic; §6.11.1 gives the order in which a history meets it.
+
 The reflection is a *model*, not a fallback, and it has two guards (log 01):
 
 - **G1.** The potential must declare `reflects_at_origin` (new on `AbstractPotential`, default
@@ -1547,6 +1549,169 @@ is `prompts/inelastic-reflection/logs/09-store.md`.
   r_χ = 0.0 the old operations are taken, so α = 0 is bitwise. Measured: against the tree before, ρ_χ moves M²_eff/H² by at most 12 % in relative terms, near a zero of it (m = −6×10⁻⁴ at M = 10⁻³ M_P, β = 1.2), and by at most 1.25 % of max(|m|, 1); Ḣ/H² by at most 10⁻³; max |Q| by at most 0.8 %.
 - **Q on the parked samples (R15).** A parked sample has φ = φ_min and π = dφ_min/dN, and Q is computed
   on it as on any other: finite on every parked sample of the histories measured, 1 904–2 142 at β = 2, M = 10⁻¹⁶ and 10⁻³⁰ and at M = 10⁻³, β = 1.2, and 244 at M = 0.5, β = 5. The largest parked |Q| at k/H = 10 is 2.28, 0.0022 e-folds after the switch at M = 10⁻³, β = 1.2, where the spline of asinh m carries the switch's step; at β = 2 it is at the last sample, 2×10⁻⁸ to 7×10⁻⁵.
+
+### 6.10 Added 2026-11-01 (`inelastic-reflection` prompt 12): the measurement of prompt 11
+
+Prompt 11 ran 48 tuned histories with BBN through `tools/history_and_bbn.py`, at M = 4×10⁻³¹ and
+10⁻¹² M_P (dissipation mode), M = 0.5 and 10⁻⁷ M_P (natural mode) and three values of the parking ε, and
+rehearsed a two-α build under Ray (verification §1, §2). The code is prompt 10's (`8c12afa`;
+`PARKING_EPSILON = 1.0e-6`, `ComputeTargets/ScalarHistory.py:126`). Every figure below is a line of
+[`inelastic-reflection-verification.md`](inelastic-reflection-verification.md), at the section named,
+and is measured; none is re-derived here. All 48 points ran with exit status 0, every history tuned and
+every BBN solve a success (§1). The machine was shared, with the one-minute load between 2.2 and 33.9
+(that document's header), so every time is a measurement under load.
+
+- **The drain does not depend on M below 10⁻¹² M_P (§1.4).**
+  - |Δ`injected_fraction`|/`injected_fraction` between M = 10⁻¹² and 4×10⁻³¹ at each of the 16 (β, α)
+    is 1.47×10⁻⁵ at worst (β = 1.2, α = 0.03: 0.00477064 against 0.00477057, parking 0.0008 e-folds
+    apart) and equal to the printed six digits at the other 15. The gate's limit was 10⁻³.
+  - Every reflection at both M is unresolved (`resolved_candidates = 0`), every history parks, none is
+    released: at these M the parked tracker stays adiabatic to today (§1.3).
+  - Every history converged on its seed, in one integration, 11.1–31.3 s with BBN (about 8–9 s of it
+    PRyMordial), 1 649–32 106 steps (§1.3).
+- **ΔN_eff against α (§1.5).** ΔN_eff today rises strictly with α at all 8 (M, β), and so does ΔN_eff
+  at 1 MeV; the values are the same at both M to the printed digits.
+
+  | β | ΔN_eff today at α = 0.03, 0.1, 0.3, 0.9 | ΔN_eff/α, first to last |
+  |---|---|---|
+  | 1.2 | 0.021488, 0.065672, 0.19323, 0.56467 | 0.716 to 0.627 |
+  | 2 | 0.016948, 0.052441, 0.1227, 0.14669 | 0.565 to 0.163 |
+  | 3 | 0.012287, 0.031576, 0.041723, 0.046522 | 0.410 to 0.052 |
+  | 5 | 0.0026859, 0.0062655, 0.014022, 0.019809 | 0.0895 to 0.0220 |
+
+  The drain is close to linear in α only at β = 1.2 (ΔN_eff/α within 13 %); at β ≥ 2 it saturates.
+  ΔN_eff at 1 MeV is 0.85–0.97 of the value today: the rest is injected after 1 MeV, or is the factor
+  between R22's two conventions (§1.5).
+- **Natural mode (§1.6).** At M = 10⁻⁷ P23's warning was printed at every β, and every history reached
+  T_CMB and converged on its seed in one integration: 53.5–191.1 s, 150 847–493 615 steps (the slowest
+  at β = 5, 191.1 s, 483 767 steps). At M = 0.5 nothing was printed, the histories took 9–20
+  integrations, 19.2–118.1 s and 2 451–12 834 steps, and Yp falls from 0.148 to 0.0997 as β goes from
+  1.2 to 5.
+- **The parking ε (§1.7).** At M = 4×10⁻³¹, α = 0.1:
+  - ε = 10⁻⁴ against 10⁻⁶ at β = 2, 3, 5: the switch comes 0.62–1.17 e-folds earlier, and
+    `injected_fraction` is larger by 1.9–2.5×10⁻³ relative;
+  - ε = 10⁻⁸ against 10⁻⁶: the switch comes 0.05–0.40 e-folds later at β = 2, 3, 5 and the drain differs
+    by at most 2.4×10⁻⁵ relative; at β = 1.2 it parks 5.416 e-folds later (log 06 §5.5 found 5.4);
+  - |ΔYp| ≤ 8.9×10⁻⁶ and |Δ(D/H)| ≤ 1.5×10⁻⁴ (×10⁻⁵) between any two ε at one β;
+  - a smaller ε takes more steps before the switch: 3.3–4.2× more at 10⁻⁸ than at 10⁻⁴.
+- **The margins (§1.3, "The margins").**
+  - At M = 4×10⁻³¹ every worst margin is at least 6.54 (the birth margin at β = 1.2, α = 0.03), every
+    failing share is 0 and no margin warning is printed.
+  - At M = 10⁻¹² the worst birth margin is −0.70 to −0.74 at every point, with failing shares
+    0.966–0.9999; the worst reflection margin is −0.68 to +0.62, failing shares 0.040–0.9994; the tracker
+    margin is 12.7–21.2, share 0. Each of those 16 points printed the birth and reflection margin
+    warnings, and R6's "nearly elastic" warning once.
+  - The unassessed share (R21) is 5×10⁻⁷ to 1.6×10⁻³, the same at both M.
+- **The BBN spline across injections (§3; P14, P46).** Below 10 keV every dissipation history is parked
+  (β = 1.2 at α = 0.03 parks at 0.57 eV) and its ratio ρ_NP/ρ_R,J is flat. In the 10–100 keV window
+  rms_step is 6.4×, 8.4×, 2.9× and 1.26× natural mode's at M = 10⁻⁷ for β = 1.2 at α = 0.03, 0.1 and 0.3
+  and β = 2 at α = 0.03, the histories that inject or park there. Whether PRyMordial's spline rings on
+  these steps, and what that does to Yp and D/H, is not measured: board issue
+  `[11-the-ratio-steps-at-injections-and-parking-in-the-10-100-keV-window]`.
+- **At M = 10⁻³ M_P, from the rehearsal (§2.3).** β = 1.5 at α = 0.1 parks at 17.7 eV (N = 36.34) and is
+  released at N = 47.51, T_J = 2.37×10⁻¹⁰ MeV; β = 3 and 5.5 park and are not released; β = 0.5 never
+  parks, its 13 drains are resolved and all after 1 MeV, and it ends with ΔN_eff today 8.95. That is R17's
+  unofficial large-M regime. Its BBN, like its natural-mode twin's, fails on the spline's floor
+  (`T_in_MeV = 0.00019824 MeV` against `T_BBN_spline_min = 0.0002 MeV`), as in
+  `jordan-normalization` 09.
+- **α = 0 is 2026.7.0 (§2.4).** 548 922 values of the four α = 0 histories of the rehearsal, compared
+  by `float.hex` against `jordan-normalization` 09's reference store, are all equal; the store has since
+  been retired, so the comparison cannot be repeated (board §5.13, "The stores").
+
+### 6.11 Added 2026-11-01 (`inelastic-reflection` prompt 12): dissipation mode as it stands
+
+§6.1–§6.9 were each written on the day of their prompt, and some statements in them were overtaken by a
+later prompt. This section reads them in the order a history at α > 0 meets them, gives each step its
+code at the dispatch commit (`7cfced4`, whose code is prompt 10's `8c12afa`; lines are in
+`ComputeTargets/ScalarHistory.py` unless a file is named), and ends with the statements of §6.1–§6.9 that
+are superseded and where. Natural mode (α = 0) runs none of it (README §8.2 P22); both golden histories
+are bitwise unchanged, and the warnings of R6 are printed lines, never values. The sections are records,
+and nothing in them is edited.
+
+#### 6.11.1 What a history at α > 0 does, in order
+
+0. **Entry.** `alpha` is a parameter of `integrate_scalar_history` (`:1432`), `integrate_history` (`:3857`)
+   and `tune_history` (`:4464`), and of `compute_scalar_history` (`:4703`), which `ScalarHistory.compute`
+   calls with the history's `alpha_value`. 0 ≤ α < 1 or `ValueError` (`:1590`). The wall is assessed
+   only where `alpha > 0.0 and model.reflects_at_origin and model.log_V_floor is not None` (`:1683`);
+   the margins' condition at `:4130` is the same.
+1. **The drain** (§6.1, §6.2; R11, P1–P3). The quanta are dark radiation, ρ_χ,E = K(N) e^{−4N}, in a
+   `DarkRadiationLedger` (`ComputeTargets/dark_radiation.py:51`; `add` at `:103`). Turning points are
+   seen at every α (`observe_turning_points`, `:1906`; `handle_turning_point`, `:2048`). A wall-side
+   point arms a drain, made at the first step end past the maximum of |π|. A candidate (`candidate`,
+   `:1777`) forms ΔK = α_eff ρ_kin,E e^{4N}, calls `ledger.add` (`:1881`), scales π by √(1 − α_eff) and
+   restarts Radau (`new_solver`, `:1634`).
+2. **The gate** (§6.3; U4 (b′), the user's 𝒜₀ = 1, R10). At a drain point after a resolved wall-side
+   turning point α_eff = α w_gate, w_gate = `gate_weight(𝒜_k)` (`:1044`), 𝒜₀ = `NONADIABATICITY_SCALE`
+   (`:99`). The weight is 1.0 at every unresolved reflection and every floor reflection (`:1750`, P20).
+   The stopping rule of §6.3 was withdrawn and is not in the code.
+3. **The unresolved rule** (§6.4; R8, R9, P18, P20, P23). At the start of every infalling step
+   (`:2480`–`:2489`), `assess_infall` (`:1070`) asks the model for the classical turning point, and
+   `unresolved_turnaround` (`:1104`) reflects the field at K φ_t, K = `UNRESOLVED_REFLECTION_FACTOR` = 3
+   (`:109`), when φ_t < `UNRESOLVED_PHI_T_THRESHOLD_MP` = 10⁻⁸ M_P (`:110`) or ln 𝓡 > 0. Either rule's
+   reflection goes through the floor branch and drains with w_gate = 1. The floor rule is the old one.
+4. **Parking** (§6.5; R14, R15, R17, P18, P19, P21). After every candidate after the first,
+   `parking_ratio_test` (`:1138`; used at `:2391`) asks ρ_kin,E/ρ_R,E < `PARKING_EPSILON` (`:126`,
+   read at call time at `:1147`); `cut_tracker` (`:1317`) finds the zero-lag tracker, and
+   `tracker_adiabatic` (`:1150`) requires m_eff/H_E ≥ `PARKING_ADIABATICITY_THRESHOLD` = 10 (`:127`). If
+   both hold the leftover goes into the ledger and `run_parked_phase` (`:2132`) integrates (ln ρ_R,E,
+   ln f_m, ln T_J) by DOP853 (`ParkedRHS`, `:1361`; `ParkedSegment`, `:1393`). The guard `parking_guard`
+   (`:1160`, used at `:2433`) fails a history whose |π| at a reflection is below
+   `PARKING_PI_GUARD_MP` = 10⁻⁹ M_P (`:128`) with the cut not having fired.
+5. **The release** (§6.6; R16, P24). At each parked step end the same adiabaticity check is made
+   (`:2192`); where it fails the field is released at the root of m_eff/H_E = 10 on the step's segment
+   (`brentq` at `:2234`, tolerances `RELEASE_ROOT_XTOL`, `RELEASE_ROOT_RTOL`, `:135`–`:136`) and returned as
+   a `_ParkedPhaseEnd` (`:2265`). It is integrated in full to T_CMB and never parks again (`release is
+   None` at `:2391`).
+6. **The wall search**, under steps 3–5 (§6.4, §6.7; R18). Every call of the model's
+   `classical_turning_point` and `one_loop_turnaround` (`CosmologyConcepts/Models/AbstractModel.py:351`,
+   `:356`) goes through `_search_log_field` (`:183`), which since 07b forms ln(V − V_floor) with
+   `_log_V_minus_floor` (`:137`), returning −∞ within `WALL_ROUNDING_QUANTA` = 16 quanta (`:112`) of the
+   rounding of ln V. A root with E ≲ 10⁻¹² V_floor raises, and a field inside such a root raises too
+   (log 07b §7).
+7. **The peak and the margins** (§6.8; R7, R13, R19–R21, U9, P25), after the integration and outside
+   its loop: `peak_estimate` (`:3425`), `relativistic_margins` (`:3511`, a pure core),
+   `history_margins` (`:3685`, the gatherer) and `margin_warning_lines` (`:3806`), called at `:4132`.
+   The threshold is `MARGIN_THRESHOLD` = ln 10 (`:144`) and the weight `MARGIN_WEIGHT_SHARE` = 10⁻³
+   (`:145`). Nothing of it changes a value of the integration.
+8. **The stored values** (§6.9, §6.10; R22–R25, P26–P31). `dark_radiation_values` (`:3112`) forms r_χ and
+   ΔN_eff at 1 MeV, 70 keV and today, `dissipation_values` (`:3224`) the 24 columns, and
+   `ScalarHistory.store` (`:5242`) writes them with the per-sample ratio
+   (`ObjectFactories/ScalarHistory.py`; α is `alpha_serial`, `:227`). The format is 6 and the label
+   `2026.8.0` (`config/fingerprint.py:87`, `config/version.py:62`).
+
+#### 6.11.2 Statements of §6.1–§6.9 that are superseded
+
+The lines are this file's at `7cfced4`, before this section and the note of this date at §3.5.3 were added.
+A reading of the rest of §6.1–§6.9 for this section, statement by statement, found no further one.
+
+| Statement | Where | Superseded by | Where |
+|---|---|---|---|
+| "injects nothing: the only way to give a history a nonzero ρ_χ is the test harness" | §6.1 (`:1124`–`:1126`) | the drain | §6.2 (`:1162`), step 1 above |
+| "`AdiabaticHistory`'s own E (prompt 05 of the campaign)" is unchanged | §6.1 (`:1149`–`:1150`) | `AdiabaticHistory` reads each sample's r_χ (P29) | §6.9 (`:1542`) |
+| "not by `compute_scalar_history`, so no stored history has α > 0" | §6.2 (`:1163`–`:1164`) | α a key, stored | §6.9 (`:1517`) |
+| the tapered stopping rule (w_rate) | §6.3 (`:1216`–`:1219`) | withdrawn on 2026-10-28; §6.3 says so | §6.3 itself |
+| "every drain point and every floor reflection is a candidate, drained at α_eff = α · w_gate" | §6.3 (`:1215`) | w_gate = 1 at an unresolved reflection and at the floor rule (R10, P20) | §6.4 (`:1280`–`:1282`), step 2 |
+| "A floor reflection takes the infall's [𝒜_k]" as the weight's input | §6.3 (`:1240`–`:1241`) | the weight is 1; 𝒜_k is still recorded | §6.4 (`:1280`–`:1282`) |
+| "A `None` turning point … makes no decision" | §6.4 (`:1272`–`:1273`) | a root within the rounding width raises, and so does a field inside it | §6.7 (`:1438`); log 07b §7 |
+| the wall search's refusal of a wall below the rounding of ln V (board issue `[05-the-wall-search-refuses-a-wall-below-the-rounding-of-ln-V]`) | §6.4, log 05 §5.5 | the width K = 16; the issue is closed | §6.7 (`:1418`–`:1439`); board §4 |
+| a parked step end with m_eff/H_E < 10 fails the history | §6.5 (`:1331`–`:1333`) | the release | §6.5 says so itself; §6.6 (`:1359`) |
+| at M = 0.5 M_P β = 5 and 25, and at M = 10⁻³ M_P β = 1.2, the history fails after parking | §6.5 (`:1339`–`:1342`) | each is released and reaches T_CMB; "0.25 eV" was 0.25 meV | §6.6 (`:1395`–`:1397`) |
+| "Every history of log 05 §5.5's grid parks … and reaches T_CMB" | §6.5 (`:1345`) | true of that grid; in the band 10⁻²⁵–10⁻¹³ M_P the code of that day failed, and 07b fixed it | §6.7 (`:1441`–`:1447`) |
+| "Nothing is stored. The payload's `generations`, `margins` and `margin_warnings` are not read by any store" | §6.8 (`:1512`–`:1513`) | prompt 09 stores the record | §6.9 (`:1517`) |
+| the M = 10⁻³, β = 1.2 release as 0.27 eV | `architecture-summary.md` §7.2's 06 note, §6.5 | 0.27 meV | §6.6 (`:1397`), `architecture-summary.md` §7.2's 07 note |
+
+The drain at laboratory M is also not what README §8.0 gives: under P20 the converged drain is 0.1153,
+0.2902 and 0.4219 of the first-impact ceiling at β = 1.2, 2 and 3 (log 05 §7), not 0.115, 0.218 and
+0.261, which had gated floor reflections.
+
+#### 6.11.3 What a reader of the code will find stale
+
+Two statements in code are left as the campaign wrote them, and are listed in the log of this prompt:
+the comment of `REFLECTIONS_KEY` (`ComputeTargets/ScalarHistory.py:75`) calls the count "elastic reflections
+(the floor-triggered reflection model …)", though the count now includes unresolved reflections and at
+α > 0 every reflection drains; and `integrate_history`'s verbose line prints "elastic reflection(s)"
+(`:4024`) for the same count. A change of code corrects either, which this prompt does not make.
 
 ---
 

@@ -2159,6 +2159,193 @@ cut from `jordan-normalization` at `4ad15fe` and **is not merged into `main` whe
    `--stale-after` is needed**. With `--tuning-max-integrations` under 10, a fast tuning that fails at its
    cap prints only its `!!` line.
 
+### 4.18 Addendum 2026-11-01 — the `inelastic-reflection` campaign
+
+Added by `inelastic-reflection` prompt 12 (this commit), written at `7cfced4`. Nothing above this heading has
+been changed; where it is superseded, this section says so by statement. The campaign changed what a build
+computes and stores, and it started no production run: its rehearsal built two small stores under `var/`. It
+did, in order:
+
+- it was planned from a scoping with the user (2026-10-27, `47f2d36`) and re-planned on 2026-10-29
+  (`56c65cd`, README §8) after probes showed that laboratory M can be computed with a parking switch;
+- it put a dark-radiation component into the policy expressions (prompt 01, `85661b5`);
+- it made the step loop see turning points and drain a fraction α of the condensate's kinetic energy into
+  that component (02, `fe2a944`);
+- it weighted the drain at resolved wall-side turning points by the non-adiabaticity gate; the stopping rule
+  was withdrawn by the user (03, `0afa199`);
+- it gave the model the wall's turning point, 𝓡, the one-loop turnaround and the full-trace minimum (04,
+  `81b933f`);
+- it reflected unresolved turnarounds at three classical turning points (05, `9c2483b`);
+- it parked the field on its zero-lag tracker once the drain has emptied it (06, `e967cb7`) and released it
+  where the tracker stops being adiabatic (07, `5397f8f`);
+- it fixed the wall search at the rounding of ln V (07b, `92f41f2`);
+- it computed the spectrum's peak and three relativistic margins per history (08, `86fc526`);
+- it made α a key of every history, stored ΔN_eff and the dissipation values, and bumped the format and the
+  label (09, `3984ec5`);
+- it carried α through the drivers, the readers and the tools (10, `8c12afa`);
+- it measured dissipation mode and rehearsed a registered two-α build, interrupted and resumed, under real
+  Ray (11, `c797831`: the gates "Measure" and "R" hold);
+- and prompt 12 wrote the documents and this handover (this commit).
+
+Its board is [`prompts/inelastic-reflection/IMPLEMENTATION_STATE.md`](../prompts/inelastic-reflection/IMPLEMENTATION_STATE.md);
+its plan is its [`README.md`](../prompts/inelastic-reflection/README.md) (§8 is the plan as re-made on
+2026-10-29, with its rulings R6–R31 and P18–P47 and §8.6, what it hands to the user); the measurement and the
+rehearsal are in [`inelastic-reflection-verification.md`](inelastic-reflection-verification.md); what the code
+now does is in [`numerical-strategies.md`](numerical-strategies.md) §6.1–§6.11 (§6.10 is the measurement,
+§6.11 the reading guide) and in the dated notes of [`architecture-summary.md`](architecture-summary.md) (§7.2's
+map of this date lists the pieces). It **did bump** `VERSION_LABEL` (`"2026.8.0"`, `config/version.py:62`)
+and `FINGERPRINT_FORMAT` (6, `config/fingerprint.py:87`), so a store made before it cannot be reused. The
+branch `inelastic-reflection`, cut from `main` at `6f635e6`, **is not merged into `main` when this is
+written.**
+
+**This supersedes**, by statement and not by edit:
+
+- **§4.16's reference store.** `var/datastores/jordan-normalization-09-reference.db` was retired by the user
+  on 2026-11-01, without a fingerprint, because this campaign's code cannot read a store from before format 6
+  (`StoreSchemaMismatch`; board §5.13, "The stores"). §4.16 point 7's account of that store, and its
+  `main.py --inventory` figures (75,050 records in 15 classes, label 2026.7.0), are of the day before. The
+  reference store is now `var/datastores/inelastic-reflection-11-reference.db` (point 1).
+- **§4.16's format 5 and label 2026.7.0** ("It did bump `VERSION_LABEL` (`"2026.7.0"`) and
+  `FINGERPRINT_FORMAT` (5)"), and its point 2's `:2` row ("`2026.7.0`, and a tree that holds this campaign"):
+  they are 6 and `2026.8.0`, and the tree for a rebuild holds this campaign as well. §4.16 point 1's "the old
+  stores stay refused" now also covers every 2026.7.0 store.
+- **§4.17 point 4's bound on the heartbeat's silence**, about 430 s, which was read and not measured: prompt 11
+  measured a longest silence of 153 s (point 5).
+- **§4.16 point 7's "Left to the user"** is superseded as to stores by point 7 below; the paper notes stand
+  as it says.
+
+**The points.**
+
+1. **What changed for a build.**
+   - **α is a key of every history**, in its own replicated table `alpha_value` (`CosmologyConcepts/alpha_value.py`).
+     `--alpha-values` (default `[0.0]`) **replaces** its default rather than extending it, as `--n-values`
+     does, and runs one pipeline per α, in the order given. α outside [0, 1) is refused at parse (exit 2).
+     The shard key is still β (`config/sharding.py:54`): the α = 0 and α > 0 histories of one model sit on
+     one shard.
+   - **α = 0 is bitwise 2026.7.0** wherever the code did not change it: the four α = 0 histories of the
+     rehearsal, 548 922 values, every one equal to `jordan-normalization` 09's store (verification §2.4). A
+     rebuild at α = 0 reproduces the last science values in that sense. The new columns of an α = 0 row hold
+     the zeros and NULLs of R24.
+   - **The format is 6 and the label `2026.8.0`.** This code cannot read a 2026.7.0 store, so a rebuild
+     starts a new store, under `var/datastores/` as before.
+   - **`inelastic-reflection-11-reference` is the reference store at 2026.8.0**: 16 shards, the primary and
+     its sidecar, 18 files. On 2026-11-01 `main.py --config exponential.yaml --database
+     var/datastores/inelastic-reflection-11-reference.db --shards 16 --inventory` ran in 26 s, exit 0, with no
+     Ray: read-only, 75,050 records in 16 classes, `problems: none`, label 2026.8.0, `alpha_value` 2 records,
+     and `shasum -a 256` of the 18 files before and after identical. It was built by prompt 11's run
+     `reference-a` and its fingerprint is `afd2f329d79b3b3e65fd7af53dd1ef33b80f60f74e49eb1d77698da0ea6f1264`
+     (verification §2.5). The resumed store and 09's were retired by the user.
+
+2. **What changes in the run scripts, by change.** The scripts of `science-runs/2026-10-03-science-2026.6.0/`
+   are records and are not edited; a new folder under `science-runs/` holds the new scripts when the user
+   writes them. §4.16 point 2's table stands, and this table adds what the campaign changes. In every row,
+   "nothing new passed" is a script that gives none of the new options and reads the outputs by the old
+   names: it gets α = 0 only, and its products sit under `alpha=0/`.
+
+   | Change | Where | A script that passes nothing new |
+   |---|---|---|
+   | The option `--alpha-values ALPHA [ALPHA …]`, default `0.0` | `main.py`, `plot_by_beta.py`, `plot_ScalarHistory.py` (shared parser, `config/argument_parser.py:222`); the YAML key `alpha-values` works | α = 0, one pipeline, banner `>> RUNNING PIPELINE FOR MODEL <label>, alpha = 0` |
+   | The plot scripts match α as they match `--tuning-tolerance`: an α with no stored `alpha_value` exits 2, names `--alpha-values` and the value, and writes nothing (verification §2.6) | `plot_inputs.py` | α = 0: a store built with `--alpha-values 0.1` alone holds no α = 0 row, and the default plot exits 2 on it |
+   | The `alpha=<α>/` level, `α` formatted `:.5g`, on every per-α product, α = 0's included: `<output>/<label>/alpha=<α>/…` | `plot_by_beta.py`: `csv/M=…/data.csv`, `plots/M_convergence.pdf`, `plots/M=…/` (the six figures). `plot_ScalarHistory.py`: `plots/beta=…/M=…/`, `csv/…` | everything sits one level lower, under `alpha=0/`; a script that reads the old paths does not find them |
+   | New figures | `plot_ScalarHistory.py`: `dark_radiation.pdf` per history, at α > 0 only (Δg*(T_J) above, ρ_χ/ρ_R below, parking and release marked). `plot_by_beta.py`: `Delta_N_eff.pdf` per (M, n) group at `<label>/plots/M=…eV_n=…/`, spanning α (two panels, ΔN_eff today and at 1 MeV, one curve per α > 0), written only when some α > 0 | neither is written |
+   | New columns | `histories.csv` (at `<label>/`, spanning α): `alpha` after `phi_init_Mp`, `Delta_N_eff_today` and `Delta_N_eff_1MeV` after `rho_ratio_70keV`, rows sorted by (α, M, n, β). `fields.csv`: `rho_chi_over_rho_rad` and `Delta_gstar` | the columns are there, α = 0 and ΔN_eff 0.0; columns inserted in the middle shift a script that reads by position |
+   | The wrapper's scope names α | `RunDrivers/registered_run.py:700`: `α <values>` after the tuning tolerance, as given, duplicates included | `α 0`. The wrapper passes `--alpha-values` through to `main.py` after the bare `--`, as it passes every option; its own `--help` lists only its four options |
+   | `--alpha` | `tools/history_and_bbn.py` (default 0) and `tools/bbn_from_store.py` (default 0; matched in its raw SQL as the factory matches it, and a shard with no `alpha_value` table holds α = 0 only) | α = 0, output byte-identical to before |
+   | The tools' `dissipation` line | `tools/history_and_bbn.py`, at α > 0 only: after the bounce line, every field of `dissipation_values`, `:.6g`; the `history` line gains `alpha=<α>` before `wall=` | no new line |
+   | The inventory | `main.py --inventory`: `alpha_value` among the redshifts, tolerances and parameter values; `alpha=` on each history line, once on the common line when shared | `alpha=0` |
+
+   The wrapped command of §4.16 point 2, with the campaign and prompt filled in and the option added
+   (`<ALPHAS>` is the grid of point 4, the user's choice):
+
+   ```bash
+   ./venv/bin/python RunDrivers/registered_run.py --campaign <campaign> --prompt <N> --register "$job" \
+       --purpose "<one line>" -- --config exponential.yaml --database "$DB" --shards "$SHARDS" \
+       --ray-address "$RAY_ADDR" --job-name "$job" --bbn-wall-clock-limit 600 --alpha-values <ALPHAS> "$@" \
+       2>&1 | tee "$LOG/$job.log"
+   ```
+
+   The plot loop gives the same `--alpha-values` to both plot scripts. Every command above ran with `--help`,
+   exit 0, at `7cfced4`: `main.py`, `plot_by_beta.py`, `plot_ScalarHistory.py`,
+   `RunDrivers/registered_run.py`, `tools/history_and_bbn.py`, `tools/bbn_from_store.py` and
+   `./venv/bin/python -m runregistrykit list`.
+
+3. **The two modes, and where each holds** (README §8.1 R6, R17; all figures are prompt 11's, verification
+   §1, §2.3).
+   - **Natural mode (α = 0) at large M.** At M = 0.5 M_P the histories took 9–20 integrations, 19.2–118.1 s
+     with BBN. At M = 10⁻⁷ P23's warning (the classical turning point lies below the threshold, and the
+     history may fail on the step budget) was printed at every β, and every history still reached T_CMB in one integration, 53.5–191.1 s,
+     150 847–493 615 steps. Natural mode below that is "warn and let the run fail, if that's what it does"
+     (R6).
+   - **Dissipation mode down to laboratory M, through parking.** At M = 4×10⁻³¹ and 10⁻¹² M_P every history
+     (β ∈ {1.2, 2, 3, 5}, α ∈ {0.03, 0.1, 0.3, 0.9}) converged on its seed in one integration, every
+     reflection is unresolved, every history parks and none is released.
+   - **R17's unofficial large-M dissipation regime**, where "it is not clear it corresponds to anything
+     physical". The rehearsal's β = 0.5, M = 10⁻³ M_P, α = 0.1 history is the example: 13 resolved drains, all
+     after 1 MeV, no parking, ΔN_eff today 8.95 (log 11 §6), and its BBN fails on the spline's floor as its α = 0
+     twin's does. β = 1.5 at the same M parks at 17.7 eV and is released at today's temperature.
+   - **The margins.** At M = 10⁻¹² every history's birth margin fails (−0.70 to −0.74, failing share
+     0.966–0.9999) and each prints the margin warnings; at 4×10⁻³¹ none fails (every worst margin at least
+     6.54) and none is printed.
+
+4. **The α grid is the user's choice.** The facts for it (log 11 §7; verification §1.5):
+   - the measured span is α ∈ {0.03, 0.1, 0.3, 0.9}, with ΔN_eff today 0.0027–0.565, rising strictly with α
+     at every (M, β);
+   - ΔN_eff saturates in α at β ≥ 2: ΔN_eff/α falls by a factor 3.5–8 from α = 0.03 to 0.9, while at β = 1.2
+     it is within 13 % of linear;
+   - the one-loop α is about 0.08 at laboratory M (README §8.0), between the grid's 0.03 and 0.1. α is bracketed
+     and not predicted (README §8.6);
+   - ΔN_eff at 1 MeV is 0.85–0.97 of the value today (R22's two conventions; the rest is injected after 1 MeV).
+
+5. **The cost, measured and estimated.**
+   - **Measured** (verification §1.2, §2.1, §2.5; under load, 2.2–33.9 on a shared machine):
+     - per history, with BBN: dissipation at M ≤ 10⁻¹², 11–31 s, one integration, 1.6–32 k steps; natural mode
+       at M = 10⁻⁷, 54–191 s; at M = 0.5, 19–118 s;
+     - per build: the rehearsal's two-α build, four β at M = 10⁻³, took 4 min 46 s on 10 CPUs (the α = 0 scalar
+       stage 2m 33.1s, the α = 0.1 one 43.2 s, the same four β);
+     - the longest heartbeat silence of the three builds: 153 s (`resumed-a`, the α = 0 scalar stage; 151 s for
+       `reference-a`), against the 900 s window.
+   - **Estimated.** Both are read from the figures above, not measured:
+     - the α = 0 part of a rebuild costs what §4.16 point 3 estimated (about 6.6–8.4 hours of scalar stage),
+       which this campaign did not re-measure;
+     - each further α is one more pipeline. The rehearsal's α = 0.1 scalar stage took 0.28 of its α = 0 one
+       (43.2 s against 153.1 s), which sets an order for it; the science grid's β and M differ from the
+       rehearsal's, so no figure for a rebuild is given.
+   - **`--stale-after` is not needed**: 153 s measured is inside 900 s, and the read bound of §4.17 point 4 is
+     inside it too. If a run shows `stale` with its pid still answering `kill -0` on its host, it is a long
+     integration, and `runregistrykit list --stale-after SECONDS` reads it as running (§4.16 point 3: read,
+     not measured).
+
+6. **What stays open.**
+   - **README §8.6's list:** a computed α (2.7/ℓ is recorded, not used); the reflection at laboratory M,
+     which lies outside the low-energy theory, so that α is bracketed and not predicted (the handoff's §2.2);
+     the Σ spline noise (P15), which sets the release point at M = 10⁻³; and the handoff's observation that
+     BBN yields at M ≥ 10⁻³ are not in the hard-wall limit, which is the user's to place.
+   - **The four open issues of the board** (`.documents/OPEN_ISSUES.md` §1.19; none assigned):
+     - `[00-xav-sigma-is-non-monotone-at-25-35-keV]`: measure the effect on φ, H_J and BBN between 50 and
+       20 keV against a smooth Σ, then decide whether the table is regenerated or the spline replaced; it
+       changes every history, so it needs its own ruling;
+     - `[09-the-bath-drifts-from-g-rho-T4-by-about-1e-3]`: left documented by the user (2026-10-31); the next
+       step, if wanted, is to compare φ, H_J, Yp and D/H with a bath that holds the adiabatic condition;
+     - **`[11-the-ratio-steps-at-injections-and-parking-in-the-10-100-keV-window]`, which bears on a rebuild:**
+       BBN's ratio steps at each injection and at parking, and in the 10–100 keV window rms_step reaches
+       1.26–8.4× natural mode's where a history injects or parks there (verification §3). Whether the
+       spline rings on them, and what that does to Yp and D/H, is not measured. Next: compare Yp and D/H from
+       the stored samples with those from a spline that respects the steps, at β = 1.2, α = 0.03 and 0.1;
+     - **`[11-ray-deduplicates-the-dissipation-warnings-of-parallel-histories]`, which bears on a rebuild:**
+       a registered build's log does not show which histories warned (R6, P23 and the margin lines collapse
+       into `[repeated Nx across cluster]`); the stored columns do (𝓡 at the first impact, the margins and
+       their shares). Next, for the user: accept it, or set Ray's `RAY_DEDUP_LOGS=0` in the drivers, or print
+       a per-history summary of the warnings from the stored row after each batch.
+
+7. **The merge into `main` is the user's** (U1). At the time of writing `git merge-base main
+   inelastic-reflection` is `6f635e6`, which is `main` itself, so the merge is a fast-forward; `main` is level
+   with `github/main`, and `inelastic-reflection` has no upstream and is not pushed.
+   - **Stores and runs.** The reference store (point 1) is the user's, with its sidecar. The runs of prompt 11
+     are under `var/runs/inelastic-reflection-11-*` (`reference-a` done, `resumed-a` killed, `resumed-a2`
+     done) and its figures and full outputs under `var/inelastic-reflection-11/`. Never `git clean` with `-x`
+     or `-X` (`CLAUDE.md`).
+   - **The two paper notes** are as §4.16 point 7 says; prompt 12 did not edit them.
+
 ---
 
 ## 5. Reproduce

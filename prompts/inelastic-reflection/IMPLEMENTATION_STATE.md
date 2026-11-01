@@ -1,14 +1,7 @@
 # inelastic-reflection campaign — implementation state
 
-**Last updated:** 2026-11-01 · **Status: LIVE, RE-PLANNED 2026-10-29 (README §8): 04–12 replace
-the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29, landed in `e967cb7` and reviewed (2026-10-29; gate Park holds; one issue narrowed). 07 written 2026-10-29, landed in `5397f8f` (2026-10-30; gate Release holds, the lag as a sign-and-order test by the user's ruling of option (c); one issue narrowed) and reviewed (`0b8f420`). 07b inserted 2026-10-30 at the user's word (README §8.1 R18) and written, before 08: the wall search across 10⁻²⁵–10⁻¹³ M_P; landed in `92f41f2` and reviewed (2026-10-30; gate Band holds; one issue closed). 08 written 2026-10-30 at the user's word, after the user ruled R20 (the tracker margin on the late tracker, with the reflections shown to cover the time before it) and R21 (the leftover unassessed); landed in `86fc526` and reviewed (2026-10-31; gate Margin holds; one issue closed, none opened). 09 written 2026-10-31 at the user's word, after the user ruled R22–R25 (ΔN_eff at 1 MeV with T_ν = T_γ; `extra_data` widened; zeros at α = 0 where defined; the margins' columns the charter's and the unassessed share); landed in `3984ec5` and reviewed (2026-10-31; gate Store holds; one stop, ruled by the user: option (b), `test_adiabatic_mass` gains r_χ = 0.0; the assigned issue closed, none opened by the prompt; the review opened one). 10 written 2026-10-31 at the user's word, after the user ruled R26–R28 (the `alpha=<α>/` output level for every α; Δg* in a new `dark_radiation.pdf`; ΔN_eff(β) in two panels, today and 1 MeV); landed in `8c12afa` and reviewed (2026-10-31; gate Driver holds; no stop; none opened; D1 accepted at review). 11 written 2026-11-01 at the user's word, after the user ruled R29–R31 (the grid as a detached, resumable batch; the ε scan by patching `PARKING_EPSILON` from a measurement script; the rehearsal as `jordan-normalization` 09's run `a` at α = 0 and 0.1, compared with its 2026.7.0 store). 11 landed in `c797831` and reviewed (2026-11-01; gates Measure and R hold; no stop; two issues opened). 12, the close, written 2026-11-01 from log 11 §7. Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
-gate DR holds); 02 landed in `fe2a944` and reviewed (2026-10-28; gate Inject holds), after one
-stop and the user's ruling of interior sampling; 3 of 8 prompts written: 03 written 2026-10-28
-from log 02 §8, after the user ruled 𝒜₀ = 1 (README §6.1); 03 landed in `0afa199` and reviewed (2026-10-28;
-gate Taper holds, as restated when the user withdrew the stopping rule mid-prompt, note 03 ruling 16).
-R1–R5 ruled by the user 2026-10-27; U1–U8 ruled the same
-day (U4 as the revised proposal (b′): wall-side turning points only) and P1–P16 stand. The prompts
-are written one at a time, each after the one before has landed and been reviewed (README §2.1).**
+**Last updated:** 2026-11-01 · **Status: CLOSED 2026-11-01 — 13 of 13 prompts landed (01–11 with 07b, and 12, the close); every
+gate holds; four issues open, none assigned; the merge into `main` is the user's (U1).**
 The plan is [`README.md`](README.md), written on 2026-10-27 on branch `inelastic-reflection`, cut
 from `main` at `6f635e6` with the planning commit (U1). Its physics basis is
 [`source/scoping_2026-10-27.md`](source/scoping_2026-10-27.md).
@@ -20,10 +13,13 @@ today. It makes α a key of every history and stores ΔN_eff and ρ_χ/ρ_R. At 
 bitwise the old code's.
 
 **Campaign:** [`README.md`](README.md) ·
-**Code:** `ComputeTargets/ScalarHistory.py`, `ComputeTargets/Policies/PotentialDerivativePolicy.py`,
-`ComputeTargets/AdiabaticHistory.py`, `ObjectFactories/ScalarHistory.py`, `config/`, `main.py`,
-`plot_inputs.py`, the plot scripts, `RunDrivers/registered_run.py`, `tools/history_and_bbn.py` ·
-**Verification:** `.documents/inelastic-reflection-verification.md` (created by 07) ·
+**Code:** `ComputeTargets/ScalarHistory.py`, `ComputeTargets/dark_radiation.py`,
+`ComputeTargets/Policies/PotentialDerivativePolicy.py`, `ComputeTargets/AdiabaticHistory.py`,
+`CosmologyConcepts/Models/AbstractModel.py`, `CosmologyConcepts/alpha_value.py`,
+`ObjectFactories/ScalarHistory.py`, `config/`, `main.py`, `plot_inputs.py`, `extract_common.py`, the plot
+scripts, `RunDrivers/registered_run.py`, `tools/history_and_bbn.py`, `tools/bbn_from_store.py`,
+`tools/inventory_report.py` ·
+**Verification:** `.documents/inelastic-reflection-verification.md` (created by 11) ·
 **Index:** [`.documents/OPEN_ISSUES.md`](../../.documents/OPEN_ISSUES.md) §1.19
 
 > **Maintenance rule.** Whenever an entry is added to, narrowed in, or closed out of §3 or §4
@@ -48,7 +44,7 @@ bitwise the old code's.
 | 09 | [Store](09-store.md) | α as a key in its own table (U3, P28); the per-sample ratio as a payload key of its own (P27); ΔN_eff at T_CMB and 1 MeV (R22), the margins (R25), parking and release as columns, zeros at α = 0 where defined (R24); the first failures in `extra_data`, widened (R23); `AdiabaticHistory` with ρ_χ (P29) and on parked samples; every reader at α = 0 (P30); format 6, 2026.8.0 | Opus | ✍️ 2026-10-31 | ✅ 2026-10-31 | `3984ec5` | [09](logs/09-store.md) |
 | 10 | [Driver and readers](10-driver-and-readers.md) | `--alpha-values` (P32); one pipeline per α in each driver (P33); the plots' matching (P34) and `alpha=<α>/` paths (R26); `dark_radiation.pdf` with Δg* (R27) and `Delta_N_eff.pdf`, two panels (R28); the scope, the inventory, both tools' `--alpha` (P37–P39) | Sonnet | ✍️ 2026-10-31 | ✅ 2026-10-31 | `8c12afa` | [10](logs/10-driver-and-readers.md) |
 | 11 | [Measure](11-measure.md) | the grid of U10, 48 tool runs as a detached batch (R29, P40, P41); the ε scan by patch (R30, P42); the rehearsal of `jordan-normalization` 09's run `a` at two α, interrupted and resumed, α = 0 against its 2026.7.0 store, and the readers' first run with α (R31); the verification document | Opus | ✍️ 2026-11-01 | ✅ 2026-11-01 | `c797831` | [11](logs/11-measure.md) |
-| 12 | [Close](12-close.md) | documents (§6.10, §6.11, §7.2, §14), `CLAUDE.md` by description only, handover §4.18, indexes, board | Sonnet | ✍️ 2026-11-01 | ⬜ | — | — |
+| 12 | [Close](12-close.md) | documents (§6.10, §6.11, §7.2, §14), `CLAUDE.md` by description only, handover §4.18, indexes, board | Sonnet | ✍️ 2026-11-01 | ✅ 2026-11-01 | this commit | [12](logs/12-close.md) |
 
 *The rows for the old 04–08 (relativistic margin, store, driver and readers, measure, close), none of
 them written, were replaced by the re-plan of 2026-10-29 (README §8).*
@@ -97,7 +93,8 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 
 ## 3. Active and unresolved issues
 
-One opened by the planner, one by the orchestrator's review of prompt 09, and two by prompt 11. Prompt 04's
+The campaign closed on 2026-11-01 with these four open and none assigned; prompt 12 opened and closed none.
+One was opened by the planner, one by the orchestrator's review of prompt 09, and two by prompt 11. Prompt 04's
 was closed by prompt 08, and prompt 05's by prompt 07b (§4). The one assigned (§3.1) was closed by prompt 09 (§4).
 
 ### `[00-xav-sigma-is-non-monotone-at-25-35-keV]`
@@ -2009,3 +2006,31 @@ campaign's schema, so the current code cannot read it (`StoreSchemaMismatch`, th
 tombstone); 11's α = 0 histories are bitwise equal to it (§2.4 of the verification document).
 `inelastic-reflection-11-reference` is kept, and is now the reference store at 2026.8.0. The paragraphs above,
 which say both of 11's stores are kept, were true when written.
+
+### 5.14 After prompt 12 (2026-11-01)
+
+12 landed in this commit, under orchestrator note 12 (rulings 1–10). Log: [`logs/12-close.md`](logs/12-close.md).
+- **No stop.** Prompt §4 was not reached: §1.20 lists none assigned, no suite failed and no count fell, every
+  statement of the documents that the campaign made false is corrected by a dated note, `CLAUDE.md` gained no
+  rule, and the inventory changed no byte of the store.
+- **What shipped:** no code. `numerical-strategies.md` §6.10 (the measurement of 11) and §6.11 (dissipation mode
+  as it stands, with the table of §6.1–§6.9's superseded statements); `architecture-summary.md`: the §7.2 map,
+  the §14 note (D3 and `PARKING_EPSILON`), and dated notes at §2's tree, §5.2, `first_bounce_reflected`'s row and
+  §8.2, with a one-line note at `numerical-strategies.md` §3.5.3; `review-remediation-verification.md` §4.18;
+  `CLAUDE.md`'s counts, the time, the parenthesis, the plot-scripts bullet and the Redshift bullet (descriptions
+  only); this board, `prompts/INDEX.md` and `.documents/OPEN_ISSUES.md`. No existing line of the three documents is
+  deleted or reworded (`git diff` shows 0 deleted lines in them).
+- **Counts:** 26 / 497 (122 + 375) / 129 / 123 / 68, log 11's exactly, all passing; the `test_[g-z]` half took
+  454.6 s.
+- **Issues:** opened none, closed none. Index 27.
+- **Rulings applied:** all ten (log 12 §2). Deviations D1–D14: D1, D5, D10, D11 and D12 STRUCTURALLY REQUIRED
+  (D11: the store has 18 files, the manifest included; D12: the prompt's "payload key and not a column" is
+  corrected to the code, which also stores a `ScalarHistoryValue` column); D13 UNINTENDED DRIFT (two suites ran
+  twice because the first run cut off their counts; harmless); D7, D8 and D14 NOTED; the rest IMPLEMENTATION CHOICE.
+
+**The campaign is closed.** 13 of 13 prompts landed on the branch `inelastic-reflection`, cut from `main` at `6f635e6`
+(`git merge-base main inelastic-reflection` gives `main` itself, so the merge is a fast-forward); nothing is pushed
+and the merge is the user's (U1). The handover for the science rebuild is
+[`.documents/review-remediation-verification.md`](../../.documents/review-remediation-verification.md) §4.18. Four
+issues stay open and none is assigned (§3). The reference store is
+`var/datastores/inelastic-reflection-11-reference.db`.
