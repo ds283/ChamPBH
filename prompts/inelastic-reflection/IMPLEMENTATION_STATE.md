@@ -1,6 +1,6 @@
 # inelastic-reflection campaign — implementation state
 
-**Last updated:** 2026-11-01 · **Status: CLOSED 2026-11-01 — 13 of 13 prompts landed (01–11 with 07b, and 12, the close); every
+**Last updated:** 2026-11-01 · **Status: CLOSED 2026-11-01 — 13 of 13 prompts landed and reviewed (01–11 with 07b, and 12, the close); every
 gate holds; four issues open, none assigned; the merge into `main` is the user's (U1).**
 The plan is [`README.md`](README.md), written on 2026-10-27 on branch `inelastic-reflection`, cut
 from `main` at `6f635e6` with the planning commit (U1). Its physics basis is
@@ -44,7 +44,7 @@ scripts, `RunDrivers/registered_run.py`, `tools/history_and_bbn.py`, `tools/bbn_
 | 09 | [Store](09-store.md) | α as a key in its own table (U3, P28); the per-sample ratio as a payload key of its own (P27); ΔN_eff at T_CMB and 1 MeV (R22), the margins (R25), parking and release as columns, zeros at α = 0 where defined (R24); the first failures in `extra_data`, widened (R23); `AdiabaticHistory` with ρ_χ (P29) and on parked samples; every reader at α = 0 (P30); format 6, 2026.8.0 | Opus | ✍️ 2026-10-31 | ✅ 2026-10-31 | `3984ec5` | [09](logs/09-store.md) |
 | 10 | [Driver and readers](10-driver-and-readers.md) | `--alpha-values` (P32); one pipeline per α in each driver (P33); the plots' matching (P34) and `alpha=<α>/` paths (R26); `dark_radiation.pdf` with Δg* (R27) and `Delta_N_eff.pdf`, two panels (R28); the scope, the inventory, both tools' `--alpha` (P37–P39) | Sonnet | ✍️ 2026-10-31 | ✅ 2026-10-31 | `8c12afa` | [10](logs/10-driver-and-readers.md) |
 | 11 | [Measure](11-measure.md) | the grid of U10, 48 tool runs as a detached batch (R29, P40, P41); the ε scan by patch (R30, P42); the rehearsal of `jordan-normalization` 09's run `a` at two α, interrupted and resumed, α = 0 against its 2026.7.0 store, and the readers' first run with α (R31); the verification document | Opus | ✍️ 2026-11-01 | ✅ 2026-11-01 | `c797831` | [11](logs/11-measure.md) |
-| 12 | [Close](12-close.md) | documents (§6.10, §6.11, §7.2, §14), `CLAUDE.md` by description only, handover §4.18, indexes, board | Sonnet | ✍️ 2026-11-01 | ✅ 2026-11-01 | this commit | [12](logs/12-close.md) |
+| 12 | [Close](12-close.md) | documents (§6.10, §6.11, §7.2, §14), `CLAUDE.md` by description only, handover §4.18, indexes, board | Sonnet | ✍️ 2026-11-01 | ✅ 2026-11-01 | `7ad6744` | [12](logs/12-close.md) |
 
 *The rows for the old 04–08 (relativistic margin, store, driver and readers, measure, close), none of
 them written, were replaced by the re-plan of 2026-10-29 (README §8).*
@@ -69,6 +69,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 - [`orchestrator/prompt-09.md`](orchestrator/prompt-09.md) (`03b769e`), used for 09.
 - [`orchestrator/prompt-10.md`](orchestrator/prompt-10.md) (`d097745`), used for 10.
 - [`orchestrator/prompt-11.md`](orchestrator/prompt-11.md) (`6d1a77c`), used for 11.
+- [`orchestrator/prompt-12.md`](orchestrator/prompt-12.md) (`7cfced4`), used for 12.
 
 ## 2. The gates
 
@@ -2009,7 +2010,7 @@ which say both of 11's stores are kept, were true when written.
 
 ### 5.14 After prompt 12 (2026-11-01)
 
-12 landed in this commit, under orchestrator note 12 (rulings 1–10). Log: [`logs/12-close.md`](logs/12-close.md).
+12 landed in `7ad6744`, under orchestrator note 12 (rulings 1–10). Log: [`logs/12-close.md`](logs/12-close.md).
 - **No stop.** Prompt §4 was not reached: §1.20 lists none assigned, no suite failed and no count fell, every
   statement of the documents that the campaign made false is corrected by a dated note, `CLAUDE.md` gained no
   rule, and the inventory changed no byte of the store.
@@ -2027,6 +2028,53 @@ which say both of 11's stores are kept, were true when written.
   (D11: the store has 18 files, the manifest included; D12: the prompt's "payload key and not a column" is
   corrected to the code, which also stores a `ScalarHistoryValue` column); D13 UNINTENDED DRIFT (two suites ran
   twice because the first run cut off their counts; harmless); D7, D8 and D14 NOTED; the rest IMPLEMENTATION CHOICE.
+
+**Orchestrator review of prompt 12** (2026-11-01, at `7ad6744`, by the ten checks of note 12 §3). Dispatched at
+09:05 GMT on Sonnet; the load spiked to 42 from the machine's daemons, and no ChamPBH process ran.
+1. **Scope.** `7ad6744`'s parent is `7cfced4`; eight files, exactly the prompt's §5 list. `git diff 7cfced4 7ad6744` over
+   `*.py`, `*.sh`, `*.toml`, `*.yaml`, `*.json`, `requirements.txt`, `science-runs/`, `orchestrator/` and the README is
+   empty. The tree is clean, one worktree, nothing pushed.
+2. **Additive.** The three documents' diffs have no deleted line. §4.18's hunk starts after §4.17's last line; §6.10 and
+   §6.11 sit between §6.9 and `## 7.`.
+3. **The code claims.** 56 `file:line` references of §6.11.1, the §7.2 map, §14 and §5.2 read in the code, across
+   `ScalarHistory.py`, `AbstractModel.py`, `dark_radiation.py`, `ObjectFactories/ScalarHistory.py`, `config/`,
+   `main.py`, `extract_common.py` and the tools: each names what the note says. D3 reproduced in a scratch probe:
+   `import ComputeTargets.ScalarHistory as X` gives the class (`X is sys.modules[…]` is `False`), and
+   `importlib.import_module` gives the module. One looseness, recorded and not edited: §14's "finds 17" is the grep it
+   describes, but `tools/bbn_from_store.py` is in that set for `import_module("ComputeTargets.BBNData")`, not for the
+   `ScalarHistory` module. D14 is right: `_parking_cut`, which note 12 (and note 11) named, is not a function of the code;
+   the read is in `parking_ratio_test`. D12 is right: `rho_chi_over_rho_rad` is a `ScalarHistoryValue` column
+   (`ObjectFactories/ScalarHistory.py:1092`) as well as a payload key.
+4. **The numbers.** 27 numbers of §6.10 and §4.18 found in the verification document (the drain's 1.47×10⁻⁵ and
+   0.00477064, the ΔN_eff table, 0.85, 53.5–191.1 s and 493 615 steps, 0.0997, 1.9–2.5×10⁻³, 2.4×10⁻⁵, 5.416, 8.9×10⁻⁶,
+   6.54, 0.966–0.9999, 12.7, 1.6×10⁻³, 6.4×, 8.95, 548 922, 153 s, 4 min 46 s, 0.00019824, 11.1 s, 32 106) and the stage
+   times 2m 33.1s and 43.2 s (verification §2.1). §4.16's 6.6–8.4 hours is §4.16's. R6's and R17's quotes are the
+   README's (`:572`–`:573`, `:624`).
+5. **The grep.** My own grep for "elastic" at `7cfced4`: every hit is in a dated section, and the ones describing the
+   present are covered by the new §3.5.3 note and the `first_bounce_reflected` note. None is false and unnoted.
+6. **The handover's commands.** The `--help` of each command exits 0 (run before dispatch). `main.py --inventory` on
+   the reference store myself: exit 0, 75,050 records in 16 classes, `problems: none`; its 18 files' `shasum -a 256`
+   equal before and after, and equal to the hashes taken before dispatch. `--alpha-values` probed on
+   `create_argument_parser`: `[0.0]` by default, `[0.1]` for `0.1` (replaces), `[0.0, 0.1]` for `0 0.1`.
+   `runregistrykit list`: 14 runs, all finished; the cluster's status: no process, lock free.
+7. **The "made false" table** against note 12 §0. One difference, the agent's right: test_injection test_4's
+   docstring was already corrected by `67cb5f8` (the review of 03), which my note missed. The two code statements
+   left are `REFLECTIONS_KEY`'s comment (`ComputeTargets/ScalarHistory.py:75`) and `integrate_history`'s verbose
+   line (`:4024`), offered to the user as housekeeping.
+8. **`CLAUDE.md`, the board and the indexes.** `CLAUDE.md` is descriptive; my modal grep finds one line, the
+   original's "They **must not** need a Ray cluster" carried inside a re-flowed line ("run it alone" is also the
+   original's). INDEX: 15 rows, 15 **complete**, as its header says. OPEN_ISSUES: 27 rows, as its header says; §1.19
+   and §1.20 say the campaign closed.
+9. **The log** is in §5.1's form, the ten rulings and D1–D14 classed; the message is in `CLAUDE.md`'s form.
+10. **The suites** were not re-run: check 1 found no code changed. The agent's counts, 26 / 497 (122 + 375) / 129 /
+    123 / 68, are log 11's.
+
+Residue fixed in this review's commit:
+- "this commit" → `7ad6744` in the log, on this board, in §4.18 and in `prompts/INDEX.md`;
+- note 12 added to the list of orchestrator notes; the status line says "landed and reviewed".
+
+**Opened:** none by the review. Note 11 §0's statement that the shard key now includes α was wrong (it is β;
+`alpha_value` is replicated, `architecture-summary.md` §5.2's note of this date); nothing depended on it.
 
 **The campaign is closed.** 13 of 13 prompts landed on the branch `inelastic-reflection`, cut from `main` at `6f635e6`
 (`git merge-base main inelastic-reflection` gives `main` itself, so the merge is a fast-forward); nothing is pushed

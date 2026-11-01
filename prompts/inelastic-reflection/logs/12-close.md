@@ -1,7 +1,7 @@
 # Log 12 — close
 
 **Subject:** Close the `inelastic-reflection` campaign: the documents, `CLAUDE.md`, the handover, the indexes
-**Commit:** this commit, on branch `inelastic-reflection`, on top of `7cfced4`
+**Commit:** `7ad6744`, on branch `inelastic-reflection`, on top of `7cfced4`
 **Date:** 2026-11-01, by Claude Sonnet 5.5
 **Result:** **COMPLETE.** C1–C5 shipped; no stop condition was met; no code changed. Opened none, closed none.
 - `numerical-strategies.md`: §6.10 and §6.11 (with three sub-subsections) and one one-line note, at §3.5.3;
@@ -148,13 +148,13 @@ includes unresolved reflections, already noted at arch `:1141`).
 
 The lines are in the logs' "Observations not acted on" and "State handed to the next prompt" (no log uses the
 words "made false"); the pass covered logs 01–11 with 07b. `CLAUDE.md`'s counts are stale in each of 01–10's
-lines "`CLAUDE.md`'s counts" and are done in this commit (C2).
+lines "`CLAUDE.md`'s counts" and are done in `7ad6744` (C2).
 
 | Log | The line | Fixed by | Why |
 |---|---|---|---|
 | 01 §6 | `.documents/integrator-audit-2026-09-30/harness.py:60` and `…/pipe_runs.py:146` call `ODEPolicy` with the old signature | left | dated records (invariant 6), and made false by `jordan-normalization` 04, not this campaign |
 | 01 §6 | `AdiabaticHistory` does not see ρ_χ | 09 (`3984ec5`) | the code, P29 |
-| 01–10 | `CLAUDE.md`'s suite counts are stale (each log) | this commit (C2) | the counts and times of §4.2 |
+| 01–10 | `CLAUDE.md`'s suite counts are stale (each log) | `7ad6744` (C2) | the counts and times of §4.2 |
 | 02 §7 | the loop's first wall `TurningPoint` and `first_bounce` can differ | left | true; it does not happen on any history measured |
 | 03 §7 | `test_injection.py` test 4's docstring says every ratio measured 0.0 | `67cb5f8` ("Correct two docstrings of test_injection after the gate") | `ComputeTargets/tests/test_injection.py:396`–`:405` now reads "Under prompt 02's drains … Under prompt 03's gate one ratio here is 1.43e-14": time-scoped and true |
 | 05 §7 | `REFLECTIONS_KEY`'s comment (`ComputeTargets/ScalarHistory.py:75`) says "elastic reflections (the floor-triggered reflection model …)"; the count now includes unresolved reflections and at α > 0 they drain | left: code, outside 12's files; for the orchestrator's housekeeping | a comment; listed in §6.11.3 |
@@ -166,10 +166,10 @@ lines "`CLAUDE.md`'s counts" and are done in this commit (C2).
 | 07b §7 | `assess_infall`'s docstring reads "ln(V − V_floor) = −inf where V rounds to V_floor or below" | none needed | true for its own expression, which has no width |
 | 09 §7 | `bbn_from_store`'s `_FIND_QUERY` has no α; the wrapper's scope does not name α; `tools/history_and_bbn.py` takes no `--alpha` | 10 (`8c12afa`) | the code |
 | 10 §7 | `registered_run.py --help` does not list `--alpha-values` | none needed | true: the wrapper passes `main.py`'s options after the bare `--` (`--help`, §4.3) |
-| 11 §7 | "For `CLAUDE.md`" | this commit (C2) | counts, time, plot bullet; the `sys.modules` sentence is §14's description and §6's proposal |
-| 11 §7 | "For the architecture summary" | this commit: §6.10, §7.2 map, §14 | |
-| 11 §7 | "For the handover §4.18" | this commit | |
-| the pass | arch's tree, §5.2, §8.2 and the `first_bounce_reflected` row, and NS §3.5.3, say what was true before α | this commit: dated notes | §3.1's greps |
+| 11 §7 | "For `CLAUDE.md`" | `7ad6744` (C2) | counts, time, plot bullet; the `sys.modules` sentence is §14's description and §6's proposal |
+| 11 §7 | "For the architecture summary" | `7ad6744`: §6.10, §7.2 map, §14 | |
+| 11 §7 | "For the handover §4.18" | `7ad6744` | |
+| the pass | arch's tree, §5.2, §8.2 and the `first_bounce_reflected` row, and NS §3.5.3, say what was true before α | `7ad6744`: dated notes | §3.1's greps |
 
 ## 4. Verification performed
 
@@ -239,7 +239,7 @@ printed one line:
 
 It is an unchanged clause carried inside an edited line: "They **must not need a Ray cluster or a persistent
 datastore**" is the original line's tail, and the line was re-flowed to follow the parenthesis. The same edit
-carries "run it alone" (the original's) and, unedited above it, "run it in two halves". Every sentence this commit
+carries "run it alone" (the original's) and, unedited above it, "run it in two halves". Every sentence `7ad6744`
 adds to `CLAUDE.md` is a description.
 
 ## 5. The deliberate-breakage record
@@ -278,7 +278,7 @@ None: no code or test was changed, so there was nothing to break on purpose.
 ## 7. State handed to the next prompt
 
 The campaign is closed; there is no next prompt. For the user:
-- **Tree:** this commit, on `inelastic-reflection`, on top of `7cfced4`; nothing pushed; `main` not merged (U1, the
+- **Tree:** `7ad6744`, on `inelastic-reflection`, on top of `7cfced4`; nothing pushed; `main` not merged (U1, the
   user's). `git merge-base main inelastic-reflection` is `6f635e6`, which is `main`, so the merge is a fast-forward;
   `main` is level with `github/main`; the branch has no upstream.
 - **The science rebuild** is described in `.documents/review-remediation-verification.md` §4.18: what changed for a

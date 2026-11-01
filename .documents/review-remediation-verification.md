@@ -2161,7 +2161,7 @@ cut from `jordan-normalization` at `4ad15fe` and **is not merged into `main` whe
 
 ### 4.18 Addendum 2026-11-01 — the `inelastic-reflection` campaign
 
-Added by `inelastic-reflection` prompt 12 (this commit), written at `7cfced4`. Nothing above this heading has
+Added by `inelastic-reflection` prompt 12 (`7ad6744`), written at `7cfced4`. Nothing above this heading has
 been changed; where it is superseded, this section says so by statement. The campaign changed what a build
 computes and stores, and it started no production run: its rehearsal built two small stores under `var/`. It
 did, in order:
@@ -2185,7 +2185,7 @@ did, in order:
 - it carried α through the drivers, the readers and the tools (10, `8c12afa`);
 - it measured dissipation mode and rehearsed a registered two-α build, interrupted and resumed, under real
   Ray (11, `c797831`: the gates "Measure" and "R" hold);
-- and prompt 12 wrote the documents and this handover (this commit).
+- and prompt 12 wrote the documents and this handover (`7ad6744`).
 
 Its board is [`prompts/inelastic-reflection/IMPLEMENTATION_STATE.md`](../prompts/inelastic-reflection/IMPLEMENTATION_STATE.md);
 its plan is its [`README.md`](../prompts/inelastic-reflection/README.md) (§8 is the plan as re-made on
