@@ -6,7 +6,14 @@ The run that replaces [`2026.6.0`](../2026-10-03-science-2026.6.0/README.md), ma
 
 **Status: current.** Every block completed and both stores are whole. 189 of the main store's 3846
 histories failed; 41 of those are in the surfing region and are not yet diagnosed (below, "Failed
-histories"). No figure has yet been made from the run.
+histories").
+
+**Figures made from it** (each folder holds its script, its inputs and a note):
+- [`fig6/`](fig6/NOTES.md): Figure 6 at the laboratory mass, with the band over α and a ΔN_eff
+  panel (2026-11-01);
+- [`reflections/`](reflections/NOTES.md): the reflection structure against M (2026-11-01).
+
+The comparison Figure 6 (larger M) is not yet made.
 
 ## The run
 
