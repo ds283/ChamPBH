@@ -1,0 +1,39 @@
+>> 2026-11-01 20:42:20 R-reflections-natural
+** registered_run: registered as science-2026.8.0-R-R-reflections-natural-20261101T204221
+**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/science-2026.8.0-R-R-reflections-natural-20261101T204221/manifest.json
+**   list it with: ./venv/bin/python -m runregistrykit list
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-01 20:42:22,170	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-01 20:42:22,205	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at [1m[32mhttp://127.0.0.1:8267 [39m[22m
+>> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/science-2026.8.0-reflections.db" with 16 shards
+
+** BUILDING GRID OF MODELS TO SAMPLE
+   -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+   -- populated beta sample grid with 3 values = [ 1.2, 2, 2.9 ]
+   -- populated M sample grid with 2 values = [ 0.001 Mp, 0.5 Mp ]
+   -- populated alpha grid with 1 value = [ 0 ]
+   -- total number of models to integrate = 6
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+[36m(Datastore pid=36560)[0m @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+[36m(compute_scalar_history pid=36623)[0m -- tune R-reflections-natural-ScalarHistory-ExponentialModel(M=0.5Mp,n=1,beta=2.9)-2026-11-01T20:42:34 it=1 kind=guard H/H0-1=+7.136e-01 phi_ref/phi_min-1=+4.330e-02 norm=-278.133129521 phi_ref=6.4452504451e-01 wall=2.6
+[36m(compute_scalar_history pid=36615)[0m -- tune R-reflections-natural-ScalarHistory-ExponentialModel(M=0.5Mp,n=1,beta=2)-2026-11-01T20:42:34 it=9 kind=secant H/H0-1=-1.366e-06 phi_ref/phi_min-1=+4.700e-05 norm=-279.564944001 phi_ref=3.5851900158e-01 wall=1.8
+[36m(compute_scalar_history pid=36615)[0m -- tune R-reflections-natural-ScalarHistory-ExponentialModel(M=0.5Mp,n=1,beta=2)-2026-11-01T20:42:34 it=10 kind=secant H/H0-1=+2.859e-07 phi_ref/phi_min-1=-5.434e-07 norm=-279.564974356 phi_ref=3.5848296752e-01 wall=1.8
+[36m(compute_scalar_history pid=36623)[0m -- tune R-reflections-natural-ScalarHistory-ExponentialModel(M=0.5Mp,n=1,beta=2.9)-2026-11-01T20:42:34 it=9 kind=secant H/H0-1=+8.671e-05 phi_ref/phi_min-1=-2.140e-04 norm=-280.0792181 phi_ref=2.7688847777e-01 wall=2.5
+[36m(compute_scalar_history pid=36623)[0m -- tune R-reflections-natural-ScalarHistory-ExponentialModel(M=0.5Mp,n=1,beta=2.9)-2026-11-01T20:42:34 it=10 kind=secant H/H0-1=-2.021e-05 phi_ref/phi_min-1=+5.375e-05 norm=-280.079480545 phi_ref=2.7700749978e-01 wall=2.5
+[36m(compute_scalar_history pid=36623)[0m -- tune R-reflections-natural-ScalarHistory-ExponentialModel(M=0.5Mp,n=1,beta=2.9)-2026-11-01T20:42:34 it=11 kind=secant H/H0-1=+3.255e-07 phi_ref/phi_min-1=+2.060e-09 norm=-280.079434725 phi_ref=2.7698301376e-01 wall=2.5
+   -- ALL WORK ITEMS COMPLETE in time 43.3s
+      Queue summary: 6 lookup (avg 498.7/hr), 6 compute (avg 498.7/hr), 6 store (avg 498.7/hr), 6 validation (avg 498.7/hr)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 1.07s
+      Queue summary: 6 lookup (avg 336.2/min), 6 compute (avg 336.2/min), 6 store (avg 336.2/min), 6 validation (avg 336.2/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 10.8s
+      Queue summary: 6 lookup (avg 33.35/min), 6 compute (avg 33.35/min), 6 store (avg 33.35/min), 6 validation (avg 33.35/min)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+** driver exit status 0

@@ -26,9 +26,7 @@ and this folder says what it was for and what came of it.
 
 ## Runs
 
-**Planned:** [`plan-science-2026.8.0/`](plan-science-2026.8.0/PLAN.md), the `2026.8.0` run that replaces
-`2026.6.0`: the plan and its probe. They move into the run's folder when the run starts.
-
 | Folder | What | Status |
 |---|---|---|
 | [`2026-10-03-science-2026.6.0/`](2026-10-03-science-2026.6.0/README.md) | The first full science run, at `VERSION_LABEL` `2026.6.0`, with its BBN refresh (`+bt02`) and the draft BBN-constraint figure (fig6) | Superseded: the tree cannot read its stores, and `jordan-normalization`'s rebuild replaces them |
+| [`2026-11-01-science-2026.8.0/`](2026-11-01-science-2026.8.0/README.md) | The run at `VERSION_LABEL` `2026.8.0` that replaces it: Figure 6 at laboratory M with α bands, comparisons near M_crit and in natural mode at large M, and a reflection store; registered, with its plan and probe | Current; 41 surfing-region failures undiagnosed; no figure made yet |

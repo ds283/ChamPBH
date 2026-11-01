@@ -1,0 +1,52 @@
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-01 20:50:13,613	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-01 20:50:13,646	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at [1m[32mhttp://127.0.0.1:8267 [39m[22m
+!! WARNING: number of shards read from database (=16) does not match specified number of shards (=10)
+>> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/science-2026.8.0-reflections.db" read-only with 16 shards (version label "2026.8.0", serial 1)
+@@ plot_ScalarHistory: alpha values 0, 0.001, 0.01, 0.08, 0.15
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0
+
+** GENERATING ScalarHistory DATA PRODUCTS
+[36m(Datastore pid=37497)[0m @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+[36m(plot_ScalarHistory pid=37539)[0m @@ plot_ScalarHistory: scalar field history for Model=ExponentialModel(M=0.00097413eV,n=1,beta=1.2) is not available; skipping this item
+[36m(plot_ScalarHistory pid=37551)[0m @@ plot_dark_radiation: alpha = 0, no dark radiation to plot; figure skipped
+[36m(plot_ScalarHistory pid=37551)[0m @@ plot_dark_radiation: alpha = 0, no dark radiation to plot; figure skipped
+[36m(plot_ScalarHistory pid=37556)[0m @@ plot_ScalarHistory: scalar field history for Model=ExponentialModel(M=2.4353e+06GeV,n=1,beta=2.9) is not available; skipping this item[32m [repeated 8x across cluster] (Ray deduplicates logs by default. Set RAY_DEDUP_LOGS=0 to disable log deduplication, or see https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#log-deduplication for more options.)[0m
+   -- ALL WORK ITEMS COMPLETE in time 10.5s
+      Queue summary: 15 lookup (avg 85.75/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.001
+
+** GENERATING ScalarHistory DATA PRODUCTS
+[36m(plot_ScalarHistory pid=37547)[0m @@ plot_dark_radiation: alpha = 0, no dark radiation to plot; figure skipped[32m [repeated 4x across cluster][0m
+   -- ALL WORK ITEMS COMPLETE in time 6.85s
+      Queue summary: 15 lookup (avg 131.4/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.01
+
+** GENERATING ScalarHistory DATA PRODUCTS
+[36m(plot_ScalarHistory pid=37547)[0m @@ plot_ScalarHistory: scalar field history for Model=ExponentialModel(M=0.001Mp,n=1,beta=2) is not available; skipping this item[32m [repeated 2x across cluster][0m
+   -- ALL WORK ITEMS COMPLETE in time 7.01s
+      Queue summary: 15 lookup (avg 128.4/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.08
+
+** GENERATING ScalarHistory DATA PRODUCTS
+[36m(plot_ScalarHistory pid=37539)[0m @@ plot_ScalarHistory: scalar field history for Model=ExponentialModel(M=0.001Mp,n=1,beta=2) is not available; skipping this item[32m [repeated 6x across cluster][0m
+   -- ALL WORK ITEMS COMPLETE in time 5.6s
+      Queue summary: 15 lookup (avg 160.6/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.15
+
+** GENERATING ScalarHistory DATA PRODUCTS
+[36m(plot_ScalarHistory pid=37547)[0m @@ plot_ScalarHistory: scalar field history for Model=ExponentialModel(M=0.001Mp,n=1,beta=2) is not available; skipping this item[32m [repeated 6x across cluster][0m
+   -- ALL WORK ITEMS COMPLETE in time 6.18s
+      Queue summary: 15 lookup (avg 145.7/min)
+      (no compute items were evaluated - all assets read from datastore)
+[36m(plot_ScalarHistory pid=37539)[0m @@ plot_ScalarHistory: scalar field history for Model=ExponentialModel(M=0.001Mp,n=1,beta=2) is not available; skipping this item[32m [repeated 6x across cluster][0m
+[36m(plot_ScalarHistory pid=37539)[0m @@ plot_ScalarHistory: scalar field history for Model=ExponentialModel(M=0.5Mp,n=1,beta=2.9) is not available; skipping this item[32m [repeated 4x across cluster][0m

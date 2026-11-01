@@ -1,0 +1,214 @@
+{
+  "created": "2026-11-01T12:32:13+00:00",
+  "datastore": "science-2026.8.0.db",
+  "fingerprint": {
+    "classes": {
+      "AdiabaticHistory": {
+        "count": 3718,
+        "digest": "444814dfece2c35878499c524b7ed2285787a2dd870f10acabcc61c6c138c081",
+        "tag_sets": [
+          {
+            "count": 3718,
+            "digest": "444814dfece2c35878499c524b7ed2285787a2dd870f10acabcc61c6c138c081",
+            "tags": [
+              "SamplesPerLog10Z_250"
+            ]
+          }
+        ]
+      },
+      "BBNData": {
+        "count": 3718,
+        "digest": "1ca18f91ea4b27fed4f7227bdcfd3fc1532cb8d2c90c9aa7eac4d917c9e01dfb",
+        "tag_sets": [
+          {
+            "count": 3718,
+            "digest": "1ca18f91ea4b27fed4f7227bdcfd3fc1532cb8d2c90c9aa7eac4d917c9e01dfb",
+            "tags": [
+              "SamplesPerLog10Z_250"
+            ]
+          }
+        ]
+      },
+      "ExponentialModel": {
+        "count": 618,
+        "digest": "a8609d5eea2a2e64d510ada488b5f5f1fb603d76e24d02abc65ac847a34af63f",
+        "tag_sets": [
+          {
+            "count": 618,
+            "digest": "a8609d5eea2a2e64d510ada488b5f5f1fb603d76e24d02abc65ac847a34af63f",
+            "tags": []
+          }
+        ]
+      },
+      "IntegrationSolver": {
+        "count": 6,
+        "digest": "223ae7361d67244aff9c12f3f5cc1954ac2c7dc717189ad15b4030c8a0650e4a",
+        "tag_sets": [
+          {
+            "count": 6,
+            "digest": "223ae7361d67244aff9c12f3f5cc1954ac2c7dc717189ad15b4030c8a0650e4a",
+            "tags": []
+          }
+        ]
+      },
+      "M_value": {
+        "count": 9,
+        "digest": "dcfc23a220a9ae7266c6b4d2e86109c053edadef6a3b1c6702636b35cfd4c952",
+        "tag_sets": [
+          {
+            "count": 9,
+            "digest": "dcfc23a220a9ae7266c6b4d2e86109c053edadef6a3b1c6702636b35cfd4c952",
+            "tags": []
+          }
+        ]
+      },
+      "QCD_Cosmology": {
+        "count": 1,
+        "digest": "dcbaa9d413d45bf56b63a2a6ac1da865159e363f8b5ea2a479265113b82091b2",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "dcbaa9d413d45bf56b63a2a6ac1da865159e363f8b5ea2a479265113b82091b2",
+            "tags": []
+          }
+        ]
+      },
+      "ScalarHistory": {
+        "count": 3846,
+        "digest": "655a82a89a862e55ed6a3f65e093832215210cf5a23c48456cde551c5a0e2192",
+        "tag_sets": [
+          {
+            "count": 3846,
+            "digest": "655a82a89a862e55ed6a3f65e093832215210cf5a23c48456cde551c5a0e2192",
+            "tags": [
+              "SamplesPerLog10Z_250"
+            ]
+          }
+        ]
+      },
+      "alpha_value": {
+        "count": 14,
+        "digest": "45b3d27619502f1f655e05e0971ce2b39efe4fc1595dbb005d80f8f4f3d17fd9",
+        "tag_sets": [
+          {
+            "count": 14,
+            "digest": "45b3d27619502f1f655e05e0971ce2b39efe4fc1595dbb005d80f8f4f3d17fd9",
+            "tags": []
+          }
+        ]
+      },
+      "beta_value": {
+        "count": 201,
+        "digest": "32780a04e6d9d3bebc47fb0f808a7cc180515d63c67b3dd181e90208c6b8bc35",
+        "tag_sets": [
+          {
+            "count": 201,
+            "digest": "32780a04e6d9d3bebc47fb0f808a7cc180515d63c67b3dd181e90208c6b8bc35",
+            "tags": []
+          }
+        ]
+      },
+      "phi_value": {
+        "count": 1,
+        "digest": "29e7a88b01e35866c8f102278ae2ab0eaaecef332e2fe6badec047d47894e14a",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "29e7a88b01e35866c8f102278ae2ab0eaaecef332e2fe6badec047d47894e14a",
+            "tags": []
+          }
+        ]
+      },
+      "pi_value": {
+        "count": 1,
+        "digest": "237cd5e9616925eae2215daa8eb602f9db5e521a4415d78f11056c39f8c74cc8",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "237cd5e9616925eae2215daa8eb602f9db5e521a4415d78f11056c39f8c74cc8",
+            "tags": []
+          }
+        ]
+      },
+      "redshift": {
+        "count": 75001,
+        "digest": "8dad579a1ae8f2a82a70c62838d7200adc490a4205dc7976074a17f3012b450d",
+        "tag_sets": [
+          {
+            "count": 75001,
+            "digest": "8dad579a1ae8f2a82a70c62838d7200adc490a4205dc7976074a17f3012b450d",
+            "tags": []
+          }
+        ]
+      },
+      "store_tag": {
+        "count": 1,
+        "digest": "34407c96658d27b3334475fbcac14bdf7862190810b233d798b75c11a6450531",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "34407c96658d27b3334475fbcac14bdf7862190810b233d798b75c11a6450531",
+            "tags": []
+          }
+        ]
+      },
+      "temperature": {
+        "count": 1,
+        "digest": "9bd0581c026ad77d80f5c76b87ad07d5299ba643855d44d4b3d27bdd06b061bf",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "9bd0581c026ad77d80f5c76b87ad07d5299ba643855d44d4b3d27bdd06b061bf",
+            "tags": []
+          }
+        ]
+      },
+      "tolerance": {
+        "count": 2,
+        "digest": "a6a6f286796401ec6660c96b91e9635bbf6cad6951285cbbf48b5d1ea823c5ef",
+        "tag_sets": [
+          {
+            "count": 2,
+            "digest": "a6a6f286796401ec6660c96b91e9635bbf6cad6951285cbbf48b5d1ea823c5ef",
+            "tags": []
+          }
+        ]
+      },
+      "version": {
+        "count": 1,
+        "digest": "c902dde1662cef7421da19a9b197a0824c616d6c3650c169dd6541babef5b733",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "c902dde1662cef7421da19a9b197a0824c616d6c3650c169dd6541babef5b733",
+            "tags": []
+          }
+        ]
+      }
+    },
+    "digest": "e8d9b41d4f93409fcad7a6a745f35f7554f356205d41ca61e93d4d27daba9faf",
+    "encoding_format": 1,
+    "fingerprint_format": 6,
+    "problems": {},
+    "taken": {
+      "git_dirty": false,
+      "git_head": "eecaf2e2eb1e3d53e8cd01eaae8eb6ae08ffe147",
+      "run_id": "science-2026.8.0-D-D-large-M-natural-20261101T202510",
+      "when": "2026-11-01T20:34:13+00:00"
+    }
+  },
+  "history": [
+    {
+      "from": null,
+      "git_dirty": false,
+      "git_head": "75208cdb19ecf97a6dfc578e7c303411c2352c0f",
+      "operation": "create",
+      "to": "var/datastores/science-2026.8.0.db",
+      "when": "2026-11-01T12:32:13+00:00"
+    }
+  ],
+  "name": "science-2026.8.0",
+  "purpose": "science-2026.8.0 main store: Figure 6 at laboratory M and its comparisons at larger M (PLAN.md section 8)",
+  "sidecar_format": 1,
+  "store_id": "bdeb7b9f4d67459e990ec16d8ffe1f92"
+}

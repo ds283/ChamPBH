@@ -1,0 +1,210 @@
+{
+  "exit_code": 0,
+  "fingerprint": {
+    "classes": {
+      "AdiabaticHistory": {
+        "count": 1291,
+        "digest": "58e8c5ba68be7f11e3c6e502d6b16b66c155fe34201cd6f5ef0678d6d18f9548",
+        "tag_sets": [
+          {
+            "count": 1291,
+            "digest": "58e8c5ba68be7f11e3c6e502d6b16b66c155fe34201cd6f5ef0678d6d18f9548",
+            "tags": [
+              "SamplesPerLog10Z_250"
+            ]
+          }
+        ]
+      },
+      "BBNData": {
+        "count": 1291,
+        "digest": "ad7a0b220338e39dfeb16b3ab4a7196cc027a603f5b0be13df47189878070074",
+        "tag_sets": [
+          {
+            "count": 1291,
+            "digest": "ad7a0b220338e39dfeb16b3ab4a7196cc027a603f5b0be13df47189878070074",
+            "tags": [
+              "SamplesPerLog10Z_250"
+            ]
+          }
+        ]
+      },
+      "ExponentialModel": {
+        "count": 186,
+        "digest": "c0f533ae5fb5416be57e28da9816f623bef1eeb08339fe4b5b184b4e8163638a",
+        "tag_sets": [
+          {
+            "count": 186,
+            "digest": "c0f533ae5fb5416be57e28da9816f623bef1eeb08339fe4b5b184b4e8163638a",
+            "tags": []
+          }
+        ]
+      },
+      "IntegrationSolver": {
+        "count": 6,
+        "digest": "223ae7361d67244aff9c12f3f5cc1954ac2c7dc717189ad15b4030c8a0650e4a",
+        "tag_sets": [
+          {
+            "count": 6,
+            "digest": "223ae7361d67244aff9c12f3f5cc1954ac2c7dc717189ad15b4030c8a0650e4a",
+            "tags": []
+          }
+        ]
+      },
+      "M_value": {
+        "count": 1,
+        "digest": "746c1d92721d75c079624d856160f50953e152ec9f7dbb1bb1b8310089d647da",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "746c1d92721d75c079624d856160f50953e152ec9f7dbb1bb1b8310089d647da",
+            "tags": []
+          }
+        ]
+      },
+      "QCD_Cosmology": {
+        "count": 1,
+        "digest": "dcbaa9d413d45bf56b63a2a6ac1da865159e363f8b5ea2a479265113b82091b2",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "dcbaa9d413d45bf56b63a2a6ac1da865159e363f8b5ea2a479265113b82091b2",
+            "tags": []
+          }
+        ]
+      },
+      "ScalarHistory": {
+        "count": 1302,
+        "digest": "764e3e61dbd00ade3280e53f12cc9983a48ad9f208db1ef006e397efc2a9cef3",
+        "tag_sets": [
+          {
+            "count": 1302,
+            "digest": "764e3e61dbd00ade3280e53f12cc9983a48ad9f208db1ef006e397efc2a9cef3",
+            "tags": [
+              "SamplesPerLog10Z_250"
+            ]
+          }
+        ]
+      },
+      "alpha_value": {
+        "count": 7,
+        "digest": "1e6cedf2abac7468b9a69918af5dc1c980e4fd3e9019fb9e75787cf420a36583",
+        "tag_sets": [
+          {
+            "count": 7,
+            "digest": "1e6cedf2abac7468b9a69918af5dc1c980e4fd3e9019fb9e75787cf420a36583",
+            "tags": []
+          }
+        ]
+      },
+      "beta_value": {
+        "count": 186,
+        "digest": "9f39919037afbef3909a6e0489e7e616ce43a836b6d1e0dbf1fa32594f6a2b01",
+        "tag_sets": [
+          {
+            "count": 186,
+            "digest": "9f39919037afbef3909a6e0489e7e616ce43a836b6d1e0dbf1fa32594f6a2b01",
+            "tags": []
+          }
+        ]
+      },
+      "phi_value": {
+        "count": 1,
+        "digest": "29e7a88b01e35866c8f102278ae2ab0eaaecef332e2fe6badec047d47894e14a",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "29e7a88b01e35866c8f102278ae2ab0eaaecef332e2fe6badec047d47894e14a",
+            "tags": []
+          }
+        ]
+      },
+      "pi_value": {
+        "count": 1,
+        "digest": "237cd5e9616925eae2215daa8eb602f9db5e521a4415d78f11056c39f8c74cc8",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "237cd5e9616925eae2215daa8eb602f9db5e521a4415d78f11056c39f8c74cc8",
+            "tags": []
+          }
+        ]
+      },
+      "redshift": {
+        "count": 75001,
+        "digest": "8dad579a1ae8f2a82a70c62838d7200adc490a4205dc7976074a17f3012b450d",
+        "tag_sets": [
+          {
+            "count": 75001,
+            "digest": "8dad579a1ae8f2a82a70c62838d7200adc490a4205dc7976074a17f3012b450d",
+            "tags": []
+          }
+        ]
+      },
+      "store_tag": {
+        "count": 1,
+        "digest": "34407c96658d27b3334475fbcac14bdf7862190810b233d798b75c11a6450531",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "34407c96658d27b3334475fbcac14bdf7862190810b233d798b75c11a6450531",
+            "tags": []
+          }
+        ]
+      },
+      "temperature": {
+        "count": 1,
+        "digest": "9bd0581c026ad77d80f5c76b87ad07d5299ba643855d44d4b3d27bdd06b061bf",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "9bd0581c026ad77d80f5c76b87ad07d5299ba643855d44d4b3d27bdd06b061bf",
+            "tags": []
+          }
+        ]
+      },
+      "tolerance": {
+        "count": 2,
+        "digest": "a6a6f286796401ec6660c96b91e9635bbf6cad6951285cbbf48b5d1ea823c5ef",
+        "tag_sets": [
+          {
+            "count": 2,
+            "digest": "a6a6f286796401ec6660c96b91e9635bbf6cad6951285cbbf48b5d1ea823c5ef",
+            "tags": []
+          }
+        ]
+      },
+      "version": {
+        "count": 1,
+        "digest": "c902dde1662cef7421da19a9b197a0824c616d6c3650c169dd6541babef5b733",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "c902dde1662cef7421da19a9b197a0824c616d6c3650c169dd6541babef5b733",
+            "tags": []
+          }
+        ]
+      }
+    },
+    "digest": "5a0480a677d47d2e964cdec6f2907496ccfe14403d49282d0663a864bafbe9b3",
+    "encoding_format": 1,
+    "fingerprint_format": 6,
+    "problems": {},
+    "taken": {
+      "git_dirty": false,
+      "git_head": "75208cdb19ecf97a6dfc578e7c303411c2352c0f",
+      "run_id": "science-2026.8.0-A-A-lab-main-20261101T112047",
+      "when": "2026-11-01T12:31:42+00:00"
+    }
+  },
+  "fingerprint_sidecar": "not written: /Users/ds283/Documents/Code/ChamPBH/var/datastores/science-2026.8.0.manifest.json is not a problem-free registry sidecar (there is none)",
+  "heartbeat": "2026-11-01T12:32:13+00:00",
+  "host": {
+    "boot": "3032DE24-D9C7-47E8-B1C7-C366CDBC76DF",
+    "id": "8d2b247824882486"
+  },
+  "pid": 7342,
+  "stage": "CALCULATE BBN DATA, all work items complete",
+  "state": "done",
+  "units_done": 0,
+  "units_total": null
+}
