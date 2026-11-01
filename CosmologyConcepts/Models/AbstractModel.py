@@ -477,7 +477,9 @@ class AbstractModel(DatastoreObject, ABC):
 
         brentq on `bracket`, by default (0.05 phi_0, 20 phi_0), with xtol = 1e-14 phi_0 and
         rtol = 1e-13. A bracket on which V_eff' does not change sign raises ValueError naming
-        it. A model may override this with a closed form.
+        it, and so does one on which V_eff' overflows, as it does at 20 phi_0 once beta phi_0
+        is a few M_P: the tuning layer records either as a failed history. A model may override
+        this with a closed form.
         """
         rm: RealizedModel = self.realize(normalization, phi_ref)
         log_Omega_0: float = rm.log_Omega(phi_0)
@@ -488,14 +490,20 @@ class AbstractModel(DatastoreObject, ABC):
             ) * rho_m_E_0 * exp(rm.log_Omega(x) - log_Omega_0)
 
         low, high = bracket if bracket is not None else (0.05 * phi_0, 20.0 * phi_0)
-        f_low, f_high = dV_eff(low), dV_eff(high)
-        if not ((f_low <= 0.0 <= f_high) or (f_high <= 0.0 <= f_low)):
-            raise ValueError(
-                f"effective_minimum ({self.name}): V_eff' does not change sign on the bracket "
-                f"[{low:.6g}, {high:.6g}] (values {f_low:.6g}, {f_high:.6g})"
-            )
+        try:
+            f_low, f_high = dV_eff(low), dV_eff(high)
+            if not ((f_low <= 0.0 <= f_high) or (f_high <= 0.0 <= f_low)):
+                raise ValueError(
+                    f"effective_minimum ({self.name}): V_eff' does not change sign on the bracket "
+                    f"[{low:.6g}, {high:.6g}] (values {f_low:.6g}, {f_high:.6g})"
+                )
 
-        return float(brentq(dV_eff, low, high, xtol=1e-14 * phi_0, rtol=1e-13))
+            return float(brentq(dV_eff, low, high, xtol=1e-14 * phi_0, rtol=1e-13))
+        except OverflowError as e:
+            raise ValueError(
+                f"effective_minimum ({self.name}): V_eff' overflows on the bracket "
+                f"[{low:.6g}, {high:.6g}] ({e})"
+            ) from e
 
     # ---- the wall and the minimum (inelastic-reflection prompt 04; README §8.1 R7-R9) ----
     #

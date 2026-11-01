@@ -386,6 +386,24 @@ class TestEffectiveMinimum(unittest.TestCase):
             )
         self.assertIn("bracket", str(ctx.exception))
 
+    def test_f_a_bracket_on_which_V_eff_prime_overflows_is_refused(self):
+        """
+        At beta = 25 and phi_0 = 2 M_P, A(20 phi_0)/A(phi_0) = e^{950} overflows a float. The
+        tuning layer catches only ValueError, so an OverflowError ended the driver of the
+        science run of 2026.8.0 (M = 0.5 M_P, beta = 20, its tuning diverging); it is now the
+        ValueError that names the bracket, recorded as a failed history.
+        """
+        beta, Lambda_meV, phi_ref_over_Mp, _ = self.STATES[2]
+        normalization = 4.0 * log(Lambda_meV * 1.0e-3 * _units.eV)
+        for M_over_Mp in (1.0e-3, 0.5):
+            model = exponential_model(beta, M_over_Mp=M_over_Mp)
+            with self.assertRaises(ValueError) as ctx:
+                model.effective_minimum(
+                    normalization, phi_ref_over_Mp * Mp, 2.0 * Mp, cosmology().rho_m0
+                )
+            self.assertIn("overflows on the bracket", str(ctx.exception), M_over_Mp)
+            self.assertIsInstance(ctx.exception.__cause__, OverflowError, M_over_Mp)
+
 
 class TestSeed(unittest.TestCase):
     """
