@@ -29,9 +29,12 @@ The two figures of inelastic-reflection prompt 10 and histories.csv (tests 5, 6 
     `gstar_rho * rho_chi_over_rho_rad` per sample bitwise (read back from the axes), samples with a
     ratio of 0.0 are left out, two vertical lines stand at the parking and the release (exactly, in
     e-folds; at the first sample at or after each N, in redshift), and at alpha = 0 nothing is
-    written and the function returns False.
+    written and the function returns False;
+(8) the record of that history carries the further dissipation columns (added 2026-11-01): the
+    parking and release temperatures as exp(ln T_J) in GeV, the injections, the injected fraction
+    and the failing shares as the record has them, in the header just before failure_reasons.
 
-Test 7 integrates two histories (about 4 s each unloaded, 8-10 s at a load of 8) and draws the
+Tests 7 and 8 integrate two histories (about 4 s each unloaded, 8-10 s at a load of 8) and draws the
 figure three times; no Ray, no PRyMordial. Tests 5 and 6 are instant.
 """
 
@@ -394,6 +397,47 @@ class TestDarkRadiationFigure(tds._DissipationStoreCase):
                 self.assertIsNone(fig)
                 self.assertEqual(list(out.iterdir()), [])
             self.assertIn("alpha = 0", lines[0])
+
+    def test_8_the_dissipation_columns_of_the_record(self):
+        got = self.stored(self.KEY)
+        dissipation = got.dissipation
+        record = ec.build_history_record(
+            beta=1.2,
+            M_Mp=1e-3,
+            n=1,
+            phi_init_Mp=5.0,
+            alpha=0.1,
+            scalar=got,
+            bbn=None,
+            baseline=None,
+            units=self.units,
+        )
+        # the temperatures, in GeV, from the stored ln T_J in the cosmology's units
+        for key, source in (
+            ("parking_T_GeV", dissipation.parking_log_T_Jordan),
+            ("release_T_GeV", dissipation.release_log_T_Jordan),
+        ):
+            self.assertIsNotNone(source, key)
+            self.assertEqual(record[key], np.exp(source) / self.units.GeV, key)
+        # the others as the record has them
+        for key in (
+            "injections",
+            "injected_fraction",
+            "birth_failing_share",
+            "reflection_failing_share",
+            "tracker_failing_share",
+            "unassessed_share",
+        ):
+            expected = getattr(dissipation, key)
+            if expected is None:
+                self.assertTrue(np.isnan(record[key]), key)
+            else:
+                self.assertEqual(record[key], expected, key)
+        # in the header just before failure_reasons
+        self.assertEqual(
+            ec.CSV_COLUMNS[-len(ec.DISSIPATION_CSV_COLUMNS) - 1 : -1],
+            ec.DISSIPATION_CSV_COLUMNS,
+        )
 
 
 if __name__ == "__main__":

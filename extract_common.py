@@ -541,7 +541,20 @@ FIXED_T_MEV = {"1MeV": 1.0, "70keV": 0.07}
 # the shifts are fractions ((value - SM baseline)/SM baseline), D/H is the stored 10^5 D/H.
 # inelastic-reflection prompt 10 added alpha, the drained fraction that keys the history, and the
 # history's two Delta N_eff (the `dissipation` record's, at T_CMB and at 1 MeV with T_nu = T_gamma;
-# blank where there is no value, and 0 at alpha = 0).
+# blank where there is no value, and 0 at alpha = 0). DISSIPATION_CSV_COLUMNS are more of that
+# record's fields (added 2026-11-01 for the 2026.8.0 run's figures): the injections and the injected
+# fraction, the temperatures T_J at which the history parked and was released, in GeV (blank if it
+# did not), and the shares of the relativistic margins that fail.
+DISSIPATION_CSV_COLUMNS = [
+    "injections",
+    "injected_fraction",
+    "parking_T_GeV",
+    "release_T_GeV",
+    "birth_failing_share",
+    "reflection_failing_share",
+    "tracker_failing_share",
+    "unassessed_share",
+]
 CSV_COLUMNS = [
     "beta",
     "M_Mp",
@@ -570,6 +583,7 @@ CSV_COLUMNS = [
     "Delta_N_eff_today",
     "Delta_N_eff_1MeV",
     "reflections",
+    *DISSIPATION_CSV_COLUMNS,
     "failure_reasons",
 ]
 
@@ -919,6 +933,8 @@ def build_history_record(
     for every record, a failure's included (a failure has no ``scalar`` to read it from); the
     two Delta N_eff are `scalar.dissipation`'s fields of those names, NaN where ``scalar`` is None,
     its ``dissipation`` is None or the field is None (inelastic-reflection prompt 10, ruling 1).
+    DISSIPATION_CSV_COLUMNS are read the same way, the parking and release temperatures as
+    exp(ln T_J) in GeV.
     """
     record = {name: nan for name in CSV_COLUMNS}
     record.update(
@@ -959,6 +975,14 @@ def build_history_record(
             for key in ("Delta_N_eff_today", "Delta_N_eff_1MeV"):
                 value = getattr(dissipation, key)
                 record[key] = nan if value is None else value
+            # the further fields of DISSIPATION_CSV_COLUMNS; absent from a stand-in, so read with a
+            # default. The parking and release ln T_J are in the cosmology's units
+            for key in DISSIPATION_CSV_COLUMNS:
+                source = key.replace("_T_GeV", "_log_T_Jordan")
+                value = getattr(dissipation, source, None)
+                if value is None:
+                    continue
+                record[key] = exp(value) / units.GeV if source != key else value
         bounce = scalar.first_bounce
         if bounce is not None:
             record["T_deliver_GeV"] = exp(bounce.log_T_Jordan) / units.GeV
