@@ -680,8 +680,23 @@ Each in the user's words, from the conversation of 2026-10-29.
 - **R28 — ΔN_eff(β)** (2026-10-31). The user chose "Both, two panels": one `Delta_N_eff.pdf` per (M, n)
   group, ΔN_eff today and at 1 MeV against β, one curve per α > 0; `histories.csv` gains α and both
   ΔN_eff columns. BBN's frame factor F (log 09 §1.2) is not drawn.
+- **R29 — how U10's grid runs** (2026-10-31, when prompt 11 was written). The grid is about 48 runs of
+  `tools/history_and_bbn.py`. The run registry wraps `main.py` only. The user chose "Detached batch": a
+  committed script runs each point as its own process, a few at a time, writes each point's output to its
+  own file under `var/inelastic-reflection-11/`, and skips the points already done, so that it resumes.
+  The agent launches it detached, checks once that it started, and waits for it to end.
+- **R30 — the ε scan** (2026-10-31). The parking ε is the module constant `PARKING_EPSILON`, read at call
+  time. The user chose "Patch at run time": a committed measurement script sets it, then calls the tool's
+  `main` in the same process. 11 changes no code.
+- **R31 — the rehearsal's build** (2026-10-31). The user chose "JN 09's grid, two α":
+  - `jordan-normalization` 09's run `a` (M = 10⁻³ M_P, β ∈ {0.5, 1.5, 3, 5.5}, φ* = 5), with
+    `--alpha-values 0 0.1`: four natural and four dissipation histories, in place of U11's one of each;
+  - a second build interrupted in the α = 0.1 scalar stage and resumed;
+  - the α = 0 histories compared value by value with `jordan-normalization` 09's 2026.7.0 reference store,
+    which is still under `var/datastores/`;
+  - both plot scripts run on the store, an unstored α included.
 
-### 8.2 Proposed by the planner (P18–P39)
+### 8.2 Proposed by the planner (P18–P47)
 
 Accepted as proposed unless the user rules otherwise.
 - **P18 — the constants**, module constants in `ComputeTargets/ScalarHistory.py` under
@@ -748,6 +763,46 @@ Accepted as proposed unless the user rules otherwise.
   field: once on the common line when shared, per history otherwise.
 - **P39 — the tools.** `tools/history_and_bbn.py --alpha` (P10), with a `dissipation` line at α > 0 for 11;
   `tools/bbn_from_store.py --alpha`, matching α in its raw SQL as the factory matches it.
+
+- **P40 — U10's points** (2026-10-31, when prompt 11 was written). 48 runs of `tools/history_and_bbn.py`,
+  each tuned (the tool's default, as `main.py`), φ* = 5, the small network:
+  - dissipation: M ∈ {4×10⁻³¹, 10⁻¹²} M_P × β ∈ {1.2, 2, 3, 5} × α ∈ {0.03, 0.1, 0.3, 0.9}, 32 points;
+  - natural (α = 0): M ∈ {0.5, 10⁻⁷} M_P × the same β, 8 points;
+  - ε ∈ {10⁻⁴, 10⁻⁸} at M = 4×10⁻³¹, α = 0.1, each β, 8 points; ε = 10⁻⁶ there is the grid's own point.
+
+  The planner's probe put the slowest point, natural mode at M = 10⁻⁷, β = 2, at 129 s (113 s for one
+  integration, 408 566 steps, converged on the seed; 9 s of PRyMordial). The dissipation points converge on
+  the seed in 2–8 s (log 06 §5.6). So the grid is about 25 minutes serial, not the 1–3 h of §8.3.
+- **P41 — the batch runner** (R29). `.documents/inelastic-reflection/measure/run_grid.py`:
+  - one process per point, at most three at a time;
+  - each point's output goes to `var/inelastic-reflection-11/grid/<slug>.txt`, written as `<slug>.part` and
+    renamed when the process ends, with a header (the command, the git SHA, the start and end in UTC,
+    `uptime`) and the exit status;
+  - a point whose `.txt` exists is skipped, so the same command resumes;
+  - the runner writes its pid to a file and ends with a `** grid done` line.
+- **P42 — the ε script** (R30). `.documents/inelastic-reflection/measure/eps_point.py EPS -- <tool arguments>`
+  sets `ComputeTargets.ScalarHistory.PARKING_EPSILON`, prints `epsilon=<EPS>`, then calls
+  `tools.history_and_bbn.main`. At ε = 10⁻⁶ its output equals the plain tool's, timings masked, which checks
+  the patch.
+- **P43 — the reference for Yp and D/H.** Each dissipation point's Yp and D/H are given beside the Standard
+  Model's (one solve, `tools/bbn_from_store.py --sm-baseline`) and beside natural mode's at M = 10⁻⁷, the
+  same β.
+- **P44 — the gate Measure's measures:**
+  - the drain's independence of M is |Δ`injected_fraction`|/`injected_fraction` between M = 10⁻¹² and
+    4×10⁻³¹ at each (β, α), against 10⁻³;
+  - "ΔN_eff rises with α" is ΔN_eff(T_CMB) strictly increasing in α at each (M, β), over the points that
+    succeed; ΔN_eff(1 MeV) is reported beside it;
+  - "every margin is reported" is the ten margin fields of the `dissipation` line present at every
+    dissipation success, each a value or `None`;
+  - "α = 0 reproduces 2026.7.0" is R31's comparison.
+- **P45 — the order.** The suites, then the rehearsal on the cluster, which stops it, then the grid. Nothing
+  runs beside the grid, so that its costs are its own.
+- **P46 — P14's measurement** (the BBN spline across injections) is the tool's `ratio` lines: `rms_step` per
+  window at α > 0 against natural mode at the same β. An effect is recorded and opened, not fixed.
+- **P47 — the records.** The scripts are committed under `.documents/inelastic-reflection/measure/`. The
+  points' outputs, the tables and the rehearsal's small outputs go to `.documents/inelastic-reflection/out/`,
+  and the record to `.documents/inelastic-reflection-verification.md`. The stores stay under
+  `var/datastores/` for the user. U7's estimate (scoping §7) goes to the record.
 
 ### 8.3 For the user to rule (U9–U11)
 
@@ -894,6 +949,10 @@ its own, α has its own row, `AdiabaticHistory` reads ρ_χ, and every reader pa
 of U11; the verification document. **Gates "Measure"**: every point has a row, a failure with its
 reason; at M ≤ 10⁻¹² the drain is independent of M to the probes' 10⁻³; ΔN_eff rises with α; every
 margin is reported; α = 0 reproduces 2026.7.0. **"R"** as §2.3.
+*Amended 2026-10-31, when 11 was written (R29–R31, P40–P47).* The grid runs as a detached, resumable batch
+of 48 tool runs, about 25 minutes. The ε scan patches `PARKING_EPSILON` from a measurement script. The
+rehearsal builds `jordan-normalization` 09's run `a` at α = 0 and 0.1. Its α = 0 histories are compared with
+that prompt's 2026.7.0 store, and both plot scripts run on it. 11 changes no code.
 
 **12 — the close** (§2.2's 08).
 
