@@ -1,7 +1,7 @@
 # Log 11 — the measurement and the rehearsal
 
 **Subject:** Measure dissipation mode and rehearse a two-α build under Ray
-**Commit:** this commit, on branch `inelastic-reflection`, on top of `6d1a77c`
+**Commit:** `c797831`, on branch `inelastic-reflection`, on top of `6d1a77c`
 **Date:** 2026-11-01, by Claude Opus 5.5
 **Result:** **COMPLETE.** The gates "Measure" and "R" hold. No stop was needed. Two issues opened, none closed.
 - **What shipped.** No code. The measurement scripts under `.documents/inelastic-reflection/measure/`
@@ -199,7 +199,7 @@ The counts are log 10's exactly, before and after. Nothing failed, so nothing wa
 - **Token:** `grep -c` of `Token authentication is enabled`, `Generated new authentication token`,
   `InvalidAuthToken` and `AuthenticationError` in `start.txt`, the three build logs and the four readers'
   logs: 0 each. The token file `-rw-------`, mtime `1792932677`, as at the Gate. `grep -r -F -l -f
-  ~/.ray/auth_token` over every file this commit adds or changes: no output, exit 1 (`out/11-token.txt`).
+  ~/.ray/auth_token` over every file `c797831` adds or changes: no output, exit 1 (`out/11-token.txt`).
 - `git diff --cached --name-status` before the commit: only the files of prompt §6.
 
 ## 5. The deliberate-breakage record

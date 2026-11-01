@@ -1,7 +1,7 @@
 # inelastic-reflection campaign — implementation state
 
 **Last updated:** 2026-11-01 · **Status: LIVE, RE-PLANNED 2026-10-29 (README §8): 04–12 replace
-the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29, landed in `e967cb7` and reviewed (2026-10-29; gate Park holds; one issue narrowed). 07 written 2026-10-29, landed in `5397f8f` (2026-10-30; gate Release holds, the lag as a sign-and-order test by the user's ruling of option (c); one issue narrowed) and reviewed (`0b8f420`). 07b inserted 2026-10-30 at the user's word (README §8.1 R18) and written, before 08: the wall search across 10⁻²⁵–10⁻¹³ M_P; landed in `92f41f2` and reviewed (2026-10-30; gate Band holds; one issue closed). 08 written 2026-10-30 at the user's word, after the user ruled R20 (the tracker margin on the late tracker, with the reflections shown to cover the time before it) and R21 (the leftover unassessed); landed in `86fc526` and reviewed (2026-10-31; gate Margin holds; one issue closed, none opened). 09 written 2026-10-31 at the user's word, after the user ruled R22–R25 (ΔN_eff at 1 MeV with T_ν = T_γ; `extra_data` widened; zeros at α = 0 where defined; the margins' columns the charter's and the unassessed share); landed in `3984ec5` and reviewed (2026-10-31; gate Store holds; one stop, ruled by the user: option (b), `test_adiabatic_mass` gains r_χ = 0.0; the assigned issue closed, none opened by the prompt; the review opened one). 10 written 2026-10-31 at the user's word, after the user ruled R26–R28 (the `alpha=<α>/` output level for every α; Δg* in a new `dark_radiation.pdf`; ΔN_eff(β) in two panels, today and 1 MeV); landed in `8c12afa` and reviewed (2026-10-31; gate Driver holds; no stop; none opened; D1 accepted at review). 11 written 2026-11-01 at the user's word, after the user ruled R29–R31 (the grid as a detached, resumable batch; the ε scan by patching `PARKING_EPSILON` from a measurement script; the rehearsal as `jordan-normalization` 09's run `a` at α = 0 and 0.1, compared with its 2026.7.0 store). 11 landed in this commit (2026-11-01; gates Measure and R hold; no stop; two issues opened). Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
+the old 04–08; the campaign now reaches laboratory M through a parking switch. 04 landed in `81b933f` and reviewed (2026-10-29; gate Wall holds; one issue opened). 05 written 2026-10-29, landed in `9c2483b` and reviewed (2026-10-29; gate Unresolved holds, D14 accepted by the user; one issue opened). 06 written 2026-10-29, landed in `e967cb7` and reviewed (2026-10-29; gate Park holds; one issue narrowed). 07 written 2026-10-29, landed in `5397f8f` (2026-10-30; gate Release holds, the lag as a sign-and-order test by the user's ruling of option (c); one issue narrowed) and reviewed (`0b8f420`). 07b inserted 2026-10-30 at the user's word (README §8.1 R18) and written, before 08: the wall search across 10⁻²⁵–10⁻¹³ M_P; landed in `92f41f2` and reviewed (2026-10-30; gate Band holds; one issue closed). 08 written 2026-10-30 at the user's word, after the user ruled R20 (the tracker margin on the late tracker, with the reflections shown to cover the time before it) and R21 (the leftover unassessed); landed in `86fc526` and reviewed (2026-10-31; gate Margin holds; one issue closed, none opened). 09 written 2026-10-31 at the user's word, after the user ruled R22–R25 (ΔN_eff at 1 MeV with T_ν = T_γ; `extra_data` widened; zeros at α = 0 where defined; the margins' columns the charter's and the unassessed share); landed in `3984ec5` and reviewed (2026-10-31; gate Store holds; one stop, ruled by the user: option (b), `test_adiabatic_mass` gains r_χ = 0.0; the assigned issue closed, none opened by the prompt; the review opened one). 10 written 2026-10-31 at the user's word, after the user ruled R26–R28 (the `alpha=<α>/` output level for every α; Δg* in a new `dark_radiation.pdf`; ΔN_eff(β) in two panels, today and 1 MeV); landed in `8c12afa` and reviewed (2026-10-31; gate Driver holds; no stop; none opened; D1 accepted at review). 11 written 2026-11-01 at the user's word, after the user ruled R29–R31 (the grid as a detached, resumable batch; the ε scan by patching `PARKING_EPSILON` from a measurement script; the rehearsal as `jordan-normalization` 09's run `a` at α = 0 and 0.1, compared with its 2026.7.0 store). 11 landed in `c797831` and reviewed (2026-11-01; gates Measure and R hold; no stop; two issues opened). Before that: 01 landed in `85661b5` and reviewed (2026-10-28;
 gate DR holds); 02 landed in `fe2a944` and reviewed (2026-10-28; gate Inject holds), after one
 stop and the user's ruling of interior sampling; 3 of 8 prompts written: 03 written 2026-10-28
 from log 02 §8, after the user ruled 𝒜₀ = 1 (README §6.1); 03 landed in `0afa199` and reviewed (2026-10-28;
@@ -47,7 +47,7 @@ bitwise the old code's.
 | 08 | [Spectrum peak and margins](08-spectrum-peak-and-margins.md) | the peak by 𝓡 (R7, P25), the gap flagged (R19); ℓ; the energy weight (U9); three worst margins with the first failure (R13), the reflection margin over plateau turning points too and the tracker margin on the late tracker (R20), the leftover unassessed (R21); the coverage bound measured | Opus | ✍️ 2026-10-30 | ✅ 2026-10-31 | `86fc526` | [08](logs/08-spectrum-peak-and-margins.md) |
 | 09 | [Store](09-store.md) | α as a key in its own table (U3, P28); the per-sample ratio as a payload key of its own (P27); ΔN_eff at T_CMB and 1 MeV (R22), the margins (R25), parking and release as columns, zeros at α = 0 where defined (R24); the first failures in `extra_data`, widened (R23); `AdiabaticHistory` with ρ_χ (P29) and on parked samples; every reader at α = 0 (P30); format 6, 2026.8.0 | Opus | ✍️ 2026-10-31 | ✅ 2026-10-31 | `3984ec5` | [09](logs/09-store.md) |
 | 10 | [Driver and readers](10-driver-and-readers.md) | `--alpha-values` (P32); one pipeline per α in each driver (P33); the plots' matching (P34) and `alpha=<α>/` paths (R26); `dark_radiation.pdf` with Δg* (R27) and `Delta_N_eff.pdf`, two panels (R28); the scope, the inventory, both tools' `--alpha` (P37–P39) | Sonnet | ✍️ 2026-10-31 | ✅ 2026-10-31 | `8c12afa` | [10](logs/10-driver-and-readers.md) |
-| 11 | [Measure](11-measure.md) | the grid of U10, 48 tool runs as a detached batch (R29, P40, P41); the ε scan by patch (R30, P42); the rehearsal of `jordan-normalization` 09's run `a` at two α, interrupted and resumed, α = 0 against its 2026.7.0 store, and the readers' first run with α (R31); the verification document | Opus | ✍️ 2026-11-01 | ✅ 2026-11-01 | this commit | [11](logs/11-measure.md) |
+| 11 | [Measure](11-measure.md) | the grid of U10, 48 tool runs as a detached batch (R29, P40, P41); the ε scan by patch (R30, P42); the rehearsal of `jordan-normalization` 09's run `a` at two α, interrupted and resumed, α = 0 against its 2026.7.0 store, and the readers' first run with α (R31); the verification document | Opus | ✍️ 2026-11-01 | ✅ 2026-11-01 | `c797831` | [11](logs/11-measure.md) |
 | 12 | Close | documents, `CLAUDE.md`, handover §4.18, indexes, board | Sonnet | ⬜ | ⬜ | — | — |
 
 *The rows for the old 04–08 (relativistic margin, store, driver and readers, measure, close), none of
@@ -72,6 +72,7 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 - [`orchestrator/prompt-08.md`](orchestrator/prompt-08.md) (`f0c139d`), used for 08.
 - [`orchestrator/prompt-09.md`](orchestrator/prompt-09.md) (`03b769e`), used for 09.
 - [`orchestrator/prompt-10.md`](orchestrator/prompt-10.md) (`d097745`), used for 10.
+- [`orchestrator/prompt-11.md`](orchestrator/prompt-11.md) (`6d1a77c`), used for 11.
 
 ## 2. The gates
 
@@ -1918,7 +1919,7 @@ from log 10 §8 (README §2.1).
 
 ### 5.13 After prompt 11 (2026-11-01)
 
-11 landed in this commit, under orchestrator note 11 (rulings 1–9). Log: [`logs/11-measure.md`](logs/11-measure.md).
+11 landed in `c797831`, under orchestrator note 11 (rulings 1–9). Log: [`logs/11-measure.md`](logs/11-measure.md).
 Record: [`.documents/inelastic-reflection-verification.md`](../../.documents/inelastic-reflection-verification.md).
 - **No stop.** Prompt §5 was not reached: no lock refusal, no driver failure, no gate item failed, every history
   converged, no stall.
@@ -1947,3 +1948,56 @@ Record: [`.documents/inelastic-reflection-verification.md`](../../.documents/ine
 - **Issues:** opened `[11-the-ratio-steps-at-injections-and-parking-in-the-10-100-keV-window]` (P14's effect, up to
   8.4× natural mode's rms_step in 10–100 keV) and `[11-ray-deduplicates-the-dissipation-warnings-of-parallel-histories]`;
   closed none. Index 25 → 27.
+
+**Orchestrator review of prompt 11** (2026-11-01, at `c797831`, by the eight checks of note 11 §3). Dispatched at
+02:40 GMT, not 05:00 as the note had it: the user said the other workload had finished early and to dispatch now.
+The load then was 3.56 / 3.87 / 6.26 and falling, the lock free, no run going.
+1. **Scope.** `c797831`'s parent is `6d1a77c`; 123 files, all on the prompt's §6 list. `git diff 6d1a77c c797831`
+   over `*.py` outside `.documents/inelastic-reflection/measure/` is empty, and over `ComputeTargets/` empty. The tree
+   is clean, one worktree, nothing pushed.
+2. **Nothing left running.** `ray_cluster.sh status`: no process, ports 6380, 6381, 8267, 52367 free; lock free;
+   `runregistrykit list` 14 runs, all finished (`reference-a` done, `resumed-a` killed, `resumed-a2` done);
+   `run_grid.pid`'s pid 56929 does not answer `kill -0`.
+3. **The scripts.** `points.py` gives P40's 48 points. `eps_point.py` takes the module by `importlib` and asserts it
+   is `sys.modules`'s. Replayed at β = 2, M = 4×10⁻³¹, α = 0.1 (load 5.8): at ε = 10⁻⁶ the output equals the plain
+   tool's after ruling 7's mask but for the `epsilon=` line and the tune line's `wall=`, which the mask does not
+   cover; at ε = 10⁻⁴ it parks at N = 29.1825 against 30.3493, and equals the committed
+   `eps0.0001-M4e-31-b2-a0.1.txt` but for its header, footer and timings. So D3's fix reaches the cut. D3 is
+   accepted: my note's §0 said patching the module attribute is enough and did not warn that `import … as` binds
+   the class `ComputeTargets/__init__.py` exports under the module's name. The agent's observation that a test might
+   patch through that name was checked: every test module that patches `ComputeTargets.ScalarHistory` takes it by
+   `importlib.import_module` (`test_parking`, `test_release`, `test_tuning`, `test_margins` and ten more). Nothing
+   to open.
+4. **The stores.** `compare_stores.py` myself: `RESULT: equal`, problems none. `store fingerprint` of the reference
+   `afd2f329d79b3b3e65fd7af53dd1ef33b80f60f74e49eb1d77698da0ea6f1264`; the resumed store's matches `resumed-a2`'s
+   record. My own read of §2.7, written apart from `compare_jn09.py`, on β = 1.5 and 3: the α = 0 row picked by
+   `alpha_serial`, the 2026.7.0 row by its label; 27 tuning and history columns, and 100 samples spread over
+   ln(1 + z) by 18 columns each, matched through `z_serial` to `redshift.log_one_plus_z`. The z sets are equal
+   (5161, 5973 samples); 3 654 values compared by `float.hex`, 0 differences.
+5. **The interruption.** The reference's α = 0.1 timestamps 03:02:38.172, :38.560, :47.917, 03:03:05.158 against the
+   banner at 03:02:23.291: +14.881, +15.269, +24.626, +41.867 s; (14.881 + 41.867)/2 = 28.374 → 28 s. In the resumed
+   store three α = 0.1 histories are stamped 03:08:07.9–03:08:17.5, before the 03:08:21 signal, and the fourth
+   03:10:10.9, by `resumed-a2`.
+6. **The grid.** 48 `.txt` in `out/grid/`, 48 rows in `11-grid.csv`. Re-derived from the `.txt`: `injected_fraction`
+   at β = 1.2, α = 0.03 is 4.77064×10⁻³ (M = 10⁻¹²) against 4.77057×10⁻³ (4×10⁻³¹), 1.47×10⁻⁵ relative; ΔN_eff today
+   at 4×10⁻³¹, β = 2 is 0.0169, 0.0524, 0.123, 0.147 at α = 0.03, 0.1, 0.3, 0.9, strictly rising; at β = 1.2 the
+   parking N is 28.3641 at ε = 10⁻⁴ and 10⁻⁶ and 33.7804 at 10⁻⁸, 5.416 e-folds later.
+7. **The figures.** `Delta_N_eff.pdf` (`var/inelastic-reflection-11/rehearsal/plot-by-beta/QCD_Cosmology/plots/M=2.4353e+24eV_n=1/`):
+   the α = 0.1 curve only, α = 0's zeros left off the log axes as note 10 ruling 5 says; today's panel falls from
+   8.95 at β = 0.5 to 6×10⁻³ at β = 5.5, and the 1 MeV panel has no β = 0.5 point (its drains are all after
+   1 MeV). `dark_radiation.pdf` for β = 1.5, α = 0.1: the parking line at N = 36.34 and the release at 47.51; ρ_χ/ρ_R
+   settles at 8.3×10⁻³, which with (4/7)(11/4)^{4/3} g_ρ(today) ≈ 7.4 gives ΔN_eff ≈ 0.061, the summary figure's
+   value at β = 1.5.
+8. **The records.** Log 11 is in §5.1's form, the nine rulings and D1–D8 classed, §6 and §7 as the prompt asks.
+   The verification document is dated, new, and in `jordan-normalization`'s form; `out/` holds text only. My token
+   grep over the commit's files: no output, exit 1. `black --check` on the six measure scripts: unchanged. The
+   board's row 11, the gates Measure and R, §5.13, and the two issues on §3 and in `.documents/OPEN_ISSUES.md`
+   (27 open) agree.
+
+Residue fixed in this review's commit:
+- "this commit" → `c797831` in the log and on this board;
+- note 11 added to the list of orchestrator notes.
+
+**Opened:** none by the review. **For the user:** the rehearsal's β = 0.5 history at M = 10⁻³, α = 0.1 ends with
+ΔN_eff today = 8.95 (log 11 §6). It is in R17's unofficial large-M regime and is recorded, not opened. 12, which closes
+the campaign, is written next, from log 11 §7 (README §2.1).
