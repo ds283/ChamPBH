@@ -325,7 +325,8 @@ measured on 2026-11-01 (board §4; `.documents/bbn-ratio-spline-2026-11-01/`); t
   *(`inelastic-reflection`; review of prompt 09)*
 - `[11-ray-deduplicates-the-dissipation-warnings-of-parallel-histories]` — under Ray the "nearly elastic",
   P23 and margin warnings of histories run in parallel collapse into one `[repeated Nx across cluster]`
-  line, so a build's log does not show which histories warned; the stored columns do.
+  line, so a build's log does not show which histories warned; the stored columns do; left by the user
+  unless it proves a problem in production (2026-11-01).
   *(`inelastic-reflection`; prompt 11)*
 
 ### 1.20 Assigned to `inelastic-reflection` — [its board](../prompts/inelastic-reflection/IMPLEMENTATION_STATE.md) §3.1

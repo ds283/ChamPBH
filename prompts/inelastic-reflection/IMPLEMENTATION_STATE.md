@@ -1,7 +1,7 @@
 # inelastic-reflection campaign — implementation state
 
 **Last updated:** 2026-11-01 · **Status: CLOSED 2026-11-01 — 13 of 13 prompts landed and reviewed (01–11 with 07b, and 12, the close); every
-gate holds; three issues open, none assigned (a fourth closed as measured after the close); the merge into `main` is the user's (U1).**
+gate holds; three issues open, none assigned (a fourth closed as measured after the close); merged into `main` and pushed 2026-11-01 at the user's request (U1; the last paragraph of §5.14).**
 The plan is [`README.md`](README.md), written on 2026-10-27 on branch `inelastic-reflection`, cut
 from `main` at `6f635e6` with the planning commit (U1). Its physics basis is
 [`source/scoping_2026-10-27.md`](source/scoping_2026-10-27.md).
@@ -206,6 +206,9 @@ was closed by prompt 08, and prompt 05's by prompt 07b (§4). The one assigned (
 - **Next step.** For the user: accept it (the columns are the record), or have the drivers set Ray's
   `RAY_DEDUP_LOGS=0`, or print a per-history summary of the warnings from the stored row after each batch.
   Not assigned.
+- **Ruled by the user, 2026-11-01:** "I'm not worried about the deduplication of warnings for now, unless it
+  proves to be a problem in production." The issue stays open and not assigned, to be taken up if a
+  production build's log is found to need the per-history warnings.
 
 ### 3.1 Assigned to this campaign
 
@@ -2101,3 +2104,11 @@ and the merge is the user's (U1). The handover for the science rebuild is
 [`.documents/review-remediation-verification.md`](../../.documents/review-remediation-verification.md) §4.18. Four
 issues stay open and none is assigned (§3). The reference store is
 `var/datastores/inelastic-reflection-11-reference.db`.
+
+**Merged and pushed (2026-11-01).** At the user's request `main`, at `6f635e6` and an ancestor of this branch,
+fast-forwards to the commit that adds this paragraph, and `main` is pushed to GitHub (`github/main` was
+`6f635e6`). The branch `inelastic-reflection`, never pushed and contained in `main`, is deleted. Before the
+merge the user closed `[11-the-ratio-steps-at-injections-and-parking-in-the-10-100-keV-window]` as measured
+(§4; `7a24826`), and ruled that `[11-ray-deduplicates-the-dissipation-warnings-of-parallel-histories]` stays as
+it is unless it proves a problem in production (§3). The two code comments that the close left as housekeeping
+were corrected in `4fefdf8`. The paragraphs above, which say the merge is the user's, were true when written.
