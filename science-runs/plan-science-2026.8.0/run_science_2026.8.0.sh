@@ -14,6 +14,11 @@
 # every block can be restarted: main.py looks up each history before computing it, so
 # re-running the script recomputes only what is missing. After a SIGKILL, end the stale run
 # first (runregistrykit end RUN_ID --reason ..., CLAUDE.md rule 5).
+#
+# START_AT=<block> (A, A2, B, C, D or R; default A) resumes the script at that block after a run
+# that ended early, skipping the blocks before it; the inventories and the plots always run.
+# Each block's log is appended to, so an earlier attempt's stays above the resume's:
+#   START_AT=D nohup bash science-runs/<folder>/run_science_2026.8.0.sh >> var/science-2026.8.0/run.out 2>&1 &
 set -euo pipefail
 
 if [ ! -f main.py ] || [ ! -d RunDrivers ]; then
@@ -35,6 +40,21 @@ SHARDS=16
 RAY_ADDR="${RAY_ADDR:-127.0.0.1:6380}"     # never auto, which the drivers refuse
 mkdir -p "$STORE_DIR" "$LOG" "$OUT"
 export PYTHONPATH=.
+
+BLOCKS="A A2 B C D R"
+START_AT="${START_AT:-A}"
+case " $BLOCKS " in
+    *" $START_AT "*) ;;
+    *) echo "!! START_AT=$START_AT is not one of: $BLOCKS" >&2; exit 2 ;;
+esac
+
+due() {  # due <block>: whether this invocation runs <block>, i.e. it is START_AT or comes after it
+    local b
+    for b in $BLOCKS; do
+        [ "$b" = "$START_AT" ] && return 0
+        [ "$b" = "$1" ] && return 1
+    done
+}
 
 # G spec...: the sorted distinct betas of its specs, each the double of a ratio of integers, so
 # that the same beta is the same double in every block. A spec lo:hi:step:den is
@@ -71,16 +91,16 @@ ALPHA_PLOT_MAIN="0 0.001 0.0015 0.002 0.003 0.005 0.007 0.01 0.02 0.03 0.05 0.08
 ALPHA_PLOT_R="0 0.001 0.01 0.08 0.15"
 
 count() { echo $#; }
-echo ">> $(date '+%F %T') $RUN on $(git rev-parse HEAD), β grids: dense $(count $BETA_DENSE), sparse $(count $BETA_SPARSE), low $(count $BETA_LOW), coarse $(count $BETA_COARSE)"
+echo ">> $(date '+%F %T') $RUN on $(git rev-parse HEAD), starting at block $START_AT, β grids: dense $(count $BETA_DENSE), sparse $(count $BETA_SPARSE), low $(count $BETA_LOW), coarse $(count $BETA_COARSE)"
 
 run() {  # run <store> <tier> <job> <purpose> <main.py arguments...>
     local db="$1" tier="$2" job="$3" purpose="$4"
     shift 4
-    echo ">> $(date '+%F %T') $job"
+    echo ">> $(date '+%F %T') $job" | tee -a "$LOG/$job.log"
     ./venv/bin/python -u RunDrivers/registered_run.py --campaign "$RUN" --prompt "$tier" \
         --register "$job" --purpose "$purpose" -- --config exponential.yaml --database "$db" \
         --shards "$SHARDS" --ray-address "$RAY_ADDR" --job-name "$job" \
-        --bbn-wall-clock-limit 600 --phi-init-Mp 5 "$@" 2>&1 | tee "$LOG/$job.log"
+        --bbn-wall-clock-limit 600 --phi-init-Mp 5 "$@" 2>&1 | tee -a "$LOG/$job.log"
 }
 
 sidecar() {  # sidecar <store> <purpose>: the store's fingerprint sidecar, once, after its first block
@@ -90,39 +110,51 @@ sidecar() {  # sidecar <store> <purpose>: the store's fingerprint sidecar, once,
 }
 
 # A   Figure 6: laboratory M, the dense beta grid, the main alpha grid          1302 histories
-run "$DB" A A-lab-main \
-    "$RUN A: Figure 6 at laboratory M 4e-31 Mp, dense beta 0.5-20, alpha 0.01-0.15, phi* 5" \
-    --M-values-Mp 4e-31 --beta-values $BETA_DENSE --alpha-values $ALPHA_MAIN
-sidecar "$DB" "$RUN main store: Figure 6 at laboratory M and its comparisons at larger M (PLAN.md section 8)"
+if due A; then
+    run "$DB" A A-lab-main \
+        "$RUN A: Figure 6 at laboratory M 4e-31 Mp, dense beta 0.5-20, alpha 0.01-0.15, phi* 5" \
+        --M-values-Mp 4e-31 --beta-values $BETA_DENSE --alpha-values $ALPHA_MAIN
+    sidecar "$DB" "$RUN main store: Figure 6 at laboratory M and its comparisons at larger M (PLAN.md section 8)"
+fi
 
 # A2  Figure 6: low alpha, dense in the transition window, sparse above it      636 histories
-run "$DB" A2 A2-lab-low-alpha \
-    "$RUN A2: Figure 6 low alpha 0.001-0.007 at M 4e-31 Mp, transition window 1.06-1.50 and sparse beta above" \
-    --M-values-Mp 4e-31 --beta-values $BETA_LOW --alpha-values $ALPHA_LOW
+if due A2; then
+    run "$DB" A2 A2-lab-low-alpha \
+        "$RUN A2: Figure 6 low alpha 0.001-0.007 at M 4e-31 Mp, transition window 1.06-1.50 and sparse beta above" \
+        --M-values-Mp 4e-31 --beta-values $BETA_LOW --alpha-values $ALPHA_LOW
+fi
 
 # B   M around and below the laboratory bound                                    420 histories
-run "$DB" B B-lab-neighbourhood \
-    "$RUN B: M 1e-30 and 1e-33 Mp on the sparse beta grid, alpha 0.01-0.15, to show independence of M" \
-    --M-values-Mp 1e-30 1e-33 --beta-values $BETA_SPARSE --alpha-values $ALPHA_MAIN
+if due B; then
+    run "$DB" B B-lab-neighbourhood \
+        "$RUN B: M 1e-30 and 1e-33 Mp on the sparse beta grid, alpha 0.01-0.15, to show independence of M" \
+        --M-values-Mp 1e-30 1e-33 --beta-values $BETA_SPARSE --alpha-values $ALPHA_MAIN
+fi
 
 # C   around M_crit                                                              1302 histories
-run "$DB" C C-Mcrit \
-    "$RUN C: M 1e-15, 1e-13, 1e-12 Mp around M_crit, coarse beta, alpha 0.01-0.15" \
-    --M-values-Mp 1e-15 1e-13 1e-12 --beta-values $BETA_COARSE --alpha-values $ALPHA_MAIN
+if due C; then
+    run "$DB" C C-Mcrit \
+        "$RUN C: M 1e-15, 1e-13, 1e-12 Mp around M_crit, coarse beta, alpha 0.01-0.15" \
+        --M-values-Mp 1e-15 1e-13 1e-12 --beta-values $BETA_COARSE --alpha-values $ALPHA_MAIN
+fi
 
 # D   large M, natural mode only (alpha = 0)                                     186 histories
-run "$DB" D D-large-M-natural \
-    "$RUN D: natural mode (alpha 0) at M 1e-3, 0.1, 0.5 Mp, coarse beta" \
-    --M-values-Mp 1e-3 0.1 0.5 --beta-values $BETA_COARSE --alpha-values 0
+if due D; then
+    run "$DB" D D-large-M-natural \
+        "$RUN D: natural mode (alpha 0) at M 1e-3, 0.1, 0.5 Mp, coarse beta" \
+        --M-values-Mp 1e-3 0.1 0.5 --beta-values $BETA_COARSE --alpha-values 0
+fi
 
 # R   the reflection store: a few histories drawn whole by plot_ScalarHistory    42 histories
-run "$DB_R" R R-reflections-dissipation \
-    "$RUN R: reflection structure, beta 1.2 2 2.9 at M 4e-31, 1e-15, 1e-12 Mp, alpha 0.001-0.15" \
-    --M-values-Mp 4e-31 1e-15 1e-12 --beta-values $BETA_R --alpha-values $ALPHA_R
-sidecar "$DB_R" "$RUN reflection store: a few histories for the reflection-structure figure (PLAN.md section 8.3)"
-run "$DB_R" R R-reflections-natural \
-    "$RUN R: reflection structure, natural mode (alpha 0), beta 1.2 2 2.9 at M 1e-3 and 0.5 Mp" \
-    --M-values-Mp 1e-3 0.5 --beta-values $BETA_R --alpha-values 0
+if due R; then
+    run "$DB_R" R R-reflections-dissipation \
+        "$RUN R: reflection structure, beta 1.2 2 2.9 at M 4e-31, 1e-15, 1e-12 Mp, alpha 0.001-0.15" \
+        --M-values-Mp 4e-31 1e-15 1e-12 --beta-values $BETA_R --alpha-values $ALPHA_R
+    sidecar "$DB_R" "$RUN reflection store: a few histories for the reflection-structure figure (PLAN.md section 8.3)"
+    run "$DB_R" R R-reflections-natural \
+        "$RUN R: reflection structure, natural mode (alpha 0), beta 1.2 2 2.9 at M 1e-3 and 0.5 Mp" \
+        --M-values-Mp 1e-3 0.5 --beta-values $BETA_R --alpha-values 0
+fi
 
 # the inventories: read-only, unregistered, no Ray
 for STORE in "$DB" "$DB_R"; do
