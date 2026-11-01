@@ -1,0 +1,31 @@
+## command: ./venv/bin/python -u tools/history_and_bbn.py 2.9 0.5 --alpha 0.08
+## git: 26c376a514e8f19f10dd54e6e4d68e9a3632c58f
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+!! tune_history (history_and_bbn-beta2.9-M0.5): dissipation mode: the reflections are expected to be nearly elastic in this regime: the test-field ratio R = 10^-60.455 < 1 at the first impact (phi_t = 0.004867 M_P)
+!! tune_history (history_and_bbn-beta2.9-M0.5): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.7057 < ln 10 at N = 28.84071197 (generation 22); the generations below ln 10 carry 0.9983 of K
+!! tune_history (history_and_bbn-beta2.9-M0.5): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = -0.4849 < ln 10 at N = 28.22355806 (generation 16); the generations below ln 10 carry 0.9983 of K
+-- tune history_and_bbn-beta2.9-M0.5 it=0 kind=seed H/H0-1=+1.066e+00 phi_ref/phi_min-1=-4.140e-02 norm=-277.43998234 phi_ref=6.1785317948e-01 wall=3.6
+-- tune history_and_bbn-beta2.9-M0.5 it=1 kind=guard H/H0-1=+7.135e-01 phi_ref/phi_min-1=+4.329e-02 norm=-278.133129521 phi_ref=6.4453592976e-01 wall=3.7
+-- tune history_and_bbn-beta2.9-M0.5 it=2 kind=plain H/H0-1=-1.187e-01 phi_ref/phi_min-1=+3.752e-01 norm=-280.497084401 phi_ref=6.1779433194e-01 wall=3.9
+-- tune history_and_bbn-beta2.9-M0.5 it=3 kind=secant H/H0-1=-5.091e-02 phi_ref/phi_min-1=+2.536e-01 norm=-280.145778531 phi_ref=4.7399812686e-01 wall=3.8
+-- tune history_and_bbn-beta2.9-M0.5 it=4 kind=secant H/H0-1=+6.347e-02 phi_ref/phi_min-1=-9.129e-03 norm=-279.764769092 phi_ref=2.9687533075e-01 wall=4.2
+-- tune history_and_bbn-beta2.9-M0.5 it=5 kind=secant H/H0-1=-1.043e-02 phi_ref/phi_min-1=+9.655e-02 norm=-280.031588522 phi_ref=3.3919705875e-01 wall=4.1
+-- tune history_and_bbn-beta2.9-M0.5 it=6 kind=secant H/H0-1=+5.600e-03 phi_ref/phi_min-1=+3.763e-02 norm=-280.006422214 phi_ref=3.0376080408e-01 wall=4.2
+-- tune history_and_bbn-beta2.9-M0.5 it=7 kind=secant H/H0-1=+4.909e-03 phi_ref/phi_min-1=+1.628e-02 norm=-280.03342298 phi_ref=2.8927567108e-01 wall=4.2
+-- tune history_and_bbn-beta2.9-M0.5 it=8 kind=secant H/H0-1=-2.630e-05 phi_ref/phi_min-1=+1.847e-03 norm=-280.077378831 phi_ref=2.7809504479e-01 wall=4.2
+-- tune history_and_bbn-beta2.9-M0.5 it=9 kind=secant H/H0-1=+8.438e-05 phi_ref/phi_min-1=-2.132e-04 norm=-280.079292238 phi_ref=2.7688076325e-01 wall=4.2
+-- tune history_and_bbn-beta2.9-M0.5 it=10 kind=secant H/H0-1=-1.708e-05 phi_ref/phi_min-1=+5.372e-05 norm=-280.079541432 phi_ref=2.7699968948e-01 wall=4.2
+-- tune history_and_bbn-beta2.9-M0.5 it=11 kind=secant H/H0-1=-2.309e-06 phi_ref/phi_min-1=-1.592e-06 norm=-280.079510142 phi_ref=2.7697412126e-01 wall=4.2
+history beta=2.9 M=0.5: RHS=49634 accepted_steps=5254 reflections=0 samples=5840 integrations=12 alpha=0.08 wall=48.5 s
+tuning beta=2.9 M=0.5: normalization=-280.07951014170357 V_ref=1.402854255679453e-121 phi_ref=0.2769741212599233 phi_0=0.2724975289248077 pi_0=0.17141337126867412 tracking=0.41936373256917003 residual_H=-2.3088294777151575e-06 residual_phi=-1.5920463362073534e-06 tuning_iterations=12 plain_steps=1 secant_steps=9 guard_steps=1 seed_kind=static seed_normalization=-277.4399823400586 seed_phi_ref=0.6178531794833306
+bounce beta=2.9 M=0.5: N=23.882798127 T_J=1855.462917 MeV phi=4.573370e-03 reflected=False
+dissipation beta=2.9 M=0.5: injections=43 resolved_candidates=43 unresolved_candidates=0 injected_fraction=0.00799419 rho_chi_ratio_1MeV=0.00513634 rho_chi_ratio_70keV=0.0043062 rho_chi_ratio_today=0.00428909 Delta_N_eff_1MeV=0.0309514 Delta_N_eff_today=0.0319452 log_R_first_impact=-134.756 parking_N=33.5215 parking_log_T_Jordan_GeV=-8.30037 release_N=35.4337 release_log_T_Jordan_GeV=-9.96564 worst_birth_margin=-0.704761 worst_birth_margin_N=28.8194 birth_failing_share=0.997961 worst_reflection_margin=-0.486426 worst_reflection_margin_N=28.2159 reflection_failing_share=0.997961 worst_tracker_margin=5.21702 worst_tracker_margin_N=33.5042 tracker_failing_share=0 unassessed_share=0.000205141
+fixed_T beta=2.9 M=0.5: 1MeV crossings=1 phi=7.287193742e-03 ratio=-7.928021278e-01 stand_in_phi=7.287236076e-03 stand_in_ratio=-7.927689903e-01 | 70keV crossings=1 phi=8.630003199e-03 ratio=-7.867406494e-01 stand_in_phi=8.630007317e-03 stand_in_ratio=-7.867406284e-01
+ratio beta=2.9 M=0.5 [0.3,1) keV: n=130 min=-0.7826 median=-0.7819 max=-0.7815 rms_step=1.459e-05
+ratio beta=2.9 M=0.5 [1,3) keV: n=119 min=-0.7831 median=-0.7825 max=-0.7824 rms_step=1.12e-05
+ratio beta=2.9 M=0.5 [3,10) keV: n=131 min=-0.7845 median=-0.7844 max=-0.7831 rms_step=1.579e-05
+ratio beta=2.9 M=0.5 [10,100) keV: n=256 min=-0.7877 median=-0.7846 max=-0.7842 rms_step=2.147e-05
+bbn beta=2.9 M=0.5: Yp=0.1213039355 DoH=0.4660988443 He3oH=0.6798933431 Li7oH=8.088666341 network=small PRyM_time=9.5 s wall=9.5 s PRyM_version=bf24c3d+ri02+sr01+bt02
+
+## exit status: 0
+## wall: 60.1 s

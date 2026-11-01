@@ -13,6 +13,11 @@ histories").
   panel (2026-11-01);
 - [`reflections/`](reflections/NOTES.md): the reflection structure against M (2026-11-01).
 
+**After the run**, [`diagnostic/`](diagnostic/NOTES.md) (2026-11-01, `run_diagnostic_large_M.sh`):
+`histories.csv` again with the dissipation columns, and 12 dissipation-mode histories at large M in a
+store of their own, `var/datastores/science-2026.8.0-large-M-dissipation.db`; the run's stores are
+unchanged.
+
 The comparison Figure 6 (larger M) is not yet made.
 
 ## The run

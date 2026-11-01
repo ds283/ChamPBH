@@ -1,0 +1,14 @@
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-01 22:42:21,769	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-01 22:42:21,799	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at [1m[32mhttp://127.0.0.1:8267 [39m[22m
+!! WARNING: number of shards read from database (=16) does not match specified number of shards (=10)
+>> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/science-2026.8.0-large-M-dissipation.db" read-only with 16 shards (version label "2026.8.0", serial 1)
+@@ plot_ScalarHistory: alpha values 0.08
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.08
+
+** GENERATING ScalarHistory DATA PRODUCTS
+[36m(Datastore pid=51141)[0m @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+   -- ALL WORK ITEMS COMPLETE in time 14.7s
+      Queue summary: 12 lookup (avg 49.1/min)
+      (no compute items were evaluated - all assets read from datastore)

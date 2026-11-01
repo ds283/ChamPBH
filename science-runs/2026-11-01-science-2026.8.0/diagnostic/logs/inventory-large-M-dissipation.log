@@ -1,0 +1,102 @@
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+@@ DATASTORE INVENTORY: var/datastores/science-2026.8.0-large-M-dissipation.db
+   read-only; 16 shards (#0, #1, #2, #3, #4, #5, #6, #7, #8, #9, #10, #11, #12, #13, #14, #15); 75,071 records in 16 classes
+   problems: none
+
+   -- Datastore metadata
+      @@ version (replicated): 1 record
+         label = [ 2026.8.0 ]
+      @@ store_tag (replicated): 1 record | committed at Sun 01 Nov 2026 22:40:00
+         label = [ SamplesPerLog10Z_250 ]
+
+   -- Redshifts, tolerances and parameter values
+      @@ redshift (replicated): 75,001 records | committed at Sun 01 Nov 2026 22:39:35
+         log_one_plus_z = [ 0, 0.0092103, 0.018421, 0.027631, 0.036841, 0.046052, 0.055262, 0.064472, 0.073683, 0.082893, ... 74,981 values not shown (--show-all shows every one) ..., 690.69, 690.7, 690.71, 690.72, 690.73, 690.74, 690.75, 690.76, 690.77, 690.78 ]
+      @@ tolerance (replicated): 2 records | committed between Sun 01 Nov 2026 22:39:35 and Sun 01 Nov 2026 22:39:35
+         log10_tol = [ -8, -5 ]
+      @@ beta_value (replicated): 3 records | committed at Sun 01 Nov 2026 22:40:00
+         values = [ 1.2, 2, 2.9 ]
+      @@ alpha_value (replicated): 1 record | committed at Sun 01 Nov 2026 22:39:35
+         values = [ 0.08 ]
+      @@ temperature (replicated): 1 record | committed at Sun 01 Nov 2026 22:39:35
+         values = [ 20000 GeV ]
+      @@ M_value (replicated): 4 records | committed at Sun 01 Nov 2026 22:40:00
+         values = [ 2.4353e+18 eV, 2.4353e+21 eV, 2.4353e+24 eV, 1.2177e+27 eV ]
+      @@ phi_value (replicated): 1 record | committed at Sun 01 Nov 2026 22:39:35
+         values = [ 5 PlanckMass ]
+      @@ pi_value (replicated): 1 record | committed at Sun 01 Nov 2026 22:39:35
+         values = [ 0 PlanckMass ]
+
+   -- Cosmologies and solvers
+      @@ QCD_Cosmology (replicated): 1 record | committed at Sun 01 Nov 2026 22:40:00
+            - omega_m=0.3111, omega_cc=0.6889, h=0.6766, f_baryon=0.15817, T_CMB_Kelvin=2.7255, Neff=3.046
+      @@ IntegrationSolver (replicated): 6 records | committed between Sun 01 Nov 2026 22:39:35 and Sun 01 Nov 2026 22:39:35
+            - label=Radau+kinematic-cap, stepping=0
+            - label=solve_ivp+BDF, stepping=0
+            - label=solve_ivp+DOP853, stepping=0
+            - label=solve_ivp+LSODA, stepping=0
+            - label=solve_ivp+RK45, stepping=0
+            - label=solve_ivp+Radau, stepping=0
+
+   -- Models
+      @@ ExponentialModel (sharded): 12 records | committed between Sun 01 Nov 2026 22:40:00 and Sun 01 Nov 2026 22:40:00
+            - M=2.4353e+18 eV, beta=1.2, n_value=1
+            - M=2.4353e+18 eV, beta=2, n_value=1
+            - M=2.4353e+18 eV, beta=2.9, n_value=1
+            - M=2.4353e+21 eV, beta=1.2, n_value=1
+            - M=2.4353e+21 eV, beta=2, n_value=1
+            - M=2.4353e+21 eV, beta=2.9, n_value=1
+            - M=2.4353e+24 eV, beta=1.2, n_value=1
+            - M=2.4353e+24 eV, beta=2, n_value=1
+            - M=2.4353e+24 eV, beta=2.9, n_value=1
+            - M=1.2177e+27 eV, beta=1.2, n_value=1
+            - M=1.2177e+27 eV, beta=2, n_value=1
+            - M=1.2177e+27 eV, beta=2.9, n_value=1
+
+   -- Compute targets
+      @@ ScalarHistory (sharded): 12 records: 12 validated, 0 unvalidated; 65,221 ScalarHistoryValue rows | committed between Sun 01 Nov 2026 22:40:13 and Sun 01 Nov 2026 22:40:55
+         common to every history: cosmology=QCD_Cosmology(omega_m=0.3111, omega_cc=0.6889, h=0.6766, f_baryon=0.15817, T_CMB_Kelvin=2.7255, Neff=3.046), log10_atol=-8, log10_rtol=-8, log10_tuning_tol=-5, alpha=0.08
+         validated: 12 records; version = 2026.8.0
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+18 eV, beta=1.2, n_value=1), failure=False  tags: SamplesPerLog10Z_250  | values: 5,003
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+18 eV, beta=2, n_value=1), failure=False  tags: SamplesPerLog10Z_250  | values: 5,437
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+18 eV, beta=2.9, n_value=1), failure=False  tags: SamplesPerLog10Z_250  | values: 5,926
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+21 eV, beta=1.2, n_value=1), failure=False  tags: SamplesPerLog10Z_250  | values: 5,003
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+21 eV, beta=2, n_value=1), failure=False  tags: SamplesPerLog10Z_250  | values: 5,437
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+21 eV, beta=2.9, n_value=1), failure=False  tags: SamplesPerLog10Z_250  | values: 5,926
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=1.2, n_value=1), failure=False  tags: SamplesPerLog10Z_250  | values: 4,998
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=2, n_value=1), failure=False  tags: SamplesPerLog10Z_250  | values: 5,431
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=2.9, n_value=1), failure=False  tags: SamplesPerLog10Z_250  | values: 5,918
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=1.2177e+27 eV, beta=1.2, n_value=1), failure=False  tags: SamplesPerLog10Z_250  | values: 4,940
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=1.2177e+27 eV, beta=2, n_value=1), failure=False  tags: SamplesPerLog10Z_250  | values: 5,362
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=1.2177e+27 eV, beta=2.9, n_value=1), failure=False  tags: SamplesPerLog10Z_250  | values: 5,840
+         unvalidated: none
+      @@ AdiabaticHistory (sharded): 12 records: 12 validated, 0 unvalidated; 65,221 AdiabaticHistoryValue rows | committed between Sun 01 Nov 2026 22:40:58 and Sun 01 Nov 2026 22:40:59
+         validated: 12 records; version = 2026.8.0
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+18 eV, beta=1.2, n_value=1), failure=False, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,003
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+18 eV, beta=2, n_value=1), failure=False, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,437
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+18 eV, beta=2.9, n_value=1), failure=False, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,926
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+21 eV, beta=1.2, n_value=1), failure=False, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,003
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+21 eV, beta=2, n_value=1), failure=False, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,437
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+21 eV, beta=2.9, n_value=1), failure=False, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,926
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=1.2, n_value=1), failure=False, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 4,998
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=2, n_value=1), failure=False, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,431
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=2.9, n_value=1), failure=False, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,918
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=1.2177e+27 eV, beta=1.2, n_value=1), failure=False, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 4,940
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=1.2177e+27 eV, beta=2, n_value=1), failure=False, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,362
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=1.2177e+27 eV, beta=2.9, n_value=1), failure=False, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,840
+         unvalidated: none
+      @@ BBNData (sharded): 12 records: 12 validated, 0 unvalidated; 17,858 BBNDataValue rows | committed between Sun 01 Nov 2026 22:41:13 and Sun 01 Nov 2026 22:41:23
+         validated: 12 records; version = 2026.8.0
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+18 eV, beta=1.2, n_value=1), failure=False, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,505
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+18 eV, beta=2, n_value=1), failure=False, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,481
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+18 eV, beta=2.9, n_value=1), failure=False, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,480
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+21 eV, beta=1.2, n_value=1), failure=False, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,506
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+21 eV, beta=2, n_value=1), failure=False, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,481
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+21 eV, beta=2.9, n_value=1), failure=False, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,479
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=1.2, n_value=1), failure=False, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,505
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=2, n_value=1), failure=False, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,481
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=2.9, n_value=1), failure=False, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,479
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=1.2177e+27 eV, beta=1.2, n_value=1), failure=False, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,505
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=1.2177e+27 eV, beta=2, n_value=1), failure=False, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,479
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=1.2177e+27 eV, beta=2.9, n_value=1), failure=False, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,477
+         unvalidated: none
