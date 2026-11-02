@@ -1,0 +1,74 @@
+{
+  "script": "fig6a.py",
+  "script_sha256": "79453b3122b1d20bf860f553c86b3023c596cfd657437db969ca90480965d539",
+  "git_head": "424982934c5a29c6389d59af02d9181198ec5824",
+  "git_dirty": false,
+  "input": {
+    "path": "../fig6/inputs/histories.csv",
+    "sha256": "4eac33576244402b11ef7c7b891b26087ef86c32899eedd15f2e8d8cfa9ad957"
+  },
+  "store": {
+    "name": "science-2026.8.0",
+    "store_id": "bdeb7b9f4d67459e990ec16d8ffe1f92",
+    "digest": "e8d9b41d4f93409fcad7a6a745f35f7554f356205d41ca61e93d4d27daba9faf"
+  },
+  "alpha": 0.0,
+  "tolerances_percent": {
+    "dYp": 2.4489795918367347,
+    "dDH": 2.374356944994064
+  },
+  "beta_wall_bracket": [
+    1.0,
+    1.08
+  ],
+  "reference_line": {
+    "M_Mp": 4e-31,
+    "alpha": 0.08
+  },
+  "by_M": {
+    "0.001": {
+      "histories": 62,
+      "with_yields": 59,
+      "passing_both": [
+        1.16,
+        1.3,
+        1.35,
+        1.4
+      ],
+      "excluded_by_Yp": 47,
+      "excluded_by_DH": 55,
+      "without_result": {
+        "0.5": "PRyMordial: ComputationFailureError: T_in_MeV=0.00019824 MeV is smaller than T_BBN_spline_min=0.0002 MeV",
+        "0.75": "PRyMordial: ComputationFailureError: T_in_MeV=0.00019559 MeV is smaller than T_BBN_spline_min=0.0002 MeV",
+        "0.9": "PRyMordial: ComputationFailureError: T_in_MeV=0.00019861 MeV is smaller than T_BBN_spline_min=0.0002 MeV"
+      }
+    },
+    "0.1": {
+      "histories": 62,
+      "with_yields": 59,
+      "passing_both": [],
+      "excluded_by_Yp": 59,
+      "excluded_by_DH": 59,
+      "without_result": {
+        "0.5": "PRyMordial: ComputationFailureError: T_in_MeV=0.00019557 MeV is smaller than T_BBN_spline_min=0.0002 MeV",
+        "0.75": "PRyMordial: ComputationFailureError: T_in_MeV=0.00019603 MeV is smaller than T_BBN_spline_min=0.0002 MeV",
+        "0.9": "PRyMordial output: Yp_BBN=0.5049200153 is outside (0, 0.5)"
+      }
+    },
+    "0.5": {
+      "histories": 62,
+      "with_yields": 56,
+      "passing_both": [],
+      "excluded_by_Yp": 56,
+      "excluded_by_DH": 56,
+      "without_result": {
+        "0.5": "PRyMordial: ComputationFailureError: T_in_MeV=0.00019912 MeV is smaller than T_BBN_spline_min=0.0002 MeV",
+        "0.75": "PRyMordial: ComputationFailureError: T_in_MeV=0.00019883 MeV is smaller than T_BBN_spline_min=0.0002 MeV",
+        "8": "the normalization did not converge: after 30 integrations, H/H0-1=+9.704e-06, phi_ref/phi_min-1=+1.552e-05",
+        "10": "the normalization did not converge: after 30 integrations, H/H0-1=+2.744e-05, phi_ref/phi_min-1=+3.757e-05",
+        "15": "the normalization did not converge: after 30 integrations, H/H0-1=+2.122e-06, phi_ref/phi_min-1=+5.924e-05",
+        "20": "the effective minimum was not found: effective_minimum (ExponentialModel(M=0.5Mp,n=1,beta=20)): V_eff' overflows on the bracket [0.104619, 41.8474] (math range error) (tuning integration 14)"
+      }
+    }
+  }
+}
