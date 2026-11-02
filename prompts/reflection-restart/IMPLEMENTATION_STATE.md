@@ -3,8 +3,8 @@
 **Last updated:** 2026-11-02 · **Status: LIVE — 1 of 3 landed (01; 02 withdrawn).** Planned 2026-11-02 at the
 user's request; U1–U5 ruled by the user the same day, P1–P10 standing (README §6). Re-planned the same day
 after 01, at the user's word (README §6.3): the signature narrowed to the first step of a restarted Radau;
-02 withdrawn, since `quanta-diagnostics` rebuilds the whole store; U3–U5 lapsed; U6 (the fix) to be ruled
-from 01. The plan is [`README.md`](README.md), on branch `reflection-restart`, cut from `main` at
+02 withdrawn, since `quanta-diagnostics` rebuilds the whole store; U3–U5 lapsed. U6 ruled the same day: F3 plus the guard
+(README §6.3). The plan is [`README.md`](README.md), on branch `reflection-restart`, cut from `main` at
 `cc7fe75`.
 
 The campaign takes the defect diagnosed in `.documents/post-reflection-step-2026-11-02/`: after a
@@ -28,8 +28,8 @@ to the rebuild of record, which rebuilds the whole store (README §6.3).
 |---|---|---|---|---|---|---|---|
 | 01 | [Measure the fixes](01-measure-the-fixes.md) | the scanner; F1–F4 measured; why Radau accepts the bad step | Opus | ✅ | ✅ | `d4703df` | [log](logs/01-measure-the-fixes.md) |
 | ~~02~~ | ~~Audit the 2026.8.0 store~~ | **withdrawn 2026-11-02** (README §6.3): the whole store is rebuilt | — | — | — | | |
-| — | the user's ruling U6 | the fix, from 01 | — | | | | |
-| 03 | The fix | the ruled fix; tests; a reflecting golden history; labels; documents | Opus | ⬜ | ⬜ | | |
+| — | the user's ruling U6 | F3 plus the guard (README §6.3), 2026-11-02 | — | ✅ | ✅ | | |
+| 03 | [The fix](03-the-fix.md) | F3 and the guard, the probe switch removed; tests; a reflecting golden history; labels; documents | Opus | ✍️ | ⬜ | | |
 | 04 | The close | the 42 recomputed with the fix; the issue closed; the handover to the rebuild; the close | Opus | ⬜ | ⬜ | | |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed · ~~struck~~ withdrawn.

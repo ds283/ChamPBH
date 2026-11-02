@@ -264,7 +264,15 @@ please, make that restructure." So:
 - **U3, U4 and U5 lapse.** U3's aim (no bad data in the store) is met by the rebuild; U4 was 02's scope; U5
   was 04's recomputation for a verdict that is no longer needed. 04 recomputes only the 42 failures, as
   part of the close.
-- **U6 is ruled from 01 alone**, and is still the user's.
+- **U6 is ruled from 01 alone.** Ruled by the user, 2026-11-02: "That's fine. We'll do F3 plus the guard."
+  So the fix is two things:
+  - **F3:** each Radau restarted with π > 0 (after a reflection, a drain or a release; P7) is given
+    `first_step = min(global_max_step, max(h_floor, f·φ/π))`.
+  - **the guard:** P1's flag, with either condition, on the first accepted step of each such instance and
+    on no other step. A flagged step is discarded before it is used for anything and retaken from the
+    same state at half its h; below h_floor the history fails. The retakes are counted per history.
+  In 01's data the guard never fires under F3, so F3 plus the guard is expected bitwise equal to the
+  probe's F3 on every history 01 ran. Prompt 03 implements it.
 - **The labels** (P6) stand: `VERSION_LABEL` 2026.9.0. `quanta-diagnostics`' U3 relies on no store of record
   being built at 2026.9.0 before it lands, which this re-plan keeps.
 
