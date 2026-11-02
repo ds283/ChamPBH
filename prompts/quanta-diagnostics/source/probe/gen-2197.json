@@ -1,0 +1,40 @@
+{
+ "serial": 2197,
+ "M_Mp": 4e-31,
+ "beta": 1.185,
+ "alpha": 0.001,
+ "wall_s": 497.30495291698026,
+ "stored": {
+  "injections": 6648,
+  "worst_tracker": 68.989286196075,
+  "worst_reflection": 17.529001102644372,
+  "below_weight_share": 0.8887285310935163,
+  "unassessed_share": 0.0011545887502344753,
+  "rho_chi_ratio_today": 0.0008651958712788435
+ },
+ "rerun": {
+  "injections": 6648,
+  "worst_tracker": 68.989286196075,
+  "worst_reflection": 17.529001102644372,
+  "below_weight_share": 0.8887285310935163,
+  "unassessed_share": 0.0011545887502344753
+ },
+ "generations": 6648,
+ "weighted": 4,
+ "all_min_tracker": 1.607663649682877,
+ "all_min_reflection": -20.407141860136335,
+ "all_min_field_sampled": 1.607663649682877,
+ "below_weight_min_tracker": 1.607663649682877,
+ "below_weight_min_reflection": -20.407141860136335,
+ "share_tracker_below_ln10": 0.0003162984187305194,
+ "share_reflection_below_ln10": 0.8737065781019767,
+ "share_reflection_below_0": 0.8402241471322694,
+ "share_field_below_ln10": 0.0003162984187305194,
+ "max_E_field": 4.8353663288977085e-06,
+ "N_at_max_E_field": 45.16250253862834,
+ "T_GeV_at_max_E_field": 5.430241558780727e-13,
+ "max_E_tracker": 4.8353663288977085e-06,
+ "max_rchi_E_field": 4.183538983882322e-09,
+ "E_field_today": 5.972542812491393e-07,
+ "E_tracker_today": 5.972542812491393e-07
+}
