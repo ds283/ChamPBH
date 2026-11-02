@@ -1,212 +1,326 @@
 [
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0/csv/beta=1.2/M=1.2177e+27eV_n=1/fields.csv",
     "sha256": "785383ebf0af638cb7a87cfbc7edcda5f359df8c2cea2eb6eb7327b2083833d1",
     "rows": 4940
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0/csv/beta=1.2/M=2.4353e+24eV_n=1/fields.csv",
     "sha256": "3cea840aca270315fe636a9ecbb39215d7ec09426bbfd41cbd18d5921432b6ec",
     "rows": 4998
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0/csv/beta=2/M=1.2177e+27eV_n=1/fields.csv",
     "sha256": "52e30934558a778c1b118d235171ca164f5c9ac8a84975355360bcf49c1b6c4b",
     "rows": 5362
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0/csv/beta=2/M=2.4353e+24eV_n=1/fields.csv",
     "sha256": "12399ee2640d26d362b362ff39b72e9f5e209d4f524e734655c9e51e3dffbeb0",
     "rows": 5431
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0/csv/beta=2.9/M=1.2177e+27eV_n=1/fields.csv",
     "sha256": "be671099b92d524786a8ac2b3ce791b53f973d15f15e288a8209432a14233e3a",
     "rows": 5840
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0/csv/beta=2.9/M=2.4353e+24eV_n=1/fields.csv",
     "sha256": "338e68e9dd2828098ea25b519f0766c4c6aba2798d864b06c7c449b937c3e8ad",
     "rows": 5919
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.001/csv/beta=1.2/M=0.00097413eV_n=1/fields.csv",
     "sha256": "589a5dc1580b44d2a664da2b486b354f96a2b0e2ea5e81dfc6e01f5490ca6704",
     "rows": 5003
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.001/csv/beta=1.2/M=2.4353e+12eV_n=1/fields.csv",
     "sha256": "442fc18899f31ac33bc00d8a0eaaf1cc0f43f3c9d0a8ceb4c649aa12b52fb123",
     "rows": 5003
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.001/csv/beta=1.2/M=2.4353e+15eV_n=1/fields.csv",
     "sha256": "3d1789a324b4ffb8e8bea65153769c1e974958b8a88fc109be81dc1178128e4c",
     "rows": 5003
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.001/csv/beta=2/M=0.00097413eV_n=1/fields.csv",
     "sha256": "e4a6eef3647c837414c41f458baea586ff73f13cdc11e727d11aa640493d850c",
     "rows": 5437
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.001/csv/beta=2/M=2.4353e+12eV_n=1/fields.csv",
     "sha256": "1f08cc1961161c74dec266e40d1da5bc6432ee5b428bd470873138384b52d4bc",
     "rows": 5437
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.001/csv/beta=2/M=2.4353e+15eV_n=1/fields.csv",
     "sha256": "b8418e0cdc6ab9c983999ddfd6e6b2910827e91b1c660599c77cc299a4d66b27",
     "rows": 5437
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.001/csv/beta=2.9/M=0.00097413eV_n=1/fields.csv",
     "sha256": "92765c7ed1dd063b2f0542593cba26cd7b74ab332aa0d31c008b30a1321266f4",
     "rows": 5926
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.001/csv/beta=2.9/M=2.4353e+12eV_n=1/fields.csv",
     "sha256": "d89cabdd234c31b3fedd406321876dfee5df08333690a4a330d84ed4122ce2cd",
     "rows": 5926
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.001/csv/beta=2.9/M=2.4353e+15eV_n=1/fields.csv",
     "sha256": "ce453d0bf2aba9f264bd254267ef8263b42fc937f5ce36e47acda3128d939631",
     "rows": 5926
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.01/csv/beta=1.2/M=0.00097413eV_n=1/fields.csv",
     "sha256": "fa6a0eab66eca4bd811d40f22fad98b6267222341d12dbe94d0aed933b2b78c4",
     "rows": 5003
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.01/csv/beta=1.2/M=2.4353e+12eV_n=1/fields.csv",
     "sha256": "ff268cea778b127e879f16a5f8fef0f195f32004d27a410241c76c8ce8338f18",
     "rows": 5003
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.01/csv/beta=1.2/M=2.4353e+15eV_n=1/fields.csv",
     "sha256": "b46286bd4ad8d00391ba988fd825933a8a7b206c7d833c5de721c2e274fc26d5",
     "rows": 5003
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.01/csv/beta=2/M=0.00097413eV_n=1/fields.csv",
     "sha256": "44b90d7a068bf36e6d0a9870a783a4d99d702e7ac45654a56b5833e57507bc4e",
     "rows": 5437
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.01/csv/beta=2/M=2.4353e+12eV_n=1/fields.csv",
     "sha256": "f494a25d8e5682a91583e8dc44382c1119a74fe6ac7614b12a644b663a3a79a8",
     "rows": 5437
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.01/csv/beta=2/M=2.4353e+15eV_n=1/fields.csv",
     "sha256": "fb8f54981bfab96510494978d017bec40449a0167cb1609f4d99854330f83074",
     "rows": 5437
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.01/csv/beta=2.9/M=0.00097413eV_n=1/fields.csv",
     "sha256": "ba65b14996c2021b137bd84e4449bc2d8d873c2f9b7fed35fd0f9911ec8eff24",
     "rows": 5926
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.01/csv/beta=2.9/M=2.4353e+12eV_n=1/fields.csv",
     "sha256": "89c2073871b348181ea6149a0dfd5f7ae49a0ff9453aee1e13e8f2a63b5878fd",
     "rows": 5926
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.01/csv/beta=2.9/M=2.4353e+15eV_n=1/fields.csv",
     "sha256": "df182351cf58483712207ab68f71a3d8fdb37feb988a39303ee2fd7870e2eeca",
     "rows": 5926
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.08/csv/beta=1.2/M=0.00097413eV_n=1/fields.csv",
     "sha256": "b79a8146e0258a529b2db86150c2c25290582a228c85bfded91fcb5b27ced517",
     "rows": 5003
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.08/csv/beta=1.2/M=2.4353e+12eV_n=1/fields.csv",
     "sha256": "6a432a90b5b0dad7be6f60497eec98647daa585a670030c0be5d5561369988c2",
     "rows": 5003
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.08/csv/beta=1.2/M=2.4353e+15eV_n=1/fields.csv",
     "sha256": "0265868017367b2c84993c74e302983a33ac5e0166e354fc1bd2ed441c7a26f0",
     "rows": 5003
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.08/csv/beta=2/M=0.00097413eV_n=1/fields.csv",
     "sha256": "c2d73494e46f609f16ce0503a474380604db47e920a3148fe7261cbbb85e9b8b",
     "rows": 5437
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.08/csv/beta=2/M=2.4353e+12eV_n=1/fields.csv",
     "sha256": "536218dab6e8ca16d4c2620f1ba0e91d03497ff30edebaeeef3350d42ed8e329",
     "rows": 5437
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.08/csv/beta=2/M=2.4353e+15eV_n=1/fields.csv",
     "sha256": "537ae264cd690c1f029eea44b757139f295c1d000ea99e6fb1c879211a70faff",
     "rows": 5437
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.08/csv/beta=2.9/M=0.00097413eV_n=1/fields.csv",
     "sha256": "8bb88a94e104caf329d98ae88363976c6a47e3e2267a745d98d4498cb682c0d2",
     "rows": 5926
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.08/csv/beta=2.9/M=2.4353e+12eV_n=1/fields.csv",
     "sha256": "d0e28b7b64679cd44fba84098c3de16e41e1e68e1ce6a30e11c2aa0b165e57d0",
     "rows": 5926
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.08/csv/beta=2.9/M=2.4353e+15eV_n=1/fields.csv",
     "sha256": "9167b25171bbcdde43982d3ad598de0e0ea0a37706bd572bd579a879f7d71256",
     "rows": 5926
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.15/csv/beta=1.2/M=0.00097413eV_n=1/fields.csv",
     "sha256": "07ca4f405dc784071e311d76b4372ab0a652a40190a26c76ca647e4d0544c8a1",
     "rows": 5003
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.15/csv/beta=1.2/M=2.4353e+12eV_n=1/fields.csv",
     "sha256": "49c2fc6f9daa8cccaea5c4bb44fef35c18e274641a3a6f068123fff1263611f3",
     "rows": 5003
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.15/csv/beta=1.2/M=2.4353e+15eV_n=1/fields.csv",
     "sha256": "1b168652255e0045383308e2e246130575ca08ed08f9169c937aa00035a633fc",
     "rows": 5003
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.15/csv/beta=2/M=0.00097413eV_n=1/fields.csv",
     "sha256": "8e85fe0630b1a9cc02987d697ffd4c4af81c3ea8b59bc1d4b1507dc3abe56920",
     "rows": 5437
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.15/csv/beta=2/M=2.4353e+12eV_n=1/fields.csv",
     "sha256": "dc1af447aadd39164734ccdb9fb1a2f02a834ee388a5a089677b2df7aba94e66",
     "rows": 5437
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.15/csv/beta=2/M=2.4353e+15eV_n=1/fields.csv",
     "sha256": "98781b99c228984b4c7e4056b077a2d6965c2ab3c644ce478e09050a93d50595",
     "rows": 5437
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.15/csv/beta=2.9/M=0.00097413eV_n=1/fields.csv",
     "sha256": "8b2d1aec4e12998a40b6d85dec0fd2574cba7bdd4c829076939044fd39f6ed51",
     "rows": 5926
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.15/csv/beta=2.9/M=2.4353e+12eV_n=1/fields.csv",
     "sha256": "cb0c96fdfed7fd4668ecd47aed5fe8067aeb6dfa6a0e7b24facd8149cba47e3b",
     "rows": 5926
   },
   {
+    "store": "reflections",
     "path": "var/science-2026.8.0/out/reflections/QCD_Cosmology/alpha=0.15/csv/beta=2.9/M=2.4353e+15eV_n=1/fields.csv",
     "sha256": "4c8b60e4a5d27ac63c8c7d64385db735071f52e8d43c246cd346dc654f0e6ec0",
     "rows": 5926
+  },
+  {
+    "store": "large-M-dissipation",
+    "path": "var/science-2026.8.0/diagnostic/out/large-M-dissipation/QCD_Cosmology/alpha=0.08/csv/beta=1.2/M=1.2177e+27eV_n=1/fields.csv",
+    "sha256": "779aa6ff907d9f1978d9e5177ab3c4c806b92ce5a6f5055d2c1b271f4c74b921",
+    "rows": 4940
+  },
+  {
+    "store": "large-M-dissipation",
+    "path": "var/science-2026.8.0/diagnostic/out/large-M-dissipation/QCD_Cosmology/alpha=0.08/csv/beta=1.2/M=2.4353e+18eV_n=1/fields.csv",
+    "sha256": "235ad1a45d8a6dbea0f419ebbfb36b835ea055071e12021e872b81756eb3d9e8",
+    "rows": 5003
+  },
+  {
+    "store": "large-M-dissipation",
+    "path": "var/science-2026.8.0/diagnostic/out/large-M-dissipation/QCD_Cosmology/alpha=0.08/csv/beta=1.2/M=2.4353e+21eV_n=1/fields.csv",
+    "sha256": "66eae1ea90bbe153667a613e48637459b55347653d058f8605d351db73ea4987",
+    "rows": 5003
+  },
+  {
+    "store": "large-M-dissipation",
+    "path": "var/science-2026.8.0/diagnostic/out/large-M-dissipation/QCD_Cosmology/alpha=0.08/csv/beta=1.2/M=2.4353e+24eV_n=1/fields.csv",
+    "sha256": "f4eece1689fd07d706f5004f2adebd91f7db0317757d2c769c90d8bb12fdeb9e",
+    "rows": 4998
+  },
+  {
+    "store": "large-M-dissipation",
+    "path": "var/science-2026.8.0/diagnostic/out/large-M-dissipation/QCD_Cosmology/alpha=0.08/csv/beta=2/M=1.2177e+27eV_n=1/fields.csv",
+    "sha256": "f5fd2c1bdd9db1026c254ad8cd41e108b989305d28175bbf2be8c7a3bc87cca2",
+    "rows": 5362
+  },
+  {
+    "store": "large-M-dissipation",
+    "path": "var/science-2026.8.0/diagnostic/out/large-M-dissipation/QCD_Cosmology/alpha=0.08/csv/beta=2/M=2.4353e+18eV_n=1/fields.csv",
+    "sha256": "213640bd54c1ba04134c9d1024862ad14f9d9521b7e9f89ab288184155871091",
+    "rows": 5437
+  },
+  {
+    "store": "large-M-dissipation",
+    "path": "var/science-2026.8.0/diagnostic/out/large-M-dissipation/QCD_Cosmology/alpha=0.08/csv/beta=2/M=2.4353e+21eV_n=1/fields.csv",
+    "sha256": "6c3583ea87a2e5f4bcd1a32c690e1facae8b124e5fc85a1422fdadd998403c39",
+    "rows": 5437
+  },
+  {
+    "store": "large-M-dissipation",
+    "path": "var/science-2026.8.0/diagnostic/out/large-M-dissipation/QCD_Cosmology/alpha=0.08/csv/beta=2/M=2.4353e+24eV_n=1/fields.csv",
+    "sha256": "bf83017d04712d3a22a3e68e77456a0a2125876c8dd713cba0495bc6baff4c8e",
+    "rows": 5431
+  },
+  {
+    "store": "large-M-dissipation",
+    "path": "var/science-2026.8.0/diagnostic/out/large-M-dissipation/QCD_Cosmology/alpha=0.08/csv/beta=2.9/M=1.2177e+27eV_n=1/fields.csv",
+    "sha256": "9f0830c387e1fe5eed071fe53bd0bc4afbd90391ffd5d096a1f3c20b6e3a688e",
+    "rows": 5840
+  },
+  {
+    "store": "large-M-dissipation",
+    "path": "var/science-2026.8.0/diagnostic/out/large-M-dissipation/QCD_Cosmology/alpha=0.08/csv/beta=2.9/M=2.4353e+18eV_n=1/fields.csv",
+    "sha256": "5c38ed95ef6b5188d6c54813d28b58766d274cd0e643b4250789e479d46feb46",
+    "rows": 5926
+  },
+  {
+    "store": "large-M-dissipation",
+    "path": "var/science-2026.8.0/diagnostic/out/large-M-dissipation/QCD_Cosmology/alpha=0.08/csv/beta=2.9/M=2.4353e+21eV_n=1/fields.csv",
+    "sha256": "538bf825af6765bbcea6976c4b3798abb7a636109b26a7eaf51bdf536c35d825",
+    "rows": 5926
+  },
+  {
+    "store": "large-M-dissipation",
+    "path": "var/science-2026.8.0/diagnostic/out/large-M-dissipation/QCD_Cosmology/alpha=0.08/csv/beta=2.9/M=2.4353e+24eV_n=1/fields.csv",
+    "sha256": "9cf2fa0febd233104af44bdd22aa5d8fd63a24f7be730d6709d332b07011c0bc",
+    "rows": 5918
   }
 ]

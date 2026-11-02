@@ -66,3 +66,39 @@ Its review's four fixes: the tests are now two-sided by the user's ruling; no bl
 mislabelled (the crosses name what they are); no blue band ends at the analytic threshold (there is
 none); and the figure is self-contained here. New: the band over α, the ΔN_eff panel, the
 electroweak cut, and the differential tests in place of the measurements' absolute ranges.
+
+## Added 2026-11-02: the parking row
+
+At the user's request ("add the parking temperature panel to Fig 6"), a fourth row shows T_J at
+parking, where the parking cut ends the reflections, against β, with the same band over α, points
+and α = 0.08 line. The green band is an indicative BBN window, 2 MeV to 20 keV, as in the reflection
+figure.
+
+`inputs/histories.csv` is now the export of [`../run_figure_exports.sh`](../run_figure_exports.sh)
+(`plot_by_beta.py` on the main store at `c390816`, read-only), which adds the parking and release
+temperatures and `log_R_first_impact` to the run's columns. The run's 27 columns are identical,
+cell for cell, to the copy this figure was first drawn from, so rows 1–3 and the exclusion counts
+are unchanged (893 of 1914).
+
+Every one of the 1914 histories with yields parks; none is released. Against the run's tests:
+
+| β | parks below 1 keV | 1–10 keV | 10–20 keV | in the BBN window | above 2 MeV |
+|---|---|---|---|---|---|
+| 1.06–1.50 | 839 of 1031 excluded | 8 of 43 | 0 of 9 | 0 of 32 | — |
+| 1.50–3.00 | 26 of 149 | 0 of 79 | 0 of 17 | 0 of 328 | 0 of 63 |
+| above 3.00 | — | — | — | 0 of 16 | 0 of 127 |
+
+- **No history that parks above 10 keV is excluded**, and every excluded history parks below
+  10 keV. In 1.06–1.50 nearly every α parks after BBN (median at α = 0.08: 3.3 eV); above 1.5 the
+  parking temperature climbs into the BBN window and through it (median 0.17 MeV in 1.50–3.00).
+- **Parking rises with α** at fixed β, by about three and a half decades from α = 0.001 to 0.15 at
+  the median (3.7 meV against 12 eV in 1.06–1.50; 1.2 keV against 4.9 MeV in 1.50–3.00). Between
+  neighbouring β or α it can jump by four or five decades (1.41–1.50 has many), as a history parks
+  one bounce earlier or later.
+- **Late parking is necessary for exclusion, not sufficient.** 192 of the 1031 histories in
+  1.06–1.50 that park below 1 keV are not excluded. From β ≈ 1.42 the larger α (≥ 0.05) mostly pass
+  the tests while still parking at a few eV (β = 1.42, α = 0.05–0.10), and from 1.48 almost every α
+  passes, whether it parks at 10⁻¹⁰ or 10⁻⁴ GeV.
+- So the row supports reading the β ≈ 1.5 edge as "the field is still reflecting through BBN" only in
+  part: a history that has parked by 10 keV is never excluded, but how much a later-parking one
+  shifts the yields depends on how strongly it is still moving through BBN, which the rows above show.

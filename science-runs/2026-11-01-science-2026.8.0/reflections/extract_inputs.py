@@ -1,12 +1,14 @@
 """
 The inputs of the reflection-structure figure: the columns it draws from each of the reflection
-store's 42 fields.csv, written by the run's plot_ScalarHistory.py step, gathered into one
-compressed file. The 42 files are 105 MB together, too large to keep in git; this keeps the columns
-the figure reads, unchanged, and the SHA-256 of every source.
+store's 42 fields.csv, written by the run's plot_ScalarHistory.py step, and (since 2026-11-02) the
+diagnostic store's 12, written by run_diagnostic_large_M.sh, gathered into one compressed file. The
+files are too large to keep in git together; this keeps the columns the figure reads, unchanged,
+the store each came from, and the SHA-256 of every source.
 
     ./venv/bin/python science-runs/2026-11-01-science-2026.8.0/reflections/extract_inputs.py
 
-From the repository root. Reads var/science-2026.8.0/out/reflections/QCD_Cosmology/; writes
+From the repository root. Reads var/science-2026.8.0/out/reflections/QCD_Cosmology/ and
+var/science-2026.8.0/diagnostic/out/large-M-dissipation/QCD_Cosmology/; writes
 inputs/fields.csv.gz and inputs/sources.json beside this file.
 """
 
@@ -18,12 +20,17 @@ from pathlib import Path
 import pandas as pd
 
 HERE = Path(__file__).resolve().parent
-SOURCE = Path("var/science-2026.8.0/out/reflections/QCD_Cosmology")
+SOURCES = {  # store: the plot_ScalarHistory.py output written from it
+    "reflections": Path("var/science-2026.8.0/out/reflections/QCD_Cosmology"),
+    "large-M-dissipation": Path("var/science-2026.8.0/diagnostic/out/large-M-dissipation/QCD_Cosmology"),
+}
 COLUMNS = ["T_Jordan_GeV", "phi_Einstein_Mp", "pi_Einstein_Mp", "rho_chi_over_rho_rad"]
 M_EV_TO_MP = {  # the folder names give M in eV; these are the run's M in M_P
     "0.00097413eV": 4e-31,
     "2.4353e+12eV": 1e-15,
     "2.4353e+15eV": 1e-12,
+    "2.4353e+18eV": 1e-9,
+    "2.4353e+21eV": 1e-6,
     "2.4353e+24eV": 1e-3,
     "1.2177e+27eV": 0.5,
 }
@@ -31,7 +38,9 @@ M_EV_TO_MP = {  # the folder names give M in eV; these are the run's M in M_P
 
 def main():
     frames, sources = [], []
-    for path in sorted(SOURCE.glob("alpha=*/csv/beta=*/M=*_n=1/fields.csv")):
+    paths = [(store, p) for store, source in SOURCES.items()
+             for p in sorted(source.glob("alpha=*/csv/beta=*/M=*_n=1/fields.csv"))]
+    for store, path in paths:
         alpha = float(re.search(r"alpha=([^/]+)", str(path)).group(1))
         beta = float(re.search(r"beta=([^/]+)", str(path)).group(1))
         M_eV = re.search(r"M=([^_]+)_n=1", str(path)).group(1)
@@ -39,10 +48,12 @@ def main():
         d.insert(0, "M_Mp", M_EV_TO_MP[M_eV])
         d.insert(0, "beta", beta)
         d.insert(0, "alpha", alpha)
-        d.insert(3, "sample", range(len(d)))
+        d.insert(0, "store", store)
+        d.insert(4, "sample", range(len(d)))
         frames.append(d)
         sources.append(
             {
+                "store": store,
                 "path": str(path),
                 "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
                 "rows": len(d),

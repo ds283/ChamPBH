@@ -1,11 +1,12 @@
 """
-Figure 6 of the 2026.8.0 science run: the shifts in Y_p and D/H, and Delta N_eff, against beta at the
-laboratory mass M = 4e-31 M_P, with a band spanning every sampled alpha.
+Figure 6 of the 2026.8.0 science run: the shifts in Y_p and D/H, Delta N_eff and (since 2026-11-02)
+the temperature at which the field parks, against beta at the laboratory mass M = 4e-31 M_P, with a
+band spanning every sampled alpha.
 
     ./venv/bin/python science-runs/2026-11-01-science-2026.8.0/fig6/fig6.py
 
 Reads only inputs/histories.csv beside this file (a copy of plot_by_beta.py's output on the main
-store) and ../registry/stores/science-2026.8.0.manifest.json (the store's fingerprint). Writes
+store; since 2026-11-02 the export of ../run_figure_exports.sh, which adds the parking temperature) and ../registry/stores/science-2026.8.0.manifest.json (the store's fingerprint). Writes
 fig6.pdf, fig6.png and fig6.provenance.json beside this file. Needs no Ray and no store.
 
 The shifts are relative to PRyMordial + LambdaCDM: PRyMordial with rho_NP = 0, at the same version,
@@ -14,7 +15,8 @@ tests are differential and two-sided (the user's ruling of 2026-11-01): a histor
 relative to that baseline must lie within twice the
 measurement's relative 1-sigma precision, |dY_p| <= 2 x 0.003/0.245 (PDG 2024) and
 |d(D/H)| <= 2 x 0.030/2.527 (Cooke et al. 2018), observational errors only. Delta N_eff today is
-drawn against the same 2-sigma width of Planck 2018's N_eff, 2 x 0.17.
+drawn against the same 2-sigma width of Planck 2018's N_eff, 2 x 0.17. The parking temperature
+is T_J where the parking cut stops the reflections, drawn against an indicative BBN window.
 """
 
 import hashlib
@@ -38,6 +40,7 @@ ALPHA_LINE = 0.08  # the one-loop estimate at laboratory M (inelastic-reflection
 BETA_QCD = 1.1074  # the analytic QCD surfing threshold
 EW_BRACKET = (3.000, 3.005)  # where the delivery temperature jumps at laboratory M (this run)
 T_WALL_GEV = 1e-2  # a history delivered below 10 MeV has not reached the wall before BBN
+T_BBN_GEV = (2e-5, 2e-3)  # an indicative BBN window, 20 keV to 2 MeV, as in the reflection figure
 
 YP_OBS, YP_SIG = 0.245, 0.003  # PDG 2024
 DH_OBS, DH_SIG = 2.527, 0.030  # Cooke et al. 2018, in 1e-5
@@ -58,6 +61,7 @@ ROWS = [  # (column, axis label, y range, scale)
     ("dYp", r"$\Delta Y_p$ [%]", (-1.5, 12.5), "linear"),
     ("dDH", r"$\Delta(\mathrm{D/H})$ [%]", (-3.0, 23.0), "linear"),
     ("dNeff", r"$\Delta N_{\rm eff}$ today", (1e-4, 1.0), "log"),
+    ("parkT", r"$T_J$ at parking [GeV]", (1e-13, 1e3), "log"),
 ]
 
 
@@ -80,6 +84,7 @@ def load() -> pd.DataFrame:
     H["dYp"] = 100 * H.delta_Yp
     H["dDH"] = 100 * H.delta_D_over_H
     H["dNeff"] = H.Delta_N_eff_today
+    H["parkT"] = H.parking_T_GeV
     return H
 
 
@@ -105,7 +110,7 @@ def main():
     b_wall = 0.5 * (td[td < T_WALL_GEV].index.max() + td[td >= T_WALL_GEV].index.min())
     n_alpha = ok.groupby("beta").alpha.nunique()
 
-    fig = plt.figure(figsize=(9.0, 8.6))
+    fig = plt.figure(figsize=(9.0, 10.6))
     gs = fig.add_gridspec(
         len(ROWS), len(COLUMNS), width_ratios=[c[2] for c in COLUMNS], wspace=0.06, hspace=0.1
     )
@@ -128,8 +133,10 @@ def main():
             A.axvline(BETA_QCD, color="0.35", ls="--", lw=0.8, zorder=1)
             A.axvline(0.5 * sum(EW_BRACKET), color="0.35", ls="-.", lw=0.8, zorder=1)
 
-            # the observational tolerance
-            if yscale == "linear":
+            # the observational tolerance; for the parking temperature, the BBN window
+            if col not in TOL:
+                A.axhspan(*T_BBN_GEV, color="#d9ead3", zorder=0.5, lw=0)
+            elif yscale == "linear":
                 A.axhspan(-TOL[col], TOL[col], color="#c9d8e8", zorder=0.5, lw=0)
                 A.axhline(0, color="0.45", lw=0.6, ls=":")
             else:
@@ -196,6 +203,7 @@ def main():
         Line2D([], [], color="black", lw=0.9, label=rf"$\alpha = {ALPHA_LINE}$"),
         Patch(color="#c9d8e8", label=r"$\pm 2\sigma$ of the measurement, about PRyMordial + $\Lambda$CDM"),
         Line2D([], [], color="#4a6f96", ls="--", lw=1.0, label=rf"$2\sigma$ of Planck 2018's $N_{{\rm eff}}$ ({TOL['dNeff']:.2f})"),
+        Patch(color="#d9ead3", label="BBN, 2 MeV – 20 keV (indicative; parking row)"),
         Patch(color="#f3e6d0", label=rf"not at the wall before BBN ($T_{{\rm deliver}} < 10$ MeV; $\beta < {b_wall:.4g}$)"),
         Patch(color="0.93", label=rf"surfs the electroweak kick ($\beta > {EW_BRACKET[0]:.3f}$–${EW_BRACKET[1]:.3f}$)"),
         Line2D([], [], color="0.35", ls="--", lw=0.8, label=rf"analytic QCD surfing threshold $\beta = {BETA_QCD}$"),
@@ -208,7 +216,7 @@ def main():
         rf"$M = 4\times10^{{-31}}\,M_P$, $\phi_* = 5\,M_P$: shifts relative to PRyMordial + $\Lambda$CDM",
         fontsize=10, y=0.995,
     )
-    fig.subplots_adjust(bottom=0.22, top=0.95, left=0.08, right=0.99)
+    fig.subplots_adjust(bottom=0.165, top=0.955, left=0.08, right=0.99)
 
     head = git("rev-parse", "HEAD")
     # tracked files only: this script's own outputs are new files until they are committed
@@ -236,6 +244,7 @@ def main():
         "beta_wall_edge": b_wall,
         "betas_without_BBN": nobbn,
         "histories_with_yields": int(len(ok)),
+        "histories_without_parking": int(ok.parkT.isna().sum()),
         "alpha_count_by_beta": {f"{b:g}": int(n) for b, n in n_alpha.items()},
         "excluded_histories": {
             "dYp": int((ok.dYp.abs() > TOL["dYp"]).sum()),

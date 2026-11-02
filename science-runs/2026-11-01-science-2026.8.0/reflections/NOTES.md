@@ -69,3 +69,34 @@ change to `plot_by_beta.py` and a re-run on a cluster. Since the counts, the yie
 three M of this store) the parking temperatures are all independent of M, the panel shows the
 counts, which `histories.csv` already has, and this note gives the parking temperatures. The export
 is still wanted for the comparison Figure 6, which is to mark failed relativistic margins.
+
+## Restated 2026-11-02
+
+At the user's request, after the diagnostic ([`../diagnostic/NOTES.md`](../diagnostic/NOTES.md))
+found that at fixed α the dark radiation does not depend on M, so that the figure's intended claim
+("a large-M history used as a proxy mis-computes ρ_χ") was not supported as drawn. Rows 2 and 3 are
+restated; row 1 is unchanged.
+
+- **Row 2** keeps its curves and overlays the diagnostic store's α = 0.08 histories at M = 10⁻⁹,
+  10⁻⁶, 10⁻³ and 0.5 M_P (orange). They lie on the laboratory α = 0.08 curve: at the same α, every M
+  up to 10⁻³ deposits the same dark radiation (to 3×10⁻⁴ today), and 0.5 deposits 1–3% less.
+- **Row 3** replaces the reflection count with the test-field ratio 𝓡 at the first impact,
+  log₁₀ 𝓡 against M, at α = 0.08 (the history to the first impact, and so 𝓡, is the same at every
+  α): the main store's six M (circles) and the diagnostic store's four (squares). Below the line
+  𝓡 = 1 an impact is elastic and produces no particles. 𝓡 ∝ M⁻⁴ to within 0.1 in log₁₀ 𝓡 up to
+  10⁻³; it crosses 1 at M ≈ 4×10⁻¹⁶ (β = 1.2), 1.1×10⁻¹⁵ (2.0) and 2.6×10⁻¹⁵ (2.9), beside the
+  briefing notes' median M_crit, 1.2×10⁻¹⁵ (dashed; dotted, their maximum 8.2×10⁻¹³). At the
+  laboratory M, 𝓡 ≈ 10⁶⁰; at 10⁻⁶, 10⁻³⁶.
+
+**What it now says.** The field's motion and, at a given α, the dark radiation are the same at every
+M. What depends on M is whether the impacts produce particles at all. A large-M history is right to
+reflect elastically at its own mass, and so deposits no dark radiation, where the laboratory history,
+at the one-loop estimate α ≈ 0.08, ends with ρ_χ/ρ_R ≈ 0.4–0.7% (0.4–1.3% over α = 0.08–0.15). The
+proxy's error is in α, which the code takes as an input, not in the dynamics.
+
+The inputs: `extract_inputs.py` now also gathers the diagnostic store's 12 `fields.csv` (a `store`
+column says which; `inputs/fields.csv.gz` is 10.0 MB), and `inputs/histories-large-M-dissipation.csv`
+is `plot_by_beta.py`'s export of the diagnostic store by [`../run_figure_exports.sh`](../run_figure_exports.sh).
+`../fig6/inputs/histories.csv` is that script's export of the main store, which carries
+`log_R_first_impact`. The diagnostic store's sidecar has no fingerprint (it was registered after its
+run), so the provenance takes its digest from the run's status record in `../registry/runs/`.

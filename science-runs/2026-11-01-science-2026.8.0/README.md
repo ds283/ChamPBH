@@ -10,8 +10,12 @@ histories").
 
 **Figures made from it** (each folder holds its script, its inputs and a note):
 - [`fig6/`](fig6/NOTES.md): Figure 6 at the laboratory mass, with the band over α and a ΔN_eff
-  panel (2026-11-01);
-- [`reflections/`](reflections/NOTES.md): the reflection structure against M (2026-11-01).
+  panel (2026-11-01), and a parking-temperature row (2026-11-02);
+- [`reflections/`](reflections/NOTES.md): the reflection structure against M (2026-11-01), restated
+  2026-11-02 with the large-M dark radiation and 𝓡 at the first impact against M.
+
+Their inputs since 2026-11-02 are the read-only exports of
+[`run_figure_exports.sh`](run_figure_exports.sh).
 
 **After the run**, [`diagnostic/`](diagnostic/NOTES.md) (2026-11-01, `run_diagnostic_large_M.sh`):
 `histories.csv` again with the dissipation columns, and 12 dissipation-mode histories at large M in a
