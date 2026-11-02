@@ -49,7 +49,7 @@ prompts landed, with these four open and none assigned; one of them closed as me
 2026-11-02, §1.19, from the diagnosis of the 2026.8.0 run's m_eff² failures, `.documents/post-reflection-step-2026-11-02/`,
 and assigned the same day to `reflection-restart`, §1.21); none on the `reflection-restart` board (planned
 2026-11-02, with none opened and that one assigned); 5 on the `quanta-diagnostics` board (planned
-2026-11-02 from a scoping session the same day, `prompts/quanta-diagnostics/source/`; three opened by
+2026-11-02 from a scoping session the same day, `prompts/one-loop-drain/source/`; three opened by
 the planner, one of them narrowed and two more opened the same day from the drain probe, §1.22).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
@@ -75,7 +75,7 @@ the two disagree, the board is right.
 [`jordan-normalization`](../prompts/jordan-normalization/IMPLEMENTATION_STATE.md) ·
 [`tuning-followups`](../prompts/tuning-followups/IMPLEMENTATION_STATE.md) ·
 [`inelastic-reflection`](../prompts/inelastic-reflection/IMPLEMENTATION_STATE.md) ·
-[`quanta-diagnostics`](../prompts/quanta-diagnostics/IMPLEMENTATION_STATE.md)
+[`one-loop-drain`](../prompts/one-loop-drain/IMPLEMENTATION_STATE.md)
 
 ## 1. Open, by owning board
 
@@ -354,7 +354,7 @@ rules and give a verdict on the run. One issue assigned at planning, from the `i
   crosses φ = 0; the run's 42 m_eff² failures at M = 10⁻¹⁵–10⁻¹²; silent cases not excluded; fixes measured, store
   audited, fix ruled after. *(`inelastic-reflection`; after the close, 2026-11-02; assigned 2026-11-02)*
 
-### 1.22 `quanta-diagnostics` — [board §3](../prompts/quanta-diagnostics/IMPLEMENTATION_STATE.md)
+### 1.22 `quanta-diagnostics` — [board §3](../prompts/one-loop-drain/IMPLEMENTATION_STATE.md)
 
 Planned 2026-11-02 to store and measure what the run discards about the produced quanta. Three opened by
 the planner, from the scoping session of that day; two opened the same day from the drain probe
