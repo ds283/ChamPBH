@@ -1,10 +1,10 @@
 {
   "script": "reflections.py",
-  "script_sha256": "f77ac61f9d21950887a2b92f9415909858c5f3439aa61d24d71e19dc3758e84b",
-  "git_head": "b2464403a3a1953f2b221428ec9ee33800f2d6a5",
+  "script_sha256": "144842e426209b98da0fe759c8745e72376ee2d34bb4a5dc347550ab8562940c",
+  "git_head": "db43ac0ef7f8e6ad012e9bd32eeab8751bad2eb4",
   "git_dirty": false,
   "inputs": {
-    "inputs/fields.csv.gz": "4febbf5cc68f85c47c0a437627843898821c3c20c7d3251032b893ddc5a132d4",
+    "inputs/fields.csv.gz": "41c59e85ce8ad357b5d9b5578bc7fe4e3427d03e2dbc34fd7b8385caca37aead",
     "../fig6/inputs/histories.csv": "4eac33576244402b11ef7c7b891b26087ef86c32899eedd15f2e8d8cfa9ad957",
     "inputs/histories-large-M-dissipation.csv": "8d306dac77db1d171a8379ebc9721d6e5a0d27c6418a7b5fc8aba22f37fc1ea4"
   },
@@ -69,6 +69,26 @@
       "1e-06": -34.36939753046762,
       "0.001": -46.48403678541442,
       "0.5": -58.52385106879622
+    }
+  },
+  "rho_chi_ratio_vs_laboratory_minus_1_at_end_alpha_0.08": {
+    "beta=1.2": {
+      "1e-09": -4.0400149340369396e-06,
+      "1e-06": -2.565690647049479e-06,
+      "0.001": -0.0004798745105467628,
+      "0.5": -0.011124886074953544
+    },
+    "beta=2": {
+      "1e-09": 6.4992542458952585e-09,
+      "1e-06": -4.5160617379025325e-07,
+      "0.001": -0.00016160750620619613,
+      "0.5": -0.022966948599490555
+    },
+    "beta=2.9": {
+      "1e-09": -4.304202882998709e-09,
+      "1e-06": -8.492353323896751e-07,
+      "0.001": -0.0001272028105936407,
+      "0.5": -0.03170047080232996
     }
   }
 }
