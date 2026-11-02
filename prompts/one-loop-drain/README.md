@@ -571,7 +571,8 @@ in its own module, 05); P5 (G and the overlap only); P7–P9 (§8.3); P11 (02's 
 (06's grid, both laws); P15 (board §3); P16 (the verification document is
 `one-loop-drain-verification.md`). **Withdrawn:** P10.
 
-**For the user to rule now (U8–U12):**
+**For the user to rule now (U8–U12).** **Ruled by the user, 2026-11-02, all as proposed:** "U8 - agree; U9 - yes,
+keep it; U10 - 0.99 is OK; U11 - OK; U12: OK". The table below is the proposal as it was put.
 
 | | Proposed | Alternatives |
 |---|---|---|

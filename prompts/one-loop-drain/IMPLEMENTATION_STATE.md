@@ -1,12 +1,12 @@
 # one-loop-drain campaign — implementation state
 
-**Last updated:** 2026-11-02 · **Status: PLANNED — 0 of 8 landed; U8–U12 open for the user.** Planned
+**Last updated:** 2026-11-02 · **Status: PLANNED — 0 of 8 landed.** Planned
 2026-11-02 as `quanta-diagnostics` at the user's request, after a scoping session the same day
 ([`source/scoping_2026-11-02.md`](source/scoping_2026-11-02.md)); U1–U7 and P1–P16 ruled the same day,
 all as proposed (README §6). **Re-planned the same day around the drain law and renamed `one-loop-drain`**
 (branch and folder), at the user's rulings of README §6.3, after the premise was corrected
 ([`source/margins-correction_2026-11-02.md`](source/margins-correction_2026-11-02.md)) and a one-loop drain
-probed ([`source/drain-probe_2026-11-02.md`](source/drain-probe_2026-11-02.md)). **README §8 is the plan.**
+probed ([`source/drain-probe_2026-11-02.md`](source/drain-probe_2026-11-02.md)). **README §8 is the plan;** U8–U12 ruled the same day, all as proposed (README §8.6).
 The branch was cut from `reflection-restart` at `3b8a553`. Under U1 as extended by ruling 6, no prompt is
 written until `reflection-restart` 04 has landed and been merged here; under U2, the rebuild of record
 waits for this campaign's 08.
@@ -35,7 +35,7 @@ The plan as first ruled had seven prompts (README §2), none written; the re-pla
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | The drain law | the law and A as inputs; the regime in the loop; α_eff by regime; the gap prescription as a module attribute; the `"drain"` payload key; the tool route's options; the 3873 failure | Opus | ⏸ U8–U12; `reflection-restart` 04 | ⬜ | | |
+| 01 | The drain law | the law and A as inputs; the regime in the loop; α_eff by regime; the gap prescription as a module attribute; the `"drain"` payload key; the tool route's options; the 3873 failure | Opus | ⏸ `reflection-restart` 04 | ⬜ | | |
 | 02 | Measure the law | about forty histories by the tool route, re-tuned, at three A and both gap prescriptions; then U13–U14 | Opus | ⬜ | ⬜ | | |
 | 03 | The store | the keys, `ScalarHistoryBounce`, the sample and history columns, the gap prescription fixed, `FINGERPRINT_FORMAT` 7, `VERSION_LABEL` | Opus | ⬜ | ⬜ | | |
 | 04 | Drivers and exports | the law's options in `main.py` and the plot scripts; `histories.csv`, `fields.csv`, `bounces.csv` | Sonnet | ⬜ | ⬜ | | |
