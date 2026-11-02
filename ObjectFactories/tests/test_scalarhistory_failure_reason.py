@@ -64,7 +64,7 @@ def _model(compute_result):
     """An unpopulated ScalarHistory on the stand-ins, with store() about to resolve compute_result."""
     model = SM.ScalarHistory(
         payload=None,
-        solver_labels={"Radau+kinematic-cap-stepping0": NS(store_id=1)},
+        solver_labels={"Radau+kinematic-cap-stepping1": NS(store_id=1)},
         cosmology=_cosmology,
         T_Jordan_init=_T_init,
         phi_Einstein_init=_phi,
@@ -147,7 +147,7 @@ class TestFailureReasonRoundTrip(_TempStoreCase):
         _insert(
             store,
             "IntegrationSolver",
-            dict(serial=1, label="Radau+kinematic-cap-stepping0", stepping=0),
+            dict(serial=1, label="Radau+kinematic-cap-stepping1", stepping=1),
         )
 
         model = SM.ScalarHistory(
@@ -183,7 +183,7 @@ class TestFailureReasonRoundTrip(_TempStoreCase):
         got = store.object_get(
             "ScalarHistory",
             **_scalar_history_query(
-                failure=False, solver_labels=["Radau+kinematic-cap-stepping0"]
+                failure=False, solver_labels=["Radau+kinematic-cap-stepping1"]
             ),
         )
         self.assertTrue(got.available)

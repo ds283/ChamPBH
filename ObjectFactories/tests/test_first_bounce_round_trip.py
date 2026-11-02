@@ -60,7 +60,7 @@ from Units import Planck_units
 
 SM = kcl.SM
 
-STEPPER = "Radau+kinematic-cap-stepping0"
+STEPPER = "Radau+kinematic-cap-stepping1"
 
 _units = Planck_units()
 
@@ -175,7 +175,7 @@ class TestFirstBounceRoundTrip(_TempStoreCase):
         store = self.open(LABEL_A)
         for serial, log10_tol in ((14, -10.0), (15, -8.0)):
             _insert(store, "tolerance", dict(serial=serial, log10_tol=log10_tol))
-        _insert(store, "IntegrationSolver", dict(serial=1, label=STEPPER, stepping=0))
+        _insert(store, "IntegrationSolver", dict(serial=1, label=STEPPER, stepping=1))
         return store
 
     def _raw_columns(self, store):

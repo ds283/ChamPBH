@@ -1017,6 +1017,7 @@ def execute(pool, units: UnitsLike):
         solve_ivp_BDF,
         solve_icp_LSODA,
         Radau_kinematic_cap,
+        Radau_kinematic_cap_stepping1,
     ) = ray.get(
         [
             pool.object_get("IntegrationSolver", label="solve_ivp+RK45", stepping=0),
@@ -1027,6 +1028,11 @@ def execute(pool, units: UnitsLike):
             pool.object_get(
                 "IntegrationSolver", label="Radau+kinematic-cap", stepping=0
             ),
+            # the stepper since reflection-restart prompt 03 (F3 and the guard at a restart with
+            # pi > 0); stepping 0 stays registered, as the older labels do
+            pool.object_get(
+                "IntegrationSolver", label="Radau+kinematic-cap", stepping=1
+            ),
         ]
     )
     solvers = {
@@ -1036,6 +1042,7 @@ def execute(pool, units: UnitsLike):
         "solve_ivp+BDF-stepping0": solve_ivp_BDF,
         "solve_ivp+LSODA-stepping0": solve_icp_LSODA,
         "Radau+kinematic-cap-stepping0": Radau_kinematic_cap,
+        "Radau+kinematic-cap-stepping1": Radau_kinematic_cap_stepping1,
     }
 
     # the sampling axis on which the scalar field histories are stored: ln(1 + z_E) = k * DELTA,

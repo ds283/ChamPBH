@@ -143,7 +143,7 @@ class _TunedStoreCase(_TempStoreCase):
         units = self.units
 
         get = self.store.object_get
-        self.solver = get("IntegrationSolver", label="Radau+kinematic-cap", stepping=0)
+        self.solver = get("IntegrationSolver", label="Radau+kinematic-cap", stepping=1)
         self.solvers = {SCALAR_HISTORY_STEPPER_LABEL: self.solver}
         self.atol = get("tolerance", tol=gt.ATOL)
         self.rtol = get("tolerance", tol=gt.RTOL)

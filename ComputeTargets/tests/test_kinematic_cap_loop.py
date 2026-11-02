@@ -415,7 +415,7 @@ class TestStoredMetadataAndLabel(unittest.TestCase):
 
     def test_g_stepper_label_registered_in_the_scripts(self):
         self.assertEqual(
-            SM.SCALAR_HISTORY_STEPPER_LABEL, "Radau+kinematic-cap-stepping0"
+            SM.SCALAR_HISTORY_STEPPER_LABEL, "Radau+kinematic-cap-stepping1"
         )
         for script in ("main.py", "plot_by_beta.py", "plot_ScalarHistory.py"):
             with open(os.path.join(REPO_ROOT, script)) as f:
@@ -425,7 +425,7 @@ class TestStoredMetadataAndLabel(unittest.TestCase):
                 for node in ast.walk(tree)
                 if isinstance(node, ast.Constant) and isinstance(node.value, str)
             }
-            self.assertIn("Radau+kinematic-cap-stepping0", strings, script)
+            self.assertIn("Radau+kinematic-cap-stepping1", strings, script)
             if script == "main.py":
                 self.assertIn("Radau+kinematic-cap", strings, script)
 

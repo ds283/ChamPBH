@@ -1,0 +1,84 @@
+golden_history_05.json -> golden_history_rr03.json
+  beta=1.5: RHS_evaluations: equal
+  beta=1.5: accepted_steps: equal
+  beta=1.5: cap_floor: equal
+  beta=1.5: cap_fraction: equal
+  beta=1.5: cap_global_max_step: equal
+  beta=1.5: compute_steps: equal
+  beta=1.5: first_bounce: equal
+  beta=1.5: fixed_T_values: equal
+  beta=1.5: jacobian_factor_max: equal
+  beta=1.5: largest_RHS_values: equal
+  beta=1.5: log_one_plus_z_sha256: equal
+  beta=1.5: mean_RHS_values: equal
+  beta=1.5: n_samples: equal
+  beta=1.5: reflections: equal
+  beta=1.5: restart_retakes: added, 0 (allowed)
+  beta=1.5: sample_fields: equal
+  beta=1.5: samples_sha256: equal
+  beta=1.5: smallest_RHS_values: equal
+  beta=1.5: solver_label: 'Radau+kinematic-cap-stepping0' -> 'Radau+kinematic-cap-stepping1' (allowed)
+  beta=1.5: steps_rejected_by_exception: equal
+  beta=1.5: excerpts: 12 samples, 216 fields, all equal
+  beta=5.5: RHS_evaluations: equal
+  beta=5.5: accepted_steps: equal
+  beta=5.5: cap_floor: equal
+  beta=5.5: cap_fraction: equal
+  beta=5.5: cap_global_max_step: equal
+  beta=5.5: compute_steps: equal
+  beta=5.5: first_bounce: equal
+  beta=5.5: fixed_T_values: equal
+  beta=5.5: jacobian_factor_max: equal
+  beta=5.5: largest_RHS_values: equal
+  beta=5.5: log_one_plus_z_sha256: equal
+  beta=5.5: mean_RHS_values: equal
+  beta=5.5: n_samples: equal
+  beta=5.5: reflections: equal
+  beta=5.5: restart_retakes: added, 0 (allowed)
+  beta=5.5: sample_fields: equal
+  beta=5.5: samples_sha256: equal
+  beta=5.5: smallest_RHS_values: equal
+  beta=5.5: solver_label: 'Radau+kinematic-cap-stepping0' -> 'Radau+kinematic-cap-stepping1' (allowed)
+  beta=5.5: steps_rejected_by_exception: equal
+  beta=5.5: excerpts: 21 samples, 378 fields, all equal
+
+golden_history_06_tuned.json -> golden_history_rr03_tuned.json
+  history: RHS_evaluations: equal
+  history: accepted_steps: equal
+  history: cap_floor: equal
+  history: cap_fraction: equal
+  history: cap_global_max_step: equal
+  history: compute_steps: equal
+  history: first_bounce: equal
+  history: fixed_T_values: equal
+  history: jacobian_factor_max: equal
+  history: largest_RHS_values: equal
+  history: log_one_plus_z_sha256: equal
+  history: mean_RHS_values: equal
+  history: n_samples: equal
+  history: reflections: equal
+  history: restart_retakes: added, 0 (allowed)
+  history: sample_fields: equal
+  history: samples_sha256: equal
+  history: smallest_RHS_values: equal
+  history: solver_label: 'Radau+kinematic-cap-stepping0' -> 'Radau+kinematic-cap-stepping1' (allowed)
+  history: steps_rejected_by_exception: equal
+  history: excerpts: 25 samples, 450 fields, all equal
+  tuning: V_ref: equal
+  tuning: guard_steps: equal
+  tuning: normalization: equal
+  tuning: phi_0: equal
+  tuning: phi_ref: equal
+  tuning: pi_0: equal
+  tuning: plain_steps: equal
+  tuning: residual_H: equal
+  tuning: residual_phi: equal
+  tuning: secant_steps: equal
+  tuning: seed_kind: equal
+  tuning: seed_normalization: equal
+  tuning: seed_phi_ref: equal
+  tuning: tracking: equal
+  tuning: tuning_iterations: equal
+
+differences not allowed: 0
+RESULT: EQUAL but for the two allowed

@@ -47,12 +47,16 @@ opened two, 2026-11-01, §1.19; prompt 12 opened and closed none, and the campai
 prompts landed, with these four open and none assigned; one of them closed as measured, 2026-11-01, with
 `science-readiness`'s last, both from one measurement, `.documents/bbn-ratio-spline-2026-11-01/`; one opened after the close,
 2026-11-02, §1.19, from the diagnosis of the 2026.8.0 run's m_eff² failures, `.documents/post-reflection-step-2026-11-02/`,
-and assigned the same day to `reflection-restart`, §1.21); none on the `reflection-restart` board (planned
-2026-11-02, with none opened and that one assigned; one more assigned from `one-loop-drain` the same day,
-§1.21); 5 on the `one-loop-drain` board (planned 2026-11-02 as `quanta-diagnostics` from a scoping session
+and assigned the same day to `reflection-restart`, §1.21); 1 on the `reflection-restart` board (planned
+2026-11-02, with none opened and that one assigned; prompt 01 opened one, 2026-11-02, closed the same day by
+the user's ruling of the signature; re-planned the same day, its audit withdrawn; one more assigned the same day
+from the `one-loop-drain` board, planned on its own branch, §1.21; prompt 04 closed the first assigned issue,
+narrowed the second and opened one, §1.22, and the campaign closed 2026-11-02, 3 of 3 prompts landed, 02 withdrawn,
+with that one open and the second assigned issue still listed in §1.21); 5 on the `one-loop-drain` board (planned
+2026-11-02 as `quanta-diagnostics` from a scoping session
 the same day, `prompts/one-loop-drain/source/`; three opened by the planner, one of them narrowed and two
 more opened the same day from the drain probe; re-planned and renamed the same day, when one of those was
-split in two and one half assigned to `reflection-restart`, §1.21, the rest §1.22).
+split in two and one half assigned to `reflection-restart`, §1.21, the rest §1.23).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -348,18 +352,26 @@ on 2026-10-31. None is assigned now, and the campaign closed on 2026-11-01.
 
 ### 1.21 Assigned to `reflection-restart` — [its board](../prompts/reflection-restart/IMPLEMENTATION_STATE.md) §3.1
 
-Planned 2026-11-02 to measure the proposed fixes, audit the 2026.8.0 store, implement the fix the user
-rules and give a verdict on the run. One issue assigned at planning, from the `inelastic-reflection` board.
+Planned 2026-11-02 to measure the proposed fixes, implement the fix the user rules and hand over to a
+rebuild of the whole store (re-planned after its 01: the audit withdrawn, since `quanta-diagnostics`
+rebuilds everything). One issue assigned at planning, from the `inelastic-reflection` board.
+*(2026-11-02: one more assigned from the `one-loop-drain` board. Prompt 04 closed the first, board §4, and
+narrowed the second, which stays here until the user rules its destination; the campaign closed the same day.)*
 
-- `[run-2026.8.0-an-uncapped-outward-step-after-a-reflection-crosses-the-wall]` — after a late floor
-  reflection the kinematic cap can fall back to 0.1 outward, and Radau accepts a wrong step whose interpolant
-  crosses φ = 0; the run's 42 m_eff² failures at M = 10⁻¹⁵–10⁻¹²; silent cases not excluded; fixes measured, store
-  audited, fix ruled after. *(`inelastic-reflection`; after the close, 2026-11-02; assigned 2026-11-02)*
-- `[00-fixed-alpha-laboratory-M-histories-fail-in-classical-turning-point]` — 2197 and 2188 at α = 10⁻³ fail in
-  `classical_turning_point` on `2d50b95` (ln E = −306.7), though both completed on `0209aac`; is it 03's F3?
-  *(`one-loop-drain`; drain probe, 2026-11-02; assigned 2026-11-02)*
+- `[00-fixed-alpha-laboratory-M-histories-fail-in-classical-turning-point]` — the wall search cannot find a root
+  below 17 quanta of ln V's rounding and raises "not monotone"; met at an infall's first step start near an apex; F3
+  moves 2197 and 2188 onto it (roots 1.5 quanta), the store's nine show it before 03; proposed for `one-loop-drain` 01,
+  for the user to rule. *(`one-loop-drain`; drain probe, 2026-11-02; assigned 2026-11-02; narrowed 2026-11-02)*
 
-### 1.22 `one-loop-drain` — [board §3](../prompts/one-loop-drain/IMPLEMENTATION_STATE.md)
+### 1.22 `reflection-restart` — [board §3](../prompts/reflection-restart/IMPLEMENTATION_STATE.md)
+
+Planned 2026-11-02; closed 2026-11-02. One opened by prompt 04, from the 42 recomputed.
+
+- `[04-a-recomputed-history-does-not-find-the-effective-minimum]` — 4389 (β = 1.13, M = 10⁻¹², α = 0.01), one of
+  the 42, recomputed on the fixed tree passes its m_eff² failure and fails after its seed integration, "the effective
+  minimum was not found", above the surfing threshold; not diagnosed. *(`reflection-restart`; prompt 04)*
+
+### 1.23 `one-loop-drain` — [board §3](../prompts/one-loop-drain/IMPLEMENTATION_STATE.md)
 
 Planned 2026-11-02 as `quanta-diagnostics`, to store and measure what the run discards about the produced
 quanta; re-planned and renamed the same day around a one-loop drain law. Three opened by the planner, from

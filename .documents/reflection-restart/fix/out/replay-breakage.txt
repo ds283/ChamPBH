@@ -1,0 +1,76 @@
+replay: var/reflection-restart/03/breakage/replay-F3-halved.jsonl, 1 lines; 01's F3 lines: 66
+fields compared: outcome, samples_sha256, log_one_plus_z_sha256, n_samples, accepted_steps, RHS_evaluations, compute_steps, reflections; the store comparison (store tasks); the golden hook (goldens); restart_retakes; the signature
+
+kind	outcome	accepted_steps	restart_retakes	signature kept	signature discarded	verdict	key
+tuned	success	7183	0	0	0	DIFFERS: samples_sha256: 'bf02ddccb6c7e6d8c982a3ab9450849c7b355dbcd6bb8e76faa330361c680981' -> '5105444010af00c10926d8da96cf969ec622fbfda063041fdec497a5700ece75'; RHS_evaluations: 52403 -> 52394; compute_steps: 52403 -> 52394	beta=1.5 M=1e-12 alpha=0.05 tuned
+
+tuned: 0 of 1 equal in every field
+tasks of 01's F3 not in the replay: 65
+  beta=1.09 M=1e-12 alpha=0.08 tuned
+  beta=1.09 M=1e-15 alpha=0.03 tuned
+  beta=1.14 M=1e-15 alpha=0.01 tuned
+  beta=1.2 M=0.001 alpha=0.0 store=science-2026.8.0-reflections-shard0015.db#53
+  beta=1.2 M=0.5 alpha=0.0 store=science-2026.8.0-reflections-shard0015.db#54
+  beta=1.2 M=1e-12 alpha=0.001 store=science-2026.8.0-reflections-shard0015.db#12
+  beta=1.2 M=1e-12 alpha=0.01 store=science-2026.8.0-reflections-shard0015.db#7
+  beta=1.2 M=1e-12 alpha=0.08 store=science-2026.8.0-reflections-shard0015.db#4
+  beta=1.2 M=1e-12 alpha=0.15 store=science-2026.8.0-reflections-shard0015.db#3
+  beta=1.2 M=1e-15 alpha=0.001 store=science-2026.8.0-reflections-shard0015.db#11
+  beta=1.2 M=1e-15 alpha=0.01 store=science-2026.8.0-reflections-shard0015.db#9
+  beta=1.2 M=1e-15 alpha=0.03 tuned
+  beta=1.2 M=1e-15 alpha=0.08 store=science-2026.8.0-reflections-shard0015.db#6
+  beta=1.2 M=1e-15 alpha=0.15 store=science-2026.8.0-reflections-shard0015.db#2
+  beta=1.2 M=1e-30 alpha=0.01 store=science-2026.8.0-shard0011.db#2821
+  beta=1.2 M=1e-30 alpha=0.08 store=science-2026.8.0-shard0011.db#2501
+  beta=1.2 M=1e-33 alpha=0.01 store=science-2026.8.0-shard0011.db#2819
+  beta=1.2 M=1e-33 alpha=0.08 store=science-2026.8.0-shard0011.db#2500
+  beta=1.2 M=4e-31 alpha=0.001 store=science-2026.8.0-reflections-shard0015.db#10
+  beta=1.2 M=4e-31 alpha=0.01 store=science-2026.8.0-reflections-shard0015.db#8
+  beta=1.2 M=4e-31 alpha=0.08 store=science-2026.8.0-reflections-shard0015.db#5
+  beta=1.2 M=4e-31 alpha=0.08 tuned
+  beta=1.2 M=4e-31 alpha=0.15 store=science-2026.8.0-reflections-shard0015.db#1
+  beta=1.5 M=0.001 alpha=0.0 fixed golden=beta=1.5
+  beta=1.5 M=1e-12 alpha=0.02 tuned
+  beta=1.5 M=1e-12 alpha=0.15 tuned
+  beta=1.5 M=4e-31 alpha=0.08 tuned
+  beta=2.0 M=0.001 alpha=0.0 store=science-2026.8.0-reflections-shard0000.db#74
+  beta=2.0 M=0.5 alpha=0.0 store=science-2026.8.0-reflections-shard0000.db#73
+  beta=2.0 M=1e-12 alpha=0.001 store=science-2026.8.0-reflections-shard0000.db#32
+  beta=2.0 M=1e-12 alpha=0.01 store=science-2026.8.0-reflections-shard0000.db#27
+  beta=2.0 M=1e-12 alpha=0.08 store=science-2026.8.0-reflections-shard0000.db#25
+  beta=2.0 M=1e-12 alpha=0.15 store=science-2026.8.0-reflections-shard0000.db#23
+  beta=2.0 M=1e-15 alpha=0.001 store=science-2026.8.0-reflections-shard0000.db#31
+  beta=2.0 M=1e-15 alpha=0.01 store=science-2026.8.0-reflections-shard0000.db#28
+  beta=2.0 M=1e-15 alpha=0.08 store=science-2026.8.0-reflections-shard0000.db#24
+  beta=2.0 M=1e-15 alpha=0.15 store=science-2026.8.0-reflections-shard0000.db#21
+  beta=2.0 M=1e-30 alpha=0.01 store=science-2026.8.0-shard0002.db#2498
+  beta=2.0 M=1e-30 alpha=0.08 store=science-2026.8.0-shard0002.db#2603
+  beta=2.0 M=1e-33 alpha=0.01 store=science-2026.8.0-shard0002.db#2496
+  beta=2.0 M=1e-33 alpha=0.08 store=science-2026.8.0-shard0002.db#2335
+  beta=2.0 M=4e-31 alpha=0.001 store=science-2026.8.0-reflections-shard0000.db#30
+  beta=2.0 M=4e-31 alpha=0.01 store=science-2026.8.0-reflections-shard0000.db#29
+  beta=2.0 M=4e-31 alpha=0.08 store=science-2026.8.0-reflections-shard0000.db#26
+  beta=2.0 M=4e-31 alpha=0.15 store=science-2026.8.0-reflections-shard0000.db#22
+  beta=2.9 M=0.001 alpha=0.0 store=science-2026.8.0-reflections-shard0001.db#93
+  beta=2.9 M=0.5 alpha=0.0 store=science-2026.8.0-reflections-shard0001.db#94
+  beta=2.9 M=1e-12 alpha=0.001 store=science-2026.8.0-reflections-shard0001.db#52
+  beta=2.9 M=1e-12 alpha=0.01 store=science-2026.8.0-reflections-shard0001.db#49
+  beta=2.9 M=1e-12 alpha=0.08 store=science-2026.8.0-reflections-shard0001.db#46
+  beta=2.9 M=1e-12 alpha=0.15 store=science-2026.8.0-reflections-shard0001.db#42
+  beta=2.9 M=1e-15 alpha=0.001 store=science-2026.8.0-reflections-shard0001.db#51
+  beta=2.9 M=1e-15 alpha=0.01 store=science-2026.8.0-reflections-shard0001.db#48
+  beta=2.9 M=1e-15 alpha=0.08 store=science-2026.8.0-reflections-shard0001.db#45
+  beta=2.9 M=1e-15 alpha=0.15 store=science-2026.8.0-reflections-shard0001.db#43
+  beta=2.9 M=1e-30 alpha=0.01 store=science-2026.8.0-shard0015.db#2823
+  beta=2.9 M=1e-30 alpha=0.08 store=science-2026.8.0-shard0015.db#2690
+  beta=2.9 M=1e-33 alpha=0.01 store=science-2026.8.0-shard0015.db#2584
+  beta=2.9 M=1e-33 alpha=0.08 store=science-2026.8.0-shard0015.db#2359
+  beta=2.9 M=4e-31 alpha=0.001 store=science-2026.8.0-reflections-shard0001.db#50
+  beta=2.9 M=4e-31 alpha=0.01 store=science-2026.8.0-reflections-shard0001.db#47
+  beta=2.9 M=4e-31 alpha=0.08 store=science-2026.8.0-reflections-shard0001.db#44
+  beta=2.9 M=4e-31 alpha=0.15 store=science-2026.8.0-reflections-shard0001.db#41
+  beta=3.0 M=0.01 alpha=0.0 tuned golden=tuned
+  beta=5.5 M=0.001 alpha=0.0 fixed golden=beta=5.5
+signature steps over the replay: kept 0, discarded 0
+restart_retakes over the replay: 0
+RESULT: DIFFERENT (0 of 1 tasks equal)

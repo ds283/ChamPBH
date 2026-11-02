@@ -1,0 +1,278 @@
+ComputeTargets.ScalarHistory.__file__ = /private/tmp/claude-35086/-Users-ds283-Documents-Code-ChamPBH/c6cd2499-1308-40be-afb5-d0b8f2a91bfe/scratchpad/rr04/wt-89a0760/ComputeTargets/ScalarHistory.py
+tools.outward_step_scan.__file__ = /private/tmp/claude-35086/-Users-ds283-Documents-Code-ChamPBH/c6cd2499-1308-40be-afb5-d0b8f2a91bfe/scratchpad/rr04/wt-89a0760/tools/outward_step_scan.py
+tree: /private/tmp/claude-35086/-Users-ds283-Documents-Code-ChamPBH/c6cd2499-1308-40be-afb5-d0b8f2a91bfe/scratchpad/rr04/wt-89a0760 at 89a0760a952f7e0aca1e26abcbbfb68ea74856bc; tracked changes: none
+WALL_ROUNDING_QUANTA = 16, WALL_SEARCH_HALVINGS = 4, WALL_SEARCH_MAX_DOUBLINGS = 64
+== 2197 (beta 1.185, the probe): phi = 2.950090845531173e-07 (2.95009e-07 M_P), log_E = -306.7166549210319, normalization = -276.63072859401797
+   call time 0.25 ms; raises: True
+   message: classical_turning_point (ExponentialModel(M=0.00097413eV,n=1,beta=1.185), normalization = -276.63072859401797, phi = 2.950090845531173e-07, log_E = -306.7166549210319): the searched quantity is not monotone along the search (a midpoint of the bracket [-42.28625968598544, -42.34875968598544] is not between its ends); probes (ln phi, residual) from the start: (ln phi = -15.036259685985438, -inf), (ln phi = -16.036259685985438, -inf), (ln phi = -18.036259685985438, -inf), (ln phi = -22.036259685985438, -inf), (ln phi = -30.036259685985438, -inf), (ln phi = -46.036259685985442, 6.1284803815859163), (ln phi = -38.036259685985442, -inf), (ln phi = -42.036259685985442, -inf), (ln phi = -44.036259685985442, 4.1307451646489994), (ln phi = -43.036259685985442, 3.1138109069934217), (ln phi = -42.536259685985442, 2.6319728201003159), (ln phi = -42.286259685985442, -inf), (ln phi = -42.411259685985442, 2.4778221402729628), (ln phi = -42.348759685985442, 2.4206637264330197), (ln phi = -42.317509685985442, 2.4206637264330197)
+   equal to the probe's printed message: True
+   root: ln V - ln V_floor = ln(1 + E/V_floor) = 8.58713e-14; ulp = 5.68434e-14; margin = 1.5107 quanta (WALL_ROUNDING_QUANTA = 16; within K + 1 = 17: True)
+   15 probes, decoded (ln phi, residual, ln V - ln V_floor in quanta):
+     ln phi = -15.036259685985438  residual =                   -inf  quanta = 0.0000
+     ln phi = -16.036259685985438  residual =                   -inf  quanta = 0.0000
+     ln phi = -18.036259685985438  residual =                   -inf  quanta = 0.0000
+     ln phi = -22.036259685985438  residual =                   -inf  quanta = 0.0000
+     ln phi = -30.036259685985438  residual =                   -inf  quanta = 0.0000
+     ln phi = -46.036259685985442  residual =      6.128480381585916  quanta = 693.0000
+     ln phi = -38.036259685985442  residual =                   -inf  quanta = 0.0000
+     ln phi = -42.036259685985442  residual =                   -inf  quanta = 13.0000
+     ln phi = -44.036259685985442  residual =      4.130745164648999  quanta = 94.0000
+     ln phi = -43.036259685985442  residual =     3.1138109069934217  quanta = 34.0000
+     ln phi = -42.536259685985442  residual =      2.631972820100316  quanta = 21.0000
+     ln phi = -42.286259685985442  residual =                   -inf  quanta = 16.0000
+     ln phi = -42.411259685985442  residual =     2.4778221402729628  quanta = 18.0000
+     ln phi = -42.348759685985442  residual =     2.4206637264330197  quanta = 17.0000
+     ln phi = -42.317509685985442  residual =     2.4206637264330197  quanta = 17.0000
+   the raise's bracket width 0.0625 = 2^-4.000 e-folds; its midpoint is 2^-5.000 from each end; 07b's derivation orders probes 2^-4 apart
+== 2188 (beta 1.06, the probe): phi = 2.647733963294608e-07 (2.64773e-07 M_P), log_E = -306.6698578858307, normalization = -276.63072859401797
+   call time 0.10 ms; raises: True
+   message: classical_turning_point (ExponentialModel(M=0.00097413eV,n=1,beta=1.06), normalization = -276.63072859401797, phi = 2.647733963294608e-07, log_E = -306.6698578858307): the searched quantity is not monotone along the search (a midpoint of the bracket [-42.269391484964466, -42.331891484964466] is not between its ends); probes (ln phi, residual) from the start: (ln phi = -15.144391484964467, -inf), (ln phi = -16.144391484964466, -inf), (ln phi = -18.144391484964466, -inf), (ln phi = -22.144391484964466, -inf), (ln phi = -30.144391484964466, -inf), (ln phi = -46.144391484964466, 6.1896378972218713), (ln phi = -38.144391484964466, -inf), (ln phi = -42.144391484964466, -inf), (ln phi = -44.144391484964466, 4.1850442463194781), (ln phi = -43.144391484964466, 3.1782395069026279), (ln phi = -42.644391484964466, 2.676147563104962), (ln phi = -42.394391484964466, 2.4310251050717966), (ln phi = -42.269391484964466, -inf), (ln phi = -42.331891484964466, 2.3738666912318536), (ln phi = -42.300641484964466, 2.3738666912318536)
+   equal to the probe's printed message: True
+   root: ln V - ln V_floor = ln(1 + E/V_floor) = 8.99854e-14; ulp = 5.68434e-14; margin = 1.5830 quanta (WALL_ROUNDING_QUANTA = 16; within K + 1 = 17: True)
+   15 probes, decoded (ln phi, residual, ln V - ln V_floor in quanta):
+     ln phi = -15.144391484964467  residual =                   -inf  quanta = 0.0000
+     ln phi = -16.144391484964466  residual =                   -inf  quanta = 0.0000
+     ln phi = -18.144391484964466  residual =                   -inf  quanta = 0.0000
+     ln phi = -22.144391484964466  residual =                   -inf  quanta = 0.0000
+     ln phi = -30.144391484964466  residual =                   -inf  quanta = 0.0000
+     ln phi = -46.144391484964466  residual =      6.189637897221871  quanta = 772.0000
+     ln phi = -38.144391484964466  residual =                   -inf  quanta = 0.0000
+     ln phi = -42.144391484964466  residual =                   -inf  quanta = 14.0000
+     ln phi = -44.144391484964466  residual =      4.185044246319478  quanta = 104.0000
+     ln phi = -43.144391484964466  residual =      3.178239506902628  quanta = 38.0000
+     ln phi = -42.644391484964466  residual =      2.676147563104962  quanta = 23.0000
+     ln phi = -42.394391484964466  residual =     2.4310251050717966  quanta = 18.0000
+     ln phi = -42.269391484964466  residual =                   -inf  quanta = 16.0000
+     ln phi = -42.331891484964466  residual =     2.3738666912318536  quanta = 17.0000
+     ln phi = -42.300641484964466  residual =     2.3738666912318536  quanta = 17.0000
+   the raise's bracket width 0.0625 = 2^-4.000 e-folds; its midpoint is 2^-5.000 from each end; 07b's derivation orders probes 2^-4 apart
+-- shard0002#1592: stored M = 0.0009741294382105218 eV; as the tool builds it, M/M_P = 4e-31; bitwise equal: True (relative difference 0)
+== shard0002#1592 (beta 1.1775, alpha 0.001): phi = 6.143779548042237e-10 (6.14378e-10 M_P), log_E = -308.6129970063558, normalization = -276.63072859401797
+   call time 0.05 ms; raises: True
+   message: classical_turning_point (ExponentialModel(M=0.00097413eV,n=1,beta=1.1775), normalization = -276.63072859401797, phi = 6.143779548042237e-10, log_E = -308.6129970063558): the searched quantity is not monotone along the search (a midpoint of the bracket [-42.27291081559132, -42.33541081559132] is not between its ends); probes (ln phi, residual) from the start: (ln phi = -21.21041081559132, -inf), (ln phi = -22.21041081559132, -inf), (ln phi = -24.21041081559132, -inf), (ln phi = -28.21041081559132, -inf), (ln phi = -36.210410815591317, -inf), (ln phi = -52.210410815591317, 14.1988370293804), (ln phi = -44.210410815591317, 6.2022913389985206), (ln phi = -40.210410815591317, -inf), (ln phi = -42.210410815591317, -inf), (ln phi = -43.210410815591317, 5.1973645344057218), (ln phi = -42.710410815591317, 4.7026682925691148), (ln phi = -42.460410815591317, 4.4282314468671871), (ln phi = -42.335410815591317, 4.3170058117569283), (ln phi = -42.272910815591317, -inf), (ln phi = -42.304160815591317, 4.3170058117569283)
+   the stored failure_reason (256 chars) is a prefix of it: True
+   root: ln V - ln V_floor = ln(1 + E/V_floor) = 1.28907e-14; ulp = 5.68434e-14; margin = 0.2268 quanta (WALL_ROUNDING_QUANTA = 16; within K + 1 = 17: True)
+   15 probes, decoded (ln phi, residual, ln V - ln V_floor in quanta):
+     ln phi = -21.21041081559132  residual =                   -inf  quanta = 0.0000
+     ln phi = -22.21041081559132  residual =                   -inf  quanta = 0.0000
+     ln phi = -24.21041081559132  residual =                   -inf  quanta = 0.0000
+     ln phi = -28.21041081559132  residual =                   -inf  quanta = 0.0000
+     ln phi = -36.210410815591317  residual =                   -inf  quanta = 0.0000
+     ln phi = -52.210410815591317  residual =       14.1988370293804  quanta = 332716.0000
+     ln phi = -44.210410815591317  residual =      6.202291338998521  quanta = 112.0000
+     ln phi = -40.210410815591317  residual =                   -inf  quanta = 2.0000
+     ln phi = -42.210410815591317  residual =                   -inf  quanta = 15.0000
+     ln phi = -43.210410815591317  residual =      5.197364534405722  quanta = 41.0000
+     ln phi = -42.710410815591317  residual =      4.702668292569115  quanta = 25.0000
+     ln phi = -42.460410815591317  residual =      4.428231446867187  quanta = 19.0000
+     ln phi = -42.335410815591317  residual =      4.317005811756928  quanta = 17.0000
+     ln phi = -42.272910815591317  residual =                   -inf  quanta = 16.0000
+     ln phi = -42.304160815591317  residual =      4.317005811756928  quanta = 17.0000
+   the raise's bracket width 0.0625 = 2^-4.000 e-folds; its midpoint is 2^-5.000 from each end; 07b's derivation orders probes 2^-4 apart
+-- shard0003#2208: stored M = 0.0009741294382105218 eV; as the tool builds it, M/M_P = 4e-31; bitwise equal: True (relative difference 0)
+== shard0003#2208 (beta 1.18, alpha 0.001): phi = 6.242270073944803e-10 (6.24227e-10 M_P), log_E = -309.37538319488175, normalization = -276.63072859401797
+   call time 0.05 ms; raises: True
+   message: classical_turning_point (ExponentialModel(M=0.00097413eV,n=1,beta=1.18), normalization = -276.63072859401797, phi = 6.242270073944803e-10, log_E = -309.37538319488175): the searched quantity is not monotone along the search (a midpoint of the bracket [-42.288257019814665, -42.319507019814665] is not between its ends); probes (ln phi, residual) from the start: (ln phi = -21.194507019814665, -inf), (ln phi = -22.194507019814665, -inf), (ln phi = -24.194507019814665, -inf), (ln phi = -28.194507019814665, -inf), (ln phi = -36.194507019814665, -inf), (ln phi = -52.194507019814665, 14.945318177407557), (ln phi = -44.194507019814665, 6.9466590220217199), (ln phi = -40.194507019814665, -inf), (ln phi = -42.194507019814665, -inf), (ln phi = -43.194507019814665, 5.9350581103412878), (ln phi = -42.694507019814665, 5.4650544810950805), (ln phi = -42.444507019814665, 5.1906176353931528), (ln phi = -42.319507019814665, 5.0793920002828941), (ln phi = -42.257007019814665, -inf), (ln phi = -42.288257019814665, -inf), (ln phi = -42.303882019814665, 5.0793920002828941)
+   the stored failure_reason (256 chars) is a prefix of it: True
+   root: ln V - ln V_floor = ln(1 + E/V_floor) = 6.01419e-15; ulp = 5.68434e-14; margin = 0.1058 quanta (WALL_ROUNDING_QUANTA = 16; within K + 1 = 17: True)
+   16 probes, decoded (ln phi, residual, ln V - ln V_floor in quanta):
+     ln phi = -21.194507019814665  residual =                   -inf  quanta = 0.0000
+     ln phi = -22.194507019814665  residual =                   -inf  quanta = 0.0000
+     ln phi = -24.194507019814665  residual =                   -inf  quanta = 0.0000
+     ln phi = -28.194507019814665  residual =                   -inf  quanta = 0.0000
+     ln phi = -36.194507019814665  residual =                   -inf  quanta = 0.0000
+     ln phi = -52.194507019814665  residual =     14.945318177407557  quanta = 327466.0000
+     ln phi = -44.194507019814665  residual =       6.94665902202172  quanta = 110.0000
+     ln phi = -40.194507019814665  residual =                   -inf  quanta = 2.0000
+     ln phi = -42.194507019814665  residual =                   -inf  quanta = 15.0000
+     ln phi = -43.194507019814665  residual =      5.935058110341288  quanta = 40.0000
+     ln phi = -42.694507019814665  residual =     5.4650544810950805  quanta = 25.0000
+     ln phi = -42.444507019814665  residual =      5.190617635393153  quanta = 19.0000
+     ln phi = -42.319507019814665  residual =      5.079392000282894  quanta = 17.0000
+     ln phi = -42.257007019814665  residual =                   -inf  quanta = 16.0000
+     ln phi = -42.288257019814665  residual =                   -inf  quanta = 16.0000
+     ln phi = -42.303882019814665  residual =      5.079392000282894  quanta = 17.0000
+   the raise's bracket width 0.03125 = 2^-5.000 e-folds; its midpoint is 2^-6.000 from each end; 07b's derivation orders probes 2^-4 apart
+-- shard0004#2199: stored M = 0.0009741294382105218 eV; as the tool builds it, M/M_P = 4e-31; bitwise equal: True (relative difference 0)
+== shard0004#2199 (beta 1.1825, alpha 0.001): phi = 6.112859129007901e-10 (6.11286e-10 M_P), log_E = -308.6585130622487, normalization = -276.63072859401797
+   call time 0.05 ms; raises: True
+   message: classical_turning_point (ExponentialModel(M=0.00097413eV,n=1,beta=1.1825), normalization = -276.63072859401797, phi = 6.112859129007901e-10, log_E = -308.6585130622487): the searched quantity is not monotone along the search (a midpoint of the bracket [-42.27795632365344, -42.34045632365344] is not between its ends); probes (ln phi, residual) from the start: (ln phi = -21.215456323653441, -inf), (ln phi = -22.215456323653441, -inf), (ln phi = -24.215456323653441, -inf), (ln phi = -28.215456323653441, -inf), (ln phi = -36.215456323653441, -inf), (ln phi = -52.215456323653441, 14.249398702854933), (ln phi = -44.215456323653441, 6.2478073948914243), (ln phi = -40.215456323653441, -inf), (ln phi = -42.215456323653441, -inf), (ln phi = -43.215456323653441, 5.2428805902986255), (ln phi = -42.715456323653441, 4.7481843484620185), (ln phi = -42.465456323653441, 4.4737475027600908), (ln phi = -42.340456323653441, 4.3625218676498321), (ln phi = -42.277956323653441, -inf), (ln phi = -42.309206323653441, 4.3625218676498321)
+   the stored failure_reason (256 chars) is a prefix of it: True
+   root: ln V - ln V_floor = ln(1 + E/V_floor) = 1.23171e-14; ulp = 5.68434e-14; margin = 0.2167 quanta (WALL_ROUNDING_QUANTA = 16; within K + 1 = 17: True)
+   15 probes, decoded (ln phi, residual, ln V - ln V_floor in quanta):
+     ln phi = -21.215456323653441  residual =                   -inf  quanta = 0.0000
+     ln phi = -22.215456323653441  residual =                   -inf  quanta = 0.0000
+     ln phi = -24.215456323653441  residual =                   -inf  quanta = 0.0000
+     ln phi = -28.215456323653441  residual =                   -inf  quanta = 0.0000
+     ln phi = -36.215456323653441  residual =                   -inf  quanta = 0.0000
+     ln phi = -52.215456323653441  residual =     14.249398702854933  quanta = 334399.0000
+     ln phi = -44.215456323653441  residual =      6.247807394891424  quanta = 112.0000
+     ln phi = -40.215456323653441  residual =                   -inf  quanta = 2.0000
+     ln phi = -42.215456323653441  residual =                   -inf  quanta = 15.0000
+     ln phi = -43.215456323653441  residual =     5.2428805902986255  quanta = 41.0000
+     ln phi = -42.715456323653441  residual =     4.7481843484620185  quanta = 25.0000
+     ln phi = -42.465456323653441  residual =      4.473747502760091  quanta = 19.0000
+     ln phi = -42.340456323653441  residual =      4.362521867649832  quanta = 17.0000
+     ln phi = -42.277956323653441  residual =                   -inf  quanta = 16.0000
+     ln phi = -42.309206323653441  residual =      4.362521867649832  quanta = 17.0000
+   the raise's bracket width 0.0625 = 2^-4.000 e-folds; its midpoint is 2^-5.000 from each end; 07b's derivation orders probes 2^-4 apart
+-- shard0000#1001: stored M = 0.0009741294382105218 eV; as the tool builds it, M/M_P = 4e-31; bitwise equal: True (relative difference 0)
+== shard0000#1001 (beta 0.75, alpha 0.03): phi = 8.943323416413437e-09 (8.94332e-09 M_P), log_E = -304.3236804061682, normalization = -276.63072859401797
+   call time 0.05 ms; raises: True
+   message: classical_turning_point (ExponentialModel(M=0.00097413eV,n=1,beta=0.75), normalization = -276.63072859401797, phi = 8.943323416413437e-09, log_E = -304.3236804061682): the searched quantity is not monotone along the search (a midpoint of the bracket [-42.282358570039314, -42.344858570039314] is not between its ends); probes (ln phi, residual) from the start: (ln phi = -18.532358570039314, -inf), (ln phi = -19.532358570039314, -inf), (ln phi = -21.532358570039314, -inf), (ln phi = -25.532358570039314, -inf), (ln phi = -33.532358570039314, -inf), (ln phi = -49.532358570039314, 7.231488563303401), (ln phi = -41.532358570039314, -inf), (ln phi = -45.532358570039314, 3.2323467874466587), (ln phi = -43.532358570039314, 1.2375271353487847), (ln phi = -42.532358570039314, 0.23899830523663468), (ln phi = -42.032358570039314, -inf), (ln phi = -42.282358570039314, -inf), (ln phi = -42.407358570039314, 0.084847625409281591), (ln phi = -42.344858570039314, 0.027689211569338568), (ln phi = -42.313608570039314, 0.027689211569338568)
+   the stored failure_reason (256 chars) is a prefix of it: True
+   root: ln V - ln V_floor = ln(1 + E/V_floor) = 9.39948e-13; ulp = 5.68434e-14; margin = 16.5357 quanta (WALL_ROUNDING_QUANTA = 16; within K + 1 = 17: True)
+   15 probes, decoded (ln phi, residual, ln V - ln V_floor in quanta):
+     ln phi = -18.532358570039314  residual =                   -inf  quanta = 0.0000
+     ln phi = -19.532358570039314  residual =                   -inf  quanta = 0.0000
+     ln phi = -21.532358570039314  residual =                   -inf  quanta = 0.0000
+     ln phi = -25.532358570039314  residual =                   -inf  quanta = 0.0000
+     ln phi = -33.532358570039314  residual =                   -inf  quanta = 0.0000
+     ln phi = -49.532358570039314  residual =      7.231488563303401  quanta = 22857.0000
+     ln phi = -41.532358570039314  residual =                   -inf  quanta = 8.0000
+     ln phi = -45.532358570039314  residual =     3.2323467874466587  quanta = 419.0000
+     ln phi = -43.532358570039314  residual =     1.2375271353487847  quanta = 57.0000
+     ln phi = -42.532358570039314  residual =    0.23899830523663468  quanta = 21.0000
+     ln phi = -42.032358570039314  residual =                   -inf  quanta = 13.0000
+     ln phi = -42.282358570039314  residual =                   -inf  quanta = 16.0000
+     ln phi = -42.407358570039314  residual =    0.08484762540928159  quanta = 18.0000
+     ln phi = -42.344858570039314  residual =   0.027689211569338568  quanta = 17.0000
+     ln phi = -42.313608570039314  residual =   0.027689211569338568  quanta = 17.0000
+   the raise's bracket width 0.0625 = 2^-4.000 e-folds; its midpoint is 2^-5.000 from each end; 07b's derivation orders probes 2^-4 apart
+-- shard0001#766: stored M = 0.0009741294382105218 eV; as the tool builds it, M/M_P = 4e-31; bitwise equal: True (relative difference 0)
+== shard0001#766 (beta 0.9, alpha 0.02): phi = 3.7072307387094975e-08 (3.70723e-08 M_P), log_E = -306.2985617947364, normalization = -276.63072859401797
+   call time 0.05 ms; raises: True
+   message: classical_turning_point (ExponentialModel(M=0.00097413eV,n=1,beta=0.9), normalization = -276.63072859401797, phi = 3.7072307387094975e-08, log_E = -306.2985617947364): the searched quantity is not monotone along the search (a midpoint of the bracket [-42.297895577666495, -42.329145577666495] is not between its ends); probes (ln phi, residual) from the start: (ln phi = -17.110395577666495, -inf), (ln phi = -18.110395577666495, -inf), (ln phi = -20.110395577666495, -inf), (ln phi = -24.110395577666495, -inf), (ln phi = -32.110395577666495, -inf), (ln phi = -48.110395577666495, 7.7844028478212977), (ln phi = -40.110395577666495, -inf), (ln phi = -44.110395577666495, 3.7844777729249586), (ln phi = -42.110395577666495, -inf), (ln phi = -43.110395577666495, 2.7802751687260638), (ln phi = -42.610395577666495, 2.3048514720106255), (ln phi = -42.360395577666495, 2.05972901397746), (ln phi = -42.235395577666495, -inf), (ln phi = -42.297895577666495, -inf), (ln phi = -42.329145577666495, 2.002570600137517), (ln phi = -42.313520577666495, 2.002570600137517)
+   the stored failure_reason (256 chars) is a prefix of it: True
+   root: ln V - ln V_floor = ln(1 + E/V_floor) = 1.30444e-13; ulp = 5.68434e-14; margin = 2.2948 quanta (WALL_ROUNDING_QUANTA = 16; within K + 1 = 17: True)
+   16 probes, decoded (ln phi, residual, ln V - ln V_floor in quanta):
+     ln phi = -17.110395577666495  residual =                   -inf  quanta = 0.0000
+     ln phi = -18.110395577666495  residual =                   -inf  quanta = 0.0000
+     ln phi = -20.110395577666495  residual =                   -inf  quanta = 0.0000
+     ln phi = -24.110395577666495  residual =                   -inf  quanta = 0.0000
+     ln phi = -32.110395577666495  residual =                   -inf  quanta = 0.0000
+     ln phi = -48.110395577666495  residual =      7.784402847821298  quanta = 5514.0000
+     ln phi = -40.110395577666495  residual =                   -inf  quanta = 2.0000
+     ln phi = -44.110395577666495  residual =     3.7844777729249586  quanta = 101.0000
+     ln phi = -42.110395577666495  residual =                   -inf  quanta = 14.0000
+     ln phi = -43.110395577666495  residual =      2.780275168726064  quanta = 37.0000
+     ln phi = -42.610395577666495  residual =     2.3048514720106255  quanta = 23.0000
+     ln phi = -42.360395577666495  residual =       2.05972901397746  quanta = 18.0000
+     ln phi = -42.235395577666495  residual =                   -inf  quanta = 15.0000
+     ln phi = -42.297895577666495  residual =                   -inf  quanta = 16.0000
+     ln phi = -42.329145577666495  residual =      2.002570600137517  quanta = 17.0000
+     ln phi = -42.313520577666495  residual =      2.002570600137517  quanta = 17.0000
+   the raise's bracket width 0.03125 = 2^-5.000 e-folds; its midpoint is 2^-6.000 from each end; 07b's derivation orders probes 2^-4 apart
+-- shard0015#403: stored M = 0.0009741294382105218 eV; as the tool builds it, M/M_P = 4e-31; bitwise equal: True (relative difference 0)
+== shard0015#403 (beta 0.5, alpha 0.1): phi = 1.4103964409699267e-08 (1.4104e-08 M_P), log_E = -308.8526551068955, normalization = -276.63072859401797
+   call time 0.05 ms; raises: True
+   message: classical_turning_point (ExponentialModel(M=0.00097413eV,n=1,beta=0.5), normalization = -276.63072859401797, phi = 1.4103964409699267e-08, log_E = -308.8526551068955): the searched quantity is not monotone along the search (a midpoint of the bracket [-42.29555991527297, -42.32680991527297] is not between its ends); probes (ln phi, residual) from the start: (ln phi = -18.076809915272968, -inf), (ln phi = -19.076809915272968, -inf), (ln phi = -21.076809915272968, -inf), (ln phi = -25.076809915272968, -inf), (ln phi = -33.076809915272968, -inf), (ln phi = -49.076809915272968, 11.304871621874383), (ln phi = -41.076809915272968, -inf), (ln phi = -45.076809915272968, 7.3031803942337206), (ln phi = -43.076809915272968, 5.3069695066970439), (ln phi = -42.076809915272968, -inf), (ln phi = -42.576809915272968, 4.8144930215988779), (ln phi = -42.326809915272968, 4.5566639122966421), (ln phi = -42.201809915272968, -inf), (ln phi = -42.264309915272968, -inf), (ln phi = -42.295559915272968, -inf), (ln phi = -42.311184915272968, 4.5566639122966421)
+   the stored failure_reason (256 chars) is a prefix of it: True
+   root: ln V - ln V_floor = ln(1 + E/V_floor) = 1.01437e-14; ulp = 5.68434e-14; margin = 0.1784 quanta (WALL_ROUNDING_QUANTA = 16; within K + 1 = 17: True)
+   16 probes, decoded (ln phi, residual, ln V - ln V_floor in quanta):
+     ln phi = -18.076809915272968  residual =                   -inf  quanta = 0.0000
+     ln phi = -19.076809915272968  residual =                   -inf  quanta = 0.0000
+     ln phi = -21.076809915272968  residual =                   -inf  quanta = 0.0000
+     ln phi = -25.076809915272968  residual =                   -inf  quanta = 0.0000
+     ln phi = -33.076809915272968  residual =                   -inf  quanta = 0.0000
+     ln phi = -49.076809915272968  residual =     11.304871621874383  quanta = 14493.0000
+     ln phi = -41.076809915272968  residual =                   -inf  quanta = 5.0000
+     ln phi = -45.076809915272968  residual =      7.303180394233721  quanta = 265.0000
+     ln phi = -43.076809915272968  residual =      5.306969506697044  quanta = 36.0000
+     ln phi = -42.076809915272968  residual =                   -inf  quanta = 13.0000
+     ln phi = -42.576809915272968  residual =      4.814493021598878  quanta = 22.0000
+     ln phi = -42.326809915272968  residual =      4.556663912296642  quanta = 17.0000
+     ln phi = -42.201809915272968  residual =                   -inf  quanta = 15.0000
+     ln phi = -42.264309915272968  residual =                   -inf  quanta = 16.0000
+     ln phi = -42.295559915272968  residual =                   -inf  quanta = 16.0000
+     ln phi = -42.311184915272968  residual =      4.556663912296642  quanta = 17.0000
+   the raise's bracket width 0.03125 = 2^-5.000 e-folds; its midpoint is 2^-6.000 from each end; 07b's derivation orders probes 2^-4 apart
+-- shard0000#2735: stored M = 2.4353235955263047e-06 eV; as the tool builds it, M/M_P = 1e-33; bitwise equal: True (relative difference 0)
+== shard0000#2735 (beta 0.75, alpha 0.03): phi = 5.2012071586237315e-08 (5.20121e-08 M_P), log_E = -305.91588537339726, normalization = -276.63072859401797
+   call time 0.05 ms; raises: True
+   message: classical_turning_point (ExponentialModel(M=2.4353e-06eV,n=1,beta=0.75), normalization = -276.63072859401797, phi = 5.2012071586237315e-08, log_E = -305.91588537339726): the searched quantity is not monotone along the search (a midpoint of the bracket [-48.27178999941749, -48.33428999941749] is not between its ends); probes (ln phi, residual) from the start: (ln phi = -16.771789999417493, -inf), (ln phi = -17.771789999417493, -inf), (ln phi = -19.771789999417493, -inf), (ln phi = -23.771789999417493, -inf), (ln phi = -31.771789999417493, -inf), (ln phi = -47.771789999417493, -inf), (ln phi = -79.771789999417493, 73.386133524104054), (ln phi = -63.771789999417493, 17.071641193714868), (ln phi = -55.771789999417493, 9.0716481334679315), (ln phi = -51.771789999417493, 5.0708149958277318), (ln phi = -49.771789999417493, 3.0771402758921909), (ln phi = -48.771789999417493, 2.0825177007467914), (ln phi = -48.271789999417493, -inf), (ln phi = -48.521789999417493, 1.8312032724657001), (ln phi = -48.396789999417493, 1.6770525926383471), (ln phi = -48.334289999417493, 1.619894178798404), (ln phi = -48.303039999417493, 1.619894178798404)
+   the stored failure_reason (256 chars) is a prefix of it: True
+   root: ln V - ln V_floor = ln(1 + E/V_floor) = 1.91257e-13; ulp = 5.68434e-14; margin = 3.3646 quanta (WALL_ROUNDING_QUANTA = 16; within K + 1 = 17: True)
+   17 probes, decoded (ln phi, residual, ln V - ln V_floor in quanta):
+     ln phi = -16.771789999417493  residual =                   -inf  quanta = 0.0000
+     ln phi = -17.771789999417493  residual =                   -inf  quanta = 0.0000
+     ln phi = -19.771789999417493  residual =                   -inf  quanta = 0.0000
+     ln phi = -23.771789999417493  residual =                   -inf  quanta = 0.0000
+     ln phi = -31.771789999417493  residual =                   -inf  quanta = 0.0000
+     ln phi = -47.771789999417493  residual =                   -inf  quanta = 10.0000
+     ln phi = -79.771789999417493  residual =      73.38613352410405  quanta = 775832587633661.5000
+     ln phi = -63.771789999417493  residual =     17.071641193714868  quanta = 87308456.0000
+     ln phi = -55.771789999417493  residual =      9.071648133467932  quanta = 29289.0000
+     ln phi = -51.771789999417493  residual =      5.070814995827732  quanta = 536.0000
+     ln phi = -49.771789999417493  residual =      3.077140275892191  quanta = 73.0000
+     ln phi = -48.771789999417493  residual =     2.0825177007467914  quanta = 27.0000
+     ln phi = -48.271789999417493  residual =                   -inf  quanta = 16.0000
+     ln phi = -48.521789999417493  residual =     1.8312032724657001  quanta = 21.0000
+     ln phi = -48.396789999417493  residual =      1.677052592638347  quanta = 18.0000
+     ln phi = -48.334289999417493  residual =      1.619894178798404  quanta = 17.0000
+     ln phi = -48.303039999417493  residual =      1.619894178798404  quanta = 17.0000
+   the raise's bracket width 0.0625 = 2^-4.000 e-folds; its midpoint is 2^-5.000 from each end; 07b's derivation orders probes 2^-4 apart
+-- shard0015#2480: stored M = 2.4353235955263047e-06 eV; as the tool builds it, M/M_P = 1e-33; bitwise equal: True (relative difference 0)
+== shard0015#2480 (beta 0.5, alpha 0.1): phi = 4.5197701189944676e-08 (4.51977e-08 M_P), log_E = -308.24395716177537, normalization = -276.63072859401797
+   call time 0.05 ms; raises: True
+   message: classical_turning_point (ExponentialModel(M=2.4353e-06eV,n=1,beta=0.5), normalization = -276.63072859401797, phi = 4.5197701189944676e-08, log_E = -308.24395716177537): the searched quantity is not monotone along the search (a midpoint of the bracket [-48.287219610031116, -48.318469610031116] is not between its ends); probes (ln phi, residual) from the start: (ln phi = -16.912219610031112, -inf), (ln phi = -17.912219610031112, -inf), (ln phi = -19.912219610031112, -inf), (ln phi = -23.912219610031112, -inf), (ln phi = -31.912219610031112, -inf), (ln phi = -47.912219610031116, -inf), (ln phi = -79.912219610031116, 82.363224675522417), (ln phi = -63.912219610031116, 19.540142968526084), (ln phi = -55.912219610031116, 11.540154097365303), (ln phi = -51.912219610031116, 7.5396216470427362), (ln phi = -49.912219610031116, 5.5455694219655243), (ln phi = -48.912219610031116, 4.548739827605857), (ln phi = -48.412219610031116, 4.0591916022867736), (ln phi = -48.162219610031116, -inf), (ln phi = -48.287219610031116, -inf), (ln phi = -48.349719610031116, 4.0051243810164578), (ln phi = -48.318469610031116, 3.9479659671765148), (ln phi = -48.302844610031116, 3.9479659671765148)
+   the stored failure_reason (256 chars) is a prefix of it: True
+   root: ln V - ln V_floor = ln(1 + E/V_floor) = 1.86444e-14; ulp = 5.68434e-14; margin = 0.3280 quanta (WALL_ROUNDING_QUANTA = 16; within K + 1 = 17: True)
+   18 probes, decoded (ln phi, residual, ln V - ln V_floor in quanta):
+     ln phi = -16.912219610031112  residual =                   -inf  quanta = 0.0000
+     ln phi = -17.912219610031112  residual =                   -inf  quanta = 0.0000
+     ln phi = -19.912219610031112  residual =                   -inf  quanta = 0.0000
+     ln phi = -23.912219610031112  residual =                   -inf  quanta = 0.0000
+     ln phi = -31.912219610031112  residual =                   -inf  quanta = 0.0000
+     ln phi = -47.912219610031116  residual =                   -inf  quanta = 11.0000
+     ln phi = -79.912219610031116  residual =      82.36322467552242  quanta = 892803373281190.0000
+     ln phi = -63.912219610031116  residual =     19.540142968526084  quanta = 100471784.0000
+     ln phi = -55.912219610031116  residual =     11.540154097365303  quanta = 33705.0000
+     ln phi = -51.912219610031116  residual =      7.539621647042736  quanta = 617.0000
+     ln phi = -49.912219610031116  residual =      5.545569421965524  quanta = 84.0000
+     ln phi = -48.912219610031116  residual =      4.548739827605857  quanta = 31.0000
+     ln phi = -48.412219610031116  residual =      4.059191602286774  quanta = 19.0000
+     ln phi = -48.162219610031116  residual =                   -inf  quanta = 15.0000
+     ln phi = -48.287219610031116  residual =                   -inf  quanta = 16.0000
+     ln phi = -48.349719610031116  residual =      4.005124381016458  quanta = 18.0000
+     ln phi = -48.318469610031116  residual =      3.947965967176515  quanta = 17.0000
+     ln phi = -48.302844610031116  residual =      3.947965967176515  quanta = 17.0000
+   the raise's bracket width 0.03125 = 2^-5.000 e-folds; its midpoint is 2^-6.000 from each end; 07b's derivation orders probes 2^-4 apart
+-- shard0015#2386: stored M = 0.0024353235955263046 eV; as the tool builds it, M/M_P = 1e-30; bitwise equal: True (relative difference 0)
+== shard0015#2386 (beta 0.5, alpha 0.15): phi = 1.2947244448110153e-08 (1.29472e-08 M_P), log_E = -306.8183703090743, normalization = -276.63072859401797
+   call time 0.04 ms; raises: True
+   message: classical_turning_point (ExponentialModel(M=0.0024353eV,n=1,beta=0.5), normalization = -276.63072859401797, phi = 1.2947244448110153e-08, log_E = -306.8183703090743): the searched quantity is not monotone along the search (a midpoint of the bracket [-41.38113285537229, -41.41238285537229] is not between its ends); probes (ln phi, residual) from the start: (ln phi = -18.162382855372293, -inf), (ln phi = -19.162382855372293, -inf), (ln phi = -21.162382855372293, -inf), (ln phi = -25.162382855372293, -inf), (ln phi = -33.162382855372293, -inf), (ln phi = -49.162382855372293, 10.272461940197445), (ln phi = -41.162382855372293, -inf), (ln phi = -45.162382855372293, 6.2725749925980381), (ln phi = -43.162382855372293, 4.274133249092074), (ln phi = -42.162382855372293, 3.2726847088758291), (ln phi = -41.662382855372293, 2.7802082237776631), (ln phi = -41.412382855372293, 2.5223791144754273), (ln phi = -41.287382855372293, -inf), (ln phi = -41.349882855372293, -inf), (ln phi = -41.381132855372293, -inf), (ln phi = -41.396757855372293, 2.5223791144754273)
+   the stored failure_reason (256 chars) is a prefix of it: True
+   root: ln V - ln V_floor = ln(1 + E/V_floor) = 7.75664e-14; ulp = 5.68434e-14; margin = 1.3646 quanta (WALL_ROUNDING_QUANTA = 16; within K + 1 = 17: True)
+   16 probes, decoded (ln phi, residual, ln V - ln V_floor in quanta):
+     ln phi = -18.162382855372293  residual =                   -inf  quanta = 0.0000
+     ln phi = -19.162382855372293  residual =                   -inf  quanta = 0.0000
+     ln phi = -21.162382855372293  residual =                   -inf  quanta = 0.0000
+     ln phi = -25.162382855372293  residual =                   -inf  quanta = 0.0000
+     ln phi = -33.162382855372293  residual =                   -inf  quanta = 0.0000
+     ln phi = -49.162382855372293  residual =     10.272461940197445  quanta = 39470.0000
+     ln phi = -41.162382855372293  residual =                   -inf  quanta = 13.0000
+     ln phi = -45.162382855372293  residual =      6.272574992598038  quanta = 723.0000
+     ln phi = -43.162382855372293  residual =      4.274133249092074  quanta = 98.0000
+     ln phi = -42.162382855372293  residual =      3.272684708875829  quanta = 36.0000
+     ln phi = -41.662382855372293  residual =      2.780208223777663  quanta = 22.0000
+     ln phi = -41.412382855372293  residual =     2.5223791144754273  quanta = 17.0000
+     ln phi = -41.287382855372293  residual =                   -inf  quanta = 15.0000
+     ln phi = -41.349882855372293  residual =                   -inf  quanta = 16.0000
+     ln phi = -41.381132855372293  residual =                   -inf  quanta = 16.0000
+     ln phi = -41.396757855372293  residual =     2.5223791144754273  quanta = 17.0000
+   the raise's bracket width 0.03125 = 2^-5.000 e-folds; its midpoint is 2^-6.000 from each end; 07b's derivation orders probes 2^-4 apart
+
+serial  beta     M/M_P   alpha   phi/M_P        ln E                 root margin (quanta)  raises  ms
+  2197  1.185   4e-31           2.95009e-07    -306.7166549210319       1.5107            True    0.25
+  2188  1.06    4e-31           2.64773e-07    -306.6698578858307       1.5830            True    0.10
+  1592  1.1775  4e-31   0.001   6.14378e-10    -308.6129970063558       0.2268            True    0.05
+  2208  1.18    4e-31   0.001   6.24227e-10    -309.37538319488175      0.1058            True    0.05
+  2199  1.1825  4e-31   0.001   6.11286e-10    -308.6585130622487       0.2167            True    0.05
+  1001  0.75    4e-31   0.03    8.94332e-09    -304.3236804061682      16.5357            True    0.05
+   766  0.9     4e-31   0.02    3.70723e-08    -306.2985617947364       2.2948            True    0.05
+   403  0.5     4e-31   0.1     1.4104e-08     -308.8526551068955       0.1784            True    0.05
+  2735  0.75    1e-33   0.03    5.20121e-08    -305.91588537339726      3.3646            True    0.05
+  2480  0.5     1e-33   0.1     4.51977e-08    -308.24395716177537      0.3280            True    0.05
+  2386  0.5     1e-30   0.15    1.29472e-08    -306.8183703090743       1.3646            True    0.04
+largest root margin 16.5357 quanta; every root within WALL_ROUNDING_QUANTA + 1 = 17: True; every call raises: True

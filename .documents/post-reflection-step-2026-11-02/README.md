@@ -87,6 +87,11 @@ at 1659 M with π = 1.6×10⁻⁷; resolved, it ends at 2.6×10⁸ M with π = 0
 at 10⁻¹²; β = 1.2, α = 0.03 at 10⁻¹⁵; β = 1.5 and 1.2, α = 0.08 at 4×10⁻³¹). Together they have 845 first
 outward steps.
 
+> **Note (2026-11-02, `reflection-restart` 01).** The per-history counts in `out/scan_first_steps.txt`
+> (30, 270, 151, 25, 32, 62, 174, 36, 55) sum to **835**, not 845. The 845 was a slip in this sentence.
+> The counts themselves stand, and the scanner of `reflection-restart` 01 reproduces each of them line for
+> line (`.documents/reflection-restart-verification.md` §1.2).
+
 - **In each failing history exactly one is bad** (1 of 30, 1 of 151, 1 of 270), and it is the one that
   fails. Its h is 1.6–6.4×10⁻⁴, its h·ω 1060–1240, and π_end/π_start 7–9×10⁻⁵.
 - **Every other step is good**, the six successful histories' included: h ≤ 4.1×10⁻⁶, h·ω ≤ 0.008, and
@@ -129,3 +134,8 @@ Not ruled; each changes the stored digits of every history that reflects, so nee
    let Radau grow it from there.
 
 Any of them should be checked against the golden histories and against these three failures.
+
+> **Note (2026-11-02, `reflection-restart` 04).** The fix is fix 3 above with a guard on the restarted solver's first
+> step ("F3 plus the guard", ruled by the user), landed by `reflection-restart` 03 (`b81eab8`); the measurements of
+> the fixes, the fix and the 42 recomputed are in
+> [`reflection-restart-verification.md`](../reflection-restart-verification.md) §1–§3.

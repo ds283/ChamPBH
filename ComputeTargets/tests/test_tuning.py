@@ -31,7 +31,8 @@ there. Each integration to T_CMB costs about 5 s on an unloaded machine (12-19 s
       StageTracker.
   (d) determinism: a second tuning, with the default progress and clock, equals (c)'s bitwise
       (about 25 s unloaded), and prints no tune line unless it ran 120 s or more (then it skips).
-  (e) the tuned golden history: (c)'s output against data/golden_history_06_tuned.json.
+  (e) the tuned golden history: (c)'s output against data/golden_history_rr03_tuned.json
+      (data/golden_history_06_tuned.json until reflection-restart prompt 03).
   (f)-(j) the failures: the cap, no normalization reaching H0, the seed being the model's own,
       the effective minimum not found, and an integration's own failure (f)-(h) with
       progress="every".
@@ -604,7 +605,7 @@ class TestAConvergedHistory(unittest.TestCase):
         self.assertEqual([strip(l) for l in lines], [strip(l) for l in self.lines])
 
     def test_e_the_tuned_golden_history(self):
-        """(e) (c)'s output against data/golden_history_06_tuned.json (no integration)."""
+        """(e) (c)'s output against data/golden_history_rr03_tuned.json (no integration)."""
         golden = json.loads(gth.GOLDEN_TUNED_PATH.read_text())
         messages = gth.differences(golden, gth.build_record(self.data))
         if messages:

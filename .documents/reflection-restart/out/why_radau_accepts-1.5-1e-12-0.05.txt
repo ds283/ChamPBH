@@ -1,0 +1,109 @@
+beta=1.5 M=1e-12 alpha=0.05: outcome failure: log_m_eff_squared: m_eff^2 <= 0 (m_eff^2 = -1 e^-225.0798555) at phi_E = -3.792756377e-12,
+the flagged step: N0=35.91429105196516 h=0.000636674 h*omega=1245 pi_end/pi_start=6.579e-05 phi0/M=0.2371 least phi/M=-4.86 SciPy error_norm=0.9375 (first step of its instance: True; first h_abs 0.003183)
+   state at N0 (float.hex): ['0x1.0aef551c04d40p-42', '0x1.3f0da5ec8aaa8p-9', '-0x1.ddd3e415f9ab8p+7', '-0x1.c38af5a2f4350p+1', '-0x1.de0a48f74dca2p+5']
+   J[1,0] = -3.82117e+12, omega = sqrt|J[1,0]| = 1.95478e+06; eigenvalues of J: -0+0j, -0.5071+1.955e+06j, -0.5071-1.955e+06j, 0+0j, -0+0j
+   f at N0: phi'=0.00243418 pi'=0.0157076 (inward acceleration -pi' = -0.0157076)
+
+1. single attempts from the flagged step's start (h*omega with omega at N0)
+            h   h*omega conv it        est est_refined       true  true/est accept pi_end/pi0 true pi/pi0  phi_end/M true phi/M
+        1e-08   0.01955    F  2  7.263e-05   7.262e-05      20.68  2.85e+05  False     0.9998    0.999999      24.58      24.58
+    1.642e-08    0.0321    F  2  0.0005283   0.0005281      55.85  1.06e+05  False     0.9995    0.999999      40.21      40.21
+    2.697e-08   0.05273    F  2    0.00384    0.003837      150.7  3.93e+04  False     0.9986    0.999999      65.86      65.89
+     4.43e-08   0.08659    F  2    0.02788     0.02781      406.6  1.46e+04  False     0.9963    0.999998      107.9      108.1
+    7.275e-08    0.1422    F  2     0.2017      0.2004       1096  5.43e+03  False     0.9899    0.999996      176.7      177.3
+    1.195e-07    0.2336    F  2      1.445       1.418       2948  2.04e+03  False     0.9728    0.999994      288.5      291.1
+    1.962e-07    0.3836    F  2      10.07       9.115       7891       783  False     0.9273    0.999989      466.3      477.9
+    3.223e-07      0.63    F  2      65.06       63.73  2.085e+04       320  False      0.808    0.999983      733.9      784.7
+    5.293e-07     1.035    F  2      330.2       306.4  5.313e+04       161  False     0.5107    0.999972       1071       1289
+    8.693e-07     1.699    F  2      365.2       301.1  1.224e+05       335  False    -0.1269    0.999953       1232       2116
+    1.428e-06     2.791    F  2  1.276e+04        8028  2.059e+05      16.1  False    -0.8957    0.999924      436.6       3475
+    2.345e-06     4.584    F  2  5.136e+04   1.985e+04   1.45e+05      2.82  False    -0.3352    0.999874     -838.8       5708
+    3.851e-06     7.528    F  2  1.025e+04        1940   7.14e+04      6.96  False     0.3423    0.999794     -352.3       9373
+    6.325e-06     12.36    F  2  5.231e+04        4169  8.145e+04      1.56  False     0.2496    0.999661       60.7  1.539e+04
+    1.039e-05      20.3    F  2  8.582e+04        2670  9.639e+04      1.12  False     0.1118    0.999444      125.5  2.528e+04
+    1.706e-05     33.35    F  3  9.561e+04        1125  9.907e+04      1.04  False     0.0868    0.999086      183.7  4.151e+04
+    2.802e-05     54.77    F  3  1.037e+05       455.8  1.048e+05      1.01  False    0.03333      0.9985      127.4  6.815e+04
+    4.601e-05     89.95    F  3  1.068e+05       174.5   1.07e+05         1  False    0.01251    0.997536      81.17  1.119e+05
+    7.557e-05     147.7    F  3  1.079e+05       65.49  1.077e+05     0.997  False   0.004661    0.995953      50.31  1.836e+05
+    0.0001241     242.6    F  3  1.083e+05        24.4  1.077e+05     0.994  False   0.001731    0.993354       30.9  3.011e+05
+    0.0002038     398.5    F  3  1.085e+05       9.074  1.073e+05     0.989  False   0.000642    0.989084      18.94  4.935e+05
+    0.0003348     654.4    F  3  1.086e+05       3.373  1.066e+05     0.982  False   0.000238    0.982073      11.62  8.076e+05
+    0.0005498      1075    T  2  1.086e+05       1.255  1.054e+05     0.971  False  8.824e-05    0.970558      7.159  1.319e+06
+    0.0006367      1245    T  2  1.086e+05      0.9375  1.049e+05     0.966  False  6.579e-05    0.965906      6.211  1.523e+06
+     0.000903      1765    T  2  1.086e+05      0.4681  1.033e+05     0.952  False   3.27e-05    0.951646      4.441  2.145e+06
+     0.001483      2899    T  2  1.086e+05      0.1752  9.997e+04     0.921  False  1.211e-05    0.920588      2.786  3.466e+06
+     0.002436      4761    T  2  1.086e+05     0.06595  9.443e+04      0.87  False  4.486e-06    0.869582      1.778  5.542e+06
+     0.003183      6223    T  2  1.086e+05     0.03906  9.008e+04      0.83  False  2.623e-06    0.829541      1.409  7.088e+06
+        0.004      7819    T  2  1.086e+05     0.02506  8.534e+04     0.786  False   1.66e-06    0.785818      1.165  8.694e+06
+
+1b. SciPy's path from the instance's first h_abs
+   attempt 1: h=0.00318337 (h*omega 6223) Newton converged True in 2; plain estimate 1.086e+05 > 1: rejected (no refinement on an attempt not yet rejected)
+   attempt 2: h=0.000636674 = 0.2 x attempt 1 (h*omega 1245); Newton converged True in 2; plain estimate 1.086e+05 > 1, so SciPy recomputes it after the rejection: 0.9375 -> accepted
+   attempt 2 is the accepted step: h equal True (h rounded as SciPy rounds it), endpoint equal True, SciPy's recorded error_norm 0.9375
+
+2. a fresh Radau from the same state, growing its step (no cap, max_step 0.1)
+   first_step = 1e-11
+      step  0: N-N0=9.997e-12 h=9.997e-12 h*omega=1.954e-05 error_norm=9.37e-08 phi/M=0.2614 pi=0.00243418 flagged=False
+      step  1: N-N0=1.1e-10 h=9.997e-11 h*omega=0.0001343 error_norm=3.33e-05 phi/M=0.5048 pi=0.00243418 flagged=False
+      step  2: N-N0=1.11e-09 h=9.997e-10 h*omega=0.0001646 error_norm=3.34e-05 phi/M=2.938 pi=0.00243418 flagged=False
+      step  3: N-N0=1.111e-08 h=9.997e-09 h*omega=3.959e-05 error_norm=1.85e-06 phi/M=27.27 pi=0.00243418 flagged=False
+      step  4: N-N0=1.111e-07 h=9.997e-08 h*omega=1.122e-05 error_norm=1.57e-07 phi/M=270.6 pi=0.00243417 flagged=False
+      step  5: N-N0=1.111e-06 h=9.997e-07 h*omega=3.5e-06 error_norm=1.51e-08 phi/M=2704 pi=0.00243404 flagged=False
+      step  6: N-N0=1.111e-05 h=9.997e-06 h*omega=0 error_norm=1.51e-09 phi/M=2.703e+04 pi=0.00243274 flagged=False
+      step  7: N-N0=0.0001111 h=9.997e-05 h*omega=0 error_norm=1.5e-10 phi/M=2.696e+05 pi=0.0024197 flagged=False
+      step  8: N-N0=0.001111 h=0.0009997 h*omega=0 error_norm=2.47e-08 phi/M=2.624e+06 pi=0.00228939 flagged=False
+      step  9: N-N0=0.01111 h=0.009997 h*omega=0 error_norm=0.000249 phi/M=1.9e+07 pi=0.000986626 flagged=True
+      step 10: N-N0=0.02 h=0.008892 h*omega=0 error_norm=0.000155 phi/M=2.262e+07 pi=-0.00017154 flagged=False
+      largest h*omega over the steps: 0.0001646 at step 2
+   first_step = 1e-06
+      step  0: N-N0=6.103e-11 h=6.103e-11 h*omega=0.0001193 error_norm=2.39e-05 phi/M=0.3856 pi=0.00243418 flagged=False
+      step  1: N-N0=6.713e-10 h=6.103e-10 h*omega=0.0002195 error_norm=6.33e-05 phi/M=1.871 pi=0.00243418 flagged=False
+      step  2: N-N0=1.282e-09 h=6.103e-10 h*omega=5.452e-06 error_norm=3.47e-08 phi/M=3.357 pi=0.00243418 flagged=False
+      step  3: N-N0=7.384e-09 h=6.103e-09 h*omega=1.92e-05 error_norm=5.99e-07 phi/M=18.21 pi=0.00243418 flagged=False
+      step  4: N-N0=6.841e-08 h=6.103e-08 h*omega=1.272e-05 error_norm=2.06e-07 phi/M=166.8 pi=0.00243417 flagged=False
+      step  5: N-N0=6.787e-07 h=6.103e-07 h*omega=4.431e-06 error_norm=2.43e-08 phi/M=1652 pi=0.0024341 flagged=False
+      step  6: N-N0=6.782e-06 h=6.103e-06 h*omega=1.443e-06 error_norm=2.47e-09 phi/M=1.65e+04 pi=0.0024333 flagged=False
+      step  7: N-N0=6.781e-05 h=6.103e-05 h*omega=0 error_norm=2.47e-10 phi/M=1.648e+05 pi=0.00242534 flagged=False
+      step  8: N-N0=0.0006781 h=0.0006103 h*omega=0 error_norm=3.43e-09 phi/M=1.621e+06 pi=0.00234579 flagged=False
+      step  9: N-N0=0.006781 h=0.006103 h*omega=0 error_norm=3.56e-05 phi/M=1.351e+07 pi=0.00155042 flagged=False
+      step 10: N-N0=0.02 h=0.01322 h*omega=0 error_norm=0.000815 phi/M=2.262e+07 pi=-0.00017154 flagged=False
+      largest h*omega over the steps: 0.0002195 at step 1
+   first_step = 4e-06
+      step  0: N-N0=6.103e-11 h=6.103e-11 h*omega=0.0001193 error_norm=2.39e-05 phi/M=0.3856 pi=0.00243418 flagged=False
+      step  1: N-N0=6.713e-10 h=6.103e-10 h*omega=0.0002195 error_norm=6.33e-05 phi/M=1.871 pi=0.00243418 flagged=False
+      step  2: N-N0=1.282e-09 h=6.103e-10 h*omega=5.452e-06 error_norm=3.47e-08 phi/M=3.357 pi=0.00243418 flagged=False
+      step  3: N-N0=7.384e-09 h=6.103e-09 h*omega=1.92e-05 error_norm=5.99e-07 phi/M=18.21 pi=0.00243418 flagged=False
+      step  4: N-N0=6.841e-08 h=6.103e-08 h*omega=1.272e-05 error_norm=2.06e-07 phi/M=166.8 pi=0.00243417 flagged=False
+      step  5: N-N0=6.787e-07 h=6.103e-07 h*omega=4.431e-06 error_norm=2.43e-08 phi/M=1652 pi=0.0024341 flagged=False
+      step  6: N-N0=6.782e-06 h=6.103e-06 h*omega=1.443e-06 error_norm=2.47e-09 phi/M=1.65e+04 pi=0.0024333 flagged=False
+      step  7: N-N0=6.781e-05 h=6.103e-05 h*omega=0 error_norm=2.47e-10 phi/M=1.648e+05 pi=0.00242534 flagged=False
+      step  8: N-N0=0.0006781 h=0.0006103 h*omega=0 error_norm=3.43e-09 phi/M=1.621e+06 pi=0.00234579 flagged=False
+      step  9: N-N0=0.006781 h=0.006103 h*omega=0 error_norm=3.56e-05 phi/M=1.351e+07 pi=0.00155042 flagged=False
+      step 10: N-N0=0.02 h=0.01322 h*omega=0 error_norm=0.000815 phi/M=2.262e+07 pi=-0.00017154 flagged=False
+      largest h*omega over the steps: 0.0002195 at step 1
+   first_step = 4e-05
+      step  0: N-N0=7.629e-11 h=7.629e-11 h*omega=0.0001491 error_norm=4.02e-05 phi/M=0.4228 pi=0.00243418 flagged=False
+      step  1: N-N0=8.234e-10 h=7.471e-10 h*omega=0.0002036 error_norm=5.22e-05 phi/M=2.241 pi=0.00243418 flagged=False
+      step  2: N-N0=1.571e-09 h=7.471e-10 h*omega=4.786e-06 error_norm=2.65e-08 phi/M=4.06 pi=0.00243418 flagged=False
+      step  3: N-N0=9.042e-09 h=7.471e-09 h*omega=1.702e-05 error_norm=4.73e-07 phi/M=22.25 pi=0.00243418 flagged=False
+      step  4: N-N0=8.376e-08 h=7.471e-08 h*omega=1.145e-05 error_norm=1.77e-07 phi/M=204.1 pi=0.00243417 flagged=False
+      step  5: N-N0=8.309e-07 h=7.471e-07 h*omega=4.002e-06 error_norm=1.98e-08 phi/M=2023 pi=0.00243408 flagged=False
+      step  6: N-N0=8.302e-06 h=7.471e-06 h*omega=1.442e-06 error_norm=2.02e-09 phi/M=2.02e+04 pi=0.0024331 flagged=False
+      step  7: N-N0=8.302e-05 h=7.471e-05 h*omega=0 error_norm=2.02e-10 phi/M=2.016e+05 pi=0.00242336 flagged=False
+      step  8: N-N0=0.0008302 h=0.0007471 h*omega=0 error_norm=7.72e-09 phi/M=1.976e+06 pi=0.00232597 flagged=False
+      step  9: N-N0=0.008302 h=0.007471 h*omega=0 error_norm=7.88e-05 phi/M=1.572e+07 pi=0.00135229 flagged=False
+      step 10: N-N0=0.02 h=0.0117 h*omega=0 error_norm=0.000478 phi/M=2.262e+07 pi=-0.00017154 flagged=False
+      largest h*omega over the steps: 0.0002036 at step 1
+   first_step = 0.00016
+      step  0: N-N0=7.629e-11 h=7.629e-11 h*omega=0.0001491 error_norm=4.02e-05 phi/M=0.4228 pi=0.00243418 flagged=False
+      step  1: N-N0=8.234e-10 h=7.471e-10 h*omega=0.0002036 error_norm=5.22e-05 phi/M=2.241 pi=0.00243418 flagged=False
+      step  2: N-N0=1.571e-09 h=7.471e-10 h*omega=4.786e-06 error_norm=2.65e-08 phi/M=4.06 pi=0.00243418 flagged=False
+      step  3: N-N0=9.042e-09 h=7.471e-09 h*omega=1.702e-05 error_norm=4.73e-07 phi/M=22.25 pi=0.00243418 flagged=False
+      step  4: N-N0=8.376e-08 h=7.471e-08 h*omega=1.145e-05 error_norm=1.77e-07 phi/M=204.1 pi=0.00243417 flagged=False
+      step  5: N-N0=8.309e-07 h=7.471e-07 h*omega=4.002e-06 error_norm=1.98e-08 phi/M=2023 pi=0.00243408 flagged=False
+      step  6: N-N0=8.302e-06 h=7.471e-06 h*omega=1.442e-06 error_norm=2.02e-09 phi/M=2.02e+04 pi=0.0024331 flagged=False
+      step  7: N-N0=8.302e-05 h=7.471e-05 h*omega=0 error_norm=2.02e-10 phi/M=2.016e+05 pi=0.00242336 flagged=False
+      step  8: N-N0=0.0008302 h=0.0007471 h*omega=0 error_norm=7.72e-09 phi/M=1.976e+06 pi=0.00232597 flagged=False
+      step  9: N-N0=0.008302 h=0.007471 h*omega=0 error_norm=7.88e-05 phi/M=1.572e+07 pi=0.00135229 flagged=False
+      step 10: N-N0=0.02 h=0.0117 h*omega=0 error_norm=0.000478 phi/M=2.262e+07 pi=-0.00017154 flagged=False
+      largest h*omega over the steps: 0.0002036 at step 1

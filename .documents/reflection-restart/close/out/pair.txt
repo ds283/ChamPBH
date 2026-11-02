@@ -1,0 +1,28 @@
+-- 2197 at 89a0760: success, wall 467.5 s, integrations 1
+   accepted_steps 906090, RHS 6453742, compute_steps 6453742, reflections 6648, n_samples 4995, restart_retakes n/a
+   samples_sha256 f8d5429be002da62400a6c249240d79c0367fa4db2dfc4ef92c54110a6545cd7
+   store comparison: bitwise True; samples stored 4995 new 4995; differing history columns [], value columns [], extra_data []; only in {'store': [], 'new': []}; stored accepted_steps 906090, stored compute_time 624.2781767499982
+   scan: radau accepted 906081, instances 6648 {'reflection': 6647, 'start': 1}, flagged first 0 later 5620, signature kept/discarded 0/0 (counted from rows)
+-- 2197 at this tree: failure, wall 128.0 s, integrations 1
+   failure_reason: classical_turning_point (ExponentialModel(M=0.00097413eV,n=1,beta=1.185), normalization = -276.63072859401797, phi = 2.950090845531173e-07, log_E = -306.7166549210319): the searched quantity is not monotone along the search (a midpoint of the bracket [-42.
+   integration entries: [{'index': 0}]
+   scan: radau accepted 250952, instances 1555 {'reflection': 1554, 'start': 1}, flagged first 0 later 1461, signature kept/discarded 0/0 (counted from scan)
+   failure_reason is 256 characters, a prefix of the printed line: True
+   against the probe: phi True, log_E True, bracket True
+   the whole message equal to the probe's printed line: True (lengths 1026, 1026)
+   probe wall 117.1 s (not compared, ruling 6); scanner wall 128.0 s
+
+-- 2188 at 89a0760: success, wall 406.4 s, integrations 1
+   accepted_steps 795508, RHS 5621781, compute_steps 5621781, reflections 5741, n_samples 4927, restart_retakes n/a
+   samples_sha256 22416e3f55c97cb9a543367d0f9b5a133a4ed580ec9a4a601a05c4a98ee21114
+   store comparison: bitwise True; samples stored 4927 new 4927; differing history columns [], value columns [], extra_data []; only in {'store': [], 'new': []}; stored accepted_steps 795508, stored compute_time 652.7107058340043
+   scan: radau accepted 795492, instances 5741 {'reflection': 5740, 'start': 1}, flagged first 0 later 4733, signature kept/discarded 0/0 (counted from rows)
+-- 2188 at this tree: failure, wall 125.6 s, integrations 1
+   failure_reason: classical_turning_point (ExponentialModel(M=0.00097413eV,n=1,beta=1.06), normalization = -276.63072859401797, phi = 2.647733963294608e-07, log_E = -306.6698578858307): the searched quantity is not monotone along the search (a midpoint of the bracket [-42.2
+   integration entries: [{'index': 0}]
+   scan: radau accepted 246870, instances 1532 {'reflection': 1531, 'start': 1}, flagged first 0 later 1441, signature kept/discarded 0/0 (counted from scan)
+   failure_reason is 256 characters, a prefix of the printed line: True
+   against the probe: phi True, log_E True, bracket True
+   the whole message equal to the probe's printed line: True (lengths 1026, 1026)
+   probe wall 115.3 s (not compared, ruling 6); scanner wall 125.6 s
+

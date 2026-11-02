@@ -1,0 +1,42 @@
+-- 2188 (candidates-89a0760.jsonl, tree 89a0760): success, wall 405.2 s
+   passive (ruling 5): True {'outcome': True, 'samples_sha256': True, 'accepted_steps': True}
+   calls 753395: none 0, point 753395, raise 0; searched 753395
+   least margin (quanta): searched 1257.5410615984154, point 1257.5410615984154, raise None, all calls 1257.5410615984154
+   searched calls with margin <= 17 / 32 / 100 / 1000: 0 / 0 / 0 / 0
+   smallest: {'call': 283272, 'phi': 1.337254419057785e-07, 'log_E': -299.99229098382045, 'outcome': 'point', 'margin': 1257.5410615984154}
+   smallest: {'call': 283408, 'phi': 1.3351409281065701e-07, 'log_E': -299.9891905973613, 'outcome': 'point', 'margin': 1261.4459751200227}
+   smallest: {'call': 282728, 'phi': 1.3457480592665826e-07, 'log_E': -299.9854623505063, 'outcome': 'point', 'margin': 1266.157734953543}
+   smallest: {'call': 283136, 'phi': 1.3393718522158665e-07, 'log_E': -299.97982701341493, 'outcome': 'point', 'margin': 1273.3131031202922}
+   smallest: {'call': 283000, 'phi': 1.3414932688065537e-07, 'log_E': -299.9784753803658, 'outcome': 'point', 'margin': 1275.0353188319343}
+-- 2197 (candidates-89a0760.jsonl, tree 89a0760): success, wall 471.0 s
+   passive (ruling 5): True {'outcome': True, 'samples_sha256': True, 'accepted_steps': True}
+   calls 857476: none 0, point 857476, raise 0; searched 857476
+   least margin (quanta): searched 208.57612745125994, point 208.57612745125994, raise None, all calls 208.57612745125994
+   searched calls with margin <= 17 / 32 / 100 / 1000: 0 / 0 / 0 / 1295
+   smallest: {'call': 287502, 'phi': 1.4800499460247938e-07, 'log_E': -301.78890044438043, 'outcome': 'point', 'margin': 208.57612745125994}
+   smallest: {'call': 287638, 'phi': 1.4777108284543723e-07, 'log_E': -301.7790816649702, 'outcome': 'point', 'margin': 210.63417767308252}
+   smallest: {'call': 287094, 'phi': 1.4870935331027052e-07, 'log_E': -301.77788962148486, 'outcome': 'point', 'margin': 210.88541248402467}
+   smallest: {'call': 287230, 'phi': 1.4847412725984831e-07, 'log_E': -301.77635939727605, 'outcome': 'point', 'margin': 211.20836147665565}
+   smallest: {'call': 286822, 'phi': 1.4918112692277505e-07, 'log_E': -301.77522163570956, 'outcome': 'point', 'margin': 211.44880298948362}
+-- 2188 (candidates-this.jsonl, tree 741dcce): failure, wall 122.2 s
+   passive (ruling 5): True {'outcome': True, 'failure_reason': True}
+   calls 228214: none 0, point 228213, raise 1; searched 228214
+   least margin (quanta): searched 1.5830393727483856, point 639277529.3372431, raise 1.5830393727483856, all calls 1.5830393727483856
+   searched calls with margin <= 17 / 32 / 100 / 1000: 1 / 1 / 1 / 1
+   the failing call: {'call': 228213, 'phi': 2.647733963294608e-07, 'log_E': -306.6698578858307, 'margin': 1.5830393727483856, 'min_margin_searched_before': 639277529.3372431}
+   smallest: {'call': 228213, 'phi': 2.647733963294608e-07, 'log_E': -306.6698578858307, 'outcome': 'raise', 'margin': 1.5830393727483856}
+   smallest: {'call': 228075, 'phi': 2.387448136258385e-07, 'log_E': -286.85333713297575, 'outcome': 'point', 'margin': 639277529.3372431}
+   smallest: {'call': 227937, 'phi': 2.391955252412661e-07, 'log_E': -286.8496569264671, 'outcome': 'point', 'margin': 641634494.1563132}
+   smallest: {'call': 227799, 'phi': 2.396472646287585e-07, 'log_E': -286.8459740546616, 'outcome': 'point', 'margin': 644001865.1784277}
+   smallest: {'call': 227661, 'phi': 2.4010003441065465e-07, 'log_E': -286.84228850552876, 'outcome': 'point', 'margin': 646379701.2148399}
+-- 2197 (candidates-this.jsonl, tree 741dcce): failure, wall 124.0 s
+   passive (ruling 5): True {'outcome': True, 'failure_reason': True}
+   calls 231891: none 0, point 231890, raise 1; searched 231891
+   least margin (quanta): searched 1.5106644960305586, point 2828338.247947135, raise 1.5106644960305586, all calls 1.5106644960305586
+   searched calls with margin <= 17 / 32 / 100 / 1000: 1 / 1 / 1 / 1
+   the failing call: {'call': 231890, 'phi': 2.950090845531173e-07, 'log_E': -306.7166549210319, 'margin': 1.5106644960305586, 'min_margin_searched_before': 2828338.247947135}
+   smallest: {'call': 231890, 'phi': 2.950090845531173e-07, 'log_E': -306.7166549210319, 'outcome': 'raise', 'margin': 1.5106644960305586}
+   smallest: {'call': 33496, 'phi': 2.7738980298034846e-05, 'log_E': -292.2740045526525, 'outcome': 'point', 'margin': 2828338.247947135}
+   smallest: {'call': 231752, 'phi': 2.6600397713925306e-07, 'log_E': -288.6298214469416, 'outcome': 'point', 'margin': 108187892.28067107}
+   smallest: {'call': 231614, 'phi': 2.6650596583176025e-07, 'log_E': -288.6261374665269, 'outcome': 'point', 'margin': 108587188.17441739}
+   smallest: {'call': 231476, 'phi': 2.6700909689021644e-07, 'log_E': -288.6224508212808, 'outcome': 'point', 'margin': 108988248.20422459}

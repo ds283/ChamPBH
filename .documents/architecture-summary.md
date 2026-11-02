@@ -1394,6 +1394,39 @@ SampleValues = namedtuple("SampleValues", [
 >    `dark_radiation.pdf`, `Delta_N_eff.pdf`, `histories.csv`'s `alpha`, `Delta_N_eff_today` and
 >    `Delta_N_eff_1MeV`. Note `:1265`.
 
+> **Note, 2026-11-02 (`reflection-restart`, prompt 03): the restart's first step and the guard.** The
+> step loop gives a Radau restarted with π > 0 (after a reflection, a drain or a release) F3's first step
+> and guards that instance's first accepted step (`numerical-strategies.md` §3.5, the note of this date).
+> What changes at the interfaces:
+> - **`ComputeTargets/ScalarHistory.py`** gains `_restart_first_step(y, global_max_step, h_floor,
+>   cap_fraction)` (F3; `None` where π ≤ 0; the loop takes at most the distance to the solver's bound),
+>   `_outward_step_flagged(interpolant, N_low, N_high,
+>   phi_start, pi_start, pi_end, cap_fraction)` (the guard's test, P1's flag) and `OUTWARD_FLAG_SAMPLES`
+>   (50). `integrate_scalar_history` looks both functions up at call time, so a test may replace them;
+>   neither is an option of any driver. Prompt 01's probe switch (`_PROBE_OUTWARD_FIX`,
+>   `_PROBE_STIFFNESS_C`, `_probe_outward_step_flagged`, `IntegrationResult.probe_retakes`) is gone.
+> - **`IntegrationResult`** gains `restart_retakes` (in place of `probe_retakes`, last, default 0): the
+>   first steps the guard discarded and retook.
+> - **The payload** of `integrate_history` gains `"restart_retakes"`, and so does `tune_history`'s, the
+>   count of the integration it accepts. **`build_extra_data`** stores it as the `extra_data` key
+>   `restart_retakes` only when it is above 0 (read with `.get`), as `steps_rejected_by_exception` is, so
+>   a history the guard never touches stores exactly what it stored before. No table, column or
+>   inventory spec changes; `FINGERPRINT_FORMAT` stays 6.
+> - **The labels.** `SCALAR_HISTORY_STEPPER_LABEL = "Radau+kinematic-cap-stepping1"`, which `main.py`
+>   registers as `IntegrationSolver(label="Radau+kinematic-cap", stepping=1)` beside stepping 0;
+>   `plot_by_beta.py` and `plot_ScalarHistory.py` select stepping 1. `VERSION_LABEL = "2026.9.0"`. Lookups
+>   are keyed on the version label and never fall back, so 2026.9.0 code reads no history of a 2026.8.0
+>   store; such a store is read with its own tree.
+> - **The golden records** are `ComputeTargets/tests/data/golden_history_rr03.json` and
+>   `golden_history_rr03_tuned.json` (equal to `golden_history_05.json` and `golden_history_06_tuned.json`
+>   but for the stepper label and the added `restart_retakes`, 0), and the new reflecting one,
+>   `golden_history_rr03_reflecting.json` (β = 1.5, M = 10⁻¹² M_P, α = 0.05, tuned;
+>   `golden_reflecting_history.py`).
+> - **`tools/outward_step_scan.py`** runs the production code only (`--variant` and `--stiffness-c` are
+>   gone; a task naming a variant is refused) and records each history's `restart_retakes` and the ruled
+>   signature's steps, kept and discarded apart.
+> - Tests: `ComputeTargets/tests/test_restart_fix.py`, `test_golden_reflecting_history.py`.
+
 ### 7.3 `AdiabaticHistory` (`ComputeTargets/AdiabaticHistory.py`)
 
 Computes the adiabatic perturbation parameter Q (which determines whether the chameleon field is adiabatically tracking its minimum). Requires a `ScalarHistoryProxy` as input.

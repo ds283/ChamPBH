@@ -59,7 +59,21 @@
 # rho_chi/rho_R, the history row stores the dark radiation, Delta N_eff, the parking, the release and
 # the relativistic margins, extra_data is Text, and AdiabaticHistory reads rho_chi. A store made
 # before 2026.8.0 cannot be reused: start a fresh datastore file.
-VERSION_LABEL = "2026.8.0"
+# On 2026-11-02 (reflection-restart prompt 03), 2026.9.0: from 2026.9.0 a Radau instance restarted with
+# pi > 0 (after a floor reflection, a drain or a release) is given a first step f phi/pi, clamped to
+# [h_floor, global_max_step] (F3), and its first accepted step is guarded: a step carrying P1's flag
+# (pi_end/pi_start < 1/2 with no sign change, or the interpolant below (1 - f) phi_start) is discarded
+# and retaken at half its h, and a retake below h_floor fails the history. Before, an uncapped first
+# step after a reflection near the wall could be accepted with an endpoint near the wall and an
+# interpolant through phi < 0 (.documents/post-reflection-step-2026-11-02/). Every history that
+# reflects, drains or is released may change value; a history with none of these (natural mode at
+# large M, the golden histories) is bitwise unchanged but for its stepper label,
+# "Radau+kinematic-cap-stepping1". extra_data gains the key restart_retakes, only where the guard
+# retook a step. No table or column changes (FINGERPRINT_FORMAT stays 6). A 2026.8.0 store is not to
+# be extended at 2026.9.0: start a fresh datastore file. Lookups are keyed on this label and never
+# fall back, so 2026.9.0 code finds no history in a 2026.8.0 store; read one with its own tree (main
+# before reflection-restart prompt 03).
+VERSION_LABEL = "2026.9.0"
 
 # The reserved payload key of a version-keyed lookup (VERSION_SERIAL_KEY) and its reader
 # (require_version_serial) were defined here until dk-and-rpk-migration prompt 08; they are
