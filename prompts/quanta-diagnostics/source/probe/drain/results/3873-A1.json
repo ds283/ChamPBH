@@ -1,0 +1,13 @@
+{
+ "serial": 3873,
+ "label": "A1",
+ "M_eV": 2435323595526304.5,
+ "beta": 1.11,
+ "alpha_stored": 0.03,
+ "A": "1",
+ "gap": "zero",
+ "rchi_today_stored": 0.003123126945440556,
+ "wall_s": 91.88216376304626,
+ "failure": true,
+ "failure_reason": "integrate_scalar_history (drain-probe-3873-A1): reflection requested inside the wall: W/(pi^2/2) = 1.485 at N=43.76462032, phi_E=1.6701e-08, pi_E=-0.0014122 (W = 1.4807e-06, pi^2/2 = 9.9713e-07)"
+}

@@ -7,6 +7,12 @@ U1–U7 and P1–P16 ruled by the user the same day, all as proposed (README §6
 Under U1, no prompt is written until `reflection-restart` 03 has landed and been merged here; under U2,
 the rebuild of record waits for this campaign's 07.
 
+**2026-11-02, after the rulings: held for the user's decisions of README §6.3.** The premise was corrected
+(births, not later bounces; [`source/margins-correction_2026-11-02.md`](source/margins-correction_2026-11-02.md)),
+and a probe of a one-loop drain ([`source/drain-probe_2026-11-02.md`](source/drain-probe_2026-11-02.md),
+README §0.4) found the late classical cascade to be a product of the fixed-α drain. Whether the drain
+changes, and where, decides what this campaign becomes.
+
 The campaign stores what the run computes and discards about the produced quanta: every generation and
 turning point as a row of a child table, the field's and the tracker's mass and the matter-like excess at
 every sample, and per history the margins over all generations, the late-born share, and three measures
@@ -61,7 +67,8 @@ None yet.
 
 ## 3. Active and unresolved issues
 
-Opened by the planner on 2026-11-02, from the scoping (`source/scoping_2026-11-02.md`).
+Opened by the planner on 2026-11-02, from the scoping (`source/scoping_2026-11-02.md`); the last two
+opened the same day, after the plan was ruled, from the drain probe (`source/drain-probe_2026-11-02.md`).
 
 - **`[00-weighted-margins-hide-the-least-relativistic-generations]`** — the stored worst margins and
   failing shares (`inelastic-reflection` 09) run over the generations holding at least 10⁻³ of
@@ -81,6 +88,35 @@ Opened by the planner on 2026-11-02, from the scoping (`source/scoping_2026-11-0
   at later bounces could change. The user ruled it documented and quantified, not modelled (2026-11-02).
   **Next:** quantified by 04 and 05 (δ_stim, δ_resc under the stated spectrum and random phases),
   documented by 07, and left open as a known limitation.
+  **Narrowed 2026-11-02** (source `drain-probe_2026-11-02.md` §§1, 3): the premise above is wrong in
+  one respect. A bounce acts on a mode by where it sits against the bounce's band, not by p/m: a mode
+  with p ≫ k_ex follows adiabatically whatever its mass, so only generations with ln(Q_g/Q_k) ≲ O(1)
+  are rescattered or stimulated. Parametric resonance is excluded wherever production is
+  non-negligible: the phase slip per bounce is 10⁶–10³⁰ rad in every producing train probed (two
+  laboratory-M histories under a one-loop drain, three at 10⁻¹² M_P at stored α and without a drain),
+  against |β|² ≲ 1. The random-phase recursion n_{j+1} = n_j + |β_j|²(1 + 2n_j) is then the complete
+  model; under a one-loop drain it is negligible (n ~ αe^{−4ℓ} ≪ 1). At the stored fixed α the late
+  classical generations still have n ≫ 1, which is `[00-fixed-alpha-drain-overstates-late-reflections]`.
+- **`[00-fixed-alpha-drain-overstates-late-reflections]`** — opened 2026-11-02 (source
+  `drain-probe_2026-11-02.md`). A fixed α cannot follow the drain along the cascade or with M. At
+  α = 10⁻³ at laboratory M it underestimates the early one-loop drains (one loop: 0.08–0.26) and asks
+  the late classical bounces (R < 1) for occupations n ≫ 1 in their own band: in 2197, 61% of ρ_χ is born
+  at R < 1 with n > 1, against |β|² ≲ O(1) from one bounce (a fraction ~R e^{4ℓ} of E; R·S(L) on the
+  classical wall). Under α_eff = min(1, A·2.7/ℓ), zero at R ≤ 1, 2197 and 2188 park after 10–95 one-loop
+  bounces and r_χ rises 1–10× (2197's ΔN_eff 0.0064 → 0.061 at A = 1); at 10⁻¹² M_P nothing is drained
+  and ΔN_eff → 0 (3233: 0.335 → 0). **Impact:** the stored ρ_χ of the low-α laboratory-M histories is
+  dominated by an unphysical late drain, and the stored large-M ΔN_eff rests on drains far above what
+  a bounce can deliver; observable effects are below current bounds in the histories probed. **Next:**
+  the user's decisions, README §6.3 (1–4).
+- **`[00-reflection-restart-tree-fails-probe-histories]`** — opened 2026-11-02 (source
+  `drain-probe_2026-11-02.md` §5). On `reflection-restart` at `2d50b95`, at the stored normalization:
+  2197 and 2188 at their stored α = 10⁻³ fail after about 115 s in `classical_turning_point`
+  (ln E = −306.7: a residual not monotone, alternating −inf and repeated values, which looks like float
+  cancellation in V − V_floor), though both completed on `0209aac`; and 3873 (10⁻¹² M_P, β 1.11) without
+  a drain stops at N = 43.76 at the guard "reflection requested inside the wall" (W/(π²/2) = 1.485).
+  **Impact:** not investigated; histories of the low-α transition window may fail on the fixed tree
+  where they succeeded before. **Next:** for `reflection-restart` 04, at the user's word (README §6.3,
+  6).
 - **`[00-the-parking-leftover-has-no-spectrum]`** — the energy drained at the parking switch (up to
   0.10 of ρ_χ at 4×10⁻³¹, β 1.06–1.107; ≤ 0.03 elsewhere) has no peak estimate, so no margin and no
   wall-exposure measure covers it; it is reported only as `unassessed_share`. **Impact:** not measured.

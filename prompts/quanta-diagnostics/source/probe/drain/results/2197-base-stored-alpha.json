@@ -1,0 +1,13 @@
+{
+ "serial": 2197,
+ "label": "base",
+ "M_eV": 0.0009741294382105218,
+ "beta": 1.185,
+ "alpha_stored": 0.001,
+ "A": null,
+ "gap": "zero",
+ "rchi_today_stored": 0.0008651958712788435,
+ "wall_s": 117.11052393913269,
+ "failure": true,
+ "failure_reason": "classical_turning_point (ExponentialModel(M=0.00097413eV,n=1,beta=1.185), normalization = -276.63072859401797, phi = 2.950090845531173e-07, log_E = -306.7166549210319): the searched quantity is not monotone along the search (a midpoint of the bracket [-42."
+}

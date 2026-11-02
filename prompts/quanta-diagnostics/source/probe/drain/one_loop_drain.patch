@@ -1,0 +1,56 @@
+--- a/ComputeTargets/ScalarHistory.py
++++ b/ComputeTargets/ScalarHistory.py
+@@ -1497,6 +1497,44 @@
+         for j in range(t.shape[0]):
+             values[:, j] = self.state_at(float(t[j]))
+         return values
++
++
++# PROBE (drain-probe, 2026-11-02, not a campaign change): the one-loop drain
++# alpha_eff = min(cap, A * 2.7/ell) where the one-loop chain has a solution (R > 1); zero for
++# R <= 1 and for an unassessed candidate; in the gap (R > 1, no solution) zero, or A * 2.7/4 with
++# PROBE_GAP=high (ell > 4 at R = 1)
++import os as _os
++
++_PROBE_A = float(_os.environ["PROBE_DRAIN_A"]) if "PROBE_DRAIN_A" in _os.environ else None
++_PROBE_GAP = _os.environ.get("PROBE_GAP", "zero")
++_PROBE_CAP = 0.99
++_PROBE_LOG = []
++
++
++def _probe_alpha(model, assessment, N_):
++    ell = None
++    log_R = None
++    if assessment is None:
++        regime, a = "unassessed", 0.0
++    else:
++        phi_a, log_E_a, ct = assessment
++        log_R = ct.log_R
++        if ct.log_R <= 0.0:
++            regime, a = "classical", 0.0
++        else:
++            try:
++                ta = model.one_loop_turnaround(phi_a, log_E_a)
++            except ComputationFailureError:
++                ta = None
++            if ta is None:
++                regime = "gap"
++                a = _PROBE_A * 2.7 / 4.0 if _PROBE_GAP == "high" else 0.0
++            else:
++                regime, ell = "one_loop", ta.ell
++                a = _PROBE_A * 2.7 / ta.ell
++    a = min(a, _PROBE_CAP)
++    _PROBE_LOG.append((float(N_), regime, log_R, ell, a))
++    return a
+ 
+ 
+ def integrate_scalar_history(
+@@ -1912,6 +1950,8 @@
+         log_rho_kin: float = 2.0 * log(H_before) + 2.0 * log(abs(pi_before)) - LOG_2
+ 
+         alpha_eff, w_gate = alpha_effective(nonadiabaticity, resolved)
++        if _PROBE_A is not None:
++            alpha_eff = _probe_alpha(model, assessment, N_)
+         phi_a, log_E_a, turning_point_a = (
+             (None, None, None) if assessment is None else assessment
+         )

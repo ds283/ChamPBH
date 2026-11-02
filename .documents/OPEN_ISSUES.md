@@ -1,6 +1,6 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-11-02 · **29 open**: 4 on the `review-remediation` board (closed
+**Last updated:** 2026-11-02 · **31 open**: 4 on the `review-remediation` board (closed
 2026-09-30), none now assigned; 2 on the `production-readiness` board
 (closed 2026-09-30); 2 on the `run-integrity` board (closed 2026-09-30; one stale entry closed 2026-10-22, its fix having landed in `5740690`; `jordan-normalization` prompt 07 closed one, 2026-10-26); 6 on the
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`
@@ -48,9 +48,9 @@ prompts landed, with these four open and none assigned; one of them closed as me
 `science-readiness`'s last, both from one measurement, `.documents/bbn-ratio-spline-2026-11-01/`; one opened after the close,
 2026-11-02, §1.19, from the diagnosis of the 2026.8.0 run's m_eff² failures, `.documents/post-reflection-step-2026-11-02/`,
 and assigned the same day to `reflection-restart`, §1.21); none on the `reflection-restart` board (planned
-2026-11-02, with none opened and that one assigned); 3 on the `quanta-diagnostics` board (planned
-2026-11-02 from a scoping session the same day, `prompts/quanta-diagnostics/source/`; all three opened by
-the planner, §1.22).
+2026-11-02, with none opened and that one assigned); 5 on the `quanta-diagnostics` board (planned
+2026-11-02 from a scoping session the same day, `prompts/quanta-diagnostics/source/`; three opened by
+the planner, one of them narrowed and two more opened the same day from the drain probe, §1.22).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -357,13 +357,20 @@ rules and give a verdict on the run. One issue assigned at planning, from the `i
 ### 1.22 `quanta-diagnostics` — [board §3](../prompts/quanta-diagnostics/IMPLEMENTATION_STATE.md)
 
 Planned 2026-11-02 to store and measure what the run discards about the produced quanta. Three opened by
-the planner, from the scoping session of that day.
+the planner, from the scoping session of that day; two opened the same day from the drain probe
+(`source/drain-probe_2026-11-02.md`).
 
 - `[00-weighted-margins-hide-the-least-relativistic-generations]` — stored worst margins and failing
   shares cover only generations ≥ 10⁻³ of K; in the low-α transition window the rest hold 80–98% of ρ_χ,
   with all-generation reflection margins to −20 against a stored +17.5. *(`quanta-diagnostics`; planner)*
-- `[00-later-bounces-act-on-quanta-already-present]` — a later bounce is non-adiabatic for quanta with
-  p ≪ ω_t: rescattering and stimulated production not modelled; to be quantified and documented, then
-  left open, as the user ruled. *(`quanta-diagnostics`; planner)*
+- `[00-later-bounces-act-on-quanta-already-present]` — a later bounce rescatters and stimulates only quanta
+  within about an e-fold of its band (not those with p ≪ ω_t, narrowed 2026-11-02); parametric resonance
+  measured absent; to be quantified and documented, then left open, as the user ruled. *(`quanta-diagnostics`; planner)*
 - `[00-the-parking-leftover-has-no-spectrum]` — the parking drain (≤ 0.10 of ρ_χ) has no peak estimate,
   so no margin or wall measure covers it; out of scope. *(`quanta-diagnostics`; planner)*
+- `[00-fixed-alpha-drain-overstates-late-reflections]` — a fixed α asks late R < 1 bounces for n ≫ 1 (61%
+  of 2197's ρ_χ); a one-loop drain parks the field in 10–95 bounces and moves ΔN_eff; the user's decision.
+  *(`quanta-diagnostics`; drain probe, 2026-11-02)*
+- `[00-reflection-restart-tree-fails-probe-histories]` — on `2d50b95`, 2197 and 2188 fail in
+  `classical_turning_point` at stored α, and 3873 at the inside-wall guard without a drain; not investigated.
+  *(`quanta-diagnostics`; drain probe, 2026-11-02)*

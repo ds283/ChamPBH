@@ -1,0 +1,5 @@
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+-- integrate_history (drain-probe-3873-A1): integration failure
+   integrate_scalar_history (drain-probe-3873-A1): reflection requested inside the wall: W/(pi^2/2) = 1.485 at N=43.76462032, phi_E=1.6701e-08, pi_E=-0.0014122 (W = 1.4807e-06, pi^2/2 = 9.9713e-07)
+!! integrate_history (drain-probe-3873-A1): marked as total integration failure
+done {"serial": 3873, "label": "A1", "wall_s": 91.88216376304626, "failure": true, "candidates": null}

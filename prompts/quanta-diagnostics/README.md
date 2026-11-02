@@ -12,6 +12,11 @@ prompt 08 (the peak and the margins) and 09 (the store); the briefing notes
 `BriefingNotes/production_energy_ratio.tex` and `meff_and_wall_production.tex` (the classical spectrum)
 and `KadanoffBaym/kb_partB_report.tex` §§ "The soft occupation", "The hard spectrum", "What is open"
 (the two-loop toy), all in the repository *Chameleon PBH (David's stuff)*; the `reflection-restart` plan.
+Added 2026-11-02, after the plan was ruled: [`source/margins-correction_2026-11-02.md`](source/margins-correction_2026-11-02.md),
+[`source/drain-probe_2026-11-02.md`](source/drain-probe_2026-11-02.md) with its probe in
+[`source/probe/drain/`](source/probe/drain/), and the briefing note `BriefingNotes/nonrelativistic_quanta.tex`
+(the whole argument, with what is measured and what is only possible) and `BriefingNotes/wall_backreaction.tex`
+§"The chain of estimates" (the one-loop inelastic fraction).
 
 ## 0. Why this campaign exists
 
@@ -67,6 +72,18 @@ generations themselves are dropped at the store. The scoping (source §§2–3) 
   has ruled the effect documented and quantified, not modelled (source §7). What §1.1's measure 4
   should become in the light of this is open for the user; the argument and its numbers are in
   [`source/margins-correction_2026-11-02.md`](source/margins-correction_2026-11-02.md).
+  **Narrowed 2026-11-02** ([`source/drain-probe_2026-11-02.md`](source/drain-probe_2026-11-02.md) §1):
+  being NR at the wall and being disturbed by the bounce are different thresholds,
+  ln(Q_g/Q_k) < ln(m_k/k_ex,k) (15–20 e-folds wide in the tail) against ln(Q_g/Q_k) ≲ O(1). A quantum
+  NR at the wall but outside the band keeps its occupation; what remains for it is the equation of
+  state (measure 2) and an unmodelled backreaction n_χ m(φ). The n ≫ 1 at birth is a property of the
+  fixed-α drain: one bounce from vacuum gives |β|² ≲ O(1) in its band, a fraction of about R e^{4ℓ} of
+  E, and the classical-wall computation gives R·S(L).
+- **The drain, not the redshifting (2026-11-02, §0.4).** A drain set by the one-loop inelastic
+  fraction, scaled by A, with nothing drained at R ≤ 1, removes the late classical cascade in the two
+  laboratory-M histories probed: the field parks after 10–95 one-loop bounces, and r_χ rises 1–10×.
+  Parametric resonance is excluded wherever production is non-negligible (phase slip per bounce ≳
+  (k_ex/H)·ΔN²), so the random-phase recursion, stimulated emission, is the whole multi-bounce model.
 
 Seven histories cannot carry a statement about a grid of 3,846, and a figure cannot be made from what
 the store keeps. This campaign stores what the run already computes and discards, adds the measures
@@ -97,6 +114,38 @@ rebuild that is the user's. This campaign touches the same file (after the integ
 step loop) and changes the store's schema. Hence U1 and U2: this campaign's prompts are written and run
 **after `reflection-restart` 03 lands**, on its fixed tree, and the rebuild of record waits for this
 campaign, so that one rebuild carries both.
+
+### 0.4 The drain question (2026-11-02, open for the user)
+
+Added after the plan was ruled, from a session that continued the margins correction
+([`source/drain-probe_2026-11-02.md`](source/drain-probe_2026-11-02.md); the briefing note
+`BriefingNotes/nonrelativistic_quanta.tex` holds the whole argument). The user has said that whether
+any of this belongs in this campaign is to be decided by what is right, not by the plan's wording;
+§5's "no stored value moves" was written for a diagnostics-only campaign.
+
+- **What is wrong with a fixed α.** The drained fraction should vary along the cascade and with M, and
+  a fixed α cannot. At α = 10⁻³ at laboratory M it underestimates the early one-loop drains (one loop
+  gives 0.08–0.26) and asks the late classical bounces for n ≫ 1, which one bounce cannot deliver. At
+  large M, where R < 1 from the first impact, every stored α (0.01–0.15) is far above what a bounce can
+  deliver.
+- **The proposal examined.** α_eff = min(1, A·2.7/ℓ) where the one-loop chain has a solution
+  (`wall_backreaction.tex`, ρ_prod/ρ_kin ≈ 4c/ℓ, a formal answer near the elastic end), zero (or R·S(L))
+  at R ≤ 1, with A scanned: A = 1 is one loop, A → 0 elastic, the clamp fully inelastic.
+- **What it does** (two laboratory-M histories, three at 10⁻¹² M_P, stored normalization, not re-tuned).
+  - At laboratory M the field parks after 10 (A = 1) or 95 (A = 0.1) bounces, all one-loop. r_χ rises:
+    2197's ΔN_eff goes from 0.0064 to 0.061 at A = 1. Each integration takes seconds instead of ten
+    minutes.
+  - At large M nothing is drained: about 300 elastic bounces, and ΔN_eff → 0 (3233: 0.335 → 0).
+- **What is not settled.**
+  - The gap 1 < R < 10^2.9, where the one-loop fraction is O(1) and the classical one is about 10⁻⁵ R.
+    The probes never reached it.
+  - The tail, where production at R < 1 has not been computed.
+  - Whether the cascade parks before R ≤ 1 across the grid and at A < 0.1.
+  - The parking model at physical M.
+- **Found on the way.** Two integrator failures on the `reflection-restart` 03 tree, at the stored
+  normalization (board §3, `[00-reflection-restart-tree-fails-probe-histories]`).
+
+The decisions this leaves are listed in §6.3.
 
 ## 1. Scope
 
@@ -150,6 +199,10 @@ so that (1/2π²)∫ q³ n_g dq = ΔK_g. The measures:
    - the **rescattered fraction** ε_j = Σ_g ∫ q³ n_g(q) 2 n_j(q) dq / ((2π²) K_j⁻): the fraction of the ρ_χ
      present changed by the bounce at first order with random phases (n_j the bounce's own occupation,
      |β_j|², from its ΔK_j; zero where ΔK_j = 0).
+   **Under review (2026-11-02; §0.4, §6.3):** S_j largely repeats the birth margin and the Q table;
+   n̄_j and ε_j are first-order, random-phase measures that apply only where n ≲ 1, and parametric
+   resonance (the coherent build-up below) is now measured to be absent wherever production is
+   non-negligible.
    Per history: max S_j, the number of bounces with S_j > ½, max n̄_j, max ε_j, and the two summaries
    **δ_stim** = Σ_j 2 n̄_j ΔK_j / K(N_final) and **δ_resc** = Σ_j ε_j K_j⁻ / K(N_final): the fractional
    change of the final ρ_χ that stimulated emission and rescattering would make, at first order, with
@@ -311,6 +364,24 @@ Accepted by the user as their defaults, 2026-11-02 ("§6.2 P1 to P16 seem OK as 
   05's measurements and the measures' definitions as the paper will use them; `architecture-summary.md`
   gets the table and the columns; `numerical-strategies.md` the spectrum model and its kernels;
   `CLAUDE.md` the test counts and one line on the new table.
+
+### 6.3 Open for the user (2026-11-02, not ruled)
+
+From §0.4 and [`source/drain-probe_2026-11-02.md`](source/drain-probe_2026-11-02.md) §6. Nothing is
+written until these are decided; U1–U7 and P1–P16 stand until then, but several depend on them (§5's
+"no stored value moves", U3's labels, U6's summaries, P15's issues).
+
+1. **The drain.** Keep the fixed α, or replace it by α_eff = min(1, A·2.7/ℓ) with A scanned (α's stored
+   key then carries A).
+2. **R ≤ 1.** Drain zero, or R·S(L) as a stated upper extrapolation.
+3. **The gap 1 < R < 10^2.9.** The interpolation between the one-loop and classical estimates, and how
+   its effect is measured.
+4. **Where it lands.** This campaign re-planned around the drain (the drain first, the diagnostics
+   measuring it), or a campaign of its own. Either way, before the rebuild of record (U2).
+5. **Measure 4** (margins-correction, "Open for the user"). Under a one-loop drain, n̄_j and ε_j apply
+   wherever the probes reached (n ≪ 1). The random-phase recursion is the complete multi-bounce model,
+   and a phase-slip check per bounce would document the absence of resonance. S_j: drop or re-describe.
+6. **The two integrator failures** (board §3): whether they go to `reflection-restart` 04.
 
 ## 7. What this campaign hands to the user
 
