@@ -11,7 +11,7 @@ The branch was cut from `reflection-restart` at `3b8a553`. Under U1 as extended 
 written until `reflection-restart` 04 has landed and been merged here; under U2, the rebuild of record
 waits for this campaign's 08. *(2026-11-02: `reflection-restart` 04 landed and that campaign closed; its branch was
 merged here (`1561b60`). The user ruled the wall-search fix into 01 (README §8.8), and the fixed-α issue came
-back to §3 for it.)*
+back to §3 for it. Prompt 01 written the same day.)*
 
 The campaign replaces the fixed-α drain by a one-loop law, α_eff = min(α_cap, A·2.7/ℓ)·w_gate at a
 one-loop turnaround and zero at R ≤ 1, with the fixed law kept beside it, bitwise. It measures the law
@@ -37,7 +37,7 @@ The plan as first ruled had seven prompts (README §2), none written; the re-pla
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | The drain law | the law and A as inputs; the regime in the loop; α_eff by regime; the gap prescription as a module attribute; the `"drain"` payload key; the tool route's options; the 3873 failure; the wall-search fix (README §8.8) | Opus | ⬜ | ⬜ | | |
+| 01 | [The drain law](01-the-drain-law.md) | the law and A as inputs; the regime in the loop; α_eff by regime; the gap prescription as a module attribute; the `"drain"` payload key; the tool route's options; the 3873 failure; the wall-search fix (README §8.8) | Opus | ✍️ | ⬜ | | |
 | 02 | Measure the law | about forty histories by the tool route, re-tuned, at three A and both gap prescriptions; then U13–U14 | Opus | ⬜ | ⬜ | | |
 | 03 | The store | the keys, `ScalarHistoryBounce`, the sample and history columns, the gap prescription fixed, `FINGERPRINT_FORMAT` 7, `VERSION_LABEL` | Opus | ⬜ | ⬜ | | |
 | 04 | Drivers and exports | the law's options in `main.py` and the plot scripts; `histories.csv`, `fields.csv`, `bounces.csv` | Sonnet | ⬜ | ⬜ | | |
