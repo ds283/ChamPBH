@@ -1,0 +1,92 @@
+== 2197, 89a0760 (before 03): 857476 calls, 6648 infalls; outcomes none/point/raise 0/857476/0
+   least margin 208.576 quanta at call 287502 (phi 1.480050e-07, ln E -301.788900), the first call of infall 1962:
+       1959  phi 1.4871e-07  start ln E  -301.778  second  -290.152  last -287.8562  calls  136  start margin 210.9
+       1960  phi 1.4847e-07  start ln E  -301.776  second  -290.155  last -287.8595  calls  136  start margin 211.2
+       1961  phi 1.4824e-07  start ln E  -301.775  second  -290.159  last -287.8628  calls  136  start margin 211.6
+     * 1962  phi 1.4800e-07  start ln E  -301.789  second  -290.162  last -287.8662  calls  136  start margin 208.6
+       1963  phi 1.4777e-07  start ln E  -301.779  second  -290.165  last -287.8695  calls  135  start margin 210.6
+       1964  phi 1.4753e-07  start ln E  -297.958  second  -290.134  last -287.8728  calls  135  start margin 9612
+       1965  phi 1.4730e-07  start ln E  -298.006  second  -290.138  last -287.8761  calls  135  start margin 9165
+   least margin over infall starts 208.576; over later calls 9965.11
+   outlier starts (ln E more than 3 below the local median of 21 starts): 0
+
+== 2197, this branch (03's code): 231891 calls, 1555 infalls; outcomes none/point/raise 0/231890/1
+   least margin 1.51066 quanta at call 231890 (phi 2.950091e-07, ln E -306.716655), the first call of infall 1554:
+       1551  phi 2.6701e-07  start ln E  -288.622  second  -287.878  last -286.3194  calls  138  start margin 1.09e+08
+       1552  phi 2.6651e-07  start ln E  -288.626  second  -287.883  last -286.3237  calls  138  start margin 1.086e+08
+       1553  phi 2.6600e-07  start ln E  -288.630  second  -287.887  last -286.3279  calls  138  start margin 1.082e+08
+     * 1554  phi 2.9501e-07  start ln E  -306.717  second         —  last -306.7167  calls    1  start margin 1.511
+   least margin over infall starts 1.51066; over later calls 2.27475e+08
+   outlier starts (ln E more than 3 below the local median of 21 starts): 4
+   - infall 18: start ln E -270.627 against local median -266.522
+         15  phi 1.2125e-03  start ln E  -259.820  second  -258.993  last -257.4959  calls  183  start margin 2.957e+14
+         16  phi 1.0966e-03  start ln E  -260.110  second  -259.337  last -257.8510  calls  182  start margin 2.906e+14
+         17  phi 1.0008e-03  start ln E  -260.403  second  -259.661  last -258.1819  calls  182  start margin 2.855e+14
+     *   18  phi 1.0220e-03  start ln E  -270.627  second  -260.677  last -258.4919  calls  182  start margin 1.057e+14
+         19  phi 9.4724e-04  start ln E  -268.148  second  -260.936  last -258.7838  calls  181  start margin 1.492e+14
+         20  phi 8.8160e-04  start ln E  -267.359  second  -261.181  last -259.0596  calls  181  start margin 1.631e+14
+         21  phi 8.2356e-04  start ln E  -266.963  second  -261.413  last -259.3213  calls  180  start margin 1.701e+14
+   - infall 196: start ln E -292.274 against local median -283.181
+        193  phi 2.5689e-05  start ln E  -274.449  second  -273.701  last -272.1477  calls  160  start margin 4.026e+13
+        194  phi 2.5445e-05  start ln E  -274.479  second  -273.734  last -272.1814  calls  160  start margin 3.978e+13
+        195  phi 2.5204e-05  start ln E  -274.510  second  -273.767  last -272.2150  calls  160  start margin 3.93e+13
+     *  196  phi 2.7739e-05  start ln E  -292.274  second  -274.540  last -272.2484  calls  161  start margin 2.828e+06
+        197  phi 2.7488e-05  start ln E  -287.308  second  -274.570  last -272.2817  calls  160  start margin 4.056e+08
+        198  phi 2.7241e-05  start ln E  -286.042  second  -274.600  last -272.3148  calls  160  start margin 1.438e+09
+        199  phi 2.6996e-05  start ln E  -285.297  second  -274.630  last -272.3477  calls  160  start margin 3.032e+09
+   - infall 197: start ln E -287.308 against local median -283.181
+        194  phi 2.5445e-05  start ln E  -274.479  second  -273.734  last -272.1814  calls  160  start margin 3.978e+13
+        195  phi 2.5204e-05  start ln E  -274.510  second  -273.767  last -272.2150  calls  160  start margin 3.93e+13
+        196  phi 2.7739e-05  start ln E  -292.274  second  -274.540  last -272.2484  calls  161  start margin 2.828e+06
+     *  197  phi 2.7488e-05  start ln E  -287.308  second  -274.570  last -272.2817  calls  160  start margin 4.056e+08
+        198  phi 2.7241e-05  start ln E  -286.042  second  -274.600  last -272.3148  calls  160  start margin 1.438e+09
+        199  phi 2.6996e-05  start ln E  -285.297  second  -274.630  last -272.3477  calls  160  start margin 3.032e+09
+        200  phi 2.6755e-05  start ln E  -284.772  second  -274.660  last -272.3805  calls  160  start margin 5.122e+09
+   - infall 1554: start ln E -306.717 against local median -288.615
+       1551  phi 2.6701e-07  start ln E  -288.622  second  -287.878  last -286.3194  calls  138  start margin 1.09e+08
+       1552  phi 2.6651e-07  start ln E  -288.626  second  -287.883  last -286.3237  calls  138  start margin 1.086e+08
+       1553  phi 2.6600e-07  start ln E  -288.630  second  -287.887  last -286.3279  calls  138  start margin 1.082e+08
+     * 1554  phi 2.9501e-07  start ln E  -306.717  second         —  last -306.7167  calls    1  start margin 1.511
+
+== 2188, 89a0760 (before 03): 753395 calls, 5741 infalls; outcomes none/point/raise 0/753395/0
+   least margin 1257.54 quanta at call 283272 (phi 1.337254e-07, ln E -299.992291), the first call of infall 1935:
+       1932  phi 1.3436e-07  start ln E  -299.975  second  -288.361  last -286.0649  calls  136  start margin 1280
+       1933  phi 1.3415e-07  start ln E  -299.978  second  -288.364  last -286.0682  calls  136  start margin 1275
+       1934  phi 1.3394e-07  start ln E  -299.980  second  -288.367  last -286.0715  calls  136  start margin 1273
+     * 1935  phi 1.3373e-07  start ln E  -299.992  second  -288.371  last -286.0748  calls  136  start margin 1258
+       1936  phi 1.3351e-07  start ln E  -299.989  second  -288.374  last -286.0782  calls  135  start margin 1261
+       1937  phi 1.3330e-07  start ln E  -296.167  second  -288.343  last -286.0815  calls  135  start margin 5.768e+04
+       1938  phi 1.3309e-07  start ln E  -296.214  second  -288.347  last -286.0848  calls  135  start margin 5.503e+04
+   least margin over infall starts 1257.54; over later calls 226971
+   outlier starts (ln E more than 3 below the local median of 21 starts): 0
+
+== 2188, this branch (03's code): 228214 calls, 1532 infalls; outcomes none/point/raise 0/228213/1
+   least margin 1.58304 quanta at call 228213 (phi 2.647734e-07, ln E -306.669858), the first call of infall 1531:
+       1528  phi 2.3965e-07  start ln E  -286.846  second  -286.102  last -284.5428  calls  138  start margin 6.44e+08
+       1529  phi 2.3920e-07  start ln E  -286.850  second  -286.106  last -284.5470  calls  138  start margin 6.416e+08
+       1530  phi 2.3874e-07  start ln E  -286.853  second  -286.110  last -284.5513  calls  138  start margin 6.393e+08
+     * 1531  phi 2.6477e-07  start ln E  -306.670  second         —  last -306.6699  calls    1  start margin 1.583
+   least margin over infall starts 1.58304; over later calls 1.34425e+09
+   outlier starts (ln E more than 3 below the local median of 21 starts): 3
+   - infall 184: start ln E -285.923 against local median -281.361
+        181  phi 2.1868e-05  start ln E  -272.847  second  -272.101  last -270.5485  calls  160  start margin 6.696e+13
+        182  phi 2.1661e-05  start ln E  -272.878  second  -272.134  last -270.5821  calls  160  start margin 6.643e+13
+        183  phi 2.1456e-05  start ln E  -272.908  second  -272.167  last -270.6155  calls  160  start margin 6.591e+13
+     *  184  phi 2.3622e-05  start ln E  -285.923  second  -272.938  last -270.6488  calls  160  start margin 1.621e+09
+        185  phi 2.3409e-05  start ln E  -284.502  second  -272.968  last -270.6819  calls  160  start margin 6.714e+09
+        186  phi 2.3199e-05  start ln E  -283.704  second  -272.998  last -270.7149  calls  160  start margin 1.49e+10
+        187  phi 2.2992e-05  start ln E  -283.154  second  -273.027  last -270.7477  calls  160  start margin 2.582e+10
+   - infall 185: start ln E -284.502 against local median -281.361
+        182  phi 2.1661e-05  start ln E  -272.878  second  -272.134  last -270.5821  calls  160  start margin 6.643e+13
+        183  phi 2.1456e-05  start ln E  -272.908  second  -272.167  last -270.6155  calls  160  start margin 6.591e+13
+        184  phi 2.3622e-05  start ln E  -285.923  second  -272.938  last -270.6488  calls  160  start margin 1.621e+09
+     *  185  phi 2.3409e-05  start ln E  -284.502  second  -272.968  last -270.6819  calls  160  start margin 6.714e+09
+        186  phi 2.3199e-05  start ln E  -283.704  second  -272.998  last -270.7149  calls  160  start margin 1.49e+10
+        187  phi 2.2992e-05  start ln E  -283.154  second  -273.027  last -270.7477  calls  160  start margin 2.582e+10
+        188  phi 2.2787e-05  start ln E  -282.737  second  -273.057  last -270.7804  calls  160  start margin 3.915e+10
+   - infall 1531: start ln E -306.670 against local median -286.839
+       1528  phi 2.3965e-07  start ln E  -286.846  second  -286.102  last -284.5428  calls  138  start margin 6.44e+08
+       1529  phi 2.3920e-07  start ln E  -286.850  second  -286.106  last -284.5470  calls  138  start margin 6.416e+08
+       1530  phi 2.3874e-07  start ln E  -286.853  second  -286.110  last -284.5513  calls  138  start margin 6.393e+08
+     * 1531  phi 2.6477e-07  start ln E  -306.670  second         —  last -306.6699  calls    1  start margin 1.583
+

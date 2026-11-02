@@ -8,6 +8,12 @@ The run that replaces [`2026.6.0`](../2026-10-03-science-2026.6.0/README.md), ma
 histories failed; 41 of those are in the surfing region and are not yet diagnosed (below, "Failed
 histories").
 
+*Added 2026-11-02, by `reflection-restart` prompt 04:* **this store is superseded by the rebuild of record**, which the
+user makes after `one-loop-drain` 08, under its one-loop drain law at `VERSION_LABEL` 2026.10.0, with the fixed α kept
+as a selectable law; no store of record is built at 2026.9.0. The rebuild's tree holds `reflection-restart`'s fix of
+the 42 `log_m_eff_squared` failures once that branch is merged into `one-loop-drain`. Until then this store and its
+figures stand as made; the failures of the surfing region are diagnosed below.
+
 **Figures made from it** (each folder holds its script, its inputs and a note):
 - [`fig6/`](fig6/NOTES.md): Figure 6 at the laboratory mass, with the band over α and a ΔN_eff
   panel (2026-11-01), and a parking-temperature row (2026-11-02);
@@ -146,6 +152,20 @@ categories are the first words of each `failure_reasons`.
   After a late floor reflection the outward step can go uncapped, and Radau accepts a wrong step whose
   interpolant crosses φ = 0, where the gate evaluates m_eff². Three reproduced; the issue is
   `[run-2026.8.0-an-uncapped-outward-step-after-a-reflection-crosses-the-wall]` (`inelastic-reflection` board §3).
+- *Added 2026-11-02, by `reflection-restart` prompt 04:* **the 42 recomputed with the fix** (F3 and the guard,
+  `reflection-restart` 03, `b81eab8`, `VERSION_LABEL` 2026.9.0), tuned as the run made them, as a measurement only:
+  **41 succeed**; none fails in `log_m_eff_squared`, and the fix's guard never fired. The one failure is 4389 (β = 1.13,
+  M = 10⁻¹², α = 0.01): after its seed integration, "the effective minimum was not found", above the surfing threshold,
+  opened as `[04-a-recomputed-history-does-not-find-the-effective-minimum]` (`reflection-restart` board §3). None is
+  stored: this store is not changed ([verification §3.1](../../.documents/reflection-restart-verification.md)).
+- *Added 2026-11-02, by `reflection-restart` prompt 04:* **the nine classical-turning-point failures are diagnosed**
+  (A 3, A2 3, B 3: all "not monotone", in the tuning's seed integration). The wall search cannot find a root of
+  V − V_floor = E that lies below 17 quanta of ln V's rounding (`WALL_ROUNDING_QUANTA` = 16), and raises; their roots
+  lie at 0.11–16.54 quanta. It is met at the first step start of an infall, near the apex of a plateau turn, where E is
+  as small as the step grid makes it. The limit predates `reflection-restart`; that campaign's fix moves which histories
+  meet it (2197 and 2188, successes here, fail on the fixed tree). Narrowed as
+  `[00-fixed-alpha-laboratory-M-histories-fail-in-classical-turning-point]`, its fix proposed for `one-loop-drain` 01
+  ([verification §3.4–§3.6](../../.documents/reflection-restart-verification.md)).
 
 ## Where the output is
 

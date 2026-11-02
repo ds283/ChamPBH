@@ -80,5 +80,19 @@ the particle production behind α switches off between 10⁻¹⁵ and 10⁻¹³.
    same, which the export's comparison should confirm.
 4. The questions in §2 are ruled.
 
+*Added 2026-11-02, by `reflection-restart` prompt 04: steps 1–2 as they now stand.*
+- **Step 1 is done.** The fix is F3 and the guard (`reflection-restart` 03, `b81eab8`, `VERSION_LABEL` 2026.9.0). Its
+  Fix gate holds: the three reproduced failures succeed (`.documents/reflection-restart-verification.md` §2.1).
+- **The 42, recomputed with the fix** as a measurement (verification §3.1): 41 succeed, none fails in
+  `log_m_eff_squared`. One fails, 4389 (β = 1.13, M = 10⁻¹², α = 0.01), in the effective minimum after its seed
+  integration; it is open as an issue (`reflection-restart` board §3).
+- **Step 2 does not happen as written.** The 42 cannot be recomputed into the 2026.8.0 store: lookups are
+  version-keyed, so a 2026.9.0 history is not a 2026.8.0 one, and C's successes and the recomputed holes would come
+  from different code. No store of record is built at 2026.9.0 either.
+- **So the figure's store is the rebuild of record's.** The user rebuilds the whole store after `one-loop-drain` 08,
+  at 2026.10.0, on a tree that holds the fix once `reflection-restart` is merged into `one-loop-drain`. The
+  prerequisites of this plan are therefore that rebuild, step 3's export re-run on it, and step 4. Its design (§1–§2)
+  is not changed here.
+
 Then `fig6b.py` is written beside this file, as `fig6a.py` is: reading only the export and the store's
 sidecar, needing no Ray, writing a PDF, a PNG and a provenance record, with notes.

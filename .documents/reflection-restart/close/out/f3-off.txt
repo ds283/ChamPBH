@@ -1,0 +1,20 @@
+-- 2197: F3 off (guard live) on this tree, against 89a0760
+   outcome                  equal: 'success' | 'success'
+   samples_sha256           equal: 'f8d5429be002da62400a6c249240d79c0367fa4db2dfc4ef92c54110a6545cd7' | 'f8d5429be002da62400a6c249240d79c0367fa4db2dfc4ef92c54110a6545cd7'
+   log_one_plus_z_sha256    equal: '245a3f2be7d6582a147f5fb1dbea5e7bd17e7b86e07b0393a8fe1c66e7c2de9c' | '245a3f2be7d6582a147f5fb1dbea5e7bd17e7b86e07b0393a8fe1c66e7c2de9c'
+   n_samples                equal: 4995 | 4995
+   accepted_steps           equal: 906090 | 906090
+   RHS_evaluations          equal: 6453742 | 6453742
+   reflections              equal: 6648 | 6648
+   restart_retakes 0; signature kept 0, discarded 0
+   RESULT: bitwise equal
+-- 2188: F3 off (guard live) on this tree, against 89a0760
+   outcome                  equal: 'success' | 'success'
+   samples_sha256           equal: '22416e3f55c97cb9a543367d0f9b5a133a4ed580ec9a4a601a05c4a98ee21114' | '22416e3f55c97cb9a543367d0f9b5a133a4ed580ec9a4a601a05c4a98ee21114'
+   log_one_plus_z_sha256    equal: '08f6349327e3a5d5e6c60cd8a3e7444ec1e9a941f52cf21b6026fa32b7889015' | '08f6349327e3a5d5e6c60cd8a3e7444ec1e9a941f52cf21b6026fa32b7889015'
+   n_samples                equal: 4927 | 4927
+   accepted_steps           equal: 795508 | 795508
+   RHS_evaluations          equal: 5621781 | 5621781
+   reflections              equal: 5741 | 5741
+   restart_retakes 0; signature kept 0, discarded 0
+   RESULT: bitwise equal

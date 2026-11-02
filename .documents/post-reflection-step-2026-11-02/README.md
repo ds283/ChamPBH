@@ -134,3 +134,8 @@ Not ruled; each changes the stored digits of every history that reflects, so nee
    let Radau grow it from there.
 
 Any of them should be checked against the golden histories and against these three failures.
+
+> **Note (2026-11-02, `reflection-restart` 04).** The fix is fix 3 above with a guard on the restarted solver's first
+> step ("F3 plus the guard", ruled by the user), landed by `reflection-restart` 03 (`b81eab8`); the measurements of
+> the fixes, the fix and the 42 recomputed are in
+> [`reflection-restart-verification.md`](../reflection-restart-verification.md) §1–§3.

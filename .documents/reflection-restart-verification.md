@@ -422,3 +422,296 @@ orchestrator's note had not foreseen. The agent stopped, and the user ruled: "Pl
   (`BETA_5_FAILED_CHECK_N`, re-pinned; inelastic-reflection log 06's value stays the record of the old code). Every
   other value the test pins holds: parking at candidate 105, the release's crossing within its tolerance of 40.25454.
 
+
+## 3. Prompt 04 — the close (2026-11-02)
+
+**Tree:** branch `reflection-restart` at `741dcce`, whose computing code is `b81eab8`'s (`git diff --stat b81eab8 741dcce`
+over the computing directories shows only `ComputeTargets/tests/test_release.py`, the review's comments), and, for
+§3.2, `89a0760` (`b81eab8^`) in a temporary detached worktree under the session scratchpad, run from its root with
+`PYTHONPATH=.` and this checkout's venv, removed with `git worktree remove` before the commit (orchestrator note 04,
+ruling 3). SciPy 1.17.0, Python 3.13.16. No Ray, no store written; the 2026.8.0 store opened read-only
+(`sqlite mode=ro`). **Scripts:** [`reflection-restart/close/`](reflection-restart/close/), each with a docstring.
+**Committed outputs:** [`reflection-restart/close/out/`](reflection-restart/close/out/), text only. **Raw output**
+(not committed): `var/reflection-restart/04/` — the task lists `tasks-42.json`, `tasks-pair.json`, `tasks-nine.json`;
+the batches' `the-42.jsonl`, `pair-89a0760.jsonl`, `pair-this.jsonl`, `the-nine.jsonl`, each with its `.log`, `.pid`,
+`.nohup` and launch and end times; the in-process scripts' `f3-off.jsonl`, `candidates-89a0760.jsonl`,
+`candidates-this.jsonl`, their `.out` and `.pid`, and every wall-search call in `candidates-<tree>-<serial>.npz`; the
+drain probe's two logs and JSON, copied from `one-loop-drain` by `git show` (`probe-*-base-stored-alpha.*`).
+`ScalarHistory.py`, `AbstractModel.py` and the scanner were not edited at any point (their SHA-256 before and after
+the runs are equal: `the-42.sha-before`, `wave1.sha-this`, `wave1.sha-89a0760`).
+
+**The suites, before anything else** (prompt §3; serially, ComputeTargets in two halves), at `741dcce`, 22:28–22:44
+UTC: CosmologyModels 26 (68.1 s; load at start 3.80 / 4.76 / 4.48), ComputeTargets 122 + 392 = 514 (128.7 s, 4.87 /
+4.84 / 4.53; 463.1 s, 3.42 / 4.35 / 4.38), ObjectFactories 130 (79.1 s, 4.27 / 4.20 / 4.25), tools 147 (157.5 s,
+4.27 / 4.25 / 4.26), RunDrivers 68 (22.8 s, 3.06 / 4.08 / 4.21); all OK. This prompt changes no code or test file, so
+they were not run again.
+
+**The task lists** (`close/tasks.py`, `close/out/tasks.txt`): the store has 3846 histories over 16 shards; over all of
+them 42 failures contain `log_m_eff_squared` and 9 begin `classical_turning_point` and say "not monotone", the counts
+of the Gate. Block C holds 1302 histories and the 42 (by M: 31 at 10⁻¹², 10 at 10⁻¹⁵, 1 at 10⁻¹³; by α: 0.01 8, 0.02 2,
+0.03 7, 0.05 10, 0.08 3, 0.1 5, 0.15 7), on 12 shards. Each task carries a key naming its shard and serial.
+
+### 3.1 The 42, recomputed with the fix (prompt §1.1)
+
+Built as log 03 §8 gives the route: mode `tuned`; `normalization`, `phi_ref_Mp`, `store` (and the spec's `failure`
+flag) dropped; β, M, α, `phi_init_Mp`, `T_init_GeV`, `atol`, `rtol` kept. `outward_step_scan.py batch --jobs 6
+--timeout 1800`, detached (`nohup`, pid 68745), launched 22:44:30 UTC (load 3.63 / 4.13 / 4.22), `** scan done` at
+22:45:43 (load 11.10 / 6.07 / 4.93), alone (ruling 2). 42 records, no timeout, no error; Σ wall 390.6 s, the longest
+30.9 s. `close/compare.py the-42` (`close/out/the-42.txt`):
+
+| # | store | beta | M/M_P | alpha | outcome | integrations | accepted steps | restart_retakes | reflections | signature kept / discarded | wall (s) |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | shard0000#3189 | 1.25 | 1e-12 | 0.15 | success | 1 | 6122 | 0 | 27 | 0 / 0 | 5.1 |
+| 2 | shard0000#3441 | 1.25 | 1e-12 | 0.1 | success | 1 | 7774 | 0 | 36 | 0 / 0 | 5.9 |
+| 3 | shard0000#3853 | 1.25 | 1e-15 | 0.03 | success | 1 | 29274 | 0 | 162 | 0 / 0 | 16.3 |
+| 4 | shard0000#4206 | 2.25 | 1e-13 | 0.01 | success | 1 | 37652 | 0 | 205 | 0 / 0 | 21.2 |
+| 5 | shard0000#4254 | 2.6 | 1e-12 | 0.01 | success | 1 | 21843 | 0 | 110 | 0 / 0 | 13.8 |
+| 6 | shard0003#3084 | 1.14 | 1e-12 | 0.15 | success | 1 | 5182 | 0 | 22 | 0 / 0 | 4.7 |
+| 7 | shard0003#3739 | 1.1 | 1e-15 | 0.03 | success | 1 | 26123 | 0 | 144 | 0 / 0 | 14.4 |
+| 8 | shard0003#3818 | 1.14 | 1e-12 | 0.05 | success | 1 | 6737 | 0 | 30 | 0 / 0 | 5.2 |
+| 9 | shard0003#3819 | 1.1 | 1e-12 | 0.05 | success | 1 | 5091 | 0 | 22 | 0 / 0 | 4.1 |
+| 10 | shard0003#3906 | 1.14 | 1e-12 | 0.03 | success | 1 | 10035 | 0 | 48 | 0 / 0 | 6.8 |
+| 11 | shard0003#4000 | 1.14 | 1e-15 | 0.01 | success | 1 | 49765 | 0 | 284 | 0 / 0 | 25.9 |
+| 12 | shard0005#3332 | 1.3 | 1e-12 | 0.15 | success | 1 | 6847 | 0 | 31 | 0 / 0 | 5.2 |
+| 13 | shard0005#3642 | 1.3 | 1e-12 | 0.05 | success | 1 | 7659 | 0 | 35 | 0 / 0 | 5.5 |
+| 14 | shard0007#3240 | 1.15 | 1e-12 | 0.1 | success | 1 | 5141 | 0 | 22 | 0 / 0 | 4.2 |
+| 15 | shard0007#3265 | 1.19 | 1e-12 | 0.15 | success | 1 | 5334 | 0 | 23 | 0 / 0 | 4.3 |
+| 16 | shard0007#3782 | 1.11 | 1e-12 | 0.05 | success | 1 | 5659 | 0 | 25 | 0 / 0 | 4.4 |
+| 17 | shard0007#3897 | 1.11 | 1e-15 | 0.03 | success | 1 | 27430 | 0 | 152 | 0 / 0 | 14.6 |
+| 18 | shard0008#4296 | 1.8 | 1e-15 | 0.01 | success | 1 | 60931 | 0 | 353 | 0 / 0 | 30.9 |
+| 19 | shard0009#3389 | 1.5 | 1e-12 | 0.1 | success | 1 | 7699 | 0 | 35 | 0 / 0 | 5.5 |
+| 20 | shard0009#3405 | 1.5 | 1e-12 | 0.05 | success | 1 | 7183 | 0 | 32 | 0 / 0 | 5.3 |
+| 21 | shard0009#3522 | 1.5 | 1e-12 | 0.08 | success | 1 | 8082 | 0 | 37 | 0 / 0 | 5.7 |
+| 22 | shard0009#3912 | 1.55 | 1e-12 | 0.05 | success | 1 | 11265 | 0 | 54 | 0 / 0 | 7.4 |
+| 23 | shard0009#4066 | 1.5 | 1e-12 | 0.03 | success | 1 | 10915 | 0 | 52 | 0 / 0 | 7.2 |
+| 24 | shard0010#3111 | 1.35 | 1e-12 | 0.15 | success | 1 | 6676 | 0 | 30 | 0 / 0 | 4.9 |
+| 25 | shard0010#3544 | 1.65 | 1e-12 | 0.05 | success | 1 | 9799 | 0 | 46 | 0 / 0 | 6.7 |
+| 26 | shard0010#3606 | 1.65 | 1e-12 | 0.08 | success | 1 | 9390 | 0 | 44 | 0 / 0 | 6.5 |
+| 27 | shard0011#3663 | 1.08 | 1e-15 | 0.05 | success | 1 | 20142 | 0 | 109 | 0 / 0 | 11.3 |
+| 28 | shard0011#3664 | 1.2 | 1e-15 | 0.05 | success | 1 | 20716 | 0 | 112 | 0 / 0 | 11.4 |
+| 29 | shard0011#3883 | 1.2 | 1e-15 | 0.02 | success | 1 | 34992 | 0 | 196 | 0 / 0 | 18.4 |
+| 30 | shard0012#4382 | 1.85 | 1e-12 | 0.01 | success | 1 | 15786 | 0 | 78 | 0 / 0 | 9.7 |
+| 31 | shard0013#4272 | 1.9 | 1e-12 | 0.01 | success | 1 | 14899 | 0 | 73 | 0 / 0 | 9.4 |
+| 32 | shard0014#3381 | 1.6 | 1e-12 | 0.08 | success | 1 | 10116 | 0 | 48 | 0 / 0 | 6.9 |
+| 33 | shard0014#3890 | 1.6 | 1e-12 | 0.03 | success | 1 | 11726 | 0 | 56 | 0 / 0 | 7.9 |
+| 34 | shard0014#4039 | 2.05 | 1e-12 | 0.02 | success | 1 | 14376 | 0 | 70 | 0 / 0 | 9.1 |
+| 35 | shard0015#2959 | 1.17 | 1e-12 | 0.15 | success | 1 | 5479 | 0 | 24 | 0 / 0 | 4.3 |
+| 36 | shard0015#3260 | 1.09 | 1e-12 | 0.1 | success | 1 | 6928 | 0 | 32 | 0 / 0 | 5.0 |
+| 37 | shard0015#3298 | 1.09 | 1e-12 | 0.15 | success | 1 | 4899 | 0 | 21 | 0 / 0 | 4.1 |
+| 38 | shard0015#3304 | 1.13 | 1e-12 | 0.1 | success | 1 | 6078 | 0 | 27 | 0 / 0 | 4.7 |
+| 39 | shard0015#3611 | 1.09 | 1e-15 | 0.03 | success | 1 | 27665 | 0 | 153 | 0 / 0 | 15.0 |
+| 40 | shard0015#3630 | 1.09 | 1e-15 | 0.05 | success | 1 | 20157 | 0 | 109 | 0 / 0 | 11.4 |
+| 41 | shard0015#4389 | 1.13 | 1e-12 | 0.01 | failure | 1 | — | 0 | 59 | 0 / 0 | 8.5 |
+| 42 | shard0015#4390 | 1.09 | 1e-12 | 0.01 | success | 1 | 21405 | 0 | 112 | 0 / 0 | 11.9 |
+
+"Accepted steps" is the final integration's; every history tuned in one integration. Each instance after the start
+was begun by a reflection (3299 over the 42); none by a drain, a release or a retake.
+
+- **41 succeed, 1 fails.** No `log_m_eff_squared` failure, and no signature step kept or discarded: the two stop
+  conditions of prompt §1.1 do not hold. `restart_retakes` is 0 in all 42: the guard did not fire. The three
+  reproduced failures (rows 20, 11 and 39) have 03's step counts (§2.1: 7183, 49 765, 27 665).
+- **The failure** is 4389 (shard0015, β = 1.13, M = 10⁻¹², α = 0.01). Its seed integration completed (14 318 steps,
+  59 reflections, to N = 45.724) and the tuning then failed: "the effective minimum was not found: effective_minimum
+  (ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.13)): V_eff' does not change sign on the bracket [8.20971e-05,
+  0.0328388] (values 3.724e-121, 3.86555e-121) (tuning integration 0)". Its kind is among the run's ("effective
+  minimum", run record "Failed histories"), but every one of those is at β ≤ 1.1074, below the surfing threshold,
+  and the kind is not open as an issue: the user left β = 0.6 undiagnosed as non-surfing (`PLAN.md` §8). This one is
+  above the threshold. Opened as `[04-a-recomputed-history-does-not-find-the-effective-minimum]` (board §3), not
+  diagnosed. In the store 4389 failed in `log_m_eff_squared`, at φ_E = −3.84×10⁻¹².
+
+### 3.2 2197 and 2188, before and after 03 (prompt §1.2 (a))
+
+The two specs from `select_from_store` on the store's absolute path, in mode `store`, filtered on (shard0005, 2197)
+and (shard0003, 2188), each carrying its shard and serial (ruling 1); both at normalization −276.63072859401797, α =
+10⁻³, M = 4×10⁻³¹ M_P, φ_ref 8.645101631245453×10⁻¹⁶ and 9.140634547368375×10⁻¹⁶ M_P. Run by each tree's scanner
+batch (`--jobs 2 --timeout 3600`), detached, launched together at 22:46:25 UTC (load 7.38 / 5.70 / 4.84) beside the
+nine (§3.5): `pair-89a0760.jsonl` (pid 69140, run from the worktree, its cwd checked by `lsof`) ended 22:54:14,
+`pair-this.jsonl` (pid 69141) at 22:48:34. `close/compare.py pair` (`close/out/pair.txt`):
+
+| | 2197 (β 1.185) | 2188 (β 1.06) |
+|---|---|---|
+| **at `89a0760`** | success, 906 090 steps, 6 453 742 RHS, 6648 reflections, 4995 samples, 467.5 s | success, 795 508 steps, 5 621 781 RHS, 5741 reflections, 4927 samples, 406.4 s |
+| store comparison | **bitwise** (every column; stored accepted_steps 906 090, compute_time 624.3 s) | **bitwise** (stored 795 508, 652.7 s) |
+| signature (from the rows) | 0 kept, 0 discarded | 0 kept, 0 discarded |
+| **on this tree** | failure in the first integration, 128.0 s, after 1554 reflections | failure in the first integration, 125.6 s, after 1531 reflections |
+| the failure | `classical_turning_point`, φ = 2.950090845531173e-07, ln E = −306.7166549210319, bracket [−42.28625968598544, −42.34875968598544] | φ = 2.647733963294608e-07, ln E = −306.6698578858307, bracket [−42.269391484964466, −42.331891484964466] |
+| against the probe | the whole printed message (1026 characters, probes included) **equal** to the probe's log line | **equal** |
+| signature, `restart_retakes` | 0 kept, 0 discarded; 0 | 0 kept, 0 discarded; 0 |
+
+So 01's bitwise reproduction holds for both at the run's smallest α, and on the fixed tree both fail exactly as the
+drain probe found on `2d50b95`. **Against the probe's JSON** (ruling 6): `failure`, `failure_reason` (both cut at 256
+characters, as the store's is; the whole message is the integration's printed line, which the scanner's `stdout_tail`
+keeps), β and α are equal; the probe holds `M_eV` = 0.0009741294382105218 where the scanner holds M = 4×10⁻³¹ M_P,
+the same model (`close/out/failing_call-this.txt`: the stored M and the tool's are bitwise equal). The wall times
+(117.1 and 115.3 s in the probe, 128.0 and 125.6 s here) are not compared. Since `89a0760` succeeds, no older tree was
+run.
+
+### 3.3 Which of 03's changes moves the trajectory (prompt §1.2 (b))
+
+`close/f3_off.py` replaces `ScalarHistory._restart_first_step` with a function returning `None` (SciPy's choice at
+every restart), leaves the guard live, and calls the scanner's `scan_one` in its own process, one process per history
+(ruling 4); launched 22:49:12 UTC (load 6.73 / 6.84 / 5.52), 439.7 s and 393.7 s. `close/compare.py f3-off`
+(`close/out/f3-off.txt`), each against its `89a0760` record:
+
+| | outcome | samples SHA-256 | ln(1 + z) SHA-256 | samples | accepted steps | RHS | reflections | retakes | signature discarded |
+|---|---|---|---|---|---|---|---|---|---|
+| 2197 | success = | `f8d5429b…` = | `245a3f2b…` = | 4995 = | 906 090 = | 6 453 742 = | 6648 = | 0 | 0 |
+| 2188 | success = | `22416e3f…` = | `08f63493…` = | 4927 = | 795 508 = | 5 621 781 = | 5741 = | 0 | 0 |
+
+**Bitwise equal, both.** With F3 off and the guard live, this tree gives `89a0760`'s history, and the guard discards
+nothing (neither history has a signature step under SciPy's choice, as the impact statement said of laboratory M). **F3
+alone is the change** that moves 2197 and 2188 onto the failure.
+
+### 3.4 The failing call (prompt §1.2 (c))
+
+**Alone.** `close/failing_call.py` calls `classical_turning_point(normalization, φ, ln E)` with the probe's three
+values on a model built as the scanner builds it, on this tree (`close/out/failing_call-this.txt`) and at `89a0760`
+(`close/out/failing_call-89a0760.txt`). Both raise, with a message equal to the probe's whole printed line, in
+0.04–0.10 ms; the two outputs are identical but for the times. The wall search (`_log_V_minus_floor`,
+`_search_log_field`, `classical_turning_point`, `WALL_ROUNDING_QUANTA` = 16, `WALL_SEARCH_HALVINGS` = 4) is unchanged
+from `75208cd`, the store's tree, to `741dcce`: the only change to `AbstractModel.py` in that range is `745c8ee`'s, in
+`effective_minimum`. So the call raises on its own inputs at any tree since the store was built.
+
+**Where the root lies.** The target is ln V − ln V_floor = ln(1 + E/V_floor), in quanta of ulp(max(|ln V|, |ln V_floor|)) =
+ulp(276.63) = 5.68434×10⁻¹⁴; `_log_V_minus_floor` returns −∞ at 16 quanta and below:
+
+| history | ln E | root (quanta) |
+|---|---|---|
+| 2197 | −306.7166549210319 | **1.5107** |
+| 2188 | −306.6698578858307 | **1.5830** |
+
+Decoded probe by probe (ln V − ln V_floor = (M/φ) rounded, in quanta), 2197's search runs: −∞ at the start and the four
+doublings, where V − V_floor is not resolved; 693 quanta at ln φ = −46.04, the first finite value, which brackets; then the halvings: −∞
+(0), −∞ (13), 94, 34 (four halvings, H = 4, bracket [−43.04, −42.04]); the further halvings while the outer end is
+−∞: 21, −∞ (16), 18, **17**, **17**. The last two, 2⁻⁵ e-folds apart (the midpoint of a bracket 2⁻⁴ wide), are the
+same quantum, and the value 2.4206637264330197 repeated is ln(17 quanta × V_floor) − ln E: the least finite value the
+search can see. 2188's is the same, ending 17, 17 at 2.3738666912318536.
+
+**The nine, from their stored `failure_reason`** (φ, ln E and the normalization are complete there), each called alone on
+this tree: all nine raise, each with a message of which the stored 256 characters are a prefix. Their roots:
+
+| store | β | M/M_P | α | stored ln E | root (quanta) | the raise's bracket |
+|---|---|---|---|---|---|---|
+| shard0002#1592 | 1.1775 | 4×10⁻³¹ | 0.001 | −308.6129970063558 | 0.2268 | 2⁻⁴ |
+| shard0003#2208 | 1.18 | 4×10⁻³¹ | 0.001 | −309.37538319488175 | 0.1058 | 2⁻⁵ |
+| shard0004#2199 | 1.1825 | 4×10⁻³¹ | 0.001 | −308.6585130622487 | 0.2167 | 2⁻⁴ |
+| shard0000#1001 | 0.75 | 4×10⁻³¹ | 0.03 | −304.3236804061682 | **16.5357** | 2⁻⁴ |
+| shard0001#766 | 0.9 | 4×10⁻³¹ | 0.02 | −306.2985617947364 | 2.2948 | 2⁻⁵ |
+| shard0015#403 | 0.5 | 4×10⁻³¹ | 0.1 | −308.8526551068955 | 0.1784 | 2⁻⁵ |
+| shard0000#2735 | 0.75 | 10⁻³³ | 0.03 | −305.91588537339726 | 3.3646 | 2⁻⁴ |
+| shard0015#2480 | 0.5 | 10⁻³³ | 0.1 | −308.24395716177537 | 0.3280 | 2⁻⁵ |
+| shard0015#2386 | 0.5 | 10⁻³⁰ | 0.15 | −306.8183703090743 | 1.3646 | 2⁻⁵ |
+
+Every root, 2197's and 2188's among them, lies within `WALL_ROUNDING_QUANTA` + 1 = 17 quanta (ruling 7's bound); the
+largest is 1001's, 16.54, between 16 and 17. The stored M and the tool's M are bitwise equal for all nine.
+
+**Why such a call always raises.** Every finite value of the residual ln(V − V_floor) − ln E is at least
+ln(17 q V_floor) − ln E, which is positive when the root is below 17 quanta. So the first finite probe brackets, the
+inner end stays finite and positive, the outer end stays −∞, and brentq is never reached. The halvings beyond H go on
+while the outer end is −∞; they close in on the edge of the −∞ region, where the probes are finer than 07b's
+derivation orders (2⁻ᴴ = 2⁻⁴ e-folds, with s = 1 and ρ = ½ for the exponential): two of them round to the same
+quantum, 17, and the monotonicity check raises "not monotone". Were that check not met, the search would end on "the
+bracket's outer end is still −∞". **§0.2's reading holds**: the raise is at a midpoint 2⁻⁵ e-folds from its ends (2⁻⁶
+in five of the nine), and the root lies inside the −∞ region; the "not monotone" is how a root below ln V's resolution
+shows itself, not float cancellation in a resolved difference.
+
+**The margins along each history.** `close/candidates.py` wraps `AbstractModel.classical_turning_point` passively,
+recording every call's φ, ln E, result and root margin, and runs each history at its stored normalization in its own
+process, on each tree (ruling 5): launched 22:49:12 (this tree) and 22:56:46 UTC (`89a0760`, load 2.64 / 5.43 / 5.61),
+ended by 23:04:45 (load 15.73 / 11.44 / 8.15). Each run reproduces its tree's (a) record — outcome, samples SHA-256
+and accepted steps for the successes, the failure_reason for the failures — so the wrapper is passive
+(`close/out/candidates.txt`). `close/infall_starts.py` (`close/out/infall_starts.txt`) reads the calls:
+
+| | calls | least margin | where | least margin before the failure |
+|---|---|---|---|---|
+| 2197 at `89a0760` | 857 476 (all return a turning point) | **208.58** quanta, φ = 1.4800×10⁻⁷, ln E = −301.7889 | the first call of infall 1962 of 6648 | — (success) |
+| 2197 on this tree | 231 891 | **1.5107** (the failing call) | the first call of infall 1554 | 2.83×10⁶ (infall 196's first call) |
+| 2188 at `89a0760` | 753 395 | **1257.54**, φ = 1.3373×10⁻⁷, ln E = −299.9923 | the first call of infall 1935 of 5741 | — (success) |
+| 2188 on this tree | 228 214 | **1.5830** (the failing call) | the first call of infall 1531 | 6.39×10⁸ |
+
+The wall is assessed at every step start with π < 0 (`assess_infall`, from the step loop at α > 0), so the calls run in
+infalls of 109–631 calls with φ falling, and a new infall starts where φ rises. **The least margin on both trees is
+always at an infall's first call**: the first step start after the field has turned back on the plateau, where π has
+just changed sign, so ρ_kin = H²π²/2 can be as small as the step grid places that start near the apex; V − V_floor there
+is below ln V's resolution, so E = ρ_kin. The later calls of an infall carry its energy, and that is continuous:
+- on this tree, before 2197's failure, infalls 1551–1553 start at ln E = −288.62 to −288.63 with second calls at
+  −287.88 and last calls at −286.32 to −286.33; infall 1554's first call is at φ = 2.95×10⁻⁷ (the apex, 10 % beyond its
+  neighbours' first-step φ) and ln E = −306.72. Earlier "outlier" starts of the same kind, ln E more than 3 below the
+  local median of 21 starts, came in infalls 18, 196 and 197 (2197) and 184 and 185 (2188); each one's second and last
+  calls lie on its neighbours' trend (infall 196: second −274.540 between −274.510 and −274.570, last −272.2484 between
+  −272.2150 and −272.2817). The outlier is the start's place in the step grid, not the infall's energy;
+- at `89a0760` the starts of infalls 1959–1963 (2197) all lie 11.6 e-folds below their second calls (ln E ≈ −301.78
+  against −290.15), at 208–212 quanta, and then move to −297.96 at infall 1964; no start is an outlier.
+
+So the history before 03 came within 208 quanta (2197) and 1258 quanta (2188) of the limit, at near-apex infall
+starts, by the same mechanism; F3, by changing every first step after a reflection, moves the step grid of every
+flight, and so where the first π < 0 step start falls against each apex. On this tree one start of 2197 and one of 2188
+fall within 1.6 quanta. No candidate's energy contradicts the cascade before it.
+
+### 3.5 The nine, on the fixed tree (prompt §1.2 (d))
+
+Tuned as the 42 are, the three at α = 10⁻³ first (ruling 2): `batch --jobs 4 --timeout 3600`, detached (pid 69142),
+launched 22:46:25 UTC, `** scan done` at 22:48:35; no timeout. `close/compare.py nine` (`close/out/the-nine.txt`) and
+`close/nine_margins.py` (`close/out/nine_margins.txt`, each failure's call made alone, and its margin):
+
+| store | β | M/M_P | α | outcome | wall | φ/M_P at the failure | ln E | root (quanta) | stored ln E, root |
+|---|---|---|---|---|---|---|---|---|---|
+| shard0002#1592 | 1.1775 | 4×10⁻³¹ | 0.001 | failure | 128.1 s | 2.92669×10⁻⁷ | −305.3632323353481 | 5.8473 | −308.613, 0.2268 |
+| shard0003#2208 | 1.18 | 4×10⁻³¹ | 0.001 | failure | 128.6 s | 2.93456×10⁻⁷ | −306.87941516628615 | 1.2838 | −309.375, 0.1058 |
+| shard0004#2199 | 1.1825 | 4×10⁻³¹ | 0.001 | failure | 129.1 s | 2.93892×10⁻⁷ | −305.2276525761867 | 6.6963 | −308.659, 0.2167 |
+| shard0000#1001 | 0.75 | 4×10⁻³¹ | 0.03 | failure | 25.4 s | 8.56511×10⁻⁸ | −306.3563620503721 | 2.1659 | −304.324, 16.5357 |
+| shard0001#766 | 0.9 | 4×10⁻³¹ | 0.02 | failure | 29.6 s | 1.79717×10⁻⁷ | −307.5556578621605 | 0.6528 | −306.299, 2.2948 |
+| shard0015#403 | 0.5 | 4×10⁻³¹ | 0.1 | failure | 10.5 s | 6.90946×10⁻⁸ | −305.33592552406515 | 6.0091 | −308.853, 0.1784 |
+| shard0000#2735 | 0.75 | 10⁻³³ | 0.03 | failure | 23.9 s | 8.56511×10⁻⁸ | −306.3567396216211 | 2.1651 | −305.916, 3.3646 |
+| shard0015#2480 | 0.5 | 10⁻³³ | 0.1 | failure | 11.0 s | 6.90946×10⁻⁸ | −305.28832358387046 | 6.3021 | −308.244, 0.3280 |
+| shard0015#2386 | 0.5 | 10⁻³⁰ | 0.15 | **success** | 26.4 s | — | — | — | −306.818, 1.3646 |
+
+Every failure is `classical_turning_point` "not monotone", in the tuning's seed integration (one integration, at the
+seed normalization −276.63072859401797), each call raising alone with the same whole message, at a new φ and ln E: F3
+moved each history, and eight of the nine meet the same limit elsewhere, within 0.65–6.70 quanta. 2386 now succeeds,
+tuned in three integrations (normalization −276.63101193186736; 15 860 steps, 91 reflections, no retake). No
+signature step and no retake in any of the nine. The three at α = 10⁻³ took about 128 s; in the run they failed about
+30 minutes into their batch, under the cluster's load (orchestrator note 04, §0).
+
+### 3.6 The verdict (prompt §1.2)
+
+**(ii): 03 moves a correct trajectory onto a limit that was already there.**
+- The failing call raises on its own inputs at both trees, and the wall search is the same at every tree since the
+  store's (§3.4).
+- Its root lies within the wall search's rounding width: 1.51 and 1.58 quanta, against `WALL_ROUNDING_QUANTA` = 16
+  (ruling 7's bound 17).
+- The store's nine show the same limit before 03 (built at `75208cd`): roots 0.11–16.54 quanta, each call raising
+  alone (§3.4); on the fixed tree eight of them meet it again, at 0.65–6.70 quanta (§3.5).
+- Nothing of (i) is found: no signature step kept or discarded and no retake in either history on either tree (§3.2,
+  §3.3); with F3 off the history is `89a0760`'s bit for bit (§3.3), so the restarts' first steps are F3's, as the code
+  intends; and the failing candidate's energy is the kinetic energy at an infall's first step start, near an apex,
+  while the infall energies run on smoothly (§3.4).
+
+**The limit.** A root of V − V_floor = E below `WALL_ROUNDING_QUANTA` + 1 quanta of ln V's rounding lies in the region
+that `_log_V_minus_floor` treats as −∞, and `classical_turning_point` cannot find it: it raises, "not monotone" or
+"the outer end is still −∞". At laboratory M (ln V_floor = −276.63) that is E/V_floor below about 9.7×10⁻¹³. The step
+loop asks for it at every step start with π < 0, so it is met wherever such a start falls close enough to the apex of a
+plateau turn. Which histories meet it depends on the step grid, and F3 changes the step grid of every history that
+reflects. Not fixed (prompt §2).
+
+**Proposed destination, for the user to rule:** `one-loop-drain` 01, as the planner proposed. It lands the drain law in
+the step loop on the merged tree, keeps the fixed α as a selectable law under which these histories run, and already
+owns the related inside-wall stop of 3873; and the rebuild of record (its 08) runs at laboratory M, where the limit is
+met. The fix is not this prompt's to choose; three forms the measurements point to:
+- a model hook for ln(V − V_floor) in closed form, which for the exponential is normalization + ln expm1((M/φ)ⁿ), so
+  that the difference is never formed from ln V and the root is found at any E;
+- or, in the step loop, no assessment where E/V_floor is below the rounding width: such a start is far from the wall
+  (φ/M ≈ 7×10²³ at 2197's and 2188's failures), where `unresolved_turnaround` decides nothing;
+- or, in the search, a root inside the −∞ region reported (as the region's edge, or as "not resolved") rather than
+  raised.
+
+### 3.7 The Close gate (README §2.1; prompt §1.5)
+
+1. **The 42 recomputed** and each outcome stated (§3.1): 41 succeed, 1 fails (4389, the effective minimum not found,
+   opened as an issue); no `log_m_eff_squared` failure; no signature step kept or discarded; no retake. **Holds.**
+2. **The issue closed**: `[run-2026.8.0-an-uncapped-outward-step-after-a-reflection-crosses-the-wall]` on the board's §4,
+   with a Closed pointer on the `inelastic-reflection` board's entry, and its index row deleted. **Holds.**
+3. **The handover written**: the run record's README ("Failed histories" and its status), `fig6b/PLAN.md` §3,
+   `review-remediation-verification.md` §4.19, the diagnosis README's pointer, and this section. **Holds.**
+4. **The fixed-α question answered**: verdict (ii), with the evidence of §3.2–§3.5, the issue narrowed and its
+   destination proposed. **Holds.**

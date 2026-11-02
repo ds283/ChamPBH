@@ -247,6 +247,10 @@ run's `log_m_eff_squared` failures, [`.documents/post-reflection-step-2026-11-02
   §3.1), planned that day at the user's request to measure the fixes (F1–F4), audit the 2026.8.0 store for
   stored successes with a bad step, implement the fix the user rules and recompute what must be. That
   board now carries it; this entry stays as the record of the opening.
+- **Closed (2026-11-02)** by `reflection-restart` prompt 04 (this commit), on [its board](../reflection-restart/IMPLEMENTATION_STATE.md)
+  §4: the fix is F3 and the guard (its prompt 03, `b81eab8`); the 42 recomputed on the fixed tree have no
+  `log_m_eff_squared` failure; the whole store is rebuilt by the user after `one-loop-drain` 08. That entry is the
+  record of the close.
 
 ### 3.1 Assigned to this campaign
 

@@ -2358,6 +2358,66 @@ written.**
      or `-X` (`CLAUDE.md`).
    - **The two paper notes** are as §4.16 point 7 says; prompt 12 did not edit them.
 
+### 4.19 Addendum 2026-11-02 — the `reflection-restart` campaign
+
+Added by `reflection-restart` prompt 04 (this commit), written at `741dcce`. Nothing above this heading has been
+changed; where it is superseded, this section says so by statement. The campaign changed what a build computes for
+every history that reflects, and it started no production run and wrote no store. It did, in order:
+
+- it was planned on 2026-11-02 (branch `reflection-restart`, from `main` at `cc7fe75`) to take
+  `[run-2026.8.0-an-uncapped-outward-step-after-a-reflection-crosses-the-wall]`, the diagnosis of the 2026.8.0 run's
+  42 `log_m_eff_squared` failures (`.documents/post-reflection-step-2026-11-02/`);
+- it built the outward-step scanner `tools/outward_step_scan.py` and measured four fixes, F1–F4, and why Radau accepts
+  the bad step (01, `d4703df`: the gates "Signature" and "Measure");
+- it was re-planned the same day at the user's word: the signature narrowed to the first step of a restarted Radau,
+  the store audit (02) withdrawn since the whole store is to be rebuilt, and the fix ruled from 01 (U6, "F3 plus the
+  guard");
+- it made F3 and the guard the production code and moved the labels (03, `b81eab8`: the gate "Fix");
+- and prompt 04 recomputed the 42, diagnosed the fixed-α turning-point failures, wrote this handover and closed the
+  campaign (the gate "Close").
+
+Its board is [`prompts/reflection-restart/IMPLEMENTATION_STATE.md`](../prompts/reflection-restart/IMPLEMENTATION_STATE.md);
+its plan is its [`README.md`](../prompts/reflection-restart/README.md) (§6.3, the re-plan; §6.4, the handover as the
+user restated it); the measurements are in [`reflection-restart-verification.md`](reflection-restart-verification.md)
+§1–§3; what the code now does is in the dated notes of [`numerical-strategies.md`](numerical-strategies.md) §3.5.3 and
+[`architecture-summary.md`](architecture-summary.md) §7.2. It **did bump** `VERSION_LABEL` (`"2026.9.0"`) and the
+stepper label (`Radau+kinematic-cap-stepping1`); `FINGERPRINT_FORMAT` is still 6. The branch **is not merged into
+`main` or `one-loop-drain` when this is written**; its merge into `one-loop-drain` (that campaign's U1) is the user's.
+
+**This supersedes**, by statement and not by edit:
+
+- **§4.18's label `2026.8.0`** as the label of the tree: this tree computes `2026.9.0`. A 2026.8.0 store stays
+  readable by a tree at its own label, and lookups are version-keyed, so a history computed here is not found in it.
+- **The 2026.8.0 run record's "41 … not yet diagnosed"** (`science-runs/2026-11-01-science-2026.8.0/README.md`,
+  Status): the 42 `log_m_eff_squared` failures and the nine classical-turning-point failures are diagnosed (points 2
+  and 3); the record carries dated notes.
+
+**The points.**
+
+1. **What changed for a build.** Every Radau restarted with π > 0 (after a reflection, a drain or a release) starts at
+   `min(global_max_step, max(h_floor, f φ/π))`, at most the distance to its bound (F3), and its first accepted step is
+   tested by P1's flag and retaken at half its h if flagged (the guard; `restart_retakes` counts it, in the payload and,
+   above 0, in `extra_data`). A history with no such restart (α = 0 without reflection, as the goldens and block D)
+   is bitwise as before but for the labels; a history that reflects moves (verification §1.4, §2.4).
+2. **The 42** were recomputed tuned on the fixed tree as a measurement only, and are not stored: 41 succeed, none fails
+   in `log_m_eff_squared`, the guard never fired; 4389 (β 1.13, M 10⁻¹², α 0.01) fails in the effective minimum after
+   its seed integration, open as `[04-a-recomputed-history-does-not-find-the-effective-minimum]` (verification §3.1).
+3. **The fixed-α turning-point failures.** The wall search (`classical_turning_point`, inelastic-reflection 07b's
+   `WALL_ROUNDING_QUANTA` = 16) cannot find a root of V − V_floor = E below 17 quanta of ln V's rounding, and raises
+   "not monotone". The step loop meets such a root at an infall's first step start near the apex of a plateau turn.
+   The limit predates this campaign (the 2026.8.0 store's nine, roots 0.11–16.54 quanta); F3 moves which histories meet
+   it (2197 and 2188, stored successes at α = 10⁻³, fail on the fixed tree; 8 of the nine fail again, 2386 succeeds).
+   **For a fixed-α build at laboratory M on this tree, such failures are to be expected** at a rate not measured. The
+   fix is proposed for `one-loop-drain` 01, for the user to rule (verification §3.2–§3.6;
+   `[00-fixed-alpha-laboratory-M-histories-fail-in-classical-turning-point]`).
+4. **The rebuild of record.** The whole store is rebuilt by the user after `one-loop-drain` 08, under its one-loop
+   drain law at `VERSION_LABEL` 2026.10.0, with the fixed α kept as a selectable law. **No store of record is built at
+   2026.9.0.** The 2026.8.0 store is superseded by that rebuild, not by anything of this campaign's; the fix of 03 is in
+   the rebuild's tree once `reflection-restart` is merged into `one-loop-drain`. Figure 6b's store is the rebuild's
+   (`fig6b/PLAN.md` §3, dated note).
+5. **Left to the user:** the merge into `one-loop-drain`; the destination of the wall-search limit (point 3); the
+   effective-minimum failure of 4389 (point 2); the rebuild of record (point 4).
+
 ---
 
 ## 5. Reproduce
