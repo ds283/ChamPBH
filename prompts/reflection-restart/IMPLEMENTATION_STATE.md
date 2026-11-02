@@ -25,7 +25,7 @@ Under U3 as ruled, every stored success with a bad step is regenerated, whatever
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | [Measure the fixes](01-measure-the-fixes.md) | the scanner; F1–F4 measured; why Radau accepts the bad step | Opus | ✍️ | ✅ | this commit | [log](logs/01-measure-the-fixes.md) |
+| 01 | [Measure the fixes](01-measure-the-fixes.md) | the scanner; F1–F4 measured; why Radau accepts the bad step | Opus | ✅ | ✅ | `d4703df` | [log](logs/01-measure-the-fixes.md) |
 | 02 | Audit the 2026.8.0 store | A, A2, B, C re-integrated at their stored normalization; bitwise reproduction; bad steps per history | Sonnet | ⬜ | ⬜ | | |
 | — | the user's ruling U6 | the fix, from 01 and 02 | — | | | | |
 | 03 | The fix | the ruled fix; tests; a reflecting golden history; labels; documents | Opus | ⬜ | ⬜ | | |
@@ -36,7 +36,40 @@ Under U3 as ruled, every stored success with a bad step is regenerated, whatever
 Prompts are written one at a time, each after the previous one lands and is reviewed. 02 runs on the
 tree before 03.
 
-Orchestrator notes, one prompt at a time, in `orchestrator/`.
+Orchestrator notes, one prompt at a time, in `orchestrator/`:
+- [`prompt-01.md`](orchestrator/prompt-01.md) (`3b8a553`) — used for 01.
+
+**Orchestrator review of prompt 01 (2026-11-02)**, by orchestrator note 01 §3, on `d4703df`. Passed; seven
+checks:
+1. **Scope.** The commit's parent is `3b8a553`, the note's. It holds ruling 7's 21 files and nothing else
+   (`CLAUDE.md`'s test counts only), and nothing is pushed or left untracked. In
+   `ComputeTargets/ScalarHistory.py` the diff holds only the switch, its values, the `first_step` argument
+   F3 needs and `probe_retakes`. F4 rebuilds Radau from `N = solver.t` at the top of the loop, which is the
+   start of the discarded step, before `accepted_steps` is counted.
+2. **Nothing left running.** Neither recorded pid (4986, 2091) answers `kill -0`. `runregistrykit list`
+   is unchanged: 23 runs, all finished.
+3. **Bitwise at None.** Run by the orchestrator: `test_golden_history`, `test_store_fingerprint_golden` and
+   `test_tuning`, 48 OK in 144 s. Two reflection-store histories were re-integrated at their stored
+   normalization by the orchestrator's own probe, not the scanner. β = 2.9, M = 4×10⁻³¹, α = 0.08 has 5926
+   samples, and β = 2.0, M = 10⁻¹⁵, α = 0.01 has 5437. Both are bitwise in raw N, φ, π, Σ and g*_ρ.
+4. **Signature.** The scanner was re-run on β = 1.14, M = 10⁻¹⁵, α = 0.01 (failing) and on β = 1.2,
+   M = 10⁻¹⁵, α = 0.03 (clean). It counts 270 and 174 first outward steps, as `scan_first_steps.txt` does.
+   It finds one bad step in the first and none in the second. The bad step has N₀ = 37.67089767,
+   h = 1.61×10⁻⁴, h·ω = 1.07×10³ and π ratio 8.79×10⁻⁵, as printed there.
+5. **The variants.** The switch's code was read against prompt §1.2 and rulings 3–4. β = 1.5, M = 10⁻¹²,
+   α = 0.05 was re-run under F3 and under F4, and both succeed. Under F3: 7183 accepted steps, and no
+   flagged first step. Under F4: 7123 steps, 59 retakes, and the bad step itself among the discarded steps.
+   These are the record's numbers.
+6. **§1.4.** `measure/why_radau_accepts.py 1.5 1e-12 0.05` was re-run, and its output is identical to the
+   committed `out/` file. SciPy 1.17.0's `radau.py` (lines 485–487) refines the error estimate only
+   `if rejected and error_norm > 1`, as §1.5 says.
+7. **The records.** The log is in §5.1's form, with ruling 1–7 deviations classed. The verification
+   document §1 and the `out/` files are ASCII text. Row 01, the items and the gates are on this board, and
+   the issue is in §3 and in the index at §1.22.
+
+Residue fixed in the review commit: "this commit" → `d4703df` in the log and here. The count in
+`prompts/INDEX.md` (26 → 27), which the log noted as outside the agent's files. Dated notes on 845 → 835 in
+the diagnosis README and in the campaign README §2.1.
 
 ### 1.1 Items
 

@@ -1,7 +1,7 @@
 # Log 01 — measure the fixes
 
 **Subject:** Measure the four fixes of the uncapped outward step, with a scanner and a probe switch
-**Commit:** this commit, on branch `reflection-restart`, on top of `3b8a553`
+**Commit:** `d4703df`, on branch `reflection-restart`, on top of `3b8a553`
 **Date:** 2026-11-02, by Claude Opus 5.5
 **Result:** **COMPLETE.** The scanner, the probe switch and their tests shipped; the Signature gate holds (835 = 835,
 every printed line of the diagnosis reproduced); the Measure gate holds, with the proviso of one issue opened. No
@@ -308,7 +308,7 @@ the strengthened None and F3+F4 tests and ran during the batch (D16); T18 with t
   computed `ScalarHistory` column (`compute_steps`, `RHS_evaluations` and `z_samples` included) and every shared
   `extra_data` key. `comparison.bitwise` in each line is the verdict; a difference names the column, its largest
   relative difference and the first differing sample by ln(1 + z) and raw N. The tree was this prompt's; the probe
-  switch at None is today's code, so 02 may run on this commit (P3's tree is `main` before 03).
+  switch at None is today's code, so 02 may run on `d4703df` (P3's tree is `main` before 03).
 - **Do not edit `ComputeTargets/ScalarHistory.py` or the tool while a batch runs**: each task's worker imports
   them when it starts (D16).
 - The probe switch stays until 03 removes it, with `probe_retakes` and `_probe_outward_step_flagged`; the scanner

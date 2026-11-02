@@ -126,6 +126,10 @@ it does not depend on 01's results, only on its scanner, so 02 may be launched w
 | **Fix** | the three failures succeed; no signature step in the nine histories; the golden histories as the ruling predicts (bitwise for a restart-only fix, re-pinned with a stated reason otherwise); the new reflecting golden pinned | 03 |
 | **Verdict** | the 42 recomputed and their outcome stated; on the sample, the change in Y_p, D/H, ΔN_eff (1 MeV, T_CMB), ρ_χ/ρ_R and parking T against the store, set beside the figures' resolution; a statement, per block and per figure, of what must be rebuilt | 04 |
 
+> **Note (2026-11-02, after 01).** The Signature gate's "845-step count" repeats a slip in the diagnosis.
+> Its nine per-history counts sum to **835**, and that is the count the gate was held to (orchestrator note
+> 01, ruling 1; verification §1.2). The diagnosis README carries the same note.
+
 ## 3. Stores
 
 - 01 and 03 open none but temporary SQLite stores in `tempfile` directories; the histories they run go
