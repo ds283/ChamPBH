@@ -120,7 +120,7 @@ From `var/datastores/science-2026.8.0` (successes only, per M; `number_reflectio
 | ~~02~~ | ~~`02-audit-the-2026.8.0-store.md`~~ | **withdrawn 2026-11-02** (§6.3): the whole store is rebuilt, so the audit decides nothing | — |
 | — | **ruling** | the user chooses the fix from 01 (U6) | — |
 | 03 | `03-the-fix.md` | the ruled fix in `integrate_scalar_history`, the probe switch removed; tests; a reflecting golden history; `VERSION_LABEL` and stepper label; documents | Opus |
-| 04 | `04-close.md` | the 42 recomputed with the fix through the tool route; the issue closed; the handover (the whole store rebuilt, carried by `quanta-diagnostics`' rebuild of record); closes the campaign | Opus |
+| 04 | `04-close.md` | the 42 recomputed with the fix through the tool route; the issue closed; the handover (the whole store rebuilt, carried by `quanta-diagnostics`' rebuild of record; since 2026-11-02 `one-loop-drain` 08's, §6.4); the fixed-α turning-point failures of 2197 and 2188 investigated (§6.4); closes the campaign | Opus |
 
 Written one at a time, each after the previous one lands and is reviewed (the user's practice in
 `inelastic-reflection`).
@@ -276,11 +276,32 @@ please, make that restructure." So:
 - **The labels** (P6) stand: `VERSION_LABEL` 2026.9.0. `quanta-diagnostics`' U3 relies on no store of record
   being built at 2026.9.0 before it lands, which this re-plan keeps.
 
+### 6.4 The handover restated, after 03 (2026-11-02)
+
+`quanta-diagnostics` was re-planned and renamed `one-loop-drain` on 2026-11-02 (branch `one-loop-drain`,
+README §8 there). Stated by the user the same day, for 04:
+- **The rebuild of record** now waits for `one-loop-drain` 08, not `quanta-diagnostics` 07. It runs under a
+  one-loop drain law at `VERSION_LABEL` 2026.10.0, with the fixed α kept as a selectable law. **No store of
+  record is to be built at 2026.9.0.** This replaces "after `quanta-diagnostics` 07" in §1, §4 and §7.
+- **`[00-fixed-alpha-laboratory-M-histories-fail-in-classical-turning-point]`** (that board's §3, assigned
+  here in `b306c45`) is 04's to investigate: does 03's F3 make 2197 and 2188 fail? Its logs and the probe
+  driver are read on the other branch with `git show`.
+- **Nothing about the drain is 04's.** The 42 are recomputed at their stored α, as planned. The 3873
+  inside-wall stop belongs to `one-loop-drain` 01.
+- **After 04 lands**, `reflection-restart` is merged into `one-loop-drain` (that campaign's U1), and its 01 is
+  written on the merged tree. 04 merges nothing.
+
+04 is written from this (`04-close.md`). Its §0.2 records what the planner read from the 2026.8.0 store for
+it: the store already holds nine "not monotone" `classical_turning_point` failures at laboratory M, made
+before anything of this campaign's, three of them 2197's β neighbours at α = 10⁻³. So whether F3 is the cause
+is tested there on two trees and not assumed.
+
 ## 7. What this campaign hands to the user
 
 - A fix, ruled and landed, with its measurements.
 - **The handover for the rebuild** (§6.3): the whole store is rebuilt under `2026.9.0`, by the user, after
-  `quanta-diagnostics` 07, and the figures of record are made from it.
+  `quanta-diagnostics` 07, and the figures of record are made from it. *(Restated 2026-11-02, §6.4: after
+  `one-loop-drain` 08, at 2026.10.0; no store of record at 2026.9.0.)*
 - ~~**A verdict on `2026.8.0`**, per block and per figure, with evidence.~~ *(Withdrawn 2026-11-02, §6.3; the
   text below is the plan as it was.)* Under U3 as ruled: every stored
   success with a bad step is listed for regeneration, whatever its observables do. The planner's

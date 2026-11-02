@@ -5,7 +5,9 @@ user's request; U1–U5 ruled by the user the same day, P1–P10 standing (READM
 after 01, at the user's word (README §6.3): the signature narrowed to the first step of a restarted Radau;
 02 withdrawn, since `quanta-diagnostics` rebuilds the whole store; U3–U5 lapsed. U6 ruled the same day: F3 plus the guard
 (README §6.3). Prompt 03 landed the same day: F3 and the guard are the production code, `VERSION_LABEL`
-2026.9.0. The plan is [`README.md`](README.md), on branch `reflection-restart`, cut from `main` at
+2026.9.0. The handover was restated by the user the same day (README §6.4): the rebuild of record follows
+`one-loop-drain` 08 at 2026.10.0, and no store of record is built at 2026.9.0. Prompt 04 written the same
+day. The plan is [`README.md`](README.md), on branch `reflection-restart`, cut from `main` at
 `cc7fe75`.
 
 The campaign takes the defect diagnosed in `.documents/post-reflection-step-2026-11-02/`: after a
@@ -31,7 +33,7 @@ to the rebuild of record, which rebuilds the whole store (README §6.3).
 | ~~02~~ | ~~Audit the 2026.8.0 store~~ | **withdrawn 2026-11-02** (README §6.3): the whole store is rebuilt | — | — | — | | |
 | — | the user's ruling U6 | F3 plus the guard (README §6.3), 2026-11-02 | — | ✅ | ✅ | | |
 | 03 | [The fix](03-the-fix.md) | F3 and the guard, the probe switch removed; tests; a reflecting golden history; labels; documents | Opus | ✅ | ✅ | `b81eab8` | [log](logs/03-the-fix.md) |
-| 04 | The close | the 42 recomputed with the fix; the issue closed; the handover to the rebuild; the close | Opus | ⬜ | ⬜ | | |
+| 04 | [The close](04-close.md) | the 42 recomputed with the fix; the fixed-α turning-point failures of 2197 and 2188 investigated on two trees; the issue closed; the handover to the rebuild (README §6.4); the close | Opus | ✍️ | ⬜ | | |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed · ~~struck~~ withdrawn.
 
@@ -161,6 +163,9 @@ the handover saying the whole store is rebuilt (README §6.3).
   trajectory after every restart) causes it, by running both at `b81eab8^` and `b81eab8`; then record, and
   either fix it within this campaign's scope or say where it goes. The campaign that found it plans to move
   laboratory-M histories to a one-loop drain, under which both complete, but it keeps the fixed α as a law.
+  *(2026-11-02, prompt 04 written: §1.2 there. The planner found that the 2026.8.0 store already holds nine
+  "not monotone" failures of `classical_turning_point` at laboratory M, made before this campaign's code;
+  04 §0.2 lists them, with a reading to be tested.)*
 
 ## 4. Resolved issues
 
