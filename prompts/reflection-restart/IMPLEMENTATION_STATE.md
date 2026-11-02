@@ -1,15 +1,16 @@
 # reflection-restart campaign — implementation state
 
-**Last updated:** 2026-11-02 · **Status: LIVE — 1 of 4 landed (01).** Planned 2026-11-02 at the user's
-request; U1–U5 ruled by the user the same day, U6 (the fix) to be ruled after 01 and 02, P1–P10 standing
-(README §6). The plan is [`README.md`](README.md), on branch `reflection-restart`, cut from `main` at
+**Last updated:** 2026-11-02 · **Status: LIVE — 1 of 3 landed (01; 02 withdrawn).** Planned 2026-11-02 at the
+user's request; U1–U5 ruled by the user the same day, P1–P10 standing (README §6). Re-planned the same day
+after 01, at the user's word (README §6.3): the signature narrowed to the first step of a restarted Radau;
+02 withdrawn, since `quanta-diagnostics` rebuilds the whole store; U3–U5 lapsed; U6 (the fix) to be ruled
+from 01. The plan is [`README.md`](README.md), on branch `reflection-restart`, cut from `main` at
 `cc7fe75`.
 
 The campaign takes the defect diagnosed in `.documents/post-reflection-step-2026-11-02/`: after a
 reflection the restarted Radau's first outward step can be uncapped, and Radau can accept a wrong step
-whose interpolant crosses φ = 0. It measures four fixes, audits the 2026.8.0 store for stored successes
-that took such a step, implements the fix the user rules, and says what of the run must be rebuilt.
-Under U3 as ruled, every stored success with a bad step is regenerated, whatever its observables do.
+whose interpolant crosses φ = 0. It measures four fixes, implements the fix the user rules, and hands over
+to the rebuild of record, which rebuilds the whole store (README §6.3).
 
 **Campaign:** [`README.md`](README.md) ·
 **Code:** `ComputeTargets/ScalarHistory.py` (`integrate_scalar_history`), `tools/` (the scanner) ·
@@ -26,12 +27,12 @@ Under U3 as ruled, every stored success with a bad step is regenerated, whatever
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
 | 01 | [Measure the fixes](01-measure-the-fixes.md) | the scanner; F1–F4 measured; why Radau accepts the bad step | Opus | ✅ | ✅ | `d4703df` | [log](logs/01-measure-the-fixes.md) |
-| 02 | Audit the 2026.8.0 store | A, A2, B, C re-integrated at their stored normalization; bitwise reproduction; bad steps per history | Sonnet | ⬜ | ⬜ | | |
-| — | the user's ruling U6 | the fix, from 01 and 02 | — | | | | |
+| ~~02~~ | ~~Audit the 2026.8.0 store~~ | **withdrawn 2026-11-02** (README §6.3): the whole store is rebuilt | — | — | — | | |
+| — | the user's ruling U6 | the fix, from 01 | — | | | | |
 | 03 | The fix | the ruled fix; tests; a reflecting golden history; labels; documents | Opus | ⬜ | ⬜ | | |
-| 04 | Verdict on 2026.8.0 | the 42 and a sample recomputed; the verdict per block and figure; the issue closed; the handover; the close | Opus | ⬜ | ⬜ | | |
+| 04 | The close | the 42 recomputed with the fix; the issue closed; the handover to the rebuild; the close | Opus | ⬜ | ⬜ | | |
 
-**Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
+**Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed · ~~struck~~ withdrawn.
 
 Prompts are written one at a time, each after the previous one lands and is reviewed. 02 runs on the
 tree before 03.
@@ -84,18 +85,31 @@ the diagnosis README and in the campaign README §2.1.
 | Gate | Holds when | Prompt | State |
 |---|---|---|---|
 | Signature | the scanner reproduces the diagnosis's three bad steps and its 845-step count on the nine histories | 01 | ✅ 2026-11-02: 835 = 835 (the diagnosis's sum; 845 was its slip, orchestrator note 01 ruling 1), every printed line identical, no accounting difference (verification §1.2) |
-| Measure | each of F1–F4 measured: the three failures, signature steps over all outward steps, golden digits, cost at each M; why Radau accepts the bad step | 01 | ✅ 2026-11-02 (verification §1.4–§1.6), with the proviso of `[01-p1-flag-fires-on-legitimate-steps]` (§3) |
-| Audit | every scanned history reproduces its stored samples bitwise (or the exceptions listed); bad steps counted per history over A, A2, B, C | 02 | ⬜ |
-| Fix | the three failures succeed; no signature step in the nine; golden histories as the ruling predicts; a reflecting golden pinned | 03 | ⬜ |
-| Verdict | the 42 recomputed; the sample's observables against the store; what is rebuilt, per block and figure | 04 | ⬜ |
+| Measure | each of F1–F4 measured: the three failures, signature steps over all outward steps, golden digits, cost at each M; why Radau accepts the bad step | 01 | ✅ 2026-11-02 (verification §1.4–§1.6); its proviso, `[01-p1-flag-fires-on-legitimate-steps]`, closed by the user's ruling of the signature (§4) |
+| ~~Audit~~ | withdrawn with 02 (README §6.3) | — | — |
+| Fix | the three failures succeed; no signature step (as ruled, README §6.3) in the nine; golden histories as the ruling predicts; a reflecting golden pinned | 03 | ⬜ |
+| Close | the 42 recomputed and their outcome stated; the issue closed; the handover written | 04 | ⬜ |
 
 ## 3. Active and unresolved issues
 
-One opened by prompt 01 (2026-11-02).
+None open on this board (the one opened by prompt 01 closed 2026-11-02, §4).
+
+### 3.1 Assigned to this campaign
+
+- `[run-2026.8.0-an-uncapped-outward-step-after-a-reflection-crosses-the-wall]` — assigned 2026-11-02 from
+  the `inelastic-reflection` board (§3 there, which holds its measurements and impact). Closed by 04, with
+the handover saying the whole store is rebuilt (README §6.3).
+
+## 4. Resolved issues
 
 ### `[01-p1-flag-fires-on-legitimate-steps]`
 
 **Opened:** 2026-11-02 by prompt 01, from its measurement (log 01 §5; verification §1.1, §1.4).
+**Closed:** 2026-11-02, by the user's ruling of the signature (README §6.3): "P1 only seems to need to fire
+on the first step of a restarted Radau." Counted on 01's raw output (`var/reflection-restart/01/`) by the
+orchestrator: P1's flag (either condition) on the first accepted step of an instance begun after a
+reflection, a drain or a release holds for exactly the three bad steps under None, and for no step under F3,
+over the 66 histories of its batch, the three goldens among them. 02, which needed it, is withdrawn; 03's Fix gate counts it.
 
 - **What.** P1's flag (README §6.2), which the scanner applies and the probe's F4 acts on, fires on steps that
   are not the bad step, in every history measured, reflecting or not:
@@ -118,15 +132,6 @@ One opened by prompt 01 (2026-11-02).
   or that with a bound on h·ω), and, if F4 is still wanted, the flag it acts on. The scanner records each row's
   conditions, start reason, first-step flag, −π′ and h·ω, so a narrower signature needs no new run of 01's
   histories. Not fixed here (orchestrator note 01, ruling 4: the flag is not tuned).
-
-### 3.1 Assigned to this campaign
-
-- `[run-2026.8.0-an-uncapped-outward-step-after-a-reflection-crosses-the-wall]` — assigned 2026-11-02 from
-  the `inelastic-reflection` board (§3 there, which holds its measurements and impact). Closed by 04.
-
-## 4. Resolved issues
-
-None.
 
 ## 5. Baselines
 

@@ -6,6 +6,13 @@ of them", and, if possible, to determine whether the `2026.8.0` science run must
 actually rebuilding all of it". U1–U5 ruled by the user the same day; U6 (the fix) waits on prompts 01
 and 02 (§6.1).
 
+**Re-planned 2026-11-02, after 01, at the user's word (§6.3).** `quanta-diagnostics` (planned the same day,
+`296be00`) rebuilds the whole store to capture data that cannot be backfilled, and the user has ruled that the
+rebuild of record waits for it. A full rebuild is therefore guaranteed. Prompt 02 (the audit of the 2026.8.0
+store) is **withdrawn**, since it would only decide which histories to regenerate. 04 shrinks to the 42
+failures recomputed, the close and the handover. U6 can be ruled without 02. The text below is the plan as
+amended; the passages that no longer hold are marked.
+
 It takes `[run-2026.8.0-an-uncapped-outward-step-after-a-reflection-crosses-the-wall]`
 (`inelastic-reflection` board §3; `.documents/OPEN_ISSUES.md`), which the user said on 2026-11-02 they
 would take to a campaign of its own.
@@ -40,6 +47,8 @@ What the diagnosis left open, and this campaign must settle before a fix is chos
 - **whether successful histories hold a bad step** that did not reach φ < 0. That would stop the field
   near the wall, a spurious early parking, and pass silently; at α = 0 the gate does not run, so any
   would. Six of nine scanned are clean; the other 3,600-odd reflecting histories are unscanned.
+  *(2026-11-02, after 01: under the signature as the user ruled it (§6.3), none of the 54 stored successes 01
+  re-integrated holds a bad step; the rest are not audited, since the whole store is rebuilt.)*
 
 ### 0.2 What the 2026.8.0 store says about exposure (planner, read-only, 2026-11-02)
 
@@ -83,17 +92,18 @@ From `var/datastores/science-2026.8.0` (successes only, per M; `number_reflectio
 - **Measure** the fixes (§2, prompt 01) on the reproduced failures, the clean histories the diagnosis
   scanned, the golden histories, and a cost sample at each M of the run; and establish why the bad step
   is accepted.
-- **Audit the 2026.8.0 store** (prompt 02) at the run's code: re-integrate reflecting successes at their
-  stored normalization, check that each reproduces its stored samples bitwise, and record every
-  outward step with the bad-step signature.
+- ~~**Audit the 2026.8.0 store** (prompt 02)~~ — withdrawn 2026-11-02 (§6.3): the whole store is rebuilt.
 - **Implement** the fix the user rules (prompt 03), with tests, a reflecting golden history, the labels,
   and the documents.
-- **The verdict** on the run (prompt 04): the 42 failures recomputed with the fix; a sample of clean
-  histories recomputed and compared with the store on what the figures read; the issue closed.
+- **The close** (prompt 04): the 42 failures recomputed with the fix; the issue closed; the handover,
+  which says the whole store is rebuilt.
 
 **Out of scope:**
-- **Rebuilding the run.** The campaign says what must be rebuilt and why; a build of record is the
-  user's, on the user's word, recorded in `science-runs/` (§7).
+- **Rebuilding the run.** The rebuild of record is the user's, on the user's word, recorded in
+  `science-runs/` (§7). It waits for `quanta-diagnostics` 07, so that one build carries both campaigns'
+  changes.
+- A verdict per block or per figure on 2026.8.0, and a comparison of its observables with the fixed
+  code's beyond what 01 measured: withdrawn with 02 (§6.3).
 - The other failures of the run (classical turning point at 4×10⁻³¹, normalization and overflow at
   M = 0.5, the PRyMordial and effective-minimum failures below the surfing threshold).
 - The parking cut's ε, the gate's sampling (`observe_turning_points`' ten samples per step), the
@@ -107,14 +117,13 @@ From `var/datastores/science-2026.8.0` (successes only, per M; `number_reflectio
 | # | Prompt | Covers | Model |
 |---|---|---|---|
 | 01 | `01-measure-the-fixes.md` | a scanner tool (every step that starts outward, flagged by signature) with tests; F1–F4 behind a probe-only switch, measured on the three failures, the six clean histories, the golden histories and a cost sample; why Radau accepts the bad step | Opus |
-| 02 | `02-audit-the-2026.8.0-store.md` | the scanner on the run's reflecting successes at their stored normalization (scope U4); bitwise reproduction; the signature counted per history; a list of affected histories | Sonnet |
-| — | **ruling** | the user chooses the fix from 01 and 02 (U6) | — |
-| 03 | `03-the-fix.md` | the ruled fix in `integrate_scalar_history`; tests; a reflecting golden history; `VERSION_LABEL` and stepper label; documents | Opus |
-| 04 | `04-verdict-on-2026.8.0.md` | the 42 recomputed with the fix; a stratified sample of clean histories recomputed and compared with stored observables; the verdict; the issue closed; the handover; closes the campaign | Opus |
+| ~~02~~ | ~~`02-audit-the-2026.8.0-store.md`~~ | **withdrawn 2026-11-02** (§6.3): the whole store is rebuilt, so the audit decides nothing | — |
+| — | **ruling** | the user chooses the fix from 01 (U6) | — |
+| 03 | `03-the-fix.md` | the ruled fix in `integrate_scalar_history`, the probe switch removed; tests; a reflecting golden history; `VERSION_LABEL` and stepper label; documents | Opus |
+| 04 | `04-close.md` | the 42 recomputed with the fix through the tool route; the issue closed; the handover (the whole store rebuilt, carried by `quanta-diagnostics`' rebuild of record); closes the campaign | Opus |
 
 Written one at a time, each after the previous one lands and is reviewed (the user's practice in
-`inelastic-reflection`). 02 must run on the tree **before** 03, since it re-runs the run's integration;
-it does not depend on 01's results, only on its scanner, so 02 may be launched while 01 is reviewed.
+`inelastic-reflection`).
 
 ### 2.1 The gates
 
@@ -122,9 +131,9 @@ it does not depend on 01's results, only on its scanner, so 02 may be launched w
 |---|---|---|
 | **Signature** | the scanner reproduces the diagnosis's three bad steps (h, h·ω, π_end/π_start to its printed digits) and its 845-step count on the nine histories | 01 |
 | **Measure** | for each of F1–F4: the three failures' outcome, the count of signature steps over **all** outward steps (not only first ones), golden digits moved or bitwise, accepted steps and wall-clock against today at each M sampled; and a stated, tested account of why Radau accepts the bad step | 01 |
-| **Audit** | every scanned history reproduces its stored samples bitwise, or the exceptions are listed; the signature count per history is recorded for the whole scope | 02 |
-| **Fix** | the three failures succeed; no signature step in the nine histories; the golden histories as the ruling predicts (bitwise for a restart-only fix, re-pinned with a stated reason otherwise); the new reflecting golden pinned | 03 |
-| **Verdict** | the 42 recomputed and their outcome stated; on the sample, the change in Y_p, D/H, ΔN_eff (1 MeV, T_CMB), ρ_χ/ρ_R and parking T against the store, set beside the figures' resolution; a statement, per block and per figure, of what must be rebuilt | 04 |
+| ~~**Audit**~~ | withdrawn with 02 (§6.3) | — |
+| **Fix** | the three failures succeed; no signature step (as ruled, §6.3) in the nine histories; the golden histories as the ruling predicts (bitwise for a restart-only fix, re-pinned with a stated reason otherwise); the new reflecting golden pinned | 03 |
+| **Close** | the 42 recomputed and their outcome stated; the issue closed; the handover written | 04 |
 
 > **Note (2026-11-02, after 01).** The Signature gate's "845-step count" repeats a slip in the diagnosis.
 > Its nine per-history counts sum to **835**, and that is the count the gate was held to (orchestrator note
@@ -134,20 +143,18 @@ it does not depend on 01's results, only on its scanner, so 02 may be launched w
 
 - 01 and 03 open none but temporary SQLite stores in `tempfile` directories; the histories they run go
   through `tools/history_and_bbn.py`'s path, as the diagnosis did, with no Ray.
-- 02 reads `var/datastores/science-2026.8.0` read-only (sqlite `mode=ro` on each shard), as
-  `failures.py` did; it writes its output under `var/reflection-restart/02/` and its summary into the
-  verification document.
-- 04 reads the same store read-only, and writes any recomputed histories to a store of its own under
-  `var/datastores/` (U5), never into the run's.
+- ~~02~~ (withdrawn).
+- 04 reads the 2026.8.0 store read-only for the 42 failures' inputs, and runs them through the tool route
+  with no store written (§6.3, replacing U5).
 
 ## 4. The interfaces
 
-- **01 → 02.** The scanner, its signature thresholds, and the bitwise-reproduction check.
-- **01 + 02 → the ruling.** 01 says what each fix costs and catches; 02 says how often the defect
-  occurred in the run, and where. The user rules the fix (U6) and whether to rebuild anything yet.
+- **01 → the ruling.** 01 says what each fix costs and catches; the user rules the fix (U6).
 - **03 → 04.** The fixed tree and its labels.
-- **To the run.** 04's verdict goes into the run record as a dated note (`science-runs/…/README.md`) and
-  into `.documents/review-remediation-verification.md` as a handover addendum (§4.19; §4.18 is `inelastic-reflection`'s).
+- **03 → `quanta-diagnostics`.** That campaign's prompts start on the fixed tree after 03 lands (its U1).
+- **To the run.** 04's handover goes into the run record as a dated note (`science-runs/…/README.md`: the
+  2026.8.0 store is superseded by the rebuild of record) and into `.documents/review-remediation-verification.md`
+  as a handover addendum (§4.19; §4.18 is `inelastic-reflection`'s).
 
 ## 5. The rules this campaign runs under
 
@@ -156,10 +163,10 @@ it does not depend on 01's results, only on its scanner, so 02 may be launched w
 - **The probe switch is not a production option.** F1–F4 exist in 01 only behind a keyword of
   `integrate_scalar_history` (default today's behaviour, bitwise), or as patches in the probe's own
   process; 03 removes what was not chosen.
-- **Values do not move in 01 or 02.** The golden histories pass bitwise at both. In 03 they move only
-  as the ruling predicts.
-- **Long runs are detached and recorded** (`CLAUDE.md`, "Long-running jobs"): 02's scan, and 04's if
-  it is long, are launched detached with their output in `var/`, and verified once (U4).
+- **Values do not move in 01.** The golden histories pass bitwise there. In 03 they move only as the
+  ruling predicts.
+- **Long runs are detached and recorded** (`CLAUDE.md`, "Long-running jobs"): 04's, if it is long, is
+  launched detached with its output in `var/`, and verified once.
 - **Measurements, not bounds.** Integrator differences are recorded as measured; a threshold enters
   only where the user rules one.
 
@@ -182,6 +189,8 @@ need for D if it cannot be affected."; U5 (prompt 04's recomputation) "that seem
 - **U4 as ruled.** A, A2, B and C in full; D is not scanned. 02 records from the store that D has no
   reflection and no injection, which is why it cannot be affected by a restart-only fix; if the ruled fix
   (U6) acts outside restarts (F1, F2), 04 says what that means for D.
+
+*(2026-11-02, after 01: U3, U4 and U5 lapse, and U6 is ruled from 01 alone; §6.3.)*
 
 The table below is the proposal as it was put.
 
@@ -206,7 +215,7 @@ Accepted as proposed unless the user rules otherwise.
   history through `integrate_history` as `tools/history_and_bbn.py` does, either tuned or at a given
   normalization, with a step hook rather than a patch of SciPy where the code allows (01 decides; a
   patch confined to the tool's process is acceptable). No BBN.
-- **P3 — bitwise reproduction** (02): a stored success re-integrated at its stored normalization with the
+- **P3 — bitwise reproduction** (02; lapsed with it, §6.3; 01 checked it on 54 histories): a stored success re-integrated at its stored normalization with the
   run's tree must give its stored samples bitwise, compared through the store's `ScalarHistoryValue`
   rows; that it does is what makes the scan's verdict about the store and not about a different
   integration. The tree is `main` before 03. Since the run's first tree (`75208cd`, blocks A–C) the
@@ -230,16 +239,42 @@ Accepted as proposed unless the user rules otherwise.
   trace (the reflected state of §3 step 3) restarted with the fix gives no signature step and π of the
   resolved re-integration's sign over the next steps. In `ComputeTargets/tests/`, with a docstring
   stating its runtime.
-- **P9 — documents.** `.documents/reflection-restart-verification.md` (new) holds 01, 02 and 04's
-  measurements; `numerical-strategies.md` gets a dated note on the cap and restart; `architecture-summary.md`
+- **P9 — documents.** `.documents/reflection-restart-verification.md` (new) holds 01 and 04's
+  measurements (02 withdrawn); `numerical-strategies.md` gets a dated note on the cap and restart; `architecture-summary.md`
   if the stepper's interface changes. The diagnosis folder gets a dated pointer, nothing else.
 - **P10 — issues.** The issue is assigned to this campaign when the plan is committed (index §1, the
   board's **Assigned** line) and closed by 04. Anything else found is recorded and opened, not fixed.
 
+### 6.3 Re-planned after 01 (2026-11-02)
+
+**Ruled by the user, 2026-11-02, after 01's review:** "P1 only seems to need to fire on the first step of a
+restarted Radau. That's how I would write it myself." Then, of `quanta-diagnostics`: "This is going to
+rebuild the whole store anyway, to capture some diagnostic data that cannot be backfilled. So we can
+guarantee a full rebuild. Is the audit still needed?" and, on the restructure proposed in answer, "Yes
+please, make that restructure." So:
+- **The signature** (P1 as amended) is P1's flag on **the first accepted step of a restarted Radau
+  instance** with π > 0 (after a reflection, a drain or a release; not the history's start, and not a later
+  step of the instance). Either condition of P1 counts. In 01's measurement it holds for exactly the
+  three bad steps of the diagnosis and for no other step, under None, over the 66 histories of its batch (the goldens among them);
+  under F3 it holds for none. This closes `[01-p1-flag-fires-on-legitimate-steps]`.
+- **02 is withdrawn.** It would decide which stored successes U3 regenerates; with the whole store
+  rebuilt (by the user, after `quanta-diagnostics` 07), every one is. 01 already re-integrated 54 stored
+  successes bitwise under the production code and found no bad step among them by the signature as
+  ruled; the remaining successes are not audited, and no statement about them is made.
+- **U3, U4 and U5 lapse.** U3's aim (no bad data in the store) is met by the rebuild; U4 was 02's scope; U5
+  was 04's recomputation for a verdict that is no longer needed. 04 recomputes only the 42 failures, as
+  part of the close.
+- **U6 is ruled from 01 alone**, and is still the user's.
+- **The labels** (P6) stand: `VERSION_LABEL` 2026.9.0. `quanta-diagnostics`' U3 relies on no store of record
+  being built at 2026.9.0 before it lands, which this re-plan keeps.
+
 ## 7. What this campaign hands to the user
 
 - A fix, ruled and landed, with its measurements.
-- **A verdict on `2026.8.0`**, per block and per figure, with evidence. Under U3 as ruled: every stored
+- **The handover for the rebuild** (§6.3): the whole store is rebuilt under `2026.9.0`, by the user, after
+  `quanta-diagnostics` 07, and the figures of record are made from it.
+- ~~**A verdict on `2026.8.0`**, per block and per figure, with evidence.~~ *(Withdrawn 2026-11-02, §6.3; the
+  text below is the plan as it was.)* Under U3 as ruled: every stored
   success with a bad step is listed for regeneration, whatever its observables do. The planner's
   expectation, to be tested and not assumed: D and Figure 6a stand unchanged (with a restart-only fix);
   A, A2 and B stand if 02 finds no bad step there; block C (Figure 6b, the M_crit
