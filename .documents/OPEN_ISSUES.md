@@ -46,7 +46,9 @@ opened none, 2026-10-31; the orchestrator's review of prompt 09 opened one, 2026
 opened two, 2026-11-01, §1.19; prompt 12 opened and closed none, and the campaign closed 2026-11-01, 13 of 13
 prompts landed, with these four open and none assigned; one of them closed as measured, 2026-11-01, with
 `science-readiness`'s last, both from one measurement, `.documents/bbn-ratio-spline-2026-11-01/`; one opened after the close,
-2026-11-02, §1.19, from the diagnosis of the 2026.8.0 run's m_eff² failures, `.documents/post-reflection-step-2026-11-02/`).
+2026-11-02, §1.19, from the diagnosis of the 2026.8.0 run's m_eff² failures, `.documents/post-reflection-step-2026-11-02/`,
+and assigned the same day to `reflection-restart`, §1.21); none on the `reflection-restart` board (planned
+2026-11-02, with none opened and that one assigned).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -315,7 +317,8 @@ opened and closed none, and these four stayed open. One of them,
 `[11-the-ratio-steps-at-injections-and-parking-in-the-10-100-keV-window]`, was measured and closed as
 measured on 2026-11-01 (board §4; `.documents/bbn-ratio-spline-2026-11-01/`); three stay open. One more was
 opened after the close, on 2026-11-02, from the diagnosis of the 2026.8.0 science run's `log_m_eff_squared`
-failures (`.documents/post-reflection-step-2026-11-02/`); four are open.
+failures (`.documents/post-reflection-step-2026-11-02/`); four are open. That one was assigned to
+`reflection-restart` on 2026-11-02 (§1.21), and three are listed here.
 
 - `[00-xav-sigma-is-non-monotone-at-25-35-keV]` — Σ from `Xav_EOS_spline` swings between 3×10⁻⁶
   and 9×10⁻⁵ at 25–33 keV (an irregular table and a ringing cubic spline), comparable to the matter
@@ -331,13 +334,19 @@ failures (`.documents/post-reflection-step-2026-11-02/`); four are open.
   line, so a build's log does not show which histories warned; the stored columns do; left by the user
   unless it proves a problem in production (2026-11-01).
   *(`inelastic-reflection`; prompt 11)*
-- `[run-2026.8.0-an-uncapped-outward-step-after-a-reflection-crosses-the-wall]` — after a late floor
-  reflection the kinematic cap can fall back to 0.1 outward, and Radau accepts a wrong step whose interpolant
-  crosses φ = 0; the run's 42 m_eff² failures at M = 10⁻¹⁵–10⁻¹²; silent cases not excluded; fix to a
-  campaign of its own. *(`inelastic-reflection`; after the close, 2026-11-02)*
 
 ### 1.20 Assigned to `inelastic-reflection` — [its board](../prompts/inelastic-reflection/IMPLEMENTATION_STATE.md) §3.1
 
 Re-planned 2026-10-29 to reach laboratory M through a parking switch (its README §8). The one
 issue assigned, `[00-settling-at-physical-M-needs-a-parked-tracking-model]`, was closed by prompt 09
 on 2026-10-31. None is assigned now, and the campaign closed on 2026-11-01.
+
+### 1.21 Assigned to `reflection-restart` — [its board](../prompts/reflection-restart/IMPLEMENTATION_STATE.md) §3.1
+
+Planned 2026-11-02 to measure the proposed fixes, audit the 2026.8.0 store, implement the fix the user
+rules and give a verdict on the run. One issue assigned at planning, from the `inelastic-reflection` board.
+
+- `[run-2026.8.0-an-uncapped-outward-step-after-a-reflection-crosses-the-wall]` — after a late floor
+  reflection the kinematic cap can fall back to 0.1 outward, and Radau accepts a wrong step whose interpolant
+  crosses φ = 0; the run's 42 m_eff² failures at M = 10⁻¹⁵–10⁻¹²; silent cases not excluded; fixes measured, store
+  audited, fix ruled after. *(`inelastic-reflection`; after the close, 2026-11-02; assigned 2026-11-02)*

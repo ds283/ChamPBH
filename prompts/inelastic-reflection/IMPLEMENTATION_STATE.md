@@ -98,7 +98,8 @@ The campaign closed on 2026-11-01 with these four open and none assigned; prompt
 *(2026-11-01, after the close: `[11-the-ratio-steps-at-injections-and-parking-in-the-10-100-keV-window]` was
 measured and closed as measured by the user (§4); three stay open.)*
 *(2026-11-02, after the close: `[run-2026.8.0-an-uncapped-outward-step-after-a-reflection-crosses-the-wall]` was
-opened from the diagnosis of the 2026.8.0 run's m_eff² failures; four are open.)*
+opened from the diagnosis of the 2026.8.0 run's m_eff² failures; four are open. It was assigned the same day
+to `reflection-restart`, which carries it.)*
 One was opened by the planner, one by the orchestrator's review of prompt 09, and two by prompt 11. Prompt 04's
 was closed by prompt 08, and prompt 05's by prompt 07b (§4). The one assigned (§3.1) was closed by prompt 09 (§4).
 
@@ -242,6 +243,10 @@ run's `log_m_eff_squared` failures, [`.documents/post-reflection-step-2026-11-02
   Jacobian, or a `first_step` for the restarted solver), as a campaign, checked against the golden histories
   and the three failures; then recompute the 42 failed histories. Not assigned. The user means to take the
   analysis and the fix to a campaign of its own (2026-11-02).
+- **Assigned (2026-11-02):** to `reflection-restart` ([its board](../reflection-restart/IMPLEMENTATION_STATE.md)
+  §3.1), planned that day at the user's request to measure the fixes (F1–F4), audit the 2026.8.0 store for
+  stored successes with a bad step, implement the fix the user rules and recompute what must be. That
+  board now carries it; this entry stays as the record of the opening.
 
 ### 3.1 Assigned to this campaign
 
