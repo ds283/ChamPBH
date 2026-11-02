@@ -32,10 +32,41 @@ generations themselves are dropped at the store. The scoping (source §§2–3) 
   matter-like excess E of ρ_χ over its massless value is ≤ 5×10⁻⁶ of ρ_χ, ≤ 4×10⁻⁹ of ρ_R. The earliest
   generations are the most relativistic (margins 72–82 e-folds today) because m·a falls by 20–35 e-folds
   over a history.
-- **At a later bounce they are not.** The wall's mass exceeds the between-bounce mass by e²²–e⁵²; for
-  quanta with p ≪ ω_t a bounce is non-adiabatic, so it rescatters them and stimulates production into
-  occupied modes. The ledger treats them as passive radiation. The user has ruled this documented and
-  quantified, not modelled (source §7).
+- **At their own bounce they are not.** The wall's mass exceeds the between-bounce mass by e²²–e⁵². The
+  scoping read the negative reflection margins as earlier generations made non-relativistic by later
+  bounces. **Corrected 2026-11-02**, by re-integrating history 2197 (β = 1.185, α = 0.001) from `main` at
+  `0209aac` and keeping each generation's margins and the event that sets its reflection margin:
+  - Q = k_ex·a falls from each generation to the next (6,638 of 6,647 steps; ln Q from +6.8 to −72.3).
+    At a later bounce k, an earlier generation g has p/m = (Q_g/Q_k)(k_ex,k/m_k), which is never below
+    bounce k's own birth margin. A reflection-margin failure is therefore a failure at birth: the last
+    bounce leaves the first generation's margin at about +59.
+  - The birth margin over all generations has median −15.7 and minimum −20.4. 72% of ρ_χ is born with
+    ln(k_ex/m) < 0; a further 12% is born above 0 but meets a later bounce whose births are below it. A
+    generation's reflection margin equals the next generation's birth margin to a median 0.003. The
+    weighting hid this too (stored birth failing share: 0).
+  - The cause is the classical turning point once the impact energy E falls well below V_0. The field
+    then turns in the 1/φ tail, at φ_t ≈ M V_0/E, where k_ex ∝ E^{5/2} and ω_t ∝ E^{3/2}, and
+    ln(k_ex/ω_t) ≈ ln(E/V_0) − ln 2√2 instead of the steep wall's ln ½. The 5,981 late classical
+    generations (birth margin < −5) follow d ln k_ex/d ln ω_t = 1.667. Their birth margins put
+    ln(E/V_0) at −15 to −19. The steep-wall spectrum (k_ex = λ_t E^{1/2}/2) is derived outside this
+    regime, and every such turnaround at laboratory M is a floor reflection drained with w_gate = 1.
+- **What a bounce does to quanta already present** is set by where they sit against that bounce's
+  production band (around k_ex), not by p/m. A mode far above the band follows the bounce adiabatically
+  (|β|² falls steeply above the peak), so a bounce neither rescatters it nor stimulates production into
+  it. In the classical regime the band and the mass nearly coincide (k_ex ≈ ω_t/2). In the one-loop
+  regime they do not (m_ta ≪ k_ex, ln(k_ex/m_ta) up to 32), so a relativistic quantum can still sit in
+  a later bounce's band. Since Q falls by about 0.5% per bounce in 2197's late tail, about 100 earlier
+  generations lie within half an e-fold of each bounce's peak. A crude occupation for them (each
+  generation's ΔK in a shell one e-fold wide at its Q, n ≈ 2π² ΔK/Q⁴) is e³⁰–e¹⁷⁰. This does not
+  contradict inelastic-reflection's small occupations, n ~ α e^{−4ℓ}, which hold for one-loop
+  turnarounds (R ≫ 1, k_ex ≫ E^{1/4}): in 2197 the 209 one-loop generations (39% of ρ_χ) have
+  ln n from −135 to −12. Once R < 1, k_ex < E^{1/4}, and the same αE in softer modes gives n ≫ 1: the
+  first generation with n > 1 has ln R = −1.0, and the 61% of ρ_χ at R < 1 has n > 1. If that is right,
+  the late modes are classical, the first-order n̄_j and ε_j of §1.1 are outside their validity there,
+  and the late drain is outside the model's. The ledger treats all of it as passive radiation. The user
+  has ruled the effect documented and quantified, not modelled (source §7). What §1.1's measure 4
+  should become in the light of this is open for the user; the argument and its numbers are in
+  [`source/margins-correction_2026-11-02.md`](source/margins-correction_2026-11-02.md).
 
 Seven histories cannot carry a statement about a grid of 3,846, and a figure cannot be made from what
 the store keeps. This campaign stores what the run already computes and discards, adds the measures
