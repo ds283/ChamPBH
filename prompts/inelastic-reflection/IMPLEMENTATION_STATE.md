@@ -97,6 +97,8 @@ Orchestrator notes, one prompt at a time, in [`orchestrator/`](orchestrator/):
 The campaign closed on 2026-11-01 with these four open and none assigned; prompt 12 opened and closed none.
 *(2026-11-01, after the close: `[11-the-ratio-steps-at-injections-and-parking-in-the-10-100-keV-window]` was
 measured and closed as measured by the user (§4); three stay open.)*
+*(2026-11-02, after the close: `[run-2026.8.0-an-uncapped-outward-step-after-a-reflection-crosses-the-wall]` was
+opened from the diagnosis of the 2026.8.0 run's m_eff² failures; four are open.)*
 One was opened by the planner, one by the orchestrator's review of prompt 09, and two by prompt 11. Prompt 04's
 was closed by prompt 08, and prompt 05's by prompt 07b (§4). The one assigned (§3.1) was closed by prompt 09 (§4).
 
@@ -209,6 +211,37 @@ was closed by prompt 08, and prompt 05's by prompt 07b (§4). The one assigned (
 - **Ruled by the user, 2026-11-01:** "I'm not worried about the deduplication of warnings for now, unless it
   proves to be a problem in production." The issue stays open and not assigned, to be taken up if a
   production build's log is found to need the per-history warnings.
+
+### `[run-2026.8.0-an-uncapped-outward-step-after-a-reflection-crosses-the-wall]`
+
+**Opened:** 2026-11-02, after the close, at the user's request, from the diagnosis of the 2026.8.0 science
+run's `log_m_eff_squared` failures, [`.documents/post-reflection-step-2026-11-02/`](../../.documents/post-reflection-step-2026-11-02/README.md).
+
+- **What.** After a floor reflection late in a dissipation-mode history, the restarted Radau's first outward
+  step can be uncapped, and Radau can accept it although it is wrong.
+  - The kinematic cap (integrator-remediation's, README §2 (a) there) limits inward motion only, and its
+    acceleration term applies only where −π′ > 0. At a reflection close enough to the wall that the wall's
+    push beats the matter pull, neither applies and the cap is `global_max_step`, 0.1.
+  - **Measured** at β = 1.5, M = 10⁻¹², α = 0.05 (note §3): the reflection at φ = 0.237 M is followed by one
+    step of h = 6.4×10⁻⁴, h·ω ≈ 1240. Radau ends it at φ = 6.2 M with π = 1.6×10⁻⁷; resolved, the same step
+    ends at φ = 1.5×10⁶ M with π = 0.00235. Its interpolant reaches φ = −4.7 M. The same at β = 1.14 and 1.09,
+    M = 10⁻¹⁵.
+  - At α > 0 the gate evaluates m_eff² on the interpolant (`observe_turning_points`) and fails the history
+    there. Uncapped restarts are common and mostly harmless (40 of 62 at β = 1.09, 10⁻¹²); why Radau's error
+    test accepts the bad ones is not established.
+- **Impact.**
+  - The run's 42 `log_m_eff_squared` failures, all at M = 10⁻¹⁵–10⁻¹² and α > 0, at one epoch for each M
+    (0.8 eV at 10⁻¹⁵, 10–28 eV at 10⁻¹²), near parking. Three reproduced; the other 39 share the signature.
+    They are the holes in the planned Figure 6b.
+  - A bad step whose interpolant stays above zero would pass silently, stopping the field near the wall as a
+    spurious parking; at α = 0 the gate does not run, so any would. None of six successful histories scanned
+    (845 first outward steps with the failing three) has one, and the two at 4×10⁻³¹ have no uncapped
+    restart. The 1302 histories at 10⁻¹⁵–10⁻¹² were not all scanned.
+  - The cap predates this campaign; the gate's samples are what expose it.
+- **Next step.** For the user. Choose a fix (note §6: an outward cap h ≤ fφ/|π|, a stiffness cap from the
+  Jacobian, or a `first_step` for the restarted solver), as a campaign, checked against the golden histories
+  and the three failures; then recompute the 42 failed histories. Not assigned. The user means to take the
+  analysis and the fix to a campaign of its own (2026-11-02).
 
 ### 3.1 Assigned to this campaign
 

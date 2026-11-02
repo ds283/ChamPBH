@@ -141,6 +141,11 @@ categories are the first words of each `failure_reasons`.
   scattered over β = 1.11–2.6, at M = 10⁻¹⁵, 10⁻¹³ and 10⁻¹², across most α. They fall in the M_crit
   comparison, densest in its transition window, and are **undiagnosed**. So are the three classical-turning-point failures in A2 and the three
   normalization failures in D.
+- *Added 2026-11-02:* all 42 `log_m_eff_squared` failures (the 34 above and C's 8 below the threshold) are
+  diagnosed in [`.documents/post-reflection-step-2026-11-02/`](../../.documents/post-reflection-step-2026-11-02/README.md).
+  After a late floor reflection the outward step can go uncapped, and Radau accepts a wrong step whose
+  interpolant crosses φ = 0, where the gate evaluates m_eff². Three reproduced; the issue is
+  `[run-2026.8.0-an-uncapped-outward-step-after-a-reflection-crosses-the-wall]` (`inelastic-reflection` board §3).
 
 ## Where the output is
 

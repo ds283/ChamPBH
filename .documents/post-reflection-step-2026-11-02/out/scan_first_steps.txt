@@ -1,0 +1,39 @@
+beta=1.5 M=1e-12 alpha=0.05: history beta=1.5 M=1e-12: FAILURE wall=3.4 s reason=log_m_eff_squared: m_eff^2 <= 0 (m_eff^2 = -1 e^-225.0798555) at phi
+   first outward steps: 30; flagged (pi_end/pi_start < 0.5): 1; dense phi < 0: 1
+   good steps: h max 3.7e-06, h*omega median 0.000241 max 0.00366, least pi_end/pi_start 0.999987
+   good steps: cap median 1.3e-06 max 3.7e-06; first h_abs median 1.3e-06 max 3.7e-06; inward acceleration > 0 at 29 of 29
+   flagged: N0=35.91429105 h=0.000637 h*omega=1.24e+03 pi_end/pi_start=6.58e-05 phi_start/M=0.237 least dense phi/M=-4.86 cap=0.1 first h_abs=0.00318 inward acceleration=-0.0157
+beta=1.14 M=1e-15 alpha=0.01: history beta=1.14 M=1e-15: FAILURE wall=22.2 s reason=log_m_eff_squared: m_eff^2 <= 0 (m_eff^2 = -1 e^-226.8813015) at p
+   first outward steps: 270; flagged (pi_end/pi_start < 0.5): 1; dense phi < 0: 1
+   good steps: h max 3.67e-06, h*omega median 0.000608 max 0.00448, least pi_end/pi_start 0.999974
+   good steps: cap median 3.24e-07 max 0.1; first h_abs median 3.24e-07 max 0.00118; inward acceleration > 0 at 238 of 269
+   flagged: N0=37.67089767 h=0.000161 h*omega=1.07e+03 pi_end/pi_start=8.79e-05 phi_start/M=162 least dense phi/M=-1.06e+03 cap=0.1 first h_abs=0.000807 inward acceleration=-1.83
+beta=1.09 M=1e-15 alpha=0.03: history beta=1.09 M=1e-15: FAILURE wall=12.9 s reason=log_m_eff_squared: m_eff^2 <= 0 (m_eff^2 = -1 e^-226.7833498) at p
+   first outward steps: 151; flagged (pi_end/pi_start < 0.5): 1; dense phi < 0: 1
+   good steps: h max 4.11e-06, h*omega median 0.000554 max 0.0034, least pi_end/pi_start 0.999981
+   good steps: cap median 3.8e-07 max 0.1; first h_abs median 3.8e-07 max 0.00118; inward acceleration > 0 at 133 of 150
+   flagged: N0=37.41894954 h=0.00016 h*omega=1.06e+03 pi_end/pi_start=8.9e-05 phi_start/M=161 least dense phi/M=-1.03e+03 cap=0.1 first h_abs=0.0008 inward acceleration=-1.9
+beta=1.5 M=1e-12 alpha=0.02: history beta=1.5 M=1e-12: RHS=43554 accepted_steps=5921 reflections=26 samples=5166 integrations=1 alpha=0.02 wall=3.6 s
+   first outward steps: 25; flagged (pi_end/pi_start < 0.5): 0; dense phi < 0: 0
+   good steps: h max 4.11e-06, h*omega median 0 max 0.00771, least pi_end/pi_start 0.999981
+   good steps: cap median 1.3e-06 max 4.11e-06; first h_abs median 1.3e-06 max 4.11e-06; inward acceleration > 0 at 25 of 25
+beta=1.5 M=1e-12 alpha=0.15: history beta=1.5 M=1e-12: RHS=50936 accepted_steps=6915 reflections=33 samples=5166 integrations=1 alpha=0.15 wall=4.6 s
+   first outward steps: 32; flagged (pi_end/pi_start < 0.5): 0; dense phi < 0: 0
+   good steps: h max 3.2e-06, h*omega median 0 max 8.02e-08, least pi_end/pi_start 0.999948
+   good steps: cap median 7.27e-07 max 3.2e-06; first h_abs median 7.27e-07 max 3.2e-06; inward acceleration > 0 at 32 of 32
+beta=1.09 M=1e-12 alpha=0.08: history beta=1.09 M=1e-12: RHS=96459 accepted_steps=12369 reflections=63 samples=4943 integrations=1 alpha=0.08 wall=6.4
+   first outward steps: 62; flagged (pi_end/pi_start < 0.5): 0; dense phi < 0: 0
+   good steps: h max 3.42e-06, h*omega median 0.000329 max 0.00833, least pi_end/pi_start 0.999991
+   good steps: cap median 0.1 max 0.1; first h_abs median 4.29e-05 max 0.00177; inward acceleration > 0 at 22 of 62
+beta=1.2 M=1e-15 alpha=0.03: history beta=1.2 M=1e-15: RHS=234875 accepted_steps=31035 reflections=175 samples=5003 integrations=1 alpha=0.03 wall=15
+   first outward steps: 174; flagged (pi_end/pi_start < 0.5): 0; dense phi < 0: 0
+   good steps: h max 3.66e-06, h*omega median 0.000504 max 0.00336, least pi_end/pi_start 0.999981
+   good steps: cap median 4.86e-07 max 0.1; first h_abs median 4.86e-07 max 0.00116; inward acceleration > 0 at 129 of 174
+beta=1.5 M=4e-31 alpha=0.08: history beta=1.5 M=4e-31: RHS=57073 accepted_steps=7893 reflections=37 samples=5166 integrations=1 alpha=0.08 wall=4.4 s
+   first outward steps: 36; flagged (pi_end/pi_start < 0.5): 0; dense phi < 0: 0
+   good steps: h max 4.13e-06, h*omega median 0 max 0, least pi_end/pi_start 0.999957
+   good steps: cap median 9.58e-07 max 4.13e-06; first h_abs median 9.58e-07 max 4.13e-06; inward acceleration > 0 at 36 of 36
+beta=1.2 M=4e-31 alpha=0.08: history beta=1.2 M=4e-31: RHS=78848 accepted_steps=10993 reflections=56 samples=5003 integrations=1 alpha=0.08 wall=5.6 
+   first outward steps: 55; flagged (pi_end/pi_start < 0.5): 0; dense phi < 0: 0
+   good steps: h max 3.63e-06, h*omega median 0 max 0, least pi_end/pi_start 0.999922
+   good steps: cap median 5.15e-07 max 3.63e-06; first h_abs median 5.15e-07 max 3.63e-06; inward acceleration > 0 at 55 of 55

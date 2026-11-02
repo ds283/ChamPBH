@@ -1,0 +1,32 @@
+beta=1.5 M=1e-12 alpha=0.05
+history beta=1.5 M=1e-12: FAILURE wall=3.5 s reason=log_m_eff_squared: m_eff^2 <= 0 (m_eff^2 = -1 e^-225.0798555) at phi_E = -3.792756377e-12, ln rho_R,E = -238.9155473, ln f_m = -3.527253759, Sigma = 0 (ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.5)[normalization=-276.631,phi_ref=1.21493e-06Mp]) (tuning in
+
+1. the last loop passes
+   step  N 35.914291051881 -> 35.914291051899 (h=1.7863e-11, max_step=1.7862e-11, h_abs in=1.7862e-11) -> phi/M=0.401478 pi=-0.00249742
+   cap   1.60757e-11  N=35.91429105 phi/M=0.401478 pi=-0.00249742 a_in=0.116296 h_abs=1.60757e-11
+   step  N 35.914291051899 -> 35.914291051915 (h=1.60725e-11, max_step=1.60757e-11, h_abs in=1.60757e-11) -> phi/M=0.361338 pi=-0.00249742
+   cap   1.44685e-11  N=35.91429105 phi/M=0.361338 pi=-0.00249742 a_in=0.110608 h_abs=1.44685e-11
+   step  N 35.914291051915 -> 35.91429105193 (h=1.44667e-11, max_step=1.44685e-11, h_abs in=1.44685e-11) -> phi/M=0.325209 pi=-0.00249742
+   cap   1.30218e-11  N=35.91429105 phi/M=0.325209 pi=-0.00249742 a_in=0.100598 h_abs=1.30218e-11
+   step  N 35.91429105193 -> 35.914291051943 (h=1.30242e-11, max_step=1.30218e-11, h_abs in=1.30218e-11) -> phi/M=0.292682 pi=-0.00249742
+   cap   1.17194e-11  N=35.91429105 phi/M=0.292682 pi=-0.00249742 a_in=0.0823396 h_abs=1.17194e-11
+   step  N 35.914291051943 -> 35.914291051955 (h=1.17168e-11, max_step=1.17194e-11, h_abs in=1.17194e-11) -> phi/M=0.26342 pi=-0.00249742
+   cap   1.05477e-11  N=35.91429105 phi/M=0.26342 pi=-0.00249742 a_in=0.0477409 h_abs=1.05477e-11
+   step  N 35.914291051955 -> 35.914291051965 (h=1.05445e-11, max_step=1.05477e-11, h_abs in=1.05477e-11) -> phi/M=0.237086 pi=-0.00249742
+   reflection N=35.91429105 kind=floor phi/M=0.237086 pi_in=-0.00249742
+   cap   0.1  N=35.91429105 phi/M=0.237086 pi=0.00243418 a_in=-0.0157076 h_abs=0.00318337
+   step  N 35.914291051965 -> 35.914927725525 (h=0.000636674, max_step=0.1, h_abs in=0.00318337) -> phi/M=6.21095 pi=1.60155e-07
+
+2. the parking cut's ratio test at the last three reflections (index, rho_kin/rho_R, passed)
+   (27, 1.1904877606323822e-06, False)
+   (28, 1.1309628859415068e-06, False)
+   (29, 1.0744143469538105e-06, False)
+
+3. the failing step
+   N 35.914291051965 -> 35.914927725525, h = 0.0006367
+   start            phi = 2.370858e-13 M_P (0.2371 M), pi = 2.434184e-03
+   Radau's endpoint phi = 6.210951e-12 M_P (6.211 M), pi = 1.601547e-07
+   Radau's dense output, phi/M at 12 points: 0.237 6.36 8.93 8.76 6.67 3.47 -0.0402 -3.04 -4.73 -4.29 -0.914 6.21
+   resolved         phi = 1.523361e-06 M_P (1.523e+06 M), pi = 2.351192e-03 (The solver successfully reached the end of the integration interval.)
+   resolved: phi/M from 0.2371 to 1.523e+06; pi from 0.00235119 to 0.00243418; sign changes of pi: 0
+   the other three components, Radau minus resolved: 0 -2.29e-06 2.29e-06
