@@ -3,7 +3,10 @@ The golden histories: the setup, and the record of one history, shared by the te
 (test_golden_history.py) and by a regeneration. (jordan-normalization prompt 01, X1; regenerated
 by prompt 03 as data/golden_history_03.json, beside 01's, which is the record of 01 and 02, and by
 prompt 05 as data/golden_history_05.json, which is the record of 05 on; 03's is the record of 03
-and 04.)
+and 04. reflection-restart prompt 03 regenerated it as data/golden_history_rr03.json, when the stepper
+label became "Radau+kinematic-cap-stepping1" and the record gained restart_retakes; every other field is
+05's, which stays the record of everything before that prompt:
+.documents/reflection-restart/fix/compare_goldens.py.)
 
 Two histories are run as tools/history_and_bbn.py runs one, through integrate_history (the
 primitive; until jordan-normalization prompt 07, compute_scalar_history._function) with no Ray:
@@ -27,8 +30,8 @@ What is pinned, per history (see `record_of`):
   - samples_sha256: SHA-256 of numpy.asarray(samples, dtype=float64).tobytes(), row-major in
     SampleValues order; log_one_plus_z_sha256: the same for the sampled points' ln(1 + z), the
     label of each sample; n_samples; the field names of SampleValues, in order;
-  - reflections, accepted_steps, steps_rejected_by_exception, metadata.compute_steps and
-    metadata.RHS_evaluations (ints);
+  - reflections, accepted_steps, steps_rejected_by_exception, restart_retakes (since
+    reflection-restart prompt 03), metadata.compute_steps and metadata.RHS_evaluations (ints);
   - first_bounce (N, phi_Einstein, log_T_Jordan as float.hex; reflected as a bool; null if None);
     fixed_T_values (four fields, float.hex or null); cap_fraction, cap_floor, cap_global_max_step,
     jacobian_factor_max (float.hex); solver_label; the three RHS-statistics blocks (null, since full
@@ -75,7 +78,7 @@ from CosmologyModels.GenericEOS.QCD_Cosmology import QCD_Cosmology
 from CosmologyModels.LambdaCDM import Planck2018
 from Units import Planck_units
 
-GOLDEN_PATH = Path(__file__).resolve().parent / "data" / "golden_history_05.json"
+GOLDEN_PATH = Path(__file__).resolve().parent / "data" / "golden_history_rr03.json"
 REGENERATE_COMMAND = (
     "PYTHONPATH=. ./venv/bin/python -m ComputeTargets.tests.golden_history"
 )
@@ -201,6 +204,7 @@ def record_of(data: dict) -> dict:
         "reflections": int(data["reflections"]),
         "accepted_steps": int(data["accepted_steps"]),
         "steps_rejected_by_exception": int(data["steps_rejected_by_exception"]),
+        "restart_retakes": int(data["restart_retakes"]),
         "compute_steps": int(metadata.compute_steps),
         "RHS_evaluations": int(metadata.RHS_evaluations),
         "first_bounce": (
@@ -299,7 +303,7 @@ def main() -> int:
         "provenance": {
             "generated_at_commit": commit,
             "code_tree": (
-                "jordan-normalization prompt 05's working tree, before its commit, on top "
+                "reflection-restart prompt 03's working tree, before its commit, on top "
                 "of generated_at_commit"
             ),
             "generator": "ComputeTargets/tests/golden_history.py",

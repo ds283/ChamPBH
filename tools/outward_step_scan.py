@@ -16,8 +16,16 @@
 """
 The outward-step scanner (reflection-restart prompt 01, §1.1; README §6.2 P1, P2, P3): run scalar
 histories through the production code, with no Ray, no BBN and no store written, and record every
-accepted Radau step that begins outward (pi > 0), flagged by the signature of the bad step after a
-reflection (`.documents/post-reflection-step-2026-11-02/`).
+accepted Radau step that begins outward (pi > 0), flagged by P1's flag, of which the signature of the
+bad step after a reflection (`.documents/post-reflection-step-2026-11-02/`) is a case.
+
+**The ruled signature** (README §6.3): P1's flag, either condition, on the first accepted step of a
+Radau instance begun by a restart (a reflection, a drain, a release, or the guard's retake), never on
+the history's start or a later step. Since reflection-restart prompt 03 the production code gives
+such a restart F3's first step and guards that step (`ComputeTargets.ScalarHistory`,
+`_restart_first_step` and `_outward_step_flagged`): a flagged first step is discarded and retaken at
+half its h. Each record counts the signature steps kept and discarded apart (`signature_kept`,
+`signature_discarded` in "scan") and carries the payload's `restart_retakes`.
 
 **The flag (P1).** A step that begins with pi > 0 is flagged if either
   - pi_end/pi_start < 1/2 and pi does not change sign on the step's interpolant (the "ratio"
@@ -27,6 +35,8 @@ reflection (`.documents/post-reflection-step-2026-11-02/`).
 The interpolant is read at FLAG_SAMPLES (50) equally spaced points, its two ends included, as the
 diagnosis read it; "changes sign" means some sample has pi <= 0. h*omega, omega = sqrt(|J[1,0]|) of
 the Jacobian Radau holds at the step's start (J[1,0] = d pi'/d phi), is recorded, never flagged on.
+`ComputeTargets.ScalarHistory._outward_step_flagged`, the guard's predicate, holds the same definition
+(a test holds the two equal).
 
 **How it observes.** By a subclass of SciPy's Radau put in place of the name `Radau` in
 `ComputeTargets.ScalarHistory` for the duration of a history (`observe`), and the module's
@@ -35,16 +45,18 @@ IntegrationResult. Nothing in SciPy is modified, no other module's `Radau` is to
 names are restored when the history ends, so the patch cannot leak into another import; nothing is
 patched at import. The subclass reads the solver's attributes before and after each step and calls
 SciPy's own `step`, so the values are bitwise those of an unobserved run. What started each Radau
-instance (start, reflection, drain, release, or an F4 retake) is read from the frame of
+instance (start, reflection, drain, release, or the guard's retake) is read from the frame of
 `integrate_scalar_history` that builds it: the closure `resume_after_release` for a release, and
 otherwise the identity of the state array passed to `new_solver` against the loop's locals
-`y_reflected`, `y_drained` and `y_retake`.
+`y_reflected`, `y_drained` and `y_retake`. A step the guard discards is marked "discarded" in its row
+when the retake's instance is built.
 
 **What it records**, per history (one JSON object): the outcome; the final integration's accepted
-steps and RHS evaluations, the wall-clock; reflections, injections, parking and release (N and ln
-T_J, T_J in GeV) and the dark-radiation values (`dissipation_values` of the payload); per
-integration, the IntegrationResult's counts (or the failure); over every integration, the counts of
-outward steps, first outward steps and flagged steps (first and later apart), the distribution of
+steps, RHS evaluations and restart_retakes, the wall-clock; reflections, injections, parking and
+release (N and ln T_J, T_J in GeV) and the dark-radiation values (`dissipation_values` of the payload);
+per integration, the IntegrationResult's counts (restart_retakes among them) or the failure; over every
+integration, the counts of outward steps, first outward steps, flagged steps (first and later apart)
+and signature steps (kept and discarded apart), the distribution of
 pi_end/pi_start and of h*omega over the outward steps, the largest h*omega over all accepted steps;
 the flagged rows in full (and, with --rows first or all, more rows); and SHA-256 digests of the
 samples and of their ln(1 + z), so that two runs can be seen to be bitwise equal.
@@ -67,21 +79,20 @@ per task is appended to the output and flushed; a task whose key is already ther
 killed batch resumes. A task that raises anything is recorded with its traceback and the batch goes
 on. The batch writes its pid to OUTPUT.pid and logs to OUTPUT.log, whose last line is "** scan done".
 
-**The probe switch** (reflection-restart prompt 01 §1.2): a task's "variant" sets
-`ComputeTargets.ScalarHistory._PROBE_OUTWARD_FIX` (and "stiffness_c" `_PROBE_STIFFNESS_C`) in its
-worker for the duration of the history. None, the default, is the production code.
+**The production code only.** Prompt 01's probe switch (`--variant`, `--stiffness-c`, a task's
+"variant") was removed with the switch by reflection-restart prompt 03; a task that names a variant is
+refused. 01's task lists and its measurement scripts run only at `d4703df`.
 
 Run from the repository root:
 
     PYTHONPATH=. ./venv/bin/python tools/outward_step_scan.py one BETA M [--alpha A] \\
         [--phi-init-Mp X] [--fixed-normalization NORM PHI_REF_MP [--T-stop-GeV T]] \\
-        [--variant V] [--stiffness-c C] [--rows flagged|first|all]
+        [--rows flagged|first|all]
     PYTHONPATH=. ./venv/bin/python tools/outward_step_scan.py batch --output OUT.jsonl \\
         (--tasks TASKS.json | --from-store PATH [--M M ...] [--beta B ...] [--alpha A ...] \\
-         [--block A|A2|B|C|D ...] [--success-only] [--variant V ...]) [--jobs N] [--timeout S]
+         [--block A|A2|B|C|D ...] [--success-only]) [--jobs N] [--timeout S]
 
-Written for reflection-restart prompt 01; prompt 02 runs `batch --from-store` over the 2026.8.0
-store.
+Written for reflection-restart prompt 01; made a tool on the production code by prompt 03.
 """
 
 import argparse
@@ -115,6 +126,10 @@ if str(_ROOT) not in sys.path:
 # the flag (P1)
 FLAG_SAMPLES = 50
 PI_RATIO_THRESHOLD = 0.5
+
+# the start reasons of a restarted Radau instance, whose first step the ruled signature looks at
+# (README §6.3): every reason but "start" (and "unknown")
+RESTART_REASONS = ("reflection", "drain", "release", "retake")
 
 # main.py's initial data and sampling axis (tools/history_and_bbn.py's, which are main.py's)
 PHI_INIT_MP = 5.0
@@ -261,6 +276,8 @@ class Observer:
         self.first_call_outward = 0
         self.flagged_first = 0
         self.flagged_later = 0
+        self.signature = 0
+        self.signature_discarded = 0
         self.flag_ratio = 0
         self.flag_phi = 0
         self.flag_both = 0
@@ -293,7 +310,7 @@ class Observer:
             }
         )
         if reason == "retake" and self.last_row is not None:
-            # F4 discarded the step it retakes: the last outward step, from the same start
+            # the guard discarded the step it retakes: the last outward step, from the same start
             row = self.last_row
             if row["N0"] == float(solver.t) and row["integration"] == self.integration:
                 row["discarded"] = True
@@ -305,6 +322,8 @@ class Observer:
                     else:
                         self.flagged_later -= 1
                     self.discarded_flagged += 1
+                if row["signature"]:
+                    self.signature_discarded += 1
                 self._keep(row, force=True)
         return index
 
@@ -378,6 +397,11 @@ class Observer:
         else:
             self.h_omega_hist[0] += 1
 
+        # the ruled signature (README §6.3): the flag on the first step of a restarted instance
+        signature = bool(cls["flagged"] and first and inst["reason"] in RESTART_REASONS)
+        if signature:
+            self.signature += 1
+
         if cls["flagged"]:
             if first:
                 self.flagged_first += 1
@@ -423,6 +447,7 @@ class Observer:
             "ratio_condition": cls["ratio"],
             "phi_condition": cls["phi"],
             "flagged": cls["flagged"],
+            "signature": signature,
             "discarded": False,
         }
         self.last_row = row
@@ -451,6 +476,8 @@ class Observer:
             "flag_both": self.flag_both,
             "discarded_steps": self.discarded,
             "discarded_flagged_steps": self.discarded_flagged,
+            "signature_kept": self.signature - self.signature_discarded,
+            "signature_discarded": self.signature_discarded,
             "radau_accepted_steps": self.accepted,
             "max_h_omega": self.max_h_omega,
             "max_h_omega_N": self.max_h_omega_N,
@@ -489,25 +516,17 @@ def _observed_radau_class(base, observer: Observer):
 
 
 @contextlib.contextmanager
-def observe(
-    M: float,
-    variant: Optional[str] = None,
-    stiffness_c: Optional[float] = None,
-    rows_mode: str = "flagged",
-    progress=None,
-):
+def observe(M: float, rows_mode: str = "flagged", progress=None):
     """
     For the duration of the block: the observed Radau in place of ComputeTargets.ScalarHistory's
-    `Radau`, its integrate_scalar_history wrapped to count integrations and keep their results, and
-    the probe switch set to `variant` (and _PROBE_STIFFNESS_C to `stiffness_c` if given). Yields the
-    Observer. Everything is restored on exit.
+    `Radau`, and its integrate_scalar_history wrapped to count integrations and keep their results.
+    Yields the Observer. Both are restored on exit.
     """
     SM = importlib.import_module("ComputeTargets.ScalarHistory")
     observer = Observer(SM.StepControl().cap_fraction, M, rows_mode, progress)
 
     radau = SM.Radau
     integrate = SM.integrate_scalar_history
-    fix, c = SM._PROBE_OUTWARD_FIX, SM._PROBE_STIFFNESS_C
 
     def wrapped(*args, **kwargs):
         observer.integration += 1
@@ -524,7 +543,7 @@ def observe(
             reflections=len(result.reflections),
             injections=len(result.injections),
             N_final=float(result.N_final),
-            probe_retakes=int(getattr(result, "probe_retakes", 0)),
+            restart_retakes=int(result.restart_retakes),
             parked=result.parking is not None,
             released=result.release is not None,
         )
@@ -532,16 +551,11 @@ def observe(
 
     SM.Radau = _observed_radau_class(radau, observer)
     SM.integrate_scalar_history = wrapped
-    SM._PROBE_OUTWARD_FIX = variant
-    if stiffness_c is not None:
-        SM._PROBE_STIFFNESS_C = stiffness_c
     try:
         yield observer
     finally:
         SM.Radau = radau
         SM.integrate_scalar_history = integrate
-        SM._PROBE_OUTWARD_FIX = fix
-        SM._PROBE_STIFFNESS_C = c
 
 
 # ---- one history ----------------------------------------------------------------------------------
@@ -661,6 +675,7 @@ def history_summary(data: dict, units) -> dict:
     out = {
         "outcome": "success",
         "accepted_steps": int(data["accepted_steps"]),
+        "restart_retakes": int(data["restart_retakes"]),
         "RHS_evaluations": int(data["metadata"].RHS_evaluations),
         "compute_steps": int(data["metadata"].compute_steps),
         "reflections": int(data["reflections"]),
@@ -706,9 +721,16 @@ def history_summary(data: dict, units) -> dict:
 
 def scan_one(spec: dict, rows_mode: str = "flagged", progress=None, keep=None) -> dict:
     """
-    Run one task (a history spec with "variant" and optionally "stiffness_c", "store" and "post")
-    under the observer; return its record. `keep`, if given, is a dict that receives the payload.
+    Run one task (a history spec, optionally with "store" and "post") under the observer; return its
+    record. `keep`, if given, is a dict that receives the payload. A spec that names a probe variant
+    (prompt 01's "variant" or "stiffness_c", other than None) is refused: the switch is gone.
     """
+    for name in ("variant", "stiffness_c"):
+        if spec.get(name) is not None:
+            raise ValueError(
+                f"outward_step_scan: the task names {name}={spec[name]!r}, but the probe switch was "
+                f"removed by reflection-restart prompt 03; 01's tasks run only at d4703df"
+            )
     record = {"key": spec.get("key"), "spec": spec}
     if spec.get("mode") == "stub":
         # a stand-in for a history, for the tests of the batch: "module:function" called on the spec
@@ -717,13 +739,7 @@ def scan_one(spec: dict, rows_mode: str = "flagged", progress=None, keep=None) -
         return record
     with contextlib.redirect_stdout(io.StringIO()) as out:
         start = time.perf_counter()
-        with observe(
-            spec["M"],
-            spec.get("variant"),
-            spec.get("stiffness_c"),
-            rows_mode,
-            progress,
-        ) as observer:
+        with observe(spec["M"], rows_mode, progress) as observer:
             data, units = run_history(spec)
         wall = time.perf_counter() - start
     record["wall"] = wall
@@ -1087,18 +1103,12 @@ def compare_with_store(data: dict, units, store: dict) -> dict:
 def task_key(spec: dict) -> str:
     if spec.get("key"):
         return spec["key"]
-    variant = spec.get("variant") or "None"
-    if spec.get("stiffness_c") is not None:
-        variant = f"{variant}(c={spec['stiffness_c']:g})"
     where = (
         f"store={Path(spec['store']['shard']).name}#{spec['store']['serial']}"
         if spec.get("store")
         else spec["mode"]
     )
-    return (
-        f"beta={spec['beta']!r} M={spec['M']!r} alpha={spec.get('alpha', 0.0)!r} "
-        f"{where} variant={variant}"
-    )
+    return f"beta={spec['beta']!r} M={spec['M']!r} alpha={spec.get('alpha', 0.0)!r} {where}"
 
 
 def _worker(spec, rows_mode, progress, conn):
@@ -1286,8 +1296,6 @@ def _parser():
         metavar=("NORM", "PHI_REF_MP"),
     )
     one.add_argument("--T-stop-GeV", type=float, default=None)
-    one.add_argument("--variant", default=None)
-    one.add_argument("--stiffness-c", type=float, default=None)
     one.add_argument("--rows", choices=("flagged", "first", "all"), default="flagged")
 
     batch = sub.add_parser("batch", help="scan many histories, one JSON line each")
@@ -1300,12 +1308,6 @@ def _parser():
     batch.add_argument("--alpha", type=float, nargs="+", default=None)
     batch.add_argument("--block", choices=sorted(BLOCKS), nargs="+", default=None)
     batch.add_argument("--success-only", action="store_true")
-    batch.add_argument(
-        "--variant",
-        nargs="+",
-        default=["None"],
-        help="the probe variants to run each history under (None: production)",
-    )
     batch.add_argument("--jobs", type=int, default=DEFAULT_JOBS)
     batch.add_argument("--timeout", type=float, default=DEFAULT_TIMEOUT)
     batch.add_argument("--rows", choices=("flagged", "first", "all"), default="flagged")
@@ -1324,8 +1326,6 @@ def main(argv=None) -> int:
             "M": args.M,
             "alpha": args.alpha,
             "phi_init_Mp": args.phi_init_Mp,
-            "variant": args.variant,
-            "stiffness_c": args.stiffness_c,
         }
         if args.fixed_normalization is None:
             spec["mode"] = "tuned"
@@ -1343,7 +1343,7 @@ def main(argv=None) -> int:
     if args.tasks:
         tasks = json.loads(Path(args.tasks).read_text())
     else:
-        selected = select_from_store(
+        tasks = select_from_store(
             args.from_store,
             M=args.M,
             beta=args.beta,
@@ -1351,10 +1351,6 @@ def main(argv=None) -> int:
             blocks=args.block,
             success_only=args.success_only,
         )
-        tasks = []
-        for variant in args.variant:
-            for spec in selected:
-                tasks.append(dict(spec, variant=None if variant == "None" else variant))
     run_batch(tasks, args.output, args.jobs, args.timeout, args.rows)
     return 0
 

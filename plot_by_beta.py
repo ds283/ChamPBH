@@ -883,7 +883,7 @@ def run_pipeline(
         model_query_batch = [
             {
                 "shard_key": model.shard_key,
-                "solver_labels": ["Radau+kinematic-cap-stepping0"],
+                "solver_labels": ["Radau+kinematic-cap-stepping1"],
                 "failure": False,
                 "cosmology": model_cosmology,
                 "T_Jordan_init": T_init,

@@ -46,7 +46,8 @@ untuned, at the model's seed realization:
 - **6** ΔN_eff at 1 MeV and today against a hand computation (R22), from the cosmology's `G_rho`;
 - **7** `extra_data` longer than 256 characters round-trips whole, and the column is `Text` in the
   reflected schema;
-- **10** the version: `VERSION_LABEL` is 2026.8.0 and `FINGERPRINT_FORMAT` is 6.
+- **10** the version: `VERSION_LABEL` is 2026.9.0 (2026.8.0 until reflection-restart prompt 03, which
+  moved it without a schema change) and `FINGERPRINT_FORMAT` is 6.
 
 "Bitwise" for a converted column (ln T_J, stored with T_J in GeV) is ruling 7's: the row equals the
 forward conversion of the payload's value bitwise, and the object equals the inverse conversion of
@@ -185,7 +186,7 @@ class _DissipationStoreCase(_TempStoreCase):
         self.store = self.open(LABEL_A)
 
         get = self.store.object_get
-        self.solver = get("IntegrationSolver", label="Radau+kinematic-cap", stepping=0)
+        self.solver = get("IntegrationSolver", label="Radau+kinematic-cap", stepping=1)
         self.solvers = {SM.SCALAR_HISTORY_STEPPER_LABEL: self.solver}
         self.atol = get("tolerance", tol=1e-8)
         self.rtol = get("tolerance", tol=1e-8)
@@ -631,7 +632,9 @@ class TestTheVersion(unittest.TestCase):
         from config.fingerprint import FINGERPRINT_FORMAT, SPEC_DIGESTS
         from config.version import VERSION_LABEL
 
-        self.assertEqual(VERSION_LABEL, "2026.8.0")
+        # 2026.8.0 at inelastic-reflection prompt 09; 2026.9.0 since reflection-restart prompt 03 (F3 and
+        # the guard at a restart), which changed no table, so the format stays 6
+        self.assertEqual(VERSION_LABEL, "2026.9.0")
         self.assertEqual(FINGERPRINT_FORMAT, 6)
         self.assertIn(6, SPEC_DIGESTS)
         self.assertIn("alpha_value", dict(SPEC_DIGESTS[6]))

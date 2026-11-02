@@ -78,7 +78,11 @@ _INTEGRATE = SM.integrate_scalar_history
 # ruling 8). test_parking's BETA_5_CROSSING_N is the oscillating history's crossing, 40.2547
 BETA_5_PARKED_CROSSING_N = 40.25454
 BETA_5_PARKED_CROSSING_ROUNDING = 5e-6
-BETA_5_FAILED_CHECK_N = 40.29089
+# reflection-restart prompt 03: F3 at the drain restarts (the first step of a Radau restarted with
+# pi > 0) moved the history before the switch, and the parked step grid with it, by about 2.1e-4
+# e-folds, so the failing check is now at 40.29068; log 06's 40.29089 stays the record of the old code
+# (re-pinned at the user's ruling, "Please allow both")
+BETA_5_FAILED_CHECK_N = 40.29068
 
 # item (3)'s window, inside the parked phase (the switch is at N = 38.004) and before the release
 # step [40.19089, 40.29089]; test_parking's window at beta = 5 ends here too

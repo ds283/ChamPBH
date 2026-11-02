@@ -280,6 +280,40 @@ at `φ < 0` above that (audit §3.5); it is gone.
 
 > **Note, 2026-11-01 (`inelastic-reflection`, prompt 12; §6.11).** At α > 0 the floor rule drains: the restart is π ← −√(1 − α_eff) π (§6.2), so the reflection there is not elastic; §6.11.1 gives the order in which a history meets it.
 
+> **Note, 2026-11-02 (`reflection-restart`, prompt 03): the first step after a restart, and the guard.**
+> The kinematic cap of §3.5.2 bounds only inward motion. After a floor reflection close to the wall
+> π > 0 and the wall's push beats the matter pull (−π̇ < 0), so neither term binds and the cap is the
+> global 0.1; the new Radau's first attempt was then SciPy's own initial step, at h·ω ≈ 10³–10⁴ of the
+> oscillation its Jacobian sees. SciPy rejects that attempt on its ordinary error estimate, cuts h by 0.2,
+> and, because the step has been rejected once, accepts the cut attempt on its refined estimate, which
+> under-reads there by 10⁵: an endpoint near the wall and an interpolant through φ < 0, which the gate
+> at α > 0 then fails on (the diagnosis, `post-reflection-step-2026-11-02/`; the account,
+> `reflection-restart-verification.md` §1.5). The user ruled "F3 plus the guard" (campaign README §6.3),
+> and since `VERSION_LABEL = "2026.9.0"` (stepper label `Radau+kinematic-cap-stepping1`) the loop does two
+> things at every restart with π > 0 — after a reflection, a drain or a release — and nowhere else:
+> - **F3.** The restarted Radau's `first_step` is `_restart_first_step`'s, `min(global_max_step,
+>   max(h_floor, f φ/π))` of the restarted state: the inward velocity cap's form applied to the outward
+>   velocity, for the first attempt only. It is at most the distance to the solver's bound (a window's
+>   `N_stop`), since SciPy refuses a first step past it; with no `N_stop` the bound is `N_failsafe` and this
+>   never binds. Radau grows the step from there. A grown step does not reach
+>   the h·ω at which SciPy's acceptance goes wrong, since ω falls faster than h grows as the field leaves
+>   the wall (verification §1.5).
+> - **The guard.** The instance's first accepted step is tested by `_outward_step_flagged`: P1's flag,
+>   π_end/π_start < ½ with π > 0 at each of 50 samples of the step's interpolant, or the interpolant's least
+>   φ below (1 − f) φ_start. A flagged step is discarded before it is used for anything (no node, no
+>   turning point, no gate sample, no ledger entry, no drain armed, not counted in `accepted_steps` or the
+>   budget; its RHS evaluations stay counted) and retaken from the same (N, state) by a new Radau with
+>   `first_step` = h/2, itself guarded; half an h below `h_floor` is a failure of the history naming the
+>   guard. Later steps are never tested: P1's ratio condition fires on about one legitimate step per
+>   outward flight, the deceleration before the apex (verification §1.1).
+>   `IntegrationResult.restart_retakes` counts the retakes.
+> The history's start (π* = 0), a restart with π ≤ 0 and the parked phase (DOP853) are unchanged, so a
+> history with no restart with π > 0 (natural mode at large M, the golden histories at α = 0) is bitwise
+> what it was. On the 66 histories of prompt 01's measurement the guard never fires, and the production
+> code reproduces the probe's F3 bit for bit (verification §2). The cap's terms, `cap_fraction`,
+> `h_floor`, `global_max_step`, the floor rule, the parking cut, the gate's sampling and the drain rule
+> are unchanged.
+
 The reflection is a *model*, not a fallback, and it has two guards (log 01):
 
 - **G1.** The potential must declare `reflects_at_origin` (new on `AbstractPotential`, default

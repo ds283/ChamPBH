@@ -15,15 +15,16 @@
 
 """
 The outward-step scanner, tools/outward_step_scan.py (reflection-restart prompt 01 §1.1; README §6.2
-P1, P2, P3).
+P1, P2, P3; made a tool on the production code by prompt 03).
 
 - **The flag** on synthetic step quantities: each condition alone, neither, a sign change, an inward
-  step; and the scanner's flag against ScalarHistory's copy (`_probe_outward_step_flagged`, the
-  probe's F4) on synthetic interpolants.
+  step; and the scanner's flag against ScalarHistory's (`_outward_step_flagged`, the guard's
+  predicate since prompt 03) on synthetic interpolants.
 - **The observer** on a stub integration: a stand-in solver class observed as the scanner observes
   Radau, built from functions named as integrate_scalar_history's are, so that what started each
-  instance is read from the frames as in a real history; the counts and the summary; the patch is
-  gone after `observe`.
+  instance is read from the frames as in a real history; the counts and the summary, the ruled
+  signature's among them (kept, and discarded by a retake); the patch is gone after `observe`; a task
+  that names one of prompt 01's probe variants is refused.
 - **The batch** on stub tasks (mode "stub", a function of this module run in the worker): one line
   per task, the resume (a task whose line exists is not run again), a task that raises is recorded
   with its traceback and the batch goes on, numpy values in a record (a payload's 0-d arrays) are written, a task past its wall-clock limit is recorded as a
@@ -132,8 +133,8 @@ def _interpolant(phi, pi):
     return call
 
 
-class TestTheFlagAgreesWithTheProbe(unittest.TestCase):
-    """The scanner's flag and ScalarHistory's copy, which the probe's F4 applies, agree."""
+class TestTheFlagAgreesWithTheGuard(unittest.TestCase):
+    """The scanner's flag and ScalarHistory's, which the guard applies (prompt 03), agree."""
 
     CASES = {
         "neither": (lambda t: 1.0 + t, lambda t: 1.0 - 0.01 * t),
@@ -161,16 +162,16 @@ class TestTheFlagAgreesWithTheProbe(unittest.TestCase):
                     float(np.min(phi_s)),
                     F,
                 )["flagged"]
-                probe = SM._probe_outward_step_flagged(
+                guard = SM._outward_step_flagged(
                     interp, 0.0, 1.0, float(phi(0.0)), float(pi(0.0)), float(pi(1.0)), F
                 )
-                self.assertEqual(scanner, probe)
+                self.assertEqual(scanner, guard)
 
     def test_the_cases_cover_both_outcomes(self):
         outcomes = set()
         for phi, pi in self.CASES.values():
             outcomes.add(
-                SM._probe_outward_step_flagged(
+                SM._outward_step_flagged(
                     _interpolant(phi, pi), 0.0, 1.0, phi(0.0), pi(0.0), pi(1.0), F
                 )
             )
@@ -252,6 +253,28 @@ def integrate_scalar_history(cls, scripts):
     return solver
 
 
+def integrate_with_a_retake(cls, scripts):
+    """A stub of the loop's shape (its function named integrate_scalar_history, as the scanner reads
+    the frames) in which the guard discards a reflection's first step and retakes it from the same
+    start (N = 1.0), as the loop does: new_solver(N, y_retake, ...)."""
+
+    def integrate_scalar_history():
+        def new_solver(N, y, first_step=None):
+            return cls(scripts.pop(0), N, y, 10.0, first_step=first_step)
+
+        solver = new_solver(0.0, np.array([1.0, 0.0]))
+        solver.step()  # pi = 0 at the start: not outward
+        y_reflected = np.array([1.0, 2.0])
+        solver = new_solver(1.0, y_reflected)
+        solver.step()  # outward, bad: a first step, discarded
+        y_retake = y_reflected.copy()
+        solver = new_solver(1.0, y_retake, 5e-4)
+        solver.step()  # outward, good: the retake's first step
+        return solver
+
+    return integrate_scalar_history()
+
+
 class TestTheObserver(unittest.TestCase):
     def run_stub(self, rows_mode="flagged"):
         observer = oss.Observer(F, 0.5, rows_mode)
@@ -284,6 +307,9 @@ class TestTheObserver(unittest.TestCase):
         self.assertEqual(s["flagged_later"], 1)
         self.assertEqual(s["flagged"], 2)
         self.assertEqual(s["flag_both"], 2)
+        # the ruled signature: the drain's bad first step; the reflection's bad step is a later one
+        self.assertEqual(s["signature_kept"], 1)
+        self.assertEqual(s["signature_discarded"], 0)
         self.assertEqual(s["instances"], 5)
         self.assertAlmostEqual(s["max_h_omega"], 1e-3 * 2000.0)
 
@@ -298,21 +324,59 @@ class TestTheObserver(unittest.TestCase):
         self.assertEqual(len(first), 5)
         self.assertEqual(len(self.run_stub("all").rows), 5)
 
+    def test_a_discarded_first_step_is_a_discarded_signature_step(self):
+        observer = oss.Observer(F, 0.5, "flagged")
+        cls = oss._observed_radau_class(_StubSolver, observer)
+        scripts = [
+            [(1e-6, [1.0, 0.0], _linear)],
+            [(1e-3, [1.0, 1e-4], _bad)],
+            [(1e-6, [1.0, 1.999], _straight_out)],
+        ]
+        observer.integration += 1
+        integrate_with_a_retake(cls, scripts)
+        self.assertEqual(
+            [i["reason"] for i in observer.instances], ["start", "reflection", "retake"]
+        )
+        self.assertEqual(observer.instances[2]["first_step"], 5e-4)
+        s = observer.summary()
+        self.assertEqual(s["signature_kept"], 0)
+        self.assertEqual(s["signature_discarded"], 1)
+        self.assertEqual(s["discarded_steps"], 1)
+        self.assertEqual(s["discarded_flagged_steps"], 1)
+        self.assertEqual(s["flagged"], 0)
+        self.assertEqual(
+            [(r["reason"], r["signature"], r["discarded"]) for r in observer.rows],
+            [("reflection", True, True)],
+        )
+
     def test_observe_restores_the_module(self):
         radau, integrate = SM.Radau, SM.integrate_scalar_history
-        fix, c = SM._PROBE_OUTWARD_FIX, SM._PROBE_STIFFNESS_C
-        with oss.observe(1.0, "F2", 0.3):
+        with oss.observe(1.0):
             self.assertIsNot(SM.Radau, radau)
             self.assertIsNot(SM.integrate_scalar_history, integrate)
-            self.assertEqual(SM._PROBE_OUTWARD_FIX, "F2")
-            self.assertEqual(SM._PROBE_STIFFNESS_C, 0.3)
         self.assertIs(SM.Radau, radau)
         self.assertIs(SM.integrate_scalar_history, integrate)
-        self.assertEqual((SM._PROBE_OUTWARD_FIX, SM._PROBE_STIFFNESS_C), (fix, c))
         # SciPy's own class is never touched
         from scipy.integrate import Radau
 
         self.assertIs(Radau, radau)
+
+    def test_a_task_that_names_a_probe_variant_is_refused(self):
+        for name, value in (("variant", "F3"), ("stiffness_c", 1.0)):
+            with self.subTest(name=name):
+                spec = {
+                    "key": "k",
+                    "mode": "stub",
+                    "stub": f"{__name__}:stub_ok",
+                    name: value,
+                }
+                with self.assertRaises(ValueError):
+                    oss.scan_one(spec)
+        # None, as 01's None tasks carry it, is the production code
+        record = oss.scan_one(
+            {"key": "k", "mode": "stub", "stub": f"{__name__}:stub_ok", "variant": None}
+        )
+        self.assertEqual(record["outcome"], "success")
 
 
 # ---- the batch --------------------------------------------------------------------------------------

@@ -1,10 +1,11 @@
 # reflection-restart campaign — implementation state
 
-**Last updated:** 2026-11-02 · **Status: LIVE — 1 of 3 landed (01; 02 withdrawn).** Planned 2026-11-02 at the
+**Last updated:** 2026-11-02 · **Status: LIVE — 2 of 3 landed (01, 03; 02 withdrawn).** Planned 2026-11-02 at the
 user's request; U1–U5 ruled by the user the same day, P1–P10 standing (README §6). Re-planned the same day
 after 01, at the user's word (README §6.3): the signature narrowed to the first step of a restarted Radau;
 02 withdrawn, since `quanta-diagnostics` rebuilds the whole store; U3–U5 lapsed. U6 ruled the same day: F3 plus the guard
-(README §6.3). The plan is [`README.md`](README.md), on branch `reflection-restart`, cut from `main` at
+(README §6.3). Prompt 03 landed the same day: F3 and the guard are the production code, `VERSION_LABEL`
+2026.9.0. The plan is [`README.md`](README.md), on branch `reflection-restart`, cut from `main` at
 `cc7fe75`.
 
 The campaign takes the defect diagnosed in `.documents/post-reflection-step-2026-11-02/`: after a
@@ -29,7 +30,7 @@ to the rebuild of record, which rebuilds the whole store (README §6.3).
 | 01 | [Measure the fixes](01-measure-the-fixes.md) | the scanner; F1–F4 measured; why Radau accepts the bad step | Opus | ✅ | ✅ | `d4703df` | [log](logs/01-measure-the-fixes.md) |
 | ~~02~~ | ~~Audit the 2026.8.0 store~~ | **withdrawn 2026-11-02** (README §6.3): the whole store is rebuilt | — | — | — | | |
 | — | the user's ruling U6 | F3 plus the guard (README §6.3), 2026-11-02 | — | ✅ | ✅ | | |
-| 03 | [The fix](03-the-fix.md) | F3 and the guard, the probe switch removed; tests; a reflecting golden history; labels; documents | Opus | ✍️ | ⬜ | | |
+| 03 | [The fix](03-the-fix.md) | F3 and the guard, the probe switch removed; tests; a reflecting golden history; labels; documents | Opus | ✅ | ✅ | this commit | [log](logs/03-the-fix.md) |
 | 04 | The close | the 42 recomputed with the fix; the issue closed; the handover to the rebuild; the close | Opus | ⬜ | ⬜ | | |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed · ~~struck~~ withdrawn.
@@ -39,6 +40,7 @@ tree before 03.
 
 Orchestrator notes, one prompt at a time, in `orchestrator/`:
 - [`prompt-01.md`](orchestrator/prompt-01.md) (`3b8a553`) — used for 01.
+- [`prompt-03.md`](orchestrator/prompt-03.md) (`89a0760`) — used for 03.
 
 **Orchestrator review of prompt 01 (2026-11-02)**, by orchestrator note 01 §3, on `d4703df`. Passed; seven
 checks:
@@ -79,6 +81,11 @@ the diagnosis README and in the campaign README §2.1.
 | 01-a | the scanner `tools/outward_step_scan.py` (every outward Radau step, P1's flag, the store comparison, the batch) and its 22 tests in `tools/tests/test_outward_step_scan.py` | 01 | ✅ |
 | 01-b | the probe switch `_PROBE_OUTWARD_FIX` (None, F1, F2, F3, F4, F3+F4) and `_PROBE_STIFFNESS_C` in `ComputeTargets/ScalarHistory.py`, `IntegrationResult.probe_retakes`; 10 tests in `ComputeTargets/tests/test_probe_outward_fix.py`; removed by 03 | 01 | ✅ |
 | 01-c | the measurement (`.documents/reflection-restart/measure/`, `out/`) and `.documents/reflection-restart-verification.md` §1 | 01 | ✅ |
+| 03-a | F3 (`_restart_first_step`) and the guard (`_outward_step_flagged` on the first accepted step of a Radau restarted with π > 0, retaken at h/2, failing below h_floor) in `integrate_scalar_history`, at the reflection, the drain and the release; `IntegrationResult.restart_retakes`, the payload's `"restart_retakes"`, `extra_data`'s `restart_retakes` only above 0; F3's step at most the distance to the solver's bound (the user's ruling after 03's stop, "Please allow both"); 14 tests in `ComputeTargets/tests/test_restart_fix.py`; `test_release.py`'s `BETA_5_FAILED_CHECK_N` re-pinned 40.29089 → 40.29068 at the same ruling | 03 | ✅ |
+| 03-b | the probe switch removed (01-b's module code and its 10 tests); `tools/outward_step_scan.py` on the production code (`--variant` gone, a variant refused, `restart_retakes` and the signature's counts), its tests 22 → 24 | 03 | ✅ |
+| 03-c | the labels: `VERSION_LABEL` 2026.9.0, `Radau+kinematic-cap-stepping1` (registered in `main.py`, selected by the plot scripts), `FINGERPRINT_FORMAT` 6 unchanged; the tests that name them | 03 | ✅ |
+| 03-d | the golden records `golden_history_rr03.json` and `golden_history_rr03_tuned.json` (old records' every field but the label and the added `restart_retakes`), and the reflecting golden `golden_history_rr03_reflecting.json` (β 1.5, M 10⁻¹², α 0.05) with its module and test | 03 | ✅ |
+| 03-e | the replay of 01's 66 F3 tasks (equal in all 66), `.documents/reflection-restart/fix/` and `out/`, verification §2, the dated notes in `numerical-strategies.md` and `architecture-summary.md` | 03 | ✅ |
 
 ## 2. The gates
 
@@ -87,12 +94,12 @@ the diagnosis README and in the campaign README §2.1.
 | Signature | the scanner reproduces the diagnosis's three bad steps and its 845-step count on the nine histories | 01 | ✅ 2026-11-02: 835 = 835 (the diagnosis's sum; 845 was its slip, orchestrator note 01 ruling 1), every printed line identical, no accounting difference (verification §1.2) |
 | Measure | each of F1–F4 measured: the three failures, signature steps over all outward steps, golden digits, cost at each M; why Radau accepts the bad step | 01 | ✅ 2026-11-02 (verification §1.4–§1.6); its proviso, `[01-p1-flag-fires-on-legitimate-steps]`, closed by the user's ruling of the signature (§4) |
 | ~~Audit~~ | withdrawn with 02 (README §6.3) | — | — |
-| Fix | the three failures succeed; no signature step (as ruled, README §6.3) in the nine; golden histories as the ruling predicts; a reflecting golden pinned | 03 | ⬜ |
+| Fix | the three failures succeed; no signature step (as ruled, README §6.3) in the nine; golden histories as the ruling predicts; a reflecting golden pinned | 03 | ✅ 2026-11-02: the three succeed (7183, 49 765, 27 665 steps, no retake); the replay of 01's 66 F3 tasks equal to 01's F3 in every field, 66 of 66, the guard never firing; no signature step kept or discarded; the α = 0 goldens equal but for the label and `restart_retakes` = 0; the reflecting golden pinned (verification §2) |
 | Close | the 42 recomputed and their outcome stated; the issue closed; the handover written | 04 | ⬜ |
 
 ## 3. Active and unresolved issues
 
-None open on this board (the one opened by prompt 01 closed 2026-11-02, §4).
+None open on this board (the one opened by prompt 01 closed 2026-11-02, §4). Prompt 03 opened none (log 03 §7).
 
 ### 3.1 Assigned to this campaign
 
@@ -145,3 +152,9 @@ anything.
 ComputeTargets 498 (122 + 376), ObjectFactories 130, tools 123, RunDrivers 68, all passing (log 01 §4.1).
 **After prompt 01** (11:39–11:55): CosmologyModels 26, ComputeTargets 508 (122 + 386), ObjectFactories 130, tools 145,
 RunDrivers 68, all passing; ComputeTargets gains 10 (`test_probe_outward_fix.py`), tools 22 (`test_outward_step_scan.py`).
+
+**Measured by prompt 03, 2026-11-02, before it changed anything** (at `89a0760`): CosmologyModels 26, ComputeTargets
+508 (122 + 386), ObjectFactories 130, tools 145, RunDrivers 68, all passing. **After prompt 03** (15:34–15:49, after
+the user's ruling on its stop): CosmologyModels 26, ComputeTargets 514 (122 + 392), ObjectFactories 130, tools 147,
+RunDrivers 68, all passing; ComputeTargets loses 10 (`test_probe_outward_fix.py`) and gains 14
+(`test_restart_fix.py`) and 2 (`test_golden_reflecting_history.py`), tools gains 2 (log 03 §4.1).

@@ -1,0 +1,78 @@
+replay: var/reflection-restart/03/replay.jsonl, 66 lines; 01's F3 lines: 66
+fields compared: outcome, samples_sha256, log_one_plus_z_sha256, n_samples, accepted_steps, RHS_evaluations, compute_steps, reflections; the store comparison (store tasks); the golden hook (goldens); restart_retakes; the signature
+
+kind	outcome	accepted_steps	restart_retakes	signature kept	signature discarded	verdict	key
+golden	success	1233	0	0	0	equal	beta=1.5 M=0.001 alpha=0.0 fixed golden=beta=1.5
+golden	success	15331	0	0	0	equal	beta=3.0 M=0.01 alpha=0.0 tuned golden=tuned
+golden	success	26331	0	0	0	equal	beta=5.5 M=0.001 alpha=0.0 fixed golden=beta=5.5
+store	success	21298	0	0	0	equal	beta=1.2 M=0.001 alpha=0.0 store=science-2026.8.0-reflections-shard0015.db#53
+store	success	2451	0	0	0	equal	beta=1.2 M=0.5 alpha=0.0 store=science-2026.8.0-reflections-shard0015.db#54
+store	success	428251	0	0	0	equal	beta=1.2 M=1e-12 alpha=0.001 store=science-2026.8.0-reflections-shard0015.db#12
+store	success	1823	0	0	0	equal	beta=1.2 M=1e-12 alpha=0.01 store=science-2026.8.0-reflections-shard0015.db#7
+store	success	11480	0	0	0	equal	beta=1.2 M=1e-12 alpha=0.08 store=science-2026.8.0-reflections-shard0015.db#4
+store	success	3952	0	0	0	equal	beta=1.2 M=1e-12 alpha=0.15 store=science-2026.8.0-reflections-shard0015.db#3
+store	success	589264	0	0	0	equal	beta=1.2 M=1e-15 alpha=0.001 store=science-2026.8.0-reflections-shard0015.db#11
+store	success	1824	0	0	0	equal	beta=1.2 M=1e-15 alpha=0.01 store=science-2026.8.0-reflections-shard0015.db#9
+store	success	11254	0	0	0	equal	beta=1.2 M=1e-15 alpha=0.08 store=science-2026.8.0-reflections-shard0015.db#6
+store	success	3952	0	0	0	equal	beta=1.2 M=1e-15 alpha=0.15 store=science-2026.8.0-reflections-shard0015.db#2
+store	success	1820	0	0	0	equal	beta=1.2 M=1e-30 alpha=0.01 store=science-2026.8.0-shard0011.db#2821
+store	success	11258	0	0	0	equal	beta=1.2 M=1e-30 alpha=0.08 store=science-2026.8.0-shard0011.db#2501
+store	success	1819	0	0	0	equal	beta=1.2 M=1e-33 alpha=0.01 store=science-2026.8.0-shard0011.db#2819
+store	success	11257	0	0	0	equal	beta=1.2 M=1e-33 alpha=0.08 store=science-2026.8.0-shard0011.db#2500
+store	success	529425	0	0	0	equal	beta=1.2 M=4e-31 alpha=0.001 store=science-2026.8.0-reflections-shard0015.db#10
+store	success	1819	0	0	0	equal	beta=1.2 M=4e-31 alpha=0.01 store=science-2026.8.0-reflections-shard0015.db#8
+store	success	11257	0	0	0	equal	beta=1.2 M=4e-31 alpha=0.08 store=science-2026.8.0-reflections-shard0015.db#5
+store	success	3947	0	0	0	equal	beta=1.2 M=4e-31 alpha=0.15 store=science-2026.8.0-reflections-shard0015.db#1
+store	success	23292	0	0	0	equal	beta=2.0 M=0.001 alpha=0.0 store=science-2026.8.0-reflections-shard0000.db#74
+store	success	4311	0	0	0	equal	beta=2.0 M=0.5 alpha=0.0 store=science-2026.8.0-reflections-shard0000.db#73
+store	success	6822	0	0	0	equal	beta=2.0 M=1e-12 alpha=0.001 store=science-2026.8.0-reflections-shard0000.db#32
+store	success	16773	0	0	0	equal	beta=2.0 M=1e-12 alpha=0.01 store=science-2026.8.0-reflections-shard0000.db#27
+store	success	11244	0	0	0	equal	beta=2.0 M=1e-12 alpha=0.08 store=science-2026.8.0-reflections-shard0000.db#25
+store	success	8218	0	0	0	equal	beta=2.0 M=1e-12 alpha=0.15 store=science-2026.8.0-reflections-shard0000.db#23
+store	success	6824	0	0	0	equal	beta=2.0 M=1e-15 alpha=0.001 store=science-2026.8.0-reflections-shard0000.db#31
+store	success	16773	0	0	0	equal	beta=2.0 M=1e-15 alpha=0.01 store=science-2026.8.0-reflections-shard0000.db#28
+store	success	11244	0	0	0	equal	beta=2.0 M=1e-15 alpha=0.08 store=science-2026.8.0-reflections-shard0000.db#24
+store	success	8218	0	0	0	equal	beta=2.0 M=1e-15 alpha=0.15 store=science-2026.8.0-reflections-shard0000.db#21
+store	success	16773	0	0	0	equal	beta=2.0 M=1e-30 alpha=0.01 store=science-2026.8.0-shard0002.db#2498
+store	success	11244	0	0	0	equal	beta=2.0 M=1e-30 alpha=0.08 store=science-2026.8.0-shard0002.db#2603
+store	success	16773	0	0	0	equal	beta=2.0 M=1e-33 alpha=0.01 store=science-2026.8.0-shard0002.db#2496
+store	success	11244	0	0	0	equal	beta=2.0 M=1e-33 alpha=0.08 store=science-2026.8.0-shard0002.db#2335
+store	success	6824	0	0	0	equal	beta=2.0 M=4e-31 alpha=0.001 store=science-2026.8.0-reflections-shard0000.db#30
+store	success	16773	0	0	0	equal	beta=2.0 M=4e-31 alpha=0.01 store=science-2026.8.0-reflections-shard0000.db#29
+store	success	11244	0	0	0	equal	beta=2.0 M=4e-31 alpha=0.08 store=science-2026.8.0-reflections-shard0000.db#26
+store	success	8218	0	0	0	equal	beta=2.0 M=4e-31 alpha=0.15 store=science-2026.8.0-reflections-shard0000.db#22
+store	success	28727	0	0	0	equal	beta=2.9 M=0.001 alpha=0.0 store=science-2026.8.0-reflections-shard0001.db#93
+store	success	5994	0	0	0	equal	beta=2.9 M=0.5 alpha=0.0 store=science-2026.8.0-reflections-shard0001.db#94
+store	success	11721	0	0	0	equal	beta=2.9 M=1e-12 alpha=0.001 store=science-2026.8.0-reflections-shard0001.db#52
+store	success	11552	0	0	0	equal	beta=2.9 M=1e-12 alpha=0.01 store=science-2026.8.0-reflections-shard0001.db#49
+store	success	10381	0	0	0	equal	beta=2.9 M=1e-12 alpha=0.08 store=science-2026.8.0-reflections-shard0001.db#46
+store	success	9517	0	0	0	equal	beta=2.9 M=1e-12 alpha=0.15 store=science-2026.8.0-reflections-shard0001.db#42
+store	success	11721	0	0	0	equal	beta=2.9 M=1e-15 alpha=0.001 store=science-2026.8.0-reflections-shard0001.db#51
+store	success	11552	0	0	0	equal	beta=2.9 M=1e-15 alpha=0.01 store=science-2026.8.0-reflections-shard0001.db#48
+store	success	10381	0	0	0	equal	beta=2.9 M=1e-15 alpha=0.08 store=science-2026.8.0-reflections-shard0001.db#45
+store	success	9517	0	0	0	equal	beta=2.9 M=1e-15 alpha=0.15 store=science-2026.8.0-reflections-shard0001.db#43
+store	success	11552	0	0	0	equal	beta=2.9 M=1e-30 alpha=0.01 store=science-2026.8.0-shard0015.db#2823
+store	success	10381	0	0	0	equal	beta=2.9 M=1e-30 alpha=0.08 store=science-2026.8.0-shard0015.db#2690
+store	success	11552	0	0	0	equal	beta=2.9 M=1e-33 alpha=0.01 store=science-2026.8.0-shard0015.db#2584
+store	success	10381	0	0	0	equal	beta=2.9 M=1e-33 alpha=0.08 store=science-2026.8.0-shard0015.db#2359
+store	success	11721	0	0	0	equal	beta=2.9 M=4e-31 alpha=0.001 store=science-2026.8.0-reflections-shard0001.db#50
+store	success	11552	0	0	0	equal	beta=2.9 M=4e-31 alpha=0.01 store=science-2026.8.0-reflections-shard0001.db#47
+store	success	10381	0	0	0	equal	beta=2.9 M=4e-31 alpha=0.08 store=science-2026.8.0-reflections-shard0001.db#44
+store	success	9517	0	0	0	equal	beta=2.9 M=4e-31 alpha=0.15 store=science-2026.8.0-reflections-shard0001.db#41
+tuned	success	12423	0	0	0	equal	beta=1.09 M=1e-12 alpha=0.08 tuned
+tuned	success	27665	0	0	0	equal	beta=1.09 M=1e-15 alpha=0.03 tuned
+tuned	success	49765	0	0	0	equal	beta=1.14 M=1e-15 alpha=0.01 tuned
+tuned	success	31448	0	0	0	equal	beta=1.2 M=1e-15 alpha=0.03 tuned
+tuned	success	11257	0	0	0	equal	beta=1.2 M=4e-31 alpha=0.08 tuned
+tuned	success	6047	0	0	0	equal	beta=1.5 M=1e-12 alpha=0.02 tuned
+tuned	success	7183	0	0	0	equal	beta=1.5 M=1e-12 alpha=0.05 tuned
+tuned	success	7065	0	0	0	equal	beta=1.5 M=1e-12 alpha=0.15 tuned
+tuned	success	8080	0	0	0	equal	beta=1.5 M=4e-31 alpha=0.08 tuned
+
+golden: 3 of 3 equal in every field
+store: 54 of 54 equal in every field
+tuned: 9 of 9 equal in every field
+tasks of 01's F3 not in the replay: 0
+signature steps over the replay: kept 0, discarded 0
+restart_retakes over the replay: 0
+RESULT: EQUAL (66 of 66 tasks equal)

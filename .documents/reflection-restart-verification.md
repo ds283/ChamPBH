@@ -282,3 +282,143 @@ non-reflecting histories bitwise; cost ≤ 1.03×), and §1.5 explains why it sh
 large first attempt at h·ω ≳ 10³, which F3 removes, and a grown step does not reach that h·ω on an outward flight.
 F4 as defined adds nothing to F3 here and moves the goldens through the flag's legitimate catches. F2 at c = 1 is the
 cheapest in changed digits, but acts outside restarts and moves the goldens.
+
+## 2. Prompt 03 — the fix (2026-11-02)
+
+**Tree:** branch `reflection-restart` at `89a0760` plus prompt 03's changes, committed as prompt 03's commit
+(this commit). SciPy 1.17.0, Python 3.13.16. **The fix** (README §6.3, the user's U6, "F3 plus the guard"): in
+`integrate_scalar_history`, every Radau restarted with π > 0 (after a reflection, a drain or a release) is given
+`first_step = _restart_first_step(y) = min(global_max_step, max(h_floor, f φ/π))`, at most the distance to the
+solver's bound (§2.6), and its first accepted step is
+tested by `_outward_step_flagged` (P1's flag, either condition); a flagged step is discarded and retaken from the
+same (N, state) at `first_step` = h/2, and a retake below `h_floor` fails the history.
+`IntegrationResult.restart_retakes` counts the retakes; the payload carries `"restart_retakes"` and `extra_data`
+the key `restart_retakes` only when it is above 0. The probe switch of §1.3 is gone. `VERSION_LABEL` 2026.9.0,
+stepper label `Radau+kinematic-cap-stepping1`, `FINGERPRINT_FORMAT` 6 (unchanged). **Scripts:**
+[`reflection-restart/fix/`](reflection-restart/fix/), each with a docstring. **Committed outputs:**
+[`reflection-restart/fix/out/`](reflection-restart/fix/out/). **Raw output** (not committed):
+`var/reflection-restart/03/` — `tasks-replay.json`, `replay.jsonl` with its `.log`, `.pid`, `replay.launch` and
+`replay.end`; `three-failures/` (the three `one` records); `breakage/` (the replay's breakage run).
+
+**01's measurement scripts run only at `d4703df`.** `reflection-restart/measure/` (`tasks.py`, `golden_post.py`'s
+callers, `signature.py`, `why_radau_accepts.py`, …) set the probe switch or name its variants, which this prompt
+removed; the scanner now refuses a task that names a variant. They and `out/` stay as 01's record (invariant 6).
+`golden_post.py`, which reads the golden paths through the modules, is reused by the replay below on the new
+records.
+
+### 2.1 The Fix gate, item 1: the three failures succeed
+
+`tools/outward_step_scan.py one BETA M --alpha A` (tuned, the production code), at 14:53 UTC (load 7.15):
+
+| history | outcome | integrations | accepted steps | RHS | reflections | restart_retakes | signature kept / discarded | wall |
+|---|---|---|---|---|---|---|---|---|
+| β 1.5, 10⁻¹², α 0.05 | success | 1 | 7183 | 52 403 | 32 | 0 | 0 / 0 | 5.5 s |
+| β 1.14, 10⁻¹⁵, α 0.01 | success | 1 | 49 765 | 355 694 | 284 | 0 | 0 / 0 | 24.4 s |
+| β 1.09, 10⁻¹⁵, α 0.03 | success | 1 | 27 665 | 198 179 | 153 | 0 | 0 / 0 | 14.2 s |
+
+The accepted steps are 01's under the probe's F3 (§1.4, "the three failures"). Each history's last reflection parks it
+(31, 283 and 152 restarts after a reflection; no drain or release).
+
+### 2.2 The Fix gate, item 2: the fixed code reproduces 01's F3 bit for bit
+
+`fix/replay_tasks.py` wrote `var/reflection-restart/03/tasks-replay.json`: 01's 66 task specs under F3
+(`var/reflection-restart/01/tasks-main.json`) with `"variant"` removed and `" variant=F3"` removed from each key
+(orchestrator note 03, ruling 1): the nine tuned histories of the diagnosis, the 54 at a stored normalization (the
+reflection store's 42, block B's 12) and the three goldens with 01's `golden_post.py` hook. Run by
+`outward_step_scan.py batch --jobs 6 --timeout 1800`, detached (`nohup`, pid 28532), launched 14:54:38 UTC (load
+5.42 / 5.42 / 5.35), `** scan done` at 15:00:43 (load at 15:00, 5.23 / 6.94 / 6.28): 66 records, no timeout, no
+error; the longest task 290.5 s (β 1.2, M 10⁻¹⁵, α 0.001), Σ wall 1287 s. `ScalarHistory.py` and the scanner were not
+edited while it ran (their SHA-256 before the launch and after the end are equal).
+
+`fix/replay_compare.py` (`fix/out/replay.txt`) compares each record with 01's F3 line for the same task: `outcome`,
+`samples_sha256`, `log_one_plus_z_sha256`, `n_samples`, `accepted_steps`, `RHS_evaluations`, `compute_steps`,
+`reflections`; for the 54 store tasks the store comparison as a whole (the same columns differing from the store, by
+the same amounts, as under 01's F3; only the six at α = 0 are bitwise against the store, as in §1.4); for the three
+goldens the hook's verdict against the regenerated records; `restart_retakes` of the record and of every integration;
+and the ruled signature, kept or discarded.
+
+| kind | tasks | equal in every field | restart_retakes | signature kept / discarded |
+|---|---|---|---|---|
+| tuned (the diagnosis's nine) | 9 | 9 | 0 | 0 / 0 |
+| store (reflection store 42, block B 12) | 54 | 54 | 0 | 0 / 0 |
+| golden (β 1.5, β 5.5 at M = 10⁻³; tuned β 3, M = 0.01) | 3 | 3 (hook: bitwise) | 0 | 0 / 0 |
+| **all** | **66** | **66** | **0** | **0 / 0** |
+
+**RESULT: EQUAL (66 of 66).** The guard never fired on any of them. Over the 66, the scanner saw 13 700 Radau
+instances begun by a reflection and 70 starts (the tuned golden's five integrations among them); no instance was
+begun by a drain, a release or a retake.
+
+### 2.3 The Fix gate, item 3: no signature step
+
+The ruled signature (P1's flag, either condition, on the first accepted step of an instance begun by a reflection, a
+drain, a release or a retake) is on no step, kept or discarded, in any of the 66 (§2.2), the nine histories of the
+diagnosis among them, nor in §2.1's three runs. Under 01's None the same count was 3 (§1.4).
+
+### 2.4 The Fix gate, item 4: the golden histories
+
+Regenerated beside the old records (`golden_history.py`'s rule), by each module's own command:
+`data/golden_history_rr03.json` (β 1.5, 5.5 at M = 10⁻³; 11.3 s) and `data/golden_history_rr03_tuned.json` (β 3,
+M = 0.01, tuned; 25.7 s); `golden_history_05.json` and `golden_history_06_tuned.json` stay as the records of
+everything before this prompt. `fix/compare_goldens.py` (`fix/out/compare_goldens.txt`) compares old and new field by
+field, every excerpt field included (12 + 21 + 25 samples, 1044 fields), and every tuning key: **equal but for the two
+allowed differences** (ruling 3), `solver_label` (`…-stepping0` → `…-stepping1`) and the added `restart_retakes` = 0, in
+all three. So F3 and the guard leave every history without a restart with π > 0 bitwise.
+
+**The reflecting golden** (P5): `data/golden_history_rr03_reflecting.json`, β = 1.5, M = 10⁻¹² M_P, α = 0.05, tuned,
+by `ComputeTargets/tests/golden_reflecting_history.py` on `golden_tuned_history`'s builders (4.1 s): one tuning
+integration, 32 reflections, 32 injections, 7183 accepted steps, 52 403 RHS evaluations, 5166 samples,
+`restart_retakes` 0, `solver_label` `Radau+kinematic-cap-stepping1`. `test_golden_reflecting_history.py` passes it
+bitwise.
+
+### 2.5 The breakage record
+
+Each check edits one place, runs the named tests, expects a failure and restores the file (SHA-256 compared):
+
+| # | breakage | test | result |
+|---|---|---|---|
+| B1 | `_restart_first_step` always `None` (F3 off) | `TestF3AtAReflection`, `TestF3AtADrainAndAtARelease`, `TestTheRestartFirstStep` | FAILED (4) |
+| B2 | the drain's restart without F3 and the guard | `TestF3AtADrainAndAtARelease` | FAILED (2) |
+| B2b | the release's restart without F3 and the guard | `TestF3AtADrainAndAtARelease` | FAILED (2) |
+| B2c | the reflection's restart without F3 and the guard | `TestF3AtAReflection` | FAILED |
+| B3 | the guard never applied | `test_the_bad_step_is_discarded_and_retaken` | FAILED |
+| B4 | the guard's mark not cleared after the first step | `test_a_later_flagged_step_of_a_restarted_instance_is_kept` | FAILED |
+| B5 | the guard armed at every new Radau, the start included | `test_no_restart_no_guard` | FAILED |
+| B6 | the retake at the full discarded h | `test_the_bad_step_is_discarded_and_retaken` | FAILED |
+| B7 | the failure bound at h_floor/10 | `test_a_retake_below_h_floor_fails_the_history` | FAILED |
+| B8 | the retakes not counted | `test_the_count_is_that_of_the_retakes` | FAILED |
+| B9 | `restart_retakes` stored at 0 too | `test_extra_data_holds_the_count_only_above_0` | FAILED |
+| B10 | the payload without `"restart_retakes"` | `test_the_payload_carries_the_count` | FAILED |
+| B11 | the guard's predicate without the phi condition | `TestTheFlagAgreesWithTheGuard` (scanner) | FAILED |
+| B12 | F3's first step halved | `test_golden_reflecting_history` | FAILED |
+| B13 | F3's first step not clamped to the solver's bound (§2.6) | `TestF3IsClampedToTheBound` | ERROR (SciPy's `ValueError`) |
+| T1 | the scanner's signature not counted | `test_the_counts` | FAILED |
+| T2 | a discarded signature step not counted | `test_a_discarded_first_step_is_a_discarded_signature_step` | FAILED |
+| T3 | a task naming a variant not refused | `test_a_task_that_names_a_probe_variant_is_refused` | FAILED (2) |
+| T4 | `observe` does not restore `Radau` | `test_observe_restores_the_module` | FAILED |
+| R | the replay: β 1.5, 10⁻¹², α 0.05 run with B12's mutation, compared by `replay_compare.py` (`fix/out/replay-breakage.txt`) | — | DIFFERS: `samples_sha256`, `RHS_evaluations` 52 403 → 52 394, `compute_steps` |
+
+B7's first form (the bound at h_floor/1000) did not end: with the predicate forced true, SciPy's least step at
+N ≈ 36 (10 ulp, about 7×10⁻¹⁴) is above the bound, so each retake's step was clamped back up and halved again
+forever. At the real bound it cannot happen: SciPy's least step is below `h_floor` = 10⁻¹¹ for every N < 4096, far past
+`N_failsafe` = 1000, so each discarded step is at most half the one before and the bound is reached.
+
+### 2.6 The clamp to the solver's bound, and `test_release`'s re-pin (the user's ruling)
+
+The suites after the change found two things in `ComputeTargets/tests/test_release.py`, which the prompt and the
+orchestrator's note had not foreseen. The agent stopped, and the user ruled: "Please allow both".
+
+- **F3 past the bound.** `TestTheEnds` integrates M = 0.5 M_P, β = 5, α = 0.1 with `N_stop` 0.01 e-folds after the
+  release. The release restarts with π > 0, F3's step there is 0.1 (f φ/π ≈ 0.66), and SciPy refuses a `first_step`
+  past the solver's bound (`ValueError: first_step exceeds bounds`). `new_solver` now takes `min(first_step, N_bound − N)`.
+  **Where F3's step fits inside the bound this changes nothing**: so in every history with `N_stop = None`
+  (`N_bound = N_failsafe = 1000`), in particular every task of the replay (§2.2), the three failures (§2.1) and the
+  three goldens and the reflecting golden (§2.4), which were run before the clamp and stand without a re-run. Tested by
+  `TestF3IsClampedToTheBound` (that history with `N_stop = N_rel + 0.01`: it succeeds, ends at `N_stop`, and the
+  release's restart has first step `N_stop − N_rel`, below F3's), which fails with SciPy's `ValueError` without the
+  clamp (B13, §2.5).
+- **The drains move `test_release`'s parked step grid.** The same history restarts with π > 0 at 120 drains and at the
+  release, and F3 now sets each restart's first step. The history before the switch moves, and with it the parked
+  phase's step grid, by about 2.1×10⁻⁴ e-folds: the check that fails after the release is at N = 40.29068, not 40.29089
+  (`BETA_5_FAILED_CHECK_N`, re-pinned; inelastic-reflection log 06's value stays the record of the old code). Every
+  other value the test pins holds: parking at candidate 105, the release's crossing within its tolerance of 40.25454.
+

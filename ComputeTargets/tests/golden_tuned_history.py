@@ -11,6 +11,11 @@ phi* = 5 M_P, pi* = 0, T* = 2e4 GeV; atol = rtol = 1e-8; the tuning tolerance 1e
 The tuning starts from the model's own seed and integrates to T_J = T_CMB until both residuals
 are inside the tolerance: five integrations, about 25 s on an unloaded machine.
 
+The record: data/golden_history_rr03_tuned.json since reflection-restart prompt 03, which regenerated
+it when the stepper label became "Radau+kinematic-cap-stepping1" and the history's record gained
+restart_retakes; every other field is data/golden_history_06_tuned.json's, which stays the record of
+everything before that prompt (.documents/reflection-restart/fix/compare_goldens.py).
+
 What is pinned:
   - "history": the record of the final integration's payload, by golden_history.record_of (the
     SHA-256 of the samples and of their ln(1 + z), the counts, the first bounce, the
@@ -58,7 +63,7 @@ from CosmologyModels.LambdaCDM import Planck2018
 from Units import Planck_units
 
 GOLDEN_TUNED_PATH = (
-    Path(__file__).resolve().parent / "data" / "golden_history_06_tuned.json"
+    Path(__file__).resolve().parent / "data" / "golden_history_rr03_tuned.json"
 )
 REGENERATE_COMMAND = (
     "PYTHONPATH=. ./venv/bin/python -m ComputeTargets.tests.golden_tuned_history"
@@ -176,7 +181,7 @@ def main() -> int:
         "provenance": {
             "generated_at_commit": commit,
             "code_tree": (
-                "jordan-normalization prompt 06's working tree, before its commit, on top "
+                "reflection-restart prompt 03's working tree, before its commit, on top "
                 "of generated_at_commit"
             ),
             "generator": "ComputeTargets/tests/golden_tuned_history.py",

@@ -78,9 +78,9 @@ invariants that hold across all of them:
   the repository root:
   ```bash
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .   # 26 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 508 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 514 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .   # 130 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 145 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 147 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .        # 68 tests
   ```
   `ComputeTargets/tests` took 590 s on 2026-11-01 (the two halves below, 135.8 s and 454.6 s, at one-minute
@@ -88,10 +88,11 @@ invariants that hold across all of them:
   capped at ten minutes, so run it in two halves:
   ```bash
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 122 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 386 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 392 tests
   ```
-  (The counts are those of 2026-11-02, after `reflection-restart` 01, which added 10 tests to `ComputeTargets/tests`
-  and 22 to `tools/tests`; `745c8ee` and `c95650a` had added one each to `ComputeTargets/tests` and
+  (The counts are those of 2026-11-02, after `reflection-restart` 03, which deleted 01's 10 probe tests from
+  `ComputeTargets/tests` and added 16 there and 2 to `tools/tests`; `reflection-restart` 01 had added 10 to
+  `ComputeTargets/tests` and 22 to `tools/tests`; `745c8ee` and `c95650a` had added one each to `ComputeTargets/tests` and
   `ObjectFactories/tests` since 2026-11-01. `inelastic-reflection`, closed 2026-11-01, added 228 tests to
   `ComputeTargets/tests`, 26 to `ObjectFactories/tests`, 8 to `tools/tests` and 4 to `RunDrivers/tests`, and
   none to `CosmologyModels/tests`. `tools/tests` holds tuned histories and took 131.7 s on 2026-11-01, at a
