@@ -1,7 +1,7 @@
 # Log 04 — the close
 
-**Subject:** Close reflection-restart: recompute the 42 and diagnose the fixed-alpha failures
-**Commit:** this commit, on branch `reflection-restart`, on top of `741dcce`
+**Subject:** Close reflection-restart: recompute the 42 and diagnose fixed-alpha
+**Commit:** `ac8ce15`, on branch `reflection-restart`, on top of `741dcce`
 **Date:** 2026-11-02, by Claude Opus 5.5
 **Result:** **COMPLETE.** The Close gate holds; the campaign is closed. No code or test file is changed.
 - **The 42**, recomputed tuned on the fixed tree: 41 succeed, 1 fails (4389, β 1.13, M 10⁻¹², α 0.01, "the effective
@@ -64,7 +64,7 @@ and copies of the drain probe's logs and JSON, read with `git show`).
 | R5 | **Passive recording** (ruling 5): `candidates.py` on each tree, each run equal to its tree's (a) record (outcome, samples SHA-256 and accepted steps for the successes; failure_reason for the failures). Passive in all four. The failing call alone in a script of its own (`failing_call.py`). | IMPLEMENTATION CHOICE (ruled) |
 | R6 | **The probe comparison** (ruling 6). The payload's `failure_reason` (as the store's and the probe JSON's) is cut at 256 characters, so it holds φ and ln E but not the whole bracket; the whole message was taken from the integration's printed line in the record's `stdout_tail`, and it equals the probe's log line (1026 characters). Fields both hold compared (§4.2). | STRUCTURALLY REQUIRED (the truncation) |
 | R7 | **The verdict's evidence** (ruling 7): the call raises alone; the roots 1.51, 1.58 ≤ 17; the nine's 0.11–16.54 ≤ 17, 1001's 16.54 reported. Met; no stop. | As the prompt says; made exact |
-| R8 | **The issues** (ruling 8): closed and narrowed as prompt §1.3; one opened (4389), on §3 and in the index in this commit. | As the prompt says |
+| R8 | **The issues** (ruling 8): closed and narrowed as prompt §1.3; one opened (4389), on §3 and in the index in `ac8ce15`. | As the prompt says |
 | R9 | **The files** (ruling 9): only the listed files are staged (§4.4). The task lists and JSONL stay in `var/`. | STRUCTURALLY REQUIRED |
 | D1 | The 42's tasks carry an explicit `key` (`shardNNNN#serial beta=… M=… alpha=… tuned`) so a record names its stored row, and the spec's `failure` flag is dropped with the other store fields. | IMPLEMENTATION CHOICE |
 | D2 | "Every assessed candidate" of §1.2 (c) is taken as every call of `classical_turning_point` (231 891 to 857 476 per run), since the margin depends on ln E alone and any call below 17 quanta raises; the least margin is reported over all calls and over each outcome. | IMPLEMENTATION CHOICE |
@@ -133,7 +133,7 @@ stored M and the tool's are bitwise equal); `wall_s` 117.1 / 115.3 s against 128
 
 ### 4.3 `black`
 
-`black` (no configuration) on the eight scripts of `close/`, the only Python files of this commit (§2, D6).
+`black` (no configuration) on the eight scripts of `close/`, the only Python files of `ac8ce15` (§2, D6).
 
 ### 4.4 The staged files
 

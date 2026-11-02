@@ -2360,7 +2360,7 @@ written.**
 
 ### 4.19 Addendum 2026-11-02 — the `reflection-restart` campaign
 
-Added by `reflection-restart` prompt 04 (this commit), written at `741dcce`. Nothing above this heading has been
+Added by `reflection-restart` prompt 04 (`ac8ce15`), written at `741dcce`. Nothing above this heading has been
 changed; where it is superseded, this section says so by statement. The campaign changed what a build computes for
 every history that reflects, and it started no production run and wrote no store. It did, in order:
 

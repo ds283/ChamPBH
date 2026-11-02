@@ -100,6 +100,7 @@ measured and closed as measured by the user (§4); three stay open.)*
 *(2026-11-02, after the close: `[run-2026.8.0-an-uncapped-outward-step-after-a-reflection-crosses-the-wall]` was
 opened from the diagnosis of the 2026.8.0 run's m_eff² failures; four are open. It was assigned the same day
 to `reflection-restart`, which carries it.)*
+*(2026-11-02: closed by `reflection-restart` prompt 04 (`ac8ce15`), on that board's §4; three are open.)*
 One was opened by the planner, one by the orchestrator's review of prompt 09, and two by prompt 11. Prompt 04's
 was closed by prompt 08, and prompt 05's by prompt 07b (§4). The one assigned (§3.1) was closed by prompt 09 (§4).
 
@@ -247,7 +248,7 @@ run's `log_m_eff_squared` failures, [`.documents/post-reflection-step-2026-11-02
   §3.1), planned that day at the user's request to measure the fixes (F1–F4), audit the 2026.8.0 store for
   stored successes with a bad step, implement the fix the user rules and recompute what must be. That
   board now carries it; this entry stays as the record of the opening.
-- **Closed (2026-11-02)** by `reflection-restart` prompt 04 (this commit), on [its board](../reflection-restart/IMPLEMENTATION_STATE.md)
+- **Closed (2026-11-02)** by `reflection-restart` prompt 04 (`ac8ce15`), on [its board](../reflection-restart/IMPLEMENTATION_STATE.md)
   §4: the fix is F3 and the guard (its prompt 03, `b81eab8`); the 42 recomputed on the fixed tree have no
   `log_m_eff_squared` failure; the whole store is rebuilt by the user after `one-loop-drain` 08. That entry is the
   record of the close.

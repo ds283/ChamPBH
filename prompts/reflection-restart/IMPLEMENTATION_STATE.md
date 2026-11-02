@@ -36,7 +36,7 @@ to the rebuild of record, which rebuilds the whole store (README §6.3).
 | ~~02~~ | ~~Audit the 2026.8.0 store~~ | **withdrawn 2026-11-02** (README §6.3): the whole store is rebuilt | — | — | — | | |
 | — | the user's ruling U6 | F3 plus the guard (README §6.3), 2026-11-02 | — | ✅ | ✅ | | |
 | 03 | [The fix](03-the-fix.md) | F3 and the guard, the probe switch removed; tests; a reflecting golden history; labels; documents | Opus | ✅ | ✅ | `b81eab8` | [log](logs/03-the-fix.md) |
-| 04 | [The close](04-close.md) | the 42 recomputed with the fix; the fixed-α turning-point failures of 2197 and 2188 investigated on two trees; the issue closed; the handover to the rebuild (README §6.4); the close | Opus | ✅ | ✅ | this commit | [log](logs/04-close.md) |
+| 04 | [The close](04-close.md) | the 42 recomputed with the fix; the fixed-α turning-point failures of 2197 and 2188 investigated on two trees; the issue closed; the handover to the rebuild (README §6.4); the close | Opus | ✅ | ✅ | `ac8ce15` | [log](logs/04-close.md) |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed · ~~struck~~ withdrawn.
 
@@ -127,6 +127,50 @@ Residue fixed in the review commit:
 - `prompts/INDEX.md`'s row;
 - two comments in `test_release.py` that gave the release step's end as 40.29089 only.
 
+**Orchestrator review of prompt 04 (2026-11-02)**, by orchestrator note 04 §3, on `ac8ce15`. Passed; seven
+checks. The prompt did not stop.
+1. **Scope.** The commit's parent is `741dcce`, the note's. Its 28 files are ruling 9's. Nothing is pushed or
+   left untracked. `git diff a27eb1d ac8ce15` over the code directories, the drivers and the plot scripts is
+   empty. `git worktree list` shows the main checkout and the `one-loop-drain` worktree only.
+2. **Nothing left running.** No pid recorded under `var/reflection-restart/04/` answers `kill -0`.
+   `runregistrykit list` is unchanged: 23 runs, all finished.
+3. **The 42.** Counted by the orchestrator from `the-42.jsonl`:
+   - 42 records (31 at 10⁻¹², 10 at 10⁻¹⁵, 1 at 10⁻¹³): 41 successes and one failure, 4389;
+   - no `log_m_eff_squared` reason; signature kept 0, discarded 0; retakes 0.
+
+   Two tasks were re-run on `ac8ce15`: shard0000#3189 (β 1.25, 10⁻¹², α 0.15) and shard0000#4206 (β 2.25,
+   10⁻¹³, α 0.01). Each equals its line in outcome, both SHA-256 digests, sample count, steps, RHS
+   evaluations, reflections and retakes.
+4. **The failing call.** `close/failing_call.py`, re-run by the orchestrator on this tree, reproduces
+   `out/failing_call-this.txt` except for the call timings. Three margins were checked by hand as
+   e^{ln E − normalization}/ulp(276.63…): 1.5107 (2197), 1.5830 (2188) and 16.5357 (1001), each as reported.
+5. **The two trees.** Recomputed by the orchestrator from `pair-89a0760.jsonl`, `pair-this.jsonl` and
+   `f3-off.jsonl`:
+   - at `89a0760` both succeed, with the store comparison `bitwise`;
+   - on this tree both fail in `classical_turning_point` at the probe's φ;
+   - with F3 off, both equal `89a0760` in outcome, both digests, sample count, steps, RHS evaluations and
+     reflections, with retakes 0 and no signature step.
+6. **The verdict.** Verdict (ii) meets ruling 7: both failing calls and all nine stored roots, and the eight
+   failures on the fixed tree (at most 6.70 quanta), lie within 17 quanta. The narrowed §3.1 entry and its
+   index hook agree. The destination, `one-loop-drain` 01, is a proposal for the user, and the row stays in
+   §1.21.
+7. **The records.**
+   - The log is in §5.1's form, with R1–R9 and D1–D10 classed.
+   - Verification §3 and the five handover notes only add lines, and are dated. `close/out/` is text.
+   - The board is CLOSED, with row 04, its items and the Close gate.
+   - `.documents/OPEN_ISSUES.md` holds 27 rows before and after: one closed, and one opened in a new §1.22.
+   - `prompts/INDEX.md` shows the campaign complete.
+
+Residue fixed in the review commit:
+- "this commit" → `ac8ce15` in the log, here, in §4.19 of `review-remediation-verification.md` and on the
+  `inelastic-reflection` board;
+- the log's **Subject** made the commit's;
+- the `inelastic-reflection` board's §3 preamble gains a dated note: three are open.
+
+Not residue, and recorded only:
+- note 04 §0 put the 42 on 13 shards, where there are 12 (`close/out/tasks.txt`);
+- the `inelastic-reflection` pointer line does not name the precedent, but the log does (D9).
+
 ### 1.1 Items
 
 | Item | What | Prompt | State |
@@ -182,7 +226,7 @@ opened; verification §3.1).
 
 - `[run-2026.8.0-an-uncapped-outward-step-after-a-reflection-crosses-the-wall]` — assigned 2026-11-02 from
   the `inelastic-reflection` board (§3 there, which holds its measurements and impact). Closed by 04, with
-the handover saying the whole store is rebuilt (README §6.3). *(2026-11-02: closed by prompt 04, this commit;
+the handover saying the whole store is rebuilt (README §6.3). *(2026-11-02: closed by prompt 04, `ac8ce15`;
   the entry is in §4.)*
 - `[00-fixed-alpha-laboratory-M-histories-fail-in-classical-turning-point]` — assigned 2026-11-02 from the
   `one-loop-drain` board (§3 there, on branch `one-loop-drain` at `c07839e`, which holds its measurements and
@@ -195,7 +239,7 @@ the handover saying the whole store is rebuilt (README §6.3). *(2026-11-02: clo
   *(2026-11-02, prompt 04 written: §1.2 there. The planner found that the 2026.8.0 store already holds nine
   "not monotone" failures of `classical_turning_point` at laboratory M, made before this campaign's code;
   04 §0.2 lists them, with a reading to be tested.)*
-- **Narrowed (2026-11-02) by prompt 04** (this commit; verification §3.2–§3.6): **verdict (ii)**, 03 moves a correct
+- **Narrowed (2026-11-02) by prompt 04** (`ac8ce15`; verification §3.2–§3.6): **verdict (ii)**, 03 moves a correct
   trajectory onto a limit of the wall search that was already there.
   - **What F3 does.** At `89a0760` both succeed, bitwise to the store; on this tree both fail with the probe's message
     to every character. With `_restart_first_step` returning SciPy's choice and the guard live, this tree gives
@@ -236,7 +280,7 @@ the handover saying the whole store is rebuilt (README §6.3). *(2026-11-02: clo
 [that board](../inelastic-reflection/IMPLEMENTATION_STATE.md)), with a dated pointer to this entry. **Assigned**
 2026-11-02 to this campaign (§3.1).
 
-**Closed:** 2026-11-02 by prompt 04 (this commit).
+**Closed:** 2026-11-02 by prompt 04 (`ac8ce15`).
 - **The fix**: F3 and the guard (prompt 03, `b81eab8`, ruled by the user as U6, README §6.3): every Radau restarted with
   π > 0 starts at `min(global_max_step, max(h_floor, f φ/π))`, at most the distance to its bound, and its first
   accepted step is tested by P1's flag and retaken at half its h if flagged. `VERSION_LABEL` 2026.9.0.
