@@ -153,6 +153,14 @@ None open on this board (the one opened by prompt 01 closed 2026-11-02, §4). Pr
 - `[run-2026.8.0-an-uncapped-outward-step-after-a-reflection-crosses-the-wall]` — assigned 2026-11-02 from
   the `inelastic-reflection` board (§3 there, which holds its measurements and impact). Closed by 04, with
 the handover saying the whole store is rebuilt (README §6.3).
+- `[00-fixed-alpha-laboratory-M-histories-fail-in-classical-turning-point]` — assigned 2026-11-02 from the
+  `one-loop-drain` board (§3 there, on branch `one-loop-drain` at `c07839e`, which holds its measurements and
+  logs), at the user's ruling (that campaign's README §6.3, ruling 6). 2197 and 2188 (4×10⁻³¹ M_P, α = 10⁻³)
+  fail on `2d50b95` at their stored normalization, after about 115 s in `classical_turning_point`
+  (ln E = −306.7), though both completed on `0209aac`. **For 04:** find whether 03 (F3 changes the
+  trajectory after every restart) causes it, by running both at `b81eab8^` and `b81eab8`; then record, and
+  either fix it within this campaign's scope or say where it goes. The campaign that found it plans to move
+  laboratory-M histories to a one-loop drain, under which both complete, but it keeps the fixed α as a law.
 
 ## 4. Resolved issues
 
