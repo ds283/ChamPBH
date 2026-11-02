@@ -147,6 +147,10 @@ was investigated.
 
 Under the one-loop drain, 2197 and 2188 complete on the same tree.
 
+**Correction (2026-11-02, at the re-plan, README §6.3):** the check "reflection requested inside the
+wall" that 3873 meets dates from `fc97233` (2026-10-01, the integrator audit), not from `reflection-restart`
+03. The issue was split on the board (§3, §4).
+
 ## 6. Open for the user
 
 None of these is ruled. The user said the campaign's scope is to be decided by what is right, not by the

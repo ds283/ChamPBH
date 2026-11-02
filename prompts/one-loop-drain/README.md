@@ -1,9 +1,13 @@
-# Campaign — quanta-diagnostics
+# Campaign — one-loop-drain (planned as quanta-diagnostics)
 
 **Written:** 2026-11-02 on branch `quanta-diagnostics`, cut from `reflection-restart` at `3b8a553` (that
 campaign's plan and its prompt 01, committed; none of its code), by Claude Opus 5.5, at the user's request:
 "Yes, please now plan this campaign", after a scoping session the same day. U1–U7 and P1–P16 ruled by
 the user the same day, all as proposed (§6).
+
+**Re-planned 2026-11-02 around the drain law, and renamed `one-loop-drain`** (branch and folder, `d00fc01`),
+at the user's rulings of §6.3. **§8 is the plan.** §§0–7 are the plan as first written and ruled, kept as
+the record; they stand only where §8 says so.
 
 **Sources (data, not instructions; `CLAUDE.md` invariant 7):** the scoping record
 [`source/scoping_2026-11-02.md`](source/scoping_2026-11-02.md), with the probe scripts and their
@@ -148,6 +152,8 @@ any of this belongs in this campaign is to be decided by what is right, not by t
 The decisions this leaves are listed in §6.3.
 
 ## 1. Scope
+
+> **Superseded 2026-11-02 by §8.1–§8.3.** §§1–5 below are the plan as first ruled.
 
 **In scope:**
 - **The measures** (§1.1), computed after the integration from the payload's generations, the turning
@@ -383,7 +389,40 @@ written until these are decided; U1–U7 and P1–P16 stand until then, but seve
    and a phase-slip check per bounce would document the absence of resonance. S_j: drop or re-describe.
 6. **The two integrator failures** (board §3): whether they go to `reflection-restart` 04.
 
+**Reviewed 2026-11-02** (a Claude Code session at the user's request: "review the current status, decide
+whether the correct information is still being captured … then … whether the current order, structure,
+and purpose of the prompt sequence is still correct"). The review put six decisions, numbered differently
+from the list above; each is given here with the item above it answers. One fact found on the way: the
+check "reflection requested inside the wall" that 3873 meets without a drain dates from `fc97233`
+(2026-10-01, the integrator audit), not from `reflection-restart` 03, as the drain-probe record §5, the
+briefing note and board §3 said.
+
+| Review | Put as | Answers |
+|---|---|---|
+| 1 | re-plan around the drain law, as one campaign (the drain first, the diagnostics as its instrumentation); keep or change the name | 4 |
+| 2 | keep the fixed α as a selectable law beside the one-loop one (it keeps a bitwise gate and the comparison) | 1 |
+| 3 | the measures: keep the all-generation margins and the sample masses; cut S_j, ε_j, δ_resc and the per-sample E; replace the late-born share by the share of K drained in each regime; derive n̄_j and δ_stim in a tool; add the phase slip, the backreaction ratio n_χ m_k/E_k and the drain-law columns | 5 |
+| 4 | store each bounce's inputs and derive whatever depends on the spectrum model outside the integrator | 5 |
+| 5 | rule the gap law and R ≤ 1 after a measurement prompt; zero at R ≤ 1 by default, R·S(L) as a sensitivity | 2, 3 |
+| 6 | 2197 and 2188 to `reflection-restart` 04 (is it 03's regression?); 3873 to this campaign's 01 | 6 |
+
+**Ruled by the user, 2026-11-02**, in their words:
+- **1:** "yes, replan around the drain law, as one campaign. `quanta-diagnostics` is now an opaque name.
+  `one-loop-drain` is perhaps a better choice."
+- **2:** "yes, OK, provided this does not cost significant effort to support a mode that has (mostly) been
+  superseded. The instrumentation columns would have limited meaning in this mode."
+- **3:** "agree".
+- **4:** "yes, let's factor the spectrum model out of the integrator".
+- **5:** "agree".
+- **6:** "agree".
+
+And on the science: "I was never taking a large `M` `Delta_Neff` seriously, so there is no problem with
+this disappearing. … The science result is Fig. 6 at the lab-allowed value of `M`." (The review had
+meant Fig 6a's large-M ΔN_eff constraint, drawn there for comparison.)
+
 ## 7. What this campaign hands to the user
+
+> **Superseded 2026-11-02 by §8.7.**
 
 - The measures, stored per bounce, per sample and per history, on the fixed integrator, with
   `FINGERPRINT_FORMAT` 7.
@@ -391,3 +430,176 @@ written until these are decided; U1–U7 and P1–P16 stand until then, but seve
   and the wall-exposure summaries δ_stim and δ_resc, with their sensitivity to the associated piece.
 - Two figure tools and their demonstration figures.
 - The handover for the rebuild that carries all of it (U2), and for the figures of record made from it.
+
+## 8. Re-planned 2026-11-02: the drain law
+
+Written by Claude Opus 5.5 the same day, from the user's rulings of §6.3. This section is the plan; §§0–7
+stand only where it says so.
+
+### 8.0 Why the plan changed
+
+The campaign was planned to store and measure what the run discards about the produced quanta, with no
+stored value moving (§5). Two findings of the same day changed its object (§0.1's corrections, §0.4,
+`BriefingNotes/nonrelativistic_quanta.tex`):
+- the non-relativistic, highly occupied late quanta of the laboratory-M histories are a product of the
+  **fixed-α drain**, which asks a late classical bounce (R < 1) for occupations one bounce cannot deliver;
+- under a **one-loop drain**, α_eff = min(1, A·2.7/ℓ) with nothing drained at R ≤ 1, the two laboratory-M
+  histories probed park after 10–95 one-loop bounces, every birth is relativistic by ℓ > 0, the
+  occupations are about α e^{−4ℓ} ≪ 1, and parametric resonance is excluded. Most of §1.1's measure 4
+  would then compute numbers near zero.
+
+The open questions are now the drain law's: whether the cascade reaches the gap (1 < R < 10^2.9) or
+R ≤ 1 anywhere on the grid, what happens for A < 0.1, how much ρ_χ the parking leaves. This campaign
+implements the law, measures it across the grid, and stores the instrumentation that answers them.
+
+**What it does to the science.** The science result is Fig 6 at laboratory M (the user, 2026-11-02),
+and the one-loop law moves it: 2197's ΔN_eff today goes from 0.0064 to 0.061 at A = 1 and 0.011 at
+A = 0.1 (§0.4, not re-tuned). At large M the law drains nothing and the dissipation-mode ΔN_eff vanishes,
+which the user does not take seriously in either case (Fig 6a drew it for comparison only).
+
+### 8.1 Scope
+
+**In scope:**
+- **The drain law** (§8.2): a one-loop law beside today's fixed α, selected per history, with A its
+  strength; the fixed law bitwise as today.
+- **The instrumentation** (§8.3): per candidate and turning point, a row of a child table; per sample the
+  field's and the tracker's mass; per history the share of K drained in each regime, the drain counts and
+  extremes, and the margins over all generations. Model-free, and written under the one-loop law only.
+- **The derivation tool** (§8.3): the spectrum model (U4) and every measure that depends on it, computed
+  from the exports, outside the integrator, so that a better spectrum needs a re-run of the tool, not a
+  rebuild.
+- **A measurement** of the law across the grid through the tool route, re-tuned, from which the user
+  rules the gap law and the A values of record (§8.5, U13–U14).
+- **The store, the keys and the drivers; the exports; a registered rehearsal; two figure tools; the
+  documents and the handover for the rebuild.**
+- **The 3873 failure** (`[00-a-zero-drain-history-stops-at-the-inside-wall-guard]`): every large-M
+  history drains nothing under the new law, so all of them take the path on which 3873 stops.
+
+**Out of scope:**
+- Modelling stimulated emission, rescattering or the backreaction n_χ m(φ): measured by the tool and
+  documented, not modelled (the user's ruling of source §7 stands).
+- Production at R < 1 in the 1/φ tail, and the physics inside the gap: the gap is bracketed (§8.2) and
+  the bracket's spread measured, not resolved.
+- The parking model at physical M, and the spectrum of the parking leftover (its share is measured, §8.3).
+- Instrumentation under the fixed law (the user's ruling 2: limited meaning there, no significant effort).
+- The 2197/2188 failure at the fixed α, which goes to `reflection-restart` 04 (ruling 6).
+- The rebuild of record and the figures of record (the user's, §8.7); `reflection-restart`'s files; the
+  packages; `PRyM/`; `thirdparty/`.
+
+### 8.2 The drain law
+
+At every candidate the code already classifies the turning point (`peak_estimate`, after the
+integration): **one-loop** where ln R > 0 and `one_loop_turnaround` solves; **gap** where ln R > 0 and it
+does not (`ESTIMATE_CLASSICAL_GAP`); **classical** where ln R ≤ 0; **unassessed** where there is no
+assessment. Under the one-loop law that classification moves into the loop, before the drain, and sets
+
+| regime | α_eff |
+|---|---|
+| one-loop | min(α_cap, A · c₁ / ℓ) · w_gate, with c₁ = 4c ≈ 2.7 (`wall_backreaction.tex`, "The inelastic fraction") and ℓ the turnaround's |
+| gap | by the gap prescription: **zero**, or **edge**, A · c₁ / ℓ_edge with ℓ_edge = 4 (the probe's `PROBE_GAP=high`); 02 measures both; the user rules one (U13) |
+| classical (R ≤ 1) | zero (ruling 5); R·S(L) is computed by the tool from the bounce rows as an upper bound, not drained |
+| unassessed | zero, counted |
+
+The fixed law is today's α_eff = α · w_gate, unchanged. α = 0 (natural mode) is untouched by either.
+`c₁`, `α_cap` and `ℓ_edge` are module constants with their sources quoted beside them. Until U13 is
+ruled the gap prescription is a module attribute that 02 sets (the precedent is `reflection-restart` 01's
+`_PROBE_OUTWARD_FIX`); 03 fixes it as ruled and removes the attribute.
+
+### 8.3 The measures (ruling 3) and where each is computed (ruling 4)
+
+**In the integrator, under the one-loop law only** (model-free; the fixed law writes no bounce row and
+leaves the new history columns NULL):
+- **Bounce rows** (P6, P7 as revised): every candidate and every turning point of the reflection margin,
+  with P7's columns less `wall_nr_share`, `occupation_overlap` and `rescattered_fraction`, plus `regime`,
+  `ell` (one-loop only), `alpha_eff`, `w_gate`, `log_E` (the impact energy), `log_H` and whatever the tool
+  needs for S(L).
+- **History columns**: the share of K drained in each regime (one-loop, gap, classical, unassessed) and
+  the parking leftover's share; the number of drains and of gap and unassessed candidates; ℓ_min; the
+  least ln R at a drain; the margins over all generations (measure 1: the worst of each kind, its N and
+  its failing share; P3).
+
+**At every sample, under every law** (U5 as ruled): `log_m_eff_Mp` and `log_m_tracker_Mp` (nullable).
+One code path; written under the fixed law too, since leaving them out there would be the extra effort.
+
+**In the derivation tool, from the exports**: the spectrum model (U4, P4) and its kernels (P5, now only
+G and the occupation overlap); per generation the occupation at birth n_g; per bounce n̄_j, per history
+δ_stim, with rescattering bounded by it (≈ 2n) and the bound stated, not computed separately; E(N), its
+maximum and r_χ E's; per bounce the phase slip (k_ex/H)·ΔN² and its minimum over producing bounces; per
+bounce the backreaction ratio n_χ m_k/E_k (n_χ a³ ≈ Σ_g ΔK_g/Q_g) and its maximum; the R·S(L) bound.
+
+**Cut:** S_j and its counts; ε_j and δ_resc; the per-sample E column; the late-born share (P10, which the
+regime shares replace).
+
+### 8.4 Prompts
+
+| # | Prompt | Covers | Model |
+|---|---|---|---|
+| 01 | `01-the-drain-law.md` | the law and A as inputs of the integration and the tuning (keys not yet stored); the classification in the loop; α_eff by regime; the gap prescription as a module attribute; a `"drain"` payload key with each candidate's regime, ℓ, α_eff, w_gate, ln E, ln H; the tool route's options; the 3873 failure investigated and, if it is in this code, fixed; tests | Opus |
+| 02 | `02-measure-the-law.md` | about forty histories by the tool route, re-tuned (§8.5): A ∈ {0.01, 0.1, 1}, both gap prescriptions; regime shares, gap entry, ℓ_min, the parking leftover, the R·S(L) bound from the payload; Y_p, D/H and ΔN_eff against the fixed law; tuning integrations and wall time. Then the user rules U13–U14 | Opus |
+| 03 | `03-the-store.md` | the keys (U8), `ScalarHistoryBounce`, the sample and history columns, the gap prescription fixed as ruled, `FINGERPRINT_FORMAT` 7, `VERSION_LABEL` (U12), the registry, drop group, sharding, batch size, read-back; tests in a temporary store | Opus |
+| 04 | `04-drivers-and-exports.md` | `main.py`'s and the plot scripts' options for the law (the match against stored keys, as `--alpha-values`); `histories.csv`, `fields.csv`, a new `bounces.csv`; readers and tests | Sonnet |
+| 05 | `05-derivation-tool.md` | the spectrum model as one module outside the integrator (`ComputeTargets/quanta_spectrum.py`, pure), and `tools/quanta_measures.py` reading the exports and writing the derived measures per bounce and per history; tests against direct quadrature; run on 02's histories | Opus |
+| 06 | `06-rehearse.md` | registered builds on the isolated cluster: the fixed law at the campaign's base and at its tip, bitwise; the one-loop law at the tip, interrupted and resumed, by value and against 02's tool route | Opus |
+| 07 | `07-figure-tools.md` | the grid figure (regime shares, ℓ_min, the margins, δ_stim) and the per-history figure (m·a, the generations' q, the bounces), from the exports and 05's output; tests; rendered on 06's store | Sonnet |
+| 08 | `08-close.md` | `.documents/one-loop-drain-verification.md`, the law and the measures for the paper, `architecture-summary.md`, `numerical-strategies.md`, `CLAUDE.md`, the handover for the rebuild, the issues, the indexes | Opus |
+
+Written one at a time, each after the previous one lands and is reviewed. 01 is written after
+`reflection-restart` 04 lands and that branch is merged here (U1, extended by ruling 6). 05 needs only
+04's export format, and 07 only 05's output format, so either may be written while the prompt before it
+runs.
+
+### 8.5 The gates
+
+| Gate | Holds when | Prompt |
+|---|---|---|
+| **Law** | under the fixed law every golden history (plain, tuned and reflecting) passes bitwise and the payload is unchanged but for the new key; under the one-loop law 2197 and 2188 at the stored normalization reproduce §0.4's table (A = 1, 0.1; drains, parking N, r_χ), with any difference the merged tree makes stated; 3016 and 3233 drain nothing; 3873's failure explained | 01 |
+| **Measure** | the sample measured at both gap prescriptions and three A, re-tuned; the regime shares and the gap's reach stated across M and β; the spread of Y_p, D/H and ΔN_eff between the prescriptions; the cost | 02 |
+| **Store** | the round trip exact, bounce rows in order; the fixed law and α = 0 write no bounce row and NULL new columns; the fingerprint guard carries format 7 beside 6 | 03 |
+| **Export** | every new export column equals the stored record; `histories.csv`'s existing columns byte-identical for a store without the new data; the drivers refuse a law that does not match the store | 04 |
+| **Derive** | each derived measure agrees with direct quadrature to 10⁻⁶ relative on constructed generations; with the spectrum collapsed to its peak, E and the margins agree with `source/probe/all_generations.py` on the same integration | 05 |
+| **Bitwise** | the fixed law's build at the tip equals the base's in every pre-existing column, history and sample rows | 06 |
+| **R** | the one-loop build, interrupted with `SIGTERM` and resumed, equals the straight build by value, bounce rows included, and 02's tool route for the same histories | 06 |
+| **Figures** | both tools render from 06's exports; their tests pass on constructed exports | 07 |
+
+### 8.6 Decisions
+
+**Standing from §6:** U1 (extended: 01 waits for `reflection-restart` 04, not 03); U2 (the rebuild of record
+waits for 08); U4 (the spectrum shape, now in the tool); U5; U7 (the figures, now 07's); P2–P4, P6, P12,
+P14. **Revised:** U3 (values move under the one-loop law, so `VERSION_LABEL` moves: U12); U6 (δ_stim is
+derived by the tool, δ_resc cut); P1 (the integrator gathers the model-free values only; the spectrum is
+in its own module, 05); P5 (G and the overlap only); P7–P9 (§8.3); P11 (02's sample, §8.5 below); P13
+(06's grid, both laws); P15 (board §3); P16 (the verification document is
+`one-loop-drain-verification.md`). **Withdrawn:** P10.
+
+**For the user to rule now (U8–U12):**
+
+| | Proposed | Alternatives |
+|---|---|---|
+| **U8** — the keys | the `alpha_value` table gains `drain_law` (`fixed` or `one_loop`); its value is α under the fixed law and A under the one-loop law; α = 0 rows are law `fixed` and unchanged; A = 0 refused under the one-loop law (that is natural mode) | a table of its own (`drain_value`: law, A) beside `alpha_value` |
+| **U9** — the gate under the one-loop law | kept: α_eff = min(α_cap, A·c₁/ℓ)·w_gate, the law setting the amplitude and the gate the half-oscillation's adiabaticity, as today; 02 reports how often w_gate < 1 at a one-loop candidate (the probe left the gate out) | no gate under the one-loop law |
+| **U10** — the cap | α_cap = 0.99, as the probe, since the code refuses α ≥ 1 | 1 − 10⁻⁶ |
+| **U11** — 02's sample | 2197, 2188 and the ten largest below-weight shares at laboratory M; three each at M = 10⁻³³ and 10⁻³⁰; a ladder of five M between 10⁻³⁰ and 10⁻¹² chosen where ln R at the first impact crosses zero; 3016, 3233, 3873; the four β regions at one laboratory M. About forty, each at A ∈ {0.01, 0.1, 1} and both gap prescriptions, re-tuned; detached, bounded at about three hours | a smaller sample at A = 0.1 and 1 only |
+| **U12** — the labels | `FINGERPRINT_FORMAT` 7 and `VERSION_LABEL` 2026.10.0 in 03 | `VERSION_LABEL` 2026.9.1 |
+
+**For the user after 02 (U13–U14):** the gap prescription of record (U13), from 02's spread; the A values
+of the rebuild of record (U14).
+
+**Proposed by the planner (P17–P20), the defaults unless the user says otherwise:**
+- **P17 — the law's constants** (c₁, α_cap, ℓ_edge) beside the margin constants in `ScalarHistory.py`,
+  each with its source; c₁ quoted from `wall_backreaction.tex`.
+- **P18 — the classification once.** The one-loop law classifies each candidate in the loop; the
+  post-integration `peak_estimate` reuses that result where it exists, so the one-loop solve is not run
+  twice. Under the fixed law `peak_estimate` runs as today.
+- **P19 — unassessed candidates** drain zero under the one-loop law and are counted; 02 reports how many.
+- **P20 — the gap prescription's name** in the payload and the logs, so that 02's two runs of one history
+  are told apart without the module attribute.
+
+### 8.7 What this campaign hands to the user
+
+- The one-loop drain law beside the fixed one, with the gap prescription and the A values ruled from a
+  measurement across the grid.
+- Per bounce, per sample and per history, the model-free instrumentation of the law, stored under
+  `FINGERPRINT_FORMAT` 7; and a tool that derives the spectrum-dependent measures from the exports.
+- Two figure tools and their demonstration figures.
+- The handover for the rebuild of record (U2), at the A values of U14, and for the figures of record made
+  from it, Fig 6 at laboratory M first.

@@ -1,28 +1,26 @@
-# quanta-diagnostics campaign — implementation state
+# one-loop-drain campaign — implementation state
 
-**Last updated:** 2026-11-02 · **Status: PLANNED — 0 of 7 landed.** Planned 2026-11-02 at the user's
-request, after a scoping session the same day ([`source/scoping_2026-11-02.md`](source/scoping_2026-11-02.md)).
-U1–U7 and P1–P16 ruled by the user the same day, all as proposed (README §6). The plan is
-[`README.md`](README.md), on branch `quanta-diagnostics`, cut from `reflection-restart` at `3b8a553`.
-Under U1, no prompt is written until `reflection-restart` 03 has landed and been merged here; under U2,
-the rebuild of record waits for this campaign's 07.
+**Last updated:** 2026-11-02 · **Status: PLANNED — 0 of 8 landed; U8–U12 open for the user.** Planned
+2026-11-02 as `quanta-diagnostics` at the user's request, after a scoping session the same day
+([`source/scoping_2026-11-02.md`](source/scoping_2026-11-02.md)); U1–U7 and P1–P16 ruled the same day,
+all as proposed (README §6). **Re-planned the same day around the drain law and renamed `one-loop-drain`**
+(branch and folder), at the user's rulings of README §6.3, after the premise was corrected
+([`source/margins-correction_2026-11-02.md`](source/margins-correction_2026-11-02.md)) and a one-loop drain
+probed ([`source/drain-probe_2026-11-02.md`](source/drain-probe_2026-11-02.md)). **README §8 is the plan.**
+The branch was cut from `reflection-restart` at `3b8a553`. Under U1 as extended by ruling 6, no prompt is
+written until `reflection-restart` 04 has landed and been merged here; under U2, the rebuild of record
+waits for this campaign's 08.
 
-**2026-11-02, after the rulings: held for the user's decisions of README §6.3.** The premise was corrected
-(births, not later bounces; [`source/margins-correction_2026-11-02.md`](source/margins-correction_2026-11-02.md)),
-and a probe of a one-loop drain ([`source/drain-probe_2026-11-02.md`](source/drain-probe_2026-11-02.md),
-README §0.4) found the late classical cascade to be a product of the fixed-α drain. Whether the drain
-changes, and where, decides what this campaign becomes.
-
-The campaign stores what the run computes and discards about the produced quanta: every generation and
-turning point as a row of a child table, the field's and the tracker's mass and the matter-like excess at
-every sample, and per history the margins over all generations, the late-born share, and three measures
-of what a later bounce does to quanta already present, with two summaries (δ_stim, δ_resc). It measures
-them on a sample and a rehearsal, and writes the tools for the grid figure and the per-history m·a figure.
-No stored value moves.
+The campaign replaces the fixed-α drain by a one-loop law, α_eff = min(α_cap, A·2.7/ℓ)·w_gate at a
+one-loop turnaround and zero at R ≤ 1, with the fixed law kept beside it, bitwise. It measures the law
+across the grid before the user rules the gap prescription and the A values of record; stores the
+law's model-free instrumentation (a row per bounce, the masses per sample, the regime shares and margins
+per history); derives the spectrum-dependent measures in a tool outside the integrator; rehearses both
+laws; and writes the figure tools.
 
 **Campaign:** [`README.md`](README.md) ·
-**Code:** `ComputeTargets/quanta_diagnostics.py` (new), `ComputeTargets/ScalarHistory.py`,
-`ObjectFactories/ScalarHistory.py`, `config/`, `extract_common.py`, `plot_ScalarHistory.py`, `tools/` ·
+**Code:** `ComputeTargets/ScalarHistory.py`, `ComputeTargets/quanta_spectrum.py` (new),
+`ObjectFactories/ScalarHistory.py`, `config/`, `main.py`, `plot_*.py`, `extract_common.py`, `tools/` ·
 **Index:** [`.documents/OPEN_ISSUES.md`](../../.documents/OPEN_ISSUES.md) §1.22
 
 > **Maintenance rule.** Whenever an entry is added to, narrowed in, or closed out of §3 or §4
@@ -33,15 +31,18 @@ No stored value moves.
 
 ## 1. Prompts
 
+The plan as first ruled had seven prompts (README §2), none written; the re-plan replaced them (README §8.4).
+
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | The measures | `quanta_diagnostics.py`: the spectrum model, kernels, the measures; the sample masses; the `"quanta"` payload key | Opus | ⏸ `reflection-restart` 03 | ⬜ | | |
-| 02 | The store | `ScalarHistoryBounce`, the sample and history columns, `FINGERPRINT_FORMAT` 7 | Opus | ⬜ | ⬜ | | |
-| 03 | Exports | `histories.csv`, `fields.csv`, `bounces.csv` | Sonnet | ⬜ | ⬜ | | |
-| 04 | Measure | about forty tuned histories by the tool route; the model's sensitivity; the cost | Opus | ⬜ | ⬜ | | |
-| 05 | Rehearse | base and tip builds on the isolated cluster, interrupted and resumed; bitwise; by value | Opus | ⬜ | ⬜ | | |
-| 06 | Figure tools | the grid figure and the per-history figure, from the exports | Sonnet | ⬜ | ⬜ | | |
-| 07 | Close | the verification document, the measures for the paper, the handover for the rebuild, the indexes | Opus | ⬜ | ⬜ | | |
+| 01 | The drain law | the law and A as inputs; the regime in the loop; α_eff by regime; the gap prescription as a module attribute; the `"drain"` payload key; the tool route's options; the 3873 failure | Opus | ⏸ U8–U12; `reflection-restart` 04 | ⬜ | | |
+| 02 | Measure the law | about forty histories by the tool route, re-tuned, at three A and both gap prescriptions; then U13–U14 | Opus | ⬜ | ⬜ | | |
+| 03 | The store | the keys, `ScalarHistoryBounce`, the sample and history columns, the gap prescription fixed, `FINGERPRINT_FORMAT` 7, `VERSION_LABEL` | Opus | ⬜ | ⬜ | | |
+| 04 | Drivers and exports | the law's options in `main.py` and the plot scripts; `histories.csv`, `fields.csv`, `bounces.csv` | Sonnet | ⬜ | ⬜ | | |
+| 05 | Derivation tool | `quanta_spectrum.py` and `tools/quanta_measures.py`: n_g, n̄_j, δ_stim, E, phase slip, backreaction ratio, the R·S(L) bound | Opus | ⬜ | ⬜ | | |
+| 06 | Rehearse | the fixed law base against tip, bitwise; the one-loop law interrupted and resumed, by value | Opus | ⬜ | ⬜ | | |
+| 07 | Figure tools | the grid figure and the per-history figure | Sonnet | ⬜ | ⬜ | | |
+| 08 | Close | the verification document, the law and measures for the paper, the handover for the rebuild, the indexes | Opus | ⬜ | ⬜ | | |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
 
@@ -57,18 +58,21 @@ None yet.
 
 | Gate | Holds when | Prompt | State |
 |---|---|---|---|
-| Measures | each measure against direct quadrature (10⁻⁶); peak-collapsed against the scoping probe's method on two histories; golden histories bitwise; existing payload unchanged | 01 | ⬜ |
-| Store | the round trip exact, bounce rows in order; α = 0 writes no row; fingerprint format 7 beside 6 | 02 | ⬜ |
-| Export | the new export columns equal the stored record; existing `histories.csv` columns byte-identical | 03 | ⬜ |
-| Measure | the sample measured; the seven of the scoping set beside source §3; sensitivity to the associated piece; the cost | 04 | ⬜ |
-| Bitwise | every column of the base build bitwise equal in the tip build | 05 | ⬜ |
-| R | the tip, interrupted and resumed, equals the straight build by value (bounce rows included) and 04's tool route | 05 | ⬜ |
-| Figures | both tools render from 05's exports; their tests pass | 06 | ⬜ |
+| Law | fixed law: golden histories bitwise, payload unchanged but the new key; one-loop law: 2197 and 2188 reproduce the probe's table, 3016 and 3233 drain nothing; 3873 explained | 01 | ⬜ |
+| Measure | the sample at three A and both gap prescriptions, re-tuned; regime shares and the gap's reach across M and β; the prescriptions' spread in Y_p, D/H, ΔN_eff; the cost | 02 | ⬜ |
+| Store | the round trip exact, bounce rows in order; the fixed law and α = 0 write no bounce row; fingerprint format 7 beside 6 | 03 | ⬜ |
+| Export | the new export columns equal the stored record; existing `histories.csv` columns byte-identical; the drivers refuse a mismatched law | 04 | ⬜ |
+| Derive | the derived measures against direct quadrature (10⁻⁶); peak-collapsed against the scoping probe's method | 05 | ⬜ |
+| Bitwise | the fixed law's tip build equal to the base's in every pre-existing column | 06 | ⬜ |
+| R | the one-loop build, interrupted and resumed, equals the straight build by value (bounce rows included) and 02's tool route | 06 | ⬜ |
+| Figures | both tools render from 06's exports; their tests pass | 07 | ⬜ |
 
 ## 3. Active and unresolved issues
 
-Opened by the planner on 2026-11-02, from the scoping (`source/scoping_2026-11-02.md`); the last two
+Opened by the planner on 2026-11-02, from the scoping (`source/scoping_2026-11-02.md`); two more
 opened the same day, after the plan was ruled, from the drain probe (`source/drain-probe_2026-11-02.md`).
+At the re-plan the same day (README §8) one of those was split in two (§4), and the rest re-pointed at
+the new prompts.
 
 - **`[00-weighted-margins-hide-the-least-relativistic-generations]`** — the stored worst margins and
   failing shares (`inelastic-reflection` 09) run over the generations holding at least 10⁻³ of
@@ -80,6 +84,9 @@ opened the same day, after the plan was ruled, from the drain probe (`source/dra
   below-weight share is large (up to 0.98 at 4×10⁻³¹, 0.65 at β = 20); the expansion history is not
   affected (matter-like excess ≤ 5×10⁻⁶ of ρ_χ). **Next:** closed by 02, when the all-generation values
   and the generations are stored.
+  **Re-planned 2026-11-02** (README §8.3): the all-generation margins and the bounce rows are stored under
+  the one-loop law only (ruling 2), by 03, which closes this; under the fixed law the record stays as it
+  is, and 08 documents that.
 - **`[00-later-bounces-act-on-quanta-already-present]`** — a bounce is non-adiabatic for quanta with
   p ≪ ω_t, which the wall's mass makes of most of ρ_χ in the transition-window histories (the wall's
   mass is e²²–e⁵² above the between-bounce mass). It rescatters them and stimulates production into
@@ -97,6 +104,10 @@ opened the same day, after the plan was ruled, from the drain probe (`source/dra
   against |β|² ≲ 1. The random-phase recursion n_{j+1} = n_j + |β_j|²(1 + 2n_j) is then the complete
   model; under a one-loop drain it is negligible (n ~ αe^{−4ℓ} ≪ 1). At the stored fixed α the late
   classical generations still have n ≫ 1, which is `[00-fixed-alpha-drain-overstates-late-reflections]`.
+  **Re-planned 2026-11-02** (README §8.3): quantified by the derivation tool (05) under the one-loop law,
+  on 02's and 06's histories: δ_stim, with rescattering bounded by it; documented by 08, and closed there
+  if negligible under the one-loop law, otherwise left open as ruled. Under the fixed law it stays a
+  documented limitation.
 - **`[00-fixed-alpha-drain-overstates-late-reflections]`** — opened 2026-11-02 (source
   `drain-probe_2026-11-02.md`). A fixed α cannot follow the drain along the cascade or with M. At
   α = 10⁻³ at laboratory M it underestimates the early one-loop drains (one loop: 0.08–0.26) and asks
@@ -108,19 +119,35 @@ opened the same day, after the plan was ruled, from the drain probe (`source/dra
   dominated by an unphysical late drain, and the stored large-M ΔN_eff rests on drains far above what
   a bounce can deliver; observable effects are below current bounds in the histories probed. **Next:**
   the user's decisions, README §6.3 (1–4).
-- **`[00-reflection-restart-tree-fails-probe-histories]`** — opened 2026-11-02 (source
-  `drain-probe_2026-11-02.md` §5). On `reflection-restart` at `2d50b95`, at the stored normalization:
-  2197 and 2188 at their stored α = 10⁻³ fail after about 115 s in `classical_turning_point`
-  (ln E = −306.7: a residual not monotone, alternating −inf and repeated values, which looks like float
-  cancellation in V − V_floor), though both completed on `0209aac`; and 3873 (10⁻¹² M_P, β 1.11) without
-  a drain stops at N = 43.76 at the guard "reflection requested inside the wall" (W/(π²/2) = 1.485).
-  **Impact:** not investigated; histories of the low-α transition window may fail on the fixed tree
-  where they succeeded before. **Next:** for `reflection-restart` 04, at the user's word (README §6.3,
-  6).
+  **Re-planned 2026-11-02:** this campaign's object (README §8). The one-loop law lands in 01; 03 closes
+  this when the gap prescription of record (U13) is fixed and the law's keys are stored.
+- **`[00-fixed-alpha-laboratory-M-histories-fail-in-classical-turning-point]`** — opened 2026-11-02, when
+  `[00-reflection-restart-tree-fails-probe-histories]` was split (§4; source `drain-probe_2026-11-02.md` §5).
+  On `reflection-restart` at `2d50b95`, at the stored normalization, 2197 and 2188 at their stored
+  α = 10⁻³ fail after about 115 s in `classical_turning_point` (ln E = −306.7: a residual not monotone,
+  alternating −inf and repeated values, which looks like float cancellation in V − V_floor), though both
+  completed on `0209aac`. Logs: `source/probe/drain/results/2197-base-stored-alpha.log`,
+  `2188-base-stored-alpha.log`. **Impact:** not investigated; histories of the low-α transition window
+  may fail on the fixed tree where they succeeded before, and `reflection-restart` 03's F3 changes the
+  trajectory after every restart, so it may be that prompt's regression. Under the one-loop law both
+  histories complete on the same tree. **Next:** `reflection-restart` 04.
+  **Assigned (2026-11-02):** to `reflection-restart` 04, by the user's ruling 6 (README §6.3), to find
+  whether its 03 caused this; that campaign's board §3.1 carries it.
+- **`[00-a-zero-drain-history-stops-at-the-inside-wall-guard]`** — opened 2026-11-02, when
+  `[00-reflection-restart-tree-fails-probe-histories]` was split (§4; source `drain-probe_2026-11-02.md` §5).
+  3873 (10⁻¹² M_P, β 1.11), run on `2d50b95` at its stored normalization with nothing drained, stops at
+  N = 43.76 at the check "reflection requested inside the wall" (W/(π²/2) = 1.485); at its stored
+  α = 0.03 it passes. Log: `source/probe/drain/results/3873-A1.log`. The check dates from `fc97233`
+  (2026-10-01, the integrator audit), not from `reflection-restart` 03, as the source record and the first
+  form of this entry said. **Impact:** under the one-loop law every large-M history drains nothing, so all
+  of them take the path on which 3873 stops; how many stop is not known. **Next:** 01 (README §8.4).
 - **`[00-the-parking-leftover-has-no-spectrum]`** — the energy drained at the parking switch (up to
   0.10 of ρ_χ at 4×10⁻³¹, β 1.06–1.107; ≤ 0.03 elsewhere) has no peak estimate, so no margin and no
   wall-exposure measure covers it; it is reported only as `unassessed_share`. **Impact:** not measured.
   **Next:** out of this campaign's scope; recorded for a later one.
+  **2026-11-02, at the re-plan:** under the one-loop law the parking leftover was 0.008–0.23% of K in the
+  four laboratory-M probe runs, and at 10⁻¹² M_P it is all of ρ_χ (3016: r_χ 1.0×10⁻⁶ today). 02 measures
+  its share across the sample (README §8.3); the spectrum stays out of scope.
 
 ### 3.1 Assigned to this campaign
 
@@ -128,7 +155,12 @@ None.
 
 ## 4. Resolved issues
 
-None.
+- **`[00-reflection-restart-tree-fails-probe-histories]`** — opened 2026-11-02 from the drain probe;
+  **closed the same day by splitting** at the user's ruling 6 (README §6.3) into
+  `[00-fixed-alpha-laboratory-M-histories-fail-in-classical-turning-point]`, assigned to
+  `reflection-restart` 04, and `[00-a-zero-drain-history-stops-at-the-inside-wall-guard]`, for this
+  campaign's 01 (§3). Its text said the inside-wall check was added by `reflection-restart` 03; it dates
+  from `fc97233`.
 
 ## 5. Baselines
 
@@ -136,3 +168,7 @@ The suites as `CLAUDE.md` records them (2026-11-01, after `inelastic-reflection`
 ComputeTargets 497 (122 + 375), ObjectFactories 129, tools 123, RunDrivers 68. `c95650a` added one to
 ObjectFactories, and `reflection-restart` will add more before 01 starts, so 01 measures the counts again
 on its own tree before it changes anything.
+
+**2026-11-02, at the re-plan:** on `reflection-restart` after its 03 (`b81eab8`), CosmologyModels 26,
+ComputeTargets 514 (122 + 392), ObjectFactories 130, tools 147, RunDrivers 68. `reflection-restart` 04
+may add more, so 01 still measures them on its own tree first.
