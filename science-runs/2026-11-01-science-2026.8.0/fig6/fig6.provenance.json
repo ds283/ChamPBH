@@ -1,11 +1,11 @@
 {
   "script": "fig6.py",
-  "script_sha256": "efc202f14acefe77d6e20d191d95d60ff30483ab63bb3aa5d09e086151d9632c",
-  "git_head": "998fc75e110105b38ff8bc9458328765460fa02c",
+  "script_sha256": "6d45fe45a1c08d71a4d4ffc509d441d453f1b2e6c1be9c508874d15ac03ea041",
+  "git_head": "bfc04d52bc3fc1da3a6a22ff1f88559a88ebd054",
   "git_dirty": false,
   "input": {
     "path": "inputs/histories.csv",
-    "sha256": "f7862e39a4577e1f676ee58cdccbaa42d1f9a47b05f9da08b3a82e3a3fd04139"
+    "sha256": "4eac33576244402b11ef7c7b891b26087ef86c32899eedd15f2e8d8cfa9ad957"
   },
   "store": {
     "name": "science-2026.8.0",
@@ -40,6 +40,7 @@
     0.9
   ],
   "histories_with_yields": 1914,
+  "histories_without_parking": 0,
   "alpha_count_by_beta": {
     "1": 7,
     "1.06": 13,
