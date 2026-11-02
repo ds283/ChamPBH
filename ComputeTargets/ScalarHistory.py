@@ -232,6 +232,58 @@ StepControl = namedtuple(
     ],
 )
 
+# the probe switch of reflection-restart prompt 01 (README §5; prompt §1.2; orchestrator note 01). It
+# exists for that prompt's measurement of four fixes of the uncapped outward step after a restart
+# only, is not an option of any driver, and is removed by prompt 03, which keeps the fix the user
+# rules (U6). integrate_scalar_history reads both attributes at call time, as it reads
+# PARKING_EPSILON, so that a probe sets them in its own process; any other value is a ValueError.
+# None is today's code, bitwise. The values:
+#   "F1":    the kinematic cap made symmetric: h <= f phi/pi also where pi > 0, at every step
+#   "F2":    the stiffness cap: h <= _PROBE_STIFFNESS_C/omega, omega = sqrt(|J[1,0]|) of the
+#            Jacobian the solver holds, at every step. SciPy's Radau computes J when it is built and
+#            again only after a step whose Newton iteration converged slowly or not at all, so J may
+#            be that of an earlier step of the same instance, never of another instance
+#   "F3":    at each restart with pi > 0 (after a reflection, a drain, a release; README §6.2 P7),
+#            the new Radau's first_step = min(global_max_step, max(h_floor, f phi/pi)) of the
+#            restarted state. The history's start (pi* = 0) is untouched
+#   "F4":    after an accepted step that began with pi > 0, before it is used for anything, the flag
+#            of prompt 01 §1.1 (_probe_outward_step_flagged). A flagged step is discarded: Radau is
+#            rebuilt from the step's start (N, state) and the retaken step capped at half the
+#            discarded h, until a step passes; a cap below h_floor is a failure of the history. The
+#            discarded step leaves no trace but the count IntegrationResult.probe_retakes; the RHS
+#            evaluations it made stay counted in nfev and the supervisor (orchestrator note 01,
+#            ruling 3)
+#   "F3+F4": both
+_PROBE_OUTWARD_FIX: Optional[str] = None
+_PROBE_STIFFNESS_C: float = 1.0
+_PROBE_OUTWARD_FIX_VALUES = (None, "F1", "F2", "F3", "F4", "F3+F4")
+
+# the flag of reflection-restart prompt 01 §1.1 (README §6.2 P1), which F4 applies: a step's
+# interpolant is read at this many equally spaced points, its two ends included
+_PROBE_FLAG_SAMPLES = 50
+
+
+def _probe_outward_step_flagged(
+    interpolant,
+    N_low: float,
+    N_high: float,
+    phi_start: float,
+    pi_start: float,
+    pi_end: float,
+    cap_fraction: float,
+) -> bool:
+    """
+    The flag of reflection-restart prompt 01 §1.1 (README §6.2 P1), for the probe's F4: a step that
+    began with pi_start > 0 is flagged if pi_end/pi_start < 1/2 while pi > 0 at every sample of its
+    interpolant, or if the interpolant's least phi is below (1 - f) phi_start.
+    tools/outward_step_scan.py (classify_step) holds the same definition.
+    """
+    y = interpolant(np.linspace(N_low, N_high, _PROBE_FLAG_SAMPLES))
+    sign_change = bool(np.any(y[1] <= 0.0))
+    ratio = (pi_end / pi_start) < 0.5 and not sign_change
+    return bool(ratio or np.min(y[0]) < (1.0 - cap_fraction) * phi_start)
+
+
 # one reflection performed by integrate_scalar_history: the e-fold number, the field value and the
 # (negative) inward velocity at which it was performed. Elastic at alpha = 0; at alpha > 0 it drains
 # (inelastic-reflection prompt 02)
@@ -467,6 +519,9 @@ _ParkedPhaseEnd = namedtuple("_ParkedPhaseEnd", ["N", "state", "released"])
 #   release:                     the Release record of the release of the parked field (inelastic-
 #                                reflection prompt 07), or None if the history was not released. Its
 #                                segments from Release.N on are Radau's again
+#   probe_retakes:               the steps discarded and retaken by the probe's F4 (reflection-restart
+#                                prompt 01; orchestrator note 01, ruling 3); 0 under every other value
+#                                of _PROBE_OUTWARD_FIX. Removed with the switch by prompt 03
 IntegrationResult = namedtuple(
     "IntegrationResult",
     [
@@ -484,7 +539,9 @@ IntegrationResult = namedtuple(
         "warnings",
         "parking",
         "release",
+        "probe_retakes",
     ],
+    defaults=[0],
 )
 
 # using named tuples ensures that we never get the fields in the wrong order
@@ -1571,6 +1628,9 @@ def integrate_scalar_history(
     calls the tracker (P24). The guard still runs at every reflection. The Release record is
     IntegrationResult.release.
 
+    The probe switch (reflection-restart prompt 01): _PROBE_OUTWARD_FIX, read at call time, selects
+    one of the fixes measured there (see its comment); None, the default, is the code above, bitwise.
+
     :param RHS: callable RHS(N, state, supervisor), normally an ODERHS
     :param supervisor: the ScalarFieldIntegrationSupervisor (already entered)
     :param initial_state: the state at N_start
@@ -1587,6 +1647,21 @@ def integrate_scalar_history(
                   receives the drains, and must be the ledger the RHS reads
     :return: IntegrationResult
     """
+    # the probe switch (reflection-restart prompt 01), read here, at call time
+    probe_fix: Optional[str] = _PROBE_OUTWARD_FIX
+    if probe_fix not in _PROBE_OUTWARD_FIX_VALUES:
+        raise ValueError(
+            f"integrate_scalar_history: _PROBE_OUTWARD_FIX must be one of "
+            f"{_PROBE_OUTWARD_FIX_VALUES}, not {probe_fix!r}"
+        )
+    probe_F1: bool = probe_fix == "F1"
+    probe_F2: bool = probe_fix == "F2"
+    probe_F3: bool = probe_fix in ("F3", "F3+F4")
+    probe_F4: bool = probe_fix in ("F4", "F3+F4")
+    probe_c: float = _PROBE_STIFFNESS_C
+    probe_retakes: int = 0
+    probe_retake_cap: Optional[float] = None
+
     if not (0.0 <= alpha < 1.0):
         raise ValueError(
             f"integrate_scalar_history: alpha must satisfy 0 <= alpha < 1, not {alpha!r}"
@@ -1632,7 +1707,7 @@ def integrate_scalar_history(
     N_bound: float = N_failsafe if N_stop is None else min(N_stop, N_failsafe)
     stop_at_bound: bool = N_stop is not None and N_stop <= N_failsafe
 
-    def new_solver(N, y):
+    def new_solver(N, y, first_step=None):
         return Radau(
             fun,
             N,
@@ -1641,7 +1716,16 @@ def integrate_scalar_history(
             max_step=global_max_step,
             rtol=params.rtol,
             atol=params.atol,
+            first_step=first_step,
         )
+
+    def restart_first_step(y) -> Optional[float]:
+        """The probe's F3 (reflection-restart prompt 01): the first step of a Radau restarted at y
+        with pi > 0; None (SciPy's own choice) where pi <= 0 and under every other value.
+        """
+        if not probe_F3 or not y[1] > 0.0:
+            return None
+        return min(global_max_step, max(h_floor, f_cap * y[0] / y[1]))
 
     solver = new_solver(float(N_start), np.array(initial_state, dtype=float))
 
@@ -2462,7 +2546,8 @@ def integrate_scalar_history(
         infall_assessment = None
         running_max = None
         boundary_N = float(end_.N)
-        return new_solver(float(end_.N), np.array(end_.state, dtype=float))
+        y_released = np.array(end_.state, dtype=float)
+        return new_solver(float(end_.N), y_released, restart_first_step(y_released))
 
     try:
         while True:
@@ -2548,7 +2633,7 @@ def integrate_scalar_history(
                         N_final, final_state = parked.N, parked.state
                         break
 
-                solver = new_solver(N, y_reflected)
+                solver = new_solver(N, y_reflected, restart_first_step(y_reflected))
                 continue
 
             # the kinematic cap (README §2 (a)): the inward displacement in a step is at most
@@ -2556,15 +2641,29 @@ def integrate_scalar_history(
             cap: float = global_max_step
             if pi_ < 0.0:
                 cap = min(cap, f_cap * phi / (-pi_))
+            elif probe_F1 and pi_ > 0.0:
+                # the probe's F1 (reflection-restart prompt 01): the cap on outward motion too
+                cap = min(cap, f_cap * phi / pi_)
             a_in: float = -solver.f[1]
             if a_in > 0.0:
                 cap = min(cap, sqrt(2.0 * f_cap * phi / a_in))
+            if probe_F2:
+                # the probe's F2: the cap on the local stiffness, from the Jacobian Radau holds
+                probe_omega: float = sqrt(abs(solver.J[1, 0]))
+                if probe_omega > 0.0:
+                    cap = min(cap, probe_c / probe_omega)
+            if probe_retake_cap is not None:
+                # the probe's F4: a retaken step is capped at half the discarded one
+                cap = min(cap, probe_retake_cap)
             cap = max(cap, h_floor)
 
             solver.max_step = cap
             if solver.h_abs > cap:
                 solver.h_abs = cap
             supervisor.notify_step_cap(cap)
+
+            # the probe's F4 keeps the step's start state, to retake a discarded step from it
+            y_step_start: Optional[np.ndarray] = solver.y.copy() if probe_F4 else None
 
             try:
                 message = solver.step()
@@ -2584,6 +2683,33 @@ def integrate_scalar_history(
                 raise ComputationFailureError(
                     f'integrate_scalar_history{label}: Radau step failed at N={solver.t:.10g}, phi_E={solver.y[0]:.5g}, pi_E={solver.y[1]:.5g}: "{message}"'
                 )
+
+            # the probe's F4 (reflection-restart prompt 01; orchestrator note 01, ruling 3): an
+            # accepted step that began outward and carries the flag is discarded before it is used for
+            # anything, and retaken from its start with its cap halved
+            if probe_F4 and y_step_start[1] > 0.0:
+                if _probe_outward_step_flagged(
+                    solver.dense_output(),
+                    solver.t_old,
+                    solver.t,
+                    y_step_start[0],
+                    y_step_start[1],
+                    solver.y[1],
+                    f_cap,
+                ):
+                    h_discarded: float = solver.t - solver.t_old
+                    probe_retakes += 1
+                    probe_retake_cap = 0.5 * h_discarded
+                    if probe_retake_cap < h_floor:
+                        raise ComputationFailureError(
+                            f"integrate_scalar_history{label}: the probe's F4 (reflection-restart "
+                            f"prompt 01): an outward step from N={N:.10g} is still flagged at "
+                            f"h={h_discarded:.5g}, and half of it is below h_floor={h_floor:.3g}"
+                        )
+                    y_retake: np.ndarray = y_step_start
+                    solver = new_solver(N, y_retake)
+                    continue
+                probe_retake_cap = None
 
             accepted_steps += 1
 
@@ -2697,7 +2823,9 @@ def integrate_scalar_history(
                                 N_final, final_state = parked.N, parked.state
                                 break
                     if y_drained is not None:
-                        solver = new_solver(solver.t, y_drained)
+                        solver = new_solver(
+                            solver.t, y_drained, restart_first_step(y_drained)
+                        )
                 armed = None
                 armed_assessment = None
     except ComputationFailureError as e:
@@ -2733,6 +2861,7 @@ def integrate_scalar_history(
             if release is None
             else release._replace(steps_after=accepted_steps - accepted_at_release)
         ),
+        probe_retakes=probe_retakes,
     )
 
 

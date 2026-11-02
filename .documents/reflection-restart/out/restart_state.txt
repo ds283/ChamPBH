@@ -1,0 +1,55 @@
+# beta=1.5 M=1e-12 alpha=0.05: log_m_eff_squared: m_eff^2 <= 0 (m_eff^2 = -1 e^-225.0798555) at phi_E = -3.7927
+# the flagged step: instance 30 (reflection), N0=35.91429105196516, h=0.0006366735601730511, h*omega=1244.56, pi_end/pi_start=6.5794e-05
+RESTART_N = float.fromhex('0x1.1f5077d3b9b9fp+5')
+RESTART_STATE = tuple(float.fromhex(x) for x in (
+    '0x1.0aef551c04d40p-42',
+    '0x1.3f0da5ec8aaa8p-9',
+    '-0x1.ddd3e415f9ab8p+7',
+    '-0x1.c38af5a2f4350p+1',
+    '-0x1.de0a48f74dca2p+5',
+))
+NORMALIZATION = float.fromhex('-0x1.14a17800d5024p+8')
+PHI_REF = float.fromhex('0x1.46217bbc6b0dfp-20')
+K_INITIAL = float.fromhex('0x0.0p+0')
+LEDGER = tuple((float.fromhex(n), float.fromhex(k)) for n, k in (
+    ('0x1.2a4dc2d7d10a8p+4', '0x1.8bdfbd5d5c584p-147'),
+    ('0x1.3a56df29ba380p+4', '0x1.3c2d92021356bp-147'),
+    ('0x1.52ef04d3e2582p+4', '0x1.d4443ed06322ap-150'),
+    ('0x1.680431c31d694p+4', '0x1.3ae98863404c1p-153'),
+    ('0x1.a053a8faba3c9p+4', '0x1.5451ae3c62f40p-152'),
+    ('0x1.a96a63ef38951p+4', '0x1.48cca43b6dfdcp-152'),
+    ('0x1.af732b4894e9cp+4', '0x1.166dc249745edp-152'),
+    ('0x1.b47577de92353p+4', '0x1.ac9a9ec3c0f69p-153'),
+    ('0x1.b948ccd84fe14p+4', '0x1.1bfc6282117bdp-153'),
+    ('0x1.bf16aa5260595p+4', '0x1.f374e774f85a8p-155'),
+    ('0x1.09202e45d3407p+5', '0x1.c722d0801b0b2p-161'),
+    ('0x1.0e9644b344ef5p+5', '0x1.b04e69c8f2791p-161'),
+    ('0x1.11bcf1ddd7a4bp+5', '0x1.9aab0f353f0bcp-161'),
+    ('0x1.13f1d916d19f9p+5', '0x1.861fd6e165ef0p-161'),
+    ('0x1.15a264970fa1bp+5', '0x1.729ccc51be4d2p-161'),
+    ('0x1.16ff48386a756p+5', '0x1.601415c70e90ap-161'),
+    ('0x1.18227be2852dbp+5', '0x1.4e78eaf338303p-161'),
+    ('0x1.191b7ea49215fp+5', '0x1.3dbf4a72d6f54p-161'),
+    ('0x1.19f44ecbfa0edp+5', '0x1.2ddbdbe3f5eafp-161'),
+    ('0x1.1ab3bede2a80fp+5', '0x1.1ec3df85dc9ffp-161'),
+    ('0x1.1b5eac6ef3a6fp+5', '0x1.106d231eef9b0p-161'),
+    ('0x1.1bf8af19c15c1p+5', '0x1.02cdf9338925bp-161'),
+    ('0x1.1c84812ec9642p+5', '0x1.ebba62ef0704cp-162'),
+    ('0x1.1d0441768aa5cp+5', '0x1.d3242422e581ep-162'),
+    ('0x1.1d799e358423bp+5', '0x1.bbc8a2bd30f5cp-162'),
+    ('0x1.1de5f245f7ecep+5', '0x1.a598205697b30p-162'),
+    ('0x1.1e4a595ab9f69p+5', '0x1.9083a88a2e4c0p-162'),
+    ('0x1.1ea7be74e15fep+5', '0x1.7c7d06a96add7p-162'),
+    ('0x1.1efee66f1d81ap+5', '0x1.6976bc229f4b0p-162'),
+    ('0x1.1f5077d3b9b9fp+5', '0x1.5763f742e9d8dp-162'),
+))
+BAD_STEP_H = float.fromhex('0x1.4dcce0f410000p-11')
+# the state the reflection was made from, at RESTART_N; the ledger before the reflection's
+# drain is LEDGER[:-1]
+PRE_REFLECTION_STATE = tuple(float.fromhex(x) for x in (
+    '0x1.0aef551c04d40p-42',
+    '-0x1.47577fb413242p-9',
+    '-0x1.ddd3e415f9ab8p+7',
+    '-0x1.c38af5a2f4350p+1',
+    '-0x1.de0a48f74dca2p+5',
+))

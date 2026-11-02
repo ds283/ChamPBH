@@ -1,6 +1,6 @@
 # reflection-restart campaign — implementation state
 
-**Last updated:** 2026-11-02 · **Status: LIVE — 0 of 4 landed.** Planned 2026-11-02 at the user's
+**Last updated:** 2026-11-02 · **Status: LIVE — 1 of 4 landed (01).** Planned 2026-11-02 at the user's
 request; U1–U5 ruled by the user the same day, U6 (the fix) to be ruled after 01 and 02, P1–P10 standing
 (README §6). The plan is [`README.md`](README.md), on branch `reflection-restart`, cut from `main` at
 `cc7fe75`.
@@ -25,7 +25,7 @@ Under U3 as ruled, every stored success with a bad step is regenerated, whatever
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | [Measure the fixes](01-measure-the-fixes.md) | the scanner; F1–F4 measured; why Radau accepts the bad step | Opus | ✍️ | ⬜ | | |
+| 01 | [Measure the fixes](01-measure-the-fixes.md) | the scanner; F1–F4 measured; why Radau accepts the bad step | Opus | ✍️ | ✅ | this commit | [log](logs/01-measure-the-fixes.md) |
 | 02 | Audit the 2026.8.0 store | A, A2, B, C re-integrated at their stored normalization; bitwise reproduction; bad steps per history | Sonnet | ⬜ | ⬜ | | |
 | — | the user's ruling U6 | the fix, from 01 and 02 | — | | | | |
 | 03 | The fix | the ruled fix; tests; a reflecting golden history; labels; documents | Opus | ⬜ | ⬜ | | |
@@ -40,21 +40,51 @@ Orchestrator notes, one prompt at a time, in `orchestrator/`.
 
 ### 1.1 Items
 
-None yet.
+| Item | What | Prompt | State |
+|---|---|---|---|
+| 01-a | the scanner `tools/outward_step_scan.py` (every outward Radau step, P1's flag, the store comparison, the batch) and its 22 tests in `tools/tests/test_outward_step_scan.py` | 01 | ✅ |
+| 01-b | the probe switch `_PROBE_OUTWARD_FIX` (None, F1, F2, F3, F4, F3+F4) and `_PROBE_STIFFNESS_C` in `ComputeTargets/ScalarHistory.py`, `IntegrationResult.probe_retakes`; 10 tests in `ComputeTargets/tests/test_probe_outward_fix.py`; removed by 03 | 01 | ✅ |
+| 01-c | the measurement (`.documents/reflection-restart/measure/`, `out/`) and `.documents/reflection-restart-verification.md` §1 | 01 | ✅ |
 
 ## 2. The gates
 
 | Gate | Holds when | Prompt | State |
 |---|---|---|---|
-| Signature | the scanner reproduces the diagnosis's three bad steps and its 845-step count on the nine histories | 01 | ⬜ |
-| Measure | each of F1–F4 measured: the three failures, signature steps over all outward steps, golden digits, cost at each M; why Radau accepts the bad step | 01 | ⬜ |
+| Signature | the scanner reproduces the diagnosis's three bad steps and its 845-step count on the nine histories | 01 | ✅ 2026-11-02: 835 = 835 (the diagnosis's sum; 845 was its slip, orchestrator note 01 ruling 1), every printed line identical, no accounting difference (verification §1.2) |
+| Measure | each of F1–F4 measured: the three failures, signature steps over all outward steps, golden digits, cost at each M; why Radau accepts the bad step | 01 | ✅ 2026-11-02 (verification §1.4–§1.6), with the proviso of `[01-p1-flag-fires-on-legitimate-steps]` (§3) |
 | Audit | every scanned history reproduces its stored samples bitwise (or the exceptions listed); bad steps counted per history over A, A2, B, C | 02 | ⬜ |
 | Fix | the three failures succeed; no signature step in the nine; golden histories as the ruling predicts; a reflecting golden pinned | 03 | ⬜ |
 | Verdict | the 42 recomputed; the sample's observables against the store; what is rebuilt, per block and figure | 04 | ⬜ |
 
 ## 3. Active and unresolved issues
 
-None opened by this campaign.
+One opened by prompt 01 (2026-11-02).
+
+### `[01-p1-flag-fires-on-legitimate-steps]`
+
+**Opened:** 2026-11-02 by prompt 01, from its measurement (log 01 §5; verification §1.1, §1.4).
+
+- **What.** P1's flag (README §6.2), which the scanner applies and the probe's F4 acts on, fires on steps that
+  are not the bad step, in every history measured, reflecting or not:
+  - **the ratio condition** (π_end/π_start < ½, π > 0 throughout) on the last outward step before an apex,
+    where the field decelerates legitimately (−π′ > 0): about one per outward flight, with π ratios running
+    continuously up to 0.4999, against the least unflagged 0.5001. Under the production code (None) these are
+    every ratio-only flag of the batch; none is a first step of a restarted instance;
+  - **the phi condition** (the interpolant below (1 − f) φ_start) on a step that turns at an apex and falls back
+    by the f φ the acceleration cap allows (φ_min/φ_start = 0.89983 at β = 2.9, α = 0.08, in five stored
+    successes at M = 4×10⁻³¹, 10⁻¹⁵, 10⁻¹², 10⁻³³ and 10⁻³⁰).
+  The three bad steps of the diagnosis are the only flagged steps that are the first step of a restarted Radau
+  instance and carry the phi condition (with −π′ < 0 and h·ω ≈ 1060–1240).
+- **Impact.** (a) P1's count of "signature steps" does not measure the defect: under None the batch's histories
+  hold thousands of ratio-only flags. (b) F4 acts outside restarts: it retakes the legitimate steps, so it moves
+  the golden histories (α = 0, no reflection) and every history it touches, which a restart-only fix would not.
+  (c) 02's audit, which counts the signature per history, would list every reflecting success as affected
+  unless it counts a narrower signature.
+- **Next step.** For the user, before 02 is written: rule the signature 02 counts (for example P1's phi
+  condition on the first step of a restarted instance, which isolates the three bad steps in all 01 measured,
+  or that with a bound on h·ω), and, if F4 is still wanted, the flag it acts on. The scanner records each row's
+  conditions, start reason, first-step flag, −π′ and h·ω, so a narrower signature needs no new run of 01's
+  histories. Not fixed here (orchestrator note 01, ruling 4: the flag is not tuned).
 
 ### 3.1 Assigned to this campaign
 
@@ -72,3 +102,8 @@ The suites as `CLAUDE.md` records them (2026-11-01, after `inelastic-reflection`
 `745c8ee` touched `ComputeTargets/tests/test_model_interface.py` and `c95650a`
 `ObjectFactories/tests/test_alpha_figures.py`, so prompt 01 measures the counts again before it changes
 anything.
+
+**Measured by prompt 01, 2026-11-02, before it changed anything** (at `3b8a553`): CosmologyModels 26,
+ComputeTargets 498 (122 + 376), ObjectFactories 130, tools 123, RunDrivers 68, all passing (log 01 §4.1).
+**After prompt 01** (11:39–11:55): CosmologyModels 26, ComputeTargets 508 (122 + 386), ObjectFactories 130, tools 145,
+RunDrivers 68, all passing; ComputeTargets gains 10 (`test_probe_outward_fix.py`), tools 22 (`test_outward_step_scan.py`).

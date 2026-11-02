@@ -1,6 +1,6 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-11-02 · **26 open**: 4 on the `review-remediation` board (closed
+**Last updated:** 2026-11-02 · **27 open**: 4 on the `review-remediation` board (closed
 2026-09-30), none now assigned; 2 on the `production-readiness` board
 (closed 2026-09-30); 2 on the `run-integrity` board (closed 2026-09-30; one stale entry closed 2026-10-22, its fix having landed in `5740690`; `jordan-normalization` prompt 07 closed one, 2026-10-26); 6 on the
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`
@@ -47,8 +47,8 @@ opened two, 2026-11-01, §1.19; prompt 12 opened and closed none, and the campai
 prompts landed, with these four open and none assigned; one of them closed as measured, 2026-11-01, with
 `science-readiness`'s last, both from one measurement, `.documents/bbn-ratio-spline-2026-11-01/`; one opened after the close,
 2026-11-02, §1.19, from the diagnosis of the 2026.8.0 run's m_eff² failures, `.documents/post-reflection-step-2026-11-02/`,
-and assigned the same day to `reflection-restart`, §1.21); none on the `reflection-restart` board (planned
-2026-11-02, with none opened and that one assigned).
+and assigned the same day to `reflection-restart`, §1.21); 1 on the `reflection-restart` board (planned
+2026-11-02, with none opened and that one assigned; prompt 01 opened one, 2026-11-02, §1.22).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -350,3 +350,12 @@ rules and give a verdict on the run. One issue assigned at planning, from the `i
   reflection the kinematic cap can fall back to 0.1 outward, and Radau accepts a wrong step whose interpolant
   crosses φ = 0; the run's 42 m_eff² failures at M = 10⁻¹⁵–10⁻¹²; silent cases not excluded; fixes measured, store
   audited, fix ruled after. *(`inelastic-reflection`; after the close, 2026-11-02; assigned 2026-11-02)*
+
+### 1.22 `reflection-restart` — [board §3](../prompts/reflection-restart/IMPLEMENTATION_STATE.md)
+
+Planned 2026-11-02. One opened by prompt 01, 2026-11-02, from its measurement.
+
+- `[01-p1-flag-fires-on-legitimate-steps]` — P1's signature flag fires on legitimate steps in every history
+  (the ratio condition before each apex, the phi condition on an apex step that falls back by f φ), so its
+  count does not measure the defect, F4 moves the golden histories, and 02 needs a narrower signature ruled
+  by the user. *(`reflection-restart`; prompt 01)*

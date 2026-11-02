@@ -1,0 +1,1008 @@
+tasks: 414; by status and outcome: {('done', 'failure'): 3, ('done', 'success'): 411}
+timeouts: 0; errors: 0
+
+=== item 1: the three failures (tuned)
+--- None
+    outcomes {'failure': 3}; flagged first 3, later 421 (of all flags made, phi condition 3); discarded by F4 0
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    beta=1.5 M=1e-12 alpha=0.05                failure      5.5   1.00     None      -    1    27    1     0   1.24e+03                              -
+    beta=1.09 M=1e-15 alpha=0.03               failure     15.5   1.00     None      -    1   142    1     0   1.45e+03                              -
+    beta=1.14 M=1e-15 alpha=0.01               failure     25.7   1.00     None      -    1   252    1     0   1.95e+03                              -
+--- F1
+    outcomes {'success': 3}; flagged first 0, later 368 (of all flags made, phi condition 0); discarded by F4 0
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    beta=1.5 M=1e-12 alpha=0.05                success     12.6   2.30    13168      -    0    27    0     0      0.305                              -
+    beta=1.09 M=1e-15 alpha=0.03               success     31.2   2.01    53543      -    0   117    0     0       1.11                              -
+    beta=1.14 M=1e-15 alpha=0.01               success     55.6   2.16    97311      -    0   224    0     0       1.23                              -
+--- F2
+    outcomes {'success': 3}; flagged first 0, later 388 (of all flags made, phi condition 0); discarded by F4 0
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    beta=1.5 M=1e-12 alpha=0.05                success      5.5   1.00     7093      -    0    26    0     0          1                              -
+    beta=1.09 M=1e-15 alpha=0.03               success     15.7   1.01    27614      -    0   128    0     0          1                              -
+    beta=1.14 M=1e-15 alpha=0.01               success     27.6   1.07    50061      -    0   234    0     0          1                              -
+--- F2(c=0.3)
+    outcomes {'success': 3}; flagged first 0, later 437 (of all flags made, phi condition 0); discarded by F4 0
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    beta=1.5 M=1e-12 alpha=0.05                success      6.9   1.27     9805      -    0    29    0     0        0.3                              -
+    beta=1.09 M=1e-15 alpha=0.03               success     17.8   1.14    31033      -    0   143    0     0        0.3                              -
+    beta=1.14 M=1e-15 alpha=0.01               success     31.3   1.22    58714      -    0   265    0     0        0.3                              -
+--- F2(c=3)
+    outcomes {'success': 3}; flagged first 0, later 437 (of all flags made, phi condition 0); discarded by F4 0
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    beta=1.5 M=1e-12 alpha=0.05                success      5.2   0.94     7099      -    0    28    0     0          3                              -
+    beta=1.09 M=1e-15 alpha=0.03               success     14.9   0.96    27582      -    0   147    0     0          3                              -
+    beta=1.14 M=1e-15 alpha=0.01               success     25.6   1.00    49850      -    0   262    0     0          3                              -
+--- F3
+    outcomes {'success': 3}; flagged first 0, later 445 (of all flags made, phi condition 0); discarded by F4 0
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    beta=1.5 M=1e-12 alpha=0.05                success      5.6   1.03     7183      -    0    29    0     0   1.03e+04                              -
+    beta=1.09 M=1e-15 alpha=0.03               success     15.7   1.01    27665      -    0   146    0     0    2.1e+03                              -
+    beta=1.14 M=1e-15 alpha=0.01               success     28.8   1.12    49765      -    0   270    0     0   1.88e+03                              -
+--- F4
+    outcomes {'success': 3}; flagged first 0, later 0 (of all flags made, phi condition 5); discarded by F4 724
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    beta=1.5 M=1e-12 alpha=0.05                success      5.3   0.96     7123      -    0     0    1    59   1.56e+03                              -
+    beta=1.09 M=1e-15 alpha=0.03               success     15.1   0.97    27528      -    0     0    1   256   1.73e+03                              -
+    beta=1.14 M=1e-15 alpha=0.01               success     25.3   0.99    48564      -    0     0    3   409   1.92e+03                              -
+--- F3+F4
+    outcomes {'success': 3}; flagged first 0, later 0 (of all flags made, phi condition 0); discarded by F4 652
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    beta=1.5 M=1e-12 alpha=0.05                success      5.3   0.97     7236      -    0     0    0    74        115                              -
+    beta=1.09 M=1e-15 alpha=0.03               success     14.9   0.96    27780      -    0     0    0   220   1.74e+03                              -
+    beta=1.14 M=1e-15 alpha=0.01               success     25.3   0.98    49755      -    0     0    0   358   1.88e+03                              -
+
+=== item 2: the six clean histories (tuned)
+--- None
+    outcomes {'success': 6}; flagged first 0, later 330 (of all flags made, phi condition 0); discarded by F4 0
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    beta=1.5 M=1e-12 alpha=0.02                success      5.8   1.00     5921   1.00    0    25    0     0        248                samples bitwise
+    beta=1.5 M=1e-12 alpha=0.15                success      6.6   1.00     6915   1.00    0    24    0     0   0.000506                samples bitwise
+    beta=1.09 M=1e-12 alpha=0.08               success      8.8   1.00    12369   1.00    0    58    0     0   6.78e+03                samples bitwise
+    beta=1.5 M=4e-31 alpha=0.08                success      6.1   1.00     7893   1.00    0    28    0     0          0                samples bitwise
+    beta=1.2 M=4e-31 alpha=0.08                success      7.3   1.00    10993   1.00    0    46    0     0          0                samples bitwise
+    beta=1.2 M=1e-15 alpha=0.03                success     17.3   1.00    31035   1.00    0   149    0     0   2.72e+03                samples bitwise
+--- F1
+    outcomes {'success': 6}; flagged first 0, later 285 (of all flags made, phi condition 0); discarded by F4 0
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    beta=1.5 M=1e-12 alpha=0.02                success      9.7   1.67    10987   1.86    0    16    0     0      0.465      0.0026 (unassessed_share)
+    beta=1.5 M=1e-12 alpha=0.15                success     11.7   1.76    12985   1.88    0    26    0     0          0 1.4e-05 (density_NP_ratio_1MeV)
+    beta=1.09 M=1e-12 alpha=0.08               success     14.4   1.63    23282   1.88    0    50    0     0       1.24       0.022 (unassessed_share)
+    beta=1.5 M=4e-31 alpha=0.08                success      9.2   1.51    14928   1.89    0    27    0     0          0     2.2e-05 (unassessed_share)
+    beta=1.2 M=4e-31 alpha=0.08                success     13.6   1.87    21177   1.93    0    41    0     0          0 3.4e-05 (density_NP_ratio_70keV)
+    beta=1.2 M=1e-15 alpha=0.03                success     33.2   1.91    60500   1.95    0   125    0     0        2.5            0.0057 (injections)
+--- F2
+    outcomes {'success': 6}; flagged first 0, later 320 (of all flags made, phi condition 0); discarded by F4 0
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    beta=1.5 M=1e-12 alpha=0.02                success      5.2   0.89     5923   1.00    0    25    0     0          1       7e-06 (unassessed_share)
+    beta=1.5 M=1e-12 alpha=0.15                success      6.1   0.92     6915   1.00    0    24    0     0   0.000506                samples bitwise
+    beta=1.09 M=1e-12 alpha=0.08               success      8.2   0.92    12459   1.01    0    54    0     0          1       0.022 (unassessed_share)
+    beta=1.5 M=4e-31 alpha=0.08                success      6.7   1.09     7893   1.00    0    28    0     0          0                samples bitwise
+    beta=1.2 M=4e-31 alpha=0.08                success      8.3   1.15    10993   1.00    0    46    0     0          0                samples bitwise
+    beta=1.2 M=1e-15 alpha=0.03                success     17.4   1.01    31273   1.01    0   143    0     0          1            0.0057 (injections)
+--- F2(c=0.3)
+    outcomes {'success': 6}; flagged first 0, later 340 (of all flags made, phi condition 0); discarded by F4 0
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    beta=1.5 M=1e-12 alpha=0.02                success     11.1   1.92    18727   3.16    0    24    0     0        0.3       7e-06 (unassessed_share)
+    beta=1.5 M=1e-12 alpha=0.15                success      6.2   0.93     6915   1.00    0    24    0     0   0.000506                samples bitwise
+    beta=1.09 M=1e-12 alpha=0.08               success      8.4   0.95    14284   1.15    0    60    0     0        0.3       0.022 (unassessed_share)
+    beta=1.5 M=4e-31 alpha=0.08                success      5.6   0.92     7893   1.00    0    28    0     0          0                samples bitwise
+    beta=1.2 M=4e-31 alpha=0.08                success      7.8   1.07    10993   1.00    0    46    0     0          0                samples bitwise
+    beta=1.2 M=1e-15 alpha=0.03                success     18.8   1.08    36101   1.16    0   158    0     0        0.3            0.0057 (injections)
+--- F2(c=3)
+    outcomes {'success': 6}; flagged first 0, later 336 (of all flags made, phi condition 0); discarded by F4 0
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    beta=1.5 M=1e-12 alpha=0.02                success      5.2   0.89     5926   1.00    0    25    0     0          3       7e-06 (unassessed_share)
+    beta=1.5 M=1e-12 alpha=0.15                success      5.8   0.87     6915   1.00    0    24    0     0   0.000506                samples bitwise
+    beta=1.09 M=1e-12 alpha=0.08               success      7.5   0.85    12384   1.00    0    56    0     0          3       0.022 (unassessed_share)
+    beta=1.5 M=4e-31 alpha=0.08                success      6.7   1.09     7893   1.00    0    28    0     0          0                samples bitwise
+    beta=1.2 M=4e-31 alpha=0.08                success      7.9   1.08    10993   1.00    0    46    0     0          0                samples bitwise
+    beta=1.2 M=1e-15 alpha=0.03                success     17.5   1.01    31229   1.01    0   157    0     0          3            0.0057 (injections)
+--- F3
+    outcomes {'success': 6}; flagged first 0, later 349 (of all flags made, phi condition 0); discarded by F4 0
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    beta=1.5 M=1e-12 alpha=0.02                success      5.3   0.92     6047   1.02    0    26    0     0        413      0.0011 (unassessed_share)
+    beta=1.5 M=1e-12 alpha=0.15                success      6.4   0.96     7065   1.02    0    30    0     0          0 6.7e-05 (density_NP_ratio_1MeV)
+    beta=1.09 M=1e-12 alpha=0.08               success      8.5   0.96    12423   1.00    0    49    0     0    2.9e+03       0.025 (unassessed_share)
+    beta=1.5 M=4e-31 alpha=0.08                success      6.8   1.11     8080   1.02    0    34    0     0          0     1.1e-05 (unassessed_share)
+    beta=1.2 M=4e-31 alpha=0.08                success      7.8   1.07    11257   1.02    0    46    0     0          0 2.8e-05 (density_NP_ratio_70keV)
+    beta=1.2 M=1e-15 alpha=0.03                success     19.1   1.10    31448   1.01    0   164    0     0    1.5e+03       0.013 (unassessed_share)
+--- F4
+    outcomes {'success': 6}; flagged first 0, later 0 (of all flags made, phi condition 0); discarded by F4 628
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    beta=1.5 M=1e-12 alpha=0.02                success      5.0   0.86     5971   1.01    0     0    0    57        449     0.00051 (unassessed_share)
+    beta=1.5 M=1e-12 alpha=0.15                success      5.8   0.88     6938   1.00    0     0    0    44   0.000478 8.1e-05 (density_NP_ratio_1MeV)
+    beta=1.09 M=1e-12 alpha=0.08               success      7.8   0.88    12439   1.01    0     0    0   107   5.84e+03       0.037 (unassessed_share)
+    beta=1.5 M=4e-31 alpha=0.08                success      5.9   0.97     7949   1.01    0     0    0    69          0     1.6e-05 (unassessed_share)
+    beta=1.2 M=4e-31 alpha=0.08                success      7.1   0.97    11049   1.01    0     0    0    98          0 5.8e-06 (density_NP_ratio_70keV)
+    beta=1.2 M=1e-15 alpha=0.03                success     17.0   0.98    31001   1.00    0     0    0   253   1.74e+03            0.0057 (injections)
+--- F3+F4
+    outcomes {'success': 6}; flagged first 0, later 0 (of all flags made, phi condition 0); discarded by F4 646
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    beta=1.5 M=1e-12 alpha=0.02                success      5.2   0.90     6110   1.03    0     0    0    74        416      0.0011 (unassessed_share)
+    beta=1.5 M=1e-12 alpha=0.15                success      6.0   0.90     7103   1.03    0     0    0    57          0 3.7e-05 (density_NP_ratio_1MeV)
+    beta=1.09 M=1e-12 alpha=0.08               success      7.8   0.88    12492   1.01    0     0    0    95   7.05e+03     0.00017 (unassessed_share)
+    beta=1.5 M=4e-31 alpha=0.08                success      5.8   0.95     8131   1.03    0     0    0    78          0     4.1e-07 (unassessed_share)
+    beta=1.2 M=4e-31 alpha=0.08                success      7.1   0.98    11315   1.03    0     0    0    93          0 3.6e-05 (density_NP_ratio_70keV)
+    beta=1.2 M=1e-15 alpha=0.03                success     16.7   0.96    31580   1.02    0     0    0   249   1.58e+03       0.013 (unassessed_share)
+
+=== item 3: the golden histories
+--- None
+    outcomes {'success': 3}; flagged first 0, later 1524 (of all flags made, phi condition 0); discarded by F4 0
+    golden beta=1.5: success, golden bitwise True; keys moved []; largest excerpt changes 
+    golden beta=5.5: success, golden bitwise True; keys moved []; largest excerpt changes 
+    golden tuned: success, golden bitwise True; keys moved []; largest excerpt changes 
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    golden beta=1.5                            success      1.7   1.00     1233   1.00    0     3    0     0       2.18                samples bitwise
+    golden beta=5.5                            success     12.9   1.00    26331   1.00    0   198    0     0       5.96                samples bitwise
+    golden tuned                               success     31.8   1.00    15331   1.00    0  1323    0     0       45.3                samples bitwise
+--- F1
+    outcomes {'success': 3}; flagged first 0, later 1375 (of all flags made, phi condition 0); discarded by F4 0
+    golden beta=1.5: success, golden bitwise False; keys moved ['RHS_evaluations', 'accepted_steps', 'compute_steps', 'samples_sha256']; largest excerpt changes friction_term 0.0021, pi_Einstein 0.0021, raw_N 0.0021, reflecting_term 0.00042
+    golden beta=5.5: success, golden bitwise False; keys moved ['RHS_evaluations', 'accepted_steps', 'compute_steps', 'fixed_T_values', 'samples_sha256']; largest excerpt changes reflecting_term 0.11, friction_term 0.0033, pi_Einstein 0.0033, phi_Einstein 0.0022
+    golden tuned: success, golden bitwise False; keys moved ['RHS_evaluations', 'accepted_steps', 'compute_steps', 'first_bounce', 'fixed_T_values', 'samples_sha256']; largest excerpt changes friction_term 0.033, pi_Einstein 0.033, reflecting_term 0.011, phi_Einstein 0.00039
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    golden beta=1.5                            success      2.1   1.23     1460   1.18    0     3    0     0      0.556                 0 (injections)
+    golden beta=5.5                            success     16.1   1.25    31085   1.18    0   129    0     0       1.14 0.0031 (density_NP_ratio_1MeV)
+    golden tuned                               success     34.5   1.09    16229   1.06    0  1243    0     0       2.74    0.0001 (phi_Einstein_70keV)
+--- F2
+    outcomes {'success': 3}; flagged first 0, later 1492 (of all flags made, phi condition 0); discarded by F4 0
+    golden beta=1.5: success, golden bitwise False; keys moved ['RHS_evaluations', 'accepted_steps', 'compute_steps', 'fixed_T_values', 'samples_sha256']; largest excerpt changes friction_term 5.9e-06, pi_Einstein 5.9e-06, raw_N 5.9e-06, reflecting_term 2.1e-06
+    golden beta=5.5: success, golden bitwise False; keys moved ['RHS_evaluations', 'accepted_steps', 'compute_steps', 'fixed_T_values', 'samples_sha256']; largest excerpt changes reflecting_term 0.1, friction_term 0.0037, pi_Einstein 0.0037, phi_Einstein 0.002
+    golden tuned: success, golden bitwise False; keys moved ['RHS_evaluations', 'accepted_steps', 'compute_steps', 'first_bounce', 'fixed_T_values', 'samples_sha256']; largest excerpt changes friction_term 0.031, pi_Einstein 0.031, reflecting_term 0.011, phi_Einstein 0.00036
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    golden beta=1.5                            success      1.8   1.06     1239   1.00    0     3    0     0          1                 0 (injections)
+    golden beta=5.5                            success     13.0   1.01    26407   1.00    0   202    0     0          1 0.0028 (density_NP_ratio_1MeV)
+    golden tuned                               success     31.0   0.98    15353   1.00    0  1287    0     0          1   9.6e-05 (phi_Einstein_70keV)
+--- F3
+    outcomes {'success': 3}; flagged first 0, later 1524 (of all flags made, phi condition 0); discarded by F4 0
+    golden beta=1.5: success, golden bitwise True; keys moved []; largest excerpt changes 
+    golden beta=5.5: success, golden bitwise True; keys moved []; largest excerpt changes 
+    golden tuned: success, golden bitwise True; keys moved []; largest excerpt changes 
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    golden beta=1.5                            success      2.1   1.20     1233   1.00    0     3    0     0       2.18                samples bitwise
+    golden beta=5.5                            success     13.1   1.02    26331   1.00    0   198    0     0       5.96                samples bitwise
+    golden tuned                               success     30.8   0.97    15331   1.00    0  1323    0     0       45.3                samples bitwise
+--- F4
+    outcomes {'success': 3}; flagged first 0, later 0 (of all flags made, phi condition 0); discarded by F4 2620
+    golden beta=1.5: success, golden bitwise False; keys moved ['RHS_evaluations', 'accepted_steps', 'compute_steps', 'fixed_T_values', 'samples_sha256']; largest excerpt changes friction_term 0.0025, pi_Einstein 0.0025, raw_N 0.0025, reflecting_term 0.0005
+    golden beta=5.5: success, golden bitwise False; keys moved ['RHS_evaluations', 'accepted_steps', 'compute_steps', 'fixed_T_values', 'samples_sha256']; largest excerpt changes reflecting_term 0.013, friction_term 0.00047, pi_Einstein 0.00047, phi_Einstein 0.00025
+    golden tuned: success, golden bitwise False; keys moved ['RHS_evaluations', 'accepted_steps', 'compute_steps', 'first_bounce', 'fixed_T_values', 'samples_sha256']; largest excerpt changes friction_term 0.031, pi_Einstein 0.031, reflecting_term 0.01, phi_Einstein 0.00036
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    golden beta=1.5                            success      1.8   1.05     1231   1.00    0     0    0     7       4.34                 0 (injections)
+    golden beta=5.5                            success     13.1   1.02    26533   1.01    0     0    0   346       7.09 0.00035 (density_NP_ratio_1MeV)
+    golden tuned                               success     32.4   1.02    15574   1.02    0     0    0  2267       47.5   9.2e-05 (phi_Einstein_70keV)
+--- F3+F4
+    outcomes {'success': 3}; flagged first 0, later 0 (of all flags made, phi condition 0); discarded by F4 2620
+    golden beta=1.5: success, golden bitwise False; keys moved ['RHS_evaluations', 'accepted_steps', 'compute_steps', 'fixed_T_values', 'samples_sha256']; largest excerpt changes friction_term 0.0025, pi_Einstein 0.0025, raw_N 0.0025, reflecting_term 0.0005
+    golden beta=5.5: success, golden bitwise False; keys moved ['RHS_evaluations', 'accepted_steps', 'compute_steps', 'fixed_T_values', 'samples_sha256']; largest excerpt changes reflecting_term 0.013, friction_term 0.00047, pi_Einstein 0.00047, phi_Einstein 0.00025
+    golden tuned: success, golden bitwise False; keys moved ['RHS_evaluations', 'accepted_steps', 'compute_steps', 'first_bounce', 'fixed_T_values', 'samples_sha256']; largest excerpt changes friction_term 0.031, pi_Einstein 0.031, reflecting_term 0.01, phi_Einstein 0.00036
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    golden beta=1.5                            success      1.8   1.03     1231   1.00    0     0    0     7       4.34                 0 (injections)
+    golden beta=5.5                            success     12.8   1.00    26533   1.01    0     0    0   346       7.09 0.00035 (density_NP_ratio_1MeV)
+    golden tuned                               success     33.7   1.06    15574   1.02    0     0    0  2267       47.5   9.2e-05 (phi_Einstein_70keV)
+
+=== item 4: the reflection store's 42 (stored normalization)
+--- None
+    outcomes {'success': 42}; flagged first 0, later 11978 (of all flags made, phi condition 3); discarded by F4 0
+    bitwise against the store: 42 of 42 compared
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    beta=2 M=1e-15 alpha=0.15 #0000/21         success      6.7   1.00     8028   1.00    0    33    0     0          0                samples bitwise
+    beta=2 M=4e-31 alpha=0.15 #0000/22         success      6.8   1.00     8028   1.00    0    33    0     0          0                samples bitwise
+    beta=2 M=1e-12 alpha=0.15 #0000/23         success      6.9   1.00     8028   1.00    0    33    0     0          0                samples bitwise
+    beta=2 M=1e-15 alpha=0.08 #0000/24         success      8.6   1.00    10988   1.00    0    40    0     0          0                samples bitwise
+    beta=2 M=1e-12 alpha=0.08 #0000/25         success      8.8   1.00    10988   1.00    0    40    0     0   0.000513                samples bitwise
+    beta=2 M=4e-31 alpha=0.08 #0000/26         success      8.7   1.00    10988   1.00    0    40    0     0          0                samples bitwise
+    beta=2 M=1e-12 alpha=0.01 #0000/27         success     12.7   1.00    16389   1.00    0    61    0     0    0.00238                samples bitwise
+    beta=2 M=4e-31 alpha=0.001 #0000/30        success      6.3   1.00     6672   1.00    0    30    0     0          0                samples bitwise
+    beta=2 M=1e-15 alpha=0.001 #0000/31        success      6.6   1.00     6672   1.00    0    30    0     0          0                samples bitwise
+    beta=2 M=1e-15 alpha=0.01 #0000/28         success     12.8   1.00    16389   1.00    0    61    0     0          0                samples bitwise
+    beta=2 M=0.5 alpha=0 #0000/73              success      3.2   1.00     4311   1.00    0    23    0     0       1.84                samples bitwise
+    beta=2 M=1e-12 alpha=0.001 #0000/32        success      6.0   1.00     6670   1.00    0    30    0     0          0                samples bitwise
+    beta=2 M=4e-31 alpha=0.01 #0000/29         success     12.9   1.00    16389   1.00    0    61    0     0          0                samples bitwise
+    beta=2 M=0.001 alpha=0 #0000/74            success      9.6   1.00    23292   1.00    0   564    0     0        484                samples bitwise
+    beta=2.9 M=4e-31 alpha=0.15 #0001/41       success      8.1   1.00     9296   1.00    0    41    0     0          0                samples bitwise
+    beta=2.9 M=1e-12 alpha=0.15 #0001/42       success      8.1   1.00     9296   1.00    0    41    0     0          0                samples bitwise
+    beta=2.9 M=1e-15 alpha=0.15 #0001/43       success      8.1   1.00     9296   1.00    0    41    0     0          0                samples bitwise
+    beta=2.9 M=4e-31 alpha=0.08 #0001/44       success      8.6   1.00    10151   1.00    0    43    1     0          0                samples bitwise
+    beta=2.9 M=1e-15 alpha=0.08 #0001/45       success      8.7   1.00    10151   1.00    0    43    1     0          0                samples bitwise
+    beta=2.9 M=1e-12 alpha=0.08 #0001/46       success      8.9   1.00    10151   1.00    0    43    1     0          0                samples bitwise
+    beta=2.9 M=4e-31 alpha=0.01 #0001/47       success      9.3   1.00    11281   1.00    0    51    0     0          0                samples bitwise
+    beta=2.9 M=1e-15 alpha=0.01 #0001/48       success      9.4   1.00    11281   1.00    0    51    0     0          0                samples bitwise
+    beta=2.9 M=1e-12 alpha=0.01 #0001/49       success      9.6   1.00    11281   1.00    0    51    0     0     0.0372                samples bitwise
+    beta=2.9 M=4e-31 alpha=0.001 #0001/50      success      9.3   1.00    11458   1.00    0    47    0     0          0                samples bitwise
+    beta=2.9 M=1e-15 alpha=0.001 #0001/51      success      9.3   1.00    11458   1.00    0    47    0     0          0                samples bitwise
+    beta=2.9 M=0.5 alpha=0 #0001/94            success      4.2   1.00     5994   1.00    0    35    0     0       2.81                samples bitwise
+    beta=1.2 M=4e-31 alpha=0.15 #0015/1        success      4.3   1.00     3876   1.00    0    15    0     0          0                samples bitwise
+    beta=1.2 M=1e-15 alpha=0.15 #0015/2        success      4.3   1.00     3878   1.00    0    16    0     0          0                samples bitwise
+    beta=1.2 M=1e-12 alpha=0.15 #0015/3        success      4.3   1.00     3878   1.00    0    16    0     0          0                samples bitwise
+    beta=2.9 M=1e-12 alpha=0.001 #0001/52      success      9.5   1.00    11458   1.00    0    47    0     0    0.00682                samples bitwise
+    beta=1.2 M=1e-12 alpha=0.01 #0015/7        success      2.7   1.00     1788   1.00    0     4    0     0          0                samples bitwise
+    beta=2.9 M=0.001 alpha=0 #0001/93          success     11.6   1.00    28727   1.00    0   715    0     0        249                samples bitwise
+    beta=1.2 M=4e-31 alpha=0.01 #0015/8        success      2.6   1.00     1791   1.00    0     3    0     0          0                samples bitwise
+    beta=1.2 M=1e-12 alpha=0.08 #0015/4        success      7.1   1.00    10517   1.00    0    45    0     0   1.23e+04                samples bitwise
+    beta=1.2 M=4e-31 alpha=0.08 #0015/5        success      7.3   1.00    10993   1.00    0    46    0     0          0                samples bitwise
+    beta=1.2 M=1e-15 alpha=0.01 #0015/9        success      2.9   1.00     1787   1.00    0     4    0     0          0                samples bitwise
+    beta=1.2 M=1e-15 alpha=0.08 #0015/6        success      7.6   1.00    11044   1.00    0    49    0     0        290                samples bitwise
+    beta=1.2 M=0.5 alpha=0 #0015/54            success      2.7   1.00     2451   1.00    0    13    0     0       1.12                samples bitwise
+    beta=1.2 M=0.001 alpha=0 #0015/53          success      9.0   1.00    21298   1.00    0   328    0     0        6.4                samples bitwise
+    beta=1.2 M=1e-12 alpha=0.001 #0015/12      success    236.0   1.00   428329   1.00    0  3175    0     0   6.25e+03                samples bitwise
+    beta=1.2 M=4e-31 alpha=0.001 #0015/10      success    270.0   1.00   515943   1.00    0  2551    0     0     0.0271                samples bitwise
+    beta=1.2 M=1e-15 alpha=0.001 #0015/11      success    316.9   1.00   589112   1.00    0  3338    0     0   2.39e+03                samples bitwise
+--- F1
+    outcomes {'success': 42}; flagged first 0, later 10827 (of all flags made, phi condition 0); discarded by F4 0
+    bitwise against the store: 0 of 42 compared
+    largest relative change against the store, ScalarHistory columns:
+      Delta_N_eff_1MeV             6.04e-08  (beta=1.2 M=1e-12 alpha=0.15 #0015/3)
+      Delta_N_eff_today            0.00388  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      RHS_evaluations              0.498  (beta=1.2 M=4e-31 alpha=0.001 #0015/10)
+      birth_failing_share          0.00388  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      compute_steps                0.498  (beta=1.2 M=4e-31 alpha=0.001 #0015/10)
+      density_NP_ratio_1MeV        6.53e-05  (beta=2.9 M=0.001 alpha=0 #0001/93)
+      density_NP_ratio_70keV       0.00124  (beta=2 M=1e-12 alpha=0.001 #0000/32)
+      injected_fraction            0.00258  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      injections                   0.0714  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      parking_N                    0.00188  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      parking_log_T_Jordan         0.00352  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      phi_Einstein_1MeV            0.000533  (beta=2.9 M=1e-12 alpha=0.08 #0001/46)
+      phi_Einstein_70keV           0.00289  (beta=2.9 M=1e-15 alpha=0.001 #0001/51)
+      reflection_failing_share     0.00388  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      rho_chi_ratio_1MeV           6.04e-08  (beta=1.2 M=1e-12 alpha=0.15 #0015/3)
+      rho_chi_ratio_70keV          7.42e-07  (beta=2 M=1e-12 alpha=0.001 #0000/32)
+      rho_chi_ratio_today          0.00388  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      unassessed_share             0.237  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      unresolved_candidates        0.0714  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      worst_birth_margin           9.09e-07  (beta=2 M=4e-31 alpha=0.001 #0000/30)
+      worst_birth_margin_N         9.1e-07  (beta=2 M=1e-12 alpha=0.001 #0000/32)
+      worst_reflection_margin      5.4e-06  (beta=1.2 M=1e-12 alpha=0.15 #0015/3)
+      worst_reflection_margin_N    6.53e-07  (beta=2 M=1e-12 alpha=0.001 #0000/32)
+      worst_tracker_margin         0.00267  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      worst_tracker_margin_N       0.00177  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+    largest relative change against the store, sample columns:
+      H_Einstein_Mp                1.82e-06  (beta=2 M=1e-12 alpha=0.001 #0000/32)
+      H_Jordan_Mp                  0.0313  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      Sigma                        0.0313  (beta=2 M=1e-12 alpha=0.001 #0000/32)
+      dgstar_rho_dlogT             0.0802  (beta=2.9 M=1e-15 alpha=0.001 #0001/51)
+      dgstar_s_dlogT               0.0652  (beta=1.2 M=1e-15 alpha=0.08 #0015/6)
+      friction_term_Mp             2  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      gstar_rho                    1.45e-06  (beta=2 M=1e-12 alpha=0.001 #0000/32)
+      gstar_s                      1.39e-06  (beta=2 M=1e-12 alpha=0.001 #0000/32)
+      kicking_term_Mp              7.51e-05  (beta=2 M=1e-12 alpha=0.001 #0000/32)
+      log_T_Jordan_GeV             0.000732  (beta=1.2 M=0.001 alpha=0 #0015/53)
+      log_fm                       0.00305  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      log_one_plus_z_Jordan        4.47e-06  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      log_rhorad_Einstein_Mp4      4.22e-08  (beta=2 M=1e-12 alpha=0.001 #0000/32)
+      log_rhorad_Jordan_Mp4        6.66e-07  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      phi_Einstein_Mp              1  (beta=2 M=1e-12 alpha=0.001 #0000/32)
+      pi_Einstein_Mp               2  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      raw_N                        0.0017  (beta=2.9 M=0.001 alpha=0 #0001/93)
+      reflecting_term_Mp           1  (beta=2 M=1e-12 alpha=0.001 #0000/32)
+      rho_chi_over_rho_rad         0.00466  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    beta=2 M=1e-15 alpha=0.15 #0000/21         success     12.0   1.77    15259   1.90    0    31    0     0          0 4.5e-07 (density_NP_ratio_1MeV)
+    beta=2 M=4e-31 alpha=0.15 #0000/22         success     11.8   1.73    15258   1.90    0    33    0     0          0    1.2e-07 (phi_Einstein_1MeV)
+    beta=2 M=1e-12 alpha=0.15 #0000/23         success     11.8   1.71    15257   1.90    0    33    0     0          0 4.9e-07 (density_NP_ratio_1MeV)
+    beta=2 M=1e-15 alpha=0.08 #0000/24         success     15.5   1.79    21192   1.93    0    38    0     0          0    2.1e-06 (phi_Einstein_1MeV)
+    beta=2 M=1e-12 alpha=0.08 #0000/25         success     15.4   1.75    21196   1.93    0    39    0     0   0.000545    1.5e-05 (phi_Einstein_1MeV)
+    beta=2 M=4e-31 alpha=0.08 #0000/26         success     15.6   1.79    21194   1.93    0    38    0     0          0    8.2e-06 (phi_Einstein_1MeV)
+    beta=2 M=1e-12 alpha=0.01 #0000/27         success     22.5   1.77    32059   1.96    0    68    0     0    0.00213    6.7e-05 (phi_Einstein_1MeV)
+    beta=2 M=4e-31 alpha=0.001 #0000/30        success      9.9   1.58    12481   1.87    0    27    0     0          0      0.0067 (unassessed_share)
+    beta=2 M=1e-15 alpha=0.001 #0000/31        success      9.6   1.47    12481   1.87    0    27    0     0          0      0.0067 (unassessed_share)
+    beta=2 M=1e-15 alpha=0.01 #0000/28         success     22.7   1.77    32067   1.96    0    64    0     0          0    0.00017 (phi_Einstein_1MeV)
+    beta=2 M=0.5 alpha=0 #0000/73              success      3.1   0.98     4368   1.01    0    23    0     0       1.27   2.4e-06 (phi_Einstein_70keV)
+    beta=2 M=1e-12 alpha=0.001 #0000/32        success      9.7   1.61    12477   1.87    0    26    0     0          0       0.011 (unassessed_share)
+    beta=2 M=4e-31 alpha=0.01 #0000/29         success     22.2   1.71    32065   1.96    0    66    0     0          0    6.7e-05 (phi_Einstein_1MeV)
+    beta=2 M=0.001 alpha=0 #0000/74            success     10.0   1.03    24600   1.06    0   557    0     0       1.75 0.00015 (density_NP_ratio_70keV)
+    beta=2.9 M=4e-31 alpha=0.15 #0001/41       success     13.6   1.68    17811   1.92    0    33    0     0          0   1.8e-07 (phi_Einstein_70keV)
+    beta=2.9 M=1e-12 alpha=0.15 #0001/42       success     13.2   1.64    17813   1.92    0    31    0     0          0     1.1e-07 (unassessed_share)
+    beta=2.9 M=1e-15 alpha=0.15 #0001/43       success     13.4   1.65    17813   1.92    0    33    0     0          0       1e-07 (unassessed_share)
+    beta=2.9 M=4e-31 alpha=0.08 #0001/44       success     14.5   1.69    19506   1.92    0    39    0     0          0    1.5e-05 (phi_Einstein_1MeV)
+    beta=2.9 M=1e-15 alpha=0.08 #0001/45       success     14.3   1.65    19506   1.92    0    38    0     0          0    1.5e-05 (phi_Einstein_1MeV)
+    beta=2.9 M=1e-12 alpha=0.08 #0001/46       success     14.1   1.58    19506   1.92    0    39    0     0          0    0.00053 (phi_Einstein_1MeV)
+    beta=2.9 M=4e-31 alpha=0.01 #0001/47       success     15.4   1.66    21728   1.93    0    38    0     0          0 1.8e-05 (density_NP_ratio_70keV)
+    beta=2.9 M=1e-15 alpha=0.01 #0001/48       success     15.1   1.60    21732   1.93    0    38    0     0          0 4.8e-06 (density_NP_ratio_70keV)
+    beta=2.9 M=1e-12 alpha=0.01 #0001/49       success     15.2   1.59    21730   1.93    0    38    0     0     0.0378 1.8e-05 (density_NP_ratio_70keV)
+    beta=2.9 M=4e-31 alpha=0.001 #0001/50      success     15.8   1.69    22061   1.93    0    43    0     0          0    0.0028 (phi_Einstein_70keV)
+    beta=2.9 M=1e-15 alpha=0.001 #0001/51      success     15.6   1.69    22064   1.93    0    43    0     0          0    0.0029 (phi_Einstein_70keV)
+    beta=2.9 M=0.5 alpha=0 #0001/94            success      4.2   0.99     6093   1.02    0    34    0     0       1.88   5.1e-06 (phi_Einstein_70keV)
+    beta=1.2 M=4e-31 alpha=0.15 #0015/1        success      6.0   1.40     6896   1.78    0     9    0     0          0     0.00073 (unassessed_share)
+    beta=1.2 M=1e-15 alpha=0.15 #0015/2        success      5.9   1.39     6898   1.78    0     9    0     0          0      0.0011 (unassessed_share)
+    beta=1.2 M=1e-12 alpha=0.15 #0015/3        success      6.0   1.39     6899   1.78    0    10    0     0    0.00262      0.0011 (unassessed_share)
+    beta=2.9 M=1e-12 alpha=0.001 #0001/52      success     15.6   1.65    22063   1.93    0    43    0     0          0    0.0028 (phi_Einstein_70keV)
+    beta=1.2 M=1e-12 alpha=0.01 #0015/7        success      3.3   1.20     2627   1.47    0     4    0     0          0     3.1e-06 (unassessed_share)
+    beta=2.9 M=0.001 alpha=0 #0001/93          success     12.5   1.08    30675   1.07    0   723    0     0       3.75 0.00027 (density_NP_ratio_70keV)
+    beta=1.2 M=4e-31 alpha=0.01 #0015/8        success      3.3   1.24     2629   1.47    0     4    0     0          0     0.00013 (unassessed_share)
+    beta=1.2 M=1e-12 alpha=0.08 #0015/4        success     12.5   1.77    21171   2.01    0    42    0     0       1.38             0.071 (injections)
+    beta=1.2 M=4e-31 alpha=0.08 #0015/5        success     12.8   1.77    21177   1.93    0    41    0     0          0 3.4e-05 (density_NP_ratio_70keV)
+    beta=1.2 M=1e-15 alpha=0.01 #0015/9        success      3.4   1.14     2627   1.47    0     3    0     0          0     7.3e-05 (unassessed_share)
+    beta=1.2 M=1e-15 alpha=0.08 #0015/6        success     12.8   1.68    21176   1.92    0    42    0     0      0.838 6e-05 (density_NP_ratio_70keV)
+    beta=1.2 M=0.5 alpha=0 #0015/54            success      3.4   1.26     2486   1.01    0    13    0     0      0.951   2.3e-07 (phi_Einstein_70keV)
+    beta=1.2 M=0.001 alpha=0 #0015/53          success     10.8   1.21    21871   1.03    0   342    0     0      0.967 5.7e-06 (density_NP_ratio_70keV)
+    beta=1.2 M=1e-12 alpha=0.001 #0015/12      success    346.4   1.47   687337   1.60    0  2732    0     0       5.79        0.24 (unassessed_share)
+    beta=1.2 M=4e-31 alpha=0.001 #0015/10      success    478.1   1.77  1031574   2.00    0  2559    0     0     0.0278       2e-05 (unassessed_share)
+    beta=1.2 M=1e-15 alpha=0.001 #0015/11      success    509.3   1.61  1026944   1.74    0  2734    0     0       11.5             0.011 (injections)
+--- F2
+    outcomes {'success': 42}; flagged first 0, later 12051 (of all flags made, phi condition 3); discarded by F4 0
+    bitwise against the store: 32 of 42 compared
+    largest relative change against the store, ScalarHistory columns:
+      Delta_N_eff_today            0.00462  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      RHS_evaluations              0.0643  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      birth_failing_share          0.00462  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      compute_steps                0.0643  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      density_NP_ratio_1MeV        9.27e-05  (beta=2.9 M=0.001 alpha=0 #0001/93)
+      density_NP_ratio_70keV       0.000375  (beta=2.9 M=0.001 alpha=0 #0001/93)
+      injected_fraction            0.00307  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      injections                   0.0714  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      parking_N                    0.00188  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      parking_log_T_Jordan         0.00352  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      phi_Einstein_1MeV            2.47e-05  (beta=2 M=0.001 alpha=0 #0000/74)
+      phi_Einstein_70keV           0.000196  (beta=2.9 M=0.001 alpha=0 #0001/93)
+      reflection_failing_share     0.00462  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      rho_chi_ratio_today          0.00462  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      unassessed_share             1  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      unresolved_candidates        0.0714  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      worst_tracker_margin         0.00267  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      worst_tracker_margin_N       0.00177  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+    largest relative change against the store, sample columns:
+      H_Einstein_Mp                9.23e-07  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      H_Jordan_Mp                  0.0313  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      Sigma                        0.00399  (beta=2.9 M=0.001 alpha=0 #0001/93)
+      dgstar_rho_dlogT             0.0268  (beta=2 M=0.001 alpha=0 #0000/74)
+      dgstar_s_dlogT               0.0408  (beta=2.9 M=0.001 alpha=0 #0001/93)
+      friction_term_Mp             2  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      gstar_rho                    7.43e-07  (beta=2.9 M=0.001 alpha=0 #0001/93)
+      gstar_s                      6.32e-07  (beta=2.9 M=0.001 alpha=0 #0001/93)
+      kicking_term_Mp              4.14e-05  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      log_T_Jordan_GeV             9.55e-05  (beta=2.9 M=0.5 alpha=0 #0001/94)
+      log_fm                       0.00307  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      log_one_plus_z_Jordan        4.47e-06  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      log_rhorad_Einstein_Mp4      2.02e-08  (beta=2.9 M=0.5 alpha=0 #0001/94)
+      log_rhorad_Jordan_Mp4        6.66e-07  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      phi_Einstein_Mp              1  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      pi_Einstein_Mp               2  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      raw_N                        0.00111  (beta=2.9 M=0.001 alpha=0 #0001/93)
+      reflecting_term_Mp           1  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      rho_chi_over_rho_rad         0.00471  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    beta=2 M=1e-15 alpha=0.15 #0000/21         success      6.7   1.00     8028   1.00    0    33    0     0          0                samples bitwise
+    beta=2 M=4e-31 alpha=0.15 #0000/22         success      7.3   1.07     8028   1.00    0    33    0     0          0                samples bitwise
+    beta=2 M=1e-12 alpha=0.15 #0000/23         success      6.9   1.00     8028   1.00    0    33    0     0          0                samples bitwise
+    beta=2 M=1e-15 alpha=0.08 #0000/24         success      8.8   1.02    10988   1.00    0    40    0     0          0                samples bitwise
+    beta=2 M=1e-12 alpha=0.08 #0000/25         success      8.8   1.00    10988   1.00    0    40    0     0   0.000513                samples bitwise
+    beta=2 M=4e-31 alpha=0.08 #0000/26         success      8.7   1.00    10988   1.00    0    40    0     0          0                samples bitwise
+    beta=2 M=1e-12 alpha=0.01 #0000/27         success     12.1   0.95    16389   1.00    0    61    0     0    0.00238                samples bitwise
+    beta=2 M=4e-31 alpha=0.001 #0000/30        success      5.9   0.94     6672   1.00    0    30    0     0          0                samples bitwise
+    beta=2 M=1e-15 alpha=0.001 #0000/31        success      5.8   0.88     6672   1.00    0    30    0     0          0                samples bitwise
+    beta=2 M=1e-15 alpha=0.01 #0000/28         success     12.0   0.94    16389   1.00    0    61    0     0          0                samples bitwise
+    beta=2 M=0.5 alpha=0 #0000/73              success      3.2   0.99     4311   1.00    0    22    0     0          1     4e-06 (phi_Einstein_70keV)
+    beta=2 M=1e-12 alpha=0.001 #0000/32        success      5.9   0.99     6670   1.00    0    30    0     0          0                samples bitwise
+    beta=2 M=4e-31 alpha=0.01 #0000/29         success     12.3   0.95    16389   1.00    0    61    0     0          0                samples bitwise
+    beta=2 M=0.001 alpha=0 #0000/74            success      9.8   1.01    23300   1.00    0   593    0     0          1 7.1e-05 (density_NP_ratio_70keV)
+    beta=2.9 M=4e-31 alpha=0.15 #0001/41       success      8.0   0.99     9296   1.00    0    41    0     0          0                samples bitwise
+    beta=2.9 M=1e-12 alpha=0.15 #0001/42       success      8.2   1.02     9296   1.00    0    41    0     0          0                samples bitwise
+    beta=2.9 M=1e-15 alpha=0.15 #0001/43       success      8.2   1.01     9296   1.00    0    41    0     0          0                samples bitwise
+    beta=2.9 M=4e-31 alpha=0.08 #0001/44       success      8.5   1.00    10151   1.00    0    43    1     0          0                samples bitwise
+    beta=2.9 M=1e-15 alpha=0.08 #0001/45       success      8.5   0.98    10151   1.00    0    43    1     0          0                samples bitwise
+    beta=2.9 M=1e-12 alpha=0.08 #0001/46       success      8.4   0.95    10151   1.00    0    43    1     0          0                samples bitwise
+    beta=2.9 M=4e-31 alpha=0.01 #0001/47       success      9.0   0.97    11281   1.00    0    51    0     0          0                samples bitwise
+    beta=2.9 M=1e-15 alpha=0.01 #0001/48       success      8.9   0.95    11281   1.00    0    51    0     0          0                samples bitwise
+    beta=2.9 M=1e-12 alpha=0.01 #0001/49       success      9.0   0.94    11281   1.00    0    51    0     0     0.0372                samples bitwise
+    beta=2.9 M=4e-31 alpha=0.001 #0001/50      success      9.2   0.99    11458   1.00    0    47    0     0          0                samples bitwise
+    beta=2.9 M=1e-15 alpha=0.001 #0001/51      success      9.1   0.98    11458   1.00    0    47    0     0          0                samples bitwise
+    beta=2.9 M=0.5 alpha=0 #0001/94            success      4.0   0.94     6019   1.00    0    35    0     0          1   4.4e-06 (phi_Einstein_70keV)
+    beta=1.2 M=4e-31 alpha=0.15 #0015/1        success      4.1   0.95     3876   1.00    0    15    0     0          0                samples bitwise
+    beta=1.2 M=1e-15 alpha=0.15 #0015/2        success      4.1   0.96     3878   1.00    0    16    0     0          0                samples bitwise
+    beta=1.2 M=1e-12 alpha=0.15 #0015/3        success      4.1   0.95     3878   1.00    0    16    0     0          0                samples bitwise
+    beta=2.9 M=1e-12 alpha=0.001 #0001/52      success      9.1   0.96    11458   1.00    0    47    0     0    0.00682                samples bitwise
+    beta=1.2 M=1e-12 alpha=0.01 #0015/7        success      2.8   1.01     1788   1.00    0     4    0     0          0                samples bitwise
+    beta=2.9 M=0.001 alpha=0 #0001/93          success     11.5   0.99    28696   1.00    0   714    0     0          1 0.00037 (density_NP_ratio_70keV)
+    beta=1.2 M=4e-31 alpha=0.01 #0015/8        success      2.9   1.09     1791   1.00    0     3    0     0          0                samples bitwise
+    beta=1.2 M=1e-12 alpha=0.08 #0015/4        success      7.5   1.06    11254   1.07    0    45    0     0          1             0.071 (injections)
+    beta=1.2 M=4e-31 alpha=0.08 #0015/5        success      7.3   1.01    10993   1.00    0    46    0     0          0                samples bitwise
+    beta=1.2 M=1e-15 alpha=0.01 #0015/9        success      2.6   0.90     1787   1.00    0     4    0     0          0                samples bitwise
+    beta=1.2 M=1e-15 alpha=0.08 #0015/6        success      7.4   0.98    11413   1.03    0    51    0     0          1       3e-06 (unassessed_share)
+    beta=1.2 M=0.5 alpha=0 #0015/54            success      2.3   0.84     2441   1.00    0    15    0     0          1   9.6e-09 (phi_Einstein_70keV)
+    beta=1.2 M=0.001 alpha=0 #0015/53          success      8.3   0.92    21341   1.00    0   338    0     0          1 4.8e-07 (density_NP_ratio_70keV)
+    beta=1.2 M=1e-12 alpha=0.001 #0015/12      success    224.9   0.95   430200   1.00    0  3218    0     0          1       0.051 (unassessed_share)
+    beta=1.2 M=4e-31 alpha=0.001 #0015/10      success    254.2   0.94   515943   1.00    0  2551    0     0     0.0271                samples bitwise
+    beta=1.2 M=1e-15 alpha=0.001 #0015/11      success    307.5   0.97   590507   1.00    0  3327    0     0          1           1 (unassessed_share)
+--- F3
+    outcomes {'success': 42}; flagged first 0, later 12583 (of all flags made, phi condition 0); discarded by F4 0
+    bitwise against the store: 6 of 42 compared
+    largest relative change against the store, ScalarHistory columns:
+      Delta_N_eff_1MeV             3.17e-08  (beta=1.2 M=1e-15 alpha=0.15 #0015/2)
+      Delta_N_eff_today            0.00292  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      RHS_evaluations              0.0917  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      birth_failing_share          0.00292  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      compute_steps                0.0917  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      density_NP_ratio_1MeV        8.67e-05  (beta=2.9 M=1e-12 alpha=0.08 #0001/46)
+      density_NP_ratio_70keV       0.000309  (beta=2.9 M=1e-12 alpha=0.001 #0001/52)
+      injected_fraction            0.00194  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      injections                   0.0877  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      parking_N                    0.00239  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      parking_log_T_Jordan         0.00448  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      phi_Einstein_1MeV            0.00091  (beta=2.9 M=1e-15 alpha=0.08 #0001/45)
+      phi_Einstein_70keV           0.00328  (beta=2.9 M=1e-15 alpha=0.001 #0001/51)
+      reflection_failing_share     0.00292  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      rho_chi_ratio_1MeV           3.17e-08  (beta=1.2 M=1e-15 alpha=0.15 #0015/2)
+      rho_chi_ratio_70keV          2.1e-07  (beta=2.9 M=1e-15 alpha=0.001 #0001/51)
+      rho_chi_ratio_today          0.00292  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      unassessed_share             0.0269  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      unresolved_candidates        0.0877  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      worst_birth_margin           2.81e-07  (beta=2.9 M=4e-31 alpha=0.001 #0001/50)
+      worst_birth_margin_N         1.61e-07  (beta=2.9 M=1e-15 alpha=0.001 #0001/51)
+      worst_reflection_margin      2.86e-06  (beta=1.2 M=1e-15 alpha=0.15 #0015/2)
+      worst_reflection_margin_N    4.45e-07  (beta=1.2 M=4e-31 alpha=0.001 #0015/10)
+      worst_tracker_margin         0.00343  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      worst_tracker_margin_N       0.00227  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+    largest relative change against the store, sample columns:
+      H_Einstein_Mp                1.14e-06  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      H_Jordan_Mp                  0.0313  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      Sigma                        0.00576  (beta=1.2 M=1e-15 alpha=0.01 #0015/9)
+      dgstar_rho_dlogT             0.0915  (beta=2.9 M=4e-31 alpha=0.001 #0001/50)
+      dgstar_s_dlogT               0.031  (beta=1.2 M=4e-31 alpha=0.08 #0015/5)
+      friction_term_Mp             2  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      gstar_rho                    7.57e-07  (beta=2 M=1e-15 alpha=0.08 #0000/24)
+      gstar_s                      7.2e-07  (beta=2 M=1e-15 alpha=0.08 #0000/24)
+      kicking_term_Mp              4.37e-05  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      log_T_Jordan_GeV             0.000298  (beta=2 M=1e-12 alpha=0.08 #0000/25)
+      log_fm                       0.00333  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      log_one_plus_z_Jordan        4.76e-06  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      log_rhorad_Einstein_Mp4      2.28e-08  (beta=2.9 M=1e-15 alpha=0.001 #0001/51)
+      log_rhorad_Jordan_Mp4        7.18e-07  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      phi_Einstein_Mp              1  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      pi_Einstein_Mp               2  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      raw_N                        8.88e-05  (beta=2.9 M=1e-12 alpha=0.001 #0001/52)
+      reflecting_term_Mp           1  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      rho_chi_over_rho_rad         0.00549  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    beta=2 M=1e-15 alpha=0.15 #0000/21         success      7.2   1.06     8218   1.02    0    38    0     0          0 1.9e-06 (density_NP_ratio_1MeV)
+    beta=2 M=4e-31 alpha=0.15 #0000/22         success      6.9   1.00     8218   1.02    0    38    0     0          0 1.9e-06 (density_NP_ratio_1MeV)
+    beta=2 M=1e-12 alpha=0.15 #0000/23         success      6.6   0.96     8218   1.02    0    38    0     0          0 1.9e-06 (density_NP_ratio_1MeV)
+    beta=2 M=1e-15 alpha=0.08 #0000/24         success      8.4   0.98    11244   1.02    0    48    0     0          0    4.2e-05 (phi_Einstein_1MeV)
+    beta=2 M=1e-12 alpha=0.08 #0000/25         success      8.6   0.98    11244   1.02    0    48    0     0     0.0017    4.2e-05 (phi_Einstein_1MeV)
+    beta=2 M=4e-31 alpha=0.08 #0000/26         success      8.8   1.00    11244   1.02    0    48    0     0          0    4.2e-05 (phi_Einstein_1MeV)
+    beta=2 M=1e-12 alpha=0.01 #0000/27         success     12.2   0.96    16773   1.02    0    81    0     0    0.00167 3.1e-05 (density_NP_ratio_70keV)
+    beta=2 M=4e-31 alpha=0.001 #0000/30        success      5.9   0.94     6824   1.02    0    31    0     0          0     0.00042 (unassessed_share)
+    beta=2 M=1e-15 alpha=0.001 #0000/31        success      5.7   0.87     6824   1.02    0    31    0     0          0     0.00042 (unassessed_share)
+    beta=2 M=1e-15 alpha=0.01 #0000/28         success     12.2   0.95    16773   1.02    0    81    0     0          0 3.1e-05 (density_NP_ratio_70keV)
+    beta=2 M=0.5 alpha=0 #0000/73              success      3.1   0.97     4311   1.00    0    23    0     0       1.84                samples bitwise
+    beta=2 M=1e-12 alpha=0.001 #0000/32        success      5.7   0.95     6822   1.02    0    31    0     0          0     0.00043 (unassessed_share)
+    beta=2 M=4e-31 alpha=0.01 #0000/29         success     12.3   0.95    16773   1.02    0    81    0     0          0 3.1e-05 (density_NP_ratio_70keV)
+    beta=2 M=0.001 alpha=0 #0000/74            success      9.3   0.97    23292   1.00    0   564    0     0        484                samples bitwise
+    beta=2.9 M=4e-31 alpha=0.15 #0001/41       success      8.4   1.04     9517   1.02    0    37    0     0          0   5.3e-08 (phi_Einstein_70keV)
+    beta=2.9 M=1e-12 alpha=0.15 #0001/42       success      8.4   1.05     9517   1.02    0    37    0     0          0 1.3e-08 (parking_log_T_Jordan_GeV)
+    beta=2.9 M=1e-15 alpha=0.15 #0001/43       success      8.5   1.05     9517   1.02    0    37    0     0          0 1.3e-08 (parking_log_T_Jordan_GeV)
+    beta=2.9 M=4e-31 alpha=0.08 #0001/44       success      8.8   1.03    10381   1.02    0    44    0     0          0    0.00091 (phi_Einstein_1MeV)
+    beta=2.9 M=1e-15 alpha=0.08 #0001/45       success      8.7   1.00    10381   1.02    0    44    0     0          0    0.00091 (phi_Einstein_1MeV)
+    beta=2.9 M=1e-12 alpha=0.08 #0001/46       success      8.8   0.99    10381   1.02    0    44    0     0          0    0.00091 (phi_Einstein_1MeV)
+    beta=2.9 M=4e-31 alpha=0.01 #0001/47       success      9.9   1.07    11552   1.02    0    34    0     0          0 9.6e-05 (density_NP_ratio_70keV)
+    beta=2.9 M=1e-15 alpha=0.01 #0001/48       success      9.9   1.05    11552   1.02    0    34    0     0          0 9.6e-05 (density_NP_ratio_70keV)
+    beta=2.9 M=1e-12 alpha=0.01 #0001/49       success     10.8   1.13    11552   1.02    0    34    0     0     0.0356 9.6e-05 (density_NP_ratio_70keV)
+    beta=2.9 M=4e-31 alpha=0.001 #0001/50      success     10.3   1.10    11721   1.02    0    41    0     0          0    0.0033 (phi_Einstein_70keV)
+    beta=2.9 M=1e-15 alpha=0.001 #0001/51      success     10.3   1.12    11721   1.02    0    41    0     0          0    0.0033 (phi_Einstein_70keV)
+    beta=2.9 M=0.5 alpha=0 #0001/94            success      5.8   1.38     5994   1.00    0    35    0     0       2.81                samples bitwise
+    beta=1.2 M=4e-31 alpha=0.15 #0015/1        success      5.7   1.33     3947   1.02    0    14    0     0          0     0.00016 (unassessed_share)
+    beta=1.2 M=1e-15 alpha=0.15 #0015/2        success      5.0   1.18     3952   1.02    0    14    0     0          0     0.00059 (unassessed_share)
+    beta=1.2 M=1e-12 alpha=0.15 #0015/3        success      5.1   1.19     3952   1.02    0    14    0     0          0     0.00056 (unassessed_share)
+    beta=2.9 M=1e-12 alpha=0.001 #0001/52      success     11.9   1.26    11721   1.02    0    41    0     0          0    0.0033 (phi_Einstein_70keV)
+    beta=1.2 M=1e-12 alpha=0.01 #0015/7        success      4.4   1.63     1823   1.02    0     4    0     0          0     4.3e-05 (unassessed_share)
+    beta=2.9 M=0.001 alpha=0 #0001/93          success     14.6   1.26    28727   1.00    0   715    0     0        249                samples bitwise
+    beta=1.2 M=4e-31 alpha=0.01 #0015/8        success      3.9   1.50     1819   1.02    0     3    0     0          0     2.3e-07 (unassessed_share)
+    beta=1.2 M=1e-12 alpha=0.08 #0015/4        success      8.8   1.25    11480   1.09    0    43    0     0   1.08e+04             0.088 (injections)
+    beta=1.2 M=4e-31 alpha=0.08 #0015/5        success      9.4   1.29    11257   1.02    0    46    0     0          0 2.8e-05 (density_NP_ratio_70keV)
+    beta=1.2 M=1e-15 alpha=0.01 #0015/9        success      3.1   1.05     1824   1.02    0     4    0     0          0     4.9e-05 (unassessed_share)
+    beta=1.2 M=1e-15 alpha=0.08 #0015/6        success      9.6   1.27    11254   1.02    0    46    0     0        138     6.8e-06 (unassessed_share)
+    beta=1.2 M=0.5 alpha=0 #0015/54            success      2.9   1.06     2451   1.00    0    13    0     0       1.12                samples bitwise
+    beta=1.2 M=0.001 alpha=0 #0015/53          success      8.1   0.90    21298   1.00    0   328    0     0        6.4                samples bitwise
+    beta=1.2 M=1e-12 alpha=0.001 #0015/12      success    213.6   0.91   428251   1.00    0  3222    0     0   6.53e+03       0.027 (unassessed_share)
+    beta=1.2 M=4e-31 alpha=0.001 #0015/10      success    261.6   0.97   529425   1.03    0  3071    0     0     0.0286     1.7e-05 (unassessed_share)
+    beta=1.2 M=1e-15 alpha=0.001 #0015/11      success    292.0   0.92   589264   1.00    0  3362    0     0   3.15e+03 0.0029 (reflection_failing_share)
+--- F4
+    outcomes {'success': 42}; flagged first 0, later 0 (of all flags made, phi condition 0); discarded by F4 17370
+    bitwise against the store: 0 of 42 compared
+    largest relative change against the store, ScalarHistory columns:
+      Delta_N_eff_1MeV             1.01e-07  (beta=1.2 M=1e-15 alpha=0.15 #0015/2)
+      Delta_N_eff_today            0.00831  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      RHS_evaluations              0.101  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      birth_failing_share          0.00831  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      compute_steps                0.101  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      density_NP_ratio_1MeV        3.15e-05  (beta=1.2 M=1e-15 alpha=0.15 #0015/2)
+      density_NP_ratio_70keV       0.00042  (beta=1.2 M=1e-15 alpha=0.15 #0015/2)
+      injected_fraction            0.00552  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      injections                   0.0877  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      parking_N                    0.00241  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      parking_log_T_Jordan         0.0045  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      phi_Einstein_1MeV            0.000179  (beta=2.9 M=4e-31 alpha=0.08 #0001/44)
+      phi_Einstein_70keV           0.000117  (beta=1.2 M=1e-15 alpha=0.15 #0015/2)
+      reflection_failing_share     0.00831  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      rho_chi_ratio_1MeV           1.01e-07  (beta=1.2 M=1e-15 alpha=0.15 #0015/2)
+      rho_chi_ratio_70keV          3.76e-07  (beta=1.2 M=1e-15 alpha=0.15 #0015/2)
+      rho_chi_ratio_today          0.00831  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      unassessed_share             1  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      unresolved_candidates        0.0877  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      worst_birth_margin           1.87e-07  (beta=1.2 M=4e-31 alpha=0.15 #0015/1)
+      worst_birth_margin_N         4.59e-07  (beta=1.2 M=1e-15 alpha=0.15 #0015/2)
+      worst_reflection_margin      8.99e-06  (beta=1.2 M=1e-15 alpha=0.15 #0015/2)
+      worst_reflection_margin_N    4.59e-07  (beta=1.2 M=1e-15 alpha=0.15 #0015/2)
+      worst_tracker_margin         0.00343  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      worst_tracker_margin_N       0.00227  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+    largest relative change against the store, sample columns:
+      H_Einstein_Mp                1.47e-06  (beta=1.2 M=1e-12 alpha=0.15 #0015/3)
+      H_Jordan_Mp                  0.0313  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      Sigma                        0.00401  (beta=2.9 M=0.5 alpha=0 #0001/94)
+      dgstar_rho_dlogT             0.0547  (beta=2 M=0.001 alpha=0 #0000/74)
+      dgstar_s_dlogT               0.0562  (beta=1.2 M=1e-15 alpha=0.08 #0015/6)
+      friction_term_Mp             2  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      gstar_rho                    1.07e-06  (beta=1.2 M=1e-12 alpha=0.15 #0015/3)
+      gstar_s                      1.04e-06  (beta=1.2 M=1e-12 alpha=0.15 #0015/3)
+      kicking_term_Mp              4.73e-05  (beta=2 M=0.001 alpha=0 #0000/74)
+      log_T_Jordan_GeV             0.000514  (beta=1.2 M=1e-12 alpha=0.15 #0015/3)
+      log_fm                       0.013  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      log_one_plus_z_Jordan        3.28e-06  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      log_rhorad_Einstein_Mp4      2.86e-08  (beta=1.2 M=1e-12 alpha=0.15 #0015/3)
+      log_rhorad_Jordan_Mp4        5.29e-07  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      phi_Einstein_Mp              1  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      pi_Einstein_Mp               2  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      raw_N                        0.000761  (beta=2.9 M=0.001 alpha=0 #0001/93)
+      reflecting_term_Mp           1  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      rho_chi_over_rho_rad         0.00831  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    beta=2 M=1e-15 alpha=0.15 #0000/21         success      6.8   1.01     8077   1.01    0     0    0    77          0 3.6e-06 (density_NP_ratio_1MeV)
+    beta=2 M=4e-31 alpha=0.15 #0000/22         success      6.7   0.99     8077   1.01    0     0    0    77          0 3.6e-06 (density_NP_ratio_1MeV)
+    beta=2 M=1e-12 alpha=0.15 #0000/23         success      6.6   0.96     8077   1.01    0     0    0    77          0 3.6e-06 (density_NP_ratio_1MeV)
+    beta=2 M=1e-15 alpha=0.08 #0000/24         success      8.5   0.98    11048   1.01    0     0    0    94          0      1e-05 (phi_Einstein_1MeV)
+    beta=2 M=1e-12 alpha=0.08 #0000/25         success      8.4   0.96    11046   1.01    0     0    0    94    0.00143      1e-05 (phi_Einstein_1MeV)
+    beta=2 M=4e-31 alpha=0.08 #0000/26         success      8.4   0.97    11048   1.01    0     0    0    94          0      1e-05 (phi_Einstein_1MeV)
+    beta=2 M=1e-12 alpha=0.01 #0000/27         success     11.7   0.92    16452   1.00    0     0    0   124     0.0015 5.5e-05 (density_NP_ratio_70keV)
+    beta=2 M=4e-31 alpha=0.001 #0000/30        success      5.7   0.90     6712   1.01    0     0    0    57          0       8e-05 (unassessed_share)
+    beta=2 M=1e-15 alpha=0.001 #0000/31        success      5.6   0.85     6712   1.01    0     0    0    57          0     7.4e-05 (unassessed_share)
+    beta=2 M=1e-15 alpha=0.01 #0000/28         success     11.6   0.91    16452   1.00    0     0    0   124          0 5.5e-05 (density_NP_ratio_70keV)
+    beta=2 M=0.5 alpha=0 #0000/73              success      3.1   0.96     4328   1.00    0     0    0    43       2.34   1.3e-05 (phi_Einstein_70keV)
+    beta=2 M=1e-12 alpha=0.001 #0000/32        success      5.6   0.93     6710   1.01    0     0    0    57          0     7.4e-05 (unassessed_share)
+    beta=2 M=4e-31 alpha=0.01 #0000/29         success     11.7   0.90    16452   1.00    0     0    0   124          0 5.5e-05 (density_NP_ratio_70keV)
+    beta=2 M=0.001 alpha=0 #0000/74            success     10.0   1.04    23719   1.02    0     0    0   842        314 0.00014 (density_NP_ratio_70keV)
+    beta=2.9 M=4e-31 alpha=0.15 #0001/41       success      7.9   0.98     9344   1.01    0     0    0    80          0   4.8e-07 (phi_Einstein_70keV)
+    beta=2.9 M=1e-12 alpha=0.15 #0001/42       success      7.8   0.97     9344   1.01    0     0    0    80          0     1.4e-07 (unassessed_share)
+    beta=2.9 M=1e-15 alpha=0.15 #0001/43       success      7.8   0.96     9344   1.01    0     0    0    80          0     1.4e-07 (unassessed_share)
+    beta=2.9 M=4e-31 alpha=0.08 #0001/44       success      8.3   0.96    10206   1.01    0     0    0    83          0    0.00018 (phi_Einstein_1MeV)
+    beta=2.9 M=1e-15 alpha=0.08 #0001/45       success      8.3   0.96    10206   1.01    0     0    0    83          0    0.00018 (phi_Einstein_1MeV)
+    beta=2.9 M=1e-12 alpha=0.08 #0001/46       success      8.3   0.93    10206   1.01    0     0    0    83          0    0.00018 (phi_Einstein_1MeV)
+    beta=2.9 M=4e-31 alpha=0.01 #0001/47       success      8.7   0.94    11338   1.01    0     0    0    92          0 0.0001 (density_NP_ratio_70keV)
+    beta=2.9 M=1e-15 alpha=0.01 #0001/48       success      8.7   0.92    11338   1.01    0     0    0    92          0 0.0001 (density_NP_ratio_70keV)
+    beta=2.9 M=1e-12 alpha=0.01 #0001/49       success      9.1   0.95    11338   1.01    0     0    0    92     0.0346 0.0001 (density_NP_ratio_70keV)
+    beta=2.9 M=4e-31 alpha=0.001 #0001/50      success      9.2   0.98    11520   1.01    0     0    0    98          0   0.00011 (phi_Einstein_70keV)
+    beta=2.9 M=1e-15 alpha=0.001 #0001/51      success      9.3   1.01    11520   1.01    0     0    0    98          0   0.00011 (phi_Einstein_70keV)
+    beta=2.9 M=0.5 alpha=0 #0001/94            success      4.3   1.02     6103   1.02    0     0    0    89       2.81   7.1e-06 (phi_Einstein_70keV)
+    beta=1.2 M=4e-31 alpha=0.15 #0015/1        success      4.1   0.95     3903   1.01    0     0    0    33          0     0.00062 (unassessed_share)
+    beta=1.2 M=1e-15 alpha=0.15 #0015/2        success      4.1   0.97     3905   1.01    0     0    0    39          0      0.0018 (unassessed_share)
+    beta=1.2 M=1e-12 alpha=0.15 #0015/3        success      4.1   0.95     3907   1.01    0     0    0    40          0      0.0018 (unassessed_share)
+    beta=2.9 M=1e-12 alpha=0.001 #0001/52      success      9.1   0.97    11520   1.01    0     0    0    98          0   0.00011 (phi_Einstein_70keV)
+    beta=1.2 M=1e-12 alpha=0.01 #0015/7        success      2.7   0.98     1799   1.01    0     0    0    11          0     2.9e-06 (unassessed_share)
+    beta=2.9 M=0.001 alpha=0 #0001/93          success     12.7   1.09    29140   1.01    0     0    0  1091        158 5e-05 (density_NP_ratio_70keV)
+    beta=1.2 M=4e-31 alpha=0.01 #0015/8        success      2.6   0.99     1797   1.00    0     0    0    14          0     2.5e-06 (unassessed_share)
+    beta=1.2 M=1e-12 alpha=0.08 #0015/4        success      7.4   1.05    11479   1.09    0     0    0    93   9.58e+03             0.088 (injections)
+    beta=1.2 M=4e-31 alpha=0.08 #0015/5        success      7.2   0.99    11049   1.01    0     0    0    98          0 5.8e-06 (density_NP_ratio_70keV)
+    beta=1.2 M=1e-15 alpha=0.01 #0015/9        success      2.7   0.90     1800   1.01    0     0    0    12          0       4e-06 (unassessed_share)
+    beta=1.2 M=1e-15 alpha=0.08 #0015/6        success      7.2   0.95    11094   1.00    0     0    0    81        264 5.2e-05 (density_NP_ratio_70keV)
+    beta=1.2 M=0.5 alpha=0 #0015/54            success      2.3   0.86     2473   1.01    0     0    0    32       1.53   5.1e-08 (phi_Einstein_70keV)
+    beta=1.2 M=0.001 alpha=0 #0015/53          success      8.5   0.95    21574   1.01    0     0    0   517          5 9.7e-07 (density_NP_ratio_70keV)
+    beta=1.2 M=1e-12 alpha=0.001 #0015/12      success    230.7   0.98   438598   1.02    0     0    0  4396   5.96e+03        0.36 (unassessed_share)
+    beta=1.2 M=4e-31 alpha=0.001 #0015/10      success    259.3   0.96   517374   1.00    0     0    0  3643     0.0238     1.4e-06 (unassessed_share)
+    beta=1.2 M=1e-15 alpha=0.001 #0015/11      success    288.2   0.91   553534   0.94    0     0    0  4181   2.56e+03           1 (unassessed_share)
+--- F3+F4
+    outcomes {'success': 42}; flagged first 0, later 0 (of all flags made, phi condition 0); discarded by F4 18350
+    bitwise against the store: 0 of 42 compared
+    largest relative change against the store, ScalarHistory columns:
+      Delta_N_eff_1MeV             8.33e-08  (beta=1.2 M=1e-12 alpha=0.15 #0015/3)
+      Delta_N_eff_today            0.0114  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      RHS_evaluations              0.134  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      birth_failing_share          0.0114  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      compute_steps                0.134  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      density_NP_ratio_1MeV        5.54e-05  (beta=2.9 M=1e-12 alpha=0.001 #0001/52)
+      density_NP_ratio_70keV       0.000347  (beta=1.2 M=1e-12 alpha=0.15 #0015/3)
+      injected_fraction            0.00758  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      injections                   0.0816  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      parking_N                    0.00144  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      parking_log_T_Jordan         0.00241  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      phi_Einstein_1MeV            0.000209  (beta=2.9 M=1e-15 alpha=0.08 #0001/45)
+      phi_Einstein_70keV           0.00349  (beta=2.9 M=1e-15 alpha=0.001 #0001/51)
+      reflection_failing_share     0.0114  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      rho_chi_ratio_1MeV           8.33e-08  (beta=1.2 M=1e-12 alpha=0.15 #0015/3)
+      rho_chi_ratio_70keV          3.1e-07  (beta=1.2 M=1e-12 alpha=0.15 #0015/3)
+      rho_chi_ratio_today          0.0114  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      unassessed_share             1  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      unresolved_candidates        0.0816  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      worst_birth_margin           3e-07  (beta=2.9 M=4e-31 alpha=0.001 #0001/50)
+      worst_birth_margin_N         3.78e-07  (beta=1.2 M=1e-12 alpha=0.15 #0015/3)
+      worst_reflection_margin      7.42e-06  (beta=1.2 M=1e-12 alpha=0.15 #0015/3)
+      worst_reflection_margin_N    4.24e-07  (beta=1.2 M=4e-31 alpha=0.001 #0015/10)
+      worst_tracker_margin         0.00195  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+      worst_tracker_margin_N       0.00153  (beta=1.2 M=1e-15 alpha=0.001 #0015/11)
+    largest relative change against the store, sample columns:
+      H_Einstein_Mp                1.22e-06  (beta=1.2 M=1e-12 alpha=0.15 #0015/3)
+      H_Jordan_Mp                  0.0313  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      Sigma                        0.00539  (beta=1.2 M=1e-15 alpha=0.01 #0015/9)
+      dgstar_rho_dlogT             0.0973  (beta=2.9 M=4e-31 alpha=0.001 #0001/50)
+      dgstar_s_dlogT               0.0395  (beta=1.2 M=4e-31 alpha=0.08 #0015/5)
+      friction_term_Mp             2  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      gstar_rho                    1.01e-06  (beta=2.9 M=1e-15 alpha=0.01 #0001/48)
+      gstar_s                      9.66e-07  (beta=2.9 M=1e-15 alpha=0.01 #0001/48)
+      kicking_term_Mp              5.18e-05  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      log_T_Jordan_GeV             0.000427  (beta=1.2 M=1e-12 alpha=0.15 #0015/3)
+      log_fm                       0.00698  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      log_one_plus_z_Jordan        5.95e-06  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      log_rhorad_Einstein_Mp4      3.36e-08  (beta=2.9 M=1e-15 alpha=0.01 #0001/48)
+      log_rhorad_Jordan_Mp4        8.2e-07  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      phi_Einstein_Mp              1  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      pi_Einstein_Mp               2  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+      raw_N                        0.000761  (beta=2.9 M=0.001 alpha=0 #0001/93)
+      reflecting_term_Mp           1  (beta=1.2 M=1e-12 alpha=0.08 #0015/4)
+      rho_chi_over_rho_rad         0.0114  (beta=1.2 M=1e-12 alpha=0.001 #0015/12)
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    beta=2 M=1e-15 alpha=0.15 #0000/21         success      6.7   0.99     8273   1.03    0     0    0    76          0 6.7e-06 (density_NP_ratio_1MeV)
+    beta=2 M=4e-31 alpha=0.15 #0000/22         success      6.7   0.98     8273   1.03    0     0    0    76          0 6.7e-06 (density_NP_ratio_1MeV)
+    beta=2 M=1e-12 alpha=0.15 #0000/23         success      6.7   0.97     8273   1.03    0     0    0    76          0 6.7e-06 (density_NP_ratio_1MeV)
+    beta=2 M=1e-15 alpha=0.08 #0000/24         success      9.8   1.14    11307   1.03    0     0    0    96          0    4.2e-05 (phi_Einstein_1MeV)
+    beta=2 M=1e-12 alpha=0.08 #0000/25         success      9.7   1.10    11307   1.03    0     0    0    96   0.000481    4.2e-05 (phi_Einstein_1MeV)
+    beta=2 M=4e-31 alpha=0.08 #0000/26         success      9.1   1.04    11307   1.03    0     0    0    96          0    4.2e-05 (phi_Einstein_1MeV)
+    beta=2 M=1e-12 alpha=0.01 #0000/27         success     12.8   1.01    16858   1.03    0     0    0   168    0.00145    1.6e-05 (phi_Einstein_1MeV)
+    beta=2 M=4e-31 alpha=0.001 #0000/30        success      5.8   0.92     6863   1.03    0     0    0    59          0     0.00034 (unassessed_share)
+    beta=2 M=1e-15 alpha=0.001 #0000/31        success      5.8   0.88     6863   1.03    0     0    0    59          0     0.00035 (unassessed_share)
+    beta=2 M=1e-15 alpha=0.01 #0000/28         success     12.7   0.99    16858   1.03    0     0    0   168          0    1.7e-05 (phi_Einstein_1MeV)
+    beta=2 M=0.5 alpha=0 #0000/73              success      3.1   0.97     4328   1.00    0     0    0    43       2.34   1.3e-05 (phi_Einstein_70keV)
+    beta=2 M=1e-12 alpha=0.001 #0000/32        success      5.9   0.98     6861   1.03    0     0    0    59          0     0.00035 (unassessed_share)
+    beta=2 M=4e-31 alpha=0.01 #0000/29         success     12.5   0.97    16859   1.03    0     0    0   168          0    1.7e-05 (phi_Einstein_1MeV)
+    beta=2 M=0.001 alpha=0 #0000/74            success     10.0   1.03    23719   1.02    0     0    0   842        314 0.00014 (density_NP_ratio_70keV)
+    beta=2.9 M=4e-31 alpha=0.15 #0001/41       success      8.1   1.01     9558   1.03    0     0    0    67          0   2.1e-07 (phi_Einstein_70keV)
+    beta=2.9 M=1e-12 alpha=0.15 #0001/42       success      8.0   1.00     9558   1.03    0     0    0    67          0 4e-08 (parking_log_T_Jordan_GeV)
+    beta=2.9 M=1e-15 alpha=0.15 #0001/43       success      8.0   0.99     9558   1.03    0     0    0    67          0 4e-08 (parking_log_T_Jordan_GeV)
+    beta=2.9 M=4e-31 alpha=0.08 #0001/44       success      8.5   1.00    10449   1.03    0     0    0    94          0    0.00021 (phi_Einstein_1MeV)
+    beta=2.9 M=1e-15 alpha=0.08 #0001/45       success      8.3   0.96    10449   1.03    0     0    0    94          0    0.00021 (phi_Einstein_1MeV)
+    beta=2.9 M=1e-12 alpha=0.08 #0001/46       success      8.4   0.95    10449   1.03    0     0    0    94          0    0.00021 (phi_Einstein_1MeV)
+    beta=2.9 M=4e-31 alpha=0.01 #0001/47       success      9.1   0.98    11617   1.03    0     0    0    82          0 0.00025 (density_NP_ratio_70keV)
+    beta=2.9 M=1e-15 alpha=0.01 #0001/48       success      9.1   0.96    11617   1.03    0     0    0    82          0 0.00025 (density_NP_ratio_70keV)
+    beta=2.9 M=1e-12 alpha=0.01 #0001/49       success      9.1   0.96    11617   1.03    0     0    0    82     0.0324 0.00025 (density_NP_ratio_70keV)
+    beta=2.9 M=4e-31 alpha=0.001 #0001/50      success      9.4   1.01    11791   1.03    0     0    0   100          0    0.0035 (phi_Einstein_70keV)
+    beta=2.9 M=1e-15 alpha=0.001 #0001/51      success      9.3   1.01    11791   1.03    0     0    0   100          0    0.0035 (phi_Einstein_70keV)
+    beta=2.9 M=0.5 alpha=0 #0001/94            success      4.2   1.00     6103   1.02    0     0    0    89       2.81   7.1e-06 (phi_Einstein_70keV)
+    beta=1.2 M=4e-31 alpha=0.15 #0015/1        success      4.1   0.96     3979   1.03    0     0    0    35          0     0.00038 (unassessed_share)
+    beta=1.2 M=1e-15 alpha=0.15 #0015/2        success      4.1   0.95     3982   1.03    0     0    0    36          0      0.0015 (unassessed_share)
+    beta=1.2 M=1e-12 alpha=0.15 #0015/3        success      4.1   0.96     3982   1.03    0     0    0    36          0      0.0015 (unassessed_share)
+    beta=2.9 M=1e-12 alpha=0.001 #0001/52      success      9.5   1.01    11791   1.03    0     0    0   100    0.00682    0.0035 (phi_Einstein_70keV)
+    beta=1.2 M=1e-12 alpha=0.01 #0015/7        success      2.7   1.00     1829   1.02    0     0    0     7          0     4.3e-05 (unassessed_share)
+    beta=2.9 M=0.001 alpha=0 #0001/93          success     12.4   1.07    29140   1.01    0     0    0  1091        158 5e-05 (density_NP_ratio_70keV)
+    beta=1.2 M=4e-31 alpha=0.01 #0015/8        success      2.6   1.00     1822   1.02    0     0    0     6          0     6.2e-06 (unassessed_share)
+    beta=1.2 M=1e-12 alpha=0.08 #0015/4        success      7.2   1.02    11006   1.05    0     0    0    91   1.41e+04             0.037 (injections)
+    beta=1.2 M=4e-31 alpha=0.08 #0015/5        success      7.3   1.00    11315   1.03    0     0    0    93          0 3.6e-05 (density_NP_ratio_70keV)
+    beta=1.2 M=1e-15 alpha=0.01 #0015/9        success      2.6   0.88     1824   1.02    0     0    0     6          0     4.5e-05 (unassessed_share)
+    beta=1.2 M=1e-15 alpha=0.08 #0015/6        success      7.3   0.97    11319   1.02    0     0    0    94        140 2.5e-05 (density_NP_ratio_70keV)
+    beta=1.2 M=0.5 alpha=0 #0015/54            success      2.2   0.83     2473   1.01    0     0    0    32       1.53   5.1e-08 (phi_Einstein_70keV)
+    beta=1.2 M=0.001 alpha=0 #0015/53          success      8.7   0.97    21574   1.01    0     0    0   517          5 9.7e-07 (density_NP_ratio_70keV)
+    beta=1.2 M=1e-12 alpha=0.001 #0015/12      success    241.8   1.02   431028   1.01    0     0    0  4023   8.14e+03        0.16 (unassessed_share)
+    beta=1.2 M=4e-31 alpha=0.001 #0015/10      success    293.0   1.08   531690   1.03    0     0    0  4795     0.0259     1.6e-05 (unassessed_share)
+    beta=1.2 M=1e-15 alpha=0.001 #0015/11      success    300.1   0.95   553659   0.94    0     0    0  4288   3.46e+03           1 (unassessed_share)
+
+=== item 5: block B's twelve (stored normalization)
+--- None
+    outcomes {'success': 12}; flagged first 0, later 489 (of all flags made, phi condition 2); discarded by F4 0
+    bitwise against the store: 12 of 12 compared
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    beta=2 M=1e-33 alpha=0.08 #0002/2335       success      9.4   1.00    10988   1.00    0    40    0     0          0                samples bitwise
+    beta=1.2 M=1e-33 alpha=0.01 #0011/2819     success      3.0   1.00     1791   1.00    0     3    0     0          0                samples bitwise
+    beta=2 M=1e-33 alpha=0.01 #0002/2496       success     12.8   1.00    16389   1.00    0    61    0     0          0                samples bitwise
+    beta=1.2 M=1e-33 alpha=0.08 #0011/2500     success      7.6   1.00    10993   1.00    0    46    0     0          0                samples bitwise
+    beta=2.9 M=1e-33 alpha=0.08 #0015/2359     success      8.5   1.00    10151   1.00    0    43    1     0          0                samples bitwise
+    beta=2.9 M=1e-33 alpha=0.01 #0015/2584     success      9.1   1.00    11281   1.00    0    51    0     0          0                samples bitwise
+    beta=2 M=1e-30 alpha=0.01 #0002/2498       success     12.5   1.00    16389   1.00    0    61    0     0          0                samples bitwise
+    beta=2 M=1e-30 alpha=0.08 #0002/2603       success      9.0   1.00    10988   1.00    0    40    0     0          0                samples bitwise
+    beta=1.2 M=1e-30 alpha=0.01 #0011/2821     success      2.9   1.00     1791   1.00    0     3    0     0          0                samples bitwise
+    beta=1.2 M=1e-30 alpha=0.08 #0011/2501     success      7.4   1.00    10992   1.00    0    47    0     0          0                samples bitwise
+    beta=2.9 M=1e-30 alpha=0.08 #0015/2690     success      9.3   1.00    10151   1.00    0    43    1     0          0                samples bitwise
+    beta=2.9 M=1e-30 alpha=0.01 #0015/2823     success     10.2   1.00    11281   1.00    0    51    0     0          0                samples bitwise
+--- F1
+    outcomes {'success': 12}; flagged first 0, later 461 (of all flags made, phi condition 0); discarded by F4 0
+    bitwise against the store: 0 of 12 compared
+    largest relative change against the store, ScalarHistory columns:
+      Delta_N_eff_1MeV             3.28e-08  (beta=1.2 M=1e-33 alpha=0.01 #0011/2819)
+      Delta_N_eff_today            1.48e-07  (beta=1.2 M=1e-33 alpha=0.01 #0011/2819)
+      RHS_evaluations              0.482  (beta=2 M=1e-30 alpha=0.01 #0002/2498)
+      compute_steps                0.482  (beta=2 M=1e-30 alpha=0.01 #0002/2498)
+      density_NP_ratio_1MeV        1.43e-05  (beta=2 M=1e-30 alpha=0.01 #0002/2498)
+      density_NP_ratio_70keV       5.76e-05  (beta=2.9 M=1e-33 alpha=0.01 #0015/2584)
+      injected_fraction            5.79e-08  (beta=1.2 M=1e-33 alpha=0.01 #0011/2819)
+      parking_N                    7.42e-06  (beta=1.2 M=1e-33 alpha=0.01 #0011/2819)
+      parking_log_T_Jordan         1.69e-05  (beta=1.2 M=1e-33 alpha=0.01 #0011/2819)
+      phi_Einstein_1MeV            6.68e-05  (beta=2 M=1e-30 alpha=0.01 #0002/2498)
+      phi_Einstein_70keV           7.62e-06  (beta=2.9 M=1e-33 alpha=0.01 #0015/2584)
+      rho_chi_ratio_1MeV           3.28e-08  (beta=1.2 M=1e-33 alpha=0.01 #0011/2819)
+      rho_chi_ratio_70keV          9.58e-08  (beta=1.2 M=1e-33 alpha=0.01 #0011/2819)
+      rho_chi_ratio_today          1.48e-07  (beta=1.2 M=1e-33 alpha=0.01 #0011/2819)
+      unassessed_share             0.000134  (beta=1.2 M=1e-33 alpha=0.01 #0011/2819)
+      worst_birth_margin           3.25e-08  (beta=1.2 M=1e-30 alpha=0.01 #0011/2821)
+      worst_birth_margin_N         4.27e-08  (beta=2 M=1e-33 alpha=0.08 #0002/2335)
+      worst_reflection_margin      8.45e-08  (beta=1.2 M=1e-30 alpha=0.08 #0011/2501)
+      worst_reflection_margin_N    1.46e-07  (beta=1.2 M=1e-33 alpha=0.08 #0011/2500)
+      worst_tracker_margin         2.35e-08  (beta=1.2 M=1e-30 alpha=0.01 #0011/2821)
+      worst_tracker_margin_N       1.43e-08  (beta=1.2 M=1e-33 alpha=0.01 #0011/2819)
+    largest relative change against the store, sample columns:
+      H_Einstein_Mp                8.74e-07  (beta=1.2 M=1e-33 alpha=0.01 #0011/2819)
+      H_Jordan_Mp                  0.0004  (beta=2.9 M=1e-33 alpha=0.01 #0015/2584)
+      Sigma                        0.0159  (beta=1.2 M=1e-33 alpha=0.01 #0011/2819)
+      dgstar_rho_dlogT             0.0199  (beta=1.2 M=1e-33 alpha=0.08 #0011/2500)
+      dgstar_s_dlogT               0.0394  (beta=1.2 M=1e-33 alpha=0.08 #0011/2500)
+      friction_term_Mp             0.491  (beta=2 M=1e-30 alpha=0.01 #0002/2498)
+      gstar_rho                    6.86e-07  (beta=1.2 M=1e-33 alpha=0.01 #0011/2819)
+      gstar_s                      6.59e-07  (beta=1.2 M=1e-33 alpha=0.01 #0011/2819)
+      kicking_term_Mp              5.54e-06  (beta=1.2 M=1e-33 alpha=0.01 #0011/2819)
+      log_T_Jordan_GeV             0.000306  (beta=1.2 M=1e-33 alpha=0.01 #0011/2819)
+      log_fm                       0.000406  (beta=1.2 M=1e-30 alpha=0.01 #0011/2821)
+      log_one_plus_z_Jordan        2.5e-08  (beta=1.2 M=1e-33 alpha=0.01 #0011/2819)
+      log_rhorad_Einstein_Mp4      1.7e-08  (beta=1.2 M=1e-33 alpha=0.01 #0011/2819)
+      log_rhorad_Jordan_Mp4        1.89e-08  (beta=1.2 M=1e-33 alpha=0.01 #0011/2819)
+      phi_Einstein_Mp              0.51  (beta=1.2 M=1e-33 alpha=0.08 #0011/2500)
+      pi_Einstein_Mp               0.491  (beta=2 M=1e-30 alpha=0.01 #0002/2498)
+      raw_N                        7.87e-05  (beta=1.2 M=1e-33 alpha=0.01 #0011/2819)
+      reflecting_term_Mp           0.759  (beta=1.2 M=1e-33 alpha=0.08 #0011/2500)
+      rho_chi_over_rho_rad         2.4e-07  (beta=1.2 M=1e-33 alpha=0.01 #0011/2819)
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    beta=2 M=1e-33 alpha=0.08 #0002/2335       success     16.9   1.79    21194   1.93    0    40    0     0          0    1.2e-05 (phi_Einstein_1MeV)
+    beta=1.2 M=1e-33 alpha=0.01 #0011/2819     success      3.2   1.09     2629   1.47    0     4    0     0          0     0.00013 (unassessed_share)
+    beta=2 M=1e-33 alpha=0.01 #0002/2496       success     22.6   1.76    32061   1.96    0    68    0     0          0    2.3e-05 (phi_Einstein_1MeV)
+    beta=1.2 M=1e-33 alpha=0.08 #0011/2500     success     12.3   1.62    21177   1.93    0    41    0     0          0 3.4e-05 (density_NP_ratio_70keV)
+    beta=2.9 M=1e-33 alpha=0.08 #0015/2359     success     14.4   1.69    19510   1.92    0    39    0     0          0    1.6e-05 (phi_Einstein_1MeV)
+    beta=2.9 M=1e-33 alpha=0.01 #0015/2584     success     15.6   1.71    21729   1.93    0    43    0     0          0 5.8e-05 (density_NP_ratio_70keV)
+    beta=2 M=1e-30 alpha=0.01 #0002/2498       success     22.0   1.76    32065   1.96    0    66    0     0          0    6.7e-05 (phi_Einstein_1MeV)
+    beta=2 M=1e-30 alpha=0.08 #0002/2603       success     15.3   1.71    21194   1.93    0    38    0     0          0    8.2e-06 (phi_Einstein_1MeV)
+    beta=1.2 M=1e-30 alpha=0.01 #0011/2821     success      3.3   1.17     2625   1.47    0     3    0     0          0     0.00013 (unassessed_share)
+    beta=1.2 M=1e-30 alpha=0.08 #0011/2501     success     12.3   1.66    21175   1.93    0    42    0     0          0 3.2e-05 (density_NP_ratio_70keV)
+    beta=2.9 M=1e-30 alpha=0.08 #0015/2690     success     14.2   1.53    19506   1.92    0    39    0     0          0    1.5e-05 (phi_Einstein_1MeV)
+    beta=2.9 M=1e-30 alpha=0.01 #0015/2823     success     15.4   1.50    21728   1.93    0    38    0     0          0 1.8e-05 (density_NP_ratio_70keV)
+--- F2
+    outcomes {'success': 12}; flagged first 0, later 489 (of all flags made, phi condition 2); discarded by F4 0
+    bitwise against the store: 12 of 12 compared
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    beta=2 M=1e-33 alpha=0.08 #0002/2335       success      8.7   0.92    10988   1.00    0    40    0     0          0                samples bitwise
+    beta=1.2 M=1e-33 alpha=0.01 #0011/2819     success      3.6   1.21     1791   1.00    0     3    0     0          0                samples bitwise
+    beta=2 M=1e-33 alpha=0.01 #0002/2496       success     12.3   0.96    16389   1.00    0    61    0     0          0                samples bitwise
+    beta=1.2 M=1e-33 alpha=0.08 #0011/2500     success      7.2   0.95    10993   1.00    0    46    0     0          0                samples bitwise
+    beta=2.9 M=1e-33 alpha=0.08 #0015/2359     success     10.2   1.19    10151   1.00    0    43    1     0          0                samples bitwise
+    beta=2.9 M=1e-33 alpha=0.01 #0015/2584     success      9.7   1.06    11281   1.00    0    51    0     0          0                samples bitwise
+    beta=2 M=1e-30 alpha=0.01 #0002/2498       success     13.2   1.06    16389   1.00    0    61    0     0          0                samples bitwise
+    beta=2 M=1e-30 alpha=0.08 #0002/2603       success      9.3   1.04    10988   1.00    0    40    0     0          0                samples bitwise
+    beta=1.2 M=1e-30 alpha=0.01 #0011/2821     success      3.6   1.26     1791   1.00    0     3    0     0          0                samples bitwise
+    beta=1.2 M=1e-30 alpha=0.08 #0011/2501     success      9.4   1.27    10992   1.00    0    47    0     0          0                samples bitwise
+    beta=2.9 M=1e-30 alpha=0.08 #0015/2690     success      9.8   1.06    10151   1.00    0    43    1     0          0                samples bitwise
+    beta=2.9 M=1e-30 alpha=0.01 #0015/2823     success      9.3   0.91    11281   1.00    0    51    0     0          0                samples bitwise
+--- F3
+    outcomes {'success': 12}; flagged first 0, later 513 (of all flags made, phi condition 0); discarded by F4 0
+    bitwise against the store: 0 of 12 compared
+    largest relative change against the store, ScalarHistory columns:
+      Delta_N_eff_1MeV             1.09e-08  (beta=1.2 M=1e-33 alpha=0.08 #0011/2500)
+      Delta_N_eff_today            1.66e-07  (beta=2 M=1e-33 alpha=0.08 #0002/2335)
+      RHS_evaluations              0.0229  (beta=1.2 M=1e-30 alpha=0.08 #0011/2501)
+      compute_steps                0.0229  (beta=1.2 M=1e-30 alpha=0.08 #0011/2501)
+      density_NP_ratio_1MeV        8.67e-05  (beta=2.9 M=1e-30 alpha=0.08 #0015/2690)
+      density_NP_ratio_70keV       9.58e-05  (beta=2.9 M=1e-33 alpha=0.01 #0015/2584)
+      injected_fraction            1.44e-07  (beta=2 M=1e-33 alpha=0.08 #0002/2335)
+      parking_N                    4.09e-07  (beta=2 M=1e-33 alpha=0.08 #0002/2335)
+      parking_log_T_Jordan         1.11e-06  (beta=2 M=1e-33 alpha=0.08 #0002/2335)
+      phi_Einstein_1MeV            0.00091  (beta=2.9 M=1e-30 alpha=0.08 #0015/2690)
+      phi_Einstein_70keV           1.3e-05  (beta=2.9 M=1e-33 alpha=0.01 #0015/2584)
+      rho_chi_ratio_1MeV           1.09e-08  (beta=1.2 M=1e-33 alpha=0.08 #0011/2500)
+      rho_chi_ratio_70keV          1.66e-07  (beta=2 M=1e-33 alpha=0.08 #0002/2335)
+      rho_chi_ratio_today          1.66e-07  (beta=2 M=1e-33 alpha=0.08 #0002/2335)
+      unassessed_share             1.73e-05  (beta=2 M=1e-33 alpha=0.08 #0002/2335)
+      worst_birth_margin           1.06e-07  (beta=2 M=1e-30 alpha=0.08 #0002/2603)
+      worst_birth_margin_N         1.55e-07  (beta=2 M=1e-33 alpha=0.08 #0002/2335)
+      worst_reflection_margin      1.04e-07  (beta=2 M=1e-30 alpha=0.08 #0002/2603)
+      worst_reflection_margin_N    1.59e-07  (beta=2 M=1e-33 alpha=0.08 #0002/2335)
+      worst_tracker_margin         2.97e-08  (beta=2 M=1e-30 alpha=0.08 #0002/2603)
+      worst_tracker_margin_N       1.47e-08  (beta=2 M=1e-30 alpha=0.08 #0002/2603)
+    largest relative change against the store, sample columns:
+      H_Einstein_Mp                8.91e-07  (beta=2 M=1e-30 alpha=0.08 #0002/2603)
+      H_Jordan_Mp                  0.000569  (beta=2.9 M=1e-30 alpha=0.01 #0015/2823)
+      Sigma                        0.000166  (beta=1.2 M=1e-33 alpha=0.08 #0011/2500)
+      dgstar_rho_dlogT             0.0156  (beta=1.2 M=1e-33 alpha=0.08 #0011/2500)
+      dgstar_s_dlogT               0.031  (beta=1.2 M=1e-33 alpha=0.08 #0011/2500)
+      friction_term_Mp             0.599  (beta=2 M=1e-33 alpha=0.08 #0002/2335)
+      gstar_rho                    7.57e-07  (beta=2 M=1e-30 alpha=0.08 #0002/2603)
+      gstar_s                      7.2e-07  (beta=2 M=1e-30 alpha=0.08 #0002/2603)
+      kicking_term_Mp              1.63e-06  (beta=2 M=1e-30 alpha=0.08 #0002/2603)
+      log_T_Jordan_GeV             0.000298  (beta=2 M=1e-30 alpha=0.08 #0002/2603)
+      log_fm                       0.000408  (beta=2 M=1e-30 alpha=0.08 #0002/2603)
+      log_one_plus_z_Jordan        1.58e-08  (beta=2 M=1e-30 alpha=0.08 #0002/2603)
+      log_rhorad_Einstein_Mp4      2.06e-08  (beta=2 M=1e-30 alpha=0.08 #0002/2603)
+      log_rhorad_Jordan_Mp4        2.03e-08  (beta=2 M=1e-30 alpha=0.08 #0002/2603)
+      phi_Einstein_Mp              0.293  (beta=1.2 M=1e-33 alpha=0.08 #0011/2500)
+      pi_Einstein_Mp               0.599  (beta=2 M=1e-33 alpha=0.08 #0002/2335)
+      raw_N                        5.4e-05  (beta=2 M=1e-30 alpha=0.08 #0002/2603)
+      reflecting_term_Mp           0.5  (beta=1.2 M=1e-33 alpha=0.08 #0011/2500)
+      rho_chi_over_rho_rad         2.4e-07  (beta=2 M=1e-30 alpha=0.08 #0002/2603)
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    beta=2 M=1e-33 alpha=0.08 #0002/2335       success      8.5   0.90    11244   1.02    0    48    0     0          0    4.2e-05 (phi_Einstein_1MeV)
+    beta=1.2 M=1e-33 alpha=0.01 #0011/2819     success      2.7   0.89     1819   1.02    0     3    0     0          0     2.3e-07 (unassessed_share)
+    beta=2 M=1e-33 alpha=0.01 #0002/2496       success     12.0   0.93    16773   1.02    0    81    0     0          0 3.1e-05 (density_NP_ratio_70keV)
+    beta=1.2 M=1e-33 alpha=0.08 #0011/2500     success      7.4   0.97    11257   1.02    0    46    0     0          0 2.8e-05 (density_NP_ratio_70keV)
+    beta=2.9 M=1e-33 alpha=0.08 #0015/2359     success      8.2   0.96    10381   1.02    0    44    0     0          0    0.00091 (phi_Einstein_1MeV)
+    beta=2.9 M=1e-33 alpha=0.01 #0015/2584     success      8.7   0.95    11552   1.02    0    34    0     0          0 9.6e-05 (density_NP_ratio_70keV)
+    beta=2 M=1e-30 alpha=0.01 #0002/2498       success     11.8   0.94    16773   1.02    0    81    0     0          0 3.1e-05 (density_NP_ratio_70keV)
+    beta=2 M=1e-30 alpha=0.08 #0002/2603       success      8.4   0.94    11244   1.02    0    48    0     0          0    4.2e-05 (phi_Einstein_1MeV)
+    beta=1.2 M=1e-30 alpha=0.01 #0011/2821     success      2.5   0.88     1820   1.02    0     4    0     0          0     4.5e-07 (unassessed_share)
+    beta=1.2 M=1e-30 alpha=0.08 #0011/2501     success      7.1   0.96    11258   1.02    0    46    0     0          0 2.8e-05 (density_NP_ratio_70keV)
+    beta=2.9 M=1e-30 alpha=0.08 #0015/2690     success      8.1   0.87    10381   1.02    0    44    0     0          0    0.00091 (phi_Einstein_1MeV)
+    beta=2.9 M=1e-30 alpha=0.01 #0015/2823     success      8.7   0.85    11552   1.02    0    34    0     0          0 9.6e-05 (density_NP_ratio_70keV)
+--- F4
+    outcomes {'success': 12}; flagged first 0, later 0 (of all flags made, phi condition 0); discarded by F4 1006
+    bitwise against the store: 0 of 12 compared
+    largest relative change against the store, ScalarHistory columns:
+      Delta_N_eff_1MeV             9.41e-09  (beta=2.9 M=1e-33 alpha=0.01 #0015/2584)
+      Delta_N_eff_today            4.06e-08  (beta=2 M=1e-30 alpha=0.08 #0002/2603)
+      RHS_evaluations              0.0241  (beta=1.2 M=1e-33 alpha=0.08 #0011/2500)
+      compute_steps                0.0241  (beta=1.2 M=1e-33 alpha=0.08 #0011/2500)
+      density_NP_ratio_1MeV        1.7e-05  (beta=2.9 M=1e-33 alpha=0.08 #0015/2359)
+      density_NP_ratio_70keV       9.99e-05  (beta=2.9 M=1e-33 alpha=0.01 #0015/2584)
+      injected_fraction            3.25e-08  (beta=2 M=1e-30 alpha=0.08 #0002/2603)
+      parking_N                    1.39e-07  (beta=1.2 M=1e-33 alpha=0.01 #0011/2819)
+      parking_log_T_Jordan         3.16e-07  (beta=1.2 M=1e-33 alpha=0.01 #0011/2819)
+      phi_Einstein_1MeV            0.000179  (beta=2.9 M=1e-33 alpha=0.08 #0015/2359)
+      phi_Einstein_70keV           1.43e-05  (beta=2.9 M=1e-33 alpha=0.01 #0015/2584)
+      rho_chi_ratio_1MeV           9.41e-09  (beta=2.9 M=1e-33 alpha=0.01 #0015/2584)
+      rho_chi_ratio_70keV          4.06e-08  (beta=2 M=1e-30 alpha=0.08 #0002/2603)
+      rho_chi_ratio_today          4.06e-08  (beta=2 M=1e-30 alpha=0.08 #0002/2603)
+      unassessed_share             4.18e-06  (beta=2 M=1e-30 alpha=0.08 #0002/2603)
+      worst_birth_margin           3.53e-08  (beta=2.9 M=1e-30 alpha=0.01 #0015/2823)
+      worst_birth_margin_N         3.68e-08  (beta=2 M=1e-30 alpha=0.08 #0002/2603)
+      worst_reflection_margin      3.43e-08  (beta=2.9 M=1e-30 alpha=0.01 #0015/2823)
+      worst_reflection_margin_N    3.78e-08  (beta=2 M=1e-30 alpha=0.08 #0002/2603)
+      worst_tracker_margin         9.93e-09  (beta=2.9 M=1e-33 alpha=0.01 #0015/2584)
+      worst_tracker_margin_N       5.04e-09  (beta=2.9 M=1e-33 alpha=0.01 #0015/2584)
+    largest relative change against the store, sample columns:
+      H_Einstein_Mp                3.93e-07  (beta=2.9 M=1e-33 alpha=0.01 #0015/2584)
+      H_Jordan_Mp                  0.000517  (beta=2.9 M=1e-33 alpha=0.01 #0015/2584)
+      Sigma                        0.000291  (beta=1.2 M=1e-33 alpha=0.01 #0011/2819)
+      dgstar_rho_dlogT             0.00326  (beta=1.2 M=1e-33 alpha=0.08 #0011/2500)
+      dgstar_s_dlogT               0.00652  (beta=1.2 M=1e-33 alpha=0.08 #0011/2500)
+      friction_term_Mp             0.144  (beta=2 M=1e-30 alpha=0.08 #0002/2603)
+      gstar_rho                    3.45e-07  (beta=2.9 M=1e-33 alpha=0.01 #0015/2584)
+      gstar_s                      3.3e-07  (beta=2.9 M=1e-33 alpha=0.01 #0015/2584)
+      kicking_term_Mp              1.2e-06  (beta=2.9 M=1e-33 alpha=0.01 #0015/2584)
+      log_T_Jordan_GeV             6.04e-05  (beta=2 M=1e-30 alpha=0.08 #0002/2603)
+      log_fm                       0.000183  (beta=2.9 M=1e-33 alpha=0.01 #0015/2584)
+      log_one_plus_z_Jordan        7.12e-09  (beta=2.9 M=1e-33 alpha=0.01 #0015/2584)
+      log_rhorad_Einstein_Mp4      1.15e-08  (beta=2.9 M=1e-33 alpha=0.01 #0015/2584)
+      log_rhorad_Jordan_Mp4        9.44e-09  (beta=2.9 M=1e-33 alpha=0.01 #0015/2584)
+      phi_Einstein_Mp              0.0808  (beta=1.2 M=1e-33 alpha=0.08 #0011/2500)
+      pi_Einstein_Mp               0.144  (beta=2 M=1e-30 alpha=0.08 #0002/2603)
+      raw_N                        4.49e-05  (beta=2.9 M=1e-33 alpha=0.01 #0015/2584)
+      reflecting_term_Mp           0.155  (beta=1.2 M=1e-33 alpha=0.08 #0011/2500)
+      rho_chi_over_rho_rad         1.05e-07  (beta=2.9 M=1e-33 alpha=0.01 #0015/2584)
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    beta=2 M=1e-33 alpha=0.08 #0002/2335       success      8.5   0.90    11046   1.01    0     0    0    94          0      1e-05 (phi_Einstein_1MeV)
+    beta=1.2 M=1e-33 alpha=0.01 #0011/2819     success      2.6   0.88     1797   1.00    0     0    0    14          0     2.5e-06 (unassessed_share)
+    beta=2 M=1e-33 alpha=0.01 #0002/2496       success     11.8   0.92    16452   1.00    0     0    0   124          0 5.5e-05 (density_NP_ratio_70keV)
+    beta=1.2 M=1e-33 alpha=0.08 #0011/2500     success      7.0   0.92    11049   1.01    0     0    0    98          0 5.8e-06 (density_NP_ratio_70keV)
+    beta=2.9 M=1e-33 alpha=0.08 #0015/2359     success      8.3   0.97    10206   1.01    0     0    0    83          0    0.00018 (phi_Einstein_1MeV)
+    beta=2.9 M=1e-33 alpha=0.01 #0015/2584     success      8.8   0.96    11338   1.01    0     0    0    92          0 0.0001 (density_NP_ratio_70keV)
+    beta=2 M=1e-30 alpha=0.01 #0002/2498       success     12.1   0.97    16452   1.00    0     0    0   124          0 5.5e-05 (density_NP_ratio_70keV)
+    beta=2 M=1e-30 alpha=0.08 #0002/2603       success      8.5   0.95    11048   1.01    0     0    0    94          0      1e-05 (phi_Einstein_1MeV)
+    beta=1.2 M=1e-30 alpha=0.01 #0011/2821     success      2.5   0.88     1797   1.00    0     0    0    14          0       2e-06 (unassessed_share)
+    beta=1.2 M=1e-30 alpha=0.08 #0011/2501     success      6.9   0.93    11046   1.00    0     0    0    94          0 4.7e-06 (density_NP_ratio_70keV)
+    beta=2.9 M=1e-30 alpha=0.08 #0015/2690     success      8.2   0.88    10206   1.01    0     0    0    83          0    0.00018 (phi_Einstein_1MeV)
+    beta=2.9 M=1e-30 alpha=0.01 #0015/2823     success      8.7   0.85    11338   1.01    0     0    0    92          0 0.0001 (density_NP_ratio_70keV)
+--- F3+F4
+    outcomes {'success': 12}; flagged first 0, later 0 (of all flags made, phi condition 0); discarded by F4 1078
+    bitwise against the store: 0 of 12 compared
+    largest relative change against the store, ScalarHistory columns:
+      Delta_N_eff_1MeV             2.43e-08  (beta=2.9 M=1e-33 alpha=0.01 #0015/2584)
+      Delta_N_eff_today            1.66e-07  (beta=2 M=1e-33 alpha=0.08 #0002/2335)
+      RHS_evaluations              0.0463  (beta=2 M=1e-33 alpha=0.01 #0002/2496)
+      compute_steps                0.0463  (beta=2 M=1e-33 alpha=0.01 #0002/2496)
+      density_NP_ratio_1MeV        1.99e-05  (beta=2.9 M=1e-30 alpha=0.08 #0015/2690)
+      density_NP_ratio_70keV       0.000247  (beta=2.9 M=1e-30 alpha=0.01 #0015/2823)
+      injected_fraction            1.44e-07  (beta=2 M=1e-33 alpha=0.08 #0002/2335)
+      parking_N                    4.08e-07  (beta=2 M=1e-33 alpha=0.08 #0002/2335)
+      parking_log_T_Jordan         1.11e-06  (beta=2 M=1e-33 alpha=0.08 #0002/2335)
+      phi_Einstein_1MeV            0.000208  (beta=2.9 M=1e-30 alpha=0.08 #0015/2690)
+      phi_Einstein_70keV           3.42e-05  (beta=2.9 M=1e-30 alpha=0.01 #0015/2823)
+      rho_chi_ratio_1MeV           2.43e-08  (beta=2.9 M=1e-33 alpha=0.01 #0015/2584)
+      rho_chi_ratio_70keV          1.66e-07  (beta=2 M=1e-33 alpha=0.08 #0002/2335)
+      rho_chi_ratio_today          1.66e-07  (beta=2 M=1e-33 alpha=0.08 #0002/2335)
+      unassessed_share             1.73e-05  (beta=2 M=1e-33 alpha=0.08 #0002/2335)
+      worst_birth_margin           1.07e-07  (beta=2 M=1e-30 alpha=0.08 #0002/2603)
+      worst_birth_margin_N         1.54e-07  (beta=2 M=1e-33 alpha=0.08 #0002/2335)
+      worst_reflection_margin      1.05e-07  (beta=2 M=1e-30 alpha=0.08 #0002/2603)
+      worst_reflection_margin_N    1.59e-07  (beta=2 M=1e-33 alpha=0.08 #0002/2335)
+      worst_tracker_margin         2.93e-08  (beta=2 M=1e-30 alpha=0.08 #0002/2603)
+      worst_tracker_margin_N       1.47e-08  (beta=2.9 M=1e-30 alpha=0.01 #0015/2823)
+    largest relative change against the store, sample columns:
+      H_Einstein_Mp                1.15e-06  (beta=2.9 M=1e-30 alpha=0.01 #0015/2823)
+      H_Jordan_Mp                  0.00151  (beta=2.9 M=1e-30 alpha=0.01 #0015/2823)
+      Sigma                        0.000686  (beta=1.2 M=1e-33 alpha=0.01 #0011/2819)
+      dgstar_rho_dlogT             0.0199  (beta=1.2 M=1e-33 alpha=0.08 #0011/2500)
+      dgstar_s_dlogT               0.0395  (beta=1.2 M=1e-33 alpha=0.08 #0011/2500)
+      friction_term_Mp             0.597  (beta=2 M=1e-33 alpha=0.08 #0002/2335)
+      gstar_rho                    1.01e-06  (beta=2.9 M=1e-30 alpha=0.01 #0015/2823)
+      gstar_s                      9.66e-07  (beta=2.9 M=1e-30 alpha=0.01 #0015/2823)
+      kicking_term_Mp              2.97e-06  (beta=2.9 M=1e-30 alpha=0.01 #0015/2823)
+      log_T_Jordan_GeV             0.000298  (beta=2 M=1e-30 alpha=0.08 #0002/2603)
+      log_fm                       0.000529  (beta=2.9 M=1e-30 alpha=0.01 #0015/2823)
+      log_one_plus_z_Jordan        2.08e-08  (beta=2.9 M=1e-30 alpha=0.01 #0015/2823)
+      log_rhorad_Einstein_Mp4      3.36e-08  (beta=2.9 M=1e-30 alpha=0.01 #0015/2823)
+      log_rhorad_Jordan_Mp4        2.76e-08  (beta=2.9 M=1e-30 alpha=0.01 #0015/2823)
+      phi_Einstein_Mp              0.347  (beta=1.2 M=1e-33 alpha=0.08 #0011/2500)
+      pi_Einstein_Mp               0.597  (beta=2 M=1e-33 alpha=0.08 #0002/2335)
+      raw_N                        0.000131  (beta=2.9 M=1e-30 alpha=0.01 #0015/2823)
+      reflecting_term_Mp           0.574  (beta=1.2 M=1e-33 alpha=0.08 #0011/2500)
+      rho_chi_over_rho_rad         3.06e-07  (beta=2.9 M=1e-30 alpha=0.01 #0015/2823)
+    history                                    outcome     wall x None    steps x None  1st later  phi  disc max hw out        max rel vs None (value)
+    beta=2 M=1e-33 alpha=0.08 #0002/2335       success      8.8   0.93    11307   1.03    0     0    0    96          0    4.2e-05 (phi_Einstein_1MeV)
+    beta=1.2 M=1e-33 alpha=0.01 #0011/2819     success      2.6   0.88     1822   1.02    0     0    0     6          0     6.2e-06 (unassessed_share)
+    beta=2 M=1e-33 alpha=0.01 #0002/2496       success     14.5   1.13    16859   1.03    0     0    0   168          0    1.7e-05 (phi_Einstein_1MeV)
+    beta=1.2 M=1e-33 alpha=0.08 #0011/2500     success      7.6   1.00    11315   1.03    0     0    0    93          0 3.6e-05 (density_NP_ratio_70keV)
+    beta=2.9 M=1e-33 alpha=0.08 #0015/2359     success      9.2   1.08    10449   1.03    0     0    0    94          0    0.00021 (phi_Einstein_1MeV)
+    beta=2.9 M=1e-33 alpha=0.01 #0015/2584     success     10.7   1.17    11617   1.03    0     0    0    82          0 0.00025 (density_NP_ratio_70keV)
+    beta=2 M=1e-30 alpha=0.01 #0002/2498       success     15.9   1.27    16859   1.03    0     0    0   168          0    1.7e-05 (phi_Einstein_1MeV)
+    beta=2 M=1e-30 alpha=0.08 #0002/2603       success     12.3   1.37    11307   1.03    0     0    0    96          0    4.2e-05 (phi_Einstein_1MeV)
+    beta=1.2 M=1e-30 alpha=0.01 #0011/2821     success      4.7   1.64     1826   1.02    0     0    0     6          0     5.7e-06 (unassessed_share)
+    beta=1.2 M=1e-30 alpha=0.08 #0011/2501     success     10.1   1.35    11317   1.03    0     0    0    93          0 3.6e-05 (density_NP_ratio_70keV)
+    beta=2.9 M=1e-30 alpha=0.08 #0015/2690     success     12.8   1.38    10449   1.03    0     0    0    94          0    0.00021 (phi_Einstein_1MeV)
+    beta=2.9 M=1e-30 alpha=0.01 #0015/2823     success     13.4   1.32    11617   1.03    0     0    0    82          0 0.00025 (density_NP_ratio_70keV)
+
+=== overview per variant, over every history of the batch
+--- None: 66 tasks; outcomes {'failure': 3, 'success': 63}
+    kept steps flagged by the phi condition: first steps of an instance 3, later 5; ratio-only flags made 14737; discarded by F4 0
+    goldens bitwise 3 of 3; against the store bitwise 54 of 54
+--- F1: 66 tasks; outcomes {'success': 66}
+    kept steps flagged by the phi condition: first steps of an instance 0, later 0; ratio-only flags made 13316; discarded by F4 0
+    goldens bitwise 0 of 3; against the store bitwise 0 of 54
+    largest relative change against the store (items 4, 5): Delta_N_eff_1MeV 6e-08, Delta_N_eff_today 0.0039, rho_chi_ratio_70keV 7.4e-07, parking_N 0.0019, parking_log_T_Jordan 0.0035, injections 0.071, density_NP_ratio_1MeV 6.5e-05, density_NP_ratio_70keV 0.0012, phi_Einstein_1MeV 0.00053
+--- F2: 66 tasks; outcomes {'success': 66}
+    kept steps flagged by the phi condition: first steps of an instance 0, later 5; ratio-only flags made 14735; discarded by F4 0
+    goldens bitwise 0 of 3; against the store bitwise 44 of 54
+    largest relative change against the store (items 4, 5): Delta_N_eff_today 0.0046, parking_N 0.0019, parking_log_T_Jordan 0.0035, injections 0.071, density_NP_ratio_1MeV 9.3e-05, density_NP_ratio_70keV 0.00037, phi_Einstein_1MeV 2.5e-05
+--- F2(c=0.3): 9 tasks; outcomes {'success': 9}
+    kept steps flagged by the phi condition: first steps of an instance 0, later 0; ratio-only flags made 777; discarded by F4 0
+    goldens bitwise 0 of 0; against the store bitwise 0 of 0
+--- F2(c=3): 9 tasks; outcomes {'success': 9}
+    kept steps flagged by the phi condition: first steps of an instance 0, later 0; ratio-only flags made 773; discarded by F4 0
+    goldens bitwise 0 of 0; against the store bitwise 0 of 0
+--- F3: 66 tasks; outcomes {'success': 66}
+    kept steps flagged by the phi condition: first steps of an instance 0, later 0; ratio-only flags made 15414; discarded by F4 0
+    goldens bitwise 3 of 3; against the store bitwise 6 of 54
+    largest relative change against the store (items 4, 5): Delta_N_eff_1MeV 3.2e-08, Delta_N_eff_today 0.0029, rho_chi_ratio_70keV 2.1e-07, parking_N 0.0024, parking_log_T_Jordan 0.0045, injections 0.088, density_NP_ratio_1MeV 8.7e-05, density_NP_ratio_70keV 0.00031, phi_Einstein_1MeV 0.00091
+--- F4: 66 tasks; outcomes {'success': 66}
+    kept steps flagged by the phi condition: first steps of an instance 0, later 0; ratio-only flags made 22343; discarded by F4 22348
+    goldens bitwise 0 of 3; against the store bitwise 0 of 54
+    largest relative change against the store (items 4, 5): Delta_N_eff_1MeV 1e-07, Delta_N_eff_today 0.0083, rho_chi_ratio_70keV 3.8e-07, parking_N 0.0024, parking_log_T_Jordan 0.0045, injections 0.088, density_NP_ratio_1MeV 3.2e-05, density_NP_ratio_70keV 0.00042, phi_Einstein_1MeV 0.00018
+--- F3+F4: 66 tasks; outcomes {'success': 66}
+    kept steps flagged by the phi condition: first steps of an instance 0, later 0; ratio-only flags made 23346; discarded by F4 23346
+    goldens bitwise 0 of 3; against the store bitwise 0 of 54
+    largest relative change against the store (items 4, 5): Delta_N_eff_1MeV 8.3e-08, Delta_N_eff_today 0.011, rho_chi_ratio_70keV 3.1e-07, parking_N 0.0014, parking_log_T_Jordan 0.0024, injections 0.082, density_NP_ratio_1MeV 5.5e-05, density_NP_ratio_70keV 0.00035, phi_Einstein_1MeV 0.00021
+
+=== cost per M: total accepted steps and wall-clock over the histories both runs completed, against None
+    variant               1e-33            4e-31            1e-30            1e-15            1e-12            0.001             0.01              0.5
+    None         1.00/ 1.00( 6)   1.00/ 1.00(14)   1.00/ 1.00( 6)   1.00/ 1.00(13)   1.00/ 1.00(15)   1.00/ 1.00( 5)   1.00/ 1.00( 1)   1.00/ 1.00( 3)
+    F1           1.92/ 1.68( 6)   1.98/ 1.75(14)   1.92/ 1.61( 6)   1.78/ 1.63(13)   1.67/ 1.53(15)   1.09/ 1.15( 5)   1.06/ 1.09( 1)   1.01/ 1.06( 3)
+    F2           1.00/ 1.02( 6)   1.00/ 0.96(14)   1.00/ 1.07( 6)   1.00/ 0.97(13)   1.00/ 0.96(15)   1.00/ 0.99( 5)   1.00/ 0.98( 1)   1.00/ 0.93( 3)
+    F2(c=0.3)                 -   1.00/ 1.00( 2)                -   1.16/ 1.08( 1)   1.58/ 1.21( 3)                -                -                -
+    F2(c=3)                   -   1.00/ 1.09( 2)                -   1.01/ 1.01( 1)   1.00/ 0.87( 3)                -                -                -
+    F3           1.02/ 0.94( 6)   1.03/ 1.00(14)   1.02/ 0.91( 6)   1.00/ 0.95(13)   1.01/ 0.95(15)   1.00/ 1.05( 5)   1.00/ 0.97( 1)   1.00/ 1.17( 3)
+    F4           1.00/ 0.93( 6)   1.00/ 0.96(14)   1.00/ 0.92( 6)   0.95/ 0.92(13)   1.02/ 0.97(15)   1.01/ 1.03( 5)   1.02/ 1.02( 1)   1.01/ 0.96( 3)
+    F3+F4        1.03/ 1.06( 6)   1.03/ 1.06(14)   1.03/ 1.35( 6)   0.96/ 0.95(13)   1.01/ 1.01(15)   1.01/ 1.02( 5)   1.02/ 1.06( 1)   1.01/ 0.94( 3)
+    (each cell: steps ratio/wall ratio(histories))
+
+=== the flag under None, over every history of the batch
+    outward steps 390774; with a sign change of pi 16995; flagged by the phi condition 8, by the ratio condition alone 14737
+    least pi_end/pi_start of an unflagged step with no sign change 0.500006; greatest of a flagged one 0.499988
+    pi_end/pi_start, steps with no sign change: <0: 0, [0,0.0001): 2, [0.0001,0.001): 19, [0.001,0.01): 137, [0.01,0.1): 2000, [0.1,0.5): 12579, [0.5,0.9): 53021, [0.9,0.99): 51797, [0.99,0.999): 32453, [0.999,0.9999): 21998, [0.9999,0.99999): 9993, [0.99999,1): 6930, >=1: 182850
+    h*omega (stale J), outward steps: 0 or <1e-12: 36276, [1e-10,1e-9): 2, [1e-8,1e-7): 80, [1e-7,1e-6): 680, [1e-6,1e-5): 2208, [1e-5,1e-4): 4920, [1e-4,1e-3): 11860, [1e-3,1e-2): 27699, [1e-2,1e-1): 136838, [1e-1,1e0): 164084, [1e0,1e1): 4556, [1e1,1e2): 508, [1e2,1e3): 842, [1e3,1e4): 219, >=1e4: 2
+    every step flagged by the phi condition under None (8):
+      beta=1.5 M=1e-12 alpha=0.05: N0=35.91429105 reflection first=True h=0.000637 h*omega=1.24e+03 pi ratio=6.58e-05 sign change=True least phi/phi0=-20.5 a_in=-0.0157
+      beta=1.09 M=1e-15 alpha=0.03: N0=37.41894954 reflection first=True h=0.00016 h*omega=1.06e+03 pi ratio=8.9e-05 sign change=True least phi/phi0=-6.37 a_in=-1.9
+      beta=1.14 M=1e-15 alpha=0.01: N0=37.67089767 reflection first=True h=0.000161 h*omega=1.07e+03 pi ratio=8.79e-05 sign change=True least phi/phi0=-6.54 a_in=-1.83
+      beta=2.9 M=4e-31 alpha=0.08 #0001/44: N0=32.10687425 reflection first=False h=0.0113 h*omega=0 pi ratio=-1.79e+03 sign change=True least phi/phi0=0.9 a_in=0.099
+      beta=2.9 M=1e-15 alpha=0.08 #0001/45: N0=32.10687419 reflection first=False h=0.0113 h*omega=0 pi ratio=-1.77e+03 sign change=True least phi/phi0=0.9 a_in=0.099
+      beta=2.9 M=1e-12 alpha=0.08 #0001/46: N0=32.10687419 reflection first=False h=0.0113 h*omega=0 pi ratio=-1.77e+03 sign change=True least phi/phi0=0.9 a_in=0.099
+      beta=2.9 M=1e-33 alpha=0.08 #0015/2359: N0=32.10687421 reflection first=False h=0.0113 h*omega=0 pi ratio=-1.78e+03 sign change=True least phi/phi0=0.9 a_in=0.099
+      beta=2.9 M=1e-30 alpha=0.08 #0015/2690: N0=32.10687425 reflection first=False h=0.0113 h*omega=0 pi ratio=-1.79e+03 sign change=True least phi/phi0=0.9 a_in=0.099
+    the ratio-only flags under None: 14737; with inward acceleration -pi' > 0 (the field decelerating) 14737; first steps of an instance 0; largest h*omega 1.23e+04
