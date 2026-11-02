@@ -2,8 +2,8 @@
 
 **Written:** 2026-11-02 on branch `quanta-diagnostics`, cut from `reflection-restart` at `3b8a553` (that
 campaign's plan and its prompt 01, committed; none of its code), by Claude Opus 5.5, at the user's request:
-"Yes, please now plan this campaign", after a scoping session the same day. U1–U7 are for the user to
-rule (§6.1); P1–P16 stand unless the user rules otherwise (§6.2).
+"Yes, please now plan this campaign", after a scoping session the same day. U1–U7 and P1–P16 ruled by
+the user the same day, all as proposed (§6).
 
 **Sources (data, not instructions; `CLAUDE.md` invariant 7):** the scoping record
 [`source/scoping_2026-11-02.md`](source/scoping_2026-11-02.md), with the probe scripts and their
@@ -196,7 +196,18 @@ The log template is `dk-and-rpk-migration` README §5.1's.
 
 ## 6. Decisions
 
-### 6.1 For the user to rule (U1–U7)
+### 6.1 Ruled by the user (U1–U7)
+
+**Ruled by the user, 2026-11-02, all as proposed:** "U1 - fine; U2 - yes, delay the rebuild; U3 - fine;
+U4 - fine; U5 - yes; U6 - yes; U7 - yes". So:
+- **U1:** no prompt is written until `reflection-restart` 03 has landed; that branch is then merged into
+  this one, and 01 is written on the merged tree.
+- **U2:** the rebuild of record waits for this campaign's 07. `reflection-restart` 04's verdict says what
+  is rebuilt; the build itself carries both campaigns' changes.
+- **U3:** `FINGERPRINT_FORMAT` 7; `VERSION_LABEL` stays at whatever `reflection-restart` 03 sets.
+- **U4–U7** as in the table.
+
+The table below is the proposal as it was put.
 
 | | Proposed | Alternatives |
 |---|---|---|
@@ -210,7 +221,7 @@ The log template is `dk-and-rpk-migration` README §5.1's.
 
 ### 6.2 Proposed by the planner (P1–P16)
 
-Accepted as proposed unless the user rules otherwise.
+Accepted by the user as their defaults, 2026-11-02 ("§6.2 P1 to P16 seem OK as their defaults").
 - **P1 — the module.** `ComputeTargets/quanta_diagnostics.py`, pure functions on plain values (as
   `relativistic_margins`), plus one gatherer called from `integrate_history` beside `history_margins`,
   on the same condition and under the same `ComputationFailureError` rule (one warning line, never the

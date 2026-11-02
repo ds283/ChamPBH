@@ -2,9 +2,10 @@
 
 **Last updated:** 2026-11-02 · **Status: PLANNED — 0 of 7 landed.** Planned 2026-11-02 at the user's
 request, after a scoping session the same day ([`source/scoping_2026-11-02.md`](source/scoping_2026-11-02.md)).
-U1–U7 are for the user to rule; P1–P16 stand unless ruled otherwise (README §6). The plan is
+U1–U7 and P1–P16 ruled by the user the same day, all as proposed (README §6). The plan is
 [`README.md`](README.md), on branch `quanta-diagnostics`, cut from `reflection-restart` at `3b8a553`.
-Under U1 as proposed, no prompt is written until `reflection-restart` 03 has landed and been merged here.
+Under U1, no prompt is written until `reflection-restart` 03 has landed and been merged here; under U2,
+the rebuild of record waits for this campaign's 07.
 
 The campaign stores what the run computes and discards about the produced quanta: every generation and
 turning point as a row of a child table, the field's and the tracker's mass and the matter-like excess at
