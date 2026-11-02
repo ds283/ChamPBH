@@ -9,7 +9,9 @@ all as proposed (README §6). **Re-planned the same day around the drain law and
 probed ([`source/drain-probe_2026-11-02.md`](source/drain-probe_2026-11-02.md)). **README §8 is the plan;** U8–U12 ruled the same day, all as proposed (README §8.6).
 The branch was cut from `reflection-restart` at `3b8a553`. Under U1 as extended by ruling 6, no prompt is
 written until `reflection-restart` 04 has landed and been merged here; under U2, the rebuild of record
-waits for this campaign's 08.
+waits for this campaign's 08. *(2026-11-02: `reflection-restart` 04 landed and that campaign closed; its branch was
+merged here (`1561b60`). The user ruled the wall-search fix into 01 (README §8.8), and the fixed-α issue came
+back to §3 for it.)*
 
 The campaign replaces the fixed-α drain by a one-loop law, α_eff = min(α_cap, A·2.7/ℓ)·w_gate at a
 one-loop turnaround and zero at R ≤ 1, with the fixed law kept beside it, bitwise. It measures the law
@@ -19,7 +21,7 @@ per history); derives the spectrum-dependent measures in a tool outside the inte
 laws; and writes the figure tools.
 
 **Campaign:** [`README.md`](README.md) ·
-**Code:** `ComputeTargets/ScalarHistory.py`, `ComputeTargets/quanta_spectrum.py` (new),
+**Code:** `ComputeTargets/ScalarHistory.py`, `CosmologyConcepts/Models/AbstractModel.py` (the wall search, 01), `ComputeTargets/quanta_spectrum.py` (new),
 `ObjectFactories/ScalarHistory.py`, `config/`, `main.py`, `plot_*.py`, `extract_common.py`, `tools/` ·
 **Index:** [`.documents/OPEN_ISSUES.md`](../../.documents/OPEN_ISSUES.md) §1.23
 
@@ -35,7 +37,7 @@ The plan as first ruled had seven prompts (README §2), none written; the re-pla
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | The drain law | the law and A as inputs; the regime in the loop; α_eff by regime; the gap prescription as a module attribute; the `"drain"` payload key; the tool route's options; the 3873 failure | Opus | ⏸ `reflection-restart` 04 | ⬜ | | |
+| 01 | The drain law | the law and A as inputs; the regime in the loop; α_eff by regime; the gap prescription as a module attribute; the `"drain"` payload key; the tool route's options; the 3873 failure; the wall-search fix (README §8.8) | Opus | ⬜ | ⬜ | | |
 | 02 | Measure the law | about forty histories by the tool route, re-tuned, at three A and both gap prescriptions; then U13–U14 | Opus | ⬜ | ⬜ | | |
 | 03 | The store | the keys, `ScalarHistoryBounce`, the sample and history columns, the gap prescription fixed, `FINGERPRINT_FORMAT` 7, `VERSION_LABEL` | Opus | ⬜ | ⬜ | | |
 | 04 | Drivers and exports | the law's options in `main.py` and the plot scripts; `histories.csv`, `fields.csv`, `bounces.csv` | Sonnet | ⬜ | ⬜ | | |
@@ -133,6 +135,18 @@ the new prompts.
   histories complete on the same tree. **Next:** `reflection-restart` 04.
   **Assigned (2026-11-02):** to `reflection-restart` 04, by the user's ruling 6 (README §6.3), to find
   whether its 03 caused this; that campaign's board §3.1 carries it.
+  **Narrowed (2026-11-02) by `reflection-restart` 04** (`ac8ce15`; its board §3.1 holds the measurements, its
+  verification document §3.2–§3.6 the evidence): verdict (ii), 03's F3 moves a correct trajectory onto a limit
+  of the wall search that predates it. The search cannot find a root of V(φ_t) − V_floor = E that lies below
+  17 quanta of ln V's rounding (`WALL_ROUNDING_QUANTA` = 16 treats the region as −∞), and raises "not monotone"
+  or "the outer end is still −inf". The step loop meets it at an infall's first step start, near the apex,
+  where E/V_floor falls below about 10⁻¹² and the field is far out in the tail (φ/M ≈ 7×10²³ at the two
+  failures). The roots are at 1.51 and 1.58 quanta in 2197 and 2188, and at 0.11–16.54 in the nine
+  "not monotone" failures of the 2026.8.0 store, made before `reflection-restart`. Eight of those nine still
+  fail on the fixed tree.
+  **Assigned (2026-11-02):** to this campaign's 01, by the user: "Add the wall-search fix to `one-loop-drain`
+  01." The fixed law runs these histories, and 01 already owns the related inside-wall stop of 3873. The form of
+  the fix is README §8.8, P21. **Next:** 01.
 - **`[00-a-zero-drain-history-stops-at-the-inside-wall-guard]`** — opened 2026-11-02, when
   `[00-reflection-restart-tree-fails-probe-histories]` was split (§4; source `drain-probe_2026-11-02.md` §5).
   3873 (10⁻¹² M_P, β 1.11), run on `2d50b95` at its stored normalization with nothing drained, stops at

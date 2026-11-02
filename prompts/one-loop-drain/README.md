@@ -604,3 +604,59 @@ of the rebuild of record (U14).
 - Two figure tools and their demonstration figures.
 - The handover for the rebuild of record (U2), at the A values of U14, and for the figures of record made
   from it, Fig 6 at laboratory M first.
+
+### 8.8 After `reflection-restart` closed (2026-11-02)
+
+`reflection-restart` 04 landed on 2026-11-02 (`ac8ce15`, reviewed `25b1242`), and that campaign closed. Its
+branch was merged here the same day (`1561b60`), as U1 requires: the merged tree's computing code is
+`reflection-restart`'s, with F3 and the guard, `VERSION_LABEL` 2026.9.0 and the scanner
+`tools/outward_step_scan.py`.
+
+Its 04 gave verdict (ii) on `[00-fixed-alpha-laboratory-M-histories-fail-in-classical-turning-point]`.
+`reflection-restart` 03's F3 moves 2197 and 2188 onto a limit of the wall search that predates it: a root
+below 17 quanta of ln V's rounding cannot be found, and the search raises. The issue's measurements are
+on `reflection-restart`'s board §3.1 and in its verification document §3. That campaign proposed this
+campaign's 01 as the fix's destination.
+
+**Ruled by the user, 2026-11-02:** "Add the wall-search fix to `one-loop-drain` 01." So 01 takes the
+fix, under the Law gate, beside the drain law and 3873 (§8.4's row 01, extended). The issue went back
+to this board's §3.
+
+**Proposed by the planner for 01 (P21–P25), the defaults unless the user says otherwise.** Prompt 01 is
+written on them.
+- **P21 — the form of the wall-search fix.**
+  - **Where:** in `AbstractModel.classical_turning_point`, after its test `r_0 >= 0` (which returns
+    None) and before the search.
+  - **The rule:** return None when ln E is below the least finite value that `_log_V_minus_floor` can
+    return at this ln V_floor. The turning point then lies inside the region the search reads as −∞,
+    and cannot be resolved.
+  - **Why nothing else moves:** every such call raises today. Every finite residual is positive, so the
+    outer end stays −∞. The rule changes only calls that raise, so no history that succeeds today moves,
+    and the fixed law stays bitwise.
+  - **What the step loop does with None:** it already reads None as "no decision", and the infall's
+    latest assessment stands. At the eleven calls measured, the field is far out in the tail, where no
+    decision would be made.
+  - **Not chosen:**
+    - a closed-form hook for ln(V − V_floor), which would move the digits of every wall search and so
+      lose the fixed law's bitwise gates (Law, here, and 06's Bitwise);
+    - reporting a root inside the −∞ region, which changes the search that the one-loop turnaround
+      also uses, for the same set of calls.
+  - **Accounting:** the calls it answers are counted in the `"drain"` payload key.
+- **P22 — the law's interface.**
+  - `integrate_scalar_history`, `integrate_history` and `tune_history` take `drain_law`: `"fixed"`, the
+    default, or `"one_loop"`. It sits beside `alpha`, which carries A under the one-loop law, as U8's
+    keys will.
+  - Under the one-loop law, A must be finite and > 0. A = 0 is refused, since it is natural mode. There
+    is no upper bound, because α_cap clamps.
+  - `compute_scalar_history` and `main.py` refuse the one-loop law until 03 and 04 store its keys, so
+    that no one-loop history can be written under a fixed-law key.
+- **P23 — the constants.**
+  - c₁ = 2.7 exactly. It is the note's own figure: `wall_backreaction.tex`, "The inelastic fraction",
+    gives 4c with c ≈ 0.68 and writes 2.7. It is also the probe's, so that the Law gate compares with the
+    probe directly.
+  - α_cap = 0.99 (U10), and ℓ_edge = 4 (the probe's `PROBE_GAP=high`).
+- **P24 — ℓ ≤ 0.** A one-loop solution with ℓ ≤ 0 is classified gap, with its reason, since A·c₁/ℓ has
+  no meaning there. 01 reports whether any arises.
+- **P25 — the tool route.** `tools/history_and_bbn.py` gains `--drain-law`. Until 03 it also gains
+  `--gap-prescription`, which sets the module attribute of §8.2 in its own process, as
+  `reflection-restart` 01's `--variant` set its switch. 03 removes both the attribute and the option.

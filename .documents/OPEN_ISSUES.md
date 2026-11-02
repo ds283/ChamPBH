@@ -52,11 +52,11 @@ and assigned the same day to `reflection-restart`, §1.21); 1 on the `reflection
 the user's ruling of the signature; re-planned the same day, its audit withdrawn; one more assigned the same day
 from the `one-loop-drain` board, planned on its own branch, §1.21; prompt 04 closed the first assigned issue,
 narrowed the second and opened one, §1.22, and the campaign closed 2026-11-02, 3 of 3 prompts landed, 02 withdrawn,
-with that one open and the second assigned issue still listed in §1.21); 5 on the `one-loop-drain` board (planned
+with that one open; the second assigned issue returned to `one-loop-drain` the same day, §1.23); 6 on the `one-loop-drain` board (planned
 2026-11-02 as `quanta-diagnostics` from a scoping session
 the same day, `prompts/one-loop-drain/source/`; three opened by the planner, one of them narrowed and two
 more opened the same day from the drain probe; re-planned and renamed the same day, when one of those was
-split in two and one half assigned to `reflection-restart`, §1.21, the rest §1.23).
+split in two and one half assigned to `reflection-restart`, returned for its 01 after that campaign closed; §1.23).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -356,12 +356,8 @@ Planned 2026-11-02 to measure the proposed fixes, implement the fix the user rul
 rebuild of the whole store (re-planned after its 01: the audit withdrawn, since `quanta-diagnostics`
 rebuilds everything). One issue assigned at planning, from the `inelastic-reflection` board.
 *(2026-11-02: one more assigned from the `one-loop-drain` board. Prompt 04 closed the first, board §4, and
-narrowed the second, which stays here until the user rules its destination; the campaign closed the same day.)*
-
-- `[00-fixed-alpha-laboratory-M-histories-fail-in-classical-turning-point]` — the wall search cannot find a root
-  below 17 quanta of ln V's rounding and raises "not monotone"; met at an infall's first step start near an apex; F3
-  moves 2197 and 2188 onto it (roots 1.5 quanta), the store's nine show it before 03; proposed for `one-loop-drain` 01,
-  for the user to rule. *(`one-loop-drain`; drain probe, 2026-11-02; assigned 2026-11-02; narrowed 2026-11-02)*
+narrowed the second, which stays here until the user rules its destination; the campaign closed the same day.
+The user then ruled it to `one-loop-drain` 01, and its row moved to §1.23.)* None is assigned now.
 
 ### 1.22 `reflection-restart` — [board §3](../prompts/reflection-restart/IMPLEMENTATION_STATE.md)
 
@@ -376,7 +372,8 @@ Planned 2026-11-02; closed 2026-11-02. One opened by prompt 04, from the 42 reco
 Planned 2026-11-02 as `quanta-diagnostics`, to store and measure what the run discards about the produced
 quanta; re-planned and renamed the same day around a one-loop drain law. Three opened by the planner, from
 the scoping session of that day; two opened the same day from the drain probe
-(`source/drain-probe_2026-11-02.md`), one of which was split at the re-plan, its other half in §1.21.
+(`source/drain-probe_2026-11-02.md`), one of which was split at the re-plan, its other half assigned to
+`reflection-restart` (§1.21) and returned, narrowed, for 01 the same day.
 
 - `[00-weighted-margins-hide-the-least-relativistic-generations]` — stored worst margins and failing
   shares cover only generations ≥ 10⁻³ of K; in the low-α transition window the rest hold 80–98% of ρ_χ,
@@ -389,6 +386,11 @@ the scoping session of that day; two opened the same day from the drain probe
 - `[00-fixed-alpha-drain-overstates-late-reflections]` — a fixed α asks late R < 1 bounces for n ≫ 1 (61%
   of 2197's ρ_χ); a one-loop drain parks the field in 10–95 bounces and moves ΔN_eff; this campaign's object,
   closed by 03. *(`one-loop-drain`; drain probe, 2026-11-02)*
+- `[00-fixed-alpha-laboratory-M-histories-fail-in-classical-turning-point]` — the wall search cannot find a root
+  below 17 quanta of ln V's rounding and raises "not monotone"; met at an infall's first step start near an apex;
+  `reflection-restart` 03's F3 moves 2197 and 2188 onto it, and the 2026.8.0 store's nine show it before; narrowed by
+  `reflection-restart` 04; for 01, by the user's ruling. *(`one-loop-drain`; drain probe, 2026-11-02; assigned to
+  `reflection-restart` 2026-11-02; returned for 01 2026-11-02)*
 - `[00-a-zero-drain-history-stops-at-the-inside-wall-guard]` — 3873 (10⁻¹² M_P) with nothing drained stops at
   the inside-wall check (from `fc97233`, not `reflection-restart` 03); every large-M history takes that path
   under the one-loop law; for 01. *(`one-loop-drain`; drain probe, 2026-11-02, split at the re-plan)*

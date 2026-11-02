@@ -270,6 +270,9 @@ the handover saying the whole store is rebuilt (README §6.3). *(2026-11-02: clo
     where E/V_floor is below the rounding width (such a start is far from the wall, φ/M ≈ 7×10²³ at the two failures,
     where no decision is made); or a root inside the −∞ region reported rather than raised. Not fixed here (prompt
     §2).
+- **Returned (2026-11-02):** after the close, the user ruled the destination as proposed: "Add the wall-search
+  fix to `one-loop-drain` 01." `reflection-restart` was merged into `one-loop-drain` the same day (`1561b60`, that
+  campaign's U1), and the issue went back to its home board, `one-loop-drain` §3, for its prompt 01.
 
 ## 4. Resolved issues
 
