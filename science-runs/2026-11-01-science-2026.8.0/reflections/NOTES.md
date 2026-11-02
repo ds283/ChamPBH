@@ -100,3 +100,26 @@ is `plot_by_beta.py`'s export of the diagnostic store by [`../run_figure_exports
 `../fig6/inputs/histories.csv` is that script's export of the main store, which carries
 `log_R_first_impact`. The diagnostic store's sidecar has no fingerprint (it was registered after its
 run), so the provenance takes its digest from the run's status record in `../registry/runs/`.
+
+### Revised later on 2026-11-02: the key, the markers and the ratio strip
+
+At the user's request, after they found row 2 hard to read: the four large-M curves coincided, so
+only M = 0.5 showed, and the key gave the three laboratory-range line styles for row 1 only.
+
+- **The key** draws the line styles of M = 4×10⁻³¹ (thick, pale, solid), 10⁻¹⁵ (dashed) and 10⁻¹²
+  (dotted) in grey, for rows 1 and 2: row 1 draws them in blue at α = 0.08, row 2 in each α's colour.
+  In row 2 the dashed and dotted lines lie on the pale solid one, which is the figure's earlier point
+  that nothing changes from 4×10⁻³¹ to 10⁻¹².
+- **The large-M histories** (α = 0.08) are open orange markers in row 2, seven a curve, one shape per
+  M (10⁻⁹ ▽, 10⁻⁶ △, 10⁻³ ◇, 0.5 ○), at the samples nearest a log-spaced grid in T_J, staggered by M
+  so that all four show.
+- **A strip under row 2** gives each large-M history's ρ_χ/ρ_R relative to the laboratory history's,
+  minus one, sample by sample at the same redshift (the redshift grid is the same at every M, so no
+  interpolation), on a symmetric-log axis linear within ±10⁻⁴. At the end: |Δ| ≤ 4×10⁻⁶ at 10⁻⁹ and
+  10⁻⁶; −1.3 to −4.8×10⁻⁴ at 10⁻³; −1.1%, −2.3% and −3.2% at 0.5 (β = 1.2, 2.0, 2.9). During the
+  drain the strip spikes, to −45% at 10⁻³ and −57% at 0.5 at single samples: there an injection lands a
+  step earlier or later than in the laboratory history, and ρ_χ is a staircase. The values are in the
+  provenance (`rho_chi_ratio_vs_laboratory_minus_1_at_end_alpha_0.08`).
+
+`extract_inputs.py` now also keeps `log_one_plus_z`, the Einstein-frame ln(1 + z) that labels each
+sample (T_J is not monotone through the bounces), so `inputs/fields.csv.gz` is 12.7 MB.

@@ -24,7 +24,7 @@ SOURCES = {  # store: the plot_ScalarHistory.py output written from it
     "reflections": Path("var/science-2026.8.0/out/reflections/QCD_Cosmology"),
     "large-M-dissipation": Path("var/science-2026.8.0/diagnostic/out/large-M-dissipation/QCD_Cosmology"),
 }
-COLUMNS = ["T_Jordan_GeV", "phi_Einstein_Mp", "pi_Einstein_Mp", "rho_chi_over_rho_rad"]
+COLUMNS = ["log_one_plus_z", "T_Jordan_GeV", "phi_Einstein_Mp", "pi_Einstein_Mp", "rho_chi_over_rho_rad"]
 M_EV_TO_MP = {  # the folder names give M in eV; these are the run's M in M_P
     "0.00097413eV": 4e-31,
     "2.4353e+12eV": 1e-15,
