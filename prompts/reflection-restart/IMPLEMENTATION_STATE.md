@@ -30,13 +30,13 @@ to the rebuild of record, which rebuilds the whole store (README §6.3).
 | 01 | [Measure the fixes](01-measure-the-fixes.md) | the scanner; F1–F4 measured; why Radau accepts the bad step | Opus | ✅ | ✅ | `d4703df` | [log](logs/01-measure-the-fixes.md) |
 | ~~02~~ | ~~Audit the 2026.8.0 store~~ | **withdrawn 2026-11-02** (README §6.3): the whole store is rebuilt | — | — | — | | |
 | — | the user's ruling U6 | F3 plus the guard (README §6.3), 2026-11-02 | — | ✅ | ✅ | | |
-| 03 | [The fix](03-the-fix.md) | F3 and the guard, the probe switch removed; tests; a reflecting golden history; labels; documents | Opus | ✅ | ✅ | this commit | [log](logs/03-the-fix.md) |
+| 03 | [The fix](03-the-fix.md) | F3 and the guard, the probe switch removed; tests; a reflecting golden history; labels; documents | Opus | ✅ | ✅ | `b81eab8` | [log](logs/03-the-fix.md) |
 | 04 | The close | the 42 recomputed with the fix; the issue closed; the handover to the rebuild; the close | Opus | ⬜ | ⬜ | | |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed · ~~struck~~ withdrawn.
 
-Prompts are written one at a time, each after the previous one lands and is reviewed. 02 runs on the
-tree before 03.
+Prompts are written one at a time, each after the previous one lands and is reviewed. (02, which was to
+run on the tree before 03, is withdrawn: README §6.3.)
 
 Orchestrator notes, one prompt at a time, in `orchestrator/`:
 - [`prompt-01.md`](orchestrator/prompt-01.md) (`3b8a553`) — used for 01.
@@ -73,6 +73,53 @@ checks:
 Residue fixed in the review commit: "this commit" → `d4703df` in the log and here. The count in
 `prompts/INDEX.md` (26 → 27), which the log noted as outside the agent's files. Dated notes on 845 → 835 in
 the diagnosis README and in the campaign README §2.1.
+
+**Orchestrator review of prompt 03 (2026-11-02)**, by orchestrator note 03 §3, on `b81eab8`. Passed; seven
+checks. The prompt stopped once, before its commit, on two failures in `test_release.py`. The user ruled
+both changes in ("Please allow both"): F3 clamped to the solver's bound, and `BETA_5_FAILED_CHECK_N`
+re-pinned (log 03, D16 and D17).
+1. **Scope.** The commit's parent is `89a0760`, the note's. Its 36 files are ruling 8's, plus
+   `test_release.py` at the user's ruling and `CLAUDE.md`'s counts. Nothing is pushed or left untracked.
+   `grep -i probe ComputeTargets/ScalarHistory.py` finds only the Jacobian's "probe" comments.
+   `FINGERPRINT_FORMAT` is 6.
+2. **Nothing left running.** The replay's pid 28532 does not answer `kill -0`, and no scan or unittest
+   process is alive. `runregistrykit list` is unchanged: 23 runs, all finished.
+3. **The goldens.** Run by the orchestrator: `test_golden_history`, `test_store_fingerprint_golden`,
+   `test_tuning`, `test_golden_reflecting_history`, `test_restart_fix`, `test_release` and
+   `test_fingerprint_format_guard`, 87 OK in 199 s. `fix/compare_goldens.py` reports "differences not
+   allowed: 0".
+4. **The replay.** Three tasks were re-run by the orchestrator on `b81eab8`: the β = 1.5 failure (tuned),
+   the store task β = 2.9, M = 4×10⁻³¹, α = 0.08, and the tuned golden. Each is equal to 01's F3 line in
+   outcome, both SHA-256 digests, sample count, steps, RHS evaluations, compute steps and reflections. The
+   store comparison equals 01's F3 comparison, the golden hook says bitwise, and `restart_retakes` is 0.
+5. **The guard.** The code was read against prompt §1.2 and rulings 5–6:
+   - `new_solver` alone arms the mark, for a restart with π > 0 or a retake.
+   - The mark is cleared at the first accepted step, and the step's start is copied before the step.
+   - The clamp `min(first_step, N_bound − N)` applies to F3's value only.
+
+   A probe of the orchestrator's (scratchpad) then ran the whole tuned β = 1.5, M = 10⁻¹², α = 0.05
+   history through the scanner:
+   - with `_restart_first_step` replaced to return SciPy's choice, it succeeds with one retake (the
+     signature discarded once, kept never);
+   - with the guard's predicate also replaced to return False, it fails with the original
+     `m_eff^2 = -1 e^-225.0798555`.
+6. **The labels.**
+   - `config/version.py` has a 2026.9.0 entry, which says lookups are version-keyed and a 2026.8.0 store
+     is read with its own tree.
+   - `main.py` registers and maps stepping 1 beside stepping 0.
+   - Both plot scripts select stepping 1 only.
+   - `test_kinematic_cap_loop`'s label test follows.
+7. **The records.**
+   - The log is in §5.1's form, D1–D17 classed, with the note's rulings and the user's two among them.
+   - The verification document gains §2 and its diff only adds lines. `fix/out/` is ASCII text.
+   - The notes in `numerical-strategies.md` and `architecture-summary.md` are dated.
+   - Row 03, the items and the Fix gate are on this board, and no issue was opened.
+
+Residue fixed in the review commit:
+- "this commit" → `b81eab8` in the log, here and in verification §2;
+- the board's stale sentence on 02;
+- `prompts/INDEX.md`'s row;
+- two comments in `test_release.py` that gave the release step's end as 40.29089 only.
 
 ### 1.1 Items
 

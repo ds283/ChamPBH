@@ -286,7 +286,7 @@ cheapest in changed digits, but acts outside restarts and moves the goldens.
 ## 2. Prompt 03 — the fix (2026-11-02)
 
 **Tree:** branch `reflection-restart` at `89a0760` plus prompt 03's changes, committed as prompt 03's commit
-(this commit). SciPy 1.17.0, Python 3.13.16. **The fix** (README §6.3, the user's U6, "F3 plus the guard"): in
+(`b81eab8`). SciPy 1.17.0, Python 3.13.16. **The fix** (README §6.3, the user's U6, "F3 plus the guard"): in
 `integrate_scalar_history`, every Radau restarted with π > 0 (after a reflection, a drain or a release) is given
 `first_step = _restart_first_step(y) = min(global_max_step, max(h_floor, f φ/π))`, at most the distance to the
 solver's bound (§2.6), and its first accepted step is

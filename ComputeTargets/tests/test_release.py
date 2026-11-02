@@ -85,7 +85,8 @@ BETA_5_PARKED_CROSSING_ROUNDING = 5e-6
 BETA_5_FAILED_CHECK_N = 40.29068
 
 # item (3)'s window, inside the parked phase (the switch is at N = 38.004) and before the release
-# step [40.19089, 40.29089]; test_parking's window at beta = 5 ends here too
+# step [40.19089, 40.29089] (its end at 40.29068 since reflection-restart prompt 03); test_parking's
+# window at beta = 5 ends here too
 WINDOW_IN_THE_PARKED_PHASE = 40.0
 
 # item (5)'s sentinel (ruling 6): larger than any non-adiabaticity a real history has (A_k <= 1.3 at
@@ -101,7 +102,7 @@ LAG_GRID_PER_EFOLD = 2000
 LAG_PHI_STEP = 1.0e-6
 
 # item (8)'s ends at beta = 5 (the release at 9.745 MeV, N = 40.2545; its step ends at N = 40.29089,
-# 9.396 MeV; the first candidate after it is at N = 41.301)
+# 40.29068 since reflection-restart prompt 03, 9.396 MeV; the first candidate after it is at N = 41.301)
 T_FINAL_INSIDE_THE_RELEASE_STEP_MEV = 9.5
 T_FINAL_ABOVE_THE_RELEASE_MEV = 10.0
 N_STOP_INSIDE_THE_RELEASE_STEP_OFFSET = 0.01

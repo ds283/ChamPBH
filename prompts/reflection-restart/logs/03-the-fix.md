@@ -1,7 +1,7 @@
 # Log 03 — the fix
 
 **Subject:** Implement F3 and the guard at a restart with π > 0, and remove the probe
-**Commit:** this commit, on branch `reflection-restart`, on top of `89a0760`
+**Commit:** `b81eab8`, on branch `reflection-restart`, on top of `89a0760`
 **Date:** 2026-11-02, by Claude Opus 5.5
 **Result:** **COMPLETE, after one stop.** F3 and the guard are the production code, the probe switch is gone, the
 labels moved (`VERSION_LABEL` 2026.9.0, `Radau+kinematic-cap-stepping1`, `FINGERPRINT_FORMAT` still 6), and the Fix gate
