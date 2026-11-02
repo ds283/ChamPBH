@@ -25,7 +25,7 @@ Under U3 as ruled, every stored success with a bad step is regenerated, whatever
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | Measure the fixes | the scanner; F1–F4 measured; why Radau accepts the bad step | Opus | ⬜ | ⬜ | | |
+| 01 | [Measure the fixes](01-measure-the-fixes.md) | the scanner; F1–F4 measured; why Radau accepts the bad step | Opus | ✍️ | ⬜ | | |
 | 02 | Audit the 2026.8.0 store | A, A2, B, C re-integrated at their stored normalization; bitwise reproduction; bad steps per history | Sonnet | ⬜ | ⬜ | | |
 | — | the user's ruling U6 | the fix, from 01 and 02 | — | | | | |
 | 03 | The fix | the ruled fix; tests; a reflecting golden history; labels; documents | Opus | ⬜ | ⬜ | | |
