@@ -423,6 +423,7 @@ class TestDarkRadiationFigure(tds._DissipationStoreCase):
         for key in (
             "injections",
             "injected_fraction",
+            "log_R_first_impact",
             "birth_failing_share",
             "reflection_failing_share",
             "tracker_failing_share",

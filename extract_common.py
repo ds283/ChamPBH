@@ -544,10 +544,12 @@ FIXED_T_MEV = {"1MeV": 1.0, "70keV": 0.07}
 # blank where there is no value, and 0 at alpha = 0). DISSIPATION_CSV_COLUMNS are more of that
 # record's fields (added 2026-11-01 for the 2026.8.0 run's figures): the injections and the injected
 # fraction, the temperatures T_J at which the history parked and was released, in GeV (blank if it
-# did not), and the shares of the relativistic margins that fail.
+# did not), and the shares of the relativistic margins that fail. log_R_first_impact (added 2026-11-02)
+# is ln R, the test-field ratio at the first candidate's classical turning point (blank if none).
 DISSIPATION_CSV_COLUMNS = [
     "injections",
     "injected_fraction",
+    "log_R_first_impact",
     "parking_T_GeV",
     "release_T_GeV",
     "birth_failing_share",
