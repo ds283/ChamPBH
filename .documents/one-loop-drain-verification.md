@@ -10,8 +10,8 @@ the tree they were taken on.
 
 ## 1. Prompt 01 — the drain law (2026-11-03)
 
-**Tree:** branch `one-loop-drain` at `b1415a3` plus prompt 01's changes, committed as prompt 01's commit (this
-commit). Python 3.13.16, SciPy 1.17.0, NumPy 2.3.5. **Scripts:** [`one-loop-drain/law/`](one-loop-drain/law/), each
+**Tree:** branch `one-loop-drain` at `b1415a3` plus prompt 01's changes, committed as prompt 01's commit
+(`b99f6a4`). Python 3.13.16, SciPy 1.17.0, NumPy 2.3.5. **Scripts:** [`one-loop-drain/law/`](one-loop-drain/law/), each
 with a docstring. **Committed outputs:** [`one-loop-drain/law/out/`](one-loop-drain/law/out/). **Raw output** (not
 committed): `var/one-loop-drain/01/`, with the batches' `.jsonl`, `.log`, `.pid`, `.launch` and `.end`. The first
 run there was made on the tree before the user's ruling (b) of §1.7; the run on the final tree is in

@@ -38,7 +38,7 @@ The plan as first ruled had seven prompts (README §2), none written; the re-pla
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | [The drain law](01-the-drain-law.md) | the law and A as inputs; the regime in the loop; α_eff by regime; the gap prescription as a module attribute; the `"drain"` payload key; the tool route's options; the 3873 failure; the wall-search fix (README §8.8) | Opus | ✅ | ✅ | this commit | [01](logs/01-the-drain-law.md) |
+| 01 | [The drain law](01-the-drain-law.md) | the law and A as inputs; the regime in the loop; α_eff by regime; the gap prescription as a module attribute; the `"drain"` payload key; the tool route's options; the 3873 failure; the wall-search fix (README §8.8) | Opus | ✅ | ✅ | `b99f6a4` | [01](logs/01-the-drain-law.md) |
 | 02 | Measure the law | about forty histories by the tool route, re-tuned, at three A and both gap prescriptions; then U13–U14 | Opus | ⬜ | ⬜ | | |
 | 03 | The store | the keys, `ScalarHistoryBounce`, the sample and history columns, the gap prescription fixed, `FINGERPRINT_FORMAT` 7, `VERSION_LABEL` | Opus | ⬜ | ⬜ | | |
 | 04 | Drivers and exports | the law's options in `main.py` and the plot scripts; `histories.csv`, `fields.csv`, `bounces.csv` | Sonnet | ⬜ | ⬜ | | |
@@ -51,7 +51,66 @@ The plan as first ruled had seven prompts (README §2), none written; the re-pla
 
 Prompts are written one at a time, each after the previous one lands and is reviewed.
 
-Orchestrator notes, one prompt at a time, in `orchestrator/`.
+Orchestrator notes, one prompt at a time, in `orchestrator/`:
+- [`prompt-01.md`](orchestrator/prompt-01.md) (`b1415a3`) — used for 01.
+
+**Orchestrator review of prompt 01 (2026-11-03)**, by orchestrator note 01 §3, on `b99f6a4`. Passed; seven
+checks:
+1. **Scope.**
+   - The commit's parent is `b1415a3`, the note's. It holds ruling 9's 36 files and nothing else, and nothing is
+     pushed. Only `var/` outputs are untracked.
+   - The diff over `config`, `main.py`, the plot scripts, `ObjectFactories` and `tools/outward_step_scan.py` is
+     empty.
+   - In `AbstractModel.py` the diff adds the predicate, its cache and the one early return in
+     `classical_turning_point`. `_search_log_field`, `WALL_ROUNDING_QUANTA` and `WALL_SEARCH_HALVINGS` are
+     unchanged.
+   - `VERSION_LABEL` is 2026.9.0 and `FINGERPRINT_FORMAT` is 6.
+2. **Nothing left running.** No pid under `var/one-loop-drain/01/` answers `kill -0`. `runregistrykit list` is
+   unchanged: 23 runs, all finished.
+3. **The fixed law.**
+   - Run by the orchestrator: `test_golden_history`, `test_golden_reflecting_history`, `test_tuning` and
+     `test_store_fingerprint_golden`, 50 OK in 154 s.
+   - Three of `reflection-restart` 04's 42, re-run through the scanner on `b99f6a4`: `shard0015#3298`,
+     `shard0003#3819` and `shard0015#4389`. Each equals `the-42.jsonl` in outcome, both digests, `n_samples`,
+     `accepted_steps`, `RHS_evaluations`, `reflections` and `restart_retakes`, and 4389 fails with the same
+     reason.
+4. **The fix.**
+   - Read against P21: the early return sits after `r_0 >= 0` and before the search, and the docstring carries
+     the argument.
+   - In a scratch probe, the old behaviour was taken with `_turning_point_unresolvable` patched to False, and
+     compared with the new on `probe 2197` and `stored shard0000#1001` (16.5 quanta): the new returns None, the
+     old raises.
+   - At 2197's ln V_floor, with ln E at the least finite value (predicate False), old and new return the same
+     root, bitwise. One float below it (predicate True), the new returns None and the old raises.
+5. **The law.**
+   - `drain_alpha_effective` reads `min(DRAIN_ALPHA_CAP, A * DRAIN_C1 / ell) * w_gate`, as ruling 3 asks.
+   - `unresolved_reflection_refused` shares `_wall_and_kinetic` and `_g2_refuses` with `_reflection_guards`, and
+     is called only where `unresolved_turnaround` fired.
+   - Re-run by the orchestrator: 2197 at A = 1, gap zero, `gate_weight` patched
+     (`law/one_loop_run.py ... probe`). It was compared with the probe's `2197-A1.json` by the orchestrator's own
+     comparison: all 10 candidates' (N, α_eff, ΔK) equal, and the dark-radiation values, `accepted_steps`,
+     `reflections` and the parking N equal.
+6. **The tool route.**
+   - `--help` shows `--drain-law` and `--gap-prescription`.
+   - The pinned fixed-law tests (`test_history_and_bbn`, `test_history_and_bbn_alpha`) pass, 7 OK in 38 s.
+   - One run, `1.185 4e-31 --drain-law one_loop --alpha 1 --fixed-normalization …`, prints
+     `drain_law=one_loop A=1 gap=zero` and a `drain` line (10 one-loop candidates, `unresolved_declined=0`).
+     r_χ today is 8.21841×10⁻³, the probe's.
+7. **The records.**
+   - The log follows `dk-and-rpk-migration` README §5.1's six sections, with every deviation classed and the
+     user's ruling (b) quoted.
+   - The verification document is new, with §1 only, and `law/out/` holds text only.
+   - The numerical-strategies and architecture-summary notes are dated 2026-11-03.
+   - Row 01 and the Law gate are landed. Both issues are on §4 with their measurements.
+   - `.documents/OPEN_ISSUES.md` reads 30 open, last updated 2026-11-03, with 4 rows under §1.23 and 30 in all.
+   - `CLAUDE.md`'s counts are the measured 26, 566 (163 + 403), 130, 156 and 68.
+
+   The review substituted `b99f6a4` for "this commit" on the board, in the log and in the verification
+   document.
+
+Noted, not acted on: the deliberate-breakage record's B5 found that one test of `TestTheLawsInputs`
+(`test_1_integrate_history_refuses_before_any_integration`) does not catch A = 0 being accepted, since its mock
+model raises a ValueError of its own. The others of its class do.
 
 ### 1.1 Items
 
@@ -170,7 +229,7 @@ None.
   **Assigned (2026-11-02):** to this campaign's 01, by the user: "Add the wall-search fix to `one-loop-drain`
   01." The fixed law runs these histories, and 01 already owns the related inside-wall stop of 3873. The form of
   the fix is README §8.8, P21. **Next:** 01.
-  **Closed 2026-11-03 by prompt 01** (this commit; `.documents/one-loop-drain-verification.md` §1.3–§1.4): the
+  **Closed 2026-11-03 by prompt 01** (`b99f6a4`; `.documents/one-loop-drain-verification.md` §1.3–§1.4): the
   rule of README §8.8 P21, `_turning_point_unresolvable`, makes `classical_turning_point` return None where ln E lies
   below the least finite ln(V − V_floor); only calls that raised change. All 19 measured failing inputs now return
   None with the predicate holding, and each raises with a copy of the method before the fix. 2197 and 2188 at their
@@ -190,8 +249,8 @@ None.
   10⁻⁸ M_P threshold only at φ = 1.67 φ_t, so the rule fired late and G2 refused. The same mechanism is behind 21 of
   the 2026.8.0 store's fixed-law failures (M = 10⁻¹⁵–10⁻¹² M_P, β 0.5–1.0). **Ruled by the user, 2026-11-03**, on
   option (b): "I see. I had assumed that was an energy balance that meant the field and moved beyond its reflection
-  point, but I see that it's not. In which case, (b) is correct." **Closed 2026-11-03 by prompt 01** (this
-  commit): where the unresolved reflection would fail G2 (G2's own expression), that step start makes no unresolved
+  point, but I see that it's not. In which case, (b) is correct." **Closed 2026-11-03 by prompt 01** (`b99f6a4`):
+  where the unresolved reflection would fail G2 (G2's own expression), that step start makes no unresolved
   decision and the floor rule is tested as usual; every such state raised before, so nothing that succeeded moves.
   3873 under the one-loop law at A = 1 now completes (19 declined step starts); 3016 and 3233 are unchanged; 3460
   and 4397, two of the 21, complete tuned under the fixed law (4 and 13 declined in the accepted integration).

@@ -1,7 +1,7 @@
 # Log 01 — the drain law
 
 **Subject:** Add the one-loop drain law, the wall-search fix and ruling (b)
-**Commit:** this commit, on branch `one-loop-drain`, on top of `b1415a3`
+**Commit:** `b99f6a4`, on branch `one-loop-drain`, on top of `b1415a3`
 **Date:** 2026-11-03, by Claude Opus 5.5
 **Result:** **COMPLETE.** The Law gate holds (`.documents/one-loop-drain-verification.md` §1.10).
 - **The one-loop law** sits beside the fixed one as an input (`drain_law`) of `integrate_scalar_history`,
