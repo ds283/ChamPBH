@@ -1,0 +1,122 @@
+# §2.6, for U14: how each observable moves with A (zero; edge in brackets where it differs), and the fixed
+# law at the stored alpha of the serial named. dN: Delta N_eff today; DoH in 10^-5; flags as in regimes.txt
+P-2197       M=4e-31   beta=1.185   fixed alpha=0.001: dN=0.006444 Yp=0.25840 DoH=2.8762
+   A=1     --  zero: dN=0.06121 Yp=0.25688 DoH=2.5227
+   A=0.1   --  zero: dN=0.01141 Yp=0.25862 DoH=2.8623
+   A=0.01  GCx zero: failure (the effective minimum was not found (after integration 0))   [edge: failure (step budget (2e6 steps) at N=44.06268398)]
+P-2188       M=4e-31   beta=1.06    fixed alpha=0.001: dN=0.002359 Yp=0.25522 DoH=2.7012
+   A=1     --  zero: dN=0.005696 Yp=0.25508 DoH=2.6144
+   A=0.1   --  zero: dN=0.002647 Yp=0.25514 DoH=2.6931
+   A=0.01  GCx zero: failure (step budget (2e6 steps) at N=44.42771313)   [edge: dN=0.002365 Yp=0.25522 DoH=2.7011]
+W-2187       M=4e-31   beta=1.0775  fixed alpha=0.001: dN=0.005885 Yp=0.25588 DoH=2.8222
+   A=1     --  zero: dN=0.01575 Yp=0.25657 DoH=2.7208
+   A=0.1   --  zero: dN=0.006942 Yp=0.25586 DoH=2.8187
+   A=0.01  GCx zero: failure (the effective minimum was not found (after integration 0))   [edge: failure (step budget (2e6 steps) at N=44.10510234)]
+W-1631       M=4e-31   beta=1.07    fixed alpha=0.001: dN=0.003622 Yp=0.26022 DoH=2.5643
+   A=1     --  zero: dN=0.01365 Yp=0.25745 DoH=2.7818
+   A=0.1   --  zero: dN=0.00465 Yp=0.25993 DoH=2.5910
+   A=0.01  GCx zero: failure (step budget (2e6 steps) at N=44.91856294)   [edge: failure (step budget (2e6 steps) at N=43.01581021)]
+W-2179       M=4e-31   beta=1.0925  fixed alpha=0.001: dN=0.006 Yp=0.25599 DoH=2.8265
+   A=1     --  zero: dN=0.03243 Yp=0.25527 DoH=2.5527
+   A=0.1   --  zero: dN=0.008524 Yp=0.25627 DoH=2.8165
+   A=0.01  GCx zero: failure (the effective minimum was not found (after integration 0))   [edge: failure (step budget (2e6 steps) at N=44.10364956)]
+W-2078       M=4e-31   beta=1.175   fixed alpha=0.001: dN=0.006342 Yp=0.25827 DoH=2.8682
+   A=1     --  zero: dN=0.06501 Yp=0.25893 DoH=2.7334
+   A=0.1   --  zero: dN=0.01169 Yp=0.25847 DoH=2.8638
+   A=0.01  GCx zero: failure (the effective minimum was not found (after integration 0))   [edge: failure (step budget (2e6 steps) at N=44.25861391)]
+W-2192       M=4e-31   beta=1.105   fixed alpha=0.001: dN=0.006144 Yp=0.27458 DoH=2.9502
+   A=1     --  zero: dN=0.06087 Yp=0.26723 DoH=2.5431
+   A=0.1   --  zero: dN=0.01065 Yp=0.27396 DoH=2.9148
+   A=0.01  GCx zero: failure (the effective minimum was not found (after integration 0))   [edge: failure (step budget (2e6 steps) at N=44.14566167)]
+W-2209       M=4e-31   beta=1.1875  fixed alpha=0.001: dN=0.005973 Yp=0.25862 DoH=2.8635
+   A=1     --  zero: dN=0.06113 Yp=0.25558 DoH=2.4879
+   A=0.1   --  zero: dN=0.0108 Yp=0.25868 DoH=2.8443
+   A=0.01  GCx zero: failure (step budget (2e6 steps) at N=45.85239142)   [edge: failure (step budget (2e6 steps) at N=43.90472278)]
+W-2183       M=4e-31   beta=1.125   fixed alpha=0.001: dN=0.00668 Yp=0.25652 DoH=2.8483
+   A=1     --  zero: dN=0.06833 Yp=0.25283 DoH=2.6097
+   A=0.1   --  zero: dN=0.01205 Yp=0.25693 DoH=2.8321
+   A=0.01  GCx zero: failure (the effective minimum was not found (after integration 0))   [edge: failure (step budget (2e6 steps) at N=44.26084887)]
+W-2172       M=4e-31   beta=1.1225  fixed alpha=0.001: dN=0.006633 Yp=0.25846 DoH=2.8081
+   A=1     --  zero: dN=0.06754 Yp=0.25592 DoH=2.5547
+   A=0.1   --  zero: dN=0.01295 Yp=0.25749 DoH=2.8489
+   A=0.01  GCx zero: failure (the effective minimum was not found (after integration 0))   [edge: failure (step budget (2e6 steps) at N=44.28325868)]
+W-2178       M=4e-31   beta=1.1025  fixed alpha=0.001: dN=0.005322 Yp=0.27386 DoH=2.9190
+   A=1     --  zero: dN=0.05722 Yp=0.26663 DoH=2.5271
+   A=0.1   --  zero: dN=0.009582 Yp=0.27325 DoH=2.8849
+   A=0.01  GCx zero: failure (the effective minimum was not found (after integration 0))   [edge: failure (step budget (2e6 steps) at N=43.7838977)]
+W-2185       M=4e-31   beta=1.1725  fixed alpha=0.001: dN=0.005699 Yp=0.25840 DoH=2.8476
+   A=1     --  zero: dN=0.06565 Yp=0.25902 DoH=2.7492
+   A=0.1   --  zero: dN=0.01115 Yp=0.25844 DoH=2.8449
+   A=0.01  GCx zero: failure (step budget (2e6 steps) at N=45.92889657)   [edge: failure (step budget (2e6 steps) at N=43.87458289)]
+R-632        M=4e-31   beta=1       fixed alpha=0.01: dN=0.3309 Yp=0.43449 DoH=10.4068
+   A=1     --  zero: dN=0.3371 Yp=0.43449 DoH=10.4068
+   A=0.1   GCx zero: failure (the effective minimum was not found (after integration 0))   [edge: failure (step budget (2e6 steps) at N=44.4223418)]
+   A=0.01  GCx zero: failure (the effective minimum was not found (after integration 0))   [edge: failure (the effective minimum was not found (after integration 0))]
+R-1193       M=4e-31   beta=1.15    fixed alpha=0.01: dN=0.007237 Yp=0.24705 DoH=2.5055
+   A=1     --  zero: dN=0.06352 Yp=0.25061 DoH=2.5653
+   A=0.1   --  zero: dN=0.006076 Yp=0.24695 DoH=2.4844
+   A=0.01  --  zero: dN=0.0006506 Yp=0.24691 DoH=2.4935
+R-865        M=4e-31   beta=2       fixed alpha=0.01: dN=0.005482 Yp=0.24695 DoH=2.4598
+   A=1     --  zero: dN=0.04548 Yp=0.24687 DoH=2.4696
+   A=0.1   --  zero: dN=0.004683 Yp=0.24690 DoH=2.4592
+   A=0.01  --  zero: dN=0.0004922 Yp=0.24681 DoH=2.4706
+R-611        M=4e-31   beta=10      fixed alpha=0.01: dN=0.001021 Yp=0.24690 DoH=2.4584
+   A=1     --  zero: dN=0.003604 Yp=0.24693 DoH=2.4592
+   A=0.1   --  zero: dN=0.0008812 Yp=0.24689 DoH=2.4584
+   A=0.01  --  zero: dN=0.0001809 Yp=0.24688 DoH=2.4581
+B-2819       M=1e-33   beta=1.2     fixed alpha=0.01: dN=0.006759 Yp=0.25601 DoH=2.5247
+   A=1     --  zero: dN=0.0491 Yp=0.25129 DoH=2.4743
+   A=0.1   --  zero: dN=0.005044 Yp=0.25624 DoH=2.5434
+   A=0.01  --  zero: dN=0.0007734 Yp=0.25666 DoH=2.5954
+B-2496       M=1e-33   beta=2       fixed alpha=0.01: dN=0.005482 Yp=0.24694 DoH=2.4597
+   A=1     --  zero: dN=0.03806 Yp=0.24735 DoH=2.4703
+   A=0.1   --  zero: dN=0.004027 Yp=0.24684 DoH=2.4586
+   A=0.01  --  zero: dN=0.0004294 Yp=0.24682 DoH=2.4706
+B-2772       M=1e-33   beta=10      fixed alpha=0.01: dN=0.001021 Yp=0.24690 DoH=2.4582
+   A=1     --  zero: dN=0.003278 Yp=0.24693 DoH=2.4592
+   A=0.1   --  zero: dN=0.0008343 Yp=0.24689 DoH=2.4584
+   A=0.01  --  zero: dN=0.0001575 Yp=0.24688 DoH=2.4581
+B-2821       M=1e-30   beta=1.2     fixed alpha=0.01: dN=0.006759 Yp=0.25602 DoH=2.5245
+   A=1     --  zero: dN=0.05883 Yp=0.24945 DoH=2.5806
+   A=0.1   --  zero: dN=0.006042 Yp=0.25606 DoH=2.5304
+   A=0.01  --  zero: dN=0.0008672 Yp=0.25664 DoH=2.5942
+B-2498       M=1e-30   beta=2       fixed alpha=0.01: dN=0.005482 Yp=0.24695 DoH=2.4596
+   A=1     --  zero: dN=0.04672 Yp=0.24675 DoH=2.4693
+   A=0.1   --  zero: dN=0.004806 Yp=0.24696 DoH=2.4595
+   A=0.01  --  zero: dN=0.0005032 Yp=0.24683 DoH=2.4705
+B-2774       M=1e-30   beta=10      fixed alpha=0.01: dN=0.001021 Yp=0.24690 DoH=2.4584
+   A=1     --  zero: dN=0.003662 Yp=0.24693 DoH=2.4593
+   A=0.1   --  zero: dN=0.0008895 Yp=0.24689 DoH=2.4584
+   A=0.01  --  zero: dN=0.0001854 Yp=0.24688 DoH=2.4580
+L-M5e-20     M=5e-20   beta=2      
+   A=1     --  zero: dN=0.1321 Yp=0.24863 DoH=2.5015
+   A=0.1   GCx zero: failure (step budget (2e6 steps) at N=47.04432044)   [edge: failure (step budget (2e6 steps) at N=47.68914951)]
+   A=0.01  GC  zero: dN=0.001972 Yp=0.24697 DoH=2.4620   [edge: dN=0.001983 Yp=0.24702 DoH=2.4600]
+L-M8e-18     M=8e-18   beta=2      
+   A=1     GC  zero: dN=0.1441 Yp=0.24878 DoH=2.5055   [edge: dN=0.1441 Yp=0.24878 DoH=2.5055]
+   A=0.1   GC  zero: dN=0.05785 Yp=0.24740 DoH=2.4790   [edge: dN=0.05922 Yp=0.24768 DoH=2.4775]
+   A=0.01  GC  zero: dN=0.005129 Yp=0.24695 DoH=2.4602   [edge: dN=0.005425 Yp=0.24696 DoH=2.4605]
+L-M1e-16     M=1e-16   beta=2      
+   A=1     GC  zero: dN=0.146 Yp=0.24881 DoH=2.5061   [edge: dN=0.1474 Yp=0.24883 DoH=2.5067]
+   A=0.1   GC  zero: dN=0.0286 Yp=0.24644 DoH=2.4827   [edge: dN=0.04828 Yp=0.24739 DoH=2.4769]
+   A=0.01  GC  zero: dN=0.00286 Yp=0.24700 DoH=2.4627   [edge: dN=0.005164 Yp=0.24695 DoH=2.4596]
+L-M5e-16     M=5e-16   beta=2      
+   A=1     GC  zero: dN=6.748e-06 Yp=0.24663 DoH=2.4619   [edge: dN=0.09955 Yp=0.24793 DoH=2.5072]
+   A=0.1   GC  zero: dN=6.748e-06 Yp=0.24663 DoH=2.4619   [edge: dN=0.009962 Yp=0.24689 DoH=2.4619]
+   A=0.01  GC  zero: dN=6.748e-06 Yp=0.24663 DoH=2.4619   [edge: dN=0.0009981 Yp=0.24681 DoH=2.4679]
+L-M4e-15     M=4e-15   beta=2      
+   A=1     -C  zero: dN=6.748e-06 Yp=0.24662 DoH=2.4620
+   A=0.1   -C  zero: dN=6.748e-06 Yp=0.24662 DoH=2.4620
+   A=0.01  -C  zero: dN=6.748e-06 Yp=0.24662 DoH=2.4620
+C-3016       M=1e-12   beta=4       fixed alpha=0.1: dN=0.007894 Yp=0.24699 DoH=2.4606
+   A=1     -C  zero: dN=7.387e-06 Yp=0.24695 DoH=2.4583
+   A=0.1   -C  zero: dN=7.387e-06 Yp=0.24695 DoH=2.4583
+   A=0.01  -C  zero: dN=7.387e-06 Yp=0.24695 DoH=2.4583
+C-3233       M=1e-12   beta=1       fixed alpha=0.15: dN=0.3348 Yp=0.43450 DoH=10.4071
+   A=1     -C  zero: dN=0 Yp=0.43449 DoH=10.4070
+   A=0.1   -C  zero: dN=0 Yp=0.43449 DoH=10.4070
+   A=0.01  -C  zero: dN=0 Yp=0.43449 DoH=10.4070
+C-3873       M=1e-12   beta=1.11    fixed alpha=0.03: dN=0.02326 Yp=0.27038 DoH=2.7170
+   A=1     -C  zero: dN=0 Yp=0.27307 DoH=2.8621
+   A=0.1   -C  zero: dN=0 Yp=0.27307 DoH=2.8621
+   A=0.01  -C  zero: dN=0 Yp=0.27307 DoH=2.8621

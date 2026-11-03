@@ -1,0 +1,5 @@
+S1 P-2197-A1-edge (spot run, outcome success) against P-2197-A1-zero: BITWISE EQUAL; 1 integrations, 10 candidates, 20 regime and injection entries compared in full; samples 56eef32a6160d62e..., Yp 0.25688455988399567, DoH 2.522682869802573; record gap_prescription: ['edge'] against ['zero']
+S1 R-865-A0.1-edge (spot run, outcome success) against R-865-A0.1-zero: BITWISE EQUAL; 1 integrations, 78 candidates, 156 regime and injection entries compared in full; samples a2f3ddc57b7bc304..., Yp 0.24690202527404065, DoH 2.459245914546649; record gap_prescription: ['edge'] against ['zero']
+S2 C-3016-A0.01-zero (spot run, outcome success) against C-3016-A1-zero: BITWISE EQUAL; 1 integrations, 330 candidates, 660 regime and injection entries compared in full; samples 130c739fea35a157..., Yp 0.24694657327900363, DoH 2.4583366269704374; record A: [0.01] against [1.0]
+S2 C-3233-A0.1-zero (sample run, outcome success) against C-3233-A1-zero: BITWISE EQUAL; 3 integrations, 903 candidates, 1806 regime and injection entries compared in full; samples ff4989dd4ae7d603..., Yp 0.43449327004980476, DoH 10.406956501207878; record A: [0.1] against [1.0]
+every spot check bitwise equal

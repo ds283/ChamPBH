@@ -259,3 +259,294 @@ The gate holds:
 - **One-loop law:** 2197 and 2188 reproduce the probe's table bitwise at A = 1 and 0.1, and the production gate
   changes nothing, since every candidate is unresolved; 3016 and 3233 drain nothing.
 - **3873:** the failure is explained, and after the user's ruling (b) it completes.
+
+## 2. Prompt 02 — measure the law (2026-11-03)
+
+**Tree:** branch `one-loop-drain` at `b1d6bc5`; its computing code is `b99f6a4`'s (the Gate's diff is empty). Prompt 02's
+commit (this commit) adds no code outside [`one-loop-drain/measure/`](one-loop-drain/measure/). Python 3.13.16, SciPy
+1.17.0, NumPy 2.3.5. **Scripts:** [`one-loop-drain/measure/`](one-loop-drain/measure/), each with a docstring.
+**Committed outputs:** [`one-loop-drain/measure/out/`](one-loop-drain/measure/out/). **Raw output** (not committed):
+`var/one-loop-drain/02/`:
+- `sample.jsonl`: the 180 task lines, 110 run and 70 derived;
+- `spot.jsonl`: the spot runs and the tool checks;
+- `tasks.json` and `fixed_law.json`;
+- `tasks/`: each task's stdout (`<id>.log`), stderr, partial file and result;
+- `batches/<step>/`: each batch's `batch.pid`, `batch.log` and `batch.end`, beside the `.ids` files.
+
+Every number below comes from a file of `measure/out/`, or from the line of `sample.jsonl` that it names. The orchestrator
+note's rulings 1–10 governed. No store was written and no Ray was started. The 2026.8.0 store was opened `mode=ro` only,
+by `tasks.py` and `fixed_law.py`, through its main shards (`science-2026.8.0-shard*.db`; ruling 8).
+
+### 2.1 The Gate and the suites
+
+The Gate was checked again at `b1d6bc5` before anything ran, and it held:
+- the tree was clean;
+- `b99f6a4` and `d7cef0e` are ancestors of `HEAD`, and the code-path diff from `b99f6a4` is empty;
+- `runregistrykit list` showed 23 runs, all finished;
+- this document had §1 only, and `measure/` did not exist;
+- all 25 serials of §1.1 are in the shards named, validated successes, with the table's M (relative 2.2 × 10⁻¹⁶ or 0),
+  β and α ([`out/tasks.txt`](one-loop-drain/measure/out/tasks.txt)).
+
+The suites, serially, before anything else:
+
+| suite | count | time | load at start |
+|---|---|---|---|
+| CosmologyModels | 26 OK | 67.7 s | 12.99 |
+| ComputeTargets `test_[a-f]` | 163 OK | 139.1 s | 20.74 |
+| ComputeTargets `test_[g-z]` | 403 OK | 483.8 s | 7.67 |
+| ObjectFactories | 130 OK | 83.5 s | 5.71 |
+| tools | 156 OK | 162.9 s | 4.64 |
+| RunDrivers | 68 OK | 23.6 s | 6.33 |
+
+The suites after the batches are in the log (§4 there). The counts are unchanged.
+
+### 2.2 The driver, and its checks
+
+[`run_sample.py`](one-loop-drain/measure/run_sample.py) runs each task in a fresh `./venv/bin/python` (ruling 3). In that
+process it calls `tools.history_and_bbn.main(argv)`, with argv `BETA M --drain-law one_loop --alpha A
+--gap-prescription G`. It makes three captures around the call:
+- `ScalarHistory.integrate_scalar_history`, which reduces each integration at once and appends it, flushed, to the
+  task's partial file (ruling 4);
+- `tune_history`, to keep the payload;
+- `compute_BBN_data`, through a stand-in whose `_function` calls the real one.
+
+The parent runs at most the batch's worker count at once. It reaps each child with `os.wait4`, whose `ru_maxrss` is the
+line's `peak_rss`. A child past 3600 s gets `SIGTERM`, then `SIGKILL` 30 s later. No task reached the timeout. The
+timeout path was exercised once before the batches, with the limit set to 8 s by an environment variable, on 3873: the
+line was written with outcome `timeout` and the child was reaped.
+
+**The tool checks (ruling 9; [`out/tool_check.txt`](one-loop-drain/measure/out/tool_check.txt)).** For `P-2197-A0.1-zero`
+and `L-M1e-16-A1-zero`, `tools/history_and_bbn.py` was run in its own subprocess with the same argv. Its stdout equals the
+driver task's line for line once `wall=` and `PRyM_time=` are masked: 13 of 13 lines, and 15 of 15. The `history`,
+`drain` and `bbn` lines carry the driver's JSON values, 22 of 22 in each. **The driver agrees with the tool.**
+
+**The spot checks (§1.2, ruling 6; [`out/spot_check.txt`](one-loop-drain/measure/out/spot_check.txt)).** Each was compared
+in every value of the line but the wall times, the peak RSS, PRyMordial's time and the record's own field. Each was also
+compared in the full regime sequence and the injections' (N, α_eff, ΔK) of every integration, from the partial files.
+
+| shortcut | task run | against | integrations | candidates | result |
+|---|---|---|---|---|---|
+| S1 | `P-2197-A1-edge` | `P-2197-A1-zero` | 1 | 10 | bitwise equal; the record's `gap_prescription` 'edge' against 'zero' |
+| S1 | `R-865-A0.1-edge` | `R-865-A0.1-zero` | 1 | 78 | bitwise equal |
+| S2 | `C-3016-A0.01-zero` | `C-3016-A1-zero` | 1 | 330 | bitwise equal; the record's `A` 0.01 against 1.0 |
+| S2 | `C-3233-A0.1-zero` | `C-3233-A1-zero` | 3 | 903 | bitwise equal (the step-1 run, under ruling 1) |
+
+S1 applied to both histories the prompt names, so no substitute was needed. **Ruling 1's free check of S2:** S2(zero)
+holds for L-M5e-16, L-M4e-15, C-3016, C-3233 and C-3873. In each of the five, the run at A = 0.1 equals the run at
+A = 1 under ruling 6 ([`out/decisions.txt`](one-loop-drain/measure/out/decisions.txt), step 1b).
+
+**The r_χ form of ruling 7.** On `P-2197-A1-zero`, K(N_final) e^{−4N_final}/ρ_R,E(last sample) is 0.008218413249662701.
+`rho_chi_ratio_today` is 0.008218413249662944, a relative difference of −2.95 × 10⁻¹⁴. The last sample's raw N equals
+N_final ([`out/regimes.txt`](one-loop-drain/measure/out/regimes.txt), last section).
+
+### 2.3 The batches and the projection
+
+The order is ruling 1's ([`out/decisions.txt`](one-loop-drain/measure/out/decisions.txt) is decide.py re-run on the final
+sample; it gives the same id files as the batches ran). Every batch was launched with `nohup`, checked once that it
+had started, and waited on by a command that ended with it.
+
+| batch | tasks | workers | start (UTC) | wall | loads at start | loads at end | largest task RSS |
+|---|---|---|---|---|---|---|---|
+| step1a: zero, A = 1 then 0.1 | 60 | 6 | 14:44:36 | 2155.6 s | 4.82 8.03 13.35 | 6.22 8.54 10.37 | 1348 MiB |
+| step1b: edge at A = 1, 0.1 not covered by S1 | 8 | 4 | 15:05:34 | 964.5 s | 7.49 9.16 10.70 | 5.86 8.02 10.04 | 1354 MiB |
+| step2a: zero, A = 0.01, P's two | 2 | 2 | 15:21:56 | 914.1 s | 6.03 7.93 9.96 | 5.14 5.26 6.76 | 1354 MiB |
+| step2b: zero, A = 0.01, R B W L less S2's | 23 | 6 | 15:37:26 | 1856.5 s | 4.89 5.20 6.71 | 5.35 11.50 12.67 | 1351 MiB |
+| step3: edge at A = 0.01 not covered by S1 | 17 | 6 | 16:08:46 | 1934.9 s | 5.29 11.08 12.49 | 10.34 11.21 12.00 | 1352 MiB |
+| step4: spot runs and tool checks | 5 | 5 | 16:41:23 | 46.2 s | 7.90 10.59 11.76 | 6.21 9.82 11.42 | 289 MiB |
+
+Step1b was launched while 3873's two zero tunings were still running in step1a. It covered the 29 other histories,
+decided once their two zero runs had ended, and used 4 workers, so that 6 ran in all. 3873 was decided after step1a
+ended and needed no edge run (log §2, D3). From the first launch to the last end took 1 h 58 min. The 110 runs took
+31 367 s of task wall time.
+
+**Ruling 5's projection**, after P's two at A = 0.01:
+- walls 910.1 and 914.1 s, a mean of 912.1 s;
+- peak RSS 1.307 and 1.322 GiB, so the workers are min(6, ⌊8 GiB / 1.322 GiB⌋) = 6;
+- 25 zero tasks (W, R, B, L) plus 27 edge tasks (P, W, R, B, L) make 52;
+- 52 × 912.1 s / 6 = 7905 s = **2.20 h**, against the 4 h limit and the floor of three workers.
+
+So it did not stop. In the event, 23 zero tasks and 17 edge tasks ran at A = 0.01: S2 spared 2 of the zero tasks
+counted, and S1 spared 10 of the edge tasks. Steps 2b and 3 took 1.05 h together.
+
+### 2.4 The sample measured (§2.1 of the prompt)
+
+[`out/sample.txt`](one-loop-drain/measure/out/sample.txt): 180 task lines.
+- 110 were run: 81 succeeded and 29 failed, with none timed out, crashed or in error;
+- 70 were derived: 65 by S1 and 5 by S2.
+
+| failure | where | count |
+|---|---|---|
+| step budget exhausted (2 × 10⁶ accepted steps) | A = 0.01: 4 zero (P-2188, W-1631, W-2209, W-2185) and 11 edge (P-2197, all ten W); A = 0.1: R-632 edge, L-M5e-20 zero and edge | 18 |
+| "the effective minimum was not found" after the seed integration | A = 0.01: 9 zero (P-2197, W-2187, -2179, -2078, -2192, -2183, -2172, -2178, R-632) and R-632 edge; A = 0.1: R-632 zero | 11 |
+
+None is the wall search or the inside-wall guard. None points at `drain_regime` or `drain_alpha_effective`. Each failed in
+its seed integration (the step budget) or right after it (the effective minimum). Every laboratory-M history in the transition
+window (P, W, and R-632 at β = 1.0) fails at A = 0.01 under both prescriptions, except P-2188 under `edge`, which
+succeeds in 54 s. R-632 also fails at A = 0.1. So does the ladder's 5 × 10⁻²⁰ M_P, which succeeds at A = 1 and 0.01.
+The step-budget failures stopped at N = 43.0–47.7, after 13 573–14 638 reflections. The P and W integrations at
+A = 0.01 met 9992–13 497 classical candidates (§2.5).
+They are opened as an issue on the board (§3, `[02-one-loop-tunings-fail-at-small-A-in-the-transition-window]`).
+
+### 2.5 The regime shares and the gap's reach (§2.2 of the prompt)
+
+[`out/regimes.txt`](one-loop-drain/measure/out/regimes.txt) holds, per history, A and prescription:
+- the candidates by regime;
+- the K shares by regime and the parking leftover's;
+- the drains, ℓ_min, the least ln R at a drain, and U9's count;
+- the regimes met, with the gap's reach and the R·S(L) bound.
+
+The regimes met by the zero tuning over all its integrations, failures included:
+
+| group | ln R_first | A = 1 | A = 0.1 | A = 0.01 |
+|---|---|---|---|---|
+| P, W (β 1.06–1.1875, 4 × 10⁻³¹) | 101.7–138.1 | one-loop only, 9–19 drains, then parks | one-loop only, 90–96 drains | gap and R ≤ 1 in every one: 167–214 one-loop, 420–713 gap, 9992–13 497 classical; every tuning fails |
+| R-632 (β 1.0) | 49.9 | one-loop only, 13 | gap (200) and R ≤ 1 (4515); fails | gap (40) and R ≤ 1 (353); fails |
+| R-1193, R-865, R-611 (β 1.15, 2, 10) | 137.7–166.3 | one-loop only | one-loop only | one-loop only (64–662 drains) |
+| B, 10⁻³³ and 10⁻³⁰ (β 1.2, 2, 10) | 134.5–190.3 | one-loop only | one-loop only | one-loop only (30–664 drains) |
+| L-M5e-20 | 40.16 | one-loop only, 14 | gap and R ≤ 1; fails (step budget) | gap at candidate 7 (ln R = 2.66), R ≤ 1 at 9 |
+| L-M8e-18 | 19.86 | gap at 3 (ln R = 6.67), R ≤ 1 at 161 | gap at 5, R ≤ 1 at 8 | gap at 4, R ≤ 1 at 6 |
+| L-M1e-16 | 9.758 | gap at 1 (ln R = 3.97), R ≤ 1 at 10 | gap at 1, R ≤ 1 at 4 | gap at 1, R ≤ 1 at 4 |
+| L-M5e-16 | 3.320 | gap at 0, R ≤ 1 at 1 | the same (S2 holds) | the same (S2) |
+| L-M4e-15 | −4.998 | R ≤ 1 from the first impact | the same | the same |
+| C (10⁻¹²) | −6.2, −119.6, −33.1 | R ≤ 1 from the first impact; nothing drains | the same | the same |
+
+- **The ladder's ln R_first** against §1.1's targets of 40, 20, 10, 3 and −5 are 40.16, 19.86, 9.758, 3.320 and
+  −4.998.
+- **K shares.** Wherever the cascade stays one-loop, the one-loop share is 0.9611–1.0000 and the parking leftover takes
+  the rest:
+  - 1.9 × 10⁻⁸ to 8.6 × 10⁻⁴ at A = 1 (P, W, R, B);
+  - 4.7 × 10⁻⁴ to 5.7 × 10⁻³ at A = 0.1;
+  - 8.3 × 10⁻³ to 3.9 × 10⁻² at A = 0.01.
+
+  Where nothing drains but the parking (L-M5e-16 and L-M4e-15 at gap zero, C-3016), the parking leftover is all of K.
+  3233 and 3873 do not park and have K = 0. Under `edge` the gap share is:
+  - 0.0002–0.054 for the ladder's 8 × 10⁻¹⁸ and 5 × 10⁻²⁰;
+  - 0.009–0.445 for 10⁻¹⁶;
+  - 0.9975–1 for 5 × 10⁻¹⁶;
+  - 0.026 for P-2188 at A = 0.01.
+- **ℓ_min** at laboratory M is 5.4–10.2 at A = 1 and 1.55–2.43 at A = 0.1 (P, W); R-632 at A = 1 has 0.473. Before
+  the gap: 0.147 (P-2188, A = 0.01, edge), 0.59–4.0 on the ladder.
+- **U9:** no one-loop candidate has w_gate < 1, 0 of 7203 over the 81 successful runs' accepted integrations, and no
+  gap candidate either, 0 of 535. **P19:** no candidate is unassessed, 0 of 34 664.
+- **Unresolvable assessments and declined reflections** in the accepted integrations: only 3873, 27 declined at every A.
+  In failed integrations: R-632 A = 0.1 zero had 6 unresolvable; W-2187 and W-2178 at A = 0.01 zero had 1 each; L-M5e-20
+  A = 0.1 zero declined 1.
+- **The R·S(L) bound** (ruling 7):
+  - no classical candidate in any successful P, W, R or B run;
+  - on the ladder where a one-loop or a gap candidate drains, its sum is 3.3 × 10⁻⁸ to 9.5 × 10⁻⁴ of K. As an r_χ today
+    it is at most 1.3 × 10⁻⁷, against an r_χ today of 1.3 × 10⁻⁴ to 0.02;
+  - where only the parking drains (L-M5e-16 zero, L-M4e-15, C-3016), it is 0.142, 0.0033 and 1.4 × 10⁻⁴ of K. Those
+    shares are of the parking leftover;
+  - where K = 0 (3233, 3873) the share is None. As an r_χ today it is 0 for 3233, whose 301 classical candidates all lie
+    at L < 40, and 9.3 × 10⁻²¹ for 3873, of which 2 lie in range and 2487 outside;
+  - outside S(L)'s range: L-M1e-16 at A = 0.1 zero has 9714 of 9729 outside (L down to 10⁻⁸), and L-M5e-16 at A = 1
+    edge has 9932 of 9962.
+
+### 2.6 The spread between the prescriptions (§2.3 of the prompt)
+
+[`out/spread.txt`](one-loop-drain/measure/out/spread.txt). The prescriptions differ only where the cascade enters the gap.
+Elsewhere `edge` equals `zero` by S1, which held for 65 of the 90 (history, A) pairs. Both prescriptions succeeded in 10
+of the pairs that entered the gap, all on the ladder. Where both ran:
+
+| | largest edge − zero | where |
+|---|---|---|
+| Y_p | +1.306 × 10⁻³ (+0.53%) | L-M5e-16, A = 1 |
+| D/H | +0.0454 × 10⁻⁵ (+1.8%) | L-M5e-16, A = 1 |
+| ΔN_eff at 1 MeV | +0.0965 | L-M5e-16, A = 1 |
+| ΔN_eff today | +0.0995 | L-M5e-16, A = 1 (zero: 6.7 × 10⁻⁶) |
+| r_χ today | +0.0134 | L-M5e-16, A = 1 |
+
+At 10⁻¹⁶ the ΔN_eff today rises with `edge` by 0.0014, 0.0197 and 0.0023 at A = 1, 0.1 and 0.01. At 8 × 10⁻¹⁸ it rises by
+2.4 × 10⁻⁵, 0.0014 and 0.0003. At laboratory M only P-2188 at A = 0.01 succeeds under `edge`, and its `zero` fails, so
+no laboratory-M pair can be compared. Both prescriptions succeed in no history of P, W or R-632 at A = 0.01.
+
+### 2.7 Against the fixed law (§2.4 of the prompt)
+
+[`out/fixed.txt`](one-loop-drain/measure/out/fixed.txt) sets each one-loop value beside every stored α at the same
+(M, β): ΔN_eff at 1 MeV and today, r_χ today, Y_p, D/H and parking N. There are 261 references, 13 at each laboratory-M β
+of block A2 and 4–7 elsewhere ([`out/fixed_law.txt`](one-loop-drain/measure/out/fixed_law.txt)), all at φ* = 5 M_P and
+T* = 2 × 10⁴ GeV, small network. [`out/u14.txt`](one-loop-drain/measure/out/u14.txt) sets the values beside the stored α
+of each named serial. The store's values were measured on the 2026.8.0 tree; they are not a bound. For example:
+- **2197** (β 1.185): the fixed law at α = 10⁻³ gives ΔN_eff today 0.00644, Y_p 0.25840, D/H 2.8762. The one-loop
+  law gives 0.0612, 0.25688, 2.5227 at A = 1, and 0.0114, 0.25862, 2.8623 at A = 0.1. The fixed law reaches 0.0612
+  between α = 0.08 (0.0567) and 0.1 (0.0707).
+- **W** at A = 1 gives ΔN_eff today 0.0137–0.0683, against the fixed law's 0.0036–0.0067 at α = 10⁻³. At A = 0.1 it
+  gives 0.0047–0.0130.
+- **R, B** (β ≥ 1.15) at A = 0.1 sit near the fixed law at α = 0.01: R-865 gives 0.00468 against 0.00548, B-2498 0.00481
+  against 0.00548. R-865, which has the full α grid, at A = 1 gives 0.0455, between α = 0.08 (0.0424) and 0.1 (0.0524), and
+  at A = 0.01 gives 0.00049, against 0.00056 at α = 10⁻³.
+- **β = 1.0** (R-632, C-3233): Y_p 0.4345 and D/H 10.41 under both laws. ΔN_eff today is 0.337 for R-632 at A = 1,
+  against 0.331 at α = 0.01. At 1 MeV it is 0 under both laws.
+- **C (10⁻¹²):** ΔN_eff today is 7.4 × 10⁻⁶ for 3016, from its parking leftover, and 0 for 3233 and 3873. The fixed law
+  gives 0.0020–0.0097 (3016), 0.33 (3233) and 0.0098–0.116 (3873). 3873's Y_p is 0.27307 under the one-loop law, against
+  0.2585–0.2721 under the fixed law.
+
+### 2.8 The cost (§2.5 of the prompt)
+
+[`out/cost.txt`](one-loop-drain/measure/out/cost.txt). Per tuning:
+
+| group | A = 1 | A = 0.1 | A = 0.01 |
+|---|---|---|---|
+| P, W | 14–16 s | 20–22 s | 729–979 s (each failing in its first integration); P-2188 edge 54 s |
+| R | 14–22 s | 14–349 s; R-632 edge 965 s | 20–88 s; R-632 edge 42 s |
+| B | 14–22 s | 12–122 s | 16–86 s |
+| L | 14–38 s; edge 14–748 s | 16–924 s; edge 18–944 s | 18–20 s; edge 16–22 s |
+| C | 50–86 s; 3873 1832 s | 48–88 s; 3873 1823 s | (S2) |
+
+- **Integrations per tuning:** 105 of the 110 runs took one integration. B-2774 at A = 0.1 took 2, C-3233 took 3 at
+  A = 1 and 0.1, and C-3873 took **16** at A = 1 and 0.1, at 110–118 s each.
+- **Peak RSS** is about 250 MiB for a short task and about 1.35 GiB for one that reaches the step budget (2 × 10⁶
+  accepted steps).
+- **The batches** are in §2.3.
+
+### 2.9 The handover for U13 and U14 (§2.6 of the prompt)
+
+This is a measurement and the options it bears on, not a choice.
+
+**U13 — the gap prescription of record.**
+- **Where the prescriptions differ.** Only where the cascade enters the gap. On this sample that is:
+  - the ladder: 8 × 10⁻¹⁸ and 10⁻¹⁶ at every A; 5 × 10⁻¹⁶ at every A, where the first impact is in the gap; and
+    5 × 10⁻²⁰ at A = 0.1 and 0.01;
+  - laboratory M at A = 0.01 (P, W) and R-632 (β = 1.0) at A = 0.1 and 0.01.
+
+  At A = 1 and 0.1 it enters nowhere at laboratory M (β 1.06–10) or in block B; R-632 (β = 1.0) enters it at
+  A = 0.1. Large M (3016, 3233, 3873) and the ladder's 4 × 10⁻¹⁵ never enter the gap; their cascade starts at R ≤ 1.
+- **By how much.** Where both succeed (ladder only), Δ(ΔN_eff today) is up to +0.0995, Δ(Y_p) up to +1.3 × 10⁻³ and
+  Δ(D/H) up to +0.045 × 10⁻⁵, all at 5 × 10⁻¹⁶, A = 1. There `zero` drains nothing but the parking leftover, and `edge`
+  drains the one gap candidate at the first impact. At 10⁻¹⁶ Δ(ΔN_eff today) is 0.0014–0.0197.
+- **The share of K in the gap under `edge`:** 0.0002–0.054 at 8 × 10⁻¹⁸ and 5 × 10⁻²⁰; 0.009–0.445 at 10⁻¹⁶;
+  0.9975–1 at 5 × 10⁻¹⁶; 0.026 for P-2188 at A = 0.01.
+- **What the sample cannot say.** At laboratory M the gap is reached only at A = 0.01. There every tuning fails under
+  `zero`, and all but P-2188 fail under `edge`. So the prescriptions cannot be compared at laboratory M on this code.
+
+**U14 — the A values of the rebuild of record.**
+- **How the observables move with A** ([`out/u14.txt`](one-loop-drain/measure/out/u14.txt)). Laboratory M first (Fig 6):
+  - ΔN_eff today falls roughly in proportion to A: P/W 0.0057–0.068 at A = 1, 0.0026–0.013 at A = 0.1; R and B
+    (β ≥ 1.15) 0.0033–0.064 at A = 1, 0.0008–0.0061 at A = 0.1, 0.00016–0.00087 at A = 0.01;
+  - Y_p and D/H move with ΔN_eff in the transition window (2197: Y_p 0.25688 → 0.25862, D/H 2.5227 → 2.8623 from
+    A = 1 to 0.1), and hardly at β ≥ 2;
+  - parking N moves later as A falls: 2197 from 33.12 to 38.45.
+- **Which histories change regime between A values:**
+  - P and W: one-loop only at A = 1 and 0.1; gap and R ≤ 1 at A = 0.01, where every tuning fails but P-2188's under
+    `edge`;
+  - R-632 (β = 1.0): one-loop at A = 1; gap and R ≤ 1 at A = 0.1 and 0.01, failing;
+  - L-M5e-20: one-loop at A = 1; gap and R ≤ 1 at 0.1 (failing) and 0.01;
+  - R-1193, R-865, R-611 and block B: one-loop at every A;
+  - the ladder's 8 × 10⁻¹⁸ to 4 × 10⁻¹⁵ M_P, and C: the same regimes at every A.
+- **What it bears on.** On this code A = 0.01 cannot be built at laboratory M for P, W and R-632 (β 1.0–1.1875): the
+  step budget is reached, or the effective minimum is not found after the seed integration. It was built for R-1193,
+  R-865 and R-611 (β 1.15, 2, 10) at laboratory M, in block B, on the ladder and at large M. At large M nothing drains at any A, so A has no effect
+  there (S2).
+
+### 2.10 The Measure gate
+
+The gate holds, item by item (prompt §2):
+1. **The sample measured.** All 180 tasks, by group, A and prescription, with S1 and S2 marked. The 29 failures are listed
+   with their reasons, and there were no timeouts (§2.4).
+2. **The regime shares and the gap's reach across M and β** (§2.5), with U9's count (0) and P19's (0).
+3. **The spread between the prescriptions** for every pair where both succeeded, with the largest of each (§2.6). At
+   laboratory M none could be compared.
+4. **Against the fixed law** for every stored (M, β) (§2.7).
+5. **The cost**: wall time and integrations by group and A, the batches, the workers, the loads and the peak RSS
+   (§2.3, §2.8).
+6. **The handover for U13 and U14** (§2.9).

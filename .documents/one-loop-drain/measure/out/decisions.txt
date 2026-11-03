@@ -1,0 +1,331 @@
+# decide.py's decisions, re-run on the final sample.jsonl (its run lines) to give one clean record; the id files
+# it writes here went to the agent's scratchpad and equal those the batches ran (var/one-loop-drain/02/batches/*.ids).
+# At launch step 1b was decided in two parts, '!C-3873' (29 histories) while C-3873's zero tunings ran, then 'C-3873'.
+
+## decide.py step1a
+step 1a (zero, A = 1 then 0.1): 60 tasks -> /private/tmp/claude-35086/-Users-ds283-Documents-Code-ChamPBH/22b01212-c0c6-40a3-a03d-905bdf7b834c/scratchpad/agent-02/redo/step1a.ids
+   P-2197-A1-zero
+   P-2188-A1-zero
+   W-2187-A1-zero
+   W-1631-A1-zero
+   W-2179-A1-zero
+   W-2078-A1-zero
+   W-2192-A1-zero
+   W-2209-A1-zero
+   W-2183-A1-zero
+   W-2172-A1-zero
+   W-2178-A1-zero
+   W-2185-A1-zero
+   R-632-A1-zero
+   R-1193-A1-zero
+   R-865-A1-zero
+   R-611-A1-zero
+   B-2819-A1-zero
+   B-2496-A1-zero
+   B-2772-A1-zero
+   B-2821-A1-zero
+   B-2498-A1-zero
+   B-2774-A1-zero
+   L-M5e-20-A1-zero
+   L-M8e-18-A1-zero
+   L-M1e-16-A1-zero
+   L-M5e-16-A1-zero
+   L-M4e-15-A1-zero
+   C-3016-A1-zero
+   C-3233-A1-zero
+   C-3873-A1-zero
+   P-2197-A0.1-zero
+   P-2188-A0.1-zero
+   W-2187-A0.1-zero
+   W-1631-A0.1-zero
+   W-2179-A0.1-zero
+   W-2078-A0.1-zero
+   W-2192-A0.1-zero
+   W-2209-A0.1-zero
+   W-2183-A0.1-zero
+   W-2172-A0.1-zero
+   W-2178-A0.1-zero
+   W-2185-A0.1-zero
+   R-632-A0.1-zero
+   R-1193-A0.1-zero
+   R-865-A0.1-zero
+   R-611-A0.1-zero
+   B-2819-A0.1-zero
+   B-2496-A0.1-zero
+   B-2772-A0.1-zero
+   B-2821-A0.1-zero
+   B-2498-A0.1-zero
+   B-2774-A0.1-zero
+   L-M5e-20-A0.1-zero
+   L-M8e-18-A0.1-zero
+   L-M1e-16-A0.1-zero
+   L-M5e-16-A0.1-zero
+   L-M4e-15-A0.1-zero
+   C-3016-A0.1-zero
+   C-3233-A0.1-zero
+   C-3873-A0.1-zero
+(exit 0)
+
+## decide.py step1b
+step 1b: the zero passes at A = 1 and 0.1
+   P-2197-A1-zero               success  integrations=1 one_loop=10 gap=0 classical=0 unassessed=0 wall=16.0
+   P-2188-A1-zero               success  integrations=1 one_loop=15 gap=0 classical=0 unassessed=0 wall=16.0
+   W-2187-A1-zero               success  integrations=1 one_loop=18 gap=0 classical=0 unassessed=0 wall=16.0
+   W-1631-A1-zero               success  integrations=1 one_loop=18 gap=0 classical=0 unassessed=0 wall=16.0
+   W-2179-A1-zero               success  integrations=1 one_loop=11 gap=0 classical=0 unassessed=0 wall=16.0
+   W-2078-A1-zero               success  integrations=1 one_loop=19 gap=0 classical=0 unassessed=0 wall=16.0
+   W-2192-A1-zero               success  integrations=1 one_loop=14 gap=0 classical=0 unassessed=0 wall=14.1
+   W-2209-A1-zero               success  integrations=1 one_loop=18 gap=0 classical=0 unassessed=0 wall=14.0
+   W-2183-A1-zero               success  integrations=1 one_loop=18 gap=0 classical=0 unassessed=0 wall=14.0
+   W-2172-A1-zero               success  integrations=1 one_loop=9 gap=0 classical=0 unassessed=0 wall=14.0
+   W-2178-A1-zero               success  integrations=1 one_loop=15 gap=0 classical=0 unassessed=0 wall=14.0
+   W-2185-A1-zero               success  integrations=1 one_loop=19 gap=0 classical=0 unassessed=0 wall=14.0
+   R-632-A1-zero                success  integrations=1 one_loop=13 gap=0 classical=0 unassessed=0 wall=14.0
+   R-1193-A1-zero               success  integrations=1 one_loop=19 gap=0 classical=0 unassessed=0 wall=16.0
+   R-865-A1-zero                success  integrations=1 one_loop=44 gap=0 classical=0 unassessed=0 wall=20.1
+   R-611-A1-zero                success  integrations=1 one_loop=64 gap=0 classical=0 unassessed=0 wall=22.1
+   B-2819-A1-zero               success  integrations=1 one_loop=18 gap=0 classical=0 unassessed=0 wall=16.0
+   B-2496-A1-zero               success  integrations=1 one_loop=36 gap=0 classical=0 unassessed=0 wall=18.0
+   B-2772-A1-zero               success  integrations=1 one_loop=74 gap=0 classical=0 unassessed=0 wall=22.1
+   B-2821-A1-zero               success  integrations=1 one_loop=18 gap=0 classical=0 unassessed=0 wall=14.0
+   B-2498-A1-zero               success  integrations=1 one_loop=43 gap=0 classical=0 unassessed=0 wall=18.1
+   B-2774-A1-zero               success  integrations=1 one_loop=62 gap=0 classical=0 unassessed=0 wall=20.1
+   L-M5e-20-A1-zero             success  integrations=1 one_loop=14 gap=0 classical=0 unassessed=0 wall=14.0
+   L-M8e-18-A1-zero             success  integrations=1 one_loop=3 gap=158 classical=67 unassessed=0 wall=38.1
+   L-M1e-16-A1-zero             success  integrations=1 one_loop=1 gap=9 classical=54 unassessed=0 wall=20.1
+   L-M5e-16-A1-zero             success  integrations=1 one_loop=0 gap=1 classical=27 unassessed=0 wall=16.0
+   L-M4e-15-A1-zero             success  integrations=1 one_loop=0 gap=0 classical=28 unassessed=0 wall=16.0
+   C-3016-A1-zero               success  integrations=1 one_loop=0 gap=0 classical=330 unassessed=0 wall=50.2
+   C-3233-A1-zero               success  integrations=3 one_loop=0 gap=0 classical=903 unassessed=0 wall=86.3
+   C-3873-A1-zero               success  integrations=16 one_loop=0 gap=0 classical=39825 unassessed=0 wall=1832.3
+   P-2197-A0.1-zero             success  integrations=1 one_loop=95 gap=0 classical=0 unassessed=0 wall=22.1
+   P-2188-A0.1-zero             success  integrations=1 one_loop=92 gap=0 classical=0 unassessed=0 wall=20.1
+   W-2187-A0.1-zero             success  integrations=1 one_loop=90 gap=0 classical=0 unassessed=0 wall=20.1
+   W-1631-A0.1-zero             success  integrations=1 one_loop=92 gap=0 classical=0 unassessed=0 wall=20.1
+   W-2179-A0.1-zero             success  integrations=1 one_loop=91 gap=0 classical=0 unassessed=0 wall=20.1
+   W-2078-A0.1-zero             success  integrations=1 one_loop=95 gap=0 classical=0 unassessed=0 wall=20.1
+   W-2192-A0.1-zero             success  integrations=1 one_loop=91 gap=0 classical=0 unassessed=0 wall=20.1
+   W-2209-A0.1-zero             success  integrations=1 one_loop=96 gap=0 classical=0 unassessed=0 wall=20.1
+   W-2183-A0.1-zero             success  integrations=1 one_loop=92 gap=0 classical=0 unassessed=0 wall=20.1
+   W-2172-A0.1-zero             success  integrations=1 one_loop=91 gap=0 classical=0 unassessed=0 wall=20.1
+   W-2178-A0.1-zero             success  integrations=1 one_loop=92 gap=0 classical=0 unassessed=0 wall=20.1
+   W-2185-A0.1-zero             success  integrations=1 one_loop=95 gap=0 classical=0 unassessed=0 wall=20.1
+   R-632-A0.1-zero              failure  integrations=1 one_loop=34 gap=200 classical=4515 unassessed=0 wall=348.9
+   R-1193-A0.1-zero             success  integrations=1 one_loop=26 gap=0 classical=0 unassessed=0 wall=14.0
+   R-865-A0.1-zero              success  integrations=1 one_loop=78 gap=0 classical=0 unassessed=0 wall=22.1
+   R-611-A0.1-zero              success  integrations=1 one_loop=528 gap=0 classical=0 unassessed=0 wall=68.2
+   B-2819-A0.1-zero             success  integrations=1 one_loop=48 gap=0 classical=0 unassessed=0 wall=16.0
+   B-2496-A0.1-zero             success  integrations=1 one_loop=63 gap=0 classical=0 unassessed=0 wall=20.1
+   B-2772-A0.1-zero             success  integrations=1 one_loop=595 gap=0 classical=0 unassessed=0 wall=76.2
+   B-2821-A0.1-zero             success  integrations=1 one_loop=5 gap=0 classical=0 unassessed=0 wall=12.0
+   B-2498-A0.1-zero             success  integrations=1 one_loop=81 gap=0 classical=0 unassessed=0 wall=22.0
+   B-2774-A0.1-zero             success  integrations=2 one_loop=1032 gap=0 classical=0 unassessed=0 wall=122.3
+   L-M5e-20-A0.1-zero           failure  integrations=1 one_loop=8 gap=2 classical=13825 unassessed=0 wall=924.3
+   L-M8e-18-A0.1-zero           success  integrations=1 one_loop=5 gap=3 classical=23 unassessed=0 wall=18.0
+   L-M1e-16-A0.1-zero           success  integrations=1 one_loop=1 gap=3 classical=9729 unassessed=0 wall=707.7
+   L-M5e-16-A0.1-zero           success  integrations=1 one_loop=0 gap=1 classical=27 unassessed=0 wall=16.0
+   L-M4e-15-A0.1-zero           success  integrations=1 one_loop=0 gap=0 classical=28 unassessed=0 wall=16.0
+   C-3016-A0.1-zero             success  integrations=1 one_loop=0 gap=0 classical=330 unassessed=0 wall=48.1
+   C-3233-A0.1-zero             success  integrations=3 one_loop=0 gap=0 classical=903 unassessed=0 wall=88.2
+   C-3873-A0.1-zero             success  integrations=16 one_loop=0 gap=0 classical=39825 unassessed=0 wall=1822.6
+S2 from the zero tuning at A = 1 (zero: no one-loop candidate; edge: and no gap candidate)
+   P-2197       known=True S2(zero)=False S2(edge)=False
+   P-2188       known=True S2(zero)=False S2(edge)=False
+   W-2187       known=True S2(zero)=False S2(edge)=False
+   W-1631       known=True S2(zero)=False S2(edge)=False
+   W-2179       known=True S2(zero)=False S2(edge)=False
+   W-2078       known=True S2(zero)=False S2(edge)=False
+   W-2192       known=True S2(zero)=False S2(edge)=False
+   W-2209       known=True S2(zero)=False S2(edge)=False
+   W-2183       known=True S2(zero)=False S2(edge)=False
+   W-2172       known=True S2(zero)=False S2(edge)=False
+   W-2178       known=True S2(zero)=False S2(edge)=False
+   W-2185       known=True S2(zero)=False S2(edge)=False
+   R-632        known=True S2(zero)=False S2(edge)=False
+   R-1193       known=True S2(zero)=False S2(edge)=False
+   R-865        known=True S2(zero)=False S2(edge)=False
+   R-611        known=True S2(zero)=False S2(edge)=False
+   B-2819       known=True S2(zero)=False S2(edge)=False
+   B-2496       known=True S2(zero)=False S2(edge)=False
+   B-2772       known=True S2(zero)=False S2(edge)=False
+   B-2821       known=True S2(zero)=False S2(edge)=False
+   B-2498       known=True S2(zero)=False S2(edge)=False
+   B-2774       known=True S2(zero)=False S2(edge)=False
+   L-M5e-20     known=True S2(zero)=False S2(edge)=False
+   L-M8e-18     known=True S2(zero)=False S2(edge)=False
+   L-M1e-16     known=True S2(zero)=False S2(edge)=False
+   L-M5e-16     known=True S2(zero)=True S2(edge)=False
+   L-M4e-15     known=True S2(zero)=True S2(edge)=True
+   C-3016       known=True S2(zero)=True S2(edge)=True
+   C-3233       known=True S2(zero)=True S2(edge)=True
+   C-3873       known=True S2(zero)=True S2(edge)=True
+ruling 1's free check of S2: the zero run at A = 0.1 against A = 1, where S2(zero) holds
+   L-M5e-16     A=0.1 equals A=1 under ruling 6
+   L-M4e-15     A=0.1 equals A=1 under ruling 6
+   C-3016       A=0.1 equals A=1 under ruling 6
+   C-3233       A=0.1 equals A=1 under ruling 6
+   C-3873       A=0.1 equals A=1 under ruling 6
+   5 checked
+S1 at A = 1 and 0.1 (the zero tuning at that A met no gap candidate)
+   P-2197-A1-edge               S1=True
+   P-2188-A1-edge               S1=True
+   W-2187-A1-edge               S1=True
+   W-1631-A1-edge               S1=True
+   W-2179-A1-edge               S1=True
+   W-2078-A1-edge               S1=True
+   W-2192-A1-edge               S1=True
+   W-2209-A1-edge               S1=True
+   W-2183-A1-edge               S1=True
+   W-2172-A1-edge               S1=True
+   W-2178-A1-edge               S1=True
+   W-2185-A1-edge               S1=True
+   R-632-A1-edge                S1=True
+   R-1193-A1-edge               S1=True
+   R-865-A1-edge                S1=True
+   R-611-A1-edge                S1=True
+   B-2819-A1-edge               S1=True
+   B-2496-A1-edge               S1=True
+   B-2772-A1-edge               S1=True
+   B-2821-A1-edge               S1=True
+   B-2498-A1-edge               S1=True
+   B-2774-A1-edge               S1=True
+   L-M5e-20-A1-edge             S1=True
+   L-M8e-18-A1-edge             S1=False
+   L-M1e-16-A1-edge             S1=False
+   L-M5e-16-A1-edge             S1=False
+   L-M4e-15-A1-edge             S1=True
+   C-3016-A1-edge               S1=True
+   C-3233-A1-edge               S1=True
+   C-3873-A1-edge               S1=True
+   P-2197-A0.1-edge             S1=True
+   P-2188-A0.1-edge             S1=True
+   W-2187-A0.1-edge             S1=True
+   W-1631-A0.1-edge             S1=True
+   W-2179-A0.1-edge             S1=True
+   W-2078-A0.1-edge             S1=True
+   W-2192-A0.1-edge             S1=True
+   W-2209-A0.1-edge             S1=True
+   W-2183-A0.1-edge             S1=True
+   W-2172-A0.1-edge             S1=True
+   W-2178-A0.1-edge             S1=True
+   W-2185-A0.1-edge             S1=True
+   R-632-A0.1-edge              S1=False
+   R-1193-A0.1-edge             S1=True
+   R-865-A0.1-edge              S1=True
+   R-611-A0.1-edge              S1=True
+   B-2819-A0.1-edge             S1=True
+   B-2496-A0.1-edge             S1=True
+   B-2772-A0.1-edge             S1=True
+   B-2821-A0.1-edge             S1=True
+   B-2498-A0.1-edge             S1=True
+   B-2774-A0.1-edge             S1=True
+   L-M5e-20-A0.1-edge           S1=False
+   L-M8e-18-A0.1-edge           S1=False
+   L-M1e-16-A0.1-edge           S1=False
+   L-M5e-16-A0.1-edge           S1=False
+   L-M4e-15-A0.1-edge           S1=True
+   C-3016-A0.1-edge             S1=True
+   C-3233-A0.1-edge             S1=True
+   C-3873-A0.1-edge             S1=True
+step 1b (edge runs at A = 1 and 0.1 that S1 does not cover): 8 tasks -> /private/tmp/claude-35086/-Users-ds283-Documents-Code-ChamPBH/22b01212-c0c6-40a3-a03d-905bdf7b834c/scratchpad/agent-02/redo/step1b.ids
+   L-M8e-18-A1-edge
+   L-M1e-16-A1-edge
+   L-M5e-16-A1-edge
+   R-632-A0.1-edge
+   L-M5e-20-A0.1-edge
+   L-M8e-18-A0.1-edge
+   L-M1e-16-A0.1-edge
+   L-M5e-16-A0.1-edge
+(exit 0)
+
+## decide.py step2a
+step 2a (zero, A = 0.01, P's two): 2 tasks -> /private/tmp/claude-35086/-Users-ds283-Documents-Code-ChamPBH/22b01212-c0c6-40a3-a03d-905bdf7b834c/scratchpad/agent-02/redo/step2a.ids
+   P-2197-A0.01-zero
+   P-2188-A0.01-zero
+(exit 0)
+
+## decide.py project
+ruling 5: the projection after P's two at A = 0.01
+   P-2197-A0.01-zero            failure  integrations=1 one_loop=183 gap=508 classical=13260 unassessed=0 wall=910.1 peak_rss=1.307 GiB
+   P-2188-A0.01-zero            failure  integrations=1 one_loop=214 gap=713 classical=13377 unassessed=0 wall=914.1 peak_rss=1.322 GiB
+   workers = min(6, floor(8 GiB / 1.322 GiB)) = 6
+   tasks counted: 25 zero (W, R, B, L) + 27 edge (P, W, R, B, L) = 52, each at the mean wall of P's two, 912.1 s
+   projection = 52 x 912.1 s / 6 = 7905 s = 2.20 h (limit 4 h, worker floor 3)
+step 2b (zero, A = 0.01, R B W L, less S2's) at 6 workers: 23 tasks -> /private/tmp/claude-35086/-Users-ds283-Documents-Code-ChamPBH/22b01212-c0c6-40a3-a03d-905bdf7b834c/scratchpad/agent-02/redo/project.ids
+   R-632-A0.01-zero
+   R-1193-A0.01-zero
+   R-865-A0.01-zero
+   R-611-A0.01-zero
+   B-2819-A0.01-zero
+   B-2496-A0.01-zero
+   B-2772-A0.01-zero
+   B-2821-A0.01-zero
+   B-2498-A0.01-zero
+   B-2774-A0.01-zero
+   W-2187-A0.01-zero
+   W-1631-A0.01-zero
+   W-2179-A0.01-zero
+   W-2078-A0.01-zero
+   W-2192-A0.01-zero
+   W-2209-A0.01-zero
+   W-2183-A0.01-zero
+   W-2172-A0.01-zero
+   W-2178-A0.01-zero
+   W-2185-A0.01-zero
+   L-M5e-20-A0.01-zero
+   L-M8e-18-A0.01-zero
+   L-M1e-16-A0.01-zero
+   derived by S2 (equal to A = 1), not run: ['L-M5e-16-A0.01-zero', 'L-M4e-15-A0.01-zero', 'C-3016-A0.01-zero', 'C-3233-A0.01-zero', 'C-3873-A0.01-zero']
+(exit 0)
+
+## decide.py step3
+S1 at A = 0.01 (the zero tuning at A = 0.01, run or S2's, met no gap candidate)
+   P-2197-A0.01-edge            from P-2197-A0.01-zero            S1=False
+   P-2188-A0.01-edge            from P-2188-A0.01-zero            S1=False
+   W-2187-A0.01-edge            from W-2187-A0.01-zero            S1=False
+   W-1631-A0.01-edge            from W-1631-A0.01-zero            S1=False
+   W-2179-A0.01-edge            from W-2179-A0.01-zero            S1=False
+   W-2078-A0.01-edge            from W-2078-A0.01-zero            S1=False
+   W-2192-A0.01-edge            from W-2192-A0.01-zero            S1=False
+   W-2209-A0.01-edge            from W-2209-A0.01-zero            S1=False
+   W-2183-A0.01-edge            from W-2183-A0.01-zero            S1=False
+   W-2172-A0.01-edge            from W-2172-A0.01-zero            S1=False
+   W-2178-A0.01-edge            from W-2178-A0.01-zero            S1=False
+   W-2185-A0.01-edge            from W-2185-A0.01-zero            S1=False
+   R-632-A0.01-edge             from R-632-A0.01-zero             S1=False
+   R-1193-A0.01-edge            from R-1193-A0.01-zero            S1=True
+   R-865-A0.01-edge             from R-865-A0.01-zero             S1=True
+   R-611-A0.01-edge             from R-611-A0.01-zero             S1=True
+   B-2819-A0.01-edge            from B-2819-A0.01-zero            S1=True
+   B-2496-A0.01-edge            from B-2496-A0.01-zero            S1=True
+   B-2772-A0.01-edge            from B-2772-A0.01-zero            S1=True
+   B-2821-A0.01-edge            from B-2821-A0.01-zero            S1=True
+   B-2498-A0.01-edge            from B-2498-A0.01-zero            S1=True
+   B-2774-A0.01-edge            from B-2774-A0.01-zero            S1=True
+   L-M5e-20-A0.01-edge          from L-M5e-20-A0.01-zero          S1=False
+   L-M8e-18-A0.01-edge          from L-M8e-18-A0.01-zero          S1=False
+   L-M1e-16-A0.01-edge          from L-M1e-16-A0.01-zero          S1=False
+   L-M5e-16-A0.01-edge          from L-M5e-16-A1-zero             S1=False
+   L-M4e-15-A0.01-edge          from L-M4e-15-A1-zero             S1=True
+   C-3016-A0.01-edge            from C-3016-A1-zero               S1=True
+   C-3233-A0.01-edge            from C-3233-A1-zero               S1=True
+   C-3873-A0.01-edge            from C-3873-A1-zero               S1=True
+step 3 (edge runs at A = 0.01 that S1 does not cover): 17 tasks -> /private/tmp/claude-35086/-Users-ds283-Documents-Code-ChamPBH/22b01212-c0c6-40a3-a03d-905bdf7b834c/scratchpad/agent-02/redo/step3.ids
+   P-2197-A0.01-edge
+   P-2188-A0.01-edge
+   W-2187-A0.01-edge
+   W-1631-A0.01-edge
+   W-2179-A0.01-edge
+   W-2078-A0.01-edge
+   W-2192-A0.01-edge
+   W-2209-A0.01-edge
+   W-2183-A0.01-edge
+   W-2172-A0.01-edge
+   W-2178-A0.01-edge
+   W-2185-A0.01-edge
+   R-632-A0.01-edge
+   L-M5e-20-A0.01-edge
+   L-M8e-18-A0.01-edge
+   L-M1e-16-A0.01-edge
+   L-M5e-16-A0.01-edge
+(exit 0)

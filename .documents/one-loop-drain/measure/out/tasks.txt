@@ -1,0 +1,32 @@
+history  group  M/M_P  beta  shard#serial  stored alpha  store check
+P-2197       P  4e-31  1.185  0005#2197  0.001  M rel -2.2e-16, beta 1.185, alpha 0.001, failure 0, validated 1: ok
+P-2188       P  4e-31  1.06  0003#2188  0.001  M rel -2.2e-16, beta 1.06, alpha 0.001, failure 0, validated 1: ok
+W-2187       W  4e-31  1.0775  0010#2187  0.001  M rel -2.2e-16, beta 1.0775, alpha 0.001, failure 0, validated 1: ok
+W-1631       W  4e-31  1.07  0007#1631  0.001  M rel -2.2e-16, beta 1.07, alpha 0.001, failure 0, validated 1: ok
+W-2179       W  4e-31  1.0925  0000#2179  0.001  M rel -2.2e-16, beta 1.0925, alpha 0.001, failure 0, validated 1: ok
+W-2078       W  4e-31  1.175  0001#2078  0.001  M rel -2.2e-16, beta 1.175, alpha 0.001, failure 0, validated 1: ok
+W-2192       W  4e-31  1.105  0005#2192  0.001  M rel -2.2e-16, beta 1.105, alpha 0.001, failure 0, validated 1: ok
+W-2209       W  4e-31  1.1875  0006#2209  0.001  M rel -2.2e-16, beta 1.1875, alpha 0.001, failure 0, validated 1: ok
+W-2183       W  4e-31  1.125  0013#2183  0.001  M rel -2.2e-16, beta 1.125, alpha 0.001, failure 0, validated 1: ok
+W-2172       W  4e-31  1.1225  0012#2172  0.001  M rel -2.2e-16, beta 1.1225, alpha 0.001, failure 0, validated 1: ok
+W-2178       W  4e-31  1.1025  0004#2178  0.001  M rel -2.2e-16, beta 1.1025, alpha 0.001, failure 0, validated 1: ok
+W-2185       W  4e-31  1.1725  0000#2185  0.001  M rel -2.2e-16, beta 1.1725, alpha 0.001, failure 0, validated 1: ok
+R-632        R  4e-31  1.0  0002#632  0.01  M rel -2.2e-16, beta 1.0, alpha 0.01, failure 0, validated 1: ok
+R-1193       R  4e-31  1.15  0007#1193  0.01  M rel -2.2e-16, beta 1.15, alpha 0.01, failure 0, validated 1: ok
+R-865        R  4e-31  2.0  0002#865  0.01  M rel -2.2e-16, beta 2.0, alpha 0.01, failure 0, validated 1: ok
+R-611        R  4e-31  10.0  0006#611  0.01  M rel -2.2e-16, beta 10.0, alpha 0.01, failure 0, validated 1: ok
+B-2819       B  1e-33  1.2  0011#2819  0.01  M rel +0.0e+00, beta 1.2, alpha 0.01, failure 0, validated 1: ok
+B-2496       B  1e-33  2.0  0002#2496  0.01  M rel +0.0e+00, beta 2.0, alpha 0.01, failure 0, validated 1: ok
+B-2772       B  1e-33  10.0  0006#2772  0.01  M rel +0.0e+00, beta 10.0, alpha 0.01, failure 0, validated 1: ok
+B-2821       B  1e-30  1.2  0011#2821  0.01  M rel -2.2e-16, beta 1.2, alpha 0.01, failure 0, validated 1: ok
+B-2498       B  1e-30  2.0  0002#2498  0.01  M rel -2.2e-16, beta 2.0, alpha 0.01, failure 0, validated 1: ok
+B-2774       B  1e-30  10.0  0006#2774  0.01  M rel -2.2e-16, beta 10.0, alpha 0.01, failure 0, validated 1: ok
+L-M5e-20     L  5e-20  2.0  -  None  (no store entry)
+L-M8e-18     L  8e-18  2.0  -  None  (no store entry)
+L-M1e-16     L  1e-16  2.0  -  None  (no store entry)
+L-M5e-16     L  5e-16  2.0  -  None  (no store entry)
+L-M4e-15     L  4e-15  2.0  -  None  (no store entry)
+C-3016       C  1e-12  4.0  0002#3016  0.1  M rel +0.0e+00, beta 4.0, alpha 0.1, failure 0, validated 1: ok
+C-3233       C  1e-12  1.0  0002#3233  0.15  M rel +0.0e+00, beta 1.0, alpha 0.15, failure 0, validated 1: ok
+C-3873       C  1e-12  1.11  0007#3873  0.03  M rel +0.0e+00, beta 1.11, alpha 0.03, failure 0, validated 1: ok
+30 histories, 180 tasks written to var/one-loop-drain/02/tasks.json
