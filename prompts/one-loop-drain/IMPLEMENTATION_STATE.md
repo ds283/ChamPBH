@@ -1,6 +1,6 @@
 # one-loop-drain campaign — implementation state
 
-**Last updated:** 2026-11-02 · **Status: PLANNED — 0 of 8 landed.** Planned
+**Last updated:** 2026-11-03 · **Status: LIVE — 1 of 8 landed (01).** Planned
 2026-11-02 as `quanta-diagnostics` at the user's request, after a scoping session the same day
 ([`source/scoping_2026-11-02.md`](source/scoping_2026-11-02.md)); U1–U7 and P1–P16 ruled the same day,
 all as proposed (README §6). **Re-planned the same day around the drain law and renamed `one-loop-drain`**
@@ -11,7 +11,8 @@ The branch was cut from `reflection-restart` at `3b8a553`. Under U1 as extended 
 written until `reflection-restart` 04 has landed and been merged here; under U2, the rebuild of record
 waits for this campaign's 08. *(2026-11-02: `reflection-restart` 04 landed and that campaign closed; its branch was
 merged here (`1561b60`). The user ruled the wall-search fix into 01 (README §8.8), and the fixed-α issue came
-back to §3 for it. Prompt 01 written the same day.)*
+back to §3 for it. Prompt 01 written the same day.)* *(2026-11-03: prompt 01 landed, with the user's ruling (b) on
+the inside-wall stop (§3, §4); the Law gate holds, and two issues closed.)*
 
 The campaign replaces the fixed-α drain by a one-loop law, α_eff = min(α_cap, A·2.7/ℓ)·w_gate at a
 one-loop turnaround and zero at R ≤ 1, with the fixed law kept beside it, bitwise. It measures the law
@@ -37,7 +38,7 @@ The plan as first ruled had seven prompts (README §2), none written; the re-pla
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | [The drain law](01-the-drain-law.md) | the law and A as inputs; the regime in the loop; α_eff by regime; the gap prescription as a module attribute; the `"drain"` payload key; the tool route's options; the 3873 failure; the wall-search fix (README §8.8) | Opus | ✍️ | ⬜ | | |
+| 01 | [The drain law](01-the-drain-law.md) | the law and A as inputs; the regime in the loop; α_eff by regime; the gap prescription as a module attribute; the `"drain"` payload key; the tool route's options; the 3873 failure; the wall-search fix (README §8.8) | Opus | ✅ | ✅ | this commit | [01](logs/01-the-drain-law.md) |
 | 02 | Measure the law | about forty histories by the tool route, re-tuned, at three A and both gap prescriptions; then U13–U14 | Opus | ⬜ | ⬜ | | |
 | 03 | The store | the keys, `ScalarHistoryBounce`, the sample and history columns, the gap prescription fixed, `FINGERPRINT_FORMAT` 7, `VERSION_LABEL` | Opus | ⬜ | ⬜ | | |
 | 04 | Drivers and exports | the law's options in `main.py` and the plot scripts; `histories.csv`, `fields.csv`, `bounces.csv` | Sonnet | ⬜ | ⬜ | | |
@@ -54,13 +55,21 @@ Orchestrator notes, one prompt at a time, in `orchestrator/`.
 
 ### 1.1 Items
 
-None yet.
+| Item | Prompt | State |
+|---|---|---|
+| `drain_law` on `integrate_scalar_history`, `integrate_history`, `tune_history` (P22) | 01 | ✅ |
+| the regime in the loop, α_eff by regime, the constants (P17, P18, P23, P24, U9, U10) | 01 | ✅ |
+| `_GAP_PRESCRIPTION`, temporary (P20, P25) | 01 | ✅ (03 removes it) |
+| the `"drain"` payload key, `DrainRecord`/`DrainCandidate` | 01 | ✅ |
+| the wall-search fix, `_turning_point_unresolvable` (P21) | 01 | ✅ |
+| the declined unresolved reflection (the user's ruling (b), 2026-11-03) | 01 | ✅ |
+| `tools/history_and_bbn.py --drain-law`, `--gap-prescription` (P25) | 01 | ✅ |
 
 ## 2. The gates
 
 | Gate | Holds when | Prompt | State |
 |---|---|---|---|
-| Law | fixed law: golden histories bitwise, payload unchanged but the new key; one-loop law: 2197 and 2188 reproduce the probe's table, 3016 and 3233 drain nothing; 3873 explained | 01 | ⬜ |
+| Law | fixed law: golden histories bitwise, payload unchanged but the new key; one-loop law: 2197 and 2188 reproduce the probe's table, 3016 and 3233 drain nothing; 3873 explained | 01 | ✅ 2026-11-03 (verification §1.10): the goldens bitwise, the 42 equal 04's, the probe's table bitwise at A = 1 and 0.1, 3016/3233 drain nothing, 3873 explained and completing after ruling (b) |
 | Measure | the sample at three A and both gap prescriptions, re-tuned; regime shares and the gap's reach across M and β; the prescriptions' spread in Y_p, D/H, ΔN_eff; the cost | 02 | ⬜ |
 | Store | the round trip exact, bounce rows in order; the fixed law and α = 0 write no bounce row; fingerprint format 7 beside 6 | 03 | ⬜ |
 | Export | the new export columns equal the stored record; existing `histories.csv` columns byte-identical; the drivers refuse a mismatched law | 04 | ⬜ |
@@ -123,6 +132,20 @@ the new prompts.
   the user's decisions, README §6.3 (1–4).
   **Re-planned 2026-11-02:** this campaign's object (README §8). The one-loop law lands in 01; 03 closes
   this when the gap prescription of record (U13) is fixed and the law's keys are stored.
+- **`[00-the-parking-leftover-has-no-spectrum]`** — the energy drained at the parking switch (up to
+  0.10 of ρ_χ at 4×10⁻³¹, β 1.06–1.107; ≤ 0.03 elsewhere) has no peak estimate, so no margin and no
+  wall-exposure measure covers it; it is reported only as `unassessed_share`. **Impact:** not measured.
+  **Next:** out of this campaign's scope; recorded for a later one.
+  **2026-11-02, at the re-plan:** under the one-loop law the parking leftover was 0.008–0.23% of K in the
+  four laboratory-M probe runs, and at 10⁻¹² M_P it is all of ρ_χ (3016: r_χ 1.0×10⁻⁶ today). 02 measures
+  its share across the sample (README §8.3); the spectrum stays out of scope.
+
+### 3.1 Assigned to this campaign
+
+None.
+
+## 4. Resolved issues
+
 - **`[00-fixed-alpha-laboratory-M-histories-fail-in-classical-turning-point]`** — opened 2026-11-02, when
   `[00-reflection-restart-tree-fails-probe-histories]` was split (§4; source `drain-probe_2026-11-02.md` §5).
   On `reflection-restart` at `2d50b95`, at the stored normalization, 2197 and 2188 at their stored
@@ -147,6 +170,13 @@ the new prompts.
   **Assigned (2026-11-02):** to this campaign's 01, by the user: "Add the wall-search fix to `one-loop-drain`
   01." The fixed law runs these histories, and 01 already owns the related inside-wall stop of 3873. The form of
   the fix is README §8.8, P21. **Next:** 01.
+  **Closed 2026-11-03 by prompt 01** (this commit; `.documents/one-loop-drain-verification.md` §1.3–§1.4): the
+  rule of README §8.8 P21, `_turning_point_unresolvable`, makes `classical_turning_point` return None where ln E lies
+  below the least finite ln(V − V_floor); only calls that raised change. All 19 measured failing inputs now return
+  None with the predicate holding, and each raises with a copy of the method before the fix. 2197 and 2188 at their
+  stored normalization, α = 10⁻³, complete (131 and 46 assessments answered); the nine of `reflection-restart` 04
+  §0.2, tuned, all succeed; the 42 replay equal 04's; the predicate costs under 10⁻³ of the wall time.
+
 - **`[00-a-zero-drain-history-stops-at-the-inside-wall-guard]`** — opened 2026-11-02, when
   `[00-reflection-restart-tree-fails-probe-histories]` was split (§4; source `drain-probe_2026-11-02.md` §5).
   3873 (10⁻¹² M_P, β 1.11), run on `2d50b95` at its stored normalization with nothing drained, stops at
@@ -155,19 +185,16 @@ the new prompts.
   (2026-10-01, the integrator audit), not from `reflection-restart` 03, as the source record and the first
   form of this entry said. **Impact:** under the one-loop law every large-M history drains nothing, so all
   of them take the path on which 3873 stops; how many stop is not known. **Next:** 01 (README §8.4).
-- **`[00-the-parking-leftover-has-no-spectrum]`** — the energy drained at the parking switch (up to
-  0.10 of ρ_χ at 4×10⁻³¹, β 1.06–1.107; ≤ 0.03 elsewhere) has no peak estimate, so no margin and no
-  wall-exposure measure covers it; it is reported only as `unassessed_share`. **Impact:** not measured.
-  **Next:** out of this campaign's scope; recorded for a later one.
-  **2026-11-02, at the re-plan:** under the one-loop law the parking leftover was 0.008–0.23% of K in the
-  four laboratory-M probe runs, and at 10⁻¹² M_P it is all of ρ_χ (3016: r_χ 1.0×10⁻⁶ today). 02 measures
-  its share across the sample (README §8.3); the spectrum stays out of scope.
-
-### 3.1 Assigned to this campaign
-
-None.
-
-## 4. Resolved issues
+  **Narrowed 2026-11-03 by prompt 01** (verification §1.7): the branch is the unresolved turnaround. In the wall's
+  linear tail (nothing drained, E/V₀ ≈ e^{−9.2}) W/ρ_kin = 0.5 at 3φ_t and exceeds 1 inside 2φ_t. φ_t crossed the
+  10⁻⁸ M_P threshold only at φ = 1.67 φ_t, so the rule fired late and G2 refused. The same mechanism is behind 21 of
+  the 2026.8.0 store's fixed-law failures (M = 10⁻¹⁵–10⁻¹² M_P, β 0.5–1.0). **Ruled by the user, 2026-11-03**, on
+  option (b): "I see. I had assumed that was an energy balance that meant the field and moved beyond its reflection
+  point, but I see that it's not. In which case, (b) is correct." **Closed 2026-11-03 by prompt 01** (this
+  commit): where the unresolved reflection would fail G2 (G2's own expression), that step start makes no unresolved
+  decision and the floor rule is tested as usual; every such state raised before, so nothing that succeeded moves.
+  3873 under the one-loop law at A = 1 now completes (19 declined step starts); 3016 and 3233 are unchanged; 3460
+  and 4397, two of the 21, complete tuned under the fixed law (4 and 13 declined in the accepted integration).
 
 - **`[00-reflection-restart-tree-fails-probe-histories]`** — opened 2026-11-02 from the drain probe;
   **closed the same day by splitting** at the user's ruling 6 (README §6.3) into
@@ -186,3 +213,6 @@ on its own tree before it changes anything.
 **2026-11-02, at the re-plan:** on `reflection-restart` after its 03 (`b81eab8`), CosmologyModels 26,
 ComputeTargets 514 (122 + 392), ObjectFactories 130, tools 147, RunDrivers 68. `reflection-restart` 04
 may add more, so 01 still measures them on its own tree first.
+
+**2026-11-03, prompt 01:** measured first at `b1415a3`: 26, 514 (122 + 392), 130, 147, 68, all passing. After 01:
+26, 566 (163 + 403), 130, 156, 68, all passing (log 01 §4).

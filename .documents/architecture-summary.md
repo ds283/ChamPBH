@@ -1427,6 +1427,35 @@ SampleValues = namedtuple("SampleValues", [
 >   signature's steps, kept and discarded apart.
 > - Tests: `ComputeTargets/tests/test_restart_fix.py`, `test_golden_reflecting_history.py`.
 
+> **Note, 2026-11-03 (`one-loop-drain`, prompt 01): the `drain_law` argument and the `"drain"` key.** The
+> one-loop drain law is an input of the integration and the tuning. It is not yet a key: prompt 03 stores it. The
+> numerics are `numerical-strategies.md` §3.5's note of this date.
+> - **`ComputeTargets/ScalarHistory.py`** gains:
+>   - the law's constants: `DRAIN_LAW_FIXED`, `DRAIN_LAW_ONE_LOOP`, `DRAIN_LAWS`, `DRAIN_C1`,
+>     `DRAIN_ALPHA_CAP`, `DRAIN_ELL_EDGE`, the `REGIME_*` names with `DRAIN_REGIMES`, the `GAP_PRESCRIPTION_*`
+>     names with `GAP_PRESCRIPTIONS`, and the temporary `_GAP_PRESCRIPTION` (prompt 03 removes it);
+>   - the functions `check_drain_law`, `drain_regime`, `drain_alpha_effective`, `_assessed_peak` (peak_estimate's
+>     body, moved unchanged), `unresolved_reflection_refused`, `_wall_and_kinetic` and `_g2_refuses` (G2, factored
+>     out of `_reflection_guards` with its raise and message unchanged);
+>   - the records `DrainCandidate` (regime, ℓ, α_eff, w_gate, ln E, ln H_E) and `DrainRecord` (law, A, gap
+>     prescription, unresolvable assessments, candidates, declined unresolved reflections).
+> - **`integrate_scalar_history`, `integrate_history` and `tune_history`** take `drain_law` (default `"fixed"`),
+>   checked at entry with `alpha`, which carries A under `"one_loop"`. `compute_scalar_history`,
+>   `ScalarHistory.compute`, `main.py` and the plot scripts do not take it, so no one-loop history can be stored
+>   under a fixed-law key.
+> - **`IntegrationResult`** gains `drain` (the DrainRecord) and `peak_estimates` (the loop's PeakEstimates under
+>   the one-loop law, which `history_margins` reuses; None under the fixed law). Both default to None. `Injection`
+>   and `PeakEstimate` are unchanged.
+> - **The payload.** `integrate_history`'s payload, a failure's included, gains `"drain"`. For a failure it holds
+>   the record as far as the loop reached, carried as the exception's `drain` attribute beside `warnings`, or None
+>   if the failure came before the loop. `tune_history` returns the accepted integration's record, and a failed
+>   tuning the record of the integration that ended it. `build_extra_data` and every stored value are unchanged.
+> - **`CosmologyConcepts/Models/AbstractModel.py`** gains `_least_finite_log_V_minus_floor` and
+>   `_turning_point_unresolvable`. `classical_turning_point` returns None where the latter holds.
+> - **`tools/history_and_bbn.py`** gains `--drain-law` and the temporary `--gap-prescription`, and a `drain` line.
+> - Tests: `ComputeTargets/tests/test_drain_law.py`, `test_unresolvable_turning_points.py`,
+>   `tools/tests/test_history_and_bbn_drain_law.py`.
+
 ### 7.3 `AdiabaticHistory` (`ComputeTargets/AdiabaticHistory.py`)
 
 Computes the adiabatic perturbation parameter Q (which determines whether the chameleon field is adiabatically tracking its minimum). Requires a `ScalarHistoryProxy` as input.

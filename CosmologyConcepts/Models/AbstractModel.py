@@ -48,7 +48,7 @@ None assumes a form of the potential.
 import sys
 from abc import ABC, abstractmethod
 from collections import namedtuple
-from math import exp, expm1, isfinite, isnan, log, pi, ulp
+from math import exp, expm1, isfinite, isnan, log, nextafter, pi, ulp
 from typing import Callable, List, Optional, Tuple
 
 from scipy.optimize import brentq
@@ -147,6 +147,83 @@ def _log_V_minus_floor(log_V: float, log_V_floor: float) -> float:
     if log_V - log_V_floor <= width < float("inf"):
         return _NEG_INF
     return log_V + log(-expm1(log_V_floor - log_V))
+
+
+# the least finite value of _log_V_minus_floor at one ln V_floor, cached per (ln V_floor,
+# WALL_ROUNDING_QUANTA) (one-loop-drain prompt 01 §1.6): a history has one ln V_floor, a tuning a few.
+# The walk up from ln V_floor takes WALL_ROUNDING_QUANTA + 1 steps where the floats above ln V_floor
+# have its ulp (every ln V_floor of the grid, near -276.6), and about twice that where ln V_floor is
+# minus a power of two, whose upper neighbours have half its ulp; it is bounded at
+# _LEAST_FINITE_MAX_STEPS. The cache is cleared when it reaches _LEAST_FINITE_CACHE_SIZE entries
+_LEAST_FINITE_MAX_STEPS = 4 * (WALL_ROUNDING_QUANTA + 2)
+_LEAST_FINITE_CACHE_SIZE = 4096
+_LEAST_FINITE_CACHE: dict = {}
+
+
+def _least_finite_log_V_minus_floor(log_V_floor: float) -> float:
+    """
+    The least finite value that _log_V_minus_floor(., log_V_floor) can return, for a finite ln V_floor
+    (one-loop-drain prompt 01 §1.6; README §8.8 P21): its value at the first float above ln V_floor at
+    which it is finite, found by stepping up from ln V_floor through the representable floats
+    (nextafter), and computed by _log_V_minus_floor itself, so that it is exact by construction.
+
+    It is the least value, not only the first: above the first finite argument ln V - ln V_floor grows
+    by at least one ulp of ln V_floor a step, ln(-expm1(ln V_floor - ln V)) with it, and the sum
+    ln V + ln(-expm1(...)) is rounded monotonically, so _log_V_minus_floor does not decrease (given
+    monotone expm1 and log, which the test of this function checks over 10^4 floats). Below the first
+    finite argument it is -inf.
+
+    Raises ComputationFailureError if no finite value is found within _LEAST_FINITE_MAX_STEPS steps.
+    """
+    key = (log_V_floor, WALL_ROUNDING_QUANTA)
+    least = _LEAST_FINITE_CACHE.get(key)
+    if least is not None:
+        return least
+
+    log_V = log_V_floor
+    for _ in range(_LEAST_FINITE_MAX_STEPS):
+        log_V = nextafter(log_V, float("inf"))
+        value = _log_V_minus_floor(log_V, log_V_floor)
+        if value > _NEG_INF:
+            least = value
+            break
+    else:
+        raise _failure(
+            f"_least_finite_log_V_minus_floor: no finite ln(V - V_floor) within "
+            f"{_LEAST_FINITE_MAX_STEPS} floats above ln V_floor = {log_V_floor!r}"
+        )
+
+    if len(_LEAST_FINITE_CACHE) >= _LEAST_FINITE_CACHE_SIZE:
+        _LEAST_FINITE_CACHE.clear()
+    _LEAST_FINITE_CACHE[key] = least
+    return least
+
+
+def _turning_point_unresolvable(log_V_floor: float, log_E: float) -> bool:
+    """
+    True iff ln E is below the least finite value that _log_V_minus_floor(., log_V_floor) can return
+    (one-loop-drain prompt 01 §1.6; README §8.8 P21, the user's ruling "Add the wall-search fix to
+    one-loop-drain 01"): the classical turning point, the root of V(phi_t) - V_floor = E, lies inside
+    the region where _log_V_minus_floor returns -inf (within WALL_ROUNDING_QUANTA quanta of ln V_floor),
+    below the resolution of ln V, and the search cannot resolve it. ln V_floor and ln E are finite (the
+    caller's input checks).
+
+    Why every input it accepts raised in classical_turning_point's search before this prompt. The
+    search's residual is _log_V_minus_floor(ln V(phi), ln V_floor) - ln E. Where the predicate holds,
+    every finite value of _log_V_minus_floor is at least its least value, which is above ln E, so every
+    finite residual is strictly positive (a float difference a - b with a > b is positive), and every
+    other residual is -inf (+inf, at ln V = +inf, is refused by _evaluate). classical_turning_point
+    returns None first where r_0 >= 0, so the search starts with r_0 = -inf. Then in _search_log_field:
+      - the doubling loop keeps the outer end at a probe whose residual is -inf, and breaks at the first
+        positive one (or raises: no bracket in WALL_SEARCH_MAX_DOUBLINGS, a probe out of float range);
+      - every halving midpoint is -inf, which becomes the outer end, or positive, which becomes the inner
+        one if it is below the inner end's value and otherwise raises "not monotone"; the outer end's
+        value therefore stays -inf, no residual is ever exactly 0.0, and the halvings run to their limit;
+      - after them the outer end is -inf, and the search raises "the bracket's outer end is still -inf".
+    No path returns. So classical_turning_point's return of None where this holds changes only calls
+    that raised, and none that returned.
+    """
+    return log_E < _least_finite_log_V_minus_floor(log_V_floor)
 
 
 def _evaluate(residual: Callable[[float], float], x: float, context: str) -> float:
@@ -561,7 +638,11 @@ class AbstractModel(DatastoreObject, ABC):
         - ell_t = ln(k_ex/omega_t), about ln 1/2 for the exponential wall.
 
         Returns None if V(phi) - V_floor >= E already: the field is at or inside its classical turning
-        point, which is behind it. That is not a failure.
+        point, which is behind it. That is not a failure. It also returns None, after that test and
+        before the search, if ln E is below the least finite value of ln(V - V_floor)
+        (_turning_point_unresolvable; one-loop-drain prompt 01 §1.6, README §8.8 P21): the turning point
+        lies inside the region the search reads as -inf, below the resolution of ln V, and cannot be
+        resolved. Every such call raised in the search before that prompt.
 
         Raises ComputationFailureError, naming the model, the inputs and the reason, for a model that
         does not reflect at the origin or has no log_V_floor; phi not finite and positive; ln E not
@@ -581,6 +662,11 @@ class AbstractModel(DatastoreObject, ABC):
         x_0 = log(phi)
         r_0 = _evaluate(residual, x_0, context)
         if r_0 >= 0.0:
+            return None
+
+        # the second None (one-loop-drain prompt 01 §1.6): a root inside the -inf region, which the search
+        # cannot find; only calls that raised in the search reach it
+        if _turning_point_unresolvable(log_V_floor, log_E):
             return None
 
         phi_t = exp(_search_log_field(residual, x_0, r_0, -1.0, context))

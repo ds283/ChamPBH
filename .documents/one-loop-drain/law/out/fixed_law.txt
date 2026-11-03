@@ -1,0 +1,32 @@
+§2.1.4 2197 and 2188 at their stored normalization, alpha = 10^-3, the fixed law
+
+| history | source | outcome | wall (s) | unresolvable_assessments | reflections | accepted_steps | candidates | parking N | r_chi today | Delta N_eff today |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 2197 | this tree (scanner) | success | 455.8 | 131 | 6648 | 929806 | 6648 | 45.15719176029348 | 0.0008651957345510242 | 0.006443995728849547 |
+| 2197 | the 2026.8.0 store | success | 624.3 (compute_time) | | 6648 | 906090 | 6648 | 45.15719184959033 | 0.0008651958712788435 | 0.006443996747201174 |
+   predicate_cost.py's run of the same task: wall 463.0 s, samples digest equal to the scanner's: True; drain record {'law': 'fixed', 'A': None, 'gap_prescription': None, 'unresolvable_assessments': 131, 'candidates': None}
+   against the store: bitwise False (F3 moved these histories; not expected)
+| 2188 | this tree (scanner) | success | 399.5 | 46 | 5741 | 817087 | 5741 | 43.807329622389375 | 0.0003167919967850287 | 0.002359473345387898 |
+| 2188 | the 2026.8.0 store | success | 652.7 (compute_time) | | 5741 | 795508 | 5741 | 43.80732950822453 | 0.00031679196129658093 | 0.0023594730810692043 |
+   predicate_cost.py's run of the same task: wall 387.2 s, samples digest equal to the scanner's: True; drain record {'law': 'fixed', 'A': None, 'gap_prescription': None, 'unresolvable_assessments': 46, 'candidates': None}
+   against the store: bitwise False (F3 moved these histories; not expected)
+
+§2.1.5 the nine of reflection-restart 04 §0.2, tuned, the fixed law, --timeout 3600
+
+| task | here | integrations | wall (s) | reason, or parking N and r_chi today | reflection-restart 04 (fixed tree) |
+|---|---|---|---|---|---|
+| shard0000#1001 beta=0.75 M=4e-31 alpha=0.03 tuned | success | 3 | 107.7 | parking N 43.65053110338259, r_chi 0.467728408375604 | failure: classical_turning_point (ExponentialModel(M=0.00097413eV,n=1 |
+| shard0001#766 beta=0.9 M=4e-31 alpha=0.02 tuned | success | 1 | 49.7 | parking N 43.92297470535889, r_chi 0.2012942633585327 | failure: classical_turning_point (ExponentialModel(M=0.00097413eV,n=1 |
+| shard0015#403 beta=0.5 M=4e-31 alpha=0.1 tuned | success | 3 | 38.5 | parking N 42.278383103436674, r_chi 2.133535805302585 | failure: classical_turning_point (ExponentialModel(M=0.00097413eV,n=1 |
+| shard0000#2735 beta=0.75 M=1e-33 alpha=0.03 tuned | success | 3 | 106.3 | parking N 43.65053468225344, r_chi 0.467728419038141 | failure: classical_turning_point (ExponentialModel(M=2.4353e-06eV,n=1 |
+| shard0015#2480 beta=0.5 M=1e-33 alpha=0.1 tuned | success | 3 | 38.1 | parking N 42.27838332036384, r_chi 2.1335358063026386 | failure: classical_turning_point (ExponentialModel(M=2.4353e-06eV,n=1 |
+| shard0002#1592 beta=1.1775 M=4e-31 alpha=0.001 tuned | success | 1 | 472.1 | parking N 45.17271370712133, r_chi 0.0008950647141929489 | failure: classical_turning_point (ExponentialModel(M=0.00097413eV,n=1 |
+| shard0003#2208 beta=1.18 M=4e-31 alpha=0.001 tuned | success | 1 | 467.9 | parking N 45.200654481437745, r_chi 0.0009093361258148712 | failure: classical_turning_point (ExponentialModel(M=0.00097413eV,n=1 |
+| shard0004#2199 beta=1.1825 M=4e-31 alpha=0.001 tuned | success | 1 | 476.1 | parking N 45.19618672820716, r_chi 0.0008996795019422918 | failure: classical_turning_point (ExponentialModel(M=0.00097413eV,n=1 |
+| shard0015#2386 beta=0.5 M=1e-30 alpha=0.15 tuned | success | 3 | 25.6 | parking N 41.38022373034946, r_chi 2.1369479274420025 | success |
+
+§2.1.6 the predicate's cost
+   2197: 856147 calls in classical_turning_point and 131 in the step loop, 0.3869 s in all, of a wall time of 463.0 s: a share of 8.356e-04 (the stop is 1e-2)
+   2188: 752752 calls in classical_turning_point and 46 in the step loop, 0.3183 s in all, of a wall time of 387.2 s: a share of 8.222e-04 (the stop is 1e-2)
+
+stops: none

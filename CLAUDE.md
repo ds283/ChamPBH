@@ -78,19 +78,21 @@ invariants that hold across all of them:
   the repository root:
   ```bash
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .   # 26 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 514 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 566 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .   # 130 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 147 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 156 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .        # 68 tests
   ```
   `ComputeTargets/tests` took 590 s on 2026-11-01 (the two halves below, 135.8 s and 454.6 s, at one-minute
   loads of 6.1 and 11.2 at their starts), and longer on a loaded machine; a Bash call is
   capped at ten minutes, so run it in two halves:
   ```bash
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 122 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 392 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 163 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 403 tests
   ```
-  (The counts are those of 2026-11-02, after `reflection-restart` 03, which deleted 01's 10 probe tests from
+  (The counts are those of 2026-11-03, after `one-loop-drain` 01, which added 41 tests to the `test_[a-f]` half
+  (`test_drain_law`), 11 to the `test_[g-z]` half (`test_unresolvable_turning_points`) and 9 to `tools/tests`; before
+  it, those of 2026-11-02, after `reflection-restart` 03, which deleted 01's 10 probe tests from
   `ComputeTargets/tests` and added 16 there and 2 to `tools/tests`; `reflection-restart` 01 had added 10 to
   `ComputeTargets/tests` and 22 to `tools/tests`; `745c8ee` and `c95650a` had added one each to `ComputeTargets/tests` and
   `ObjectFactories/tests` since 2026-11-01. `inelastic-reflection`, closed 2026-11-01, added 228 tests to

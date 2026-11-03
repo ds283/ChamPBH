@@ -1,0 +1,51 @@
+04's records: 42; this tree's: 42; same keys: True
+
+| task | outcome | samples | accepted_steps | RHS | reflections | retakes | equal | wall 04 / here (s) |
+|---|---|---|---|---|---|---|---|---|
+| shard0000#3189 beta=1.25 M=1e-12 alpha=0.15 tuned | success | 5030 | 6122 | 44806 | 27 | 0 | yes | 5.1 / 5.2 |
+| shard0000#3441 beta=1.25 M=1e-12 alpha=0.1 tuned | success | 5030 | 7774 | 56636 | 36 | 0 | yes | 5.9 / 6.0 |
+| shard0000#3853 beta=1.25 M=1e-15 alpha=0.03 tuned | success | 5030 | 29274 | 209596 | 162 | 0 | yes | 16.3 / 16.4 |
+| shard0000#4206 beta=2.25 M=1e-13 alpha=0.01 tuned | success | 5573 | 37652 | 269279 | 205 | 0 | yes | 21.2 / 20.9 |
+| shard0000#4254 beta=2.6 M=1e-12 alpha=0.01 tuned | success | 5763 | 21843 | 156315 | 110 | 0 | yes | 13.8 / 13.8 |
+| shard0003#3084 beta=1.14 M=1e-12 alpha=0.15 tuned | success | 4971 | 5182 | 38201 | 22 | 0 | yes | 4.7 / 4.7 |
+| shard0003#3739 beta=1.1 M=1e-15 alpha=0.03 tuned | success | 4949 | 26123 | 187223 | 144 | 0 | yes | 14.4 / 14.4 |
+| shard0003#3818 beta=1.14 M=1e-12 alpha=0.05 tuned | success | 4971 | 6737 | 49223 | 30 | 0 | yes | 5.2 / 5.3 |
+| shard0003#3819 beta=1.1 M=1e-12 alpha=0.05 tuned | success | 4949 | 5091 | 37557 | 22 | 0 | yes | 4.1 / 4.2 |
+| shard0003#3906 beta=1.14 M=1e-12 alpha=0.03 tuned | success | 4971 | 10035 | 72743 | 48 | 0 | yes | 6.8 / 6.6 |
+| shard0003#4000 beta=1.14 M=1e-15 alpha=0.01 tuned | success | 4971 | 49765 | 355694 | 284 | 0 | yes | 25.9 / 26.0 |
+| shard0005#3332 beta=1.3 M=1e-12 alpha=0.15 tuned | success | 5057 | 6847 | 49955 | 31 | 0 | yes | 5.2 / 5.1 |
+| shard0005#3642 beta=1.3 M=1e-12 alpha=0.05 tuned | success | 5057 | 7659 | 55671 | 35 | 0 | yes | 5.5 / 5.5 |
+| shard0007#3240 beta=1.15 M=1e-12 alpha=0.1 tuned | success | 4976 | 5141 | 37891 | 22 | 0 | yes | 4.2 / 4.3 |
+| shard0007#3265 beta=1.19 M=1e-12 alpha=0.15 tuned | success | 4998 | 5334 | 39303 | 23 | 0 | yes | 4.3 / 4.4 |
+| shard0007#3782 beta=1.11 M=1e-12 alpha=0.05 tuned | success | 4954 | 5659 | 41537 | 25 | 0 | yes | 4.4 / 4.4 |
+| shard0007#3897 beta=1.11 M=1e-15 alpha=0.03 tuned | success | 4954 | 27430 | 196509 | 152 | 0 | yes | 14.6 / 15.0 |
+| shard0008#4296 beta=1.8 M=1e-15 alpha=0.01 tuned | success | 5329 | 60931 | 435329 | 353 | 0 | yes | 30.9 / 31.4 |
+| shard0009#3389 beta=1.5 M=1e-12 alpha=0.1 tuned | success | 5166 | 7699 | 56088 | 35 | 0 | yes | 5.5 / 5.6 |
+| shard0009#3405 beta=1.5 M=1e-12 alpha=0.05 tuned | success | 5166 | 7183 | 52403 | 32 | 0 | yes | 5.3 / 5.3 |
+| shard0009#3522 beta=1.5 M=1e-12 alpha=0.08 tuned | success | 5166 | 8082 | 58727 | 37 | 0 | yes | 5.7 / 5.7 |
+| shard0009#3912 beta=1.55 M=1e-12 alpha=0.05 tuned | success | 5193 | 11265 | 81324 | 54 | 0 | yes | 7.4 / 7.7 |
+| shard0009#4066 beta=1.5 M=1e-12 alpha=0.03 tuned | success | 5166 | 10915 | 78842 | 52 | 0 | yes | 7.2 / 7.4 |
+| shard0010#3111 beta=1.35 M=1e-12 alpha=0.15 tuned | success | 5085 | 6676 | 48750 | 30 | 0 | yes | 4.9 / 5.3 |
+| shard0010#3544 beta=1.65 M=1e-12 alpha=0.05 tuned | success | 5247 | 9799 | 70921 | 46 | 0 | yes | 6.7 / 7.1 |
+| shard0010#3606 beta=1.65 M=1e-12 alpha=0.08 tuned | success | 5247 | 9390 | 67986 | 44 | 0 | yes | 6.5 / 6.8 |
+| shard0011#3663 beta=1.08 M=1e-15 alpha=0.05 tuned | success | 4938 | 20142 | 144632 | 109 | 0 | yes | 11.3 / 11.7 |
+| shard0011#3664 beta=1.2 M=1e-15 alpha=0.05 tuned | success | 5003 | 20716 | 148641 | 112 | 0 | yes | 11.4 / 12.0 |
+| shard0011#3883 beta=1.2 M=1e-15 alpha=0.02 tuned | success | 5003 | 34992 | 250398 | 196 | 0 | yes | 18.4 / 18.9 |
+| shard0012#4382 beta=1.85 M=1e-12 alpha=0.01 tuned | success | 5356 | 15786 | 113476 | 78 | 0 | yes | 9.7 / 9.9 |
+| shard0013#4272 beta=1.9 M=1e-12 alpha=0.01 tuned | success | 5383 | 14899 | 107087 | 73 | 0 | yes | 9.4 / 9.6 |
+| shard0014#3381 beta=1.6 M=1e-12 alpha=0.08 tuned | success | 5220 | 10116 | 73159 | 48 | 0 | yes | 6.9 / 7.1 |
+| shard0014#3890 beta=1.6 M=1e-12 alpha=0.03 tuned | success | 5220 | 11726 | 84574 | 56 | 0 | yes | 7.9 / 7.9 |
+| shard0014#4039 beta=2.05 M=1e-12 alpha=0.02 tuned | success | 5465 | 14376 | 103461 | 70 | 0 | yes | 9.1 / 9.3 |
+| shard0015#2959 beta=1.17 M=1e-12 alpha=0.15 tuned | success | 4987 | 5479 | 40271 | 24 | 0 | yes | 4.3 / 4.7 |
+| shard0015#3260 beta=1.09 M=1e-12 alpha=0.1 tuned | success | 4943 | 6928 | 50671 | 32 | 0 | yes | 5.0 / 5.2 |
+| shard0015#3298 beta=1.09 M=1e-12 alpha=0.15 tuned | success | 4943 | 4899 | 36217 | 21 | 0 | yes | 4.1 / 4.1 |
+| shard0015#3304 beta=1.13 M=1e-12 alpha=0.1 tuned | success | 4965 | 6078 | 44531 | 27 | 0 | yes | 4.7 / 4.6 |
+| shard0015#3611 beta=1.09 M=1e-15 alpha=0.03 tuned | success | 4943 | 27665 | 198179 | 153 | 0 | yes | 15.0 / 14.8 |
+| shard0015#3630 beta=1.09 M=1e-15 alpha=0.05 tuned | success | 4943 | 20157 | 144711 | 109 | 0 | yes | 11.4 / 11.0 |
+| shard0015#4389 beta=1.13 M=1e-12 alpha=0.01 tuned | failure | None | None | None | None | None | yes | 8.5 / 8.3 |
+| shard0015#4390 beta=1.09 M=1e-12 alpha=0.01 tuned | success | 4943 | 21405 | 154004 | 112 | 0 | yes | 11.9 / 11.6 |
+
+failure shard0015#4389 beta=1.13 M=1e-12 alpha=0.01 tuned: here "the effective minimum was not found: effective_minimum (ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.13)): V_eff' does not change sign on the bracket [8.20971e-05, 0.0328388] (values 3.724e-121, 3.86555e-121) (tuning integration 0)"
+         04:   "the effective minimum was not found: effective_minimum (ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.13)): V_eff' does not change sign on the bracket [8.20971e-05, 0.0328388] (values 3.724e-121, 3.86555e-121) (tuning integration 0)"
+
+tasks differing in any field: 0

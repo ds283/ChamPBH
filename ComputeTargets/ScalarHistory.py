@@ -42,8 +42,10 @@ from CosmologyConcepts import (
 from CosmologyConcepts.Models.AbstractModel import (
     AbstractModel,
     ClassicalTurningPoint,
+    OneLoopTurnaround,
     RealizedModel,
     Seed,
+    _turning_point_unresolvable,
 )
 from CosmologyModels import BaseCosmology
 from CosmologyModels.GenericEOS.LambdaCDM_GenericEOS import LambdaCDM_GenericEOS
@@ -144,6 +146,52 @@ RELEASE_ROOT_RTOL = 4.0 * float(np.finfo(float).eps)
 #                         generations with Delta K_j/K(N_final) >= this
 MARGIN_THRESHOLD = log(10.0)
 MARGIN_WEIGHT_SHARE = 1.0e-3
+
+# the drain law (one-loop-drain prompt 01; README §8.2, §8.8 P22-P24, U9, U10), an input of
+# integrate_scalar_history, integrate_history and tune_history; not yet a key (prompt 03 stores it)
+#   DRAIN_LAW_FIXED:     alpha_eff = alpha w_gate at every candidate, 0 <= alpha < 1: the law to
+#                        VERSION_LABEL 2026.9.0, the default, unchanged
+#   DRAIN_LAW_ONE_LOOP:  alpha carries the law's strength A, finite and > 0 (A = 0 is natural mode, asked
+#                        for as the fixed law at alpha = 0); each candidate is classified in the loop
+#                        (drain_regime) and drains by its regime (drain_alpha_effective):
+#                          one_loop:    min(DRAIN_ALPHA_CAP, A DRAIN_C1/ell) w_gate, ell the turnaround's;
+#                          gap:         by the gap prescription, times w_gate;
+#                          classical:   0 (ln R <= 0; README §6.3 ruling 5);
+#                          unassessed:  0, counted (P19)
+# and the law's constants (P17, P23), each with its source:
+#   DRAIN_C1:         c_1 = 4c, rho_prod/rho_kin ~ 4c/ell at a one-loop turnaround, written 2.7 in
+#                     BriefingNotes/wall_backreaction.tex, "The inelastic fraction" (c ~ 0.68); the drain
+#                     probe's figure (source/probe/drain/one_loop_drain.patch), so that the Law gate compares
+#                     with the probe directly
+#   DRAIN_ALPHA_CAP:  0.99 (U10, "0.99 is OK"), the probe's cap; the drain refuses alpha_eff >= 1
+#   DRAIN_ELL_EDGE:   ell at the gap's edge under the "edge" prescription, 4 (the probe's PROBE_GAP=high:
+#                     ell > 4 at R = 1)
+DRAIN_LAW_FIXED = "fixed"
+DRAIN_LAW_ONE_LOOP = "one_loop"
+DRAIN_LAWS = (DRAIN_LAW_FIXED, DRAIN_LAW_ONE_LOOP)
+DRAIN_C1 = 2.7
+DRAIN_ALPHA_CAP = 0.99
+DRAIN_ELL_EDGE = 4.0
+
+# the regimes of a candidate under the one-loop law (README §8.2): peak_estimate's classification,
+# computed once, in the loop (P18), with a one-loop solution of ell <= 0 called gap (P24)
+REGIME_ONE_LOOP = "one_loop"
+REGIME_GAP = "gap"
+REGIME_CLASSICAL = "classical"
+REGIME_UNASSESSED = "unassessed"
+DRAIN_REGIMES = (REGIME_ONE_LOOP, REGIME_GAP, REGIME_CLASSICAL, REGIME_UNASSESSED)
+
+# the gap prescription (README §8.2, P20, P25): what a gap candidate drains under the one-loop law,
+# "zero" (0) or "edge" (min(DRAIN_ALPHA_CAP, A DRAIN_C1/DRAIN_ELL_EDGE) w_gate). TEMPORARY: prompt 02
+# measures both, the user rules one (U13), and prompt 03 fixes it as ruled and removes this attribute
+# and tools/history_and_bbn.py's --gap-prescription (the precedent is reflection-restart prompt 01's
+# _PROBE_OUTWARD_FIX). drain_alpha_effective reads it at call time, at each gap candidate; any other
+# value is a ValueError there. integrate_scalar_history records the value it reads at its start in the
+# "drain" record, so that two runs of one history are told apart without it
+GAP_PRESCRIPTION_ZERO = "zero"
+GAP_PRESCRIPTION_EDGE = "edge"
+GAP_PRESCRIPTIONS = (GAP_PRESCRIPTION_ZERO, GAP_PRESCRIPTION_EDGE)
+_GAP_PRESCRIPTION = GAP_PRESCRIPTION_ZERO
 
 # the warnings of a history (inelastic-reflection prompt 05; README §8.1 R6, §8.2 P23), returned by
 # integrate_scalar_history and printed once per history by tune_history. Each line begins with one
@@ -534,6 +582,14 @@ _ParkedPhaseEnd = namedtuple("_ParkedPhaseEnd", ["N", "state", "released"])
 #                                discarded and retook (reflection-restart prompt 03 §1.2). The default
 #                                0 exists only so that a stand-in built by keyword without it still
 #                                builds; the loop always passes it
+#   drain:                       the DrainRecord of the drain law (one-loop-drain prompt 01 §1.4), the
+#                                payload's "drain"; the default None exists for stand-ins, as
+#                                restart_retakes' 0 does, and the loop always passes it
+#   peak_estimates:              under the one-loop law, the PeakEstimate (or None, unassessed) of each
+#                                candidate, parallel to injections, as the loop's classification computed
+#                                it, which history_margins reuses (P18; orchestrator note 01, ruling 5);
+#                                None under the fixed law, where history_margins calls peak_estimate as
+#                                before. Neither field is carried by an existing payload key
 IntegrationResult = namedtuple(
     "IntegrationResult",
     [
@@ -552,8 +608,53 @@ IntegrationResult = namedtuple(
         "parking",
         "release",
         "restart_retakes",
+        "drain",
+        "peak_estimates",
     ],
-    defaults=[0],
+    defaults=[0, None, None],
+)
+
+# the drain law's record of one candidate under the one-loop law (one-loop-drain prompt 01 §1.4), in the
+# order of IntegrationResult.injections. Plain values only, so that it crosses Ray and pickles
+#   regime:     REGIME_ONE_LOOP, REGIME_GAP, REGIME_CLASSICAL or REGIME_UNASSESSED (drain_regime)
+#   ell:        ln(k_ex/m_ta) of the one-loop turnaround (regime one_loop only), else None
+#   alpha_eff:  the fraction drained (drain_alpha_effective), the Injection's alpha_eff
+#   w_gate:     the gate, the Injection's w_gate: gate_weight(A_k) at a resolved candidate, 1.0 exactly at
+#               an unresolved one
+#   log_E:      ln E of the assessment the candidate was judged on (the Injection's log_E_assessed), the
+#               impact energy; None if unassessed
+#   log_H:      ln H_E before the candidate (ln of the Injection's H_Einstein_before)
+DrainCandidate = namedtuple(
+    "DrainCandidate", ["regime", "ell", "alpha_eff", "w_gate", "log_E", "log_H"]
+)
+
+# the payload's "drain" (one-loop-drain prompt 01 §1.4): the drain law of one integration, and what it did.
+# Plain values only (strings, floats, ints, None and tuples of DrainCandidate), so that it crosses Ray
+#   law:                       DRAIN_LAW_FIXED or DRAIN_LAW_ONE_LOOP
+#   A:                         the one-loop law's A (the alpha argument); None under the fixed law
+#   gap_prescription:          _GAP_PRESCRIPTION as integrate_scalar_history read it at its start, under the
+#                              one-loop law (P20); None under the fixed law
+#   unresolvable_assessments:  the assessments whose classical turning point was None with
+#                              _turning_point_unresolvable holding (§1.6): the calls the wall-search fix
+#                              answers. Counted under either law: the loop's assessments at every step
+#                              start with pi < 0 (alpha > 0) and natural mode's one assessment (alpha = 0)
+#   candidates:                under the one-loop law a tuple of DrainCandidate, one per Injection, in
+#                              order; None under the fixed law (no instrumentation there: README §6.3
+#                              ruling 2)
+#   unresolved_declined:       the step starts at which unresolved_turnaround fired but the reflection
+#                              would have failed G2, so that no unresolved decision was made there
+#                              (unresolved_reflection_refused; one-loop-drain prompt 01 §1.7, the user's
+#                              ruling (b)). Counted under either law
+DrainRecord = namedtuple(
+    "DrainRecord",
+    [
+        "law",
+        "A",
+        "gap_prescription",
+        "unresolvable_assessments",
+        "candidates",
+        "unresolved_declined",
+    ],
 )
 
 # using named tuples ensures that we never get the fields in the wrong order
@@ -1000,12 +1101,10 @@ def _reflection_guards(
             f"reflects_at_origin but provides no log_V_floor, so the reflection cannot be checked"
         )
 
-    data: ODEPolicyData = policy(N, state)
-    W = -3.0 * data.V_over_3H2Mp2 * expm1(log_V_floor - data.log_V)
-    kinetic = 0.5 * state.pi_Einstein * state.pi_Einstein / policy.CONST_MP_SQ
+    W, kinetic = _wall_and_kinetic(policy, N, state, log_V_floor)
     ratio = W / kinetic
 
-    if not (W <= kinetic):
+    if _g2_refuses(W, kinetic):
         raise ComputationFailureError(
             f"integrate_scalar_history{label}: reflection requested inside the wall: "
             f"W/(pi^2/2) = {ratio:.5g} at N={N:.10g}, phi_E={state.phi_Einstein:.5g}, "
@@ -1013,6 +1112,46 @@ def _reflection_guards(
         )
 
     return ratio
+
+
+def _wall_and_kinetic(
+    policy: ODEPolicy, N: float, state: StateVector, log_V_floor: float
+) -> Tuple[float, float]:
+    """
+    G2's two sides at one state (one-loop-drain prompt 01 §1.7: factored out of _reflection_guards, the
+    expressions unchanged, so that the unresolved turnaround's decision reads the same numbers): the wall
+    part of the potential fraction, W = -3 V/(3H^2 Mp^2) expm1(ln V_floor - ln V) = 3(V - V_floor)/(3H^2 Mp^2),
+    and the kinetic fraction pi^2/(2 Mp^2), from one policy call at (N, state).
+    """
+    data: ODEPolicyData = policy(N, state)
+    W = -3.0 * data.V_over_3H2Mp2 * expm1(log_V_floor - data.log_V)
+    kinetic = 0.5 * state.pi_Einstein * state.pi_Einstein / policy.CONST_MP_SQ
+    return W, kinetic
+
+
+def _g2_refuses(W: float, kinetic: float) -> bool:
+    """G2's comparison: a reflection is refused iff not (W <= kinetic), so a NaN refuses."""
+    return not (W <= kinetic)
+
+
+def unresolved_reflection_refused(policy: ODEPolicy, N: float, y: np.ndarray) -> bool:
+    """
+    Whether G2 would refuse a reflection at (N, y) (one-loop-drain prompt 01 §1.7; the user's ruling (b),
+    2026-11-03): _reflection_guards' own expressions (_wall_and_kinetic) and comparison (_g2_refuses).
+    The step loop asks it only where unresolved_turnaround has fired, on a model with a wall (G1 and a
+    log_V_floor hold there, since the loop assesses the wall only on such a model). Where it is True the
+    loop makes no unresolved decision at that step start: the floor rule is tested as usual, with G2
+    applied to its reflection as before, and otherwise Radau integrates the infall on to its turning point.
+
+    Why nothing that succeeds today moves: where it is True, the unresolved branch went on to
+    _reflection_guards at this same state, which raised "reflection requested inside the wall", and the
+    history failed; a failed integration ends a tuning as a failure. So every state at which the decision
+    is declined is one that raised before this ruling, and no history or tuning that succeeds today moves.
+    """
+    W, kinetic = _wall_and_kinetic(
+        policy, N, StateVector._make(y), policy.model.log_V_floor
+    )
+    return _g2_refuses(W, kinetic)
 
 
 # ---- the gate (inelastic-reflection prompt 03) ----
@@ -1499,6 +1638,102 @@ class ParkedSegment(DenseOutput):
         return values
 
 
+# ---- the drain law (one-loop-drain prompt 01; README §8.2, §8.8 P18, P22-P24) ----
+#
+# Module-level, so that they can be tested on synthetic values without an integration; the loop calls
+# each by its module name at call time, as it calls the gate's
+
+
+def check_drain_law(drain_law: str, alpha: float, context: str) -> None:
+    """
+    The law's inputs (one-loop-drain prompt 01 §1.1; README §8.8 P22), checked at entry by
+    integrate_scalar_history, integrate_history and tune_history (context, the function's name, begins
+    the message). Under DRAIN_LAW_FIXED alpha is the fraction, 0 <= alpha < 1, checked as before this
+    prompt, with the same message; under DRAIN_LAW_ONE_LOOP it is A, finite and > 0, with no upper bound
+    (DRAIN_ALPHA_CAP clamps). A = 0 is natural mode, asked for as the fixed law at alpha = 0. Any other
+    drain_law is a ValueError, and so is an alpha the law refuses.
+    """
+    if drain_law == DRAIN_LAW_FIXED:
+        if not (0.0 <= alpha < 1.0):
+            raise ValueError(
+                f"{context}: alpha must satisfy 0 <= alpha < 1, not {alpha!r}"
+            )
+        return
+    if drain_law == DRAIN_LAW_ONE_LOOP:
+        if not (alpha > 0.0 and isfinite(alpha)):
+            raise ValueError(
+                f"{context}: under the one-loop drain law alpha carries A, which must be finite and "
+                f"> 0 (A = 0 is natural mode, the fixed law at alpha = 0), not {alpha!r}"
+            )
+        return
+    raise ValueError(
+        f"{context}: drain_law must be one of {DRAIN_LAWS}, not {drain_law!r}"
+    )
+
+
+def drain_regime(model: RealizedModel, assessment):
+    """
+    The regime of one candidate under the one-loop law (one-loop-drain prompt 01 §1.2; README §8.2, P18,
+    P24), from the assessment it is judged on, (phi, ln E, ClassicalTurningPoint) or None. Returns
+    (regime, ell, estimate), estimate the PeakEstimate that peak_estimate computes for a candidate with
+    this assessment (None if unassessed), from the same expressions (_assessed_peak), so that
+    history_margins can reuse it and one_loop_turnaround runs once per candidate:
+      - unassessed:  no assessment; (REGIME_UNASSESSED, None, None);
+      - classical:   ln R <= 0;
+      - one_loop:    ln R > 0, one_loop_turnaround(phi, ln E) returns a solution with ell > 0; ell is its;
+      - gap:         ln R > 0, and it raises ComputationFailureError or returns None, or returns a
+                     solution with ell <= 0 (P24, for which estimate is peak_estimate's ESTIMATE_ONE_LOOP:
+                     orchestrator note 01, ruling 4). ell is None.
+    Any other exception from the model propagates, as it does from peak_estimate.
+    """
+    if assessment is None:
+        return REGIME_UNASSESSED, None, None
+    phi_assessed, log_E_assessed, turning_point = assessment
+    estimate, turnaround = _assessed_peak(
+        model, turning_point, phi_assessed, log_E_assessed
+    )
+    if estimate.estimate == ESTIMATE_CLASSICAL:
+        return REGIME_CLASSICAL, None, estimate
+    if estimate.estimate == ESTIMATE_CLASSICAL_GAP:
+        return REGIME_GAP, None, estimate
+    if not turnaround.ell > 0.0:
+        return REGIME_GAP, None, estimate
+    return REGIME_ONE_LOOP, turnaround.ell, estimate
+
+
+def drain_alpha_effective(
+    regime: str, ell: Optional[float], A: float, w_gate: float
+) -> float:
+    """
+    The fraction drained at one candidate under the one-loop law (one-loop-drain prompt 01 §1.2, §1.3;
+    README §8.2; orchestrator note 01, ruling 3), each product evaluated left to right, so that with
+    w_gate = 1.0 the values are the drain probe's bit for bit:
+      - one_loop:              min(DRAIN_ALPHA_CAP, A * DRAIN_C1 / ell) * w_gate;
+      - gap, prescription edge: min(DRAIN_ALPHA_CAP, A * DRAIN_C1 / DRAIN_ELL_EDGE) * w_gate;
+      - gap, prescription zero, classical, unassessed: 0.0 exactly, and the caller takes the alpha_eff = 0
+        branch it takes at the fixed law.
+    _GAP_PRESCRIPTION is read here, at call time, at a gap candidate only; a value other than
+    GAP_PRESCRIPTIONS' is a ValueError there. An unknown regime is a ValueError.
+    """
+    if regime == REGIME_ONE_LOOP:
+        return min(DRAIN_ALPHA_CAP, A * DRAIN_C1 / ell) * w_gate
+    if regime == REGIME_GAP:
+        prescription = _GAP_PRESCRIPTION
+        if prescription == GAP_PRESCRIPTION_ZERO:
+            return 0.0
+        if prescription == GAP_PRESCRIPTION_EDGE:
+            return min(DRAIN_ALPHA_CAP, A * DRAIN_C1 / DRAIN_ELL_EDGE) * w_gate
+        raise ValueError(
+            f"drain_alpha_effective: the gap prescription must be one of {GAP_PRESCRIPTIONS}, "
+            f"not {prescription!r}"
+        )
+    if regime == REGIME_CLASSICAL or regime == REGIME_UNASSESSED:
+        return 0.0
+    raise ValueError(
+        f"drain_alpha_effective: the regime must be one of {DRAIN_REGIMES}, not {regime!r}"
+    )
+
+
 def integrate_scalar_history(
     RHS,
     supervisor: ScalarFieldIntegrationSupervisor,
@@ -1511,6 +1746,7 @@ def integrate_scalar_history(
     task_label: Optional[str] = None,
     N_stop: Optional[float] = None,
     alpha: float = 0.0,
+    drain_law: str = DRAIN_LAW_FIXED,
 ) -> IntegrationResult:
     """
     Integrate the scalar-field history from (N_start, initial_state) until ln T_J falls below
@@ -1650,6 +1886,27 @@ def integrate_scalar_history(
     history's start, not a later step of an instance, not a restart with pi <= 0, not the parked phase.
     The retakes are IntegrationResult.restart_retakes.
 
+    The drain law (one-loop-drain prompt 01 §1.1-§1.4; README §8.2, §8.8 P18, P22-P24). drain_law is
+    DRAIN_LAW_FIXED (the default: everything above, unchanged) or DRAIN_LAW_ONE_LOOP, under which alpha
+    carries A > 0 and every alpha > 0 path above runs unchanged (assessments, candidates, the gate,
+    parking, the release) but for alpha_eff: at each candidate, before alpha_eff, drain_regime classifies
+    it from the assessment it is given, once, and drain_alpha_effective gives alpha_eff from the regime,
+    ell, A and the gate's w_gate (gate_weight at a resolved candidate, 1.0 at an unresolved one, as
+    above). Each candidate's DrainCandidate and PeakEstimate are kept, in IntegrationResult.drain and
+    IntegrationResult.peak_estimates. Under either law, each assessment whose classical turning point
+    is None with _turning_point_unresolvable holding is counted (DrainRecord.unresolvable_assessments);
+    nothing else changes at it, since a None turning point already makes no decision. A
+    ComputationFailureError that the loop raises carries the DrainRecord as far as the loop reached as
+    its attribute `drain`, beside `warnings`.
+
+    The declined unresolved reflection (one-loop-drain prompt 01 §1.7; the user's ruling (b), 2026-11-03),
+    under either law: at a step start where unresolved_turnaround fires but unresolved_reflection_refused
+    says G2 would refuse the reflection there (W > pi^2/2, G2's own expression and comparison), no
+    unresolved decision is made at that step start, and the floor rule is tested as usual (its reflection
+    is guarded by G2 as before). The step starts declined are DrainRecord.unresolved_declined. Every
+    state where this acts raised in _reflection_guards before the ruling, so no history or tuning that
+    succeeded before it moves.
+
     :param RHS: callable RHS(N, state, supervisor), normally an ODERHS
     :param supervisor: the ScalarFieldIntegrationSupervisor (already entered)
     :param initial_state: the state at N_start
@@ -1663,7 +1920,9 @@ def integrate_scalar_history(
     :param alpha: the fraction of the condensate's kinetic energy drained at each drain point and
                   floor reflection (inelastic-reflection prompt 02), 0 <= alpha < 1, before the
                   gate w_gate of prompt 03. At alpha > 0 policy.dark_radiation
-                  receives the drains, and must be the ledger the RHS reads
+                  receives the drains, and must be the ledger the RHS reads. Under the one-loop
+                  drain law it is A instead, finite and > 0 (one-loop-drain prompt 01)
+    :param drain_law: DRAIN_LAW_FIXED (the default) or DRAIN_LAW_ONE_LOOP (check_drain_law)
     :return: IntegrationResult
     """
     # the guard (reflection-restart prompt 03 §1.2): guard_first_step is True from a restart with pi > 0
@@ -1671,9 +1930,26 @@ def integrate_scalar_history(
     guard_first_step: bool = False
     restart_retakes: int = 0
 
-    if not (0.0 <= alpha < 1.0):
-        raise ValueError(
-            f"integrate_scalar_history: alpha must satisfy 0 <= alpha < 1, not {alpha!r}"
+    check_drain_law(drain_law, alpha, "integrate_scalar_history")
+
+    # the drain law (one-loop-drain prompt 01): under the one-loop law the candidates' records and
+    # PeakEstimates, and the gap prescription as read here; under either law the count of the
+    # assessments the wall-search fix answers
+    one_loop: bool = drain_law == DRAIN_LAW_ONE_LOOP
+    gap_prescription: Optional[str] = _GAP_PRESCRIPTION if one_loop else None
+    drain_candidates: List[DrainCandidate] = []
+    peak_estimates: List[Optional[PeakEstimate]] = []
+    unresolvable_assessments: int = 0
+    unresolved_declined: int = 0
+
+    def drain_record() -> DrainRecord:
+        return DrainRecord(
+            law=drain_law,
+            A=alpha if one_loop else None,
+            gap_prescription=gap_prescription,
+            unresolvable_assessments=unresolvable_assessments,
+            candidates=tuple(drain_candidates) if one_loop else None,
+            unresolved_declined=unresolved_declined,
         )
 
     if policy is None:
@@ -1911,7 +2187,14 @@ def integrate_scalar_history(
         # rho_kin,E = H_E^2 pi^2/2, in logs (prompt 02)
         log_rho_kin: float = 2.0 * log(H_before) + 2.0 * log(abs(pi_before)) - LOG_2
 
-        alpha_eff, w_gate = alpha_effective(nonadiabaticity, resolved)
+        if one_loop:
+            # the one-loop law (one-loop-drain prompt 01 §1.2): the gate as alpha_effective forms it,
+            # the regime from the assessment, once (P18), and alpha_eff by the regime
+            w_gate: float = gate_weight(nonadiabaticity) if resolved else 1.0
+            regime, ell, estimate = drain_regime(model, assessment)
+            alpha_eff: float = drain_alpha_effective(regime, ell, alpha, w_gate)
+        else:
+            alpha_eff, w_gate = alpha_effective(nonadiabaticity, resolved)
         phi_a, log_E_a, turning_point_a = (
             (None, None, None) if assessment is None else assessment
         )
@@ -1924,8 +2207,9 @@ def integrate_scalar_history(
             classical_turning_point=turning_point_a,
         )
 
+        y_out: Optional[np.ndarray] = None
         if alpha_eff > 0.0:
-            return drain(
+            y_out = drain(
                 N_,
                 y_,
                 H_before,
@@ -1937,25 +2221,39 @@ def integrate_scalar_history(
                 sign,
                 weights,
             )
-
-        injections.append(
-            Injection(
-                N=float(N_),
-                kind=kind,
-                N_turn=float(N_turn),
-                phi_turn=float(phi_turn),
-                pi_before=pi_before,
-                pi_after=sign * pi_before,
-                log_rho_kin=log_rho_kin,
-                alpha_eff=alpha_eff,
-                delta_K=0.0,
-                delta_rho_over_rho_rad=0.0,
-                H_Einstein_before=H_before,
-                H_Einstein_after=H_before,
-                **weights,
+        else:
+            injections.append(
+                Injection(
+                    N=float(N_),
+                    kind=kind,
+                    N_turn=float(N_turn),
+                    phi_turn=float(phi_turn),
+                    pi_before=pi_before,
+                    pi_after=sign * pi_before,
+                    log_rho_kin=log_rho_kin,
+                    alpha_eff=alpha_eff,
+                    delta_K=0.0,
+                    delta_rho_over_rho_rad=0.0,
+                    H_Einstein_before=H_before,
+                    H_Einstein_after=H_before,
+                    **weights,
+                )
             )
-        )
-        return None
+
+        # the drain law's record of the candidate, beside its Injection (one-loop-drain prompt 01 §1.4)
+        if one_loop:
+            drain_candidates.append(
+                DrainCandidate(
+                    regime=regime,
+                    ell=ell,
+                    alpha_eff=alpha_eff,
+                    w_gate=w_gate,
+                    log_E=log_E_a,
+                    log_H=log(H_before),
+                )
+            )
+            peak_estimates.append(estimate)
+        return y_out
 
     def drain(
         N_: float,
@@ -2196,7 +2494,7 @@ def integrate_scalar_history(
         ComputationFailureError from H_E or the model makes the "could not be assessed" warning,
         and the history goes on; any other exception propagates. It changes no value.
         """
-        nonlocal natural_warned, natural_floor_called
+        nonlocal natural_warned, natural_floor_called, unresolvable_assessments
         if natural_warned or natural_floor_called:
             return
         natural_floor_called = True
@@ -2205,7 +2503,13 @@ def integrate_scalar_history(
         try:
             H_: float = H_Einstein_at(N_, y_)
             log_rho_kin_: float = 2.0 * log(H_) + 2.0 * log(abs(float(y_[1]))) - LOG_2
-            _, turning_point_ = assess_infall(model, phi_, log_rho_kin_)
+            log_E_, turning_point_ = assess_infall(model, phi_, log_rho_kin_)
+            # the wall-search fix's count (one-loop-drain prompt 01 §1.6): before it, this call raised
+            # and made the "could not be assessed" warning; now phi is taken for phi_t, below
+            if turning_point_ is None and _turning_point_unresolvable(
+                model.log_V_floor, log_E_
+            ):
+                unresolvable_assessments += 1
         except ComputationFailureError as e:
             natural_warned = True
             warnings.append(
@@ -2595,6 +2899,22 @@ def integrate_scalar_history(
                         turning_point_start,
                     )
                     unresolved = unresolved_turnaround(phi, turning_point_start, Mp)
+                    # the user's ruling (b) (one-loop-drain prompt 01 §1.7, 2026-11-03): where the
+                    # unresolved reflection would fail G2 (the field already within the wall's
+                    # mirror-invalid region, as in the linear tail when phi_t crosses the threshold
+                    # mid-infall), no unresolved decision is made at this step start; the floor rule is
+                    # tested as usual. Every such state raised before, so nothing that succeeds moves
+                    if unresolved and unresolved_reflection_refused(
+                        policy, N, solver.y
+                    ):
+                        unresolved = False
+                        unresolved_declined += 1
+                elif _turning_point_unresolvable(model.log_V_floor, log_E_start):
+                    # the wall-search fix answered this assessment (one-loop-drain prompt 01 §1.6):
+                    # counted, and nothing else changes, as at any None. assess_infall's ln E is at
+                    # least the finite ln(V - V_floor) at phi wherever that is finite, so where the
+                    # predicate holds the None is the fix's, never the r_0 >= 0 test's
+                    unresolvable_assessments += 1
 
             # the floor rule: an inward-moving field whose velocity cap would fall below the
             # representable step is reflected elastically (README §2 (b)); at alpha > 0 the
@@ -2845,8 +3165,10 @@ def integrate_scalar_history(
     except ComputationFailureError as e:
         # the warnings survive a failure (orchestrator note 05, ruling 2): the same exception,
         # carrying the warnings collected before it, so that integrate_history's failure payload and
-        # tune_history can report them
+        # tune_history can report them; and the drain law's record as far as the loop reached
+        # (one-loop-drain prompt 01 §1.4)
         e.warnings = tuple(warnings)
+        e.drain = drain_record()
         raise
 
     # a drain still armed when the history ends is dropped (ruling 7)
@@ -2876,6 +3198,8 @@ def integrate_scalar_history(
             else release._replace(steps_after=accepted_steps - accepted_at_release)
         ),
         restart_retakes=restart_retakes,
+        drain=drain_record(),
+        peak_estimates=tuple(peak_estimates) if one_loop else None,
     )
 
 
@@ -3581,29 +3905,59 @@ def peak_estimate(model: RealizedModel, injection: Injection) -> Optional[PeakEs
     ct: Optional[ClassicalTurningPoint] = injection.classical_turning_point
     if ct is None:
         return None
+    return _assessed_peak(model, ct, injection.phi_assessed, injection.log_E_assessed)[
+        0
+    ]
+
+
+def _assessed_peak(
+    model: RealizedModel,
+    ct: ClassicalTurningPoint,
+    phi_assessed: float,
+    log_E_assessed: float,
+) -> Tuple[PeakEstimate, Optional[OneLoopTurnaround]]:
+    """
+    peak_estimate's body for an assessed candidate (its expressions moved here unchanged by one-loop-drain
+    prompt 01, so that the one-loop law's drain_regime computes the same PeakEstimate, once; P18):
+    (the PeakEstimate, the OneLoopTurnaround where one_loop_turnaround returned one, else None).
+    """
     log_m_classical: float = 0.5 * ct.log_omega_t_squared
     if ct.log_R <= 0.0:
-        return PeakEstimate(
-            ESTIMATE_CLASSICAL, ct.log_k_ex, log_m_classical, ct.log_R, None
+        return (
+            PeakEstimate(
+                ESTIMATE_CLASSICAL, ct.log_k_ex, log_m_classical, ct.log_R, None
+            ),
+            None,
         )
     try:
-        turnaround = model.one_loop_turnaround(
-            injection.phi_assessed, injection.log_E_assessed
-        )
+        turnaround = model.one_loop_turnaround(phi_assessed, log_E_assessed)
     except ComputationFailureError as e:
-        return PeakEstimate(
-            ESTIMATE_CLASSICAL_GAP, ct.log_k_ex, log_m_classical, ct.log_R, e.message
+        return (
+            PeakEstimate(
+                ESTIMATE_CLASSICAL_GAP,
+                ct.log_k_ex,
+                log_m_classical,
+                ct.log_R,
+                e.message,
+            ),
+            None,
         )
     if turnaround is None:
-        return PeakEstimate(
-            ESTIMATE_CLASSICAL_GAP,
-            ct.log_k_ex,
-            log_m_classical,
-            ct.log_R,
-            "one_loop_turnaround returned None",
+        return (
+            PeakEstimate(
+                ESTIMATE_CLASSICAL_GAP,
+                ct.log_k_ex,
+                log_m_classical,
+                ct.log_R,
+                "one_loop_turnaround returned None",
+            ),
+            None,
         )
-    return PeakEstimate(
-        ESTIMATE_ONE_LOOP, turnaround.log_k_ex, turnaround.log_m_ta, ct.log_R, None
+    return (
+        PeakEstimate(
+            ESTIMATE_ONE_LOOP, turnaround.log_k_ex, turnaround.log_m_ta, ct.log_R, None
+        ),
+        turnaround,
     )
 
 
@@ -3851,9 +4205,16 @@ def history_margins(
     ledger: DarkRadiationLedger = policy.dark_radiation
     solution = result.solution
 
+    # under the one-loop law the loop's PeakEstimates are reused (one-loop-drain prompt 01, P18;
+    # orchestrator note 01, ruling 5): drain_regime computed each as peak_estimate would. Under the fixed
+    # law (peak_estimates None) peak_estimate is called as before
+    reused: Optional[Tuple[Optional[PeakEstimate], ...]] = result.peak_estimates
     candidates: List[MarginCandidate] = []
     for index, injection in enumerate(result.injections):
-        estimate = peak_estimate(model, injection)
+        if reused is None:
+            estimate = peak_estimate(model, injection)
+        else:
+            estimate = reused[index]
         if estimate is None:
             candidates.append(
                 MarginCandidate(
@@ -4012,6 +4373,7 @@ def integrate_history(
     verbose: bool = False,
     rho_chi_ratio_init: float = 0.0,
     alpha: float = 0.0,
+    drain_law: str = DRAIN_LAW_FIXED,
 ) -> dict:
     """
     The primitive (jordan-normalization prompt 06, T1; README §6.0 R8): integrate one history of
@@ -4043,7 +4405,12 @@ def integrate_history(
                   floor reflection (inelastic-reflection prompt 02; see integrate_scalar_history),
                   0 <= alpha < 1, else a ValueError before any integration. 0.0 (the default) is
                   the old code bitwise. compute_scalar_history passes it through tune_history since
-                  inelastic-reflection prompt 09, which makes it a key of every stored history
+                  inelastic-reflection prompt 09, which makes it a key of every stored history.
+                  Under the one-loop drain law it is A, finite and > 0
+    :param drain_law: DRAIN_LAW_FIXED (the default) or DRAIN_LAW_ONE_LOOP (one-loop-drain prompt 01;
+                      check_drain_law), passed to integrate_scalar_history. compute_scalar_history does
+                      not take it, so no history a driver launches has the one-loop law until
+                      one-loop-drain prompts 03 and 04 store its keys
     :return: the payload; on success it carries "dark_radiation", the history's
              DarkRadiationLedger (inelastic-reflection prompt 01), and "turning_points" and
              "injections", the IntegrationResult's lists of TurningPoint and Injection
@@ -4055,12 +4422,12 @@ def integrate_history(
              failure's payload does not carry, and "rho_chi_over_rho_rad", r_chi at each sample,
              and "dark_radiation_values", a DarkRadiationValues (prompt 09), which a failure's
              payload does not carry either. ScalarHistory.store reads "injections", "parking",
-             "release", "margins" and the last two (prompt 09); no store reads the others
+             "release", "margins" and the last two (prompt 09); no store reads the others. Every
+             payload, a failure's included, carries "drain", the DrainRecord of the drain law
+             (one-loop-drain prompt 01 §1.4), as far as the integration reached, or None if it failed
+             before the step loop; no store reads it, and build_extra_data does not
     """
-    if not (0.0 <= alpha < 1.0):
-        raise ValueError(
-            f"integrate_history: alpha must satisfy 0 <= alpha < 1, not {alpha!r}"
-        )
+    check_drain_law(drain_law, alpha, "integrate_history")
 
     units: UnitsLike = cosmology.units
 
@@ -4156,6 +4523,7 @@ def integrate_history(
                 policy=policy,
                 task_label=task_label,
                 alpha=alpha,
+                drain_law=drain_law,
             )
 
         # the solution must carry the five components of StateVector; anything else is a bug
@@ -4239,10 +4607,12 @@ def integrate_history(
             print(
                 f"!! integrate_history ({task_label}): overflow when assembling sample values; marked as total integration failure"
             )
-            return _failure_payload(
+            payload = _failure_payload(
                 f"sampling: overflow when assembling sample values: {e}",
                 warnings=result.warnings,
             )
+            payload["drain"] = result.drain
+            return payload
     except ComputationFailureError as e:
         print(f"-- integrate_history ({task_label}): integration failure")
         print(f"   {e.message}")
@@ -4250,8 +4620,11 @@ def integrate_history(
             f"!! integrate_history ({task_label}): marked as total integration failure"
         )
         # the warnings collected before the failure (inelastic-reflection prompt 05; orchestrator
-        # note 05, ruling 2); none if the failure came from outside the step loop
-        return _failure_payload(e.message, warnings=getattr(e, "warnings", ()))
+        # note 05, ruling 2); none if the failure came from outside the step loop. The drain law's
+        # record likewise (one-loop-drain prompt 01 §1.4): None from outside the step loop
+        payload = _failure_payload(e.message, warnings=getattr(e, "warnings", ()))
+        payload["drain"] = getattr(e, "drain", None)
+        return payload
 
     # the first bounce, on the dense output (science-readiness prompt 03); None if there is none
     bounce: Optional[FirstBounce] = first_bounce(result)
@@ -4345,6 +4718,10 @@ def integrate_history(
         # stored by ScalarHistory.store, as are the records above
         "rho_chi_over_rho_rad": tuple(rho_chi_ratios),
         "dark_radiation_values": dark_values,
+        # the drain law's record, a DrainRecord (one-loop-drain prompt 01 §1.4): the law, A, the gap
+        # prescription, the unresolvable assessments and, under the one-loop law, each candidate's
+        # regime, ell, alpha_eff, w_gate, ln E and ln H_E. Not stored (one-loop-drain prompt 03's)
+        "drain": result.drain,
     }
 
 
@@ -4570,10 +4947,15 @@ def _tuning_state(
     )
 
 
-def _tuning_failure(task_label: str, reason: str) -> dict:
-    """A failed tuning: the line, and _failure_payload's payload."""
+def _tuning_failure(task_label: str, reason: str, drain=None) -> dict:
+    """
+    A failed tuning: the line, and _failure_payload's payload, with "drain", the DrainRecord of the
+    integration that ended the tuning (one-loop-drain prompt 01 §1.4), or None.
+    """
     print(f"!! tune_history ({task_label}): {reason}", flush=True)
-    return _failure_payload(reason)
+    payload = _failure_payload(reason)
+    payload["drain"] = drain
+    return payload
 
 
 def tune_line_due(
@@ -4626,6 +5008,7 @@ def tune_history(
     clock=perf_counter,
     rho_chi_ratio_init: float = 0.0,
     alpha: float = 0.0,
+    drain_law: str = DRAIN_LAW_FIXED,
 ) -> dict:
     """
     The tuning layer (jordan-normalization prompt 06; README §6.0 R1, R2, R8, R10, R13): integrate
@@ -4681,6 +5064,12 @@ def tune_history(
     at entry, before the seed. 0.0 (the default) is the old tuning bitwise. compute_scalar_history
     passes its own (inelastic-reflection prompt 09).
 
+    drain_law (one-loop-drain prompt 01 §1.1) is passed to every integration with alpha, and checked at
+    entry with it (check_drain_law): under DRAIN_LAW_ONE_LOOP alpha is A, finite and > 0. The default is
+    DRAIN_LAW_FIXED, the old tuning bitwise; compute_scalar_history does not take it. The payload's
+    "drain" is the accepted integration's; a failure's payload carries the "drain" of the integration
+    that ended the tuning.
+
     :return: on success, the final integration's payload (every key integrate_history returns),
              with the keys of TUNING_OUTPUT_KEYS added: normalization, V_ref = V(phi_ref) on the
              final realization, phi_ref, phi_0, pi_0, tracking = pi_0/(1.5 phi_0), residual_H,
@@ -4695,10 +5084,7 @@ def tune_history(
         raise ValueError(
             f"tune_history: progress must be one of {TUNE_LINE_PROGRESS}, not {progress!r}"
         )
-    if not (0.0 <= alpha < 1.0):
-        raise ValueError(
-            f"tune_history: alpha must satisfy 0 <= alpha < 1, not {alpha!r}"
-        )
+    check_drain_law(drain_law, alpha, "tune_history")
 
     units: UnitsLike = cosmology.units
     Mp: float = units.PlanckMass
@@ -4738,6 +5124,7 @@ def tune_history(
             verbose=verbose,
             rho_chi_ratio_init=rho_chi_ratio_init,
             alpha=alpha,
+            drain_law=drain_law,
         )
         end = clock()
         wall = end - start
@@ -4755,7 +5142,9 @@ def tune_history(
 
         if data.get("failure", False):
             return _tuning_failure(
-                task_label, f"{data['failure_reason']} (tuning integration {k})"
+                task_label,
+                f"{data['failure_reason']} (tuning integration {k})",
+                drain=data.get("drain"),
             )
 
         try:
@@ -4764,6 +5153,7 @@ def tune_history(
             return _tuning_failure(
                 task_label,
                 f"the effective minimum was not found: {e} (tuning integration {k})",
+                drain=data.get("drain"),
             )
 
         if tune_line_due(progress, k, kind, reset, end, last_line):
@@ -4810,6 +5200,7 @@ def tune_history(
                     task_label,
                     f"no normalization reaches H0: V_target <= 0 at {TUNING_GUARD_LIMIT} "
                     f"integrations running, the last at integration {k}",
+                    drain=data.get("drain"),
                 )
             next_norm = model.renormalize(norm, state.phi_0, 0.5 * exp(state.log_V))
             next_phi_ref = state.phi_min
@@ -4826,6 +5217,7 @@ def tune_history(
                 f"the normalization did not converge: after {k + 1} integrations, "
                 f"H/H0-1={state.residual_H:+.3e}, "
                 f"phi_ref/phi_min-1={state.residual_phi:+.3e}",
+                drain=data.get("drain"),
             )
 
         if next_kind is None:

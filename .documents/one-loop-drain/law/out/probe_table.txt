@@ -1,0 +1,70 @@
+§2.2.1 the probe's table (2197, 2188; A = 1, 0.1; gap zero)
+
+| run | law | candidates | drains | reflections | parking N | r_chi today | Delta N_eff today | wall (s) |
+|---|---|---|---|---|---|---|---|---|
+| 2197 A = 1 | probe | 10 | 10 | 10 | 33.123237745059676 | 0.008218413249662944 | 0.061210911894093833 | 2.0 |
+| 2197 A = 1 | here, gate probe | 10 | 10 | 10 | 33.123237745059676 | 0.008218413249662944 | 0.061210911894093833 | 2.0 |
+| 2197 A = 1 | here, gate production | 10 | 10 | 10 | 33.123237745059676 | 0.008218413249662944 | 0.061210911894093833 | 1.9 |
+| 2197 A = 0.1 | probe | 95 | 95 | 95 | 38.44696564046158 | 0.0015323000212346686 | 0.011412602256154508 | 8.8 |
+| 2197 A = 0.1 | here, gate probe | 95 | 95 | 95 | 38.44696564046158 | 0.0015323000212346686 | 0.011412602256154508 | 9.0 |
+| 2197 A = 0.1 | here, gate production | 95 | 95 | 95 | 38.44696564046158 | 0.0015323000212346686 | 0.011412602256154508 | 8.7 |
+| 2188 A = 1 | probe | 15 | 15 | 15 | 34.786619586267996 | 0.0007647890129067202 | 0.005696164388974255 | 2.2 |
+| 2188 A = 1 | here, gate probe | 15 | 15 | 15 | 34.786619586267996 | 0.0007647890129067202 | 0.005696164388974255 | 2.3 |
+| 2188 A = 1 | here, gate production | 15 | 15 | 15 | 34.786619586267996 | 0.0007647890129067202 | 0.005696164388974255 | 2.1 |
+| 2188 A = 0.1 | probe | 92 | 92 | 92 | 37.45221407328659 | 0.0003554132209084453 | 0.00264712502159893 | 8.4 |
+| 2188 A = 0.1 | here, gate probe | 92 | 92 | 92 | 37.45221407328659 | 0.0003554132209084453 | 0.00264712502159893 | 9.5 |
+| 2188 A = 0.1 | here, gate production | 92 | 92 | 92 | 37.45221407328659 | 0.0003554132209084453 | 0.00264712502159893 | 8.9 |
+
+2197 A = 1, gate patched to 1.0, against the probe, bitwise: equal
+2197 A = 1, production (gate kept): 0 of 10 candidates' alpha_eff differ from the probe's; resolved candidates 0, w_gate < 1 at 0; kinds {'floor': 10}
+   summary against the probe: equal
+2197 A = 0.1, gate patched to 1.0, against the probe, bitwise: equal
+2197 A = 0.1, production (gate kept): 0 of 95 candidates' alpha_eff differ from the probe's; resolved candidates 0, w_gate < 1 at 0; kinds {'floor': 95}
+   summary against the probe: equal
+2188 A = 1, gate patched to 1.0, against the probe, bitwise: equal
+2188 A = 1, production (gate kept): 0 of 15 candidates' alpha_eff differ from the probe's; resolved candidates 0, w_gate < 1 at 0; kinds {'floor': 15}
+   summary against the probe: equal
+2188 A = 0.1, gate patched to 1.0, against the probe, bitwise: equal
+2188 A = 0.1, production (gate kept): 0 of 92 candidates' alpha_eff differ from the probe's; resolved candidates 0, w_gate < 1 at 0; kinds {'floor': 92}
+   summary against the probe: equal
+
+§2.2.2 both prescriptions: 2197 at A = 1, gap edge against gap zero (production)
+   every candidate's (N, alpha_eff, delta_K) and the summary equal: True; gap candidates 0; the records name 'zero' and 'edge'
+
+§2.2.3 large M at A = 1: 3016 and 3233; §2.2.4: 3873
+
+| run | gate | outcome | candidates | every alpha_eff 0 | regimes | reflections | parking N | r_chi today | wall (s) |
+|---|---|---|---|---|---|---|---|---|---|
+| 3016 | probe | success | 330 | True | ['classical'] | 330 | 40.428069515010996 | 9.917990234419203e-07 | 38.4 |
+| 3016 | here, probe | success | 330 | True | {'one_loop': 0, 'gap': 0, 'classical': 330, 'unassessed': 0} | 330 | 40.428069515010996 | 9.917990234419203e-07 | 36.6 |
+| 3016 | here, production | success | 330 | True | {'one_loop': 0, 'gap': 0, 'classical': 330, 'unassessed': 0} | 330 | 40.428069515010996 | 9.917990234419203e-07 | 35.7 |
+   3016, gate patched, against the probe bitwise: equal
+| 3233 | probe | success | 301 | True | ['classical'] | 228 | None | 0.0 | 26.6 |
+| 3233 | here, probe | success | 301 | True | {'one_loop': 0, 'gap': 0, 'classical': 301, 'unassessed': 0} | 228 | None | 0.0 | 24.4 |
+| 3233 | here, production | success | 301 | True | {'one_loop': 0, 'gap': 0, 'classical': 301, 'unassessed': 0} | 228 | None | 0.0 | 24.3 |
+   3233, gate patched, against the probe bitwise: equal
+| 3873 | probe | failure | None | None | None | None | None | None | 91.9 |
+| 3873 | probe | failure | | | {'one_loop': 0, 'gap': 0, 'classical': 1439, 'unassessed': 0} | | | | 88.2 |
+| 3873 | production | failure | | | {'one_loop': 0, 'gap': 0, 'classical': 1439, 'unassessed': 0} | | | | 89.1 |
+   3873, gate patched, against the probe bitwise: equal
+   3873 (probe): failure True; reason 'integrate_scalar_history (drain-probe-3873-A1): reflection requested inside the wall: W/(pi^2/2) = 1.485 at N=43.76462032, phi_E=1.6701e-08, pi_E=-0.0014122 (W = 1.4807e-06, pi^2/2 = 9.9713e-07)'
+   3873 (production): failure True; reason 'integrate_scalar_history (drain-probe-3873-A1): reflection requested inside the wall: W/(pi^2/2) = 1.485 at N=43.76462032, phi_E=1.6701e-08, pi_E=-0.0014122 (W = 1.4807e-06, pi^2/2 = 9.9713e-07)'
+
+§2.2.5 the "drain" key of each run
+   2188-A0.1-zero-probe: law one_loop, A 0.1, gap 'zero'; 92 records for 92 Injections (one per Injection, in order: True); regimes {'one_loop': 92, 'gap': 0, 'classical': 0, 'unassessed': 0}; unresolvable_assessments 0; regime agrees with peak_estimate's at 92 of 92 (disagreeing: []); ell <= 0 candidates: []; reused PeakEstimate equal to a fresh one at 92 of 92
+   2188-A0.1-zero-production: law one_loop, A 0.1, gap 'zero'; 92 records for 92 Injections (one per Injection, in order: True); regimes {'one_loop': 92, 'gap': 0, 'classical': 0, 'unassessed': 0}; unresolvable_assessments 0; regime agrees with peak_estimate's at 92 of 92 (disagreeing: []); ell <= 0 candidates: []; reused PeakEstimate equal to a fresh one at 92 of 92
+   2188-A1-zero-probe: law one_loop, A 1.0, gap 'zero'; 15 records for 15 Injections (one per Injection, in order: True); regimes {'one_loop': 15, 'gap': 0, 'classical': 0, 'unassessed': 0}; unresolvable_assessments 0; regime agrees with peak_estimate's at 15 of 15 (disagreeing: []); ell <= 0 candidates: []; reused PeakEstimate equal to a fresh one at 15 of 15
+   2188-A1-zero-production: law one_loop, A 1.0, gap 'zero'; 15 records for 15 Injections (one per Injection, in order: True); regimes {'one_loop': 15, 'gap': 0, 'classical': 0, 'unassessed': 0}; unresolvable_assessments 0; regime agrees with peak_estimate's at 15 of 15 (disagreeing: []); ell <= 0 candidates: []; reused PeakEstimate equal to a fresh one at 15 of 15
+   2197-A0.1-zero-probe: law one_loop, A 0.1, gap 'zero'; 95 records for 95 Injections (one per Injection, in order: True); regimes {'one_loop': 95, 'gap': 0, 'classical': 0, 'unassessed': 0}; unresolvable_assessments 0; regime agrees with peak_estimate's at 95 of 95 (disagreeing: []); ell <= 0 candidates: []; reused PeakEstimate equal to a fresh one at 95 of 95
+   2197-A0.1-zero-production: law one_loop, A 0.1, gap 'zero'; 95 records for 95 Injections (one per Injection, in order: True); regimes {'one_loop': 95, 'gap': 0, 'classical': 0, 'unassessed': 0}; unresolvable_assessments 0; regime agrees with peak_estimate's at 95 of 95 (disagreeing: []); ell <= 0 candidates: []; reused PeakEstimate equal to a fresh one at 95 of 95
+   2197-A1-edge-production: law one_loop, A 1.0, gap 'edge'; 10 records for 10 Injections (one per Injection, in order: True); regimes {'one_loop': 10, 'gap': 0, 'classical': 0, 'unassessed': 0}; unresolvable_assessments 0; regime agrees with peak_estimate's at 10 of 10 (disagreeing: []); ell <= 0 candidates: []; reused PeakEstimate equal to a fresh one at 10 of 10
+   2197-A1-zero-probe: law one_loop, A 1.0, gap 'zero'; 10 records for 10 Injections (one per Injection, in order: True); regimes {'one_loop': 10, 'gap': 0, 'classical': 0, 'unassessed': 0}; unresolvable_assessments 0; regime agrees with peak_estimate's at 10 of 10 (disagreeing: []); ell <= 0 candidates: []; reused PeakEstimate equal to a fresh one at 10 of 10
+   2197-A1-zero-production: law one_loop, A 1.0, gap 'zero'; 10 records for 10 Injections (one per Injection, in order: True); regimes {'one_loop': 10, 'gap': 0, 'classical': 0, 'unassessed': 0}; unresolvable_assessments 0; regime agrees with peak_estimate's at 10 of 10 (disagreeing: []); ell <= 0 candidates: []; reused PeakEstimate equal to a fresh one at 10 of 10
+   3016-A1-zero-probe: law one_loop, A 1.0, gap 'zero'; 330 records for 330 Injections (one per Injection, in order: True); regimes {'one_loop': 0, 'gap': 0, 'classical': 330, 'unassessed': 0}; unresolvable_assessments 0; regime agrees with peak_estimate's at 330 of 330 (disagreeing: []); ell <= 0 candidates: []; reused PeakEstimate equal to a fresh one at 330 of 330
+   3016-A1-zero-production: law one_loop, A 1.0, gap 'zero'; 330 records for 330 Injections (one per Injection, in order: True); regimes {'one_loop': 0, 'gap': 0, 'classical': 330, 'unassessed': 0}; unresolvable_assessments 0; regime agrees with peak_estimate's at 330 of 330 (disagreeing: []); ell <= 0 candidates: []; reused PeakEstimate equal to a fresh one at 330 of 330
+   3233-A1-zero-probe: law one_loop, A 1.0, gap 'zero'; 301 records for 301 Injections (one per Injection, in order: True); regimes {'one_loop': 0, 'gap': 0, 'classical': 301, 'unassessed': 0}; unresolvable_assessments 0; regime agrees with peak_estimate's at 301 of 301 (disagreeing: []); ell <= 0 candidates: []; reused PeakEstimate equal to a fresh one at 301 of 301
+   3233-A1-zero-production: law one_loop, A 1.0, gap 'zero'; 301 records for 301 Injections (one per Injection, in order: True); regimes {'one_loop': 0, 'gap': 0, 'classical': 301, 'unassessed': 0}; unresolvable_assessments 0; regime agrees with peak_estimate's at 301 of 301 (disagreeing: []); ell <= 0 candidates: []; reused PeakEstimate equal to a fresh one at 301 of 301
+   3873-A1-zero-probe: failure; drain record as far as the loop reached: 1439 candidates, regimes {'one_loop': 0, 'gap': 0, 'classical': 1439, 'unassessed': 0}, unresolvable_assessments 0, gap prescription 'zero'
+   3873-A1-zero-production: failure; drain record as far as the loop reached: 1439 candidates, regimes {'one_loop': 0, 'gap': 0, 'classical': 1439, 'unassessed': 0}, unresolvable_assessments 0, gap prescription 'zero'
+
+stops: none

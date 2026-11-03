@@ -314,6 +314,47 @@ at `φ < 0` above that (audit §3.5); it is gone.
 > `h_floor`, `global_max_step`, the floor rule, the parking cut, the gate's sampling and the drain rule
 > are unchanged.
 
+> **Note, 2026-11-03 (`one-loop-drain`, prompt 01): the drain law, the wall search's unresolvable roots, and
+> the declined unresolved reflection.** The verification is `one-loop-drain-verification.md` §1.
+> - **The drain law.** `integrate_scalar_history`, `integrate_history` and `tune_history` take
+>   `drain_law`. `"fixed"` is the default, today's α_eff = α·w_gate, bitwise. Under `"one_loop"`, `alpha`
+>   carries A > 0 (finite, with no upper bound). Each candidate is classified in the loop from the
+>   assessment it is judged on (`drain_regime`, `peak_estimate`'s classification computed once and reused
+>   by `history_margins`), and it drains α_eff (`drain_alpha_effective`):
+>   - one-loop (ln R > 0, a turnaround with ℓ > 0): min(α_cap, A·c₁/ℓ)·w_gate;
+>   - gap (ln R > 0, no solution, or ℓ ≤ 0): by `_GAP_PRESCRIPTION`, either 0 (`"zero"`, the default) or
+>     min(α_cap, A·c₁/ℓ_edge)·w_gate (`"edge"`);
+>   - classical (ln R ≤ 0) and unassessed: 0.
+>
+>   The constants are c₁ = 2.7 (`DRAIN_C1`, 4c of `wall_backreaction.tex`, "The inelastic fraction"),
+>   α_cap = 0.99 (`DRAIN_ALPHA_CAP`, U10) and ℓ_edge = 4 (`DRAIN_ELL_EDGE`). The prescription attribute is
+>   temporary: prompt 03 fixes it as U13 rules. Each product is evaluated left to right, so with w_gate = 1
+>   the values are the drain probe's bit for bit (verification §1.5).
+> - **The wall search's unresolvable roots.** The search reads ln(V − V_floor) as −∞ within
+>   `WALL_ROUNDING_QUANTA` = 16 quanta of ln V_floor (§6.7). A turning point whose ln E lies below the least
+>   finite value of `_log_V_minus_floor` (17 ulp above ln V_floor on the grid's normalizations: ln E < ln V_floor −
+>   27.67) cannot be found, and the search raised "not monotone" or "outer end still −inf". Since this prompt,
+>   `classical_turning_point` returns None there (`_turning_point_unresolvable`, which computes the least value
+>   from `_log_V_minus_floor` itself by `nextafter`, cached per ln V_floor). Only calls that raised change, and
+>   none that returned: the argument is in the function's docstring. The step loop already read None as no
+>   decision, and counts these assessments in `DrainRecord.unresolvable_assessments`. The search itself is
+>   unchanged. The predicate's cost is under 10⁻³ of a laboratory-M history's wall time.
+> - **The declined unresolved reflection** (the user's ruling (b), 2026-11-03). The unresolved turnaround (§6.4)
+>   fires at φ < 3φ_t when φ_t < 10⁻⁸ M_P or ln R > 0.
+>   - In the wall's linear tail (E ≪ V₀, V − V_floor ≈ V₀M/φ) the ratio W/ρ_kin is φ_t/(φ − φ_t), which is 0.5 at
+>     3φ_t and above 1 inside 2φ_t.
+>   - Where φ_t crosses the threshold during an infall, the rule fires late, inside 2φ_t, and G2 ("reflection
+>     requested inside the wall") refused. This happened in 21 of the 2026.8.0 store's histories, and in 3873
+>     under the one-loop law.
+>   - G2 tests whether the mirror model is valid: it detects a field already stepped into the wall. It is not an
+>     energy balance, since π → −π conserves E.
+>   - Since this prompt, where the rule fires but G2 would refuse (`unresolved_reflection_refused`, G2's own
+>     expression and comparison), the step start makes no unresolved decision, and the floor rule is tested as
+>     usual. Radau then integrates the turnaround, and the resolved candidate's drain point lies past the maximum
+>     of |π|, outside the wall.
+>   - Every state where this acts raised before, so no history that succeeds today moves.
+>   - The declined step starts are `DrainRecord.unresolved_declined`.
+
 The reflection is a *model*, not a fallback, and it has two guards (log 01):
 
 - **G1.** The potential must declare `reflects_at_origin` (new on `AbstractPotential`, default

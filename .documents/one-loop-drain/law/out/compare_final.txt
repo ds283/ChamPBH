@@ -1,0 +1,22 @@
+the-42.jsonl: shard0015#4389 beta=1.13 M=1e-12 alpha=0.01 tuned failed in the first run; now failure
+the-42.jsonl: 42 tasks first, 42 now; same keys True; of those that succeeded first, differing: 0
+pair.jsonl: 2 tasks first, 2 now; same keys True; of those that succeeded first, differing: 0
+the-nine.jsonl: 9 tasks first, 9 now; same keys True; of those that succeeded first, differing: 0
+
+oneloop/2188-A0.1-zero-probe.json: equal to the first run: True; unresolved_declined 0
+oneloop/2188-A0.1-zero-production.json: equal to the first run: True; unresolved_declined 0
+oneloop/2188-A1-zero-probe.json: equal to the first run: True; unresolved_declined 0
+oneloop/2188-A1-zero-production.json: equal to the first run: True; unresolved_declined 0
+oneloop/2197-A0.1-zero-probe.json: equal to the first run: True; unresolved_declined 0
+oneloop/2197-A0.1-zero-production.json: equal to the first run: True; unresolved_declined 0
+oneloop/2197-A1-edge-production.json: equal to the first run: True; unresolved_declined 0
+oneloop/2197-A1-zero-probe.json: equal to the first run: True; unresolved_declined 0
+oneloop/2197-A1-zero-production.json: equal to the first run: True; unresolved_declined 0
+oneloop/3016-A1-zero-probe.json: equal to the first run: True; unresolved_declined 0
+oneloop/3016-A1-zero-production.json: equal to the first run: True; unresolved_declined 0
+oneloop/3233-A1-zero-probe.json: equal to the first run: True; unresolved_declined 0
+oneloop/3233-A1-zero-production.json: equal to the first run: True; unresolved_declined 0
+oneloop/3873-A1-zero-probe.json: failed first (integrate_scalar_history (drain-probe-3873-A1): reflection requested inside the wall: W/(p...); now success, unresolved_declined 19
+oneloop/3873-A1-zero-production.json: failed first (integrate_scalar_history (drain-probe-3873-A1): reflection requested inside the wall: W/(p...); now success, unresolved_declined 19
+
+stops: none

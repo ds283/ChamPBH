@@ -1,0 +1,30 @@
+== 3873-inside-wall-one_loop-A1: law one_loop, A/alpha 1.0, at the stored normalization -276.63073612988643
+   outcome: success; wall 112.7 s
+   parking N None; reflections 1439
+   drain record: {'law': 'one_loop', 'unresolvable_assessments': 0, 'unresolved_declined': 19, 'regimes': {'one_loop': 0, 'gap': 0, 'classical': 2486, 'unassessed': 0}}
+   reflections asked for: 1439 ({'unresolved': 1176, 'floor': 263}); W/(pi^2/2): max 0.883588, median 0.512283; above 0.5 at 874, above 1 at 0; floor-branch max 0.0847153820487526
+   unresolved reflections: 1176; fired at the first step start below 3 phi_t: 1090; later (phi_t still above the threshold there): 86
+   at the unresolved triggers: phi/phi_t in [2.1317, 2.9997]; ln W - ln E in [-2.5022, -0.7569]; ln R in [-215.14, -156.86]; phi_t/threshold in [3.097e-05, 0.9989]
+   the last six reflections asked for:
+     N = 43.75646782: unresolved, phi = 2.71563e-08 M_P, phi/phi_t = 2.7685, phi_t = 9.80891e-09 M_P, ln R = -215.044, ln W - ln E = -1.0184, W/(pi^2/2) = 0.565411, ln E (step start's assessment: True) = -285.821731, passed True
+     N = 43.75782557: unresolved, phi = 2.80812e-08 M_P, phi/phi_t = 2.8444, phi_t = 9.87255e-09 M_P, ln R = -215.077, ln W - ln E = -1.0454, W/(pi^2/2) = 0.542162, ln E (step start's assessment: True) = -285.828199, passed True
+     N = 43.75918134: unresolved, phi = 2.94862e-08 M_P, phi/phi_t = 2.9655, phi_t = 9.94298e-09 M_P, ln R = -215.112, ln W - ln E = -1.0871, W/(pi^2/2) = 0.508743, ln E (step start's assessment: True) = -285.835308, passed True
+     N = 43.76053646: unresolved, phi = 2.80452e-08 M_P, phi/phi_t = 2.8114, phi_t = 9.9756e-09 M_P, ln R = -215.128, ln W - ln E = -1.0337, W/(pi^2/2) = 0.552038, ln E (step start's assessment: True) = -285.838583, passed True
+     N = 43.7618943: unresolved, phi = 2.35599e-08 M_P, phi/phi_t = 2.3636, phi_t = 9.96759e-09 M_P, ln R = -215.124, ln W - ln E = -0.8602, W/(pi^2/2) = 0.733291, ln E (step start's assessment: True) = -285.837780, passed True
+     N = 43.76325544: unresolved, phi = 2.12945e-08 M_P, phi/phi_t = 2.1317, phi_t = 9.98948e-09 M_P, ln R = -215.135, ln W - ln E = -0.7569, W/(pi^2/2) = 0.883588, ln E (step start's assessment: True) = -285.839973, passed True
+
+== 3873-inside-wall-fixed-a0.03: law fixed, A/alpha 0.03, at the stored normalization -276.63073612988643
+   outcome: success; wall 13.1 s
+   parking N 37.52250600230298; reflections 153
+   drain record: {'law': 'fixed', 'unresolvable_assessments': 0, 'unresolved_declined': 0, 'regimes': None}
+   reflections asked for: 153 ({'unresolved': 34, 'floor': 119}); W/(pi^2/2): max 0.00203199, median 8.93616e-06; above 0.5 at 0, above 1 at 0; floor-branch max 0.0005897869980377495
+   unresolved reflections: 34; fired at the first step start below 3 phi_t: 34; later (phi_t still above the threshold there): 0
+   at the unresolved triggers: phi/phi_t in [2.7074, 2.9995]; ln W - ln E in [-7.2855, -6.2008]; ln R in [-142.32, -139.95]; phi_t/threshold in [9.088e-06, 1.037e-05]
+   the last six reflections asked for:
+     N = 37.51209356: unresolved, phi = 3.04636e-13 M_P, phi/phi_t = 2.9974, phi_t = 1.01634e-13 M_P, ln R = -141.975, ln W - ln E = -6.5948, W/(pi^2/2) = 0.00136927, ln E (step start's assessment: True) = -266.791540, passed True
+     N = 37.51424649: unresolved, phi = 3.03798e-13 M_P, phi/phi_t = 2.9773, phi_t = 1.02039e-13 M_P, ln R = -142.045, ln W - ln E = -6.5464, W/(pi^2/2) = 0.00143733, ln E (step start's assessment: True) = -266.830569, passed True
+     N = 37.51636355: unresolved, phi = 2.98518e-13 M_P, phi/phi_t = 2.9139, phi_t = 1.02445e-13 M_P, ln R = -142.114, ln W - ln E = -6.4471, W/(pi^2/2) = 0.00158759, ln E (step start's assessment: True) = -266.869453, passed True
+     N = 37.5184454: unresolved, phi = 2.99367e-13 M_P, phi/phi_t = 2.9106, phi_t = 1.02853e-13 M_P, ln R = -142.183, ln W - ln E = -6.4182, W/(pi^2/2) = 0.0016342, ln E (step start's assessment: True) = -266.908190, passed True
+     N = 37.52049267: unresolved, phi = 2.89742e-13 M_P, phi/phi_t = 2.8059, phi_t = 1.03263e-13 M_P, ln R = -142.252, ln W - ln E = -6.2648, W/(pi^2/2) = 0.00190567, ln E (step start's assessment: True) = -266.946788, passed True
+     N = 37.522506: unresolved, phi = 2.87675e-13 M_P, phi/phi_t = 2.7748, phi_t = 1.03675e-13 M_P, ln R = -142.321, ln W - ln E = -6.2008, W/(pi^2/2) = 0.00203199, ln E (step start's assessment: True) = -266.985242, passed True
+
