@@ -40,7 +40,7 @@ The plan as first ruled had seven prompts (README §2), none written; the re-pla
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
 | 01 | [The drain law](01-the-drain-law.md) | the law and A as inputs; the regime in the loop; α_eff by regime; the gap prescription as a module attribute; the `"drain"` payload key; the tool route's options; the 3873 failure; the wall-search fix (README §8.8) | Opus | ✅ | ✅ | `b99f6a4` | [01](logs/01-the-drain-law.md) |
-| 02 | [Measure the law](02-measure-the-law.md) | U11's thirty histories by the tool route, re-tuned, at three A and both gap prescriptions, with two exact shortcuts (S1, S2) spot-checked; regime shares, the gap's reach, the R·S(L) bound, Y_p, D/H, ΔN_eff against the fixed law; then U13–U14 | Opus | ✅ | ✅ | this commit | [02](logs/02-measure-the-law.md) |
+| 02 | [Measure the law](02-measure-the-law.md) | U11's thirty histories by the tool route, re-tuned, at three A and both gap prescriptions, with two exact shortcuts (S1, S2) spot-checked; regime shares, the gap's reach, the R·S(L) bound, Y_p, D/H, ΔN_eff against the fixed law; then U13–U14 | Opus | ✅ | ✅ | `3f3f0cf` | [02](logs/02-measure-the-law.md) |
 | 03 | The store | the keys, `ScalarHistoryBounce`, the sample and history columns, the gap prescription fixed, `FINGERPRINT_FORMAT` 7, `VERSION_LABEL` | Opus | ⬜ | ⬜ | | |
 | 04 | Drivers and exports | the law's options in `main.py` and the plot scripts; `histories.csv`, `fields.csv`, `bounces.csv` | Sonnet | ⬜ | ⬜ | | |
 | 05 | Derivation tool | `quanta_spectrum.py` and `tools/quanta_measures.py`: n_g, n̄_j, δ_stim, E, phase slip, backreaction ratio, the R·S(L) bound | Opus | ⬜ | ⬜ | | |
@@ -113,6 +113,61 @@ checks:
 Noted, not acted on: the deliberate-breakage record's B5 found that one test of `TestTheLawsInputs`
 (`test_1_integrate_history_refuses_before_any_integration`) does not catch A = 0 being accepted, since its mock
 model raises a ValueError of its own. The others of its class do.
+
+**Orchestrator review of prompt 02 (2026-11-03)**, by orchestrator note 02 §3, on `3f3f0cf`. Passed; seven
+checks:
+1. **Scope.**
+   - The commit's parent is `b1d6bc5`, the note's. It holds ruling 10's 24 files and nothing else, and nothing is
+     pushed. Only `var/` outputs are untracked.
+   - The diff over the code paths and `CLAUDE.md` is empty, and `measure/out/` holds text only.
+   - The agent amended its own commit once before handing back, to correct three phrases of verification §2.9.
+     Nothing had landed on top of it, so the rule of one commit per prompt holds.
+2. **Nothing left running.** No pid under `var/one-loop-drain/02/` answers `kill -0`. Each of the six batches has
+   its `batch.end`, and no `run_sample.py` process is alive. `runregistrykit list` is unchanged: 23 runs, all finished.
+3. **The sample is complete.** `sample.jsonl` has 180 lines with 180 distinct ids. Together they cover 30 histories
+   × 3 A × 2 prescriptions, with nothing missing and nothing extra: 110 `run`, 65 `S1` and 5 `S2`. The
+   orchestrator re-derived every S1 and S2 decision with its own script, from the per-integration regime counts of
+   every integration (the 18 that raised included). It agrees with the agent's at every task.
+4. **A shortcut, re-run.** The orchestrator ran two derived tasks as children with prefix `review-`:
+   `W-2183-A1-edge` (S1) and `L-M4e-15-A0.01-zero` (S2). It compared their partial and result files with their
+   sources' by its own comparison. Both are equal in every value but the task id, the argv and the record's own
+   `gap_prescription` or `A`: per integration, every regime and injection, the tuning record, both digests and
+   the BBN values.
+5. **The tool, re-run.** `tools/history_and_bbn.py 2.0 4e-31 --drain-law one_loop --alpha 1 --gap-prescription zero`,
+   run by the orchestrator, gives stdout equal to `tasks/R-865-A1-zero.log` once `wall=` and `PRyM_time=` are
+   masked. The line's full-precision values, written in the tool's formats, appear in its `history`, `tuning`,
+   `dissipation`, `drain` and `bbn` lines.
+6. **The numbers.**
+   - Recomputed from `sample.jsonl`:
+     - the largest Δ(ΔN_eff today), edge − zero, over the 10 pairs both run and successful, is +0.09955 at
+       L-M5e-16, A = 1;
+     - 2197's ΔN_eff today is 0.061211 at A = 1 and 0.011413 at A = 0.1, and it fails at A = 0.01 under both
+       prescriptions;
+     - 17 histories meet a gap candidate at A = 0.01 under `zero` (P 2, W 10, R-632, and the ladder's four from
+       5 × 10⁻²⁰ to 5 × 10⁻¹⁶);
+     - 29 failures: 18 by the step budget and 11 because the effective minimum was not found.
+   - **The R·S(L) bound.** L-M1e-16 at A = 1 was re-tuned by the orchestrator's own `tune_history` call, and the
+     bound recomputed from the payload by its own arithmetic: 54 classical candidates, all in range, a sum of
+     1.680039880463449 × 10⁻⁴⁵, a share 9.108874548736619 × 10⁻⁷ and an r_χ of 1.785765712567109 × 10⁻⁸. Each is
+     equal to the line's, and so is the samples' SHA-256.
+   - One fixed-law reference (serial 2142: β 2.0, α 1.5 × 10⁻³, shard 0002) equals the store in all 11 fields,
+     and there are 261 references in all.
+7. **The records.**
+   - The log follows §5.1's seven sections, with rulings 1–10 and D1–D11 classed.
+   - Verification §1 is unchanged (the diff only adds), and §2.1–§2.10 follow prompt §2's six items. The handover
+     (§2.9) states measurements and the options they bear on, and makes no choice.
+   - On the board: row 02, its items, the Measure gate, U13 and U14 "open for the user", one issue on §3, and
+     **Last updated**. `.documents/OPEN_ISSUES.md` reads 31 open, with 31 rows, 5 of them under §1.23.
+   - `CLAUDE.md` is unchanged, and the suites' counts stand.
+
+   The review substituted `3f3f0cf` for "this commit" on the board, in the log and in the verification document.
+
+Noted, not acted on:
+- Verification §2.5 gives the R·S(L) bound's range as 3.3 × 10⁻⁸ to 9.5 × 10⁻⁴ of K where a one-loop or gap
+  candidate drains. Where only the parking leftover drains it is larger (0.142 of K at L-M5e-16 under `zero`), as
+  the same section states.
+- L-M5e-16 at A = 1 under `edge` took 747 s, against 16 s under `zero`. The gap drain at the first impact leads into
+  a classical tail of 9962 candidates.
 
 **Open for the user, with 02's measurements (2026-11-03;
 [verification §2.9](../../.documents/one-loop-drain-verification.md)):**
@@ -213,8 +268,8 @@ the new prompts.
   four laboratory-M probe runs, and at 10⁻¹² M_P it is all of ρ_χ (3016: r_χ 1.0×10⁻⁶ today). 02 measures
   its share across the sample (README §8.3); the spectrum stays out of scope.
 
-- **`[02-one-loop-tunings-fail-at-small-A-in-the-transition-window]`** — opened 2026-11-03 by prompt 02 (this
-  commit; `.documents/one-loop-drain-verification.md` §2.4, §2.5; `var/one-loop-drain/02/sample.jsonl`). The tool
+- **`[02-one-loop-tunings-fail-at-small-A-in-the-transition-window]`** — opened 2026-11-03 by prompt 02 (`3f3f0cf`;
+  `.documents/one-loop-drain-verification.md` §2.4, §2.5; `var/one-loop-drain/02/sample.jsonl`). The tool
   route was run tuned on `b99f6a4`'s code, under the one-loop law. There, 29 of 110 tunings fail, each in or just after
   its seed integration:
   - 18 by the step budget (2 × 10⁶ accepted steps, at N = 43.0–47.7 after 13 573–14 638 reflections);

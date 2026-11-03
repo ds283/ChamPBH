@@ -263,7 +263,7 @@ The gate holds:
 ## 2. Prompt 02 — measure the law (2026-11-03)
 
 **Tree:** branch `one-loop-drain` at `b1d6bc5`; its computing code is `b99f6a4`'s (the Gate's diff is empty). Prompt 02's
-commit (this commit) adds no code outside [`one-loop-drain/measure/`](one-loop-drain/measure/). Python 3.13.16, SciPy
+commit (`3f3f0cf`) adds no code outside [`one-loop-drain/measure/`](one-loop-drain/measure/). Python 3.13.16, SciPy
 1.17.0, NumPy 2.3.5. **Scripts:** [`one-loop-drain/measure/`](one-loop-drain/measure/), each with a docstring.
 **Committed outputs:** [`one-loop-drain/measure/out/`](one-loop-drain/measure/out/). **Raw output** (not committed):
 `var/one-loop-drain/02/`:

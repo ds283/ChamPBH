@@ -1,7 +1,7 @@
 # Log 02 — measure the law
 
 **Subject:** Measure the one-loop drain law across U11's sample
-**Commit:** this commit, on branch `one-loop-drain`, on top of `b1d6bc5`
+**Commit:** `3f3f0cf`, on branch `one-loop-drain`, on top of `b1d6bc5`
 **Date:** 2026-11-03, by Claude Opus 5.5
 **Result:** **COMPLETE.** The Measure gate holds (`.documents/one-loop-drain-verification.md` §2.10). U13 and U14 are
 open for the user, with the measurements of verification §2.9.
