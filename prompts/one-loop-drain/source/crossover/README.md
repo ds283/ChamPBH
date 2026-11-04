@@ -26,6 +26,7 @@ kinetic energy is produced as quanta through the crossover from the one-loop reg
 | `stage2_validate.py` | stage 2's validation (brief §6): the Born limit, the classical limit, energy, convergence, the start threshold at large ℓ |
 | `stage2_modes.py` | the two mode equations (brief §4): the scheme's soft tail, and the Hartree (fixed-variance linearized) equation |
 | `stage2_scan.py` | the scan (brief §7): 2197 at A = 0.05 and 0.01, R-865, and an (L, ln R) grid |
+| `measured_law_map.py` | `cascade_map.py` with the drain replaced by stage 2's measured fraction, patched in-process (no production change) |
 | `out/` | every output, text only |
 
 Run from this directory with `../../../../venv/bin/python`, except `cascade_map.py`, which runs from the repository
@@ -307,3 +308,43 @@ What is not settled by stage 2:
 - The fraction on curves at other M; the scan covers only the laboratory curve, and the grid's off-curve points.
 - The cascade's fate after the first strongly inelastic bounce, which needs the map re-run under whichever law is
   ruled.
+
+## The measured law on the cascades (2026-11-04)
+
+Asked by the user: with the fraction ≈ 0.9 from ℓ = 1 down to gap entry, how much energy can be left when the
+condensate exits the gap, and will it not already have parked?
+
+**Energy.** On the laboratory-M curve gap exit (R = 1) is E ≈ V₀ (L = 0.68) whatever the prescription, since the
+curve is fixed by V₀/M⁴. At ℓ = 1, E ≈ 300 V₀, so the field leaves the gap with about 0.3% of its ℓ = 1 energy. The
+prescription decides how fast it gets there and where the energy goes, not how much is left.
+
+**Parking is not set by V₀.** The code parks at a candidate with ρ_kin/ρ_R < 10⁻⁶ (`PARKING_EPSILON`), so it is a
+race against radiation, and the drains are only part of it. Summed −ln(1 − α) at parking is 0.24 for R-865 at A = 0.05
+and 7.1 for 2197 at A = 0.05.
+
+**The run.** `measured_law_map.py` runs `cascade_map.py` with the drain α_eff = min(0.99, A f)·w_gate, where f is:
+- one-loop, ℓ ≥ 1: 1 − exp(−2.69/(ℓ + 0.12)), the fit to stage 2's curve rows (within 0.007 from ℓ = 1 to 33);
+- one-loop, ℓ < 1: 0.9;
+- gap: stage 2's gap rows, interpolated in ln(R·S(L));
+- classical: R·S(L)·g(ln R), with g from V6.
+
+Each history keeps its old-law tuned normalization, and nothing is re-tuned (R-632 at A = 0.05 borrows A = 0.5's).
+Outputs: `out/measured-*.txt`.
+
+| history | A | measured law | old law (02, 02b) |
+|---|---|---|---|
+| 2197 (β = 1.185) | 1 | parks at N = 31.99 after 6 candidates, ℓ_min = 11.8 | parks at N = 33.12, 10 candidates, ℓ_min = 10.2 |
+| R-632 (β = 1.0) | 1 | 17 drains down to ℓ = 1.55, then one at ℓ = 0.79 (f = 0.9); parks at N = 37.88 after it | parks at N = 37.61, 13 candidates, ℓ_min = 0.47 |
+| 2197 | 0.05 | 191 one-loop and 14 gap candidates; parks at N = 39.47 at the 14th gap bounce (L = 3.39) | parks at N = 39.09 at ℓ = 0.52 |
+| R-632 | 0.05 | 43 one-loop, 51 gap and 792 classical candidates; **does not park** by N_final = 45.08 (L = 6 × 10⁻⁷ at the end) | tuning fails (02b) |
+
+**What this shows.**
+- **At A = 1 neither history reaches the gap.**
+  - 2197 parks while ℓ ≈ 12.
+  - β = 1.0 does come down to the plateau, and parks right after its first plateau drain.
+- **The gap matters only at small A.**
+  - At A = 0.05, 2197 parks inside the gap's first bounces.
+  - R-632 still crosses the whole gap and the classical tail unparked. Every drain there is scaled by A = 0.05, so a
+    gap bounce drains at most 0.04.
+  - So the small-A failure is a property of small A, not of the gap prescription.
+- These are single integrations at old-law normalizations, a guide to the behaviour and not a re-tuned measurement.

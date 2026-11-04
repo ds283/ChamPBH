@@ -458,6 +458,17 @@ the new prompts.
     ≤ 0.5% of the quanta's energy.
   - **Next:** the user re-rules U13 (`zero`, `edge`, a terminal drain, or a measured function; the evidence on each
     is in the README's "What stage 2 hands back"), and so whether 2.7/ℓ itself is replaced.)*
+  *(2026-11-04, the measured law on the cascades, at the user's request (`source/crossover/README.md` "The measured
+  law on the cascades"; `measured_law_map.py`, in-process patch, no production change):
+  - **The law tried.** f = 1 − exp(−2.69/(ℓ + 0.12)) for ℓ ≥ 1, 0.9 below that, stage 2's gap rows and R·S(L) in
+    the classical regime; α_eff = min(0.99, A f) w_gate, at the old-law normalizations.
+  - **At A = 1.** 2197 parks at N = 31.99, ℓ_min = 11.8. R-632 (β = 1.0) parks at N = 37.88, right after its first
+    plateau drain at ℓ = 0.79. Neither reaches the gap.
+  - **At A = 0.05.** 2197 parks at its 14th gap bounce. R-632 does not park: 51 gap and 792 classical candidates by
+    N_final = 45.08.
+  - Parking is ρ_kin/ρ_R < 10⁻⁶, a race against radiation; the energy left at gap exit is about V₀ on this curve
+    whatever the prescription.
+  - **So the gap prescription matters only at small A, and the small-A failure is a property of small A.**)*
 
 ### 3.1 Assigned to this campaign
 

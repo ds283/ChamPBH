@@ -1,0 +1,10 @@
+# measured-law map: one-loop 1 - exp(-2.69/(ell + 0.12)) (ell >= 1), 0.9 (ell < 1); gap by ln(R S) on 2197's stage 2 rows; classical R S(L) g(ln R); alpha_eff = min(0.99, A f) w_gate
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+# P-2197-A1-zero: beta=1.185 M=4e-31 M_P A=1.0 gap=zero normalization(ln V0)=-276.63072859401797 ln(V0/M^4)=3.3446 failure=False parking_N=31.993047935134328 N_final=46.000643286191476 candidates=6
+# idx       N    regime       ell   alpha_eff   ln(E/V0)     ln R         L     ell_t   ln(E/M^4)
+    0  17.6297  one_loop   32.2579  7.9724e-02   102.0518  138.070     102.1   -0.7029   105.3964
+    1  20.1188  one_loop   28.7763  8.8890e-02    89.5695  124.550     89.57   -0.7042    92.9141
+    2  25.1281  one_loop   22.9252  1.1017e-01    69.1040  102.022      69.1   -0.7074    72.4486
+    3  25.9407  one_loop   21.7707  1.1563e-01    65.1635   97.615     65.16   -0.7083    68.5081
+    4  31.3221  one_loop   12.7803  1.8822e-01    36.1639   63.952     36.16   -0.7201    39.5085
+    5  31.9930  one_loop   11.8093  2.0188e-01    33.2716   60.402     33.27   -0.7223    36.6162
