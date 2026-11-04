@@ -26,6 +26,8 @@ kinetic energy is produced as quanta through the crossover from the one-loop reg
 | `stage2_validate.py` | stage 2's validation (brief §6): the Born limit, the classical limit, energy, convergence, the start threshold at large ℓ |
 | `stage2_modes.py` | the two mode equations (brief §4): the scheme's soft tail, and the Hartree (fixed-variance linearized) equation |
 | `stage2_scan.py` | the scan (brief §7): 2197 at A = 0.05 and 0.01, R-865, and an (L, ln R) grid |
+| `stage2_mscan.py` | stage 2 on the curves of other M (the β = 2 ladder near M_crit, and 10⁻³ M_P), against the measured law |
+| `fit_law.py` | the qualitative drain law fitted to every stage-2 point, in ℓ, L and R |
 | `measured_law_map.py` | `cascade_map.py` with the drain replaced by stage 2's measured fraction, patched in-process (no production change) |
 | `out/` | every output, text only |
 
@@ -348,3 +350,70 @@ Outputs: `out/measured-*.txt`.
     gap bounce drains at most 0.04.
   - So the small-A failure is a property of small A, not of the gap prescription.
 - These are single integrations at old-law normalizations, a guide to the behaviour and not a re-tuned measurement.
+
+## Other M: near M_crit and at 10⁻³ M_P (2026-11-04)
+
+Asked by the user, after the laboratory-calibrated law was found to read only ℓ, L and R: stage-2 runs for M near
+M_crit for surfing at the QCD temperature, and for M near 10⁻³ M_P.
+
+**The curves.** On a history, ln R = ln(V₀/M⁴) + 2L + 2 ln(L⁴ + 2L³) − ln(e^L − 1) − ln 8π². The laboratory curve has
+ln(V₀/M⁴) = 3.3.
+- **M_crit** (where the one-loop stopping point meets the classical wall; about 1 TeV ≈ 4 × 10⁻¹⁶ M_P for QCD
+  surfing, `wall_backreaction.tex` §"Where the field is stopped") lies inside the β = 2 ladder. The A = 1 maps
+  (`out/cascade-L-M*-A1.txt`, the old law) show:
+
+  | M (M_P) | ln(V₀/M⁴) | one-loop bounces | first gap bounce |
+  |---|---|---|---|
+  | 8 × 10⁻¹⁸ | −119.2 | 3, at ℓ = 4.1, 2.9 and 1.9 | ln R = 6.7, then 157 more gap bounces |
+  | 10⁻¹⁶ | −129.3 | 1, at ℓ = 1.39 | then 9 gap bounces |
+  | 5 × 10⁻¹⁶ | −135.7 | none | the first impact (ln R = 3.3); classical after it |
+
+  Every bounce there is at L ≈ 75–106, far outside stage 2's earlier grid (L ≤ 8).
+- **10⁻³ M_P** has ln(V₀/M⁴) = −249, so every bounce has R ~ e⁻⁸⁰ or less. No history exists at that M; four points on
+  its curve were run.
+
+**Results** (`out/stage2_mscan.txt`, energy conserved to ≤ 5 × 10⁻⁷).
+- **One-loop bounces near M_crit absorb more than the laboratory law gives.** The excess is 0.03 at ℓ = 9 and grows
+  to 0.25 at ℓ = 2:
+  - 0.29, 0.37, 0.52, 0.66 and 0.88 at ℓ = 8.9, 6.8, 4.6, 3.5 and 2.4 (the 8 × 10⁻¹⁸ curve);
+  - 0.97–0.98 at ℓ ≈ 1.9–2.0 (field not yet out);
+  - 0.80 at ℓ = 0.69.
+  - Both curves give the same f(ℓ).
+- **The gap is very different from the laboratory gap at the same R·S.** At L ≈ 90–106, S(L) ~ 10⁻⁵, so R·S is
+  10⁻⁵–10⁻². Yet the fraction is still large:
+
+  | ln R | 6.7 | 5.6 | 4.7 | 4.0 | 3.2 | 2.4 | 1.3 | 0.03 |
+  |---|---|---|---|---|---|---|---|---|
+  | f (8 × 10⁻¹⁸ curve) | 0.73 | 0.57 | 0.45 | 0.34 | 0.19 | 0.06 | 0.005 | 10⁻⁴ |
+
+  The 10⁻¹⁶ and 5 × 10⁻¹⁶ curves agree at the same ln R. The laboratory law, interpolated in ln(R·S), gives 0.003 at
+  every one of these points. **R·S is the wrong variable in the gap.**
+- **The classical regime.**
+  - Near M_crit, frac/(R·S) is 2–4 at R ≈ 1, dips to 0.1 at ln R ≈ −1, and returns towards 1 by ln R = −3. The
+    fraction there is ≤ 10⁻⁴.
+  - At 10⁻³ M_P it is the test field exactly: frac/(R·S) = 1.000 ± 0.003, with fractions of 10⁻⁴⁰ to 10⁻⁹⁵.
+
+**A law that covers every curve** (`fit_law.py`, `out/fit_law.txt`). It uses only ℓ, L = M/φ_t and R, which the code
+has at each candidate. M enters only through them.
+- **One-loop, ℓ ≥ 1:**
+
+      f = 1 − exp[−2.69 / (ℓ + 0.97 − 0.41 ln L)]
+
+  - The coefficient is held at its Born value 2.69; the shift is fitted.
+  - It is within 0.074 (rms 0.021) of all 27 points where the field came back out: the laboratory curve, the grid,
+    R-865 to ℓ = 33, and the curves near M_crit.
+  - The laboratory-only form, 2.69/(ℓ + 0.12), is off by up to 0.125 on the same set.
+  - At L ≈ 100 and ℓ ≲ 2 the denominator approaches 0, so a cap of about 0.95 is needed. The measured values there
+    are 0.88–0.98.
+- **One-loop, ℓ < 1:** f ≈ 0.9 (measured 0.80–0.97 on both kinds of curve).
+- **Gap** (R > 1, no chain):
+
+      y = 0.020 (ln R − 1.56)^1.55 (1 + 0.84 ln L),  f = 1 − e^{−y}
+
+  It holds for ln R > 1.56, and is 0 below, where the measured fraction is ≤ 0.06. It is within 0.062 (rms 0.024)
+  of all 34 gap points, on the laboratory curve, the grid (L ≤ 8, ln R ≤ 15) and near M_crit.
+- **Classical (R ≤ 1):** f ≈ R·S(L). This is ≤ 0.003 at the laboratory curve's R = 1 and ≤ 10⁻⁴ near M_crit, and is
+  exact for R ≪ 1.
+
+The cap, the plateau and the classical piece are judgement, not fits. They are where the user asked for qualitative
+behaviour only.

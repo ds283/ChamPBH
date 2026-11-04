@@ -469,6 +469,19 @@ the new prompts.
   - Parking is ρ_kin/ρ_R < 10⁻⁶, a race against radiation; the energy left at gap exit is about V₀ on this curve
     whatever the prescription.
   - **So the gap prescription matters only at small A, and the small-A failure is a property of small A.**)*
+  *(2026-11-04, other M, at the user's request (`source/crossover/README.md` "Other M"; `stage2_mscan.py`,
+  `fit_law.py`):
+  - **Near M_crit** (the β = 2 ladder at 8 × 10⁻¹⁸–5 × 10⁻¹⁶ M_P, bounces at L ≈ 75–106):
+    - one-loop bounces absorb 0.03–0.25 more than the laboratory law;
+    - the gap absorbs 0.73 at ln R = 6.7, falling to 0.06 at 2.4, where the laboratory law (in ln R·S) gives 0.003.
+  - **At 10⁻³ M_P** every bounce is the test field (frac = R·S, 10⁻⁴⁰ or less).
+  - **A law in ℓ, L and R alone fits every curve:**
+    - one-loop: 1 − exp[−2.69/(ℓ + 0.97 − 0.41 ln L)], within 0.074 of 27 points, with a cap of about 0.95 and 0.9
+      below ℓ = 1;
+    - gap: y = 0.020 (ln R − 1.56)^1.55 (1 + 0.84 ln L), f = 1 − e^{−y}, within 0.062 of 34 points;
+    - classical: R·S(L).
+  - It replaces the laboratory-calibrated law of `measured_law_map.py`. U13 and the drain law remain the user's to
+    rule.)*
 
 ### 3.1 Assigned to this campaign
 
