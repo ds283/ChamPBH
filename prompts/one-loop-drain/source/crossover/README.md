@@ -20,6 +20,7 @@ kinetic energy is produced as quanta through the crossover from the one-loop reg
 | `born.py` | the Born-regime scheme of `wall_backreaction.tex` (`scripts/return_fraction.py`) generalized to any (L, R); the chain in these units; the production on a trajectory as the scheme gives it, by the Born formula, and with massive mode functions |
 | `stage1b_born.py` | the scheme with k_IR = √V''_max, self-consistent, at bounces of a mapped cascade |
 | `stage1b_kmin.py` | the massive-mode production against the lower end of its k grid |
+| `stage1b_occupation.py` | the occupation numbers on the stage-1b trajectories |
 | `stage2-brief.md` | the handoff brief for stage 2, for a fresh session |
 | `out/` | every output, text only |
 
@@ -97,3 +98,18 @@ So stage 1 does not support a fraction that falls as ℓ → 0 within the one-lo
 total absorption more slowly than 2.7/ℓ. A fall is expected only where R·S(L) < 1. Between the chain's failure and
 R·S(L) ≈ 1, neither the Born scheme nor the classical test field applies. That is the region a self-consistent solve
 (stage 2) has to cover. At A = 0.01 at laboratory M it is the gap's first 329 bounces, where `zero` drains nothing.
+
+## Occupation numbers near full dissipation (2026-11-04)
+
+Asked by the user: do the occupations stay O(1) or below as the dissipation approaches 1?
+[`out/stage1b_occupation.txt`](out/stage1b_occupation.txt), on the stage-1b trajectories, from the Born formula with
+massive modes alongside; the two agree to three digits wherever the field comes back out.
+- **The produced energy sits at 0.6–5 k_ex** (10–90% of it).
+- **The occupations there are ≪ 1 throughout.** The energy-weighted mean n is 10⁻¹³ at ℓ = 7.4, 7 × 10⁻⁸ at 3.7,
+  6 × 10⁻⁶ at 2.4 and 1.2 × 10⁻⁴ at 1.5, where 92% of E is in quanta.
+- **The largest occupation is at the soft end, k ≈ m_ta,** and it too stays small: 5 × 10⁻⁸, 6 × 10⁻⁵, 7 × 10⁻⁴ and
+  4 × 10⁻³ at the same ℓ, growing roughly as e^{−2ℓ}.
+
+Near-total dissipation comes from phase space, not from occupation. The quanta are spread over modes up to a few
+k_ex, each weakly occupied, while E ~ m_ta⁴ℓ/32π² is set by the much lower mass. So production stays in the
+linear-response (Born) regime, with no Bose enhancement, up to the edge of the scheme.
