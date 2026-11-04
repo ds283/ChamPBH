@@ -587,8 +587,10 @@ keep it; U10 - 0.99 is OK; U11 - OK; U12: OK". The table below is the proposal a
 
 **For the user after 02 (U13–U14):** the gap prescription of record (U13), from 02's spread; the A values
 of the rebuild of record (U14). **U13 ruled by the user, 2026-11-04:** "Please keep both, but make `zero` the default in production". Both
-prescriptions are kept, and `zero` is the default (P26 below). U14 is open. **Prompt 02b inserted at the user's
-request, 2026-11-04,** before U14 is ruled: "Can we try `A \in { 0.05, 0.1, 0.5, 1.0, 1.5, 2.0, 5.0, 10.0 }`?", and then "Running a few histories where the condensate loses most or almost all of its KE on the first impact might be worth doing, to get a measurement of what happens when the collision is mostly inelastic. A=5 and A=10 sound like they probe slightly different configurations in this regime, so leave those. Let's test first using a prompt 02b".
+prescriptions are kept, and `zero` is the default (P26 below). **Prompt 02b inserted at the user's
+request, 2026-11-04,** before U14 is ruled: "Can we try `A \in { 0.05, 0.1, 0.5, 1.0, 1.5, 2.0, 5.0, 10.0 }`?", and then "Running a few histories where the condensate loses most or almost all of its KE on the first impact might be worth doing, to get a measurement of what happens when the collision is mostly inelastic. A=5 and A=10 sound like they probe slightly different configurations in this regime, so leave those. Let's test first using a prompt 02b". **U14 ruled by the user, 2026-11-04,** after 02b:
+"In that case, it seems to me that our original list `A \in { 0.05, 0.1, 0.5, 1.0, 1.5, 2.0, 5.0, 10.0 }` covers the required region adequately. I see no reason to change it, unless you have an objection." The orchestrator raised no objection. The rebuild of record samples
+A ∈ {0.05, 0.1, 0.5, 1, 1.5, 2, 5, 10} under the one-loop law; A = 0.01 is not among them.
 
 **Proposed by the planner (P17–P20), the defaults unless the user says otherwise:**
 - **P17 — the law's constants** (c₁, α_cap, ℓ_edge) beside the margin constants in `ScalarHistory.py`,

@@ -1,6 +1,6 @@
 # one-loop-drain campaign — implementation state
 
-**Last updated:** 2026-11-04 · **Status: LIVE — 3 of 9 landed (01, 02, 02b); U13 ruled; U14 open for the user, with 02's and 02b's measurements.** Planned
+**Last updated:** 2026-11-04 · **Status: LIVE — 3 of 9 landed (01, 02, 02b); U13 and U14 ruled; 03 next.** Planned
 2026-11-02 as `quanta-diagnostics` at the user's request, after a scoping session the same day
 ([`source/scoping_2026-11-02.md`](source/scoping_2026-11-02.md)); U1–U7 and P1–P16 ruled the same day,
 all as proposed (README §6). **Re-planned the same day around the drain law and renamed `one-loop-drain`**
@@ -16,7 +16,8 @@ the inside-wall stop (§3, §4); the Law gate holds, and two issues closed.)* *(
 gate holds, one issue opened (§3), and U13 and U14 are open for the user with its measurements.)* *(2026-11-04: the user ruled U13: both gap
 prescriptions kept, `zero` the default (README §8.6, P26). U14 is open.)* *(2026-11-04: prompt 02b inserted and written at the user's request, to
 measure A ∈ {0.05, 0.5, 1.5, 2, 5, 10} before U14 is ruled (README §8.4, §8.6).)* *(2026-11-04: prompt 02b landed; the Wide
-gate holds, no issue opened, one extended (§3), and U14 is open for the user with the measurements at nine A.)*
+gate holds, no issue opened, one extended (§3), and U14 is open for the user with the measurements at nine A.)* *(2026-11-04: the user ruled U14: A ∈ {0.05, 0.1,
+0.5, 1, 1.5, 2, 5, 10} for the rebuild of record (README §8.6).)*
 
 The campaign replaces the fixed-α drain by a one-loop law, α_eff = min(α_cap, A·2.7/ℓ)·w_gate at a
 one-loop turnaround and zero at R ≤ 1, with the fixed law kept beside it, bitwise. It measures the law
@@ -235,7 +236,8 @@ Noted, not acted on:
   At laboratory M no pair could be compared. **Ruled by the user, 2026-11-04:** "Please keep both, but make `zero` the default in production"
   (README §8.6; P26 proposes the key).
 - **U14**, the A values of the rebuild of record. At laboratory M, ΔN_eff today falls roughly in proportion to A. A = 0.01
-  cannot be built in the transition window on this code (§3).
+  cannot be built in the transition window on this code (§3). **Ruled by the user, 2026-11-04,** after 02b: "In that case, it seems to me that our original list `A \in { 0.05, 0.1, 0.5, 1.0, 1.5, 2.0, 5.0, 10.0 }` covers the required region adequately. I see no reason to change it, unless you have an objection."
+  (README §8.6). The orchestrator raised no objection.
   **With 02b's measurements (2026-11-04; [verification §2b.11](../../.documents/one-loop-drain-verification.md)):** at
   laboratory M every P and W history builds, one-loop only, at A = 10, 5, 2, 1.5, 0.5 and 0.05. Their ΔN_eff today is
   0.029–0.645 at A = 10, 0.024–0.335 at 5 and 0.0025–0.0094 at 0.05 (2197: 0.564, 0.277, 0.0086), and ΔN_eff at 1 MeV is
@@ -255,9 +257,9 @@ Noted, not acted on:
 | `tools/history_and_bbn.py --drain-law`, `--gap-prescription` (P25) | 01 | ✅ |
 | the measure scripts, `.documents/one-loop-drain/measure/` (driver, task list, fixed-law references, decisions, spot and tool checks, analyses) | 02 | ✅ |
 | U11's 30 histories × A ∈ {1, 0.1, 0.01} × {zero, edge}: 110 run, 65 by S1, 5 by S2; spot and tool checks bitwise | 02 | ✅ (verification §2) |
-| the handover for U13 and U14 | 02 | ✅ (verification §2.9; U13 ruled 2026-11-04, U14 open for the user) |
+| the handover for U13 and U14 | 02 | ✅ (verification §2.9; U13 and U14 ruled 2026-11-04) |
 | the wide-A scripts, `.documents/one-loop-drain/measure-02b/` (02's scripts imported; the reproduction check, the first impact and the cap) | 02b | ✅ |
-| 02's 30 histories × A ∈ {10, 5, 2, 1.5, 0.5, 0.05} × {zero, edge}: 171 run, 159 by S1, 30 by S2; the reproduction, spot and tool checks bitwise; the handover for U14 at nine A | 02b | ✅ (verification §2b; U14 open for the user) |
+| 02's 30 histories × A ∈ {10, 5, 2, 1.5, 0.5, 0.05} × {zero, edge}: 171 run, 159 by S1, 30 by S2; the reproduction, spot and tool checks bitwise; the handover for U14 at nine A | 02b | ✅ (verification §2b; U14 ruled 2026-11-04) |
 
 ## 2. The gates
 
@@ -351,7 +353,8 @@ the new prompts.
   integration at A = 0.01 meets 9992–13 497 classical candidates. **Impact:** A = 0.01 cannot be built at laboratory M in
   the transition window on this code, so U14 has no A = 0.01 values there, and U13 cannot be compared at laboratory M.
   `main.py` tunes through the same `tune_history`, so a rebuild at those (β, A) on this code takes the same path (not
-  run). **Next:** for the user, with U14 (U13 ruled 2026-11-04). Not
+  run). **Next:** U13 and U14 ruled 2026-11-04; A = 0.01 is not among U14's values, so the rebuild of record does not meet
+  the P and W failures; it will meet β = 1.0's at A = 0.05 and 0.1 (and the ladder's 5 × 10⁻²⁰ M_P, if that M is built). Not
   diagnosed, and not acted on (prompt 02 §1.5).
   *(2026-11-04, prompt 02b (`cc1f449`; verification §2b.5): measured at A = 0.05. Every P and W history succeeds there,
   one-loop only, in 24–26 s. Four tunings fail, of the same two kinds and at the two histories that failed at A = 0.1:
