@@ -1,0 +1,12 @@
+L=26.74 ell=9.535 kmin=0.001 m: massive=0.3230  Efl=0.2594  start adiabaticity at kmin=1.14e+06
+L=26.74 ell=9.535 kmin=0.01 m: massive=0.2625  Efl=0.2594  start adiabaticity at kmin=1.14e+03
+L=26.74 ell=9.535 kmin=0.1 m: massive=0.2600  Efl=0.2594  start adiabaticity at kmin=1.14e+00
+L=26.74 ell=9.535 kmin=0.3 m: massive=0.2599  Efl=0.2594  start adiabaticity at kmin=4.24e-02
+L=20.95 ell=7.399 kmin=0.001 m: massive=0.3234  Efl=0.3220  start adiabaticity at kmin=1.05e+05
+L=20.95 ell=7.399 kmin=0.01 m: massive=0.3226  Efl=0.3220  start adiabaticity at kmin=1.05e+02
+L=20.95 ell=7.399 kmin=0.1 m: massive=0.3224  Efl=0.3220  start adiabaticity at kmin=1.05e-01
+L=20.95 ell=7.399 kmin=0.3 m: massive=0.3224  Efl=0.3220  start adiabaticity at kmin=3.89e-03
+L=10.83 ell=3.296 kmin=0.001 m: massive=0.5973  Efl=0.5964  start adiabaticity at kmin=1.65e+03
+L=10.83 ell=3.296 kmin=0.01 m: massive=0.5971  Efl=0.5964  start adiabaticity at kmin=1.65e+00
+L=10.83 ell=3.296 kmin=0.1 m: massive=0.5969  Efl=0.5964  start adiabaticity at kmin=1.65e-03
+L=10.83 ell=3.296 kmin=0.3 m: massive=0.5968  Efl=0.5964  start adiabaticity at kmin=6.10e-05

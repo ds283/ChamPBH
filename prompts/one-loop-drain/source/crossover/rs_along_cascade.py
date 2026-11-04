@@ -38,9 +38,10 @@ def main(path):
             or line.startswith("# R-")
         ):
             head = line.strip()
-        if line.startswith("#") or line.startswith("@@") or not line.strip():
-            continue
         f = line.split()
+        # the integrator's progress lines (status updates) are interleaved with the table; keep table rows only
+        if not f or not f[0].isdigit():
+            continue
         idx, N, regime = int(f[0]), float(f[1]), f[2]
         # columns: idx N regime [ell] alpha_eff ln(E/V0) lnR L ell_t ln(E/M^4); ell is blank off one-loop
         rest = f[3:]

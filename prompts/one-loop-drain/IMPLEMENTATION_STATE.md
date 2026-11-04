@@ -421,6 +421,19 @@ the new prompts.
   and so do ΔN_eff, Y_p and D/H there. The parking time does too: a fraction that falls as ℓ → 0 would leave the
   cascade more energy when it reaches the near-elastic regime. **Next:** the side-campaign `crossover` (README §8.9),
   which the user ruled to land before 03. Its scripts and outputs are in `source/crossover/`.
+  *(2026-11-04, crossover stage 1 (`source/crossover/README.md`): **the measurements do not support the belief
+  above within the one-loop range.**
+  - The note's Born scheme was generalized to the cascade's own bounces (2197 at A = 0.05, L 102–5.7, ln R
+    138–19), with the infrared end at the mode mass. It reproduces the note's table.
+  - The fraction lies below 2.7/ℓ: 0.92 of it at ℓ = 9.5, 0.65 at ℓ = 2.4. But it still rises as ℓ falls: 0.73 at
+    ℓ = 2.4 and 0.92 at ℓ = 1.5, where the field no longer comes back out.
+  - Massive mode functions give the same production to 0.2%.
+  - At ℓ ≈ 1 the scheme fails, and the classical wall is not elastic there: a test field reaching it would produce
+    R·S(L) ≈ 10³–10⁵ times E.
+  - S(L) stays at 10⁻³–10⁻², so the nearly elastic classical reflection holds only once R·S(L) < 1. At A = 0.01 at
+    laboratory M, that is the gap's last 179 of 508 bounces and the classical tail.
+  - So the region in doubt is from the chain's failure to R·S(L) ≈ 1, where `zero` drains nothing. Stage 2 is to
+    cover it.)*
 
 ### 3.1 Assigned to this campaign
 

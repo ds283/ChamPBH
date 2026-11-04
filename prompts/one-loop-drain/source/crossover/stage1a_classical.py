@@ -23,6 +23,9 @@ import walls  # noqa: E402
 from walls import Bounce, Wall, beta_squared  # noqa: E402
 
 LS = (
+    0.3,
+    0.5,
+    0.7,
     1.0,
     2.0,
     3.0,
