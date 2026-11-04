@@ -1,6 +1,6 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-11-04 · **31 open**: 4 on the `review-remediation` board (closed
+**Last updated:** 2026-11-04 · **32 open**: 4 on the `review-remediation` board (closed
 2026-09-30), none now assigned; 2 on the `production-readiness` board
 (closed 2026-09-30); 2 on the `run-integrity` board (closed 2026-09-30; one stale entry closed 2026-10-22, its fix having landed in `5740690`; `jordan-normalization` prompt 07 closed one, 2026-10-26); 6 on the
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`
@@ -52,12 +52,12 @@ and assigned the same day to `reflection-restart`, §1.21); 1 on the `reflection
 the user's ruling of the signature; re-planned the same day, its audit withdrawn; one more assigned the same day
 from the `one-loop-drain` board, planned on its own branch, §1.21; prompt 04 closed the first assigned issue,
 narrowed the second and opened one, §1.22, and the campaign closed 2026-11-02, 3 of 3 prompts landed, 02 withdrawn,
-with that one open; the second assigned issue returned to `one-loop-drain` the same day, §1.23); 5 on the `one-loop-drain` board (planned
+with that one open; the second assigned issue returned to `one-loop-drain` the same day, §1.23); 6 on the `one-loop-drain` board (planned
 2026-11-02 as `quanta-diagnostics` from a scoping session
 the same day, `prompts/one-loop-drain/source/`; three opened by the planner, one of them narrowed and two
 more opened the same day from the drain probe; re-planned and renamed the same day, when one of those was
 split in two and one half assigned to `reflection-restart`, returned for its 01 after that campaign closed; prompt 01
-closed that one and the other half, 2026-11-03, the second by the user's ruling (b); prompt 02 opened one, 2026-11-03;
+closed that one and the other half, 2026-11-03, the second by the user's ruling (b); prompt 02 opened one, 2026-11-03; the orchestrator opened one after 02b, 2026-11-04;
 §1.23).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
@@ -376,7 +376,7 @@ quanta; re-planned and renamed the same day around a one-loop drain law. Three o
 the scoping session of that day; two opened the same day from the drain probe
 (`source/drain-probe_2026-11-02.md`), one of which was split at the re-plan, its other half assigned to
 `reflection-restart` (§1.21) and returned, narrowed, for 01 the same day. Prompt 01 closed both halves,
-2026-11-03 (board §4). Prompt 02 opened one, 2026-11-03.
+2026-11-03 (board §4). Prompt 02 opened one, 2026-11-03. The orchestrator opened one after 02b, 2026-11-04.
 
 - `[00-weighted-margins-hide-the-least-relativistic-generations]` — stored worst margins and failing
   shares cover only generations ≥ 10⁻³ of K; in the low-α transition window the rest hold 80–98% of ρ_χ,
@@ -391,4 +391,7 @@ the scoping session of that day; two opened the same day from the drain probe
   closed by 03. *(`one-loop-drain`; drain probe, 2026-11-02)*
 - `[02-one-loop-tunings-fail-at-small-A-in-the-transition-window]` — under the one-loop law the laboratory-M
   transition-window histories (β 1.0–1.1875) fail tuned at A = 0.01 (25 of 26 tasks; β = 1.0 at A = 0.1 too): step budget
-  or effective minimum after the seed integration; 29 of 110 tunings; U14 (ruled 2026-11-04) leaves out A = 0.01. *(`one-loop-drain`; prompt 02)*
+  or effective minimum after the seed integration; 29 of 110 tunings; U14 (ruled 2026-11-04) leaves out A = 0.01; diagnosed 2026-11-04: the field never parks before today. *(`one-loop-drain`; prompt 02)*
+- `[02b-the-one-loop-fraction-is-unreliable-at-small-ell]` — 2.7/ℓ is verified only for ℓ ≳ 4 and should fall, not
+  rise, as ℓ → 0; 70–78% of K at A = 0.01 (19–30% at 0.05) is drained at ℓ < 4 in the transition window; the side-campaign
+  `crossover` tests it before 03. *(`one-loop-drain`; orchestrator, 2026-11-04)*

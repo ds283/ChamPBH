@@ -1,6 +1,6 @@
 # one-loop-drain campaign — implementation state
 
-**Last updated:** 2026-11-04 · **Status: LIVE — 3 of 9 landed (01, 02, 02b); U13 and U14 ruled; 03 next.** Planned
+**Last updated:** 2026-11-04 · **Status: LIVE — 3 of 9 landed (01, 02, 02b); U13 and U14 ruled; the side-campaign `crossover` before 03.** Planned
 2026-11-02 as `quanta-diagnostics` at the user's request, after a scoping session the same day
 ([`source/scoping_2026-11-02.md`](source/scoping_2026-11-02.md)); U1–U7 and P1–P16 ruled the same day,
 all as proposed (README §6). **Re-planned the same day around the drain law and renamed `one-loop-drain`**
@@ -17,7 +17,9 @@ gate holds, one issue opened (§3), and U13 and U14 are open for the user with i
 prescriptions kept, `zero` the default (README §8.6, P26). U14 is open.)* *(2026-11-04: prompt 02b inserted and written at the user's request, to
 measure A ∈ {0.05, 0.5, 1.5, 2, 5, 10} before U14 is ruled (README §8.4, §8.6).)* *(2026-11-04: prompt 02b landed; the Wide
 gate holds, no issue opened, one extended (§3), and U14 is open for the user with the measurements at nine A.)* *(2026-11-04: the user ruled U14: A ∈ {0.05, 0.1,
-0.5, 1, 1.5, 2, 5, 10} for the rebuild of record (README §8.6).)*
+0.5, 1, 1.5, 2, 5, 10} for the rebuild of record (README §8.6).)* *(2026-11-04: the small-A failures diagnosed, an issue
+opened on the one-loop fraction at small ℓ, and the side-campaign `crossover` started at the user's request, to land
+before 03 (README §8.9).)*
 
 The campaign replaces the fixed-α drain by a one-loop law, α_eff = min(α_cap, A·2.7/ℓ)·w_gate at a
 one-loop turnaround and zero at R ≤ 1, with the fixed law kept beside it, bitwise. It measures the law
@@ -361,6 +363,64 @@ the new prompts.
   R-632 (β = 1.0) under both prescriptions, by "the effective minimum was not found" after the seed integration (37
   one-loop, 58–98 gap and 1488–4193 classical candidates; values 3.27795 × 10⁻¹²¹); and the ladder's 5 × 10⁻²⁰ M_P under
   both, by the step budget at N = 46.07–46.44 after 14 020–14 116 reflections. At A = 0.5–10 every tuning succeeds.)*
+  *(2026-11-04, diagnosed by the orchestrator from 02's and 02b's partial files, at the user's request: one cause. **The
+  field never parks before today.**
+  - **Per bounce, the one-loop law drains no less than the fixed law did.** At A = 0.01 a one-loop bounce drains
+    0.027/ℓ, from about 8 × 10⁻⁴ at the first impact up to 0.33.
+  - **But it stops draining.** Once ℓ reaches 0 the chain has no solution, so the cascade is in the gap and then at
+    R ≤ 1, where `zero` drains nothing. The cascade then goes on essentially elastic.
+  - **For 2197:**
+    - the stored fixed α = 10⁻³ drains 6648 times and parks at N = 45.16;
+    - the one-loop law at A = 0.1 drains 95 times and parks at N = 38.45, and at A = 0.05 drains 134 times and
+      parks at N = 39.09;
+    - at A = 0.01 it drains 183 times, the last at N = 40.24, then meets 508 gap and 13 260 classical candidates,
+      and does not park by N_final = 46.0.
+  - **Whether a history fails is a race** between parking and ℓ reaching 0. At A ≥ 0.05 at laboratory M the field
+    parks while still one-loop (ℓ_min 0.31–1.27 at A = 0.05).
+  - **Both kinds of failure follow from this:**
+    - the step budget is the 10⁴ undrained bounces before today;
+    - "the effective minimum was not found" is a field still bouncing today. 2197 at A = 0.01 is at
+      φ₀ ≈ 7 × 10⁻¹¹ against a minimum near 8.6 × 10⁻¹⁶, and `effective_minimum` brackets only (0.05 φ₀, 20 φ₀)
+      (`AbstractModel.py` :537, called from `_tuning_state`, `ScalarHistory.py` :4937).
+  - **β = 1.0 and the ladder at 5 × 10⁻²⁰ M_P are the same case.** R-632 at A = 0.1 drains 34 times to N = 39.87,
+    then meets 200 gap and 4515 classical candidates, and does not park.
+  - **This need not be a numerical defect.** If R ≤ 1 bounces are close to elastic, a small-A field may really be
+    unparked today, and the tuning, which assumes the field at its minimum today, then has no solution. The drain
+    near ℓ → 0 is itself in doubt (`[02b-the-one-loop-fraction-is-unreliable-at-small-ell]`).)*
+
+- **`[02b-the-one-loop-fraction-is-unreliable-at-small-ell]`** — opened 2026-11-04 by the orchestrator, at the user's
+  request, after 02b (`cc1f449`).
+  - **What the law rests on.** The one-loop law drains A · 2.7/ℓ, with ℓ = ln(k_ex/m_ta).
+    - `wall_backreaction.tex` derives 2.7/ℓ in the Born regime ("The scheme solved in the Born regime") as the
+      production c(V'')²/8π², which has no logarithm, divided by the dressing (V'')²ℓ/32π².
+    - It verifies the law to 5% for ln(k_ex/k_IR) ≳ 4. It finds the scheme self-consistent only for
+      k_IR ≲ 0.1 k_ex (ℓ ≳ 2.3), and for k_IR ≳ 0.2 k_ex the drag vanishes and the field runs on to the classical
+      wall.
+    - The scheme's modes are massless, with the mass entering only as the infrared cutoff.
+  - **What it is asked to do.** The law rises as the cascade loses energy and ℓ falls, up to α_cap.
+  - **What the user and the orchestrator believe instead (2026-11-04).** The fraction should fall as ℓ → 0:
+    - once k_ex ≈ m_ta, the modes near k_ex have ω ≈ m_ta ≈ 1/Δt and respond nearly adiabatically;
+    - in the limit, the classical exponential wall is reflectionless (the note's heavy-pulse result), and
+      production at R ≤ 1 is about R·S(L) ≈ 10⁻⁴ R;
+    - so the rise of 2.7/ℓ below ℓ ≈ 4 is an extrapolation of the Born scheme past its range, not a prediction.
+  - **How much of the drained energy K comes from that range** (02 and 02b's partials, share of K from one-loop
+    drains):
+
+    | history | A | ℓ_min | ℓ < 4 | ℓ < 2.3 |
+    |---|---|---|---|---|
+    | 2197 | 0.1 | 1.8 | 0.04 | 0.001 |
+    | 2197 | 0.05 | 0.52 | 0.19 | 0.02 |
+    | 2197 | 0.01 | 0.083 | 0.70 | 0.44 |
+    | W-2187 | 0.05 | 0.31 | 0.30 | 0.04 |
+    | W-2187 | 0.01 | 0.11 | 0.78 | 0.50 |
+
+    At A ≥ 0.5 at laboratory M, and at β = 2 at every A, no drain has ℓ < 4: 2197 has ℓ_min ≥ 4.9 and R-865
+    ℓ_min ≥ 8.5.
+
+  **Impact:** at laboratory M in the transition window, the drain law at A ≤ 0.1 relies partly on the extrapolation,
+  and so do ΔN_eff, Y_p and D/H there. The parking time does too: a fraction that falls as ℓ → 0 would leave the
+  cascade more energy when it reaches the near-elastic regime. **Next:** the side-campaign `crossover` (README §8.9),
+  which the user ruled to land before 03. Its scripts and outputs are in `source/crossover/`.
 
 ### 3.1 Assigned to this campaign
 

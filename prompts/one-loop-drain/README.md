@@ -675,3 +675,37 @@ written on them.
 - **P25 — the tool route.** `tools/history_and_bbn.py` gains `--drain-law`. Until 03 it also gains
   `--gap-prescription`, which sets the module attribute of §8.2 in its own process, as
   `reflection-restart` 01's `--variant` set its switch. 03 removes the attribute; the option stays, default `zero` (U13, P26).
+
+### 8.9 The side-campaign `crossover` (2026-11-04)
+
+After 02b, the small-A failures were diagnosed (board §3,
+`[02-one-loop-tunings-fail-at-small-A-in-the-transition-window]`): the field never parks before today. While discussing
+that, the user and the orchestrator agreed that the one-loop fraction 2.7/ℓ is not reliable when ℓ becomes small
+(`[02b-the-one-loop-fraction-is-unreliable-at-small-ell]`). The user's words: "It sounds much more reasonable that the
+production fraction decreases as `ell -> 0`. What would be involved in testing the crossover law? Now we need the mode
+integral with the mass `m_ta` in the propagator, so solving the 1-loop system self consistently becomes more
+complicated."
+
+**Ruled by the user, 2026-11-04:** "Please record the diagnosis and also our belief that the one-loop formula is not
+reliable when `ell` becomes too small. Then yes, I'd like to run this as a side-campaign. To keep things simple I let's
+try to land it before doing prompt 03. Create a directory in `source/` to hold the scripts and other outputs. Then
+proceed with stage 1."
+
+**What it is.** A research side-campaign, run by the orchestrator in this campaign's `source/crossover/`. It measures
+the production fraction through the crossover from the one-loop regime (ℓ ≳ 4) to the classical wall (R ≤ 1), with the
+mass in the mode functions. It changes no production code. It has three stages:
+1. **Stage 1, the bracketing test-field runs.**
+   - The classical bounce with no backreaction, which must reproduce the classical-wall limit (S(L),
+     `production_energy_ratio.tex`).
+   - Massive-mode production on the Born scheme's self-consistent trajectories (`wall_backreaction.tex`,
+     `scripts/return_fraction.py`), set against the scheme's own Born production, where those trajectories exist
+     (ℓ ≳ 1.6).
+2. **Stage 2, the self-consistent solve.** The background with the one-loop tadpole from mode functions that carry the
+   mass, renormalized against the instantaneous adiabatic vacuum. It must overlap the Born table at ℓ ≈ 4–8 and the
+   classical limit as the backreaction vanishes. It conserves energy, and reports the loop parameter.
+3. **Stage 3, the scan and a fit.** The fraction against ℓ (and R, L), and whether one function of one variable
+   replaces 2.7/ℓ and the gap prescriptions.
+
+**What it decides.** Nothing by itself. Whether the drain law changes, and so whether 02's and 02b's measurements at
+A ≤ 0.1 are superseded, is the user's ruling once stage 3 is in. 03 waits for it, at the user's word.
+
