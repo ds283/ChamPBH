@@ -63,47 +63,48 @@ def report(name, fn, X, F, p0, labels):
     return p
 
 
-rows = scan_rows()
+if __name__ == "__main__":
+    rows = scan_rows()
 
-one = [r for r in rows if r[3] is not None and r[5] and r[3] >= 1.0]
-X1 = (np.array([r[3] for r in one]), np.array([r[1] for r in one]))
-F1 = np.array([r[4] for r in one])
-print("# one-loop: columns ell, L")
-report(
-    "old form f = 1 - exp(-2.69/(ell + b)), b refitted (0.12 on the laboratory curve alone): params b",
-    lambda Z, b: 1 - np.exp(-2.69 / (Z[0] + b)),
-    X1,
-    F1,
-    (0.12,),
-    [r[0] for r in one],
-)
-report(
-    "f = 1 - exp(-2.69/(ell + b0 - c ln L)): params b0, c",
-    lambda Z, b0, c: 1 - np.exp(-2.69 / (Z[0] + b0 - c * np.log(Z[1]))),
-    X1,
-    F1,
-    (0.5, 0.3),
-    [r[0] for r in one],
-)
+    one = [r for r in rows if r[3] is not None and r[5] and r[3] >= 1.0]
+    X1 = (np.array([r[3] for r in one]), np.array([r[1] for r in one]))
+    F1 = np.array([r[4] for r in one])
+    print("# one-loop: columns ell, L")
+    report(
+        "old form f = 1 - exp(-2.69/(ell + b)), b refitted (0.12 on the laboratory curve alone): params b",
+        lambda Z, b: 1 - np.exp(-2.69 / (Z[0] + b)),
+        X1,
+        F1,
+        (0.12,),
+        [r[0] for r in one],
+    )
+    report(
+        "f = 1 - exp(-2.69/(ell + b0 - c ln L)): params b0, c",
+        lambda Z, b0, c: 1 - np.exp(-2.69 / (Z[0] + b0 - c * np.log(Z[1]))),
+        X1,
+        F1,
+        (0.5, 0.3),
+        [r[0] for r in one],
+    )
 
-gap = [
-    r
-    for r in rows
-    if r[3] is None
-    and r[2] > 0.3
-    and r[5]
-    and not r[0].startswith("curve")
-    and not (r[0] == "grid" and r[2] > 15.0)
-]
-X2 = (np.array([r[2] for r in gap]), np.array([r[1] for r in gap]))
-F2 = np.array([r[4] for r in gap])
-print("# gap: columns ln R, L")
-report(
-    "y = a (ln R - c)^p (1 + b ln L), f = 1 - exp(-y): params a, c, p, b",
-    lambda Z, a, c, p, b: 1
-    - np.exp(-a * np.clip(Z[0] - c, 0.0, None) ** p * (1 + b * np.log(Z[1]))),
-    X2,
-    F2,
-    (0.05, 1.0, 1.5, 0.5),
-    [r[0] for r in gap],
-)
+    gap = [
+        r
+        for r in rows
+        if r[3] is None
+        and r[2] > 0.3
+        and r[5]
+        and not r[0].startswith("curve")
+        and not (r[0] == "grid" and r[2] > 15.0)
+    ]
+    X2 = (np.array([r[2] for r in gap]), np.array([r[1] for r in gap]))
+    F2 = np.array([r[4] for r in gap])
+    print("# gap: columns ln R, L")
+    report(
+        "y = a (ln R - c)^p (1 + b ln L), f = 1 - exp(-y): params a, c, p, b",
+        lambda Z, a, c, p, b: 1
+        - np.exp(-a * np.clip(Z[0] - c, 0.0, None) ** p * (1 + b * np.log(Z[1]))),
+        X2,
+        F2,
+        (0.05, 1.0, 1.5, 0.5),
+        [r[0] for r in gap],
+    )

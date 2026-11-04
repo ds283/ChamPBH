@@ -28,8 +28,10 @@ kinetic energy is produced as quanta through the crossover from the one-loop reg
 | `stage2_scan.py` | the scan (brief §7): 2197 at A = 0.05 and 0.01, R-865, and an (L, ln R) grid |
 | `stage2_mscan.py` | stage 2 on the curves of other M (the β = 2 ladder near M_crit, and 10⁻³ M_P), against the measured law |
 | `fit_law.py` | the qualitative drain law fitted to every stage-2 point, in ℓ, L and R |
+| `plot_law.py` | `fig/drain_law.png`: the gap law against R at fixed L, and the one-loop law against ℓ beside 2.7/ℓ and 1 − exp(−2.7/ℓ), with stage 2's points |
 | `measured_law_map.py` | `cascade_map.py` with the drain replaced by stage 2's measured fraction, patched in-process (no production change) |
 | `out/` | every output, text only |
+| `fig/` | figures |
 
 Run from this directory with `../../../../venv/bin/python`, except `cascade_map.py`, which runs from the repository
 root with `PYTHONPATH=.`.
