@@ -20,6 +20,7 @@ kinetic energy is produced as quanta through the crossover from the one-loop reg
 | `born.py` | the Born-regime scheme of `wall_backreaction.tex` (`scripts/return_fraction.py`) generalized to any (L, R); the chain in these units; the production on a trajectory as the scheme gives it, by the Born formula, and with massive mode functions |
 | `stage1b_born.py` | the scheme with k_IR = √V''_max, self-consistent, at bounces of a mapped cascade |
 | `stage1b_kmin.py` | the massive-mode production against the lower end of its k grid |
+| `stage2-brief.md` | the handoff brief for stage 2, for a fresh session |
 | `out/` | every output, text only |
 
 Run from this directory with `../../../../venv/bin/python`, except `cascade_map.py`, which runs from the repository
