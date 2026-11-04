@@ -1,0 +1,565 @@
+the reproduction check (ruling 4), at two workers: 2 tasks -> /private/tmp/claude-35086/-Users-ds283-Documents-Code-ChamPBH/22b01212-c0c6-40a3-a03d-905bdf7b834c/scratchpad/agent-02b/repro.ids
+   P-2197-A1-zero
+   R-865-A0.1-zero
+
+## decide_wide.py step2a
+S2 from 02's zero tuning at A = 1 (zero: no one-loop candidate; edge: and no gap candidate)
+   P-2197       known=True S2(zero)=False S2(edge)=False   02's P-2197-A1-zero: success  integrations=1 one_loop=10 gap=0 classical=0 unassessed=0 wall=16.0
+   P-2188       known=True S2(zero)=False S2(edge)=False   02's P-2188-A1-zero: success  integrations=1 one_loop=15 gap=0 classical=0 unassessed=0 wall=16.0
+   W-2187       known=True S2(zero)=False S2(edge)=False   02's W-2187-A1-zero: success  integrations=1 one_loop=18 gap=0 classical=0 unassessed=0 wall=16.0
+   W-1631       known=True S2(zero)=False S2(edge)=False   02's W-1631-A1-zero: success  integrations=1 one_loop=18 gap=0 classical=0 unassessed=0 wall=16.0
+   W-2179       known=True S2(zero)=False S2(edge)=False   02's W-2179-A1-zero: success  integrations=1 one_loop=11 gap=0 classical=0 unassessed=0 wall=16.0
+   W-2078       known=True S2(zero)=False S2(edge)=False   02's W-2078-A1-zero: success  integrations=1 one_loop=19 gap=0 classical=0 unassessed=0 wall=16.0
+   W-2192       known=True S2(zero)=False S2(edge)=False   02's W-2192-A1-zero: success  integrations=1 one_loop=14 gap=0 classical=0 unassessed=0 wall=14.1
+   W-2209       known=True S2(zero)=False S2(edge)=False   02's W-2209-A1-zero: success  integrations=1 one_loop=18 gap=0 classical=0 unassessed=0 wall=14.0
+   W-2183       known=True S2(zero)=False S2(edge)=False   02's W-2183-A1-zero: success  integrations=1 one_loop=18 gap=0 classical=0 unassessed=0 wall=14.0
+   W-2172       known=True S2(zero)=False S2(edge)=False   02's W-2172-A1-zero: success  integrations=1 one_loop=9 gap=0 classical=0 unassessed=0 wall=14.0
+   W-2178       known=True S2(zero)=False S2(edge)=False   02's W-2178-A1-zero: success  integrations=1 one_loop=15 gap=0 classical=0 unassessed=0 wall=14.0
+   W-2185       known=True S2(zero)=False S2(edge)=False   02's W-2185-A1-zero: success  integrations=1 one_loop=19 gap=0 classical=0 unassessed=0 wall=14.0
+   R-632        known=True S2(zero)=False S2(edge)=False   02's R-632-A1-zero: success  integrations=1 one_loop=13 gap=0 classical=0 unassessed=0 wall=14.0
+   R-1193       known=True S2(zero)=False S2(edge)=False   02's R-1193-A1-zero: success  integrations=1 one_loop=19 gap=0 classical=0 unassessed=0 wall=16.0
+   R-865        known=True S2(zero)=False S2(edge)=False   02's R-865-A1-zero: success  integrations=1 one_loop=44 gap=0 classical=0 unassessed=0 wall=20.1
+   R-611        known=True S2(zero)=False S2(edge)=False   02's R-611-A1-zero: success  integrations=1 one_loop=64 gap=0 classical=0 unassessed=0 wall=22.1
+   B-2819       known=True S2(zero)=False S2(edge)=False   02's B-2819-A1-zero: success  integrations=1 one_loop=18 gap=0 classical=0 unassessed=0 wall=16.0
+   B-2496       known=True S2(zero)=False S2(edge)=False   02's B-2496-A1-zero: success  integrations=1 one_loop=36 gap=0 classical=0 unassessed=0 wall=18.0
+   B-2772       known=True S2(zero)=False S2(edge)=False   02's B-2772-A1-zero: success  integrations=1 one_loop=74 gap=0 classical=0 unassessed=0 wall=22.1
+   B-2821       known=True S2(zero)=False S2(edge)=False   02's B-2821-A1-zero: success  integrations=1 one_loop=18 gap=0 classical=0 unassessed=0 wall=14.0
+   B-2498       known=True S2(zero)=False S2(edge)=False   02's B-2498-A1-zero: success  integrations=1 one_loop=43 gap=0 classical=0 unassessed=0 wall=18.1
+   B-2774       known=True S2(zero)=False S2(edge)=False   02's B-2774-A1-zero: success  integrations=1 one_loop=62 gap=0 classical=0 unassessed=0 wall=20.1
+   L-M5e-20     known=True S2(zero)=False S2(edge)=False   02's L-M5e-20-A1-zero: success  integrations=1 one_loop=14 gap=0 classical=0 unassessed=0 wall=14.0
+   L-M8e-18     known=True S2(zero)=False S2(edge)=False   02's L-M8e-18-A1-zero: success  integrations=1 one_loop=3 gap=158 classical=67 unassessed=0 wall=38.1
+   L-M1e-16     known=True S2(zero)=False S2(edge)=False   02's L-M1e-16-A1-zero: success  integrations=1 one_loop=1 gap=9 classical=54 unassessed=0 wall=20.1
+   L-M5e-16     known=True S2(zero)=True S2(edge)=False   02's L-M5e-16-A1-zero: success  integrations=1 one_loop=0 gap=1 classical=27 unassessed=0 wall=16.0
+   L-M4e-15     known=True S2(zero)=True S2(edge)=True   02's L-M4e-15-A1-zero: success  integrations=1 one_loop=0 gap=0 classical=28 unassessed=0 wall=16.0
+   C-3016       known=True S2(zero)=True S2(edge)=True   02's C-3016-A1-zero: success  integrations=1 one_loop=0 gap=0 classical=330 unassessed=0 wall=50.2
+   C-3233       known=True S2(zero)=True S2(edge)=True   02's C-3233-A1-zero: success  integrations=3 one_loop=0 gap=0 classical=903 unassessed=0 wall=86.3
+   C-3873       known=True S2(zero)=True S2(edge)=True   02's C-3873-A1-zero: success  integrations=16 one_loop=0 gap=0 classical=39825 unassessed=0 wall=1832.3
+step 2a (zero, A = 10, 5, 2, 1.5, 0.5, every history less S2's): 125 tasks -> /private/tmp/claude-35086/-Users-ds283-Documents-Code-ChamPBH/22b01212-c0c6-40a3-a03d-905bdf7b834c/scratchpad/agent-02b/step2a.ids
+   P-2197-A10-zero
+   P-2188-A10-zero
+   W-2187-A10-zero
+   W-1631-A10-zero
+   W-2179-A10-zero
+   W-2078-A10-zero
+   W-2192-A10-zero
+   W-2209-A10-zero
+   W-2183-A10-zero
+   W-2172-A10-zero
+   W-2178-A10-zero
+   W-2185-A10-zero
+   R-632-A10-zero
+   R-1193-A10-zero
+   R-865-A10-zero
+   R-611-A10-zero
+   B-2819-A10-zero
+   B-2496-A10-zero
+   B-2772-A10-zero
+   B-2821-A10-zero
+   B-2498-A10-zero
+   B-2774-A10-zero
+   L-M5e-20-A10-zero
+   L-M8e-18-A10-zero
+   L-M1e-16-A10-zero
+   P-2197-A5-zero
+   P-2188-A5-zero
+   W-2187-A5-zero
+   W-1631-A5-zero
+   W-2179-A5-zero
+   W-2078-A5-zero
+   W-2192-A5-zero
+   W-2209-A5-zero
+   W-2183-A5-zero
+   W-2172-A5-zero
+   W-2178-A5-zero
+   W-2185-A5-zero
+   R-632-A5-zero
+   R-1193-A5-zero
+   R-865-A5-zero
+   R-611-A5-zero
+   B-2819-A5-zero
+   B-2496-A5-zero
+   B-2772-A5-zero
+   B-2821-A5-zero
+   B-2498-A5-zero
+   B-2774-A5-zero
+   L-M5e-20-A5-zero
+   L-M8e-18-A5-zero
+   L-M1e-16-A5-zero
+   P-2197-A2-zero
+   P-2188-A2-zero
+   W-2187-A2-zero
+   W-1631-A2-zero
+   W-2179-A2-zero
+   W-2078-A2-zero
+   W-2192-A2-zero
+   W-2209-A2-zero
+   W-2183-A2-zero
+   W-2172-A2-zero
+   W-2178-A2-zero
+   W-2185-A2-zero
+   R-632-A2-zero
+   R-1193-A2-zero
+   R-865-A2-zero
+   R-611-A2-zero
+   B-2819-A2-zero
+   B-2496-A2-zero
+   B-2772-A2-zero
+   B-2821-A2-zero
+   B-2498-A2-zero
+   B-2774-A2-zero
+   L-M5e-20-A2-zero
+   L-M8e-18-A2-zero
+   L-M1e-16-A2-zero
+   P-2197-A1.5-zero
+   P-2188-A1.5-zero
+   W-2187-A1.5-zero
+   W-1631-A1.5-zero
+   W-2179-A1.5-zero
+   W-2078-A1.5-zero
+   W-2192-A1.5-zero
+   W-2209-A1.5-zero
+   W-2183-A1.5-zero
+   W-2172-A1.5-zero
+   W-2178-A1.5-zero
+   W-2185-A1.5-zero
+   R-632-A1.5-zero
+   R-1193-A1.5-zero
+   R-865-A1.5-zero
+   R-611-A1.5-zero
+   B-2819-A1.5-zero
+   B-2496-A1.5-zero
+   B-2772-A1.5-zero
+   B-2821-A1.5-zero
+   B-2498-A1.5-zero
+   B-2774-A1.5-zero
+   L-M5e-20-A1.5-zero
+   L-M8e-18-A1.5-zero
+   L-M1e-16-A1.5-zero
+   P-2197-A0.5-zero
+   P-2188-A0.5-zero
+   W-2187-A0.5-zero
+   W-1631-A0.5-zero
+   W-2179-A0.5-zero
+   W-2078-A0.5-zero
+   W-2192-A0.5-zero
+   W-2209-A0.5-zero
+   W-2183-A0.5-zero
+   W-2172-A0.5-zero
+   W-2178-A0.5-zero
+   W-2185-A0.5-zero
+   R-632-A0.5-zero
+   R-1193-A0.5-zero
+   R-865-A0.5-zero
+   R-611-A0.5-zero
+   B-2819-A0.5-zero
+   B-2496-A0.5-zero
+   B-2772-A0.5-zero
+   B-2821-A0.5-zero
+   B-2498-A0.5-zero
+   B-2774-A0.5-zero
+   L-M5e-20-A0.5-zero
+   L-M8e-18-A0.5-zero
+   L-M1e-16-A0.5-zero
+   derived by S2 (equal to 02's A = 1), not run: 25: ['L-M5e-16-A10-zero', 'L-M4e-15-A10-zero', 'C-3016-A10-zero', 'C-3233-A10-zero', 'C-3873-A10-zero', 'L-M5e-16-A5-zero', 'L-M4e-15-A5-zero', 'C-3016-A5-zero', 'C-3233-A5-zero', 'C-3873-A5-zero', 'L-M5e-16-A2-zero', 'L-M4e-15-A2-zero', 'C-3016-A2-zero', 'C-3233-A2-zero', 'C-3873-A2-zero', 'L-M5e-16-A1.5-zero', 'L-M4e-15-A1.5-zero', 'C-3016-A1.5-zero', 'C-3233-A1.5-zero', 'C-3873-A1.5-zero', 'L-M5e-16-A0.5-zero', 'L-M4e-15-A0.5-zero', 'C-3016-A0.5-zero', 'C-3233-A0.5-zero', 'C-3873-A0.5-zero']
+
+## decide_wide.py step2b
+step 2b: the zero passes at A = 10, 5, 2, 1.5, 0.5
+   P-2197-A10-zero              success  integrations=1 one_loop=6 gap=0 classical=0 unassessed=0 wall=14.0
+   P-2188-A10-zero              success  integrations=1 one_loop=3 gap=0 classical=0 unassessed=0 wall=14.0
+   W-2187-A10-zero              success  integrations=1 one_loop=4 gap=0 classical=0 unassessed=0 wall=14.0
+   W-1631-A10-zero              success  integrations=1 one_loop=4 gap=0 classical=0 unassessed=0 wall=14.0
+   W-2179-A10-zero              success  integrations=1 one_loop=5 gap=0 classical=0 unassessed=0 wall=14.0
+   W-2078-A10-zero              success  integrations=1 one_loop=6 gap=0 classical=0 unassessed=0 wall=14.0
+   W-2192-A10-zero              success  integrations=1 one_loop=5 gap=0 classical=0 unassessed=0 wall=14.0
+   W-2209-A10-zero              success  integrations=1 one_loop=6 gap=0 classical=0 unassessed=0 wall=14.0
+   W-2183-A10-zero              success  integrations=1 one_loop=5 gap=0 classical=0 unassessed=0 wall=14.0
+   W-2172-A10-zero              success  integrations=1 one_loop=5 gap=0 classical=0 unassessed=0 wall=14.0
+   W-2178-A10-zero              success  integrations=1 one_loop=5 gap=0 classical=0 unassessed=0 wall=14.0
+   W-2185-A10-zero              success  integrations=1 one_loop=6 gap=0 classical=0 unassessed=0 wall=14.0
+   R-632-A10-zero               success  integrations=1 one_loop=4 gap=0 classical=0 unassessed=0 wall=16.0
+   R-1193-A10-zero              success  integrations=1 one_loop=6 gap=0 classical=0 unassessed=0 wall=16.0
+   R-865-A10-zero               success  integrations=1 one_loop=7 gap=0 classical=0 unassessed=0 wall=16.0
+   R-611-A10-zero               success  integrations=1 one_loop=8 gap=0 classical=0 unassessed=0 wall=18.1
+   B-2819-A10-zero              success  integrations=1 one_loop=8 gap=0 classical=0 unassessed=0 wall=16.0
+   B-2496-A10-zero              success  integrations=1 one_loop=9 gap=0 classical=0 unassessed=0 wall=16.0
+   B-2772-A10-zero              success  integrations=1 one_loop=9 gap=0 classical=0 unassessed=0 wall=16.1
+   B-2821-A10-zero              success  integrations=1 one_loop=6 gap=0 classical=0 unassessed=0 wall=14.0
+   B-2498-A10-zero              success  integrations=1 one_loop=6 gap=0 classical=0 unassessed=0 wall=14.0
+   B-2774-A10-zero              success  integrations=1 one_loop=7 gap=0 classical=0 unassessed=0 wall=16.0
+   L-M5e-20-A10-zero            success  integrations=1 one_loop=4 gap=0 classical=0 unassessed=0 wall=14.0
+   L-M8e-18-A10-zero            success  integrations=1 one_loop=3 gap=1 classical=0 unassessed=0 wall=14.0
+   L-M1e-16-A10-zero            success  integrations=1 one_loop=1 gap=9 classical=54 unassessed=0 wall=22.1
+   L-M5e-16-A10-zero            S2 = 02's L-M5e-16-A1-zero
+   L-M4e-15-A10-zero            S2 = 02's L-M4e-15-A1-zero
+   C-3016-A10-zero              S2 = 02's C-3016-A1-zero
+   C-3233-A10-zero              S2 = 02's C-3233-A1-zero
+   C-3873-A10-zero              S2 = 02's C-3873-A1-zero
+   P-2197-A5-zero               success  integrations=1 one_loop=9 gap=0 classical=0 unassessed=0 wall=14.0
+   P-2188-A5-zero               success  integrations=1 one_loop=6 gap=0 classical=0 unassessed=0 wall=14.0
+   W-2187-A5-zero               success  integrations=1 one_loop=9 gap=0 classical=0 unassessed=0 wall=14.0
+   W-1631-A5-zero               success  integrations=1 one_loop=7 gap=0 classical=0 unassessed=0 wall=14.0
+   W-2179-A5-zero               success  integrations=1 one_loop=8 gap=0 classical=0 unassessed=0 wall=14.0
+   W-2078-A5-zero               success  integrations=1 one_loop=11 gap=0 classical=0 unassessed=0 wall=14.0
+   W-2192-A5-zero               success  integrations=1 one_loop=8 gap=0 classical=0 unassessed=0 wall=14.0
+   W-2209-A5-zero               success  integrations=1 one_loop=7 gap=0 classical=0 unassessed=0 wall=14.1
+   W-2183-A5-zero               success  integrations=1 one_loop=10 gap=0 classical=0 unassessed=0 wall=14.1
+   W-2172-A5-zero               success  integrations=1 one_loop=10 gap=0 classical=0 unassessed=0 wall=14.1
+   W-2178-A5-zero               success  integrations=1 one_loop=8 gap=0 classical=0 unassessed=0 wall=14.1
+   W-2185-A5-zero               success  integrations=1 one_loop=11 gap=0 classical=0 unassessed=0 wall=14.1
+   R-632-A5-zero                success  integrations=1 one_loop=4 gap=0 classical=0 unassessed=0 wall=12.0
+   R-1193-A5-zero               success  integrations=1 one_loop=10 gap=0 classical=0 unassessed=0 wall=14.0
+   R-865-A5-zero                success  integrations=1 one_loop=17 gap=0 classical=0 unassessed=0 wall=14.0
+   R-611-A5-zero                success  integrations=1 one_loop=18 gap=0 classical=0 unassessed=0 wall=16.1
+   B-2819-A5-zero               success  integrations=1 one_loop=12 gap=0 classical=0 unassessed=0 wall=14.1
+   B-2496-A5-zero               success  integrations=1 one_loop=19 gap=0 classical=0 unassessed=0 wall=14.1
+   B-2772-A5-zero               success  integrations=1 one_loop=21 gap=0 classical=0 unassessed=0 wall=14.1
+   B-2821-A5-zero               success  integrations=1 one_loop=10 gap=0 classical=0 unassessed=0 wall=14.1
+   B-2498-A5-zero               success  integrations=1 one_loop=17 gap=0 classical=0 unassessed=0 wall=14.0
+   B-2774-A5-zero               success  integrations=1 one_loop=18 gap=0 classical=0 unassessed=0 wall=14.0
+   L-M5e-20-A5-zero             success  integrations=1 one_loop=4 gap=0 classical=0 unassessed=0 wall=12.1
+   L-M8e-18-A5-zero             success  integrations=1 one_loop=3 gap=1 classical=0 unassessed=0 wall=12.1
+   L-M1e-16-A5-zero             success  integrations=1 one_loop=1 gap=9 classical=54 unassessed=0 wall=20.1
+   L-M5e-16-A5-zero             S2 = 02's L-M5e-16-A1-zero
+   L-M4e-15-A5-zero             S2 = 02's L-M4e-15-A1-zero
+   C-3016-A5-zero               S2 = 02's C-3016-A1-zero
+   C-3233-A5-zero               S2 = 02's C-3233-A1-zero
+   C-3873-A5-zero               S2 = 02's C-3873-A1-zero
+   P-2197-A2-zero               success  integrations=1 one_loop=7 gap=0 classical=0 unassessed=0 wall=12.0
+   P-2188-A2-zero               success  integrations=1 one_loop=3 gap=0 classical=0 unassessed=0 wall=12.0
+   W-2187-A2-zero               success  integrations=1 one_loop=8 gap=0 classical=0 unassessed=0 wall=12.0
+   W-1631-A2-zero               success  integrations=1 one_loop=10 gap=0 classical=0 unassessed=0 wall=12.0
+   W-2179-A2-zero               success  integrations=1 one_loop=7 gap=0 classical=0 unassessed=0 wall=12.0
+   W-2078-A2-zero               success  integrations=1 one_loop=12 gap=0 classical=0 unassessed=0 wall=12.0
+   W-2192-A2-zero               success  integrations=1 one_loop=11 gap=0 classical=0 unassessed=0 wall=12.0
+   W-2209-A2-zero               success  integrations=1 one_loop=11 gap=0 classical=0 unassessed=0 wall=12.0
+   W-2183-A2-zero               success  integrations=1 one_loop=10 gap=0 classical=0 unassessed=0 wall=12.0
+   W-2172-A2-zero               success  integrations=1 one_loop=10 gap=0 classical=0 unassessed=0 wall=12.0
+   W-2178-A2-zero               success  integrations=1 one_loop=11 gap=0 classical=0 unassessed=0 wall=12.0
+   W-2185-A2-zero               success  integrations=1 one_loop=12 gap=0 classical=0 unassessed=0 wall=12.0
+   R-632-A2-zero                success  integrations=1 one_loop=7 gap=0 classical=0 unassessed=0 wall=12.0
+   R-1193-A2-zero               success  integrations=1 one_loop=12 gap=0 classical=0 unassessed=0 wall=12.0
+   R-865-A2-zero                success  integrations=1 one_loop=27 gap=0 classical=0 unassessed=0 wall=16.1
+   R-611-A2-zero                success  integrations=1 one_loop=38 gap=0 classical=0 unassessed=0 wall=18.1
+   B-2819-A2-zero               success  integrations=1 one_loop=18 gap=0 classical=0 unassessed=0 wall=14.0
+   B-2496-A2-zero               success  integrations=1 one_loop=30 gap=0 classical=0 unassessed=0 wall=16.1
+   B-2772-A2-zero               success  integrations=1 one_loop=38 gap=0 classical=0 unassessed=0 wall=18.1
+   B-2821-A2-zero               success  integrations=1 one_loop=17 gap=0 classical=0 unassessed=0 wall=14.0
+   B-2498-A2-zero               success  integrations=1 one_loop=20 gap=0 classical=0 unassessed=0 wall=14.0
+   B-2774-A2-zero               success  integrations=1 one_loop=38 gap=0 classical=0 unassessed=0 wall=16.1
+   L-M5e-20-A2-zero             success  integrations=1 one_loop=8 gap=0 classical=0 unassessed=0 wall=12.0
+   L-M8e-18-A2-zero             success  integrations=1 one_loop=3 gap=1 classical=0 unassessed=0 wall=12.0
+   L-M1e-16-A2-zero             success  integrations=1 one_loop=1 gap=9 classical=54 unassessed=0 wall=20.1
+   L-M5e-16-A2-zero             S2 = 02's L-M5e-16-A1-zero
+   L-M4e-15-A2-zero             S2 = 02's L-M4e-15-A1-zero
+   C-3016-A2-zero               S2 = 02's C-3016-A1-zero
+   C-3233-A2-zero               S2 = 02's C-3233-A1-zero
+   C-3873-A2-zero               S2 = 02's C-3873-A1-zero
+   P-2197-A1.5-zero             success  integrations=1 one_loop=14 gap=0 classical=0 unassessed=0 wall=14.0
+   P-2188-A1.5-zero             success  integrations=1 one_loop=10 gap=0 classical=0 unassessed=0 wall=12.0
+   W-2187-A1.5-zero             success  integrations=1 one_loop=12 gap=0 classical=0 unassessed=0 wall=12.0
+   W-1631-A1.5-zero             success  integrations=1 one_loop=13 gap=0 classical=0 unassessed=0 wall=12.0
+   W-2179-A1.5-zero             success  integrations=1 one_loop=13 gap=0 classical=0 unassessed=0 wall=12.0
+   W-2078-A1.5-zero             success  integrations=1 one_loop=5 gap=0 classical=0 unassessed=0 wall=12.0
+   W-2192-A1.5-zero             success  integrations=1 one_loop=13 gap=0 classical=0 unassessed=0 wall=12.0
+   W-2209-A1.5-zero             success  integrations=1 one_loop=11 gap=0 classical=0 unassessed=0 wall=12.0
+   W-2183-A1.5-zero             success  integrations=1 one_loop=13 gap=0 classical=0 unassessed=0 wall=12.0
+   W-2172-A1.5-zero             success  integrations=1 one_loop=13 gap=0 classical=0 unassessed=0 wall=12.0
+   W-2178-A1.5-zero             success  integrations=1 one_loop=13 gap=0 classical=0 unassessed=0 wall=12.0
+   W-2185-A1.5-zero             success  integrations=1 one_loop=11 gap=0 classical=0 unassessed=0 wall=12.0
+   R-632-A1.5-zero              success  integrations=1 one_loop=9 gap=0 classical=0 unassessed=0 wall=12.0
+   R-1193-A1.5-zero             success  integrations=1 one_loop=13 gap=0 classical=0 unassessed=0 wall=12.0
+   R-865-A1.5-zero              success  integrations=1 one_loop=35 gap=0 classical=0 unassessed=0 wall=16.1
+   R-611-A1.5-zero              success  integrations=1 one_loop=42 gap=0 classical=0 unassessed=0 wall=18.1
+   B-2819-A1.5-zero             success  integrations=1 one_loop=11 gap=0 classical=0 unassessed=0 wall=14.0
+   B-2496-A1.5-zero             success  integrations=1 one_loop=30 gap=0 classical=0 unassessed=0 wall=16.1
+   B-2772-A1.5-zero             success  integrations=1 one_loop=49 gap=0 classical=0 unassessed=0 wall=20.1
+   B-2821-A1.5-zero             success  integrations=1 one_loop=13 gap=0 classical=0 unassessed=0 wall=14.0
+   B-2498-A1.5-zero             success  integrations=1 one_loop=33 gap=0 classical=0 unassessed=0 wall=18.1
+   B-2774-A1.5-zero             success  integrations=1 one_loop=40 gap=0 classical=0 unassessed=0 wall=18.1
+   L-M5e-20-A1.5-zero           success  integrations=1 one_loop=11 gap=0 classical=0 unassessed=0 wall=14.0
+   L-M8e-18-A1.5-zero           success  integrations=1 one_loop=3 gap=1 classical=0 unassessed=0 wall=14.1
+   L-M1e-16-A1.5-zero           success  integrations=1 one_loop=1 gap=9 classical=54 unassessed=0 wall=20.1
+   L-M5e-16-A1.5-zero           S2 = 02's L-M5e-16-A1-zero
+   L-M4e-15-A1.5-zero           S2 = 02's L-M4e-15-A1-zero
+   C-3016-A1.5-zero             S2 = 02's C-3016-A1-zero
+   C-3233-A1.5-zero             S2 = 02's C-3233-A1-zero
+   C-3873-A1.5-zero             S2 = 02's C-3873-A1-zero
+   P-2197-A0.5-zero             success  integrations=1 one_loop=32 gap=0 classical=0 unassessed=0 wall=16.1
+   P-2188-A0.5-zero             success  integrations=1 one_loop=28 gap=0 classical=0 unassessed=0 wall=16.1
+   W-2187-A0.5-zero             success  integrations=1 one_loop=31 gap=0 classical=0 unassessed=0 wall=16.1
+   W-1631-A0.5-zero             success  integrations=1 one_loop=31 gap=0 classical=0 unassessed=0 wall=16.1
+   W-2179-A0.5-zero             success  integrations=1 one_loop=30 gap=0 classical=0 unassessed=0 wall=14.0
+   W-2078-A0.5-zero             success  integrations=1 one_loop=32 gap=0 classical=0 unassessed=0 wall=14.0
+   W-2192-A0.5-zero             success  integrations=1 one_loop=28 gap=0 classical=0 unassessed=0 wall=14.0
+   W-2209-A0.5-zero             success  integrations=1 one_loop=31 gap=0 classical=0 unassessed=0 wall=14.0
+   W-2183-A0.5-zero             success  integrations=1 one_loop=29 gap=0 classical=0 unassessed=0 wall=14.0
+   W-2172-A0.5-zero             success  integrations=1 one_loop=31 gap=0 classical=0 unassessed=0 wall=14.0
+   W-2178-A0.5-zero             success  integrations=1 one_loop=27 gap=0 classical=0 unassessed=0 wall=14.0
+   W-2185-A0.5-zero             success  integrations=1 one_loop=32 gap=0 classical=0 unassessed=0 wall=14.0
+   R-632-A0.5-zero              success  integrations=1 one_loop=20 gap=1 classical=0 unassessed=0 wall=14.0
+   R-1193-A0.5-zero             success  integrations=1 one_loop=27 gap=0 classical=0 unassessed=0 wall=14.0
+   R-865-A0.5-zero              success  integrations=1 one_loop=33 gap=0 classical=0 unassessed=0 wall=16.1
+   R-611-A0.5-zero              success  integrations=1 one_loop=122 gap=0 classical=0 unassessed=0 wall=26.1
+   B-2819-A0.5-zero             success  integrations=1 one_loop=35 gap=0 classical=0 unassessed=0 wall=16.0
+   B-2496-A0.5-zero             success  integrations=1 one_loop=35 gap=0 classical=0 unassessed=0 wall=16.0
+   B-2772-A0.5-zero             success  integrations=1 one_loop=140 gap=0 classical=0 unassessed=0 wall=30.1
+   B-2821-A0.5-zero             success  integrations=1 one_loop=30 gap=0 classical=0 unassessed=0 wall=14.0
+   B-2498-A0.5-zero             success  integrations=1 one_loop=24 gap=0 classical=0 unassessed=0 wall=16.1
+   B-2774-A0.5-zero             success  integrations=1 one_loop=119 gap=0 classical=0 unassessed=0 wall=26.1
+   L-M5e-20-A0.5-zero           success  integrations=1 one_loop=17 gap=0 classical=0 unassessed=0 wall=14.0
+   L-M8e-18-A0.5-zero           success  integrations=1 one_loop=5 gap=71 classical=103 unassessed=0 wall=32.1
+   L-M1e-16-A0.5-zero           success  integrations=1 one_loop=1 gap=7 classical=115 unassessed=0 wall=28.1
+   L-M5e-16-A0.5-zero           S2 = 02's L-M5e-16-A1-zero
+   L-M4e-15-A0.5-zero           S2 = 02's L-M4e-15-A1-zero
+   C-3016-A0.5-zero             S2 = 02's C-3016-A1-zero
+   C-3233-A0.5-zero             S2 = 02's C-3233-A1-zero
+   C-3873-A0.5-zero             S2 = 02's C-3873-A1-zero
+S1 at A = 10, 5, 2, 1.5, 0.5 (the zero tuning at that A, run or S2's, met no gap candidate)
+   P-2197-A10-edge              S1=True
+   P-2188-A10-edge              S1=True
+   W-2187-A10-edge              S1=True
+   W-1631-A10-edge              S1=True
+   W-2179-A10-edge              S1=True
+   W-2078-A10-edge              S1=True
+   W-2192-A10-edge              S1=True
+   W-2209-A10-edge              S1=True
+   W-2183-A10-edge              S1=True
+   W-2172-A10-edge              S1=True
+   W-2178-A10-edge              S1=True
+   W-2185-A10-edge              S1=True
+   R-632-A10-edge               S1=True
+   R-1193-A10-edge              S1=True
+   R-865-A10-edge               S1=True
+   R-611-A10-edge               S1=True
+   B-2819-A10-edge              S1=True
+   B-2496-A10-edge              S1=True
+   B-2772-A10-edge              S1=True
+   B-2821-A10-edge              S1=True
+   B-2498-A10-edge              S1=True
+   B-2774-A10-edge              S1=True
+   L-M5e-20-A10-edge            S1=True
+   L-M8e-18-A10-edge            S1=False
+   L-M1e-16-A10-edge            S1=False
+   L-M5e-16-A10-edge            S1=False
+   L-M4e-15-A10-edge            S1=True
+   C-3016-A10-edge              S1=True
+   C-3233-A10-edge              S1=True
+   C-3873-A10-edge              S1=True
+   P-2197-A5-edge               S1=True
+   P-2188-A5-edge               S1=True
+   W-2187-A5-edge               S1=True
+   W-1631-A5-edge               S1=True
+   W-2179-A5-edge               S1=True
+   W-2078-A5-edge               S1=True
+   W-2192-A5-edge               S1=True
+   W-2209-A5-edge               S1=True
+   W-2183-A5-edge               S1=True
+   W-2172-A5-edge               S1=True
+   W-2178-A5-edge               S1=True
+   W-2185-A5-edge               S1=True
+   R-632-A5-edge                S1=True
+   R-1193-A5-edge               S1=True
+   R-865-A5-edge                S1=True
+   R-611-A5-edge                S1=True
+   B-2819-A5-edge               S1=True
+   B-2496-A5-edge               S1=True
+   B-2772-A5-edge               S1=True
+   B-2821-A5-edge               S1=True
+   B-2498-A5-edge               S1=True
+   B-2774-A5-edge               S1=True
+   L-M5e-20-A5-edge             S1=True
+   L-M8e-18-A5-edge             S1=False
+   L-M1e-16-A5-edge             S1=False
+   L-M5e-16-A5-edge             S1=False
+   L-M4e-15-A5-edge             S1=True
+   C-3016-A5-edge               S1=True
+   C-3233-A5-edge               S1=True
+   C-3873-A5-edge               S1=True
+   P-2197-A2-edge               S1=True
+   P-2188-A2-edge               S1=True
+   W-2187-A2-edge               S1=True
+   W-1631-A2-edge               S1=True
+   W-2179-A2-edge               S1=True
+   W-2078-A2-edge               S1=True
+   W-2192-A2-edge               S1=True
+   W-2209-A2-edge               S1=True
+   W-2183-A2-edge               S1=True
+   W-2172-A2-edge               S1=True
+   W-2178-A2-edge               S1=True
+   W-2185-A2-edge               S1=True
+   R-632-A2-edge                S1=True
+   R-1193-A2-edge               S1=True
+   R-865-A2-edge                S1=True
+   R-611-A2-edge                S1=True
+   B-2819-A2-edge               S1=True
+   B-2496-A2-edge               S1=True
+   B-2772-A2-edge               S1=True
+   B-2821-A2-edge               S1=True
+   B-2498-A2-edge               S1=True
+   B-2774-A2-edge               S1=True
+   L-M5e-20-A2-edge             S1=True
+   L-M8e-18-A2-edge             S1=False
+   L-M1e-16-A2-edge             S1=False
+   L-M5e-16-A2-edge             S1=False
+   L-M4e-15-A2-edge             S1=True
+   C-3016-A2-edge               S1=True
+   C-3233-A2-edge               S1=True
+   C-3873-A2-edge               S1=True
+   P-2197-A1.5-edge             S1=True
+   P-2188-A1.5-edge             S1=True
+   W-2187-A1.5-edge             S1=True
+   W-1631-A1.5-edge             S1=True
+   W-2179-A1.5-edge             S1=True
+   W-2078-A1.5-edge             S1=True
+   W-2192-A1.5-edge             S1=True
+   W-2209-A1.5-edge             S1=True
+   W-2183-A1.5-edge             S1=True
+   W-2172-A1.5-edge             S1=True
+   W-2178-A1.5-edge             S1=True
+   W-2185-A1.5-edge             S1=True
+   R-632-A1.5-edge              S1=True
+   R-1193-A1.5-edge             S1=True
+   R-865-A1.5-edge              S1=True
+   R-611-A1.5-edge              S1=True
+   B-2819-A1.5-edge             S1=True
+   B-2496-A1.5-edge             S1=True
+   B-2772-A1.5-edge             S1=True
+   B-2821-A1.5-edge             S1=True
+   B-2498-A1.5-edge             S1=True
+   B-2774-A1.5-edge             S1=True
+   L-M5e-20-A1.5-edge           S1=True
+   L-M8e-18-A1.5-edge           S1=False
+   L-M1e-16-A1.5-edge           S1=False
+   L-M5e-16-A1.5-edge           S1=False
+   L-M4e-15-A1.5-edge           S1=True
+   C-3016-A1.5-edge             S1=True
+   C-3233-A1.5-edge             S1=True
+   C-3873-A1.5-edge             S1=True
+   P-2197-A0.5-edge             S1=True
+   P-2188-A0.5-edge             S1=True
+   W-2187-A0.5-edge             S1=True
+   W-1631-A0.5-edge             S1=True
+   W-2179-A0.5-edge             S1=True
+   W-2078-A0.5-edge             S1=True
+   W-2192-A0.5-edge             S1=True
+   W-2209-A0.5-edge             S1=True
+   W-2183-A0.5-edge             S1=True
+   W-2172-A0.5-edge             S1=True
+   W-2178-A0.5-edge             S1=True
+   W-2185-A0.5-edge             S1=True
+   R-632-A0.5-edge              S1=False
+   R-1193-A0.5-edge             S1=True
+   R-865-A0.5-edge              S1=True
+   R-611-A0.5-edge              S1=True
+   B-2819-A0.5-edge             S1=True
+   B-2496-A0.5-edge             S1=True
+   B-2772-A0.5-edge             S1=True
+   B-2821-A0.5-edge             S1=True
+   B-2498-A0.5-edge             S1=True
+   B-2774-A0.5-edge             S1=True
+   L-M5e-20-A0.5-edge           S1=True
+   L-M8e-18-A0.5-edge           S1=False
+   L-M1e-16-A0.5-edge           S1=False
+   L-M5e-16-A0.5-edge           S1=False
+   L-M4e-15-A0.5-edge           S1=True
+   C-3016-A0.5-edge             S1=True
+   C-3233-A0.5-edge             S1=True
+   C-3873-A0.5-edge             S1=True
+step 2b (edge runs at A = 10, 5, 2, 1.5, 0.5 that S1 does not cover) at 6 workers (ruling 5: largest peak RSS so far 0.254 GiB): 16 tasks -> /private/tmp/claude-35086/-Users-ds283-Documents-Code-ChamPBH/22b01212-c0c6-40a3-a03d-905bdf7b834c/scratchpad/agent-02b/step2b.ids
+   L-M8e-18-A10-edge
+   L-M1e-16-A10-edge
+   L-M5e-16-A10-edge
+   L-M8e-18-A5-edge
+   L-M1e-16-A5-edge
+   L-M5e-16-A5-edge
+   L-M8e-18-A2-edge
+   L-M1e-16-A2-edge
+   L-M5e-16-A2-edge
+   L-M8e-18-A1.5-edge
+   L-M1e-16-A1.5-edge
+   L-M5e-16-A1.5-edge
+   R-632-A0.5-edge
+   L-M8e-18-A0.5-edge
+   L-M1e-16-A0.5-edge
+   L-M5e-16-A0.5-edge
+
+## decide_wide.py step3a
+step 3a (zero, A = 0.05, P's two), at two workers: 2 tasks -> /private/tmp/claude-35086/-Users-ds283-Documents-Code-ChamPBH/22b01212-c0c6-40a3-a03d-905bdf7b834c/scratchpad/agent-02b/step3a.ids
+   P-2197-A0.05-zero
+   P-2188-A0.05-zero
+
+## decide_wide.py project
+ruling 5: the projection after P's two at A = 0.05
+   P-2197-A0.05-zero            success  integrations=1 one_loop=134 gap=0 classical=0 unassessed=0 wall=26.1 peak_rss=0.239 GiB
+   P-2188-A0.05-zero            success  integrations=1 one_loop=138 gap=0 classical=0 unassessed=0 wall=26.1 peak_rss=0.241 GiB
+   workers = min(6, floor(8 GiB / 0.254 GiB)), the largest peak RSS seen so far in 02b, = 6
+   tasks counted: 23 zero (W, R, B, L less S2's) + 26 edge (every history S2 does not spare under edge) = 49, each at the mean wall of P's two, 26.1 s
+   edge histories counted: ['P-2197', 'P-2188', 'W-2187', 'W-1631', 'W-2179', 'W-2078', 'W-2192', 'W-2209', 'W-2183', 'W-2172', 'W-2178', 'W-2185', 'R-632', 'R-1193', 'R-865', 'R-611', 'B-2819', 'B-2496', 'B-2772', 'B-2821', 'B-2498', 'B-2774', 'L-M5e-20', 'L-M8e-18', 'L-M1e-16', 'L-M5e-16']
+   projection = 49 x 26.1 s / 6 = 213 s = 0.06 h (limit 3 h, worker floor 3)
+step 3b (zero, A = 0.05, W R B L, less S2's) at 6 workers: 23 tasks -> /private/tmp/claude-35086/-Users-ds283-Documents-Code-ChamPBH/22b01212-c0c6-40a3-a03d-905bdf7b834c/scratchpad/agent-02b/step3b.ids
+   W-2187-A0.05-zero
+   W-1631-A0.05-zero
+   W-2179-A0.05-zero
+   W-2078-A0.05-zero
+   W-2192-A0.05-zero
+   W-2209-A0.05-zero
+   W-2183-A0.05-zero
+   W-2172-A0.05-zero
+   W-2178-A0.05-zero
+   W-2185-A0.05-zero
+   R-632-A0.05-zero
+   R-1193-A0.05-zero
+   R-865-A0.05-zero
+   R-611-A0.05-zero
+   B-2819-A0.05-zero
+   B-2496-A0.05-zero
+   B-2772-A0.05-zero
+   B-2821-A0.05-zero
+   B-2498-A0.05-zero
+   B-2774-A0.05-zero
+   L-M5e-20-A0.05-zero
+   L-M8e-18-A0.05-zero
+   L-M1e-16-A0.05-zero
+   derived by S2 (equal to 02's A = 1), not run: ['L-M5e-16-A0.05-zero', 'L-M4e-15-A0.05-zero', 'C-3016-A0.05-zero', 'C-3233-A0.05-zero', 'C-3873-A0.05-zero']
+
+## decide_wide.py step3c
+S1 at A = 0.05 (the zero tuning at A = 0.05, run or S2's, met no gap candidate)
+   P-2197-A0.05-edge            from P-2197-A0.05-zero            S1=True
+   P-2188-A0.05-edge            from P-2188-A0.05-zero            S1=True
+   W-2187-A0.05-edge            from W-2187-A0.05-zero            S1=True
+   W-1631-A0.05-edge            from W-1631-A0.05-zero            S1=True
+   W-2179-A0.05-edge            from W-2179-A0.05-zero            S1=True
+   W-2078-A0.05-edge            from W-2078-A0.05-zero            S1=True
+   W-2192-A0.05-edge            from W-2192-A0.05-zero            S1=True
+   W-2209-A0.05-edge            from W-2209-A0.05-zero            S1=True
+   W-2183-A0.05-edge            from W-2183-A0.05-zero            S1=True
+   W-2172-A0.05-edge            from W-2172-A0.05-zero            S1=True
+   W-2178-A0.05-edge            from W-2178-A0.05-zero            S1=True
+   W-2185-A0.05-edge            from W-2185-A0.05-zero            S1=True
+   R-632-A0.05-edge             from R-632-A0.05-zero             S1=False
+   R-1193-A0.05-edge            from R-1193-A0.05-zero            S1=True
+   R-865-A0.05-edge             from R-865-A0.05-zero             S1=True
+   R-611-A0.05-edge             from R-611-A0.05-zero             S1=True
+   B-2819-A0.05-edge            from B-2819-A0.05-zero            S1=True
+   B-2496-A0.05-edge            from B-2496-A0.05-zero            S1=True
+   B-2772-A0.05-edge            from B-2772-A0.05-zero            S1=True
+   B-2821-A0.05-edge            from B-2821-A0.05-zero            S1=True
+   B-2498-A0.05-edge            from B-2498-A0.05-zero            S1=True
+   B-2774-A0.05-edge            from B-2774-A0.05-zero            S1=True
+   L-M5e-20-A0.05-edge          from L-M5e-20-A0.05-zero          S1=False
+   L-M8e-18-A0.05-edge          from L-M8e-18-A0.05-zero          S1=False
+   L-M1e-16-A0.05-edge          from L-M1e-16-A0.05-zero          S1=False
+   L-M5e-16-A0.05-edge          from L-M5e-16-A1-zero             S1=False
+   L-M4e-15-A0.05-edge          from L-M4e-15-A1-zero             S1=True
+   C-3016-A0.05-edge            from C-3016-A1-zero               S1=True
+   C-3233-A0.05-edge            from C-3233-A1-zero               S1=True
+   C-3873-A0.05-edge            from C-3873-A1-zero               S1=True
+step 3c (edge runs at A = 0.05 that S1 does not cover) at 6 workers (ruling 5: largest peak RSS so far 1.323 GiB): 5 tasks -> /private/tmp/claude-35086/-Users-ds283-Documents-Code-ChamPBH/22b01212-c0c6-40a3-a03d-905bdf7b834c/scratchpad/agent-02b/step3c.ids
+   R-632-A0.05-edge
+   L-M5e-20-A0.05-edge
+   L-M8e-18-A0.05-edge
+   L-M1e-16-A0.05-edge
+   L-M5e-16-A0.05-edge
+
+## decide_wide.py derive
+(its output is out/derive.txt)

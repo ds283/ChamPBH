@@ -1,0 +1,1230 @@
+# §2.2 the accepted integration of each tuning, by regime (zero and edge)
+# cand: candidates 1L/gap/cl/un; K shares of K(N_final) drained in each regime and the parking leftover's;
+# drains (delta_K > 0); l_min; least ln R at a drain; w<1: one-loop candidates with w_gate < 1 (U9)
+
+P-2197  M=4e-31 beta=1.185  ln R_first=138.070
+   A=10    zero     cand=6/0/0/0            1L=1 gap=0 cl=0 un=0 park=1.28e-08  drains=6/0/0/0 l_min=27.16 lnR_drain_min=118.3 w<1=0 unresolvable=0 declined=0
+   A=10    edge S1  cand=6/0/0/0            1L=1 gap=0 cl=0 un=0 park=1.28e-08  drains=6/0/0/0 l_min=27.16 lnR_drain_min=118.3 w<1=0 unresolvable=0 declined=0
+   A=5     zero     cand=9/0/0/0            1L=1 gap=0 cl=0 un=0 park=4.51e-06  drains=9/0/0/0 l_min=21.25 lnR_drain_min=95.63 w<1=0 unresolvable=0 declined=0
+   A=5     edge S1  cand=9/0/0/0            1L=1 gap=0 cl=0 un=0 park=4.51e-06  drains=9/0/0/0 l_min=21.25 lnR_drain_min=95.63 w<1=0 unresolvable=0 declined=0
+   A=2     zero     cand=7/0/0/0            1L=1 gap=0 cl=0 un=0 park=3.31e-06  drains=7/0/0/0 l_min=14.12 lnR_drain_min=68.88 w<1=0 unresolvable=0 declined=0
+   A=2     edge S1  cand=7/0/0/0            1L=1 gap=0 cl=0 un=0 park=3.31e-06  drains=7/0/0/0 l_min=14.12 lnR_drain_min=68.88 w<1=0 unresolvable=0 declined=0
+   A=1.5   zero     cand=14/0/0/0           1L=1 gap=0 cl=0 un=0 park=3.32e-05  drains=14/0/0/0 l_min=7.477 lnR_drain_min=44.72 w<1=0 unresolvable=0 declined=0
+   A=1.5   edge S1  cand=14/0/0/0           1L=1 gap=0 cl=0 un=0 park=3.32e-05  drains=14/0/0/0 l_min=7.477 lnR_drain_min=44.72 w<1=0 unresolvable=0 declined=0
+   A=1     zero     cand=10/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=7.63e-05  drains=10/0/0/0 l_min=10.2 lnR_drain_min=54.55 w<1=0 unresolvable=0 declined=0
+   A=1     edge S1  cand=10/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=7.63e-05  drains=10/0/0/0 l_min=10.2 lnR_drain_min=54.55 w<1=0 unresolvable=0 declined=0
+   A=0.5   zero     cand=32/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=0.000119  drains=32/0/0/0 l_min=4.894 lnR_drain_min=35.3 w<1=0 unresolvable=0 declined=0
+   A=0.5   edge S1  cand=32/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=0.000119  drains=32/0/0/0 l_min=4.894 lnR_drain_min=35.3 w<1=0 unresolvable=0 declined=0
+   A=0.1   zero     cand=95/0/0/0           1L=0.9995 gap=0 cl=0 un=0 park=0.000535  drains=95/0/0/0 l_min=1.783 lnR_drain_min=22.94 w<1=0 unresolvable=0 declined=0
+   A=0.1   edge S1  cand=95/0/0/0           1L=0.9995 gap=0 cl=0 un=0 park=0.000535  drains=95/0/0/0 l_min=1.783 lnR_drain_min=22.94 w<1=0 unresolvable=0 declined=0
+   A=0.05  zero     cand=134/0/0/0          1L=0.9994 gap=0 cl=0 un=0 park=0.000561  drains=134/0/0/0 l_min=0.5221 lnR_drain_min=16.97 w<1=0 unresolvable=0 declined=0
+   A=0.05  edge S1  cand=134/0/0/0          1L=0.9994 gap=0 cl=0 un=0 park=0.000561  drains=134/0/0/0 l_min=0.5221 lnR_drain_min=16.97 w<1=0 unresolvable=0 declined=0
+   A=0.01  zero     failure; met in its 1 integration(s): cand=183/508/13260/0; the effective minimum was not found (after integration 0)
+   A=0.01  edge     failure; met in its 1 integration(s): cand=183/305/14074/0; step budget (2e6 steps) at N=44.06268398
+
+P-2188  M=4e-31 beta=1.06  ln R_first=101.663
+   A=10    zero     cand=3/0/0/0            1L=1 gap=0 cl=0 un=0 park=9.64e-07  drains=3/0/0/0 l_min=19.96 lnR_drain_min=90.75 w<1=0 unresolvable=0 declined=0
+   A=10    edge S1  cand=3/0/0/0            1L=1 gap=0 cl=0 un=0 park=9.64e-07  drains=3/0/0/0 l_min=19.96 lnR_drain_min=90.75 w<1=0 unresolvable=0 declined=0
+   A=5     zero     cand=6/0/0/0            1L=1 gap=0 cl=0 un=0 park=5.8e-07  drains=6/0/0/0 l_min=13.16 lnR_drain_min=65.33 w<1=0 unresolvable=0 declined=0
+   A=5     edge S1  cand=6/0/0/0            1L=1 gap=0 cl=0 un=0 park=5.8e-07  drains=6/0/0/0 l_min=13.16 lnR_drain_min=65.33 w<1=0 unresolvable=0 declined=0
+   A=2     zero     cand=3/0/0/0            1L=0.9999 gap=0 cl=0 un=0 park=0.000102  drains=3/0/0/0 l_min=13.65 lnR_drain_min=67.15 w<1=0 unresolvable=0 declined=0
+   A=2     edge S1  cand=3/0/0/0            1L=0.9999 gap=0 cl=0 un=0 park=0.000102  drains=3/0/0/0 l_min=13.65 lnR_drain_min=67.15 w<1=0 unresolvable=0 declined=0
+   A=1.5   zero     cand=10/0/0/0           1L=0.9997 gap=0 cl=0 un=0 park=0.000275  drains=10/0/0/0 l_min=8.213 lnR_drain_min=47.38 w<1=0 unresolvable=0 declined=0
+   A=1.5   edge S1  cand=10/0/0/0           1L=0.9997 gap=0 cl=0 un=0 park=0.000275  drains=10/0/0/0 l_min=8.213 lnR_drain_min=47.38 w<1=0 unresolvable=0 declined=0
+   A=1     zero     cand=15/0/0/0           1L=0.9993 gap=0 cl=0 un=0 park=0.00068  drains=15/0/0/0 l_min=6.829 lnR_drain_min=42.38 w<1=0 unresolvable=0 declined=0
+   A=1     edge S1  cand=15/0/0/0           1L=0.9993 gap=0 cl=0 un=0 park=0.00068  drains=15/0/0/0 l_min=6.829 lnR_drain_min=42.38 w<1=0 unresolvable=0 declined=0
+   A=0.5   zero     cand=28/0/0/0           1L=0.9988 gap=0 cl=0 un=0 park=0.00118  drains=28/0/0/0 l_min=5.222 lnR_drain_min=36.51 w<1=0 unresolvable=0 declined=0
+   A=0.5   edge S1  cand=28/0/0/0           1L=0.9988 gap=0 cl=0 un=0 park=0.00118  drains=28/0/0/0 l_min=5.222 lnR_drain_min=36.51 w<1=0 unresolvable=0 declined=0
+   A=0.1   zero     cand=92/0/0/0           1L=0.9977 gap=0 cl=0 un=0 park=0.00228  drains=92/0/0/0 l_min=2.426 lnR_drain_min=25.69 w<1=0 unresolvable=0 declined=0
+   A=0.1   edge S1  cand=92/0/0/0           1L=0.9977 gap=0 cl=0 un=0 park=0.00228  drains=92/0/0/0 l_min=2.426 lnR_drain_min=25.69 w<1=0 unresolvable=0 declined=0
+   A=0.05  zero     cand=138/0/0/0          1L=0.9976 gap=0 cl=0 un=0 park=0.00243  drains=138/0/0/0 l_min=1.268 lnR_drain_min=20.61 w<1=0 unresolvable=0 declined=0
+   A=0.05  edge S1  cand=138/0/0/0          1L=0.9976 gap=0 cl=0 un=0 park=0.00243  drains=138/0/0/0 l_min=1.268 lnR_drain_min=20.61 w<1=0 unresolvable=0 declined=0
+   A=0.01  zero     failure; met in its 1 integration(s): cand=214/713/13377/0; step budget (2e6 steps) at N=44.42771313
+   A=0.01  edge     cand=214/331/0/0        1L=0.9707 gap=0.02616 cl=0 un=0 park=0.00311  drains=214/331/0/0 l_min=0.1473 lnR_drain_min=1.648 w<1=0 unresolvable=0 declined=0
+
+W-2187  M=4e-31 beta=1.0775  ln R_first=126.548
+   A=10    zero     cand=4/0/0/0            1L=1 gap=0 cl=0 un=0 park=3.26e-08  drains=4/0/0/0 l_min=24.73 lnR_drain_min=108.9 w<1=0 unresolvable=0 declined=0
+   A=10    edge S1  cand=4/0/0/0            1L=1 gap=0 cl=0 un=0 park=3.26e-08  drains=4/0/0/0 l_min=24.73 lnR_drain_min=108.9 w<1=0 unresolvable=0 declined=0
+   A=5     zero     cand=9/0/0/0            1L=1 gap=0 cl=0 un=0 park=3.64e-05  drains=9/0/0/0 l_min=19.51 lnR_drain_min=89.03 w<1=0 unresolvable=0 declined=0
+   A=5     edge S1  cand=9/0/0/0            1L=1 gap=0 cl=0 un=0 park=3.64e-05  drains=9/0/0/0 l_min=19.51 lnR_drain_min=89.03 w<1=0 unresolvable=0 declined=0
+   A=2     zero     cand=8/0/0/0            1L=0.9999 gap=0 cl=0 un=0 park=8.12e-05  drains=8/0/0/0 l_min=10.13 lnR_drain_min=54.3 w<1=0 unresolvable=0 declined=0
+   A=2     edge S1  cand=8/0/0/0            1L=0.9999 gap=0 cl=0 un=0 park=8.12e-05  drains=8/0/0/0 l_min=10.13 lnR_drain_min=54.3 w<1=0 unresolvable=0 declined=0
+   A=1.5   zero     cand=12/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=0.000112  drains=12/0/0/0 l_min=7.433 lnR_drain_min=44.56 w<1=0 unresolvable=0 declined=0
+   A=1.5   edge S1  cand=12/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=0.000112  drains=12/0/0/0 l_min=7.433 lnR_drain_min=44.56 w<1=0 unresolvable=0 declined=0
+   A=1     zero     cand=18/0/0/0           1L=0.9998 gap=0 cl=0 un=0 park=0.000164  drains=18/0/0/0 l_min=5.758 lnR_drain_min=38.49 w<1=0 unresolvable=0 declined=0
+   A=1     edge S1  cand=18/0/0/0           1L=0.9998 gap=0 cl=0 un=0 park=0.000164  drains=18/0/0/0 l_min=5.758 lnR_drain_min=38.49 w<1=0 unresolvable=0 declined=0
+   A=0.5   zero     cand=31/0/0/0           1L=0.9996 gap=0 cl=0 un=0 park=0.000351  drains=31/0/0/0 l_min=4.274 lnR_drain_min=32.97 w<1=0 unresolvable=0 declined=0
+   A=0.5   edge S1  cand=31/0/0/0           1L=0.9996 gap=0 cl=0 un=0 park=0.000351  drains=31/0/0/0 l_min=4.274 lnR_drain_min=32.97 w<1=0 unresolvable=0 declined=0
+   A=0.1   zero     cand=90/0/0/0           1L=0.9991 gap=0 cl=0 un=0 park=0.000862  drains=90/0/0/0 l_min=1.563 lnR_drain_min=21.97 w<1=0 unresolvable=0 declined=0
+   A=0.1   edge S1  cand=90/0/0/0           1L=0.9991 gap=0 cl=0 un=0 park=0.000862  drains=90/0/0/0 l_min=1.563 lnR_drain_min=21.97 w<1=0 unresolvable=0 declined=0
+   A=0.05  zero     cand=125/0/0/0          1L=0.9994 gap=0 cl=0 un=0 park=0.000564  drains=125/0/0/0 l_min=0.3114 lnR_drain_min=15.91 w<1=0 unresolvable=0 declined=0
+   A=0.05  edge S1  cand=125/0/0/0          1L=0.9994 gap=0 cl=0 un=0 park=0.000564  drains=125/0/0/0 l_min=0.3114 lnR_drain_min=15.91 w<1=0 unresolvable=0 declined=0
+   A=0.01  zero     failure; met in its 1 integration(s): cand=167/420/10184/0; the effective minimum was not found (after integration 0)
+   A=0.01  edge     failure; met in its 1 integration(s): cand=167/282/14013/0; step budget (2e6 steps) at N=44.10510234
+
+W-1631  M=4e-31 beta=1.07  ln R_first=121.804
+   A=10    zero     cand=4/0/0/0            1L=1 gap=0 cl=0 un=0 park=5.89e-08  drains=4/0/0/0 l_min=20.36 lnR_drain_min=92.25 w<1=0 unresolvable=0 declined=0
+   A=10    edge S1  cand=4/0/0/0            1L=1 gap=0 cl=0 un=0 park=5.89e-08  drains=4/0/0/0 l_min=20.36 lnR_drain_min=92.25 w<1=0 unresolvable=0 declined=0
+   A=5     zero     cand=7/0/0/0            1L=1 gap=0 cl=0 un=0 park=1.36e-05  drains=7/0/0/0 l_min=17.84 lnR_drain_min=82.74 w<1=0 unresolvable=0 declined=0
+   A=5     edge S1  cand=7/0/0/0            1L=1 gap=0 cl=0 un=0 park=1.36e-05  drains=7/0/0/0 l_min=17.84 lnR_drain_min=82.74 w<1=0 unresolvable=0 declined=0
+   A=2     zero     cand=10/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=7.79e-05  drains=10/0/0/0 l_min=7.014 lnR_drain_min=43.05 w<1=0 unresolvable=0 declined=0
+   A=2     edge S1  cand=10/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=7.79e-05  drains=10/0/0/0 l_min=7.014 lnR_drain_min=43.05 w<1=0 unresolvable=0 declined=0
+   A=1.5   zero     cand=13/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=0.000118  drains=13/0/0/0 l_min=6.164 lnR_drain_min=39.97 w<1=0 unresolvable=0 declined=0
+   A=1.5   edge S1  cand=13/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=0.000118  drains=13/0/0/0 l_min=6.164 lnR_drain_min=39.97 w<1=0 unresolvable=0 declined=0
+   A=1     zero     cand=18/0/0/0           1L=0.9998 gap=0 cl=0 un=0 park=0.000233  drains=18/0/0/0 l_min=5.401 lnR_drain_min=37.17 w<1=0 unresolvable=0 declined=0
+   A=1     edge S1  cand=18/0/0/0           1L=0.9998 gap=0 cl=0 un=0 park=0.000233  drains=18/0/0/0 l_min=5.401 lnR_drain_min=37.17 w<1=0 unresolvable=0 declined=0
+   A=0.5   zero     cand=31/0/0/0           1L=0.9996 gap=0 cl=0 un=0 park=0.000427  drains=31/0/0/0 l_min=4.269 lnR_drain_min=32.96 w<1=0 unresolvable=0 declined=0
+   A=0.5   edge S1  cand=31/0/0/0           1L=0.9996 gap=0 cl=0 un=0 park=0.000427  drains=31/0/0/0 l_min=4.269 lnR_drain_min=32.96 w<1=0 unresolvable=0 declined=0
+   A=0.1   zero     cand=92/0/0/0           1L=0.9987 gap=0 cl=0 un=0 park=0.00127  drains=92/0/0/0 l_min=1.92 lnR_drain_min=23.54 w<1=0 unresolvable=0 declined=0
+   A=0.1   edge S1  cand=92/0/0/0           1L=0.9987 gap=0 cl=0 un=0 park=0.00127  drains=92/0/0/0 l_min=1.92 lnR_drain_min=23.54 w<1=0 unresolvable=0 declined=0
+   A=0.05  zero     cand=133/0/0/0          1L=0.9986 gap=0 cl=0 un=0 park=0.00137  drains=133/0/0/0 l_min=0.798 lnR_drain_min=18.35 w<1=0 unresolvable=0 declined=0
+   A=0.05  edge S1  cand=133/0/0/0          1L=0.9986 gap=0 cl=0 un=0 park=0.00137  drains=133/0/0/0 l_min=0.798 lnR_drain_min=18.35 w<1=0 unresolvable=0 declined=0
+   A=0.01  zero     failure; met in its 1 integration(s): cand=192/577/13497/0; step budget (2e6 steps) at N=44.91856294
+   A=0.01  edge     failure; met in its 1 integration(s): cand=192/322/14124/0; step budget (2e6 steps) at N=43.01581021
+
+W-2179  M=4e-31 beta=1.0925  ln R_first=133.422
+   A=10    zero     cand=5/0/0/0            1L=1 gap=0 cl=0 un=0 park=5.75e-09  drains=5/0/0/0 l_min=25.16 lnR_drain_min=110.6 w<1=0 unresolvable=0 declined=0
+   A=10    edge S1  cand=5/0/0/0            1L=1 gap=0 cl=0 un=0 park=5.75e-09  drains=5/0/0/0 l_min=25.16 lnR_drain_min=110.6 w<1=0 unresolvable=0 declined=0
+   A=5     zero     cand=8/0/0/0            1L=1 gap=0 cl=0 un=0 park=1.24e-05  drains=8/0/0/0 l_min=21.1 lnR_drain_min=95.07 w<1=0 unresolvable=0 declined=0
+   A=5     edge S1  cand=8/0/0/0            1L=1 gap=0 cl=0 un=0 park=1.24e-05  drains=8/0/0/0 l_min=21.1 lnR_drain_min=95.07 w<1=0 unresolvable=0 declined=0
+   A=2     zero     cand=7/0/0/0            1L=0.9999 gap=0 cl=0 un=0 park=5.5e-05  drains=7/0/0/0 l_min=11.55 lnR_drain_min=59.46 w<1=0 unresolvable=0 declined=0
+   A=2     edge S1  cand=7/0/0/0            1L=0.9999 gap=0 cl=0 un=0 park=5.5e-05  drains=7/0/0/0 l_min=11.55 lnR_drain_min=59.46 w<1=0 unresolvable=0 declined=0
+   A=1.5   zero     cand=13/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=6.46e-05  drains=13/0/0/0 l_min=7.215 lnR_drain_min=43.78 w<1=0 unresolvable=0 declined=0
+   A=1.5   edge S1  cand=13/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=6.46e-05  drains=13/0/0/0 l_min=7.215 lnR_drain_min=43.78 w<1=0 unresolvable=0 declined=0
+   A=1     zero     cand=11/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=0.000148  drains=11/0/0/0 l_min=8.917 lnR_drain_min=49.92 w<1=0 unresolvable=0 declined=0
+   A=1     edge S1  cand=11/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=0.000148  drains=11/0/0/0 l_min=8.917 lnR_drain_min=49.92 w<1=0 unresolvable=0 declined=0
+   A=0.5   zero     cand=30/0/0/0           1L=0.9997 gap=0 cl=0 un=0 park=0.000254  drains=30/0/0/0 l_min=4.792 lnR_drain_min=34.92 w<1=0 unresolvable=0 declined=0
+   A=0.5   edge S1  cand=30/0/0/0           1L=0.9997 gap=0 cl=0 un=0 park=0.000254  drains=30/0/0/0 l_min=4.792 lnR_drain_min=34.92 w<1=0 unresolvable=0 declined=0
+   A=0.1   zero     cand=91/0/0/0           1L=0.9993 gap=0 cl=0 un=0 park=0.000701  drains=91/0/0/0 l_min=1.649 lnR_drain_min=22.35 w<1=0 unresolvable=0 declined=0
+   A=0.1   edge S1  cand=91/0/0/0           1L=0.9993 gap=0 cl=0 un=0 park=0.000701  drains=91/0/0/0 l_min=1.649 lnR_drain_min=22.35 w<1=0 unresolvable=0 declined=0
+   A=0.05  zero     cand=127/0/0/0          1L=0.9994 gap=0 cl=0 un=0 park=0.000566  drains=127/0/0/0 l_min=0.3764 lnR_drain_min=16.23 w<1=0 unresolvable=0 declined=0
+   A=0.05  edge S1  cand=127/0/0/0          1L=0.9994 gap=0 cl=0 un=0 park=0.000566  drains=127/0/0/0 l_min=0.3764 lnR_drain_min=16.23 w<1=0 unresolvable=0 declined=0
+   A=0.01  zero     failure; met in its 1 integration(s): cand=170/432/10385/0; the effective minimum was not found (after integration 0)
+   A=0.01  edge     failure; met in its 1 integration(s): cand=170/289/14014/0; step budget (2e6 steps) at N=44.10364956
+
+W-2078  M=4e-31 beta=1.175  ln R_first=137.988
+   A=10    zero     cand=6/0/0/0            1L=1 gap=0 cl=0 un=0 park=9.03e-09  drains=6/0/0/0 l_min=26.98 lnR_drain_min=117.6 w<1=0 unresolvable=0 declined=0
+   A=10    edge S1  cand=6/0/0/0            1L=1 gap=0 cl=0 un=0 park=9.03e-09  drains=6/0/0/0 l_min=26.98 lnR_drain_min=117.6 w<1=0 unresolvable=0 declined=0
+   A=5     zero     cand=11/0/0/0           1L=1 gap=0 cl=0 un=0 park=3.45e-06  drains=11/0/0/0 l_min=20.29 lnR_drain_min=92 w<1=0 unresolvable=0 declined=0
+   A=5     edge S1  cand=11/0/0/0           1L=1 gap=0 cl=0 un=0 park=3.45e-06  drains=11/0/0/0 l_min=20.29 lnR_drain_min=92 w<1=0 unresolvable=0 declined=0
+   A=2     zero     cand=12/0/0/0           1L=1 gap=0 cl=0 un=0 park=1.05e-05  drains=12/0/0/0 l_min=7.714 lnR_drain_min=45.58 w<1=0 unresolvable=0 declined=0
+   A=2     edge S1  cand=12/0/0/0           1L=1 gap=0 cl=0 un=0 park=1.05e-05  drains=12/0/0/0 l_min=7.714 lnR_drain_min=45.58 w<1=0 unresolvable=0 declined=0
+   A=1.5   zero     cand=5/0/0/0            1L=1 gap=0 cl=0 un=0 park=3.93e-05  drains=5/0/0/0 l_min=15.67 lnR_drain_min=74.61 w<1=0 unresolvable=0 declined=0
+   A=1.5   edge S1  cand=5/0/0/0            1L=1 gap=0 cl=0 un=0 park=3.93e-05  drains=5/0/0/0 l_min=15.67 lnR_drain_min=74.61 w<1=0 unresolvable=0 declined=0
+   A=1     zero     cand=19/0/0/0           1L=1 gap=0 cl=0 un=0 park=3.98e-05  drains=19/0/0/0 l_min=6.126 lnR_drain_min=39.83 w<1=0 unresolvable=0 declined=0
+   A=1     edge S1  cand=19/0/0/0           1L=1 gap=0 cl=0 un=0 park=3.98e-05  drains=19/0/0/0 l_min=6.126 lnR_drain_min=39.83 w<1=0 unresolvable=0 declined=0
+   A=0.5   zero     cand=32/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=0.000135  drains=32/0/0/0 l_min=4.54 lnR_drain_min=33.98 w<1=0 unresolvable=0 declined=0
+   A=0.5   edge S1  cand=32/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=0.000135  drains=32/0/0/0 l_min=4.54 lnR_drain_min=33.98 w<1=0 unresolvable=0 declined=0
+   A=0.1   zero     cand=95/0/0/0           1L=0.9995 gap=0 cl=0 un=0 park=0.000477  drains=95/0/0/0 l_min=1.698 lnR_drain_min=22.57 w<1=0 unresolvable=0 declined=0
+   A=0.1   edge S1  cand=95/0/0/0           1L=0.9995 gap=0 cl=0 un=0 park=0.000477  drains=95/0/0/0 l_min=1.698 lnR_drain_min=22.57 w<1=0 unresolvable=0 declined=0
+   A=0.05  zero     cand=133/0/0/0          1L=0.9994 gap=0 cl=0 un=0 park=0.000612  drains=133/0/0/0 l_min=0.5458 lnR_drain_min=17.09 w<1=0 unresolvable=0 declined=0
+   A=0.05  edge S1  cand=133/0/0/0          1L=0.9994 gap=0 cl=0 un=0 park=0.000612  drains=133/0/0/0 l_min=0.5458 lnR_drain_min=17.09 w<1=0 unresolvable=0 declined=0
+   A=0.01  zero     failure; met in its 1 integration(s): cand=182/479/11069/0; the effective minimum was not found (after integration 0)
+   A=0.01  edge     failure; met in its 1 integration(s): cand=182/314/14018/0; step budget (2e6 steps) at N=44.25861391
+
+W-2192  M=4e-31 beta=1.105  ln R_first=135.860
+   A=10    zero     cand=5/0/0/0            1L=1 gap=0 cl=0 un=0 park=7.42e-09  drains=5/0/0/0 l_min=25.72 lnR_drain_min=112.7 w<1=0 unresolvable=0 declined=0
+   A=10    edge S1  cand=5/0/0/0            1L=1 gap=0 cl=0 un=0 park=7.42e-09  drains=5/0/0/0 l_min=25.72 lnR_drain_min=112.7 w<1=0 unresolvable=0 declined=0
+   A=5     zero     cand=8/0/0/0            1L=1 gap=0 cl=0 un=0 park=5.16e-06  drains=8/0/0/0 l_min=20.78 lnR_drain_min=93.84 w<1=0 unresolvable=0 declined=0
+   A=5     edge S1  cand=8/0/0/0            1L=1 gap=0 cl=0 un=0 park=5.16e-06  drains=8/0/0/0 l_min=20.78 lnR_drain_min=93.84 w<1=0 unresolvable=0 declined=0
+   A=2     zero     cand=11/0/0/0           1L=1 gap=0 cl=0 un=0 park=2.19e-06  drains=11/0/0/0 l_min=6.316 lnR_drain_min=40.52 w<1=0 unresolvable=0 declined=0
+   A=2     edge S1  cand=11/0/0/0           1L=1 gap=0 cl=0 un=0 park=2.19e-06  drains=11/0/0/0 l_min=6.316 lnR_drain_min=40.52 w<1=0 unresolvable=0 declined=0
+   A=1.5   zero     cand=13/0/0/0           1L=1 gap=0 cl=0 un=0 park=2.22e-05  drains=13/0/0/0 l_min=6.34 lnR_drain_min=40.61 w<1=0 unresolvable=0 declined=0
+   A=1.5   edge S1  cand=13/0/0/0           1L=1 gap=0 cl=0 un=0 park=2.22e-05  drains=13/0/0/0 l_min=6.34 lnR_drain_min=40.61 w<1=0 unresolvable=0 declined=0
+   A=1     zero     cand=14/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=6.1e-05  drains=14/0/0/0 l_min=7.889 lnR_drain_min=46.21 w<1=0 unresolvable=0 declined=0
+   A=1     edge S1  cand=14/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=6.1e-05  drains=14/0/0/0 l_min=7.889 lnR_drain_min=46.21 w<1=0 unresolvable=0 declined=0
+   A=0.5   zero     cand=28/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=0.000136  drains=28/0/0/0 l_min=5.441 lnR_drain_min=37.32 w<1=0 unresolvable=0 declined=0
+   A=0.5   edge S1  cand=28/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=0.000136  drains=28/0/0/0 l_min=5.441 lnR_drain_min=37.32 w<1=0 unresolvable=0 declined=0
+   A=0.1   zero     cand=91/0/0/0           1L=0.9994 gap=0 cl=0 un=0 park=0.000589  drains=91/0/0/0 l_min=1.83 lnR_drain_min=23.15 w<1=0 unresolvable=0 declined=0
+   A=0.1   edge S1  cand=91/0/0/0           1L=0.9994 gap=0 cl=0 un=0 park=0.000589  drains=91/0/0/0 l_min=1.83 lnR_drain_min=23.15 w<1=0 unresolvable=0 declined=0
+   A=0.05  zero     cand=129/0/0/0          1L=0.9995 gap=0 cl=0 un=0 park=0.000492  drains=129/0/0/0 l_min=0.4414 lnR_drain_min=16.56 w<1=0 unresolvable=0 declined=0
+   A=0.05  edge S1  cand=129/0/0/0          1L=0.9995 gap=0 cl=0 un=0 park=0.000492  drains=129/0/0/0 l_min=0.4414 lnR_drain_min=16.56 w<1=0 unresolvable=0 declined=0
+   A=0.01  zero     failure; met in its 1 integration(s): cand=172/440/10178/0; the effective minimum was not found (after integration 0)
+   A=0.01  edge     failure; met in its 1 integration(s): cand=172/298/14005/0; step budget (2e6 steps) at N=44.14566167
+
+W-2209  M=4e-31 beta=1.1875  ln R_first=138.088
+   A=10    zero     cand=6/0/0/0            1L=1 gap=0 cl=0 un=0 park=1.39e-08  drains=6/0/0/0 l_min=27.2 lnR_drain_min=118.4 w<1=0 unresolvable=0 declined=0
+   A=10    edge S1  cand=6/0/0/0            1L=1 gap=0 cl=0 un=0 park=1.39e-08  drains=6/0/0/0 l_min=27.2 lnR_drain_min=118.4 w<1=0 unresolvable=0 declined=0
+   A=5     zero     cand=7/0/0/0            1L=1 gap=0 cl=0 un=0 park=8.69e-06  drains=7/0/0/0 l_min=22 lnR_drain_min=98.51 w<1=0 unresolvable=0 declined=0
+   A=5     edge S1  cand=7/0/0/0            1L=1 gap=0 cl=0 un=0 park=8.69e-06  drains=7/0/0/0 l_min=22 lnR_drain_min=98.51 w<1=0 unresolvable=0 declined=0
+   A=2     zero     cand=11/0/0/0           1L=1 gap=0 cl=0 un=0 park=1.75e-05  drains=11/0/0/0 l_min=10.29 lnR_drain_min=54.9 w<1=0 unresolvable=0 declined=0
+   A=2     edge S1  cand=11/0/0/0           1L=1 gap=0 cl=0 un=0 park=1.75e-05  drains=11/0/0/0 l_min=10.29 lnR_drain_min=54.9 w<1=0 unresolvable=0 declined=0
+   A=1.5   zero     cand=11/0/0/0           1L=1 gap=0 cl=0 un=0 park=4.6e-05  drains=11/0/0/0 l_min=9.3 lnR_drain_min=51.3 w<1=0 unresolvable=0 declined=0
+   A=1.5   edge S1  cand=11/0/0/0           1L=1 gap=0 cl=0 un=0 park=4.6e-05  drains=11/0/0/0 l_min=9.3 lnR_drain_min=51.3 w<1=0 unresolvable=0 declined=0
+   A=1     zero     cand=18/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=6.23e-05  drains=18/0/0/0 l_min=7.126 lnR_drain_min=43.46 w<1=0 unresolvable=0 declined=0
+   A=1     edge S1  cand=18/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=6.23e-05  drains=18/0/0/0 l_min=7.126 lnR_drain_min=43.46 w<1=0 unresolvable=0 declined=0
+   A=0.5   zero     cand=31/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=0.000134  drains=31/0/0/0 l_min=5.301 lnR_drain_min=36.81 w<1=0 unresolvable=0 declined=0
+   A=0.5   edge S1  cand=31/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=0.000134  drains=31/0/0/0 l_min=5.301 lnR_drain_min=36.81 w<1=0 unresolvable=0 declined=0
+   A=0.1   zero     cand=96/0/0/0           1L=0.9995 gap=0 cl=0 un=0 park=0.000538  drains=96/0/0/0 l_min=1.871 lnR_drain_min=23.33 w<1=0 unresolvable=0 declined=0
+   A=0.1   edge S1  cand=96/0/0/0           1L=0.9995 gap=0 cl=0 un=0 park=0.000538  drains=96/0/0/0 l_min=1.871 lnR_drain_min=23.33 w<1=0 unresolvable=0 declined=0
+   A=0.05  zero     cand=136/0/0/0          1L=0.9993 gap=0 cl=0 un=0 park=0.000655  drains=136/0/0/0 l_min=0.6414 lnR_drain_min=17.57 w<1=0 unresolvable=0 declined=0
+   A=0.05  edge S1  cand=136/0/0/0          1L=0.9993 gap=0 cl=0 un=0 park=0.000655  drains=136/0/0/0 l_min=0.6414 lnR_drain_min=17.57 w<1=0 unresolvable=0 declined=0
+   A=0.01  zero     failure; met in its 1 integration(s): cand=188/537/13484/0; step budget (2e6 steps) at N=45.85239142
+   A=0.01  edge     failure; met in its 1 integration(s): cand=188/313/14091/0; step budget (2e6 steps) at N=43.90472278
+
+W-2183  M=4e-31 beta=1.125  ln R_first=137.082
+   A=10    zero     cand=5/0/0/0            1L=1 gap=0 cl=0 un=0 park=4.88e-08  drains=5/0/0/0 l_min=26.88 lnR_drain_min=117.2 w<1=0 unresolvable=0 declined=0
+   A=10    edge S1  cand=5/0/0/0            1L=1 gap=0 cl=0 un=0 park=4.88e-08  drains=5/0/0/0 l_min=26.88 lnR_drain_min=117.2 w<1=0 unresolvable=0 declined=0
+   A=5     zero     cand=10/0/0/0           1L=1 gap=0 cl=0 un=0 park=5.31e-06  drains=10/0/0/0 l_min=19.33 lnR_drain_min=88.34 w<1=0 unresolvable=0 declined=0
+   A=5     edge S1  cand=10/0/0/0           1L=1 gap=0 cl=0 un=0 park=5.31e-06  drains=10/0/0/0 l_min=19.33 lnR_drain_min=88.34 w<1=0 unresolvable=0 declined=0
+   A=2     zero     cand=10/0/0/0           1L=1 gap=0 cl=0 un=0 park=1.99e-05  drains=10/0/0/0 l_min=11.7 lnR_drain_min=59.99 w<1=0 unresolvable=0 declined=0
+   A=2     edge S1  cand=10/0/0/0           1L=1 gap=0 cl=0 un=0 park=1.99e-05  drains=10/0/0/0 l_min=11.7 lnR_drain_min=59.99 w<1=0 unresolvable=0 declined=0
+   A=1.5   zero     cand=13/0/0/0           1L=1 gap=0 cl=0 un=0 park=3.68e-05  drains=13/0/0/0 l_min=8.017 lnR_drain_min=46.67 w<1=0 unresolvable=0 declined=0
+   A=1.5   edge S1  cand=13/0/0/0           1L=1 gap=0 cl=0 un=0 park=3.68e-05  drains=13/0/0/0 l_min=8.017 lnR_drain_min=46.67 w<1=0 unresolvable=0 declined=0
+   A=1     zero     cand=18/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=5.32e-05  drains=18/0/0/0 l_min=6.417 lnR_drain_min=40.89 w<1=0 unresolvable=0 declined=0
+   A=1     edge S1  cand=18/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=5.32e-05  drains=18/0/0/0 l_min=6.417 lnR_drain_min=40.89 w<1=0 unresolvable=0 declined=0
+   A=0.5   zero     cand=29/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=0.000129  drains=29/0/0/0 l_min=5.457 lnR_drain_min=37.38 w<1=0 unresolvable=0 declined=0
+   A=0.5   edge S1  cand=29/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=0.000129  drains=29/0/0/0 l_min=5.457 lnR_drain_min=37.38 w<1=0 unresolvable=0 declined=0
+   A=0.1   zero     cand=92/0/0/0           1L=0.9995 gap=0 cl=0 un=0 park=0.000507  drains=92/0/0/0 l_min=1.705 lnR_drain_min=22.6 w<1=0 unresolvable=0 declined=0
+   A=0.1   edge S1  cand=92/0/0/0           1L=0.9995 gap=0 cl=0 un=0 park=0.000507  drains=92/0/0/0 l_min=1.705 lnR_drain_min=22.6 w<1=0 unresolvable=0 declined=0
+   A=0.05  zero     cand=129/0/0/0          1L=0.9996 gap=0 cl=0 un=0 park=0.000373  drains=129/0/0/0 l_min=0.338 lnR_drain_min=16.04 w<1=0 unresolvable=0 declined=0
+   A=0.05  edge S1  cand=129/0/0/0          1L=0.9996 gap=0 cl=0 un=0 park=0.000373  drains=129/0/0/0 l_min=0.338 lnR_drain_min=16.04 w<1=0 unresolvable=0 declined=0
+   A=0.01  zero     failure; met in its 1 integration(s): cand=172/438/10272/0; the effective minimum was not found (after integration 0)
+   A=0.01  edge     failure; met in its 1 integration(s): cand=172/293/14010/0; step budget (2e6 steps) at N=44.26084887
+
+W-2172  M=4e-31 beta=1.1225  ln R_first=136.988
+   A=10    zero     cand=5/0/0/0            1L=1 gap=0 cl=0 un=0 park=4.12e-08  drains=5/0/0/0 l_min=26.79 lnR_drain_min=116.9 w<1=0 unresolvable=0 declined=0
+   A=10    edge S1  cand=5/0/0/0            1L=1 gap=0 cl=0 un=0 park=4.12e-08  drains=5/0/0/0 l_min=26.79 lnR_drain_min=116.9 w<1=0 unresolvable=0 declined=0
+   A=5     zero     cand=10/0/0/0           1L=1 gap=0 cl=0 un=0 park=5.85e-06  drains=10/0/0/0 l_min=19.51 lnR_drain_min=89.04 w<1=0 unresolvable=0 declined=0
+   A=5     edge S1  cand=10/0/0/0           1L=1 gap=0 cl=0 un=0 park=5.85e-06  drains=10/0/0/0 l_min=19.51 lnR_drain_min=89.04 w<1=0 unresolvable=0 declined=0
+   A=2     zero     cand=10/0/0/0           1L=1 gap=0 cl=0 un=0 park=2.1e-05  drains=10/0/0/0 l_min=10.07 lnR_drain_min=54.09 w<1=0 unresolvable=0 declined=0
+   A=2     edge S1  cand=10/0/0/0           1L=1 gap=0 cl=0 un=0 park=2.1e-05  drains=10/0/0/0 l_min=10.07 lnR_drain_min=54.09 w<1=0 unresolvable=0 declined=0
+   A=1.5   zero     cand=13/0/0/0           1L=1 gap=0 cl=0 un=0 park=2.31e-05  drains=13/0/0/0 l_min=7.513 lnR_drain_min=44.86 w<1=0 unresolvable=0 declined=0
+   A=1.5   edge S1  cand=13/0/0/0           1L=1 gap=0 cl=0 un=0 park=2.31e-05  drains=13/0/0/0 l_min=7.513 lnR_drain_min=44.86 w<1=0 unresolvable=0 declined=0
+   A=1     zero     cand=9/0/0/0            1L=0.9999 gap=0 cl=0 un=0 park=5.87e-05  drains=9/0/0/0 l_min=9.794 lnR_drain_min=53.09 w<1=0 unresolvable=0 declined=0
+   A=1     edge S1  cand=9/0/0/0            1L=0.9999 gap=0 cl=0 un=0 park=5.87e-05  drains=9/0/0/0 l_min=9.794 lnR_drain_min=53.09 w<1=0 unresolvable=0 declined=0
+   A=0.5   zero     cand=31/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=0.000111  drains=31/0/0/0 l_min=4.431 lnR_drain_min=33.57 w<1=0 unresolvable=0 declined=0
+   A=0.5   edge S1  cand=31/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=0.000111  drains=31/0/0/0 l_min=4.431 lnR_drain_min=33.57 w<1=0 unresolvable=0 declined=0
+   A=0.1   zero     cand=91/0/0/0           1L=0.9995 gap=0 cl=0 un=0 park=0.000465  drains=91/0/0/0 l_min=1.55 lnR_drain_min=21.91 w<1=0 unresolvable=0 declined=0
+   A=0.1   edge S1  cand=91/0/0/0           1L=0.9995 gap=0 cl=0 un=0 park=0.000465  drains=91/0/0/0 l_min=1.55 lnR_drain_min=21.91 w<1=0 unresolvable=0 declined=0
+   A=0.05  zero     cand=127/0/0/0          1L=0.9996 gap=0 cl=0 un=0 park=0.00042  drains=127/0/0/0 l_min=0.3429 lnR_drain_min=16.06 w<1=0 unresolvable=0 declined=0
+   A=0.05  edge S1  cand=127/0/0/0          1L=0.9996 gap=0 cl=0 un=0 park=0.00042  drains=127/0/0/0 l_min=0.3429 lnR_drain_min=16.06 w<1=0 unresolvable=0 declined=0
+   A=0.01  zero     failure; met in its 1 integration(s): cand=172/435/9992/0; the effective minimum was not found (after integration 0)
+   A=0.01  edge     failure; met in its 1 integration(s): cand=172/295/14001/0; step budget (2e6 steps) at N=44.28325868
+
+W-2178  M=4e-31 beta=1.1025  ln R_first=135.558
+   A=10    zero     cand=5/0/0/0            1L=1 gap=0 cl=0 un=0 park=6.74e-09  drains=5/0/0/0 l_min=25.57 lnR_drain_min=112.2 w<1=0 unresolvable=0 declined=0
+   A=10    edge S1  cand=5/0/0/0            1L=1 gap=0 cl=0 un=0 park=6.74e-09  drains=5/0/0/0 l_min=25.57 lnR_drain_min=112.2 w<1=0 unresolvable=0 declined=0
+   A=5     zero     cand=8/0/0/0            1L=1 gap=0 cl=0 un=0 park=8.18e-06  drains=8/0/0/0 l_min=20.68 lnR_drain_min=93.48 w<1=0 unresolvable=0 declined=0
+   A=5     edge S1  cand=8/0/0/0            1L=1 gap=0 cl=0 un=0 park=8.18e-06  drains=8/0/0/0 l_min=20.68 lnR_drain_min=93.48 w<1=0 unresolvable=0 declined=0
+   A=2     zero     cand=11/0/0/0           1L=1 gap=0 cl=0 un=0 park=2.32e-06  drains=11/0/0/0 l_min=6.316 lnR_drain_min=40.52 w<1=0 unresolvable=0 declined=0
+   A=2     edge S1  cand=11/0/0/0           1L=1 gap=0 cl=0 un=0 park=2.32e-06  drains=11/0/0/0 l_min=6.316 lnR_drain_min=40.52 w<1=0 unresolvable=0 declined=0
+   A=1.5   zero     cand=13/0/0/0           1L=1 gap=0 cl=0 un=0 park=2.38e-05  drains=13/0/0/0 l_min=6.316 lnR_drain_min=40.52 w<1=0 unresolvable=0 declined=0
+   A=1.5   edge S1  cand=13/0/0/0           1L=1 gap=0 cl=0 un=0 park=2.38e-05  drains=13/0/0/0 l_min=6.316 lnR_drain_min=40.52 w<1=0 unresolvable=0 declined=0
+   A=1     zero     cand=15/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=5.96e-05  drains=15/0/0/0 l_min=7.497 lnR_drain_min=44.8 w<1=0 unresolvable=0 declined=0
+   A=1     edge S1  cand=15/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=5.96e-05  drains=15/0/0/0 l_min=7.497 lnR_drain_min=44.8 w<1=0 unresolvable=0 declined=0
+   A=0.5   zero     cand=27/0/0/0           1L=0.9998 gap=0 cl=0 un=0 park=0.000159  drains=27/0/0/0 l_min=5.72 lnR_drain_min=38.34 w<1=0 unresolvable=0 declined=0
+   A=0.5   edge S1  cand=27/0/0/0           1L=0.9998 gap=0 cl=0 un=0 park=0.000159  drains=27/0/0/0 l_min=5.72 lnR_drain_min=38.34 w<1=0 unresolvable=0 declined=0
+   A=0.1   zero     cand=92/0/0/0           1L=0.9994 gap=0 cl=0 un=0 park=0.000622  drains=92/0/0/0 l_min=1.958 lnR_drain_min=23.71 w<1=0 unresolvable=0 declined=0
+   A=0.1   edge S1  cand=92/0/0/0           1L=0.9994 gap=0 cl=0 un=0 park=0.000622  drains=92/0/0/0 l_min=1.958 lnR_drain_min=23.71 w<1=0 unresolvable=0 declined=0
+   A=0.05  zero     cand=131/0/0/0          1L=0.9992 gap=0 cl=0 un=0 park=0.000813  drains=131/0/0/0 l_min=0.7151 lnR_drain_min=17.94 w<1=0 unresolvable=0 declined=0
+   A=0.05  edge S1  cand=131/0/0/0          1L=0.9992 gap=0 cl=0 un=0 park=0.000813  drains=131/0/0/0 l_min=0.7151 lnR_drain_min=17.94 w<1=0 unresolvable=0 declined=0
+   A=0.01  zero     failure; met in its 1 integration(s): cand=180/487/11903/0; the effective minimum was not found (after integration 0)
+   A=0.01  edge     failure; met in its 1 integration(s): cand=180/312/14036/0; step budget (2e6 steps) at N=43.7838977
+
+W-2185  M=4e-31 beta=1.1725  ln R_first=137.965
+   A=10    zero     cand=6/0/0/0            1L=1 gap=0 cl=0 un=0 park=8.2e-09  drains=6/0/0/0 l_min=26.93 lnR_drain_min=117.4 w<1=0 unresolvable=0 declined=0
+   A=10    edge S1  cand=6/0/0/0            1L=1 gap=0 cl=0 un=0 park=8.2e-09  drains=6/0/0/0 l_min=26.93 lnR_drain_min=117.4 w<1=0 unresolvable=0 declined=0
+   A=5     zero     cand=11/0/0/0           1L=1 gap=0 cl=0 un=0 park=3.92e-06  drains=11/0/0/0 l_min=20.24 lnR_drain_min=91.81 w<1=0 unresolvable=0 declined=0
+   A=5     edge S1  cand=11/0/0/0           1L=1 gap=0 cl=0 un=0 park=3.92e-06  drains=11/0/0/0 l_min=20.24 lnR_drain_min=91.81 w<1=0 unresolvable=0 declined=0
+   A=2     zero     cand=12/0/0/0           1L=1 gap=0 cl=0 un=0 park=1.09e-05  drains=12/0/0/0 l_min=7.659 lnR_drain_min=45.38 w<1=0 unresolvable=0 declined=0
+   A=2     edge S1  cand=12/0/0/0           1L=1 gap=0 cl=0 un=0 park=1.09e-05  drains=12/0/0/0 l_min=7.659 lnR_drain_min=45.38 w<1=0 unresolvable=0 declined=0
+   A=1.5   zero     cand=11/0/0/0           1L=1 gap=0 cl=0 un=0 park=2.73e-05  drains=11/0/0/0 l_min=8.92 lnR_drain_min=49.93 w<1=0 unresolvable=0 declined=0
+   A=1.5   edge S1  cand=11/0/0/0           1L=1 gap=0 cl=0 un=0 park=2.73e-05  drains=11/0/0/0 l_min=8.92 lnR_drain_min=49.93 w<1=0 unresolvable=0 declined=0
+   A=1     zero     cand=19/0/0/0           1L=1 gap=0 cl=0 un=0 park=4.25e-05  drains=19/0/0/0 l_min=6.038 lnR_drain_min=39.51 w<1=0 unresolvable=0 declined=0
+   A=1     edge S1  cand=19/0/0/0           1L=1 gap=0 cl=0 un=0 park=4.25e-05  drains=19/0/0/0 l_min=6.038 lnR_drain_min=39.51 w<1=0 unresolvable=0 declined=0
+   A=0.5   zero     cand=32/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=0.000132  drains=32/0/0/0 l_min=4.562 lnR_drain_min=34.06 w<1=0 unresolvable=0 declined=0
+   A=0.5   edge S1  cand=32/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=0.000132  drains=32/0/0/0 l_min=4.562 lnR_drain_min=34.06 w<1=0 unresolvable=0 declined=0
+   A=0.1   zero     cand=95/0/0/0           1L=0.9995 gap=0 cl=0 un=0 park=0.000547  drains=95/0/0/0 l_min=1.834 lnR_drain_min=23.17 w<1=0 unresolvable=0 declined=0
+   A=0.1   edge S1  cand=95/0/0/0           1L=0.9995 gap=0 cl=0 un=0 park=0.000547  drains=95/0/0/0 l_min=1.834 lnR_drain_min=23.17 w<1=0 unresolvable=0 declined=0
+   A=0.05  zero     cand=135/0/0/0          1L=0.9993 gap=0 cl=0 un=0 park=0.000714  drains=135/0/0/0 l_min=0.6731 lnR_drain_min=17.73 w<1=0 unresolvable=0 declined=0
+   A=0.05  edge S1  cand=135/0/0/0          1L=0.9993 gap=0 cl=0 un=0 park=0.000714  drains=135/0/0/0 l_min=0.6731 lnR_drain_min=17.73 w<1=0 unresolvable=0 declined=0
+   A=0.01  zero     failure; met in its 1 integration(s): cand=189/531/13469/0; step budget (2e6 steps) at N=45.92889657
+   A=0.01  edge     failure; met in its 1 integration(s): cand=189/321/14069/0; step budget (2e6 steps) at N=43.87458289
+
+R-632  M=4e-31 beta=1  ln R_first=49.874
+   A=10    zero     cand=4/0/0/0            1L=1 gap=0 cl=0 un=0 park=1e-08  drains=4/0/0/0 l_min=3.219 lnR_drain_min=28.9 w<1=0 unresolvable=0 declined=0
+   A=10    edge S1  cand=4/0/0/0            1L=1 gap=0 cl=0 un=0 park=1e-08  drains=4/0/0/0 l_min=3.219 lnR_drain_min=28.9 w<1=0 unresolvable=0 declined=0
+   A=5     zero     cand=4/0/0/0            1L=1 gap=0 cl=0 un=0 park=1e-08  drains=4/0/0/0 l_min=3.219 lnR_drain_min=28.9 w<1=0 unresolvable=0 declined=0
+   A=5     edge S1  cand=4/0/0/0            1L=1 gap=0 cl=0 un=0 park=1e-08  drains=4/0/0/0 l_min=3.219 lnR_drain_min=28.9 w<1=0 unresolvable=0 declined=0
+   A=2     zero     cand=7/0/0/0            1L=1 gap=0 cl=0 un=0 park=2.9e-09  drains=7/0/0/0 l_min=1.177 lnR_drain_min=20.18 w<1=0 unresolvable=0 declined=0
+   A=2     edge S1  cand=7/0/0/0            1L=1 gap=0 cl=0 un=0 park=2.9e-09  drains=7/0/0/0 l_min=1.177 lnR_drain_min=20.18 w<1=0 unresolvable=0 declined=0
+   A=1.5   zero     cand=9/0/0/0            1L=1 gap=0 cl=0 un=0 park=2.77e-08  drains=9/0/0/0 l_min=1.547 lnR_drain_min=21.89 w<1=0 unresolvable=0 declined=0
+   A=1.5   edge S1  cand=9/0/0/0            1L=1 gap=0 cl=0 un=0 park=2.77e-08  drains=9/0/0/0 l_min=1.547 lnR_drain_min=21.89 w<1=0 unresolvable=0 declined=0
+   A=1     zero     cand=13/0/0/0           1L=1 gap=0 cl=0 un=0 park=1.93e-08  drains=13/0/0/0 l_min=0.4728 lnR_drain_min=16.72 w<1=0 unresolvable=0 declined=0
+   A=1     edge S1  cand=13/0/0/0           1L=1 gap=0 cl=0 un=0 park=1.93e-08  drains=13/0/0/0 l_min=0.4728 lnR_drain_min=16.72 w<1=0 unresolvable=0 declined=0
+   A=0.5   zero     cand=20/1/0/0           1L=1 gap=0 cl=0 un=0 park=1.54e-06  drains=20/0/0/0 l_min=1.12 lnR_drain_min=19.91 w<1=0 unresolvable=0 declined=0
+   A=0.5   edge     cand=20/1/0/0           1L=1 gap=5.188e-07 cl=0 un=0 park=1.02e-06  drains=20/1/0/0 l_min=1.12 lnR_drain_min=6.295 w<1=0 unresolvable=0 declined=0
+   A=0.1   zero     failure; met in its 1 integration(s): cand=34/200/4515/0; the effective minimum was not found (after integration 0)
+   A=0.1   edge     failure; met in its 1 integration(s): cand=34/40/14375/0; step budget (2e6 steps) at N=44.4223418
+   A=0.05  zero     failure; met in its 1 integration(s): cand=37/98/1488/0; the effective minimum was not found (after integration 0)
+   A=0.05  edge     failure; met in its 1 integration(s): cand=37/58/4193/0; the effective minimum was not found (after integration 0)
+   A=0.01  zero     failure; met in its 1 integration(s): cand=39/40/353/0; the effective minimum was not found (after integration 0)
+   A=0.01  edge     failure; met in its 1 integration(s): cand=39/39/407/0; the effective minimum was not found (after integration 0)
+
+R-1193  M=4e-31 beta=1.15  ln R_first=137.687
+   A=10    zero     cand=6/0/0/0            1L=1 gap=0 cl=0 un=0 park=2.69e-09  drains=6/0/0/0 l_min=26.4 lnR_drain_min=115.3 w<1=0 unresolvable=0 declined=0
+   A=10    edge S1  cand=6/0/0/0            1L=1 gap=0 cl=0 un=0 park=2.69e-09  drains=6/0/0/0 l_min=26.4 lnR_drain_min=115.3 w<1=0 unresolvable=0 declined=0
+   A=5     zero     cand=10/0/0/0           1L=1 gap=0 cl=0 un=0 park=5.37e-06  drains=10/0/0/0 l_min=20.01 lnR_drain_min=90.93 w<1=0 unresolvable=0 declined=0
+   A=5     edge S1  cand=10/0/0/0           1L=1 gap=0 cl=0 un=0 park=5.37e-06  drains=10/0/0/0 l_min=20.01 lnR_drain_min=90.93 w<1=0 unresolvable=0 declined=0
+   A=2     zero     cand=12/0/0/0           1L=1 gap=0 cl=0 un=0 park=9.8e-06  drains=12/0/0/0 l_min=7.653 lnR_drain_min=45.36 w<1=0 unresolvable=0 declined=0
+   A=2     edge S1  cand=12/0/0/0           1L=1 gap=0 cl=0 un=0 park=9.8e-06  drains=12/0/0/0 l_min=7.653 lnR_drain_min=45.36 w<1=0 unresolvable=0 declined=0
+   A=1.5   zero     cand=13/0/0/0           1L=1 gap=0 cl=0 un=0 park=3.47e-05  drains=13/0/0/0 l_min=8.119 lnR_drain_min=47.04 w<1=0 unresolvable=0 declined=0
+   A=1.5   edge S1  cand=13/0/0/0           1L=1 gap=0 cl=0 un=0 park=3.47e-05  drains=13/0/0/0 l_min=8.119 lnR_drain_min=47.04 w<1=0 unresolvable=0 declined=0
+   A=1     zero     cand=19/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=5.57e-05  drains=19/0/0/0 l_min=7.092 lnR_drain_min=43.33 w<1=0 unresolvable=0 declined=0
+   A=1     edge S1  cand=19/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=5.57e-05  drains=19/0/0/0 l_min=7.092 lnR_drain_min=43.33 w<1=0 unresolvable=0 declined=0
+   A=0.5   zero     cand=27/0/0/0           1L=0.9998 gap=0 cl=0 un=0 park=0.000174  drains=27/0/0/0 l_min=7.045 lnR_drain_min=43.16 w<1=0 unresolvable=0 declined=0
+   A=0.5   edge S1  cand=27/0/0/0           1L=0.9998 gap=0 cl=0 un=0 park=0.000174  drains=27/0/0/0 l_min=7.045 lnR_drain_min=43.16 w<1=0 unresolvable=0 declined=0
+   A=0.1   zero     cand=26/0/0/0           1L=0.9988 gap=0 cl=0 un=0 park=0.00117  drains=26/0/0/0 l_min=8.613 lnR_drain_min=48.82 w<1=0 unresolvable=0 declined=0
+   A=0.1   edge S1  cand=26/0/0/0           1L=0.9988 gap=0 cl=0 un=0 park=0.00117  drains=26/0/0/0 l_min=8.613 lnR_drain_min=48.82 w<1=0 unresolvable=0 declined=0
+   A=0.05  zero     cand=123/0/0/0          1L=0.9977 gap=0 cl=0 un=0 park=0.0023  drains=123/0/0/0 l_min=4.489 lnR_drain_min=33.79 w<1=0 unresolvable=0 declined=0
+   A=0.05  edge S1  cand=123/0/0/0          1L=0.9977 gap=0 cl=0 un=0 park=0.0023  drains=123/0/0/0 l_min=4.489 lnR_drain_min=33.79 w<1=0 unresolvable=0 declined=0
+   A=0.01  zero     cand=314/0/0/0          1L=0.9887 gap=0 cl=0 un=0 park=0.0113  drains=314/0/0/0 l_min=3.018 lnR_drain_min=28.11 w<1=0 unresolvable=0 declined=0
+   A=0.01  edge S1  cand=314/0/0/0          1L=0.9887 gap=0 cl=0 un=0 park=0.0113  drains=314/0/0/0 l_min=3.018 lnR_drain_min=28.11 w<1=0 unresolvable=0 declined=0
+
+R-865  M=4e-31 beta=2  ln R_first=142.368
+   A=10    zero     cand=7/0/0/0            1L=1 gap=0 cl=0 un=0 park=3.27e-07  drains=7/0/0/0 l_min=28.94 lnR_drain_min=125.2 w<1=0 unresolvable=0 declined=0
+   A=10    edge S1  cand=7/0/0/0            1L=1 gap=0 cl=0 un=0 park=3.27e-07  drains=7/0/0/0 l_min=28.94 lnR_drain_min=125.2 w<1=0 unresolvable=0 declined=0
+   A=5     zero     cand=17/0/0/0           1L=1 gap=0 cl=0 un=0 park=1.57e-05  drains=17/0/0/0 l_min=28 lnR_drain_min=121.6 w<1=0 unresolvable=0 declined=0
+   A=5     edge S1  cand=17/0/0/0           1L=1 gap=0 cl=0 un=0 park=1.57e-05  drains=17/0/0/0 l_min=28 lnR_drain_min=121.6 w<1=0 unresolvable=0 declined=0
+   A=2     zero     cand=27/0/0/0           1L=1 gap=0 cl=0 un=0 park=4.54e-05  drains=27/0/0/0 l_min=21.13 lnR_drain_min=95.17 w<1=0 unresolvable=0 declined=0
+   A=2     edge S1  cand=27/0/0/0           1L=1 gap=0 cl=0 un=0 park=4.54e-05  drains=27/0/0/0 l_min=21.13 lnR_drain_min=95.17 w<1=0 unresolvable=0 declined=0
+   A=1.5   zero     cand=35/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=7.11e-05  drains=35/0/0/0 l_min=20.24 lnR_drain_min=91.81 w<1=0 unresolvable=0 declined=0
+   A=1.5   edge S1  cand=35/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=7.11e-05  drains=35/0/0/0 l_min=20.24 lnR_drain_min=91.81 w<1=0 unresolvable=0 declined=0
+   A=1     zero     cand=44/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=0.00013  drains=44/0/0/0 l_min=19.3 lnR_drain_min=88.25 w<1=0 unresolvable=0 declined=0
+   A=1     edge S1  cand=44/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=0.00013  drains=44/0/0/0 l_min=19.3 lnR_drain_min=88.25 w<1=0 unresolvable=0 declined=0
+   A=0.5   zero     cand=33/0/0/0           1L=0.9998 gap=0 cl=0 un=0 park=0.000241  drains=33/0/0/0 l_min=9.915 lnR_drain_min=53.52 w<1=0 unresolvable=0 declined=0
+   A=0.5   edge S1  cand=33/0/0/0           1L=0.9998 gap=0 cl=0 un=0 park=0.000241  drains=33/0/0/0 l_min=9.915 lnR_drain_min=53.52 w<1=0 unresolvable=0 declined=0
+   A=0.1   zero     cand=78/0/0/0           1L=0.9984 gap=0 cl=0 un=0 park=0.00156  drains=78/0/0/0 l_min=18.75 lnR_drain_min=86.16 w<1=0 unresolvable=0 declined=0
+   A=0.1   edge S1  cand=78/0/0/0           1L=0.9984 gap=0 cl=0 un=0 park=0.00156  drains=78/0/0/0 l_min=18.75 lnR_drain_min=86.16 w<1=0 unresolvable=0 declined=0
+   A=0.05  zero     cand=40/0/0/0           1L=0.9988 gap=0 cl=0 un=0 park=0.0012  drains=40/0/0/0 l_min=17.75 lnR_drain_min=82.4 w<1=0 unresolvable=0 declined=0
+   A=0.05  edge S1  cand=40/0/0/0           1L=0.9988 gap=0 cl=0 un=0 park=0.0012  drains=40/0/0/0 l_min=17.75 lnR_drain_min=82.4 w<1=0 unresolvable=0 declined=0
+   A=0.01  zero     cand=64/0/0/0           1L=0.985 gap=0 cl=0 un=0 park=0.015  drains=64/0/0/0 l_min=8.498 lnR_drain_min=48.41 w<1=0 unresolvable=0 declined=0
+   A=0.01  edge S1  cand=64/0/0/0           1L=0.985 gap=0 cl=0 un=0 park=0.015  drains=64/0/0/0 l_min=8.498 lnR_drain_min=48.41 w<1=0 unresolvable=0 declined=0
+
+R-611  M=4e-31 beta=10  ln R_first=166.289
+   A=10    zero     cand=8/0/0/0            1L=1 gap=0 cl=0 un=0 park=4.91e-05  drains=8/0/0/0 l_min=36.1 lnR_drain_min=153.1 w<1=0 unresolvable=0 declined=0
+   A=10    edge S1  cand=8/0/0/0            1L=1 gap=0 cl=0 un=0 park=4.91e-05  drains=8/0/0/0 l_min=36.1 lnR_drain_min=153.1 w<1=0 unresolvable=0 declined=0
+   A=5     zero     cand=18/0/0/0           1L=0.9997 gap=0 cl=0 un=0 park=0.000297  drains=18/0/0/0 l_min=35.52 lnR_drain_min=150.8 w<1=0 unresolvable=0 declined=0
+   A=5     edge S1  cand=18/0/0/0           1L=0.9997 gap=0 cl=0 un=0 park=0.000297  drains=18/0/0/0 l_min=35.52 lnR_drain_min=150.8 w<1=0 unresolvable=0 declined=0
+   A=2     zero     cand=38/0/0/0           1L=0.9995 gap=0 cl=0 un=0 park=0.000458  drains=38/0/0/0 l_min=33.96 lnR_drain_min=144.7 w<1=0 unresolvable=0 declined=0
+   A=2     edge S1  cand=38/0/0/0           1L=0.9995 gap=0 cl=0 un=0 park=0.000458  drains=38/0/0/0 l_min=33.96 lnR_drain_min=144.7 w<1=0 unresolvable=0 declined=0
+   A=1.5   zero     cand=42/0/0/0           1L=0.9995 gap=0 cl=0 un=0 park=0.000523  drains=42/0/0/0 l_min=32.69 lnR_drain_min=139.7 w<1=0 unresolvable=0 declined=0
+   A=1.5   edge S1  cand=42/0/0/0           1L=0.9995 gap=0 cl=0 un=0 park=0.000523  drains=42/0/0/0 l_min=32.69 lnR_drain_min=139.7 w<1=0 unresolvable=0 declined=0
+   A=1     zero     cand=64/0/0/0           1L=0.9992 gap=0 cl=0 un=0 park=0.00077  drains=64/0/0/0 l_min=31.71 lnR_drain_min=135.9 w<1=0 unresolvable=0 declined=0
+   A=1     edge S1  cand=64/0/0/0           1L=0.9992 gap=0 cl=0 un=0 park=0.00077  drains=64/0/0/0 l_min=31.71 lnR_drain_min=135.9 w<1=0 unresolvable=0 declined=0
+   A=0.5   zero     cand=122/0/0/0          1L=0.9986 gap=0 cl=0 un=0 park=0.00139  drains=122/0/0/0 l_min=30.68 lnR_drain_min=131.9 w<1=0 unresolvable=0 declined=0
+   A=0.5   edge S1  cand=122/0/0/0          1L=0.9986 gap=0 cl=0 un=0 park=0.00139  drains=122/0/0/0 l_min=30.68 lnR_drain_min=131.9 w<1=0 unresolvable=0 declined=0
+   A=0.1   zero     cand=528/0/0/0          1L=0.9949 gap=0 cl=0 un=0 park=0.00507  drains=528/0/0/0 l_min=28.68 lnR_drain_min=124.2 w<1=0 unresolvable=0 declined=0
+   A=0.1   edge S1  cand=528/0/0/0          1L=0.9949 gap=0 cl=0 un=0 park=0.00507  drains=528/0/0/0 l_min=28.68 lnR_drain_min=124.2 w<1=0 unresolvable=0 declined=0
+   A=0.05  zero     cand=679/0/0/0          1L=0.9915 gap=0 cl=0 un=0 park=0.00846  drains=679/0/0/0 l_min=27.61 lnR_drain_min=120 w<1=0 unresolvable=0 declined=0
+   A=0.05  edge S1  cand=679/0/0/0          1L=0.9915 gap=0 cl=0 un=0 park=0.00846  drains=679/0/0/0 l_min=27.61 lnR_drain_min=120 w<1=0 unresolvable=0 declined=0
+   A=0.01  zero     cand=662/0/0/0          1L=0.9669 gap=0 cl=0 un=0 park=0.0331  drains=662/0/0/0 l_min=25.53 lnR_drain_min=112 w<1=0 unresolvable=0 declined=0
+   A=0.01  edge S1  cand=662/0/0/0          1L=0.9669 gap=0 cl=0 un=0 park=0.0331  drains=662/0/0/0 l_min=25.53 lnR_drain_min=112 w<1=0 unresolvable=0 declined=0
+
+B-2819  M=1e-33 beta=1.2  ln R_first=162.135
+   A=10    zero     cand=8/0/0/0            1L=1 gap=0 cl=0 un=0 park=3.54e-07  drains=8/0/0/0 l_min=31.39 lnR_drain_min=139 w<1=0 unresolvable=0 declined=0
+   A=10    edge S1  cand=8/0/0/0            1L=1 gap=0 cl=0 un=0 park=3.54e-07  drains=8/0/0/0 l_min=31.39 lnR_drain_min=139 w<1=0 unresolvable=0 declined=0
+   A=5     zero     cand=12/0/0/0           1L=1 gap=0 cl=0 un=0 park=9.35e-06  drains=12/0/0/0 l_min=25.21 lnR_drain_min=117 w<1=0 unresolvable=0 declined=0
+   A=5     edge S1  cand=12/0/0/0           1L=1 gap=0 cl=0 un=0 park=9.35e-06  drains=12/0/0/0 l_min=25.21 lnR_drain_min=117 w<1=0 unresolvable=0 declined=0
+   A=2     zero     cand=18/0/0/0           1L=1 gap=0 cl=0 un=0 park=2.93e-05  drains=18/0/0/0 l_min=22.57 lnR_drain_min=108.2 w<1=0 unresolvable=0 declined=0
+   A=2     edge S1  cand=18/0/0/0           1L=1 gap=0 cl=0 un=0 park=2.93e-05  drains=18/0/0/0 l_min=22.57 lnR_drain_min=108.2 w<1=0 unresolvable=0 declined=0
+   A=1.5   zero     cand=11/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=5.89e-05  drains=11/0/0/0 l_min=13.09 lnR_drain_min=79.95 w<1=0 unresolvable=0 declined=0
+   A=1.5   edge S1  cand=11/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=5.89e-05  drains=11/0/0/0 l_min=13.09 lnR_drain_min=79.95 w<1=0 unresolvable=0 declined=0
+   A=1     zero     cand=18/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=8.14e-05  drains=18/0/0/0 l_min=9.742 lnR_drain_min=71.14 w<1=0 unresolvable=0 declined=0
+   A=1     edge S1  cand=18/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=8.14e-05  drains=18/0/0/0 l_min=9.742 lnR_drain_min=71.14 w<1=0 unresolvable=0 declined=0
+   A=0.5   zero     cand=35/0/0/0           1L=0.9998 gap=0 cl=0 un=0 park=0.000198  drains=35/0/0/0 l_min=5.413 lnR_drain_min=59.68 w<1=0 unresolvable=0 declined=0
+   A=0.5   edge S1  cand=35/0/0/0           1L=0.9998 gap=0 cl=0 un=0 park=0.000198  drains=35/0/0/0 l_min=5.413 lnR_drain_min=59.68 w<1=0 unresolvable=0 declined=0
+   A=0.1   zero     cand=48/0/0/0           1L=0.9986 gap=0 cl=0 un=0 park=0.00139  drains=48/0/0/0 l_min=7.99 lnR_drain_min=66.58 w<1=0 unresolvable=0 declined=0
+   A=0.1   edge S1  cand=48/0/0/0           1L=0.9986 gap=0 cl=0 un=0 park=0.00139  drains=48/0/0/0 l_min=7.99 lnR_drain_min=66.58 w<1=0 unresolvable=0 declined=0
+   A=0.05  zero     cand=134/0/0/0          1L=0.9973 gap=0 cl=0 un=0 park=0.00273  drains=134/0/0/0 l_min=4.192 lnR_drain_min=56.23 w<1=0 unresolvable=0 declined=0
+   A=0.05  edge S1  cand=134/0/0/0          1L=0.9973 gap=0 cl=0 un=0 park=0.00273  drains=134/0/0/0 l_min=4.192 lnR_drain_min=56.23 w<1=0 unresolvable=0 declined=0
+   A=0.01  zero     cand=338/0/0/0          1L=0.9908 gap=0 cl=0 un=0 park=0.00916  drains=338/0/0/0 l_min=0.6509 lnR_drain_min=44.36 w<1=0 unresolvable=0 declined=0
+   A=0.01  edge S1  cand=338/0/0/0          1L=0.9908 gap=0 cl=0 un=0 park=0.00916  drains=338/0/0/0 l_min=0.6509 lnR_drain_min=44.36 w<1=0 unresolvable=0 declined=0
+
+B-2496  M=1e-33 beta=2  ln R_first=166.333
+   A=10    zero     cand=9/0/0/0            1L=1 gap=0 cl=0 un=0 park=3.51e-06  drains=9/0/0/0 l_min=34.13 lnR_drain_min=149.1 w<1=0 unresolvable=0 declined=0
+   A=10    edge S1  cand=9/0/0/0            1L=1 gap=0 cl=0 un=0 park=3.51e-06  drains=9/0/0/0 l_min=34.13 lnR_drain_min=149.1 w<1=0 unresolvable=0 declined=0
+   A=5     zero     cand=19/0/0/0           1L=1 gap=0 cl=0 un=0 park=1.82e-05  drains=19/0/0/0 l_min=32.52 lnR_drain_min=143.2 w<1=0 unresolvable=0 declined=0
+   A=5     edge S1  cand=19/0/0/0           1L=1 gap=0 cl=0 un=0 park=1.82e-05  drains=19/0/0/0 l_min=32.52 lnR_drain_min=143.2 w<1=0 unresolvable=0 declined=0
+   A=2     zero     cand=30/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=6.12e-05  drains=30/0/0/0 l_min=25.54 lnR_drain_min=118.2 w<1=0 unresolvable=0 declined=0
+   A=2     edge S1  cand=30/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=6.12e-05  drains=30/0/0/0 l_min=25.54 lnR_drain_min=118.2 w<1=0 unresolvable=0 declined=0
+   A=1.5   zero     cand=30/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=8.24e-05  drains=30/0/0/0 l_min=25.71 lnR_drain_min=118.8 w<1=0 unresolvable=0 declined=0
+   A=1.5   edge S1  cand=30/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=8.24e-05  drains=30/0/0/0 l_min=25.71 lnR_drain_min=118.8 w<1=0 unresolvable=0 declined=0
+   A=1     zero     cand=36/0/0/0           1L=0.9998 gap=0 cl=0 un=0 park=0.000151  drains=36/0/0/0 l_min=25.58 lnR_drain_min=118.3 w<1=0 unresolvable=0 declined=0
+   A=1     edge S1  cand=36/0/0/0           1L=0.9998 gap=0 cl=0 un=0 park=0.000151  drains=36/0/0/0 l_min=25.58 lnR_drain_min=118.3 w<1=0 unresolvable=0 declined=0
+   A=0.5   zero     cand=35/0/0/0           1L=0.9997 gap=0 cl=0 un=0 park=0.000298  drains=35/0/0/0 l_min=11.56 lnR_drain_min=75.88 w<1=0 unresolvable=0 declined=0
+   A=0.5   edge S1  cand=35/0/0/0           1L=0.9997 gap=0 cl=0 un=0 park=0.000298  drains=35/0/0/0 l_min=11.56 lnR_drain_min=75.88 w<1=0 unresolvable=0 declined=0
+   A=0.1   zero     cand=63/0/0/0           1L=0.9993 gap=0 cl=0 un=0 park=0.000663  drains=63/0/0/0 l_min=22.31 lnR_drain_min=107.3 w<1=0 unresolvable=0 declined=0
+   A=0.1   edge S1  cand=63/0/0/0           1L=0.9993 gap=0 cl=0 un=0 park=0.000663  drains=63/0/0/0 l_min=22.31 lnR_drain_min=107.3 w<1=0 unresolvable=0 declined=0
+   A=0.05  zero     cand=38/0/0/0           1L=0.9979 gap=0 cl=0 un=0 park=0.00214  drains=38/0/0/0 l_min=17.03 lnR_drain_min=90.95 w<1=0 unresolvable=0 declined=0
+   A=0.05  edge S1  cand=38/0/0/0           1L=0.9979 gap=0 cl=0 un=0 park=0.00214  drains=38/0/0/0 l_min=17.03 lnR_drain_min=90.95 w<1=0 unresolvable=0 declined=0
+   A=0.01  zero     cand=235/0/0/0          1L=0.9828 gap=0 cl=0 un=0 park=0.0172  drains=235/0/0/0 l_min=5.973 lnR_drain_min=61.22 w<1=0 unresolvable=0 declined=0
+   A=0.01  edge S1  cand=235/0/0/0          1L=0.9828 gap=0 cl=0 un=0 park=0.0172  drains=235/0/0/0 l_min=5.973 lnR_drain_min=61.22 w<1=0 unresolvable=0 declined=0
+
+B-2772  M=1e-33 beta=10  ln R_first=190.255
+   A=10    zero     cand=9/0/0/0            1L=0.9998 gap=0 cl=0 un=0 park=0.000174  drains=9/0/0/0 l_min=41.62 lnR_drain_min=177.4 w<1=0 unresolvable=0 declined=0
+   A=10    edge S1  cand=9/0/0/0            1L=0.9998 gap=0 cl=0 un=0 park=0.000174  drains=9/0/0/0 l_min=41.62 lnR_drain_min=177.4 w<1=0 unresolvable=0 declined=0
+   A=5     zero     cand=21/0/0/0           1L=0.9997 gap=0 cl=0 un=0 park=0.000302  drains=21/0/0/0 l_min=40.75 lnR_drain_min=174 w<1=0 unresolvable=0 declined=0
+   A=5     edge S1  cand=21/0/0/0           1L=0.9997 gap=0 cl=0 un=0 park=0.000302  drains=21/0/0/0 l_min=40.75 lnR_drain_min=174 w<1=0 unresolvable=0 declined=0
+   A=2     zero     cand=38/0/0/0           1L=0.9995 gap=0 cl=0 un=0 park=0.000484  drains=38/0/0/0 l_min=38.81 lnR_drain_min=166.7 w<1=0 unresolvable=0 declined=0
+   A=2     edge S1  cand=38/0/0/0           1L=0.9995 gap=0 cl=0 un=0 park=0.000484  drains=38/0/0/0 l_min=38.81 lnR_drain_min=166.7 w<1=0 unresolvable=0 declined=0
+   A=1.5   zero     cand=49/0/0/0           1L=0.9994 gap=0 cl=0 un=0 park=0.000629  drains=49/0/0/0 l_min=37.59 lnR_drain_min=162 w<1=0 unresolvable=0 declined=0
+   A=1.5   edge S1  cand=49/0/0/0           1L=0.9994 gap=0 cl=0 un=0 park=0.000629  drains=49/0/0/0 l_min=37.59 lnR_drain_min=162 w<1=0 unresolvable=0 declined=0
+   A=1     zero     cand=74/0/0/0           1L=0.9991 gap=0 cl=0 un=0 park=0.000858  drains=74/0/0/0 l_min=36.77 lnR_drain_min=159 w<1=0 unresolvable=0 declined=0
+   A=1     edge S1  cand=74/0/0/0           1L=0.9991 gap=0 cl=0 un=0 park=0.000858  drains=74/0/0/0 l_min=36.77 lnR_drain_min=159 w<1=0 unresolvable=0 declined=0
+   A=0.5   zero     cand=140/0/0/0          1L=0.9984 gap=0 cl=0 un=0 park=0.00157  drains=140/0/0/0 l_min=35.75 lnR_drain_min=155.1 w<1=0 unresolvable=0 declined=0
+   A=0.5   edge S1  cand=140/0/0/0          1L=0.9984 gap=0 cl=0 un=0 park=0.00157  drains=140/0/0/0 l_min=35.75 lnR_drain_min=155.1 w<1=0 unresolvable=0 declined=0
+   A=0.1   zero     cand=595/0/0/0          1L=0.9943 gap=0 cl=0 un=0 park=0.00569  drains=595/0/0/0 l_min=33.69 lnR_drain_min=147.5 w<1=0 unresolvable=0 declined=0
+   A=0.1   edge S1  cand=595/0/0/0          1L=0.9943 gap=0 cl=0 un=0 park=0.00569  drains=595/0/0/0 l_min=33.69 lnR_drain_min=147.5 w<1=0 unresolvable=0 declined=0
+   A=0.05  zero     cand=720/0/0/0          1L=0.9904 gap=0 cl=0 un=0 park=0.00958  drains=720/0/0/0 l_min=32.31 lnR_drain_min=142.4 w<1=0 unresolvable=0 declined=0
+   A=0.05  edge S1  cand=720/0/0/0          1L=0.9904 gap=0 cl=0 un=0 park=0.00958  drains=720/0/0/0 l_min=32.31 lnR_drain_min=142.4 w<1=0 unresolvable=0 declined=0
+   A=0.01  zero     cand=648/0/0/0          1L=0.9611 gap=0 cl=0 un=0 park=0.0389  drains=648/0/0/0 l_min=30.54 lnR_drain_min=135.9 w<1=0 unresolvable=0 declined=0
+   A=0.01  edge S1  cand=648/0/0/0          1L=0.9611 gap=0 cl=0 un=0 park=0.0389  drains=648/0/0/0 l_min=30.54 lnR_drain_min=135.9 w<1=0 unresolvable=0 declined=0
+
+B-2821  M=1e-30 beta=1.2  ln R_first=134.504
+   A=10    zero     cand=6/0/0/0            1L=1 gap=0 cl=0 un=0 park=3.02e-09  drains=6/0/0/0 l_min=26.23 lnR_drain_min=114.2 w<1=0 unresolvable=0 declined=0
+   A=10    edge S1  cand=6/0/0/0            1L=1 gap=0 cl=0 un=0 park=3.02e-09  drains=6/0/0/0 l_min=26.23 lnR_drain_min=114.2 w<1=0 unresolvable=0 declined=0
+   A=5     zero     cand=10/0/0/0           1L=1 gap=0 cl=0 un=0 park=7.63e-06  drains=10/0/0/0 l_min=20.33 lnR_drain_min=91.38 w<1=0 unresolvable=0 declined=0
+   A=5     edge S1  cand=10/0/0/0           1L=1 gap=0 cl=0 un=0 park=7.63e-06  drains=10/0/0/0 l_min=20.33 lnR_drain_min=91.38 w<1=0 unresolvable=0 declined=0
+   A=2     zero     cand=17/0/0/0           1L=1 gap=0 cl=0 un=0 park=3.75e-05  drains=17/0/0/0 l_min=19.84 lnR_drain_min=89.51 w<1=0 unresolvable=0 declined=0
+   A=2     edge S1  cand=17/0/0/0           1L=1 gap=0 cl=0 un=0 park=3.75e-05  drains=17/0/0/0 l_min=19.84 lnR_drain_min=89.51 w<1=0 unresolvable=0 declined=0
+   A=1.5   zero     cand=13/0/0/0           1L=1 gap=0 cl=0 un=0 park=4.58e-05  drains=13/0/0/0 l_min=11.13 lnR_drain_min=56.56 w<1=0 unresolvable=0 declined=0
+   A=1.5   edge S1  cand=13/0/0/0           1L=1 gap=0 cl=0 un=0 park=4.58e-05  drains=13/0/0/0 l_min=11.13 lnR_drain_min=56.56 w<1=0 unresolvable=0 declined=0
+   A=1     zero     cand=18/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=5.34e-05  drains=18/0/0/0 l_min=6.958 lnR_drain_min=41 w<1=0 unresolvable=0 declined=0
+   A=1     edge S1  cand=18/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=5.34e-05  drains=18/0/0/0 l_min=6.958 lnR_drain_min=41 w<1=0 unresolvable=0 declined=0
+   A=0.5   zero     cand=30/0/0/0           1L=0.9998 gap=0 cl=0 un=0 park=0.000167  drains=30/0/0/0 l_min=4.96 lnR_drain_min=33.43 w<1=0 unresolvable=0 declined=0
+   A=0.5   edge S1  cand=30/0/0/0           1L=0.9998 gap=0 cl=0 un=0 park=0.000167  drains=30/0/0/0 l_min=4.96 lnR_drain_min=33.43 w<1=0 unresolvable=0 declined=0
+   A=0.1   zero     cand=5/0/0/0            1L=0.9991 gap=0 cl=0 un=0 park=0.000901  drains=5/0/0/0 l_min=12.39 lnR_drain_min=61.26 w<1=0 unresolvable=0 declined=0
+   A=0.1   edge S1  cand=5/0/0/0            1L=0.9991 gap=0 cl=0 un=0 park=0.000901  drains=5/0/0/0 l_min=12.39 lnR_drain_min=61.26 w<1=0 unresolvable=0 declined=0
+   A=0.05  zero     cand=113/0/0/0          1L=0.9977 gap=0 cl=0 un=0 park=0.00225  drains=113/0/0/0 l_min=4.214 lnR_drain_min=30.54 w<1=0 unresolvable=0 declined=0
+   A=0.05  edge S1  cand=113/0/0/0          1L=0.9977 gap=0 cl=0 un=0 park=0.00225  drains=113/0/0/0 l_min=4.214 lnR_drain_min=30.54 w<1=0 unresolvable=0 declined=0
+   A=0.01  zero     cand=349/0/0/0          1L=0.9917 gap=0 cl=0 un=0 park=0.00834  drains=349/0/0/0 l_min=1.074 lnR_drain_min=17.22 w<1=0 unresolvable=0 declined=0
+   A=0.01  edge S1  cand=349/0/0/0          1L=0.9917 gap=0 cl=0 un=0 park=0.00834  drains=349/0/0/0 l_min=1.074 lnR_drain_min=17.22 w<1=0 unresolvable=0 declined=0
+
+B-2498  M=1e-30 beta=2  ln R_first=138.702
+   A=10    zero     cand=6/0/0/0            1L=1 gap=0 cl=0 un=0 park=1.13e-06  drains=6/0/0/0 l_min=28.59 lnR_drain_min=123.3 w<1=0 unresolvable=0 declined=0
+   A=10    edge S1  cand=6/0/0/0            1L=1 gap=0 cl=0 un=0 park=1.13e-06  drains=6/0/0/0 l_min=28.59 lnR_drain_min=123.3 w<1=0 unresolvable=0 declined=0
+   A=5     zero     cand=17/0/0/0           1L=1 gap=0 cl=0 un=0 park=1.21e-05  drains=17/0/0/0 l_min=27.2 lnR_drain_min=117.9 w<1=0 unresolvable=0 declined=0
+   A=5     edge S1  cand=17/0/0/0           1L=1 gap=0 cl=0 un=0 park=1.21e-05  drains=17/0/0/0 l_min=27.2 lnR_drain_min=117.9 w<1=0 unresolvable=0 declined=0
+   A=2     zero     cand=20/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=5.48e-05  drains=20/0/0/0 l_min=21.23 lnR_drain_min=94.87 w<1=0 unresolvable=0 declined=0
+   A=2     edge S1  cand=20/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=5.48e-05  drains=20/0/0/0 l_min=21.23 lnR_drain_min=94.87 w<1=0 unresolvable=0 declined=0
+   A=1.5   zero     cand=33/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=7.04e-05  drains=33/0/0/0 l_min=19.69 lnR_drain_min=88.93 w<1=0 unresolvable=0 declined=0
+   A=1.5   edge S1  cand=33/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=7.04e-05  drains=33/0/0/0 l_min=19.69 lnR_drain_min=88.93 w<1=0 unresolvable=0 declined=0
+   A=1     zero     cand=43/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=0.000128  drains=43/0/0/0 l_min=18.54 lnR_drain_min=84.55 w<1=0 unresolvable=0 declined=0
+   A=1     edge S1  cand=43/0/0/0           1L=0.9999 gap=0 cl=0 un=0 park=0.000128  drains=43/0/0/0 l_min=18.54 lnR_drain_min=84.55 w<1=0 unresolvable=0 declined=0
+   A=0.5   zero     cand=24/0/0/0           1L=0.9998 gap=0 cl=0 un=0 park=0.000204  drains=24/0/0/0 l_min=12.87 lnR_drain_min=63.07 w<1=0 unresolvable=0 declined=0
+   A=0.5   edge S1  cand=24/0/0/0           1L=0.9998 gap=0 cl=0 un=0 park=0.000204  drains=24/0/0/0 l_min=12.87 lnR_drain_min=63.07 w<1=0 unresolvable=0 declined=0
+   A=0.1   zero     cand=81/0/0/0           1L=0.9985 gap=0 cl=0 un=0 park=0.00151  drains=81/0/0/0 l_min=18.05 lnR_drain_min=82.66 w<1=0 unresolvable=0 declined=0
+   A=0.1   edge S1  cand=81/0/0/0           1L=0.9985 gap=0 cl=0 un=0 park=0.00151  drains=81/0/0/0 l_min=18.05 lnR_drain_min=82.66 w<1=0 unresolvable=0 declined=0
+   A=0.05  zero     cand=41/0/0/0           1L=0.9995 gap=0 cl=0 un=0 park=0.000534  drains=41/0/0/0 l_min=13.31 lnR_drain_min=64.74 w<1=0 unresolvable=0 declined=0
+   A=0.05  edge S1  cand=41/0/0/0           1L=0.9995 gap=0 cl=0 un=0 park=0.000534  drains=41/0/0/0 l_min=13.31 lnR_drain_min=64.74 w<1=0 unresolvable=0 declined=0
+   A=0.01  zero     cand=30/0/0/0           1L=0.988 gap=0 cl=0 un=0 park=0.012  drains=30/0/0/0 l_min=12.85 lnR_drain_min=62.99 w<1=0 unresolvable=0 declined=0
+   A=0.01  edge S1  cand=30/0/0/0           1L=0.988 gap=0 cl=0 un=0 park=0.012  drains=30/0/0/0 l_min=12.85 lnR_drain_min=62.99 w<1=0 unresolvable=0 declined=0
+
+B-2774  M=1e-30 beta=10  ln R_first=162.624
+   A=10    zero     cand=7/0/0/0            1L=0.9999 gap=0 cl=0 un=0 park=0.000126  drains=7/0/0/0 l_min=35.56 lnR_drain_min=150.6 w<1=0 unresolvable=0 declined=0
+   A=10    edge S1  cand=7/0/0/0            1L=0.9999 gap=0 cl=0 un=0 park=0.000126  drains=7/0/0/0 l_min=35.56 lnR_drain_min=150.6 w<1=0 unresolvable=0 declined=0
+   A=5     zero     cand=18/0/0/0           1L=0.9998 gap=0 cl=0 un=0 park=0.000234  drains=18/0/0/0 l_min=34.64 lnR_drain_min=147 w<1=0 unresolvable=0 declined=0
+   A=5     edge S1  cand=18/0/0/0           1L=0.9998 gap=0 cl=0 un=0 park=0.000234  drains=18/0/0/0 l_min=34.64 lnR_drain_min=147 w<1=0 unresolvable=0 declined=0
+   A=2     zero     cand=38/0/0/0           1L=0.9996 gap=0 cl=0 un=0 park=0.000434  drains=38/0/0/0 l_min=33.18 lnR_drain_min=141.3 w<1=0 unresolvable=0 declined=0
+   A=2     edge S1  cand=38/0/0/0           1L=0.9996 gap=0 cl=0 un=0 park=0.000434  drains=38/0/0/0 l_min=33.18 lnR_drain_min=141.3 w<1=0 unresolvable=0 declined=0
+   A=1.5   zero     cand=40/0/0/0           1L=0.9994 gap=0 cl=0 un=0 park=0.000564  drains=40/0/0/0 l_min=32 lnR_drain_min=136.7 w<1=0 unresolvable=0 declined=0
+   A=1.5   edge S1  cand=40/0/0/0           1L=0.9994 gap=0 cl=0 un=0 park=0.000564  drains=40/0/0/0 l_min=32 lnR_drain_min=136.7 w<1=0 unresolvable=0 declined=0
+   A=1     zero     cand=62/0/0/0           1L=0.9992 gap=0 cl=0 un=0 park=0.000787  drains=62/0/0/0 l_min=30.94 lnR_drain_min=132.5 w<1=0 unresolvable=0 declined=0
+   A=1     edge S1  cand=62/0/0/0           1L=0.9992 gap=0 cl=0 un=0 park=0.000787  drains=62/0/0/0 l_min=30.94 lnR_drain_min=132.5 w<1=0 unresolvable=0 declined=0
+   A=0.5   zero     cand=119/0/0/0          1L=0.9986 gap=0 cl=0 un=0 park=0.00138  drains=119/0/0/0 l_min=29.89 lnR_drain_min=128.4 w<1=0 unresolvable=0 declined=0
+   A=0.5   edge S1  cand=119/0/0/0          1L=0.9986 gap=0 cl=0 un=0 park=0.00138  drains=119/0/0/0 l_min=29.89 lnR_drain_min=128.4 w<1=0 unresolvable=0 declined=0
+   A=0.1   zero     cand=516/0/0/0          1L=0.995 gap=0 cl=0 un=0 park=0.00498  drains=516/0/0/0 l_min=27.89 lnR_drain_min=120.6 w<1=0 unresolvable=0 declined=0
+   A=0.1   edge S1  cand=516/0/0/0          1L=0.995 gap=0 cl=0 un=0 park=0.00498  drains=516/0/0/0 l_min=27.89 lnR_drain_min=120.6 w<1=0 unresolvable=0 declined=0
+   A=0.05  zero     cand=675/0/0/0          1L=0.9917 gap=0 cl=0 un=0 park=0.00833  drains=675/0/0/0 l_min=26.87 lnR_drain_min=116.6 w<1=0 unresolvable=0 declined=0
+   A=0.05  edge S1  cand=675/0/0/0          1L=0.9917 gap=0 cl=0 un=0 park=0.00833  drains=675/0/0/0 l_min=26.87 lnR_drain_min=116.6 w<1=0 unresolvable=0 declined=0
+   A=0.01  zero     cand=664/0/0/0          1L=0.9668 gap=0 cl=0 un=0 park=0.0332  drains=664/0/0/0 l_min=24.75 lnR_drain_min=108.4 w<1=0 unresolvable=0 declined=0
+   A=0.01  edge S1  cand=664/0/0/0          1L=0.9668 gap=0 cl=0 un=0 park=0.0332  drains=664/0/0/0 l_min=24.75 lnR_drain_min=108.4 w<1=0 unresolvable=0 declined=0
+
+L-M5e-20  M=5e-20 beta=2  ln R_first=40.161
+   A=10    zero     cand=4/0/0/0            1L=1 gap=0 cl=0 un=0 park=9.73e-09  drains=4/0/0/0 l_min=5.165 lnR_drain_min=24.32 w<1=0 unresolvable=0 declined=0
+   A=10    edge S1  cand=4/0/0/0            1L=1 gap=0 cl=0 un=0 park=9.73e-09  drains=4/0/0/0 l_min=5.165 lnR_drain_min=24.32 w<1=0 unresolvable=0 declined=0
+   A=5     zero     cand=4/0/0/0            1L=1 gap=0 cl=0 un=0 park=9.73e-09  drains=4/0/0/0 l_min=5.165 lnR_drain_min=24.32 w<1=0 unresolvable=0 declined=0
+   A=5     edge S1  cand=4/0/0/0            1L=1 gap=0 cl=0 un=0 park=9.73e-09  drains=4/0/0/0 l_min=5.165 lnR_drain_min=24.32 w<1=0 unresolvable=0 declined=0
+   A=2     zero     cand=8/0/0/0            1L=1 gap=0 cl=0 un=0 park=9.42e-09  drains=8/0/0/0 l_min=3.895 lnR_drain_min=19.32 w<1=0 unresolvable=0 declined=0
+   A=2     edge S1  cand=8/0/0/0            1L=1 gap=0 cl=0 un=0 park=9.42e-09  drains=8/0/0/0 l_min=3.895 lnR_drain_min=19.32 w<1=0 unresolvable=0 declined=0
+   A=1.5   zero     cand=11/0/0/0           1L=1 gap=0 cl=0 un=0 park=1.36e-06  drains=11/0/0/0 l_min=4.323 lnR_drain_min=21 w<1=0 unresolvable=0 declined=0
+   A=1.5   edge S1  cand=11/0/0/0           1L=1 gap=0 cl=0 un=0 park=1.36e-06  drains=11/0/0/0 l_min=4.323 lnR_drain_min=21 w<1=0 unresolvable=0 declined=0
+   A=1     zero     cand=14/0/0/0           1L=1 gap=0 cl=0 un=0 park=1.01e-05  drains=14/0/0/0 l_min=3.581 lnR_drain_min=18.1 w<1=0 unresolvable=0 declined=0
+   A=1     edge S1  cand=14/0/0/0           1L=1 gap=0 cl=0 un=0 park=1.01e-05  drains=14/0/0/0 l_min=3.581 lnR_drain_min=18.1 w<1=0 unresolvable=0 declined=0
+   A=0.5   zero     cand=17/0/0/0           1L=1 gap=0 cl=0 un=0 park=1.5e-07  drains=17/0/0/0 l_min=1.04 lnR_drain_min=8.701 w<1=0 unresolvable=0 declined=0
+   A=0.5   edge S1  cand=17/0/0/0           1L=1 gap=0 cl=0 un=0 park=1.5e-07  drains=17/0/0/0 l_min=1.04 lnR_drain_min=8.701 w<1=0 unresolvable=0 declined=0
+   A=0.1   zero     failure; met in its 1 integration(s): cand=8/2/13825/0; step budget (2e6 steps) at N=47.04432044
+   A=0.1   edge     failure; met in its 1 integration(s): cand=8/2/13563/0; step budget (2e6 steps) at N=47.68914951
+   A=0.05  zero     failure; met in its 1 integration(s): cand=8/2/14010/0; step budget (2e6 steps) at N=46.43600671
+   A=0.05  edge     failure; met in its 1 integration(s): cand=8/2/14106/0; step budget (2e6 steps) at N=46.06566773
+   A=0.01  zero     cand=7/2/28/0           1L=0.9997 gap=0 cl=0 un=0 park=0.000262  drains=7/0/0/0 l_min=4.022 lnR_drain_min=19.82 w<1=0 unresolvable=0 declined=0
+   A=0.01  edge     cand=7/2/28/0           1L=0.9943 gap=0.002996 cl=0 un=0 park=0.00274  drains=7/2/0/0 l_min=4.022 lnR_drain_min=0.7503 w<1=0 unresolvable=0 declined=0
+
+L-M8e-18  M=8e-18 beta=2  ln R_first=19.861
+   A=10    zero     cand=3/1/0/0            1L=1 gap=0 cl=0 un=0 park=9.73e-07  drains=3/0/0/0 l_min=1.164 lnR_drain_min=9.023 w<1=0 unresolvable=0 declined=0
+   A=10    edge     cand=3/1/0/0            1L=1 gap=9.633e-07 cl=0 un=0 park=9.73e-09  drains=3/1/0/0 l_min=1.164 lnR_drain_min=4.019 w<1=0 unresolvable=0 declined=0
+   A=5     zero     cand=3/1/0/0            1L=1 gap=0 cl=0 un=0 park=9.73e-07  drains=3/0/0/0 l_min=1.164 lnR_drain_min=9.023 w<1=0 unresolvable=0 declined=0
+   A=5     edge     cand=3/1/0/0            1L=1 gap=9.633e-07 cl=0 un=0 park=9.73e-09  drains=3/1/0/0 l_min=1.164 lnR_drain_min=4.019 w<1=0 unresolvable=0 declined=0
+   A=2     zero     cand=3/1/0/0            1L=1 gap=0 cl=0 un=0 park=9.73e-07  drains=3/0/0/0 l_min=1.164 lnR_drain_min=9.023 w<1=0 unresolvable=0 declined=0
+   A=2     edge     cand=3/1/0/0            1L=1 gap=9.633e-07 cl=0 un=0 park=9.73e-09  drains=3/1/0/0 l_min=1.164 lnR_drain_min=4.019 w<1=0 unresolvable=0 declined=0
+   A=1.5   zero     cand=3/1/0/0            1L=1 gap=0 cl=0 un=0 park=9.73e-07  drains=3/0/0/0 l_min=1.164 lnR_drain_min=9.023 w<1=0 unresolvable=0 declined=0
+   A=1.5   edge     cand=3/1/0/0            1L=1 gap=9.633e-07 cl=0 un=0 park=9.73e-09  drains=3/1/0/0 l_min=1.164 lnR_drain_min=4.019 w<1=0 unresolvable=0 declined=0
+   A=1     zero     cand=3/158/67/0         1L=1 gap=0 cl=0 un=0 park=3.91e-05  drains=3/0/0/0 l_min=1.932 lnR_drain_min=11.71 w<1=0 unresolvable=0 declined=0
+   A=1     edge     cand=3/3/0/0            1L=0.9998 gap=0.0002019 cl=0 un=0 park=7.18e-06  drains=3/3/0/0 l_min=1.932 lnR_drain_min=4.175 w<1=0 unresolvable=0 declined=0
+   A=0.5   zero     cand=5/71/103/0         1L=1 gap=0 cl=0 un=0 park=4.13e-05  drains=5/0/0/0 l_min=1.179 lnR_drain_min=9.07 w<1=0 unresolvable=0 declined=0
+   A=0.5   edge     cand=5/7/0/0            1L=0.9997 gap=0.0003009 cl=0 un=0 park=1.77e-05  drains=5/7/0/0 l_min=1.179 lnR_drain_min=1.219 w<1=0 unresolvable=0 declined=0
+   A=0.1   zero     cand=5/3/23/0           1L=0.9999 gap=0 cl=0 un=0 park=0.000113  drains=5/0/0/0 l_min=0.5883 lnR_drain_min=7.307 w<1=0 unresolvable=0 declined=0
+   A=0.1   edge     cand=5/3/102/0          1L=0.9768 gap=0.02307 cl=0 un=0 park=0.000125  drains=5/3/0/0 l_min=0.5883 lnR_drain_min=0.7707 w<1=0 unresolvable=0 declined=0
+   A=0.05  zero     cand=4/3/9777/0         1L=1 gap=0 cl=0 un=0 park=8.16e-08  drains=4/0/0/0 l_min=1.606 lnR_drain_min=10.54 w<1=0 unresolvable=0 declined=0
+   A=0.05  edge     cand=4/3/12941/0        1L=0.935 gap=0.06498 cl=0 un=0 park=2.23e-10  drains=4/3/0/0 l_min=1.606 lnR_drain_min=0.8946 w<1=0 unresolvable=0 declined=1
+   A=0.01  zero     cand=4/2/61/0           1L=0.9997 gap=0 cl=0 un=0 park=0.000299  drains=4/0/0/0 l_min=1.549 lnR_drain_min=10.34 w<1=0 unresolvable=0 declined=0
+   A=0.01  edge     cand=4/2/68/0           1L=0.9451 gap=0.0544 cl=0 un=0 park=0.000506  drains=4/2/0/0 l_min=1.549 lnR_drain_min=2.89 w<1=0 unresolvable=0 declined=0
+
+L-M1e-16  M=1e-16 beta=2  ln R_first=9.758
+   A=10    zero     cand=1/9/54/0           1L=1 gap=0 cl=0 un=0 park=2.07e-05  drains=1/0/0/0 l_min=1.392 lnR_drain_min=9.758 w<1=0 unresolvable=0 declined=0
+   A=10    edge     cand=1/1/299/0          1L=0.9903 gap=0.009655 cl=0 un=0 park=3.59e-05  drains=1/1/0/0 l_min=1.392 lnR_drain_min=3.974 w<1=0 unresolvable=0 declined=0
+   A=5     zero     cand=1/9/54/0           1L=1 gap=0 cl=0 un=0 park=2.07e-05  drains=1/0/0/0 l_min=1.392 lnR_drain_min=9.758 w<1=0 unresolvable=0 declined=0
+   A=5     edge     cand=1/1/299/0          1L=0.9903 gap=0.009655 cl=0 un=0 park=3.59e-05  drains=1/1/0/0 l_min=1.392 lnR_drain_min=3.974 w<1=0 unresolvable=0 declined=0
+   A=2     zero     cand=1/9/54/0           1L=1 gap=0 cl=0 un=0 park=2.07e-05  drains=1/0/0/0 l_min=1.392 lnR_drain_min=9.758 w<1=0 unresolvable=0 declined=0
+   A=2     edge     cand=1/1/299/0          1L=0.9903 gap=0.009655 cl=0 un=0 park=3.59e-05  drains=1/1/0/0 l_min=1.392 lnR_drain_min=3.974 w<1=0 unresolvable=0 declined=0
+   A=1.5   zero     cand=1/9/54/0           1L=1 gap=0 cl=0 un=0 park=2.07e-05  drains=1/0/0/0 l_min=1.392 lnR_drain_min=9.758 w<1=0 unresolvable=0 declined=0
+   A=1.5   edge     cand=1/1/299/0          1L=0.9903 gap=0.009655 cl=0 un=0 park=3.59e-05  drains=1/1/0/0 l_min=1.392 lnR_drain_min=3.974 w<1=0 unresolvable=0 declined=0
+   A=1     zero     cand=1/9/54/0           1L=1 gap=0 cl=0 un=0 park=2.07e-05  drains=1/0/0/0 l_min=1.392 lnR_drain_min=9.758 w<1=0 unresolvable=0 declined=0
+   A=1     edge     cand=1/3/263/0          1L=0.9906 gap=0.009388 cl=0 un=0 park=4.02e-05  drains=1/3/0/0 l_min=1.392 lnR_drain_min=0.904 w<1=0 unresolvable=0 declined=0
+   A=0.5   zero     cand=1/7/115/0          1L=1 gap=0 cl=0 un=0 park=4.7e-05  drains=1/0/0/0 l_min=1.392 lnR_drain_min=9.758 w<1=0 unresolvable=0 declined=0
+   A=0.5   edge     cand=1/5/90/0           1L=0.9745 gap=0.02542 cl=0 un=0 park=4.03e-05  drains=1/5/0/0 l_min=1.392 lnR_drain_min=0.5747 w<1=0 unresolvable=0 declined=0
+   A=0.1   zero     cand=1/3/9729/0         1L=1 gap=0 cl=0 un=0 park=6.83e-07  drains=1/0/0/0 l_min=1.392 lnR_drain_min=9.758 w<1=0 unresolvable=0 declined=0
+   A=0.1   edge     cand=1/3/32/0           1L=0.5924 gap=0.4076 cl=0 un=0 park=1.05e-05  drains=1/3/0/0 l_min=1.392 lnR_drain_min=0.9214 w<1=0 unresolvable=0 declined=0
+   A=0.05  zero     cand=1/3/9618/0         1L=1 gap=0 cl=0 un=0 park=4.56e-08  drains=1/0/0/0 l_min=1.392 lnR_drain_min=9.758 w<1=0 unresolvable=0 declined=0
+   A=0.05  edge     cand=1/3/10028/0        1L=0.5693 gap=0.4307 cl=0 un=0 park=8.75e-08  drains=1/3/0/0 l_min=1.392 lnR_drain_min=0.5931 w<1=0 unresolvable=0 declined=0
+   A=0.01  zero     cand=1/3/35/0           1L=0.9998 gap=0 cl=0 un=0 park=0.000242  drains=1/0/0/0 l_min=1.392 lnR_drain_min=9.758 w<1=0 unresolvable=0 declined=0
+   A=0.01  edge     cand=1/3/59/0           1L=0.5538 gap=0.445 cl=0 un=0 park=0.00123  drains=1/3/0/0 l_min=1.392 lnR_drain_min=0.2677 w<1=0 unresolvable=0 declined=0
+
+L-M5e-16  M=5e-16 beta=2  ln R_first=3.320
+   A=10    zero S2  cand=0/1/27/0           1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=10    edge     cand=0/1/63/0           1L=0 gap=1 cl=0 un=0 park=2.07e-05  drains=0/1/0/0 l_min=None lnR_drain_min=3.32 w<1=0 unresolvable=0 declined=0
+   A=5     zero S2  cand=0/1/27/0           1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=5     edge     cand=0/1/63/0           1L=0 gap=1 cl=0 un=0 park=2.07e-05  drains=0/1/0/0 l_min=None lnR_drain_min=3.32 w<1=0 unresolvable=0 declined=0
+   A=2     zero S2  cand=0/1/27/0           1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=2     edge     cand=0/1/63/0           1L=0 gap=1 cl=0 un=0 park=2.07e-05  drains=0/1/0/0 l_min=None lnR_drain_min=3.32 w<1=0 unresolvable=0 declined=0
+   A=1.5   zero S2  cand=0/1/27/0           1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=1.5   edge     cand=0/1/63/0           1L=0 gap=1 cl=0 un=0 park=2.07e-05  drains=0/1/0/0 l_min=None lnR_drain_min=3.32 w<1=0 unresolvable=0 declined=0
+   A=1     zero     cand=0/1/27/0           1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=1     edge     cand=0/1/9962/0         1L=0 gap=1 cl=0 un=0 park=1.39e-09  drains=0/1/0/0 l_min=None lnR_drain_min=3.32 w<1=0 unresolvable=0 declined=0
+   A=0.5   zero S2  cand=0/1/27/0           1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=0.5   edge     cand=0/1/25/0           1L=0 gap=0.9999 cl=0 un=0 park=0.000105  drains=0/1/0/0 l_min=None lnR_drain_min=3.32 w<1=0 unresolvable=0 declined=0
+   A=0.1   zero     cand=0/1/27/0           1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=0.1   edge     cand=0/1/35/0           1L=0 gap=0.9993 cl=0 un=0 park=0.000684  drains=0/1/0/0 l_min=None lnR_drain_min=3.32 w<1=0 unresolvable=0 declined=0
+   A=0.05  zero S2  cand=0/1/27/0           1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=0.05  edge     cand=0/1/58/0           1L=0 gap=0.9993 cl=0 un=0 park=0.000719  drains=0/1/0/0 l_min=None lnR_drain_min=3.32 w<1=0 unresolvable=0 declined=0
+   A=0.01  zero S2  cand=0/1/27/0           1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=0.01  edge     cand=0/1/30/0           1L=0 gap=0.9975 cl=0 un=0 park=0.00253  drains=0/1/0/0 l_min=None lnR_drain_min=3.32 w<1=0 unresolvable=0 declined=0
+
+L-M4e-15  M=4e-15 beta=2  ln R_first=-4.998
+   A=10    zero S2  cand=0/0/28/0           1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=10    edge S1  cand=0/0/28/0           1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=5     zero S2  cand=0/0/28/0           1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=5     edge S1  cand=0/0/28/0           1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=2     zero S2  cand=0/0/28/0           1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=2     edge S1  cand=0/0/28/0           1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=1.5   zero S2  cand=0/0/28/0           1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=1.5   edge S1  cand=0/0/28/0           1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=1     zero     cand=0/0/28/0           1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=1     edge S1  cand=0/0/28/0           1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=0.5   zero S2  cand=0/0/28/0           1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=0.5   edge S1  cand=0/0/28/0           1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=0.1   zero     cand=0/0/28/0           1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=0.1   edge S1  cand=0/0/28/0           1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=0.05  zero S2  cand=0/0/28/0           1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=0.05  edge S1  cand=0/0/28/0           1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=0.01  zero S2  cand=0/0/28/0           1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=0.01  edge S1  cand=0/0/28/0           1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+
+C-3016  M=1e-12 beta=4  ln R_first=-6.191
+   A=10    zero S2  cand=0/0/330/0          1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=10    edge S1  cand=0/0/330/0          1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=5     zero S2  cand=0/0/330/0          1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=5     edge S1  cand=0/0/330/0          1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=2     zero S2  cand=0/0/330/0          1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=2     edge S1  cand=0/0/330/0          1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=1.5   zero S2  cand=0/0/330/0          1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=1.5   edge S1  cand=0/0/330/0          1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=1     zero     cand=0/0/330/0          1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=1     edge S1  cand=0/0/330/0          1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=0.5   zero S2  cand=0/0/330/0          1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=0.5   edge S1  cand=0/0/330/0          1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=0.1   zero     cand=0/0/330/0          1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=0.1   edge S1  cand=0/0/330/0          1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=0.05  zero S2  cand=0/0/330/0          1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=0.05  edge S1  cand=0/0/330/0          1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=0.01  zero S2  cand=0/0/330/0          1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=0.01  edge S1  cand=0/0/330/0          1L=0 gap=0 cl=0 un=0 park=1  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+
+C-3233  M=1e-12 beta=1  ln R_first=-119.579
+   A=10    zero S2  cand=0/0/301/0          1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=10    edge S1  cand=0/0/301/0          1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=5     zero S2  cand=0/0/301/0          1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=5     edge S1  cand=0/0/301/0          1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=2     zero S2  cand=0/0/301/0          1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=2     edge S1  cand=0/0/301/0          1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=1.5   zero S2  cand=0/0/301/0          1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=1.5   edge S1  cand=0/0/301/0          1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=1     zero     cand=0/0/301/0          1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=1     edge S1  cand=0/0/301/0          1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=0.5   zero S2  cand=0/0/301/0          1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=0.5   edge S1  cand=0/0/301/0          1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=0.1   zero     cand=0/0/301/0          1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=0.1   edge S1  cand=0/0/301/0          1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=0.05  zero S2  cand=0/0/301/0          1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=0.05  edge S1  cand=0/0/301/0          1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=0.01  zero S2  cand=0/0/301/0          1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+   A=0.01  edge S1  cand=0/0/301/0          1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=0
+
+C-3873  M=1e-12 beta=1.11  ln R_first=-33.142
+   A=10    zero S2  cand=0/0/2489/0         1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=27
+   A=10    edge S1  cand=0/0/2489/0         1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=27
+   A=5     zero S2  cand=0/0/2489/0         1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=27
+   A=5     edge S1  cand=0/0/2489/0         1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=27
+   A=2     zero S2  cand=0/0/2489/0         1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=27
+   A=2     edge S1  cand=0/0/2489/0         1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=27
+   A=1.5   zero S2  cand=0/0/2489/0         1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=27
+   A=1.5   edge S1  cand=0/0/2489/0         1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=27
+   A=1     zero     cand=0/0/2489/0         1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=27
+   A=1     edge S1  cand=0/0/2489/0         1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=27
+   A=0.5   zero S2  cand=0/0/2489/0         1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=27
+   A=0.5   edge S1  cand=0/0/2489/0         1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=27
+   A=0.1   zero     cand=0/0/2489/0         1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=27
+   A=0.1   edge S1  cand=0/0/2489/0         1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=27
+   A=0.05  zero S2  cand=0/0/2489/0         1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=27
+   A=0.05  edge S1  cand=0/0/2489/0         1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=27
+   A=0.01  zero S2  cand=0/0/2489/0         1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=27
+   A=0.01  edge S1  cand=0/0/2489/0         1L=None gap=None cl=None un=None park=None  drains=0/0/0/0 l_min=None lnR_drain_min=None w<1=0 unresolvable=0 declined=27
+
+# the regimes met, by history and A: the zero task's candidates over every integration of its tuning,
+# failures included (1L/gap/cl/un); G: the cascade enters the gap; C: it reaches R <= 1; x: the tuning failed
+history       ln R_first                      A=10                       A=5                       A=2                     A=1.5                       A=1                     A=0.5                     A=0.1                    A=0.05                    A=0.01
+P-2197           138.070               6/0/0/0 --                9/0/0/0 --                7/0/0/0 --               14/0/0/0 --               10/0/0/0 --               32/0/0/0 --               95/0/0/0 --              134/0/0/0 --        183/508/13260/0 GCx
+P-2188           101.663               3/0/0/0 --                6/0/0/0 --                3/0/0/0 --               10/0/0/0 --               15/0/0/0 --               28/0/0/0 --               92/0/0/0 --              138/0/0/0 --        214/713/13377/0 GCx
+W-2187           126.548               4/0/0/0 --                9/0/0/0 --                8/0/0/0 --               12/0/0/0 --               18/0/0/0 --               31/0/0/0 --               90/0/0/0 --              125/0/0/0 --        167/420/10184/0 GCx
+W-1631           121.804               4/0/0/0 --                7/0/0/0 --               10/0/0/0 --               13/0/0/0 --               18/0/0/0 --               31/0/0/0 --               92/0/0/0 --              133/0/0/0 --        192/577/13497/0 GCx
+W-2179           133.422               5/0/0/0 --                8/0/0/0 --                7/0/0/0 --               13/0/0/0 --               11/0/0/0 --               30/0/0/0 --               91/0/0/0 --              127/0/0/0 --        170/432/10385/0 GCx
+W-2078           137.988               6/0/0/0 --               11/0/0/0 --               12/0/0/0 --                5/0/0/0 --               19/0/0/0 --               32/0/0/0 --               95/0/0/0 --              133/0/0/0 --        182/479/11069/0 GCx
+W-2192           135.860               5/0/0/0 --                8/0/0/0 --               11/0/0/0 --               13/0/0/0 --               14/0/0/0 --               28/0/0/0 --               91/0/0/0 --              129/0/0/0 --        172/440/10178/0 GCx
+W-2209           138.088               6/0/0/0 --                7/0/0/0 --               11/0/0/0 --               11/0/0/0 --               18/0/0/0 --               31/0/0/0 --               96/0/0/0 --              136/0/0/0 --        188/537/13484/0 GCx
+W-2183           137.082               5/0/0/0 --               10/0/0/0 --               10/0/0/0 --               13/0/0/0 --               18/0/0/0 --               29/0/0/0 --               92/0/0/0 --              129/0/0/0 --        172/438/10272/0 GCx
+W-2172           136.988               5/0/0/0 --               10/0/0/0 --               10/0/0/0 --               13/0/0/0 --                9/0/0/0 --               31/0/0/0 --               91/0/0/0 --              127/0/0/0 --         172/435/9992/0 GCx
+W-2178           135.558               5/0/0/0 --                8/0/0/0 --               11/0/0/0 --               13/0/0/0 --               15/0/0/0 --               27/0/0/0 --               92/0/0/0 --              131/0/0/0 --        180/487/11903/0 GCx
+W-2185           137.965               6/0/0/0 --               11/0/0/0 --               12/0/0/0 --               11/0/0/0 --               19/0/0/0 --               32/0/0/0 --               95/0/0/0 --              135/0/0/0 --        189/531/13469/0 GCx
+R-632             49.874               4/0/0/0 --                4/0/0/0 --                7/0/0/0 --                9/0/0/0 --               13/0/0/0 --               20/1/0/0 G-          34/200/4515/0 GCx          37/98/1488/0 GCx           39/40/353/0 GCx
+R-1193           137.687               6/0/0/0 --               10/0/0/0 --               12/0/0/0 --               13/0/0/0 --               19/0/0/0 --               27/0/0/0 --               26/0/0/0 --              123/0/0/0 --              314/0/0/0 -- 
+R-865            142.368               7/0/0/0 --               17/0/0/0 --               27/0/0/0 --               35/0/0/0 --               44/0/0/0 --               33/0/0/0 --               78/0/0/0 --               40/0/0/0 --               64/0/0/0 -- 
+R-611            166.289               8/0/0/0 --               18/0/0/0 --               38/0/0/0 --               42/0/0/0 --               64/0/0/0 --              122/0/0/0 --              528/0/0/0 --              679/0/0/0 --              662/0/0/0 -- 
+B-2819           162.135               8/0/0/0 --               12/0/0/0 --               18/0/0/0 --               11/0/0/0 --               18/0/0/0 --               35/0/0/0 --               48/0/0/0 --              134/0/0/0 --              338/0/0/0 -- 
+B-2496           166.333               9/0/0/0 --               19/0/0/0 --               30/0/0/0 --               30/0/0/0 --               36/0/0/0 --               35/0/0/0 --               63/0/0/0 --               38/0/0/0 --              235/0/0/0 -- 
+B-2772           190.255               9/0/0/0 --               21/0/0/0 --               38/0/0/0 --               49/0/0/0 --               74/0/0/0 --              140/0/0/0 --              595/0/0/0 --              720/0/0/0 --              648/0/0/0 -- 
+B-2821           134.504               6/0/0/0 --               10/0/0/0 --               17/0/0/0 --               13/0/0/0 --               18/0/0/0 --               30/0/0/0 --                5/0/0/0 --              113/0/0/0 --              349/0/0/0 -- 
+B-2498           138.702               6/0/0/0 --               17/0/0/0 --               20/0/0/0 --               33/0/0/0 --               43/0/0/0 --               24/0/0/0 --               81/0/0/0 --               41/0/0/0 --               30/0/0/0 -- 
+B-2774           162.624               7/0/0/0 --               18/0/0/0 --               38/0/0/0 --               40/0/0/0 --               62/0/0/0 --              119/0/0/0 --             1032/0/0/0 --              675/0/0/0 --              664/0/0/0 -- 
+L-M5e-20          40.161               4/0/0/0 --                4/0/0/0 --                8/0/0/0 --               11/0/0/0 --               14/0/0/0 --               17/0/0/0 --            8/2/13825/0 GCx           8/2/14010/0 GCx              7/2/28/0 GC 
+L-M8e-18          19.861               3/1/0/0 G-                3/1/0/0 G-                3/1/0/0 G-                3/1/0/0 G-             3/158/67/0 GC             5/71/103/0 GC               5/3/23/0 GC             4/3/9777/0 GC               4/2/61/0 GC 
+L-M1e-16           9.758              1/9/54/0 GC               1/9/54/0 GC               1/9/54/0 GC               1/9/54/0 GC               1/9/54/0 GC              1/7/115/0 GC             1/3/9729/0 GC             1/3/9618/0 GC               1/3/35/0 GC 
+L-M5e-16           3.320              0/1/27/0 GC               0/1/27/0 GC               0/1/27/0 GC               0/1/27/0 GC               0/1/27/0 GC               0/1/27/0 GC               0/1/27/0 GC               0/1/27/0 GC               0/1/27/0 GC 
+L-M4e-15          -4.998              0/0/28/0 -C               0/0/28/0 -C               0/0/28/0 -C               0/0/28/0 -C               0/0/28/0 -C               0/0/28/0 -C               0/0/28/0 -C               0/0/28/0 -C               0/0/28/0 -C 
+C-3016            -6.191             0/0/330/0 -C              0/0/330/0 -C              0/0/330/0 -C              0/0/330/0 -C              0/0/330/0 -C              0/0/330/0 -C              0/0/330/0 -C              0/0/330/0 -C              0/0/330/0 -C 
+C-3233          -119.579             0/0/903/0 -C              0/0/903/0 -C              0/0/903/0 -C              0/0/903/0 -C              0/0/903/0 -C              0/0/903/0 -C              0/0/903/0 -C              0/0/903/0 -C              0/0/903/0 -C 
+C-3873           -33.142           0/0/39825/0 -C            0/0/39825/0 -C            0/0/39825/0 -C            0/0/39825/0 -C            0/0/39825/0 -C            0/0/39825/0 -C            0/0/39825/0 -C            0/0/39825/0 -C            0/0/39825/0 -C 
+
+# the gap's reach (zero; edge where it was run)
+# first gap: index, N, ln R, l of the one-loop candidate before it; first classical: index, N, ln R;
+# 1L after: one-loop candidates after the first gap / after the first classical
+P-2197        A=10    zero lnR_first=   138.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+P-2197        A=5     zero lnR_first=   138.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+P-2197        A=2     zero lnR_first=   138.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+P-2197        A=1.5   zero lnR_first=   138.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+P-2197        A=1     zero lnR_first=   138.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+P-2197        A=0.5   zero lnR_first=   138.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+P-2197        A=0.1   zero lnR_first=   138.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+P-2197        A=0.05  zero lnR_first=   138.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+P-2188        A=10    zero lnR_first=   101.7  enters_gap=False reaches_R<=1=False  no gap; no classical
+P-2188        A=5     zero lnR_first=   101.7  enters_gap=False reaches_R<=1=False  no gap; no classical
+P-2188        A=2     zero lnR_first=   101.7  enters_gap=False reaches_R<=1=False  no gap; no classical
+P-2188        A=1.5   zero lnR_first=   101.7  enters_gap=False reaches_R<=1=False  no gap; no classical
+P-2188        A=1     zero lnR_first=   101.7  enters_gap=False reaches_R<=1=False  no gap; no classical
+P-2188        A=0.5   zero lnR_first=   101.7  enters_gap=False reaches_R<=1=False  no gap; no classical
+P-2188        A=0.1   zero lnR_first=   101.7  enters_gap=False reaches_R<=1=False  no gap; no classical
+P-2188        A=0.05  zero lnR_first=   101.7  enters_gap=False reaches_R<=1=False  no gap; no classical
+P-2188        A=0.01  edge lnR_first=   101.7  enters_gap=True  reaches_R<=1=False  gap #214 N=39.2811 lnR=14.57 l_before=0.1473 1L_after=0; no classical
+W-2187        A=10    zero lnR_first=   126.5  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2187        A=5     zero lnR_first=   126.5  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2187        A=2     zero lnR_first=   126.5  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2187        A=1.5   zero lnR_first=   126.5  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2187        A=1     zero lnR_first=   126.5  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2187        A=0.5   zero lnR_first=   126.5  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2187        A=0.1   zero lnR_first=   126.5  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2187        A=0.05  zero lnR_first=   126.5  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-1631        A=10    zero lnR_first=   121.8  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-1631        A=5     zero lnR_first=   121.8  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-1631        A=2     zero lnR_first=   121.8  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-1631        A=1.5   zero lnR_first=   121.8  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-1631        A=1     zero lnR_first=   121.8  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-1631        A=0.5   zero lnR_first=   121.8  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-1631        A=0.1   zero lnR_first=   121.8  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-1631        A=0.05  zero lnR_first=   121.8  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2179        A=10    zero lnR_first=   133.4  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2179        A=5     zero lnR_first=   133.4  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2179        A=2     zero lnR_first=   133.4  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2179        A=1.5   zero lnR_first=   133.4  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2179        A=1     zero lnR_first=   133.4  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2179        A=0.5   zero lnR_first=   133.4  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2179        A=0.1   zero lnR_first=   133.4  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2179        A=0.05  zero lnR_first=   133.4  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2078        A=10    zero lnR_first=     138  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2078        A=5     zero lnR_first=     138  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2078        A=2     zero lnR_first=     138  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2078        A=1.5   zero lnR_first=     138  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2078        A=1     zero lnR_first=     138  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2078        A=0.5   zero lnR_first=     138  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2078        A=0.1   zero lnR_first=     138  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2078        A=0.05  zero lnR_first=     138  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2192        A=10    zero lnR_first=   135.9  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2192        A=5     zero lnR_first=   135.9  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2192        A=2     zero lnR_first=   135.9  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2192        A=1.5   zero lnR_first=   135.9  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2192        A=1     zero lnR_first=   135.9  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2192        A=0.5   zero lnR_first=   135.9  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2192        A=0.1   zero lnR_first=   135.9  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2192        A=0.05  zero lnR_first=   135.9  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2209        A=10    zero lnR_first=   138.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2209        A=5     zero lnR_first=   138.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2209        A=2     zero lnR_first=   138.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2209        A=1.5   zero lnR_first=   138.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2209        A=1     zero lnR_first=   138.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2209        A=0.5   zero lnR_first=   138.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2209        A=0.1   zero lnR_first=   138.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2209        A=0.05  zero lnR_first=   138.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2183        A=10    zero lnR_first=   137.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2183        A=5     zero lnR_first=   137.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2183        A=2     zero lnR_first=   137.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2183        A=1.5   zero lnR_first=   137.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2183        A=1     zero lnR_first=   137.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2183        A=0.5   zero lnR_first=   137.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2183        A=0.1   zero lnR_first=   137.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2183        A=0.05  zero lnR_first=   137.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2172        A=10    zero lnR_first=     137  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2172        A=5     zero lnR_first=     137  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2172        A=2     zero lnR_first=     137  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2172        A=1.5   zero lnR_first=     137  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2172        A=1     zero lnR_first=     137  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2172        A=0.5   zero lnR_first=     137  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2172        A=0.1   zero lnR_first=     137  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2172        A=0.05  zero lnR_first=     137  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2178        A=10    zero lnR_first=   135.6  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2178        A=5     zero lnR_first=   135.6  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2178        A=2     zero lnR_first=   135.6  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2178        A=1.5   zero lnR_first=   135.6  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2178        A=1     zero lnR_first=   135.6  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2178        A=0.5   zero lnR_first=   135.6  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2178        A=0.1   zero lnR_first=   135.6  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2178        A=0.05  zero lnR_first=   135.6  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2185        A=10    zero lnR_first=     138  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2185        A=5     zero lnR_first=     138  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2185        A=2     zero lnR_first=     138  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2185        A=1.5   zero lnR_first=     138  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2185        A=1     zero lnR_first=     138  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2185        A=0.5   zero lnR_first=     138  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2185        A=0.1   zero lnR_first=     138  enters_gap=False reaches_R<=1=False  no gap; no classical
+W-2185        A=0.05  zero lnR_first=     138  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-632         A=10    zero lnR_first=   49.87  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-632         A=5     zero lnR_first=   49.87  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-632         A=2     zero lnR_first=   49.87  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-632         A=1.5   zero lnR_first=   49.87  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-632         A=1     zero lnR_first=   49.87  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-632         A=0.5   zero lnR_first=   49.87  enters_gap=True  reaches_R<=1=False  gap #20 N=38.3712 lnR=6.295 l_before=1.12 1L_after=0; no classical
+R-632         A=0.5   edge lnR_first=   49.87  enters_gap=True  reaches_R<=1=False  gap #20 N=38.3712 lnR=6.295 l_before=1.12 1L_after=0; no classical
+R-1193        A=10    zero lnR_first=   137.7  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-1193        A=5     zero lnR_first=   137.7  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-1193        A=2     zero lnR_first=   137.7  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-1193        A=1.5   zero lnR_first=   137.7  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-1193        A=1     zero lnR_first=   137.7  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-1193        A=0.5   zero lnR_first=   137.7  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-1193        A=0.1   zero lnR_first=   137.7  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-1193        A=0.05  zero lnR_first=   137.7  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-1193        A=0.01  zero lnR_first=   137.7  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-865         A=10    zero lnR_first=   142.4  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-865         A=5     zero lnR_first=   142.4  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-865         A=2     zero lnR_first=   142.4  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-865         A=1.5   zero lnR_first=   142.4  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-865         A=1     zero lnR_first=   142.4  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-865         A=0.5   zero lnR_first=   142.4  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-865         A=0.1   zero lnR_first=   142.4  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-865         A=0.05  zero lnR_first=   142.4  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-865         A=0.01  zero lnR_first=   142.4  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-611         A=10    zero lnR_first=   166.3  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-611         A=5     zero lnR_first=   166.3  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-611         A=2     zero lnR_first=   166.3  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-611         A=1.5   zero lnR_first=   166.3  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-611         A=1     zero lnR_first=   166.3  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-611         A=0.5   zero lnR_first=   166.3  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-611         A=0.1   zero lnR_first=   166.3  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-611         A=0.05  zero lnR_first=   166.3  enters_gap=False reaches_R<=1=False  no gap; no classical
+R-611         A=0.01  zero lnR_first=   166.3  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2819        A=10    zero lnR_first=   162.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2819        A=5     zero lnR_first=   162.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2819        A=2     zero lnR_first=   162.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2819        A=1.5   zero lnR_first=   162.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2819        A=1     zero lnR_first=   162.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2819        A=0.5   zero lnR_first=   162.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2819        A=0.1   zero lnR_first=   162.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2819        A=0.05  zero lnR_first=   162.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2819        A=0.01  zero lnR_first=   162.1  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2496        A=10    zero lnR_first=   166.3  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2496        A=5     zero lnR_first=   166.3  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2496        A=2     zero lnR_first=   166.3  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2496        A=1.5   zero lnR_first=   166.3  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2496        A=1     zero lnR_first=   166.3  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2496        A=0.5   zero lnR_first=   166.3  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2496        A=0.1   zero lnR_first=   166.3  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2496        A=0.05  zero lnR_first=   166.3  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2496        A=0.01  zero lnR_first=   166.3  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2772        A=10    zero lnR_first=   190.3  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2772        A=5     zero lnR_first=   190.3  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2772        A=2     zero lnR_first=   190.3  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2772        A=1.5   zero lnR_first=   190.3  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2772        A=1     zero lnR_first=   190.3  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2772        A=0.5   zero lnR_first=   190.3  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2772        A=0.1   zero lnR_first=   190.3  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2772        A=0.05  zero lnR_first=   190.3  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2772        A=0.01  zero lnR_first=   190.3  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2821        A=10    zero lnR_first=   134.5  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2821        A=5     zero lnR_first=   134.5  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2821        A=2     zero lnR_first=   134.5  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2821        A=1.5   zero lnR_first=   134.5  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2821        A=1     zero lnR_first=   134.5  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2821        A=0.5   zero lnR_first=   134.5  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2821        A=0.1   zero lnR_first=   134.5  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2821        A=0.05  zero lnR_first=   134.5  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2821        A=0.01  zero lnR_first=   134.5  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2498        A=10    zero lnR_first=   138.7  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2498        A=5     zero lnR_first=   138.7  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2498        A=2     zero lnR_first=   138.7  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2498        A=1.5   zero lnR_first=   138.7  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2498        A=1     zero lnR_first=   138.7  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2498        A=0.5   zero lnR_first=   138.7  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2498        A=0.1   zero lnR_first=   138.7  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2498        A=0.05  zero lnR_first=   138.7  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2498        A=0.01  zero lnR_first=   138.7  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2774        A=10    zero lnR_first=   162.6  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2774        A=5     zero lnR_first=   162.6  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2774        A=2     zero lnR_first=   162.6  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2774        A=1.5   zero lnR_first=   162.6  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2774        A=1     zero lnR_first=   162.6  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2774        A=0.5   zero lnR_first=   162.6  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2774        A=0.1   zero lnR_first=   162.6  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2774        A=0.05  zero lnR_first=   162.6  enters_gap=False reaches_R<=1=False  no gap; no classical
+B-2774        A=0.01  zero lnR_first=   162.6  enters_gap=False reaches_R<=1=False  no gap; no classical
+L-M5e-20      A=10    zero lnR_first=   40.16  enters_gap=False reaches_R<=1=False  no gap; no classical
+L-M5e-20      A=5     zero lnR_first=   40.16  enters_gap=False reaches_R<=1=False  no gap; no classical
+L-M5e-20      A=2     zero lnR_first=   40.16  enters_gap=False reaches_R<=1=False  no gap; no classical
+L-M5e-20      A=1.5   zero lnR_first=   40.16  enters_gap=False reaches_R<=1=False  no gap; no classical
+L-M5e-20      A=1     zero lnR_first=   40.16  enters_gap=False reaches_R<=1=False  no gap; no classical
+L-M5e-20      A=0.5   zero lnR_first=   40.16  enters_gap=False reaches_R<=1=False  no gap; no classical
+L-M5e-20      A=0.01  zero lnR_first=   40.16  enters_gap=True  reaches_R<=1=True   gap #7 N=27.4642 lnR=2.66 l_before=4.022 1L_after=0; classical #9 N=28.2369 lnR=-0.3961 1L_after=0 gap_after=0
+L-M5e-20      A=0.01  edge lnR_first=   40.16  enters_gap=True  reaches_R<=1=True   gap #7 N=27.4642 lnR=2.66 l_before=4.022 1L_after=0; classical #9 N=28.2345 lnR=-0.4015 1L_after=0 gap_after=0
+L-M8e-18      A=10    zero lnR_first=   19.86  enters_gap=True  reaches_R<=1=False  gap #3 N=20.5558 lnR=4.019 l_before=1.164 1L_after=0; no classical
+L-M8e-18      A=10    edge lnR_first=   19.86  enters_gap=True  reaches_R<=1=False  gap #3 N=20.5558 lnR=4.019 l_before=1.164 1L_after=0; no classical
+L-M8e-18      A=5     zero lnR_first=   19.86  enters_gap=True  reaches_R<=1=False  gap #3 N=20.5558 lnR=4.019 l_before=1.164 1L_after=0; no classical
+L-M8e-18      A=5     edge lnR_first=   19.86  enters_gap=True  reaches_R<=1=False  gap #3 N=20.5558 lnR=4.019 l_before=1.164 1L_after=0; no classical
+L-M8e-18      A=2     zero lnR_first=   19.86  enters_gap=True  reaches_R<=1=False  gap #3 N=20.5558 lnR=4.019 l_before=1.164 1L_after=0; no classical
+L-M8e-18      A=2     edge lnR_first=   19.86  enters_gap=True  reaches_R<=1=False  gap #3 N=20.5558 lnR=4.019 l_before=1.164 1L_after=0; no classical
+L-M8e-18      A=1.5   zero lnR_first=   19.86  enters_gap=True  reaches_R<=1=False  gap #3 N=20.5558 lnR=4.019 l_before=1.164 1L_after=0; no classical
+L-M8e-18      A=1.5   edge lnR_first=   19.86  enters_gap=True  reaches_R<=1=False  gap #3 N=20.5558 lnR=4.019 l_before=1.164 1L_after=0; no classical
+L-M8e-18      A=1     zero lnR_first=   19.86  enters_gap=True  reaches_R<=1=True   gap #3 N=21.2829 lnR=6.667 l_before=1.932 1L_after=0; classical #161 N=22.5991 lnR=-0.03772 1L_after=0 gap_after=0
+L-M8e-18      A=1     edge lnR_first=   19.86  enters_gap=True  reaches_R<=1=False  gap #3 N=21.2829 lnR=6.667 l_before=1.932 1L_after=0; no classical
+L-M8e-18      A=0.5   zero lnR_first=   19.86  enters_gap=True  reaches_R<=1=True   gap #5 N=21.9928 lnR=4.034 l_before=1.179 1L_after=0; classical #76 N=22.6681 lnR=-0.05302 1L_after=0 gap_after=0
+L-M8e-18      A=0.5   edge lnR_first=   19.86  enters_gap=True  reaches_R<=1=False  gap #5 N=21.9928 lnR=4.034 l_before=1.179 1L_after=0; no classical
+L-M8e-18      A=0.1   zero lnR_first=   19.86  enters_gap=True  reaches_R<=1=True   gap #5 N=23.2500 lnR=4.235 l_before=0.5883 1L_after=0; classical #8 N=24.2885 lnR=-1.212 1L_after=0 gap_after=0
+L-M8e-18      A=0.1   edge lnR_first=   19.86  enters_gap=True  reaches_R<=1=True   gap #5 N=23.2500 lnR=4.235 l_before=0.5883 1L_after=0; classical #8 N=24.2171 lnR=-1.005 1L_after=0 gap_after=0
+L-M8e-18      A=0.05  zero lnR_first=   19.86  enters_gap=True  reaches_R<=1=True   gap #4 N=22.9800 lnR=6.521 l_before=1.606 1L_after=0; classical #7 N=24.7557 lnR=-3.511 1L_after=0 gap_after=0
+L-M8e-18      A=0.05  edge lnR_first=   19.86  enters_gap=True  reaches_R<=1=True   gap #4 N=22.9800 lnR=6.521 l_before=1.606 1L_after=0; classical #7 N=24.6609 lnR=-2.907 1L_after=0 gap_after=0
+L-M8e-18      A=0.01  zero lnR_first=   19.86  enters_gap=True  reaches_R<=1=True   gap #4 N=23.1373 lnR=5.907 l_before=1.549 1L_after=0; classical #6 N=24.3188 lnR=-0.2708 1L_after=0 gap_after=0
+L-M8e-18      A=0.01  edge lnR_first=   19.86  enters_gap=True  reaches_R<=1=True   gap #4 N=23.1373 lnR=5.907 l_before=1.549 1L_after=0; classical #6 N=24.3125 lnR=-0.2461 1L_after=0 gap_after=0
+L-M1e-16      A=10    zero lnR_first=   9.758  enters_gap=True  reaches_R<=1=True   gap #1 N=20.5370 lnR=3.974 l_before=1.392 1L_after=0; classical #10 N=21.5120 lnR=-0.2684 1L_after=0 gap_after=0
+L-M1e-16      A=10    edge lnR_first=   9.758  enters_gap=True  reaches_R<=1=True   gap #1 N=20.5370 lnR=3.974 l_before=1.392 1L_after=0; classical #2 N=20.5541 lnR=-1.08 1L_after=0 gap_after=0
+L-M1e-16      A=5     zero lnR_first=   9.758  enters_gap=True  reaches_R<=1=True   gap #1 N=20.5370 lnR=3.974 l_before=1.392 1L_after=0; classical #10 N=21.5120 lnR=-0.2684 1L_after=0 gap_after=0
+L-M1e-16      A=5     edge lnR_first=   9.758  enters_gap=True  reaches_R<=1=True   gap #1 N=20.5370 lnR=3.974 l_before=1.392 1L_after=0; classical #2 N=20.5541 lnR=-1.08 1L_after=0 gap_after=0
+L-M1e-16      A=2     zero lnR_first=   9.758  enters_gap=True  reaches_R<=1=True   gap #1 N=20.5370 lnR=3.974 l_before=1.392 1L_after=0; classical #10 N=21.5120 lnR=-0.2684 1L_after=0 gap_after=0
+L-M1e-16      A=2     edge lnR_first=   9.758  enters_gap=True  reaches_R<=1=True   gap #1 N=20.5370 lnR=3.974 l_before=1.392 1L_after=0; classical #2 N=20.5541 lnR=-1.08 1L_after=0 gap_after=0
+L-M1e-16      A=1.5   zero lnR_first=   9.758  enters_gap=True  reaches_R<=1=True   gap #1 N=20.5370 lnR=3.974 l_before=1.392 1L_after=0; classical #10 N=21.5120 lnR=-0.2684 1L_after=0 gap_after=0
+L-M1e-16      A=1.5   edge lnR_first=   9.758  enters_gap=True  reaches_R<=1=True   gap #1 N=20.5370 lnR=3.974 l_before=1.392 1L_after=0; classical #2 N=20.5541 lnR=-1.08 1L_after=0 gap_after=0
+L-M1e-16      A=1     zero lnR_first=   9.758  enters_gap=True  reaches_R<=1=True   gap #1 N=20.5370 lnR=3.974 l_before=1.392 1L_after=0; classical #10 N=21.5120 lnR=-0.2684 1L_after=0 gap_after=0
+L-M1e-16      A=1     edge lnR_first=   9.758  enters_gap=True  reaches_R<=1=True   gap #1 N=20.5370 lnR=3.974 l_before=1.392 1L_after=0; classical #4 N=20.7095 lnR=-0.4352 1L_after=0 gap_after=0
+L-M1e-16      A=0.5   zero lnR_first=   9.758  enters_gap=True  reaches_R<=1=True   gap #1 N=20.6577 lnR=4.642 l_before=1.392 1L_after=0; classical #8 N=21.7557 lnR=-0.06078 1L_after=0 gap_after=0
+L-M1e-16      A=0.5   edge lnR_first=   9.758  enters_gap=True  reaches_R<=1=True   gap #1 N=20.6577 lnR=4.642 l_before=1.392 1L_after=0; classical #6 N=21.2402 lnR=-0.1275 1L_after=0 gap_after=0
+L-M1e-16      A=0.1   zero lnR_first=   9.758  enters_gap=True  reaches_R<=1=True   gap #1 N=21.3527 lnR=5.121 l_before=1.392 1L_after=0; classical #4 N=22.8818 lnR=-3.011 1L_after=0 gap_after=0
+L-M1e-16      A=0.1   edge lnR_first=   9.758  enters_gap=True  reaches_R<=1=True   gap #1 N=21.3527 lnR=5.121 l_before=1.392 1L_after=0; classical #4 N=22.7280 lnR=-2.333 1L_after=0 gap_after=0
+L-M1e-16      A=0.05  zero lnR_first=   9.758  enters_gap=True  reaches_R<=1=True   gap #1 N=21.3818 lnR=5.114 l_before=1.392 1L_after=0; classical #4 N=23.0375 lnR=-3.74 1L_after=0 gap_after=0
+L-M1e-16      A=0.05  edge lnR_first=   9.758  enters_gap=True  reaches_R<=1=True   gap #1 N=21.3818 lnR=5.114 l_before=1.392 1L_after=0; classical #4 N=22.9515 lnR=-3.393 1L_after=0 gap_after=0
+L-M1e-16      A=0.01  zero lnR_first=   9.758  enters_gap=True  reaches_R<=1=True   gap #1 N=21.4027 lnR=5.109 l_before=1.392 1L_after=0; classical #4 N=23.1504 lnR=-4.23 1L_after=0 gap_after=0
+L-M1e-16      A=0.01  edge lnR_first=   9.758  enters_gap=True  reaches_R<=1=True   gap #1 N=21.4027 lnR=5.109 l_before=1.392 1L_after=0; classical #4 N=23.1330 lnR=-4.167 1L_after=0 gap_after=0
+L-M5e-16      A=10    zero lnR_first=    3.32  enters_gap=True  reaches_R<=1=True   gap #0 N=20.3521 lnR=3.32 l_before=None 1L_after=0; classical #1 N=21.4077 lnR=-1.329 1L_after=0 gap_after=0
+L-M5e-16      A=10    edge lnR_first=    3.32  enters_gap=True  reaches_R<=1=True   gap #0 N=20.3521 lnR=3.32 l_before=None 1L_after=0; classical #1 N=20.5370 lnR=-2.464 1L_after=0 gap_after=0
+L-M5e-16      A=5     zero lnR_first=    3.32  enters_gap=True  reaches_R<=1=True   gap #0 N=20.3521 lnR=3.32 l_before=None 1L_after=0; classical #1 N=21.4077 lnR=-1.329 1L_after=0 gap_after=0
+L-M5e-16      A=5     edge lnR_first=    3.32  enters_gap=True  reaches_R<=1=True   gap #0 N=20.3521 lnR=3.32 l_before=None 1L_after=0; classical #1 N=20.5370 lnR=-2.464 1L_after=0 gap_after=0
+L-M5e-16      A=2     zero lnR_first=    3.32  enters_gap=True  reaches_R<=1=True   gap #0 N=20.3521 lnR=3.32 l_before=None 1L_after=0; classical #1 N=21.4077 lnR=-1.329 1L_after=0 gap_after=0
+L-M5e-16      A=2     edge lnR_first=    3.32  enters_gap=True  reaches_R<=1=True   gap #0 N=20.3521 lnR=3.32 l_before=None 1L_after=0; classical #1 N=20.5370 lnR=-2.464 1L_after=0 gap_after=0
+L-M5e-16      A=1.5   zero lnR_first=    3.32  enters_gap=True  reaches_R<=1=True   gap #0 N=20.3521 lnR=3.32 l_before=None 1L_after=0; classical #1 N=21.4077 lnR=-1.329 1L_after=0 gap_after=0
+L-M5e-16      A=1.5   edge lnR_first=    3.32  enters_gap=True  reaches_R<=1=True   gap #0 N=20.3521 lnR=3.32 l_before=None 1L_after=0; classical #1 N=20.5370 lnR=-2.464 1L_after=0 gap_after=0
+L-M5e-16      A=1     zero lnR_first=    3.32  enters_gap=True  reaches_R<=1=True   gap #0 N=20.3521 lnR=3.32 l_before=None 1L_after=0; classical #1 N=21.4077 lnR=-1.329 1L_after=0 gap_after=0
+L-M5e-16      A=1     edge lnR_first=    3.32  enters_gap=True  reaches_R<=1=True   gap #0 N=20.3521 lnR=3.32 l_before=None 1L_after=0; classical #1 N=21.1188 lnR=-1.267 1L_after=0 gap_after=0
+L-M5e-16      A=0.5   zero lnR_first=    3.32  enters_gap=True  reaches_R<=1=True   gap #0 N=20.3521 lnR=3.32 l_before=None 1L_after=0; classical #1 N=21.4077 lnR=-1.329 1L_after=0 gap_after=0
+L-M5e-16      A=0.5   edge lnR_first=    3.32  enters_gap=True  reaches_R<=1=True   gap #0 N=20.3521 lnR=3.32 l_before=None 1L_after=0; classical #1 N=21.3018 lnR=-1.303 1L_after=0 gap_after=0
+L-M5e-16      A=0.1   zero lnR_first=    3.32  enters_gap=True  reaches_R<=1=True   gap #0 N=20.3521 lnR=3.32 l_before=None 1L_after=0; classical #1 N=21.4077 lnR=-1.329 1L_after=0 gap_after=0
+L-M5e-16      A=0.1   edge lnR_first=    3.32  enters_gap=True  reaches_R<=1=True   gap #0 N=20.3521 lnR=3.32 l_before=None 1L_after=0; classical #1 N=21.3900 lnR=-1.326 1L_after=0 gap_after=0
+L-M5e-16      A=0.05  zero lnR_first=    3.32  enters_gap=True  reaches_R<=1=True   gap #0 N=20.3521 lnR=3.32 l_before=None 1L_after=0; classical #1 N=21.4077 lnR=-1.329 1L_after=0 gap_after=0
+L-M5e-16      A=0.05  edge lnR_first=    3.32  enters_gap=True  reaches_R<=1=True   gap #0 N=20.3521 lnR=3.32 l_before=None 1L_after=0; classical #1 N=21.3990 lnR=-1.328 1L_after=0 gap_after=0
+L-M5e-16      A=0.01  zero lnR_first=    3.32  enters_gap=True  reaches_R<=1=True   gap #0 N=20.3521 lnR=3.32 l_before=None 1L_after=0; classical #1 N=21.4077 lnR=-1.329 1L_after=0 gap_after=0
+L-M5e-16      A=0.01  edge lnR_first=    3.32  enters_gap=True  reaches_R<=1=True   gap #0 N=20.3521 lnR=3.32 l_before=None 1L_after=0; classical #1 N=21.4060 lnR=-1.329 1L_after=0 gap_after=0
+L-M4e-15      A=10    zero lnR_first=  -4.998  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=20.3521 lnR=-4.998 1L_after=0 gap_after=0
+L-M4e-15      A=5     zero lnR_first=  -4.998  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=20.3521 lnR=-4.998 1L_after=0 gap_after=0
+L-M4e-15      A=2     zero lnR_first=  -4.998  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=20.3521 lnR=-4.998 1L_after=0 gap_after=0
+L-M4e-15      A=1.5   zero lnR_first=  -4.998  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=20.3521 lnR=-4.998 1L_after=0 gap_after=0
+L-M4e-15      A=1     zero lnR_first=  -4.998  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=20.3521 lnR=-4.998 1L_after=0 gap_after=0
+L-M4e-15      A=0.5   zero lnR_first=  -4.998  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=20.3521 lnR=-4.998 1L_after=0 gap_after=0
+L-M4e-15      A=0.1   zero lnR_first=  -4.998  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=20.3521 lnR=-4.998 1L_after=0 gap_after=0
+L-M4e-15      A=0.05  zero lnR_first=  -4.998  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=20.3521 lnR=-4.998 1L_after=0 gap_after=0
+L-M4e-15      A=0.01  zero lnR_first=  -4.998  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=20.3521 lnR=-4.998 1L_after=0 gap_after=0
+C-3016        A=10    zero lnR_first=  -6.191  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=25.0759 lnR=-6.191 1L_after=0 gap_after=0
+C-3016        A=5     zero lnR_first=  -6.191  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=25.0759 lnR=-6.191 1L_after=0 gap_after=0
+C-3016        A=2     zero lnR_first=  -6.191  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=25.0759 lnR=-6.191 1L_after=0 gap_after=0
+C-3016        A=1.5   zero lnR_first=  -6.191  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=25.0759 lnR=-6.191 1L_after=0 gap_after=0
+C-3016        A=1     zero lnR_first=  -6.191  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=25.0759 lnR=-6.191 1L_after=0 gap_after=0
+C-3016        A=0.5   zero lnR_first=  -6.191  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=25.0759 lnR=-6.191 1L_after=0 gap_after=0
+C-3016        A=0.1   zero lnR_first=  -6.191  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=25.0759 lnR=-6.191 1L_after=0 gap_after=0
+C-3016        A=0.05  zero lnR_first=  -6.191  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=25.0759 lnR=-6.191 1L_after=0 gap_after=0
+C-3016        A=0.01  zero lnR_first=  -6.191  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=25.0759 lnR=-6.191 1L_after=0 gap_after=0
+C-3233        A=10    zero lnR_first=  -119.6  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=35.8230 lnR=-119.6 1L_after=0 gap_after=0
+C-3233        A=5     zero lnR_first=  -119.6  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=35.8230 lnR=-119.6 1L_after=0 gap_after=0
+C-3233        A=2     zero lnR_first=  -119.6  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=35.8230 lnR=-119.6 1L_after=0 gap_after=0
+C-3233        A=1.5   zero lnR_first=  -119.6  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=35.8230 lnR=-119.6 1L_after=0 gap_after=0
+C-3233        A=1     zero lnR_first=  -119.6  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=35.8230 lnR=-119.6 1L_after=0 gap_after=0
+C-3233        A=0.5   zero lnR_first=  -119.6  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=35.8230 lnR=-119.6 1L_after=0 gap_after=0
+C-3233        A=0.1   zero lnR_first=  -119.6  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=35.8230 lnR=-119.6 1L_after=0 gap_after=0
+C-3233        A=0.05  zero lnR_first=  -119.6  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=35.8230 lnR=-119.6 1L_after=0 gap_after=0
+C-3233        A=0.01  zero lnR_first=  -119.6  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=35.8230 lnR=-119.6 1L_after=0 gap_after=0
+C-3873        A=10    zero lnR_first=  -33.14  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=17.6945 lnR=-33.14 1L_after=0 gap_after=0
+C-3873        A=5     zero lnR_first=  -33.14  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=17.6945 lnR=-33.14 1L_after=0 gap_after=0
+C-3873        A=2     zero lnR_first=  -33.14  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=17.6945 lnR=-33.14 1L_after=0 gap_after=0
+C-3873        A=1.5   zero lnR_first=  -33.14  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=17.6945 lnR=-33.14 1L_after=0 gap_after=0
+C-3873        A=1     zero lnR_first=  -33.14  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=17.6945 lnR=-33.14 1L_after=0 gap_after=0
+C-3873        A=0.5   zero lnR_first=  -33.14  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=17.6945 lnR=-33.14 1L_after=0 gap_after=0
+C-3873        A=0.1   zero lnR_first=  -33.14  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=17.6945 lnR=-33.14 1L_after=0 gap_after=0
+C-3873        A=0.05  zero lnR_first=  -33.14  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=17.6945 lnR=-33.14 1L_after=0 gap_after=0
+C-3873        A=0.01  zero lnR_first=  -33.14  enters_gap=False reaches_R<=1=True   no gap; classical #0 N=17.6945 lnR=-33.14 1L_after=0 gap_after=0
+
+# the R S(L) bound on the classical candidates (ruling 7)
+# n: classical candidates; in/out: with L in / outside [40, 134]; L range; sum of the bound as a share of
+# K(N_final) (None where K = 0) and as an r_chi today
+P-2197        A=10    zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.07571
+P-2197        A=5     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.03721
+P-2197        A=2     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01596
+P-2197        A=1.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01231
+P-2197        A=1     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.008218
+P-2197        A=0.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.00447
+P-2197        A=0.1   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.001532
+P-2197        A=0.05  zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.001156
+P-2188        A=10    zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.003884
+P-2188        A=5     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.00317
+P-2188        A=2     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.00132
+P-2188        A=1.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.001026
+P-2188        A=1     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0007648
+P-2188        A=0.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0005296
+P-2188        A=0.1   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0003554
+P-2188        A=0.05  zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0003343
+P-2188        A=0.01  edge n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0003175
+W-2187        A=10    zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01083
+W-2187        A=5     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.006866
+W-2187        A=2     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.003428
+W-2187        A=1.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.002715
+W-2187        A=1     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.002115
+W-2187        A=0.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.001498
+W-2187        A=0.1   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.000932
+W-2187        A=0.05  zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0008541
+W-1631        A=10    zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.004935
+W-1631        A=5     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.005381
+W-1631        A=2     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.002792
+W-1631        A=1.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.002356
+W-1631        A=1     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.001833
+W-1631        A=0.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0012
+W-1631        A=0.1   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0006244
+W-1631        A=0.05  zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0005486
+W-2179        A=10    zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.03911
+W-2179        A=5     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01848
+W-2179        A=2     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.00842
+W-2179        A=1.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.006567
+W-2179        A=1     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.004355
+W-2179        A=0.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.002564
+W-2179        A=0.1   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.001144
+W-2179        A=0.05  zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0009554
+W-2078        A=10    zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.07794
+W-2078        A=5     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.03873
+W-2078        A=2     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01692
+W-2078        A=1.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01269
+W-2078        A=1     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.008729
+W-2078        A=0.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.004793
+W-2078        A=0.1   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.00157
+W-2078        A=0.05  zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.001163
+W-2192        A=10    zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0751
+W-2192        A=5     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.03639
+W-2192        A=2     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01661
+W-2192        A=1.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01258
+W-2192        A=1     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.008173
+W-2192        A=0.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.004268
+W-2192        A=0.1   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.00143
+W-2192        A=0.05  zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.001088
+W-2209        A=10    zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.07517
+W-2209        A=5     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0369
+W-2209        A=2     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01571
+W-2209        A=1.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01206
+W-2209        A=1     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.008207
+W-2209        A=0.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.004315
+W-2209        A=0.1   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.00145
+W-2209        A=0.05  zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.001084
+W-2183        A=10    zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.08655
+W-2183        A=5     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.04496
+W-2183        A=2     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01744
+W-2183        A=1.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01337
+W-2183        A=1     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.009175
+W-2183        A=0.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.004713
+W-2183        A=0.1   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.001618
+W-2183        A=0.05  zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.001213
+W-2172        A=10    zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.08634
+W-2172        A=5     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.04434
+W-2172        A=2     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01764
+W-2172        A=1.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01352
+W-2172        A=1     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.009068
+W-2172        A=0.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.005134
+W-2172        A=0.1   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.001739
+W-2172        A=0.05  zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.001264
+W-2178        A=10    zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.07025
+W-2178        A=5     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.03401
+W-2178        A=2     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01561
+W-2178        A=1.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01184
+W-2178        A=1     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.007683
+W-2178        A=0.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.003973
+W-2178        A=0.1   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.001287
+W-2178        A=0.05  zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0009633
+W-2185        A=10    zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.07851
+W-2185        A=5     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.03913
+W-2185        A=2     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01709
+W-2185        A=1.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01281
+W-2185        A=1     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.008814
+W-2185        A=0.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.004784
+W-2185        A=0.1   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.001497
+W-2185        A=0.05  zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.001083
+R-632         A=10    zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.04564
+R-632         A=5     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.04564
+R-632         A=2     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.04554
+R-632         A=1.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.04543
+R-632         A=1     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.04526
+R-632         A=0.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.04498
+R-632         A=0.5   edge n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.04498
+R-1193        A=10    zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.08357
+R-1193        A=5     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.04275
+R-1193        A=2     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01767
+R-1193        A=1.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01299
+R-1193        A=1     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.008529
+R-1193        A=0.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.004167
+R-1193        A=0.1   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0008158
+R-1193        A=0.05  zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0004192
+R-1193        A=0.01  zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=8.736e-05
+R-865         A=10    zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01957
+R-865         A=5     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01886
+R-865         A=2     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01101
+R-865         A=1.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.008676
+R-865         A=1     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.006107
+R-865         A=0.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.003261
+R-865         A=0.1   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0006288
+R-865         A=0.05  zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0003204
+R-865         A=0.01  zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=6.608e-05
+R-611         A=10    zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0007169
+R-611         A=5     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0008084
+R-611         A=2     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.000729
+R-611         A=1.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0006309
+R-611         A=1     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0004839
+R-611         A=0.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0002977
+R-611         A=0.1   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0001183
+R-611         A=0.05  zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=8.602e-05
+R-611         A=0.01  zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=2.428e-05
+B-2819        A=10    zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.06309
+B-2819        A=5     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.03066
+B-2819        A=2     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01249
+B-2819        A=1.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.009663
+B-2819        A=1     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.006593
+B-2819        A=0.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.003585
+B-2819        A=0.1   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0006773
+B-2819        A=0.05  zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0003549
+B-2819        A=0.01  zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0001038
+B-2496        A=10    zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01941
+B-2496        A=5     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01801
+B-2496        A=2     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.009665
+B-2496        A=1.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.007461
+B-2496        A=1     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.00511
+B-2496        A=0.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.002806
+B-2496        A=0.1   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0005406
+B-2496        A=0.05  zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0002752
+B-2496        A=0.01  zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=5.765e-05
+B-2772        A=10    zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0007392
+B-2772        A=5     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0008152
+B-2772        A=2     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.000686
+B-2772        A=1.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.00058
+B-2772        A=1     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0004402
+B-2772        A=0.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0002714
+B-2772        A=0.1   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.000112
+B-2772        A=0.05  zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=7.852e-05
+B-2772        A=0.01  zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=2.114e-05
+B-2821        A=10    zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.07394
+B-2821        A=5     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.03685
+B-2821        A=2     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01454
+B-2821        A=1.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01139
+B-2821        A=1     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.007899
+B-2821        A=0.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.00425
+B-2821        A=0.1   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0008112
+B-2821        A=0.05  zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0004195
+B-2821        A=0.01  zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0001164
+B-2498        A=10    zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0196
+B-2498        A=5     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01895
+B-2498        A=2     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01123
+B-2498        A=1.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.00885
+B-2498        A=1     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.006273
+B-2498        A=0.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.003341
+B-2498        A=0.1   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0006453
+B-2498        A=0.05  zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0003287
+B-2498        A=0.01  zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=6.756e-05
+B-2774        A=10    zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.000713
+B-2774        A=5     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0008068
+B-2774        A=2     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0007354
+B-2774        A=1.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0006394
+B-2774        A=1     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0004916
+B-2774        A=0.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0003024
+B-2774        A=0.1   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0001194
+B-2774        A=0.05  zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=8.729e-05
+B-2774        A=0.01  zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=2.489e-05
+L-M5e-20      A=10    zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0198
+L-M5e-20      A=5     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0198
+L-M5e-20      A=2     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01927
+L-M5e-20      A=1.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01921
+L-M5e-20      A=1     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01773
+L-M5e-20      A=0.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0115
+L-M5e-20      A=0.01  zero n=    28 in=    28 out=     0 L=[48.04, 68.91] share=1.957e-05 r_chi_bound=5.181e-09 r_chi_today=0.0002648
+L-M5e-20      A=0.01  edge n=    28 in=    28 out=     0 L=[52.62, 68.91] share=1.915e-05 r_chi_bound=5.097e-09 r_chi_today=0.0002662
+L-M8e-18      A=10    zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0198
+L-M8e-18      A=10    edge n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0198
+L-M8e-18      A=5     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0198
+L-M8e-18      A=5     edge n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0198
+L-M8e-18      A=2     zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0198
+L-M8e-18      A=2     edge n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0198
+L-M8e-18      A=1.5   zero n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0198
+L-M8e-18      A=1.5   edge n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.0198
+L-M8e-18      A=1     zero n=    67 in=    67 out=     0 L=[83.86, 87.66] share=3.335e-08 r_chi_bound=6.45e-10 r_chi_today=0.01934
+L-M8e-18      A=1     edge n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01935
+L-M8e-18      A=0.5   zero n=   103 in=   103 out=     0 L=[81.54, 87.65] share=3.685e-08 r_chi_bound=7.051e-10 r_chi_today=0.01913
+L-M8e-18      A=0.5   edge n=     0 in=     0 out=     0 L=[None, None] share=0 r_chi_bound=0 r_chi_today=0.01914
+L-M8e-18      A=0.1   zero n=    23 in=    23 out=     0 L=[52.3, 86.59] share=6.218e-07 r_chi_bound=4.83e-09 r_chi_today=0.007767
+L-M8e-18      A=0.1   edge n=   102 in=   102 out=     0 L=[55.31, 86.77] share=6.969e-07 r_chi_bound=5.541e-09 r_chi_today=0.007951
+L-M8e-18      A=0.05  zero n=  9777 in=    12 out=  9765 L=[8.208e-10, 84.48] share=1.189e-07 r_chi_bound=3.956e-10 r_chi_today=0.003327
+L-M8e-18      A=0.05  edge n= 12941 in=    13 out= 12928 L=[1.632e-09, 85.03] share=2.386e-07 r_chi_bound=8.491e-10 r_chi_today=0.003558
+L-M8e-18      A=0.01  zero n=    61 in=    61 out=     0 L=[51.48, 87.45] share=4.654e-05 r_chi_bound=3.205e-08 r_chi_today=0.0006886
+L-M8e-18      A=0.01  edge n=    68 in=    68 out=     0 L=[52.66, 87.47] share=4.495e-05 r_chi_bound=3.274e-08 r_chi_today=0.0007284
+L-M1e-16      A=10    zero n=    54 in=    54 out=     0 L=[75.35, 96.75] share=9.109e-07 r_chi_bound=1.786e-08 r_chi_today=0.0196
+L-M1e-16      A=10    edge n=   299 in=   299 out=     0 L=[86.69, 96] share=1.549e-08 r_chi_bound=3.067e-10 r_chi_today=0.0198
+L-M1e-16      A=5     zero n=    54 in=    54 out=     0 L=[75.35, 96.75] share=9.109e-07 r_chi_bound=1.786e-08 r_chi_today=0.0196
+L-M1e-16      A=5     edge n=   299 in=   299 out=     0 L=[86.69, 96] share=1.549e-08 r_chi_bound=3.067e-10 r_chi_today=0.0198
+L-M1e-16      A=2     zero n=    54 in=    54 out=     0 L=[75.35, 96.75] share=9.109e-07 r_chi_bound=1.786e-08 r_chi_today=0.0196
+L-M1e-16      A=2     edge n=   299 in=   299 out=     0 L=[86.69, 96] share=1.549e-08 r_chi_bound=3.067e-10 r_chi_today=0.0198
+L-M1e-16      A=1.5   zero n=    54 in=    54 out=     0 L=[75.35, 96.75] share=9.109e-07 r_chi_bound=1.786e-08 r_chi_today=0.0196
+L-M1e-16      A=1.5   edge n=   299 in=   299 out=     0 L=[86.69, 96] share=1.549e-08 r_chi_bound=3.067e-10 r_chi_today=0.0198
+L-M1e-16      A=1     zero n=    54 in=    54 out=     0 L=[75.35, 96.75] share=9.109e-07 r_chi_bound=1.786e-08 r_chi_today=0.0196
+L-M1e-16      A=1     edge n=   263 in=   263 out=     0 L=[81.33, 96.59] share=6.31e-08 r_chi_bound=1.249e-09 r_chi_today=0.01979
+L-M1e-16      A=0.5   zero n=   115 in=   115 out=     0 L=[54.75, 96.94] share=2.26e-06 r_chi_bound=4.338e-08 r_chi_today=0.0192
+L-M1e-16      A=0.5   edge n=    90 in=    90 out=     0 L=[77.38, 96.88] share=4.973e-07 r_chi_bound=9.797e-09 r_chi_today=0.0197
+L-M1e-16      A=0.1   zero n=  9729 in=    15 out=  9714 L=[1.068e-08, 94.22] share=1.333e-06 r_chi_bound=5.118e-09 r_chi_today=0.00384
+L-M1e-16      A=0.1   edge n=    32 in=    32 out=     0 L=[47.64, 94.84] share=1.543e-06 r_chi_bound=1e-08 r_chi_today=0.006482
+L-M1e-16      A=0.05  zero n=  9618 in=    19 out=  9599 L=[1.006e-08, 93.54] share=1.25e-06 r_chi_bound=2.4e-09 r_chi_today=0.00192
+L-M1e-16      A=0.05  edge n= 10028 in=    15 out= 10013 L=[1.028e-08, 93.86] share=9.759e-07 r_chi_bound=3.291e-09 r_chi_today=0.003372
+L-M1e-16      A=0.01  zero n=    35 in=    35 out=     0 L=[48.88, 93.09] share=3.876e-06 r_chi_bound=1.489e-09 r_chi_today=0.0003841
+L-M1e-16      A=0.01  edge n=    59 in=    59 out=     0 L=[53.86, 93.15] share=2.261e-06 r_chi_bound=1.568e-09 r_chi_today=0.0006933
+L-M5e-16      A=10    zero n=    27 in=    27 out=     0 L=[52.36, 101.7] share=0.1417 r_chi_bound=1.284e-07 r_chi_today=9.059e-07
+L-M5e-16      A=10    edge n=    63 in=    63 out=     0 L=[75.35, 100.7] share=4.592e-08 r_chi_bound=9.002e-10 r_chi_today=0.0196
+L-M5e-16      A=5     zero n=    27 in=    27 out=     0 L=[52.36, 101.7] share=0.1417 r_chi_bound=1.284e-07 r_chi_today=9.059e-07
+L-M5e-16      A=5     edge n=    63 in=    63 out=     0 L=[75.35, 100.7] share=4.592e-08 r_chi_bound=9.002e-10 r_chi_today=0.0196
+L-M5e-16      A=2     zero n=    27 in=    27 out=     0 L=[52.36, 101.7] share=0.1417 r_chi_bound=1.284e-07 r_chi_today=9.059e-07
+L-M5e-16      A=2     edge n=    63 in=    63 out=     0 L=[75.35, 100.7] share=4.592e-08 r_chi_bound=9.002e-10 r_chi_today=0.0196
+L-M5e-16      A=1.5   zero n=    27 in=    27 out=     0 L=[52.36, 101.7] share=0.1417 r_chi_bound=1.284e-07 r_chi_today=9.059e-07
+L-M5e-16      A=1.5   edge n=    63 in=    63 out=     0 L=[75.35, 100.7] share=4.592e-08 r_chi_bound=9.002e-10 r_chi_today=0.0196
+L-M5e-16      A=1     zero n=    27 in=    27 out=     0 L=[52.36, 101.7] share=0.1417 r_chi_bound=1.284e-07 r_chi_today=9.059e-07
+L-M5e-16      A=1     edge n=  9962 in=    30 out=  9932 L=[5.179e-08, 101.8] share=3.687e-06 r_chi_bound=4.928e-08 r_chi_today=0.01337
+L-M5e-16      A=0.5   zero n=    27 in=    27 out=     0 L=[52.36, 101.7] share=0.1417 r_chi_bound=1.284e-07 r_chi_today=9.059e-07
+L-M5e-16      A=0.5   edge n=    25 in=    24 out=     1 L=[38.56, 101.7] share=1.371e-05 r_chi_bound=9.161e-08 r_chi_today=0.006684
+L-M5e-16      A=0.1   zero n=    27 in=    27 out=     0 L=[52.36, 101.7] share=0.1417 r_chi_bound=1.284e-07 r_chi_today=9.059e-07
+L-M5e-16      A=0.1   edge n=    35 in=    35 out=     0 L=[52.91, 101.7] share=9.06e-05 r_chi_bound=1.212e-07 r_chi_today=0.001338
+L-M5e-16      A=0.05  zero n=    27 in=    27 out=     0 L=[52.36, 101.7] share=0.1417 r_chi_bound=1.284e-07 r_chi_today=9.059e-07
+L-M5e-16      A=0.05  edge n=    58 in=    58 out=     0 L=[52.72, 101.7] share=0.0001866 r_chi_bound=1.248e-07 r_chi_today=0.0006688
+L-M5e-16      A=0.01  zero n=    27 in=    27 out=     0 L=[52.36, 101.7] share=0.1417 r_chi_bound=1.284e-07 r_chi_today=9.059e-07
+L-M5e-16      A=0.01  edge n=    30 in=    29 out=     1 L=[39.27, 101.7] share=0.0009527 r_chi_bound=1.277e-07 r_chi_today=0.000134
+L-M4e-15      A=10    zero n=    28 in=    28 out=     0 L=[52.36, 106] share=0.003316 r_chi_bound=3.004e-09 r_chi_today=9.059e-07
+L-M4e-15      A=5     zero n=    28 in=    28 out=     0 L=[52.36, 106] share=0.003316 r_chi_bound=3.004e-09 r_chi_today=9.059e-07
+L-M4e-15      A=2     zero n=    28 in=    28 out=     0 L=[52.36, 106] share=0.003316 r_chi_bound=3.004e-09 r_chi_today=9.059e-07
+L-M4e-15      A=1.5   zero n=    28 in=    28 out=     0 L=[52.36, 106] share=0.003316 r_chi_bound=3.004e-09 r_chi_today=9.059e-07
+L-M4e-15      A=1     zero n=    28 in=    28 out=     0 L=[52.36, 106] share=0.003316 r_chi_bound=3.004e-09 r_chi_today=9.059e-07
+L-M4e-15      A=0.5   zero n=    28 in=    28 out=     0 L=[52.36, 106] share=0.003316 r_chi_bound=3.004e-09 r_chi_today=9.059e-07
+L-M4e-15      A=0.1   zero n=    28 in=    28 out=     0 L=[52.36, 106] share=0.003316 r_chi_bound=3.004e-09 r_chi_today=9.059e-07
+L-M4e-15      A=0.05  zero n=    28 in=    28 out=     0 L=[52.36, 106] share=0.003316 r_chi_bound=3.004e-09 r_chi_today=9.059e-07
+L-M4e-15      A=0.01  zero n=    28 in=    28 out=     0 L=[52.36, 106] share=0.003316 r_chi_bound=3.004e-09 r_chi_today=9.059e-07
+C-3016        A=10    zero n=   330 in=   330 out=     0 L=[55.84, 125.6] share=0.0001403 r_chi_bound=1.392e-10 r_chi_today=9.918e-07
+C-3016        A=5     zero n=   330 in=   330 out=     0 L=[55.84, 125.6] share=0.0001403 r_chi_bound=1.392e-10 r_chi_today=9.918e-07
+C-3016        A=2     zero n=   330 in=   330 out=     0 L=[55.84, 125.6] share=0.0001403 r_chi_bound=1.392e-10 r_chi_today=9.918e-07
+C-3016        A=1.5   zero n=   330 in=   330 out=     0 L=[55.84, 125.6] share=0.0001403 r_chi_bound=1.392e-10 r_chi_today=9.918e-07
+C-3016        A=1     zero n=   330 in=   330 out=     0 L=[55.84, 125.6] share=0.0001403 r_chi_bound=1.392e-10 r_chi_today=9.918e-07
+C-3016        A=0.5   zero n=   330 in=   330 out=     0 L=[55.84, 125.6] share=0.0001403 r_chi_bound=1.392e-10 r_chi_today=9.918e-07
+C-3016        A=0.1   zero n=   330 in=   330 out=     0 L=[55.84, 125.6] share=0.0001403 r_chi_bound=1.392e-10 r_chi_today=9.918e-07
+C-3016        A=0.05  zero n=   330 in=   330 out=     0 L=[55.84, 125.6] share=0.0001403 r_chi_bound=1.392e-10 r_chi_today=9.918e-07
+C-3016        A=0.01  zero n=   330 in=   330 out=     0 L=[55.84, 125.6] share=0.0001403 r_chi_bound=1.392e-10 r_chi_today=9.918e-07
+C-3233        A=10    zero n=   301 in=     0 out=   301 L=[6.256e-06, 24.99] share=None r_chi_bound=0 r_chi_today=0
+C-3233        A=5     zero n=   301 in=     0 out=   301 L=[6.256e-06, 24.99] share=None r_chi_bound=0 r_chi_today=0
+C-3233        A=2     zero n=   301 in=     0 out=   301 L=[6.256e-06, 24.99] share=None r_chi_bound=0 r_chi_today=0
+C-3233        A=1.5   zero n=   301 in=     0 out=   301 L=[6.256e-06, 24.99] share=None r_chi_bound=0 r_chi_today=0
+C-3233        A=1     zero n=   301 in=     0 out=   301 L=[6.256e-06, 24.99] share=None r_chi_bound=0 r_chi_today=0
+C-3233        A=0.5   zero n=   301 in=     0 out=   301 L=[6.256e-06, 24.99] share=None r_chi_bound=0 r_chi_today=0
+C-3233        A=0.1   zero n=   301 in=     0 out=   301 L=[6.256e-06, 24.99] share=None r_chi_bound=0 r_chi_today=0
+C-3233        A=0.05  zero n=   301 in=     0 out=   301 L=[6.256e-06, 24.99] share=None r_chi_bound=0 r_chi_today=0
+C-3233        A=0.01  zero n=   301 in=     0 out=   301 L=[6.256e-06, 24.99] share=None r_chi_bound=0 r_chi_today=0
+C-3873        A=10    zero n=  2489 in=     2 out=  2487 L=[7.862e-07, 100.4] share=None r_chi_bound=9.3e-21 r_chi_today=0
+C-3873        A=5     zero n=  2489 in=     2 out=  2487 L=[7.862e-07, 100.4] share=None r_chi_bound=9.3e-21 r_chi_today=0
+C-3873        A=2     zero n=  2489 in=     2 out=  2487 L=[7.862e-07, 100.4] share=None r_chi_bound=9.3e-21 r_chi_today=0
+C-3873        A=1.5   zero n=  2489 in=     2 out=  2487 L=[7.862e-07, 100.4] share=None r_chi_bound=9.3e-21 r_chi_today=0
+C-3873        A=1     zero n=  2489 in=     2 out=  2487 L=[7.862e-07, 100.4] share=None r_chi_bound=9.3e-21 r_chi_today=0
+C-3873        A=0.5   zero n=  2489 in=     2 out=  2487 L=[7.862e-07, 100.4] share=None r_chi_bound=9.3e-21 r_chi_today=0
+C-3873        A=0.1   zero n=  2489 in=     2 out=  2487 L=[7.862e-07, 100.4] share=None r_chi_bound=9.3e-21 r_chi_today=0
+C-3873        A=0.05  zero n=  2489 in=     2 out=  2487 L=[7.862e-07, 100.4] share=None r_chi_bound=9.3e-21 r_chi_today=0
+C-3873        A=0.01  zero n=  2489 in=     2 out=  2487 L=[7.862e-07, 100.4] share=None r_chi_bound=9.3e-21 r_chi_today=0
+
+# U9 and P19 over the sample's run lines (accepted integrations)
+one-loop candidates with w_gate < 1: 0 of 13561; gap candidates with w_gate < 1: 0 of 693; unassessed candidates: 0 of 85599 (over 248 run lines)
+
+# ruling 7's check of the r_chi form: K(N_final) e^{-4 N_final} / rho_R,E(last) against rho_chi_ratio_today
+P-2197-A1-zero: K form 0.008218413249662701, rho_chi_ratio_today 0.008218413249662944, relative difference -2.953e-14, last raw_N - N_final 0.0
+
+# U9 and P19 at 02b's A (A = 10, 5, 2, 1.5, 0.5, 0.05), over 02b's run lines (accepted integrations)
+A=10    : one-loop candidates with w_gate < 1: 0 of 142; gap candidates with w_gate < 1: 0 of 13; unassessed: 0 of 571 (over 28 run lines)
+A=5     : one-loop candidates with w_gate < 1: 0 of 262; gap candidates with w_gate < 1: 0 of 13; unassessed: 0 of 691 (over 28 run lines)
+A=2     : one-loop candidates with w_gate < 1: 0 of 373; gap candidates with w_gate < 1: 0 of 13; unassessed: 0 of 802 (over 28 run lines)
+A=1.5   : one-loop candidates with w_gate < 1: 0 of 435; gap candidates with w_gate < 1: 0 of 13; unassessed: 0 of 864 (over 28 run lines)
+A=0.5   : one-loop candidates with w_gate < 1: 0 of 996; gap candidates with w_gate < 1: 0 of 93; unassessed: 0 of 1422 (over 29 run lines)
+A=0.05  : one-loop candidates with w_gate < 1: 0 of 4150; gap candidates with w_gate < 1: 0 of 13; unassessed: 0 of 46585 (over 26 run lines)
+all six : one-loop candidates with w_gate < 1: 0 of 6358; gap candidates with w_gate < 1: 0 of 158; unassessed: 0 of 50935 (over 167 run lines)
+
+# unresolvable assessments and declined reflections at 02b's A: run lines, accepted or not
+   R-632-A0.05-edge: failure; unresolvable 7, declined 0 (over its integrations)
+   L-M8e-18-A0.05-edge: success; unresolvable 0, declined 1 (over its integrations)

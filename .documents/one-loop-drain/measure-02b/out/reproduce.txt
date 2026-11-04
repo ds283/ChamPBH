@@ -1,0 +1,7 @@
+P-2197-A1-zero: 02b's run (outcome success, wall 14.0 s) against 02's (outcome success, wall 16.0 s): BITWISE EQUAL
+   1 integration(s), 10 candidates; 20 regime and injection entries of the partial files compared in full; samples SHA-256 56eef32a6160d62e762a2529b5ba0da86a41d0ef46f17d2500ae0005564c0737 (02: 56eef32a6160d62e762a2529b5ba0da86a41d0ef46f17d2500ae0005564c0737); Yp 0.25688455988399567 (02: 0.25688455988399567); DoH 2.522682869802573 (02: 2.522682869802573)
+   stdout (for information): 13 and 13 lines, 13 byte-equal after masking
+R-865-A0.1-zero: 02b's run (outcome success, wall 22.0 s) against 02's (outcome success, wall 22.1 s): BITWISE EQUAL
+   1 integration(s), 78 candidates; 156 regime and injection entries of the partial files compared in full; samples SHA-256 a2f3ddc57b7bc3042ed387e90f8c24fbf4ebe62ae2d0ad7ea26b36e05079eeca (02: a2f3ddc57b7bc3042ed387e90f8c24fbf4ebe62ae2d0ad7ea26b36e05079eeca); Yp 0.24690202527404065 (02: 0.24690202527404065); DoH 2.459245914546649 (02: 2.459245914546649)
+   stdout (for information): 13 and 13 lines, 13 byte-equal after masking
+the reproduction check holds: both tasks bitwise equal to 02's, line and partial file

@@ -1,0 +1,3 @@
+P-2197-A10-zero: driver stdout 13 lines, tool stdout 13 lines, tool rc 0; 13 byte-equal after masking
+   history, drain and bbn lines against the driver's JSON line: 22 of 22 values equal
+the driver agrees with the tool on both tasks

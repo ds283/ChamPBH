@@ -1,6 +1,6 @@
 # one-loop-drain campaign — implementation state
 
-**Last updated:** 2026-11-04 · **Status: LIVE — 2 of 9 landed (01, 02); U13 ruled; 02b written; U14 open for the user.** Planned
+**Last updated:** 2026-11-04 · **Status: LIVE — 3 of 10 landed (01, 02, 02b); U13 ruled; U14 open for the user, with 02's and 02b's measurements.** Planned
 2026-11-02 as `quanta-diagnostics` at the user's request, after a scoping session the same day
 ([`source/scoping_2026-11-02.md`](source/scoping_2026-11-02.md)); U1–U7 and P1–P16 ruled the same day,
 all as proposed (README §6). **Re-planned the same day around the drain law and renamed `one-loop-drain`**
@@ -15,7 +15,8 @@ back to §3 for it. Prompt 01 written the same day.)* *(2026-11-03: prompt 01 la
 the inside-wall stop (§3, §4); the Law gate holds, and two issues closed.)* *(2026-11-03: prompt 02 landed; the Measure
 gate holds, one issue opened (§3), and U13 and U14 are open for the user with its measurements.)* *(2026-11-04: the user ruled U13: both gap
 prescriptions kept, `zero` the default (README §8.6, P26). U14 is open.)* *(2026-11-04: prompt 02b inserted and written at the user's request, to
-measure A ∈ {0.05, 0.5, 1.5, 2, 5, 10} before U14 is ruled (README §8.4, §8.6).)*
+measure A ∈ {0.05, 0.5, 1.5, 2, 5, 10} before U14 is ruled (README §8.4, §8.6).)* *(2026-11-04: prompt 02b landed; the Wide
+gate holds, no issue opened, one extended (§3), and U14 is open for the user with the measurements at nine A.)*
 
 The campaign replaces the fixed-α drain by a one-loop law, α_eff = min(α_cap, A·2.7/ℓ)·w_gate at a
 one-loop turnaround and zero at R ≤ 1, with the fixed law kept beside it, bitwise. It measures the law
@@ -43,7 +44,7 @@ The plan as first ruled had seven prompts (README §2), none written; the re-pla
 |---|---|---|---|---|---|---|---|
 | 01 | [The drain law](01-the-drain-law.md) | the law and A as inputs; the regime in the loop; α_eff by regime; the gap prescription as a module attribute; the `"drain"` payload key; the tool route's options; the 3873 failure; the wall-search fix (README §8.8) | Opus | ✅ | ✅ | `b99f6a4` | [01](logs/01-the-drain-law.md) |
 | 02 | [Measure the law](02-measure-the-law.md) | U11's thirty histories by the tool route, re-tuned, at three A and both gap prescriptions, with two exact shortcuts (S1, S2) spot-checked; regime shares, the gap's reach, the R·S(L) bound, Y_p, D/H, ΔN_eff against the fixed law; then U13–U14 | Opus | ✅ | ✅ | `3f3f0cf` | [02](logs/02-measure-the-law.md) |
-| 02b | [Measure over a wider A](02b-measure-wide-A.md) | inserted 2026-11-04 at the user's request: 02's thirty histories at A ∈ {0.05, 0.5, 1.5, 2, 5, 10}, both gap prescriptions; 02's lines reused after a reproduction check; S2 generalised; the first impact's drained fraction and the cap; the handover for U14 at nine A | Opus | ✍️ | ⬜ | | |
+| 02b | [Measure over a wider A](02b-measure-wide-A.md) | inserted 2026-11-04 at the user's request: 02's thirty histories at A ∈ {0.05, 0.5, 1.5, 2, 5, 10}, both gap prescriptions; 02's lines reused after a reproduction check; S2 generalised; the first impact's drained fraction and the cap; the handover for U14 at nine A | Opus | ✅ | ✅ | this commit | [02b](logs/02b-measure-wide-A.md) |
 | 03 | The store | the keys, `ScalarHistoryBounce`, the sample and history columns, the gap prescription as a key (U13, P26), `FINGERPRINT_FORMAT` 7, `VERSION_LABEL` | Opus | ⬜ | ⬜ | | |
 | 04 | Drivers and exports | the law's options in `main.py` and the plot scripts; `histories.csv`, `fields.csv`, `bounces.csv` | Sonnet | ⬜ | ⬜ | | |
 | 05 | Derivation tool | `quanta_spectrum.py` and `tools/quanta_measures.py`: n_g, n̄_j, δ_stim, E, phase slip, backreaction ratio, the R·S(L) bound | Opus | ⬜ | ⬜ | | |
@@ -181,6 +182,11 @@ Noted, not acted on:
   (README §8.6; P26 proposes the key).
 - **U14**, the A values of the rebuild of record. At laboratory M, ΔN_eff today falls roughly in proportion to A. A = 0.01
   cannot be built in the transition window on this code (§3).
+  **With 02b's measurements (2026-11-04; [verification §2b.11](../../.documents/one-loop-drain-verification.md)):** at
+  laboratory M every P and W history builds, one-loop only, at A = 10, 5, 2, 1.5, 0.5 and 0.05. Their ΔN_eff today is
+  0.029–0.645 at A = 10, 0.024–0.335 at 5 and 0.0025–0.0094 at 0.05 (2197: 0.564, 0.277, 0.0086), and ΔN_eff at 1 MeV is
+  close to proportional to A. At A = 10 the first impact drains 84–99% of the kinetic energy and the field parks by
+  N = 18.8–24.7. R-632 (β = 1.0) fails at A ≤ 0.1, and the ladder's 5 × 10⁻²⁰ M_P at A = 0.1 and 0.05. Open for the user.
 
 ### 1.1 Items
 
@@ -196,6 +202,8 @@ Noted, not acted on:
 | the measure scripts, `.documents/one-loop-drain/measure/` (driver, task list, fixed-law references, decisions, spot and tool checks, analyses) | 02 | ✅ |
 | U11's 30 histories × A ∈ {1, 0.1, 0.01} × {zero, edge}: 110 run, 65 by S1, 5 by S2; spot and tool checks bitwise | 02 | ✅ (verification §2) |
 | the handover for U13 and U14 | 02 | ✅ (verification §2.9; U13 ruled 2026-11-04, U14 open for the user) |
+| the wide-A scripts, `.documents/one-loop-drain/measure-02b/` (02's scripts imported; the reproduction check, the first impact and the cap) | 02b | ✅ |
+| 02's 30 histories × A ∈ {10, 5, 2, 1.5, 0.5, 0.05} × {zero, edge}: 171 run, 159 by S1, 30 by S2; the reproduction, spot and tool checks bitwise; the handover for U14 at nine A | 02b | ✅ (verification §2b; U14 open for the user) |
 
 ## 2. The gates
 
@@ -203,7 +211,7 @@ Noted, not acted on:
 |---|---|---|---|
 | Law | fixed law: golden histories bitwise, payload unchanged but the new key; one-loop law: 2197 and 2188 reproduce the probe's table, 3016 and 3233 drain nothing; 3873 explained | 01 | ✅ 2026-11-03 (verification §1.10): the goldens bitwise, the 42 equal 04's, the probe's table bitwise at A = 1 and 0.1, 3016/3233 drain nothing, 3873 explained and completing after ruling (b) |
 | Measure | the sample at three A and both gap prescriptions, re-tuned; regime shares and the gap's reach across M and β; the prescriptions' spread in Y_p, D/H, ΔN_eff; the cost | 02 | ✅ 2026-11-03 (verification §2.10): 180 tasks, 81 of 110 runs succeeding; the gap reached at laboratory M only at A = 0.01, where the tunings fail; the spread measured on the ladder; 1 h 58 min, at most six workers |
-| Wide | 02's sample at 02b's six A, the reproduction check bitwise; regime shares, the first impact and the cap across nine A; the cost; the handover for U14 | 02b | ⬜ |
+| Wide | 02's sample at 02b's six A, the reproduction check bitwise; regime shares, the first impact and the cap across nine A; the cost; the handover for U14 | 02b | ✅ 2026-11-04 (verification §2b.12): 360 tasks, 167 of 171 runs succeeding; every tuning at A = 0.5–10 succeeds, and P and W stay one-loop down to A = 0.05; at A = 10 the first impact drains 84–99% of the kinetic energy at laboratory M; 43 min, at most six workers |
 | Store | the round trip exact, bounce rows in order; the fixed law and α = 0 write no bounce row; fingerprint format 7 beside 6 | 03 | ⬜ |
 | Export | the new export columns equal the stored record; existing `histories.csv` columns byte-identical; the drivers refuse a mismatched law | 04 | ⬜ |
 | Derive | the derived measures against direct quadrature (10⁻⁶); peak-collapsed against the scoping probe's method | 05 | ⬜ |
@@ -291,6 +299,11 @@ the new prompts.
   `main.py` tunes through the same `tune_history`, so a rebuild at those (β, A) on this code takes the same path (not
   run). **Next:** for the user, with U14 (U13 ruled 2026-11-04). Not
   diagnosed, and not acted on (prompt 02 §1.5).
+  *(2026-11-04, prompt 02b (this commit; verification §2b.5): measured at A = 0.05. Every P and W history succeeds there,
+  one-loop only, in 24–26 s. Four tunings fail, of the same two kinds and at the two histories that failed at A = 0.1:
+  R-632 (β = 1.0) under both prescriptions, by "the effective minimum was not found" after the seed integration (37
+  one-loop, 58–98 gap and 1488–4193 classical candidates; values 3.27795 × 10⁻¹²¹); and the ladder's 5 × 10⁻²⁰ M_P under
+  both, by the step budget at N = 46.07–46.44 after 14 020–14 116 reflections. At A = 0.5–10 every tuning succeeds.)*
 
 ### 3.1 Assigned to this campaign
 
@@ -371,3 +384,6 @@ may add more, so 01 still measures them on its own tree first.
 
 **2026-11-03, prompt 02:** measured first at `b1d6bc5`: 26, 566 (163 + 403), 130, 156, 68, all passing. After 02 (no code
 changed): the same counts, all passing (log 02 §4).
+
+**2026-11-04, prompt 02b:** measured first at `62d3f2f`: 26, 566 (163 + 403), 130, 156, 68, all passing. After 02b (no code
+changed): the same counts, all passing (log 02b §4).

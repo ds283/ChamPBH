@@ -1,0 +1,68 @@
+# §2.5 the cost: run lines only (derived lines cost nothing)
+# wall: the task's wall time (s), tuning and BBN; integ: integrations of the tuning; rss: peak RSS (MiB)
+group A      gap   n   wall min/median/max           integ min/max  rss max (MiB)
+P     10     zero   2      14.0     14.0     14.0       1   1            239
+P     5      zero   2      14.0     14.0     14.0       1   1            248
+P     2      zero   2      12.0     12.0     12.0       1   1            247
+P     1.5    zero   2      12.0     14.0     14.0       1   1            248
+P     0.5    zero   2      16.1     16.1     16.1       1   1            250
+P     0.05   zero   2      26.1     26.1     26.1       1   1            246
+W     10     zero  10      14.0     14.0     14.0       1   1            243
+W     5      zero  10      14.0     14.1     14.1       1   1            247
+W     2      zero  10      12.0     12.0     12.0       1   1            252
+W     1.5    zero  10      12.0     12.0     12.0       1   1            251
+W     0.5    zero  10      14.0     14.0     16.1       1   1            252
+W     0.05   zero  10      24.1     24.1     24.1       1   1            250
+R     10     zero   4      16.0     16.0     18.1       1   1            240
+R     5      zero   4      12.0     14.0     16.1       1   1            251
+R     2      zero   4      12.0     16.1     18.1       1   1            258
+R     1.5    zero   4      12.0     16.1     18.1       1   1            259
+R     0.5    zero   4      14.0     16.1     26.1       1   1            253
+R     0.5    edge   1      14.1     14.1     14.1       1   1            234
+R     0.05   zero   4      18.1     86.4    130.6       1   1            309
+R     0.05   edge   1     353.7    353.7    353.7       1   1            526
+B     10     zero   6      14.0     16.0     16.1       1   1            238
+B     5      zero   6      14.0     14.1     14.1       1   1            256
+B     2      zero   6      14.0     16.1     18.1       1   1            257
+B     1.5    zero   6      14.0     18.1     20.1       1   1            260
+B     0.5    zero   6      14.0     16.1     30.1       1   1            256
+B     0.05   zero   6      18.1     24.1     90.4       1   1            310
+L     10     zero   3      14.0     14.0     22.1       1   1            241
+L     10     edge   3      14.0     22.1     48.1       1   1            256
+L     5      zero   3      12.1     12.1     20.1       1   1            249
+L     5      edge   3      14.0     22.1     48.1       1   1            256
+L     2      zero   3      12.0     12.0     20.1       1   1            248
+L     2      edge   3      12.0     20.1     46.2       1   1            257
+L     1.5    zero   3      14.0     14.1     20.1       1   1            240
+L     1.5    edge   3      12.0     20.1     46.2       1   1            255
+L     0.5    zero   3      14.0     28.1     32.1       1   1            254
+L     0.5    edge   3      14.1     16.1     24.1       1   1            249
+L     0.05   zero   3     711.1    729.2    912.0       1   1           1354
+L     0.05   edge   4      22.1    936.3    942.3       1   1           1358
+
+# integrations per tuning, over every run line
+   1: 171
+   run lines: 171; total task wall 8442 s (CPU-bound, one core each)
+
+# the batches (batch.log: first and last lines)
+repro: peak RSS of a task 248 MiB
+   2026-11-04T16:04:50Z ** batch repro start pid=28863 tasks=2 workers=2 loads 6.58 8.73 12.98
+   2026-11-04T16:05:12Z ** batch repro end tasks=2 wall=22.1 s loads 6.73 8.61 12.81
+spot: peak RSS of a task 280 MiB
+   2026-11-04T16:46:35Z ** batch spot start pid=34791 tasks=5 workers=5 loads 9.25 18.78 26.44
+   2026-11-04T16:48:02Z ** batch spot end tasks=5 wall=86.3 s loads 14.34 20.28 26.41
+step2a: peak RSS of a task 260 MiB
+   2026-11-04T16:05:38Z ** batch step2a start pid=29010 tasks=125 workers=6 loads 6.83 8.44 12.62
+   2026-11-04T16:11:03Z ** batch step2a end tasks=125 wall=325.2 s loads 12.19 12.07 13.31
+step2b: peak RSS of a task 257 MiB
+   2026-11-04T16:11:25Z ** batch step2b start pid=30182 tasks=16 workers=6 loads 11.17 11.85 13.20
+   2026-11-04T16:12:37Z ** batch step2b end tasks=16 wall=72.3 s loads 27.16 15.57 14.44
+step3a: peak RSS of a task 246 MiB
+   2026-11-04T16:12:49Z ** batch step3a start pid=30639 tasks=2 workers=2 loads 33.05 17.35 15.09
+   2026-11-04T16:13:15Z ** batch step3a end tasks=2 wall=26.1 s loads 51.69 23.38 17.35
+step3b: peak RSS of a task 1354 MiB
+   2026-11-04T16:13:36Z ** batch step3b start pid=30900 tasks=23 workers=6 loads 44.77 23.65 17.59
+   2026-11-04T16:30:12Z ** batch step3b end tasks=23 wall=996.5 s loads 5.75 13.67 18.49
+step3c: peak RSS of a task 1358 MiB
+   2026-11-04T16:30:28Z ** batch step3c start pid=32699 tasks=5 workers=6 loads 5.22 13.16 18.23
+   2026-11-04T16:46:10Z ** batch step3c end tasks=5 wall=942.3 s loads 9.50 19.63 26.96
