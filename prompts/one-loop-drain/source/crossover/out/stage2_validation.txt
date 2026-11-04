@@ -1,0 +1,71 @@
+# stage 2 validation. Columns of each run: frac(modes) = 8 pi^2 R rho, frac(balance) = (E - phi'^2/2 - U)/E,
+# v_out/v_in, returned, M/phi_turn, max |dE/E| along the run, modes, steps
+V4 A0.05 #35        L=14.660 lnR= 35.379 ell= 4.914 passes=1 mref=1.369e-04 kref=1.865e-02 eps_turn=1.58e+05
+V4 A0.05 #35        base      0.41650  0.41650  0.7639  True   2.876  3.3e-10  412   43337  d(frac) +0.0e+00
+V4 A0.05 #35        ppd x2    0.41650  0.41650  0.7639  True   2.876  3.3e-10  823   43337  d(frac) -1.5e-08
+V4 A0.05 #35        kmax x2   0.41653  0.41653  0.7639  True   2.876  2.6e-10  436   86627  d(frac) +3.5e-05
+V4 A0.05 #35        kmin /2   0.41640  0.41640  0.7639  True   2.876  3.2e-10  436   43504  d(frac) -9.3e-05
+V4 A0.05 #35        h /2      0.41650  0.41650  0.7639  True   2.876  2.2e-10  412   87147  d(frac) -8.3e-08
+V4 A0.05 #35        EPS /10   0.41650  0.41650  0.7639  True   2.876  1.5e-10  412   43506  d(frac) -5.2e-07
+V4 A0.05 #35        F0 /100   0.41650  0.41650  0.7639  True   2.876  9.6e-11  412  192710  d(frac) -1.9e-06  (83 s)
+V4 A0.05 #107       L= 7.885 lnR= 23.833 ell= 1.987 passes=1 mref=3.079e-03 kref=2.245e-02 eps_turn=1.57e+03
+V4 A0.05 #107       base      0.71709  0.71709  0.5319  True   1.678  2.0e-10  311   53265  d(frac) +0.0e+00
+V4 A0.05 #107       ppd x2    0.71709  0.71709  0.5319  True   1.678  2.0e-10  620   53265  d(frac) -3.2e-08
+V4 A0.05 #107       kmax x2   0.71727  0.71727  0.5317  True   1.678  4.9e-11  335  106527  d(frac) +1.9e-04
+V4 A0.05 #107       kmin /2   0.71677  0.71677  0.5322  True   1.678  2.0e-10  335   53398  d(frac) -3.2e-04
+V4 A0.05 #107       h /2      0.71709  0.71709  0.5319  True   1.678  2.2e-11  311  106786  d(frac) -7.3e-08
+V4 A0.05 #107       EPS /10   0.71708  0.71708  0.5319  True   1.678  1.9e-10  311   53418  d(frac) -1.4e-06
+V4 A0.05 #107       F0 /100   0.71708  0.71708  0.5319  True   1.678  1.9e-10  311  237884  d(frac) -2.3e-06  (93 s)
+V4 A0.05 #128       L= 5.716 lnR= 19.242 ell= 0.980 passes=1 mref=1.158e-02 kref=3.084e-02 eps_turn=3.71e+02
+V4 A0.05 #128       base      0.92064  0.92064  0.2815  True   1.389  2.0e-10  276   75771  d(frac) +0.0e+00
+V4 A0.05 #128       ppd x2    0.92064  0.92064  0.2815  True   1.389  2.0e-10  550   75771  d(frac) -5.3e-08
+V4 A0.05 #128       kmax x2   0.92095  0.92095  0.2810  True   1.389  5.0e-11  300  151757  d(frac) +3.1e-04
+V4 A0.05 #128       kmin /2   0.92009  0.92009  0.2825  True   1.389  2.0e-10  300   75193  d(frac) -5.5e-04
+V4 A0.05 #128       h /2      0.92064  0.92064  0.2815  True   1.389  1.7e-11  276  151173  d(frac) +2.7e-08
+V4 A0.05 #128       EPS /10   0.92064  0.92064  0.2815  True   1.389  1.9e-10  276   75623  d(frac) -1.6e-06
+V4 A0.05 #128       F0 /100   0.92064  0.92064  0.2817 False   1.389  1.9e-10  276  373745  d(frac) -1.8e-06  (134 s)
+V4 A0.01 #183 gap   L= 3.619 lnR= 13.791 ell=  none passes=2 mref=4.226e-02 kref=4.288e-02 eps_turn=9.66e+01
+V4 A0.01 #183 gap   base      0.82643  0.82643  0.4161  True   1.154  3.7e-10  242   55190  d(frac) +0.0e+00
+V4 A0.01 #183 gap   ppd x2    0.82643  0.82643  0.4161  True   1.154  3.7e-10  483   55190  d(frac) -1.8e-07
+V4 A0.01 #183 gap   kmax x2   0.82631  0.82631  0.4162  True   1.154  6.4e-11  266  110338  d(frac) -1.2e-04
+V4 A0.01 #183 gap   kmin /2   0.82588  0.82588  0.4167  True   1.154  3.6e-10  266   55286  d(frac) -5.5e-04
+V4 A0.01 #183 gap   h /2      0.82643  0.82643  0.4161  True   1.154  2.2e-11  242  110979  d(frac) -2.4e-08
+V4 A0.01 #183 gap   EPS /10   0.82643  0.82643  0.4161  True   1.154  3.6e-10  242   55402  d(frac) -3.6e-07
+V4 A0.01 #183 gap   F0 /100   0.82643  0.82643  0.4165  True   1.154  3.8e-10  242  237322  d(frac) -2.6e-07  (100 s)
+V4 A0.01 #430 gap   L= 1.794 lnR=  7.124 ell=  none passes=2 mref=4.103e-01 kref=1.525e-01 eps_turn=1.60e+02
+V4 A0.01 #430 gap   base      0.28188  0.28188  0.8468  True   1.238  6.4e-10  207   36986  d(frac) +0.0e+00
+V4 A0.01 #430 gap   ppd x2    0.28188  0.28188  0.8468  True   1.238  6.4e-10  413   36986  d(frac) +6.9e-08
+V4 A0.01 #430 gap   kmax x2   0.28106  0.28106  0.8473  True   1.238  3.3e-10  231   73941  d(frac) -8.1e-04
+V4 A0.01 #430 gap   kmin /2   0.28324  0.28324  0.8453  True   1.236  5.8e-10  231   36710  d(frac) +1.4e-03
+V4 A0.01 #430 gap   h /2      0.28188  0.28188  0.8468  True   1.238  1.9e-11  207   74012  d(frac) -1.8e-09
+V4 A0.01 #430 gap   EPS /10   0.28188  0.28188  0.8461  True   1.238  6.5e-10  207   36968  d(frac) -6.1e-08
+V4 A0.01 #430 gap   F0 /100   0.28187  0.28187  0.8473  True   1.238  6.7e-10  207  159394  d(frac) -1.0e-06  (63 s)
+V1 #  5 ell= 9.535 kIR=sqrt(V''max)=0.989 m_ta   born  0.25940  stage2-cut  0.26480  0.26480  0.8574  True   5.987  7.4e-08  451   29711  ratio  1.0208
+V1 #  5 ell= 9.535 kIR=10 m_ta                 born  0.33584  stage2-cut  0.33596  0.33596  0.8149  True   6.061  8.7e-10  371   30424  ratio  1.0004
+V1 #  5 ell= 9.535 physical (kmin = 0.03 m_ta)                  stage2      0.24901  0.24901  0.8666  True   5.968  1.3e-08  573   29606  vs born-sc  0.9600  2.7/ell  0.2832  (17 s)
+V1 # 11 ell= 7.399 kIR=sqrt(V''max)=0.983 m_ta   born  0.32199  stage2-cut  0.33041  0.33041  0.8183  True   4.377  7.7e-10  377   37309  ratio  1.0262
+V1 # 11 ell= 7.399 kIR=10 m_ta                 born  0.44982  stage2-cut  0.45002  0.45002  0.7416  True   4.463  7.7e-11  297   39567  ratio  1.0005
+V1 # 11 ell= 7.399 physical (kmin = 0.03 m_ta)                  stage2      0.30600  0.30600  0.8331  True   4.356  5.1e-09  499   36941  vs born-sc  0.9504  2.7/ell  0.3649  (22 s)
+V1 # 23 ell= 5.817 kIR=sqrt(V''max)=0.975 m_ta   born  0.39185  stage2-cut  0.40447  0.40447  0.7717  True   3.390  1.2e-10  323   42068  ratio  1.0322
+V1 # 23 ell= 5.817 kIR=10 m_ta                 born  0.59930  stage2-cut  0.59964  0.59964  0.6327  True   3.488  1.1e-10  242   47577  ratio  1.0006
+V1 # 23 ell= 5.817 physical (kmin = 0.03 m_ta)                  stage2      0.36829  0.36829  0.7948  True   3.366  7.8e-10  444   41306  vs born-sc  0.9399  2.7/ell  0.4641  (24 s)
+V1 # 35 ell= 4.914 kIR=sqrt(V''max)=0.967 m_ta   born  0.44687  stage2-cut  0.46342  0.46342  0.7325  True   2.901  1.2e-10  292   44386  ratio  1.0371
+V1 # 35 ell= 4.914 kIR=10 m_ta                 born  0.73583  stage2-cut  0.73632  0.73632  0.5135  True   3.010  1.4e-10  210   55879  ratio  1.0007
+V1 # 35 ell= 4.914 physical (kmin = 0.03 m_ta)                  stage2      0.41650  0.41650  0.7639  True   2.876  3.3e-10  412   43337  vs born-sc  0.9320  2.7/ell  0.5494  (28 s)
+V2 L=  5.0 kmin=3.0e-03 ppd= 80  S = 3.18206e-03  stage 1a 3.18520e-03  ratio 0.99901  v_out/v_in 0.998881
+V2 L=  5.0 kmin=1.5e-03 ppd=160  S = 3.18206e-03  stage 1a 3.18520e-03  ratio 0.99901  v_out/v_in 0.998803
+V2 L= 10.0 kmin=3.0e-03 ppd= 80  S = 1.35155e-03  stage 1a 1.35290e-03  ratio 0.99900  v_out/v_in 0.999875
+V2 L= 10.0 kmin=1.5e-03 ppd=160  S = 1.35155e-03  stage 1a 1.35290e-03  ratio 0.99900  v_out/v_in 0.999872
+V2 L= 40.0 kmin=3.0e-03 ppd= 80  S = 1.39219e-04  stage 1a 1.39360e-04  ratio 0.99899  v_out/v_in 1.000000
+V2 L= 40.0 kmin=1.5e-03 ppd=160  S = 1.39219e-04  stage 1a 1.39360e-04  ratio 0.99899  v_out/v_in 1.000000
+V2q L= 10.0 walls.py, 121 points in [1e-3, 10]: linear-k trapezoid 1.35287e-03 (/stage 1a 0.99998), ln-k trapezoid 1.35155e-03 (/stage 1a 0.99900)
+V2q L= 10.0 walls.py, 481 points in [1e-3, 10]: linear-k trapezoid 1.35163e-03 (/stage 1a 0.99906), ln-k trapezoid 1.35154e-03 (/stage 1a 0.99900)
+V5 R-865 #39 ell=17.75 EPS=1e-03  frac(modes) 0.16171  frac(balance) 0.14474  max|dE/E| 1.7e-02  vout/vin 0.9248
+V5 R-865 #39 ell=17.75 EPS=1e-05  frac(modes) 0.14557  frac(balance) 0.14474  max|dE/E| 8.2e-04  vout/vin 0.9248
+V5 R-865 #39 ell=17.75 EPS=1e-07  frac(modes) 0.14478  frac(balance) 0.14474  max|dE/E| 4.0e-05  vout/vin 0.9248
+V5 R-865 #39 ell=17.75 EPS=1e-09  frac(modes) 0.14474  frac(balance) 0.14474  max|dE/E| 1.6e-06  vout/vin 0.9248
+V6 L=0.6779 loop off           S(L) = 9.3552e-03
+V6 L=0.6779 ln R= -6.0 loop on  frac/R = 9.3291e-03  frac 2.312e-05  vout/vin 1.0000  M/phi_turn 0.678  max|dE/E| 4.4e-11
+V6 L=0.6779 ln R= -4.0 loop on  frac/R = 9.1634e-03  frac 1.678e-04  vout/vin 0.9999  M/phi_turn 0.678  max|dE/E| 4.5e-11
+V6 L=0.6779 ln R= -2.0 loop on  frac/R = 8.0156e-03  frac 1.085e-03  vout/vin 0.9995  M/phi_turn 0.676  max|dE/E| 5.1e-11
+V6 L=0.6779 ln R=  0.0 loop on  frac/R = 2.7275e-03  frac 2.728e-03  vout/vin 0.9986  M/phi_turn 0.667  max|dE/E| 7.8e-11

@@ -393,6 +393,7 @@ the scoping session of that day; two opened the same day from the drain probe
   transition-window histories (β 1.0–1.1875) fail tuned at A = 0.01 (25 of 26 tasks; β = 1.0 at A = 0.1 too): step budget
   or effective minimum after the seed integration; 29 of 110 tunings; U14 (ruled 2026-11-04) leaves out A = 0.01; diagnosed 2026-11-04: the field never parks before today. *(`one-loop-drain`; prompt 02)*
 - `[02b-the-one-loop-fraction-is-unreliable-at-small-ell]` — 2.7/ℓ is verified only for ℓ ≳ 4; 70–78% of K at A = 0.01
-  (19–30% at 0.05) is drained at ℓ < 4 in the transition window; crossover stage 1: the physical-cutoff scheme gives
-  0.65–0.92 of 2.7/ℓ and still rises, and the open region is from ℓ ≈ 1 to R·S(L) ≈ 1, where `zero` drains nothing;
-  `crossover` continues before 03. *(`one-loop-drain`; orchestrator, 2026-11-04)*
+  (19–30% at 0.05) is drained at ℓ < 4 in the transition window; crossover stage 2 (self-consistent, massive modes):
+  the fraction peaks at 0.97 near ℓ = 0.5, is 0.83 at gap entry and falls to 0.16 at R·S = 1, never 0.99, and is
+  0.88–0.33 of 2.7/ℓ (ℓ = 9.5–1); `zero` contradicted; U13 for the user to re-rule before 03. *(`one-loop-drain`;
+  orchestrator, 2026-11-04)*

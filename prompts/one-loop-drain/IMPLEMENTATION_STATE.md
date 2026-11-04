@@ -434,6 +434,30 @@ the new prompts.
     laboratory M, that is the gap's last 179 of 508 bounces and the classical tail.
   - So the region in doubt is from the chain's failure to R·S(L) ≈ 1, where `zero` drains nothing. Stage 2 is to
     cover it.)*
+  *(2026-11-04, crossover stage 2 (`source/crossover/README.md` "Stage 2"; `out/stage2_*.txt`): the one-loop
+  scheme was solved self-consistently with massive modes, renormalized against the instantaneous vacuum, with no
+  Born reduction.
+  - **Validation.** It equals `born.py` to 0.07% where both apply (k_IR = 10 m_ta) and S(L) with the loop off to
+    10⁻⁵. Energy is conserved to ≤ 10⁻⁷ (6.6 × 10⁻⁵ at one grid corner). Every convergence variant moves the fraction
+    by ≤ 2 × 10⁻³.
+  - **Along 2197 at laboratory M** (the same at A = 0.05 and 0.01), the fraction of E absorbed in one bounce is:
+    - 0.25, 0.42, 0.57, 0.72, 0.81 and 0.92 at ℓ = 9.5, 4.9, 3.0, 2.0, 1.5 and 1.0;
+    - **0.97 at ℓ ≈ 0.5**, 0.88 at the chain's last bounce and 0.83 at gap entry;
+    - then, through the gap, 0.52, 0.28, 0.16, 0.06 and 0.003 at R·S = 70, 8.6, 1, 0.1 and R = 1.
+  - It is 0.88–0.96 of `born.py`'s and 0.88–0.33 of 2.7/ℓ (ℓ = 9.5–1.0).
+  - **≥ 90% for ℓ ≈ 1.1 down to 0.18; never ≥ 99%** (largest 0.97 on the curve, 0.986 off it).
+  - **So the fraction does not fall as ℓ → 0 within the chain; it peaks near ℓ = 0.5 and falls only through the
+    gap.** The nearly elastic regime (< 0.1, v_out/v_in > 0.95) begins between R·S ≈ 1 and 0.1, the gap's last 90–180
+    bounces at A = 0.01.
+  - At β = 2 (R-865, ℓ ≥ 17.75 at A = 0.05) stage 2 agrees with `born.py` to 2.5%.
+  - **The fraction is a function of ℓ and V₀/M⁴.** On one M's curve it is a function of ℓ alone, the same for every
+    β and A.
+  - The scheme stays outside its own domain throughout: ε = 10²–10⁸ at the turn, and the Hartree shift is
+    23–90 k_ex².
+  - The linearized (Hartree) mode equation diverges and could not be compared. The scheme's soft 1/k² tail carries
+    ≤ 0.5% of the quanta's energy.
+  - **Next:** the user re-rules U13 (`zero`, `edge`, a terminal drain, or a measured function; the evidence on each
+    is in the README's "What stage 2 hands back"), and so whether 2.7/ℓ itself is replaced.)*
 
 ### 3.1 Assigned to this campaign
 

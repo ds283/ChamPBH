@@ -1,0 +1,25 @@
+# stage 2: the two mode equations
+A0.05 #35        scheme   frac 0.41650  vout/vin 0.7639  m_turn 1.299e-04  k_turn 1.806e-02  S = int V'' dt = 6.1980e-07
+A0.05 #35          n_k k^2/(S^2/4) at k/m_turn = 0.032: 1.007, 0.035: 1.007, 0.040: 1.008, 0.050: 1.011
+A0.05 #35          share of the quanta's energy below m_turn 1.86e-05, below 0.1 k_turn 3.43e-03
+A0.05 #35        hartree h=0.10  failed: field reached phi <= 0
+A0.05 #35        hartree h=0.05  frac(modes) 6.2704e+17  frac(balance) -7.5373e+06  vout/vin 2.7454e+03  M/phi_turn 2.084  max|dE/E| 3.15e+19  steps 34950
+A0.05 #35          (scheme: Hartree shift at the turn 44.1 k_turn^2 = 8.5e+05 m_turn^2; eps_turn 1.58e+05)
+A0.05 #107       scheme   frac 0.71709  vout/vin 0.5319  m_turn 2.688e-03  k_turn 2.022e-02  S = int V'' dt = 2.0439e-04
+A0.05 #107         n_k k^2/(S^2/4) at k/m_turn = 0.034: 0.993, 0.039: 0.993, 0.043: 0.993, 0.054: 0.993
+A0.05 #107         share of the quanta's energy below m_turn 4.59e-03, below 0.1 k_turn 2.60e-03
+A0.05 #107       hartree h=0.10  frac(modes) 6.3701e+13  frac(balance) -7.7795e+05  vout/vin 8.8202e+02  M/phi_turn 1.822  max|dE/E| 7.13e+14  steps 16603
+A0.05 #107       hartree h=0.05  frac(modes) 6.7618e+16  frac(balance) -3.3023e+07  vout/vin 5.7466e+03  M/phi_turn 2.136  max|dE/E| 4.66e+17  steps 33634
+A0.05 #107         (scheme: Hartree shift at the turn 76.3 k_turn^2 = 4.3e+03 m_turn^2; eps_turn 1.57e+03)
+A0.01 #183 gap   scheme   frac 0.82643  vout/vin 0.4161  m_turn 3.932e-02  k_turn 4.024e-02  S = int V'' dt = 1.1388e-01
+A0.01 #183 gap     n_k k^2/(S^2/4) at k/m_turn = 0.032: 0.002, 0.036: 0.002, 0.041: 0.002, 0.051: 0.002
+A0.01 #183 gap     share of the quanta's energy below m_turn 4.70e-02, below 0.1 k_turn 2.78e-04
+A0.01 #183 gap   hartree h=0.10  failed: field reached phi <= 0
+A0.01 #183 gap   hartree h=0.05  frac(modes) 5.9235e+16  frac(balance) -1.4516e+13  vout/vin 3.8107e+06  M/phi_turn 2.159  max|dE/E| 3.94e+17  steps 30580
+A0.01 #183 gap     (scheme: Hartree shift at the turn 84.5 k_turn^2 = 8.9e+01 m_turn^2; eps_turn 9.66e+01)
+A0.01 #430 gap   scheme   frac 0.28188  vout/vin 0.8468  m_turn 4.009e-01  k_turn 1.495e-01  S = int V'' dt = 1.8493e+00
+A0.01 #430 gap     n_k k^2/(S^2/4) at k/m_turn = 0.031: 0.002, 0.034: 0.002, 0.039: 0.002, 0.049: 0.002
+A0.01 #430 gap     share of the quanta's energy below m_turn 5.73e-01, below 0.1 k_turn 9.89e-04
+A0.01 #430 gap   hartree h=0.10  frac(modes) 4.5790e-01  frac(balance) 2.4198e-02  vout/vin 9.8778e-01  M/phi_turn 1.725  max|dE/E| 1.96e+01  steps 33053
+A0.01 #430 gap   hartree h=0.05  frac(modes) 4.5786e-01  frac(balance) 2.4199e-02  vout/vin 9.8778e-01  M/phi_turn 1.725  max|dE/E| 1.97e+01  steps 66147
+A0.01 #430 gap     (scheme: Hartree shift at the turn -9.6 k_turn^2 = -1.3e+00 m_turn^2; eps_turn 1.60e+02)
