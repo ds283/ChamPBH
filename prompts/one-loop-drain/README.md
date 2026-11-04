@@ -496,14 +496,15 @@ assessment. Under the one-loop law that classification moves into the loop, befo
 | regime | α_eff |
 |---|---|
 | one-loop | min(α_cap, A · c₁ / ℓ) · w_gate, with c₁ = 4c ≈ 2.7 (`wall_backreaction.tex`, "The inelastic fraction") and ℓ the turnaround's |
-| gap | by the gap prescription: **zero**, or **edge**, A · c₁ / ℓ_edge with ℓ_edge = 4 (the probe's `PROBE_GAP=high`); 02 measures both; the user rules one (U13) |
+| gap | by the gap prescription: **zero**, or **edge**, A · c₁ / ℓ_edge with ℓ_edge = 4 (the probe's `PROBE_GAP=high`); 02 measures both; both kept, `zero` the default (U13, ruled 2026-11-04; P26) |
 | classical (R ≤ 1) | zero (ruling 5); R·S(L) is computed by the tool from the bounce rows as an upper bound, not drained |
 | unassessed | zero, counted |
 
 The fixed law is today's α_eff = α · w_gate, unchanged. α = 0 (natural mode) is untouched by either.
-`c₁`, `α_cap` and `ℓ_edge` are module constants with their sources quoted beside them. Until U13 is
-ruled the gap prescription is a module attribute that 02 sets (the precedent is `reflection-restart` 01's
-`_PROBE_OUTWARD_FIX`); 03 fixes it as ruled and removes the attribute.
+`c₁`, `α_cap` and `ℓ_edge` are module constants with their sources quoted beside them. Until 03 the
+gap prescription is a module attribute that 02 sets (the precedent is `reflection-restart` 01's
+`_PROBE_OUTWARD_FIX`). U13 as ruled keeps both, with `zero` the default; 03 replaces the attribute by a key
+(P26).
 
 ### 8.3 The measures (ruling 3) and where each is computed (ruling 4)
 
@@ -536,7 +537,7 @@ regime shares replace).
 |---|---|---|---|
 | 01 | `01-the-drain-law.md` | the law and A as inputs of the integration and the tuning (keys not yet stored); the classification in the loop; α_eff by regime; the gap prescription as a module attribute; a `"drain"` payload key with each candidate's regime, ℓ, α_eff, w_gate, ln E, ln H; the tool route's options; the 3873 failure investigated and, if it is in this code, fixed; tests | Opus |
 | 02 | `02-measure-the-law.md` | about forty histories by the tool route, re-tuned (§8.5): A ∈ {0.01, 0.1, 1}, both gap prescriptions; regime shares, gap entry, ℓ_min, the parking leftover, the R·S(L) bound from the payload; Y_p, D/H and ΔN_eff against the fixed law; tuning integrations and wall time. Then the user rules U13–U14 | Opus |
-| 03 | `03-the-store.md` | the keys (U8), `ScalarHistoryBounce`, the sample and history columns, the gap prescription fixed as ruled, `FINGERPRINT_FORMAT` 7, `VERSION_LABEL` (U12), the registry, drop group, sharding, batch size, read-back; tests in a temporary store | Opus |
+| 03 | `03-the-store.md` | the keys (U8), `ScalarHistoryBounce`, the sample and history columns, the gap prescription as a key (U13, P26), `FINGERPRINT_FORMAT` 7, `VERSION_LABEL` (U12), the registry, drop group, sharding, batch size, read-back; tests in a temporary store | Opus |
 | 04 | `04-drivers-and-exports.md` | `main.py`'s and the plot scripts' options for the law (the match against stored keys, as `--alpha-values`); `histories.csv`, `fields.csv`, a new `bounces.csv`; readers and tests | Sonnet |
 | 05 | `05-derivation-tool.md` | the spectrum model as one module outside the integrator (`ComputeTargets/quanta_spectrum.py`, pure), and `tools/quanta_measures.py` reading the exports and writing the derived measures per bounce and per history; tests against direct quadrature; run on 02's histories | Opus |
 | 06 | `06-rehearse.md` | registered builds on the isolated cluster: the fixed law at the campaign's base and at its tip, bitwise; the one-loop law at the tip, interrupted and resumed, by value and against 02's tool route | Opus |
@@ -583,7 +584,8 @@ keep it; U10 - 0.99 is OK; U11 - OK; U12: OK". The table below is the proposal a
 | **U12** — the labels | `FINGERPRINT_FORMAT` 7 and `VERSION_LABEL` 2026.10.0 in 03 | `VERSION_LABEL` 2026.9.1 |
 
 **For the user after 02 (U13–U14):** the gap prescription of record (U13), from 02's spread; the A values
-of the rebuild of record (U14).
+of the rebuild of record (U14). **U13 ruled by the user, 2026-11-04:** "Please keep both, but make `zero` the default in production". Both
+prescriptions are kept, and `zero` is the default (P26 below). U14 is open.
 
 **Proposed by the planner (P17–P20), the defaults unless the user says otherwise:**
 - **P17 — the law's constants** (c₁, α_cap, ℓ_edge) beside the margin constants in `ScalarHistory.py`,
@@ -595,10 +597,18 @@ of the rebuild of record (U14).
 - **P20 — the gap prescription's name** in the payload and the logs, so that 02's two runs of one history
   are told apart without the module attribute.
 
+**Proposed by the orchestrator after U13 (P26), the default unless the user says otherwise:**
+- **P26 — the prescription as a key.** Since both prescriptions are kept, a one-loop history's prescription
+  changes its values and so is a key: a `gap_prescription` column of `alpha_value` beside U8's `drain_law`,
+  `zero` or `edge`, with no prescription under the fixed law (03 states how the key stays unique there). The
+  module attribute becomes an argument beside `drain_law` (P22), default `zero`. `main.py` gains
+  `--gap-prescription`, default `zero`, and the plot scripts match it as they match `--alpha-values` (04).
+  The tool route keeps its `--gap-prescription`, default `zero`.
+
 ### 8.7 What this campaign hands to the user
 
-- The one-loop drain law beside the fixed one, with the gap prescription and the A values ruled from a
-  measurement across the grid.
+- The one-loop drain law beside the fixed one, with both gap prescriptions (`zero` the default, U13) and the
+  A values ruled from a measurement across the grid.
 - Per bounce, per sample and per history, the model-free instrumentation of the law, stored under
   `FINGERPRINT_FORMAT` 7; and a tool that derives the spectrum-dependent measures from the exports.
 - Two figure tools and their demonstration figures.
@@ -659,4 +669,4 @@ written on them.
   no meaning there. 01 reports whether any arises.
 - **P25 — the tool route.** `tools/history_and_bbn.py` gains `--drain-law`. Until 03 it also gains
   `--gap-prescription`, which sets the module attribute of §8.2 in its own process, as
-  `reflection-restart` 01's `--variant` set its switch. 03 removes both the attribute and the option.
+  `reflection-restart` 01's `--variant` set its switch. 03 removes the attribute; the option stays, default `zero` (U13, P26).
