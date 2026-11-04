@@ -1,6 +1,6 @@
 # one-loop-drain campaign — implementation state
 
-**Last updated:** 2026-11-04 · **Status: LIVE — 2 of 8 landed (01, 02); U13 ruled; U14 open for the user.** Planned
+**Last updated:** 2026-11-04 · **Status: LIVE — 2 of 9 landed (01, 02); U13 ruled; 02b written; U14 open for the user.** Planned
 2026-11-02 as `quanta-diagnostics` at the user's request, after a scoping session the same day
 ([`source/scoping_2026-11-02.md`](source/scoping_2026-11-02.md)); U1–U7 and P1–P16 ruled the same day,
 all as proposed (README §6). **Re-planned the same day around the drain law and renamed `one-loop-drain`**
@@ -14,7 +14,8 @@ merged here (`1561b60`). The user ruled the wall-search fix into 01 (README §8.
 back to §3 for it. Prompt 01 written the same day.)* *(2026-11-03: prompt 01 landed, with the user's ruling (b) on
 the inside-wall stop (§3, §4); the Law gate holds, and two issues closed.)* *(2026-11-03: prompt 02 landed; the Measure
 gate holds, one issue opened (§3), and U13 and U14 are open for the user with its measurements.)* *(2026-11-04: the user ruled U13: both gap
-prescriptions kept, `zero` the default (README §8.6, P26). U14 is open.)*
+prescriptions kept, `zero` the default (README §8.6, P26). U14 is open.)* *(2026-11-04: prompt 02b inserted and written at the user's request, to
+measure A ∈ {0.05, 0.5, 1.5, 2, 5, 10} before U14 is ruled (README §8.4, §8.6).)*
 
 The campaign replaces the fixed-α drain by a one-loop law, α_eff = min(α_cap, A·2.7/ℓ)·w_gate at a
 one-loop turnaround and zero at R ≤ 1, with the fixed law kept beside it, bitwise. It measures the law
@@ -42,6 +43,7 @@ The plan as first ruled had seven prompts (README §2), none written; the re-pla
 |---|---|---|---|---|---|---|---|
 | 01 | [The drain law](01-the-drain-law.md) | the law and A as inputs; the regime in the loop; α_eff by regime; the gap prescription as a module attribute; the `"drain"` payload key; the tool route's options; the 3873 failure; the wall-search fix (README §8.8) | Opus | ✅ | ✅ | `b99f6a4` | [01](logs/01-the-drain-law.md) |
 | 02 | [Measure the law](02-measure-the-law.md) | U11's thirty histories by the tool route, re-tuned, at three A and both gap prescriptions, with two exact shortcuts (S1, S2) spot-checked; regime shares, the gap's reach, the R·S(L) bound, Y_p, D/H, ΔN_eff against the fixed law; then U13–U14 | Opus | ✅ | ✅ | `3f3f0cf` | [02](logs/02-measure-the-law.md) |
+| 02b | [Measure over a wider A](02b-measure-wide-A.md) | inserted 2026-11-04 at the user's request: 02's thirty histories at A ∈ {0.05, 0.5, 1.5, 2, 5, 10}, both gap prescriptions; 02's lines reused after a reproduction check; S2 generalised; the first impact's drained fraction and the cap; the handover for U14 at nine A | Opus | ✍️ | ⬜ | | |
 | 03 | The store | the keys, `ScalarHistoryBounce`, the sample and history columns, the gap prescription as a key (U13, P26), `FINGERPRINT_FORMAT` 7, `VERSION_LABEL` | Opus | ⬜ | ⬜ | | |
 | 04 | Drivers and exports | the law's options in `main.py` and the plot scripts; `histories.csv`, `fields.csv`, `bounces.csv` | Sonnet | ⬜ | ⬜ | | |
 | 05 | Derivation tool | `quanta_spectrum.py` and `tools/quanta_measures.py`: n_g, n̄_j, δ_stim, E, phase slip, backreaction ratio, the R·S(L) bound | Opus | ⬜ | ⬜ | | |
@@ -201,6 +203,7 @@ Noted, not acted on:
 |---|---|---|---|
 | Law | fixed law: golden histories bitwise, payload unchanged but the new key; one-loop law: 2197 and 2188 reproduce the probe's table, 3016 and 3233 drain nothing; 3873 explained | 01 | ✅ 2026-11-03 (verification §1.10): the goldens bitwise, the 42 equal 04's, the probe's table bitwise at A = 1 and 0.1, 3016/3233 drain nothing, 3873 explained and completing after ruling (b) |
 | Measure | the sample at three A and both gap prescriptions, re-tuned; regime shares and the gap's reach across M and β; the prescriptions' spread in Y_p, D/H, ΔN_eff; the cost | 02 | ✅ 2026-11-03 (verification §2.10): 180 tasks, 81 of 110 runs succeeding; the gap reached at laboratory M only at A = 0.01, where the tunings fail; the spread measured on the ladder; 1 h 58 min, at most six workers |
+| Wide | 02's sample at 02b's six A, the reproduction check bitwise; regime shares, the first impact and the cap across nine A; the cost; the handover for U14 | 02b | ⬜ |
 | Store | the round trip exact, bounce rows in order; the fixed law and α = 0 write no bounce row; fingerprint format 7 beside 6 | 03 | ⬜ |
 | Export | the new export columns equal the stored record; existing `histories.csv` columns byte-identical; the drivers refuse a mismatched law | 04 | ⬜ |
 | Derive | the derived measures against direct quadrature (10⁻⁶); peak-collapsed against the scoping probe's method | 05 | ⬜ |

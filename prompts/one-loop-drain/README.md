@@ -537,6 +537,7 @@ regime shares replace).
 |---|---|---|---|
 | 01 | `01-the-drain-law.md` | the law and A as inputs of the integration and the tuning (keys not yet stored); the classification in the loop; α_eff by regime; the gap prescription as a module attribute; a `"drain"` payload key with each candidate's regime, ℓ, α_eff, w_gate, ln E, ln H; the tool route's options; the 3873 failure investigated and, if it is in this code, fixed; tests | Opus |
 | 02 | `02-measure-the-law.md` | about forty histories by the tool route, re-tuned (§8.5): A ∈ {0.01, 0.1, 1}, both gap prescriptions; regime shares, gap entry, ℓ_min, the parking leftover, the R·S(L) bound from the payload; Y_p, D/H and ΔN_eff against the fixed law; tuning integrations and wall time. Then the user rules U13–U14 | Opus |
+| 02b | `02b-measure-wide-A.md` | inserted 2026-11-04 at the user's request (§8.6): 02's thirty histories at A ∈ {0.05, 0.5, 1.5, 2, 5, 10}, both gap prescriptions, with S2 generalised to every A; 02's lines at A = 0.01, 0.1 and 1 reused after a reproduction check; the first impact's drained fraction and the cap; the handover for U14 at nine A | Opus |
 | 03 | `03-the-store.md` | the keys (U8), `ScalarHistoryBounce`, the sample and history columns, the gap prescription as a key (U13, P26), `FINGERPRINT_FORMAT` 7, `VERSION_LABEL` (U12), the registry, drop group, sharding, batch size, read-back; tests in a temporary store | Opus |
 | 04 | `04-drivers-and-exports.md` | `main.py`'s and the plot scripts' options for the law (the match against stored keys, as `--alpha-values`); `histories.csv`, `fields.csv`, a new `bounces.csv`; readers and tests | Sonnet |
 | 05 | `05-derivation-tool.md` | the spectrum model as one module outside the integrator (`ComputeTargets/quanta_spectrum.py`, pure), and `tools/quanta_measures.py` reading the exports and writing the derived measures per bounce and per history; tests against direct quadrature; run on 02's histories | Opus |
@@ -555,6 +556,7 @@ runs.
 |---|---|---|
 | **Law** | under the fixed law every golden history (plain, tuned and reflecting) passes bitwise and the payload is unchanged but for the new key; under the one-loop law 2197 and 2188 at the stored normalization reproduce §0.4's table (A = 1, 0.1; drains, parking N, r_χ), with any difference the merged tree makes stated; 3016 and 3233 drain nothing; 3873's failure explained | 01 |
 | **Measure** | the sample measured at both gap prescriptions and three A, re-tuned; the regime shares and the gap's reach stated across M and β; the spread of Y_p, D/H and ΔN_eff between the prescriptions; the cost | 02 |
+| **Wide** | 02's sample measured at 02b's six A, with the reproduction check bitwise; the regime shares, the first impact and the cap across nine A; the cost; the handover for U14 | 02b |
 | **Store** | the round trip exact, bounce rows in order; the fixed law and α = 0 write no bounce row and NULL new columns; the fingerprint guard carries format 7 beside 6 | 03 |
 | **Export** | every new export column equals the stored record; `histories.csv`'s existing columns byte-identical for a store without the new data; the drivers refuse a law that does not match the store | 04 |
 | **Derive** | each derived measure agrees with direct quadrature to 10⁻⁶ relative on constructed generations; with the spectrum collapsed to its peak, E and the margins agree with `source/probe/all_generations.py` on the same integration | 05 |
@@ -585,7 +587,8 @@ keep it; U10 - 0.99 is OK; U11 - OK; U12: OK". The table below is the proposal a
 
 **For the user after 02 (U13–U14):** the gap prescription of record (U13), from 02's spread; the A values
 of the rebuild of record (U14). **U13 ruled by the user, 2026-11-04:** "Please keep both, but make `zero` the default in production". Both
-prescriptions are kept, and `zero` is the default (P26 below). U14 is open.
+prescriptions are kept, and `zero` is the default (P26 below). U14 is open. **Prompt 02b inserted at the user's
+request, 2026-11-04,** before U14 is ruled: "Can we try `A \in { 0.05, 0.1, 0.5, 1.0, 1.5, 2.0, 5.0, 10.0 }`?", and then "Running a few histories where the condensate loses most or almost all of its KE on the first impact might be worth doing, to get a measurement of what happens when the collision is mostly inelastic. A=5 and A=10 sound like they probe slightly different configurations in this regime, so leave those. Let's test first using a prompt 02b".
 
 **Proposed by the planner (P17–P20), the defaults unless the user says otherwise:**
 - **P17 — the law's constants** (c₁, α_cap, ℓ_edge) beside the margin constants in `ScalarHistory.py`,
