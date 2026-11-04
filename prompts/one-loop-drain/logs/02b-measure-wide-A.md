@@ -1,7 +1,7 @@
 # Log 02b — measure the law over a wider A
 
 **Subject:** Measure the one-loop drain law at six more values of A
-**Commit:** this commit, on branch `one-loop-drain`, on top of `62d3f2f`
+**Commit:** `cc1f449`, on branch `one-loop-drain`, on top of `62d3f2f`
 **Date:** 2026-11-04, by Claude Opus 5.5
 **Result:** **COMPLETE.** The Wide gate holds (`.documents/one-loop-drain-verification.md` §2b.12). U14 is open for the
 user, with 02's and 02b's measurements at nine A (verification §2b.11).

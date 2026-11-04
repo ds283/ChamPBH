@@ -1,6 +1,6 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-11-03 · **31 open**: 4 on the `review-remediation` board (closed
+**Last updated:** 2026-11-04 · **31 open**: 4 on the `review-remediation` board (closed
 2026-09-30), none now assigned; 2 on the `production-readiness` board
 (closed 2026-09-30); 2 on the `run-integrity` board (closed 2026-09-30; one stale entry closed 2026-10-22, its fix having landed in `5740690`; `jordan-normalization` prompt 07 closed one, 2026-10-26); 6 on the
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`
@@ -391,4 +391,4 @@ the scoping session of that day; two opened the same day from the drain probe
   closed by 03. *(`one-loop-drain`; drain probe, 2026-11-02)*
 - `[02-one-loop-tunings-fail-at-small-A-in-the-transition-window]` — under the one-loop law the laboratory-M
   transition-window histories (β 1.0–1.1875) fail tuned at A = 0.01 (25 of 26 tasks; β = 1.0 at A = 0.1 too): step budget
-  or effective minimum after the seed integration; 29 of 110 tunings; for the user with U13/U14. *(`one-loop-drain`; prompt 02)*
+  or effective minimum after the seed integration; 29 of 110 tunings; for the user with U14. *(`one-loop-drain`; prompt 02)*

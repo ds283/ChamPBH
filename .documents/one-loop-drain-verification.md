@@ -554,7 +554,7 @@ The gate holds, item by item (prompt §2):
 ## 2b. Prompt 02b — measure the law over a wider A (2026-11-04)
 
 **Tree:** branch `one-loop-drain` at `62d3f2f`; its computing code is `b99f6a4`'s (the Gate's diff is empty), the code
-§2 measured. Prompt 02b's commit (this commit) adds no code outside
+§2 measured. Prompt 02b's commit (`cc1f449`) adds no code outside
 [`one-loop-drain/measure-02b/`](one-loop-drain/measure-02b/), and §1 and §2 above are unchanged. Python 3.13.16.
 **Scripts:** [`one-loop-drain/measure-02b/`](one-loop-drain/measure-02b/), each with a docstring. They import 02's
 scripts from [`one-loop-drain/measure/`](one-loop-drain/measure/) and override some of their module globals; the
