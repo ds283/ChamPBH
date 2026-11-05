@@ -1,6 +1,6 @@
 # one-loop-drain campaign — implementation state
 
-**Last updated:** 2026-11-05 · **Status: LIVE — 4 of 11 landed (01, 02, 02b, 02c); the measured law in the code (02c); 02d next.** Planned
+**Last updated:** 2026-11-05 · **Status: LIVE — 4 of 11 landed (01, 02, 02b, 02c); the measured law in the code (02c); 02d written, not dispatched.** Planned
 2026-11-02 as `quanta-diagnostics` at the user's request, after a scoping session the same day
 ([`source/scoping_2026-11-02.md`](source/scoping_2026-11-02.md)); U1–U7 and P1–P16 ruled the same day,
 all as proposed (README §6). **Re-planned the same day around the drain law and renamed `one-loop-drain`**
@@ -54,7 +54,7 @@ The plan as first ruled had seven prompts (README §2), none written; the re-pla
 | 02 | [Measure the law](02-measure-the-law.md) | U11's thirty histories by the tool route, re-tuned, at three A and both gap prescriptions, with two exact shortcuts (S1, S2) spot-checked; regime shares, the gap's reach, the R·S(L) bound, Y_p, D/H, ΔN_eff against the fixed law; then U13–U14 | Opus | ✅ | ✅ | `3f3f0cf` | [02](logs/02-measure-the-law.md) |
 | 02b | [Measure over a wider A](02b-measure-wide-A.md) | inserted 2026-11-04 at the user's request: 02's thirty histories at A ∈ {0.05, 0.5, 1.5, 2, 5, 10}, both gap prescriptions; 02's lines reused after a reproduction check; S2 generalised; the first impact's drained fraction and the cap; the handover for U14 at nine A | Opus | ✅ | ✅ | `cc1f449` | [02b](logs/02b-measure-wide-A.md) |
 | 02c | [The measured law](02c-the-measured-law.md) | inserted 2026-11-05 (README §8.10): the adopted law in `ScalarHistory.py`, replacing 2.7/ℓ and both gap prescriptions; S(L); U15 (b), L = ln(1 + E/V₀) at every n; the `"drain"` record names the model version and records L and ln R; `--gap-prescription` removed; the reproduction of crossover's adopted-law maps | Opus | ✅ | ✅ | `18add05` | [02c](logs/02c-the-measured-law.md) |
-| 02d | Measure the measured law | inserted 2026-11-05: 02b's sample re-tuned under the adopted law at U14's eight A; replaces 02's and 02b's one-loop measurements | Opus | ⬜ | ⬜ | | |
+| 02d | [Measure the measured law](02d-measure-the-measured-law.md) | inserted 2026-11-05: 02's thirty histories re-tuned under the measured law at U14's eight A, every task run (no shortcuts); regime shares, the law's edges, parking, the first impact and the cap, ΔN_eff, Y_p, D/H, against 02/02b and the fixed law; the cost of the classical drains; replaces 02's and 02b's one-loop measurements | Opus | ✍️ | ⬜ | | |
 | 03 | The store | the keys, `ScalarHistoryBounce`, the sample and history columns, one versioned drain-model key (README §8.10, decision 1; it replaces the gap-prescription key of U13/P26), `FINGERPRINT_FORMAT` 7, `VERSION_LABEL` | Opus | ⬜ | ⬜ | | |
 | 04 | Drivers and exports | the law's options in `main.py` and the plot scripts; `histories.csv`, `fields.csv`, `bounces.csv` | Sonnet | ⬜ | ⬜ | | |
 | 05 | Derivation tool | `quanta_spectrum.py` and `tools/quanta_measures.py`: n_g, n̄_j, δ_stim, E, phase slip, backreaction ratio, the R·S(L) bound | Opus | ⬜ | ⬜ | | |
