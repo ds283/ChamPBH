@@ -1,7 +1,7 @@
 # Log 02d — measure the measured law
 
 **Subject:** Measure the measured drain law on the sample at U14's eight A
-**Commit:** this commit, on branch `one-loop-drain`, on top of `f4da906`
+**Commit:** `98b1601`, on branch `one-loop-drain`, on top of `f4da906`
 **Date:** 2026-11-05, by Claude Opus 5.5
 **Result:** **COMPLETE.** The Remeasure gate holds (`.documents/one-loop-drain-verification.md` §2d.12). Its numbers replace
 02's and 02b's as the campaign's measurement of the one-loop law.

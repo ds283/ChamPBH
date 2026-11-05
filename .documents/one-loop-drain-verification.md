@@ -1034,7 +1034,7 @@ The gate holds, item by item (prompt §2):
 ## 2d. Prompt 02d — measure the measured law (2026-11-05)
 
 **Tree:** branch `one-loop-drain` at `f4da906`; its computing code is `18add05`'s (the Gate's diff is empty), the
-measured law that §2c verified. Prompt 02d's commit (this commit) adds no code outside
+measured law that §2c verified. Prompt 02d's commit (`98b1601`) adds no code outside
 [`one-loop-drain/measure-02d/`](one-loop-drain/measure-02d/), and §1, §2, §2b and §2c above are unchanged. Python
 3.13.16. **Scripts:** [`one-loop-drain/measure-02d/`](one-loop-drain/measure-02d/), each with a docstring:
 `tasks_02d.py` (the task list), `run_02d.py` (the driver), `checks_02d.py` (the tool and determinism checks),

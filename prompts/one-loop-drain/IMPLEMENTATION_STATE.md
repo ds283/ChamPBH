@@ -57,7 +57,7 @@ The plan as first ruled had seven prompts (README §2), none written; the re-pla
 | 02 | [Measure the law](02-measure-the-law.md) | U11's thirty histories by the tool route, re-tuned, at three A and both gap prescriptions, with two exact shortcuts (S1, S2) spot-checked; regime shares, the gap's reach, the R·S(L) bound, Y_p, D/H, ΔN_eff against the fixed law; then U13–U14 | Opus | ✅ | ✅ | `3f3f0cf` | [02](logs/02-measure-the-law.md) |
 | 02b | [Measure over a wider A](02b-measure-wide-A.md) | inserted 2026-11-04 at the user's request: 02's thirty histories at A ∈ {0.05, 0.5, 1.5, 2, 5, 10}, both gap prescriptions; 02's lines reused after a reproduction check; S2 generalised; the first impact's drained fraction and the cap; the handover for U14 at nine A | Opus | ✅ | ✅ | `cc1f449` | [02b](logs/02b-measure-wide-A.md) |
 | 02c | [The measured law](02c-the-measured-law.md) | inserted 2026-11-05 (README §8.10): the adopted law in `ScalarHistory.py`, replacing 2.7/ℓ and both gap prescriptions; S(L); U15 (b), L = ln(1 + E/V₀) at every n; the `"drain"` record names the model version and records L and ln R; `--gap-prescription` removed; the reproduction of crossover's adopted-law maps | Opus | ✅ | ✅ | `18add05` | [02c](logs/02c-the-measured-law.md) |
-| 02d | [Measure the measured law](02d-measure-the-measured-law.md) | inserted 2026-11-05: 02's thirty histories re-tuned under the measured law at U14's eight A, every task run (no shortcuts); regime shares, the law's edges, parking, the first impact and the cap, ΔN_eff, Y_p, D/H, against 02/02b and the fixed law; the cost of the classical drains; replaces 02's and 02b's one-loop measurements | Opus | ✅ | ✅ | this commit | [02d](logs/02d-measure-the-measured-law.md) |
+| 02d | [Measure the measured law](02d-measure-the-measured-law.md) | inserted 2026-11-05: 02's thirty histories re-tuned under the measured law at U14's eight A, every task run (no shortcuts); regime shares, the law's edges, parking, the first impact and the cap, ΔN_eff, Y_p, D/H, against 02/02b and the fixed law; the cost of the classical drains; replaces 02's and 02b's one-loop measurements | Opus | ✅ | ✅ | `98b1601` | [02d](logs/02d-measure-the-measured-law.md) |
 | 03 | The store | the keys, `ScalarHistoryBounce`, the sample and history columns, one versioned drain-model key (README §8.10, decision 1; it replaces the gap-prescription key of U13/P26), `FINGERPRINT_FORMAT` 7, `VERSION_LABEL` | Opus | ⬜ | ⬜ | | |
 | 04 | Drivers and exports | the law's options in `main.py` and the plot scripts; `histories.csv`, `fields.csv`, `bounces.csv` | Sonnet | ⬜ | ⬜ | | |
 | 05 | Derivation tool | `quanta_spectrum.py` and `tools/quanta_measures.py`: n_g, n̄_j, δ_stim, E, phase slip, backreaction ratio, the R·S(L) bound | Opus | ⬜ | ⬜ | | |
@@ -74,6 +74,7 @@ Orchestrator notes, one prompt at a time, in `orchestrator/`:
 - [`prompt-02.md`](orchestrator/prompt-02.md) (`b1d6bc5`) — used for 02.
 - [`prompt-02b.md`](orchestrator/prompt-02b.md) (`62d3f2f`) — used for 02b.
 - [`prompt-02c.md`](orchestrator/prompt-02c.md) (`1647f7a`, amended in the review commit, its §5) — used for 02c.
+- [`prompt-02d.md`](orchestrator/prompt-02d.md) (`f4da906`) — used for 02d.
 
 **Orchestrator review of prompt 01 (2026-11-03)**, by orchestrator note 01 §3, on `b99f6a4`. Passed; seven
 checks:
@@ -300,6 +301,65 @@ Noted, not acted on:
 - Classical candidates now drain, each taking a restart: 83 on the ladder at A = 0.2. 02d measures the cost on the
   whole sample.
 
+**Orchestrator review of prompt 02d (2026-11-05)**, by orchestrator note 02d §3, on `98b1601`. Passed; seven
+checks. No stop was raised during the work.
+
+1. **Scope.**
+   - `git show --stat 98b1601` lists 25 files, all ruling 10's. Its parent is `f4da906`.
+   - The tree is clean, and no remote branch named `one-loop-drain` exists.
+   - The diff over the code paths, over `law/`, `law-02c/`, `measure/` and `measure-02b/`, and over `CLAUDE.md` is
+     empty.
+   - `measure-02d/out/` holds text only.
+   - `var/one-loop-drain/02/`, `02b/` and `02c/` hold no file newer than the note.
+2. **Nothing left running.** No pid of the six batches answers `kill -0`, every `batch.end` exists, and
+   `runregistrykit list` shows the same 23 finished runs.
+3. **The sample is complete.** `sample.jsonl` has 240 lines with 240 distinct ids, equal to `tasks.json`'s, every one
+   run and untagged. Outcomes: 230 success, 3 failure, 7 timeout.
+   - The failures are R-632 at A = 0.1 and 0.05 and L-M5e-20 at A = 0.05.
+   - The timeouts are C-3873 at every A but 1.
+4. **The law against its record, independently.** A scratch script of mine read all 245 partial files (the 240
+   tasks and the checks'), 616 270 candidates.
+   - `drain_alpha_effective` of each candidate's own fields and the record's A equals the stored α_eff at every one,
+     by `repr`.
+   - So does `fraction_adopted`, imported from `source/crossover/measured_law_map.py` with L passed exactly (M_MP =
+     2L, φ_t = 2), the clamp applied, and the continuation set aside. No candidate reached either edge, so the
+     reference agrees bitwise everywhere.
+5. **One task, re-run.** I re-ran C-3016 at A = 0.05 (330 classical drains) by 02d's driver, in a process of my own,
+   57 s at a load of about 58. Its result equals the batch's line under ruling 8: every field but the excluded
+   walls and RSS. Its partial file equals the batch's (330 injections and 330 candidates, by `repr`), and so does
+   its stdout, but for the wall times.
+6. **The tool and the numbers.**
+   - **The tool.** `tools/history_and_bbn.py 1.0775 4e-31 --drain-law one_loop --alpha 5.0` (W-2187, 21 s). Its
+     `history`, `dissipation`, `drain` and `bbn` lines equal the driver's for W-2187-A5 once `wall=` and
+     `PRyM_time=` are masked.
+   - **The cap.** Recomputed for P-2188 at A = 10 from its partial: 3 one-loop candidates, as the line says.
+   - **2197's ΔN_eff today** at A = 10 … 0.05 is 0.5554, 0.2727, 0.1170, 0.09026, 0.06009, 0.03280, 0.01131 and
+     0.008558, as §2d.7 states.
+   - **The failures at A = 0.1 and 0.05** are three, as stated.
+   - **The clamp** is met by no gap candidate. Over the last returned integration of every task, failed tunings
+     included, there are 350 gap candidates and the least L is 0.679. That is R-632's failed tunings at A = 0.1 and
+     0.05, above the clamp's 0.3045. The 2.578 of §2d.5 is over the 230 accepted integrations, as it says.
+7. **The records.**
+   - The log follows §5.1's seven sections. Every deviation is classed: the note's ten rulings, and D1–D7, two of
+     them unintended drift, corrected before the commit.
+   - Verification §1–§2c are unchanged (the diff only adds §2d, after §2c), and §2d.1–§2d.12 follow prompt §2's
+     eight items. The handover states measurements and makes no choice.
+   - On the board: row 02d, its two items, the Remeasure gate, the dated paragraph extending the §3 issue, the
+     suites, and **Last updated**. `.documents/OPEN_ISSUES.md`'s row matches it; the count stays at 31.
+   - `CLAUDE.md` is unchanged. The suites were not re-run in the review. The agent ran them before and after, at 26,
+     594 (162 + 432), 130, 156 and 68, all passing, and 02d changes no code or test.
+
+   The review substituted `98b1601` for "this commit" on the board, in the log and in verification §2d.
+
+Noted, not acted on:
+- **C-3873 costs its tuning, not its integrations.** It needs 24–28 integrations against 16 under the old law, and
+  it timed out at seven A. A rebuild of record that includes M = 10⁻¹² M_P, β = 1.11 will meet the same cost through
+  `tune_history` (log 02d §6).
+- **The failed R-632 tunings reach the gap at L ≈ 0.68,** lower than any accepted integration (2.578). That is still
+  above the clamp, but nearer to it than §2d's ranges suggest.
+- **The projection's P ratio (3.12) was set by the load,** not by the law. P's A = 0.05 tasks ran at a load of about
+  30 and its A = 0.5 tasks at about 6. The projection (1.30 h) still bounded the batch (1.00 h).
+
 **Open for the user, with 02's measurements (2026-11-03;
 [verification §2.9](../../.documents/one-loop-drain-verification.md)):**
 - **U13**, the gap prescription of record. The prescriptions differ only where the cascade enters the gap: on the
@@ -473,7 +533,7 @@ the new prompts.
   - **The two failures remain:** R-632 (β = 1.0) and the 5 × 10⁻²⁰ M_P ladder.
   - **Their floor:** R-632 parks at A = 0.5 but not at 0.2; the ladder parks at A = 0.2 but not at 0.1.
   - The user keeps A = 0.05 regardless (U14 stands). **Next:** 02d measures it re-tuned.)*
-  *(2026-11-05, prompt 02d (this commit; `.documents/one-loop-drain-verification.md` §2d.4; `var/one-loop-drain/02d/sample.jsonl`):
+  *(2026-11-05, prompt 02d (`98b1601`; `.documents/one-loop-drain-verification.md` §2d.4; `var/one-loop-drain/02d/sample.jsonl`):
   measured re-tuned under the measured law at U14's eight A, every task run. Three tunings fail, of 02's two kinds, each in
   its seed integration:
   - R-632 (β = 1.0) at A = 0.1 and 0.05, by "the effective minimum was not found" (V_eff' values 3.27795–3.27799 × 10⁻¹²¹),
