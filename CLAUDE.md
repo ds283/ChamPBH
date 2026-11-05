@@ -78,7 +78,7 @@ invariants that hold across all of them:
   the repository root:
   ```bash
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .   # 26 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 566 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 594 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .   # 130 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 156 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .        # 68 tests
@@ -87,10 +87,12 @@ invariants that hold across all of them:
   loads of 6.1 and 11.2 at their starts), and longer on a loaded machine; a Bash call is
   capped at ten minutes, so run it in two halves:
   ```bash
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 163 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 403 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 162 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 432 tests
   ```
-  (The counts are those of 2026-11-03, after `one-loop-drain` 01, which added 41 tests to the `test_[a-f]` half
+  (The counts are those of 2026-11-05, after `one-loop-drain` 02c, which deleted 2 tests from the `test_[a-f]` half
+  and added 1 there (`test_drain_law`), and added 29 to the `test_[g-z]` half (`test_measured_drain_law`); before it,
+  those of 2026-11-03, after `one-loop-drain` 01, which added 41 tests to the `test_[a-f]` half
   (`test_drain_law`), 11 to the `test_[g-z]` half (`test_unresolvable_turning_points`) and 9 to `tools/tests`; before
   it, those of 2026-11-02, after `reflection-restart` 03, which deleted 01's 10 probe tests from
   `ComputeTargets/tests` and added 16 there and 2 to `tools/tests`; `reflection-restart` 01 had added 10 to

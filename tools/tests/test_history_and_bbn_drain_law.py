@@ -14,20 +14,21 @@
 # limitations under the License.
 
 """
-tools/history_and_bbn.py --drain-law and --gap-prescription (one-loop-drain prompt 01 §1.5, P25), through
+tools/history_and_bbn.py --drain-law (one-loop-drain prompt 01 §1.5, P25; prompt 02c §1.4), through
 `main(argv)` with stdout captured and `compute_BBN_data` replaced by a stub, as test_history_and_bbn_alpha
 does, so that no PRyMordial solve runs.
 
 - `--drain-law one_loop` takes `--alpha` as A: finite and > 0, with no upper bound; A missing, 0, < 0,
   nan or inf is refused at parse, exit 2, naming the option, before any integration. Under the fixed law
   --alpha is checked as before (test_history_and_bbn_alpha pins its message);
-- `--gap-prescription` is accepted under one_loop only; it sets ScalarHistory._GAP_PRESCRIPTION in the
-  tool's process for the integration and restores it afterwards;
+- `--gap-prescription`, removed by one-loop-drain prompt 02c with the gap prescriptions (README §8.10), is
+  refused as an unknown argument, exit 2;
 - the tuned path hands the law and A to tune_history;
 - `drain_values` on a constructed payload: the counts by regime, the shares of K(N_final) by regime and
   the parking leftover's, ell_min and the unresolvable assessments;
 - one untuned integration under one_loop at M = 0.5, beta = 2 (test_history_and_bbn_alpha's point, 4-5 s
-  unloaded, about 10 s at a load of 8): the history line names `drain_law=one_loop A=1 gap=zero`, and a
+  unloaded, about 10 s at a load of 8): the history line names `drain_law=one_loop A=1
+  model=one-loop-measured-v1`, and a
   `drain` line follows the dissipation line and parses back to drain_values of the payload.
 
 Under the fixed law every line is as before: test_history_and_bbn and test_history_and_bbn_alpha pin
@@ -74,26 +75,19 @@ class TestTheOptions(unittest.TestCase):
     def test_5_an_unknown_law_is_refused(self):
         self._refused(["2", "0.5", "--drain-law", "elastic"], "--drain-law")
 
-    def test_5_the_gap_prescription_needs_the_one_loop_law(self):
-        for extra in ([], ["--drain-law", "fixed"]):
-            with self.subTest(extra=extra):
-                self._refused(
-                    ["2", "0.5", "--gap-prescription", "edge"] + extra,
-                    "argument --gap-prescription: ",
-                )
-        self._refused(
-            [
-                "2",
-                "0.5",
-                "--drain-law",
-                "one_loop",
-                "--alpha",
-                "1",
-                "--gap-prescription",
-                "high",
-            ],
-            "--gap-prescription",
-        )
+    def test_5_the_gap_prescription_is_an_unknown_argument(self):
+        """Removed by prompt 02c (README §8.10, decision 2): argparse refuses it as unrecognized."""
+        for extra in (
+            [],
+            ["--drain-law", "fixed"],
+            ["--drain-law", "one_loop", "--alpha", "1"],
+        ):
+            for value in ("zero", "edge"):
+                with self.subTest(extra=extra, value=value):
+                    self._refused(
+                        ["2", "0.5", "--gap-prescription", value] + extra,
+                        "unrecognized arguments: --gap-prescription",
+                    )
 
     def test_5_the_fixed_laws_alpha_is_checked_as_before(self):
         self._refused(
@@ -101,37 +95,26 @@ class TestTheOptions(unittest.TestCase):
         )
         self._refused(["2", "0.5", "--alpha", "x"], "argument --alpha: invalid")
 
-    def test_5_the_tuned_path_hands_the_law_A_and_the_prescription_on(self):
+    def test_5_the_tuned_path_hands_the_law_and_A_on(self):
         failure = {"failure": True, "failure_reason": "stand-in"}
         seen = []
 
         def tune(*args, **kwargs):
-            seen.append((kwargs, SM._GAP_PRESCRIPTION))
+            seen.append(kwargs)
             return failure
 
-        for argv, law, A, gap in (
-            (["2", "0.5"], "fixed", 0.0, "zero"),
-            (["2", "0.5", "--alpha", "0.1"], "fixed", 0.1, "zero"),
+        for argv, law, A in (
+            (["2", "0.5"], "fixed", 0.0),
+            (["2", "0.5", "--alpha", "0.1"], "fixed", 0.1),
             (
                 ["2", "0.5", "--drain-law", "one_loop", "--alpha", "2.5"],
                 "one_loop",
                 2.5,
-                "zero",
             ),
             (
-                [
-                    "2",
-                    "0.5",
-                    "--drain-law",
-                    "one_loop",
-                    "--alpha",
-                    "0.1",
-                    "--gap-prescription",
-                    "edge",
-                ],
+                ["2", "0.5", "--drain-law", "one_loop", "--alpha", "0.1"],
                 "one_loop",
                 0.1,
-                "edge",
             ),
         ):
             with self.subTest(argv=argv):
@@ -139,12 +122,9 @@ class TestTheOptions(unittest.TestCase):
                 with mock.patch.object(hb, "tune_history", tune):
                     status, stdout, _ = _run(argv)
                 self.assertEqual(status, 1)
-                kwargs, prescription = seen[0]
+                kwargs = seen[0]
                 self.assertEqual(kwargs["drain_law"], law)
                 self.assertEqual(kwargs["alpha"], A)
-                self.assertEqual(prescription, gap)
-                # restored after the call
-                self.assertEqual(SM._GAP_PRESCRIPTION, "zero")
                 self.assertIn("FAILURE", stdout)
 
 
@@ -163,14 +143,16 @@ class _Ledger:
 class TestTheDrainValues(unittest.TestCase):
     def test_5_counts_shares_ell_min_and_the_count(self):
         candidates = (
-            SM.DrainCandidate("one_loop", 12.0, 0.2, 1.0, -300.0, -80.0),
-            SM.DrainCandidate("one_loop", 9.5, 0.28, 1.0, -301.0, -81.0),
-            SM.DrainCandidate("gap", None, 0.0, 1.0, -302.0, -82.0),
-            SM.DrainCandidate("classical", None, 0.0, 0.5, -303.0, -83.0),
-            SM.DrainCandidate("unassessed", None, 0.0, 1.0, None, -84.0),
+            SM.DrainCandidate("one_loop", 12.0, 0.2, 1.0, -300.0, -80.0, 30.0, 40.0),
+            SM.DrainCandidate("one_loop", 9.5, 0.28, 1.0, -301.0, -81.0, 26.0, 35.0),
+            SM.DrainCandidate("gap", None, 0.0, 1.0, -302.0, -82.0, 3.0, 1.0),
+            SM.DrainCandidate("classical", None, 0.0, 0.5, -303.0, -83.0, 2.0, -1.0),
+            SM.DrainCandidate("unassessed", None, 0.0, 1.0, None, -84.0, None, None),
         )
         data = {
-            "drain": SM.DrainRecord("one_loop", 1.0, "zero", 3, candidates, 2),
+            "drain": SM.DrainRecord(
+                "one_loop", 1.0, "one-loop-measured-v1", 3, candidates, 2
+            ),
             "injections": [_injection(k) for k in (2.0, 5.0, 0.0, 0.0, 0.0)],
             "parking": SimpleNamespace(delta_K=1.0),
             "dark_radiation": _Ledger(8.0),
@@ -196,9 +178,13 @@ class TestTheDrainValues(unittest.TestCase):
         )
 
     def test_5_nothing_drained(self):
-        candidates = (SM.DrainCandidate("classical", None, 0.0, 1.0, -303.0, -83.0),)
+        candidates = (
+            SM.DrainCandidate("classical", None, 0.0, 1.0, -303.0, -83.0, 2.0, -50.0),
+        )
         data = {
-            "drain": SM.DrainRecord("one_loop", 1.0, "edge", 0, candidates, 0),
+            "drain": SM.DrainRecord(
+                "one_loop", 1.0, "one-loop-measured-v1", 0, candidates, 0
+            ),
             "injections": [_injection(0.0)],
             "parking": None,
             "dark_radiation": _Ledger(0.0),
@@ -229,11 +215,13 @@ class TestAOneLoopRun(unittest.TestCase):
         self.assertEqual(kwargs["alpha"], 1.0)
         self.assertEqual(kwargs["drain_law"], "one_loop")
         self.assertEqual(data["drain"].law, "one_loop")
-        self.assertEqual(data["drain"].gap_prescription, "zero")
+        self.assertEqual(data["drain"].model, "one-loop-measured-v1")
 
         history = _line(stdout, "history beta=2 M=0.5: ")
         self.assertRegex(
-            history, r"integrations=1 drain_law=one_loop A=1 gap=zero wall=[0-9.]+ s$"
+            history,
+            r"integrations=1 drain_law=one_loop A=1 model=one-loop-measured-v1 "
+            r"wall=[0-9.]+ s$",
         )
         self.assertNotIn("alpha=", history)
         lines = stdout.splitlines()

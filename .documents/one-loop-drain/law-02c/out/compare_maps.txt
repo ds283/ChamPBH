@@ -1,0 +1,38 @@
+== P-2197-A0.05: var/one-loop-drain/02c/maps/P-2197-A0.05.txt against prompts/one-loop-drain/source/crossover/out/adopted-A0.05/P-2197-A0.05-zero.txt
+   header parking_N: equal (39.44013957892904 | 39.44013957892904)
+   header N_final: DIFFERENT (46.00064338832537 | 46.000643388325116)
+   header candidates: equal (203 | 203)
+   rows: 203 here, 203 crossover's
+   rows equal but for the ruling's: True (0 by the ruling)
+== W-2187-A0.05: var/one-loop-drain/02c/maps/W-2187-A0.05.txt against prompts/one-loop-drain/source/crossover/out/adopted-A0.05/W-2187-A0.05-zero.txt
+   header parking_N: DIFFERENT (39.02200520613764 | 39.022005206137614)
+   header N_final: DIFFERENT (45.46314335865381 | 45.46314335865364)
+   header candidates: equal (199 | 199)
+   rows: 199 here, 199 crossover's
+   rows equal but for the ruling's: True (0 by the ruling)
+== R-632-A0.5: var/one-loop-drain/02c/maps/R-632-A0.5.txt against prompts/one-loop-drain/source/crossover/out/adopted-floor/R-632-A0.5.txt
+   header parking_N: equal (38.64575912051273 | 38.64575912051273)
+   header N_final: equal (45.075643517097994 | 45.075643517097994)
+   header candidates: equal (32 | 32)
+   rows: 32 here, 32 crossover's
+   rows equal but for the ruling's: True (0 by the ruling)
+== L-M5e-20-A0.2: var/one-loop-drain/02c/maps/L-M5e-20-A0.2.txt against prompts/one-loop-drain/source/crossover/out/adopted-floor/L-M5e-20-A0.2.txt
+   header parking_N: DIFFERENT (30.70914570727863 | 30.709145707278893)
+   header N_final: DIFFERENT (50.07564351531626 | 50.07564351531618)
+   header candidates: equal (94 | 94)
+   rows: 94 here, 94 crossover's
+   rows equal but for the ruling's: True (0 by the ruling)
+== control: measured_law_map.py --law=adopted on P-2197 A = 0.05, this tree, against crossover's file: byte-identical (20639 and 20639 bytes)
+== P-2197-A1 (unpatched against the patched reference): var/one-loop-drain/02c/maps/P-2197-A1.txt against var/one-loop-drain/02c/maps/reference-P-2197-A1.txt
+   header parking_N: equal (29.035264723467392 | 29.035264723467392)
+   header N_final: equal (46.000643473591595 | 46.000643473591595)
+   header candidates: equal (5 | 5)
+   rows: 5 here, 5 crossover's
+   rows equal but for the ruling's: True (0 by the ruling)
+== counts
+   P-2197-A0.05: candidates=203 by regime {'gap': 11, 'one_loop': 192}; gap with 1 + q ln L < 0: 0; least L at a gap candidate: 3.511
+   W-2187-A0.05: candidates=199 by regime {'gap': 22, 'one_loop': 177}; gap with 1 + q ln L < 0: 0; least L at a gap candidate: 3.039
+   R-632-A0.5: candidates=32 by regime {'gap': 3, 'one_loop': 29}; gap with 1 + q ln L < 0: 0; least L at a gap candidate: 2.578
+   L-M5e-20-A0.2: candidates=94 by regime {'classical': 83, 'gap': 3, 'one_loop': 8}; gap with 1 + q ln L < 0: 0; least L at a gap candidate: 69.57
+   P-2197-A1: candidates=5 by regime {'one_loop': 5}; gap with 1 + q ln L < 0: 0; least L at a gap candidate: None
+== all equal (but for the ruling's rows): False

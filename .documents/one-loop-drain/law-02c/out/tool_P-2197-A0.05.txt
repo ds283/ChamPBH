@@ -1,0 +1,10 @@
+history beta=1.185 M=4e-31: RHS=252253 accepted_steps=35637 reflections=203 samples=4995 integrations=1 drain_law=one_loop A=0.05 model=one-loop-measured-v1 wall=17.6 s
+bounce beta=1.185 M=4e-31: N=17.629655486 T_J=224.429008 MeV phi=8.148118e-11 reflected=True
+dissipation beta=1.185 M=4e-31: injections=203 resolved_candidates=0 unresolved_candidates=203 injected_fraction=0.00141615 rho_chi_ratio_1MeV=0.000436407 rho_chi_ratio_70keV=0.000409515 rho_chi_ratio_today=0.00114897 Delta_N_eff_1MeV=0.00262978 Delta_N_eff_today=0.00855755 log_R_first_impact=138.07 parking_N=39.4401 parking_log_T_Jordan_GeV=-22.5193 release_N=None release_log_T_Jordan_GeV=None worst_birth_margin=1.84054 worst_birth_margin_N=39.2858 birth_failing_share=0.0259645 worst_reflection_margin=-0.920652 worst_reflection_margin_N=39.4326 reflection_failing_share=0.306101 worst_tracker_margin=41.8872 worst_tracker_margin_N=39.4429 tracker_failing_share=0 unassessed_share=0.00081877
+drain beta=1.185 M=4e-31: candidates=203 one_loop=192 gap=11 classical=0 unassessed=0 K_share_one_loop=0.998659 K_share_gap=0.000521983 K_share_classical=0 K_share_unassessed=0 K_share_parking=0.00081877 ell_min=0.0977756 unresolvable_assessments=0 unresolved_declined=0
+fixed_T beta=1.185 M=4e-31: 1MeV crossings=1 phi=1.481836902e-01 ratio=4.004938159e-01 stand_in_phi=1.481835849e-01 stand_in_ratio=4.004930889e-01 | 70keV crossings=1 phi=1.793626230e-02 ratio=2.087112548e-01 stand_in_phi=1.793472043e-02 stand_in_ratio=2.087209523e-01
+ratio beta=1.185 M=4e-31 [0.3,1) keV: n=131 min=0.1508 median=0.1624 max=0.1687 rms_step=0.0001453
+ratio beta=1.185 M=4e-31 [1,3) keV: n=120 min=0.1688 median=0.1721 max=0.174 rms_step=4.538e-05
+ratio beta=1.185 M=4e-31 [3,10) keV: n=130 min=0.174 median=0.1751 max=0.1757 rms_step=1.423e-05
+ratio beta=1.185 M=4e-31 [10,100) keV: n=252 min=-0.2384 median=0.1759 max=0.2721 rms_step=0.03225
+bbn beta=1.185 M=4e-31: Yp=0.2583885742 DoH=2.869831603 He3oH=1.1002777 Li7oH=4.793962625 network=small PRyM_time=8.6 s wall=8.6 s PRyM_version=bf24c3d+ri02+sr01+bt02

@@ -896,3 +896,137 @@ The gate holds, item by item (prompt §2):
 5. **Against the fixed law** at all nine A (§2b.9).
 6. **The cost**: wall time and integrations by group and A, the batches, the workers and the loads (§2b.4, §2b.10).
 7. **The handover for U14** (§2b.11).
+
+## 2c. Prompt 02c — the measured law (2026-11-05)
+
+**Tree:** branch `one-loop-drain` at `1647f7a`, whose computing code is 02b's review's (`1edb56c`); prompt 02c's commit (this
+commit) changes `ComputeTargets/ScalarHistory.py`, `CosmologyConcepts/Models/AbstractModel.py`,
+`CosmologyConcepts/Models/ExponentialModel.py` and `tools/history_and_bbn.py`, and §1, §2 and §2b above are unchanged.
+**Scripts:** [`one-loop-drain/law-02c/`](one-loop-drain/law-02c/), each with a docstring: `make_inputs.py`, `batch.py`,
+`compare_maps.py`, `l_form_probe.py`, `compare_runs.py`. **Committed outputs:**
+[`one-loop-drain/law-02c/out/`](one-loop-drain/law-02c/out/). **Raw output** (not committed): `var/one-loop-drain/02c/`:
+- `inputs/`: the ladder's copy at A = 0.2 and 2197's at A = 1;
+- `maps/` and `batches/maps/`: the batch on the final tree; `maps-run1/` and `batches/maps-run1/`: the batch before L moved
+  into the model class (§2c.5);
+- `tool-P-2197-A0.05.txt` (final tree) and `tool-P-2197-A0.05-run1.txt`;
+- `probe/`: `l_form_probe.py`'s outputs on both trees.
+
+Orchestrator note 02c's rulings governed, with two rulings of the user made during the work, both 2026-11-05: on the gap
+below L = e^{−1/q}, "I think probably we set `f = 0` there"; and "I suggest we move `L` into the model class, with no
+default. Then when a new potential is implemented, breakage is loud, and the implementer has to think about what they
+are changing." A third, "Decision 2: yes", accepts the header differences of §2c.3 as ruling 4's exception. No store was
+written and no Ray was started.
+
+### 2c.1 The Gate and the suites
+
+The Gate held at `1647f7a`: the tree was clean; the diff from `1edb56c` outside `prompts/` and `.documents/` was empty,
+and inside `.documents/` touched only `OPEN_ISSUES.md`; U15 is ruled (b); `runregistrykit list` showed 23 runs, all
+finished; the four inputs exist under `var/one-loop-drain/02b/tasks/` with tuning records.
+
+The suites, serially (2026-11-05, local time = UTC):
+
+| suite | before (`1647f7a`, from 02:04) | after the law (from 02:22) | final tree (from 10:25) |
+|---|---|---|---|
+| CosmologyModels | 26 OK, 64.1 s | 26 OK, 65.7 s | 26 OK, 72.6 s |
+| ComputeTargets `test_[a-f]` | 163 OK, 139.5 s | 162 OK, 138.1 s | 162 OK, 143.4 s |
+| ComputeTargets `test_[g-z]` | 403 OK, 468.0 s | 426 OK, 468.8 s | 432 OK, 489.5 s |
+| ObjectFactories | 130 OK, 81.1 s | 130 OK, 85.9 s | 130 OK, 82.8 s |
+| tools | 156 OK, 161.7 s | 156 OK, 167.1 s | 156 OK, 170.2 s |
+| RunDrivers | 68 OK, 23.1 s | 68 OK, 24.5 s | 68 OK, 24.8 s |
+| load at the first start | 20.31 25.52 29.78 | 10.65 7.94 13.18 | 10.80 11.78 11.84 |
+
+The loads at each suite's start and end are in the log (§4 there). Deleted, from `test_drain_law` (the `test_[a-f]`
+half): `test_2_the_gap_prescriptions_read_at_call_time` and `test_2_an_unknown_prescription_is_refused_at_the_gap`.
+Added: `test_drain_law.TestTheOneLoopLawOn2197.test_4_the_values_under_the_measured_law`, and
+`test_measured_drain_law` (29 tests, the `test_[g-z]` half).
+
+### 2c.2 The fixed law is unchanged (prompt §2.1)
+
+- `test_golden_history` (3 tests), `test_golden_reflecting_history` (2), `test_tuning` (40) and
+  `ObjectFactories/tests/test_store_fingerprint_golden.py` (5) are unchanged files, discovered in the suites above, and
+  pass on both trees.
+- The fixed law's `DrainRecord` is `("fixed", None, "fixed", count, None, declined)`: `model` stands where
+  `gap_prescription` stood, and its value under the fixed law is `DRAIN_MODEL_FIXED` (`test_drain_law`
+  `TestTheFixedLawIsUnchanged`, `TestTheUnresolvableCount`). The payload's keys are unchanged.
+- Under the fixed law a model that does not define `_drain_L` runs as before: bit for bit ExponentialModel's on the
+  floor harness at α = 0.1 (`test_measured_drain_law.TestTheModelHook.test_h_the_same_model_runs_under_the_fixed_law`).
+
+### 2c.3 The law equals its reference (prompt §2.2)
+
+`test_measured_drain_law.TestTheReference` compares `drain_fraction` and `drain_alpha_effective` with
+`fraction_adopted`, copied verbatim from `prompts/one-loop-drain/source/crossover/measured_law_map.py` at `1b16c62`
+with its table loading (the table's 21 rows copied as text and read by the same `np.loadtxt`). The grid is 13 ℓ (from
+10⁻⁶ to 50, with 1 and its two neighbours) × 27 L (10⁻⁶ to 10⁶, with e^{−1/q}, 0.3, 133.9, 134 and 134.1) × 15 ln R
+(−100 to 138.07, with 0, ±10⁻¹², r₀ and its upper neighbour) × 3 M (4 × 10⁻³¹, 5 × 10⁻²⁰, 10⁻¹² M_P), over the one-loop,
+gap and classical regimes: 18 225 values of f, each with α_eff at three (A, w_gate). L is M/φ_t, by the reference's
+expression, handed to the production law as a number.
+- **Bitwise everywhere** but in two places, where it is bitwise against the reference with the departure substituted:
+  - the classical regime above L = 134, where S is S(134)(134/L)² as README §8.10 rules (the reference's `np.interp`
+    holds S(134));
+  - the gap where 1 + q ln L < 0 and ln R > r₀, where f is 0.0 by the user's ruling (the reference is negative).
+- No other value departs (the one-loop count of departures is 0 in the test).
+- S at the 21 nodes equals the table to 10⁻¹⁴ relative (one rounding of ln S), and equals the reference's `S_of`
+  bitwise; between nodes it equals an independent log-linear evaluation to 10⁻¹³ relative.
+- L, now `ExponentialModel._drain_L`: at x = −30, 0 and 30 it equals log1p(e^x) to 10⁻¹⁵; at x = 800 it returns 800
+  where log1p(e^x) overflows; at the maps' x within 2 ulp. At n = 1 it equals M/φ_t to 10⁻¹⁰ relative (three M, five
+  x); at n = 2 it is ln(1 + E/V₀), and (M/φ_t)² equals it to 10⁻¹⁰.
+
+### 2c.4 Crossover's adopted-law maps reproduced (prompt §2.3)
+
+`batch.py` ran `cascade_map.py` unpatched on the four maps, the control, and 2197 at A = 1 both ways, at most five at
+once; `compare_maps.py` compared them ([`out/compare_maps.txt`](one-loop-drain/law-02c/out/compare_maps.txt)). Inputs:
+02b's task records unchanged for P-2197, W-2187 (A = 0.05) and R-632 (A = 0.5); for the ladder, 02b's
+`L-M5e-20-A0.5-zero.result.json` with `--alpha` set to "0.2" ([`out/make_inputs.txt`](one-loop-drain/law-02c/out/make_inputs.txt)).
+
+| map | rows | rows equal | `parking_N` | `N_final` | candidates | wall |
+|---|---|---|---|---|---|---|
+| P-2197-A0.05 | 203 | all | equal | 46.00064338832537 against …325116 | equal | 19.8 s |
+| W-2187-A0.05 | 199 | all | 39.02200520613764 against …137614 | 45.46314335865381 against …5364 | equal | 19.5 s |
+| R-632-A0.5 | 32 | all | equal | equal | equal | 5.7 s |
+| L-M5e-20-A0.2 | 94 | all | 30.70914570727863 against …278893 | 50.07564351531626 against …1618 | equal | 14.3 s |
+
+- **The control**, `measured_law_map.py --law=adopted` on P-2197 at A = 0.05 with the adapted patch, is byte-identical to
+  crossover's file (20 639 bytes).
+- **No row differs by the gap ruling:** no gap candidate of the four maps has 1 + q ln L < 0; the least L at a gap
+  candidate is 2.578 (R-632).
+- **The headers' last digits.** `parking_N` and `N_final` are printed at full precision; they differ at 10⁻¹⁴–10⁻¹⁵
+  relative in three maps. [`out/l_form_probe.txt`](one-loop-drain/law-02c/out/l_form_probe.txt) runs each history again
+  with only the production L replaced by M/φ_t: then every header and every row equals crossover's exactly. So the cause
+  is U15 (b)'s form of L, carried by the integration. Over the candidates, |L/(M/φ_t) − 1| ≤ 2.8 × 10⁻¹⁴, 2.6 × 10⁻¹⁴,
+  3.3 × 10⁻¹⁴ and 1.3 × 10⁻¹⁴ (P, W, R, L), and the production α_eff differs from α_eff with M/φ_t on the same inputs by
+  at most 2.7 × 10⁻¹⁵, 4.9 × 10⁻¹⁵, 6.3 × 10⁻¹⁵ and 2.5 × 10⁻¹⁴ relative, the first at candidates 11, 6, 1 and 7 at
+  3–4 × 10⁻¹⁶. This met ruling 4 (ii) (≤ 10⁻¹⁰), but not (i) as worded, which speaks of a row; the work stopped, and the
+  user ruled it the exception: "Decision 2: yes".
+- **2197 at A = 1** (the re-pinned `TestTheOneLoopLawOn2197`): unpatched production equals the patched reference
+  exactly, rows and header: five candidates, all one-loop, α_eff 8.2276 × 10⁻², 9.1886 × 10⁻², 0.11431, 0.12001 and
+  0.16459, parking at N = 29.035264723467392.
+- **Classical candidates now drain.** The ladder at A = 0.2 meets 83, each drained A·R·S(L)·w_gate, from 9.3 × 10⁻¹³ to
+  6.2 × 10⁻⁶; the map took 14.3 s. The other three maps have none.
+- **The batch** took 19.9 s, at loads 43.06 42.42 28.28 at its start and 37.69 41.24 28.19 at its end.
+
+### 2c.5 The tool route, and the re-verification after L moved (prompt §2.4)
+
+`tools/history_and_bbn.py 1.185 4e-31 --drain-law one_loop --alpha 0.05 --fixed-normalization -276.63072859401797
+8.645101631245453e-16` ([`out/tool_P-2197-A0.05.txt`](one-loop-drain/law-02c/out/tool_P-2197-A0.05.txt)), 27–28 s:
+- its history line names `drain_law=one_loop A=0.05 model=one-loop-measured-v1`;
+- its `drain` line gives 203 candidates, 192 one-loop and 11 gap, and ℓ_min = 0.0977756, as the P-2197 map (192, 11,
+  0.0978).
+
+After the user's ruling moved L into the model class, the five suites (§2c.1), the batch and the tool run were repeated
+([`out/compare_runs.txt`](one-loop-drain/law-02c/out/compare_runs.txt)): every map, the control and both 2197 A = 1 runs
+are byte-identical to the first batch's, and the tool's lines are identical but for the wall times. The batch took
+19.8 s (loads 9.06 10.16 11.55 at its start, 9.38 10.18 11.53 at its end); the tool run 28 s. `l_form_probe.py` on the
+final tree gives output identical to the first.
+
+### 2c.6 The Measured gate
+
+The gate holds, item by item (prompt §2):
+1. **The fixed law is unchanged** (§2c.2): the goldens pass bitwise, unchanged, and the fixed-law payload differs only in
+   `DrainRecord.model`.
+2. **The law equals its reference** (§2c.3): bitwise on the grid, but at README §8.10's continuation above L = 134 and the
+   user's gap ruling, each named.
+3. **Crossover's maps are reproduced** (§2c.4): every candidate row of the four maps equal, the candidate counts equal, the
+   control byte-identical; the headers' parking and final N differ in their last digits by the U15 (b) form of L, which the
+   user ruled ruling 4's exception.
+4. **The tool route** (§2c.5) names the model version, and its `drain` line agrees with the P-2197 map on the counts by
+   regime and ℓ_min.

@@ -1,0 +1,2 @@
+L-M5e-20-A0.2.result.json: from L-M5e-20-A0.5-zero.result.json, argv --alpha 0.5 -> 0.2; argv=['2.0', '5e-20', '--drain-law', 'one_loop', '--alpha', '0.2', '--gap-prescription', 'zero']
+P-2197-A1.result.json: from P-2197-A0.05-zero.result.json, argv --alpha 0.05 -> 1; argv=['1.185', '4e-31', '--drain-law', 'one_loop', '--alpha', '1', '--gap-prescription', 'zero']

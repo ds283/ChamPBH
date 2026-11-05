@@ -1,0 +1,32 @@
+== P-2197-A0.05-zero (A = 0.05, M = 4e-31 M_P)
+   (a) production:        {'parking_N': '39.44013957892904', 'N_final': '46.00064338832537', 'candidates': '203'}
+   (b) L = M/phi_t:       {'parking_N': '39.44013957892904', 'N_final': '46.000643388325116', 'candidates': '203'}
+   crossover's:           {'parking_N': '39.44013957892904', 'N_final': '46.000643388325116', 'candidates': '203'}
+   (b) header equals crossover's: True; (b) rows equal crossover's: True; (a) rows equal crossover's: True
+   (a) largest |L/(M/phi_t) - 1| over its candidates: 2.776e-14
+   (a) largest relative difference of alpha_eff, production L against M/phi_t on the same inputs: 2.665e-15 (ruling 4 (ii): at most 1e-10)
+   first candidate where they differ: 11 (one_loop): 0.015731725113480696 against 0.01573172511348069 (relative 4.441e-16)
+== W-2187-A0.05-zero (A = 0.05, M = 4e-31 M_P)
+   (a) production:        {'parking_N': '39.02200520613764', 'N_final': '45.46314335865381', 'candidates': '199'}
+   (b) L = M/phi_t:       {'parking_N': '39.022005206137614', 'N_final': '45.46314335865364', 'candidates': '199'}
+   crossover's:           {'parking_N': '39.022005206137614', 'N_final': '45.46314335865364', 'candidates': '199'}
+   (b) header equals crossover's: True; (b) rows equal crossover's: True; (a) rows equal crossover's: True
+   (a) largest |L/(M/phi_t) - 1| over its candidates: 2.587e-14
+   (a) largest relative difference of alpha_eff, production L against M/phi_t on the same inputs: 4.885e-15 (ruling 4 (ii): at most 1e-10)
+   first candidate where they differ: 6 (one_loop): 0.014261740421763409 against 0.014261740421763414 (relative 3.331e-16)
+== R-632-A0.5-zero (A = 0.5, M = 4e-31 M_P)
+   (a) production:        {'parking_N': '38.64575912051273', 'N_final': '45.075643517097994', 'candidates': '32'}
+   (b) L = M/phi_t:       {'parking_N': '38.64575912051273', 'N_final': '45.075643517097994', 'candidates': '32'}
+   crossover's:           {'parking_N': '38.64575912051273', 'N_final': '45.075643517097994', 'candidates': '32'}
+   (b) header equals crossover's: True; (b) rows equal crossover's: True; (a) rows equal crossover's: True
+   (a) largest |L/(M/phi_t) - 1| over its candidates: 3.264e-14
+   (a) largest relative difference of alpha_eff, production L against M/phi_t on the same inputs: 6.328e-15 (ruling 4 (ii): at most 1e-10)
+   first candidate where they differ: 1 (one_loop): 0.15246899965033278 against 0.15246899965033273 (relative 4.441e-16)
+== L-M5e-20-A0.5-zero (A = 0.2, M = 5e-20 M_P)
+   (a) production:        {'parking_N': '30.70914570727863', 'N_final': '50.07564351531626', 'candidates': '94'}
+   (b) L = M/phi_t:       {'parking_N': '30.709145707278893', 'N_final': '50.07564351531618', 'candidates': '94'}
+   crossover's:           {'parking_N': '30.709145707278893', 'N_final': '50.07564351531618', 'candidates': '94'}
+   (b) header equals crossover's: True; (b) rows equal crossover's: True; (a) rows equal crossover's: True
+   (a) largest |L/(M/phi_t) - 1| over its candidates: 1.321e-14
+   (a) largest relative difference of alpha_eff, production L against M/phi_t on the same inputs: 2.487e-14 (ruling 4 (ii): at most 1e-10)
+   first candidate where they differ: 7 (one_loop): 0.12200279512307875 against 0.12200279512307871 (relative 4.441e-16)

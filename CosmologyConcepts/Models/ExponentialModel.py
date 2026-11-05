@@ -26,7 +26,7 @@ classes and the adapter from_rows that realized a model from them; the model is 
 table (ObjectFactories/ExponentialModel.py), keyed by (M, n, beta).
 """
 
-from math import log, sqrt
+from math import exp, log, log1p, sqrt
 
 from ComputeTargets.exceptions import ComputationFailureError
 from CosmologyConcepts import M_value, beta_value, FieldLike, GetFieldValue
@@ -77,6 +77,18 @@ class ExponentialModel(AbstractModel):
     def _log_V_floor(self, normalization) -> float:
         # far from the wall (M/phi -> 0) the potential tends to V_0
         return normalization
+
+    def _drain_L(self, normalization, log_E: float) -> float:
+        # the one-loop drain law's L (one-loop-drain prompt 02c; AbstractModel._drain_L): L = ln(1 + E/V_0). For
+        # V = V_0 e^{(M/phi)^n} this is the wall exponent (M/phi_t)^n at the classical turning point, where
+        # V(phi_t) - V_0 = E; at n = 1 it is M/phi_t, the variable crossover's stage 2 measured on. It is U15 (b)
+        # as ruled 2026-11-05, "OK, let's take option (b) for now", and the measured law was fitted on this
+        # family. Through log1p of an exponential, which cannot overflow for any finite x = ln E - ln V_0
+        # (orchestrator note 02c ruling 2): x + log1p(e^{-x}) for x > 0, log1p(e^x) otherwise
+        x: float = log_E - self._log_V_floor(normalization)
+        if x > 0.0:
+            return x + log1p(exp(-x))
+        return log1p(exp(x))
 
     def _log_V(self, normalization, phi: FieldLike) -> float:
         phi_float = GetFieldValue(phi)

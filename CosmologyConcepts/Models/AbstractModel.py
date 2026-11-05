@@ -418,6 +418,13 @@ class RealizedModel:
     def log_V_floor(self) -> Optional[float]:
         return self._model._log_V_floor(self._normalization)
 
+    def drain_L(self, log_E: float) -> float:
+        return self._model._drain_L(self._normalization, log_E)
+
+    @property
+    def drain_L_implemented(self) -> bool:
+        return self._model.drain_L_implemented
+
     @property
     def reflects_at_origin(self) -> bool:
         return self._model.reflects_at_origin
@@ -506,6 +513,28 @@ class AbstractModel(DatastoreObject, ABC):
         (RealizedModel.reflects_at_origin); the integrator's guard G1 reads it. Default False.
         """
         return False
+
+    def _drain_L(self, normalization, log_E: float) -> float:
+        """
+        L, the wall variable of the one-loop drain law (one-loop-drain prompt 02c; README §8.10, U15 (b)), for a
+        field reaching the wall with energy E (ln E given): RealizedModel.drain_L. The law's fraction was measured,
+        and its constants fitted, as a function of L on one family of walls, so L is the model's to define.
+
+        No default, by the user's ruling of 2026-11-05: "I suggest we move `L` into the model class, with no
+        default. Then when a new potential is implemented, breakage is loud, and the implementer has to think about
+        what they are changing." This base raises, naming the class. It is not abstract, so that a model without
+        it is still built and runs under the fixed law; under the one-loop law integrate_scalar_history,
+        integrate_history and tune_history refuse such a model at entry (drain_L_implemented).
+        """
+        raise NotImplementedError(
+            f"{type(self).__name__} does not implement _drain_L(normalization, log_E), the wall variable L "
+            f"that the one-loop drain law needs"
+        )
+
+    @property
+    def drain_L_implemented(self) -> bool:
+        """True iff this model's class overrides _drain_L (RealizedModel.drain_L_implemented)."""
+        return type(self)._drain_L is not AbstractModel._drain_L
 
     # ---- the interface ----
 

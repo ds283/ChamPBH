@@ -46,7 +46,7 @@ reads its tables from the working directory, one invocation at a time:
     ./venv/bin/python tools/history_and_bbn.py BETA M [--phi-init-Mp X] \\
         [--tuning-tolerance TOL] [--tuning-max-integrations K] \\
         [--fixed-normalization NORM PHI_REF_MP [--T-stop-GeV T]] [--alpha A] \\
-        [--drain-law {fixed,one_loop} [--gap-prescription {zero,edge}]] \\
+        [--drain-law {fixed,one_loop}] \\
         [--no-small-network] [--wall-clock-limit SECS]
 
 M is in units of the (reduced) Planck mass. Output lines:
@@ -91,16 +91,15 @@ printed converted as the store converts them (minus ln GeV), as `parking_log_T_J
 to the tuning or the integration. Under fixed, --alpha is as above and every line is as before. Under
 one_loop, --alpha is the law's strength A, which must be given, finite and > 0, with no upper bound (the
 law's cap clamps); it is refused at parse otherwise, exit 2. The history line then names
-`drain_law=one_loop A=<A> gap=<prescription>` where alpha=A stood, the dissipation line follows as at
+`drain_law=one_loop A=<A> model=<the drain model>` where alpha=A stood (one-loop-drain prompt 02c: the
+model is the record's DrainRecord.model, `one-loop-measured-v1`), the dissipation line follows as at
 alpha > 0, and a `drain` line follows it: the candidates, their counts by regime (one_loop, gap,
 classical, unassessed), the shares of K(N_final) drained in each regime and the parking leftover's
 (`K_share_<regime>`, `K_share_parking`; None where K(N_final) is 0), the least ell of a one-loop
 candidate (`ell_min`, None if there is none), `unresolvable_assessments` and `unresolved_declined` (the
 unresolved reflections declined because G2 would refuse them), each value `:.6g`.
---gap-prescription {zero,edge} (one_loop only; default the module's, zero) sets
-ComputeTargets.ScalarHistory._GAP_PRESCRIPTION in this process for the integration, and restores it
-after. Both the attribute and the option are TEMPORARY: one-loop-drain prompt 03 fixes the prescription
-as the user rules (U13) and removes them.
+--gap-prescription was removed by one-loop-drain prompt 02c, with the "zero" and "edge" gap prescriptions it
+set (README §8.10, decision 2); it is now an unknown argument.
 
 Costs, measured by jordan-normalization prompt 08 at a load of about 10: tuned at beta = 3,
 M = 0.01, five integrations, 22 s (up to about 28 s under more load); one integration
@@ -140,7 +139,6 @@ from ComputeTargets.ScalarHistory import (  # noqa: E402
     DRAIN_REGIMES,
     FIXED_T_JORDAN_HIGH_MEV,
     FIXED_T_JORDAN_LOW_MEV,
-    GAP_PRESCRIPTIONS,
     REGIME_ONE_LOOP,
     TUNING_OUTPUT_KEYS,
     SampleValues,
@@ -436,13 +434,6 @@ def main(argv=None) -> int:
         "alpha_eff by each candidate's regime, with --alpha as A (one-loop-drain prompt 01)",
     )
     parser.add_argument(
-        "--gap-prescription",
-        choices=GAP_PRESCRIPTIONS,
-        default=None,
-        help="--drain-law one_loop only: what a gap candidate drains, zero or edge (default: the "
-        "module's, zero). TEMPORARY, removed by one-loop-drain prompt 03",
-    )
-    parser.add_argument(
         "--tuning-tolerance",
         type=positive_float,
         default=DEFAULT_TUNING_TOLERANCE,
@@ -490,10 +481,6 @@ def main(argv=None) -> int:
         f"{DEFAULT_BBN_WALL_CLOCK_LIMIT:g}, as main.py; 0 disables it)",
     )
     args = parser.parse_args(argv)
-    if args.gap_prescription is not None and args.drain_law != DRAIN_LAW_ONE_LOOP:
-        parser.error(
-            "argument --gap-prescription: accepted only with --drain-law one_loop"
-        )
     args.alpha = _law_alpha(parser, args.alpha, args.drain_law)
     one_loop = args.drain_law == DRAIN_LAW_ONE_LOOP
 
@@ -548,12 +535,7 @@ def main(argv=None) -> int:
         return result
 
     SM.integrate_scalar_history = _capturing_integrate
-    # the gap prescription, in this process, for the integration only (temporary: one-loop-drain
-    # prompt 03 removes it); the law and A go to the tuning or the integration
-    gap_before = SM._GAP_PRESCRIPTION
-    if args.gap_prescription is not None:
-        SM._GAP_PRESCRIPTION = args.gap_prescription
-    gap = SM._GAP_PRESCRIPTION
+    # the law and A go to the tuning or the integration
     law_kwargs = {"drain_law": args.drain_law}
     start = time.perf_counter()
     try:
@@ -590,7 +572,6 @@ def main(argv=None) -> int:
             )
     finally:
         SM.integrate_scalar_history = integrate
-        SM._GAP_PRESCRIPTION = gap_before
     wall = time.perf_counter() - start
 
     if data.get("failure", False):
@@ -601,9 +582,11 @@ def main(argv=None) -> int:
     metadata = data["metadata"]
     integrations = data["tuning_iterations"] if tuned else 1
     # alpha is named only where it is not 0, so that every line at alpha = 0 is as before; under the
-    # one-loop law the law, A and the gap prescription stand in its place (one-loop-drain prompt 01)
+    # one-loop law the law, A and the drain model stand in its place (one-loop-drain prompts 01, 02c)
     if one_loop:
-        alpha_field = f"drain_law={args.drain_law} A={args.alpha:g} gap={gap} "
+        alpha_field = (
+            f"drain_law={args.drain_law} A={args.alpha:g} model={data['drain'].model} "
+        )
     else:
         alpha_field = f"alpha={args.alpha:g} " if args.alpha > 0.0 else ""
     print(

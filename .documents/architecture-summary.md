@@ -1456,6 +1456,32 @@ SampleValues = namedtuple("SampleValues", [
 > - Tests: `ComputeTargets/tests/test_drain_law.py`, `test_unresolvable_turning_points.py`,
 >   `tools/tests/test_history_and_bbn_drain_law.py`.
 
+> **Note, 2026-11-05 (`one-loop-drain`, prompt 02c): the measured law, `DrainRecord.model` and the record's inputs.**
+> The numerics are `numerical-strategies.md` §3.5's note of this date. Nothing is stored yet: prompt 03 stores the
+> drain-model key.
+> - **`ComputeTargets/ScalarHistory.py`** gains the measured law's constants and S table, `DRAIN_MODEL_FIXED`
+>   (`"fixed"`) and `DRAIN_MODEL_ONE_LOOP` (`"one-loop-measured-v1"`, whose version moves whenever the law or its
+>   constants change), the pure functions `drain_law_inputs`, `drain_S_of_L` and `drain_fraction`, and
+>   `check_drain_law_model`. `drain_alpha_effective` is now `(regime, ell, L, log_R, A, w_gate)`. It loses
+>   `_GAP_PRESCRIPTION` and its names, `DRAIN_C1` and `DRAIN_ELL_EDGE`.
+> - **The model defines L** (the user's ruling of 2026-11-05: "I suggest we move `L` into the model class, with no
+>   default"). `AbstractModel` gains the hook `_drain_L(normalization, log_E)`, whose base raises
+>   `NotImplementedError` naming the class (not abstract, so a model without it still builds and runs under the
+>   fixed law), and the property `drain_L_implemented` (the class overrides the hook). `RealizedModel` gains
+>   `drain_L(log_E)` and `drain_L_implemented`. `ExponentialModel._drain_L` is ln(1 + E/V₀), its wall exponent
+>   (M/φ_t)^n. **The refusal:** under the one-loop law `integrate_scalar_history`, `integrate_history` and
+>   `tune_history` call `check_drain_law_model` beside `check_drain_law`, before any integration (and, in
+>   `tune_history`, before the seed); a model whose class does not override `_drain_L` is a `ValueError` naming the
+>   class and the hook. Under the fixed law nothing is checked.
+> - **`DrainRecord`** has `model` where `gap_prescription` stood (six fields, as before): `DRAIN_MODEL_ONE_LOOP` under
+>   the one-loop law, `DRAIN_MODEL_FIXED` under the fixed law, whose record is otherwise as before.
+> - **`DrainCandidate`** appends `L` and `log_R`, the law's inputs as `drain_alpha_effective` was given them, None
+>   where the candidate is unassessed.
+> - **`tools/history_and_bbn.py`** loses `--gap-prescription`, now an unknown argument. Under `--drain-law one_loop`
+>   its history line names `drain_law=one_loop A=<A> model=one-loop-measured-v1`; the `drain` line is as before.
+> - Tests: `ComputeTargets/tests/test_measured_drain_law.py` (new, the model hook among them), `test_drain_law.py`,
+>   `tools/tests/test_history_and_bbn_drain_law.py`.
+
 ### 7.3 `AdiabaticHistory` (`ComputeTargets/AdiabaticHistory.py`)
 
 Computes the adiabatic perturbation parameter Q (which determines whether the chameleon field is adiabatically tracking its minimum). Requires a `ScalarHistoryProxy` as input.

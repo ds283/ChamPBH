@@ -106,7 +106,10 @@ def drain_regime(model, assessment):
     return _orig_regime(model, assessment)
 
 
-def drain_alpha_effective(regime, ell, A, w_gate):
+def drain_alpha_effective(regime, ell, *args):
+    # (regime, ell, A, w_gate) before one-loop-drain prompt 02c, (regime, ell, L, ln R, A, w_gate) after it; the
+    # law applied is LAW's either way, with the turning point kept by drain_regime
+    A, w_gate = args[-2], args[-1]
     return min(SM.DRAIN_ALPHA_CAP, A * LAW(regime, ell, _last.get("tp"))) * w_gate
 
 

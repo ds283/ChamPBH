@@ -1,0 +1,9 @@
+P-2197-A0.05: byte-identical (20420 and 20420 bytes)
+W-2187-A0.05: byte-identical (20029 and 20029 bytes)
+R-632-A0.5: byte-identical (3657 and 3657 bytes)
+L-M5e-20-A0.2: byte-identical (9736 and 9736 bytes)
+control-P-2197-A0.05: byte-identical (20639 and 20639 bytes)
+P-2197-A1: byte-identical (1015 and 1015 bytes)
+reference-P-2197-A1: byte-identical (1233 and 1233 bytes)
+tool: drain line identical; every line but the wall times identical
+all equal: True

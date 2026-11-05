@@ -64,8 +64,11 @@ def main(result_json: str, tuning_json=None) -> int:
         return res
 
     SM.integrate_scalar_history = capture
-    gap_before = SM._GAP_PRESCRIPTION
-    SM._GAP_PRESCRIPTION = gap
+    # one-loop-drain prompt 02c removed _GAP_PRESCRIPTION: set it only where it exists
+    has_gap = hasattr(SM, "_GAP_PRESCRIPTION")
+    if has_gap:
+        gap_before = SM._GAP_PRESCRIPTION
+        SM._GAP_PRESCRIPTION = gap
     try:
         data = integrate_history(
             cosmology,
@@ -81,7 +84,8 @@ def main(result_json: str, tuning_json=None) -> int:
         )
     finally:
         SM.integrate_scalar_history = integrate
-        SM._GAP_PRESCRIPTION = gap_before
+        if has_gap:
+            SM._GAP_PRESCRIPTION = gap_before
     res = captured[-1]
     cands = res.drain.candidates
     Mp_units = M  # M in M_P; Planck units throughout

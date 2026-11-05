@@ -355,6 +355,42 @@ at `φ < 0` above that (audit §3.5); it is gone.
 >   - Every state where this acts raised before, so no history that succeeds today moves.
 >   - The declined step starts are `DrainRecord.unresolved_declined`.
 
+> **Note, 2026-11-05 (`one-loop-drain`, prompt 02c): the measured drain law.** The verification is
+> `one-loop-drain-verification.md` §2c. The note of 2026-11-03 above stands for the tree it describes; under the
+> one-loop law the drain is now the one the user adopted from the side-campaign `crossover` (campaign README §8.10).
+> - **The law.** Each candidate drains α_eff = min(α_cap, A·f)·w_gate (`drain_alpha_effective`), with α_cap = 0.99
+>   and w_gate as before, and f (`drain_fraction`) by the regime of the 2026-11-03 note:
+>   - one-loop, ℓ ≥ 1: d = ℓ + 0.9691 − 0.41 ln L, f = min(0.95, 1 − e^{−2.69/d}) if d > 0, else 0.95;
+>   - one-loop, ℓ < 1: f = 0.9;
+>   - gap: f = 0 where ln R ≤ 1.5601 or s = 1 + 0.841 ln L ≤ 0; otherwise 1 − exp[−0.0198 (ln R − 1.5601)^1.5472 s].
+>     The clamp at s ≤ 0 (L ≤ e^{−1/0.841} = 0.3045, where the fitted expression is negative) is the user's ruling
+>     of 2026-11-05: "I think probably we set `f = 0` there";
+>   - classical (ln R ≤ 0): f = R·S(L), so a classical candidate now drains, however little (10⁻¹² and below on the
+>     maps), and takes the drain and its restart;
+>   - unassessed: 0.
+> - **The inputs.** ℓ is the turnaround's and ln R the assessment's `ClassicalTurningPoint.log_R`. L is the model's
+>   (`RealizedModel.drain_L(ln E)`, the hook `AbstractModel._drain_L`), with no default, by the user's ruling of
+>   2026-11-05: "I suggest we move `L` into the model class, with no default. Then when a new potential is
+>   implemented, breakage is loud, and the implementer has to think about what they are changing." Under the
+>   one-loop law a model without it is refused at entry. `ExponentialModel` gives L = ln(1 + E/V₀) at every n (U15
+>   (b), "OK, let's take option (b) for now"), the wall exponent (M/φ_t)^n: x + log1p(e^{−x}) for
+>   x = ln E − ln V_floor > 0 and log1p(e^x) otherwise, which cannot overflow. At n = 1 it equals M/φ_t, the variable
+>   stage 2 measured, to the root's accuracy (at most 3.3 × 10⁻¹⁴ relative on the maps of verification §2c). Both
+>   inputs are computed once per candidate (`drain_law_inputs`) and recorded in its `DrainCandidate`.
+> - **The constants** are module constants beside the law's others (`DRAIN_ONE_LOOP_A`, `_B0`, `_C`,
+>   `DRAIN_ELL_PLATEAU`, `DRAIN_F_CAP`, `DRAIN_F_PLATEAU`, `DRAIN_GAP_G`, `_R0`, `_P`, `_Q`), each with its source:
+>   2.69 is the Born coefficient of `wall_backreaction.tex`, held fixed; 0.9691, 0.41 and the gap's four are
+>   `crossover`'s fits (`out/fit_law.txt`), rounded as its reference implementation rounds them; 0.95 and 0.9 are the
+>   user's adopted judgement.
+> - **S(L)** (`drain_S_of_L`) is `crossover` stage 1a's table of 21 values, L = 0.3–134 (`DRAIN_S_TABLE_L`,
+>   `DRAIN_S_TABLE_S`), interpolated linearly in (ln L, ln S) by `np.interp`, held at S(0.3) below and continued as
+>   S(134)·(134/L)² above (L²S tends to a constant).
+> - **Against the reference.** The law is `fraction_adopted` of `crossover`'s `measured_law_map.py` term for term,
+>   and equal to it bitwise but in two places: the continuation above L = 134 (the reference holds S(134)), and the
+>   gap's clamp (the reference is negative there).
+> - **Removed:** `_GAP_PRESCRIPTION`, `GAP_PRESCRIPTION_ZERO`, `GAP_PRESCRIPTION_EDGE`, `GAP_PRESCRIPTIONS`, `DRAIN_C1`
+>   and `DRAIN_ELL_EDGE`; 2.7/ℓ is computed nowhere. The fixed law is unchanged, bitwise.
+
 The reflection is a *model*, not a fallback, and it has two guards (log 01):
 
 - **G1.** The potential must declare `reflects_at_origin` (new on `AbstractPotential`, default

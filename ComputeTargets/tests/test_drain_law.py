@@ -20,15 +20,17 @@ orchestrator note 01, rulings 3, 4 and 5).
 integrate_scalar_history, integrate_history and tune_history take `drain_law`: "fixed" (the default,
 alpha as before) or "one_loop" (alpha carries A > 0, finite). Under the one-loop law each candidate is
 classified in the loop (drain_regime, peak_estimate's classification computed once) and drains
-alpha_eff = min(DRAIN_ALPHA_CAP, A DRAIN_C1/ell) w_gate at a one-loop turnaround, by the gap prescription
-(_GAP_PRESCRIPTION, "zero" or "edge") in the gap, and nothing where R <= 1 or unassessed. The payload
-gains "drain", a DrainRecord. The items are those of prompt §1.8:
+alpha_eff = min(DRAIN_ALPHA_CAP, A f) w_gate, f the measured law of one-loop-drain prompt 02c (README §8.10),
+which replaced prompt 01's A DRAIN_C1/ell and its gap prescriptions; the law itself is tested in
+test_measured_drain_law. The payload gains "drain", a DrainRecord. The items are those of prompt 01 §1.8, as
+prompt 02c §1.6 rewrote them:
 
   (1) the law's inputs at each of the three entry points, under both laws;
-  (2) the regime and alpha_eff on synthetic assessments: each row of §1.2's table, the cap, w_gate's two
-      cases, ell <= 0, both gap prescriptions read at call time;
+  (2) the regime on synthetic assessments: each row of §1.2's table, ell <= 0; alpha_eff by the measured law
+      at a one-loop turnaround, the cap, w_gate's two cases, and the unassessed case;
   (3) the fixed law is unchanged: the payload's keys are the merged tree's and "drain", whose fixed-law
-      form is DrainRecord("fixed", None, None, count, None, declined); alpha_eff = alpha w_gate at every candidate;
+      form is DrainRecord("fixed", None, "fixed", count, None, declined); alpha_eff = alpha w_gate at every
+      candidate;
       a failure's payload carries "drain";
   (4) P18's reuse: under the one-loop law the loop's PeakEstimate equals a fresh peak_estimate for each
       estimate kind, the margins equal those computed without the reuse, and one_loop_turnaround runs
@@ -50,7 +52,7 @@ import contextlib
 import importlib
 import io
 import unittest
-from math import inf, log, nan, nextafter
+from math import exp, inf, log, nan, nextafter
 from unittest import mock
 
 import numpy as np
@@ -172,10 +174,10 @@ def _injection(assessment):
     )
 
 
-def run_2197(A: float, gap=None):
+def run_2197(A: float):
     """
-    2197 at its stored normalization, untuned, to T_CMB, under the one-loop law at A (and the gap
-    prescription, if given), as the drain probe builds it. Returns (data, result, policy, realized).
+    2197 at its stored normalization, untuned, to T_CMB, under the one-loop law at A, as the drain probe
+    builds it. Returns (data, result, policy, realized).
     """
     cosmology = gth.make_cosmology()
     units = cosmology.units
@@ -193,12 +195,9 @@ def run_2197(A: float, gap=None):
         captured.append((result, kwargs["policy"]))
         return result
 
-    patches = [mock.patch.object(SM, "integrate_scalar_history", capturing)]
-    if gap is not None:
-        patches.append(mock.patch.object(SM, "_GAP_PRESCRIPTION", gap))
-    with contextlib.ExitStack() as stack, contextlib.redirect_stdout(io.StringIO()):
-        for p in patches:
-            stack.enter_context(p)
+    with mock.patch.object(
+        SM, "integrate_scalar_history", capturing
+    ), contextlib.redirect_stdout(io.StringIO()):
         data = SM.integrate_history(
             cosmology,
             temperature(0, 2.0e4 * units.GeV),
@@ -219,11 +218,18 @@ class TestTheConstants(unittest.TestCase):
     def test_2_the_constants_and_their_names(self):
         self.assertEqual(SM.DRAIN_LAW_FIXED, "fixed")
         self.assertEqual(SM.DRAIN_LAW_ONE_LOOP, "one_loop")
-        self.assertEqual(SM.DRAIN_C1, 2.7)
         self.assertEqual(SM.DRAIN_ALPHA_CAP, 0.99)
-        self.assertEqual(SM.DRAIN_ELL_EDGE, 4.0)
-        self.assertEqual(SM._GAP_PRESCRIPTION, "zero")
-        self.assertEqual(SM.GAP_PRESCRIPTIONS, ("zero", "edge"))
+        # prompt 02c removed DRAIN_C1, DRAIN_ELL_EDGE and the gap prescriptions; the measured law's
+        # constants are test_measured_drain_law's
+        for name in (
+            "DRAIN_C1",
+            "DRAIN_ELL_EDGE",
+            "_GAP_PRESCRIPTION",
+            "GAP_PRESCRIPTIONS",
+        ):
+            self.assertFalse(hasattr(SM, name), name)
+        self.assertEqual(SM.DRAIN_MODEL_FIXED, "fixed")
+        self.assertEqual(SM.DRAIN_MODEL_ONE_LOOP, "one-loop-measured-v1")
         self.assertEqual(
             SM.DRAIN_REGIMES, ("one_loop", "gap", "classical", "unassessed")
         )
@@ -376,7 +382,7 @@ class TestTheLawsInputs(unittest.TestCase):
         self.assertEqual(seen[0]["drain_law"], "fixed")
 
     def test_1_tune_history_hands_the_law_on_and_returns_the_integrations_drain(self):
-        sentinel = SM.DrainRecord("one_loop", 1.5, "zero", 0, (), 0)
+        sentinel = SM.DrainRecord("one_loop", 1.5, "one-loop-measured-v1", 0, (), 0)
         failure = {"failure": True, "failure_reason": "stand-in", "drain": sentinel}
         cosmology = gth.make_cosmology()
         with mock.patch.object(
@@ -496,66 +502,53 @@ class TestTheRegimeAndAlphaEff(unittest.TestCase):
             SM.drain_regime(model, (self.PHI, self.LOG_E, _ct(3.0)))
 
     def test_2_alpha_eff_at_a_one_loop_turnaround(self):
-        for A, ell, w in (
-            (1.0, 10.0, 1.0),
-            (0.1, 1.8, 1.0),
-            (0.01, 32.3, 0.37),
-            (1.0, 2.7, 1.0),
+        """The measured law (prompt 02c): min(0.99, A f) w_gate, f = 1 - exp(-2.69/(ell + 0.9691 - 0.41 ln L))."""
+        for A, ell, L, w in (
+            (1.0, 10.0, 30.0, 1.0),
+            (0.1, 1.8, 7.0, 1.0),
+            (0.05, 32.2579, 102.1, 0.37),
+            (1.0, 2.7, 10.0, 1.0),
         ):
-            with self.subTest(A=A, ell=ell, w=w):
+            with self.subTest(A=A, ell=ell, L=L, w=w):
+                f = 1.0 - exp(-2.69 / (ell + 0.9691 - 0.41 * log(L)))
+                self.assertLess(f, 0.95)
                 self.assertEqual(
-                    SM.drain_alpha_effective("one_loop", ell, A, w),
-                    min(0.99, A * 2.7 / ell) * w,
+                    SM.drain_alpha_effective("one_loop", ell, L, 50.0, A, w),
+                    min(0.99, A * f) * w,
                 )
-        # the probe's arithmetic, with w_gate = 1.0 (ruling 3)
-        self.assertEqual(
-            SM.drain_alpha_effective("one_loop", 10.2, 1.0, 1.0),
-            min(1.0 * 2.7 / 10.2, 0.99),
-        )
 
     def test_2_the_cap(self):
-        self.assertEqual(SM.drain_alpha_effective("one_loop", 2.0, 1.0, 1.0), 0.99)
+        """alpha_cap binds once A f >= 0.99: at the plateau (f = 0.9) from A = 1.1."""
         self.assertEqual(
-            SM.drain_alpha_effective("one_loop", 2.0, 100.0, 0.5), 0.99 * 0.5
+            SM.drain_alpha_effective("one_loop", 0.5, None, None, 1.1, 1.0), 0.99
         )
-        self.assertEqual(SM.drain_alpha_effective("one_loop", 1e-300, 1.0, 1.0), 0.99)
+        self.assertEqual(
+            SM.drain_alpha_effective("one_loop", 0.5, None, None, 100.0, 0.5),
+            0.99 * 0.5,
+        )
+        self.assertEqual(
+            SM.drain_alpha_effective("one_loop", 1e-300, None, None, 10.0, 1.0), 0.99
+        )
 
     def test_2_w_gate_zero_drains_nothing(self):
-        self.assertEqual(SM.drain_alpha_effective("one_loop", 10.0, 1.0, 0.0), 0.0)
+        self.assertEqual(
+            SM.drain_alpha_effective("one_loop", 10.0, 30.0, 50.0, 1.0, 0.0), 0.0
+        )
 
-    def test_2_nothing_where_R_is_at_most_one_or_unassessed(self):
-        for regime in ("classical", "unassessed"):
-            for w in (1.0, 0.5):
-                with self.subTest(regime=regime, w=w):
-                    value = SM.drain_alpha_effective(regime, None, 1.0, w)
-                    self.assertEqual(value, 0.0)
-                    self.assertEqual(str(value), "0.0")
-
-    def test_2_the_gap_prescriptions_read_at_call_time(self):
-        self.assertEqual(SM.drain_alpha_effective("gap", None, 1.0, 1.0), 0.0)
-        with mock.patch.object(SM, "_GAP_PRESCRIPTION", "edge"):
-            self.assertEqual(
-                SM.drain_alpha_effective("gap", None, 1.0, 0.5),
-                min(0.99, 1.0 * 2.7 / 4.0) * 0.5,
-            )
-            self.assertEqual(
-                SM.drain_alpha_effective("gap", None, 0.1, 1.0),
-                min(0.99, 0.1 * 2.7 / 4.0),
-            )
-            # the cap binds above A = 0.99 * 4/2.7
-            self.assertEqual(SM.drain_alpha_effective("gap", None, 2.0, 1.0), 0.99)
-        self.assertEqual(SM.drain_alpha_effective("gap", None, 1.0, 1.0), 0.0)
-
-    def test_2_an_unknown_prescription_is_refused_at_the_gap(self):
-        with mock.patch.object(SM, "_GAP_PRESCRIPTION", "high"):
-            with self.assertRaises(ValueError):
-                SM.drain_alpha_effective("gap", None, 1.0, 1.0)
-            # but not elsewhere
-            self.assertEqual(SM.drain_alpha_effective("one_loop", 10.0, 1.0, 1.0), 0.27)
+    def test_2_nothing_where_unassessed(self):
+        """Unassessed drains 0.0 exactly; classical now drains A R S(L) (prompt 02c; README §8.10, decision 3)."""
+        for w in (1.0, 0.5):
+            with self.subTest(w=w):
+                value = SM.drain_alpha_effective("unassessed", None, None, None, 1.0, w)
+                self.assertEqual(value, 0.0)
+                self.assertEqual(str(value), "0.0")
+        self.assertGreater(
+            SM.drain_alpha_effective("classical", None, 54.52, -16.6, 1.0, 1.0), 0.0
+        )
 
     def test_2_an_unknown_regime_is_refused(self):
         with self.assertRaises(ValueError):
-            SM.drain_alpha_effective("elastic", None, 1.0, 1.0)
+            SM.drain_alpha_effective("elastic", None, 1.0, 1.0, 1.0, 1.0)
 
 
 class TestTheFixedLawIsUnchanged(unittest.TestCase):
@@ -575,7 +568,7 @@ class TestTheFixedLawIsUnchanged(unittest.TestCase):
 
     def test_3_drain_is_the_fixed_laws_record(self):
         self.assertEqual(
-            self.data["drain"], SM.DrainRecord("fixed", None, None, 0, None, 0)
+            self.data["drain"], SM.DrainRecord("fixed", None, "fixed", 0, None, 0)
         )
         self.assertIs(self.data["drain"], self.result.drain)
         self.assertIsNone(self.result.peak_estimates)
@@ -605,15 +598,30 @@ class TestTheFixedLawIsUnchanged(unittest.TestCase):
             )
         self.assertTrue(data["failure"])
         self.assertEqual(set(data), {"failure", "failure_reason", "warnings", "drain"})
-        self.assertEqual(data["drain"], SM.DrainRecord("fixed", None, None, 0, None, 0))
+        self.assertEqual(
+            data["drain"], SM.DrainRecord("fixed", None, "fixed", 0, None, 0)
+        )
 
 
 class TestTheOneLoopLawOn2197(unittest.TestCase):
     """
-    (4) and the "drain" key: 2197 at its stored normalization under the one-loop law at A = 1, gap
-    "zero" (the drain probe's 2197-A1: ten candidates, all one-loop). One integration to T_CMB, about
-    2-4 s at a load of 4-8, with one_loop_turnaround counted.
+    (4) and the "drain" key: 2197 at its stored normalization under the one-loop law at A = 1. Under prompt
+    01's law this was the drain probe's 2197-A1 (ten candidates, all one-loop); under the measured law of
+    prompt 02c it is five candidates, all one-loop, parking at N = 29.035 (re-pinned by prompt 02c and
+    cross-checked against prompts/one-loop-drain/source/crossover/measured_law_map.py --law=adopted on the
+    same inputs; log 02c). One integration to T_CMB, about 2-4 s at a load of 4-8, with one_loop_turnaround
+    counted.
     """
+
+    # prompt 02c's pins: each candidate's alpha_eff as the reference map prints it (:.4e), and the parking N
+    PINNED_ALPHA_EFF = (
+        "8.2276e-02",
+        "9.1886e-02",
+        "1.1431e-01",
+        "1.2001e-01",
+        "1.6459e-01",
+    )
+    PINNED_PARKING_N = 29.035264723467392
 
     @classmethod
     def setUpClass(cls):
@@ -632,7 +640,7 @@ class TestTheOneLoopLawOn2197(unittest.TestCase):
         self.assertIs(drain, self.result.drain)
         self.assertEqual(drain.law, "one_loop")
         self.assertEqual(drain.A, 1.0)
-        self.assertEqual(drain.gap_prescription, "zero")
+        self.assertEqual(drain.model, "one-loop-measured-v1")
         self.assertIsInstance(drain.unresolvable_assessments, int)
         self.assertIsInstance(drain.candidates, tuple)
         self.assertEqual(len(drain.candidates), len(self.result.injections))
@@ -653,12 +661,41 @@ class TestTheOneLoopLawOn2197(unittest.TestCase):
             )
             self.assertEqual(
                 record.alpha_eff,
-                SM.drain_alpha_effective(record.regime, record.ell, 1.0, record.w_gate),
+                SM.drain_alpha_effective(
+                    record.regime,
+                    record.ell,
+                    record.L,
+                    record.log_R,
+                    1.0,
+                    record.w_gate,
+                ),
             )
+            # the law's inputs, as given (prompt 02c §1.3; orchestrator note 02c ruling 1)
+            ct = injection.classical_turning_point
+            if record.regime == "unassessed":
+                self.assertIsNone(record.L)
+                self.assertIsNone(record.log_R)
+            else:
+                self.assertEqual(record.L, self.model.drain_L(record.log_E))
+                self.assertEqual(record.log_R, ct.log_R)
+                # at n = 1, L = M/phi_t to the root's accuracy (ruling 3: 1e-10)
+                M = H2197["M_eV"] * self.model.model.units.eV
+                self.assertAlmostEqual(record.L / (M / ct.phi_t), 1.0, delta=1e-10)
             if record.regime == "one_loop":
                 self.assertGreater(record.ell, 0.0)
             else:
                 self.assertIsNone(record.ell)
+
+    def test_4_the_values_under_the_measured_law(self):
+        """Re-pinned by prompt 02c: the regimes, alpha_eff and the parking N under the measured law at A = 1."""
+        candidates = self.data["drain"].candidates
+        self.assertEqual(tuple(c.regime for c in candidates), ("one_loop",) * 5)
+        self.assertEqual(
+            tuple(format(c.alpha_eff, ".4e") for c in candidates), self.PINNED_ALPHA_EFF
+        )
+        self.assertAlmostEqual(
+            self.result.parking.N, self.PINNED_PARKING_N, delta=1.0e-9
+        )
 
     def test_4_the_record_is_plain_values(self):
         import pickle
@@ -754,7 +791,9 @@ class TestTheUnresolvableCount(unittest.TestCase):
         with mock.patch.object(SM, "assess_infall", substituted):
             result, _, _ = ti.integrate_floor(0.0)
         self.assertEqual(len(calls), 1)
-        self.assertEqual(result.drain, SM.DrainRecord("fixed", None, None, 1, None, 0))
+        self.assertEqual(
+            result.drain, SM.DrainRecord("fixed", None, "fixed", 1, None, 0)
+        )
         today, _ = kcl.integrate(kcl.P1, 1e-10, 21.0)
         self.assertEqual(result.reflections, today.reflections)
         self.assertEqual(result.nfev, today.nfev)
