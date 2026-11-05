@@ -419,3 +419,39 @@ has at each candidate. M enters only through them.
 
 The cap, the plateau and the classical piece are judgement, not fits. They are where the user asked for qualitative
 behaviour only.
+
+## The adopted law at small A (2026-11-05)
+
+The user adopted, for the drain:
+- the ℓ ≥ 1 law with its ln L shift;
+- the 0.9 plateau below ℓ = 1, down to the gap;
+- `fit_law.py`'s gap function;
+- R·S(L) at R ≤ 1.
+
+A = 10 stays the top of the range. At A = 10, min(0.99, 10 f) is capped for every bounce with f ≥ 0.1, that is ℓ ≲ 26,
+under either law. The question was whether A = 0.05 still works at the bottom.
+
+**The run.** `measured_law_map.py --law=adopted` was run on every history of 02b's A = 0.05 set, at each one's own
+old-law normalization; R-632 and the 5 × 10⁻²⁰ M_P ladder, whose tunings failed, used their A = 0.5 normalization.
+Nothing is re-tuned, so parking here is a proxy for the tuning succeeding. Outputs: `out/adopted-A0.05/`,
+`out/adopted-floor/`.
+
+**At A = 0.05.**
+- **Every history that tuned under the old law still parks.** The P and W transition-window histories park
+  0.3–0.4 e-folds later than before (N = 38.4–39.4 against 38.1–39.0), mostly inside the gap's first 5–22 bounces.
+  The B, R-611, R-865, R-1193 and ladder histories park much as before.
+- **The two that failed under the old law still fail.**
+  - R-632 (β = 1.0) meets 43 one-loop, 52 gap and 800 classical candidates without parking.
+  - The 5 × 10⁻²⁰ M_P ladder exhausts the step budget at N = 46.07 after 14 115 reflections.
+- The spot history C-3233 (10⁻¹² M_P) does not park under either law, as before.
+
+**Their floor.**
+
+| history | A = 0.1 | A = 0.2 | A = 0.5 |
+|---|---|---|---|
+| R-632 (β = 1.0) | does not park (3269 classical candidates) | step budget at N = 44.1 | parks at N = 38.65, after 3 gap bounces |
+| 5 × 10⁻²⁰ M_P ladder | step budget at N = 47.6 | parks at N = 30.71 | parks at N = 26.33 |
+
+**Why small A is harder now.** Under the old law small A still parked fields through the divergence of 2.7/ℓ: at
+A = 0.05 it drained 0.27 at ℓ = 0.5 and hit the cap near ℓ → 0. Under the adopted law no bounce at A = 0.05 drains
+more than 0.045. The fields that parked did so on many weak drains, plus the gap's.

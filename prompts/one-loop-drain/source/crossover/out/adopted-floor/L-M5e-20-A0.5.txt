@@ -1,0 +1,19 @@
+# adopted-law map: one-loop min(0.95, 1 - exp(-2.69/(ell + 0.969 - 0.41 ln L))) (ell >= 1), 0.9 (ell < 1); gap 1 - exp(-0.0198 (ln R - 1.56)^1.547 (1 + 0.841 ln L)); classical R S(L); alpha_eff = min(0.99, A f) w_gate
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+# L-M5e-20-A0.5-zero (A=0.5, tuning of A0.5): beta=2.0 M=5e-20 M_P A=0.5 gap=zero normalization(ln V0)=-276.6307285962799 ln(V0/M^4)=-98.8617 failure=False parking_N=26.330956648044303 N_final=50.07564346763547 candidates=15
+# idx       N    regime       ell   alpha_eff   ln(E/V0)     ln R         L     ell_t   ln(E/M^4)
+    0  20.3521  one_loop    9.1338  1.3997e-01   106.0437   40.161       106   -0.7025     7.1820
+    1  21.3693  one_loop    7.9755  1.5861e-01   101.7330   35.520     101.7   -0.7029     2.8714
+    2  21.8578  one_loop    7.4179  1.6944e-01    99.6661   33.290     99.67   -0.7031     0.8044
+    3  22.2064  one_loop    6.9226  1.8035e-01    97.8350   31.311     97.83   -0.7033    -1.0267
+    4  22.5993  one_loop    6.2371  1.9793e-01    95.3099   28.578     95.31   -0.7035    -3.5517
+    5  23.0937  one_loop    5.4658  2.2214e-01    92.4839   25.512     92.48   -0.7038    -6.3777
+    6  23.4927  one_loop    4.9098  2.4342e-01    90.4589   23.311     90.46   -0.7041    -8.4028
+    7  23.7811  one_loop    4.4734  2.6302e-01    88.8783   21.590     88.88   -0.7043    -9.9834
+    8  24.0131  one_loop    4.0702  2.8393e-01    87.4258   20.007     87.43   -0.7045   -11.4359
+    9  24.2174  one_loop    3.6724  3.0770e-01    86.0022   18.453        86   -0.7046   -12.8595
+   10  24.4067  one_loop    3.2611  3.3617e-01    84.5421   16.856     84.54   -0.7048   -14.3195
+   11  24.5953  one_loop    2.8048  3.7304e-01    82.9400   15.102     82.94   -0.7051   -15.9217
+   12  24.8039  one_loop    2.2413  4.2592e-01    80.9970   12.971        81   -0.7053   -17.8646
+   13  25.1007  one_loop    1.3401  4.7500e-01    78.0314    9.708     78.03   -0.7058   -20.8303
+   14  26.3310       gap            3.0507e-02    71.3801    2.349     71.38   -0.7070   -27.4816

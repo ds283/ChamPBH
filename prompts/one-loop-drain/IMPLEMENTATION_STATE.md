@@ -482,6 +482,15 @@ the new prompts.
     - classical: R·S(L).
   - It replaces the laboratory-calibrated law of `measured_law_map.py`. U13 and the drain law remain the user's to
     rule.)*
+  *(2026-11-05, the adopted law at small A (`source/crossover/README.md` "The adopted law at small A";
+  `measured_law_map.py --law=adopted`). The user adopted the ℓ ≥ 1 law with its ln L shift, the 0.9 plateau and
+  the gap fit, and asked whether A = 0.05 still works.
+  - **At A = 0.05,** at each history's old-law normalization (a proxy for tuning), every history that tuned under
+    the old law still parks. The P and W histories park 0.3–0.4 e-folds later, mostly in the gap's first bounces.
+  - **The same two still fail:** R-632 (β = 1.0) and the 5 × 10⁻²⁰ M_P ladder.
+  - **Their floor:** R-632 parks at A = 0.5 but not at 0.2; the ladder parks at A = 0.2 but not at 0.1.
+  - **Why:** at A = 0.05 no bounce drains more than 0.045. The old law parked small-A fields through the
+    divergence of 2.7/ℓ.)*
 
 ### 3.1 Assigned to this campaign
 

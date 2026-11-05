@@ -21,7 +21,9 @@ under the old law (or another A's, for a failed tuning); nothing is re-tuned, so
 minimum today.
 
     PYTHONPATH=. ./venv/bin/python prompts/one-loop-drain/source/crossover/measured_law_map.py \\
-        var/one-loop-drain/02/tasks/P-2197-A1-zero.result.json [TUNING_FROM.result.json] > .../out/...
+        var/one-loop-drain/02/tasks/P-2197-A1-zero.result.json [TUNING_FROM.result.json] [--law=adopted] > .../out/...
+
+--law=adopted replaces the law above by the one the user adopted on 2026-11-05 (fraction_adopted).
 """
 
 import os
@@ -73,23 +75,59 @@ def fraction(regime, ell, turning_point):
     return 0.0
 
 
+def fraction_adopted(regime, ell, turning_point):
+    """The law the user adopted on 2026-11-05 (README "Other M"; fit_law.py): one-loop
+    min(0.95, 1 - exp(-2.69/(ell + 0.969 - 0.41 ln L))) for ell >= 1 and 0.9 below; gap
+    1 - exp(-0.0198 (ln R - 1.5601)^1.5472 (1 + 0.841 ln L)) for ln R > 1.5601, else 0; classical R S(L).
+    """
+    if turning_point is None:
+        return 0.9 if regime == SM.REGIME_ONE_LOOP and ell < 1.0 else 0.0
+    L = M_MP / turning_point.phi_t
+    lnR = turning_point.log_R
+    if regime == SM.REGIME_ONE_LOOP:
+        if ell < 1.0:
+            return 0.9
+        d = ell + 0.9691 - 0.41 * log(L)
+        return min(0.95, 1.0 - exp(-2.69 / d)) if d > 0.0 else 0.95
+    if regime == SM.REGIME_GAP:
+        if lnR <= 1.5601:
+            return 0.0
+        return 1.0 - exp(-0.0198 * (lnR - 1.5601) ** 1.5472 * (1.0 + 0.841 * log(L)))
+    if regime == SM.REGIME_CLASSICAL:
+        return exp(lnR) * S_of(L)
+    return 0.0
+
+
+LAW = fraction
+
+
 def drain_regime(model, assessment):
     _last["tp"] = None if assessment is None else assessment[2]
     return _orig_regime(model, assessment)
 
 
 def drain_alpha_effective(regime, ell, A, w_gate):
-    return min(SM.DRAIN_ALPHA_CAP, A * fraction(regime, ell, _last.get("tp"))) * w_gate
+    return min(SM.DRAIN_ALPHA_CAP, A * LAW(regime, ell, _last.get("tp"))) * w_gate
 
 
 if __name__ == "__main__":
     import json
 
-    M_MP = float(json.load(open(sys.argv[1]))["argv"][1])
+    adopted = "--law=adopted" in sys.argv
+    args = [a for a in sys.argv[1:] if a != "--law=adopted"]
+    M_MP = float(json.load(open(args[0]))["argv"][1])
     SM.drain_regime = drain_regime
     SM.drain_alpha_effective = drain_alpha_effective
-    print(
-        "# measured-law map: one-loop 1 - exp(-2.69/(ell + 0.12)) (ell >= 1), 0.9 (ell < 1); gap by ln(R S) on "
-        "2197's stage 2 rows; classical R S(L) g(ln R); alpha_eff = min(0.99, A f) w_gate"
-    )
-    sys.exit(cascade_map.main(*sys.argv[1:3]))
+    if adopted:
+        LAW = fraction_adopted
+        print(
+            "# adopted-law map: one-loop min(0.95, 1 - exp(-2.69/(ell + 0.969 - 0.41 ln L))) (ell >= 1), 0.9 "
+            "(ell < 1); gap 1 - exp(-0.0198 (ln R - 1.56)^1.547 (1 + 0.841 ln L)); classical R S(L); "
+            "alpha_eff = min(0.99, A f) w_gate"
+        )
+    else:
+        print(
+            "# measured-law map: one-loop 1 - exp(-2.69/(ell + 0.12)) (ell >= 1), 0.9 (ell < 1); gap by ln(R S) on "
+            "2197's stage 2 rows; classical R S(L) g(ln R); alpha_eff = min(0.99, A f) w_gate"
+        )
+    sys.exit(cascade_map.main(*args[:2]))

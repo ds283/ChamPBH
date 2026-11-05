@@ -1,0 +1,34 @@
+# adopted-law map: one-loop min(0.95, 1 - exp(-2.69/(ell + 0.969 - 0.41 ln L))) (ell >= 1), 0.9 (ell < 1); gap 1 - exp(-0.0198 (ln R - 1.56)^1.547 (1 + 0.841 ln L)); classical R S(L); alpha_eff = min(0.99, A f) w_gate
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+** STATUS UPDATE #1 - Thu 05 Nov 2026 00:45:07 - crossover-cascade-map
+|    running for 5m 3.1e-05s (5m 3.1e-05s since last notification) | reflections = 4268 | current N = 42.105 | current step cap dN=4.8001e-11
+|    --
+|    current T_J = 0.0045804 eV | target T_J = 0.00023487 eV
+|    current log(T_J/GeV) = -26.109 | target log(T_J/GeV) = -29.08 | 92.380% complete measured in T_J
+|    --
+|    4268 elastic reflection events, 4268 since last update: N = [35.823, 36.629, 37.108, 37.453, 37.723, 37.944, 38.131, 38.291, 38.432, 38.555, ..., 42.102, 42.102, 42.102, 42.103, 42.103, 42.103, 42.104, 42.104, 42.104, 42.105]
+|    4394136 RHS evaluations, mean 1.3867e-05s per evaluation, min RHS time = 1.0042e-05s, max RHS time = 0.19119s
+|    current state: phi_E = 5.1299e+05 GeV, pi_E = -0.0004876 Mp, f_m = 174.71, log(rho_rad/GeV^4) = -104.33, T_J = 0.0045804 eV
+** STATUS UPDATE #2 - Thu 05 Nov 2026 00:50:07 - crossover-cascade-map
+|    running for 10m 0.000484s (5m 0.000289s since last notification) | reflections = 8888 | current N = 43.231 | current step cap dN=9.6245e-10
+|    --
+|    current T_J = 0.0014861 eV | target T_J = 0.00023487 eV
+|    current log(T_J/GeV) = -27.235 | target log(T_J/GeV) = -29.08 | 95.267% complete measured in T_J
+|    log_T_GeV increment since last update: Delta[ log(T_J/GeV) ] = 1.1256 | expected completion = Thu 05 Nov 2026 00:58:19
+|    --
+|    8888 elastic reflection events, 4620 since last update: N = [42.105, 42.105, 42.106, 42.106, 42.106, 42.107, 42.107, 42.107, 42.108, 42.108, ..., 43.229, 43.229, 43.229, 43.229, 43.23, 43.23, 43.23, 43.23, 43.23, 43.231]
+|    8863029 RHS evaluations, mean 1.3679e-05s per evaluation, min RHS time = 1.0042e-05s, max RHS time = 0.30037s
+|    current state: phi_E = 6.3943e+06 GeV, pi_E = -0.00027711 Mp, f_m = 538.49, log(rho_rad/GeV^4) = -108.83, T_J = 0.0014861 eV
+** STATUS UPDATE #3 - Thu 05 Nov 2026 00:55:07 - crossover-cascade-map
+|    running for 15m 0.000873s (5m 0.000116s since last notification) | reflections = 13551 | current N = 43.961 | current step cap dN=8.3167e-07
+|    --
+|    current T_J = 0.00071618 eV | target T_J = 0.00023487 eV
+|    current log(T_J/GeV) = -27.965 | target log(T_J/GeV) = -29.08 | 97.140% complete measured in T_J
+|    log_T_GeV increment since last update: Delta[ log(T_J/GeV) ] = 0.72998 | expected completion = Thu 05 Nov 2026 01:02:45
+|    --
+|    13551 elastic reflection events, 4663 since last update: N = [43.231, 43.231, 43.231, 43.231, 43.231, 43.232, 43.232, 43.232, 43.232, 43.232, ..., 43.959, 43.96, 43.96, 43.96, 43.96, 43.96, 43.96, 43.96, 43.96, 43.961]
+|    13267908 RHS evaluations, mean 1.367e-05s per evaluation, min RHS time = 1.0042e-05s, max RHS time = 0.57261s
+|    current state: phi_E = 1.3469e-09 Mp, pi_E = -0.00016486 Mp, f_m = 1117.4, log(rho_rad/GeV^4) = -111.75, T_J = 0.00071618 eV
+-- integrate_history (crossover-cascade-map): integration failure
+   step budget exhausted: integrate_scalar_history (crossover-cascade-map) took 2000001 accepted steps (budget 2000000) at N=44.08180405, T_J=6.3451e-13 GeV, with 14476 reflection(s)
+!! integrate_history (crossover-cascade-map): marked as total integration failure
