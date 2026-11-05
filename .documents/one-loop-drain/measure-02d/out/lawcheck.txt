@@ -1,0 +1,12 @@
+# note 02d ruling 6, 'Checked', over every integration of 02d's lines (sample.jsonl and checks.jsonl):
+#   245 lines, 464 integrations, 464 with a DrainRecord; models {'one-loop-measured-v1': 464}; model = 'one-loop-measured-v1' on 464 of 464
+#   alpha_eff recomputed by drain_alpha_effective(c.regime, c.ell, c.L, c.log_R, record.A, c.w_gate) at 616270 candidates; differing by repr: 0
+#   recomputed again here from the 240 sample tasks' partial files: 459 integrations, 615946 candidates, 0 differing
+
+# the cap, by regime, over the accepted integrations (A f >= DRAIN_ALPHA_CAP)
+   one_loop  : 50 capped candidates, in 24 runs
+   gap       : 6 capped candidates, in 6 runs
+   classical : 0 capped candidates, in 0 runs
+   unassessed: 0 capped candidates, in 0 runs
+
+# one capped run, P-2188-A10: 3 capped candidates in its accepted integration (the line says 3); alpha_eff == DRAIN_ALPHA_CAP * w_gate exactly at 3

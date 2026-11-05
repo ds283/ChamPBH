@@ -1,0 +1,614 @@
+# §2 item 5, against the old law: each 02d line (new) beside the `zero` line of the same history and A (old):
+# 02's at A = 1 and 0.1, 02b's at the other six; a 02b line obtained by S2 carries its source's values and
+# is marked 'S2 of' its values_from (note 02d ruling 7). counts: candidates 1L/gap/cl of the accepted
+# integration; dN1: Delta N_eff at 1 MeV; dN0: today; DoH in 10^-5. Nothing of the old lines is re-run.
+
+P-2197  M=4e-31 beta=1.185
+   A=10    new: park= 18.8976 counts 6/0/0  dN1=   0.53827 dN0=   0.55543 Yp=0.254003 DoH=2.64109
+   A=10    old: park= 18.7733 counts 6/0/0  dN1=   0.54646 dN0=   0.56388 Yp=0.254098 DoH=2.64366 [02b]
+   A=5     new: park= 24.5662 counts 10/0/0  dN1=   0.26362 dN0=   0.27269 Yp=0.249984 DoH=2.54527
+   A=5     old: park= 24.2702 counts 9/0/0  dN1=   0.26828 dN0=   0.27712 Yp=0.250285 DoH=2.54825 [02b]
+   A=2     new: park= 33.5173 counts 11/0/0  dN1=   0.10587 dN0=   0.11698 Yp=0.250915 DoH=2.55711
+   A=2     old: park= 29.6392 counts 7/0/0  dN1=   0.10772 dN0=   0.11885 Yp=0.250944 DoH=2.52406 [02b]
+   A=1.5   new: park= 35.2085 counts 16/0/0  dN1=  0.079447 dN0=  0.090265 Yp=0.252797 DoH=2.65785
+   A=1.5   old: park= 34.9973 counts 14/0/0  dN1=  0.080846 dN0=  0.091698 Yp=0.252855 DoH=2.64668 [02b]
+   A=1     new: park= 29.0353 counts 5/0/0  dN1=  0.052914 dN0=  0.060093 Yp=0.256921 DoH=2.53433
+   A=1     old: park= 33.1232 counts 10/0/0  dN1=  0.053849 dN0=  0.061211 Yp=0.256885 DoH=2.52268 [02]
+   A=0.5   new: park= 36.7351 counts 36/0/0  dN1=  0.026392 dN0=  0.032804 Yp=0.258664 DoH=2.76401
+   A=0.5   old: park= 36.5850 counts 32/0/0  dN1=  0.026858 dN0=  0.033293 Yp=0.258572 DoH=2.75987 [02b]
+   A=0.1   new: park= 38.6959 counts 124/0/0  dN1=  0.005262 dN0=  0.011311 Yp=0.258628 DoH=2.86284
+   A=0.1   old: park= 38.4470 counts 95/0/0  dN1= 0.0053547 dN0=  0.011413 Yp=0.258616 DoH=2.86232 [02]
+   A=0.05  new: park= 39.4401 counts 192/11/0  dN1= 0.0026298 dN0= 0.0085575 Yp=0.258389 DoH=2.86983
+   A=0.05  old: park= 39.0892 counts 134/0/0  dN1= 0.0026761 dN0= 0.0086088 Yp=0.258382 DoH=2.86977 [02b]
+
+P-2188  M=4e-31 beta=1.06
+   A=10    new: park= 24.6757 counts 3/0/0  dN1=         0 dN0=  0.028931 Yp=0.253155 DoH=2.49983
+   A=10    old: park= 24.6757 counts 3/0/0  dN1=         0 dN0=  0.028931 Yp=0.253155 DoH=2.49983 [02b]
+   A=5     new: park= 28.4388 counts 5/0/0  dN1=         0 dN0=   0.02303 Yp=0.253205 DoH=2.50368
+   A=5     old: park= 29.9421 counts 6/0/0  dN1=         0 dN0=   0.02361 Yp=0.253176 DoH=2.49945 [02b]
+   A=2     new: park= 30.5792 counts 3/0/0  dN1=         0 dN0= 0.0095491 Yp=0.254608 DoH=2.52060
+   A=2     old: park= 29.6132 counts 3/0/0  dN1=         0 dN0= 0.0098302 Yp=0.254642 DoH=2.51447 [02b]
+   A=1.5   new: park= 33.9431 counts 11/0/0  dN1=         0 dN0= 0.0074525 Yp=0.254829 DoH=2.57000
+   A=1.5   old: park= 33.7643 counts 10/0/0  dN1=         0 dN0= 0.0076386 Yp=0.254899 DoH=2.56611 [02b]
+   A=1     new: park= 34.9284 counts 17/0/0  dN1=         0 dN0=  0.005585 Yp=0.254985 DoH=2.61662
+   A=1     old: park= 34.7866 counts 15/0/0  dN1=         0 dN0= 0.0056962 Yp=0.255084 DoH=2.61439 [02]
+   A=0.5   new: park= 35.9346 counts 32/0/0  dN1=         0 dN0=  0.003894 Yp=0.255063 DoH=2.66040
+   A=0.5   old: park= 35.7939 counts 28/0/0  dN1=         0 dN0= 0.0039447 Yp=0.255188 DoH=2.65973 [02b]
+   A=0.1   new: park= 37.6765 counts 116/0/0  dN1=         0 dN0= 0.0026375 Yp=0.255143 DoH=2.69355
+   A=0.1   old: park= 37.4522 counts 92/0/0  dN1=         0 dN0= 0.0026471 Yp=0.255135 DoH=2.69314 [02]
+   A=0.05  new: park= 38.3884 counts 190/0/0  dN1=         0 dN0= 0.0024852 Yp=0.255186 DoH=2.69762
+   A=0.05  old: park= 38.0847 counts 138/0/0  dN1=         0 dN0=   0.00249 Yp=0.255180 DoH=2.69750 [02b]
+
+W-2187  M=4e-31 beta=1.0775
+   A=10    new: park= 20.4779 counts 4/0/0  dN1=  0.076541 dN0=  0.078981 Yp=0.247927 DoH=2.48397
+   A=10    old: park= 20.1105 counts 4/0/0  dN1=   0.07818 dN0=  0.080672 Yp=0.247946 DoH=2.48464 [02b]
+   A=5     new: park= 25.4303 counts 10/0/0  dN1=  0.037228 dN0=  0.050708 Yp=0.249410 DoH=2.48470
+   A=5     old: park= 25.3353 counts 9/0/0  dN1=  0.037983 dN0=  0.051138 Yp=0.249222 DoH=2.48395 [02b]
+   A=2     new: park= 31.5131 counts 6/0/0  dN1=  0.014891 dN0=  0.024953 Yp=0.255173 DoH=2.50787
+   A=2     old: park= 32.5438 counts 8/0/0  dN1=  0.015193 dN0=  0.025535 Yp=0.255026 DoH=2.49582 [02b]
+   A=1.5   new: park= 34.5974 counts 13/0/0  dN1=  0.011168 dN0=  0.019882 Yp=0.256253 DoH=2.62943
+   A=1.5   old: park= 34.4166 counts 12/0/0  dN1=  0.011395 dN0=  0.020222 Yp=0.256083 DoH=2.62029 [02b]
+   A=1     new: park= 35.6264 counts 20/0/0  dN1= 0.0074455 dN0=  0.015539 Yp=0.256507 DoH=2.72469
+   A=1     old: park= 35.4848 counts 18/0/0  dN1= 0.0075967 dN0=   0.01575 Yp=0.256569 DoH=2.72078 [02]
+   A=0.5   new: park= 36.5837 counts 36/0/0  dN1= 0.0037228 dN0=  0.011038 Yp=0.256240 DoH=2.78983
+   A=0.5   old: park= 36.4310 counts 31/0/0  dN1= 0.0037983 dN0=  0.011155 Yp=0.256197 DoH=2.78802 [02b]
+   A=0.1   new: park= 38.2915 counts 120/0/0  dN1=0.00074455 dN0= 0.0069145 Yp=0.255718 DoH=2.81781
+   A=0.1   old: park= 38.0297 counts 90/0/0  dN1=0.00075967 dN0= 0.0069418 Yp=0.255860 DoH=2.81875 [02]
+   A=0.05  new: park= 39.0220 counts 177/22/0  dN1=0.00037228 dN0= 0.0063471 Yp=0.255814 DoH=2.82063
+   A=0.05  old: park= 38.6474 counts 125/0/0  dN1=0.00037983 dN0= 0.0063612 Yp=0.255810 DoH=2.82057 [02b]
+
+W-1631  M=4e-31 beta=1.07
+   A=10    new: park= 23.9186 counts 4/0/0  dN1=  0.032854 dN0=  0.037453 Yp=0.246878 DoH=2.46764
+   A=10    old: park= 23.7556 counts 4/0/0  dN1=  0.033569 dN0=  0.036757 Yp=0.246689 DoH=2.46636 [02b]
+   A=5     new: park= 30.2397 counts 7/0/0  dN1=  0.016427 dN0=   0.03941 Yp=0.253814 DoH=2.50766
+   A=5     old: park= 26.4239 counts 7/0/0  dN1=  0.016785 dN0=  0.040078 Yp=0.253626 DoH=2.50379 [02b]
+   A=2     new: park= 34.8977 counts 12/0/0  dN1= 0.0065708 dN0=  0.020466 Yp=0.257240 DoH=2.72900
+   A=2     old: park= 34.7399 counts 10/0/0  dN1= 0.0067139 dN0=  0.020798 Yp=0.257248 DoH=2.72299 [02b]
+   A=1.5   new: park= 35.3836 counts 15/0/0  dN1= 0.0049281 dN0=  0.017268 Yp=0.256960 DoH=2.76975
+   A=1.5   old: park= 35.2456 counts 13/0/0  dN1= 0.0050354 dN0=  0.017551 Yp=0.256846 DoH=2.76603 [02b]
+   A=1     new: park= 35.8723 counts 21/0/0  dN1= 0.0032854 dN0=  0.013425 Yp=0.257523 DoH=2.78282
+   A=1     old: park= 35.7370 counts 18/0/0  dN1= 0.0033569 dN0=  0.013653 Yp=0.257446 DoH=2.78178 [02]
+   A=0.5   new: park= 36.5370 counts 36/0/0  dN1= 0.0016427 dN0= 0.0088073 Yp=0.258907 DoH=2.70334
+   A=0.5   old: park= 36.3905 counts 31/0/0  dN1= 0.0016785 dN0= 0.0089408 Yp=0.258874 DoH=2.70315 [02b]
+   A=0.1   new: park= 38.0290 counts 119/0/0  dN1=0.00032854 dN0= 0.0046209 Yp=0.259945 DoH=2.59107
+   A=0.1   old: park= 37.7861 counts 92/0/0  dN1=0.00033569 dN0= 0.0046503 Yp=0.259933 DoH=2.59099 [02]
+   A=0.05  new: park= 38.7163 counts 194/0/0  dN1=0.00016427 dN0= 0.0040709 Yp=0.260094 DoH=2.57717
+   A=0.05  old: park= 38.3809 counts 133/0/0  dN1=0.00016785 dN0= 0.0040858 Yp=0.260092 DoH=2.57724 [02b]
+
+W-2179  M=4e-31 beta=1.0925
+   A=10    new: park= 19.8706 counts 5/0/0  dN1=   0.27843 dN0=    0.2873 Yp=0.250631 DoH=2.55281
+   A=10    old: park= 19.6979 counts 5/0/0  dN1=   0.28227 dN0=   0.29127 Yp=0.250684 DoH=2.55401 [02b]
+   A=5     new: park= 23.9329 counts 8/0/0  dN1=   0.13047 dN0=   0.13494 Yp=0.248437 DoH=2.50127
+   A=5     old: park= 24.0145 counts 8/0/0  dN1=   0.13293 dN0=   0.13762 Yp=0.248418 DoH=2.50191 [02b]
+   A=2     new: park= 30.4159 counts 5/0/0  dN1=  0.052119 dN0=  0.061577 Yp=0.251497 DoH=2.51539
+   A=2     old: park= 31.6899 counts 7/0/0  dN1=   0.05308 dN0=  0.062709 Yp=0.251461 DoH=2.49552 [02b]
+   A=1.5   new: park= 34.8435 counts 15/0/0  dN1=  0.039089 dN0=  0.047978 Yp=0.252723 DoH=2.58409
+   A=1.5   old: park= 34.7275 counts 13/0/0  dN1=   0.03981 dN0=  0.048913 Yp=0.252459 DoH=2.60561 [02b]
+   A=1     new: park= 33.9676 counts 13/0/0  dN1=   0.02606 dN0=   0.03185 Yp=0.255340 DoH=2.56175
+   A=1     old: park= 33.5759 counts 11/0/0  dN1=   0.02654 dN0=  0.032434 Yp=0.255266 DoH=2.55268 [02]
+   A=0.5   new: park= 36.3919 counts 35/0/0  dN1=   0.01303 dN0=  0.018844 Yp=0.256529 DoH=2.73654
+   A=0.5   old: park= 36.2363 counts 30/0/0  dN1=   0.01327 dN0=  0.019095 Yp=0.256449 DoH=2.73284 [02b]
+   A=0.1   new: park= 38.3134 counts 121/0/0  dN1=  0.002606 dN0= 0.0084683 Yp=0.256280 DoH=2.81710
+   A=0.1   old: park= 38.0551 counts 91/0/0  dN1=  0.002654 dN0= 0.0085235 Yp=0.256270 DoH=2.81654 [02]
+   A=0.05  new: park= 39.0572 counts 181/18/0  dN1=  0.001303 dN0= 0.0070875 Yp=0.255980 DoH=2.82165
+   A=0.05  old: park= 38.6895 counts 127/0/0  dN1=  0.001327 dN0= 0.0071157 Yp=0.256176 DoH=2.82289 [02b]
+
+W-2078  M=4e-31 beta=1.175
+   A=10    new: park= 18.9280 counts 6/0/0  dN1=   0.55368 dN0=   0.57133 Yp=0.254195 DoH=2.64609
+   A=10    old: park= 18.7983 counts 6/0/0  dN1=   0.56256 dN0=   0.58049 Yp=0.254310 DoH=2.64920 [02b]
+   A=5     new: park= 25.0931 counts 11/0/0  dN1=   0.27225 dN0=   0.28406 Yp=0.249947 DoH=2.54791
+   A=5     old: park= 24.9906 counts 11/0/0  dN1=   0.27705 dN0=   0.28849 Yp=0.249993 DoH=2.54941 [02b]
+   A=2     new: park= 34.8591 counts 13/0/0  dN1=   0.10937 dN0=   0.12389 Yp=0.254327 DoH=2.66562
+   A=2     old: park= 34.6889 counts 12/0/0  dN1=   0.11131 dN0=   0.12599 Yp=0.253947 DoH=2.66114 [02b]
+   A=1.5   new: park= 30.9686 counts 5/0/0  dN1=  0.081817 dN0=  0.092786 Yp=0.257746 DoH=2.56207
+   A=1.5   old: park= 28.8949 counts 5/0/0  dN1=  0.083272 dN0=  0.094484 Yp=0.257563 DoH=2.54672 [02b]
+   A=1     new: park= 35.8792 counts 21/0/0  dN1=   0.05431 dN0=  0.063961 Yp=0.258888 DoH=2.73935
+   A=1     old: park= 35.7294 counts 19/0/0  dN1=  0.055276 dN0=  0.065011 Yp=0.258928 DoH=2.73337 [02]
+   A=0.5   new: park= 36.9533 counts 37/0/0  dN1=  0.026991 dN0=  0.035159 Yp=0.258980 DoH=2.83089
+   A=0.5   old: park= 36.8036 counts 32/0/0  dN1=  0.027469 dN0=  0.035696 Yp=0.258942 DoH=2.82883 [02b]
+   A=0.1   new: park= 38.6731 counts 124/0/0  dN1= 0.0053662 dN0=  0.011581 Yp=0.258475 DoH=2.86421
+   A=0.1   old: park= 38.4228 counts 95/0/0  dN1= 0.0054607 dN0=  0.011691 Yp=0.258470 DoH=2.86385 [02]
+   A=0.05  new: park= 39.3999 counts 191/12/0  dN1=  0.002681 dN0= 0.0086108 Yp=0.258262 DoH=2.86588
+   A=0.05  old: park= 39.0470 counts 133/0/0  dN1= 0.0027281 dN0= 0.0086657 Yp=0.258258 DoH=2.86571 [02b]
+
+W-2192  M=4e-31 beta=1.105
+   A=10    new: park= 19.6680 counts 5/0/0  dN1=   0.53472 dN0=   0.55177 Yp=0.253956 DoH=2.63986
+   A=10    old: park= 19.4990 counts 5/0/0  dN1=    0.5421 dN0=   0.55938 Yp=0.254049 DoH=2.64218 [02b]
+   A=5     new: park= 24.4934 counts 9/0/0  dN1=   0.25707 dN0=   0.26681 Yp=0.249554 DoH=2.54144
+   A=5     old: park= 24.3059 counts 8/0/0  dN1=   0.26165 dN0=   0.27102 Yp=0.249757 DoH=2.54356 [02b]
+   A=2     new: park= 35.1839 counts 12/0/0  dN1=   0.10283 dN0=   0.12171 Yp=0.258896 DoH=2.80606
+   A=2     old: park= 35.0327 counts 11/0/0  dN1=   0.10466 dN0=   0.12372 Yp=0.258887 DoH=2.79874 [02b]
+   A=1.5   new: park= 35.3955 counts 15/0/0  dN1=   0.07712 dN0=  0.091787 Yp=0.262913 DoH=2.60390
+   A=1.5   old: park= 35.2982 counts 13/0/0  dN1=  0.078495 dN0=   0.09366 Yp=0.262580 DoH=2.62348 [02b]
+   A=1     new: park= 34.2072 counts 14/0/0  dN1=  0.051413 dN0=  0.059699 Yp=0.267291 DoH=2.55020
+   A=1     old: park= 34.2842 counts 14/0/0  dN1=   0.05233 dN0=  0.060872 Yp=0.267225 DoH=2.54314 [02]
+   A=0.5   new: park= 36.0164 counts 32/0/0  dN1=  0.025707 dN0=  0.031267 Yp=0.271267 DoH=2.75726
+   A=0.5   old: park= 35.8619 counts 28/0/0  dN1=  0.026165 dN0=  0.031785 Yp=0.271180 DoH=2.75320 [02b]
+   A=0.1   new: park= 38.2783 counts 120/0/0  dN1= 0.0051413 dN0=  0.010555 Yp=0.273974 DoH=2.91584
+   A=0.1   old: park= 38.0266 counts 91/0/0  dN1=  0.005233 dN0=  0.010652 Yp=0.273960 DoH=2.91483 [02]
+   A=0.05  new: park= 39.0554 counts 185/12/0  dN1= 0.0025707 dN0= 0.0080547 Yp=0.274241 DoH=2.93502
+   A=0.05  old: park= 38.6980 counts 129/0/0  dN1= 0.0026165 dN0= 0.0081028 Yp=0.274226 DoH=2.93411 [02b]
+
+W-2209  M=4e-31 beta=1.1875
+   A=10    new: park= 18.8913 counts 6/0/0  dN1=   0.53453 dN0=   0.55158 Yp=0.253947 DoH=2.63973
+   A=10    old: park= 18.7684 counts 6/0/0  dN1=   0.54255 dN0=   0.55984 Yp=0.254051 DoH=2.64244 [02b]
+   A=5     new: park= 24.2912 counts 9/0/0  dN1=   0.26165 dN0=   0.27027 Yp=0.250222 DoH=2.54601
+   A=5     old: park= 23.7907 counts 7/0/0  dN1=   0.26633 dN0=   0.27485 Yp=0.250442 DoH=2.54837 [02b]
+   A=2     new: park= 33.8569 counts 13/0/0  dN1=   0.10494 dN0=   0.11522 Yp=0.250236 DoH=2.54383
+   A=2     old: park= 32.9697 counts 11/0/0  dN1=   0.10677 dN0=   0.11701 Yp=0.249869 DoH=2.53802 [02b]
+   A=1.5   new: park= 34.4267 counts 14/0/0  dN1=  0.078807 dN0=  0.088392 Yp=0.252782 DoH=2.58543
+   A=1.5   old: park= 33.8017 counts 11/0/0  dN1=  0.080191 dN0=  0.089818 Yp=0.252691 DoH=2.56397 [02b]
+   A=1     new: park= 35.2000 counts 19/0/0  dN1=  0.052527 dN0=  0.059909 Yp=0.255681 DoH=2.48407
+   A=1     old: park= 35.2200 counts 18/0/0  dN1=  0.053454 dN0=  0.061128 Yp=0.255579 DoH=2.48785 [02]
+   A=0.5   new: park= 36.5163 counts 35/0/0  dN1=  0.026219 dN0=   0.03165 Yp=0.258218 DoH=2.71547
+   A=0.5   old: park= 36.3619 counts 31/0/0  dN1=  0.026682 dN0=  0.032135 Yp=0.258382 DoH=2.71198 [02b]
+   A=0.1   new: park= 38.6403 counts 124/0/0  dN1=  0.005231 dN0=    0.0107 Yp=0.258700 DoH=2.84503
+   A=0.1   old: park= 38.3964 counts 96/0/0  dN1= 0.0053232 dN0=  0.010799 Yp=0.258678 DoH=2.84429 [02]
+   A=0.05  new: park= 39.3908 counts 196/6/0  dN1= 0.0026145 dN0= 0.0080266 Yp=0.258546 DoH=2.85497
+   A=0.05  old: park= 39.0484 counts 136/0/0  dN1= 0.0026606 dN0= 0.0080763 Yp=0.258535 DoH=2.85456 [02b]
+
+W-2183  M=4e-31 beta=1.125
+   A=10    new: park= 19.2086 counts 6/0/0  dN1=   0.61412 dN0=    0.6337 Yp=0.254958 DoH=2.66680
+   A=10    old: park= 19.0816 counts 5/0/0  dN1=    0.6247 dN0=   0.64462 Yp=0.255091 DoH=2.67021 [02b]
+   A=5     new: park= 25.7678 counts 11/0/0  dN1=   0.30423 dN0=    0.3282 Yp=0.253936 DoH=2.58191
+   A=5     old: park= 25.7169 counts 10/0/0  dN1=   0.31016 dN0=   0.33484 Yp=0.254161 DoH=2.58504 [02b]
+   A=2     new: park= 32.3731 counts 10/0/0  dN1=   0.11875 dN0=   0.12779 Yp=0.248999 DoH=2.52476
+   A=2     old: park= 31.6705 counts 10/0/0  dN1=   0.12083 dN0=    0.1299 Yp=0.248799 DoH=2.50399 [02b]
+   A=1.5   new: park= 34.3730 counts 14/0/0  dN1=   0.08906 dN0=   0.09779 Yp=0.251124 DoH=2.51247
+   A=1.5   old: park= 34.3661 counts 13/0/0  dN1=  0.090622 dN0=  0.099577 Yp=0.250865 DoH=2.54076 [02b]
+   A=1     new: park= 35.4679 counts 20/0/0  dN1=  0.059373 dN0=  0.067082 Yp=0.253075 DoH=2.58225
+   A=1     old: park= 35.3712 counts 18/0/0  dN1=  0.060414 dN0=  0.068332 Yp=0.252828 DoH=2.60971 [02]
+   A=0.5   new: park= 36.1296 counts 33/0/0  dN1=  0.029687 dN0=  0.034578 Yp=0.256589 DoH=2.67633
+   A=0.5   old: park= 35.9643 counts 29/0/0  dN1=  0.030207 dN0=  0.035103 Yp=0.256603 DoH=2.67123 [02b]
+   A=0.1   new: park= 38.4475 counts 122/0/0  dN1= 0.0059373 dN0=  0.011945 Yp=0.256855 DoH=2.83212
+   A=0.1   old: park= 38.1917 counts 92/0/0  dN1= 0.0060414 dN0=  0.012053 Yp=0.256929 DoH=2.83209 [02]
+   A=0.05  new: park= 39.2059 counts 183/17/0  dN1= 0.0029687 dN0= 0.0089808 Yp=0.256777 DoH=2.84251
+   A=0.05  old: park= 38.8424 counts 129/0/0  dN1= 0.0030207 dN0=  0.009036 Yp=0.256765 DoH=2.84236 [02b]
+
+W-2172  M=4e-31 beta=1.1225
+   A=10    new: park= 19.2399 counts 6/0/0  dN1=   0.61282 dN0=   0.63236 Yp=0.254945 DoH=2.66614
+   A=10    old: park= 19.1116 counts 5/0/0  dN1=   0.62319 dN0=   0.64306 Yp=0.255067 DoH=2.66962 [02b]
+   A=5     new: park= 25.5914 counts 11/0/0  dN1=   0.30214 dN0=    0.3235 Yp=0.253049 DoH=2.57567
+   A=5     old: park= 25.5651 counts 10/0/0  dN1=   0.30802 dN0=   0.33024 Yp=0.253253 DoH=2.57854 [02b]
+   A=2     new: park= 29.8884 counts 6/0/0  dN1=   0.11868 dN0=   0.12918 Yp=0.250402 DoH=2.52429
+   A=2     old: park= 32.8829 counts 10/0/0  dN1=   0.12076 dN0=    0.1314 Yp=0.250489 DoH=2.50545 [02b]
+   A=1.5   new: park= 34.8169 counts 14/0/0  dN1=  0.089007 dN0=  0.099151 Yp=0.252131 DoH=2.63399
+   A=1.5   old: park= 34.5921 counts 13/0/0  dN1=   0.09057 dN0=   0.10072 Yp=0.252085 DoH=2.62098 [02b]
+   A=1     new: park= 33.8046 counts 12/0/0  dN1=  0.059338 dN0=  0.066377 Yp=0.256085 DoH=2.56795
+   A=1     old: park= 33.0587 counts 9/0/0  dN1=   0.06038 dN0=  0.067535 Yp=0.255923 DoH=2.55470 [02]
+   A=0.5   new: park= 36.7354 counts 36/0/0  dN1=  0.029669 dN0=  0.037707 Yp=0.257394 DoH=2.80712
+   A=0.5   old: park= 36.5789 counts 31/0/0  dN1=   0.03019 dN0=  0.038236 Yp=0.257470 DoH=2.80449 [02b]
+   A=0.1   new: park= 38.5247 counts 122/0/0  dN1= 0.0059338 dN0=  0.012821 Yp=0.257515 DoH=2.84893
+   A=0.1   old: park= 38.2638 counts 91/0/0  dN1=  0.006038 dN0=  0.012949 Yp=0.257488 DoH=2.84891 [02]
+   A=0.05  new: park= 39.2343 counts 180/21/0  dN1= 0.0029669 dN0= 0.0093463 Yp=0.258056 DoH=2.83422
+   A=0.05  old: park= 38.8648 counts 127/0/0  dN1=  0.003019 dN0= 0.0094119 Yp=0.258038 DoH=2.83407 [02b]
+
+W-2178  M=4e-31 beta=1.1025
+   A=10    new: park= 19.7453 counts 5/0/0  dN1=   0.50016 dN0=   0.51611 Yp=0.253518 DoH=2.62795
+   A=10    old: park= 19.5698 counts 5/0/0  dN1=   0.50705 dN0=   0.52322 Yp=0.253595 DoH=2.63041 [02b]
+   A=5     new: park= 24.6397 counts 9/0/0  dN1=   0.23955 dN0=    0.2495 Yp=0.249255 DoH=2.53519
+   A=5     old: park= 24.4753 counts 8/0/0  dN1=   0.24384 dN0=   0.25329 Yp=0.249326 DoH=2.53652 [02b]
+   A=2     new: park= 35.1696 counts 12/0/0  dN1=   0.09582 dN0=    0.1144 Yp=0.258710 DoH=2.80131
+   A=2     old: park= 35.0185 counts 11/0/0  dN1=  0.097535 dN0=    0.1163 Yp=0.258888 DoH=2.79540 [02b]
+   A=1.5   new: park= 35.4059 counts 15/0/0  dN1=  0.071865 dN0=  0.086442 Yp=0.262497 DoH=2.61397
+   A=1.5   old: park= 35.3048 counts 13/0/0  dN1=  0.073151 dN0=  0.088208 Yp=0.262290 DoH=2.63585 [02b]
+   A=1     new: park= 34.5053 counts 16/0/0  dN1=   0.04791 dN0=    0.0561 Yp=0.266822 DoH=2.53401
+   A=1     old: park= 34.5168 counts 15/0/0  dN1=  0.048768 dN0=  0.057224 Yp=0.266629 DoH=2.52707 [02]
+   A=0.5   new: park= 35.8502 counts 31/0/0  dN1=  0.023955 dN0=  0.029097 Yp=0.270663 DoH=2.73205
+   A=0.5   old: park= 35.6935 counts 27/0/0  dN1=  0.024384 dN0=  0.029593 Yp=0.270574 DoH=2.72785 [02b]
+   A=0.1   new: park= 38.1723 counts 119/0/0  dN1=  0.004791 dN0= 0.0094901 Yp=0.273268 DoH=2.88572
+   A=0.1   old: park= 37.9284 counts 92/0/0  dN1= 0.0048768 dN0= 0.0095822 Yp=0.273253 DoH=2.88492 [02]
+   A=0.05  new: park= 38.9485 counts 191/5/0  dN1= 0.0023955 dN0= 0.0071285 Yp=0.273537 DoH=2.90391
+   A=0.05  old: park= 38.6032 counts 131/0/0  dN1= 0.0024384 dN0= 0.0071744 Yp=0.273526 DoH=2.90360 [02b]
+
+W-2185  M=4e-31 beta=1.1725
+   A=10    new: park= 18.9369 counts 6/0/0  dN1=   0.55762 dN0=    0.5754 Yp=0.254245 DoH=2.64742
+   A=10    old: park= 18.8061 counts 6/0/0  dN1=   0.56667 dN0=   0.58474 Yp=0.254360 DoH=2.65048 [02b]
+   A=5     new: park= 25.1297 counts 11/0/0  dN1=   0.27453 dN0=   0.28678 Yp=0.250050 DoH=2.54934
+   A=5     old: park= 25.0552 counts 11/0/0  dN1=   0.27939 dN0=   0.29145 Yp=0.250074 DoH=2.55056 [02b]
+   A=2     new: park= 34.8172 counts 13/0/0  dN1=   0.11018 dN0=   0.12496 Yp=0.255775 DoH=2.59256
+   A=2     old: park= 34.7286 counts 12/0/0  dN1=   0.11214 dN0=   0.12728 Yp=0.255438 DoH=2.62629 [02b]
+   A=1.5   new: park= 34.2408 counts 12/0/0  dN1=  0.082344 dN0=  0.093713 Yp=0.258279 DoH=2.61236
+   A=1.5   old: park= 33.8819 counts 11/0/0  dN1=  0.083813 dN0=  0.095374 Yp=0.258247 DoH=2.59957 [02b]
+   A=1     new: park= 35.9383 counts 21/0/0  dN1=  0.054607 dN0=  0.064577 Yp=0.258947 DoH=2.75366
+   A=1     old: park= 35.7945 counts 19/0/0  dN1=   0.05558 dN0=   0.06565 Yp=0.259022 DoH=2.74922 [02]
+   A=0.5   new: park= 36.9211 counts 37/0/0  dN1=  0.027114 dN0=  0.035083 Yp=0.258869 DoH=2.82327
+   A=0.5   old: park= 36.7725 counts 32/0/0  dN1=  0.027595 dN0=   0.03563 Yp=0.258851 DoH=2.82149 [02b]
+   A=0.1   new: park= 38.6012 counts 124/0/0  dN1= 0.0053872 dN0=  0.011038 Yp=0.258440 DoH=2.84527
+   A=0.1   old: park= 38.3546 counts 95/0/0  dN1= 0.0054819 dN0=  0.011149 Yp=0.258442 DoH=2.84490 [02]
+   A=0.05  new: park= 39.3191 counts 195/7/0  dN1= 0.0026912 dN0= 0.0080106 Yp=0.258460 DoH=2.84682
+   A=0.05  old: park= 38.9753 counts 135/0/0  dN1= 0.0027385 dN0= 0.0080663 Yp=0.258460 DoH=2.84682 [02b]
+
+R-632  M=4e-31 beta=1
+   A=10    new: park= 35.9539 counts 4/0/0  dN1=         0 dN0=   0.33991 Yp=0.434492 DoH=10.40692
+   A=10    old: park= 35.9539 counts 4/0/0  dN1=         0 dN0=   0.33991 Yp=0.434492 DoH=10.40692 [02b]
+   A=5     new: park= 35.9539 counts 4/0/0  dN1=         0 dN0=   0.33991 Yp=0.434492 DoH=10.40692
+   A=5     old: park= 35.9539 counts 4/0/0  dN1=         0 dN0=   0.33991 Yp=0.434492 DoH=10.40692 [02b]
+   A=2     new: park= 36.9722 counts 9/0/0  dN1=         0 dN0=   0.33889 Yp=0.434489 DoH=10.40682
+   A=2     old: park= 36.7750 counts 7/0/0  dN1=         0 dN0=   0.33921 Yp=0.434490 DoH=10.40680 [02b]
+   A=1.5   new: park= 37.3398 counts 12/0/0  dN1=         0 dN0=   0.33802 Yp=0.434489 DoH=10.40685
+   A=1.5   old: park= 37.1406 counts 9/0/0  dN1=         0 dN0=   0.33839 Yp=0.434492 DoH=10.40691 [02b]
+   A=1     new: park= 37.8303 counts 18/0/0  dN1=         0 dN0=   0.33672 Yp=0.434490 DoH=10.40681
+   A=1     old: park= 37.6136 counts 13/0/0  dN1=         0 dN0=   0.33711 Yp=0.434489 DoH=10.40681 [02]
+   A=0.5   new: park= 38.6458 counts 29/3/0  dN1=         0 dN0=   0.33469 Yp=0.434489 DoH=10.40677
+   A=0.5   old: park= 38.3712 counts 20/1/0  dN1=         0 dN0=   0.33503 Yp=0.434489 DoH=10.40683 [02b]
+   A=0.1   new: failure (the effective minimum was not found (after 1 integration(s)))
+   A=0.1   old: failure (the effective minimum was not found (after 1 integration(s))) [02]
+   A=0.05  new: failure (the effective minimum was not found (after 1 integration(s)))
+   A=0.05  old: failure (the effective minimum was not found (after 1 integration(s))) [02b]
+
+R-1193  M=4e-31 beta=1.15
+   A=10    new: park= 19.0330 counts 6/0/0  dN1=   0.59266 dN0=   0.61156 Yp=0.254685 DoH=2.65942
+   A=10    old: park= 18.9030 counts 6/0/0  dN1=   0.60321 dN0=   0.62244 Yp=0.254822 DoH=2.66303 [02b]
+   A=5     new: park= 25.3902 counts 11/0/0  dN1=   0.29751 dN0=   0.31428 Yp=0.251225 DoH=2.56299
+   A=5     old: park= 25.2436 counts 10/0/0  dN1=   0.30272 dN0=   0.31838 Yp=0.250960 DoH=2.56255 [02b]
+   A=2     new: park= 34.7261 counts 13/0/0  dN1=   0.11497 dN0=   0.12909 Yp=0.254244 DoH=2.66128
+   A=2     old: park= 34.6025 counts 12/0/0  dN1=   0.11706 dN0=   0.13158 Yp=0.254364 DoH=2.65937 [02b]
+   A=1.5   new: park= 34.4544 counts 14/0/0  dN1=  0.085385 dN0=  0.094864 Yp=0.252851 DoH=2.59719
+   A=1.5   old: park= 34.3979 counts 13/0/0  dN1=  0.086923 dN0=  0.096728 Yp=0.252947 DoH=2.60173 [02b]
+   A=1     new: park= 35.1588 counts 21/0/0  dN1=  0.056439 dN0=  0.062362 Yp=0.250515 DoH=2.57156
+   A=1     old: park= 35.0376 counts 19/0/0  dN1=   0.05744 dN0=  0.063523 Yp=0.250612 DoH=2.56528 [02]
+   A=0.5   new: park= 35.1502 counts 29/0/0  dN1=  0.028039 dN0=  0.030454 Yp=0.247982 DoH=2.53399
+   A=0.5   old: park= 35.1073 counts 27/0/0  dN1=  0.028531 dN0=  0.031032 Yp=0.248047 DoH=2.53726 [02b]
+   A=0.1   new: park= 33.4886 counts 19/0/0  dN1= 0.0055891 dN0= 0.0059663 Yp=0.246952 DoH=2.48283
+   A=0.1   old: park= 34.0863 counts 26/0/0  dN1= 0.0056865 dN0= 0.0060757 Yp=0.246950 DoH=2.48438 [02]
+   A=0.05  new: park= 36.9046 counts 144/0/0  dN1= 0.0027937 dN0= 0.0030703 Yp=0.247012 DoH=2.46996
+   A=0.05  old: park= 36.7291 counts 123/0/0  dN1= 0.0028424 dN0= 0.0031222 Yp=0.247049 DoH=2.47066 [02b]
+
+R-865  M=4e-31 beta=2
+   A=10    new: park= 21.3081 counts 7/0/0  dN1=   0.14111 dN0=   0.14561 Yp=0.248804 DoH=2.50597
+   A=10    old: park= 21.2691 counts 7/0/0  dN1=   0.14125 dN0=   0.14575 Yp=0.248808 DoH=2.50616 [02b]
+   A=5     new: park= 22.5924 counts 17/0/0  dN1=   0.13559 dN0=   0.13992 Yp=0.248732 DoH=2.50412
+   A=5     old: park= 22.5432 counts 17/0/0  dN1=    0.1361 dN0=   0.14044 Yp=0.248736 DoH=2.50432 [02b]
+   A=2     new: park= 28.5641 counts 27/0/0  dN1=  0.078156 dN0=  0.080818 Yp=0.247880 DoH=2.48429
+   A=2     old: park= 28.5432 counts 27/0/0  dN1=  0.079312 dN0=  0.082006 Yp=0.247943 DoH=2.48489 [02b]
+   A=1.5   new: park= 29.3874 counts 36/0/0  dN1=  0.060838 dN0=  0.063689 Yp=0.247396 DoH=2.47729
+   A=1.5   old: park= 29.3214 counts 35/0/0  dN1=  0.061806 dN0=  0.064618 Yp=0.247457 DoH=2.47785 [02b]
+   A=1     new: park= 30.1253 counts 45/0/0  dN1=  0.041887 dN0=  0.044623 Yp=0.246918 DoH=2.46957
+   A=1     old: park= 30.1512 counts 44/0/0  dN1=  0.042589 dN0=  0.045482 Yp=0.246867 DoH=2.46965 [02]
+   A=0.5   new: park= 35.5597 counts 25/0/0  dN1=  0.021539 dN0=  0.023854 Yp=0.246020 DoH=2.46723
+   A=0.5   old: park= 37.4147 counts 33/0/0  dN1=  0.021912 dN0=  0.024285 Yp=0.246039 DoH=2.47338 [02b]
+   A=0.1   new: park= 30.6612 counts 76/0/0  dN1=   0.00439 dN0= 0.0046032 Yp=0.246851 DoH=2.45877
+   A=0.1   old: park= 30.6262 counts 78/0/0  dN1= 0.0044674 dN0= 0.0046835 Yp=0.246902 DoH=2.45925 [02]
+   A=0.05  new: park= 33.7351 counts 40/0/0  dN1=  0.002202 dN0= 0.0023421 Yp=0.246903 DoH=2.46476
+   A=0.05  old: park= 31.2097 counts 40/0/0  dN1=  0.002241 dN0=  0.002386 Yp=0.246966 DoH=2.46024 [02b]
+
+R-611  M=4e-31 beta=10
+   A=10    new: park= 54.9094 counts 8/0/0  dN1= 0.0051901 dN0= 0.0053556 Yp=0.246960 DoH=2.45984
+   A=10    old: park= 54.8935 counts 8/0/0  dN1= 0.0051745 dN0= 0.0053395 Yp=0.246954 DoH=2.45980 [02b]
+   A=5     new: park= 55.6964 counts 19/0/0  dN1= 0.0058408 dN0=  0.006027 Yp=0.246969 DoH=2.46004
+   A=5     old: park= 55.6790 counts 18/0/0  dN1= 0.0058348 dN0= 0.0060208 Yp=0.246966 DoH=2.46006 [02b]
+   A=2     new: park= 57.1410 counts 38/0/0  dN1= 0.0052342 dN0=  0.005401 Yp=0.246955 DoH=2.45991
+   A=2     old: park= 57.1035 counts 38/0/0  dN1= 0.0052619 dN0= 0.0054297 Yp=0.246959 DoH=2.45982 [02b]
+   A=1.5   new: park= 58.2851 counts 42/0/0  dN1= 0.0045179 dN0=  0.004662 Yp=0.246945 DoH=2.45959
+   A=1.5   old: park= 58.2462 counts 42/0/0  dN1=  0.004554 dN0= 0.0046992 Yp=0.246945 DoH=2.45962 [02b]
+   A=1     new: park= 59.1708 counts 65/0/0  dN1= 0.0034608 dN0= 0.0035712 Yp=0.246932 DoH=2.45925
+   A=1     old: park= 59.1472 counts 64/0/0  dN1=  0.003493 dN0= 0.0036043 Yp=0.246928 DoH=2.45918 [02]
+   A=0.5   new: park= 60.1054 counts 124/0/0  dN1= 0.0021294 dN0= 0.0021973 Yp=0.246912 DoH=2.45896
+   A=0.5   old: park= 60.0850 counts 122/0/0  dN1= 0.0021489 dN0= 0.0022174 Yp=0.246914 DoH=2.45884 [02b]
+   A=0.1   new: park= 61.9766 counts 536/0/0  dN1=0.00084939 dN0=0.00087647 Yp=0.246893 DoH=2.45834
+   A=0.1   old: park= 61.9571 counts 528/0/0  dN1=0.00085402 dN0=0.00088125 Yp=0.246893 DoH=2.45837 [02]
+   A=0.05  new: park= 62.9934 counts 682/0/0  dN1=0.00061494 dN0=0.00063454 Yp=0.246890 DoH=2.45815
+   A=0.05  old: park= 62.9512 counts 679/0/0  dN1=0.00062086 dN0=0.00064065 Yp=0.246890 DoH=2.45824 [02b]
+
+B-2819  M=1e-33 beta=1.2
+   A=10    new: park= 19.7988 counts 8/0/0  dN1=   0.44856 dN0=   0.46286 Yp=0.252848 DoH=2.61051
+   A=10    old: park= 19.7158 counts 8/0/0  dN1=   0.45536 dN0=   0.46988 Yp=0.252939 DoH=2.61276 [02b]
+   A=5     new: park= 25.1237 counts 13/0/0  dN1=   0.21669 dN0=   0.22521 Yp=0.249175 DoH=2.52859
+   A=5     old: park= 24.9872 counts 12/0/0  dN1=   0.22012 dN0=   0.22836 Yp=0.249256 DoH=2.52976 [02b]
+   A=2     new: park= 27.1604 counts 16/0/0  dN1=  0.086334 dN0=  0.091784 Yp=0.247521 DoH=2.48517
+   A=2     old: park= 26.8707 counts 18/0/0  dN1=  0.087656 dN0=  0.093013 Yp=0.247467 DoH=2.48478 [02b]
+   A=1.5   new: park= 34.1644 counts 15/0/0  dN1=  0.064932 dN0=  0.070997 Yp=0.248588 DoH=2.53679
+   A=1.5   old: park= 32.9057 counts 11/0/0  dN1=  0.065932 dN0=  0.071972 Yp=0.248567 DoH=2.51471 [02b]
+   A=1     new: park= 34.1202 counts 16/0/0  dN1=  0.043378 dN0=  0.048286 Yp=0.251489 DoH=2.48215
+   A=1     old: park= 34.5747 counts 18/0/0  dN1=   0.04405 dN0=  0.049101 Yp=0.251295 DoH=2.47432 [02]
+   A=0.5   new: park= 36.7610 counts 39/0/0  dN1=  0.021715 dN0=  0.026278 Yp=0.252891 DoH=2.62522
+   A=0.5   old: park= 36.6539 counts 35/0/0  dN1=  0.022052 dN0=  0.026698 Yp=0.252929 DoH=2.63936 [02b]
+   A=0.1   new: park= 35.6516 counts 55/0/0  dN1= 0.0043442 dN0= 0.0049652 Yp=0.256261 DoH=2.54457
+   A=0.1   old: park= 35.4753 counts 48/0/0  dN1= 0.0044117 dN0= 0.0050443 Yp=0.256237 DoH=2.54336 [02]
+   A=0.05  new: park= 37.3886 counts 157/0/0  dN1= 0.0021721 dN0= 0.0026054 Yp=0.256542 DoH=2.57367
+   A=0.05  old: park= 37.2205 counts 134/0/0  dN1= 0.0022058 dN0= 0.0026437 Yp=0.256537 DoH=2.57317 [02b]
+
+B-2496  M=1e-33 beta=2
+   A=10    new: park= 21.6116 counts 9/0/0  dN1=   0.13997 dN0=   0.14443 Yp=0.248788 DoH=2.50580
+   A=10    old: park= 21.5845 counts 9/0/0  dN1=   0.14006 dN0=   0.14453 Yp=0.248790 DoH=2.50575 [02b]
+   A=5     new: park= 23.1402 counts 19/0/0  dN1=   0.12918 dN0=    0.1333 Yp=0.248645 DoH=2.50192
+   A=5     old: park= 23.0800 counts 19/0/0  dN1=   0.12997 dN0=   0.13412 Yp=0.248652 DoH=2.50222 [02b]
+   A=2     new: park= 28.4142 counts 26/0/0  dN1=  0.068589 dN0=  0.070848 Yp=0.247787 DoH=2.48110
+   A=2     old: park= 28.7833 counts 30/0/0  dN1=  0.069536 dN0=  0.071986 Yp=0.247782 DoH=2.48144 [02b]
+   A=1.5   new: park= 28.9704 counts 34/0/0  dN1=   0.05301 dN0=  0.054927 Yp=0.247580 DoH=2.47593
+   A=1.5   old: park= 28.6459 counts 30/0/0  dN1=  0.053764 dN0=  0.055571 Yp=0.247575 DoH=2.47609 [02b]
+   A=1     new: park= 28.6509 counts 34/0/0  dN1=  0.036269 dN0=  0.037477 Yp=0.247350 DoH=2.47012
+   A=1     old: park= 28.7903 counts 36/0/0  dN1=  0.036809 dN0=  0.038058 Yp=0.247352 DoH=2.47027 [02]
+   A=0.5   new: park= 37.4987 counts 33/0/0  dN1=  0.018554 dN0=  0.020564 Yp=0.246129 DoH=2.47097
+   A=0.5   old: park= 37.7368 counts 35/0/0  dN1=  0.018839 dN0=    0.0209 Yp=0.246145 DoH=2.47154 [02b]
+   A=0.1   new: park= 30.8624 counts 61/0/0  dN1= 0.0037718 dN0= 0.0039686 Yp=0.246928 DoH=2.45909
+   A=0.1   old: park= 30.9879 counts 63/0/0  dN1= 0.0038305 dN0= 0.0040265 Yp=0.246838 DoH=2.45861 [02]
+   A=0.05  new: park= 34.7030 counts 38/0/0  dN1= 0.0018917 dN0= 0.0020187 Yp=0.246939 DoH=2.46394
+   A=0.05  old: park= 34.5916 counts 38/0/0  dN1= 0.0019212 dN0= 0.0020494 Yp=0.246862 DoH=2.46623 [02b]
+
+B-2772  M=1e-33 beta=10
+   A=10    new: park= 55.0733 counts 10/0/0  dN1= 0.0053485 dN0=  0.005519 Yp=0.246959 DoH=2.45975
+   A=10    old: park= 55.0555 counts 9/0/0  dN1= 0.0053352 dN0= 0.0055053 Yp=0.246958 DoH=2.45976 [02b]
+   A=5     new: park= 55.8498 counts 22/0/0  dN1= 0.0058867 dN0= 0.0060744 Yp=0.246964 DoH=2.45995
+   A=5     old: park= 55.8333 counts 21/0/0  dN1= 0.0058842 dN0= 0.0060718 Yp=0.246966 DoH=2.45995 [02b]
+   A=2     new: park= 57.6186 counts 38/0/0  dN1= 0.0049211 dN0=  0.005078 Yp=0.246954 DoH=2.45968
+   A=2     old: park= 57.5662 counts 38/0/0  dN1= 0.0049514 dN0= 0.0051093 Yp=0.246957 DoH=2.45965 [02b]
+   A=1.5   new: park= 58.6838 counts 50/0/0  dN1= 0.0041542 dN0= 0.0042867 Yp=0.246938 DoH=2.45943
+   A=1.5   old: park= 58.6513 counts 49/0/0  dN1= 0.0041866 dN0= 0.0043201 Yp=0.246943 DoH=2.45936 [02b]
+   A=1     new: park= 59.3849 counts 75/0/0  dN1= 0.0031502 dN0= 0.0032507 Yp=0.246924 DoH=2.45915
+   A=1     old: park= 59.3653 counts 74/0/0  dN1=  0.003177 dN0= 0.0032783 Yp=0.246929 DoH=2.45915 [02]
+   A=0.5   new: park= 60.2888 counts 142/0/0  dN1= 0.0019434 dN0= 0.0020054 Yp=0.246911 DoH=2.45869
+   A=0.5   old: park= 60.2706 counts 140/0/0  dN1= 0.0019593 dN0= 0.0020217 Yp=0.246911 DoH=2.45858 [02b]
+   A=0.1   new: park= 62.1489 counts 602/0/0  dN1=0.00080452 dN0=0.00083017 Yp=0.246892 DoH=2.45838
+   A=0.1   old: park= 62.1300 counts 595/0/0  dN1=0.00080851 dN0=0.00083429 Yp=0.246892 DoH=2.45837 [02]
+   A=0.05  new: park= 63.3816 counts 727/0/0  dN1=0.00056154 dN0=0.00057944 Yp=0.246889 DoH=2.45815
+   A=0.05  old: park= 63.3377 counts 720/0/0  dN1=0.00056678 dN0=0.00058485 Yp=0.246889 DoH=2.45808 [02b]
+
+B-2821  M=1e-30 beta=1.2
+   A=10    new: park= 18.6975 counts 6/0/0  dN1=   0.52718 dN0=   0.54399 Yp=0.253854 DoH=2.63712
+   A=10    old: park= 18.5873 counts 6/0/0  dN1=   0.53372 dN0=   0.55073 Yp=0.253937 DoH=2.63927 [02b]
+   A=5     new: park= 24.5826 counts 11/0/0  dN1=   0.26032 dN0=   0.26922 Yp=0.250002 DoH=2.54442
+   A=5     old: park= 24.6248 counts 10/0/0  dN1=   0.26526 dN0=   0.27449 Yp=0.249966 DoH=2.54557 [02b]
+   A=2     new: park= 25.2244 counts 19/0/0  dN1=   0.10286 dN0=   0.10662 Yp=0.248108 DoH=2.49240
+   A=2     old: park= 25.0120 counts 17/0/0  dN1=   0.10473 dN0=   0.10833 Yp=0.248223 DoH=2.49317 [02b]
+   A=1.5   new: park= 33.0281 counts 14/0/0  dN1=  0.077442 dN0=  0.083505 Yp=0.247942 DoH=2.49483
+   A=1.5   old: park= 32.0572 counts 13/0/0  dN1=  0.078817 dN0=  0.084847 Yp=0.247726 DoH=2.48807 [02b]
+   A=1     new: park= 35.2590 counts 20/0/0  dN1=  0.051783 dN0=  0.057907 Yp=0.249649 DoH=2.59056
+   A=1     old: park= 35.0196 counts 18/0/0  dN1=  0.052709 dN0=  0.058835 Yp=0.249446 DoH=2.58056 [02]
+   A=0.5   new: park= 36.5854 counts 35/0/0  dN1=  0.025938 dN0=  0.031135 Yp=0.251858 DoH=2.68573
+   A=0.5   old: park= 36.4335 counts 30/0/0  dN1=  0.026404 dN0=  0.031658 Yp=0.251662 DoH=2.68407 [02b]
+   A=0.1   new: park= 31.2116 counts 5/0/0  dN1=   0.00519 dN0=  0.005929 Yp=0.256087 DoH=2.53175
+   A=0.1   old: park= 31.0751 counts 5/0/0  dN1= 0.0052834 dN0= 0.0060417 Yp=0.256057 DoH=2.53044 [02]
+   A=0.05  new: park= 37.1029 counts 135/0/0  dN1=  0.002595 dN0= 0.0030706 Yp=0.256410 DoH=2.56736
+   A=0.05  old: park= 36.9078 counts 113/0/0  dN1= 0.0026417 dN0= 0.0031247 Yp=0.256396 DoH=2.56638 [02b]
+
+B-2498  M=1e-30 beta=2
+   A=10    new: park= 21.2484 counts 7/0/0  dN1=   0.14132 dN0=   0.14583 Yp=0.248805 DoH=2.50610
+   A=10    old: park= 21.2051 counts 6/0/0  dN1=   0.14146 dN0=   0.14597 Yp=0.248811 DoH=2.50647 [02b]
+   A=5     new: park= 22.5210 counts 17/0/0  dN1=   0.13633 dN0=   0.14067 Yp=0.248742 DoH=2.50437
+   A=5     old: park= 22.4752 counts 17/0/0  dN1=   0.13677 dN0=   0.14113 Yp=0.248745 DoH=2.50461 [02b]
+   A=2     new: park= 28.4508 counts 26/0/0  dN1=  0.079865 dN0=  0.082541 Yp=0.247941 DoH=2.48514
+   A=2     old: park= 27.8458 counts 20/0/0  dN1=   0.08105 dN0=  0.083648 Yp=0.247982 DoH=2.48561 [02b]
+   A=1.5   new: park= 29.2902 counts 35/0/0  dN1=  0.062278 dN0=   0.06505 Yp=0.247409 DoH=2.47753
+   A=1.5   old: park= 29.1515 counts 33/0/0  dN1=  0.063363 dN0=  0.065916 Yp=0.247514 DoH=2.47844 [02b]
+   A=1     new: park= 30.1767 counts 44/0/0  dN1=  0.042931 dN0=  0.045883 Yp=0.246852 DoH=2.46961
+   A=1     old: park= 30.1619 counts 43/0/0  dN1=  0.043665 dN0=  0.046724 Yp=0.246749 DoH=2.46925 [02]
+   A=0.5   new: park= 37.4243 counts 33/0/0  dN1=  0.022095 dN0=  0.024471 Yp=0.246162 DoH=2.47403
+   A=0.5   old: park= 34.7061 counts 24/0/0  dN1=  0.022486 dN0=  0.024887 Yp=0.246107 DoH=2.47357 [02b]
+   A=0.1   new: park= 30.6265 counts 79/0/0  dN1= 0.0045052 dN0= 0.0047216 Yp=0.246922 DoH=2.45950
+   A=0.1   old: park= 30.5891 counts 81/0/0  dN1= 0.0045864 dN0= 0.0048058 Yp=0.246964 DoH=2.45949 [02]
+   A=0.05  new: park= 31.0526 counts 40/0/0  dN1=   0.00226 dN0= 0.0024097 Yp=0.246905 DoH=2.45851
+   A=0.05  old: park= 33.9942 counts 41/0/0  dN1= 0.0023009 dN0= 0.0024479 Yp=0.246973 DoH=2.46419 [02b]
+
+B-2774  M=1e-30 beta=10
+   A=10    new: park= 54.8816 counts 8/0/0  dN1= 0.0051626 dN0= 0.0053272 Yp=0.246953 DoH=2.45985
+   A=10    old: park= 54.8601 counts 7/0/0  dN1= 0.0051467 dN0= 0.0053107 Yp=0.246954 DoH=2.45972 [02b]
+   A=5     new: park= 55.6694 counts 18/0/0  dN1=   0.00583 dN0= 0.0060159 Yp=0.246968 DoH=2.46008
+   A=5     old: park= 55.6556 counts 18/0/0  dN1= 0.0058234 dN0= 0.0060091 Yp=0.246964 DoH=2.46001 [02b]
+   A=2     new: park= 57.0791 counts 38/0/0  dN1= 0.0052809 dN0= 0.0054492 Yp=0.246962 DoH=2.45979
+   A=2     old: park= 57.0433 counts 38/0/0  dN1=  0.005308 dN0= 0.0054772 Yp=0.246960 DoH=2.45975 [02b]
+   A=1.5   new: park= 58.1996 counts 41/0/0  dN1= 0.0045789 dN0= 0.0047249 Yp=0.246950 DoH=2.45958
+   A=1.5   old: park= 58.1332 counts 40/0/0  dN1= 0.0046154 dN0= 0.0047626 Yp=0.246945 DoH=2.45971 [02b]
+   A=1     new: park= 59.1305 counts 63/0/0  dN1= 0.0035154 dN0= 0.0036275 Yp=0.246933 DoH=2.45926
+   A=1     old: park= 59.1059 counts 62/0/0  dN1= 0.0035485 dN0= 0.0036617 Yp=0.246934 DoH=2.45928 [02]
+   A=0.5   new: park= 60.0739 counts 121/0/0  dN1= 0.0021627 dN0= 0.0022316 Yp=0.246913 DoH=2.45895
+   A=0.5   old: park= 60.0532 counts 119/0/0  dN1= 0.0021829 dN0= 0.0022525 Yp=0.246914 DoH=2.45866 [02b]
+   A=0.1   new: park= 61.9480 counts 524/0/0  dN1=0.00085726 dN0=0.00088459 Yp=0.246893 DoH=2.45820
+   A=0.1   old: park= 61.9283 counts 516/0/0  dN1=0.00086205 dN0=0.00088953 Yp=0.246894 DoH=2.45840 [02]
+   A=0.05  new: park= 62.9336 counts 678/0/0  dN1=0.00062405 dN0=0.00064394 Yp=0.246890 DoH=2.45814
+   A=0.05  old: park= 62.8913 counts 675/0/0  dN1=0.00063006 dN0=0.00065015 Yp=0.246890 DoH=2.45821 [02b]
+
+L-M5e-20  M=5e-20 beta=2
+   A=10    new: park= 20.5558 counts 4/0/0  dN1=    0.1429 dN0=   0.14745 Yp=0.248826 DoH=2.50666
+   A=10    old: park= 20.5558 counts 4/0/0  dN1=    0.1429 dN0=   0.14745 Yp=0.248826 DoH=2.50666 [02b]
+   A=5     new: park= 20.5558 counts 4/0/0  dN1=    0.1429 dN0=   0.14745 Yp=0.248826 DoH=2.50666
+   A=5     old: park= 20.5558 counts 4/0/0  dN1=    0.1429 dN0=   0.14745 Yp=0.248826 DoH=2.50666 [02b]
+   A=2     new: park= 21.7844 counts 9/0/0  dN1=   0.13896 dN0=   0.14339 Yp=0.248774 DoH=2.50523
+   A=2     old: park= 21.6875 counts 8/0/0  dN1=   0.13905 dN0=   0.14349 Yp=0.248775 DoH=2.50531 [02b]
+   A=1.5   new: park= 22.1879 counts 12/0/0  dN1=   0.13828 dN0=   0.14269 Yp=0.248766 DoH=2.50529
+   A=1.5   old: park= 22.0848 counts 11/0/0  dN1=   0.13865 dN0=   0.14307 Yp=0.248772 DoH=2.50514 [02b]
+   A=1     new: park= 23.1409 counts 16/0/0  dN1=   0.12401 dN0=   0.12796 Yp=0.248576 DoH=2.50020
+   A=1     old: park= 22.8912 counts 14/0/0  dN1=   0.12797 dN0=   0.13205 Yp=0.248625 DoH=2.50149 [02]
+   A=0.5   new: park= 26.3310 counts 14/1/0  dN1=  0.078309 dN0=  0.080806 Yp=0.247954 DoH=2.48474
+   A=0.5   old: park= 24.6707 counts 17/0/0  dN1=  0.082975 dN0=  0.085621 Yp=0.248018 DoH=2.48631 [02b]
+   A=0.1   new: park= 47.6011 counts 8/2/13333  dN1=  0.017444 dN0=  0.018018 Yp=0.246393 DoH=2.50205
+   A=0.1   old: failure (step budget (2e6 steps) at N=47.04432044) [02]
+   A=0.05  new: failure (step budget (2e6 steps) at N=46.06980442)
+   A=0.05  old: failure (step budget (2e6 steps) at N=46.43600671) [02b]
+
+L-M8e-18  M=8e-18 beta=2
+   A=10    new: park= 20.5558 counts 3/1/0  dN1=    0.1429 dN0=   0.14745 Yp=0.248832 DoH=2.50660
+   A=10    old: park= 20.5558 counts 3/1/0  dN1=    0.1429 dN0=   0.14745 Yp=0.248832 DoH=2.50660 [02b]
+   A=5     new: park= 20.5558 counts 3/1/0  dN1=    0.1429 dN0=   0.14745 Yp=0.248832 DoH=2.50660
+   A=5     old: park= 20.5558 counts 3/1/0  dN1=    0.1429 dN0=   0.14745 Yp=0.248832 DoH=2.50660 [02b]
+   A=2     new: park= 20.5558 counts 3/1/0  dN1=    0.1429 dN0=   0.14745 Yp=0.248832 DoH=2.50660
+   A=2     old: park= 20.5558 counts 3/1/0  dN1=    0.1429 dN0=   0.14745 Yp=0.248832 DoH=2.50660 [02b]
+   A=1.5   new: park= 20.9651 counts 3/1/0  dN1=   0.14182 dN0=   0.14634 Yp=0.248814 DoH=2.50631
+   A=1.5   old: park= 20.5558 counts 3/1/0  dN1=    0.1429 dN0=   0.14745 Yp=0.248832 DoH=2.50660 [02b]
+   A=1     new: park= 21.5902 counts 4/7/0  dN1=    0.1387 dN0=   0.14313 Yp=0.248772 DoH=2.50528
+   A=1     old: park= 23.3548 counts 3/158/67  dN1=   0.13962 dN0=   0.14407 Yp=0.248784 DoH=2.50547 [02]
+   A=0.5   new: park= 25.1269 counts 7/12/29  dN1=   0.13219 dN0=    0.1364 Yp=0.248684 DoH=2.50291
+   A=0.5   old: park= 23.9462 counts 5/71/103  dN1=    0.1381 dN0=    0.1425 Yp=0.248763 DoH=2.50503 [02b]
+   A=0.1   new: park= 30.9789 counts 5/2/47  dN1=  0.036823 dN0=  0.038003 Yp=0.247387 DoH=2.47086
+   A=0.1   old: park= 31.2797 counts 5/3/23  dN1=  0.056058 dN0=  0.057852 Yp=0.247397 DoH=2.47895 [02]
+   A=0.05  new: park= 46.8713 counts 4/3/9559  dN1=  0.018605 dN0=  0.019198 Yp=0.246490 DoH=2.51690
+   A=0.05  old: park= 47.6743 counts 4/3/9777  dN1=  0.024011 dN0=  0.024777 Yp=0.246231 DoH=2.49096 [02b]
+
+L-M1e-16  M=1e-16 beta=2
+   A=10    new: park= 22.6304 counts 1/1/299  dN1=   0.14289 dN0=   0.14744 Yp=0.248830 DoH=2.50660
+   A=10    old: park= 25.3275 counts 1/9/54  dN1=    0.1415 dN0=   0.14602 Yp=0.248810 DoH=2.50612 [02b]
+   A=5     new: park= 22.6311 counts 1/1/299  dN1=   0.14289 dN0=   0.14744 Yp=0.248827 DoH=2.50663
+   A=5     old: park= 25.3275 counts 1/9/54  dN1=    0.1415 dN0=   0.14602 Yp=0.248810 DoH=2.50612 [02b]
+   A=2     new: park= 24.9565 counts 1/9/103  dN1=   0.14248 dN0=   0.14702 Yp=0.248819 DoH=2.50658
+   A=2     old: park= 25.3275 counts 1/9/54  dN1=    0.1415 dN0=   0.14602 Yp=0.248810 DoH=2.50612 [02b]
+   A=1.5   new: park= 25.0395 counts 1/9/88  dN1=   0.14233 dN0=   0.14687 Yp=0.248819 DoH=2.50637
+   A=1.5   old: park= 25.3275 counts 1/9/54  dN1=    0.1415 dN0=   0.14602 Yp=0.248810 DoH=2.50612 [02b]
+   A=1     new: park= 30.5002 counts 1/7/146  dN1=    0.1398 dN0=   0.14426 Yp=0.248755 DoH=2.50538
+   A=1     old: park= 25.3275 counts 1/9/54  dN1=    0.1415 dN0=   0.14602 Yp=0.248810 DoH=2.50612 [02]
+   A=0.5   new: park= 45.5637 counts 1/4/11154  dN1=  0.089634 dN0=  0.092499 Yp=0.247858 DoH=2.49514
+   A=0.5   old: park= 30.6759 counts 1/7/115  dN1=   0.13857 dN0=   0.14299 Yp=0.248757 DoH=2.50492 [02b]
+   A=0.1   new: park= 47.4754 counts 1/3/9440  dN1=  0.021086 dN0=  0.021758 Yp=0.246098 DoH=2.47531
+   A=0.1   old: park= 47.5939 counts 1/3/9729  dN1=  0.027714 dN0=  0.028598 Yp=0.246440 DoH=2.48266 [02]
+   A=0.05  new: park= 34.8143 counts 1/3/27  dN1=  0.010723 dN0=  0.011072 Yp=0.246878 DoH=2.47476
+   A=0.05  old: park= 46.7722 counts 1/3/9618  dN1=  0.013857 dN0=  0.014299 Yp=0.246466 DoH=2.47948 [02b]
+
+L-M5e-16  M=5e-16 beta=2
+   A=10    new: park= 25.3263 counts 0/1/63  dN1=    0.1415 dN0=   0.14602 Yp=0.248812 DoH=2.50647
+   A=10    old: park= 31.2742 counts 0/1/27  dN1=         0 dN0=6.7475e-06 Yp=0.246627 DoH=2.46185 [02b S2 of L-M5e-16-A1-zero]
+   A=5     new: park= 25.3269 counts 0/1/63  dN1=    0.1415 dN0=   0.14602 Yp=0.248809 DoH=2.50631
+   A=5     old: park= 31.2742 counts 0/1/27  dN1=         0 dN0=6.7475e-06 Yp=0.246627 DoH=2.46185 [02b S2 of L-M5e-16-A1-zero]
+   A=2     new: park= 34.6843 counts 0/1/25  dN1=  0.059571 dN0=  0.061476 Yp=0.247262 DoH=2.49741
+   A=2     old: park= 31.2742 counts 0/1/27  dN1=         0 dN0=6.7475e-06 Yp=0.246627 DoH=2.46185 [02b S2 of L-M5e-16-A1-zero]
+   A=1.5   new: park= 33.8404 counts 0/1/49  dN1=  0.044679 dN0=  0.046104 Yp=0.247498 DoH=2.47748
+   A=1.5   old: park= 31.2742 counts 0/1/27  dN1=         0 dN0=6.7475e-06 Yp=0.246627 DoH=2.46185 [02b S2 of L-M5e-16-A1-zero]
+   A=1     new: park= 44.9940 counts 0/1/8535  dN1=  0.029786 dN0=  0.030743 Yp=0.246434 DoH=2.50925
+   A=1     old: park= 31.2742 counts 0/1/27  dN1=         0 dN0=6.7475e-06 Yp=0.246627 DoH=2.46185 [02]
+   A=0.5   new: park= 46.7422 counts 0/1/9583  dN1=  0.014893 dN0=  0.015368 Yp=0.246393 DoH=2.47293
+   A=0.5   old: park= 31.2742 counts 0/1/27  dN1=         0 dN0=6.7475e-06 Yp=0.246627 DoH=2.46185 [02b S2 of L-M5e-16-A1-zero]
+   A=0.1   new: park= 34.6284 counts 0/1/40  dN1= 0.0029786 dN0= 0.0030783 Yp=0.247061 DoH=2.46604
+   A=0.1   old: park= 31.2742 counts 0/1/27  dN1=         0 dN0=6.7475e-06 Yp=0.246627 DoH=2.46185 [02]
+   A=0.05  new: park= 34.6923 counts 0/1/32  dN1= 0.0014893 dN0= 0.0015423 Yp=0.246838 DoH=2.46888
+   A=0.05  old: park= 31.2742 counts 0/1/27  dN1=         0 dN0=6.7475e-06 Yp=0.246627 DoH=2.46185 [02b S2 of L-M5e-16-A1-zero]
+
+L-M4e-15  M=4e-15 beta=2
+   A=10    new: park= 31.2729 counts 0/0/28  dN1=2.1776e-07 dN0=7.0128e-06 Yp=0.246633 DoH=2.46185
+   A=10    old: park= 31.2742 counts 0/0/28  dN1=         0 dN0=6.7475e-06 Yp=0.246624 DoH=2.46198 [02b S2 of L-M4e-15-A1-zero]
+   A=5     new: park= 31.2735 counts 0/0/28  dN1=1.0888e-07 dN0=6.8812e-06 Yp=0.246627 DoH=2.46184
+   A=5     old: park= 31.2742 counts 0/0/28  dN1=         0 dN0=6.7475e-06 Yp=0.246624 DoH=2.46198 [02b S2 of L-M4e-15-A1-zero]
+   A=2     new: park= 31.2739 counts 0/0/28  dN1=4.3551e-08 dN0=6.8019e-06 Yp=0.246631 DoH=2.46189
+   A=2     old: park= 31.2742 counts 0/0/28  dN1=         0 dN0=6.7475e-06 Yp=0.246624 DoH=2.46198 [02b S2 of L-M4e-15-A1-zero]
+   A=1.5   new: park= 31.2740 counts 0/0/28  dN1=3.2664e-08 dN0=6.7888e-06 Yp=0.246628 DoH=2.46170
+   A=1.5   old: park= 31.2742 counts 0/0/28  dN1=         0 dN0=6.7475e-06 Yp=0.246624 DoH=2.46198 [02b S2 of L-M4e-15-A1-zero]
+   A=1     new: park= 31.2740 counts 0/0/28  dN1=2.1776e-08 dN0=6.7756e-06 Yp=0.246628 DoH=2.46176
+   A=1     old: park= 31.2742 counts 0/0/28  dN1=         0 dN0=6.7475e-06 Yp=0.246624 DoH=2.46198 [02]
+   A=0.5   new: park= 31.2741 counts 0/0/28  dN1=1.0888e-08 dN0=6.7625e-06 Yp=0.246624 DoH=2.46203
+   A=0.5   old: park= 31.2742 counts 0/0/28  dN1=         0 dN0=6.7475e-06 Yp=0.246624 DoH=2.46198 [02b S2 of L-M4e-15-A1-zero]
+   A=0.1   new: park= 31.2742 counts 0/0/28  dN1=2.1776e-09 dN0=6.7502e-06 Yp=0.246629 DoH=2.46179
+   A=0.1   old: park= 31.2742 counts 0/0/28  dN1=         0 dN0=6.7475e-06 Yp=0.246624 DoH=2.46198 [02]
+   A=0.05  new: park= 31.2742 counts 0/0/28  dN1=1.0888e-09 dN0=6.7489e-06 Yp=0.246627 DoH=2.46184
+   A=0.05  old: park= 31.2742 counts 0/0/28  dN1=         0 dN0=6.7475e-06 Yp=0.246624 DoH=2.46198 [02b S2 of L-M4e-15-A1-zero]
+
+C-3016  M=1e-12 beta=4
+   A=10    new: park= 40.4281 counts 0/0/330  dN1=9.9486e-09 dN0=7.3972e-06 Yp=0.246945 DoH=2.45837
+   A=10    old: park= 40.4281 counts 0/0/330  dN1=         0 dN0=7.3869e-06 Yp=0.246947 DoH=2.45834 [02b S2 of C-3016-A1-zero]
+   A=5     new: park= 40.4281 counts 0/0/330  dN1=4.9743e-09 dN0=7.3921e-06 Yp=0.246953 DoH=2.45843
+   A=5     old: park= 40.4281 counts 0/0/330  dN1=         0 dN0=7.3869e-06 Yp=0.246947 DoH=2.45834 [02b S2 of C-3016-A1-zero]
+   A=2     new: park= 40.4281 counts 0/0/330  dN1=1.9897e-09 dN0= 7.389e-06 Yp=0.246957 DoH=2.45831
+   A=2     old: park= 40.4281 counts 0/0/330  dN1=         0 dN0=7.3869e-06 Yp=0.246947 DoH=2.45834 [02b S2 of C-3016-A1-zero]
+   A=1.5   new: park= 40.4281 counts 0/0/330  dN1=1.4923e-09 dN0=7.3885e-06 Yp=0.246949 DoH=2.45841
+   A=1.5   old: park= 40.4281 counts 0/0/330  dN1=         0 dN0=7.3869e-06 Yp=0.246947 DoH=2.45834 [02b S2 of C-3016-A1-zero]
+   A=1     new: park= 40.4281 counts 0/0/330  dN1=9.9486e-10 dN0= 7.388e-06 Yp=0.246950 DoH=2.45843
+   A=1     old: park= 40.4281 counts 0/0/330  dN1=         0 dN0=7.3869e-06 Yp=0.246947 DoH=2.45834 [02]
+   A=0.5   new: park= 40.4281 counts 0/0/330  dN1=4.9743e-10 dN0=7.3875e-06 Yp=0.246948 DoH=2.45829
+   A=0.5   old: park= 40.4281 counts 0/0/330  dN1=         0 dN0=7.3869e-06 Yp=0.246947 DoH=2.45834 [02b S2 of C-3016-A1-zero]
+   A=0.1   new: park= 40.4281 counts 0/0/330  dN1=9.9486e-11 dN0= 7.387e-06 Yp=0.246949 DoH=2.45838
+   A=0.1   old: park= 40.4281 counts 0/0/330  dN1=         0 dN0=7.3869e-06 Yp=0.246947 DoH=2.45834 [02]
+   A=0.05  new: park= 40.4281 counts 0/0/330  dN1=4.9743e-11 dN0= 7.387e-06 Yp=0.246952 DoH=2.45864
+   A=0.05  old: park= 40.4281 counts 0/0/330  dN1=         0 dN0=7.3869e-06 Yp=0.246947 DoH=2.45834 [02b S2 of C-3016-A1-zero]
+
+C-3233  M=1e-12 beta=1
+   A=10    new: park=    None counts 0/0/301  dN1=         0 dN0=1.2856e-55 Yp=0.434493 DoH=10.40690
+   A=10    old: park=    None counts 0/0/301  dN1=         0 dN0=         0 Yp=0.434493 DoH=10.40696 [02b S2 of C-3233-A1-zero]
+   A=5     new: park=    None counts 0/0/301  dN1=         0 dN0=6.4282e-56 Yp=0.434493 DoH=10.40690
+   A=5     old: park=    None counts 0/0/301  dN1=         0 dN0=         0 Yp=0.434493 DoH=10.40696 [02b S2 of C-3233-A1-zero]
+   A=2     new: park=    None counts 0/0/301  dN1=         0 dN0=2.5713e-56 Yp=0.434493 DoH=10.40690
+   A=2     old: park=    None counts 0/0/301  dN1=         0 dN0=         0 Yp=0.434493 DoH=10.40696 [02b S2 of C-3233-A1-zero]
+   A=1.5   new: park=    None counts 0/0/301  dN1=         0 dN0=1.9285e-56 Yp=0.434493 DoH=10.40690
+   A=1.5   old: park=    None counts 0/0/301  dN1=         0 dN0=         0 Yp=0.434493 DoH=10.40696 [02b S2 of C-3233-A1-zero]
+   A=1     new: park=    None counts 0/0/301  dN1=         0 dN0=1.2856e-56 Yp=0.434493 DoH=10.40690
+   A=1     old: park=    None counts 0/0/301  dN1=         0 dN0=         0 Yp=0.434493 DoH=10.40696 [02]
+   A=0.5   new: park=    None counts 0/0/301  dN1=         0 dN0=6.4282e-57 Yp=0.434493 DoH=10.40690
+   A=0.5   old: park=    None counts 0/0/301  dN1=         0 dN0=         0 Yp=0.434493 DoH=10.40696 [02b S2 of C-3233-A1-zero]
+   A=0.1   new: park=    None counts 0/0/301  dN1=         0 dN0=1.2856e-57 Yp=0.434493 DoH=10.40690
+   A=0.1   old: park=    None counts 0/0/301  dN1=         0 dN0=         0 Yp=0.434493 DoH=10.40696 [02]
+   A=0.05  new: park=    None counts 0/0/301  dN1=         0 dN0=6.4282e-58 Yp=0.434493 DoH=10.40690
+   A=0.05  old: park=    None counts 0/0/301  dN1=         0 dN0=         0 Yp=0.434493 DoH=10.40696 [02b S2 of C-3233-A1-zero]
+
+C-3873  M=1e-12 beta=1.11
+   A=10    new: timeout (killed after 3600 s)
+   A=10    old: park=    None counts 0/0/2489  dN1=         0 dN0=         0 Yp=0.273067 DoH=2.86205 [02b S2 of C-3873-A1-zero]
+   A=5     new: timeout (killed after 3600 s)
+   A=5     old: park=    None counts 0/0/2489  dN1=         0 dN0=         0 Yp=0.273067 DoH=2.86205 [02b S2 of C-3873-A1-zero]
+   A=2     new: timeout (killed after 3600 s)
+   A=2     old: park=    None counts 0/0/2489  dN1=         0 dN0=         0 Yp=0.273067 DoH=2.86205 [02b S2 of C-3873-A1-zero]
+   A=1.5   new: timeout (killed after 3600 s)
+   A=1.5   old: park=    None counts 0/0/2489  dN1=         0 dN0=         0 Yp=0.273067 DoH=2.86205 [02b S2 of C-3873-A1-zero]
+   A=1     new: park=    None counts 0/0/2487  dN1=6.7127e-20 dN0=6.9267e-20 Yp=0.273063 DoH=2.86207
+   A=1     old: park=    None counts 0/0/2489  dN1=         0 dN0=         0 Yp=0.273067 DoH=2.86205 [02]
+   A=0.5   new: timeout (killed after 3600 s)
+   A=0.5   old: park=    None counts 0/0/2489  dN1=         0 dN0=         0 Yp=0.273067 DoH=2.86205 [02b S2 of C-3873-A1-zero]
+   A=0.1   new: timeout (killed after 3600 s)
+   A=0.1   old: park=    None counts 0/0/2489  dN1=         0 dN0=         0 Yp=0.273067 DoH=2.86205 [02]
+   A=0.05  new: timeout (killed after 3600 s)
+   A=0.05  old: park=    None counts 0/0/2489  dN1=         0 dN0=         0 Yp=0.273067 DoH=2.86205 [02b S2 of C-3873-A1-zero]
+
+# the differences new - old, over the (history, A) where both succeed
+#   both succeed: 229; new succeeds, old fails: 1; new fails, old succeeds: 7; both fail: 3
+#   outcome differs: L-M5e-20 A=0.1: new success, old failure
+#   outcome differs: C-3873 A=10: new timeout, old success
+#   outcome differs: C-3873 A=5: new timeout, old success
+#   outcome differs: C-3873 A=2: new timeout, old success
+#   outcome differs: C-3873 A=1.5: new timeout, old success
+#   outcome differs: C-3873 A=0.5: new timeout, old success
+#   outcome differs: C-3873 A=0.1: new timeout, old success
+#   outcome differs: C-3873 A=0.05: new timeout, old success
+
+# Delta N_eff today: new - old over 229 pairs
+#   largest |difference|: L-M5e-16 A=10: 0.14602 vs 6.7475e-06 (+0.146); L-M5e-16 A=5: 0.14602 vs 6.7475e-06 (+0.146); L-M5e-16 A=2: 0.061476 vs 6.7475e-06 (+0.06147); L-M1e-16 A=0.5: 0.092499 vs 0.14299 (-0.0505); L-M5e-16 A=1.5: 0.046104 vs 6.7475e-06 (+0.0461); L-M5e-16 A=1: 0.030743 vs 6.7475e-06 (+0.03074)
+#   equal exactly: 8 pairs: P-2188 A=10, R-632 A=10, R-632 A=5, L-M5e-20 A=10, L-M5e-20 A=5, L-M8e-18 A=10, L-M8e-18 A=5, L-M8e-18 A=2
+#   within 1e-3 relative: 22 pairs
+#   P: 16 pairs, |difference| 0 to 0.00845
+#   W: 80 pairs, |difference| 1.4e-05 to 0.0109
+#   R: 30 pairs, |difference| 0 to 0.0109
+#   B: 48 pairs, |difference| 2.64e-06 to 0.00703
+#   L: 38 pairs, |difference| 0 to 0.146
+#   C: 17 pairs, |difference| 6.43e-58 to 1.02e-08
+
+# Delta N_eff at 1 MeV: new - old over 229 pairs
+#   largest |difference|: L-M5e-16 A=10: 0.1415 vs 0 (+0.1415); L-M5e-16 A=5: 0.1415 vs 0 (+0.1415); L-M5e-16 A=2: 0.059571 vs 0 (+0.05957); L-M1e-16 A=0.5: 0.089634 vs 0.13857 (-0.04894); L-M5e-16 A=1.5: 0.044679 vs 0 (+0.04468); L-M5e-16 A=1: 0.029786 vs 0 (+0.02979)
+#   equal exactly: 27 pairs: P-2188 A=10, P-2188 A=5, P-2188 A=2, P-2188 A=1.5, P-2188 A=1, P-2188 A=0.5, P-2188 A=0.1, P-2188 A=0.05, R-632 A=10, R-632 A=5, R-632 A=2, R-632 A=1.5, R-632 A=1, R-632 A=0.5, L-M5e-20 A=10, L-M5e-20 A=5, L-M8e-18 A=10, L-M8e-18 A=5, L-M8e-18 A=2, C-3233 A=10, C-3233 A=5, C-3233 A=2, C-3233 A=1.5, C-3233 A=1, C-3233 A=0.5, C-3233 A=0.1, C-3233 A=0.05
+#   within 1e-3 relative: 9 pairs
+#   P: 16 pairs, |difference| 0 to 0.00819
+#   W: 80 pairs, |difference| 3.58e-06 to 0.0106
+#   R: 30 pairs, |difference| 0 to 0.0106
+#   B: 48 pairs, |difference| 2.56e-06 to 0.00681
+#   L: 38 pairs, |difference| 0 to 0.142
+#   C: 17 pairs, |difference| 0 to 9.95e-09
+
+# Y_p: new - old over 229 pairs
+#   largest |difference|: L-M5e-16 A=10: 0.24881 vs 0.24663 (+0.002185); L-M5e-16 A=5: 0.24881 vs 0.24663 (+0.002182); L-M1e-16 A=0.5: 0.24786 vs 0.24876 (-0.0008986); L-M5e-16 A=1.5: 0.2475 vs 0.24663 (+0.0008707); L-M5e-16 A=2: 0.24726 vs 0.24663 (+0.0006341); L-M5e-16 A=0.1: 0.24706 vs 0.24663 (+0.0004332)
+#   equal exactly: 8 pairs: P-2188 A=10, R-632 A=10, R-632 A=5, L-M5e-20 A=10, L-M5e-20 A=5, L-M8e-18 A=10, L-M8e-18 A=5, L-M8e-18 A=2
+#   within 1e-3 relative: 212 pairs
+#   P: 16 pairs, |difference| 0 to 0.000301
+#   W: 80 pairs, |difference| 8.01e-08 to 0.00038
+#   R: 30 pairs, |difference| 0 to 0.000265
+#   B: 48 pairs, |difference| 2.25e-08 to 0.000215
+#   L: 38 pairs, |difference| 0 to 0.00218
+#   C: 17 pairs, |difference| 6.73e-07 to 1.06e-05
+
+# D/H (1e-5): new - old over 229 pairs
+#   largest |difference|: L-M5e-16 A=1: 2.5092 vs 2.4619 (+0.04739); L-M5e-16 A=10: 2.5065 vs 2.4619 (+0.04462); L-M5e-16 A=5: 2.5063 vs 2.4619 (+0.04446); L-M5e-16 A=2: 2.4974 vs 2.4619 (+0.03556); W-2185 A=2: 2.5926 vs 2.6263 (-0.03373); P-2197 A=2: 2.5571 vs 2.5241 (+0.03305)
+#   equal exactly: 8 pairs: P-2188 A=10, R-632 A=10, R-632 A=5, L-M5e-20 A=10, L-M5e-20 A=5, L-M8e-18 A=10, L-M8e-18 A=5, L-M8e-18 A=2
+#   within 1e-3 relative: 154 pairs
+#   P: 16 pairs, |difference| 0 to 0.0331
+#   W: 80 pairs, |difference| 8.23e-06 to 0.0337
+#   R: 30 pairs, |difference| 0 to 0.00628
+#   B: 48 pairs, |difference| 5.91e-07 to 0.0221
+#   L: 38 pairs, |difference| 0 to 0.0474
+#   C: 17 pairs, |difference| 1.45e-05 to 0.000303
+
+# parking N: new - old over 220 pairs
+#   largest |difference|: L-M5e-16 A=0.5: 46.742 vs 31.274 (+15.47); L-M1e-16 A=0.5: 45.564 vs 30.676 (+14.89); L-M5e-16 A=1: 44.994 vs 31.274 (+13.72); L-M1e-16 A=0.05: 34.814 vs 46.772 (-11.96); L-M5e-16 A=10: 25.326 vs 31.274 (-5.948); L-M5e-16 A=5: 25.327 vs 31.274 (-5.947)
+#   equal exactly: 8 pairs: P-2188 A=10, R-632 A=10, R-632 A=5, L-M5e-20 A=10, L-M5e-20 A=5, L-M8e-18 A=10, L-M8e-18 A=5, L-M8e-18 A=2
+#   within 1e-3 relative: 53 pairs
+#   P: 16 pairs, |difference| 0 to 4.09
+#   W: 80 pairs, |difference| 0.00691 to 3.82
+#   R: 30 pairs, |difference| 0 to 2.53
+#   B: 48 pairs, |difference| 0.0138 to 2.94
+#   L: 38 pairs, |difference| 0 to 15.5
+#   C: 8 pairs, |difference| 6.53e-09 to 1.31e-06
+
+# parking, new against old, over the pairs where both succeed
+#   new does not park, old does not park: 9
+#   new parks, old parks: 220

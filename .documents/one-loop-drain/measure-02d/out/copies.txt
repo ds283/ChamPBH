@@ -1,0 +1,554 @@
+# the copies of prompt 02d's scripts, each against its original (note 02d ruling 1)
+
+## measure-02d/tasks_02d.py:STORE <- measure/tasks.py:STORE: unchanged
+
+## measure-02d/tasks_02d.py:LAB_M <- measure/tasks.py:LAB_M: unchanged
+
+## measure-02d/tasks_02d.py:HISTORIES <- measure/tasks.py:HISTORIES: unchanged
+
+## measure-02d/tasks_02d.py:A_VALUES <- measure/tasks.py:A_VALUES: changed
+--- measure/tasks.py:A_VALUES
++++ measure-02d/tasks_02d.py:A_VALUES
+@@ -1 +1 @@
+-A_VALUES = (1.0, 0.1, 0.01)
++A_VALUES = (10.0, 5.0, 2.0, 1.5, 1.0, 0.5, 0.1, 0.05)
+
+## measure-02d/tasks_02d.py:history_id <- measure/tasks.py:history_id: unchanged
+
+## measure-02d/tasks_02d.py:a_label <- measure/tasks.py:a_label: unchanged
+
+## measure-02d/tasks_02d.py:task_id <- measure/tasks.py:task_id: changed
+--- measure/tasks.py:task_id
++++ measure-02d/tasks_02d.py:task_id
+@@ -1,2 +1,3 @@
+-def task_id(hid, A, gap):
+-    return f"{hid}-{a_label(A)}-{gap}"
++def task_id(hid, A):
++    # changed (ruling 1): no gap prescription in the id
++    return f"{hid}-{a_label(A)}"
+
+## measure-02d/tasks_02d.py:store_row <- measure/tasks.py:store_row: unchanged
+
+## measure-02d/tasks_02d.py:main <- measure/tasks.py:main: changed
+--- measure/tasks.py:main
++++ measure-02d/tasks_02d.py:main
+@@ -35,27 +35,24 @@
+         for A in A_VALUES:
+-            for gap in GAPS:
+-                tasks.append(
+-                    {
+-                        "id": task_id(hid, A, gap),
+-                        "history": hid,
+-                        "group": group,
+-                        "M": M,
+-                        "beta": beta,
+-                        "A": A,
+-                        "gap": gap,
+-                        "shard": shard,
+-                        "serial": serial,
+-                        "stored_alpha": alpha,
+-                        "argv": [
+-                            repr(beta),
+-                            repr(M),
+-                            "--drain-law",
+-                            "one_loop",
+-                            "--alpha",
+-                            repr(A),
+-                            "--gap-prescription",
+-                            gap,
+-                        ],
+-                    }
+-                )
++            # changed (ruling 1): one task per (history, A), the argv without --gap-prescription
++            tasks.append(
++                {
++                    "id": task_id(hid, A),
++                    "history": hid,
++                    "group": group,
++                    "M": M,
++                    "beta": beta,
++                    "A": A,
++                    "shard": shard,
++                    "serial": serial,
++                    "stored_alpha": alpha,
++                    "argv": [
++                        repr(beta),
++                        repr(M),
++                        "--drain-law",
++                        "one_loop",
++                        "--alpha",
++                        repr(A),
++                    ],
++                }
++            )
+     if bad:
+@@ -63,2 +60,3 @@
+         sys.exit(1)
++    out.parent.mkdir(parents=True, exist_ok=True)
+     out.write_text(json.dumps(tasks, indent=1) + "\n")
+
+## measure-02d/run_02d.py:OUT <- measure/run_sample.py:OUT: changed
+--- measure/run_sample.py:OUT
++++ measure-02d/run_02d.py:OUT
+@@ -1 +1 @@
+-OUT = ROOT / "var/one-loop-drain/02"
++OUT = ROOT / "var/one-loop-drain/02d"
+
+## measure-02d/run_02d.py:TASKS_JSON <- measure/run_sample.py:TASKS_JSON: unchanged
+
+## measure-02d/run_02d.py:TASK_DIR <- measure/run_sample.py:TASK_DIR: unchanged
+
+## measure-02d/run_02d.py:BATCH_DIR <- measure/run_sample.py:BATCH_DIR: unchanged
+
+## measure-02d/run_02d.py:SELF <- measure/run_sample.py:SELF: changed
+--- measure/run_sample.py:SELF
++++ measure-02d/run_02d.py:SELF
+@@ -1 +1 @@
+-SELF = str(ROOT / ".documents/one-loop-drain/measure/run_sample.py")
++SELF = str(ROOT / ".documents/one-loop-drain/measure-02d/run_02d.py")
+
+## measure-02d/run_02d.py:TIMEOUT_S <- measure/run_sample.py:TIMEOUT_S: changed
+--- measure/run_sample.py:TIMEOUT_S
++++ measure-02d/run_02d.py:TIMEOUT_S
+@@ -1 +1 @@
+-TIMEOUT_S = float(os.environ.get("ONE_LOOP_DRAIN_02_TIMEOUT_S", "3600"))
++TIMEOUT_S = float(os.environ.get("ONE_LOOP_DRAIN_02D_TIMEOUT_S", "3600"))
+
+## measure-02d/run_02d.py:now_utc <- measure/run_sample.py:now_utc: unchanged
+
+## measure-02d/run_02d.py:loads <- measure/run_sample.py:loads: unchanged
+
+## measure-02d/run_02d.py:load_tasks <- measure/run_sample.py:load_tasks: unchanged
+
+## measure-02d/run_02d.py:digest <- measure/run_sample.py:digest: unchanged
+
+## measure-02d/run_02d.py:reduce_result <- measure/run_sample.py:reduce_result: changed
+--- measure/run_sample.py:reduce_result
++++ measure-02d/run_02d.py:reduce_result
+@@ -2,5 +2,5 @@
+     """
+-    One integration, reduced at once (ruling 3): from an IntegrationResult, or, for an integration that raised, the
+-    exception and the DrainRecord it carries (None from outside the step loop). Returns the partial line, with the
+-    full regime sequence and injection triples under "regimes" and "injections".
++    One integration, reduced at once: from an IntegrationResult, or, for an integration that raised, the exception
++    and the DrainRecord it carries (None from outside the step loop). Returns the partial line, with the full regime
++    sequence, injection triples and DrainCandidate lists under "regimes", "injections" and "candidates".
+     """
+@@ -33,2 +33,3 @@
+         regimes = None
++        candidates = None
+     else:
+@@ -37,3 +38,4 @@
+             "A": drain.A,
+-            "gap_prescription": drain.gap_prescription,
++            # changed (ruling 1): the record's model where its gap prescription stood
++            "model": drain.model,
+             "unresolvable_assessments": drain.unresolvable_assessments,
+@@ -44,2 +46,6 @@
+         )
++        # ruling 6, "Kept": each DrainCandidate as the list of its eight fields, in order
++        candidates = (
++            None if drain.candidates is None else [list(c) for c in drain.candidates]
++        )
+     rec["counts"] = (
+@@ -49,2 +55,28 @@
+     rec["injections_sha256"] = None if injections is None else digest(injections)
++    # ruling 6, "Checked", "The cap" and "The edges", for every integration with a DrainRecord
++    if drain is not None and drain.candidates is not None:
++        rec["candidates_sha256"] = digest(candidates)
++        rec["law_check"] = law_check(SM, drain)
++        rec.update(law_counts(SM, drain.A, drain.candidates))
++    else:
++        rec["candidates_sha256"] = None
++        rec["law_check"] = None if drain is None else law_check(SM, drain)
++    # added (IMPLEMENTATION CHOICE, the log): the accepted steps after the first classical candidate, from the
++    # OdeSolution's nodes (one per accepted step after N_start), for prompt §2 item 7
++    if error is None and drain is not None and drain.candidates is not None:
++        ts = result.solution.ts
++        rec["solution_nodes"] = len(ts)
++        jc = next(
++            (
++                j
++                for j, c in enumerate(drain.candidates)
++                if c.regime == SM.REGIME_CLASSICAL
++            ),
++            None,
++        )
++        if jc is None:
++            rec["steps_after_first_classical"] = 0
++        else:
++            Nc = result.injections[jc].N
++            rec["steps_after_first_classical"] = int(sum(1 for t in ts if t > Nc))
+     rec["maxrss"] = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+@@ -52,2 +84,3 @@
+     rec["injections"] = injections
++    rec["candidates"] = candidates
+     return rec
+
+## measure-02d/run_02d.py:accepted_values <- measure/run_sample.py:accepted_values: changed
+--- measure/run_sample.py:accepted_values
++++ measure-02d/run_02d.py:accepted_values
+@@ -2,3 +2,4 @@
+     """
+-    The accepted integration's values (prompt §1.3), from the tuning's payload and the accepted integration's N_final.
++    The accepted integration's values (prompt 02d §1.3), from the tuning's payload and the accepted integration's
++    N_final.
+     """
+@@ -17,2 +18,4 @@
+     out["K_final"] = K_final
++    # changed (ruling 1): the record's model
++    out["model"] = data["drain"].model
+ 
+@@ -89,29 +92,11 @@
+ 
+-    # the R S(L) bound (ruling 7)
+-    total = 0.0
+-    n_in, n_out = 0, 0
+-    L_values = []
+-    for c, i in zip(cands, injections):
+-        if c.regime != SM.REGIME_CLASSICAL:
+-            continue
+-        tp = i.classical_turning_point
+-        L = M_units / tp.phi_t
+-        L_values.append(L)
+-        if 40.0 <= L <= 134.0:
+-            n_in += 1
+-            total += exp(tp.log_R + log(l2s(L) / (L * L)) + i.log_rho_kin + 4.0 * i.N)
+-        else:
+-            n_out += 1
++    # removed (ruling 1): the R S(L) bound ("RSL")
++    # ruling 6: by regime, the cap and the edges, from the accepted integration
++    out["by_regime"] = by_regime(SM, data, out["drain_values"])
++    out.update(law_counts(SM, data["drain"].A, cands))
++    out["first_impact"] = first_impact(SM, data, K_final)
++
+     last = SM.SampleValues._make(tuple(data["sample"][-1]))
+-    out["RSL"] = {
+-        "classical": n_in + n_out,
+-        "in_range": n_in,
+-        "outside_range": n_out,
+-        "L_min": min(L_values) if L_values else None,
+-        "L_max": max(L_values) if L_values else None,
+-        "sum_delta_K_bound": total,
+-        "share_of_K": total / K_final if K_final > 0.0 else None,
+-        "r_chi_today": total * exp(-4.0 * N_final) / exp(last.log_rhorad_Einstein),
+-    }
+-    # the r_chi form's check (ruling 7): K(N_final) e^{-4 N_final} / rho_R,E(last sample) against rho_chi_ratio_today
++    # the r_chi form's check (note 02's ruling 7): K(N_final) e^{-4 N_final} / rho_R,E(last sample) against
++    # rho_chi_ratio_today
+     out["r_chi_check"] = {
+
+## measure-02d/run_02d.py:child <- measure/run_sample.py:child: changed
+--- measure/run_sample.py:child
++++ measure-02d/run_02d.py:child
+@@ -30,3 +30,4 @@
+             partial.flush()
+-            rec.pop("regimes"), rec.pop("injections")
++            # changed (ruling 6): "candidates" dropped from the task's line too
++            rec.pop("regimes"), rec.pop("injections"), rec.pop("candidates")
+             reduced.append(rec)
+@@ -36,3 +37,3 @@
+         partial.flush()
+-        rec.pop("regimes"), rec.pop("injections")
++        rec.pop("regimes"), rec.pop("injections"), rec.pop("candidates")
+         reduced.append(rec)
+
+## measure-02d/run_02d.py:read_partial <- measure/run_sample.py:read_partial: changed
+--- measure/run_sample.py:read_partial
++++ measure-02d/run_02d.py:read_partial
+@@ -9,3 +9,6 @@
+             continue
+-        rec.pop("regimes", None), rec.pop("injections", None)
++        # changed (ruling 6): "candidates" dropped as well
++        rec.pop("regimes", None), rec.pop("injections", None), rec.pop(
++            "candidates", None
++        )
+         out.append(rec)
+
+## measure-02d/run_02d.py:TASK_FIELDS <- measure/run_sample.py:TASK_FIELDS: changed
+--- measure/run_sample.py:TASK_FIELDS
++++ measure-02d/run_02d.py:TASK_FIELDS
+@@ -7,3 +7,2 @@
+     "A",
+-    "gap",
+     "shard",
+
+## measure-02d/run_02d.py:build_line <- measure/run_sample.py:build_line: unchanged
+
+## measure-02d/run_02d.py:batch <- measure/run_sample.py:batch: changed
+--- measure/run_sample.py:batch
++++ measure-02d/run_02d.py:batch
+@@ -3,2 +3,4 @@
+     bdir.mkdir(parents=True, exist_ok=True)
++    # changed (ruling 1): the task directory is made here, under 02d's path
++    TASK_DIR.mkdir(parents=True, exist_ok=True)
+     (bdir / "batch.pid").write_text(f"{os.getpid()}\n")
+
+## measure-02d/run_02d.py:main <- measure/run_sample.py:main: unchanged
+
+## measure-02d/run_02d.py:first_impact <- measure-02b/run_wide.py:first_impact: changed
+--- measure-02b/run_wide.py:first_impact
++++ measure-02d/run_02d.py:first_impact
+@@ -2,12 +2,11 @@
+     """
+-    The first impact and the cap (prompt 02b §1.3; ruling 6), from the accepted integration's payload:
+-      - the first candidate's regime, N, ell and ln R (its classical turning point's), and its alpha_eff, the
+-        fraction of the first impact's kinetic energy drained (0 where nothing drained); its delta_K as a share of
+-        K(N_final) (None where K(N_final) = 0);
++    The first impact and the cap (prompt 02d §1.3, as prompt 02b §1.3), from the accepted integration's payload:
++      - the first candidate's regime, N, ell, L and ln R, and its alpha_eff, the fraction of the first impact's
++        kinetic energy drained (0 where nothing drained); its delta_K as a share of K(N_final) (None where
++        K(N_final) = 0);
+       - the drains (alpha_eff > 0): in all; at N <= parking_N (all of them where the field does not park); after the
+-        first impact and before parking; and after parking (a released history drains again after its release);
++        first impact and before parking; and after parking;
+       - the parking leftover, which is the Parking record's delta_K, a ledger entry of its own and not among the
+-        injections (they are parallel to the candidates): its share of K(N_final), counted apart;
+-      - the cap: one-loop drains where A c_1 / ell >= alpha_cap (by ell), and one-loop drains with alpha_eff equal to
+-        DRAIN_ALPHA_CAP exactly (by alpha_eff, the count 02's partials allow); gap drains capped under edge.
++        injections: its share of K(N_final), counted apart;
++      - the cap by regime: candidates where A f >= alpha_cap, f = drain_fraction of the candidate's record.
+     """
+@@ -28,3 +27,6 @@
+             "ell": c0.ell,
++            # changed (ruling 6): the law's L and ln R, as the record carries them
++            "L": c0.L,
+             "log_R": None if tp is None else tp.log_R,
++            "record_log_R": c0.log_R,
+             "alpha_eff": i0.alpha_eff,
+@@ -48,18 +50,8 @@
+     )
+-    out["cap_one_loop_by_ell"] = sum(
+-        1
+-        for c in cands
+-        if c.regime == SM.REGIME_ONE_LOOP
+-        and A * SM.DRAIN_C1 / c.ell >= SM.DRAIN_ALPHA_CAP
+-    )
+-    out["cap_one_loop_by_alpha_eff"] = sum(
+-        1
+-        for c, i in zip(cands, inj)
+-        if c.regime == SM.REGIME_ONE_LOOP and i.alpha_eff == SM.DRAIN_ALPHA_CAP
+-    )
+-    out["cap_gap_by_alpha_eff"] = sum(
+-        1
+-        for c, i in zip(cands, inj)
+-        if c.regime == SM.REGIME_GAP and i.alpha_eff == SM.DRAIN_ALPHA_CAP
+-    )
++    # changed (ruling 6): the cap by regime, by the law's f (DRAIN_C1 and the edge prescription are gone)
++    out["cap"] = law_counts(SM, A, cands)["cap"]
++    # changed (ruling 6): drains before parking by regime
++    out["drains_before_parking_by_regime"] = {
++        r: sum(1 for j in before if cands[j].regime == r) for r in SM.DRAIN_REGIMES
++    }
+     out["one_loop_drains"] = sum(
+
+## measure-02d/checks_02d.py:NOT_COMPARED <- measure/common.py:NOT_COMPARED: changed
+--- measure/common.py:NOT_COMPARED
++++ measure-02d/checks_02d.py:NOT_COMPARED
+@@ -7,3 +7,2 @@
+     "A",
+-    "gap",
+     "shard",
+
+## measure-02d/checks_02d.py:INTEGRATION_NOT_COMPARED <- measure/common.py:INTEGRATION_NOT_COMPARED: unchanged
+
+## measure-02d/checks_02d.py:BBN_NOT_COMPARED <- measure/common.py:BBN_NOT_COMPARED: unchanged
+
+## measure-02d/checks_02d.py:read_jsonl <- measure/common.py:read_jsonl: unchanged
+
+## measure-02d/checks_02d.py:_diff <- measure/common.py:_diff: unchanged
+
+## measure-02d/checks_02d.py:compare_lines <- measure/common.py:compare_lines: changed
+--- measure/common.py:compare_lines
++++ measure-02d/checks_02d.py:compare_lines
+@@ -1,7 +1,3 @@
+-def compare_lines(a, b, shortcut: str):
+-    """
+-    The differences between two lines under ruling 6, as a list of strings (empty: equal). shortcut is "S1" (the
+-    record's gap_prescription may differ) or "S2" (its A may differ).
+-    """
+-    allowed = {"S1": "gap_prescription", "S2": "A"}[shortcut]
++def compare_lines(a, b):
++    """The differences between two lines under note 02's ruling 6 (empty: equal), nothing of the record excused."""
+     out = []
+@@ -18,10 +14,3 @@
+             for j, (x, y) in enumerate(zip(ia, ib)):
+-                xd, yd = dict(x), dict(y)
+-                dx, dy = xd.pop("drain", None), yd.pop("drain", None)
+-                _diff(xd, yd, f"integrations[{j}]", out, skip=INTEGRATION_NOT_COMPARED)
+-                if dx is None or dy is None:
+-                    if dx is not dy:
+-                        out.append(f"integrations[{j}].drain: None in one only")
+-                else:
+-                    _diff(dx, dy, f"integrations[{j}].drain", out, skip={allowed})
++                _diff(x, y, f"integrations[{j}]", out, skip=INTEGRATION_NOT_COMPARED)
+         elif k == "bbn":
+
+## measure-02d/checks_02d.py:compare_partials <- measure/common.py:compare_partials: changed
+--- measure/common.py:compare_partials
++++ measure-02d/checks_02d.py:compare_partials
+@@ -1,3 +1,3 @@
+ def compare_partials(id_a, prefix_a, id_b, prefix_b):
+-    """The full regime sequences and injection triples of two tasks' partial files, compared by repr."""
++    """The full regime sequences, injection triples and DrainCandidate lists of two partial files, by repr."""
+     pa = read_jsonl(TASK_DIR / f"{prefix_a}{id_a}.partial.jsonl")
+@@ -6,9 +6,10 @@
+     if len(pa) != len(pb):
+-        return [f"partial: {len(pa)} and {len(pb)} integrations"], 0
+-    n = 0
++        return [f"partial: {len(pa)} and {len(pb)} integrations"], 0, 0
++    n, nc = 0, 0
+     for j, (x, y) in enumerate(zip(pa, pb)):
+-        for k in ("regimes", "injections"):
++        for k in ("regimes", "injections", "candidates"):
+             if repr(x.get(k)) != repr(y.get(k)):
+                 out.append(f"partial[{j}].{k} differ")
+-            n += len(x.get(k) or [])
+-    return out, n
++        n += len(x.get("injections") or [])
++        nc += len(x.get("candidates") or [])
++    return out, n, nc
+
+## measure-02d/checks_02d.py:MASK <- measure/tool_check.py:MASK: unchanged
+
+## measure-02d/checks_02d.py:masked <- measure/tool_check.py:masked: unchanged
+
+## measure-02d/checks_02d.py:fields <- measure/tool_check.py:fields: unchanged
+
+## measure-02d/checks_02d.py:tool <- measure/tool_check.py:main: changed
+--- measure/tool_check.py:main
++++ measure-02d/checks_02d.py:tool
+@@ -1,53 +1,56 @@
+-def main():
+-    runs = run_lines()
+-    tools = {l["tool_check"]: l for l in read_jsonl(SPOT) if "tool_check" in l}
++def tool():
++    runs = tagged_lines(TOOL_TAG)
++    tools = {
++        l["tool_check"]: l
++        for l in read_jsonl(CHECKS)
++        if "tool_check" in l and l.get("tag") == TOOL_TAG
++    }
+     stop = False
+-    for tid in CHECKS:
+-        drv = (TASK_DIR / f"{tid}.log").read_text()
+-        tool = (TASK_DIR / f"spot-tool-{tid}.log").read_text()
+-        a, b = masked(drv), masked(tool)
+-        diffs = [(j, x, y) for j, (x, y) in enumerate(zip(a, b)) if x != y]
+-        print(
+-            f"{tid}: driver stdout {len(a)} lines, tool stdout {len(b)} lines, tool rc {tools[tid]['rc']}; "
+-            f"{len(a) - len(diffs) if len(a) == len(b) else 'n/a'} byte-equal after masking"
+-        )
+-        if len(a) != len(b) or diffs:
+-            stop = True
+-            print(f"   !! line counts {len(a)} and {len(b)}; {len(diffs)} lines differ")
+-            for j, x, y in diffs[:10]:
+-                print(f"   [{j}] driver: {x}\n   [{j}]   tool: {y}")
+-        line = runs[tid]
+-        acc = line["accepted"]
+-        bbn = line["bbn"]
+-        tl = {
+-            x.split(" ", 1)[0]: x
+-            for x in tool.splitlines()
+-            if x.split(" ", 1)[0] in ("history", "drain", "bbn")
+-        }
+-        h, d, bb = fields(tl["history"]), fields(tl["drain"]), fields(tl["bbn"])
+-        want = {
+-            ("history", "accepted_steps"): str(acc["accepted_steps"]),
+-            ("history", "reflections"): str(acc["reflections"]),
+-            ("history", "samples"): str(acc["n_samples"]),
+-            ("history", "RHS"): str(acc["RHS_evaluations"]),
+-            ("history", "integrations"): str(line["tuning"]["tuning_iterations"]),
+-            ("bbn", "Yp"): format(bbn["Yp"], ".10g"),
+-            ("bbn", "DoH"): format(bbn["DoH"], ".10g"),
+-            ("bbn", "He3oH"): format(bbn["He3oH"], ".10g"),
+-            ("bbn", "Li7oH"): format(bbn["Li7oH"], ".10g"),
+-        }
+-        for k, v in acc["drain_values"].items():
+-            want[("drain", k)] = "None" if v is None else format(v, ".6g")
+-        got = {"history": h, "drain": d, "bbn": bb}
+-        bad = [
+-            (s, k, v, got[s].get(k)) for (s, k), v in want.items() if got[s].get(k) != v
+-        ]
+-        print(
+-            f"   history, drain and bbn lines against the driver's JSON line: {len(want) - len(bad)} of {len(want)} "
+-            f"values equal"
+-        )
+-        for s, k, v, gv in bad:
+-            print(f"   !! {s}.{k}: driver {v} tool {gv}")
+-        if bad:
+-            stop = True
++    tid = TOOL_TASK
++    drv = (TASK_DIR / f"{TOOL_TAG}{tid}.log").read_text()
++    tool_out = (TASK_DIR / f"{TOOL_TAG}tool-{tid}.log").read_text()
++    a, b = masked(drv), masked(tool_out)
++    diffs = [(j, x, y) for j, (x, y) in enumerate(zip(a, b)) if x != y]
++    print(
++        f"{tid}: driver stdout {len(a)} lines, tool stdout {len(b)} lines, tool rc {tools[tid]['rc']}; "
++        f"{len(a) - len(diffs) if len(a) == len(b) else 'n/a'} byte-equal after masking `wall=` and `PRyM_time=`"
++    )
++    if len(a) != len(b) or diffs:
++        stop = True
++        print(f"   !! line counts {len(a)} and {len(b)}; {len(diffs)} lines differ")
++        for j, x, y in diffs[:10]:
++            print(f"   [{j}] driver: {x}\n   [{j}]   tool: {y}")
++    line = runs[tid]
++    acc = line["accepted"]
++    bbn = line["bbn"]
++    tl = {
++        x.split(" ", 1)[0]: x
++        for x in tool_out.splitlines()
++        if x.split(" ", 1)[0] in ("history", "drain", "bbn")
++    }
++    h, d, bb = fields(tl["history"]), fields(tl["drain"]), fields(tl["bbn"])
++    want = {
++        ("history", "accepted_steps"): str(acc["accepted_steps"]),
++        ("history", "reflections"): str(acc["reflections"]),
++        ("history", "samples"): str(acc["n_samples"]),
++        ("history", "RHS"): str(acc["RHS_evaluations"]),
++        ("history", "integrations"): str(line["tuning"]["tuning_iterations"]),
++        ("history", "model"): acc["model"],
++        ("bbn", "Yp"): format(bbn["Yp"], ".10g"),
++        ("bbn", "DoH"): format(bbn["DoH"], ".10g"),
++        ("bbn", "He3oH"): format(bbn["He3oH"], ".10g"),
++        ("bbn", "Li7oH"): format(bbn["Li7oH"], ".10g"),
++    }
++    for k, v in acc["drain_values"].items():
++        want[("drain", k)] = "None" if v is None else format(v, ".6g")
++    got = {"history": h, "drain": d, "bbn": bb}
++    bad = [(s, k, v, got[s].get(k)) for (s, k), v in want.items() if got[s].get(k) != v]
++    print(
++        f"   history, drain and bbn lines against the driver's JSON line: {len(want) - len(bad)} of {len(want)} "
++        f"values equal"
++    )
++    for s, k, v, gv in bad:
++        print(f"   !! {s}.{k}: driver {v} tool {gv}")
++    if bad:
++        stop = True
+     if stop:
+@@ -55,2 +58,2 @@
+         sys.exit(3)
+-    print("the driver agrees with the tool on both tasks")
++    print("the driver agrees with the tool")
+
+## measure-02d/analyse_02d.py:read_jsonl <- measure/common.py:read_jsonl: unchanged
+
+## measure-02d/analyse_02d.py:g <- measure/common.py:g: unchanged
+
+## measure-02d/analyse_02d.py:short_reason <- measure/analyse.py:short_reason: changed
+--- measure/analyse.py:short_reason
++++ measure-02d/analyse_02d.py:short_reason
+@@ -2,2 +2,3 @@
+     r = line.get("reason") or ""
++    n = len(line.get("integrations") or [])
+     if "step budget" in r:
+@@ -6,3 +7,3 @@
+     if "effective minimum" in r:
+-        return "the effective minimum was not found (after integration 0)"
+-    return r[:100]
++        return f"the effective minimum was not found (after {n} integration(s))"
++    return r[:120]
+
+## measure-02d/analyse_02d.py:met_counts <- measure/analyse.py:met_counts: unchanged
+
+# 43 copies, 25 unchanged, 18 changed

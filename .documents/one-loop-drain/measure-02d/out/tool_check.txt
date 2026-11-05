@@ -1,0 +1,3 @@
+P-2197-A10: driver stdout 13 lines, tool stdout 13 lines, tool rc 0; 13 byte-equal after masking `wall=` and `PRyM_time=`
+   history, drain and bbn lines against the driver's JSON line: 23 of 23 values equal
+the driver agrees with the tool

@@ -1,0 +1,59 @@
+# §2 item 1, the sample: 240 task lines (every task run; no shortcut)
+#   outcome failure : 3
+#   outcome success : 230
+#   outcome timeout : 7
+#   task ids: 240 expected; missing []; extra []; lines in sample.jsonl 240
+# each cell: ok (success), fail (failure), err, TIMEOUT or crash; the tuning's integrations in brackets
+history        M        beta           A10          A5          A2        A1.5          A1        A0.5        A0.1       A0.05
+P-2197         4e-31    1.185        ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)
+P-2188         4e-31    1.06         ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)
+W-2187         4e-31    1.0775       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)
+W-1631         4e-31    1.07         ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)
+W-2179         4e-31    1.0925       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)
+W-2078         4e-31    1.175        ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)
+W-2192         4e-31    1.105        ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)
+W-2209         4e-31    1.1875       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)
+W-2183         4e-31    1.125        ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)
+W-2172         4e-31    1.1225       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)
+W-2178         4e-31    1.1025       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)
+W-2185         4e-31    1.1725       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)
+R-632          4e-31    1            ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)     fail(1)     fail(1)
+R-1193         4e-31    1.15         ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)
+R-865          4e-31    2            ok(2)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)
+R-611          4e-31    10           ok(2)       ok(1)       ok(1)       ok(1)       ok(1)       ok(2)       ok(1)       ok(1)
+B-2819         1e-33    1.2          ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)
+B-2496         1e-33    2            ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)
+B-2772         1e-33    10           ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)
+B-2821         1e-30    1.2          ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)
+B-2498         1e-30    2            ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)
+B-2774         1e-30    10           ok(1)       ok(1)       ok(1)       ok(1)       ok(3)       ok(1)       ok(1)       ok(1)
+L-M5e-20       5e-20    2            ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)     fail(1)
+L-M8e-18       8e-18    2            ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)
+L-M1e-16       1e-16    2            ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)
+L-M5e-16       5e-16    2            ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)
+L-M4e-15       4e-15    2            ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)
+C-3016         1e-12    4            ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)       ok(1)
+C-3233         1e-12    1            ok(3)       ok(3)       ok(3)       ok(3)       ok(3)       ok(3)       ok(3)       ok(3)
+C-3873         1e-12    1.11    TIMEOUT(25)  TIMEOUT(25)  TIMEOUT(25)  TIMEOUT(25)      ok(28)  TIMEOUT(24)  TIMEOUT(27)  TIMEOUT(27)
+
+# failures, errors and timeouts, with their reasons
+R-632-A0.1: failure stage=tuning after 1 integration(s), wall 279 s; candidates over all integrations 1L=44 gap=88 cl=3269 un=0; last integration returned 
+    reason: the effective minimum was not found: effective_minimum (ExponentialModel(M=0.00097413eV,n=1,beta=1)): V_eff' does not change sign on the bracket [1.90797e-09, 7.63188e-07] (values 3.27795e-121, 3.27795e-121) (tuning integration 0)
+R-632-A0.05: failure stage=tuning after 1 integration(s), wall 82 s; candidates over all integrations 1L=43 gap=52 cl=800 un=0; last integration returned 
+    reason: the effective minimum was not found: effective_minimum (ExponentialModel(M=0.00097413eV,n=1,beta=1)): V_eff' does not change sign on the bracket [2.41389e-08, 9.65557e-06] (values 3.27796e-121, 3.27799e-121) (tuning integration 0)
+L-M5e-20-A0.05: failure stage=tuning after 1 integration(s), wall 1066 s; candidates over all integrations 1L=8 gap=2 cl=14105 un=0; last integration raised ComputationFailureError
+    reason: step budget exhausted: integrate_scalar_history (history_and_bbn-beta2-M5e-20) took 2000001 accepted steps (budget 2000000) at N=46.06980442, T_J=1.2898e-11 GeV, with 14115 reflection(s) (tuning integration 0)
+C-3873-A10: timeout stage=None after 25 integration(s), wall 3604 s; candidates over all integrations 1L=0 gap=0 cl=62235 un=0; last integration returned 
+    reason: killed after 3600 s
+C-3873-A5: timeout stage=None after 25 integration(s), wall 3604 s; candidates over all integrations 1L=0 gap=0 cl=62235 un=0; last integration returned 
+    reason: killed after 3600 s
+C-3873-A2: timeout stage=None after 25 integration(s), wall 3604 s; candidates over all integrations 1L=0 gap=0 cl=62235 un=0; last integration returned 
+    reason: killed after 3600 s
+C-3873-A1.5: timeout stage=None after 25 integration(s), wall 3604 s; candidates over all integrations 1L=0 gap=0 cl=62235 un=0; last integration returned 
+    reason: killed after 3600 s
+C-3873-A0.5: timeout stage=None after 24 integration(s), wall 3604 s; candidates over all integrations 1L=0 gap=0 cl=59742 un=0; last integration returned 
+    reason: killed after 3600 s
+C-3873-A0.1: timeout stage=None after 27 integration(s), wall 3604 s; candidates over all integrations 1L=0 gap=0 cl=67211 un=0; last integration returned 
+    reason: killed after 3600 s
+C-3873-A0.05: timeout stage=None after 27 integration(s), wall 3604 s; candidates over all integrations 1L=0 gap=0 cl=67211 un=0; last integration returned 
+    reason: killed after 3600 s

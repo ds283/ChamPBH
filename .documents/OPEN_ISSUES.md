@@ -391,4 +391,4 @@ the scoping session of that day; two opened the same day from the drain probe
   closed by 03. *(`one-loop-drain`; drain probe, 2026-11-02)*
 - `[02-one-loop-tunings-fail-at-small-A-in-the-transition-window]` — under the one-loop law the laboratory-M
   transition-window histories (β 1.0–1.1875) fail tuned at A = 0.01 (25 of 26 tasks; β = 1.0 at A = 0.1 too): step budget
-  or effective minimum after the seed integration; 29 of 110 tunings; U14 (ruled 2026-11-04) leaves out A = 0.01; diagnosed 2026-11-04: the field never parks before today; under the adopted law (2026-11-05) the same two fail at A = 0.05 (R-632 parks from A = 0.5, the 5e-20 ladder from 0.2), 02d to measure re-tuned. *(`one-loop-drain`; prompt 02)*
+  or effective minimum after the seed integration; 29 of 110 tunings; U14 (ruled 2026-11-04) leaves out A = 0.01; diagnosed 2026-11-04: the field never parks before today; re-tuned under the measured law (02d, 2026-11-05) three of 240 fail: R-632 (β = 1.0) at A = 0.1 and 0.05, the 5e-20 ladder at A = 0.05 (it builds at 0.1); every P, W and B history builds at all eight A. *(`one-loop-drain`; prompt 02)*

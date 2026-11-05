@@ -1,0 +1,304 @@
+# §2 item 3, parking and the first impact, from each accepted integration (first_impact)
+# park: the parking N (None: does not park); first: regime, N, alpha_eff (the fraction of the first impact's
+# kinetic energy drained), its share of K(N_final); before: drains before parking by regime (1L/gap/cl);
+# cap: capped candidates by regime (A f >= 0.99)
+
+P-2197  M=4e-31 beta=1.185
+   A=10    park= 18.8976  first: 1L N=17.630 a_eff=0.8228 share=0.902  drains=6 before=6 (6/0/0) after=0  park_share=9.52e-08  cap: 0/0/0
+   A=5     park= 24.5662  first: 1L N=17.630 a_eff=0.4114 share=0.919  drains=10 before=10 (10/0/0) after=0  park_share=4.94e-06  cap: 0/0/0
+   A=2     park= 33.5173  first: 1L N=17.630 a_eff=0.1646 share=0.857  drains=11 before=11 (11/0/0) after=0  park_share=2.56e-05  cap: 0/0/0
+   A=1.5   park= 35.2085  first: 1L N=17.630 a_eff=0.1234 share=0.833  drains=16 before=16 (16/0/0) after=0  park_share=2.5e-05  cap: 0/0/0
+   A=1     park= 29.0353  first: 1L N=17.630 a_eff=0.08228 share=0.834  drains=5 before=5 (5/0/0) after=0  park_share=6.84e-05  cap: 0/0/0
+   A=0.5   park= 36.7351  first: 1L N=17.630 a_eff=0.04114 share=0.764  drains=36 before=36 (36/0/0) after=0  park_share=0.000161  cap: 0/0/0
+   A=0.1   park= 38.6959  first: 1L N=17.630 a_eff=0.008228 share=0.443  drains=124 before=124 (124/0/0) after=0  park_share=0.000598  cap: 0/0/0
+   A=0.05  park= 39.4401  first: 1L N=17.630 a_eff=0.004114 share=0.293  drains=203 before=203 (192/11/0) after=0  park_share=0.000819  cap: 0/0/0
+
+P-2188  M=4e-31 beta=1.06
+   A=10    park= 24.6757  first: 1L N=24.560 a_eff=0.99 share=0.99  drains=3 before=3 (3/0/0) after=0  park_share=9.64e-07  cap: 3/0/0
+   A=5     park= 28.4388  first: 1L N=24.560 a_eff=0.5739 share=0.721  drains=5 before=5 (5/0/0) after=0  park_share=7.09e-07  cap: 0/0/0
+   A=2     park= 30.5792  first: 1L N=24.560 a_eff=0.2295 share=0.696  drains=3 before=3 (3/0/0) after=0  park_share=0.00037  cap: 0/0/0
+   A=1.5   park= 33.9431  first: 1L N=24.560 a_eff=0.1722 share=0.669  drains=11 before=11 (11/0/0) after=0  park_share=0.000337  cap: 0/0/0
+   A=1     park= 34.9284  first: 1L N=24.560 a_eff=0.1148 share=0.595  drains=17 before=17 (17/0/0) after=0  park_share=0.0007  cap: 0/0/0
+   A=0.5   park= 35.9346  first: 1L N=24.560 a_eff=0.05739 share=0.426  drains=32 before=32 (32/0/0) after=0  park_share=0.00135  cap: 0/0/0
+   A=0.1   park= 37.6765  first: 1L N=24.560 a_eff=0.01148 share=0.126  drains=116 before=116 (116/0/0) after=0  park_share=0.00254  cap: 0/0/0
+   A=0.05  park= 38.3884  first: 1L N=24.560 a_eff=0.005739 share=0.0668  drains=190 before=190 (190/0/0) after=0  park_share=0.00283  cap: 0/0/0
+
+W-2187  M=4e-31 beta=1.0775
+   A=10    park= 20.4779  first: 1L N=19.261 a_eff=0.9034 share=0.973  drains=4 before=4 (4/0/0) after=0  park_share=1.98e-08  cap: 2/0/0
+   A=5     park= 25.4303  first: 1L N=19.261 a_eff=0.4517 share=0.758  drains=10 before=10 (10/0/0) after=0  park_share=1.75e-05  cap: 0/0/0
+   A=2     park= 31.5131  first: 1L N=19.261 a_eff=0.1807 share=0.616  drains=6 before=6 (6/0/0) after=0  park_share=0.000119  cap: 0/0/0
+   A=1.5   park= 34.5974  first: 1L N=19.261 a_eff=0.1355 share=0.58  drains=13 before=13 (13/0/0) after=0  park_share=0.000164  cap: 0/0/0
+   A=1     park= 35.6264  first: 1L N=19.261 a_eff=0.09034 share=0.494  drains=20 before=20 (20/0/0) after=0  park_share=0.000234  cap: 0/0/0
+   A=0.5   park= 36.5837  first: 1L N=19.261 a_eff=0.04517 share=0.348  drains=36 before=36 (36/0/0) after=0  park_share=0.000429  cap: 0/0/0
+   A=0.1   park= 38.2915  first: 1L N=19.261 a_eff=0.009034 share=0.111  drains=120 before=120 (120/0/0) after=0  park_share=0.000949  cap: 0/0/0
+   A=0.05  park= 39.0220  first: 1L N=19.261 a_eff=0.004517 share=0.0605  drains=199 before=199 (177/22/0) after=0  park_share=0.00109  cap: 0/0/0
+
+W-1631  M=4e-31 beta=1.07
+   A=10    park= 23.9186  first: 1L N=20.098 a_eff=0.9415 share=0.905  drains=4 before=4 (4/0/0) after=0  park_share=9.65e-08  cap: 3/0/0
+   A=5     park= 30.2397  first: 1L N=20.098 a_eff=0.4707 share=0.43  drains=7 before=7 (7/0/0) after=0  park_share=1.8e-06  cap: 0/0/0
+   A=2     park= 34.8977  first: 1L N=20.098 a_eff=0.1883 share=0.331  drains=12 before=12 (12/0/0) after=0  park_share=3.84e-05  cap: 0/0/0
+   A=1.5   park= 35.3836  first: 1L N=20.098 a_eff=0.1412 share=0.294  drains=15 before=15 (15/0/0) after=0  park_share=0.000112  cap: 0/0/0
+   A=1     park= 35.8723  first: 1L N=20.098 a_eff=0.09415 share=0.253  drains=21 before=21 (21/0/0) after=0  park_share=0.000213  cap: 0/0/0
+   A=0.5   park= 36.5370  first: 1L N=20.098 a_eff=0.04707 share=0.192  drains=36 before=36 (36/0/0) after=0  park_share=0.000522  cap: 0/0/0
+   A=0.1   park= 38.0290  first: 1L N=20.098 a_eff=0.009415 share=0.0734  drains=119 before=119 (119/0/0) after=0  park_share=0.00146  cap: 0/0/0
+   A=0.05  park= 38.7163  first: 1L N=20.098 a_eff=0.004707 share=0.0416  drains=194 before=194 (194/0/0) after=0  park_share=0.00173  cap: 0/0/0
+
+W-2179  M=4e-31 beta=1.0925
+   A=10    park= 19.8706  first: 1L N=18.079 a_eff=0.8535 share=0.936  drains=5 before=5 (5/0/0) after=0  park_share=1.13e-08  cap: 2/0/0
+   A=5     park= 23.9329  first: 1L N=18.079 a_eff=0.4267 share=0.996  drains=8 before=8 (8/0/0) after=0  park_share=1.21e-05  cap: 0/0/0
+   A=2     park= 30.4159  first: 1L N=18.079 a_eff=0.1707 share=0.873  drains=5 before=5 (5/0/0) after=0  park_share=3.18e-05  cap: 0/0/0
+   A=1.5   park= 34.8435  first: 1L N=18.079 a_eff=0.128 share=0.841  drains=15 before=15 (15/0/0) after=0  park_share=4.38e-05  cap: 0/0/0
+   A=1     park= 33.9676  first: 1L N=18.079 a_eff=0.08535 share=0.844  drains=13 before=13 (13/0/0) after=0  park_share=0.000163  cap: 0/0/0
+   A=0.5   park= 36.3919  first: 1L N=18.079 a_eff=0.04267 share=0.714  drains=35 before=35 (35/0/0) after=0  park_share=0.00026  cap: 0/0/0
+   A=0.1   park= 38.3134  first: 1L N=18.079 a_eff=0.008535 share=0.318  drains=121 before=121 (121/0/0) after=0  park_share=0.000739  cap: 0/0/0
+   A=0.05  park= 39.0572  first: 1L N=18.079 a_eff=0.004267 share=0.19  drains=199 before=199 (181/18/0) after=0  park_share=0.000973  cap: 0/0/0
+
+W-2078  M=4e-31 beta=1.175
+   A=10    park= 18.9280  first: 1L N=17.608 a_eff=0.8233 share=0.912  drains=6 before=6 (6/0/0) after=0  park_share=6.18e-08  cap: 0/0/0
+   A=5     park= 25.0931  first: 1L N=17.608 a_eff=0.4116 share=0.917  drains=11 before=11 (11/0/0) after=0  park_share=6.23e-06  cap: 0/0/0
+   A=2     park= 34.8591  first: 1L N=17.608 a_eff=0.1647 share=0.841  drains=13 before=13 (13/0/0) after=0  park_share=1.42e-05  cap: 0/0/0
+   A=1.5   park= 30.9686  first: 1L N=17.608 a_eff=0.1235 share=0.843  drains=5 before=5 (5/0/0) after=0  park_share=4.01e-05  cap: 0/0/0
+   A=1     park= 35.8792  first: 1L N=17.608 a_eff=0.08233 share=0.815  drains=21 before=21 (21/0/0) after=0  park_share=5.28e-05  cap: 0/0/0
+   A=0.5   park= 36.9533  first: 1L N=17.608 a_eff=0.04116 share=0.741  drains=37 before=37 (37/0/0) after=0  park_share=0.000152  cap: 0/0/0
+   A=0.1   park= 38.6731  first: 1L N=17.608 a_eff=0.008233 share=0.45  drains=124 before=124 (124/0/0) after=0  park_share=0.00057  cap: 0/0/0
+   A=0.05  park= 39.3999  first: 1L N=17.608 a_eff=0.004116 share=0.303  drains=203 before=203 (191/12/0) after=0  park_share=0.000801  cap: 0/0/0
+
+W-2192  M=4e-31 beta=1.105
+   A=10    park= 19.6680  first: 1L N=17.752 a_eff=0.8371 share=0.962  drains=5 before=5 (5/0/0) after=0  park_share=2.91e-08  cap: 1/0/0
+   A=5     park= 24.4934  first: 1L N=17.752 a_eff=0.4185 share=0.994  drains=9 before=9 (9/0/0) after=0  park_share=3.79e-06  cap: 0/0/0
+   A=2     park= 35.1839  first: 1L N=17.752 a_eff=0.1674 share=0.872  drains=12 before=12 (12/0/0) after=0  park_share=7.62e-06  cap: 0/0/0
+   A=1.5   park= 35.3955  first: 1L N=17.752 a_eff=0.1256 share=0.867  drains=15 before=15 (15/0/0) after=0  park_share=1.94e-05  cap: 0/0/0
+   A=1     park= 34.2072  first: 1L N=17.752 a_eff=0.08371 share=0.889  drains=14 before=14 (14/0/0) after=0  park_share=8.05e-05  cap: 0/0/0
+   A=0.5   park= 36.0164  first: 1L N=17.752 a_eff=0.04185 share=0.848  drains=32 before=32 (32/0/0) after=0  park_share=0.000154  cap: 0/0/0
+   A=0.1   park= 38.2783  first: 1L N=17.752 a_eff=0.008371 share=0.503  drains=120 before=120 (120/0/0) after=0  park_share=0.000608  cap: 0/0/0
+   A=0.05  park= 39.0554  first: 1L N=17.752 a_eff=0.004185 share=0.329  drains=197 before=197 (185/12/0) after=0  park_share=0.000872  cap: 0/0/0
+
+W-2209  M=4e-31 beta=1.1875
+   A=10    park= 18.8913  first: 1L N=17.636 a_eff=0.8226 share=0.9  drains=6 before=6 (6/0/0) after=0  park_share=1.05e-07  cap: 0/0/0
+   A=5     park= 24.2912  first: 1L N=17.636 a_eff=0.4113 share=0.918  drains=9 before=9 (9/0/0) after=0  park_share=6.05e-06  cap: 0/0/0
+   A=2     park= 33.8569  first: 1L N=17.636 a_eff=0.1645 share=0.862  drains=13 before=13 (13/0/0) after=0  park_share=1.95e-05  cap: 0/0/0
+   A=1.5   park= 34.4267  first: 1L N=17.636 a_eff=0.1234 share=0.842  drains=14 before=14 (14/0/0) after=0  park_share=2.83e-05  cap: 0/0/0
+   A=1     park= 35.2000  first: 1L N=17.636 a_eff=0.08226 share=0.829  drains=19 before=19 (19/0/0) after=0  park_share=7.37e-05  cap: 0/0/0
+   A=0.5   park= 36.5163  first: 1L N=17.636 a_eff=0.04113 share=0.784  drains=35 before=35 (35/0/0) after=0  park_share=0.000161  cap: 0/0/0
+   A=0.1   park= 38.6403  first: 1L N=17.636 a_eff=0.008226 share=0.464  drains=124 before=124 (124/0/0) after=0  park_share=0.000628  cap: 0/0/0
+   A=0.05  park= 39.3908  first: 1L N=17.636 a_eff=0.004113 share=0.309  drains=202 before=202 (196/6/0) after=0  park_share=0.000885  cap: 0/0/0
+
+W-2183  M=4e-31 beta=1.125
+   A=10    park= 19.2086  first: 1L N=17.607 a_eff=0.8291 share=0.967  drains=6 before=6 (6/0/0) after=0  park_share=2.75e-09  cap: 1/0/0
+   A=5     park= 25.7678  first: 1L N=17.607 a_eff=0.4145 share=0.933  drains=11 before=11 (11/0/0) after=0  park_share=2.58e-06  cap: 0/0/0
+   A=2     park= 32.3731  first: 1L N=17.607 a_eff=0.1658 share=0.959  drains=10 before=10 (10/0/0) after=0  park_share=2.76e-05  cap: 0/0/0
+   A=1.5   park= 34.3730  first: 1L N=17.607 a_eff=0.1244 share=0.94  drains=14 before=14 (14/0/0) after=0  park_share=3.45e-05  cap: 0/0/0
+   A=1     park= 35.4679  first: 1L N=17.607 a_eff=0.08291 share=0.913  drains=20 before=20 (20/0/0) after=0  park_share=5.8e-05  cap: 0/0/0
+   A=0.5   park= 36.1296  first: 1L N=17.607 a_eff=0.04145 share=0.886  drains=33 before=33 (33/0/0) after=0  park_share=0.000148  cap: 0/0/0
+   A=0.1   park= 38.4475  first: 1L N=17.607 a_eff=0.008291 share=0.513  drains=122 before=122 (122/0/0) after=0  park_share=0.000526  cap: 0/0/0
+   A=0.05  park= 39.2059  first: 1L N=17.607 a_eff=0.004145 share=0.341  drains=200 before=200 (183/17/0) after=0  park_share=0.000782  cap: 0/0/0
+
+W-2172  M=4e-31 beta=1.1225
+   A=10    park= 19.2399  first: 1L N=17.616 a_eff=0.8297 share=0.968  drains=6 before=6 (6/0/0) after=0  park_share=2.11e-09  cap: 1/0/0
+   A=5     park= 25.5914  first: 1L N=17.616 a_eff=0.4149 share=0.946  drains=11 before=11 (11/0/0) after=0  park_share=2.97e-06  cap: 0/0/0
+   A=2     park= 29.8884  first: 1L N=17.616 a_eff=0.1659 share=0.948  drains=6 before=6 (6/0/0) after=0  park_share=4.95e-06  cap: 0/0/0
+   A=1.5   park= 34.8169  first: 1L N=17.616 a_eff=0.1245 share=0.926  drains=14 before=14 (14/0/0) after=0  park_share=3.56e-05  cap: 0/0/0
+   A=1     park= 33.8046  first: 1L N=17.616 a_eff=0.08297 share=0.922  drains=12 before=12 (12/0/0) after=0  park_share=7.09e-05  cap: 0/0/0
+   A=0.5   park= 36.7354  first: 1L N=17.616 a_eff=0.04149 share=0.812  drains=36 before=36 (36/0/0) after=0  park_share=0.000131  cap: 0/0/0
+   A=0.1   park= 38.5247  first: 1L N=17.616 a_eff=0.008297 share=0.478  drains=122 before=122 (122/0/0) after=0  park_share=0.000487  cap: 0/0/0
+   A=0.05  park= 39.2343  first: 1L N=17.616 a_eff=0.004149 share=0.328  drains=201 before=201 (180/21/0) after=0  park_share=0.000745  cap: 0/0/0
+
+W-2178  M=4e-31 beta=1.1025
+   A=10    park= 19.7453  first: 1L N=17.791 a_eff=0.8391 share=0.958  drains=5 before=5 (5/0/0) after=0  park_share=2.07e-08  cap: 1/0/0
+   A=5     park= 24.6397  first: 1L N=17.791 a_eff=0.4195 share=0.991  drains=9 before=9 (9/0/0) after=0  park_share=5.53e-06  cap: 0/0/0
+   A=2     park= 35.1696  first: 1L N=17.791 a_eff=0.1678 share=0.864  drains=12 before=12 (12/0/0) after=0  park_share=8.05e-06  cap: 0/0/0
+   A=1.5   park= 35.4059  first: 1L N=17.791 a_eff=0.1259 share=0.858  drains=15 before=15 (15/0/0) after=0  park_share=2.1e-05  cap: 0/0/0
+   A=1     park= 34.5053  first: 1L N=17.791 a_eff=0.08391 share=0.881  drains=16 before=16 (16/0/0) after=0  park_share=6.43e-05  cap: 0/0/0
+   A=0.5   park= 35.8502  first: 1L N=17.791 a_eff=0.04195 share=0.85  drains=31 before=31 (31/0/0) after=0  park_share=0.000167  cap: 0/0/0
+   A=0.1   park= 38.1723  first: 1L N=17.791 a_eff=0.008391 share=0.521  drains=119 before=119 (119/0/0) after=0  park_share=0.000714  cap: 0/0/0
+   A=0.05  park= 38.9485  first: 1L N=17.791 a_eff=0.004195 share=0.347  drains=196 before=196 (191/5/0) after=0  park_share=0.000965  cap: 0/0/0
+
+W-2185  M=4e-31 beta=1.1725
+   A=10    park= 18.9369  first: 1L N=17.604 a_eff=0.8234 share=0.915  drains=6 before=6 (6/0/0) after=0  park_share=5.48e-08  cap: 0/0/0
+   A=5     park= 25.1297  first: 1L N=17.604 a_eff=0.4117 share=0.918  drains=11 before=11 (11/0/0) after=0  park_share=6.67e-06  cap: 0/0/0
+   A=2     park= 34.8172  first: 1L N=17.604 a_eff=0.1647 share=0.843  drains=13 before=13 (13/0/0) after=0  park_share=1.34e-05  cap: 0/0/0
+   A=1.5   park= 34.2408  first: 1L N=17.604 a_eff=0.1235 share=0.843  drains=12 before=12 (12/0/0) after=0  park_share=4.02e-05  cap: 0/0/0
+   A=1     park= 35.9383  first: 1L N=17.604 a_eff=0.08234 share=0.815  drains=21 before=21 (21/0/0) after=0  park_share=5.71e-05  cap: 0/0/0
+   A=0.5   park= 36.9211  first: 1L N=17.604 a_eff=0.04117 share=0.75  drains=37 before=37 (37/0/0) after=0  park_share=0.000149  cap: 0/0/0
+   A=0.1   park= 38.6012  first: 1L N=17.604 a_eff=0.008234 share=0.477  drains=124 before=124 (124/0/0) after=0  park_share=0.000589  cap: 0/0/0
+   A=0.05  park= 39.3191  first: 1L N=17.604 a_eff=0.004117 share=0.329  drains=202 before=202 (195/7/0) after=0  park_share=0.000858  cap: 0/0/0
+
+R-632  M=4e-31 beta=1
+   A=10    park= 35.9539  first: 1L N=35.823 a_eff=0.99 share=0.99  drains=4 before=4 (4/0/0) after=0  park_share=1e-08  cap: 4/0/0
+   A=5     park= 35.9539  first: 1L N=35.823 a_eff=0.99 share=0.99  drains=4 before=4 (4/0/0) after=0  park_share=1e-08  cap: 4/0/0
+   A=2     park= 36.9722  first: 1L N=35.823 a_eff=0.5396 share=0.541  drains=9 before=9 (9/0/0) after=0  park_share=2.32e-09  cap: 2/0/0
+   A=1.5   park= 37.3398  first: 1L N=35.823 a_eff=0.4047 share=0.407  drains=12 before=12 (12/0/0) after=0  park_share=3.36e-08  cap: 1/0/0
+   A=1     park= 37.8303  first: 1L N=35.823 a_eff=0.2698 share=0.272  drains=18 before=18 (18/0/0) after=0  park_share=5.54e-07  cap: 0/0/0
+   A=0.5   park= 38.6458  first: 1L N=35.823 a_eff=0.1349 share=0.137  drains=32 before=32 (29/3/0) after=0  park_share=9.38e-06  cap: 0/0/0
+   A=0.1   failure
+   A=0.05  failure
+
+R-1193  M=4e-31 beta=1.15
+   A=10    park= 19.0330  first: 1L N=17.577 a_eff=0.8252 share=0.941  drains=6 before=6 (6/0/0) after=0  park_share=1.16e-08  cap: 0/0/0
+   A=5     park= 25.3902  first: 1L N=17.577 a_eff=0.4126 share=0.915  drains=11 before=11 (11/0/0) after=0  park_share=3.14e-06  cap: 0/0/0
+   A=2     park= 34.7261  first: 1L N=17.577 a_eff=0.165 share=0.891  drains=13 before=13 (13/0/0) after=0  park_share=1.27e-05  cap: 0/0/0
+   A=1.5   park= 34.4544  first: 1L N=17.577 a_eff=0.1238 share=0.91  drains=14 before=14 (14/0/0) after=0  park_share=3.49e-05  cap: 0/0/0
+   A=1     park= 35.1588  first: 1L N=17.577 a_eff=0.08252 share=0.923  drains=21 before=21 (21/0/0) after=0  park_share=5.4e-05  cap: 0/0/0
+   A=0.5   park= 35.1502  first: 1L N=17.577 a_eff=0.04126 share=0.945  drains=29 before=29 (29/0/0) after=0  park_share=0.000179  cap: 0/0/0
+   A=0.1   park= 33.4886  first: 1L N=17.577 a_eff=0.008252 share=0.964  drains=19 before=19 (19/0/0) after=0  park_share=0.0012  cap: 0/0/0
+   A=0.05  park= 36.9046  first: 1L N=17.577 a_eff=0.004126 share=0.937  drains=144 before=144 (144/0/0) after=0  park_share=0.00236  cap: 0/0/0
+
+R-865  M=4e-31 beta=2
+   A=10    park= 21.3081  first: 1L N=20.352 a_eff=0.7963 share=0.807  drains=7 before=7 (7/0/0) after=0  park_share=9.47e-07  cap: 0/0/0
+   A=5     park= 22.5924  first: 1L N=20.352 a_eff=0.3981 share=0.42  drains=17 before=17 (17/0/0) after=0  park_share=1.87e-05  cap: 0/0/0
+   A=2     park= 28.5641  first: 1L N=20.352 a_eff=0.1593 share=0.291  drains=27 before=27 (27/0/0) after=0  park_share=5.44e-05  cap: 0/0/0
+   A=1.5   park= 29.3874  first: 1L N=20.352 a_eff=0.1194 share=0.277  drains=36 before=36 (36/0/0) after=0  park_share=7.4e-05  cap: 0/0/0
+   A=1     park= 30.1253  first: 1L N=20.352 a_eff=0.07963 share=0.263  drains=45 before=45 (45/0/0) after=0  park_share=0.000133  cap: 0/0/0
+   A=0.5   park= 35.5597  first: 1L N=20.352 a_eff=0.03981 share=0.246  drains=25 before=25 (25/0/0) after=0  park_share=0.000278  cap: 0/0/0
+   A=0.1   park= 30.6612  first: 1L N=20.352 a_eff=0.007963 share=0.255  drains=76 before=76 (76/0/0) after=0  park_share=0.00154  cap: 0/0/0
+   A=0.05  park= 33.7351  first: 1L N=20.352 a_eff=0.003981 share=0.251  drains=40 before=40 (40/0/0) after=0  park_share=0.000337  cap: 0/0/0
+
+R-611  M=4e-31 beta=10
+   A=10    park= 54.9094  first: 1L N=53.900 a_eff=0.6756 share=0.613  drains=8 before=8 (8/0/0) after=0  park_share=6.51e-05  cap: 0/0/0
+   A=5     park= 55.6964  first: 1L N=53.900 a_eff=0.3378 share=0.272  drains=19 before=19 (19/0/0) after=0  park_share=0.000212  cap: 0/0/0
+   A=2     park= 57.1410  first: 1L N=53.900 a_eff=0.1351 share=0.122  drains=38 before=38 (38/0/0) after=0  park_share=0.000472  cap: 0/0/0
+   A=1.5   park= 58.2851  first: 1L N=53.900 a_eff=0.1013 share=0.106  drains=42 before=42 (42/0/0) after=0  park_share=0.000581  cap: 0/0/0
+   A=1     park= 59.1708  first: 1L N=53.900 a_eff=0.06756 share=0.0919  drains=65 before=65 (65/0/0) after=0  park_share=0.00078  cap: 0/0/0
+   A=0.5   park= 60.1054  first: 1L N=53.900 a_eff=0.03378 share=0.0747  drains=124 before=124 (124/0/0) after=0  park_share=0.0014  cap: 0/0/0
+   A=0.1   park= 61.9766  first: 1L N=53.900 a_eff=0.006756 share=0.0375  drains=536 before=536 (536/0/0) after=0  park_share=0.00515  cap: 0/0/0
+   A=0.05  park= 62.9934  first: 1L N=53.900 a_eff=0.003378 share=0.0259  drains=682 before=682 (682/0/0) after=0  park_share=0.00857  cap: 0/0/0
+
+B-2819  M=1e-33 beta=1.2
+   A=10    park= 19.7988  first: 1L N=17.668 a_eff=0.707 share=0.881  drains=8 before=8 (8/0/0) after=0  park_share=6.15e-07  cap: 0/0/0
+   A=5     park= 25.1237  first: 1L N=17.668 a_eff=0.3535 share=0.905  drains=13 before=13 (13/0/0) after=0  park_share=7.26e-06  cap: 0/0/0
+   A=2     park= 27.1604  first: 1L N=17.668 a_eff=0.1414 share=0.888  drains=16 before=16 (16/0/0) after=0  park_share=1.26e-05  cap: 0/0/0
+   A=1.5   park= 34.1644  first: 1L N=17.668 a_eff=0.1061 share=0.861  drains=15 before=15 (15/0/0) after=0  park_share=6.82e-05  cap: 0/0/0
+   A=1     park= 34.1202  first: 1L N=17.668 a_eff=0.0707 share=0.844  drains=16 before=16 (16/0/0) after=0  park_share=9.43e-05  cap: 0/0/0
+   A=0.5   park= 36.7610  first: 1L N=17.668 a_eff=0.03535 share=0.775  drains=39 before=39 (39/0/0) after=0  park_share=0.000221  cap: 0/0/0
+   A=0.1   park= 35.6516  first: 1L N=17.668 a_eff=0.00707 share=0.821  drains=55 before=55 (55/0/0) after=0  park_share=0.00142  cap: 0/0/0
+   A=0.05  park= 37.3886  first: 1L N=17.668 a_eff=0.003535 share=0.782  drains=157 before=157 (157/0/0) after=0  park_share=0.00278  cap: 0/0/0
+
+B-2496  M=1e-33 beta=2
+   A=10    park= 21.6116  first: 1L N=20.352 a_eff=0.6873 share=0.702  drains=9 before=9 (9/0/0) after=0  park_share=5.62e-06  cap: 0/0/0
+   A=5     park= 23.1402  first: 1L N=20.352 a_eff=0.3436 share=0.38  drains=19 before=19 (19/0/0) after=0  park_share=2.15e-05  cap: 0/0/0
+   A=2     park= 28.4142  first: 1L N=20.352 a_eff=0.1375 share=0.286  drains=26 before=26 (26/0/0) after=0  park_share=6.72e-05  cap: 0/0/0
+   A=1.5   park= 28.9704  first: 1L N=20.352 a_eff=0.1031 share=0.277  drains=34 before=34 (34/0/0) after=0  park_share=9.41e-05  cap: 0/0/0
+   A=1     park= 28.6509  first: 1L N=20.352 a_eff=0.06873 share=0.27  drains=34 before=34 (34/0/0) after=0  park_share=0.000142  cap: 0/0/0
+   A=0.5   park= 37.4987  first: 1L N=20.352 a_eff=0.03436 share=0.246  drains=33 before=33 (33/0/0) after=0  park_share=0.000325  cap: 0/0/0
+   A=0.1   park= 30.8624  first: 1L N=20.352 a_eff=0.006873 share=0.255  drains=61 before=61 (61/0/0) after=0  park_share=0.00142  cap: 0/0/0
+   A=0.05  park= 34.7030  first: 1L N=20.352 a_eff=0.003436 share=0.251  drains=38 before=38 (38/0/0) after=0  park_share=0.00269  cap: 0/0/0
+
+B-2772  M=1e-33 beta=10
+   A=10    park= 55.0733  first: 1L N=53.900 a_eff=0.5936 share=0.523  drains=10 before=10 (10/0/0) after=0  park_share=7.47e-05  cap: 0/0/0
+   A=5     park= 55.8498  first: 1L N=53.900 a_eff=0.2968 share=0.237  drains=22 before=22 (22/0/0) after=0  park_share=0.000228  cap: 0/0/0
+   A=2     park= 57.6186  first: 1L N=53.900 a_eff=0.1187 share=0.114  drains=38 before=38 (38/0/0) after=0  park_share=0.000484  cap: 0/0/0
+   A=1.5   park= 58.6838  first: 1L N=53.900 a_eff=0.08904 share=0.101  drains=50 before=50 (50/0/0) after=0  park_share=0.000618  cap: 0/0/0
+   A=1     park= 59.3849  first: 1L N=53.900 a_eff=0.05936 share=0.0887  drains=75 before=75 (75/0/0) after=0  park_share=0.00087  cap: 0/0/0
+   A=0.5   park= 60.2888  first: 1L N=53.900 a_eff=0.02968 share=0.0719  drains=142 before=142 (142/0/0) after=0  park_share=0.00159  cap: 0/0/0
+   A=0.1   park= 62.1489  first: 1L N=53.900 a_eff=0.005936 share=0.0347  drains=602 before=602 (602/0/0) after=0  park_share=0.00573  cap: 0/0/0
+   A=0.05  park= 63.3816  first: 1L N=53.900 a_eff=0.002968 share=0.0249  drains=727 before=727 (727/0/0) after=0  park_share=0.00969  cap: 0/0/0
+
+B-2821  M=1e-30 beta=1.2
+   A=10    park= 18.6975  first: 1L N=17.668 a_eff=0.8436 share=0.894  drains=6 before=6 (6/0/0) after=0  park_share=1.38e-08  cap: 1/0/0
+   A=5     park= 24.5826  first: 1L N=17.668 a_eff=0.4218 share=0.903  drains=11 before=11 (11/0/0) after=0  park_share=3.04e-06  cap: 0/0/0
+   A=2     park= 25.2244  first: 1L N=17.668 a_eff=0.1687 share=0.912  drains=19 before=19 (19/0/0) after=0  park_share=3.4e-05  cap: 0/0/0
+   A=1.5   park= 33.0281  first: 1L N=17.668 a_eff=0.1265 share=0.873  drains=14 before=14 (14/0/0) after=0  park_share=5.02e-05  cap: 0/0/0
+   A=1     park= 35.2590  first: 1L N=17.668 a_eff=0.08436 share=0.84  drains=20 before=20 (20/0/0) after=0  park_share=5.92e-05  cap: 0/0/0
+   A=0.5   park= 36.5854  first: 1L N=17.668 a_eff=0.04218 share=0.781  drains=35 before=35 (35/0/0) after=0  park_share=0.000153  cap: 0/0/0
+   A=0.1   park= 31.2116  first: 1L N=17.668 a_eff=0.008436 share=0.82  drains=5 before=5 (5/0/0) after=0  park_share=0.00114  cap: 0/0/0
+   A=0.05  park= 37.1029  first: 1L N=17.668 a_eff=0.004218 share=0.792  drains=135 before=135 (135/0/0) after=0  park_share=0.00232  cap: 0/0/0
+
+B-2498  M=1e-30 beta=2
+   A=10    park= 21.2484  first: 1L N=20.352 a_eff=0.8165 share=0.826  drains=7 before=7 (7/0/0) after=0  park_share=1.88e-07  cap: 0/0/0
+   A=5     park= 22.5210  first: 1L N=20.352 a_eff=0.4082 share=0.428  drains=17 before=17 (17/0/0) after=0  park_share=1.47e-05  cap: 0/0/0
+   A=2     park= 28.4508  first: 1L N=20.352 a_eff=0.1633 share=0.292  drains=26 before=26 (26/0/0) after=0  park_share=4.73e-05  cap: 0/0/0
+   A=1.5   park= 29.2902  first: 1L N=20.352 a_eff=0.1225 share=0.278  drains=35 before=35 (35/0/0) after=0  park_share=6.63e-05  cap: 0/0/0
+   A=1     park= 30.1767  first: 1L N=20.352 a_eff=0.08165 share=0.262  drains=44 before=44 (44/0/0) after=0  park_share=0.000126  cap: 0/0/0
+   A=0.5   park= 37.4243  first: 1L N=20.352 a_eff=0.04082 share=0.246  drains=33 before=33 (33/0/0) after=0  park_share=0.000253  cap: 0/0/0
+   A=0.1   park= 30.6265  first: 1L N=20.352 a_eff=0.008165 share=0.255  drains=79 before=79 (79/0/0) after=0  park_share=0.00149  cap: 0/0/0
+   A=0.05  park= 31.0526  first: 1L N=20.352 a_eff=0.004082 share=0.25  drains=40 before=40 (40/0/0) after=0  park_share=0.0029  cap: 0/0/0
+
+B-2774  M=1e-30 beta=10
+   A=10    park= 54.8816  first: 1L N=53.900 a_eff=0.6904 share=0.63  drains=8 before=8 (8/0/0) after=0  park_share=4.01e-05  cap: 0/0/0
+   A=5     park= 55.6694  first: 1L N=53.900 a_eff=0.3452 share=0.279  drains=18 before=18 (18/0/0) after=0  park_share=0.00027  cap: 0/0/0
+   A=2     park= 57.0791  first: 1L N=53.900 a_eff=0.1381 share=0.123  drains=38 before=38 (38/0/0) after=0  park_share=0.00045  cap: 0/0/0
+   A=1.5   park= 58.1996  first: 1L N=53.900 a_eff=0.1036 share=0.106  drains=41 before=41 (41/0/0) after=0  park_share=0.000554  cap: 0/0/0
+   A=1     park= 59.1305  first: 1L N=53.900 a_eff=0.06904 share=0.0925  drains=63 before=63 (63/0/0) after=0  park_share=0.000796  cap: 0/0/0
+   A=0.5   park= 60.0739  first: 1L N=53.900 a_eff=0.03452 share=0.0752  drains=121 before=121 (121/0/0) after=0  park_share=0.00139  cap: 0/0/0
+   A=0.1   park= 61.9480  first: 1L N=53.900 a_eff=0.006904 share=0.0379  drains=524 before=524 (524/0/0) after=0  park_share=0.00507  cap: 0/0/0
+   A=0.05  park= 62.9336  first: 1L N=53.900 a_eff=0.003452 share=0.026  drains=678 before=678 (678/0/0) after=0  park_share=0.00841  cap: 0/0/0
+
+L-M5e-20  M=5e-20 beta=2
+   A=10    park= 20.5558  first: 1L N=20.352 a_eff=0.99 share=0.99  drains=4 before=4 (4/0/0) after=0  park_share=9.73e-09  cap: 4/0/0
+   A=5     park= 20.5558  first: 1L N=20.352 a_eff=0.99 share=0.99  drains=4 before=4 (4/0/0) after=0  park_share=9.73e-09  cap: 4/0/0
+   A=2     park= 21.7844  first: 1L N=20.352 a_eff=0.5599 share=0.576  drains=9 before=9 (9/0/0) after=0  park_share=3.89e-08  cap: 1/0/0
+   A=1.5   park= 22.1879  first: 1L N=20.352 a_eff=0.4199 share=0.434  drains=12 before=12 (12/0/0) after=0  park_share=6.25e-06  cap: 0/0/0
+   A=1     park= 23.1409  first: 1L N=20.352 a_eff=0.2799 share=0.323  drains=16 before=16 (16/0/0) after=0  park_share=4.16e-06  cap: 0/0/0
+   A=0.5   park= 26.3310  first: 1L N=20.352 a_eff=0.14 share=0.255  drains=15 before=15 (14/1/0) after=0  park_share=3.8e-05  cap: 0/0/0
+   A=0.1   park= 47.6011  first: 1L N=20.352 a_eff=0.02799 share=0.229  drains=13342 before=13342 (8/1/13333) after=0  park_share=1.04e-09  cap: 0/0/0
+   A=0.05  failure
+
+L-M8e-18  M=8e-18 beta=2
+   A=10    park= 20.5558  first: 1L N=20.352 a_eff=0.99 share=0.99  drains=4 before=4 (3/1/0) after=0  park_share=9.73e-09  cap: 3/1/0
+   A=5     park= 20.5558  first: 1L N=20.352 a_eff=0.99 share=0.99  drains=4 before=4 (3/1/0) after=0  park_share=9.73e-09  cap: 3/1/0
+   A=2     park= 20.5558  first: 1L N=20.352 a_eff=0.99 share=0.99  drains=4 before=4 (3/1/0) after=0  park_share=3.55e-07  cap: 3/0/0
+   A=1.5   park= 20.9651  first: 1L N=20.352 a_eff=0.8639 share=0.871  drains=4 before=4 (3/1/0) after=0  park_share=3.6e-06  cap: 2/0/0
+   A=1     park= 21.5902  first: 1L N=20.352 a_eff=0.576 share=0.594  drains=11 before=11 (4/7/0) after=0  park_share=2.05e-05  cap: 0/0/0
+   A=0.5   park= 25.1269  first: 1L N=20.352 a_eff=0.288 share=0.311  drains=44 before=44 (7/8/29) after=0  park_share=4.14e-05  cap: 0/0/0
+   A=0.1   park= 30.9789  first: 1L N=20.352 a_eff=0.0576 share=0.224  drains=53 before=53 (5/1/47) after=0  park_share=0.000148  cap: 0/0/0
+   A=0.05  park= 46.8713  first: 1L N=20.352 a_eff=0.0288 share=0.221  drains=9565 before=9565 (4/2/9559) after=0  park_share=4.18e-09  cap: 0/0/0
+
+L-M1e-16  M=1e-16 beta=2
+   A=10    park= 22.6304  first: 1L N=20.352 a_eff=0.99 share=0.99  drains=301 before=301 (1/1/299) after=0  park_share=3.59e-05  cap: 1/1/0
+   A=5     park= 22.6311  first: 1L N=20.352 a_eff=0.99 share=0.99  drains=301 before=301 (1/1/299) after=0  park_share=3.59e-05  cap: 1/1/0
+   A=2     park= 24.9565  first: 1L N=20.352 a_eff=0.99 share=0.993  drains=107 before=107 (1/3/103) after=0  park_share=3.56e-05  cap: 1/0/0
+   A=1.5   park= 25.0395  first: 1L N=20.352 a_eff=0.99 share=0.994  drains=93 before=93 (1/4/88) after=0  park_share=3.32e-05  cap: 1/0/0
+   A=1     park= 30.5002  first: 1L N=20.352 a_eff=0.95 share=0.971  drains=151 before=151 (1/4/146) after=0  park_share=4.97e-05  cap: 0/0/0
+   A=0.5   park= 45.5637  first: 1L N=20.352 a_eff=0.475 share=0.757  drains=11158 before=11158 (1/3/11154) after=0  park_share=8.05e-05  cap: 0/0/0
+   A=0.1   park= 47.4754  first: 1L N=20.352 a_eff=0.095 share=0.644  drains=9443 before=9443 (1/2/9440) after=0  park_share=5.25e-07  cap: 0/0/0
+   A=0.05  park= 34.8143  first: 1L N=20.352 a_eff=0.0475 share=0.633  drains=30 before=30 (1/2/27) after=0  park_share=0.000634  cap: 0/0/0
+
+L-M5e-16  M=5e-16 beta=2
+   A=10    park= 25.3263  first: gap N=20.352 a_eff=0.99 share=1  drains=64 before=64 (0/1/63) after=0  park_share=2.08e-05  cap: 0/1/0
+   A=5     park= 25.3269  first: gap N=20.352 a_eff=0.99 share=1  drains=64 before=64 (0/1/63) after=0  park_share=2.08e-05  cap: 0/1/0
+   A=2     park= 34.6843  first: gap N=20.352 a_eff=0.4168 share=1  drains=26 before=26 (0/1/25) after=0  park_share=8.9e-05  cap: 0/0/0
+   A=1.5   park= 33.8404  first: gap N=20.352 a_eff=0.3126 share=1  drains=50 before=50 (0/1/49) after=0  park_share=2.06e-05  cap: 0/0/0
+   A=1     park= 44.9940  first: gap N=20.352 a_eff=0.2084 share=1  drains=8536 before=8536 (0/1/8535) after=0  park_share=0.000242  cap: 0/0/0
+   A=0.5   park= 46.7422  first: gap N=20.352 a_eff=0.1042 share=1  drains=9584 before=9584 (0/1/9583) after=0  park_share=1.88e-07  cap: 0/0/0
+   A=0.1   park= 34.6284  first: gap N=20.352 a_eff=0.02084 share=0.998  drains=41 before=41 (0/1/40) after=0  park_share=0.00153  cap: 0/0/0
+   A=0.05  park= 34.6923  first: gap N=20.352 a_eff=0.01042 share=0.996  drains=33 before=33 (0/1/32) after=0  park_share=0.00355  cap: 0/0/0
+
+L-M4e-15  M=4e-15 beta=2
+   A=10    park= 31.2729  first: cl N=20.352 a_eff=1.508e-06 share=0.0317  drains=28 before=28 (0/0/28) after=0  park_share=0.968  cap: 0/0/0
+   A=5     park= 31.2735  first: cl N=20.352 a_eff=7.538e-07 share=0.0162  drains=28 before=28 (0/0/28) after=0  park_share=0.984  cap: 0/0/0
+   A=2     park= 31.2739  first: cl N=20.352 a_eff=3.015e-07 share=0.00654  drains=28 before=28 (0/0/28) after=0  park_share=0.993  cap: 0/0/0
+   A=1.5   park= 31.2740  first: cl N=20.352 a_eff=2.262e-07 share=0.00491  drains=28 before=28 (0/0/28) after=0  park_share=0.995  cap: 0/0/0
+   A=1     park= 31.2740  first: cl N=20.352 a_eff=1.508e-07 share=0.00328  drains=28 before=28 (0/0/28) after=0  park_share=0.997  cap: 0/0/0
+   A=0.5   park= 31.2741  first: cl N=20.352 a_eff=7.538e-08 share=0.00164  drains=28 before=28 (0/0/28) after=0  park_share=0.998  cap: 0/0/0
+   A=0.1   park= 31.2742  first: cl N=20.352 a_eff=1.508e-08 share=0.000329  drains=28 before=28 (0/0/28) after=0  park_share=1  cap: 0/0/0
+   A=0.05  park= 31.2742  first: cl N=20.352 a_eff=7.538e-09 share=0.000165  drains=28 before=28 (0/0/28) after=0  park_share=1  cap: 0/0/0
+
+C-3016  M=1e-12 beta=4
+   A=10    park= 40.4281  first: cl N=25.076 a_eff=3.298e-07 share=0.00138  drains=330 before=330 (0/0/330) after=0  park_share=0.999  cap: 0/0/0
+   A=5     park= 40.4281  first: cl N=25.076 a_eff=1.649e-07 share=0.000692  drains=330 before=330 (0/0/330) after=0  park_share=0.999  cap: 0/0/0
+   A=2     park= 40.4281  first: cl N=25.076 a_eff=6.596e-08 share=0.000277  drains=330 before=330 (0/0/330) after=0  park_share=1  cap: 0/0/0
+   A=1.5   park= 40.4281  first: cl N=25.076 a_eff=4.947e-08 share=0.000208  drains=330 before=330 (0/0/330) after=0  park_share=1  cap: 0/0/0
+   A=1     park= 40.4281  first: cl N=25.076 a_eff=3.298e-08 share=0.000138  drains=330 before=330 (0/0/330) after=0  park_share=1  cap: 0/0/0
+   A=0.5   park= 40.4281  first: cl N=25.076 a_eff=1.649e-08 share=6.92e-05  drains=330 before=330 (0/0/330) after=0  park_share=1  cap: 0/0/0
+   A=0.1   park= 40.4281  first: cl N=25.076 a_eff=3.298e-09 share=1.38e-05  drains=330 before=330 (0/0/330) after=0  park_share=1  cap: 0/0/0
+   A=0.05  park= 40.4281  first: cl N=25.076 a_eff=1.649e-09 share=6.92e-06  drains=330 before=330 (0/0/330) after=0  park_share=1  cap: 0/0/0
+
+C-3233  M=1e-12 beta=1
+   A=10    park=    None  first: cl N=35.823 a_eff=3.72e-55 share=0.984  drains=301 before=301 (0/0/301) after=0  park_share=None  cap: 0/0/0
+   A=5     park=    None  first: cl N=35.823 a_eff=1.86e-55 share=0.984  drains=301 before=301 (0/0/301) after=0  park_share=None  cap: 0/0/0
+   A=2     park=    None  first: cl N=35.823 a_eff=7.441e-56 share=0.984  drains=301 before=301 (0/0/301) after=0  park_share=None  cap: 0/0/0
+   A=1.5   park=    None  first: cl N=35.823 a_eff=5.581e-56 share=0.984  drains=301 before=301 (0/0/301) after=0  park_share=None  cap: 0/0/0
+   A=1     park=    None  first: cl N=35.823 a_eff=3.72e-56 share=0.984  drains=301 before=301 (0/0/301) after=0  park_share=None  cap: 0/0/0
+   A=0.5   park=    None  first: cl N=35.823 a_eff=1.86e-56 share=0.984  drains=301 before=301 (0/0/301) after=0  park_share=None  cap: 0/0/0
+   A=0.1   park=    None  first: cl N=35.823 a_eff=3.72e-57 share=0.984  drains=301 before=301 (0/0/301) after=0  park_share=None  cap: 0/0/0
+   A=0.05  park=    None  first: cl N=35.823 a_eff=1.86e-57 share=0.984  drains=301 before=301 (0/0/301) after=0  park_share=None  cap: 0/0/0
+
+C-3873  M=1e-12 beta=1.11
+   A=10    timeout
+   A=5     timeout
+   A=2     timeout
+   A=1.5   timeout
+   A=1     park=    None  first: cl N=17.694 a_eff=1.002e-19 share=1  drains=2487 before=2487 (0/0/2487) after=0  park_share=None  cap: 0/0/0
+   A=0.5   timeout
+   A=0.1   timeout
+   A=0.05  timeout

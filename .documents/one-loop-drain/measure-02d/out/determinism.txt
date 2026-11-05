@@ -1,0 +1,15 @@
+# the determinism check (prompt 02d §1.4 step 1; note 02d ruling 8): check-1's run against check-2's, under
+# note 02's ruling 6 with nothing of the record excused, and the partial files' regimes, injections and
+# candidates by repr per integration
+P-2197-A1 (check-1 against check-2): outcome success / success; 1 integration(s); 5 injections and 5 candidates in the partial files; line differences 0; partial differences 0; stdout equal after masking (13 lines)
+   samples_sha256 b749cbb76966c958934c07a5722e2efe4fc304b3d0077aa366ae8b879296b0e6; Delta_N_eff_today 0.0600931846564863; Yp 0.25692050931671995; model one-loop-measured-v1
+L-M1e-16-A1 (check-1 against check-2): outcome success / success; 1 integration(s); 154 injections and 154 candidates in the partial files; line differences 0; partial differences 0; stdout equal after masking (15 lines)
+   samples_sha256 ee7cde8e875c0076458ea0b3440826fe9b057d071dd2e6f2e593ecf5cce5d799; Delta_N_eff_today 0.14425913650691496; Yp 0.24875477676139102; model one-loop-measured-v1
+
+# not required: check-1's run against the A1 pass's untagged run of the same task
+P-2197-A1 (check-1 against A1): outcome success / success; 1 integration(s); 5 injections and 5 candidates in the partial files; line differences 0; partial differences 0; stdout equal after masking (13 lines)
+   samples_sha256 b749cbb76966c958934c07a5722e2efe4fc304b3d0077aa366ae8b879296b0e6; Delta_N_eff_today 0.0600931846564863; Yp 0.25692050931671995; model one-loop-measured-v1
+L-M1e-16-A1 (check-1 against A1): outcome success / success; 1 integration(s); 154 injections and 154 candidates in the partial files; line differences 0; partial differences 0; stdout equal after masking (15 lines)
+   samples_sha256 ee7cde8e875c0076458ea0b3440826fe9b057d071dd2e6f2e593ecf5cce5d799; Delta_N_eff_today 0.14425913650691496; Yp 0.24875477676139102; model one-loop-measured-v1
+
+every pair is bitwise equal

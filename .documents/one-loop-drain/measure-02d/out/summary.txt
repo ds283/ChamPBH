@@ -1,0 +1,121 @@
+# the headline numbers by A (verification §2d cites them); every value is from sample.jsonl
+
+A=10: outcomes {'success': 29, 'timeout': 1}
+   enter the gap (3): L-M8e-18 L-M1e-16 L-M5e-16
+   reach R <= 1 (5): L-M1e-16 L-M5e-16 L-M4e-15 C-3016 C-3233
+   do not park (1): C-3233
+   P and W (12), Delta N_eff today: 0.0289306 to 0.633695
+   P and W (12), Delta N_eff 1 MeV: 0 to 0.614116
+   P and W (12), r_chi today: 0.00388433 to 0.0850824
+   P and W (12), Y_p: 0.246878 to 0.254958
+   P and W (12), D/H (1e-5): 2.46764 to 2.6668
+   P and W (12), parking N: 18.8913 to 24.6757
+   P and W (12), first-impact alpha_eff: 0.822644 to 0.99
+   P and W (12), drains: 3 to 6
+   P and W (12), l_min: 19.9629 to 27.2912
+   P-2197: dNeff today 0.555434, 1 MeV 0.538273, r_chi 0.0745747, Yp 0.254003, DoH 2.64109, parking N 18.8976
+
+A=5: outcomes {'success': 29, 'timeout': 1}
+   enter the gap (3): L-M8e-18 L-M1e-16 L-M5e-16
+   reach R <= 1 (5): L-M1e-16 L-M5e-16 L-M4e-15 C-3016 C-3233
+   do not park (1): C-3233
+   P and W (12), Delta N_eff today: 0.0230295 to 0.328203
+   P and W (12), Delta N_eff 1 MeV: 0 to 0.30423
+   P and W (12), r_chi today: 0.00309203 to 0.0440658
+   P and W (12), Y_p: 0.248437 to 0.253936
+   P and W (12), D/H (1e-5): 2.4847 to 2.58191
+   P and W (12), parking N: 23.9329 to 30.2397
+   P and W (12), first-impact alpha_eff: 0.411322 to 0.573852
+   P and W (12), drains: 5 to 11
+   P and W (12), l_min: 12.9967 to 21.3025
+   P-2197: dNeff today 0.272689, 1 MeV 0.263618, r_chi 0.0366123, Yp 0.249984, DoH 2.54527, parking N 24.5662
+
+A=2: outcomes {'success': 29, 'timeout': 1}
+   enter the gap (3): L-M8e-18 L-M1e-16 L-M5e-16
+   reach R <= 1 (5): L-M1e-16 L-M5e-16 L-M4e-15 C-3016 C-3233
+   do not park (1): C-3233
+   P and W (12), Delta N_eff today: 0.00954907 to 0.129175
+   P and W (12), Delta N_eff 1 MeV: 0 to 0.118746
+   P and W (12), r_chi today: 0.00128209 to 0.0173436
+   P and W (12), Y_p: 0.248999 to 0.258896
+   P and W (12), D/H (1e-5): 2.50787 to 2.80606
+   P and W (12), parking N: 29.8884 to 35.1839
+   P and W (12), first-impact alpha_eff: 0.164529 to 0.229541
+   P and W (12), drains: 3 to 13
+   P and W (12), l_min: 6.29602 to 13.5401
+   P-2197: dNeff today 0.116981, 1 MeV 0.105868, r_chi 0.0157064, Yp 0.250915, DoH 2.55711, parking N 33.5173
+
+A=1.5: outcomes {'success': 29, 'timeout': 1}
+   enter the gap (3): L-M8e-18 L-M1e-16 L-M5e-16
+   reach R <= 1 (5): L-M1e-16 L-M5e-16 L-M4e-15 C-3016 C-3233
+   do not park (1): C-3233
+   P and W (12), Delta N_eff today: 0.00745251 to 0.0991511
+   P and W (12), Delta N_eff 1 MeV: 0 to 0.0890595
+   P and W (12), r_chi today: 0.0010006 to 0.0133124
+   P and W (12), Y_p: 0.251124 to 0.262913
+   P and W (12), D/H (1e-5): 2.51247 to 2.76975
+   P and W (12), parking N: 30.9686 to 35.4059
+   P and W (12), first-impact alpha_eff: 0.123397 to 0.172156
+   P and W (12), drains: 5 to 16
+   P and W (12), l_min: 5.82966 to 13.0025
+   P-2197: dNeff today 0.0902648, 1 MeV 0.0794468, r_chi 0.0121193, Yp 0.252797, DoH 2.65785, parking N 35.2085
+
+A=1: outcomes {'success': 30}
+   enter the gap (3): L-M8e-18 L-M1e-16 L-M5e-16
+   reach R <= 1 (6): L-M1e-16 L-M5e-16 L-M4e-15 C-3016 C-3233 C-3873
+   do not park (2): C-3233 C-3873
+   P and W (12), Delta N_eff today: 0.00558495 to 0.0670819
+   P and W (12), Delta N_eff 1 MeV: 0 to 0.059373
+   P and W (12), r_chi today: 0.000749857 to 0.00900667
+   P and W (12), Y_p: 0.253075 to 0.267291
+   P and W (12), D/H (1e-5): 2.48407 to 2.78282
+   P and W (12), parking N: 29.0353 to 35.9383
+   P and W (12), first-impact alpha_eff: 0.0822644 to 0.11477
+   P and W (12), drains: 5 to 21
+   P and W (12), l_min: 5.07748 to 15.5471
+   P-2197: dNeff today 0.0600932, 1 MeV 0.0529143, r_chi 0.00806834, Yp 0.256921, DoH 2.53433, parking N 29.0353
+
+A=0.5: outcomes {'success': 29, 'timeout': 1}
+   enter the gap (5): R-632 L-M5e-20 L-M8e-18 L-M1e-16 L-M5e-16
+   reach R <= 1 (6): L-M8e-18 L-M1e-16 L-M5e-16 L-M4e-15 C-3016 C-3233
+   do not park (1): C-3233
+   P and W (12), Delta N_eff today: 0.00389396 to 0.0377067
+   P and W (12), Delta N_eff 1 MeV: 0 to 0.0296865
+   P and W (12), r_chi today: 0.000522818 to 0.00506264
+   P and W (12), Y_p: 0.255063 to 0.271267
+   P and W (12), D/H (1e-5): 2.6604 to 2.83089
+   P and W (12), parking N: 35.8502 to 36.9533
+   P and W (12), first-impact alpha_eff: 0.0411322 to 0.0573852
+   P and W (12), drains: 31 to 37
+   P and W (12), l_min: 4.05486 to 5.46251
+   P-2197: dNeff today 0.0328035, 1 MeV 0.0263917, r_chi 0.00440432, Yp 0.258664, DoH 2.76401, parking N 36.7351
+
+A=0.1: outcomes {'success': 28, 'failure': 1, 'timeout': 1}
+   enter the gap (4): L-M5e-20 L-M8e-18 L-M1e-16 L-M5e-16
+   reach R <= 1 (7): L-M5e-20 L-M8e-18 L-M1e-16 L-M5e-16 L-M4e-15 C-3016 C-3233
+   do not park (1): C-3233
+   P and W (12), Delta N_eff today: 0.00263751 to 0.0128212
+   P and W (12), Delta N_eff 1 MeV: 0 to 0.0059373
+   P and W (12), r_chi today: 0.000354123 to 0.00172142
+   P and W (12), Y_p: 0.255143 to 0.273974
+   P and W (12), D/H (1e-5): 2.59107 to 2.91584
+   P and W (12), parking N: 37.6765 to 38.6959
+   P and W (12), first-impact alpha_eff: 0.00822644 to 0.011477
+   P and W (12), drains: 116 to 124
+   P and W (12), l_min: 1.03318 to 2.04771
+   P-2197: dNeff today 0.0113109, 1 MeV 0.00526197, r_chi 0.00151864, Yp 0.258628, DoH 2.86284, parking N 38.6959
+
+A=0.05: outcomes {'success': 27, 'failure': 2, 'timeout': 1}
+   enter the gap (13): P-2197 W-2187 W-2179 W-2078 W-2192 W-2209 W-2183 W-2172 W-2178 W-2185 L-M8e-18 L-M1e-16 L-M5e-16
+   reach R <= 1 (6): L-M8e-18 L-M1e-16 L-M5e-16 L-M4e-15 C-3016 C-3233
+   do not park (1): C-3233
+   P and W (12), Delta N_eff today: 0.00248519 to 0.00934633
+   P and W (12), Delta N_eff 1 MeV: 0 to 0.00296865
+   P and W (12), r_chi today: 0.000333671 to 0.00125487
+   P and W (12), Y_p: 0.255186 to 0.274241
+   P and W (12), D/H (1e-5): 2.57717 to 2.93502
+   P and W (12), parking N: 38.3884 to 39.4401
+   P and W (12), first-impact alpha_eff: 0.00411322 to 0.00573852
+   P and W (12), drains: 190 to 203
+   P and W (12), l_min: 0.0790009 to 0.730859
+   P-2197: dNeff today 0.00855755, 1 MeV 0.00262978, r_chi 0.00114897, Yp 0.258389, DoH 2.86983, parking N 39.4401

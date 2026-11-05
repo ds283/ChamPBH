@@ -1,0 +1,324 @@
+# §2 item 2, the regime shares across the eight A, from each accepted integration (the payload's record)
+# K: shares of K(N_final) drained by regime and by the parking leftover (drain_values'); n: candidates/drains
+# by regime; l_min; gap: N and ln R at the first gap candidate; R<=1: N and ln R at the first classical one;
+# edges: clamp (gap, 1 + q ln L <= 0), thr (gap, ln R <= r0), cont (classical, L > 134), Sheld (classical,
+# L < 0.3), uflow (classical, alpha_eff = 0 with w_gate > 0); U9: drains with w_gate < 1; P19: unassessed
+
+P-2197  M=4e-31 beta=1.185
+   A=10    K: 1L=1 gap=0 cl=0 park=9.52e-08  n: 1L=6/6 gap=0/0 cl=0/0  l_min=27.25  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=5     K: 1L=1 gap=0 cl=0 park=4.94e-06  n: 1L=10/10 gap=0/0 cl=0/0  l_min=20.91  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=2     K: 1L=1 gap=0 cl=0 park=2.56e-05  n: 1L=11/11 gap=0/0 cl=0/0  l_min=9.622  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1.5   K: 1L=1 gap=0 cl=0 park=2.5e-05  n: 1L=16/16 gap=0/0 cl=0/0  l_min=7.002  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1     K: 1L=1 gap=0 cl=0 park=6.84e-05  n: 1L=5/5 gap=0/0 cl=0/0  l_min=15.55  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.5   K: 1L=1 gap=0 cl=0 park=0.000161  n: 1L=36/36 gap=0/0 cl=0/0  l_min=4.734  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.1   K: 1L=0.999 gap=0 cl=0 park=0.000598  n: 1L=124/124 gap=0/0 cl=0/0  l_min=1.333  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.05  K: 1L=0.999 gap=0.000522 cl=0 park=0.000819  n: 1L=192/192 gap=11/11 cl=0/0  l_min=0.09778  gap: N=39.433 lnR=14.84  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+
+P-2188  M=4e-31 beta=1.06
+   A=10    K: 1L=1 gap=0 cl=0 park=9.64e-07  n: 1L=3/3 gap=0/0 cl=0/0  l_min=19.96  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=5     K: 1L=1 gap=0 cl=0 park=7.09e-07  n: 1L=5/5 gap=0/0 cl=0/0  l_min=14.38  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=2     K: 1L=1 gap=0 cl=0 park=0.00037  n: 1L=3/3 gap=0/0 cl=0/0  l_min=12.79  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1.5   K: 1L=1 gap=0 cl=0 park=0.000337  n: 1L=11/11 gap=0/0 cl=0/0  l_min=7.979  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1     K: 1L=0.999 gap=0 cl=0 park=0.0007  n: 1L=17/17 gap=0/0 cl=0/0  l_min=6.581  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.5   K: 1L=0.999 gap=0 cl=0 park=0.00135  n: 1L=32/32 gap=0/0 cl=0/0  l_min=5.017  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.1   K: 1L=0.997 gap=0 cl=0 park=0.00254  n: 1L=116/116 gap=0/0 cl=0/0  l_min=2.048  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.05  K: 1L=0.997 gap=0 cl=0 park=0.00283  n: 1L=190/190 gap=0/0 cl=0/0  l_min=0.7309  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+
+W-2187  M=4e-31 beta=1.0775
+   A=10    K: 1L=1 gap=0 cl=0 park=1.98e-08  n: 1L=4/4 gap=0/0 cl=0/0  l_min=24.15  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=5     K: 1L=1 gap=0 cl=0 park=1.75e-05  n: 1L=10/10 gap=0/0 cl=0/0  l_min=19.16  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=2     K: 1L=1 gap=0 cl=0 park=0.000119  n: 1L=6/6 gap=0/0 cl=0/0  l_min=11.61  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1.5   K: 1L=1 gap=0 cl=0 park=0.000164  n: 1L=13/13 gap=0/0 cl=0/0  l_min=7.246  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1     K: 1L=1 gap=0 cl=0 park=0.000234  n: 1L=20/20 gap=0/0 cl=0/0  l_min=5.614  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.5   K: 1L=1 gap=0 cl=0 park=0.000429  n: 1L=36/36 gap=0/0 cl=0/0  l_min=4.055  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.1   K: 1L=0.999 gap=0 cl=0 park=0.000949  n: 1L=120/120 gap=0/0 cl=0/0  l_min=1.072  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.05  K: 1L=0.997 gap=0.00172 cl=0 park=0.00109  n: 1L=177/177 gap=22/22 cl=0/0  l_min=0.1054  gap: N=39.004 lnR=14.86  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+
+W-1631  M=4e-31 beta=1.07
+   A=10    K: 1L=1 gap=0 cl=0 park=9.65e-08  n: 1L=4/4 gap=0/0 cl=0/0  l_min=20.32  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=5     K: 1L=1 gap=0 cl=0 park=1.8e-06  n: 1L=7/7 gap=0/0 cl=0/0  l_min=13  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=2     K: 1L=1 gap=0 cl=0 park=3.84e-05  n: 1L=12/12 gap=0/0 cl=0/0  l_min=6.394  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1.5   K: 1L=1 gap=0 cl=0 park=0.000112  n: 1L=15/15 gap=0/0 cl=0/0  l_min=5.83  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1     K: 1L=1 gap=0 cl=0 park=0.000213  n: 1L=21/21 gap=0/0 cl=0/0  l_min=5.077  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.5   K: 1L=0.999 gap=0 cl=0 park=0.000522  n: 1L=36/36 gap=0/0 cl=0/0  l_min=4.058  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.1   K: 1L=0.999 gap=0 cl=0 park=0.00146  n: 1L=119/119 gap=0/0 cl=0/0  l_min=1.503  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.05  K: 1L=0.998 gap=0 cl=0 park=0.00173  n: 1L=194/194 gap=0/0 cl=0/0  l_min=0.1536  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+
+W-2179  M=4e-31 beta=1.0925
+   A=10    K: 1L=1 gap=0 cl=0 park=1.13e-08  n: 1L=5/5 gap=0/0 cl=0/0  l_min=25.15  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=5     K: 1L=1 gap=0 cl=0 park=1.21e-05  n: 1L=8/8 gap=0/0 cl=0/0  l_min=21.17  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=2     K: 1L=1 gap=0 cl=0 park=3.18e-05  n: 1L=5/5 gap=0/0 cl=0/0  l_min=13.02  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1.5   K: 1L=1 gap=0 cl=0 park=4.38e-05  n: 1L=15/15 gap=0/0 cl=0/0  l_min=6.831  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1     K: 1L=1 gap=0 cl=0 park=0.000163  n: 1L=13/13 gap=0/0 cl=0/0  l_min=8.361  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.5   K: 1L=1 gap=0 cl=0 park=0.00026  n: 1L=35/35 gap=0/0 cl=0/0  l_min=4.509  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.1   K: 1L=0.999 gap=0 cl=0 park=0.000739  n: 1L=121/121 gap=0/0 cl=0/0  l_min=1.149  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.05  K: 1L=0.998 gap=0.00116 cl=0 park=0.000973  n: 1L=181/181 gap=18/18 cl=0/0  l_min=0.079  gap: N=39.043 lnR=14.79  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+
+W-2078  M=4e-31 beta=1.175
+   A=10    K: 1L=1 gap=0 cl=0 park=6.18e-08  n: 1L=6/6 gap=0/0 cl=0/0  l_min=27.1  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=5     K: 1L=1 gap=0 cl=0 park=6.23e-06  n: 1L=11/11 gap=0/0 cl=0/0  l_min=20.32  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=2     K: 1L=1 gap=0 cl=0 park=1.42e-05  n: 1L=13/13 gap=0/0 cl=0/0  l_min=7.478  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1.5   K: 1L=1 gap=0 cl=0 park=4.01e-05  n: 1L=5/5 gap=0/0 cl=0/0  l_min=13  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1     K: 1L=1 gap=0 cl=0 park=5.28e-05  n: 1L=21/21 gap=0/0 cl=0/0  l_min=5.949  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.5   K: 1L=1 gap=0 cl=0 park=0.000152  n: 1L=37/37 gap=0/0 cl=0/0  l_min=4.3  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.1   K: 1L=0.999 gap=0 cl=0 park=0.00057  n: 1L=124/124 gap=0/0 cl=0/0  l_min=1.272  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.05  K: 1L=0.999 gap=0.000567 cl=0 park=0.000801  n: 1L=191/191 gap=12/12 cl=0/0  l_min=0.08732  gap: N=39.392 lnR=14.81  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+
+W-2192  M=4e-31 beta=1.105
+   A=10    K: 1L=1 gap=0 cl=0 park=2.91e-08  n: 1L=5/5 gap=0/0 cl=0/0  l_min=25.91  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=5     K: 1L=1 gap=0 cl=0 park=3.79e-06  n: 1L=9/9 gap=0/0 cl=0/0  l_min=20.45  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=2     K: 1L=1 gap=0 cl=0 park=7.62e-06  n: 1L=12/12 gap=0/0 cl=0/0  l_min=6.296  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1.5   K: 1L=1 gap=0 cl=0 park=1.94e-05  n: 1L=15/15 gap=0/0 cl=0/0  l_min=6.042  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1     K: 1L=1 gap=0 cl=0 park=8.05e-05  n: 1L=14/14 gap=0/0 cl=0/0  l_min=8.073  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.5   K: 1L=1 gap=0 cl=0 park=0.000154  n: 1L=32/32 gap=0/0 cl=0/0  l_min=5.211  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.1   K: 1L=0.999 gap=0 cl=0 park=0.000608  n: 1L=120/120 gap=0/0 cl=0/0  l_min=1.341  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.05  K: 1L=0.999 gap=0.000617 cl=0 park=0.000872  n: 1L=185/185 gap=12/12 cl=0/0  l_min=0.08591  gap: N=39.046 lnR=14.81  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+
+W-2209  M=4e-31 beta=1.1875
+   A=10    K: 1L=1 gap=0 cl=0 park=1.05e-07  n: 1L=6/6 gap=0/0 cl=0/0  l_min=27.29  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=5     K: 1L=1 gap=0 cl=0 park=6.05e-06  n: 1L=9/9 gap=0/0 cl=0/0  l_min=21.3  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=2     K: 1L=1 gap=0 cl=0 park=1.95e-05  n: 1L=13/13 gap=0/0 cl=0/0  l_min=9.068  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1.5   K: 1L=1 gap=0 cl=0 park=2.83e-05  n: 1L=14/14 gap=0/0 cl=0/0  l_min=8.2  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1     K: 1L=1 gap=0 cl=0 park=7.37e-05  n: 1L=19/19 gap=0/0 cl=0/0  l_min=7.181  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.5   K: 1L=1 gap=0 cl=0 park=0.000161  n: 1L=35/35 gap=0/0 cl=0/0  l_min=5.093  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.1   K: 1L=0.999 gap=0 cl=0 park=0.000628  n: 1L=124/124 gap=0/0 cl=0/0  l_min=1.456  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.05  K: 1L=0.999 gap=0.000279 cl=0 park=0.000885  n: 1L=196/196 gap=6/6 cl=0/0  l_min=0.1206  gap: N=39.387 lnR=14.91  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+
+W-2183  M=4e-31 beta=1.125
+   A=10    K: 1L=1 gap=0 cl=0 park=2.75e-09  n: 1L=6/6 gap=0/0 cl=0/0  l_min=25.91  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=5     K: 1L=1 gap=0 cl=0 park=2.58e-06  n: 1L=11/11 gap=0/0 cl=0/0  l_min=19.03  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=2     K: 1L=1 gap=0 cl=0 park=2.76e-05  n: 1L=10/10 gap=0/0 cl=0/0  l_min=10.83  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1.5   K: 1L=1 gap=0 cl=0 park=3.45e-05  n: 1L=14/14 gap=0/0 cl=0/0  l_min=7.934  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1     K: 1L=1 gap=0 cl=0 park=5.8e-05  n: 1L=20/20 gap=0/0 cl=0/0  l_min=6.252  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.5   K: 1L=1 gap=0 cl=0 park=0.000148  n: 1L=33/33 gap=0/0 cl=0/0  l_min=5.215  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.1   K: 1L=0.999 gap=0 cl=0 park=0.000526  n: 1L=122/122 gap=0/0 cl=0/0  l_min=1.203  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.05  K: 1L=0.998 gap=0.000867 cl=0 park=0.000782  n: 1L=183/183 gap=17/17 cl=0/0  l_min=0.1111  gap: N=39.193 lnR=14.88  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+
+W-2172  M=4e-31 beta=1.1225
+   A=10    K: 1L=1 gap=0 cl=0 park=2.11e-09  n: 1L=6/6 gap=0/0 cl=0/0  l_min=25.79  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=5     K: 1L=1 gap=0 cl=0 park=2.97e-06  n: 1L=11/11 gap=0/0 cl=0/0  l_min=19.26  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=2     K: 1L=1 gap=0 cl=0 park=4.95e-06  n: 1L=6/6 gap=0/0 cl=0/0  l_min=13.54  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1.5   K: 1L=1 gap=0 cl=0 park=3.56e-05  n: 1L=14/14 gap=0/0 cl=0/0  l_min=7.284  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1     K: 1L=1 gap=0 cl=0 park=7.09e-05  n: 1L=12/12 gap=0/0 cl=0/0  l_min=8.779  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.5   K: 1L=1 gap=0 cl=0 park=0.000131  n: 1L=36/36 gap=0/0 cl=0/0  l_min=4.193  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.1   K: 1L=1 gap=0 cl=0 park=0.000487  n: 1L=122/122 gap=0/0 cl=0/0  l_min=1.033  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.05  K: 1L=0.998 gap=0.0011 cl=0 park=0.000745  n: 1L=180/180 gap=21/21 cl=0/0  l_min=0.1141  gap: N=39.218 lnR=14.89  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+
+W-2178  M=4e-31 beta=1.1025
+   A=10    K: 1L=1 gap=0 cl=0 park=2.07e-08  n: 1L=5/5 gap=0/0 cl=0/0  l_min=25.69  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=5     K: 1L=1 gap=0 cl=0 park=5.53e-06  n: 1L=9/9 gap=0/0 cl=0/0  l_min=20.36  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=2     K: 1L=1 gap=0 cl=0 park=8.05e-06  n: 1L=12/12 gap=0/0 cl=0/0  l_min=6.296  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1.5   K: 1L=1 gap=0 cl=0 park=2.1e-05  n: 1L=15/15 gap=0/0 cl=0/0  l_min=6.015  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1     K: 1L=1 gap=0 cl=0 park=6.43e-05  n: 1L=16/16 gap=0/0 cl=0/0  l_min=7.508  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.5   K: 1L=1 gap=0 cl=0 park=0.000167  n: 1L=31/31 gap=0/0 cl=0/0  l_min=5.463  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.1   K: 1L=0.999 gap=0 cl=0 park=0.000714  n: 1L=119/119 gap=0/0 cl=0/0  l_min=1.539  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.05  K: 1L=0.999 gap=0.000248 cl=0 park=0.000965  n: 1L=191/191 gap=5/5 cl=0/0  l_min=0.1123  gap: N=38.945 lnR=14.88  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+
+W-2185  M=4e-31 beta=1.1725
+   A=10    K: 1L=1 gap=0 cl=0 park=5.48e-08  n: 1L=6/6 gap=0/0 cl=0/0  l_min=27.06  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=5     K: 1L=1 gap=0 cl=0 park=6.67e-06  n: 1L=11/11 gap=0/0 cl=0/0  l_min=20.29  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=2     K: 1L=1 gap=0 cl=0 park=1.34e-05  n: 1L=13/13 gap=0/0 cl=0/0  l_min=7.504  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1.5   K: 1L=1 gap=0 cl=0 park=4.02e-05  n: 1L=12/12 gap=0/0 cl=0/0  l_min=8.507  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1     K: 1L=1 gap=0 cl=0 park=5.71e-05  n: 1L=21/21 gap=0/0 cl=0/0  l_min=5.872  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.5   K: 1L=1 gap=0 cl=0 park=0.000149  n: 1L=37/37 gap=0/0 cl=0/0  l_min=4.322  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.1   K: 1L=0.999 gap=0 cl=0 park=0.000589  n: 1L=124/124 gap=0/0 cl=0/0  l_min=1.375  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.05  K: 1L=0.999 gap=0.000322 cl=0 park=0.000858  n: 1L=195/195 gap=7/7 cl=0/0  l_min=0.1218  gap: N=39.315 lnR=14.92  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+
+R-632  M=4e-31 beta=1
+   A=10    K: 1L=1 gap=0 cl=0 park=1e-08  n: 1L=4/4 gap=0/0 cl=0/0  l_min=3.219  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=5     K: 1L=1 gap=0 cl=0 park=1e-08  n: 1L=4/4 gap=0/0 cl=0/0  l_min=3.219  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=2     K: 1L=1 gap=0 cl=0 park=2.32e-09  n: 1L=9/9 gap=0/0 cl=0/0  l_min=0.695  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1.5   K: 1L=1 gap=0 cl=0 park=3.36e-08  n: 1L=12/12 gap=0/0 cl=0/0  l_min=1.266  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1     K: 1L=1 gap=0 cl=0 park=5.54e-07  n: 1L=18/18 gap=0/0 cl=0/0  l_min=0.5647  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.5   K: 1L=1 gap=2.96e-05 cl=0 park=9.38e-06  n: 1L=29/29 gap=3/3 cl=0/0  l_min=0.192  gap: N=38.644 lnR=13.64  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.1   failure: over all integrations 1L=44 gap=88 cl=3269 un=0; last integration's edges {'gap_clamp': 0, 'gap_below_threshold': 20, 'classical_continuation': 0, 'classical_S_held': 3204, 'classical_underflow': 0}
+   A=0.05  failure: over all integrations 1L=43 gap=52 cl=800 un=0; last integration's edges {'gap_clamp': 0, 'gap_below_threshold': 8, 'classical_continuation': 0, 'classical_S_held': 776, 'classical_underflow': 0}
+
+R-1193  M=4e-31 beta=1.15
+   A=10    K: 1L=1 gap=0 cl=0 park=1.16e-08  n: 1L=6/6 gap=0/0 cl=0/0  l_min=26.65  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=5     K: 1L=1 gap=0 cl=0 park=3.14e-06  n: 1L=11/11 gap=0/0 cl=0/0  l_min=19.66  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=2     K: 1L=1 gap=0 cl=0 park=1.27e-05  n: 1L=13/13 gap=0/0 cl=0/0  l_min=7.464  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1.5   K: 1L=1 gap=0 cl=0 park=3.49e-05  n: 1L=14/14 gap=0/0 cl=0/0  l_min=7.99  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1     K: 1L=1 gap=0 cl=0 park=5.4e-05  n: 1L=21/21 gap=0/0 cl=0/0  l_min=6.858  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.5   K: 1L=1 gap=0 cl=0 park=0.000179  n: 1L=29/29 gap=0/0 cl=0/0  l_min=6.97  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.1   K: 1L=0.999 gap=0 cl=0 park=0.0012  n: 1L=19/19 gap=0/0 cl=0/0  l_min=9.481  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.05  K: 1L=0.998 gap=0 cl=0 park=0.00236  n: 1L=144/144 gap=0/0 cl=0/0  l_min=4.196  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+
+R-865  M=4e-31 beta=2
+   A=10    K: 1L=1 gap=0 cl=0 park=9.47e-07  n: 1L=7/7 gap=0/0 cl=0/0  l_min=29.1  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=5     K: 1L=1 gap=0 cl=0 park=1.87e-05  n: 1L=17/17 gap=0/0 cl=0/0  l_min=27.99  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=2     K: 1L=1 gap=0 cl=0 park=5.44e-05  n: 1L=27/27 gap=0/0 cl=0/0  l_min=21.15  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1.5   K: 1L=1 gap=0 cl=0 park=7.4e-05  n: 1L=36/36 gap=0/0 cl=0/0  l_min=20.17  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1     K: 1L=1 gap=0 cl=0 park=0.000133  n: 1L=45/45 gap=0/0 cl=0/0  l_min=19.33  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.5   K: 1L=1 gap=0 cl=0 park=0.000278  n: 1L=25/25 gap=0/0 cl=0/0  l_min=12.5  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.1   K: 1L=0.998 gap=0 cl=0 park=0.00154  n: 1L=76/76 gap=0/0 cl=0/0  l_min=18.7  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.05  K: 1L=1 gap=0 cl=0 park=0.000337  n: 1L=40/40 gap=0/0 cl=0/0  l_min=14.16  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+
+R-611  M=4e-31 beta=10
+   A=10    K: 1L=1 gap=0 cl=0 park=6.51e-05  n: 1L=8/8 gap=0/0 cl=0/0  l_min=36.15  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=5     K: 1L=1 gap=0 cl=0 park=0.000212  n: 1L=19/19 gap=0/0 cl=0/0  l_min=35.41  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=2     K: 1L=1 gap=0 cl=0 park=0.000472  n: 1L=38/38 gap=0/0 cl=0/0  l_min=33.93  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1.5   K: 1L=0.999 gap=0 cl=0 park=0.000581  n: 1L=42/42 gap=0/0 cl=0/0  l_min=32.67  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1     K: 1L=0.999 gap=0 cl=0 park=0.00078  n: 1L=65/65 gap=0/0 cl=0/0  l_min=31.68  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.5   K: 1L=0.999 gap=0 cl=0 park=0.0014  n: 1L=124/124 gap=0/0 cl=0/0  l_min=30.66  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.1   K: 1L=0.995 gap=0 cl=0 park=0.00515  n: 1L=536/536 gap=0/0 cl=0/0  l_min=28.66  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.05  K: 1L=0.991 gap=0 cl=0 park=0.00857  n: 1L=682/682 gap=0/0 cl=0/0  l_min=27.57  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+
+B-2819  M=1e-33 beta=1.2
+   A=10    K: 1L=1 gap=0 cl=0 park=6.15e-07  n: 1L=8/8 gap=0/0 cl=0/0  l_min=31.41  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=5     K: 1L=1 gap=0 cl=0 park=7.26e-06  n: 1L=13/13 gap=0/0 cl=0/0  l_min=24.93  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=2     K: 1L=1 gap=0 cl=0 park=1.26e-05  n: 1L=16/16 gap=0/0 cl=0/0  l_min=21.86  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1.5   K: 1L=1 gap=0 cl=0 park=6.82e-05  n: 1L=15/15 gap=0/0 cl=0/0  l_min=10.73  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1     K: 1L=1 gap=0 cl=0 park=9.43e-05  n: 1L=16/16 gap=0/0 cl=0/0  l_min=10.7  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.5   K: 1L=1 gap=0 cl=0 park=0.000221  n: 1L=39/39 gap=0/0 cl=0/0  l_min=5.199  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.1   K: 1L=0.999 gap=0 cl=0 park=0.00142  n: 1L=55/55 gap=0/0 cl=0/0  l_min=7.614  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.05  K: 1L=0.997 gap=0 cl=0 park=0.00278  n: 1L=157/157 gap=0/0 cl=0/0  l_min=3.817  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+
+B-2496  M=1e-33 beta=2
+   A=10    K: 1L=1 gap=0 cl=0 park=5.62e-06  n: 1L=9/9 gap=0/0 cl=0/0  l_min=34.21  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=5     K: 1L=1 gap=0 cl=0 park=2.15e-05  n: 1L=19/19 gap=0/0 cl=0/0  l_min=32.5  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=2     K: 1L=1 gap=0 cl=0 park=6.72e-05  n: 1L=26/26 gap=0/0 cl=0/0  l_min=26.04  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1.5   K: 1L=1 gap=0 cl=0 park=9.41e-05  n: 1L=34/34 gap=0/0 cl=0/0  l_min=25.32  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1     K: 1L=1 gap=0 cl=0 park=0.000142  n: 1L=34/34 gap=0/0 cl=0/0  l_min=25.73  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.5   K: 1L=1 gap=0 cl=0 park=0.000325  n: 1L=33/33 gap=0/0 cl=0/0  l_min=12.05  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.1   K: 1L=0.999 gap=0 cl=0 park=0.00142  n: 1L=61/61 gap=0/0 cl=0/0  l_min=22.74  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.05  K: 1L=0.997 gap=0 cl=0 park=0.00269  n: 1L=38/38 gap=0/0 cl=0/0  l_min=16.94  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+
+B-2772  M=1e-33 beta=10
+   A=10    K: 1L=1 gap=0 cl=0 park=7.47e-05  n: 1L=10/10 gap=0/0 cl=0/0  l_min=41.36  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=5     K: 1L=1 gap=0 cl=0 park=0.000228  n: 1L=22/22 gap=0/0 cl=0/0  l_min=40.65  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=2     K: 1L=1 gap=0 cl=0 park=0.000484  n: 1L=38/38 gap=0/0 cl=0/0  l_min=38.75  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1.5   K: 1L=0.999 gap=0 cl=0 park=0.000618  n: 1L=50/50 gap=0/0 cl=0/0  l_min=37.54  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1     K: 1L=0.999 gap=0 cl=0 park=0.00087  n: 1L=75/75 gap=0/0 cl=0/0  l_min=36.75  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.5   K: 1L=0.998 gap=0 cl=0 park=0.00159  n: 1L=142/142 gap=0/0 cl=0/0  l_min=35.73  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.1   K: 1L=0.994 gap=0 cl=0 park=0.00573  n: 1L=602/602 gap=0/0 cl=0/0  l_min=33.67  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.05  K: 1L=0.99 gap=0 cl=0 park=0.00969  n: 1L=727/727 gap=0/0 cl=0/0  l_min=32.26  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+
+B-2821  M=1e-30 beta=1.2
+   A=10    K: 1L=1 gap=0 cl=0 park=1.38e-08  n: 1L=6/6 gap=0/0 cl=0/0  l_min=26.53  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=5     K: 1L=1 gap=0 cl=0 park=3.04e-06  n: 1L=11/11 gap=0/0 cl=0/0  l_min=20.09  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=2     K: 1L=1 gap=0 cl=0 park=3.4e-05  n: 1L=19/19 gap=0/0 cl=0/0  l_min=19.55  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1.5   K: 1L=1 gap=0 cl=0 park=5.02e-05  n: 1L=14/14 gap=0/0 cl=0/0  l_min=9.856  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1     K: 1L=1 gap=0 cl=0 park=5.92e-05  n: 1L=20/20 gap=0/0 cl=0/0  l_min=6.613  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.5   K: 1L=1 gap=0 cl=0 park=0.000153  n: 1L=35/35 gap=0/0 cl=0/0  l_min=4.656  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.1   K: 1L=0.999 gap=0 cl=0 park=0.00114  n: 1L=5/5 gap=0/0 cl=0/0  l_min=12.28  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.05  K: 1L=0.998 gap=0 cl=0 park=0.00232  n: 1L=135/135 gap=0/0 cl=0/0  l_min=3.904  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+
+B-2498  M=1e-30 beta=2
+   A=10    K: 1L=1 gap=0 cl=0 park=1.88e-07  n: 1L=7/7 gap=0/0 cl=0/0  l_min=28.03  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=5     K: 1L=1 gap=0 cl=0 park=1.47e-05  n: 1L=17/17 gap=0/0 cl=0/0  l_min=27.2  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=2     K: 1L=1 gap=0 cl=0 park=4.73e-05  n: 1L=26/26 gap=0/0 cl=0/0  l_min=20.48  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1.5   K: 1L=1 gap=0 cl=0 park=6.63e-05  n: 1L=35/35 gap=0/0 cl=0/0  l_min=19.5  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1     K: 1L=1 gap=0 cl=0 park=0.000126  n: 1L=44/44 gap=0/0 cl=0/0  l_min=18.51  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.5   K: 1L=1 gap=0 cl=0 park=0.000253  n: 1L=33/33 gap=0/0 cl=0/0  l_min=9.336  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.1   K: 1L=0.999 gap=0 cl=0 park=0.00149  n: 1L=79/79 gap=0/0 cl=0/0  l_min=17.99  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.05  K: 1L=0.997 gap=0 cl=0 park=0.0029  n: 1L=40/40 gap=0/0 cl=0/0  l_min=17.47  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+
+B-2774  M=1e-30 beta=10
+   A=10    K: 1L=1 gap=0 cl=0 park=4.01e-05  n: 1L=8/8 gap=0/0 cl=0/0  l_min=35.22  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=5     K: 1L=1 gap=0 cl=0 park=0.00027  n: 1L=18/18 gap=0/0 cl=0/0  l_min=34.66  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=2     K: 1L=1 gap=0 cl=0 park=0.00045  n: 1L=38/38 gap=0/0 cl=0/0  l_min=33.15  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1.5   K: 1L=0.999 gap=0 cl=0 park=0.000554  n: 1L=41/41 gap=0/0 cl=0/0  l_min=31.92  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1     K: 1L=0.999 gap=0 cl=0 park=0.000796  n: 1L=63/63 gap=0/0 cl=0/0  l_min=30.91  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.5   K: 1L=0.999 gap=0 cl=0 park=0.00139  n: 1L=121/121 gap=0/0 cl=0/0  l_min=29.87  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.1   K: 1L=0.995 gap=0 cl=0 park=0.00507  n: 1L=524/524 gap=0/0 cl=0/0  l_min=27.87  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.05  K: 1L=0.992 gap=0 cl=0 park=0.00841  n: 1L=678/678 gap=0/0 cl=0/0  l_min=26.82  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+
+L-M5e-20  M=5e-20 beta=2
+   A=10    K: 1L=1 gap=0 cl=0 park=9.73e-09  n: 1L=4/4 gap=0/0 cl=0/0  l_min=5.165  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=5     K: 1L=1 gap=0 cl=0 park=9.73e-09  n: 1L=4/4 gap=0/0 cl=0/0  l_min=5.165  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=2     K: 1L=1 gap=0 cl=0 park=3.89e-08  n: 1L=9/9 gap=0/0 cl=0/0  l_min=4.183  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1.5   K: 1L=1 gap=0 cl=0 park=6.25e-06  n: 1L=12/12 gap=0/0 cl=0/0  l_min=4.327  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1     K: 1L=1 gap=0 cl=0 park=4.16e-06  n: 1L=16/16 gap=0/0 cl=0/0  l_min=2.996  gap: -  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.5   K: 1L=1 gap=1.2e-06 cl=0 park=3.8e-05  n: 1L=14/14 gap=1/1 cl=0/0  l_min=1.34  gap: N=26.331 lnR=2.349  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.1   K: 1L=0.999 gap=0.00102 cl=5.02e-07 park=1.04e-09  n: 1L=8/8 gap=2/1 cl=13333/13333  l_min=3.013  gap: N=28.051 lnR=2.339  R<=1: N=28.879 lnR=-1.157  edges: clamp=0 thr=1 cont=0 Sheld=9904 uflow=0  U9=0 P19=0
+   A=0.05  failure: over all integrations 1L=8 gap=2 cl=14105 un=0; last integration's edges {'gap_clamp': 0, 'gap_below_threshold': 1, 'classical_continuation': 0, 'classical_S_held': 7988, 'classical_underflow': 0}
+
+L-M8e-18  M=8e-18 beta=2
+   A=10    K: 1L=1 gap=9.63e-07 cl=0 park=9.73e-09  n: 1L=3/3 gap=1/1 cl=0/0  l_min=1.164  gap: N=20.556 lnR=4.019  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=5     K: 1L=1 gap=9.63e-07 cl=0 park=9.73e-09  n: 1L=3/3 gap=1/1 cl=0/0  l_min=1.164  gap: N=20.556 lnR=4.019  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=2     K: 1L=1 gap=6.18e-07 cl=0 park=3.55e-07  n: 1L=3/3 gap=1/1 cl=0/0  l_min=1.164  gap: N=20.556 lnR=4.019  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1.5   K: 1L=1 gap=9.3e-06 cl=0 park=3.6e-06  n: 1L=3/3 gap=1/1 cl=0/0  l_min=1.467  gap: N=20.965 lnR=5.04  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1     K: 1L=0.999 gap=0.0006 cl=0 park=2.05e-05  n: 1L=4/4 gap=7/7 cl=0/0  l_min=1.44  gap: N=21.559 lnR=6.643  R<=1: -  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.5   K: 1L=0.994 gap=0.00633 cl=8.3e-08 park=4.14e-05  n: 1L=7/7 gap=12/8 cl=29/29  l_min=0.4342  gap: N=22.463 lnR=5.791  R<=1: N=23.280 lnR=-0.03536  edges: clamp=0 thr=4 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.1   K: 1L=0.988 gap=0.0114 cl=1.11e-07 park=0.000148  n: 1L=5/5 gap=2/1 cl=47/47  l_min=0.4198  gap: N=23.491 lnR=3.832  R<=1: N=24.433 lnR=-1.424  edges: clamp=0 thr=1 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.05  K: 1L=0.95 gap=0.0502 cl=2.1e-09 park=4.18e-09  n: 1L=4/4 gap=3/2 cl=9559/9559  l_min=1.594  gap: N=23.030 lnR=6.331  R<=1: N=24.878 lnR=-4.451  edges: clamp=0 thr=1 cont=0 Sheld=5935 uflow=0  U9=0 P19=0
+
+L-M1e-16  M=1e-16 beta=2
+   A=10    K: 1L=0.99 gap=0.00966 cl=1.54e-07 park=3.59e-05  n: 1L=1/1 gap=1/1 cl=299/299  l_min=1.392  gap: N=20.537 lnR=3.974  R<=1: N=20.554 lnR=-1.08  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=5     K: 1L=0.99 gap=0.00966 cl=7.71e-08 park=3.59e-05  n: 1L=1/1 gap=1/1 cl=299/299  l_min=1.392  gap: N=20.537 lnR=3.974  R<=1: N=20.554 lnR=-1.08  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=2     K: 1L=0.993 gap=0.00682 cl=8.04e-07 park=3.56e-05  n: 1L=1/1 gap=9/3 cl=103/103  l_min=1.392  gap: N=20.537 lnR=3.974  R<=1: N=21.180 lnR=-0.144  edges: clamp=0 thr=6 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1.5   K: 1L=0.994 gap=0.00579 cl=7.48e-07 park=3.32e-05  n: 1L=1/1 gap=9/4 cl=88/88  l_min=1.392  gap: N=20.537 lnR=3.974  R<=1: N=21.259 lnR=-0.1619  edges: clamp=0 thr=5 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1     K: 1L=0.971 gap=0.0287 cl=1.64e-06 park=4.97e-05  n: 1L=1/1 gap=7/4 cl=146/146  l_min=1.392  gap: N=20.730 lnR=4.857  R<=1: N=21.674 lnR=-0.15  edges: clamp=0 thr=3 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.5   K: 1L=0.757 gap=0.243 cl=3.6e-07 park=8.05e-05  n: 1L=1/1 gap=4/3 cl=11154/11154  l_min=1.392  gap: N=21.241 lnR=5.15  R<=1: N=22.600 lnR=-2.129  edges: clamp=0 thr=1 cont=0 Sheld=4468 uflow=0  U9=0 P19=0
+   A=0.1   K: 1L=0.644 gap=0.356 cl=1.09e-07 park=5.25e-07  n: 1L=1/1 gap=3/2 cl=9440/9440  l_min=1.392  gap: N=21.382 lnR=5.114  R<=1: N=22.969 lnR=-3.444  edges: clamp=0 thr=1 cont=0 Sheld=6578 uflow=0  U9=0 P19=0
+   A=0.05  K: 1L=0.633 gap=0.367 cl=6.68e-08 park=0.000634  n: 1L=1/1 gap=3/2 cl=27/27  l_min=1.392  gap: N=21.395 lnR=5.111  R<=1: N=23.075 lnR=-3.917  edges: clamp=0 thr=1 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+
+L-M5e-16  M=5e-16 beta=2
+   A=10    K: 1L=0 gap=1 cl=4.59e-07 park=2.08e-05  n: 1L=0/0 gap=1/1 cl=63/63  l_min=None  gap: N=20.352 lnR=3.32  R<=1: N=20.537 lnR=-2.464  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=5     K: 1L=0 gap=1 cl=2.29e-07 park=2.08e-05  n: 1L=0/0 gap=1/1 cl=63/63  l_min=None  gap: N=20.352 lnR=3.32  R<=1: N=20.537 lnR=-2.464  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=2     K: 1L=0 gap=1 cl=2e-05 park=8.9e-05  n: 1L=0/0 gap=1/1 cl=25/25  l_min=None  gap: N=20.352 lnR=3.32  R<=1: N=21.269 lnR=-1.294  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1.5   K: 1L=0 gap=1 cl=2.29e-05 park=2.06e-05  n: 1L=0/0 gap=1/1 cl=49/49  l_min=None  gap: N=20.352 lnR=3.32  R<=1: N=21.311 lnR=-1.306  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1     K: 1L=0 gap=1 cl=2.57e-05 park=0.000242  n: 1L=0/0 gap=1/1 cl=8535/8535  l_min=None  gap: N=20.352 lnR=3.32  R<=1: N=21.348 lnR=-1.316  edges: clamp=0 thr=0 cont=0 Sheld=1503 uflow=0  U9=0 P19=0
+   A=0.5   K: 1L=0 gap=1 cl=2.84e-05 park=1.88e-07  n: 1L=0/0 gap=1/1 cl=9583/9583  l_min=None  gap: N=20.352 lnR=3.32  R<=1: N=21.380 lnR=-1.324  edges: clamp=0 thr=0 cont=0 Sheld=5761 uflow=0  U9=0 P19=0
+   A=0.1   K: 1L=0 gap=0.998 cl=3.06e-05 park=0.00153  n: 1L=0/0 gap=1/1 cl=40/40  l_min=None  gap: N=20.352 lnR=3.32  R<=1: N=21.402 lnR=-1.328  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.05  K: 1L=0 gap=0.996 cl=3.08e-05 park=0.00355  n: 1L=0/0 gap=1/1 cl=32/32  l_min=None  gap: N=20.352 lnR=3.32  R<=1: N=21.405 lnR=-1.329  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+
+L-M4e-15  M=4e-15 beta=2
+   A=10    K: 1L=0 gap=0 cl=0.032 park=0.968  n: 1L=0/0 gap=0/0 cl=28/28  l_min=None  gap: -  R<=1: N=20.352 lnR=-4.998  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=5     K: 1L=0 gap=0 cl=0.0163 park=0.984  n: 1L=0/0 gap=0/0 cl=28/28  l_min=None  gap: -  R<=1: N=20.352 lnR=-4.998  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=2     K: 1L=0 gap=0 cl=0.00661 park=0.993  n: 1L=0/0 gap=0/0 cl=28/28  l_min=None  gap: -  R<=1: N=20.352 lnR=-4.998  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1.5   K: 1L=0 gap=0 cl=0.00496 park=0.995  n: 1L=0/0 gap=0/0 cl=28/28  l_min=None  gap: -  R<=1: N=20.352 lnR=-4.998  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1     K: 1L=0 gap=0 cl=0.00332 park=0.997  n: 1L=0/0 gap=0/0 cl=28/28  l_min=None  gap: -  R<=1: N=20.352 lnR=-4.998  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.5   K: 1L=0 gap=0 cl=0.00166 park=0.998  n: 1L=0/0 gap=0/0 cl=28/28  l_min=None  gap: -  R<=1: N=20.352 lnR=-4.998  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.1   K: 1L=0 gap=0 cl=0.000333 park=1  n: 1L=0/0 gap=0/0 cl=28/28  l_min=None  gap: -  R<=1: N=20.352 lnR=-4.998  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.05  K: 1L=0 gap=0 cl=0.000166 park=1  n: 1L=0/0 gap=0/0 cl=28/28  l_min=None  gap: -  R<=1: N=20.352 lnR=-4.998  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+
+C-3016  M=1e-12 beta=4
+   A=10    K: 1L=0 gap=0 cl=0.00139 park=0.999  n: 1L=0/0 gap=0/0 cl=330/330  l_min=None  gap: -  R<=1: N=25.076 lnR=-6.191  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=5     K: 1L=0 gap=0 cl=0.000694 park=0.999  n: 1L=0/0 gap=0/0 cl=330/330  l_min=None  gap: -  R<=1: N=25.076 lnR=-6.191  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=2     K: 1L=0 gap=0 cl=0.000278 park=1  n: 1L=0/0 gap=0/0 cl=330/330  l_min=None  gap: -  R<=1: N=25.076 lnR=-6.191  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1.5   K: 1L=0 gap=0 cl=0.000208 park=1  n: 1L=0/0 gap=0/0 cl=330/330  l_min=None  gap: -  R<=1: N=25.076 lnR=-6.191  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=1     K: 1L=0 gap=0 cl=0.000139 park=1  n: 1L=0/0 gap=0/0 cl=330/330  l_min=None  gap: -  R<=1: N=25.076 lnR=-6.191  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.5   K: 1L=0 gap=0 cl=6.95e-05 park=1  n: 1L=0/0 gap=0/0 cl=330/330  l_min=None  gap: -  R<=1: N=25.076 lnR=-6.191  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.1   K: 1L=0 gap=0 cl=1.39e-05 park=1  n: 1L=0/0 gap=0/0 cl=330/330  l_min=None  gap: -  R<=1: N=25.076 lnR=-6.191  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+   A=0.05  K: 1L=0 gap=0 cl=6.95e-06 park=1  n: 1L=0/0 gap=0/0 cl=330/330  l_min=None  gap: -  R<=1: N=25.076 lnR=-6.191  edges: clamp=0 thr=0 cont=0 Sheld=0 uflow=0  U9=0 P19=0
+
+C-3233  M=1e-12 beta=1
+   A=10    K: 1L=0 gap=0 cl=1 park=0  n: 1L=0/0 gap=0/0 cl=301/301  l_min=None  gap: -  R<=1: N=35.823 lnR=-119.6  edges: clamp=0 thr=0 cont=0 Sheld=221 uflow=0  U9=73 P19=0
+   A=5     K: 1L=0 gap=0 cl=1 park=0  n: 1L=0/0 gap=0/0 cl=301/301  l_min=None  gap: -  R<=1: N=35.823 lnR=-119.6  edges: clamp=0 thr=0 cont=0 Sheld=221 uflow=0  U9=73 P19=0
+   A=2     K: 1L=0 gap=0 cl=1 park=0  n: 1L=0/0 gap=0/0 cl=301/301  l_min=None  gap: -  R<=1: N=35.823 lnR=-119.6  edges: clamp=0 thr=0 cont=0 Sheld=221 uflow=0  U9=73 P19=0
+   A=1.5   K: 1L=0 gap=0 cl=1 park=0  n: 1L=0/0 gap=0/0 cl=301/301  l_min=None  gap: -  R<=1: N=35.823 lnR=-119.6  edges: clamp=0 thr=0 cont=0 Sheld=221 uflow=0  U9=73 P19=0
+   A=1     K: 1L=0 gap=0 cl=1 park=0  n: 1L=0/0 gap=0/0 cl=301/301  l_min=None  gap: -  R<=1: N=35.823 lnR=-119.6  edges: clamp=0 thr=0 cont=0 Sheld=221 uflow=0  U9=73 P19=0
+   A=0.5   K: 1L=0 gap=0 cl=1 park=0  n: 1L=0/0 gap=0/0 cl=301/301  l_min=None  gap: -  R<=1: N=35.823 lnR=-119.6  edges: clamp=0 thr=0 cont=0 Sheld=221 uflow=0  U9=73 P19=0
+   A=0.1   K: 1L=0 gap=0 cl=1 park=0  n: 1L=0/0 gap=0/0 cl=301/301  l_min=None  gap: -  R<=1: N=35.823 lnR=-119.6  edges: clamp=0 thr=0 cont=0 Sheld=221 uflow=0  U9=73 P19=0
+   A=0.05  K: 1L=0 gap=0 cl=1 park=0  n: 1L=0/0 gap=0/0 cl=301/301  l_min=None  gap: -  R<=1: N=35.823 lnR=-119.6  edges: clamp=0 thr=0 cont=0 Sheld=221 uflow=0  U9=73 P19=0
+
+C-3873  M=1e-12 beta=1.11
+   A=10    timeout: over all integrations 1L=0 gap=0 cl=62235 un=0; last integration's edges {'gap_clamp': 0, 'gap_below_threshold': 0, 'classical_continuation': 0, 'classical_S_held': 2010, 'classical_underflow': 0}
+   A=5     timeout: over all integrations 1L=0 gap=0 cl=62235 un=0; last integration's edges {'gap_clamp': 0, 'gap_below_threshold': 0, 'classical_continuation': 0, 'classical_S_held': 2010, 'classical_underflow': 0}
+   A=2     timeout: over all integrations 1L=0 gap=0 cl=62235 un=0; last integration's edges {'gap_clamp': 0, 'gap_below_threshold': 0, 'classical_continuation': 0, 'classical_S_held': 2010, 'classical_underflow': 0}
+   A=1.5   timeout: over all integrations 1L=0 gap=0 cl=62235 un=0; last integration's edges {'gap_clamp': 0, 'gap_below_threshold': 0, 'classical_continuation': 0, 'classical_S_held': 2010, 'classical_underflow': 0}
+   A=1     K: 1L=0 gap=0 cl=1 park=0  n: 1L=0/0 gap=0/0 cl=2487/2487  l_min=None  gap: -  R<=1: N=17.694 lnR=-33.14  edges: clamp=0 thr=0 cont=0 Sheld=2005 uflow=0  U9=1048 P19=0
+   A=0.5   timeout: over all integrations 1L=0 gap=0 cl=59742 un=0; last integration's edges {'gap_clamp': 0, 'gap_below_threshold': 0, 'classical_continuation': 0, 'classical_S_held': 2012, 'classical_underflow': 0}
+   A=0.1   timeout: over all integrations 1L=0 gap=0 cl=67211 un=0; last integration's edges {'gap_clamp': 0, 'gap_below_threshold': 0, 'classical_continuation': 0, 'classical_S_held': 2005, 'classical_underflow': 0}
+   A=0.05  timeout: over all integrations 1L=0 gap=0 cl=67211 un=0; last integration's edges {'gap_clamp': 0, 'gap_below_threshold': 0, 'classical_continuation': 0, 'classical_S_held': 2005, 'classical_underflow': 0}
+
+# the law's edges summed over the accepted integrations of every successful task
+   gap_clamp: 0
+   gap_below_threshold: 24
+   classical_continuation: 0
+   classical_S_held: 37922
+   classical_underflow: 0
+
+# the ranges of L and ln R by regime, over every accepted integration
+   one_loop  : L 4.012 to 128.4; ln R 6.942 to 190.3
+   gap       : L 2.578 to 106; ln R 0.09468 to 14.92
+   classical : L 1.007e-11 to 125.6; ln R -239.4 to -0.03536
+
+# the law's edges over every integration of every task (failed and timed-out tunings included)
+   gap_clamp: 0
+   gap_below_threshold: 53
+   classical_continuation: 0
+   classical_S_held: 464927
+   classical_underflow: 0

@@ -1,0 +1,39 @@
+# ruling 4's projection for the batch `small` (the rest of A = 0.1 and 0.05)
+# P's measured ratio, 02d A=0.05 wall / A=0.5 wall: P-2197 50.1/16.1 = 3.119, P-2188 50.1/16.1 = 3.121; the larger is 3.121
+# workers: largest peak RSS so far 1.189 GiB (L-M1e-16-A0.5), min(6, floor(8 GiB / that)) = 6
+# r: 02b A=0.05 / A=0.5 (zero, run), or for S2's five 02 A=0.1 / A=1 (zero, run); P's ratio where larger
+history       02d A=0.5 wall (outcome)   r source                     r_hist   r used   cost per task  tasks
+P-2197             16.1 (success)      02b 26.1/16.1                  1.623    3.121          50.2   1
+P-2188             16.1 (success)      02b 26.1/16.1                  1.623    3.121          50.1   1
+W-2187             16.1 (success)      02b 24.1/16.1                  1.503    3.121          50.2   2
+W-1631             16.1 (success)      02b 24.1/16.1                  1.503    3.121          50.2   2
+W-2179             16.1 (success)      02b 24.1/14.0                  1.718    3.121          50.2   2
+W-2078             16.1 (success)      02b 24.1/14.0                  1.717    3.121          50.2   2
+W-2192             14.1 (success)      02b 24.1/14.0                  1.717    3.121          43.9   2
+W-2209             16.1 (success)      02b 24.1/14.0                  1.717    3.121          50.1   2
+W-2183             16.1 (success)      02b 24.1/14.0                  1.717    3.121          50.2   2
+W-2172             16.1 (success)      02b 24.1/14.0                  1.716    3.121          50.2   2
+W-2178             14.1 (success)      02b 24.1/14.0                  1.716    3.121          43.9   2
+W-2185             16.1 (success)      02b 24.1/14.0                  1.716    3.121          50.1   2
+R-632              14.1 (success)      02b 130.6/14.0                 9.302    9.302         130.8   2
+R-1193             16.1 (success)      02b 24.1/14.0                  1.716    3.121          50.2   2
+R-865              18.1 (success)      02b 18.1/16.1                  1.127    3.121          56.4   2
+R-611              48.1 (success)      02b 86.4/26.1                  3.314    3.314         159.5   2
+B-2819             22.1 (success)      02b 24.1/16.0                  1.503    3.121          68.9   2
+B-2496             22.0 (success)      02b 18.1/16.0                  1.127    3.121          68.8   2
+B-2772             70.5 (success)      02b 90.4/30.1                  3.005    3.121         220.0   2
+B-2821             18.1 (success)      02b 22.1/14.0                  1.575    3.121          56.4   2
+B-2498             28.2 (success)      02b 18.1/16.1                  1.127    3.121          87.9   2
+B-2774             30.1 (success)      02b 84.4/26.1                  3.237    3.237          97.3   2
+L-M5e-20           22.1 (success)      02b 912.0/14.0                64.952   64.952        1434.5   2
+L-M8e-18           20.1 (success)      02b 729.2/32.1                22.727   22.727         455.8   2
+L-M1e-16          947.2 (success)      02b 711.1/28.1                25.332   25.332        3630.0   2
+L-M5e-16          875.3 (success)      02 (S2 in 02b) 16.0/16.0       0.999    3.121        2732.2   2
+L-M4e-15           18.0 (success)      02 (S2 in 02b) 16.0/16.0       1.000    3.121          56.3   2
+C-3016             60.2 (success)      02 (S2 in 02b) 48.1/50.2       0.959    3.121         187.8   2
+C-3233            110.3 (success)      02 (S2 in 02b) 88.2/86.3       1.022    3.121         344.4   2
+C-3873           3604.4 (timeout)      02 (S2 in 02b) 1822.6/1832.3   0.995    3.121        3630.0   2
+
+58 tasks; summed cost 28013 s = 7.78 h of CPU; over 6 workers 4669 s; longest single task 3630 s
+projected wall = max(4669, 3630) s = 4669 s = 1.30 h (limit 3 h; workers 6, floor 3)
+within the limit: proceed
