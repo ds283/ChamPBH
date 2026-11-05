@@ -1,6 +1,6 @@
 # one-loop-drain campaign — implementation state
 
-**Last updated:** 2026-11-04 · **Status: LIVE — 3 of 9 landed (01, 02, 02b); U13 and U14 ruled; the side-campaign `crossover` before 03.** Planned
+**Last updated:** 2026-11-05 · **Status: LIVE — 3 of 11 landed (01, 02, 02b); the measured law adopted (README §8.10); 02c written, not dispatched; U15 open.** Planned
 2026-11-02 as `quanta-diagnostics` at the user's request, after a scoping session the same day
 ([`source/scoping_2026-11-02.md`](source/scoping_2026-11-02.md)); U1–U7 and P1–P16 ruled the same day,
 all as proposed (README §6). **Re-planned the same day around the drain law and renamed `one-loop-drain`**
@@ -19,7 +19,9 @@ measure A ∈ {0.05, 0.5, 1.5, 2, 5, 10} before U14 is ruled (README §8.4, §8.
 gate holds, no issue opened, one extended (§3), and U14 is open for the user with the measurements at nine A.)* *(2026-11-04: the user ruled U14: A ∈ {0.05, 0.1,
 0.5, 1, 1.5, 2, 5, 10} for the rebuild of record (README §8.6).)* *(2026-11-04: the small-A failures diagnosed, an issue
 opened on the one-loop fraction at small ℓ, and the side-campaign `crossover` started at the user's request, to land
-before 03 (README §8.9).)*
+before 03 (README §8.9).)* *(2026-11-05: `crossover` closed. The user adopted its measured law in place of 2.7/ℓ and both
+gap prescriptions (U13 re-ruled), kept U14, and ruled one versioned drain-model key, the removal of `zero` and `edge`,
+and a tabulated S(L). 02c and 02d inserted before 03, 03 revised, 02c written; U15 (n ≠ 1) open for the user (README §8.10).)*
 
 The campaign replaces the fixed-α drain by a one-loop law, α_eff = min(α_cap, A·2.7/ℓ)·w_gate at a
 one-loop turnaround and zero at R ≤ 1, with the fixed law kept beside it, bitwise. It measures the law
@@ -48,7 +50,9 @@ The plan as first ruled had seven prompts (README §2), none written; the re-pla
 | 01 | [The drain law](01-the-drain-law.md) | the law and A as inputs; the regime in the loop; α_eff by regime; the gap prescription as a module attribute; the `"drain"` payload key; the tool route's options; the 3873 failure; the wall-search fix (README §8.8) | Opus | ✅ | ✅ | `b99f6a4` | [01](logs/01-the-drain-law.md) |
 | 02 | [Measure the law](02-measure-the-law.md) | U11's thirty histories by the tool route, re-tuned, at three A and both gap prescriptions, with two exact shortcuts (S1, S2) spot-checked; regime shares, the gap's reach, the R·S(L) bound, Y_p, D/H, ΔN_eff against the fixed law; then U13–U14 | Opus | ✅ | ✅ | `3f3f0cf` | [02](logs/02-measure-the-law.md) |
 | 02b | [Measure over a wider A](02b-measure-wide-A.md) | inserted 2026-11-04 at the user's request: 02's thirty histories at A ∈ {0.05, 0.5, 1.5, 2, 5, 10}, both gap prescriptions; 02's lines reused after a reproduction check; S2 generalised; the first impact's drained fraction and the cap; the handover for U14 at nine A | Opus | ✅ | ✅ | `cc1f449` | [02b](logs/02b-measure-wide-A.md) |
-| 03 | The store | the keys, `ScalarHistoryBounce`, the sample and history columns, the gap prescription as a key (U13, P26), `FINGERPRINT_FORMAT` 7, `VERSION_LABEL` | Opus | ⬜ | ⬜ | | |
+| 02c | [The measured law](02c-the-measured-law.md) | inserted 2026-11-05 (README §8.10): the adopted law in `ScalarHistory.py`, replacing 2.7/ℓ and both gap prescriptions; S(L); U15 as ruled; the `"drain"` record names the model version and records L and ln R; `--gap-prescription` removed; the reproduction of crossover's adopted-law maps | Opus | ✍️ | ⬜ | | |
+| 02d | Measure the measured law | inserted 2026-11-05: 02b's sample re-tuned under the adopted law at U14's eight A; replaces 02's and 02b's one-loop measurements | Opus | ⬜ | ⬜ | | |
+| 03 | The store | the keys, `ScalarHistoryBounce`, the sample and history columns, one versioned drain-model key (README §8.10, decision 1; it replaces the gap-prescription key of U13/P26), `FINGERPRINT_FORMAT` 7, `VERSION_LABEL` | Opus | ⬜ | ⬜ | | |
 | 04 | Drivers and exports | the law's options in `main.py` and the plot scripts; `histories.csv`, `fields.csv`, `bounces.csv` | Sonnet | ⬜ | ⬜ | | |
 | 05 | Derivation tool | `quanta_spectrum.py` and `tools/quanta_measures.py`: n_g, n̄_j, δ_stim, E, phase slip, backreaction ratio, the R·S(L) bound | Opus | ⬜ | ⬜ | | |
 | 06 | Rehearse | the fixed law base against tip, bitwise; the one-loop law interrupted and resumed, by value | Opus | ⬜ | ⬜ | | |
@@ -252,7 +256,7 @@ Noted, not acted on:
 |---|---|---|
 | `drain_law` on `integrate_scalar_history`, `integrate_history`, `tune_history` (P22) | 01 | ✅ |
 | the regime in the loop, α_eff by regime, the constants (P17, P18, P23, P24, U9, U10) | 01 | ✅ |
-| `_GAP_PRESCRIPTION`, temporary (P20, P25) | 01 | ✅ (03 removes it) |
+| `_GAP_PRESCRIPTION`, temporary (P20, P25) | 01 | ✅ (02c removes it, README §8.10) |
 | the `"drain"` payload key, `DrainRecord`/`DrainCandidate` | 01 | ✅ |
 | the wall-search fix, `_turning_point_unresolvable` (P21) | 01 | ✅ |
 | the declined unresolved reflection (the user's ruling (b), 2026-11-03) | 01 | ✅ |
@@ -270,6 +274,8 @@ Noted, not acted on:
 | Law | fixed law: golden histories bitwise, payload unchanged but the new key; one-loop law: 2197 and 2188 reproduce the probe's table, 3016 and 3233 drain nothing; 3873 explained | 01 | ✅ 2026-11-03 (verification §1.10): the goldens bitwise, the 42 equal 04's, the probe's table bitwise at A = 1 and 0.1, 3016/3233 drain nothing, 3873 explained and completing after ruling (b) |
 | Measure | the sample at three A and both gap prescriptions, re-tuned; regime shares and the gap's reach across M and β; the prescriptions' spread in Y_p, D/H, ΔN_eff; the cost | 02 | ✅ 2026-11-03 (verification §2.10): 180 tasks, 81 of 110 runs succeeding; the gap reached at laboratory M only at A = 0.01, where the tunings fail; the spread measured on the ladder; 1 h 58 min, at most six workers |
 | Wide | 02's sample at 02b's six A, the reproduction check bitwise; regime shares, the first impact and the cap across nine A; the cost; the handover for U14 | 02b | ✅ 2026-11-04 (verification §2b.12): 360 tasks, 167 of 171 runs succeeding; every tuning at A = 0.5–10 succeeds, and P and W stay one-loop down to A = 0.05; at A = 10 the first impact drains 84–99% of the kinetic energy at laboratory M; 43 min, at most six workers |
+| Measured | the fixed law unchanged bitwise; the law equal to crossover's reference implementation at synthetic inputs; crossover's adopted-law maps reproduced candidate by candidate | 02c | ⬜ |
+| Remeasure | the sample at U14's eight A under the adopted law, re-tuned; the failures stated; against 02/02b | 02d | ⬜ |
 | Store | the round trip exact, bounce rows in order; the fixed law and α = 0 write no bounce row; fingerprint format 7 beside 6 | 03 | ⬜ |
 | Export | the new export columns equal the stored record; existing `histories.csv` columns byte-identical; the drivers refuse a mismatched law | 04 | ⬜ |
 | Derive | the derived measures against direct quadrature (10⁻⁶); peak-collapsed against the scoping probe's method | 05 | ⬜ |
@@ -387,6 +393,20 @@ the new prompts.
   - **This need not be a numerical defect.** If R ≤ 1 bounces are close to elastic, a small-A field may really be
     unparked today, and the tuning, which assumes the field at its minimum today, then has no solution. The drain
     near ℓ → 0 is itself in doubt (`[02b-the-one-loop-fraction-is-unreliable-at-small-ell]`).)*
+  *(2026-11-05, under the law the user adopted (README §8.10), measured by crossover's `measured_law_map.py
+  --law=adopted` at each history's old-law normalization, not re-tuned (`source/crossover/README.md` "The adopted
+  law at small A").
+  - **At A = 0.05** every history of 02b's set that tuned under the old law still parks. The P and W histories park
+    0.3–0.4 e-folds later, mostly in the gap's first bounces.
+  - **The two failures remain:** R-632 (β = 1.0) and the 5 × 10⁻²⁰ M_P ladder.
+  - **Their floor:** R-632 parks at A = 0.5 but not at 0.2; the ladder parks at A = 0.2 but not at 0.1.
+  - The user keeps A = 0.05 regardless (U14 stands). **Next:** 02d measures it re-tuned.)*
+
+### 3.1 Assigned to this campaign
+
+None.
+
+## 4. Resolved issues
 
 - **`[02b-the-one-loop-fraction-is-unreliable-at-small-ell]`** — opened 2026-11-04 by the orchestrator, at the user's
   request, after 02b (`cc1f449`).
@@ -491,12 +511,10 @@ the new prompts.
   - **Their floor:** R-632 parks at A = 0.5 but not at 0.2; the ladder parks at A = 0.2 but not at 0.1.
   - **Why:** at A = 0.05 no bounce drains more than 0.045. The old law parked small-A fields through the
     divergence of 2.7/ℓ.)*
-
-### 3.1 Assigned to this campaign
-
-None.
-
-## 4. Resolved issues
+  **Closed (2026-11-05)** by the user's adoption of the measured law (README §8.10), which replaces 2.7/ℓ and both
+  gap prescriptions. The fraction at small ℓ is now measured, not extrapolated: 0.80–0.98 below ℓ ≈ 2, falling
+  through the gap with R and L (`source/crossover/README.md`, stage 2 onwards). The code change is prompt 02c's, and
+  the re-measurement of the sample 02d's.
 
 - **`[00-fixed-alpha-laboratory-M-histories-fail-in-classical-turning-point]`** — opened 2026-11-02, when
   `[00-reflection-restart-tree-fails-probe-histories]` was split (§4; source `drain-probe_2026-11-02.md` §5).

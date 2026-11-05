@@ -2,7 +2,7 @@
 
 **Campaign:** `one-loop-drain` ([README §8.9](../../README.md)) · **Issue:**
 `[02b-the-one-loop-fraction-is-unreliable-at-small-ell]` (board §3) · **Started:** 2026-11-04, at the user's ruling ·
-**Lands before:** prompt 03.
+**Lands before:** prompt 03. · **Closed:** 2026-11-05 (below).
 
 Research, run by the orchestrator. Nothing here changes production code. The question: what fraction of a bounce's
 kinetic energy is produced as quanta through the crossover from the one-loop regime (ℓ = ln(k_ex/m_ta) ≳ 4, where
@@ -455,3 +455,23 @@ Nothing is re-tuned, so parking here is a proxy for the tuning succeeding. Outpu
 **Why small A is harder now.** Under the old law small A still parked fields through the divergence of 2.7/ℓ: at
 A = 0.05 it drained 0.27 at ℓ = 0.5 and hit the cap near ℓ → 0. Under the adopted law no bounce at A = 0.05 drains
 more than 0.045. The fields that parked did so on many weak drains, plus the gap's.
+
+## Closed (2026-11-05)
+
+The user adopted the measured law (campaign README §8.10): the ln L-shifted exponential for ℓ ≥ 1, the 0.9 plateau
+below ℓ = 1, `fit_law.py`'s gap function, and R·S(L) at R ≤ 1. They also kept U14's A values and ruled one versioned
+drain-model key, the removal of `zero` and `edge`, and a tabulated S(L).
+
+What the side-campaign established, for the record:
+- 2.7/ℓ is the Born limit of the fraction absorbed in one bounce, and its first-order term. The self-consistent
+  solve gives 1 − exp(−2.69/(ℓ + b(L))), within 0.074 of every one-loop point, from ℓ = 1 to 33 and L = 6 to 132.
+- The fraction does not fall as ℓ → 0 within the chain. It is 0.80–0.98 below ℓ ≈ 2 and falls only through the
+  gap, as a function of R and L, not of R·S(L).
+- At R ≪ 1 the bounce is the test field, f = R·S(L), exactly; at 10⁻³ M_P that is 10⁻⁴⁰ or less.
+- The gap matters only at small A. At A = 1 no history tested reaches it, and at A = 0.05 every history that tuned
+  under the old law still parks.
+- The scheme stays outside its own loop expansion throughout (ε = 10²–10²⁸ at the turn), so these are the scheme's
+  numbers, adopted by the user as qualitative behaviour.
+
+Its scripts stay here as the record and as the reference implementation of the adopted law (`measured_law_map.py`,
+`fraction_adopted`), which prompt 02c reproduces.

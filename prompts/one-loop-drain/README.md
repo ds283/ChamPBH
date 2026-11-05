@@ -488,6 +488,8 @@ which the user does not take seriously in either case (Fig 6a drew it for compar
 
 ### 8.2 The drain law
 
+*(Superseded in part, 2026-11-05: the one-loop and gap rows are replaced by the measured law of §8.10.)*
+
 At every candidate the code already classifies the turning point (`peak_estimate`, after the
 integration): **one-loop** where ln R > 0 and `one_loop_turnaround` solves; **gap** where ln R > 0 and it
 does not (`ESTIMATE_CLASSICAL_GAP`); **classical** where ln R ≤ 0; **unassessed** where there is no
@@ -532,6 +534,8 @@ bounce the backreaction ratio n_χ m_k/E_k (n_χ a³ ≈ Σ_g ΔK_g/Q_g) and its
 regime shares replace).
 
 ### 8.4 Prompts
+
+*(Amended 2026-11-05: 02c and 02d inserted, and 03 revised, by §8.10.)*
 
 | # | Prompt | Covers | Model |
 |---|---|---|---|
@@ -709,3 +713,69 @@ mass in the mode functions. It changes no production code. It has three stages:
 **What it decides.** Nothing by itself. Whether the drain law changes, and so whether 02's and 02b's measurements at
 A ≤ 0.1 are superseded, is the user's ruling once stage 3 is in. 03 waits for it, at the user's word.
 
+
+### 8.10 The measured drain law (2026-11-05)
+
+The side-campaign `crossover` (§8.9) closed with a drain law measured by a self-consistent one-loop solve with
+massive modes (`source/crossover/README.md`, stage 2 onwards; its fits in `fit_law.py`, its figure
+`fig/drain_law.png`). The user adopted it in place of 2.7/ℓ and of both gap prescriptions.
+
+**Ruled by the user, 2026-11-05** (the user's words; the proposals they answer are in the conversation of
+2026-11-04/05 recorded in `source/crossover/README.md`):
+- **The law (U13 re-ruled).** "I think this model is close enough to the analytic 1-loop understanding that I am
+  willing to use it." The model is "the full `ln L`-dependent exponential for `ell > 1`, the 0.9 plateau for
+  `ell < 1` down to the gap, and your fitting function in the gap". This supersedes U13 as ruled on 2026-11-04
+  (both prescriptions kept, `zero` the default).
+- **The A values (U14 stands).** "Yes, let's keep the original list of `A` to check": A ∈ {0.05, 0.1, 0.5, 1, 1.5,
+  2, 5, 10}. Under the adopted law R-632 (β = 1.0) and the 5 × 10⁻²⁰ M_P ladder do not park at A ≤ 0.1 (board §3),
+  as under the old law; the user keeps A = 0.05 regardless.
+- **The key (decision 1).** "agree", to one stored key naming the drain model and its version (for example
+  `one-loop-measured-v1`), with the fixed law another value of it. The law can then change later without a change of
+  schema. It replaces P26's gap-prescription key, and the separate law key of U8 is folded into it (03 designs it).
+- **`zero` and `edge` (decision 2).** "agree, remove these. They are dead now." `_GAP_PRESCRIPTION`, its constants,
+  `DRAIN_ELL_EDGE` and `tools/history_and_bbn.py --gap-prescription` are removed. 02's and 02b's records stay
+  reproducible from their commits.
+- **The classical regime (decision 3).** "if it's cheap, keep the table. I agree that zero here is also
+  defensible, however." At R ≤ 1 the drain is R·S(L), with S(L) tabulated.
+- **Dispatch.** "Don't dispatch it, however; this session has become long, and I'll do that in a fresh context."
+
+**The law.** Under the one-loop law each candidate drains α_eff = min(α_cap, A·f)·w_gate, with α_cap = 0.99 (U10) and
+w_gate as today (U9). L = M/φ_t and ln R are the assessment's (`ClassicalTurningPoint`); ℓ is the turnaround's.
+
+| regime | f |
+|---|---|
+| one-loop, ℓ ≥ 1 | min(0.95, 1 − exp[−2.69/(ℓ + 0.9691 − 0.41 ln L)]), and 0.95 where ℓ + 0.9691 − 0.41 ln L ≤ 0 |
+| one-loop, ℓ < 1 | 0.9 |
+| gap (ln R > 0, no chain) | 1 − exp[−0.0198 (ln R − 1.5601)^1.5472 (1 + 0.841 ln L)] for ln R > 1.5601; 0 below |
+| classical (ln R ≤ 0) | R·S(L), S from `source/crossover/out/stage1a_S_of_L.txt` |
+| unassessed | 0 |
+
+- **Sources.** The one-loop and gap constants are `source/crossover/out/fit_law.txt`'s fits to every stage-2 point
+  (one-loop within 0.074 of 27 points, gap within 0.062 of 34). 2.69 is the Born coefficient (`wall_backreaction.tex`,
+  "The inelastic fraction"), held fixed. The cap 0.95 and the plateau 0.9 are judgement, as the user asked for
+  qualitative behaviour (stage 2 measured 0.88–0.98 and 0.80–0.97 there).
+- **S(L)** is stage 1a's table at L = 0.3–134 (21 values), interpolated linearly in (ln L, ln S). It is held at
+  S(0.3) below and continued as S(134)·(134/L)² above (L²S tends to a constant, `production_energy_ratio.tex`).
+  The table is 0.1% high from its quadrature (stage 2, V2q); that is immaterial here.
+- **The reference implementation** is `fraction_adopted` in `source/crossover/measured_law_map.py`. Crossover's
+  outputs under it (`out/adopted-A0.05/`, `out/adopted-floor/`) are what 02c reproduces.
+
+**Open for the user: U15, models with n ≠ 1.** Stage 2 measured the n = 1 wall, V₀e^{M/φ}, only, and `main.py`
+accepts `--n-values`. The options:
+- (a) under the one-loop law a model with n ≠ 1 is a `ValueError`, before any integration, until it is measured;
+- (b) apply the law with L = ln(1 + E/V₀), stage 2's definition, which equals M/φ_t at n = 1, unmeasured at n ≠ 1;
+- (c) stage-2 runs on the n = 2 wall first.
+
+The planner recommends (a) if no rebuild of record uses n ≠ 1. 02c's gate requires U15 ruled.
+
+**The re-plan.** Prompts 02c and 02d are inserted before 03, and 03 is revised.
+
+| # | Prompt | Covers | Model |
+|---|---|---|---|
+| 02c | `02c-the-measured-law.md` | the adopted law in `ScalarHistory.py`, replacing 2.7/ℓ and both gap prescriptions; S(L); U15 as ruled; the `"drain"` record names the model version and records L and ln R per candidate; `--gap-prescription` removed; tests; the reproduction of crossover's adopted-law maps | Opus |
+| 02d | `02d-measure-the-measured-law.md` | 02b's sample re-tuned under the adopted law at U14's eight A: tuning success, regime shares, parking, ΔN_eff, Y_p, D/H, against 02/02b; the cost. It replaces 02's and 02b's one-loop measurements | Opus |
+| 03 | `03-the-store.md` (revised) | as §8.4, with one drain-model key (decision 1) in place of the gap prescription key (P26) and the separate law key | Opus |
+
+The gates: **Measured** (02c) holds when the fixed law is unchanged bitwise (the goldens), the law equals the
+reference implementation at synthetic inputs, and crossover's adopted-law maps are reproduced candidate by
+candidate. **Remeasure** (02d) holds when the sample is measured at eight A, re-tuned, with the failures stated.
