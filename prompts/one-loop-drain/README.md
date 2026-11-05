@@ -768,6 +768,12 @@ accepts `--n-values`. The options:
 
 The planner recommends (a) if no rebuild of record uses n ≠ 1. 02c's gate requires U15 ruled.
 
+*(2026-11-05, measured at the user's request: stage 2 on the n = 2 wall (`source/crossover/README.md`, "After
+closing: the n = 2 wall"). With L = ln(1 + E/V₀) the adopted law is within 0.125 of the n = 2 one-loop points and
+within 0.10 of the gap points that histories can reach (rms 0.05). With L = M/φ_t it is low by about 0.1. Option (b),
+with L = ln(1 + E/V₀) at every n, is therefore supported. It equals M/φ_t at n = 1, so the law there is unchanged.
+The planner's recommendation moves to (b).)*
+
 **The re-plan.** Prompts 02c and 02d are inserted before 03, and 03 is revised.
 
 | # | Prompt | Covers | Model |

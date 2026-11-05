@@ -73,11 +73,15 @@ Under `DRAIN_LAW_ONE_LOOP`, `drain_alpha_effective` returns min(`DRAIN_ALPHA_CAP
 | `classical` | exp(ln R)·S(L) |
 | `unassessed` | 0, and the caller takes the α_eff = 0 branch, as today |
 
-- **Inputs.** L = M/φ_t, with φ_t the candidate's `ClassicalTurningPoint.phi_t` and M the model's. ln R is
-  `ClassicalTurningPoint.log_R`. ℓ is the turnaround's, as today.
+- **Inputs.** ln R is `ClassicalTurningPoint.log_R`. ℓ is the turnaround's, as today. L depends on U15:
+  - under option (a), L = M/φ_t, with φ_t the candidate's `ClassicalTurningPoint.phi_t` and M the model's;
+  - under option (b), which the n = 2 measurement supports (README §8.10), L = ln(1 + E/V₀) at every n. Compute it
+    from the candidate's ln E and the model's ln V_floor, stably, through `log1p` of an exponential, not by
+    subtracting. At n = 1 this equals M/φ_t to the turning point's accuracy, and §2.3's reproduction checks it at
+    the maps' printed precision.
   - `drain_alpha_effective` gains the arguments it needs: L and ln R, or the turning point and M. Choose the cleaner
     signature, and say which in the log.
-  - If the realized model has no public way to give M, add a read-only one, and say so in the log.
+  - Under (a), if the realized model has no public way to give M, add a read-only one, and say so in the log.
 - **The constants**, each a module constant beside today's, with its source quoted (P17):
   - a = 2.69, the Born coefficient held fixed (`wall_backreaction.tex`, "The inelastic fraction");
   - b₀ = 0.9691 and c = 0.41;

@@ -47,13 +47,15 @@ from math import ceil, exp, log, pi, sqrt
 import numpy as np
 
 import born
-from walls import Wall
+from walls import Wall, WallN
 
 EPS = 1e-3
 F0 = 1e-6
 
 
 def V4(w: Wall, p):
+    if isinstance(w, WallN):
+        return w.V4(p)
     y = 1.0 / p
     return w.c * np.exp(y) * (y**8 + 12.0 * y**7 + 36.0 * y**6 + 24.0 * y**5)
 
@@ -87,8 +89,9 @@ def solve(
     hartree=False,
     span=4.0,
     rec_every=20,
+    n=1,
 ):
-    w = Wall(L)
+    w = Wall(L) if n == 1 else WallN(L, n)
     R = exp(lnR)
     E = w.E
     K = 4.0 * pi**2 * R * E if loop else 0.0
@@ -264,7 +267,7 @@ def solve(
     )
 
 
-def run_point(L, lnR, cmin=0.03, cmax=30.0, ppd=80, iterate=True, **kw):
+def run_point(L, lnR, cmin=0.03, cmax=30.0, ppd=80, iterate=True, n=1, **kw):
     """solve() on a grid from cmin m_ref to cmax k_ref, with m_ref, k_ref the chain's m_ta, k_ex where it exists,
     else the classical wall's (omega_t = 1, lambda_t sqrt(E)/2); then, if the field turned at a mass or a crossing
     rate (lambda sqrt(E)/2 at the turn) off the reference by more than a factor 1.5, again with the grid set from the
@@ -275,7 +278,7 @@ def run_point(L, lnR, cmin=0.03, cmax=30.0, ppd=80, iterate=True, **kw):
     hierarchy e^{4 ell}: at ell = 17.75 the modes' energy is off E's balance by 1.6e-2 at EPS = 1e-3 and by 1.6e-6
     at 1e-9, while the background's balance is unchanged to five digits (out/stage2_validation.txt, V5).
     """
-    w = Wall(L)
+    w = Wall(L) if n == 1 else WallN(L, n)
     ch = born.chain(w, exp(lnR))
     if ch is not None and ch[3] > 8.0 and "eps" not in kw:
         kw = dict(kw, eps=EPS * exp(-2.0 * (ch[3] - 8.0)))
@@ -285,7 +288,7 @@ def run_point(L, lnR, cmin=0.03, cmax=30.0, ppd=80, iterate=True, **kw):
         mref, kref = 1.0, float(lam(w, w.phi_t)) * sqrt(w.E) / 2.0
     for it in range(3):
         res = solve(
-            L, lnR, kmin=cmin * mref, kmax=cmax * kref, ppd=ppd, mref=mref, **kw
+            L, lnR, kmin=cmin * mref, kmax=cmax * kref, ppd=ppd, mref=mref, n=n, **kw
         )
         res["mref"], res["kref"], res["passes"] = mref, kref, it + 1
         if not iterate:

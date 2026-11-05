@@ -28,6 +28,7 @@ kinetic energy is produced as quanta through the crossover from the one-loop reg
 | `stage2_scan.py` | the scan (brief §7): 2197 at A = 0.05 and 0.01, R-865, and an (L, ln R) grid |
 | `stage2_mscan.py` | stage 2 on the curves of other M (the β = 2 ladder near M_crit, and 10⁻³ M_P), against the measured law |
 | `fit_law.py` | the qualitative drain law fitted to every stage-2 point, in ℓ, L and R |
+| `stage2_n2.py` | stage 2 on the n = 2 wall (`walls.WallN`), with the adopted law at two choices of L, for U15 |
 | `plot_law.py` | `fig/drain_law.png`: the gap law along each history's own (L, R) path and at the grid's fixed L, and the one-loop law against ℓ beside 2.7/ℓ and 1 − exp(−2.7/ℓ), each with stage 2's points at their own (L, R) |
 | `measured_law_map.py` | `cascade_map.py` with the drain replaced by stage 2's measured fraction, patched in-process (no production change) |
 | `out/` | every output, text only |
@@ -475,3 +476,41 @@ What the side-campaign established, for the record:
 
 Its scripts stay here as the record and as the reference implementation of the adopted law (`measured_law_map.py`,
 `fraction_adopted`), which prompt 02c reproduces.
+
+## After closing: the n = 2 wall (2026-11-05)
+
+Asked by the user for U15 (campaign README §8.10): stage 2 on V = V₀e^{(M/φ)²}. `walls.WallN` carries the wall for
+any n. n = 1's `Wall` is unchanged; `WallN(L, 1)` equals it to 5 × 10⁻¹⁶. `stage2.solve` and `run_point` take `n`
+(default 1). Output: `out/stage2_n2.txt`.
+
+There L = ln(1 + E/V₀) = (M/φ_t)^n. The adopted law's L was M/φ_t, which is the same thing only at n = 1, so the scan
+tests two inputs: L_E = ln(1 + E/V₀) and L_M = M/φ_t = L_E^{1/2}.
+
+**Validation.**
+- **Classical limit:** with the loop off, stage 2 equals walls.py's independent test field to five digits at L = 5
+  and 20.
+- **Born limit:** at k_IR = 10 m_ta stage 2 is 1.0007 and 1.0010 of `born.py`.
+- **Energy:** conserved to ≤ 5 × 10⁻⁷, except at grid corners of ln(V₀/M⁴) ≥ 14 (≤ 4 × 10⁻³).
+- **S(L) at n = 2** is 0.6–0.8 of n = 1's at the same L_E (6.1 × 10⁻³ at L = 1, 1.43 × 10⁻⁵ at L = 100).
+
+**The scan.** 63 points, L_E ∈ {2, …, 100} × ln R ∈ {3, …, 40}. On a history ln R and L_E are tied by V₀/M⁴:
+- at n = 2, ln R = ln(V₀/M⁴) + 2L − ln(e^L − 1) + 2 ln(4L² + 6L) + 2 ln L − ln 8π²;
+- the laboratory curve runs through (L, ln R) = (2, 9.2), (4, 14.7), (8, 22.6) and (16, 34.6);
+- every M of the sample has ln(V₀/M⁴) ≤ 3.3.
+
+Residuals of the adopted law against stage 2, where the field came back out:
+
+| points | law at L_E | law at L_M |
+|---|---|---|
+| one-loop, ℓ ≥ 1, ln(V₀/M⁴) ≤ 10 (22) | max 0.125, rms 0.048, mean −0.03 | max 0.20, rms 0.10, mean −0.09 |
+| gap, ln(V₀/M⁴) ≤ 10 (19) | max 0.10, rms 0.046, mean −0.04 | max 0.23, rms 0.13, mean −0.11 |
+
+- **L_E is the right input.** With it the n = 1 law describes the n = 2 wall about as well as it describes n = 1's
+  off-curve grid, slightly low on average. With L_M it is low by about 0.1.
+- **The corners at ln(V₀/M⁴) > 10 fail under either input.** There, at small L and large R, the fraction collapses
+  (0.13 at L = 2, ln R = 25; 0.003 at L = 4, ln R = 40) while the law tends to 1. This is n = 1's off-curve corner
+  again (0.33 at L = 1.3, ln R = 25). It needs M below laboratory M, which no history of the sample has.
+
+**For U15:** option (b) with L = ln(1 + E/V₀) is supported at n = 2, to the qualitative accuracy the user asked for.
+At n = 1 that L equals M/φ_t, so the law at n = 1 is unchanged, and it needs no M. Using n = 1's S(L) table at
+n = 2 overstates the classical drain by under a factor 2, on a drain that is ≤ 0.006 at R = 1.

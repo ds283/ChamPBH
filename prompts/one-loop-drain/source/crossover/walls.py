@@ -66,6 +66,58 @@ class Wall:
         return p
 
 
+class WallN(Wall):
+    """The wall of V = V0 exp((M/phi)^n), for any n (added 2026-11-05 for U15; Wall is n = 1 and unchanged).
+
+    In units M = 1, omega_t = 1, with y = phi^{-n} and U = c (e^y - 1): the classical turning point is
+    phi_t = L^{-1/n}, where L = ln(1 + E/V0) = y_t (so L = M/phi_t only at n = 1), and c is fixed by
+    V''(phi_t) = 1. With d1..d4 the derivatives of y,
+        d1 = -n y/phi, d2 = n(n+1) y/phi^2, d3 = -n(n+1)(n+2) y/phi^3, d4 = n(n+1)(n+2)(n+3) y/phi^4,
+    the derivatives of U are c e^y times d1; d1^2 + d2; d1^3 + 3 d1 d2 + d3; and
+    d1^4 + 6 d1^2 d2 + 3 d2^2 + 4 d1 d3 + d4.
+    """
+
+    def __init__(self, L: float, n: int):
+        self.L = L
+        self.n = n
+        self.phi_t = L ** (-1.0 / n)
+        d1, d2, _, _ = self._dy(self.phi_t)
+        self.c = exp(-L) / (d1 * d1 + d2)
+        self.E = self.c * (exp(L) - 1.0)
+
+    def _dy(self, p):
+        n = self.n
+        y = p ** (-n)
+        return (
+            -n * y / p,
+            n * (n + 1) * y / p**2,
+            -n * (n + 1) * (n + 2) * y / p**3,
+            n * (n + 1) * (n + 2) * (n + 3) * y / p**4,
+        )
+
+    def U(self, p):
+        return self.c * np.expm1(p ** (-self.n))
+
+    def dU(self, p):
+        return self.c * np.exp(p ** (-self.n)) * self._dy(p)[0]
+
+    def V2(self, p):
+        d1, d2, _, _ = self._dy(p)
+        return self.c * np.exp(p ** (-self.n)) * (d1 * d1 + d2)
+
+    def V3(self, p):
+        d1, d2, d3, _ = self._dy(p)
+        return self.c * np.exp(p ** (-self.n)) * (d1**3 + 3.0 * d1 * d2 + d3)
+
+    def V4(self, p):
+        d1, d2, d3, d4 = self._dy(p)
+        return (
+            self.c
+            * np.exp(p ** (-self.n))
+            * (d1**4 + 6.0 * d1 * d1 * d2 + 3.0 * d2 * d2 + 4.0 * d1 * d3 + d4)
+        )
+
+
 class Bounce:
     """The classical bounce: the incoming leg from phi_start to the turning point, with dense output."""
 
