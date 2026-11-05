@@ -53,7 +53,7 @@ The plan as first ruled had seven prompts (README §2), none written; the re-pla
 | 01 | [The drain law](01-the-drain-law.md) | the law and A as inputs; the regime in the loop; α_eff by regime; the gap prescription as a module attribute; the `"drain"` payload key; the tool route's options; the 3873 failure; the wall-search fix (README §8.8) | Opus | ✅ | ✅ | `b99f6a4` | [01](logs/01-the-drain-law.md) |
 | 02 | [Measure the law](02-measure-the-law.md) | U11's thirty histories by the tool route, re-tuned, at three A and both gap prescriptions, with two exact shortcuts (S1, S2) spot-checked; regime shares, the gap's reach, the R·S(L) bound, Y_p, D/H, ΔN_eff against the fixed law; then U13–U14 | Opus | ✅ | ✅ | `3f3f0cf` | [02](logs/02-measure-the-law.md) |
 | 02b | [Measure over a wider A](02b-measure-wide-A.md) | inserted 2026-11-04 at the user's request: 02's thirty histories at A ∈ {0.05, 0.5, 1.5, 2, 5, 10}, both gap prescriptions; 02's lines reused after a reproduction check; S2 generalised; the first impact's drained fraction and the cap; the handover for U14 at nine A | Opus | ✅ | ✅ | `cc1f449` | [02b](logs/02b-measure-wide-A.md) |
-| 02c | [The measured law](02c-the-measured-law.md) | inserted 2026-11-05 (README §8.10): the adopted law in `ScalarHistory.py`, replacing 2.7/ℓ and both gap prescriptions; S(L); U15 (b), L = ln(1 + E/V₀) at every n; the `"drain"` record names the model version and records L and ln R; `--gap-prescription` removed; the reproduction of crossover's adopted-law maps | Opus | ✅ | ✅ | this commit | [02c](logs/02c-the-measured-law.md) |
+| 02c | [The measured law](02c-the-measured-law.md) | inserted 2026-11-05 (README §8.10): the adopted law in `ScalarHistory.py`, replacing 2.7/ℓ and both gap prescriptions; S(L); U15 (b), L = ln(1 + E/V₀) at every n; the `"drain"` record names the model version and records L and ln R; `--gap-prescription` removed; the reproduction of crossover's adopted-law maps | Opus | ✅ | ✅ | `18add05` | [02c](logs/02c-the-measured-law.md) |
 | 02d | Measure the measured law | inserted 2026-11-05: 02b's sample re-tuned under the adopted law at U14's eight A; replaces 02's and 02b's one-loop measurements | Opus | ⬜ | ⬜ | | |
 | 03 | The store | the keys, `ScalarHistoryBounce`, the sample and history columns, one versioned drain-model key (README §8.10, decision 1; it replaces the gap-prescription key of U13/P26), `FINGERPRINT_FORMAT` 7, `VERSION_LABEL` | Opus | ⬜ | ⬜ | | |
 | 04 | Drivers and exports | the law's options in `main.py` and the plot scripts; `histories.csv`, `fields.csv`, `bounces.csv` | Sonnet | ⬜ | ⬜ | | |
@@ -70,6 +70,7 @@ Orchestrator notes, one prompt at a time, in `orchestrator/`:
 - [`prompt-01.md`](orchestrator/prompt-01.md) (`b1415a3`) — used for 01.
 - [`prompt-02.md`](orchestrator/prompt-02.md) (`b1d6bc5`) — used for 02.
 - [`prompt-02b.md`](orchestrator/prompt-02b.md) (`62d3f2f`) — used for 02b.
+- [`prompt-02c.md`](orchestrator/prompt-02c.md) (`1647f7a`, amended in the review commit, its §5) — used for 02c.
 
 **Orchestrator review of prompt 01 (2026-11-03)**, by orchestrator note 01 §3, on `b99f6a4`. Passed; seven
 checks:
@@ -236,6 +237,65 @@ Noted, not acted on:
   well as at 5 and 10. So these values belong to that history, not to A.
 - Ruling 5's projection for A = 0.05 costed every remaining task at P's 26 s, and was low by about nine times: the
   ladder's long classical tails took 711–942 s each. It held under the three-hour limit regardless.
+
+**Orchestrator review of prompt 02c (2026-11-05)**, by orchestrator note 02c §3, on `18add05`. Passed; seven
+checks:
+
+During the work the user made three rulings, each forwarded in their words and recorded in README §8.10 and in note
+§5:
+- the gap's f = 0 where 1 + q ln L ≤ 0, in place of the note's ruling 9, so no issue was opened;
+- L moved into the model class with no default, which the orchestrator raised after the agent's stop;
+- ruling 4's stop (the maps' headers) ruled the exception.
+
+1. **Scope.**
+   - `git show --stat 18add05` lists 28 files: prompt §5's, ruling 11's, and `AbstractModel.py` and
+     `ExponentialModel.py` by the user's ruling. Its parent is `1647f7a`.
+   - The tree is clean, and no remote branch contains `18add05`.
+   - In `source/crossover/`, only `cascade_map.py` (the `_GAP_PRESCRIPTION` guard) and `measured_law_map.py` (the
+     patch's `*args`) change. `law/`, `measure/` and `measure-02b/` change only by their new READMEs.
+   - Nothing under `config/`, `ObjectFactories/`, `main.py`, the plot scripts, `PRyM/` or `thirdparty/` changes, and
+     `VERSION_LABEL`, `FINGERPRINT_FORMAT` and the stepper label are untouched.
+   - The removed names appear in the tree only in absence tests and dated comments.
+2. **Nothing left running.** The two batch pids (20401, 86349) are dead, both `batch.end` files exist, and
+   `runregistrykit list` shows 23 runs, all finished.
+3. **The law, read.**
+   - `drain_fraction` and `drain_alpha_effective` follow README §8.10 and `fraction_adopted` term for term,
+     including the evaluation order of the gap's product.
+   - The S table's 21 pairs equal `stage1a_S_of_L.txt`'s columns L and S(L) exactly (loaded by `np.loadtxt`).
+   - The continuation and the clamp are where the rulings put them.
+   - `ExponentialModel._drain_L` is the stable form of note ruling 2. At x = −30, 0, 30, 102 and 800 it gives
+     9.36 × 10⁻¹⁴, ln 2, 30.000000000000092, 102 and 800. `AbstractModel._drain_L` raises and is not abstract.
+4. **The reference, independently.** A scratch script compared the production law with `fraction_adopted` imported
+   from `source/crossover/` (not the test's copy), at 10⁴ random points over the three assessed regimes, four M,
+   ℓ in (0, 40), L in (0.01, 300) and ln R in (−50, 30), with α_eff at three A and two w_gate:
+   - 8717 points are bitwise equal;
+   - 252 are classical points above L = 134, equal bitwise to exp(ln R)·(S(134)·(134/L)²);
+   - 1031 are gap points with 1 + q ln L ≤ 0, where the reference is ≤ 0 and production is 0.0;
+   - none departs otherwise, and no one-loop point departs at all.
+5. **One map, re-run.** W-2187 at A = 0.05, unpatched `cascade_map.py` in a process of my own (17.7 s, load 5.0):
+   - byte-identical to the agent's `var/one-loop-drain/02c/maps/W-2187-A0.05.txt`;
+   - its 199 rows equal crossover's;
+   - its header shows the ruled last-digit difference: `parking_N` 39.02200520613764 against 39.022005206137614.
+6. **The tool, re-run.** §2.4's command (26.6 s): its `drain` line equals the agent's, and its `history` line too,
+   apart from the wall time. That is 192 one-loop and 11 gap candidates, ℓ_min 0.0977756, and
+   `model=one-loop-measured-v1`.
+7. **The records.**
+   - The log follows §5.1's seven sections, with its fourteen deviations classed, among them the note's rulings and the user's three.
+   - Verification §1, §2 and §2b are unchanged (the diff only adds lines), and §2c follows prompt §2's four items.
+   - On the board: row 02c, its items, the Measured gate and **Last updated**. No issue moved, so
+     `.documents/OPEN_ISSUES.md` stays at 31.
+   - The suites, re-run serially in the review: 26 (70 s), 162 (142 s) + 432 (481 s), 130 (91 s), 156 (206 s), 68
+     (27 s), all passing, at 1-minute loads of 11–51 at their starts. These equal `CLAUDE.md`'s new counts.
+
+   The review substituted `18add05` for "this commit" on the board, in the log, and in the three dated READMEs. It
+   recorded the user's three rulings in README §8.10 and added §5 to note 02c.
+
+Noted, not acted on:
+- The fitted constants and S(L) are measured on the exponential family too (log 02c §6). Moving L into the model does
+  not make them model-independent. If another potential is added, the law's applicability to it is a question for
+  the user, beside `_drain_L`.
+- Classical candidates now drain, each taking a restart: 83 on the ladder at A = 0.2. 02d measures the cost on the
+  whole sample.
 
 **Open for the user, with 02's measurements (2026-11-03;
 [verification §2.9](../../.documents/one-loop-drain-verification.md)):**

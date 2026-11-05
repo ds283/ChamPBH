@@ -316,3 +316,20 @@ in `.documents/OPEN_ISSUES.md`, in the same commit.
 - the Measured gate: the goldens, the reference, the four maps and the tool;
 - ruling 9's issue, put to the user for a ruling in their own words;
 - that 02d is written next.
+
+## 5. Amended during the work (2026-11-05)
+
+Three rulings of the user, forwarded to the agent with `SendMessage` in the user's words, and recorded in README
+§8.10:
+- **Ruling 9 replaced.** "I think probably we set `f = 0` there": in the gap f = 0 where 1 + q ln L ≤ 0. No issue
+  is opened. The reference test compares production with max(0, reference) there.
+- **§0's second point and ruling 11 amended.** "I suggest we move `L` into the model class, with no default." L is
+  `AbstractModel._drain_L`, with no default, defined by `ExponentialModel`, and checked at the three entry points under
+  the one-loop law. `AbstractModel.py` and `ExponentialModel.py` join ruling 11's files. The orchestrator raised this
+  after the agent's stop: L = ln(1 + E/V₀), computed in `ScalarHistory.py`, would have coupled the integration to the
+  form of the potential, and this note had ruled that no model file change.
+- **Ruling 4's stop.** Ruling 4 (i) was worded for a differing row. The difference came instead in the headers'
+  full-precision `parking_N` and `N_final`, in their last digits, traced to the form of L. "Decision 2: yes": it is
+  the exception.
+
+Checked after the move: every output was byte-identical to the first batch's.

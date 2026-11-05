@@ -1,7 +1,7 @@
 # Log 02c — the measured law
 
 **Subject:** Put the measured drain law in the code and remove the gap prescriptions
-**Commit:** this commit, on branch `one-loop-drain`, on top of `1647f7a`
+**Commit:** `18add05`, on branch `one-loop-drain`, on top of `1647f7a`
 **Date:** 2026-11-05, by Claude Opus 5.5
 **Result:** **COMPLETE.** The Measured gate holds (`.documents/one-loop-drain-verification.md` §2c.6).
 - **The law.** Under the one-loop law each candidate now drains min(0.99, A·f)·w_gate, with f the law the user adopted
@@ -69,7 +69,7 @@ classified in §2, beside the user's three rulings made during the work.
 - **`prompts/one-loop-drain/source/crossover/`** (prompt §1.5):
   - `cascade_map.py` sets `SM._GAP_PRESCRIPTION` only where it exists;
   - `measured_law_map.py`'s patched `drain_alpha_effective` takes `(regime, ell, *args)` and reads A and w_gate as the
-    last two, so the same patch applies the same law on trees before and after this commit.
+    last two, so the same patch applies the same law on trees before and after `18add05`.
 
   The diff is in §3.
 - **`.documents/one-loop-drain/law/README.md`, `measure/README.md` and `measure-02b/README.md`**, new, each holding only

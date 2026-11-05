@@ -789,3 +789,22 @@ measurement at other n may revise it, through the drain-model key's version (dec
 The gates: **Measured** (02c) holds when the fixed law is unchanged bitwise (the goldens), the law equals the
 reference implementation at synthetic inputs, and crossover's adopted-law maps are reproduced candidate by
 candidate. **Remeasure** (02d) holds when the sample is measured at eight A, re-tuned, with the failures stated.
+
+**Ruled by the user during 02c, 2026-11-05** (the user's words; the questions are orchestrator note 02c's, and its
+ruling 4's stop):
+- **The gap below L = e^{−1/q} ≈ 0.304.** The gap function above is negative there, where 1 + 0.841 ln L < 0, and so
+  is the reference implementation. "I think probably we set `f = 0` there." In the gap f = 0 where 1 + q ln L ≤ 0.
+  No gap candidate of 02c's runs reaches it (least L 2.578). The M = 10⁻³³ M_P histories are the likeliest place;
+  02d counts it from `DrainCandidate.L`.
+- **L is the model's.** L = ln(1 + E/V₀) is the exponential family's wall exponent (M/φ_t)^n. Computed in
+  `ScalarHistory.py`, it coupled the integration to the form of the potential. "I suggest we move `L` into the model
+  class, with no default. Then when a new potential is implemented, breakage is loud, and the implementer has to think
+  about what they are changing." `AbstractModel._drain_L` has no default. `ExponentialModel` defines it, and under the
+  one-loop law the three entry points refuse a model that does not.
+- **The maps' headers.** The production L and the reference's M/φ_t differ by at most 3.3 × 10⁻¹⁴. Carried through the
+  integration, that moves the full-precision `parking_N` and `N_final` of three of the four maps in their last digits
+  (about 5 × 10⁻¹⁵ relative). Every candidate row is equal. "Decision 2: yes": this is the stated exception, not a
+  stop.
+
+The fitted constants and S(L) are themselves measured on this family (log 02c, "Observations not acted on"); moving L
+into the model does not make them model-independent.
