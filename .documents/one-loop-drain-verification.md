@@ -899,8 +899,8 @@ The gate holds, item by item (prompt §2):
 
 ## 2c. Prompt 02c — the measured law (2026-11-05)
 
-**Tree:** branch `one-loop-drain` at `1647f7a`, whose computing code is 02b's review's (`1edb56c`); prompt 02c's commit (this
-commit) changes `ComputeTargets/ScalarHistory.py`, `CosmologyConcepts/Models/AbstractModel.py`,
+**Tree:** branch `one-loop-drain` at `1647f7a`, whose computing code is 02b's review's (`1edb56c`); prompt 02c's commit
+(`18add05`) changes `ComputeTargets/ScalarHistory.py`, `CosmologyConcepts/Models/AbstractModel.py`,
 `CosmologyConcepts/Models/ExponentialModel.py` and `tools/history_and_bbn.py`, and §1, §2 and §2b above are unchanged.
 **Scripts:** [`one-loop-drain/law-02c/`](one-loop-drain/law-02c/), each with a docstring: `make_inputs.py`, `batch.py`,
 `compare_maps.py`, `l_form_probe.py`, `compare_runs.py`. **Committed outputs:**
