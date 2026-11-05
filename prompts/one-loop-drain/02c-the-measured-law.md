@@ -20,7 +20,7 @@ repository root, with `PYTHONPATH=.` and `./venv/bin/python`. Outputs go under `
 
 **Gate:**
 - on branch `one-loop-drain`, at or after the commit that adds this prompt, with no tracked change in `git status`;
-- **U15 is ruled** (README §8.10 or an orchestrator note). If it is not, stop and ask;
+- **U15 is ruled:** option (b), 2026-11-05 (README §8.10). L = ln(1 + E/V₀) at every n;
 - `./venv/bin/python -m runregistrykit list`: no run `running`, stale or unknown;
 - the suites stand at the counts of `CLAUDE.md` (26, 566 = 163 + 403, 130, 156, 68), all passing.
 
@@ -96,8 +96,7 @@ Under `DRAIN_LAW_ONE_LOOP`, `drain_alpha_effective` returns min(`DRAIN_ALPHA_CAP
 - **The order of operations** follows `fraction_adopted` term for term, so that the values equal the reference's
   (§2.2). Where the production form must differ (for example, an interpolation that is not `np.interp`), the
   difference is bounded in §2.2.
-- **U15 (n ≠ 1)** as ruled. Under option (a), a model with n ≠ 1 under the one-loop law is a `ValueError` before any
-  integration, at each entry point that today checks A. Under (b) or (c), follow the ruling's text.
+- **U15 (n ≠ 1)**, ruled (b): no check on n; the law applies at every n with L = ln(1 + E/V₀) (README §8.10).
 - `DRAIN_C1` goes. 2.7/ℓ is no longer computed anywhere.
 
 ### 1.2 The prescriptions removed (decision 2)
@@ -150,7 +149,8 @@ lets them run on the new tree: skip the attribute when it is absent. They are §
   below 0.3; above 134.
 - **The reference:** at a grid of (regime, ℓ, L, ln R) covering every branch, f equals `fraction_adopted` (imported
   from `source/crossover/`, or a verbatim copy kept in the test module with its source named), to the bound of §2.2.
-- **U15** as ruled.
+- **U15:** the law at an n = 2 model takes L = ln(1 + E/V₀), and at n = 1 it equals M/φ_t to the turning point's
+  accuracy.
 - **The record:** `DrainRecord.model` under both laws, and the new `DrainCandidate` fields.
 - **The removed feature:** no `_GAP_PRESCRIPTION`, and the tool refuses `--gap-prescription` as an unknown argument.
 - **`TestTheOneLoopLawOn2197`** and any other test pinning values of the old law: re-pinned to the new law.

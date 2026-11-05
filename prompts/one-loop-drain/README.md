@@ -760,19 +760,23 @@ w_gate as today (U9). L = M/φ_t and ln R are the assessment's (`ClassicalTurnin
 - **The reference implementation** is `fraction_adopted` in `source/crossover/measured_law_map.py`. Crossover's
   outputs under it (`out/adopted-A0.05/`, `out/adopted-floor/`) are what 02c reproduces.
 
-**Open for the user: U15, models with n ≠ 1.** Stage 2 measured the n = 1 wall, V₀e^{M/φ}, only, and `main.py`
+**U15, models with n ≠ 1** (ruled 2026-11-05, below). Stage 2 measured the n = 1 wall, V₀e^{M/φ}, only, and `main.py`
 accepts `--n-values`. The options:
 - (a) under the one-loop law a model with n ≠ 1 is a `ValueError`, before any integration, until it is measured;
 - (b) apply the law with L = ln(1 + E/V₀), stage 2's definition, which equals M/φ_t at n = 1, unmeasured at n ≠ 1;
 - (c) stage-2 runs on the n = 2 wall first.
 
-The planner recommends (a) if no rebuild of record uses n ≠ 1. 02c's gate requires U15 ruled.
+The planner recommends (a) if no rebuild of record uses n ≠ 1. 02c's gate required U15 ruled.
 
 *(2026-11-05, measured at the user's request: stage 2 on the n = 2 wall (`source/crossover/README.md`, "After
 closing: the n = 2 wall"). With L = ln(1 + E/V₀) the adopted law is within 0.125 of the n = 2 one-loop points and
 within 0.10 of the gap points that histories can reach (rms 0.05). With L = M/φ_t it is low by about 0.1. Option (b),
 with L = ln(1 + E/V₀) at every n, is therefore supported. It equals M/φ_t at n = 1, so the law there is unchanged.
 The planner's recommendation moves to (b).)*
+
+**U15 ruled by the user, 2026-11-05:** "OK, let's take option (b) for now." Under the one-loop law the drain applies
+at every n, with L = ln(1 + E/V₀); at n = 1 that is M/φ_t, and the law there is unchanged. "For now": a later
+measurement at other n may revise it, through the drain-model key's version (decision 1).
 
 **The re-plan.** Prompts 02c and 02d are inserted before 03, and 03 is revised.
 
