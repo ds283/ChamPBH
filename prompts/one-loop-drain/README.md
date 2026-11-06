@@ -808,3 +808,49 @@ ruling 4's stop):
 
 The fitted constants and S(L) are themselves measured on this family (log 02c, "Observations not acted on"); moving L
 into the model does not make them model-independent.
+
+### 8.11 Before 03 (2026-11-06)
+
+Reviewed by Claude Opus 5.5 at the user's request: "Please review the `one-loop-drain` campaign. We should now be ready
+to write prompt 03. If you agree, please do so."
+
+**Ready.** 02d landed and was reviewed (`98b1601`, `f830085`), with the Remeasure gate held. The tree is clean, and
+no run is live (`runregistrykit list`: 23 finished). Every ruling 03 needs is in: U8 (the key on `alpha_value`), U12
+(`FINGERPRINT_FORMAT` 7, `VERSION_LABEL` 2026.10.0), U5 (the sample masses), ruling 2 (no instrumentation under the
+fixed law), and decision 1 of §8.10 (one versioned drain-model key, which "03 designs"). The questions 02d's handover
+left for the user (which (β, M, A) the rebuild builds, and C-3873's tuning cost) are the rebuild's, not 03's.
+
+**Stale beside §8.10, for the prompts after 03** (not acted on here):
+- §8.3 and §8.4 row 05: "the R·S(L) bound" is no longer a bound. Under decision 3 the classical regime drains R·S(L),
+  and the bounce rows carry it as α_eff. 05 needs no separate computation of it.
+- §8.5 gate R: "02's tool route" should read 02d's, which replaced 02's and 02b's one-loop measurements.
+- §8.4 row 04: the option it adds selects the drain model (decision 1), not a gap prescription (P26, superseded).
+
+**Proposed by the planner for 03 (P27–P32), the defaults unless the user says otherwise.** Prompt 03 is written on them.
+- **P27 — where the key lives.** On `alpha_value`, as U8 ruled. Its column `drain_model` takes the place of U8's
+  `drain_law`, since decision 1 folds the law into the model key.
+  - A row is (value, drain_model), and the pair is unique. The value is α under `fixed` and A under
+    `one-loop-measured-v1`. α = 0 exists only under `fixed`, and the one-loop model refuses A ≤ 0.
+  - The law follows from the model. The stored string is the code's current `DRAIN_MODEL_*`, so a later version of the
+    law is a new value. A lookup made under it finds no row of the old version, as a lookup under a new
+    `VERSION_LABEL` finds none of the old label.
+  - A lookup that names no model asks for `fixed`. So `main.py`, the plot scripts and the tools are unchanged until 04,
+    which adds their option, and none of them can store a one-loop history before then (P22's intent).
+  - Not chosen: a table of its own (U8's rejected alternative); a column on `ScalarHistory` (it would key the history
+    twice over the same drain).
+- **P28 — the guard.** `ScalarHistory.store()` refuses a success payload whose `DrainRecord.model` is not its
+  `alpha_value`'s `drain_model`.
+- **P29 — the bounce table.** `ScalarHistoryBounce`, one row per candidate and per turning point of the reflection margin
+  that is not a candidate, under the one-loop law only (prompt 03 §1.3 lists the columns).
+  - It is written, read, validated and pruned wherever `ScalarHistoryValue` is, and loaded with the samples.
+  - The history row gains `bounce_rows`, which `validate` checks as it checks `z_samples`.
+  - The table has no `inventory_spec`, as `ScalarHistoryValue` has none. DatastoreKit's `InventorySpec` names a single
+    value table (`values`), so the inventory does not count bounce rows. That is recorded, not worked around (`CLAUDE.md`,
+    the packages).
+- **P30 — the all-generation margins** are taken from the generations `relativistic_margins` already returns, which
+  carry every generation's margins. They are not computed by a second run of the core, which is O(G·E) and would add a
+  pass over 13 000 candidates on the ladder's classical tails.
+- **P31 — the sample masses** are computed once per stored history, on the payload `tune_history` returns, with the
+  accepted integration's realization (P2). They are not computed on every tuning integration (C-3873 takes 28).
+- **P32 — no migration.** A format-6 store is read with the code of its own commit, as for every earlier format and label
+  (`config/version.py`).
