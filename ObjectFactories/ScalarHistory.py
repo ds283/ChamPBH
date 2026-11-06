@@ -26,7 +26,9 @@ from ComputeTargets import (
     ScalarHistoryValue,
 )
 from ComputeTargets.ScalarHistory import (
+    BounceRow,
     DissipationValues,
+    DrainHistoryValues,
     FirstBounce,
     FixedTValues,
     TUNING_OUTPUT_KEYS,
@@ -116,6 +118,131 @@ def _dissipation_from_row(row_data, units: UnitsLike) -> DissipationValues:
             value = value + log_GeV
         values[key] = value
     return DissipationValues(**values)
+
+
+# ---- the units of the columns of one-loop-drain prompt 03 (orchestrator note 03, ruling 9) ----
+#
+# One helper per suffix, used by the store, the read-back and the tests: a log column holds ln x - ln u and is
+# read back as the column + ln u, with ln u = ln M_P ("_Mp"), 4 ln M_P ("_Mp4") or ln GeV ("_GeV"); a linear
+# column ("_Mp4" on K) holds x / M_P^4 and is read back as the column * M_P^4. None stays None
+LOG_MP = "log_Mp"
+LOG_MP4 = "log_Mp4"
+LOG_GEV = "log_GeV"
+LINEAR_MP4 = "linear_Mp4"
+
+
+def log_unit(kind: str, units: UnitsLike) -> float:
+    """ln u of a log column's unit: ln M_P, 4 ln M_P or ln GeV."""
+    if kind == LOG_MP:
+        return log(units.PlanckMass)
+    if kind == LOG_MP4:
+        return 4.0 * log(units.PlanckMass)
+    if kind == LOG_GEV:
+        return log(units.GeV)
+    raise ValueError(f"log_unit: not a log column's kind: {kind!r}")
+
+
+def to_column(value, kind: Optional[str], units: UnitsLike):
+    """The forward conversion of a value to its column's unit (kind None: stored as it is)."""
+    if value is None or kind is None:
+        return value
+    if kind == LINEAR_MP4:
+        return value / units.PlanckMass**4
+    return value - log_unit(kind, units)
+
+
+def from_column(value, kind: Optional[str], units: UnitsLike):
+    """The inverse conversion of a column back to the cosmology's units (kind None: read as it is)."""
+    if value is None or kind is None:
+        return value
+    if kind == LINEAR_MP4:
+        return value * units.PlanckMass**4
+    return value + log_unit(kind, units)
+
+
+# the bounce rows' columns (one-loop-drain prompt 03 §1.3): (BounceRow field, column, conversion), in the
+# table's order after history_serial. A converted column carries its unit's suffix
+BOUNCE_COLUMNS = (
+    ("ordinal", "ordinal", None),
+    ("source", "source", None),
+    ("candidate_index", "candidate_index", None),
+    ("N", "N", None),
+    ("N_turn", "N_turn", None),
+    ("kind", "kind", None),
+    ("resolved", "resolved", None),
+    ("log_T_Jordan", "log_T_Jordan_GeV", LOG_GEV),
+    ("delta_K", "delta_K_Mp4", LINEAR_MP4),
+    ("log_rho_kin", "log_rho_kin_Mp4", LOG_MP4),
+    ("nonadiabaticity", "nonadiabaticity", None),
+    ("alpha_eff", "alpha_eff", None),
+    ("w_gate", "w_gate", None),
+    ("K_before", "K_before_Mp4", LINEAR_MP4),
+    ("regime", "regime", None),
+    ("ell", "ell", None),
+    ("L", "L", None),
+    ("log_R", "log_R", None),
+    ("log_E", "log_E_Mp4", LOG_MP4),
+    ("log_H", "log_H_Mp", LOG_MP),
+    ("log_k_ex", "log_k_ex_Mp", LOG_MP),
+    ("log_m", "log_m_Mp", LOG_MP),
+    ("log_q", "log_q_Mp", LOG_MP),
+    ("share", "share", None),
+    ("weighted", "weighted", None),
+    ("birth_margin", "birth_margin", None),
+    ("reflection_margin", "reflection_margin", None),
+    ("reflection_margin_N", "reflection_margin_N", None),
+    ("tracker_margin", "tracker_margin", None),
+    ("tracker_margin_N", "tracker_margin_N", None),
+)
+assert tuple(f for f, _, _ in BOUNCE_COLUMNS) == BounceRow._fields
+
+# the sample masses' columns of ScalarHistoryValue (one-loop-drain prompt 03 §1.5): (attribute, column, conversion)
+MASS_COLUMNS = (
+    ("log_m_eff", "log_m_eff_Mp", LOG_MP),
+    ("log_m_tracker", "log_m_tracker_Mp", LOG_MP),
+)
+
+
+def bounce_row_columns(row: BounceRow, units: UnitsLike) -> dict:
+    """A bounce row's columns (but history_serial), each in its stored unit."""
+    out = {}
+    for field, column, kind in BOUNCE_COLUMNS:
+        value = getattr(row, field)
+        if isinstance(value, bool) or value is None:
+            out[column] = value
+        else:
+            out[column] = to_column(value, kind, units)
+    return out
+
+
+def bounce_row_from_columns(row_data, units: UnitsLike) -> BounceRow:
+    """A BounceRow read back: each column in the cosmology's units; a Boolean column as bool."""
+    values = {}
+    for field, column, kind in BOUNCE_COLUMNS:
+        value = getattr(row_data, column)
+        if field in ("resolved", "weighted") and value is not None:
+            value = bool(value)
+        values[field] = from_column(value, kind, units)
+    return BounceRow(**values)
+
+
+def _drain_history_columns(record: Optional[DrainHistoryValues]) -> dict:
+    """The columns of DrainHistoryValues for a row, as the record has them (every field is dimensionless); all
+    None if record is None (the fixed law, alpha = 0, a failure row)."""
+    return {
+        key: (None if record is None else getattr(record, key))
+        for key in DrainHistoryValues._fields
+    }
+
+
+def _drain_history_from_row(row_data) -> Optional[DrainHistoryValues]:
+    """The DrainHistoryValues of a row read back; None where every column is NULL, as a fixed-law row has them.
+    bounce_rows is never NULL where the record was written."""
+    if getattr(row_data, "bounce_rows") is None:
+        return None
+    return DrainHistoryValues(
+        **{key: getattr(row_data, key) for key in DrainHistoryValues._fields}
+    )
 
 
 class sqla_ScalarHistoryTagAssociation_factory(SQLAFactoryBase):
@@ -355,6 +482,33 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                 sqla.Column("worst_tracker_margin_N", sqla.Float(64), nullable=True),
                 sqla.Column("tracker_failing_share", sqla.Float(64), nullable=True),
                 sqla.Column("unassessed_share", sqla.Float(64), nullable=True),
+                # the history's drain record under the one-loop law, the fields of DrainHistoryValues
+                # (one-loop-drain prompt 03 §1.4; README §8.3, P9 as revised, P30). All are NULL under the fixed
+                # law, at alpha = 0 and on a failure row. Every one is dimensionless: the shares of K(N_final)
+                # drained in each regime and the parking leftover's (NULL where K(N_final) = 0); the candidates
+                # per regime; the least one-loop ell and the least ln R at a drain (NULL if there is none); the
+                # drain record's counts of unresolvable assessments and declined unresolved reflections; the
+                # worst margin, its N and the failing share of each kind over every generation, the weight
+                # ignored (NULL where the margins were not computed); and the number of ScalarHistoryBounce rows,
+                # which validate checks as it checks z_samples
+                *(
+                    sqla.Column(
+                        key,
+                        (
+                            sqla.Integer
+                            if key.startswith("candidates_")
+                            or key
+                            in (
+                                "unresolvable_assessments",
+                                "unresolved_declined",
+                                "bounce_rows",
+                            )
+                            else sqla.Float(64)
+                        ),
+                        nullable=True,
+                    )
+                    for key in DrainHistoryValues._fields
+                ),
                 sqla.Column("validated", sqla.Boolean, default=False, nullable=False),
                 # the JSON of build_extra_data: Text since inelastic-reflection prompt 09 (R23),
                 # which adds the margins' first failures under "margins"; String(256) before
@@ -458,6 +612,7 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                 table.c.density_NP_ratio_70keV,
                 *(table.c[key] for key in TUNING_OUTPUT_KEYS),
                 *(table.c[key] for key in DissipationValues._fields),
+                *(table.c[key] for key in DrainHistoryValues._fields),
                 solver_table.c.label.label("solver_label"),
                 solver_table.c.stepping.label("solver_stepping"),
                 atol_table.c.log10_tol.label("log10_atol"),
@@ -593,6 +748,7 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                     value_table.c.kicking_term_Mp,
                     value_table.c.log_one_plus_z_Jordan,
                     value_table.c.rho_chi_over_rho_rad,
+                    *(value_table.c[column] for _, column, _ in MASS_COLUMNS),
                 )
                 .select_from(
                     value_table.join(
@@ -640,6 +796,10 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                         kicking_term=row.kicking_term_Mp * units.PlanckMass,
                         log_one_plus_z_Jordan=row.log_one_plus_z_Jordan,
                         rho_chi_over_rho_rad=row.rho_chi_over_rho_rad,
+                        **{
+                            attribute: from_column(getattr(row, column), kind, units)
+                            for attribute, column, kind in MASS_COLUMNS
+                        },
                     )
                 )
             imported_z_sample = redshift_array(z_points)
@@ -650,9 +810,30 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                         f'Fewer z-samples than expected were recovered from the validated ScalarHistory "{store_label}"'
                     )
 
+            # the bounce rows, in ordinal order (one-loop-drain prompt 03 §1.6), read with the samples and
+            # counted against bounce_rows as the samples are against z_samples (NULL: none expected)
+            bounce_table = tables["ScalarHistoryBounce"]
+            bounce_rows = conn.execute(
+                sqla.select(
+                    *(bounce_table.c[column] for _, column, _ in BOUNCE_COLUMNS)
+                )
+                .filter(bounce_table.c.history_serial == store_id)
+                .order_by(bounce_table.c.ordinal)
+            )
+            bounces = tuple(bounce_row_from_columns(row, units) for row in bounce_rows)
+            expected_bounces = (
+                row_data.bounce_rows if row_data.bounce_rows is not None else 0
+            )
+            if not row_data.failure and len(bounces) != expected_bounces:
+                raise RuntimeError(
+                    f'{len(bounces)} bounce rows were recovered from the validated ScalarHistory "{store_label}", '
+                    f"where {expected_bounces} were expected"
+                )
+
             attributes = {"_deserialized": True}
         else:
             values = None
+            bounces = None
 
             attributes = {"_do_not_populate": True, "_deserialized": True}
 
@@ -734,6 +915,13 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                     if not failed
                     else None
                 ),
+                # the history's drain record, from the row's own columns, so that it is read with
+                # _do_not_populate too; None on a failure row and where every column is NULL (the fixed law)
+                # (one-loop-drain prompt 03 §1.4)
+                "drain_history": (
+                    _drain_history_from_row(row_data) if not failed else None
+                ),
+                "bounces": bounces if not failed else None,
                 "values": values,
             },
             solver_labels=solver_labels,
@@ -851,6 +1039,13 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
         )
         payload.update(_dissipation_columns(dissipation, obj._units))
 
+        # the history's drain record (one-loop-drain prompt 03 §1.4); NULL under the fixed law, at alpha = 0 and
+        # on a failure row. Every field is dimensionless, stored as the record has it
+        drain_history: Optional[DrainHistoryValues] = (
+            obj._drain_history if not obj._failure else None
+        )
+        payload.update(_drain_history_columns(drain_history))
+
         # # because ScalarHistory is a replicated table, we need to allow for the possibility that this object
         # # is a replica, rather than a fresh insert. If so, it's _my_id field will be set.
         # if hasattr(obj, "_my_id") and obj._my_id is not None:
@@ -900,11 +1095,26 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                     "kicking_term_Mp": value.kicking_term / units.PlanckMass,
                     "log_one_plus_z_Jordan": value.log_one_plus_z_Jordan,
                     "rho_chi_over_rho_rad": value.rho_chi_over_rho_rad,
+                    **{
+                        column: to_column(getattr(value, attribute), kind, units)
+                        for attribute, column, kind in MASS_COLUMNS
+                    },
                 },
             )
 
             # set store_id on behalf of the ScalarHistoryValue instance
             value._my_id = value_id
+
+        # the bounce rows (one-loop-drain prompt 03 §1.3), in ordinal order; none under the fixed law, at
+        # alpha = 0 and on a failure
+        bounces = obj._bounces if not obj._failure and obj._bounces else ()
+        if len(bounces) > 0:
+            bounce_inserter = inserters["ScalarHistoryBounce"]
+            for row in bounces:
+                bounce_inserter(
+                    conn,
+                    {"history_serial": store_id, **bounce_row_columns(row, units)},
+                )
 
         return obj
 
@@ -937,12 +1147,28 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                 )
             ).scalar()
 
+            # the bounce rows against bounce_rows (one-loop-drain prompt 03 §1.6), as the samples against
+            # z_samples; NULL (the fixed law) expects none
+            expected_bounces = conn.execute(
+                sqla.select(table.c.bounce_rows).filter(table.c.serial == obj.store_id)
+            ).scalar()
+            if expected_bounces is None:
+                expected_bounces = 0
+            bounce_table = tables["ScalarHistoryBounce"]
+            num_bounces = conn.execute(
+                sqla.select(sqla.func.count(bounce_table.c.serial)).filter(
+                    bounce_table.c.history_serial == obj.store_id
+                )
+            ).scalar()
+
             # check if we counted as many rows as we expected
-            validated: bool = num_samples == expected_samples
+            validated: bool = (
+                num_samples == expected_samples and num_bounces == expected_bounces
+            )
 
         if not validated:
             print(
-                f'!! WARNING: ScalarHistory "{obj.label}" did not validate after serialization (expected samples={expected_samples}, number stored={num_samples})'
+                f'!! WARNING: ScalarHistory "{obj.label}" did not validate after serialization (expected samples={expected_samples}, number stored={num_samples}; expected bounce rows={expected_bounces}, number stored={num_bounces})'
             )
 
         conn.execute(
@@ -960,6 +1186,7 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
         rtol_table = tables["tolerance"].alias("rtol")
         solver_table = tables["IntegrationSolver"]
         value_table = tables["ScalarHistoryValue"]
+        bounce_table = tables["ScalarHistoryBounce"]
         tags_table = tables["ScalarHistory_tags"]
 
         # bake results into a list so that we can close this query; we are going to want to run
@@ -970,6 +1197,7 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                     table.c.serial,
                     table.c.label,
                     table.c.z_samples,
+                    table.c.bounce_rows,
                     solver_table.c.label.label("solver_label"),
                     atol_table.c.log10_tol.label("log10_atol"),
                     rtol_table.c.log10_tol.label("log10_rtol"),
@@ -1011,6 +1239,14 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
             msgs.append(
                 f"          contains {rows} z-sample values | expected={model.z_samples}"
             )
+            bounces = conn.execute(
+                sqla.select(sqla.func.count(bounce_table.c.serial)).filter(
+                    bounce_table.c.history_serial == model.serial,
+                )
+            ).scalar()
+            msgs.append(
+                f"          contains {bounces} bounce rows | expected={model.bounce_rows}"
+            )
 
         if prune:
             invalid_serials = [nv.serial for nv in not_validated]
@@ -1018,6 +1254,11 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                 conn.execute(
                     sqla.delete(value_table).where(
                         value_table.c.history_serial.in_(invalid_serials)
+                    )
+                )
+                conn.execute(
+                    sqla.delete(bounce_table).where(
+                        bounce_table.c.history_serial.in_(invalid_serials)
                     )
                 )
                 conn.execute(
@@ -1090,6 +1331,13 @@ class sqla_ScalarHistoryValue_factory(SQLAFactoryBase):
                 # used at the sample, the same in both frames; exactly 0.0 at alpha = 0
                 # (inelastic-reflection prompt 09, P27). Dimensionless
                 sqla.Column("rho_chi_over_rho_rad", sqla.Float(64), nullable=False),
+                # ln m_eff of the field and ln m_tr of the zero-lag tracker at the sample, ln(m/M_P), at every
+                # law and every alpha (one-loop-drain prompt 03 §1.5; README §8.3 U5, P31); NULL where the
+                # model call failed (m_eff^2 <= 0, or no tracker minimum)
+                *(
+                    sqla.Column(column, sqla.Float(64), nullable=True)
+                    for _, column, _ in MASS_COLUMNS
+                ),
             ],
         }
 
@@ -1101,5 +1349,97 @@ class sqla_ScalarHistoryValue_factory(SQLAFactoryBase):
         # SQLAFactoryBase, so it stays, and refuses
         raise NotImplementedError(
             "ScalarHistoryValue rows are written and read only through "
+            "sqla_ScalarHistoryFactory (its store and build), never on their own"
+        )
+
+
+class sqla_ScalarHistoryBounce_factory(SQLAFactoryBase):
+    """
+    The bounce rows of a history (one-loop-drain prompt 03 §1.3; README §8.3, P7 as revised, P29): one row per
+    candidate and per turning point of the reflection margin that is not a candidate, written under the one-loop
+    drain law only, by sqla_ScalarHistoryFactory.store, read by its build with the samples, counted by its
+    validate against the history's bounce_rows and pruned by its validate_on_startup, wherever
+    ScalarHistoryValue is. Sharded by the history's shard key, as ScalarHistoryValue is.
+
+    It declares no inventory_spec, as ScalarHistoryValue declares none: DatastoreKit's InventorySpec names one
+    value table per owner (``values=``), which ScalarHistory's spec gives to ScalarHistoryValue, so the inventory
+    does not count bounce rows (README §8.11 P29; recorded, not worked around).
+    """
+
+    def __init__(self):
+        pass
+
+    def register(self):
+        float_column = lambda name: sqla.Column(name, sqla.Float(64), nullable=True)
+        return {
+            "version": False,
+            "timestamp": False,
+            "stepping": False,
+            "columns": [
+                sqla.Column(
+                    "history_serial",
+                    sqla.Integer,
+                    sqla.ForeignKey("ScalarHistory.serial"),
+                    index=True,
+                    nullable=False,
+                ),
+                # 0, 1, ... in relativistic_margins' event order: by N (a candidate at its N_turn), stable, a
+                # candidate before an event at the same N
+                sqla.Column("ordinal", sqla.Integer, nullable=False),
+                # "candidate", "plateau" or "wall"
+                sqla.Column(
+                    "source", sqla.String(DEFAULT_STRING_LENGTH), nullable=False
+                ),
+                # the index in IntegrationResult.injections; NULL for an event
+                sqla.Column("candidate_index", sqla.Integer, nullable=True),
+                # a candidate's drain N, or an event's N; dimensionless, as every N
+                sqla.Column("N", sqla.Float(64), nullable=False),
+                # the Injection's N_turn, kind ("turning_point", "floor" or "unresolved") and resolved; NULL
+                # for an event
+                float_column("N_turn"),
+                sqla.Column("kind", sqla.String(DEFAULT_STRING_LENGTH), nullable=True),
+                sqla.Column("resolved", sqla.Boolean, nullable=True),
+                # ln T_J at N_turn or at the event, T_J in GeV, as ScalarHistoryValue's log_T_Jordan_GeV
+                float_column("log_T_Jordan_GeV"),
+                # the Injection's: delta_K in M_P^4 (K = rho_chi,E e^{4N}); ln rho_kin,E with rho in M_P^4; the
+                # non-adiabaticity, alpha_eff and w_gate, dimensionless
+                float_column("delta_K_Mp4"),
+                float_column("log_rho_kin_Mp4"),
+                float_column("nonadiabaticity"),
+                float_column("alpha_eff"),
+                float_column("w_gate"),
+                # the ledger's K in force just before the candidate, in M_P^4
+                float_column("K_before_Mp4"),
+                # the DrainCandidate's: the regime, ell, L and ln R, dimensionless; ln E with E in M_P^4; ln H_E
+                # with H_E in M_P
+                sqla.Column(
+                    "regime", sqla.String(DEFAULT_STRING_LENGTH), nullable=True
+                ),
+                float_column("ell"),
+                float_column("L"),
+                float_column("log_R"),
+                float_column("log_E_Mp4"),
+                float_column("log_H_Mp"),
+                # the PeakEstimate's ln k_ex and ln m, or the field's own ln m for an unassessed candidate and
+                # an event; in M_P
+                float_column("log_k_ex_Mp"),
+                float_column("log_m_Mp"),
+                # the Generation's, where the candidate is one: ln q in M_P (q = k_ex e^{N_turn}); the share of
+                # K(N_final), whether weighted, and the margins ln(p/m) and their N, dimensionless
+                float_column("log_q_Mp"),
+                float_column("share"),
+                sqla.Column("weighted", sqla.Boolean, nullable=True),
+                float_column("birth_margin"),
+                float_column("reflection_margin"),
+                float_column("reflection_margin_N"),
+                float_column("tracker_margin"),
+                float_column("tracker_margin_N"),
+            ],
+        }
+
+    def build(self, payload, conn, table, inserter, tables, inserters):
+        # as ScalarHistoryValue's: the rows are written and read only with their parent
+        raise NotImplementedError(
+            "ScalarHistoryBounce rows are written and read only through "
             "sqla_ScalarHistoryFactory (its store and build), never on their own"
         )

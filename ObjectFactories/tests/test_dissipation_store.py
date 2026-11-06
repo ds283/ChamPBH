@@ -46,8 +46,9 @@ untuned, at the model's seed realization:
 - **6** ΔN_eff at 1 MeV and today against a hand computation (R22), from the cosmology's `G_rho`;
 - **7** `extra_data` longer than 256 characters round-trips whole, and the column is `Text` in the
   reflected schema;
-- **10** the version: `VERSION_LABEL` is 2026.9.0 (2026.8.0 until reflection-restart prompt 03, which
-  moved it without a schema change) and `FINGERPRINT_FORMAT` is 6.
+- **10** the version: `VERSION_LABEL` is 2026.10.0 (2026.8.0 until reflection-restart prompt 03, which
+  moved it without a schema change, and 2026.9.0 until one-loop-drain prompt 03) and `FINGERPRINT_FORMAT` is 7
+  (6 until one-loop-drain prompt 03).
 
 "Bitwise" for a converted column (ln T_J, stored with T_J in GeV) is ruling 7's: the row equals the
 forward conversion of the payload's value bitwise, and the object equals the inverse conversion of
@@ -633,8 +634,9 @@ class TestTheVersion(unittest.TestCase):
         from config.version import VERSION_LABEL
 
         # 2026.8.0 at inelastic-reflection prompt 09; 2026.9.0 since reflection-restart prompt 03 (F3 and
-        # the guard at a restart), which changed no table, so the format stays 6
-        self.assertEqual(VERSION_LABEL, "2026.9.0")
-        self.assertEqual(FINGERPRINT_FORMAT, 6)
+        # the guard at a restart), which changed no table, so the format stayed 6; 2026.10.0 and format 7 since
+        # one-loop-drain prompt 03 (the drain model's key, the bounce table)
+        self.assertEqual(VERSION_LABEL, "2026.10.0")
+        self.assertEqual(FINGERPRINT_FORMAT, 7)
         self.assertIn(6, SPEC_DIGESTS)
         self.assertIn("alpha_value", dict(SPEC_DIGESTS[6]))

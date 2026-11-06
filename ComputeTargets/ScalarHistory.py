@@ -39,6 +39,20 @@ from CosmologyConcepts import (
     GetFieldValue,
     FieldLike,
 )
+
+# the drain law and the drain model, and their rules (one-loop-drain prompt 03; orchestrator note 03, ruling 1):
+# defined in the leaf module CosmologyConcepts/drain_model.py, which alpha_value imports too, and imported here
+# so that every SM.<name> resolves to the same object as before
+from CosmologyConcepts.drain_model import (
+    DRAIN_LAW_FIXED,
+    DRAIN_LAW_ONE_LOOP,
+    DRAIN_LAWS,
+    DRAIN_MODEL_FIXED,
+    DRAIN_MODEL_ONE_LOOP,
+    DRAIN_MODELS,
+    check_drain_law,
+    law_of,
+)
 from CosmologyConcepts.Models.AbstractModel import (
     AbstractModel,
     ClassicalTurningPoint,
@@ -148,8 +162,10 @@ MARGIN_THRESHOLD = log(10.0)
 MARGIN_WEIGHT_SHARE = 1.0e-3
 
 # the drain law (one-loop-drain prompt 01; README §8.2, §8.8 P22, U9, U10; the measured law of prompt 02c,
-# README §8.10), an input of integrate_scalar_history, integrate_history and tune_history; not yet a key
-# (prompt 03 stores it)
+# README §8.10), an input of integrate_scalar_history, integrate_history and tune_history; since prompt 03 a key
+# of every stored history, through alpha_value's drain_model (README §8.11 P27). DRAIN_LAW_FIXED,
+# DRAIN_LAW_ONE_LOOP and DRAIN_LAWS are defined in CosmologyConcepts/drain_model.py and imported above
+# (orchestrator note 03, ruling 1); this comment and the constants below stay here
 #   DRAIN_LAW_FIXED:     alpha_eff = alpha w_gate at every candidate, 0 <= alpha < 1: the law to
 #                        VERSION_LABEL 2026.9.0, the default, unchanged
 #   DRAIN_LAW_ONE_LOOP:  alpha carries the law's strength A, finite and > 0 (A = 0 is natural mode, asked
@@ -192,9 +208,6 @@ MARGIN_WEIGHT_SHARE = 1.0e-3
 #                       34 gap points)
 # The gap's s <= 0 branch (L <= e^{-1/DRAIN_GAP_Q} = 0.304, where README §8.10's expression is negative) is the
 # user's ruling of 2026-11-05 on orchestrator note 02c's ruling 9: "I think probably we set `f = 0` there"
-DRAIN_LAW_FIXED = "fixed"
-DRAIN_LAW_ONE_LOOP = "one_loop"
-DRAIN_LAWS = (DRAIN_LAW_FIXED, DRAIN_LAW_ONE_LOOP)
 DRAIN_ALPHA_CAP = 0.99
 DRAIN_ONE_LOOP_A = 2.69
 DRAIN_ONE_LOOP_B0 = 0.9691
@@ -263,11 +276,11 @@ DRAIN_S_TABLE_S = (
 _DRAIN_S_LOG_L = np.log(np.array(DRAIN_S_TABLE_L))
 _DRAIN_S_LOG_S = np.log(np.array(DRAIN_S_TABLE_S))
 
-# the drain model, named in the "drain" record (README §8.10, decision 1): prompt 03 stores a key from these, and
-# may change their strings there. DRAIN_MODEL_ONE_LOOP names the measured law and its version: the version moves
-# whenever drain_fraction, its constants or the S table change
-DRAIN_MODEL_FIXED = "fixed"
-DRAIN_MODEL_ONE_LOOP = "one-loop-measured-v1"
+# the drain model, named in the "drain" record (README §8.10, decision 1) and, since prompt 03, stored as
+# alpha_value's drain_model, a key of every history (README §8.11 P27). DRAIN_MODEL_FIXED and DRAIN_MODEL_ONE_LOOP
+# ("one-loop-measured-v1") are defined in CosmologyConcepts/drain_model.py, with law_of, the one mapping from a
+# model to its law, and imported above. DRAIN_MODEL_ONE_LOOP names the measured law and its version: THE VERSION
+# MOVES whenever drain_fraction, its constants above or the S table change, so that a new version is a new key value
 
 # the regimes of a candidate under the one-loop law (README §8.2): peak_estimate's classification,
 # computed once, in the loop (P18), with a one-loop solution of ell <= 0 called gap (P24)
@@ -1733,31 +1746,10 @@ class ParkedSegment(DenseOutput):
 # each by its module name at call time, as it calls the gate's
 
 
-def check_drain_law(drain_law: str, alpha: float, context: str) -> None:
-    """
-    The law's inputs (one-loop-drain prompt 01 §1.1; README §8.8 P22), checked at entry by
-    integrate_scalar_history, integrate_history and tune_history (context, the function's name, begins
-    the message). Under DRAIN_LAW_FIXED alpha is the fraction, 0 <= alpha < 1, checked as before this
-    prompt, with the same message; under DRAIN_LAW_ONE_LOOP it is A, finite and > 0, with no upper bound
-    (DRAIN_ALPHA_CAP clamps). A = 0 is natural mode, asked for as the fixed law at alpha = 0. Any other
-    drain_law is a ValueError, and so is an alpha the law refuses.
-    """
-    if drain_law == DRAIN_LAW_FIXED:
-        if not (0.0 <= alpha < 1.0):
-            raise ValueError(
-                f"{context}: alpha must satisfy 0 <= alpha < 1, not {alpha!r}"
-            )
-        return
-    if drain_law == DRAIN_LAW_ONE_LOOP:
-        if not (alpha > 0.0 and isfinite(alpha)):
-            raise ValueError(
-                f"{context}: under the one-loop drain law alpha carries A, which must be finite and "
-                f"> 0 (A = 0 is natural mode, the fixed law at alpha = 0), not {alpha!r}"
-            )
-        return
-    raise ValueError(
-        f"{context}: drain_law must be one of {DRAIN_LAWS}, not {drain_law!r}"
-    )
+# check_drain_law, the law's inputs (one-loop-drain prompt 01 §1.1; README §8.8 P22), is defined in
+# CosmologyConcepts/drain_model.py and imported above (one-loop-drain prompt 03; orchestrator note 03, ruling 1),
+# so that alpha_value checks its pair (value, drain_model) by the same statement of the rules; its messages are
+# unchanged
 
 
 def check_drain_law_model(drain_law: str, model, context: str) -> None:
@@ -4357,11 +4349,41 @@ def relativistic_margins(
     return tuple(generations), margins
 
 
+# the core's inputs, as the gatherer returns them (one-loop-drain prompt 03; orchestrator note 03, ruling 4):
+# relativistic_margins' arguments in its order, so that relativistic_margins(*inputs) is history_margins' result.
+# integrate_history keeps them for the bounce rows (bounce_record)
+#   candidates:    every candidate, as MarginCandidate, in the order of IntegrationResult.injections
+#   events:        the events of the reflection margin that are not candidates, as MarginEvent, in the order of
+#                  IntegrationResult.turning_points
+#   N_late:        the late tracker's start (R20)
+#   samples:       (N, ln m_tr) of the stored samples with N > N_late, in N order
+#   today:         (N_final, ln m_tr) at the final state
+#   K_final:       K(N_final), the policy's ledger's
+#   K_unassessed:  the parking leftover's delta_K plus K_0
+MarginInputs = namedtuple(
+    "MarginInputs",
+    ["candidates", "events", "N_late", "samples", "today", "K_final", "K_unassessed"],
+)
+
+
 def history_margins(
     result: IntegrationResult, sample, policy: ODEPolicy
 ) -> Tuple[Tuple[Generation, ...], Margins]:
     """
-    The gatherer (prompt 08 §1.4): the core's values from a history, and the core's result.
+    The margins of a history (prompt 08 §1.4): the core (relativistic_margins) on the gatherer's values
+    (margin_inputs). Since one-loop-drain prompt 03 the gathering is margin_inputs, its body moved there
+    unchanged (orchestrator note 03, ruling 4), so that integrate_history can keep the core's inputs; this
+    returns what it returned before, bitwise.
+
+    A ComputationFailureError (a model call, the tracker's minimum) propagates to the caller, which
+    reports it as a warning (§1.4).
+    """
+    return relativistic_margins(*margin_inputs(result, sample, policy))
+
+
+def margin_inputs(result: IntegrationResult, sample, policy: ODEPolicy) -> MarginInputs:
+    """
+    The gatherer (prompt 08 §1.4; one-loop-drain prompt 03, ruling 4): the core's values from a history.
 
     - Each candidate's peak, once (peak_estimate), used both for its generation and as an event
       (orchestrator note 08, ruling 5); a candidate with no assessment takes the field's own mass at its
@@ -4474,7 +4496,7 @@ def history_margins(
     if result.parking is not None:
         K_unassessed += result.parking.delta_K
 
-    return relativistic_margins(
+    return MarginInputs(
         candidates,
         events,
         N_late,
@@ -4509,6 +4531,490 @@ def margin_warning_lines(margins: Margins) -> Tuple[str, ...]:
             f"carry {getattr(margins, f'{kind}_failing_share'):.4g} of K"
         )
     return tuple(lines)
+
+
+# ---- the store's instrumentation (one-loop-drain prompt 03; README §8.3, §8.11 P29-P31) ----
+#
+# Model-free, computed from records the integration already holds, outside the step loop: the sample masses at
+# every law (U5, P31), and, under the one-loop law only, a row per bounce (the payload's "bounces") and the
+# history's drain record (DrainHistoryValues, formed by ScalarHistory.store from the payload). None of them moves
+# a value of the integration
+
+
+def sample_masses(
+    model: RealizedModel, cosmology: BaseCosmology, sample
+) -> Tuple[Tuple[Optional[float], ...], Tuple[Optional[float], ...]]:
+    """
+    The sample masses (one-loop-drain prompt 03 §1.5; README §8.3 U5, P31; orchestrator note 03, ruling 2):
+    (ln m_eff, ln m_tr) at each sample, two tuples parallel to sample, in the cosmology's units.
+      - ln m_eff: the field's own mass, field_log_m on the sample's stored state (phi, pi, ln rho_R,E, ln f_m,
+        ln T_J), Sigma from log_trace as the policy forms it;
+      - ln m_tr: the zero-lag tracker's, tracker_log_m from the sample's stored phi, ln rho_R,E, ln f_m and
+        Sigma, searched from the sample's own field, as history_margins calls it.
+    Each is None where its call raises ComputationFailureError (m_eff^2 <= 0, no tracker minimum); any other
+    exception propagates. Each value is a Python float (float() of the model's result, exact: a realization
+    whose parameters are numpy floats returns numpy floats), so that a payload's repr does not depend on how the
+    model was realized. The model is the realized model of the integration that made the samples.
+    integrate_history calls it by default; tune_history once, on the converged payload.
+    """
+    field: List[Optional[float]] = []
+    tracker: List[Optional[float]] = []
+    for s in sample:
+        try:
+            field.append(
+                float(
+                    field_log_m(
+                        model,
+                        cosmology,
+                        (
+                            s.phi_Einstein,
+                            s.pi_Einstein,
+                            s.log_rhorad_Einstein,
+                            s.log_fm,
+                            s.log_T_Jordan,
+                        ),
+                    )
+                )
+            )
+        except ComputationFailureError:
+            field.append(None)
+        try:
+            tracker.append(
+                float(
+                    tracker_log_m(
+                        model, s.phi_Einstein, s.log_rhorad_Einstein, s.log_fm, s.Sigma
+                    )
+                )
+            )
+        except ComputationFailureError:
+            tracker.append(None)
+    return tuple(field), tuple(tracker)
+
+
+# the sources of a bounce row (prompt 03 §1.3): a candidate (an Injection), or an event of the reflection margin
+# that is not one (MarginEvent.source: a plateau turning point, or a wall-side turning point with no candidate)
+BOUNCE_SOURCE_CANDIDATE = "candidate"
+BOUNCE_SOURCE_PLATEAU = "plateau"
+BOUNCE_SOURCE_WALL = "wall"
+BOUNCE_SOURCES = (BOUNCE_SOURCE_CANDIDATE, BOUNCE_SOURCE_PLATEAU, BOUNCE_SOURCE_WALL)
+
+# one bounce row (one-loop-drain prompt 03 §1.3; README §8.3, P7 as revised, P29), a row of ScalarHistoryBounce,
+# under the one-loop law only; in the cosmology's units (the store converts each to the unit of its column's
+# suffix). Plain values only, so that it crosses Ray. None where a field does not apply
+#   ordinal:             0, 1, ... in relativistic_margins' event order: by N (a candidate at its N_turn, an event
+#                        at its N), stable, a candidate before an event at the same N
+#   source:              BOUNCE_SOURCE_CANDIDATE, _PLATEAU or _WALL
+#   candidate_index:     the index in IntegrationResult.injections; None for an event
+#   N:                   a candidate's drain N (Injection.N), or an event's N
+#   N_turn, kind, resolved:
+#                        the Injection's; None for an event
+#   log_T_Jordan:        ln T_J at N_turn, or at the event: the TurningPoint's own log_T_Jordan for a
+#                        "turning_point" candidate and for an event, the dense output's (solution(N_turn)[4]) for
+#                        a reflection candidate (orchestrator note 03, ruling 7)
+#   delta_K, log_rho_kin, nonadiabaticity, alpha_eff, w_gate:
+#                        the Injection's; None for an event
+#   K_before:            the ledger's K in force just before the candidate: its cumulative K after the entries
+#                        made before it, read by position (ledger_K_before; ruling 6); None for an event
+#   regime, ell, L, log_R, log_E, log_H:
+#                        the DrainCandidate's; None for an event. log_R is PeakEstimate.log_R too, bitwise (P18)
+#   log_k_ex, log_m:     the PeakEstimate's; for an unassessed candidate log_k_ex is None and log_m the field's own
+#                        mass that the margins' gatherer used (MarginCandidate.log_m), and for an event the
+#                        event's (MarginEvent.log_m); None where the margins were not computed
+#   log_q, share, weighted, birth_margin, reflection_margin, reflection_margin_N, tracker_margin,
+#   tracker_margin_N:    the Generation's, where the candidate is one (delta_K > 0 and assessed) and the margins
+#                        were computed; None otherwise
+BounceRow = namedtuple(
+    "BounceRow",
+    [
+        "ordinal",
+        "source",
+        "candidate_index",
+        "N",
+        "N_turn",
+        "kind",
+        "resolved",
+        "log_T_Jordan",
+        "delta_K",
+        "log_rho_kin",
+        "nonadiabaticity",
+        "alpha_eff",
+        "w_gate",
+        "K_before",
+        "regime",
+        "ell",
+        "L",
+        "log_R",
+        "log_E",
+        "log_H",
+        "log_k_ex",
+        "log_m",
+        "log_q",
+        "share",
+        "weighted",
+        "birth_margin",
+        "reflection_margin",
+        "reflection_margin_N",
+        "tracker_margin",
+        "tracker_margin_N",
+    ],
+)
+
+# the payload's "bounces" (one-loop-drain prompt 03 §1.3; orchestrator note 03, ruling 4): None under the fixed
+# law and at alpha = 0, absent from a failure's payload
+#   rows:     a tuple of BounceRow, in ordinal order
+#   K_final:  K(N_final), the ledger's, the parking leftover and K_0 included: the denominator of the shares
+#             (Generation.share's, and DrainHistoryValues')
+BounceRecord = namedtuple("BounceRecord", ["rows", "K_final"])
+
+
+def ledger_K_before(
+    injections, parking: Optional[Parking], ledger: DarkRadiationLedger
+) -> Tuple[float, ...]:
+    """
+    K just before each candidate (orchestrator note 03, ruling 6), parallel to injections: the ledger's
+    cumulative K after the entries made before the candidate, read by position. The ledger holds one entry per
+    candidate with alpha_eff > 0 (the drain's add, made iff alpha_eff > 0) and the parking leftover, added at the
+    cut candidate's own N after its drain, so the walk goes over the candidates in index order and takes an entry
+    for each that drained and the leftover after the cut candidate. It is never read by K(N) at a candidate's N
+    (right-continuous, so it would include the candidate's own entry) and never re-summed. Each entry's N and
+    delta_K are checked against the candidate's, and every entry must be consumed; a mismatch is a RuntimeError.
+    """
+    entries = ledger.injections
+    cumulative = ledger.cumulative_K
+    K: float = ledger.K_initial
+    j = 0
+    out: List[float] = []
+
+    def take(N: float, delta_K: float, what: str) -> float:
+        nonlocal j
+        if j >= len(entries) or entries[j] != (N, delta_K):
+            raise RuntimeError(
+                f"ledger_K_before: {what} at N = {N!r} with delta_K = {delta_K!r} does not match the "
+                f"ledger's entry {j} ({entries[j] if j < len(entries) else 'none'})"
+            )
+        value = cumulative[j]
+        j += 1
+        return value
+
+    for index, injection in enumerate(injections):
+        out.append(K)
+        if injection.alpha_eff > 0.0:
+            K = take(injection.N, injection.delta_K, f"candidate {index}")
+        if parking is not None and parking.candidate_index == index:
+            K = take(parking.N, parking.delta_K, "the parking leftover")
+    if j != len(entries):
+        raise RuntimeError(
+            f"ledger_K_before: {len(entries) - j} of the ledger's {len(entries)} entries are not candidates' "
+            f"or the parking leftover's"
+        )
+    return tuple(out)
+
+
+def bounce_rows(
+    injections,
+    drain_candidates,
+    estimates,
+    candidate_log_T,
+    K_before,
+    margin_candidates,
+    events,
+    event_log_T,
+    generations,
+) -> Tuple[BounceRow, ...]:
+    """
+    The bounce rows (one-loop-drain prompt 03 §1.3; orchestrator note 03, rulings 4, 5 and 7): pure, on plain
+    values, so that it is tested on constructed records. No model, cosmology, dense output or ledger is read:
+    every value from them is computed by the caller (bounce_record) and handed in.
+
+    :param injections: the candidates, as Injection, in order
+    :param drain_candidates: the DrainRecord's candidates, parallel to injections
+    :param estimates: the PeakEstimate (or None, unassessed) of each candidate, parallel (the loop's, reused)
+    :param candidate_log_T: ln T_J of each candidate's row, parallel (ruling 7)
+    :param K_before: the ledger's K just before each candidate, parallel (ledger_K_before)
+    :param margin_candidates: the margins' gatherer's MarginCandidates, parallel, or None where the margins were
+                              not computed
+    :param events: the gatherer's MarginEvents, or None where the margins were not computed (then no event row
+                   is written; ruling 5)
+    :param event_log_T: ln T_J of each event, its TurningPoint's, parallel to events (None with events)
+    :param generations: the core's Generations, or None where the margins were not computed
+
+    One row per candidate (delta_K = 0 included) and one per event; ordered by N (a candidate at its N_turn) by
+    a stable sort of the candidates in index order followed by the events in their order, so that a candidate
+    comes before an event at the same N, as relativistic_margins orders them; ordinals 0, 1, ...
+    """
+    if not (
+        len(injections)
+        == len(drain_candidates)
+        == len(estimates)
+        == len(candidate_log_T)
+        == len(K_before)
+    ):
+        raise ValueError(
+            "bounce_rows: injections, drain_candidates, estimates, candidate_log_T and K_before must be "
+            "parallel"
+        )
+    by_index = {} if generations is None else {g.index: g for g in generations}
+
+    unordered = []
+    for index, injection in enumerate(injections):
+        c = drain_candidates[index]
+        estimate = estimates[index]
+        if estimate is not None:
+            log_k_ex, log_m = estimate.log_k_ex, estimate.log_m
+        elif margin_candidates is not None:
+            log_k_ex, log_m = None, margin_candidates[index].log_m
+        else:
+            log_k_ex, log_m = None, None
+        g: Optional[Generation] = by_index.get(index)
+        unordered.append(
+            (
+                injection.N_turn,
+                dict(
+                    source=BOUNCE_SOURCE_CANDIDATE,
+                    candidate_index=index,
+                    N=injection.N,
+                    N_turn=injection.N_turn,
+                    kind=injection.kind,
+                    resolved=injection.resolved,
+                    log_T_Jordan=candidate_log_T[index],
+                    delta_K=injection.delta_K,
+                    log_rho_kin=injection.log_rho_kin,
+                    nonadiabaticity=injection.nonadiabaticity,
+                    alpha_eff=injection.alpha_eff,
+                    w_gate=injection.w_gate,
+                    K_before=K_before[index],
+                    regime=c.regime,
+                    ell=c.ell,
+                    L=c.L,
+                    log_R=c.log_R,
+                    log_E=c.log_E,
+                    log_H=c.log_H,
+                    log_k_ex=log_k_ex,
+                    log_m=log_m,
+                    log_q=None if g is None else g.log_q,
+                    share=None if g is None else g.share,
+                    weighted=None if g is None else g.weighted,
+                    birth_margin=None if g is None else g.birth_margin,
+                    reflection_margin=None if g is None else g.reflection_margin,
+                    reflection_margin_N=None if g is None else g.reflection_margin_N,
+                    tracker_margin=None if g is None else g.tracker_margin,
+                    tracker_margin_N=None if g is None else g.tracker_margin_N,
+                ),
+            )
+        )
+
+    if events is not None:
+        if event_log_T is None or len(event_log_T) != len(events):
+            raise ValueError("bounce_rows: event_log_T must be parallel to events")
+        for event, log_T in zip(events, event_log_T):
+            row = dict.fromkeys(BounceRow._fields)
+            row.update(
+                source=event.source, N=event.N, log_T_Jordan=log_T, log_m=event.log_m
+            )
+            del row["ordinal"]
+            unordered.append((event.N, row))
+
+    ordered = sorted(unordered, key=lambda item: float(item[0]))
+    return tuple(
+        BounceRow(ordinal=ordinal, **row) for ordinal, (_, row) in enumerate(ordered)
+    )
+
+
+def bounce_record(
+    result: IntegrationResult,
+    inputs: Optional[MarginInputs],
+    generations: Optional[Tuple[Generation, ...]],
+    ledger: DarkRadiationLedger,
+) -> BounceRecord:
+    """
+    The payload's "bounces" under the one-loop law (one-loop-drain prompt 03 §1.3; orchestrator note 03, rulings
+    4-7): the values the builder needs from the dense output and the ledger, then bounce_rows on them.
+      - ln T_J of each candidate (ruling 7): a "turning_point" candidate's wall-side TurningPoint, matched by
+        exact N equality as the margins' gatherer matches it; a reflection's solution(N_turn)[4];
+      - ln T_J of each event: its TurningPoint's, the turning points the gatherer kept as events, in the
+        gatherer's order (checked by N against the events);
+      - K just before each candidate (ledger_K_before);
+      - inputs and generations are the margins' (None where they were not computed, ruling 5).
+    No model call is made. A turning point that cannot be matched is a RuntimeError, a bug.
+    """
+    injections = result.injections
+    drain: DrainRecord = result.drain
+
+    wall_log_T = {
+        tp.N: tp.log_T_Jordan for tp in result.turning_points if tp.kind == "wall"
+    }
+    candidate_log_T: List[float] = []
+    for index, injection in enumerate(injections):
+        if injection.kind == "turning_point":
+            if injection.N_turn not in wall_log_T:
+                raise RuntimeError(
+                    f"bounce_record: candidate {index} (turning_point) at N_turn = {injection.N_turn!r} has "
+                    f"no wall-side turning point"
+                )
+            candidate_log_T.append(wall_log_T[injection.N_turn])
+        else:
+            candidate_log_T.append(float(result.solution(injection.N_turn)[4]))
+
+    events = None
+    event_log_T = None
+    margin_candidates = None
+    if inputs is not None:
+        margin_candidates = inputs.candidates
+        events = inputs.events
+        drained_turns = {
+            injection.N_turn
+            for injection in injections
+            if injection.kind == "turning_point"
+        }
+        event_tps = [
+            tp
+            for tp in result.turning_points
+            if tp.kind == "plateau" or tp.N not in drained_turns
+        ]
+        if [tp.N for tp in event_tps] != [e.N for e in events]:
+            raise RuntimeError(
+                "bounce_record: the turning points kept as events do not match the margins' events"
+            )
+        event_log_T = [tp.log_T_Jordan for tp in event_tps]
+
+    rows = bounce_rows(
+        injections,
+        drain.candidates,
+        result.peak_estimates,
+        candidate_log_T,
+        ledger_K_before(injections, result.parking, ledger),
+        margin_candidates,
+        events,
+        event_log_T,
+        generations,
+    )
+    return BounceRecord(rows=rows, K_final=ledger.K(result.N_final))
+
+
+# the history's drain record (one-loop-drain prompt 03 §1.4; README §8.3, P9 as revised, P30), as ScalarHistory
+# exposes it (ScalarHistory.drain_history) and stores it, one column each, in this order. Formed by
+# drain_history_values from the payload, under the one-loop law only: None under the fixed law, at alpha = 0 and
+# on a failure. Every value is dimensionless
+#   drained_share_<regime>:  for one_loop, gap, classical and unassessed, the sum of the candidates' delta_K in the
+#                            regime, in index order, over K_final (BounceRecord.K_final), as the tool's drain line
+#                            (tools/history_and_bbn.drain_values) forms it, bitwise; None where K_final = 0
+#   parking_share:           the parking leftover's delta_K over K_final; 0.0 if the history did not park; None
+#                            where K_final = 0. With the four shares and K_0/K_final it sums to 1 to rounding
+#   candidates_<regime>:     the candidates per regime, delta_K = 0 included
+#   ell_min:                 the least ell over the one-loop candidates; None if there is none
+#   log_R_min_drain:         the least ln R over the candidates with delta_K > 0 and an assessment; None if none
+#   unresolvable_assessments, unresolved_declined:
+#                            the DrainRecord's counts
+#   all_worst_<kind>_margin, all_worst_<kind>_margin_N, all_<kind>_failing_share, for birth, reflection and tracker:
+#                            Margins' worst margin, its N and the failing share over every generation, the weight
+#                            ignored (P3, P30): the core's values with MARGIN_WEIGHT_SHARE 0 (all_generation_margins);
+#                            None where the margins were not computed
+#   bounce_rows:             the number of bounce rows
+DrainHistoryValues = namedtuple(
+    "DrainHistoryValues",
+    [f"drained_share_{regime}" for regime in DRAIN_REGIMES]
+    + ["parking_share"]
+    + [f"candidates_{regime}" for regime in DRAIN_REGIMES]
+    + ["ell_min", "log_R_min_drain", "unresolvable_assessments", "unresolved_declined"]
+    + [
+        f"{prefix}{kind}{suffix}"
+        for kind in MARGIN_KINDS
+        for prefix, suffix in (
+            ("all_worst_", "_margin"),
+            ("all_worst_", "_margin_N"),
+            ("all_", "_failing_share"),
+        )
+    ]
+    + ["bounce_rows"],
+)
+
+
+def all_generation_margins(generations) -> Dict[str, Any]:
+    """
+    The all-generation margins (one-loop-drain prompt 03 §1.4; README §8.3 P3, P30): for each kind, the worst
+    margin over every generation, its N and the failing share, taken from the generations relativistic_margins
+    returns by the core's own rules with the weight ignored (every generation counted), so that each value equals
+    the core's with MARGIN_WEIGHT_SHARE 0: generations in index order, a strict comparison (a tie keeps the
+    lowest index), the birth margin's N its N_turn, the failing share summed in order. One O(G) pass; no second
+    run of the core.
+    """
+    threshold: float = MARGIN_THRESHOLD
+    out: Dict[str, Any] = {}
+    for kind in MARGIN_KINDS:
+        worst: Optional[Generation] = None
+        failing_share: float = 0.0
+        for g in generations:
+            margin = getattr(g, f"{kind}_margin")
+            if margin is None:
+                continue
+            if worst is None or margin < getattr(worst, f"{kind}_margin"):
+                worst = g
+            if margin < threshold:
+                failing_share += g.share
+        if worst is None:
+            out[f"all_worst_{kind}_margin"] = None
+            out[f"all_worst_{kind}_margin_N"] = None
+        else:
+            out[f"all_worst_{kind}_margin"] = getattr(worst, f"{kind}_margin")
+            out[f"all_worst_{kind}_margin_N"] = (
+                worst.N_turn if kind == "birth" else getattr(worst, f"{kind}_margin_N")
+            )
+        out[f"all_{kind}_failing_share"] = failing_share
+    return out
+
+
+def drain_history_values(data: dict) -> Optional[DrainHistoryValues]:
+    """
+    The history's drain record of a success payload (one-loop-drain prompt 03 §1.4; orchestrator note 03, ruling
+    8), read with .get as dissipation_values reads its own: None where the payload's "bounces" is None or absent
+    (the fixed law, alpha = 0, a stand-in payload). Otherwise each field as DrainHistoryValues says, None where a
+    key it is read from is absent.
+    """
+    record: Optional[BounceRecord] = data.get("bounces")
+    if record is None:
+        return None
+    values = dict.fromkeys(DrainHistoryValues._fields)
+    values["bounce_rows"] = len(record.rows)
+    K_final: float = record.K_final
+
+    drain: Optional[DrainRecord] = data.get("drain")
+    injections = data.get("injections")
+    if drain is not None:
+        values["unresolvable_assessments"] = drain.unresolvable_assessments
+        values["unresolved_declined"] = drain.unresolved_declined
+    if drain is not None and drain.candidates is not None and injections is not None:
+        candidates = drain.candidates
+        for regime in DRAIN_REGIMES:
+            values[f"candidates_{regime}"] = sum(
+                1 for c in candidates if c.regime == regime
+            )
+        if K_final > 0.0:
+            # as tools/history_and_bbn.drain_values forms them (ruling 8), so that they are its bitwise
+            for regime in DRAIN_REGIMES:
+                K = sum(
+                    i.delta_K
+                    for c, i in zip(candidates, injections)
+                    if c.regime == regime
+                )
+                values[f"drained_share_{regime}"] = K / K_final
+            if "parking" in data:
+                parking: Optional[Parking] = data["parking"]
+                K_parking = 0.0 if parking is None else parking.delta_K
+                values["parking_share"] = K_parking / K_final
+        ells = [c.ell for c in candidates if c.regime == REGIME_ONE_LOOP]
+        values["ell_min"] = min(ells) if len(ells) > 0 else None
+        log_Rs = [
+            c.log_R
+            for c, i in zip(candidates, injections)
+            if i.delta_K > 0.0 and c.log_R is not None
+        ]
+        values["log_R_min_drain"] = min(log_Rs) if len(log_Rs) > 0 else None
+
+    generations = data.get("generations")
+    if data.get("margins") is not None and generations is not None:
+        values.update(all_generation_margins(generations))
+
+    return DrainHistoryValues(**values)
 
 
 def truncate_to_history(z_grid: redshift_array, final_N: float) -> redshift_array:
@@ -4551,6 +5057,7 @@ def integrate_history(
     rho_chi_ratio_init: float = 0.0,
     alpha: float = 0.0,
     drain_law: str = DRAIN_LAW_FIXED,
+    compute_sample_masses: bool = True,
 ) -> dict:
     """
     The primitive (jordan-normalization prompt 06, T1; README §6.0 R8): integrate one history of
@@ -4585,9 +5092,14 @@ def integrate_history(
                   inelastic-reflection prompt 09, which makes it a key of every stored history.
                   Under the one-loop drain law it is A, finite and > 0
     :param drain_law: DRAIN_LAW_FIXED (the default) or DRAIN_LAW_ONE_LOOP (one-loop-drain prompt 01;
-                      check_drain_law), passed to integrate_scalar_history. compute_scalar_history does
-                      not take it, so no history a driver launches has the one-loop law until
-                      one-loop-drain prompts 03 and 04 store its keys
+                      check_drain_law), passed to integrate_scalar_history. Since one-loop-drain prompt 03
+                      compute_scalar_history takes it, from the stored key (alpha_value's drain_model); no
+                      driver asks for the one-loop law until prompt 04 gives it the option
+    :param compute_sample_masses: whether the payload carries "log_m_eff" and "log_m_tracker", the sample
+                      masses (sample_masses; one-loop-drain prompt 03 §1.5, orchestrator note 03 ruling 2).
+                      True, the default, for every caller but tune_history, which passes False on each of its
+                      integrations and computes them once, on the converged payload (P31); with False the two
+                      keys are absent
     :return: the payload; on success it carries "dark_radiation", the history's
              DarkRadiationLedger (inelastic-reflection prompt 01), and "turning_points" and
              "injections", the IntegrationResult's lists of TurningPoint and Injection
@@ -4602,7 +5114,12 @@ def integrate_history(
              "release", "margins" and the last two (prompt 09); no store reads the others. Every
              payload, a failure's included, carries "drain", the DrainRecord of the drain law
              (one-loop-drain prompt 01 §1.4), as far as the integration reached, or None if it failed
-             before the step loop; no store reads it, and build_extra_data does not
+             before the step loop; no store reads it, and build_extra_data does not. Since
+             one-loop-drain prompt 03 a success's payload carries "bounces" too, a BounceRecord under the
+             one-loop law (bounce_record) and None under the fixed law and at alpha = 0, and, unless
+             compute_sample_masses is False, "log_m_eff" and "log_m_tracker", tuples parallel to "sample"
+             (sample_masses). ScalarHistory.store reads all three, and "drain"; a failure's payload carries
+             none of them
     """
     check_drain_law(drain_law, alpha, "integrate_history")
     check_drain_law_model(drain_law, model, "integrate_history")
@@ -4819,19 +5336,32 @@ def integrate_history(
     # integration and outside its loop, under the step loop's own condition for assessing the wall
     # (orchestrator note 08, ruling 2): at alpha = 0, or on a model without a wall, nothing is computed
     # (P22). A ComputationFailureError inside them is one warning line, never the history's failure
+    # Since one-loop-drain prompt 03 the gatherer and the core are called here, as history_margins calls them,
+    # so that the core's inputs are kept for the bounce rows (orchestrator note 03, ruling 4): the core runs
+    # once and no model call is added
     generations: Optional[Tuple[Generation, ...]] = None
     margins: Optional[Margins] = None
     margin_warnings: Tuple[str, ...] = ()
+    inputs: Optional[MarginInputs] = None
     if alpha > 0.0 and model.reflects_at_origin and model.log_V_floor is not None:
         try:
-            generations, margins = history_margins(result, sample, policy)
+            inputs = margin_inputs(result, sample, policy)
+            generations, margins = relativistic_margins(*inputs)
             margin_warnings = margin_warning_lines(margins)
         except ComputationFailureError as e:
+            inputs = None
             generations, margins = None, None
             margin_warnings = (f"{WARNING_MARGINS_FAILED}: {e.message}",)
 
+    # the bounce rows (one-loop-drain prompt 03 §1.3; README §8.11 P29), under the one-loop law only: None under
+    # the fixed law and at alpha = 0 (no instrumentation there, README §6.3 ruling 2). Where the margins failed
+    # the candidate rows are written without what depends on them, and no event row (ruling 5)
+    bounces: Optional[BounceRecord] = None
+    if drain_law == DRAIN_LAW_ONE_LOOP:
+        bounces = bounce_record(result, inputs, generations, dark_radiation)
+
     collected_full_statistics = supervisor.collect_full_statistics
-    return {
+    payload = {
         "metadata": IntegrationData(
             compute_time=supervisor.integration_time,
             compute_steps=result.nfev,
@@ -4898,9 +5428,20 @@ def integrate_history(
         "dark_radiation_values": dark_values,
         # the drain law's record, a DrainRecord (one-loop-drain prompt 01 §1.4): the law, A, the drain
         # model (prompt 02c), the unresolvable assessments and, under the one-loop law, each candidate's
-        # regime, ell, alpha_eff, w_gate, ln E, ln H_E, L and ln R. Not stored (one-loop-drain prompt 03's)
+        # regime, ell, alpha_eff, w_gate, ln E, ln H_E, L and ln R. ScalarHistory.store checks its model against
+        # the key's (one-loop-drain prompt 03, P28) and forms the history's drain record from it
         "drain": result.drain,
+        # the bounce rows, a BounceRecord under the one-loop law, None under the fixed law (one-loop-drain prompt
+        # 03 §1.3); stored by ScalarHistory.store as rows of ScalarHistoryBounce
+        "bounces": bounces,
     }
+    # the sample masses (one-loop-drain prompt 03 §1.5; orchestrator note 03, ruling 2): every law and every
+    # alpha, unless tune_history turned them off, which computes them once on the converged payload (P31)
+    if compute_sample_masses:
+        payload["log_m_eff"], payload["log_m_tracker"] = sample_masses(
+            model, cosmology, sample
+        )
+    return payload
 
 
 # ---- the tuning layer (jordan-normalization prompt 06; README §6.0 R1, R2, R8, R10, R13) ----
@@ -5244,9 +5785,13 @@ def tune_history(
 
     drain_law (one-loop-drain prompt 01 §1.1) is passed to every integration with alpha, and checked at
     entry with it (check_drain_law): under DRAIN_LAW_ONE_LOOP alpha is A, finite and > 0. The default is
-    DRAIN_LAW_FIXED, the old tuning bitwise; compute_scalar_history does not take it. The payload's
-    "drain" is the accepted integration's; a failure's payload carries the "drain" of the integration
-    that ended the tuning.
+    DRAIN_LAW_FIXED, the old tuning bitwise; compute_scalar_history passes the stored key's law since
+    one-loop-drain prompt 03. The payload's "drain" is the accepted integration's; a failure's payload
+    carries the "drain" of the integration that ended the tuning.
+
+    The sample masses (one-loop-drain prompt 03 §1.5, P31): every integration is made with
+    compute_sample_masses=False, and the success's payload gains "log_m_eff" and "log_m_tracker"
+    (sample_masses) from its samples and the accepted integration's realized model, once.
 
     :return: on success, the final integration's payload (every key integrate_history returns),
              with the keys of TUNING_OUTPUT_KEYS added: normalization, V_ref = V(phi_ref) on the
@@ -5304,6 +5849,9 @@ def tune_history(
             rho_chi_ratio_init=rho_chi_ratio_init,
             alpha=alpha,
             drain_law=drain_law,
+            # the sample masses are computed once, on the converged payload, below (one-loop-drain prompt 03,
+            # P31; orchestrator note 03, ruling 2)
+            compute_sample_masses=False,
         )
         end = clock()
         wall = end - start
@@ -5364,6 +5912,11 @@ def tune_history(
                     "seed_normalization": float(seed.normalization),
                     "seed_phi_ref": float(seed.phi_ref),
                 }
+            )
+            # the sample masses of the accepted integration, with its realization (one-loop-drain prompt 03
+            # §1.5, P31): once per stored history, never on a tuning integration
+            payload["log_m_eff"], payload["log_m_tracker"] = sample_masses(
+                rm, cosmology, payload["sample"]
             )
             return payload
 
@@ -5432,6 +5985,7 @@ def compute_scalar_history(
     max_integrations: int = DEFAULT_TUNING_MAX_INTEGRATIONS,
     verbose: bool = False,
     alpha: float = 0.0,
+    drain_law: str = DRAIN_LAW_FIXED,
 ) -> dict:
     """
     The stored path (jordan-normalization prompt 07, S4): the Ray task that ScalarHistory.compute
@@ -5456,7 +6010,10 @@ def compute_scalar_history(
     :param max_integrations: the cap on integrations, the seed's included
     :param alpha: the fraction of the condensate's kinetic energy drained at each candidate, passed to
                   tune_history (inelastic-reflection prompt 09); 0.0, the default, is natural mode,
-                  the old code bitwise
+                  the old code bitwise. Under the one-loop law it is A
+    :param drain_law: the drain law, passed to tune_history (one-loop-drain prompt 03 §1.2): the law of the
+                      history's alpha_value's drain_model, which ScalarHistory.compute passes. The default,
+                      DRAIN_LAW_FIXED, is the call of before, bitwise
     :return: tune_history's payload
     """
     return tune_history(
@@ -5473,6 +6030,7 @@ def compute_scalar_history(
         max_integrations=max_integrations,
         verbose=verbose,
         alpha=alpha,
+        drain_law=drain_law,
     )
 
 
@@ -5619,6 +6177,8 @@ class ScalarHistory(DatastoreObject):
             self._fixed_T_values = None
             self._tuning = None
             self._dissipation = None
+            self._drain_history = None
+            self._bounces = None
 
         else:
             DatastoreObject.__init__(self, payload["store_id"])
@@ -5632,6 +6192,10 @@ class ScalarHistory(DatastoreObject):
             self._fixed_T_values: Optional[FixedTValues] = payload["fixed_T_values"]
             self._tuning: Optional[TuningValues] = payload["tuning"]
             self._dissipation: Optional[DissipationValues] = payload["dissipation"]
+            # the history's drain record and its bounce rows (one-loop-drain prompt 03 §1.4, §1.6); the rows are
+            # None under _do_not_populate and on a failure, as the values are
+            self._drain_history: Optional[DrainHistoryValues] = payload["drain_history"]
+            self._bounces: Optional[Tuple[BounceRow, ...]] = payload["bounces"]
 
         # store parameters
         self._label: str = label
@@ -5727,6 +6291,42 @@ class ScalarHistory(DatastoreObject):
             raise RuntimeError("dissipation has not yet been populated")
 
         return self._dissipation
+
+    @property
+    def drain_history(self) -> Optional[DrainHistoryValues]:
+        """
+        The history's drain record (one-loop-drain prompt 03 §1.4): the regime shares and counts, ell_min, the
+        least ln R at a drain, the DrainRecord's counts, the all-generation margins and the number of bounce
+        rows; set by store() from the payload (drain_history_values), or by the factory's build from the row's
+        columns, so that it is readable on an object built with _do_not_populate, as `dissipation` is. Under
+        the one-loop law only: None under the fixed law, at alpha = 0 and on a failure row; raises when not
+        populated.
+        """
+        if self._failure is None:
+            raise RuntimeError("drain_history has not yet been populated")
+
+        return self._drain_history
+
+    @property
+    def bounces(self) -> Tuple[BounceRow, ...]:
+        """
+        The history's bounce rows (one-loop-drain prompt 03 §1.3, §1.6), a tuple of BounceRow in ordinal order,
+        in the cosmology's units; empty under the fixed law and at alpha = 0. Read with the samples, so it
+        raises under _do_not_populate, on a failure row and when not populated, as `values` does.
+        """
+        if hasattr(self, "_do_not_populate"):
+            raise RuntimeError(
+                "ScalarHistory: attempt to read bounces, but _do_not_populate is set"
+            )
+
+        if self._failure:
+            raise RuntimeError(
+                f"ScalarHistory ({self._label}): this object had an integration failure and cannot be used"
+            )
+
+        if self._bounces is None:
+            raise RuntimeError("bounces has not yet been populated")
+        return self._bounces
 
     @property
     def tuning(self) -> TuningValues:
@@ -5961,6 +6561,9 @@ class ScalarHistory(DatastoreObject):
             tolerance=self._tuning_tol.tol,
             max_integrations=max_integrations,
             alpha=self._alpha.value,
+            # the law of the key's drain model (one-loop-drain prompt 03 §1.2): the key is on alpha, so the
+            # history takes no argument of its own
+            drain_law=self._alpha.drain_law,
         )
         return self._compute_ref
 
@@ -5979,9 +6582,30 @@ class ScalarHistory(DatastoreObject):
 
         # retrieve result and populate ourselves
         data = ray.get(self._compute_ref)
-        self._compute_ref = None
 
         failure: bool = data.get("failure", False)
+
+        # the guard (one-loop-drain prompt 03 §1.2; README §8.11 P28; orchestrator note 03, ruling 3): a success's
+        # drain model must be its key's, checked before anything is stored or set on the object. A "drain"
+        # record whose model differs is refused; a missing or None record is accepted under the fixed model
+        # (a stand-in payload) and refused under the one-loop model. A failure is stored as before
+        if not failure:
+            key_model: str = self._alpha.drain_model
+            drain: Optional[DrainRecord] = data.get("drain")
+            if drain is None:
+                if key_model != DRAIN_MODEL_FIXED:
+                    raise RuntimeError(
+                        f"ScalarHistory ({self._label}): the payload carries no drain record, but the "
+                        f"history's key names the drain model {key_model!r}"
+                    )
+            elif drain.model != key_model:
+                raise RuntimeError(
+                    f"ScalarHistory ({self._label}): the payload was computed under the drain model "
+                    f"{drain.model!r}, but the history's key names {key_model!r}"
+                )
+
+        self._compute_ref = None
+
         if failure:
             self._failure = True
             self._failure_reason = (
@@ -5991,6 +6615,8 @@ class ScalarHistory(DatastoreObject):
             self._fixed_T_values = None
             self._tuning = None
             self._dissipation = None
+            self._drain_history = None
+            self._bounces = ()
             self._values = []
             return True
 
@@ -6007,6 +6633,12 @@ class ScalarHistory(DatastoreObject):
         # ruling 5)
         self._dissipation = dissipation_values(data)
 
+        # the history's drain record and its bounce rows (one-loop-drain prompt 03 §1.3, §1.4): both from the
+        # payload's "bounces", None and () where it is None or absent (the fixed law, alpha = 0)
+        self._drain_history = drain_history_values(data)
+        record: Optional[BounceRecord] = data.get("bounces")
+        self._bounces = () if record is None else tuple(record.rows)
+
         sample: List[SampleValues] = data["sample"]
         z_grid: redshift_array = data["z_grid"]
 
@@ -6016,6 +6648,16 @@ class ScalarHistory(DatastoreObject):
             raise RuntimeError(
                 f"ScalarHistory ({self._label}): the payload has {len(sample)} samples but no "
                 f'"rho_chi_over_rho_rad"'
+            )
+
+        # the sample masses (one-loop-drain prompt 03 §1.5): a payload with samples must carry both, as it must
+        # carry the ratio; an entry may be None (the model call failed there)
+        masses_eff = data.get("log_m_eff")
+        masses_tracker = data.get("log_m_tracker")
+        if (masses_eff is None or masses_tracker is None) and len(sample) > 0:
+            raise RuntimeError(
+                f"ScalarHistory ({self._label}): the payload has {len(sample)} samples but no "
+                f'"log_m_eff" or no "log_m_tracker"'
             )
 
         extra_data = build_extra_data(data)
@@ -6047,6 +6689,8 @@ class ScalarHistory(DatastoreObject):
                     kicking_term=sample[i].kicking_term,
                     log_one_plus_z_Jordan=sample[i].log_one_plus_z_Jordan,
                     rho_chi_over_rho_rad=ratios[i],
+                    log_m_eff=masses_eff[i],
+                    log_m_tracker=masses_tracker[i],
                 )
             )
 
@@ -6080,6 +6724,8 @@ class ScalarHistoryValue(DatastoreObject):
         log_one_plus_z_Jordan: float,
         *,
         rho_chi_over_rho_rad: float,
+        log_m_eff: Optional[float] = None,
+        log_m_tracker: Optional[float] = None,
     ):
         """
         :param store_id: ID in the datastore
@@ -6107,6 +6753,11 @@ class ScalarHistoryValue(DatastoreObject):
             bath that the policy used at the sample, exactly 0.0 at alpha = 0
             (inelastic-reflection prompt 09, P27). A required keyword with no default, so that no
             caller passes a dissipation history's samples with the ratio silently zero
+        :param log_m_eff: ln m_eff of the field itself at the sample, in the cosmology's units, or None where
+            the model call failed (m_eff^2 <= 0); sample_masses (one-loop-drain prompt 03 §1.5)
+        :param log_m_tracker: ln m_tr of the zero-lag tracker at the sample, or None where the model call
+            failed (no tracker minimum). Both default to None, for the objects that tools build from a payload
+            and never store; ScalarHistory.store passes both, and refuses a payload without them
         """
         DatastoreObject.__init__(self, store_id)
 
@@ -6138,6 +6789,9 @@ class ScalarHistoryValue(DatastoreObject):
         self._log_one_plus_z_Jordan: float = log_one_plus_z_Jordan
 
         self._rho_chi_over_rho_rad: float = rho_chi_over_rho_rad
+
+        self._log_m_eff: Optional[float] = log_m_eff
+        self._log_m_tracker: Optional[float] = log_m_tracker
 
     @property
     def shard_key(self) -> ShardKeyType:
@@ -6223,6 +6877,17 @@ class ScalarHistoryValue(DatastoreObject):
     @property
     def rho_chi_over_rho_rad(self) -> float:
         return self._rho_chi_over_rho_rad
+
+    @property
+    def log_m_eff(self) -> Optional[float]:
+        """ln m_eff of the field at the sample (one-loop-drain prompt 03 §1.5); None where it is not defined."""
+        return self._log_m_eff
+
+    @property
+    def log_m_tracker(self) -> Optional[float]:
+        """ln m_tr of the zero-lag tracker at the sample (one-loop-drain prompt 03 §1.5); None where it is not
+        defined."""
+        return self._log_m_tracker
 
 
 class ScalarHistoryProxy:

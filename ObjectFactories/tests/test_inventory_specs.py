@@ -75,9 +75,15 @@ READ_THROUGH: Dict[str, Tuple[str, str]] = {
     "BBNDataValue": ("BBNData", "values"),
 }
 
-# I5: the registered classes that are in no spec, each with a one-line reason. Empty: every class
-# that holds state is covered (README §6.5, measured at 12c82e8 and again at prompt 09)
-EXCLUDED: Dict[str, str] = {}
+# I5: the registered classes that are in no spec, each with a one-line reason. Empty until one-loop-drain
+# prompt 03: every class that holds state was covered (README §6.5, measured at 12c82e8 and again at prompt 09)
+EXCLUDED: Dict[str, str] = {
+    "ScalarHistoryBounce": (
+        "one-loop-drain prompt 03 (README §8.11 P29): DatastoreKit's InventorySpec names one value table per "
+        "owner, which ScalarHistory's spec gives to ScalarHistoryValue, so the inventory does not count bounce "
+        "rows; recorded, not worked around"
+    ),
+}
 
 SLOTS = ("tags", "values", "parent_sets")
 
@@ -153,21 +159,23 @@ class TestInventoryClasses(_NoRay):
     def test_the_registry_is_accepted_and_ordered(self):
         self.assertEqual(inventory_classes(factories), EXPECTED_ORDER)
 
-    def test_twelve_definitions_serve_sixteen_classes(self):
+    def test_thirteen_definitions_serve_sixteen_classes(self):
         # thirteen served seventeen until jordan-normalization prompt 07, which replaced
         # Lambda_value, ExponentialPotential and ExponentialCoupling with ExponentialModel; twelve
-        # served fifteen until inelastic-reflection prompt 09 added alpha_value
+        # served fifteen until inelastic-reflection prompt 09 added alpha_value, and sixteen until
+        # one-loop-drain prompt 03 gave alpha_value a factory of its own (thirteen since)
         owners = [name for name, f in factories.items() if _spec(f) is not None]
         self.assertEqual(len(owners), 16)
-        self.assertEqual(len({type(factories[n]) for n in owners}), 12)
-        # the six quantity entries share two factory classes, each reading its own value column
+        self.assertEqual(len({type(factories[n]) for n in owners}), 13)
+        # five quantity entries share two factory classes, each reading its own value column; alpha_value's
+        # own factory reads the pair (value, drain_model) since one-loop-drain prompt 03
         quantities = ["beta_value", "alpha_value", "M_value", "temperature"]
         quantities += ["phi_value", "pi_value"]
         self.assertEqual(
             {n: _spec(factories[n]).leaves for n in quantities},
             {
                 "beta_value": ("value",),
-                "alpha_value": ("value",),
+                "alpha_value": ("value", "drain_model"),
                 "M_value": ("value_eV",),
                 "temperature": ("value_GeV",),
                 "phi_value": ("value_PlanckMass",),
@@ -250,7 +258,8 @@ class TestCoverage(_NoRay):
     def test_every_registered_class_is_covered(self):
         registry = dict(factories)
         self.assertEqual(coverage_failures(registry, READ_THROUGH, EXCLUDED), [])
-        self.assertEqual(EXCLUDED, {})
+        # one exclusion since one-loop-drain prompt 03: the bounce table (P29)
+        self.assertEqual(list(EXCLUDED), ["ScalarHistoryBounce"])
 
     def test_a_class_in_none_of_the_three_is_named(self):
         registry = dict(factories)
@@ -265,7 +274,9 @@ class TestCoverage(_NoRay):
 
     def test_a_stale_exclusion_is_named(self):
         failures = coverage_failures(
-            dict(factories), READ_THROUGH, {"LambdaCDM": "no factory stores it"}
+            dict(factories),
+            READ_THROUGH,
+            dict(EXCLUDED, LambdaCDM="no factory stores it"),
         )
         self.assertEqual(
             failures, ["LambdaCDM: named in the test but no longer registered"]

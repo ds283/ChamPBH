@@ -78,8 +78,8 @@ invariants that hold across all of them:
   the repository root:
   ```bash
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .   # 26 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 594 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .   # 130 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 622 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .   # 149 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 156 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .        # 68 tests
   ```
@@ -87,10 +87,12 @@ invariants that hold across all of them:
   loads of 6.1 and 11.2 at their starts), and longer on a loaded machine; a Bash call is
   capped at ten minutes, so run it in two halves:
   ```bash
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 162 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 190 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 432 tests
   ```
-  (The counts are those of 2026-11-05, after `one-loop-drain` 02c, which deleted 2 tests from the `test_[a-f]` half
+  (The counts are those of 2026-11-06, after `one-loop-drain` 03, which added 28 tests to the `test_[a-f]` half
+  (`test_drain_store_records`) and 19 to `ObjectFactories/tests` (`test_drain_store`); before it, those of 2026-11-05,
+  after `one-loop-drain` 02c, which deleted 2 tests from the `test_[a-f]` half
   and added 1 there (`test_drain_law`), and added 29 to the `test_[g-z]` half (`test_measured_drain_law`); before it,
   those of 2026-11-03, after `one-loop-drain` 01, which added 41 tests to the `test_[a-f]` half
   (`test_drain_law`), 11 to the `test_[g-z]` half (`test_unresolvable_turning_points`) and 9 to `tools/tests`; before
@@ -137,7 +139,9 @@ invariants that hold across all of them:
   same in both frames. ΔN_eff is stored for each history at T_CMB and at 1 MeV, the 1 MeV value under the
   convention T_ν = T_γ. The per-sample ρ_χ/ρ_R is a payload key beside the samples, not a field of
   `SampleValues`, and a `ScalarHistoryValue` column. α is a key of every history, in its own table
-  `alpha_value`.
+  `alpha_value`, whose row is the pair (value, `drain_model`) since `one-loop-drain` 03: `"fixed"`, where the
+  value is α, or `"one-loop-measured-v1"`, the one-loop law's model and version, where it is A
+  (`CosmologyConcepts/drain_model.py`); a lookup that names no model is `"fixed"`.
 - **The plot scripts** (`plot_by_beta.py`, `plot_ScalarHistory.py`) read a store read-only, through
   `plot_inputs.py`, and stop (exit 2) if their options do not match the ones the build used: the
   tolerances, T*, φ*, `--tuning-tolerance` (a key of every history), `--alpha-values` (an α with no stored

@@ -73,7 +73,19 @@
 # be extended at 2026.9.0: start a fresh datastore file. Lookups are keyed on this label and never
 # fall back, so 2026.9.0 code finds no history in a 2026.8.0 store; read one with its own tree (main
 # before reflection-restart prompt 03).
-VERSION_LABEL = "2026.9.0"
+# On 2026-11-06 (one-loop-drain prompt 03), 2026.10.0: from 2026.10.0 a history can be stored under the one-loop
+# drain law. alpha_value's key is the pair (value, drain_model): "fixed", the fixed law, whose value is alpha, or
+# "one-loop-measured-v1", the measured one-loop law and its version, whose value is the law's strength A
+# (CosmologyConcepts/drain_model.py); a lookup that names no model asks for "fixed". Under the one-loop law a
+# history stores a row per bounce (the new table ScalarHistoryBounce) and the history's drain record (the regime
+# shares and counts, ell_min, the least ln R at a drain, the all-generation margins and the bounce rows' count,
+# new columns of ScalarHistory). Every history's samples carry the field's and the tracker's masses (two new
+# columns of ScalarHistoryValue). Under the fixed law no value moves: every pre-existing column, history and
+# sample is as at 2026.9.0, the drain record's columns are NULL and no bounce row is written; only the masses are
+# new. FINGERPRINT_FORMAT is 7. A 2026.9.0 store is not extended at 2026.10.0, and none is migrated (README §8.11
+# P32): start a fresh datastore file, and read a 2026.9.0 store with the tree of its own commit (before
+# one-loop-drain prompt 03).
+VERSION_LABEL = "2026.10.0"
 
 # The reserved payload key of a version-keyed lookup (VERSION_SERIAL_KEY) and its reader
 # (require_version_serial) were defined here until dk-and-rpk-migration prompt 08; they are

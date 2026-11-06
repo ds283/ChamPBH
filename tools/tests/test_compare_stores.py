@@ -889,8 +889,16 @@ def _fill_champbh_shard(conn, sm_shard: bool, offset: int, bbn_reason: str, bk: 
     _insert(conn, "tolerance", serial=o + 3, timestamp=TS, log10_tol=-8.0)
     _insert(conn, "tolerance", serial=o + 4, timestamp=TS, log10_tol=-10.0)
     _insert(conn, "beta_value", serial=o + 5, timestamp=TS, value=1.15)
-    # alpha = 0, a key of every history since inelastic-reflection prompt 09
-    _insert(conn, "alpha_value", serial=o + 9, timestamp=TS, value=0.0)
+    # alpha = 0, a key of every history since inelastic-reflection prompt 09; the pair (value,
+    # drain_model) since one-loop-drain prompt 03
+    _insert(
+        conn,
+        "alpha_value",
+        serial=o + 9,
+        timestamp=TS,
+        value=0.0,
+        drain_model="fixed",
+    )
     _insert(conn, "M_value", serial=o + 6, timestamp=TS, value_eV=2.435e24)
     # the tuning tolerance, in the serial Lambda_value had until jordan-normalization prompt 07
     _insert(conn, "tolerance", serial=o + 7, timestamp=TS, log10_tol=-5.0)

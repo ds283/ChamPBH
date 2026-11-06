@@ -1,6 +1,6 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-11-05 · **31 open**: 4 on the `review-remediation` board (closed
+**Last updated:** 2026-11-06 · **29 open**: 4 on the `review-remediation` board (closed
 2026-09-30), none now assigned; 2 on the `production-readiness` board
 (closed 2026-09-30); 2 on the `run-integrity` board (closed 2026-09-30; one stale entry closed 2026-10-22, its fix having landed in `5740690`; `jordan-normalization` prompt 07 closed one, 2026-10-26); 6 on the
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`
@@ -52,13 +52,13 @@ and assigned the same day to `reflection-restart`, §1.21); 1 on the `reflection
 the user's ruling of the signature; re-planned the same day, its audit withdrawn; one more assigned the same day
 from the `one-loop-drain` board, planned on its own branch, §1.21; prompt 04 closed the first assigned issue,
 narrowed the second and opened one, §1.22, and the campaign closed 2026-11-02, 3 of 3 prompts landed, 02 withdrawn,
-with that one open; the second assigned issue returned to `one-loop-drain` the same day, §1.23); 5 on the `one-loop-drain` board (planned
+with that one open; the second assigned issue returned to `one-loop-drain` the same day, §1.23); 3 on the `one-loop-drain` board (planned
 2026-11-02 as `quanta-diagnostics` from a scoping session
 the same day, `prompts/one-loop-drain/source/`; three opened by the planner, one of them narrowed and two
 more opened the same day from the drain probe; re-planned and renamed the same day, when one of those was
 split in two and one half assigned to `reflection-restart`, returned for its 01 after that campaign closed; prompt 01
 closed that one and the other half, 2026-11-03, the second by the user's ruling (b); prompt 02 opened one, 2026-11-03; the orchestrator opened one after 02b, 2026-11-04, which the user's adoption of
-the measured law closed, 2026-11-05; §1.23).
+the measured law closed, 2026-11-05; prompt 03 closed two, 2026-11-06; §1.23).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -377,18 +377,13 @@ the scoping session of that day; two opened the same day from the drain probe
 (`source/drain-probe_2026-11-02.md`), one of which was split at the re-plan, its other half assigned to
 `reflection-restart` (§1.21) and returned, narrowed, for 01 the same day. Prompt 01 closed both halves,
 2026-11-03 (board §4). Prompt 02 opened one, 2026-11-03. The orchestrator opened one after 02b, 2026-11-04.
+Prompt 03 closed two, one the planner's and one the probe's, 2026-11-06 (board §4).
 
-- `[00-weighted-margins-hide-the-least-relativistic-generations]` — stored worst margins and failing
-  shares cover only generations ≥ 10⁻³ of K; in the low-α transition window the rest hold 80–98% of ρ_χ,
-  with all-generation reflection margins to −20 against a stored +17.5; stored by 03 under the one-loop law. *(`one-loop-drain`; planner)*
 - `[00-later-bounces-act-on-quanta-already-present]` — a later bounce rescatters and stimulates only quanta
   within about an e-fold of its band (not those with p ≪ ω_t, narrowed 2026-11-02); parametric resonance
   measured absent; quantified by 05 (δ_stim) under the one-loop law, documented by 08. *(`one-loop-drain`; planner)*
 - `[00-the-parking-leftover-has-no-spectrum]` — the parking drain (≤ 0.10 of ρ_χ) has no peak estimate,
   so no margin or wall measure covers it; all of ρ_χ at large M under the one-loop law; out of scope. *(`one-loop-drain`; planner)*
-- `[00-fixed-alpha-drain-overstates-late-reflections]` — a fixed α asks late R < 1 bounces for n ≫ 1 (61%
-  of 2197's ρ_χ); a one-loop drain parks the field in 10–95 bounces and moves ΔN_eff; this campaign's object,
-  closed by 03. *(`one-loop-drain`; drain probe, 2026-11-02)*
 - `[02-one-loop-tunings-fail-at-small-A-in-the-transition-window]` — under the one-loop law the laboratory-M
   transition-window histories (β 1.0–1.1875) fail tuned at A = 0.01 (25 of 26 tasks; β = 1.0 at A = 0.1 too): step budget
   or effective minimum after the seed integration; 29 of 110 tunings; U14 (ruled 2026-11-04) leaves out A = 0.01; diagnosed 2026-11-04: the field never parks before today; re-tuned under the measured law (02d, 2026-11-05) three of 240 fail: R-632 (β = 1.0) at A = 0.1 and 0.05, the 5e-20 ladder at A = 0.05 (it builds at 0.1); every P, W and B history builds at all eight A. *(`one-loop-drain`; prompt 02)*

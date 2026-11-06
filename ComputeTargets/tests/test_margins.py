@@ -829,7 +829,16 @@ class TestAFailureInTheMargins(unittest.TestCase):
 
     def test_8_every_other_key_is_the_unpatched_runs(self):
         patched, unpatched = self.patched[0], self.unpatched[0]
-        skip = {"metadata", "z_grid", "generations", "margins", "margin_warnings"}
+        # "log_m_tracker" (one-loop-drain prompt 03, the sample masses) calls tracker_log_m too, so the patched
+        # run's is None at every sample
+        skip = {
+            "metadata",
+            "z_grid",
+            "generations",
+            "margins",
+            "margin_warnings",
+            "log_m_tracker",
+        }
         self.assertEqual(set(patched), set(unpatched))
         for key in sorted(set(patched) - skip):
             with self.subTest(key=key):

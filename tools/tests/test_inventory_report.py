@@ -130,7 +130,8 @@ class _InventoryStoreCase(_TempStoreCase):
         beta_failed = ins("beta_value", {"value": 1.1})
         beta_ok = ins("beta_value", {"value": 25.0})
         # alpha = 0, a key of every history since inelastic-reflection prompt 09
-        alpha = ins("alpha_value", {"value": 0.0})
+        # the pair (value, drain_model) since one-loop-drain prompt 03
+        alpha = ins("alpha_value", {"value": 0.0, "drain_model": "fixed"})
         M = ins("M_value", {"value_eV": 2.436e24})
         T_init = ins("temperature", {"value_GeV": 2.0e4})
         phi = ins("phi_value", {"value_PlanckMass": 5.0})
@@ -304,7 +305,8 @@ class TestReportOnAStore(_InventoryStoreCase):
         self.assertIn(
             "common to every history: cosmology=QCD_Cosmology(omega_m=0.3111, "
             "omega_cc=0.6889, h=0.6766, f_baryon=0.1575, T_CMB_Kelvin=2.7255, Neff=3.046), "
-            "log10_atol=-10, log10_rtol=-8, log10_tuning_tol=-5, alpha=0",
+            "log10_atol=-10, log10_rtol=-8, log10_tuning_tol=-5, "
+            "alpha=alpha_value(value=0, drain_model=fixed)",
             self.lines,
         )
         self.assertIn("validated: 2 records; version = 2026.6.0", self.lines)

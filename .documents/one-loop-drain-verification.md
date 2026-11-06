@@ -1318,3 +1318,154 @@ The gate holds, item by item (prompt §2):
 6. **Against the fixed law** at all eight A (§2d.9).
 7. **The cost**, with the classical tails' share of the steps and the batches (§2d.3, §2d.10).
 8. **The handover** for 03 and for the user (§2d.11).
+
+## 3. Prompt 03 — the store (2026-11-06)
+
+**Tree:** branch `one-loop-drain` at `d3069cb` (the orchestrator note's commit; its parent `2a6825b` adds the prompt),
+whose code and tests are those 02d's review passed. Prompt 03's commit changes the code (the key, the bounce table,
+the history and sample columns, the guard, `FINGERPRINT_FORMAT` 7, `VERSION_LABEL` 2026.10.0; `architecture-summary.md`
+and `numerical-strategies.md`, notes of 2026-11-06); §1–§2d above are unchanged. Python 3.13.16. **Scripts:**
+[`one-loop-drain/store-03/`](one-loop-drain/store-03/), each with a docstring: `fixed_law_payloads.py` and
+`compare_fixed_law.py` (§3.2), `cost_03.py` and `launch_03.sh` (§3.4). **Committed outputs:**
+[`one-loop-drain/store-03/out/`](one-loop-drain/store-03/out/): `fixed_law.txt`, `cost.txt`. **Raw output** (not
+committed): `var/one-loop-drain/03/`:
+- `fixed_law_base.json`, `fixed_law_tip.json`: the three fixed-law payloads, key by key, at `d3069cb` (a scratch
+  worktree, removed afterwards) and at this commit's tree;
+- `<id>.result.json`, `<id>.log`, `<id>.pid`, `<id>.done` for each of §3.4's six histories, and `stores/<id>/{full,
+  base}/`, their temporary stores.
+
+Orchestrator note 03's rulings 1–12 governed. No Ray was started, nothing was registered, and no store was opened but
+the tests' temporary ones and §3.4's under `var/one-loop-drain/03/stores/`.
+
+### 3.1 The Gate and the suites
+
+The Gate held at `d3069cb`: the tree was clean; `runregistrykit list` showed 23 runs, all finished.
+
+The suites before any change were measured on a scratch worktree of `d3069cb` (a first chain on the main checkout was
+stopped, since edits had begun while it ran; see log 03 §4), serially, at 2026-11-06 00:45–01:06 local time, the
+machine shared and loaded (one-minute loads 13–81):
+
+| suite | count | time | load at start |
+|---|---|---|---|
+| CosmologyModels | 26 OK | 109.0 s | 65.25 23.89 13.40 (00:45) |
+| ComputeTargets `test_[a-f]` | 162 OK | 176.9 s | 58.05 35.90 19.54 (00:47) |
+| ComputeTargets `test_[g-z]` | 432 OK | 494.7 s | 37.21 45.42 27.24 (00:50) |
+| ObjectFactories | 130 OK | 129.5 s | 13.31 16.48 19.62 (00:59) |
+| tools | 156; 155 OK, 1 failing for the worktree's root (`test_registry_config`) | 163.8 s | 4.73 17.75 26.24 (01:13) |
+| RunDrivers | 68; 67 OK, 1 failing for the worktree's root (`test_registered_run`, the script's path) | 25.0 s | 7.49 12.83 22.61 (01:16) |
+
+The tools and RunDrivers rows are a second run with the checkout's `venv` linked into the worktree; in the first, ten
+`tools/tests` failed for the worktree's lack of `./venv` and one for a batch timeout at a load of 41–81. The two that fail
+in the worktree read the repository root (the run registry's `var/runs`, the script's path), and pass in the main
+checkout's after-chain, unchanged.
+
+and after the change, on this commit's tree:
+
+| suite | count | time | load at start |
+|---|---|---|---|
+| CosmologyModels | 26 OK | 63.2 s | 6.38 7.11 12.08 (01:36) |
+| ComputeTargets `test_[a-f]` | 190 OK | 141.0 s | 4.94 6.52 11.52 (01:37) |
+| ComputeTargets `test_[g-z]` | 432 OK | 459.5 s | 6.11 6.20 10.59 (01:40) |
+| ObjectFactories | 149 OK | 118.4 s | 4.12 4.66 7.93 (01:47) |
+| tools | 156 OK | 159.1 s | 4.54 4.63 7.48 (01:49) |
+| RunDrivers | 68 OK | 22.8 s | 4.05 4.43 6.91 (01:52) |
+
+ComputeTargets goes from 594 to 622 (`test_drain_store_records`, 28, in the `test_[a-f]` half) and ObjectFactories from 130
+to 149 (`test_drain_store`, 19). No count fell.
+
+### 3.2 The fixed law is unchanged (prompt §2.1)
+
+- **The goldens** pass unchanged: `test_golden_history`, `test_golden_reflecting_history` and `test_tuning`, in the
+  `test_[g-z]` half (§3.1).
+- **The payloads, key by key** ([`out/fixed_law.txt`](one-loop-drain/store-03/out/fixed_law.txt)): three fixed-law
+  runs at `d3069cb` and at this tree — `integrate_history` on the tuned golden history at its stored normalization
+  (α = 0), on the reflecting setup (β = 1.5, M = 10⁻¹² M_P, α = 0.05, its seed realization), and `tune_history` on the
+  golden history. Every key the base has is equal in the tip by `repr` (30, 30 and 45 keys; `metadata` compared by its
+  `compute_steps` and `RHS_evaluations`, `z_grid` by its points), and the tip's only new keys are `"bounces"` (None) and
+  `"log_m_eff"`, `"log_m_tracker"`.
+- **The store's columns.** `test_dissipation_store` passes with no change but its version test's two literals (2026.10.0,
+  7), and `test_tuned_history_round_trip` with none: every pre-existing column of a fixed-law row, history and samples,
+  is written as before. `ObjectFactories/tests/test_drain_store.py` adds that a fixed-law row (α = 0.1 and α = 0) has no
+  bounce row, every column of the drain record NULL, and the masses written.
+
+### 3.3 The round trip and the fingerprint (prompt §2.2, §2.3)
+
+**The round trip** (`ComputeTargets/tests/test_drain_store_records.py`, 28 tests; `ObjectFactories/tests/test_drain_store.py`,
+19 tests), all passing:
+- a one-loop history (2197 at A = 1, five one-loop candidates, parked) through a temporary store: every bounce column,
+  every drain-record column and both masses raw on the row and on the object, bitwise to ruling 9's conversions; the
+  bounce rows in ordinal order with their count, which `validate` checks; the same read with `_do_not_populate`, the
+  record read and the rows not;
+- a history with a gap candidate (8 × 10⁻¹⁸ M_P, β = 2, A = 2) and one with 28 classical candidates (4 × 10⁻¹⁵ M_P,
+  A = 1), both parked;
+- constructed extremes: α_eff = 2.3 × 10⁻¹⁰⁸, L = 10⁻¹¹, ln R = −239 and 13 400 bounce rows;
+- the fixed law at α > 0 and at α = 0 (§3.2), a failure row (every new column NULL, no row);
+- the key: one value under the two models is two `alpha_value` rows and two histories, a lookup under one finds neither
+  the other's row nor its history, a lookup with no model is `fixed`; A = 0 and A < 0 under the one-loop model, α = 1.5
+  under the fixed one and an unknown model are refused with no row written;
+- the guard (P28): a one-loop payload under a fixed key, a fixed payload under a one-loop key, and a one-loop key with no
+  drain record each store nothing; a fixed key with no drain record is accepted;
+- in `ComputeTargets`: the bounce-row builder on constructed records (every regime, ΔK = 0, unassessed, events of both
+  sources, ties in N, the margins failed); K before each candidate against a constructed ledger with K₀ and a parking
+  leftover; the history record and its shares' sum (to 8 ε, with and without K₀ and parking), K_final = 0; the
+  all-generation margins against the core with `MARGIN_WEIGHT_SHARE` patched to 0, ties included; the sample masses'
+  NULLs; `compute_scalar_history` passing `drain_law` (default fixed) and `ScalarHistory.compute` passing the key's law;
+  on 2197, ln R of every candidate equal to its `PeakEstimate`'s bitwise, the regime and the estimate in correspondence,
+  the K chain against the ledger, the shares equal to `tools/history_and_bbn.drain_values` by `repr`; and
+  `tune_history`'s masses equal to `integrate_history`'s for the same integration, by `repr`.
+
+**The fingerprint.** `FINGERPRINT_FORMAT` is 7, with `SPEC_DIGESTS[7]` generated by `spec_digests` and the pins of
+formats 1–6 unchanged (`test_fingerprint_format_guard` passes; `test_drain_store` checks that format 6's pin is as it
+was). The golden at 7 is the new file `ObjectFactories/tests/data/store_fingerprint_one-loop-drain-03.json`, beside the
+old ones, which are unchanged; `test_store_fingerprint_golden` passes against it.
+- **Spec digests that moved:** `alpha_value`'s alone (its leaf `drain_model`, from its own factory; 14 distinct digests
+  where format 6 had 13). `ScalarHistory`'s spec digest did not move: its spec names its parent `alpha` by the same
+  column and table, and no new column.
+- **Store-fingerprint digests that moved** (golden at 6 against golden at 7, same store but the `drain_model` of its one
+  `alpha_value` row): the classes `alpha_value` (its key gains `drain_model`), `ScalarHistory` (its key resolves its parent
+  `alpha`), `AdiabaticHistory` and `BBNData` (their keys resolve their history's), and the store's digest.
+
+### 3.4 The cost and the volume (prompt §2.4; P12)
+
+Six of 02d's accepted integrations, each run once, untuned, at its accepted normalization and φ_ref (the line's
+`tuning`) and A, under the one-loop law, with T_stop = T_CMB, the tool's z grid and the default tolerances
+(`cost_03.py`): one-loop only (P-2197, A = 1), the gap (W-2187, A = 0.05: 22 gap candidates), a mixed ladder rung
+(8 × 10⁻¹⁸ M_P, A = 0.5: one-loop, gap and classical), a classical tail of 8 536 candidates (5 × 10⁻¹⁶ M_P, A = 1), and two
+of C (3016, parked; 3233, not parked, 73 resolved candidates). C-3873 is excluded (its 02d tunings timed out), and none of
+the six had a 02d wall above 1800 s. All six were launched detached at once at 01:02 and had ended by 01:13
+([`out/cost.txt`](one-loop-drain/store-03/out/cost.txt); times in s; "added" is the bounce key, the masses, the record and
+the write and read in full less the same history written and read with no bounce key and NULL masses):
+
+| task | candidates (02d) | rows | integration | bounce key | masses | record | write / read, full | write / read, base | added | ratio | NULL masses (eff, tr) |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| P-2197-A1 | 5 (5) | 9 | 2.64 | 0.000 | 0.381 | 0.0001 | 0.495 / 0.216 | 0.230 / 0.193 | 0.670 | 0.254 | 0, 0 |
+| W-2187-A0.05 | 199 (199) | 397 | 37.69 | 0.004 | 0.411 | 0.0003 | 0.324 / 0.243 | 0.308 / 0.082 | 0.593 | 0.016 | 0, 0 |
+| L-M8e-18-A0.5 | 48 (48) | 95 | 15.81 | 0.002 | 0.433 | 0.0001 | 0.222 / 0.121 | 0.292 / 0.152 | 0.435 | 0.028 | 0, 0 |
+| L-M5e-16-A1 | 8 536 (8 536) | 17 071 | 652.62 | 0.167 | 0.188 | 0.0095 | 0.729 / 0.383 | 0.160 / 0.075 | 1.242 | 0.002 | 0, 0 |
+| C-3016-A1 | 330 (330) | 659 | 77.98 | 0.007 | 0.380 | 0.0004 | 0.418 / 0.244 | 0.601 / 0.164 | 0.388 | 0.005 | 0, 0 |
+| C-3233-A1 | 301 (301) | 602 | 58.48 | 0.011 | 0.200 | 0.0004 | 0.287 / 0.135 | 0.407 / 0.308 | 0.212 | 0.004 | 0, 0 |
+
+**The median ratio is 0.0104, the largest 0.254** (P-2197, whose integration is 2.6 s); the stop (median > 0.25) is not
+met. Counting the whole write and read as added instead, the median is 0.020 and the largest 0.414 (`cost.txt`, column
+"whole"). The loads were heavy and uneven: one-minute 46.3 at the start, 4.8–103.3 at the six ends.
+
+**The checks**, every one holding at all six: each `DrainCandidate` equal by `repr` to the last line of its 02d partial
+file (so regime, α_eff and ln R per candidate are 02d's bitwise); ln R of every assessed candidate equal to its
+`PeakEstimate`'s bitwise (0 differing of 9 419), and the regime and the estimate in correspondence (0 differing); the
+stored shares, counts, ℓ_min and the drain record's two counts equal to 02d's `drain_values` by `repr`; the rows read back
+equal to the payload's through the conversions, and no nonzero value converting to 0.0 or ±∞; rows stored, read and
+`bounce_rows` equal. The margins were computed at all six. **ln T_J of the rows** (ruling 7): 73 candidates took their
+wall-side `TurningPoint`'s (all at C-3233), 9 346 the dense output's (reflections), and 9 414 events their
+`TurningPoint`'s. Rows are about twice the candidates: each candidate is followed by a plateau turning point.
+
+### 3.5 The Store gate
+
+The gate holds, item by item (prompt §2):
+1. **The fixed law is unchanged** (§3.2): the goldens pass; the three fixed-law payloads equal the parent's key by key but
+   for the new keys; every pre-existing column written as before.
+2. **The round trip** (§3.3): exact, bounce rows in order; the fixed law and α = 0 write no bounce row and NULL drain
+   columns; the key and the guard.
+3. **The fingerprint** (§3.3): format 7 beside formats 1–6, its golden beside the old ones; `alpha_value`'s spec digest
+   moved, and `ScalarHistory`'s did not.
+4. **The cost and the volume** (§3.4): median added time 0.0104 of the integration, 17 071 rows for 8 536 candidates, every
+   check holding.

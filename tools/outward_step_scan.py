@@ -922,17 +922,24 @@ def store_rows(data: dict, units):
         ScalarHistoryValue,
         build_extra_data,
         dissipation_values,
+        drain_history_values,
     )
     from ObjectFactories.ScalarHistory import sqla_ScalarHistoryFactory
 
     stub = SimpleNamespace(store_id=None, type_id=None)
     sample = data["sample"]
     ratios = data["rho_chi_over_rho_rad"]
+    # the sample masses, as ScalarHistory.store() passes them since one-loop-drain prompt 03 (None where a payload
+    # has none)
+    masses_eff = data.get("log_m_eff") or (None,) * len(sample)
+    masses_tracker = data.get("log_m_tracker") or (None,) * len(sample)
     values = [
         ScalarHistoryValue(
             None,
             z,
             rho_chi_over_rho_rad=ratios[i],
+            log_m_eff=masses_eff[i],
+            log_m_tracker=masses_tracker[i],
             **SampleValues._make(tuple(sample[i]))._asdict(),
         )
         for i, z in enumerate(data["z_grid"])
@@ -958,6 +965,10 @@ def store_rows(data: dict, units):
         _fixed_T_values=data["fixed_T_values"],
         _tuning=None,
         _dissipation=dissipation_values(data),
+        # what ScalarHistory.store() sets since one-loop-drain prompt 03: the drain record (None under the fixed law)
+        # and the bounce rows, which this comparison does not write
+        _drain_history=drain_history_values(data),
+        _bounces=(),
         _units=units,
         tags=[],
     )

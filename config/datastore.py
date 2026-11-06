@@ -21,8 +21,10 @@ them to its ``ShardedPool`` (``factories=``, ``serial_batch_sizes=`` and, in ``m
 ``drop_tables=``).
 
 - ``factories``: the registry of storable classes, each table name mapped to its factory instance,
-  in the order the schema is built. Seven entries are built on a quantity class (by the dimensionless
-  and the dimensionful quantity factories), which the factory keeps as ``ObjectType``.
+  in the order the schema is built. Five entries are built on a quantity class (by the dimensionless
+  and the dimensionful quantity factories), which the factory keeps as ``ObjectType``; ``alpha_value``
+  has a factory of its own since one-loop-drain prompt 03, since its key is the pair (value,
+  drain_model).
 - ``drop_groups``: the ``--drop`` groups, each mapped to the tables it drops. The pool drops tables,
   in the order their foreign keys require, so the order within a group is not the drop order.
 - ``serial_batch_sizes``: how many serials an actor leases from the broker at a time, per table; a
@@ -43,7 +45,6 @@ from datastorekit.SQL.schema import build_schema, dependent_tables
 from datastorekit.store_inventory import inventory_specs
 
 from CosmologyConcepts import (
-    alpha_value,
     beta_value,
     M_value,
     temperature,
@@ -55,6 +56,7 @@ from ObjectFactories.AdiabaticHistory import (
     sqla_AdiabaticHistoryTagAssociation_factory,
     sqla_AdiabaticHistoryValue_factory,
 )
+from ObjectFactories.alpha_value import sqla_alpha_value_factory
 from ObjectFactories.BBNData import (
     sqla_BBNDataFactory,
     sqla_BBNDataTagAssociation_factory,
@@ -70,6 +72,7 @@ from ObjectFactories.ExponentialModel import sqla_ExponentialModel_factory
 from ObjectFactories.QCD_Cosmology import sqla_QCDCosmology_factory
 from ObjectFactories.ScalarHistory import (
     sqla_ScalarHistoryFactory,
+    sqla_ScalarHistoryBounce_factory,
     sqla_ScalarHistoryTagAssociation_factory,
     sqla_ScalarHistoryValue_factory,
 )
@@ -87,8 +90,9 @@ factories = {
     "redshift": sqla_redshift_factory(),
     "tolerance": sqla_tolerance_factory(),
     "beta_value": sqla_dimensionless_quantity_factory(beta_value),
-    # alpha, a key of every ScalarHistory (inelastic-reflection prompt 09, P28)
-    "alpha_value": sqla_dimensionless_quantity_factory(alpha_value),
+    # alpha, a key of every ScalarHistory (inelastic-reflection prompt 09, P28); since one-loop-drain prompt 03
+    # the pair (value, drain_model), with a factory of its own (README §8.11 P27)
+    "alpha_value": sqla_alpha_value_factory(),
     "M_value": sqla_dimensionful_quantity_factory(M_value),
     "temperature": sqla_dimensionful_quantity_factory(temperature),
     "phi_value": sqla_dimensionful_quantity_factory(phi_value),
@@ -99,6 +103,9 @@ factories = {
     "ScalarHistory": sqla_ScalarHistoryFactory(),
     "ScalarHistory_tags": sqla_ScalarHistoryTagAssociation_factory(),
     "ScalarHistoryValue": sqla_ScalarHistoryValue_factory(),
+    # a row per candidate and per turning point of the reflection margin, under the one-loop drain law only
+    # (one-loop-drain prompt 03 §1.3; README §8.11 P29)
+    "ScalarHistoryBounce": sqla_ScalarHistoryBounce_factory(),
     "AdiabaticHistory": sqla_AdiabaticHistoryFactory(),
     "AdiabaticHistory_tags": sqla_AdiabaticHistoryTagAssociation_factory(),
     "AdiabaticHistoryValue": sqla_AdiabaticHistoryValue_factory(),
@@ -108,7 +115,12 @@ factories = {
 }
 
 drop_groups = {
-    "scalar-history": ["ScalarHistory_tags", "ScalarHistoryValue", "ScalarHistory"],
+    "scalar-history": [
+        "ScalarHistory_tags",
+        "ScalarHistoryValue",
+        "ScalarHistoryBounce",
+        "ScalarHistory",
+    ],
     "adiabatic-history": [
         "AdiabaticHistory_tags",
         "AdiabaticHistoryValue",
@@ -132,6 +144,7 @@ serial_batch_sizes = {
     "IntegrationSolver": 6,
     "ScalarHistory": 20,
     "ScalarHistoryValue": 250,
+    "ScalarHistoryBounce": 250,
     "AdiabaticHistory": 20,
     "AdiabaticHistoryValue": 250,
     "BBNData": 20,

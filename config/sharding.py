@@ -34,6 +34,7 @@ sharded_tables = {
     "ExponentialModel": "shard_key",
     "ScalarHistory": "shard_key",
     "ScalarHistoryValue": "shard_key",
+    "ScalarHistoryBounce": "shard_key",
     "AdiabaticHistory": "shard_key",
     "AdiabaticHistoryValue": "shard_key",
     "BBNData": "shard_key",

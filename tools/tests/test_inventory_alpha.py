@@ -23,6 +23,10 @@ stand-in cluster, no Ray):
   on each history line;
 - a store with two alpha prints `alpha=` on each history line, and not on the common line.
 
+Since one-loop-drain prompt 03 an `alpha_value` row is the pair (value, drain_model), and its spec has both
+leaves, so the report (unchanged) prints a row as `- value=0, drain_model=fixed` and a history's alpha as
+`alpha=alpha_value(value=0, drain_model=fixed)`; the rows here are of the fixed model.
+
 No Ray, no PRyMordial. About 1 s.
 """
 
@@ -75,7 +79,7 @@ class _AlphaStoreCase(_InventoryStoreCase):
         solver = ins("IntegrationSolver", {"label": "solve_ivp+RK45", "stepping": 0})
         model = ins("ExponentialModel", dict(M_serial=M, n_value=1, beta_serial=beta))
         for k, value in enumerate(alphas):
-            alpha = ins("alpha_value", {"value": value})
+            alpha = ins("alpha_value", {"value": value, "drain_model": "fixed"})
             ins(
                 "ScalarHistory",
                 dict(
@@ -125,7 +129,7 @@ class TestTheInventoryNamesAlpha(_AlphaStoreCase):
         self.assertGreater(alpha, beta)
         self.assertGreater(alpha, heading)
         self.assertFalse(any("Other classes" in l for l in lines))
-        self.assertIn("values = [ 0 ]", lines[alpha:])
+        self.assertEqual(lines[alpha + 1], "- value=0, drain_model=fixed")
 
     def test_9_the_extra_field_follows_the_tuning_tolerance(self):
         fields = [f for f, _ in HISTORY_EXTRA_FIELDS]
@@ -136,7 +140,12 @@ class TestTheInventoryNamesAlpha(_AlphaStoreCase):
         _, lines = self.report([0.0])
         common = [l for l in lines if l.startswith("common to every history:")]
         self.assertEqual(len(common), 1)
-        self.assertTrue(common[0].endswith("log10_tuning_tol=-5, alpha=0"), common[0])
+        self.assertTrue(
+            common[0].endswith(
+                "log10_tuning_tol=-5, alpha=alpha_value(value=0, drain_model=fixed)"
+            ),
+            common[0],
+        )
         histories = [l for l in lines if l.startswith("- T_init=")]
         self.assertEqual(len(histories), 1)
         self.assertNotIn("alpha=", histories[0])
@@ -149,12 +158,16 @@ class TestTheInventoryNamesAlpha(_AlphaStoreCase):
         histories = [l for l in lines if l.startswith("- T_init=")]
         self.assertEqual(len(histories), 2)
         self.assertEqual(
-            sorted(l.split("alpha=")[1].split(",")[0].split(" ")[0] for l in histories),
-            ["0", "0.1"],
+            sorted(l.split("alpha=")[1].split(")")[0] + ")" for l in histories),
+            [
+                "alpha_value(value=0, drain_model=fixed)",
+                "alpha_value(value=0.1, drain_model=fixed)",
+            ],
         )
         for l in histories:
             self.assertEqual(l.count("alpha="), 1)
-        self.assertIn("values = [ 0, 0.1 ]", lines)
+        self.assertIn("- value=0, drain_model=fixed", lines)
+        self.assertIn("- value=0.1, drain_model=fixed", lines)
 
 
 if __name__ == "__main__":

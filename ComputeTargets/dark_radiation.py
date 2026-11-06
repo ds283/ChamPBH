@@ -94,6 +94,15 @@ class DarkRadiationLedger:
         return tuple(zip(self._N, self._delta_K))
 
     @property
+    def cumulative_K(self) -> Tuple[float, ...]:
+        """
+        K after each injection, in the order of injections: entry j is K_0 plus the injections 0 ... j, the
+        float add() computed for it (one-loop-drain prompt 03; orchestrator note 03, ruling 6), so that a
+        caller reads K just before or after an entry by position, never re-summed.
+        """
+        return tuple(self._K)
+
+    @property
     def is_empty(self) -> bool:
         """True iff K_0 = 0 and there are no injections: K(N) = 0 at every N."""
         return self._K_initial == 0.0 and not self._N

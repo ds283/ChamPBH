@@ -73,6 +73,13 @@ column of dissipation mode set to a fixed literal (`DISSIPATION_COLUMNS`), and t
 `rho_chi_over_rho_rad` is filled with zero, as every other, neither of which any spec names. `GOLDEN`
 names `store_fingerprint_inelastic-reflection-09.json`. `LABEL` and `T0` are unchanged.
 
+**Format 7** (one-loop-drain prompt 03): `alpha_value`'s key is the pair (value, drain_model), with a spec of its
+own whose leaves are `value` and `drain_model`; the registry gains `ScalarHistoryBounce`, which declares no spec.
+The store's one `alpha_value` row is written with `drain_model="fixed"` (α = 0 exists only under the fixed
+model); nothing else changes: the new columns of `ScalarHistory` and `ScalarHistoryValue` are nullable and left
+NULL, and no spec names them, and no bounce row is written. `GOLDEN` names
+`store_fingerprint_one-loop-drain-03.json`. `LABEL` and `T0` are unchanged.
+
 **The golden file** is under `data/`, written once and never overwritten (P8). It was written from
 `config.fingerprint.fingerprinter.take(primary, None)` as `json.dumps(fp, indent=2, sort_keys=True)
 + "\\n"`, so its `taken` is `null`; the tests take with `taken={}` and compare with `taken`
@@ -115,7 +122,7 @@ from ObjectFactories.tests.test_version_keyed_lookups import _TempStoreCase
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DATA = Path(__file__).resolve().parent / "data"
-GOLDEN = DATA / "store_fingerprint_inelastic-reflection-09.json"
+GOLDEN = DATA / "store_fingerprint_one-loop-drain-03.json"
 
 LABEL = "rrk-adoption-02-golden"
 T0 = datetime(2026, 10, 19, 12, 0, 0)
@@ -244,7 +251,8 @@ class _GoldenStoreCase(_TempStoreCase):
         rtol = ins("tolerance", {"log10_tol": -8.0})
         tuning_tol = ins("tolerance", {"log10_tol": -5.0})
         beta = ins("beta_value", {"value": 25.0})
-        alpha = ins("alpha_value", {"value": 0.0})
+        # the pair (value, drain_model) since format 7 (one-loop-drain prompt 03)
+        alpha = ins("alpha_value", {"value": 0.0, "drain_model": "fixed"})
         M = ins("M_value", {"value_eV": 2.436e24})
         T_init = ins("temperature", {"value_GeV": 2.0e4})
         phi = ins("phi_value", {"value_PlanckMass": 5.0})
@@ -440,7 +448,7 @@ class TestCommandLine(_GoldenStoreCase):
         squeezed = [" ".join(line.split()) for line in lines]
         self.assertIn(f"digest: {golden['digest']}", squeezed)
         self.assertIn(f"format: {golden['fingerprint_format']}", squeezed)
-        self.assertEqual(golden["fingerprint_format"], 6)
+        self.assertEqual(golden["fingerprint_format"], 7)
         self.assertEqual(
             lines[-1].strip(), "recorded: none recorded (the sidecar is absent)"
         )

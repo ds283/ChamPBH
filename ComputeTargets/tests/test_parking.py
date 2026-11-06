@@ -364,7 +364,14 @@ class TestAlphaZeroIsTheOldCode(unittest.TestCase):
 
     def test_1_no_minimum_on_a_golden_history(self):
         for beta in gh.BETAS:
-            with minimum_spy() as (spy_min, spy_d):
+            # the sample masses (one-loop-drain prompt 03, U5) search the tracker's minimum at every sample, after
+            # the integration and at every alpha by design; they are left out here, so that the count is the
+            # integration's
+            with minimum_spy() as (spy_min, spy_d), mock.patch.object(
+                SM,
+                "sample_masses",
+                lambda m, c, s: ((None,) * len(s), (None,) * len(s)),
+            ):
                 data = gh.run_history(beta)
             self.assertEqual(spy_min.call_count, 0, beta)
             self.assertEqual(spy_d.call_count, 0, beta)

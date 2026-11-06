@@ -391,6 +391,29 @@ at `φ < 0` above that (audit §3.5); it is gone.
 > - **Removed:** `_GAP_PRESCRIPTION`, `GAP_PRESCRIPTION_ZERO`, `GAP_PRESCRIPTION_EDGE`, `GAP_PRESCRIPTIONS`, `DRAIN_C1`
 >   and `DRAIN_ELL_EDGE`; 2.7/ℓ is computed nowhere. The fixed law is unchanged, bitwise.
 
+> **Note, 2026-11-06 (`one-loop-drain`, prompt 03): the sample masses and the all-generation margins.** The
+> verification is `one-loop-drain-verification.md` §3. Nothing of the integration moves under either law (§3.1 there:
+> every pre-existing payload key of three fixed-law runs equal to the parent commit's by `repr`).
+> - **The sample masses** (`sample_masses`; campaign README §8.3 U5, P31). At every stored sample, under every law and
+>   every α, natural mode included: ln m_eff, the field's own mass, `field_log_m` on the sample's stored state (φ, π,
+>   ln ρ_R,E, ln f_m, ln T_J), Σ from `log_trace` as the policy forms it; and ln m_tr, the zero-lag tracker's,
+>   `tracker_log_m` from the sample's stored φ, ln ρ_R,E, ln f_m and Σ, its minimum searched from the sample's own
+>   field, as the margins' gatherer calls it. Each is None where the model call raises `ComputationFailureError`
+>   (m_eff² ≤ 0, no tracker minimum); any other exception propagates. Each is a Python float. They are computed once
+>   per stored history, with the accepted integration's realization: `integrate_history` computes them by default,
+>   and `tune_history` turns that off on each of its integrations (`compute_sample_masses=False`) and computes them
+>   once on the converged payload (orchestrator note 03, ruling 2). They cost about a tenth of an integration's wall
+>   on the laboratory-M histories of §3.4 there.
+> - **The all-generation margins** (`all_generation_margins`; P3, P30). The worst birth, reflection and tracker margin
+>   over every generation, its N and the failing share, the weight U9 ignored: one O(G) pass over the generations
+>   `relativistic_margins` already returns, by the core's own rules (generations in index order, a strict
+>   comparison, so a tie keeps the lowest index; the birth margin's N its N_turn), so that each value equals the core's
+>   with `MARGIN_WEIGHT_SHARE` 0. The core is not run a second time. NULL where the margins were not computed.
+> - **The gatherer split** (orchestrator note 03, ruling 4). `history_margins`' gathering is `margin_inputs`, its body
+>   moved unchanged, which returns the core's inputs (`MarginInputs`); `history_margins` is now
+>   `relativistic_margins(*margin_inputs(...))`, and `integrate_history` calls the two itself to keep the inputs for the
+>   bounce rows. The core runs once and no model call is added.
+
 The reflection is a *model*, not a fallback, and it has two guards (log 01):
 
 - **G1.** The potential must declare `reflects_at_origin` (new on `AbstractPotential`, default

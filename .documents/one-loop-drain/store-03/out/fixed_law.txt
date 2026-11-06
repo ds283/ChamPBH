@@ -1,0 +1,118 @@
+== golden-alpha0: 30 keys at the base, 33 at the tip
+   accepted_steps                   equal
+   cap_floor                        equal
+   cap_fraction                     equal
+   cap_global_max_step              equal
+   dark_radiation                   equal
+   dark_radiation_values            equal
+   drain                            equal
+   dropped_drains                   equal
+   first_bounce                     equal
+   fixed_T_values                   equal
+   generations                      equal
+   injections                       equal
+   jacobian_factor_max              equal
+   largest_RHS_values               equal
+   margin_warnings                  equal
+   margins                          equal
+   mean_RHS_values                  equal
+   metadata                         equal
+   parking                          equal
+   reflections                      equal
+   release                          equal
+   restart_retakes                  equal
+   rho_chi_over_rho_rad             equal
+   sample                           equal
+   smallest_RHS_values              equal
+   solver_label                     equal
+   steps_rejected_by_exception      equal
+   turning_points                   equal
+   warnings                         equal
+   z_grid                           equal
+   bounces                          new: None
+   log_m_eff                        new: (-39.062811988199144, -39.07198265137251, -39.08113247337565...
+   log_m_tracker                    new: (-32.093527161352725, -32.102796329919975, -32.1120444430210...
+== golden-tuned: 45 keys at the base, 48 at the tip
+   V_ref                            equal
+   accepted_steps                   equal
+   cap_floor                        equal
+   cap_fraction                     equal
+   cap_global_max_step              equal
+   dark_radiation                   equal
+   dark_radiation_values            equal
+   drain                            equal
+   dropped_drains                   equal
+   first_bounce                     equal
+   fixed_T_values                   equal
+   generations                      equal
+   guard_steps                      equal
+   injections                       equal
+   jacobian_factor_max              equal
+   largest_RHS_values               equal
+   margin_warnings                  equal
+   margins                          equal
+   mean_RHS_values                  equal
+   metadata                         equal
+   normalization                    equal
+   parking                          equal
+   phi_0                            equal
+   phi_ref                          equal
+   pi_0                             equal
+   plain_steps                      equal
+   reflections                      equal
+   release                          equal
+   residual_H                       equal
+   residual_phi                     equal
+   restart_retakes                  equal
+   rho_chi_over_rho_rad             equal
+   sample                           equal
+   secant_steps                     equal
+   seed_kind                        equal
+   seed_normalization               equal
+   seed_phi_ref                     equal
+   smallest_RHS_values              equal
+   solver_label                     equal
+   steps_rejected_by_exception      equal
+   tracking                         equal
+   tuning_iterations                equal
+   turning_points                   equal
+   warnings                         equal
+   z_grid                           equal
+   bounces                          new: None
+   log_m_eff                        new: (-39.062811988199144, -39.07198265137251, -39.08113247337565...
+   log_m_tracker                    new: (-32.093527161352725, -32.102796329919975, -32.1120444430210...
+== reflecting-a005: 30 keys at the base, 33 at the tip
+   accepted_steps                   equal
+   cap_floor                        equal
+   cap_fraction                     equal
+   cap_global_max_step              equal
+   dark_radiation                   equal
+   dark_radiation_values            equal
+   drain                            equal
+   dropped_drains                   equal
+   first_bounce                     equal
+   fixed_T_values                   equal
+   generations                      equal
+   injections                       equal
+   jacobian_factor_max              equal
+   largest_RHS_values               equal
+   margin_warnings                  equal
+   margins                          equal
+   mean_RHS_values                  equal
+   metadata                         equal
+   parking                          equal
+   reflections                      equal
+   release                          equal
+   restart_retakes                  equal
+   rho_chi_over_rho_rad             equal
+   sample                           equal
+   smallest_RHS_values              equal
+   solver_label                     equal
+   steps_rejected_by_exception      equal
+   turning_points                   equal
+   warnings                         equal
+   z_grid                           equal
+   bounces                          new: None
+   log_m_eff                        new: (-54.3776927365506, -54.38687731248992, -54.39603740063209, ...
+   log_m_tracker                    new: (-35.888966463885815, -35.898289049144864, -35.9075867973333...
+RESULT: every base key equal; new keys only bounces (None) and the masses

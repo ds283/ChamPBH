@@ -1482,6 +1482,58 @@ SampleValues = namedtuple("SampleValues", [
 > - Tests: `ComputeTargets/tests/test_measured_drain_law.py` (new, the model hook among them), `test_drain_law.py`,
 >   `tools/tests/test_history_and_bbn_drain_law.py`.
 
+> **Note, 2026-11-06 (`one-loop-drain`, prompt 03): the store of the one-loop law.** `VERSION_LABEL` 2026.10.0,
+> `FINGERPRINT_FORMAT` 7; the verification is `one-loop-drain-verification.md` §3, the numerics
+> `numerical-strategies.md` §3.5's note of this date.
+> - **The key** (campaign README §8.10 decision 1, §8.11 P27). `alpha_value` is the pair (value, `drain_model`):
+>   `"fixed"`, whose value is α (0 ≤ α < 1, 0 natural mode), or `"one-loop-measured-v1"`, the measured law and its
+>   version, whose value is A (finite and > 0); a later version of the law is a new string, so a new key value. The
+>   law follows from the model by one mapping (`law_of`), and `alpha_value.drain_law` gives it. The constants
+>   `DRAIN_LAW_*`, `DRAIN_LAWS`, `DRAIN_MODEL_*`, `DRAIN_MODELS`, `law_of`, `check_drain_law` and `check_drain_model`
+>   live in the leaf module `CosmologyConcepts/drain_model.py`, which imports nothing of `CosmologyConcepts` or
+>   `ComputeTargets` (orchestrator note 03, ruling 1), and `ComputeTargets/ScalarHistory.py` imports them, so every
+>   `SM.<name>` is the same object. `alpha_value(store_id, value, drain_model="fixed")` checks the pair on
+>   construction. Its factory is its own, `ObjectFactories/alpha_value.py` (no longer the dimensionless factory it
+>   shared with `beta_value`): it checks the pair before it queries or inserts, matches the value as before and the
+>   model exactly, and asks for `"fixed"` where the payload names no model, so `object_get("alpha_value", value=a)` is
+>   the lookup of before and the drivers are unchanged until prompt 04. Its spec has the leaves `value` and
+>   `drain_model`. The table stays replicated, batch size 200.
+> - **The stored path.** `compute_scalar_history` takes `drain_law` (default fixed) and passes it to `tune_history`;
+>   `ScalarHistory.compute` passes its `alpha`'s law. **The guard** (P28; ruling 3): `ScalarHistory.store()` refuses
+>   (RuntimeError), before anything is set or stored, a success payload whose `"drain"` record's model is not the
+>   key's, and one with no record under the one-loop model; a payload with no record is accepted under the fixed
+>   model, and a failure is stored as before. It refuses a payload with samples but without `"log_m_eff"` or
+>   `"log_m_tracker"`, as it refuses one without the ratio.
+> - **The bounce rows** (P29). The new table `ScalarHistoryBounce` (sharded by the history's shard key, batch size 250,
+>   in the drop group `scalar-history` before `ScalarHistory`, registered after `ScalarHistoryValue`) holds, under the
+>   one-loop law only, a row per candidate and per turning point of the reflection margin that is not one (plateau,
+>   or wall-side with no candidate), in `relativistic_margins`' event order, `ordinal` 0, 1, … Its columns are
+>   `BounceRow`'s with unit suffixes (`ObjectFactories/ScalarHistory.py`, `BOUNCE_COLUMNS`): `ordinal`, `source`,
+>   `candidate_index`, `N`, `N_turn`, `kind`, `resolved`, `log_T_Jordan_GeV`, `delta_K_Mp4`, `log_rho_kin_Mp4`,
+>   `nonadiabaticity`, `alpha_eff`, `w_gate`, `K_before_Mp4`, `regime`, `ell`, `L`, `log_R`, `log_E_Mp4`, `log_H_Mp`,
+>   `log_k_ex_Mp`, `log_m_Mp`, `log_q_Mp`, `share`, `weighted`, `birth_margin`, `reflection_margin`,
+>   `reflection_margin_N`, `tracker_margin`, `tracker_margin_N`. The payload's `"bounces"` (a `BounceRecord` of the
+>   rows and K_final) is built by `bounce_record` and the pure `bounce_rows` in `integrate_history`, beside
+>   `"margins"`; it is None under the fixed law and at α = 0. The rows are written in the factory's `store`, read in
+>   its `build` with the samples (in ordinal order; skipped under `_do_not_populate`), counted in `validate` against
+>   the history's `bounce_rows` and pruned in `validate_on_startup`, wherever `ScalarHistoryValue` is.
+>   `ScalarHistory.bounces` gives them, in the cosmology's units. The table declares no inventory spec: DatastoreKit's
+>   `InventorySpec` names one value table per owner, so the inventory does not count bounce rows.
+> - **The history's drain record** (P9 as revised, P30): the fields of `DrainHistoryValues`, columns of
+>   `ScalarHistory`, all dimensionless: `drained_share_{one_loop,gap,classical,unassessed}`, `parking_share`,
+>   `candidates_{one_loop,gap,classical,unassessed}`, `ell_min`, `log_R_min_drain`, `unresolvable_assessments`,
+>   `unresolved_declined`, `all_worst_{birth,reflection,tracker}_margin`, `all_worst_{…}_margin_N`,
+>   `all_{…}_failing_share` and `bounce_rows`. Formed by `drain_history_values` from the payload in `store()`, and
+>   read on every lookup as `ScalarHistory.drain_history`, `_do_not_populate` included. NULL under the fixed law, at
+>   α = 0 and on a failure row.
+> - **The sample masses**: `ScalarHistoryValue` gains `log_m_eff_Mp` and `log_m_tracker_Mp` (ln(m/M_P), nullable),
+>   written at every law, and the object `log_m_eff` and `log_m_tracker` (keyword arguments, default None, for the
+>   objects the tools build and never store).
+> - **No migration** (P32): a 2026.9.0 store is read with the tree of its own commit.
+> - **`tools/outward_step_scan.py`**'s mirror of `store()` (`store_rows`) sets `_drain_history`, `_bounces` and the masses as
+>   `store()` does, so that the factory's `store` runs on it; the factory asks for the bounce inserter only when it has rows.
+> - Tests: `ComputeTargets/tests/test_drain_store_records.py`, `ObjectFactories/tests/test_drain_store.py` (new).
+
 ### 7.3 `AdiabaticHistory` (`ComputeTargets/AdiabaticHistory.py`)
 
 Computes the adiabatic perturbation parameter Q (which determines whether the chameleon field is adiabatically tracking its minimum). Requires a `ScalarHistoryProxy` as input.

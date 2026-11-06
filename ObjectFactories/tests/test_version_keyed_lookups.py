@@ -74,8 +74,9 @@ _stand_in_model = _stand_in(2, 3)
 _T_init = _stand_in(10)
 _phi, _pi = _stand_in(12), _stand_in(13)
 _atol, _rtol, _tuning_tol = _stand_in(14), _stand_in(15), _stand_in(16)
-# alpha, a key of every history (inelastic-reflection prompt 09); an alpha_value serial
-_alpha = _stand_in(17)
+# alpha, a key of every history (inelastic-reflection prompt 09); an alpha_value serial, and since
+# one-loop-drain prompt 03 the key's drain model, which ScalarHistory.store() checks a payload against
+_alpha = NS(store_id=17, type_id=0, units=_UNITS, drain_model="fixed")
 
 _MODEL_SERIAL = 1
 

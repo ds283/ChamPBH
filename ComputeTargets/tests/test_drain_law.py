@@ -564,7 +564,13 @@ class TestTheFixedLawIsUnchanged(unittest.TestCase):
 
     def test_3_the_payloads_keys_are_the_merged_trees_and_drain(self):
         self.assertFalse(self.data.get("failure", False))
-        self.assertEqual(set(self.data), MERGED_TREE_PAYLOAD_KEYS | {"drain"})
+        # one-loop-drain prompt 03 adds "bounces" (None under the fixed law) and the sample masses
+        self.assertEqual(
+            set(self.data),
+            MERGED_TREE_PAYLOAD_KEYS
+            | {"drain", "bounces", "log_m_eff", "log_m_tracker"},
+        )
+        self.assertIsNone(self.data["bounces"])
 
     def test_3_drain_is_the_fixed_laws_record(self):
         self.assertEqual(

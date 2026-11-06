@@ -1,6 +1,6 @@
 # one-loop-drain campaign — implementation state
 
-**Last updated:** 2026-11-06 · **Status: LIVE — 5 of 11 landed (01, 02, 02b, 02c, 02d); the measured law in the code (02c) and measured on the sample (02d); 03 written, not dispatched.** Planned
+**Last updated:** 2026-11-06 · **Status: LIVE — 6 of 11 landed (01, 02, 02b, 02c, 02d, 03); the measured law in the code (02c), measured on the sample (02d) and stored (03).** Planned
 2026-11-02 as `quanta-diagnostics` at the user's request, after a scoping session the same day
 ([`source/scoping_2026-11-02.md`](source/scoping_2026-11-02.md)); U1–U7 and P1–P16 ruled the same day,
 all as proposed (README §6). **Re-planned the same day around the drain law and renamed `one-loop-drain`**
@@ -29,7 +29,9 @@ landed; the Remeasure gate holds. 230 of 240 tunings succeed under the measured 
 5 × 10⁻²⁰ M_P ladder at A = 0.05, which extends the §3 issue; C-3873 times out at seven A. Its numbers replace 02's and 02b's
 as the campaign's measurement of the one-loop law. No issue opened or closed.)* *(2026-11-06: the campaign reviewed before 03 (README §8.11):
 ready, with three stale items noted for 04–06. The planner proposed P27–P32 for the store, the defaults unless the user
-says otherwise: the drain-model key on `alpha_value` (U8), with `fixed` where no model is named. Prompt 03 written.)*
+says otherwise: the drain-model key on `alpha_value` (U8), with `fixed` where no model is named. Prompt 03 written.)* *(2026-11-06: prompt 03
+landed; the Store gate holds. The drain-model key, the bounce table, the history's drain record and the sample masses are stored,
+`FINGERPRINT_FORMAT` 7 and `VERSION_LABEL` 2026.10.0; two issues closed (§4), none opened.)*
 
 The campaign replaces the fixed-α drain by a one-loop law, α_eff = min(α_cap, A·2.7/ℓ)·w_gate at a
 one-loop turnaround and zero at R ≤ 1, with the fixed law kept beside it, bitwise. It measures the law
@@ -60,7 +62,7 @@ The plan as first ruled had seven prompts (README §2), none written; the re-pla
 | 02b | [Measure over a wider A](02b-measure-wide-A.md) | inserted 2026-11-04 at the user's request: 02's thirty histories at A ∈ {0.05, 0.5, 1.5, 2, 5, 10}, both gap prescriptions; 02's lines reused after a reproduction check; S2 generalised; the first impact's drained fraction and the cap; the handover for U14 at nine A | Opus | ✅ | ✅ | `cc1f449` | [02b](logs/02b-measure-wide-A.md) |
 | 02c | [The measured law](02c-the-measured-law.md) | inserted 2026-11-05 (README §8.10): the adopted law in `ScalarHistory.py`, replacing 2.7/ℓ and both gap prescriptions; S(L); U15 (b), L = ln(1 + E/V₀) at every n; the `"drain"` record names the model version and records L and ln R; `--gap-prescription` removed; the reproduction of crossover's adopted-law maps | Opus | ✅ | ✅ | `18add05` | [02c](logs/02c-the-measured-law.md) |
 | 02d | [Measure the measured law](02d-measure-the-measured-law.md) | inserted 2026-11-05: 02's thirty histories re-tuned under the measured law at U14's eight A, every task run (no shortcuts); regime shares, the law's edges, parking, the first impact and the cap, ΔN_eff, Y_p, D/H, against 02/02b and the fixed law; the cost of the classical drains; replaces 02's and 02b's one-loop measurements | Opus | ✅ | ✅ | `98b1601` | [02d](logs/02d-measure-the-measured-law.md) |
-| 03 | [The store](03-the-store.md) | the drain-model key on `alpha_value` (U8, README §8.10 decision 1, P27), `ScalarHistoryBounce` under the one-loop law (P29), the history columns (regime shares, counts, ℓ_min, the all-generation margins; P30), the sample masses at every law (U5, P31), the guard (P28), `FINGERPRINT_FORMAT` 7, `VERSION_LABEL` 2026.10.0; closes two §3 issues | Opus | ✅ | ⬜ | | |
+| 03 | [The store](03-the-store.md) | the drain-model key on `alpha_value` (U8, README §8.10 decision 1, P27), `ScalarHistoryBounce` under the one-loop law (P29), the history columns (regime shares, counts, ℓ_min, the all-generation margins; P30), the sample masses at every law (U5, P31), the guard (P28), `FINGERPRINT_FORMAT` 7, `VERSION_LABEL` 2026.10.0; closes two §3 issues | Opus | ✅ | ✅ | this commit | [03](logs/03-the-store.md) |
 | 04 | Drivers and exports | the law's options in `main.py` and the plot scripts; `histories.csv`, `fields.csv`, `bounces.csv` | Sonnet | ⬜ | ⬜ | | |
 | 05 | Derivation tool | `quanta_spectrum.py` and `tools/quanta_measures.py`: n_g, n̄_j, δ_stim, E, phase slip, backreaction ratio, the R·S(L) bound | Opus | ⬜ | ⬜ | | |
 | 06 | Rehearse | the fixed law base against tip, bitwise; the one-loop law interrupted and resumed, by value | Opus | ⬜ | ⬜ | | |
@@ -400,6 +402,12 @@ Noted, not acted on:
 | the four adopted-law maps reproduced and the control byte-identical (`.documents/one-loop-drain/law-02c/`); the tool route | 02c | ✅ (verification §2c) |
 | the re-measure scripts, `.documents/one-loop-drain/measure-02d/` (self-contained copies of 02's driver and task list with 02b's `first_impact`; the law checked against its record at every candidate; the cap and the law's edges by regime) | 02d | ✅ |
 | 02's 30 histories × U14's eight A, re-tuned under the measured law, every task run: 230 succeed, 3 fail, 7 time out (C-3873); the tool and determinism checks bitwise; α_eff equal to `drain_alpha_effective` at all 616 270 candidates; the handover for 03 and the user | 02d | ✅ (verification §2d) |
+| the drain-model key: `CosmologyConcepts/drain_model.py` (the leaf module), `alpha_value`'s pair and its own factory (P27, U8, decision 1) | 03 | ✅ |
+| `ScalarHistoryBounce` (P29), the bounce key and the pure builder, the gatherer split, `ledger_K_before` | 03 | ✅ |
+| the history's drain record, `DrainHistoryValues`, the all-generation margins (P30) | 03 | ✅ |
+| the sample masses at every law (U5, P31), the guard (P28), `compute_scalar_history`'s `drain_law` | 03 | ✅ |
+| `FINGERPRINT_FORMAT` 7, its golden; `VERSION_LABEL` 2026.10.0 (U12); the registry, drop group, sharding, batch size | 03 | ✅ |
+| the Store gate's scripts, `.documents/one-loop-drain/store-03/` (the fixed law key by key; the cost on six of 02d's histories) | 03 | ✅ (verification §3) |
 
 ## 2. The gates
 
@@ -410,7 +418,7 @@ Noted, not acted on:
 | Wide | 02's sample at 02b's six A, the reproduction check bitwise; regime shares, the first impact and the cap across nine A; the cost; the handover for U14 | 02b | ✅ 2026-11-04 (verification §2b.12): 360 tasks, 167 of 171 runs succeeding; every tuning at A = 0.5–10 succeeds, and P and W stay one-loop down to A = 0.05; at A = 10 the first impact drains 84–99% of the kinetic energy at laboratory M; 43 min, at most six workers |
 | Measured | the fixed law unchanged bitwise; the law equal to crossover's reference implementation at synthetic inputs; crossover's adopted-law maps reproduced candidate by candidate | 02c | ✅ 2026-11-05 (verification §2c.6): the goldens bitwise; the law bitwise equal to `fraction_adopted` on the grid but for the two ruled departures; every candidate row of the four maps equal, the control byte-identical, the headers' last digits the U15 (b) form of L (ruled); the tool route agrees |
 | Remeasure | the sample at U14's eight A under the adopted law, re-tuned; the failures stated; against 02/02b | 02d | ✅ 2026-11-05 (verification §2d.12): 240 tasks, every one run; 230 succeed, R-632 fails at A = 0.1 and 0.05 and the 5 × 10⁻²⁰ M_P ladder at 0.05 (02's two kinds), C-3873 times out at seven A; every P, W and B history builds at all eight A; at laboratory M the law moves ΔN_eff today by at most 0.011 from the old law; 3 h 08 min, six workers |
-| Store | the round trip exact, bounce rows in order; the fixed law and α = 0 write no bounce row; fingerprint format 7 beside 6 | 03 | ⬜ |
+| Store | the round trip exact, bounce rows in order; the fixed law and α = 0 write no bounce row; fingerprint format 7 beside 6 | 03 | ✅ 2026-11-06 (verification §3.5): the fixed law's payloads equal the parent's key by key but for the three new keys, the goldens pass; the round trip exact at three one-loop histories and constructed extremes (13 400 rows); format 7 beside 1–6, only `alpha_value`'s spec digest moved; median added time 0.0104 of the integration on six of 02d's histories |
 | Export | the new export columns equal the stored record; existing `histories.csv` columns byte-identical; the drivers refuse a mismatched law | 04 | ⬜ |
 | Derive | the derived measures against direct quadrature (10⁻⁶); peak-collapsed against the scoping probe's method | 05 | ⬜ |
 | Bitwise | the fixed law's tip build equal to the base's in every pre-existing column | 06 | ⬜ |
@@ -424,19 +432,6 @@ opened the same day, after the plan was ruled, from the drain probe (`source/dra
 At the re-plan the same day (README §8) one of those was split in two (§4), and the rest re-pointed at
 the new prompts.
 
-- **`[00-weighted-margins-hide-the-least-relativistic-generations]`** — the stored worst margins and
-  failing shares (`inelastic-reflection` 09) run over the generations holding at least 10⁻³ of
-  K(N_final) only, and the generations are not stored. In the low-α transition window at laboratory M
-  the others hold 80–98% of ρ_χ. Measured on two histories (serials 2188, 2197; β 1.06, 1.185, α 0.001):
-  tracker margin over all generations 7.3 and 1.6 against a stored 68.3 and 69.0; reflection margin
-  −17.5 and −20.4 against 17.9 and 17.5, with 0.92 and 0.84 of ρ_χ below zero against a stored failing
-  share of 0. **Impact:** the stored record understates exposure at later bounces wherever the
-  below-weight share is large (up to 0.98 at 4×10⁻³¹, 0.65 at β = 20); the expansion history is not
-  affected (matter-like excess ≤ 5×10⁻⁶ of ρ_χ). **Next:** closed by 02, when the all-generation values
-  and the generations are stored.
-  **Re-planned 2026-11-02** (README §8.3): the all-generation margins and the bounce rows are stored under
-  the one-loop law only (ruling 2), by 03, which closes this; under the fixed law the record stays as it
-  is, and 08 documents that.
 - **`[00-later-bounces-act-on-quanta-already-present]`** — a bounce is non-adiabatic for quanta with
   p ≪ ω_t, which the wall's mass makes of most of ρ_χ in the transition-window histories (the wall's
   mass is e²²–e⁵² above the between-bounce mass). It rescatters them and stimulates production into
@@ -458,21 +453,6 @@ the new prompts.
   on 02's and 06's histories: δ_stim, with rescattering bounded by it; documented by 08, and closed there
   if negligible under the one-loop law, otherwise left open as ruled. Under the fixed law it stays a
   documented limitation.
-- **`[00-fixed-alpha-drain-overstates-late-reflections]`** — opened 2026-11-02 (source
-  `drain-probe_2026-11-02.md`). A fixed α cannot follow the drain along the cascade or with M. At
-  α = 10⁻³ at laboratory M it underestimates the early one-loop drains (one loop: 0.08–0.26) and asks
-  the late classical bounces (R < 1) for occupations n ≫ 1 in their own band: in 2197, 61% of ρ_χ is born
-  at R < 1 with n > 1, against |β|² ≲ O(1) from one bounce (a fraction ~R e^{4ℓ} of E; R·S(L) on the
-  classical wall). Under α_eff = min(1, A·2.7/ℓ), zero at R ≤ 1, 2197 and 2188 park after 10–95 one-loop
-  bounces and r_χ rises 1–10× (2197's ΔN_eff 0.0064 → 0.061 at A = 1); at 10⁻¹² M_P nothing is drained
-  and ΔN_eff → 0 (3233: 0.335 → 0). **Impact:** the stored ρ_χ of the low-α laboratory-M histories is
-  dominated by an unphysical late drain, and the stored large-M ΔN_eff rests on drains far above what
-  a bounce can deliver; observable effects are below current bounds in the histories probed. **Next:**
-  the user's decisions, README §6.3 (1–4).
-  **Re-planned 2026-11-02:** this campaign's object (README §8). The one-loop law lands in 01; 03 closes
-  this when the gap prescription of record (U13) is fixed and the law's keys are stored. *(2026-11-04: U13
-  ruled, both kept and `zero` the default; 03 closes this when the law's keys, the prescription among them, are
-  stored.)*
 - **`[00-the-parking-leftover-has-no-spectrum]`** — the energy drained at the parking switch (up to
   0.10 of ρ_χ at 4×10⁻³¹, β 1.06–1.107; ≤ 0.03 elsewhere) has no peak estimate, so no margin and no
   wall-exposure measure covers it; it is reported only as `unassessed_share`. **Impact:** not measured.
@@ -557,6 +537,45 @@ the new prompts.
 None.
 
 ## 4. Resolved issues
+
+- **`[00-weighted-margins-hide-the-least-relativistic-generations]`** — the stored worst margins and
+  failing shares (`inelastic-reflection` 09) run over the generations holding at least 10⁻³ of
+  K(N_final) only, and the generations are not stored. In the low-α transition window at laboratory M
+  the others hold 80–98% of ρ_χ. Measured on two histories (serials 2188, 2197; β 1.06, 1.185, α 0.001):
+  tracker margin over all generations 7.3 and 1.6 against a stored 68.3 and 69.0; reflection margin
+  −17.5 and −20.4 against 17.9 and 17.5, with 0.92 and 0.84 of ρ_χ below zero against a stored failing
+  share of 0. **Impact:** the stored record understates exposure at later bounces wherever the
+  below-weight share is large (up to 0.98 at 4×10⁻³¹, 0.65 at β = 20); the expansion history is not
+  affected (matter-like excess ≤ 5×10⁻⁶ of ρ_χ). **Next:** closed by 02, when the all-generation values
+  and the generations are stored.
+  **Re-planned 2026-11-02** (README §8.3): the all-generation margins and the bounce rows are stored under
+  the one-loop law only (ruling 2), by 03, which closes this; under the fixed law the record stays as it
+  is, and 08 documents that.
+  **Closed 2026-11-06 by prompt 03** (this commit; `.documents/one-loop-drain-verification.md` §3): under the one-loop law
+  every generation is stored, as a row of `ScalarHistoryBounce` with its share, weight and three margins, and the history
+  stores the all-generation worst margins, their N and failing shares (`all_worst_*`, `all_*_failing_share`), taken from the
+  generations the core returns with the weight ignored. Under the fixed law the record stays as it is; 08 documents that.
+
+- **`[00-fixed-alpha-drain-overstates-late-reflections]`** — opened 2026-11-02 (source
+  `drain-probe_2026-11-02.md`). A fixed α cannot follow the drain along the cascade or with M. At
+  α = 10⁻³ at laboratory M it underestimates the early one-loop drains (one loop: 0.08–0.26) and asks
+  the late classical bounces (R < 1) for occupations n ≫ 1 in their own band: in 2197, 61% of ρ_χ is born
+  at R < 1 with n > 1, against |β|² ≲ O(1) from one bounce (a fraction ~R e^{4ℓ} of E; R·S(L) on the
+  classical wall). Under α_eff = min(1, A·2.7/ℓ), zero at R ≤ 1, 2197 and 2188 park after 10–95 one-loop
+  bounces and r_χ rises 1–10× (2197's ΔN_eff 0.0064 → 0.061 at A = 1); at 10⁻¹² M_P nothing is drained
+  and ΔN_eff → 0 (3233: 0.335 → 0). **Impact:** the stored ρ_χ of the low-α laboratory-M histories is
+  dominated by an unphysical late drain, and the stored large-M ΔN_eff rests on drains far above what
+  a bounce can deliver; observable effects are below current bounds in the histories probed. **Next:**
+  the user's decisions, README §6.3 (1–4).
+  **Re-planned 2026-11-02:** this campaign's object (README §8). The one-loop law lands in 01; 03 closes
+  this when the gap prescription of record (U13) is fixed and the law's keys are stored. *(2026-11-04: U13
+  ruled, both kept and `zero` the default; 03 closes this when the law's keys, the prescription among them, are
+  stored.)*
+  *(2026-11-05: the user adopted the measured law in place of 2.7/ℓ and both prescriptions, and ruled one versioned
+  drain-model key (README §8.10, decision 1).)*
+  **Closed 2026-11-06 by prompt 03** (this commit; `.documents/one-loop-drain-verification.md` §3): the law's key is stored.
+  `alpha_value` is the pair (value, `drain_model`), `"fixed"` or `"one-loop-measured-v1"`, so a history built under the
+  one-loop law is keyed apart from the fixed law's, and a later version of the law is a new key value.
 
 - **`[02b-the-one-loop-fraction-is-unreliable-at-small-ell]`** — opened 2026-11-04 by the orchestrator, at the user's
   request, after 02b (`cc1f449`).
@@ -748,3 +767,6 @@ changed): the same counts, all passing (log 02b §4).
 
 **2026-11-05, prompt 02d:** measured first at `f4da906`: 26, 594 (162 + 432), 130, 156, 68, all passing. After 02d (no code
 changed): the same counts, all passing (log 02d §4).
+
+**2026-11-06, prompt 03:** measured first on a worktree of `d3069cb`: 26, 594 (162 + 432), 130, 156, 68. After 03:
+26, 622 (190 + 432), 149, 156, 68, all passing (log 03 §4).

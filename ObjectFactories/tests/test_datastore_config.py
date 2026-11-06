@@ -51,7 +51,8 @@ EXPECTED_FACTORIES = [
     ("redshift", "sqla_redshift_factory", None),
     ("tolerance", "sqla_tolerance_factory", None),
     ("beta_value", "sqla_dimensionless_quantity_factory", "beta_value"),
-    ("alpha_value", "sqla_dimensionless_quantity_factory", "alpha_value"),
+    # a factory of its own since one-loop-drain prompt 03 (the pair value, drain_model); it keeps no ObjectType
+    ("alpha_value", "sqla_alpha_value_factory", None),
     ("M_value", "sqla_dimensionful_quantity_factory", "M_value"),
     ("temperature", "sqla_dimensionful_quantity_factory", "temperature"),
     ("phi_value", "sqla_dimensionful_quantity_factory", "phi_value"),
@@ -62,6 +63,8 @@ EXPECTED_FACTORIES = [
     ("ScalarHistory", "sqla_ScalarHistoryFactory", None),
     ("ScalarHistory_tags", "sqla_ScalarHistoryTagAssociation_factory", None),
     ("ScalarHistoryValue", "sqla_ScalarHistoryValue_factory", None),
+    # one-loop-drain prompt 03 (README §8.11 P29)
+    ("ScalarHistoryBounce", "sqla_ScalarHistoryBounce_factory", None),
     ("AdiabaticHistory", "sqla_AdiabaticHistoryFactory", None),
     ("AdiabaticHistory_tags", "sqla_AdiabaticHistoryTagAssociation_factory", None),
     ("AdiabaticHistoryValue", "sqla_AdiabaticHistoryValue_factory", None),
@@ -71,7 +74,13 @@ EXPECTED_FACTORIES = [
 ]
 
 EXPECTED_DROP_GROUPS = {
-    "scalar-history": ["ScalarHistory_tags", "ScalarHistoryValue", "ScalarHistory"],
+    # ScalarHistoryBounce since one-loop-drain prompt 03, before ScalarHistory
+    "scalar-history": [
+        "ScalarHistory_tags",
+        "ScalarHistoryValue",
+        "ScalarHistoryBounce",
+        "ScalarHistory",
+    ],
     "adiabatic-history": [
         "AdiabaticHistory_tags",
         "AdiabaticHistoryValue",
@@ -95,6 +104,8 @@ EXPECTED_SERIAL_BATCH_SIZES = {
     "IntegrationSolver": 6,
     "ScalarHistory": 20,
     "ScalarHistoryValue": 250,
+    # one-loop-drain prompt 03 (P7)
+    "ScalarHistoryBounce": 250,
     "AdiabaticHistory": 20,
     "AdiabaticHistoryValue": 250,
     "BBNData": 20,

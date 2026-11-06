@@ -212,6 +212,16 @@ class TestAlphaZeroIsTheOldCode(unittest.TestCase):
             stack.enter_context(
                 mock.patch.object(SM, "integrate_scalar_history", capturing)
             )
+            # the sample masses (one-loop-drain prompt 03, U5) call log_m_eff_squared at every sample, after the
+            # integration and at every alpha by design; they are left out here, so that the count is the
+            # integration's
+            stack.enter_context(
+                mock.patch.object(
+                    SM,
+                    "sample_masses",
+                    lambda m, c, s: ((None,) * len(s), (None,) * len(s)),
+                )
+            )
             data = gh.run_history(1.5)
         result = captured[-1]
 
