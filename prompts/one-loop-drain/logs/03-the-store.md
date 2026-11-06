@@ -1,7 +1,7 @@
 # Log 03 — the store
 
 **Subject:** Store the one-loop drain law: the drain-model key, bounce rows and masses
-**Commit:** this commit, on branch `one-loop-drain`, on top of `d3069cb`
+**Commit:** `fe4c917`, on branch `one-loop-drain`, on top of `d3069cb`
 **Date:** 2026-11-06, by Claude Opus 5.5
 **Result:** **COMPLETE.** The Store gate holds (`.documents/one-loop-drain-verification.md` §3.5).
 - **The key.** `alpha_value` is the pair (value, `drain_model`): `"fixed"` (α) or `"one-loop-measured-v1"` (A). A lookup that
@@ -219,7 +219,7 @@ The tools and RunDrivers rows are a second run with the checkout's `venv` linked
 in the worktree read the repository root (the run registry's `var/runs`, the script's path), and pass in the main
 checkout's after-chain, unchanged.
 
-After, on this commit's tree (a first after-chain at 01:16–01:34 failed `test_gate_and_taper` and `test_parking`'s α = 0
+After, on `fe4c917`'s tree (a first after-chain at 01:16–01:34 failed `test_gate_and_taper` and `test_parking`'s α = 0
 call-count tests and errored `test_outward_step_scan`'s five store-comparison tests, which led to §2.1's last three
 changes; this second chain is the record):
 

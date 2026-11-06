@@ -1330,7 +1330,7 @@ and `numerical-strategies.md`, notes of 2026-11-06); §1–§2d above are unchan
 [`one-loop-drain/store-03/out/`](one-loop-drain/store-03/out/): `fixed_law.txt`, `cost.txt`. **Raw output** (not
 committed): `var/one-loop-drain/03/`:
 - `fixed_law_base.json`, `fixed_law_tip.json`: the three fixed-law payloads, key by key, at `d3069cb` (a scratch
-  worktree, removed afterwards) and at this commit's tree;
+  worktree, removed afterwards) and at `fe4c917`'s tree;
 - `<id>.result.json`, `<id>.log`, `<id>.pid`, `<id>.done` for each of §3.4's six histories, and `stores/<id>/{full,
   base}/`, their temporary stores.
 
@@ -1359,7 +1359,7 @@ The tools and RunDrivers rows are a second run with the checkout's `venv` linked
 in the worktree read the repository root (the run registry's `var/runs`, the script's path), and pass in the main
 checkout's after-chain, unchanged.
 
-and after the change, on this commit's tree:
+and after the change, on `fe4c917`'s tree:
 
 | suite | count | time | load at start |
 |---|---|---|---|
