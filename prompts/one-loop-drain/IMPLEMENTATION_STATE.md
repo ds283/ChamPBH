@@ -64,7 +64,7 @@ The plan as first ruled had seven prompts (README §2), none written; the re-pla
 | 02d | [Measure the measured law](02d-measure-the-measured-law.md) | inserted 2026-11-05: 02's thirty histories re-tuned under the measured law at U14's eight A, every task run (no shortcuts); regime shares, the law's edges, parking, the first impact and the cap, ΔN_eff, Y_p, D/H, against 02/02b and the fixed law; the cost of the classical drains; replaces 02's and 02b's one-loop measurements | Opus | ✅ | ✅ | `98b1601` | [02d](logs/02d-measure-the-measured-law.md) |
 | 03 | [The store](03-the-store.md) | the drain-model key on `alpha_value` (U8, README §8.10 decision 1, P27), `ScalarHistoryBounce` under the one-loop law (P29), the history columns (regime shares, counts, ℓ_min, the all-generation margins; P30), the sample masses at every law (U5, P31), the guard (P28), `FINGERPRINT_FORMAT` 7, `VERSION_LABEL` 2026.10.0; closes two §3 issues | Opus | ✅ | ✅ | `fe4c917` | [03](logs/03-the-store.md) |
 | 04 | [Drivers and exports](04-drivers-and-exports.md) | `--A-values` in `main.py` and the plot scripts, beside `--alpha-values` (P33, P34); the one-loop paths and labels (P35); `drain_model` and the drain record in `histories.csv` (P36), the sample masses in `fields.csv` (P37), a new `bounces.csv` (P38); the raw-SQL readers of `alpha_value` and the inventory report's label (P39); the registered run's scope (P40) | Sonnet | ✅ | ✅ | `64a6274` | [04](logs/04-drivers-and-exports.md) |
-| 05 | [Derivation tool](05-derivation-tool.md) | `ComputeTargets/quanta_spectrum.py` (U4's shape, its moments and the kernels G and Ω; P41) and `tools/quanta_measures.py` reading 04's exports alone (P42): K(N) rebuilt from the bounce rows (P43); n_g, n̄_j, δ_stim, E(N), the phase slip and the backreaction ratio (P44); three outputs for 07 (P45); the associated piece at 0, 1 and 10 (P46); run on 02d's 230 successes (P47); the Derive gate (P48); the R·S(L) bound dropped (README §8.13) | Opus | ✅ | ✅ | this commit | [05](logs/05-derivation-tool.md) |
+| 05 | [Derivation tool](05-derivation-tool.md) | `ComputeTargets/quanta_spectrum.py` (U4's shape, its moments and the kernels G and Ω; P41) and `tools/quanta_measures.py` reading 04's exports alone (P42): K(N) rebuilt from the bounce rows (P43); n_g, n̄_j, δ_stim, E(N), the phase slip and the backreaction ratio (P44); three outputs for 07 (P45); the associated piece at 0, 1 and 10 (P46); run on 02d's 230 successes (P47); the Derive gate (P48); the R·S(L) bound dropped (README §8.13) | Opus | ✅ | ✅ | `9830738` | [05](logs/05-derivation-tool.md) |
 | 06 | Rehearse | the fixed law base against tip, bitwise; the one-loop law interrupted and resumed, by value | Opus | ⬜ | ⬜ | | |
 | 07 | Figure tools | the grid figure and the per-history figure | Sonnet | ⬜ | ⬜ | | |
 | 08 | Close | the verification document, the law and measures for the paper, the handover for the rebuild, the indexes | Opus | ⬜ | ⬜ | | |
@@ -81,6 +81,7 @@ Orchestrator notes, one prompt at a time, in `orchestrator/`:
 - [`prompt-02d.md`](orchestrator/prompt-02d.md) (`f4da906`) — used for 02d.
 - [`prompt-03.md`](orchestrator/prompt-03.md) (`d3069cb`) — used for 03.
 - [`prompt-04.md`](orchestrator/prompt-04.md) (`8df05c1`) — used for 04.
+- [`prompt-05.md`](orchestrator/prompt-05.md) (`88c6ae5`) — used for 05.
 
 **Orchestrator review of prompt 01 (2026-11-03)**, by orchestrator note 01 §3, on `b99f6a4`. Passed; seven
 checks:
@@ -499,6 +500,80 @@ Noted, not acted on:
 - **`plot_ScalarHistory.py` kept `pandas` and `nan`**, which the moved code no longer uses (log §6). Removed in a
   housekeeping commit after this review.
 - **Two copies of `_law_alpha`** (`tools/history_and_bbn.py`, `tools/bbn_from_store.py`; log §6).
+
+**Orchestrator review of prompt 05 (2026-11-06)**, by orchestrator note 05 §3, on `9830738`. Passed; seven checks.
+Before dispatch the orchestrator found that U4's associated piece, 49 x_*³/x at every x, makes I diverge, and put its
+upper end to the user, who chose the 1/x piece to x_p, falling above it as e^{−κ(x − x_p)} (U17, README §8.13; note 05,
+ruling 1). The agent stopped once on a usage limit after §1.6's run had ended, and was resumed from its transcript;
+nothing ran in between. No stop condition was raised.
+
+1. **Scope.**
+   - `git show --stat 9830738` lists 27 files, ruling 12's. Its parent is `88c6ae5`, the note's.
+   - The tree was clean, and nothing is pushed.
+   - Under `ComputeTargets/` only `quanta_spectrum.py` and its test are new, and nothing under `ObjectFactories/`
+     changes. `FINGERPRINT_FORMAT` is 7 and `VERSION_LABEL` 2026.10.0. `plot_ScalarHistory.py`'s diff is the helper's
+     two lines and its import.
+   - No pid recorded under `var/one-loop-drain/05/` answers `kill -0`, and nothing under `var/one-loop-drain/0[1-4]*/`
+     is newer than the note.
+2. **The suites, re-run by me** serially, 15:27–15:45, at loads of 4.6–17.7 at their starts: 26 (67 s), 665 (219 in
+   155 s + 446 in 478 s), 163 (130 s), 191 (210 s) and 72 (25 s), all passing. These are the counts the log states,
+   and none fell.
+3. **The spectrum, independently.** A scratch script of mine, with its own shape and SciPy's adaptive quadrature on
+   panels split at x_p, at y and at x_p e^u:
+   - κ = 3.9657820823215935, equal to the module's bit for bit;
+   - I and J within 8 × 10⁻¹⁶ at c_a = 0, 1 and 10;
+   - G within 4.7 × 10⁻¹² and Ω within 2.25 × 10⁻⁹ at random points inside the tables, between nodes, at their ends
+     and a decade beyond, at the three scales; the quadrature's own error estimate is below 2 × 10⁻¹³.
+4. **The measures, independently.** A second script of mine reads bounces.csv, fields.csv and histories.csv and
+   computes K(N), ln n_g, n̄, δ_stim, E with both masses, the phase slip, k_ex/H and the backreaction ratio by its own
+   arithmetic. E uses a fixed Gauss–Legendre quadrature over the full spectrum, without the tables.
+   - **P-2197 at A = 1:** every measure within 4.2 × 10⁻⁸ of the tool's; K(N) equal, the leftover after the last
+     candidate included.
+   - **The worst Ω of my fixed quadrature.** It has no break at x_p e^u, and on the larger histories it reached
+     2 × 10⁻⁶ in n̄. Against my adaptive quadrature the module's Ω is within 6.3 × 10⁻¹¹ over the whole u range of
+     C-3016-A0.05 (0.01 to 21). With the module's Ω in my sum, n̄ and δ_stim agree to 5 × 10⁻¹⁵. That holds on
+     C-3016-A0.05 (parking share 0.999993) at the three scales, on L-M1e-16-A0.5 (11 158 generations, the largest
+     δ_stim) and on C-3873-A1 (no parking), and E agrees to 10⁻¹⁵ on each.
+   - **One phase slip differs by 5.6 × 10⁻⁵** (L-M1e-16-A0.5, ordinal 7434: slip 2.44 rad against θ ≈ 10¹⁰, with
+     exponents up to 130 in magnitude). That is within the formula's own conditioning, about 130 ε θ/slip ≈ 10⁻⁴.
+   - **The bracketed leftover,** which no history of 02d has, I probed on `KHistory` with constructed rows. K steps at
+     each drain, the leftover is placed at the cut candidate, and E is blank where K = 0 or the mass is None.
+5. **§2.2, independently.** My own `ast` extraction of `excess`, run on a fresh `one_loop_payload` of P-2197, against
+   the tool's `matter_excess` with `PEAK_SPECTRUM` on the agent's export of the same integration:
+   - 3 081 samples compared for each mass, worst 2.38 ε (field) and 2.52 ε (tracker), every one inside the note's
+     tolerance;
+   - 1 914 matched blanks where K = 0;
+   - my own cancellation-free peak E within 6 × 10⁻¹⁶ of the tool's.
+6. **The run.**
+   - 230 results, none in error. Each one's candidates equal 02d's, its fields and bounce rows read back equal, and its
+     temporary store is deleted.
+   - The merged histories.csv's 230 rows are the parts' rows, in `write_histories_csv`'s order.
+   - Each A's directories number its 02d successes (27, 28, 29, 30, 29, 29, 29, 29).
+   - The tool, re-run at c_a = 1 on a copy of the export root, wrote 461 files byte-identical to the agent's (52.7 s,
+     exit 0).
+   - The headline figures of the report are what the files give: δ_stim 2.2 × 10⁻⁷⁵ to 1.34 × 10⁻³ (median
+     3.5 × 10⁻¹⁷); n̄ > 1 in 33 histories, up to 9.0 × 10³¹; E_field ≤ 5.4 × 10⁻²⁰ and E_tracker ≤ 7.2 × 10⁻¹⁶; slips
+     below 1 rad in 15; the backreaction maximum 1.8 × 10³; the K check's largest difference 1.46 × 10⁻¹¹; δ_stim's
+     ratios 5.6 × 10⁻⁸ to 1 at c_a = 0 and 1 to 10 at c_a = 10.
+7. **The records.**
+   - The log follows the template, and classes every deviation and each of note 05's rulings. Its §7 gives 07 the
+     format and 06 the command.
+   - The agent widened ruling 6's K-check tolerance to cover the conditioning of K_final = K_last/(1 − parking_share),
+     which is 1.4 × 10⁵ ε at a parking share of 0.999993. That is right, and logged as STRUCTURALLY REQUIRED.
+   - Verification §1–§4 are unchanged; §5 follows prompt §2 and §1.6.
+   - On the board: row 05, its items, the Derive gate, the narrowing of `[00-later-bounces-act-on-quanta-already-present]`
+     and **Last updated**. `.documents/OPEN_ISSUES.md`'s row matches it, at 29 open.
+   - `CLAUDE.md`'s counts are those measured.
+   - `architecture-summary.md` and `numerical-strategies.md` have their dated notes, U17's end in the latter.
+
+   The review substituted `9830738` for "this commit" on the board and in the log, added note 05 to the list of notes,
+   and updated `prompts/INDEX.md`'s row.
+
+Noted, not acted on:
+- **The probe's cancellation was not exercised** by §2.2 (log §6): on P-2197 every y is below e^{−20}, where the probe
+  takes its 0.5 x² branch.
+- **The random-phase reading fails where n̄ > 1** (33 histories) and where the slip is below 1 rad (15; log §6). These
+  are measurements (P49), recorded in the issue's narrowing, for 08 to document.
 
 **Open for the user, with 02's measurements (2026-11-03;
 [verification §2.9](../../.documents/one-loop-drain-verification.md)):**

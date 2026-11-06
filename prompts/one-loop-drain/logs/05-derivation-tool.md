@@ -1,7 +1,7 @@
 # Log 05 — the derivation tool
 
 **Subject:** Add the spectrum model and the derivation tool, run on 02d's sample
-**Commit:** this commit, on branch `one-loop-drain`, on top of `88c6ae5`
+**Commit:** `9830738`, on branch `one-loop-drain`, on top of `88c6ae5`
 **Date:** 2026-11-06, by Claude Opus 5.5
 **Result:** **COMPLETE.** The Derive gate holds (`.documents/one-loop-drain-verification.md` §5.8).
 - **The spectrum module.** `ComputeTargets/quanta_spectrum.py`, pure: U4's shape for every generation (U16) with U17's
@@ -188,7 +188,7 @@ Item by item in verification §5.8:
 (The first CosmologyModels and ComputeTargets `test_[a-f]` runs, at 11:56–11:59, were not captured whole; the rows above are their
 re-runs. ObjectFactories, tools and RunDrivers ran with the helper's edit in the tree: §2, last group.)
 
-After, on this commit's tree, serially, 15:07–15:25, the machine shared:
+After, on `9830738`'s tree, serially, 15:07–15:25, the machine shared:
 
 | suite | count | time | load at start |
 |---|---|---|---|
