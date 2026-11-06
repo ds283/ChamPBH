@@ -414,6 +414,45 @@ at `φ < 0` above that (audit §3.5); it is gone.
 >   `relativistic_margins(*margin_inputs(...))`, and `integrate_history` calls the two itself to keep the inputs for the
 >   bounce rows. The core runs once and no model call is added.
 
+> **Note, 2026-11-06 (`one-loop-drain`, prompt 05): the spectrum model, its kernels and the derived measures.** The
+> verification is `one-loop-drain-verification.md` §5. Nothing of the integration or the store moves: the spectrum is
+> outside the integrator (`ComputeTargets/quanta_spectrum.py`, pure), and its measures are computed from 04's exports by
+> `tools/quanta_measures.py`, so that a better spectrum is a re-run of the tool, not a rebuild.
+> - **The shape** (`SPECTRUM_MODEL = "U4-U17-v1"`; README §6.1 U4, §8.13 U16 and U17), in units of each generation's
+>   k_ex, for every generation whatever its estimate: s = s_dir + c_a s_assoc, s_dir = x² for x ≤ x_p and
+>   x_p² e^{−κ(x − x_p)} above; s_assoc = 49 x_*³/x for x ≤ x_p and 49 x_*³/x · e^{−κ(x − x_p)} above. The upper end of
+>   the 1/x piece is the user's ruling U17 (2026-11-06): as U4 wrote it, x³ s_assoc = 49 x_*³ x² and I diverges; it now
+>   falls with the direct piece's κ above x_p, and carries 2.95 × 10⁻⁵ of I at c_a = 1. s is continuous at x_p and
+>   s(x_*) = 50 s_dir(x_*) at c_a = 1. c_a is 1 by default (P46); the tool reports 0 and 10 beside it.
+> - **The constants and their sources.** x_p = 0.62 (`production_energy_ratio.tex`, §"Results" and Table "One reflection
+>   off V₀e^{M/φ}": k_peak = 0.31 ω_t, with k_ex = ω_t/2). κ is fitted to the same section's "falls exponentially, to
+>   about 10⁻²⁰ at k = 5 ω_t" and the Table's peak values: κ_L = ln(|β|²_max,L/10⁻²⁰)/(10 − x_p), which gives 4.1334,
+>   4.0178, 3.9658, 3.9235 and 3.8821 at L = 40, 70, 90, 110 and 134; the module takes the median row, L = 90,
+>   κ = 3.96578. (The note's script, `beta_k_reflection.py`, is not in `BriefingNotes/scripts/`.) x_* = 0.0058 and the
+>   49 = 50 − 1 are `kb_partB_report.tex`, §"The soft occupation": n_q at q = 0.0029 ω_t is fifty times the test field's.
+> - **Moments in closed form:** M_k = x_p^{k+3}/(k+3) + x_p² T_k + C (x_p^k/k + T_{k−1}), T_k = Σ_j C(k, j)
+>   x_p^{k−j} j!/κ^{j+1}, C = 49 c_a x_*³; I = M_3 = 0.0930072 and J = M_2/M_3 = 1.05604 at c_a = 1 (0.0930044 and
+>   1.05603 at 0; 0.0930319 and 1.05614 at 10).
+> - **The kernels**, G(y) = ∫x³s[√(1 + y²/x²) − 1]dx/I and Ω(u) = ∫x³ s(x) s(x e^{−u}) dx/I, are tabulated on first use
+>   per c_a: ln G on ln y ∈ [ln 10⁻³, ln 50] with step 0.01, ln Ω on u ∈ [0, 4] with step 0.005, each node by composite
+>   20-point Gauss–Legendre split at x_p (and x_p e^u), and a not-a-knot cubic spline between nodes (0.2 s per scale).
+>   Ω(u) = e^{4u} Ω(−u) exactly, so the table serves u < 0.
+> - **The asymptotes beyond the tables**, with every term needed for 10⁻⁷ at the table's end (orchestrator note 05,
+>   ruling 3): G I = M_1 y²/2 − C y³/3 + B_4 y⁴ as y → 0 (the y³ term is the region x ≲ y of the 1/x piece, needed at
+>   c_a = 10, absent at 0; B_4 = −(1/8)∫s_dir/x + C/8x_p − (C/8)e^{κx_p}E_2(κx_p)/x_p; left out O(y⁶ ln y));
+>   G I = M_2 y − M_3 + M_4/2y − M_6/8y³ + M_8/16y⁵ as y → ∞ (the −1 is exact and needed: 1.9 × 10⁻² at y = 50); Ω I =
+>   e^{−2u} M_5 + C e^u M_2 above u = 4, exact but for a term of order e^{−κ x_p e^u} = e^{−134} there.
+> - **The accuracy measured** (`derive-05/kernels_05.py`, against scipy's adaptive quad split at x_p and at y or x_p e^u,
+>   whose stated error is below 5 × 10⁻¹⁴): G within 8.1 × 10⁻¹² inside its table and 5.6 × 10⁻¹¹ to four decades beyond;
+>   Ω within 2.3 × 10⁻⁹ inside (the largest at the first midpoint, u = 0.0025, where Ω's third derivative jumps) and
+>   8.4 × 10⁻¹⁵ beyond; the moments within 4.4 × 10⁻¹⁶; at c_a = 1, 0 and 10 alike.
+> - **The measures** (`tools/quanta_measures.py`), in float64: the occupation at birth ln n_g = ln(2π²ΔK_g/Q_g⁴I) + ln s(x_p);
+>   the overlap n̄_j = Σ_{N_g < N_j} A_g Ω(ln Q_g/Q_j), untruncated, O(G²) evaluations; δ_stim = Σ_j 2 n̄_j ΔK_j/K_final;
+>   E(N) = Σ_{N_g ≤ N} ΔK_g G((N + ln m) − ln Q_g)/K(N) for the field's and the tracker's mass; the phase slip of
+>   `phase_slip.py`; the backreaction ratio n_χ a³ e^{−3N_k} m_k/E_k with n_χ a³ = Σ ΔK_g J/Q_g. K(N) is rebuilt from the
+>   bounce rows and checked at every sample against r_χ ρ_R,E e^{4N} to 10⁻⁹ relative (the leftover after the last
+>   candidate is K_last/(1 − parking_share), which loses about parking_share/(1 − parking_share) ulps).
+
 The reflection is a *model*, not a fallback, and it has two guards (log 01):
 
 - **G1.** The potential must declare `reflects_at_origin` (new on `AbstractPotential`, default

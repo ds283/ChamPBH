@@ -79,6 +79,7 @@ from extract_common import (
     add_ScalarHistory_labels,
     alpha_path,
     build_fields_frame,
+    history_directory,
     plot_dark_radiation,
     write_bounces_csv,
     add_redshift_xaxis_labels,
@@ -1394,8 +1395,8 @@ def plot_ScalarHistory(
     base_path = alpha_path(
         base_path / f"{model_label}", model.alpha.value, model.alpha.drain_model
     )
-    plot_path = base_path / f"plots/beta={beta:.5g}/M={M/units.eV:.5g}eV_n={n}"
-    csv_path = base_path / f"csv/beta={beta:.5g}/M={M/units.eV:.5g}eV_n={n}"
+    plot_path = base_path / f"plots/{history_directory(beta, M / units.eV, n)}"
+    csv_path = base_path / f"csv/{history_directory(beta, M / units.eV, n)}"
 
     def get_x_coord(value: ScalarHistoryValue) -> float:
         if x_coord == "efolds":

@@ -1,0 +1,48 @@
+SPECTRUM_MODEL 'U4-U17-v1'; associated end: 1/x to x_p, then e^{-kappa (x - x_p)} (U17)
+x_p = 0.62, x_* = 0.0058, coefficient 49.0 (50 - 1)
+kappa_L = ln(|beta|^2_max,L / 1e-20) / (10 - x_p):
+  L =  40: |beta|^2_max = 0.000689, kappa = 4.133414986453124
+  L =  70: |beta|^2_max = 0.000233, kappa = 4.017828332140974
+  L =  90: |beta|^2_max = 0.000143, kappa = 3.9657820823215935
+  L = 110: |beta|^2_max = 9.62e-05, kappa = 3.923520326182121
+  L = 134: |beta|^2_max = 6.52e-05, kappa = 3.88205232098606
+  taken: L = 90 (the median row), kappa = 3.9657820823215935; spread 3.8821-4.1334
+grids: ln y in [ln 0.001, ln 50] step 0.01; u in [0, 4.0] step 0.005 (u < 0 by Omega(u) = e^(4u) Omega(-u))
+
+==== c_a = 1 (C = 9.560487999999998e-06) ====
+tables built: G 0.013 s, Omega 0.164 s
+I = 0.09300715800293864 (quad 0.09300715800293867, rel diff -3.33e-16, stated 1.1e-14); J = 1.0560436029665003 (quad 1.0560436029664997, rel diff 6.66e-16, stated 2.2e-14)
+M_1..M_10: largest rel diff against quad 4.44e-16
+G inside:  2165 points, largest rel diff 8.10e-12 at ln y = 0.0071; quad's stated error <= 3.8e-14
+G beyond:   400 points, largest rel diff 1.58e-11 at ln y = -11.5129; quad's stated error <= 3.7e-14
+Omega inside:  2001 points, largest rel diff 2.25e-09 at u = 0.0025; quad's stated error <= 4.3e-14
+Omega beyond:   200 points, largest rel diff 4.44e-15 at u = -7.4000; quad's stated error <= 1.1e-14
+G small-y at y = 0.001: leading M_1 y^2/2I = 6.531037e-07; y^3 term -5.25e-08, y^4 term -6.39e-07 relative; series against quad -7.11e-12 (left out: O(y^4 ln y) relative, 6.6e-12)
+G large-y at y = 50: leading M_2 y/I = 5.280218e+01; -1, M_4/2y, -M_6/8y^3, M_8/16y^5 relative: -1.89e-02, +2.11e-04, -4.25e-08, +3.04e-11; series against quad +4.42e-14 (left out <= 5 M_10/128 y^7 I = 4.4e-14 relative)
+Omega large-u at u = 4: C e^u M_2/I = 5.5124e-04, e^(-2u) M_5/I = 4.9018e-04; series against quad +1.78e-15 (left out of order e^(-kappa x_p e^u) = e^(-134))
+
+==== c_a = 0 (C = 0.0) ====
+tables built: G 0.014 s, Omega 0.164 s
+I = 0.09300441145732584 (quad 0.09300441145732585, rel diff -1.11e-16, stated 1.1e-14); J = 1.0560324249819 (quad 1.0560324249818998, rel diff 2.22e-16, stated 2.2e-14)
+M_1..M_10: largest rel diff against quad 4.44e-16
+G inside:  2165 points, largest rel diff 8.10e-12 at ln y = -0.0029; quad's stated error <= 3.8e-14
+G beyond:   400 points, largest rel diff 5.95e-12 at ln y = -6.9538; quad's stated error <= 1.1e-14
+Omega inside:  2001 points, largest rel diff 2.25e-09 at u = 0.0025; quad's stated error <= 4.3e-14
+Omega beyond:   200 points, largest rel diff 8.44e-15 at u = -12.6000; quad's stated error <= 1.1e-14
+G small-y at y = 0.001: leading M_1 y^2/2I = 6.530782e-07; y^3 term -0.00e+00, y^4 term -6.39e-07 relative; series against quad -7.11e-12 (left out: O(y^4 ln y) relative, 6.6e-12)
+G large-y at y = 50: leading M_2 y/I = 5.280162e+01; -1, M_4/2y, -M_6/8y^3, M_8/16y^5 relative: -1.89e-02, +2.11e-04, -4.25e-08, +3.04e-11; series against quad +4.42e-14 (left out <= 5 M_10/128 y^7 I = 4.4e-14 relative)
+Omega large-u at u = 4: C e^u M_2/I = 0.0000e+00, e^(-2u) M_5/I = 4.9018e-04; series against quad +0.00e+00 (left out of order e^(-kappa x_p e^u) = e^(-134))
+
+==== c_a = 10 (C = 9.560487999999998e-05) ====
+tables built: G 0.014 s, Omega 0.168 s
+I = 0.09303187691345381 (quad 0.09303187691345383, rel diff -1.11e-16, stated 1.1e-14); J = 1.056144175127589 (quad 1.0561441751275888, rel diff 2.22e-16, stated 2.2e-14)
+M_1..M_10: largest rel diff against quad 4.44e-16
+G inside:  2165 points, largest rel diff 8.10e-12 at ln y = -0.0029; quad's stated error <= 3.8e-14
+G beyond:   400 points, largest rel diff 5.55e-11 at ln y = -12.7103; quad's stated error <= 3.8e-14
+Omega inside:  2001 points, largest rel diff 2.25e-09 at u = 0.0025; quad's stated error <= 4.3e-14
+Omega beyond:   200 points, largest rel diff 4.00e-15 at u = -14.0000; quad's stated error <= 1.1e-14
+G small-y at y = 0.001: leading M_1 y^2/2I = 6.533335e-07; y^3 term -5.24e-07, y^4 term -6.38e-07 relative; series against quad -7.10e-12 (left out: O(y^4 ln y) relative, 6.6e-12)
+G large-y at y = 50: leading M_2 y/I = 5.280721e+01; -1, M_4/2y, -M_6/8y^3, M_8/16y^5 relative: -1.89e-02, +2.11e-04, -4.24e-08, +3.04e-11; series against quad +4.42e-14 (left out <= 5 M_10/128 y^7 I = 4.3e-14 relative)
+Omega large-u at u = 4: C e^u M_2/I = 5.5129e-03, e^(-2u) M_5/I = 4.9013e-04; series against quad -4.44e-16 (left out of order e^(-kappa x_p e^u) = e^(-134))
+
+RESULT: holds (every difference below 1e-6, every asymptote within 1e-7 at its end)

@@ -1,0 +1,215 @@
+== 1. the tasks ==
+tasks 230, workers 5, results 230, failures 0
+step 2: candidates equal to 02d by repr 230 of 230; samples equal to 02d's count 230; fields.csv rows = samples 230; bounces.csv rows = rows read = stored = bounce_rows 230; store deleted 230; stores left 0
+candidates over the run 82139; samples 1299063
+
+== 2. the walls ==
+the run: 1601 s (26.7 min)
+  integrate        sum   6821.6 s, median    4.28 s, max   981.3 s
+  store            sum    429.5 s, median    1.81 s, max     3.6 s
+  export           sum     55.4 s, median    0.15 s, max     3.5 s
+  readback_delete  sum      0.8 s, median    0.00 s, max     0.0 s
+integration wall / 02d's per-integration wall: median 1.02, min 0.36, max 1.31
+largest: L-M5e-20-A0.1 integrate 981 s (02d 1079 s)
+peak RSS: largest 1.26 GiB (L-M1e-16-A0.5); median 0.25 GiB
+one-minute loads at the children's starts and ends: 2.84-40.00
+
+== 3. the merge ==
+{"records": 230, "merged_rows": 230, "header_equal": true, "rows_equal_as_multisets": true}
+
+== 4. the tool ==
+c_a = 1: quanta_measures (U4-U17-v1, assoc scale 1): measured 230, skipped as fixed-law 0, failed histories 0, missing files 0, refused 0, failed the K check 0; wall 53.0 s
+c_a = 0: quanta_measures (U4-U17-v1, assoc scale 0): measured 230, skipped as fixed-law 0, failed histories 0, missing files 0, refused 0, failed the K check 0; wall 50.7 s
+c_a = 10: quanta_measures (U4-U17-v1, assoc scale 10): measured 230, skipped as fixed-law 0, failed histories 0, missing files 0, refused 0, failed the K check 0; wall 51.9 s
+histories measured at c_a = 1: 230
+tool wall per history / its integration's: median 0.0319, max 0.119 (L-M1e-16-A0.05); largest tool wall 2.12 s (L-M5e-20-A0.1)
+the leftover's placement: {'after the last candidate': 221, 'none': 9}
+K check: largest relative difference 1.46e-11 (C-3016-A0.05); K_before + delta_K equal to the next K_before bit for bit at 81909 of 81909 pairs
+ruling 7: samples with K(N) = 0 and a generation born: 0 in 0 histories
+ruling 7: samples between a generation's N_turn and its N: 45 in 9 histories (largest (29, 'C-3873-A1'))
+ruling 8: histories with drains without a spectrum: 0: []
+
+== 5. at c_a = 1, per A and per group (median, maximum) ==
+-- A = 0.05 (27 histories)
+   delta_stim                 med 1.03e-05 max 0.000229 (n=27)
+   n_bar_max                  med 0.00952 max 4.23e+29 (n=27)
+   ln_n_g_max                 med -6.84 max 79.9 (n=27)
+   E_field_max                med 5.37e-38 max 2.75e-23 (n=27)
+   E_tracker_max              med 1.03e-33 max 7.19e-16 (n=27)
+   r_chi_E_field_max          med 4.77e-41 max 1.18e-33 (n=27)
+   r_chi_E_tracker_max        med 6.44e-37 max 1.05e-22 (n=27)
+   phase_slip_min_producing   min 9.94e-08 med 5.98e+22 max 7.12e+28 (n=27)
+   backreaction_max           med 0.0532 max 258 (n=27)
+-- A = 0.1 (28 histories)
+   delta_stim                 med 2.84e-07 max 0.000446 (n=28)
+   n_bar_max                  med 0.000353 max 8.98e+31 (n=28)
+   ln_n_g_max                 med -8.98 max 98.2 (n=28)
+   E_field_max                med 3.67e-38 max 2.75e-23 (n=28)
+   E_tracker_max              med 1.63e-33 max 7.19e-16 (n=28)
+   r_chi_E_field_max          med 4.69e-41 max 1.46e-32 (n=28)
+   r_chi_E_tracker_max        med 1.29e-36 max 2.1e-22 (n=28)
+   phase_slip_min_producing   min 1.14e-08 med 1.55e+23 max 2.68e+30 (n=28)
+   backreaction_max           med 0.0617 max 5.24 (n=28)
+-- A = 0.5 (29 histories)
+   delta_stim                 med 1.66e-12 max 0.00134 (n=29)
+   n_bar_max                  med 1.9e-09 max 1.25e+28 (n=29)
+   ln_n_g_max                 med -19.9 max 65.7 (n=29)
+   E_field_max                med 3.79e-39 max 2.75e-23 (n=29)
+   E_tracker_max              med 1.03e-33 max 7.19e-16 (n=29)
+   r_chi_E_field_max          med 1.49e-41 max 2.37e-26 (n=29)
+   r_chi_E_tracker_max        med 6.44e-36 max 1.01e-21 (n=29)
+   phase_slip_min_producing   min 4.93e-09 med 9.02e+24 max 9.65e+28 (n=29)
+   backreaction_max           med 0.0558 max 918 (n=29)
+-- A = 1 (30 histories)
+   delta_stim                 med 1.04e-16 max 0.000555 (n=30)
+   n_bar_max                  med 8.78e-13 max 2.08e+22 (n=30)
+   ln_n_g_max                 med -26.9 max 47.3 (n=30)
+   E_field_max                med 6.11e-39 max 5.42e-20 (n=30)
+   E_tracker_max              med 1.63e-33 max 7.19e-16 (n=30)
+   r_chi_E_field_max          med 8.08e-42 max 1.89e-21 (n=30)
+   r_chi_E_tracker_max        med 1.23e-35 max 1.96e-21 (n=30)
+   phase_slip_min_producing   min 5.13e-10 med 1.07e+26 max 1.67e+31 (n=30)
+   backreaction_max           med 0.00156 max 348 (n=30)
+-- A = 1.5 (29 histories)
+   delta_stim                 med 6.94e-18 max 0.000228 (n=29)
+   n_bar_max                  med 4.78e-14 max 1.22e+21 (n=29)
+   ln_n_g_max                 med -29.2 max 47.7 (n=29)
+   E_field_max                med 2.84e-39 max 1.85e-20 (n=29)
+   E_tracker_max              med 1.03e-33 max 7.19e-16 (n=29)
+   r_chi_E_field_max          med 7.9e-42 max 7.39e-22 (n=29)
+   r_chi_E_tracker_max        med 1.84e-35 max 2.35e-21 (n=29)
+   phase_slip_min_producing   min 9.94e-08 med 4.13e+26 max 6.08e+30 (n=29)
+   backreaction_max           med 0.00151 max 469 (n=29)
+-- A = 2 (29 histories)
+   delta_stim                 med 2.22e-21 max 0.000161 (n=29)
+   n_bar_max                  med 3.25e-17 max 1.62e+21 (n=29)
+   ln_n_g_max                 med -36.1 max 48 (n=29)
+   E_field_max                med 2.56e-39 max 1.52e-20 (n=29)
+   E_tracker_max              med 1.02e-33 max 7.19e-16 (n=29)
+   r_chi_E_field_max          med 7.41e-42 max 6.43e-22 (n=29)
+   r_chi_E_tracker_max        med 2.46e-35 max 3.13e-21 (n=29)
+   phase_slip_min_producing   min 9.94e-08 med 6.82e+26 max 4.7e+30 (n=29)
+   backreaction_max           med 2.37e-06 max 1.78e+03 (n=29)
+-- A = 5 (29 histories)
+   delta_stim                 med 2.29e-40 max 0.0004 (n=29)
+   n_bar_max                  med 4.94e-36 max 4.05e+21 (n=29)
+   ln_n_g_max                 med -79.1 max 48.9 (n=29)
+   E_field_max                med 4.24e-34 max 1.7e-20 (n=29)
+   E_tracker_max              med 1.02e-33 max 7.19e-16 (n=29)
+   r_chi_E_field_max          med 1.02e-35 max 7.2e-22 (n=29)
+   r_chi_E_tracker_max        med 6.14e-35 max 7.43e-21 (n=29)
+   phase_slip_min_producing   min 9.94e-08 med 5.48e+27 max 1.02e+30 (n=29)
+   backreaction_max           med 3.24e-08 max 1.78e+03 (n=29)
+-- A = 10 (29 histories)
+   delta_stim                 med 2.56e-53 max 0.0008 (n=29)
+   n_bar_max                  med 5.76e-48 max 8.1e+21 (n=29)
+   ln_n_g_max                 med -102 max 49.6 (n=29)
+   E_field_max                med 2.08e-33 max 1.7e-20 (n=29)
+   E_tracker_max              med 2.13e-33 max 7.19e-16 (n=29)
+   r_chi_E_field_max          med 1.93e-34 max 7.2e-22 (n=29)
+   r_chi_E_tracker_max        med 2.03e-34 max 7.43e-21 (n=29)
+   phase_slip_min_producing   min 9.94e-08 med 3.22e+28 max 4.21e+30 (n=29)
+   backreaction_max           med 1.02e-09 max 1.78e+03 (n=29)
+-- group P (16 histories)
+   delta_stim                 med 1.02e-17 max 4.75e-05 (n=16)
+   n_bar_max                  med 7.45e-14 max 0.00964 (n=16)
+   ln_n_g_max                 med -30.1 max -6.84 (n=16)
+   E_field_max                med 1.15e-38 max 2e-33 (n=16)
+   E_tracker_max              med 1.02e-33 max 2e-33 (n=16)
+   r_chi_E_field_max          med 1.04e-41 max 2.03e-34 (n=16)
+   r_chi_E_tracker_max        med 1.19e-36 max 2.03e-34 (n=16)
+   phase_slip_min_producing   min 5.61e+22 med 2.07e+26 max 1.67e+31 (n=16)
+   backreaction_max           med 0.00478 max 244 (n=16)
+-- group W (80 histories)
+   delta_stim                 med 9.82e-17 max 9.04e-05 (n=80)
+   n_bar_max                  med 1.03e-12 max 0.00977 (n=80)
+   ln_n_g_max                 med -25.5 max -6.84 (n=80)
+   E_field_max                med 1.14e-38 max 2.13e-33 (n=80)
+   E_tracker_max              med 9.98e-34 max 2.23e-33 (n=80)
+   r_chi_E_field_max          med 1.5e-41 max 2.33e-34 (n=80)
+   r_chi_E_tracker_max        med 9.54e-36 max 2.33e-34 (n=80)
+   phase_slip_min_producing   min 4.47e+22 med 2.18e+26 max 6.08e+30 (n=80)
+   backreaction_max           med 0.0217 max 258 (n=80)
+-- group B (48 histories)
+   delta_stim                 med 1.19e-48 max 6.16e-11 (n=48)
+   n_bar_max                  med 7.81e-45 max 2.83e-08 (n=48)
+   ln_n_g_max                 med -102 max -19 (n=48)
+   E_field_max                med 3.12e-34 max 7.49e-29 (n=48)
+   E_tracker_max              med 2.34e-33 max 7.59e-29 (n=48)
+   r_chi_E_field_max          med 2.28e-36 max 1.46e-32 (n=48)
+   r_chi_E_tracker_max        med 8.42e-36 max 1.47e-32 (n=48)
+   phase_slip_min_producing   min 7.8e+21 med 2.18e+27 max 4.21e+30 (n=48)
+   backreaction_max           med 1.11e-10 max 0.101 (n=48)
+-- group L (39 histories)
+   delta_stim                 med 1.18e-07 max 0.00134 (n=39)
+   n_bar_max                  med 0.473 max 8.98e+31 (n=39)
+   ln_n_g_max                 med -2.52 max 98.2 (n=39)
+   E_field_max                med 1.3e-30 max 5.42e-20 (n=39)
+   E_tracker_max              med 5.48e-20 max 1.49e-18 (n=39)
+   r_chi_E_field_max          med 6.65e-33 max 1.89e-21 (n=39)
+   r_chi_E_tracker_max        med 1.57e-22 max 7.43e-21 (n=39)
+   phase_slip_min_producing   min 4.93e-09 med 4.51e+13 max 3.17e+19 (n=39)
+   backreaction_max           med 0.788 max 1.78e+03 (n=39)
+-- group R (30 histories)
+   delta_stim                 med 3.24e-38 max 1.81e-06 (n=30)
+   n_bar_max                  med 1.1e-34 max 0.00746 (n=30)
+   ln_n_g_max                 med -77.5 max -4.29 (n=30)
+   E_field_max                med 1.2e-34 max 3.52e-29 (n=30)
+   E_tracker_max              med 4.72e-33 max 3.54e-29 (n=30)
+   r_chi_E_field_max          med 1.87e-36 max 6.72e-33 (n=30)
+   r_chi_E_tracker_max        med 3.08e-35 max 6.75e-33 (n=30)
+   phase_slip_min_producing   min 2.42e+22 med 5.01e+26 max 9.65e+28 (n=30)
+   backreaction_max           med 2.88e-08 max 918 (n=30)
+-- group C (17 histories)
+   delta_stim                 med 6.69e-09 max 0.0008 (n=17)
+   n_bar_max                  med 4.05e+19 max 2.08e+22 (n=17)
+   ln_n_g_max                 med 44.3 max 49.6 (n=17)
+   E_field_max                med 3.41e-31 max 2.75e-23 (n=17)
+   E_tracker_max              med 2.52e-16 max 7.19e-16 (n=17)
+   r_chi_E_field_max          med 9.14e-52 max 2.68e-38 (n=17)
+   r_chi_E_tracker_max        med 3.61e-36 max 2.49e-24 (n=17)
+   phase_slip_min_producing   min 5.13e-10 med 9.94e-08 max 4.77e+06 (n=17)
+   backreaction_max           med 1.68e-22 max 2.78e-07 (n=17)
+
+== 6. at c_a = 0, X(0)/X(1) per history (min, median, max) ==
+-- A = 0.05 (27): delta_stim 0.809/1/1; n_bar_max 3.46e-16/1/1; ln_n_g_max 1/1/1; E_field_max 1/1/1; E_tracker_max 1/1/1; r_chi_E_field_max 1/1/1; r_chi_E_tracker_max 1/1/1; phase_slip_min_producing 1/1/1; backreaction_max 1/1/1
+-- A = 0.1 (28): delta_stim 0.826/1/1; n_bar_max 4.93e-13/1/1; ln_n_g_max 1/1/1; E_field_max 1/1/1; E_tracker_max 1/1/1; r_chi_E_field_max 1/1/1; r_chi_E_tracker_max 1/1/1; phase_slip_min_producing 1/1/1; backreaction_max 1/1/1
+-- A = 0.5 (29): delta_stim 1/1/1; n_bar_max 2.59e-14/1/1; ln_n_g_max 1/1/1; E_field_max 1/1/1; E_tracker_max 1/1/1; r_chi_E_field_max 1/1/1; r_chi_E_tracker_max 1/1/1; phase_slip_min_producing 1/1/1; backreaction_max 1/1/1
+-- A = 1 (30): delta_stim 5.58e-08/1/1; n_bar_max 4.51e-08/1/1; ln_n_g_max 1/1/1; E_field_max 1/1/1; E_tracker_max 1/1/1; r_chi_E_field_max 1/1/1; r_chi_E_tracker_max 1/1/1; phase_slip_min_producing 1/1/1; backreaction_max 1/1/1
+-- A = 1.5 (29): delta_stim 0.786/1/1; n_bar_max 5.36e-06/1/1; ln_n_g_max 1/1/1; E_field_max 1/1/1; E_tracker_max 1/1/1; r_chi_E_field_max 1/1/1; r_chi_E_tracker_max 1/1/1; phase_slip_min_producing 1/1/1; backreaction_max 1/1/1
+-- A = 2 (29): delta_stim 0.678/1/1; n_bar_max 4.79e-06/1/1; ln_n_g_max 1/1/1; E_field_max 1/1/1; E_tracker_max 1/1/1; r_chi_E_field_max 1/1/1; r_chi_E_tracker_max 1/1/1; phase_slip_min_producing 1/1/1; backreaction_max 1/1/1
+-- A = 5 (29): delta_stim 0.122/1/1; n_bar_max 0.00426/1/1; ln_n_g_max 1/1/1; E_field_max 1/1/1; E_tracker_max 1/1/1; r_chi_E_field_max 1/1/1; r_chi_E_tracker_max 1/1/1; phase_slip_min_producing 1/1/1; backreaction_max 1/1/1
+-- A = 10 (29): delta_stim 0.95/0.999/1; n_bar_max 0.00426/0.998/1; ln_n_g_max 1/1/1; E_field_max 1/1/1; E_tracker_max 1/1/1; r_chi_E_field_max 1/1/1; r_chi_E_tracker_max 1/1/1; phase_slip_min_producing 1/1/1; backreaction_max 1/1/1
+-- group P (16): delta_stim 0.678/1/1; n_bar_max 0.00166/1/1; ln_n_g_max 1/1/1; E_field_max 1/1/1; E_tracker_max 1/1/1; r_chi_E_field_max 1/1/1; r_chi_E_tracker_max 1/1/1; phase_slip_min_producing 1/1/1; backreaction_max 1/1/1
+-- group W (80): delta_stim 0.122/1/1; n_bar_max 0.00207/1/1; ln_n_g_max 1/1/1; E_field_max 1/1/1; E_tracker_max 1/1/1; r_chi_E_field_max 1/1/1; r_chi_E_tracker_max 1/1/1; phase_slip_min_producing 1/1/1; backreaction_max 1/1/1
+-- group B (48): delta_stim 0.809/1/1; n_bar_max 0.00313/1/1; ln_n_g_max 1/1/1; E_field_max 1/1/1; E_tracker_max 1/1/1; r_chi_E_field_max 1/1/1; r_chi_E_tracker_max 1/1/1; phase_slip_min_producing 1/1/1; backreaction_max 1/1/1
+-- group L (39): delta_stim 0.974/1/1; n_bar_max 3.46e-16/0.0145/1; ln_n_g_max 1/1/1; E_field_max 1/1/1; E_tracker_max 1/1/1; r_chi_E_field_max 1/1/1; r_chi_E_tracker_max 1/1/1; phase_slip_min_producing 1/1/1; backreaction_max 1/1/1
+-- group R (30): delta_stim 0.95/1/1; n_bar_max 0.95/1/1; ln_n_g_max 1/1/1; E_field_max 1/1/1; E_tracker_max 1/1/1; r_chi_E_field_max 1/1/1; r_chi_E_tracker_max 1/1/1; phase_slip_min_producing 1/1/1; backreaction_max 1/1/1
+-- group C (17): delta_stim 5.58e-08/1/1; n_bar_max 0.00426/0.972/1; ln_n_g_max 1/1/1; E_field_max 1/1/1; E_tracker_max 1/1/1; r_chi_E_field_max 1/1/1; r_chi_E_tracker_max 1/1/1; phase_slip_min_producing 1/1/1; backreaction_max 1/1/1
+-- all (230): delta_stim 5.58e-08/1/1; n_bar_max 3.46e-16/1/1; ln_n_g_max 1/1/1; E_field_max 1/1/1; E_tracker_max 1/1/1; r_chi_E_field_max 1/1/1; r_chi_E_tracker_max 1/1/1; phase_slip_min_producing 1/1/1; backreaction_max 1/1/1
+
+== 6. at c_a = 10, X(10)/X(1) per history (min, median, max) ==
+-- A = 0.05 (27): delta_stim 1/1/2.72; n_bar_max 1/1/10; ln_n_g_max 1/1/1; E_field_max 1/1/1; E_tracker_max 1/1/1; r_chi_E_field_max 1/1/1; r_chi_E_tracker_max 1/1/1; phase_slip_min_producing 1/1/1; backreaction_max 1/1/1
+-- A = 0.1 (28): delta_stim 1/1/2.57; n_bar_max 1/1/10; ln_n_g_max 1/1/1; E_field_max 1/1/1; E_tracker_max 1/1/1; r_chi_E_field_max 1/1/1; r_chi_E_tracker_max 1/1/1; phase_slip_min_producing 1/1/1; backreaction_max 1/1/1
+-- A = 0.5 (29): delta_stim 1/1/1; n_bar_max 1/1/10; ln_n_g_max 1/1/1; E_field_max 1/1/1; E_tracker_max 1/1/1; r_chi_E_field_max 1/1/1; r_chi_E_tracker_max 1/1/1; phase_slip_min_producing 1/1/1; backreaction_max 1/1/1
+-- A = 1 (30): delta_stim 1/1/10; n_bar_max 1/1/10; ln_n_g_max 1/1/1; E_field_max 1/1/1; E_tracker_max 1/1/1; r_chi_E_field_max 1/1/1; r_chi_E_tracker_max 1/1/1; phase_slip_min_producing 1/1/1; backreaction_max 1/1/1
+-- A = 1.5 (29): delta_stim 1/1/2.92; n_bar_max 1/1/10; ln_n_g_max 1/1/1; E_field_max 1/1/1; E_tracker_max 1/1/1; r_chi_E_field_max 1/1/1; r_chi_E_tracker_max 1/1/1; phase_slip_min_producing 1/1/1; backreaction_max 1/1/1
+-- A = 2 (29): delta_stim 1/1/3.9; n_bar_max 1/1/10; ln_n_g_max 1/1/1; E_field_max 1/1/1; E_tracker_max 1/1/1; r_chi_E_field_max 1/1/1; r_chi_E_tracker_max 1/1/1; phase_slip_min_producing 1/1/1; backreaction_max 1/1/1
+-- A = 5 (29): delta_stim 1/1/8.9; n_bar_max 1/1/10; ln_n_g_max 1/1/1; E_field_max 1/1/1; E_tracker_max 1/1/1; r_chi_E_field_max 1/1/1; r_chi_E_tracker_max 1/1/1; phase_slip_min_producing 1/1/1; backreaction_max 1/1/1
+-- A = 10 (29): delta_stim 1/1.01/1.45; n_bar_max 1/1.02/10; ln_n_g_max 1/1/1; E_field_max 1/1/1; E_tracker_max 1/1/1; r_chi_E_field_max 1/1/1; r_chi_E_tracker_max 1/1/1; phase_slip_min_producing 1/1/1; backreaction_max 1/1/1
+-- group P (16): delta_stim 1/1/3.9; n_bar_max 1/1/10; ln_n_g_max 1/1/1; E_field_max 1/1/1; E_tracker_max 1/1/1; r_chi_E_field_max 1/1/1; r_chi_E_tracker_max 1/1/1; phase_slip_min_producing 1/1/1; backreaction_max 1/1/1
+-- group W (80): delta_stim 1/1/8.9; n_bar_max 1/1/10; ln_n_g_max 1/1/1; E_field_max 1/1/1; E_tracker_max 1/1/1; r_chi_E_field_max 1/1/1; r_chi_E_tracker_max 1/1/1; phase_slip_min_producing 1/1/1; backreaction_max 1/1/1
+-- group B (48): delta_stim 1/1/2.72; n_bar_max 1/1/10; ln_n_g_max 1/1/1; E_field_max 1/1/1; E_tracker_max 1/1/1; r_chi_E_field_max 1/1/1; r_chi_E_tracker_max 1/1/1; phase_slip_min_producing 1/1/1; backreaction_max 1/1/1
+-- group L (39): delta_stim 1/1/1.24; n_bar_max 1/9.99/10; ln_n_g_max 1/1/1; E_field_max 1/1/1; E_tracker_max 1/1/1; r_chi_E_field_max 1/1/1; r_chi_E_tracker_max 1/1/1; phase_slip_min_producing 1/1/1; backreaction_max 1/1/1
+-- group R (30): delta_stim 1/1/1.45; n_bar_max 1/1/1.45; ln_n_g_max 1/1/1; E_field_max 1/1/1; E_tracker_max 1/1/1; r_chi_E_field_max 1/1/1; r_chi_E_tracker_max 1/1/1; phase_slip_min_producing 1/1/1; backreaction_max 1/1/1
+-- group C (17): delta_stim 1/1/10; n_bar_max 1/1.4/9.97; ln_n_g_max 1/1/1; E_field_max 1/1/1; E_tracker_max 1/1/1; r_chi_E_field_max 1/1/1; r_chi_E_tracker_max 1/1/1; phase_slip_min_producing 1/1/1; backreaction_max 1/1/1
+-- all (230): delta_stim 1/1/10; n_bar_max 1/1/10; ln_n_g_max 1/1/1; E_field_max 1/1/1; E_tracker_max 1/1/1; r_chi_E_field_max 1/1/1; r_chi_E_tracker_max 1/1/1; phase_slip_min_producing 1/1/1; backreaction_max 1/1/1
+
+== 7. delta_stim over the sample at c_a = 1: min 2.16e-75 (B-2772-A10), median 3.47e-17, max 0.00134 (L-M1e-16-A0.5); histories 230
+   at c_a = 0: min 2.16e-75, max 0.00134 (L-M1e-16-A0.5)
+   at c_a = 10: min 2.16e-75, max 0.00134 (L-M1e-16-A0.5)
+
+== 8. the K check's tolerance (1e-09) ==
+largest |ln K| + 4|N| + |ln rho_R,E| + 4|ln(GeV/M_P)| = 882.8 (one-loop-measured-v1/A=5/csv/beta=10/M=2.4353e-06eV_n=1); times eps 1.96e-13
+largest parking_share/(1 - parking_share) = 1.439e+05 (M_Mp, beta, A = ('1e-12', '4.0', '0.05')); times eps 3.20e-11
+margin: 31

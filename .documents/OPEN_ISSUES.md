@@ -381,7 +381,8 @@ Prompt 03 closed two, one the planner's and one the probe's, 2026-11-06 (board �
 
 - `[00-later-bounces-act-on-quanta-already-present]` — a later bounce rescatters and stimulates only quanta
   within about an e-fold of its band (not those with p ≪ ω_t, narrowed 2026-11-02); parametric resonance
-  measured absent; quantified by 05 (δ_stim) under the one-loop law, documented by 08. *(`one-loop-drain`; planner)*
+  measured absent; quantified by 05 (δ_stim ≤ 1.3 × 10⁻³ on 02d's 230 histories, 2026-11-06; n̄ > 1 and slips < 1 rad in a few
+  L-ladder and group-C histories) under the one-loop law, documented by 08. *(`one-loop-drain`; planner)*
 - `[00-the-parking-leftover-has-no-spectrum]` — the parking drain (≤ 0.10 of ρ_χ) has no peak estimate,
   so no margin or wall measure covers it; all of ρ_χ at large M under the one-loop law; out of scope. *(`one-loop-drain`; planner)*
 - `[02-one-loop-tunings-fail-at-small-A-in-the-transition-window]` — under the one-loop law the laboratory-M

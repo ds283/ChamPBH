@@ -1,0 +1,9 @@
+P-2197, A = 1: exported to var/one-loop-drain/05/probe/QCD_Cosmology/one-loop-measured-v1/A=1/csv/beta=1.185/M=0.00097413eV_n=1
+tolerance: |E_tool - E_probe| <= 2 eps sum_born dK/K + 8 eps n_born |E_probe|, eps = 2.220446049250313e-16
+samples 4995; candidate rows 5; generations 5 (payload 5); leftover after the last candidate at N = 29.035264723467392
+log_m_eff: compared 3081 (equal bit for bit 1806; with a term in the probe's cancellation band -20 < ln x < -8: 0); matched blanks: mass None 0, K(N) = 0 1914 (of which with a generation born 0); beyond the tolerance 0
+  largest |diff| / tolerance 1.15e-41; largest |diff| / (a part) 1.15e-41; largest |diff| / (b part) 0.297; largest |diff| / |E_probe| 5.27e-16 (2.4 eps)
+log_m_tracker: compared 3081 (equal bit for bit 1782; with a term in the probe's cancellation band -20 < ln x < -8: 0); matched blanks: mass None 0, K(N) = 0 1914 (of which with a generation born 0); beyond the tolerance 0
+  largest |diff| / tolerance 3.85e-34; largest |diff| / (a part) 3.85e-34; largest |diff| / (b part) 0.148; largest |diff| / |E_probe| 5.6e-16 (2.5 eps)
+K(N) against the payload ledger's: equal bit for bit at 4995 of 4995 samples; before the leftover (3153 samples) largest rel diff 0; after it (1842) 0 (tolerance 8 eps (1 + ps/(1 - ps)) = 1.78e-15, parking_share 6.83866989536091e-05)
+RESULT: holds

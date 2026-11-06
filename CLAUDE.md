@@ -78,9 +78,9 @@ invariants that hold across all of them:
   the repository root:
   ```bash
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .   # 26 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 651 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 665 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .   # 163 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 173 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 191 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .        # 72 tests
   ```
   `ComputeTargets/tests` took 590 s on 2026-11-01 (the two halves below, 135.8 s and 454.6 s, at one-minute
@@ -88,9 +88,11 @@ invariants that hold across all of them:
   capped at ten minutes, so run it in two halves:
   ```bash
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 219 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 432 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 446 tests
   ```
-  (The counts are those of 2026-11-06, after `one-loop-drain` 04, which added 29 tests to the `test_[a-f]` half
+  (The counts are those of 2026-11-06, after `one-loop-drain` 05, which added 14 tests to the `test_[g-z]` half
+  (`test_quanta_spectrum`) and 18 to `tools/tests` (`test_quanta_measures`, `test_history_directory`); before it, those of
+  2026-11-06, after `one-loop-drain` 04, which added 29 tests to the `test_[a-f]` half
   (`test_a_values_option`, `test_a_values_plot_inputs`), 14 to `ObjectFactories/tests` (`test_export_04`), 17 to `tools/tests`
   (`test_one_loop_tools` and `test_inventory_alpha`) and 4 to `RunDrivers/tests` (`test_scope_a_values`); before it, those of
   2026-11-06, after `one-loop-drain` 03, which added 28 tests to the `test_[a-f]` half

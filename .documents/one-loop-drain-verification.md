@@ -1625,3 +1625,176 @@ The gate holds, item by item (prompt §2):
    base's columns, byte-identical to the dispatch tree's from the same store; the one-loop histories' existing columns agree too; the
    fixed-law paths and titles are equal, and the one-loop ones follow P35. The store's SHA-256 is unchanged under both exports.
 3. **The drivers refuse a law that does not match the store** (§4.5).
+
+## 5. Prompt 05 — the derivation tool (2026-11-06)
+
+**Tree:** branch `one-loop-drain` at `88c6ae5` (orchestrator note 05's commit; `4820df5` records U16 and `8378b4f` adds the
+prompt; the code is 04's reviewed code). Prompt 05's commit adds `ComputeTargets/quanta_spectrum.py` and
+`tools/quanta_measures.py` with their tests, `extract_common.history_directory` (and `plot_ScalarHistory.py`'s two calls),
+and the dated notes of `architecture-summary.md` and `numerical-strategies.md`; §1–§4 above are unchanged. Python 3.13.16,
+numpy 2.3.5, scipy 1.17.0.
+**Scripts:** [`one-loop-drain/derive-05/`](one-loop-drain/derive-05/), each with a docstring: `kernels_05.py` (§5.3), `probe_05.py`
+(§5.5), `run_05.py` and `launch_05.sh` (§5.6), `report_05.py` (§5.6, §5.7). **Committed outputs:**
+[`one-loop-drain/derive-05/out/`](one-loop-drain/derive-05/out/): `kernels.txt`, `probe.txt`, `run.txt` (the scheduler's log and
+summary), `tool-assoc1.txt`, `tool-assoc0.txt`, `tool-assoc10.txt` (the tool's lines at the three scales), `report.txt`.
+**Raw output** (not committed): `var/one-loop-drain/05/`: `run/` (each child's pid, log, result and end marker), `records/`,
+`parts/`, `exports/QCD_Cosmology/` (the merged histories.csv, 230 history directories with fields.csv, bounces.csv and the
+tool's files at the three scales, and `quanta_histories*.csv`), `probe/` (§5.5's export), `scheduler.*`.
+
+Orchestrator note 05's rulings 1–12 governed. No Ray was started, nothing was registered, and no store was opened but the
+tests' and the run's temporary ones, all deleted.
+
+### 5.1 The Gate and the suites
+
+The Gate held at `88c6ae5` (11:56): the tree clean on `one-loop-drain`; `runregistrykit list` 23 runs, all finished; 02d's
+`sample.jsonl` 240 lines and its `tasks/` present. The suites, serially (log 05 §4 has the tables): before, 26, 651 (219 +
+432), 163, 173, 72, all passing (ObjectFactories, tools and RunDrivers with the helper's additive edit already in the tree,
+log 05 §2); after, on this prompt's tree, 26, 665 (219 + 446), 163, 191, 72, all passing (`test_quanta_spectrum` adds 14 to
+the `test_[g-z]` half; `test_quanta_measures` 16 and `test_history_directory` 2 to tools).
+
+### 5.2 The spectrum and its constants (prompt §1.1; rulings 1, 2)
+
+`SPECTRUM_MODEL = "U4-U17-v1"`. s = s_dir + c_a s_assoc; s_dir = x² (x ≤ x_p), x_p² e^{−κ(x − x_p)} above; s_assoc = 49 x_*³/x
+(x ≤ x_p), 49 x_*³/x · e^{−κ(x − x_p)} above (U17, the user's ruling of 2026-11-06).
+
+| constant | value | source |
+|---|---|---|
+| x_p | 0.62 | `production_energy_ratio.tex` §"Results" and Table tab:beta: k_peak = 0.31 ω_t, k_ex = ω_t/2 (U4) |
+| κ | 3.9657820823215935 | κ_L = ln(\|β\|²_max,L/10⁻²⁰)/(10 − x_p) at L = 90 (\|β\|²_max = 1.43 × 10⁻⁴), the median row; the same section's "about 10⁻²⁰ at k = 5 ω_t" (x = 10) |
+| κ_L, the five rows | 4.1334 (40), 4.0178 (70), 3.9658 (90), 3.9235 (110), 3.8821 (134) | the fit's spread, 6.4% |
+| x_* | 0.0058 | `kb_partB_report.tex` §"The soft occupation": q̂ = 0.0029 ω_t |
+| 49 | 50 − 1 | the same: n_q there is "fifty times the test field's \|β_q\|²" |
+
+`BriefingNotes/scripts/` does not hold the spectrum's script (`beta_k_reflection.py`, named in §"Provenance"), so the fit is to
+the Table and the statement. Checked by the tests: s(x_*) = 50 s_dir(x_*) at c_a = 1 (to 10⁻¹²); s continuous at x_p; κ equal
+to the formula; the associated piece's share of I 2.95 × 10⁻⁵ at c_a = 1.
+
+| c_a | I | J |
+|---|---|---|
+| 1 | 0.09300715800293864 | 1.0560436029665003 |
+| 0 | 0.09300441145732584 | 1.0560324249819 |
+| 10 | 0.09303187691345381 | 1.056144175127589 |
+
+Each in closed form, and equal to quadrature within 6.7 × 10⁻¹⁶ (`out/kernels.txt`).
+
+### 5.3 The kernels against direct quadrature (prompt §2.1; ruling 3)
+
+Grids: ln y ∈ [ln 10⁻³, ln 50], step 0.01 (1 083 nodes); u ∈ [0, 4], step 0.005 (801 nodes), Ω(u) = e^{4u} Ω(−u) below 0. Tables
+built in 0.013 s (G) and 0.16 s (Ω) per scale. `kernels_05.py` against scipy's adaptive quad, split at x_p and at y (G) or
+x_p e^u (Ω) and at the tails' scales, whose stated error is at most 4.3 × 10⁻¹⁴ at every point:
+
+| kernel | points per scale | largest relative difference, c_a = 1 / 0 / 10 |
+|---|---|---|
+| G, every node and midpoint | 2 165 | 8.1 × 10⁻¹² / 8.1 × 10⁻¹² / 8.1 × 10⁻¹² |
+| G, beyond the table (to four decades each way) | 400 | 1.6 × 10⁻¹¹ / 6.0 × 10⁻¹² / 5.6 × 10⁻¹¹ |
+| Ω, every node and midpoint on [0, 4], every fourth mirrored | 2 001 | 2.25 × 10⁻⁹ (at u = 0.0025) at all three |
+| Ω, beyond (to \|u\| = 14) | 200 | 4.4 × 10⁻¹⁵ / 8.4 × 10⁻¹⁵ / 4.0 × 10⁻¹⁵ |
+| M_1 … M_10 | 10 | 4.4 × 10⁻¹⁶ |
+
+The asymptotes at the tables' ends, term by term (relative to the leading term), and the series against quadrature:
+
+| asymptote, at | kept terms | series − quad |
+|---|---|---|
+| G, y = 10⁻³ | M_1y²/2; −Cy³/3: 5.2 × 10⁻⁸ (c_a = 1), 5.2 × 10⁻⁷ (10), 0 (0); B_4y⁴: −6.4 × 10⁻⁷; left out O(y⁴ ln y) = 6.6 × 10⁻¹² | −7.1 × 10⁻¹² |
+| G, y = 50 | M_2y/I; −1: −1.9 × 10⁻²; M_4/2y: 2.1 × 10⁻⁴; −M_6/8y³: −4.2 × 10⁻⁸; M_8/16y⁵: 3.0 × 10⁻¹¹; left out ≤ 4.4 × 10⁻¹⁴ | 4.4 × 10⁻¹⁴ |
+| Ω, u = 4 | e^{−2u}M_5/I (4.9 × 10⁻⁴) + Ce^uM_2/I (5.5 × 10⁻⁴ at 1, 5.5 × 10⁻³ at 10, 0 at 0); left out of order e^{−134} | ≤ 1.8 × 10⁻¹⁵ |
+
+Every difference is below 10⁻⁶, and every asymptote is within 10⁻⁷ at its end: §2.1 holds.
+
+### 5.4 The tool on constructed exports (prompt §1.7)
+
+`tools/tests/test_quanta_measures.py` writes histories.csv, fields.csv and bounces.csv by 04's writers from constructed rows
+(five generations, two of them beyond Ω's table, an unassessed drain, a candidate that drains nothing, a plateau event; r_χ
+from a `DarkRadiationLedger`) and checks, at c_a = 1, 0 and 10, E at every sample for both masses, ln n_g, n̄_j, δ_stim and the
+backreaction ratio against direct quadrature in q over the full spectrum (no kernel), to 10⁻⁶, and the phase slip against
+`phase_slip.py`'s formula; K(N) with no leftover, with the leftover after the last candidate and with it bracketed by a later
+candidate; K_0 > 0; the refusals of ruling 6; a failed check (nothing written, exit 1); the check in three `UnitsLike`; the
+duplicate directory, the fixed row, the failed history, the missing file and the non-integer n; every column, its blanks and
+the model's columns, and the exit statuses. 16 tests, all passing; with the spectrum's 14 and the helper's 2.
+
+### 5.5 Against the scoping probe, peak-collapsed (prompt §2.2; ruling 5)
+
+`probe_05.py` (`out/probe.txt`): P-2197 at A = 1 by `one_loop_payload`, written on a temporary store, read back and exported to
+`var/one-loop-drain/05/probe/`. The tool's `matter_excess` with `PEAK_SPECTRUM` on the exported files, against the probe's
+`excess` extracted by `ast` and run unedited on the payload. 4 995 samples, 5 generations (the payload's 5), the leftover after
+the last candidate at N = 29.035.
+
+Tolerance: |E_tool − E_probe| ≤ 2ε Σ_born ΔK_g/K(N) + 8ε n_born |E_probe| (reasons in the script's docstring).
+
+| mass | compared | equal bit for bit | matched blanks: mass None / K(N) = 0 | beyond the tolerance | largest \|diff\|/(a part) | largest \|diff\|/(b part) | largest \|diff\|/\|E_probe\| |
+|---|---|---|---|---|---|---|---|
+| field | 3 081 | 1 806 | 0 / 1 914 | 0 | 1.2 × 10⁻⁴¹ | 0.30 | 5.3 × 10⁻¹⁶ (2.4ε) |
+| tracker | 3 081 | 1 782 | 0 / 1 914 | 0 | 3.9 × 10⁻³⁴ | 0.15 | 5.6 × 10⁻¹⁶ (2.5ε) |
+
+P-2197's masses put every y far below e^{−20}, so no term falls in the probe's cancellation band (−20 < ln x < −8: 0 samples)
+and the a part, which allows for it, is never used. None of the 1 914 samples with K(N) = 0 has a generation born.
+**K(N):** the tool's rebuilt K equals the payload ledger's (by `to_column`) bit for bit at all 4 995 samples, before the
+leftover (3 153) and after it (1 842). §2.2 holds.
+
+### 5.6 The run on 02d's sample (prompt §1.6, §2.3; ruling 11)
+
+`launch_05.sh` started `run_05.py scheduler` once (pid 26565, 12:31:33); it ended at 12:58:15 (`scheduler.done`), 1 601 s, five
+workers, the largest first. **All 230 tasks succeeded**; none was stopped at its wall limit. Every child's step 2 held: its
+`DrainCandidate`s equal to the last line of 02d's partial by `repr` (230 of 230; 82 139 candidates); its samples 02d's count
+(1 299 063 in all); fields.csv and bounces.csv read back with the object's samples and bounce rows (and the stored rows and
+`bounce_rows`); its temporary store deleted (none left). **The merge:** 230 records, the merged histories.csv's header each
+part's and its 230 data rows the parts' rows byte for byte. No pid recorded under `var/one-loop-drain/05/` answers `kill -0`.
+
+| step | sum | median | max |
+|---|---|---|---|
+| integrate | 6 821.6 s | 4.28 s | 981.3 s (L-M5e-20-A0.1; 02d 1 079 s) |
+| store and read back | 429.5 s | 1.81 s | 3.6 s |
+| export | 55.4 s | 0.15 s | 3.5 s |
+| read back the export, delete the store | 0.8 s | 0.00 s | 0.02 s |
+
+The integration's wall against 02d's per-integration wall: median 1.02 (0.36–1.31). Peak RSS 1.26 GiB (L-M1e-16-A0.5), median
+0.25 GiB. One-minute loads at the children's starts and ends 2.8–40.0.
+
+**The tool** on `var/one-loop-drain/05/exports/QCD_Cosmology/` (`out/tool-assoc*.txt`): at c_a = 1, 0 and 10, 230 measured, 0
+skipped, missing, refused or failing the check, exit 0; 53.0 s, 50.7 s and 51.9 s. Its wall per history against that history's
+integration: median 0.032, max 0.12 (L-M1e-16-A0.05); the largest, 2.1 s, is L-M5e-20-A0.1, 13 342 generations, about
+8.9 × 10⁷ evaluations of Ω for n̄ (untruncated). Run again at c_a = 1, its 461 files are byte-identical.
+- **The leftover's placement:** after the last candidate in 221 histories, none in 9; bracketed by a later candidate in none.
+- **The K check:** largest relative difference 1.46 × 10⁻¹¹ (C-3016-A0.05, whose parking share is 0.999993), against the
+  tolerance 10⁻⁹. Its two sources measured over the run (`report.txt` §8): |ln K| + 4|N| + |ln ρ_R,E| + 4|ln(GeV/M_P)| at most
+  882.8, so 2.0 × 10⁻¹³ per pass; parking_share/(1 − parking_share) at most 1.44 × 10⁵, so 3.2 × 10⁻¹¹; the margin 31.
+  K_before + ΔK equals the next K_before bit for bit at all 81 909 pairs.
+- **Ruling 7:** no sample has K(N) = 0 with a generation born; 45 samples, in 9 histories, lie between a generation's N_turn
+  and its N (the most, 29, in C-3873-A1). **Ruling 8:** no history has a drain without a spectrum.
+
+§2.3 holds: every end marker, every step 2 check equal, no failed task, the tool at the three scales.
+
+### 5.7 The measures on the sample (prompt §1.6's report)
+
+`out/report.txt` §5 gives, per A and per group, the median and the maximum at c_a = 1 of δ_stim, n̄_max, ln n_g max, the E
+maxima and r_χ E's for both masses, the least producing phase slip (with its minimum) and the backreaction maximum; §6 the same at
+c_a = 0 and 10 as per-history ratios to c_a = 1. In brief:
+- **δ_stim** over the 230 histories: 2.2 × 10⁻⁷⁵ (B-2772-A10) to 1.34 × 10⁻³ (L-M1e-16-A0.5), median 3.5 × 10⁻¹⁷. By group, the
+  maximum is 4.8 × 10⁻⁵ (P), 9.0 × 10⁻⁵ (W), 6.2 × 10⁻¹¹ (B), 1.3 × 10⁻³ (L), 1.8 × 10⁻⁶ (R), 8.0 × 10⁻⁴ (C); by A, the median falls
+  from 1.0 × 10⁻⁵ at A = 0.05 to 2.6 × 10⁻⁵³ at A = 10, and the maximum stays between 1.6 × 10⁻⁴ and 1.3 × 10⁻³.
+- **n̄_max** is below 0.01 in every P, W, B and R history; above 1 in 33 histories, all on the L ladder (5 × 10⁻²⁰ to 4 × 10⁻¹⁵
+  M_P, β = 2) and in group C (10⁻¹² M_P), up to 9.0 × 10³¹ (L-M5e-20-A0.1, whose δ_stim is 4.2 × 10⁻⁹: the large overlaps sit at
+  bounces that drain almost nothing). ln n_g max likewise, up to 98.
+- **E** is negligible everywhere: E_field max at most 5.4 × 10⁻²⁰, E_tracker max at most 7.2 × 10⁻¹⁶, r_χ E at most 1.9 × 10⁻²¹
+  (field) and 7.4 × 10⁻²¹ (tracker).
+- **The phase slip** at producing bounces is at least 7.8 × 10²¹ rad in every P, W, B and R history (median 6 × 10²²–3 × 10²⁸ by
+  A); it falls below 1 rad in 15 histories, on the L ladder (5 × 10⁻²⁰ to 5 × 10⁻¹⁶ M_P) and in group C at 10⁻¹² M_P, β = 1.0 and
+  1.11 (least 5.1 × 10⁻¹⁰ rad, C-3873-A1).
+- **The backreaction ratio** has a median of 10⁻⁹–6 × 10⁻² by A and a maximum of 1.8 × 10³ (on the L ladder); P ≤ 244, W ≤ 258,
+  R ≤ 918, B ≤ 0.10, C ≤ 2.8 × 10⁻⁷.
+- **The associated piece's scale** moves only δ_stim and n̄: at c_a = 0 the ratio to c_a = 1 is 1 at the median, down to
+  5.6 × 10⁻⁸ (δ_stim) and 3.5 × 10⁻¹⁶ (n̄_max) at the least; at c_a = 10 it is 1 at the median and at most 10 (both). Every
+  other measure (n_g, E, r_χ E, the slip, the backreaction) moves by less than the third significant figure.
+
+These are measurements, not bounds (P49); no threshold refuses or warns on any of them.
+
+### 5.8 The Derive gate
+
+The gate holds, item by item (prompt §2):
+1. **Against direct quadrature** (§5.3, §5.4): every kernel and moment within 2.3 × 10⁻⁹ of quadrature on the grid and beyond it at
+   c_a = 1, 0 and 10; every asymptote within 10⁻⁷ at its end; every measure of the tool within 10⁻⁶ of a direct computation on
+   constructed generations.
+2. **Against the scoping probe, peak-collapsed** (§5.5): E within 2.5ε relative of `excess` at all 3 081 compared samples for both
+   masses, every blank matched in its own case; K(N) equal to the ledger's bit for bit.
+3. **On the sample** (§5.6): 230 of 230 tasks, every step 2 check equal, the merged histories.csv equal to its parts, the tool at the
+   three scales with every history measured and its K check within 1.5 × 10⁻¹¹.

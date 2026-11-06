@@ -143,6 +143,16 @@ def alpha_path(base, alpha: float, drain_model: str) -> Path:
     return Path(base) / drain_model / f"A={alpha:.5g}"
 
 
+def history_directory(beta: float, M_eV: float, n: int) -> str:
+    """
+    The directory of one history's products below a row's `plots/` and `csv/`, ``beta=<β:.5g>/M=<M_eV:.5g>eV_n=<n>``,
+    from β, M in eV and n (one-loop-drain prompt 05, orchestrator note 05 ruling 9): the string plot_ScalarHistory.py
+    formatted inline for its plot_path and csv_path, which both now call this, so that tools/quanta_measures.py finds
+    a history's fields.csv and bounces.csv with the same helper and not a copy of it.
+    """
+    return f"beta={beta:.5g}/M={M_eV:.5g}eV_n={n}"
+
+
 def add_beta_summary_labels(
     fig,
     model_label,

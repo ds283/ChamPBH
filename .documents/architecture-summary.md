@@ -2313,3 +2313,31 @@ work_pool.run()
 >   another model it skipped; `tools/inventory_report.py` labels a row of another model `A=<A:.5g> (<drain_model>)`; a
 >   store whose `alpha_value` has no `drain_model` column is read as `fixed` rows only. `RunDrivers/registered_run.py`'s scope
 >   gains `A <values>` after the α part only when `--A-values` is given.
+
+> **Note, 2026-11-06 (`one-loop-drain`, prompt 05): the spectrum module and the derivation tool.**
+> - **`ComputeTargets/quanta_spectrum.py`** (new, pure: floats and numpy arrays, no I/O, nothing of the integrator or the
+>   store, no Ray). The spectrum model of the produced quanta, `SPECTRUM_MODEL = "U4-U17-v1"`: U4's shape for every
+>   generation with U17's end of the associated piece, its constants with their sources at the top of the module
+>   (`X_PEAK`, `KAPPA` fitted from `BETA2_MAX_BY_L` at `KAPPA_FIT_L` = 90, `X_STAR`, `ASSOC_COEFFICIENT`), the moments in
+>   closed form, and the kernels G (matter-like excess) and Ω (occupation overlap), tabulated once per scale and continued
+>   by closed-form asymptotes. `spectrum(c_a)` returns one cached `QuantaSpectrum` per scale of the associated piece
+>   (attributes `model`, `assoc_scale`, `I`, `J`, `log_s_peak`; methods `s`, `G`, `G_of_log_y`, `log_Omega`, `Omega`, and
+>   the slow references `I_quad`, `J_quad`, `moment_quad`, `G_quad`, `Omega_quad` for the tests and the gate).
+>   `PEAK_SPECTRUM` (s = δ(x − 1), G only) exists for the Derive gate's comparison with the scoping probe; nothing selects
+>   it on a command line. `numerical-strategies.md` (note of the same date) gives the shape, the grids and the accuracy.
+> - **`tools/quanta_measures.py EXPORT_ROOT [--assoc-scale C]`** (new): reads a plot run's `<output>/<label>/` (histories.csv
+>   and the per-history fields.csv and bounces.csv of 04), opens no store and starts no Ray. Each one-loop row with a
+>   normalization names its directory by `alpha_path` and the new `extract_common.history_directory(beta, M_eV, n)` (which
+>   `plot_ScalarHistory.py`'s `plot_path` and `csv_path` now call, their strings unchanged). It rebuilds K(N) from the
+>   candidate rows (the parking leftover bracketed by a later K_before, or after the last candidate from `parking_share`),
+>   checks it at every sample against r_χ ρ_R,E e^{4N}, and writes, per one-loop history beside its bounces.csv,
+>   **`quanta_bounces.csv`** (per bounce row: `ln_n_g`, `n_bar`, `phase_slip`, `k_ex_over_H`, `backreaction_ratio`) and
+>   **`quanta_samples.csv`** (per fields.csv row: `K_Mp4`, `parking_fraction`, `E_field`, `E_tracker`, `r_chi_E_field`,
+>   `r_chi_E_tracker`), and at the root **`quanta_histories.csv`** (one row per measured history, keyed as histories.csv:
+>   `generations`, `delta_stim`, the n̄, n_g, E, phase-slip and backreaction summaries, `parking_share`,
+>   `K_check_max_rel`). Every row of every file begins with `spectrum_model` and `assoc_scale`; at a scale other than 1
+>   each name carries `-assoc<c:g>`. Log 05 §7 gives every column with its unit. Exit 2 on a usage error or an unreadable
+>   root, 1 if a row was refused or a history failed the K check, else 0.
+> - **Tests:** `ComputeTargets/tests/test_quanta_spectrum.py`; `tools/tests/test_quanta_measures.py` (constructed exports and
+>   P-2197 on a temporary store; `tools/tests/quanta_exports.py` writes the exports by 04's writers) and
+>   `tools/tests/test_history_directory.py`.
