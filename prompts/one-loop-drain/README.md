@@ -1079,3 +1079,112 @@ piece at 0 and 10 beside the default 1, as U4 asked.
 - **The user selected the first,** "1/x to x_p, then e^{-κ} (Recommended)". So s_assoc(x) = 49 x_*³/x for x ≤ x_p,
   and 49 x_*³/x · e^{−κ(x − x_p)} above, with the direct piece's κ. s is continuous at x_p, and s(x_*) = 50 s_dir(x_*)
   is unchanged. Orchestrator note 05, ruling 1, binds it for 05.
+
+### 8.14 Before 06 (2026-11-06)
+
+Written by Claude Opus 5.5 after 05 landed and was reviewed (`9830738`, `20972cc`), at the user's request: "Please write
+prompt 06".
+
+**Ready.** The Derive gate holds, and the tree is clean. No run is live (`runregistrykit list`: 23 finished). Every gate
+before 06 holds, so the code that 06 rehearses is complete: the law (02c), the store (03), the drivers and exports (04)
+and the tool (05). 04's gate checked the drivers without Ray, and said that 06 runs them under Ray. 05's log §7 gives the
+command that runs the tool on a rehearsal's exports.
+
+**What 06 is for** (§8.4 row 06, §8.5's gates Bitwise and R). It is the first build under real Ray since the campaign
+began, and the first `main.py` build of a one-loop history. It shows two things:
+- the fixed law is untouched: a build at the tip equals a build at the base;
+- a one-loop build survives an interruption and a resume, and stores exactly what the tool route computed.
+
+**Stale beside §8.10–§8.13, now settled for 06:**
+- **Gate R's "02's tool route"** reads 02d's. 02d replaced 02's and 02b's one-loop measurements, and its 230 lines carry
+  the tuning, the drain record and the candidates of every history it ran.
+- **"The campaign's base"** is `1561b60`, the merge of `reflection-restart` into this branch. Its code is the tree that 01
+  started from (`git diff 1561b60 9616e04` touches no code), at `VERSION_LABEL` 2026.9.0 and `FINGERPRINT_FORMAT` 6.
+  `exponential.yaml`, `PRyM/`, `PRyMrates/`, `requirements.txt` and `runregistrykit.toml` are the same at the base and
+  the tip.
+- **"Every pre-existing column"** has two stated exceptions under the fixed law, both from 01:
+  - the wall-search fix (P21);
+  - the user's ruling (b) on the inside-wall guard.
+  Each changes only calls that raised before. So a history that fails at the base for one of those reasons may succeed
+  at the tip. Nothing that succeeds at the base may move.
+
+**Proposed by the planner for 06 (P50–P57), the defaults unless the user says otherwise.** Prompt 06 is written on them.
+- **P50 — the base tree.**
+  - **Where.** A detached worktree of `1561b60` under the session scratchpad. Its `venv` and `var` are symbolic links
+    to this checkout's, so the base build is registered in this repository's `var/runs` and its store lands in
+    `var/datastores` (`CLAUDE.md`, rules 1 and 6).
+  - **How it runs.** The base build runs through the base's own wrapper, from the worktree's root. Its manifest
+    therefore records the base's `main.py` hash and `git_head` `1561b60`.
+  - **Afterwards.** The worktree is removed before the commit, as 04's and `reflection-restart` 04's were.
+  - **Not chosen:** checking out the base in the main checkout. That moves the shared checkout's `HEAD` for the length
+    of a build.
+- **P51 — the code on the workers.** A Ray worker imports the driver's modules by name. Ray puts the driver's working
+  directory and its script's directory on the worker's path (`ray/_private/worker.py`, `_py_driver_sys_path`).
+  - So a base driver should load the base's modules on the shared cluster. This has not been measured.
+  - **The probe.** Before any build, a probe driver runs from each tree's root, as `main.py` is run. It reports, from
+    the driver, from a task and from an actor:
+    - the file of `ComputeTargets.ScalarHistory` and of `ObjectFactories`;
+    - `VERSION_LABEL` and `FINGERPRINT_FORMAT`.
+  - The probe runs again from this checkout after the base build.
+  - Any mismatch between a driver and its workers is a stop. Under the fixed law the two trees agree bitwise, so a
+    mixture would not show in the values.
+- **P52 — the grid.** Three runs make each store, all at φ* = 5:
+  - **Run `a`** (laboratory M): M = 4 × 10⁻³¹ M_P, β ∈ {1.06, 1.185, 2, 10}, `--alpha-values 0.01 0.1`, and at the tip
+    `--A-values 0.1 1`.
+  - **Run `b`** (large M, natural mode): M = 10⁻³ M_P, β ∈ {0.5, 1.5, 3, 5.5}, `--alpha-values 0 0.1`. This is
+    `inelastic-reflection` 11's rehearsal grid, with no `--A-values`.
+  - **Run `c`** (the classical regime): M = 10⁻¹² M_P, β = 1, `--alpha-values 0.15`, and at the tip `--A-values 1`.
+  - **The counts.** The base stores 17 fixed-law histories, and the tip 26: the same 17 and 9 one-loop. Every one-loop
+    history is a task of 02d: P-2188, P-2197, R-865 and R-611 at A = 0.1 and 1, and C-3233 at A = 1.
+  - **Why this grid.**
+    - α = 0 is kept off laboratory M, where natural mode has never been run. `--alpha-values` without a 0 builds none.
+    - The one-loop rows cover the one-loop regime with parking (run `a`) and the classical regime's R·S(L) drains
+      with no parking (run `c`).
+    - The gap regime is left out. 02d's gap histories are on the L ladder, which has no fixed-law reference, and six of
+      its tunings there took 630–1 120 s. Gap rows take the same store path as the other regimes, since the regime is a
+      column; 03's tests and 05's run stored them.
+  - **The cost**, from 02d's and `inelastic-reflection` 11's tool runs: each history takes seconds to about a minute.
+    So each build should take minutes, and the three builds with the readers under an hour.
+- **P53 — the Bitwise gate, made exact.**
+  - **The instrument.** A read-only script over the base store and the tip's reference store, adapted from
+    `inelastic-reflection` 11's `compare_jn09.py`.
+  - **Matching.** Each of the 17 histories is matched by (M, β, φ*, α), under `fixed` at the tip.
+  - **What is compared, bitwise:** every column both schemas hold, in `ScalarHistory`, `ScalarHistoryValue`,
+    `AdiabaticHistory` and `BBNData` and their samples. Serials, labels, timestamps and timings are left out by name.
+  - **The new columns at the tip** are checked against 03's rules:
+    - `drain_model` is `fixed`;
+    - the drain record is NULL;
+    - there is no bounce row;
+    - the sample masses are filled wherever 03's `sample_masses` gives them.
+  - **The two exceptions** above are listed if they occur. Any other difference is a stop.
+- **P54 — the R gate, made exact.**
+  - **(i) The two stores agree.** `tools/compare_stores.py` finds the reference store and the resumed store equal, with
+    `ScalarHistoryBounce` among the tables compared, and `store fingerprint` gives the same result for both.
+  - **(ii) Against 02d's tool route,** for each of the nine one-loop histories against its 02d line:
+    - the tuning's fifteen keys, bitwise;
+    - every field of the drain record, bitwise;
+    - every candidate's bounce row against `DrainCandidate` in the last line of the task's `partial.jsonl`, by `repr`,
+      as 05 compared them.
+    The dissipation values and Y_p and D/H are compared as `inelastic-reflection` 11's `compare_tool.py` compared
+    them, to the digits the line prints.
+  - **(iii) The exports.** The two stores' exports and the tool's outputs agree byte for byte, apart from any timing
+    columns, which are named. Each one-loop history's bounces.csv is byte-identical to 05's export of the same 02d task.
+- **P55 — the interruption.**
+  - **When.** In the resumed build's run `a`, `SIGTERM` is sent by `interrupt_when.py` on the banner of the A = 0.1
+    pipeline, `RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 0.1 (one-loop-measured-v1)`. The delay is chosen from the
+    reference log, so that at least one A = 0.1 history is stored and the scalar stage has not ended.
+  - **The resume.** Run `a` again with `--prune-unvalidated`, then runs `b` and `c`.
+  - **A miss.** If the signal falls outside that window, the store is kept and named in the log. One further attempt is
+    made, into `…-resumed2`. A second miss is a stop.
+- **P56 — the readers, under Ray, on the reference store.**
+  - `main.py --inventory`.
+  - `plot_by_beta.py` and `plot_ScalarHistory.py` with `--alpha-values 0 0.01 0.1 0.15 --A-values 0.1 1`.
+  - `plot_by_beta.py --A-values 0.5`, which must exit 2 and write nothing.
+  - `tools/quanta_measures.py` at c_a = 1, 0 and 10.
+  - The two plot scripts and the tool on the resumed store too, for P54 (iii).
+  - **The format-6 store.** `tools/bbn_from_store.py` on one fixed-law history of the base store and the same history of
+    the reference store, and on one one-loop history of the reference store. Each must give the stored Y_p and D/H.
+    It is the first read of a format-6 store by a tip reader since 04 (P39).
+- **P57 — what is kept.** The three stores stay under `var/datastores/` with their `store create` sidecars, for the user.
+  The reference store's exports and the tool's outputs stay under `var/one-loop-drain/06/`. 07 renders on them, beside
+  05's exports of 02d's 230 histories. Nothing under `var/` is committed.
