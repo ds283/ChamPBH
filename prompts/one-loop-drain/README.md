@@ -1066,3 +1066,16 @@ piece at 0 and 10 beside the default 1, as U4 asked.
 - **P49 — measurements, not bounds.** No threshold refuses or warns on a measure, and no value opens an issue.
   `[00-later-bounces-act-on-quanta-already-present]` is narrowed by 05's δ_stim on the sample. It stays open as a
   known limitation, as the user ruled (P15).
+
+**U17 ruled by the user, 2026-11-06, at 05's dispatch:** the associated piece's upper end.
+- **The question.** U4's associated piece, 49 x_*³/x at every x, gives x³ s_assoc = 49 x_*³ x², so I = ∫x³ s dx
+  diverges, and Ω and the large-y form of G with it. No source gives the piece an end. `kb_partB_report.tex` measures
+  n ∝ 1/q on its resolved probes only (q ≤ 0.05 ω_t, x ≤ 0.1), and calls it the soft band's occupation, below the
+  hard/soft split near 0.3 ω_t ≈ x_p.
+- **The options put,** with the share of I each carries at c_a = 1:
+  - the 1/x piece to x_p, then falling as the direct piece does, e^{−κ(x − x_p)} (2.9 × 10⁻⁵);
+  - a hard cut at x_p (8 × 10⁻⁶);
+  - a hard cut at x = 0.1 (3 × 10⁻⁸).
+- **The user selected the first,** "1/x to x_p, then e^{-κ} (Recommended)". So s_assoc(x) = 49 x_*³/x for x ≤ x_p,
+  and 49 x_*³/x · e^{−κ(x − x_p)} above, with the direct piece's κ. s is continuous at x_p, and s(x_*) = 50 s_dir(x_*)
+  is unchanged. Orchestrator note 05, ruling 1, binds it for 05.
