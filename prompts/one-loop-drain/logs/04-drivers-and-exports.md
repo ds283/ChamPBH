@@ -1,7 +1,7 @@
 # Log 04 — drivers and exports
 
 **Subject:** Give the drivers the one-loop law and write its three exports
-**Commit:** this commit, on branch `one-loop-drain`, on top of `8df05c1`
+**Commit:** `64a6274`, on branch `one-loop-drain`, on top of `8df05c1`
 **Date:** 2026-11-06, by Claude Sonnet 5.5
 **Result:** **COMPLETE.** The Export gate holds (`.documents/one-loop-drain-verification.md` §4).
 - **The option.** `--A-values` (one or more A, each finite and > 0, no upper bound, no default) beside `--alpha-values`
@@ -276,8 +276,10 @@ the drivers are checked by `ast` and their functions on temporary stores. `black
 ## 7. State handed to the next prompt
 
 **For 05 (the derivation tool): the export format, exactly.** 05 reads only files; it opens no store. Every number is
-written at full precision (`repr`), so a value read back by `float()` is the stored column exactly in the units the store was built
-with (ruling 1: each cell is `to_column(from_column(raw, kind, units), kind, units)`, the raw value itself in `Planck_units`).
+written at full precision (`repr`), so `float()` of a cell gives back exactly the value written. A cell of a converted column is
+`to_column(from_column(raw, kind, units), kind, units)` (ruling 1). Whether that equals the raw column bit for bit depends on the
+units the store's cosmology carries; on this prompt's store, in `Planck_units`, it did at every cell (verification §4). *(Corrected in
+the orchestrator's review: this sentence first said the cells are the stored columns exactly, which holds only in some units.)*
 
 *Where the files are* (`<output>` is the plot scripts' `--output`; `<label>` is the cosmology's label, `QCD_Cosmology`):
 - **histories.csv**: `<output>/<label>/histories.csv`, written by `plot_by_beta.py` once per cosmology, over every row of the run (fixed

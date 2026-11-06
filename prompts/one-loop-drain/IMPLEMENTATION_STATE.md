@@ -63,7 +63,7 @@ The plan as first ruled had seven prompts (README §2), none written; the re-pla
 | 02c | [The measured law](02c-the-measured-law.md) | inserted 2026-11-05 (README §8.10): the adopted law in `ScalarHistory.py`, replacing 2.7/ℓ and both gap prescriptions; S(L); U15 (b), L = ln(1 + E/V₀) at every n; the `"drain"` record names the model version and records L and ln R; `--gap-prescription` removed; the reproduction of crossover's adopted-law maps | Opus | ✅ | ✅ | `18add05` | [02c](logs/02c-the-measured-law.md) |
 | 02d | [Measure the measured law](02d-measure-the-measured-law.md) | inserted 2026-11-05: 02's thirty histories re-tuned under the measured law at U14's eight A, every task run (no shortcuts); regime shares, the law's edges, parking, the first impact and the cap, ΔN_eff, Y_p, D/H, against 02/02b and the fixed law; the cost of the classical drains; replaces 02's and 02b's one-loop measurements | Opus | ✅ | ✅ | `98b1601` | [02d](logs/02d-measure-the-measured-law.md) |
 | 03 | [The store](03-the-store.md) | the drain-model key on `alpha_value` (U8, README §8.10 decision 1, P27), `ScalarHistoryBounce` under the one-loop law (P29), the history columns (regime shares, counts, ℓ_min, the all-generation margins; P30), the sample masses at every law (U5, P31), the guard (P28), `FINGERPRINT_FORMAT` 7, `VERSION_LABEL` 2026.10.0; closes two §3 issues | Opus | ✅ | ✅ | `fe4c917` | [03](logs/03-the-store.md) |
-| 04 | [Drivers and exports](04-drivers-and-exports.md) | `--A-values` in `main.py` and the plot scripts, beside `--alpha-values` (P33, P34); the one-loop paths and labels (P35); `drain_model` and the drain record in `histories.csv` (P36), the sample masses in `fields.csv` (P37), a new `bounces.csv` (P38); the raw-SQL readers of `alpha_value` and the inventory report's label (P39); the registered run's scope (P40) | Sonnet | ✅ | ✅ | this commit | [04](logs/04-drivers-and-exports.md) |
+| 04 | [Drivers and exports](04-drivers-and-exports.md) | `--A-values` in `main.py` and the plot scripts, beside `--alpha-values` (P33, P34); the one-loop paths and labels (P35); `drain_model` and the drain record in `histories.csv` (P36), the sample masses in `fields.csv` (P37), a new `bounces.csv` (P38); the raw-SQL readers of `alpha_value` and the inventory report's label (P39); the registered run's scope (P40) | Sonnet | ✅ | ✅ | `64a6274` | [04](logs/04-drivers-and-exports.md) |
 | 05 | Derivation tool | `quanta_spectrum.py` and `tools/quanta_measures.py`: n_g, n̄_j, δ_stim, E, phase slip, backreaction ratio, the R·S(L) bound | Opus | ⬜ | ⬜ | | |
 | 06 | Rehearse | the fixed law base against tip, bitwise; the one-loop law interrupted and resumed, by value | Opus | ⬜ | ⬜ | | |
 | 07 | Figure tools | the grid figure and the per-history figure | Sonnet | ⬜ | ⬜ | | |
@@ -80,6 +80,7 @@ Orchestrator notes, one prompt at a time, in `orchestrator/`:
 - [`prompt-02c.md`](orchestrator/prompt-02c.md) (`1647f7a`, amended in the review commit, its §5) — used for 02c.
 - [`prompt-02d.md`](orchestrator/prompt-02d.md) (`f4da906`) — used for 02d.
 - [`prompt-03.md`](orchestrator/prompt-03.md) (`d3069cb`) — used for 03.
+- [`prompt-04.md`](orchestrator/prompt-04.md) (`8df05c1`) — used for 04.
 
 **Orchestrator review of prompt 01 (2026-11-03)**, by orchestrator note 01 §3, on `b99f6a4`. Passed; seven
 checks:
@@ -440,6 +441,64 @@ Noted, not acted on:
 - **The wall-side ln T_J path of ruling 7** was exercised on stored data only at C-3233 (73 candidates); P-2197's
   candidates are all reflections.
 - **For 04:** the raw-SQL readers of `alpha_value` and the inventory report's α label (log §6).
+
+**Orchestrator review of prompt 04 (2026-11-06)**, by orchestrator note 04 §3, on `64a6274`. Passed; seven checks.
+No stop was raised. Before dispatch the orchestrator put to the user a question about one column of bounces.csv,
+`log_T_Jordan_GeV`, which it took to be the one converted column that could not equal its stored column bit for bit.
+The user called the question misconceived (2026-11-06): which columns come back exactly depends only on the units
+(M_P = 1 in Planck units is an accident), and the units system exists so that they can change. Note 04's ruling 1
+therefore states the export's equality as an identity of the store's own conversions, the same for every column. The
+orchestrator's figure of about half the cells changing came from random values; on stored temperatures in Planck units
+ln T and ln GeV are within a factor two, the subtraction is exact, and the agent measured 0 of 55 000 cells differing.
+
+1. **Scope.**
+   - `git show --stat 64a6274` lists 34 files, prompt §5's and ruling 9's, with the changed test modules the log names.
+     Its parent is `8df05c1`, the note's.
+   - The tree was clean, `git worktree list` showed the main checkout alone, and nothing is pushed.
+   - Under `ComputeTargets/` and `ObjectFactories/` only tests change. `FINGERPRINT_FORMAT` is 7, `VERSION_LABEL`
+     2026.10.0, and `tools/history_and_bbn.py` is unchanged.
+2. **The suites, re-run by me** serially at loads of 5.4–36.3 at their starts: 26 (68 s), 651 (219 in 149 s + 432 in
+   476 s), 163 (131 s), 173 (215 s) and 72 (28 s), all passing. These are the counts the log states, and none fell.
+3. **The exports, independently.** A scratch script of mine stored P-2197 at A = 1 and the fixed-law histories at
+   α = 0.1 and α = 0 on a temporary store, exported them with the agent's functions, and checked every new cell against
+   the raw column read by SQL, by ruling 1's identity: 69 drain cells of histories.csv (blank under the fixed law), 31 138
+   mass cells of fields.csv (no NULL among them) and 270 cells of bounces.csv (9 rows, `bounce_rows` 9, ordinals 0–8).
+   `write_bounces_csv` under `Mpc_units`, on a constructed row, equals `bounce_row_columns` cell by cell.
+4. **The fixed law, byte for byte.** A second script of mine, run in a scratch worktree at `8df05c1` (since removed) and
+   at `64a6274`, wrote histories.csv and fields.csv (the base's `write_csv_file` by `ast`, unedited) for the same three
+   histories. Projected onto the base's columns, every file of the tip is byte-identical to the base's, P-2197's
+   included.
+5. **The drivers.** I read the diffs of `main.py`, `plot_inputs.py`, both plot scripts and `extract_common.py`. My probe:
+   `--A-values` is None by default and refuses 0, −0, −1, nan, inf and text with exit 2, naming the option; 10 and
+   1000 parse. `alpha_label` gives `α = 0.1`, `alpha = 0.1` and `$\alpha$ = 0.1` under `fixed` and
+   `A = 1 (one-loop-measured-v1)` otherwise. `alpha_path` gives `alpha=0` for −0 and
+   `one-loop-measured-v1/A=1.2346`, and refuses a call with no model or an unknown one. `plot_inputs.parameters` returns
+   the fixed rows, then the A rows, each with its model, and refuses an A stored only as an α (`--A-values`) and an α
+   stored only as an A (`--alpha-values`).
+6. **The tools.** My probe of `bbn_from_store._find_query` on an imitation store with the same value under both
+   models finds each law's own history; without the `drain_model` column it finds the fixed one and, under the one-loop
+   model, nothing. `_law_alpha` accepts `--alpha 10` under `one_loop`, refuses it under `fixed` with today's message,
+   and requires `--alpha` under `one_loop`. `describe_scope` adds `A 0.5, 1` only with `--A-values`. The inventory
+   report's and `outward_step_scan.py`'s counts I checked by reading the code and the tests that pin them
+   (`test_inventory_alpha`, `test_inventory_report`, `test_one_loop_tools`), not by a probe of my own.
+7. **The records.**
+   - The log follows the template, and classes every deviation and each of note 04's rulings.
+   - Verification §1–§3 are unchanged; §4 follows prompt §2.
+   - On the board: row 04, its items, the Export gate and **Last updated**.
+   - `CLAUDE.md`'s counts are those measured, and "The plot scripts" names `--A-values` and the one-loop path.
+   - `architecture-summary.md` has its dated note.
+
+   The review substituted `64a6274` for "this commit" on the board and in the log. It corrected the log's §7, whose
+   first sentence said every exported cell is the stored column exactly, which holds only in some units, and it updated
+   `prompts/INDEX.md`'s row.
+
+Noted, not acted on:
+- **The `--A-values` refusal names the option twice** (`argument --A-values: --A-values: under the one-loop drain law
+  alpha carries A, …`), because `check_drain_model`'s message begins with its context. The message is right;
+  rewording it would change the rule's one statement.
+- **`plot_ScalarHistory.py` kept `pandas` and `nan`**, which the moved code no longer uses (log §6). Removed in a
+  housekeeping commit after this review.
+- **Two copies of `_law_alpha`** (`tools/history_and_bbn.py`, `tools/bbn_from_store.py`; log §6).
 
 **Open for the user, with 02's measurements (2026-11-03;
 [verification §2.9](../../.documents/one-loop-drain-verification.md)):**
