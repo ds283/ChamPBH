@@ -11,8 +11,8 @@
 - the scoping probes `source/probe/all_generations.py` and `source/probe/drain/phase_slip.py`;
 - the tree's code at the commit that adds this prompt.
 
-**Not to be dispatched until the user has answered U16** (README §8.13). The prompt is written on the proposal,
-U4 as ruled. If the user rules otherwise, the orchestrator note says what changes.
+**U16 is ruled** (README §8.13, 2026-11-06): U4's shape for every generation, whatever its estimate, with the
+associated piece at scale 1 the default. The Born scheme's S²/4k² is not a measured spectrum and is not used.
 
 If an orchestrator note is written for this prompt at dispatch, it governs where it differs from this file.
 
@@ -304,7 +304,8 @@ task that fails is reported with its reason. More than three failures is a stop.
 - **No threshold** refuses or warns on a measure, and no measured value opens an issue (P49).
 - **No Ray, no cluster, no registered run, and no run of `main.py`, `plot_by_beta.py` or `plot_ScalarHistory.py` as a
   program.** §1.6's children call 04's functions directly.
-- **No figure** (07's). No shape other than U4's in the module, unless the user's answer to U16 asks for one.
+- **No figure** (07's). No shape other than U4's in the module (U16), but for the peak-collapsed shape the gate's
+  §2.2 needs.
 - **Nothing is written** under the briefing notes' repository, or under `var/one-loop-drain/0[1-4]*/`.
 - No merge, no push. `PRyM/`, `thirdparty/` and the packages are not touched.
 

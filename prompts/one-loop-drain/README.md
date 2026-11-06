@@ -999,6 +999,26 @@ Rescattering is bounded by δ_stim (about 2n), and the bound is stated, not comp
   - **Alternative (c):** U4 as the model of record, and (b) as a further sensitivity.
 - **Prompt 05 is written on the proposal.** It is not dispatched until the user answers U16.
 
+**U16 ruled by the user, 2026-11-06:** U4 stays for every generation, whatever its estimate. Alternatives (b) and (c)
+are withdrawn, and the associated piece stays in the model of record at scale 1, the default. The user's words: "Surely
+`wall_backreaction.tex` is wrong. I can't think why we would have that divergent `1/k^2` piece. The point of U4 was to
+use the spectrum that we had measured. At the time, I think I wondered even whether to use the `1/k` associated
+production piece." And then: "Yes, please record that way. Keep the associated piece as the default."
+
+*Correction (the planner, 2026-11-06).* The U16 entry above misdescribed the Born scheme's final spectrum as a
+candidate shape for one-loop bounces, and in conversation called it "the one-loop spectrum". It is not a measured
+spectrum.
+- In the scheme, n_k = |∫ V̇'' e^{−2ikt} dt / 4k²|² tends to S²/4k² as k → 0, with S = ∫ V'' dt. That is the Born
+  result for massless modes struck by a pulse of nonzero area. The scheme's modes are massless, with the mass entering
+  only as an infrared cutoff.
+- On the exponential wall itself, the same note's test-field calculation gives n ≃ 34 (k/ω_t)²/L², the k² law of U4's
+  direct piece. The note sets the scheme's S²/4k² against it.
+- `kb_partB_report.tex` finds the soft modes populated by associated production with a 1/q spectrum, "not by the
+  retarded kick".
+
+U4 is the spectrum that was measured, and nothing in the notes supports the 1/k² piece. P46 reports the associated
+piece at 0 and 10 beside the default 1, as U4 asked.
+
 **Proposed by the planner for 05 (P41–P49), the defaults unless the user says otherwise.** Prompt 05 is written on them.
 - **P41 — two modules,** as §8.4 names them.
   - `ComputeTargets/quanta_spectrum.py` is pure: the shape, its moments, its kernels, its constants with their
