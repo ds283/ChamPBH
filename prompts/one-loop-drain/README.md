@@ -945,3 +945,104 @@ those the code at the commit adding prompt 04 writes from the same store. The pl
 or `--A-values` value that has no row under its model (exit 2). Nothing runs under Ray: the drivers are checked by
 `ast` and their functions on temporary stores, as `inelastic-reflection` 10 checked `--alpha-values`. 06 runs them
 under Ray.
+
+### 8.13 Before 05 (2026-11-06)
+
+Written by Claude Opus 5.5 after 04 landed and was reviewed (`64a6274`, `48d98fd`), at the user's request: "Please
+write prompt 05".
+
+**Ready.** The Export gate holds, and the tree is clean. 04's log §7 (as corrected in the review) gives the export
+format exactly:
+- histories.csv at `<output>/<label>/`, with `drain_model` and the drain record;
+- fields.csv per history, with the sample masses;
+- bounces.csv beside it for each one-loop history, the 30 stored columns of `ScalarHistoryBounce`.
+
+Each converted cell is the store's own conversion of its column (note 04, ruling 1). 05 needs nothing else, and opens
+no store.
+
+**Stale beside §8.10 and §8.11, now settled for 05:**
+- **"The R·S(L) bound"** (§8.3, §8.4 row 05) is dropped. Under decision 3 the classical regime drains R·S(L), and each
+  row carries it as `alpha_eff`.
+- **"Run on 02's histories"** (§8.4 row 05) reads 02d's, which replaced 02's and 02b's one-loop measurements.
+- **The Derive gate's "E and the margins agree with the probe"** (§8.5): the all-generation margins are 03's stored
+  columns, checked in 03's review against the core with the weight set to 0. 05 compares E only.
+
+**What the tool computes** (§8.3, with ruling 3 of §6.3): per generation the occupation at birth n_g; per producing
+bounce the occupation overlap n̄_j; per history δ_stim; E(N) at every sample, its maximum and r_χ E's; per bounce the
+phase slip and its minimum over producing bounces; per bounce the backreaction ratio n_χ m_k/E_k and its maximum.
+Rescattering is bounded by δ_stim (about 2n), and the bound is stated, not computed separately (§8.3).
+
+**For the user (U16) — the spectrum's shape for one-loop generations.**
+- **U4 as ruled (2026-11-02).** One shape for every generation, whatever its estimate, in units of its k_ex:
+  - s_dir ∝ x² below a peak at x_p = 0.62, exponential above;
+  - s_assoc = 49 x_*³/x, with x_* = 0.0058.
+  The direct piece is the classical wall's test-field spectrum (`production_energy_ratio.tex`, §"Results": peak at
+  0.31 ω_t = 0.62 k_ex, slope 1.99 below, about 10⁻²⁰ at 5 ω_t). The associated piece is the 2PI toy's soft
+  occupation, fifty times the test field's at 0.0029 ω_t (`kb_partB_report.tex`, "The soft occupation").
+- **What has changed since.** Under the measured law most drained energy is one-loop. In 02d, at every A, the median
+  history drains between 0.997 and 1 of its K in one-loop generations; four or five histories per A drain mostly in
+  the other regimes (`var/one-loop-drain/02d/sample.jsonl`, `drain_values`). U4 was ruled when the fixed α's late
+  classical drains dominated.
+- **What the Born scheme gives for a one-loop bounce** (`wall_backreaction.tex`, "Weak pulse (one-loop scheme, Born
+  regime)"):
+  - The final spectrum's energy peaks at 1.06 k_ex, with 89% of it between 0.3 and 3 k_ex, against 1.14 k_ex for
+    U4's x³s_dir.
+  - Below 0.1 k_ex, n_k → S²/4k², against U4's x² plus the 1/x associated piece.
+  - With a 1/x² occupation the overlap ∫x³ s(x) s(x e^{−u}) dx diverges logarithmically at x → 0. The shape would
+    then need an infrared end at each generation's own mass, x ≥ m_ta/k_ex = e^{−ℓ}, which makes every kernel a
+    function of two variables.
+  - The same note finds the scheme self-consistent only with its infrared cutoff near the band's edge.
+- **Proposed: keep U4 as ruled for 05.** The shape is one versioned function, named in every output, so a later shape
+  is a re-run of the tool, not a rebuild. 05 reports the associated piece off and ×10 beside it, as U4 asked (P46).
+  - **Alternative (b):** the Born scheme's final spectrum for one-loop and gap generations, with U4's for classical
+    ones, cut off at e^{−ℓ}. That means two-variable kernels and a tabulation from `scripts/spec_born.py`.
+  - **Alternative (c):** U4 as the model of record, and (b) as a further sensitivity.
+- **Prompt 05 is written on the proposal.** It is not dispatched until the user answers U16.
+
+**Proposed by the planner for 05 (P41–P49), the defaults unless the user says otherwise.** Prompt 05 is written on them.
+- **P41 — two modules,** as §8.4 names them.
+  - `ComputeTargets/quanta_spectrum.py` is pure: the shape, its moments, its kernels, its constants with their
+    sources, and a version string. It does no I/O and imports nothing of the integrator.
+  - `tools/quanta_measures.py` reads the exports and writes the measures. It opens no store and starts no Ray.
+- **P42 — the inputs are 04's exports alone.**
+  - A history is found from its histories.csv row, by the directory 04's helpers give it.
+  - Two rows that map to one directory are refused.
+  - A fixed-law history has no bounces.csv. It is skipped with a count, since nothing in it carries a generation.
+- **P43 — K(N) is rebuilt from the bounce rows.**
+  - It is right-continuous, with entries at each candidate's drain N:
+    - K_before + ΔK at a candidate, bitwise as the ledger adds it (03, ruling 6);
+    - the parking leftover where the next candidate's K_before shows it, or after the last candidate, from
+      `parking_share`.
+  - It is checked against each sample's r_χ ρ_R,E e^{4N} from fields.csv. The leftover has no spectrum (the open issue
+    `[00-the-parking-leftover-has-no-spectrum]`). It enters K but not E's numerator, and its share is reported.
+- **P44 — the measures, exactly** (prompt 05 §1.4):
+  - **The generations** are the candidate rows with ΔK > 0 and a `log_q`, born at `N_turn`, with Q_g = e^{log_q}.
+  - **n_g** is the occupation at the direct peak, A_g s(x_p), with A_g = 2π² ΔK_g/(Q_g⁴ I).
+  - **n̄_j** = Σ_{g: N_g < N_j} A_g Ω(ln(Q_g/Q_j)), with Ω(u) = ∫x³ s(x) s(x e^{−u}) dx / I.
+  - **δ_stim** = Σ_j 2 n̄_j ΔK_j / K(N_final).
+  - **E(N)** with the field's mass, and with the tracker's beside it, as the probe computes it (§1.1 measure 2).
+  - **The phase slip** as `source/probe/drain/phase_slip.py` defines it, over consecutive assessed candidates, with
+    `log_H` as the probe's `H_before`.
+  - **The backreaction ratio** at every candidate row with `log_m` and `log_E`: n_χ m_k/E_k, with
+    n_χ a³ = Σ_{g before k} ΔK_g J/Q_g and J = ∫x² s/∫x³ s.
+- **P45 — the outputs.**
+  - `quanta_bounces.csv` and `quanta_samples.csv` beside each one-loop history's bounces.csv.
+  - `quanta_histories.csv` at `<label>/`, one row per one-loop history, keyed as histories.csv.
+  - Every file names the spectrum's version and the associated piece's scale. 07 reads these files, so 05's log
+    states them exactly.
+- **P46 — the sensitivity.** The tool takes the associated piece's scale, default 1. 05 reports 0 and 10 beside 1.
+- **P47 — the run on 02d's histories.**
+  - Every one of 02d's 230 successful tasks is re-integrated once at its accepted tuning, as `store-03/cost_03.py`
+    realizes them, with its candidates checked against 02d's partial line by `repr`.
+  - Each is stored on a temporary store, exported by 04's writers in the plot scripts' layout, and measured at the
+    three scales.
+  - The run is detached, at most six workers, under `var/one-loop-drain/05/`. 02d's per-integration walls sum to
+    about 10 500 s.
+- **P48 — the Derive gate, made exact.**
+  - Each kernel, moment and measure agrees with direct quadrature to 10⁻⁶ relative on constructed generations.
+  - With the spectrum collapsed to its peak, E agrees with the probe's `excess` (run unedited, extracted by `ast`) on
+    P-2197 at A = 1, fed the same generations, masses and ledger.
+  - K(N) agrees with the payload's ledger.
+- **P49 — measurements, not bounds.** No threshold refuses or warns on a measure, and no value opens an issue.
+  `[00-later-bounces-act-on-quanta-already-present]` is narrowed by 05's δ_stim on the sample. It stays open as a
+  known limitation, as the user ruled (P15).
