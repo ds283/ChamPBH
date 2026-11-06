@@ -2277,3 +2277,39 @@ work_pool.run()
 >   each candidate (`:2391`). A value set on the module object before a call is the cut's ε for that call.
 >   It is a module constant and not a key: a store does not record the ε its histories were made with
 >   (`numerical-strategies.md` §6.10 gives the measured effect of changing it).
+
+> **Note, 2026-11-06 (`one-loop-drain`, prompt 04): the drivers take the one-loop law, and three exports carry what 03 stored.**
+> - **The option and the rows.** `--A-values` (`config/argument_parser.py`, type `drain_strength_A`, `nargs="+"`, no
+>   default) gives the strengths A of the one-loop law, each finite and > 0 with no upper bound, checked at parse by
+>   `check_drain_model(DRAIN_MODEL_ONE_LOOP, …)`. `main.py` and both plot scripts apply `distinct_values` to each list and
+>   hold one `alpha_value` row per value: the `--alpha-values` rows first (no model named, so `fixed`; the default is still
+>   `[0]`, so a run given only `--A-values` also builds, or reads, α = 0), then the `--A-values` rows looked up with
+>   `drain_model=DRAIN_MODEL_ONE_LOOP`. `plot_inputs.parameters(…, alpha_values, A_values=())` returns them in one tuple
+>   (`PlotParameters.alphas`, each row with its `drain_model`); an A with no row under the one-loop model is
+>   `PlotOptionNotStored` naming `--A-values`, even when the value is stored as an α, and an α with no `fixed` row is
+>   refused as before, even when the value is stored as an A.
+> - **The paths and the labels** come from two helpers that take the row's model and have no default for it:
+>   `extract_common.alpha_path(base, value, drain_model)` gives `<base>/alpha=<α:.5g>/` under `fixed` (as before) and
+>   `<base>/<drain_model>/A=<A:.5g>/` under any other model; `CosmologyConcepts.drain_model.alpha_label(value, drain_model,
+>   spelling="α")` gives `<spelling> = <α:g>` under `fixed` (the printed header lines pass `alpha`, the Delta N_eff legend
+>   `$\alpha$`, so every fixed-law string is today's) and `A = <A:g> (<drain_model>)` otherwise. `model_of_law` is the
+>   inverse of `law_of`, for the tools' `--drain-law`.
+> - **histories.csv** gains `drain_model` directly after `alpha` (`alpha` keeps the key's value: α under `fixed`, A under
+>   the one-loop model) and `DRAIN_CSV_COLUMNS`, the fields of `ScalarHistory.drain_history` under their stored names
+>   (dimensionless; counts as integers; blank under `fixed`, at α = 0 and on a failure), after `DISSIPATION_CSV_COLUMNS`
+>   and before `failure_reasons`; the sort is by (`drain_model`, α, M, n, β), today's order for a store of `fixed` rows
+>   alone; `Delta_N_eff.pdf` draws one curve per (model, value > 0), fixed first.
+> - **fields.csv** gains `log_m_eff_Mp` and `log_m_tracker_Mp` after `Delta_gstar` (ln(m/M_P), the stored columns; blank
+>   where NULL; under every law); its row-building moved from `plot_ScalarHistory.write_csv_file` into
+>   `extract_common.build_fields_frame(BBN, Q, model, units)`. **bounces.csv** is new: beside each one-loop history's
+>   fields.csv, one row per bounce row in `ordinal` order, the stored columns of `BOUNCE_COLUMNS` without `history_serial`,
+>   each cell `bounce_row_columns(row, units)`'s value (`extract_common.write_bounces_csv`); Booleans as 0 and 1, NULL as a
+>   blank cell; a header alone for a one-loop history with no bounce row; never written under `fixed`.
+> - **Every new cell is the stored column in any units:** `to_column(from_column(raw, kind, units), kind, units)`, which
+>   is the raw value itself where the round trip is exact (it is in `Planck_units`, for every cell of the export store;
+>   `.documents/one-loop-drain-verification.md` §4). No writer relies on a unit being 1.
+> - **The tools.** `tools/bbn_from_store.py --drain-law {fixed,one_loop}` (`--alpha` is α or A by the law; the find query
+>   binds `model_of_law`'s model); `tools/outward_step_scan.py` reads `fixed` rows only and says on stderr how many rows of
+>   another model it skipped; `tools/inventory_report.py` labels a row of another model `A=<A:.5g> (<drain_model>)`; a
+>   store whose `alpha_value` has no `drain_model` column is read as `fixed` rows only. `RunDrivers/registered_run.py`'s scope
+>   gains `A <values>` after the α part only when `--A-values` is given.

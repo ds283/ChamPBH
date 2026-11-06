@@ -78,19 +78,22 @@ invariants that hold across all of them:
   the repository root:
   ```bash
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .   # 26 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 622 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .   # 149 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 156 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .        # 68 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 651 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .   # 163 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 173 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .        # 72 tests
   ```
   `ComputeTargets/tests` took 590 s on 2026-11-01 (the two halves below, 135.8 s and 454.6 s, at one-minute
   loads of 6.1 and 11.2 at their starts), and longer on a loaded machine; a Bash call is
   capped at ten minutes, so run it in two halves:
   ```bash
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 190 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 219 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 432 tests
   ```
-  (The counts are those of 2026-11-06, after `one-loop-drain` 03, which added 28 tests to the `test_[a-f]` half
+  (The counts are those of 2026-11-06, after `one-loop-drain` 04, which added 29 tests to the `test_[a-f]` half
+  (`test_a_values_option`, `test_a_values_plot_inputs`), 14 to `ObjectFactories/tests` (`test_export_04`), 17 to `tools/tests`
+  (`test_one_loop_tools` and `test_inventory_alpha`) and 4 to `RunDrivers/tests` (`test_scope_a_values`); before it, those of
+  2026-11-06, after `one-loop-drain` 03, which added 28 tests to the `test_[a-f]` half
   (`test_drain_store_records`) and 19 to `ObjectFactories/tests` (`test_drain_store`); before it, those of 2026-11-05,
   after `one-loop-drain` 02c, which deleted 2 tests from the `test_[a-f]` half
   and added 1 there (`test_drain_law`), and added 29 to the `test_[g-z]` half (`test_measured_drain_law`); before it,
@@ -145,8 +148,13 @@ invariants that hold across all of them:
 - **The plot scripts** (`plot_by_beta.py`, `plot_ScalarHistory.py`) read a store read-only, through
   `plot_inputs.py`, and stop (exit 2) if their options do not match the ones the build used: the
   tolerances, T*, φ*, `--tuning-tolerance` (a key of every history), `--alpha-values` (an α with no stored
-  `alpha_value` row; each α's output goes under `<label>/alpha=<α>/`, α = 0 included) and `--n-values` (an n
-  with no stored model). `--tuning-max-integrations` is not matched; it is not a key.
+  `alpha_value` row under the fixed model; each α's output goes under `<label>/alpha=<α>/`, α = 0 included),
+  `--A-values` (an A with no stored `alpha_value` row under the one-loop model, `one-loop-measured-v1`, even when the
+  same value is stored as an α, as an α stored only as an A is refused likewise; each A's output goes under
+  `<label>/<drain_model>/A=<A>/`) and `--n-values` (an n with no stored model). `--tuning-max-integrations` is not
+  matched; it is not a key. `main.py` and the plot scripts hold the `--alpha-values` rows first and the `--A-values`
+  rows after them; `--A-values` has no default, so a run without it is the fixed-law run, and a run given only
+  `--A-values` also builds, or reads, α = 0.
 - **Science runs** are recorded in [`science-runs/`](science-runs/README.md), one dated folder
   (`YYYY-MM-DD-<slug>`) per run. Each holds the run scripts, the logs, and each figure made from the
   run with its inputs. That folder is a record of what produced output for publication; code

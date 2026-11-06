@@ -55,6 +55,7 @@ from typing import List, NamedTuple, Sequence
 import ray
 from datastorekit.replication import ReadOnlyMiss, ReadOnlyWrite
 
+from CosmologyConcepts.drain_model import DRAIN_MODEL_ONE_LOOP
 from MetadataConcepts import tolerance
 from config.model_list import build_model_list
 
@@ -104,7 +105,9 @@ class PlotParameters(NamedTuple):
     phi_init: object
     pi_init: object
     tuning_tol: object
-    # one `alpha_value` row per distinct --alpha-values value, in the drivers' order (a tuple)
+    # one `alpha_value` row per distinct --alpha-values value, then one per distinct --A-values value, in
+    # the drivers' order (a tuple): the fixed rows first, each row carrying its `drain_model`
+    # (one-loop-drain prompt 04, P34)
     alphas: tuple
 
 
@@ -117,6 +120,7 @@ def parameters(
     units,
     tuning_tol: float,
     alpha_values: Sequence[float],
+    A_values: Sequence[float] = (),
 ) -> PlotParameters:
     """
     The tolerances, `T_init`, `phi_init` and `pi_init` (README §0.3 rows 1-5), from `--abs-tol`,
@@ -126,6 +130,13 @@ def parameters(
     (inelastic-reflection prompt 09, P30; prompt 10, P34). Every lookup is submitted first; each is
     then read in this order, the alphas last and in the order given, and the first that is not
     stored raises `PlotOptionNotStored`. `alphas` is the tuple of the alpha rows.
+
+    One-loop-drain prompt 04 (P33, P34) adds `A_values` (`--A-values`, deduplicated by the caller; none by
+    default): one row per A, looked up under `DRAIN_MODEL_ONE_LOOP`, the code's current one-loop model, after
+    the alpha rows and in the order given. `alphas` is then the alpha rows (model `fixed`, no model named in
+    the lookup, as before) followed by the A rows. An A with no row under that model is `PlotOptionNotStored`
+    naming `--A-values`, the value and the model, even when the same value is stored under `fixed`; an alpha
+    with no `fixed` row is refused as before, even when the value is stored under the one-loop model.
     """
     lookups = [
         (
@@ -176,6 +187,16 @@ def parameters(
             _value(a),
         )
         for a in alpha_values
+    ]
+    # then the A rows, under the code's current one-loop model, in the order given
+    lookups += [
+        (
+            pool.object_get("alpha_value", value=A, drain_model=DRAIN_MODEL_ONE_LOOP),
+            "alpha_value",
+            "--A-values",
+            f"{_value(A)} ({DRAIN_MODEL_ONE_LOOP})",
+        )
+        for A in A_values
     ]
     rows = [_get_parameter(*lookup) for lookup in lookups]
     return PlotParameters(*rows[:6], tuple(rows[6:]))

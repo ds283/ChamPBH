@@ -23,9 +23,10 @@ stand-in cluster, no Ray):
   on each history line;
 - a store with two alpha prints `alpha=` on each history line, and not on the common line.
 
-Since one-loop-drain prompt 03 an `alpha_value` row is the pair (value, drain_model), and its spec has both
-leaves, so the report (unchanged) prints a row as `- value=0, drain_model=fixed` and a history's alpha as
-`alpha=alpha_value(value=0, drain_model=fixed)`; the rows here are of the fixed model.
+Since one-loop-drain prompt 03 an `alpha_value` row is the pair (value, drain_model). One-loop-drain prompt 04 (P39)
+labels each row by its model: a `fixed` row reads as before 03 (`values = [ 0, 0.1 ]` and `alpha=0`), which these
+tests pin again, and a row of another model reads `A=<A:.5g> (<drain_model>)` in the values list and on a history's
+line (`TestTheInventoryNamesTheModel`).
 
 No Ray, no PRyMordial. About 1 s.
 """
@@ -79,7 +80,9 @@ class _AlphaStoreCase(_InventoryStoreCase):
         solver = ins("IntegrationSolver", {"label": "solve_ivp+RK45", "stepping": 0})
         model = ins("ExponentialModel", dict(M_serial=M, n_value=1, beta_serial=beta))
         for k, value in enumerate(alphas):
-            alpha = ins("alpha_value", {"value": value, "drain_model": "fixed"})
+            # a bare value is a row of the fixed model; a (value, drain_model) pair is that model's
+            value, drain_model = value if isinstance(value, tuple) else (value, "fixed")
+            alpha = ins("alpha_value", {"value": value, "drain_model": drain_model})
             ins(
                 "ScalarHistory",
                 dict(
@@ -129,7 +132,7 @@ class TestTheInventoryNamesAlpha(_AlphaStoreCase):
         self.assertGreater(alpha, beta)
         self.assertGreater(alpha, heading)
         self.assertFalse(any("Other classes" in l for l in lines))
-        self.assertEqual(lines[alpha + 1], "- value=0, drain_model=fixed")
+        self.assertIn("values = [ 0 ]", lines[alpha:])
 
     def test_9_the_extra_field_follows_the_tuning_tolerance(self):
         fields = [f for f, _ in HISTORY_EXTRA_FIELDS]
@@ -140,12 +143,7 @@ class TestTheInventoryNamesAlpha(_AlphaStoreCase):
         _, lines = self.report([0.0])
         common = [l for l in lines if l.startswith("common to every history:")]
         self.assertEqual(len(common), 1)
-        self.assertTrue(
-            common[0].endswith(
-                "log10_tuning_tol=-5, alpha=alpha_value(value=0, drain_model=fixed)"
-            ),
-            common[0],
-        )
+        self.assertTrue(common[0].endswith("log10_tuning_tol=-5, alpha=0"), common[0])
         histories = [l for l in lines if l.startswith("- T_init=")]
         self.assertEqual(len(histories), 1)
         self.assertNotIn("alpha=", histories[0])
@@ -158,16 +156,51 @@ class TestTheInventoryNamesAlpha(_AlphaStoreCase):
         histories = [l for l in lines if l.startswith("- T_init=")]
         self.assertEqual(len(histories), 2)
         self.assertEqual(
-            sorted(l.split("alpha=")[1].split(")")[0] + ")" for l in histories),
-            [
-                "alpha_value(value=0, drain_model=fixed)",
-                "alpha_value(value=0.1, drain_model=fixed)",
-            ],
+            sorted(l.split("alpha=")[1].split(",")[0].split(" ")[0] for l in histories),
+            ["0", "0.1"],
         )
         for l in histories:
             self.assertEqual(l.count("alpha="), 1)
-        self.assertIn("- value=0, drain_model=fixed", lines)
-        self.assertIn("- value=0.1, drain_model=fixed", lines)
+        self.assertIn("values = [ 0, 0.1 ]", lines)
+
+
+ONE_LOOP = "one-loop-measured-v1"
+
+
+class TestTheInventoryNamesTheModel(_AlphaStoreCase):
+    """One-loop-drain prompt 04, P39: a row of the one-loop model reads `A=<A:.5g> (<drain_model>)`."""
+
+    def test_the_values_list_and_the_history_lines_name_a_one_loop_row(self):
+        _, lines = self.report([0.0, 0.5, (0.5, ONE_LOOP), (1.0, ONE_LOOP)])
+        # fixed rows by value, then the other model's: 0.5 is two rows and reads two ways
+        self.assertIn(
+            f"values = [ 0, 0.5, A=0.5 ({ONE_LOOP}), A=1 ({ONE_LOOP}) ]", lines
+        )
+        histories = [l for l in lines if l.startswith("- T_init=")]
+        self.assertEqual(len(histories), 4)
+        self.assertEqual(
+            sorted(l.split(", ")[-1].split("  |")[0] for l in histories),
+            sorted(
+                ["alpha=0", "alpha=0.5", f"A=0.5 ({ONE_LOOP})", f"A=1 ({ONE_LOOP})"]
+            ),
+        )
+        common = [l for l in lines if l.startswith("common to every history:")]
+        self.assertNotIn("alpha", common[0].split("log10_tuning_tol=-5")[-1])
+        self.assertFalse(any("drain_model=" in l for l in lines), "no raw key")
+
+    def test_one_one_loop_row_alone_is_common_to_every_history(self):
+        _, lines = self.report([(2.0, ONE_LOOP)])
+        common = [l for l in lines if l.startswith("common to every history:")]
+        self.assertTrue(
+            common[0].endswith(f"log10_tuning_tol=-5, A=2 ({ONE_LOOP})"), common[0]
+        )
+        self.assertIn(f"values = [ A=2 ({ONE_LOOP}) ]", lines)
+
+    def test_a_store_of_fixed_rows_alone_reports_as_before_one_loop_drain_03(self):
+        text, lines = self.report([0.0, 0.1])
+        self.assertNotIn("drain_model", text)
+        self.assertNotIn("A=", text)
+        self.assertIn("values = [ 0, 0.1 ]", lines)
 
 
 if __name__ == "__main__":

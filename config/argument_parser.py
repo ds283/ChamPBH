@@ -8,6 +8,7 @@ from ComputeTargets.ScalarHistory import (
     DEFAULT_TUNING_MAX_INTEGRATIONS,
     DEFAULT_TUNING_TOLERANCE,
 )
+from CosmologyConcepts.drain_model import DRAIN_MODEL_ONE_LOOP, check_drain_model
 from config.defaults import DEFAULT_ABS_TOLERANCE, DEFAULT_REL_TOLERANCE
 
 DEFAULT_LABEL = "ChamPBH-test"
@@ -124,6 +125,22 @@ def alpha_fraction(text: str) -> float:
     return value
 
 
+def drain_strength_A(text: str) -> float:
+    """
+    An argparse type for --A-values: the strength A of the one-loop drain law, finite and > 0, with no
+    upper bound (one-loop-drain prompt 04, README §8.12 P33). The rules are CosmologyConcepts.drain_model's
+    (check_drain_model under the code's current one-loop model), stated once; its ValueError is re-raised as
+    an ArgumentTypeError so that argparse prints the message, and the option is named by argparse (exit 2,
+    before any Ray). ``-0`` is refused as 0 is.
+    """
+    value = float(text) + 0.0
+    try:
+        check_drain_model(DRAIN_MODEL_ONE_LOOP, value, "--A-values")
+    except ValueError as e:
+        raise argparse.ArgumentTypeError(str(e)) from None
+    return value
+
+
 def distinct_values(values) -> list:
     """
     ``values`` without exact duplicates, in the order of first appearance. The drivers apply it once
@@ -227,6 +244,18 @@ def create_argument_parser() -> configargparse.ArgumentParser:
         "condensate's kinetic energy that dissipation mode drains at each candidate. It is a key of "
         "every stored history; 0 is natural mode (the default %(default)s), and a given list "
         "replaces the default (inelastic-reflection prompt 10)",
+    )
+    parser.add_argument(
+        "--A-values",
+        type=drain_strength_A,
+        nargs="+",
+        default=None,
+        help="one or more values of A, the strength of the one-loop drain law, finite and > 0 with no upper "
+        "bound: each names a history key (A, the code's current one-loop drain model) beside the "
+        "--alpha-values rows, which are looked up first and are unchanged. A is a key of every stored "
+        "history, as alpha is. The default is none, so a run without it is the fixed-law run; --alpha-values "
+        "keeps its default, so a run given only --A-values also builds, or reads, alpha = 0, natural mode "
+        "(one-loop-drain prompt 04)",
     )
     parser.add_argument(
         "--tuning-max-integrations",

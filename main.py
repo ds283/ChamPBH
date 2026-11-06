@@ -40,6 +40,7 @@ from CosmologyConcepts import (
     phi_value,
     pi_value,
 )
+from CosmologyConcepts.drain_model import DRAIN_MODEL_ONE_LOOP, alpha_label
 from CosmologyConcepts.redshift import log_one_plus_z_grid
 from CosmologyConcepts.Models import AbstractModel
 from ObjectFactories import tolerance
@@ -170,7 +171,9 @@ def run_pipeline(
     model_label = model_data["label"]
     model_cosmology = model_data["cosmology"]
 
-    print(f"\n>> RUNNING PIPELINE FOR MODEL {model_label}, alpha = {alpha.value:g}")
+    print(
+        f"\n>> RUNNING PIPELINE FOR MODEL {model_label}, {alpha_label(alpha.value, alpha.drain_model, 'alpha')}"
+    )
 
     # build tags and other labels, based on these sample grids
     (
@@ -996,14 +999,24 @@ def execute(pool, units: UnitsLike):
     # build absolute and relative tolerances, and the tuning's tolerance on both residuals, which
     # keys every history (jordan-normalization prompt 07; --tuning-tolerance is prompt 08's); and the
     # drained fraction alpha, which keys every history too: one row per distinct value of
-    # --alpha-values, in the order given (inelastic-reflection prompt 09, P30; prompt 10, P32, P33)
+    # --alpha-values, in the order given (inelastic-reflection prompt 09, P30; prompt 10, P32, P33). The rows
+    # follow the fixed rows with one row per distinct value of --A-values, in the order given, each under the
+    # code's current one-loop drain model (one-loop-drain prompt 04, P33, P34); without --A-values the lookups
+    # are those of before
     alpha_values = distinct_values(args.alpha_values)
+    A_values = distinct_values(args.A_values or [])
     atol, rtol, tuning_tol, *alpha_rows = ray.get(
         [
             pool.object_get("tolerance", tol=args.abs_tol),
             pool.object_get("tolerance", tol=args.rel_tol),
             pool.object_get("tolerance", tol=args.tuning_tolerance),
             *[pool.object_get("alpha_value", value=a) for a in alpha_values],
+            *[
+                pool.object_get(
+                    "alpha_value", value=A, drain_model=DRAIN_MODEL_ONE_LOOP
+                )
+                for A in A_values
+            ],
         ]
     )
 
@@ -1136,6 +1149,11 @@ def execute(pool, units: UnitsLike):
         f'   -- populated alpha grid with {len(alpha_values)} value{"" if len(alpha_values)==1 else "s"} = [ {", ".join(f"{a:.5g}" for a in alpha_values)} ]'
     )
 
+    if A_values:
+        print(
+            f'   -- populated A grid with {len(A_values)} value{"" if len(A_values)==1 else "s"} = [ {", ".join(f"{A:.5g}" for A in A_values)} ] ({DRAIN_MODEL_ONE_LOOP})'
+        )
+
     # M outer, n, beta inner: beta stays innermost, which balances the shards' load
     M_n_beta_grid = itertools.product(M_grid, n_values, beta_grid)
     Model_array = ray.get(convert_to_model(M_n_beta_grid))
@@ -1153,7 +1171,8 @@ def execute(pool, units: UnitsLike):
             Model_array, phi_init, T_init, units, model_data["cosmology"]
         )
 
-        # one pipeline per alpha row, in the order of --alpha-values (prompt 10, P33)
+        # one pipeline per alpha row: the fixed rows in the order of --alpha-values, then the one-loop rows in the
+        # order of --A-values (prompt 10, P33; one-loop-drain prompt 04, P34)
         for alpha in alpha_rows:
             run_pipeline(
                 pool,

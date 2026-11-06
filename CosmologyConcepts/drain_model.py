@@ -68,6 +68,40 @@ def law_of(drain_model: str, context: str = "law_of") -> str:
         ) from None
 
 
+# the inverse of law_of, the one mapping from a law to its current model (one-loop-drain prompt 04, orchestrator
+# note 04 ruling 4): the model a driver's or a tool's law option names. DRAIN_MODEL_ONE_LOOP is the code's current
+# one-loop model, so a version bump moves this and nothing typed at a call site
+_MODEL_OF_LAW = {law: model for model, law in _LAW_OF_MODEL.items()}
+
+
+def model_of_law(drain_law: str, context: str = "model_of_law") -> str:
+    """
+    The code's current drain model of a drain law, the inverse of law_of: DRAIN_MODEL_FIXED for DRAIN_LAW_FIXED
+    and DRAIN_MODEL_ONE_LOOP for DRAIN_LAW_ONE_LOOP. Any other law is a ValueError, whose message begins with
+    context.
+    """
+    try:
+        return _MODEL_OF_LAW[drain_law]
+    except (KeyError, TypeError):
+        raise ValueError(
+            f"{context}: drain_law must be one of {DRAIN_LAWS}, not {drain_law!r}"
+        ) from None
+
+
+def alpha_label(value: float, drain_model: str, alpha_spelling: str = "α") -> str:
+    """
+    The label of an alpha_value row, from its value and its model (one-loop-drain prompt 04, README §8.12 P35;
+    orchestrator note 04 ruling 2). Under DRAIN_MODEL_FIXED it is ``<alpha_spelling> = <value:g>``, the
+    spelling being a parameter because the printed lines, the titles and the legends have always spelt alpha
+    three ways; under any other model it is ``A = <value:g> (<drain_model>)``, whatever the spelling. The model
+    has no default: a caller that forgets it is a TypeError, not a fixed-law label on a one-loop row.
+    """
+    if drain_model == DRAIN_MODEL_FIXED:
+        return f"{alpha_spelling} = {value:g}"
+    law_of(drain_model, "alpha_label")
+    return f"A = {value:g} ({drain_model})"
+
+
 def check_drain_law(drain_law: str, alpha: float, context: str) -> None:
     """
     The law's inputs (one-loop-drain prompt 01 §1.1; README §8.8 P22), checked at entry by

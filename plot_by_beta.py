@@ -44,6 +44,11 @@ import config.ray_auth  # noqa: F401
 from ComputeTargets import ScalarHistoryProxy, AdiabaticHistory, BBNData, ScalarHistory
 from ComputeTargets.BBNData import PRYM_VERSION, compute_SM_baseline
 from CosmologyConcepts import alpha_value, temperature, phi_value, pi_value
+from CosmologyConcepts.drain_model import (
+    DRAIN_MODEL_FIXED,
+    DRAIN_MODEL_ONE_LOOP,
+    alpha_label,
+)
 from CosmologyConcepts.Models import AbstractModel
 from datastorekit.SQL.ProfileAgent import ProfileAgent
 from datastorekit.SQL.ShardedPool import ShardedPool
@@ -152,6 +157,7 @@ def build_beta_plot(
     model_label,
     group_model: AbstractModel,
     alpha: float,
+    drain_model: str,
     Q_data: List[AdiabaticHistory],
     bbn_data: list[BBNData],
     scalar_data: list[ScalarHistory],
@@ -167,11 +173,13 @@ def build_beta_plot(
 
     group_model is one model of the (M, n) group, which gives the group's M and n; the
     histories differ in beta (jordan-normalization prompt 07). alpha is the value of the alpha
-    row these histories were read at: every product goes under <output>/<label>/alpha=<alpha>/
-    (inelastic-reflection prompt 10, R26, ruling 3), and every figure's label says it.
+    row these histories were read at, and drain_model its model: every product goes under
+    <output>/<label>/alpha=<alpha>/ (inelastic-reflection prompt 10, R26, ruling 3) under the fixed
+    law and <output>/<label>/<drain_model>/A=<A>/ under the one-loop law (one-loop-drain prompt 04, P35),
+    and every figure's label says it.
     """
     base_path = Path(args.output).resolve()
-    base_path = alpha_path(base_path / f"{model_label}", alpha)
+    base_path = alpha_path(base_path / f"{model_label}", alpha, drain_model)
 
     # one record per history, from the stored columns through the existing lookups
     scalar_failures = {} if scalar_failures is None else scalar_failures
@@ -195,6 +203,7 @@ def build_beta_plot(
             n=group_model._n,
             phi_init_Mp=args.phi_init_Mp,
             alpha=alpha,
+            drain_model=drain_model,
             scalar=scalar_by_beta.get(beta),
             bbn=bbn_by_beta.get(beta),
             baseline=SM_baseline,
@@ -265,7 +274,7 @@ def build_beta_plot(
     if len(Yp_points) == 0:
         print(
             f"!! build_beta_plot '{model_label}', M={group_model._M.as_float / units.eV:.5g} eV, "
-            f"n={group_model._n}, alpha={alpha:g}: no valid BBN data to plot"
+            f"n={group_model._n}, {alpha_label(alpha, drain_model, 'alpha').replace(' = ', '=', 1)}: no valid BBN data to plot"
         )
         return records
 
@@ -317,7 +326,9 @@ def build_beta_plot(
         solver_ax.set_ylabel(r"time [sec]")
         solver_ax.grid(True)
 
-        add_beta_summary_labels(fig, model_label, group_model, alpha=alpha)
+        add_beta_summary_labels(
+            fig, model_label, group_model, alpha=alpha, drain_model=drain_model
+        )
         add_BBN_info_labels(fig, labels=bbn_labels)
 
         solver_ax.legend(loc="best")
@@ -462,7 +473,9 @@ def build_beta_plot(
 
         Yp_ax.set_xlabel(r"coupling $\beta$")
 
-        add_beta_summary_labels(fig, model_label, group_model, alpha=alpha)
+        add_beta_summary_labels(
+            fig, model_label, group_model, alpha=alpha, drain_model=drain_model
+        )
         add_BBN_info_labels(fig, labels=bbn_labels)
 
         def get_max_min(data):
@@ -542,7 +555,9 @@ def build_beta_plot(
         ax.set_ylabel(r"maximum $|Q| = |\omega_k'/\omega_k^2|$")
         ax.grid(True)
 
-        add_beta_summary_labels(fig, model_label, group_model, alpha=alpha)
+        add_beta_summary_labels(
+            fig, model_label, group_model, alpha=alpha, drain_model=drain_model
+        )
 
         # the max |Q| of a small-M history may be set by aliased late samples
         Q_caveat = adiabatic_Q_caption(group_model._M.as_float / units.PlanckMass)
@@ -681,7 +696,7 @@ def build_beta_plot(
         base_path
         / f"plots/M={group_model._M.as_float / units.eV:.5g}eV_n={group_model._n}"
     )
-    title = f"{model_label}, α = {alpha:g}: M = {group_model._M.as_float / units.PlanckMass:.5g} M_P, n = {group_model._n}, phi* = {args.phi_init_Mp:g} M_P"
+    title = f"{model_label}, {alpha_label(alpha, drain_model)}: M = {group_model._M.as_float / units.PlanckMass:.5g} M_P, n = {group_model._n}, phi* = {args.phi_init_Mp:g} M_P"
 
     if SM_baseline is not None:
         plot_abundance_shifts(
@@ -723,7 +738,9 @@ def run_pipeline(
     model_label = model_data["label"]
     model_cosmology = model_data["cosmology"]
 
-    print(f"\n>> RUNNING PIPELINE FOR MODEL {model_label}, alpha = {alpha.value:g}")
+    print(
+        f"\n>> RUNNING PIPELINE FOR MODEL {model_label}, {alpha_label(alpha.value, alpha.drain_model, 'alpha')}"
+    )
 
     # every BBNData row read for this model, for the provenance warning
     # (bbn-tolerance prompt 02)
@@ -987,6 +1004,7 @@ def run_pipeline(
             model_label,
             group_model,
             alpha.value,
+            alpha.drain_model,
             available_adiabatic,
             available_bbn,
             available_models,
@@ -1032,14 +1050,16 @@ def run_pipeline(
     all_records = [
         record for records in work_queue.results if records for record in records
     ]
-    model_path = alpha_path(Path(args.output).resolve() / f"{model_label}", alpha.value)
+    model_path = alpha_path(
+        Path(args.output).resolve() / f"{model_label}", alpha.value, alpha.drain_model
+    )
     if len(all_records) > 0:
         if SM_baseline is not None:
             plot_convergence_in_M(
                 all_records,
                 model_path / "plots/M_convergence.pdf",
                 args.band_half_width,
-                f"{model_label}, α = {alpha.value:g}: phi* = {args.phi_init_Mp:g} M_P",
+                f"{model_label}, {alpha_label(alpha.value, alpha.drain_model)}: phi* = {args.phi_init_Mp:g} M_P",
             )
         else:
             print(
@@ -1094,6 +1114,7 @@ with ShardedPool(
     units = Planck_units()
     try:
         alpha_values = distinct_values(args.alpha_values)
+        A_values = distinct_values(args.A_values or [])
         atol, rtol, T_init, phi_init, pi_init, tuning_tol, alpha_rows = (
             plot_inputs.parameters(
                 pool,
@@ -1104,6 +1125,7 @@ with ShardedPool(
                 units=units,
                 tuning_tol=args.tuning_tolerance,
                 alpha_values=alpha_values,
+                A_values=A_values,
             )
         )
 
@@ -1131,14 +1153,19 @@ with ShardedPool(
         )
 
     print(
-        f"@@ plot_by_beta: alpha values {', '.join(f'{a.value:.5g}' for a in alpha_rows)}"
+        f"@@ plot_by_beta: alpha values {', '.join(f'{a.value:.5g}' for a in alpha_rows if a.drain_model == DRAIN_MODEL_FIXED)}"
     )
+    if A_values:
+        print(
+            f"@@ plot_by_beta: A values {', '.join(f'{a.value:.5g}' for a in alpha_rows if a.drain_model == DRAIN_MODEL_ONE_LOOP)} ({DRAIN_MODEL_ONE_LOOP})"
+        )
 
     for model_data in model_list:
         tags = []
 
-        # one pipeline per alpha row, in the order of --alpha-values; histories.csv and
-        # Delta_N_eff.pdf are written once, from the records of every alpha
+        # one pipeline per alpha row, the fixed rows in the order of --alpha-values then the one-loop rows in
+        # the order of --A-values; histories.csv and Delta_N_eff.pdf are written once, from the records of
+        # every row, both models (one-loop-drain prompt 04)
         cosmology_records = []
         for alpha in alpha_rows:
             cosmology_records.extend(

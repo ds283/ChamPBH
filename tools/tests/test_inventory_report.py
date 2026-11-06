@@ -305,8 +305,7 @@ class TestReportOnAStore(_InventoryStoreCase):
         self.assertIn(
             "common to every history: cosmology=QCD_Cosmology(omega_m=0.3111, "
             "omega_cc=0.6889, h=0.6766, f_baryon=0.1575, T_CMB_Kelvin=2.7255, Neff=3.046), "
-            "log10_atol=-10, log10_rtol=-8, log10_tuning_tol=-5, "
-            "alpha=alpha_value(value=0, drain_model=fixed)",
+            "log10_atol=-10, log10_rtol=-8, log10_tuning_tol=-5, alpha=0",
             self.lines,
         )
         self.assertIn("validated: 2 records; version = 2026.6.0", self.lines)

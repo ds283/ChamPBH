@@ -1,6 +1,6 @@
 # one-loop-drain campaign — implementation state
 
-**Last updated:** 2026-11-06 · **Status: LIVE — 6 of 11 landed (01, 02, 02b, 02c, 02d, 03); the measured law in the code (02c), measured on the sample (02d) and stored (03); 04 written.** Planned
+**Last updated:** 2026-11-06 · **Status: LIVE — 7 of 11 landed (01, 02, 02b, 02c, 02d, 03, 04); the measured law in the code (02c), measured on the sample (02d), stored (03) and exported by the drivers (04); 05 is written next.** Planned
 2026-11-02 as `quanta-diagnostics` at the user's request, after a scoping session the same day
 ([`source/scoping_2026-11-02.md`](source/scoping_2026-11-02.md)); U1–U7 and P1–P16 ruled the same day,
 all as proposed (README §6). **Re-planned the same day around the drain law and renamed `one-loop-drain`**
@@ -31,7 +31,7 @@ as the campaign's measurement of the one-loop law. No issue opened or closed.)* 
 ready, with three stale items noted for 04–06. The planner proposed P27–P32 for the store, the defaults unless the user
 says otherwise: the drain-model key on `alpha_value` (U8), with `fixed` where no model is named. Prompt 03 written.)* *(2026-11-06: prompt 03
 landed; the Store gate holds. The drain-model key, the bounce table, the history's drain record and the sample masses are stored,
-`FINGERPRINT_FORMAT` 7 and `VERSION_LABEL` 2026.10.0; two issues closed (§4), none opened.)* *(2026-11-06: the campaign reviewed before 04 (README §8.12). The planner proposed P33–P40 for the drivers and exports, the defaults unless the user says otherwise: `--A-values` beside `--alpha-values`, the one-loop products under `<label>/<drain_model>/A=<A>/`. Prompt 04 written.)*
+`FINGERPRINT_FORMAT` 7 and `VERSION_LABEL` 2026.10.0; two issues closed (§4), none opened.)* *(2026-11-06: the campaign reviewed before 04 (README §8.12). The planner proposed P33–P40 for the drivers and exports, the defaults unless the user says otherwise: `--A-values` beside `--alpha-values`, the one-loop products under `<label>/<drain_model>/A=<A>/`. Prompt 04 written.)* *(2026-11-06: prompt 04 landed; the Export gate holds. `--A-values` is in `main.py` and the plot scripts, the one-loop products go under `<label>/<drain_model>/A=<A>/`, histories.csv gains `drain_model` and the drain record, fields.csv the sample masses, and a new bounces.csv holds the bounce rows; the fixed law's exports are byte-identical to the dispatch tree's. No issue opened or closed.)*
 
 The campaign replaces the fixed-α drain by a one-loop law, α_eff = min(α_cap, A·2.7/ℓ)·w_gate at a
 one-loop turnaround and zero at R ≤ 1, with the fixed law kept beside it, bitwise. It measures the law
@@ -63,7 +63,7 @@ The plan as first ruled had seven prompts (README §2), none written; the re-pla
 | 02c | [The measured law](02c-the-measured-law.md) | inserted 2026-11-05 (README §8.10): the adopted law in `ScalarHistory.py`, replacing 2.7/ℓ and both gap prescriptions; S(L); U15 (b), L = ln(1 + E/V₀) at every n; the `"drain"` record names the model version and records L and ln R; `--gap-prescription` removed; the reproduction of crossover's adopted-law maps | Opus | ✅ | ✅ | `18add05` | [02c](logs/02c-the-measured-law.md) |
 | 02d | [Measure the measured law](02d-measure-the-measured-law.md) | inserted 2026-11-05: 02's thirty histories re-tuned under the measured law at U14's eight A, every task run (no shortcuts); regime shares, the law's edges, parking, the first impact and the cap, ΔN_eff, Y_p, D/H, against 02/02b and the fixed law; the cost of the classical drains; replaces 02's and 02b's one-loop measurements | Opus | ✅ | ✅ | `98b1601` | [02d](logs/02d-measure-the-measured-law.md) |
 | 03 | [The store](03-the-store.md) | the drain-model key on `alpha_value` (U8, README §8.10 decision 1, P27), `ScalarHistoryBounce` under the one-loop law (P29), the history columns (regime shares, counts, ℓ_min, the all-generation margins; P30), the sample masses at every law (U5, P31), the guard (P28), `FINGERPRINT_FORMAT` 7, `VERSION_LABEL` 2026.10.0; closes two §3 issues | Opus | ✅ | ✅ | `fe4c917` | [03](logs/03-the-store.md) |
-| 04 | [Drivers and exports](04-drivers-and-exports.md) | `--A-values` in `main.py` and the plot scripts, beside `--alpha-values` (P33, P34); the one-loop paths and labels (P35); `drain_model` and the drain record in `histories.csv` (P36), the sample masses in `fields.csv` (P37), a new `bounces.csv` (P38); the raw-SQL readers of `alpha_value` and the inventory report's label (P39); the registered run's scope (P40) | Sonnet | ✍️ | ⬜ | | |
+| 04 | [Drivers and exports](04-drivers-and-exports.md) | `--A-values` in `main.py` and the plot scripts, beside `--alpha-values` (P33, P34); the one-loop paths and labels (P35); `drain_model` and the drain record in `histories.csv` (P36), the sample masses in `fields.csv` (P37), a new `bounces.csv` (P38); the raw-SQL readers of `alpha_value` and the inventory report's label (P39); the registered run's scope (P40) | Sonnet | ✅ | ✅ | this commit | [04](logs/04-drivers-and-exports.md) |
 | 05 | Derivation tool | `quanta_spectrum.py` and `tools/quanta_measures.py`: n_g, n̄_j, δ_stim, E, phase slip, backreaction ratio, the R·S(L) bound | Opus | ⬜ | ⬜ | | |
 | 06 | Rehearse | the fixed law base against tip, bitwise; the one-loop law interrupted and resumed, by value | Opus | ⬜ | ⬜ | | |
 | 07 | Figure tools | the grid figure and the per-history figure | Sonnet | ⬜ | ⬜ | | |
@@ -485,6 +485,12 @@ Noted, not acted on:
 | the sample masses at every law (U5, P31), the guard (P28), `compute_scalar_history`'s `drain_law` | 03 | ✅ |
 | `FINGERPRINT_FORMAT` 7, its golden; `VERSION_LABEL` 2026.10.0 (U12); the registry, drop group, sharding, batch size | 03 | ✅ |
 | the Store gate's scripts, `.documents/one-loop-drain/store-03/` (the fixed law key by key; the cost on six of 02d's histories) | 03 | ✅ (verification §3) |
+| `--A-values` (type `drain_strength_A`, no default), the rows (fixed, then one-loop), `plot_inputs.parameters(…, A_values)`, the drivers' loops and lines (P33, P34) | 04 | ✅ |
+| `alpha_path(base, value, drain_model)`, `alpha_label(value, drain_model, spelling)`, `model_of_law`; the model never defaulted (P35; note 04 rulings 2, 3) | 04 | ✅ |
+| histories.csv: `drain_model` and `DRAIN_CSV_COLUMNS`, the sort, `plot_Delta_N_eff` by (model, value) (P36) | 04 | ✅ |
+| fields.csv: `build_fields_frame`, `log_m_eff_Mp`, `log_m_tracker_Mp` (P37); bounces.csv: `write_bounces_csv` (P38) | 04 | ✅ |
+| `tools/bbn_from_store.py --drain-law`, `tools/outward_step_scan.py` fixed rows only with a count, the inventory report's labels, `describe_scope` (P39, P40) | 04 | ✅ |
+| the Export gate's scripts, `.documents/one-loop-drain/export-04/` (the store, the two trees' exports, the comparison, the new-column check) | 04 | ✅ (verification §4) |
 
 ## 2. The gates
 
@@ -496,7 +502,7 @@ Noted, not acted on:
 | Measured | the fixed law unchanged bitwise; the law equal to crossover's reference implementation at synthetic inputs; crossover's adopted-law maps reproduced candidate by candidate | 02c | ✅ 2026-11-05 (verification §2c.6): the goldens bitwise; the law bitwise equal to `fraction_adopted` on the grid but for the two ruled departures; every candidate row of the four maps equal, the control byte-identical, the headers' last digits the U15 (b) form of L (ruled); the tool route agrees |
 | Remeasure | the sample at U14's eight A under the adopted law, re-tuned; the failures stated; against 02/02b | 02d | ✅ 2026-11-05 (verification §2d.12): 240 tasks, every one run; 230 succeed, R-632 fails at A = 0.1 and 0.05 and the 5 × 10⁻²⁰ M_P ladder at 0.05 (02's two kinds), C-3873 times out at seven A; every P, W and B history builds at all eight A; at laboratory M the law moves ΔN_eff today by at most 0.011 from the old law; 3 h 08 min, six workers |
 | Store | the round trip exact, bounce rows in order; the fixed law and α = 0 write no bounce row; fingerprint format 7 beside 6 | 03 | ✅ 2026-11-06 (verification §3.5): the fixed law's payloads equal the parent's key by key but for the three new keys, the goldens pass; the round trip exact at three one-loop histories and constructed extremes (13 400 rows); format 7 beside 1–6, only `alpha_value`'s spec digest moved; median added time 0.0104 of the integration on six of 02d's histories |
-| Export | the new export columns equal the stored record; existing `histories.csv` columns byte-identical; the drivers refuse a mismatched law | 04 | ⬜ |
+| Export | the new export columns equal the stored record; existing `histories.csv` columns byte-identical; the drivers refuse a mismatched law | 04 | ✅ 2026-11-06 (verification §4.6): 168 + 52 886 + 2 130 new cells obey ruling 1's rule (0 differ from the raw column in the store's units), the rule exercised under `Mpc_units`; histories.csv (fixed-law records) and fields.csv (every history) byte-identical to the dispatch tree's on a seven-history store, the store's SHA-256 unmoved; the refusals tested |
 | Derive | the derived measures against direct quadrature (10⁻⁶); peak-collapsed against the scoping probe's method | 05 | ⬜ |
 | Bitwise | the fixed law's tip build equal to the base's in every pre-existing column | 06 | ⬜ |
 | R | the one-loop build, interrupted and resumed, equals the straight build by value (bounce rows included) and 02's tool route | 06 | ⬜ |
@@ -847,3 +853,5 @@ changed): the same counts, all passing (log 02d §4).
 
 **2026-11-06, prompt 03:** measured first on a worktree of `d3069cb`: 26, 594 (162 + 432), 130, 156, 68. After 03:
 26, 622 (190 + 432), 149, 156, 68, all passing (log 03 §4).
+
+**2026-11-06, prompt 04:** measured first on a worktree of `8df05c1`: 26, 622 (190 + 432), 149, 156, 68 (the last two with one worktree-root failure each, as in 03). After 04: 26, 651 (219 + 432), 163, 173, 72, all passing (log 04 §4).

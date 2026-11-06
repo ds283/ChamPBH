@@ -1,0 +1,13 @@
+@@ F-alpha0: serial 1 (10:03:46)
+@@ F-alpha0.1: serial 2 (10:03:49)
+@@ F-fail: serial 3 (10:03:49)
+@@ O-2197: serial 4 (10:03:51)
+@@ O-classical: serial 5 (10:03:55)
+@@ O-gap: serial 6 (10:03:57)
+@@ O-fail: serial 7 (10:03:57)
+.
+----------------------------------------------------------------------
+Ran 1 test in 14.462s
+
+OK
+@@ store copied to var/one-loop-drain/04/store: ['store-shard0000.db', 'store.db']

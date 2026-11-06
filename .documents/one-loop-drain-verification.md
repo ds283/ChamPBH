@@ -1469,3 +1469,159 @@ The gate holds, item by item (prompt §2):
    moved, and `ScalarHistory`'s did not.
 4. **The cost and the volume** (§3.4): median added time 0.0104 of the integration, 17 071 rows for 8 536 candidates, every
    check holding.
+
+## 4. Prompt 04 — drivers and exports (2026-11-06)
+
+**Tree:** branch `one-loop-drain` at `8df05c1` (the orchestrator note's commit; its parent `6f6557e` adds the prompt, and the code
+is 03's reviewed code, `50e93c7`/`fe4c917`). Prompt 04's commit changes the code (`--A-values`, the path and label helpers, the three
+exports, the tools and the scope; `architecture-summary.md`, note of 2026-11-06); §1–§3 above are unchanged. Python 3.13.16.
+**Scripts:** [`one-loop-drain/export-04/`](one-loop-drain/export-04/), each with a docstring: `build_store.py` (§4.2), `export_tree.py`
+(one tree's three exports), `compare_exports.py` (§4.4), `check_new_columns.py` (§4.3). **Committed outputs:**
+[`one-loop-drain/export-04/out/`](one-loop-drain/export-04/out/): `build_store.txt`, `compare.txt`, `new_columns.txt`. **Raw output** (not
+committed): `var/one-loop-drain/04/`: `store/` (the two store files), `manifest.json`, `export-base/`, `export-tip/` (the exported files,
+`labels.json`, `sha256.json`).
+
+Orchestrator note 04's rulings 1–9 governed. No Ray was started, nothing was registered, and no store was opened but the tests'
+temporary ones and §4.2's.
+
+### 4.1 The Gate and the suites
+
+The Gate held at `8df05c1`: the tree was clean on branch `one-loop-drain`; `runregistrykit list` showed 23 runs, all finished.
+
+The suites before any change were measured on a scratch worktree of `8df05c1` (a first chain on the main checkout was stopped when
+my edits began while it ran), serially, 2026-11-06, the machine shared (one-minute loads 8–38):
+
+| suite | count | time | load at start |
+|---|---|---|---|
+| CosmologyModels | 26 OK | 70.5 s | 20.02 18.61 19.98 (09:48) |
+| ComputeTargets `test_[a-f]` | 190 OK | 146.9 s | 37.66 23.72 21.76 (09:49) |
+| ComputeTargets `test_[g-z]` | 432 OK | 487.0 s | 10.44 19.24 20.39 (09:52) |
+| ObjectFactories | 149 OK | 126.4 s | 8.56 10.34 15.41 (10:00) |
+| tools | 156; 155 OK, 1 failing for the worktree's root (`test_registry_config`) | 165.5 s | 19.10 12.68 10.34 (10:31) |
+| RunDrivers | 68; 67 OK, 1 failing for the worktree's root (`test_registered_run`, the script's path) | 23.2 s | 7.53 10.53 9.88 (10:34) |
+
+The tools and RunDrivers rows are a second run with the checkout's `venv` linked into the worktree (the first, without the link,
+failed ten `tools/tests` for the worktree's lack of `./venv`, and one RunDrivers test); the two that fail in the worktree read the
+repository root (the run registry's `var/runs`, the script's path), as in 03's record, and pass in the main checkout, which is where
+the dispatch Gate (and 03's review) measured 156 and 68 passing. The main checkout could not be measured before the change: a first
+chain was started there and stopped when edits began.
+
+and after the change, on this prompt's tree (the main checkout):
+
+| suite | count | time | load at start |
+|---|---|---|---|
+| CosmologyModels | 26 OK | 65.8 s | 8.23 8.80 12.05 (10:09) |
+| ComputeTargets `test_[a-f]` | 219 OK | 144.9 s | 7.32 8.40 11.66 (10:10) |
+| ComputeTargets `test_[g-z]` | 432 OK | 482.0 s | 6.43 7.27 10.65 (10:12) |
+| ObjectFactories | 163 OK | 133.1 s | 9.79 7.19 8.24 (10:29) |
+| tools | 173 OK | 260.9 s | 9.09 8.39 9.37 (10:23) |
+| RunDrivers | 72 OK | 47.6 s | 4.25 6.04 8.05 (10:27) |
+
+ComputeTargets goes from 622 to 651 (`test_a_values_option`, 23, and `test_a_values_plot_inputs`, 6, both in the `test_[a-f]` half),
+ObjectFactories from 149 to 163 (`test_export_04`, 14), tools from 156 to 173 (`test_one_loop_tools`, 14, and 3 in `test_inventory_alpha`) and
+RunDrivers from 68 to 72 (`test_scope_a_values`, 4). No count fell. ObjectFactories' first after-run failed
+`test_alpha_figures.TestDarkRadiationFigure.test_8_the_dissipation_columns_of_the_record`, which pinned the dissipation columns as the last
+before `failure_reasons`; the drain block now sits between (log 04 §2.1); the table is the second run (128.5 s and one failure in the first).
+
+### 4.2 The store (prompt §2.2)
+
+`build_store.py` writes seven histories through the harness of `test_drain_store` (`_DrainStoreCase`: the package's actor on a one-shard
+store, in the stand-in cluster) and copies the store to `var/one-loop-drain/04/store/` (14 s; `out/build_store.txt`). Each is
+`test_injection`'s setup (n = 1, φ* = 5 M_P, π* = 0, T* = 2×10⁴ GeV, to T_CMB, untuned at the model's seed realization):
+
+| name | law and key | what it is |
+|---|---|---|
+| `F-alpha0` | fixed, α = 0 | M = 0.5 M_P, β = 2 |
+| `F-alpha0.1` | fixed, α = 0.1 | M = 0.5 M_P, β = 2: reflects and drains (`test_dissipation_store`'s TEST_1) |
+| `F-fail` | fixed, α = 0.1 | a failure row, M = 4×10⁻³¹ M_P, β = 1.185 |
+| `O-2197` | one-loop, A = 1 | P-2197, M = 4×10⁻³¹ M_P, β = 1.185: five one-loop candidates, parked; 9 bounce rows |
+| `O-classical` | one-loop, A = 1 | L-M4e-15, M = 4×10⁻¹⁵ M_P, β = 2: 28 classical candidates, parked; 55 bounce rows |
+| `O-gap` | one-loop, A = 2 | L-M8e-18, M = 8×10⁻¹⁸ M_P, β = 2: three one-loop candidates and one in the gap; 7 bounce rows |
+| `O-fail` | one-loop, A = 0.5 | a failure row |
+
+**The store is read through the package's actor opened `read_only=True`** (with the label's lookup serial), not through
+`ShardedPool(read_only=True)`: the harness writes the shard without registering shard keys in the primary, and the pool's read-only route
+refuses `beta_value`'s shard key. Both trees read it the same way. BBN and Q are unavailable stand-ins in both trees (`export_tree.py`).
+
+**The SHA-256 of both store files** (`store-shard0000.db` `88eeb523…501a`, `store.db` `6b5115ea…a266`) is the same before and after each
+export, and the same under both trees (`out/compare.txt`, top).
+
+### 4.3 The new columns equal the stored record (prompt §2.1; ruling 1)
+
+The rule, the same for every new column of every file (ruling 1), true in any units: a cell read back from the file equals
+`to_column(from_column(raw, kind, units), kind, units)` of the raw column, read by SQL from the store's file (mode=ro): by `float.hex`
+for a float, as a value for an integer and a string, 0 or 1 for a Boolean, and blank for NULL. `check_new_columns.py` on the tip's export
+(`out/new_columns.txt`), in the store's units (`GeV = 4.106×10⁻¹⁹`, `M_P = 1`):
+
+| file | cells compared | failures of the rule | cells differing from the raw column (measurement) |
+|---|---|---|---|
+| histories.csv | 168 (`drain_model` and the 23 drain columns, 7 rows: 5 successes and 2 failures; the fixed rows' cells blank against NULL) | 0 | 0 |
+| fields.csv | 52 886 (`log_m_eff_Mp` and `log_m_tracker_Mp`, every sample of 5 histories, matched by redshift) | 0 | 0 |
+| bounces.csv | 2 130 (71 rows × 30 columns, in `ordinal` order, over the three one-loop histories) | 0 | 0 |
+
+Zero cells differ from the raw column here: the stored value is `x − u` with x and u of one magnitude (Sterbenz), so adding and
+subtracting u again is exact; ln M_P = 0 in `Planck_units`. **The rule does not rest on that.** `test_export_04` writes bounces.csv and
+the mass cells from constructed rows under `Mpc_units` (GeV = 1.56×10³⁸, M_P = 3.8×10⁵⁶, neither 1) and checks every cell against
+`bounce_row_columns(row, units)` and `to_column` by `float.hex`; breaking `to_column` in the mass cells leaves the tests in `Planck_units`
+passing and fails that one. The same tests read the P-2197 (A = 1) history, a fixed history at α = 0.1 and one at α = 0 back from a
+temporary store and check the rule against the raw columns; the one-loop history with no bounce row writes a header alone.
+
+### 4.4 The existing columns are unchanged (prompt §2.2)
+
+`export_tree.py` was run from the root of each tree: this checkout and a scratch worktree of `8df05c1` (removed afterwards), each with this
+checkout's interpreter and `PYTHONPATH=.`. Neither copies code: the tree's `extract_common` functions are called, and the tree's own
+`write_csv_file` is **extracted from its `plot_ScalarHistory.py` by `ast` and executed unedited** (the script parses its arguments on
+import). `compare_exports.py` projects the tip's file onto the base's columns, in the base's order, written with the base's writer settings
+(`csv.writer` defaults, line terminator `\r\n` for histories.csv and `\n` for fields.csv), and compares byte for byte (`out/compare.txt`):
+
+| product | base bytes | projected tip bytes | identical |
+|---|---|---|---|
+| histories.csv, the fixed-law records (`F-alpha0`, `F-alpha0.1`, `F-fail`) | 1 144 | 1 144 | **yes** |
+| histories.csv, the one-loop records (`O-2197`, `O-classical`, `O-gap`, `O-fail`) | 1 685 | 1 685 | yes |
+| fields.csv `F-alpha0` (5 287 rows) | 2 428 214 | 2 428 214 | **yes** |
+| fields.csv `F-alpha0.1` (5 287 rows) | 2 532 012 | 2 532 012 | **yes** |
+| fields.csv `O-2197` (4 995 rows) | 2 391 847 | 2 391 847 | yes |
+| fields.csv `O-classical` (5 437 rows) | 2 618 309 | 2 618 309 | yes |
+| fields.csv `O-gap` (5 437 rows) | 2 608 383 | 2 608 383 | yes |
+
+The tip's files add exactly `drain_model` and the 23 drain columns to histories.csv and `log_m_eff_Mp` and `log_m_tracker_Mp` to fields.csv,
+the base's columns kept in the base's order. **Every existing column agrees for the one-loop histories too:** nothing to explain.
+
+**Paths and labels**, as each tree's own code gives them (`labels.json`; the strings are those of `alpha_path`, of the two figure-label
+functions drawn on a `Figure`, and of the drivers' f-strings, evaluated by `ast` on stand-in names; `compare.txt` lists all of them):
+
+| history | product | base | tip |
+|---|---|---|---|
+| fixed, α = 0.1 | directory | `<label>/alpha=0.1` | `<label>/alpha=0.1` (equal) |
+| fixed, α = 0.1 | cosmology line of the figures | `Cosmology: label, α = 0.1` | equal |
+| fixed, α = 0.1 | header line of every `run_pipeline`, `build_beta_plot` titles and failure line | `… alpha = 0.1`, `label, α = 0.1: M = …`, `… alpha=0.1: no valid BBN data …` | equal, string for string |
+| one-loop, A = 1 | directory | `<label>/alpha=1` | `<label>/one-loop-measured-v1/A=1` |
+| one-loop, A = 1 | cosmology line | `Cosmology: label, α = 1` | `Cosmology: label, A = 1 (one-loop-measured-v1)` |
+| one-loop, A = 1 | header line | `… alpha = 1` | `… A = 1 (one-loop-measured-v1)` |
+| one-loop, A = 1 | `build_beta_plot` title; failure line | `label, α = 1: M = …`; `… alpha=1: …` | `label, A = 1 (one-loop-measured-v1): M = …`; `… A=1 (one-loop-measured-v1): …` |
+| all four α > 0 in the store | `Delta_N_eff` legend | `$\alpha$ = 0.1, 0.5, 1, 2` | `$\alpha$ = 0.1`, then `A = 0.5 (…)`, `A = 1 (…)`, `A = 2 (…)` (fixed first) |
+
+The base's one-loop rows show what the base would have written for them (a `fixed`-looking `alpha=1` directory), which is why the model enters
+the path.
+
+### 4.5 The drivers refuse a law that does not match the store (prompt §2.3)
+
+- **The parse refusals of `--A-values`** (`ComputeTargets/tests/test_a_values_option.py`): 0, −0, −1, nan, inf and an unparsable text each
+  exit 2 with `argument --A-values:` and `check_drain_model`'s message, before any Ray; 10, 1000 and 1e6 are accepted; duplicates collapse
+  in the order of first appearance.
+- **`plot_inputs.parameters`** on a temporary store with α = 0 and 0.5 under `fixed` and A = 0.5 and 1 under the one-loop model
+  (`test_a_values_plot_inputs`): the rows come back fixed first, each with its model; an A stored only as an α is
+  `PlotOptionNotStored` naming `--A-values`, the value and the model; an α stored only as an A is refused naming `--alpha-values`; the
+  first missing row in the order is named after the parameters before it; the read-only pool writes no byte and creates no row.
+- **`test_alpha_plot_inputs`' handler test** still shows both scripts catching `PlotOptionNotStored`, printing it to stderr and exiting 2
+  (unchanged, passing).
+
+### 4.6 The Export gate
+
+The gate holds, item by item (prompt §2):
+1. **The new columns equal the stored record** (§4.3): 168 + 52 886 + 2 130 cells, no failure of ruling 1's rule; 0 cells differ from the
+   raw column in the store's units; the rule exercised under a second `UnitsLike`.
+2. **The existing columns are unchanged** (§4.4): histories.csv (fixed-law records) and fields.csv (every history), projected onto the
+   base's columns, byte-identical to the dispatch tree's from the same store; the one-loop histories' existing columns agree too; the
+   fixed-law paths and titles are equal, and the one-loop ones follow P35. The store's SHA-256 is unchanged under both exports.
+3. **The drivers refuse a law that does not match the store** (§4.5).

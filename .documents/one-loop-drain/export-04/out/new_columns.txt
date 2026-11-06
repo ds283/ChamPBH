@@ -1,0 +1,22 @@
+units of the store: GeV = 4.106230489603117e-19, M_P = 1.0
+histories.csv: 168 cells compared (the drain block of 23 columns and drain_model, for every history of the manifest: 7 rows including 2 failures)
+fields.csv: 52886 cells compared (two mass columns per sample, matched by redshift, over 5 histories)
+bounces.csv: 2130 cells compared (71 rows of 30 columns, in ordinal order, over the one-loop histories)
+
+histories.csv: failures of the rule: 0
+fields.csv: failures of the rule: 0
+bounces.csv: failures of the rule: 0
+
+measurement (ruling 1; in the units the store was built with, never a stop): per column, cells compared,
+cells differing from the raw column by float.hex, and the largest |cell - raw|
+-- histories.csv
+   cells differing from raw, all columns: 0 of 168
+   columns with no differing cell: 23 of 23
+-- fields.csv
+   cells differing from raw, all columns: 0 of 52886
+   columns with no differing cell: 2 of 2
+-- bounces.csv
+   cells differing from raw, all columns: 0 of 2130
+   columns with no differing cell: 30 of 30
+
+STOP CONDITION HIT: False

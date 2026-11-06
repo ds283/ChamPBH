@@ -115,7 +115,9 @@ class TestTheOption(unittest.TestCase):
         args, _ = _parse(BASE + ["--alpha-values", "-0"])
         self.assertEqual(math.copysign(1.0, args.alpha_values[0]), 1.0)
         # so the row, and the directory built from it, have one spelling of zero (ruling 9)
-        self.assertEqual(alpha_path("out", args.alpha_values[0]), Path("out/alpha=0"))
+        self.assertEqual(
+            alpha_path("out", args.alpha_values[0], "fixed"), Path("out/alpha=0")
+        )
 
     def test_1_duplicates_collapse_in_the_order_of_first_appearance(self):
         self.assertEqual(distinct_values([0.1, 0.0, 0.1, 0.03, 0.0]), [0.1, 0.0, 0.03])
@@ -170,8 +172,10 @@ class TestTheDriversCarryAlpha(unittest.TestCase):
         self.assertEqual(
             _assigned(tree, "alpha_values"), ["distinct_values(args.alpha_values)"]
         )
+        # one-loop-drain prompt 04: the fixed rows, with no model named, then one row per A under the
+        # constant (test_a_values_option pins the second)
         lookups = _alpha_lookups(tree)
-        self.assertEqual(len(lookups), 1)
+        self.assertEqual(len(lookups), 2)
         self.assertEqual(
             [(k.arg, ast.unparse(k.value)) for k in lookups[0].keywords],
             [("value", "a")],
@@ -247,19 +251,29 @@ class TestTheDriversCarryAlpha(unittest.TestCase):
 
 class TestThePaths(unittest.TestCase):
     def test_4_alpha_path_names_the_value(self):
-        self.assertEqual(alpha_path("out/label", 0.0), Path("out/label/alpha=0"))
-        self.assertEqual(alpha_path("out/label", 0.1), Path("out/label/alpha=0.1"))
-        self.assertEqual(alpha_path("out/label", 0.03), Path("out/label/alpha=0.03"))
+        # the fixed model, whose paths are those of before one-loop-drain prompt 04 (the model has no default)
         self.assertEqual(
-            alpha_path(Path("out"), 0.123456789), Path("out/alpha=0.12346")
+            alpha_path("out/label", 0.0, "fixed"), Path("out/label/alpha=0")
+        )
+        self.assertEqual(
+            alpha_path("out/label", 0.1, "fixed"), Path("out/label/alpha=0.1")
+        )
+        self.assertEqual(
+            alpha_path("out/label", 0.03, "fixed"), Path("out/label/alpha=0.03")
+        )
+        self.assertEqual(
+            alpha_path(Path("out"), 0.123456789, "fixed"), Path("out/alpha=0.12346")
         )
         # alpha = 0 is a level of its own, never the base
-        self.assertNotEqual(alpha_path("out", 0.0), Path("out"))
+        self.assertNotEqual(alpha_path("out", 0.0, "fixed"), Path("out"))
 
     def test_4_both_scripts_build_their_per_alpha_paths_through_it(self):
         expected = {
-            "plot_by_beta.py": {"alpha", "alpha.value"},
-            "plot_ScalarHistory.py": {"model.alpha.value"},
+            "plot_by_beta.py": {
+                ("alpha", "drain_model"),
+                ("alpha.value", "alpha.drain_model"),
+            },
+            "plot_ScalarHistory.py": {("model.alpha.value", "model.alpha.drain_model")},
         }
         for name, values in expected.items():
             with self.subTest(script=name):
@@ -270,8 +284,12 @@ class TestThePaths(unittest.TestCase):
                 ]
                 self.assertGreaterEqual(len(calls), 1)
                 # the row's value, never the float the user typed (ruling 3)
+                # and its model, which has no default (one-loop-drain prompt 04, ruling 3)
                 for call in calls:
-                    self.assertIn(ast.unparse(call.args[1]), values)
+                    self.assertEqual(len(call.args), 3)
+                    self.assertIn(
+                        (ast.unparse(call.args[1]), ast.unparse(call.args[2])), values
+                    )
         # plot_by_beta writes figure 2 and the per-group products through it, in two places
         calls = [
             n
@@ -295,9 +313,10 @@ class TestThePaths(unittest.TestCase):
                 ]
                 self.assertGreaterEqual(len(calls), 1)
                 for call in calls:
-                    self.assertIn(
-                        "alpha", [k.arg for k in call.keywords], ast.unparse(call)
-                    )
+                    keywords = [k.arg for k in call.keywords]
+                    self.assertIn("alpha", keywords, ast.unparse(call))
+                    # the row's model with its value (one-loop-drain prompt 04, ruling 3)
+                    self.assertIn("drain_model", keywords, ast.unparse(call))
 
 
 if __name__ == "__main__":

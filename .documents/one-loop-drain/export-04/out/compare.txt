@@ -1,0 +1,139 @@
+== the store's files, SHA-256 before and after each export ==
+base: unchanged=True
+   store-shard0000.db  88eeb523d5a2bb01908e33238345cf5a5b4e3a4cba9896de54fcf5a03c44501a  after: 88eeb523d5a2bb01908e33238345cf5a5b4e3a4cba9896de54fcf5a03c44501a
+   store.db  6b5115eaed2e9fa7912f8a1c5b102baf9edbcd0c4c0796693bece24e3e30a266  after: 6b5115eaed2e9fa7912f8a1c5b102baf9edbcd0c4c0796693bece24e3e30a266
+tip: unchanged=True
+   store-shard0000.db  88eeb523d5a2bb01908e33238345cf5a5b4e3a4cba9896de54fcf5a03c44501a  after: 88eeb523d5a2bb01908e33238345cf5a5b4e3a4cba9896de54fcf5a03c44501a
+   store.db  6b5115eaed2e9fa7912f8a1c5b102baf9edbcd0c4c0796693bece24e3e30a266  after: 6b5115eaed2e9fa7912f8a1c5b102baf9edbcd0c4c0796693bece24e3e30a266
+both exports read the same store files: True
+
+== histories.csv, the projection of the tip's file onto the base's columns ==
+histories_fixed.csv: byte-identical=True {"identical": true, "missing_in_tip": [], "added_in_tip": ["drain_model", "drained_share_one_loop", "drained_share_gap", "drained_share_classical", "drained_share_unassessed", "parking_share", "candidates_one_loop", "candidates_gap", "candidates_classical", "candidates_unassessed", "ell_min", "log_R_min_drain", "unresolvable_assessments", "unresolved_declined", "all_worst_birth_margin", "all_worst_birth_margin_N", "all_birth_failing_share", "all_worst_reflection_margin", "all_worst_reflection_margin_N", "all_reflection_failing_share", "all_worst_tracker_margin", "all_worst_tracker_margin_N", "all_tracker_failing_share", "bounce_rows"], "base_order_kept": true, "base_bytes": 1144, "projected_bytes": 1144}
+histories_one_loop.csv: byte-identical=True {"identical": true, "missing_in_tip": [], "added_in_tip": ["drain_model", "drained_share_one_loop", "drained_share_gap", "drained_share_classical", "drained_share_unassessed", "parking_share", "candidates_one_loop", "candidates_gap", "candidates_classical", "candidates_unassessed", "ell_min", "log_R_min_drain", "unresolvable_assessments", "unresolved_declined", "all_worst_birth_margin", "all_worst_birth_margin_N", "all_birth_failing_share", "all_worst_reflection_margin", "all_worst_reflection_margin_N", "all_reflection_failing_share", "all_worst_tracker_margin", "all_worst_tracker_margin_N", "all_tracker_failing_share", "bounce_rows"], "base_order_kept": true, "base_bytes": 1685, "projected_bytes": 1685}
+
+== fields.csv per history, the projection onto the base's columns ==
+F-alpha0 (fixed, 5287 rows): byte-identical=True {"identical": true, "missing_in_tip": [], "added_in_tip": ["log_m_eff_Mp", "log_m_tracker_Mp"], "base_order_kept": true, "base_bytes": 2428214, "projected_bytes": 2428214}
+F-alpha0.1 (fixed, 5287 rows): byte-identical=True {"identical": true, "missing_in_tip": [], "added_in_tip": ["log_m_eff_Mp", "log_m_tracker_Mp"], "base_order_kept": true, "base_bytes": 2532012, "projected_bytes": 2532012}
+O-2197 (one-loop-measured-v1, 4995 rows): byte-identical=True {"identical": true, "missing_in_tip": [], "added_in_tip": ["log_m_eff_Mp", "log_m_tracker_Mp"], "base_order_kept": true, "base_bytes": 2391847, "projected_bytes": 2391847}
+O-classical (one-loop-measured-v1, 5437 rows): byte-identical=True {"identical": true, "missing_in_tip": [], "added_in_tip": ["log_m_eff_Mp", "log_m_tracker_Mp"], "base_order_kept": true, "base_bytes": 2618309, "projected_bytes": 2618309}
+O-gap (one-loop-measured-v1, 5437 rows): byte-identical=True {"identical": true, "missing_in_tip": [], "added_in_tip": ["log_m_eff_Mp", "log_m_tracker_Mp"], "base_order_kept": true, "base_bytes": 2608383, "projected_bytes": 2608383}
+
+== paths and titles under both trees ==
+-- F-alpha0
+   path: base OUT/label/alpha=0  | tip OUT/label/alpha=0
+   add_beta_summary_labels: base ['Cosmology: label, α = 0']  | tip ['Cosmology: label, α = 0']
+   add_ScalarHistory_labels: base ['Cosmology: label, α = 0']  | tip ['Cosmology: label, α = 0']
+   main.py:run_pipeline:#1: same
+   plot_ScalarHistory.py:run_pipeline:#1: same
+   plot_by_beta.py:build_beta_plot:#1: same
+   plot_by_beta.py:build_beta_plot:#2: same
+   plot_by_beta.py:run_pipeline:#1: same
+   plot_by_beta.py:run_pipeline:#2: same
+-- F-alpha0.1
+   path: base OUT/label/alpha=0.1  | tip OUT/label/alpha=0.1
+   add_beta_summary_labels: base ['Cosmology: label, α = 0.1']  | tip ['Cosmology: label, α = 0.1']
+   add_ScalarHistory_labels: base ['Cosmology: label, α = 0.1']  | tip ['Cosmology: label, α = 0.1']
+   main.py:run_pipeline:#1: same
+   plot_ScalarHistory.py:run_pipeline:#1: same
+   plot_by_beta.py:build_beta_plot:#1: same
+   plot_by_beta.py:build_beta_plot:#2: same
+   plot_by_beta.py:run_pipeline:#1: same
+   plot_by_beta.py:run_pipeline:#2: same
+-- F-fail
+   path: base OUT/label/alpha=0.1  | tip OUT/label/alpha=0.1
+   main.py:run_pipeline:#1: same
+   plot_ScalarHistory.py:run_pipeline:#1: same
+   plot_by_beta.py:build_beta_plot:#1: same
+   plot_by_beta.py:build_beta_plot:#2: same
+   plot_by_beta.py:run_pipeline:#1: same
+   plot_by_beta.py:run_pipeline:#2: same
+-- O-2197
+   path: base OUT/label/alpha=1  | tip OUT/label/one-loop-measured-v1/A=1
+   add_beta_summary_labels: base ['Cosmology: label, α = 1']  | tip ['Cosmology: label, A = 1 (one-loop-measured-v1)']
+   add_ScalarHistory_labels: base ['Cosmology: label, α = 1']  | tip ['Cosmology: label, A = 1 (one-loop-measured-v1)']
+   main.py:run_pipeline:#1: DIFFERENT
+      base: '\n>> RUNNING PIPELINE FOR MODEL label, alpha = 1'
+      tip:  '\n>> RUNNING PIPELINE FOR MODEL label, A = 1 (one-loop-measured-v1)'
+   plot_ScalarHistory.py:run_pipeline:#1: DIFFERENT
+      base: '\n>> RUNNING PIPELINE FOR MODEL label, alpha = 1'
+      tip:  '\n>> RUNNING PIPELINE FOR MODEL label, A = 1 (one-loop-measured-v1)'
+   plot_by_beta.py:build_beta_plot:#1: DIFFERENT
+      base: "!! build_beta_plot 'label', M=1.2177e+27 eV, n=1, alpha=1: no valid BBN data to plot"
+      tip:  "!! build_beta_plot 'label', M=1.2177e+27 eV, n=1, A=1 (one-loop-measured-v1): no valid BBN data to plot"
+   plot_by_beta.py:build_beta_plot:#2: DIFFERENT
+      base: 'label, α = 1: M = 0.5 M_P, n = 1, phi* = 5 M_P'
+      tip:  'label, A = 1 (one-loop-measured-v1): M = 0.5 M_P, n = 1, phi* = 5 M_P'
+   plot_by_beta.py:run_pipeline:#1: DIFFERENT
+      base: '\n>> RUNNING PIPELINE FOR MODEL label, alpha = 1'
+      tip:  '\n>> RUNNING PIPELINE FOR MODEL label, A = 1 (one-loop-measured-v1)'
+   plot_by_beta.py:run_pipeline:#2: DIFFERENT
+      base: 'label, α = 1: phi* = 5 M_P'
+      tip:  'label, A = 1 (one-loop-measured-v1): phi* = 5 M_P'
+-- O-classical
+   path: base OUT/label/alpha=1  | tip OUT/label/one-loop-measured-v1/A=1
+   add_beta_summary_labels: base ['Cosmology: label, α = 1']  | tip ['Cosmology: label, A = 1 (one-loop-measured-v1)']
+   add_ScalarHistory_labels: base ['Cosmology: label, α = 1']  | tip ['Cosmology: label, A = 1 (one-loop-measured-v1)']
+   main.py:run_pipeline:#1: DIFFERENT
+      base: '\n>> RUNNING PIPELINE FOR MODEL label, alpha = 1'
+      tip:  '\n>> RUNNING PIPELINE FOR MODEL label, A = 1 (one-loop-measured-v1)'
+   plot_ScalarHistory.py:run_pipeline:#1: DIFFERENT
+      base: '\n>> RUNNING PIPELINE FOR MODEL label, alpha = 1'
+      tip:  '\n>> RUNNING PIPELINE FOR MODEL label, A = 1 (one-loop-measured-v1)'
+   plot_by_beta.py:build_beta_plot:#1: DIFFERENT
+      base: "!! build_beta_plot 'label', M=1.2177e+27 eV, n=1, alpha=1: no valid BBN data to plot"
+      tip:  "!! build_beta_plot 'label', M=1.2177e+27 eV, n=1, A=1 (one-loop-measured-v1): no valid BBN data to plot"
+   plot_by_beta.py:build_beta_plot:#2: DIFFERENT
+      base: 'label, α = 1: M = 0.5 M_P, n = 1, phi* = 5 M_P'
+      tip:  'label, A = 1 (one-loop-measured-v1): M = 0.5 M_P, n = 1, phi* = 5 M_P'
+   plot_by_beta.py:run_pipeline:#1: DIFFERENT
+      base: '\n>> RUNNING PIPELINE FOR MODEL label, alpha = 1'
+      tip:  '\n>> RUNNING PIPELINE FOR MODEL label, A = 1 (one-loop-measured-v1)'
+   plot_by_beta.py:run_pipeline:#2: DIFFERENT
+      base: 'label, α = 1: phi* = 5 M_P'
+      tip:  'label, A = 1 (one-loop-measured-v1): phi* = 5 M_P'
+-- O-gap
+   path: base OUT/label/alpha=2  | tip OUT/label/one-loop-measured-v1/A=2
+   add_beta_summary_labels: base ['Cosmology: label, α = 2']  | tip ['Cosmology: label, A = 2 (one-loop-measured-v1)']
+   add_ScalarHistory_labels: base ['Cosmology: label, α = 2']  | tip ['Cosmology: label, A = 2 (one-loop-measured-v1)']
+   main.py:run_pipeline:#1: DIFFERENT
+      base: '\n>> RUNNING PIPELINE FOR MODEL label, alpha = 2'
+      tip:  '\n>> RUNNING PIPELINE FOR MODEL label, A = 2 (one-loop-measured-v1)'
+   plot_ScalarHistory.py:run_pipeline:#1: DIFFERENT
+      base: '\n>> RUNNING PIPELINE FOR MODEL label, alpha = 2'
+      tip:  '\n>> RUNNING PIPELINE FOR MODEL label, A = 2 (one-loop-measured-v1)'
+   plot_by_beta.py:build_beta_plot:#1: DIFFERENT
+      base: "!! build_beta_plot 'label', M=1.2177e+27 eV, n=1, alpha=2: no valid BBN data to plot"
+      tip:  "!! build_beta_plot 'label', M=1.2177e+27 eV, n=1, A=2 (one-loop-measured-v1): no valid BBN data to plot"
+   plot_by_beta.py:build_beta_plot:#2: DIFFERENT
+      base: 'label, α = 2: M = 0.5 M_P, n = 1, phi* = 5 M_P'
+      tip:  'label, A = 2 (one-loop-measured-v1): M = 0.5 M_P, n = 1, phi* = 5 M_P'
+   plot_by_beta.py:run_pipeline:#1: DIFFERENT
+      base: '\n>> RUNNING PIPELINE FOR MODEL label, alpha = 2'
+      tip:  '\n>> RUNNING PIPELINE FOR MODEL label, A = 2 (one-loop-measured-v1)'
+   plot_by_beta.py:run_pipeline:#2: DIFFERENT
+      base: 'label, α = 2: phi* = 5 M_P'
+      tip:  'label, A = 2 (one-loop-measured-v1): phi* = 5 M_P'
+-- O-fail
+   path: base OUT/label/alpha=0.5  | tip OUT/label/one-loop-measured-v1/A=0.5
+   main.py:run_pipeline:#1: DIFFERENT
+      base: '\n>> RUNNING PIPELINE FOR MODEL label, alpha = 0.5'
+      tip:  '\n>> RUNNING PIPELINE FOR MODEL label, A = 0.5 (one-loop-measured-v1)'
+   plot_ScalarHistory.py:run_pipeline:#1: DIFFERENT
+      base: '\n>> RUNNING PIPELINE FOR MODEL label, alpha = 0.5'
+      tip:  '\n>> RUNNING PIPELINE FOR MODEL label, A = 0.5 (one-loop-measured-v1)'
+   plot_by_beta.py:build_beta_plot:#1: DIFFERENT
+      base: "!! build_beta_plot 'label', M=1.2177e+27 eV, n=1, alpha=0.5: no valid BBN data to plot"
+      tip:  "!! build_beta_plot 'label', M=1.2177e+27 eV, n=1, A=0.5 (one-loop-measured-v1): no valid BBN data to plot"
+   plot_by_beta.py:build_beta_plot:#2: DIFFERENT
+      base: 'label, α = 0.5: M = 0.5 M_P, n = 1, phi* = 5 M_P'
+      tip:  'label, A = 0.5 (one-loop-measured-v1): M = 0.5 M_P, n = 1, phi* = 5 M_P'
+   plot_by_beta.py:run_pipeline:#1: DIFFERENT
+      base: '\n>> RUNNING PIPELINE FOR MODEL label, alpha = 0.5'
+      tip:  '\n>> RUNNING PIPELINE FOR MODEL label, A = 0.5 (one-loop-measured-v1)'
+   plot_by_beta.py:run_pipeline:#2: DIFFERENT
+      base: 'label, α = 0.5: phi* = 5 M_P'
+      tip:  'label, A = 0.5 (one-loop-measured-v1): phi* = 5 M_P'
+plot_Delta_N_eff legend: base ['$\\alpha$ = 0.1', '$\\alpha$ = 0.5', '$\\alpha$ = 1', '$\\alpha$ = 2']
+                         tip  ['$\\alpha$ = 0.1', 'A = 0.5 (one-loop-measured-v1)', 'A = 1 (one-loop-measured-v1)', 'A = 2 (one-loop-measured-v1)']
+
+STOP CONDITION HIT: False

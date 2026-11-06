@@ -21,15 +21,28 @@ from pathlib import Path
 from typing import Optional, Any, Sequence
 
 import numpy as np
+import pandas as pd
 from matplotlib.figure import Figure
 from matplotlib.patches import Patch
 from numpy import nan
 from scipy.optimize import brentq, minimize_scalar
 
-from ComputeTargets import ScalarHistory, ScalarHistoryValue, BBNData
-from ComputeTargets.ScalarHistory import REFLECTIONS_KEY
+from ComputeTargets import (
+    AdiabaticHistory,
+    ScalarHistory,
+    ScalarHistoryValue,
+    BBNData,
+)
+from ComputeTargets.ScalarHistory import REFLECTIONS_KEY, BounceRow, DrainHistoryValues
 from CosmologyConcepts.Models import AbstractModel
+from CosmologyConcepts.drain_model import DRAIN_MODELS, DRAIN_MODEL_FIXED, alpha_label
 from CosmologyModels import BaseCosmology
+from ObjectFactories.ScalarHistory import (
+    BOUNCE_COLUMNS,
+    MASS_COLUMNS,
+    bounce_row_columns,
+    to_column,
+)
 from Quadrature.integration_metadata import IntegrationSolver
 from Units.base import UnitsLike
 
@@ -96,30 +109,54 @@ def safe_div(x: Optional[float], y: float) -> Optional[float]:
     return nan
 
 
-def _cosmology_line(model_label, alpha: Optional[float]) -> str:
-    """The label line that names the cosmology, with the drained fraction when it is given."""
+def _cosmology_line(
+    model_label, alpha: Optional[float], drain_model: Optional[str]
+) -> str:
+    """
+    The label line that names the cosmology, with the alpha row when it is given: `α = <α:g>` under the fixed
+    model and `A = <A:g> (<drain_model>)` under any other (alpha_label). ``drain_model`` has no default
+    meaning: an ``alpha`` without its model is a ValueError, never a fixed-law label on a one-loop row
+    (one-loop-drain prompt 04, orchestrator note 04 ruling 3).
+    """
     if alpha is None:
         return f"Cosmology: {model_label}"
-    return f"Cosmology: {model_label}, α = {alpha:g}"
+    if drain_model is None:
+        raise ValueError(
+            "_cosmology_line: an alpha is given without its drain_model; the model is never defaulted"
+        )
+    return f"Cosmology: {model_label}, {alpha_label(alpha, drain_model)}"
 
 
-def alpha_path(base, alpha: float) -> Path:
+def alpha_path(base, alpha: float, drain_model: str) -> Path:
     """
-    The directory of every per-alpha product of a plot script: ``base / "alpha=<α:.5g>"``, alpha = 0
-    included (`alpha=0`). The alpha is the stored row's value, never the float the user typed
-    (inelastic-reflection prompt 10, R26, ruling 3).
+    The directory of every per-row product of a plot script, from the alpha_value row's value and model
+    (one-loop-drain prompt 04, README §8.12 P35; orchestrator note 04 ruling 3, so that the model has no
+    default). Under DRAIN_MODEL_FIXED it is ``base / "alpha=<α:.5g>"``, alpha = 0 included (`alpha=0`), as
+    it has been since inelastic-reflection prompt 10 (R26, ruling 3); under any other model it is
+    ``base / "<drain_model>" / "A=<A:.5g>"``, so that a later version of the model is a new directory and a
+    glob of `alpha=*` never reads a one-loop one. The value is the stored row's, never the float the user
+    typed.
     """
-    return Path(base) / f"alpha={alpha:.5g}"
+    if drain_model == DRAIN_MODEL_FIXED:
+        return Path(base) / f"alpha={alpha:.5g}"
+    alpha_label(alpha, drain_model, "alpha")  # refuses an unknown model
+    return Path(base) / drain_model / f"A={alpha:.5g}"
 
 
 def add_beta_summary_labels(
-    fig, model_label, group_model: AbstractModel, alpha: Optional[float] = None
+    fig,
+    model_label,
+    group_model: AbstractModel,
+    alpha: Optional[float] = None,
+    drain_model: Optional[str] = None,
 ):
     """
     The labels of a figure against beta: its (M, n) group, from one model of the group
     (jordan-normalization prompt 07; until then, the potential's name), the time and the
-    cosmology. With ``alpha`` the cosmology's line also says the drained fraction, `Cosmology:
-    <label>, α = <α:g>`; without it the line is as before (inelastic-reflection prompt 10, ruling 2).
+    cosmology. With ``alpha`` the cosmology's line also says the alpha row, `Cosmology:
+    <label>, α = <α:g>` under the fixed model; without it the line is as before (inelastic-reflection
+    prompt 10, ruling 2). ``alpha`` must come with its ``drain_model`` (one-loop-drain prompt 04, ruling 3),
+    which makes the line `A = <A:g> (<drain_model>)` under the one-loop model.
     """
     now = datetime.now()
     M_text = group_model._formatter(group_model._M)
@@ -143,7 +180,7 @@ def add_beta_summary_labels(
     fig.text(
         RIGHT_COLUMN,
         ABOVE_PLOTS_BOTTOM_ROW,
-        _cosmology_line(model_label, alpha),
+        _cosmology_line(model_label, alpha, drain_model),
         horizontalalignment="right",
         fontsize="x-small",
     )
@@ -210,13 +247,18 @@ def reflection_count(extra_data: Optional[dict]) -> int:
 
 
 def add_ScalarHistory_labels(
-    fig, model: ScalarHistory, model_label, alpha: Optional[float] = None
+    fig,
+    model: ScalarHistory,
+    model_label,
+    alpha: Optional[float] = None,
+    drain_model: Optional[str] = None,
 ):
     """
     The labels of a history's figure: its model, and the V_ref and phi_ref its tuning found
     (jordan-normalization prompt 07; until then, the coupling's and the potential's names), the
-    solver, the time and the cosmology. With ``alpha`` the cosmology's line also says the drained
-    fraction (inelastic-reflection prompt 10, ruling 2).
+    solver, the time and the cosmology. With ``alpha`` the cosmology's line also says the alpha row
+    (inelastic-reflection prompt 10, ruling 2), and ``alpha`` must come with its ``drain_model``
+    (one-loop-drain prompt 04, ruling 3).
     """
     solver: IntegrationSolver = model.solver
     now = datetime.now()
@@ -258,7 +300,7 @@ def add_ScalarHistory_labels(
     fig.text(
         RIGHT_COLUMN,
         ABOVE_PLOTS_BOTTOM_ROW,
-        _cosmology_line(model_label, alpha),
+        _cosmology_line(model_label, alpha, drain_model),
         horizontalalignment="right",
         fontsize="x-small",
     )
@@ -546,6 +588,12 @@ FIXED_T_MEV = {"1MeV": 1.0, "70keV": 0.07}
 # fraction, the temperatures T_J at which the history parked and was released, in GeV (blank if it
 # did not), and the shares of the relativistic margins that fail. log_R_first_impact (added 2026-11-02)
 # is ln R, the test-field ratio at the first candidate's classical turning point (blank if none).
+# one-loop-drain prompt 04 (2026-11-06) added drain_model, directly after alpha: the model of the history's
+# alpha_value key, "fixed" or the one-loop model's name, while alpha keeps the key's value (alpha under "fixed",
+# A under the one-loop model); and DRAIN_CSV_COLUMNS, the fields of ScalarHistory.drain_history
+# (DrainHistoryValues) under their stored names, after DISSIPATION_CSV_COLUMNS and before failure_reasons. They
+# are dimensionless, read from the history's columns, and blank where the record is None (the fixed law, alpha =
+# 0, a failure) or the field is. The counts are written as integers.
 DISSIPATION_CSV_COLUMNS = [
     "injections",
     "injected_fraction",
@@ -557,12 +605,14 @@ DISSIPATION_CSV_COLUMNS = [
     "tracker_failing_share",
     "unassessed_share",
 ]
+DRAIN_CSV_COLUMNS = list(DrainHistoryValues._fields)
 CSV_COLUMNS = [
     "beta",
     "M_Mp",
     "n",
     "phi_init_Mp",
     "alpha",
+    "drain_model",
     "normalization",
     "V_ref_eV4",
     "phi_ref_Mp",
@@ -586,6 +636,7 @@ CSV_COLUMNS = [
     "Delta_N_eff_1MeV",
     "reflections",
     *DISSIPATION_CSV_COLUMNS,
+    *DRAIN_CSV_COLUMNS,
     "failure_reasons",
 ]
 
@@ -915,6 +966,7 @@ def build_history_record(
     n: int,
     phi_init_Mp: float,
     alpha: float,
+    drain_model: str,
     scalar,
     bbn,
     baseline: Optional[dict],
@@ -933,7 +985,9 @@ def build_history_record(
     carries one extra key, first_bounce_reflected, which figure 3 reads and the CSV does not
     write. ``alpha`` is the value of the alpha row the history was read at, given by the caller
     for every record, a failure's included (a failure has no ``scalar`` to read it from); the
-    two Delta N_eff are `scalar.dissipation`'s fields of those names, NaN where ``scalar`` is None,
+    ``drain_model`` is the model of that row, given by the caller in the same way and with no default
+    (one-loop-drain prompt 04, ruling 3); DRAIN_CSV_COLUMNS are the fields of `scalar.drain_history`, blank
+    where it is None. The two Delta N_eff are `scalar.dissipation`'s fields of those names, NaN where ``scalar`` is None,
     its ``dissipation`` is None or the field is None (inelastic-reflection prompt 10, ruling 1).
     DISSIPATION_CSV_COLUMNS are read the same way, the parking and release temperatures as
     exp(ln T_J) in GeV.
@@ -945,6 +999,7 @@ def build_history_record(
         n=n,
         phi_init_Mp=phi_init_Mp,
         alpha=alpha,
+        drain_model=drain_model,
         reflections=nan,
         failure_reasons="; ".join(failure_reasons),
         first_bounce_reflected=None,
@@ -985,6 +1040,14 @@ def build_history_record(
                 if value is None:
                     continue
                 record[key] = exp(value) / units.GeV if source != key else value
+        # the drain record of the one-loop law, dimensionless; absent from a stand-in, and None under the fixed
+        # law, at alpha = 0 and on a failure (one-loop-drain prompt 04, P36)
+        drain = getattr(scalar, "drain_history", None)
+        if drain is not None:
+            for key in DRAIN_CSV_COLUMNS:
+                value = getattr(drain, key)
+                if value is not None:
+                    record[key] = value
         bounce = scalar.first_bounce
         if bounce is not None:
             record["T_deliver_GeV"] = exp(bounce.log_T_Jordan) / units.GeV
@@ -1213,8 +1276,9 @@ def plot_fixed_T(records: Sequence[dict], path: Path, title: str = "") -> bool:
 
 def write_histories_csv(records: Sequence[dict], path: Path) -> None:
     """
-    histories.csv: one row per record, columns CSV_COLUMNS, sorted by (alpha, M, n, beta).
-    Missing values are written empty.
+    histories.csv: one row per record, columns CSV_COLUMNS, sorted by (drain_model, alpha, M, n, beta); for
+    records of the fixed model alone that is the order of (alpha, M, n, beta) it has always had
+    (one-loop-drain prompt 04, P36). Missing values are written empty.
     """
     path = Path(path)
     path.parent.mkdir(exist_ok=True, parents=True)
@@ -1228,9 +1292,184 @@ def write_histories_csv(records: Sequence[dict], path: Path) -> None:
         writer = csv.writer(f)
         writer.writerow(CSV_COLUMNS)
         for r in sorted(
-            records, key=lambda r: (r["alpha"], r["M_Mp"], r["n"], r["beta"])
+            records,
+            key=lambda r: (r["drain_model"], r["alpha"], r["M_Mp"], r["n"], r["beta"]),
         ):
             writer.writerow([cell(r[c]) for c in CSV_COLUMNS])
+
+
+# ---------------------------------------------------------------------------------------
+# fields.csv and bounces.csv (one-loop-drain prompt 04, P37, P38)
+# ---------------------------------------------------------------------------------------
+
+
+def build_fields_frame(
+    BBN: BBNData,
+    Q: AdiabaticHistory,
+    model: ScalarHistory,
+    units: UnitsLike,
+) -> pd.DataFrame:
+    """
+    The rows of a history's fields.csv, one per sample, merged over the stores' redshift ids and sorted by
+    log_one_plus_z, descending (moved out of plot_ScalarHistory.write_csv_file by one-loop-drain prompt 04,
+    P37, so that a test can call it: that script parses its arguments on import). The columns of before keep
+    their names, their order and their arithmetic; `log_m_eff_Mp` and `log_m_tracker_Mp` follow Delta_gstar,
+    each the stored column (`to_column` of the sample's value with MASS_COLUMNS' kind), blank where the value
+    is None, under every drain law.
+    """
+    model_values = (
+        {value.z.store_id: value for value in model.values} if model.available else {}
+    )
+    Q_values = {value.z.store_id: value for value in Q.values} if Q.available else {}
+    BBN_values = (
+        {value.z.store_id: value for value in BBN.values} if BBN.available else {}
+    )
+
+    z_keys = set(model_values.keys()) | set(Q_values.keys()) | set(BBN_values.keys())
+
+    log_GeV = log(units.GeV)
+
+    def mass_cells(value):
+        # to_column of the value with MASS_COLUMNS' kind, so that no conversion is written twice; None is nan
+        # (a blank cell)
+        cells = {}
+        for attribute, column, kind in MASS_COLUMNS:
+            x = getattr(value, attribute)
+            cells[column] = nan if x is None else to_column(x, kind, units)
+        return cells
+
+    def model_columns(store_id):
+        if store_id in model_values:
+            value = model_values[store_id]
+            return {
+                # z derived from the axis (inf past float range), and the axis itself, ln(1 + z_E);
+                # ln(1 + z_J) is a column, not a key (jordan-normalization prompt 03)
+                "z": value.z.z,
+                "log_one_plus_z": value.z.log_one_plus_z,
+                "log_one_plus_z_Jordan": value.log_one_plus_z_Jordan,
+                "raw_N": value.raw_N,
+                "phi_Einstein_Mp": value.phi_Einstein / units.PlanckMass,
+                "pi_Einstein_Mp": value.pi_Einstein / units.PlanckMass,
+                "H_Einstein_Mp": value.H_Einstein / units.PlanckMass,
+                "H_Jordan_Mp": value.H_Jordan / units.PlanckMass,
+                "log_rhorad_Einstein_GeV4": value.log_rhorad_Einstein - 4.0 * log_GeV,
+                "log_rhorad_Jordan_GeV4": value.log_rhorad_Jordan - 4.0 * log_GeV,
+                "log_fm": value.log_fm,
+                "fm": exp(value.log_fm),
+                "log_T_Jordan_GeV": value.log_T_Jordan - log_GeV,
+                "T_Jordan_GeV": exp(value.log_T_Jordan) / units.GeV,
+                "T_Jordan_Kelvin": exp(value.log_T_Jordan) / units.Kelvin,
+                "gstar_rho": value.gstar_rho,
+                "gstar_s": value.gstar_s,
+                "dgstar_rho_dlogT": value.dgstar_rho_dlogT,
+                "dgstar_s_dlogT": value.dgstar_s_dlogT,
+                "Sigma": value.Sigma,
+                "w": (1.0 - value.Sigma) / 3.0,
+                "friction_term_Mp": value.friction_term / units.PlanckMass,
+                "reflecting_term_Mp": value.reflecting_term / units.PlanckMass,
+                "kicking_term_Mp": value.kicking_term / units.PlanckMass,
+                # the dark radiation (inelastic-reflection prompt 10, R27): r_chi per sample and
+                # Delta g* = gstar_rho * r_chi, both 0.0 at alpha = 0
+                "rho_chi_over_rho_rad": value.rho_chi_over_rho_rad,
+                "Delta_gstar": value.gstar_rho * value.rho_chi_over_rho_rad,
+                # the stored columns of the sample masses, ln(m/M_P), blank where not defined
+                # (one-loop-drain prompt 04, P37)
+                **mass_cells(value),
+            }
+
+        return {
+            "z": nan,
+            "log_one_plus_z": nan,
+            "log_one_plus_z_Jordan": nan,
+            "raw_N": nan,
+            "phi_Einstein_Mp": nan,
+            "pi_Einstein_Mp": nan,
+            "H_Einstein_Mp": nan,
+            "H_Jordan_Mp": nan,
+            "log_rhorad_Einstein_GeV4": nan,
+            "log_rhorad_Jordan_GeV4": nan,
+            "log_fm": nan,
+            "fm": nan,
+            "log_T_Jordan_GeV": nan,
+            "T_Jordan_GeV": nan,
+            "T_Jordan_Kelvin": nan,
+            "gstar_rho": nan,
+            "gstar_s": nan,
+            "dgstar_rho_dlogT": nan,
+            "dgstar_s_dlogT": nan,
+            "Sigma": nan,
+            "w": nan,
+            "friction_term_Mp": nan,
+            "reflecting_term_Mp": nan,
+            "kicking_term_Mp": nan,
+            "rho_chi_over_rho_rad": nan,
+            "Delta_gstar": nan,
+            **{column: nan for _, column, _ in MASS_COLUMNS},
+        }
+
+    def Q_columns(store_id):
+        if store_id in Q_values:
+            return {}
+
+        return {}
+
+    def BBN_columns(store_id):
+        if store_id in BBN_values:
+            return {}
+
+        return {}
+
+    data = [
+        model_columns(store_id) | Q_columns(store_id) | BBN_columns(store_id)
+        for store_id in z_keys
+    ]
+
+    df = pd.DataFrame(data)
+    df.sort_values(
+        by="log_one_plus_z", inplace=True, ascending=False, ignore_index=True
+    )
+
+    return df
+
+
+BOUNCES_CSV_COLUMNS = [column for _, column, _ in BOUNCE_COLUMNS]
+
+
+def bounces_csv_rows(bounces: Sequence[BounceRow], units: UnitsLike) -> list:
+    """
+    The rows of a one-loop history's bounces.csv (one-loop-drain prompt 04, P38), one list per bounce row in
+    the order given (ordinal order, as ScalarHistory.bounces has them), one cell per BOUNCES_CSV_COLUMNS: the
+    value of `bounce_row_columns(row, units)` for that stored column, so that no conversion is written twice.
+    A Boolean is 0 or 1 and None is the empty string; every other cell is the value itself.
+    """
+
+    def cell(x):
+        if x is None:
+            return ""
+        if isinstance(x, bool):
+            return int(x)
+        return x
+
+    return [
+        [cell(bounce_row_columns(row, units)[column]) for column in BOUNCES_CSV_COLUMNS]
+        for row in bounces
+    ]
+
+
+def write_bounces_csv(
+    bounces: Sequence[BounceRow], units: UnitsLike, path: Path
+) -> None:
+    """
+    bounces.csv: the header BOUNCES_CSV_COLUMNS (the stored columns of ScalarHistoryBounce, in the table's
+    order, without history_serial) and one row per bounce row; the header alone for a one-loop history with
+    no bounce row. The caller writes it for one-loop histories only (one-loop-drain prompt 04, P38).
+    """
+    path = Path(path)
+    path.parent.mkdir(exist_ok=True, parents=True)
+    with open(path, "w", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow(BOUNCES_CSV_COLUMNS)
+        writer.writerows(bounces_csv_rows(bounces, units))
 
 
 # ---------------------------------------------------------------------------------------
@@ -1252,12 +1491,24 @@ DELTA_N_EFF_PANELS = [
 def plot_Delta_N_eff(records: Sequence[dict], path: Path, title: str = "") -> bool:
     """
     Delta N_eff against beta (R28): two panels sharing the beta axis, Delta N_eff at T_CMB above and at
-    1 MeV below, each on a log axis, one curve with markers per alpha > 0 present in ``records``, in
-    increasing alpha. A value that is NULL (a failure, or a history that did not reach 1 MeV) or not
+    1 MeV below, each on a log axis, one curve with markers per (drain_model, alpha) with alpha > 0 present
+    in ``records``, the fixed model first (DRAIN_MODELS' order) and then by increasing value, each labelled
+    by alpha_label (one-loop-drain prompt 04, P36). A value that is NULL (a failure, or a history that did not reach 1 MeV) or not
     positive is left out of its panel; one line is printed with the number left out of each. Returns
     False, writing nothing, if no record has alpha > 0 (a store at alpha = 0 alone).
     """
-    alphas = sorted({r["alpha"] for r in records if r["alpha"] > 0.0})
+    alphas = sorted(
+        {(r["drain_model"], r["alpha"]) for r in records if r["alpha"] > 0.0},
+        key=lambda row: (
+            (
+                DRAIN_MODELS.index(row[0])
+                if row[0] in DRAIN_MODELS
+                else len(DRAIN_MODELS)
+            ),
+            row[0],
+            row[1],
+        ),
+    )
     if len(alphas) == 0:
         print(
             "!! plot_Delta_N_eff: no record has alpha > 0; Delta N_eff figure skipped"
@@ -1269,8 +1520,12 @@ def plot_Delta_N_eff(records: Sequence[dict], path: Path, title: str = "") -> bo
     left_out = []
     for ax, (key, ylabel) in zip(axs, DELTA_N_EFF_PANELS):
         omitted = 0
-        for alpha in alphas:
-            group = [r for r in records if r["alpha"] == alpha]
+        for drain_model, alpha in alphas:
+            group = [
+                r
+                for r in records
+                if r["alpha"] == alpha and r["drain_model"] == drain_model
+            ]
             xs = np.array([r["beta"] for r in group], dtype=float)
             ys = np.array([r[key] for r in group], dtype=float)
             good = np.isfinite(xs) & np.isfinite(ys) & (ys > 0.0)
@@ -1280,7 +1535,7 @@ def plot_Delta_N_eff(records: Sequence[dict], path: Path, title: str = "") -> bo
                 xs[good][order],
                 ys[good][order],
                 marker="o",
-                label=rf"$\alpha$ = {alpha:g}",
+                label=alpha_label(alpha, drain_model, r"$\alpha$"),
             )
         left_out.append(omitted)
         ax.set_yscale("log")
@@ -1379,6 +1634,8 @@ def plot_dark_radiation(
 
     add_redshift_xaxis_labels(gstar_ax, model, text_labels=True, x_coord=x_coord)
     add_redshift_xaxis_labels(ratio_ax, model, text_labels=False, x_coord=x_coord)
-    add_ScalarHistory_labels(fig, model, model_label, alpha=alpha)
+    add_ScalarHistory_labels(
+        fig, model, model_label, alpha=alpha, drain_model=model.alpha.drain_model
+    )
     gstar_ax.legend(loc="best", fontsize="small")
     return _save(fig, path)

@@ -61,6 +61,7 @@ def _record(alpha, beta, today, one_MeV, M_Mp=0.5, n=1):
         n=n,
         phi_init_Mp=5.0,
         alpha=alpha,
+        drain_model="fixed",
         scalar=None,
         bbn=None,
         baseline=None,
@@ -264,6 +265,7 @@ class TestHistoriesCsv(unittest.TestCase):
                     n=1,
                     phi_init_Mp=5.0,
                     alpha=0.1,
+                    drain_model="fixed",
                     scalar=scalar,
                     bbn=None,
                     baseline=None,
@@ -407,6 +409,7 @@ class TestDarkRadiationFigure(tds._DissipationStoreCase):
             n=1,
             phi_init_Mp=5.0,
             alpha=0.1,
+            drain_model="fixed",
             scalar=got,
             bbn=None,
             baseline=None,
@@ -434,11 +437,18 @@ class TestDarkRadiationFigure(tds._DissipationStoreCase):
                 self.assertTrue(np.isnan(record[key]), key)
             else:
                 self.assertEqual(record[key], expected, key)
-        # in the header just before failure_reasons
+        # in the header just before the drain block, which one-loop-drain prompt 04 put between them and
+        # failure_reasons
+        first = ec.CSV_COLUMNS.index(ec.DISSIPATION_CSV_COLUMNS[0])
         self.assertEqual(
-            ec.CSV_COLUMNS[-len(ec.DISSIPATION_CSV_COLUMNS) - 1 : -1],
+            ec.CSV_COLUMNS[first : first + len(ec.DISSIPATION_CSV_COLUMNS)],
             ec.DISSIPATION_CSV_COLUMNS,
         )
+        self.assertEqual(
+            ec.CSV_COLUMNS[first + len(ec.DISSIPATION_CSV_COLUMNS) : -1],
+            ec.DRAIN_CSV_COLUMNS,
+        )
+        self.assertEqual(ec.CSV_COLUMNS[-1], "failure_reasons")
 
 
 if __name__ == "__main__":

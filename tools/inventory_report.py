@@ -62,6 +62,7 @@ from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 import sqlalchemy as sqla
 
+from CosmologyConcepts.drain_model import DRAIN_MODEL_FIXED
 from datastorekit.store_inventory import ClassInventory, Record, StoreInventory
 
 # categories are reported in this order; a class of the inventory that no category names is
@@ -288,7 +289,45 @@ class _Renderer:
             self.value_sort(name, record, f) for f in self.field_order(name, record)
         )
 
+    # --- an alpha_value row, by its model (one-loop-drain prompt 04, P39) -------------------------
+
+    def alpha_row_text(self, record: Record) -> str:
+        """
+        An alpha_value row: its value under the fixed model, as before one-loop-drain prompt 03 (`0`, `0.1`),
+        and `A=<A:.5g> (<drain_model>)` under any other. A row with no drain_model leaf (a store of format 6
+        or before) is fixed.
+        """
+        value = self.leaf_text("alpha_value", "value", record.key["value"])
+        model = record.key.get("drain_model")
+        if model is None or model == DRAIN_MODEL_FIXED:
+            return value
+        return f"A={value} ({model})"
+
+    def alpha_row_sort(self, record: Record) -> tuple:
+        """The fixed rows first, then any other model's by name, each by value."""
+        model = record.key.get("drain_model")
+        return (
+            0 if model is None or model == DRAIN_MODEL_FIXED else 1,
+            str(model),
+            self.leaf_sort("alpha_value", "value", record.key["value"]),
+        )
+
+    def history_alpha_text(self, record: Record) -> str:
+        """A history's alpha row: `alpha=<α>` under the fixed model, `A=<A> (<drain_model>)` under another."""
+        _, parent, why = self.parent("ScalarHistory", record, "alpha")
+        if parent is None:
+            return f"alpha={why}"
+        text = self.alpha_row_text(parent)
+        return text if text.startswith("A=") else f"alpha={text}"
+
     # --- a ScalarHistory, by its physical labels -------------------------------------------------
+
+    def _alpha_keys(self) -> frozenset:
+        """The key fields of the alpha_value class (empty if the store holds none)."""
+        if "alpha_value" not in self.inventory.classes:
+            return frozenset()
+        records = self.cls("alpha_value").records
+        return frozenset(records[0].key) if len(records) > 0 else frozenset()
 
     def history_extras(self) -> Tuple[List[str], List[str]]:
         """(the extra history fields every ScalarHistory shares, those that vary)."""
@@ -313,7 +352,11 @@ class _Renderer:
             if field in record.key
         ]
         parts += [
-            f"{labels[field]}={self.value_text('ScalarHistory', record, field)}"
+            (
+                self.history_alpha_text(record)
+                if field == "alpha" and "drain_model" in self._alpha_keys()
+                else f"{labels[field]}={self.value_text('ScalarHistory', record, field)}"
+            )
             for field in extras
             if field in record.key
         ]
@@ -446,7 +489,11 @@ def _compute_target_lines(renderer: _Renderer, name: str) -> List[str]:
             lines.append(
                 f"{_DETAIL_INDENT}common to every history: "
                 + ", ".join(
-                    f"{labels[f]}={renderer.value_text(name, first, f)}"
+                    (
+                        renderer.history_alpha_text(first)
+                        if f == "alpha" and "drain_model" in renderer._alpha_keys()
+                        else f"{labels[f]}={renderer.value_text(name, first, f)}"
+                    )
                     for f in shared
                     if f in first.key
                 )
@@ -503,6 +550,20 @@ def _class_lines(renderer: _Renderer, name: str) -> List[str]:
 
     if name in COMPUTE_TARGETS:
         lines.extend(_compute_target_lines(renderer, name))
+    elif (
+        name == "alpha_value" and cls.count > 0 and "drain_model" in cls.records[0].key
+    ):
+        # the pair (value, drain_model): a list of values as before, the fixed rows by value and a row of
+        # another model as `A=<A> (<drain_model>)`, so that a store of fixed rows alone reads as before
+        # one-loop-drain prompt 03
+        ordered = sorted(
+            cls.records,
+            key=lambda r: (renderer.alpha_row_sort(r), r.canonical_json()),
+        )
+        texts = [renderer.alpha_row_text(r) for r in ordered]
+        lines.append(
+            f"{_DETAIL_INDENT}values = [ {', '.join(_truncated(texts, renderer.verbose, 'value'))} ]"
+        )
     elif cls.count > 0:
         one_leaf = all(
             len(r.key) == 1 and next(iter(r.key)) not in cls.parents

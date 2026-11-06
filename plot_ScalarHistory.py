@@ -50,6 +50,12 @@ from ComputeTargets import (
 )
 from CosmologyConcepts import alpha_value, temperature, phi_value, pi_value
 from CosmologyConcepts.Models import AbstractModel
+from CosmologyConcepts.drain_model import (
+    DRAIN_LAW_ONE_LOOP,
+    DRAIN_MODEL_FIXED,
+    DRAIN_MODEL_ONE_LOOP,
+    alpha_label,
+)
 from datastorekit.SQL.ProfileAgent import ProfileAgent
 from datastorekit.SQL.ShardedPool import ShardedPool
 from MetadataConcepts import tolerance, store_tag
@@ -74,7 +80,9 @@ from extract_common import (
     safe_fabs,
     add_ScalarHistory_labels,
     alpha_path,
+    build_fields_frame,
     plot_dark_radiation,
+    write_bounces_csv,
     add_redshift_xaxis_labels,
     add_temperature_yaxis_labels,
     safe_fabs_positive,
@@ -262,7 +270,13 @@ def history_plot(
     T_ax.set_yscale("log")
     T_ax.grid(True)
 
-    add_ScalarHistory_labels(fig, model, model_label, alpha=model.alpha.value)
+    add_ScalarHistory_labels(
+        fig,
+        model,
+        model_label,
+        alpha=model.alpha.value,
+        drain_model=model.alpha.drain_model,
+    )
 
     h, l = add_redshift_xaxis_labels(
         phi_ax, model, temp_unit="GeV", text_labels=True, x_coord=x_coord
@@ -384,7 +398,13 @@ def thermo_plot(
         linestyle="solid",
     )
 
-    add_ScalarHistory_labels(fig, model, model_label, alpha=model.alpha.value)
+    add_ScalarHistory_labels(
+        fig,
+        model,
+        model_label,
+        alpha=model.alpha.value,
+        drain_model=model.alpha.drain_model,
+    )
 
     h, l = add_redshift_xaxis_labels(
         gstar_ax, model, text_labels=False, x_coord=x_coord
@@ -516,7 +536,13 @@ def Hubble_plot(
 
     H_ax.grid(True)
 
-    add_ScalarHistory_labels(fig, model, model_label, alpha=model.alpha.value)
+    add_ScalarHistory_labels(
+        fig,
+        model,
+        model_label,
+        alpha=model.alpha.value,
+        drain_model=model.alpha.drain_model,
+    )
     h, l = add_redshift_xaxis_labels(
         H_ax, model, temp_unit="GeV", text_labels=True, x_coord=x_coord
     )
@@ -602,7 +628,13 @@ def energy_plot(
 
     energy_ax.grid(True)
 
-    add_ScalarHistory_labels(fig, model, model_label, alpha=model.alpha.value)
+    add_ScalarHistory_labels(
+        fig,
+        model,
+        model_label,
+        alpha=model.alpha.value,
+        drain_model=model.alpha.drain_model,
+    )
     h, l = add_redshift_xaxis_labels(
         energy_ax, model, temp_unit="GeV", text_labels=True, x_coord=x_coord
     )
@@ -806,7 +838,13 @@ def ODE_terms_plot(
         Sigma_ax.xaxis.set_inverted(True)
     Sigma_ax.set_xlabel(x_axis_label())
 
-    add_ScalarHistory_labels(fig, model, model_label, alpha=model.alpha.value)
+    add_ScalarHistory_labels(
+        fig,
+        model,
+        model_label,
+        alpha=model.alpha.value,
+        drain_model=model.alpha.drain_model,
+    )
     add_redshift_xaxis_labels(f_ax, model, text_labels=False, x_coord=x_coord)
     add_redshift_xaxis_labels(r_ax, model, text_labels=False, x_coord=x_coord)
     add_redshift_xaxis_labels(k_ax, model, text_labels=False, x_coord=x_coord)
@@ -1055,7 +1093,13 @@ def BBN_era_plot(
     phi_BBN_ax.set_xscale("log")
     phi_BBN_ax.xaxis.set_inverted(True)
 
-    add_ScalarHistory_labels(fig, model, model_label, alpha=model.alpha.value)
+    add_ScalarHistory_labels(
+        fig,
+        model,
+        model_label,
+        alpha=model.alpha.value,
+        drain_model=model.alpha.drain_model,
+    )
 
     phi_BBN_ax.legend(loc="best")
     HJordan_BBN_ax.legend(loc="best")
@@ -1255,7 +1299,13 @@ def BBN_era_NP_plot(
     rho_NP_ax.set_xlabel("Temperature $T$ [MeV]")
     rho_NP_ax.xaxis.set_inverted(True)
 
-    add_ScalarHistory_labels(fig, model, model_label, alpha=model.alpha.value)
+    add_ScalarHistory_labels(
+        fig,
+        model,
+        model_label,
+        alpha=model.alpha.value,
+        drain_model=model.alpha.drain_model,
+    )
     add_BBN_info_labels(fig, bbn=BBN)
 
     rho_NP_ax.legend(loc="best")
@@ -1282,104 +1332,7 @@ def write_csv_file(
     model: ScalarHistory,
     units: UnitsLike,
 ):
-    model_values = (
-        {value.z.store_id: value for value in model.values} if model.available else {}
-    )
-    Q_values = {value.z.store_id: value for value in Q.values} if Q.available else {}
-    BBN_values = (
-        {value.z.store_id: value for value in BBN.values} if BBN.available else {}
-    )
-
-    z_keys = set(model_values.keys()) | set(Q_values.keys()) | set(BBN_values.keys())
-
-    log_GeV = log(units.GeV)
-
-    def model_columns(store_id):
-        if store_id in model_values:
-            value = model_values[store_id]
-            return {
-                # z derived from the axis (inf past float range), and the axis itself, ln(1 + z_E);
-                # ln(1 + z_J) is a column, not a key (jordan-normalization prompt 03)
-                "z": value.z.z,
-                "log_one_plus_z": value.z.log_one_plus_z,
-                "log_one_plus_z_Jordan": value.log_one_plus_z_Jordan,
-                "raw_N": value.raw_N,
-                "phi_Einstein_Mp": value.phi_Einstein / units.PlanckMass,
-                "pi_Einstein_Mp": value.pi_Einstein / units.PlanckMass,
-                "H_Einstein_Mp": value.H_Einstein / units.PlanckMass,
-                "H_Jordan_Mp": value.H_Jordan / units.PlanckMass,
-                "log_rhorad_Einstein_GeV4": value.log_rhorad_Einstein - 4.0 * log_GeV,
-                "log_rhorad_Jordan_GeV4": value.log_rhorad_Jordan - 4.0 * log_GeV,
-                "log_fm": value.log_fm,
-                "fm": exp(value.log_fm),
-                "log_T_Jordan_GeV": value.log_T_Jordan - log_GeV,
-                "T_Jordan_GeV": exp(value.log_T_Jordan) / units.GeV,
-                "T_Jordan_Kelvin": exp(value.log_T_Jordan) / units.Kelvin,
-                "gstar_rho": value.gstar_rho,
-                "gstar_s": value.gstar_s,
-                "dgstar_rho_dlogT": value.dgstar_rho_dlogT,
-                "dgstar_s_dlogT": value.dgstar_s_dlogT,
-                "Sigma": value.Sigma,
-                "w": (1.0 - value.Sigma) / 3.0,
-                "friction_term_Mp": value.friction_term / units.PlanckMass,
-                "reflecting_term_Mp": value.reflecting_term / units.PlanckMass,
-                "kicking_term_Mp": value.kicking_term / units.PlanckMass,
-                # the dark radiation (inelastic-reflection prompt 10, R27): r_chi per sample and
-                # Delta g* = gstar_rho * r_chi, both 0.0 at alpha = 0
-                "rho_chi_over_rho_rad": value.rho_chi_over_rho_rad,
-                "Delta_gstar": value.gstar_rho * value.rho_chi_over_rho_rad,
-            }
-
-        return {
-            "z": nan,
-            "log_one_plus_z": nan,
-            "log_one_plus_z_Jordan": nan,
-            "raw_N": nan,
-            "phi_Einstein_Mp": nan,
-            "pi_Einstein_Mp": nan,
-            "H_Einstein_Mp": nan,
-            "H_Jordan_Mp": nan,
-            "log_rhorad_Einstein_GeV4": nan,
-            "log_rhorad_Jordan_GeV4": nan,
-            "log_fm": nan,
-            "fm": nan,
-            "log_T_Jordan_GeV": nan,
-            "T_Jordan_GeV": nan,
-            "T_Jordan_Kelvin": nan,
-            "gstar_rho": nan,
-            "gstar_s": nan,
-            "dgstar_rho_dlogT": nan,
-            "dgstar_s_dlogT": nan,
-            "Sigma": nan,
-            "w": nan,
-            "friction_term_Mp": nan,
-            "reflecting_term_Mp": nan,
-            "kicking_term_Mp": nan,
-            "rho_chi_over_rho_rad": nan,
-            "Delta_gstar": nan,
-        }
-
-    def Q_columns(store_id):
-        if store_id in Q_values:
-            return {}
-
-        return {}
-
-    def BBN_columns(store_id):
-        if store_id in BBN_values:
-            return {}
-
-        return {}
-
-    data = [
-        model_columns(store_id) | Q_columns(store_id) | BBN_columns(store_id)
-        for store_id in z_keys
-    ]
-
-    df = pd.DataFrame(data)
-    df.sort_values(
-        by="log_one_plus_z", inplace=True, ascending=False, ignore_index=True
-    )
+    df = build_fields_frame(BBN, Q, model, units)
 
     csv_path = csv_path / "fields.csv"
     csv_path.parents[0].mkdir(exist_ok=True, parents=True)
@@ -1436,10 +1389,13 @@ def plot_ScalarHistory(
     CONST_MP2: float = CONST_MP * CONST_MP
     CONST_3_MP2: float = 3.0 * CONST_MP2
 
-    # every per-alpha product goes under <output>/<label>/alpha=<alpha>/, alpha being the history's
-    # row (inelastic-reflection prompt 10, R26, ruling 3)
+    # every per-row product goes under <output>/<label>/alpha=<alpha>/ (the fixed model) or
+    # <output>/<label>/<drain_model>/A=<A>/ (any other), the history's own alpha_value row
+    # (inelastic-reflection prompt 10, R26, ruling 3; one-loop-drain prompt 04, P35)
     base_path = Path(args.output).resolve()
-    base_path = alpha_path(base_path / f"{model_label}", model.alpha.value)
+    base_path = alpha_path(
+        base_path / f"{model_label}", model.alpha.value, model.alpha.drain_model
+    )
     plot_path = base_path / f"plots/beta={beta:.5g}/M={M/units.eV:.5g}eV_n={n}"
     csv_path = base_path / f"csv/beta={beta:.5g}/M={M/units.eV:.5g}eV_n={n}"
 
@@ -1532,6 +1488,10 @@ def plot_ScalarHistory(
     )
 
     write_csv_file(BBN, Q, csv_path, model, units)
+    # bounces.csv beside fields.csv, for a history of the one-loop law only, and never under the fixed one
+    # (one-loop-drain prompt 04, P38)
+    if model.alpha.drain_law == DRAIN_LAW_ONE_LOOP:
+        write_bounces_csv(model.bounces, units, csv_path / "bounces.csv")
 
 
 def run_pipeline(
@@ -1549,7 +1509,9 @@ def run_pipeline(
     model_label = model_data["label"]
     model_cosmology = model_data["cosmology"]
 
-    print(f"\n>> RUNNING PIPELINE FOR MODEL {model_label}, alpha = {alpha.value:g}")
+    print(
+        f"\n>> RUNNING PIPELINE FOR MODEL {model_label}, {alpha_label(alpha.value, alpha.drain_model, 'alpha')}"
+    )
 
     def build_plot_work(lagrangian: AbstractModel):
         model_query_payload = {
@@ -1636,6 +1598,7 @@ with ShardedPool(
     units = Planck_units()
     try:
         alpha_values = distinct_values(args.alpha_values)
+        A_values = distinct_values(args.A_values or [])
         atol, rtol, T_init, phi_init, pi_init, tuning_tol, alpha_rows = (
             plot_inputs.parameters(
                 pool,
@@ -1646,6 +1609,7 @@ with ShardedPool(
                 units=units,
                 tuning_tol=args.tuning_tolerance,
                 alpha_values=alpha_values,
+                A_values=A_values,
             )
         )
 
@@ -1662,13 +1626,18 @@ with ShardedPool(
         sys.exit(2)
 
     print(
-        f"@@ plot_ScalarHistory: alpha values {', '.join(f'{a.value:.5g}' for a in alpha_rows)}"
+        f"@@ plot_ScalarHistory: alpha values {', '.join(f'{a.value:.5g}' for a in alpha_rows if a.drain_model == DRAIN_MODEL_FIXED)}"
     )
+    if A_values:
+        print(
+            f"@@ plot_ScalarHistory: A values {', '.join(f'{a.value:.5g}' for a in alpha_rows if a.drain_model == DRAIN_MODEL_ONE_LOOP)} ({DRAIN_MODEL_ONE_LOOP})"
+        )
 
     for model_data in model_list:
         tags = []
 
-        # one pipeline per alpha row, in the order of --alpha-values
+        # one pipeline per alpha row: the fixed rows in the order of --alpha-values, then the one-loop rows in
+        # the order of --A-values (one-loop-drain prompt 04)
         for alpha in alpha_rows:
             run_pipeline(
                 model_data,
