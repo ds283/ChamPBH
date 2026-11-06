@@ -854,3 +854,94 @@ left for the user (which (β, M, A) the rebuild builds, and C-3873's tuning cost
   accepted integration's realization (P2). They are not computed on every tuning integration (C-3873 takes 28).
 - **P32 — no migration.** A format-6 store is read with the code of its own commit, as for every earlier format and label
   (`config/version.py`).
+
+### 8.12 Before 04 (2026-11-06)
+
+Written by Claude Opus 5.5 after 03 landed and was reviewed (`fe4c917`, `50e93c7`), at the user's request: "Please write
+prompt 04".
+
+**Ready.** The Store gate holds, and the tree is clean. 03's log §7 hands 04:
+- the key, `alpha_value` = (value, `drain_model`), with `fixed` where no model is named;
+- the history's drain record (`ScalarHistory.drain_history`, readable under `_do_not_populate`);
+- the bounce rows (`ScalarHistory.bounces`, with `BOUNCE_COLUMNS` and `bounce_row_columns` in
+  `ObjectFactories/ScalarHistory.py`);
+- the sample masses (`ScalarHistoryValue.log_m_eff`, `.log_m_tracker`; `MASS_COLUMNS`);
+- two items for 04: the tools that read `alpha_value` by raw SQL see only its value, and the inventory report's α
+  label needs a decision.
+
+**What changes from §8.4's row 04.** The option selects a drain model (decision 1 of §8.10), not a gap prescription
+(P26, superseded). The "readers" of that row are the tools that read `alpha_value` by raw SQL, and the inventory report.
+
+**What the drivers do today.**
+- **`main.py`.** It looks up one `alpha_value` per `--alpha-values` value with no model, so every row is `fixed`. It
+  runs one pipeline per row. `alpha_fraction` refuses a value ≥ 1 at parse, so no A above 1 can be given.
+- **The plot scripts.** They match the same list through `plot_inputs.parameters`, and write under
+  `<label>/alpha=<α>/`. Their histories.csv and `Delta_N_eff.pdf` span every α of the run, at `<label>/`.
+- **The tool route.** `tools/history_and_bbn.py` takes `--drain-law {fixed,one_loop}`, and its `--alpha` carries α or
+  A by the law (01, P25).
+
+**Proposed by the planner for 04 (P33–P40), the defaults unless the user says otherwise.** Prompt 04 is written on them.
+- **P33 — the option.** `main.py` and the plot scripts gain `--A-values`: one or more A, each finite and > 0, with no
+  upper bound. Each value names the row (A, `DRAIN_MODEL_ONE_LOOP`), the code's current one-loop model. No driver
+  takes a model string.
+  - **The checks.** Values are checked at parse by `check_drain_model`, the one statement of the rules. Duplicates
+    are collapsed by `distinct_values`.
+  - **The default is none.** `--alpha-values` keeps its default [0], so a run given only `--A-values` also builds,
+    or reads, natural mode, the baseline every figure compares with.
+  - **Why this form.** The rebuild of record (U14, with α = 0 beside it) is then one invocation, and one plot run
+    writes one histories.csv across both models. A plot run of a store built under an older version of the law
+    stops (exit 2), as a run under another `VERSION_LABEL` finds nothing.
+  - **Not chosen:**
+    - (a) `--drain-model` selecting the model of `--alpha-values`, one model per run. Natural mode and the A values
+      would then need two runs, and the second plot run would overwrite the first one's `<label>/histories.csv`.
+    - (c) pairs such as `fixed:0 one-loop-measured-v1:1`, which put the version string on every command line.
+- **P34 — the order.** The fixed rows come first, in the order of `--alpha-values`, then the one-loop rows, in the
+  order of `--A-values`, with one pipeline per row as today. A run given no `--A-values` looks up exactly what it does
+  today.
+- **P35 — the paths and the labels.**
+  - **Under `fixed`, unchanged:** the products go to `<label>/alpha=<α:.5g>/`, and the label reads `α = <α:g>`.
+  - **Under the one-loop model:** the products go to `<label>/<drain_model>/A=<A:.5g>/`, and the label reads
+    `A = <A:g> (<drain_model>)`.
+  - **Why the version is in the path:** a later version is then a new directory. The science-runs scripts glob
+    `alpha=*` and so never read a one-loop directory.
+  - One helper gives the path and one gives the label, each from the `alpha_value` row.
+- **P36 — histories.csv.**
+  - **A `drain_model` column** follows `alpha`. `alpha` keeps the key's value: α under `fixed`, A under the one-loop
+    model.
+  - **The drain record** is a block of columns, `DRAIN_CSV_COLUMNS`. It holds every field of `DrainHistoryValues`
+    under its stored name, after `DISSIPATION_CSV_COLUMNS` and before `failure_reasons`, and is blank under `fixed`
+    and on a failure.
+  - **The sort** is by (`drain_model`, alpha, M, n, β). For a store holding only `fixed` rows, the order is today's.
+  - **`Delta_N_eff.pdf`** draws one curve per (model, value) with value > 0, labelled as in P35.
+- **P37 — fields.csv.**
+  - **Two columns:** `log_m_eff_Mp` and `log_m_tracker_Mp`, after `Delta_gstar`, under every law. Each is the stored
+    column, by `MASS_COLUMNS`' conversion, and blank where NULL.
+  - **The row-building moves to `extract_common.py`,** so that it can be tested without running the script, which
+    parses its arguments on import. The existing columns keep their arithmetic exactly.
+- **P38 — bounces.csv.**
+  - **Where and when.** It sits beside each one-loop history's fields.csv. It is written for every one-loop history,
+    header only if the history has no bounce row, and never under `fixed`, so that a missing file means the fixed
+    law.
+  - **Rows:** one per bounce row, in `ordinal` order.
+  - **Columns:** those of `BOUNCE_COLUMNS` in the table's order, but `history_serial`, by `bounce_row_columns`, so
+    that each cell is the stored column's value. Booleans are written as 0/1 and NULL as blank.
+  - The history's keys come from the path and from histories.csv, as for fields.csv.
+- **P39 — the tools that read `alpha_value` by raw SQL.**
+  - **`tools/bbn_from_store.py`** gains `--drain-law {fixed,one_loop}`, default `fixed`, as `tools/history_and_bbn.py`
+    has (P25), and its query matches the model the law gives.
+  - **`tools/outward_step_scan.py`** rebuilds a history under the fixed law. It therefore reads only `fixed` rows
+    from a store, and counts the rows of other models it skips.
+  - **A store whose `alpha_value` has no `drain_model` column** (format ≤ 6) holds only `fixed` rows. Both tools read
+    it as today, as `bbn_from_store.py` reads a store with no `alpha_value` table as α = 0.
+  - **`tools/inventory_report.py`** labels a `fixed` row `alpha=<α>`, as before 03, and a one-loop row
+    `A=<A> (<drain_model>)`, in the values list and on each history's line. A store holding only `fixed` rows then
+    reports as it did before 03.
+- **P40 — the registered run's scope.** `describe_scope` adds `A <values>` only when `--A-values` is given, so every
+  scope a fixed-law run records is unchanged.
+
+**The Export gate made exact** (§8.5): every new column of histories.csv, fields.csv and bounces.csv equals the stored
+column, bitwise. For fixed-law histories, the existing columns of histories.csv and fields.csv are byte-identical to
+those the code at the commit adding prompt 04 writes from the same store. The plot scripts refuse an `--alpha-values`
+or `--A-values` value that has no row under its model (exit 2). Nothing runs under Ray: the drivers are checked by
+`ast` and their functions on temporary stores, as `inelastic-reflection` 10 checked `--alpha-values`. 06 runs them
+under Ray.
