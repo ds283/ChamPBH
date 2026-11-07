@@ -1327,3 +1327,90 @@ zero, and a per-history figure must handle tens of thousands of points.
   `ComputeTargets/tests/test_reflection_reporting.py` change with it, and the test count does not.
 - **P65 — measurements, not verdicts.** No threshold colours a cell as failing beyond the margins' own zero and the
   1 rad reference line, and no figure opens an issue. What the demonstration shows goes in the log for 08.
+
+### 8.16 Before 08 (2026-11-07)
+
+Written by Claude Opus 5.5 after 07 landed and was reviewed (`867b267`, `c8b87d6`), at the user's request: "Please write
+prompt 08".
+
+**Ready.** Every gate of §8.5 holds: Law, Measure, Wide, Measured, Remeasure, Store, Export, Derive, Bitwise, R and
+Figures (board §2). The tree is clean, and no run is live (33 finished). The suites stand at 26, 665 (219 + 446), 163,
+259 and 72. Three issues are open on the board (§3) and none is assigned to this campaign (§3.1). The three stores of 06
+are kept under `var/datastores/` (P57).
+
+**Stale beside §8.10–§8.15, settled for 08:**
+- **"The law and the measures for the paper"** (§8.4 row 08; P16 as revised in §8.6) go in the verification document, as
+  a section written for the paper's use. Nothing is written in the briefing notes' repository, and the paper is not
+  edited.
+- **The law the documents describe** is §8.10's measured law, `one-loop-measured-v1`: f by regime, with drains in the
+  gap and at R ≤ 1. 2.7/ℓ, the gap prescriptions and "zero at R ≤ 1" (§8.2, P26 and the board's opening description)
+  are the plan's history, not the code.
+- **`[00-later-bounces-act-on-quanta-already-present]`.** §8.3 had 08 close it if negligible under the one-loop law.
+  05 measured it and the review left it open (board §3, narrowed 2026-11-06): δ_stim is at most 1.3 × 10⁻³, but the
+  first-order, random-phase premise fails in 33 histories (n̄ > 1), and in 15 the phase slip falls below 1 rad. It
+  stays open, as the user first ruled, and 08 documents it.
+- **The handover's destination** is `.documents/review-remediation-verification.md` §4.20, after `inelastic-reflection`'s
+  §4.18 and `reflection-restart`'s §4.19. §4.19 point 4 says that the rebuild of record waits for this campaign's 08.
+
+**For 08 from the earlier prompts and reviews:**
+- **06:** the disk (the raylet counts 39 GB free, and Finder shows over 200 GB, the difference purgeable; §8.15); the
+  workers' working directory is the cluster's whatever tree the driver runs from (log 06 §6); the stores and their
+  sizes, the costs and the longest heartbeat silence (log 06 §7).
+- **The shard warning** is DatastoreKit's (`befa7f3`), to be fixed there and adopted through a new pin.
+- **05:** where the random-phase reading of δ_stim does not hold, the backreaction ratio above 1, and E negligible
+  (log 05 §6).
+- **07:** what the demonstration shows (log 07 §6) and its "Observations not acted on" (§5). Two readings from the
+  review (board, 07's review paragraph): the cream "no history" background is close to the white at the centre of the
+  margins' map, and in the per-history drain panel an open marker at 1 hides under a filled α_eff ≈ 1 marker. Both are
+  documented, not changed.
+
+**Proposed by the planner for 08 (P66–P73), the defaults unless the user says otherwise.** Prompt 08 is written on them.
+- **P66 — one commit, no code.** 08 changes no Python file and no test. It builds no store and starts no Ray. The one
+  program it runs on a store is `main.py --inventory` (P72), read-only, with the bytes checked.
+- **P67 — the law and the measures for the paper.** A new §8 of `one-loop-drain-verification.md`:
+  - the two laws as coded, with each constant, its value and its source;
+  - what the law did on 02d's sample;
+  - the stored, model-free measures and the derived, spectrum-dependent ones, each defined with its column, its unit and
+    its assumptions;
+  - what they say on the sample;
+  - where the reading does not hold, and what is not modelled.
+
+  Every number cites the section or log it comes from. Nothing is re-measured.
+- **P68 — the reading guides.**
+  - `numerical-strategies.md` gets a dated §6.12, "the one-loop drain law as it stands", in §6.11's form: what a history
+    under `one-loop-measured-v1` does, in order, pointing to the dated notes of 01, 02c, 03 and 05. It also names the
+    statements of §6.1–§6.11 that hold only for the fixed law.
+  - `architecture-summary.md` gets one dated note at the end of §7.2 that maps the campaign onto the code: the modules,
+    functions, tables, columns, payload keys, exports and tools, pointing to each prompt's note rather than repeating it.
+  - A present-tense statement this campaign made false is corrected by a dated note beside it, not edited.
+- **P69 — `CLAUDE.md` by description only.** The counts and times from 08's own run, and anything a log names as made
+  false. No new rule (the user, 2026-10-29).
+- **P70 — the handover**, §4.20, in §4.19's form, so that a reader who knows §4.18 and §4.19 can plan the rebuild. It
+  covers:
+  - the build's changes, and the run scripts' changes against 2026.8.0's;
+  - U14's A values;
+  - the costs and failures to expect, with a projection labelled as one;
+  - the figures of record, Fig 6 at laboratory M first (§8.7), and the tools that make the rest;
+  - the stores kept;
+  - what stays open;
+  - the merge.
+
+  It writes no run script; the scripts are the user's, in a new `science-runs/` folder.
+- **P71 — the issues.** None is closed. `[00-later-bounces-act-on-quanta-already-present]` gains a dated line pointing
+  to the verification's §8. `[00-the-parking-leftover-has-no-spectrum]` is narrowed with 02d's measured parking share.
+  `[02-one-loop-tunings-fail-at-small-A-in-the-transition-window]` gains a dated line naming the handover's point on it.
+  `.documents/OPEN_ISSUES.md` is updated in the same commit, and its count stays 29 unless the work opens something.
+- **P72 — the checks.**
+  - The five suites, run once.
+  - A table of every line addressed to 08 or the close, in the logs, the README and the board, each marked done or
+    left, with why.
+  - Every command in the handover run as written (`--help`).
+  - `main.py --inventory` run twice, each time with `shasum -a 256` of every file before and after:
+    - on `one-loop-drain-06-reference`, where nothing may change;
+    - on a scratchpad copy of `one-loop-drain-06-base`, which states what the tip reads of a format-6 store.
+- **P73 — the board, the index and the branch.**
+  - The board: closed, with its status line a short statement of the closed campaign and its opening description the
+    measured law.
+  - `prompts/INDEX.md`: the row says complete.
+  - The merge into `main` is the user's. `main` (`0209aac`) is an ancestor of this branch, so the merge would be a
+    fast-forward; 08 checks this and states it. It does not merge or push.
