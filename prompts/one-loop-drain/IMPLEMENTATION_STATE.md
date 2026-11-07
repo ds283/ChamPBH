@@ -66,7 +66,7 @@ The plan as first ruled had seven prompts (README §2), none written; the re-pla
 | 04 | [Drivers and exports](04-drivers-and-exports.md) | `--A-values` in `main.py` and the plot scripts, beside `--alpha-values` (P33, P34); the one-loop paths and labels (P35); `drain_model` and the drain record in `histories.csv` (P36), the sample masses in `fields.csv` (P37), a new `bounces.csv` (P38); the raw-SQL readers of `alpha_value` and the inventory report's label (P39); the registered run's scope (P40) | Sonnet | ✅ | ✅ | `64a6274` | [04](logs/04-drivers-and-exports.md) |
 | 05 | [Derivation tool](05-derivation-tool.md) | `ComputeTargets/quanta_spectrum.py` (U4's shape, its moments and the kernels G and Ω; P41) and `tools/quanta_measures.py` reading 04's exports alone (P42): K(N) rebuilt from the bounce rows (P43); n_g, n̄_j, δ_stim, E(N), the phase slip and the backreaction ratio (P44); three outputs for 07 (P45); the associated piece at 0, 1 and 10 (P46); run on 02d's 230 successes (P47); the Derive gate (P48); the R·S(L) bound dropped (README §8.13) | Opus | ✅ | ✅ | `9830738` | [05](logs/05-derivation-tool.md) |
 | 06 | [Rehearse](06-rehearse.md) | registered builds under Ray (P50–P57): the fixed law at the base `1561b60` against the tip, bitwise, with the workers' code probed; the one-loop law interrupted and resumed, against the straight build and 02d's tool route; the readers, `--A-values` and the derivation tool on the exports | Opus | ✅ | ✅ | `1416b80` | [06](logs/06-rehearse.md) |
-| 07 | [Figure tools](07-figure-tools.md) | `tools/plot_quanta_grid.py` (P59) and `tools/plot_quanta_history.py` (P60) from 04's exports and 05's outputs, sharing `tools/quanta_figures.py` (P58, P61); tests on constructed exports (P62); rendered on 06's and 05's exports, the PNGs committed (P63); the footer label (P64) | Sonnet | ✅ | ✅ | this commit | [07](logs/07-figure-tools.md) |
+| 07 | [Figure tools](07-figure-tools.md) | `tools/plot_quanta_grid.py` (P59) and `tools/plot_quanta_history.py` (P60) from 04's exports and 05's outputs, sharing `tools/quanta_figures.py` (P58, P61); tests on constructed exports (P62); rendered on 06's and 05's exports, the PNGs committed (P63); the footer label (P64) | Sonnet | ✅ | ✅ | `867b267` | [07](logs/07-figure-tools.md) |
 | 08 | Close | the verification document, the law and measures for the paper, the handover for the rebuild, the indexes | Opus | ⬜ | ⬜ | | |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
@@ -83,6 +83,7 @@ Orchestrator notes, one prompt at a time, in `orchestrator/`:
 - [`prompt-04.md`](orchestrator/prompt-04.md) (`8df05c1`) — used for 04.
 - [`prompt-05.md`](orchestrator/prompt-05.md) (`88c6ae5`) — used for 05.
 - [`prompt-06.md`](orchestrator/prompt-06.md) (`41d18c4`) — used for 06.
+- [`prompt-07.md`](orchestrator/prompt-07.md) (`d4031dc`) — used for 07.
 
 **Orchestrator review of prompt 01 (2026-11-03)**, by orchestrator note 01 §3, on `b99f6a4`. Passed; seven
 checks:
@@ -657,6 +658,68 @@ Noted, not acted on (log §6), for 07 and 08:
   rehearsal on this machine could meet Ray's refusal to create objects.
 - **The workers' working directory** is the cluster's whatever tree a driver runs from. Harmless at both commits, whose
   data files read by relative path are identical; worth a line in 08's handover.
+
+**Orchestrator review of prompt 07 (2026-11-07)**, by orchestrator note 07 §3, on `867b267`. Passed; seven checks.
+Before dispatch the orchestrator ruled in note 07 (§0, rulings 1–10): the four counts in order, fixed before marker; values
+matched by `isclose` and cells by their strings; the expected spectrum model the code's `SPECTRUM_MODEL`; each norm named,
+with ranges for a log panel with no positive value or one; the history figure's undrawn counts; the six picks drawn one tool
+call each; the committed names; 05's helper used unedited. No stop condition was raised. The agent (Sonnet) amended its own
+commit once before reporting, to correct two sentences of its log.
+
+1. **Scope.**
+   - `git show --stat 867b267` lists 40 files, all of prompt §6's: the three new modules and their three test modules,
+     §1.4's two-line label change and its two assertions, `CLAUDE.md` (the `tools/tests` count and its dated sentence only),
+     the verification document (§7, 55 lines added, none removed), the architecture summary, the board, the log, and
+     `figures-07/` (four scripts, `out/`, twelve PNGs, 2.9 MB). Its parent is `d4031dc`, the note's.
+   - The tree was clean and nothing is pushed. `quanta_measures.py`, `quanta_exports.py`, `test_quanta_measures.py`, the
+     plot scripts, `PRyM/`, `.gitignore` and the README are untouched. Nothing under `var/` is tracked and no PDF is
+     committed.
+2. **The suites, re-run by me** serially, between 16:14 and 16:51, at one-minute loads of 3 to 6 at their starts: 26
+   (64 s), 665 (219 in 145 s + 446 in 466 s), 163 (126 s), 259 (255 s) and 72 (23 s), all passing. These are the
+   counts the log states. `tools/tests` rose by the 68 tests added, and none fell. (A first pass cut its summary lines;
+   the counts above are from a second pass, run serially as the first was.)
+3. **The code against the prompt and the rulings.**
+   - The grid's ten panels are in the prompt's order with its columns and files. Their norms are `Normalize(0, 1)` for
+     (a), `LogNorm` over the finite positive values for (b), (c), (h)–(j), `Normalize` for (d), and `Normalize(−m, m)` for
+     (e)–(g), as ruling 4 says, with its degenerate ranges.
+   - The blank (hatched), zero (solid grey), failed (a cross in every panel) and no-quanta-row (a cross in (h)–(j)) cells
+     are each drawn and counted.
+   - The history figure's six panels draw the prompt's columns. Panel 1 uses ln(m a) = `log_m_*_Mp` + `raw_N`, 05's frame.
+     Panel 2 counts its undrawn candidates by ruling 5's three causes.
+   - Ruling 1's order is `quanta_figures.classify`, and ruling 3's checks are in `check_model_rows` and the two `run`s. Paths
+     are formed by `alpha_path`, `history_dir`, `plots_dir` and `to_output`; none is formatted inline.
+   - The 68 tests read the figures' artists by gid, and the norms' types and limits. They cover prompt §1.5's list.
+4. **The demonstration, re-run by me**, with `--output` in my scratchpad:
+   - both tools on 06's tree (2 grid pages, 9 histories), the grid tool on 05's (8 pages), and the history tool on the
+     A = 0.1, M = 5 × 10⁻²⁰ pick;
+   - every exit 0, and every printed line the agent's but for the wall times;
+   - the 20 PNGs the same size as the agent's, byte for byte in length;
+   - no file of either input tree modified since 15:00, before the agent's demonstration began.
+5. **The gate Figures, independently.** A script of mine read the printed lines committed in `out/`. Every grid page's
+   drawn count equals histories.csv's drawn rows at that A and quanta_histories' rows at that A and scale (12 pages over
+   both trees and the three scales). Every history's generations equal quanta_histories.csv's (13 figures): 25 checks, 0
+   failures. Ruling 6's picks, recomputed, are the agent's four: (A, β, M) = (0.1, 2, 5 × 10⁻²⁰) for `generations`,
+   `n_bar_max` and `phase_slips_below_1`; (5, 2, 5 × 10⁻¹⁶) for `drained_share_gap`; (10, 1, 10⁻¹²) for
+   `drained_share_classical`; (2, 2, 8 × 10⁻¹⁸) for `backreaction_max`.
+6. **The figures, by eye.** I opened all twelve committed PNGs.
+   - **The grid pages.** They hold the 02d sample's shape at every A. The β = 1.11 column appears only at A = 1, where
+     C-3873 is the only history that built. The 5 × 10⁻²⁰ row is missing at A = 0.05, where that ladder fails.
+     Hatching, solid grey and the cream "no history" background read apart.
+   - **The history figures.** In the A = 10, β = 1, M = 10⁻¹² history, panel 2's first drained fraction is 1 (K_before =
+     0 at its first candidate, by the data), and its r_χ axis reads 1.7 × 10⁻⁵⁶, that history's own value.
+   - **What reads weakly.** The cream background is close to the white at the centre of the margins' diverging map; a
+     near-zero margin and an empty cell are told apart by the legend more than by eye (log D2 chose the cream for this).
+     A panel-2 open marker at 1 hides under its filled `alpha_eff` marker where α_eff ≈ 1. Neither is acted on.
+7. **The records.**
+   - The log follows §5.1's form and classes every deviation, note 07's ten rulings among them, with nine choices of its
+     own (D1–D9). Its §6 gives 08 the command lines, exits, figures and costs.
+   - Verification §1–§6 are unchanged, and §7 follows prompt §6.
+   - The architecture summary has the dated note. The board has row 07, its two items, the gate Figures, the §5 counts
+     and **Last updated**. `.documents/OPEN_ISSUES.md` is unchanged, nothing being opened.
+
+   The review substituted `867b267` for "this commit" on the board and in the log, added note 07 to the list of notes,
+   and updated `prompts/INDEX.md`'s row. **Residue fixed:** `figures-07/check_figures.py` and `pick_histories.py` were
+   not `black`-clean. They are formatted in the review commit, and their outputs are byte-identical before and after.
 
 **Open for the user, with 02's measurements (2026-11-03;
 [verification §2.9](../../.documents/one-loop-drain-verification.md)):**

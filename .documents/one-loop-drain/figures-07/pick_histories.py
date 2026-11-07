@@ -26,7 +26,10 @@ KEY = ["drain_model", "alpha", "M_Mp", "n", "beta"]
 
 
 def picks(root: Path):
-    hist = {tuple(r[c] for c in KEY): r for r in csv.DictReader(open(root / "histories.csv", newline=""))}
+    hist = {
+        tuple(r[c] for c in KEY): r
+        for r in csv.DictReader(open(root / "histories.csv", newline=""))
+    }
     quanta = list(csv.DictReader(open(root / "quanta_histories.csv", newline="")))
     joined = []
     for q in quanta:

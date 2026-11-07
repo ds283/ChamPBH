@@ -1,7 +1,7 @@
 # Log 07 — the figure tools
 
 **Subject:** Add the grid and per-history figure tools for the one-loop exports, and render them on 06's and 05's exports
-**Commit:** this commit, on branch `one-loop-drain`, on top of `d4031dc` (orchestrator note 07)
+**Commit:** `867b267`, on branch `one-loop-drain`, on top of `d4031dc` (orchestrator note 07)
 **Date:** 2026-11-07, by Claude Sonnet 5.5
 **Result:** **COMPLETE.** The gate Figures holds (`.documents/one-loop-drain-verification.md` §7).
 - **The tools** (§1): `tools/quanta_figures.py` (shared), `tools/plot_quanta_grid.py` (ten heat maps per one-loop A) and
