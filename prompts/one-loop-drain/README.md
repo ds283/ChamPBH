@@ -1188,3 +1188,142 @@ began, and the first `main.py` build of a one-loop history. It shows two things:
 - **P57 — what is kept.** The three stores stay under `var/datastores/` with their `store create` sidecars, for the user.
   The reference store's exports and the tool's outputs stay under `var/one-loop-drain/06/`. 07 renders on them, beside
   05's exports of 02d's 230 histories. Nothing under `var/` is committed.
+
+### 8.15 Before 07 (2026-11-07)
+
+Written by Claude Opus 5.5 after 06 landed and was reviewed (`1416b80`, `0a0b540`), at the user's request: "Then we
+should write prompt 07".
+
+**Ready.** The gates Bitwise and R hold, and the tree is clean. No run is live. 07 needs only 05's output format, which
+05's log §7 states exactly, and 06's exports to render on (06's log §7). Both export trees exist:
+- `var/one-loop-drain/06/plot-reference/QCD_Cosmology/`: 26 histories (17 fixed, 9 one-loop) and 28 marker rows, with
+  the plot scripts' figures, BBN, and the tool's three files at c_a = 0, 1 and 10 (156 MB);
+- `var/one-loop-drain/05/exports/QCD_Cosmology/`: 02d's 230 one-loop successes at U14's eight A, with no BBN and no
+  plot-script figures, and the tool's files at the three scales (1.2 GB).
+
+**Stale beside §8.10–§8.14, now settled for 07:**
+- **The grid figure's "δ_stim"** (§8.4 row 07) is one of 05's derived measures, read from `quanta_histories.csv`, beside
+  the stored regime shares, ℓ_min and margins from `histories.csv`.
+- **"Rendered on 06's store"** (§8.4 row 07, gate Figures): on 06's exports, which hold 9 one-loop histories at two A.
+  That shows the tools run under the plot scripts' layout but makes a sparse grid. 05's export of 230 is the grid
+  figure's demonstration (P63).
+- **The tools' names** are those §2 gave them first: `tools/plot_quanta_grid.py` for the grid and
+  `tools/plot_quanta_history.py` for one history (§2 row 06 called the first `plot_quanta_margins.py`; the grid now
+  shows more than the margins).
+
+**From 06's review, for 07:**
+- **The marker rows.** histories.csv holds a row for every (row, M, β) of the run's grid, and marks those with no
+  stored history `no ScalarHistory row in the store`, with a blank `normalization`. The figure tools skip them, as
+  05's tool does, and count them apart from failures.
+- **"Reflections (elastic model)"** in the footer of every per-history figure of the plot scripts (`extract_common.py`,
+  `add_ScalarHistory_labels`). The label predates the drain laws: under α > 0 the reflection drains energy, so it is
+  not elastic. 07 relabels it (P64).
+- **The shard warning** is a DatastoreKit matter: an existing store always opens with its own shard count, and an
+  argument the client never meant to state is compared with it. Recorded at the user's request on DatastoreKit's
+  `inherited-issues` board (`[cpbh-an-unstated-shard-count-warns-on-every-open]`, DatastoreKit `befa7f3`), to be fixed
+  there and adopted through a new pin. Not 07's.
+- **The disk.** The raylet's warning during 06 counted 39 GB free. The user reports that Finder shows over 200 GB
+  available (2026-11-07): the difference is purgeable space, which the raylet does not count. Not 07's; 08's handover
+  notes it for a rehearsal on this machine.
+
+**What the data look like** (05's export, c_a = 1; these set the scales of P59–P60):
+- the one-loop share is 0.9998 at the median and 0 to 1 over the grid; the parking share 7 × 10⁻⁵ at the median and 0
+  to 0.99999;
+- ℓ_min is 0.079 to 41 where there is a one-loop drain, and blank in 33 of 230 histories;
+- the worst all-generation margins are −26 to +41 (birth), −15 to +42 (reflection) and −36 to +43 (tracker);
+- δ_stim runs from 10⁻⁷⁵ to 1.3 × 10⁻³, n̄_max to 9 × 10³¹, E_field_max from 10⁻⁴⁵ to 5 × 10⁻²⁰, the backreaction
+  ratio from 10⁻⁵⁷ to 1.8 × 10³, the least producing phase slip from 5 × 10⁻¹⁰ to 10³¹ rad;
+- a history has 3 to 13 342 generations and up to 26 686 bounce rows, and about 5 000 samples.
+
+So every derived measure spans tens of decades and is drawn on log₁₀, the margins are drawn on a linear scale about
+zero, and a per-history figure must handle tens of thousands of points.
+
+**Proposed by the planner for 07 (P58–P65), the defaults unless the user says otherwise.** Prompt 07 is written on them.
+- **P58 — two tools, reading files only.**
+  - `tools/plot_quanta_grid.py` and `tools/plot_quanta_history.py`. Each opens no store, starts no Ray, and reads only
+    04's exports and 05's outputs, through the helpers that already find them (`extract_common.alpha_path` and
+    `history_directory`; `quanta_measures.read_csv`, `history_dir`, `suffix` and `KEY_COLUMNS`).
+  - Each draws one model's files: c_a = 1 by default, another with `--assoc-scale`, whose files carry `-assoc<c:g>`.
+    The model (`spectrum_model`, `assoc_scale`) is printed on every figure. A file whose rows name more than one model,
+    or a model other than the one asked for, is refused.
+  - Exit 0 if every figure asked for is written; 1 if a history was refused or a figure failed, the rest written; 2 on
+    a usage error or an unreadable root. That is 05's convention.
+- **P59 — the grid figure.** One figure per A, from histories.csv and quanta_histories.csv joined on the five key
+  columns, compared as the cells' strings.
+  - **Layout.** Heat maps over the grid, β across and M up, each axis the sorted distinct values as categories. The
+    rebuild's grid is a rectangle (U14), and 02d's is not; a category axis draws both, with a cell left empty where no
+    history is.
+  - **Panels**, each with its own colour bar:
+    - (a) the one-loop drained share, linear, 0 to 1;
+    - (b) the share drained outside it, gap + classical + unassessed, on log₁₀;
+    - (c) the parking share, log₁₀;
+    - (d) ℓ_min, linear;
+    - (e)–(g) the worst all-generation birth, reflection and tracker margins, on a diverging map centred at 0;
+    - (h) δ_stim, log₁₀;
+    - (i) E_field_max, log₁₀;
+    - (j) the backreaction maximum, log₁₀.
+  - **Cells.**
+    - A blank value, such as ℓ_min with no one-loop drain, is drawn in a hatched grey.
+    - A zero on a log scale is drawn in a solid grey, distinct from the hatching.
+    - A one-loop row that has no quanta_histories row (refused or failed by 05) is drawn as a cross over every panel
+      that needs the derived measures.
+    - Each kind is counted in the figure's footer.
+  - **Rows skipped.** Fixed-law rows and marker rows are skipped and counted on the printed line. A one-loop row with
+    a blank `normalization` that is not a marker row (a failed history) gets an empty cell, and is counted apart.
+  - **Where.** Written to `<row>/plots/quanta_grid.{pdf,png}` (`<row>` = `<drain_model>/A=<A:.5g>`), `-assoc<c:g>`
+    before the extension at another scale. That is beside the plot scripts' per-row figures. `--output` writes the same
+    layout under another root, so a demonstration does not write into a record's tree.
+- **P60 — the per-history figure.** One figure per measured one-loop history, sharing the e-fold axis N (`raw_N`,
+  `N`, `N_turn`; T_J is not monotonic, so it is not the axis).
+  - **Panels**, top to bottom:
+    - (a) **m·a against the generations' q:** ln(m_eff e^N/M_P) and ln(m_tracker e^N/M_P) from fields.csv as lines,
+      and each generation's ln(Q_g/M_P) (`log_q_Mp`) at its `N_turn` as a point coloured by regime. A generation is
+      relativistic while its q lies above the line. The `plateau` and `wall` events are ticks on the axis.
+    - (b) **The drain:** each candidate's `alpha_eff` at `N` on log₁₀, coloured by regime, with the drained-K fraction
+      ΔK/K_after beside it in the same colours.
+    - (c) **The dark radiation:** K(N)/K_final and the parking fraction from quanta_samples.csv, and r_χ =
+      `rho_chi_over_rho_rad` from fields.csv on its own axis, all on log₁₀.
+    - (d) **The excess:** E_field and E_tracker, and r_χ E for each, log₁₀.
+    - (e) **The occupations:** n_g (from `ln_n_g`) and n̄_j per generation, and the backreaction ratio per candidate,
+      log₁₀.
+    - (f) **The phase slip and k_ex/H** per assessed candidate, log₁₀, with 1 rad marked: the line 05 counts
+      `phase_slips_below_1` against. It is a reference, not a verdict (P49).
+  - **Colours.** The regimes have a fixed categorical order (one-loop, gap, classical, unassessed), the same in both
+    tools. A point-heavy panel is rasterised inside the PDF, so that a history of 26 686 rows stays a small file.
+  - **The footer** gives the key, the model, the generation and bounce counts, δ_stim, and the shares.
+  - **Which histories.** The root is `<label>/`. Every measured one-loop history by default, or those that
+    `--A-values`, `--beta-values` and `--M-Mp-values` select, each matched to the stored values as histories.csv
+    gives them.
+  - **Where.** `<row>/plots/<history_directory>/quanta_history.{pdf,png}`, beside the plot scripts' figures of that
+    history, with `--output` as in P59.
+- **P61 — the shared pieces.** The regime colours, the key-matching and the model check live in one module that both
+  tools import, `tools/quanta_figures.py`, not in a copy in each.
+- **P62 — tests on constructed exports.** In `tools/tests/`, built by `tools/tests/quanta_exports.write_constructed`
+  and 05's tool's `run`, with the Agg backend. Each tool builds its figure in a function that returns it, and the tests
+  read its artists:
+  - the panels and their scales;
+  - the counts of cells and points against the constructed histories;
+  - the blank, zero and missing cells drawn as P59 says;
+  - the marker and fixed rows skipped and counted;
+  - the model refusal, and `--assoc-scale`'s file names;
+  - the selectors of P60;
+  - `--output`, and the exit codes;
+  - both files written, and nothing written for a refused history.
+- **P63 — the demonstration (the gate Figures).**
+  - **On 06's exports,** with `--output var/one-loop-drain/07/plot-reference/`:
+    - the grid tool at A = 0.1 and 1;
+    - the history tool on all nine one-loop histories.
+  - **On 05's exports,** with `--output var/one-loop-drain/07/exports-05/`:
+    - the grid tool at all eight A;
+    - the history tool on at most six histories: those holding the largest of `generations`, `drained_share_gap`,
+      `drained_share_classical`, `n_bar_max`, `backreaction_max` and `phase_slips_below_1`, with duplicates merged.
+  - **At c_a = 0 and 10,** the grid tool at A = 1 on 05's export.
+  - **Committed:** the PNGs of 05's eight grid pages and of the history figures, at the tools' default resolution,
+    under `.documents/one-loop-drain/figures-07/`. If they come to more than 8 MB, the largest are named in the log
+    and left under `var/`. The PDFs stay under `var/`.
+  - **Not in the demonstration:** no record's tree is written into, and no export is regenerated.
+- **P64 — the footer label.** "Reflections (elastic model): N" becomes "Reflections: N" in `add_ScalarHistory_labels`.
+  The drain is named on the cosmology line beside it. The two assertions in
+  `ComputeTargets/tests/test_reflection_reporting.py` change with it, and the test count does not.
+- **P65 — measurements, not verdicts.** No threshold colours a cell as failing beyond the margins' own zero and the
+  1 rad reference line, and no figure opens an issue. What the demonstration shows goes in the log for 08.
