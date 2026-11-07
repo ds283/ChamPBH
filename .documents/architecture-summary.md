@@ -319,6 +319,17 @@ ChamPBH/
 > and gain the code that §7.2's map of this date lists. The campaign's measurement scripts and outputs are
 > under `.documents/inelastic-reflection/` (`measure/`, `out/`), outside the tree above.
 
+> **Note, 2026-11-07 (`one-loop-drain`, prompt 08): the tree above gains seven files.**
+> `CosmologyConcepts/drain_model.py` (the drain laws and models, `law_of`, `check_drain_law`; §7.2's note of 2026-11-06, 03),
+> `ObjectFactories/alpha_value.py` (`alpha_value`'s own factory; the same note), `ComputeTargets/quanta_spectrum.py` (the
+> spectrum model; §14's note of 2026-11-06, 05), `tools/quanta_measures.py` (the derivation tool; the same note), and
+> `tools/quanta_figures.py`, `tools/plot_quanta_grid.py` and `tools/plot_quanta_history.py` (the figure tools; §14's note of
+> 2026-11-07, 07). `ComputeTargets/ScalarHistory.py`, `ComputeTargets/dark_radiation.py`, `CosmologyConcepts/alpha_value.py`,
+> `CosmologyConcepts/Models/AbstractModel.py`, `CosmologyConcepts/Models/ExponentialModel.py`, `ObjectFactories/ScalarHistory.py`,
+> `config/`, `main.py`, the plot scripts, `plot_inputs.py`, `extract_common.py`, `RunDrivers/registered_run.py` and four tools keep
+> their names and gain the code that §7.2's map of this date lists. The campaign's scripts and outputs are under
+> `.documents/one-loop-drain/`, and the side-campaign `crossover`'s under `prompts/one-loop-drain/source/`, outside the tree above.
+
 ---
 
 ## 3. The Ray Distributed Computing Layer
@@ -501,6 +512,13 @@ factory registered it, is in neither since `dk-and-rpk-migration` P8 (prompt 08)
 > `FINGERPRINT_FORMAT` is 5 (15 spec pairs, 13 distinct digests), with the golden file
 > `store_fingerprint_jordan-normalization-07.json`. `VERSION_LABEL` is `2026.7.0`: a store made before
 > cannot be reused. The table above describes the registry as it was.
+
+> **Note, 2026-11-07 (`one-loop-drain`, prompt 08): the registry has 23 entries.** `config/datastore.py:87`–`:115`, read at
+> `d0d8918`: `alpha_value` (since `inelastic-reflection` 09, replicated) has its own factory, `sqla_alpha_value_factory`
+> (`ObjectFactories/alpha_value.py`), since `one-loop-drain` 03, where it had the dimensionless factory; and
+> `ScalarHistoryBounce` (`sqla_ScalarHistoryBounce_factory`, sharded by β, batch size 250, in the drop group `scalar-history`
+> before `ScalarHistory`) follows `ScalarHistoryValue`. §7.2's note of 2026-11-06 (03) describes both. The table above, and the
+> note of 2026-10-26, describe the registry as it was.
 
 ### 4.3 What the package does for a get, a store and a validate
 
@@ -776,6 +794,11 @@ For a new project with a different shard key, this file is the primary place to 
 > sit on one shard, the one of the model's β, and `alpha_value` has a row on every shard. `read_table_config`
 > does not name it. The registry entry is `config/datastore.py:91` and its serial batch size, 200, `:125`.
 > The listing above is of the tree of its day.
+
+> **Note, 2026-11-07 (`one-loop-drain`, prompt 08): `sharded_tables` gains `ScalarHistoryBounce`.** `config/sharding.py:37`, read
+> at `d0d8918`, after `ScalarHistoryValue` and with the same `shard_key`, so a history's bounce rows sit on its shard
+> (`one-loop-drain` 03; §7.2's note of 2026-11-06). The note above's "`sharded_tables` is unchanged" is of its day.
+> `replicated_tables`, `read_table_config` and `ShardKeyType` (β) are as that note gives them.
 
 ### 5.3 Defaults (`config/defaults.py`)
 
@@ -1533,6 +1556,54 @@ SampleValues = namedtuple("SampleValues", [
 > - **`tools/outward_step_scan.py`**'s mirror of `store()` (`store_rows`) sets `_drain_history`, `_bounces` and the masses as
 >   `store()` does, so that the factory's `store` runs on it; the factory asks for the bounce inserter only when it has rows.
 > - Tests: `ComputeTargets/tests/test_drain_store_records.py`, `ObjectFactories/tests/test_drain_store.py` (new).
+
+> **Note, 2026-11-07 (`one-loop-drain`, prompt 08): the one-loop drain law on the code, by piece.** A map of the campaign onto the
+> code, read at the dispatch commit `d0d8918`; it points to each prompt's note rather than repeating it. The line numbers of the
+> notes it points to are this file's at `d0d8918`, before this prompt's notes: 01's at `:1430`, 02c's at `:1459` and 03's at
+> `:1485` in §7.2; 04's at `:2281`, 05's at `:2317` and 07's at `:2345` in §14 (06 added none). The order in which a history meets
+> the pieces is `numerical-strategies.md` §6.12; the law and its measures, with every constant's source, are
+> `one-loop-drain-verification.md` §8.
+> 1. **The keys.** `CosmologyConcepts/drain_model.py` (new, a leaf module): `DRAIN_LAW_FIXED`, `DRAIN_LAW_ONE_LOOP`, `DRAIN_LAWS`,
+>    `DRAIN_MODEL_FIXED` (`"fixed"`), `DRAIN_MODEL_ONE_LOOP` (`"one-loop-measured-v1"`, `:48`), `DRAIN_MODELS`, `law_of`,
+>    `model_of_law`, `alpha_label`, `check_drain_law` (`:105`), `check_drain_model` (`:133`). `CosmologyConcepts/alpha_value.py`:
+>    `alpha_value(store_id, value, drain_model="fixed")`, the pair; its factory `ObjectFactories/alpha_value.py` (new). Notes 03,
+>    04.
+> 2. **The law.** `ComputeTargets/ScalarHistory.py`: the constants `DRAIN_ALPHA_CAP`, `DRAIN_ONE_LOOP_A`, `_B0`, `_C`,
+>    `DRAIN_ELL_PLATEAU`, `DRAIN_F_CAP`, `DRAIN_F_PLATEAU`, `DRAIN_GAP_G`, `_R0`, `_P`, `_Q` (`:211`–`:221`), `DRAIN_S_TABLE_L`
+>    and `DRAIN_S_TABLE_S` (`:230`–`:275`), the `REGIME_*` names and `DRAIN_REGIMES` (`:287`–`:291`); the functions
+>    `check_drain_law_model` (`:1755`), `drain_regime` (`:1773`), `drain_law_inputs` (`:1803`), `drain_S_of_L` (`:1818`),
+>    `drain_fraction` (`:1831`), `drain_alpha_effective` (`:1872`), `unresolved_reflection_refused` (`:1239`). The model's hook
+>    `AbstractModel._drain_L` (no default) and `drain_L_implemented`, `RealizedModel.drain_L`, `ExponentialModel._drain_L`
+>    (`CosmologyConcepts/Models/ExponentialModel.py:81`); the wall search's `_turning_point_unresolvable`
+>    (`CosmologyConcepts/Models/AbstractModel.py:202`). Notes 01, 02c.
+> 3. **The entry points.** `integrate_scalar_history` (`:1897`), `integrate_history` (`:5045`), `tune_history` (`:5712`) and
+>    `compute_scalar_history` (`:5974`) take `drain_law` (default `"fixed"`); `ScalarHistory.compute` passes its `alpha`'s law.
+>    Notes 01, 03.
+> 4. **The `"drain"` payload key** (`:5433`): the `DrainRecord` (`:750`; law, A, model, unresolvable assessments, candidates,
+>    declined unresolved reflections) with a `DrainCandidate` per candidate (`:727`; regime, ℓ, α_eff, w_gate, ln E, ln H_E, L,
+>    ln R). Beside it `"bounces"` (`:5436`, a `BounceRecord`, `:4667`), `"log_m_eff"` and `"log_m_tracker"`. Notes 01, 02c, 03.
+> 5. **The store.** The table `ScalarHistoryBounce` (`sqla_ScalarHistoryBounce_factory`, `ObjectFactories/ScalarHistory.py:1356`;
+>    `BOUNCE_COLUMNS`, `:165`; `BounceRow`, `ComputeTargets/ScalarHistory.py:4626`; `bounce_rows`, `:4713`); the history's columns
+>    `DrainHistoryValues` (`:4913`; `drain_history_values`, `:4966`; `all_generation_margins`, `:4932`), read as
+>    `ScalarHistory.drain_history` (`:6296`) and `ScalarHistory.bounces` (`:6311`); the sample columns `log_m_eff_Mp`,
+>    `log_m_tracker_Mp` (`MASS_COLUMNS`, `ObjectFactories/ScalarHistory.py:200`; `sample_masses`, `:4544`); `alpha_value`'s pair;
+>    the guard in `ScalarHistory.store()`. `FINGERPRINT_FORMAT` 7 (`config/fingerprint.py:95`) and `VERSION_LABEL` 2026.10.0
+>    (`config/version.py:88`); the registry, drop group and batch sizes (§4.2's note of this date), `sharded_tables` (§5.2's).
+>    Note 03.
+> 6. **The drivers and the exports.** `--A-values` (`config/argument_parser.py:249`, type `drain_strength_A`, no default) in
+>    `main.py` and both plot scripts, the rows fixed first (`plot_inputs.parameters(…, A_values)`); the paths and labels
+>    `extract_common.alpha_path(base, value, drain_model)` (`:130`) and `alpha_label` (`drain_model.py:91`); histories.csv's `drain_model` and
+>    `DRAIN_CSV_COLUMNS` (`extract_common.py:618`), fields.csv's `log_m_eff_Mp` and `log_m_tracker_Mp` (`build_fields_frame`,
+>    `:1316`), and the new bounces.csv (`write_bounces_csv`, `:1469`); `tools/bbn_from_store.py --drain-law`,
+>    `tools/outward_step_scan.py` (fixed rows only), `tools/inventory_report.py`'s `A=<A> (<drain_model>)`; the registered run's
+>    scope `A <values>` (`RunDrivers/registered_run.py:704`). Note 04.
+> 7. **The derivation tool.** `ComputeTargets/quanta_spectrum.py` (new, pure; `SPECTRUM_MODEL = "U4-U17-v1"`, `:103`) and
+>    `tools/quanta_measures.py EXPORT_ROOT [--assoc-scale C]` (new), writing `quanta_bounces.csv`, `quanta_samples.csv` and
+>    `quanta_histories.csv`. Note 05.
+> 8. **The figure tools.** `tools/quanta_figures.py`, `tools/plot_quanta_grid.py` and `tools/plot_quanta_history.py` (new), and
+>    `extract_common.add_ScalarHistory_labels`' "Reflections: N". Note 07.
+> 9. **The tool route.** `tools/history_and_bbn.py --drain-law {fixed,one_loop}` (`:430`; `--alpha` carries A under `one_loop`)
+>    and its `drain` line. Notes 01, 02c.
 
 ### 7.3 `AdiabaticHistory` (`ComputeTargets/AdiabaticHistory.py`)
 
@@ -2360,3 +2431,20 @@ work_pool.run()
 >   named on the cosmology line beside it).
 > - **Tests:** `tools/tests/test_quanta_figures.py` (it holds the constructed exports the other two use),
 >   `test_plot_quanta_grid.py`, `test_plot_quanta_history.py`. Log 07 §6 gives the command lines and the costs.
+
+> **Note, 2026-11-07 (`one-loop-drain`, prompt 08): a model's wall variable, and the workers' working directory.**
+> - **A model has no default wall variable L.** `AbstractModel._drain_L` raises, naming the class
+>   (`CosmologyConcepts/Models/AbstractModel.py:517`–`:532`), by the user's ruling of 2026-11-05: "I suggest we move `L` into the
+>   model class, with no default. Then when a new potential is implemented, breakage is loud, and the implementer has to think
+>   about what they are changing." A model added without it builds and runs under the fixed law, and under the one-loop law is
+>   refused at entry, before any integration (`check_drain_law_model`, `ComputeTargets/ScalarHistory.py:1755`).
+>   `ExponentialModel` is the one model that defines it (`ExponentialModel.py:81`), and the law's fitted constants and S(L) were
+>   measured on that family of walls (n = 1, checked at n = 2), so they do not carry over to another one by defining L
+>   (`one-loop-drain-verification.md` §8.1; §7.2's note of 2026-11-05).
+> - **A Ray worker runs in the cluster's working directory, whatever tree the driver runs from.** Measured by `one-loop-drain`
+>   06's probe (`one-loop-drain-verification.md` §6.1): with the cluster started from the main checkout, a driver run from a
+>   worktree had its tasks and actors import that worktree's modules (Ray puts the driver's tree first on each worker's path),
+>   with the main checkout as their working directory. The data files the code reads by a relative path, `PRyMrates/`
+>   (`PRyM/PRyM_init.py`, from `os.getcwd()`) and `CosmologyModels/GenericEOS/Xav_EOS_data.csv`, are then the cluster's start
+>   directory's, not the driver's tree's. At `1561b60` and the tip those files are identical, so 06's base build was not affected.
+> - The drain model has no default in the path and label helpers: 04's note above says so.

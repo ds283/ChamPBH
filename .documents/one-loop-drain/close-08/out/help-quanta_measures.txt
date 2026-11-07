@@ -1,0 +1,14 @@
+$ PYTHONPATH=. ./venv/bin/python tools/quanta_measures.py --help
+# exit 0
+usage: quanta_measures.py [-h] [--assoc-scale ASSOC_SCALE] export_root
+
+The spectrum-dependent measures of a plot run's one-loop exports (one-loop-
+drain prompt 05)
+
+positional arguments:
+  export_root           a plot run's <output>/<label>/
+
+options:
+  -h, --help            show this help message and exit
+  --assoc-scale ASSOC_SCALE
+                        the associated piece's scale c_a (default 1)

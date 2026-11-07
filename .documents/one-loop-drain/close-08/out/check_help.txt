@@ -1,0 +1,79 @@
+# the commands, each with --help
+ok   ./venv/bin/python main.py --help: exit 0
+ok   ./venv/bin/python plot_by_beta.py --help: exit 0
+ok   ./venv/bin/python plot_ScalarHistory.py --help: exit 0
+ok   ./venv/bin/python RunDrivers/registered_run.py --help: exit 0
+ok   ./venv/bin/python tools/quanta_measures.py --help: exit 0
+ok   ./venv/bin/python tools/plot_quanta_grid.py --help: exit 0
+ok   ./venv/bin/python tools/plot_quanta_history.py --help: exit 0
+ok   ./venv/bin/python tools/bbn_from_store.py --help: exit 0
+ok   ./venv/bin/python tools/history_and_bbn.py --help: exit 0
+ok   ./venv/bin/python -m runregistrykit list --help: exit 0
+
+# the options §4.20 names (30), each in its command's --help
+ok   --A-values in main --help
+ok   --A-values in plot_by_beta --help
+ok   --A-values in plot_ScalarHistory --help
+ok   --A-values in plot_quanta_grid --help
+ok   --A-values in plot_quanta_history --help
+ok   --M-Mp in bbn_from_store --help
+ok   --M-Mp-values in plot_quanta_history --help
+ok   --M-values-Mp in main --help
+ok   --alpha in bbn_from_store --help
+ok   --alpha-values in main --help
+ok   --alpha-values in plot_by_beta --help
+ok   --alpha-values in plot_ScalarHistory --help
+ok   --assoc-scale in quanta_measures --help
+ok   --assoc-scale in plot_quanta_grid --help
+ok   --assoc-scale in plot_quanta_history --help
+ok   --bbn-wall-clock-limit in main --help
+ok   --beta in bbn_from_store --help
+ok   --beta-values in main --help
+ok   --beta-values in plot_quanta_history --help
+ok   --campaign in registered_run --help
+ok   --config in main --help
+ok   --config in plot_by_beta --help
+ok   --config in plot_ScalarHistory --help
+ok   --database in main --help
+ok   --database in plot_by_beta --help
+ok   --database in plot_ScalarHistory --help
+ok   --drain-law in bbn_from_store --help
+ok   --drain-law in history_and_bbn --help
+ok   --help in main --help
+ok   --help in plot_by_beta --help
+ok   --help in plot_ScalarHistory --help
+ok   --help in registered_run --help
+ok   --help in quanta_measures --help
+ok   --help in plot_quanta_grid --help
+ok   --help in plot_quanta_history --help
+ok   --help in bbn_from_store --help
+ok   --help in history_and_bbn --help
+ok   --help in runregistrykit_list --help
+ok   --inventory in main --help
+ok   --is-ancestor: git merge-base --is-ancestor main one-loop-drain runs as written, exit 0
+ok   --job-name in main --help
+ok   --output in plot_by_beta --help
+ok   --output in plot_ScalarHistory --help
+ok   --output in plot_quanta_grid --help
+ok   --output in plot_quanta_history --help
+ok   --phi-init-Mp in main --help
+ok   --phi-init-Mp in plot_by_beta --help
+ok   --phi-init-Mp in plot_ScalarHistory --help
+ok   --phi-init-Mp in bbn_from_store --help
+ok   --prompt in registered_run --help
+ok   --purpose in registered_run --help
+ok   --ray-address in main --help
+ok   --ray-address in plot_by_beta --help
+ok   --ray-address in plot_ScalarHistory --help
+ok   --register in registered_run --help
+ok   --retry-failed-scalar in main --help
+ok   --shards in main --help
+ok   --shards in plot_by_beta --help
+ok   --shards in plot_ScalarHistory --help
+ok   --small-network in bbn_from_store --help
+ok   --stale-after in runregistrykit_list --help
+ok   --tuning-max-integrations in main --help
+ok   --variant in bbn_from_store --help
+
+# options of the table that §4.20 does not name: none
+# failures: 0

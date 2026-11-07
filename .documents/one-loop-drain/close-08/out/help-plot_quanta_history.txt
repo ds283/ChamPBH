@@ -1,0 +1,22 @@
+$ PYTHONPATH=. ./venv/bin/python tools/plot_quanta_history.py --help
+# exit 0
+usage: plot_quanta_history.py [-h] [--A-values A_VALUES [A_VALUES ...]]
+                              [--beta-values BETA_VALUES [BETA_VALUES ...]]
+                              [--M-Mp-values M_MP_VALUES [M_MP_VALUES ...]]
+                              [--assoc-scale ASSOC_SCALE] [--output OUTPUT]
+                              root
+
+The per-history figure of the derived measures of a plot run's one-loop
+exports (one-loop-drain prompt 07)
+
+positional arguments:
+  root                  a plot run's <output>/<label>/
+
+options:
+  -h, --help            show this help message and exit
+  --A-values A_VALUES [A_VALUES ...]
+  --beta-values BETA_VALUES [BETA_VALUES ...]
+  --M-Mp-values M_MP_VALUES [M_MP_VALUES ...]
+  --assoc-scale ASSOC_SCALE
+                        the associated piece's scale c_a (default 1)
+  --output OUTPUT       write below this root, not the input

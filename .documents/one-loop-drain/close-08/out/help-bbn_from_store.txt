@@ -1,0 +1,52 @@
+$ PYTHONPATH=. ./venv/bin/python tools/bbn_from_store.py --help
+# exit 0
+usage: bbn_from_store.py [-h] [--beta BETA] [--M-Mp M_MP]
+                         [--phi-init-Mp PHI_INIT_MP]
+                         [--drain-law {fixed,one_loop}] [--alpha ALPHA]
+                         [--sm-baseline] [--variant VARIANT [VARIANT ...]]
+                         [--small-network | --no-small-network]
+                         [--wall-clock-limit SECS] [--lowT-rtol LOWT_RTOL]
+                         [--lowT-atol LOWT_ATOL] [--csv CSV] [--tag TAG]
+                         [stem]
+
+Rebuild a stored history's BBN input from a ChamPBH datastore and re-run
+PRyMordial on it, optionally with the low-temperature network's solve_ivp
+tolerances changed by interception.
+
+positional arguments:
+  stem                  the store path without -shardNNNN.db
+
+options:
+  -h, --help            show this help message and exit
+  --beta BETA           the coupling's beta
+  --M-Mp M_MP           the potential's M, in units of the reduced M_P
+  --phi-init-Mp PHI_INIT_MP
+                        initial phi in units of M_P (default 5)
+  --drain-law {fixed,one_loop}
+                        the history's drain law (default fixed), as
+                        tools/history_and_bbn.py: fixed, with --alpha its
+                        drained fraction; one_loop, the code's current one-
+                        loop model, with --alpha as A (one-loop-drain prompt
+                        04)
+  --alpha ALPHA         the history's drained fraction alpha, 0 <= alpha < 1
+                        (default 0: natural mode), under --drain-law fixed; A,
+                        finite and > 0 and required, under one_loop
+  --sm-baseline         run compute_SM_baseline (rho_NP = 0) instead of a
+                        stored history
+  --variant VARIANT [VARIANT ...]
+                        prod, pertE, linear, pchip (default: prod)
+  --small-network, --no-small-network
+                        PRyMordial's small network (default: the full network,
+                        which logs 01 and 01c's reproduction commands assume;
+                        main.py runs the small network since bbn-tolerance
+                        prompt 02)
+  --wall-clock-limit SECS
+                        wall-clock limit per solve (default 600, as
+                        production; 0 disables it); ignored with --sm-baseline
+  --lowT-rtol LOWT_RTOL
+                        rtol for the low-T call
+  --lowT-atol LOWT_ATOL
+                        atol for the low-T call: a number or one of
+                        ['reported']
+  --csv CSV             append one row per solve here
+  --tag TAG             a label written to the CSV rows

@@ -83,8 +83,8 @@ invariants that hold across all of them:
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 259 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .        # 72 tests
   ```
-  `ComputeTargets/tests` took 590 s on 2026-11-01 (the two halves below, 135.8 s and 454.6 s, at one-minute
-  loads of 6.1 and 11.2 at their starts), and longer on a loaded machine; a Bash call is
+  `ComputeTargets/tests` took 639 s on 2026-11-07 (the two halves below, 148.1 s and 491.1 s, at one-minute
+  loads of 5.2 and 5.0 at their starts), and longer on a loaded machine; a Bash call is
   capped at ten minutes, so run it in two halves:
   ```bash
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 219 tests
@@ -108,8 +108,8 @@ invariants that hold across all of them:
   `ComputeTargets/tests` and 22 to `tools/tests`; `745c8ee` and `c95650a` had added one each to `ComputeTargets/tests` and
   `ObjectFactories/tests` since 2026-11-01. `inelastic-reflection`, closed 2026-11-01, added 228 tests to
   `ComputeTargets/tests`, 26 to `ObjectFactories/tests`, 8 to `tools/tests` and 4 to `RunDrivers/tests`, and
-  none to `CosmologyModels/tests`. `tools/tests` holds tuned histories and took 131.7 s on 2026-11-01, at a
-  one-minute load of 25.0 at its start; run it alone.) They **must not
+  none to `CosmologyModels/tests`. `tools/tests` holds tuned histories and took 266.5 s on 2026-11-07, at a
+  one-minute load of 2.3 at its start; run it alone.) They **must not
   need a Ray cluster or a persistent datastore**. A test may build a temporary
   SQLite datastore in a `tempfile` directory, through `datastorekit`'s undecorated actor
   (`standin_pool.DatastoreClass`) inside ChamPBH's stand-in cluster (`StoreFixtures/standin_pool.py`,

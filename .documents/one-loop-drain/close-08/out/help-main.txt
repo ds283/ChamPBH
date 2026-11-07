@@ -1,0 +1,172 @@
+$ PYTHONPATH=. ./venv/bin/python main.py --help
+# exit 0
+usage: main.py [-h] [-c CONFIG] --database DATABASE
+               [--inventory | --no-inventory] [--show-all | --no-show-all]
+               [--job-name JOB_NAME] [--shards SHARDS]
+               [--db-timeout DB_TIMEOUT] [--profile-db PROFILE_DB]
+               [--samples-log10-z SAMPLES_LOG10_Z]
+               [--tuning-tolerance TUNING_TOLERANCE]
+               [--alpha-values ALPHA_VALUES [ALPHA_VALUES ...]]
+               [--A-values A_VALUES [A_VALUES ...]]
+               [--tuning-max-integrations TUNING_MAX_INTEGRATIONS]
+               [--abs-tol ABS_TOL] [--rel-tol REL_TOL]
+               [--T-init-GeV T_INIT_GEV] [--phi-init-Mp PHI_INIT_MP]
+               [--band-half-width BAND_HALF_WIDTH] [--beta-low BETA_LOW]
+               [--beta-high BETA_HIGH] [--samples-per-beta SAMPLES_PER_BETA]
+               [--beta-values [BETA_VALUES ...]]
+               [--log10-M-low-eV LOG10_M_LOW_EV]
+               [--log10-M-high-eV LOG10_M_HIGH_EV]
+               [--samples-per-log10-M-eV SAMPLES_PER_LOG10_M_EV]
+               [--M-values-eV [M_VALUES_EV ...]]
+               [--M-values-Mp [M_VALUES_MP ...]]
+               [--n-values N_VALUES [N_VALUES ...]]
+               [--log10-one-plus-z-high LOG10_ONE_PLUS_Z_HIGH]
+               [--log10-one-plus-z-low LOG10_ONE_PLUS_Z_LOW]
+               [--prune-unvalidated | --no-prune-unvalidated]
+               [--drop {scalar-history,adiabatic-history,bbn-data} [{scalar-history,adiabatic-history,bbn-data} ...]]
+               [--retry-failed-bbn] [--retry-failed-scalar]
+               [--bbn-wall-clock-limit SECS] [--output OUTPUT]
+               [--Li7-axis-limits | --no-Li7-axis-limits]
+               [--D-axis-limits | --no-D-axis-limits]
+               [--Yp-axis-limits | --no-Yp-axis-limits]
+               [--ray-address RAY_ADDRESS]
+
+options:
+  -h, --help            show this help message and exit
+  -c, --config CONFIG   read options from the specified configuration file
+  --database DATABASE   read/write work items using the specified database
+                        cache
+  --inventory, --no-inventory
+                        show an inventory of the datastore content
+  --show-all, --no-show-all
+                        do not truncate long lists of inventory items
+  --job-name JOB_NAME   specify a label for this job (used to identify
+                        integrations and other numerical products)
+  --shards SHARDS       specify number of shards to be used when creating a
+                        new datastore (if used)
+  --db-timeout DB_TIMEOUT
+                        specify connection timeout for database layer
+  --profile-db PROFILE_DB
+                        write profiling and performance data to the specified
+                        database
+  --samples-log10-z SAMPLES_LOG10_Z
+                        specify number of sample points per decade of 1 + z
+                        (the axis is ln(1 + z) at multiples of ln(10)/N)
+  --tuning-tolerance TUNING_TOLERANCE
+                        the tolerance of each history's tuning on both of its
+                        residuals, |H_J(T_CMB)/H0 - 1| and |phi_ref/phi_min -
+                        1| (default 1e-05). It is a key of every stored
+                        history, so a run at another tolerance computes
+                        histories of its own (jordan-normalization prompt 08)
+  --alpha-values ALPHA_VALUES [ALPHA_VALUES ...]
+                        one or more values of the drained fraction alpha, 0 <=
+                        alpha < 1: the fraction of the condensate's kinetic
+                        energy that dissipation mode drains at each candidate.
+                        It is a key of every stored history; 0 is natural mode
+                        (the default [0.0]), and a given list replaces the
+                        default (inelastic-reflection prompt 10)
+  --A-values A_VALUES [A_VALUES ...]
+                        one or more values of A, the strength of the one-loop
+                        drain law, finite and > 0 with no upper bound: each
+                        names a history key (A, the code's current one-loop
+                        drain model) beside the --alpha-values rows, which are
+                        looked up first and are unchanged. A is a key of every
+                        stored history, as alpha is. The default is none, so a
+                        run without it is the fixed-law run; --alpha-values
+                        keeps its default, so a run given only --A-values also
+                        builds, or reads, alpha = 0, natural mode (one-loop-
+                        drain prompt 04)
+  --tuning-max-integrations TUNING_MAX_INTEGRATIONS
+                        the cap on the integrations of one history's tuning,
+                        the seed's included (default 30). It is not a key of
+                        the history: a history that does not converge within
+                        it is stored as a failure, and a later run with a
+                        larger cap does not recompute it unless given --retry-
+                        failed-scalar, which stores the new history beside the
+                        failure (jordan-normalization prompt 08; tuning-
+                        followups prompt 01)
+  --abs-tol ABS_TOL     specify absolute tolerance used during integration
+  --rel-tol REL_TOL     specify relative tolerance used during integration
+  --T-init-GeV T_INIT_GEV
+                        set initial temperature in Jordan frame, specified in
+                        GeV
+  --phi-init-Mp PHI_INIT_MP
+                        set the initial value of the scalar field phi* in the
+                        Einstein frame, in units of the (reduced) Planck mass
+                        M_P (science-readiness prompt 04). The initial
+                        momentum is zero. A start with Omega(phi*) T* > M_P is
+                        warned about and computed
+  --band-half-width BAND_HALF_WIDTH
+                        half-width h, in the coupling beta, of the window
+                        [beta - h, beta + h] over which plot_by_beta.py takes
+                        the running median and the 16th-84th percentile band
+                        of the abundance shifts (science-readiness prompt 07)
+  --beta-low BETA_LOW   minimum value of beta to sample
+  --beta-high BETA_HIGH
+                        maximum value of beta to sample
+  --samples-per-beta SAMPLES_PER_BETA
+                        number of samples per beta
+  --beta-values [BETA_VALUES ...]
+                        specify one or more beta values to sample
+  --log10-M-low-eV LOG10_M_LOW_EV
+                        minimum value of log10(M/eV) to sample
+  --log10-M-high-eV LOG10_M_HIGH_EV
+                        maximum value of log10(M/eV) to sample
+  --samples-per-log10-M-eV SAMPLES_PER_LOG10_M_EV
+                        number of samples per log10(M/eV)
+  --M-values-eV [M_VALUES_EV ...]
+                        specify one or more values of M/eV to sample
+  --M-values-Mp [M_VALUES_MP ...]
+                        specify one or more values of M/Mp to sample
+  --n-values N_VALUES [N_VALUES ...]
+                        one or more values of the model's exponent n, V = V0
+                        exp((M/phi)^n); n is part of the model's key (default
+                        [1]; jordan-normalization prompt 08)
+  --log10-one-plus-z-high LOG10_ONE_PLUS_Z_HIGH
+                        maximum value of log10(1+z) to sample (default 300)
+  --log10-one-plus-z-low LOG10_ONE_PLUS_Z_LOW
+                        minimum value of log10(1+z) to sample; only 0 is
+                        accepted, since the redshift axis is anchored at the
+                        end of the history
+  --prune-unvalidated, --no-prune-unvalidated
+                        prune unvalidated data from the datastore during
+                        startup
+  --drop {scalar-history,adiabatic-history,bbn-data} [{scalar-history,adiabatic-history,bbn-data} ...]
+                        drop one or more data categories (scalar-history
+                        replaced scalar-model in jordan-normalization prompt
+                        02)
+  --retry-failed-bbn    retry BBN computations that failed under the current
+                        version label; without this flag a stored BBN failure
+                        counts as done and is not retried
+  --retry-failed-scalar
+                        retry scalar histories that failed under the current
+                        version label (for example after raising --tuning-max-
+                        integrations); the new history is stored beside the
+                        failure. Without this flag a stored scalar failure
+                        counts as done and is not retried. Not a key (tuning-
+                        followups prompt 01)
+  --bbn-wall-clock-limit SECS
+                        wall-clock limit on each PRyMordial solve, in seconds;
+                        a solve that exceeds it is stored as a failure
+                        (default 600; 0 disables the limit)
+  --output OUTPUT       specify folder for output files
+  --Li7-axis-limits, --no-Li7-axis-limits
+                        limit the y-axis on Li7 plots to near the
+                        observationally-allowed region
+  --D-axis-limits, --no-D-axis-limits
+                        limit the y-axis on D/H plots to near the
+                        observationally-allowed region
+  --Yp-axis-limits, --no-Yp-axis-limits
+                        limit the y-axis on Y_p plots to near the
+                        observationally-allowed region
+  --ray-address RAY_ADDRESS
+                        address of the Ray cluster; required whenever Ray
+                        starts (main.py --inventory starts no Ray and needs
+                        none). On this machine ChamPBH's cluster is
+                        127.0.0.1:6380; 'local' starts a private instance.
+                        'auto' is refused
+
+Args that start with '--' can also be set in a config file (specified via -c).
+The config file uses YAML syntax and must represent a YAML 'mapping' (for
+details, see http://learn.getgrav.org/advanced/yaml). In general, command-line
+values override config file values which override defaults.

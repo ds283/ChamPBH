@@ -1,0 +1,74 @@
+# In this file the session scratchpad's directory for prompt 08 is written <scratch> (orchestrator note 08, ruling 3).
+# one-loop-drain 08: main.py --inventory on a copy of the base store (format 6, 2026.9.0) (orchestrator note 08, ruling 3)
+# git HEAD d0d8918
+## cp -p of the 18 files into <scratch>/basecopy
+files copied: 18
+## shasum -a 256 of the originals
+8d2b96fdb8724667795cbde84f6adb066db3a76d5bf6d794fefa44b344741a7e  one-loop-drain-06-base-shard0000.db
+575831756d69a8fbf440efeb98d66a00d7a00ff44ed565f413957f2cd9e7ae5b  one-loop-drain-06-base-shard0001.db
+864688884b4db3584dc9fbc4037abb590db12d990bb536c2915060b0632b4450  one-loop-drain-06-base-shard0002.db
+e6dd3130b796c6a1532ea3f1861ed6fbf2d131f1be30b68512510f1bdb85f5fa  one-loop-drain-06-base-shard0003.db
+a279198df7106ac5aa75da23d28578bd877b5ca3b9c996945781995a7da692c6  one-loop-drain-06-base-shard0004.db
+572189d7cbeab4381a5ea33803b354e886ac67f9fec12c912ae742ec175b0949  one-loop-drain-06-base-shard0005.db
+d65506d49760cc1ea689686e7b99f95508803cbc4ff924957ba3a411080bdb2f  one-loop-drain-06-base-shard0006.db
+5e1321411f9fbca0d4bc46fecb37e14788e2eff377a93314504cbf1f1214ce83  one-loop-drain-06-base-shard0007.db
+ab7f2a40edd4d75f8b731e1764f767f5c25ab4de6b4964da1346bff7f51cde29  one-loop-drain-06-base-shard0008.db
+c9935b78553b35e380e3579d39496846a77c3e72d0fbd3ac7a42ac09bb6d299c  one-loop-drain-06-base-shard0009.db
+c9935b78553b35e380e3579d39496846a77c3e72d0fbd3ac7a42ac09bb6d299c  one-loop-drain-06-base-shard0010.db
+c9935b78553b35e380e3579d39496846a77c3e72d0fbd3ac7a42ac09bb6d299c  one-loop-drain-06-base-shard0011.db
+ab7f2a40edd4d75f8b731e1764f767f5c25ab4de6b4964da1346bff7f51cde29  one-loop-drain-06-base-shard0012.db
+ab7f2a40edd4d75f8b731e1764f767f5c25ab4de6b4964da1346bff7f51cde29  one-loop-drain-06-base-shard0013.db
+ab7f2a40edd4d75f8b731e1764f767f5c25ab4de6b4964da1346bff7f51cde29  one-loop-drain-06-base-shard0014.db
+0326746480a25645eabe06caedc6514ec2ad8f4e4ca49525519eabaca088cac9  one-loop-drain-06-base-shard0015.db
+64516736f27f111bfdbce3d8886c3e95dd30dac831013e2302dcb7bc74cd1f87  one-loop-drain-06-base.db
+4d1b3bbbca0c429ba58cfdee5cc0cfb6783845a064b31405782ea5665582679f  one-loop-drain-06-base.manifest.json
+## shasum -a 256 of the copy, before
+8d2b96fdb8724667795cbde84f6adb066db3a76d5bf6d794fefa44b344741a7e  one-loop-drain-06-base-shard0000.db
+575831756d69a8fbf440efeb98d66a00d7a00ff44ed565f413957f2cd9e7ae5b  one-loop-drain-06-base-shard0001.db
+864688884b4db3584dc9fbc4037abb590db12d990bb536c2915060b0632b4450  one-loop-drain-06-base-shard0002.db
+e6dd3130b796c6a1532ea3f1861ed6fbf2d131f1be30b68512510f1bdb85f5fa  one-loop-drain-06-base-shard0003.db
+a279198df7106ac5aa75da23d28578bd877b5ca3b9c996945781995a7da692c6  one-loop-drain-06-base-shard0004.db
+572189d7cbeab4381a5ea33803b354e886ac67f9fec12c912ae742ec175b0949  one-loop-drain-06-base-shard0005.db
+d65506d49760cc1ea689686e7b99f95508803cbc4ff924957ba3a411080bdb2f  one-loop-drain-06-base-shard0006.db
+5e1321411f9fbca0d4bc46fecb37e14788e2eff377a93314504cbf1f1214ce83  one-loop-drain-06-base-shard0007.db
+ab7f2a40edd4d75f8b731e1764f767f5c25ab4de6b4964da1346bff7f51cde29  one-loop-drain-06-base-shard0008.db
+c9935b78553b35e380e3579d39496846a77c3e72d0fbd3ac7a42ac09bb6d299c  one-loop-drain-06-base-shard0009.db
+c9935b78553b35e380e3579d39496846a77c3e72d0fbd3ac7a42ac09bb6d299c  one-loop-drain-06-base-shard0010.db
+c9935b78553b35e380e3579d39496846a77c3e72d0fbd3ac7a42ac09bb6d299c  one-loop-drain-06-base-shard0011.db
+ab7f2a40edd4d75f8b731e1764f767f5c25ab4de6b4964da1346bff7f51cde29  one-loop-drain-06-base-shard0012.db
+ab7f2a40edd4d75f8b731e1764f767f5c25ab4de6b4964da1346bff7f51cde29  one-loop-drain-06-base-shard0013.db
+ab7f2a40edd4d75f8b731e1764f767f5c25ab4de6b4964da1346bff7f51cde29  one-loop-drain-06-base-shard0014.db
+0326746480a25645eabe06caedc6514ec2ad8f4e4ca49525519eabaca088cac9  one-loop-drain-06-base-shard0015.db
+64516736f27f111bfdbce3d8886c3e95dd30dac831013e2302dcb7bc74cd1f87  one-loop-drain-06-base.db
+4d1b3bbbca0c429ba58cfdee5cc0cfb6783845a064b31405782ea5665582679f  one-loop-drain-06-base.manifest.json
+## originals against the copy
+identical
+## the inventory
+$ PYTHONPATH=. ./venv/bin/python main.py --config exponential.yaml --database <scratch>/basecopy/one-loop-drain-06-base.db --shards 16 --inventory
+# start 2026-11-07 20:59:43 +0000; 20:59  up 7 days, 23:20, 1 user, load averages: 7.90 6.93 6.67
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+!! --inventory: Cannot read sharded datastore "<scratch>/basecopy/one-loop-drain-06-base.db": shard #0 "<scratch>/basecopy/one-loop-drain-06-base-shard0000.db" differs from the tables this code declares (it lacks the table(s) "ScalarHistoryBounce"; its table "alpha_value" lacks the column(s) "drain_model"; its table "ScalarHistory" lacks the column(s) "drained_share_one_loop", "drained_share_gap", "drained_share_classical", "drained_share_unassessed", "parking_share", "candidates_one_loop", "candidates_gap", "candidates_classical", "candidates_unassessed", "ell_min", "log_R_min_drain", "unresolvable_assessments", "unresolved_declined", "all_worst_birth_margin", "all_worst_birth_margin_N", "all_birth_failing_share", "all_worst_reflection_margin", "all_worst_reflection_margin_N", "all_reflection_failing_share", "all_worst_tracker_margin", "all_worst_tracker_margin_N", "all_tracker_failing_share", "bounce_rows"; its table "ScalarHistoryValue" lacks the column(s) "log_m_eff_Mp", "log_m_tracker_Mp"), so nothing was read
+# exit 1; wall 1.6 s; end 2026-11-07 20:59:45 +0000
+## shasum -a 256 of the copy, after
+8d2b96fdb8724667795cbde84f6adb066db3a76d5bf6d794fefa44b344741a7e  one-loop-drain-06-base-shard0000.db
+575831756d69a8fbf440efeb98d66a00d7a00ff44ed565f413957f2cd9e7ae5b  one-loop-drain-06-base-shard0001.db
+864688884b4db3584dc9fbc4037abb590db12d990bb536c2915060b0632b4450  one-loop-drain-06-base-shard0002.db
+e6dd3130b796c6a1532ea3f1861ed6fbf2d131f1be30b68512510f1bdb85f5fa  one-loop-drain-06-base-shard0003.db
+a279198df7106ac5aa75da23d28578bd877b5ca3b9c996945781995a7da692c6  one-loop-drain-06-base-shard0004.db
+572189d7cbeab4381a5ea33803b354e886ac67f9fec12c912ae742ec175b0949  one-loop-drain-06-base-shard0005.db
+d65506d49760cc1ea689686e7b99f95508803cbc4ff924957ba3a411080bdb2f  one-loop-drain-06-base-shard0006.db
+5e1321411f9fbca0d4bc46fecb37e14788e2eff377a93314504cbf1f1214ce83  one-loop-drain-06-base-shard0007.db
+ab7f2a40edd4d75f8b731e1764f767f5c25ab4de6b4964da1346bff7f51cde29  one-loop-drain-06-base-shard0008.db
+c9935b78553b35e380e3579d39496846a77c3e72d0fbd3ac7a42ac09bb6d299c  one-loop-drain-06-base-shard0009.db
+c9935b78553b35e380e3579d39496846a77c3e72d0fbd3ac7a42ac09bb6d299c  one-loop-drain-06-base-shard0010.db
+c9935b78553b35e380e3579d39496846a77c3e72d0fbd3ac7a42ac09bb6d299c  one-loop-drain-06-base-shard0011.db
+ab7f2a40edd4d75f8b731e1764f767f5c25ab4de6b4964da1346bff7f51cde29  one-loop-drain-06-base-shard0012.db
+ab7f2a40edd4d75f8b731e1764f767f5c25ab4de6b4964da1346bff7f51cde29  one-loop-drain-06-base-shard0013.db
+ab7f2a40edd4d75f8b731e1764f767f5c25ab4de6b4964da1346bff7f51cde29  one-loop-drain-06-base-shard0014.db
+0326746480a25645eabe06caedc6514ec2ad8f4e4ca49525519eabaca088cac9  one-loop-drain-06-base-shard0015.db
+64516736f27f111bfdbce3d8886c3e95dd30dac831013e2302dcb7bc74cd1f87  one-loop-drain-06-base.db
+4d1b3bbbca0c429ba58cfdee5cc0cfb6783845a064b31405782ea5665582679f  one-loop-drain-06-base.manifest.json
+## the copy, before against after
+identical: 18 files
+## files in the copy's directory after
+files: 18

@@ -1,0 +1,61 @@
+$ PYTHONPATH=. ./venv/bin/python tools/history_and_bbn.py --help
+# exit 0
+usage: history_and_bbn.py [-h] [--phi-init-Mp PHI_INIT_MP] [--alpha ALPHA]
+                          [--drain-law {fixed,one_loop}]
+                          [--tuning-tolerance TUNING_TOLERANCE]
+                          [--tuning-max-integrations TUNING_MAX_INTEGRATIONS]
+                          [--fixed-normalization NORM PHI_REF_MP]
+                          [--T-stop-GeV T_STOP_GEV]
+                          [--small-network | --no-small-network]
+                          [--wall-clock-limit SECS]
+                          beta M
+
+Run one scalar history and its BBN through the production code, with no Ray
+cluster and no datastore, and print one line per stage.
+
+positional arguments:
+  beta                  the coupling's beta
+  M                     the potential's M, in units of M_P
+
+options:
+  -h, --help            show this help message and exit
+  --phi-init-Mp PHI_INIT_MP
+                        initial value of the scalar field in units of M_P
+                        (default 5, as main.py)
+  --alpha ALPHA         under the fixed drain law, the drained fraction alpha
+                        of dissipation mode, 0 <= alpha < 1 (default 0:
+                        natural mode); under --drain-law one_loop, the law's
+                        strength A, finite and > 0, required. Passed to the
+                        tuning, or to the integration with --fixed-
+                        normalization
+  --drain-law {fixed,one_loop}
+                        the drain law (default fixed): fixed, alpha_eff =
+                        alpha w_gate; one_loop, alpha_eff by each candidate's
+                        regime, with --alpha as A (one-loop-drain prompt 01)
+  --tuning-tolerance TUNING_TOLERANCE
+                        the tuning's tolerance on both residuals,
+                        |H_J(T_CMB)/H0 - 1| and |phi_ref/phi_min - 1| (default
+                        1e-05, as main.py); no effect with --fixed-
+                        normalization
+  --tuning-max-integrations TUNING_MAX_INTEGRATIONS
+                        the cap on the tuning's integrations, the seed's
+                        included (default 30, as main.py); no effect with
+                        --fixed-normalization
+  --fixed-normalization NORM PHI_REF_MP
+                        run one untuned history of the model realized at the
+                        normalization NORM (the model's own: ln V0, V0 in
+                        units of M_P^4, as a stored history holds it) and
+                        phi_ref = PHI_REF_MP M_P, by integrate_history, for
+                        diagnostics (default: tune the history, as main.py
+                        does)
+  --T-stop-GeV T_STOP_GEV
+                        with --fixed-normalization only: the stopping
+                        temperature in the Jordan frame, in GeV (default:
+                        T_CMB). A tuned history ends at T_CMB
+  --small-network, --no-small-network
+                        run PRyMordial's 12-reaction network (default: True,
+                        the small network, as main.py runs; --no-small-network
+                        for the full network)
+  --wall-clock-limit SECS
+                        wall-clock limit on the PRyMordial solve, in seconds
+                        (default 600, as main.py; 0 disables it)

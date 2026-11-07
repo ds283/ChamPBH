@@ -1898,6 +1898,82 @@ the comment of `REFLECTIONS_KEY` (`ComputeTargets/ScalarHistory.py:75`) calls th
 α > 0 every reflection drains; and `integrate_history`'s verbose line prints "elastic reflection(s)"
 (`:4024`) for the same count. A change of code corrects either, which this prompt does not make.
 
+### 6.12 Added 2026-11-07 (`one-loop-drain` prompt 08): the one-loop drain law as it stands
+
+A reading guide, not a restatement. Under the drain model `one-loop-measured-v1` a history at A > 0 runs every step of §6.11.1
+but one: α_eff is the law's, not α · w_gate. This section reads that history in order, gives each step its code at the dispatch
+commit `d0d8918` (lines are in `ComputeTargets/ScalarHistory.py` unless a file is named), and points to the dated notes of
+`one-loop-drain` in §3.5.3 that describe it: 01's at `:317`, 02c's at `:358`, 03's at `:394` and 05's at `:417` (lines of this
+file at `d0d8918`). The law and its measures, written for quotation with every constant's source, are
+[`one-loop-drain-verification.md`](one-loop-drain-verification.md) §8; the campaign's plan is its README §8. Those notes and §6.1–§6.11
+are records, and nothing in them is edited. The fixed law (`"fixed"`, α_eff = α · w_gate) is §6.11 as it stands, bitwise
+(verification §6.4).
+
+#### 6.12.1 What a history under `one-loop-measured-v1` does, in order
+
+0. **Entry.** `alpha` carries A, finite and > 0 with no upper bound (`check_drain_law`, `CosmologyConcepts/drain_model.py:105`),
+   and `drain_law` is `"one_loop"`, which `compute_scalar_history` takes from the history's `alpha_value` (its `drain_model`, 03's
+   note). The model must define the wall variable L (`check_drain_law_model`, `:1755`; `AbstractModel._drain_L` has no default,
+   `CosmologyConcepts/Models/AbstractModel.py:517`). 02c's note.
+1. **The assessment at each candidate.** As in §6.11.1 steps 3 and 6, with two changes of 01 that act only where the code of
+   2026.9.0 raised (01's note):
+   - `classical_turning_point` returns None where ln E lies below the least finite value of ln(V − V_floor) at this ln V_floor
+     (`_turning_point_unresolvable`, `AbstractModel.py:202`, called at `:698`), so a root inside the rounding width is "no decision"
+     again and no longer raises;
+   - the unresolved rule makes no decision where G2 would refuse its reflection (`unresolved_reflection_refused`, `:1239`; the
+     user's ruling (b) of 2026-11-03). Radau then integrates the turnaround and the resolved candidate drains outside the wall.
+2. **The regime and f.** From the assessment the candidate is judged on, once, in the loop (`drain_regime`, `:1773`): unassessed,
+   classical (ln R ≤ 0), one-loop (ln R > 0 and the turnaround has ℓ > 0) or gap (the rest). L and ln R are computed once
+   (`drain_law_inputs`, `:1803`). f is `drain_fraction` (`:1831`), with S(L) (`drain_S_of_L`, `:1818`) in the classical regime.
+   01's note defines the regimes; 02c's gives f, its constants and their sources.
+3. **The gate and the cap.** α_eff = min(α_cap, A · f) · w_gate (`drain_alpha_effective`, `:1872`), α_cap = 0.99 (`:211`), w_gate
+   formed as under the fixed law (`:2357`; `gate_weight`, `:1355`). 02c's note.
+4. **The drain into the ledger**, at α_eff > 0, as §6.11.1 step 1 (`candidate`, `:2323`). Since every classical candidate has
+   f = R·S(L) > 0 (barring underflow, met nowhere in 02d: verification §2d.5), it drains, however little,
+   and takes the drain's restart.
+   Each candidate's regime, ℓ, α_eff, w_gate, ln E, ln H, L and ln R go into the `"drain"` record (`DrainCandidate`).
+   02c's note.
+5. **Parking and the release**, as §6.11.1 steps 4 and 5, unchanged. On 02d's sample 221 of 230 successes park and none is released
+   (verification §2d.6; log 05 §6).
+6. **The instrumentation**, after the integration and outside its loop, from what the loop and §6.11.1 step 7 already computed;
+   nothing changes a value of the integration (03's note):
+   - the bounce rows (`bounce_rows`, `:4713`; `bounce_record`, `:4823`): a row per candidate and per turning point of the reflection
+     margin;
+   - the history's drain record (`drain_history_values`, `:4966`): the regime and parking shares, the counts, ℓ_min, the least
+     ln R at a drain;
+   - the all-generation margins (`all_generation_margins`, `:4932`), the weighted margins of §6.8 with the weight ignored.
+   The peak estimate of §6.8 is the loop's (`drain_regime` returns it, from `_assessed_peak`, `:4082`, the same expressions as
+   `peak_estimate`, `:4062`), so `one_loop_turnaround` runs once per candidate (P18).
+7. **The sample masses** at every law and every α, natural mode included (`sample_masses`, `:4544`). 03's note.
+8. **What is stored, and what is derived afterwards.** `ScalarHistory.store` (`:6570`) writes the drain record, the bounce rows
+   (`ScalarHistoryBounce`) and the masses beside §6.11.1 step 8's values, under `FINGERPRINT_FORMAT` 7 and `VERSION_LABEL`
+   2026.10.0 (`config/fingerprint.py:95`, `config/version.py:88`); `alpha_value` is the pair (A, `"one-loop-measured-v1"`)
+   (03's note; `architecture-summary.md` §7.2). The spectrum-dependent measures (n_g, n̄, δ_stim, E, the phase slip, the
+   backreaction ratio) are computed from the exports by `tools/quanta_measures.py` with `ComputeTargets/quanta_spectrum.py`, not
+   stored (05's note; verification §5, §8.4).
+
+#### 6.12.2 Statements of §6.1–§6.11 that hold only for the fixed law, or that this campaign superseded
+
+The lines are this file's at `d0d8918`. Each statement of §6.1–§6.11 that names α_eff, the drain's fraction, the key, the format,
+the margins' weight or the wall search's refusals was checked against the code at that commit; those not listed hold under both
+laws.
+
+| Statement | Where | Under `one-loop-measured-v1` | Where it is said |
+|---|---|---|---|
+| prompt 02 drains "a fraction α of the kinetic energy" at each candidate, with α_eff = α | §6.2 (`:1344`, `:1366`) | α_eff = min(α_cap, A · f) · w_gate; the fixed law only | 02c's note (`:358`); step 3 above |
+| α_eff = α · w_gate | §6.3 (`:1398`); §6.11.1 step 2 (`:1829`–`:1832`) | the gate multiplies min(α_cap, A · f), formed the same way | 02c's note; step 3 |
+| "0 ≤ α < 1 or `ValueError`" at entry | §6.11.1 step 0 (`:1820`) | A finite and > 0, no upper bound | 01's note (`:317`); step 0 |
+| "A root with E ≲ 10⁻¹² V_floor raises, and a field inside such a root raises too" | §6.11.1 step 6 (`:1855`–`:1856`); §6.7 (`:1615`–`:1620`); §6.11.2's row on §6.4 (`:1881`) | `classical_turning_point` returns None there, under both laws: "no decision", as §6.4 (`:1455`) first said | 01's note; step 1 |
+| the unresolved rule "reflects the field at K φ_t" whenever φ_t < 10⁻⁸ M_P or ln 𝓡 > 0 | §6.4; §6.11.1 step 3 (`:1833`–`:1837`) | no decision where G2 would refuse (both laws; every such state raised before) | 01's note; step 1 |
+| the peak estimate chosen by 𝓡 after the integration | §6.8 (`:1646`–`:1650`) | computed once in the loop and reused, with the same expressions (P18); values unchanged | 01's note; step 6 |
+| "The worst of each kind runs over the generations with share ≥ 10⁻³" | §6.8 (`:1658`); §6.11.1 step 7 (`:1860`) | stored beside the all-generation values and the bounce rows; the fixed law keeps the weighted ones only | 03's note (`:394`); step 6 |
+| α a key of every history, `alpha_serial`; "The format is 6 and the label `2026.8.0`" | §6.9 (`:1699`); §6.11.1 step 8 (`:1865`–`:1866`) | the key is (value, `drain_model`); format 7, label 2026.10.0, at both laws | 03's note; step 8 |
+| §6.10's measurement (dissipation mode at α ∈ {0.03, 0.1, 0.3, 0.9}) | §6.10 | a measurement of the fixed law on the code of `8c12afa`; the one-loop law's is verification §2d | verification §2d, §8.2 |
+
+Not of this campaign: the two statements in code that §6.11.3 lists ("elastic reflections" in `REFLECTIONS_KEY`'s comment, and
+the verbose line) were corrected in `4fefdf8` (2026-11-01, housekeeping after `inelastic-reflection`'s close); the comment at
+`:91`–`:93` now says the count is elastic at α = 0 and drains at α > 0.
+
 ---
 
 ## 7. From scalar history to BBN via PRyMordial (`ComputeTargets/BBNData.py`)

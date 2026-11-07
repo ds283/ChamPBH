@@ -1,37 +1,6 @@
 # one-loop-drain campaign — implementation state
 
-**Last updated:** 2026-11-07 · **Status: LIVE — 10 of 11 landed (01, 02, 02b, 02c, 02d, 03, 04, 05, 06, 07); the measured law in the code (02c), measured on the sample (02d), stored (03), exported by the drivers (04), its spectrum-dependent measures derived from the exports (05), and rehearsed under Ray (06: Bitwise and R hold); 07: the figure tools (`tools/plot_quanta_grid.py`, `tools/plot_quanta_history.py`) render from 06's and 05's exports, the gate Figures holds; 08 (the close) written.** Planned
-2026-11-02 as `quanta-diagnostics` at the user's request, after a scoping session the same day
-([`source/scoping_2026-11-02.md`](source/scoping_2026-11-02.md)); U1–U7 and P1–P16 ruled the same day,
-all as proposed (README §6). **Re-planned the same day around the drain law and renamed `one-loop-drain`**
-(branch and folder), at the user's rulings of README §6.3, after the premise was corrected
-([`source/margins-correction_2026-11-02.md`](source/margins-correction_2026-11-02.md)) and a one-loop drain
-probed ([`source/drain-probe_2026-11-02.md`](source/drain-probe_2026-11-02.md)). **README §8 is the plan;** U8–U12 ruled the same day, all as proposed (README §8.6).
-The branch was cut from `reflection-restart` at `3b8a553`. Under U1 as extended by ruling 6, no prompt is
-written until `reflection-restart` 04 has landed and been merged here; under U2, the rebuild of record
-waits for this campaign's 08. *(2026-11-02: `reflection-restart` 04 landed and that campaign closed; its branch was
-merged here (`1561b60`). The user ruled the wall-search fix into 01 (README §8.8), and the fixed-α issue came
-back to §3 for it. Prompt 01 written the same day.)* *(2026-11-03: prompt 01 landed, with the user's ruling (b) on
-the inside-wall stop (§3, §4); the Law gate holds, and two issues closed.)* *(2026-11-03: prompt 02 landed; the Measure
-gate holds, one issue opened (§3), and U13 and U14 are open for the user with its measurements.)* *(2026-11-04: the user ruled U13: both gap
-prescriptions kept, `zero` the default (README §8.6, P26). U14 is open.)* *(2026-11-04: prompt 02b inserted and written at the user's request, to
-measure A ∈ {0.05, 0.5, 1.5, 2, 5, 10} before U14 is ruled (README §8.4, §8.6).)* *(2026-11-04: prompt 02b landed; the Wide
-gate holds, no issue opened, one extended (§3), and U14 is open for the user with the measurements at nine A.)* *(2026-11-04: the user ruled U14: A ∈ {0.05, 0.1,
-0.5, 1, 1.5, 2, 5, 10} for the rebuild of record (README §8.6).)* *(2026-11-04: the small-A failures diagnosed, an issue
-opened on the one-loop fraction at small ℓ, and the side-campaign `crossover` started at the user's request, to land
-before 03 (README §8.9).)* *(2026-11-05: `crossover` closed. The user adopted its measured law in place of 2.7/ℓ and both
-gap prescriptions (U13 re-ruled), kept U14, and ruled one versioned drain-model key, the removal of `zero` and `edge`,
-and a tabulated S(L). 02c and 02d inserted before 03, 03 revised, 02c written; U15 (n ≠ 1) open for the user (README §8.10).)* *(2026-11-05: stage 2 on the n = 2 wall supports
-L = ln(1 + E/V₀); the user ruled U15 (b), the law at every n with that L (README §8.10). 02c's gate is met.)* *(2026-11-05: prompt 02c
-landed; the Measured gate holds. Two rulings of the user during it: the gap fraction is 0 where 1 + q ln L ≤ 0, and L moves
-into the model class with no default; one stop ruled (the maps' headers). No issue opened or closed.)* *(2026-11-05: prompt 02d
-landed; the Remeasure gate holds. 230 of 240 tunings succeed under the measured law; R-632 fails at A = 0.1 and 0.05 and the
-5 × 10⁻²⁰ M_P ladder at A = 0.05, which extends the §3 issue; C-3873 times out at seven A. Its numbers replace 02's and 02b's
-as the campaign's measurement of the one-loop law. No issue opened or closed.)* *(2026-11-06: the campaign reviewed before 03 (README §8.11):
-ready, with three stale items noted for 04–06. The planner proposed P27–P32 for the store, the defaults unless the user
-says otherwise: the drain-model key on `alpha_value` (U8), with `fixed` where no model is named. Prompt 03 written.)* *(2026-11-06: prompt 03
-landed; the Store gate holds. The drain-model key, the bounce table, the history's drain record and the sample masses are stored,
-`FINGERPRINT_FORMAT` 7 and `VERSION_LABEL` 2026.10.0; two issues closed (§4), none opened.)* *(2026-11-06: the campaign reviewed before 04 (README §8.12). The planner proposed P33–P40 for the drivers and exports, the defaults unless the user says otherwise: `--A-values` beside `--alpha-values`, the one-loop products under `<label>/<drain_model>/A=<A>/`. Prompt 04 written.)* *(2026-11-06: prompt 04 landed; the Export gate holds. `--A-values` is in `main.py` and the plot scripts, the one-loop products go under `<label>/<drain_model>/A=<A>/`, histories.csv gains `drain_model` and the drain record, fields.csv the sample masses, and a new bounces.csv holds the bounce rows; the fixed law's exports are byte-identical to the dispatch tree's. No issue opened or closed.)* *(2026-11-06: the campaign reviewed before 05 (README §8.13). The planner proposed P41–P49 for the derivation tool, the defaults unless the user says otherwise, and put U16 to the user: whether U4's spectrum shape stays for the one-loop generations, which now carry most of the drained energy. Prompt 05 written on the proposal, U4 as ruled; it is not dispatched until the user answers U16.)* *(2026-11-06: U16 ruled by the user: U4 stays for every generation, the associated piece at scale 1 the default; the alternatives withdrawn (README §8.13). Prompt 05 ready to dispatch.)* *(2026-11-06: prompt 05 landed; the Derive gate holds. U17 ruled by the user at dispatch: the associated piece's 1/x runs to x_p and falls as e^{−κ(x − x_p)} above. `ComputeTargets/quanta_spectrum.py` holds U4's shape (`U4-U17-v1`), its constants, moments and kernels; `tools/quanta_measures.py` derives n_g, n̄, δ_stim, E, the phase slip and the backreaction ratio from 04's exports. Run on 02d's 230 successes: every task re-integrated equal to 02d, δ_stim ≤ 1.3 × 10⁻³. No issue opened or closed; one narrowed (§3).)* *(2026-11-06: the campaign reviewed before 06 (README §8.14). The planner proposed P50–P57 for the rehearsal, the defaults unless the user says otherwise: the base `1561b60` built from a scratch worktree, the workers' code probed, three runs per store with nine of 02d's one-loop tasks, the gates Bitwise and R made exact. Prompt 06 written.)* *(2026-11-07: prompt 06 landed; the gates Bitwise and R hold. The fixed law built at `1561b60` and at the tip agrees in 2 524 629 values; the one-loop build interrupted by `SIGTERM` and resumed equals the straight one, and both equal 02d's tool route bit for bit, Y_p and D/H included; the readers and the tool behave under Ray as 04 and 05 said. No issue opened or closed.)* *(2026-11-07: the campaign reviewed before 07 (README §8.15). The planner proposed P58–P65 for the figure tools, the defaults unless the user says otherwise: `tools/plot_quanta_grid.py` (heat maps over β and M per A, ten panels) and `tools/plot_quanta_history.py` (six panels on N), a shared `tools/quanta_figures.py`, tests on constructed exports, a demonstration on 06's and 05's exports written under `var/one-loop-drain/07/`, and the plot scripts' footer "Reflections (elastic model)" relabelled. The shard warning recorded in DatastoreKit at the user's request (`befa7f3`). Prompt 07 written.)* *(2026-11-07: prompt 07 landed and was reviewed (`867b267`, `c8b87d6`); the gate Figures holds. No issue opened or closed.)* *(2026-11-07: the campaign reviewed before 08 (README §8.16). Every gate holds and none of the three open issues is assigned here. The planner proposed P66–P73 for the close, the defaults unless the user says otherwise: no code; the law and the measures for the paper as a new §8 of the verification document; reading guides in `numerical-strategies.md` §6.12 and `architecture-summary.md` §7.2; `CLAUDE.md` by description only; the handover for the rebuild of record as `review-remediation-verification.md` §4.20; no issue closed, two given dated lines and one narrowed; the inventory run read-only on the reference store and on a copy of the base store; the merge the user's. Prompt 08 written.)*
+**Last updated:** 2026-11-07 · **Status: CLOSED 2026-11-07 — 11 of 11 prompts landed (01, 02, 02b, 02c, 02d, 03, 04, 05, 06, 07, 08); every gate holds; three issues open, none assigned; the merge into `main` is the user's.** The status line as it stood before the close, with its dated history, is under "History of the status line", after §5.
 
 The campaign replaces the fixed-α drain by a one-loop law, α_eff = min(α_cap, A·2.7/ℓ)·w_gate at a
 one-loop turnaround and zero at R ≤ 1, with the fixed law kept beside it, bitwise. It measures the law
@@ -40,9 +9,18 @@ law's model-free instrumentation (a row per bounce, the masses per sample, the r
 per history); derives the spectrum-dependent measures in a tool outside the integrator; rehearses both
 laws; and writes the figure tools.
 
+> **Note, 2026-11-07 (prompt 08): the law as it stands.** The paragraph above is the plan of 2026-11-02. The law the code
+> applies is README §8.10's measured law, `one-loop-measured-v1`, adopted by the user on 2026-11-05 in place of A·2.7/ℓ and
+> both gap prescriptions: α_eff = min(α_cap, A·f)·w_gate, with f = min(0.95, 1 − e^{−2.69/(ℓ + 0.9691 − 0.41 ln L)}) at a
+> one-loop turnaround with ℓ ≥ 1, 0.9 below ℓ = 1, a fitted fraction of ln R and L in the gap, and R·S(L) at R ≤ 1, so the gap
+> and the classical regime drain. The verification's §8.1 gives each constant with its source and `file:line`.
+
 **Campaign:** [`README.md`](README.md) ·
 **Code:** `ComputeTargets/ScalarHistory.py`, `CosmologyConcepts/Models/AbstractModel.py` (the wall search, 01), `ComputeTargets/quanta_spectrum.py` (new),
-`ObjectFactories/ScalarHistory.py`, `config/`, `main.py`, `plot_*.py`, `extract_common.py`, `tools/` ·
+`ObjectFactories/ScalarHistory.py`, `config/`, `main.py`, `plot_*.py`, `extract_common.py`, `tools/`; and (added 2026-11-07 by 08, from
+`git diff --stat 3b8a553 d0d8918 -- '*.py'`) `CosmologyConcepts/drain_model.py` (new), `ObjectFactories/alpha_value.py` (new),
+`CosmologyConcepts/alpha_value.py`, `CosmologyConcepts/Models/ExponentialModel.py`, `ComputeTargets/dark_radiation.py`,
+`RunDrivers/registered_run.py` ·
 **Index:** [`.documents/OPEN_ISSUES.md`](../../.documents/OPEN_ISSUES.md) §1.23
 
 > **Maintenance rule.** Whenever an entry is added to, narrowed in, or closed out of §3 or §4
@@ -67,7 +45,7 @@ The plan as first ruled had seven prompts (README §2), none written; the re-pla
 | 05 | [Derivation tool](05-derivation-tool.md) | `ComputeTargets/quanta_spectrum.py` (U4's shape, its moments and the kernels G and Ω; P41) and `tools/quanta_measures.py` reading 04's exports alone (P42): K(N) rebuilt from the bounce rows (P43); n_g, n̄_j, δ_stim, E(N), the phase slip and the backreaction ratio (P44); three outputs for 07 (P45); the associated piece at 0, 1 and 10 (P46); run on 02d's 230 successes (P47); the Derive gate (P48); the R·S(L) bound dropped (README §8.13) | Opus | ✅ | ✅ | `9830738` | [05](logs/05-derivation-tool.md) |
 | 06 | [Rehearse](06-rehearse.md) | registered builds under Ray (P50–P57): the fixed law at the base `1561b60` against the tip, bitwise, with the workers' code probed; the one-loop law interrupted and resumed, against the straight build and 02d's tool route; the readers, `--A-values` and the derivation tool on the exports | Opus | ✅ | ✅ | `1416b80` | [06](logs/06-rehearse.md) |
 | 07 | [Figure tools](07-figure-tools.md) | `tools/plot_quanta_grid.py` (P59) and `tools/plot_quanta_history.py` (P60) from 04's exports and 05's outputs, sharing `tools/quanta_figures.py` (P58, P61); tests on constructed exports (P62); rendered on 06's and 05's exports, the PNGs committed (P63); the footer label (P64) | Sonnet | ✅ | ✅ | `867b267` | [07](logs/07-figure-tools.md) |
-| 08 | [Close](08-close.md) | the law and the measures for the paper (verification §8, P67); the reading guides in `numerical-strategies.md` §6.12 and `architecture-summary.md` §7.2 (P68); `CLAUDE.md` by description (P69); the handover for the rebuild, `review-remediation-verification.md` §4.20 (P70); the issues (P71); the inventory checks (P72); the board and index closed (P73) | Opus | ✅ | ⬜ | | |
+| 08 | [Close](08-close.md) | the law and the measures for the paper (verification §8, P67); the reading guides in `numerical-strategies.md` §6.12 and `architecture-summary.md` §7.2 (P68); `CLAUDE.md` by description (P69); the handover for the rebuild, `review-remediation-verification.md` §4.20 (P70); the issues (P71); the inventory checks (P72); the board and index closed (P73) | Opus | ✅ | ✅ | this commit | [08](logs/08-close.md) |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
 
@@ -779,6 +757,11 @@ commit once before reporting, to correct two sentences of its log.
 | ten registered runs on the isolated cluster: the base at `1561b60` from a worktree (17 fixed-law histories), the reference and the resumed store at the tip (26 each, 9 of them 02d's one-loop tasks), run a of the resumed build interrupted with `SIGTERM` and resumed; the readers R1–R7; the three stores kept (P50, P52, P55–P57) | 06 | ✅ (verification §6) |
 | `tools/quanta_figures.py` (regime colours, the four row classes, the model check, the `--output` mapping), `tools/plot_quanta_grid.py` (ten heat maps per one-loop A) and `tools/plot_quanta_history.py` (six panels sharing N per history); 68 tests on constructed exports; "Reflections: N" (P58–P62, P64) | 07 | ✅ |
 | the figure scripts, `.documents/one-loop-drain/figures-07/` (the six picks, the demonstration, the count check, 12 committed PNGs): 06's exports, 2 grid pages and 9 history figures; 05's, 8 grid pages, A = 1 at c_a = 0 and 10, 4 history figures; 58 checks, 0 failures (P63) | 07 | ✅ (verification §7) |
+| the law and the measures for the paper: verification §8 (the two laws as coded, with every constant's source and `file:line`; what the law did on 02d's sample; the stored and the derived measures; what they say; where the reading does not hold), and §9 (the close's checks) (P67) | 08 | ✅ |
+| the reading guides: `numerical-strategies.md` §6.12 (a history under `one-loop-measured-v1` in order, and the statements of §6.1–§6.11 that hold only for the fixed law or were superseded); `architecture-summary.md`'s §7.2 map and notes at §2's tree, §4.2's registry, §5.2's `sharded_tables` and §14 (P68) | 08 | ✅ |
+| `CLAUDE.md` by description: the suite times of this run; the counts unchanged (P69) | 08 | ✅ |
+| the handover for the rebuild of record, `review-remediation-verification.md` §4.20 (P70); the issues dated and one narrowed (P71); the board and the indexes closed (P73) | 08 | ✅ |
+| the close's scripts, `.documents/one-loop-drain/close-08/` (`run_inventories.sh`: `main.py --inventory` on the reference store and on a copy of the base store, with the hashes; `check_help.py`: every command and option §4.20 gives, against its `--help`) (P72) | 08 | ✅ (verification §9) |
 
 ## 2. The gates
 
@@ -832,6 +815,10 @@ the new prompts.
   W, B and R history, but above 1 in 33 histories (the L ladder and group C at 10⁻¹² M_P, up to 9 × 10³¹ at bounces that drain
   almost nothing), and the phase slip at a producing bounce falls below 1 rad in 15 of them, where the random-phase model's
   premise does not hold. Left open as ruled; 08 documents it.
+  *(2026-11-07, prompt 08: documented in `.documents/one-loop-drain-verification.md` §8.5–§8.6. The first-order, random-phase
+  reading of δ_stim does not hold where n̄ > 1 (33 histories, on the L ladder and in group C) and where the phase slip at a
+  producing bounce falls below 1 rad (15 of them); at laboratory M and in B (n̄ < 0.01, slips ≥ 7.8 × 10²¹ rad) it holds. Left open
+  as ruled.)*
 - **`[00-the-parking-leftover-has-no-spectrum]`** — the energy drained at the parking switch (up to
   0.10 of ρ_χ at 4×10⁻³¹, β 1.06–1.107; ≤ 0.03 elsewhere) has no peak estimate, so no margin and no
   wall-exposure measure covers it; it is reported only as `unassessed_share`. **Impact:** not measured.
@@ -839,6 +826,10 @@ the new prompts.
   **2026-11-02, at the re-plan:** under the one-loop law the parking leftover was 0.008–0.23% of K in the
   four laboratory-M probe runs, and at 10⁻¹² M_P it is all of ρ_χ (3016: r_χ 1.0×10⁻⁶ today). 02 measures
   its share across the sample (README §8.3); the spectrum stays out of scope.
+  **Narrowed 2026-11-07 (prompt 08)** with 02d's measured parking share: 0 to 0.99999 over the 230 successes, 7 × 10⁻⁵ at the
+  median (05's export, README §8.15); 10⁻⁹–10⁻² of K at laboratory M and in B at A ≥ 0.1, and ≥ 0.968 of K at 4 × 10⁻¹⁵ M_P
+  (verification §2d.5); 0.999993 for C-3016 at A = 0.05 (§5.6); 0 in the 9 that do not park (§2d.6). It is largest where the
+  drains are classical (group C, the top of the ladder). **Next:** unchanged, out of this campaign's scope.
 
 - **`[02-one-loop-tunings-fail-at-small-A-in-the-transition-window]`** — opened 2026-11-03 by prompt 02 (`3f3f0cf`;
   `.documents/one-loop-drain-verification.md` §2.4, §2.5; `var/one-loop-drain/02/sample.jsonl`). The tool
@@ -910,6 +901,9 @@ the new prompts.
   So under the measured law the issue holds at A = 0.1 and 0.05 for R-632, and at A = 0.05 for the 5 × 10⁻²⁰ ladder;
   neither failure points at the law's code, the wall search or the inside-wall guard. Not diagnosed further (prompt 02d
   §1.5).)*
+  *(2026-11-07, prompt 08: the handover for the rebuild of record, `.documents/review-remediation-verification.md` §4.20 point 3
+  ("The failures to expect") and point 6, states which (β, A) of U14 meet these failures, how `main.py` stores and counts them,
+  and what `--retry-failed-scalar` does. Not diagnosed further.)*
 
 ### 3.1 Assigned to this campaign
 
@@ -1156,3 +1150,44 @@ changed): the same counts, all passing (log 02d §4).
 changed): the same counts, all passing (log 06 §4), at one-minute loads of 107–200 from other work.
 
 **2026-11-07, prompt 07:** measured first at `d4031dc`: 26, 665 (219 + 446), 163, 191, 72, all passing. After 07: 26, 665 (219 + 446), 163, 259, 72, all passing (log 07 §4); 68 tests added to `tools/tests`.
+
+**2026-11-07, prompt 08:** measured first at `d0d8918`: 26, 665 (219 + 446), 163, 259, 72, all passing (log 08 §4). No code
+changed, so these are the final counts.
+
+### History of the status line
+
+The status line as it stood when prompt 08 was dispatched, moved here unchanged at the close (prompt 08; orchestrator note 08,
+ruling 9):
+
+**Last updated:** 2026-11-07 · **Status: LIVE — 10 of 11 landed (01, 02, 02b, 02c, 02d, 03, 04, 05, 06, 07); the measured law in the code (02c), measured on the sample (02d), stored (03), exported by the drivers (04), its spectrum-dependent measures derived from the exports (05), and rehearsed under Ray (06: Bitwise and R hold); 07: the figure tools (`tools/plot_quanta_grid.py`, `tools/plot_quanta_history.py`) render from 06's and 05's exports, the gate Figures holds; 08 (the close) written.** Planned
+2026-11-02 as `quanta-diagnostics` at the user's request, after a scoping session the same day
+([`source/scoping_2026-11-02.md`](source/scoping_2026-11-02.md)); U1–U7 and P1–P16 ruled the same day,
+all as proposed (README §6). **Re-planned the same day around the drain law and renamed `one-loop-drain`**
+(branch and folder), at the user's rulings of README §6.3, after the premise was corrected
+([`source/margins-correction_2026-11-02.md`](source/margins-correction_2026-11-02.md)) and a one-loop drain
+probed ([`source/drain-probe_2026-11-02.md`](source/drain-probe_2026-11-02.md)). **README §8 is the plan;** U8–U12 ruled the same day, all as proposed (README §8.6).
+The branch was cut from `reflection-restart` at `3b8a553`. Under U1 as extended by ruling 6, no prompt is
+written until `reflection-restart` 04 has landed and been merged here; under U2, the rebuild of record
+waits for this campaign's 08. *(2026-11-02: `reflection-restart` 04 landed and that campaign closed; its branch was
+merged here (`1561b60`). The user ruled the wall-search fix into 01 (README §8.8), and the fixed-α issue came
+back to §3 for it. Prompt 01 written the same day.)* *(2026-11-03: prompt 01 landed, with the user's ruling (b) on
+the inside-wall stop (§3, §4); the Law gate holds, and two issues closed.)* *(2026-11-03: prompt 02 landed; the Measure
+gate holds, one issue opened (§3), and U13 and U14 are open for the user with its measurements.)* *(2026-11-04: the user ruled U13: both gap
+prescriptions kept, `zero` the default (README §8.6, P26). U14 is open.)* *(2026-11-04: prompt 02b inserted and written at the user's request, to
+measure A ∈ {0.05, 0.5, 1.5, 2, 5, 10} before U14 is ruled (README §8.4, §8.6).)* *(2026-11-04: prompt 02b landed; the Wide
+gate holds, no issue opened, one extended (§3), and U14 is open for the user with the measurements at nine A.)* *(2026-11-04: the user ruled U14: A ∈ {0.05, 0.1,
+0.5, 1, 1.5, 2, 5, 10} for the rebuild of record (README §8.6).)* *(2026-11-04: the small-A failures diagnosed, an issue
+opened on the one-loop fraction at small ℓ, and the side-campaign `crossover` started at the user's request, to land
+before 03 (README §8.9).)* *(2026-11-05: `crossover` closed. The user adopted its measured law in place of 2.7/ℓ and both
+gap prescriptions (U13 re-ruled), kept U14, and ruled one versioned drain-model key, the removal of `zero` and `edge`,
+and a tabulated S(L). 02c and 02d inserted before 03, 03 revised, 02c written; U15 (n ≠ 1) open for the user (README §8.10).)* *(2026-11-05: stage 2 on the n = 2 wall supports
+L = ln(1 + E/V₀); the user ruled U15 (b), the law at every n with that L (README §8.10). 02c's gate is met.)* *(2026-11-05: prompt 02c
+landed; the Measured gate holds. Two rulings of the user during it: the gap fraction is 0 where 1 + q ln L ≤ 0, and L moves
+into the model class with no default; one stop ruled (the maps' headers). No issue opened or closed.)* *(2026-11-05: prompt 02d
+landed; the Remeasure gate holds. 230 of 240 tunings succeed under the measured law; R-632 fails at A = 0.1 and 0.05 and the
+5 × 10⁻²⁰ M_P ladder at A = 0.05, which extends the §3 issue; C-3873 times out at seven A. Its numbers replace 02's and 02b's
+as the campaign's measurement of the one-loop law. No issue opened or closed.)* *(2026-11-06: the campaign reviewed before 03 (README §8.11):
+ready, with three stale items noted for 04–06. The planner proposed P27–P32 for the store, the defaults unless the user
+says otherwise: the drain-model key on `alpha_value` (U8), with `fixed` where no model is named. Prompt 03 written.)* *(2026-11-06: prompt 03
+landed; the Store gate holds. The drain-model key, the bounce table, the history's drain record and the sample masses are stored,
+`FINGERPRINT_FORMAT` 7 and `VERSION_LABEL` 2026.10.0; two issues closed (§4), none opened.)* *(2026-11-06: the campaign reviewed before 04 (README §8.12). The planner proposed P33–P40 for the drivers and exports, the defaults unless the user says otherwise: `--A-values` beside `--alpha-values`, the one-loop products under `<label>/<drain_model>/A=<A>/`. Prompt 04 written.)* *(2026-11-06: prompt 04 landed; the Export gate holds. `--A-values` is in `main.py` and the plot scripts, the one-loop products go under `<label>/<drain_model>/A=<A>/`, histories.csv gains `drain_model` and the drain record, fields.csv the sample masses, and a new bounces.csv holds the bounce rows; the fixed law's exports are byte-identical to the dispatch tree's. No issue opened or closed.)* *(2026-11-06: the campaign reviewed before 05 (README §8.13). The planner proposed P41–P49 for the derivation tool, the defaults unless the user says otherwise, and put U16 to the user: whether U4's spectrum shape stays for the one-loop generations, which now carry most of the drained energy. Prompt 05 written on the proposal, U4 as ruled; it is not dispatched until the user answers U16.)* *(2026-11-06: U16 ruled by the user: U4 stays for every generation, the associated piece at scale 1 the default; the alternatives withdrawn (README §8.13). Prompt 05 ready to dispatch.)* *(2026-11-06: prompt 05 landed; the Derive gate holds. U17 ruled by the user at dispatch: the associated piece's 1/x runs to x_p and falls as e^{−κ(x − x_p)} above. `ComputeTargets/quanta_spectrum.py` holds U4's shape (`U4-U17-v1`), its constants, moments and kernels; `tools/quanta_measures.py` derives n_g, n̄, δ_stim, E, the phase slip and the backreaction ratio from 04's exports. Run on 02d's 230 successes: every task re-integrated equal to 02d, δ_stim ≤ 1.3 × 10⁻³. No issue opened or closed; one narrowed (§3).)* *(2026-11-06: the campaign reviewed before 06 (README §8.14). The planner proposed P50–P57 for the rehearsal, the defaults unless the user says otherwise: the base `1561b60` built from a scratch worktree, the workers' code probed, three runs per store with nine of 02d's one-loop tasks, the gates Bitwise and R made exact. Prompt 06 written.)* *(2026-11-07: prompt 06 landed; the gates Bitwise and R hold. The fixed law built at `1561b60` and at the tip agrees in 2 524 629 values; the one-loop build interrupted by `SIGTERM` and resumed equals the straight one, and both equal 02d's tool route bit for bit, Y_p and D/H included; the readers and the tool behave under Ray as 04 and 05 said. No issue opened or closed.)* *(2026-11-07: the campaign reviewed before 07 (README §8.15). The planner proposed P58–P65 for the figure tools, the defaults unless the user says otherwise: `tools/plot_quanta_grid.py` (heat maps over β and M per A, ten panels) and `tools/plot_quanta_history.py` (six panels on N), a shared `tools/quanta_figures.py`, tests on constructed exports, a demonstration on 06's and 05's exports written under `var/one-loop-drain/07/`, and the plot scripts' footer "Reflections (elastic model)" relabelled. The shard warning recorded in DatastoreKit at the user's request (`befa7f3`). Prompt 07 written.)* *(2026-11-07: prompt 07 landed and was reviewed (`867b267`, `c8b87d6`); the gate Figures holds. No issue opened or closed.)* *(2026-11-07: the campaign reviewed before 08 (README §8.16). Every gate holds and none of the three open issues is assigned here. The planner proposed P66–P73 for the close, the defaults unless the user says otherwise: no code; the law and the measures for the paper as a new §8 of the verification document; reading guides in `numerical-strategies.md` §6.12 and `architecture-summary.md` §7.2; `CLAUDE.md` by description only; the handover for the rebuild of record as `review-remediation-verification.md` §4.20; no issue closed, two given dated lines and one narrowed; the inventory run read-only on the reference store and on a copy of the base store; the merge the user's. Prompt 08 written.)*

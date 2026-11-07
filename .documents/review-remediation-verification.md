@@ -2418,6 +2418,271 @@ stepper label (`Radau+kinematic-cap-stepping1`); `FINGERPRINT_FORMAT` is still 6
 5. **Left to the user:** the merge into `one-loop-drain`; the destination of the wall-search limit (point 3); the
    effective-minimum failure of 4389 (point 2); the rebuild of record (point 4).
 
+### 4.20 Addendum 2026-11-07 — the `one-loop-drain` campaign
+
+Added by `one-loop-drain` prompt 08 (this commit), written at `d0d8918`. Nothing above this heading has been changed;
+where it is superseded, this section says so by statement. The campaign changed what a build computes and stores under a
+new drain law, kept the fixed law beside it bitwise, and started no production run: its rehearsal built three small
+stores under `var/`. It did, in order:
+
+- it was planned on 2026-11-02 as `quanta-diagnostics` and re-planned and renamed the same day around a one-loop drain
+  law (README §8, `c07839e`); `reflection-restart` was merged into it (`1561b60`);
+- it put a drain law into the integration and the tuning beside the fixed one, classified each candidate in the loop,
+  fixed the wall search's unresolvable roots and declined the unresolved reflection that G2 would refuse (01, `b99f6a4`:
+  the gate "Law");
+- it measured the law across thirty histories at three A and two gap prescriptions (02, `3f3f0cf`: "Measure"), and at
+  six more A (02b, `cc1f449`: "Wide");
+- the side-campaign `crossover` measured the drain fraction by a self-consistent one-loop solve, and the user adopted its
+  law in place of 2.7/ℓ and both gap prescriptions (README §8.9, §8.10);
+- it put the measured law in the code, with L in the model class (02c, `18add05`: "Measured"), and measured it at U14's
+  eight A (02d, `98b1601`: "Remeasure");
+- it stored the drain-model key, the bounce rows, the history's drain record and the sample masses, at
+  `FINGERPRINT_FORMAT` 7 and `VERSION_LABEL` 2026.10.0 (03, `fe4c917`: "Store");
+- it carried the law through the drivers and the exports (04, `64a6274`: "Export");
+- it derived the spectrum-dependent measures outside the integrator (05, `9830738`: "Derive");
+- it rehearsed both laws under Ray, interrupted and resumed (06, `1416b80`: "Bitwise" and "R");
+- it wrote two figure tools (07, `867b267`: "Figures");
+- and prompt 08 wrote the documents and this handover (this commit).
+
+Its board is [`prompts/one-loop-drain/IMPLEMENTATION_STATE.md`](../prompts/one-loop-drain/IMPLEMENTATION_STATE.md); its
+plan is its [`README.md`](../prompts/one-loop-drain/README.md) (§8 is the plan as re-made on 2026-11-02, with its rulings
+U8–U17 and P17–P73; §8.10 is the law as ruled); the measurements and the rehearsal are in
+[`one-loop-drain-verification.md`](one-loop-drain-verification.md) §1–§7, and the law and its measures, written to be
+quoted, in its §8; what the code now does is in [`numerical-strategies.md`](numerical-strategies.md) §6.12 (the reading
+guide) and in the dated notes of [`architecture-summary.md`](architecture-summary.md) (§7.2's map of this date lists the
+pieces). It **did bump** `VERSION_LABEL` (`"2026.10.0"`, `config/version.py:88`) and `FINGERPRINT_FORMAT` (7,
+`config/fingerprint.py:95`). The branch `one-loop-drain` **is not merged into `main` when this is written** (point 7).
+
+**This supersedes**, by statement and not by edit:
+
+- **§4.19 point 4's condition** that the rebuild of record waits "after `one-loop-drain` 08": this is 08, so the
+  condition is met. The rest of point 4 stands: the rebuild is the user's, at 2026.10.0, with the fixed α a selectable
+  law, and Figure 6b's store is the rebuild's.
+- **§4.19's labels** (`VERSION_LABEL` 2026.9.0; "`FINGERPRINT_FORMAT` is still 6"): they are 2026.10.0 and 7.
+- **§4.19's "is not merged into `main` or `one-loop-drain`"**: `reflection-restart` was merged into `one-loop-drain` on
+  2026-11-02 (`1561b60`), so its fix is in this branch.
+- **§4.19 point 3's "such failures are to be expected at a rate not measured"** for a fixed-α build at laboratory M, and
+  point 5's "the destination of the wall-search limit": the user ruled the fix into this campaign's 01, which returns None
+  where the root cannot be resolved instead of raising, and closed
+  `[00-fixed-alpha-laboratory-M-histories-fail-in-classical-turning-point]` (board §4; verification §1.4). Every call it
+  changes raised before, so no history that succeeded moves (§1.3 there, and the gate Bitwise, §6.4).
+- **§4.18 point 1's "α is a key of every history, in its own replicated table `alpha_value`"**: the key is now the pair
+  (value, `drain_model`) (point 1 below). §4.18's format 6 is 7.
+- **§4.18 point 6's "a computed α (2.7/ℓ is recorded, not used)"**: under the one-loop law the drained fraction is
+  computed at each candidate by the measured law (verification §8.1); under the fixed law α is still given.
+- **§4.18 point 5's "`--stale-after` is not needed"**, on a measured silence of 153 s: point 3 below gives 06's 160 s, and
+  why a stage of long tunings reads stale while it works.
+
+**The points.**
+
+1. **What changed for a build.**
+   - **The drain-model key on `alpha_value`.** A row is the pair (value, `drain_model`): `"fixed"`, whose value is α
+     (0 ≤ α < 1; α = 0 is natural mode and exists only here), or `"one-loop-measured-v1"`, the measured law and its
+     version, whose value is A (finite and > 0, no upper bound). **A lookup that names no model is `"fixed"`**, so every
+     command of before this campaign reads and builds the fixed law (`ObjectFactories/alpha_value.py:71`). A later version
+     of the law is a new string, so a new key value.
+   - **`--A-values A [A …]`** beside `--alpha-values`, in `main.py`, `plot_by_beta.py` and `plot_ScalarHistory.py`
+     (`config/argument_parser.py:249`). It has **no default**: a run without it is the fixed-law run. The `--alpha-values`
+     rows come first, in their order, then the `--A-values` rows, one pipeline per row. `--alpha-values` keeps its default
+     `0`, so **a run given only `--A-values` also builds α = 0** (at laboratory M that is natural mode, which has never been
+     run there: README §8.14 P52). The plot scripts refuse an A with no stored row under the one-loop model (exit 2), as
+     they refuse an α (verification §6.6, R4).
+   - **The one-loop products** go under `<label>/one-loop-measured-v1/A=<A:.5g>/`, beside the fixed law's
+     `<label>/alpha=<α:.5g>/`; histories.csv and `Delta_N_eff.pdf` stay at `<label>/` and span both.
+   - **The new export columns and `bounces.csv`.** histories.csv gains `drain_model` after `alpha` and the drain record's
+     23 columns (`DRAIN_CSV_COLUMNS`) before `failure_reasons`, blank under `"fixed"`; its rows sort by (`drain_model`, α, M,
+     n, β). fields.csv gains `log_m_eff_Mp` and `log_m_tracker_Mp` after `Delta_gstar`, at every law. A new bounces.csv sits
+     beside each one-loop history's fields.csv, one row per bounce row, never under `"fixed"`. Every new cell is the stored
+     column (verification §4; `architecture-summary.md` §14's note of 2026-11-06).
+   - **The labels.** A rebuild starts a new store, at format 7 and 2026.10.0. **The tip does not read a format-6 store.**
+     On 2026-11-07 `main.py --config exponential.yaml --database <copy>/one-loop-drain-06-base.db --shards 16 --inventory`,
+     on a scratch copy of the base store (2026.9.0, format 6; all 18 files, `cp -p`), exited 1 in 1.6 s, with no Ray:
+     `!! --inventory: Cannot read sharded datastore …: shard #0 … differs from the tables this code declares (it lacks the
+     table(s) "ScalarHistoryBounce"; its table "alpha_value" lacks the column(s) "drain_model"; …), so nothing was read`.
+     The 18 files' `shasum -a 256` were identical before and after (verification §9.3). A 2026.9.0 or 2026.8.0 store is read
+     with the tree of its own commit (README §8.11 P32; no migration).
+   - **The fixed law under the tip** equals the base's in every pre-existing column: 2 524 629 values of 17 histories, every
+     one equal (the gate Bitwise, verification §6.4). It writes no bounce row and a NULL drain record, and it writes the
+     sample masses, which are new at every law.
+
+2. **What changes in the run scripts, against 2026.8.0's** (`science-runs/2026-11-01-science-2026.8.0/run_science_2026.8.0.sh`
+   and `run_figure_exports.sh`, which are records and are not edited; a new folder under `science-runs/` holds the user's
+   scripts when the user writes them). This section writes no script.
+   - **What `--A-values` adds.** U14's values, as the user ruled them: "A \in { 0.05, 0.1, 0.5, 1.0, 1.5, 2.0, 5.0, 10.0 }"
+     (README §8.6). In the script's `run` function the option goes after the bare `--`, with the other `main.py` options:
+
+     ```bash
+     ./venv/bin/python -u RunDrivers/registered_run.py --campaign "$RUN" --prompt "$tier" \
+         --register "$job" --purpose "$purpose" -- --config exponential.yaml --database "$db" \
+         --shards "$SHARDS" --ray-address "$RAY_ADDR" --job-name "$job" \
+         --bbn-wall-clock-limit 600 --phi-init-Mp 5 --M-values-Mp <M> --beta-values <BETAS> \
+         --alpha-values <ALPHAS> --A-values 0.05 0.1 0.5 1 1.5 2 5 10
+     ```
+
+     Each A is one pipeline after the α rows. A block's (M, β) grid is unchanged by the option.
+   - **What becomes of the fixed-α blocks** (A, A2, B, C at α 0.001–0.15, and R's) is the user's choice. The facts: the
+     fixed law is bitwise in its old columns (point 1); it carries no instrumentation (no bounce row, a NULL drain record,
+     the weighted margins only; verification §8.6); and it is what Figure 6a drew for comparison. A2's β grid lies inside
+     A's (its 106 values are among A's 186), so under `--A-values` alone A2 adds no (M, β) that A does not build.
+   - **The post-build steps**, from the repository root with the cluster up for the plot scripts; `<OUT>` is the plot
+     scripts' `--output`, and `<ROOT>` is `<OUT>/QCD_Cosmology`, the label's directory:
+     - the exports, each plot script with the build's options and its `--A-values`:
+       `./venv/bin/python -u plot_by_beta.py --config exponential.yaml --database "$DB" --shards 16 --ray-address 127.0.0.1:6380 --phi-init-Mp 5 --alpha-values <ALPHAS> --A-values 0.05 0.1 0.5 1 1.5 2 5 10 --output <OUT>`,
+       and `plot_ScalarHistory.py` with the same options;
+     - the derived measures at c_a = 1, then at 0 and 10 for the sensitivity (no store, no Ray; about 52 s for 230 histories
+       at one scale, verification §5.6):
+       `PYTHONPATH=. ./venv/bin/python tools/quanta_measures.py <ROOT>`, and the same with `--assoc-scale 0` and with
+       `--assoc-scale 10`;
+     - a BBN re-solve of one stored one-loop history, where a script uses one:
+       `PYTHONPATH=. ./venv/bin/python -u tools/bbn_from_store.py <stem> --beta <β> --M-Mp <M> --phi-init-Mp 5 --drain-law one_loop --alpha <A> --small-network --variant prod`,
+       where `<stem>` is the store's path without `.db`; under `--drain-law one_loop`, `--alpha` is A;
+     - the figure tools (no store, no Ray; point 4):
+       `PYTHONPATH=. ./venv/bin/python tools/plot_quanta_grid.py <ROOT> [--A-values A …] [--assoc-scale C] [--output DIR]` and
+       `PYTHONPATH=. ./venv/bin/python tools/plot_quanta_history.py <ROOT> [--A-values A …] [--beta-values B …] [--M-Mp-values M …] [--assoc-scale C] [--output DIR]`.
+     The 2026.8.0 scripts' plot steps pass `--alpha-values` alone; a store built with `--A-values` and plotted without it
+     exports the fixed rows only.
+   - **The registered run's scope** (P40): `RunDrivers/registered_run.py` takes `--campaign`, `--prompt`, `--register` and
+     `--purpose` and passes everything after `--` to `main.py`. The scope it records gains `A <values>` after the α part
+     only when `--A-values` is given (`RunDrivers/registered_run.py:704`), so a fixed-law block records the scope it did.
+   Every command above ran with `--help` at `d0d8918`, exit 0, with every option this section names checked against its own
+   command's help (`.documents/one-loop-drain/close-08/check_help.py`; verification §9.4).
+
+3. **What to expect.**
+   - **The cost per history**, measured in the tool route (verification §2d.10; `measure-02d/out/cost.txt`, the task's wall
+     with BBN, under loads up to 50 on six workers): P, W, R and B 12–70 s at A ≥ 0.5, medians by group and A 12.1–28.2 s;
+     at A = 0.1 and 0.05 the medians are 24.1–82.3 s, the largest success 96.3 s (R-611 at A = 0.05). Group C at 10⁻¹² M_P: 52–112 s (C-3016,
+     C-3233). **The classical-heavy ladder**, where a cascade runs a long classical tail: L-M5e-20 at A = 0.1, 1115 s
+     (1 962 144 steps, 13 333 classical drains); L-M5e-16 at A = 1, 632 s; L-M1e-16 at A = 0.5, 947 s. Under Ray, in 06
+     (verification §6.7; log 06 §7): a one-loop history at laboratory M in one integration, 4.2–59 s (queueing included);
+     C-3233 at A = 1, 3 integrations, 89 s; the A = 0.1 scalar stage of four laboratory-M histories 61–71 s.
+   - **C-3873's kind** (β = 1.11 at 10⁻¹² M_P): its tuning took 28 integrations of 114–158 s each, 3324 s, at A = 1, and
+     reached 24–27 integrations by the 3600 s timeout at the other seven A (verification §2d.4, §2d.10). Its trajectory is
+     the same at every A, since its drains are R·S(L) ≈ 10⁻¹⁹ of the kinetic energy (§2d.11). **`main.py` has no
+     wall-clock limit on a history.** What bounds one is `--tuning-max-integrations`, default 30
+     (`DEFAULT_TUNING_MAX_INTEGRATIONS`, `ComputeTargets/ScalarHistory.py:5453`, the parser's default at
+     `config/argument_parser.py:261`), the seed's integration included, and the step budget of each integration,
+     `StepControl`'s `step_budget`, 2 000 000 accepted steps (`ComputeTargets/ScalarHistory.py:358`–`:381`), which the
+     build path does not override; exceeding it fails the history. Neither is a wall-clock limit.
+     `--bbn-wall-clock-limit` bounds the BBN stage only.
+   - **The failures to expect at U14's A** (verification §2d.4): R-632's kind, β = 1.0 at laboratory M, at A = 0.1 and
+     0.05 ("the effective minimum was not found", after its first integration, so the integration cap does not stop it);
+     and the 5 × 10⁻²⁰ M_P ladder rung at A = 0.05 (the step budget). That rung is not in 2026.8.0's grid; whether other
+     (β, M) of the grid fail at small A is not measured (`[02-one-loop-tunings-fail-at-small-A-in-the-transition-window]`,
+     point 6). **How `main.py` stores and counts them:** a failed history is stored as a `ScalarHistory` row with `failure`
+     set and its `failure_reason`, and the run prints `-- ScalarHistory: N histories failed in this run` with the reasons
+     grouped by their first clause (`main.py:365`–`:369`). A stored failure counts as done: a later run does not recompute
+     it. `--retry-failed-scalar` retries the failures under the current label and stores each new history beside its
+     failure (its `--help`, which gives as its example a retry "after raising `--tuning-max-integrations`"; `tuning-followups` 01).
+     R-632's kind did not stop at the cap.
+   - **A projection, labelled as one.** Not measured, and nothing was run to refine it. Basis: the per-history medians by
+     group and A of 02d's tool route (`measure-02d/out/cost.txt`, "by group and A"), summed over U14's eight A, times each
+     2026.8.0 block's (M, β) pairs (`run_science_2026.8.0.sh`), over ten workers (the 2026.8.0 record's "ten at a time",
+     `science-runs/2026-11-01-science-2026.8.0/README.md`, "Timings against the plan"). Only the one-loop rows are
+     projected; the α rows are the user's choice.
+
+     | block | (M, β) pairs | per pair over 8 A (s) | work (s) | over 10 workers |
+     |---|---|---|---|---|
+     | A (4 × 10⁻³¹, 186 β) | 186 | 142.7 (W) to 263.1 (R) | 26 542–48 937 | 0.74–1.36 h |
+     | A2 | 0 new: its β are A's | — | — | — |
+     | B (10⁻³⁰, 10⁻³³; 30 β) | 60 | 174.6 (B) | 10 476 | 0.29 h |
+     | C (10⁻¹⁵, 10⁻¹³, 10⁻¹²; 62 β) | 186 | 836.6 (C, at 10⁻¹²) | 155 608 | 4.32 h |
+     | D (natural mode only) | — | not projected: the one-loop law at 10⁻³–0.5 M_P was not measured | — | — |
+     | R (3 β at 4 × 10⁻³¹, 10⁻¹⁵, 10⁻¹²) | 9 | 263.1 (R) and 836.6 (C) | 5 809 | 0.16 h |
+
+     Each `--A-values` row is a pipeline of its own, whose scalar stage ends with its slowest history. C's coarse grid holds
+     β = 1.11 at each M; if C-3873's tuning recurs there, each of C's eight pipelines lasts at least its 3324 s (A = 1), and up
+     to about 30 × 158 s = 4740 s before the cap, so block C would take at least 8 × 3324 s = 7.4 h however many workers run.
+     **The weakest assumption** is block C: the medians are three histories at 10⁻¹² M_P (n = 3), no history of 02d ran at
+     10⁻¹⁵ or 10⁻¹³ M_P, and where C-3873's cost recurs is not measured. Next to it, the tool route's walls were taken at
+     six workers; the 2026.8.0 record found a history about 1.8 times as long at ten at a time. α = 0 at laboratory M,
+     which a run given only `--A-values` builds (point 1), has no measured cost.
+   - **The disk.** In 06 the raylet warned every 10 s that the volume holding `/tmp/ray-cpbh` was over 95% full, 44.6 → 39.3
+     GB free of 926 GB, and nothing failed (verification §6.2, §6.9). The user reports over 200 GB available in Finder: the
+     difference is purgeable space, which the raylet does not count (README §8.15). Ray refuses object creation past its
+     threshold, so a build or rehearsal on this machine could meet it if the counted free space falls further (log 06 §6).
+   - **The workers' working directory** is the cluster's, whatever tree the driver runs from (verification §6.1; log 06 §6):
+     a driver in a worktree on a shared cluster has its workers import its own tree's modules but read `PRyMrates/` and the
+     EOS table from the cluster's start directory (`architecture-summary.md` §14's note of this date).
+   - **The shard warning**, `!! WARNING: number of shards read from database (=16) does not match specified number of shards
+     (=10)`, printed by each plot script on a 16-shard store though given `--shards 16`, is cosmetic: the store opens with its
+     own 16 shards, read-only. It is DatastoreKit's, recorded there as `[cpbh-an-unstated-shard-count-warns-on-every-open]`
+     (DatastoreKit `befa7f3`), to be fixed there and adopted through a new pin (README §8.15; log 06 §6).
+   - **The longest heartbeat silence** in 06 was 160 s (`resumed-b`, the α = 0 scalar stage), against the 900 s window
+     (verification §6.2). The wrapper's docstring (`RunDrivers/registered_run.py:47`–`:57`) says how a beat is taken: from a
+     line on stdout, and `RayWorkPool` prints a progress line only after completed work, so "a stage that prints nothing for
+     longer than the staleness window (900 s, `list --stale-after`) -- a queue whose items each take longer than that -- is
+     reported stale while it works". A pipeline whose last histories are of C-3873's kind (about an hour each) is such a
+     stage. The reader's option is `./venv/bin/python -m runregistrykit list --stale-after SECONDS`, which reads a run as
+     stale only after that many seconds without a beat; a run shown stale whose pid still answers `kill -0` on its host is
+     working (`CLAUDE.md`, "Long-running jobs", rule 2). No value is prescribed here.
+
+4. **The figures of record.**
+   - **Figure 6 at laboratory M first** (README §8.7): the one-loop law at U14's A, with the fixed law's α beside it as the
+     user chooses (point 2).
+   - **Figure 6b** (`science-runs/2026-11-01-science-2026.8.0/fig6b/PLAN.md`): its prerequisites, as its dated note of
+     2026-11-02 says, are this rebuild, the export re-run on it, and the user's rulings of its §2. Its design is unchanged.
+   - **The two figure tools** (log 07 §6; verification §7). `tools/plot_quanta_grid.py` draws, per one-loop A, ten heat maps
+     over (β, M): the one-loop share, the gap + classical + unassessed share, the parking share, ℓ_min, the three
+     all-generation margins, δ_stim, E_field_max and the backreaction maximum, to `<ROOT>/one-loop-measured-v1/A=<A>/plots/quanta_grid.{pdf,png}`.
+     `tools/plot_quanta_history.py` draws, per one-loop history, six panels on the e-fold axis (m·a against the generations'
+     q, the drain, the dark radiation, the excess, the occupations, the phase slip with 1 rad marked), beside the plot
+     scripts' figures of that history. Both read the exports and 05's outputs only. Commands: point 2. **Costs** (log 07 §6):
+     a grid page 1.0–1.6 s; a history figure 0.8–0.9 s at 64–600 generations and 2.4 s at 13 342. They read each history's
+     files into Python lists, so they are for a handful of histories, not thousands (log 07 §5 item 7).
+   - **What 07's demonstration shows** (log 07 §6; verification §7.5): 02d's grid has the same "plus" shape at every A, a
+     band at laboratory M and a column at β = 2, **not a rectangle**, so a rebuild's grid page will look different; the
+     one-loop share is 1.0 across the laboratory band; the all-generation margins are mostly positive and negative at a few
+     cells; δ_stim reaches about 10⁻⁴ there and E_field_max about 10⁻²⁰; the backreaction maximum is 1.8 × 10³ (A = 2,
+     8 × 10⁻¹⁸ M_P, β = 2); slips below 1 rad appear in the long classical tails.
+   - **Two weak readings**, from 07's review (board; README §8.16), documented and not changed: the cream "no history"
+     background is close to the white at the centre of the margins' diverging map, so a near-zero margin and an empty cell
+     are told apart by the legend more than by eye; and in the per-history drain panel an open marker at 1 hides under a
+     filled α_eff ≈ 1 marker.
+
+5. **The stores kept** (log 06 §7; README §8.14 P57), each 16 shards, the primary and its sidecar under `var/datastores/`:
+   - `one-loop-drain-06-base`: the fixed law at `1561b60`, 2026.9.0, format 6, 17 histories, `store_id`
+     `2f6e8a7c74e54965865a781e8430f66c`, fingerprint `ff38053c…f4a7`; 117 344 KiB. The tip refuses it (point 1).
+   - `one-loop-drain-06-reference`: the tip, 2026.10.0, format 7, 26 histories (17 fixed, 9 one-loop), 2 562 bounce rows,
+     `store_id` `2b6fd51c22ad445abaf2cf3e5573582a`, fingerprint `7c7641d2…dd04`; 137 352 KiB. On 2026-11-07 `main.py
+     --config exponential.yaml --database var/datastores/one-loop-drain-06-reference.db --shards 16 --inventory` ran in 25.3 s,
+     exit 0, with no Ray: read-only, 75,121 records in 16 classes, `problems: none`, label 2026.10.0, `alpha_value` 6 records
+     (0, 0.01, 0.1, 0.15, A = 0.1 and A = 1 under `one-loop-measured-v1`), and `shasum -a 256` of its 18 files identical before
+     and after (verification §9.3).
+   - `one-loop-drain-06-resumed`: the same grid, run a interrupted by `SIGTERM` and resumed, `store_id`
+     `23db39c668b4486cba95c7006cdffa65`, the same fingerprint; 137 868 KiB.
+   - `inelastic-reflection-11-reference`: 2026.8.0, format 6, fingerprint `afd2f329…1264` (§4.18 point 1). By the same
+     schema check the tip does not read it; it was not opened here.
+   Retiring any of them is the user's (`runregistrykit store retire`, which a person runs). The runs are under
+   `var/runs/one-loop-drain-06-*`.
+
+6. **What stays open.** The board's three issues (`.documents/OPEN_ISSUES.md` §1.23; none assigned), each with its next step:
+   - **`[02-one-loop-tunings-fail-at-small-A-in-the-transition-window]`, which bears on the rebuild:** under the measured law
+     R-632 (β = 1.0, laboratory M) fails at A = 0.1 and 0.05 and the 5 × 10⁻²⁰ M_P rung at A = 0.05, the field not parking
+     before today; every P, W and B history builds at all eight A (verification §2d.4). Next: none planned; the user keeps
+     A = 0.05 (U14); a rebuild stores these as failed histories (point 3).
+   - `[00-later-bounces-act-on-quanta-already-present]`: left open as the user ruled; documented in verification §8.6, where
+     the random-phase reading of δ_stim fails (n̄ > 1 in 33 histories, slips below 1 rad in 15). Next: none in this code; a
+     model of stimulated emission and rescattering is out of scope (README §8.1).
+   - `[00-the-parking-leftover-has-no-spectrum]`: the leftover's share is 0 to 0.99999 over 02d's 230 successes, largest
+     where the drains are classical. Next: out of this campaign's scope; for a later one.
+   - **Observations the logs left unopened** that a reader of the rebuild should know:
+     - `drained_share_classical` is 1.0000000000000007 at A = 10, β = 1, 10⁻¹² M_P: a share above 1 by rounding of the sum
+       (log 07 §5 item 2);
+     - the unassessed regime was met nowhere in 02d's sample (verification §2d.5; log 07 §5 item 5);
+     - histories.csv writes a marker row (`no ScalarHistory row in the store`) for every (row, M, β) of the stored grid
+       with no history, which `tools/quanta_measures.py` counts as failed histories, and `Delta_N_eff.pdf` draws a legend
+       entry for an α with no point at that M; a rectangular grid shows neither (log 06 §6);
+     - no history of 02d has a parking leftover bracketed by a later candidate, so that placement is tested on constructed
+       exports only, and the scoping probe's cancellation branch was not exercised (log 05 §6);
+     - `reflection_count`'s docstring in `extract_common.py` still says "elastic reflections" (log 07 §5 item 1).
+
+7. **The merge into `main` is the user's.** At the time of writing `git merge-base --is-ancestor main one-loop-drain` exits
+   0: `main` (`0209aac`) is an ancestor of this branch, so the merge is a fast-forward. `reflection-restart` (`25b1242`) is
+   contained in this branch (merged at `1561b60`). `github/main` is `7b35dc8`, four commits behind local `main` (`626b04f`,
+   `4249829`, `cc7fe75`, `0209aac`, not pushed), and also an ancestor of this branch; `one-loop-drain` has no upstream and
+   is not pushed. Pushing is the user's. The stores and run records are under `var/`, which git ignores, so `git clean -x`
+   or `-X` would delete them (`CLAUDE.md`).
+
 ---
 
 ## 5. Reproduce

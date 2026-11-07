@@ -1,0 +1,20 @@
+$ PYTHONPATH=. ./venv/bin/python RunDrivers/registered_run.py --help
+# exit 0
+usage: registered_run.py [-h] --campaign CAMPAIGN --prompt PROMPT
+                         --register SLUG --purpose PURPOSE
+
+Run main.py as a registered run (RunRegistryKit). main.py's arguments follow a
+bare --, verbatim.
+
+options:
+  -h, --help           show this help message and exit
+  --campaign CAMPAIGN  the campaign that ordered the run (a person's own
+                       launch: handover)
+  --prompt PROMPT      the prompt that ordered the run
+  --register SLUG      the run's slug: its directory is
+                       var/runs/<campaign>-<prompt>-<slug>-<time>
+  --purpose PURPOSE    one line a stranger can read saying what the run is for
+
+form: registered_run.py --campaign C --prompt N --register SLUG --purpose TEXT
+-- <main.py's arguments>
+** driver exit status 0

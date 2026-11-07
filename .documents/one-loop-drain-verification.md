@@ -2222,3 +2222,400 @@ margins mostly positive; the four history figures show the generations by regime
 excess, the occupations and the phase slips on one e-fold axis. Nothing reads wrongly that is the tool's: the first render's two
 faults (white empty cells indistinguishable from a diverging map's zero; a footer clipped at the right edge) and a 1 rad line off
 the axes were fixed before the figures were committed.
+
+## 8. The law and the measures, for the paper (2026-11-07, prompt 08)
+
+**Tree:** branch `one-loop-drain` at `d0d8918` (orchestrator note 08's commit, on `e951b8e`, which adds the prompt). Its code is
+07's reviewed code (`867b267`, `c8b87d6`): `VERSION_LABEL` 2026.10.0 (`config/version.py:88`), `FINGERPRINT_FORMAT` 7
+(`config/fingerprint.py:95`). §1–§7 above are unchanged. Nothing in this section was measured for it: every number is quoted from
+the section, log or file it names, and every formula and constant from the code at the `file:line` given (lines of `d0d8918`;
+`ComputeTargets/ScalarHistory.py` unless a file is named). It is written for a reader who will quote it; it edits neither the paper
+nor the briefing notes. Where a number spans tens of decades it is given as the record gives it.
+
+### 8.1 The two laws, as coded
+
+**Where a drain happens.** A *candidate* is a drain point after a resolved wall-side turning point, or a reflection (unresolved or
+at the floor), at α > 0 (`numerical-strategies.md` §6.11.1 steps 1–3). At each one the condensate's kinetic energy
+ρ_kin,E = H_E² π²/2 loses the fraction α_eff: ΔK = α_eff ρ_kin,E e^{4N} enters the ledger K (ρ_χ,E = K e^{−4N}), π is scaled by
+√(1 − α_eff), and Radau restarts (`candidate`, `:2323`). The two laws differ only in α_eff.
+
+**The gate**, common to both (U9; inelastic-reflection U4 (b′)): w_gate = 𝒜_k²/(𝒜_k² + 𝒜₀²) (`gate_weight`, `:1355`–`:1371`),
+𝒜₀ = `NONADIABATICITY_SCALE` = 1 (`:116`, the user's ruling of 2026-10-28), 𝒜_k = max |dm_eff/dt|/m_eff² over the half-oscillation
+that ends at the candidate. At an unresolved reflection w_gate = 1 exactly, and the gate is not evaluated (`:2296` under the fixed
+law, `:2357` under the one-loop law).
+
+**The fixed law** (`DRAIN_LAW_FIXED`, model `"fixed"`): α_eff = α · w_gate (`alpha_effective`, `:2284`–`:2298`), with
+0 ≤ α < 1 (`check_drain_law`, `CosmologyConcepts/drain_model.py:105`). α = 0 is natural mode: `alpha_effective` returns 0.0
+before the weight is formed (`:2293`) and no candidate drains. This is the law of every store to `VERSION_LABEL` 2026.9.0,
+unchanged: the gate Bitwise compared 2 524 629 values of 17 fixed-law histories built at the base and at the tip, every one equal
+(§6.4).
+
+**The one-loop law** (`DRAIN_LAW_ONE_LOOP`, model `"one-loop-measured-v1"`, `drain_model.py:48`):
+
+    α_eff = min(α_cap, A · f) · w_gate          (drain_alpha_effective, :1872–:1894)
+
+with α_cap = `DRAIN_ALPHA_CAP` = 0.99 (`:211`; U10, "0.99 is OK": the drain refuses α_eff ≥ 1) and A the law's strength, finite
+and > 0 with no upper bound (`check_drain_law`, `drain_model.py:122`; A = 0 is natural mode, asked for as the fixed law at α = 0).
+f, the fraction of the kinetic energy one bounce gives to quanta, is `drain_fraction` (`:1831`–`:1869`), by regime:
+
+| regime | f | constants (`:211`–`:221`) |
+|---|---|---|
+| one-loop, ℓ ≥ 1 | d = ℓ + b₀ − c ln L; f = min(f_cap, 1 − e^{−a/d}) if d > 0, else f_cap | a = `DRAIN_ONE_LOOP_A` = 2.69, b₀ = `DRAIN_ONE_LOOP_B0` = 0.9691, c = `DRAIN_ONE_LOOP_C` = 0.41, f_cap = `DRAIN_F_CAP` = 0.95, the edge ℓ = `DRAIN_ELL_PLATEAU` = 1 |
+| one-loop, ℓ < 1 | f = f_plateau (L and ln R not read) | f_plateau = `DRAIN_F_PLATEAU` = 0.9 |
+| gap | f = 0 if ln R ≤ r₀ or s = 1 + q ln L ≤ 0; else f = 1 − exp[−g (ln R − r₀)^p s] | g = `DRAIN_GAP_G` = 0.0198, r₀ = `DRAIN_GAP_R0` = 1.5601, p = `DRAIN_GAP_P` = 1.5472, q = `DRAIN_GAP_Q` = 0.841 |
+| classical | f = R · S(L) = e^{ln R} S(L) | S(L), below |
+| unassessed | f = 0; α_eff = 0.0 exactly, L and ln R not read (`:1888`–`:1889`) | — |
+
+The two clauses of the gap row that end in 0 are the threshold of the fit (R ≤ e^{1.5601} = 4.76) and the user's ruling of
+2026-11-05 on the region L ≤ e^{−1/0.841} = 0.3045, where the fitted expression is negative: "I think probably we set `f = 0`
+there" (README §8.10; the comment at `:209`–`:210`).
+
+**S(L)** (`drain_S_of_L`, `:1818`–`:1828`), the classical wall's production energy ratio: the 21 values of `DRAIN_S_TABLE_L` and
+`DRAIN_S_TABLE_S` (`:230`–`:275`), L = 0.3, 0.5, 0.7, 1, 2, …, 110, 134, S = 1.0041 × 10⁻² at L = 0.3 to 1.4204 × 10⁻⁵ at 134;
+linear interpolation in (ln L, ln S) (`np.interp` on the table's logarithms); S(0.3) held below L = 0.3; S(134)·(134/L)² above
+L = 134, since L²S tends to a constant.
+
+**The inputs.**
+- **ℓ** = ln(k_ex/m_ta) is the one-loop turnaround's: m_ta⁴ ℓ = 32π² E, V''(φ_ta) = m_ta², k_ex = λ_ta E^{1/2}/2
+  (`one_loop_turnaround`, `CosmologyConcepts/Models/AbstractModel.py:730`).
+- **ln R** is the assessment's classical turning point's, R = ω_t⁴/8π²E with ω_t² = V''(φ_t) and V(φ_t) − V_floor = E
+  (`ClassicalTurningPoint.log_R`, `AbstractModel.py:721`).
+- **L** is the model's wall variable at the assessment's ln E (`drain_law_inputs`, `:1803`–`:1815`; `RealizedModel.drain_L`,
+  `AbstractModel.py:421`). The base hook `AbstractModel._drain_L` has no default and raises (`AbstractModel.py:517`–`:532`), by the
+  user's ruling of 2026-11-05 ("I suggest we move `L` into the model class, with no default"). Under the one-loop law a model whose
+  class does not define it is refused before any integration (`check_drain_law_model`, `:1755`–`:1770`). `ExponentialModel` defines
+  L = ln(1 + E/V₀), the wall exponent (M/φ_t)^n at every n (`CosmologyConcepts/Models/ExponentialModel.py:81`–`:91`), computed as
+  x + log1p(e^{−x}) for x = ln E − ln V₀ > 0 and log1p(e^x) otherwise. At n = 1 it is M/φ_t, the variable the law was measured on
+  (U15 (b), ruled 2026-11-05: "OK, let's take option (b) for now"); the two differ there by at most 3.3 × 10⁻¹⁴ relative (§2c;
+  README §8.10).
+
+**The regimes** (`drain_regime`, `:1773`–`:1800`), from the assessment the candidate is judged on, computed once in the loop (P18):
+- **unassessed:** no assessment (no wall, or every assessment of the infall returned None);
+- **classical:** ln R ≤ 0;
+- **one-loop:** ln R > 0 and `one_loop_turnaround` returns a solution with ℓ > 0; ℓ is its;
+- **gap:** ln R > 0 and the turnaround raises, returns None, or returns ℓ ≤ 0 (P24); ℓ is None.
+
+**The sources of the constants.**
+- a = 2.69 is the Born coefficient of the one-loop fraction (`BriefingNotes/wall_backreaction.tex`, "The inelastic fraction"),
+  held fixed in the fit.
+- b₀, c and the gap's g, r₀, p, q are the side-campaign `crossover`'s fits to every stage-2 point
+  (`prompts/one-loop-drain/source/crossover/out/fit_law.txt`): one-loop within 0.074 of 27 points (rms 0.021), gap within 0.062 of
+  34 (rms 0.024). Stage 2 is a self-consistent one-loop solve with massive modes on the n = 1 wall (`source/crossover/README.md`,
+  "Stage 2").
+- f_cap = 0.95 and f_plateau = 0.9 are judgement: the user adopted them for qualitative behaviour, where stage 2 measured 0.88–0.98
+  and 0.80–0.97 (README §8.10).
+- S(L) is stage 1a's table (`source/crossover/out/stage1a_S_of_L.txt`, the classical bounce off V₀(e^{M/φ} − 1)), 0.1% high from
+  its quadrature (crossover stage 2, V2q), which README §8.10 records as immaterial.
+- The reference implementation is `fraction_adopted` in `source/crossover/measured_law_map.py`. The code equals it bitwise but in
+  the two departures the user ruled: the continuation above L = 134 (the reference holds S(134)) and the gap's clamp (§2c.3).
+- α_cap = 0.99 is U10. The version string moves whenever `drain_fraction`, its constants or the S table change
+  (`drain_model.py:42`–`:46`).
+
+**Under the key.** A history's law is part of its key: `alpha_value` is the pair (value, `drain_model`) (README §8.11 P27;
+`ObjectFactories/alpha_value.py`). Under `"fixed"` the value is α, 0 ≤ α < 1; α = 0, natural mode, exists only there. Under
+`"one-loop-measured-v1"` the value is A > 0. A lookup that names no model asks for `"fixed"` (`ObjectFactories/alpha_value.py:71`),
+so every store and command of before this campaign reads as the fixed law.
+
+**The law's domain.**
+- **Fitted on** the n = 1 wall in stage 2 (27 one-loop and 34 gap points; `fit_law.txt`), and checked on the n = 2 wall: with
+  L = ln(1 + E/V₀) the law is within 0.125 of the n = 2 one-loop points and within 0.10 of the gap points histories can reach
+  (rms 0.05); with L = M/φ_t it is low by about 0.1 (README §8.10, "After closing: the n = 2 wall" in `source/crossover/README.md`).
+- **Not measured:** n ≠ 1, 2. U15 (b) applies the law at every n "for now"; a later measurement revises it through the model's
+  version. The fitted constants and S(L) are themselves measured on this family of walls, so moving L into the model does not make
+  them model-independent (log 02c, "Observations not acted on"; README §8.10).
+- **The gap** (ln R > 0 with no one-loop chain) is a fit to stage-2 points, not a solve of the physics there.
+
+### 8.2 What the law did on the sample
+
+02d's measurement (§2d) replaced 02's and 02b's (§2, §2b, which stand as the record of the old law, A·2.7/ℓ with a gap
+prescription). The sample is 30 histories in six groups, re-tuned at U14's eight A ∈ {0.05, 0.1, 0.5, 1, 1.5, 2, 5, 10}, by the tool
+route (`tools/history_and_bbn.py`): P and W, laboratory M (4 × 10⁻³¹ M_P) in the transition window, β 1.06–1.1875; R, laboratory M
+at β 1.0, 1.15, 2, 10; B, 10⁻³³ and 10⁻³⁰ M_P at β 1.2, 2, 10; L, a ladder at β = 2 from 5 × 10⁻²⁰ to 4 × 10⁻¹⁵ M_P; C, 10⁻¹² M_P
+at β 4.0, 1.0, 1.11 (`measure-02d/out/tasks.txt`).
+
+- **Outcomes** (§2d.4): 240 tasks, **230 succeed, 3 fail, 7 time out.** Every P, W and B history builds at all eight A. R-632
+  (β = 1.0) fails at A = 0.1 and 0.05 ("the effective minimum was not found" after the seed integration); the ladder's
+  5 × 10⁻²⁰ M_P fails at A = 0.05 (the step budget, 2 × 10⁶ accepted steps, at N = 46.07 after 14 115 reflections); C-3873
+  (β = 1.11, 10⁻¹² M_P) times out (3600 s) at seven A after 24–27 tuning integrations and succeeds at A = 1 after 28 in 3324 s.
+- **The law against its own record** (§2d.2): α_eff recomputed by `drain_alpha_effective` equals the record's by `repr` at all
+  616 270 candidates of 464 integrations.
+- **The regime shares** (§2d.5). At laboratory M (P, W, and R but R-632) and in B, at A ≥ 0.1, every drain is one-loop, the
+  one-loop share of K is ≥ 0.990 and the parking leftover holds 10⁻⁹–10⁻² of K. ℓ_min at P and W falls with A: 20.0–27.3 at
+  A = 10, 5.1–15.5 at A = 1, 1.03–2.05 at A = 0.1. In 05's export of the 230 successes the one-loop share is 0.9998 at the
+  median, 0 to 1 over the grid (README §8.15).
+- **Where the cascade reaches the gap and R ≤ 1** (§2d.5). At A = 0.05 ten of the twelve P and W histories enter the gap before
+  parking (5–22 gap candidates each, all drained), with ℓ_min 0.079–0.73 and a small gap share (5.2 × 10⁻⁴ of K for P-2197); none
+  reaches R ≤ 1. R-632 enters the gap at A = 0.5. On the ladder, 8 × 10⁻¹⁸ to 5 × 10⁻¹⁶ M_P enter the gap at every A and
+  5 × 10⁻²⁰ at A ≤ 0.5; 10⁻¹⁶ and 5 × 10⁻¹⁶ reach R ≤ 1 at every A, 8 × 10⁻¹⁸ at A ≤ 0.5 and 5 × 10⁻²⁰ at A = 0.1;
+  4 × 10⁻¹⁵ is classical from its first impact. C is classical throughout, at α_eff = A·R·S(L)·w_gate of 3 × 10⁻⁷ (C-3016,
+  A = 10) down to 2 × 10⁻⁵⁷ (C-3233, A = 0.05) at the first impact.
+- **The law's edges** over the accepted integrations (§2d.5): the clamp (1 + q ln L ≤ 0) never met, the least gap L being 2.578; a
+  gap candidate at ln R ≤ r₀ 24 times; the continuation (classical L > 134) never; S held at S(0.3) at 37 922 classical
+  candidates (classical L down to 1.0 × 10⁻¹¹). The ranges: one-loop L 4.012–128.4, ln R 6.942–190.3, ℓ 0.0790–44.98; gap L
+  2.578–106.0, ln R 0.0947–14.92; classical L 1.007 × 10⁻¹¹–125.6, ln R −239.4 to −0.0354.
+- **The gate and the unassessed** (§2d.5): w_gate < 1 at no one-loop or gap drain; at classical drains of C-3233 (73 at every A)
+  and C-3873 (1048 at A = 1). No candidate is unassessed in any task.
+- **Parking and the first impact** (§2d.6). 221 of the 230 successes park; the 9 that do not are C-3233 at all eight A and C-3873
+  at A = 1. At laboratory M the first impact is one-loop at every A and drains A·f₁, f₁ = 0.0823–0.115 at its ℓ of 22.8–32.3:
+  0.82–0.99 of the kinetic energy at A = 10, 0.082–0.115 at A = 1 and 0.0041–0.0057 at A = 0.05. P and W park at
+  N = 18.9–24.7 (A = 10), 29.0–35.9 (A = 1), 37.7–38.7 (A = 0.1) and 38.4–39.4 (A = 0.05), after 3–6, 5–21, 116–124 and 190–203
+  drains. No drain follows parking. Where the ladder runs a classical tail it parks late, at N = 44.99–47.60 after 8 500–13 300
+  classical drains.
+- **The cap** (§2d.2, §2d.6): A·f ≥ 0.99 at 50 one-loop candidates in 24 accepted integrations and 6 gap candidates in 6, never at
+  a classical one. The first impact caps for R-632 and the 5 × 10⁻²⁰ M_P ladder rung at A = 5 and 10, 8 × 10⁻¹⁸ at A ≥ 2 and
+  10⁻¹⁶ at A ≥ 1.5.
+- **ΔN_eff, Y_p and D/H** (§2d.7; Y_p and D/H as context, never a pass or a failure). P-2197 (β = 1.185), ΔN_eff today: 0.5554
+  (A = 10), 0.06009 (A = 1), 0.01131 (A = 0.1), 0.008558 (A = 0.05). Across P and W: ΔN_eff today 0.029–0.634 at A = 10,
+  0.0056–0.067 at A = 1, 0.0026–0.0128 at A = 0.1 and 0.0025–0.0093 at A = 0.05; ΔN_eff at 1 MeV is A times a constant of each
+  history (P-2197: 0.0526–0.0538 × A), and 0 for P-2188, whose first impact comes after 1 MeV. Y_p 0.2469–0.2550 at A = 10 and
+  0.2552–0.2742 at A = 0.05; D/H (10⁻⁵) 2.47–2.67 at A = 10 and 2.58–2.94 at A = 0.05.
+- **Against the old law** (§2d.8): at laboratory M ΔN_eff today within 0.0085 (P) and 0.011 (W, R), Y_p within 3.8 × 10⁻⁴, D/H
+  within 0.034 × 10⁻⁵; the parking N moves by up to 4.1 e-folds. The ladder near M_crit moves most, where the old `zero`
+  prescription drained nothing in the gap: L-M5e-16's ΔN_eff today is 0.146 against 6.7 × 10⁻⁶ at A = 10 and 5.
+- **Against the fixed law at laboratory M** (§2d.9; the 2026.8.0 store, a measurement on that tree): P-2197's ΔN_eff today at
+  A = 0.05 and 0.1 (0.0086, 0.0113) is near the stored α = 10⁻³ and 10⁻² (0.0064, 0.0123), and at A = 1 (0.0601) near
+  α = 0.08–0.1 (0.0567, 0.0707); it parks 5.7 (A = 0.05) to 26.3 (A = 10) e-folds earlier than at α = 10⁻³ (N = 45.16). At
+  10⁻¹² M_P the stored fixed-law ΔN_eff today (C-3016 0.0079 at α = 0.1, C-3233 0.335 at α = 0.15, C-3873 0.023 at α = 0.03)
+  falls to 7 × 10⁻⁶, 10⁻⁵⁵ and 7 × 10⁻²⁰ under the one-loop law.
+- **The cost** (§2d.10): 40 985 s of task wall for 240 tasks under loads up to 50 on six workers; P, W, R and B 12–70 s a task
+  at A ≥ 0.5; the ladder's classical tails 632–1115 s (L-M5e-20 at A = 0.1: 1 962 144 steps, 1115 s); C-3873's tuning 3324 s at
+  A = 1.
+
+### 8.3 The stored measures (model-free)
+
+Since `FINGERPRINT_FORMAT` 7 (§3). None of them moves a value of the integration (§3.2; the gate Bitwise, §6.4).
+
+- **The bounce rows** (table `ScalarHistoryBounce`; columns `BOUNCE_COLUMNS`, `ObjectFactories/ScalarHistory.py:165`–`:196`; built
+  by `bounce_rows`, `:4713`). **One-loop law only**: the fixed law and α = 0 write none. One row per candidate, and one per turning
+  point of the reflection margin that is not a candidate (`source` `candidate`, `plateau` or `wall`), in the event order of
+  `relativistic_margins`, `ordinal` 0, 1, … (30 columns). Each candidate's row holds the drain (`delta_K_Mp4`, K in M_P⁴;
+  `alpha_eff`; `w_gate`; `nonadiabaticity`; `K_before_Mp4`), the law's inputs and regime (`regime`, `ell`, `L`, `log_R`,
+  `log_E_Mp4`, `log_H_Mp`), the peak estimate (`log_k_ex_Mp`, `log_m_Mp`, `log_q_Mp`) and, for a generation, its `share` of
+  K_final, `weighted` and its three margins with their N. N and N_turn are e-folds; a `log_*_Mp`, `_Mp4` or `_GeV` column is ln of
+  the quantity in that unit; the rest are dimensionless. The history's `bounce_rows` counts them, and `validate` checks the count.
+  bounces.csv exports them cell for cell (04). On 02d's sample: 3 to 13 343 candidates per history, 82 139 in all (§2d.11).
+- **The history's drain record** (columns of `ScalarHistory`, the fields of `DrainHistoryValues`, `:4913`–`:4929`, formed by
+  `drain_history_values`, `:4966`–`:5017`). **One-loop law only**; NULL under the fixed law, at α = 0 and on a failure row. All
+  dimensionless:
+  - `drained_share_{one_loop,gap,classical,unassessed}`: the K drained in each regime over K_final; `parking_share`, the parking
+    leftover's ΔK over K_final (0 if the history did not park). With K₀/K_final they sum to 1 to rounding;
+  - `candidates_<regime>`: the candidates per regime, ΔK = 0 included; `ell_min`, the least ℓ over the one-loop candidates;
+    `log_R_min_drain`, the least ln R over the candidates that drained; `unresolvable_assessments`, `unresolved_declined` (01's
+    two counts);
+  - the all-generation margins (below), and `bounce_rows`.
+- **The all-generation margins** (`all_generation_margins`, `:4932`–`:4963`; P3, P30). For each of the birth, reflection and tracker
+  margins (`MARGIN_KINDS`, `:4059`): the worst value over every generation, its N (the birth margin's N its N_turn) and the failing
+  share, the summed `share` of the generations whose margin is below `MARGIN_THRESHOLD` = ln 10 (`:161`). Columns
+  `all_worst_<kind>_margin`, `all_worst_<kind>_margin_N`, `all_<kind>_failing_share`. One-loop law only.
+  - **How they differ from `inelastic-reflection`'s weighted margins.** The weighted ones (that campaign's prompt 09, stored at
+    every α > 0) run over the generations holding at least `MARGIN_WEIGHT_SHARE` = 10⁻³ of K(N_final) (`:162`) only. In the low-α
+    transition window at laboratory M the others held 80–98% of ρ_χ: on 2188 and 2197 at α = 0.001 the tracker margin over all
+    generations was 7.3 and 1.6 against a stored 68.3 and 69.0, and the reflection margin −17.5 and −20.4 against 17.9 and 17.5,
+    with 0.92 and 0.84 of ρ_χ below zero against a stored failing share of 0 (board §4,
+    `[00-weighted-margins-hide-the-least-relativistic-generations]`, closed by 03). Under the fixed law the record stays the
+    weighted one; the all-generation values and the generations are not stored there (ruling 2 of README §6.3).
+- **The sample masses** (`ScalarHistoryValue.log_m_eff_Mp` and `.log_m_tracker_Mp`, ln(m/M_P), nullable; `MASS_COLUMNS`,
+  `ObjectFactories/ScalarHistory.py:200`–`:203`; `sample_masses`, `:4544`). **Every law and every α**, natural mode included
+  (U5, P31): at each stored sample, the field's own mass m_eff from its stored state and the zero-lag tracker's m_tr; NULL where
+  the model call raises (m_eff² ≤ 0, no tracker minimum). fields.csv exports them (04).
+
+### 8.4 The derived measures
+
+Computed outside the integrator, from 04's exports, by `tools/quanta_measures.py` with the spectrum of
+`ComputeTargets/quanta_spectrum.py` (05). A better spectrum is a re-run of the tool, not a rebuild. Every row of its three outputs
+names the spectrum's version and c_a (log 05 §7).
+
+**The spectrum model `U4-U17-v1`** (`SPECTRUM_MODEL`, `quanta_spectrum.py:103`; U4, U16, U17). One shape for every generation,
+whatever its regime, in x = k/k_ex of the generation's own k_ex:
+
+    s(x) = s_dir(x) + c_a s_assoc(x)
+    s_dir(x) = x²  (x ≤ x_p),          x_p² e^{−κ(x − x_p)}  (x > x_p)                    (:189–:192)
+    s_assoc(x) = 49 x_*³/x  (x ≤ x_p),  49 x_*³/x · e^{−κ(x − x_p)}  (x > x_p)              (:195–:203)
+
+| constant | value | source |
+|---|---|---|
+| x_p (`X_PEAK`, `:108`) | 0.62 | `production_energy_ratio.tex` §"Results" and Table tab:beta: k_peak = 0.31 ω_t, with k_ex = ω_t/2 |
+| κ (`KAPPA`, `:129`) | 3.9657820823215935 | κ_L = ln(\|β\|²_max,L/10⁻²⁰)/(10 − x_p) at the Table's median row L = 90 (\|β\|²_max = 1.43 × 10⁻⁴), from the same section's "about 10⁻²⁰ at k = 5 ω_t"; the five rows give 3.8821–4.1334, a spread of 6.4% (§5.2) |
+| x_* (`X_STAR`, `:135`) | 0.0058 | `kb_partB_report.tex` §"The soft occupation": q̂ = 0.0029 ω_t |
+| 49 (`ASSOC_COEFFICIENT`, `:137`) | 50 − 1 | the same: there n_q is fifty times the test field's \|β_q\|², so s(x_*) = 50 s_dir(x_*) at c_a = 1 |
+| c_a | 1 by default (`DEFAULT_ASSOC_SCALE`, `:144`); 0 and 10 measured | U16 ("Keep the associated piece as the default"); P46 |
+| the 1/x piece's end | 1/x to x_p, then e^{−κ(x − x_p)} | U17, the user's ruling of 2026-11-06; it carries 2.95 × 10⁻⁵ of I at c_a = 1 |
+
+The moments M_k = ∫x^k s dx are in closed form; I = M_3 and J = M_2/M_3 (`:305`–`:306`): I = 0.09300715800293864 and
+J = 1.0560436029665003 at c_a = 1 (§5.2). The kernels are G(y) = ∫x³ s [√(1 + y²/x²) − 1] dx / I, the matter-like excess of a
+generation at y = m/q, and Ω(u) = ∫x³ s(x) s(x e^{−u}) dx / I, the overlap of two generations an e-fold distance u apart; each is
+tabulated once per c_a and continued by closed-form asymptotes (§5.3; `numerical-strategies.md` §3.5's note of 2026-11-06).
+
+**The measures**, as `tools/quanta_measures.py` computes them (a *generation* g is a candidate row with ΔK_g > 0 and a `log_q`,
+born at N_turn,g with momentum Q_g = e^{log_q}; `Generations`, `:406`–`:428`):
+
+| measure | formula | code |
+|---|---|---|
+| n_g, the occupation at birth at the direct peak | ln n_g = ln(2π² ΔK_g/(Q_g⁴ I)) + ln s(x_p), with s(x_p) = x_p² + c_a 49 x_*³/x_p | `:606`–`:613`; `quanta_spectrum.py:310` |
+| n̄_j, the occupation already in generation j's band | n̄_j = Σ_{g: N_turn,g < N_turn,j} A_g Ω(ln Q_g − ln Q_j), A_g = 2π² ΔK_g/(Q_g⁴ I), untruncated | `occupation_overlaps`, `:451`–`:463` |
+| δ_stim | δ_stim = Σ_j 2 n̄_j ΔK_j / K_final | `:644` |
+| E(N), the matter-like excess | E(N) = Σ_{g: N_turn,g ≤ N} ΔK_g G(m e^N/Q_g) / K(N), with m the field's mass (`E_field`) or the tracker's (`E_tracker`), each from fields.csv; r_χ E beside it | `matter_excess`, `:431`–`:448` |
+| the phase slip | over consecutive assessed candidates a, x, b: \|θ(x, b) − θ(a, x)\|, θ(p, q) = e^{ln Q_x − (N_p + N_q)/2 − ln H_p} (N_q − N_p), ln Q_x = ln k_ex,x + N_x; interior candidates only | `phase_slips`, `:466`–`:486` |
+| k_ex/H | e^{ln k_ex − ln H_E}, both before the candidate | `:474` |
+| the backreaction ratio | at each candidate k with a mass and an energy: n_χa³ e^{−3N_turn,k} m_k/E_k, n_χa³ = Σ_{g: N_turn,g < N_turn,k} ΔK_g J/Q_g | `backreaction_ratios`, `:489`–`:506` |
+
+K(N) is rebuilt from the bounce rows (the parking leftover included) and checked at every sample against r_χ ρ_R,E e^{4N} to
+10⁻⁹ relative (`K_check`, `:369`; `K_CHECK_TOLERANCE`, `:108`).
+
+**The assumptions.** The spectrum is U4's shape at every generation. δ_stim is first order in the occupations, with random phases
+between generations; rescattering is bounded by it (about 2n) and is not computed separately (README §8.3). E and the backreaction
+ratio use the stored masses at the sample or at the candidate. The parking leftover enters K but has no spectrum, so it enters
+neither E's numerator nor any occupation (P43).
+
+**What was checked against what** (§5.3–§5.5). The kernels and moments against scipy's adaptive quadrature: G within 8.1 × 10⁻¹²
+inside its table and 5.6 × 10⁻¹¹ beyond, Ω within 2.25 × 10⁻⁹ inside and 8.4 × 10⁻¹⁵ beyond, the moments within 4.4 × 10⁻¹⁶,
+every asymptote within 10⁻⁷ at its end, at c_a = 1, 0 and 10. Every measure against a direct quadrature in q over the full spectrum
+on constructed generations, to 10⁻⁶ (16 tests). With the spectrum collapsed to its peak, E on P-2197 at A = 1 against the
+scoping probe's `excess` within 2.5ε relative at all 3 081 compared samples, and K(N) equal to the payload's ledger bit for bit.
+
+### 8.5 What they say on the sample
+
+At c_a = 1 on 02d's 230 successes (§5.7; `derive-05/out/report.txt`), unless stated:
+- **δ_stim**: 2.2 × 10⁻⁷⁵ (B-2772-A10) to 1.34 × 10⁻³ (L-M1e-16-A0.5), median 3.5 × 10⁻¹⁷. The largest by group: 4.8 × 10⁻⁵ (P),
+  9.0 × 10⁻⁵ (W), 1.8 × 10⁻⁶ (R), 6.2 × 10⁻¹¹ (B), 1.3 × 10⁻³ (L), 8.0 × 10⁻⁴ (C). Its median falls with A, from 1.0 × 10⁻⁵ at
+  A = 0.05 to 2.6 × 10⁻⁵³ at A = 10, while its largest stays between 1.6 × 10⁻⁴ and 1.3 × 10⁻³.
+- **n̄_max**: below 0.01 in every P, W, B and R history; above 1 in 33, all on the L ladder (5 × 10⁻²⁰ to 4 × 10⁻¹⁵ M_P, β = 2) and in
+  group C (10⁻¹² M_P), up to 9.0 × 10³¹ (L-M5e-20-A0.1). ln n_g max likewise, up to 98.
+- **E**: E_field max at most 5.4 × 10⁻²⁰, E_tracker max at most 7.2 × 10⁻¹⁶; r_χ E at most 1.9 × 10⁻²¹ (field) and 7.4 × 10⁻²¹
+  (tracker). The one-loop generations stay relativistic.
+- **The phase slip** at producing bounces: at least 7.8 × 10²¹ rad in every P, W, B and R history (median 6 × 10²²–3 × 10²⁸ by A);
+  below 1 rad in 15 histories, on the ladder (5 × 10⁻²⁰ to 5 × 10⁻¹⁶ M_P) and in C at β = 1.0 and 1.11; the least 5.1 × 10⁻¹⁰ rad
+  (C-3873-A1).
+- **The backreaction ratio**: median 10⁻⁹–6 × 10⁻² by A; the largest 1.8 × 10³ (on the ladder: A = 2, 8 × 10⁻¹⁸ M_P, β = 2, log 07
+  §6); by group P ≤ 244, W ≤ 258, R ≤ 918, B ≤ 0.10, C ≤ 2.8 × 10⁻⁷.
+- **The all-generation margins** in 05's export: worst birth −26 to +41, reflection −15 to +42, tracker −36 to +43 (README §8.15);
+  mostly positive over the grid and negative at a few cells (log 07 §6). ℓ_min is 0.079 to 41 where there is a one-loop drain, and
+  blank in 33 of the 230 (README §8.15).
+- **c_a**: only δ_stim and n̄ move. At c_a = 0 the ratio to c_a = 1 is 1 at the median and down to 5.6 × 10⁻⁸ (δ_stim) and
+  3.5 × 10⁻¹⁶ (n̄_max) at the least; at c_a = 10 it is 1 at the median and at most 10 (both). n_g, E, r_χ E, the slip and the
+  backreaction move by less than the third significant figure (§5.7).
+- **Where the extremes sit.** The four histories drawn whole by 07 hold them (§7.4; log 07 §6): A = 0.1, β = 2, 5 × 10⁻²⁰ M_P
+  (13 342 generations, n̄_max 9.0 × 10³¹, 6 302 of its slips below 1 rad, in its long classical tail); A = 5, β = 2, 5 × 10⁻¹⁶ M_P
+  (gap share 0.99998); A = 10, β = 1, 10⁻¹² M_P (classical share 1.0000000000000007, above 1 by rounding); A = 2, β = 2,
+  8 × 10⁻¹⁸ M_P (backreaction 1 785).
+
+These are measurements, not bounds (P49): no threshold refuses or warns on any of them.
+
+### 8.6 Where the reading does not hold, and what is not modelled
+
+- **The random-phase premise of δ_stim** does not hold in 33 histories, where n̄ > 1 (the L ladder and group C, above), and in 15
+  of them the phase slip at a producing bounce falls below 1 rad (§5.7; log 05 §6). The large overlaps sit at bounces that drain
+  almost nothing: L-M5e-20-A0.1, whose n̄_max is 9.0 × 10³¹, has δ_stim 4.2 × 10⁻⁹. There the first-order, random-phase number is
+  not a measure of stimulated emission, and nothing else here is. At laboratory M and in B (n̄ < 0.01, slips ≥ 7.8 × 10²¹ rad) the
+  premise holds. Open issue: `[00-later-bounces-act-on-quanta-already-present]` (left open, as the user ruled).
+- **The backreaction ratio above 1**, in P (≤ 244), W (≤ 258), R (≤ 918) and L (≤ 1.8 × 10³), not in B or C (§5.7): the produced
+  quanta's rest energy at the mass of a later bounce exceeds that bounce's impact energy. The integration does not include
+  n_χ m(φ). No open issue; out of scope (README §8.1, the user's ruling of source §7).
+- **The parking leftover** has no spectrum: it enters K, not E or any occupation. Its share is stored (`parking_share`) and is
+  0 to 0.99999 over the 230, 7 × 10⁻⁵ at the median (README §8.15), largest where the drains are classical (4 × 10⁻¹⁵ M_P,
+  ≥ 0.968; C-3016-A0.05, 0.999993; §2d.5, §5.6). Open issue: `[00-the-parking-leftover-has-no-spectrum]`.
+- **The fixed law has no instrumentation**: no bounce row, a NULL drain record, the weighted margins only (README §8.1, the user's
+  ruling 2: "limited meaning there"). The sample masses are stored at every law. No issue.
+- **Not modelled** (README §8.1, out of scope): stimulated emission and rescattering (`[00-later-bounces-act-on-quanta-already-present]`);
+  the backreaction n_χ m(φ) (no issue); production at R < 1 in the 1/φ tail (no issue; the classical regime drains R·S(L) of the
+  wall); the gap's physics, bracketed by a fit (no issue); parking at physical M, and the parking leftover's spectrum
+  (`[00-the-parking-leftover-has-no-spectrum]`). The small-A tunings that do not park before today are
+  `[02-one-loop-tunings-fail-at-small-A-in-the-transition-window]`.
+
+## 9. Prompt 08 — the close (2026-11-07)
+
+**Tree:** branch `one-loop-drain` at `d0d8918` (orchestrator note 08's commit, on `e951b8e`, which adds the prompt); no code
+changed, so the tree that ran every check below is the tree this commit leaves. §1–§8 above are §8's only addition. **Scripts:**
+[`one-loop-drain/close-08/`](one-loop-drain/close-08/): `run_inventories.sh` (§9.3) and `check_help.py` (§9.4). **Committed
+outputs:** [`one-loop-drain/close-08/out/`](one-loop-drain/close-08/out/): `inventory-reference.txt`, `inventory-basecopy.txt`
+(the session scratchpad's directory written `<scratch>`), `check_help.txt` and each command's `help-<name>.txt`. Orchestrator note
+08's rulings 1–11 governed. No Ray was started, no store was built, and no build, plot script, derivation tool, figure tool or
+registered run was run. Log: [`08-close.md`](../prompts/one-loop-drain/logs/08-close.md).
+
+### 9.1 The Gate
+
+Re-checked at 20:38 GMT: `one-loop-drain` at `d0d8918`, `git status --porcelain --untracked-files=all` empty, the main checkout the
+only worktree; `tools/ray_cluster.sh status` exit 0 (the lock free, no Ray process of the cluster, ports 6380, 6381, 8267 and
+52367 free); `runregistrykit list` 33 runs, all finished; `one-loop-drain-06-reference`, `-base` and `-resumed` 18 files each;
+`.documents/OPEN_ISSUES.md` 29 open, §1.23 the board's three, none assigned (board §3.1); `git merge-base --is-ancestor main
+one-loop-drain` exit 0.
+
+### 9.2 The suites
+
+Once, serially, before any edit, with `CLAUDE.md`'s commands (`unittest`'s time; the one-minute load at the start; the
+`test_[g-z]` half and `tools/tests` in the background):
+
+| suite | count | time | load at start |
+|---|---|---|---|
+| CosmologyModels | 26 OK | 66.8 s | 3.51 (20:38) |
+| ComputeTargets `test_[a-f]` | 219 OK | 148.1 s | 5.21 (20:39) |
+| ComputeTargets `test_[g-z]` | 446 OK | 491.1 s | 5.02 (20:42) |
+| ObjectFactories | 163 OK | 125.9 s | 5.08 (20:50) |
+| tools | 259 OK | 266.5 s | 2.30 (20:52) |
+| RunDrivers | 72 OK | 25.0 s | 15.47 (20:57) |
+
+07's counts exactly (26, 665 = 219 + 446, 163, 259, 72); none failed. No `.py` file outside `close-08/` changed afterwards.
+
+### 9.3 The inventories (§2 item 4; ruling 3)
+
+- **`one-loop-drain-06-reference`, in place:** `main.py --config exponential.yaml --database
+  var/datastores/one-loop-drain-06-reference.db --shards 16 --inventory`, exit 0 in 25.3 s, no Ray: "read-only; 16 shards",
+  75,121 records in 16 classes, `problems: none`, label 2026.10.0; `alpha_value` 6 records (0, 0.01, 0.1, 0.15, A = 0.1 and A = 1
+  under `one-loop-measured-v1`); `ScalarHistory` 26 (26 validated); `BBNData` 26. `shasum -a 256` of its 18 files before and after:
+  identical (the primary `848435c3…51e8`, the manifest `1f7f59bb…f7ee`).
+- **A copy of `one-loop-drain-06-base`** (2026.9.0, format 6): its 18 files copied by `cp -p` into `<scratch>/basecopy/`, the
+  copy's 18 hashes equal to the originals' before anything ran. `main.py --inventory` on the copy: **exit 1 in 1.6 s**, `!!
+  --inventory: Cannot read sharded datastore …: shard #0 … differs from the tables this code declares (it lacks the table(s)
+  "ScalarHistoryBounce"; its table "alpha_value" lacks the column(s) "drain_model"; its table "ScalarHistory" lacks the column(s)
+  [the 23 of the drain record]; its table "ScalarHistoryValue" lacks the column(s) "log_m_eff_Mp", "log_m_tracker_Mp"), so nothing
+  was read`. The copy's 18 hashes after: identical (the primary `64516736…1f87`, the manifest `4d1b3bbb…679f`), and the directory
+  holds the same 18 files. The tip refuses a format-6 store and writes nothing to it. Both results are the orchestrator's (note 08
+  §0) exactly.
+
+### 9.4 The `--help` check (§2 item 3; ruling 4)
+
+`check_help.py`, run after §4.20's text was final ([`out/check_help.txt`](one-loop-drain/close-08/out/check_help.txt)): ten
+commands with `--help`, each exit 0 (`main.py`, `plot_by_beta.py`, `plot_ScalarHistory.py`, `RunDrivers/registered_run.py`,
+`tools/quanta_measures.py`, `tools/plot_quanta_grid.py`, `tools/plot_quanta_history.py`, `tools/bbn_from_store.py`,
+`tools/history_and_bbn.py`, `runregistrykit list`); the 30 options §4.20 names, each found in its own command's help as §4.20
+spells it (63 checks), `--stale-after` in `runregistrykit list`'s; and §4.20's one git command, `git merge-base --is-ancestor main
+one-loop-drain`, run as written, exit 0. 0 failures. A first run counted `--is-ancestor` as an option of no command, and the
+script was given its git command (log 08 §2).
+
+### 9.5 The twenty numbers (§2 item 5)
+
+Ten of §8 and ten of §4.20, each found at its cited source (the lines are of `d0d8918`'s files, or of this commit's for
+`close-08/out/`); none differs.
+
+| # | number, as written | where written | source line |
+|---|---|---|---|
+| 1 | α_eff equal at 616 270 candidates | §8.2 | this document `:1099` (§2d.2) |
+| 2 | ℓ_min 1.03–2.05 at A = 0.1 (P, W) | §8.2 | `:1168` (§2d.5) |
+| 3 | S held at 37 922 classical candidates | §8.2 | `:1183` (§2d.5) |
+| 4 | f₁ = 0.0823–0.115 at ℓ 22.8–32.3 | §8.2 | `:1195` (§2d.6) |
+| 5 | P-2197 ΔN_eff today 0.06009 at A = 1 | §8.2 | `:1215` (§2d.7) |
+| 6 | one-loop fit within 0.074 of 27 points | §8.1 | `source/crossover/out/fit_law.txt:30` |
+| 7 | κ = 3.9657820823215935 | §8.4 | `:1663` (§5.2) |
+| 8 | I = 0.09300715800293864 at c_a = 1 | §8.4 | `:1674` (§5.2) |
+| 9 | δ_stim median 3.5 × 10⁻¹⁷ | §8.5 | `:1772` (§5.7) |
+| 10 | least producing phase slip 5.1 × 10⁻¹⁰ rad (C-3873-A1) | §8.5, §8.6 | `:1782` (§5.7) |
+| 11 | 2 524 629 values equal (Bitwise) | §4.20 point 1 | `:1947` (§6.4) |
+| 12 | C-3873 at A = 1: 28 integrations, 3324 s | §4.20 point 3 | `measure-02d/out/cost.txt:243` |
+| 13 | L-M5e-20 at A = 0.1: 1 962 144 steps, 1115 s | §4.20 point 3 | `:1270` (§2d.10) |
+| 14 | `--tuning-max-integrations` default 30 | §4.20 point 3 | `ComputeTargets/ScalarHistory.py:5453` |
+| 15 | step budget 2 000 000 accepted steps | §4.20 point 3 | `ComputeTargets/ScalarHistory.py:380` |
+| 16 | longest heartbeat silence 160 s | §4.20 point 3 | `:1902` (§6.2) |
+| 17 | 44.6 → 39.3 GB free | §4.20 point 3 | `:1899` (§6.2) |
+| 18 | reference store 137 352 KiB, `store_id` `2b6fd51c…` | §4.20 point 5 | `prompts/one-loop-drain/logs/06-rehearse.md:236` |
+| 19 | 75,121 records, 25.3 s | §4.20 points 1, 5 | `close-08/out/inventory-reference.txt:28`, `:153` |
+| 20 | block C, 836.6 s per (M, β) over the eight A (the medians 112.3, 112.4, 112.3, 110.3, 94.2, 110.3, 92.4, 92.4) | §4.20 point 3 | `measure-02d/out/cost.txt:289`–`:296` ("C A=…") |
+
+### 9.6 The rest of §2
+
+- **§2 item 2**, the lines addressed to 08: the table is log 08 §3; each is done or named as left, with why.
+- **§2 item 6**, the board and the index agree: `.documents/OPEN_ISSUES.md` counts 29 rows in its §1 and says 29; its §1.23
+  holds exactly the board's three §3 entries, none assigned (board §3.1 "None"); `prompts/INDEX.md`'s row says "§1.23; 3 open; 29
+  open in the whole index", and its header 17 campaigns, all complete, as its 17 rows say.
+- **§2 item 7**, `git diff --stat d0d8918` before the commit: the files of prompt §4 only (log 08 §4); no Python file changed but
+  `close-08/check_help.py`, which `black` formats. No existing line of this document, `numerical-strategies.md`,
+  `architecture-summary.md` or `review-remediation-verification.md` is deleted (`git diff --numstat`: 0 deleted lines in each).
