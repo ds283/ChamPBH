@@ -1624,9 +1624,15 @@ with ShardedPool(
         print(str(e), file=sys.stderr)
         sys.exit(2)
 
-    print(
-        f"@@ plot_ScalarHistory: alpha values {', '.join(f'{a.value:.5g}' for a in alpha_rows if a.drain_model == DRAIN_MODEL_FIXED)}"
-    )
+    # under --no-alpha-values the parser has emptied --alpha-values (no-alpha-values, 2026-11-07)
+    if alpha_values:
+        print(
+            f"@@ plot_ScalarHistory: alpha values {', '.join(f'{a.value:.5g}' for a in alpha_rows if a.drain_model == DRAIN_MODEL_FIXED)}"
+        )
+    else:
+        print(
+            "@@ plot_ScalarHistory: no alpha values (--no-alpha-values): no fixed-law row is read"
+        )
     if A_values:
         print(
             f"@@ plot_ScalarHistory: A values {', '.join(f'{a.value:.5g}' for a in alpha_rows if a.drain_model == DRAIN_MODEL_ONE_LOOP)} ({DRAIN_MODEL_ONE_LOOP})"

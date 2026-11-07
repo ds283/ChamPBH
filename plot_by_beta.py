@@ -1152,9 +1152,15 @@ with ShardedPool(
             f"Yp={SM_baseline['Yp_BBN']:.6g}, D/H x1e5={SM_baseline['DOverH']:.6g}, 3He/H x1e5={SM_baseline['He3OverH']:.6g}, 7Li/H x1e10={SM_baseline['Li7OverH']:.6g}"
         )
 
-    print(
-        f"@@ plot_by_beta: alpha values {', '.join(f'{a.value:.5g}' for a in alpha_rows if a.drain_model == DRAIN_MODEL_FIXED)}"
-    )
+    # under --no-alpha-values the parser has emptied --alpha-values (no-alpha-values, 2026-11-07)
+    if alpha_values:
+        print(
+            f"@@ plot_by_beta: alpha values {', '.join(f'{a.value:.5g}' for a in alpha_rows if a.drain_model == DRAIN_MODEL_FIXED)}"
+        )
+    else:
+        print(
+            "@@ plot_by_beta: no alpha values (--no-alpha-values): no fixed-law row is read"
+        )
     if A_values:
         print(
             f"@@ plot_by_beta: A values {', '.join(f'{a.value:.5g}' for a in alpha_rows if a.drain_model == DRAIN_MODEL_ONE_LOOP)} ({DRAIN_MODEL_ONE_LOOP})"

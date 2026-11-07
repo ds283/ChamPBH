@@ -86,6 +86,73 @@ class RemovedOption(argparse.Action):
         )
 
 
+# set on the namespace by AlphaValues when --alpha-values is given, and removed again by
+# DriverArgumentParser once it has been read
+_ALPHA_VALUES_GIVEN = "_alpha_values_given"
+
+
+class AlphaValues(argparse._StoreAction):
+    """
+    --alpha-values: argparse's own store, which also records that the option was given, on the
+    command line or in a --config file, which its default [0.0] alone cannot tell; so that
+    --no-alpha-values can refuse it (no-alpha-values, 2026-11-07). It is a subclass of
+    ``argparse._StoreAction`` because configargparse expands a YAML list into the option's values
+    only for that class.
+    """
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        super().__call__(parser, namespace, values, option_string)
+        setattr(namespace, _ALPHA_VALUES_GIVEN, True)
+
+
+NO_ALPHA_WITH_ALPHA = (
+    "--no-alpha-values refuses --alpha-values: the first asks for no fixed-law row, the second "
+    "names some. Give one or the other"
+)
+NO_ALPHA_WITHOUT_A = (
+    "--no-alpha-values needs --A-values: with no fixed-law row and no one-loop row there is "
+    "nothing to build or read"
+)
+
+
+def drain_rows_problem(namespace) -> Optional[str]:
+    """
+    None if the parsed drain-law options name at least one row, and otherwise the message that
+    refuses them (no-alpha-values, 2026-11-07). Only --no-alpha-values can leave a run without a
+    row, since --alpha-values takes one value or more and has the default [0.0]: it is refused
+    together with --alpha-values, and without --A-values.
+    """
+    if not getattr(namespace, "no_alpha_values", False):
+        return None
+    if getattr(namespace, _ALPHA_VALUES_GIVEN, False):
+        return NO_ALPHA_WITH_ALPHA
+    if not getattr(namespace, "A_values", None):
+        return NO_ALPHA_WITHOUT_A
+    return None
+
+
+class DriverArgumentParser(configargparse.ArgumentParser):
+    """
+    The drivers' parser. After configargparse's parse it checks the drain-law options with
+    `drain_rows_problem`, calling ``self.error`` on a refusal (exit 2, before any Ray; a parser
+    whose ``error`` is replaced, RunDrivers/registered_run.py's, refuses with the same message), and
+    under --no-alpha-values sets ``alpha_values`` to the empty list. Every reader of
+    ``alpha_values`` then sees the fixed-law rows the run has, none under the flag, and a command
+    without the flag parses as it did (no-alpha-values, 2026-11-07).
+    """
+
+    def parse_known_args(self, *args, **kwargs):
+        namespace, unknown = super().parse_known_args(*args, **kwargs)
+        problem = drain_rows_problem(namespace)
+        if problem is not None:
+            self.error(problem)
+        if hasattr(namespace, _ALPHA_VALUES_GIVEN):
+            delattr(namespace, _ALPHA_VALUES_GIVEN)
+        if getattr(namespace, "no_alpha_values", False):
+            namespace.alpha_values = []
+        return namespace, unknown
+
+
 def non_negative_float(text: str) -> float:
     """An argparse type: a float that is not negative (science-readiness prompt 01)."""
     value = float(text)
@@ -167,7 +234,7 @@ def anchored_log10_one_plus_z_low(text: str) -> float:
 
 
 def create_argument_parser() -> configargparse.ArgumentParser:
-    parser = configargparse.ArgumentParser(
+    parser = DriverArgumentParser(
         config_file_parser_class=configargparse.YAMLConfigFileParser
     )
 
@@ -240,10 +307,20 @@ def create_argument_parser() -> configargparse.ArgumentParser:
         type=alpha_fraction,
         nargs="+",
         default=[0.0],
+        action=AlphaValues,
         help="one or more values of the drained fraction alpha, 0 <= alpha < 1: the fraction of the "
         "condensate's kinetic energy that dissipation mode drains at each candidate. It is a key of "
         "every stored history; 0 is natural mode (the default %(default)s), and a given list "
-        "replaces the default (inelastic-reflection prompt 10)",
+        "replaces the default (inelastic-reflection prompt 10). --no-alpha-values gives no alpha",
+    )
+    parser.add_argument(
+        "--no-alpha-values",
+        action="store_true",
+        default=False,
+        help="build, or read, no fixed-law row: no alpha, not even the default alpha = 0 (natural "
+        "mode), so that the run builds, or plots, its --A-values rows alone. It needs --A-values and "
+        "refuses --alpha-values (exit 2, before any Ray). No stored value changes: a fixed-law row "
+        "already in the store is left as it is, and is not read (no-alpha-values, 2026-11-07)",
     )
     parser.add_argument(
         "--A-values",
@@ -255,7 +332,7 @@ def create_argument_parser() -> configargparse.ArgumentParser:
         "--alpha-values rows, which are looked up first and are unchanged. A is a key of every stored "
         "history, as alpha is. The default is none, so a run without it is the fixed-law run; --alpha-values "
         "keeps its default, so a run given only --A-values also builds, or reads, alpha = 0, natural mode "
-        "(one-loop-drain prompt 04)",
+        "(one-loop-drain prompt 04), unless --no-alpha-values is given",
     )
     parser.add_argument(
         "--tuning-max-integrations",

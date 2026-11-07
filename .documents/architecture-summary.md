@@ -2448,3 +2448,20 @@ work_pool.run()
 >   (`PRyM/PRyM_init.py`, from `os.getcwd()`) and `CosmologyModels/GenericEOS/Xav_EOS_data.csv`, are then the cluster's start
 >   directory's, not the driver's tree's. At `1561b60` and the tip those files are identical, so 06's base build was not affected.
 > - The drain model has no default in the path and label helpers: 04's note above says so.
+
+> **Note, 2026-11-07 (`--no-alpha-values`, a standalone change): a run of one-loop rows alone.** Prompt 04's note above says
+> that a run given only `--A-values` also builds, or reads, α = 0; that is still so without the new flag.
+> - **The flag.** `--no-alpha-values` (`config/argument_parser.py`, `store_true`) asks for no fixed-law row, not even the
+>   default α = 0, so that `main.py` builds, and the plot scripts read, the `--A-values` rows alone. The shared parser is
+>   `DriverArgumentParser`, a subclass of `configargparse.ArgumentParser` whose `parse_known_args` checks the drain-law
+>   options (`drain_rows_problem`) and calls `self.error` on a refusal: the flag without `--A-values`, and the flag beside
+>   `--alpha-values` (on the command line or in a `--config` file, the default's own value 0 included; the action
+>   `AlphaValues` records that the option was given), each exit 2 before any Ray, and the wrapper, whose parser's `error`
+>   raises a `Refusal`, refuses them with the same message before it registers anything. `main.py --inventory` is under
+>   the same rule and otherwise ignores the rows. Under the flag the parser sets `alpha_values` to `[]`, so the drivers'
+>   `distinct_values(args.alpha_values)` holds no fixed row and their loops run over the one-loop rows alone;
+>   `plot_inputs.parameters` looks up the A rows alone. Without the flag every command parses as it did.
+> - **What it does not change.** No stored value, key or column: `VERSION_LABEL` and `FINGERPRINT_FORMAT` are as they were.
+>   A fixed-law row already in a store is left as it is and is not read. The wrapper's scope reads `α none` before the A
+>   part (`RunDrivers/registered_run.py`, `describe_scope`). The tests are `tools/tests/test_no_alpha_values.py` and
+>   `RunDrivers/tests/test_no_alpha_values.py`.

@@ -137,6 +137,9 @@ def parameters(
     the lookup, as before) followed by the A rows. An A with no row under that model is `PlotOptionNotStored`
     naming `--A-values`, the value and the model, even when the same value is stored under `fixed`; an alpha
     with no `fixed` row is refused as before, even when the value is stored under the one-loop model.
+
+    Under `--no-alpha-values` the parser has emptied `--alpha-values`, so `alpha_values` is empty and `alphas`
+    is the A rows alone; no fixed row is looked up (no-alpha-values, 2026-11-07).
     """
     lookups = [
         (
