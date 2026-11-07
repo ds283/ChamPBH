@@ -65,7 +65,7 @@ The plan as first ruled had seven prompts (README §2), none written; the re-pla
 | 03 | [The store](03-the-store.md) | the drain-model key on `alpha_value` (U8, README §8.10 decision 1, P27), `ScalarHistoryBounce` under the one-loop law (P29), the history columns (regime shares, counts, ℓ_min, the all-generation margins; P30), the sample masses at every law (U5, P31), the guard (P28), `FINGERPRINT_FORMAT` 7, `VERSION_LABEL` 2026.10.0; closes two §3 issues | Opus | ✅ | ✅ | `fe4c917` | [03](logs/03-the-store.md) |
 | 04 | [Drivers and exports](04-drivers-and-exports.md) | `--A-values` in `main.py` and the plot scripts, beside `--alpha-values` (P33, P34); the one-loop paths and labels (P35); `drain_model` and the drain record in `histories.csv` (P36), the sample masses in `fields.csv` (P37), a new `bounces.csv` (P38); the raw-SQL readers of `alpha_value` and the inventory report's label (P39); the registered run's scope (P40) | Sonnet | ✅ | ✅ | `64a6274` | [04](logs/04-drivers-and-exports.md) |
 | 05 | [Derivation tool](05-derivation-tool.md) | `ComputeTargets/quanta_spectrum.py` (U4's shape, its moments and the kernels G and Ω; P41) and `tools/quanta_measures.py` reading 04's exports alone (P42): K(N) rebuilt from the bounce rows (P43); n_g, n̄_j, δ_stim, E(N), the phase slip and the backreaction ratio (P44); three outputs for 07 (P45); the associated piece at 0, 1 and 10 (P46); run on 02d's 230 successes (P47); the Derive gate (P48); the R·S(L) bound dropped (README §8.13) | Opus | ✅ | ✅ | `9830738` | [05](logs/05-derivation-tool.md) |
-| 06 | [Rehearse](06-rehearse.md) | registered builds under Ray (P50–P57): the fixed law at the base `1561b60` against the tip, bitwise, with the workers' code probed; the one-loop law interrupted and resumed, against the straight build and 02d's tool route; the readers, `--A-values` and the derivation tool on the exports | Opus | ✅ | ✅ | this commit | [06](logs/06-rehearse.md) |
+| 06 | [Rehearse](06-rehearse.md) | registered builds under Ray (P50–P57): the fixed law at the base `1561b60` against the tip, bitwise, with the workers' code probed; the one-loop law interrupted and resumed, against the straight build and 02d's tool route; the readers, `--A-values` and the derivation tool on the exports | Opus | ✅ | ✅ | `1416b80` | [06](logs/06-rehearse.md) |
 | 07 | Figure tools | the grid figure and the per-history figure | Sonnet | ⬜ | ⬜ | | |
 | 08 | Close | the verification document, the law and measures for the paper, the handover for the rebuild, the indexes | Opus | ⬜ | ⬜ | | |
 
@@ -82,6 +82,7 @@ Orchestrator notes, one prompt at a time, in `orchestrator/`:
 - [`prompt-03.md`](orchestrator/prompt-03.md) (`d3069cb`) — used for 03.
 - [`prompt-04.md`](orchestrator/prompt-04.md) (`8df05c1`) — used for 04.
 - [`prompt-05.md`](orchestrator/prompt-05.md) (`88c6ae5`) — used for 05.
+- [`prompt-06.md`](orchestrator/prompt-06.md) (`41d18c4`) — used for 06.
 
 **Orchestrator review of prompt 01 (2026-11-03)**, by orchestrator note 01 §3, on `b99f6a4`. Passed; seven
 checks:
@@ -574,6 +575,88 @@ Noted, not acted on:
   takes its 0.5 x² branch.
 - **The random-phase reading fails where n̄ > 1** (33 histories) and where the slip is below 1 rad (15; log §6). These
   are measurements (P49), recorded in the issue's narrowing, for 08 to document.
+
+**Orchestrator review of prompt 06 (2026-11-07)**, by orchestrator note 06 §3, on `1416b80`. Passed; seven checks.
+Before dispatch the orchestrator ruled in note 06 (§0, rulings 1–9): the probe's environment and the workers' working
+directory; the candidates matched by `candidate_index` through `to_column`, not by ordinal or `repr`; the values to their
+digits; R7's small network; the commands in full; the worktree; the interrupt delay. No stop condition was raised.
+
+1. **Scope.**
+   - `git show --stat 1416b80` lists 114 files, all of prompt §7's: the verification document, `rehearse-06/` (eleven
+     scripts and 100 small text files in `out/`, 1.3 MB, no PDF or PNG), the log and the board. Its parent is `41d18c4`,
+     the note's.
+   - The tree was clean, nothing is pushed, and `git worktree list` shows the main checkout only. No code, test,
+     `CLAUDE.md`, `.gitignore` or `PRyM/` changed, and nothing under `var/` is tracked. Only the board has lines
+     removed: five, each replaced (the status, the history line, row 06 and the two gate rows).
+2. **The suites, re-run by me** serially, ending 10:07, at loads of 129 to 20 at their starts from other
+   work: 26 (78 s), 665 (219 in 208 s + 446 in 663 s), 163 (210 s), 191 (323 s) and 72 (33 s), all passing. These are the
+   counts the log states, and none fell.
+3. **The cluster, the registry and the code.**
+   - `tools/ray_cluster.sh status` and the lock's `status`: free, no process, the four ports free.
+   - `runregistrykit list`: the ten runs of this prompt, nine `done` and `resumed-a` `killed`; nothing `running` or stale.
+   - My own `shasum -a 256` of `git show 1561b60:main.py` is `92117838…acc0` and of the tip's `2b8956ff…c0e9`; the three
+     base manifests record `git_head` `1561b60` and the first, the seven others `41d18c4` and the second, the base's with
+     the worktree as `cwd`.
+   - The three probe outputs as committed: driver, task and actor import `ComputeTargets/ScalarHistory.py` and
+     `ObjectFactories/__init__.py` from the worktree at 2026.9.0 before the base build, and from the main checkout at
+     2026.10.0 before and after it.
+   - The sidecars hold no format field of their own (log §2, ruling 1); the formats are the fingerprints', 6 for the
+     base (taken by the base's code from the worktree) and 7 for the reference and resumed stores, which I re-took.
+4. **Bitwise, independently.** A read-only script of mine (`sqlite3` `mode=ro`, sixteen shards each, the key tables from
+   shard 0) matched the base's 17 histories to the reference's 17 under `fixed` by (M, n, β, φ*, α) through `float.hex`,
+   and their samples by ln(1 + z): 101 335.
+   - Every shared column of the six tables equal, by `float.hex` (the `_serial` columns through the rows they name;
+     `extra_data` as a string): 1 925 365 values in `ScalarHistoryValue`, 506 675 in `AdiabaticHistoryValue`, 90 952 in
+     `BBNDataValue`, 102 in `AdiabaticHistory` and 170 in `BBNData`, the agent's counts exactly; 1 105 in
+     `ScalarHistory`, which the agent counts as 935 + 107 + 323 by splitting `extra_data` and the key rows. 0 differ.
+   - 03's rules for the new columns: the 23 drain-record columns NULL at all 17, no bounce row, both masses filled and
+     finite at all 202 670 sample slots. I did not recompute the masses; the agent did, with `sample_masses`.
+5. **R, independently.**
+   - `tools/compare_stores.py` on the reference and resumed stores, run by me: `RESULT: equal`, `problems: none`,
+     `ScalarHistoryBounce` 2 562 matched and none on either side alone. `store fingerprint` on each: both
+     `7c7641d2…dd04`, format 7.
+   - My own script against 02d, on both stores: each of the nine tasks (argv the tool's defaults) matched once by A
+     under `one-loop-measured-v1`, β and M; the 15 tuning keys through `_tuning_unit` (135), the drain values (117),
+     1 285 candidate rows × 11 by `candidate_index` through `to_column` with `Planck_units` (14 135; all equal to the raw
+     values too, these units being M_P = 1), the dissipation values (216), `bounce_rows` against the rows present; Y_p
+     and D/H bitwise equal in 18 of 18. 0 differ.
+6. **The readers and exports.**
+   - `histories.csv` of `plot-reference` has **54 rows, not 26**: the 26 histories in P36's sort and 28 marker rows
+     (`no ScalarHistory row in the store`, `plot_by_beta.py:882`), one per (row of α or A, M, β) of the run's grid that
+     no history fills. The grid is not a rectangle here, and the markers are the plot script's behaviour since before this
+     campaign. The note's "26 rows" took the prompt's expectation over; the agent classes it rightly as drift of the
+     expectation, not of the code. Each of the 26 has its fields.csv; the nine one-loop ones have a bounces.csv, and
+     nothing under `alpha=*` has one.
+   - The nine bounces.csv against 05's, by `cmp`: identical.
+   - The tool at c_a = 1, re-run by me on a copy of the export's CSV files: its 19 files byte-identical to the agent's,
+     and its log equal but for the wall times.
+   - R4 refuses `--A-values 0.5`, naming the option and the value, and no `A=0.5` directory exists. R7's re-solves print
+     the stored Y_p and D/H to their ten digits, the stored values being those of the stores (my own query).
+   - The 54 store files' `shasum`s equal those the agent recorded before and after each reader, one hash per file
+     throughout.
+7. **The records.**
+   - The log follows §5.1's form and classes every deviation, each of note 06's rulings among them. Its §7 gives 07 the
+     exports and 08 the stores, the gates and the costs.
+   - Verification §1–§5 are unchanged (369 lines added, none removed); §6 follows prompt §3, the commands in §6.8.
+   - The board: row 06, its two items, the gates Bitwise and R, the §5 suite counts and **Last updated**.
+     `.documents/OPEN_ISSUES.md` is unchanged, nothing being opened.
+   - The token grep over the commit finds nothing; the file is named, never quoted.
+
+   The review substituted `1416b80` for "this commit" on the board and in the log, added note 06 to the list of notes,
+   and updated `prompts/INDEX.md`'s row.
+
+Noted, not acted on (log §6), for 07 and 08:
+- **The marker rows.** `tools/quanta_measures.py` counts a one-loop marker row as a "failed history" (9 here), its
+  blank `normalization` being the test it documents; `Delta_N_eff.pdf` lists α = 0.15 at laboratory M with no point.
+  The rebuild's grid is a rectangle (U14), so neither shows there. 07's figure tools should skip a marker row.
+- **"Reflections (elastic model)"** in a one-loop history's figure footer predates the drain laws; 07's to relabel.
+- **The shard warning.** `plot_by_beta.py` and `plot_ScalarHistory.py` accept `--shards` but never pass it to
+  `ShardedPool`, which takes its default of 10 and warns on a 16-shard store. A read-only open uses the store's own
+  shards, so nothing is wrong but the line; it predates this campaign.
+- **The disk.** The raylet warned that the volume holding `/tmp/ray-cpbh` was over 95 % full (39 GB free at the end). A
+  rehearsal on this machine could meet Ray's refusal to create objects.
+- **The workers' working directory** is the cluster's whatever tree a driver runs from. Harmless at both commits, whose
+  data files read by relative path are identical; worth a line in 08's handover.
 
 **Open for the user, with 02's measurements (2026-11-03;
 [verification §2.9](../../.documents/one-loop-drain-verification.md)):**

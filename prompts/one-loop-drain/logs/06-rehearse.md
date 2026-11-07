@@ -1,7 +1,7 @@
 # Log 06 — the rehearsal
 
 **Subject:** Rehearse the one-loop law under Ray: the gates Bitwise and R hold
-**Commit:** this commit, on branch `one-loop-drain`, on top of `41d18c4`
+**Commit:** `1416b80`, on branch `one-loop-drain`, on top of `41d18c4`
 **Date:** 2026-11-07, by Claude Opus 5.5
 **Result:** **COMPLETE.** The gates Bitwise and R hold (`.documents/one-loop-drain-verification.md` §6.4, §6.5).
 - **The probe** (§6.1): from the base worktree every process, driver, task and actor, imported the worktree's code at
