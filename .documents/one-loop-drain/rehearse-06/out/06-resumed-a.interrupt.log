@@ -1,0 +1,4 @@
+[2026-11-07T08:51:46+00:00] interrupt_when: waiting for "RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 0.1 (one-loop-measured-v1)" in /Users/ds283/Documents/Code/ChamPBH/var/one-loop-drain/06/runs/resumed-a.log; then 41 s; then SIGTERM
+[2026-11-07T08:51:46+00:00] interrupt_when: driver pid 90059 (from /Users/ds283/Documents/Code/ChamPBH/var/one-loop-drain/06/runs/resumed-a.pid)
+[2026-11-07T08:55:05+00:00] interrupt_when: saw "RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 0.1 (one-loop-measured-v1)"; waiting 41 s
+[2026-11-07T08:55:46+00:00] interrupt_when: sent SIGTERM to pid 90059

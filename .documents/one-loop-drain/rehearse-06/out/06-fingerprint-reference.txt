@@ -1,0 +1,38 @@
+store:    /Users/ds283/Documents/Code/ChamPBH/var/datastores/one-loop-drain-06-reference.db
+digest:   7c7641d2aade2d926319113781d8515ea8488b826d2f4b488b3c48105636dd04
+format:   7
+classes:  (count, digest; then each tag set)
+  version                  1  1304d7010ab9
+                           1  1304d7010ab9  []
+  store_tag                1  34407c96658d
+                           1  34407c96658d  []
+  redshift             75001  8dad579a1ae8
+                       75001  8dad579a1ae8  []
+  tolerance                2  a6a6f2867964
+                           2  a6a6f2867964  []
+  beta_value               9  18457bbc74bb
+                           9  18457bbc74bb  []
+  alpha_value              6  a0f4a6b090d5
+                           6  a0f4a6b090d5  []
+  M_value                  3  867aefc2e0e5
+                           3  867aefc2e0e5  []
+  temperature              1  9bd0581c026a
+                           1  9bd0581c026a  []
+  phi_value                1  29e7a88b01e3
+                           1  29e7a88b01e3  []
+  pi_value                 1  237cd5e96169
+                           1  237cd5e96169  []
+  QCD_Cosmology            1  dcbaa9d413d4
+                           1  dcbaa9d413d4  []
+  IntegrationSolver        7  5806cd3cbdd9
+                           7  5806cd3cbdd9  []
+  ExponentialModel         9  6e1342f6d340
+                           9  6e1342f6d340  []
+  ScalarHistory           26  70430cdb8854
+                          26  70430cdb8854  [SamplesPerLog10Z_250]
+  AdiabaticHistory        26  cccf7102bf78
+                          26  cccf7102bf78  [SamplesPerLog10Z_250]
+  BBNData                 26  e2aa445c2c31
+                          26  e2aa445c2c31  [SamplesPerLog10Z_250]
+problems: none
+recorded: none recorded (the sidecar is registry)

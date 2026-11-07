@@ -1,0 +1,87 @@
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-07 09:08:48,176	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-07 09:08:48,210	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at http://127.0.0.1:8267 
+!! WARNING: number of shards read from database (=16) does not match specified number of shards (=10)
+(raylet) [2026-11-07 09:08:52,097 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full, available space: 39.2507 GB; capacity: 926.352 GB. Object creation will fail if spilling is required.
+>> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/one-loop-drain-06-reference.db" read-only with 16 shards (version label "2026.10.0", serial 1)
+!! plot: no ExponentialModel stored for M=0.0009741294382 eV, n=1, β=0.5; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=0.0009741294382 eV, n=1, β=1; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=0.0009741294382 eV, n=1, β=1.5; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=0.0009741294382 eV, n=1, β=3; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=0.0009741294382 eV, n=1, β=5.5; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+15 eV, n=1, β=0.5; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+15 eV, n=1, β=1.06; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+15 eV, n=1, β=1.185; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+15 eV, n=1, β=1.5; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+15 eV, n=1, β=2; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+15 eV, n=1, β=3; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+15 eV, n=1, β=5.5; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+15 eV, n=1, β=10; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+24 eV, n=1, β=1; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+24 eV, n=1, β=1.06; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+24 eV, n=1, β=1.185; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+24 eV, n=1, β=2; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+24 eV, n=1, β=10; no history can use it; skipped
+!! plot: 18 of 27 ExponentialModel combinations of the stored M and β are not stored, and were skipped
+@@ plot_ScalarHistory: alpha values 0, 0.01, 0.1, 0.15
+@@ plot_ScalarHistory: A values 0.1, 1 (one-loop-measured-v1)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0
+
+** GENERATING ScalarHistory DATA PRODUCTS
+(Datastore pid=96821) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+(plot_ScalarHistory pid=96868) @@ plot_ScalarHistory: scalar field history for Model=ExponentialModel(M=0.00097413eV,n=1,beta=1.185) is not available; skipping this item
+(plot_ScalarHistory pid=96869) @@ plot_ScalarHistory: BBN data for Model=ExponentialModel(M=0.001Mp,n=1,beta=0.5) is not available, and will not be plotted
+(raylet) [2026-11-07 09:09:02,179 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full, available space: 39.2465 GB; capacity: 926.352 GB. Object creation will fail if spilling is required.
+(plot_ScalarHistory pid=96869) @@ plot_dark_radiation: alpha = 0, no dark radiation to plot; figure skipped
+   -- ALL WORK ITEMS COMPLETE in time 8.61s
+      Queue summary: 9 lookup (avg 62.75/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.01
+
+** GENERATING ScalarHistory DATA PRODUCTS
+(plot_ScalarHistory pid=96869) @@ plot_ScalarHistory: scalar field history for Model=ExponentialModel(M=2.4353e+06GeV,n=1,beta=1) is not available; skipping this item [repeated 5x across cluster] (Ray deduplicates logs by default. Set RAY_DEDUP_LOGS=0 to disable log deduplication, or see https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#log-deduplication for more options.)
+   -- ALL WORK ITEMS COMPLETE in time 4.84s
+      Queue summary: 9 lookup (avg 111.7/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.1
+
+** GENERATING ScalarHistory DATA PRODUCTS
+(plot_ScalarHistory pid=96884) @@ plot_dark_radiation: alpha = 0, no dark radiation to plot; figure skipped [repeated 3x across cluster]
+(plot_ScalarHistory pid=96865) @@ plot_ScalarHistory: BBN data for Model=ExponentialModel(M=0.001Mp,n=1,beta=0.5) is not available, and will not be plotted
+(plot_ScalarHistory pid=96884) @@ plot_ScalarHistory: scalar field history for Model=ExponentialModel(M=2.4353e+06GeV,n=1,beta=1) is not available; skipping this item [repeated 5x across cluster]
+(raylet) [2026-11-07 09:09:12,250 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full, available space: 39.2041 GB; capacity: 926.352 GB. Object creation will fail if spilling is required.
+   -- ALL WORK ITEMS COMPLETE in time 7.43s
+      Queue summary: 9 lookup (avg 72.63/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.15
+
+** GENERATING ScalarHistory DATA PRODUCTS
+(plot_ScalarHistory pid=96870) @@ plot_ScalarHistory: scalar field history for Model=ExponentialModel(M=0.00097413eV,n=1,beta=1.06) is not available; skipping this item
+(plot_ScalarHistory pid=96870) @@ plot_ScalarHistory: scalar field history for Model=ExponentialModel(M=0.00097413eV,n=1,beta=1.185) is not available; skipping this item
+(plot_ScalarHistory pid=96870) @@ plot_ScalarHistory: scalar field history for Model=ExponentialModel(M=0.00097413eV,n=1,beta=2) is not available; skipping this item
+(plot_ScalarHistory pid=96870) @@ plot_ScalarHistory: scalar field history for Model=ExponentialModel(M=0.00097413eV,n=1,beta=10) is not available; skipping this item
+(plot_ScalarHistory pid=96870) @@ plot_ScalarHistory: scalar field history for Model=ExponentialModel(M=0.001Mp,n=1,beta=0.5) is not available; skipping this item
+   -- ALL WORK ITEMS COMPLETE in time 3.43s
+      Queue summary: 9 lookup (avg 157.2/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 0.1 (one-loop-measured-v1)
+
+** GENERATING ScalarHistory DATA PRODUCTS
+(raylet) [2026-11-07 09:09:22,277 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full, available space: 39.1619 GB; capacity: 926.352 GB. Object creation will fail if spilling is required.
+   -- ALL WORK ITEMS COMPLETE in time 4.91s
+      Queue summary: 9 lookup (avg 109.9/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 1 (one-loop-measured-v1)
+
+** GENERATING ScalarHistory DATA PRODUCTS
+(plot_ScalarHistory pid=96865) @@ plot_ScalarHistory: scalar field history for Model=ExponentialModel(M=0.001Mp,n=1,beta=0.5) is not available; skipping this item [repeated 9x across cluster]
+   -- ALL WORK ITEMS COMPLETE in time 4.75s
+      Queue summary: 9 lookup (avg 113.6/min)
+      (no compute items were evaluated - all assets read from datastore)
+(plot_ScalarHistory pid=96882) @@ plot_ScalarHistory: scalar field history for Model=ExponentialModel(M=0.001Mp,n=1,beta=5.5) is not available; skipping this item [repeated 3x across cluster]

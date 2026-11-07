@@ -1,0 +1,11 @@
+one-loop-drain 06, the interruption's delay (orchestrator note 06, ruling 7), from reference-a (launched 08:37:00 UTC, load 13.87 / 16.69 / 20.51):
+  banner (reference-a.beats): 2026-11-07T08:40:18.930 L >> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 0.1 (one-loop-measured-v1)
+  the beats hold no line per stored history (heartbeats change only at stage banners; the other lines are the raylet's disk warnings),
+  so the opening is read from the reference store's ScalarHistory.timestamp (UTC), as inelastic-reflection 11 read its window:
+    A = 0.1 beta 1.06  stored 08:40:30.210  +11.280 s   <- the window opens (first A = 0.1 history stored)
+    A = 0.1 beta 2     stored 08:40:30.606  +11.676 s
+    A = 0.1 beta 1.185 stored 08:40:31.536  +12.606 s
+    A = 0.1 beta 10    stored 08:41:27.988  +69.058 s
+  closes (reference-a.beats): 2026-11-07T08:41:29.978 L    -- ALL WORK ITEMS COMPLETE in time 1m 11.2s   +71.048 s (the A = 0.1 scalar stage's end)
+  window 11.280 .. 71.048 s, length 59.8 s (not short); midpoint 41.164 s; --after 41
+  expected at the signal: A = 0.1 beta 1.06, 2, 1.185 stored, beta 10 not.

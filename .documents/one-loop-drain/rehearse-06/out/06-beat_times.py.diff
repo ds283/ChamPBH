@@ -1,0 +1,13 @@
+--- inelastic-reflection/out/11-beat_times.py.txt
++++ one-loop-drain/rehearse-06/beat_times.py
+@@ -1,4 +1,10 @@
+ """
++one-loop-drain prompt 06: copied from inelastic-reflection 11's (.documents/inelastic-reflection/out/11-beat_times.py.txt),
++with this paragraph added. Run from the main checkout's root as
++`./venv/bin/python -u .documents/one-loop-drain/rehearse-06/beat_times.py var/one-loop-drain/06/runs/<slug>.log
++var/one-loop-drain/06/runs/<slug>.beats`; it reads the log and var/runs/<RUN_ID>/status.json, and writes only OUT, under
++var/one-loop-drain/06/.
++
+ The recorder of jordan-normalization prompt 09 (the orchestrator's note for 09, ruling 7).
+ 
+     ./venv/bin/python -u beat_times.py LOG OUT [--runs var/runs] [--poll 0.5] [--limit 3600]

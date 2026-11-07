@@ -1,0 +1,23 @@
+--- inelastic-reflection/out/11-check.sh.txt
++++ one-loop-drain/rehearse-06/check.sh
+@@ -1,9 +1,10 @@
+ #!/bin/sh
+-# inelastic-reflection 11: the one check after a launch (as jordan-normalization 09; the orchestrator's note for 09, ruling 4).
++# one-loop-drain 06 (adapted from inelastic-reflection 11's check.sh): the one check after a launch (as
++# jordan-normalization 09; the orchestrator's note for 09, ruling 4). Run from the main checkout's root.
+ # Reads the launch log, the run's manifest.json and status.json, the pid file, and `list`.
+-# Starts nothing and signals nothing. Appends to var/inelastic-reflection-11/rehearsal/11-checks.txt.
+-#   sh var/inelastic-reflection-11/tools/check.sh SLUG
+-L=var/inelastic-reflection-11/rehearsal
++# Starts nothing and signals nothing. Appends to var/one-loop-drain/06/runs/06-checks.txt, and writes nothing else.
++#   sh .documents/one-loop-drain/rehearse-06/check.sh SLUG
++L=var/one-loop-drain/06/runs
+ slug=$1
+ log=$L/$slug.log
+ {
+@@ -29,4 +30,4 @@
+     echo '$ head of log'
+     head -4 "$log" | grep -n ''
+     echo
+-} >> $L/11-checks.txt 2>&1
++} >> $L/06-checks.txt 2>&1

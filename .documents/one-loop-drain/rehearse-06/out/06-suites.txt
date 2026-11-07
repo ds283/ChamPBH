@@ -1,0 +1,108 @@
+## before CosmologyModels: 2026-11-07 08:06:23 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .
+uptime:  8:06  up 7 days, 10:27, 1 user, load averages: 8.68 24.11 35.96
+wall: 70 s
+uptime after:  8:07  up 7 days, 10:28, 1 user, load averages: 7.41 20.35 33.59
+Ran 26 tests in 68.477s
+verdict: OK
+exit: 0
+
+## before ComputeTargets-a-f: 2026-11-07 08:07:37 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'
+uptime:  8:07  up 7 days, 10:28, 1 user, load averages: 6.82 20.01 33.40
+wall: 146 s
+uptime after:  8:10  up 7 days, 10:30, 1 user, load averages: 6.56 14.50 29.03
+Ran 219 tests in 144.060s
+verdict: OK
+exit: 0
+
+## before ComputeTargets-g-z: 2026-11-07 08:10:07 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'
+uptime:  8:10  up 7 days, 10:30, 1 user, load averages: 6.35 14.32 28.89
+wall: 491 s
+uptime after:  8:18  up 7 days, 10:39, 1 user, load averages: 28.89 15.57 21.72
+Ran 446 tests in 487.906s
+verdict: OK
+exit: 0
+
+## before ObjectFactories: 2026-11-07 08:18:23 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .
+uptime:  8:18  up 7 days, 10:39, 1 user, load averages: 40.99 18.30 22.65
+wall: 136 s
+uptime after:  8:20  up 7 days, 10:41, 1 user, load averages: 19.15 22.83 24.30
+Ran 163 tests in 133.719s
+verdict: OK
+exit: 0
+
+## before tools: 2026-11-07 08:20:44 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .
+uptime:  8:20  up 7 days, 10:41, 1 user, load averages: 18.57 22.65 24.23
+wall: 213 s
+uptime after:  8:24  up 7 days, 10:45, 1 user, load averages: 13.13 17.83 21.74
+Ran 191 tests in 211.460s
+verdict: OK
+exit: 0
+
+## before RunDrivers: 2026-11-07 08:24:22 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .
+uptime:  8:24  up 7 days, 10:45, 1 user, load averages: 12.40 17.60 21.63
+wall: 25 s
+uptime after:  8:24  up 7 days, 10:45, 1 user, load averages: 10.53 16.75 21.21
+Ran 72 tests in 23.308s
+verdict: OK
+exit: 0
+
+## after CosmologyModels: 2026-11-07 09:17:35 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .
+uptime:  9:17  up 7 days, 11:38, 1 user, load averages: 107.02 55.21 32.61
+wall: 78 s
+uptime after:  9:18  up 7 days, 11:39, 1 user, load averages: 130.27 74.59 41.92
+Ran 26 tests in 76.875s
+verdict: OK
+exit: 0
+
+## after ComputeTargets-a-f: 2026-11-07 09:18:53 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'
+uptime:  9:18  up 7 days, 11:39, 1 user, load averages: 130.27 74.59 41.92
+wall: 165 s
+uptime after:  9:21  up 7 days, 11:42, 1 user, load averages: 147.02 99.58 57.62
+Ran 219 tests in 162.873s
+verdict: OK
+exit: 0
+
+## after ComputeTargets-g-z: 2026-11-07 09:21:48 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'
+uptime:  9:21  up 7 days, 11:42, 1 user, load averages: 149.46 101.68 58.85
+wall: 550 s
+uptime after:  9:30  up 7 days, 11:51, 1 user, load averages: 201.47 185.62 125.26
+Ran 446 tests in 545.751s
+verdict: OK
+exit: 0
+
+## after ObjectFactories: 2026-11-07 09:31:05 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .
+uptime:  9:31  up 7 days, 11:51, 1 user, load averages: 199.91 185.56 125.59
+wall: 162 s
+uptime after:  9:33  up 7 days, 11:54, 1 user, load averages: 187.57 186.85 136.72
+Ran 163 tests in 159.104s
+verdict: OK
+exit: 0
+
+## after tools: 2026-11-07 09:33:53 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .
+uptime:  9:33  up 7 days, 11:54, 1 user, load averages: 188.09 186.97 137.06
+wall: 276 s
+uptime after:  9:38  up 7 days, 11:59, 1 user, load averages: 153.35 180.35 149.22
+Ran 191 tests in 273.406s
+verdict: OK
+exit: 0
+
+## after RunDrivers: 2026-11-07 09:38:37 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .
+uptime:  9:38  up 7 days, 11:59, 1 user, load averages: 151.10 178.99 149.10
+wall: 36 s
+uptime after:  9:39  up 7 days, 11:59, 1 user, load averages: 164.49 178.95 150.27
+Ran 72 tests in 33.346s
+verdict: OK
+exit: 0
+

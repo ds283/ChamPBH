@@ -1,0 +1,68 @@
+## R1-inventory: 2026-11-07 09:07:35 +0000; uptime:  9:07  up 7 days, 11:28, 1 user, load averages: 11.30 13.42 15.81
+$ ./venv/bin/python -u main.py --config exponential.yaml --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/one-loop-drain-06-reference.db --shards 16 --inventory
+exit 0; wall 26.321 s; store shasums unchanged (18 files); uptime after:  9:08  up 7 days, 11:28, 1 user, load averages: 11.29 13.23 15.67
+## R2-plot-by-beta: 2026-11-07 09:08:11 +0000; uptime:  9:08  up 7 days, 11:28, 1 user, load averages: 10.94 13.09 15.59
+$ ./venv/bin/python -u plot_by_beta.py --config exponential.yaml --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/one-loop-drain-06-reference.db --shards 16 --phi-init-Mp 5 --alpha-values 0 0.01 0.1 0.15 --A-values 0.1 1 --output /Users/ds283/Documents/Code/ChamPBH/var/one-loop-drain/06/plot-reference --ray-address 127.0.0.1:6380
+exit 0; wall 33.440 s; store shasums unchanged (18 files); uptime after:  9:08  up 7 days, 11:29, 1 user, load averages: 17.81 14.39 15.96
+## R3-plot-history: 2026-11-07 09:08:45 +0000; uptime:  9:08  up 7 days, 11:29, 1 user, load averages: 17.81 14.39 15.96
+$ ./venv/bin/python -u plot_ScalarHistory.py --config exponential.yaml --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/one-loop-drain-06-reference.db --shards 16 --phi-init-Mp 5 --alpha-values 0 0.01 0.1 0.15 --A-values 0.1 1 --output /Users/ds283/Documents/Code/ChamPBH/var/one-loop-drain/06/plot-reference --ray-address 127.0.0.1:6380
+exit 0; wall 45.233 s; store shasums unchanged (18 files); uptime after:  9:09  up 7 days, 11:30, 1 user, load averages: 22.80 16.15 16.52
+## R4-plot-unstored: 2026-11-07 09:10:10 +0000; uptime:  9:10  up 7 days, 11:30, 1 user, load averages: 16.54 15.41 16.23
+$ ./venv/bin/python -u plot_by_beta.py --config exponential.yaml --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/one-loop-drain-06-reference.db --shards 16 --phi-init-Mp 5 --A-values 0.5 --output /Users/ds283/Documents/Code/ChamPBH/var/one-loop-drain/06/plot-unstored --ray-address 127.0.0.1:6380
+exit 2; wall 11.076 s; store shasums unchanged (18 files); uptime after:  9:10  up 7 days, 11:31, 1 user, load averages: 18.34 15.81 16.36
+## R5-plot-by-beta-resumed: 2026-11-07 09:10:29 +0000; uptime:  9:10  up 7 days, 11:31, 1 user, load averages: 17.69 15.75 16.33
+$ ./venv/bin/python -u plot_by_beta.py --config exponential.yaml --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/one-loop-drain-06-resumed.db --shards 16 --phi-init-Mp 5 --alpha-values 0 0.01 0.1 0.15 --A-values 0.1 1 --output /Users/ds283/Documents/Code/ChamPBH/var/one-loop-drain/06/plot-resumed --ray-address 127.0.0.1:6380
+exit 0; wall 30.914 s; store shasums unchanged (18 files); uptime after:  9:11  up 7 days, 11:31, 1 user, load averages: 17.57 15.97 16.40
+## R5-plot-history-resumed: 2026-11-07 09:11:01 +0000; uptime:  9:11  up 7 days, 11:31, 1 user, load averages: 17.57 15.97 16.40
+$ ./venv/bin/python -u plot_ScalarHistory.py --config exponential.yaml --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/one-loop-drain-06-resumed.db --shards 16 --phi-init-Mp 5 --alpha-values 0 0.01 0.1 0.15 --A-values 0.1 1 --output /Users/ds283/Documents/Code/ChamPBH/var/one-loop-drain/06/plot-resumed --ray-address 127.0.0.1:6380
+exit 0; wall 40.555 s; store shasums unchanged (18 files); uptime after:  9:11  up 7 days, 11:32, 1 user, load averages: 18.81 16.48 16.56
+## R6 plot-reference c_a=1: 2026-11-07 09:12:28 +0000; uptime:  9:12  up 7 days, 11:33, 1 user, load averages: 11.74 14.98 16.01
+$ PYTHONPATH=. ./venv/bin/python tools/quanta_measures.py var/one-loop-drain/06/plot-reference/QCD_Cosmology 
+exit 0; wall 3.631 s; uptime after:  9:12  up 7 days, 11:33, 1 user, load averages: 11.04 14.78 15.93
+## R6 plot-reference c_a=0: 2026-11-07 09:12:32 +0000; uptime:  9:12  up 7 days, 11:33, 1 user, load averages: 11.04 14.78 15.93
+$ PYTHONPATH=. ./venv/bin/python tools/quanta_measures.py var/one-loop-drain/06/plot-reference/QCD_Cosmology --assoc-scale 0
+exit 2; wall 1.566 s; uptime after:  9:12  up 7 days, 11:33, 1 user, load averages: 10.48 14.60 15.86
+## R6 plot-reference c_a=10: 2026-11-07 09:12:34 +0000; uptime:  9:12  up 7 days, 11:33, 1 user, load averages: 10.48 14.60 15.86
+$ PYTHONPATH=. ./venv/bin/python tools/quanta_measures.py var/one-loop-drain/06/plot-reference/QCD_Cosmology --assoc-scale 10
+exit 2; wall 1.540 s; uptime after:  9:12  up 7 days, 11:33, 1 user, load averages: 10.48 14.60 15.86
+## R6 plot-resumed c_a=1: 2026-11-07 09:12:35 +0000; uptime:  9:12  up 7 days, 11:33, 1 user, load averages: 10.48 14.60 15.86
+$ PYTHONPATH=. ./venv/bin/python tools/quanta_measures.py var/one-loop-drain/06/plot-resumed/QCD_Cosmology 
+exit 0; wall 3.389 s; uptime after:  9:12  up 7 days, 11:33, 1 user, load averages: 9.96 14.43 15.79
+## R6 plot-resumed c_a=0: 2026-11-07 09:12:39 +0000; uptime:  9:12  up 7 days, 11:33, 1 user, load averages: 9.96 14.43 15.79
+$ PYTHONPATH=. ./venv/bin/python tools/quanta_measures.py var/one-loop-drain/06/plot-resumed/QCD_Cosmology --assoc-scale 0
+exit 2; wall 1.533 s; uptime after:  9:12  up 7 days, 11:33, 1 user, load averages: 9.96 14.43 15.79
+## R6 plot-resumed c_a=10: 2026-11-07 09:12:40 +0000; uptime:  9:12  up 7 days, 11:33, 1 user, load averages: 9.96 14.43 15.79
+$ PYTHONPATH=. ./venv/bin/python tools/quanta_measures.py var/one-loop-drain/06/plot-resumed/QCD_Cosmology --assoc-scale 10
+exit 2; wall 1.674 s; uptime after:  9:12  up 7 days, 11:33, 1 user, load averages: 9.96 14.43 15.79
+## note: the four R6 calls above at c_a = 0 and 10 passed '--assoc-scale <c>' as one word (zsh does not split an unquoted variable); the tool refused it (exit 2, usage). Re-run below with the option and its value as two words.
+## R6 plot-reference c_a=0 (re-run): 2026-11-07 09:12:51 +0000; uptime:  9:12  up 7 days, 11:33, 1 user, load averages: 9.66 14.21 15.70
+$ PYTHONPATH=. ./venv/bin/python tools/quanta_measures.py var/one-loop-drain/06/plot-reference/QCD_Cosmology --assoc-scale 0
+exit 0; wall 3.562 s; uptime after:  9:12  up 7 days, 11:33, 1 user, load averages: 9.45 14.09 15.65
+## R6 plot-reference c_a=10 (re-run): 2026-11-07 09:12:55 +0000; uptime:  9:12  up 7 days, 11:33, 1 user, load averages: 9.45 14.09 15.65
+$ PYTHONPATH=. ./venv/bin/python tools/quanta_measures.py var/one-loop-drain/06/plot-reference/QCD_Cosmology --assoc-scale 10
+exit 0; wall 3.473 s; uptime after:  9:12  up 7 days, 11:33, 1 user, load averages: 9.45 14.09 15.65
+## R6 plot-resumed c_a=0 (re-run): 2026-11-07 09:12:58 +0000; uptime:  9:12  up 7 days, 11:33, 1 user, load averages: 9.45 14.09 15.65
+$ PYTHONPATH=. ./venv/bin/python tools/quanta_measures.py var/one-loop-drain/06/plot-resumed/QCD_Cosmology --assoc-scale 0
+exit 0; wall 3.541 s; uptime after:  9:13  up 7 days, 11:33, 1 user, load averages: 9.25 13.98 15.60
+## R6 plot-resumed c_a=10 (re-run): 2026-11-07 09:13:02 +0000; uptime:  9:13  up 7 days, 11:33, 1 user, load averages: 9.25 13.98 15.60
+$ PYTHONPATH=. ./venv/bin/python tools/quanta_measures.py var/one-loop-drain/06/plot-resumed/QCD_Cosmology --assoc-scale 10
+exit 0; wall 3.499 s; uptime after:  9:13  up 7 days, 11:33, 1 user, load averages: 9.23 13.89 15.56
+## R7-base-fixed base fixed 0.1: 2026-11-07 09:13:18 +0000; uptime:  9:13  up 7 days, 11:34, 1 user, load averages: 9.35 13.76 15.49
+$ ./venv/bin/python -u tools/bbn_from_store.py var/datastores/one-loop-drain-06- --beta 1.185 --M-Mp 4e-31 --phi-init-Mp 5 --drain-law --alpha --small-network --variant prod
+exit 2; wall 1.616 s; store shasums CHANGED (51 files); uptime after:  9:13  up 7 days, 11:34, 1 user, load averages: 9.80 13.78 15.49
+## R7-reference-fixed reference fixed 0.1: 2026-11-07 09:13:23 +0000; uptime:  9:13  up 7 days, 11:34, 1 user, load averages: 9.80 13.78 15.49
+$ ./venv/bin/python -u tools/bbn_from_store.py var/datastores/one-loop-drain-06- --beta 1.185 --M-Mp 4e-31 --phi-init-Mp 5 --drain-law --alpha --small-network --variant prod
+exit 2; wall 1.632 s; store shasums CHANGED (51 files); uptime after:  9:13  up 7 days, 11:34, 1 user, load averages: 13.02 14.39 15.69
+## R7-reference-oneloop reference one_loop 1: 2026-11-07 09:13:28 +0000; uptime:  9:13  up 7 days, 11:34, 1 user, load averages: 13.02 14.39 15.69
+$ ./venv/bin/python -u tools/bbn_from_store.py var/datastores/one-loop-drain-06- --beta 1.185 --M-Mp 4e-31 --phi-init-Mp 5 --drain-law --alpha --small-network --variant prod
+exit 2; wall 1.464 s; store shasums CHANGED (51 files); uptime after:  9:13  up 7 days, 11:34, 1 user, load averages: 18.54 15.51 16.08
+## note: the three R7 calls above were malformed by my shell loop (zsh does not split 'set -- $spec'): an empty store name and a file name with spaces, so the run was a usage error (exit 2) and 'CHANGED' is cmp's usage error on that name, not a change of a store. Their files were removed; R7 re-run below, one explicit call each.
+## R7-base-fixed: 2026-11-07 09:13:49 +0000; uptime:  9:13  up 7 days, 11:34, 1 user, load averages: 19.15 15.81 16.18
+$ ./venv/bin/python -u tools/bbn_from_store.py var/datastores/one-loop-drain-06-base --beta 1.185 --M-Mp 4e-31 --phi-init-Mp 5 --drain-law fixed --alpha 0.1 --small-network --variant prod
+exit 0; wall 12.367 s; store shasums unchanged (18 files); uptime after:  9:14  up 7 days, 11:34, 1 user, load averages: 25.05 17.31 16.71
+## R7-reference-fixed: 2026-11-07 09:14:09 +0000; uptime:  9:14  up 7 days, 11:34, 1 user, load averages: 26.41 17.72 16.86
+$ ./venv/bin/python -u tools/bbn_from_store.py var/datastores/one-loop-drain-06-reference --beta 1.185 --M-Mp 4e-31 --phi-init-Mp 5 --drain-law fixed --alpha 0.1 --small-network --variant prod
+exit 0; wall 11.129 s; store shasums unchanged (18 files); uptime after:  9:14  up 7 days, 11:35, 1 user, load averages: 33.24 19.66 17.56
+## R7-reference-oneloop: 2026-11-07 09:14:21 +0000; uptime:  9:14  up 7 days, 11:35, 1 user, load averages: 33.24 19.66 17.56
+$ ./venv/bin/python -u tools/bbn_from_store.py var/datastores/one-loop-drain-06-reference --beta 1.185 --M-Mp 4e-31 --phi-init-Mp 5 --drain-law one_loop --alpha 1 --small-network --variant prod
+exit 0; wall 12.254 s; store shasums unchanged (18 files); uptime after:  9:14  up 7 days, 11:35, 1 user, load averages: 38.58 21.51 18.26

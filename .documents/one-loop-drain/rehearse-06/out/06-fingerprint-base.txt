@@ -1,0 +1,38 @@
+store:    /private/tmp/claude-35086/-Users-ds283--claude-spares-spare-3KG1mP/ac4eb94d-0bc8-4fda-a4e4-f553733c5d07/scratchpad/agent-06/base-1561b60/var/datastores/one-loop-drain-06-base.db
+digest:   ff38053c350bf9dabb789336d4a417d83f5ee7678354824cd062616c0965f4a7
+format:   6
+classes:  (count, digest; then each tag set)
+  version                  1  1de73a1450f6
+                           1  1de73a1450f6  []
+  store_tag                1  34407c96658d
+                           1  34407c96658d  []
+  redshift             75001  8dad579a1ae8
+                       75001  8dad579a1ae8  []
+  tolerance                2  a6a6f2867964
+                           2  a6a6f2867964  []
+  beta_value               9  18457bbc74bb
+                           9  18457bbc74bb  []
+  alpha_value              4  27e2834b6a2a
+                           4  27e2834b6a2a  []
+  M_value                  3  867aefc2e0e5
+                           3  867aefc2e0e5  []
+  temperature              1  9bd0581c026a
+                           1  9bd0581c026a  []
+  phi_value                1  29e7a88b01e3
+                           1  29e7a88b01e3  []
+  pi_value                 1  237cd5e96169
+                           1  237cd5e96169  []
+  QCD_Cosmology            1  dcbaa9d413d4
+                           1  dcbaa9d413d4  []
+  IntegrationSolver        7  5806cd3cbdd9
+                           7  5806cd3cbdd9  []
+  ExponentialModel         9  6e1342f6d340
+                           9  6e1342f6d340  []
+  ScalarHistory           17  600218136c73
+                          17  600218136c73  [SamplesPerLog10Z_250]
+  AdiabaticHistory        17  5838608b60ea
+                          17  5838608b60ea  [SamplesPerLog10Z_250]
+  BBNData                 17  7d303cfa11ed
+                          17  7d303cfa11ed  [SamplesPerLog10Z_250]
+problems: none
+recorded: none recorded (the sidecar is registry)

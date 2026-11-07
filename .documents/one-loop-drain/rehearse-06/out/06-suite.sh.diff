@@ -1,0 +1,40 @@
+--- inelastic-reflection/out/11-suite.sh.txt
++++ one-loop-drain/rehearse-06/suite.sh
+@@ -1,11 +1,14 @@
+ #!/bin/sh
+-# inelastic-reflection 11: run one CLAUDE.md suite command from the repository root, its output to
+-# var/inelastic-reflection-11/suites/<point>-<name>.txt, and a summary (the command, uptime before,
+-# the wall time, uptime after, Ran, the verdict, the exit) appended to var/inelastic-reflection-11/11-suites.txt.
+-#   sh var/inelastic-reflection-11/tools/suite.sh POINT NAME DIR [PATTERN]
+-L=var/inelastic-reflection-11
++# one-loop-drain 06 (adapted from inelastic-reflection 11's suite.sh): run one CLAUDE.md suite command
++# from the repository root, its output to $SUITES/<point>-<name>.txt, and a summary (the command,
++# uptime before, the wall time, uptime after, Ran, the verdict, the exit) appended to $SUITES/06-suites.txt.
++# $SUITES is a directory given in the environment (the session scratchpad, by the orchestrator's note for
++# 06, "Scratch"); the script writes nothing else, and reads only the suite's own output.
++#   SUITES=<dir> sh .documents/one-loop-drain/rehearse-06/suite.sh POINT NAME DIR [PATTERN]
++L=${SUITES:?set SUITES to the output directory}
++mkdir -p "$L"
+ point=$1; name=$2; dir=$3; pat=$4
+-out=$L/suites/$point-$name.txt
++out=$L/$point-$name.txt
+ if [ -n "$pat" ]; then
+     cmd="PYTHONPATH=. ./venv/bin/python -m unittest discover -s $dir -t . -p '$pat'"
+ else
+@@ -15,7 +18,7 @@
+     echo "## $point $name: $(date '+%F %T %z')"
+     echo "\$ $cmd"
+     echo "uptime: $(uptime)"
+-} >> $L/11-suites.txt
++} >> $L/06-suites.txt
+ t0=$(date +%s)
+ if [ -n "$pat" ]; then
+     PYTHONPATH=. ./venv/bin/python -m unittest discover -s "$dir" -t . -p "$pat" > "$out" 2>&1
+@@ -31,5 +34,5 @@
+     echo "verdict: $(grep -E '^(OK|FAILED)' "$out" | tail -1)"
+     echo "exit: $rc"
+     echo
+-} >> $L/11-suites.txt
+-tail -6 $L/11-suites.txt
++} >> $L/06-suites.txt
++tail -6 $L/06-suites.txt

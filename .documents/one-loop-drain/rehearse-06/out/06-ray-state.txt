@@ -1,0 +1,40 @@
+## after resumed-a
+$ ./venv/bin/ray list jobs --address 127.0.0.1:6380 --limit 1000 --format json
+  job 01000000 SUCCEEDED driver pid 67488: ntents/MacOS/Python -u /Users/ds283/Documents/Code/ChamPBH/.documents/one-loop-drain/rehearse-06/code_probe.py
+  job 02000000 SUCCEEDED driver pid 67544: ntents/MacOS/Python -u /Users/ds283/Documents/Code/ChamPBH/.documents/one-loop-drain/rehearse-06/code_probe.py
+  job 03000000 SUCCEEDED driver pid 67682: dress 127.0.0.1:6380 --M-values-Mp 4e-31 --beta-values 1.06 1.185 2 10 --phi-init-Mp 5 --alpha-values 0.01 0.1
+  job 04000000 SUCCEEDED driver pid 68244: ray-address 127.0.0.1:6380 --M-values-Mp 1e-3 --beta-values 0.5 1.5 3 5.5 --phi-init-Mp 5 --alpha-values 0 0.1
+  job 05000000 SUCCEEDED driver pid 69351: 06-base-c --ray-address 127.0.0.1:6380 --M-values-Mp 1e-12 --beta-values 1 --phi-init-Mp 5 --alpha-values 0.15
+  job 06000000 SUCCEEDED driver pid 69739: ersions/3.13/Resources/Python.app/Contents/MacOS/Python -u .documents/one-loop-drain/rehearse-06/code_probe.py
+  job 07000000 SUCCEEDED driver pid 69796: 380 --M-values-Mp 4e-31 --beta-values 1.06 1.185 2 10 --phi-init-Mp 5 --alpha-values 0.01 0.1 --A-values 0.1 1
+  job 08000000 SUCCEEDED driver pid 70472: ray-address 127.0.0.1:6380 --M-values-Mp 1e-3 --beta-values 0.5 1.5 3 5.5 --phi-init-Mp 5 --alpha-values 0 0.1
+  job 09000000 SUCCEEDED driver pid 75085: ay-address 127.0.0.1:6380 --M-values-Mp 1e-12 --beta-values 1 --phi-init-Mp 5 --alpha-values 0.15 --A-values 1
+  job 0a000000 SUCCEEDED driver pid 90059: 380 --M-values-Mp 4e-31 --beta-values 1.06 1.185 2 10 --phi-init-Mp 5 --alpha-values 0.01 0.1 --A-values 0.1 1
+$ ./venv/bin/ray list workers --address 127.0.0.1:6380 --limit 1000 --format json
+  workers: 159 recorded, 0 alive
+$ ./venv/bin/ray list actors --address 127.0.0.1:6380 --limit 1000 --format json
+  actors: 122 recorded, 0 ALIVE; by (job, class, state): {('07000000', 'Datastore', 'DEAD'): 16, ('0a000000', 'Datastore', 'DEAD'): 16, ('09000000', 'Datastore', 'DEAD'): 16, ('04000000', 'Datastore', 'DEAD'): 16, ('08000000', 'Datastore', 'DEAD'): 16, ('05000000', 'Datastore', 'DEAD'): 16, ('09000000', 'SerialPoolBroker', 'DEAD'): 1, ('02000000', 'ProbeActor', 'DEAD'): 1, ('03000000', 'Datastore', 'DEAD'): 16, ('01000000', 'ProbeActor', 'DEAD'): 1, ('08000000', 'SerialPoolBroker', 'DEAD'): 1, ('04000000', 'SerialPoolBroker', 'DEAD'): 1, ('0a000000', 'SerialPoolBroker', 'DEAD'): 1, ('07000000', 'SerialPoolBroker', 'DEAD'): 1, ('03000000', 'SerialPoolBroker', 'DEAD'): 1, ('06000000', 'ProbeActor', 'DEAD'): 1, ('05000000', 'SerialPoolBroker', 'DEAD'): 1}
+## before the stop
+$ ./venv/bin/ray list jobs --address 127.0.0.1:6380 --limit 1000 --format json
+  job 01000000 SUCCEEDED driver pid 67488: ntents/MacOS/Python -u /Users/ds283/Documents/Code/ChamPBH/.documents/one-loop-drain/rehearse-06/code_probe.py
+  job 02000000 SUCCEEDED driver pid 67544: ntents/MacOS/Python -u /Users/ds283/Documents/Code/ChamPBH/.documents/one-loop-drain/rehearse-06/code_probe.py
+  job 03000000 SUCCEEDED driver pid 67682: dress 127.0.0.1:6380 --M-values-Mp 4e-31 --beta-values 1.06 1.185 2 10 --phi-init-Mp 5 --alpha-values 0.01 0.1
+  job 04000000 SUCCEEDED driver pid 68244: ray-address 127.0.0.1:6380 --M-values-Mp 1e-3 --beta-values 0.5 1.5 3 5.5 --phi-init-Mp 5 --alpha-values 0 0.1
+  job 05000000 SUCCEEDED driver pid 69351: 06-base-c --ray-address 127.0.0.1:6380 --M-values-Mp 1e-12 --beta-values 1 --phi-init-Mp 5 --alpha-values 0.15
+  job 06000000 SUCCEEDED driver pid 69739: ersions/3.13/Resources/Python.app/Contents/MacOS/Python -u .documents/one-loop-drain/rehearse-06/code_probe.py
+  job 07000000 SUCCEEDED driver pid 69796: 380 --M-values-Mp 4e-31 --beta-values 1.06 1.185 2 10 --phi-init-Mp 5 --alpha-values 0.01 0.1 --A-values 0.1 1
+  job 08000000 SUCCEEDED driver pid 70472: ray-address 127.0.0.1:6380 --M-values-Mp 1e-3 --beta-values 0.5 1.5 3 5.5 --phi-init-Mp 5 --alpha-values 0 0.1
+  job 09000000 SUCCEEDED driver pid 75085: ay-address 127.0.0.1:6380 --M-values-Mp 1e-12 --beta-values 1 --phi-init-Mp 5 --alpha-values 0.15 --A-values 1
+  job 0a000000 SUCCEEDED driver pid 90059: 380 --M-values-Mp 4e-31 --beta-values 1.06 1.185 2 10 --phi-init-Mp 5 --alpha-values 0.01 0.1 --A-values 0.1 1
+  job 0b000000 SUCCEEDED driver pid 90981: -31 --beta-values 1.06 1.185 2 10 --phi-init-Mp 5 --alpha-values 0.01 0.1 --A-values 0.1 1 --prune-unvalidated
+  job 0c000000 SUCCEEDED driver pid 91430: ray-address 127.0.0.1:6380 --M-values-Mp 1e-3 --beta-values 0.5 1.5 3 5.5 --phi-init-Mp 5 --alpha-values 0 0.1
+  job 0d000000 SUCCEEDED driver pid 95407: ay-address 127.0.0.1:6380 --M-values-Mp 1e-12 --beta-values 1 --phi-init-Mp 5 --alpha-values 0.15 --A-values 1
+  job 0e000000 SUCCEEDED driver pid 96630: --output /Users/ds283/Documents/Code/ChamPBH/var/one-loop-drain/06/plot-reference --ray-address 127.0.0.1:6380
+  job 0f000000 SUCCEEDED driver pid 96790: --output /Users/ds283/Documents/Code/ChamPBH/var/one-loop-drain/06/plot-reference --ray-address 127.0.0.1:6380
+  job 10000000 SUCCEEDED driver pid 97228:  --output /Users/ds283/Documents/Code/ChamPBH/var/one-loop-drain/06/plot-unstored --ray-address 127.0.0.1:6380
+  job 11000000 SUCCEEDED driver pid 97378: 1 --output /Users/ds283/Documents/Code/ChamPBH/var/one-loop-drain/06/plot-resumed --ray-address 127.0.0.1:6380
+  job 12000000 SUCCEEDED driver pid 97642: 1 --output /Users/ds283/Documents/Code/ChamPBH/var/one-loop-drain/06/plot-resumed --ray-address 127.0.0.1:6380
+$ ./venv/bin/ray list workers --address 127.0.0.1:6380 --limit 1000 --format json
+  workers: 336 recorded, 0 alive
+$ ./venv/bin/ray list actors --address 127.0.0.1:6380 --limit 1000 --format json
+  actors: 253 recorded, 0 ALIVE; by (job, class, state): {('07000000', 'Datastore', 'DEAD'): 16, ('0a000000', 'Datastore', 'DEAD'): 16, ('0d000000', 'Datastore', 'DEAD'): 16, ('11000000', 'Datastore', 'DEAD'): 16, ('09000000', 'Datastore', 'DEAD'): 16, ('04000000', 'Datastore', 'DEAD'): 16, ('0f000000', 'Datastore', 'DEAD'): 16, ('08000000', 'Datastore', 'DEAD'): 16, ('12000000', 'Datastore', 'DEAD'): 16, ('0e000000', 'Datastore', 'DEAD'): 16, ('05000000', 'Datastore', 'DEAD'): 16, ('10000000', 'Datastore', 'DEAD'): 16, ('0b000000', 'Datastore', 'DEAD'): 16, ('09000000', 'SerialPoolBroker', 'DEAD'): 1, ('0c000000', 'Datastore', 'DEAD'): 16, ('02000000', 'ProbeActor', 'DEAD'): 1, ('03000000', 'Datastore', 'DEAD'): 16, ('01000000', 'ProbeActor', 'DEAD'): 1, ('08000000', 'SerialPoolBroker', 'DEAD'): 1, ('0c000000', 'SerialPoolBroker', 'DEAD'): 1, ('04000000', 'SerialPoolBroker', 'DEAD'): 1, ('0b000000', 'SerialPoolBroker', 'DEAD'): 1, ('0a000000', 'SerialPoolBroker', 'DEAD'): 1, ('07000000', 'SerialPoolBroker', 'DEAD'): 1, ('03000000', 'SerialPoolBroker', 'DEAD'): 1, ('06000000', 'ProbeActor', 'DEAD'): 1, ('05000000', 'SerialPoolBroker', 'DEAD'): 1, ('0d000000', 'SerialPoolBroker', 'DEAD'): 1}

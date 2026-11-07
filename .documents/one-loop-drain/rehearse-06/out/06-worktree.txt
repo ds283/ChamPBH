@@ -1,0 +1,28 @@
+## worktree /private/tmp/claude-35086/-Users-ds283--claude-spares-spare-3KG1mP/ac4eb94d-0bc8-4fda-a4e4-f553733c5d07/scratchpad/agent-06/base-1561b60, before the first base run: 2026-11-07 08:24:54 +0000
+1561b60fdf9d162cf4b9afc1438b24a2186ad8a2
+Not currently on any branch.
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	var
+	venv
+
+nothing added to commit but untracked files present (use "git add" to track)
+?? var
+?? venv
+lrwxr-xr-x 1 ds283 wheel 39 Nov  7 08:24 /private/tmp/claude-35086/-Users-ds283--claude-spares-spare-3KG1mP/ac4eb94d-0bc8-4fda-a4e4-f553733c5d07/scratchpad/agent-06/base-1561b60/var -> /Users/ds283/Documents/Code/ChamPBH/var
+lrwxr-xr-x 1 ds283 wheel 40 Nov  7 08:24 /private/tmp/claude-35086/-Users-ds283--claude-spares-spare-3KG1mP/ac4eb94d-0bc8-4fda-a4e4-f553733c5d07/scratchpad/agent-06/base-1561b60/venv -> /Users/ds283/Documents/Code/ChamPBH/venv
+76:VERSION_LABEL = "2026.9.0"
+87:FINGERPRINT_FORMAT = 6
+92117838ee846599b10a7f091557de662391c70b79c992726c6e0a9b801aacc0  /private/tmp/claude-35086/-Users-ds283--claude-spares-spare-3KG1mP/ac4eb94d-0bc8-4fda-a4e4-f553733c5d07/scratchpad/agent-06/base-1561b60/main.py
+runs_root = "var/runs"
+stores_root = "var/datastores"
+distributions = ["datastorekit", "raypoolkit", "ray", "SQLAlchemy", "numpy", "scipy"]
+
+[stores]
+fingerprinter = "config.fingerprint:fingerprinter"
+## worktree /private/tmp/claude-35086/-Users-ds283--claude-spares-spare-3KG1mP/ac4eb94d-0bc8-4fda-a4e4-f553733c5d07/scratchpad/agent-06/base-1561b60, after the last base run and store create: 2026-11-07 08:36:47 +0000
+1561b60fdf9d162cf4b9afc1438b24a2186ad8a2
+?? var
+?? venv
+## after git worktree remove and prune
+/Users/ds283/Documents/Code/ChamPBH 41d18c4 [one-loop-drain]

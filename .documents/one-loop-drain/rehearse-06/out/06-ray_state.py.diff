@@ -1,0 +1,14 @@
+--- inelastic-reflection/out/11-ray_state.py.txt
++++ one-loop-drain/rehearse-06/ray_state.py
+@@ -1,5 +1,10 @@
+ """Summarise the isolated cluster's jobs, workers and actors (rrk-adoption 04, ruling 9).
+-Read-only: it runs `ray list` with --address 127.0.0.1:6380 and prints one line per item."""
++Read-only: it runs `ray list` with --address 127.0.0.1:6380 and prints one line per item.
++
++one-loop-drain prompt 06: copied from inelastic-reflection 11's (.documents/inelastic-reflection/out/11-ray_state.py.txt),
++with this paragraph added. Run from the main checkout's root, with the cluster up, as
++`RAY_AUTH_MODE=token ./venv/bin/python .documents/one-loop-drain/rehearse-06/ray_state.py`; it starts nothing, opens no
++store and writes nothing but stdout."""
+ import json, subprocess, sys
+ A = "127.0.0.1:6380"
+ RAY = "./venv/bin/ray"

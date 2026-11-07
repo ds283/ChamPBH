@@ -1,0 +1,18 @@
+{
+  "created": "2026-11-07T09:07:22+00:00",
+  "datastore": "one-loop-drain-06-resumed.db",
+  "history": [
+    {
+      "from": null,
+      "git_dirty": true,
+      "git_head": "41d18c4a600e4e4b25e1e41aaa3448935a56dd03",
+      "operation": "create",
+      "to": "var/datastores/one-loop-drain-06-resumed.db",
+      "when": "2026-11-07T09:07:22+00:00"
+    }
+  ],
+  "name": "one-loop-drain-06-resumed",
+  "purpose": "one-loop-drain 06 R: the reference build's grid built with run a interrupted by SIGTERM in the A = 0.1 scalar stage and resumed (runs a, a2, b, c), kept for the user",
+  "sidecar_format": 1,
+  "store_id": "23db39c668b4486cba95c7006cdffa65"
+}

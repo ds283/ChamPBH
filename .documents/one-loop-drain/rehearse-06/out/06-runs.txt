@@ -1,0 +1,12 @@
+| Run id | Slug | Store | pid | State | Exit | Launched -> ended (UTC) | Wall | Load at launch | git_head | git_dirty | script_sha256 | results_store_id | Fingerprint at finish (format, digest, taken) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `one-loop-drain-06-base-a-20261107T082601` | `base-a` | `base` | 67682 | `done` | 0 | 08:26:00 -> 08:29:38 | 3 min 38 s | 17.40 17.93 21.32 | `1561b60` | True | `92117838…acc0` | `None` | 6, 79f848b2…0c2b, 08:29:13 |
+| `one-loop-drain-06-base-b-20261107T082957` | `base-b` | `base` | 68244 | `done` | 0 | 08:29:55 -> 08:34:37 | 4 min 42 s | 37.11 27.07 24.61 | `1561b60` | True | `92117838…acc0` | `None` | 6, 248381db…5517, 08:34:12 |
+| `one-loop-drain-06-base-c-20261107T083454` | `base-c` | `base` | 69351 | `done` | 0 | 08:34:53 -> 08:35:51 | 0 min 58 s | 9.47 18.61 21.74 | `1561b60` | True | `92117838…acc0` | `None` | 6, ff38053c…f4a7, 08:35:26 |
+| `one-loop-drain-06-reference-a-20261107T083701` | `reference-a` | `reference` | 69796 | `done` | 0 | 08:37:00 -> 08:42:46 | 5 min 46 s | 13.87 16.69 20.51 | `41d18c4` | True | `2b8956ff…c0e9` | `None` | 7, b1bd5716…7f20, 08:42:21 |
+| `one-loop-drain-06-reference-b-20261107T084318` | `reference-b` | `reference` | 70472 | `done` | 0 | 08:43:16 -> 08:47:57 | 4 min 40 s | 10.49 23.53 24.07 | `41d18c4` | True | `2b8956ff…c0e9` | `None` | 7, d4fd784b…801f, 08:47:31 |
+| `one-loop-drain-06-reference-c-20261107T084809` | `reference-c` | `reference` | 75085 | `done` | 0 | 08:48:07 -> 08:50:48 | 2 min 41 s | 9.64 14.15 19.52 | `41d18c4` | True | `2b8956ff…c0e9` | `None` | 7, 7c7641d2…dd04, 08:50:23 |
+| `one-loop-drain-06-resumed-a-20261107T085145` | `resumed-a` | `resumed` | 90059 | `killed` | 143 | 08:51:44 -> 08:56:12 | 4 min 28 s | 10.20 13.59 18.16 | `41d18c4` | True | `2b8956ff…c0e9` | `None` | 7, baf4bc32…3e57, 08:55:47 |
+| `one-loop-drain-06-resumed-a2-20261107T085643` | `resumed-a2` | `resumed` | 90981 | `done` | 0 | 08:56:42 -> 08:59:17 | 2 min 35 s | 8.64 16.19 19.06 | `41d18c4` | True | `2b8956ff…c0e9` | `None` | 7, b1bd5716…7f20, 08:58:53 |
+| `one-loop-drain-06-resumed-b-20261107T085932` | `resumed-b` | `resumed` | 91430 | `done` | 0 | 08:59:31 -> 09:04:24 | 4 min 53 s | 9.20 13.51 17.45 | `41d18c4` | True | `2b8956ff…c0e9` | `None` | 7, d4fd784b…801f, 09:03:59 |
+| `one-loop-drain-06-resumed-c-20261107T090440` | `resumed-c` | `resumed` | 95407 | `done` | 0 | 09:04:38 -> 09:07:15 | 2 min 37 s | 12.92 13.38 16.21 | `41d18c4` | True | `2b8956ff…c0e9` | `None` | 7, 7c7641d2…dd04, 09:06:50 |

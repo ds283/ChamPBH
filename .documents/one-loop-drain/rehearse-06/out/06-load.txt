@@ -1,0 +1,10 @@
+base-a launch: 2026-11-07 08:26:00 +0000  8:26  up 7 days, 10:46, 1 user, load averages: 17.40 17.93 21.32
+base-b launch: 2026-11-07 08:29:55 +0000  8:29  up 7 days, 10:50, 1 user, load averages: 37.11 27.07 24.61
+base-c launch: 2026-11-07 08:34:53 +0000  8:34  up 7 days, 10:55, 1 user, load averages: 9.47 18.61 21.74
+reference-a launch: 2026-11-07 08:37:00 +0000  8:37  up 7 days, 10:57, 1 user, load averages: 13.87 16.69 20.51
+reference-b launch: 2026-11-07 08:43:16 +0000  8:43  up 7 days, 11:04, 1 user, load averages: 10.49 23.53 24.07
+reference-c launch: 2026-11-07 08:48:07 +0000  8:48  up 7 days, 11:08, 1 user, load averages: 9.64 14.15 19.52
+resumed-a launch: 2026-11-07 08:51:44 +0000  8:51  up 7 days, 11:12, 1 user, load averages: 10.20 13.59 18.16
+resumed-a2 launch: 2026-11-07 08:56:42 +0000  8:56  up 7 days, 11:17, 1 user, load averages: 8.64 16.19 19.06
+resumed-b launch: 2026-11-07 08:59:31 +0000  8:59  up 7 days, 11:20, 1 user, load averages: 9.20 13.51 17.45
+resumed-c launch: 2026-11-07 09:04:38 +0000  9:04  up 7 days, 11:25, 1 user, load averages: 12.92 13.38 16.21

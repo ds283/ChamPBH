@@ -1,0 +1,18 @@
+{
+  "created": "2026-11-07T08:36:00+00:00",
+  "datastore": "one-loop-drain-06-base.db",
+  "history": [
+    {
+      "from": null,
+      "git_dirty": true,
+      "git_head": "1561b60fdf9d162cf4b9afc1438b24a2186ad8a2",
+      "operation": "create",
+      "to": "/private/tmp/claude-35086/-Users-ds283--claude-spares-spare-3KG1mP/ac4eb94d-0bc8-4fda-a4e4-f553733c5d07/scratchpad/agent-06/base-1561b60/var/datastores/one-loop-drain-06-base.db",
+      "when": "2026-11-07T08:36:00+00:00"
+    }
+  ],
+  "name": "one-loop-drain-06-base",
+  "purpose": "one-loop-drain 06 Bitwise: the base build at 1561b60 (runs a, b, c: 17 fixed-law histories), kept for the user",
+  "sidecar_format": 1,
+  "store_id": "2f6e8a7c74e54965865a781e8430f66c"
+}

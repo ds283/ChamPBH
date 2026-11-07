@@ -1,0 +1,19 @@
+$ git diff --name-only 1561b60 9616e04
+.documents/OPEN_ISSUES.md
+prompts/INDEX.md
+prompts/one-loop-drain/01-the-drain-law.md
+prompts/one-loop-drain/IMPLEMENTATION_STATE.md
+prompts/one-loop-drain/README.md
+prompts/reflection-restart/IMPLEMENTATION_STATE.md
+
+$ git show 1561b60:config/version.py | grep VERSION_LABEL
+76:VERSION_LABEL = "2026.9.0"
+$ git show 1561b60:config/fingerprint.py | grep FINGERPRINT_FORMAT =
+87:FINGERPRINT_FORMAT = 6
+$ git diff --stat 1561b60 HEAD -- PRyMrates PRyM CosmologyModels/GenericEOS exponential.yaml requirements.txt runregistrykit.toml thirdparty
+(exit 0)
+$ shasum -a 256 of main.py at 1561b60 and at HEAD
+92117838ee846599b10a7f091557de662391c70b79c992726c6e0a9b801aacc0  -
+2b8956ff1ceaee4d5c222f4c9307adae9ee1841b41f5d09276798553206bc0e9  main.py
+88:VERSION_LABEL = "2026.10.0"
+95:FINGERPRINT_FORMAT = 7

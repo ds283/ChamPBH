@@ -1,0 +1,12 @@
+--- inelastic-reflection/out/11-wait_for_line.py.txt
++++ one-loop-drain/rehearse-06/wait_for_line.py
+@@ -1,4 +1,9 @@
+ """
++one-loop-drain prompt 06: copied from inelastic-reflection 11's (.documents/inelastic-reflection/out/11-wait_for_line.py.txt),
++with this paragraph added. Run from the main checkout's root as
++`./venv/bin/python .documents/one-loop-drain/rehearse-06/wait_for_line.py LOG TEXT --timeout S`; it reads LOG only and
++writes nothing but stdout.
++
+ Wait until LOG holds a line containing TEXT (rrk-adoption prompt 04, the orchestrator's note for
+ 04, section 0 ruling 3). Reads LOG only: no pgrep, no kill -0, no Ray, and nothing started.
+ 

@@ -1798,3 +1798,372 @@ The gate holds, item by item (prompt §2):
    masses, every blank matched in its own case; K(N) equal to the ledger's bit for bit.
 3. **On the sample** (§5.6): 230 of 230 tasks, every step 2 check equal, the merged histories.csv equal to its parts, the tool at the
    three scales with every history measured and its K check within 1.5 × 10⁻¹¹.
+
+## 6. Prompt 06 — the rehearsal (2026-11-07)
+
+**Tree:** branch `one-loop-drain` at `41d18c4` (orchestrator note 06's commit, on `d05b625`, which adds the prompt); the code is
+05's reviewed code, `VERSION_LABEL` 2026.10.0, `FINGERPRINT_FORMAT` 7. The base build ran from a detached worktree of `1561b60`
+(2026.9.0, format 6), since removed. §1–§5 above are unchanged. Nothing in the code changed.
+**Scripts:** [`one-loop-drain/rehearse-06/`](one-loop-drain/rehearse-06/), each with a docstring: `code_probe.py` (§6.1),
+`histories.py` (§6.3), `compare_base.py` (§6.4), `compare_02d.py` (§6.5), `compare_exports.py` (§6.5), and the helpers copied from
+`inelastic-reflection` 11 (`wait_for_line.py`, `beat_times.py`, `ray_state.py`, `silences.py`, `check.sh`, `suite.sh`; each
+adaptation is a diff in `out/06-*.diff`). **Committed outputs:** [`one-loop-drain/rehearse-06/out/`](one-loop-drain/rehearse-06/out/):
+the runs' logs (ANSI codes removed), recorders, manifests, status files and the three sidecars; the probe's three outputs; the
+comparisons; the histories readers; histories.csv and quanta_histories.csv at the three scales; the readers' logs and the
+store shasums; the loads, the cluster, the worktree and the suite records. **Raw output** (not committed):
+`var/one-loop-drain/06/` (`runs/`, `readers/`, `plot-reference/`, `plot-resumed/` with the figures, and the files copied to `out/`);
+the stores `var/datastores/one-loop-drain-06-{base,reference,resumed}*` with their sidecars; the run records under `var/runs/`.
+
+Orchestrator note 06's rulings 1–9 governed. The machine was shared: one-minute loads of 8.6–37 at the launches, up to 149
+during the suites after.
+
+### 6.1 The cluster, the base tree and the probe (prompt §1.1, §1.2; rulings 1, 6)
+
+- **The base tree** ([`06-base-code.txt`](one-loop-drain/rehearse-06/out/06-base-code.txt),
+  [`06-worktree.txt`](one-loop-drain/rehearse-06/out/06-worktree.txt)). `git diff --name-only 1561b60 9616e04` lists six
+  documents and no code. At `1561b60`, `VERSION_LABEL = "2026.9.0"` and `FINGERPRINT_FORMAT = 6`. `git diff --stat 1561b60 HEAD`
+  over `PRyMrates PRyM CosmologyModels/GenericEOS exponential.yaml requirements.txt runregistrykit.toml thirdparty` is empty.
+  `main.py`'s SHA-256 is `92117838…acc0` at `1561b60` and `2b8956ff…c0e9` at the tip. The worktree's `git status` before the
+  first base run and after the last: `?? var`, `?? venv` (the two links) and nothing else.
+- **The cluster** ([`06-cluster.txt`](one-loop-drain/rehearse-06/out/06-cluster.txt)): `tools/ray_cluster.sh start
+  "one-loop-drain 06 (rehearsal)"` from the main checkout with `PYTHONPATH` unset, exit 0, `started in 8s; gcs_server pid 67063`
+  at 08:25 UTC; `status` and the lock's `status`: HELD, purpose `one-loop-drain 06 (rehearsal)`. The token's value appears in no
+  output (`grep -c -F -f ~/.ray/auth_token`: 0).
+- **The probe**, from each tree's root, as ruling 1 gives it
+  ([`06-probe-base-before.txt`](one-loop-drain/rehearse-06/out/06-probe-base-before.txt),
+  [`06-probe-tip-before.txt`](one-loop-drain/rehearse-06/out/06-probe-tip-before.txt),
+  [`06-probe-tip-after-base.txt`](one-loop-drain/rehearse-06/out/06-probe-tip-after-base.txt)); each exit 0:
+
+  | run | process | `ScalarHistory.py`, `ObjectFactories/__init__.py` under | labels | `sys.path[0]` | cwd | `PYTHONPATH` |
+  |---|---|---|---|---|---|---|
+  | worktree, before B0 | driver | the worktree | 2026.9.0, 6 | ray's `thirdparty_files` (then the probe's dir, the worktree) | the worktree | `.` |
+  | | task, actor | the worktree | 2026.9.0, 6 | the worktree | **the main checkout** | None |
+  | main checkout, before B0 | driver | the main checkout | 2026.10.0, 7 | ray's `thirdparty_files` (then the probe's dir, the checkout) | the main checkout | `.` |
+  | | task, actor | the main checkout | 2026.10.0, 7 | the main checkout | the main checkout | None |
+  | main checkout, after B0 | all three | the main checkout | 2026.10.0, 7 | as before | the main checkout | as before |
+
+  The job's `py_driver_sys_path` was `[<probe dir>, <the tree's root>]` each time: Ray puts the driver's tree root first on each
+  worker's path, so a worker imports its own driver's tree. A worker's working directory is the cluster's, the main checkout,
+  for a base driver too; ruling 1 allows it, since the data files read from it are identical at both commits (above).
+
+### 6.2 The builds (prompt §1.3, §1.4)
+
+Each run went through the wrapper, detached through `sh`, with a recorder beside it; registration seen in 2.0 s each; one
+check ([`06-checks.txt`](one-loop-drain/rehearse-06/out/06-checks.txt): the pid file equals `status.json`'s pid, state
+`running`); its end waited on in the background by `wait_for_line.py --timeout 3600`. The 17 histories of each fixed-law
+grid and the 9 one-loop histories are as prompt §1.3 gives them; the one-loop ones are 02d's tasks P-2188, P-2197, R-865 and
+R-611 at A = 0.1 and 1 and C-3233 at A = 1, each a 02d `success` whose `argv` is `<β> <M> --drain-law one_loop --alpha <A>` and
+nothing else ([`06-02d-tasks.txt`](one-loop-drain/rehearse-06/out/06-02d-tasks.txt)).
+
+| Run id | Slug | Store | pid | State | Exit | Launched → ended (UTC) | Wall | Load at launch | `git_head` | `git_dirty` | `script_sha256` | Fingerprint at finish (format, digest, taken) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `one-loop-drain-06-base-a-20261107T082601` | `base-a` | base | 67682 | `done` | 0 | 08:26:00 → 08:29:38 | 3 min 38 s | 17.40 | `1561b60` | true | `92117838…acc0` | 6, `79f848b2…0c2b`, 08:29:13 |
+| `one-loop-drain-06-base-b-20261107T082957` | `base-b` | base | 68244 | `done` | 0 | 08:29:55 → 08:34:37 | 4 min 42 s | 37.11 | `1561b60` | true | `92117838…acc0` | 6, `248381db…5517`, 08:34:12 |
+| `one-loop-drain-06-base-c-20261107T083454` | `base-c` | base | 69351 | `done` | 0 | 08:34:53 → 08:35:51 | 58 s | 9.47 | `1561b60` | true | `92117838…acc0` | 6, `ff38053c…f4a7`, 08:35:26 |
+| `one-loop-drain-06-reference-a-20261107T083701` | `reference-a` | reference | 69796 | `done` | 0 | 08:37:00 → 08:42:46 | 5 min 46 s | 13.87 | `41d18c4` | true | `2b8956ff…c0e9` | 7, `b1bd5716…7f20`, 08:42:21 |
+| `one-loop-drain-06-reference-b-20261107T084318` | `reference-b` | reference | 70472 | `done` | 0 | 08:43:16 → 08:47:57 | 4 min 40 s | 10.49 | `41d18c4` | true | `2b8956ff…c0e9` | 7, `d4fd784b…801f`, 08:47:31 |
+| `one-loop-drain-06-reference-c-20261107T084809` | `reference-c` | reference | 75085 | `done` | 0 | 08:48:07 → 08:50:48 | 2 min 41 s | 9.64 | `41d18c4` | true | `2b8956ff…c0e9` | 7, `7c7641d2…dd04`, 08:50:23 |
+| `one-loop-drain-06-resumed-a-20261107T085145` | `resumed-a` | resumed | 90059 | `killed` | 143 | 08:51:44 → 08:56:12 | 4 min 28 s | 10.20 | `41d18c4` | true | `2b8956ff…c0e9` | 7, `baf4bc32…3e57`, 08:55:47 |
+| `one-loop-drain-06-resumed-a2-20261107T085643` | `resumed-a2` | resumed | 90981 | `done` | 0 | 08:56:42 → 08:59:17 | 2 min 35 s | 8.64 | `41d18c4` | true | `2b8956ff…c0e9` | 7, `b1bd5716…7f20`, 08:58:53 |
+| `one-loop-drain-06-resumed-b-20261107T085932` | `resumed-b` | resumed | 91430 | `done` | 0 | 08:59:31 → 09:04:24 | 4 min 53 s | 9.20 | `41d18c4` | true | `2b8956ff…c0e9` | 7, `d4fd784b…801f`, 09:03:59 |
+| `one-loop-drain-06-resumed-c-20261107T090440` | `resumed-c` | resumed | 95407 | `done` | 0 | 09:04:38 → 09:07:15 | 2 min 37 s | 12.92 | `41d18c4` | true | `2b8956ff…c0e9` | 7, `7c7641d2…dd04`, 09:06:50 |
+
+- **The manifests** ([`06-<slug>.manifest.json`](one-loop-drain/rehearse-06/out/)): every base run records `git_head`
+  `1561b60fdf9d…` and `script_sha256` `92117838…acc0`, the SHA-256 of `git show 1561b60:main.py`; every tip run `41d18c4` and
+  `2b8956ff…c0e9`, `main.py`'s at the tip. `git_dirty` is `true` throughout: in the worktree from the two links, in the main
+  checkout from this prompt's untracked scripts under `.documents/one-loop-drain/rehearse-06/` (no tracked file differed;
+  `git status --porcelain` showed that directory alone). `results_store_id` is `null` for every run: each store's sidecar was
+  created after its last run (as in 11's reference store), so each run's `fingerprint_sidecar` says "not written … (there is none)".
+- **The stores** ([`06-*-store.sidecar.json`](one-loop-drain/rehearse-06/out/)): `store create` from the worktree's root
+  (ruling 1) after `base-c`, `store_id` `2f6e8a7c74e54965865a781e8430f66c`, its history recording `git_head` `1561b60` (dirty);
+  `store fingerprint` from the worktree at that time: **format 6**, digest `ff38053c…f4a7`, equal to `base-c`'s at finish
+  ([`06-fingerprint-base.txt`](one-loop-drain/rehearse-06/out/06-fingerprint-base.txt)). From the main checkout: reference
+  `2b6fd51c22ad445abaf2cf3e5573582a` after `reference-c`, resumed `23db39c668b4486cba95c7006cdffa65` after `resumed-c`.
+- **The stage times** (each log's `ALL WORK ITEMS COMPLETE`, scalar / adiabatic / BBN):
+
+  | run | α or A: scalar / adiabatic / BBN |
+  |---|---|
+  | `base-a` | α 0.01: 1m 40s / 1.21 s / 16.9 s; α 0.1: 24.4 s / 1.16 s / 16.2 s |
+  | `base-b` | α 0: 2m 39.6s / 0.959 s / 19.1 s; α 0.1: 44.4 s / 0.87 s / 16.2 s |
+  | `base-c` | α 0.15: 9.68 s / 0.406 s / 8.87 s |
+  | `reference-a` | α 0.01: 1m 42.6s / 1.38 s / 19.2 s; α 0.1: 25.4 s / 1.17 s / 16.1 s; A 0.1: 1m 11.2s / 1.27 s / 16.4 s; A 1: 15.8 s / 1.27 s / 16.5 s |
+  | `reference-b` | α 0: 2m 36.7s / 0.933 s / 18.6 s; α 0.1: 45.2 s / 1.1 s / 16.2 s |
+  | `reference-c` | α 0.15: 10.3 s / 0.443 s / 9.16 s; A 1: 1m 29.9s / 0.493 s / 8.47 s |
+  | `resumed-a` | α 0.01: 1m 41.5s / 1.3 s / 16.9 s; α 0.1: 24.3 s / 1.12 s / 16 s; A 0.1: interrupted |
+  | `resumed-a2` | α 0.01 and 0.1: nothing to compute (0.02–0.2 s); A 0.1: 1m 1.14s / 1.79 s / 17.2 s; A 1: 16.2 s / 1.17 s / 16.8 s |
+  | `resumed-b` | α 0: 2m 42.6s / 1.16 s / 20.5 s; α 0.1: 47.8 s / 1.26 s / 17.6 s |
+  | `resumed-c` | α 0.15: 10.7 s / 0.503 s / 9.91 s; A 1: 1m 21.4s / 0.447 s / 8.17 s |
+
+  **The builds' walls**: base 9 min 18 s (three runs), reference 13 min 7 s, resumed 14 min 33 s (four runs); the whole
+  prompt's Ray work, from the cluster's start to its stop, 08:25–09:15. No log holds a `Traceback`; every stage prints `0 models
+  skipped`. Every log carries the raylet's `file_system_monitor` warning that `/tmp/ray-cpbh` is "over 95% full" (44.6 → 39.3 GB
+  free of 926 GB); no object creation failed (§6.8).
+- **The silences** ([`06-silences.txt`](one-loop-drain/rehearse-06/out/06-silences.txt)): the longest heartbeat silence was
+  **160 s** (`resumed-b`, the α = 0 scalar stage; `base-b` 157 s, `reference-b` 155 s; the others 24–90 s), against the 900 s window.
+
+### 6.3 The interruption (prompt §1.4; ruling 7)
+
+- **The window** ([`06-delay.txt`](one-loop-drain/rehearse-06/out/06-delay.txt)). `reference-a`'s recorder saw `>> RUNNING PIPELINE
+  FOR MODEL QCD_Cosmology, A = 0.1 (one-loop-measured-v1)` at 08:40:18.930 UTC. The beats hold no line per stored history (the
+  heartbeat changes only at stage banners, and the other lines of that stage are the raylet's disk warnings), so the opening
+  was read from the reference store's `ScalarHistory.timestamp`s, as `inelastic-reflection` 11 read its window: β = 1.06 at
+  +11.280 s (**the opening**), β = 2 at +11.676 s, β = 1.185 at +12.606 s, β = 10 at +69.058 s. **The close**: the A = 0.1 scalar
+  stage's `-- ALL WORK ITEMS COMPLETE in time 1m 11.2s` line at 08:41:29.978, +71.048 s. The window is 59.8 s long, its midpoint
+  41.164 s: **`--after 41`**. Load at `reference-a`'s launch 13.87, at `resumed-a`'s 10.20.
+- **The signal** ([`06-resumed-a.interrupt.log`](one-loop-drain/rehearse-06/out/06-resumed-a.interrupt.log)): banner seen at
+  08:55:05 (the recorder: 08:55:05.211), `sent SIGTERM to pid 90059` at 08:55:46, +40.8 s, **inside the window**. The wrapper:
+  `** SIGTERM at 2026-11-07 08:55:47 +0000: recorded killed, exit code 143`; `main.py ended with SystemExit(1)`; `** launcher saw
+  exit status 143`. One attempt; no miss.
+- **What was stored** ([`06-histories-resumed-after-a.txt`](one-loop-drain/rehearse-06/out/06-histories-resumed-after-a.txt)):
+  the eight fixed histories of run a; **A = 0.1 β = 1.06, 2 and 1.185, each `validated = 1`**, stored 08:55:16.4–08:55:17.8, +11.2
+  to +12.6 s after the banner; β = 10 not stored. `ScalarHistory` 11, `ScalarHistoryBounce` 629 (231 + 247 + 151), `AdiabaticHistory`
+  8, `BBNData` 8 (the fixed rows').
+- **Ray after it** ([`06-ray-state.txt`](one-loop-drain/rehearse-06/out/06-ray-state.txt)): every job `SUCCEEDED` (Ray's record of a
+  `SIGTERM`ed driver), workers 159 recorded and 0 alive, actors 122 and 0 `ALIVE`; `ray_cluster.sh status` exit 0, the lock HELD.
+- **The resume** (`resumed-a2`, `--prune-unvalidated`): no prune report (no row was unvalidated). At α = 0.01 and 0.1 every stage
+  had 0 lookups; at A = 0.1 the scalar stage looked up, computed, stored and validated **one** history (β = 10), and the adiabatic
+  and BBN stages all four; at A = 1, all four, as a fresh build ([`06-stage-counts.txt`](one-loop-drain/rehearse-06/out/06-stage-counts.txt)).
+  `resumed-a2`'s fingerprint at finish, `b1bd5716…7f20`, equals `reference-a`'s.
+
+### 6.4 The gate Bitwise (prompt §2.1; P53)
+
+`compare_base.py` on the base and reference stores ([`06-compare-base.txt`](one-loop-drain/rehearse-06/out/06-compare-base.txt)),
+exit 0, **`RESULT: every compared value bitwise equal, new columns as 03 sets them`**, `DIFFERENCES: none`.
+- **Matched:** the base's 17 histories, each once in the tip store under `drain_model` = `fixed`, by (M, β, φ*, α) through
+  `ExponentialModel`, `M_value`, `beta_value`, `phi_value` and `alpha_value`, all by `float.hex`; and the tip's 17 fixed histories
+  each once. Samples by ln(1 + z) through each shard's `redshift`: every sample matched, none on one side only, no duplicate
+  (4 620 to 9 780 per history; 101 335 in all).
+- **Compared, bitwise:** `ScalarHistory`'s 55 shared columns (the type ids, `failure`, `failure_reason`, the tuning's outputs, the
+  first bounce, the fixed-temperature values, the 24 dissipation columns, `RHS_evaluations`, `compute_steps`, `z_samples`,
+  `validated`, …) and `extra_data` key by key (5 keys each, none on one side only); `ScalarHistoryValue`'s 19 value columns;
+  `AdiabaticHistory`'s 6 and `AdiabaticHistoryValue`'s 5; `BBNData`'s 10 (`failure_reason` and `PRyM_version` included) and
+  `BBNDataValue`'s 4; the key rows each history references (`QCD_Cosmology` 7 columns, `ExponentialModel.n_value`, `M_value`,
+  `beta_value`, the three `tolerance` rows, `alpha_value.value`, `phi_value`, `pi_value`, `temperature`, `IntegrationSolver`'s
+  `stepping` and `label`).
+- **Left out, by name:** `serial` and every `*_serial` column, `version`, `label` (of the history tables), `timestamp`,
+  `compute_time`, `mean_RHS_time`, `max_RHS_time`, `min_RHS_time`, `NP_compute_time`, `BBN_compute_time`.
+- **The count:** `ScalarHistory` 935, `extra_data` 107, `ScalarHistoryValue` 1 925 365, `AdiabaticHistory` 102,
+  `AdiabaticHistoryValue` 506 675, `BBNData` 170, `BBNDataValue` 90 952, key tables 323 (`QCD_Cosmology` 119, `tolerance` 51,
+  `IntegrationSolver` 34, the others 17 each): **2 524 629 values, every one equal.**
+- **The tip's new columns** at the 17: `alpha_value.drain_model` = `fixed` 17 of 17; the drain record's 23 columns (`bounce_rows`
+  included) NULL at 17 of 17; no `ScalarHistoryBounce` row at 17 of 17. **The sample masses**: of 101 335 samples, `log_m_eff_Mp`
+  and `log_m_tracker_Mp` are filled at every one, NULL at none. Checked by recomputing each sample's pair with
+  `ComputeTargets.ScalarHistory.sample_masses` on the `ExponentialModel` realized at the stored normalization and φ_ref in
+  `Planck_units`, from the sample's columns read back as `ObjectFactories` reads them: no NULL where it gives a value, no value
+  where it gives None, and all 202 670 filled values equal to the recomputation bit for bit.
+- **The exceptions** (README §8.14): **none**. No history failed at either commit. The two BBN failures (M = 10⁻³ M_P, β = 0.5,
+  α = 0 and 0.1: `T_in_MeV=0.00019824 MeV` and `0.00019825 MeV is smaller than T_BBN_spline_min=0.0002 MeV`) are rows of
+  `BBNData` with equal reasons at both, and compared as such.
+- An early run of the script on the same two stores at 08:51, after B1 and before B2, gave the same output byte for byte (its
+  first two attempts failed on two bugs of the script, fixed then: §6.8's version is the fixed one; log 06 §2).
+
+### 6.5 The gate R (prompt §2.2; P54; rulings 2, 3)
+
+**(i) The stores agree.** `tools/compare_stores.py` on the reference and resumed stores
+([`06-compare-stores.txt`](one-loop-drain/rehearse-06/out/06-compare-stores.txt)), exit 0, **`RESULT: equal`**, `problems: none`.
+Every table matched with 0 rows on either side only, **`ScalarHistoryBounce` 2 562 among them**; `ScalarHistory` 26,
+`ScalarHistoryValue` 156 508, `AdiabaticHistoryValue` 156 508, `BBNDataValue` 36 571, `alpha_value` 6, `redshift` 75 001. The
+bookkeeping columns that differ: timestamps, labels and the compute times only. **`store fingerprint`** on each closed store
+([`06-fingerprint-reference.txt`](one-loop-drain/rehearse-06/out/06-fingerprint-reference.txt),
+[`06-fingerprint-resumed.txt`](one-loop-drain/rehearse-06/out/06-fingerprint-resumed.txt)): both **`7c7641d2aade2d926319113781d8515ea8488b826d2f4b488b3c48105636dd04`**,
+**format 7**, `problems: none`, every class's count and digest identical.
+
+**(ii) Against 02d's tool route.** `compare_02d.py` on each store ([`06-compare-02d-reference.txt`](one-loop-drain/rehearse-06/out/06-compare-02d-reference.txt),
+[`06-compare-02d-resumed.txt`](one-loop-drain/rehearse-06/out/06-compare-02d-resumed.txt)), exit 0, **`RESULT: every bitwise item equal;
+Yp and D/H within 5e-10`**, `DIFFERENCES: none`, on both:
+- the nine histories matched once each, failure 0, validated 1;
+- **the tuning's fifteen keys**, through the columns' units: 135 values equal;
+- **every field of `accepted.drain_values`** against the stored drain record (13 per history): 117 equal;
+- **the candidate rows** by `candidate_index`, ruling 2: their number equal to the partial line's `candidates` and `injections`
+  in each history, indices 0, 1, …; 1 285 candidate rows × 11 values (the `DrainCandidate`'s eight through `to_column` in
+  `Planck_units`, and the injection's N, α_eff, ΔK) = **14 135 values equal**; all 14 135 also equal the raw values bit for bit
+  (a measurement). The event rows, counted and not compared: 1 277 `plateau` rows, no `wall` row;
+
+  | task | candidates (regime) | plateau rows | bounce rows |
+  |---|---|---|---|
+  | P-2188-A0.1 | 116 (one-loop) | 115 | 231 |
+  | P-2188-A1 | 17 (one-loop) | 16 | 33 |
+  | P-2197-A0.1 | 124 (one-loop) | 123 | 247 |
+  | P-2197-A1 | 5 (one-loop) | 4 | 9 |
+  | R-865-A0.1 | 76 (one-loop) | 75 | 151 |
+  | R-865-A1 | 45 (one-loop) | 44 | 89 |
+  | R-611-A0.1 | 536 (one-loop) | 535 | 1 071 |
+  | R-611-A1 | 65 (one-loop) | 64 | 129 |
+  | C-3233-A1 | 301 (classical) | 301 | 602 |
+
+- **the 24 dissipation values** (ΔN_eff today and at 1 MeV among them): 216 values equal, bit for bit (ruling 3);
+- **Y_p and D/H** at full precision: **equal in all nine, relative difference 0** in both stores; the 5 × 10⁻¹⁰ allowance was not
+  used.
+
+**(iii) The exports.** `compare_exports.py` ([`06-compare-exports.txt`](one-loop-drain/rehearse-06/out/06-compare-exports.txt)) on
+`plot-reference/QCD_Cosmology` and `plot-resumed/QCD_Cosmology`, after R6, exit 0: 101 files in each, none on one side only;
+**93 byte-identical** (histories.csv, 26 fields.csv, 9 bounces.csv, and the tool's 9 + 9 + 9 per-history files and 3
+quanta_histories at each of the three scales); **8 differ only in timing columns** (plot_by_beta's per-(row, M) `data.csv`:
+`scalar_compute_time`, `BBN_compute_time`, `NP_compute_time`); 0 differ otherwise.
+- **The nine bounces.csv against 05's export** of the same 02d tasks under `var/one-loop-drain/05/exports/QCD_Cosmology/`
+  ([`06-compare-bounces-05.txt`](one-loop-drain/rehearse-06/out/06-compare-bounces-05.txt)): **9 of 9 byte-identical.**
+- **quanta_histories.csv against 05's rows** (a measurement; [`06-compare-quanta-histories-05.txt`](one-loop-drain/rehearse-06/out/06-compare-quanta-histories-05.txt)):
+  at c_a = 1, 0 and 10, all 27 rows equal to 05's, cell for cell. 05's fields.csv had no adiabatic or BBN columns behind it, but
+  the tool reads neither: E and the K check use the sample masses, `raw_N` and `rho_chi_over_rho_rad`, which are the same.
+
+### 6.6 The readers (prompt §1.5; P56; rulings 4, 5)
+
+Each unregistered, from the main checkout, with `--config exponential.yaml --database <stem>.db --shards 16`, the plot scripts
+with `--ray-address 127.0.0.1:6380`. `shasum -a 256` of the store's 17 files and its sidecar before and after each: **unchanged
+every time** ([`06-shasums.txt`](one-loop-drain/rehearse-06/out/06-shasums.txt), [`06-readers.txt`](one-loop-drain/rehearse-06/out/06-readers.txt)).
+
+| reader | store | exit | wall | load at start |
+|---|---|---|---|---|
+| R1 `main.py --inventory` | reference | 0 | 26.3 s | 11.30 |
+| R2 `plot_by_beta.py` | reference | 0 | 33.4 s | 10.94 |
+| R3 `plot_ScalarHistory.py` | reference | 0 | 45.2 s | 17.81 |
+| R4 `plot_by_beta.py --A-values 0.5` | reference | **2** | 11.1 s | 16.54 |
+| R5 `plot_by_beta.py` | resumed | 0 | 30.9 s | 17.69 |
+| R5 `plot_ScalarHistory.py` | resumed | 0 | 40.6 s | 17.57 |
+| R6 `quanta_measures.py`, ×6 | the two exports | 0 | 3.4–3.6 s | 9.25–11.74 |
+| R7 `bbn_from_store.py`, fixed α = 0.1 | base | 0 | 12.4 s | 19.15 |
+| R7 the same | reference | 0 | 11.1 s | 26.41 |
+| R7 `--drain-law one_loop --alpha 1` | reference | 0 | 12.3 s | 33.24 |
+
+- **R1** ([`06-R1-inventory.log`](one-loop-drain/rehearse-06/out/06-R1-inventory.log)): `@@ alpha_value (replicated): 6 records`,
+  `values = [ 0, 0.01, 0.1, 0.15, A=0.1 (one-loop-measured-v1), A=1 (one-loop-measured-v1) ]`; each one-loop history's line ends
+  `A=<A> (one-loop-measured-v1)`; `ScalarHistory (sharded): 26 records: 26 validated, 0 unvalidated`. 16 classes are listed;
+  `ScalarHistoryBounce` has no inventory spec (03).
+- **R2 and R3** (`plot-reference/QCD_Cosmology/`): `alpha=0/`, `alpha=0.01/`, `alpha=0.1/`, `alpha=0.15/` and
+  `one-loop-measured-v1/A=0.1/`, `one-loop-measured-v1/A=1/`, each with `csv/` and `plots/`; at the label's level histories.csv
+  and `plots/M=<M>eV_n=1/Delta_N_eff.pdf` for each of the three M. **histories.csv** ([`06-histories.csv`](one-loop-drain/rehearse-06/out/06-histories.csv))
+  holds **54 rows**, in P36's sort (`drain_model`, α, M, n, β): the **26 stored histories**, and **28 rows marked `no ScalarHistory
+  row in the store`**: the plot script writes a row for every (row, M, β) of the stored grid, and the three runs' grids are not
+  a rectangle (§6.8). **26 fields.csv**; **9 bounces.csv**, one under each one-loop history's directory, **none under `alpha=*`**.
+- **R4** ([`06-R4-plot-unstored.log`](one-loop-drain/rehearse-06/out/06-R4-plot-unstored.log)): exit 2, `!! plot: the store holds no
+  alpha_value for --A-values 0.5 (one-loop-measured-v1); main.py was not run with it, so no history in this store can match. Give
+  the plot the options the build used`; `var/one-loop-drain/06/plot-unstored` does not exist afterwards.
+- **R6** (05's log §7's commands; [`06-R6-*.log`](one-loop-drain/rehearse-06/out/)): at each scale and on each export, `measured 9,
+  skipped as fixed-law 36, failed histories 9, missing files 0, refused 0, failed the K check 0`; the nine "failed" are the
+  one-loop grid rows with no stored history (R2's 28, of which 9 are one-loop). K bitwise at every candidate but the leftover,
+  the K check within 2.84 × 10⁻¹⁴. δ_stim at c_a = 1: 4.1 × 10⁻⁵⁸ (R-611, A = 1) to 8.0 × 10⁻⁵ (C-3233, A = 1). My first four
+  calls at c_a = 0 and 10 passed `--assoc-scale <c>` as one shell word and were refused (exit 2, usage); they were re-run as two
+  words (the readers' record says so).
+- **R7** (ruling 4: `--small-network --variant prod --phi-init-Mp 5 --beta 1.185 --M-Mp 4e-31`, from the main checkout):
+
+  | store | law | `stored:` Y_p, D/H | `prod` re-solve |
+  |---|---|---|---|
+  | base (format 6) | fixed, α = 0.1 | 0.25595621877075797, 2.4855627505745383 | 0.2559562188, 2.485562751 |
+  | reference | fixed, α = 0.1 | 0.25595621877075797, 2.4855627505745383 | 0.2559562188, 2.485562751 |
+  | reference | one-loop, A = 1 | 0.25692050931671995, 2.534332574064248 | 0.2569205093, 2.534332574 |
+
+  Each re-solve equals the stored value rounded to the ten significant digits it prints. The base store, with no `drain_model`
+  column, was read as `fixed` (P39). My first three R7 calls were malformed by a shell loop (an empty store name; exit 2 at
+  argument parsing, nothing opened) and were re-run one by one.
+- **The cluster's stop**, after every driver's pid answered `no such process`, every recorder had written its exit line and
+  `interrupt_when.py` its `sent` line: Ray state, 18 jobs `SUCCEEDED`, workers 336 recorded and 0 alive, actors 253 and 0 `ALIVE`.
+  `ray_cluster.sh stop`, exit 0: `grace period of 15s over; SIGKILL to: 67063 67064`, `no process names /tmp/ray-cpbh; ports 6380
+  6381 8267 52367 are free`, `released the rehearsal lock`, `stopped in 19s`. Then `status`, exit 0: `lock: free`, no Ray process,
+  the four ports free; `raypoolkit.rehearsal_lock status`, exit 0, `lock: free`. `ray stop` was never run.
+
+### 6.7 The figures, the costs, the suites
+
+- **The figures**, looked at as PNG (none committed). `plot-reference/QCD_Cosmology/plots/M=0.00097413eV_n=1/Delta_N_eff.png`: two
+  panels, ΔN_eff(T_CMB) above and ΔN_eff(1 MeV) below against β on log axes, one curve per (model, value) with value > 0
+  (P36): α = 0.01, α = 0.1, A = 0.1 and A = 1 (one-loop-measured-v1), and a legend entry for α = 0.15 with no point at this M. A = 1
+  lies just below α = 0.1 (0.060 against 0.071 at β = 1.185 today) and A = 0.1 just below α = 0.01; β = 1.06's zero at 1 MeV is not
+  drawn on the log axis. `one-loop-measured-v1/A=1/plots/beta=1.185/M=0.00097413eV_n=1/dark_radiation.png` (P-2197 at A = 1):
+  Δg* and ρ_χ/ρ_R against N from the first impact at N ≈ 17.6, a step near N = 20 and three small steps through 25–26, the BBN
+  window shaded, the parking at N = 29.04 marked, and ρ_χ/ρ_R flat at 8.07 × 10⁻³ after it; the footer reads "Reflections (elastic
+  model): 5".
+- **The costs**, for 08's handover: the builds' walls above; per history (the store's `timestamp` less the time in its label, so the
+  compute task's queueing included; [`06-histories-reference.txt`](one-loop-drain/rehearse-06/out/06-histories-reference.txt)):
+  fixed-law tunings 1–5 integrations, 6.7–128 s (β = 5.5 at M = 10⁻³ the longest); one-loop 1 integration at laboratory M, 4.2–59 s
+  (R-611 at A = 0.1 the longest, 536 drains), C-3233 at A = 1 3 integrations, 89 s. Bounce rows per one-loop history 9–1 071, **2 562
+  in all**. On disk: base 117 344 KiB, reference 137 352 KiB, resumed 137 868 KiB (17 files each).
+- **The suites**, serially, never with the cluster up ([`06-suites.txt`](one-loop-drain/rehearse-06/out/06-suites.txt); `unittest`'s
+  time, the one-minute load before the root): before (08:06–08:24), CosmologyModels 26 OK (68.5 s; 8.68), ComputeTargets
+  `test_[a-f]*` 219 OK (144.1 s; 6.82), `test_[g-z]*` 446 OK (487.9 s; 6.35), ObjectFactories 163 OK (133.7 s; 40.99), tools 191 OK
+  (211.5 s; 18.57), RunDrivers 72 OK (23.3 s; 12.40); after (09:17–09:39, other work loading the machine to 107–200), the same
+  counts, all OK: 76.9 s, 162.9 s, 545.8 s, 159.1 s, 273.4 s, 33.3 s.
+- **The token**: `grep -r -F -l -f ~/.ray/auth_token` over every file this prompt commits finds nothing (exit 1).
+- **The registry** after: 33 runs, all finished; this prompt's ten `done` but `resumed-a` `killed`. No pid recorded under
+  `var/one-loop-drain/06/` answers `kill -0`.
+
+### 6.8 The commands, verbatim
+
+From the main checkout's root unless stated. `<R>` is `.documents/one-loop-drain/rehearse-06`, `<L>` `var/one-loop-drain/06/runs`,
+`<W>` the worktree `<scratch>/base-1561b60`, `<scratch>` the session scratchpad's `agent-06`, `ADDRESS=127.0.0.1:6380`,
+`S=<main checkout>/var/datastores`. Each suite, launch, wait, start, stop and status was its own Bash call.
+
+```bash
+# the Gate
+git status --porcelain; git worktree list; tools/ray_cluster.sh status; ./venv/bin/python -m raypoolkit.rehearsal_lock status
+./venv/bin/python -m runregistrykit list
+# the suites, before and after (ComputeTargets in halves; the g-z half and tools in the background)
+SUITES=<scratch>/suites sh <R>/suite.sh before CosmologyModels CosmologyModels/tests          # and the four others, as CLAUDE.md
+# the base tree
+git worktree add --detach <W> 1561b60; cd <W> && ln -s <main checkout>/venv venv && ln -s <main checkout>/var var
+# the cluster (alone; PYTHONPATH unset)
+tools/ray_cluster.sh start "one-loop-drain 06 (rehearsal)" > var/one-loop-drain/06/start.txt 2>&1
+# the probe, from each tree's root
+PYTHONPATH=. ./venv/bin/python -u <main checkout>/<R>/code_probe.py > <scratch>/probe-<tree>-<when>.txt 2>&1
+# a base run (from <W>; b and c alike, with prompt §1.3's grid)
+echo "base-a launch: $(date '+%F %T %z') $(uptime)" | tee -a var/one-loop-drain/06/06-load.txt
+cd <W> && export ADDRESS S L=<main checkout>/<L> && nohup sh -c 'PYTHONPATH=. ./venv/bin/python -u RunDrivers/registered_run.py --campaign one-loop-drain --prompt 06 --register base-a --purpose "one-loop-drain 06 Bitwise: run a of the base build at 1561b60 (beta 1.06 1.185 2 10 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1)" -- --config exponential.yaml --database $S/one-loop-drain-06-base.db --shards 16 --job-name one-loop-drain-06-base-a --ray-address $ADDRESS --M-values-Mp 4e-31 --beta-values 1.06 1.185 2 10 --phi-init-Mp 5 --alpha-values 0.01 0.1 > $L/base-a.log 2>&1 & echo $! > $L/base-a.pid; wait $!; echo "** launcher saw exit status $?" >> $L/base-a.log' > /dev/null 2>&1 &
+nohup ./venv/bin/python -u $PWD/<R>/beat_times.py $L/base-a.log $L/base-a.beats > $L/base-a.beats.err 2>&1 &
+./venv/bin/python <R>/wait_for_line.py <L>/base-a.log "** registered_run: registered as" --timeout 120 && sh <R>/check.sh base-a
+./venv/bin/python <R>/wait_for_line.py <L>/base-a.log "** launcher saw exit status" --timeout 3600 --poll 5      # in the background
+cd <W> && PYTHONPATH=. ./venv/bin/python -m runregistrykit store create var/datastores/one-loop-drain-06-base.db --purpose "one-loop-drain 06 Bitwise: the base build at 1561b60 (runs a, b, c: 17 fixed-law histories), kept for the user"
+cd <W> && PYTHONPATH=. ./venv/bin/python -m runregistrykit store fingerprint var/datastores/one-loop-drain-06-base.db
+# a tip run (reference-*, resumed-*): the same from the main checkout, with the tip's grid (--A-values 0.1 1 on a, --A-values 1 on c);
+# reference's store create after reference-c, resumed's after resumed-c, from the main checkout
+# the interruption, beside resumed-a (after its registration line)
+nohup ./venv/bin/python .documents/dk-and-rpk-migration/rehearsal/interrupt_when.py $L/resumed-a.log $L/resumed-a.pid --banner "RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 0.1 (one-loop-measured-v1)" --after 41 > $L/resumed-a.interrupt.log 2>&1 &
+RAY_AUTH_MODE=token ./venv/bin/python <R>/ray_state.py; tools/ray_cluster.sh status
+./venv/bin/python <R>/histories.py var/datastores/one-loop-drain-06-resumed > var/one-loop-drain/06/histories-resumed-after-a.txt
+# then resumed-a2: run a's arguments into …-resumed.db with --prune-unvalidated; then resumed-b, resumed-c
+# the readers (each through a wrapper that takes shasum -a 256 of <stem>*.db and <stem>.manifest.json before and after)
+PYTHONPATH=. ./venv/bin/python -u main.py --config exponential.yaml --database $PWD/var/datastores/one-loop-drain-06-reference.db --shards 16 --inventory
+PYTHONPATH=. ./venv/bin/python -u plot_by_beta.py --config exponential.yaml --database $PWD/var/datastores/one-loop-drain-06-reference.db --shards 16 --phi-init-Mp 5 --alpha-values 0 0.01 0.1 0.15 --A-values 0.1 1 --output $PWD/var/one-loop-drain/06/plot-reference --ray-address 127.0.0.1:6380
+PYTHONPATH=. ./venv/bin/python -u plot_ScalarHistory.py --config exponential.yaml --database $PWD/var/datastores/one-loop-drain-06-reference.db --shards 16 --phi-init-Mp 5 --alpha-values 0 0.01 0.1 0.15 --A-values 0.1 1 --output $PWD/var/one-loop-drain/06/plot-reference --ray-address 127.0.0.1:6380
+PYTHONPATH=. ./venv/bin/python -u plot_by_beta.py --config exponential.yaml --database $PWD/var/datastores/one-loop-drain-06-reference.db --shards 16 --phi-init-Mp 5 --A-values 0.5 --output $PWD/var/one-loop-drain/06/plot-unstored --ray-address 127.0.0.1:6380
+# R5: R2 and R3 on …-resumed.db with --output $PWD/var/one-loop-drain/06/plot-resumed
+RAY_AUTH_MODE=token ./venv/bin/python <R>/ray_state.py; kill -0 <each pid in <L>/*.pid>
+# the stop, then status and the lock (each alone)
+tools/ray_cluster.sh stop; tools/ray_cluster.sh status; ./venv/bin/python -m raypoolkit.rehearsal_lock status
+# R6, on plot-reference and plot-resumed
+PYTHONPATH=. ./venv/bin/python tools/quanta_measures.py var/one-loop-drain/06/plot-<store>/QCD_Cosmology [--assoc-scale 0 | --assoc-scale 10]
+# R7
+PYTHONPATH=. ./venv/bin/python -u tools/bbn_from_store.py var/datastores/one-loop-drain-06-base --beta 1.185 --M-Mp 4e-31 --phi-init-Mp 5 --drain-law fixed --alpha 0.1 --small-network --variant prod
+PYTHONPATH=. ./venv/bin/python -u tools/bbn_from_store.py var/datastores/one-loop-drain-06-reference --beta 1.185 --M-Mp 4e-31 --phi-init-Mp 5 --drain-law fixed --alpha 0.1 --small-network --variant prod
+PYTHONPATH=. ./venv/bin/python -u tools/bbn_from_store.py var/datastores/one-loop-drain-06-reference --beta 1.185 --M-Mp 4e-31 --phi-init-Mp 5 --drain-law one_loop --alpha 1 --small-network --variant prod
+# the comparisons
+PYTHONPATH=. ./venv/bin/python <R>/compare_base.py var/datastores/one-loop-drain-06-base var/datastores/one-loop-drain-06-reference
+PYTHONPATH=. ./venv/bin/python tools/compare_stores.py var/datastores/one-loop-drain-06-reference.db var/datastores/one-loop-drain-06-resumed.db
+./venv/bin/python -m runregistrykit store fingerprint var/datastores/one-loop-drain-06-<reference|resumed>.db
+PYTHONPATH=. ./venv/bin/python <R>/compare_02d.py var/datastores/one-loop-drain-06-<reference|resumed>
+./venv/bin/python <R>/compare_exports.py var/one-loop-drain/06/plot-reference/QCD_Cosmology var/one-loop-drain/06/plot-resumed/QCD_Cosmology
+./venv/bin/python <R>/compare_exports.py var/one-loop-drain/06/plot-reference/QCD_Cosmology var/one-loop-drain/05/exports/QCD_Cosmology --subset --names bounces.csv
+./venv/bin/python <R>/compare_exports.py var/one-loop-drain/06/plot-reference/QCD_Cosmology var/one-loop-drain/05/exports/QCD_Cosmology --key-rows quanta_histories.csv   # and -assoc0, -assoc10
+./venv/bin/python <R>/histories.py var/datastores/one-loop-drain-06-<base|reference|resumed>
+./venv/bin/python .documents/dk-and-rpk-migration/rehearsal/stage_counts.py <L>/<each slug>.log
+./venv/bin/python <R>/silences.py <L>/*.beats
+# the worktree's removal (the two links unlinked first, so no --force)
+rm <W>/var <W>/venv; git worktree remove <W>; git worktree prune; git worktree list
+# the token
+grep -r -F -l -f ~/.ray/auth_token <each committed path>
+```
+
+### 6.9 Observed, not acted on
+
+- **histories.csv's grid rows.** `plot_by_beta.py` writes a row for every (row, M, β) of the stored grid (`plot_by_beta.py:882`,
+  since `abccc23`), marked `no ScalarHistory row in the store` where nothing is stored. The three runs' grids are not a rectangle,
+  so histories.csv holds 54 rows, 28 of them such markers, where prompt §3 expected 26; the 26 stored histories are there, in
+  P36's sort. The tool counts the 9 one-loop markers as "failed histories". `Delta_N_eff.pdf` draws a legend entry for α = 0.15 at
+  laboratory M, where it has no point. Earlier rehearsals' grids were rectangles, so this had not shown.
+- **The shard warning.** Each plot script prints `!! WARNING: number of shards read from database (=16) does not match specified
+  number of shards (=10)` though given `--shards 16` (`datastorekit`'s `ShardedPool`); `inelastic-reflection` 11's plot logs carry it
+  too. The store opens read-only with its 16 shards.
+- **"Reflections (elastic model)"** in the footer of a one-loop history's figures (the dark-radiation figure of P-2197 at A = 1).
+- **The disk.** Ray's raylet warned every 10 s that the volume holding `/tmp/ray-cpbh` was over 95% full (44.6 → 39.3 GB free of
+  926 GB during the prompt). Nothing failed; a longer build (the rebuild of record) may meet Ray's object-creation limit on this
+  machine if the free space falls further.
+- **The probe's findings** (§6.1): workers run in the cluster's working directory, the main checkout, whatever tree the driver
+  is in. Harmless here (the data files are identical at both commits), but a worktree run on a shared cluster reads its relative
+  data paths from the cluster's start directory, not its own.

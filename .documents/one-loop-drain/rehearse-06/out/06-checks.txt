@@ -1,0 +1,475 @@
+### 2026-11-07 08:26:02 +0000 one check, base-a
+manifest path: /Users/ds283/Documents/Code/ChamPBH/var/runs/one-loop-drain-06-base-a-20261107T082601/manifest.json
+-rw-r--r-- 1 ds283 staff 4320 Nov  7 08:26 /Users/ds283/Documents/Code/ChamPBH/var/runs/one-loop-drain-06-base-a-20261107T082601/manifest.json
+status state running pid 67682 heartbeat 2026-11-07T08:26:02+00:00 stage Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/one-loop-drain-06-base.db" with 16 shards
+created 2026-11-07T08:26:01+00:00 results_store_id None
+pid file: 67682
+log birth: 2026-11-07 08:26:00 +0000
+manifest birth: 2026-11-07 08:26:01 +0000
+$ list
+   RUN                                                           STATE      PROGRESS      AGE  PURPOSE · STAGE
+   one-loop-drain-06-base-a-20261107T082601                      running           -       2s  one-loop-drain 06 Bitwise: run a of the base build at 1561b60 (beta 1.06 1.185 2 10 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1)  · Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datas
+   science-2026.8.0-X-X-large-M-dissipation-20261101T223930      done              -   5d 09h  science-2026.8.0 X: diagnostic, dissipation (alpha 0.08) at M 1e-9 1e-6 1e-3 0.5 Mp, beta 1.2 2.0 2.9, for the reflection figure  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-R-R-reflections-natural-20261101T204221      done              -   5d 11h  science-2026.8.0 R: reflection structure, natural mode (alpha 0), beta 1.2 2 2.9 at M 1e-3 and 0.5 Mp  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-R-R-reflections-dissipation-20261101T203500  done              -   5d 11h  science-2026.8.0 R: reflection structure, beta 1.2 2 2.9 at M 4e-31, 1e-15, 1e-12 Mp, alpha 0.001-0.15  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-D-D-large-M-natural-20261101T202510          done              -   5d 12h  science-2026.8.0 D: natural mode (alpha 0) at M 1e-3, 0.1, 0.5 Mp, coarse beta  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-D-D-large-M-natural-20261101T180712          failed            -   5d 14h  science-2026.8.0 D: natural mode (alpha 0) at M 1e-3, 0.1, 0.5 Mp, coarse beta  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID, 75.00% (6 of 24 work i
+   science-2026.8.0-C-C-Mcrit-20261101T163105                    done              -   5d 15h  science-2026.8.0 C: M 1e-15, 1e-13, 1e-12 Mp around M_crit, coarse beta, alpha 0.01-0.15  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-B-B-lab-neighbourhood-20261101T160543        done              -   5d 16h  science-2026.8.0 B: M 1e-30 and 1e-33 Mp on the sparse beta grid, alpha 0.01-0.15, to show independence of M  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-A2-A2-lab-low-alpha-20261101T123215          done              -   5d 19h  science-2026.8.0 A2: Figure 6 low alpha 0.001-0.007 at M 4e-31 Mp, transition window 1.06-1.50 and sparse beta above  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-A-A-lab-main-20261101T112047                 done              -   5d 21h  science-2026.8.0 A: Figure 6 at laboratory M 4e-31 Mp, dense beta 0.5-20, alpha 0.01-0.15, phi* 5  · CALCULATE BBN DATA, all work items complete
+   inelastic-reflection-11-resumed-a2-20261101T030928            done              -   6d 05h  inelastic-reflection 11 R2: the same build again into the resumed store, the resume after SIGTERM  · CALCULATE BBN DATA, all work items complete
+   inelastic-reflection-11-resumed-a-20261101T030431             killed            -   6d 05h  inelastic-reflection 11 R2: the build into the resumed store, interrupted with SIGTERM in the alpha = 0.1 scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   inelastic-reflection-11-reference-a-20261101T025902           done              -   6d 05h  inelastic-reflection 11 R1: the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5, alpha 0 and 0.1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-c-20261026T201250             done              -  11d 12h  jordan-normalization 09 H2: run c into the resumed store (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-b-20261026T201130             done              -  11d 12h  jordan-normalization 09 H2: run b into the resumed store (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a2-20261026T200824            done              -  11d 12h  jordan-normalization 09 H2: run a again into the resumed store, the resume after SIGTERM  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a-20261026T200457             killed            -  11d 12h  jordan-normalization 09 H2: run a into the resumed store, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   jordan-normalization-09-reference-c-20261026T200132           done              -  11d 12h  jordan-normalization 09 H1: run c of the reference build (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-b-20261026T200014           done              -  11d 12h  jordan-normalization 09 H1: run b of the reference build (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-a-20261026T195544           done              -  11d 12h  jordan-normalization 09 H1: run a of the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   rrk-adoption-03-unit-20261026T151946                          lost              -  11d 17h  a test run of the wrapper, in a temporary directory  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   ray-sqla-align-02-resumed-c-20261025T210916                   done              -  12d 11h  ray-sqla-align 02 R3: the resume of the resumed store under ray 2.59.0, straight through  · CALCULATE BBN DATA, all work items complete
+   ray-sqla-align-02-resumed-a-20261025T210611                   killed            -  12d 11h  ray-sqla-align 02 R2: the pilot grid into the resumed store under ray 2.59.0, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   ray-sqla-align-02-reference-20261025T210149                   done              -  12d 11h  ray-sqla-align 02 R1: the pilot grid straight through under ray 2.59.0, the reference store  · CALCULATE BBN DATA, all work items complete
+
+24 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 1 alive, 23 finished; 0 with no host recorded.
+list exit 0
+$ head of log
+1:** registered_run: registered as one-loop-drain-06-base-a-20261107T082601
+2:**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/one-loop-drain-06-base-a-20261107T082601/manifest.json
+3:**   list it with: ./venv/bin/python -m runregistrykit list
+4:>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+
+### 2026-11-07 08:29:58 +0000 one check, base-b
+manifest path: /Users/ds283/Documents/Code/ChamPBH/var/runs/one-loop-drain-06-base-b-20261107T082957/manifest.json
+-rw-r--r-- 1 ds283 staff 4297 Nov  7 08:29 /Users/ds283/Documents/Code/ChamPBH/var/runs/one-loop-drain-06-base-b-20261107T082957/manifest.json
+status state running pid 68244 heartbeat 2026-11-07T08:29:58+00:00 stage packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+created 2026-11-07T08:29:57+00:00 results_store_id None
+pid file: 68244
+log birth: 2026-11-07 08:29:55 +0000
+manifest birth: 2026-11-07 08:29:57 +0000
+$ list
+   RUN                                                           STATE      PROGRESS      AGE  PURPOSE · STAGE
+   one-loop-drain-06-base-b-20261107T082957                      running           -       1s  one-loop-drain 06 Bitwise: run b of the base build at 1561b60 (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5, alpha 0 0.1)  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   one-loop-drain-06-base-a-20261107T082601                      done              -       4m  one-loop-drain 06 Bitwise: run a of the base build at 1561b60 (beta 1.06 1.185 2 10 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1)  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-X-X-large-M-dissipation-20261101T223930      done              -   5d 09h  science-2026.8.0 X: diagnostic, dissipation (alpha 0.08) at M 1e-9 1e-6 1e-3 0.5 Mp, beta 1.2 2.0 2.9, for the reflection figure  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-R-R-reflections-natural-20261101T204221      done              -   5d 11h  science-2026.8.0 R: reflection structure, natural mode (alpha 0), beta 1.2 2 2.9 at M 1e-3 and 0.5 Mp  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-R-R-reflections-dissipation-20261101T203500  done              -   5d 11h  science-2026.8.0 R: reflection structure, beta 1.2 2 2.9 at M 4e-31, 1e-15, 1e-12 Mp, alpha 0.001-0.15  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-D-D-large-M-natural-20261101T202510          done              -   5d 12h  science-2026.8.0 D: natural mode (alpha 0) at M 1e-3, 0.1, 0.5 Mp, coarse beta  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-D-D-large-M-natural-20261101T180712          failed            -   5d 14h  science-2026.8.0 D: natural mode (alpha 0) at M 1e-3, 0.1, 0.5 Mp, coarse beta  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID, 75.00% (6 of 24 work i
+   science-2026.8.0-C-C-Mcrit-20261101T163105                    done              -   5d 15h  science-2026.8.0 C: M 1e-15, 1e-13, 1e-12 Mp around M_crit, coarse beta, alpha 0.01-0.15  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-B-B-lab-neighbourhood-20261101T160543        done              -   5d 16h  science-2026.8.0 B: M 1e-30 and 1e-33 Mp on the sparse beta grid, alpha 0.01-0.15, to show independence of M  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-A2-A2-lab-low-alpha-20261101T123215          done              -   5d 19h  science-2026.8.0 A2: Figure 6 low alpha 0.001-0.007 at M 4e-31 Mp, transition window 1.06-1.50 and sparse beta above  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-A-A-lab-main-20261101T112047                 done              -   5d 21h  science-2026.8.0 A: Figure 6 at laboratory M 4e-31 Mp, dense beta 0.5-20, alpha 0.01-0.15, phi* 5  · CALCULATE BBN DATA, all work items complete
+   inelastic-reflection-11-resumed-a2-20261101T030928            done              -   6d 05h  inelastic-reflection 11 R2: the same build again into the resumed store, the resume after SIGTERM  · CALCULATE BBN DATA, all work items complete
+   inelastic-reflection-11-resumed-a-20261101T030431             killed            -   6d 05h  inelastic-reflection 11 R2: the build into the resumed store, interrupted with SIGTERM in the alpha = 0.1 scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   inelastic-reflection-11-reference-a-20261101T025902           done              -   6d 05h  inelastic-reflection 11 R1: the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5, alpha 0 and 0.1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-c-20261026T201250             done              -  11d 12h  jordan-normalization 09 H2: run c into the resumed store (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-b-20261026T201130             done              -  11d 12h  jordan-normalization 09 H2: run b into the resumed store (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a2-20261026T200824            done              -  11d 12h  jordan-normalization 09 H2: run a again into the resumed store, the resume after SIGTERM  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a-20261026T200457             killed            -  11d 12h  jordan-normalization 09 H2: run a into the resumed store, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   jordan-normalization-09-reference-c-20261026T200132           done              -  11d 12h  jordan-normalization 09 H1: run c of the reference build (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-b-20261026T200014           done              -  11d 12h  jordan-normalization 09 H1: run b of the reference build (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-a-20261026T195544           done              -  11d 12h  jordan-normalization 09 H1: run a of the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   rrk-adoption-03-unit-20261026T151946                          lost              -  11d 17h  a test run of the wrapper, in a temporary directory  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   ray-sqla-align-02-resumed-c-20261025T210916                   done              -  12d 11h  ray-sqla-align 02 R3: the resume of the resumed store under ray 2.59.0, straight through  · CALCULATE BBN DATA, all work items complete
+   ray-sqla-align-02-resumed-a-20261025T210611                   killed            -  12d 11h  ray-sqla-align 02 R2: the pilot grid into the resumed store under ray 2.59.0, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   ray-sqla-align-02-reference-20261025T210149                   done              -  12d 11h  ray-sqla-align 02 R1: the pilot grid straight through under ray 2.59.0, the reference store  · CALCULATE BBN DATA, all work items complete
+
+25 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 1 alive, 24 finished; 0 with no host recorded.
+list exit 0
+$ head of log
+1:** registered_run: registered as one-loop-drain-06-base-b-20261107T082957
+2:**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/one-loop-drain-06-base-b-20261107T082957/manifest.json
+3:**   list it with: ./venv/bin/python -m runregistrykit list
+4:>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+
+### 2026-11-07 08:34:55 +0000 one check, base-c
+manifest path: /Users/ds283/Documents/Code/ChamPBH/var/runs/one-loop-drain-06-base-c-20261107T083454/manifest.json
+-rw-r--r-- 1 ds283 staff 4216 Nov  7 08:34 /Users/ds283/Documents/Code/ChamPBH/var/runs/one-loop-drain-06-base-c-20261107T083454/manifest.json
+status state running pid 69351 heartbeat 2026-11-07T08:34:55+00:00 stage packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+created 2026-11-07T08:34:54+00:00 results_store_id None
+pid file: 69351
+log birth: 2026-11-07 08:34:53 +0000
+manifest birth: 2026-11-07 08:34:54 +0000
+$ list
+   RUN                                                           STATE      PROGRESS      AGE  PURPOSE · STAGE
+   one-loop-drain-06-base-c-20261107T083454                      running           -       2s  one-loop-drain 06 Bitwise: run c of the base build at 1561b60 (beta 1 at M 1e-12 Mp, phi* 5, alpha 0.15)  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   one-loop-drain-06-base-b-20261107T082957                      done              -       5m  one-loop-drain 06 Bitwise: run b of the base build at 1561b60 (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5, alpha 0 0.1)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-base-a-20261107T082601                      done              -       9m  one-loop-drain 06 Bitwise: run a of the base build at 1561b60 (beta 1.06 1.185 2 10 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1)  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-X-X-large-M-dissipation-20261101T223930      done              -   5d 09h  science-2026.8.0 X: diagnostic, dissipation (alpha 0.08) at M 1e-9 1e-6 1e-3 0.5 Mp, beta 1.2 2.0 2.9, for the reflection figure  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-R-R-reflections-natural-20261101T204221      done              -   5d 11h  science-2026.8.0 R: reflection structure, natural mode (alpha 0), beta 1.2 2 2.9 at M 1e-3 and 0.5 Mp  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-R-R-reflections-dissipation-20261101T203500  done              -   5d 11h  science-2026.8.0 R: reflection structure, beta 1.2 2 2.9 at M 4e-31, 1e-15, 1e-12 Mp, alpha 0.001-0.15  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-D-D-large-M-natural-20261101T202510          done              -   5d 12h  science-2026.8.0 D: natural mode (alpha 0) at M 1e-3, 0.1, 0.5 Mp, coarse beta  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-D-D-large-M-natural-20261101T180712          failed            -   5d 14h  science-2026.8.0 D: natural mode (alpha 0) at M 1e-3, 0.1, 0.5 Mp, coarse beta  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID, 75.00% (6 of 24 work i
+   science-2026.8.0-C-C-Mcrit-20261101T163105                    done              -   5d 16h  science-2026.8.0 C: M 1e-15, 1e-13, 1e-12 Mp around M_crit, coarse beta, alpha 0.01-0.15  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-B-B-lab-neighbourhood-20261101T160543        done              -   5d 16h  science-2026.8.0 B: M 1e-30 and 1e-33 Mp on the sparse beta grid, alpha 0.01-0.15, to show independence of M  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-A2-A2-lab-low-alpha-20261101T123215          done              -   5d 20h  science-2026.8.0 A2: Figure 6 low alpha 0.001-0.007 at M 4e-31 Mp, transition window 1.06-1.50 and sparse beta above  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-A-A-lab-main-20261101T112047                 done              -   5d 21h  science-2026.8.0 A: Figure 6 at laboratory M 4e-31 Mp, dense beta 0.5-20, alpha 0.01-0.15, phi* 5  · CALCULATE BBN DATA, all work items complete
+   inelastic-reflection-11-resumed-a2-20261101T030928            done              -   6d 05h  inelastic-reflection 11 R2: the same build again into the resumed store, the resume after SIGTERM  · CALCULATE BBN DATA, all work items complete
+   inelastic-reflection-11-resumed-a-20261101T030431             killed            -   6d 05h  inelastic-reflection 11 R2: the build into the resumed store, interrupted with SIGTERM in the alpha = 0.1 scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   inelastic-reflection-11-reference-a-20261101T025902           done              -   6d 05h  inelastic-reflection 11 R1: the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5, alpha 0 and 0.1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-c-20261026T201250             done              -  11d 12h  jordan-normalization 09 H2: run c into the resumed store (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-b-20261026T201130             done              -  11d 12h  jordan-normalization 09 H2: run b into the resumed store (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a2-20261026T200824            done              -  11d 12h  jordan-normalization 09 H2: run a again into the resumed store, the resume after SIGTERM  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a-20261026T200457             killed            -  11d 12h  jordan-normalization 09 H2: run a into the resumed store, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   jordan-normalization-09-reference-c-20261026T200132           done              -  11d 12h  jordan-normalization 09 H1: run c of the reference build (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-b-20261026T200014           done              -  11d 12h  jordan-normalization 09 H1: run b of the reference build (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-a-20261026T195544           done              -  11d 12h  jordan-normalization 09 H1: run a of the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   rrk-adoption-03-unit-20261026T151946                          lost              -  11d 17h  a test run of the wrapper, in a temporary directory  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   ray-sqla-align-02-resumed-c-20261025T210916                   done              -  12d 11h  ray-sqla-align 02 R3: the resume of the resumed store under ray 2.59.0, straight through  · CALCULATE BBN DATA, all work items complete
+   ray-sqla-align-02-resumed-a-20261025T210611                   killed            -  12d 11h  ray-sqla-align 02 R2: the pilot grid into the resumed store under ray 2.59.0, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   ray-sqla-align-02-reference-20261025T210149                   done              -  12d 11h  ray-sqla-align 02 R1: the pilot grid straight through under ray 2.59.0, the reference store  · CALCULATE BBN DATA, all work items complete
+
+26 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 1 alive, 25 finished; 0 with no host recorded.
+list exit 0
+$ head of log
+1:** registered_run: registered as one-loop-drain-06-base-c-20261107T083454
+2:**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/one-loop-drain-06-base-c-20261107T083454/manifest.json
+3:**   list it with: ./venv/bin/python -m runregistrykit list
+4:>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+
+### 2026-11-07 08:37:02 +0000 one check, reference-a
+manifest path: /Users/ds283/Documents/Code/ChamPBH/var/runs/one-loop-drain-06-reference-a-20261107T083701/manifest.json
+-rw-r--r-- 1 ds283 staff 4099 Nov  7 08:37 /Users/ds283/Documents/Code/ChamPBH/var/runs/one-loop-drain-06-reference-a-20261107T083701/manifest.json
+status state running pid 69796 heartbeat 2026-11-07T08:37:02+00:00 stage Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/one-loop-drain-06-reference.db" with 16 shards
+created 2026-11-07T08:37:01+00:00 results_store_id None
+pid file: 69796
+log birth: 2026-11-07 08:37:00 +0000
+manifest birth: 2026-11-07 08:37:01 +0000
+$ list
+   RUN                                                           STATE      PROGRESS      AGE  PURPOSE · STAGE
+   one-loop-drain-06-reference-a-20261107T083701                 running           -       2s  one-loop-drain 06 Bitwise and R: run a of the reference build at the tip (beta 1.06 1.185 2 10 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1, A 0.1 1)  · Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datas
+   one-loop-drain-06-base-c-20261107T083454                      done              -       2m  one-loop-drain 06 Bitwise: run c of the base build at 1561b60 (beta 1 at M 1e-12 Mp, phi* 5, alpha 0.15)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-base-b-20261107T082957                      done              -       7m  one-loop-drain 06 Bitwise: run b of the base build at 1561b60 (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5, alpha 0 0.1)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-base-a-20261107T082601                      done              -      11m  one-loop-drain 06 Bitwise: run a of the base build at 1561b60 (beta 1.06 1.185 2 10 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1)  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-X-X-large-M-dissipation-20261101T223930      done              -   5d 09h  science-2026.8.0 X: diagnostic, dissipation (alpha 0.08) at M 1e-9 1e-6 1e-3 0.5 Mp, beta 1.2 2.0 2.9, for the reflection figure  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-R-R-reflections-natural-20261101T204221      done              -   5d 11h  science-2026.8.0 R: reflection structure, natural mode (alpha 0), beta 1.2 2 2.9 at M 1e-3 and 0.5 Mp  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-R-R-reflections-dissipation-20261101T203500  done              -   5d 12h  science-2026.8.0 R: reflection structure, beta 1.2 2 2.9 at M 4e-31, 1e-15, 1e-12 Mp, alpha 0.001-0.15  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-D-D-large-M-natural-20261101T202510          done              -   5d 12h  science-2026.8.0 D: natural mode (alpha 0) at M 1e-3, 0.1, 0.5 Mp, coarse beta  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-D-D-large-M-natural-20261101T180712          failed            -   5d 14h  science-2026.8.0 D: natural mode (alpha 0) at M 1e-3, 0.1, 0.5 Mp, coarse beta  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID, 75.00% (6 of 24 work i
+   science-2026.8.0-C-C-Mcrit-20261101T163105                    done              -   5d 16h  science-2026.8.0 C: M 1e-15, 1e-13, 1e-12 Mp around M_crit, coarse beta, alpha 0.01-0.15  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-B-B-lab-neighbourhood-20261101T160543        done              -   5d 16h  science-2026.8.0 B: M 1e-30 and 1e-33 Mp on the sparse beta grid, alpha 0.01-0.15, to show independence of M  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-A2-A2-lab-low-alpha-20261101T123215          done              -   5d 20h  science-2026.8.0 A2: Figure 6 low alpha 0.001-0.007 at M 4e-31 Mp, transition window 1.06-1.50 and sparse beta above  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-A-A-lab-main-20261101T112047                 done              -   5d 21h  science-2026.8.0 A: Figure 6 at laboratory M 4e-31 Mp, dense beta 0.5-20, alpha 0.01-0.15, phi* 5  · CALCULATE BBN DATA, all work items complete
+   inelastic-reflection-11-resumed-a2-20261101T030928            done              -   6d 05h  inelastic-reflection 11 R2: the same build again into the resumed store, the resume after SIGTERM  · CALCULATE BBN DATA, all work items complete
+   inelastic-reflection-11-resumed-a-20261101T030431             killed            -   6d 05h  inelastic-reflection 11 R2: the build into the resumed store, interrupted with SIGTERM in the alpha = 0.1 scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   inelastic-reflection-11-reference-a-20261101T025902           done              -   6d 05h  inelastic-reflection 11 R1: the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5, alpha 0 and 0.1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-c-20261026T201250             done              -  11d 12h  jordan-normalization 09 H2: run c into the resumed store (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-b-20261026T201130             done              -  11d 12h  jordan-normalization 09 H2: run b into the resumed store (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a2-20261026T200824            done              -  11d 12h  jordan-normalization 09 H2: run a again into the resumed store, the resume after SIGTERM  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a-20261026T200457             killed            -  11d 12h  jordan-normalization 09 H2: run a into the resumed store, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   jordan-normalization-09-reference-c-20261026T200132           done              -  11d 12h  jordan-normalization 09 H1: run c of the reference build (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-b-20261026T200014           done              -  11d 12h  jordan-normalization 09 H1: run b of the reference build (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-a-20261026T195544           done              -  11d 12h  jordan-normalization 09 H1: run a of the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   rrk-adoption-03-unit-20261026T151946                          lost              -  11d 17h  a test run of the wrapper, in a temporary directory  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   ray-sqla-align-02-resumed-c-20261025T210916                   done              -  12d 11h  ray-sqla-align 02 R3: the resume of the resumed store under ray 2.59.0, straight through  · CALCULATE BBN DATA, all work items complete
+   ray-sqla-align-02-resumed-a-20261025T210611                   killed            -  12d 11h  ray-sqla-align 02 R2: the pilot grid into the resumed store under ray 2.59.0, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   ray-sqla-align-02-reference-20261025T210149                   done              -  12d 11h  ray-sqla-align 02 R1: the pilot grid straight through under ray 2.59.0, the reference store  · CALCULATE BBN DATA, all work items complete
+
+27 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 1 alive, 26 finished; 0 with no host recorded.
+list exit 0
+$ head of log
+1:** registered_run: registered as one-loop-drain-06-reference-a-20261107T083701
+2:**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/one-loop-drain-06-reference-a-20261107T083701/manifest.json
+3:**   list it with: ./venv/bin/python -m runregistrykit list
+4:>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+
+### 2026-11-07 08:43:19 +0000 one check, reference-b
+manifest path: /Users/ds283/Documents/Code/ChamPBH/var/runs/one-loop-drain-06-reference-b-20261107T084318/manifest.json
+-rw-r--r-- 1 ds283 staff 4010 Nov  7 08:43 /Users/ds283/Documents/Code/ChamPBH/var/runs/one-loop-drain-06-reference-b-20261107T084318/manifest.json
+status state running pid 70472 heartbeat 2026-11-07T08:43:18+00:00 stage packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+created 2026-11-07T08:43:18+00:00 results_store_id None
+pid file: 70472
+log birth: 2026-11-07 08:43:16 +0000
+manifest birth: 2026-11-07 08:43:18 +0000
+$ list
+   RUN                                                           STATE      PROGRESS      AGE  PURPOSE · STAGE
+   one-loop-drain-06-reference-b-20261107T084318                 running           -       1s  one-loop-drain 06 Bitwise and R: run b of the reference build at the tip (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5, alpha 0 0.1)  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   one-loop-drain-06-reference-a-20261107T083701                 done              -       6m  one-loop-drain 06 Bitwise and R: run a of the reference build at the tip (beta 1.06 1.185 2 10 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1, A 0.1 1)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-base-c-20261107T083454                      done              -       8m  one-loop-drain 06 Bitwise: run c of the base build at 1561b60 (beta 1 at M 1e-12 Mp, phi* 5, alpha 0.15)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-base-b-20261107T082957                      done              -      13m  one-loop-drain 06 Bitwise: run b of the base build at 1561b60 (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5, alpha 0 0.1)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-base-a-20261107T082601                      done              -      17m  one-loop-drain 06 Bitwise: run a of the base build at 1561b60 (beta 1.06 1.185 2 10 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1)  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-X-X-large-M-dissipation-20261101T223930      done              -   5d 10h  science-2026.8.0 X: diagnostic, dissipation (alpha 0.08) at M 1e-9 1e-6 1e-3 0.5 Mp, beta 1.2 2.0 2.9, for the reflection figure  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-R-R-reflections-natural-20261101T204221      done              -   5d 12h  science-2026.8.0 R: reflection structure, natural mode (alpha 0), beta 1.2 2 2.9 at M 1e-3 and 0.5 Mp  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-R-R-reflections-dissipation-20261101T203500  done              -   5d 12h  science-2026.8.0 R: reflection structure, beta 1.2 2 2.9 at M 4e-31, 1e-15, 1e-12 Mp, alpha 0.001-0.15  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-D-D-large-M-natural-20261101T202510          done              -   5d 12h  science-2026.8.0 D: natural mode (alpha 0) at M 1e-3, 0.1, 0.5 Mp, coarse beta  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-D-D-large-M-natural-20261101T180712          failed            -   5d 14h  science-2026.8.0 D: natural mode (alpha 0) at M 1e-3, 0.1, 0.5 Mp, coarse beta  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID, 75.00% (6 of 24 work i
+   science-2026.8.0-C-C-Mcrit-20261101T163105                    done              -   5d 16h  science-2026.8.0 C: M 1e-15, 1e-13, 1e-12 Mp around M_crit, coarse beta, alpha 0.01-0.15  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-B-B-lab-neighbourhood-20261101T160543        done              -   5d 16h  science-2026.8.0 B: M 1e-30 and 1e-33 Mp on the sparse beta grid, alpha 0.01-0.15, to show independence of M  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-A2-A2-lab-low-alpha-20261101T123215          done              -   5d 20h  science-2026.8.0 A2: Figure 6 low alpha 0.001-0.007 at M 4e-31 Mp, transition window 1.06-1.50 and sparse beta above  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-A-A-lab-main-20261101T112047                 done              -   5d 21h  science-2026.8.0 A: Figure 6 at laboratory M 4e-31 Mp, dense beta 0.5-20, alpha 0.01-0.15, phi* 5  · CALCULATE BBN DATA, all work items complete
+   inelastic-reflection-11-resumed-a2-20261101T030928            done              -   6d 05h  inelastic-reflection 11 R2: the same build again into the resumed store, the resume after SIGTERM  · CALCULATE BBN DATA, all work items complete
+   inelastic-reflection-11-resumed-a-20261101T030431             killed            -   6d 05h  inelastic-reflection 11 R2: the build into the resumed store, interrupted with SIGTERM in the alpha = 0.1 scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   inelastic-reflection-11-reference-a-20261101T025902           done              -   6d 05h  inelastic-reflection 11 R1: the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5, alpha 0 and 0.1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-c-20261026T201250             done              -  11d 12h  jordan-normalization 09 H2: run c into the resumed store (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-b-20261026T201130             done              -  11d 12h  jordan-normalization 09 H2: run b into the resumed store (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a2-20261026T200824            done              -  11d 12h  jordan-normalization 09 H2: run a again into the resumed store, the resume after SIGTERM  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a-20261026T200457             killed            -  11d 12h  jordan-normalization 09 H2: run a into the resumed store, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   jordan-normalization-09-reference-c-20261026T200132           done              -  11d 12h  jordan-normalization 09 H1: run c of the reference build (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-b-20261026T200014           done              -  11d 12h  jordan-normalization 09 H1: run b of the reference build (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-a-20261026T195544           done              -  11d 12h  jordan-normalization 09 H1: run a of the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   rrk-adoption-03-unit-20261026T151946                          lost              -  11d 17h  a test run of the wrapper, in a temporary directory  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   ray-sqla-align-02-resumed-c-20261025T210916                   done              -  12d 11h  ray-sqla-align 02 R3: the resume of the resumed store under ray 2.59.0, straight through  · CALCULATE BBN DATA, all work items complete
+   ray-sqla-align-02-resumed-a-20261025T210611                   killed            -  12d 11h  ray-sqla-align 02 R2: the pilot grid into the resumed store under ray 2.59.0, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   ray-sqla-align-02-reference-20261025T210149                   done              -  12d 11h  ray-sqla-align 02 R1: the pilot grid straight through under ray 2.59.0, the reference store  · CALCULATE BBN DATA, all work items complete
+
+28 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 1 alive, 27 finished; 0 with no host recorded.
+list exit 0
+$ head of log
+1:** registered_run: registered as one-loop-drain-06-reference-b-20261107T084318
+2:**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/one-loop-drain-06-reference-b-20261107T084318/manifest.json
+3:**   list it with: ./venv/bin/python -m runregistrykit list
+4:>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+
+### 2026-11-07 08:48:09 +0000 one check, reference-c
+manifest path: /Users/ds283/Documents/Code/ChamPBH/var/runs/one-loop-drain-06-reference-c-20261107T084809/manifest.json
+-rw-r--r-- 1 ds283 staff 3971 Nov  7 08:48 /Users/ds283/Documents/Code/ChamPBH/var/runs/one-loop-drain-06-reference-c-20261107T084809/manifest.json
+status state running pid 75085 heartbeat 2026-11-07T08:48:09+00:00 stage list it with: ./venv/bin/python -m runregistrykit list
+created 2026-11-07T08:48:09+00:00 results_store_id None
+pid file: 75085
+log birth: 2026-11-07 08:48:07 +0000
+manifest birth: 2026-11-07 08:48:09 +0000
+$ list
+   RUN                                                           STATE      PROGRESS      AGE  PURPOSE · STAGE
+   one-loop-drain-06-reference-c-20261107T084809                 running           -       1s  one-loop-drain 06 Bitwise and R: run c of the reference build at the tip (beta 1 at M 1e-12 Mp, phi* 5, alpha 0.15, A 1)  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   one-loop-drain-06-reference-b-20261107T084318                 done              -       5m  one-loop-drain 06 Bitwise and R: run b of the reference build at the tip (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5, alpha 0 0.1)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-reference-a-20261107T083701                 done              -      11m  one-loop-drain 06 Bitwise and R: run a of the reference build at the tip (beta 1.06 1.185 2 10 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1, A 0.1 1)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-base-c-20261107T083454                      done              -      13m  one-loop-drain 06 Bitwise: run c of the base build at 1561b60 (beta 1 at M 1e-12 Mp, phi* 5, alpha 0.15)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-base-b-20261107T082957                      done              -      18m  one-loop-drain 06 Bitwise: run b of the base build at 1561b60 (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5, alpha 0 0.1)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-base-a-20261107T082601                      done              -      22m  one-loop-drain 06 Bitwise: run a of the base build at 1561b60 (beta 1.06 1.185 2 10 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1)  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-X-X-large-M-dissipation-20261101T223930      done              -   5d 10h  science-2026.8.0 X: diagnostic, dissipation (alpha 0.08) at M 1e-9 1e-6 1e-3 0.5 Mp, beta 1.2 2.0 2.9, for the reflection figure  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-R-R-reflections-natural-20261101T204221      done              -   5d 12h  science-2026.8.0 R: reflection structure, natural mode (alpha 0), beta 1.2 2 2.9 at M 1e-3 and 0.5 Mp  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-R-R-reflections-dissipation-20261101T203500  done              -   5d 12h  science-2026.8.0 R: reflection structure, beta 1.2 2 2.9 at M 4e-31, 1e-15, 1e-12 Mp, alpha 0.001-0.15  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-D-D-large-M-natural-20261101T202510          done              -   5d 12h  science-2026.8.0 D: natural mode (alpha 0) at M 1e-3, 0.1, 0.5 Mp, coarse beta  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-D-D-large-M-natural-20261101T180712          failed            -   5d 14h  science-2026.8.0 D: natural mode (alpha 0) at M 1e-3, 0.1, 0.5 Mp, coarse beta  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID, 75.00% (6 of 24 work i
+   science-2026.8.0-C-C-Mcrit-20261101T163105                    done              -   5d 16h  science-2026.8.0 C: M 1e-15, 1e-13, 1e-12 Mp around M_crit, coarse beta, alpha 0.01-0.15  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-B-B-lab-neighbourhood-20261101T160543        done              -   5d 16h  science-2026.8.0 B: M 1e-30 and 1e-33 Mp on the sparse beta grid, alpha 0.01-0.15, to show independence of M  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-A2-A2-lab-low-alpha-20261101T123215          done              -   5d 20h  science-2026.8.0 A2: Figure 6 low alpha 0.001-0.007 at M 4e-31 Mp, transition window 1.06-1.50 and sparse beta above  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-A-A-lab-main-20261101T112047                 done              -   5d 21h  science-2026.8.0 A: Figure 6 at laboratory M 4e-31 Mp, dense beta 0.5-20, alpha 0.01-0.15, phi* 5  · CALCULATE BBN DATA, all work items complete
+   inelastic-reflection-11-resumed-a2-20261101T030928            done              -   6d 05h  inelastic-reflection 11 R2: the same build again into the resumed store, the resume after SIGTERM  · CALCULATE BBN DATA, all work items complete
+   inelastic-reflection-11-resumed-a-20261101T030431             killed            -   6d 05h  inelastic-reflection 11 R2: the build into the resumed store, interrupted with SIGTERM in the alpha = 0.1 scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   inelastic-reflection-11-reference-a-20261101T025902           done              -   6d 05h  inelastic-reflection 11 R1: the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5, alpha 0 and 0.1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-c-20261026T201250             done              -  11d 12h  jordan-normalization 09 H2: run c into the resumed store (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-b-20261026T201130             done              -  11d 12h  jordan-normalization 09 H2: run b into the resumed store (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a2-20261026T200824            done              -  11d 12h  jordan-normalization 09 H2: run a again into the resumed store, the resume after SIGTERM  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a-20261026T200457             killed            -  11d 12h  jordan-normalization 09 H2: run a into the resumed store, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   jordan-normalization-09-reference-c-20261026T200132           done              -  11d 12h  jordan-normalization 09 H1: run c of the reference build (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-b-20261026T200014           done              -  11d 12h  jordan-normalization 09 H1: run b of the reference build (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-a-20261026T195544           done              -  11d 12h  jordan-normalization 09 H1: run a of the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   rrk-adoption-03-unit-20261026T151946                          lost              -  11d 17h  a test run of the wrapper, in a temporary directory  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   ray-sqla-align-02-resumed-c-20261025T210916                   done              -  12d 11h  ray-sqla-align 02 R3: the resume of the resumed store under ray 2.59.0, straight through  · CALCULATE BBN DATA, all work items complete
+   ray-sqla-align-02-resumed-a-20261025T210611                   killed            -  12d 11h  ray-sqla-align 02 R2: the pilot grid into the resumed store under ray 2.59.0, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   ray-sqla-align-02-reference-20261025T210149                   done              -  12d 11h  ray-sqla-align 02 R1: the pilot grid straight through under ray 2.59.0, the reference store  · CALCULATE BBN DATA, all work items complete
+
+29 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 1 alive, 28 finished; 0 with no host recorded.
+list exit 0
+$ head of log
+1:** registered_run: registered as one-loop-drain-06-reference-c-20261107T084809
+2:**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/one-loop-drain-06-reference-c-20261107T084809/manifest.json
+3:**   list it with: ./venv/bin/python -m runregistrykit list
+4:>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+
+### 2026-11-07 08:51:46 +0000 one check, resumed-a
+manifest path: /Users/ds283/Documents/Code/ChamPBH/var/runs/one-loop-drain-06-resumed-a-20261107T085145/manifest.json
+-rw-r--r-- 1 ds283 staff 4149 Nov  7 08:51 /Users/ds283/Documents/Code/ChamPBH/var/runs/one-loop-drain-06-resumed-a-20261107T085145/manifest.json
+status state running pid 90059 heartbeat 2026-11-07T08:51:46+00:00 stage Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/one-loop-drain-06-resumed.db" with 16 shards
+created 2026-11-07T08:51:46+00:00 results_store_id None
+pid file: 90059
+log birth: 2026-11-07 08:51:44 +0000
+manifest birth: 2026-11-07 08:51:46 +0000
+$ list
+   RUN                                                           STATE      PROGRESS      AGE  PURPOSE · STAGE
+   one-loop-drain-06-resumed-a-20261107T085145                   running           -       1s  one-loop-drain 06 R: run a into the resumed store, interrupted with SIGTERM in the A = 0.1 scalar stage (beta 1.06 1.185 2 10 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1, A 0.1 1)  · Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datas
+   one-loop-drain-06-reference-c-20261107T084809                 done              -       4m  one-loop-drain 06 Bitwise and R: run c of the reference build at the tip (beta 1 at M 1e-12 Mp, phi* 5, alpha 0.15, A 1)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-reference-b-20261107T084318                 done              -       8m  one-loop-drain 06 Bitwise and R: run b of the reference build at the tip (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5, alpha 0 0.1)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-reference-a-20261107T083701                 done              -      15m  one-loop-drain 06 Bitwise and R: run a of the reference build at the tip (beta 1.06 1.185 2 10 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1, A 0.1 1)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-base-c-20261107T083454                      done              -      17m  one-loop-drain 06 Bitwise: run c of the base build at 1561b60 (beta 1 at M 1e-12 Mp, phi* 5, alpha 0.15)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-base-b-20261107T082957                      done              -      22m  one-loop-drain 06 Bitwise: run b of the base build at 1561b60 (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5, alpha 0 0.1)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-base-a-20261107T082601                      done              -      26m  one-loop-drain 06 Bitwise: run a of the base build at 1561b60 (beta 1.06 1.185 2 10 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1)  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-X-X-large-M-dissipation-20261101T223930      done              -   5d 10h  science-2026.8.0 X: diagnostic, dissipation (alpha 0.08) at M 1e-9 1e-6 1e-3 0.5 Mp, beta 1.2 2.0 2.9, for the reflection figure  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-R-R-reflections-natural-20261101T204221      done              -   5d 12h  science-2026.8.0 R: reflection structure, natural mode (alpha 0), beta 1.2 2 2.9 at M 1e-3 and 0.5 Mp  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-R-R-reflections-dissipation-20261101T203500  done              -   5d 12h  science-2026.8.0 R: reflection structure, beta 1.2 2 2.9 at M 4e-31, 1e-15, 1e-12 Mp, alpha 0.001-0.15  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-D-D-large-M-natural-20261101T202510          done              -   5d 12h  science-2026.8.0 D: natural mode (alpha 0) at M 1e-3, 0.1, 0.5 Mp, coarse beta  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-D-D-large-M-natural-20261101T180712          failed            -   5d 14h  science-2026.8.0 D: natural mode (alpha 0) at M 1e-3, 0.1, 0.5 Mp, coarse beta  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID, 75.00% (6 of 24 work i
+   science-2026.8.0-C-C-Mcrit-20261101T163105                    done              -   5d 16h  science-2026.8.0 C: M 1e-15, 1e-13, 1e-12 Mp around M_crit, coarse beta, alpha 0.01-0.15  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-B-B-lab-neighbourhood-20261101T160543        done              -   5d 16h  science-2026.8.0 B: M 1e-30 and 1e-33 Mp on the sparse beta grid, alpha 0.01-0.15, to show independence of M  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-A2-A2-lab-low-alpha-20261101T123215          done              -   5d 20h  science-2026.8.0 A2: Figure 6 low alpha 0.001-0.007 at M 4e-31 Mp, transition window 1.06-1.50 and sparse beta above  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-A-A-lab-main-20261101T112047                 done              -   5d 21h  science-2026.8.0 A: Figure 6 at laboratory M 4e-31 Mp, dense beta 0.5-20, alpha 0.01-0.15, phi* 5  · CALCULATE BBN DATA, all work items complete
+   inelastic-reflection-11-resumed-a2-20261101T030928            done              -   6d 05h  inelastic-reflection 11 R2: the same build again into the resumed store, the resume after SIGTERM  · CALCULATE BBN DATA, all work items complete
+   inelastic-reflection-11-resumed-a-20261101T030431             killed            -   6d 05h  inelastic-reflection 11 R2: the build into the resumed store, interrupted with SIGTERM in the alpha = 0.1 scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   inelastic-reflection-11-reference-a-20261101T025902           done              -   6d 05h  inelastic-reflection 11 R1: the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5, alpha 0 and 0.1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-c-20261026T201250             done              -  11d 12h  jordan-normalization 09 H2: run c into the resumed store (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-b-20261026T201130             done              -  11d 12h  jordan-normalization 09 H2: run b into the resumed store (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a2-20261026T200824            done              -  11d 12h  jordan-normalization 09 H2: run a again into the resumed store, the resume after SIGTERM  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a-20261026T200457             killed            -  11d 12h  jordan-normalization 09 H2: run a into the resumed store, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   jordan-normalization-09-reference-c-20261026T200132           done              -  11d 12h  jordan-normalization 09 H1: run c of the reference build (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-b-20261026T200014           done              -  11d 12h  jordan-normalization 09 H1: run b of the reference build (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-a-20261026T195544           done              -  11d 12h  jordan-normalization 09 H1: run a of the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   rrk-adoption-03-unit-20261026T151946                          lost              -  11d 17h  a test run of the wrapper, in a temporary directory  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   ray-sqla-align-02-resumed-c-20261025T210916                   done              -  12d 11h  ray-sqla-align 02 R3: the resume of the resumed store under ray 2.59.0, straight through  · CALCULATE BBN DATA, all work items complete
+   ray-sqla-align-02-resumed-a-20261025T210611                   killed            -  12d 11h  ray-sqla-align 02 R2: the pilot grid into the resumed store under ray 2.59.0, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   ray-sqla-align-02-reference-20261025T210149                   done              -  12d 11h  ray-sqla-align 02 R1: the pilot grid straight through under ray 2.59.0, the reference store  · CALCULATE BBN DATA, all work items complete
+
+30 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 1 alive, 29 finished; 0 with no host recorded.
+list exit 0
+$ head of log
+1:** registered_run: registered as one-loop-drain-06-resumed-a-20261107T085145
+2:**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/one-loop-drain-06-resumed-a-20261107T085145/manifest.json
+3:**   list it with: ./venv/bin/python -m runregistrykit list
+4:>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+
+### 2026-11-07 08:56:44 +0000 one check, resumed-a2
+manifest path: /Users/ds283/Documents/Code/ChamPBH/var/runs/one-loop-drain-06-resumed-a2-20261107T085643/manifest.json
+-rw-r--r-- 1 ds283 staff 4136 Nov  7 08:56 /Users/ds283/Documents/Code/ChamPBH/var/runs/one-loop-drain-06-resumed-a2-20261107T085643/manifest.json
+status state running pid 90981 heartbeat 2026-11-07T08:56:44+00:00 stage packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+created 2026-11-07T08:56:43+00:00 results_store_id None
+pid file: 90981
+log birth: 2026-11-07 08:56:42 +0000
+manifest birth: 2026-11-07 08:56:43 +0000
+$ list
+   RUN                                                           STATE      PROGRESS      AGE  PURPOSE · STAGE
+   one-loop-drain-06-resumed-a2-20261107T085643                  running           -       2s  one-loop-drain 06 R: run a again into the resumed store, the resume after SIGTERM (beta 1.06 1.185 2 10 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1, A 0.1 1)  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   one-loop-drain-06-resumed-a-20261107T085145                   killed            -       5m  one-loop-drain 06 R: run a into the resumed store, interrupted with SIGTERM in the A = 0.1 scalar stage (beta 1.06 1.185 2 10 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1, A 0.1 1)  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   one-loop-drain-06-reference-c-20261107T084809                 done              -       9m  one-loop-drain 06 Bitwise and R: run c of the reference build at the tip (beta 1 at M 1e-12 Mp, phi* 5, alpha 0.15, A 1)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-reference-b-20261107T084318                 done              -      13m  one-loop-drain 06 Bitwise and R: run b of the reference build at the tip (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5, alpha 0 0.1)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-reference-a-20261107T083701                 done              -      20m  one-loop-drain 06 Bitwise and R: run a of the reference build at the tip (beta 1.06 1.185 2 10 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1, A 0.1 1)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-base-c-20261107T083454                      done              -      22m  one-loop-drain 06 Bitwise: run c of the base build at 1561b60 (beta 1 at M 1e-12 Mp, phi* 5, alpha 0.15)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-base-b-20261107T082957                      done              -      27m  one-loop-drain 06 Bitwise: run b of the base build at 1561b60 (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5, alpha 0 0.1)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-base-a-20261107T082601                      done              -      31m  one-loop-drain 06 Bitwise: run a of the base build at 1561b60 (beta 1.06 1.185 2 10 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1)  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-X-X-large-M-dissipation-20261101T223930      done              -   5d 10h  science-2026.8.0 X: diagnostic, dissipation (alpha 0.08) at M 1e-9 1e-6 1e-3 0.5 Mp, beta 1.2 2.0 2.9, for the reflection figure  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-R-R-reflections-natural-20261101T204221      done              -   5d 12h  science-2026.8.0 R: reflection structure, natural mode (alpha 0), beta 1.2 2 2.9 at M 1e-3 and 0.5 Mp  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-R-R-reflections-dissipation-20261101T203500  done              -   5d 12h  science-2026.8.0 R: reflection structure, beta 1.2 2 2.9 at M 4e-31, 1e-15, 1e-12 Mp, alpha 0.001-0.15  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-D-D-large-M-natural-20261101T202510          done              -   5d 12h  science-2026.8.0 D: natural mode (alpha 0) at M 1e-3, 0.1, 0.5 Mp, coarse beta  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-D-D-large-M-natural-20261101T180712          failed            -   5d 14h  science-2026.8.0 D: natural mode (alpha 0) at M 1e-3, 0.1, 0.5 Mp, coarse beta  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID, 75.00% (6 of 24 work i
+   science-2026.8.0-C-C-Mcrit-20261101T163105                    done              -   5d 16h  science-2026.8.0 C: M 1e-15, 1e-13, 1e-12 Mp around M_crit, coarse beta, alpha 0.01-0.15  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-B-B-lab-neighbourhood-20261101T160543        done              -   5d 16h  science-2026.8.0 B: M 1e-30 and 1e-33 Mp on the sparse beta grid, alpha 0.01-0.15, to show independence of M  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-A2-A2-lab-low-alpha-20261101T123215          done              -   5d 20h  science-2026.8.0 A2: Figure 6 low alpha 0.001-0.007 at M 4e-31 Mp, transition window 1.06-1.50 and sparse beta above  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-A-A-lab-main-20261101T112047                 done              -   5d 21h  science-2026.8.0 A: Figure 6 at laboratory M 4e-31 Mp, dense beta 0.5-20, alpha 0.01-0.15, phi* 5  · CALCULATE BBN DATA, all work items complete
+   inelastic-reflection-11-resumed-a2-20261101T030928            done              -   6d 05h  inelastic-reflection 11 R2: the same build again into the resumed store, the resume after SIGTERM  · CALCULATE BBN DATA, all work items complete
+   inelastic-reflection-11-resumed-a-20261101T030431             killed            -   6d 05h  inelastic-reflection 11 R2: the build into the resumed store, interrupted with SIGTERM in the alpha = 0.1 scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   inelastic-reflection-11-reference-a-20261101T025902           done              -   6d 05h  inelastic-reflection 11 R1: the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5, alpha 0 and 0.1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-c-20261026T201250             done              -  11d 12h  jordan-normalization 09 H2: run c into the resumed store (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-b-20261026T201130             done              -  11d 12h  jordan-normalization 09 H2: run b into the resumed store (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a2-20261026T200824            done              -  11d 12h  jordan-normalization 09 H2: run a again into the resumed store, the resume after SIGTERM  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a-20261026T200457             killed            -  11d 12h  jordan-normalization 09 H2: run a into the resumed store, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   jordan-normalization-09-reference-c-20261026T200132           done              -  11d 12h  jordan-normalization 09 H1: run c of the reference build (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-b-20261026T200014           done              -  11d 12h  jordan-normalization 09 H1: run b of the reference build (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-a-20261026T195544           done              -  11d 13h  jordan-normalization 09 H1: run a of the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   rrk-adoption-03-unit-20261026T151946                          lost              -  11d 17h  a test run of the wrapper, in a temporary directory  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   ray-sqla-align-02-resumed-c-20261025T210916                   done              -  12d 11h  ray-sqla-align 02 R3: the resume of the resumed store under ray 2.59.0, straight through  · CALCULATE BBN DATA, all work items complete
+   ray-sqla-align-02-resumed-a-20261025T210611                   killed            -  12d 11h  ray-sqla-align 02 R2: the pilot grid into the resumed store under ray 2.59.0, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   ray-sqla-align-02-reference-20261025T210149                   done              -  12d 11h  ray-sqla-align 02 R1: the pilot grid straight through under ray 2.59.0, the reference store  · CALCULATE BBN DATA, all work items complete
+
+31 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 1 alive, 30 finished; 0 with no host recorded.
+list exit 0
+$ head of log
+1:** registered_run: registered as one-loop-drain-06-resumed-a2-20261107T085643
+2:**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/one-loop-drain-06-resumed-a2-20261107T085643/manifest.json
+3:**   list it with: ./venv/bin/python -m runregistrykit list
+4:>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+
+### 2026-11-07 08:59:33 +0000 one check, resumed-b
+manifest path: /Users/ds283/Documents/Code/ChamPBH/var/runs/one-loop-drain-06-resumed-b-20261107T085932/manifest.json
+-rw-r--r-- 1 ds283 staff 3952 Nov  7 08:59 /Users/ds283/Documents/Code/ChamPBH/var/runs/one-loop-drain-06-resumed-b-20261107T085932/manifest.json
+status state running pid 91430 heartbeat 2026-11-07T08:59:33+00:00 stage packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+created 2026-11-07T08:59:32+00:00 results_store_id None
+pid file: 91430
+log birth: 2026-11-07 08:59:31 +0000
+manifest birth: 2026-11-07 08:59:32 +0000
+$ list
+   RUN                                                           STATE      PROGRESS      AGE  PURPOSE · STAGE
+   one-loop-drain-06-resumed-b-20261107T085932                   running           -       2s  one-loop-drain 06 R: run b into the resumed store (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5, alpha 0 0.1)  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   one-loop-drain-06-resumed-a2-20261107T085643                  done              -       3m  one-loop-drain 06 R: run a again into the resumed store, the resume after SIGTERM (beta 1.06 1.185 2 10 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1, A 0.1 1)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-resumed-a-20261107T085145                   killed            -       8m  one-loop-drain 06 R: run a into the resumed store, interrupted with SIGTERM in the A = 0.1 scalar stage (beta 1.06 1.185 2 10 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1, A 0.1 1)  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   one-loop-drain-06-reference-c-20261107T084809                 done              -      11m  one-loop-drain 06 Bitwise and R: run c of the reference build at the tip (beta 1 at M 1e-12 Mp, phi* 5, alpha 0.15, A 1)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-reference-b-20261107T084318                 done              -      16m  one-loop-drain 06 Bitwise and R: run b of the reference build at the tip (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5, alpha 0 0.1)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-reference-a-20261107T083701                 done              -      23m  one-loop-drain 06 Bitwise and R: run a of the reference build at the tip (beta 1.06 1.185 2 10 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1, A 0.1 1)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-base-c-20261107T083454                      done              -      25m  one-loop-drain 06 Bitwise: run c of the base build at 1561b60 (beta 1 at M 1e-12 Mp, phi* 5, alpha 0.15)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-base-b-20261107T082957                      done              -      30m  one-loop-drain 06 Bitwise: run b of the base build at 1561b60 (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5, alpha 0 0.1)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-base-a-20261107T082601                      done              -      34m  one-loop-drain 06 Bitwise: run a of the base build at 1561b60 (beta 1.06 1.185 2 10 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1)  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-X-X-large-M-dissipation-20261101T223930      done              -   5d 10h  science-2026.8.0 X: diagnostic, dissipation (alpha 0.08) at M 1e-9 1e-6 1e-3 0.5 Mp, beta 1.2 2.0 2.9, for the reflection figure  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-R-R-reflections-natural-20261101T204221      done              -   5d 12h  science-2026.8.0 R: reflection structure, natural mode (alpha 0), beta 1.2 2 2.9 at M 1e-3 and 0.5 Mp  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-R-R-reflections-dissipation-20261101T203500  done              -   5d 12h  science-2026.8.0 R: reflection structure, beta 1.2 2 2.9 at M 4e-31, 1e-15, 1e-12 Mp, alpha 0.001-0.15  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-D-D-large-M-natural-20261101T202510          done              -   5d 12h  science-2026.8.0 D: natural mode (alpha 0) at M 1e-3, 0.1, 0.5 Mp, coarse beta  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-D-D-large-M-natural-20261101T180712          failed            -   5d 14h  science-2026.8.0 D: natural mode (alpha 0) at M 1e-3, 0.1, 0.5 Mp, coarse beta  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID, 75.00% (6 of 24 work i
+   science-2026.8.0-C-C-Mcrit-20261101T163105                    done              -   5d 16h  science-2026.8.0 C: M 1e-15, 1e-13, 1e-12 Mp around M_crit, coarse beta, alpha 0.01-0.15  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-B-B-lab-neighbourhood-20261101T160543        done              -   5d 16h  science-2026.8.0 B: M 1e-30 and 1e-33 Mp on the sparse beta grid, alpha 0.01-0.15, to show independence of M  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-A2-A2-lab-low-alpha-20261101T123215          done              -   5d 20h  science-2026.8.0 A2: Figure 6 low alpha 0.001-0.007 at M 4e-31 Mp, transition window 1.06-1.50 and sparse beta above  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-A-A-lab-main-20261101T112047                 done              -   5d 21h  science-2026.8.0 A: Figure 6 at laboratory M 4e-31 Mp, dense beta 0.5-20, alpha 0.01-0.15, phi* 5  · CALCULATE BBN DATA, all work items complete
+   inelastic-reflection-11-resumed-a2-20261101T030928            done              -   6d 05h  inelastic-reflection 11 R2: the same build again into the resumed store, the resume after SIGTERM  · CALCULATE BBN DATA, all work items complete
+   inelastic-reflection-11-resumed-a-20261101T030431             killed            -   6d 05h  inelastic-reflection 11 R2: the build into the resumed store, interrupted with SIGTERM in the alpha = 0.1 scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   inelastic-reflection-11-reference-a-20261101T025902           done              -   6d 06h  inelastic-reflection 11 R1: the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5, alpha 0 and 0.1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-c-20261026T201250             done              -  11d 12h  jordan-normalization 09 H2: run c into the resumed store (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-b-20261026T201130             done              -  11d 12h  jordan-normalization 09 H2: run b into the resumed store (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a2-20261026T200824            done              -  11d 12h  jordan-normalization 09 H2: run a again into the resumed store, the resume after SIGTERM  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a-20261026T200457             killed            -  11d 12h  jordan-normalization 09 H2: run a into the resumed store, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   jordan-normalization-09-reference-c-20261026T200132           done              -  11d 12h  jordan-normalization 09 H1: run c of the reference build (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-b-20261026T200014           done              -  11d 12h  jordan-normalization 09 H1: run b of the reference build (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-a-20261026T195544           done              -  11d 13h  jordan-normalization 09 H1: run a of the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   rrk-adoption-03-unit-20261026T151946                          lost              -  11d 17h  a test run of the wrapper, in a temporary directory  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   ray-sqla-align-02-resumed-c-20261025T210916                   done              -  12d 11h  ray-sqla-align 02 R3: the resume of the resumed store under ray 2.59.0, straight through  · CALCULATE BBN DATA, all work items complete
+   ray-sqla-align-02-resumed-a-20261025T210611                   killed            -  12d 11h  ray-sqla-align 02 R2: the pilot grid into the resumed store under ray 2.59.0, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   ray-sqla-align-02-reference-20261025T210149                   done              -  12d 11h  ray-sqla-align 02 R1: the pilot grid straight through under ray 2.59.0, the reference store  · CALCULATE BBN DATA, all work items complete
+
+32 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 1 alive, 31 finished; 0 with no host recorded.
+list exit 0
+$ head of log
+1:** registered_run: registered as one-loop-drain-06-resumed-b-20261107T085932
+2:**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/one-loop-drain-06-resumed-b-20261107T085932/manifest.json
+3:**   list it with: ./venv/bin/python -m runregistrykit list
+4:>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+
+### 2026-11-07 09:04:40 +0000 one check, resumed-c
+manifest path: /Users/ds283/Documents/Code/ChamPBH/var/runs/one-loop-drain-06-resumed-c-20261107T090440/manifest.json
+-rw-r--r-- 1 ds283 staff 3913 Nov  7 09:04 /Users/ds283/Documents/Code/ChamPBH/var/runs/one-loop-drain-06-resumed-c-20261107T090440/manifest.json
+status state running pid 95407 heartbeat 2026-11-07T09:04:40+00:00 stage packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+created 2026-11-07T09:04:40+00:00 results_store_id None
+pid file: 95407
+log birth: 2026-11-07 09:04:38 +0000
+manifest birth: 2026-11-07 09:04:40 +0000
+$ list
+   RUN                                                           STATE      PROGRESS      AGE  PURPOSE · STAGE
+   one-loop-drain-06-resumed-c-20261107T090440                   running           -       1s  one-loop-drain 06 R: run c into the resumed store (beta 1 at M 1e-12 Mp, phi* 5, alpha 0.15, A 1)  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   one-loop-drain-06-resumed-b-20261107T085932                   done              -       5m  one-loop-drain 06 R: run b into the resumed store (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5, alpha 0 0.1)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-resumed-a2-20261107T085643                  done              -       8m  one-loop-drain 06 R: run a again into the resumed store, the resume after SIGTERM (beta 1.06 1.185 2 10 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1, A 0.1 1)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-resumed-a-20261107T085145                   killed            -      13m  one-loop-drain 06 R: run a into the resumed store, interrupted with SIGTERM in the A = 0.1 scalar stage (beta 1.06 1.185 2 10 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1, A 0.1 1)  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   one-loop-drain-06-reference-c-20261107T084809                 done              -      17m  one-loop-drain 06 Bitwise and R: run c of the reference build at the tip (beta 1 at M 1e-12 Mp, phi* 5, alpha 0.15, A 1)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-reference-b-20261107T084318                 done              -      21m  one-loop-drain 06 Bitwise and R: run b of the reference build at the tip (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5, alpha 0 0.1)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-reference-a-20261107T083701                 done              -      28m  one-loop-drain 06 Bitwise and R: run a of the reference build at the tip (beta 1.06 1.185 2 10 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1, A 0.1 1)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-base-c-20261107T083454                      done              -      30m  one-loop-drain 06 Bitwise: run c of the base build at 1561b60 (beta 1 at M 1e-12 Mp, phi* 5, alpha 0.15)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-base-b-20261107T082957                      done              -      35m  one-loop-drain 06 Bitwise: run b of the base build at 1561b60 (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5, alpha 0 0.1)  · CALCULATE BBN DATA, all work items complete
+   one-loop-drain-06-base-a-20261107T082601                      done              -      39m  one-loop-drain 06 Bitwise: run a of the base build at 1561b60 (beta 1.06 1.185 2 10 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1)  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-X-X-large-M-dissipation-20261101T223930      done              -   5d 10h  science-2026.8.0 X: diagnostic, dissipation (alpha 0.08) at M 1e-9 1e-6 1e-3 0.5 Mp, beta 1.2 2.0 2.9, for the reflection figure  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-R-R-reflections-natural-20261101T204221      done              -   5d 12h  science-2026.8.0 R: reflection structure, natural mode (alpha 0), beta 1.2 2 2.9 at M 1e-3 and 0.5 Mp  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-R-R-reflections-dissipation-20261101T203500  done              -   5d 12h  science-2026.8.0 R: reflection structure, beta 1.2 2 2.9 at M 4e-31, 1e-15, 1e-12 Mp, alpha 0.001-0.15  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-D-D-large-M-natural-20261101T202510          done              -   5d 12h  science-2026.8.0 D: natural mode (alpha 0) at M 1e-3, 0.1, 0.5 Mp, coarse beta  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-D-D-large-M-natural-20261101T180712          failed            -   5d 14h  science-2026.8.0 D: natural mode (alpha 0) at M 1e-3, 0.1, 0.5 Mp, coarse beta  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID, 75.00% (6 of 24 work i
+   science-2026.8.0-C-C-Mcrit-20261101T163105                    done              -   5d 16h  science-2026.8.0 C: M 1e-15, 1e-13, 1e-12 Mp around M_crit, coarse beta, alpha 0.01-0.15  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-B-B-lab-neighbourhood-20261101T160543        done              -   5d 16h  science-2026.8.0 B: M 1e-30 and 1e-33 Mp on the sparse beta grid, alpha 0.01-0.15, to show independence of M  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-A2-A2-lab-low-alpha-20261101T123215          done              -   5d 20h  science-2026.8.0 A2: Figure 6 low alpha 0.001-0.007 at M 4e-31 Mp, transition window 1.06-1.50 and sparse beta above  · CALCULATE BBN DATA, all work items complete
+   science-2026.8.0-A-A-lab-main-20261101T112047                 done              -   5d 21h  science-2026.8.0 A: Figure 6 at laboratory M 4e-31 Mp, dense beta 0.5-20, alpha 0.01-0.15, phi* 5  · CALCULATE BBN DATA, all work items complete
+   inelastic-reflection-11-resumed-a2-20261101T030928            done              -   6d 05h  inelastic-reflection 11 R2: the same build again into the resumed store, the resume after SIGTERM  · CALCULATE BBN DATA, all work items complete
+   inelastic-reflection-11-resumed-a-20261101T030431             killed            -   6d 06h  inelastic-reflection 11 R2: the build into the resumed store, interrupted with SIGTERM in the alpha = 0.1 scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   inelastic-reflection-11-reference-a-20261101T025902           done              -   6d 06h  inelastic-reflection 11 R1: the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5, alpha 0 and 0.1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-c-20261026T201250             done              -  11d 12h  jordan-normalization 09 H2: run c into the resumed store (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-b-20261026T201130             done              -  11d 12h  jordan-normalization 09 H2: run b into the resumed store (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a2-20261026T200824            done              -  11d 12h  jordan-normalization 09 H2: run a again into the resumed store, the resume after SIGTERM  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-resumed-a-20261026T200457             killed            -  11d 12h  jordan-normalization 09 H2: run a into the resumed store, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   jordan-normalization-09-reference-c-20261026T200132           done              -  11d 13h  jordan-normalization 09 H1: run c of the reference build (beta 3 at M 0.1 and 1e-5 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-b-20261026T200014           done              -  11d 13h  jordan-normalization 09 H1: run b of the reference build (beta 0.5 at M 1e-3 Mp, phi* 1)  · CALCULATE BBN DATA, all work items complete
+   jordan-normalization-09-reference-a-20261026T195544           done              -  11d 13h  jordan-normalization 09 H1: run a of the reference build (beta 0.5 1.5 3 5.5 at M 1e-3 Mp, phi* 5)  · CALCULATE BBN DATA, all work items complete
+   rrk-adoption-03-unit-20261026T151946                          lost              -  11d 17h  a test run of the wrapper, in a temporary directory  · packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c857
+   ray-sqla-align-02-resumed-c-20261025T210916                   done              -  12d 11h  ray-sqla-align 02 R3: the resume of the resumed store under ray 2.59.0, straight through  · CALCULATE BBN DATA, all work items complete
+   ray-sqla-align-02-resumed-a-20261025T210611                   killed            -  12d 11h  ray-sqla-align 02 R2: the pilot grid into the resumed store under ray 2.59.0, interrupted with SIGTERM in the scalar stage  · CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   ray-sqla-align-02-reference-20261025T210149                   done              -  12d 12h  ray-sqla-align 02 R1: the pilot grid straight through under ray 2.59.0, the reference store  · CALCULATE BBN DATA, all work items complete
+
+33 run(s) under /Users/ds283/Documents/Code/ChamPBH/var/runs: 1 alive, 32 finished; 0 with no host recorded.
+list exit 0
+$ head of log
+1:** registered_run: registered as one-loop-drain-06-resumed-c-20261107T090440
+2:**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/one-loop-drain-06-resumed-c-20261107T090440/manifest.json
+3:**   list it with: ./venv/bin/python -m runregistrykit list
+4:>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+

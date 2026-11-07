@@ -1,0 +1,13 @@
+store var/datastores/inelastic-reflection-11-reference; 02d at /Users/ds283/Documents/Code/ChamPBH/var/one-loop-drain/02d
+
+0. the tasks (tasks.json):
+   P-2188-A0.1: beta=1.06 M=4e-31 A=0.1 argv=['1.06', '4e-31', '--drain-law', 'one_loop', '--alpha', '0.1'] only --drain-law one_loop --alpha A; 02d outcome success
+   P-2188-A1: beta=1.06 M=4e-31 A=1.0 argv=['1.06', '4e-31', '--drain-law', 'one_loop', '--alpha', '1.0'] only --drain-law one_loop --alpha A; 02d outcome success
+   P-2197-A0.1: beta=1.185 M=4e-31 A=0.1 argv=['1.185', '4e-31', '--drain-law', 'one_loop', '--alpha', '0.1'] only --drain-law one_loop --alpha A; 02d outcome success
+   P-2197-A1: beta=1.185 M=4e-31 A=1.0 argv=['1.185', '4e-31', '--drain-law', 'one_loop', '--alpha', '1.0'] only --drain-law one_loop --alpha A; 02d outcome success
+   R-865-A0.1: beta=2.0 M=4e-31 A=0.1 argv=['2.0', '4e-31', '--drain-law', 'one_loop', '--alpha', '0.1'] only --drain-law one_loop --alpha A; 02d outcome success
+   R-865-A1: beta=2.0 M=4e-31 A=1.0 argv=['2.0', '4e-31', '--drain-law', 'one_loop', '--alpha', '1.0'] only --drain-law one_loop --alpha A; 02d outcome success
+   R-611-A0.1: beta=10.0 M=4e-31 A=0.1 argv=['10.0', '4e-31', '--drain-law', 'one_loop', '--alpha', '0.1'] only --drain-law one_loop --alpha A; 02d outcome success
+   R-611-A1: beta=10.0 M=4e-31 A=1.0 argv=['10.0', '4e-31', '--drain-law', 'one_loop', '--alpha', '1.0'] only --drain-law one_loop --alpha A; 02d outcome success
+   C-3233-A1: beta=1.0 M=1e-12 A=1.0 argv=['1.0', '1e-12', '--drain-law', 'one_loop', '--alpha', '1.0'] only --drain-law one_loop --alpha A; 02d outcome success
+

@@ -1,0 +1,29 @@
+2026-11-07 08:25:43,148	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-07 08:25:43,186	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at [1m[32mhttp://127.0.0.1:8267 [39m[22m
+tree root (driver's cwd, realpath): /Users/ds283/Documents/Code/ChamPBH
+job py_driver_sys_path: ['/Users/ds283/Documents/Code/ChamPBH/.documents/one-loop-drain/rehearse-06', '/Users/ds283/Documents/Code/ChamPBH']
+== driver (pid 67544)
+   ScalarHistory: /Users/ds283/Documents/Code/ChamPBH/ComputeTargets/ScalarHistory.py
+   ObjectFactories: /Users/ds283/Documents/Code/ChamPBH/ObjectFactories/__init__.py
+   VERSION_LABEL: 2026.10.0
+   FINGERPRINT_FORMAT: 7
+   sys.path[:5]: ['/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/thirdparty_files', '/Users/ds283/Documents/Code/ChamPBH/.documents/one-loop-drain/rehearse-06', '/Users/ds283/Documents/Code/ChamPBH', '/opt/local/Library/Frameworks/Python.framework/Versions/3.13/lib/python313.zip', '/opt/local/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13']
+   cwd: /Users/ds283/Documents/Code/ChamPBH
+   PYTHONPATH: .
+== task (pid 67512)
+   ScalarHistory: /Users/ds283/Documents/Code/ChamPBH/ComputeTargets/ScalarHistory.py
+   ObjectFactories: /Users/ds283/Documents/Code/ChamPBH/ObjectFactories/__init__.py
+   VERSION_LABEL: 2026.10.0
+   FINGERPRINT_FORMAT: 7
+   sys.path[:5]: ['/Users/ds283/Documents/Code/ChamPBH', '/Users/ds283/Documents/Code/ChamPBH/.documents/one-loop-drain/rehearse-06', '/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/thirdparty_files', '/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/_private/workers', '/opt/local/Library/Frameworks/Python.framework/Versions/3.13/lib/python313.zip']
+   cwd: /Users/ds283/Documents/Code/ChamPBH
+   PYTHONPATH: None
+== actor (pid 67521)
+   ScalarHistory: /Users/ds283/Documents/Code/ChamPBH/ComputeTargets/ScalarHistory.py
+   ObjectFactories: /Users/ds283/Documents/Code/ChamPBH/ObjectFactories/__init__.py
+   VERSION_LABEL: 2026.10.0
+   FINGERPRINT_FORMAT: 7
+   sys.path[:5]: ['/Users/ds283/Documents/Code/ChamPBH', '/Users/ds283/Documents/Code/ChamPBH/.documents/one-loop-drain/rehearse-06', '/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/thirdparty_files', '/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/_private/workers', '/opt/local/Library/Frameworks/Python.framework/Versions/3.13/lib/python313.zip']
+   cwd: /Users/ds283/Documents/Code/ChamPBH
+   PYTHONPATH: None
+RESULT: every process imports the tree root code, labels the driver's (VERSION_LABEL 2026.10.0, FINGERPRINT_FORMAT 7)

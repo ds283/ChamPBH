@@ -1,0 +1,29 @@
+2026-11-07 08:25:38,374	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-07 08:25:38,421	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at [1m[32mhttp://127.0.0.1:8267 [39m[22m
+tree root (driver's cwd, realpath): /private/tmp/claude-35086/-Users-ds283--claude-spares-spare-3KG1mP/ac4eb94d-0bc8-4fda-a4e4-f553733c5d07/scratchpad/agent-06/base-1561b60
+job py_driver_sys_path: ['/Users/ds283/Documents/Code/ChamPBH/.documents/one-loop-drain/rehearse-06', '/private/tmp/claude-35086/-Users-ds283--claude-spares-spare-3KG1mP/ac4eb94d-0bc8-4fda-a4e4-f553733c5d07/scratchpad/agent-06/base-1561b60']
+== driver (pid 67488)
+   ScalarHistory: /private/tmp/claude-35086/-Users-ds283--claude-spares-spare-3KG1mP/ac4eb94d-0bc8-4fda-a4e4-f553733c5d07/scratchpad/agent-06/base-1561b60/ComputeTargets/ScalarHistory.py
+   ObjectFactories: /private/tmp/claude-35086/-Users-ds283--claude-spares-spare-3KG1mP/ac4eb94d-0bc8-4fda-a4e4-f553733c5d07/scratchpad/agent-06/base-1561b60/ObjectFactories/__init__.py
+   VERSION_LABEL: 2026.9.0
+   FINGERPRINT_FORMAT: 6
+   sys.path[:5]: ['/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/thirdparty_files', '/Users/ds283/Documents/Code/ChamPBH/.documents/one-loop-drain/rehearse-06', '/private/tmp/claude-35086/-Users-ds283--claude-spares-spare-3KG1mP/ac4eb94d-0bc8-4fda-a4e4-f553733c5d07/scratchpad/agent-06/base-1561b60', '/opt/local/Library/Frameworks/Python.framework/Versions/3.13/lib/python313.zip', '/opt/local/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13']
+   cwd: /private/tmp/claude-35086/-Users-ds283--claude-spares-spare-3KG1mP/ac4eb94d-0bc8-4fda-a4e4-f553733c5d07/scratchpad/agent-06/base-1561b60
+   PYTHONPATH: .
+== task (pid 67513)
+   ScalarHistory: /private/tmp/claude-35086/-Users-ds283--claude-spares-spare-3KG1mP/ac4eb94d-0bc8-4fda-a4e4-f553733c5d07/scratchpad/agent-06/base-1561b60/ComputeTargets/ScalarHistory.py
+   ObjectFactories: /private/tmp/claude-35086/-Users-ds283--claude-spares-spare-3KG1mP/ac4eb94d-0bc8-4fda-a4e4-f553733c5d07/scratchpad/agent-06/base-1561b60/ObjectFactories/__init__.py
+   VERSION_LABEL: 2026.9.0
+   FINGERPRINT_FORMAT: 6
+   sys.path[:5]: ['/private/tmp/claude-35086/-Users-ds283--claude-spares-spare-3KG1mP/ac4eb94d-0bc8-4fda-a4e4-f553733c5d07/scratchpad/agent-06/base-1561b60', '/Users/ds283/Documents/Code/ChamPBH/.documents/one-loop-drain/rehearse-06', '/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/thirdparty_files', '/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/_private/workers', '/opt/local/Library/Frameworks/Python.framework/Versions/3.13/lib/python313.zip']
+   cwd: /Users/ds283/Documents/Code/ChamPBH
+   PYTHONPATH: None
+== actor (pid 67516)
+   ScalarHistory: /private/tmp/claude-35086/-Users-ds283--claude-spares-spare-3KG1mP/ac4eb94d-0bc8-4fda-a4e4-f553733c5d07/scratchpad/agent-06/base-1561b60/ComputeTargets/ScalarHistory.py
+   ObjectFactories: /private/tmp/claude-35086/-Users-ds283--claude-spares-spare-3KG1mP/ac4eb94d-0bc8-4fda-a4e4-f553733c5d07/scratchpad/agent-06/base-1561b60/ObjectFactories/__init__.py
+   VERSION_LABEL: 2026.9.0
+   FINGERPRINT_FORMAT: 6
+   sys.path[:5]: ['/private/tmp/claude-35086/-Users-ds283--claude-spares-spare-3KG1mP/ac4eb94d-0bc8-4fda-a4e4-f553733c5d07/scratchpad/agent-06/base-1561b60', '/Users/ds283/Documents/Code/ChamPBH/.documents/one-loop-drain/rehearse-06', '/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/thirdparty_files', '/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/_private/workers', '/opt/local/Library/Frameworks/Python.framework/Versions/3.13/lib/python313.zip']
+   cwd: /Users/ds283/Documents/Code/ChamPBH
+   PYTHONPATH: None
+RESULT: every process imports the tree root code, labels the driver's (VERSION_LABEL 2026.9.0, FINGERPRINT_FORMAT 6)

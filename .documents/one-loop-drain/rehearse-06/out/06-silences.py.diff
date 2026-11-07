@@ -1,0 +1,12 @@
+--- inelastic-reflection/out/11-silences.py.txt
++++ one-loop-drain/rehearse-06/silences.py
+@@ -1,4 +1,9 @@
+ """
++one-loop-drain prompt 06: copied from inelastic-reflection 11's (.documents/inelastic-reflection/out/11-silences.py.txt),
++with this paragraph added. Run from the main checkout's root as
++`./venv/bin/python .documents/one-loop-drain/rehearse-06/silences.py var/one-loop-drain/06/runs/<slug>.beats ...`;
++it reads the recorders' outputs and writes nothing but stdout.
++
+ The recorders' summariser of jordan-normalization prompt 09 (the orchestrator's note for 09,
+ ruling 7).
+ 

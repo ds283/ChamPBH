@@ -1,0 +1,7 @@
+A: var/one-loop-drain/06/plot-reference/QCD_Cosmology
+B: var/one-loop-drain/05/exports/QCD_Cosmology
+files of A: 9; missing in B: 0
+per file name (identical / timing only / different):
+  bounces.csv: 9 / 0 / 0
+pairs compared: 9; byte-identical 9; differ only in timing columns 0; differ 0
+RESULT: every pair byte-identical or differing only in timing columns

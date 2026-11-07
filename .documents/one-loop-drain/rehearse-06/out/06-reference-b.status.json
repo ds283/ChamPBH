@@ -1,0 +1,210 @@
+{
+  "exit_code": 0,
+  "fingerprint": {
+    "classes": {
+      "AdiabaticHistory": {
+        "count": 24,
+        "digest": "c7f617820c4f7e40e6f988baaffe375e481a630ace64da49ebbc99211e3ef39c",
+        "tag_sets": [
+          {
+            "count": 24,
+            "digest": "c7f617820c4f7e40e6f988baaffe375e481a630ace64da49ebbc99211e3ef39c",
+            "tags": [
+              "SamplesPerLog10Z_250"
+            ]
+          }
+        ]
+      },
+      "BBNData": {
+        "count": 24,
+        "digest": "56a6523e8a1674d3928bb4b9f5b3ff08608688f3d2d6e818e42b3a6fcad325c8",
+        "tag_sets": [
+          {
+            "count": 24,
+            "digest": "56a6523e8a1674d3928bb4b9f5b3ff08608688f3d2d6e818e42b3a6fcad325c8",
+            "tags": [
+              "SamplesPerLog10Z_250"
+            ]
+          }
+        ]
+      },
+      "ExponentialModel": {
+        "count": 8,
+        "digest": "2fe9d246c6e4f03c1b2ad8ab9afeca9f9bb2ef5323b07077427d0884a12a3ea9",
+        "tag_sets": [
+          {
+            "count": 8,
+            "digest": "2fe9d246c6e4f03c1b2ad8ab9afeca9f9bb2ef5323b07077427d0884a12a3ea9",
+            "tags": []
+          }
+        ]
+      },
+      "IntegrationSolver": {
+        "count": 7,
+        "digest": "5806cd3cbdd9430253813a33ebea6ff660ea4ace1fc8f0f8739e653941343783",
+        "tag_sets": [
+          {
+            "count": 7,
+            "digest": "5806cd3cbdd9430253813a33ebea6ff660ea4ace1fc8f0f8739e653941343783",
+            "tags": []
+          }
+        ]
+      },
+      "M_value": {
+        "count": 2,
+        "digest": "8e64c206e41d54f55ea14292b1250a638c6145a21ebc8d92a33c760e8c0ba154",
+        "tag_sets": [
+          {
+            "count": 2,
+            "digest": "8e64c206e41d54f55ea14292b1250a638c6145a21ebc8d92a33c760e8c0ba154",
+            "tags": []
+          }
+        ]
+      },
+      "QCD_Cosmology": {
+        "count": 1,
+        "digest": "dcbaa9d413d45bf56b63a2a6ac1da865159e363f8b5ea2a479265113b82091b2",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "dcbaa9d413d45bf56b63a2a6ac1da865159e363f8b5ea2a479265113b82091b2",
+            "tags": []
+          }
+        ]
+      },
+      "ScalarHistory": {
+        "count": 24,
+        "digest": "68a5fa1bf69053a6f9d55f78cccfb001e395e6eb46fd4592f2261c3c9d5e48f4",
+        "tag_sets": [
+          {
+            "count": 24,
+            "digest": "68a5fa1bf69053a6f9d55f78cccfb001e395e6eb46fd4592f2261c3c9d5e48f4",
+            "tags": [
+              "SamplesPerLog10Z_250"
+            ]
+          }
+        ]
+      },
+      "alpha_value": {
+        "count": 5,
+        "digest": "0502cab9334be86063331f92082fc1b8619457bd5cad0e056aa4e60b5ad91f6b",
+        "tag_sets": [
+          {
+            "count": 5,
+            "digest": "0502cab9334be86063331f92082fc1b8619457bd5cad0e056aa4e60b5ad91f6b",
+            "tags": []
+          }
+        ]
+      },
+      "beta_value": {
+        "count": 8,
+        "digest": "7573f92e528501770ae0b7529d434741c5f9fb1c24dc7917addd71feed79b7be",
+        "tag_sets": [
+          {
+            "count": 8,
+            "digest": "7573f92e528501770ae0b7529d434741c5f9fb1c24dc7917addd71feed79b7be",
+            "tags": []
+          }
+        ]
+      },
+      "phi_value": {
+        "count": 1,
+        "digest": "29e7a88b01e35866c8f102278ae2ab0eaaecef332e2fe6badec047d47894e14a",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "29e7a88b01e35866c8f102278ae2ab0eaaecef332e2fe6badec047d47894e14a",
+            "tags": []
+          }
+        ]
+      },
+      "pi_value": {
+        "count": 1,
+        "digest": "237cd5e9616925eae2215daa8eb602f9db5e521a4415d78f11056c39f8c74cc8",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "237cd5e9616925eae2215daa8eb602f9db5e521a4415d78f11056c39f8c74cc8",
+            "tags": []
+          }
+        ]
+      },
+      "redshift": {
+        "count": 75001,
+        "digest": "8dad579a1ae8f2a82a70c62838d7200adc490a4205dc7976074a17f3012b450d",
+        "tag_sets": [
+          {
+            "count": 75001,
+            "digest": "8dad579a1ae8f2a82a70c62838d7200adc490a4205dc7976074a17f3012b450d",
+            "tags": []
+          }
+        ]
+      },
+      "store_tag": {
+        "count": 1,
+        "digest": "34407c96658d27b3334475fbcac14bdf7862190810b233d798b75c11a6450531",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "34407c96658d27b3334475fbcac14bdf7862190810b233d798b75c11a6450531",
+            "tags": []
+          }
+        ]
+      },
+      "temperature": {
+        "count": 1,
+        "digest": "9bd0581c026ad77d80f5c76b87ad07d5299ba643855d44d4b3d27bdd06b061bf",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "9bd0581c026ad77d80f5c76b87ad07d5299ba643855d44d4b3d27bdd06b061bf",
+            "tags": []
+          }
+        ]
+      },
+      "tolerance": {
+        "count": 2,
+        "digest": "a6a6f286796401ec6660c96b91e9635bbf6cad6951285cbbf48b5d1ea823c5ef",
+        "tag_sets": [
+          {
+            "count": 2,
+            "digest": "a6a6f286796401ec6660c96b91e9635bbf6cad6951285cbbf48b5d1ea823c5ef",
+            "tags": []
+          }
+        ]
+      },
+      "version": {
+        "count": 1,
+        "digest": "1304d7010ab9a0a373f9a97e60ef9440a065e71201df960b4ec044fd82cfbe86",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "1304d7010ab9a0a373f9a97e60ef9440a065e71201df960b4ec044fd82cfbe86",
+            "tags": []
+          }
+        ]
+      }
+    },
+    "digest": "d4fd784b9b0f41e4c2ba4778c328c9f693f8476879f352b8f70d95310a9e801f",
+    "encoding_format": 1,
+    "fingerprint_format": 7,
+    "problems": {},
+    "taken": {
+      "git_dirty": true,
+      "git_head": "41d18c4a600e4e4b25e1e41aaa3448935a56dd03",
+      "run_id": "one-loop-drain-06-reference-b-20261107T084318",
+      "when": "2026-11-07T08:47:31+00:00"
+    }
+  },
+  "fingerprint_sidecar": "not written: /Users/ds283/Documents/Code/ChamPBH/var/datastores/one-loop-drain-06-reference.manifest.json is not a problem-free registry sidecar (there is none)",
+  "heartbeat": "2026-11-07T08:47:56+00:00",
+  "host": {
+    "boot": "3032DE24-D9C7-47E8-B1C7-C366CDBC76DF",
+    "id": "8d2b247824882486"
+  },
+  "pid": 70472,
+  "stage": "CALCULATE BBN DATA, all work items complete",
+  "state": "done",
+  "units_done": 0,
+  "units_total": null
+}

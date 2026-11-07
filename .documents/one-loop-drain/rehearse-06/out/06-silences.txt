@@ -1,0 +1,263 @@
+=== var/one-loop-drain/06/runs/base-a.beats
+  records: 78 log lines, 12 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/var/one-loop-drain/06/runs/base-a.log, runs var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-11-07 08:26:01+00:00 running; final status: hb 2026-11-07 08:29:37+00:00 done (CALCULATE BBN DATA, all work items complete)
+  (a) longest heartbeat silence: 53 s, from hb 08:27:20 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID) to hb 08:28:13 (running, stage: CALCULATE ADIABATIC TRANSGRESSION PARAMETERS)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 10.146 s, 08:26:06.200 -> 08:26:16.346
+         after: (raylet) [2026-11-07 08:26:05,777 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+         before: (raylet) [2026-11-07 08:26:15,844 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+      BUILDING GRID OF MODELS TO SAMPLE: 0.508 s, 08:26:33.141 -> 08:26:33.649
+         after:    -- total number of models to integrate = 4
+         before: (Datastore pid=67519) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038)
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 10.166 s, 08:27:56.868 -> 08:28:07.034
+         after: (raylet) [2026-11-07 08:27:56,401 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+         before: (raylet) [2026-11-07 08:28:06,460 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.019 s, 08:28:13.655 -> 08:28:14.674
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before:    -- ALL WORK ITEMS COMPLETE in time 1.21s
+      CALCULATE BBN DATA: 10.162 s, 08:29:17.107 -> 08:29:27.269
+         after: (raylet) [2026-11-07 08:29:16,871 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+         before: (raylet) [2026-11-07 08:29:26,943 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 08:26:33.141, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 100.005 s (08:26:33.650 -> 08:28:13.655; line: -- ALL WORK ITEMS COMPLETE in time 1m 40s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.019 s (08:28:13.655 -> 08:28:14.674; line: -- ALL WORK ITEMS COMPLETE in time 1.21s)
+      CALCULATE BBN DATA: 16.748 s (08:28:14.674 -> 08:28:31.422; line: -- ALL WORK ITEMS COMPLETE in time 16.9s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):
+=== var/one-loop-drain/06/runs/base-b.beats
+  records: 84 log lines, 12 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/var/one-loop-drain/06/runs/base-b.log, runs var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-11-07 08:29:57+00:00 running; final status: hb 2026-11-07 08:34:37+00:00 done (CALCULATE BBN DATA, all work items complete)
+  (a) longest heartbeat silence: 157 s, from hb 08:30:11 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID) to hb 08:32:48 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 7.595 s, 08:30:00.087 -> 08:30:07.682
+         after: >> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/one-loop-drain-06-base.db" with 16 shards
+         before: (raylet) [2026-11-07 08:30:07,263 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+      BUILDING GRID OF MODELS TO SAMPLE: 0.000 s, 08:30:11.245 -> 08:30:11.245
+         after: ** BUILDING GRID OF MODELS TO SAMPLE
+         before:    -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 10.164 s, 08:30:47.808 -> 08:30:57.972
+         after: (raylet) [2026-11-07 08:30:47,500 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+         before: (raylet) [2026-11-07 08:30:57,576 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.017 s, 08:32:51.097 -> 08:32:52.114
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before:    -- ALL WORK ITEMS COMPLETE in time 0.959s
+      CALCULATE BBN DATA: 10.166 s, 08:32:58.723 -> 08:33:08.889
+         after: (raylet) [2026-11-07 08:32:58,289 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+         before: (raylet) [2026-11-07 08:33:08,360 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 08:30:11.245, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 159.851 s (08:30:11.245 -> 08:32:51.096; line: -- ALL WORK ITEMS COMPLETE in time 2m 39.6s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.017 s (08:32:51.097 -> 08:32:52.114; line: -- ALL WORK ITEMS COMPLETE in time 0.959s)
+      CALCULATE BBN DATA: 18.807 s (08:32:52.114 -> 08:33:10.921; line: -- ALL WORK ITEMS COMPLETE in time 19.1s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):
+      one-loop-drain-06-base-b-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-11-07T08:30:39: 1 lines (4:secant); wall sum 25.5 s; last at 08:32:48.560, +157.3 s
+=== var/one-loop-drain/06/runs/base-c.beats
+  records: 42 log lines, 8 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/var/one-loop-drain/06/runs/base-c.log, runs var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-11-07 08:34:54+00:00 running; final status: hb 2026-11-07 08:35:50+00:00 done (CALCULATE BBN DATA, all work items complete)
+  (a) longest heartbeat silence: 24 s, from hb 08:35:26 (running, stage: CALCULATE BBN DATA, all work items complete) to hb 08:35:50 (done, stage: CALCULATE BBN DATA, all work items complete)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 8.614 s, 08:34:59.315 -> 08:35:07.929
+         after: (raylet) [2026-11-07 08:34:59,092 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+         before: 
+      BUILDING GRID OF MODELS TO SAMPLE: 0.000 s, 08:35:07.929 -> 08:35:07.929
+         after: ** BUILDING GRID OF MODELS TO SAMPLE
+         before:    -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 6.586 s, 08:35:09.449 -> 08:35:16.035
+         after: (raylet) [2026-11-07 08:35:09,133 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+         before: (compute_scalar_history pid=69474) !! tune_history (one-loop-drain-06-base-c-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1)-2026-11-07T08:35:07): di
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 0.509 s, 08:35:17.560 -> 08:35:18.069
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before:    -- ALL WORK ITEMS COMPLETE in time 0.406s
+      CALCULATE BBN DATA: 10.149 s, 08:35:39.878 -> 08:35:50.027
+         after: (raylet) [2026-11-07 08:35:39,353 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+         before: (raylet) [2026-11-07 08:35:49,432 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 08:35:07.929, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 9.631 s (08:35:07.929 -> 08:35:17.560; line: -- ALL WORK ITEMS COMPLETE in time 9.68s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 0.509 s (08:35:17.560 -> 08:35:18.069; line: -- ALL WORK ITEMS COMPLETE in time 0.406s)
+      CALCULATE BBN DATA: 8.620 s (08:35:18.069 -> 08:35:26.689; line: -- ALL WORK ITEMS COMPLETE in time 8.87s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):
+=== var/one-loop-drain/06/runs/reference-a.beats
+  records: 123 log lines, 18 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/var/one-loop-drain/06/runs/reference-a.log, runs var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-11-07 08:37:01+00:00 running; final status: hb 2026-11-07 08:42:45+00:00 done (CALCULATE BBN DATA, all work items complete)
+  (a) longest heartbeat silence: 71 s, from hb 08:40:18 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID) to hb 08:41:29 (running, stage: CALCULATE ADIABATIC TRANSGRESSION PARAMETERS)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 10.162 s, 08:37:20.308 -> 08:37:30.470
+         after: (raylet) [2026-11-07 08:37:20,070 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+         before: (raylet) [2026-11-07 08:37:30,147 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+      BUILDING GRID OF MODELS TO SAMPLE: 0.000 s, 08:37:32.506 -> 08:37:32.506
+         after: ** BUILDING GRID OF MODELS TO SAMPLE
+         before:    -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 10.161 s, 08:38:40.982 -> 08:38:51.143
+         after: (raylet) [2026-11-07 08:38:40,577 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+         before: (raylet) [2026-11-07 08:38:50,622 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.522 s, 08:41:29.978 -> 08:41:31.500
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before:    -- ALL WORK ITEMS COMPLETE in time 1.27s
+      CALCULATE BBN DATA: 10.150 s, 08:42:32.385 -> 08:42:42.535
+         after: (raylet) [2026-11-07 08:42:31,989 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+         before: (raylet) [2026-11-07 08:42:42,061 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 08:37:32.506, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 103.022 s (08:37:32.506 -> 08:39:15.528; line: -- ALL WORK ITEMS COMPLETE in time 1m 42.6s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.018 s (08:39:15.528 -> 08:39:16.546; line: -- ALL WORK ITEMS COMPLETE in time 1.38s)
+      CALCULATE BBN DATA: 19.270 s (08:39:16.547 -> 08:39:35.817; line: -- ALL WORK ITEMS COMPLETE in time 19.2s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):
+=== var/one-loop-drain/06/runs/reference-b.beats
+  records: 85 log lines, 12 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/var/one-loop-drain/06/runs/reference-b.log, runs var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-11-07 08:43:18+00:00 running; final status: hb 2026-11-07 08:47:56+00:00 done (CALCULATE BBN DATA, all work items complete)
+  (a) longest heartbeat silence: 155 s, from hb 08:43:31 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID) to hb 08:46:06 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 9.628 s, 08:43:22.572 -> 08:43:32.200
+         after: (raylet) [2026-11-07 08:43:22,349 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+         before: 
+      BUILDING GRID OF MODELS TO SAMPLE: 0.000 s, 08:43:32.200 -> 08:43:32.200
+         after: ** BUILDING GRID OF MODELS TO SAMPLE
+         before:    -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 10.171 s, 08:44:12.800 -> 08:44:22.971
+         after: (raylet) [2026-11-07 08:44:12,690 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+         before: (raylet) [2026-11-07 08:44:22,733 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.014 s, 08:46:09.044 -> 08:46:10.058
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before:    -- ALL WORK ITEMS COMPLETE in time 0.933s
+      CALCULATE BBN DATA: 10.144 s, 08:47:34.278 -> 08:47:44.422
+         after: (raylet) [2026-11-07 08:47:33,806 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+         before: (raylet) [2026-11-07 08:47:43,896 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 08:43:32.200, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 156.844 s (08:43:32.200 -> 08:46:09.044; line: -- ALL WORK ITEMS COMPLETE in time 2m 36.7s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.014 s (08:46:09.044 -> 08:46:10.058; line: -- ALL WORK ITEMS COMPLETE in time 0.933s)
+      CALCULATE BBN DATA: 18.262 s (08:46:10.058 -> 08:46:28.320; line: -- ALL WORK ITEMS COMPLETE in time 18.6s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):
+      one-loop-drain-06-reference-b-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-11-07T08:43:59: 1 lines (4:secant); wall sum 24.9 s; last at 08:46:06.501, +154.3 s
+=== var/one-loop-drain/06/runs/reference-c.beats
+  records: 72 log lines, 11 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/var/one-loop-drain/06/runs/reference-c.log, runs var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-11-07 08:48:09+00:00 running; final status: hb 2026-11-07 08:50:48+00:00 done (CALCULATE BBN DATA, all work items complete)
+  (a) longest heartbeat silence: 90 s, from hb 08:48:43 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID) to hb 08:50:13 (running, stage: CALCULATE ADIABATIC TRANSGRESSION PARAMETERS)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 9.640 s, 08:48:14.668 -> 08:48:24.308
+         after: (raylet) [2026-11-07 08:48:14,124 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+         before: 
+      BUILDING GRID OF MODELS TO SAMPLE: 0.000 s, 08:48:24.308 -> 08:48:24.308
+         after: ** BUILDING GRID OF MODELS TO SAMPLE
+         before:    -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 10.159 s, 08:48:54.727 -> 08:49:04.886
+         after: (raylet) [2026-11-07 08:48:54,373 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+         before: (raylet) [2026-11-07 08:49:04,439 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 0.508 s, 08:48:34.455 -> 08:48:34.963
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before:    -- ALL WORK ITEMS COMPLETE in time 0.443s
+      CALCULATE BBN DATA: 10.151 s, 08:50:25.126 -> 08:50:35.277
+         after: (raylet) [2026-11-07 08:50:24,887 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+         before: (raylet) [2026-11-07 08:50:34,971 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 08:48:24.308, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 10.147 s (08:48:24.308 -> 08:48:34.455; line: -- ALL WORK ITEMS COMPLETE in time 10.3s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 0.508 s (08:48:34.455 -> 08:48:34.963; line: -- ALL WORK ITEMS COMPLETE in time 0.443s)
+      CALCULATE BBN DATA: 9.121 s (08:48:34.963 -> 08:48:44.084; line: -- ALL WORK ITEMS COMPLETE in time 9.16s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):
+=== var/one-loop-drain/06/runs/resumed-a.beats
+  records: 89 log lines, 13 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/var/one-loop-drain/06/runs/resumed-a.log, runs var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-11-07 08:51:46+00:00 running; final status: hb 2026-11-07 08:56:11+00:00 killed (CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID)
+  (a) longest heartbeat silence: 55 s, from hb 08:53:10 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID) to hb 08:54:05 (running, stage: CALCULATE ADIABATIC TRANSGRESSION PARAMETERS)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 10.195 s, 08:52:05.570 -> 08:52:15.765
+         after: (raylet) [2026-11-07 08:52:05,531 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+         before: (raylet) [2026-11-07 08:52:15,599 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+      BUILDING GRID OF MODELS TO SAMPLE: 0.509 s, 08:52:23.379 -> 08:52:23.888
+         after:    -- total number of models to integrate = 4
+         before: (Datastore pid=90147) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038)
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 10.165 s, 08:55:06.737 -> 08:55:16.902
+         after: (raylet) [2026-11-07 08:55:06,594 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+         before: (raylet) [2026-11-07 08:55:16,650 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.517 s, 08:54:05.352 -> 08:54:06.869
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before: (raylet) [2026-11-07 08:54:06,260 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+      CALCULATE BBN DATA: 9.640 s, 08:54:06.869 -> 08:54:16.509
+         after: ** CALCULATE BBN DATA
+         before: (raylet) [2026-11-07 08:54:16,322 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 08:52:23.379, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 101.464 s (08:52:23.888 -> 08:54:05.352; line: -- ALL WORK ITEMS COMPLETE in time 1m 41.5s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.517 s (08:54:05.352 -> 08:54:06.869; line: -- ALL WORK ITEMS COMPLETE in time 1.3s)
+      CALCULATE BBN DATA: 16.756 s (08:54:06.869 -> 08:54:23.625; line: -- ALL WORK ITEMS COMPLETE in time 16.9s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):
+=== var/one-loop-drain/06/runs/resumed-a2.beats
+  records: 105 log lines, 12 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/var/one-loop-drain/06/runs/resumed-a2.log, runs var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-11-07 08:56:43+00:00 running; final status: hb 2026-11-07 08:59:17+00:00 done (CALCULATE BBN DATA, all work items complete)
+  (a) longest heartbeat silence: 61 s, from hb 08:56:58 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID) to hb 08:57:59 (running, stage: CALCULATE ADIABATIC TRANSGRESSION PARAMETERS)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 10.162 s, 08:56:47.677 -> 08:56:57.839
+         after: (raylet) [2026-11-07 08:56:47,262 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+         before: (raylet) [2026-11-07 08:56:57,283 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+      BUILDING GRID OF MODELS TO SAMPLE: 0.000 s, 08:56:58.347 -> 08:56:58.347
+         after: ** BUILDING GRID OF MODELS TO SAMPLE
+         before:    -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 10.168 s, 08:57:37.948 -> 08:57:48.116
+         after: (raylet) [2026-11-07 08:57:37,523 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+         before: (raylet) [2026-11-07 08:57:47,585 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 2.029 s, 08:57:59.794 -> 08:58:01.823
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before:    -- ALL WORK ITEMS COMPLETE in time 1.79s
+      CALCULATE BBN DATA: 10.163 s, 08:58:07.913 -> 08:58:18.076
+         after: (raylet) [2026-11-07 08:58:07,721 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+         before: (raylet) [2026-11-07 08:58:17,784 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 08:56:58.347, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 0.000 s (08:56:58.347 -> 08:56:58.347; line: -- ALL WORK ITEMS COMPLETE in time 0.0278s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 0.000 s (08:56:58.347 -> 08:56:58.347; line: -- ALL WORK ITEMS COMPLETE in time 0.185s)
+      CALCULATE BBN DATA: 0.000 s (08:56:58.347 -> 08:56:58.347; line: -- ALL WORK ITEMS COMPLETE in time 0.0384s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):
+=== var/one-loop-drain/06/runs/resumed-b.beats
+  records: 89 log lines, 12 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/var/one-loop-drain/06/runs/resumed-b.log, runs var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-11-07 08:59:32+00:00 running; final status: hb 2026-11-07 09:04:24+00:00 done (CALCULATE BBN DATA, all work items complete)
+  (a) longest heartbeat silence: 160 s, from hb 08:59:47 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID) to hb 09:02:27 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 9.136 s, 08:59:38.562 -> 08:59:47.698
+         after: (raylet) [2026-11-07 08:59:38,297 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+         before: 
+      BUILDING GRID OF MODELS TO SAMPLE: 0.000 s, 08:59:47.698 -> 08:59:47.698
+         after: ** BUILDING GRID OF MODELS TO SAMPLE
+         before:    -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 10.219 s, 09:00:38.947 -> 09:00:49.166
+         after: (raylet) [2026-11-07 09:00:38,765 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+         before: (raylet) [2026-11-07 09:00:48,833 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.019 s, 09:02:30.699 -> 09:02:31.718
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before:    -- ALL WORK ITEMS COMPLETE in time 1.16s
+      CALCULATE BBN DATA: 10.168 s, 09:02:39.846 -> 09:02:50.014
+         after: (raylet) [2026-11-07 09:02:39,547 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+         before: (raylet) [2026-11-07 09:02:49,632 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 08:59:47.698, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 163.000 s (08:59:47.698 -> 09:02:30.698; line: -- ALL WORK ITEMS COMPLETE in time 2m 42.6s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.019 s (09:02:30.699 -> 09:02:31.718; line: -- ALL WORK ITEMS COMPLETE in time 1.16s)
+      CALCULATE BBN DATA: 20.332 s (09:02:31.718 -> 09:02:52.050; line: -- ALL WORK ITEMS COMPLETE in time 20.5s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):
+      one-loop-drain-06-resumed-b-ScalarHistory-ExponentialModel(M=0.001Mp,n=1,beta=5.5)-2026-11-07T09:00:16: 1 lines (4:secant); wall sum 26.6 s; last at 09:02:28.154, +160.5 s
+=== var/one-loop-drain/06/runs/resumed-c.beats
+  records: 71 log lines, 11 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/var/one-loop-drain/06/runs/resumed-c.log, runs var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-11-07 09:04:40+00:00 running; final status: hb 2026-11-07 09:07:14+00:00 done (CALCULATE BBN DATA, all work items complete)
+  (a) longest heartbeat silence: 82 s, from hb 09:05:19 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID) to hb 09:06:41 (running, stage: CALCULATE ADIABATIC TRANSGRESSION PARAMETERS)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 8.121 s, 09:04:50.802 -> 09:04:58.923
+         after: (raylet) [2026-11-07 09:04:50,490 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+         before: 
+      BUILDING GRID OF MODELS TO SAMPLE: 0.000 s, 09:04:58.923 -> 09:04:58.923
+         after: ** BUILDING GRID OF MODELS TO SAMPLE
+         before:    -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 10.168 s, 09:06:11.446 -> 09:06:21.614
+         after: (raylet) [2026-11-07 09:06:11,023 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+         before: (raylet) [2026-11-07 09:06:21,088 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 0.509 s, 09:05:09.594 -> 09:05:10.103
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before:    -- ALL WORK ITEMS COMPLETE in time 0.503s
+      CALCULATE BBN DATA: 10.150 s, 09:07:01.707 -> 09:07:11.857
+         after: (raylet) [2026-11-07 09:07:01,380 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+         before: (raylet) [2026-11-07 09:07:11,463 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 09:04:58.923, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 10.671 s (09:04:58.923 -> 09:05:09.594; line: -- ALL WORK ITEMS COMPLETE in time 10.7s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 0.509 s (09:05:09.594 -> 09:05:10.103; line: -- ALL WORK ITEMS COMPLETE in time 0.503s)
+      CALCULATE BBN DATA: 10.146 s (09:05:10.104 -> 09:05:20.250; line: -- ALL WORK ITEMS COMPLETE in time 9.91s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):

@@ -1,0 +1,62 @@
+store var/datastores/one-loop-drain-06-resumed; 02d at /Users/ds283/Documents/Code/ChamPBH/var/one-loop-drain/02d
+
+0. the tasks (tasks.json):
+   P-2188-A0.1: beta=1.06 M=4e-31 A=0.1 argv=['1.06', '4e-31', '--drain-law', 'one_loop', '--alpha', '0.1'] only --drain-law one_loop --alpha A; 02d outcome success
+   P-2188-A1: beta=1.06 M=4e-31 A=1.0 argv=['1.06', '4e-31', '--drain-law', 'one_loop', '--alpha', '1.0'] only --drain-law one_loop --alpha A; 02d outcome success
+   P-2197-A0.1: beta=1.185 M=4e-31 A=0.1 argv=['1.185', '4e-31', '--drain-law', 'one_loop', '--alpha', '0.1'] only --drain-law one_loop --alpha A; 02d outcome success
+   P-2197-A1: beta=1.185 M=4e-31 A=1.0 argv=['1.185', '4e-31', '--drain-law', 'one_loop', '--alpha', '1.0'] only --drain-law one_loop --alpha A; 02d outcome success
+   R-865-A0.1: beta=2.0 M=4e-31 A=0.1 argv=['2.0', '4e-31', '--drain-law', 'one_loop', '--alpha', '0.1'] only --drain-law one_loop --alpha A; 02d outcome success
+   R-865-A1: beta=2.0 M=4e-31 A=1.0 argv=['2.0', '4e-31', '--drain-law', 'one_loop', '--alpha', '1.0'] only --drain-law one_loop --alpha A; 02d outcome success
+   R-611-A0.1: beta=10.0 M=4e-31 A=0.1 argv=['10.0', '4e-31', '--drain-law', 'one_loop', '--alpha', '0.1'] only --drain-law one_loop --alpha A; 02d outcome success
+   R-611-A1: beta=10.0 M=4e-31 A=1.0 argv=['10.0', '4e-31', '--drain-law', 'one_loop', '--alpha', '1.0'] only --drain-law one_loop --alpha A; 02d outcome success
+   C-3233-A1: beta=1.0 M=1e-12 A=1.0 argv=['1.0', '1e-12', '--drain-law', 'one_loop', '--alpha', '1.0'] only --drain-law one_loop --alpha A; 02d outcome success
+
+=== P-2188-A0.1 (beta=1.06 M=4e-31 A=0.1)
+    shard0015.db #3 failure=0 validated=1
+    compared: tuning 15, drain_values 13, candidates 116 rows x 11 = 1276 values (1276 also equal to the raw value), dissipation 24; event rows {'plateau': 115}
+    Yp stored 0.2551425657288337 line 0.2551425657288337 rel 0.000e+00; D/H stored 2.693550049233329 line 2.693550049233329 rel 0.000e+00
+
+=== P-2188-A1 (beta=1.06 M=4e-31 A=1)
+    shard0015.db #83 failure=0 validated=1
+    compared: tuning 15, drain_values 13, candidates 17 rows x 11 = 187 values (187 also equal to the raw value), dissipation 24; event rows {'plateau': 16}
+    Yp stored 0.2549846977970504 line 0.2549846977970504 rel 0.000e+00; D/H stored 2.616618165287152 line 2.616618165287152 rel 0.000e+00
+
+=== P-2197-A0.1 (beta=1.185 M=4e-31 A=0.1)
+    shard0000.db #47 failure=0 validated=1
+    compared: tuning 15, drain_values 13, candidates 124 rows x 11 = 1364 values (1364 also equal to the raw value), dissipation 24; event rows {'plateau': 123}
+    Yp stored 0.25862763279609824 line 0.25862763279609824 rel 0.000e+00; D/H stored 2.862843758157439 line 2.862843758157439 rel 0.000e+00
+
+=== P-2197-A1 (beta=1.185 M=4e-31 A=1)
+    shard0000.db #103 failure=0 validated=1
+    compared: tuning 15, drain_values 13, candidates 5 rows x 11 = 55 values (55 also equal to the raw value), dissipation 24; event rows {'plateau': 4}
+    Yp stored 0.25692050931671995 line 0.25692050931671995 rel 0.000e+00; D/H stored 2.534332574064248 line 2.534332574064248 rel 0.000e+00
+
+=== R-865-A0.1 (beta=2 M=4e-31 A=0.1)
+    shard0001.db #25 failure=0 validated=1
+    compared: tuning 15, drain_values 13, candidates 76 rows x 11 = 836 values (836 also equal to the raw value), dissipation 24; event rows {'plateau': 75}
+    Yp stored 0.24685126395214754 line 0.24685126395214754 rel 0.000e+00; D/H stored 2.458766067727849 line 2.458766067727849 rel 0.000e+00
+
+=== R-865-A1 (beta=2 M=4e-31 A=1)
+    shard0001.db #128 failure=0 validated=1
+    compared: tuning 15, drain_values 13, candidates 45 rows x 11 = 495 values (495 also equal to the raw value), dissipation 24; event rows {'plateau': 44}
+    Yp stored 0.24691769693673563 line 0.24691769693673563 rel 0.000e+00; D/H stored 2.469568316976615 line 2.469568316976615 rel 0.000e+00
+
+=== R-611-A0.1 (beta=10 M=4e-31 A=0.1)
+    shard0002.db #63 failure=0 validated=1
+    compared: tuning 15, drain_values 13, candidates 536 rows x 11 = 5896 values (5896 also equal to the raw value), dissipation 24; event rows {'plateau': 535}
+    Yp stored 0.2468931809226183 line 0.2468931809226183 rel 0.000e+00; D/H stored 2.458342798550233 line 2.458342798550233 rel 0.000e+00
+
+=== R-611-A1 (beta=10 M=4e-31 A=1)
+    shard0002.db #64 failure=0 validated=1
+    compared: tuning 15, drain_values 13, candidates 65 rows x 11 = 715 values (715 also equal to the raw value), dissipation 24; event rows {'plateau': 64}
+    Yp stored 0.24693191112063265 line 0.24693191112063265 rel 0.000e+00; D/H stored 2.4592507446803964 line 2.4592507446803964 rel 0.000e+00
+
+=== C-3233-A1 (beta=1 M=1e-12 A=1)
+    shard0007.db #195 failure=0 validated=1
+    compared: tuning 15, drain_values 13, candidates 301 rows x 11 = 3311 values (3311 also equal to the raw value), dissipation 24; event rows {'plateau': 301}
+    Yp stored 0.4344925969074266 line 0.4344925969074266 rel 0.000e+00; D/H stored 10.406900386619519 line 10.406900386619519 rel 0.000e+00
+
+Totals: tuning 135, drain_values 117, candidate_values 14135, candidate_raw_equal 14135, dissipation 216
+Largest relative differences: Yp 0.000e+00 (P-2188-A0.1), D/H 0.000e+00 (P-2188-A0.1)
+DIFFERENCES: none
+RESULT: every bitwise item equal; Yp and D/H within 5e-10

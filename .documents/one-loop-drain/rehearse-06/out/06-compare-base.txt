@@ -1,0 +1,230 @@
+base store: var/datastores/one-loop-drain-06-base
+tip store:  var/datastores/one-loop-drain-06-reference
+left out, by name: serial and every *_serial column; version; label; timestamp; compute_time; mean_RHS_time; max_RHS_time; min_RHS_time; NP_compute_time; BBN_compute_time
+key tables: every column both hold but serial, timestamp, version
+base: 17 histories (models ['fixed']); tip: 26 histories, 17 under fixed
+
+=== alpha=0 M=2.43532e+24eV beta=0.5 phi*=5: 1 tip row(s) under fixed
+    base shard0003.db #63; tip shard0003.db #71
+    key QCD_Cosmology (via cosmology_serial): compared name, omega_m, omega_cc, h, f_baryon, T_CMB_Kelvin, Neff; tip only []
+    key ExponentialModel (via model_serial): compared n_value; tip only []
+    key tolerance (via atol_serial): compared log10_tol; tip only []
+    key alpha_value (via alpha_serial): compared value; tip only ['drain_model']
+    key phi_value (via phi_Einstein_init_serial): compared value_PlanckMass; tip only []
+    key pi_value (via pi_Einstein_init_serial): compared value_PlanckMass; tip only []
+    key temperature (via T_Jordan_init_serial): compared value_GeV; tip only []
+    key IntegrationSolver (via solver_serial): compared stepping, label; tip only []
+    key M_value (via ExponentialModel.M_serial): compared value_eV
+    key beta_value (via ExponentialModel.beta_serial): compared value
+    ScalarHistory: compared (55 + extra_data): cosmology_type, model_type, failure, failure_reason, z_samples, compute_steps, RHS_evaluations, first_bounce_N, first_bounce_log_T_Jordan, first_bounce_phi_Einstein, first_bounce_reflected, phi_Einstein_1MeV, density_NP_ratio_1MeV, phi_Einstein_70keV, density_NP_ratio_70keV, normalization, V_ref, phi_ref, phi_0, pi_0, tracking, residual_H, residual_phi, tuning_iterations, plain_steps, secant_steps, guard_steps, seed_kind, seed_normalization, seed_phi_ref, injections, resolved_candidates, unresolved_candidates, injected_fraction, rho_chi_ratio_1MeV, rho_chi_ratio_70keV, rho_chi_ratio_today, Delta_N_eff_1MeV, Delta_N_eff_today, log_R_first_impact, parking_N, parking_log_T_Jordan, release_N, release_log_T_Jordan, worst_birth_margin, worst_birth_margin_N, birth_failing_share, worst_reflection_margin, worst_reflection_margin_N, reflection_failing_share, worst_tracker_margin, worst_tracker_margin_N, tracker_failing_share, unassessed_share, validated
+    ScalarHistory: left out, held by both: serial, version, timestamp, label, cosmology_serial, model_serial, atol_serial, rtol_serial, tuning_tol_serial, alpha_serial, phi_Einstein_init_serial, pi_Einstein_init_serial, T_Jordan_init_serial, solver_serial, compute_time, mean_RHS_time, max_RHS_time, min_RHS_time
+    ScalarHistory: tip-only columns: drained_share_one_loop, drained_share_gap, drained_share_classical, drained_share_unassessed, parking_share, candidates_one_loop, candidates_gap, candidates_classical, candidates_unassessed, ell_min, log_R_min_drain, unresolvable_assessments, unresolved_declined, all_worst_birth_margin, all_worst_birth_margin_N, all_birth_failing_share, all_worst_reflection_margin, all_worst_reflection_margin_N, all_reflection_failing_share, all_worst_tracker_margin, all_worst_tracker_margin_N, all_tracker_failing_share, bounce_rows
+    ScalarHistory: base-only columns: none
+    extra_data: 5 keys compared; only tip []; only base []
+    ScalarHistoryValue: tip 4620, base 4620, matched 4620; duplicates tip 0 base 0
+    ScalarHistoryValue: compared: raw_N, phi_Einstein_Mp, pi_Einstein_Mp, log_rhorad_Einstein_Mp4, log_rhorad_Jordan_Mp4, log_fm, log_T_Jordan_GeV, H_Einstein_Mp, H_Jordan_Mp, gstar_rho, gstar_s, dgstar_rho_dlogT, dgstar_s_dlogT, Sigma, friction_term_Mp, reflecting_term_Mp, kicking_term_Mp, log_one_plus_z_Jordan, rho_chi_over_rho_rad
+    ScalarHistoryValue: left out: serial, history_serial, z_serial
+    ScalarHistoryValue: tip-only: log_m_eff_Mp, log_m_tracker_Mp
+    masses: log_m_eff_Mp filled 4620 NULL 0; log_m_tracker_Mp filled 4620 NULL 0
+    AdiabaticHistory: tip 1 row(s), base 1
+    AdiabaticHistory: compared: max_abs_Q_kp_over_H_1E1, max_abs_Q_kp_over_H_1E2, max_abs_Q_kp_over_H_1E3, max_abs_Q_kp_over_H_1E4, z_samples, validated; left out: serial, version, timestamp, scalar_history_serial, compute_time, label; tip-only: none
+    AdiabaticHistoryValue: tip 4620, base 4620, matched 4620; duplicates tip 0 base 0
+    AdiabaticHistoryValue: compared: raw_N, abs_Q_kp_over_H_1E1, abs_Q_kp_over_H_1E2, abs_Q_kp_over_H_1E3, abs_Q_kp_over_H_1E4; left out: serial, history_serial, z_serial
+    BBNData: tip 1 row(s), base 1
+    BBNData: compared: failure, failure_reason, Yp_BBN, DOverH, He3OverH, Li7OverH, small_network, PRyM_version, z_samples, validated; left out: serial, version, timestamp, scalar_history_serial, label, NP_compute_time, BBN_compute_time; tip-only: none
+    BBNDataValue: tip 0, base 0, matched 0; duplicates tip 0 base 0
+
+=== alpha=0 M=2.43532e+24eV beta=1.5 phi*=5: 1 tip row(s) under fixed
+    base shard0004.db #83; tip shard0004.db #91
+    extra_data: 5 keys compared; only tip []; only base []
+    ScalarHistoryValue: tip 5161, base 5161, matched 5161; duplicates tip 0 base 0
+    masses: log_m_eff_Mp filled 5161 NULL 0; log_m_tracker_Mp filled 5161 NULL 0
+    AdiabaticHistory: tip 1 row(s), base 1
+    AdiabaticHistoryValue: tip 5161, base 5161, matched 5161; duplicates tip 0 base 0
+    BBNData: tip 1 row(s), base 1
+    BBNDataValue: tip 1497, base 1497, matched 1497; duplicates tip 0 base 0
+    BBNDataValue: compared: raw_N, log_T_Jordan_MeV, density_NP_MeV4, density_NP_ratio; left out: serial, bbn_serial, z_serial
+
+=== alpha=0 M=2.43532e+24eV beta=3 phi*=5: 1 tip row(s) under fixed
+    base shard0005.db #103; tip shard0005.db #128
+    extra_data: 5 keys compared; only tip []; only base []
+    ScalarHistoryValue: tip 5973, base 5973, matched 5973; duplicates tip 0 base 0
+    masses: log_m_eff_Mp filled 5973 NULL 0; log_m_tracker_Mp filled 5973 NULL 0
+    AdiabaticHistory: tip 1 row(s), base 1
+    AdiabaticHistoryValue: tip 5973, base 5973, matched 5973; duplicates tip 0 base 0
+    BBNData: tip 1 row(s), base 1
+    BBNDataValue: tip 1481, base 1481, matched 1481; duplicates tip 0 base 0
+
+=== alpha=0 M=2.43532e+24eV beta=5.5 phi*=5: 1 tip row(s) under fixed
+    base shard0006.db #128; tip shard0006.db #131
+    extra_data: 5 keys compared; only tip []; only base []
+    ScalarHistoryValue: tip 7328, base 7328, matched 7328; duplicates tip 0 base 0
+    masses: log_m_eff_Mp filled 7328 NULL 0; log_m_tracker_Mp filled 7328 NULL 0
+    AdiabaticHistory: tip 1 row(s), base 1
+    AdiabaticHistoryValue: tip 7328, base 7328, matched 7328; duplicates tip 0 base 0
+    BBNData: tip 1 row(s), base 1
+    BBNDataValue: tip 1479, base 1479, matched 1479; duplicates tip 0 base 0
+
+=== alpha=0.01 M=0.000974129eV beta=1.06 phi*=5: 1 tip row(s) under fixed
+    base shard0015.db #1; tip shard0015.db #1
+    extra_data: 7 keys compared; only tip []; only base []
+    ScalarHistoryValue: tip 4927, base 4927, matched 4927; duplicates tip 0 base 0
+    masses: log_m_eff_Mp filled 4927 NULL 0; log_m_tracker_Mp filled 4927 NULL 0
+    AdiabaticHistory: tip 1 row(s), base 1
+    AdiabaticHistoryValue: tip 4927, base 4927, matched 4927; duplicates tip 0 base 0
+    BBNData: tip 1 row(s), base 1
+    BBNDataValue: tip 1616, base 1616, matched 1616; duplicates tip 0 base 0
+
+=== alpha=0.01 M=0.000974129eV beta=1.185 phi*=5: 1 tip row(s) under fixed
+    base shard0000.db #41; tip shard0000.db #41
+    extra_data: 7 keys compared; only tip []; only base []
+    ScalarHistoryValue: tip 4995, base 4995, matched 4995; duplicates tip 0 base 0
+    masses: log_m_eff_Mp filled 4995 NULL 0; log_m_tracker_Mp filled 4995 NULL 0
+    AdiabaticHistory: tip 1 row(s), base 1
+    AdiabaticHistoryValue: tip 4995, base 4995, matched 4995; duplicates tip 0 base 0
+    BBNData: tip 1 row(s), base 1
+    BBNDataValue: tip 1504, base 1504, matched 1504; duplicates tip 0 base 0
+
+=== alpha=0.01 M=0.000974129eV beta=2 phi*=5: 1 tip row(s) under fixed
+    base shard0001.db #21; tip shard0001.db #21
+    extra_data: 7 keys compared; only tip []; only base []
+    ScalarHistoryValue: tip 5437, base 5437, matched 5437; duplicates tip 0 base 0
+    masses: log_m_eff_Mp filled 5437 NULL 0; log_m_tracker_Mp filled 5437 NULL 0
+    AdiabaticHistory: tip 1 row(s), base 1
+    AdiabaticHistoryValue: tip 5437, base 5437, matched 5437; duplicates tip 0 base 0
+    BBNData: tip 1 row(s), base 1
+    BBNDataValue: tip 1487, base 1487, matched 1487; duplicates tip 0 base 0
+
+=== alpha=0.01 M=0.000974129eV beta=10 phi*=5: 1 tip row(s) under fixed
+    base shard0002.db #61; tip shard0002.db #61
+    extra_data: 7 keys compared; only tip []; only base []
+    ScalarHistoryValue: tip 9780, base 9780, matched 9780; duplicates tip 0 base 0
+    masses: log_m_eff_Mp filled 9780 NULL 0; log_m_tracker_Mp filled 9780 NULL 0
+    AdiabaticHistory: tip 1 row(s), base 1
+    AdiabaticHistoryValue: tip 9780, base 9780, matched 9780; duplicates tip 0 base 0
+    BBNData: tip 1 row(s), base 1
+    BBNDataValue: tip 1478, base 1478, matched 1478; duplicates tip 0 base 0
+
+=== alpha=0.1 M=0.000974129eV beta=1.06 phi*=5: 1 tip row(s) under fixed
+    base shard0015.db #2; tip shard0015.db #2
+    extra_data: 7 keys compared; only tip []; only base []
+    ScalarHistoryValue: tip 4927, base 4927, matched 4927; duplicates tip 0 base 0
+    masses: log_m_eff_Mp filled 4927 NULL 0; log_m_tracker_Mp filled 4927 NULL 0
+    AdiabaticHistory: tip 1 row(s), base 1
+    AdiabaticHistoryValue: tip 4927, base 4927, matched 4927; duplicates tip 0 base 0
+    BBNData: tip 1 row(s), base 1
+    BBNDataValue: tip 1618, base 1618, matched 1618; duplicates tip 0 base 0
+
+=== alpha=0.1 M=0.000974129eV beta=1.185 phi*=5: 1 tip row(s) under fixed
+    base shard0000.db #42; tip shard0000.db #42
+    extra_data: 7 keys compared; only tip []; only base []
+    ScalarHistoryValue: tip 4995, base 4995, matched 4995; duplicates tip 0 base 0
+    masses: log_m_eff_Mp filled 4995 NULL 0; log_m_tracker_Mp filled 4995 NULL 0
+    AdiabaticHistory: tip 1 row(s), base 1
+    AdiabaticHistoryValue: tip 4995, base 4995, matched 4995; duplicates tip 0 base 0
+    BBNData: tip 1 row(s), base 1
+    BBNDataValue: tip 1508, base 1508, matched 1508; duplicates tip 0 base 0
+
+=== alpha=0.1 M=0.000974129eV beta=2 phi*=5: 1 tip row(s) under fixed
+    base shard0001.db #22; tip shard0001.db #22
+    extra_data: 7 keys compared; only tip []; only base []
+    ScalarHistoryValue: tip 5437, base 5437, matched 5437; duplicates tip 0 base 0
+    masses: log_m_eff_Mp filled 5437 NULL 0; log_m_tracker_Mp filled 5437 NULL 0
+    AdiabaticHistory: tip 1 row(s), base 1
+    AdiabaticHistoryValue: tip 5437, base 5437, matched 5437; duplicates tip 0 base 0
+    BBNData: tip 1 row(s), base 1
+    BBNDataValue: tip 1479, base 1479, matched 1479; duplicates tip 0 base 0
+
+=== alpha=0.1 M=0.000974129eV beta=10 phi*=5: 1 tip row(s) under fixed
+    base shard0002.db #62; tip shard0002.db #62
+    extra_data: 7 keys compared; only tip []; only base []
+    ScalarHistoryValue: tip 9780, base 9780, matched 9780; duplicates tip 0 base 0
+    masses: log_m_eff_Mp filled 9780 NULL 0; log_m_tracker_Mp filled 9780 NULL 0
+    AdiabaticHistory: tip 1 row(s), base 1
+    AdiabaticHistoryValue: tip 9780, base 9780, matched 9780; duplicates tip 0 base 0
+    BBNData: tip 1 row(s), base 1
+    BBNDataValue: tip 1478, base 1478, matched 1478; duplicates tip 0 base 0
+
+=== alpha=0.1 M=2.43532e+24eV beta=0.5 phi*=5: 1 tip row(s) under fixed
+    base shard0003.db #64; tip shard0003.db #72
+    extra_data: 6 keys compared; only tip []; only base []
+    ScalarHistoryValue: tip 4620, base 4620, matched 4620; duplicates tip 0 base 0
+    masses: log_m_eff_Mp filled 4620 NULL 0; log_m_tracker_Mp filled 4620 NULL 0
+    AdiabaticHistory: tip 1 row(s), base 1
+    AdiabaticHistoryValue: tip 4620, base 4620, matched 4620; duplicates tip 0 base 0
+    BBNData: tip 1 row(s), base 1
+    BBNDataValue: tip 0, base 0, matched 0; duplicates tip 0 base 0
+
+=== alpha=0.1 M=2.43532e+24eV beta=1.5 phi*=5: 1 tip row(s) under fixed
+    base shard0004.db #84; tip shard0004.db #92
+    extra_data: 6 keys compared; only tip []; only base []
+    ScalarHistoryValue: tip 5160, base 5160, matched 5160; duplicates tip 0 base 0
+    masses: log_m_eff_Mp filled 5160 NULL 0; log_m_tracker_Mp filled 5160 NULL 0
+    AdiabaticHistory: tip 1 row(s), base 1
+    AdiabaticHistoryValue: tip 5160, base 5160, matched 5160; duplicates tip 0 base 0
+    BBNData: tip 1 row(s), base 1
+    BBNDataValue: tip 1494, base 1494, matched 1494; duplicates tip 0 base 0
+
+=== alpha=0.1 M=2.43532e+24eV beta=3 phi*=5: 1 tip row(s) under fixed
+    base shard0005.db #104; tip shard0005.db #129
+    extra_data: 6 keys compared; only tip []; only base []
+    ScalarHistoryValue: tip 5973, base 5973, matched 5973; duplicates tip 0 base 0
+    masses: log_m_eff_Mp filled 5973 NULL 0; log_m_tracker_Mp filled 5973 NULL 0
+    AdiabaticHistory: tip 1 row(s), base 1
+    AdiabaticHistoryValue: tip 5973, base 5973, matched 5973; duplicates tip 0 base 0
+    BBNData: tip 1 row(s), base 1
+    BBNDataValue: tip 1479, base 1479, matched 1479; duplicates tip 0 base 0
+
+=== alpha=0.1 M=2.43532e+24eV beta=5.5 phi*=5: 1 tip row(s) under fixed
+    base shard0006.db #65; tip shard0006.db #130
+    extra_data: 6 keys compared; only tip []; only base []
+    ScalarHistoryValue: tip 7327, base 7327, matched 7327; duplicates tip 0 base 0
+    masses: log_m_eff_Mp filled 7327 NULL 0; log_m_tracker_Mp filled 7327 NULL 0
+    AdiabaticHistory: tip 1 row(s), base 1
+    AdiabaticHistoryValue: tip 7327, base 7327, matched 7327; duplicates tip 0 base 0
+    BBNData: tip 1 row(s), base 1
+    BBNDataValue: tip 1479, base 1479, matched 1479; duplicates tip 0 base 0
+
+=== alpha=0.15 M=2.43532e+15eV beta=1 phi*=5: 1 tip row(s) under fixed
+    base shard0007.db #129; tip shard0007.db #132
+    extra_data: 7 keys compared; only tip []; only base []
+    ScalarHistoryValue: tip 4895, base 4895, matched 4895; duplicates tip 0 base 0
+    masses: log_m_eff_Mp filled 4895 NULL 0; log_m_tracker_Mp filled 4895 NULL 0
+    AdiabaticHistory: tip 1 row(s), base 1
+    AdiabaticHistoryValue: tip 4895, base 4895, matched 4895; duplicates tip 0 base 0
+    BBNData: tip 1 row(s), base 1
+    BBNDataValue: tip 1661, base 1661, matched 1661; duplicates tip 0 base 0
+
+tip fixed histories matched exactly once: 17 of 17
+
+The tip's new columns at the matched histories:
+  alpha_value.drain_model = fixed: 17
+  drain record (23 columns, bounce_rows included) all NULL: 17
+  no ScalarHistoryBounce row: 17
+  sample masses over 101335 samples: log_m_eff_Mp filled 101335 NULL 0; log_m_tracker_Mp filled 101335 NULL 0
+  recomputed by sample_masses: NULL where None 0, NULL where a value 0, filled where None 0; filled equal bit for bit 202670, largest relative difference of the others 0.000e+00 (measured)
+
+Exceptions (base failure, tip success): none
+
+Values compared, per table:
+  AdiabaticHistory: 102
+  AdiabaticHistoryValue: 506675
+  BBNData: 170
+  BBNDataValue: 90952
+  ScalarHistory: 935
+  ScalarHistory.extra_data: 107
+  ScalarHistoryValue: 1925365
+  key:ExponentialModel: 17
+  key:IntegrationSolver: 34
+  key:M_value: 17
+  key:QCD_Cosmology: 119
+  key:alpha_value: 17
+  key:beta_value: 17
+  key:phi_value: 17
+  key:pi_value: 17
+  key:temperature: 17
+  key:tolerance: 51
+  total: 2524629
+
+DIFFERENCES: none
+RESULT: every compared value bitwise equal, new columns as 03 sets them

@@ -1,0 +1,84 @@
+2026-11-07T09:04:38.570+00:00 X recorder started: log /Users/ds283/Documents/Code/ChamPBH/var/one-loop-drain/06/runs/resumed-c.log, runs var/runs, poll 0.5 s
+2026-11-07T09:04:40.603+00:00 L ** registered_run: registered as one-loop-drain-06-resumed-c-20261107T090440
+2026-11-07T09:04:40.603+00:00 L **   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/one-loop-drain-06-resumed-c-20261107T090440/manifest.json
+2026-11-07T09:04:40.603+00:00 L **   list it with: ./venv/bin/python -m runregistrykit list
+2026-11-07T09:04:40.603+00:00 H 2026-11-07T09:04:40+00:00 running list it with: ./venv/bin/python -m runregistrykit list
+2026-11-07T09:04:41.106+00:00 L >> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-07T09:04:41.106+00:00 L 2026-11-07 09:04:40,642	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-07T09:04:41.106+00:00 L 2026-11-07 09:04:40,708	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at http://127.0.0.1:8267 
+2026-11-07T09:04:41.106+00:00 H 2026-11-07T09:04:40+00:00 running packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-07T09:04:43.134+00:00 L >> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/one-loop-drain-06-resumed.db" with 16 shards
+2026-11-07T09:04:43.135+00:00 H 2026-11-07T09:04:42+00:00 running Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/one-loop-drain-06-resumed.db" with 16 shards
+2026-11-07T09:04:50.802+00:00 L (raylet) [2026-11-07 09:04:50,490 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full, available space: 39.2767 GB; capacity: 926.352 GB. Object creation will fail if spilling is required.
+2026-11-07T09:04:58.923+00:00 L 
+2026-11-07T09:04:58.923+00:00 L ** BUILDING GRID OF MODELS TO SAMPLE
+2026-11-07T09:04:58.923+00:00 L    -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+2026-11-07T09:04:58.923+00:00 L    -- populated beta sample grid with 1 value = [ 1 ]
+2026-11-07T09:04:58.923+00:00 L    -- populated M sample grid with 1 value = [ 2.4353e+06 GeV ]
+2026-11-07T09:04:58.923+00:00 L    -- populated alpha grid with 1 value = [ 0.15 ]
+2026-11-07T09:04:58.923+00:00 L    -- populated A grid with 1 value = [ 1 ] (one-loop-measured-v1)
+2026-11-07T09:04:58.923+00:00 L    -- total number of models to integrate = 1
+2026-11-07T09:04:58.923+00:00 L 
+2026-11-07T09:04:58.923+00:00 L >> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.15
+2026-11-07T09:04:58.923+00:00 L 
+2026-11-07T09:04:58.923+00:00 L ** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-11-07T09:04:58.923+00:00 L (Datastore pid=95500) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+2026-11-07T09:04:58.924+00:00 H 2026-11-07T09:04:58+00:00 running CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-11-07T09:05:00.956+00:00 L (raylet) [2026-11-07 09:05:00,553 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full, available space: 39.2698 GB; capacity: 926.352 GB. Object creation will fail if spilling is required.
+2026-11-07T09:05:08.074+00:00 L (compute_scalar_history pid=95656) !! tune_history (one-loop-drain-06-resumed-c-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1)-2026-11-07T09:04:59): dissipation mode: the reflections are expected to be nearly elastic in this regime: the test-field ratio R = 10^-51.932 < 1 at the first impact (phi_t = 4.001e-14 M_P)
+2026-11-07T09:05:08.074+00:00 L (compute_scalar_history pid=95656) !! tune_history (one-loop-drain-06-resumed-c-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1)-2026-11-07T09:04:59): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.8151 < ln 10 at N = 39.03152126 (generation 30); the generations below ln 10 carry 0.9935 of K
+2026-11-07T09:05:08.074+00:00 L (compute_scalar_history pid=95656) !! tune_history (one-loop-drain-06-resumed-c-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1)-2026-11-07T09:04:59): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = -0.6698 < ln 10 at N = 39.04189143 (generation 30); the generations below ln 10 carry 0.9935 of K
+2026-11-07T09:05:09.594+00:00 L    -- ALL WORK ITEMS COMPLETE in time 10.7s
+2026-11-07T09:05:09.594+00:00 L       Queue summary: 1 lookup (avg 334.9/hr), 1 compute (avg 334.9/hr), 1 store (avg 334.9/hr), 1 validation (avg 334.9/hr)
+2026-11-07T09:05:09.594+00:00 L 
+2026-11-07T09:05:09.594+00:00 L ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+2026-11-07T09:05:09.594+00:00 H 2026-11-07T09:05:09+00:00 running CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+2026-11-07T09:05:10.103+00:00 L    -- ALL WORK ITEMS COMPLETE in time 0.503s
+2026-11-07T09:05:10.103+00:00 L       Queue summary: 1 lookup (avg 119.3/min), 1 compute (avg 119.3/min), 1 store (avg 119.3/min), 1 validation (avg 119.3/min)
+2026-11-07T09:05:10.104+00:00 L -- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+2026-11-07T09:05:10.104+00:00 L 
+2026-11-07T09:05:10.104+00:00 L ** CALCULATE BBN DATA
+2026-11-07T09:05:10.104+00:00 H 2026-11-07T09:05:09+00:00 running CALCULATE BBN DATA
+2026-11-07T09:05:11.123+00:00 L (raylet) [2026-11-07 09:05:10,621 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full, available space: 39.2666 GB; capacity: 926.352 GB. Object creation will fail if spilling is required.
+2026-11-07T09:05:20.250+00:00 L    -- ALL WORK ITEMS COMPLETE in time 9.91s
+2026-11-07T09:05:20.250+00:00 L       Queue summary: 1 lookup (avg 363.3/hr), 1 compute (avg 363.3/hr), 1 store (avg 363.3/hr), 1 validation (avg 363.3/hr)
+2026-11-07T09:05:20.250+00:00 L -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+2026-11-07T09:05:20.250+00:00 L 
+2026-11-07T09:05:20.250+00:00 L >> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 1 (one-loop-measured-v1)
+2026-11-07T09:05:20.250+00:00 L 
+2026-11-07T09:05:20.250+00:00 L ** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-11-07T09:05:20.250+00:00 H 2026-11-07T09:05:19+00:00 running CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-11-07T09:05:21.269+00:00 L (raylet) [2026-11-07 09:05:20,682 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full, available space: 39.2623 GB; capacity: 926.352 GB. Object creation will fail if spilling is required.
+2026-11-07T09:05:30.885+00:00 L (raylet) [2026-11-07 09:05:30,741 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full, available space: 39.2617 GB; capacity: 926.352 GB. Object creation will fail if spilling is required.
+2026-11-07T09:05:41.032+00:00 L (raylet) [2026-11-07 09:05:40,811 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full, available space: 39.2649 GB; capacity: 926.352 GB. Object creation will fail if spilling is required.
+2026-11-07T09:05:47.101+00:00 L (compute_scalar_history pid=95656) !! tune_history (one-loop-drain-06-resumed-c-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1)-2026-11-07T09:05:20): dissipation mode: the reflections are expected to be nearly elastic in this regime: the test-field ratio R = 10^-51.932 < 1 at the first impact (phi_t = 4.001e-14 M_P)
+2026-11-07T09:05:47.101+00:00 L (compute_scalar_history pid=95656) !! tune_history (one-loop-drain-06-resumed-c-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1)-2026-11-07T09:05:20): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.7415 < ln 10 at N = 37.14163472 (generation 2); the generations below ln 10 carry 0.9998 of K
+2026-11-07T09:05:47.101+00:00 L (compute_scalar_history pid=95656) !! tune_history (one-loop-drain-06-resumed-c-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1)-2026-11-07T09:05:20): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = -0.2233 < ln 10 at N = 37.50763296 (generation 2); the generations below ln 10 carry 0.9998 of K
+2026-11-07T09:05:51.166+00:00 L (raylet) [2026-11-07 09:05:50,888 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full, available space: 39.2729 GB; capacity: 926.352 GB. Object creation will fail if spilling is required.
+2026-11-07T09:06:01.303+00:00 L (raylet) [2026-11-07 09:06:00,955 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full, available space: 39.2756 GB; capacity: 926.352 GB. Object creation will fail if spilling is required.
+2026-11-07T09:06:11.446+00:00 L (raylet) [2026-11-07 09:06:11,023 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full, available space: 39.2764 GB; capacity: 926.352 GB. Object creation will fail if spilling is required.
+2026-11-07T09:06:21.614+00:00 L (raylet) [2026-11-07 09:06:21,088 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full, available space: 39.2669 GB; capacity: 926.352 GB. Object creation will fail if spilling is required.
+2026-11-07T09:06:31.271+00:00 L (raylet) [2026-11-07 09:06:31,151 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full, available space: 39.2669 GB; capacity: 926.352 GB. Object creation will fail if spilling is required.
+2026-11-07T09:06:41.420+00:00 L (raylet) [2026-11-07 09:06:41,211 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full, available space: 39.2694 GB; capacity: 926.352 GB. Object creation will fail if spilling is required.
+2026-11-07T09:06:41.420+00:00 L    -- ALL WORK ITEMS COMPLETE in time 1m 21.4s
+2026-11-07T09:06:41.420+00:00 L       Queue summary: 1 lookup (avg 44.22/hr), 1 compute (avg 44.22/hr), 1 store (avg 44.22/hr), 1 validation (avg 44.22/hr)
+2026-11-07T09:06:41.420+00:00 L 
+2026-11-07T09:06:41.420+00:00 L ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+2026-11-07T09:06:41.420+00:00 H 2026-11-07T09:06:41+00:00 running CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+2026-11-07T09:06:41.924+00:00 L    -- ALL WORK ITEMS COMPLETE in time 0.447s
+2026-11-07T09:06:41.924+00:00 L       Queue summary: 1 lookup (avg 134.1/min), 1 compute (avg 134.1/min), 1 store (avg 134.1/min), 1 validation (avg 134.1/min)
+2026-11-07T09:06:41.924+00:00 L -- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+2026-11-07T09:06:41.924+00:00 L 
+2026-11-07T09:06:41.924+00:00 L ** CALCULATE BBN DATA
+2026-11-07T09:06:41.924+00:00 H 2026-11-07T09:06:41+00:00 running CALCULATE BBN DATA
+2026-11-07T09:06:50.049+00:00 L    -- ALL WORK ITEMS COMPLETE in time 8.17s
+2026-11-07T09:06:50.049+00:00 L       Queue summary: 1 lookup (avg 440.8/hr), 1 compute (avg 440.8/hr), 1 store (avg 440.8/hr), 1 validation (avg 440.8/hr)
+2026-11-07T09:06:50.049+00:00 L -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+2026-11-07T09:06:50.049+00:00 H 2026-11-07T09:06:49+00:00 running CALCULATE BBN DATA, all work items complete
+2026-11-07T09:06:51.573+00:00 L (raylet) [2026-11-07 09:06:51,303 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full, available space: 39.268 GB; capacity: 926.352 GB. Object creation will fail if spilling is required.
+2026-11-07T09:07:01.707+00:00 L (raylet) [2026-11-07 09:07:01,380 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full, available space: 39.2679 GB; capacity: 926.352 GB. Object creation will fail if spilling is required.
+2026-11-07T09:07:11.857+00:00 L (raylet) [2026-11-07 09:07:11,463 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full, available space: 39.2675 GB; capacity: 926.352 GB. Object creation will fail if spilling is required.
+2026-11-07T09:07:14.912+00:00 H 2026-11-07T09:07:14+00:00 done CALCULATE BBN DATA, all work items complete
+2026-11-07T09:07:15.422+00:00 L ** driver exit status 0
+2026-11-07T09:07:15.422+00:00 L ** launcher saw exit status 0
+2026-11-07T09:07:15.423+00:00 X exit: the launcher's line was seen; status.json read once more

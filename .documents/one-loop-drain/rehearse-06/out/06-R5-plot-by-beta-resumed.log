@@ -1,0 +1,137 @@
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-07 09:10:31,098	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-07 09:10:31,133	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at http://127.0.0.1:8267 
+(raylet) [2026-11-07 09:10:32,715 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full, available space: 39.1115 GB; capacity: 926.352 GB. Object creation will fail if spilling is required.
+!! WARNING: number of shards read from database (=16) does not match specified number of shards (=10)
+>> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/one-loop-drain-06-resumed.db" read-only with 16 shards (version label "2026.10.0", serial 1)
+!! plot: no ExponentialModel stored for M=0.0009741294382 eV, n=1, β=0.5; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=0.0009741294382 eV, n=1, β=1; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=0.0009741294382 eV, n=1, β=1.5; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=0.0009741294382 eV, n=1, β=3; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=0.0009741294382 eV, n=1, β=5.5; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+15 eV, n=1, β=0.5; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+15 eV, n=1, β=1.06; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+15 eV, n=1, β=1.185; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+15 eV, n=1, β=1.5; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+15 eV, n=1, β=2; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+15 eV, n=1, β=3; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+15 eV, n=1, β=5.5; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+15 eV, n=1, β=10; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+24 eV, n=1, β=1; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+24 eV, n=1, β=1.06; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+24 eV, n=1, β=1.185; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+24 eV, n=1, β=2; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+24 eV, n=1, β=10; no history can use it; skipped
+!! plot: 18 of 27 ExponentialModel combinations of the stored M and β are not stored, and were skipped
+(Datastore pid=97384) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+(raylet) [2026-11-07 09:10:42,789 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full, available space: 39.1119 GB; capacity: 926.352 GB. Object creation will fail if spilling is required.
+@@ plot_by_beta: SM baseline (rho_NP = 0, PRyM_version=bf24c3d+ri02+sr01+bt02, small_network=True): Yp=0.24688, D/H x1e5=2.45829, 3He/H x1e5=1.04193, 7Li/H x1e10=5.48637
+@@ plot_by_beta: alpha values 0, 0.01, 0.1, 0.15
+@@ plot_by_beta: A values 0.1, 1 (one-loop-measured-v1)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0
+
+** GENERATING SUMMARY PLOTS BY BETA
+!! plot_by_beta 'QCD_Cosmology', M=0.00097413 eV, n=1: 4 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=1.06, M=0.00097413 eV, n=1: no ScalarHistory row in the store
+     -- beta=1.185, M=0.00097413 eV, n=1: no ScalarHistory row in the store
+     -- beta=2, M=0.00097413 eV, n=1: no ScalarHistory row in the store
+     -- beta=10, M=0.00097413 eV, n=1: no ScalarHistory row in the store
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e+15 eV, n=1: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=1, M=2.4353e+15 eV, n=1: no ScalarHistory row in the store
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e+24 eV, n=1: 1 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e+24 eV, n=1: PRyMordial: ComputationFailureError: T_in_MeV=0.00019824 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+(build_beta_plot pid=97574) !! build_beta_plot 'QCD_Cosmology', M=0.00097413 eV, n=1, alpha=0: no valid BBN data to plot
+(build_beta_plot pid=97576) @@ build_beta_plot 'QCD_Cosmology', M=2.4353e+24 eV, n=1: no models used elastic reflections (4 model(s) checked)
+   -- ALL WORK ITEMS COMPLETE in time 3.5s
+      Queue summary: 3 lookup (avg 51.49/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.01
+
+** GENERATING SUMMARY PLOTS BY BETA
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e+15 eV, n=1: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=1, M=2.4353e+15 eV, n=1: no ScalarHistory row in the store
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e+24 eV, n=1: 4 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=1.5, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=3, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=5.5, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+(build_beta_plot pid=97576) !! build_beta_plot 'QCD_Cosmology', M=0.00097413 eV, n=1: 4 of 4 model(s) used elastic reflections
+(build_beta_plot pid=97576)      -- beta=1.06, M=0.00097413 eV, n=1: 568 reflection(s)
+(build_beta_plot pid=97576)      -- beta=1.185, M=0.00097413 eV, n=1: 657 reflection(s)
+(build_beta_plot pid=97576)      -- beta=2, M=0.00097413 eV, n=1: 85 reflection(s)
+(build_beta_plot pid=97576)      -- beta=10, M=0.00097413 eV, n=1: 481 reflection(s)
+   -- ALL WORK ITEMS COMPLETE in time 1.13s
+      Queue summary: 3 lookup (avg 159.1/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.1
+
+** GENERATING SUMMARY PLOTS BY BETA
+(raylet) [2026-11-07 09:10:52,845 E 67096 14048086] (raylet) file_system_monitor.cc:116: /tmp/ray-cpbh/session_2026-11-07_08-25-01_770328_67059 is over 95% full, available space: 39.1091 GB; capacity: 926.352 GB. Object creation will fail if spilling is required.
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e+15 eV, n=1: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=1, M=2.4353e+15 eV, n=1: no ScalarHistory row in the store
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e+24 eV, n=1: 1 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e+24 eV, n=1: PRyMordial: ComputationFailureError: T_in_MeV=0.00019825 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+(build_beta_plot pid=97576) !! build_beta_plot 'QCD_Cosmology', M=0.00097413 eV, n=1: 4 of 4 model(s) used elastic reflections
+(build_beta_plot pid=97576)      -- beta=1.06, M=0.00097413 eV, n=1: 49 reflection(s)
+(build_beta_plot pid=97576)      -- beta=1.185, M=0.00097413 eV, n=1: 42 reflection(s)
+(build_beta_plot pid=97576)      -- beta=2, M=0.00097413 eV, n=1: 49 reflection(s)
+(build_beta_plot pid=97576)      -- beta=10, M=0.00097413 eV, n=1: 50 reflection(s)
+   -- ALL WORK ITEMS COMPLETE in time 1.83s
+      Queue summary: 3 lookup (avg 98.12/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.15
+
+** GENERATING SUMMARY PLOTS BY BETA
+!! plot_by_beta 'QCD_Cosmology', M=0.00097413 eV, n=1: 4 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=1.06, M=0.00097413 eV, n=1: no ScalarHistory row in the store
+     -- beta=1.185, M=0.00097413 eV, n=1: no ScalarHistory row in the store
+     -- beta=2, M=0.00097413 eV, n=1: no ScalarHistory row in the store
+     -- beta=10, M=0.00097413 eV, n=1: no ScalarHistory row in the store
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e+24 eV, n=1: 4 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=1.5, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=3, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=5.5, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+(build_beta_plot pid=97576) !! build_beta_plot 'QCD_Cosmology', M=2.4353e+24 eV, n=1, alpha=0.15: no valid BBN data to plot [repeated 6x across cluster] (Ray deduplicates logs by default. Set RAY_DEDUP_LOGS=0 to disable log deduplication, or see https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#log-deduplication for more options.)
+   -- ALL WORK ITEMS COMPLETE in time 0.918s
+      Queue summary: 3 lookup (avg 196.1/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 0.1 (one-loop-measured-v1)
+
+** GENERATING SUMMARY PLOTS BY BETA
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e+15 eV, n=1: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=1, M=2.4353e+15 eV, n=1: no ScalarHistory row in the store
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e+24 eV, n=1: 4 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=1.5, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=3, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=5.5, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+(build_beta_plot pid=97573) @@ build_beta_plot 'QCD_Cosmology', M=2.4353e+24 eV, n=1: no models used elastic reflections (4 model(s) checked)
+   -- ALL WORK ITEMS COMPLETE in time 1.28s
+      Queue summary: 3 lookup (avg 140.7/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 1 (one-loop-measured-v1)
+
+** GENERATING SUMMARY PLOTS BY BETA
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e+24 eV, n=1: 4 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=1.5, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=3, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=5.5, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+(build_beta_plot pid=97573) !! build_beta_plot 'QCD_Cosmology', M=0.00097413 eV, n=1: 4 of 4 model(s) used elastic reflections [repeated 2x across cluster]
+(build_beta_plot pid=97573)      -- beta=10, M=0.00097413 eV, n=1: 536 reflection(s) [repeated 5x across cluster]
+   -- ALL WORK ITEMS COMPLETE in time 1.32s
+      Queue summary: 3 lookup (avg 135.9/min)
+      (no compute items were evaluated - all assets read from datastore)
+@@ plot_Delta_N_eff: left out (NULL or not positive): 4 from the T_CMB panel, 8 from the 1 MeV panel
+@@ plot_Delta_N_eff: left out (NULL or not positive): 3 from the T_CMB panel, 5 from the 1 MeV panel
+@@ plot_Delta_N_eff: left out (NULL or not positive): 16 from the T_CMB panel, 17 from the 1 MeV panel
+(build_beta_plot pid=97574) !! build_beta_plot 'QCD_Cosmology', M=2.4353e+24 eV, n=1, A=1 (one-loop-measured-v1): no valid BBN data to plot [repeated 3x across cluster]
+(build_beta_plot pid=97576) !! build_beta_plot 'QCD_Cosmology', M=2.4353e+15 eV, n=1: 1 of 1 model(s) used elastic reflections [repeated 2x across cluster]
+(build_beta_plot pid=97576)      -- beta=1, M=2.4353e+15 eV, n=1: 228 reflection(s) [repeated 5x across cluster]
