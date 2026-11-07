@@ -2525,7 +2525,7 @@ These are measurements, not bounds (P49): no threshold refuses or warns on any o
 ## 9. Prompt 08 — the close (2026-11-07)
 
 **Tree:** branch `one-loop-drain` at `d0d8918` (orchestrator note 08's commit, on `e951b8e`, which adds the prompt); no code
-changed, so the tree that ran every check below is the tree this commit leaves. §1–§8 above are §8's only addition. **Scripts:**
+changed, so the tree that ran every check below is the tree `a1fc384` leaves. §1–§8 above are §8's only addition. **Scripts:**
 [`one-loop-drain/close-08/`](one-loop-drain/close-08/): `run_inventories.sh` (§9.3) and `check_help.py` (§9.4). **Committed
 outputs:** [`one-loop-drain/close-08/out/`](one-loop-drain/close-08/out/): `inventory-reference.txt`, `inventory-basecopy.txt`
 (the session scratchpad's directory written `<scratch>`), `check_help.txt` and each command's `help-<name>.txt`. Orchestrator note
@@ -2584,7 +2584,7 @@ script was given its git command (log 08 §2).
 
 ### 9.5 The twenty numbers (§2 item 5)
 
-Ten of §8 and ten of §4.20, each found at its cited source (the lines are of `d0d8918`'s files, or of this commit's for
+Ten of §8 and ten of §4.20, each found at its cited source (the lines are of `d0d8918`'s files, or of `a1fc384`'s for
 `close-08/out/`); none differs.
 
 | # | number, as written | where written | source line |

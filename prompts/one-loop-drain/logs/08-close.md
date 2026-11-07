@@ -2,7 +2,7 @@
 
 **Subject:** Close the `one-loop-drain` campaign: the law and the measures for the paper, the reading guides, `CLAUDE.md`, the
 handover for the rebuild of record, the issues and the indexes
-**Commit:** this commit, on branch `one-loop-drain`, on top of `d0d8918`
+**Commit:** `a1fc384`, on branch `one-loop-drain`, on top of `d0d8918`
 **Date:** 2026-11-07, by Claude Opus 5.5
 **Result:** **COMPLETE.** C1–C6 shipped; no stop condition was met; no code changed. Opened none, closed none.
 - `one-loop-drain-verification.md`: §8 (six subsections) and §9; `numerical-strategies.md`: §6.12 (two subsections);

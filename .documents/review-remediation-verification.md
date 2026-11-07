@@ -2420,7 +2420,7 @@ stepper label (`Radau+kinematic-cap-stepping1`); `FINGERPRINT_FORMAT` is still 6
 
 ### 4.20 Addendum 2026-11-07 — the `one-loop-drain` campaign
 
-Added by `one-loop-drain` prompt 08 (this commit), written at `d0d8918`. Nothing above this heading has been changed;
+Added by `one-loop-drain` prompt 08 (`a1fc384`), written at `d0d8918`. Nothing above this heading has been changed;
 where it is superseded, this section says so by statement. The campaign changed what a build computes and stores under a
 new drain law, kept the fixed law beside it bitwise, and started no production run: its rehearsal built three small
 stores under `var/`. It did, in order:
@@ -2442,7 +2442,7 @@ stores under `var/`. It did, in order:
 - it derived the spectrum-dependent measures outside the integrator (05, `9830738`: "Derive");
 - it rehearsed both laws under Ray, interrupted and resumed (06, `1416b80`: "Bitwise" and "R");
 - it wrote two figure tools (07, `867b267`: "Figures");
-- and prompt 08 wrote the documents and this handover (this commit).
+- and prompt 08 wrote the documents and this handover (`a1fc384`).
 
 Its board is [`prompts/one-loop-drain/IMPLEMENTATION_STATE.md`](../prompts/one-loop-drain/IMPLEMENTATION_STATE.md); its
 plan is its [`README.md`](../prompts/one-loop-drain/README.md) (§8 is the plan as re-made on 2026-11-02, with its rulings

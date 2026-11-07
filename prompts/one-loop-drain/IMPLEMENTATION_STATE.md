@@ -45,7 +45,7 @@ The plan as first ruled had seven prompts (README §2), none written; the re-pla
 | 05 | [Derivation tool](05-derivation-tool.md) | `ComputeTargets/quanta_spectrum.py` (U4's shape, its moments and the kernels G and Ω; P41) and `tools/quanta_measures.py` reading 04's exports alone (P42): K(N) rebuilt from the bounce rows (P43); n_g, n̄_j, δ_stim, E(N), the phase slip and the backreaction ratio (P44); three outputs for 07 (P45); the associated piece at 0, 1 and 10 (P46); run on 02d's 230 successes (P47); the Derive gate (P48); the R·S(L) bound dropped (README §8.13) | Opus | ✅ | ✅ | `9830738` | [05](logs/05-derivation-tool.md) |
 | 06 | [Rehearse](06-rehearse.md) | registered builds under Ray (P50–P57): the fixed law at the base `1561b60` against the tip, bitwise, with the workers' code probed; the one-loop law interrupted and resumed, against the straight build and 02d's tool route; the readers, `--A-values` and the derivation tool on the exports | Opus | ✅ | ✅ | `1416b80` | [06](logs/06-rehearse.md) |
 | 07 | [Figure tools](07-figure-tools.md) | `tools/plot_quanta_grid.py` (P59) and `tools/plot_quanta_history.py` (P60) from 04's exports and 05's outputs, sharing `tools/quanta_figures.py` (P58, P61); tests on constructed exports (P62); rendered on 06's and 05's exports, the PNGs committed (P63); the footer label (P64) | Sonnet | ✅ | ✅ | `867b267` | [07](logs/07-figure-tools.md) |
-| 08 | [Close](08-close.md) | the law and the measures for the paper (verification §8, P67); the reading guides in `numerical-strategies.md` §6.12 and `architecture-summary.md` §7.2 (P68); `CLAUDE.md` by description (P69); the handover for the rebuild, `review-remediation-verification.md` §4.20 (P70); the issues (P71); the inventory checks (P72); the board and index closed (P73) | Opus | ✅ | ✅ | this commit | [08](logs/08-close.md) |
+| 08 | [Close](08-close.md) | the law and the measures for the paper (verification §8, P67); the reading guides in `numerical-strategies.md` §6.12 and `architecture-summary.md` §7.2 (P68); `CLAUDE.md` by description (P69); the handover for the rebuild, `review-remediation-verification.md` §4.20 (P70); the issues (P71); the inventory checks (P72); the board and index closed (P73) | Opus | ✅ | ✅ | `a1fc384` | [08](logs/08-close.md) |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
 
@@ -62,6 +62,7 @@ Orchestrator notes, one prompt at a time, in `orchestrator/`:
 - [`prompt-05.md`](orchestrator/prompt-05.md) (`88c6ae5`) — used for 05.
 - [`prompt-06.md`](orchestrator/prompt-06.md) (`41d18c4`) — used for 06.
 - [`prompt-07.md`](orchestrator/prompt-07.md) (`d4031dc`) — used for 07.
+- [`prompt-08.md`](orchestrator/prompt-08.md) (`d0d8918`) — used for 08.
 
 **Orchestrator review of prompt 01 (2026-11-03)**, by orchestrator note 01 §3, on `b99f6a4`. Passed; seven
 checks:
@@ -698,6 +699,87 @@ commit once before reporting, to correct two sentences of its log.
    The review substituted `867b267` for "this commit" on the board and in the log, added note 07 to the list of notes,
    and updated `prompts/INDEX.md`'s row. **Residue fixed:** `figures-07/check_figures.py` and `pick_histories.py` were
    not `black`-clean. They are formatted in the review commit, and their outputs are byte-identical before and after.
+
+**Orchestrator review of prompt 08 (2026-11-07)**, by orchestrator note 08 §3, on `a1fc384`. Passed; nine checks.
+Before dispatch the orchestrator ruled in note 08 (§0, rulings 1–11). The rulings fixed where each section goes, held that
+the documents state the code (the law found equal to README §8.10 term by term), and set how the inventories are run on 18
+files each. They also set the `--help` check, what the handover says of the bounds and the heartbeat, `CLAUDE.md` by
+description with the modal grep, the table of lines addressed to 08, and how the board, the issue index and `prompts/INDEX.md`
+are closed. The orchestrator ran both inventories and every `--help` itself first. No stop condition was raised. The agent
+(Opus) amended its own commit once before reporting, to reword the subject.
+
+1. **Scope.**
+   - `git show --stat a1fc384` lists 24 files, all of the note's "What moves on purpose". There are four documents, with 826
+     lines added and none removed. `CLAUDE.md` changes four lines and `.documents/OPEN_ISSUES.md` eleven. `prompts/INDEX.md`,
+     the board and log 08 change too, and `close-08/` holds two scripts and `out/`.
+   - Its parent is `d0d8918`, the note's. No `.py`, `.sh`, `.toml` or `.yaml` changes outside `close-08/`. `science-runs/`,
+     the README, the prompts, `orchestrator/` and logs 01–07 are untouched.
+   - The tree was clean, `var/` is in no commit, and nothing is pushed.
+2. **Additive.**
+   - The four documents have no removed line, and verification §1–§7 is a byte-identical prefix.
+   - Verification §8 (`:2226`) and §9 (`:2525`) follow §7.5. §6.12 sits between §6.11 and `## 7.`.
+   - The §7.2 map (`:1560`) sits after 03's note and before `### 7.3`. §4.20 follows §4.19's point 5 and precedes the `---`.
+   - The other new notes in `architecture-summary.md` are at §2 (`:322`), §4.2 (`:516`), §5.2 (`:798`) and §14 (`:2435`).
+3. **The suites, re-run by me** serially between 21:12 and 21:31, at one-minute loads of 2–20 at their starts:
+   - CosmologyModels 26 (64 s);
+   - ComputeTargets 665: 219 in 146 s and 446 in 471 s;
+   - ObjectFactories 163 (131 s);
+   - tools 259 (256 s);
+   - RunDrivers 72 (23 s).
+
+   All pass, at 07's counts. (A first pass passed the two halves' patterns wrongly and ran no tests there. They were re-run
+   serially, after the rest.)
+4. **The code claims.** I read 37 `file:line` references in the code at `a1fc384`, from verification §8.1, the §7.2 map, the
+   §14 note and §4.20. Each says what the document says. Among them:
+   - the law's functions (`drain_fraction`, `drain_S_of_L`, `drain_alpha_effective`, `drain_regime`, `drain_law_inputs`,
+     `check_drain_law_model`), its constants and `gate_weight`;
+   - `drain_model.py`'s model string and checks, and `AbstractModel._drain_L` and `_turning_point_unresolvable`;
+   - `alpha_value.py:71`'s default model, the tuning cap (`:5453`), the step budget (`:380`) and `--A-values` (`:249`);
+   - the wrapper's scope (`:704`), `main.py:365`'s failure line, `DRAIN_CSV_COLUMNS` and `write_bounces_csv`;
+   - `SPECTRUM_MODEL`, the bounce factory, and `history_and_bbn.py --drain-law`.
+
+   §8.1's five rows of f and the regime classification are the code's, the two ruled departures from the reference included.
+5. **The numbers.** I traced fifteen numbers of §8, none among the agent's twenty, to their cited sections. All were found
+   as quoted:
+   - 230 / 3 / 7; the 14 115 reflections; 221 of 230 parked; parking at N = 18.9–24.7 at A = 10;
+   - the cap at 50 one-loop candidates in 24 integrations; P-2197's 0.5554; Y_p 0.2469–0.2550;
+   - δ_stim's 1.34 × 10⁻³; n̄ > 1 in 33; slips below 1 rad in 15; backreaction R ≤ 918;
+   - 0.999993; the 40 985 s of task wall; E_tracker's 7.2 × 10⁻¹⁶; and L-M5e-16's 0.146.
+
+   In §4.20, block C's 836.6 s per pair is the sum of the eight C medians of `cost.txt`, and its 155 608 s and 4.32 h follow.
+   The stores' sizes (117 344, 137 352 and 137 868 KiB) are log 06 §7's and verification §6.7's, quoted with their source.
+   Today `du -k` gives 137 356 KiB for the reference, but 113 752 for the base and 137 660 for the resumed store. The record is
+   06's measurement and is left as it stands; the difference is noted here.
+6. **The commands.**
+   - `close-08/check_help.py`, re-run by me: exit 0, 0 failures. Its outputs were byte-identical to those committed, and it is
+     `black`-clean.
+   - By hand, every option of five §4.20 commands is in its own `--help`: `main.py`, `bbn_from_store.py` (whose `stem` is the
+     path without `-shardNNNN.db`, as §4.20's "without `.db`" reads), `quanta_measures.py`, `plot_quanta_grid.py` and
+     `plot_quanta_history.py`.
+   - The committed inventory hashes equal mine of note 08 §1. The reference store's 18 files are still equal to them after
+     the agent's run.
+7. **The grep.** I grepped `numerical-strategies.md` and `architecture-summary.md` for `α_eff`, `alpha_value`,
+   `FINGERPRINT_FORMAT`, `VERSION_LABEL`, `elastic`, `histories.csv`, `2.7/ℓ` and `gap prescription`. Every hit outside a
+   dated note is a dated record true for its tree, or is listed in §6.12.2. Nothing describes the present falsely without a
+   note.
+8. **`CLAUDE.md`.** Only the two times change (`:86`–`:87`, `:111`–`:112`), with their loads; the counts and their
+   parenthesis are unchanged. The modal grep has one hit, the unchanged "They **must not" carried inside the edited line.
+9. **The records.**
+   - The log is in §5.1's form. It classes every deviation, note 08's eleven rulings among them, and holds §2 item 2's table
+     with one item left (code).
+   - The board's three §3 issues, `.documents/OPEN_ISSUES.md` §1.23 (three rows, 29 open, dated 2026-11-07) and
+     `prompts/INDEX.md` (the row complete; the header "17 campaigns: 0 planned, 0 live, 17 closed") agree.
+   - Verification §9 holds the suites, the hashes and §2's checks.
+
+   The review substituted `a1fc384` for "this commit" seven times: in the log, board row 08, the INDEX row, §4.20 (two) and
+   verification §9 (two). It also added note 08 to the list of notes. No residue was found in 08's files.
+
+   **Left for housekeeping:** three code statements call a reflection elastic where at α > 0 it drains:
+   - `reflection_count`'s docstring, `extract_common.py:248`;
+   - the legend label at `extract_common.py:1199`;
+   - the comment of `reflected`, `ComputeTargets/ScalarHistory.py:3379`.
+
+   They are listed in log 08 §6 item 1.
 
 **Open for the user, with 02's measurements (2026-11-03;
 [verification §2.9](../../.documents/one-loop-drain-verification.md)):**
