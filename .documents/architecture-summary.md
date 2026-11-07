@@ -2341,3 +2341,22 @@ work_pool.run()
 > - **Tests:** `ComputeTargets/tests/test_quanta_spectrum.py`; `tools/tests/test_quanta_measures.py` (constructed exports and
 >   P-2197 on a temporary store; `tools/tests/quanta_exports.py` writes the exports by 04's writers) and
 >   `tools/tests/test_history_directory.py`.
+
+> **Note, 2026-11-07 (`one-loop-drain`, prompt 07): the figure tools.**
+> - **`tools/quanta_figures.py`** (new, shared): the regimes' fixed colours (one-loop, gap, classical, unassessed), the four
+>   classes of a histories.csv row (fixed, marker, failed, drawn, counted in that order), the model check of a quanta file
+>   (`SPECTRUM_MODEL` and the scale asked for, in every row), the `--output` mapping and the plots directory of a history (its csv
+>   directory with `csv` replaced by `plots`), and saving the PDF and the PNG (150 dpi).
+> - **`tools/plot_quanta_grid.py ROOT [--A-values ...] [--assoc-scale C] [--output DIR]`** (new): reads a plot run's
+>   `<output>/<label>/` (histories.csv, quanta_histories<suffix>.csv, joined on the five key cells as strings) and writes, per
+>   one-loop A, `<ROOT or DIR>/<drain_model>/A=<A:.5g>/plots/quanta_grid<suffix>.{pdf,png}`: ten heat maps over (β, M), the one-loop,
+>   gap-plus-classical-plus-unassessed and parking shares, ℓ_min, the three all-generation margins, δ_stim, E_field_max and
+>   the backreaction maximum, with blank, zero, failed and no-quanta-row cells marked and counted.
+> - **`tools/plot_quanta_history.py ROOT [selectors] [--assoc-scale C] [--output DIR]`** (new): per drawn one-loop history,
+>   `<...>/plots/<history_directory>/quanta_history<suffix>.{pdf,png}`, six panels on the e-fold axis from fields.csv, bounces.csv,
+>   quanta_bounces and quanta_samples. Both tools open no store and start no Ray; each builds its figure in a function that
+>   returns a `Figure` (no pyplot). Exit 0, 1 (a figure or history refused, the rest written) or 2 (usage, an unreadable root).
+> - **`extract_common.add_ScalarHistory_labels`** says "Reflections: N" (it said "Reflections (elastic model): N"; the drain is
+>   named on the cosmology line beside it).
+> - **Tests:** `tools/tests/test_quanta_figures.py` (it holds the constructed exports the other two use),
+>   `test_plot_quanta_grid.py`, `test_plot_quanta_history.py`. Log 07 §6 gives the command lines and the costs.

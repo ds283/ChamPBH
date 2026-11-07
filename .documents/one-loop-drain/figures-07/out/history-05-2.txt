@@ -1,0 +1,7 @@
+# ./venv/bin/python tools/plot_quanta_history.py var/one-loop-drain/05/exports/QCD_Cosmology --A-values 5.0 --beta-values 2.0 --M-Mp-values 5e-16 --output var/one-loop-drain/07/exports-05/QCD_Cosmology
+# load at start: 4.00 4.09 5.44
+plot_quanta_history: histories.csv rows: fixed 0, marker 0, failed 0, drawn 230; selected 1
+one-loop-measured-v1 A=5.0 M_Mp=5e-16 n=1 beta=2.0: generations 64; bounce rows 127; alpha_eff drawn 64, undrawn 0; fraction drawn 64, undrawn dK=0 0, K_before blank 0; zeros not drawn [K/K_final 2209; parking_fraction 540; r_chi 2209; n_bar 1; backreaction_ratio 1]; wrote var/one-loop-drain/07/exports-05/QCD_Cosmology/one-loop-measured-v1/A=5/plots/beta=2/M=1.2177e+12eV_n=1/quanta_history.pdf var/one-loop-drain/07/exports-05/QCD_Cosmology/one-loop-measured-v1/A=5/plots/beta=2/M=1.2177e+12eV_n=1/quanta_history.png; wall 0.94 s
+plot_quanta_history (U4-U17-v1, assoc scale 1): figures written 1, refused 0, no quanta files 0; skipped as fixed-law 0, marker rows 0, failed histories 0; wall 0.9 s
+exit 0
+wall 3 s

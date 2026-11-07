@@ -1,0 +1,59 @@
+ok   grid-06.txt: exit 0
+ok   grid-06.txt: A=0.1 drawn 4 = drawn rows of histories.csv 4
+ok   grid-06.txt: A=0.1 drawn - no quanta row = 4; quanta_histories rows at A: 4
+ok   grid-06.txt: A=1 drawn 5 = drawn rows of histories.csv 5
+ok   grid-06.txt: A=1 drawn - no quanta row = 5; quanta_histories rows at A: 5
+ok   grid-06.txt: 2 figure lines, summary says 2
+ok   grid-06.txt: two A (0.1 and 1)
+ok   history-06.txt: exit 0
+ok   history-06.txt: A=0.1 M_Mp=4e-31 beta=1.06: generations 116 = quanta_histories 116
+ok   history-06.txt: A=0.1 M_Mp=4e-31 beta=1.185: generations 124 = quanta_histories 124
+ok   history-06.txt: A=0.1 M_Mp=4e-31 beta=2: generations 76 = quanta_histories 76
+ok   history-06.txt: A=0.1 M_Mp=4e-31 beta=10: generations 536 = quanta_histories 536
+ok   history-06.txt: A=1 M_Mp=4e-31 beta=1.06: generations 17 = quanta_histories 17
+ok   history-06.txt: A=1 M_Mp=4e-31 beta=1.185: generations 5 = quanta_histories 5
+ok   history-06.txt: A=1 M_Mp=4e-31 beta=2: generations 45 = quanta_histories 45
+ok   history-06.txt: A=1 M_Mp=4e-31 beta=10: generations 65 = quanta_histories 65
+ok   history-06.txt: A=1 M_Mp=1e-12 beta=1: generations 301 = quanta_histories 301
+ok   history-06.txt: 9 history lines, summary says 9
+ok   history-06.txt: 9 figures = 9 drawn one-loop histories of 06's histories.csv
+ok   grid-05.txt: exit 0
+ok   grid-05.txt: A=0.05 drawn 27 = drawn rows of histories.csv 27
+ok   grid-05.txt: A=0.05 drawn - no quanta row = 27; quanta_histories rows at A: 27
+ok   grid-05.txt: A=0.1 drawn 28 = drawn rows of histories.csv 28
+ok   grid-05.txt: A=0.1 drawn - no quanta row = 28; quanta_histories rows at A: 28
+ok   grid-05.txt: A=0.5 drawn 29 = drawn rows of histories.csv 29
+ok   grid-05.txt: A=0.5 drawn - no quanta row = 29; quanta_histories rows at A: 29
+ok   grid-05.txt: A=1 drawn 30 = drawn rows of histories.csv 30
+ok   grid-05.txt: A=1 drawn - no quanta row = 30; quanta_histories rows at A: 30
+ok   grid-05.txt: A=1.5 drawn 29 = drawn rows of histories.csv 29
+ok   grid-05.txt: A=1.5 drawn - no quanta row = 29; quanta_histories rows at A: 29
+ok   grid-05.txt: A=2 drawn 29 = drawn rows of histories.csv 29
+ok   grid-05.txt: A=2 drawn - no quanta row = 29; quanta_histories rows at A: 29
+ok   grid-05.txt: A=5 drawn 29 = drawn rows of histories.csv 29
+ok   grid-05.txt: A=5 drawn - no quanta row = 29; quanta_histories rows at A: 29
+ok   grid-05.txt: A=10 drawn 29 = drawn rows of histories.csv 29
+ok   grid-05.txt: A=10 drawn - no quanta row = 29; quanta_histories rows at A: 29
+ok   grid-05.txt: 8 figure lines, summary says 8
+ok   grid-05.txt: eight A
+ok   grid-05-assoc0.txt: exit 0
+ok   grid-05-assoc0.txt: A=1 drawn 30 = drawn rows of histories.csv 30
+ok   grid-05-assoc0.txt: A=1 drawn - no quanta row = 30; quanta_histories rows at A: 30
+ok   grid-05-assoc0.txt: 1 figure lines, summary says 1
+ok   grid-05-assoc10.txt: exit 0
+ok   grid-05-assoc10.txt: A=1 drawn 30 = drawn rows of histories.csv 30
+ok   grid-05-assoc10.txt: A=1 drawn - no quanta row = 30; quanta_histories rows at A: 30
+ok   grid-05-assoc10.txt: 1 figure lines, summary says 1
+ok   history-05-1.txt: exit 0
+ok   history-05-1.txt: A=0.1 M_Mp=5e-20 beta=2: generations 13342 = quanta_histories 13342
+ok   history-05-1.txt: 1 history lines, summary says 1
+ok   history-05-2.txt: exit 0
+ok   history-05-2.txt: A=5 M_Mp=5e-16 beta=2: generations 64 = quanta_histories 64
+ok   history-05-2.txt: 1 history lines, summary says 1
+ok   history-05-3.txt: exit 0
+ok   history-05-3.txt: A=10 M_Mp=1e-12 beta=1: generations 301 = quanta_histories 301
+ok   history-05-3.txt: 1 history lines, summary says 1
+ok   history-05-4.txt: exit 0
+ok   history-05-4.txt: A=2 M_Mp=8e-18 beta=2: generations 4 = quanta_histories 4
+ok   history-05-4.txt: 1 history lines, summary says 1
+0 failures

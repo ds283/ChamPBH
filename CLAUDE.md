@@ -80,7 +80,7 @@ invariants that hold across all of them:
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .   # 26 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 665 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .   # 163 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 191 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 259 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .        # 72 tests
   ```
   `ComputeTargets/tests` took 590 s on 2026-11-01 (the two halves below, 135.8 s and 454.6 s, at one-minute
@@ -90,7 +90,9 @@ invariants that hold across all of them:
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 219 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 446 tests
   ```
-  (The counts are those of 2026-11-06, after `one-loop-drain` 05, which added 14 tests to the `test_[g-z]` half
+  (The counts are those of 2026-11-07, after `one-loop-drain` 07, which added 68 tests to `tools/tests`
+  (`test_quanta_figures`, `test_plot_quanta_grid`, `test_plot_quanta_history`); before it, those of
+  2026-11-06, after `one-loop-drain` 05, which added 14 tests to the `test_[g-z]` half
   (`test_quanta_spectrum`) and 18 to `tools/tests` (`test_quanta_measures`, `test_history_directory`); before it, those of
   2026-11-06, after `one-loop-drain` 04, which added 29 tests to the `test_[a-f]` half
   (`test_a_values_option`, `test_a_values_plot_inputs`), 14 to `ObjectFactories/tests` (`test_export_04`), 17 to `tools/tests`

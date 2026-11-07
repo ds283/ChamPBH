@@ -142,13 +142,13 @@ class TestReflectionReporting(unittest.TestCase):
     def test_c_caption_reports_the_stored_count(self):
         stored = json.loads(json.dumps(build_extra_data(sample_payload())))
         texts = caption_texts(stored)
-        self.assertIn("Reflections (elastic model): 3", texts)
+        self.assertIn("Reflections: 3", texts)
         self.assertFalse(any(t.startswith("Hard reflections") for t in texts))
         self.assertFalse(any(t.startswith("Solution fragments") for t in texts))
 
     def test_c_caption_for_zero(self):
         stored = json.loads(json.dumps(build_extra_data(sample_payload(reflections=0))))
-        self.assertIn("Reflections (elastic model): 0", caption_texts(stored))
+        self.assertIn("Reflections: 0", caption_texts(stored))
 
 
 if __name__ == "__main__":

@@ -1,0 +1,4 @@
+0.1 2.0 5e-20 1 | generations=13342.0, n_bar_max=8.977978071636221e+31, phase_slips_below_1=6302.0
+5.0 2.0 5e-16 1 | drained_share_gap=0.999979014182823
+10.0 1.0 1e-12 1 | drained_share_classical=1.0000000000000007
+2.0 2.0 8e-18 1 | backreaction_max=1784.897704016393

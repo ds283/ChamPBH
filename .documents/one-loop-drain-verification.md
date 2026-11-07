@@ -2167,3 +2167,58 @@ grep -r -F -l -f ~/.ray/auth_token <each committed path>
 - **The probe's findings** (§6.1): workers run in the cluster's working directory, the main checkout, whatever tree the driver
   is in. Harmless here (the data files are identical at both commits), but a worktree run on a shared cluster reads its relative
   data paths from the cluster's start directory, not its own.
+
+## 7. Prompt 07 — the figure tools (2026-11-07)
+
+**Tree:** branch `one-loop-drain` at `d4031dc` (orchestrator note 07's commit, on `5bb6c40`, which adds the prompt); the code is
+06's reviewed code, `VERSION_LABEL` 2026.10.0, `FINGERPRINT_FORMAT` 7, plus the new tools. §1–§6 above are unchanged. No value,
+schema, export or measure changed. **Scripts and outputs:** [`one-loop-drain/figures-07/`](one-loop-drain/figures-07/):
+`pick_histories.py`, `run_demo.sh`, `check_figures.py`, `copy_pngs.py`, the 12 committed PNGs and `out/` (each run's printed
+output, with its exit and wall; `picks.txt`; `check_figures.txt`). **Raw output** (not committed): `var/one-loop-drain/07/`.
+
+### 7.1 What was added
+
+`tools/quanta_figures.py` (the shared module: regime colours, ruling 1's classes, the model check, the `--output` mapping),
+`tools/plot_quanta_grid.py` (ten heat maps per one-loop A) and `tools/plot_quanta_history.py` (six panels sharing N per history);
+both read 04's exports and 05's outputs only. `extract_common.add_ScalarHistory_labels` says "Reflections: N" (P64). Log:
+[`07-figure-tools.md`](../prompts/one-loop-drain/logs/07-figure-tools.md).
+
+### 7.2 The gate Figures (prompt §2), item by item
+
+1. **Tests.** 68 added to `tools/tests` (`test_quanta_figures` 12, `test_plot_quanta_grid` 26, `test_plot_quanta_history` 30);
+   `tools/tests` 191 → 259, the other suites unchanged (26, 665 = 219 + 446, 163, 72); all pass. Three manual breakages together
+   fail ten of the 68 (log §4).
+2. **06's exports.** Grid: two figures (A = 0.1: drawn 4; A = 1: drawn 5); history: nine figures, every one-loop history of that
+   tree; both exit 0 (`out/grid-06.txt`, `out/history-06.txt`).
+3. **05's exports.** Grid at the eight A (drawn 27, 28, 29, 30, 29, 29, 29, 29) and at A = 1 for c_a = 0 and 10 (30 each); history on
+   four histories; all exit 0.
+4. **Counts against the files, by script** (`check_figures.py`; `out/check_figures.txt`): 58 checks, 0 failures. Each grid line's
+   `drawn` equals the drawn rows of histories.csv at its A and, less its "no quanta row" (0), the rows of quanta_histories<suffix>.csv
+   at that A; each history line's generations equal that history's `generations` in quanta_histories.csv (06's nine, and 05's
+   13 342, 64, 301 and 4).
+
+**The gate holds.**
+
+### 7.3 The commands, times and sizes
+
+As in the log §3.2, with the one-minute loads (3.3-4.1, a quiet machine): grid on 06's tree 2.4 s for two figures; history on
+06's nine 7.8 s; grid on 05's eight 12.5 s (1.4-1.6 s a figure); the c_a = 0 and 10 pages 1.7 s each; history figures 0.8-0.9 s at
+64-600 generations and 2.4 s for the 13 342-generation history. Sizes: a grid page 51-72 kB PDF, 185-232 kB PNG; a history figure
+36-60 kB PDF (400 kB for 13 342 generations) and 250-293 kB PNG. 25 PDFs, 1.75 MB; the 12 committed PNGs, 2.9 MB.
+The two input trees were listed with mtimes and sizes (3 194 files) before and after: identical.
+
+### 7.4 The six picks and the degenerate ranges
+
+Four histories, from the six columns (`out/picks.txt`): A = 0.1, β = 2, M = 5e-20 (generations 13 342, `n_bar_max` 9.0e31,
+`phase_slips_below_1` 6 302); A = 5, β = 2, M = 5e-16 (`drained_share_gap` 0.99998); A = 10, β = 1, M = 1e-12
+(`drained_share_classical` 1.0000000000000007, above 1 by rounding); A = 2, β = 2, M = 8e-18 (`backreaction_max` 1 785). The
+degenerate colour ranges: 06's A = 0.1, panel (b) no positive value; 06's A = 1, panel (b) one value; none on 05's tree.
+
+### 7.5 The figures, by eye
+
+Per figure in log §3.6: 05's eight grid pages show one set of cells (a band at the laboratory mass, a column at β = 2 and a few
+more) with the one-loop share 1.0 on the band, the non-one-loop shares zero there, 4 or 5 hatched `ell_min` cells at each A and
+margins mostly positive; the four history figures show the generations by regime, alpha_eff and the drained fraction, K(N), the
+excess, the occupations and the phase slips on one e-fold axis. Nothing reads wrongly that is the tool's: the first render's two
+faults (white empty cells indistinguishable from a diverging map's zero; a footer clipped at the right edge) and a 1 rad line off
+the axes were fixed before the figures were committed.

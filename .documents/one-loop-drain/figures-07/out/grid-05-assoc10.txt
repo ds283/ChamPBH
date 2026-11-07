@@ -1,0 +1,7 @@
+# ./venv/bin/python tools/plot_quanta_grid.py var/one-loop-drain/05/exports/QCD_Cosmology --A-values 1 --assoc-scale 10 --output var/one-loop-drain/07/exports-05/QCD_Cosmology
+# load at start: 3.46 3.99 5.42
+plot_quanta_grid: histories.csv rows: fixed 0, marker 0, failed 0, drawn 230
+one-loop-measured-v1 A=1: drawn 30, failed 0, no quanta row 0; blank cells [a 0, b 0, c 0, d 5, e 0, f 0, g 0, h 0, i 0, j 0]; zero cells [b 23, c 2, h 0, i 0, j 0]; degenerate colour range [none]; wrote var/one-loop-drain/07/exports-05/QCD_Cosmology/one-loop-measured-v1/A=1/plots/quanta_grid-assoc10.pdf var/one-loop-drain/07/exports-05/QCD_Cosmology/one-loop-measured-v1/A=1/plots/quanta_grid-assoc10.png; wall 1.66 s
+plot_quanta_grid (U4-U17-v1, assoc scale 10): figures written 1, refused 0, A with no drawn or failed row 0; skipped as fixed-law 0, marker rows 0; wall 1.7 s
+exit 0
+wall 4 s

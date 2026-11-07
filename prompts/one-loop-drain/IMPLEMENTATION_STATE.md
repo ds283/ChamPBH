@@ -1,6 +1,6 @@
 # one-loop-drain campaign — implementation state
 
-**Last updated:** 2026-11-07 · **Status: LIVE — 9 of 11 landed (01, 02, 02b, 02c, 02d, 03, 04, 05, 06); the measured law in the code (02c), measured on the sample (02d), stored (03), exported by the drivers (04), its spectrum-dependent measures derived from the exports (05), and rehearsed under Ray (06: Bitwise and R hold); 07, the figure tools, written.** Planned
+**Last updated:** 2026-11-07 · **Status: LIVE — 10 of 11 landed (01, 02, 02b, 02c, 02d, 03, 04, 05, 06, 07); the measured law in the code (02c), measured on the sample (02d), stored (03), exported by the drivers (04), its spectrum-dependent measures derived from the exports (05), and rehearsed under Ray (06: Bitwise and R hold); 07: the figure tools (`tools/plot_quanta_grid.py`, `tools/plot_quanta_history.py`) render from 06's and 05's exports, the gate Figures holds; 08 (the close) not yet written.** Planned
 2026-11-02 as `quanta-diagnostics` at the user's request, after a scoping session the same day
 ([`source/scoping_2026-11-02.md`](source/scoping_2026-11-02.md)); U1–U7 and P1–P16 ruled the same day,
 all as proposed (README §6). **Re-planned the same day around the drain law and renamed `one-loop-drain`**
@@ -66,7 +66,7 @@ The plan as first ruled had seven prompts (README §2), none written; the re-pla
 | 04 | [Drivers and exports](04-drivers-and-exports.md) | `--A-values` in `main.py` and the plot scripts, beside `--alpha-values` (P33, P34); the one-loop paths and labels (P35); `drain_model` and the drain record in `histories.csv` (P36), the sample masses in `fields.csv` (P37), a new `bounces.csv` (P38); the raw-SQL readers of `alpha_value` and the inventory report's label (P39); the registered run's scope (P40) | Sonnet | ✅ | ✅ | `64a6274` | [04](logs/04-drivers-and-exports.md) |
 | 05 | [Derivation tool](05-derivation-tool.md) | `ComputeTargets/quanta_spectrum.py` (U4's shape, its moments and the kernels G and Ω; P41) and `tools/quanta_measures.py` reading 04's exports alone (P42): K(N) rebuilt from the bounce rows (P43); n_g, n̄_j, δ_stim, E(N), the phase slip and the backreaction ratio (P44); three outputs for 07 (P45); the associated piece at 0, 1 and 10 (P46); run on 02d's 230 successes (P47); the Derive gate (P48); the R·S(L) bound dropped (README §8.13) | Opus | ✅ | ✅ | `9830738` | [05](logs/05-derivation-tool.md) |
 | 06 | [Rehearse](06-rehearse.md) | registered builds under Ray (P50–P57): the fixed law at the base `1561b60` against the tip, bitwise, with the workers' code probed; the one-loop law interrupted and resumed, against the straight build and 02d's tool route; the readers, `--A-values` and the derivation tool on the exports | Opus | ✅ | ✅ | `1416b80` | [06](logs/06-rehearse.md) |
-| 07 | [Figure tools](07-figure-tools.md) | `tools/plot_quanta_grid.py` (P59) and `tools/plot_quanta_history.py` (P60) from 04's exports and 05's outputs, sharing `tools/quanta_figures.py` (P58, P61); tests on constructed exports (P62); rendered on 06's and 05's exports, the PNGs committed (P63); the footer label (P64) | Sonnet | ✅ | ⬜ | | |
+| 07 | [Figure tools](07-figure-tools.md) | `tools/plot_quanta_grid.py` (P59) and `tools/plot_quanta_history.py` (P60) from 04's exports and 05's outputs, sharing `tools/quanta_figures.py` (P58, P61); tests on constructed exports (P62); rendered on 06's and 05's exports, the PNGs committed (P63); the footer label (P64) | Sonnet | ✅ | ✅ | this commit | [07](logs/07-figure-tools.md) |
 | 08 | Close | the verification document, the law and measures for the paper, the handover for the rebuild, the indexes | Opus | ⬜ | ⬜ | | |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
@@ -714,6 +714,8 @@ Noted, not acted on (log §6), for 07 and 08:
 | the Derive gate's scripts, `.documents/one-loop-drain/derive-05/` (the kernels, the probe, the run of 02d's 230 successes and its report; P47, P48) | 05 | ✅ (verification §5) |
 | the rehearsal's scripts, `.documents/one-loop-drain/rehearse-06/` (the code probe, the stored-values reader, the three comparisons, 11's helpers adapted; P51, P53, P54) | 06 | ✅ |
 | ten registered runs on the isolated cluster: the base at `1561b60` from a worktree (17 fixed-law histories), the reference and the resumed store at the tip (26 each, 9 of them 02d's one-loop tasks), run a of the resumed build interrupted with `SIGTERM` and resumed; the readers R1–R7; the three stores kept (P50, P52, P55–P57) | 06 | ✅ (verification §6) |
+| `tools/quanta_figures.py` (regime colours, the four row classes, the model check, the `--output` mapping), `tools/plot_quanta_grid.py` (ten heat maps per one-loop A) and `tools/plot_quanta_history.py` (six panels sharing N per history); 68 tests on constructed exports; "Reflections: N" (P58–P62, P64) | 07 | ✅ |
+| the figure scripts, `.documents/one-loop-drain/figures-07/` (the six picks, the demonstration, the count check, 12 committed PNGs): 06's exports, 2 grid pages and 9 history figures; 05's, 8 grid pages, A = 1 at c_a = 0 and 10, 4 history figures; 58 checks, 0 failures (P63) | 07 | ✅ (verification §7) |
 
 ## 2. The gates
 
@@ -729,7 +731,7 @@ Noted, not acted on (log §6), for 07 and 08:
 | Derive | the derived measures against direct quadrature (10⁻⁶); peak-collapsed against the scoping probe's method | 05 | ✅ 2026-11-06 (verification §5.8): G and Ω within 2.3 × 10⁻⁹ of quadrature on the grid and beyond at c_a = 1, 0, 10, every asymptote within 10⁻⁷ at its end, every measure within 10⁻⁶ of a direct computation on constructed generations; peak-collapsed E within 2.5ε of the probe's `excess` on P-2197 at every compared sample, K(N) equal to the ledger's bitwise; 230 of 230 of 02d's tasks re-integrated with every candidate equal by `repr`, exported and measured at the three scales, the K check within 1.5 × 10⁻¹¹; 27 min, five workers |
 | Bitwise | the fixed law's tip build equal to the base's in every pre-existing column | 06 | ✅ 2026-11-07 (verification §6.4): the base's 17 histories matched once each under `fixed`; 2 524 629 values in the shared columns of the six tables and the key rows, every one equal; the drain record NULL, no bounce row and the sample masses as `sample_masses` gives them at all 17; no exception; the workers probed to run their own tree's code |
 | R | the one-loop build, interrupted and resumed, equals the straight build by value (bounce rows included) and 02d's tool route (README §8.14) | 06 | ✅ 2026-11-07 (verification §6.5): `compare_stores` equal with 2 562 bounce rows matched, both fingerprints `7c7641d2…dd04` (format 7); the nine one-loop histories equal to 02d's tool route in the tuning, the drain record, 14 135 candidate values, the dissipation values and Y_p and D/H, bit for bit; the exports byte-identical but for three timing columns, the nine bounces.csv byte-identical to 05's |
-| Figures | both tools render from 06's exports; their tests pass | 07 | ⬜ |
+| Figures | both tools render from 06's exports; their tests pass | 07 | ✅ 2026-11-07 (verification §7.2): 68 tests added (`tools/tests` 191 → 259, the others unchanged); both tools exit 0 on 06's exports (2 grid pages, all 9 one-loop histories) and on 05's (8 grid pages, c_a = 0 and 10 at A = 1, 4 histories); each figure's drawn count and each history's generations equal quanta_histories.csv's, by script (58 checks, 0 failures) |
 
 ## 3. Active and unresolved issues
 
@@ -1089,3 +1091,5 @@ changed): the same counts, all passing (log 02d §4).
 
 **2026-11-07, prompt 06:** measured first at `41d18c4`: 26, 665 (219 + 446), 163, 191, 72, all passing. After 06 (no code
 changed): the same counts, all passing (log 06 §4), at one-minute loads of 107–200 from other work.
+
+**2026-11-07, prompt 07:** measured first at `d4031dc`: 26, 665 (219 + 446), 163, 191, 72, all passing. After 07: 26, 665 (219 + 446), 163, 259, 72, all passing (log 07 §4); 68 tests added to `tools/tests`.

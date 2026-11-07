@@ -322,7 +322,7 @@ def add_ScalarHistory_labels(
     fig.text(
         LEFT_COLUMN,
         BELOW_PLOTS_TOP_ROW,
-        f"Reflections (elastic model): {reflection_count(extra_data)}",
+        f"Reflections: {reflection_count(extra_data)}",
         horizontalalignment="left",
         fontsize="xx-small",
     )
