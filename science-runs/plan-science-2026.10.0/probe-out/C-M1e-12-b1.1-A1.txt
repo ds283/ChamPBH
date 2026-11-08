@@ -1,0 +1,25 @@
+## command: PYTHONPATH=. ./venv/bin/python -u tools/history_and_bbn.py 1.1 1e-12 --alpha 1 --drain-law one_loop
+## git rev-parse HEAD: 8b05d304589796c75253edee2543d8af41777fed
+## git status --porcelain lines: 1
+## start (UTC): 2026-11-07T22:24:32+00:00
+## uptime: 22:24  up 8 days, 45 mins, 1 user, load averages: 15.90 9.28 7.71
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+!! tune_history (history_and_bbn-beta1.1-M1e-12): dissipation mode: the reflections are expected to be nearly elastic in this regime: the test-field ratio R = 10^-14.883 < 1 at the first impact (phi_t = 1.006e-14 M_P)
+!! tune_history (history_and_bbn-beta1.1-M1e-12): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.7031 < ln 10 at N = 17.83996312 (generation 0); the generations below ln 10 carry 1 of K
+-- tune history_and_bbn-beta1.1-M1e-12 it=0 kind=seed H/H0-1=-1.347e-04 phi_ref/phi_min-1=+4.298e-07 norm=-276.630736096 phi_ref=1.4187355923e-06 wall=135.0
+-- tune history_and_bbn-beta1.1-M1e-12 it=1 kind=plain H/H0-1=+1.870e-04 phi_ref/phi_min-1=-1.957e-04 norm=-276.630344853 phi_ref=1.4187349826e-06 wall=133.1
+-- tune history_and_bbn-beta1.1-M1e-12 it=2 kind=secant H/H0-1=+1.934e-04 phi_ref/phi_min-1=+1.687e-07 norm=-276.630572166 phi_ref=1.4188512669e-06 wall=130.1
+-- tune history_and_bbn-beta1.1-M1e-12 it=3 kind=secant H/H0-1=-1.914e-04 phi_ref/phi_min-1=-8.157e-07 norm=-276.631515723 phi_ref=1.4181809929e-06 wall=132.1
+-- tune history_and_bbn-beta1.1-M1e-12 it=4 kind=secant H/H0-1=-4.312e-05 phi_ref/phi_min-1=+2.420e-07 norm=-276.631046571 phi_ref=1.4185147261e-06 wall=132.9
+-- tune history_and_bbn-beta1.1-M1e-12 it=5 kind=secant H/H0-1=-1.605e-04 phi_ref/phi_min-1=-4.238e-07 norm=-276.630909652 phi_ref=1.4186113439e-06 wall=131.1
+-- tune history_and_bbn-beta1.1-M1e-12 it=6 kind=plain H/H0-1=-5.153e-05 phi_ref/phi_min-1=-2.328e-04 norm=-276.630443694 phi_ref=1.4186119451e-06 wall=130.5
+-- tune history_and_bbn-beta1.1-M1e-12 it=7 kind=secant H/H0-1=+2.354e-04 phi_ref/phi_min-1=-1.061e-07 norm=-276.630223202 phi_ref=1.4190988225e-06 wall=130.5
+-- tune history_and_bbn-beta1.1-M1e-12 it=8 kind=plain H/H0-1=-1.601e-04 phi_ref/phi_min-1=+3.418e-04 norm=-276.630906687 phi_ref=1.4190989730e-06 wall=131.6
+-- tune history_and_bbn-beta1.1-M1e-12 it=9 kind=secant H/H0-1=-1.077e-04 phi_ref/phi_min-1=+1.199e-07 norm=-276.630630044 phi_ref=1.4188103464e-06 wall=130.2
+-- tune history_and_bbn-beta1.1-M1e-12 it=10 kind=secant H/H0-1=+2.690e-04 phi_ref/phi_min-1=-4.809e-08 norm=-276.630372705 phi_ref=1.4189926756e-06 wall=131.2
+-- tune history_and_bbn-beta1.1-M1e-12 it=11 kind=plain H/H0-1=-1.924e-04 phi_ref/phi_min-1=+3.905e-04 norm=-276.631153764 phi_ref=1.4189927439e-06 wall=126.8
+-- tune history_and_bbn-beta1.1-M1e-12 it=12 kind=secant H/H0-1=-1.215e-04 phi_ref/phi_min-1=+4.619e-09 norm=-276.630828024 phi_ref=1.4186698653e-06 wall=131.2
+## end (UTC): 2026-11-07T22:54:35+00:00
+## uptime: 22:54  up 8 days,  1:15, 1 user, load averages: 6.41 7.33 7.65
+## exit status: -15 (timed out)
+## wall: 1803.1 s

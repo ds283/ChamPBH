@@ -1,0 +1,86 @@
+== C: the one-loop law at M_crit, A = 1
+C-M1e-12-b1.1-A1       exit=-15 (timed out)  wall= 1803.1s tunings=13 steps=       - refl=     - dNeff_today=          - dNeff_1MeV=          - Yp=           - DoH=          - parkN=       - lnR1=       - 
+C-M1e-15-b1.1-A1       exit=-15 (timed out)  wall= 1803.2s tunings= 8 steps=       - refl=     - dNeff_today=          - dNeff_1MeV=          - Yp=           - DoH=          - parkN=       - lnR1=       - 
+C-M1e-15-b2-A1         exit=0                wall=   18.0s tunings= 1 steps=    6419 refl=    28 dNeff_today=6.81971e-06 dNeff_1MeV=5.79679e-08 Yp=0.2466336523 DoH=2.461763351 parkN= 31.2738 lnR1=0.547346 1L=0 gap=1 cl=27
+
+== G: the fixed law at 1e-16, beta = 2, beside 02d's one-loop L-M1e-16
+alpha=0.01             exit=0                wall=   24.0s tunings= 1 steps=   16773 refl=    85 dNeff_today= 0.00548245 dNeff_1MeV= 0.00526067 Yp=0.2469395511 DoH=2.459624922 parkN= 30.6205 lnR1= 9.75769 
+alpha=0.1              exit=0                wall=   18.0s tunings= 1 steps=   10157 refl=    49 dNeff_today=  0.0524405 dNeff_1MeV=  0.0496484 Yp=0.2470951997 DoH=2.472663274 parkN= 30.3493 lnR1= 9.75769 
+one-loop A=0.05        02d            dNeff_today=1.107232e-02 dNeff_1MeV=1.072341e-02 Yp=  0.24687817 DoH=   2.474759
+one-loop A=0.1         02d            dNeff_today=2.175790e-02 dNeff_1MeV=2.108564e-02 Yp=  0.24609751 DoH=   2.475311
+one-loop A=1           02d            dNeff_today=1.442591e-01 dNeff_1MeV=1.397950e-01 Yp=  0.24875478 DoH=   2.505385
+one-loop A=10          02d            dNeff_today=1.474420e-01 dNeff_1MeV=1.428865e-01 Yp=  0.24883030 DoH=   2.506596
+
+== L: the one-loop law against M, by beta and A (02d at 1e-33, 4e-31, 1e-30)
+b=1.2 A=0.05 M=1e-40   exit=0                wall=   22.0s tunings= 1 steps=   17053 refl=    89 dNeff_today= 0.00210132 dNeff_1MeV=  0.0016778 Yp=  0.25653794 DoH=2.578982741 parkN= 36.8595 lnR1= 226.607 1L=79 gap=10 cl=0
+b=1.2 A=0.05 M=1e-36   exit=0                wall=   24.1s tunings= 1 steps=   23570 refl=   127 dNeff_today= 0.00230123 dNeff_1MeV= 0.00188675 Yp=0.2564876374 DoH=2.576726561 parkN= 37.2255 lnR1= 189.766 1L=127 gap=0 cl=0
+b=1.2 A=0.05 M=1e-33   02d            dNeff_today=2.605408e-03 dNeff_1MeV=2.172063e-03 Yp=  0.25654163 DoH=   2.573666
+b=1.2 A=0.05 M=1e-30   02d            dNeff_today=3.070572e-03 dNeff_1MeV=2.594998e-03 Yp=  0.25641023 DoH=   2.567362
+
+b=1.2 A=1 M=1e-40      exit=0                wall=   14.0s tunings= 1 steps=    3954 refl=    16 dNeff_today=  0.0388029 dNeff_1MeV=  0.0335255 Yp=0.2517572498 DoH=2.626025487 parkN= 35.2737 lnR1= 226.607 1L=16 gap=0 cl=0
+b=1.2 A=1 M=1e-36      exit=0                wall=   14.0s tunings= 1 steps=    4537 refl=    19 dNeff_today=  0.0424509 dNeff_1MeV=  0.0376964 Yp=0.2518297302 DoH=2.583032373 parkN= 35.1203 lnR1= 189.766 1L=19 gap=0 cl=0
+b=1.2 A=1 M=1e-33      02d            dNeff_today=4.828640e-02 dNeff_1MeV=4.337841e-02 Yp=  0.25148864 DoH=   2.482149
+b=1.2 A=1 M=1e-30      02d            dNeff_today=5.790691e-02 dNeff_1MeV=5.178291e-02 Yp=  0.24964921 DoH=   2.590563
+
+b=1.2 A=10 M=1e-40     exit=0                wall=   14.0s tunings= 1 steps=    1898 refl=     6 dNeff_today=   0.353504 dNeff_1MeV=   0.342582 Yp=0.2514745166 DoH=2.574641503 parkN= 21.8858 lnR1= 226.607 1L=6 gap=0 cl=0
+b=1.2 A=10 M=1e-36     exit=0                wall=   14.0s tunings= 1 steps=    2420 refl=     9 dNeff_today=   0.401039 dNeff_1MeV=   0.388648 Yp=0.2520755843 DoH=2.590129552 parkN= 20.5914 lnR1= 189.766 1L=9 gap=0 cl=0
+b=1.2 A=10 M=1e-33     02d            dNeff_today=4.628568e-01 dNeff_1MeV=4.485559e-01 Yp=  0.25284790 DoH=   2.610512
+b=1.2 A=10 M=1e-30     02d            dNeff_today=5.439868e-01 dNeff_1MeV=5.271793e-01 Yp=  0.25385367 DoH=   2.637118
+
+b=2 A=0.05 M=1e-40     exit=0                wall=   18.0s tunings= 1 steps=    7773 refl=    35 dNeff_today= 0.00157655 dNeff_1MeV= 0.00146426 Yp=0.2467899402 DoH=2.467484483 parkN= 34.6475 lnR1= 230.806 1L=35 gap=0 cl=0
+b=2 A=0.05 M=1e-36     exit=0                wall=   18.0s tunings= 1 steps=    7967 refl=    36 dNeff_today= 0.00175737 dNeff_1MeV= 0.00164358 Yp=0.2468343856 DoH=2.467282225 parkN=  34.631 lnR1= 193.964 1L=36 gap=0 cl=0
+b=2 A=0.05 M=1e-33     02d            dNeff_today=2.018720e-03 dNeff_1MeV=1.891664e-03 Yp=  0.24693897 DoH=   2.463941
+b=2 A=0.05 M=4e-31     02d            dNeff_today=2.342140e-03 dNeff_1MeV=2.202038e-03 Yp=  0.24690296 DoH=   2.464756
+b=2 A=0.05 M=1e-30     02d            dNeff_today=2.409665e-03 dNeff_1MeV=2.260046e-03 Yp=  0.24690513 DoH=   2.458508
+
+b=2 A=1 M=1e-40        exit=0                wall=   16.0s tunings= 1 steps=    8072 refl=    37 dNeff_today=  0.0307773 dNeff_1MeV=  0.0283676 Yp=0.2465683569 DoH=2.463785125 parkN= 30.8475 lnR1= 230.806 1L=37 gap=0 cl=0
+b=2 A=1 M=1e-36        exit=0                wall=   18.0s tunings= 1 steps=   10461 refl=    51 dNeff_today=  0.0335554 dNeff_1MeV=  0.0317077 Yp=0.2471585854 DoH=2.468251871 parkN= 30.1934 lnR1= 193.964 1L=51 gap=0 cl=0
+b=2 A=1 M=1e-33        02d            dNeff_today=3.747674e-02 dNeff_1MeV=3.626854e-02 Yp=  0.24734966 DoH=   2.470119
+b=2 A=1 M=4e-31        02d            dNeff_today=4.462349e-02 dNeff_1MeV=4.188749e-02 Yp=  0.24691770 DoH=   2.469568
+b=2 A=1 M=1e-30        02d            dNeff_today=4.588302e-02 dNeff_1MeV=4.293130e-02 Yp=  0.24685198 DoH=   2.469613
+
+b=2 A=10 M=1e-40       exit=0                wall=   16.0s tunings= 2 steps=    3018 refl=    13 dNeff_today=   0.143593 dNeff_1MeV=   0.139156 Yp=0.2487771662 DoH=2.505296909 parkN= 22.0285 lnR1= 230.806 1L=13 gap=0 cl=0
+b=2 A=10 M=1e-36       exit=0                wall=   14.0s tunings= 1 steps=    2805 refl=    12 dNeff_today=   0.143843 dNeff_1MeV=   0.139399 Yp=0.2487825062 DoH=2.505482539 parkN= 21.8468 lnR1= 193.964 1L=12 gap=0 cl=0
+b=2 A=10 M=1e-33       02d            dNeff_today=1.444306e-01 dNeff_1MeV=1.399681e-01 Yp=  0.24878770 DoH=   2.505803
+b=2 A=10 M=4e-31       02d            dNeff_today=1.456091e-01 dNeff_1MeV=1.411102e-01 Yp=  0.24880406 DoH=   2.505966
+b=2 A=10 M=1e-30       02d            dNeff_today=1.458284e-01 dNeff_1MeV=1.413227e-01 Yp=  0.24880501 DoH=   2.506105
+
+b=10 A=0.05 M=1e-40    exit=0                wall=  102.2s tunings= 1 steps=  134630 refl=   797 dNeff_today=0.000488103 dNeff_1MeV=0.000473022 Yp= 0.246887372 DoH=2.458128025 parkN= 63.9056 lnR1= 254.727 1L=797 gap=0 cl=0
+b=10 A=0.05 M=1e-36    exit=0                wall=   98.2s tunings= 1 steps=  131573 refl=   780 dNeff_today=0.000529154 dNeff_1MeV=0.000512805 Yp=0.2468877468 DoH=2.458227904 parkN= 63.7196 lnR1= 217.886 1L=780 gap=0 cl=0
+b=10 A=0.05 M=1e-33    02d            dNeff_today=5.794394e-04 dNeff_1MeV=5.615365e-04 Yp=  0.24688930 DoH=   2.458147
+b=10 A=0.05 M=4e-31    02d            dNeff_today=6.345412e-04 dNeff_1MeV=6.149358e-04 Yp=  0.24689012 DoH=   2.458150
+b=10 A=0.05 M=1e-30    02d            dNeff_today=6.439447e-04 dNeff_1MeV=6.240488e-04 Yp=  0.24689014 DoH=   2.458142
+
+b=10 A=1 M=1e-40       exit=0                wall=   24.1s tunings= 1 steps=   18254 refl=    95 dNeff_today= 0.00269793 dNeff_1MeV= 0.00261457 Yp=0.2469230422 DoH=2.458960391 parkN= 59.7409 lnR1= 254.727 1L=95 gap=0 cl=0
+b=10 A=1 M=1e-36       exit=0                wall=   22.0s tunings= 1 steps=   16558 refl=    85 dNeff_today= 0.00296512 dNeff_1MeV=  0.0028735 Yp=0.2469276004 DoH=2.458928751 parkN= 59.5734 lnR1= 217.886 1L=85 gap=0 cl=0
+b=10 A=1 M=1e-33       02d            dNeff_today=3.250673e-03 dNeff_1MeV=3.150237e-03 Yp=  0.24692371 DoH=   2.459150
+b=10 A=1 M=4e-31       02d            dNeff_today=3.571188e-03 dNeff_1MeV=3.460850e-03 Yp=  0.24693191 DoH=   2.459251
+b=10 A=1 M=1e-30       02d            dNeff_today=3.627519e-03 dNeff_1MeV=3.515440e-03 Yp=  0.24693316 DoH=   2.459256
+
+b=10 A=10 M=1e-40      exit=0                wall=   14.0s tunings= 1 steps=    3414 refl=    13 dNeff_today= 0.00580452 dNeff_1MeV= 0.00562518 Yp= 0.246968076 DoH=2.459870669 parkN= 55.3672 lnR1= 254.727 1L=13 gap=0 cl=0
+b=10 A=10 M=1e-36      exit=0                wall=   14.0s tunings= 1 steps=    3043 refl=    11 dNeff_today= 0.00566646 dNeff_1MeV= 0.00549138 Yp=0.2469638574 DoH=2.459959775 parkN= 55.2182 lnR1= 217.886 1L=11 gap=0 cl=0
+b=10 A=10 M=1e-33      02d            dNeff_today=5.518997e-03 dNeff_1MeV=5.348477e-03 Yp=  0.24695924 DoH=   2.459745
+b=10 A=10 M=4e-31      02d            dNeff_today=5.355581e-03 dNeff_1MeV=5.190110e-03 Yp=  0.24696047 DoH=   2.459837
+b=10 A=10 M=1e-30      02d            dNeff_today=5.327239e-03 dNeff_1MeV=5.162643e-03 Yp=  0.24695297 DoH=   2.459849
+
+== F: the fixed law against M (2026.8.0's export at 1e-33 and 4e-31)
+b=1.2 a=0.01 M=1e-40   exit=0                wall=   14.0s tunings= 1 steps=    1819 refl=     5 dNeff_today= 0.00675937 dNeff_1MeV= 0.00609389 Yp=0.2560189448 DoH=2.524556361 parkN=  30.398 lnR1= 226.607 
+b=1.2 a=0.01 M=1e-36   exit=0                wall=   14.0s tunings= 1 steps=    1819 refl=     5 dNeff_today= 0.00675937 dNeff_1MeV= 0.00609389 Yp=0.2560189373 DoH=2.524529992 parkN=  30.398 lnR1= 189.766 
+b=1.2 a=0.01 M=1e-33   2026.8.0       dNeff_today=0.006759374159598867 dNeff_1MeV=0.006093893660820593 Yp=0.2560144294597116 DoH=2.5246670644420752
+b=1.2 a=0.01 M=4e-31   2026.8.0       dNeff_today=0.006759374159599252 dNeff_1MeV=0.006093893660820593 Yp=0.256019162982978 DoH=2.5247102158243475
+
+b=1.2 a=0.1 M=1e-40    exit=0                wall=   14.0s tunings= 1 steps=    2220 refl=     7 dNeff_today=  0.0656722 dNeff_1MeV=  0.0607917 Yp=0.2494892386 DoH=2.494639907 parkN= 28.3643 lnR1= 226.607 
+b=1.2 a=0.1 M=1e-36    exit=0                wall=   14.1s tunings= 1 steps=    2220 refl=     7 dNeff_today=  0.0656722 dNeff_1MeV=  0.0607917 Yp=0.2494892386 DoH=2.494639907 parkN= 28.3643 lnR1= 189.766 
+b=1.2 a=0.1 M=1e-33    2026.8.0       dNeff_today=0.06567221651838474 dNeff_1MeV=0.060791679567020536 Yp=0.24948557339256705 DoH=2.4945707283684784
+b=1.2 a=0.1 M=4e-31    2026.8.0       dNeff_today=0.06567221651838848 dNeff_1MeV=0.060791679567020536 Yp=0.2494870752302938 DoH=2.4945551138713427
+
+b=2 a=0.01 M=1e-40     exit=0                wall=   24.1s tunings= 1 steps=   16773 refl=    85 dNeff_today= 0.00548245 dNeff_1MeV= 0.00526067 Yp=0.2469496276 DoH=2.459633518 parkN= 30.6205 lnR1= 230.806 
+b=2 a=0.01 M=1e-36     exit=0                wall=   24.1s tunings= 1 steps=   16773 refl=    85 dNeff_today= 0.00548245 dNeff_1MeV= 0.00526067 Yp=0.2469502978 DoH=2.459666632 parkN= 30.6205 lnR1= 193.964 
+b=2 a=0.01 M=1e-33     2026.8.0       dNeff_today=0.005482445657123719 dNeff_1MeV=0.005260665982348647 Yp=0.24693608260712324 DoH=2.459738199031636
+b=2 a=0.01 M=4e-31     2026.8.0       dNeff_today=0.0054824456571196676 dNeff_1MeV=0.0052606659823368354 Yp=0.24694528054998574 DoH=2.4598275671732903
+
+b=2 a=0.1 M=1e-40      exit=0                wall=   20.1s tunings= 1 steps=   10157 refl=    49 dNeff_today=  0.0524405 dNeff_1MeV=  0.0496484 Yp=0.2470890903 DoH=2.472685719 parkN= 30.3493 lnR1= 230.806 
+b=2 a=0.1 M=1e-36      exit=0                wall=   18.0s tunings= 1 steps=   10157 refl=    49 dNeff_today=  0.0524405 dNeff_1MeV=  0.0496484 Yp=0.2470946709 DoH=2.472577263 parkN= 30.3493 lnR1= 193.964 
+b=2 a=0.1 M=1e-33      2026.8.0       dNeff_today=0.05244048939147539 dNeff_1MeV=0.04964840387654275 Yp=0.24708780196835908 DoH=2.4725877941789367
+b=2 a=0.1 M=4e-31      2026.8.0       dNeff_today=0.05244048939162443 dNeff_1MeV=0.049648403876538516 Yp=0.24709345723811973 DoH=2.4725449328040012
+

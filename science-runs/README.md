@@ -26,6 +26,10 @@ and this folder says what it was for and what came of it.
 
 ## Runs
 
+**Planned:** [`plan-science-2026.10.0/`](plan-science-2026.10.0/PLAN.md), the `2026.10.0` rebuild that replaces
+`2026.8.0` under the one-loop drain law: the plan, its probe and its run script. They move into the run's folder when
+the run starts.
+
 | Folder | What | Status |
 |---|---|---|
 | [`2026-10-03-science-2026.6.0/`](2026-10-03-science-2026.6.0/README.md) | The first full science run, at `VERSION_LABEL` `2026.6.0`, with its BBN refresh (`+bt02`) and the draft BBN-constraint figure (fig6) | Superseded: the tree cannot read its stores, and `jordan-normalization`'s rebuild replaces them |

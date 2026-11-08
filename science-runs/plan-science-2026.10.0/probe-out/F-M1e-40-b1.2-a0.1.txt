@@ -1,0 +1,21 @@
+## command: PYTHONPATH=. ./venv/bin/python -u tools/history_and_bbn.py 1.2 1e-40 --alpha 0.1
+## git rev-parse HEAD: 8b05d304589796c75253edee2543d8af41777fed
+## git status --porcelain lines: 1
+## start (UTC): 2026-11-07T22:33:43+00:00
+## uptime: 22:33  up 8 days, 54 mins, 1 user, load averages: 7.12 6.97 7.08
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+-- tune history_and_bbn-beta1.2-M1e-40 it=0 kind=seed H/H0-1=+5.045e-07 phi_ref/phi_min-1=+4.419e-07 norm=-276.630728594 phi_ref=1.3583405311e-20 wall=1.7
+history beta=1.2 M=1e-40: RHS=17702 accepted_steps=2220 reflections=7 samples=5003 integrations=1 alpha=0.1 wall=1.9 s
+tuning beta=1.2 M=1e-40: normalization=-276.63072859401797 V_ref=7.257733995332848e-121 phi_ref=1.3583405310974223e-20 phi_0=1.3583399308467203e-20 pi_0=2.0375098962701054e-20 tracking=1.0000000000000122 residual_H=5.045429800620838e-07 residual_phi=4.4190021664114454e-07 tuning_iterations=1 plain_steps=0 secant_steps=0 guard_steps=0 seed_kind=tracking seed_normalization=-276.63072859401797 seed_phi_ref=1.3583405310974223e-20
+bounce beta=1.2 M=1e-40: N=17.667942087 T_J=231.107600 MeV phi=8.052215e-11 reflected=True
+dissipation beta=1.2 M=1e-40: injections=7 resolved_candidates=0 unresolved_candidates=7 injected_fraction=0.0150926 rho_chi_ratio_1MeV=0.0100883 rho_chi_ratio_70keV=0.00885207 rho_chi_ratio_today=0.00881741 Delta_N_eff_1MeV=0.0607917 Delta_N_eff_today=0.0656722 log_R_first_impact=226.607 parking_N=28.3643 parking_log_T_Jordan_GeV=-11.3685 release_N=None release_log_T_Jordan_GeV=None worst_birth_margin=27.765 worst_birth_margin_N=26.2842 birth_failing_share=0 worst_reflection_margin=29.3284 worst_reflection_margin_N=28.3643 reflection_failing_share=0 worst_tracker_margin=48.2876 worst_tracker_margin_N=28.3734 tracker_failing_share=0 unassessed_share=5.10483e-05
+fixed_T beta=1.2 M=1e-40: 1MeV crossings=1 phi=5.973233019e-02 ratio=1.282223821e-01 stand_in_phi=5.973215646e-02 stand_in_ratio=1.282211527e-01 | 70keV crossings=1 phi=5.886154276e-03 ratio=3.999289863e-02 stand_in_phi=5.886004150e-03 stand_in_ratio=3.999443248e-02
+ratio beta=1.2 M=1e-40 [0.3,1) keV: n=131 min=0.008817 median=0.008817 max=0.008817 rms_step=1.257e-14
+ratio beta=1.2 M=1e-40 [1,3) keV: n=119 min=0.008817 median=0.008817 max=0.008817 rms_step=1.23e-14
+ratio beta=1.2 M=1e-40 [3,10) keV: n=131 min=0.008817 median=0.008817 max=0.008817 rms_step=1.312e-14
+ratio beta=1.2 M=1e-40 [10,100) keV: n=258 min=-0.1024 median=0.005035 max=0.1185 rms_step=0.01387
+bbn beta=1.2 M=1e-40: Yp=0.2494892386 DoH=2.494639907 He3oH=1.048333376 Li7oH=5.453487307 network=small PRyM_time=8.7 s wall=8.7 s PRyM_version=bf24c3d+ri02+sr01+bt02
+## end (UTC): 2026-11-07T22:33:57+00:00
+## uptime: 22:33  up 8 days, 54 mins, 1 user, load averages: 7.07 6.97 7.08
+## exit status: 0
+## wall: 14.0 s
