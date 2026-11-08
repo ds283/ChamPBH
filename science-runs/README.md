@@ -26,9 +26,9 @@ and this folder says what it was for and what came of it.
 
 ## Runs
 
-**Planned:** [`plan-science-2026.10.0/`](plan-science-2026.10.0/PLAN.md), the `2026.10.0` rebuild that replaces
-`2026.8.0` under the one-loop drain law: the plan, its probe and its run script. They move into the run's folder when
-the run starts.
+**Ready to launch:** [`2026-11-08-science-2026.10.0/`](2026-11-08-science-2026.10.0/PLAN.md), the `2026.10.0` rebuild
+that replaces `2026.8.0` under the one-loop drain law: the plan, its probe and its run script, in the run's own
+folder. Its README and row in the table below follow when the run ends.
 
 | Folder | What | Status |
 |---|---|---|

@@ -7,6 +7,9 @@ stores this tree cannot read (format 6 against 7; review-remediation verificatio
 the plan and its probe (`probe.py`, §2). When the run starts, its files move into the run's own folder,
 `YYYY-MM-DD-science-2026.10.0/`. Until then it is a plan: nothing has been launched.
 
+**2026-11-08:** moved from `science-runs/plan-science-2026.10.0/` to this folder, with the run script of §8
+(`run_science_2026.10.0.sh`), before launch. `probe.py`, `summarise_probe.py` and §7 name the old path, where they ran.
+
 The tree: `VERSION_LABEL` `2026.10.0` (`config/version.py:88`), `FINGERPRINT_FORMAT` 7 (`config/fingerprint.py:95`),
 `PRYM_VERSION` `bf24c3d+ri02+sr01+bt02` (`ComputeTargets/BBNData.py:47`).
 
