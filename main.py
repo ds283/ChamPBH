@@ -1145,9 +1145,14 @@ def execute(pool, units: UnitsLike):
         f'   -- populated M sample grid with {len(M_array)} value{"" if len(M_array)==1 else "s"} = [ {", ".join(formatted_M_sample)} ]'
     )
 
-    print(
-        f'   -- populated alpha grid with {len(alpha_values)} value{"" if len(alpha_values)==1 else "s"} = [ {", ".join(f"{a:.5g}" for a in alpha_values)} ]'
-    )
+    # under --no-alpha-values the parser has emptied --alpha-values, so there is no fixed-law row
+    # (no-alpha-values, 2026-11-07)
+    if alpha_values:
+        print(
+            f'   -- populated alpha grid with {len(alpha_values)} value{"" if len(alpha_values)==1 else "s"} = [ {", ".join(f"{a:.5g}" for a in alpha_values)} ]'
+        )
+    else:
+        print("   -- no alpha grid (--no-alpha-values): no fixed-law row is built")
 
     if A_values:
         print(

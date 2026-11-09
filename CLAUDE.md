@@ -80,8 +80,8 @@ invariants that hold across all of them:
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .   # 26 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 665 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .   # 163 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 259 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .        # 72 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 272 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .        # 76 tests
   ```
   `ComputeTargets/tests` took 639 s on 2026-11-07 (the two halves below, 148.1 s and 491.1 s, at one-minute
   loads of 5.2 and 5.0 at their starts), and longer on a loaded machine; a Bash call is
@@ -90,7 +90,9 @@ invariants that hold across all of them:
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 219 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 446 tests
   ```
-  (The counts are those of 2026-11-07, after `one-loop-drain` 07, which added 68 tests to `tools/tests`
+  (The counts are those of 2026-11-07, after `--no-alpha-values`, which added 13 tests to `tools/tests` and 4 to
+  `RunDrivers/tests` (`test_no_alpha_values` in each); before it, those of 2026-11-07, after `one-loop-drain` 07, which
+  added 68 tests to `tools/tests`
   (`test_quanta_figures`, `test_plot_quanta_grid`, `test_plot_quanta_history`); before it, those of
   2026-11-06, after `one-loop-drain` 05, which added 14 tests to the `test_[g-z]` half
   (`test_quanta_spectrum`) and 18 to `tools/tests` (`test_quanta_measures`, `test_history_directory`); before it, those of
@@ -158,7 +160,8 @@ invariants that hold across all of them:
   `<label>/<drain_model>/A=<A>/`) and `--n-values` (an n with no stored model). `--tuning-max-integrations` is not
   matched; it is not a key. `main.py` and the plot scripts hold the `--alpha-values` rows first and the `--A-values`
   rows after them; `--A-values` has no default, so a run without it is the fixed-law run, and a run given only
-  `--A-values` also builds, or reads, α = 0.
+  `--A-values` also builds, or reads, α = 0, unless it is also given `--no-alpha-values`, which builds, or reads, no
+  fixed-law row. That flag needs `--A-values` and refuses `--alpha-values` (exit 2, at parse, before Ray).
 - **Science runs** are recorded in [`science-runs/`](science-runs/README.md), one dated folder
   (`YYYY-MM-DD-<slug>`) per run. Each holds the run scripts, the logs, and each figure made from the
   run with its inputs. That folder is a record of what produced output for publication; code
