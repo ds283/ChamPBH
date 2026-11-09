@@ -1,0 +1,81 @@
+{
+  "script": "fig6b.py",
+  "script_sha256": "963d9605a08bb27cb397be3a2b13a43a422539f5f62dafc07a175808bc47b268",
+  "git_head": "8ac1e4899ddb58a93facc464957ba1c5655c00cb",
+  "git_dirty": false,
+  "input": {
+    "path": "../fig6/inputs/histories.csv",
+    "sha256": "196f720b37f48bfa619dba90d774a803649c46b7c164f9990b9aa9e34891588e"
+  },
+  "store": {
+    "name": "science-2026.10.0",
+    "store_id": "dbc3bbff48a94d64b1c6bc6fa017d65d",
+    "digest": "81e0deb423b41896fd57dd12d3caa5295c905814adb8cb7c78b5bb431cf3afcf"
+  },
+  "beta_wall_edge": 1.06625,
+  "one_loop_A1": {
+    "1e-15": {
+      "histories": 24,
+      "excluded": 3,
+      "largest_excluded_beta": 1.4,
+      "dNeff_today_range": [
+        8.225731385786916e-08,
+        0.0327645556121815
+      ],
+      "regimes": {
+        "classical": 12,
+        "gap": 8,
+        "one_loop": 4
+      }
+    },
+    "1e-12": {
+      "histories": 25,
+      "excluded": 4,
+      "largest_excluded_beta": 1.3,
+      "dNeff_today_range": [
+        1.7649718860740612e-20,
+        7.445971056501556e-06
+      ],
+      "regimes": {
+        "classical": 25
+      }
+    },
+    "4e-31": {
+      "histories": 179,
+      "excluded": 60,
+      "largest_excluded_beta": 1.5,
+      "dNeff_today_range": [
+        0.0021751563070875,
+        0.0709897439360944
+      ],
+      "regimes": {
+        "one_loop": 179
+      }
+    }
+  },
+  "failed_surfing": {
+    "1e-15": [
+      1.1,
+      1.2
+    ],
+    "1e-12": [
+      1.4
+    ]
+  },
+  "fixed_law_against_laboratory_mass": {
+    "1e-15": {
+      "histories": 54,
+      "max_abs_dYp_percent": 0.007152273972529998,
+      "max_abs_dDH_percent": 0.02045989954345001,
+      "max_rel_dNeff": 0.0013520241631773677,
+      "max_rel_dNeff_surfing": 0.00039621416446278257
+    },
+    "1e-12": {
+      "histories": 54,
+      "max_abs_dYp_percent": 0.005993912258104871,
+      "max_abs_dDH_percent": 0.02806400058119607,
+      "max_rel_dNeff": 0.026633730628690344,
+      "max_rel_dNeff_surfing": 0.0024422527993602783
+    }
+  }
+}
