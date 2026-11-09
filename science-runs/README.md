@@ -26,11 +26,8 @@ and this folder says what it was for and what came of it.
 
 ## Runs
 
-**Ready to launch:** [`2026-11-08-science-2026.10.0/`](2026-11-08-science-2026.10.0/PLAN.md), the `2026.10.0` rebuild
-that replaces `2026.8.0` under the one-loop drain law: the plan, its probe and its run script, in the run's own
-folder. Its README and row in the table below follow when the run ends.
-
 | Folder | What | Status |
 |---|---|---|
 | [`2026-10-03-science-2026.6.0/`](2026-10-03-science-2026.6.0/README.md) | The first full science run, at `VERSION_LABEL` `2026.6.0`, with its BBN refresh (`+bt02`) and the draft BBN-constraint figure (fig6) | Superseded: the tree cannot read its stores, and `jordan-normalization`'s rebuild replaces them |
-| [`2026-11-01-science-2026.8.0/`](2026-11-01-science-2026.8.0/README.md) | The run at `VERSION_LABEL` `2026.8.0` that replaces it: Figure 6 at laboratory M with α bands, comparisons near M_crit and in natural mode at large M, and a reflection store; registered, with its plan and probe | Current; 41 surfing-region failures undiagnosed; Figure 6 and the reflection figure made, the comparison Figure 6 not yet |
+| [`2026-11-01-science-2026.8.0/`](2026-11-01-science-2026.8.0/README.md) | The run at `VERSION_LABEL` `2026.8.0` that replaces it: Figure 6 at laboratory M with α bands, comparisons near M_crit and in natural mode at large M, and a reflection store; registered, with its plan and probe | Superseded by `2026.10.0`, whose tree cannot read its stores; Figure 6, 6a and the reflection figure were made from it |
+| [`2026-11-08-science-2026.10.0/`](2026-11-08-science-2026.10.0/README.md) | The rebuild of record after `one-loop-drain`, at `VERSION_LABEL` `2026.10.0`: the one-loop drain law at ten strengths A beside the fixed α, at laboratory M, down to 10⁻⁴² M_P, around M_crit and in natural mode at large M, and a reflection store; registered, with its plan, probe and post-build script | Current; 6 surfing-region failures, all at the tuning cap or as in 2026.8.0; Figure 6, the trend in M and Figure 6b made |

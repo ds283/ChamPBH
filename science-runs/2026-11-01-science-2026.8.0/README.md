@@ -14,6 +14,9 @@ as a selectable law; no store of record is built at 2026.9.0. The rebuild's tree
 the 42 `log_m_eff_squared` failures once that branch is merged into `one-loop-drain`. Until then this store and its
 figures stand as made; the failures of the surfing region are diagnosed below.
 
+*Added 2026-11-09:* the rebuild of record is [`2026-11-08-science-2026.10.0/`](../2026-11-08-science-2026.10.0/README.md),
+built at `VERSION_LABEL` 2026.10.0 on `5837a47`. Its Figure 6 replaces this run's as the figure of record.
+
 **Figures made from it** (each folder holds its script, its inputs and a note):
 - [`fig6/`](fig6/NOTES.md): Figure 6 at the laboratory mass, with the band over α and a ΔN_eff
   panel (2026-11-01), and a parking-temperature row (2026-11-02);

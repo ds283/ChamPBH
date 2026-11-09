@@ -1,0 +1,410 @@
+>> 2026-11-08 23:44:55 R-Mcrit
+** registered_run: registered as science-2026.10.0-R-R-Mcrit-20261108T234456
+**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/science-2026.10.0-R-R-Mcrit-20261108T234456/manifest.json
+**   list it with: ./venv/bin/python -m runregistrykit list
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-08 23:44:57,465	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-08 23:44:57,504	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at [1m[32mhttp://127.0.0.1:8267 [39m[22m
+>> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/science-2026.10.0-reflections.db" with 16 shards
+
+** BUILDING GRID OF MODELS TO SAMPLE
+   -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+   -- populated beta sample grid with 3 values = [ 1.2, 2, 2.9 ]
+   -- populated M sample grid with 2 values = [ 2435.3 GeV, 2.4353e+06 GeV ]
+   -- populated alpha grid with 2 values = [ 0.01, 0.1 ]
+   -- populated A grid with 1 value = [ 1 ] (one-loop-measured-v1)
+   -- total number of models to integrate = 6
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.01
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+[36m(Datastore pid=56598)[0m @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+[36m(compute_scalar_history pid=56627)[0m !! tune_history (R-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.2)-2026-11-08T23:45:09): dissipation mode: the reflections are expected to be nearly elastic in this regime: the test-field ratio R = 10^-13.586 < 1 at the first impact (phi_t = 9.79e-15 M_P)
+[36m(compute_scalar_history pid=56627)[0m !! tune_history (R-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.2)-2026-11-08T23:45:09): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.7082 < ln 10 at N = 25.97411627 (generation 3); the generations below ln 10 carry 0.9996 of K
+[36m(compute_scalar_history pid=56627)[0m !! tune_history (R-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.2)-2026-11-08T23:45:09): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = 0.4955 < ln 10 at N = 25.97411627 (generation 2); the generations below ln 10 carry 0.04382 of K
+[36m(compute_scalar_history pid=56629)[0m !! tune_history (R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:45:10): dissipation mode: the reflections are expected to be nearly elastic in this regime: the test-field ratio R = 10^-1.586 < 1 at the first impact (phi_t = 9.79e-18 M_P)
+[36m(compute_scalar_history pid=56634)[0m !! tune_history (R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=2.9)-2026-11-08T23:45:10): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.7090 < ln 10 at N = 34.45456515 (generation 41); the generations below ln 10 carry 0.9924 of K[32m [repeated 2x across cluster] (Ray deduplicates logs by default. Set RAY_DEDUP_LOGS=0 to disable log deduplication, or see https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#log-deduplication for more options.)[0m
+[36m(compute_scalar_history pid=56634)[0m !! tune_history (R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=2.9)-2026-11-08T23:45:10): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = -0.6177 < ln 10 at N = 34.17603192 (generation 35); the generations below ln 10 carry 0.9924 of K[32m [repeated 2x across cluster][0m
+[36m(compute_scalar_history pid=56637)[0m !! tune_history (R-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=2.9)-2026-11-08T23:45:10): dissipation mode: the reflections are expected to be nearly elastic in this regime: the test-field ratio R = 10^-10.365 < 1 at the first impact (phi_t = 9.171e-15 M_P)
+   -- ALL WORK ITEMS COMPLETE in time 16.5s
+      Queue summary: 6 lookup (avg 21.82/min), 6 compute (avg 21.82/min), 6 store (avg 21.82/min), 6 validation (avg 21.82/min)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 1.12s
+      Queue summary: 6 lookup (avg 322/min), 6 compute (avg 322/min), 6 store (avg 322/min), 6 validation (avg 322/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 10.7s
+      Queue summary: 6 lookup (avg 33.56/min), 6 compute (avg 33.56/min), 6 store (avg 33.56/min), 6 validation (avg 33.56/min)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.1
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+[36m(compute_scalar_history pid=56626)[0m !! tune_history (R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:45:38): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.7089 < ln 10 at N = 26.28424248 (generation 5); the generations below ln 10 carry 0.9999 of K[32m [repeated 4x across cluster][0m
+[36m(compute_scalar_history pid=56626)[0m !! tune_history (R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:45:38): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = 0.0048 < ln 10 at N = 25.84646434 (generation 3); the generations below ln 10 carry 0.04046 of K[32m [repeated 4x across cluster][0m
+[36m(compute_scalar_history pid=56626)[0m !! tune_history (R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:45:38): dissipation mode: the reflections are expected to be nearly elastic in this regime: the test-field ratio R = 10^-1.586 < 1 at the first impact (phi_t = 9.79e-18 M_P)[32m [repeated 2x across cluster][0m
+[36m(compute_scalar_history pid=56627)[0m !! tune_history (R-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=2.9)-2026-11-08T23:45:38): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.7047 < ln 10 at N = 28.56024553 (generation 25); the generations below ln 10 carry 0.9955 of K[32m [repeated 3x across cluster][0m
+[36m(compute_scalar_history pid=56627)[0m !! tune_history (R-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=2.9)-2026-11-08T23:45:38): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = -0.5395 < ln 10 at N = 28.62246547 (generation 25); the generations below ln 10 carry 0.9955 of K[32m [repeated 3x across cluster][0m
+[36m(compute_scalar_history pid=56627)[0m !! tune_history (R-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=2.9)-2026-11-08T23:45:38): dissipation mode: the reflections are expected to be nearly elastic in this regime: the test-field ratio R = 10^-10.365 < 1 at the first impact (phi_t = 9.171e-15 M_P)[32m [repeated 2x across cluster][0m
+   -- ALL WORK ITEMS COMPLETE in time 12.6s
+      Queue summary: 6 lookup (avg 28.53/min), 6 compute (avg 28.53/min), 6 store (avg 28.53/min), 6 validation (avg 28.53/min)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 1.07s
+      Queue summary: 6 lookup (avg 335.3/min), 6 compute (avg 335.3/min), 6 store (avg 335.3/min), 6 validation (avg 335.3/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 9.28s
+      Queue summary: 6 lookup (avg 38.77/min), 6 compute (avg 38.77/min), 6 store (avg 38.77/min), 6 validation (avg 38.77/min)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 1 (one-loop-measured-v1)
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+[36m(compute_scalar_history pid=56637)[0m !! tune_history (R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=2)-2026-11-08T23:46:01): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.7029 < ln 10 at N = 21.4076718 (generation 1); the generations below ln 10 carry 0.007863 of K[32m [repeated 3x across cluster][0m
+[36m(compute_scalar_history pid=56637)[0m !! tune_history (R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=2)-2026-11-08T23:46:01): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = -0.1436 < ln 10 at N = 21.93611669 (generation 1); the generations below ln 10 carry 0.007863 of K[32m [repeated 3x across cluster][0m
+[36m(compute_scalar_history pid=56628)[0m !! tune_history (R-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=2)-2026-11-08T23:45:38): dissipation mode: the reflections are expected to be nearly elastic in this regime: the test-field ratio R = 10^-11.762 < 1 at the first impact (phi_t = 9.43e-15 M_P)
+[36m(compute_scalar_history pid=56626)[0m !! tune_history (R-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=2)-2026-11-08T23:46:01): dissipation mode: the reflections are expected to be nearly elastic in this regime: the test-field ratio R = 10^-11.762 < 1 at the first impact (phi_t = 9.43e-15 M_P)
+[36m(compute_scalar_history pid=56629)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=0 kind=seed H/H0-1=+2.750e-05 phi_ref/phi_min-1=-2.027e-07 norm=-276.630736429 phi_ref=1.3583357095e-06 wall=244.7
+[36m(compute_scalar_history pid=56629)[0m !! tune_history (R-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.2)-2026-11-08T23:46:01): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.7028 < ln 10 at N = 17.66794209 (generation 0); the generations below ln 10 carry 1 of K[32m [repeated 2x across cluster][0m
+[36m(compute_scalar_history pid=56627)[0m !! tune_history (R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=2.9)-2026-11-08T23:46:01): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = 0.5598 < ln 10 at N = 24.83817468 (generation 0); the generations below ln 10 carry 0.9999 of K
+[36m(compute_scalar_history pid=56629)[0m !! tune_history (R-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.2)-2026-11-08T23:46:01): dissipation mode: the reflections are expected to be nearly elastic in this regime: the test-field ratio R = 10^-13.586 < 1 at the first impact (phi_t = 9.79e-15 M_P)[32m [repeated 2x across cluster][0m
+[36m(compute_scalar_history pid=56634)[0m ** STATUS UPDATE #1 - Sun 08 Nov 2026 23:51:01 - R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01
+[36m(compute_scalar_history pid=56634)[0m |    running for 5m 0.000224s (5m 0.000224s since last notification) | reflections = 4068 | current N = 43.808 | current step cap dN=1.9493e-08
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    current T_J = 0.0022683 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=56634)[0m |    current log(T_J/GeV) = -26.812 | target log(T_J/GeV) = -29.08 | 94.183% complete measured in T_J
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    4068 elastic reflection events, 4068 since last update: N = [17.668, 20.1, 25.18, 26.023, 33.206, 33.904, 34.312, 34.603, 34.828, 35.013, ..., 43.803, 43.804, 43.804, 43.805, 43.805, 43.806, 43.806, 43.806, 43.807, 43.807]
+[36m(compute_scalar_history pid=56634)[0m |    4652907 RHS evaluations, mean 1.332e-05s per evaluation, min RHS time = 1.0708e-05s, max RHS time = 0.013165s
+[36m(compute_scalar_history pid=56634)[0m |    current state: phi_E = 3.6274e+08 GeV, pi_E = -0.00077515 Mp, f_m = 352.8, log(rho_rad/GeV^4) = -107.14, T_J = 0.0022683 eV
+[36m(compute_scalar_history pid=56634)[0m !! tune_history (R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01): dissipation mode: the reflections are expected to be nearly elastic in this regime: the test-field ratio R = 10^-1.586 < 1 at the first impact (phi_t = 9.79e-18 M_P)
+[36m(compute_scalar_history pid=56634)[0m !! tune_history (R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.7028 < ln 10 at N = 17.66794209 (generation 0); the generations below ln 10 carry 1 of K
+[36m(compute_scalar_history pid=56634)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=0 kind=seed H/H0-1=-7.620e-05 phi_ref/phi_min-1=-1.756e-07 norm=-276.630728842 phi_ref=4.2954494342e-08 wall=445.7
+[36m(compute_scalar_history pid=56629)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=1 kind=plain H/H0-1=-6.000e-05 phi_ref/phi_min-1=+3.994e-05 norm=-276.630816278 phi_ref=1.3583359849e-06 wall=239.9
+[36m(compute_scalar_history pid=56629)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=2 kind=secant H/H0-1=-3.978e-05 phi_ref/phi_min-1=+4.301e-08 norm=-276.630761545 phi_ref=1.3583189440e-06 wall=237.3
+[36m(compute_scalar_history pid=56634)[0m ** STATUS UPDATE #1 - Sun 08 Nov 2026 23:58:27 - R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01
+[36m(compute_scalar_history pid=56634)[0m |    running for 5m 6.18e-05s (5m 6.18e-05s since last notification) | reflections = 4395 | current N = 43.981 | current step cap dN=1.8585e-05
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    current T_J = 0.0019082 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=56634)[0m |    current log(T_J/GeV) = -26.985 | target log(T_J/GeV) = -29.08 | 94.626% complete measured in T_J
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    4395 elastic reflection events, 4395 since last update: N = [17.668, 20.1, 25.18, 26.023, 33.206, 33.904, 34.312, 34.603, 34.828, 35.013, ..., 43.977, 43.977, 43.978, 43.978, 43.979, 43.979, 43.979, 43.98, 43.98, 43.981]
+[36m(compute_scalar_history pid=56634)[0m |    4883256 RHS evaluations, mean 1.2772e-05s per evaluation, min RHS time = 1.0417e-05s, max RHS time = 0.11282s
+[36m(compute_scalar_history pid=56634)[0m |    current state: phi_E = 5.7669e-09 Mp, pi_E = 0.00074885 Mp, f_m = 419.39, log(rho_rad/GeV^4) = -107.83, T_J = 0.0019082 eV
+[36m(compute_scalar_history pid=56634)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=1 kind=plain H/H0-1=-1.781e-06 phi_ref/phi_min-1=-1.106e-04 norm=-276.630507581 phi_ref=4.2954501885e-08 wall=427.7
+[36m(compute_scalar_history pid=56629)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=3 kind=secant H/H0-1=+1.962e-05 phi_ref/phi_min-1=-8.206e-08 norm=-276.630679211 phi_ref=1.3583746741e-06 wall=247.7
+[36m(compute_scalar_history pid=56634)[0m ** STATUS UPDATE #1 - Mon 09 Nov 2026 00:05:34 - R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01
+[36m(compute_scalar_history pid=56634)[0m |    running for 5m 0.000137s (5m 0.000137s since last notification) | reflections = 4295 | current N = 43.909 | current step cap dN=2.6306e-07
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    current T_J = 0.0020496 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=56634)[0m |    current log(T_J/GeV) = -26.913 | target log(T_J/GeV) = -29.08 | 94.443% complete measured in T_J
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    4295 elastic reflection events, 4295 since last update: N = [17.668, 20.1, 25.18, 26.023, 33.206, 33.904, 34.312, 34.603, 34.828, 35.013, ..., 43.905, 43.905, 43.906, 43.906, 43.907, 43.907, 43.907, 43.908, 43.908, 43.909]
+[36m(compute_scalar_history pid=56634)[0m |    4820702 RHS evaluations, mean 1.2922e-05s per evaluation, min RHS time = 1.0542e-05s, max RHS time = 0.049662s
+[36m(compute_scalar_history pid=56634)[0m |    current state: phi_E = 2.0178e-09 Mp, pi_E = -0.00077918 Mp, f_m = 390.44, log(rho_rad/GeV^4) = -107.55, T_J = 0.0020496 eV
+[36m(compute_scalar_history pid=56629)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=4 kind=secant H/H0-1=+1.410e-05 phi_ref/phi_min-1=-5.750e-08 norm=-276.63070642 phi_ref=1.3583563124e-06 wall=242.7
+[36m(compute_scalar_history pid=56634)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=2 kind=secant H/H0-1=+3.983e-05 phi_ref/phi_min-1=+5.812e-08 norm=-276.630502283 phi_ref=4.2959369991e-08 wall=438.2
+[36m(compute_scalar_history pid=56629)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=5 kind=secant H/H0-1=+1.805e-05 phi_ref/phi_min-1=+2.077e-07 norm=-276.630775927 phi_ref=1.3583093985e-06 wall=243.1
+[36m(compute_scalar_history pid=56634)[0m ** STATUS UPDATE #1 - Mon 09 Nov 2026 00:12:53 - R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01
+[36m(compute_scalar_history pid=56634)[0m |    running for 5m 3.19e-05s (5m 3.19e-05s since last notification) | reflections = 4291 | current N = 43.922 | current step cap dN=3.095e-06
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    current T_J = 0.0020234 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=56634)[0m |    current log(T_J/GeV) = -26.926 | target log(T_J/GeV) = -29.08 | 94.476% complete measured in T_J
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    4291 elastic reflection events, 4291 since last update: N = [17.668, 20.1, 25.18, 26.023, 33.206, 33.904, 34.312, 34.603, 34.828, 35.013, ..., 43.918, 43.918, 43.919, 43.919, 43.919, 43.92, 43.92, 43.921, 43.921, 43.922]
+[36m(compute_scalar_history pid=56634)[0m |    4813655 RHS evaluations, mean 1.2902e-05s per evaluation, min RHS time = 1.05e-05s, max RHS time = 0.020127s
+[36m(compute_scalar_history pid=56634)[0m |    current state: phi_E = 2.1095e-08 Mp, pi_E = -0.00069404 Mp, f_m = 395.5, log(rho_rad/GeV^4) = -107.6, T_J = 0.0020234 eV
+[36m(compute_scalar_history pid=56629)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=6 kind=secant H/H0-1=+1.241e-04 phi_ref/phi_min-1=+1.842e-07 norm=-276.630459255 phi_ref=1.3585244955e-06 wall=242.3
+[36m(compute_scalar_history pid=56634)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=3 kind=secant H/H0-1=+7.468e-05 phi_ref/phi_min-1=+1.008e-08 norm=-276.630577666 phi_ref=4.2957748635e-08 wall=436.6
+[36m(compute_scalar_history pid=56629)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=7 kind=plain H/H0-1=-4.286e-07 phi_ref/phi_min-1=+1.802e-04 norm=-276.6308196 phi_ref=1.3585242453e-06 wall=238.9
+[36m(compute_scalar_history pid=56634)[0m ** STATUS UPDATE #1 - Mon 09 Nov 2026 00:20:09 - R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01
+[36m(compute_scalar_history pid=56634)[0m |    running for 5m 6.29e-05s (5m 6.29e-05s since last notification) | reflections = 4354 | current N = 43.94 | current step cap dN=1.1872e-06
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    current T_J = 0.001988 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=56634)[0m |    current log(T_J/GeV) = -26.944 | target log(T_J/GeV) = -29.08 | 94.521% complete measured in T_J
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    4354 elastic reflection events, 4354 since last update: N = [17.668, 20.1, 25.18, 26.023, 33.206, 33.904, 34.312, 34.603, 34.828, 35.013, ..., 43.935, 43.936, 43.936, 43.937, 43.937, 43.938, 43.938, 43.938, 43.939, 43.939]
+[36m(compute_scalar_history pid=56634)[0m |    4861643 RHS evaluations, mean 1.2798e-05s per evaluation, min RHS time = 1.05e-05s, max RHS time = 0.0029326s
+[36m(compute_scalar_history pid=56634)[0m |    current state: phi_E = 8.6687e-09 Mp, pi_E = -0.0007423 Mp, f_m = 402.55, log(rho_rad/GeV^4) = -107.67, T_J = 0.001988 eV
+[36m(compute_scalar_history pid=56629)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=8 kind=secant H/H0-1=-3.735e-05 phi_ref/phi_min-1=-2.772e-08 norm=-276.630818359 phi_ref=1.3582802255e-06 wall=235.6
+[36m(compute_scalar_history pid=56634)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=4 kind=secant H/H0-1=+1.482e-04 phi_ref/phi_min-1=-2.618e-08 norm=-276.630416112 phi_ref=4.2961218516e-08 wall=433.3
+[36m(compute_scalar_history pid=56629)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=9 kind=secant H/H0-1=-1.676e-05 phi_ref/phi_min-1=-5.605e-08 norm=-276.630735021 phi_ref=1.3583368846e-06 wall=232.9
+[36m(compute_scalar_history pid=56634)[0m ** STATUS UPDATE #1 - Mon 09 Nov 2026 00:27:23 - R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01
+[36m(compute_scalar_history pid=56634)[0m |    running for 5m 6.89e-05s (5m 6.89e-05s since last notification) | reflections = 4281 | current N = 43.887 | current step cap dN=0.1
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    current T_J = 0.0020953 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=56634)[0m |    current log(T_J/GeV) = -26.891 | target log(T_J/GeV) = -29.08 | 94.386% complete measured in T_J
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    4281 elastic reflection events, 4281 since last update: N = [17.668, 20.1, 25.18, 26.023, 33.206, 33.904, 34.312, 34.603, 34.828, 35.013, ..., 43.883, 43.884, 43.884, 43.885, 43.885, 43.885, 43.886, 43.886, 43.887, 43.887]
+[36m(compute_scalar_history pid=56634)[0m |    4815376 RHS evaluations, mean 1.2918e-05s per evaluation, min RHS time = 1.0667e-05s, max RHS time = 0.015336s
+[36m(compute_scalar_history pid=56634)[0m |    current state: phi_E = 2.9348e+08 GeV, pi_E = 0.0006922 Mp, f_m = 381.92, log(rho_rad/GeV^4) = -107.46, T_J = 0.0020953 eV
+[36m(compute_scalar_history pid=56634)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=5 kind=secant H/H0-1=-4.480e-05 phi_ref/phi_min-1=-4.017e-08 norm=-276.630741653 phi_ref=4.2954224469e-08 wall=436.4
+[36m(compute_scalar_history pid=56629)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=10 kind=secant H/H0-1=+5.710e-05 phi_ref/phi_min-1=+8.746e-08 norm=-276.630667256 phi_ref=1.3583830640e-06 wall=231.5
+[36m(compute_scalar_history pid=56629)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=11 kind=plain H/H0-1=-1.964e-05 phi_ref/phi_min-1=+8.287e-05 norm=-276.630833043 phi_ref=1.3583829452e-06 wall=232.6
+[36m(compute_scalar_history pid=56634)[0m ** STATUS UPDATE #1 - Mon 09 Nov 2026 00:34:39 - R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01
+[36m(compute_scalar_history pid=56634)[0m |    running for 5m 3.81e-05s (5m 3.81e-05s since last notification) | reflections = 4344 | current N = 43.911 | current step cap dN=1.349e-06
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    current T_J = 0.0020466 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=56634)[0m |    current log(T_J/GeV) = -26.915 | target log(T_J/GeV) = -29.08 | 94.447% complete measured in T_J
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    4344 elastic reflection events, 4344 since last update: N = [17.668, 20.1, 25.18, 26.023, 33.206, 33.904, 34.312, 34.603, 34.828, 35.013, ..., 43.906, 43.907, 43.907, 43.908, 43.908, 43.909, 43.909, 43.909, 43.91, 43.91]
+[36m(compute_scalar_history pid=56634)[0m |    4863406 RHS evaluations, mean 1.2811e-05s per evaluation, min RHS time = 1.0458e-05s, max RHS time = 0.004824s
+[36m(compute_scalar_history pid=56634)[0m |    current state: phi_E = 9.7882e-09 Mp, pi_E = -0.00073777 Mp, f_m = 391.03, log(rho_rad/GeV^4) = -107.55, T_J = 0.0020466 eV
+[36m(compute_scalar_history pid=56634)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=6 kind=secant H/H0-1=+2.966e-05 phi_ref/phi_min-1=+1.169e-08 norm=-276.630666122 phi_ref=4.2955848799e-08 wall=440.4
+[36m(compute_scalar_history pid=56629)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=12 kind=secant H/H0-1=-3.893e-05 phi_ref/phi_min-1=-1.882e-08 norm=-276.630790605 phi_ref=1.3582991802e-06 wall=236.7
+[36m(compute_scalar_history pid=56629)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=13 kind=secant H/H0-1=-1.476e-05 phi_ref/phi_min-1=+1.595e-08 norm=-276.630688774 phi_ref=1.3583683632e-06 wall=240.6
+[36m(compute_scalar_history pid=56634)[0m ** STATUS UPDATE #1 - Mon 09 Nov 2026 00:41:59 - R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01
+[36m(compute_scalar_history pid=56634)[0m |    running for 5m 8.82e-05s (5m 8.82e-05s since last notification) | reflections = 4169 | current N = 43.853 | current step cap dN=5.8101e-07
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    current T_J = 0.0021675 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=56634)[0m |    current log(T_J/GeV) = -26.857 | target log(T_J/GeV) = -29.08 | 94.299% complete measured in T_J
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    4169 elastic reflection events, 4169 since last update: N = [17.668, 20.1, 25.18, 26.023, 33.206, 33.904, 34.312, 34.603, 34.828, 35.013, ..., 43.849, 43.849, 43.85, 43.85, 43.851, 43.851, 43.851, 43.852, 43.852, 43.853]
+[36m(compute_scalar_history pid=56634)[0m |    4728812 RHS evaluations, mean 1.301e-05s per evaluation, min RHS time = 1.0667e-05s, max RHS time = 0.10933s
+[36m(compute_scalar_history pid=56634)[0m |    current state: phi_E = 4.5463e-09 Mp, pi_E = -0.0007951 Mp, f_m = 369.2, log(rho_rad/GeV^4) = -107.32, T_J = 0.0021675 eV
+[36m(compute_scalar_history pid=56634)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=7 kind=secant H/H0-1=-5.758e-05 phi_ref/phi_min-1=-8.494e-09 norm=-276.630696215 phi_ref=4.2955202017e-08 wall=438.8
+[36m(compute_scalar_history pid=56629)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=14 kind=secant H/H0-1=+5.697e-05 phi_ref/phi_min-1=+3.328e-08 norm=-276.630626562 phi_ref=1.3584105789e-06 wall=230.9
+[36m(compute_scalar_history pid=56634)[0m ** STATUS UPDATE #1 - Mon 09 Nov 2026 00:49:18 - R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01
+[36m(compute_scalar_history pid=56634)[0m |    running for 5m 7.2e-05s (5m 7.2e-05s since last notification) | reflections = 4266 | current N = 43.873 | current step cap dN=1.7144e-06
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    current T_J = 0.0021245 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=56634)[0m |    current log(T_J/GeV) = -26.878 | target log(T_J/GeV) = -29.08 | 94.351% complete measured in T_J
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    4266 elastic reflection events, 4266 since last update: N = [17.668, 20.1, 25.18, 26.023, 33.206, 33.904, 34.312, 34.603, 34.828, 35.013, ..., 43.869, 43.869, 43.87, 43.87, 43.871, 43.871, 43.872, 43.872, 43.873, 43.873]
+[36m(compute_scalar_history pid=56634)[0m |    4808401 RHS evaluations, mean 1.3001e-05s per evaluation, min RHS time = 1.0458e-05s, max RHS time = 0.33619s
+[36m(compute_scalar_history pid=56634)[0m |    current state: phi_E = 1.1394e-08 Mp, pi_E = -0.00074486 Mp, f_m = 376.69, log(rho_rad/GeV^4) = -107.4, T_J = 0.0021245 eV
+[36m(compute_scalar_history pid=56629)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=15 kind=plain H/H0-1=-5.053e-05 phi_ref/phi_min-1=+8.266e-05 norm=-276.630791963 phi_ref=1.3584105337e-06 wall=236.0
+[36m(compute_scalar_history pid=56634)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=8 kind=secant H/H0-1=-5.698e-05 phi_ref/phi_min-1=-1.222e-08 norm=-276.630676351 phi_ref=4.2955628734e-08 wall=444.7
+[36m(compute_scalar_history pid=56629)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=16 kind=secant H/H0-1=+4.255e-06 phi_ref/phi_min-1=+2.642e-08 norm=-276.630714208 phi_ref=1.3583510329e-06 wall=238.9
+[36m(compute_scalar_history pid=56634)[0m ** STATUS UPDATE #1 - Mon 09 Nov 2026 00:56:43 - R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01
+[36m(compute_scalar_history pid=56634)[0m |    running for 5m 0.000187s (5m 0.000187s since last notification) | reflections = 4323 | current N = 43.92 | current step cap dN=6.2416e-08
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    current T_J = 0.0020284 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=56634)[0m |    current log(T_J/GeV) = -26.924 | target log(T_J/GeV) = -29.08 | 94.469% complete measured in T_J
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    4323 elastic reflection events, 4323 since last update: N = [17.668, 20.1, 25.18, 26.023, 33.206, 33.904, 34.312, 34.603, 34.828, 35.013, ..., 43.915, 43.916, 43.916, 43.917, 43.917, 43.917, 43.918, 43.918, 43.919, 43.919]
+[36m(compute_scalar_history pid=56634)[0m |    4842134 RHS evaluations, mean 1.2829e-05s per evaluation, min RHS time = 1.0584e-05s, max RHS time = 0.055138s
+[36m(compute_scalar_history pid=56634)[0m |    current state: phi_E = 1.1364e+09 GeV, pi_E = -0.000759 Mp, f_m = 394.53, log(rho_rad/GeV^4) = -107.59, T_J = 0.0020284 eV
+[36m(compute_scalar_history pid=56634)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=9 kind=secant H/H0-1=+6.837e-04 phi_ref/phi_min-1=+8.200e-08 norm=-276.628796368 phi_ref=4.2996030364e-08 wall=435.9
+[36m(compute_scalar_history pid=56634)[0m ** STATUS UPDATE #1 - Mon 09 Nov 2026 01:03:59 - R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01
+[36m(compute_scalar_history pid=56634)[0m |    running for 5m 4.91e-05s (5m 4.91e-05s since last notification) | reflections = 4455 | current N = 43.967 | current step cap dN=7.8729e-06
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    current T_J = 0.0019341 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=56634)[0m |    current log(T_J/GeV) = -26.971 | target log(T_J/GeV) = -29.08 | 94.592% complete measured in T_J
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    4455 elastic reflection events, 4455 since last update: N = [17.668, 20.1, 25.18, 26.023, 33.206, 33.904, 34.312, 34.603, 34.828, 35.013, ..., 43.963, 43.963, 43.964, 43.964, 43.965, 43.965, 43.966, 43.966, 43.966, 43.967]
+[36m(compute_scalar_history pid=56634)[0m |    4938389 RHS evaluations, mean 1.2614e-05s per evaluation, min RHS time = 1.0459e-05s, max RHS time = 0.0034163s
+[36m(compute_scalar_history pid=56634)[0m |    current state: phi_E = 4.1458e-08 Mp, pi_E = -0.00053927 Mp, f_m = 413.76, log(rho_rad/GeV^4) = -107.78, T_J = 0.0019341 eV
+[36m(compute_scalar_history pid=56634)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=10 kind=plain H/H0-1=-6.221e-06 phi_ref/phi_min-1=+9.924e-04 norm=-276.630780178 phi_ref=4.2996026838e-08 wall=429.5
+[36m(compute_scalar_history pid=56634)[0m ** STATUS UPDATE #1 - Mon 09 Nov 2026 01:11:08 - R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01
+[36m(compute_scalar_history pid=56634)[0m |    running for 5m 0.000269s (5m 0.000269s since last notification) | reflections = 4466 | current N = 43.961 | current step cap dN=3.0821e-08
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    current T_J = 0.0019453 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=56634)[0m |    current log(T_J/GeV) = -26.966 | target log(T_J/GeV) = -29.08 | 94.577% complete measured in T_J
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    4466 elastic reflection events, 4466 since last update: N = [17.668, 20.1, 25.18, 26.023, 33.206, 33.904, 34.312, 34.603, 34.828, 35.013, ..., 43.957, 43.958, 43.958, 43.958, 43.959, 43.959, 43.96, 43.96, 43.961, 43.961]
+[36m(compute_scalar_history pid=56634)[0m |    4950315 RHS evaluations, mean 1.2576e-05s per evaluation, min RHS time = 1.05e-05s, max RHS time = 0.0020813s
+[36m(compute_scalar_history pid=56634)[0m |    current state: phi_E = 5.085e+08 GeV, pi_E = -0.00068689 Mp, f_m = 411.37, log(rho_rad/GeV^4) = -107.76, T_J = 0.0019453 eV
+[36m(compute_scalar_history pid=56634)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=11 kind=secant H/H0-1=+4.216e-05 phi_ref/phi_min-1=-2.144e-08 norm=-276.630762278 phi_ref=4.2953782445e-08 wall=430.8
+[36m(compute_scalar_history pid=56634)[0m ** STATUS UPDATE #1 - Mon 09 Nov 2026 01:18:19 - R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01
+[36m(compute_scalar_history pid=56634)[0m |    running for 5m 0.000316s (5m 0.000316s since last notification) | reflections = 4324 | current N = 43.914 | current step cap dN=1.2106e-06
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    current T_J = 0.0020392 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=56634)[0m |    current log(T_J/GeV) = -26.918 | target log(T_J/GeV) = -29.08 | 94.456% complete measured in T_J
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    4324 elastic reflection events, 4324 since last update: N = [17.668, 20.1, 25.18, 26.023, 33.206, 33.904, 34.312, 34.603, 34.828, 35.013, ..., 43.91, 43.91, 43.911, 43.911, 43.912, 43.912, 43.913, 43.913, 43.913, 43.914]
+[36m(compute_scalar_history pid=56634)[0m |    4845389 RHS evaluations, mean 1.2823e-05s per evaluation, min RHS time = 1.05e-05s, max RHS time = 0.10953s
+[36m(compute_scalar_history pid=56634)[0m |    current state: phi_E = 8.8869e-09 Mp, pi_E = -0.00074628 Mp, f_m = 392.43, log(rho_rad/GeV^4) = -107.57, T_J = 0.0020392 eV
+[36m(compute_scalar_history pid=56634)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=12 kind=secant H/H0-1=-1.158e-04 phi_ref/phi_min-1=-3.648e-08 norm=-276.630891268 phi_ref=4.2951011615e-08 wall=433.2
+[36m(compute_scalar_history pid=56634)[0m ** STATUS UPDATE #1 - Mon 09 Nov 2026 01:25:32 - R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01
+[36m(compute_scalar_history pid=56634)[0m |    running for 5m 0.000182s (5m 0.000182s since last notification) | reflections = 4238 | current N = 43.878 | current step cap dN=5.7058e-07
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    current T_J = 0.0021149 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=56634)[0m |    current log(T_J/GeV) = -26.882 | target log(T_J/GeV) = -29.08 | 94.362% complete measured in T_J
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    4238 elastic reflection events, 4238 since last update: N = [17.668, 20.1, 25.18, 26.023, 33.206, 33.904, 34.312, 34.603, 34.828, 35.013, ..., 43.873, 43.874, 43.874, 43.875, 43.875, 43.876, 43.876, 43.877, 43.877, 43.877]
+[36m(compute_scalar_history pid=56634)[0m |    4781702 RHS evaluations, mean 1.2977e-05s per evaluation, min RHS time = 1.05e-05s, max RHS time = 0.034897s
+[36m(compute_scalar_history pid=56634)[0m |    current state: phi_E = 4.3919e-09 Mp, pi_E = -0.00078213 Mp, f_m = 378.4, log(rho_rad/GeV^4) = -107.42, T_J = 0.0021149 eV
+[36m(compute_scalar_history pid=56634)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=13 kind=plain H/H0-1=+4.661e-05 phi_ref/phi_min-1=-1.681e-04 norm=-276.630555101 phi_ref=4.2951013182e-08 wall=435.1
+[36m(compute_scalar_history pid=56634)[0m ** STATUS UPDATE #1 - Mon 09 Nov 2026 01:32:47 - R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01
+[36m(compute_scalar_history pid=56634)[0m |    running for 5m 0.000342s (5m 0.000342s since last notification) | reflections = 4384 | current N = 43.95 | current step cap dN=1.5083e-06
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    current T_J = 0.0019684 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=56634)[0m |    current log(T_J/GeV) = -26.954 | target log(T_J/GeV) = -29.08 | 94.546% complete measured in T_J
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    4384 elastic reflection events, 4384 since last update: N = [17.668, 20.1, 25.18, 26.023, 33.206, 33.904, 34.312, 34.603, 34.828, 35.013, ..., 43.945, 43.946, 43.946, 43.947, 43.947, 43.948, 43.948, 43.948, 43.949, 43.949]
+[36m(compute_scalar_history pid=56634)[0m |    4884239 RHS evaluations, mean 1.275e-05s per evaluation, min RHS time = 1.0459e-05s, max RHS time = 0.012411s
+[36m(compute_scalar_history pid=56634)[0m |    current state: phi_E = 1.0778e-08 Mp, pi_E = -0.00072665 Mp, f_m = 406.55, log(rho_rad/GeV^4) = -107.71, T_J = 0.0019684 eV
+[36m(compute_scalar_history pid=56634)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=14 kind=secant H/H0-1=-1.633e-05 phi_ref/phi_min-1=+8.189e-09 norm=-276.630651598 phi_ref=4.2956160722e-08 wall=429.0
+[36m(compute_scalar_history pid=56634)[0m ** STATUS UPDATE #1 - Mon 09 Nov 2026 01:39:56 - R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01
+[36m(compute_scalar_history pid=56634)[0m |    running for 5m 0.000347s (5m 0.000347s since last notification) | reflections = 4456 | current N = 43.984 | current step cap dN=3.4451e-08
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    current T_J = 0.0019016 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=56634)[0m |    current log(T_J/GeV) = -26.988 | target log(T_J/GeV) = -29.08 | 94.635% complete measured in T_J
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    4456 elastic reflection events, 4456 since last update: N = [17.668, 20.1, 25.18, 26.023, 33.206, 33.904, 34.312, 34.603, 34.828, 35.013, ..., 43.98, 43.98, 43.981, 43.981, 43.982, 43.982, 43.983, 43.983, 43.983, 43.984]
+[36m(compute_scalar_history pid=56634)[0m |    4933618 RHS evaluations, mean 1.2634e-05s per evaluation, min RHS time = 1.05e-05s, max RHS time = 0.0020324s
+[36m(compute_scalar_history pid=56634)[0m |    current state: phi_E = 5.7421e+08 GeV, pi_E = -0.00069402 Mp, f_m = 420.84, log(rho_rad/GeV^4) = -107.85, T_J = 0.0019016 eV
+[36m(compute_scalar_history pid=56634)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=15 kind=secant H/H0-1=+6.055e-05 phi_ref/phi_min-1=-2.836e-08 norm=-276.630619466 phi_ref=4.2956850520e-08 wall=426.4
+[36m(compute_scalar_history pid=56634)[0m ** STATUS UPDATE #1 - Mon 09 Nov 2026 01:47:03 - R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01
+[36m(compute_scalar_history pid=56634)[0m |    running for 5m 7.72e-05s (5m 7.72e-05s since last notification) | reflections = 4440 | current N = 43.938 | current step cap dN=4.3952e-06
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    current T_J = 0.0019906 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=56634)[0m |    current log(T_J/GeV) = -26.943 | target log(T_J/GeV) = -29.08 | 94.518% complete measured in T_J
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    4440 elastic reflection events, 4440 since last update: N = [17.668, 20.1, 25.18, 26.023, 33.206, 33.904, 34.312, 34.603, 34.828, 35.013, ..., 43.934, 43.935, 43.935, 43.936, 43.936, 43.936, 43.937, 43.937, 43.938, 43.938]
+[36m(compute_scalar_history pid=56634)[0m |    4936812 RHS evaluations, mean 1.2634e-05s per evaluation, min RHS time = 1.05e-05s, max RHS time = 0.012666s
+[36m(compute_scalar_history pid=56634)[0m |    current state: phi_E = 2.7112e-08 Mp, pi_E = -0.00062902 Mp, f_m = 402.02, log(rho_rad/GeV^4) = -107.66, T_J = 0.0019906 eV
+[36m(compute_scalar_history pid=56634)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=16 kind=plain H/H0-1=-8.677e-05 phi_ref/phi_min-1=+8.793e-05 norm=-276.630795279 phi_ref=4.2956851739e-08 wall=431.1
+[36m(compute_scalar_history pid=56634)[0m ** STATUS UPDATE #1 - Mon 09 Nov 2026 01:54:14 - R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01
+[36m(compute_scalar_history pid=56634)[0m |    running for 5m 8.96e-05s (5m 8.96e-05s since last notification) | reflections = 4365 | current N = 43.927 | current step cap dN=6.6836e-06
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    current T_J = 0.002014 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=56634)[0m |    current log(T_J/GeV) = -26.931 | target log(T_J/GeV) = -29.08 | 94.488% complete measured in T_J
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    4365 elastic reflection events, 4365 since last update: N = [17.668, 20.1, 25.18, 26.023, 33.206, 33.904, 34.312, 34.603, 34.828, 35.013, ..., 43.922, 43.923, 43.923, 43.924, 43.924, 43.925, 43.925, 43.926, 43.926, 43.926]
+[36m(compute_scalar_history pid=56634)[0m |    4875739 RHS evaluations, mean 1.2774e-05s per evaluation, min RHS time = 1.0458e-05s, max RHS time = 0.0075308s
+[36m(compute_scalar_history pid=56634)[0m |    current state: phi_E = 3.804e-08 Mp, pi_E = -0.00058184 Mp, f_m = 397.34, log(rho_rad/GeV^4) = -107.62, T_J = 0.002014 eV
+[36m(compute_scalar_history pid=56634)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=17 kind=secant H/H0-1=-5.980e-05 phi_ref/phi_min-1=+4.272e-09 norm=-276.630691732 phi_ref=4.2955299377e-08 wall=433.2
+[36m(compute_scalar_history pid=56634)[0m ** STATUS UPDATE #1 - Mon 09 Nov 2026 02:01:27 - R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01
+[36m(compute_scalar_history pid=56634)[0m |    running for 5m 2.6e-05s (5m 2.6e-05s since last notification) | reflections = 4297 | current N = 43.904 | current step cap dN=4.9495e-08
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    current T_J = 0.0020598 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=56634)[0m |    current log(T_J/GeV) = -26.908 | target log(T_J/GeV) = -29.08 | 94.430% complete measured in T_J
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    4297 elastic reflection events, 4297 since last update: N = [17.668, 20.1, 25.18, 26.023, 33.206, 33.904, 34.312, 34.603, 34.828, 35.013, ..., 43.9, 43.9, 43.901, 43.901, 43.902, 43.902, 43.903, 43.903, 43.903, 43.904]
+[36m(compute_scalar_history pid=56634)[0m |    4824795 RHS evaluations, mean 1.2963e-05s per evaluation, min RHS time = 1.0541e-05s, max RHS time = 0.27178s
+[36m(compute_scalar_history pid=56634)[0m |    current state: phi_E = 8.5565e+08 GeV, pi_E = -0.00075649 Mp, f_m = 388.52, log(rho_rad/GeV^4) = -107.53, T_J = 0.0020598 eV
+[36m(compute_scalar_history pid=56634)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=18 kind=secant H/H0-1=+1.179e-04 phi_ref/phi_min-1=+2.052e-08 norm=-276.630546923 phi_ref=4.2958409659e-08 wall=436.2
+[36m(compute_scalar_history pid=56634)[0m ** STATUS UPDATE #1 - Mon 09 Nov 2026 02:08:43 - R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01
+[36m(compute_scalar_history pid=56634)[0m |    running for 5m 8.39e-05s (5m 8.39e-05s since last notification) | reflections = 4479 | current N = 43.982 | current step cap dN=6.8508e-06
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    current T_J = 0.0019065 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=56634)[0m |    current log(T_J/GeV) = -26.986 | target log(T_J/GeV) = -29.08 | 94.628% complete measured in T_J
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    4479 elastic reflection events, 4479 since last update: N = [17.668, 20.1, 25.18, 26.023, 33.206, 33.904, 34.312, 34.603, 34.828, 35.013, ..., 43.977, 43.978, 43.978, 43.979, 43.979, 43.98, 43.98, 43.98, 43.981, 43.981]
+[36m(compute_scalar_history pid=56634)[0m |    4952972 RHS evaluations, mean 1.2586e-05s per evaluation, min RHS time = 1.05e-05s, max RHS time = 0.0041172s
+[36m(compute_scalar_history pid=56634)[0m |    current state: phi_E = 3.7503e-08 Mp, pi_E = -0.00055986 Mp, f_m = 419.75, log(rho_rad/GeV^4) = -107.84, T_J = 0.0019065 eV
+[36m(compute_scalar_history pid=56634)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=19 kind=secant H/H0-1=-3.957e-05 phi_ref/phi_min-1=-6.765e-09 norm=-276.630642985 phi_ref=4.2956345978e-08 wall=427.4
+[36m(compute_scalar_history pid=56634)[0m ** STATUS UPDATE #1 - Mon 09 Nov 2026 02:15:51 - R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01
+[36m(compute_scalar_history pid=56634)[0m |    running for 5m 0.000248s (5m 0.000248s since last notification) | reflections = 4391 | current N = 43.977 | current step cap dN=4.0229e-07
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    current T_J = 0.0019159 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=56634)[0m |    current log(T_J/GeV) = -26.981 | target log(T_J/GeV) = -29.08 | 94.616% complete measured in T_J
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    4391 elastic reflection events, 4391 since last update: N = [17.668, 20.1, 25.18, 26.023, 33.206, 33.904, 34.312, 34.603, 34.828, 35.013, ..., 43.972, 43.973, 43.973, 43.974, 43.974, 43.975, 43.975, 43.975, 43.976, 43.976]
+[36m(compute_scalar_history pid=56634)[0m |    4880756 RHS evaluations, mean 1.2744e-05s per evaluation, min RHS time = 1.05e-05s, max RHS time = 0.059372s
+[36m(compute_scalar_history pid=56634)[0m |    current state: phi_E = 3.0089e-09 Mp, pi_E = -0.00075985 Mp, f_m = 417.69, log(rho_rad/GeV^4) = -107.82, T_J = 0.0019159 eV
+[36m(compute_scalar_history pid=56634)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=20 kind=secant H/H0-1=+1.118e-04 phi_ref/phi_min-1=-2.824e-09 norm=-276.630618841 phi_ref=4.2956864655e-08 wall=425.5
+[36m(compute_scalar_history pid=56634)[0m ** STATUS UPDATE #1 - Mon 09 Nov 2026 02:22:56 - R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01
+[36m(compute_scalar_history pid=56634)[0m |    running for 5m 0.000141s (5m 0.000141s since last notification) | reflections = 4453 | current N = 43.959 | current step cap dN=6.7361e-07
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    current T_J = 0.0019502 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=56634)[0m |    current log(T_J/GeV) = -26.963 | target log(T_J/GeV) = -29.08 | 94.570% complete measured in T_J
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    4453 elastic reflection events, 4453 since last update: N = [17.668, 20.1, 25.18, 26.023, 33.206, 33.904, 34.312, 34.603, 34.828, 35.013, ..., 43.955, 43.955, 43.956, 43.956, 43.956, 43.957, 43.957, 43.958, 43.958, 43.959]
+[36m(compute_scalar_history pid=56634)[0m |    4940491 RHS evaluations, mean 1.2586e-05s per evaluation, min RHS time = 1.0459e-05s, max RHS time = 0.0029639s
+[36m(compute_scalar_history pid=56634)[0m |    current state: phi_E = 4.9081e-09 Mp, pi_E = -0.00074043 Mp, f_m = 410.35, log(rho_rad/GeV^4) = -107.75, T_J = 0.0019502 eV
+[36m(compute_scalar_history pid=56634)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=21 kind=plain H/H0-1=-8.378e-06 phi_ref/phi_min-1=+1.624e-04 norm=-276.630943551 phi_ref=4.2956864776e-08 wall=433.0
+[36m(compute_scalar_history pid=56634)[0m ** STATUS UPDATE #1 - Mon 09 Nov 2026 02:30:09 - R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01
+[36m(compute_scalar_history pid=56634)[0m |    running for 5m 4.2e-05s (5m 4.2e-05s since last notification) | reflections = 4413 | current N = 43.962 | current step cap dN=1.6467e-06
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    current T_J = 0.0019439 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=56634)[0m |    current log(T_J/GeV) = -26.966 | target log(T_J/GeV) = -29.08 | 94.579% complete measured in T_J
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    4413 elastic reflection events, 4413 since last update: N = [17.668, 20.1, 25.18, 26.023, 33.206, 33.904, 34.312, 34.603, 34.828, 35.013, ..., 43.958, 43.958, 43.959, 43.959, 43.96, 43.96, 43.96, 43.961, 43.961, 43.962]
+[36m(compute_scalar_history pid=56634)[0m |    4905045 RHS evaluations, mean 1.268e-05s per evaluation, min RHS time = 1.05e-05s, max RHS time = 0.0032722s
+[36m(compute_scalar_history pid=56634)[0m |    current state: phi_E = 1.1614e-08 Mp, pi_E = -0.0007173 Mp, f_m = 411.68, log(rho_rad/GeV^4) = -107.76, T_J = 0.0019439 eV
+[36m(compute_scalar_history pid=56634)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=22 kind=secant H/H0-1=-1.426e-04 phi_ref/phi_min-1=+7.337e-09 norm=-276.63092092 phi_ref=4.2950377248e-08 wall=427.4
+[36m(compute_scalar_history pid=56634)[0m ** STATUS UPDATE #1 - Mon 09 Nov 2026 02:37:17 - R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01
+[36m(compute_scalar_history pid=56634)[0m |    running for 5m 3.39e-05s (5m 3.39e-05s since last notification) | reflections = 4433 | current N = 43.973 | current step cap dN=0.1
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    current T_J = 0.0019224 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=56634)[0m |    current log(T_J/GeV) = -26.977 | target log(T_J/GeV) = -29.08 | 94.607% complete measured in T_J
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    4433 elastic reflection events, 4433 since last update: N = [17.668, 20.1, 25.18, 26.023, 33.206, 33.904, 34.312, 34.603, 34.828, 35.013, ..., 43.969, 43.97, 43.97, 43.971, 43.971, 43.972, 43.972, 43.972, 43.973, 43.973]
+[36m(compute_scalar_history pid=56634)[0m |    4916986 RHS evaluations, mean 1.2655e-05s per evaluation, min RHS time = 1.05e-05s, max RHS time = 0.027484s
+[36m(compute_scalar_history pid=56634)[0m |    current state: phi_E = 2.8187e+08 GeV, pi_E = 0.0006213 Mp, f_m = 416.29, log(rho_rad/GeV^4) = -107.8, T_J = 0.0019224 eV
+[36m(compute_scalar_history pid=56634)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=23 kind=plain H/H0-1=+1.533e-04 phi_ref/phi_min-1=-2.070e-04 norm=-276.630506851 phi_ref=4.2950376933e-08 wall=426.2
+[36m(compute_scalar_history pid=56634)[0m ** STATUS UPDATE #1 - Mon 09 Nov 2026 02:44:23 - R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01
+[36m(compute_scalar_history pid=56634)[0m |    running for 5m 2.79e-05s (5m 2.79e-05s since last notification) | reflections = 4439 | current N = 43.97 | current step cap dN=2.1091e-07
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    current T_J = 0.0019283 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=56634)[0m |    current log(T_J/GeV) = -26.974 | target log(T_J/GeV) = -29.08 | 94.599% complete measured in T_J
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    4439 elastic reflection events, 4439 since last update: N = [17.668, 20.1, 25.18, 26.023, 33.206, 33.904, 34.312, 34.603, 34.828, 35.013, ..., 43.966, 43.966, 43.967, 43.967, 43.968, 43.968, 43.969, 43.969, 43.969, 43.97]
+[36m(compute_scalar_history pid=56634)[0m |    4924169 RHS evaluations, mean 1.2662e-05s per evaluation, min RHS time = 1.0542e-05s, max RHS time = 0.00090429s
+[36m(compute_scalar_history pid=56634)[0m |    current state: phi_E = 1.5626e-09 Mp, pi_E = -0.00075251 Mp, f_m = 415, log(rho_rad/GeV^4) = -107.79, T_J = 0.0019283 eV
+[36m(compute_scalar_history pid=56634)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=24 kind=secant H/H0-1=-1.646e-05 phi_ref/phi_min-1=+2.238e-08 norm=-276.630721345 phi_ref=4.2954663224e-08 wall=427.0
+[36m(compute_scalar_history pid=56634)[0m ** STATUS UPDATE #1 - Mon 09 Nov 2026 02:51:30 - R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01
+[36m(compute_scalar_history pid=56634)[0m |    running for 5m 2.31e-05s (5m 2.31e-05s since last notification) | reflections = 4445 | current N = 43.992 | current step cap dN=5.1799e-08
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    current T_J = 0.0018867 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=56634)[0m |    current log(T_J/GeV) = -26.996 | target log(T_J/GeV) = -29.08 | 94.655% complete measured in T_J
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    4445 elastic reflection events, 4445 since last update: N = [17.668, 20.1, 25.18, 26.023, 33.206, 33.904, 34.312, 34.603, 34.828, 35.013, ..., 43.988, 43.988, 43.989, 43.989, 43.989, 43.99, 43.99, 43.991, 43.991, 43.992]
+[36m(compute_scalar_history pid=56634)[0m |    4920976 RHS evaluations, mean 1.2686e-05s per evaluation, min RHS time = 1.0458e-05s, max RHS time = 0.15559s
+[36m(compute_scalar_history pid=56634)[0m |    current state: phi_E = 8.9704e+08 GeV, pi_E = -0.00072158 Mp, f_m = 424.15, log(rho_rad/GeV^4) = -107.88, T_J = 0.0018867 eV
+[36m(compute_scalar_history pid=56634)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=25 kind=secant H/H0-1=+7.005e-05 phi_ref/phi_min-1=-2.510e-08 norm=-276.630699772 phi_ref=4.2955125634e-08 wall=424.0
+[36m(compute_scalar_history pid=56634)[0m ** STATUS UPDATE #1 - Mon 09 Nov 2026 02:58:34 - R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01
+[36m(compute_scalar_history pid=56634)[0m |    running for 5m 2.81e-05s (5m 2.81e-05s since last notification) | reflections = 4435 | current N = 43.996 | current step cap dN=5.3295e-05
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    current T_J = 0.0018799 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=56634)[0m |    current log(T_J/GeV) = -27 | target log(T_J/GeV) = -29.08 | 94.664% complete measured in T_J
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    4435 elastic reflection events, 4435 since last update: N = [17.668, 20.1, 25.18, 26.023, 33.206, 33.904, 34.312, 34.603, 34.828, 35.013, ..., 43.992, 43.992, 43.993, 43.993, 43.994, 43.994, 43.994, 43.995, 43.995, 43.996]
+[36m(compute_scalar_history pid=56634)[0m |    4911184 RHS evaluations, mean 1.2698e-05s per evaluation, min RHS time = 1.05e-05s, max RHS time = 0.15713s
+[36m(compute_scalar_history pid=56634)[0m |    current state: phi_E = 2.2802e-09 Mp, pi_E = 0.00075372 Mp, f_m = 425.69, log(rho_rad/GeV^4) = -107.89, T_J = 0.0018799 eV
+[36m(compute_scalar_history pid=56634)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=26 kind=plain H/H0-1=+5.937e-06 phi_ref/phi_min-1=+1.017e-04 norm=-276.630903152 phi_ref=4.2955126712e-08 wall=424.6
+[36m(compute_scalar_history pid=56634)[0m ** STATUS UPDATE #1 - Mon 09 Nov 2026 03:05:39 - R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01
+[36m(compute_scalar_history pid=56634)[0m |    running for 5m 6.99e-05s (5m 6.99e-05s since last notification) | reflections = 4428 | current N = 43.966 | current step cap dN=3.9662e-07
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    current T_J = 0.0019374 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=56634)[0m |    current log(T_J/GeV) = -26.97 | target log(T_J/GeV) = -29.08 | 94.587% complete measured in T_J
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    4428 elastic reflection events, 4428 since last update: N = [17.668, 20.1, 25.18, 26.023, 33.206, 33.904, 34.312, 34.603, 34.828, 35.013, ..., 43.961, 43.962, 43.962, 43.963, 43.963, 43.963, 43.964, 43.964, 43.965, 43.965]
+[36m(compute_scalar_history pid=56634)[0m |    4916426 RHS evaluations, mean 1.2647e-05s per evaluation, min RHS time = 1.0458e-05s, max RHS time = 0.023125s
+[36m(compute_scalar_history pid=56634)[0m |    current state: phi_E = 2.6861e-09 Mp, pi_E = -0.00075337 Mp, f_m = 413.05, log(rho_rad/GeV^4) = -107.77, T_J = 0.0019374 eV
+[36m(compute_scalar_history pid=56634)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=27 kind=secant H/H0-1=-9.044e-05 phi_ref/phi_min-1=+1.192e-08 norm=-276.630921987 phi_ref=4.2950353753e-08 wall=427.9
+[36m(compute_scalar_history pid=56634)[0m ** STATUS UPDATE #1 - Mon 09 Nov 2026 03:12:47 - R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01
+[36m(compute_scalar_history pid=56634)[0m |    running for 5m 0.000212s (5m 0.000212s since last notification) | reflections = 4421 | current N = 43.969 | current step cap dN=2.9905e-06
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    current T_J = 0.0019307 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=56634)[0m |    current log(T_J/GeV) = -26.973 | target log(T_J/GeV) = -29.08 | 94.596% complete measured in T_J
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    4421 elastic reflection events, 4421 since last update: N = [17.668, 20.1, 25.18, 26.023, 33.206, 33.904, 34.312, 34.603, 34.828, 35.013, ..., 43.965, 43.965, 43.966, 43.966, 43.966, 43.967, 43.967, 43.968, 43.968, 43.969]
+[36m(compute_scalar_history pid=56634)[0m |    4908466 RHS evaluations, mean 1.2713e-05s per evaluation, min RHS time = 1.0459e-05s, max RHS time = 0.15985s
+[36m(compute_scalar_history pid=56634)[0m |    current state: phi_E = 1.9808e-08 Mp, pi_E = -0.00067447 Mp, f_m = 414.5, log(rho_rad/GeV^4) = -107.79, T_J = 0.0019307 eV
+[36m(compute_scalar_history pid=56634)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=28 kind=plain H/H0-1=+4.420e-05 phi_ref/phi_min-1=-1.313e-04 norm=-276.630659375 phi_ref=4.2950353241e-08 wall=426.8
+[36m(compute_scalar_history pid=56634)[0m ** STATUS UPDATE #1 - Mon 09 Nov 2026 03:19:53 - R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01
+[36m(compute_scalar_history pid=56634)[0m |    running for 5m 1.98e-05s (5m 1.98e-05s since last notification) | reflections = 4428 | current N = 43.969 | current step cap dN=1.9336e-05
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    current T_J = 0.0019303 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=56634)[0m |    current log(T_J/GeV) = -26.973 | target log(T_J/GeV) = -29.08 | 94.597% complete measured in T_J
+[36m(compute_scalar_history pid=56634)[0m |    --
+[36m(compute_scalar_history pid=56634)[0m |    4428 elastic reflection events, 4428 since last update: N = [17.668, 20.1, 25.18, 26.023, 33.206, 33.904, 34.312, 34.603, 34.828, 35.013, ..., 43.965, 43.965, 43.966, 43.966, 43.967, 43.967, 43.968, 43.968, 43.968, 43.969]
+[36m(compute_scalar_history pid=56634)[0m |    4915009 RHS evaluations, mean 1.2704e-05s per evaluation, min RHS time = 1.05e-05s, max RHS time = 0.19381s
+[36m(compute_scalar_history pid=56634)[0m |    current state: phi_E = 5.9301e-08 Mp, pi_E = -0.0004137 Mp, f_m = 414.58, log(rho_rad/GeV^4) = -107.79, T_J = 0.0019303 eV
+[36m(compute_scalar_history pid=56634)[0m -- tune R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01 it=29 kind=secant H/H0-1=-1.169e-05 phi_ref/phi_min-1=-3.133e-08 norm=-276.630745578 phi_ref=4.2954141799e-08 wall=425.6
+[36m(compute_scalar_history pid=56634)[0m !! tune_history (R-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-08T23:46:01): the normalization did not converge: after 30 integrations, H/H0-1=-1.169e-05, phi_ref/phi_min-1=-3.133e-08
+   -- 2026-11-09 03:22:00 (3h 35m 59.7s running): 0/1 work items remaining = 100.00% complete (may be waiting for compute/store/validate tasks to finish)
+      inflight: 0 lookup, 0 compute, 2 store, 0 validation | completed: 6 lookup (avg 40/day), 6 compute (avg 40/day), 4 store (avg 26.67/day), 4 validation (avg 26.67/day)
+   -- ALL WORK ITEMS COMPLETE in time 3h 36m 1.82s
+      Queue summary: 6 lookup (avg 39.99/day), 6 compute (avg 39.99/day), 6 store (avg 39.99/day), 6 validation (avg 39.99/day)
+-- ScalarHistory: 1 histories failed in this run
+     -- 1 x the normalization did not converge
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 1.46s
+      Queue summary: 5 lookup (avg 205.8/min), 5 compute (avg 205.8/min), 5 store (avg 205.8/min), 5 validation (avg 205.8/min)
+-- AdiabaticHistory: 1 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 18.1s
+      Queue summary: 5 lookup (avg 16.56/min), 5 compute (avg 16.56/min), 5 store (avg 16.56/min), 5 validation (avg 16.56/min)
+-- BBNData: 1 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+** driver exit status 0
