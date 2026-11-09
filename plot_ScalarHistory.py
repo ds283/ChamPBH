@@ -1441,6 +1441,18 @@ def plot_ScalarHistory(
         H: float = sqrt(H2)
         return H
 
+    def write_csv_files():
+        write_csv_file(BBN, Q, csv_path, model, units)
+        # bounces.csv beside fields.csv, for a history of the one-loop law only, and never under the fixed one
+        # (one-loop-drain prompt 04, P38)
+        if model.alpha.drain_law == DRAIN_LAW_ONE_LOOP:
+            write_bounces_csv(model.bounces, units, csv_path / "bounces.csv")
+
+    # --no-plots: the CSV files alone, and no figure (2026-11-09)
+    if not args.plots:
+        write_csv_files()
+        return
+
     sns.set_theme()
 
     history_plot(
@@ -1486,11 +1498,7 @@ def plot_ScalarHistory(
         model, model_label, plot_path / "dark_radiation.pdf", x_coord=x_coord
     )
 
-    write_csv_file(BBN, Q, csv_path, model, units)
-    # bounces.csv beside fields.csv, for a history of the one-loop law only, and never under the fixed one
-    # (one-loop-drain prompt 04, P38)
-    if model.alpha.drain_law == DRAIN_LAW_ONE_LOOP:
-        write_bounces_csv(model.bounces, units, csv_path / "bounces.csv")
+    write_csv_files()
 
 
 def run_pipeline(

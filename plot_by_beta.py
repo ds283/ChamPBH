@@ -291,7 +291,8 @@ def build_beta_plot(
 
     sns.set_theme()
 
-    if len(solver_time_x) > 0 or len(bbn_time_x) > 0:
+    # --no-plots: data.csv and the records alone, and no figure (2026-11-09)
+    if args.plots and (len(solver_time_x) > 0 or len(bbn_time_x) > 0):
         # TIMINGS
 
         fig = plt.figure()
@@ -349,7 +350,7 @@ def build_beta_plot(
 
         plt.close()
 
-    if len(Yp_x) > 0 or len(DOverH_x) > 0 or len(Li7_x) > 0:
+    if args.plots and (len(Yp_x) > 0 or len(DOverH_x) > 0 or len(Li7_x) > 0):
         # BBN OUTPUT
 
         fig = plt.figure()
@@ -536,56 +537,57 @@ def build_beta_plot(
     if len(adiabtic_maxQ_xy) > 0:
         # BBN OUTPUT
 
-        fig = plt.figure()
-        fig.set_size_inches(8.0, 8.0)
+        if args.plots:
+            fig = plt.figure()
+            fig.set_size_inches(8.0, 8.0)
 
-        ax = fig.gca()
+            ax = fig.gca()
 
-        for label in AdiabaticHistory.Q_labels:
-            x, y = adiabtic_maxQ_xy[label]
-            ax.plot(
-                x,
-                y,
-                label=nice_Q_labels[label],
-                marker="o" if len(x) <= 20.0 else None,
-            )
-        ax.set_yscale("log")
+            for label in AdiabaticHistory.Q_labels:
+                x, y = adiabtic_maxQ_xy[label]
+                ax.plot(
+                    x,
+                    y,
+                    label=nice_Q_labels[label],
+                    marker="o" if len(x) <= 20.0 else None,
+                )
+            ax.set_yscale("log")
 
-        ax.set_xlabel(r"coupling $\beta$")
-        ax.set_ylabel(r"maximum $|Q| = |\omega_k'/\omega_k^2|$")
-        ax.grid(True)
+            ax.set_xlabel(r"coupling $\beta$")
+            ax.set_ylabel(r"maximum $|Q| = |\omega_k'/\omega_k^2|$")
+            ax.grid(True)
 
-        add_beta_summary_labels(
-            fig, model_label, group_model, alpha=alpha, drain_model=drain_model
-        )
-
-        # the max |Q| of a small-M history may be set by aliased late samples
-        Q_caveat = adiabatic_Q_caption(group_model._M.as_float / units.PlanckMass)
-        if Q_caveat is not None:
-            fig.text(
-                LEFT_COLUMN,
-                BELOW_PLOTS_TOP_ROW,
-                f"maximum |Q| {Q_caveat}",
-                horizontalalignment="left",
-                fontsize="xx-small",
+            add_beta_summary_labels(
+                fig, model_label, group_model, alpha=alpha, drain_model=drain_model
             )
 
-        ax.legend(loc="best")
+            # the max |Q| of a small-M history may be set by aliased late samples
+            Q_caveat = adiabatic_Q_caption(group_model._M.as_float / units.PlanckMass)
+            if Q_caveat is not None:
+                fig.text(
+                    LEFT_COLUMN,
+                    BELOW_PLOTS_TOP_ROW,
+                    f"maximum |Q| {Q_caveat}",
+                    horizontalalignment="left",
+                    fontsize="xx-small",
+                )
 
-        fig_path = (
-            base_path
-            / f"plots/M={group_model._M.as_float / units.eV:.5g}eV_n={group_model._n}/max_Q.pdf"
-        )
-        fig_path.parents[0].mkdir(exist_ok=True, parents=True)
-        try:
-            fig.savefig(fig_path)
-            fig.savefig(fig_path.with_suffix(".png"))
-        except OverflowError:
-            print(
-                f"@@ build_beta_plot: error occurred when generating a max(Q) plot for ScalarHistory '{model_label}'"
+            ax.legend(loc="best")
+
+            fig_path = (
+                base_path
+                / f"plots/M={group_model._M.as_float / units.eV:.5g}eV_n={group_model._n}/max_Q.pdf"
             )
+            fig_path.parents[0].mkdir(exist_ok=True, parents=True)
+            try:
+                fig.savefig(fig_path)
+                fig.savefig(fig_path.with_suffix(".png"))
+            except OverflowError:
+                print(
+                    f"@@ build_beta_plot: error occurred when generating a max(Q) plot for ScalarHistory '{model_label}'"
+                )
 
-        plt.close()
+            plt.close()
 
         beta_to_models = {
             m.model._beta.store_id: m
@@ -689,6 +691,9 @@ def build_beta_plot(
         csv_path.parents[0].mkdir(exist_ok=True, parents=True)
 
         df.to_csv(csv_path, header=True, index=False)
+
+    if not args.plots:
+        return records
 
     # THE SCIENCE FIGURES 1, 3 and 4 (science-readiness prompt 07); figure 2 and
     # histories.csv need every (M, n) group and are written by run_pipeline
@@ -1053,7 +1058,7 @@ def run_pipeline(
     model_path = alpha_path(
         Path(args.output).resolve() / f"{model_label}", alpha.value, alpha.drain_model
     )
-    if len(all_records) > 0:
+    if len(all_records) > 0 and args.plots:
         if SM_baseline is not None:
             plot_convergence_in_M(
                 all_records,
@@ -1078,6 +1083,8 @@ def write_alpha_summaries(model_label: str, records: list):
         return
     model_path = Path(args.output).resolve() / f"{model_label}"
     write_histories_csv(records, model_path / "histories.csv")
+    if not args.plots:
+        return
 
     groups = {}
     for record in records:

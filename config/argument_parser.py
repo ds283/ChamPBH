@@ -522,6 +522,14 @@ def create_argument_parser() -> configargparse.ArgumentParser:
         help="limit the y-axis on Y_p plots to near the observationally-allowed region",
     )
     parser.add_argument(
+        "--plots",
+        default=True,
+        action=argparse.BooleanOptionalAction,
+        help="draw the plot scripts' figures (the default); with --no-plots, plot_by_beta.py and "
+        "plot_ScalarHistory.py write their CSV files alone (histories.csv and each group's data.csv; "
+        "each history's fields.csv and bounces.csv) and draw no figure. main.py ignores it",
+    )
+    parser.add_argument(
         "--ray-address",
         default=None,
         type=str,
