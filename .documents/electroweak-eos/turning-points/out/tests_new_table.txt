@@ -1,0 +1,104 @@
+table: /private/tmp/claude-35086/-Users-ds283--claude-spares-spare-3KNGVN/ecb7c03c-e3ce-49e7-b132-11687f83a678/scratchpad/ee01a-agent/../ee01a-new-table.csv
+before: resolved_sign_changes present = False
+after:  resolved_sign_changes present = True
+
+fail  -> fail   CT.test_golden_history.TestGoldenHistories.test_history_beta_1_5
+      at test_golden_history.py", line 53, in _check :: self.fail(
+      AssertionError: golden history beta=1.5 differs from golden_history_rr03.json:
+fail  -> fail   CT.test_golden_history.TestGoldenHistories.test_history_beta_5_5
+      at test_golden_history.py", line 53, in _check :: self.fail(
+      AssertionError: golden history beta=5.5 differs from golden_history_rr03.json:
+fail  -> fail   CT.test_golden_reflecting_history.TestTheReflectingGoldenHistory.test_it_succeeds_and_is_the_record_bitwise
+      at test_golden_reflecting_history.py", line 38, in test_it_succeeds_and_is_the_record_bitwise :: self.fail(
+      AssertionError: the reflecting golden history differs from golden_history_rr03_reflecting.json:
+fail  -> fail   CT.test_tuning.TestAConvergedHistory.test_e_the_tuned_golden_history
+      at test_tuning.py", line 612, in test_e_the_tuned_golden_history :: self.fail(
+      AssertionError: the tuned golden history differs from golden_history_rr03_tuned.json:
+fail  -> pass   CT.test_injection.TestAlphaZeroIsTheOldCode.test_1_no_injection_and_the_first_wall_turning_point_is_first_bounce
+fail  -> pass   CT.test_injection.TestARealHistoryAtAlpha.test_2_one_injection_per_wall_side_turning_point_and_none_after_a_plateau
+fail  -> pass   CT.test_injection.TestARealHistoryAtAlpha.test_2_the_turning_points_are_classified
+fail  -> fail   CT.test_injection.TestTwoTurningPointsOnOneStep.test_11_a_plateau_and_wall_pair_inside_one_step_is_recorded
+      at test_injection.py", line 536, in test_11_a_plateau_and_wall_pair_inside_one_step_is_recorded :: self.assertGreaterEqual(len(multi), 1)
+      AssertionError: 0 not greater than or equal to 1
+fail  -> fail   CT.test_reachability_roots.TestProductionEOS.test_d1_four_kicks_and_their_peaks
+      at test_reachability_roots.py", line 261, in test_d1_four_kicks_and_their_peaks :: self.assertAlmostEqual(kick["Sigma_peak"], value, delta=delta)
+      AssertionError: 0.03775698995334742 != 0.037436 within 5e-07 delta (0.00032098995334742253 difference)
+fail  -> fail   CT.test_reachability_roots.TestProductionEOS.test_d2_thresholds
+      at test_reachability_roots.py", line 286, in test_d2_thresholds :: self.assertAlmostEqual(value, expected, delta=delta)
+      AssertionError: 2.999175559935557 != 3.01 within 0.005 delta (0.010824440064442609 difference)
+fail  -> fail   CT.test_release.TestALateRelease.test_7_parks_at_6_is_released_near_0_27_meV_and_reaches_T_CMB
+      at test_release.py", line 704, in test_7_parks_at_6_is_released_near_0_27_meV_and_reaches_T_CMB :: self.assertEqual(r.parking.candidate_index, 6)
+      AssertionError: 8 != 6
+fail  -> fail   CT.test_release.TestTheReleaseAtHalfThePlanckMass.test_2_it_parks_at_105_and_is_released_once_inside_the_step_06_failed_on
+      at test_release.py", line 459, in test_2_it_parks_at_105_and_is_released_once_inside_the_step_06_failed_on :: self.assertEqual(round(rel.N_check, 5), BETA_5_FAILED_CHECK_N)
+      AssertionError: 40.31008 != 40.29068
+fail  -> fail   CT.test_wall_rounding.TestAHistoryInTheBand.test_3_the_drain_is_log_06s
+      at test_wall_rounding.py", line 364, in test_3_the_drain_is_log_06s :: self.assertLessEqual(
+      AssertionError: 4.882080748176698e-08 not less than or equal to 8.154226750000001e-10 : (0.012616955820807482, 8.154226750000001e-10)
+fail  -> fail   CT.test_drain_law.TestTheOneLoopLawOn2197.test_4_the_values_under_the_measured_law
+      at test_drain_law.py", line 699, in test_4_the_values_under_the_measured_law :: self.assertEqual(
+      AssertionError: Tuples differ: ('8.2277e-02', '9.1883e-02', '1.1431e-01', '1.2001e-01', '1.6185e-01') != ('8.2276e-02', '9.1886e-02', '1.1431e-01', '1.2001e-01', '1.6459e-01')
+fail  -> fail   OF.test_adiabatic_dark_radiation.TestAdiabaticHistory.test_8a_alpha_zero_is_the_dispatch_commits
+      at test_adiabatic_dark_radiation.py", line 133, in test_8a_alpha_zero_is_the_dispatch_commits :: self.assertEqual(repr(out["max_abs_Q_values"]), PIN_MAX_ABS_Q)
+      AssertionError: "{'kp_over_H_1E1': 13.96602530958698, 'kp_over_H_1E2': 0.8970[88 chars]-05}" != "{'kp_over_H_1E1': 18.9909249914034, 'kp_over_H_1E2': 1.23209[87 chars]-05}"
+error -> pass   OF.test_drain_store.TestConstructedExtremes.test_the_extremes_and_the_row_count
+fail  -> fail   OF.test_tuned_history_round_trip.TestATunedHistoryRoundTrips.test_a_the_payload_is_the_tuned_golden_history
+      at test_tuned_history_round_trip.py", line 240, in test_a_the_payload_is_the_tuned_golden_history :: self.assertEqual(
+      AssertionError: Lists differ: ['sample 0: field H_Einstein differs: reco[1122 chars]20'"] != []
+fail  -> fail   tools.test_history_and_bbn.TestTuned.test_a_the_tuning_line_is_the_tuned_goldens_record_bitwise
+      at test_history_and_bbn.py", line 124, in test_a_the_tuning_line_is_the_tuned_goldens_record_bitwise :: self.assertEqual(
+      AssertionError: 18033 != 15331
+      and 8 failing subtests
+fail  -> fail   tools.test_history_and_bbn.TestFixedNormalization.test_b_one_integration_at_the_given_normalization_and_phi_ref
+      at test_history_and_bbn.py", line 186, in test_b_one_integration_at_the_given_normalization_and_phi_ref :: self.assertEqual(
+      AssertionError: 18050 != 15331
+fail  -> fail   tools.test_history_and_bbn_alpha.TestAlphaZeroIsUnchanged.test_10_every_line_is_the_dispatch_commits
+      at test_history_and_bbn_alpha.py", line 137, in test_10_every_line_is_the_dispatch_commits :: self.assertEqual(_mask(stdout), PINNED_ALPHA_ZERO)
+      AssertionError: '@@ P[246 chars]HS=33721 accepted_steps=3715 reflections=0 sam[880 chars]ub\n' != '@@ P[246 chars]HS=33838 accepted_steps=3725 reflections=0 sam[879 chars]ub\n'
+fail  -> fail   tools.test_surfing_scan.TestRealHistory.test_beta_1_5_tuned
+      at test_surfing_scan.py", line 602, in test_beta_1_5_tuned :: self.assertLessEqual(
+      AssertionError: 1.383421269984808e-05 not less than or equal to 1e-06
+      and 2 failing subtests
+fail  -> fail   tools.test_plot_surfing_histories.TestRealHistory.test_beta_3_is_not_captured_and_bounces_as_the_committed_scan
+      at test_plot_surfing_histories.py", line 272, in test_beta_3_is_not_captured_and_bounces_as_the_committed_scan :: self.assertLessEqual(
+      AssertionError: 27.863023330260773 not less than or equal to 1e-06
+
+  1 tests: error -> pass
+ 18 tests: fail -> fail
+  3 tests: fail -> pass
+
+integrations: before 33, 31 with the early pair; after 33, 0 with an early TurningPoint, 31 dropping a pair, 31 pairs dropped in all
+in call order, the integrations that dropped a pair are exactly those that had it: True
+  ExponentialModel(M=0.001Mp,n=1,beta=1.5)[normalization=-279.87 alpha=0.0: early pair before 2 TPs, dropped_drains 1 -> 0, unresolved 1
+  ExponentialModel(M=0.001Mp,n=1,beta=5.5)[normalization=-279.87 alpha=0.0: early pair before 2 TPs, dropped_drains 1 -> 0, unresolved 1
+  ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.5)[normalization=- alpha=0.05: early pair before 2 TPs, dropped_drains 1 -> 0, unresolved 1
+  ExponentialModel(M=0.01Mp,n=1,beta=3)[normalization=-277.582,p alpha=0.0: early pair before 2 TPs, dropped_drains 1 -> 0, unresolved 1
+  ExponentialModel(M=0.01Mp,n=1,beta=3)[normalization=-277.425,p alpha=0.0: early pair before 2 TPs, dropped_drains 1 -> 0, unresolved 1
+  ExponentialModel(M=0.01Mp,n=1,beta=3)[normalization=-277.442,p alpha=0.0: early pair before 2 TPs, dropped_drains 1 -> 0, unresolved 1
+  ExponentialModel(M=0.01Mp,n=1,beta=3)[normalization=-277.45,ph alpha=0.0: early pair before 2 TPs, dropped_drains 1 -> 0, unresolved 1
+  ExponentialModel(M=0.01Mp,n=1,beta=3)[normalization=-277.45,ph alpha=0.0: early pair before 2 TPs, dropped_drains 1 -> 0, unresolved 1
+  ExponentialModel(M=0.001Mp,n=1,beta=1.5)[normalization=-279.87 alpha=0.0: early pair before 2 TPs, dropped_drains 1 -> 0, unresolved 1
+  ExponentialModel(M=0.5Mp,n=1,beta=2)[normalization=-277.303,ph alpha=0.1: early pair before 2 TPs, dropped_drains 1 -> 0, unresolved 1
+  ExponentialModel(M=0.5Mp,n=1,beta=10)[normalization=-278.133,p alpha=0.1: early pair before 0 TPs, dropped_drains 0 -> 0, unresolved 0
+  ExponentialModel(M=0.001Mp,n=1,beta=1.2)[normalization=-276.86 alpha=0.1: early pair before 2 TPs, dropped_drains 1 -> 0, unresolved 1
+  ExponentialModel(M=0.5Mp,n=1,beta=5)[normalization=-277.693,ph alpha=0.1: early pair before 2 TPs, dropped_drains 1 -> 0, unresolved 1
+  ExponentialModel(M=243.53GeV,n=1,beta=2)[normalization=-276.63 alpha=0.1: early pair before 0 TPs, dropped_drains 0 -> 0, unresolved 0
+  ExponentialModel(M=0.00097413eV,n=1,beta=1.185)[normalization= alpha=1.0: early pair before 2 TPs, dropped_drains 1 -> 0, unresolved 1
+  ExponentialModel(M=0.01Mp,n=1,beta=3)[normalization=-277.45,ph alpha=0.0: early pair before 2 TPs, dropped_drains 1 -> 0, unresolved 1
+  ExponentialModel(M=0.00097413eV,n=1,beta=1.185)[normalization= alpha=1.0: early pair before 2 TPs, dropped_drains 1 -> 0, unresolved 1
+  ExponentialModel(M=0.01Mp,n=1,beta=3)[normalization=-277.45,ph alpha=0.0: early pair before 2 TPs, dropped_drains 1 -> 0, unresolved 1
+  ExponentialModel(M=0.01Mp,n=1,beta=3)[normalization=-277.582,p alpha=0.0: early pair before 2 TPs, dropped_drains 1 -> 0, unresolved 1
+  ExponentialModel(M=0.01Mp,n=1,beta=3)[normalization=-277.425,p alpha=0.0: early pair before 2 TPs, dropped_drains 1 -> 0, unresolved 1
+  ExponentialModel(M=0.01Mp,n=1,beta=3)[normalization=-277.442,p alpha=0.0: early pair before 2 TPs, dropped_drains 1 -> 0, unresolved 1
+  ExponentialModel(M=0.01Mp,n=1,beta=3)[normalization=-277.45,ph alpha=0.0: early pair before 2 TPs, dropped_drains 1 -> 0, unresolved 1
+  ExponentialModel(M=0.01Mp,n=1,beta=3)[normalization=-277.45,ph alpha=0.0: early pair before 2 TPs, dropped_drains 1 -> 0, unresolved 1
+  ExponentialModel(M=0.01Mp,n=1,beta=3)[normalization=-277.45,ph alpha=0.0: early pair before 2 TPs, dropped_drains 1 -> 0, unresolved 1
+  ExponentialModel(M=0.5Mp,n=1,beta=2)[normalization=-277.303,ph alpha=0.0: early pair before 2 TPs, dropped_drains 1 -> 0, unresolved 1
+  ExponentialModel(M=0.001Mp,n=1,beta=1.5)[normalization=-276.88 alpha=0.0: early pair before 2 TPs, dropped_drains 1 -> 0, unresolved 1
+  ExponentialModel(M=0.001Mp,n=1,beta=1.5)[normalization=-276.85 alpha=0.0: early pair before 2 TPs, dropped_drains 1 -> 0, unresolved 1
+  ExponentialModel(M=0.001Mp,n=1,beta=1.5)[normalization=-276.85 alpha=0.0: early pair before 2 TPs, dropped_drains 1 -> 0, unresolved 1
+  ExponentialModel(M=0.001Mp,n=1,beta=1.5)[normalization=-276.85 alpha=0.0: early pair before 2 TPs, dropped_drains 1 -> 0, unresolved 1
+  ExponentialModel(M=0.001Mp,n=1,beta=3)[normalization=-276.979, alpha=0.0: early pair before 2 TPs, dropped_drains 1 -> 0, unresolved 1
+  ExponentialModel(M=0.001Mp,n=1,beta=3)[normalization=-276.95,p alpha=0.0: early pair before 2 TPs, dropped_drains 1 -> 0, unresolved 1
+  ExponentialModel(M=0.001Mp,n=1,beta=3)[normalization=-276.952, alpha=0.0: early pair before 2 TPs, dropped_drains 1 -> 0, unresolved 1
+  ExponentialModel(M=0.001Mp,n=1,beta=3)[normalization=-276.953, alpha=0.0: early pair before 2 TPs, dropped_drains 1 -> 0, unresolved 1

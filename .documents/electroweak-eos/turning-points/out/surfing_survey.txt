@@ -1,0 +1,16 @@
+before_old_merged: 22 successful histories, 262 crossings, 220 above 300 GeV
+  beta=10.0  M=0.001  crossings   22,   6 within 1e-9 of the last T_J = 404.9261008 GeV, N 5.0331 to 53.9000, smallest spacing 4.61e-06
+  beta=10.0  M=0.5    crossings   22,   6 within 1e-9 of the last T_J = 404.9261008 GeV, N 5.0331 to 53.8556, smallest spacing 0.00231
+  beta=20.0  M=0.001  crossings   88,  71 within 1e-9 of the last T_J = 846.1700298 GeV, N 4.2466 to 103.1627, smallest spacing 7.48e-06
+  beta=20.0  M=0.5    crossings   88,  71 within 1e-9 of the last T_J = 846.1700298 GeV, N 4.2466 to 103.0754, smallest spacing 0.00229
+  beta=4.0   M=0.001  crossings    6,   1 within 1e-9 of the last T_J = 125.7747556 GeV, N 6.5913 to 22.9817, smallest spacing 3.26
+  beta=5.5   M=0.001  crossings   10,   1 within 1e-9 of the last T_J = 199.929507 GeV, N 5.8805 to 30.8214, smallest spacing 2.67
+  beta=5.5   M=0.5    crossings   10,   1 within 1e-9 of the last T_J = 199.929507 GeV, N 5.8805 to 30.8214, smallest spacing 2.67
+before_new: 23 successful histories, 400 crossings, 276 above 300 GeV
+  beta=10.0  M=0.001  crossings   36,   7 within 1e-9 of the last T_J = 274.1571159 GeV, N 4.8492 to 53.4878, smallest spacing 1.36
+  beta=10.0  M=0.5    crossings   36,   7 within 1e-9 of the last T_J = 274.1571159 GeV, N 4.8492 to 53.4878, smallest spacing 1.36
+  beta=20.0  M=0.001  crossings  138,  96 within 1e-9 of the last T_J = 327.6496401 GeV, N 4.4723 to 104.1119, smallest spacing 7.24e-06
+  beta=20.0  M=0.5    crossings  138,  96 within 1e-9 of the last T_J = 327.6496401 GeV, N 4.4723 to 104.0188, smallest spacing 0.00362
+  beta=4.0   M=0.001  crossings    8,   1 within 1e-9 of the last T_J = 139.0954871 GeV, N 6.2092 to 24.9737, smallest spacing 0.645
+  beta=5.5   M=0.001  crossings   14,   1 within 1e-9 of the last T_J = 196.616727 GeV, N 5.4957 to 32.1245, smallest spacing 1.11
+  beta=5.5   M=0.5    crossings   14,   1 within 1e-9 of the last T_J = 196.6167229 GeV, N 5.4957 to 32.1010, smallest spacing 1.09

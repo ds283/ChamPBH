@@ -1,0 +1,43 @@
+The breakage record: ComputeTargets.tests.test_resolved_turning_points (19 tests) run against a scratch export of the tree with ScalarHistory.py broken one way at a time, then restored (cmp equal) and run OK.
+== B1_comparison_ge: Ran 19 tests in 9.801s FAILED (failures=1) 
+      1 FAIL: test_an_excursion_exactly_tau_is_dropped_and_the_next_float_kept
+== B2_no_rtol_term: Ran 19 tests in 9.789s FAILED (failures=2) 
+      1 FAIL: test_a_pair_between_atol_and_tau_is_dropped_by_the_rtol_term
+      1 FAIL: test_the_tolerance_is_atol_plus_rtol_times_the_larger_node
+== B3_no_pair_dropped: Ran 19 tests in 9.636s FAILED (failures=10) 
+      1 FAIL: test_a_kept_change_is_followed_by_the_test_of_the_next_pair
+      1 FAIL: test_a_pair_between_atol_and_tau_is_dropped_by_the_rtol_term
+      1 FAIL: test_a_pair_through_zero_samples_is_tested_like_any_other
+      1 FAIL: test_an_excursion_exactly_tau_is_dropped_and_the_next_float_kept
+      1 FAIL: test_an_unresolved_interior_pair_is_dropped_and_counted
+      2 FAIL: test_it_arms_and_drops_no_drain
+      2 FAIL: test_it_gives_no_turning_point_and_counts_the_pair
+      1 FAIL: test_three_changes_with_the_first_pair_unresolved_keep_only_the_third
+== B4_the_old_code: Ran 19 tests in 9.943s FAILED (failures=5, errors=22) 
+      1 ERROR: test_a_kept_change_is_followed_by_the_test_of_the_next_pair
+      1 ERROR: test_a_pair_between_atol_and_tau_is_dropped_by_the_rtol_term
+      1 ERROR: test_a_pair_through_zero_samples_is_tested_like_any_other
+      1 ERROR: test_a_single_change_across_the_nodes_is_kept_below_tau
+      1 ERROR: test_an_excursion_exactly_tau_is_dropped_and_the_next_float_kept
+      1 ERROR: test_an_unresolved_interior_pair_is_dropped_and_counted
+      1 ERROR: test_no_pair_is_dropped_on_this_history
+      7 ERROR: test_samples_exactly_zero_are_treated_as_before
+      1 ERROR: test_the_pair_is_kept_with_its_excursion_above_tau
+      1 ERROR: test_the_same_pair_above_tau_is_kept
+      2 ERROR: test_the_step_where_sigma_switches_on_shows_an_unresolved_pair
+      1 ERROR: test_the_tolerance_is_atol_plus_rtol_times_the_larger_node
+      1 ERROR: test_three_changes_with_the_first_pair_resolved_keep_all_three
+      1 ERROR: test_three_changes_with_the_first_pair_unresolved_keep_only_the_third
+      1 ERROR: test_with_no_pair_dropped_the_changes_are_the_old_codes
+      2 FAIL: test_it_arms_and_drops_no_drain
+      2 FAIL: test_it_gives_no_turning_point_and_counts_the_pair
+      1 FAIL: test_it_is_appended_last_with_default_zero
+== B5_tau_times_1000: Ran 19 tests in 9.612s FAILED (failures=7) 
+      1 FAIL: test_a_pair_between_atol_and_tau_is_dropped_by_the_rtol_term
+      1 FAIL: test_a_pair_through_zero_samples_is_tested_like_any_other
+      1 FAIL: test_no_pair_is_dropped_on_this_history
+      1 FAIL: test_the_pair_is_kept_with_its_excursion_above_tau
+      1 FAIL: test_the_same_pair_above_tau_is_kept
+      1 FAIL: test_the_tolerance_is_atol_plus_rtol_times_the_larger_node
+      1 FAIL: test_three_changes_with_the_first_pair_resolved_keep_all_three
+== B0_restored: Ran 19 tests in 9.605s OK 

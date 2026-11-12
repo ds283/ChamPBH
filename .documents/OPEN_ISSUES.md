@@ -60,8 +60,8 @@ split in two and one half assigned to `reflection-restart`, returned for its 01 
 closed that one and the other half, 2026-11-03, the second by the user's ruling (b); prompt 02 opened one, 2026-11-03; the orchestrator opened one after 02b, 2026-11-04, which the user's adoption of
 the measured law closed, 2026-11-05; prompt 03 closed two, 2026-11-06; prompt 08 opened and closed none, and the campaign
 closed 2026-11-07, 11 of 11 prompts landed, with these three open; §1.23); 1 on the `electroweak-eos` board
-(planned 2026-11-12, with none opened or assigned; opened from prompt 01's stop the same day and assigned to its
-prompt 01a, §1.24).
+(planned 2026-11-12, with none opened or assigned; one opened from prompt 01's stop the same day and assigned to its
+prompt 01a, §1.24, which closed it and opened one the same day, §1.25).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -398,7 +398,12 @@ Prompt 03 closed two, one the planner's and one the probe's, 2026-11-06 (board �
 ### 1.24 Assigned to `electroweak-eos` 01a — [board §3](../prompts/electroweak-eos/IMPLEMENTATION_STATE.md)
 
 Planned 2026-11-12; one opened from prompt 01's stop the same day and assigned to the inserted prompt 01a.
+*(2026-11-12: prompt 01a closed it, board §4.)* None is assigned now.
 
-- `[01-turning-points-read-below-the-solver-tolerance]` — the interpolant's sign changes below the solver's
-  tolerance recorded as a wall/plateau pair; on the new table at T_J ≈ 387 GeV for histories started at rest;
-  `first_bounce` unaffected, bounce rows and drains not. *(`electroweak-eos`; prompt 01's stop; assigned to 01a)*
+### 1.25 `electroweak-eos` — [board §3](../prompts/electroweak-eos/IMPLEMENTATION_STATE.md)
+
+Planned 2026-11-12. One opened by prompt 01a.
+
+- `[01a-surfing-turning-points-keeps-crossings-below-the-solver-tolerance]` — `surfing_turning_points` keeps every sign
+  change of g, with no tolerance; in captured histories (β = 10, 20) tens of crossings at one T_J to 10⁻⁹, g held at zero
+  on the attractor; counted in `surfing_scan`'s `n_crossings`, not in its capture columns. *(`electroweak-eos`; prompt 01a)*

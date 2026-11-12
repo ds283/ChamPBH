@@ -1,0 +1,22 @@
+The five suites, after 01a's change, serially, in the worktree (ComputeTargets in two halves). Start times local (GMT).
+== CosmologyModels start 17:30:08 17:30  up 12 days, 19:50, 2 users, load averages: 10.81 16.83 22.21
+== CosmologyModels rc=0 elapsed=72s ::  OK 
+== ObjectFactories start 17:31:20 17:31  up 12 days, 19:52, 2 users, load averages: 13.31 16.22 21.52
+== ObjectFactories rc=0 elapsed=145s :: Ran 163 tests in 141.801s  OK 
+== RunDrivers start 17:33:45 17:33  up 12 days, 19:54, 2 users, load averages: 28.67 20.59 22.39
+== RunDrivers rc=1 elapsed=30s :: Ran 76 tests in 27.209s  FAILED (failures=1) 
+== CT_af start 17:34:15 17:34  up 12 days, 19:54, 2 users, load averages: 23.60 20.12 22.16
+== CT_af rc=0 elapsed=159s :: Ran 219 tests in 157.051s  OK  
+== CT_gz start 17:36:54 17:36  up 12 days, 19:57, 2 users, load averages: 34.71 25.64 24.03
+== CT_gz rc=0 elapsed=510s :: 
+== tools start 17:45:24 17:45  up 12 days, 20:06, 2 users, load averages: 8.35 13.45 18.64
+== tools rc=1 elapsed=290s :: Ran 277 tests in 286.644s  FAILED (failures=1) 
+== all done 17:50:14 17:50  up 12 days, 20:10, 2 users, load averages: 10.10 12.71 16.97
+-- CosmologyModels: Ran 26 tests in 70.973s OK 
+-- ObjectFactories: Ran 163 tests in 141.801s OK 
+-- RunDrivers: Ran 76 tests in 27.209s FAILED (failures=1) 
+FAIL: test_the_script_is_main_py_with_its_hash_and_this_repositorys_head (RunDrivers.tests.test_registered_run.TestRegisterInProduction.test_the_script_is_main_py_with_its_hash_and_this_repositorys_head)
+-- CT_af: Ran 219 tests in 157.051s OK 
+-- CT_gz: Ran 465 tests in 506.191s OK 
+-- tools: Ran 277 tests in 286.644s FAILED (failures=1) 
+FAIL: test_roots_and_distributions (tools.tests.test_registry_config.TestRegistryConfig.test_roots_and_distributions)

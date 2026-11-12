@@ -1,0 +1,9 @@
+has resolved_sign_changes: True
+beta=1.5 M=0.001: steps 75, early TPs [], unresolved 1, dropped_drains 0, 0.07 s
+   step [3.944422, 3.946330], T_J 387.36 -> 386.63 GeV: pi nodes -3.997e-12, -1.682e-09; largest pi > 0 6.173730244659701e-10; tau np.float64(1.000000001682357e-08)
+beta=2.0 M=0.001: steps 78, early TPs [], unresolved 1, dropped_drains 0, 0.06 s
+   step [3.945411, 3.948233], T_J 386.98 -> 385.89 GeV: pi nodes -5.334e-12, -1.235e-07; largest pi > 0 3.1070851145186654e-09; tau np.float64(1.000000123475592e-08)
+beta=3.0 M=0.001: steps 76, early TPs [], unresolved 1, dropped_drains 0, 0.09 s
+   step [3.942539, 3.951322], T_J 388.09 -> 384.70 GeV: pi nodes -7.978e-12, -1.189e-06; largest pi > 0 7.746448753116503e-09; tau np.float64(1.000001188714046e-08)
+beta=10.0 M=0.5: steps 1070, early TPs [], unresolved 1, dropped_drains 0, 0.69 s
+   step [3.944602, 3.948118], T_J 387.29 -> 385.94 GeV: pi nodes -2.665e-11, -5.773e-07; largest pi > 0 5.625308014347339e-10; tau np.float64(1.0000005773311521e-08)

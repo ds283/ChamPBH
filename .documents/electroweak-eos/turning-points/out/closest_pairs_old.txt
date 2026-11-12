@@ -1,0 +1,14 @@
+Old table, with 01a's change: per history, the smallest excursion/tau over every pair of consecutive
+sign changes on one step (kept or dropped), and the smallest above 1 (kept). Re-run 2026-11-12 ~20:11
+of the M = 1e-3 M_P histories of scan_turning_points.py, the only ones with a step showing two or more
+changes; every record also equal to the after_old run (turning points, nodes, interpolants, final state,
+first_bounce). The other 27 histories show no step with two or more changes.
+beta=1.2   M=0.001: 1 steps; smallest 125.9 tau at N=42.847101; smallest kept 125.9 tau at N=42.847101
+beta=1.5   M=0.001: 1 steps; smallest 23.02 tau at N=42.673916; smallest kept 23.02 tau at N=42.673916
+beta=2.0   M=0.001: 1 steps; smallest 51.78 tau at N=45.071596; smallest kept 51.78 tau at N=45.071596
+beta=2.5   M=0.001: no step with two or more changes
+beta=3.0   M=0.001: 2 steps; smallest 8.941 tau at N=49.525987; smallest kept 8.941 tau at N=49.525987
+beta=4.0   M=0.001: 6 steps; smallest 1.097 tau at N=52.065578; smallest kept 1.097 tau at N=52.065578
+beta=5.5   M=0.001: 1 steps; smallest 10.28 tau at N=57.191646; smallest kept 10.28 tau at N=57.191646
+beta=10.0  M=0.001: 4 steps; smallest 0.1751 tau at N=78.552502; smallest kept 2.449 tau at N=78.545626
+beta=20.0  M=0.001: 5 steps; smallest 0.9515 tau at N=125.583817; smallest kept 2.715 tau at N=125.565846

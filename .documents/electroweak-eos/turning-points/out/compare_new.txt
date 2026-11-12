@@ -1,0 +1,117 @@
+before: before_new
+after:  after_new_p
+mode:   new
+histories: before 36, after 36
+beta=0.5   M=4e-31  tps     23 ->     23  unresolved 0  dropped_drains 0 -> 0  first_bounce same
+beta=0.5   M=1e-12  tps     32 ->     32  unresolved 0  dropped_drains 0 -> 0  first_bounce same
+beta=0.5   M=0.001  tps     32 ->     32  unresolved 0  dropped_drains 0 -> 0  first_bounce same
+beta=0.5   M=0.5    tps     11 ->     11  unresolved 0  dropped_drains 0 -> 0  first_bounce same
+beta=1.2   M=4e-31  tps  13314 ->  13312  unresolved 1  dropped_drains 1 -> 0  first_bounce same  closest pair excursion/tau 0.2251 at N=3.937987 (1 steps with >= 2 changes)
+   removed wall     N=3.943645290 T_J=387.664 GeV phi=5 M_P
+   removed plateau  N=3.949963112 T_J=385.225 GeV phi=5 M_P
+   dropped pair on [3.937986837, 3.953605791]: pi nodes -3.177e-12, -1.476e-08; excursions 2.251e-09; tau 1e-08
+beta=1.2   M=1e-12  tps  15385 ->  15383  unresolved 1  dropped_drains 1 -> 0  first_bounce same  closest pair excursion/tau 0.2251 at N=3.937987 (1 steps with >= 2 changes)
+   removed wall     N=3.943645290 T_J=387.664 GeV phi=5 M_P
+   removed plateau  N=3.949963112 T_J=385.225 GeV phi=5 M_P
+   dropped pair on [3.937986837, 3.953605791]: pi nodes -3.177e-12, -1.476e-08; excursions 2.251e-09; tau 1e-08
+beta=1.2   M=0.001  tps    953 ->    951  unresolved 1  dropped_drains 1 -> 0  first_bounce same  closest pair excursion/tau 0.2251 at N=3.937987 (2 steps with >= 2 changes)
+   removed wall     N=3.943645290 T_J=387.664 GeV phi=5 M_P
+   removed plateau  N=3.949963112 T_J=385.225 GeV phi=5 M_P
+   dropped pair on [3.937986837, 3.953605791]: pi nodes -3.177e-12, -1.476e-08; excursions 2.251e-09; tau 1e-08
+beta=1.2   M=0.5    tps     33 ->     31  unresolved 1  dropped_drains 1 -> 0  first_bounce same  closest pair excursion/tau 0.2251 at N=3.937987 (1 steps with >= 2 changes)
+   removed wall     N=3.943645290 T_J=387.664 GeV phi=5 M_P
+   removed plateau  N=3.949963112 T_J=385.225 GeV phi=5 M_P
+   dropped pair on [3.937986837, 3.953605791]: pi nodes -3.177e-12, -1.476e-08; excursions 2.251e-09; tau 1e-08
+beta=1.5   M=4e-31  FAILED tps  14287 ->  14285  unresolved 1  dropped_drains None -> None  first_bounce same  closest pair excursion/tau 0.06674 at N=3.937266 (1 steps with >= 2 changes)
+   removed wall     N=3.941509925 T_J=388.492 GeV phi=5 M_P
+   removed plateau  N=3.947333559 T_J=386.239 GeV phi=5 M_P
+   dropped pair on [3.937265740, 3.949192273]: pi nodes -3.968e-12, -1.821e-09; excursions 6.674e-10; tau 1e-08
+beta=1.5   M=1e-12  FAILED tps  25366 ->  25364  unresolved 1  dropped_drains None -> None  first_bounce same  closest pair excursion/tau 0.06674 at N=3.937266 (1 steps with >= 2 changes)
+   removed wall     N=3.941509925 T_J=388.492 GeV phi=5 M_P
+   removed plateau  N=3.947333559 T_J=386.239 GeV phi=5 M_P
+   dropped pair on [3.937265740, 3.949192273]: pi nodes -3.968e-12, -1.821e-09; excursions 6.674e-10; tau 1e-08
+beta=1.5   M=0.001  tps   1357 ->   1355  unresolved 1  dropped_drains 1 -> 0  first_bounce same  closest pair excursion/tau 0.06674 at N=3.937266 (3 steps with >= 2 changes)
+   removed wall     N=3.941509925 T_J=388.492 GeV phi=5 M_P
+   removed plateau  N=3.947333559 T_J=386.239 GeV phi=5 M_P
+   dropped pair on [3.937265740, 3.949192273]: pi nodes -3.968e-12, -1.821e-09; excursions 6.674e-10; tau 1e-08
+beta=1.5   M=0.5    tps     39 ->     37  unresolved 1  dropped_drains 1 -> 0  first_bounce same  closest pair excursion/tau 0.06674 at N=3.937266 (1 steps with >= 2 changes)
+   removed wall     N=3.941509925 T_J=388.492 GeV phi=5 M_P
+   removed plateau  N=3.947333559 T_J=386.239 GeV phi=5 M_P
+   dropped pair on [3.937265740, 3.949192273]: pi nodes -3.968e-12, -1.821e-09; excursions 6.674e-10; tau 1e-08
+beta=2.0   M=4e-31  FAILED tps  14361 ->  14361  unresolved 0  dropped_drains None -> None  first_bounce same
+beta=2.0   M=1e-12  FAILED tps  23278 ->  23278  unresolved 0  dropped_drains None -> None  first_bounce same
+beta=2.0   M=0.001  tps   1607 ->   1607  unresolved 0  dropped_drains 0 -> 0  first_bounce same
+beta=2.0   M=0.5    tps     51 ->     51  unresolved 0  dropped_drains 0 -> 0  first_bounce same
+beta=2.5   M=4e-31  FAILED tps  14476 ->  14474  unresolved 1  dropped_drains None -> None  first_bounce same  closest pair excursion/tau 0.1595 at N=3.943201 (1 steps with >= 2 changes)
+   removed wall     N=3.944371069 T_J=387.383 GeV phi=5 M_P
+   removed plateau  N=3.949289970 T_J=385.485 GeV phi=5 M_P
+   dropped pair on [3.943200898, 3.988281944]: pi nodes -6.653e-12, -5.914e-06; excursions 1.595e-09; tau 1.0000059e-08
+beta=2.5   M=0.001  tps   1819 ->   1817  unresolved 1  dropped_drains 1 -> 0  first_bounce same  closest pair excursion/tau 0.1595 at N=3.943201 (2 steps with >= 2 changes)
+   removed wall     N=3.944371069 T_J=387.383 GeV phi=5 M_P
+   removed plateau  N=3.949289970 T_J=385.485 GeV phi=5 M_P
+   dropped pair on [3.943200898, 3.988281944]: pi nodes -6.653e-12, -5.914e-06; excursions 1.595e-09; tau 1.0000059e-08
+beta=3.0   M=4e-31  FAILED tps  14646 ->  14644  unresolved 1  dropped_drains None -> None  first_bounce same  closest pair excursion/tau 0.02317 at N=3.942539 (1 steps with >= 2 changes)
+   removed wall     N=3.945994282 T_J=386.756 GeV phi=5 M_P
+   removed plateau  N=3.947827225 T_J=386.048 GeV phi=5 M_P
+   dropped pair on [3.942539081, 3.951322351]: pi nodes -7.978e-12, -1.334e-08; excursions 2.317e-10; tau 1e-08
+beta=3.0   M=1e-12  tps    200 ->    198  unresolved 1  dropped_drains 1 -> 0  first_bounce same  closest pair excursion/tau 0.02317 at N=3.942539 (1 steps with >= 2 changes)
+   removed wall     N=3.945994282 T_J=386.756 GeV phi=5 M_P
+   removed plateau  N=3.947827225 T_J=386.048 GeV phi=5 M_P
+   dropped pair on [3.942539081, 3.951322351]: pi nodes -7.978e-12, -1.334e-08; excursions 2.317e-10; tau 1e-08
+beta=3.0   M=0.001  tps   1697 ->   1695  unresolved 1  dropped_drains 1 -> 0  first_bounce same  closest pair excursion/tau 0.02317 at N=3.942539 (4 steps with >= 2 changes)
+   removed wall     N=3.945994282 T_J=386.756 GeV phi=5 M_P
+   removed plateau  N=3.947827225 T_J=386.048 GeV phi=5 M_P
+   dropped pair on [3.942539081, 3.951322351]: pi nodes -7.978e-12, -1.334e-08; excursions 2.317e-10; tau 1e-08
+beta=3.0   M=0.5    tps    137 ->    135  unresolved 1  dropped_drains 1 -> 0  first_bounce same  closest pair excursion/tau 0.02317 at N=3.942539 (1 steps with >= 2 changes)
+   removed wall     N=3.945994282 T_J=386.756 GeV phi=5 M_P
+   removed plateau  N=3.947827225 T_J=386.048 GeV phi=5 M_P
+   dropped pair on [3.942539081, 3.951322351]: pi nodes -7.978e-12, -1.334e-08; excursions 2.317e-10; tau 1e-08
+beta=4.0   M=4e-31  FAILED tps  14581 ->  14579  unresolved 1  dropped_drains None -> None  first_bounce same  closest pair excursion/tau 0.01808 at N=3.943025 (1 steps with >= 2 changes)
+   removed wall     N=3.946435643 T_J=386.585 GeV phi=5 M_P
+   removed plateau  N=3.947787851 T_J=386.063 GeV phi=5 M_P
+   dropped pair on [3.943024863, 3.983024863]: pi nodes -1.064e-11, -6.365e-06; excursions 1.808e-10; tau 1.0000064e-08
+beta=4.0   M=0.001  tps   2099 ->   2097  unresolved 1  dropped_drains 1 -> 0  first_bounce same  closest pair excursion/tau 0.01808 at N=3.943025 (9 steps with >= 2 changes)
+   removed wall     N=3.946435643 T_J=386.585 GeV phi=5 M_P
+   removed plateau  N=3.947787851 T_J=386.063 GeV phi=5 M_P
+   dropped pair on [3.943024863, 3.983024863]: pi nodes -1.064e-11, -6.365e-06; excursions 1.808e-10; tau 1.0000064e-08
+beta=5.5   M=4e-31  FAILED tps  14438 ->  14436  unresolved 1  dropped_drains None -> None  first_bounce same  closest pair excursion/tau 0.04452 at N=3.940858 (1 steps with >= 2 changes)
+   removed wall     N=3.943386408 T_J=387.765 GeV phi=5 M_P
+   removed plateau  N=3.946745965 T_J=386.466 GeV phi=5 M_P
+   dropped pair on [3.940858019, 3.947851560]: pi nodes -1.46e-11, -1.258e-09; excursions 4.452e-10; tau 1e-08
+beta=5.5   M=1e-12  FAILED tps   2056 ->   2054  unresolved 1  dropped_drains None -> None  first_bounce same  closest pair excursion/tau 0.04452 at N=3.940858 (1 steps with >= 2 changes)
+   removed wall     N=3.943386408 T_J=387.765 GeV phi=5 M_P
+   removed plateau  N=3.946745965 T_J=386.466 GeV phi=5 M_P
+   dropped pair on [3.940858019, 3.947851560]: pi nodes -1.46e-11, -1.258e-09; excursions 4.452e-10; tau 1e-08
+beta=5.5   M=0.001  tps   2803 ->   2801  unresolved 1  dropped_drains 1 -> 0  first_bounce same  closest pair excursion/tau 0.04452 at N=3.940858 (8 steps with >= 2 changes)
+   removed wall     N=3.943386408 T_J=387.765 GeV phi=5 M_P
+   removed plateau  N=3.946745965 T_J=386.466 GeV phi=5 M_P
+   dropped pair on [3.940858019, 3.947851560]: pi nodes -1.46e-11, -1.258e-09; excursions 4.452e-10; tau 1e-08
+beta=5.5   M=0.5    tps    343 ->    341  unresolved 1  dropped_drains 1 -> 0  first_bounce same  closest pair excursion/tau 0.04452 at N=3.940858 (1 steps with >= 2 changes)
+   removed wall     N=3.943386408 T_J=387.765 GeV phi=5 M_P
+   removed plateau  N=3.946745965 T_J=386.466 GeV phi=5 M_P
+   dropped pair on [3.940858019, 3.947851560]: pi nodes -1.46e-11, -1.258e-09; excursions 4.452e-10; tau 1e-08
+beta=10.0  M=4e-31  FAILED tps  14085 ->  14083  unresolved 1  dropped_drains None -> None  first_bounce same  closest pair excursion/tau 0.008357 at N=3.942844 (1 steps with >= 2 changes)
+   removed wall     N=3.946625481 T_J=386.512 GeV phi=5 M_P
+   removed plateau  N=3.947349509 T_J=386.233 GeV phi=5 M_P
+   dropped pair on [3.942843952, 3.951634821]: pi nodes -2.66e-11, -5.369e-08; excursions 8.357e-11; tau 1.0000001e-08
+beta=10.0  M=1e-12  FAILED tps   2924 ->   2922  unresolved 1  dropped_drains None -> None  first_bounce same  closest pair excursion/tau 0.008357 at N=3.942844 (1 steps with >= 2 changes)
+   removed wall     N=3.946625481 T_J=386.512 GeV phi=5 M_P
+   removed plateau  N=3.947349509 T_J=386.233 GeV phi=5 M_P
+   dropped pair on [3.942843952, 3.951634821]: pi nodes -2.66e-11, -5.369e-08; excursions 8.357e-11; tau 1.0000001e-08
+beta=10.0  M=0.001  tps   4343 ->   4341  unresolved 1  dropped_drains 1 -> 0  first_bounce same  closest pair excursion/tau 0.008357 at N=3.942844 (6 steps with >= 2 changes)
+   removed wall     N=3.946625481 T_J=386.512 GeV phi=5 M_P
+   removed plateau  N=3.947349509 T_J=386.233 GeV phi=5 M_P
+   dropped pair on [3.942843952, 3.951634821]: pi nodes -2.66e-11, -5.369e-08; excursions 8.357e-11; tau 1.0000001e-08
+beta=10.0  M=0.5    tps    489 ->    487  unresolved 1  dropped_drains 1 -> 0  first_bounce same  closest pair excursion/tau 0.008357 at N=3.942844 (1 steps with >= 2 changes)
+   removed wall     N=3.946625481 T_J=386.512 GeV phi=5 M_P
+   removed plateau  N=3.947349509 T_J=386.233 GeV phi=5 M_P
+   dropped pair on [3.942843952, 3.951634821]: pi nodes -2.66e-11, -5.369e-08; excursions 8.357e-11; tau 1.0000001e-08
+beta=20.0  M=4e-31  FAILED tps  13579 ->  13579  unresolved 0  dropped_drains None -> None  first_bounce same
+beta=20.0  M=1e-12  FAILED tps   8640 ->   8640  unresolved 0  dropped_drains None -> None  first_bounce same
+beta=20.0  M=0.001  tps   7607 ->   7605  unresolved 1  dropped_drains 0 -> 0  first_bounce same  closest pair excursion/tau 0.5916 at N=126.277907 (3 steps with >= 2 changes)
+   removed plateau  N=126.278121769 T_J=2.30538e-07 GeV phi=3.03615e-05 M_P
+   removed wall     N=126.278426381 T_J=2.30468e-07 GeV phi=3.03615e-05 M_P
+   dropped pair on [126.277906969, 126.279257167]: pi nodes 3.565e-08, 2.881e-07; excursions 5.916e-09; tau 1.0000003e-08
+beta=20.0  M=0.5    tps    813 ->    813  unresolved 0  dropped_drains 0 -> 0  first_bounce same
+turning points compared: before 231904, after 231854; histories with a first_bounce: 23; pairs dropped in all: 25
+RESULT: HOLDS

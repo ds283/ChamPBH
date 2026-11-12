@@ -1358,6 +1358,33 @@ not by `compute_scalar_history`, so no stored history has α > 0. The record is
   ruling, after a near-stall at β = 5, α = 0.1, M = 0.5 M_P put a plateau and a wall-side point inside
   one step (π > 0 at both ends, a dip to −1e-6 between). Detection reads the interpolant only and does
   not touch the solver.
+
+  *Added 2026-11-12 (`electroweak-eos` prompt 01a; its README §8, U8 and U9): an interior pair is kept
+  only if the solver resolves it.* On prompt 01's w table, Σ = 0 above 386.7 GeV, so a history started
+  at rest keeps |π| at 10⁻¹⁴–10⁻⁹ M_P until Σ switches on. On the step that straddles 386.7 GeV π is
+  negative at both nodes, and Radau's interpolant swings above zero between them by less than the
+  solver's tolerance; the sampling above read that as a wall and a plateau, though the kick there is
+  negative and the field does not turn. The rule now (`resolved_sign_changes`,
+  `turning_point_tolerance`): if the samples show exactly one change and the nodes are of opposite
+  signs, it is a turning point whatever its size, located end to end as before. Otherwise the changes
+  are walked from the step's start; for a change with a successor, the excursion is the largest |π|
+  over the samples between the two crossings, and if it is not greater than
+  τ = atol + rtol · max(|π_low|, |π_high|) both changes are dropped and the walk goes on after them;
+  otherwise the first is kept and the walk goes on at the second. τ is the scale SciPy's Radau gives
+  the error of component y[1] = π, with the scalar atol and rtol the step loop builds it with. A
+  dropped pair is as if it were not there: no `TurningPoint`, no drain armed or dropped, no boundary
+  of the half-oscillation, no bounce row. It is counted in
+  `IntegrationResult.unresolved_turning_point_pairs`, at every α, which is not stored. With no pair
+  dropped every change, its sub-interval and its root are the old code's. On the old (`ec6bca8`)
+  table, over 01's 36 scanned histories run to T_CMB, no pair is dropped down to 100 GeV (01's scan
+  range), and everything but two turning-point pairs is bitwise unchanged. Those two are late
+  near-stalls of an outgoing field, π > 0 at both nodes with a dip below zero smaller than τ: β = 10,
+  M = 10⁻³ M_P at N = 78.5525 (T_J ≈ 24 eV, excursion 0.175 τ) and β = 20, M = 10⁻³ M_P at
+  N = 125.5838 (T_J ≈ 0.46 keV, 0.95 τ). The user ruled on 2026-11-12 that they are the rule working
+  as ruled. The closest pair kept there is 1.10 τ (β = 4, M = 10⁻³ M_P, N = 52.066), so a pair can
+  move across the threshold with the tolerance. The interior
+  pair above (β = 10 since `inelastic-reflection` prompt 03) has an excursion of 1.18 × 10⁻⁶ against
+  τ = 1.00 × 10⁻⁸, and is kept. The measurements are in `.documents/electroweak-eos/turning-points/`.
 - **The drain point** (P3). A wall-side turning point arms a drain. A plateau turnaround, a floor
   reflection or the history's end drops it. The drain point is the end of the first accepted step,
   counting from the turning point's own, at which the accepted state has π > 0 and

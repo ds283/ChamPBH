@@ -105,7 +105,12 @@ FIXED_T_JORDAN_LOW_MEV = 0.07
 # the interior points at which integrate_scalar_history samples pi on each accepted step, besides
 # its two ends, to find turning points (inelastic-reflection prompt 02; orchestrator note 02,
 # ruling 15, as surfing_turning_points samples g): two sign changes on one step are both found
-# unless they are closer than a ninth of it
+# unless they are closer than a ninth of it.
+# Since electroweak-eos prompt 01a (its README §8, U8) an interior pair of changes is kept only if
+# the solver resolves it: unless the samples show exactly one change running end to end, two
+# consecutive changes whose excursion (the largest |pi| over the samples between them) is not
+# greater than the step's tolerance on pi, atol + rtol max(|pi_low|, |pi_high|), are both dropped
+# (resolved_sign_changes). The interpolant's swing below that tolerance is not the field turning
 TURNING_POINT_INTERIOR_SAMPLES = 8
 
 # the gate (inelastic-reflection prompt 03; README §6.1 U4 (b'), §6.2 P6), applied at alpha > 0 only:
@@ -485,6 +490,98 @@ TurningPoint = namedtuple(
     ],
 )
 
+# one sign change of pi between two consecutive samples of an accepted step (electroweak-eos
+# prompt 01a), as observe_turning_points finds them
+#   N_before:  N of the last sample before the change at which pi is not 0.0
+#   N_after:   N of the first sample after it at which pi is not 0.0, of the other sign
+#   N_zero:    N of the first sample exactly 0.0 between those two, or None; if not None it is the
+#              turning point
+#   kind:      "wall" where pi goes from - to +, "plateau" where it goes from + to -
+SignChange = namedtuple("SignChange", ["N_before", "N_after", "N_zero", "kind"])
+
+
+def turning_point_tolerance(
+    pi_low: float, pi_high: float, atol: float, rtol: float
+) -> float:
+    """
+    The tolerance to which Radau holds pi on an accepted step (electroweak-eos prompt 01a; README
+    §8.3 U8): atol + rtol max(|pi_low|, |pi_high|), with pi_low and pi_high pi at the step's two
+    nodes and atol, rtol the scalars its Radau instance was built with. SciPy's Radau scales each
+    component's error estimate by atol + rtol max(|y_old|, |y_new|) and accepts a step whose RMS
+    over the components is at most 1; pi is the state's component y[1], unscaled.
+    """
+    return atol + rtol * max(abs(pi_low), abs(pi_high))
+
+
+def resolved_sign_changes(
+    N_samples, pi_samples, tolerance: float
+) -> Tuple[List[SignChange], int]:
+    """
+    The sign changes of pi that a step's samples resolve, in order, and the number of pairs dropped
+    (electroweak-eos prompt 01a; README §8.3 U8 and U9).
+
+    The sign changes are found between consecutive samples, as observe_turning_points found them
+    before 01a: a sample exactly 0.0 carries no sign, and a change across one or more such samples is
+    recorded with the first of them (N_zero); a touch of zero, with the same sign on either side, is
+    no change. Then the changes are walked in order from the step's start. For a change i that has a
+    successor i + 1, the excursion between them is the largest |pi| over the samples strictly
+    between the two crossings (from change i's N_after to change i + 1's N_before, all of the
+    opposite sign to pi before change i). If the excursion is not greater than `tolerance`, both
+    changes are dropped and the walk goes on at i + 2; otherwise change i is kept and the walk goes
+    on at i + 1. A change with no successor is kept, so a single change is always kept, whatever
+    its size.
+
+    When no pair is dropped, the changes returned are those found before 01a, in the same order and
+    with the same N.
+
+    :param N_samples: the samples' N, in increasing order, the step's two nodes first and last
+    :param pi_samples: pi at each sample, plain floats
+    :param tolerance: the step's tolerance on pi (turning_point_tolerance)
+    :return: (the kept SignChanges in order, the number of pairs dropped)
+    """
+    # the changes as indices: (j_before, j_after, j_zero or None, kind)
+    changes = []
+    last_sign: int = 0
+    last_j: Optional[int] = None
+    zero_j: Optional[int] = None
+    for j, pi_j in enumerate(pi_samples):
+        if pi_j == 0.0:
+            if zero_j is None:
+                zero_j = j
+            continue
+        sign: int = 1 if pi_j > 0.0 else -1
+        if last_sign != 0 and sign != last_sign:
+            changes.append((last_j, j, zero_j, "wall" if last_sign < 0 else "plateau"))
+        last_sign = sign
+        last_j = j
+        zero_j = None
+
+    kept: List[SignChange] = []
+    dropped: int = 0
+    i: int = 0
+    while i < len(changes):
+        j_before, j_after, j_zero, kind = changes[i]
+        if i + 1 < len(changes):
+            j_end: int = changes[i + 1][0]
+            excursion: float = max(
+                abs(pi_samples[j]) for j in range(j_after, j_end + 1)
+            )
+            if excursion <= tolerance:
+                dropped += 1
+                i += 2
+                continue
+        kept.append(
+            SignChange(
+                N_before=N_samples[j_before],
+                N_after=N_samples[j_after],
+                N_zero=None if j_zero is None else N_samples[j_zero],
+                kind=kind,
+            )
+        )
+        i += 1
+    return kept, dropped
+
+
 # one candidate for a drain of the condensate's kinetic energy into the dark-radiation ledger
 # (inelastic-reflection prompts 02, 03 and 05; README §6.2 P4, the fields prompts 02 and 03 can
 # fill). At alpha > 0 every drain point and every reflection is one, alpha_eff = 0.0 included
@@ -687,6 +784,14 @@ _ParkedPhaseEnd = namedtuple("_ParkedPhaseEnd", ["N", "state", "released"])
 #                                it, which history_margins reuses (P18; orchestrator note 01, ruling 5);
 #                                None under the fixed law, where history_margins calls peak_estimate as
 #                                before. Neither field is carried by an existing payload key
+#   unresolved_turning_point_pairs: the interior pairs of sign changes of pi that observe_turning_points
+#                                dropped over the history because the solver does not resolve them
+#                                (resolved_sign_changes; electroweak-eos prompt 01a, README §8.3 U8, U9).
+#                                Counted at every alpha, alpha = 0 included. A dropped pair is as if it
+#                                were not there: no TurningPoint, no drain armed or dropped, no boundary
+#                                of the half-oscillation, no bounce row. It is not a payload key, not a
+#                                column and not part of any record or fingerprint. The default 0 exists
+#                                for stand-ins, as restart_retakes' does, and the loop always passes it
 IntegrationResult = namedtuple(
     "IntegrationResult",
     [
@@ -707,8 +812,9 @@ IntegrationResult = namedtuple(
         "restart_retakes",
         "drain",
         "peak_estimates",
+        "unresolved_turning_point_pairs",
     ],
-    defaults=[0, None, None],
+    defaults=[0, None, None, 0],
 )
 
 # the drain law's record of one candidate under the one-loop law (one-loop-drain prompt 01 §1.4), in the
@@ -1937,7 +2043,18 @@ def integrate_scalar_history(
     sign change is a TurningPoint, located by brentq (xtol = 1e-15): "wall" for pi from - to +,
     "plateau" for + to -. A single change running end to end is located exactly as first_bounce
     locates one; two or more on one step are each refined on their own sub-interval
-    (orchestrator note 02, ruling 15). This runs at every alpha and does not touch the solver.
+    (orchestrator note 02, ruling 15). Since electroweak-eos prompt 01a (its README §8, U8 and U9),
+    unless the samples show exactly one change running end to end, an interior pair is kept only if
+    the solver resolves it: walking the changes from the step's start, two consecutive changes whose
+    excursion (the largest |pi| over the samples between their crossings) is not greater than
+    tau = atol + rtol max(|pi_low|, |pi_high|), the tolerance to which Radau holds pi = y[1] on the
+    step, are both dropped (resolved_sign_changes). A dropped pair is as if it were not there: no
+    TurningPoint, no drain armed or dropped, no boundary of the half-oscillation; it is counted in
+    IntegrationResult.unresolved_turning_point_pairs. The case that led to it: on the w table of
+    electroweak-eos prompt 01, with Sigma = 0 above 386.7 GeV, a history started at rest has
+    pi < 0 at both nodes of the step where Sigma switches on, and the interpolant swings above zero
+    between them by less than tau; the field does not turn there.
+    This runs at every alpha and does not touch the solver.
     At alpha > 0:
       - a wall-side turning point arms a drain. The drain point is the end of the first accepted
         step, counting from the turning point's own, at which the accepted state has pi > 0 and
@@ -2218,6 +2335,10 @@ def integrate_scalar_history(
     # (orchestrator note 03, ruling 7). Counted at every alpha, alpha = 0 included
     dropped_drains = 0
 
+    # the interior pairs of sign changes of pi dropped as unresolved by the solver (electroweak-eos
+    # prompt 01a). Counted at every alpha, alpha = 0 included
+    unresolved_pairs: int = 0
+
     # the unresolved turnaround (inelastic-reflection prompt 05), at alpha > 0 on a model with a wall
     # only; at alpha = 0, or without a wall, nothing is assessed and the floor rule is the old code
     #   infall_assessment:  the infall's latest assessment (phi, ln E, ClassicalTurningPoint), or None;
@@ -2487,9 +2608,15 @@ def integrate_scalar_history(
           - One sign change across the samples, running end to end (pi_low and pi_high of opposite
             signs): the root is bracketed by the whole step, brentq(xtol = 1e-15), exactly as
             first_bounce brackets it.
-          - Otherwise each sign change between consecutive samples is refined by brentq on its
-            sub-interval. A sample at which pi is exactly 0.0 is the turning point if the signs
-            on either side of it (within the step) differ, counted once; a touch is not one.
+          - Otherwise each sign change between consecutive samples that resolved_sign_changes keeps
+            is refined by brentq on its sub-interval. A pair of consecutive changes whose excursion
+            is not greater than the step's tolerance on pi (turning_point_tolerance, with
+            params.atol and params.rtol) is dropped and counted in unresolved_pairs
+            (electroweak-eos prompt 01a); its samples are folded as if the step held no turning
+            point. The end-to-end bracket is used only when the samples show exactly one change,
+            even if dropping a pair leaves one. A sample at which pi is exactly 0.0 is the turning
+            point if the signs on either side of it (within the step) differ, counted once; a
+            touch is not one.
         "wall" where pi goes from - to +, "plateau" where it goes from + to -. Records and returns
         the list, possibly empty.
 
@@ -2501,6 +2628,7 @@ def integrate_scalar_history(
         whose A_k the TurningPoint records with m_eff/H_E at the turning point itself, and those
         after it into the next.
         """
+        nonlocal unresolved_pairs
         k: int = len(interpolants) - 1
         interpolant_ = interpolants[k]
         t_low: float = ts[k]
@@ -2548,39 +2676,33 @@ def integrate_scalar_history(
         Ns = [t_low] + [float(x) for x in N_interior] + [t_high]
         pis = [pi_low] + [float(x) for x in pi_interior] + [pi_high]
 
-        # the sign changes between consecutive samples: (j_before, j_after, j_zero or None, kind),
-        # where j_zero is the first sample exactly 0.0 since the last non-zero one
-        changes = []
-        last_sign: int = 0
-        last_j: Optional[int] = None
-        zero_j: Optional[int] = None
-        for j, pi_j in enumerate(pis):
-            if pi_j == 0.0:
-                if zero_j is None:
-                    zero_j = j
-                continue
-            sign: int = 1 if pi_j > 0.0 else -1
-            if last_sign != 0 and sign != last_sign:
-                changes.append(
-                    (last_j, j, zero_j, "wall" if last_sign < 0 else "plateau")
-                )
-            last_sign = sign
-            last_j = j
-            zero_j = None
+        # the sign changes between consecutive samples, less the pairs the solver does not resolve
+        # (electroweak-eos prompt 01a): with none dropped, exactly the changes found before 01a
+        changes, dropped = resolved_sign_changes(
+            Ns,
+            pis,
+            turning_point_tolerance(pi_low, pi_high, params.atol, params.rtol),
+        )
+        unresolved_pairs += dropped
 
         def pi_of(t: float) -> float:
             return interpolant_(t)[1]
 
         roots = []
-        if len(changes) == 1 and (pi_low < 0.0 < pi_high or pi_low > 0.0 > pi_high):
+        if (
+            len(changes) == 1
+            and dropped == 0
+            and (pi_low < 0.0 < pi_high or pi_low > 0.0 > pi_high)
+        ):
             # end to end: the whole step is the bracket, as first_bounce takes it
-            roots.append((brentq(pi_of, t_low, t_high, xtol=1e-15), changes[0][3]))
+            roots.append((brentq(pi_of, t_low, t_high, xtol=1e-15), changes[0].kind))
         else:
-            for j_before, j_after, j_zero, kind in changes:
-                if j_zero is not None:
-                    roots.append((Ns[j_zero], kind))
+            for change in changes:
+                kind = change.kind
+                if change.N_zero is not None:
+                    roots.append((change.N_zero, kind))
                     continue
-                a, b = Ns[j_before], Ns[j_after]
+                a, b = change.N_before, change.N_after
                 # re-read the sub-interval's ends by scalar calls: a vectorized interior sample
                 # can differ from the scalar one by rounding
                 pi_a, pi_b = pi_of(a), pi_of(b)
@@ -3369,6 +3491,7 @@ def integrate_scalar_history(
         restart_retakes=restart_retakes,
         drain=drain_record(),
         peak_estimates=tuple(peak_estimates) if one_loop else None,
+        unresolved_turning_point_pairs=unresolved_pairs,
     )
 
 
