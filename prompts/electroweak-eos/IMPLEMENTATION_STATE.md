@@ -27,7 +27,7 @@ amended by U7)
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | Install the table | the table by U2 (b); the build script and test; `VERSION_LABEL` 2026.11.0; re-pinned tests and golden histories; the docstring | Opus | ⬜ | ⬜ | | |
+| 01 | Install the table | the table by U2 (b); the build script and test; `VERSION_LABEL` 2026.11.0; re-pinned tests and golden histories; the docstring | Opus | ✍️ | ⬜ | | |
 | 02 | Measure the effect | the EW threshold; the sample of `2026.10.0` histories old against new; the bath drift | Opus | ⬜ | ⬜ | | |
 | 03 | Documents and handover | the documents, issues, indexes and the handover; the close | Sonnet | ⬜ | ⬜ | | |
 
@@ -35,7 +35,17 @@ amended by U7)
 
 Prompts are written one at a time, each after the previous one lands and is reviewed.
 
-Orchestrator notes, one prompt at a time, in `orchestrator/`.
+Orchestrator notes, one prompt at a time, in `orchestrator/`: [`prompt-01.md`](orchestrator/prompt-01.md), written
+2026-11-12 with the prompt and not yet dispatched (the user dispatches it from a fresh context).
+
+**Planner's probe for 01 (2026-11-12, at `b3d5906`, not committed).** The U2 (b) table (170 rows) was built in a
+scratch worktree and the suites run on it.
+- 22 tests fail because of the table, and pass with the old one restored. CosmologyModels passes in full.
+- Above 386.7 GeV the table has Σ = 0, so a history that starts at rest is not kicked until 387 GeV. On the
+  golden β = 1.5 history a wall-side turning point at N = 3.94 (T_J ≈ 390 GeV) becomes `first_bounce`
+  (it was at N = 18.64).
+- The note makes this a stop for the user's ruling before anything that reads `first_bounce` is re-pinned
+  (note §0 and ruling 3).
 
 ### 1.1 Items
 
