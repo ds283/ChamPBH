@@ -110,7 +110,7 @@ FIXED_T_JORDAN_LOW_MEV = 0.07
 # the solver resolves it: unless the samples show exactly one change running end to end, two
 # consecutive changes whose excursion (the largest |pi| over the samples between them) is not
 # greater than the step's tolerance on pi, atol + rtol max(|pi_low|, |pi_high|), are both dropped
-# (resolved_sign_changes). The interpolant's swing below that tolerance is not the field turning
+# (resolved_sign_changes). The interpolant's swing below that tolerance is not the field turning.
 TURNING_POINT_INTERIOR_SAMPLES = 8
 
 # the gate (inelastic-reflection prompt 03; README §6.1 U4 (b'), §6.2 P6), applied at alpha > 0 only:
