@@ -49,6 +49,13 @@ $\beta \in (3.019, 3.020]$. Neither table records how it was made. Separately, t
 closed-form matter fraction $f_m(\TJ)$ appears to have its $(1+w)$ dependence inverted.
 This changes $f_m$ by up to $17\%$, but $f_m$ is at most $4\times10^{-4}$ of $\Sigma$ at the
 relevant temperatures, so the error has no effect on the dynamics.
+
+\medskip\noindent
+\emph{Addendum, 12 November 2026} (\S\ref{sec:addendum}). The pipeline's table is a free gas of
+Standard Model particles at their vacuum masses above $100\GeV$; the notebook's departs from it as
+Laine \& Meyer's equation of state does. Judgement~1 of \S\ref{sec:provenance} is withdrawn.
+Twenty-nine points supplied on 12 November sample the notebook's curve every $10\GeV$ from $100$ to
+$380\GeV$; the table they make with the notebook's rows is compared with Laine \& Meyer's data.
 \end{abstract}
 
 \tableofcontents
@@ -545,6 +552,161 @@ treatment of $\rho_r$ (algebraic in $\TJ$ in the notebook, integrated in the pip
 the runs use the notebook's integrator and parameters; the pipeline's integrator was not run.
 
 %======================================================================
+\section{Addendum (12 November 2026): Laine \& Meyer, and a denser notebook table}
+\label{sec:addendum}
+
+Everything above was written on 16 October 2026 and stands as written, except where this section
+says otherwise. Two pieces of information have arrived since.
+\begin{itemize}
+\item On 9 November D.~Seery relayed an account from the tables' author. The Saikawa--Shirai fitting
+  functions are meant for $g_\rho$ and $g_s$ alone, not for reconstructing $w$. The author's own
+  codes produce $w$ directly, following the references Saikawa and Shirai cite. The notebook's table
+  adds Laine \& Meyer's results (arXiv:1503.04935) across the electroweak crossover, whereas the
+  pipeline's table is an ideal gas there.
+\item On 12 November D.~Seery supplied 29 values of $w$ at $T = 100, 110, \ldots, 380\GeV$
+  (\path{data/notebook_w_points_2026-11-12.csv}, verbatim). D.~Seery's understanding, which the author
+  has not confirmed to us, is that they sample a smooth curve drawn to follow Laine \& Meyer's data as
+  closely as possible, because those data cannot be interpolated as they stand.
+\end{itemize}
+Every number in this section is in \path{data/laine_meyer_stats.json}, written by
+\path{scripts/laine_meyer_compare.py}.
+
+\subsection{The pipeline's table is an ideal gas above the crossover}
+
+We computed $\Sigma$ for a free gas of the Standard Model's particles at their vacuum masses, with no
+interactions and no thermal masses: the photon, the gluons, $W$, $Z$, $H$, the six quarks, the three
+charged leptons and three neutrinos. On the pipeline's rows from $100\GeV$ to $25\,\mathrm{TeV}$ the
+pipeline's $\Sigma$ agrees with it to within $3.3\%$ of $\Sigma$; it is $0.0270$ against
+$0.0263$ at $100\GeV$ and $0.00519$ against $0.00506$ at $316\GeV$. Below $60\GeV$ the pipeline's
+$\Sigma$ exceeds the free gas by at most $2.1\times10^{-3}$. So above the crossover the pipeline's
+table keeps the heavy particles' vacuum masses. In the symmetric phase they have none, and $\Sigma$
+falls much faster. That is what the notebook's rows do (Fig.~\ref{fig:lm-overview}).
+
+\medskip\noindent
+\textbf{Correction to \S\ref{sec:provenance}.} Judgement~1 (``the notebook's tail is unlikely to be
+physical'') rested on the same vacuum-mass reasoning, and is withdrawn. The notebook's fall to
+$\Sigma \approx 0$ near $390\GeV$ is the physical behaviour, to within Laine \& Meyer's stated
+uncertainty (below). Judgement~2 is answered by the author's account: the notebook's
+$25$--$100\GeV$ rows are the newer revision. The recommendation to find out where the rows came from
+is answered in part; how the curve was drawn is still not recorded.
+
+\subsection{Laine \& Meyer's data}
+
+Laine \& Meyer publish their equation of state as one file, \code{standardmodel.dat} (update of
+December 2019), at \url{http://www.laine.itp.unibe.ch/eos15/}. It was downloaded on 9 November 2026
+and is kept as \path{data/laine_meyer_eos15_standardmodel.dat}; its SHA-256 is\\
+{\small\code{457f9beba66f4e4442d012e37eb30506ed018cfada609017e101d691243e64e3}}.
+It has 1720 rows from $10\,\mathrm{keV}$ to $10^{18}\GeV$ and gives $w = p/e$ directly (column~6),
+together with $p$, $e$, $s$, $c$, $c_s^2$ and the effective numbers of degrees of freedom.
+
+Above $50\GeV$ it joins three calculations of different orders, and leaves two gaps between them:
+\begin{center}\small
+\begin{tabular}{@{}lrll@{}}
+\toprule
+$T$ [GeV] & rows & spacing & source \\
+\midrule
+50--110 & 18 & $0.0199$ in $\log_{10}T$ & hep-ph/0603048 \\
+110--125.3 & -- & no data & \\
+125.3--269.7 & 434 & $0.333\GeV$ & 1503.04935 \\
+269.7--292 & -- & no data & \\
+292--1000 & 355 & $2\GeV$ & hep-ph/0510375, modified in 1503.04935 \\
+\bottomrule
+\end{tabular}
+\end{center}
+The authors state a theoretical uncertainty of about $1\%$ and advise against taking numerical
+derivatives, because the pieces do not join smoothly. Since $\Sigma = 1 - 3p/e$, a $1\%$ shift in
+$p/e$ moves $\Sigma$ by about $0.01$. The joins show it: across $110 \to 125.3\GeV$ $\Sigma$ steps
+from $0.0274$ to $0.0225$, and across $269.7 \to 292\GeV$ from $0.0041$ to $0.0008$. There is also a
+cusp at $T \approx 159\GeV$, where the crossover is. Above $357\GeV$ Laine \& Meyer's $\Sigma$ is
+negative, reaching $-3.9\times10^{-4}$ at $574\GeV$, until it turns positive again at
+$15$--$16\,\mathrm{TeV}$. The paper attributes such features above $300\GeV$ at least partly to the
+truncation at $O(g^4)$. Splined as the pipeline splines its table, these data would put spikes into
+$\mathrm{d}w/\mathrm{d}\ln T$ at the joins and the cusp.
+
+Below $30\GeV$ the notebook's and the pipeline's rows, which are identical there, differ from Laine
+\& Meyer by $10$--$30\%$ of $\Sigma$ through the QCD region. That is a different choice of QCD input,
+and is outside this addendum's question.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/lm_overview.pdf}
+\caption{$\Sigma = 1 - 3w$ from Laine \& Meyer's data (by regime; shaded, the gaps between them), the
+notebook's rows (joined linearly in $\ln T$, zero from $386.7\GeV$) and the pipeline's table.}
+\label{fig:lm-overview}
+\end{figure}
+
+\subsection{The points of 12 November, and the merged table}
+
+The new points lie on the same curve as the notebook's existing rows. A spline through them
+reproduces the notebook's rows at $100$, $251.2$ and $316.2\GeV$ to $10^{-11}$ in $\Sigma$, and the
+row at $158.5\GeV$ to $3.7\times10^{-6}$, which is the spline's own error between $150$ and $160\GeV$.
+They add resolution to the notebook's table; they do not change it.
+
+We call \emph{the merged table} the notebook's 127 rows below $100\GeV$, the 29 new points, and the
+notebook's row $w = 1/3$ at $386.7\GeV$: 157 rows from $3.65\times10^{-5}$ to $386.7\GeV$
+(\path{data/merged_w_table.csv}). The notebook's rows at $158.5$, $251.2$ and $316.2\GeV$ are left
+out, being on the same curve. Splined as \code{Xav\_EOS\_spline} splines its table (a cubic spline in
+$\ln T$, $w = 1/3$ at and beyond the ends), it behaves well. Above $40\GeV$, $\Sigma$ has its single
+maximum at $54\GeV$ and falls steadily to the last row. It is nowhere below $-2\times10^{-15}$, and
+$\mathrm{d}\Sigma/\mathrm{d}\ln T$ is $2\times10^{-8}$ at the last row, so the switch to $w = 1/3$
+leaves no step in the derivative. The derivative is continuous where the spacing changes at
+$100\GeV$. \code{Xav\_EOS\_spline} would take the merged table without a change of code.
+
+Against Laine \& Meyer (Fig.~\ref{fig:lm-merged}), on their rows:
+\begin{itemize}
+\item $50$--$110\GeV$: higher by $3\times10^{-5}$ to $7\times10^{-4}$.
+\item $125$--$270\GeV$: between $-3.9\times10^{-3}$ (at the cusp, $159\GeV$) and
+  $+1.5\times10^{-3}$ (at $125\GeV$). Away from $150$--$170\GeV$ the difference is within
+  $\pm1.1\times10^{-3}$.
+\item $292$--$1000\GeV$: higher by $1.5\times10^{-3}$ at $292\GeV$, falling to $1.4\times10^{-4}$ at
+  $376\GeV$. Above $386.7\GeV$ the merged table is zero and does not follow the negative tail.
+\end{itemize}
+Every difference is smaller than the $\sim0.01$ in $\Sigma$ that Laine \& Meyer's stated
+uncertainty implies, and smaller than the steps at their own joins. The pipeline's table is further
+away above $250\GeV$: at $300$--$380\GeV$ its $\Sigma$ is $3.8$--$5.7\times10^{-3}$, where Laine \&
+Meyer's is below $7\times10^{-4}$.
+
+The integrated kick, $\int\Sigma\,\mathrm{d}\ln T$ (the notebook's rows here joined linearly, as in
+Fig.~\ref{fig:lm-overview}):
+\begin{center}\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+$T$ [GeV] & Laine \& Meyer & merged & notebook rows & pipeline \\
+\midrule
+30--100 & 0.04079 & 0.04183 & 0.04177 & 0.04060 \\
+100--160 & 0.01115 & 0.01110 & 0.01098 & 0.00987 \\
+160--300 & 0.00534 & 0.00542 & 0.00560 & 0.00624 \\
+300--1000 & $-0.00028$ & 0.00016 & 0.00021 & 0.00279 \\
+1000--25000 & $-0.00031$ & 0 & 0 & 0.00031 \\
+\bottomrule
+\end{tabular}
+\end{center}
+Over $100$--$300\GeV$ the merged table is within $0.2\%$ of Laine \& Meyer. Capture is not decided
+by the integral alone (\S\ref{sec:provenance}), so the table is a summary, not a prediction of the
+threshold.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/lm_merged.pdf}
+\caption{Top: the merged table, splined as the pipeline splines its table, with the points of
+12~November, the notebook's rows they replace, Laine \& Meyer's data and the pipeline's table.
+Bottom: the merged table minus Laine \& Meyer on Laine \& Meyer's rows.}
+\label{fig:lm-merged}
+\end{figure}
+
+\subsection{What this addendum does not settle}
+
+\begin{itemize}
+\item The electroweak-capture threshold with the merged table has not been measured, in either code.
+  The merged table is the notebook's curve, more finely sampled, so the expectation is a threshold
+  close to the notebook's $3.00285$; that is not a measurement.
+\item How the curve between $100$ and $386.7\GeV$ was drawn is not recorded here.
+\item The pipeline's $g_\rho$ and $g_s$ remain the Saikawa--Shirai fits, which by the author's account
+  are not meant to be consistent with any $w$; the inconsistency is measured in the companion report
+  on the field equations (\path{.documents/peakewsurf-field-equations/}).
+\end{itemize}
+
+%======================================================================
 \appendix
 \section{Reproducing these results}
 
@@ -604,5 +766,22 @@ integration sets in one \code{WORK/runs/log.txt}, each preceded by a header line
 \code{data/}. A single integration takes about 13\,s with \code{MaxStepSize} $10^{-3}$. In
 \code{bisect.wls} the history files are named to three decimal places, so the bisection steps
 overwrite one another; the bisection results are taken from its log.
+
+\paragraph{The addendum (\S\ref{sec:addendum}).}
+ChamPBH at commit \code{edf72b3}, with the same Python and packages. From the repository root,
+\begin{verbatim}
+./venv/bin/python \
+    .documents/peakewsurf-kicking-function/scripts/laine_meyer_compare.py
+\end{verbatim}
+takes a few seconds. It reads, in \path{data/},
+\begin{itemize}
+\item \path{laine_meyer_eos15_standardmodel.dat},
+\item \path{notebook_w_table.csv} and \path{notebook_w_points_2026-11-12.csv},
+\end{itemize}
+and the pipeline's table, and writes
+\begin{itemize}
+\item \path{data/merged_w_table.csv} and \path{data/laine_meyer_stats.json},
+\item \path{figures/lm_overview.pdf} and \path{figures/lm_merged.pdf}.
+\end{itemize}
 
 \end{document}
