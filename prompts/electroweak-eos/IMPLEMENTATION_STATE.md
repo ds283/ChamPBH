@@ -27,7 +27,7 @@ amended by U7)
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01a | Resolved turning points | an interior pair of sign changes of π kept only if the solver resolves it (README §8); lands before 01's commit | Opus | ⬜ | ⬜ | | |
+| 01a | Resolved turning points | an interior pair of sign changes of π kept only if the solver resolves it (README §8); lands before 01's commit | Opus | ✍️ | ⬜ | | |
 | 01 | Install the table | the table by U2 (b); the build script and test; `VERSION_LABEL` 2026.11.0; re-pinned tests and golden histories; the docstring | Opus | ✍️ ⏸ 01a | ⬜ | | |
 | 02 | Measure the effect | the EW threshold; the sample of `2026.10.0` histories old against new; the bath drift | Opus | ⬜ | ⬜ | | |
 | 03 | Documents and handover | the documents, issues, indexes and the handover; the close | Sonnet | ⬜ | ⬜ | | |
@@ -35,10 +35,13 @@ amended by U7)
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
 
 Prompts are written one at a time, each after the previous one lands and is reviewed. 01a was inserted on
-2026-11-12 while 01 was held at its stop; its proposals U8–U11 (README §8.3) wait on the user's ruling.
+2026-11-12 while 01 was held at its stop; its proposals U8–U11 (README §8.3) were
+ruled as proposed by the user the same day: "U8 to U11 are fine as proposed; write 01a".
 
 Orchestrator notes, one prompt at a time, in `orchestrator/`: [`prompt-01.md`](orchestrator/prompt-01.md), written
-2026-11-12 with the prompt and not yet dispatched (the user dispatches it from a fresh context).
+2026-11-12 with the prompt and dispatched the same day at `468266d`; 01's handoff at its stop,
+[`prompt-01-handoff.md`](orchestrator/prompt-01-handoff.md); [`prompt-01a.md`](orchestrator/prompt-01a.md), written
+2026-11-12 with prompt 01a and not yet dispatched.
 
 **Planner's probe for 01 (2026-11-12, at `b3d5906`, not committed).** The U2 (b) table (170 rows) was built in a
 scratch worktree and the suites run on it.
@@ -83,7 +86,7 @@ None yet.
     −1.82 × 10⁻⁹, interior +6.74 × 10⁻¹⁰, atol 10⁻⁸); none on the old table; gone at atol ≤ 10⁻¹².
   - *Impact:* `first_bounce` is unaffected. `turning_points`, the fixed-law drains, the one-loop bounce rows
     (two event rows at the head, every ordinal +2) and the first candidate's nonadiabaticity are.
-  - *Next step:* 01a (README §8.2), under U8–U11 once ruled.
+  - *Next step:* 01a (README §8.2), under U8–U11 as ruled 2026-11-12.
   - **Assigned (2026-11-12):** to this campaign's prompt 01a, by the user's ruling "Handle it in a separate
     classifier prompt".
 

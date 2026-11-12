@@ -279,6 +279,13 @@ Gate **Resolved** (01a):
 
 ### 8.3 For the user to rule (U8–U11)
 
+**Ruled by the user, 2026-11-12:** "U8 to U11 are fine as proposed; write 01a". So 01a keeps an interior
+pair only if its excursion exceeds atol + rtol · max(|π_low|, |π_high|) (U8). A dropped pair is as if absent,
+counted in an unstored `IntegrationResult` field (U9). 01a runs in a worktree on `electroweak-eos-01a` and is
+fast-forwarded into `electroweak-eos` (U10), with no label bump (U11).
+
+The table below is the proposal as it was put.
+
 | | Proposed | Alternatives |
 |---|---|---|
 | **U8** — the rule | An interior pair (π of one sign at both nodes, two sign changes between them) is kept only if the largest \|π\| of the opposite sign, over the samples between the two crossings, exceeds the tolerance Radau holds π to on that step, atol + rtol · max(\|π_low\|, \|π_high\|). Otherwise both are dropped. A change across the step's nodes (π of opposite signs at the two ends) is always kept, as `first_bounce` keeps it. With more than two changes on one step, consecutive pairs are tested in order from the step's start. The rule is stated in the solver's own tolerance, so it holds in any units. | (b) count only sign changes between the step's nodes, which undoes the interior sampling ruled in inelastic-reflection 02; (c) a fixed floor on \|π\|, which needs a unit and a number with no reason behind it |
