@@ -1,5 +1,9 @@
 # Orchestrator — prompt 01, install the table
 
+> **Used for 01.** Dispatched 2026-11-12 at `468266d`. 01 stopped at ruling 3, which 01a answered, and was resumed
+> at `85b52ac` under the Addendum. It stopped again at test_11 and was resumed on the user's ruling. It landed as
+> `5947b4f` and was reviewed in the commit that adds this line. The review is on the board.
+
 Read [`../README.md`](../README.md) first: §0, §2, §5, and §6 as ruled. The user's words are "U1 to U6 are
 fine as proposed; U7 doesn't need to be in scope here." Then read the prompt. This note binds 01 only. The
 conventions of earlier campaigns' notes bind here as well: a tolerance is a number with its reason, timing is

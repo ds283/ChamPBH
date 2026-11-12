@@ -1,7 +1,7 @@
 # Log 01 — install the table
 
 **Subject:** Install the electroweak-crossover w table as 2026.11.0
-**Commit:** this commit, on branch `electroweak-eos`, on top of `85b52ac` (01a `634f141`, its review `c88e672` and a
+**Commit:** `5947b4f`, on branch `electroweak-eos`, on top of `85b52ac` (01a `634f141`, its review `c88e672` and a
 comment-only commit)
 **Date:** 2026-11-12, by Claude Opus 5.5 (two agents: the first to the stop of note 01's ruling 3, the second from
 the resume to the commit)
@@ -341,7 +341,7 @@ prediction from the peak Σ is 2.99918, below 3. The threshold is 02's.
 ## 6. State handed to the next prompt
 
 - **For 02:**
-  - "new" is this commit; "old" is `ec6bca8` (or any tree before this commit), in a worktree, never this tree with the
+  - "new" is `5947b4f`; "old" is `ec6bca8` (or any tree before `5947b4f`), in a worktree, never this tree with the
     old CSV swapped in.
   - The tuned golden history (β = 3, M = 0.01 M_P), old → new:
     - normalization −277.4502 (`rr03`, hex in the record) → −277.4502002;

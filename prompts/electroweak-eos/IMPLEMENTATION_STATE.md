@@ -28,7 +28,7 @@ amended by U7)
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
 | 01a | Resolved turning points | an interior pair of sign changes of π kept only if the solver resolves it (README §8); lands before 01's commit | Opus | ✍️ | ✅ | `634f141` | [`logs/01a-resolved-turning-points.md`](logs/01a-resolved-turning-points.md) |
-| 01 | Install the table | the table by U2 (b); the build script and test; `VERSION_LABEL` 2026.11.0; re-pinned tests and golden histories; the docstring | Opus | ✍️ | ✅ | this commit | [`logs/01-install-the-table.md`](logs/01-install-the-table.md) |
+| 01 | Install the table | the table by U2 (b); the build script and test; `VERSION_LABEL` 2026.11.0; re-pinned tests and golden histories; the docstring | Opus | ✍️ | ✅ | `5947b4f` | [`logs/01-install-the-table.md`](logs/01-install-the-table.md) |
 | 02 | Measure the effect | the EW threshold; the sample of `2026.10.0` histories old against new; the bath drift | Opus | ⬜ | ⬜ | | |
 | 03 | Documents and handover | the documents, issues, indexes and the handover; the close | Sonnet | ⬜ | ⬜ | | |
 
@@ -112,13 +112,50 @@ ruled it at the stop.
    because `turning-points/` beside it is tracked.
    The worktree was removed, after its `venv` symlink, and the branch `electroweak-eos-01a` was deleted.
 
-**01 landed (2026-11-12, this commit), after two stops.** The first was note 01's ruling 3, the early pair, answered by
+**01 landed (2026-11-12, `5947b4f`), after two stops.** The first was note 01's ruling 3, the early pair, answered by
 01a. The second was the Addendum's `test_injection` test_11: on the new table its history (β = 10, M = 0.5 M_P,
 α = 0.1, parking cut off) holds no interior pair. That is the table's doing: its oscillation starts at 274 GeV rather
 than 405 GeV, and near the old stall π stays above zero by hundreds of τ. 01a drops nothing there. 01a's own item-(11)
 test failed for the same reason, outside the Addendum's 18. **Ruled by the user, 2026-11-12:** "Go with (D), keep β = 10
 on the old table". Both item-(11) classes now build their cosmology on `prompts/electroweak-eos/data/pipeline_w_table_ec6bca8.csv`
 through `test_injection.on_the_old_w_table()`, with no assertion changed (*STRUCTURALLY REQUIRED*; log 01 §2.1).
+
+**Orchestrator review of prompt 01 (2026-11-12).** All six checks of note 01 §3 pass, as the Addendum and the user's
+two rulings at the stops amend them.
+1. *Scope.* `5947b4f`'s parent is `85b52ac`, not the agent's. Its 38 files are the prompt's §4 list less `CLAUDE.md`
+   (ruling 1), plus the re-pinned tests' modules and the two item-(11) modules added by the user's ruling. Nothing was
+   staged afterwards. The user's ` M CLAUDE.md`, the two `science-runs/` READMEs and `relativistic/` are still modified
+   and unstaged. Nothing is pushed.
+2. *The table.* `tools/build_w_table.py --check` exits 0: 170 rows, old 14, notebook_low 126, points 29, notebook_top 1.
+   `test_build_w_table` passes. The installed CSV is `690090c8…0119d`. The copied old table is `28edd854…29a8`, the
+   SHA-256 of `ec6bca8`'s.
+3. *The re-pins.* For each one, the log's old and new values match `git diff`. No tolerance is widened: reachability
+   d1 keeps 5 × 10⁻⁷ and 10⁻³, d2 keeps 5 × 10⁻³, and the others keep theirs. All 18 of the Addendum's tests are
+   accounted for. Two item-(11) classes changed no assertion. The patch `on_the_old_w_table()` redirects only a read
+   whose file name is `Xav_EOS_data.csv`. The two surfing tests now read rows that 01 made again with
+   `table/surfing_reference.py`. The committed surfing-temperature CSVs are unchanged as records, and on the old
+   table that script reproduces them to 3 × 10⁻¹² and 2.1 × 10⁻⁸. `test_history_and_bbn` named its golden by hard
+   path, and 01 repointed it; the log records this as D10.
+4. *The goldens.* Run by the orchestrator, 23:03–23:04 GMT (one-minute load 9.16 at the start, 6.60 at the end):
+   - `test_build_w_table`, `test_golden_history` and `test_golden_reflecting_history`: 20 tests, OK;
+   - `test_tuning` (e): OK, 34.9 s;
+   - `ObjectFactories` `test_store_fingerprint_golden` and `test_fingerprint_format_guard`: 9 tests, OK.
+     `FINGERPRINT_FORMAT` is 7.
+   - `compare_goldens.py`, re-run, matches the committed `out/compare_goldens.txt` line for line, apart from its
+     header lines. Its last line is "FORM: SAME".
+   - `git diff 85b52ac 5947b4f` on the `rr03` records is empty.
+5. *The rulings.* Both of the user's rulings are quoted on this board and in log 01 §2.1, and carried out:
+   - "Handle it in a separate classifier prompt; re-pin test_10 to 2026.11.0": 01a landed first, and test_10 reads
+     2026.11.0;
+   - "Go with (D), keep β = 10 on the old table": β = 10, M = 0.5 M_P, α = 0.1 are kept, and the cosmology is built
+     on the old table.
+6. *The records.*
+   - The log has §5.1's sections, and its 24 class labels cover every deviation.
+   - The verification document has §1 (1.1–1.8), and points to `electroweak-eos/turning-points/`.
+   - `config/version.py`'s 2026.11.0 entry is dated 2026-11-12.
+   - Row 01, its items and the Table gate are on the board.
+   - No issue was opened, so `OPEN_ISSUES.md` is unchanged.
+   - The orchestrator substituted `5947b4f` for "this commit" here and in the log.
 
 ### 1.1 Items
 
