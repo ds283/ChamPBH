@@ -90,10 +90,11 @@ small, but it is a change nobody has asked for. **U2** decides it.
 | # | Prompt | Covers | Model |
 |---|---|---|---|
 | 01 | `01-install-the-table.md` | the table by U2; the build script and its test; `VERSION_LABEL`; the re-pinned characterisation tests and golden histories with reasons; the class docstring | Opus |
+| 01a | `01a-resolved-turning-points.md` | an interior pair of sign changes of π kept only if the solver resolves it (§8); lands before 01's commit | Opus |
 | 02 | `02-measure-the-effect.md` | the EW threshold on the surfing grids (S1, and a fine grid placed by the coarse one); the sample of `2026.10.0` histories old against new; the bath drift re-measured; optionally the notebook-side threshold (U5) | Opus |
 | 03 | `03-documents-and-handover.md` | `architecture-summary.md` and `numerical-strategies.md` where they describe the EOS; the verification document; the issues; the indexes; the handover for the rebuild; closes the campaign | Sonnet |
 
-Written one at a time, each after the previous one lands and is reviewed. 02's "old" side runs on
+Written one at a time, each after the previous one lands and is reviewed. 01a was inserted on 2026-11-12, while 01 was held at its stop (§8). 02's "old" side runs on
 `main` at `ec6bca8`, or any tree before 01, in a worktree or a separate checkout. It never runs on 01's
 tree with the old CSV swapped back in.
 
@@ -102,6 +103,7 @@ tree with the old CSV swapped back in.
 | Gate | Holds when | Prompt |
 |---|---|---|
 | **Table** | the build script regenerates the installed CSV byte for byte from the committed inputs; `Xav_EOS_spline` evaluates the new table (its peak and its zero at the top row as §0.1 states); every moved pin is listed with its old and new value and a reason; values below the first changed row change only at the spline's coupling, measured and stated | 01 |
+| **Resolved** | on the old table, the suites, the golden records and 01's scan bitwise unchanged; on the new table, the early pair dropped wherever 01 saw it, α = 0 histories bitwise apart from `turning_points` (§8.2) | 01a |
 | **Threshold** | the EW-capture threshold on the new table is bracketed to 0.001 in β on a fine grid, and stated beside 3.020 (today, ChamPBH) and 3.00285 (notebook) | 02 |
 | **Effect** | for every sampled history: the change in Y_p, D/H, ΔN_eff (1 MeV, T_CMB), the capture temperature and the turning points, old against new, set beside what the run's figures resolve | 02 |
 | **Close** | documents, issues, indexes and the handover written; the suites at their counts | 03 |
@@ -218,3 +220,71 @@ Accepted as proposed unless the user rules otherwise.
 - The rebuild itself, which stays the user's. Every block of `2026.10.0` crosses the electroweak scale,
   so the expectation, to be tested by 02 and not assumed, is that a rebuild of record is needed for every
   figure. Whether the near-threshold β (about 3.00–3.02) change their type of capture is 02's to say.
+
+## 8. The early turning-point pair, and prompt 01a (2026-11-12)
+
+### 8.1 What 01 found
+
+Prompt 01 stopped at its note's ruling 3 on 2026-11-12, with the table installed and nothing committed.
+Its measurements, from probes that changed no code:
+- **The pair.** On the new table, a history that starts at rest at T* = 20 000 GeV is kicked only by
+  −β f_m above 386.7 GeV (f_m ≈ 1.8 × 10⁻¹²), so π stays at 10⁻¹⁴ to 10⁻⁹ M_P. On the accepted step that
+  straddles 386.7 GeV, π at both nodes is negative (on the golden β = 1.5 history, −3.97 × 10⁻¹² and
+  −1.82 × 10⁻⁹). The step's dense-output interpolant swings to +6.74 × 10⁻¹⁰ between them. The interior
+  sampling of `observe_turning_points` (inelastic-reflection 02, its note's ruling 15) reads that swing as a
+  "wall" at N = 3.9415 and a "plateau" at N = 3.9473, at T_J ≈ 388 and 386 GeV.
+- **It is not the field turning.** The kick −β(Σ + f_m) is negative there, and friction cannot reverse π,
+  so the exact π does not cross zero. The swing is below the solver's absolute tolerance (atol = 10⁻⁸ on
+  that history). At atol 10⁻⁹ and 10⁻¹⁰ the pair remains; at 10⁻¹² and 10⁻¹⁴ there is none.
+- **Where it appears.** In 14 of 20 scanned histories (β from 0.5 to 20, M = 4 × 10⁻³¹ and 10⁻³ M_P),
+  always as a wall then a plateau within ΔN ≤ 0.0063 at T_J = 385–389 GeV. It depends on where the steps
+  fall, not on β or M. It was seen in 31 of the 33 integrations of the 22 tests the table breaks. No history
+  has such a pair on the old table, where Σ above 387 GeV keeps |π| at 10⁻⁶ to 10⁻³.
+- **What it changes.** `first_bounce` does not move: it takes a step only where π goes from negative at
+  the start to positive at the end, and both ends of the pair's step are negative (note 01's §0 had expected
+  it to move). The pair changes `turning_points`; under the fixed law at α > 0 it arms a drain that its
+  plateau drops; under the one-loop law it adds two event rows at the head of the bounce rows, so every
+  ordinal shifts by 2; and it resets the half-oscillation window, so the first real candidate's
+  nonadiabaticity changes (on P2197, A_k from 388 to 1.6 × 10⁵).
+
+**Ruled by the user, 2026-11-12:** "Handle it in a separate classifier prompt; re-pin test_10 to
+2026.11.0". The second half is `test_dissipation_store` test_10, which pins `VERSION_LABEL` and was outside
+note 01's list; 01 re-pins it.
+
+**A tail above 386.7 GeV was considered and not proposed** (the user asked, 2026-11-12). Restoring one
+would hide the defect rather than fix it: the pair comes back at any start where Σ and π are both near
+zero. The old table's tail is the vacuum-mass gas U2 replaced (∫Σ d ln T = +1.8 × 10⁻³ from 386.7 GeV to
+20 TeV). Laine & Meyer's is negative (−6.4 × 10⁻⁴ over the same range, least −3.9 × 10⁻⁴ at 574 GeV), well
+inside their stated uncertainty of about 0.01 in Σ, and would turn a field started at rest the other way,
+which would put a real early turning point at the head of every history. It stays out of scope (§1).
+
+### 8.2 Prompt 01a
+
+**01a — turning points resolved above the solver's tolerance** (Opus). It changes
+`observe_turning_points` so that a pair of sign changes the interpolant shows inside one step, with π of
+one sign at both nodes, is a pair of turning points only if the excursion between them is resolved by the
+solver. It lands **before** 01's commit, so 01's re-pins and golden records are made once, without the
+pair. 01 then resumes from its uncommitted work, under an addendum to its note.
+
+Gate **Resolved** (01a):
+- **Old table, bitwise.** The five suites at their counts with no test re-pinned; every golden record
+  reproduced as committed; on the old table, the turning points of 01's 32-history scan identical to the
+  last bit (N, kind, φ, ln T_J, A_k, m_eff/H), and no pair dropped anywhere.
+- **New table, by probe** (01's built CSV read through a redirect, not installed): the pair dropped in
+  every integration where 01 saw it; at α = 0 every history bitwise identical with and without 01a apart
+  from `turning_points`; `first_bounce` unchanged; and a list of which of the 22 tests then pass on the new
+  table, for 01.
+- **Unit tests** of the rule on constructed interpolants: an unresolved pair dropped, a resolved pair kept,
+  a single end-to-end change kept whatever its size, and three changes on one step.
+
+### 8.3 For the user to rule (U8–U11)
+
+| | Proposed | Alternatives |
+|---|---|---|
+| **U8** — the rule | An interior pair (π of one sign at both nodes, two sign changes between them) is kept only if the largest \|π\| of the opposite sign, over the samples between the two crossings, exceeds the tolerance Radau holds π to on that step, atol + rtol · max(\|π_low\|, \|π_high\|). Otherwise both are dropped. A change across the step's nodes (π of opposite signs at the two ends) is always kept, as `first_bounce` keeps it. With more than two changes on one step, consecutive pairs are tested in order from the step's start. The rule is stated in the solver's own tolerance, so it holds in any units. | (b) count only sign changes between the step's nodes, which undoes the interior sampling ruled in inelastic-reflection 02; (c) a fixed floor on \|π\|, which needs a unit and a number with no reason behind it |
+| **U9** — a dropped pair | **is as if it were not there**: no TurningPoint, no armed drain dropped, no boundary of the half-oscillation window, no bounce row. It is counted in a new `IntegrationResult.unresolved_turning_point_pairs`, which is not stored: no column, no format change. | store the count as a column of the history (fingerprint format 8) |
+| **U10** — where 01a runs | **In a worktree** on a branch `electroweak-eos-01a`, cut from the commit that adds 01a's prompt, so that 01's uncommitted work in the main checkout is left as it is. The orchestrator checks that 01a's commit touches no file 01 has changed, and fast-forwards `electroweak-eos` to it in the main checkout. The worktree's ten known failures (note 01 §0) are recorded, not fixed. | 01's agent sets its work aside as a patch and 01a runs in the main checkout; or 01 commits first with the pair re-pinned, and 01a re-pins those tests again |
+| **U11** — the label | **no bump in 01a.** 01's `2026.11.0` covers both: no store is built from the branch between them, and the branch is not merged before 01. | 01a bumps to `2026.10.1`, and 01 to `2026.11.0` after it |
+
+01a also checks whether `surfing_turning_points`, which samples g the same way, can do the same, and
+records what it finds without changing it.

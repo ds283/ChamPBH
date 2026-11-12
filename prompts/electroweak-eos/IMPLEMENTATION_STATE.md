@@ -1,6 +1,6 @@
 # electroweak-eos campaign — implementation state
 
-**Last updated:** 2026-11-12 · **Status: LIVE — 0 of 3 landed.** Planned 2026-11-12 at the user's
+**Last updated:** 2026-11-12 · **Status: LIVE — 0 of 4 landed; 01 held at its stop for 01a (§8 of the README).** Planned 2026-11-12 at the user's
 request. U1–U6 ruled by the user as proposed the same day, and U7 (the provenance of the rows) ruled out of
 scope. P1–P12 stand, with P11 amended by U7 (README §6). The plan is
 [`README.md`](README.md), on branch `electroweak-eos`, cut from `main` at `ec6bca8`.
@@ -27,13 +27,15 @@ amended by U7)
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | Install the table | the table by U2 (b); the build script and test; `VERSION_LABEL` 2026.11.0; re-pinned tests and golden histories; the docstring | Opus | ✍️ | ⬜ | | |
+| 01a | Resolved turning points | an interior pair of sign changes of π kept only if the solver resolves it (README §8); lands before 01's commit | Opus | ⬜ | ⬜ | | |
+| 01 | Install the table | the table by U2 (b); the build script and test; `VERSION_LABEL` 2026.11.0; re-pinned tests and golden histories; the docstring | Opus | ✍️ ⏸ 01a | ⬜ | | |
 | 02 | Measure the effect | the EW threshold; the sample of `2026.10.0` histories old against new; the bath drift | Opus | ⬜ | ⬜ | | |
 | 03 | Documents and handover | the documents, issues, indexes and the handover; the close | Sonnet | ⬜ | ⬜ | | |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
 
-Prompts are written one at a time, each after the previous one lands and is reviewed.
+Prompts are written one at a time, each after the previous one lands and is reviewed. 01a was inserted on
+2026-11-12 while 01 was held at its stop; its proposals U8–U11 (README §8.3) wait on the user's ruling.
 
 Orchestrator notes, one prompt at a time, in `orchestrator/`: [`prompt-01.md`](orchestrator/prompt-01.md), written
 2026-11-12 with the prompt and not yet dispatched (the user dispatches it from a fresh context).
@@ -47,6 +49,14 @@ scratch worktree and the suites run on it.
 - The note makes this a stop for the user's ruling before anything that reads `first_bounce` is re-pinned
   (note §0 and ruling 3).
 
+**01 at its stop (2026-11-12, nothing committed).** 01 was dispatched at `468266d` and stopped at its note's
+ruling 3. The early wall/plateau pair is the interpolant read below the solver's tolerance, not the field
+turning, and `first_bounce` does not move (README §8.1). It also stopped on a failure outside §0's list,
+`test_dissipation_store` test_10, which pins `VERSION_LABEL`. **Ruled by the user, 2026-11-12:** "Handle it
+in a separate classifier prompt; re-pin test_10 to 2026.11.0". 01's work so far (the table installed, the
+build script and its test, the label, the reachability pins and test_10 re-pinned) stays uncommitted in the
+main checkout until 01a lands.
+
 ### 1.1 Items
 
 None yet.
@@ -55,6 +65,7 @@ None yet.
 
 | Gate | Holds when | Prompt | State |
 |---|---|---|---|
+| Resolved | on the old table, suites, goldens and 01's scan bitwise unchanged; on the new table, the early pair dropped wherever 01 saw it (README §8.2) | 01a | ⬜ |
 | Table | the build script regenerates the CSV byte for byte; the class evaluates the new table; every moved pin listed with a reason; the spline's coupling below the first changed row measured | 01 | ⬜ |
 | Threshold | the EW-capture threshold bracketed to 0.001 in β, beside 3.020 (today) and 3.00285 (notebook) | 02 | ⬜ |
 | Effect | every sampled history's change in Y_p, D/H, ΔN_eff, capture temperature and turning points, set beside the figures' resolution | 02 | ⬜ |
@@ -62,7 +73,19 @@ None yet.
 
 ## 3. Active and unresolved issues
 
-None opened by this campaign.
+- **`[01-turning-points-read-below-the-solver-tolerance]`** (opened 2026-11-12, from 01's stop).
+  `observe_turning_points` samples π inside each accepted step and records every sign change of the
+  interpolant as a turning point, however small. Where π is below the solver's absolute tolerance, the
+  interpolant can change sign twice inside a step whose nodes agree in sign, and that is recorded as a
+  wall and a plateau although the field never turns.
+  - *Measured* (README §8.1): on the new table, 14 of 20 scanned histories started at rest have such a
+    pair at T_J = 385–389 GeV, where Σ switches on (golden β = 1.5: π at the nodes −3.97 × 10⁻¹² and
+    −1.82 × 10⁻⁹, interior +6.74 × 10⁻¹⁰, atol 10⁻⁸); none on the old table; gone at atol ≤ 10⁻¹².
+  - *Impact:* `first_bounce` is unaffected. `turning_points`, the fixed-law drains, the one-loop bounce rows
+    (two event rows at the head, every ordinal +2) and the first candidate's nonadiabaticity are.
+  - *Next step:* 01a (README §8.2), under U8–U11 once ruled.
+  - **Assigned (2026-11-12):** to this campaign's prompt 01a, by the user's ruling "Handle it in a separate
+    classifier prompt".
 
 ### 3.1 Assigned to this campaign
 

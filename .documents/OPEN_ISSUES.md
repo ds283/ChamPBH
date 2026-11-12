@@ -1,6 +1,6 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-11-07 · **29 open**: 4 on the `review-remediation` board (closed
+**Last updated:** 2026-11-12 · **30 open**: 4 on the `review-remediation` board (closed
 2026-09-30), none now assigned; 2 on the `production-readiness` board
 (closed 2026-09-30); 2 on the `run-integrity` board (closed 2026-09-30; one stale entry closed 2026-10-22, its fix having landed in `5740690`; `jordan-normalization` prompt 07 closed one, 2026-10-26); 6 on the
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`
@@ -59,7 +59,9 @@ more opened the same day from the drain probe; re-planned and renamed the same d
 split in two and one half assigned to `reflection-restart`, returned for its 01 after that campaign closed; prompt 01
 closed that one and the other half, 2026-11-03, the second by the user's ruling (b); prompt 02 opened one, 2026-11-03; the orchestrator opened one after 02b, 2026-11-04, which the user's adoption of
 the measured law closed, 2026-11-05; prompt 03 closed two, 2026-11-06; prompt 08 opened and closed none, and the campaign
-closed 2026-11-07, 11 of 11 prompts landed, with these three open; §1.23).
+closed 2026-11-07, 11 of 11 prompts landed, with these three open; §1.23); 1 on the `electroweak-eos` board
+(planned 2026-11-12, with none opened or assigned; opened from prompt 01's stop the same day and assigned to its
+prompt 01a, §1.24).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -84,7 +86,8 @@ the two disagree, the board is right.
 [`jordan-normalization`](../prompts/jordan-normalization/IMPLEMENTATION_STATE.md) ·
 [`tuning-followups`](../prompts/tuning-followups/IMPLEMENTATION_STATE.md) ·
 [`inelastic-reflection`](../prompts/inelastic-reflection/IMPLEMENTATION_STATE.md) ·
-[`one-loop-drain`](../prompts/one-loop-drain/IMPLEMENTATION_STATE.md)
+[`one-loop-drain`](../prompts/one-loop-drain/IMPLEMENTATION_STATE.md) ·
+[`electroweak-eos`](../prompts/electroweak-eos/IMPLEMENTATION_STATE.md)
 
 ## 1. Open, by owning board
 
@@ -391,3 +394,11 @@ Prompt 03 closed two, one the planner's and one the probe's, 2026-11-06 (board �
 - `[02-one-loop-tunings-fail-at-small-A-in-the-transition-window]` — under the one-loop law the laboratory-M
   transition-window histories (β 1.0–1.1875) fail tuned at A = 0.01 (25 of 26 tasks; β = 1.0 at A = 0.1 too): step budget
   or effective minimum after the seed integration; 29 of 110 tunings; U14 (ruled 2026-11-04) leaves out A = 0.01; diagnosed 2026-11-04: the field never parks before today; re-tuned under the measured law (02d, 2026-11-05) three of 240 fail: R-632 (β = 1.0) at A = 0.1 and 0.05, the 5e-20 ladder at A = 0.05 (it builds at 0.1); every P, W and B history builds at all eight A. *(`one-loop-drain`; prompt 02)*
+
+### 1.24 Assigned to `electroweak-eos` 01a — [board §3](../prompts/electroweak-eos/IMPLEMENTATION_STATE.md)
+
+Planned 2026-11-12; one opened from prompt 01's stop the same day and assigned to the inserted prompt 01a.
+
+- `[01-turning-points-read-below-the-solver-tolerance]` — the interpolant's sign changes below the solver's
+  tolerance recorded as a wall/plateau pair; on the new table at T_J ≈ 387 GeV for histories started at rest;
+  `first_bounce` unaffected, bounce rows and drains not. *(`electroweak-eos`; prompt 01's stop; assigned to 01a)*
