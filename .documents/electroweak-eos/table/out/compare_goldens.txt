@@ -1,0 +1,241 @@
+golden_history_rr03.json -> golden_history_ee01.json
+  beta=1.5
+    solver_label: 'Radau+kinematic-cap-stepping1' (same)
+    sample_fields: ['raw_N', 'phi_Einstein', 'pi_Einstein', 'log_rhorad_Einstein', 'log_rhorad_Jordan', 'log_fm', 'H_Einstein', 'H_Jordan', 'log_T_Jordan', 'gstar_rho', 'gstar_s', 'dgstar_s_dlogT', 'dgstar_rho_dlogT', 'Sigma', 'friction_term', 'reflecting_term', 'kicking_term', 'log_one_plus_z_Jordan'] (same)
+    n_samples: 2723 (same)
+    counts
+    reflections                                            0 -> 0                        (+0) (equal)
+    accepted_steps                                      1233 -> 1219                     (-14)
+    RHS_evaluations                                     9870 -> 9776                     (-94)
+    compute_steps                                       9870 -> 9776                     (-94)
+    steps_rejected_by_exception                            0 -> 0                        (+0) (equal)
+    restart_retakes                                        0 -> 0                        (+0) (equal)
+    first bounce
+    N                                            18.64397082 -> 18.64396256              (rel -4.431e-07)
+    phi_Einstein                             9.360344868e-06 -> 9.360455674e-06          (rel +1.184e-05)
+    log_T_Jordan                                -43.35439761 -> -43.35439026             (rel -1.695e-07)
+    reflected                                          False -> False                  (equal)
+    fixed-temperature values
+    density_NP_ratio_1MeV                               None -> -0.05162692717        
+    density_NP_ratio_70keV                              None -> None                   (equal)
+    phi_Einstein_1MeV                                   None -> 0.002237413273        
+    phi_Einstein_70keV                                  None -> None                   (equal)
+    step control
+    cap_fraction                                         0.1 -> 0.1                      (rel +0.000e+00) (equal)
+    cap_floor                                          1e-11 -> 1e-11                    (rel +0.000e+00) (equal)
+    cap_global_max_step                                  0.1 -> 0.1                      (rel +0.000e+00) (equal)
+    jacobian_factor_max                               0.0001 -> 0.0001                   (rel +0.000e+00) (equal)
+    hashes
+    samples_sha256                    differs
+    log_one_plus_z_sha256             equal
+    excerpts: 12 samples at the same indices and ln(1 + z); 215 of 216 field values changed
+    the final sample (index 2722, ln(1 + z) = 0)
+    H_Einstein                               1.824053867e-43 -> 1.822492244e-43          (rel -8.561e-04)
+    H_Jordan                                 1.764173954e-43 -> 1.762894265e-43          (rel -7.254e-04)
+    Sigma                                      0.01079928835 -> 0.01079928835            (rel +7.607e-13)
+    dgstar_rho_dlogT                            0.3691689211 -> 0.3691689211             (rel +8.396e-13)
+    dgstar_s_dlogT                              0.3630961746 -> 0.3630961746             (rel +8.185e-13)
+    friction_term                              0.01973451524 -> 0.0197377755             (rel +1.652e-04)
+    gstar_rho                                    10.54544547 -> 10.54544547              (rel -1.465e-14)
+    gstar_s                                      10.54824942 -> 10.54824942              (rel -1.443e-14)
+    kicking_term                              -0.04859674697 -> -0.04859674953           (rel +5.269e-08)
+    log_T_Jordan                                -49.24436659 -> -49.24436659             (rel +8.438e-15)
+    log_fm                                      -14.18687049 -> -14.18570128             (rel -8.241e-05)
+    log_one_plus_z_Jordan                                  0 -> 0                      (equal)
+    log_rhorad_Einstein                         -195.7216478 -> -195.7233608             (rel +8.752e-06)
+    log_rhorad_Jordan                           -195.7356157 -> -195.7367853             (rel +5.975e-06)
+    phi_Einstein                              0.002327991794 -> 0.002237413273           (rel -3.891e-02)
+    pi_Einstein                               -0.01962978216 -> -0.01963302553           (rel +1.652e-04)
+    raw_N                                        25.07112098 -> 25.07125696              (rel +5.424e-06)
+    reflecting_term                          2.422637048e-34 -> 2.673345633e-34          (rel +1.035e-01)
+  beta=5.5
+    solver_label: 'Radau+kinematic-cap-stepping1' (same)
+    sample_fields: ['raw_N', 'phi_Einstein', 'pi_Einstein', 'log_rhorad_Einstein', 'log_rhorad_Jordan', 'log_fm', 'H_Einstein', 'H_Jordan', 'log_T_Jordan', 'gstar_rho', 'gstar_s', 'dgstar_s_dlogT', 'dgstar_rho_dlogT', 'Sigma', 'friction_term', 'reflecting_term', 'kicking_term', 'log_one_plus_z_Jordan'] (same)
+    n_samples: 4894 (same)
+    counts
+    reflections                                            0 -> 0                        (+0) (equal)
+    accepted_steps                                     26331 -> 28511                    (+2180)
+    RHS_evaluations                                   232530 -> 253131                   (+20601)
+    compute_steps                                     232530 -> 253131                   (+20601)
+    steps_rejected_by_exception                            0 -> 0                        (+0) (equal)
+    restart_retakes                                        0 -> 0                        (+0) (equal)
+    first bounce
+    N                                            32.10765423 -> 32.12445967              (rel +5.234e-04)
+    phi_Einstein                             7.689203375e-06 -> 7.69339784e-06           (rel +5.455e-04)
+    log_T_Jordan                                -37.03864764 -> -37.05535548             (rel +4.511e-04)
+    reflected                                          False -> False                  (equal)
+    fixed-temperature values
+    density_NP_ratio_1MeV                      0.01729019126 -> None                  
+    density_NP_ratio_70keV                              None -> None                   (equal)
+    phi_Einstein_1MeV                        1.904834519e-05 -> None                  
+    phi_Einstein_70keV                                  None -> None                   (equal)
+    step control
+    cap_fraction                                         0.1 -> 0.1                      (rel +0.000e+00) (equal)
+    cap_floor                                          1e-11 -> 1e-11                    (rel +0.000e+00) (equal)
+    cap_global_max_step                                  0.1 -> 0.1                      (rel +0.000e+00) (equal)
+    jacobian_factor_max                               0.0001 -> 0.0001                   (rel +0.000e+00) (equal)
+    hashes
+    samples_sha256                    differs
+    log_one_plus_z_sha256             equal
+    excerpts: 21 samples at the same indices and ln(1 + z); 377 of 378 field values changed
+    the final sample (index 4893, ln(1 + z) = 0)
+    H_Einstein                               1.811680259e-43 -> 1.810578239e-43          (rel -6.083e-04)
+    H_Jordan                                  1.82689208e-43 -> 1.795460461e-43          (rel -1.720e-02)
+    Sigma                                      0.01079928835 -> 0.01079928835            (rel -7.300e-13)
+    dgstar_rho_dlogT                            0.3691689211 -> 0.3691689211             (rel -8.111e-13)
+    dgstar_s_dlogT                              0.3630961746 -> 0.3630961746             (rel -7.906e-13)
+    friction_term                            -0.001554197399 -> 0.001509497546           (rel -1.971e+00)
+    gstar_rho                                    10.54544547 -> 10.54544547              (rel +1.399e-14)
+    gstar_s                                      10.54824942 -> 10.54824942              (rel +1.354e-14)
+    kicking_term                               -0.1781994455 -> -0.1781994627            (rel +9.647e-08)
+    log_T_Jordan                                -49.24436659 -> -49.24436659             (rel -8.216e-15)
+    log_fm                                      -14.18687033 -> -14.18570122             (rel -8.241e-05)
+    log_one_plus_z_Jordan                                  0 -> 0                      (equal)
+    log_rhorad_Einstein                         -195.7351973 -> -195.7364142             (rel +6.217e-06)
+    log_rhorad_Jordan                           -195.7356164 -> -195.7367855             (rel +5.973e-06)
+    phi_Einstein                             1.904834519e-05 -> 1.687612514e-05          (rel -1.140e-01)
+    pi_Einstein                               0.001545850448 -> -0.001501390625          (rel -1.971e+00)
+    raw_N                                        45.07450838 -> 45.07452033              (rel +2.652e-07)
+    reflecting_term                          1.504827806e-07 -> 0.0001651378768          (rel +1.096e+03)
+
+golden_history_rr03_tuned.json -> golden_history_ee01_tuned.json
+  history
+    solver_label: 'Radau+kinematic-cap-stepping1' (same)
+    sample_fields: ['raw_N', 'phi_Einstein', 'pi_Einstein', 'log_rhorad_Einstein', 'log_rhorad_Jordan', 'log_fm', 'H_Einstein', 'H_Jordan', 'log_T_Jordan', 'gstar_rho', 'gstar_s', 'dgstar_s_dlogT', 'dgstar_rho_dlogT', 'Sigma', 'friction_term', 'reflecting_term', 'kicking_term', 'log_one_plus_z_Jordan'] (same)
+    n_samples: 5960 (same)
+    counts
+    reflections                                            0 -> 0                        (+0) (equal)
+    accepted_steps                                     15331 -> 18033                    (+2702)
+    RHS_evaluations                                   140823 -> 167541                   (+26718)
+    compute_steps                                     140823 -> 167541                   (+26718)
+    steps_rejected_by_exception                            0 -> 0                        (+0) (equal)
+    restart_retakes                                        0 -> 0                        (+0) (equal)
+    first bounce
+    N                                            24.49869253 -> 21.06474689              (rel -1.402e-01)
+    phi_Einstein                             9.226888066e-05 -> 8.176202509e-05          (rel -1.139e-01)
+    log_T_Jordan                                -41.81778017 -> -38.45525062             (rel -8.041e-02)
+    reflected                                          False -> False                  (equal)
+    fixed-temperature values
+    density_NP_ratio_1MeV                      -0.3426786886 -> -0.3091360702            (rel -9.788e-02)
+    density_NP_ratio_70keV                     -0.2951970361 -> -0.3169850434            (rel +7.381e-02)
+    phi_Einstein_1MeV                         0.001715824618 -> 0.0003921873569          (rel -7.714e-01)
+    phi_Einstein_70keV                       0.0003336060566 -> 0.0002000490875          (rel -4.003e-01)
+    step control
+    cap_fraction                                         0.1 -> 0.1                      (rel +0.000e+00) (equal)
+    cap_floor                                          1e-11 -> 1e-11                    (rel +0.000e+00) (equal)
+    cap_global_max_step                                  0.1 -> 0.1                      (rel +0.000e+00) (equal)
+    jacobian_factor_max                               0.0001 -> 0.0001                   (rel +0.000e+00) (equal)
+    hashes
+    samples_sha256                    differs
+    log_one_plus_z_sha256             equal
+    excerpts: 25 samples at the same indices and ln(1 + z); 408 of 450 field values changed
+    the final sample (index 5959, ln(1 + z) = 0)
+    H_Einstein                               4.829256566e-61 -> 4.829256065e-61          (rel -1.038e-07)
+    H_Jordan                                 5.926391016e-61 -> 5.926391102e-61          (rel +1.467e-08)
+    Sigma                                                  0 -> 0                      (equal)
+    dgstar_rho_dlogT                                       0 -> 0                      (equal)
+    dgstar_s_dlogT                                         0 -> 0                      (equal)
+    friction_term                              -0.1703753978 -> -0.1703755178            (rel +7.040e-07)
+    gstar_rho                                          3.383 -> 3.383                    (rel +0.000e+00) (equal)
+    gstar_s                                            3.931 -> 3.931                    (rel +0.000e+00) (equal)
+    kicking_term                                -4.139680052 -> -4.139681279             (rel +2.963e-07)
+    log_T_Jordan                                -71.41637488 -> -71.41637488             (rel +0.000e+00) (equal)
+    log_fm                                       8.133674243 -> 8.134843323              (rel +1.437e-04)
+    log_one_plus_z_Jordan                                  0 -> 0                      (equal)
+    log_rhorad_Einstein                         -285.5776643 -> -285.5788333             (rel +4.093e-06)
+    log_rhorad_Jordan                           -285.5592518 -> -285.5604208             (rel +4.094e-06)
+    phi_Einstein                               0.06069406648 -> 0.0606940601             (rel -1.051e-07)
+    pi_Einstein                                0.07384968753 -> 0.07384973609            (rel +6.575e-07)
+    raw_N                                        54.89356123 -> 54.89356122              (rel -1.708e-10)
+    reflecting_term                              4.389456748 -> 4.389457835              (rel +2.477e-07)
+  tuning
+    normalization                                  -277.4502 -> -277.4502002             (rel +6.753e-10)
+    phi_ref                                    0.06222843896 -> 0.06222843232            (rel -1.068e-07)
+    V_ref                                   3.755774192e-121 -> 3.755773553e-121         (rel -1.702e-07)
+    guard_steps                                            0 -> 0                        (+0) (equal)
+    phi_0                                      0.06069406648 -> 0.0606940601             (rel -1.051e-07)
+    pi_0                                       0.07384968753 -> 0.07384973609            (rel +6.575e-07)
+    plain_steps                                            1 -> 1                        (+0) (equal)
+    residual_H                              -7.034382626e-07 -> -6.887715748e-07         (rel -2.085e-02)
+    residual_phi                             4.691683204e-06 -> 4.710632322e-06          (rel +4.039e-03)
+    secant_steps                                           3 -> 3                        (+0) (equal)
+    seed_kind                                     'tracking' -> 'tracking'             (equal)
+    seed_normalization                          -277.5816817 -> -277.5816817             (rel +0.000e+00) (equal)
+    seed_phi_ref                               0.05819128236 -> 0.05819128236            (rel +0.000e+00) (equal)
+    tracking                                    0.8111686674 -> 0.811169286              (rel +7.626e-07)
+    tuning_iterations                                      5 -> 5                        (+0) (equal)
+
+golden_history_rr03_reflecting.json -> golden_history_ee01_reflecting.json
+  history
+    solver_label: 'Radau+kinematic-cap-stepping1' (same)
+    sample_fields: ['raw_N', 'phi_Einstein', 'pi_Einstein', 'log_rhorad_Einstein', 'log_rhorad_Jordan', 'log_fm', 'H_Einstein', 'H_Jordan', 'log_T_Jordan', 'gstar_rho', 'gstar_s', 'dgstar_s_dlogT', 'dgstar_rho_dlogT', 'Sigma', 'friction_term', 'reflecting_term', 'kicking_term', 'log_one_plus_z_Jordan'] (same)
+    n_samples: 5166 (same)
+    counts
+    reflections                                           32 -> 35                       (+3)
+    accepted_steps                                      7183 -> 7722                     (+539)
+    RHS_evaluations                                    52403 -> 56192                    (+3789)
+    compute_steps                                      52403 -> 56192                    (+3789)
+    steps_rejected_by_exception                            0 -> 0                        (+0) (equal)
+    restart_retakes                                        0 -> 0                        (+0) (equal)
+    first bounce
+    N                                            18.64398464 -> 18.64397638              (rel -4.431e-07)
+    phi_Einstein                             6.542680466e-11 -> 6.427659008e-11          (rel -1.758e-02)
+    log_T_Jordan                                -43.35439742 -> -43.35439007             (rel -1.695e-07)
+    reflected                                           True -> True                   (equal)
+    fixed-temperature values
+    density_NP_ratio_1MeV                      0.09993469865 -> 0.1001455468             (rel +2.110e-03)
+    density_NP_ratio_70keV                     0.07090111551 -> 0.07184646442            (rel +1.333e-02)
+    phi_Einstein_1MeV                          0.04273364431 -> 0.04279691336            (rel +1.481e-03)
+    phi_Einstein_70keV                        0.002597925968 -> 0.002541979815           (rel -2.153e-02)
+    step control
+    cap_fraction                                         0.1 -> 0.1                      (rel +0.000e+00) (equal)
+    cap_floor                                          1e-11 -> 1e-11                    (rel +0.000e+00) (equal)
+    cap_global_max_step                                  0.1 -> 0.1                      (rel +0.000e+00) (equal)
+    jacobian_factor_max                               0.0001 -> 0.0001                   (rel +0.000e+00) (equal)
+    hashes
+    samples_sha256                    differs
+    log_one_plus_z_sha256             equal
+    excerpts: 22 samples at the same indices and ln(1 + z); 354 of 396 field values changed
+    the final sample (index 5165, ln(1 + z) = 0)
+    H_Einstein                               5.926380907e-61 -> 5.926379338e-61          (rel -2.647e-07)
+    H_Jordan                                 5.926397107e-61 -> 5.926395538e-61          (rel -2.647e-07)
+    Sigma                                                  0 -> 0                      (equal)
+    dgstar_rho_dlogT                                       0 -> 0                      (equal)
+    dgstar_s_dlogT                                         0 -> 0                      (equal)
+    friction_term                           -4.616423729e-06 -> -4.616427956e-06         (rel +9.157e-07)
+    gstar_rho                                          3.383 -> 3.383                    (rel +0.000e+00) (equal)
+    gstar_s                                            3.931 -> 3.931                    (rel +0.000e+00) (equal)
+    kicking_term                                 -1.39995826 -> -1.399957101             (rel -8.276e-07)
+    log_T_Jordan                                -71.41637488 -> -71.41637488             (rel +0.000e+00) (equal)
+    log_fm                                       8.133673948 -> 8.134843452              (rel +1.438e-04)
+    log_one_plus_z_Jordan                                  0 -> 0                      (equal)
+    log_rhorad_Einstein                         -285.5592505 -> -285.5604214             (rel +4.100e-06)
+    log_rhorad_Jordan                           -285.5592505 -> -285.5604214             (rel +4.100e-06)
+    phi_Einstein                             1.214931227e-06 -> 1.214932051e-06          (rel +6.785e-07)
+    pi_Einstein                               1.82239443e-06 -> 1.822395667e-06          (rel +6.785e-07)
+    raw_N                                        47.57564127 -> 47.57564173              (rel +9.508e-09)
+    reflecting_term                               1.39995826 -> 1.399957101              (rel -8.276e-07)
+  tuning
+    normalization                               -276.6307374 -> -276.6307374             (rel +0.000e+00) (equal)
+    phi_ref                                  1.214931884e-06 -> 1.214931884e-06          (rel +0.000e+00) (equal)
+    V_ref                                    7.25767639e-121 -> 7.25767639e-121          (rel +0.000e+00) (equal)
+    guard_steps                                            0 -> 0                        (+0) (equal)
+    phi_0                                    1.214931227e-06 -> 1.214932051e-06          (rel +6.785e-07)
+    pi_0                                      1.82239443e-06 -> 1.822395667e-06          (rel +6.785e-07)
+    plain_steps                                            0 -> 0                        (+0) (equal)
+    residual_H                               3.244017284e-07 -> 5.967666783e-08          (rel -8.160e-01)
+    residual_phi                             5.408123493e-07 -> -1.377310762e-07         (rel -1.255e+00)
+    secant_steps                                           0 -> 0                        (+0) (equal)
+    seed_kind                                     'tracking' -> 'tracking'             (equal)
+    seed_normalization                          -276.6307374 -> -276.6307374             (rel +0.000e+00) (equal)
+    seed_phi_ref                             1.214931884e-06 -> 1.214931884e-06          (rel +0.000e+00) (equal)
+    tracking                                    0.9999986773 -> 0.9999986773             (rel -3.005e-13)
+    tuning_iterations                                      1 -> 1                        (+0) (equal)
+  reflecting
+    accepted_steps                                      7183 -> 7722                     (+539)
+    injections                                            32 -> 35                       (+3)
+    reflections                                           32 -> 35                       (+3)
+    restart_retakes                                        0 -> 0                        (+0) (equal)
+
+changes of form: 0
+FORM: SAME

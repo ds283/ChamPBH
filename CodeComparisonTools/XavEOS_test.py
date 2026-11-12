@@ -13,6 +13,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Compares the Saikawa & Shirai equations of state and Xav_EOS_spline with a Mathematica table of w
+(XavEOS_data.csv, its column Xav_w).
+
+Dated note (2026-11-12, electroweak-eos prompt 01): the comparison this script makes is with the w table
+before that prompt. Xav_EOS_spline now reads the table that follows Laine & Meyer through the electroweak
+crossover, so above about 22 GeV its w no longer matches the Xav_w column. The script and its data are left
+as they are; the old table is in git at ec6bca8 and in prompts/electroweak-eos/data/.
+"""
+
 from functools import partial
 from math import fabs
 from typing import Tuple

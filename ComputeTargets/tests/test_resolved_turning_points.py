@@ -40,7 +40,8 @@ The cases and their sources:
     random sign patterns.
   - On integrations:
       - test_injection's item (11) (beta = 10, M = 0.5 M_P, alpha = 0.1, the parking cut off,
-        PARKING_EPSILON = 0.0): its plateau and wall-side pair inside one step, with pi > 0 at both
+        PARKING_EPSILON = 0.0; on the w table before electroweak-eos prompt 01 since that prompt):
+        its plateau and wall-side pair inside one step, with pi > 0 at both
         nodes, is real and is kept. Measured on 2026-11-12 before 01a's change (atol = rtol = 1e-8):
         the step [63.852649, 63.854452], pi at its nodes +5.14e-8 and +8.29e-6, the excursion (the
         dip) 1.1761e-6, tau 1.000008e-8, so the excursion is 117.6 tau. One integration, about 9 s at
@@ -304,11 +305,16 @@ class TestTheInteriorPairOfItem11IsKept(unittest.TestCase):
     """
     test_injection's item (11): the plateau and wall-side pair inside one step, at beta = 10,
     M = 0.5 M_P, alpha = 0.1, with the parking cut off. One integration, about 9 s.
+
+    Since electroweak-eos prompt 01 it is integrated, as test_injection's item (11) is, on the w table
+    before that prompt (ti.on_the_old_w_table), by the user's ruling of 2026-11-12. On the new table
+    the history holds no interior pair, a table effect (log 01a §6), so the case is kept on the table
+    where it exists.
     """
 
     @classmethod
     def setUpClass(cls):
-        with mock.patch.object(SM, "PARKING_EPSILON", 0.0):
+        with mock.patch.object(SM, "PARKING_EPSILON", 0.0), ti.on_the_old_w_table():
             cls.data, cls.result, _ = ti.integrate_captured(10.0, 0.5, ti.ALPHA)
         cls.ts = list(cls.result.solution.ts)
         cls.interpolants = cls.result.solution.interpolants

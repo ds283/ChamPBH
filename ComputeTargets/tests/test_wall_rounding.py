@@ -79,8 +79,11 @@ BAND_SHIPPED = (
 
 # log 06 §5.4: Sigma + leftover at M = 1e-30 M_P, beta = 2, printed to eight significant figures, and
 # its M-dependence across 1e-7 to 1e-30 M_P at beta = 2, "2e-8" relative, taken at the upper end of
-# its one-digit print (orchestrator note 07b, ruling 6)
-SIGMA_PLUS_LEFTOVER_AT_1E_30 = 0.012616907
+# its one-digit print (orchestrator note 07b, ruling 6). Re-measured by electroweak-eos prompt 01 on its
+# w table, the same way (.documents/electroweak-eos/table/drain_total_by_M.py, which gives log 06's
+# 0.012616907 on the table before): 0.0126169558132557 at M = 1e-30 M_P, printed to eight figures here;
+# its M-dependence there is 6.5e-9, inside the 2.5e-8 kept below
+SIGMA_PLUS_LEFTOVER_AT_1E_30 = 0.012616956
 SIGMA_M_DEPENDENCE = 2.5e-8
 SIGMA_HALF_LAST_DIGIT = 5.0e-10
 
@@ -350,7 +353,8 @@ class TestAHistoryInTheBand(unittest.TestCase):
         """
         Sigma Delta rho/rho_R over the candidates, with the leftover, against log 06 §5.4's value at
         M = 1e-30 M_P: within its M-dependence at beta = 2 (2.5e-8 relative) and half a unit of the
-        reference's last printed digit (5e-10) (orchestrator note 07b, ruling 6).
+        reference's last printed digit (5e-10) (orchestrator note 07b, ruling 6). Since electroweak-eos
+        prompt 01 the value is that measurement remade on the new w table.
         """
         self.assertFalse(
             self.data.get("failure", False), self.data.get("failure_reason")

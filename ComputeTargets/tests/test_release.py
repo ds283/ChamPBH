@@ -76,13 +76,17 @@ _INTEGRATE = SM.integrate_scalar_history
 # inside the parked step [40.19089, 40.29089] whose end check failed at 06 (N = 40.29089, m/H = 8.94).
 # The crossing is printed to seven digits: half a unit of the last is 5e-6 (orchestrator note 07,
 # ruling 8). test_parking's BETA_5_CROSSING_N is the oscillating history's crossing, 40.2547
-BETA_5_PARKED_CROSSING_N = 40.25454
+# electroweak-eos prompt 01's w table moves the history before the switch (it parks at N = 37.924, not
+# 38.004) and the parked step grid with it: the crossing is now at 40.254529 (40.25453 to seven digits;
+# log 06's 40.25454 stays the record of the table before), inside the parked step [40.21008, 40.31008]
+BETA_5_PARKED_CROSSING_N = 40.25453
 BETA_5_PARKED_CROSSING_ROUNDING = 5e-6
 # reflection-restart prompt 03: F3 at the drain restarts (the first step of a Radau restarted with
 # pi > 0) moved the history before the switch, and the parked step grid with it, by about 2.1e-4
 # e-folds, so the failing check is now at 40.29068; log 06's 40.29089 stays the record of the old code
-# (re-pinned at the user's ruling, "Please allow both")
-BETA_5_FAILED_CHECK_N = 40.29068
+# (re-pinned at the user's ruling, "Please allow both"). electroweak-eos prompt 01's w table moved it
+# to 40.31008 (the step grid above); 40.29068 stays the record of the table before
+BETA_5_FAILED_CHECK_N = 40.31008
 
 # item (3)'s window, inside the parked phase (the switch is at N = 38.004) and before the release
 # step [40.19089, 40.29089] (its end at 40.29068 since reflection-restart prompt 03); test_parking's
@@ -701,7 +705,9 @@ class TestALateRelease(unittest.TestCase):
     def test_7_parks_at_6_is_released_near_0_27_meV_and_reaches_T_CMB(self):
         data, r = self.h.data, self.h.result
         self.assertFalse(data.get("failure", False), data)
-        self.assertEqual(r.parking.candidate_index, 6)
+        # 6 on the w table before electroweak-eos prompt 01; on its table the history parks two
+        # candidates later, at N = 32.045 rather than 28.372 (the test's name keeps the old count)
+        self.assertEqual(r.parking.candidate_index, 8)
         rel = r.release
         self.assertIsNotNone(rel)
         self.assertAlmostEqual(rel.N, 45.91, 2)

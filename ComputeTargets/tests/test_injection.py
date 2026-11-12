@@ -57,12 +57,15 @@ import sys
 import unittest
 from bisect import bisect_right
 from math import exp, isnan, log, sqrt
+from pathlib import Path
 from unittest import mock
 
 import numpy as np
+import pandas as pd
 from scipy.integrate import OdeSolution
 
 import ComputeTargets.tests.test_kinematic_cap_loop as kcl
+import CosmologyModels.GenericEOS.Xav_EOS_spline as xav_module
 from ComputeTargets.dark_radiation import DarkRadiationLedger
 from ComputeTargets.tests import golden_history as gh
 from ComputeTargets.tests import golden_tuned_history as gth
@@ -78,6 +81,31 @@ SM = importlib.import_module("ComputeTargets.ScalarHistory")
 
 EPS = 2.0**-52
 ALPHA = 0.1
+
+# item (11)'s w table (electroweak-eos prompt 01, the user's ruling of 2026-11-12, "Go with (D), keep beta = 10
+# on the old table"): the table before that prompt, kept byte for byte in the campaign's data
+OLD_W_TABLE = (
+    Path(__file__).resolve().parents[2]
+    / "prompts"
+    / "electroweak-eos"
+    / "data"
+    / "pipeline_w_table_ec6bca8.csv"
+)
+
+
+def on_the_old_w_table():
+    """
+    A patch under which Xav_EOS_spline, built inside it, reads OLD_W_TABLE in place of the installed
+    Xav_EOS_data.csv. Every other read_csv call passes through unchanged. Nothing is written.
+    """
+    real = pd.read_csv
+
+    def read_csv(path, *args, **kwargs):
+        if Path(str(path)).name == "Xav_EOS_data.csv":
+            path = OLD_W_TABLE
+        return real(path, *args, **kwargs)
+
+    return mock.patch.object(xav_module.pd, "read_csv", read_csv)
 
 
 class RecordingRHS:
@@ -510,11 +538,17 @@ class TestTwoTurningPointsOnOneStep(unittest.TestCase):
     breakage B9) misses both. One integration, about 8 s at a load of 13. Since
     inelastic-reflection prompt 06 the parking cut would end this history's oscillation at 358 MeV,
     before the near-stall, so it runs with the cut disabled (PARKING_EPSILON = 0.0).
+
+    Since electroweak-eos prompt 01 the history is integrated on the w table before that prompt
+    (OLD_W_TABLE, read through on_the_old_w_table), by the user's ruling of 2026-11-12. On the new
+    table this history holds no interior pair: its oscillation starts at T_J = 274 GeV rather than
+    405 GeV, and near the old stall pi stays above zero by hundreds of tau, a table effect, not 01a's
+    rule (log 01a §6; log 01 §2). So the classifier's case is kept on the table where it exists.
     """
 
     @classmethod
     def setUpClass(cls):
-        with mock.patch.object(SM, "PARKING_EPSILON", 0.0):
+        with mock.patch.object(SM, "PARKING_EPSILON", 0.0), on_the_old_w_table():
             cls.data, cls.result, _ = integrate_captured(10.0, 0.5, ALPHA)
         cls.ts = list(cls.result.solution.ts)
         cls.interpolants = cls.result.solution.interpolants

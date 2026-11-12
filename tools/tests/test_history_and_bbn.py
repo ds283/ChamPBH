@@ -19,8 +19,10 @@ tools/history_and_bbn.py in both of its modes (jordan-normalization prompt 08, D
 PRyMordial solve runs (one would cost about 10 s).
 
 (a) tuned at beta = 3, M = 0.01 (the tuned golden history's point and setup): the tuning line's
-    values equal golden_history_06_tuned.json's `tuning` record bitwise, key for key, and the
-    history line's counts its `history` record's. Five integrations to T_CMB: 22 s at load 4.
+    values equal the tuned golden record's `tuning` record bitwise, key for key, and the
+    history line's counts its `history` record's (golden_history_06_tuned.json until
+    electroweak-eos prompt 01, golden_history_ee01_tuned.json since). Five integrations to
+    T_CMB: 22 s at load 4.
 (b) --fixed-normalization at that record's normalization and phi_ref, given as their repr: one
     integrate_history call, whose realized model holds exactly those values, to T_CMB; the
     history line's samples, steps and RHS evaluations equal the record's (the tuning's final
@@ -41,7 +43,10 @@ import tools.history_and_bbn as hb
 from ComputeTargets.ScalarHistory import TUNING_OUTPUT_KEYS
 
 ROOT = Path(__file__).resolve().parents[2]
-GOLDEN = ROOT / "ComputeTargets/tests/data/golden_history_06_tuned.json"
+# the tuned golden record: golden_history_06_tuned.json until electroweak-eos prompt 01, which regenerated the
+# tuned golden history on its w table as golden_history_ee01_tuned.json (06's stays the record of the table
+# before; its tuning keys are rr03's)
+GOLDEN = ROOT / "ComputeTargets/tests/data/golden_history_ee01_tuned.json"
 
 # the stub's abundances: what compute_BBN_data._function returns, with no solve
 _BBN = {

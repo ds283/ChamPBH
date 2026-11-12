@@ -243,7 +243,8 @@ class TestProductionEOS(unittest.TestCase):
         cls.units = Planck_units()
         cls.cosmology = QCD_Cosmology(0, cls.units, Planck2018())
         eos = cls.cosmology._eos
-        # the table's ends, 1e-5 GeV and 25118.86 GeV, read from the EOS
+        # the table's ends, 1e-5 GeV and 386.7085 GeV (25118.86 GeV before electroweak-eos prompt 01), read from
+        # the EOS
         cls.T_lo = float(eos._T_min) * cls.units.GeV
         cls.T_hi = float(eos._T_max) * cls.units.GeV
         cls.kicks = find_kicks(cls.cosmology, cls.T_lo, cls.T_hi)
@@ -254,13 +255,15 @@ class TestProductionEOS(unittest.TestCase):
     def test_d1_four_kicks_and_their_peaks(self):
         kicks = self.kicks
         self.assertEqual([k["label"] for k in kicks], ["EW", "QCD", "mu-pi", "ee"])
-        # Sigma_peak to the digits of README section 0.3
+        # Sigma_peak to the digits of README section 0.3; the EW value re-pinned by electroweak-eos prompt 01
+        # to the new w table's peak, 0.037757 (0.037436 on the table before it, at the same tolerance)
         for kick, value, delta in zip(
-            kicks, [0.037436, 0.31453, 0.085365, 0.10073], [5e-7, 5e-6, 5e-7, 5e-6]
+            kicks, [0.037757, 0.31453, 0.085365, 0.10073], [5e-7, 5e-6, 5e-7, 5e-6]
         ):
             self.assertAlmostEqual(kick["Sigma_peak"], value, delta=delta)
-        # T_peak against the refined values measured on 2026-10-14, to 1e-3
-        for kick, value in zip(kicks, [53.2623, 0.181893, 0.0431559, 1.60450e-4]):
+        # T_peak against the refined values measured on 2026-10-14, to 1e-3; the EW value re-pinned by
+        # electroweak-eos prompt 01 to the new w table's, 54.0188 GeV (53.2623 GeV on the table before it)
+        for kick, value in zip(kicks, [54.0188, 0.181893, 0.0431559, 1.60450e-4]):
             self.assertLess(rel(self.GeV(kick["T_peak"]), value), 1e-3)
         # ordered hot to cold, and the windows tile the table
         peaks = [k["T_peak"] for k in kicks]
@@ -279,9 +282,11 @@ class TestProductionEOS(unittest.TestCase):
         thresholds = [
             sqrt((2.0 + k["Sigma_peak"]) / (6.0 * k["Sigma_peak"])) for k in self.kicks
         ]
-        # the paper's 3.01, 1.107 and 1.86, and README section 0.3's 2.018 for mu-pi
+        # the paper's 3.01, 1.107 and 1.86, and README section 0.3's 2.018 for mu-pi; the EW centre re-pinned
+        # by electroweak-eos prompt 01 to the new w table's 2.9992 (3.0118 on the table before it, inside the
+        # paper's 3.01 +/- 5e-3), the tolerance unchanged
         for value, expected, delta in zip(
-            thresholds, [3.01, 1.107, 2.018, 1.86], [5e-3, 5e-4, 5e-4, 5e-3]
+            thresholds, [2.9992, 1.107, 2.018, 1.86], [5e-3, 5e-4, 5e-4, 5e-3]
         ):
             self.assertAlmostEqual(value, expected, delta=delta)
 

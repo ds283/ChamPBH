@@ -14,7 +14,9 @@ are inside the tolerance: five integrations, about 25 s on an unloaded machine.
 The record: data/golden_history_rr03_tuned.json since reflection-restart prompt 03, which regenerated
 it when the stepper label became "Radau+kinematic-cap-stepping1" and the history's record gained
 restart_retakes; every other field is data/golden_history_06_tuned.json's, which stays the record of
-everything before that prompt (.documents/reflection-restart/fix/compare_goldens.py).
+everything before that prompt (.documents/reflection-restart/fix/compare_goldens.py). electroweak-eos
+prompt 01 regenerated it as data/golden_history_ee01_tuned.json when the w table changed; the rr03 record
+stays the record of everything before that prompt (.documents/electroweak-eos/table/compare_goldens.py).
 
 What is pinned:
   - "history": the record of the final integration's payload, by golden_history.record_of (the
@@ -63,7 +65,7 @@ from CosmologyModels.LambdaCDM import Planck2018
 from Units import Planck_units
 
 GOLDEN_TUNED_PATH = (
-    Path(__file__).resolve().parent / "data" / "golden_history_rr03_tuned.json"
+    Path(__file__).resolve().parent / "data" / "golden_history_ee01_tuned.json"
 )
 REGENERATE_COMMAND = (
     "PYTHONPATH=. ./venv/bin/python -m ComputeTargets.tests.golden_tuned_history"
@@ -181,7 +183,7 @@ def main() -> int:
         "provenance": {
             "generated_at_commit": commit,
             "code_tree": (
-                "reflection-restart prompt 03's working tree, before its commit, on top "
+                "electroweak-eos prompt 01's working tree, before its commit, on top "
                 "of generated_at_commit"
             ),
             "generator": "ComputeTargets/tests/golden_tuned_history.py",

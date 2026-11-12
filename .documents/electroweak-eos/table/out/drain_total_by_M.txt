@@ -1,0 +1,15 @@
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+The table before electroweak-eos prompt 01:
+  M = 1e-30 M_P: 0.012616907076977907  (0.012616907); 49 candidates, parked at candidate 48, N = 30.349328
+  M = 1e-16 M_P: 0.012616907076975804  (0.012616907); 49 candidates, parked at candidate 48, N = 30.349328
+  log 06 §5.4's value 0.012616907; M = 1e-30 here, to eight figures: 0.012616907
+
+The installed table:
+  M = 1e-30 M_P: 0.0126169558132557  (0.012616956); 49 candidates, parked at candidate 48, N = 30.349394
+  M = 1e-25 M_P: 0.012616955813488512  (0.012616956); 49 candidates, parked at candidate 48, N = 30.349394
+  M = 1e-20 M_P: 0.012616955820720041  (0.012616956); 49 candidates, parked at candidate 48, N = 30.349394
+  M = 1e-16 M_P: 0.012616955820807482  (0.012616956); 49 candidates, parked at candidate 48, N = 30.349394
+  M = 1e-12 M_P: 0.012616955821281523  (0.012616956); 49 candidates, parked at candidate 48, N = 30.349394
+  M = 1e-07 M_P: 0.012616955739493283  (0.012616956); 49 candidates, parked at candidate 48, N = 30.349392
+  M = 1e-30, to eight figures: 0.012616956
+  the M-dependence, (max - min)/value(1e-30) over 1e-7 to 1e-30 M_P: 6.482e-09

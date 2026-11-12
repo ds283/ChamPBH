@@ -14,6 +14,10 @@ reflection is given F3's first step and its first step is guarded; the history s
 integration, with 32 floor reflections (the last parks it, before T_CMB), 7183 accepted steps and no
 retake. About 4-6 s unloaded.
 
+The record: data/golden_history_rr03_reflecting.json, written by reflection-restart prompt 03. electroweak-eos
+prompt 01 regenerated it as data/golden_history_ee01_reflecting.json when the w table changed; the rr03 record
+stays the record of everything before that prompt (.documents/electroweak-eos/table/compare_goldens.py).
+
 What is pinned: golden_tuned_history.build_record's record (the history's record_of, which holds the
 reflection count, accepted_steps and restart_retakes, expected 0; and every tuning key), compared by
 golden_tuned_history.differences. The record also states, under "reflecting", the counts a reader of this
@@ -37,7 +41,7 @@ from ComputeTargets.tests import golden_tuned_history as gth
 from ComputeTargets.tests.golden_history import EXCLUDED_METADATA, environment
 
 GOLDEN_REFLECTING_PATH = (
-    Path(__file__).resolve().parent / "data" / "golden_history_rr03_reflecting.json"
+    Path(__file__).resolve().parent / "data" / "golden_history_ee01_reflecting.json"
 )
 REGENERATE_COMMAND = (
     "PYTHONPATH=. ./venv/bin/python -m ComputeTargets.tests.golden_reflecting_history"
@@ -95,7 +99,7 @@ def main() -> int:
         "provenance": {
             "generated_at_commit": commit,
             "code_tree": (
-                "reflection-restart prompt 03's working tree, before its commit, on top "
+                "electroweak-eos prompt 01's working tree, before its commit, on top "
                 "of generated_at_commit"
             ),
             "generator": "ComputeTargets/tests/golden_reflecting_history.py",

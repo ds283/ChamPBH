@@ -526,7 +526,11 @@ class TestResume(unittest.TestCase):
         self.assertEqual(self.stub.calls, [])
 
 
-COMMITTED_CSV = ROOT / ".documents/surfing-temperature/out/surfing_scan_phi5_M1e-3.csv"
+# surfing-temperature 04's committed scan (.documents/surfing-temperature/out/surfing_scan_phi5_M1e-3.csv) is
+# the record of the w table before electroweak-eos prompt 01; that prompt remade its beta = 1.5 row on the new
+# table the same way (untuned, Lambda = 1 meV, stopped at 1 MeV; .documents/electroweak-eos/table/
+# surfing_reference.py, which reproduces the committed row to 3e-12 on the old table), and the test reads it
+COMMITTED_CSV = ROOT / ".documents/electroweak-eos/table/out/surfing_reference_rows.csv"
 
 
 class TestRealHistory(unittest.TestCase):
@@ -538,7 +542,8 @@ class TestRealHistory(unittest.TestCase):
         T_capture, T_deliver, T_hot and T_cold are within 1e-6 relative of the committed scan's
         row (made untuned at Lambda = 1 meV, stopped at 1 MeV; the orchestrator's probe measured
         2.6e-8 at most); the turning points are inside the window and each is a crossing of
-        beta pi/M_P = -1 (before prompt 08: beta = 2, to T_stop = 0.5 GeV).
+        beta pi/M_P = -1 (before prompt 08: beta = 2, to T_stop = 0.5 GeV). Since electroweak-eos
+        prompt 01 the row is that prompt's remake on its w table (COMMITTED_CSV).
         """
         with open(COMMITTED_CSV, newline="") as f:
             committed = next(r for r in csv.DictReader(f) if float(r["beta"]) == 1.5)

@@ -1,6 +1,6 @@
 # electroweak-eos campaign — implementation state
 
-**Last updated:** 2026-11-12 · **Status: LIVE — 1 of 4 landed (01a); 01 held at its stop, to resume on 01a (§8 of the README).** Planned 2026-11-12 at the user's
+**Last updated:** 2026-11-12 · **Status: LIVE — 2 of 4 landed (01a, 01); 02 next.** Planned 2026-11-12 at the user's
 request. U1–U6 ruled by the user as proposed the same day, and U7 (the provenance of the rows) ruled out of
 scope. P1–P12 stand, with P11 amended by U7 (README §6). The plan is
 [`README.md`](README.md), on branch `electroweak-eos`, cut from `main` at `ec6bca8`.
@@ -28,7 +28,7 @@ amended by U7)
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
 | 01a | Resolved turning points | an interior pair of sign changes of π kept only if the solver resolves it (README §8); lands before 01's commit | Opus | ✍️ | ✅ | `634f141` | [`logs/01a-resolved-turning-points.md`](logs/01a-resolved-turning-points.md) |
-| 01 | Install the table | the table by U2 (b); the build script and test; `VERSION_LABEL` 2026.11.0; re-pinned tests and golden histories; the docstring | Opus | ✍️ ⏸ 01a | ⬜ | | |
+| 01 | Install the table | the table by U2 (b); the build script and test; `VERSION_LABEL` 2026.11.0; re-pinned tests and golden histories; the docstring | Opus | ✍️ | ✅ | this commit | [`logs/01-install-the-table.md`](logs/01-install-the-table.md) |
 | 02 | Measure the effect | the EW threshold; the sample of `2026.10.0` histories old against new; the bath drift | Opus | ⬜ | ⬜ | | |
 | 03 | Documents and handover | the documents, issues, indexes and the handover; the close | Sonnet | ⬜ | ⬜ | | |
 
@@ -112,16 +112,32 @@ ruled it at the stop.
    because `turning-points/` beside it is tracked.
    The worktree was removed, after its `venv` symlink, and the branch `electroweak-eos-01a` was deleted.
 
+**01 landed (2026-11-12, this commit), after two stops.** The first was note 01's ruling 3, the early pair, answered by
+01a. The second was the Addendum's `test_injection` test_11: on the new table its history (β = 10, M = 0.5 M_P,
+α = 0.1, parking cut off) holds no interior pair. That is the table's doing: its oscillation starts at 274 GeV rather
+than 405 GeV, and near the old stall π stays above zero by hundreds of τ. 01a drops nothing there. 01a's own item-(11)
+test failed for the same reason, outside the Addendum's 18. **Ruled by the user, 2026-11-12:** "Go with (D), keep β = 10
+on the old table". Both item-(11) classes now build their cosmology on `prompts/electroweak-eos/data/pipeline_w_table_ec6bca8.csv`
+through `test_injection.on_the_old_w_table()`, with no assertion changed (*STRUCTURALLY REQUIRED*; log 01 §2.1).
+
 ### 1.1 Items
 
-None yet.
+| Item | Prompt | State |
+|---|---|---|
+| The table: U2 (b), 170 rows, built by `tools/build_w_table.py` (`--check` exit 0), SHA-256 `690090c8…0119d` | 01 | ✅ |
+| `tools/tests/test_build_w_table.py` (15 tests) | 01 | ✅ |
+| `VERSION_LABEL` 2026.11.0 (covers 01a); `FINGERPRINT_FORMAT` 7 | 01 | ✅ |
+| 13 tests re-pinned with reasons, tolerances kept; 2 item-(11) classes on the old table (log 01 §2.2, §2.1) | 01 | ✅ |
+| Golden records `ee01`, `ee01_tuned`, `ee01_reflecting` beside `rr03`; FORM: SAME | 01 | ✅ |
+| `Xav_EOS_spline` docstring; `XavEOS_test.py` dated note | 01 | ✅ |
+| `.documents/electroweak-eos-verification.md` §1 | 01 | ✅ |
 
 ## 2. The gates
 
 | Gate | Holds when | Prompt | State |
 |---|---|---|---|
 | Resolved | on the old table, suites, goldens and 01's scan bitwise unchanged; on the new table, the early pair dropped wherever 01 saw it (README §8.2). *As ruled by the user 2026-11-12 at 01a's stop:* on the old table no pair dropped down to 100 GeV and everything else bitwise, the late near-stall pairs (two in 36 histories to T_CMB) recorded; on the new table `dropped_drains` too may differ at α = 0 | 01a | ✅ 2026-11-12, as ruled (log 01a §3) |
-| Table | the build script regenerates the CSV byte for byte; the class evaluates the new table; every moved pin listed with a reason; the spline's coupling below the first changed row measured | 01 | ⬜ |
+| Table | the build script regenerates the CSV byte for byte; the class evaluates the new table; every moved pin listed with a reason; the spline's coupling below the first changed row measured | 01 | ✅ 2026-11-12 (log 01 §3.1) |
 | Threshold | the EW-capture threshold bracketed to 0.001 in β, beside 3.020 (today) and 3.00285 (notebook) | 02 | ⬜ |
 | Effect | every sampled history's change in Y_p, D/H, ΔN_eff, capture temperature and turning points, set beside the figures' resolution | 02 | ⬜ |
 | Close | documents, issues, indexes and handover written; suites at their counts | 03 | ⬜ |
@@ -181,3 +197,7 @@ anything.
 After 01a (2026-11-12, in its worktree, log 01a §4): CosmologyModels 26, ComputeTargets 684 (219 + 465; 01a's
 `test_resolved_turning_points` adds 19), ObjectFactories 163, tools 277, RunDrivers 76. Two of them fail in the worktree
 only, before and after, for its path (`test_registry_config`, `test_registered_run`). `CLAUDE.md`'s counts wait for 01.
+
+After 01 (2026-11-12, main checkout, log 01 §3.3): CosmologyModels 26, ComputeTargets 684 (219 + 465), ObjectFactories
+163, tools 292 (+15, `test_build_w_table`), RunDrivers 76. `CLAUDE.md` still holds the user's uncommitted edits, so its
+counts are not changed here (note 01, ruling 1). They are to be updated once the user has committed those edits.

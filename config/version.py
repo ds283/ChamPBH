@@ -85,7 +85,19 @@
 # new. FINGERPRINT_FORMAT is 7. A 2026.9.0 store is not extended at 2026.10.0, and none is migrated (README §8.11
 # P32): start a fresh datastore file, and read a 2026.9.0 store with the tree of its own commit (before
 # one-loop-drain prompt 03).
-VERSION_LABEL = "2026.10.0"
+# On 2026-11-12 (electroweak-eos prompt 01), 2026.11.0: from 2026.11.0 the w table Xav_EOS_spline reads
+# (CosmologyModels/GenericEOS/Xav_EOS_data.csv) is, above 50.1 keV, the notebook PeakEWsurf.nb's rows and the points
+# of 2026-11-12 (100-380 GeV), which follow Laine & Meyer (arXiv:1503.04935) through the electroweak crossover, with
+# w = 1/3 from 386.7 GeV; below 50.1 keV it keeps the rows of the table before (which above about 100 GeV was a free
+# gas at vacuum masses). tools/build_w_table.py builds it. g_rho and g_s do not change. The label also covers
+# electroweak-eos prompt 01a (634f141, which made no bump of its own; README §8.3 U11): an interior pair of sign changes
+# of pi inside one step is kept as a pair of turning points only if its excursion exceeds the step's tolerance on pi,
+# which changes turning_points, and at alpha > 0 the drains and bounce rows, wherever such a pair was dropped.
+# Every history whose temperature crosses the electroweak scale may change value; main.py's default start,
+# T* = 2e4 GeV, is above it. No table or column changes (FINGERPRINT_FORMAT stays 7). A 2026.10.0 store is not extended at 2026.11.0:
+# start a fresh datastore file, and read a 2026.10.0 store with the tree of its own commit (before electroweak-eos
+# prompt 01).
+VERSION_LABEL = "2026.11.0"
 
 # The reserved payload key of a version-keyed lookup (VERSION_SERIAL_KEY) and its reader
 # (require_version_serial) were defined here until dk-and-rpk-migration prompt 08; they are

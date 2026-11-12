@@ -22,27 +22,51 @@ w = 1/3 exactly (returned without consulting the spline) at and below the
 table's lowest temperature and at and above its highest. The inherited 2 MeV
 freeze of w is not used.
 
-What the CSV establishes about itself (recorded in review-remediation prompt 05,
-item R4; measured on 89bd52e):
+The table since electroweak-eos prompt 01 (2026-11-12; campaign README §6.1,
+U2 (b)). It follows Laine & Meyer (arXiv:1503.04935) through the electroweak
+crossover; the table before it was a free gas of Standard Model particles at
+their vacuum masses above about 100 GeV (the kicking-function audit's addendum,
+.documents/peakewsurf-kicking-function/report.tex, "Addendum (12 November
+2026)"). What the CSV establishes about itself, measured by that prompt:
 
-- Two columns, `T_GeV` and `w`; 189 rows, T strictly increasing from 1e-5 GeV
-  (10 keV) to 25118.86 GeV (25.1 TeV), uniformly spaced at 0.05 in log10 T,
-  i.e. 20 rows per decade.
+- Two columns, `T_GeV` and `w`; 170 rows, T strictly increasing from 1e-5 GeV
+  (10 keV) to 386.7085 GeV. The spacing is 0.05 in log10 T up to 100 GeV (the
+  last such interval is 89.1 -> 100 GeV), then 10 GeV from 100 to 380 GeV, then
+  the last row at 386.7085 GeV.
+- The rows by source:
+    T < 50.1 keV        14 rows: the table before this campaign (the e+e- tail
+                        to 10 keV, which the notebook's table truncates at
+                        36.5 keV; README §0.2);
+    50.1 keV - 89.1 GeV 126 rows: the notebook PeakEWsurf.nb's table;
+    100 - 380 GeV       29 rows: the points of 2026-11-12, which sample the
+                        notebook's curve every 10 GeV (the notebook's own rows
+                        at 158.5, 251.2 and 316.2 GeV lie on a spline through
+                        them to 3.7e-6 and 1e-11 in Sigma, and are left out);
+    386.7085 GeV        1 row: the notebook's, w = 1/3 exactly.
+  The row at 50.1 keV is shared by the two tables, to every digit. Below
+  22 GeV the notebook's rows are the old table's to 1e-12.
 - w = 1/3 at the bottom row to 7e-16 (0.3333333333333326), and |1 - 3w| < 1e-9
-  in every row up to 15.8 keV. At the top row w = 0.3333329996, that is 1/3 to
-  3.3e-7 but not exactly; so w steps by 3.3e-7 where the class switches to 1/3.
+  in every row up to 15.8 keV. At the top row w = 1/3 exactly, so Sigma does not
+  step where the class switches to 1/3 (the spline's dSigma/d ln T is 2e-8
+  there).
 - No row has w > 1/3 by more than 3.3e-11.
 - The largest Sigma = 1 - 3w in the rows is 0.10072 at 0.1585 MeV (e+e-),
-  0.31377 at 0.1778 GeV (QCD) and 0.037326 at 56.23 GeV (electroweak). The
-  spline this class evaluates peaks between rows: 0.10073 at 0.1605 MeV, 0.31453
-  at 0.1819 GeV and 0.037436 at 53.25 GeV. `CosmologyModels/tests/
-  test_kicking_function.py` pins the spline's values.
+  0.31377 at 0.1778 GeV (QCD) and 0.037716 at 56.23 GeV (electroweak). The
+  spline this class evaluates peaks between rows (scipy minimize_scalar on the
+  spline): 0.100732 at 0.16045 MeV, 0.314532 at 0.18189 GeV and 0.037757 at
+  54.02 GeV. Above 40 GeV it has that one maximum and falls to 0 at the top
+  row. `CosmologyModels/tests/test_kicking_function.py` and
+  `tools/tests/test_build_w_table.py` pin the spline's values.
 
-How the table was built is not recorded in the repository. It was added in
-commit 1759515 ("Add implementation of Xav's adjusted QCD equation of state",
-2026-01-13) without the script or the method that produced it, and it has not
-changed since. See the review-remediation board issue
-[00-kicking-function-table-has-no-provenance-in-the-repository].
+The table is built, not typed: `tools/build_w_table.py` composes it from the
+committed inputs (the audit's data/notebook_w_table.csv and
+data/notebook_w_points_2026-11-12.csv, and prompts/electroweak-eos/data/
+pipeline_w_table_ec6bca8.csv), and `tools/build_w_table.py --check` says
+whether the installed CSV is its output, byte for byte. The table before
+electroweak-eos is in git at ec6bca8 and, byte for byte, in
+prompts/electroweak-eos/data/pipeline_w_table_ec6bca8.csv; it had 189 rows
+from 1e-5 to 25118.86 GeV at 0.05 in log10 T, and its spline peaked at 0.037436
+at 53.26 GeV (review-remediation prompt 05, item R4, recorded its facts).
 """
 
 import numpy as np

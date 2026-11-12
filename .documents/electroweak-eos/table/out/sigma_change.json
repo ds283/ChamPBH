@@ -1,0 +1,177 @@
+{
+ "tables": {
+  "old": "prompts/electroweak-eos/data/pipeline_w_table_ec6bca8.csv",
+  "new": "CosmologyModels/GenericEOS/Xav_EOS_data.csv"
+ },
+ "grid": {
+  "T_lo_GeV": 1e-05,
+  "T_hi_GeV": 30000.0,
+  "per_decade": 1000,
+  "points": 9478
+ },
+ "ends": {
+  "old": {
+   "T_min_GeV": 1e-05,
+   "T_max_GeV": 25118.864315095823,
+   "rows": 189
+  },
+  "new": {
+   "T_min_GeV": 1e-05,
+   "T_max_GeV": 386.7085411060535,
+   "rows": 170
+  }
+ },
+ "max_abs_dSigma_by_decade": [
+  {
+   "T_lo_GeV": 1e-05,
+   "T_hi_GeV": 0.0001,
+   "points": 1000,
+   "max_abs_dSigma": 1.1746159600534156e-13,
+   "at_T_GeV": 8.831045120639069e-05,
+   "dSigma_there": -1.1746159600534156e-13
+  },
+  {
+   "T_lo_GeV": 0.0001,
+   "T_hi_GeV": 0.001,
+   "points": 1000,
+   "max_abs_dSigma": 1.5432100042289676e-14,
+   "at_T_GeV": 0.00010399513239256257,
+   "dSigma_there": 1.5432100042289676e-14
+  },
+  {
+   "T_lo_GeV": 0.001,
+   "T_hi_GeV": 0.01,
+   "points": 1000,
+   "max_abs_dSigma": 2.220446049250313e-16,
+   "at_T_GeV": 0.0010069910894778481,
+   "dSigma_there": -2.220446049250313e-16
+  },
+  {
+   "T_lo_GeV": 0.01,
+   "T_hi_GeV": 0.1,
+   "points": 1000,
+   "max_abs_dSigma": 4.440892098500626e-16,
+   "at_T_GeV": 0.09796051584193828,
+   "dSigma_there": -4.440892098500626e-16
+  },
+  {
+   "T_lo_GeV": 0.1,
+   "T_hi_GeV": 1.0,
+   "points": 1000,
+   "max_abs_dSigma": 4.218847493575595e-15,
+   "at_T_GeV": 0.44264895558755274,
+   "dSigma_there": -4.218847493575595e-15
+  },
+  {
+   "T_lo_GeV": 1.0,
+   "T_hi_GeV": 10.0,
+   "points": 1000,
+   "max_abs_dSigma": 3.0455904465043204e-10,
+   "at_T_GeV": 9.573627481616246,
+   "dSigma_there": 3.0455904465043204e-10
+  },
+  {
+   "T_lo_GeV": 10.0,
+   "T_hi_GeV": 100.0,
+   "points": 1000,
+   "max_abs_dSigma": 0.002802703671565987,
+   "at_T_GeV": 99.79058064250516,
+   "dSigma_there": 0.002802703671565987
+  },
+  {
+   "T_lo_GeV": 100.0,
+   "T_hi_GeV": 1000.0,
+   "points": 1000,
+   "max_abs_dSigma": 0.0040582858613540385,
+   "at_T_GeV": 336.5861993905879,
+   "dSigma_there": -0.0040582858613540385
+  },
+  {
+   "T_lo_GeV": 1000.0,
+   "T_hi_GeV": 10000.0,
+   "points": 1000,
+   "max_abs_dSigma": 0.0006031166951044886,
+   "at_T_GeV": 1000.2357135922277,
+   "dSigma_there": -0.0006031166951044886
+  },
+  {
+   "T_lo_GeV": 10000.0,
+   "T_hi_GeV": 30000.0,
+   "points": 477,
+   "max_abs_dSigma": 6.289533078240872e-06,
+   "at_T_GeV": 10002.651816976133,
+   "dSigma_there": -6.289533078240872e-06
+  }
+ ],
+ "max_abs_dSigma_where_rows_agree": {
+  "1e-5 to T0": {
+   "points": 700,
+   "max_abs_dSigma": 2.3092638912203256e-14,
+   "at_T_GeV": 4.365240627649726e-05,
+   "dSigma_there": -2.3092638912203256e-14
+  },
+  "T0 to 22 GeV": {
+   "points": 5643,
+   "max_abs_dSigma": 2.064222223785439e-05,
+   "at_T_GeV": 21.98270559136362,
+   "dSigma_there": 2.064222223785439e-05
+  }
+ },
+ "spline_nodes_as_read_by_the_class": {
+  "below T0": {
+   "rows_old": 14,
+   "rows_new": 14,
+   "T_bitwise_equal": 1,
+   "w_bitwise_equal": 14,
+   "max_rel_dT": 5.0177639820958575e-12,
+   "max_abs_dw": 0.0
+  },
+  "T0 to 22 GeV": {
+   "rows_old": 113,
+   "rows_new": 113,
+   "T_bitwise_equal": 77,
+   "w_bitwise_equal": 93,
+   "max_rel_dT": 8.36886115962443e-13,
+   "max_abs_dw": 1.27675647831893e-15
+  }
+ },
+ "electroweak_peak": {
+  "old": {
+   "T_GeV": 53.22137084820224,
+   "Sigma": 0.037435731895861246
+  },
+  "new": {
+   "T_GeV": 53.961763406022285,
+   "Sigma": 0.0377569614507105
+  }
+ },
+ "int_Sigma_dlnT": {
+  "30-100": {
+   "old": 0.040661600986584986,
+   "new": 0.041829686447544506,
+   "addendum": {
+    "merged": 0.04182968644754442,
+    "pipeline": 0.04060008561199598,
+    "LM": 0.04078718091937697
+   }
+  },
+  "100-300": {
+   "old": 0.016101286723982332,
+   "new": 0.01652351537167253,
+   "addendum": {
+    "merged": 0.016523515371672407,
+    "pipeline": 0.01611898775159285,
+    "LM": 0.016496415273218417
+   }
+  },
+  "300-25000": {
+   "old": 0.0030898721710563926,
+   "new": 0.00016397588124332746,
+   "addendum": {
+    "merged": 0.0001639758280181968,
+    "pipeline": 0.0031006993058623165,
+    "LM": -0.0005941152789101912
+   }
+  }
+ }
+}

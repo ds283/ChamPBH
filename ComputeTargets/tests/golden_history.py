@@ -6,7 +6,9 @@ prompt 05 as data/golden_history_05.json, which is the record of 05 on; 03's is 
 and 04. reflection-restart prompt 03 regenerated it as data/golden_history_rr03.json, when the stepper
 label became "Radau+kinematic-cap-stepping1" and the record gained restart_retakes; every other field is
 05's, which stays the record of everything before that prompt:
-.documents/reflection-restart/fix/compare_goldens.py.)
+.documents/reflection-restart/fix/compare_goldens.py. electroweak-eos prompt 01 regenerated it as
+data/golden_history_ee01.json when the w table changed; the rr03 record stays the record of everything
+before that prompt: .documents/electroweak-eos/table/compare_goldens.py.)
 
 Two histories are run as tools/history_and_bbn.py runs one, through integrate_history (the
 primitive; until jordan-normalization prompt 07, compute_scalar_history._function) with no Ray:
@@ -78,7 +80,7 @@ from CosmologyModels.GenericEOS.QCD_Cosmology import QCD_Cosmology
 from CosmologyModels.LambdaCDM import Planck2018
 from Units import Planck_units
 
-GOLDEN_PATH = Path(__file__).resolve().parent / "data" / "golden_history_rr03.json"
+GOLDEN_PATH = Path(__file__).resolve().parent / "data" / "golden_history_ee01.json"
 REGENERATE_COMMAND = (
     "PYTHONPATH=. ./venv/bin/python -m ComputeTargets.tests.golden_history"
 )
@@ -303,7 +305,7 @@ def main() -> int:
         "provenance": {
             "generated_at_commit": commit,
             "code_tree": (
-                "reflection-restart prompt 03's working tree, before its commit, on top "
+                "electroweak-eos prompt 01's working tree, before its commit, on top "
                 "of generated_at_commit"
             ),
             "generator": "ComputeTargets/tests/golden_history.py",

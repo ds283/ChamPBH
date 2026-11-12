@@ -616,18 +616,22 @@ class TestTheOneLoopLawOn2197(unittest.TestCase):
     prompt 02c it is five candidates, all one-loop, parking at N = 29.035 (re-pinned by prompt 02c and
     cross-checked against prompts/one-loop-drain/source/crossover/measured_law_map.py --law=adopted on the
     same inputs; log 02c). One integration to T_CMB, about 2-4 s at a load of 4-8, with one_loop_turnaround
-    counted.
+    counted. electroweak-eos prompt 01 re-pinned the values on its w table: still five candidates, all
+    one-loop, now parking at N = 28.876.
     """
 
-    # prompt 02c's pins: each candidate's alpha_eff as the reference map prints it (:.4e), and the parking N
+    # prompt 02c's pins: each candidate's alpha_eff as the reference map prints it (:.4e), and the parking N.
+    # Re-pinned by electroweak-eos prompt 01 when the w table changed, from this tree's history (not
+    # cross-checked against the reference map); 02c's were ("8.2276e-02", "9.1886e-02", "1.1431e-01",
+    # "1.2001e-01", "1.6459e-01") and 29.035264723467392
     PINNED_ALPHA_EFF = (
-        "8.2276e-02",
-        "9.1886e-02",
+        "8.2277e-02",
+        "9.1883e-02",
         "1.1431e-01",
         "1.2001e-01",
-        "1.6459e-01",
+        "1.6185e-01",
     )
-    PINNED_PARKING_N = 29.035264723467392
+    PINNED_PARKING_N = 28.876391476457353
 
     @classmethod
     def setUpClass(cls):

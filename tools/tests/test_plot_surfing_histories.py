@@ -46,9 +46,12 @@ import numpy as np
 import tools.plot_surfing_histories as psh
 
 ROOT = Path(__file__).resolve().parents[2]
-NEAR3_CSV = (
-    ROOT / ".documents/surfing-temperature/out/surfing_scan_phi5_M1e-3_near3.csv"
-)
+# surfing-temperature 04's committed scan near beta = 3 (.documents/surfing-temperature/out/
+# surfing_scan_phi5_M1e-3_near3.csv) is the record of the w table before electroweak-eos prompt 01; that prompt
+# remade its beta = 3 row on the new table the same way (.documents/electroweak-eos/table/surfing_reference.py,
+# which reproduces the committed row to 2.1e-8 on the old table), and the test reads it. On the new table beta = 3
+# is still not captured, but its first bounce is at T_J = 48.49 GeV (1.680 GeV before)
+NEAR3_CSV = ROOT / ".documents/electroweak-eos/table/out/surfing_reference_rows.csv"
 
 
 def make_trace(beta, kick=None, bounce_N=20.0, turning_points=()):
@@ -250,7 +253,8 @@ class TestRealHistory(unittest.TestCase):
         units before jordan-normalization prompt 05. Before the window V0 is negligible, and a
         constant phi_ref rescales A, to which the dynamics there are blind. The orchestrator's
         probe for prompt 08 measured 1.1e-7 (T_deliver). Before prompt 08: one untuned
-        integration, within 1e-7.
+        integration, within 1e-7. Since electroweak-eos prompt 01 the row is that prompt's remake
+        on its w table (NEAR3_CSV).
         """
         with open(NEAR3_CSV, newline="") as f:
             row = next(r for r in csv.DictReader(f) if float(r["beta"]) == 3.0)

@@ -1,0 +1,73 @@
+The table before electroweak-eos prompt 01, against the committed surfing-temperature scans:
+  beta = 1.5 (.documents/surfing-temperature/out/surfing_scan_phi5_M1e-3.csv)
+    captured                               true   committed                     true equal
+    capture_kick                            QCD   committed                      QCD equal
+    T_capture_GeV            0.3211029090014347   committed       0.3211029090023808   rel -2.947e-12 
+    N_capture                14.520902015747152   committed       14.520902015744397   rel +1.896e-13 
+    T_max_GeV               0.36139413415879573   committed      0.36139413415985033   rel -2.918e-12 
+    N_max                     18.64396988718934   committed        18.64396988718607   rel +1.754e-13 
+    T_second_dip_GeV                          -   committed                        - equal
+    N_second_dip                              -   committed                        - equal
+    T_deliver_GeV           0.36139407580905325   committed       0.3613940758101156   rel -2.940e-12 
+    N_deliver                 18.64397081911831   committed        18.64397081911504   rel +1.754e-13 
+    deliver_reflected                     false   committed                    false equal
+    n_crossings                               2   committed                        2   rel +0.000e+00 
+    T_hot_GeV               0.35697994071986056   committed       0.3569799407198624   rel -5.107e-15 
+    T_cold_GeV              0.13027201980821712   committed       0.1302720198082178   rel -5.107e-15 
+    least g before the bounce -0.0548983 at N = 15.833392, T_J = 0.335489 GeV; accepted steps 1233
+  beta = 3.0 (.documents/surfing-temperature/out/surfing_scan_phi5_M1e-3_near3.csv)
+    captured                              false   committed                    false equal
+    capture_kick                              -   committed                        - equal
+    T_capture_GeV                             -   committed                        - equal
+    N_capture                                 -   committed                        - equal
+    T_max_GeV                                 -   committed                        - equal
+    N_max                                     -   committed                        - equal
+    T_second_dip_GeV                          -   committed                        - equal
+    N_second_dip                              -   committed                        - equal
+    T_deliver_GeV            1.6800111207273944   committed       1.6800110848779357   rel +2.134e-08 
+    N_deliver                24.498974335805435   committed       24.498974358027958   rel -9.071e-10 
+    deliver_reflected                     false   committed                    false equal
+    n_crossings                               0   committed                        0 equal
+    T_hot_GeV                                 -   committed                        - equal
+    T_cold_GeV                                -   committed                        - equal
+    least g before the bounce 0.0224792 at N = 10.840796, T_J = 46.4615 GeV; accepted steps 4561
+
+The installed table, written to .documents/electroweak-eos/table/out/surfing_reference_rows.csv:
+  beta = 1.5
+    captured           true
+    capture_kick       QCD
+    T_capture_GeV      0.32110735128889967
+    N_capture          14.51624052582834
+    T_max_GeV          0.36139678987892526
+    N_max              18.643961621404884
+    T_second_dip_GeV   -
+    N_second_dip       -
+    T_deliver_GeV      0.36139673150961826
+    N_deliver          18.64396255733012
+    deliver_reflected  false
+    n_crossings        2
+    T_hot_GeV          0.35697994071986056
+    T_cold_GeV         0.13027201980821806
+    min_g              -0.05489084761050966
+    N_min_g            15.828724211173272
+    T_min_g_GeV        0.33549129113678733
+    accepted_steps     1219
+  beta = 3.0
+    captured           false
+    capture_kick       -
+    T_capture_GeV      -
+    N_capture          -
+    T_max_GeV          -
+    N_max              -
+    T_second_dip_GeV   -
+    N_second_dip       -
+    T_deliver_GeV      48.490199737754835
+    N_deliver          21.064967186164502
+    deliver_reflected  false
+    n_crossings        0
+    T_hot_GeV          -
+    T_cold_GeV         -
+    min_g              0.0032141090439239406
+    N_min_g            13.160338249556272
+    T_min_g_GeV        50.14090071153458
+    accepted_steps     6747

@@ -27,7 +27,9 @@ through `main(argv)` with stdout captured and `compute_BBN_data` replaced by a s
   `PYTHONPATH=. ./venv/bin/python pins.py` (the same call, through `main` with the stub) from a
   temporary `git worktree` of `d097745`, and the worktree removed. The normalization and phi_ref
   are the seed's (`ExponentialModel.seed`), given as their repr. No `alpha=` and no `dissipation`
-  line appears at alpha = 0;
+  line appears at alpha = 0. `electroweak-eos` prompt 01 re-pinned `PINNED_ALPHA_ZERO` to the tool's
+  stdout on its w table, the same call through `main` with the stub (before it: RHS=33838
+  accepted_steps=3725, bounce N=20.342271137 T_J=746.622784 MeV);
 - at alpha = 0.1 the history line gains `alpha=0.1` just before `wall=`, a `dissipation` line
   follows the bounce line with every field of `dissipation_values(data)` in order, and each printed
   value equals `float(f"{x:.6g}")` of the field (the two ln T_J fields minus ln GeV, under their
@@ -62,12 +64,12 @@ _BBN = {
 
 PINNED_ALPHA_ZERO = """\
 @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
-history beta=2 M=0.5: RHS=33838 accepted_steps=3725 reflections=0 samples=5287 integrations=1 wall=# s
-bounce beta=2 M=0.5: N=20.342271137 T_J=746.622784 MeV phi=4.960119e-03 reflected=False
-fixed_T beta=2 M=0.5: 1MeV crossings=1 phi=1.243342069e-02 ratio=-9.512453022e-01 stand_in_phi=1.243304736e-02 stand_in_ratio=-9.512454771e-01 | 70keV crossings=1 phi=1.011759728e-02 ratio=-9.471102694e-01 stand_in_phi=1.011743502e-02 stand_in_ratio=-9.471100909e-01
-ratio beta=2 M=0.5 [0.3,1) keV: n=131 min=-0.9476 median=-0.9467 max=-0.9463 rms_step=1.13e-05
-ratio beta=2 M=0.5 [1,3) keV: n=119 min=-0.9463 median=-0.9461 max=-0.946 rms_step=3.486e-06
-ratio beta=2 M=0.5 [3,10) keV: n=130 min=-0.9464 median=-0.9463 max=-0.9461 rms_step=2.994e-06
+history beta=2 M=0.5: RHS=33721 accepted_steps=3715 reflections=0 samples=5287 integrations=1 wall=# s
+bounce beta=2 M=0.5: N=20.342268911 T_J=746.624260 MeV phi=4.960176e-03 reflected=False
+fixed_T beta=2 M=0.5: 1MeV crossings=1 phi=1.243540715e-02 ratio=-9.512448899e-01 stand_in_phi=1.243503343e-02 stand_in_ratio=-9.512450649e-01 | 70keV crossings=1 phi=1.011866586e-02 ratio=-9.471026231e-01 stand_in_phi=1.011850211e-02 stand_in_ratio=-9.471024435e-01
+ratio beta=2 M=0.5 [0.3,1) keV: n=131 min=-0.9476 median=-0.9467 max=-0.9463 rms_step=1.131e-05
+ratio beta=2 M=0.5 [1,3) keV: n=119 min=-0.9463 median=-0.9461 max=-0.946 rms_step=3.519e-06
+ratio beta=2 M=0.5 [3,10) keV: n=130 min=-0.9464 median=-0.9463 max=-0.9461 rms_step=2.995e-06
 ratio beta=2 M=0.5 [10,100) keV: n=257 min=-0.9503 median=-0.9463 max=-0.9435 rms_step=0.0003283
 bbn beta=2 M=0.5: Yp=0.247 DoH=2.5 He3oH=1 Li7oH=5 network=small PRyM_time=# s wall=# s PRyM_version=stub
 """

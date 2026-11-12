@@ -29,6 +29,7 @@ policy reads is the store's.
   `repr`, and the SHA-256 of `repr((raw_N_grid, [abs_Q_samples[l] for l in Q_labels]))`, equal the
   pins, which were taken at the dispatch commit `03b769e` by the script quoted whole in log 09 §4.3
   (its mode `pins`), in a temporary worktree of that commit, on the same setup and harness.
+  `electroweak-eos` prompt 01 re-pinned them on its w table, at the regenerated tuned golden record.
 - **(b) α = 0.1 reads ρ_χ.** On M = 0.5 M_P, β = 2 (test 1's history): at each sample, M²_eff/H² and
   Ḣ/H² equal a recomputation from the policy's parts with `r_chi` and §1.5's E, bitwise; and
   `compute_adiabatic_values`'s |Q| equal Q formed from the recomputed grids, bitwise.
@@ -66,12 +67,17 @@ from ObjectFactories.tests.test_dissipation_store import (
 
 SM = dh.SM
 
-# (a)'s pins, taken at the dispatch commit 03b769e (log 09 §4.3)
+# (a)'s pins, taken at the dispatch commit 03b769e (log 09 §4.3). Re-pinned by electroweak-eos prompt 01
+# when the w table changed: the tuned golden history it integrates (now golden_history_ee01_tuned.json)
+# bounces first at T_J = 48.5 GeV, not 1.68 GeV, so |Q| moves. The old pins were
+# {'kp_over_H_1E1': 18.9909249914034, 'kp_over_H_1E2': 1.2320960122983178,
+# 'kp_over_H_1E3': 0.016026391467678723, 'kp_over_H_1E4': 5.683352478895833e-05} and
+# a59c5cc762e2cdd2db0d51b005099d25050a1621634d293ff54bb39114f96c0f; the sample count is unchanged
 PIN_MAX_ABS_Q = (
-    "{'kp_over_H_1E1': 18.9909249914034, 'kp_over_H_1E2': 1.2320960122983178, "
-    "'kp_over_H_1E3': 0.016026391467678723, 'kp_over_H_1E4': 5.683352478895833e-05}"
+    "{'kp_over_H_1E1': 13.966453760977432, 'kp_over_H_1E2': 0.8964169114084297, "
+    "'kp_over_H_1E3': 0.022162546864849465, 'kp_over_H_1E4': 9.212758841702059e-05}"
 )
-PIN_SHA256 = "a59c5cc762e2cdd2db0d51b005099d25050a1621634d293ff54bb39114f96c0f"
+PIN_SHA256 = "740c6c8d6d9de04a6348851357154469b60c2f2d2d7e8bf27c563cc5f54c1cd9"
 PIN_SAMPLES = 5960
 
 
