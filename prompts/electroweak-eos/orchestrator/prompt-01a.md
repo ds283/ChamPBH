@@ -1,5 +1,8 @@
 # Orchestrator — prompt 01a, turning points resolved above the solver's tolerance
 
+> **Used for 01a.** Dispatched 2026-11-12 at `0479587`. 01a stopped once and was resumed on the user's ruling.
+> It landed as `634f141` and was reviewed in the commit that adds this line. The review is on the board.
+
 Read [`../README.md`](../README.md) §8 first, with U8–U11 as ruled. The user's words: "Handle it in a separate
 classifier prompt; re-pin test_10 to 2026.11.0", then "U8 to U11 are fine as proposed; write 01a". Then read
 the prompt. This note binds 01a only. The conventions of earlier notes bind here as well: a tolerance is a

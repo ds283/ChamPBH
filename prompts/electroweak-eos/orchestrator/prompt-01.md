@@ -244,3 +244,61 @@ If it passes, in one commit of the orchestrator's:
 - the early turning point as ruled;
 - whether β = 3 moved;
 - that 02 (the threshold and the sample) is written next.
+
+## Addendum (2026-11-12, after 01a): for 01's resumption
+
+Prompt 01a landed as `634f141` and `electroweak-eos` was fast-forwarded to it. 01's uncommitted work in the main
+checkout is untouched and now sits on top of it (no shared path). The review is on the board. Where this addendum
+differs from the note above, the addendum governs.
+
+1. **Ruling 3 is answered by 01a.** The user ruled "Handle it in a separate classifier prompt". 01a is that
+   prompt.
+   - An interior pair of sign changes of π whose excursion is not greater than
+     τ = atol + rtol · max(|π_low|, |π_high|) is dropped and counted in
+     `IntegrationResult.unresolved_turning_point_pairs`, which is not stored.
+   - On the new table the early wall/plateau pair at T_J ≈ 385–389 GeV is dropped in every history and every test
+     integration that had it. `first_bounce` does not move. At α = 0, `dropped_drains` goes from 1 to 0 in those
+     histories; the user ruled that an allowed difference.
+   - Nothing about the early turning point is left for 01 to rule. The re-pins that ruling 3 held back are now
+     made on this tree, under ruling 2.
+2. **§0's table of 22 tests is replaced** by 01a's list of what still fails on the new table with 01a. The first
+   failing assertion of each is in log 01a §6.
+   - **Now pass, nothing to re-pin (4):**
+     - `test_injection`: test_1 (`first_bounce`), test_2 (one injection per wall side), test_2 (the turning points
+       are classified);
+     - `test_drain_store`: extremes.
+   - **Still fail (18):**
+     - `test_golden_history`: β = 1.5 and β = 5.5;
+     - `test_golden_reflecting_history`;
+     - `test_tuning` (e);
+     - `test_injection` test_11;
+     - `test_reachability_roots` d1 and d2, already re-pinned by 01;
+     - `test_release` test_7 and test_2;
+     - `test_wall_rounding` test_3;
+     - `test_drain_law` test_4;
+     - `test_adiabatic_dark_radiation` test_8a;
+     - `test_tuned_history_round_trip` test_a;
+     - `test_history_and_bbn` test_a and test_b;
+     - `test_history_and_bbn_alpha` test_10;
+     - `test_surfing_scan` β = 1.5 tuned;
+     - `test_plot_surfing_histories` β = 3.
+   - **`test_injection` test_11 is a stop before any re-pin.** It guards the interior pair that led to interior
+     sampling: β = 10, M = 0.5 M_P, α = 0.1, parking cut off. On the new table that history has no interior pair,
+     even without 01a (log 01a §6). A re-pin of its count would leave the test guarding nothing. The agent reports
+     what the history now does, and proposes a case that still holds a resolved interior pair. The orchestrator
+     takes that proposal to the user. *STRUCTURALLY REQUIRED*.
+   - A test of the 18 that passes for the agent is recorded as such. A test outside the 18 that fails is a stop,
+     as ruling 2 says.
+3. **The verification document** (`.documents/electroweak-eos-verification.md`, which 01 creates) gains a
+   pointer to `.documents/electroweak-eos/turning-points/`, 01a's measurements, beside §1. 01 does not edit that
+   folder.
+4. **The suite counts 01 starts from** are 01a's: CosmologyModels 26, ComputeTargets 684 (219 + 465),
+   ObjectFactories 163, tools 277, RunDrivers 76. 01's `test_build_w_table` makes tools 292. `CLAUDE.md`'s counts
+   wait for 01 and then follow ruling 1: while `CLAUDE.md` holds the user's edits, 01 records the counts in its log
+   and on the board, and leaves `CLAUDE.md` alone.
+5. **01's handoff** ([`prompt-01-handoff.md`](prompt-01-handoff.md)) steps 2 to 12 stand, run on this tree. The
+   golden records and the re-pins are made once, with 01a's change in place. At α > 0, dropping the pair moves
+   trajectories, as U9 intends (log 01a §5), so no pin may be carried over from a run made before `634f141`.
+6. **Housekeeping.** The comment on `TURNING_POINT_INTERIOR_SAMPLES` (`ComputeTargets/ScalarHistory.py`) ends
+   without a full stop. That file is not 01's to touch, so the orchestrator fixed it in a standalone commit after
+   the review. The commit changes nothing but that comment.

@@ -27,7 +27,7 @@ amended by U7)
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01a | Resolved turning points | an interior pair of sign changes of π kept only if the solver resolves it (README §8); lands before 01's commit | Opus | ✍️ | ✅ | this commit | [`logs/01a-resolved-turning-points.md`](logs/01a-resolved-turning-points.md) |
+| 01a | Resolved turning points | an interior pair of sign changes of π kept only if the solver resolves it (README §8); lands before 01's commit | Opus | ✍️ | ✅ | `634f141` | [`logs/01a-resolved-turning-points.md`](logs/01a-resolved-turning-points.md) |
 | 01 | Install the table | the table by U2 (b); the build script and test; `VERSION_LABEL` 2026.11.0; re-pinned tests and golden histories; the docstring | Opus | ✍️ ⏸ 01a | ⬜ | | |
 | 02 | Measure the effect | the EW threshold; the sample of `2026.10.0` histories old against new; the bath drift | Opus | ⬜ | ⬜ | | |
 | 03 | Documents and handover | the documents, issues, indexes and the handover; the close | Sonnet | ⬜ | ⬜ | | |
@@ -41,7 +41,7 @@ ruled as proposed by the user the same day: "U8 to U11 are fine as proposed; wri
 Orchestrator notes, one prompt at a time, in `orchestrator/`: [`prompt-01.md`](orchestrator/prompt-01.md), written
 2026-11-12 with the prompt and dispatched the same day at `468266d`; 01's handoff at its stop,
 [`prompt-01-handoff.md`](orchestrator/prompt-01-handoff.md); [`prompt-01a.md`](orchestrator/prompt-01a.md), written
-2026-11-12 with prompt 01a and not yet dispatched.
+2026-11-12 with prompt 01a, dispatched the same day at `0479587` and used for 01a.
 
 **Planner's probe for 01 (2026-11-12, at `b3d5906`, not committed).** The U2 (b) table (170 rows) was built in a
 scratch worktree and the suites run on it.
@@ -60,13 +60,57 @@ in a separate classifier prompt; re-pin test_10 to 2026.11.0". 01's work so far 
 build script and its test, the label, the reachability pins and test_10 re-pinned) stays uncommitted in the
 main checkout until 01a lands.
 
-**01a landed (2026-11-12, this commit, on branch `electroweak-eos-01a` in a worktree, U10).** An interior pair of sign
+**01a landed (2026-11-12, `634f141`, on branch `electroweak-eos-01a` in a worktree, U10).** An interior pair of sign
 changes of π is kept only if its excursion exceeds the step's tolerance on π (README §8.3 U8); a dropped pair is counted in
 `IntegrationResult.unresolved_turning_point_pairs`, which is not stored (U9). 01a stopped once: its scans to T_CMB found
 two late near-stall pairs dropped on the old table. **Ruled by the user, 2026-11-12:** "For the stop issue, choose (a).
 For the `dropped_drains` issue, add to the allowed differences." Gate Resolved holds as so ruled (log 01a §3). It opens
 one issue (§3) and closes `[01-turning-points-read-below-the-solver-tolerance]` (§4). On 01's table, 4 of the 22 tests
 pass with it and 18 still fail; the list is in log 01a §6, for 01's resume.
+
+**Orchestrator review of prompt 01a (2026-11-12).** All six checks of note 01a §3 pass, with the gate as the user
+ruled it at the stop.
+1. *Scope.* `634f141`'s parent is `0479587`, the note's commit. Its 28 files are the prompt's §4 list. None is
+   one of note 01a's ruling 2 or `CLAUDE.md`. Nothing is pushed.
+2. *Old table, bitwise.* In the worktree, `test_golden_history`, `test_golden_reflecting_history`, `test_tuning`
+   (e), `test_injection` and `test_resolved_turning_points` ran 42 tests, OK, in 65.2 s (20:18–20:20 GMT,
+   one-minute load 3.98 to 5.98).
+   - `compare_scans.py --mode old`, re-run on the agent's JSON, reproduces the committed `out/compare_old.txt`
+     line for line. It compares 241 380 turning points and exits 0 under the ruled gate.
+   - An independent comparison of the 36 histories' JSON, done by the orchestrator, finds 34 with turning points
+     and `first_bounce` equal. In the other two (β = 10 and 20, M = 10⁻³ M_P), the turning points after are those
+     before less one plateau/wall pair, in order. `first_bounce` is equal in both.
+   - `unresolved_turning_point_pairs` is 1 in those two histories and 0 in the other 34.
+3. *The rule.* `resolved_sign_changes` finds the changes by the old loop, verbatim. It then walks them:
+   - the excursion is max |π| over the samples from change i's `N_after` to change i + 1's `N_before`
+     inclusive, which are the samples strictly between the crossings;
+   - a pair is dropped when the excursion is `<=` τ;
+   - after a drop the walk goes on at i + 2, otherwise at i + 1.
+   The end-to-end bracket is taken only when one change was found, none dropped and the nodes differ in sign, so
+   a single change left by a drop is refined on its sub-interval, as the prompt says. τ comes from `params.atol`
+   and `params.rtol`. `git grep unresolved_turning_point_pairs` finds the field only in the namedtuple, its
+   comment, the docstring and the loop's return, besides tests and probes. It is no payload key.
+4. *The new table.* The golden β = 1.5 history, re-run by the orchestrator on the new table's copy (SHA-256
+   `690090c8…0119d`, read by redirect) with 01a's change:
+   - 6 turning points, the first a wall at N = 18.643963 (`first_bounce`, unchanged);
+   - none before N = 18.6, and `unresolved_turning_point_pairs` = 1;
+   - `dropped_drains` 0, where 01's probe without the change had 1;
+   - accepted steps (1219), nfev (9776) and N_final equal to 01's probe without the change.
+   The worktree's CSV was still `28edd854…29a8` afterwards.
+5. *Records.*
+   - The log has §5.1's sections, and every deviation is classed. The user's words at the stop are quoted in
+     the log and on the board.
+   - Row 01a, the Resolved gate and §4 are on the board. `OPEN_ISSUES.md` has 01's row deleted, 01a's new row
+     added, **30 open** (not the note's 29: 01a opened one) and the date 2026-11-12.
+   - `numerical-strategies.md` §6.2 has the dated note.
+   - One correction was made in review: §4 said the new-table pair was dropped "nowhere else", but
+     `out/compare_new.txt` also drops a late near-stall pair at β = 20, M = 10⁻³ M_P, N = 126.278 (0.59 τ). The
+     log's summary already said so. §4 now does too.
+6. *The fast-forward.* `git diff --name-only 0479587 634f141` shares no path with the main checkout's uncommitted
+   work, the user's or 01's. `git merge --ff-only` succeeded. Afterwards `git status` lists the same files as
+   before. The only difference is that `.documents/electroweak-eos/` now shows as `.documents/electroweak-eos/table/`,
+   because `turning-points/` beside it is tracked.
+   The worktree was removed, after its `venv` symlink, and the branch `electroweak-eos-01a` was deleted.
 
 ### 1.1 Items
 
@@ -117,14 +161,16 @@ left out of scope by the user's ruling on U7 (2026-11-12); it stays on the `revi
   - *Next step:* 01a (README §8.2), under U8–U11 as ruled 2026-11-12.
   - **Assigned (2026-11-12):** to this campaign's prompt 01a, by the user's ruling "Handle it in a separate
     classifier prompt".
-  - **Closed (2026-11-12) by prompt 01a, this commit.** `observe_turning_points` now keeps an interior pair only if
+  - **Closed (2026-11-12) by prompt 01a, `634f141`.** `observe_turning_points` now keeps an interior pair only if
     its excursion exceeds τ = atol + rtol · max(|π_low|, |π_high|) (`resolved_sign_changes`), and counts a dropped
     pair in `IntegrationResult.unresolved_turning_point_pairs`. On the old table, over 01's 36 scanned histories to
     T_CMB, no pair is dropped down to 100 GeV and everything else is bitwise its baseline, but for two late
     near-stall pairs (β = 10 and 20 at M = 10⁻³ M_P, T_J ≈ 24 eV and 0.46 keV, excursions 0.175 τ and 0.95 τ), which
     the user ruled at 01a's stop to be the rule working as ruled; the suites and the three golden records pass
     unchanged. On 01's table the pair is dropped in every scanned history and every
-    test integration where it was seen, and nowhere else (log 01a §3).
+    test integration where it was seen, and nowhere else but one late near-stall pair at β = 20, M = 10⁻³ M_P
+    (N = 126.278, 0.59 τ; log 01a §3). *(The orchestrator's review added that exception: the text as committed said
+    "nowhere else", which `out/compare_new.txt` does not bear out.)*
 
 ## 5. Baselines
 

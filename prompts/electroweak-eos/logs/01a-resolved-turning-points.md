@@ -1,7 +1,7 @@
 # Log 01a — turning points resolved above the solver's tolerance
 
 **Subject:** Keep an interior pair of turning points only if the solver resolves it
-**Commit:** this commit, on branch `electroweak-eos-01a` (a worktree, U10), on top of `0479587` (prompt 01a and its
+**Commit:** `634f141`, on branch `electroweak-eos-01a` (a worktree, U10), on top of `0479587` (prompt 01a and its
 orchestrator note)
 **Date:** 2026-11-12, by Claude Opus 5.5
 **Result:** **COMPLETE, after one stop.** Gate Resolved holds as the user ruled it at the stop (§2.2, §3).
@@ -81,7 +81,7 @@ orchestrator note)
      script's path is the worktree's).
 
    Both fail after the change with byte-identical failure text (§4). *STRUCTURALLY REQUIRED*.
-2. **Prompt 01's files and `CLAUDE.md` are not touched.** None is in this commit (`git diff --cached --name-status` in
+2. **Prompt 01's files and `CLAUDE.md` are not touched.** None is in `634f141` (`git diff --cached --name-status` in
    §4). *STRUCTURALLY REQUIRED*.
 3. **The new table** was given as `ee01a-new-table.csv`, SHA-256 `690090c86e285f3ee30d03244a2c242dd2b5b3c3f405e4f94229b0e481d0119d`,
    shown before use. It was read through a redirect of `pandas.read_csv` inside `Xav_EOS_spline` and never swapped
@@ -339,8 +339,8 @@ A	prompts/electroweak-eos/logs/01a-resolved-turning-points.md
 
 ## 6. State handed to the next prompt (01, on resume)
 
-- **Bringing this commit in.**
-  - The orchestrator fast-forwards `electroweak-eos` to this commit (U10). It touches none of 01's files and not
+- **Bringing `634f141` in.**
+  - The orchestrator fast-forwards `electroweak-eos` to `634f141` (U10). It touches none of 01's files and not
     `CLAUDE.md`.
   - No label bump (U11). `config/version.py` is untouched, and 01's `2026.11.0` covers both.
 - **The new suite counts:** CosmologyModels 26, ComputeTargets 684 (219 + 465), ObjectFactories 163, tools 277,
