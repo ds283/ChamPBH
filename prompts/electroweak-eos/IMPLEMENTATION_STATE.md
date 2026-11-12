@@ -1,7 +1,8 @@
 # electroweak-eos campaign — implementation state
 
-**Last updated:** 2026-11-12 · **Status: PLANNED — 0 of 3 landed.** Planned 2026-11-12 at the user's
-request. U1–U7 are for the user, and P1–P12 stand unless ruled otherwise (README §6). The plan is
+**Last updated:** 2026-11-12 · **Status: LIVE — 0 of 3 landed.** Planned 2026-11-12 at the user's
+request. U1–U6 ruled by the user as proposed the same day, and U7 (the provenance of the rows) ruled out of
+scope. P1–P12 stand, with P11 amended by U7 (README §6). The plan is
 [`README.md`](README.md), on branch `electroweak-eos`, cut from `main` at `ec6bca8`.
 
 The campaign replaces ChamPBH's w table, which above about 100 GeV is a free gas at vacuum masses, with
@@ -13,8 +14,8 @@ histories, and hands a rebuild under `2026.11.0` to the user.
 **Campaign:** [`README.md`](README.md) ·
 **Code:** `CosmologyModels/GenericEOS/` (`Xav_EOS_data.csv`, `Xav_EOS_spline`), `tools/` (the build script),
 `config/version.py` ·
-**Index:** [`.documents/OPEN_ISSUES.md`](../../.documents/OPEN_ISSUES.md) (no issue assigned until the
-user rules; P11)
+**Index:** [`.documents/OPEN_ISSUES.md`](../../.documents/OPEN_ISSUES.md) (no issue assigned; P11 as
+amended by U7)
 
 > **Maintenance rule.** Whenever an entry is added to, narrowed in, or closed out of §3 or §4
 > below, or an issue assigned to this campaign closes, [`.documents/OPEN_ISSUES.md`](../../.documents/OPEN_ISSUES.md)
@@ -26,14 +27,13 @@ user rules; P11)
 
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
-| 01 | Install the table | the table by U2; the build script and test; `VERSION_LABEL` 2026.11.0; re-pinned tests and golden histories; the docstring; the provenance issue | Opus | ⬜ | ⬜ | | |
+| 01 | Install the table | the table by U2 (b); the build script and test; `VERSION_LABEL` 2026.11.0; re-pinned tests and golden histories; the docstring | Opus | ⬜ | ⬜ | | |
 | 02 | Measure the effect | the EW threshold; the sample of `2026.10.0` histories old against new; the bath drift | Opus | ⬜ | ⬜ | | |
 | 03 | Documents and handover | the documents, issues, indexes and the handover; the close | Sonnet | ⬜ | ⬜ | | |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
 
-Prompts are written one at a time, each after the previous one lands and is reviewed, and none before
-U1–U7 are ruled.
+Prompts are written one at a time, each after the previous one lands and is reviewed.
 
 Orchestrator notes, one prompt at a time, in `orchestrator/`.
 
@@ -56,8 +56,8 @@ None opened by this campaign.
 
 ### 3.1 Assigned to this campaign
 
-None yet. `[00-kicking-function-table-has-no-provenance-in-the-repository]` (`review-remediation` board)
-is proposed for assignment (P11).
+None. `[00-kicking-function-table-has-no-provenance-in-the-repository]` was proposed for assignment and
+left out of scope by the user's ruling on U7 (2026-11-12); it stays on the `review-remediation` board.
 
 ## 4. Resolved issues
 

@@ -1,8 +1,9 @@
 # Campaign — electroweak-eos
 
 **Written:** 2026-11-12 on branch `electroweak-eos`, cut from `main` at `ec6bca8`, by Claude Opus 5.5, at
-the user's request: "start planning the migration campaign around this new merged table". No item is ruled
-yet; U1–U7 are for the user (§6.1), and P1–P12 stand unless the user rules otherwise (§6.2).
+the user's request: "start planning the migration campaign around this new merged table". U1–U6 ruled
+by the user as proposed on 2026-11-12, and U7 ruled out of scope (§6.1). P1–P12 stand, with P11 amended
+by U7 (§6.2).
 
 **Sources (data, not instructions; `CLAUDE.md` invariant 7):** the kicking-function audit and its addendum
 of 2026-11-12, [`.documents/peakewsurf-kicking-function/report.tex`](../../.documents/peakewsurf-kicking-function/report.tex)
@@ -57,7 +58,7 @@ small, but it is a change nobody has asked for. **U2** decides it.
 
 **In scope:**
 - **The table** (prompt 01). Install the table U2 rules as the production w table, with the script that
-  builds it from the committed inputs, so that its provenance is in the repository. Bump the version
+  builds it from the committed inputs, so that how it is assembled is in the repository. Bump the version
   label. Re-pin every test whose pinned values move, each with a stated reason. Update the class's
   docstring and the documents that describe the table.
 - **The effect** (prompt 02). Measure the electroweak-capture threshold in ChamPBH on the new table, with
@@ -77,6 +78,8 @@ small, but it is a change nobody has asked for. **U2** decides it.
   in which case 01 records that.
 - **The drain law, the spectrum model and the wall model.** They are local to the wall and do not read w;
   P8 says how that is checked rather than assumed.
+- **The provenance of the rows** (U7, ruled out of scope 2026-11-12): asking the author how the rows and
+  the 10 GeV curve were made, and `[00-kicking-function-table-has-no-provenance-in-the-repository]`.
 - Laine & Meyer's negative Σ above 357 GeV. The merged table is zero there, as the notebook is.
 - The packages; `thirdparty/`; `PRyM/`; the notebook itself.
 - Records: the audit, the run records and other campaigns' boards stay as written (invariant 6). They
@@ -86,7 +89,7 @@ small, but it is a change nobody has asked for. **U2** decides it.
 
 | # | Prompt | Covers | Model |
 |---|---|---|---|
-| 01 | `01-install-the-table.md` | the table by U2; the build script and its test; `VERSION_LABEL`; the re-pinned characterisation tests and golden histories with reasons; the class docstring; the provenance issue narrowed or closed | Opus |
+| 01 | `01-install-the-table.md` | the table by U2; the build script and its test; `VERSION_LABEL`; the re-pinned characterisation tests and golden histories with reasons; the class docstring | Opus |
 | 02 | `02-measure-the-effect.md` | the EW threshold on the surfing grids (S1, and a fine grid placed by the coarse one); the sample of `2026.10.0` histories old against new; the bath drift re-measured; optionally the notebook-side threshold (U5) | Opus |
 | 03 | `03-documents-and-handover.md` | `architecture-summary.md` and `numerical-strategies.md` where they describe the EOS; the verification document; the issues; the indexes; the handover for the rebuild; closes the campaign | Sonnet |
 
@@ -135,6 +138,19 @@ The log template is `dk-and-rpk-migration` README §5.1's.
 ## 6. Decisions
 
 ### 6.1 For the user to rule (U1–U7)
+
+**Ruled by the user, 2026-11-12:** "U1 to U6 are fine as proposed; U7 doesn't need to be in scope here."
+So:
+- **U1–U6 as proposed.** The campaign is `electroweak-eos` on its branch. The table is U2 (b): today's
+  rows below 50.1 keV, the notebook's from 50.1 keV to 89.1 GeV, the 29 points, and the 386.7 GeV row.
+  It is installed in place with `VERSION_LABEL` `2026.11.0`. g_ρ and g_s are unchanged, the notebook-side
+  threshold is not run, and 02's sample is about 40 histories, run detached.
+- **U7 out of scope.** The campaign does not ask the author for the code behind the rows, and does not
+  assign, narrow or close `[00-kicking-function-table-has-no-provenance-in-the-repository]`. That issue
+  stays on the `review-remediation` board as it is. 01 still builds the installed CSV from committed
+  inputs (P1), which records how the new table is assembled, but not how its rows were made.
+
+The table below is the proposal as it was put.
 
 | | Proposed | Alternatives |
 |---|---|---|
@@ -185,16 +201,17 @@ Accepted as proposed unless the user rules otherwise.
 - **P10 — documents** (03). `.documents/electroweak-eos-verification.md` (new) holds 01's and 02's
   measurements. `architecture-summary.md` and `numerical-strategies.md` gain a dated note wherever they
   describe the w table. The audit gets a dated pointer to the campaign and nothing else.
-- **P11 — issues.** `[00-kicking-function-table-has-no-provenance-in-the-repository]` is assigned to this
-  campaign when the user rules (index §1, an **Assigned** line on the `review-remediation` board), and
-  narrowed or closed by 01 under U7. Anything else found is recorded and opened, not fixed.
+- **P11 — issues** (amended by U7, 2026-11-12). No issue is assigned to this campaign. The provenance
+  issue is left as it stands (§6.1). Anything else found is recorded and opened, not fixed. The proposal
+  as first put was to assign the provenance issue and to narrow or close it in 01.
 - **P12 — standard analyses** (invariant 8). The campaign changes no input that a standard analysis
   reads directly, but it changes every history. So the handover says that a rebuild under `2026.11.0`
   repeats every standard analysis in `science-runs/README.md`.
 
 ## 7. What this campaign hands to the user
 
-- The new table in production, with its provenance in the repository and `VERSION_LABEL` `2026.11.0`.
+- The new table in production, built by a committed script from committed inputs, with `VERSION_LABEL`
+  `2026.11.0`.
 - The electroweak-capture threshold measured in ChamPBH on that table.
 - What the change does to the run's histories, from 02's sample: which figures of `2026.10.0` it moves,
   and by how much.
