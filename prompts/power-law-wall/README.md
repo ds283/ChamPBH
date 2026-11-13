@@ -218,8 +218,10 @@ Accepted as proposed unless the user rules otherwise.
   loop, with V′ = −n(V − V₀)/φ in place of n = 1's −V M/φ²; tested at n = 1, 2 against a root-find.
 - **P4 — `_drain_L` not in 01.** 01 leaves it unimplemented, so the one-loop law refuses the model loudly until 03 (or
   04's first commit, U3 (a)) defines it.
-- **P5 — the tool route.** `tools/history_and_bbn.py`, `tools/surfing_scan.py` and crossover's `cascade_map.py` gain
-  `--model {exponential, inverse-power}` (default exponential, which leaves every current command's output unchanged).
+- **P5 — the tool route.** `tools/history_and_bbn.py` and `tools/surfing_scan.py` gain
+  `--model {exponential, inverse-power}` and `--n` (defaults exponential and 1, which leave every current command's
+  output unchanged). *(Amended 2026-11-13, writing 01: crossover's `cascade_map.py` is a record of a closed campaign
+  and still passes the removed `--gap-prescription`, so it is not changed; 02 maps the paths with its own copy.)*
 - **P6 — 02 is research in `source/wall/`.** It copies `walls.py`, `stage1a_classical.py`, `stage2.py` and
   `stage2_validate.py` there, adds `PowerWall(L, n)` in the units walls.py uses, and validates it as crossover's
   stage 2 was. It changes no production code. Its brief is written from crossover's `stage2-brief.md`.
