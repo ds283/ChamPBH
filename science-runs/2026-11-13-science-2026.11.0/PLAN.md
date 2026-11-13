@@ -33,7 +33,10 @@ The tree: `VERSION_LABEL` `2026.11.0` (`config/version.py:100`), `FINGERPRINT_FO
     until they are thinned. Its exports (`var/science-2026.8.0/`, 389 MB) and its two small stores (`-reflections`,
     `-large-M-dissipation`, 265 MB together) are untouched.
 
-### 0.2 Proposed, not yet ruled
+### 0.2 Proposed, then ruled as proposed
+
+Ruled by the user, 2026-11-13, in their words: "P1–P6 as proposed, launch it". Before the launch `df -h .` showed
+170 GB free (82% used).
 
 - **P1, the grid otherwise unchanged.** Every block, M, α row, A row, β grid other than the dense one, φ\*, tolerance
   and option is 2026.10.0's (§1), so every history of that run has a counterpart here and the comparison of P5 is one
