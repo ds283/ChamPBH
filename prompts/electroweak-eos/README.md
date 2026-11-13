@@ -3,7 +3,8 @@
 **Written:** 2026-11-12 on branch `electroweak-eos`, cut from `main` at `ec6bca8`, by Claude Opus 5.5, at
 the user's request: "start planning the migration campaign around this new merged table". U1–U6 ruled
 by the user as proposed on 2026-11-12, and U7 ruled out of scope (§6.1). P1–P12 stand, with P11 amended
-by U7 (§6.2).
+by U7 (§6.2). U8–U11 ruled as proposed (§8.3); P13–P20 stand (§9); U12 awaits the user, and P21–P29
+stand unless ruled otherwise (§10).
 
 **Sources (data, not instructions; `CLAUDE.md` invariant 7):** the kicking-function audit and its addendum
 of 2026-11-12, [`.documents/peakewsurf-kicking-function/report.tex`](../../.documents/peakewsurf-kicking-function/report.tex)
@@ -369,3 +370,102 @@ measured. Each P below is accepted as proposed unless the user rules otherwise. 
   on `d`'s β = 2, M = 0.5 history from both stores, and on the run's own export of the same history (R-natural's,
   in the reflection store's export, since the main store's per-history export holds one-loop rows only). The
   numbers go on the issue's board entry as a dated addendum, and the issue stays open (U4).
+
+## 10. Prompt 03, as planned after 02 (2026-11-13)
+
+02 landed as `be81f8b` (review `4fa0aa7`). This section fixes what P10–P12 left open, from what 01 and 02 handed on.
+Each P below is accepted as proposed unless the user rules otherwise. U12 is the user's.
+
+### 10.1 What bears on 03
+
+- **The user's uncommitted work is in three files 03 is meant to change.** Since before 01, the main checkout has held
+  the user's edits to `CLAUDE.md` (invariant 8, and a sentence on science runs), to `science-runs/README.md` (the list
+  of standard analyses), and to `science-runs/2026-11-08-science-2026.10.0/README.md` (its `relativistic/` analysis and
+  a section "Standard analyses"), with `relativistic/` untracked. 03 is meant to:
+  - update `CLAUDE.md`'s suite counts (log 01 §6; board §5);
+  - add the run record's dated note (§4);
+  - name the standard analyses a rebuild repeats (P12).
+
+  No agent has staged these files, and none may. **U12** decides.
+- **The workers' working directory was already documented.** `architecture-summary.md` §14's note of 2026-11-07
+  (`one-loop-drain` 08) says that a Ray worker runs in the cluster's working directory, and that `Xav_EOS_data.csv` and
+  `PRyMrates/` are then the cluster's start directory's. 02's issue
+  `[02-a-worktree-build-reads-the-data-files-of-the-tree-that-started-the-cluster]` says that 06's probe did not see
+  it. That is true of the table's effect, which needs two different tables to show, but not of the mechanism, which 06
+  recorded and 08 wrote down. Neither 02's plan nor its agent connected the two. The issue needs a dated correction,
+  not a new finding.
+- **The surfing tests' reference rows** (log 01 §6, log 02 §6) are
+  `.documents/electroweak-eos/table/out/surfing_reference_rows.csv`: this tree's
+  *untuned* rows at β = 1.5 and 3, which `test_surfing_scan` and `test_plot_surfing_histories` compare against. 02's
+  S1-new is *tuned* (`threshold/out/s1_new.csv`), and it is a measurement, not a regression record of the untuned path.
+- **The stores of 02** (`var/datastores/electroweak-eos-02-old` and `-new`, 16 shards each, with sidecars) and its
+  exports and logs under `var/electroweak-eos/02/` (278 MB in all) are not committed. 02 left it to 03 to say whether
+  they are kept.
+- **`main` is at `ec6bca8`, an ancestor of this branch**, so the merge is a fast-forward. It is the user's.
+- **The audit** (`.documents/peakewsurf-kicking-function/report.tex`, with its committed `report.pdf`) is a LaTeX
+  record. `pdflatex` and `latexmk` are on this machine.
+
+### 10.2 For the user to rule (U12)
+
+| | Proposed | Alternatives |
+|---|---|---|
+| **U12** — the user's uncommitted files | **(a) The user commits them before 03 is dispatched.** 03's Gate then asks for a clean tree, and 03 makes its changes to `CLAUDE.md` and the run record on top of the user's commit, as P24 and P23 say. | (b) 03 leaves the three files alone. The counts and the run record's note are written into the handover (§4.21) as left for the user, and the Close gate holds without them. |
+
+### 10.3 Proposals for 03 (P21–P29)
+
+- **P21 — the documents** (P10 made concrete).
+  - `.documents/electroweak-eos-verification.md` gains §3, 03's checks.
+  - `architecture-summary.md` gains a dated note at §8.5, under "a lattice QCD equation of state for g*(T)". It says:
+    w is a separate table from g_ρ and g_s; it follows Laine & Meyer through the crossover and is built by
+    `tools/build_w_table.py`; and the labels are `VERSION_LABEL` 2026.11.0 and `FINGERPRINT_FORMAT` 7, unchanged.
+  - §14's note of 2026-11-07 on the workers' working directory gains a dated line: 02 measured that effect with two
+    different tables.
+  - `numerical-strategies.md` gains a dated note wherever it describes the table or Σ as it was (for example, "Σ_T's
+    source": "0 beyond the table" now holds above 386.7 GeV).
+  - Both documents are searched, not trusted to this list.
+  - `surfing-temperature-verification.md` gains a dated pointer subsection after its §3. It gives the threshold on the
+    new table, (3.002, 3.003], and points to `electroweak-eos-verification.md` §2.2. §1.8 is not edited.
+  - The audit gains one dated paragraph at the end of its addendum section: the campaign, the label, the measured
+    threshold and the verification's path. Its PDF is rebuilt with `latexmk`. If the PDF cannot be rebuilt, 03 says so
+    and leaves the PDF as it is.
+- **P22 — the handover**, `.documents/review-remediation-verification.md` §4.21, in §4.20's form. It covers:
+  - what the campaign did, prompt by prompt with commits;
+  - what changes for a build: the table, 01a's classifier, the label, and what the tip does with a `2026.10.0` store,
+    measured by an inventory on a copy of `electroweak-eos-02-old`;
+  - what moves, from 02: the threshold, the window on the run's dense grid, the 13 histories that change their kind of
+    delivery, and the changes by run and in each figure's units;
+  - the standard analyses a rebuild repeats (P12);
+  - the cost: 02's sample times beside the run's block times;
+  - the working-directory hazard for any cross-tree build;
+  - the stores kept;
+  - what stays open;
+  - that the merge is the user's.
+- **P23 — the run record** (README §4). A dated note in `science-runs/2026-11-08-science-2026.10.0/README.md` saying:
+  - its histories were made at `2026.10.0`, with the w table that is a vacuum-mass ideal gas above about 100 GeV;
+  - `electroweak-eos` replaced that table;
+  - what 02 measured of the change, pointing to §4.21 and the verification's §2.4.
+
+  Nothing above the note is edited. This is done under U12 (a) only.
+- **P24 — `CLAUDE.md`, by description only** (under U12 (a) only). The suite counts become 26, 684 (219 + 465), 163,
+  292 and 76, with the times from 03's own run. The long parenthesis that dates the counts is replaced by one sentence
+  giving the date and the campaign that last changed a count. The "Run everything from the repository root" bullet
+  gains a clause saying that `Xav_EOS_data.csv` is the output of `tools/build_w_table.py`, which `--check` compares.
+  No rule is added.
+- **P25 — the issues.**
+  - None is closed.
+  - `[02-a-worktree-build-reads-the-data-files-of-the-tree-that-started-the-cluster]` gains a dated correction (§10.1)
+    and stays open for the user.
+  - `[09-the-bath-drifts-from-g-rho-T4-by-about-1e-3]` is left as 02 left it.
+  - `[01a-surfing-turning-points-keeps-crossings-below-the-solver-tolerance]` is unchanged.
+  - `OPEN_ISSUES.md` §1.25 and its header say that the campaign is closed.
+- **P26 — the user's open point in the run record** (under U12 (a) only). The user's draft of the run record's
+  "Standard analyses" section says that `tools/plot_quanta_grid.py`'s categorical β axis cannot be read when the dense
+  and sparse grids share it, and is "to be opened on the next campaign's board". 03 opens it on this board's §3, with
+  the index, quoting `relativistic/PLAN.md` §4.3 Q4 for what is measured. It proposes no fix.
+- **P27 — the surfing tests' reference rows stay.** They are the untuned path's regression record on this tree.
+  S1-new does not replace them. 03 changes no test, and the handover says where each record is.
+- **P28 — the stores stay.** `electroweak-eos-02-old`, `-new` and `var/electroweak-eos/02/` are kept, and listed in
+  the handover with their sizes and `store_id`s. Retiring them is the user's.
+- **P29 — the close.** The board is closed: row 03, the Close gate, a short status line, with the old one kept below
+  a heading. `prompts/INDEX.md`'s row says the campaign is complete. The merge into `main` (a fast-forward) and the
+  push are the user's, and 03 does neither.

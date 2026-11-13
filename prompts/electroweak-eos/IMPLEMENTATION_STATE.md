@@ -1,6 +1,6 @@
 # electroweak-eos campaign — implementation state
 
-**Last updated:** 2026-11-13 · **Status: LIVE — 3 of 4 landed (01a, 01, 02); 03 not yet written.** Planned 2026-11-12 at the user's
+**Last updated:** 2026-11-13 · **Status: LIVE — 3 of 4 landed (01a, 01, 02); 03 written (README §10), awaiting the user's ruling on U12.** Planned 2026-11-12 at the user's
 request. U1–U6 ruled by the user as proposed the same day, and U7 (the provenance of the rows) ruled out of
 scope. P1–P12 stand, with P11 amended by U7 (README §6). The plan is
 [`README.md`](README.md), on branch `electroweak-eos`, cut from `main` at `ec6bca8`.
@@ -30,7 +30,7 @@ amended by U7)
 | 01a | Resolved turning points | an interior pair of sign changes of π kept only if the solver resolves it (README §8); lands before 01's commit | Opus | ✍️ | ✅ | `634f141` | [`logs/01a-resolved-turning-points.md`](logs/01a-resolved-turning-points.md) |
 | 01 | Install the table | the table by U2 (b); the build script and test; `VERSION_LABEL` 2026.11.0; re-pinned tests and golden histories; the docstring | Opus | ✍️ | ✅ | `5947b4f` | [`logs/01-install-the-table.md`](logs/01-install-the-table.md) |
 | 02 | Measure the effect | the EW threshold on S1-new, F-new and F-old (P13); 48 histories of `2026.10.0` built on both trees and compared, the old side checked against the run (P14–P19); the bath drift (P20); README §9 | Opus | ✍️ | ✅ | `be81f8b` | [`logs/02-measure-the-effect.md`](logs/02-measure-the-effect.md) |
-| 03 | Documents and handover | the documents, issues, indexes and the handover; the close | Sonnet | ⬜ | ⬜ | | |
+| 03 | Documents and handover | the documents, issues, indexes and the handover; the run record's note and `CLAUDE.md`'s counts under U12 (a); the close; README §10 | Sonnet | ✍️ | ⬜ | | |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
 
@@ -43,7 +43,8 @@ Orchestrator notes, one prompt at a time, in `orchestrator/`: [`prompt-01.md`](o
 [`prompt-01-handoff.md`](orchestrator/prompt-01-handoff.md); [`prompt-01a.md`](orchestrator/prompt-01a.md), written
 2026-11-12 with prompt 01a, dispatched the same day at `0479587` and used for 01a;
 [`prompt-02.md`](orchestrator/prompt-02.md), written 2026-11-13 with prompt 02, dispatched the same day at `e1fd6bc`
-and used for 02.
+and used for 02. [`prompt-03.md`](orchestrator/prompt-03.md), written 2026-11-13 with prompt 03 and
+README §10; not dispatched, since U12 waits for the user.
 
 **Planner's probe for 01 (2026-11-12, at `b3d5906`, not committed).** The U2 (b) table (170 rows) was built in a
 scratch worktree and the suites run on it.
