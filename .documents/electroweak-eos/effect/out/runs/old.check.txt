@@ -1,0 +1,21 @@
+### one check 2026-11-13 13:37:07 +0000
+** run_side old: tree /private/tmp/claude-35086/-Users-ds283--claude-spares-spare-L2vpmA/ebde1a9d-136d-40c1-b0a9-b34bf63b08de/scratchpad/ewe-02/agent/old-ec6bca8 at ec6bca8, VERSION_LABEL 2026.10.0, store /Users/ds283/Documents/Code/ChamPBH/var/datastores/electroweak-eos-02-old.db
+** run_side old: a-edge betas 2.98 2.985 2.99 2.995 3.0 3.005 3.01 3.015 3.02 3.025 3.03 3.035 3.04
+** run_side old: started 2026-11-13 13:37:03 +0000
+--- a-edge log head
+** run_side old-a-edge: launch 2026-11-13 13:37:03 +0000
+** load at launch: 13:37  up 13 days, 15:57, 2 users, load averages: 7.82 8.19 9.23
+** registered_run: registered as electroweak-eos-02-old-a-edge-20261113T133704
+**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/electroweak-eos-02-old-a-edge-20261113T133704/manifest.json
+**   list it with: ./venv/bin/python -m runregistrykit list
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-13 13:37:05,003	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-13 13:37:05,040	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at [1m[32mhttp://127.0.0.1:8267 [39m[22m
+>> Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/electroweak-eos-02-old.db" with 16 shards
+$ list
+   RUN                                                           STATE      PROGRESS      AGE  PURPOSE · STAGE
+   electroweak-eos-02-old-a-edge-20261113T133704                 running           -       4s  electroweak-eos 02 Effect: old side (ec6bca8, 2026.10.0), run a-edge: M 4e-31 Mp, the 13 beta of the dense grid's 2.980-3.040, one-loop A 1, no fixed alpha, phi* 5  · Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datas
+   science-2026.10.0-R-R-Mcrit-20261108T234456                   done              -   4d 13h  science-2026.10.0 R: reflection structure at M_crit, 1e-15 and 1e-12 Mp, beta 1.2 2 2.9, one-loop A 1, fixed alpha 0.01 0.1  · CALCULATE BBN DATA, all work items complete
+   science-2026.10.0-C-C-Mcrit-20261108T192238                   done              -   4d 18h  science-2026.10.0 C: M 1e-15 and 1e-12 Mp around M_crit, sparse beta, one-loop A 1, fixed alpha 0.01 0.1  · CALCULATE BBN DATA, all work items complete
+  PID  PPID ELAPSED COMMAND
+98375     1   00:05 sh /Users/ds283/Documents/Code/ChamPBH/.documents/electroweak-eos/effect/run_side.sh old

@@ -1,0 +1,38 @@
+bath_drift.py tables (electroweak-eos prompt 02, §1.3)
+grid: nb_thermo.wls's, 18603 points, 2000 per decade, T from 1e-05 to 19998.61869632745 GeV (T* = the top point)
+
+[old] table prompts/electroweak-eos/data/pipeline_w_table_ec6bca8.csv
+  T_quoted_GeV     T_grid_GeV         Delta  100 Delta  100(e^D - 1)  issue %
+           100            100  +1.91827e-03    +0.1918       +0.1920    +0.19
+             1              1  -1.16772e-02    -1.1677       -1.1609    -1.17
+           0.1            0.1  -8.30785e-04    -0.0831       -0.0830    -0.08
+          0.01           0.01  -2.12082e-03    -0.2121       -0.2119    -0.21
+         0.001          0.001  -2.10647e-03    -0.2106       -0.2104   -0.211
+        0.0001         0.0001  -9.76904e-04    -0.0977       -0.0976   -0.098
+         1e-05          1e-05  -7.77681e-04    -0.0778       -0.0777 (end of table)
+         today    2.34865e-13  -7.77681e-04    -0.0778       -0.0777   -0.078  (continued below 1e-5 GeV, 15260 points)
+  least Delta on the grid: -1.69047e-02 (-1.6763 %) at T = 24.7172 GeV
+  largest Delta on the grid: +2.00694e-02 (+2.0272 %) at T = 0.163305 GeV
+
+[new] table CosmologyModels/GenericEOS/Xav_EOS_data.csv
+  T_quoted_GeV     T_grid_GeV         Delta  100 Delta  100(e^D - 1)  issue %
+           100            100  -5.68803e-04    -0.0569       -0.0569    +0.19
+             1              1  -1.28463e-02    -1.2846       -1.2764    -1.17
+           0.1            0.1  -1.99989e-03    -0.2000       -0.1998    -0.08
+          0.01           0.01  -3.28992e-03    -0.3290       -0.3285    -0.21
+         0.001          0.001  -3.27558e-03    -0.3276       -0.3270   -0.211
+        0.0001         0.0001  -2.14601e-03    -0.2146       -0.2144   -0.098
+         1e-05          1e-05  -1.94679e-03    -0.1947       -0.1945 (end of table)
+         today    2.34865e-13  -1.94679e-03    -0.1947       -0.1945   -0.078  (continued below 1e-5 GeV, 15260 points)
+  least Delta on the grid: -1.80881e-02 (-1.7925 %) at T = 24.8599 GeV
+  largest Delta on the grid: +1.89003e-02 (+1.9080 %) at T = 0.163305 GeV
+
+new - old, Delta:
+  T = 100 GeV: -2.48707e-03
+  T = 1 GeV: -1.16910e-03
+  T = 0.1 GeV: -1.16910e-03
+  T = 0.01 GeV: -1.16910e-03
+  T = 0.001 GeV: -1.16910e-03
+  T = 0.0001 GeV: -1.16910e-03
+  T = 1e-05 GeV: -1.16910e-03
+  today: -1.16910e-03

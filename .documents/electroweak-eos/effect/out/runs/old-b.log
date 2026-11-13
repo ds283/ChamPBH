@@ -1,0 +1,36 @@
+** run_side old-b: launch 2026-11-13 13:41:16 +0000
+** load at launch: 13:41  up 13 days, 16:02, 2 users, load averages: 15.43 14.66 12.33
+** registered_run: registered as electroweak-eos-02-old-b-20261113T134118
+**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/electroweak-eos-02-old-b-20261113T134118/manifest.json
+**   list it with: ./venv/bin/python -m runregistrykit list
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-13 13:41:18,917	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-13 13:41:18,956	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at [1m[32mhttp://127.0.0.1:8267 [39m[22m
+>> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/electroweak-eos-02-old.db" with 16 shards
+
+** BUILDING GRID OF MODELS TO SAMPLE
+   -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+   -- populated beta sample grid with 2 values = [ 2, 3 ]
+   -- populated M sample grid with 6 values = [ 0.0024353 eV, 2.4353e-05 eV, 2.4353e-06 eV, 2.4353e-09 eV, 2.4353e-13 eV, 2.4353e-15 eV ]
+   -- no alpha grid (--no-alpha-values): no fixed-law row is built
+   -- populated A grid with 1 value = [ 1 ] (one-loop-measured-v1)
+   -- total number of models to integrate = 12
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 1 (one-loop-measured-v1)
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+[36m(Datastore pid=98884)[0m @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+   -- ALL WORK ITEMS COMPLETE in time 22.9s
+      Queue summary: 12 lookup (avg 31.42/min), 12 compute (avg 31.42/min), 12 store (avg 31.42/min), 12 validation (avg 31.42/min)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 3.27s
+      Queue summary: 12 lookup (avg 220/min), 12 compute (avg 220/min), 12 store (avg 220/min), 12 validation (avg 220/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 22.2s
+      Queue summary: 12 lookup (avg 32.37/min), 12 compute (avg 32.37/min), 12 store (avg 32.37/min), 12 validation (avg 32.37/min)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+** driver exit status 0
+** run_side old-b: end 2026-11-13 13:42:45 +0000, exit 0

@@ -1,0 +1,10 @@
+** run_side new: tree /Users/ds283/Documents/Code/ChamPBH at e1fd6bc, VERSION_LABEL 2026.11.0, store /Users/ds283/Documents/Code/ChamPBH/var/datastores/electroweak-eos-02-new.db
+** run_side new: a-edge betas 2.98 2.985 2.99 2.995 3.0 3.005 3.01 3.015 3.02 3.025 3.03 3.035 3.04
+** run_side new: started 2026-11-13 13:49:59 +0000
+** run_side new-a-edge: exit 0 (2026-11-13 13:52:24 +0000)
+** run_side new-a-spread: exit 0 (2026-11-13 13:54:55 +0000)
+** run_side new-b: exit 0 (2026-11-13 13:56:25 +0000)
+** run_side new-c: exit 0 (2026-11-13 13:57:44 +0000)
+** run_side new-d: exit 0 (2026-11-13 13:59:25 +0000)
+** run_side new-r: exit 0 (2026-11-13 14:00:35 +0000)
+** run_side new: ended, exit 0 (2026-11-13 14:00:35 +0000)

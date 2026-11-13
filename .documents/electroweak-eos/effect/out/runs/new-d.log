@@ -1,0 +1,41 @@
+** run_side new-d: launch 2026-11-13 13:57:44 +0000
+** load at launch: 13:57  up 13 days, 16:18, 2 users, load averages: 17.35 26.53 23.35
+** registered_run: registered as electroweak-eos-02-new-d-20261113T135746
+**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/electroweak-eos-02-new-d-20261113T135746/manifest.json
+**   list it with: ./venv/bin/python -m runregistrykit list
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-13 13:57:46,618	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-13 13:57:46,655	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at [1m[32mhttp://127.0.0.1:8267 [39m[22m
+>> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/electroweak-eos-02-new.db" with 16 shards
+
+** BUILDING GRID OF MODELS TO SAMPLE
+   -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+   -- populated beta sample grid with 2 values = [ 2, 3 ]
+   -- populated M sample grid with 3 values = [ 0.001 Mp, 0.1 Mp, 0.5 Mp ]
+   -- populated alpha grid with 1 value = [ 0 ]
+   -- total number of models to integrate = 6
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+[36m(Datastore pid=1915)[0m @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+[36m(compute_scalar_history pid=1941)[0m -- tune electroweak-eos-02-new-d-ScalarHistory-ExponentialModel(M=0.5Mp,n=1,beta=3)-2026-11-13T13:58:00 it=1 kind=guard H/H0-1=+7.242e-01 phi_ref/phi_min-1=+4.388e-02 norm=-278.14696392 phi_ref=6.3225741363e-01 wall=2.7
+[36m(compute_scalar_history pid=1930)[0m -- tune electroweak-eos-02-new-d-ScalarHistory-ExponentialModel(M=0.5Mp,n=1,beta=2)-2026-11-13T13:57:59 it=9 kind=secant H/H0-1=-8.866e-07 phi_ref/phi_min-1=+4.737e-05 norm=-279.564943546 phi_ref=3.5851910882e-01 wall=1.8
+[36m(compute_scalar_history pid=1930)[0m -- tune electroweak-eos-02-new-d-ScalarHistory-ExponentialModel(M=0.5Mp,n=1,beta=2)-2026-11-13T13:57:59 it=10 kind=secant H/H0-1=-2.003e-07 phi_ref/phi_min-1=-4.716e-07 norm=-279.564976145 phi_ref=3.5848282842e-01 wall=1.7
+[36m(compute_scalar_history pid=1941)[0m -- tune electroweak-eos-02-new-d-ScalarHistory-ExponentialModel(M=0.5Mp,n=1,beta=3)-2026-11-13T13:58:00 it=9 kind=secant H/H0-1=+6.678e-05 phi_ref/phi_min-1=-1.338e-04 norm=-280.128543274 phi_ref=2.7079421650e-01 wall=2.8
+[36m(compute_scalar_history pid=1941)[0m -- tune electroweak-eos-02-new-d-ScalarHistory-ExponentialModel(M=0.5Mp,n=1,beta=3)-2026-11-13T13:58:00 it=10 kind=secant H/H0-1=-1.894e-05 phi_ref/phi_min-1=+4.016e-05 norm=-280.128798244 phi_ref=2.7086382437e-01 wall=2.8
+[36m(compute_scalar_history pid=1941)[0m -- tune electroweak-eos-02-new-d-ScalarHistory-ExponentialModel(M=0.5Mp,n=1,beta=3)-2026-11-13T13:58:00 it=11 kind=secant H/H0-1=+7.092e-09 phi_ref/phi_min-1=-1.918e-07 norm=-280.128743929 phi_ref=2.7084733926e-01 wall=2.8
+   -- ALL WORK ITEMS COMPLETE in time 49.3s
+      Queue summary: 6 lookup (avg 437.8/hr), 6 compute (avg 437.8/hr), 6 store (avg 437.8/hr), 6 validation (avg 437.8/hr)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 1.45s
+      Queue summary: 6 lookup (avg 247.9/min), 6 compute (avg 247.9/min), 6 store (avg 247.9/min), 6 validation (avg 247.9/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 11s
+      Queue summary: 6 lookup (avg 32.78/min), 6 compute (avg 32.78/min), 6 store (avg 32.78/min), 6 validation (avg 32.78/min)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+** driver exit status 0
+** run_side new-d: end 2026-11-13 13:59:25 +0000, exit 0

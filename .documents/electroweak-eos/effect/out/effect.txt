@@ -1,0 +1,281 @@
+compare_sample.py (electroweak-eos prompt 02 §1.4, P18-P19)
+old: var/electroweak-eos/02/export/old/QCD_Cosmology (48 histories); new: var/electroweak-eos/02/export/new/QCD_Cosmology (48 histories)
+matched: 48
+
+T_deliver on opposite sides of 10 GeV on the two trees (a label between the QCD deliveries, about 1-2 GeV, and the EW ones, about 30-60 GeV; not a test):
+  a-edge: beta=2.985 M=4e-31 A=1.0 (one-loop-measured-v1): T_deliver 1.93385 -> 20.6487 GeV
+  a-edge: beta=2.99 M=4e-31 A=1.0 (one-loop-measured-v1): T_deliver 1.8291 -> 35.1919 GeV
+  a-edge: beta=2.995 M=4e-31 A=1.0 (one-loop-measured-v1): T_deliver 1.68874 -> 43.1556 GeV
+  a-edge: beta=3.0 M=4e-31 A=1.0 (one-loop-measured-v1): T_deliver 1.68001 -> 48.4902 GeV
+  b: beta=3.0 M=1e-42 A=1.0 (one-loop-measured-v1): T_deliver 1.68001 -> 48.4902 GeV
+  b: beta=3.0 M=1e-40 A=1.0 (one-loop-measured-v1): T_deliver 1.68001 -> 48.4902 GeV
+  b: beta=3.0 M=1e-36 A=1.0 (one-loop-measured-v1): T_deliver 1.68001 -> 48.4902 GeV
+  b: beta=3.0 M=1e-33 A=1.0 (one-loop-measured-v1): T_deliver 1.68001 -> 48.4902 GeV
+  b: beta=3.0 M=1e-32 A=1.0 (one-loop-measured-v1): T_deliver 1.68001 -> 48.4902 GeV
+  b: beta=3.0 M=1e-30 A=1.0 (one-loop-measured-v1): T_deliver 1.68001 -> 48.4902 GeV
+  d: beta=3.0 M=0.001 alpha=0.0: T_deliver 1.68001 -> 48.4902 GeV
+  d: beta=3.0 M=0.1 alpha=0.0: T_deliver 1.68058 -> 48.4897 GeV
+  d: beta=3.0 M=0.5 alpha=0.0: T_deliver 1.68294 -> 48.4875 GeV
+  13 histories
+
+failures (failure_reasons non-empty) on either side:
+  0 histories
+
+bounce rows (one-loop histories, bounces.csv by ordinal): counts old/new, the first ordinal whose kind or source differs, and before it the largest relative |new - old| in N, log_T_Jordan_GeV and alpha_eff
+  a-edge: beta=2.98 M=4e-31 A=1.0 (one-loop-measured-v1): 65/131 rows; first ordinal whose kind or source differs: none in the first 65 (the shorter's length); before it, max rel N 0.0716 (ordinal 64), max |d ln T_J| 2.04 (ordinal 64) (rel 6.57), max rel alpha_eff 0.122 (ordinal 64)
+  a-edge: beta=2.985 M=4e-31 A=1.0 (one-loop-measured-v1): 61/133 rows; first ordinal whose kind or source differs: none in the first 61 (the shorter's length); before it, max rel N 0.0986 (ordinal 0), max |d ln T_J| 2.45 (ordinal 60) (rel 20.6), max rel alpha_eff 0.14 (ordinal 60)
+  a-edge: beta=2.99 M=4e-31 A=1.0 (one-loop-measured-v1): 87/133 rows; first ordinal whose kind or source differs: none in the first 87 (the shorter's length); before it, max rel N 0.137 (ordinal 84), max |d ln T_J| 4.38 (ordinal 86) (rel 14.5), max rel alpha_eff 0.203 (ordinal 86)
+  a-edge: beta=2.995 M=4e-31 A=1.0 (one-loop-measured-v1): 75/135 rows; first ordinal whose kind or source differs: none in the first 75 (the shorter's length); before it, max rel N 0.141 (ordinal 74), max |d ln T_J| 4.42 (ordinal 74) (rel 12.9), max rel alpha_eff 0.208 (ordinal 74)
+  a-edge: beta=3.0 M=4e-31 A=1.0 (one-loop-measured-v1): 99/135 rows; first ordinal whose kind or source differs: none in the first 99 (the shorter's length); before it, max rel N 0.14 (ordinal 0), max |d ln T_J| 3.36 (ordinal 0) (rel 55), max rel alpha_eff 0.0989 (ordinal 98)
+  a-edge: beta=3.005 M=4e-31 A=1.0 (one-loop-measured-v1): 135/141 rows; first ordinal whose kind or source differs: none in the first 135 (the shorter's length); before it, max rel N 0.0604 (ordinal 0), max |d ln T_J| 1.3 (ordinal 0) (rel 1.77), max rel alpha_eff 0.049 (ordinal 0)
+  a-edge: beta=3.01 M=4e-31 A=1.0 (one-loop-measured-v1): 133/147 rows; first ordinal whose kind or source differs: none in the first 133 (the shorter's length); before it, max rel N 0.0467 (ordinal 1), max |d ln T_J| 1.15 (ordinal 1) (rel 5.3), max rel alpha_eff 0.0538 (ordinal 132)
+  a-edge: beta=3.015 M=4e-31 A=1.0 (one-loop-measured-v1): 135/151 rows; first ordinal whose kind or source differs: none in the first 135 (the shorter's length); before it, max rel N 0.0395 (ordinal 134), max |d ln T_J| 0.942 (ordinal 134) (rel 13.9), max rel alpha_eff 0.05 (ordinal 134)
+  a-edge: beta=3.02 M=4e-31 A=1.0 (one-loop-measured-v1): 137/153 rows; first ordinal whose kind or source differs: none in the first 137 (the shorter's length); before it, max rel N 0.0308 (ordinal 136), max |d ln T_J| 0.663 (ordinal 136) (rel 3.85), max rel alpha_eff 0.0389 (ordinal 136)
+  a-edge: beta=3.025 M=4e-31 A=1.0 (one-loop-measured-v1): 143/151 rows; first ordinal whose kind or source differs: none in the first 143 (the shorter's length); before it, max rel N 0.0227 (ordinal 142), max |d ln T_J| 0.437 (ordinal 142) (rel 23.4), max rel alpha_eff 0.026 (ordinal 142)
+  a-edge: beta=3.03 M=4e-31 A=1.0 (one-loop-measured-v1): 149/149 rows; first ordinal whose kind or source differs: none in the first 149 (the shorter's length); before it, max rel N 0.018 (ordinal 148), max |d ln T_J| 0.397 (ordinal 15) (rel 13.3), max rel alpha_eff 0.0167 (ordinal 148)
+  a-edge: beta=3.035 M=4e-31 A=1.0 (one-loop-measured-v1): 153/145 rows; first ordinal whose kind or source differs: none in the first 145 (the shorter's length); before it, max rel N 0.0159 (ordinal 18), max |d ln T_J| 0.383 (ordinal 15) (rel 4.8), max rel alpha_eff 0.0115 (ordinal 144)
+  a-edge: beta=3.04 M=4e-31 A=1.0 (one-loop-measured-v1): 153/143 rows; first ordinal whose kind or source differs: none in the first 143 (the shorter's length); before it, max rel N 0.0156 (ordinal 2), max |d ln T_J| 0.369 (ordinal 2) (rel 20.5), max rel alpha_eff 0.00894 (ordinal 142)
+  a-spread: beta=1.2 M=4e-31 A=0.05 (one-loop-measured-v1): 285/279 rows; first ordinal whose kind or source differs: none in the first 279 (the shorter's length); before it, max rel N 0.00155 (ordinal 8), max |d ln T_J| 0.0523 (ordinal 197) (rel 0.00322), max rel alpha_eff 0.00838 (ordinal 278)
+  a-spread: beta=2.0 M=4e-31 A=0.05 (one-loop-measured-v1): 79/79 rows; first ordinal whose kind or source differs: none in the first 79 (the shorter's length); before it, max rel N 0.000986 (ordinal 77), max |d ln T_J| 0.0314 (ordinal 77) (rel 0.0029), max rel alpha_eff 0.000751 (ordinal 78)
+  a-spread: beta=5.0 M=4e-31 A=0.05 (one-loop-measured-v1): 457/489 rows; first ordinal whose kind or source differs: none in the first 457 (the shorter's length); before it, max rel N 0.0112 (ordinal 456), max |d ln T_J| 0.431 (ordinal 456) (rel 145), max rel alpha_eff 0.0327 (ordinal 456)
+  a-spread: beta=1.2 M=4e-31 A=1.0 (one-loop-measured-v1): 41/41 rows; first ordinal whose kind or source differs: none in the first 41 (the shorter's length); before it, max rel N 0.000381 (ordinal 11), max |d ln T_J| 0.0116 (ordinal 11) (rel 0.00132), max rel alpha_eff 0.000869 (ordinal 10)
+  a-spread: beta=2.0 M=4e-31 A=1.0 (one-loop-measured-v1): 89/89 rows; first ordinal whose kind or source differs: none in the first 89 (the shorter's length); before it, max rel N 6.14e-07 (ordinal 88), max |d ln T_J| 1.54e-05 (ordinal 88) (rel 6.85e-06), max rel alpha_eff 1.68e-05 (ordinal 88)
+  a-spread: beta=5.0 M=4e-31 A=1.0 (one-loop-measured-v1): 139/141 rows; first ordinal whose kind or source differs: none in the first 139 (the shorter's length); before it, max rel N 0.00849 (ordinal 8), max |d ln T_J| 0.277 (ordinal 8) (rel 5.16), max rel alpha_eff 0.0116 (ordinal 8)
+  a-spread: beta=1.2 M=4e-31 A=10.0 (one-loop-measured-v1): 11/11 rows; first ordinal whose kind or source differs: none in the first 11 (the shorter's length); before it, max rel N 2.25e-05 (ordinal 10), max |d ln T_J| 0.000378 (ordinal 10) (rel 0.00016), max rel alpha_eff 9.97e-06 (ordinal 10)
+  a-spread: beta=2.0 M=4e-31 A=10.0 (one-loop-measured-v1): 13/13 rows; first ordinal whose kind or source differs: none in the first 13 (the shorter's length); before it, max rel N 9.99e-07 (ordinal 12), max |d ln T_J| 1.85e-05 (ordinal 12) (rel 1.59e-05), max rel alpha_eff 1.36e-05 (ordinal 12)
+  a-spread: beta=5.0 M=4e-31 A=10.0 (one-loop-measured-v1): 15/15 rows; first ordinal whose kind or source differs: none in the first 15 (the shorter's length); before it, max rel N 0.00216 (ordinal 6), max |d ln T_J| 0.0636 (ordinal 6) (rel 0.0156), max rel alpha_eff 0.00218 (ordinal 14)
+  b: beta=2.0 M=1e-42 A=1.0 (one-loop-measured-v1): 77/77 rows; first ordinal whose kind or source differs: none in the first 77 (the shorter's length); before it, max rel N 3.35e-06 (ordinal 76), max |d ln T_J| 9.95e-05 (ordinal 76) (rel 1.02e-05), max rel alpha_eff 2.52e-05 (ordinal 52)
+  b: beta=3.0 M=1e-42 A=1.0 (one-loop-measured-v1): 61/161 rows; first ordinal whose kind or source differs: none in the first 61 (the shorter's length); before it, max rel N 0.14 (ordinal 0), max |d ln T_J| 3.36 (ordinal 0) (rel 46.3), max rel alpha_eff 0.214 (ordinal 60)
+  b: beta=2.0 M=1e-40 A=1.0 (one-loop-measured-v1): 73/73 rows; first ordinal whose kind or source differs: none in the first 73 (the shorter's length); before it, max rel N 2.41e-06 (ordinal 72), max |d ln T_J| 7.29e-05 (ordinal 72) (rel 7.39e-06), max rel alpha_eff 2.5e-05 (ordinal 58)
+  b: beta=3.0 M=1e-40 A=1.0 (one-loop-measured-v1): 61/163 rows; first ordinal whose kind or source differs: none in the first 61 (the shorter's length); before it, max rel N 0.14 (ordinal 0), max |d ln T_J| 3.36 (ordinal 0) (rel 46.6), max rel alpha_eff 0.219 (ordinal 60)
+  b: beta=2.0 M=1e-36 A=1.0 (one-loop-measured-v1): 101/101 rows; first ordinal whose kind or source differs: none in the first 101 (the shorter's length); before it, max rel N 3.17e-06 (ordinal 15), max |d ln T_J| 8.18e-05 (ordinal 15) (rel 1.61e-05), max rel alpha_eff 2.22e-05 (ordinal 100)
+  b: beta=3.0 M=1e-36 A=1.0 (one-loop-measured-v1): 107/163 rows; first ordinal whose kind or source differs: none in the first 107 (the shorter's length); before it, max rel N 0.14 (ordinal 0), max |d ln T_J| 4.36 (ordinal 106) (rel 48.6), max rel alpha_eff 0.194 (ordinal 106)
+  b: beta=2.0 M=1e-33 A=1.0 (one-loop-measured-v1): 67/67 rows; first ordinal whose kind or source differs: none in the first 67 (the shorter's length); before it, max rel N 1.42e-06 (ordinal 16), max |d ln T_J| 3.76e-05 (ordinal 16) (rel 6.85e-06), max rel alpha_eff 1.43e-05 (ordinal 66)
+  b: beta=3.0 M=1e-33 A=1.0 (one-loop-measured-v1): 77/151 rows; first ordinal whose kind or source differs: none in the first 77 (the shorter's length); before it, max rel N 0.14 (ordinal 0), max |d ln T_J| 3.36 (ordinal 0) (rel 51.3), max rel alpha_eff 0.146 (ordinal 76)
+  b: beta=2.0 M=1e-32 A=1.0 (one-loop-measured-v1): 89/89 rows; first ordinal whose kind or source differs: none in the first 89 (the shorter's length); before it, max rel N 7.53e-07 (ordinal 88), max |d ln T_J| 1.85e-05 (ordinal 88) (rel 6.85e-06), max rel alpha_eff 1.5e-05 (ordinal 88)
+  b: beta=3.0 M=1e-32 A=1.0 (one-loop-measured-v1): 83/145 rows; first ordinal whose kind or source differs: none in the first 83 (the shorter's length); before it, max rel N 0.14 (ordinal 0), max |d ln T_J| 3.36 (ordinal 0) (rel 52.5), max rel alpha_eff 0.127 (ordinal 82)
+  b: beta=2.0 M=1e-30 A=1.0 (one-loop-measured-v1): 87/87 rows; first ordinal whose kind or source differs: none in the first 87 (the shorter's length); before it, max rel N 7.07e-07 (ordinal 86), max |d ln T_J| 1.79e-05 (ordinal 86) (rel 6.85e-06), max rel alpha_eff 1.7e-05 (ordinal 86)
+  b: beta=3.0 M=1e-30 A=1.0 (one-loop-measured-v1): 103/133 rows; first ordinal whose kind or source differs: none in the first 103 (the shorter's length); before it, max rel N 0.14 (ordinal 0), max |d ln T_J| 3.36 (ordinal 0) (rel 55.7), max rel alpha_eff 0.1 (ordinal 0)
+  c: beta=2.0 M=1e-15 A=1.0 (one-loop-measured-v1): 55/55 rows; first ordinal whose kind or source differs: none in the first 55 (the shorter's length); before it, max rel N 0.000112 (ordinal 54), max |d ln T_J| 0.0035 (ordinal 54) (rel 0.000341), max rel alpha_eff 0.0336 (ordinal 54)
+  c: beta=2.0 M=1e-12 A=1.0 (one-loop-measured-v1): 55/55 rows; first ordinal whose kind or source differs: none in the first 55 (the shorter's length); before it, max rel N 0.00011 (ordinal 54), max |d ln T_J| 0.00345 (ordinal 54) (rel 0.000336), max rel alpha_eff 0.0332 (ordinal 54)
+  r: beta=2.0 M=1e-16 A=1.0 (one-loop-measured-v1): 307/305 rows; first ordinal whose kind or source differs: none in the first 305 (the shorter's length); before it, max rel N 0.00106 (ordinal 304), max |d ln T_J| 0.0294 (ordinal 304) (rel 0.0031), max rel alpha_eff 0.213 (ordinal 304)
+
+by run: over the histories with a value on both sides, |new - old| and |new - old|/|old|, largest and median
+[a-edge] 13 histories
+  Yp_BBN                         n=13  |d| max 0.0002731 median 9.882e-05  |rel| max 0.001104 median 0.0003999
+  D_over_H                       n=13  |d| max 0.006648 median 0.002343  |rel| max 0.002691 median 0.0009506
+  delta_Yp                       n=13  |d| max 0.001106 median 0.0004003  |rel| max 0.5461 median 0.4045
+  delta_D_over_H                 n=13  |d| max 0.002705 median 0.000953  |rel| max 0.5571 median 0.4211
+  Delta_N_eff_today              n=13  |d| max 0.02018 median 0.007603  |rel| max 0.5421 median 0.4133
+  Delta_N_eff_1MeV               n=13  |d| max 0.01956 median 0.007368  |rel| max 0.5421 median 0.4133
+  T_deliver_GeV                  n=13  |d| max 46.81 median 13.78  |rel| max 27.86 median 0.3123
+  reflections                    n=13  |d| max 36 median 8  |rel| max 1.161 median 0.1159
+  injections                     n=13  |d| max 36 median 8  |rel| max 1.161 median 0.1159
+  bounce_rows                    n=13  |d| max 72 median 16  |rel| max 1.18 median 0.1168
+  candidates_one_loop            n=13  |d| max 36 median 8  |rel| max 1.161 median 0.1159
+  candidates_gap                 n=13  |d| max 0 median 0  |rel| max 0 median 0
+  candidates_classical           n=13  |d| max 0 median 0  |rel| max 0 median 0
+  candidates_unassessed          n=13  |d| max 0 median 0  |rel| max 0 median 0
+  drained_share_one_loop         n=13  |d| max 0.0001883 median 0.0001363  |rel| max 0.0001883 median 0.0001363
+  drained_share_gap              n=13  |d| max 0 median 0  |rel| max 0 median 0
+  drained_share_classical        n=13  |d| max 0 median 0  |rel| max 0 median 0
+  drained_share_unassessed       n=13  |d| max 0 median 0  |rel| max 0 median 0
+  parking_T_GeV                  n=13  |d| max 0.09051 median 0.05614  |rel| max 60.15 median 1.531
+  tuning_iterations              n=13  |d| max 3 median 0  |rel| max 3 median 0
+  log_R_first_impact             n=13  |d| max 14.89 median 1.278  |rel| max 0.1028 median 0.008112
+  ell_min                        n=13  |d| max 4.842 median 1.227  |rel| max 0.2211 median 0.04525
+  all_worst_birth_margin         n=13  |d| max 4.842 median 1.227  |rel| max 0.2211 median 0.04525
+  all_worst_reflection_margin    n=13  |d| max 4.813 median 0.6464  |rel| max 0.2188 median 0.02306
+  all_reflection_failing_share   n=13  |d| max 0 median 0  |rel| max 0 median 0
+  parking_share                  n=13  |d| max 0.0001883 median 0.0001363  |rel| max 1.758 median 0.4802
+[a-spread] 12 histories
+  Yp_BBN                         n=12  |d| max 5.826e-05 median 5.671e-06  |rel| max 0.0002272 median 2.296e-05
+  D_over_H                       n=12  |d| max 0.003949 median 0.0001011  |rel| max 0.001583 median 4.098e-05
+  delta_Yp                       n=12  |d| max 0.000236 median 2.297e-05  |rel| max 0.3756 median 0.01498
+  delta_D_over_H                 n=12  |d| max 0.001606 median 4.114e-05  |rel| max 3.201 median 0.009705
+  Delta_N_eff_today              n=12  |d| max 0.0001408 median 1.794e-05  |rel| max 0.03906 median 0.0003167
+  Delta_N_eff_1MeV               n=12  |d| max 0.0001365 median 8.167e-06  |rel| max 0.03906 median 0.0002604
+  T_deliver_GeV                  n=12  |d| max 4.757 median 1.682e-05  |rel| max 0.02703 median 7.277e-05
+  reflections                    n=12  |d| max 16 median 0  |rel| max 0.2857 median 0
+  injections                     n=12  |d| max 16 median 0  |rel| max 0.2857 median 0
+  bounce_rows                    n= 9  |d| max 32 median 0  |rel| max 0.07002 median 0
+  candidates_one_loop            n= 9  |d| max 16 median 0  |rel| max 0.06987 median 0
+  candidates_gap                 n= 9  |d| max 0 median 0  |rel| max 0 median 0
+  candidates_classical           n= 9  |d| max 0 median 0  |rel| max 0 median 0
+  candidates_unassessed          n= 9  |d| max 0 median 0  |rel| max 0 median 0
+  drained_share_one_loop         n= 9  |d| max 0.0008391 median 8.809e-07  |rel| max 0.0008461 median 8.809e-07
+  drained_share_gap              n= 9  |d| max 0 median 0  |rel| max 0 median 0
+  drained_share_classical        n= 9  |d| max 0 median 0  |rel| max 0 median 0
+  drained_share_unassessed       n= 9  |d| max 0 median 0  |rel| max 0 median 0
+  parking_T_GeV                  n=12  |d| max 3.714 median 8.53e-06  |rel| max 0.9748 median 0.02463
+  tuning_iterations              n=12  |d| max 0 median 0  |rel| max 0 median 0
+  log_R_first_impact             n=12  |d| max 0.1098 median 0.001243  |rel| max 0.0006683 median 8.729e-06
+  ell_min                        n= 9  |d| max 0.1018 median 0.01166  |rel| max 0.02458 median 0.001029
+  all_worst_birth_margin         n= 9  |d| max 0.1018 median 0.01166  |rel| max 0.02458 median 0.001029
+  all_worst_reflection_margin    n= 9  |d| max 0.1018 median 0.006868  |rel| max 0.02445 median 0.0009577
+  all_reflection_failing_share   n= 9  |d| max 0 median 0  |rel| max 0 median 0
+  parking_share                  n= 9  |d| max 0.0008391 median 8.809e-07  |rel| max 0.101 median 0.008117
+[b] 12 histories
+  Yp_BBN                         n=12  |d| max 0.0001642 median 5.313e-05  |rel| max 0.0006639 median 0.000215
+  D_over_H                       n=12  |d| max 0.004032 median 0.001453  |rel| max 0.001634 median 0.0005897
+  delta_Yp                       n=12  |d| max 0.0006649 median 0.0002152  |rel| max 0.423 median 0.2291
+  delta_D_over_H                 n=12  |d| max 0.00164 median 0.0005912  |rel| max 0.445 median 0.2215
+  Delta_N_eff_today              n=12  |d| max 0.01251 median 0.003879  |rel| max 0.4358 median 0.1873
+  Delta_N_eff_1MeV               n=12  |d| max 0.01213 median 0.003759  |rel| max 0.4358 median 0.1873
+  T_deliver_GeV                  n=12  |d| max 46.81 median 23.41  |rel| max 27.86 median 13.93
+  reflections                    n=12  |d| max 51 median 7.5  |rel| max 1.645 median 0.1442
+  injections                     n=12  |d| max 51 median 7.5  |rel| max 1.645 median 0.1442
+  bounce_rows                    n=12  |d| max 102 median 15  |rel| max 1.672 median 0.1456
+  candidates_one_loop            n=12  |d| max 51 median 7.5  |rel| max 1.645 median 0.1442
+  candidates_gap                 n=12  |d| max 0 median 0  |rel| max 0 median 0
+  candidates_classical           n=12  |d| max 0 median 0  |rel| max 0 median 0
+  candidates_unassessed          n=12  |d| max 0 median 0  |rel| max 0 median 0
+  drained_share_one_loop         n=12  |d| max 0.000261 median 6.201e-05  |rel| max 0.000261 median 6.202e-05
+  drained_share_gap              n=12  |d| max 0 median 0  |rel| max 0 median 0
+  drained_share_classical        n=12  |d| max 0 median 0  |rel| max 0 median 0
+  drained_share_unassessed       n=12  |d| max 0 median 0  |rel| max 0 median 0
+  parking_T_GeV                  n=12  |d| max 0.06818 median 0.009693  |rel| max 56.66 median 1.477
+  tuning_iterations              n=12  |d| max 0 median 0  |rel| max 0 median 0
+  log_R_first_impact             n=12  |d| max 14.89 median 7.446  |rel| max 0.1055 median 0.02959
+  ell_min                        n=12  |d| max 6.276 median 1.006  |rel| max 0.2073 median 0.04068
+  all_worst_birth_margin         n=12  |d| max 6.276 median 1.006  |rel| max 0.2073 median 0.04068
+  all_worst_reflection_margin    n=12  |d| max 6.246 median 0.2289  |rel| max 0.2057 median 0.005956
+  all_reflection_failing_share   n=12  |d| max 0 median 0  |rel| max 0 median 0
+  parking_share                  n=12  |d| max 0.000261 median 6.201e-05  |rel| max 5.022 median 0.2581
+[c] 4 histories
+  Yp_BBN                         n= 4  |d| max 7.793e-06 median 3.5e-06  |rel| max 3.154e-05 median 1.418e-05
+  D_over_H                       n= 4  |d| max 0.0002627 median 0.0001709  |rel| max 0.0001067 median 6.934e-05
+  delta_Yp                       n= 4  |d| max 3.156e-05 median 1.418e-05  |rel| max 0.03742 median 0.01484
+  delta_D_over_H                 n= 4  |d| max 0.0001069 median 6.952e-05  |rel| max 0.07623 median 0.03955
+  Delta_N_eff_today              n= 4  |d| max 2.106e-07 median 1.572e-07  |rel| max 0.01523 median 0.007567
+  Delta_N_eff_1MeV               n= 4  |d| max 1.501e-07 median 7.506e-08  |rel| max 0.001231 median 0.0006098
+  T_deliver_GeV                  n= 4  |d| max 1.494e-06 median 1.494e-06  |rel| max 2.001e-06 median 2.001e-06
+  reflections                    n= 4  |d| max 0 median 0  |rel| max 0 median 0
+  injections                     n= 4  |d| max 0 median 0  |rel| max 0 median 0
+  bounce_rows                    n= 2  |d| max 0 median 0  |rel| max 0 median 0
+  candidates_one_loop            n= 2  |d| max 0 median 0  |rel| max 0 median 0
+  candidates_gap                 n= 2  |d| max 0 median 0  |rel| max 0 median 0
+  candidates_classical           n= 2  |d| max 0 median 0  |rel| max 0 median 0
+  candidates_unassessed          n= 2  |d| max 0 median 0  |rel| max 0 median 0
+  drained_share_one_loop         n= 2  |d| max 0 median 0  |rel| max 0 median 0
+  drained_share_gap              n= 2  |d| max 0 median 0  |rel| max 0 median 0
+  drained_share_classical        n= 2  |d| max 0.0001246 median 6.232e-05  |rel| max 0.01421 median 0.01417
+  drained_share_unassessed       n= 2  |d| max 0 median 0  |rel| max 0 median 0
+  parking_T_GeV                  n= 4  |d| max 1.202e-07 median 6.163e-08  |rel| max 0.003495 median 0.001752
+  tuning_iterations              n= 4  |d| max 0 median 0  |rel| max 0 median 0
+  log_R_first_impact             n= 4  |d| max 0.001243 median 0.001243  |rel| max 0.002271 median 0.001158
+  all_worst_birth_margin         n= 2  |d| max 1.077e-05 median 1.07e-05  |rel| max 1.513e-05 median 1.503e-05
+  all_worst_reflection_margin    n= 2  |d| max 1.045e-05 median 1.037e-05  |rel| max 1.852e-05 median 1.837e-05
+  all_reflection_failing_share   n= 2  |d| max 0.0001246 median 6.232e-05  |rel| max 0.01421 median 0.01417
+  parking_share                  n= 2  |d| max 0.0001246 median 6.232e-05  |rel| max 0.0001258 median 6.288e-05
+[d] 6 histories
+  Yp_BBN                         n= 6  |d| max 4.49e-05 median 1.12e-05  |rel| max 0.0003749 median 5.593e-05
+  D_over_H                       n= 6  |d| max 0.005998 median 0.0001006  |rel| max 0.002795 median 0.0001564
+  delta_Yp                       n= 6  |d| max 0.0001819 median 4.537e-05  |rel| max 0.001386 median 0.0002496
+  delta_D_over_H                 n= 6  |d| max 0.00244 median 4.091e-05  |rel| max 0.01918 median 9.989e-05
+  Delta_N_eff_today              n= 6  |d| max 0 median 0  |rel| max 0 median 0
+  Delta_N_eff_1MeV               n= 6  |d| max 0 median 0  |rel| max 0 median 0
+  T_deliver_GeV                  n= 6  |d| max 46.81 median 23.4  |rel| max 27.86 median 13.91
+  reflections                    n= 6  |d| max 0 median 0  |rel| max 0 median 0
+  injections                     n= 6  |d| max 0 median 0  |rel| max 0 median 0
+  tuning_iterations              n= 6  |d| max 0 median 0  |rel| max 0 median 0
+[r] 1 histories
+  Yp_BBN                         n= 1  |d| max 1.746e-05 median 1.746e-05  |rel| max 7.018e-05 median 7.018e-05
+  D_over_H                       n= 1  |d| max 0.0001905 median 0.0001905  |rel| max 7.605e-05 median 7.605e-05
+  delta_Yp                       n= 1  |d| max 7.071e-05 median 7.071e-05  |rel| max 0.009313 median 0.009313
+  delta_D_over_H                 n= 1  |d| max 7.75e-05 median 7.75e-05  |rel| max 0.004045 median 0.004045
+  Delta_N_eff_today              n= 1  |d| max 1.326e-06 median 1.326e-06  |rel| max 9.19e-06 median 9.19e-06
+  Delta_N_eff_1MeV               n= 1  |d| max 1.362e-06 median 1.362e-06  |rel| max 9.742e-06 median 9.742e-06
+  T_deliver_GeV                  n= 1  |d| max 1.494e-06 median 1.494e-06  |rel| max 2.001e-06 median 2.001e-06
+  reflections                    n= 1  |d| max 1 median 1  |rel| max 0.006494 median 0.006494
+  injections                     n= 1  |d| max 1 median 1  |rel| max 0.006623 median 0.006623
+  bounce_rows                    n= 1  |d| max 2 median 2  |rel| max 0.006515 median 0.006515
+  candidates_one_loop            n= 1  |d| max 0 median 0  |rel| max 0 median 0
+  candidates_gap                 n= 1  |d| max 0 median 0  |rel| max 0 median 0
+  candidates_classical           n= 1  |d| max 1 median 1  |rel| max 0.006849 median 0.006849
+  candidates_unassessed          n= 1  |d| max 0 median 0  |rel| max 0 median 0
+  drained_share_one_loop         n= 1  |d| max 1.342e-05 median 1.342e-05  |rel| max 1.382e-05 median 1.382e-05
+  drained_share_gap              n= 1  |d| max 1.398e-05 median 1.398e-05  |rel| max 0.0004873 median 0.0004873
+  drained_share_classical        n= 1  |d| max 1.336e-09 median 1.336e-09  |rel| max 0.0008163 median 0.0008163
+  drained_share_unassessed       n= 1  |d| max 0 median 0  |rel| max 0 median 0
+  parking_T_GeV                  n= 1  |d| max 1.73e-07 median 1.73e-07  |rel| max 0.002367 median 0.002367
+  tuning_iterations              n= 1  |d| max 0 median 0  |rel| max 0 median 0
+  log_R_first_impact             n= 1  |d| max 0.001243 median 0.001243  |rel| max 0.0001274 median 0.0001274
+  ell_min                        n= 1  |d| max 0.0003625 median 0.0003625  |rel| max 0.0002604 median 0.0002604
+  all_worst_birth_margin         n= 1  |d| max 1.238e-07 median 1.238e-07  |rel| max 1.741e-07 median 1.741e-07
+  all_worst_reflection_margin    n= 1  |d| max 0.0002561 median 0.0002561  |rel| max 0.0003744 median 0.0003744
+  all_reflection_failing_share   n= 1  |d| max 5.584e-07 median 5.584e-07  |rel| max 5.584e-07 median 5.584e-07
+  parking_share                  n= 1  |d| max 5.584e-07 median 5.584e-07  |rel| max 0.01123 median 0.01123
+
+beside the figures (each figure's own units; the sampled histories that lie on it)
+[fig6] M = 4e-31 M_P: dYp = 100 delta_Yp [%] (axis -1.5..12.5), dDH = 100 delta_D_over_H [%] (-3..23), Delta_N_eff today (log 1e-4..1), T_J at parking [GeV] (log 1e-13..1e3); x = beta
+  beta=2.98   A=1.0 (one-loop-measured-v1)     dYp 0.1928 -> 0.0964 (-0.0964 pp); dDH 0.4713 -> 0.2249 (-0.2464 pp); dNeff 0.035735 -> 0.017684 (x0.49485); T_park 0.0089276 -> 0.039517 GeV
+  beta=2.985  A=1.0 (one-loop-measured-v1)     dYp 0.2026 -> 0.0920 (-0.1106 pp); dDH 0.4855 -> 0.2150 (-0.2705 pp); dNeff 0.037233 -> 0.017051 (x0.45794); T_park 0.0086178 -> 0.049182 GeV
+  beta=2.99   A=1.0 (one-loop-measured-v1)     dYp 0.1991 -> 0.1098 (-0.0893 pp); dDH 0.5031 -> 0.2611 (-0.2420 pp); dNeff 0.03867 -> 0.020134 (x0.52066); T_park 0.00070113 -> 0.042875 GeV
+  beta=2.995  A=1.0 (one-loop-measured-v1)     dYp 0.2051 -> 0.0992 (-0.1059 pp); dDH 0.5001 -> 0.2356 (-0.2645 pp); dNeff 0.038085 -> 0.01832 (x0.48103); T_park 0.0010529 -> 0.055392 GeV
+  beta=3.0    A=1.0 (one-loop-measured-v1)     dYp 0.1531 -> 0.0887 (-0.0644 pp); dDH 0.3708 -> 0.2046 (-0.1662 pp); dNeff 0.028217 -> 0.016038 (x0.56839); T_park 0.014275 -> 0.07778 GeV
+  beta=3.005  A=1.0 (one-loop-measured-v1)     dYp 0.0679 -> 0.0776 (+0.0098 pp); dDH 0.1496 -> 0.1739 (+0.0243 pp); dNeff 0.012177 -> 0.0139 (x1.1415); T_park 0.085902 -> 0.10609 GeV
+  beta=3.01   A=1.0 (one-loop-measured-v1)     dYp 0.1103 -> 0.0667 (-0.0437 pp); dDH 0.2553 -> 0.1600 (-0.0953 pp); dNeff 0.019975 -> 0.012012 (x0.60137); T_park 0.04415 -> 0.13145 GeV
+  beta=3.015  A=1.0 (one-loop-measured-v1)     dYp 0.0971 -> 0.0570 (-0.0400 pp); dDH 0.2293 -> 0.1272 (-0.1020 pp); dNeff 0.018007 -> 0.010404 (x0.57777); T_park 0.059134 -> 0.14964 GeV
+  beta=3.02   A=1.0 (one-loop-measured-v1)     dYp 0.0838 -> 0.0499 (-0.0339 pp); dDH 0.1940 -> 0.1131 (-0.0808 pp); dNeff 0.015486 -> 0.0090859 (x0.58671); T_park 0.086045 -> 0.1652 GeV
+  beta=3.025  A=1.0 (one-loop-measured-v1)     dYp 0.0718 -> 0.0451 (-0.0267 pp); dDH 0.1625 -> 0.0941 (-0.0684 pp); dNeff 0.013204 -> 0.0080422 (x0.60908); T_park 0.11731 -> 0.1807 GeV
+  beta=3.03   A=1.0 (one-loop-measured-v1)     dYp 0.0646 -> 0.0402 (-0.0243 pp); dDH 0.1380 -> 0.0830 (-0.0549 pp); dNeff 0.0113 -> 0.0072417 (x0.64089); T_park 0.14031 -> 0.19645 GeV
+  beta=3.035  A=1.0 (one-loop-measured-v1)     dYp 0.0536 -> 0.0384 (-0.0152 pp); dDH 0.1210 -> 0.0810 (-0.0400 pp); dNeff 0.0098418 -> 0.0066527 (x0.67597); T_park 0.15618 -> 0.21232 GeV
+  beta=3.04   A=1.0 (one-loop-measured-v1)     dYp 0.0513 -> 0.0344 (-0.0169 pp); dDH 0.1099 -> 0.0683 (-0.0415 pp); dNeff 0.0087772 -> 0.0062453 (x0.71154); T_park 0.16932 -> 0.22649 GeV
+  beta=1.2    alpha=0.1                        dYp 1.0560 -> 1.0737 (+0.0177 pp); dDH 1.4809 -> 1.3202 (-0.1606 pp); dNeff 0.065672 -> 0.065648 (x0.99962); T_park 1.1554e-05 -> 2.9098e-07 GeV
+  beta=2.0    alpha=0.1                        dYp 0.0852 -> 0.0855 (+0.0003 pp); dDH 0.5867 -> 0.5814 (-0.0052 pp); dNeff 0.05244 -> 0.052441 (x1); T_park 8.363e-05 -> 8.3625e-05 GeV
+  beta=5.0    alpha=0.1                        dYp 0.0383 -> 0.0352 (-0.0031 pp); dDH 0.0714 -> 0.0721 (+0.0007 pp); dNeff 0.0062655 -> 0.0061814 (x0.98657); T_park 0.616 -> 0.67022 GeV
+  beta=1.2    A=0.05 (one-loop-measured-v1)    dYp 3.8691 -> 3.8455 (-0.0236 pp); dDH 4.4707 -> 4.3684 (-0.1023 pp); dNeff 0.0029966 -> 0.0029854 (x0.99627); T_park 1.7083e-09 -> 1.8189e-09 GeV
+  beta=2.0    A=0.05 (one-loop-measured-v1)    dYp 0.0092 -> 0.0127 (+0.0035 pp); dDH 0.2631 -> 0.2229 (-0.0402 pp); dNeff 0.0023421 -> 0.0023422 (x1); T_park 2.9336e-06 -> 2.8813e-06 GeV
+  beta=5.0    A=0.05 (one-loop-measured-v1)    dYp 0.0043 -> 0.0041 (-0.0002 pp); dDH -0.0009 -> -0.0040 (-0.0030 pp); dNeff 0.0006928 -> 0.00066574 (x0.96094); T_park 0.013646 -> 0.014459 GeV
+  beta=1.2    A=1.0 (one-loop-measured-v1)     dYp 1.2707 -> 1.2569 (-0.0138 pp); dDH 5.4017 -> 5.4561 (+0.0544 pp); dNeff 0.056563 -> 0.056533 (x0.99946); T_park 1.0138e-08 -> 1.0211e-08 GeV
+  beta=2.0    A=1.0 (one-loop-measured-v1)     dYp 0.0152 -> 0.0115 (-0.0037 pp); dDH 0.4589 -> 0.4593 (+0.0004 pp); dNeff 0.044623 -> 0.044624 (x1); T_park 0.00010121 -> 0.00010122 GeV
+  beta=5.0    A=1.0 (one-loop-measured-v1)     dYp 0.0287 -> 0.0302 (+0.0015 pp); dDH 0.0563 -> 0.0538 (-0.0026 pp); dNeff 0.0048069 -> 0.0049477 (x1.0293); T_park 0.50177 -> 0.486 GeV
+  beta=1.2    A=10.0 (one-loop-measured-v1)    dYp 2.7715 -> 2.7719 (+0.0004 pp); dDH 7.1324 -> 7.1300 (-0.0024 pp); dNeff 0.53312 -> 0.53299 (x0.99974); T_park 0.094571 -> 0.094607 GeV
+  beta=2.0    A=10.0 (one-loop-measured-v1)    dYp 0.7793 -> 0.7790 (-0.0003 pp); dDH 1.9395 -> 1.9467 (+0.0072 pp); dNeff 0.14561 -> 0.14561 (x1); T_park 0.31277 -> 0.31278 GeV
+  beta=5.0    A=10.0 (one-loop-measured-v1)    dYp 0.1101 -> 0.1087 (-0.0015 pp); dDH 0.2515 -> 0.2533 (+0.0019 pp); dNeff 0.019773 -> 0.019775 (x1.0001); T_park 57.134 -> 60.849 GeV
+[fig6b] M = 1e-15, 1e-12 M_P: dYp [%], dDH [%], Delta_N_eff today (log 1e-9..1), ln R at the first impact (-40..32); one-loop A = 1 and the fixed law
+  M=1e-15  beta=2.0 alpha=0.1                        dYp +0.0032 pp; dDH -0.0036 pp; dNeff 0.05244 -> 0.052441; ln R 0.547346 -> 0.546103
+  M=1e-15  beta=2.0 A=1.0 (one-loop-measured-v1)     dYp +0.0004 pp; dDH +0.0103 pp; dNeff 6.8197e-06 -> 6.7159e-06; ln R 0.547346 -> 0.546103
+  M=1e-12  beta=2.0 alpha=0.1                        dYp +0.0009 pp; dDH -0.0009 pp; dNeff 0.05244 -> 0.052441; ln R -27.0837 -> -27.0849
+  M=1e-12  beta=2.0 A=1.0 (one-loop-measured-v1)     dYp +0.0019 pp; dDH +0.0107 pp; dNeff 6.7475e-06 -> 6.6454e-06; ln R -27.0837 -> -27.0849
+[m-trend] A = 1: (a) Delta_N_eff today relative to 4e-31 (axis 0.38..1.08), here at beta = 2 (and 3), (b) ell at the first impact (28..74), first candidate row of bounces.csv
+  M=4e-31  beta=3.0: ratio 1 -> 1; ell(first impact) 33.984 -> 37.7933
+  M=4e-31  beta=2.0: ratio 1 -> 1; ell(first impact) 33.361 -> 33.3607
+  M=1e-42  beta=2.0: ratio 0.689901 -> 0.689903; ell(first impact) 51.2501 -> 51.2495
+  M=1e-42  beta=3.0: ratio 0.735122 -> 0.80436; ell(first impact) 52.4245 -> 58.8618
+  M=1e-40  beta=2.0: ratio 0.689711 -> 0.689712; ell(first impact) 50.5452 -> 50.5448
+  M=1e-40  beta=3.0: ratio 0.734073 -> 0.807847; ell(first impact) 51.4378 -> 56.4609
+  M=1e-36  beta=2.0: ratio 0.751967 -> 0.751966; ell(first impact) 44.5395 -> 44.5392
+  M=1e-36  beta=3.0: ratio 0.80523 -> 0.86702; ell(first impact) 45.2222 -> 49.3277
+  M=1e-33  beta=2.0: ratio 0.839843 -> 0.839843; ell(first impact) 38.7228 -> 38.7225
+  M=1e-33  beta=3.0: ratio 0.896504 -> 0.934153; ell(first impact) 39.3634 -> 43.2637
+  M=1e-32  beta=2.0: ratio 0.891145 -> 0.891145; ell(first impact) 36.6868 -> 36.6865
+  M=1e-32  beta=3.0: ratio 0.933628 -> 0.958979; ell(first impact) 37.3194 -> 41.1788
+  M=1e-30  beta=2.0: ratio 1.02823 -> 1.02823; ell(first impact) 32.5249 -> 32.5246
+  M=1e-30  beta=3.0: ratio 1.0177 -> 1.01018; ell(first impact) 33.1459 -> 36.945
+[relativistic] all_worst_birth_margin, all_worst_reflection_margin, all_reflection_failing_share, parking_share (one-loop rows; E, from the quanta measures, not computed here)
+  a-spread M=4e-31  beta=1.2  A=0.05 (one-loop-measured-v1) worst_birth_margin 4.1425 -> 4.2444; worst_reflection_margin 4.1639 -> 4.2657; reflection_failing_share 0 -> 0; parking_share 0.00239 -> 0.0023804
+  a-spread M=4e-31  beta=2.0  A=0.05 (one-loop-measured-v1) worst_birth_margin 14.164 -> 14.152; worst_reflection_margin 19.575 -> 19.574; reflection_failing_share 0 -> 0; parking_share 0.00033698 -> 0.00034974
+  a-spread M=4e-31  beta=5.0  A=0.05 (one-loop-measured-v1) worst_birth_margin 25.35 -> 25.433; worst_reflection_margin 25.51 -> 25.552; reflection_failing_share 0 -> 0; parking_share 0.0083046 -> 0.0091437
+  a-spread M=4e-31  beta=1.2  A=1.0 (one-loop-measured-v1) worst_birth_margin 6.9028 -> 6.9099; worst_reflection_margin 7.1711 -> 7.178; reflection_failing_share 0 -> 0; parking_share 6.5452e-05 -> 6.4921e-05
+  a-spread M=4e-31  beta=2.0  A=1.0 (one-loop-measured-v1) worst_birth_margin 19.331 -> 19.331; worst_reflection_margin 19.434 -> 19.434; reflection_failing_share 0 -> 0; parking_share 0.00013259 -> 0.00013258
+  a-spread M=4e-31  beta=5.0  A=1.0 (one-loop-measured-v1) worst_birth_margin 29.929 -> 29.885; worst_reflection_margin 29.981 -> 29.937; reflection_failing_share 0 -> 0; parking_share 0.00066561 -> 0.00063558
+  a-spread M=4e-31  beta=1.2  A=10.0 (one-loop-measured-v1) worst_birth_margin 27.459 -> 27.46; worst_reflection_margin 28.932 -> 28.932; reflection_failing_share 0 -> 0; parking_share 1.6337e-07 -> 1.6353e-07
+  a-spread M=4e-31  beta=2.0  A=10.0 (one-loop-measured-v1) worst_birth_margin 29.104 -> 29.103; worst_reflection_margin 30.275 -> 30.275; reflection_failing_share 0 -> 0; parking_share 9.4713e-07 -> 9.4664e-07
+  a-spread M=4e-31  beta=5.0  A=10.0 (one-loop-measured-v1) worst_birth_margin 35.222 -> 35.301; worst_reflection_margin 35.951 -> 36.026; reflection_failing_share 0 -> 0; parking_share 2.8353e-05 -> 2.9233e-05
+  b        M=1e-42  beta=2.0  A=1.0 (one-loop-measured-v1) worst_birth_margin 21.611 -> 21.61; worst_reflection_margin 22.159 -> 22.158; reflection_failing_share 0 -> 0; parking_share 0.0001743 -> 0.00017436
+  b        M=1e-42  beta=3.0  A=1.0 (one-loop-measured-v1) worst_birth_margin 33.055 -> 36.603; worst_reflection_margin 37.403 -> 36.7; reflection_failing_share 0 -> 0; parking_share 0.00015821 -> 0.00041103
+  b        M=1e-40  beta=2.0  A=1.0 (one-loop-measured-v1) worst_birth_margin 22.837 -> 22.837; worst_reflection_margin 23.733 -> 23.732; reflection_failing_share 0 -> 0; parking_share 0.0001591 -> 0.00015916
+  b        M=1e-40  beta=3.0  A=1.0 (one-loop-measured-v1) worst_birth_margin 33.624 -> 37.895; worst_reflection_margin 38.447 -> 37.99; reflection_failing_share 0 -> 0; parking_share 0.00025626 -> 0.00040393
+  b        M=1e-36  beta=2.0  A=1.0 (one-loop-measured-v1) worst_birth_margin 26.637 -> 26.637; worst_reflection_margin 26.756 -> 26.755; reflection_failing_share 0 -> 0; parking_share 0.00019582 -> 0.0001958
+  b        M=1e-36  beta=3.0  A=1.0 (one-loop-measured-v1) worst_birth_margin 30.272 -> 36.548; worst_reflection_margin 30.362 -> 36.608; reflection_failing_share 0 -> 0; parking_share 0.00024885 -> 0.00037721
+  b        M=1e-33  beta=2.0  A=1.0 (one-loop-measured-v1) worst_birth_margin 25.732 -> 25.732; worst_reflection_margin 25.811 -> 25.811; reflection_failing_share 0 -> 0; parking_share 0.00014242 -> 0.00014241
+  b        M=1e-33  beta=3.0  A=1.0 (one-loop-measured-v1) worst_birth_margin 28.711 -> 31.991; worst_reflection_margin 30.631 -> 32.047; reflection_failing_share 0 -> 0; parking_share 9.1795e-05 -> 0.00033006
+  b        M=1e-32  beta=2.0  A=1.0 (one-loop-measured-v1) worst_birth_margin 23.118 -> 23.117; worst_reflection_margin 23.197 -> 23.197; reflection_failing_share 0 -> 0; parking_share 0.0001444 -> 0.00014439
+  b        M=1e-32  beta=3.0  A=1.0 (one-loop-measured-v1) worst_birth_margin 27.55 -> 30.272; worst_reflection_margin 28.933 -> 30.33; reflection_failing_share 0 -> 0; parking_share 5.1967e-05 -> 0.00031294
+  b        M=1e-30  beta=2.0  A=1.0 (one-loop-measured-v1) worst_birth_margin 18.511 -> 18.511; worst_reflection_margin 18.62 -> 18.62; reflection_failing_share 0 -> 0; parking_share 0.00012591 -> 0.0001259
+  b        M=1e-30  beta=3.0  A=1.0 (one-loop-measured-v1) worst_birth_margin 24.729 -> 26.74; worst_reflection_margin 24.889 -> 26.807; reflection_failing_share 0 -> 0; parking_share 0.00016817 -> 0.00029214
+  c        M=1e-15  beta=2.0  A=1.0 (one-loop-measured-v1) worst_birth_margin -0.71189 -> -0.7119; worst_reflection_margin -0.56446 -> -0.56445; reflection_failing_share 0.008771 -> 0.0088957; parking_share 0.99123 -> 0.9911
+  c        M=1e-12  beta=2.0  A=1.0 (one-loop-measured-v1) worst_birth_margin -0.71189 -> -0.7119; worst_reflection_margin -0.56446 -> -0.56445; reflection_failing_share 8.525e-13 -> 8.6454e-13; parking_share 1 -> 1
+  r        M=1e-16  beta=2.0  A=1.0 (one-loop-measured-v1) worst_birth_margin -0.71084 -> -0.71084; worst_reflection_margin -0.68411 -> -0.68386; reflection_failing_share 0.99995 -> 0.99995; parking_share 4.9712e-05 -> 5.027e-05

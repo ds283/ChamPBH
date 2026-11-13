@@ -1,0 +1,58 @@
+** run_side new-c: launch 2026-11-13 13:56:25 +0000
+** load at launch: 13:56  up 13 days, 16:17, 2 users, load averages: 39.57 30.82 24.36
+** registered_run: registered as electroweak-eos-02-new-c-20261113T135626
+**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/electroweak-eos-02-new-c-20261113T135626/manifest.json
+**   list it with: ./venv/bin/python -m runregistrykit list
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-13 13:56:27,251	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-13 13:56:27,293	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at [1m[32mhttp://127.0.0.1:8267 [39m[22m
+>> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/electroweak-eos-02-new.db" with 16 shards
+
+** BUILDING GRID OF MODELS TO SAMPLE
+   -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+   -- populated beta sample grid with 1 value = [ 2 ]
+   -- populated M sample grid with 2 values = [ 2435.3 GeV, 2.4353e+06 GeV ]
+   -- populated alpha grid with 1 value = [ 0.1 ]
+   -- populated A grid with 1 value = [ 1 ] (one-loop-measured-v1)
+   -- total number of models to integrate = 2
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.1
+[36m(Datastore pid=1757)[0m @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+[36m(compute_scalar_history pid=1808)[0m !! tune_history (electroweak-eos-02-new-c-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=2)-2026-11-13T13:56:40): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.7083 < ln 10 at N = 29.26669269 (generation 17); the generations below ln 10 carry 0.9924 of K
+[36m(compute_scalar_history pid=1808)[0m !! tune_history (electroweak-eos-02-new-c-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=2)-2026-11-13T13:56:40): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = -0.5547 < ln 10 at N = 29.34248035 (generation 17); the generations below ln 10 carry 0.9891 of K
+[36m(compute_scalar_history pid=1809)[0m !! tune_history (electroweak-eos-02-new-c-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=2)-2026-11-13T13:56:40): dissipation mode: the reflections are expected to be nearly elastic in this regime: the test-field ratio R = 10^-11.763 < 1 at the first impact (phi_t = 9.43e-15 M_P)
+   -- ALL WORK ITEMS COMPLETE in time 12s
+      Queue summary: 2 lookup (avg 10.02/min), 2 compute (avg 10.02/min), 2 store (avg 10.02/min), 2 validation (avg 10.02/min)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 0.887s
+      Queue summary: 2 lookup (avg 135.2/min), 2 compute (avg 135.2/min), 2 store (avg 135.2/min), 2 validation (avg 135.2/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 9.86s
+      Queue summary: 2 lookup (avg 12.18/min), 2 compute (avg 12.18/min), 2 store (avg 12.18/min), 2 validation (avg 12.18/min)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 1 (one-loop-measured-v1)
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+[36m(compute_scalar_history pid=1809)[0m !! tune_history (electroweak-eos-02-new-c-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=2)-2026-11-13T13:57:03): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.7029 < ln 10 at N = 21.40767202 (generation 1); the generations below ln 10 carry 0.007975 of K[32m [repeated 2x across cluster] (Ray deduplicates logs by default. Set RAY_DEDUP_LOGS=0 to disable log deduplication, or see https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#log-deduplication for more options.)[0m
+[36m(compute_scalar_history pid=1809)[0m !! tune_history (electroweak-eos-02-new-c-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=2)-2026-11-13T13:57:03): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = -0.1436 < ln 10 at N = 21.93611759 (generation 1); the generations below ln 10 carry 0.007975 of K[32m [repeated 2x across cluster][0m
+[36m(compute_scalar_history pid=1808)[0m !! tune_history (electroweak-eos-02-new-c-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=2)-2026-11-13T13:57:03): dissipation mode: the reflections are expected to be nearly elastic in this regime: the test-field ratio R = 10^-11.763 < 1 at the first impact (phi_t = 9.43e-15 M_P)
+   -- ALL WORK ITEMS COMPLETE in time 7.69s
+      Queue summary: 2 lookup (avg 15.6/min), 2 compute (avg 15.6/min), 2 store (avg 15.6/min), 2 validation (avg 15.6/min)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 0.83s
+      Queue summary: 2 lookup (avg 144.7/min), 2 compute (avg 144.7/min), 2 store (avg 144.7/min), 2 validation (avg 144.7/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 9.08s
+      Queue summary: 2 lookup (avg 13.21/min), 2 compute (avg 13.21/min), 2 store (avg 13.21/min), 2 validation (avg 13.21/min)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+** driver exit status 0
+** run_side new-c: end 2026-11-13 13:57:44 +0000, exit 0

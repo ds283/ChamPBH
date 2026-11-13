@@ -1,0 +1,20 @@
+### one check 2026-11-13 13:50:02 +0000
+** run_side new: tree /Users/ds283/Documents/Code/ChamPBH at e1fd6bc, VERSION_LABEL 2026.11.0, store /Users/ds283/Documents/Code/ChamPBH/var/datastores/electroweak-eos-02-new.db
+** run_side new: a-edge betas 2.98 2.985 2.99 2.995 3.0 3.005 3.01 3.015 3.02 3.025 3.03 3.035 3.04
+** run_side new: started 2026-11-13 13:49:59 +0000
+--- a-edge log head
+** run_side new-a-edge: launch 2026-11-13 13:49:59 +0000
+** load at launch: 13:49  up 13 days, 16:10, 2 users, load averages: 26.40 20.91 17.78
+** registered_run: registered as electroweak-eos-02-new-a-edge-20261113T135000
+**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/electroweak-eos-02-new-a-edge-20261113T135000/manifest.json
+**   list it with: ./venv/bin/python -m runregistrykit list
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-13 13:50:01,058	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-13 13:50:01,103	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at [1m[32mhttp://127.0.0.1:8267 [39m[22m
+>> Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/electroweak-eos-02-new.db" with 16 shards
+$ list
+   RUN                                                           STATE      PROGRESS      AGE  PURPOSE · STAGE
+   electroweak-eos-02-new-a-edge-20261113T135000                 running           -       3s  electroweak-eos 02 Effect: new side (e1fd6bc, 2026.11.0), run a-edge: M 4e-31 Mp, the 13 beta of the dense grid's 2.980-3.040, one-loop A 1, no fixed alpha, phi* 5  · Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datas
+   electroweak-eos-02-old-r-20261113T134549                      done              -       4m  electroweak-eos 02 Effect: old side (ec6bca8, 2026.10.0), run r: M 1e-16 Mp, beta 2.0, one-loop A 1, no fixed alpha, phi* 5  · CALCULATE BBN DATA, all work items complete
+  PID  PPID ELAPSED COMMAND
+  951     1   00:03 sh /Users/ds283/Documents/Code/ChamPBH/.documents/electroweak-eos/effect/run_side.sh new

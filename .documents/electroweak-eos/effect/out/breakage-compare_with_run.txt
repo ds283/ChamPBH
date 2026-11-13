@@ -1,0 +1,12 @@
+# breakage record: compare_with_run.py against a scratch copy of the run's main-store table with one cell changed (beta 3.0, M 4e-31, A = 1: Yp_BBN 0.24725819050492973 -> 0.24725819050492971)
+compare_with_run.py (electroweak-eos prompt 02 §1.4, P17)
+old side: var/electroweak-eos/02/export/old/QCD_Cosmology/histories.csv (185 rows)
+run, main store: <scratch>/main_perturbed.csv (7956 rows)
+run, reflection store: var/science-2026.10.0/out/reflections/QCD_Cosmology/histories.csv (112 rows)
+old side: 48 histories, 137 marker rows set aside
+!! beta=3.0 M=4e-31 n=1 phi*=5.0 alpha=1.0 model=one-loop-measured-v1 (main): 1 columns differ
+     Yp_BBN: old '0.24725819050492973' run '0.24725819050492971'
+matched 48 of 48 histories; 1 with a difference; 0 failed on both (matched on their failure reasons and blank columns)
+
+RESULT: DIFFERENCES (a stop, prompt §1.4)
+exit 1

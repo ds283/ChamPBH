@@ -1,6 +1,6 @@
 # electroweak-eos campaign — implementation state
 
-**Last updated:** 2026-11-13 · **Status: LIVE — 2 of 4 landed (01a, 01); 02 written (README §9), not dispatched.** Planned 2026-11-12 at the user's
+**Last updated:** 2026-11-13 · **Status: LIVE — 3 of 4 landed (01a, 01, 02); 03 not yet written.** Planned 2026-11-12 at the user's
 request. U1–U6 ruled by the user as proposed the same day, and U7 (the provenance of the rows) ruled out of
 scope. P1–P12 stand, with P11 amended by U7 (README §6). The plan is
 [`README.md`](README.md), on branch `electroweak-eos`, cut from `main` at `ec6bca8`.
@@ -29,7 +29,7 @@ amended by U7)
 |---|---|---|---|---|---|---|---|
 | 01a | Resolved turning points | an interior pair of sign changes of π kept only if the solver resolves it (README §8); lands before 01's commit | Opus | ✍️ | ✅ | `634f141` | [`logs/01a-resolved-turning-points.md`](logs/01a-resolved-turning-points.md) |
 | 01 | Install the table | the table by U2 (b); the build script and test; `VERSION_LABEL` 2026.11.0; re-pinned tests and golden histories; the docstring | Opus | ✍️ | ✅ | `5947b4f` | [`logs/01-install-the-table.md`](logs/01-install-the-table.md) |
-| 02 | Measure the effect | the EW threshold on S1-new, F-new and F-old (P13); 48 histories of `2026.10.0` built on both trees and compared, the old side checked against the run (P14–P19); the bath drift (P20); README §9 | Opus | ✍️ | ⬜ | | |
+| 02 | Measure the effect | the EW threshold on S1-new, F-new and F-old (P13); 48 histories of `2026.10.0` built on both trees and compared, the old side checked against the run (P14–P19); the bath drift (P20); README §9 | Opus | ✍️ | ✅ | this commit | [`logs/02-measure-the-effect.md`](logs/02-measure-the-effect.md) |
 | 03 | Documents and handover | the documents, issues, indexes and the handover; the close | Sonnet | ⬜ | ⬜ | | |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
@@ -157,6 +157,23 @@ two rulings at the stops amend them.
    - No issue was opened, so `OPEN_ISSUES.md` is unchanged.
    - The orchestrator substituted `5947b4f` for "this commit" here and in the log.
 
+**02 landed (2026-11-13, this commit), after one stop.**
+- **The stop.** Before any build, the code probe from the old worktree showed the workers on the worktree's code but
+  reading the main checkout's w table. The cluster had been started from the main checkout, Ray workers take the
+  raylet's working directory, and `Xav_EOS_spline` reads its CSV by a relative path.
+- **Ruled by the user, 2026-11-13:** "I think this is fine. Please proceed." That is option (a): one cluster per side,
+  each started from its side's tree root (log 02 §2.1, *STRUCTURALLY REQUIRED*). The cause is opened in §3.
+- **The threshold.** On the new table the EW-capture threshold at M = 10⁻³ M_P, tuned, is **(3.002, 3.003]**. On the
+  old table, tuned, it is (3.019, 3.020], the untuned bracket. The uncaptured window is 2.976–3.002 (27 β), against
+  2.999–3.019. S1-new captures with the same kick as S1 at every β.
+- **The sample.** 48 histories on each tree, none failed. The old side equals the run's export in all 48 histories,
+  every column as written, and in 80 per-history files byte for byte. 13 histories move their delivery across 10 GeV
+  (1.68–1.93 → 20.6–48.5 GeV): β = 2.985–3.0 at 4 × 10⁻³¹, and β = 3.0 at every M of B and D. The edge histories'
+  ΔN_eff falls to 0.46–0.71 of its old value. Away from the edge (β = 1.2, 2.0, 5.0) the largest relative changes are
+  2.7 % in T_deliver and 3.9 % in ΔN_eff (β = 5.0). Verification §2.
+- **The bath drift.** Re-measured on both tables; on the new one it is −1.28 % at 1 GeV, −0.33 % at 1 MeV and
+  −0.19 % today (100 Δ). A dated addendum is on the `inelastic-reflection` board, and the issue stays open.
+
 ### 1.1 Items
 
 | Item | Prompt | State |
@@ -168,6 +185,13 @@ two rulings at the stops amend them.
 | Golden records `ee01`, `ee01_tuned`, `ee01_reflecting` beside `rr03`; FORM: SAME | 01 | ✅ |
 | `Xav_EOS_spline` docstring; `XavEOS_test.py` dated note | 01 | ✅ |
 | `.documents/electroweak-eos-verification.md` §1 | 01 | ✅ |
+| S1-new, F-new (2.950–3.050, 101 β) and F-old (2.980–3.040, 61 β), with sidecars and figures; EW threshold (3.002, 3.003] | 02 | ✅ |
+| The bath drift on both tables and three exports; addendum on `[09-the-bath-drifts-from-g-rho-T4-by-about-1e-3]` | 02 | ✅ |
+| The code probe, extended to the CSV and Σ(300 GeV); one cluster per side (the user's ruling) | 02 | ✅ |
+| 48 histories built on each tree (12 registered runs, all done); stores `electroweak-eos-02-{old,new}` | 02 | ✅ |
+| The old side against the run: 48 of 48 equal | 02 | ✅ |
+| Old against new, by history, by run, the bounce rows and beside the figures (`effect/out/`) | 02 | ✅ |
+| `.documents/electroweak-eos-verification.md` §2 | 02 | ✅ |
 
 ## 2. The gates
 
@@ -175,8 +199,8 @@ two rulings at the stops amend them.
 |---|---|---|---|
 | Resolved | on the old table, suites, goldens and 01's scan bitwise unchanged; on the new table, the early pair dropped wherever 01 saw it (README §8.2). *As ruled by the user 2026-11-12 at 01a's stop:* on the old table no pair dropped down to 100 GeV and everything else bitwise, the late near-stall pairs (two in 36 histories to T_CMB) recorded; on the new table `dropped_drains` too may differ at α = 0 | 01a | ✅ 2026-11-12, as ruled (log 01a §3) |
 | Table | the build script regenerates the CSV byte for byte; the class evaluates the new table; every moved pin listed with a reason; the spline's coupling below the first changed row measured | 01 | ✅ 2026-11-12 (log 01 §3.1) |
-| Threshold | the EW-capture threshold bracketed to 0.001 in β, beside 3.020 (today) and 3.00285 (notebook) | 02 | ⬜ |
-| Effect | every sampled history's change in Y_p, D/H, ΔN_eff, capture temperature and turning points, set beside the figures' resolution | 02 | ⬜ |
+| Threshold | the EW-capture threshold bracketed to 0.001 in β, beside 3.020 (today) and 3.00285 (notebook) | 02 | ✅ 2026-11-13: (3.002, 3.003] on the new table, (3.019, 3.020] on the old, tuned (log 02 §3.1) |
+| Effect | every sampled history's change in Y_p, D/H, ΔN_eff, capture temperature and turning points, set beside the figures' resolution | 02 | ✅ 2026-11-13: 48 histories, old side equal to the run; turning points through the one-loop bounce rows (log 02 §3.2) |
 | Close | documents, issues, indexes and handover written; suites at their counts | 03 | ⬜ |
 
 ## 3. Active and unresolved issues
@@ -193,6 +217,32 @@ two rulings at the stops amend them.
   - *Impact:* `tools/surfing_scan.py` counts them in `n_crossings`. Its capture, largest-maximum and second-dip
     columns read the first crossings, which are resolved. Nothing stored reads it.
   - *Next step:* none proposed; for the user. A rule like 01a's for g would need g's tolerance from π's.
+
+- **`[02-a-worktree-build-reads-the-data-files-of-the-tree-that-started-the-cluster]`** (opened 2026-11-13, by prompt
+  02, from its code probe's stop).
+  - *What.* A build run from a worktree through ChamPBH's isolated cluster imports the worktree's code, but reads its
+    data files from the tree the cluster was started from.
+    - Ray workers take the raylet's working directory, which is where `tools/ray_cluster.sh start` ran; the script
+      does no `cd`.
+    - The worktree's code reaches them through the job's `py_driver_sys_path`.
+    - `Xav_EOS_spline` reads `CosmologyModels/GenericEOS/Xav_EOS_data.csv` by a path relative to the cwd. PRyMordial
+      reads `PRyMrates/` from `os.getcwd()` the same way.
+  - *Measured* (verification §2.4.1, `.documents/electroweak-eos/effect/out/probe/`). With the cluster started from
+    the main checkout, the workers of a driver run from the `ec6bca8` worktree imported the worktree's
+    `ScalarHistory`, at 2026.10.0, and read the main checkout's CSV (`690090c8…`, Σ(300 GeV) = 1.889 × 10⁻³). The driver
+    read its own (`28edd854…`, 5.685 × 10⁻³). With the cluster started from the worktree, a driver run from the main
+    checkout failed the other way round.
+  - *Impact.*
+    - Every worktree build through a cluster started elsewhere reads the other tree's data files. `one-loop-drain`
+      06's base build (`1561b60`, through a cluster started from the main checkout) was one such build. Its probe
+      showed module files and labels only, and its two trees had the same data files, so it could not show this. Its
+      results are not affected for the same reason.
+    - 02 avoided the problem by starting a cluster from each side's root. Nothing 02 recorded is affected.
+    - A future comparison across trees whose data files differ would compare one table with itself unless it does
+      the same.
+  - *Next step:* none proposed; for the user. The options are a working directory set for the job (a code change in
+    the drivers), the cluster started from the build's own tree (02's practice), or a probe like 02's before every
+    worktree build. Not assigned.
 
 ### 3.1 Assigned to this campaign
 
@@ -238,3 +288,6 @@ only, before and after, for its path (`test_registry_config`, `test_registered_r
 After 01 (2026-11-12, main checkout, log 01 §3.3): CosmologyModels 26, ComputeTargets 684 (219 + 465), ObjectFactories
 163, tools 292 (+15, `test_build_w_table`), RunDrivers 76. `CLAUDE.md` still holds the user's uncommitted edits, so its
 counts are not changed here (note 01, ruling 1). They are to be updated once the user has committed those edits.
+
+After 02 (2026-11-13, main checkout, log 02 §3.4): unchanged. CosmologyModels 26, ComputeTargets 684 (219 + 465),
+ObjectFactories 163, tools 292, RunDrivers 76, all OK. 02 adds no test.

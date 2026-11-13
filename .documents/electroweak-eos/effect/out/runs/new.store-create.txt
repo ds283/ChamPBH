@@ -1,0 +1,19 @@
+>> create: /Users/ds283/Documents/Code/ChamPBH/var/datastores/electroweak-eos-02-new.manifest.json
+{
+  "created": "2026-11-13T14:00:48+00:00",
+  "datastore": "electroweak-eos-02-new.db",
+  "history": [
+    {
+      "from": null,
+      "git_dirty": true,
+      "git_head": "e1fd6bcc182eb59a02545e23882850181810efb3",
+      "operation": "create",
+      "to": "var/datastores/electroweak-eos-02-new.db",
+      "when": "2026-11-13T14:00:48+00:00"
+    }
+  ],
+  "name": "electroweak-eos-02-new",
+  "purpose": "electroweak-eos 02 Effect: the sample's new side, 48 histories of 2026.10.0 rebuilt at e1fd6bc (2026.11.0, the electroweak-crossover table), for comparison with the old side",
+  "sidecar_format": 1,
+  "store_id": "5fd9d14689c0460395d563720950e656"
+}

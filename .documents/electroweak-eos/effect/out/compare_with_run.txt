@@ -1,0 +1,11 @@
+compare_with_run.py (electroweak-eos prompt 02 §1.4, P17)
+old side: var/electroweak-eos/02/export/old/QCD_Cosmology/histories.csv (185 rows)
+run, main store: science-runs/2026-11-08-science-2026.10.0/fig6/inputs/histories.csv (7956 rows)
+run, reflection store: var/science-2026.10.0/out/reflections/QCD_Cosmology/histories.csv (112 rows)
+old side: 48 histories, 137 marker rows set aside
+matched 48 of 48 histories; 0 with a difference; 0 failed on both (matched on their failure reasons and blank columns)
+
+supplementary: per-history files, byte for byte, where the run exported the same history
+files equal: 80; differing: 0; with no twin in the run's exports: 5
+
+RESULT: the old side equals the run

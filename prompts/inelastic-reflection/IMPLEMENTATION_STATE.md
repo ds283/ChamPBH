@@ -190,6 +190,32 @@ was closed by prompt 08, and prompt 05's by prompt 07b (§4). The one assigned (
     tables, compared in φ, H_J, Yp and D/H.
   - **Ruled by the user, 2026-10-31:** "For now, though, I'm going just to leave it documented." Option 6.
     The issue stays open and not assigned.
+- **Addendum, 2026-11-13 (`electroweak-eos` prompt 02, README §9.2 P20;
+  `.documents/electroweak-eos-verification.md` §2.3).** `electroweak-eos` replaced the w table above about 50 keV
+  with one that follows Laine & Meyer through the electroweak crossover (`VERSION_LABEL` 2026.11.0; g_ρ and g_s
+  unchanged, its U4). The drift was re-measured on both tables (`.documents/electroweak-eos/bath/bath_drift.py`):
+  - **The integral.** The tables-only integral above, on `thermo_compare.py`'s grid rebuilt from `nb_thermo.wls`
+    (2000 points a decade, 10⁻⁵ to 2 × 10⁴ GeV). The values are 100 Δ, the per cent of the table above.
+
+    | T (GeV) | 100 | 1 | 0.1 | 10⁻² | 10⁻³ | 10⁻⁴ | 10⁻⁵ and today |
+    |---|---|---|---|---|---|---|---|
+    | old table (before 2026.11.0) | +0.19 | −1.17 | −0.08 | −0.21 | −0.211 | −0.098 | −0.078 |
+    | new table (2026.11.0) | −0.06 | −1.28 | −0.20 | −0.33 | −0.328 | −0.215 | −0.195 |
+
+    The old table reproduces this entry's figures to its digits. Below about 22 GeV the two tables share their
+    rows, and the new table's drift is the old one's less a constant 1.169 × 10⁻³.
+  - **The extremes on the grid,** which the table above does not show:
+    - old table: Δ = −1.690 × 10⁻² at 24.7 GeV (100 Δ = −1.69; ρ_R offset e^Δ − 1 = −1.68 %), and Δ = +2.007 × 10⁻²
+      at 0.163 GeV (100 Δ = +2.01; ρ_R offset +2.03 %);
+    - new table: −1.809 × 10⁻² at 24.9 GeV and +1.890 × 10⁻² at 0.163 GeV.
+    - So the drift's largest excursions are at the electroweak and QCD peaks, not near 1 GeV as "What" says.
+  - **Per history.** d = ln ρ_R,J − ln((π²/30) g_ρ T_J⁴) from `fields.csv`, on β = 2, M = 0.5 M_P, α = 0:
+    - the run's export (R-natural, `2026.10.0`) and the old tree's rebuild, byte for byte the same file:
+      −1.1677 × 10⁻² at 1 GeV, −2.1066 × 10⁻³ at 1 MeV and −7.778 × 10⁻⁴ today;
+    - the new tree's: −1.2846 × 10⁻², −3.2759 × 10⁻³ and −1.9471 × 10⁻³.
+    - Each agrees with the tables-only integral to the digits shown.
+  - **Status.** The issue stays open (`electroweak-eos` U4). The measurement does not narrow it: on the new table the
+    drift is larger at and below 1 GeV (about −0.33 % at 1 MeV and −0.19 % today), and the index row is unchanged.
 
 ### `[11-ray-deduplicates-the-dissipation-warnings-of-parallel-histories]`
 

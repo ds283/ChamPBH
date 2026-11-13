@@ -1,0 +1,50 @@
+2026-11-13 13:25:53,964	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-13 13:25:54,006	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at [1m[32mhttp://127.0.0.1:8267 [39m[22m
+tree root (driver's cwd, realpath): /private/tmp/claude-35086/-Users-ds283--claude-spares-spare-L2vpmA/ebde1a9d-136d-40c1-b0a9-b34bf63b08de/scratchpad/ewe-02/agent/old-ec6bca8
+job py_driver_sys_path: ['/Users/ds283/Documents/Code/ChamPBH/.documents/electroweak-eos/effect', '/private/tmp/claude-35086/-Users-ds283--claude-spares-spare-L2vpmA/ebde1a9d-136d-40c1-b0a9-b34bf63b08de/scratchpad/ewe-02/agent/old-ec6bca8']
+== driver (pid 96534)
+   ScalarHistory: /private/tmp/claude-35086/-Users-ds283--claude-spares-spare-L2vpmA/ebde1a9d-136d-40c1-b0a9-b34bf63b08de/scratchpad/ewe-02/agent/old-ec6bca8/ComputeTargets/ScalarHistory.py
+   ObjectFactories: /private/tmp/claude-35086/-Users-ds283--claude-spares-spare-L2vpmA/ebde1a9d-136d-40c1-b0a9-b34bf63b08de/scratchpad/ewe-02/agent/old-ec6bca8/ObjectFactories/__init__.py
+   Xav_EOS_spline: /private/tmp/claude-35086/-Users-ds283--claude-spares-spare-L2vpmA/ebde1a9d-136d-40c1-b0a9-b34bf63b08de/scratchpad/ewe-02/agent/old-ec6bca8/CosmologyModels/GenericEOS/Xav_EOS_spline.py
+   EOS_CSV: /private/tmp/claude-35086/-Users-ds283--claude-spares-spare-L2vpmA/ebde1a9d-136d-40c1-b0a9-b34bf63b08de/scratchpad/ewe-02/agent/old-ec6bca8/CosmologyModels/GenericEOS/Xav_EOS_data.csv
+   VERSION_LABEL: 2026.10.0
+   FINGERPRINT_FORMAT: 7
+   EOS_CSV_SHA256: 28edd85477f3b508ccf977f05faf79b3dfd76358b8be9ee6f358a45b9eda29a8
+   Sigma_300GeV: 0.005685300917773972 (0.005685)
+   sys.path[:5]: ['/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/thirdparty_files', '/Users/ds283/Documents/Code/ChamPBH/.documents/electroweak-eos/effect', '/private/tmp/claude-35086/-Users-ds283--claude-spares-spare-L2vpmA/ebde1a9d-136d-40c1-b0a9-b34bf63b08de/scratchpad/ewe-02/agent/old-ec6bca8', '/opt/local/Library/Frameworks/Python.framework/Versions/3.13/lib/python313.zip', '/opt/local/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13']
+   cwd: /private/tmp/claude-35086/-Users-ds283--claude-spares-spare-L2vpmA/ebde1a9d-136d-40c1-b0a9-b34bf63b08de/scratchpad/ewe-02/agent/old-ec6bca8
+   PYTHONPATH: .
+== task (pid 96544)
+   ScalarHistory: /private/tmp/claude-35086/-Users-ds283--claude-spares-spare-L2vpmA/ebde1a9d-136d-40c1-b0a9-b34bf63b08de/scratchpad/ewe-02/agent/old-ec6bca8/ComputeTargets/ScalarHistory.py
+   ObjectFactories: /private/tmp/claude-35086/-Users-ds283--claude-spares-spare-L2vpmA/ebde1a9d-136d-40c1-b0a9-b34bf63b08de/scratchpad/ewe-02/agent/old-ec6bca8/ObjectFactories/__init__.py
+   Xav_EOS_spline: /private/tmp/claude-35086/-Users-ds283--claude-spares-spare-L2vpmA/ebde1a9d-136d-40c1-b0a9-b34bf63b08de/scratchpad/ewe-02/agent/old-ec6bca8/CosmologyModels/GenericEOS/Xav_EOS_spline.py
+   EOS_CSV: /Users/ds283/Documents/Code/ChamPBH/CosmologyModels/GenericEOS/Xav_EOS_data.csv
+   VERSION_LABEL: 2026.10.0
+   FINGERPRINT_FORMAT: 7
+   EOS_CSV_SHA256: 690090c86e285f3ee30d03244a2c242dd2b5b3c3f405e4f94229b0e481d0119d
+   Sigma_300GeV: 0.0018887100971249904 (0.001889)
+   sys.path[:5]: ['/private/tmp/claude-35086/-Users-ds283--claude-spares-spare-L2vpmA/ebde1a9d-136d-40c1-b0a9-b34bf63b08de/scratchpad/ewe-02/agent/old-ec6bca8', '/Users/ds283/Documents/Code/ChamPBH/.documents/electroweak-eos/effect', '/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/thirdparty_files', '/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/_private/workers', '/opt/local/Library/Frameworks/Python.framework/Versions/3.13/lib/python313.zip']
+   cwd: /Users/ds283/Documents/Code/ChamPBH
+   PYTHONPATH: None
+   !! EOS_CSV is outside the tree root /private/tmp/claude-35086/-Users-ds283--claude-spares-spare-L2vpmA/ebde1a9d-136d-40c1-b0a9-b34bf63b08de/scratchpad/ewe-02/agent/old-ec6bca8
+== actor (pid 96541)
+   ScalarHistory: /private/tmp/claude-35086/-Users-ds283--claude-spares-spare-L2vpmA/ebde1a9d-136d-40c1-b0a9-b34bf63b08de/scratchpad/ewe-02/agent/old-ec6bca8/ComputeTargets/ScalarHistory.py
+   ObjectFactories: /private/tmp/claude-35086/-Users-ds283--claude-spares-spare-L2vpmA/ebde1a9d-136d-40c1-b0a9-b34bf63b08de/scratchpad/ewe-02/agent/old-ec6bca8/ObjectFactories/__init__.py
+   Xav_EOS_spline: /private/tmp/claude-35086/-Users-ds283--claude-spares-spare-L2vpmA/ebde1a9d-136d-40c1-b0a9-b34bf63b08de/scratchpad/ewe-02/agent/old-ec6bca8/CosmologyModels/GenericEOS/Xav_EOS_spline.py
+   EOS_CSV: /Users/ds283/Documents/Code/ChamPBH/CosmologyModels/GenericEOS/Xav_EOS_data.csv
+   VERSION_LABEL: 2026.10.0
+   FINGERPRINT_FORMAT: 7
+   EOS_CSV_SHA256: 690090c86e285f3ee30d03244a2c242dd2b5b3c3f405e4f94229b0e481d0119d
+   Sigma_300GeV: 0.0018887100971249904 (0.001889)
+   sys.path[:5]: ['/private/tmp/claude-35086/-Users-ds283--claude-spares-spare-L2vpmA/ebde1a9d-136d-40c1-b0a9-b34bf63b08de/scratchpad/ewe-02/agent/old-ec6bca8', '/Users/ds283/Documents/Code/ChamPBH/.documents/electroweak-eos/effect', '/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/thirdparty_files', '/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/_private/workers', '/opt/local/Library/Frameworks/Python.framework/Versions/3.13/lib/python313.zip']
+   cwd: /Users/ds283/Documents/Code/ChamPBH
+   PYTHONPATH: None
+   !! EOS_CSV is outside the tree root /private/tmp/claude-35086/-Users-ds283--claude-spares-spare-L2vpmA/ebde1a9d-136d-40c1-b0a9-b34bf63b08de/scratchpad/ewe-02/agent/old-ec6bca8
+   !! task's EOS_CSV differs from the driver's: '/Users/ds283/Documents/Code/ChamPBH/CosmologyModels/GenericEOS/Xav_EOS_data.csv' vs '/private/tmp/claude-35086/-Users-ds283--claude-spares-spare-L2vpmA/ebde1a9d-136d-40c1-b0a9-b34bf63b08de/scratchpad/ewe-02/agent/old-ec6bca8/CosmologyModels/GenericEOS/Xav_EOS_data.csv'
+   !! task's EOS_CSV_SHA256 differs from the driver's: '690090c86e285f3ee30d03244a2c242dd2b5b3c3f405e4f94229b0e481d0119d' vs '28edd85477f3b508ccf977f05faf79b3dfd76358b8be9ee6f358a45b9eda29a8'
+   !! task's Sigma_300GeV differs from the driver's: 0.0018887100971249904 vs 0.005685300917773972
+   !! actor's EOS_CSV differs from the driver's: '/Users/ds283/Documents/Code/ChamPBH/CosmologyModels/GenericEOS/Xav_EOS_data.csv' vs '/private/tmp/claude-35086/-Users-ds283--claude-spares-spare-L2vpmA/ebde1a9d-136d-40c1-b0a9-b34bf63b08de/scratchpad/ewe-02/agent/old-ec6bca8/CosmologyModels/GenericEOS/Xav_EOS_data.csv'
+   !! actor's EOS_CSV_SHA256 differs from the driver's: '690090c86e285f3ee30d03244a2c242dd2b5b3c3f405e4f94229b0e481d0119d' vs '28edd85477f3b508ccf977f05faf79b3dfd76358b8be9ee6f358a45b9eda29a8'
+   !! actor's Sigma_300GeV differs from the driver's: 0.0018887100971249904 vs 0.005685300917773972
+RESULT: MISMATCH (VERSION_LABEL 2026.10.0, FINGERPRINT_FORMAT 7, CSV 28edd854…29a8, Sigma(300 GeV) 0.005685)
+worktree probe exit 1

@@ -1,6 +1,6 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-11-12 · **30 open**: 4 on the `review-remediation` board (closed
+**Last updated:** 2026-11-13 · **31 open**: 4 on the `review-remediation` board (closed
 2026-09-30), none now assigned; 2 on the `production-readiness` board
 (closed 2026-09-30); 2 on the `run-integrity` board (closed 2026-09-30; one stale entry closed 2026-10-22, its fix having landed in `5740690`; `jordan-normalization` prompt 07 closed one, 2026-10-26); 6 on the
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`
@@ -59,9 +59,9 @@ more opened the same day from the drain probe; re-planned and renamed the same d
 split in two and one half assigned to `reflection-restart`, returned for its 01 after that campaign closed; prompt 01
 closed that one and the other half, 2026-11-03, the second by the user's ruling (b); prompt 02 opened one, 2026-11-03; the orchestrator opened one after 02b, 2026-11-04, which the user's adoption of
 the measured law closed, 2026-11-05; prompt 03 closed two, 2026-11-06; prompt 08 opened and closed none, and the campaign
-closed 2026-11-07, 11 of 11 prompts landed, with these three open; §1.23); 1 on the `electroweak-eos` board
+closed 2026-11-07, 11 of 11 prompts landed, with these three open; §1.23); 2 on the `electroweak-eos` board
 (planned 2026-11-12, with none opened or assigned; one opened from prompt 01's stop the same day and assigned to its
-prompt 01a, §1.24, which closed it and opened one the same day, §1.25).
+prompt 01a, §1.24, which closed it and opened one the same day; prompt 02 opened one, 2026-11-13; §1.25).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -402,8 +402,12 @@ Planned 2026-11-12; one opened from prompt 01's stop the same day and assigned t
 
 ### 1.25 `electroweak-eos` — [board §3](../prompts/electroweak-eos/IMPLEMENTATION_STATE.md)
 
-Planned 2026-11-12. One opened by prompt 01a.
+Planned 2026-11-12. One opened by prompt 01a, one by prompt 02.
 
 - `[01a-surfing-turning-points-keeps-crossings-below-the-solver-tolerance]` — `surfing_turning_points` keeps every sign
   change of g, with no tolerance; in captured histories (β = 10, 20) tens of crossings at one T_J to 10⁻⁹, g held at zero
   on the attractor; counted in `surfing_scan`'s `n_crossings`, not in its capture columns. *(`electroweak-eos`; prompt 01a)*
+- `[02-a-worktree-build-reads-the-data-files-of-the-tree-that-started-the-cluster]` — Ray workers take the raylet's cwd,
+  and `Xav_EOS_spline` (and PRyMordial's rates) are read by relative paths, so a worktree build through a cluster started
+  from another tree runs its own code on the other tree's data files; seen by 02's extended probe, not by
+  `one-loop-drain` 06's. *(`electroweak-eos`; prompt 02)*

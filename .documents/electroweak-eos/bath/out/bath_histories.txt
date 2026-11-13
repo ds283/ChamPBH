@@ -1,0 +1,23 @@
+bath_drift.py histories (electroweak-eos prompt 02, §1.3)
+d = log_rhorad_Jordan_GeV4 - ln((pi^2/30) gstar_rho T_Jordan_GeV^4); at each target the first adjacent pair of samples (file order) whose T_J bracket it, linear in ln T_J
+
+[run-R-natural] var/science-2026.10.0/out/reflections/QCD_Cosmology/alpha=0/csv/beta=2/M=1.2177e+27eV_n=1/fields.csv
+  samples 5362; T_J first 19832.03496058312 GeV, last 2.3486545800336046e-13 GeV
+  first sample: d = -1.500599e-06 (-0.00015 %)
+  T_J = 1 GeV: d = -1.167716e-02 (-1.16092 %), samples 1283,1284 (T_J 1.0032771571420442, 0.9992642144313454 GeV)
+  T_J = 0.001 GeV: d = -2.106638e-03 (-0.21044 %), samples 2990,2991 (T_J 0.0010035608340579014, 0.0009948844429080446 GeV)
+  last sample (T_J 2.3486545800336046e-13 GeV): d = -7.778463e-04 (-0.07775 %)
+
+[old] var/electroweak-eos/02/export/old/QCD_Cosmology/alpha=0/csv/beta=2/M=1.2177e+27eV_n=1/fields.csv
+  samples 5362; T_J first 19832.03496058312 GeV, last 2.3486545800336046e-13 GeV
+  first sample: d = -1.500599e-06 (-0.00015 %)
+  T_J = 1 GeV: d = -1.167716e-02 (-1.16092 %), samples 1283,1284 (T_J 1.0032771571420442, 0.9992642144313454 GeV)
+  T_J = 0.001 GeV: d = -2.106638e-03 (-0.21044 %), samples 2990,2991 (T_J 0.0010035608340579014, 0.0009948844429080446 GeV)
+  last sample (T_J 2.3486545800336046e-13 GeV): d = -7.778463e-04 (-0.07775 %)
+
+[new] var/electroweak-eos/02/export/new/QCD_Cosmology/alpha=0/csv/beta=2/M=1.2177e+27eV_n=1/fields.csv
+  samples 5362; T_J first 19832.028266237478 GeV, last 2.3486545800336046e-13 GeV
+  first sample: d = -1.514079e-06 (-0.00015 %)
+  T_J = 1 GeV: d = -1.284627e-02 (-1.27641 %), samples 1283,1284 (T_J 1.0036201321499254, 0.9996049736140319 GeV)
+  T_J = 0.001 GeV: d = -3.275922e-03 (-0.32706 %), samples 2990,2991 (T_J 0.0010035577462015007, 0.0009948813820696743 GeV)
+  last sample (T_J 2.3486545800336046e-13 GeV): d = -1.947129e-03 (-0.19452 %)
