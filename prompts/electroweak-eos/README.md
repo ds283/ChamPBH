@@ -295,3 +295,77 @@ The table below is the proposal as it was put.
 
 01a also checks whether `surfing_turning_points`, which samples g the same way, can do the same, and
 records what it finds without changing it.
+
+## 9. Prompt 02, as planned after 01 (2026-11-13)
+
+01 landed as `5947b4f` (review `850cc72`). This section fixes what P6–P9 left open, from what 01 and the planner
+measured. Each P below is accepted as proposed unless the user rules otherwise. None changes U1–U11.
+
+### 9.1 What changed since P6–P9 were written
+
+- **The window has moved.** The planner's probe on the new table, tuned at M = 10⁻³ M_P (orchestrator note 02 §0):
+  QCD captures at 2.90–2.97; nothing captures at 2.98–3.002, the first bounce rising from 1.95 GeV (2.98) through 20.6 GeV (2.985)
+  to 50.2 GeV (3.002); EW captures from 3.004. So the uncaptured window lies in (2.97, 2.98] to (3.002, 3.004], against S5's
+  2.999–3.019 on the old table, untuned. S5's grid, 2.980–3.040, would miss the new window's lower edge.
+- **The old threshold, 3.020, was measured untuned** at `2026.6.0`, before `jordan-normalization` (surfing-temperature
+  verification §1.8). `tools/surfing_scan.py` has tuned every history since that campaign's 08. "Today's" threshold under
+  today's tool has not been measured.
+- **The run's store is whole and its tree is known.** Every block of `2026.10.0` ran at `5837a47`. Between it and
+  `ec6bca8` only drivers' options changed (`--no-alpha-values`, `--no-plots`). Between `ec6bca8` and `5947b4f` only
+  01a's classifier and the table changed computation: `main.py`, the plot scripts, `surfing_scan.py` and
+  `history_and_bbn.py` are the same files.
+- **A worktree build through the shared cluster has a precedent.** `one-loop-drain` 06 built its base store from a
+  worktree at an older tree, through its own `registered_run.py`, with `venv` and `var` linked in, and a code probe
+  (its P51) showed which tree's code each Ray worker ran.
+
+### 9.2 Proposals for 02 (P13–P20)
+
+- **P13 — the threshold grids** (amends P6). All with `tools/surfing_scan.py` at φ* = 5 M_P, M = 10⁻³ M_P, tuned, as
+  surfing-temperature 04 ran them:
+  - **S1-new**: S1's grid, β = 1.10–5.00 in 0.05, on the new tree;
+  - **F-new**: a fine grid at 0.001 from S1-new's largest QCD-captured β to its smallest EW-captured β, both included.
+    It replaces P6's "21 β placed by the coarse grid";
+  - **F-old**: S5's grid, 2.980–3.040 at 0.001, on the old tree (a worktree at `ec6bca8`), so that today's threshold is
+    measured with today's tuned tool, beside the untuned 3.020.
+  Each runs as one process, in the background, resumable from its CSV. They need no Ray and no store.
+- **P14 — the sample** (makes U6 concrete). 48 histories, each built on both trees, all at φ* = 5 M_P and
+  `--bbn-wall-clock-limit 600`, as the run's were:
+
+  | run | M / M_P | β | rows | histories | from block |
+  |---|---|---|---|---|---|
+  | `a-edge` | 4 × 10⁻³¹ | the 13 of the dense grid's 2.980–3.040 | A = 1 | 13 | A |
+  | `a-spread` | 4 × 10⁻³¹ | 1.2, 2.0, 5.0 | α = 0.1; A = 0.05, 1, 10 | 12 | A |
+  | `b` | 10⁻³⁰, 10⁻³², 10⁻³³, 10⁻³⁶, 10⁻⁴⁰, 10⁻⁴² | 2.0, 3.0 | A = 1 | 12 | B |
+  | `c` | 10⁻¹⁵, 10⁻¹² | 2.0 | α = 0.1; A = 1 | 4 | C |
+  | `d` | 10⁻³, 0.1, 0.5 | 2.0, 3.0 | α = 0 | 6 | D |
+  | `r` | 10⁻¹⁶ | 2.0 | A = 1 | 1 | R-ladder |
+
+  Every M of the run, the A and α of every figure's central line, and the run's whole near-threshold grid at
+  the laboratory mass, where the figures are. Every β is a value of its block's grid, so each history has a stored
+  twin in `2026.10.0`. Block-average costs from the run record put a side at about 120 core-minutes, most of it `c`
+  and `r`.
+- **P15 — both sides built by `main.py`** (as README §3 and U6 already say), through `RunDrivers/registered_run.py` on
+  ChamPBH's isolated cluster. The old side from a worktree at `ec6bca8` with `venv` and `var` linked, as
+  `one-loop-drain` 06's base. Stores `var/datastores/electroweak-eos-02-old.db` and `-new.db`. Each side is exported
+  with `plot_by_beta.py --no-plots` and `plot_ScalarHistory.py --no-plots` from its own tree.
+- **P16 — the code probe.** `one-loop-drain` 06's `code_probe.py`, extended: besides module files and labels, each
+  process builds `Xav_EOS_spline` and prints the SHA-256 of the CSV it read and Σ at 300 GeV (5.685 × 10⁻³ on the old
+  table, 1.889 × 10⁻³ on the new: planner, 2026-11-13). It runs from both trees before any build. A worker that reads the other
+  tree's code or table is a stop.
+- **P17 — the old side checked against the run.** Every history of the old store's export equals its twin in the run's
+  export (`var/science-2026.10.0/out/`), column for column as written. This shows that the old side is the run's code
+  and inputs, so the comparison old against new is the change a rebuild would make. A difference is a stop.
+- **P18 — the comparison.** Per history, old against new: Y_p, D/H, ΔN_eff at T_CMB and at 1 MeV, T_deliver, the
+  reflections, injections, bounce rows and candidates by regime, the parking and release temperatures, and any
+  failure. A history whose T_deliver crosses 10 GeV, between the QCD deliveries (about 1–2 GeV) and the EW ones
+  (about 30–60 GeV), is listed with β, M and its row. The 10 GeV is a label for the list, not a test. For each figure
+  of the run, its notes state what it plots and over what range; the changes are set beside that.
+- **P19 — the bounce rows** (P8 made concrete). For each history, the two exports' `bounces.csv` aligned by ordinal: the
+  counts, the first ordinal whose `kind` or `source` differs, and before it the largest relative difference in N,
+  ln T_J and `alpha_eff`. Recorded, not bounded.
+- **P20 — the bath drift** (P9 made concrete). The issue's tables-only integral of
+  4 + d ln g_ρ/d ln T − 3(1 + w)(1 + x), on both tables, at the issue's temperatures (100, 1, 0.1, 10⁻², 10⁻³ and
+  10⁻⁴ GeV, and today); and per history, ln ρ_R,J − ln((π²/30) g_ρ T_J⁴) from `fields.csv` at 1 GeV, 1 MeV and today,
+  on `d`'s β = 2, M = 0.5 history from both stores, and on the run's own export of the same history (R-natural's,
+  in the reflection store's export, since the main store's per-history export holds one-loop rows only). The
+  numbers go on the issue's board entry as a dated addendum, and the issue stays open (U4).
