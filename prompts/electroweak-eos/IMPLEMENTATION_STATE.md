@@ -29,7 +29,7 @@ amended by U7)
 |---|---|---|---|---|---|---|---|
 | 01a | Resolved turning points | an interior pair of sign changes of π kept only if the solver resolves it (README §8); lands before 01's commit | Opus | ✍️ | ✅ | `634f141` | [`logs/01a-resolved-turning-points.md`](logs/01a-resolved-turning-points.md) |
 | 01 | Install the table | the table by U2 (b); the build script and test; `VERSION_LABEL` 2026.11.0; re-pinned tests and golden histories; the docstring | Opus | ✍️ | ✅ | `5947b4f` | [`logs/01-install-the-table.md`](logs/01-install-the-table.md) |
-| 02 | Measure the effect | the EW threshold on S1-new, F-new and F-old (P13); 48 histories of `2026.10.0` built on both trees and compared, the old side checked against the run (P14–P19); the bath drift (P20); README §9 | Opus | ✍️ | ✅ | this commit | [`logs/02-measure-the-effect.md`](logs/02-measure-the-effect.md) |
+| 02 | Measure the effect | the EW threshold on S1-new, F-new and F-old (P13); 48 histories of `2026.10.0` built on both trees and compared, the old side checked against the run (P14–P19); the bath drift (P20); README §9 | Opus | ✍️ | ✅ | `be81f8b` | [`logs/02-measure-the-effect.md`](logs/02-measure-the-effect.md) |
 | 03 | Documents and handover | the documents, issues, indexes and the handover; the close | Sonnet | ⬜ | ⬜ | | |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
@@ -41,7 +41,9 @@ ruled as proposed by the user the same day: "U8 to U11 are fine as proposed; wri
 Orchestrator notes, one prompt at a time, in `orchestrator/`: [`prompt-01.md`](orchestrator/prompt-01.md), written
 2026-11-12 with the prompt and dispatched the same day at `468266d`; 01's handoff at its stop,
 [`prompt-01-handoff.md`](orchestrator/prompt-01-handoff.md); [`prompt-01a.md`](orchestrator/prompt-01a.md), written
-2026-11-12 with prompt 01a, dispatched the same day at `0479587` and used for 01a.
+2026-11-12 with prompt 01a, dispatched the same day at `0479587` and used for 01a;
+[`prompt-02.md`](orchestrator/prompt-02.md), written 2026-11-13 with prompt 02, dispatched the same day at `e1fd6bc`
+and used for 02.
 
 **Planner's probe for 01 (2026-11-12, at `b3d5906`, not committed).** The U2 (b) table (170 rows) was built in a
 scratch worktree and the suites run on it.
@@ -157,7 +159,7 @@ two rulings at the stops amend them.
    - No issue was opened, so `OPEN_ISSUES.md` is unchanged.
    - The orchestrator substituted `5947b4f` for "this commit" here and in the log.
 
-**02 landed (2026-11-13, this commit), after one stop.**
+**02 landed (2026-11-13, `be81f8b`), after one stop.**
 - **The stop.** Before any build, the code probe from the old worktree showed the workers on the worktree's code but
   reading the main checkout's w table. The cluster had been started from the main checkout, Ray workers take the
   raylet's working directory, and `Xav_EOS_spline` reads its CSV by a relative path.
@@ -173,6 +175,51 @@ two rulings at the stops amend them.
   2.7 % in T_deliver and 3.9 % in ΔN_eff (β = 5.0). Verification §2.
 - **The bath drift.** Re-measured on both tables; on the new one it is −1.28 % at 1 GeV, −0.33 % at 1 MeV and
   −0.19 % today (100 Δ). A dated addendum is on the `inelastic-reflection` board, and the issue stays open.
+
+**Orchestrator review of prompt 02 (2026-11-13).** All six checks of note 02 §3 pass, with the user's ruling at the
+stop applied.
+1. *Scope.* `be81f8b`'s parent is `e1fd6bc`, the note's commit. Its 66 files are the prompt's §4 list: 61 under
+   `.documents/electroweak-eos/`, the verification document, the log, this board, the `inelastic-reflection` board
+   and `OPEN_ISSUES.md`. Nothing under `var/` is in it, and `git diff --name-only 5947b4f be81f8b` touches nothing
+   outside `.documents/` and `prompts/`. The user's ` M CLAUDE.md`, the two `science-runs/` READMEs and
+   `relativistic/` are still modified and unstaged. `git worktree list` shows the main checkout only. The branch has
+   no upstream, and nothing is pushed.
+2. *The threshold.*
+   - F-new's rows: QCD captures to 2.975, nothing captures at 2.976–3.002, and EW captures from 3.003.
+   - The orchestrator re-ran β = 3.002 and 3.003 on the new tree (`surfing_scan.py --beta-values 3.002 3.003 --M 1e-3
+     --phi-init-Mp 5`, 14:26–14:27 GMT, one-minute load 10.49 at the start). Both rows equal F-new's as strings in
+     every column but `wall_s`: 3.002 is uncaptured at 50.193 GeV, and 3.003 is EW-captured at 50.975 GeV.
+   - The sidecars: F-old names `ec6bca8` and 2026.10.0. S1-new and F-new name `e1fd6bc` and 2026.11.0, with tracked
+     changes true from the user's files.
+3. *The two trees.* Probe 3 (worktree cluster, run from the worktree): every process at 2026.10.0, CSV `28edd854…29a8`,
+   Σ(300 GeV) = 5.685 × 10⁻³, exit 0. Probe 5 (main-checkout cluster, run from the main checkout): every process at
+   2026.11.0, `690090c8…0119d`, 1.889 × 10⁻³, exit 0. Probes 1 and 4 record the cross-tree failure in each direction.
+   `compare_with_run.py`, re-run by the orchestrator, reproduces the committed output byte for byte: 48 of 48 matched,
+   0 differences, and 80 per-history files equal.
+4. *The effect.*
+   - `compare_sample.py`, re-run, reproduces `effect.txt` byte for byte and `effect.csv` apart from line endings (the
+     committed file is LF, by git's `core.autocrlf=input`).
+   - Three histories were checked by hand against the two exports: a-edge β = 2.995 at 4 × 10⁻³¹, A = 1; c β = 2.0
+     at 10⁻¹², α = 0.1; and d β = 3.0 at 0.5 M_P, α = 0. For each, Y_p, D/H, ΔN_eff today, T_deliver, `bounce_rows`
+     and `parking_T_GeV` on each side and their difference equal `effect.csv`'s.
+   - The orchestrator's own scan of the two exports finds exactly the 13 histories whose T_deliver lies on opposite
+     sides of 10 GeV, the same 13 that `effect.txt` lists.
+   - The figures' section (verification §2.4) states the changes in each figure's units and judges none.
+5. *The bath drift.* `bath_drift.py tables` and `histories`, re-run, reproduce the committed outputs: the `.txt`
+   files byte for byte, the `.csv` files apart from line endings. On the old table they give the issue's figures to the
+   digits it quotes. The addendum is on the issue's entry on the `inelastic-reflection` board. The issue is still open,
+   and its index row is unchanged.
+6. *The records.*
+   - The log is in §5.1's form (§1–§6), with every deviation (the seven rulings, the path correction and D1–D14)
+     classed. None is UNINTENDED DRIFT.
+   - The verification document adds §2 after line 226. §1 is unchanged.
+   - Row 02, its items and the Threshold and Effect gates are on this board. The issue
+     `[02-a-worktree-build-reads-the-data-files-of-the-tree-that-started-the-cluster]` is in §3 and in
+     `OPEN_ISSUES.md` §1.25, which now counts 31 open.
+   - `runregistrykit list`: 54 runs, all finished, the 12 of 02 `done`. `ray_cluster.sh status`: no process, and the
+     lock is free.
+   - The suites' counts equal 01's final column: 26, 163, 76, 219 + 465 and 292.
+   - The orchestrator substituted `be81f8b` for "this commit" here and in the log, and marked note 02 as used.
 
 ### 1.1 Items
 

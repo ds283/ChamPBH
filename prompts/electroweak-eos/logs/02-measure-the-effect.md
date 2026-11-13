@@ -1,7 +1,7 @@
 # Log 02 — measure the effect
 
 **Subject:** Measure the electroweak threshold and the sample, old against new
-**Commit:** this commit, on branch `electroweak-eos`, on top of `e1fd6bc` (the commit that added prompt 02 and its
+**Commit:** `be81f8b`, on branch `electroweak-eos`, on top of `e1fd6bc` (the commit that added prompt 02 and its
 orchestrator note)
 **Date:** 2026-11-13, by Claude Opus 5.5 (one agent, resumed once after a stop)
 **Result:** **COMPLETE, after one stop.** Gates Threshold and Effect hold (§3.1, §3.2).

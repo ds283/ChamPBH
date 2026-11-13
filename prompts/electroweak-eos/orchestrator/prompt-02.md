@@ -1,5 +1,9 @@
 # Orchestrator — prompt 02, measure the effect
 
+> **Used for 02.** Dispatched 2026-11-13 at `e1fd6bc`. 02 stopped once, at the code probe, and was resumed on the
+> user's ruling (one cluster per side). It landed as `be81f8b` and was reviewed in the commit that adds this line. The
+> review is on the board.
+
 Read [`../README.md`](../README.md) first: §0, §1, §2.1, §3, §5, §6.1 as ruled, and §9. The user's words on the plan
 are "U1 to U6 are fine as proposed; U7 doesn't need to be in scope here." §9's P13–P20 were written on 2026-11-13 at
 the user's request ("Please write prompt 02 and its orchestration note") and stand unless the user rules otherwise.
