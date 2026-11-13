@@ -1,7 +1,7 @@
 # Log 03 — documents and handover
 
 **Subject:** The campaign's documents, the issues and indexes, the handover, and the close
-**Commit:** this commit, on branch `electroweak-eos`, on top of `5b512f1` (the user's second commit; `e1a23dc` is the first)
+**Commit:** `f248090`, on branch `electroweak-eos`, on top of `5b512f1` (the user's second commit; `e1a23dc` is the first)
 **Date:** 2026-11-13, by Claude Opus 5.5 (one agent)
 **Result:** **COMPLETE, no stop.** The gate Close holds (§3).
 - **The documents.** `architecture-summary.md` §8.5 and §14, `numerical-strategies.md` (two notes),

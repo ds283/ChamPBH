@@ -1,5 +1,8 @@
 # Orchestrator — prompt 03, documents and handover
 
+> **Used for 03.** Dispatched 2026-11-13 at `5b512f1`, after the user ruled U12 (a) and committed their files. 03 did
+> not stop. It landed as `f248090` and was reviewed in the commit that adds this line. The review is on the board.
+
 Read [`../README.md`](../README.md) first: §0, §1, §4, §5, §6.1 as ruled, §7, and §10. The user's words on the plan are
 "U1 to U6 are fine as proposed; U7 doesn't need to be in scope here." §10's U12 and P21–P29 were written on
 2026-11-13, at the user's request ("Please write prompt 03 and its orchestration note"). **U12 is the user's to rule

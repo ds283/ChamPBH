@@ -2685,7 +2685,7 @@ pieces). It **did bump** `VERSION_LABEL` (`"2026.10.0"`, `config/version.py:88`)
 
 ### 4.21 Addendum 2026-11-13 — the `electroweak-eos` campaign
 
-Added by `electroweak-eos` prompt 03 (this commit), written on `5b512f1`. Nothing above this heading has been changed;
+Added by `electroweak-eos` prompt 03 (`f248090`), written on `5b512f1`. Nothing above this heading has been changed;
 where it is superseded, this section says so by statement. The campaign changed the w table, and so what a build
 computes, and started no production run: it built two small stores of 48 histories under `var/`. It did, in order:
 
@@ -2699,7 +2699,7 @@ computes, and started no production run: it built two small stores of 48 histori
   golden records (01, `5947b4f`: "Table");
 - it measured the electroweak-capture threshold on the new table, and what the change does to 48 histories of the
   `2026.10.0` run, built on both trees (02, `be81f8b`: "Threshold" and "Effect");
-- and prompt 03 wrote the documents and this handover (this commit: "Close").
+- and prompt 03 wrote the documents and this handover (`f248090`: "Close").
 
 Its board is [`prompts/electroweak-eos/IMPLEMENTATION_STATE.md`](../prompts/electroweak-eos/IMPLEMENTATION_STATE.md); its
 plan is its [`README.md`](../prompts/electroweak-eos/README.md) (§8 is the classifier, §9 prompt 02, §10 this prompt); the

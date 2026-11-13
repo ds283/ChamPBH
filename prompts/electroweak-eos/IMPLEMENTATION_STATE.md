@@ -27,7 +27,7 @@ amended by U7)
 | 01a | Resolved turning points | an interior pair of sign changes of π kept only if the solver resolves it (README §8); lands before 01's commit | Opus | ✍️ | ✅ | `634f141` | [`logs/01a-resolved-turning-points.md`](logs/01a-resolved-turning-points.md) |
 | 01 | Install the table | the table by U2 (b); the build script and test; `VERSION_LABEL` 2026.11.0; re-pinned tests and golden histories; the docstring | Opus | ✍️ | ✅ | `5947b4f` | [`logs/01-install-the-table.md`](logs/01-install-the-table.md) |
 | 02 | Measure the effect | the EW threshold on S1-new, F-new and F-old (P13); 48 histories of `2026.10.0` built on both trees and compared, the old side checked against the run (P14–P19); the bath drift (P20); README §9 | Opus | ✍️ | ✅ | `be81f8b` | [`logs/02-measure-the-effect.md`](logs/02-measure-the-effect.md) |
-| 03 | Documents and handover | the documents, issues, indexes and the handover; the run record's note and `CLAUDE.md`'s counts under U12 (a); the close; README §10 | Sonnet | ✍️ | ✅ | this commit | [`logs/03-documents-and-handover.md`](logs/03-documents-and-handover.md) |
+| 03 | Documents and handover | the documents, issues, indexes and the handover; the run record's note and `CLAUDE.md`'s counts under U12 (a); the close; README §10 | Sonnet | ✍️ | ✅ | `f248090` | [`logs/03-documents-and-handover.md`](logs/03-documents-and-handover.md) |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
 
@@ -41,7 +41,8 @@ Orchestrator notes, one prompt at a time, in `orchestrator/`: [`prompt-01.md`](o
 2026-11-12 with prompt 01a, dispatched the same day at `0479587` and used for 01a;
 [`prompt-02.md`](orchestrator/prompt-02.md), written 2026-11-13 with prompt 02, dispatched the same day at `e1fd6bc`
 and used for 02. [`prompt-03.md`](orchestrator/prompt-03.md), written 2026-11-13 with prompt 03 and
-README §10; not dispatched. U12 was ruled (a), so dispatch waits for the user's files to be committed.
+README §10; dispatched the same day at `5b512f1`, after U12 was ruled (a) and the user committed their files, and used
+for 03.
 
 **Planner's probe for 01 (2026-11-12, at `b3d5906`, not committed).** The U2 (b) table (170 rows) was built in a
 scratch worktree and the suites run on it.
@@ -219,7 +220,7 @@ stop applied.
    - The suites' counts equal 01's final column: 26, 163, 76, 219 + 465 and 292.
    - The orchestrator substituted `be81f8b` for "this commit" here and in the log, and marked note 02 as used.
 
-**03 landed (2026-11-13, this commit), on the user's two commits (`e1a23dc`, `5b512f1`; U12 (a)).** It wrote the campaign's
+**03 landed (2026-11-13, `f248090`), on the user's two commits (`e1a23dc`, `5b512f1`; U12 (a)).** It wrote the campaign's
 documents, closed the board and the index, and made the handover.
 - **The documents.** Dated notes in `architecture-summary.md` (§8.5, §14) and `numerical-strategies.md` (Σ_T's source and the
   bath drift); `surfing-temperature-verification.md` §4; one paragraph and a rebuilt `report.pdf` in the kicking-function audit; a
@@ -229,6 +230,48 @@ documents, closed the board and the index, and made the handover.
 - **Issues.** One opened (§3, `[03-plot-quanta-grid-beta-axis-is-categorical]`, the user's open point); none closed; the
   correction to the `[02-…]` issue is dated in §3. The index has 32 open.
 - **The suites** equal 02's: 26, 684 (219 + 465), 163, 292, 76 (log 03 §3).
+
+**Orchestrator review of prompt 03 (2026-11-13).** All six checks of note 03 §3 pass, under U12 (a).
+1. *Scope.* `f248090`'s parent is `5b512f1`, the user's second commit. Its 25 files are the prompt's §4 list for (a),
+   with `.documents/electroweak-eos/close-03/` holding the commands and outputs. No Python file outside `close-03/` and
+   no test changed, and nothing is under `var/`. The tree is clean, `git worktree list` shows the main checkout only, and
+   the branch has no upstream.
+2. *The records are additive.* `git diff 5b512f1 f248090` removes no line from the verification document, from
+   `review-remediation-verification.md`, the surfing-temperature verification, the run record, the audit's `.tex`,
+   `architecture-summary.md` or `numerical-strategies.md`. `CLAUDE.md` changes the counts and times, replaces the
+   dating parenthesis with one sentence (ruling 2), and adds one clause on the table's build. Every changed sentence
+   describes, and none is a rule.
+3. *The numbers.* The orchestrator re-ran the inventory on a fresh copy of `electroweak-eos-02-old`. It exits 0 with
+   empty stderr and reports the same as the agent's apart from the copy's path: 75,231 records in 16 classes,
+   "problems: none", label 2026.10.0. Its 18 hashes are unchanged and equal the agent's. Ten numbers, other than the
+   agent's ten, were checked against their sources:
+   - `VERSION_LABEL` at `config/version.py:100`;
+   - Σ's peak, 0.037757 at 54.02 GeV;
+   - the largest ΔΣ, 4.058 × 10⁻³ (100–1000 GeV) and 2.803 × 10⁻³ (10–100 GeV), from verification §1.3;
+   - reachability from the old peak, 3.011779;
+   - the table's 170 rows to 386.7085 GeV, and the old table's 189 rows to 25 118.86 GeV;
+   - w = 1/3 at and above the top row (`Xav_EOS_spline.w`);
+   - β = 2.98, 1.99081 → 1.95252 GeV, and β = 3.005, 14.2574 → 52.4193 GeV;
+   - b's ΔN_eff, 0.436 / 0.187;
+   - a-edge's D/H, 2.69 × 10⁻³, and d's, 2.80 × 10⁻³;
+   - Figure 6's largest ΔY_p move, 0.111 pp at β = 2.985.
+
+   One rounding: §4.21's 0.271 pp in Δ(D/H) at β = 2.985 is 0.2705 pp (`effect.csv`). It is the difference of the two
+   rounded values of verification §2.4.6's table (0.486 → 0.215), carried over, and is not changed here.
+4. *The statements corrected.* In both documents, every use of 25 118.86 GeV, 0.037436 or "vacuum" is inside the new
+   dated notes, and neither document quotes 3.020 or 3.0195. §8.5's note and §14's dated line are there. The `[02-…]`
+   issue carries the dated correction, and its index hook now says that the mechanism was in §14 from 2026-11-07.
+5. *The handover.* §4.21 covers P22's eight points and its "This supersedes" list (six statements). README §7's four
+   items are answered: the table in production, the threshold, what a rebuild moves, and that the rebuild is the
+   user's. Its nine commits are on this branch. Every path it names exists, apart from `XavEOS_data.csv`, which it names
+   as missing (log 01 §5). `github/main` is `edf72b3`, one commit behind `main` (`ec6bca8`), as it says.
+6. *The records.*
+   - The log is in §5.1's form (§1–§6), with every deviation classed and none UNINTENDED DRIFT.
+   - Row 03, the Close gate, §5's baseline after 03 and the status line's history are on this board.
+   - `prompts/INDEX.md` says complete (0 live, 18 closed). `OPEN_ISSUES.md` lists 32 rows and its header says 32 open.
+   - The suites equal 02's counts.
+   - The orchestrator substituted `f248090` for "this commit" here, in the log, in §4.21 and in the index, corrected
+     this board's line on note 03, and marked note 03 as used.
 
 ### 1.1 Items
 
