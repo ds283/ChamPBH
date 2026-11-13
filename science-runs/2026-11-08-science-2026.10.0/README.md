@@ -14,10 +14,25 @@ One of the reflection store's 44 failed, of the same kind.
   (2026-11-09);
 - [`m-trend/`](m-trend/NOTES.md): the trend in M from 10⁻³⁰ to 10⁻⁴² M_P, with the law's turnaround logarithm ℓ
   and its maximum (2026-11-09);
-- [`fig6b/`](fig6b/NOTES.md): Figure 6 around M_crit, where the one-loop law's drain switches off (2026-11-09).
+- [`fig6b/`](fig6b/NOTES.md): Figure 6 around M_crit, where the one-loop law's drain switches off (2026-11-09);
+- [`relativistic/`](relativistic/NOTES.md): whether the quanta produced at reflections stay relativistic, at
+  laboratory M, at every M at A = 1, and inside three histories, with what the test does not cover (2026-11-09; its
+  plan and the user's rulings in [`relativistic/PLAN.md`](relativistic/PLAN.md)).
 
 Each figure's input is `fig6/inputs/histories.csv`, an unchanged copy of the run's export of the main store, and
-each cites the main store's sidecar in [`registry/stores/`](registry/stores/).
+each cites the main store's sidecar in [`registry/stores/`](registry/stores/). `relativistic/` also reads copies of
+the derived measures (`quanta_histories*.csv`, and three histories' files) in its own `inputs/`.
+
+## Standard analyses
+
+The list is `science-runs/README.md`'s, added 2026-11-09, after this run's build; its plan does not name them.
+- **Figure 6:** made, [`fig6/`](fig6/NOTES.md).
+- **Relativistic quanta:** made, [`relativistic/`](relativistic/NOTES.md). The run script did not make its inputs
+  (its measures step failed; below, "The post-build steps"), and the post-build script did. Under the one-loop law the
+  quanta stay relativistic in energy at every M (the matter-like share of ρ_R ≤ 1.5×10⁻³² at or below 10⁻³⁰ M_P,
+  ≤ 1.2×10⁻¹⁹ at M_crit); the fixed law, the parking leftover and the 18 K-check failures are not covered. Open:
+  `tools/plot_quanta_grid.py`'s β axis is categorical and cannot be read when the dense and sparse grids share it; to be
+  opened on the next campaign's board (`relativistic/PLAN.md` §4.3, Q4).
 
 ## The run
 
