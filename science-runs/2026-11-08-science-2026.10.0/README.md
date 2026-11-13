@@ -222,3 +222,7 @@ are 10⁻³⁰, 10⁻³², 10⁻³³, 10⁻³⁶, 10⁻⁴⁰ and 10⁻⁴² M_P
   its rulings in its NOTES.md, and committed script first and renders second (`10a892e`, `1737378`; `6127880`,
   `a3d8d91`; `8ac1e48`, `1ecbd13`), so that each provenance file records a clean commit holding its script. Their
   Python files were formatted with `black` when they were written.
+- **`relativistic/`** was planned and drawn by a session on 2026-11-09 at the user's request, its plan and rulings in
+  its PLAN.md and NOTES.md, and accepted by the user on 2026-11-13. It was committed on the `electroweak-eos` branch,
+  at the user's request: script, inputs and notes first (`e1a23dc`), renders second, so that its provenance file
+  records a clean commit holding its script. `relativistic.py` was formatted with `black`.
