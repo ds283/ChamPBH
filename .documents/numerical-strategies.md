@@ -1178,6 +1178,17 @@ w. Against a central difference of `w` in ln T (half-step 10⁻⁴) the producti
 3.4e-8 [eosd]. No production code finite-differences `w`. Σ is the ODE's Σ = 1 − 3w (Xav's
 table), not one derived from the g's.
 
+> **Note, 2026-11-13 (`electroweak-eos`, prompt 03): Σ_T's source and the table's ends.** "0 beyond the table" and "Xav's
+> table" describe the table of `VERSION_LABEL` 2026.11.0, not the one this paragraph was written on.
+> - **The top end.** The table now has 170 rows and ends at 386.7085 GeV, where w = 1/3 exactly, so Σ = 0 and Σ_T = 0
+>   from there up. Before `electroweak-eos` 01 it had 189 rows and ended at 25 118.86 GeV with Σ above 0 (a free gas at
+>   vacuum masses), so the figures in this paragraph that were read on that table (the 3.4e-8 agreement with a central
+>   difference [eosd]) are the old table's. `test_eos_w_derivative` was not re-pinned and passes on the new one; the new
+>   agreement was not recorded.
+> - **The bottom end is unchanged:** the old table's rows below 50.1 keV are kept.
+> - **Where the table is described:** `architecture-summary.md` §8.5's note of this date, and
+>   `electroweak-eos-verification.md` §1.2–§1.3 for the rows and Σ.
+
 **Q's numerator, in its smooth form.** Q is unchanged: |A·C|/|B|^{3/2} with A = M²_eff/H²,
 B = A + k_p²/H², C = 1 + ½ d ln|M²_eff|/dN. Since d ln H²/dN = 2Ḣ/H²,
 
@@ -1745,6 +1756,11 @@ is `prompts/inelastic-reflection/logs/09-store.md`.
   whose second factor is near 1 (e± annihilation moves g_s by 11/4). Measured on the eight histories of
   log 09 §5.1, the stored ratio differs from this closed form by −1.328×10⁻³ (relative), the same on
   each. The residual is not the temperature law, which holds to 2×10⁻¹⁰ in ln(T_J a_J g_s^{1/3}); it is that the stored ρ_R,J is not (π²/30) g_ρ(T_J) T_J⁴ of the EOS's g_ρ: it lies 0.210 % below it at 1 MeV and 0.078 % below today, and that ratio, 1.00133, is the residual. The bath's ρ_R is evolved through Σ = 1 − 3w, so it drifts from the EOS's (π²/30) g_ρ T_J⁴ by about 10⁻³ over the history; not acted on (log 09 §5.2, §7).
+  *Note, 2026-11-13 (`electroweak-eos` 02, prompt 03):* the figures in this bullet (0.210 % at 1 MeV, 0.078 % today, the
+  ratio 1.00133) are the old table's. Through the new table's Σ the same quantity, d = ln ρ_R,J − ln((π²/30) g_ρ T_J⁴), is
+  −3.276 × 10⁻³ at 1 MeV and −1.947 × 10⁻³ today, against −2.107 × 10⁻³ and −7.78 × 10⁻⁴ (100 d = −0.328 and −0.195,
+  against −0.211 and −0.078; `electroweak-eos-verification.md` §2.3, the history β = 2, M = 0.5 M_P, α = 0). Below about 22 GeV the new drift is
+  the old less a constant 1.169 × 10⁻³. The issue stays open (U4).
 - **BBN sees ρ_χ through H_J with a weight F** (P9; orchestrator note 09, ruling 11). BBN's ratio
   (3M_P²H_J² − ρ_R,J(1 + f_m))/ρ_R,J holds ρ_χ as F r_χ, F = A²(1 + (ln A)′π)²/G, exactly, at one state.
   F is not near 1: at the 1 MeV crossing it is 0.93 (β = 2, M ≤ 10⁻¹²), 1.02 (β = 1.2, M = 10⁻³), 0.11, 0.049, 0.0099 and 4.4×10⁻⁵ at M = 0.5 M_P for β = 1.2, 2, 5 and 25. So at large M BBN counts the quanta far below their ΔN_eff. ΔN_eff (R22) does not carry F; BBN does, through H_J, and is not changed.

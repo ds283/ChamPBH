@@ -1,9 +1,6 @@
 # electroweak-eos campaign — implementation state
 
-**Last updated:** 2026-11-13 · **Status: LIVE — 3 of 4 landed (01a, 01, 02); 03 written (README §10); U12 ruled (a) 2026-11-13, so 03 waits for the user's files to be committed.** Planned 2026-11-12 at the user's
-request. U1–U6 ruled by the user as proposed the same day, and U7 (the provenance of the rows) ruled out of
-scope. P1–P12 stand, with P11 amended by U7 (README §6). The plan is
-[`README.md`](README.md), on branch `electroweak-eos`, cut from `main` at `ec6bca8`.
+**Last updated:** 2026-11-13 · **Status: CLOSED 2026-11-13 — 4 of 4 prompts landed (01a, 01, 02, 03); every gate holds; three issues open, none assigned; the merge into `main` (a fast-forward) and the push are the user's.** The new w table is in production as `VERSION_LABEL` 2026.11.0; the electroweak-capture threshold at M = 10⁻³ M_P is in (3.002, 3.003], where it was (3.019, 3.020]; the handover to a rebuild is `.documents/review-remediation-verification.md` §4.21. The status line as it stood before the close is under "History of the status line", after §5.
 
 The campaign replaces ChamPBH's w table, which above about 100 GeV is a free gas at vacuum masses, with
 the table that follows Laine & Meyer through the electroweak crossover. That is the notebook's rows
@@ -30,7 +27,7 @@ amended by U7)
 | 01a | Resolved turning points | an interior pair of sign changes of π kept only if the solver resolves it (README §8); lands before 01's commit | Opus | ✍️ | ✅ | `634f141` | [`logs/01a-resolved-turning-points.md`](logs/01a-resolved-turning-points.md) |
 | 01 | Install the table | the table by U2 (b); the build script and test; `VERSION_LABEL` 2026.11.0; re-pinned tests and golden histories; the docstring | Opus | ✍️ | ✅ | `5947b4f` | [`logs/01-install-the-table.md`](logs/01-install-the-table.md) |
 | 02 | Measure the effect | the EW threshold on S1-new, F-new and F-old (P13); 48 histories of `2026.10.0` built on both trees and compared, the old side checked against the run (P14–P19); the bath drift (P20); README §9 | Opus | ✍️ | ✅ | `be81f8b` | [`logs/02-measure-the-effect.md`](logs/02-measure-the-effect.md) |
-| 03 | Documents and handover | the documents, issues, indexes and the handover; the run record's note and `CLAUDE.md`'s counts under U12 (a); the close; README §10 | Sonnet | ✍️ | ⬜ | | |
+| 03 | Documents and handover | the documents, issues, indexes and the handover; the run record's note and `CLAUDE.md`'s counts under U12 (a); the close; README §10 | Sonnet | ✍️ | ✅ | this commit | [`logs/03-documents-and-handover.md`](logs/03-documents-and-handover.md) |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
 
@@ -222,6 +219,17 @@ stop applied.
    - The suites' counts equal 01's final column: 26, 163, 76, 219 + 465 and 292.
    - The orchestrator substituted `be81f8b` for "this commit" here and in the log, and marked note 02 as used.
 
+**03 landed (2026-11-13, this commit), on the user's two commits (`e1a23dc`, `5b512f1`; U12 (a)).** It wrote the campaign's
+documents, closed the board and the index, and made the handover.
+- **The documents.** Dated notes in `architecture-summary.md` (§8.5, §14) and `numerical-strategies.md` (Σ_T's source and the
+  bath drift); `surfing-temperature-verification.md` §4; one paragraph and a rebuilt `report.pdf` in the kicking-function audit; a
+  note in the `2026.10.0` run record; `CLAUDE.md`'s counts, times and one clause on the table (no rule); verification §3.
+- **The handover** is `.documents/review-remediation-verification.md` §4.21. The inventory of a copy of
+  `electroweak-eos-02-old` at the tip exits 0 and changes no file (verification §3.2).
+- **Issues.** One opened (§3, `[03-plot-quanta-grid-beta-axis-is-categorical]`, the user's open point); none closed; the
+  correction to the `[02-…]` issue is dated in §3. The index has 32 open.
+- **The suites** equal 02's: 26, 684 (219 + 465), 163, 292, 76 (log 03 §3).
+
 ### 1.1 Items
 
 | Item | Prompt | State |
@@ -240,6 +248,10 @@ stop applied.
 | The old side against the run: 48 of 48 equal | 02 | ✅ |
 | Old against new, by history, by run, the bounce rows and beside the figures (`effect/out/`) | 02 | ✅ |
 | `.documents/electroweak-eos-verification.md` §2 | 02 | ✅ |
+| Dated notes in `architecture-summary.md` (§8.5, §14) and `numerical-strategies.md`; `surfing-temperature-verification.md` §4; the audit's paragraph and `report.pdf` | 03 | ✅ |
+| Handover `review-remediation-verification.md` §4.21; `electroweak-eos-verification.md` §3; `close-03/` | 03 | ✅ |
+| The run record's note; `CLAUDE.md`'s counts and times (U12 (a)) | 03 | ✅ |
+| Issue `[03-plot-quanta-grid-beta-axis-is-categorical]` opened; the `[02-…]` correction; the index and `prompts/INDEX.md` closed | 03 | ✅ |
 
 ## 2. The gates
 
@@ -249,7 +261,7 @@ stop applied.
 | Table | the build script regenerates the CSV byte for byte; the class evaluates the new table; every moved pin listed with a reason; the spline's coupling below the first changed row measured | 01 | ✅ 2026-11-12 (log 01 §3.1) |
 | Threshold | the EW-capture threshold bracketed to 0.001 in β, beside 3.020 (today) and 3.00285 (notebook) | 02 | ✅ 2026-11-13: (3.002, 3.003] on the new table, (3.019, 3.020] on the old, tuned (log 02 §3.1) |
 | Effect | every sampled history's change in Y_p, D/H, ΔN_eff, capture temperature and turning points, set beside the figures' resolution | 02 | ✅ 2026-11-13: 48 histories, old side equal to the run; turning points through the one-loop bounce rows (log 02 §3.2) |
-| Close | documents, issues, indexes and handover written; suites at their counts | 03 | ⬜ |
+| Close | documents, issues, indexes and handover written; suites at their counts | 03 | ✅ 2026-11-13: §4.21 of the review-remediation verification, verification §3, the suites at 26 / 684 (219 + 465) / 163 / 292 / 76 (log 03 §3) |
 
 ## 3. Active and unresolved issues
 
@@ -291,6 +303,31 @@ stop applied.
   - *Next step:* none proposed; for the user. The options are a working directory set for the job (a code change in
     the drivers), the cluster started from the build's own tree (02's practice), or a probe like 02's before every
     worktree build. Not assigned.
+  - *Correction, 2026-11-13 (prompt 03).* Where *Impact* and the probe's account above say that `one-loop-drain` 06's probe
+    showed module files and labels only, and could not show this, that is true of the effect, which needs two different
+    tables to show. It is not true of the mechanism. 06 recorded the workers' working directory (verification
+    `one-loop-drain-verification.md` §6.1; its log 06 §6), and `architecture-summary.md` §14's note of 2026-11-07 already
+    stated that `PRyMrates/` and `Xav_EOS_data.csv` are then the cluster's start directory's. What 02 adds is the effect
+    measured with two different tables, by the extended probe. The issue stays open, with no next step proposed, and the
+    index row's hook is changed to match.
+
+- **`[03-plot-quanta-grid-beta-axis-is-categorical]`** (opened 2026-11-13, by prompt 03, from the user's draft of the
+  `2026.10.0` run record's "Standard analyses", committed in `e1a23dc`; U12 (a), P26).
+  - *What.* `tools/plot_quanta_grid.py` draws each heat map with a categorical β axis: one column per β value that the export
+    holds, equally spaced. When the dense and the sparse β grids of a run share the axis, the columns are not equally
+    spaced in β, and the figure cannot be read as a function of β.
+  - *Measured.* Not measured here: the statement is the plan's and the run record's. `relativistic/PLAN.md` §4.3 says that the
+    β axis "is categorical and unreadable when dense and sparse grids mix", and the run record's "Standard analyses" says it
+    "cannot be read when the dense and sparse grids share it". `relativistic/NOTES.md` records that its figures were not
+    used for that reason and "stay in `var/science-2026.10.0/out/` as diagnostics". The one-loop-drain handover
+    (`review-remediation-verification.md` §4.20 point 4) had said that a rebuild's grid page would look different from 02d's
+    "plus" shape.
+  - *Impact.* The ten heat maps per A of `<ROOT>/one-loop-measured-v1/A=<A>/plots/quanta_grid.{pdf,png}` are drawn and kept
+    but not used for figures of record. The tool's other output and its tests are not affected. Nothing stored reads it.
+  - *Next step.* None proposed; for the user. The user's ruling on the plan's Q4 ("`plot_quanta_grid.py`: fix its axis, or
+    retire it") is, as the plan's table gives it, "retire for figures; keep as a diagnostic" (`relativistic/PLAN.md` §5, and
+    §6, where the rest of the proposals are "taken as ruled as proposed" on the user's "So far this sounds fine"). It is
+    recorded here so that it is not lost; no fix to the tool's axis is proposed. Not assigned.
 
 ### 3.1 Assigned to this campaign
 
@@ -339,3 +376,15 @@ counts are not changed here (note 01, ruling 1). They are to be updated once the
 
 After 02 (2026-11-13, main checkout, log 02 §3.4): unchanged. CosmologyModels 26, ComputeTargets 684 (219 + 465),
 ObjectFactories 163, tools 292, RunDrivers 76, all OK. 02 adds no test.
+
+After 03 (2026-11-13, main checkout, log 03 §3): unchanged. CosmologyModels 26, ComputeTargets 684 (219 + 465), ObjectFactories 163,
+tools 292, RunDrivers 76, all OK. 03 adds no test. `CLAUDE.md` now states these counts.
+
+### History of the status line
+
+The status line as it stood when prompt 03 was dispatched, moved here unchanged at the close (prompt 03):
+
+**Last updated:** 2026-11-13 · **Status: LIVE — 3 of 4 landed (01a, 01, 02); 03 written (README §10); U12 ruled (a) 2026-11-13, so 03 waits for the user's files to be committed.** Planned 2026-11-12 at the user's
+request. U1–U6 ruled by the user as proposed the same day, and U7 (the provenance of the rows) ruled out of
+scope. P1–P12 stand, with P11 amended by U7 (README §6). The plan is
+[`README.md`](README.md), on branch `electroweak-eos`, cut from `main` at `ec6bca8`.

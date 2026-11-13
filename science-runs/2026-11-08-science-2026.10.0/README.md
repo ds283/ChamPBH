@@ -226,3 +226,25 @@ are 10⁻³⁰, 10⁻³², 10⁻³³, 10⁻³⁶, 10⁻⁴⁰ and 10⁻⁴² M_P
   its PLAN.md and NOTES.md, and accepted by the user on 2026-11-13. It was committed on the `electroweak-eos` branch,
   at the user's request: script, inputs and notes first (`e1a23dc`), renders second, so that its provenance file
   records a clean commit holding its script. `relativistic.py` was formatted with `black`.
+
+## Note, 2026-11-13 — the w table of this run was replaced by `electroweak-eos`
+
+Added by `electroweak-eos` prompt 03. Nothing above this note is edited.
+
+- **What this run used.** Its histories were made at `2026.10.0` with the w table that agrees with a free gas of Standard
+  Model particles at vacuum masses above about 100 GeV (the kicking-function audit's addendum, §1,
+  `.documents/peakewsurf-kicking-function/report.tex`).
+- **What replaced it.** `electroweak-eos` installed a table that follows Laine & Meyer through the electroweak
+  crossover, as `VERSION_LABEL` `2026.11.0` (`CosmologyModels/GenericEOS/Xav_EOS_data.csv`, built by
+  `tools/build_w_table.py`). The branch is not merged into `main` when this is written.
+- **What it measured of the change** (verification §2, `be81f8b`; 48 of this run's histories rebuilt at `ec6bca8` and
+  at the branch, the `ec6bca8` side equal to this run's export in all 48):
+  - at M = 10⁻³ M_P, φ* = 5 M_P, tuned, the electroweak-capture threshold is in (3.002, 3.003] on the new table and in
+    (3.019, 3.020] on the old one; on this run's dense grid at laboratory M, A = 1, the jump in the delivery temperature
+    moves from between β = 3.000 and 3.005 to between 2.980 and 2.985;
+  - 13 histories deliver above 10 GeV where they delivered at 1.7–1.9 GeV: β = 2.985–3.0 at 4 × 10⁻³¹ M_P, and β = 3.0 at
+    every M of blocks B and D;
+  - in Figure 6's units the largest moves are 0.11 pp in ΔY_p and 0.27 pp in Δ(D/H), at the edge; away from it (β = 1.2,
+    2.0, 5.0) the largest are 2.7 % in T_deliver and 3.9 % in ΔN_eff.
+- **Where to read it.** `.documents/review-remediation-verification.md` §4.21 (the handover, which says what a rebuild
+  repeats) and `.documents/electroweak-eos-verification.md` §2.4 (by history, by run and beside each figure).

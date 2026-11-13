@@ -579,3 +579,27 @@ What the figure shows:
   (§1.7).
 
 In the T_J panel, β = 3.019 lies under β = 3.020's dashed line. They separate in the lowest panel.
+
+---
+
+## 4. The threshold on the 2026.11.0 table (pointer, 2026-11-13)
+
+Added by `electroweak-eos` prompt 03. §1–§3 above are not edited; they were correct for the tree and the table they
+were taken on (`2026.6.0`, the w table before `electroweak-eos`). The measurement is
+[`electroweak-eos-verification.md`](electroweak-eos-verification.md) §2.2 (prompt 02, `be81f8b`), made with this
+document's tool, `tools/surfing_scan.py`, at φ* = 5 M_P and M = 10⁻³ M_P, **tuned**, one process per scan.
+
+| grid | tree, table | β | largest β QCD captures | uncaptured window | smallest β EW captures | EW threshold |
+|---|---|---|---|---|---|---|
+| F-new | `e1fd6bc`, 2026.11.0 | 2.950–3.050 by 0.001 (101) | **2.975** | 2.976–3.002 (27 β) | **3.003** | (3.002, 3.003] |
+| F-old | `ec6bca8`, 2026.10.0 | 2.980–3.040 by 0.001 (61) | 2.998 | 2.999–3.019 (21 β) | 3.020 | (3.019, 3.020] |
+
+- **F-old is §1.8's scan, tuned.** Every capture kick of F-old equals S5's, so the threshold of §1.8, 3.020, is the same
+  with today's tuned tool as it was untuned: the edges and the window of §1.8 stand for the old table.
+- **The new window** lies between 2.975 and 3.003, against 2.998 and 3.020. On F-new the first bounce rises from 1.6121 GeV
+  at β = 2.976 to 50.193 GeV at 3.002; on the old table it rose from 1.64143 GeV at 2.999 to 48.7703 GeV at 3.019 (§1.8).
+- **Beside the references** (verification §2.2): the notebook's integrator on its own table gave 3.00285, which lies inside
+  F-new's bracket; reachability from the new table's peak Σ gives 2.99918, and from the old table's (§1.3) 3.011779.
+- **S1-new** (S1's grid on the new tree, tuned) captures with the same kick as S1 at every one of its 79 β.
+- The scan, the figures and the rows are in `.documents/electroweak-eos/threshold/`. Nothing here is a threshold the user
+  has ruled; they are measurements.

@@ -946,3 +946,69 @@ ComputeTargets in two halves. The figures in brackets are the wall time and the 
 changed after `5947b4f`: `git diff --name-only 5947b4f` lists only campaign records (prompts, boards,
 this document, `OPEN_ISSUES.md`), `CLAUDE.md` and the `science-runs/` READMEs.
 `tools/build_w_table.py --check` exits 0 at the end.
+
+---
+
+## 3. Prompt 03 — the close (2026-11-13)
+
+**Tree:** `5b512f1` (the user's two commits on top of 02's) with prompt 03's changes, before its commit. No Ray, no store
+but a scratch copy for the inventory, no network. The records are under
+[`electroweak-eos/close-03/`](electroweak-eos/close-03/). The Gate held when the prompt began: `HEAD` `5b512f1` on
+`electroweak-eos` with `be81f8b` an ancestor; `git status --porcelain` empty; `git worktree list` the main checkout only;
+`runregistrykit list` 54 runs, all finished; `tools/ray_cluster.sh status` no process, ports free; `tools/build_w_table.py
+--check` exit 0; each of `var/datastores/electroweak-eos-02-{old,new}` with its `.db`, 16 shards and manifest; this
+document with §1 and §2 and no §3; `df -h .` 92 % used, 80 GB free; one-minute load 18.40 at the first look.
+
+### 3.1 The suites
+
+From the repository root, serially, through `close-03/suites.sh` (`close-03/out/suites.log`), `ComputeTargets/tests` in two
+halves. Times are `unittest`'s; the load is the one-minute load at the start (`uptime`).
+
+| suite | tests | result | time (s) | load at start |
+|---|---|---|---|---|
+| CosmologyModels | 26 | OK | 78.1 | 19.40 |
+| ObjectFactories | 163 | OK | 158.2 | 9.89 |
+| RunDrivers | 76 | OK | 27.2 | 4.60 |
+| ComputeTargets `[a-f]` | 219 | OK | 175.6 | 4.41 |
+| ComputeTargets `[g-z]` | 465 | OK | 631.3 | 4.24 |
+| tools | 292 | OK | 333.3 | 6.57 |
+
+They ran from 18:20:36 to 18:44 GMT. `uptime` after the last: 18:44, load averages 4.43 / 5.34 / 8.23 (and 7.36 / 5.93 /
+8.43 a few minutes later). Every count equals 02's (verification §2.5): 26, 684 (219 + 465), 163, 292 and 76. No file a
+suite imports changed in this prompt: no Python file does.
+
+### 3.2 The inventory (§2 item 3)
+
+`close-03/inventory.sh SCRATCH` copies the 18 files of `electroweak-eos-02-old` with `cp -p` into a scratch directory, hashes
+them, runs `main.py --config exponential.yaml --database <copy>/electroweak-eos-02-old.db --shards 16 --inventory`
+(`PYTHONPATH=.`, no Ray), and hashes them again. The outputs are in `close-03/out/`.
+- **Exit 0 in 29 s;** stderr empty. "read-only; 16 shards … 75,231 records in 16 classes", "problems: none"; `version`
+  `label = [ 2026.10.0 ]`; `ScalarHistory`, `AdiabaticHistory` and `BBNData`: 48 records each, "48 validated, 0
+  unvalidated … version = 2026.10.0"; 277,514 `ScalarHistoryValue` rows; `alpha_value` 5 records (α = 0 and 0.1, and A = 0.05, 1,
+  10 under `one-loop-measured-v1`); 13 M values and 16 β values.
+- **Hashes.** `sha256_source_copy_before.txt` and `sha256_source_copy_after.txt` (18 lines each, `shasum -a 256` of the primary,
+  the 16 shards and the manifest) are byte for byte equal, and equal to `sha256_source_var.txt`, the store's own. The
+  file of hashes itself hashes to `b53f892bba7e03ff6eb0d0fbf7d6892a87ab56cef6b5c37a873b6b9536d82d34` in each case. The
+  copy did not change; no reader wrote to it.
+- **What this shows.** The tip at 2026.11.0 reads a 2026.10.0, format-7 store read-only, as it must, since the schema is
+  unchanged. It does not show what a build does if pointed at that store (not run).
+
+### 3.3 The checks of §2, item by item
+
+1. **Suites:** §3.1.
+2. **Every line addressed to 03:** the table is in log 03 §3.
+3. **The inventory:** §3.2.
+4. **Ten numbers** of the handover and the run record's note, each read again from its record by
+   `close-03/check_numbers.py` (`close-03/out/check_numbers.txt`):
+   - F-new: largest QCD 2.975, smallest EW 3.003, window 2.976–3.002 (27 β); F-old: 2.998, 3.020, 2.999–3.019 (21 β)
+     (`threshold/out/f_new.csv`, `f_old.csv`);
+   - 13 histories with T_deliver across 10 GeV; a-edge β = 3.0 from 1.68001 to 48.4902 GeV; a-edge's largest relative change of
+     Y_p 1.1 × 10⁻³; parking temperature at β = 2.99 and 2.995 from 0.701 and 1.05 MeV to 42.9 and 55.4 MeV
+     (`effect/out/effect.csv`);
+   - the bath drift at 1 MeV, −0.2106 (old) and −0.3276 (new) in 100 Δ (`bath/out/bath_tables.csv`);
+   - the installed table: 170 rows, SHA-256 `690090c8…0119d`; the stores' `store_id`s `821adc85…` and `5fd9d146…`, 18 files each;
+   - the index: 32 rows, and its header says 32 open.
+5. **The board and the index agree:** the count 32; §1.25's three rows against the board's three §3 issues; the campaign's row
+   in `prompts/INDEX.md` (complete, 4 of 4, 32 open in the whole index).
+6. **Scope:** `git diff --cached --name-status` before the commit lists only the files of the prompt's §4 (log 03 §3).
+   `tools/build_w_table.py --check` exits 0 at the end (log 03 §3).

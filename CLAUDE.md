@@ -82,41 +82,22 @@ invariants that hold across all of them:
   the repository root:
   ```bash
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .   # 26 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 665 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 684 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .   # 163 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 277 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 292 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .        # 76 tests
   ```
-  `ComputeTargets/tests` took 639 s on 2026-11-07 (the two halves below, 148.1 s and 491.1 s, at one-minute
-  loads of 5.2 and 5.0 at their starts), and longer on a loaded machine; a Bash call is
+  `ComputeTargets/tests` took 807 s on 2026-11-13 (the two halves below, 175.6 s and 631.3 s, at one-minute
+  loads of 4.4 and 4.2 at their starts), and longer on a loaded machine; a Bash call is
   capped at ten minutes, so run it in two halves:
   ```bash
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 219 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 446 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 465 tests
   ```
-  (The counts are those of 2026-11-09, after `--no-plots`, which added 5 tests to `tools/tests` (`test_no_plots`);
-  before it, those of 2026-11-07, after `--no-alpha-values`, which added 13 tests to `tools/tests` and 4 to
-  `RunDrivers/tests` (`test_no_alpha_values` in each); before it, those of 2026-11-07, after `one-loop-drain` 07, which
-  added 68 tests to `tools/tests`
-  (`test_quanta_figures`, `test_plot_quanta_grid`, `test_plot_quanta_history`); before it, those of
-  2026-11-06, after `one-loop-drain` 05, which added 14 tests to the `test_[g-z]` half
-  (`test_quanta_spectrum`) and 18 to `tools/tests` (`test_quanta_measures`, `test_history_directory`); before it, those of
-  2026-11-06, after `one-loop-drain` 04, which added 29 tests to the `test_[a-f]` half
-  (`test_a_values_option`, `test_a_values_plot_inputs`), 14 to `ObjectFactories/tests` (`test_export_04`), 17 to `tools/tests`
-  (`test_one_loop_tools` and `test_inventory_alpha`) and 4 to `RunDrivers/tests` (`test_scope_a_values`); before it, those of
-  2026-11-06, after `one-loop-drain` 03, which added 28 tests to the `test_[a-f]` half
-  (`test_drain_store_records`) and 19 to `ObjectFactories/tests` (`test_drain_store`); before it, those of 2026-11-05,
-  after `one-loop-drain` 02c, which deleted 2 tests from the `test_[a-f]` half
-  and added 1 there (`test_drain_law`), and added 29 to the `test_[g-z]` half (`test_measured_drain_law`); before it,
-  those of 2026-11-03, after `one-loop-drain` 01, which added 41 tests to the `test_[a-f]` half
-  (`test_drain_law`), 11 to the `test_[g-z]` half (`test_unresolvable_turning_points`) and 9 to `tools/tests`; before
-  it, those of 2026-11-02, after `reflection-restart` 03, which deleted 01's 10 probe tests from
-  `ComputeTargets/tests` and added 16 there and 2 to `tools/tests`; `reflection-restart` 01 had added 10 to
-  `ComputeTargets/tests` and 22 to `tools/tests`; `745c8ee` and `c95650a` had added one each to `ComputeTargets/tests` and
-  `ObjectFactories/tests` since 2026-11-01. `inelastic-reflection`, closed 2026-11-01, added 228 tests to
-  `ComputeTargets/tests`, 26 to `ObjectFactories/tests`, 8 to `tools/tests` and 4 to `RunDrivers/tests`, and
-  none to `CosmologyModels/tests`. `tools/tests` holds tuned histories and took 266.5 s on 2026-11-07, at a
-  one-minute load of 2.3 at its start; run it alone.) They **must not
+  (The counts are those of 2026-11-13; the last change to a count was `electroweak-eos` 01 on 2026-11-12, which added 15
+  tests to `tools/tests` (`test_build_w_table`) and, with its 01a, 19 to the `test_[g-z]` half
+  (`test_resolved_turning_points`). `tools/tests` holds tuned histories and took 333.3 s on 2026-11-13, at a one-minute
+  load of 6.6 at its start; run it alone.) They **must not
   need a Ray cluster or a persistent datastore**. A test may build a temporary
   SQLite datastore in a `tempfile` directory, through `datastorekit`'s undecorated actor
   (`standin_pool.DatastoreClass`) inside ChamPBH's stand-in cluster (`StoreFixtures/standin_pool.py`,
@@ -128,7 +109,7 @@ invariants that hold across all of them:
   docstring. Record the per-package counts before and after every prompt; a count that falls is a
   stop.
 - **Run everything from the repository root.** `Xav_EOS_spline` reads
-  `CosmologyModels/GenericEOS/Xav_EOS_data.csv` by a relative path, and `PRyM/PRyM_init.py` reads
+  `CosmologyModels/GenericEOS/Xav_EOS_data.csv` (the output of `tools/build_w_table.py`, which `--check` compares) by a relative path, and `PRyM/PRyM_init.py` reads
   `PRyMrates/` from `os.getcwd()`. Neither works from anywhere else.
 - **`PRyM/` is a vendored copy of PRyMordial** (pinned hash `bf24c3d` in `BBNData.py`). It may be
   patched, but every patch is recorded in the log and marked in the file with a comment naming the

@@ -1955,6 +1955,27 @@ class BaseCosmology(DatastoreObject):
 
 Currently `QCD_Cosmology` is the main implementation, using a lattice QCD equation of state for g*(T).
 
+> **Note, 2026-11-13 (`electroweak-eos`, prompt 03): the w table.** The sentence above is about g*; w is a separate table.
+> - **w is not computed from g_ρ and g_s.** `Xav_EOS_spline` reads `w` from `CosmologyModels/GenericEOS/Xav_EOS_data.csv`
+>   as a cubic spline in ln T. The kicking function Σ = 1 − 3w is that table's. g_ρ and g_s are the Saikawa–Shirai fits,
+>   unchanged by the campaign (README §6.1, U4), so the two are still not a consistent pair
+>   (`[05-kicking-table-and-saikawa-shirai-gs-disagree-through-qcd-and-ew]`).
+> - **The table since `VERSION_LABEL` 2026.11.0** (`electroweak-eos` 01, `5947b4f`) follows Laine & Meyer
+>   (arXiv:1503.04935) through the electroweak crossover. It has 170 rows, from 10 keV to 386.7085 GeV, with Σ = 0
+>   exactly at the top row and `w = 1/3` returned at and above it. By range: the table before the campaign below
+>   50.1 keV (14 rows, the e⁺e⁻ tail), the notebook's rows from 50.1 keV to 89.1 GeV (126), 29 points from 100 to
+>   380 GeV, and the notebook's row at 386.7085 GeV (`electroweak-eos-verification.md` §1.2). Before it, the table was a
+>   free gas at vacuum masses above about 100 GeV, 189 rows to 25 118.86 GeV. The electroweak peak of Σ is 0.037757 at
+>   54.02 GeV, against 0.037436 at 53.26 GeV (verification §1.3).
+> - **The table is built, not typed.** `tools/build_w_table.py` composes it from committed inputs, and `--check` exits 0
+>   when the installed CSV is its output, byte for byte.
+> - **The labels.** `VERSION_LABEL` is `2026.11.0` (`config/version.py`) and `FINGERPRINT_FORMAT` stays 7
+>   (`config/fingerprint.py`); no `inventory_spec()` changes and the fingerprint's guard and golden tests pass
+>   unchanged (verification §1.4). What the tip does with a `2026.10.0` store is in
+>   `review-remediation-verification.md` §4.21 point 1.
+> - **A worker reads this CSV by a path relative to its working directory,** which is the cluster's: §14's note of
+>   2026-11-07.
+
 ### 8.6 Metadata (`MetadataConcepts/`)
 
 - `version`: labels a computation run for reproducibility
@@ -2447,6 +2468,11 @@ work_pool.run()
 >   with the main checkout as their working directory. The data files the code reads by a relative path, `PRyMrates/`
 >   (`PRyM/PRyM_init.py`, from `os.getcwd()`) and `CosmologyModels/GenericEOS/Xav_EOS_data.csv`, are then the cluster's start
 >   directory's, not the driver's tree's. At `1561b60` and the tip those files are identical, so 06's base build was not affected.
+>   *2026-11-13 (`electroweak-eos` 02, prompt 03):* 02 measured this effect with two different tables, where the CSV
+>   differs between the trees (workers on the worktree's code read the main checkout's table, and the other way round),
+>   and avoided it by starting one cluster from each side's tree root. It is open as
+>   `[02-a-worktree-build-reads-the-data-files-of-the-tree-that-started-the-cluster]`; the measurement is
+>   `electroweak-eos-verification.md` §2.4.1.
 > - The drain model has no default in the path and label helpers: 04's note above says so.
 
 > **Note, 2026-11-07 (`--no-alpha-values`, a standalone change): a run of one-loop rows alone.** Prompt 04's note above says

@@ -2683,6 +2683,277 @@ pieces). It **did bump** `VERSION_LABEL` (`"2026.10.0"`, `config/version.py:88`)
    is not pushed. Pushing is the user's. The stores and run records are under `var/`, which git ignores, so `git clean -x`
    or `-X` would delete them (`CLAUDE.md`).
 
+### 4.21 Addendum 2026-11-13 — the `electroweak-eos` campaign
+
+Added by `electroweak-eos` prompt 03 (this commit), written on `5b512f1`. Nothing above this heading has been changed;
+where it is superseded, this section says so by statement. The campaign changed the w table, and so what a build
+computes, and started no production run: it built two small stores of 48 histories under `var/`. It did, in order:
+
+- it was planned on 2026-11-12 on a branch from `main` at `ec6bca8` (`600d73b`), at the user's request ("start planning the
+  migration campaign around this new merged table"); U1–U6 were ruled as proposed and U7, the provenance of the rows,
+  ruled out of scope (`b3d5906`);
+- it changed the turning-point classifier so that an interior pair of sign changes of π is kept only if the solver
+  resolves it (01a, `634f141`: the gate "Resolved"), inserted when 01 stopped on an early pair that was the interpolant
+  read below the solver's tolerance;
+- it installed the new w table as `VERSION_LABEL` `2026.11.0`, with the script that builds it and the re-pinned tests and
+  golden records (01, `5947b4f`: "Table");
+- it measured the electroweak-capture threshold on the new table, and what the change does to 48 histories of the
+  `2026.10.0` run, built on both trees (02, `be81f8b`: "Threshold" and "Effect");
+- and prompt 03 wrote the documents and this handover (this commit: "Close").
+
+Its board is [`prompts/electroweak-eos/IMPLEMENTATION_STATE.md`](../prompts/electroweak-eos/IMPLEMENTATION_STATE.md); its
+plan is its [`README.md`](../prompts/electroweak-eos/README.md) (§8 is the classifier, §9 prompt 02, §10 this prompt); the
+measurements are in [`electroweak-eos-verification.md`](electroweak-eos-verification.md) §1 (the table), §2 (the effect)
+and §3 (this prompt's checks), and 01a's in [`electroweak-eos/turning-points/`](electroweak-eos/turning-points/); what the
+code now says about the table is in `architecture-summary.md` §8.5's note of this date. It **did bump** `VERSION_LABEL`
+(`"2026.11.0"`, `config/version.py:100`) and left `FINGERPRINT_FORMAT` at 7 (`config/fingerprint.py:95`). The branch
+`electroweak-eos` **is not merged into `main` when this is written** (point 8).
+
+**This supersedes**, by statement and not by edit:
+
+- **§4.20's "`VERSION_LABEL` (`"2026.10.0"`, `config/version.py:88`)"**: it is `"2026.11.0"`, at `config/version.py:100`.
+  `FINGERPRINT_FORMAT` is still 7.
+- **§4.20 point 1's "A rebuild starts a new store, at format 7 and 2026.10.0"**: it is format 7 and 2026.11.0. What the
+  tip does with a store of the earlier label is point 1 below.
+- **§4.19 point 4, and §4.20's restatement of it** ("the rebuild is the user's, at 2026.10.0"): that rebuild was made
+  (`science-runs/2026-11-08-science-2026.10.0/`), and a rebuild from this tree is at 2026.11.0 (point 2 says what it
+  moves).
+- **§4.20 point 5's "`one-loop-drain-06-reference`: the tip, 2026.10.0, format 7"** and its inventory "of the tip": the
+  tip is now 2026.11.0, and that store was built by the 2026.10.0 tree. The inventory of point 1 shows the tip reading a
+  2026.10.0, format-7 store (`electroweak-eos-02-old`); `one-loop-drain-06-reference` itself was not opened here.
+- **§4.14 point 3's "The scan has QCD capturing up to β = 2.998, EW from 3.020, and nothing at 2.999–3.019"**: that is the
+  window of the old table. On the new table, tuned, it is 2.975, 3.003 and 2.976–3.002 (point 2;
+  `surfing-temperature-verification.md` §4).
+- **§4.18 point 6's account of `[00-xav-sigma-is-non-monotone-at-25-35-keV]`**, that regenerating the table "changes
+  every history, so it needs its own ruling": the table has since been regenerated above 50.1 keV by this campaign, and
+  the rows below it, which that issue is about, were kept (U2 (b)). The issue is as it was.
+
+**The points.**
+
+1. **What changed for a build.**
+   - **The table.** `CosmologyModels/GenericEOS/Xav_EOS_data.csv` has 170 rows, from 10 keV to 386.7085 GeV, with
+     `w = 1/3` exactly at the top row and returned at and above it (so Σ = 0 from there; before, 189 rows to
+     25 118.86 GeV). By range (verification §1.2):
+
+     | from | rows | range |
+     |---|---|---|
+     | the table before the campaign (the e⁺e⁻ tail) | 14 | 10 keV to below 50.1 keV |
+     | the notebook `PeakEWsurf.nb`'s table | 126 | 50.1 keV to 89.1 GeV, 0.05 dex |
+     | the points of 2026-11-12 | 29 | 100 to 380 GeV, 10 GeV |
+     | the notebook's table | 1 | 386.7085 GeV, w = 1/3 |
+
+     Its SHA-256 is `690090c86e285f3ee30d03244a2c242dd2b5b3c3f405e4f94229b0e481d0119d`. The electroweak peak of Σ is
+     0.037757 at 54.02 GeV (0.037436 at 53.26 GeV before); the largest change in Σ is 4.058 × 10⁻³ in 100–1000 GeV and
+     2.803 × 10⁻³ in 10–100 GeV, and below 10 GeV it is 3.05 × 10⁻¹⁰ or less (verification §1.3). g_ρ and g_s are
+     unchanged (U4).
+   - **Its build and check.** `PYTHONPATH=. ./venv/bin/python tools/build_w_table.py` writes the CSV from the audit's
+     `data/notebook_w_table.csv` and `data/notebook_w_points_2026-11-12.csv` and the campaign's
+     `prompts/electroweak-eos/data/pipeline_w_table_ec6bca8.csv` (the table before, byte for byte); with `--check` it
+     builds in memory, compares and writes nothing. On 2026-11-13 it exits 0:
+     "Xav_EOS_data.csv is the build (170 rows: old 14, notebook_low 126, points 29, notebook_top 1)".
+     `tools/tests/test_build_w_table.py` (15 tests) checks it.
+   - **01a's classifier.** An interior pair of sign changes of π, with π of one sign at both nodes of an accepted step, is
+     a pair of turning points only if the largest |π| of the opposite sign between the crossings exceeds
+     τ = atol + rtol · max(|π_low|, |π_high|); otherwise it is dropped, as if absent. A change between the nodes of a step
+     is always kept. A dropped pair is counted in `IntegrationResult.unresolved_turning_point_pairs`, which is not
+     stored. On the new table it drops the early pair at T_J = 385–389 GeV where Σ switches on, which the interpolant
+     showed in 14 of 20 scanned histories though the field does not turn. On the old table, over 36 histories to T_CMB,
+     it drops none down to 100 GeV and two late near-stall pairs (excursions 0.175 τ and 0.95 τ), which the user ruled to be
+     the rule working as ruled (board §4; log 01a §3).
+   - **`VERSION_LABEL` 2026.11.0, covering 01a too; `FINGERPRINT_FORMAT` stays 7.** No table or column changes, and
+     `test_fingerprint_format_guard` and `test_store_fingerprint_golden` pass unchanged.
+   - **What the tip does with a `2026.10.0` store.** **It reads it, read-only.** On 2026-11-13,
+     `main.py --config exponential.yaml --database <scratch copy>/electroweak-eos-02-old.db --shards 16 --inventory`, on a
+     scratch copy of `electroweak-eos-02-old` (a 2026.10.0, format-7 store; all 18 files, `cp -p`), exited 0 in 29 s, with
+     no Ray: "read-only; 16 shards … 75,231 records in 16 classes", "problems: none", `version` label 2026.10.0, 48
+     `ScalarHistory`, `AdiabaticHistory` and `BBNData` records each "48 validated, 0 unvalidated … version = 2026.10.0",
+     and nothing on stderr. `shasum -a 256` of the 18 files was identical before and after (the file of hashes itself
+     hashes to `b53f892bba7e03ff6eb0d0fbf7d6892a87ab56cef6b5c37a873b6b9536d82d34` on both occasions) and equal to the
+     store's own in `var/datastores/`. The command, the output and the hashes are in
+     `.documents/electroweak-eos/close-03/out/` (verification §3.2). So the format-6 refusal of §4.20 point 1 does not
+     recur: the schema is the same at 2026.10.0 and 2026.11.0. What reading is not is extending: lookups are keyed on the
+     label, and `config/version.py` says a 2026.10.0 store "is not extended at 2026.11.0" (that was not run here).
+   - **A rebuild starts a new store.** `config/version.py`'s entry says so: a 2026.10.0 store "is not extended at
+     2026.11.0: start a fresh datastore file, and read a 2026.10.0 store with the tree of its own commit".
+
+2. **What a rebuild moves**, from verification §2. These are measurements of 48 histories of the `2026.10.0` run, built on
+   both trees; the `ec6bca8` side equals the run's export in all 48, every column as written (§2.4.4), so old against
+   new is the change a rebuild would make. None is judged here.
+   - **The threshold and the window,** at M = 10⁻³ M_P, φ* = 5 M_P, tuned (`tools/surfing_scan.py`, §2.2):
+
+     | table | largest β QCD captures | uncaptured window | smallest β EW captures | EW threshold |
+     |---|---|---|---|---|
+     | new, 2026.11.0 (F-new) | 2.975 | 2.976–3.002 (27 β) | 3.003 | (3.002, 3.003] |
+     | old, 2026.10.0 (F-old) | 2.998 | 2.999–3.019 (21 β) | 3.020 | (3.019, 3.020] |
+
+     The notebook's integrator gave 3.00285, which lies inside the new bracket; reachability from the new table's peak Σ
+     gives 2.99918, and from the old table's 3.011779.
+   - **On the run's dense grid at laboratory M, A = 1,** the delivery jumps between β = 2.980 (1.95 GeV) and 2.985
+     (20.6 GeV), where the run's jumped between 3.000 (1.68 GeV) and 3.005 (14.26 GeV).
+   - **The 13 histories whose T_deliver crosses 10 GeV** (§2.4.5; 10 GeV is a label for the list, not a test), each from
+     1.68–1.93 GeV to 20.6–48.5 GeV:
+
+     | β | M / M_P | row | T_deliver old → new (GeV) |
+     |---|---|---|---|
+     | 2.985 | 4 × 10⁻³¹ | A = 1 | 1.93385 → 20.6487 |
+     | 2.99 | 4 × 10⁻³¹ | A = 1 | 1.8291 → 35.1919 |
+     | 2.995 | 4 × 10⁻³¹ | A = 1 | 1.68874 → 43.1556 |
+     | 3.0 | 4 × 10⁻³¹ | A = 1 | 1.68001 → 48.4902 |
+     | 3.0 | 10⁻³⁰, 10⁻³², 10⁻³³, 10⁻³⁶, 10⁻⁴⁰, 10⁻⁴² | A = 1 | 1.68001 → 48.4902 (each) |
+     | 3.0 | 10⁻³, 0.1, 0.5 | α = 0 | 1.68001, 1.68058, 1.68294 → 48.4902, 48.4897, 48.4875 |
+
+     β = 2.98 is uncaptured on the new table, its delivery almost unchanged (1.99081 → 1.95252 GeV); β = 3.005 stays in the EW
+     range but moves from 14.2574 GeV (in the old window) to 52.4193 GeV.
+   - **The changes by run** (largest / median relative |new − old|; §2.4.5):
+
+     | run | Y_p | D/H | ΔN_eff today |
+     |---|---|---|---|
+     | a-edge (13) | 1.10 × 10⁻³ / 4.0 × 10⁻⁴ | 2.69 × 10⁻³ / 9.5 × 10⁻⁴ | 0.542 / 0.413 |
+     | a-spread (12) | 2.3 × 10⁻⁴ / 2.3 × 10⁻⁵ | 1.58 × 10⁻³ / 4.1 × 10⁻⁵ | 0.039 / 3.2 × 10⁻⁴ |
+     | b (12) | 6.6 × 10⁻⁴ / 2.2 × 10⁻⁴ | 1.63 × 10⁻³ / 5.9 × 10⁻⁴ | 0.436 / 0.187 |
+     | c (4) | 3.2 × 10⁻⁵ / 1.4 × 10⁻⁵ | 1.1 × 10⁻⁴ / 6.9 × 10⁻⁵ | 0.015 / 0.0076 |
+     | d (6) | 3.7 × 10⁻⁴ / 5.6 × 10⁻⁵ | 2.80 × 10⁻³ / 1.6 × 10⁻⁴ | 0 / 0 (natural mode, absolute) |
+     | r (1) | 7.0 × 10⁻⁵ | 7.6 × 10⁻⁵ | 9.2 × 10⁻⁶ |
+
+     (`a-edge` is the 13 β of the dense grid's 2.980–3.040 at 4 × 10⁻³¹ M_P, A = 1; `a-spread` β = 1.2, 2.0, 5.0 at α = 0.1 and
+     A = 0.05, 1, 10; `b` six M of block B at β = 2.0 and 3.0; `c` 10⁻¹⁵ and 10⁻¹² M_P at β = 2.0; `d` natural mode at
+     10⁻³, 0.1, 0.5 M_P, β = 2.0 and 3.0; `r` the R-ladder at 10⁻¹⁶ M_P.)
+   - **Each figure of the run, in its own units** (§2.4.7):
+     - **Figure 6** (`fig6/`; M = 4 × 10⁻³¹ M_P). The largest moves are 0.111 pp in ΔY_p (β = 2.985) and 0.271 pp in Δ(D/H)
+       (β = 2.985), both at the edge. ΔN_eff today at the edge falls to 0.46–0.71 of its old value (β = 2.98–3.04, A = 1),
+       except at 3.005, where it is ×1.14. No sampled history changes side of the figure's tests (±2.45 % in Y_p, ±2.37 %
+       in D/H, ΔN_eff < 0.30). The figure marks "the electroweak cut (3.000–3.005)", placed by the old deliveries. The
+       parking row (T_J at parking, shaded to the indicative BBN window 20 keV – 2 MeV): the edge histories' parking
+       moves up by factors 1.3–61, into 39–226 MeV, and **two edge histories leave the window**: β = 2.99 (0.70 → 42.9 MeV)
+       and β = 2.995 (1.05 → 55.4 MeV), both at A = 1.
+     - **Figure 6b** (`fig6b/`; M = 10⁻¹⁵ and 10⁻¹² M_P): `c`'s four histories, at β = 2.0. One-loop A = 1: ΔY_p moves by
+       +0.0004 and +0.0019 pp, Δ(D/H) by +0.010 and +0.011 pp, ΔN_eff today by −1.5 %. Its notes place its electroweak cut
+       at Figure 6's 3.000–3.005; β = 3.0 at M_crit was not sampled.
+     - **The trend in M** (`m-trend/`): at β = 2 panels (a) and (b) move by at most 2 × 10⁻⁶ and 6 × 10⁻⁴. At β = 3, an edge
+       history, the ratio in (a) moves by up to +0.074 (10⁻⁴⁰) and ℓ by +3.8 to +6.4; panel (b) does not draw β = 3, and
+       panel (a)'s median over 26 β includes it.
+     - **The relativistic quanta** (`relativistic/`): the stored margins and shares only (the derived E was not recomputed).
+       rel-history's A = 1 and A = 10 at β = 2.0: birth margins 19.331 → 19.331 and 29.104 → 29.103. rel-M at β = 3.0: the
+       worst birth margin rises by 2.0 (10⁻³⁰) to 6.3 (10⁻³⁶) and the parking share by factors of 1.5 to 6.0; at the edge
+       at 4 × 10⁻³¹ the margins move by up to 4.8.
+   - **What did not move, in kind.** Away from the edge (β = 1.2, 2.0, 5.0) the largest changes are 2.7 % in T_deliver
+     (β = 5.0, every row) and 3.9 % in ΔN_eff today (β = 5.0, A = 0.05). Across the 37 one-loop histories whose bounce rows
+     were aligned, **no ordinal has a different `kind` or `source`** within the shorter file's length: the rows alternate
+     candidate and plateau the same way on both trees (§2.4.6). The counts of rows do change where the delivery changed
+     (61–107 → 131–163 at β = 2.98–3.0).
+   - **The P8 expectation, as 02 found it** (§2.4.6). P8 expected the drain records to differ only where the bounce sequence
+     differs. They differ where the sequences agree: at β = 2.0, A = 1, 3.4 × 10⁻⁶ in N and 2.5 × 10⁻⁵ in α_eff at most;
+     at M_crit (`c`) 3.4 × 10⁻² in α_eff at the last ordinal; in the R-ladder (`r`) 0.21. Recorded, not bounded.
+   - **The bath drift, on both tables** (§2.3; the issue's quantity, 100 Δ, of ρ_R,J against (π²/30) g_ρ T_J⁴ through
+     Σ = 1 − 3w):
+
+     | T (GeV) | 100 | 1 | 0.1 | 10⁻² | 10⁻³ | 10⁻⁴ | today |
+     |---|---|---|---|---|---|---|---|
+     | old table | +0.1918 | −1.1677 | −0.0831 | −0.2121 | −0.2106 | −0.0977 | −0.0778 |
+     | new table | −0.0569 | −1.2846 | −0.1999 | −0.3290 | −0.3276 | −0.2146 | −0.1947 |
+
+     Below about 22 GeV the new drift is the old less a constant 1.169 × 10⁻³. The history β = 2, M = 0.5 M_P, α = 0 follows
+     it to the digits shown, on both tables. `[09-the-bath-drifts-from-g-rho-T4-by-about-1e-3]` stays open (U4).
+
+3. **The standard analyses a rebuild repeats** (README §6.2 P12; `CLAUDE.md`'s invariant 8). The campaign changes no input
+   a standard analysis reads in its layout, but it changes every history that crosses the electroweak scale, which is
+   every history that starts at T* = 2 × 10⁴ GeV. So **a rebuild under `2026.11.0` repeats every row of
+   [`science-runs/README.md`](../science-runs/README.md)'s "Standard analyses"**, as the file names them:
+   - **Figure 6** — "Which β are excluded by Y_p, D/H and ΔN_eff at laboratory M?", from the main store's `histories.csv`
+     (`plot_by_beta.py`); latest [`2026-11-08-science-2026.10.0/fig6/`](../science-runs/2026-11-08-science-2026.10.0/fig6/NOTES.md);
+   - **Relativistic quanta** — "Do the quanta produced at reflections stay relativistic, and how much of the dark
+     radiation is not covered by the test?", from the main store's `histories.csv` and, in the same export root, each
+     one-loop history's `fields.csv` and `bounces.csv` (`plot_ScalarHistory.py`), then `tools/quanta_measures.py` on that
+     root at c_a = 1, 0 and 10; latest
+     [`2026-11-08-science-2026.10.0/relativistic/`](../science-runs/2026-11-08-science-2026.10.0/relativistic/NOTES.md).
+   `science-runs/README.md` is not changed: no input's layout changes. Figure 6 around M_crit and the trend in M are not on
+   the list (it says why); point 2 gives what each moved in the sample.
+
+4. **What to expect.**
+   - **The cost.** 02's sample took about 10 minutes a side for 48 histories (old 9 min 58 s, new 10 min 36 s; its six
+     runs 1 min 10 s to 2 min 31 s each) at one-minute loads of 7.75–52.25 on the shared machine (log 02 §3.3).
+     The run's blocks took: A 3 h 34 min; B 3 h 09 min to its disk failure and 1 h 11 min after; D 24 min; R (lab,
+     ladder, natural) 18 min; C 4 h 22 min; R-Mcrit 3 h 38 min; 16 h 45 min of running in all (run record, "The
+     registered runs" and "Timings against the plan"). The run's long blocks were set by the tunings at M_crit near
+     β ≈ 1.1–1.2, which ran alone to the 30-integration cap (C's one-loop row 4 h 02 min, R-Mcrit's 3 h 36 min, at
+     about 430 s an integration for 10⁻¹⁵ M_P, β = 1.2). 02's sample holds none of those (its `c` is β = 2.0 at M_crit), so
+     **its times do not project to a rebuild**, and none is projected here.
+   - **The disk** (run record, "B's disk failure and the resume"). B's first attempt failed with Ray's `OutOfDiskError` with
+     the volume 97 % used and 30 GB free of 927 GB (Finder showed over 200 GB, the difference being purgeable space, which
+     Ray does not count); the user thinned the local snapshots and resumed. On 2026-11-13 `df -h .` showed 92 % used,
+     80 GB free (848 GB used of 927 GB).
+   - **The workers' working directory,** for any build or comparison run from a worktree: a Ray worker runs in the
+     cluster's working directory, so a worktree build through a cluster started elsewhere reads that tree's
+     `Xav_EOS_data.csv` and `PRyMrates/` (`architecture-summary.md` §14's note of 2026-11-07, and its dated line of this
+     date; verification §2.4.1; `[02-a-worktree-build-reads-the-data-files-of-the-tree-that-started-the-cluster]`). 02 had
+     one cluster per side, started from the side's tree root.
+
+5. **The stores kept** (P28). Retiring any of them is the user's (`runregistrykit store retire`, which a person runs). Each
+   store is a primary and 16 shards with a sidecar, 18 files, under `var/datastores/`; sizes are `du -sk` of the 18 files
+   on 2026-11-13.
+
+   | store | built from | label, format | `store_id` | shards | size |
+   |---|---|---|---|---|---|
+   | `electroweak-eos-02-old` | `ec6bca8` (worktree) | 2026.10.0, 7 | `821adc85dc2c403c93e146208d56b8db` | 16 | 188 404 KiB |
+   | `electroweak-eos-02-new` | `e1fd6bc` | 2026.11.0, 7 | `5fd9d14689c0460395d563720950e656` | 16 | 182 584 KiB |
+
+   Each holds 48 histories. The label and the format of each are those of the tree that built it (verification §2.1, §2.4.2;
+   the sidecar records the tree and its `store_id`, not the label). `var/electroweak-eos/02/` holds the exports
+   (`export/{old,new}/QCD_Cosmology/`), the scan consoles, the run logs, the cluster records and the probes: 283 772 KiB
+   (278 MB). The registry's records are `var/runs/electroweak-eos-02-*` (12 runs, all `done`). None is committed; `var/` is
+   ignored by git, so `git clean -x` or `-X` would delete them (`CLAUDE.md`).
+
+6. **What stays open.** The board's three issues (`.documents/OPEN_ISSUES.md` §1.25; none assigned; **32 open** in the whole
+   index), each with its next step:
+   - `[01a-surfing-turning-points-keeps-crossings-below-the-solver-tolerance]`: `surfing_turning_points` keeps every sign change
+     of g with no tolerance; in captured histories at β = 10 and 20 it records 22 to 138 crossings, most at one T_J to
+     10⁻⁹. Counted in `surfing_scan`'s `n_crossings`, not in its capture columns. Next: none proposed; a rule like 01a's for g
+     would need g's tolerance from π's.
+   - `[02-a-worktree-build-reads-the-data-files-of-the-tree-that-started-the-cluster]`: point 4. Next: none proposed; the
+     options are a working directory set for the job (a code change in the drivers), the cluster started from the build's own
+     tree (02's practice), or a probe like 02's before every worktree build.
+   - `[03-plot-quanta-grid-beta-axis-is-categorical]`, from the user's open point in the run record's "Standard analyses":
+     `tools/plot_quanta_grid.py`'s β axis cannot be read where the dense and sparse grids share it. Next: none proposed;
+     the user's ruling on the plan's Q4 is "retire for figures; keep as a diagnostic".
+
+   Another board's issue this campaign touched: `[09-the-bath-drifts-from-g-rho-T4-by-about-1e-3]` (the `inelastic-reflection`
+   board, §1.19 of the index), left open with 02's dated addendum (point 2).
+
+   **Observations the logs left unopened** that a reader of the rebuild should know:
+   - `test_injection`'s item-(11) classes read the campaign's copy of the old table
+     (`prompts/electroweak-eos/data/pipeline_w_table_ec6bca8.csv`), so they no longer follow the production table, and
+     moving or deleting that file breaks them (log 01 §5);
+   - `tools/plot_surfing_temperature.py` reads the w table of the tree it runs from (through `find_kicks`), so a scan's
+     figure drawn on another tree shows that tree's reachability roots beside the scan's own temperatures; its figure has
+     no check against its CSV's sidecar (log 02 §5);
+   - each plot script prints "number of shards read from database (=16) does not match specified number of shards (=10)"
+     on a 16-shard store though given `--shards 16`; the run's own export logs have the same line, and it is DatastoreKit's
+     (§4.20 point 3; log 02 §5);
+   - `tools/ray_cluster.sh stop` ended each of 02's three clusters with SIGKILL to its two head processes after the 15 s
+     grace period, then reported every process gone and released the lock (log 02 §5);
+   - `release_T_GeV` is blank in every history of the sample, on both sides: no sampled history releases (log 02 §5);
+   - at β = 3.0 the new first bounce is 48.4902 GeV at every M from 10⁻⁴² to 10⁻³ M_P (48.4897 and 48.4875 GeV at 0.1 and
+     0.5 M_P), so the new window's edge on Figure 6's dense grid is the same at M_crit as at laboratory M, as far as the
+     sample goes (log 02 §5);
+   - stale comments about the old table remain in `CosmologyModels/tests/test_kicking_function.py` (the top row 25 118.86 GeV)
+     and `eos_reference.py` ("Xav's table ends at 25 TeV"), and `CodeComparisonTools/XavEOS_test.py` reads
+     `CosmologyModels/GenericEOS/XavEOS_data.csv`, which is not there (log 01 §5).
+
+7. **The surfing tests' reference rows** (P27). The tests are unchanged and read:
+   - `tools/tests/test_surfing_scan.py` (`COMMITTED_CSV`) and `tools/tests/test_plot_surfing_histories.py` (`NEAR3_CSV`) read
+     `.documents/electroweak-eos/table/out/surfing_reference_rows.csv`: this tree's **untuned** rows at β = 1.5 and 3, which
+     01 made again with `.documents/electroweak-eos/table/surfing_reference.py`. They are the untuned path's regression
+     record on this tree. surfing-temperature 04's committed scan CSVs stay as the records of the old table; on the old table
+     that script reproduces them to 3 × 10⁻¹² and 2.1 × 10⁻⁸ (board, orchestrator's review of prompt 01, item 3).
+   - S1-new (`.documents/electroweak-eos/threshold/out/s1_new.csv`) is **tuned**. It is a measurement and does not replace
+     them; no test reads it.
+   - The golden records are `ComputeTargets/tests/data/golden_history_ee01.json`, `golden_history_ee01_tuned.json` and
+     `golden_history_ee01_reflecting.json`, beside the `rr03` records they replace, which are unchanged (verification §1.5).
+
+8. **The merge into `main` is the user's.** At the time of writing `git merge-base --is-ancestor main electroweak-eos` exits
+   0: `main` (`ec6bca8`) is an ancestor of this branch, so the merge is a fast-forward. `main` is one commit ahead
+   of `github/main` (`edf72b3`), not pushed, and `electroweak-eos` has no upstream and is not pushed. Pushing is the user's.
+
 ---
 
 ## 5. Reproduce

@@ -1,0 +1,29 @@
+== cosmology start 2026-11-13 18:20:36 18:20  up 13 days, 20:41, 1 user, load averages: 19.40 15.33 21.02
+== cosmology rc=0 elapsed=80s end 18:21  up 13 days, 20:42, 1 user, load averages: 9.89 14.01 20.03
+
+OK
+== objectfactories start 2026-11-13 18:21:57 18:21  up 13 days, 20:42, 1 user, load averages: 9.89 14.01 20.03
+== objectfactories rc=0 elapsed=161s end 18:24  up 13 days, 20:45, 1 user, load averages: 4.60 9.83 17.26
+Ran 163 tests in 158.161s
+
+OK
+== rundrivers start 2026-11-13 18:24:38 18:24  up 13 days, 20:45, 1 user, load averages: 4.60 9.83 17.26
+== rundrivers rc=0 elapsed=30s end 18:25  up 13 days, 20:45, 1 user, load averages: 4.41 9.27 16.80
+----------------------------------------------------------------------
+Ran 76 tests in 27.245s
+
+OK
+== ct_af start 2026-11-13 18:25:08 18:25  up 13 days, 20:45, 1 user, load averages: 4.41 9.27 16.80
+== ct_af rc=0 elapsed=178s end 18:28  up 13 days, 20:48, 1 user, load averages: 4.24 7.05 14.45
+Ran 219 tests in 175.566s
+
+OK
+
+== ct_gz start 2026-11-13 18:28:06 18:28  up 13 days, 20:48, 1 user, load averages: 4.24 7.05 14.45
+== ct_gz rc=0 elapsed=635s end 18:38  up 13 days, 20:59, 1 user, load averages: 6.57 6.22 9.79
+== tools start 2026-11-13 18:38:41 18:38  up 13 days, 20:59, 1 user, load averages: 6.57 6.22 9.79
+== tools rc=0 elapsed=336s end 18:44  up 13 days, 21:05, 1 user, load averages: 4.43 5.34 8.23
+Ran 292 tests in 333.346s
+
+OK
+ALLDONE
