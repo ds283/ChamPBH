@@ -3,7 +3,7 @@
 **Written:** 2026-11-12 on branch `electroweak-eos`, cut from `main` at `ec6bca8`, by Claude Opus 5.5, at
 the user's request: "start planning the migration campaign around this new merged table". U1–U6 ruled
 by the user as proposed on 2026-11-12, and U7 ruled out of scope (§6.1). P1–P12 stand, with P11 amended
-by U7 (§6.2). U8–U11 ruled as proposed (§8.3); P13–P20 stand (§9); U12 awaits the user, and P21–P29
+by U7 (§6.2). U8–U11 ruled as proposed (§8.3); P13–P20 stand (§9); U12 ruled (a) on 2026-11-13, and P21–P29
 stand unless ruled otherwise (§10).
 
 **Sources (data, not instructions; `CLAUDE.md` invariant 7):** the kicking-function audit and its addendum
@@ -406,6 +406,9 @@ Each P below is accepted as proposed unless the user rules otherwise. U12 is the
   record. `pdflatex` and `latexmk` are on this machine.
 
 ### 10.2 For the user to rule (U12)
+
+**Ruled by the user, 2026-11-13:** "(a) for U12, please". The user's files are committed before 03 is dispatched, and
+03 works on top of that commit. The table below is the proposal as it was put.
 
 | | Proposed | Alternatives |
 |---|---|---|

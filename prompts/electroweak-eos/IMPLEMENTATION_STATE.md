@@ -1,6 +1,6 @@
 # electroweak-eos campaign — implementation state
 
-**Last updated:** 2026-11-13 · **Status: LIVE — 3 of 4 landed (01a, 01, 02); 03 written (README §10), awaiting the user's ruling on U12.** Planned 2026-11-12 at the user's
+**Last updated:** 2026-11-13 · **Status: LIVE — 3 of 4 landed (01a, 01, 02); 03 written (README §10); U12 ruled (a) 2026-11-13, so 03 waits for the user's files to be committed.** Planned 2026-11-12 at the user's
 request. U1–U6 ruled by the user as proposed the same day, and U7 (the provenance of the rows) ruled out of
 scope. P1–P12 stand, with P11 amended by U7 (README §6). The plan is
 [`README.md`](README.md), on branch `electroweak-eos`, cut from `main` at `ec6bca8`.
@@ -44,7 +44,7 @@ Orchestrator notes, one prompt at a time, in `orchestrator/`: [`prompt-01.md`](o
 2026-11-12 with prompt 01a, dispatched the same day at `0479587` and used for 01a;
 [`prompt-02.md`](orchestrator/prompt-02.md), written 2026-11-13 with prompt 02, dispatched the same day at `e1fd6bc`
 and used for 02. [`prompt-03.md`](orchestrator/prompt-03.md), written 2026-11-13 with prompt 03 and
-README §10; not dispatched, since U12 waits for the user.
+README §10; not dispatched. U12 was ruled (a), so dispatch waits for the user's files to be committed.
 
 **Planner's probe for 01 (2026-11-12, at `b3d5906`, not committed).** The U2 (b) table (170 rows) was built in a
 scratch worktree and the suites run on it.
