@@ -1,0 +1,15 @@
+# command: PYTHONPATH=. ./venv/bin/python tools/history_and_bbn.py 2.9 4e-31 --alpha 0.1 --model inverse-power --n 2
+# start: 2026-11-14 18:53:52 18:53  up 14 days, 21:14, 1 user, load averages: 5.70 7.73 6.37
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+-- tune history_and_bbn-beta2.9-M4e-31-inverse-power-n2 it=0 kind=seed H/H0-1=+2.290e-07 phi_ref/phi_min-1=+1.768e-07 norm=-276.630728594 phi_ref=6.2514896323e-21 wall=6.2
+history beta=2.9 M=4e-31 model=inverse-power n=2: RHS=65882 accepted_steps=8960 reflections=42 samples=5926 integrations=1 alpha=0.1 wall=6.5 s
+tuning beta=2.9 M=4e-31 model=inverse-power n=2: normalization=-276.63072859401797 V_ref=7.257733995332848e-121 phi_ref=6.25148963229753e-21 phi_0=6.251488527122164e-21 pi_0=6.251488527122046e-21 tracking=0.6666666666666541 residual_H=2.2897712570468798e-07 residual_phi=1.767859263424043e-07 tuning_iterations=1 plain_steps=0 secant_steps=0 guard_steps=0 seed_kind=tracking seed_normalization=-276.63072859401797 seed_phi_ref=6.25148963229753e-21
+bounce beta=2.9 M=4e-31 model=inverse-power n=2: N=23.887819947 T_J=1870.300090 MeV phi=3.184970e-11 reflected=True
+dissipation beta=2.9 M=4e-31 model=inverse-power n=2: injections=42 resolved_candidates=0 unresolved_candidates=42 injected_fraction=0.00967964 rho_chi_ratio_1MeV=0.00618117 rho_chi_ratio_70keV=0.00518102 rho_chi_ratio_today=0.00516044 Delta_N_eff_1MeV=0.0372475 Delta_N_eff_today=0.038435 log_R_first_impact=329.726 parking_N=29.6949 parking_log_T_Jordan_GeV=-4.53431 release_N=None release_log_T_Jordan_GeV=None worst_birth_margin=31.7305 worst_birth_margin_N=28.5354 birth_failing_share=0 worst_reflection_margin=31.7747 worst_reflection_margin_N=28.5966 reflection_failing_share=0 worst_tracker_margin=41.3091 worst_tracker_margin_N=29.6985 tracker_failing_share=0 unassessed_share=6.39152e-05
+fixed_T beta=2.9 M=4e-31 model=inverse-power n=2: 1MeV crossings=1 phi=4.225179955e-32 ratio=6.181166960e-03 stand_in_phi=4.225182932e-32 stand_in_ratio=6.181166869e-03 | 70keV crossings=1 phi=1.663089589e-30 ratio=5.181018372e-03 stand_in_phi=1.663205219e-30 stand_in_ratio=5.181022723e-03
+ratio beta=2.9 M=4e-31 model=inverse-power n=2 [0.3,1) keV: n=131 min=0.00516 median=0.00516 max=0.00516 rms_step=1.367e-14
+ratio beta=2.9 M=4e-31 model=inverse-power n=2 [1,3) keV: n=119 min=0.00516 median=0.00516 max=0.00516 rms_step=1.435e-14
+ratio beta=2.9 M=4e-31 model=inverse-power n=2 [3,10) keV: n=131 min=0.00516 median=0.00516 max=0.00516 rms_step=2.489e-14
+ratio beta=2.9 M=4e-31 model=inverse-power n=2 [10,100) keV: n=257 min=0.00516 median=0.00516 max=0.005273 rms_step=9.367e-07
+bbn beta=2.9 M=4e-31 model=inverse-power n=2: Yp=0.2473923377 DoH=2.470734445 He3oH=1.04373594 Li7oH=5.46768258 network=small PRyM_time=8.1 s wall=8.1 s PRyM_version=bf24c3d+ri02+sr01+bt02
+# end: 2026-11-14 18:54:08 exit=0 wall=16 s 18:54  up 14 days, 21:14, 1 user, load averages: 5.76 7.65 6.36

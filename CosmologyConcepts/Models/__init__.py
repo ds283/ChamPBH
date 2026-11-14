@@ -14,7 +14,9 @@
 # limitations under the License.
 
 # AbstractModel first: ComputeTargets.ScalarHistory imports RealizedModel from it, and
-# ExponentialModel imports ComputeTargets.exceptions, which initializes ComputeTargets
+# ExponentialModel imports ComputeTargets.exceptions, which initializes ComputeTargets; InversePowerModel
+# imports it likewise, after ExponentialModel
 from .AbstractModel import AbstractModel, RealizedModel, Seed, SEED_KINDS
 from .ExponentialModel import ExponentialModel
-from .model_ids import EXPONENTIAL_MODEL
+from .InversePowerModel import InversePowerModel
+from .model_ids import EXPONENTIAL_MODEL, INVERSE_POWER_MODEL

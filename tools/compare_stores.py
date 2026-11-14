@@ -191,7 +191,11 @@ UNSTORED_TYPE_VALUES = {
             "SaikawaShirai_EOS_jax_autodiff, a class no factory stores",
             2: "QCD_EOS_SPLINE_IDENTIFIER: the type_id of a LambdaCDM_GenericEOS on "
             "SaikawaShirai_EOS_spline, a class no factory stores",
-        }
+        },
+        "model_type": {
+            2: "INVERSE_POWER_MODEL: InversePowerModel has no table until power-law-wall "
+            "prompt 05, which gives it one and moves this id into POLYMORPHIC_REFERENCES",
+        },
     }
 }
 

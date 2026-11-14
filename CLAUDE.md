@@ -82,9 +82,9 @@ invariants that hold across all of them:
   the repository root:
   ```bash
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .   # 26 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 684 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 705 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .   # 163 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 292 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 302 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .        # 76 tests
   ```
   `ComputeTargets/tests` took 807 s on 2026-11-13 (the two halves below, 175.6 s and 631.3 s, at one-minute
@@ -92,12 +92,13 @@ invariants that hold across all of them:
   capped at ten minutes, so run it in two halves:
   ```bash
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 219 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 465 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 486 tests
   ```
-  (The counts are those of 2026-11-13; the last change to a count was `electroweak-eos` 01 on 2026-11-12, which added 15
-  tests to `tools/tests` (`test_build_w_table`) and, with its 01a, 19 to the `test_[g-z]` half
-  (`test_resolved_turning_points`). `tools/tests` holds tuned histories and took 333.3 s on 2026-11-13, at a one-minute
-  load of 6.6 at its start; run it alone.) They **must not
+  (The counts are those of 2026-11-14; the last change to a count was `power-law-wall` 01 on 2026-11-14, which added 21
+  tests to the `test_[g-z]` half (`test_inverse_power_model`) and 10 to `tools/tests` (`test_model_option`); there the
+  halves took 152 s and 566 s, and `tools/tests` 298 s, at one-minute loads of 5.6, 7.9 and 6.1 at their starts, in a
+  worktree. `tools/tests` holds tuned histories and took 333.3 s on 2026-11-13, at a one-minute load of 6.6 at its
+  start; run it alone.) They **must not
   need a Ray cluster or a persistent datastore**. A test may build a temporary
   SQLite datastore in a `tempfile` directory, through `datastorekit`'s undecorated actor
   (`standin_pool.DatastoreClass`) inside ChamPBH's stand-in cluster (`StoreFixtures/standin_pool.py`,

@@ -28,7 +28,8 @@ R9). `ExponentialModel` overrides none of them, so every test here runs the gene
 - (3) `TestTheDefiningEquations`: on the exponential with n = 2 and on a test-only power-law wall
   V = V_0 (1 + (M/phi)^2), which no n = 1 closed form describes, every defining equation holds at the
   returned values to a rounding bound derived from the operations (ruling 8; see `_root_tolerance`
-  and each test).
+  and each test). Since power-law-wall prompt 01, also on the production `InversePowerModel` at n = 1
+  and 2.
 - (4) `TestTheMinimum`: its residual, its agreement with `effective_minimum` at T = rho_m,E today with
   Sigma = 0, and d phi_min/d ln T against a centred finite difference, at M = 1e-30 and 0.5 M_P, on
   the exponential and on the power-law wall with (ln A)'' != 0 (ruling 6).
@@ -53,7 +54,8 @@ from unittest import mock
 
 from ComputeTargets.exceptions import ComputationFailureError
 from ComputeTargets.tests.test_model_interface import cosmology, exponential_model, rel
-from CosmologyConcepts.Models import AbstractModel, ExponentialModel
+from CosmologyConcepts import M_value, beta_value
+from CosmologyConcepts.Models import AbstractModel, ExponentialModel, InversePowerModel
 from CosmologyConcepts.Models.AbstractModel import (
     ClassicalTurningPoint,
     OneLoopTurnaround,
@@ -210,6 +212,15 @@ def _exponential(M_over_Mp: float, n: int = 1, beta: float = 2.0) -> Exponential
     return exponential_model(beta, M_over_Mp, n)
 
 
+def _inverse_power(
+    M_over_Mp: float, n: int = 1, beta: float = 2.0
+) -> InversePowerModel:
+    """The production inverse-power-law model (power-law-wall prompt 01), V = V_0 [1 + (M/phi)^n]."""
+    return InversePowerModel(
+        0, M_value(0, M_over_Mp * Mp), n, beta_value(0, beta), _units
+    )
+
+
 class TestClassicalAgainstTheClosedForm(unittest.TestCase):
     """
     (1) The classical turning point of ExponentialModel, n = 1, against its closed form, which this
@@ -331,10 +342,16 @@ class TestTheWorkedExample(unittest.TestCase):
 # (3) the models on which no n = 1 closed form holds, and their points: the exponential with n = 2,
 # and the power-law wall with p = 2, each at two M and two E (field at 0.1 M_P, normalization -279.87).
 # Every point has a one-loop turnaround: on n = 2 at ln E = -180 the chain has none at M = 1e-16 M_P,
-# where R = 10^-2.9, so the second mass is 1e-20 M_P (R = 10^13)
+# where R = 10^-2.9, so the second mass is 1e-20 M_P (R = 10^13). Since power-law-wall prompt 01 the
+# production InversePowerModel at n = 1 and 2 runs here too, at the power-law wall's two masses (at
+# ln E = -180, ell = 40 and 25 at n = 1, 36 and 13 at n = 2: every point has a turnaround); its closed
+# forms are tested in test_inverse_power_model (d). _PowerLawWall stays: its gamma and its reflects and
+# floor switches test what the production class does not have
 _NO_CLOSED_FORM = (
     ("exponential n = 2", lambda M: _exponential(M, n=2), (1.0e-30, 1.0e-20)),
     ("power-law p = 2", lambda M: _PowerLawWall(M * Mp, p=2.0), (1.0e-30, 1.0e-10)),
+    ("InversePowerModel n = 1", lambda M: _inverse_power(M, n=1), (1.0e-30, 1.0e-10)),
+    ("InversePowerModel n = 2", lambda M: _inverse_power(M, n=2), (1.0e-30, 1.0e-10)),
 )
 _NO_CLOSED_FORM_LOG_E = (-180.0, -120.0)
 
