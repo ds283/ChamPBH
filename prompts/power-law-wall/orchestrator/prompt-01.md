@@ -1,5 +1,8 @@
 # Orchestrator — prompt 01, the model
 
+**Used for 01** (dispatched 2026-11-14 at `75ac6fb`; landed `3aae9a5`; reviewed on the board, "Orchestrator review of
+prompt 01").
+
 Read [`../README.md`](../README.md) first: §0, §2, §5, and §6 as ruled. The user's words are, for the plan, "U1–U7 as
 proposed", and for this prompt, "Yes, commit it and write prompt 01". Then read the prompt. This note binds 01 only.
 The conventions of earlier campaigns' notes bind here as well: a tolerance is a number with its reason, timing is

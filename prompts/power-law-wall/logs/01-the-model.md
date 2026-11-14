@@ -1,7 +1,7 @@
 # Log 01 — the model
 
 **Subject:** `InversePowerModel`, V = V₀[1 + (M/φ)ⁿ], with the seed at any n and the tool route's `--model` and `--n`
-**Commit:** this commit, on branch `power-law-wall`, on top of `75ac6fb`
+**Commit:** `3aae9a5`, on branch `power-law-wall`, on top of `75ac6fb`
 **Date:** 2026-11-14, by Claude Opus 5.5 (one agent, in the worktree `.claude/worktrees/power-law-wall`)
 **Result:** **COMPLETE, after one stop.** The gate Model holds (§4).
 - **The stop.** Adding `INVERSE_POWER_MODEL = 2` to `model_ids.py` (§1.1) failed
