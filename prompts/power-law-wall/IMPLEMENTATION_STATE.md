@@ -1,6 +1,6 @@
 # power-law-wall campaign — implementation state
 
-**Last updated:** 2026-11-14 · **Status: LIVE — 1 of 8 prompts landed and reviewed (01, the gate Model holds); R4–R5 ruled on its measurements (README §6.4); 02 being written; R1–R3 and U1–U7 ruled (README §6).**
+**Last updated:** 2026-11-14 · **Status: LIVE — 1 of 8 prompts landed and reviewed (01, the gate Model holds); R4–R5 ruled on its measurements (README §6.4); 02 written, not dispatched; R1–R3 and U1–U7 ruled (README §6).**
 
 The campaign adds the inverse-power-law model V = V₀[1 + (M/φ)ⁿ] beside the exponential, defines the one-loop drain
 law on its wall from measurements, and takes it through the store, the drivers and a rehearsal, so that a science run
@@ -22,7 +22,7 @@ at n = 1 and 2 can follow, under the one-loop law with the fixed α beside it.
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
 | 01 | The model | `InversePowerModel`, the seed at any n, the tool route's `--model` and `--n`; natural mode at large M measured | Opus | ✍️ | ✅ | `3aae9a5` | [`logs/01-the-model.md`](logs/01-the-model.md) |
-| 02 | Measure the wall | S, the one-loop fraction and the spectrum on the power wall (research, `source/wall/`); then U3–U5 | Opus | ⬜ | ⬜ | — | — |
+| 02 | Measure the wall | S, the one-loop fraction and the spectrum on the power wall (research, `source/wall/`); then U3–U5 | Opus | ✍️ | ⬜ | — | — |
 | 03 | The law on this wall | `_drain_L`, the law and the spectrum as U3–U5 rule | Opus | ⬜ | ⬜ | — | — |
 | 04 | Measure a sample | about forty histories under both laws; the thresholds | Opus | ⬜ | ⬜ | — | — |
 | 05 | The store | type id 2, its table, the registry, `FINGERPRINT_FORMAT` 8, the label (U6) | Opus | ⬜ | ⬜ | — | — |
@@ -34,7 +34,9 @@ at n = 1 and 2 can follow, under the one-loop law with the fixed α beside it.
 
 Prompts are written one at a time, each after the previous one lands and is reviewed. Orchestrator notes, one prompt at
 a time, in `orchestrator/`: [`prompt-01.md`](orchestrator/prompt-01.md), written 2026-11-13 with prompt 01, used for
-01 (dispatched 2026-11-14 at `75ac6fb`).
+01 (dispatched 2026-11-14 at `75ac6fb`); [`prompt-02.md`](orchestrator/prompt-02.md), written 2026-11-14 with prompt 02, not
+dispatched. Its §0 holds the planner's probe: the path formula, the power wall's scale invariance above V₀, and the
+crossover scripts' absolute tolerances failing at large E/V₀.
 
 **Planner's probe for 01 (2026-11-13, at `c540caa`, not committed).** A scratch power-law model through
 `tools/history_and_bbn.py`: at laboratory M under the fixed law, n = 1 and 2 give the same history as each other and
@@ -136,3 +138,4 @@ ObjectFactories 163, tools 292, RunDrivers 76. 01 re-measures them at its base.
   pass. The two §1.6 measurements go to the user; 02 is not written.
 - 2026-11-14: R4 (φ ≤ 0 stays a failure) and R5 (n = 1 natural mode at large M fails at G2: noted, no issue, move on)
   ruled by the user (README §6.4).
+- 2026-11-14: prompt 02 and its orchestrator note written; not dispatched.
