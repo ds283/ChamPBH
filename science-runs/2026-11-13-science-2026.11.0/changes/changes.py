@@ -134,6 +134,9 @@ def edge(beta) -> np.ndarray:
 
 
 def main():
+    # the tree's state before this script writes anything beside itself
+    head = git("rev-parse", "HEAD")
+    dirty = bool(git("status", "--porcelain"))
     old, new = load(OLD), load(NEW)
     J = old.join(new, how="outer", lsuffix="_old", rsuffix="_new")
     J = J.reset_index()
@@ -331,8 +334,6 @@ def main():
         fontsize=10,
     )
     fig.tight_layout()
-    head = git("rev-parse", "HEAD")
-    dirty = bool(git("status", "--porcelain"))
     meta = {
         "Title": "What moved, 2026.11.0 against 2026.10.0",
         "Subject": f"git {head}{' (dirty)' if dirty else ''}",
