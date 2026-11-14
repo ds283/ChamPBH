@@ -10,13 +10,26 @@ launch and §3 the analyses.
 main store's 4818 histories failed, 6 of them above the QCD surfing threshold, all of a kind diagnosed in 2026.10.0
 (below, "Failed histories"). None of the reflection store's 44 failed.
 
-**Figures made from it:** none yet. PLAN.md §3 lists them.
+**Figures made from it** (each folder holds its script, its inputs or a pointer to them, and a note; made on
+2026-11-14 by the run's orchestrator at the user's request, each repeating 2026.10.0's with that folder's rulings and
+no new choice, and **not yet seen by the user**):
+- [`fig6/`](fig6/NOTES.md): Figure 6 at the laboratory mass. Every finding of 2026.10.0's stands; the largest β
+  excluded is unchanged at every A and α, 13 histories change class near a test's edge at β = 1.0625–1.23, and the
+  electroweak region moves to β > 2.980–2.985;
+- [`relativistic/`](relativistic/NOTES.md): the quanta stay relativistic in energy under the one-loop law (the
+  matter-like share of ρ_R ≤ 1.7×10⁻³² at or below 10⁻³⁰ M_P, ≤ 1.6×10⁻¹⁹ at M_crit);
+- [`fig6b/`](fig6b/NOTES.md): Figure 6 around M_crit; β = 3.0 now surfs the electroweak kick there;
+- [`m-trend/`](m-trend/NOTES.md): the trend in M, unchanged but for one cell of panel (c) and a lower ℓ at β = 10;
+- [`changes/`](changes/NOTES.md): what moved since 2026.10.0 (PLAN.md P5). electroweak-eos 02's 47 main-store
+  histories are identical here, and the electroweak deliveries above the edge move by tens of percent (−61% at
+  β = 20), with their yields far inside the tests.
 
 ## Standard analyses
 
 From `science-runs/README.md`'s list. The run script made every input they read (PLAN.md P3).
-- **Figure 6:** not yet made.
-- **Relativistic quanta:** not yet made.
+- **Figure 6:** made, [`fig6/`](fig6/NOTES.md).
+- **Relativistic quanta:** made, [`relativistic/`](relativistic/NOTES.md), from this run's measures, which the run
+  script made. The fixed law, the parking leftover and the 19 K-check failures are not covered, as in 2026.10.0.
 
 ## The run
 
