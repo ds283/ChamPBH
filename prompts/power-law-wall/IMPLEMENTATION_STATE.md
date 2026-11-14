@@ -1,6 +1,6 @@
 # power-law-wall campaign — implementation state
 
-**Last updated:** 2026-11-14 · **Status: LIVE — 1 of 8 prompts landed and reviewed (01, the gate Model holds); natural mode at n = 1, large M, and the φ ≤ 0 continuation wait on the user; 02 not written; R1–R3 and U1–U7 ruled (README §6).**
+**Last updated:** 2026-11-14 · **Status: LIVE — 1 of 8 prompts landed and reviewed (01, the gate Model holds); R4–R5 ruled on its measurements (README §6.4); 02 being written; R1–R3 and U1–U7 ruled (README §6).**
 
 The campaign adds the inverse-power-law model V = V₀[1 + (M/φ)ⁿ] beside the exponential, defines the one-loop drain
 law on its wall from measurements, and takes it through the store, the drivers and a rehearsal, so that a science run
@@ -134,3 +134,5 @@ ObjectFactories 163, tools 292, RunDrivers 76. 01 re-measures them at its base.
   user, "(a), add the unstored entry to compare_stores". No issue opened.
 - 2026-11-14: prompt 01 reviewed by the orchestrator (this board, "Orchestrator review of prompt 01"); all six checks
   pass. The two §1.6 measurements go to the user; 02 is not written.
+- 2026-11-14: R4 (φ ≤ 0 stays a failure) and R5 (n = 1 natural mode at large M fails at G2: noted, no issue, move on)
+  ruled by the user (README §6.4).

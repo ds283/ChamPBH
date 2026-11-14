@@ -242,6 +242,18 @@ Accepted as proposed unless the user rules otherwise.
   fingerprint is regenerated with a statement of what moved (the format and the new class's empty entry only).
 - **P14 — the counts.** Every prompt records the five suites' counts before and after; none falls.
 
+### 6.4 Ruled by the user after 01, 2026-11-14, in their words
+
+On prompt 01's two measurements (log 01 §3.6 and §7; board, "Orchestrator review of prompt 01"):
+- **R4, φ ≤ 0.** "Keep φ ≤ 0 as a failure." The hooks of `InversePowerModel` raise `ComputationFailureError` at
+  φ ≤ 0, as 01 committed them, and no continuation to φ < 0 is adopted. The even continuation V(|φ|) was measured in
+  scratch and let two histories accept a step at φ < 0.
+- **R5, natural mode at n = 1, large M.** "The `n=1` failures in natural mode – if that's what the model does, I am not
+  sure what we can do about it. This is natural mode which is less important for us. I suggest we simply note it and
+  move on." The three histories at 10⁻³ M_P (β 1.2, 2, 2.9) fail at the integrator's guard G2. This is recorded as a
+  measurement, with no issue opened and no fix planned. The planner reads it as also covering 04: its natural-mode rows at large M (U7) record the same
+  failure where it recurs, and do not stop on it.
+
 ## 7. What this campaign hands to the user
 
 - A tree that builds, stores, exports and plots the power-law model under both drain laws at any n, beside an
