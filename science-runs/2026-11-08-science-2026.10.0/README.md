@@ -8,6 +8,10 @@ and §8.1 hold the user's rulings in their words, §7 the probe that set the low
 histories failed, 6 of them above the QCD surfing threshold, all of a diagnosed kind (below, "Failed histories").
 One of the reflection store's 44 failed, of the same kind.
 
+*Added 2026-11-14:* the rebuild of record is [`2026-11-13-science-2026.11.0/`](../2026-11-13-science-2026.11.0/README.md),
+built at `VERSION_LABEL` 2026.11.0 on `a19d71e`, on the electroweak-eos w table. Its analyses replace this run's as
+they are made.
+
 **Figures made from it** (each folder holds its script, its inputs and a note):
 - [`fig6/`](fig6/NOTES.md): Figure 6 at the laboratory mass under the one-loop law, a band over A = 0.05–3,
   A = 1, 3, 5 and 10 and the fixed law at α = 0.01 and 0.1 as lines, and Planck's one-tailed ΔN_eff < 0.30
