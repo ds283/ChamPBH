@@ -13,7 +13,8 @@ taken under load, and the suites run serially.
 **The prompt:** [`02-measure-the-wall.md`](../02-measure-the-wall.md) · **Gate:** "Wall" · **Closes:** nothing ·
 **Opens:** only what the work finds · **Model:** Opus · **Network:** none. Nothing is pushed.
 
-**When:** written 2026-11-14 at the user's request. Whether it is dispatched from this context or a fresh one is the
+**When:** written 2026-11-14 at the user's request. Amended the same day, before dispatch, at the user's request: "Add
+k_ex/M_P at first impact to prompt 02's map" (prompt §1.4; §0's last bullet below; review check 3). Whether it is dispatched from this context or a fresh one is the
 user's to say. Either way, the dispatching context re-checks the Gate (§1).
 
 **Gate**, as measured by the planner on 2026-11-14 at 20:20 local, before this note and the prompt were committed:
@@ -94,6 +95,26 @@ crossover's `born.chain`, `walls.Bounce` and `walls.beta_squared` unchanged. The
     measures them properly.
   - k_ex/ω_t is (1/2)√(n/(n + 1)) on the pure power wall: 0.354 (n = 1) and 0.408 (n = 2), against 1/2 on the
     exponential at large L.
+- **The Planck scale: the planner's estimates, not measurements.** k_ex = λ_t√E/2 grows with E, so the first impact
+  gives the largest. k_ex < M_P (reduced) is the same as φ_t > n√E/(2M_P) on the power wall. In Planck units:
+  - power wall: k_ex ≈ (n/2)(√E/M)(E/V₀)^{1/n}, so k_ex < M_P needs M > (n/2)E^{1/2+1/n}V₀^{−1/n};
+  - exponential: k_ex ≈ (n/2)(√E/M)L^{1+1/n}, with L = ln(1 + E/V₀), so it needs M > (n/2)√E L^{1+1/n}.
+
+  At the QCD kick (β = 2), E = e^{−170.6} M_P⁴ ≈ 0.3 GeV⁴ was taken from 01's history, with E/V₀ ≈ 10⁴⁶. At the
+  electroweak kick (β ≈ 3, T ≈ 100 GeV, g* ≈ 107, E ≈ ρ_R/(6β² − 1)), the estimate is E ≈ 7×10⁷ GeV⁴ and
+  E/V₀ ≈ 10⁵⁴; this one is not measured.
+
+  | wall | M for k_ex = M_P, QCD | k_ex/M_P at 4×10⁻³¹, QCD | M for k_ex = M_P, EW |
+  |---|---|---|---|
+  | power, n = 1 | ≈ 5×10⁸ | ≈ 10³⁹ | ≈ 10²¹ |
+  | power, n = 2 | ≈ 1×10⁻¹⁴ | ≈ 3×10¹⁶ | ≈ 2×10⁻⁶ |
+  | exponential | ≈ 5×10⁻³⁴ | ≈ 1×10⁻³ | ≈ 1×10⁻²⁹ |
+
+  - So on the estimate, the exponential at laboratory M is about 25 times above M_P at the electroweak kick.
+  - The 10⁻¹⁵ M_P histories at n = 2 should sit near k_ex ≈ 10 M_P at the QCD kick.
+  - These estimates carry O(1) uncertainty from g*, T_kick, β and A(φ). The full Planck mass is √(8π) ≈ 5 times the
+    reduced one.
+  - The map measures all of this at the twenty-five histories (prompt §1.4).
 - **The suites.** Not re-run by the planner. At `3aae9a5` 01's agent measured, in this worktree:
   - CosmologyModels 26, ComputeTargets 705 (219 + 486), ObjectFactories 163, tools 302, RunDrivers 76;
   - only the two worktree failures of note 01 ruling 7 fail.
@@ -132,7 +153,7 @@ crossover's `born.chain`, `walls.Bounce` and `walls.beta_squared` unchanged. The
   1. The Gate, and the five suites on the base: serially, ComputeTargets in its two halves, the `test_[g-z]` half and
      `tools/tests` in the background, waiting for each notification.
   2. The copies, `PowerWall`, the units, and the exponential's reproduction (§1.2).
-  3. The map of the twenty histories (§1.4).
+  3. The map of the twenty-five histories (§1.4).
   4. The validation (§1.3).
   5. S (§1.5), then the stage-2 scan along the curves (§1.6), then the law's residuals and the trial refit (§1.7), then
      the spectrum (§1.8).
@@ -153,7 +174,7 @@ crossover's `born.chain`, `walls.Bounce` and `walls.beta_squared` unchanged. The
 
 ## 1. Before you dispatch
 
-1. **The Gate above**, on the commit that adds this note.
+1. **The Gate above**, on the commit that amends this note (the one after `0c49691`, which added it), or a later one.
 2. **`runregistrykit list`**, and the load average.
 3. **The probe of §0.** Its numbers are the planner's. The dispatching context need not repeat it.
 
@@ -176,8 +197,9 @@ Tell it plainly:
   - the log's path and the message as committed; `git show --stat` of its commit;
   - the suites before and after, with counts, times and `uptime`;
   - the units and their validation; the exponential's reproduction;
-  - the twenty mapped histories (success, candidates, the ranges of x, ln R and ℓ reached, parking), and the path
+  - the twenty-five mapped histories (success, candidates, the ranges of x, ln R and ℓ reached, parking), and the path
     formula's residual;
+  - the Planck-scale table of §1.4, with the planner's estimate beside each first impact;
   - the validation items 1–6, with their tolerances and worst residuals;
   - S_n(x);
   - the stage-2 points along each curve, as tables;
@@ -204,6 +226,11 @@ Tell it plainly:
    - Re-run one change-of-units comparison (§1.2).
    - Compare S_n and ℓ at large x with the planner's tables in §0. They should agree to the probe's precision, or the
      log should say why not.
+   - **The Planck scale.**
+     - At three first impacts (one exponential at β = 3.05, one power wall at each n), recompute
+       `log_k_ex − log(units.PlanckMass)` from the model at the stored φ_t and E, with a scratch script.
+     - Check that the units are the reduced Planck mass's and the frame is stated.
+     - Check that nothing is called a bound or excluded on it.
 4. **The scan.** Re-run one stage-2 point from each curve and one validation point, and match them to the committed
    outputs. Check that every reported point states |ΔE/E| and whether the field came back out.
 5. **The residuals.**
@@ -234,5 +261,7 @@ If it passes, in one commit of the orchestrator's:
   (c) the alternative;
 - **U4:** S_n(x) against the exponential's S(L_E), and whether a per-wall table is needed;
 - **U5:** x_p and κ against 0.62 and `KAPPA`, with x_* and the associated piece carried over as ruled;
+- **the Planck scale:** the §1.4 table against §0's estimates. This is for the user's question of the campaign's scope
+  (which n and M the later prompts and the science run cover). It is not a ruling of U3–U5;
 - that 03 is written only after the user rules U3–U5. If the rulings carry the law and spectrum over unchanged with
   `_drain_L` alone, 03 is dropped and `_drain_L` moves into 04's first commit (README §2).

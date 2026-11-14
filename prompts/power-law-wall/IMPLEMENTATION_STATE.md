@@ -139,3 +139,5 @@ ObjectFactories 163, tools 292, RunDrivers 76. 01 re-measures them at its base.
 - 2026-11-14: R4 (φ ≤ 0 stays a failure) and R5 (n = 1 natural mode at large M fails at G2: noted, no issue, move on)
   ruled by the user (README §6.4).
 - 2026-11-14: prompt 02 and its orchestrator note written; not dispatched.
+- 2026-11-14: prompt 02 and its note amended before dispatch, at the user's request ("Add k_ex/M_P at first impact to
+  prompt 02's map"): ln(k_ex/M_P) at every candidate, and five more mapped histories (§1.4).

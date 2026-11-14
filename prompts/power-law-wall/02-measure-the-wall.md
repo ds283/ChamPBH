@@ -11,6 +11,9 @@ written from:
   the power wall;
 - log 01 §7 (the first-impact ln R of the twelve runs) and the orchestrator's probe of 2026-11-14 (note §0).
 
+**Amended** 2026-11-14, before dispatch, at the user's request ("Add k_ex/M_P at first impact to prompt 02's map"):
+§1.4 records ln(k_ex/M_P) at every candidate and maps five more histories for it.
+
 If an orchestrator note is written for this prompt at dispatch, it governs where it differs from this file.
 
 **Gate:**
@@ -131,14 +134,36 @@ Map with the fixed law, by the tool route, tuned:
 - **Histories.** At n = 1 and 2: laboratory M (4×10⁻³¹ M_P) at β 1.2, 2 and 2.9, and 10⁻³³ and 10⁻¹⁵ M_P at β = 2
   (U7's one-loop histories), each at α = 0.01 and 0.1. That is twenty tuned histories. A history that fails is
   recorded with its reason and not retried.
+- **Histories for the Planck scale only** (added 2026-11-14 at the user's request, "Add k_ex/M_P at first impact to
+  prompt 02's map"). Five more, at laboratory M and α = 0.1, fixed law, tuned:
+  - the exponential (`--model exponential`, n = 1) at β = 2, 2.9 and 3.05;
+  - the power wall at n = 1 and 2, at β = 3.05.
+
+  β = 3.05 lies above the electroweak capture threshold, (3.002, 3.003] (`electroweak-eos` 02), so these histories meet
+  the wall at the electroweak kick; the others meet it at the QCD kick. They give the Planck-scale columns below and
+  the path formula's check. They are not scanned by stage 2 (§1.6) and are not on §1.6's curves. That makes
+  twenty-five histories in the map.
 - **What to record.** For every candidate: N, its kind, ln(E/V₀), ln R, φ_t, ℓ_t and the turnaround's ℓ. ℓ comes from
   `one_loop_turnaround` at the candidate's assessment, computed after the run, since the fixed law does not classify.
   Also each candidate's regime as the one-loop law would classify it (one-loop, gap or classical), and parking.
+- **The Planck scale.** For every candidate, record ln(k_ex/M_P) twice: from `classical_turning_point`'s `log_k_ex`
+  (λ_t√E/2 at φ_t) and from `one_loop_turnaround`'s `log_k_ex` (at φ_ta), where the turnaround exists. M_P is
+  `units.PlanckMass`, the *reduced* Planck mass, so write the quantity as `log_k_ex − log(units.PlanckMass)` and not
+  as `log_k_ex` alone; it then holds in any `UnitsLike`. State the frame: these are the Einstein-frame values the
+  model returns, and the Jordan-frame k differs by A(φ_t) ≈ 1, which you state for the first impact.
+  - **Per history**, a table row: the history, its first impact's N and T_J, ln(E/V₀), both ln(k_ex/M_P) at the first
+    impact, the largest of each over all candidates, and the number of candidates with ln(k_ex/M_P) > 0 (classical
+    value).
+  - **Against the planner's estimate.** On the power wall, k_ex ≈ (n/2)(√E/M)(E/V₀)^{1/n} (§1.1, with s_t → 1); on
+    the exponential, k_ex ≈ (n/2)(√E/M)L^{1+1/n}, with L = ln(1 + E/V₀). Give the estimate beside the measured value
+    at each first impact, and the difference in ln.
+  - **Measured, not judged.** Report the values only. Nothing here is a bound, a stop or an issue, and no history is
+    excluded on it. Note §0 gives the planner's estimates for comparison.
 - **The map script** is `source/wall/path_map.py`, your own. Crossover's `cascade_map.py` is not changed (P5 as
   amended). Like crossover's, it may capture the `IntegrationResult` by wrapping `integrate_scalar_history`
   in-process. It changes no production module.
-- **Check the path formula.** Check §1.1's formula against every mapped candidate, and state the largest residual.
-  01's three first impacts already agree with it (note §0).
+- **Check the path formula.** Check §1.1's formula against every mapped candidate of the power wall, and state the
+  largest residual. 01's three first impacts already agree with it (note §0).
 
 ### 1.5 S on this wall (U4)
 
@@ -198,8 +223,8 @@ one line: the estimate, what 01 or this prompt measured, and where. The threshol
 
 ### 1.10 The documents
 
-- `.documents/power-law-wall-verification.md` §2: the copies and the units (§1.2), the validation (§1.3), the paths,
-  S, the fraction, the law's residuals and the spectrum, measured and not judged.
+- `.documents/power-law-wall-verification.md` §2: the copies and the units (§1.2), the validation (§1.3), the paths
+  and the Planck-scale table (§1.4), S, the fraction, the law's residuals and the spectrum, measured and not judged.
 - `.documents/power-law-wall/wall-02/`: the map's and the scans' outputs, as text. Figures go under
   `source/wall/fig/` as PNG, if you make any: at most one figure of f against the law along each curve.
 - `source/wall/README.md`: the files, how to run each (from that directory, or from the repository root for
@@ -208,6 +233,7 @@ one line: the estimate, what 01 or this prompt measured, and where. The threshol
   - for U3, the residuals of (i)–(v);
   - for U4, S_n(x) and how it differs from the exponential's S(L_E);
   - for U5, x_p and κ against the exponential's.
+  - beside them, not for U3–U5: the Planck-scale table of §1.4, for the user.
 
   State the options and the evidence for each. **The user rules**; nothing here is a recommendation that the prompt
   acts on.
