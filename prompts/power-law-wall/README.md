@@ -106,7 +106,7 @@ In the user's notation the potential is V₀ + Λ^{4+n}/φⁿ, with Λ^{4+n} = V
 
 | # | Prompt | Covers | Model |
 |---|---|---|---|
-| 01 | `01-the-model.md` | `InversePowerModel` (hooks in log space, floor, `reflects_at_origin`, `renormalize`, the analytic seed at any n; no `_drain_L`); `_PowerLawWall`'s tests run against it; `--model` on `tools/history_and_bbn.py`, `tools/surfing_scan.py` and the crossover `cascade_map.py`; natural mode and the fixed law by the tool route; tests | Opus |
+| 01 | `01-the-model.md` | `InversePowerModel` (hooks in log space, floor, `reflects_at_origin`, `renormalize`, the analytic seed at any n; no `_drain_L`); `_PowerLawWall`'s tests run against it; `--model` and `--n` on `tools/history_and_bbn.py` and `tools/surfing_scan.py` (P5 as amended); natural mode and the fixed law by the tool route; tests | Opus |
 | 02 | `02-measure-the-wall.md` | in `source/wall/`: `walls.PowerWall`; S at n = 1, 2; stage 2 along the power-law cascades' (L, ln R) paths (mapped with the fixed law); the adopted law at candidate L against it; the test field's spectrum (x_p, κ); the planner's estimates of §0.3 checked. Research; no production change. Then U3–U5 | Opus |
 | 03 | `03-the-law-on-this-wall.md` | as U3–U5 rule: `_drain_L`; a new `drain_model` value if the law is refitted, with its constants and S table; the spectrum's constants by wall in `quanta_spectrum.py` and `SPECTRUM_MODEL`; the exponential law bitwise | Opus |
 | 04 | `04-measure-a-sample.md` | about forty power-law histories, re-tuned, by the tool route under both laws (§6.3 P9); the thresholds and surfing thresholds; the comparison with the same (M, β) on the exponential. Then the user rules any threshold that does not hold | Opus |
