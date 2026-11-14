@@ -1,0 +1,83 @@
+What moved between 2026.10.0 and 2026.11.0, the main store, joined on (M, beta, row)
+  histories: 2026.10.0 4758, 2026.11.0 4818, ok in both 4452
+
+Status changed (either run failed, and not the same way):
+  C M=1e-15 beta=1.1 A=1: failed: the normalization did -> ok
+  C M=1e-15 beta=1.2 A=1: failed: the normalization did -> ok
+  C M=1e-15 beta=1.4 A=1: ok -> failed: the normalization did
+  C M=1e-12 beta=1 alpha=0.01: ok -> failed: the normalization did
+  60 histories new in 2026.11.0 (ok): beta 2.95, 2.955, 2.965, 2.97, 2.975
+
+Delivery class changed (T_deliver across 0.01 GeV or 10 GeV):
+  A beta=1.0675: QCD -> not at the wall, 12 histories (M 4e-31; rows A=0.05, A=0.1, A=0.2, A=0.5, A=1, A=1.5, A=10, A=2, A=3, A=5, alpha=0.01, alpha=0.1); T_deliver 0.01013-0.01013 -> 0.009882-0.009882 GeV
+  A beta=2.985: QCD -> EW, 12 histories (M 4e-31; rows A=0.05, A=0.1, A=0.2, A=0.5, A=1, A=1.5, A=10, A=2, A=3, A=5, alpha=0.01, alpha=0.1); T_deliver 1.934-1.934 -> 20.65-20.65 GeV
+  A beta=2.99: QCD -> EW, 12 histories (M 4e-31; rows A=0.05, A=0.1, A=0.2, A=0.5, A=1, A=1.5, A=10, A=2, A=3, A=5, alpha=0.01, alpha=0.1); T_deliver 1.829-1.829 -> 35.19-35.19 GeV
+  A beta=2.995: QCD -> EW, 12 histories (M 4e-31; rows A=0.05, A=0.1, A=0.2, A=0.5, A=1, A=1.5, A=10, A=2, A=3, A=5, alpha=0.01, alpha=0.1); T_deliver 1.689-1.689 -> 43.16-43.16 GeV
+  A beta=3: QCD -> EW, 12 histories (M 4e-31; rows A=0.05, A=0.1, A=0.2, A=0.5, A=1, A=1.5, A=10, A=2, A=3, A=5, alpha=0.01, alpha=0.1); T_deliver 1.68-1.68 -> 48.49-48.49 GeV
+  B beta=3: QCD -> EW, 72 histories (M 1e-30, 1e-32, 1e-33, 1e-36, 1e-40, 1e-42; rows A=0.05, A=0.1, A=0.2, A=0.5, A=1, A=1.5, A=10, A=2, A=3, A=5, alpha=0.01, alpha=0.1); T_deliver 1.68-1.68 -> 48.49-48.49 GeV
+  C beta=1: not at the wall -> none, 1 histories (M 1e-12; rows alpha=0.01); T_deliver 2.45e-09-2.45e-09 -> nan-nan GeV
+  C beta=1.1: none -> QCD, 1 histories (M 1e-15; rows A=1); T_deliver nan-nan -> 0.1434-0.1434 GeV
+  C beta=1.2: none -> QCD, 1 histories (M 1e-15; rows A=1); T_deliver nan-nan -> 0.2311-0.2311 GeV
+  C beta=1.4: QCD -> none, 1 histories (M 1e-15; rows A=1); T_deliver 0.3077-0.3077 -> nan-nan GeV
+  C beta=3: QCD -> EW, 6 histories (M 1e-12, 1e-15; rows A=1, alpha=0.01, alpha=0.1); T_deliver 1.68-1.68 -> 48.49-48.49 GeV
+  D beta=3: QCD -> EW, 3 histories (M 0.5, 0.1, 0.001; rows alpha=0); T_deliver 1.68-1.683 -> 48.49-48.49 GeV
+
+At the edge (beta 2.95-3.04), ok in both runs:
+  observable: largest |new - old| / median, by block (relative where marked)
+  T_deliver_GeV (rel): A 27.9/0.259 (n=168; largest at M=4e-31 beta=3 alpha=0.01); B 27.9/27.9 (n=72; largest at M=1e-42 beta=3 alpha=0.01); C 27.9/27.9 (n=6; largest at M=1e-15 beta=3 alpha=0.01); D 27.9/13.9 (n=6; largest at M=0.001 beta=3 alpha=0)
+  delta_Yp (pp): A 0.261/0.028 (n=168; largest at M=4e-31 beta=2.985 A=10); B 0.112/0.0583 (n=72; largest at M=1e-30 beta=3 A=2); C 0.14/0.0551 (n=6; largest at M=1e-15 beta=3 A=1); D 0.061/0.0115 (n=6; largest at M=0.001 beta=2.95 alpha=0)
+  delta_D_over_H (pp): A 0.656/0.0594 (n=168; largest at M=4e-31 beta=2.985 A=10); B 0.353/0.162 (n=72; largest at M=1e-33 beta=3 A=0.1); C 0.271/0.101 (n=6; largest at M=1e-15 beta=3 A=1); D 0.607/0.113 (n=6; largest at M=0.001 beta=2.95 alpha=0)
+  Delta_N_eff_today (abs): A 0.0488/0.00346 (n=168; largest at M=4e-31 beta=2.985 A=10); B 0.0207/0.00958 (n=72; largest at M=1e-36 beta=3 A=3); C 0.031/0.00765 (n=6; largest at M=1e-15 beta=3 A=1); D 0/0 (n=6; largest at M=0.001 beta=2.95 alpha=0)
+  Delta_N_eff_today (rel): A 2.41/0.314 (n=168; largest at M=4e-31 beta=3.005 A=10); B 0.521/0.369 (n=72; largest at M=1e-42 beta=3 A=3); C 4.3/0.445 (n=6; largest at M=1e-15 beta=3 A=1); D -
+  Delta_N_eff_1MeV (rel): A 2.41/0.311 (n=168; largest at M=4e-31 beta=3.005 A=10); B 0.521/0.369 (n=72; largest at M=1e-42 beta=3 A=3); C 2.75e+06/0.445 (n=6; largest at M=1e-12 beta=3 A=1); D -
+  parking_T_GeV (rel): A 124/0.86 (n=168; largest at M=4e-31 beta=2.995 A=0.1); B 97.1/2.38 (n=72; largest at M=1e-33 beta=3 A=0.2); C 579/2.52 (n=6; largest at M=1e-15 beta=3 A=1); D -
+  log_R_first_impact (abs): A 14.9/1.23 (n=168; largest at M=4e-31 beta=3 alpha=0.01); B 14.9/14.9 (n=72; largest at M=1e-32 beta=3 A=5); C 14.9/14.9 (n=6; largest at M=1e-15 beta=3 alpha=0.01); D -
+  reflections (abs): A 133/6 (n=168; largest at M=4e-31 beta=3.035 A=0.05); B 121/12.5 (n=72; largest at M=1e-36 beta=3 A=0.1); C 201/85 (n=6; largest at M=1e-15 beta=3 A=1); D 0/0 (n=6; largest at M=0.001 beta=2.95 alpha=0)
+  tuning_iterations (abs): A 3/0 (n=168; largest at M=4e-31 beta=3.035 A=1); B 3/0 (n=72; largest at M=1e-32 beta=3 A=5); C 0/0 (n=6; largest at M=1e-15 beta=3 alpha=0.01); D 0/0 (n=6; largest at M=0.001 beta=2.95 alpha=0)
+
+Away from the edge, ok in both runs:
+  observable: largest |new - old| / median, by block (relative where marked)
+  T_deliver_GeV (rel): A 0.613/6.77e-05 (n=2025; largest at M=4e-31 beta=20 alpha=0.01); B 0.613/5.99e-05 (n=1857; largest at M=1e-42 beta=20 alpha=0.01); C 0.613/5.99e-05 (n=150; largest at M=1e-12 beta=20 alpha=0.01); D 0.613/7.49e-05 (n=168; largest at M=0.1 beta=20 alpha=0)
+  delta_Yp (pp): A 0.234/0.00446 (n=2025; largest at M=4e-31 beta=1.0675 A=1); B 0.215/0.00354 (n=1857; largest at M=1e-36 beta=1 A=0.5); C 0.214/0.0057 (n=150; largest at M=1e-15 beta=1 alpha=0.1); D 0.235/0.0046 (n=168; largest at M=0.5 beta=1 alpha=0)
+  delta_D_over_H (pp): A 2.85/0.00824 (n=2025; largest at M=4e-31 beta=1 A=0.5); B 2.88/0.00713 (n=1857; largest at M=1e-42 beta=1 A=0.2); C 2.84/0.0108 (n=150; largest at M=1e-12 beta=1 alpha=0.1); D 4.15/0.0121 (n=168; largest at M=0.5 beta=0.9 alpha=0)
+  Delta_N_eff_today (abs): A 0.00277/9.54e-06 (n=2025; largest at M=4e-31 beta=1 A=5); B 0.00277/9.18e-06 (n=1857; largest at M=1e-30 beta=1 A=5); C 0.00273/4.45e-06 (n=150; largest at M=1e-15 beta=1 alpha=0.1); D 0/0 (n=168; largest at M=0.001 beta=1 alpha=0)
+  Delta_N_eff_today (rel): A 1.23/0.000202 (n=2025; largest at M=4e-31 beta=1.0625 A=0.05); B 0.447/0.000246 (n=1857; largest at M=1e-36 beta=20 A=5); C 93.1/0.00174 (n=150; largest at M=1e-12 beta=2.8 A=1); D -
+  Delta_N_eff_1MeV (rel): A 0.442/0.000127 (n=1992; largest at M=4e-31 beta=20 A=3); B 0.447/0.00015 (n=1800; largest at M=1e-36 beta=20 A=5); C 9.06e+03/0.000889 (n=146; largest at M=1e-12 beta=3.5 A=1); D -
+  parking_T_GeV (rel): A 7.78e+03/0.00408 (n=2025; largest at M=4e-31 beta=1.065 alpha=0.01); B 1.1e+03/0.00721 (n=1857; largest at M=1e-30 beta=2.7 A=0.05); C 1.01e+05/0.0456 (n=143; largest at M=1e-12 beta=2.8 A=1); D -
+  log_R_first_impact (abs): A 4.03/0.00135 (n=2025; largest at M=4e-31 beta=20 alpha=0.01); B 4.03/0.00139 (n=1857; largest at M=1e-36 beta=20 A=1); C 4.03/0.00139 (n=150; largest at M=1e-15 beta=20 alpha=0.01); D -
+  reflections (abs): A 169/0 (n=2025; largest at M=4e-31 beta=3.5 A=0.05); B 183/0 (n=1857; largest at M=1e-40 beta=3.5 A=0.05); C 1.05e+04/1 (n=150; largest at M=1e-12 beta=2.8 A=1); D 0/0 (n=168; largest at M=0.001 beta=1 alpha=0)
+  tuning_iterations (abs): A 3/0 (n=2025; largest at M=4e-31 beta=3.25 alpha=0.1); B 3/0 (n=1857; largest at M=1e-40 beta=10 A=0.1); C 19/0 (n=150; largest at M=1e-12 beta=1.1 A=1); D 2/0 (n=168; largest at M=0.001 beta=1.13 alpha=0)
+
+Figure 6's tests (|dY_p| > 2.449 pp, |d(D/H)| > 2.374 pp, Delta N_eff today > 0.30), ok in both runs:
+  A: 803 excluded in 2026.10.0, 810 in 2026.11.0; 10 become excluded, 3 cease to be
+      M=4e-31 beta=1.0625 alpha=0.01: dY_p 0.332 -> 0.270, d(D/H) 2.086 -> 3.598, DNeff 0.000335 -> 0.000652
+      M=4e-31 beta=1.08 alpha=0.01: dY_p 2.403 -> 2.507, d(D/H) 0.010 -> -0.091, DNeff 0.00179 -> 0.00162
+      M=4e-31 beta=1.0625 A=0.05: dY_p 0.305 -> 0.242, d(D/H) 2.242 -> 3.714, DNeff 0.000264 -> 0.000589
+      M=4e-31 beta=1.0625 A=0.1: dY_p 0.322 -> 0.261, d(D/H) 2.007 -> 3.536, DNeff 0.000366 -> 0.00068
+      M=4e-31 beta=1.08 A=0.1: dY_p 2.421 -> 2.521, d(D/H) -0.014 -> -0.054, DNeff 0.00174 -> 0.00157
+      M=4e-31 beta=1.0625 A=0.2: dY_p 0.347 -> 0.309, d(D/H) 1.515 -> 3.160, DNeff 0.000583 -> 0.000863
+      M=4e-31 beta=1.0675 A=0.5: dY_p 2.500 -> 2.281, d(D/H) 0.381 -> 1.808, DNeff 0.00322 -> 0.00355
+      M=4e-31 beta=1.0825 A=0.5: dY_p 0.515 -> 0.494, d(D/H) 2.222 -> 2.529, DNeff 0.00624 -> 0.00627
+      M=4e-31 beta=1.085 A=0.5: dY_p 0.299 -> 0.292, d(D/H) 2.213 -> 2.422, DNeff 0.00755 -> 0.00751
+      M=4e-31 beta=1.1375 A=0.5: dY_p 0.051 -> 0.017, d(D/H) 2.396 -> 2.317, DNeff 0.0313 -> 0.0313
+      M=4e-31 beta=1.23 A=1.5: dY_p 0.853 -> 0.864, d(D/H) 2.339 -> 2.380, DNeff 0.0766 -> 0.0766
+      M=4e-31 beta=1.0675 A=3: dY_p 1.496 -> 1.364, d(D/H) 2.537 -> 1.988, DNeff 0.0144 -> 0.0138
+      M=4e-31 beta=1.12 A=3: dY_p 0.764 -> 0.785, d(D/H) 2.367 -> 2.381, DNeff 0.187 -> 0.187
+  B: 437 excluded in 2026.10.0, 436 in 2026.11.0; 0 become excluded, 1 cease to be
+      M=1e-32 beta=1.25 A=2: dY_p 0.916 -> 0.915, d(D/H) 2.380 -> 2.374, DNeff 0.0903 -> 0.0903
+  C: 32 excluded in 2026.10.0, 32 in 2026.11.0; 0 become excluded, 0 cease to be
+  D: 170 excluded in 2026.10.0, 170 in 2026.11.0; 0 become excluded, 0 cease to be
+
+This run against electroweak-eos 02's new side, its 48 histories (47 matched; the rest are not at an M of the main store):
+  T_deliver_GeV: identical in 47 of 47; largest relative difference 0
+  Yp_BBN: identical in 47 of 47; largest relative difference 0
+  D_over_H: identical in 47 of 47; largest relative difference 0
+  delta_Yp: identical in 47 of 47; largest relative difference 0
+  delta_D_over_H: identical in 47 of 47; largest relative difference 0
+  Delta_N_eff_today: identical in 47 of 47; largest relative difference 0
+  Delta_N_eff_1MeV: identical in 47 of 47; largest relative difference 0
+  parking_T_GeV: identical in 47 of 47; largest relative difference 0
+  log_R_first_impact: identical in 47 of 47; largest relative difference 0
+  reflections: identical in 47 of 47; largest relative difference 0
+  tuning_iterations: identical in 47 of 47; largest relative difference 0
+

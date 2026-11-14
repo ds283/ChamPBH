@@ -1,0 +1,87 @@
+{
+  "script": "changes.py",
+  "script_sha256": "9a2299b362b68ee1cd352189c6e310fce70bd81b2df6d637ea8b671e389880d3",
+  "git_head": "b1804b3f8117eed8d78805f22038a6cd0b2e83ac",
+  "git_dirty": false,
+  "inputs": {
+    "new": {
+      "path": "../fig6/inputs/histories.csv",
+      "sha256": "fb6a8dbb41fa7bbd7a0dd6b6076e25c3f9623dec9328b3e07b41b5e4fdb04253"
+    },
+    "old": {
+      "path": "../../2026-11-08-science-2026.10.0/fig6/inputs/histories.csv",
+      "sha256": "196f720b37f48bfa619dba90d774a803649c46b7c164f9990b9aa9e34891588e"
+    },
+    "effect": {
+      "path": "../../../.documents/electroweak-eos/effect/out/effect.csv",
+      "sha256": "e9fe4b7f5405dbecf550f0373caa88fff461382c41b2e3053414f67795819e63"
+    }
+  },
+  "histories_ok_in_both": 4452,
+  "status_changed": 4,
+  "delivery_class_changed": 145,
+  "figure6_tests_flips": {
+    "A": {
+      "become_excluded": 10,
+      "cease_to_be": 3
+    },
+    "B": {
+      "become_excluded": 0,
+      "cease_to_be": 1
+    },
+    "C": {
+      "become_excluded": 0,
+      "cease_to_be": 0
+    },
+    "D": {
+      "become_excluded": 0,
+      "cease_to_be": 0
+    }
+  },
+  "beside_electroweak_eos": {
+    "T_deliver_GeV": {
+      "identical": 47,
+      "max_rel": 0.0
+    },
+    "Yp_BBN": {
+      "identical": 47,
+      "max_rel": 0.0
+    },
+    "D_over_H": {
+      "identical": 47,
+      "max_rel": 0.0
+    },
+    "delta_Yp": {
+      "identical": 47,
+      "max_rel": 0.0
+    },
+    "delta_D_over_H": {
+      "identical": 47,
+      "max_rel": 0.0
+    },
+    "Delta_N_eff_today": {
+      "identical": 47,
+      "max_rel": 0.0
+    },
+    "Delta_N_eff_1MeV": {
+      "identical": 47,
+      "max_rel": 0.0
+    },
+    "parking_T_GeV": {
+      "identical": 47,
+      "max_rel": 0.0
+    },
+    "log_R_first_impact": {
+      "identical": 47,
+      "max_rel": 0.0
+    },
+    "reflections": {
+      "identical": 47,
+      "max_rel": 0.0
+    },
+    "tuning_iterations": {
+      "identical": 47,
+      "max_rel": 0.0
+    }
+  }
+}
