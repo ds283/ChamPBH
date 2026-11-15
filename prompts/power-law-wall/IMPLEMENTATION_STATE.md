@@ -1,6 +1,6 @@
 # power-law-wall campaign — implementation state
 
-**Last updated:** 2026-11-15 · **Status: LIVE — 2 of 8 prompts landed and reviewed (01, the gate Model holds; 02, the gate Wall holds); R4–R5 ruled on 01's measurements (README §6.4); U3–U5 wait for the user, on 02's hand-back; R1–R3 and U1–U7 ruled (README §6).**
+**Last updated:** 2026-11-15 · **Status: LIVE — 2 of 8 prompts landed and reviewed (01, the gate Model holds; 02, the gate Wall holds); R4–R5 ruled on 01's measurements (README §6.4); R6 (U4, S = S_n constant) ruled on 02's (README §6.5); U3 and U5 wait for the user; R1–R3 and U1–U7 ruled (README §6).**
 
 The campaign adds the inverse-power-law model V = V₀[1 + (M/φ)ⁿ] beside the exponential, defines the one-loop drain
 law on its wall from measurements, and takes it through the store, the drivers and a rehearsal, so that a science run
@@ -225,3 +225,5 @@ ObjectFactories 163, tools 292, RunDrivers 76. 01 re-measures them at its base.
   hand-back (verification §2.10).
 - 2026-11-15: prompt 02 reviewed by the orchestrator (this board, "Orchestrator review of prompt 02"); all six checks
   pass. U3–U5 go to the user; 03 is not written.
+- 2026-11-15: R6 (U4) ruled by the user: S is the constant S_n on this wall (README §6.5). U3 and U5 still wait; 03 is
+  not written.

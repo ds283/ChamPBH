@@ -254,6 +254,16 @@ On prompt 01's two measurements (log 01 §3.6 and §7; board, "Orchestrator revi
   measurement, with no issue opened and no fix planned. The planner reads it as also covering 04: its natural-mode rows at large M (U7) record the same
   failure where it recurs, and do not stop on it.
 
+### 6.5 Ruled by the user after 02, 2026-11-15, in their words
+
+On prompt 02's measurements (verification §2.10; board, "Orchestrator review of prompt 02"):
+- **R6 (U4), S on this wall.** Asked whether to take S₁ and S₂ as constants, the user ruled: "yes, just use the
+  constants". On the power wall the law's classical branch is f = R·S_n, with S₁ = 1.02620×10⁻² and
+  S₂ = 5.21615×10⁻³ (stage 1a, `.documents/power-law-wall/wall-02/stage1a_S_n.txt`), constant in x; this replaces the
+  exponential's S(L) table on this wall only. The exponential's classical branch is unchanged.
+
+U3 (the law) and U5 (the spectrum) are not yet ruled.
+
 ## 7. What this campaign hands to the user
 
 - A tree that builds, stores, exports and plots the power-law model under both drain laws at any n, beside an
