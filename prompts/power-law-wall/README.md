@@ -109,10 +109,10 @@ In the user's notation the potential is V₀ + Λ^{4+n}/φⁿ, with Λ^{4+n} = V
 |---|---|---|---|
 | 01 | `01-the-model.md` | `InversePowerModel` (hooks in log space, floor, `reflects_at_origin`, `renormalize`, the analytic seed at any n; no `_drain_L`); `_PowerLawWall`'s tests run against it; `--model` and `--n` on `tools/history_and_bbn.py` and `tools/surfing_scan.py` (P5 as amended); natural mode and the fixed law by the tool route; tests | Opus |
 | 02 | `02-measure-the-wall.md` | in `source/wall/`: `walls.PowerWall`; S at n = 1, 2; stage 2 along the power-law cascades' (L, ln R) paths (mapped with the fixed law); the adopted law at candidate L against it; the test field's spectrum (x_p, κ); the planner's estimates of §0.3 checked. Research; no production change. Then U3–U5 | Opus |
-| 03 | `03-the-law-on-this-wall.md` | as U3–U5 rule: `_drain_L`; a new `drain_model` value if the law is refitted, with its constants and S table; the spectrum's constants by wall in `quanta_spectrum.py` and `SPECTRUM_MODEL`; the exponential law bitwise | Opus |
+| 03 | `03-the-law-on-this-wall.md` | as U3–U5 rule: `_drain_L`; a new `drain_model` value if the law is refitted, with its constants and S table; the spectrum's constants by wall in `quanta_spectrum.py` and `SPECTRUM_MODEL`; the exponential law bitwise. *(As written 2026-11-15 on R6–R8, P15–P23: the fit f_n(ln R) and S_n in `InversePowerModel` under `one-loop-measured-pl-v1`, no `_drain_L`; the model's own fraction and one-loop drain model as hooks; the spectrum as measured tables on three walls, the exponential's included.)* | Opus |
 | 04 | `04-measure-a-sample.md` | about forty power-law histories, re-tuned, by the tool route under both laws (§6.3 P9); the thresholds and surfing thresholds; the comparison with the same (M, β) on the exponential. Then the user rules any threshold that does not hold | Opus |
 | 05 | `05-the-store.md` | model type id 2, its table and factory keyed (M, n, β), the registry, sharding, the `types` maps, `FINGERPRINT_FORMAT` 8 and `VERSION_LABEL` (U6), `compare_stores`, `inventory_report`, `bbn_from_store`, `outward_step_scan`; tests in a temporary store | Opus |
-| 06 | `06-drivers-and-exports.md` | `main.py`'s model option and its config file; `plot_inputs`, `plot_by_beta`, `plot_ScalarHistory`, `extract_common`, `pipeline_selection` through the model interface; the model in `histories.csv` and in the export paths (P11); the exponential exports byte-identical | Sonnet |
+| 06 | `06-drivers-and-exports.md` | `main.py`'s model option and its config file; `plot_inputs`, `plot_by_beta`, `plot_ScalarHistory`, `extract_common`, `pipeline_selection` through the model interface; the model in `histories.csv` and in the export paths (P11); the exponential exports byte-identical. *(Added 2026-11-15, P17, P19: the one-loop drain model taken from the model, where they name `DRAIN_MODEL_ONE_LOOP`; the quanta tools' spectrum wall taken from the export's model column.)* | Sonnet |
 | 07 | `07-rehearse.md` | registered builds on the isolated cluster: the exponential at base and tip, bitwise; the power law at n = 1, 2 under both laws, interrupted and resumed, by value and against 04 | Opus |
 | 08 | `08-close.md` | `.documents/power-law-wall-verification.md`, `architecture-summary.md`, `numerical-strategies.md`, `CLAUDE.md`, the handover for the science run (its grid's inputs from 04), the issues and the indexes | Opus |
 
@@ -146,7 +146,12 @@ ruling. 06 needs only 05's schema; 08 needs 07's stores.
 
 - **01 → 02, 04.** The model and the tool route; 02 maps the cascades with the fixed law, which needs no `_drain_L`.
 - **02 → the user → 03.** The measurements and the residuals; the user rules the law (U3), S (U4) and the spectrum (U5).
-- **03 → 04.** The one-loop law on this wall.
+- **03 → 04.** The one-loop law on this wall: f_n(ln R) and R·S_n under `one-loop-measured-pl-v1`, through the model's
+  hooks (P15–P16), and the spectrum per wall (R8).
+- **03 → 05, 06** *(added 2026-11-15)*. The model names its one-loop drain model (P16). 05 keys and checks a stored
+  history's `drain_model` against it, and its store tools (`bbn_from_store`, …) select by it; 06 does the same in
+  `main.py`, `plot_inputs.py`, the plot scripts and `config/argument_parser.py`, which name `DRAIN_MODEL_ONE_LOOP` today
+  (P17), and has the quanta tools take the spectrum's wall from the export's model column (P19).
 - **04 → the user → 05.** The sample; the user rules any threshold that does not hold on this wall.
 - **05 → 06 → 07.** The schema, the drivers, the rehearsal stores.
 - **08 → the science run.** The handover: what a power-law run of record needs, the grid's inputs from 04, the
@@ -305,6 +310,42 @@ On prompt 02's measurements (verification §2.10; board, "Orchestrator review of
   do not change, so its row there is not amended.
 
 U3, U4 and U5 are all ruled; 03 is written from R6–R8.
+
+### 6.6 Proposed by the planner with prompt 03, 2026-11-15
+
+**P15–P23** stand unless the user rules otherwise. **U8 and U9 are the user's to rule before 03 is dispatched.**
+- **P15 — the law's home.** The power wall's constants (f_n's and S_n) and its fraction are in `InversePowerModel`, each
+  constant with its source. `ScalarHistory.py` gains no power-law expression (§5); `drain_fraction`, its constants and the
+  S table stay the exponential family's law (the "L law"), unchanged.
+- **P16 — the hooks.** `AbstractModel` gains, with no generic default, the model's own fraction and the model's one-loop
+  drain model. A model defines exactly one of `_drain_L` and its own fraction. `ExponentialModel` keeps `_drain_L` and
+  names `one-loop-measured-v1`; `InversePowerModel` defines its own fraction and names `one-loop-measured-pl-v1` at
+  n = 1 and 2, and its one-loop law is refused at entry at any other n (R7). This replaces P4's "03 defines `_drain_L`":
+  the power wall has no L.
+- **P17 — the drain models.** `one-loop-measured-pl-v1` joins `DRAIN_MODELS` after the two there, with the one-loop law.
+  `model_of_law` is written out and still returns `one-loop-measured-v1`. The call sites that name
+  `DRAIN_MODEL_ONE_LOOP` (`main.py`, `plot_inputs.py`, the plot scripts, `config/argument_parser.py`, `bbn_from_store`)
+  are 05's and 06's to make model-aware (§4).
+- **P18 — the fit.** f_n(ln R) as the user was shown it (orchestrator note 03 §0): y = −ln(1 − f), a rising branch
+  G (ln R − R₀)^P and a falling branch A/(ln R − c), switched where they cross; R·S_n at ln R ≤ 0; 0 unassessed. Fitted
+  by 03 in `source/wall/fit_fn.py` on 02's points, whose reference implementation shares production's literals.
+- **P19 — the spectrum by wall.** `quanta_spectrum.spectrum(wall, assoc_scale)` with the wall required (no default): the
+  exponential (its table serving the exponential family at every n, as today) and the power wall at n = 1, 2. The tables
+  are literals in the module. `SPECTRUM_MODEL` changes and every output names the wall's spectrum. The quanta tools pass
+  the exponential's wall until 06 takes it from the export's model column.
+- **P20 — the kernels.** Moments and kernels by quadrature on the new shape, every asymptote re-derived, each kernel
+  within 10⁻⁷ relative of its quadrature reference, as one-loop-drain 05 required.
+- **P21 — the exponential's reference.** Its table is taken at L = 90 (`KAPPA_FIT_L` today), on `WallN(90, 1)` with
+  k_ex exact; its shape over L = 40–134 is measured and reported.
+- **P22 — the tests that move.** Only assertions of the three quanta test modules are re-pinned, each listed with its old
+  and new value; no test that pins an exponential history, golden or fingerprint is edited.
+- **P23 — the tool route.** 03 runs the one-loop law at laboratory M, β = 2, A = 1 on n = 1, n = 2 and the exponential;
+  the exponential's output is identical to the base's.
+
+| | Proposed | Alternatives |
+|---|---|---|
+| **U8** — the spectrum's scale on the power wall near the floor | **(a) one table per wall in x = k/k_ex, at the scale-free reference (E/V₀ → ∞)**, as R8 reads literally and as the exponential does today at one L. On this wall the bounce in k/ω_t is the same at every E/V₀; only k_ex/ω_t = (s_t/2)√(n/(n + 1)), s_t = E/(V₀ + E), moves with the floor, so the table's x is off by the factor s_t: x_p is 0.466 at s_t = 1, 0.533 at E/V₀ = 6.9 and 0.966 at 0.93 (n = 1; 02's `spectrum.txt`). The first, energetic bounces have s_t = 1; the floor matters in the late cascade only. 03 measures the error in x over E/V₀ and 04 the share of K from generations with E/V₀ < 100 | **(b) the table in k/ω_t**, and each classical or gap generation's scale converted by its own k_ex/ω_t, from a model hook evaluated at the generation's ln E and the history's normalization (one-loop generations keep the turnaround's k_ex, as U16 ruled). Exact for the classical spectrum on this wall; it puts a model hook into the post-processing, which then needs the model (06's model column) for the power wall, and changes the exponential's generations too, where k_ex/ω_t moves with L (0.4945 at L = 90, ½ as L → ∞) |
+| **U9** — the associated piece on the new shape | **1/x up to the table's x_p, then the direct piece's own fall**, s_assoc = (C₁/x)·s_dir(x)/s_dir(x_p), which is U17's form exactly when s_dir is U4's; **C₁ = 49 x_* s_dir(x_*)**, so that s(x_*) = 50 s_dir(x_*) at c_a = 1 as U4 put it (49 x_*³ when s_dir = x² there); **x_* = 0.0058 in x on every wall**, the module's constant, flagged as unmeasured on the power wall | above x_p, the tail exponential's κ_hi from x_p (U17's form with κ replaced); C₁ = 49 x_*³ kept as a number; x_* carried in k/ω_t (0.0029 ω_t, the 2PI run's probe), which gives x_* = 0.0082 (n = 1) and 0.0071 (n = 2) on the power wall |
 
 ## 7. What this campaign hands to the user
 

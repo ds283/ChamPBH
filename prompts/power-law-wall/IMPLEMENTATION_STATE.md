@@ -1,6 +1,6 @@
 # power-law-wall campaign — implementation state
 
-**Last updated:** 2026-11-15 · **Status: LIVE — 2 of 8 prompts landed and reviewed (01, the gate Model holds; 02, the gate Wall holds); R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); 03 not written; R1–R3 and U1–U7 ruled (README §6).**
+**Last updated:** 2026-11-15 · **Status: LIVE — 2 of 8 prompts landed and reviewed (01, the gate Model holds; 02, the gate Wall holds); R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); 03 written, held for U8–U9 (README §6.6); R1–R3 and U1–U7 ruled (README §6).**
 
 The campaign adds the inverse-power-law model V = V₀[1 + (M/φ)ⁿ] beside the exponential, defines the one-loop drain
 law on its wall from measurements, and takes it through the store, the drivers and a rehearsal, so that a science run
@@ -23,7 +23,7 @@ at n = 1 and 2 can follow, under the one-loop law with the fixed α beside it.
 |---|---|---|---|---|---|---|---|
 | 01 | The model | `InversePowerModel`, the seed at any n, the tool route's `--model` and `--n`; natural mode at large M measured | Opus | ✍️ | ✅ | `3aae9a5` | [`logs/01-the-model.md`](logs/01-the-model.md) |
 | 02 | Measure the wall | S, the one-loop fraction and the spectrum on the power wall (research, `source/wall/`); then U3–U5 | Opus | ✍️ | ✅ | `693784b` | [`logs/02-measure-the-wall.md`](logs/02-measure-the-wall.md) |
-| 03 | The law on this wall | `_drain_L`, the law and the spectrum as U3–U5 rule | Opus | ⬜ | ⬜ | — | — |
+| 03 | The law on this wall | f_n(ln R) and S_n in `InversePowerModel` under `one-loop-measured-pl-v1`; the spectrum as tables on three walls (R6–R8) | Opus | ✍️ ⏸ U8, U9 | ⬜ | — | — |
 | 04 | Measure a sample | about forty histories under both laws; the thresholds | Opus | ⬜ | ⬜ | — | — |
 | 05 | The store | type id 2, its table, the registry, `FINGERPRINT_FORMAT` 8, the label (U6) | Opus | ⬜ | ⬜ | — | — |
 | 06 | Drivers and exports | the model option, the plot scripts, the export layout (P11) | Sonnet | ⬜ | ⬜ | — | — |
@@ -35,7 +35,9 @@ at n = 1 and 2 can follow, under the one-loop law with the fixed α beside it.
 Prompts are written one at a time, each after the previous one lands and is reviewed. Orchestrator notes, one prompt at
 a time, in `orchestrator/`: [`prompt-01.md`](orchestrator/prompt-01.md), written 2026-11-13 with prompt 01, used for
 01 (dispatched 2026-11-14 at `75ac6fb`); [`prompt-02.md`](orchestrator/prompt-02.md), written 2026-11-14 with prompt 02, used for
-02 (dispatched 2026-11-14 at `35f6359`). Its §0 holds the planner's probe: the path formula, the power wall's scale invariance above V₀, and the
+02 (dispatched 2026-11-14 at `35f6359`); [`prompt-03.md`](orchestrator/prompt-03.md), written 2026-11-15 with prompt 03,
+not yet used: it waits for U8 and U9 (README §6.6), and its §0 holds the f_n(ln R) fit the user ruled R7 on and the
+spectrum probes R8 was ruled on. Note 02's §0 holds the planner's probe: the path formula, the power wall's scale invariance above V₀, and the
 crossover scripts' absolute tolerances failing at large E/V₀.
 
 **Planner's probe for 01 (2026-11-13, at `c540caa`, not committed).** A scratch power-law model through
@@ -233,3 +235,6 @@ ObjectFactories 163, tools 292, RunDrivers 76. 01 re-measures them at its base.
   it and an exponential above it, on every wall, the exponential's included (README §6.5). This amends README §5's
   rule "The exponential does not move", P2 and the gate Law for the spectrum alone; the standard analysis
   "Relativistic quanta" is repeated after this campaign (convention 8). U3–U5 are all ruled; 03 is not written.
+- 2026-11-15: prompt 03 and its orchestrator note written, at the user's request ("Write prompt 03 and its orchestrator
+  note"), with the planner's P15–P23 and the questions U8 (the spectrum's scale near the floor) and U9 (the associated
+  piece on the new shape) in README §6.6. Not dispatched: it waits for U8 and U9.
