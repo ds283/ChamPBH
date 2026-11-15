@@ -1,5 +1,8 @@
 # Orchestrator — prompt 02, measure the wall
 
+**Used for 02** (dispatched 2026-11-14 at `35f6359`; landed `693784b`; reviewed on the board, "Orchestrator review of
+prompt 02").
+
 Read [`../README.md`](../README.md) first: §0, §2, §5, and §6 as ruled (R1–R5, U1–U7). For this prompt the user's words
 are: "Please write prompt 02 and its orchestration note" (2026-11-14, after R4 and R5). Then read the prompt. This note
 binds 02 only. The conventions of earlier notes bind here as well: a tolerance is a number with its reason, timing is

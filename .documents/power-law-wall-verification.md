@@ -258,6 +258,10 @@ at the first impact is −1.3e-15 (laboratory M), −6.7e-17 (1e-33) and −6.7e
 −2.6e-10 at n = 2: the Jordan-frame k differs by that factor. The estimate is note §0's formula at the first impact's
 measured E; "note §0" is the planner's number where it gave one.
 
+*(Added at the orchestrator's review, 2026-11-15.)* M_P here and throughout §2 is `units.PlanckMass`, the **reduced**
+Planck mass (`CLAUDE.md`, "Units"); the full Planck mass is √(8π) ≈ 5.01 times larger, so ln(k_ex/M_P,full) is
+ln(k_ex/M_P) − 1.612.
+
 | history | first impact N | T_J (MeV) | ln(E/V₀) | classical | turnaround | max classical | max turnaround | # classical > 0 | estimate | measured − estimate | note §0 |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | IP n=1 4e-31 β 1.2 α 0.01 / 0.1 | 17.66785 | 231.124 | 102.1423 | 84.1988 | −1.3710 | 84.1988 | −1.3710 | 4/5, 7/9 | 84.1988 | −2.9e-7 | |

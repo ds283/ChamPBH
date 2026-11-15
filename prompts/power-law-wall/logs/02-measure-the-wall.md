@@ -2,7 +2,7 @@
 
 **Subject:** S, the one-loop fraction and the spectrum on the power wall V₀[1 + (M/φ)ⁿ] at n = 1 and 2, by crossover's
 method, along the histories' own paths; the adopted drain law against them. Research; no production change.
-**Commit:** this commit, on branch `power-law-wall`, on top of `35f6359`
+**Commit:** `693784b`, on branch `power-law-wall`, on top of `35f6359`
 **Date:** 2026-11-14 to 15, by Claude Opus 5.5 (one agent, in the worktree `.claude/worktrees/power-law-wall`)
 **Result:** **COMPLETE.** The gate Wall holds (§4). No stop was reached.
 - **The copies** reproduce crossover's recorded numbers on its walls; `PowerWall` in units of φ_t agrees with walls.py's
