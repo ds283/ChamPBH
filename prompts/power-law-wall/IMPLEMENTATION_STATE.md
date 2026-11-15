@@ -1,6 +1,6 @@
 # power-law-wall campaign — implementation state
 
-**Last updated:** 2026-11-15 · **Status: LIVE — 3 of 8 prompts landed and reviewed (01, the gate Model holds; 02, the gate Wall holds; 03, the gate Law holds); 04 not written; R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); R9–R10 (U8 table in x, U9 associated piece) ruled with 03 (README §6.6); R1–R3 and U1–U7 ruled (README §6).**
+**Last updated:** 2026-11-15 · **Status: LIVE — 3 of 8 prompts landed and reviewed (01, the gate Model holds; 02, the gate Wall holds; 03, the gate Law holds); 04 written with its orchestrator note, not dispatched; D12 left as it is by the user; R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); R9–R10 (U8 table in x, U9 associated piece) ruled with 03 (README §6.6); R1–R3 and U1–U7 ruled (README §6).**
 
 The campaign adds the inverse-power-law model V = V₀[1 + (M/φ)ⁿ] beside the exponential, defines the one-loop drain
 law on its wall from measurements, and takes it through the store, the drivers and a rehearsal, so that a science run
@@ -24,7 +24,7 @@ at n = 1 and 2 can follow, under the one-loop law with the fixed α beside it.
 | 01 | The model | `InversePowerModel`, the seed at any n, the tool route's `--model` and `--n`; natural mode at large M measured | Opus | ✍️ | ✅ | `3aae9a5` | [`logs/01-the-model.md`](logs/01-the-model.md) |
 | 02 | Measure the wall | S, the one-loop fraction and the spectrum on the power wall (research, `source/wall/`); then U3–U5 | Opus | ✍️ | ✅ | `693784b` | [`logs/02-measure-the-wall.md`](logs/02-measure-the-wall.md) |
 | 03 | The law on this wall | f_n(ln R) and S_n in `InversePowerModel` under `one-loop-measured-pl-v1`; the spectrum as tables on three walls (R6–R8) | Opus | ✍️ | ✅ | `d924275` | [`logs/03-the-law-on-this-wall.md`](logs/03-the-law-on-this-wall.md) |
-| 04 | Measure a sample | about forty histories under both laws; the thresholds | Opus | ⬜ | ⬜ | — | — |
+| 04 | Measure a sample | U7's forty histories under both laws beside the exponential's; the thresholds of README §0.3, the surfing edges, R9's share, M_crit (P24–P32) | Opus | ✍️ | ⬜ | — | — |
 | 05 | The store | type id 2, its table, the registry, `FINGERPRINT_FORMAT` 8, the label (U6) | Opus | ⬜ | ⬜ | — | — |
 | 06 | Drivers and exports | the model option, the plot scripts, the export layout (P11) | Sonnet | ⬜ | ⬜ | — | — |
 | 07 | Rehearse | registered builds, exponential bitwise, power law resumed | Opus | ⬜ | ⬜ | — | — |
@@ -37,7 +37,7 @@ a time, in `orchestrator/`: [`prompt-01.md`](orchestrator/prompt-01.md), written
 01 (dispatched 2026-11-14 at `75ac6fb`); [`prompt-02.md`](orchestrator/prompt-02.md), written 2026-11-14 with prompt 02, used for
 02 (dispatched 2026-11-14 at `35f6359`); [`prompt-03.md`](orchestrator/prompt-03.md), written 2026-11-15 with prompt 03,
 used for 03 (dispatched 2026-11-15 at `7c60226`, after U8 and U9 were ruled as proposed, R9 and R10), and its §0 holds the f_n(ln R) fit the user ruled R7 on and the
-spectrum probes R8 was ruled on. Note 02's §0 holds the planner's probe: the path formula, the power wall's scale invariance above V₀, and the
+spectrum probes R8 was ruled on; [`prompt-04.md`](orchestrator/prompt-04.md), written 2026-11-15 with prompt 04, not dispatched, and its §0 holds the planner's probe at `99cc79b` (surfing at 10⁻³ M_P, one-loop histories at 10⁻¹⁵ and 10⁻³³ M_P, the M_crit estimate). Note 02's §0 holds the planner's probe: the path formula, the power wall's scale invariance above V₀, and the
 crossover scripts' absolute tolerances failing at large E/V₀.
 
 **Planner's probe for 01 (2026-11-13, at `c540caa`, not committed).** A scratch power-law model through
@@ -347,3 +347,7 @@ ObjectFactories 163, tools 292, RunDrivers 76. 01 re-measures them at its base.
 - 2026-11-15: prompt 03 dispatched at `7c60226`, and landed (`d924275`); the gate Law holds. No issue opened.
 - 2026-11-15: prompt 03 reviewed by the orchestrator (this board, "Orchestrator review of prompt 03"); all six checks
   pass. D12 (six tests outside the quanta modules re-pinned) goes to the user beside the hand-back; 04 is not written.
+- 2026-11-15: the user on D12, in their words: "No need to argue about D12. Leave it as it is." The six re-pinned tests
+  stand (README §6.7).
+- 2026-11-15: prompt 04 and its orchestrator note written, at the user's request ("Please write prompt 04 and its
+  orchestrator note"), with the planner's P24–P32 in README §6.7. No question waits on the user; not dispatched.

@@ -357,6 +357,37 @@ The table below is the proposal as it was put.
 | **U8** — the spectrum's scale on the power wall near the floor | **(a) one table per wall in x = k/k_ex, at the scale-free reference (E/V₀ → ∞)**, as R8 reads literally and as the exponential does today at one L. On this wall the bounce in k/ω_t is the same at every E/V₀; only k_ex/ω_t = (s_t/2)√(n/(n + 1)), s_t = E/(V₀ + E), moves with the floor, so the table's x is off by the factor s_t: x_p is 0.466 at s_t = 1, 0.533 at E/V₀ = 6.9 and 0.966 at 0.93 (n = 1; 02's `spectrum.txt`). The first, energetic bounces have s_t = 1; the floor matters in the late cascade only. 03 measures the error in x over E/V₀ and 04 the share of K from generations with E/V₀ < 100 | **(b) the table in k/ω_t**, and each classical or gap generation's scale converted by its own k_ex/ω_t, from a model hook evaluated at the generation's ln E and the history's normalization (one-loop generations keep the turnaround's k_ex, as U16 ruled). Exact for the classical spectrum on this wall; it puts a model hook into the post-processing, which then needs the model (06's model column) for the power wall, and changes the exponential's generations too, where k_ex/ω_t moves with L (0.4945 at L = 90, ½ as L → ∞) |
 | **U9** — the associated piece on the new shape | **1/x up to the table's x_p, then the direct piece's own fall**, s_assoc = (C₁/x)·s_dir(x)/s_dir(x_p), which is U17's form exactly when s_dir is U4's; **C₁ = 49 x_* s_dir(x_*)**, so that s(x_*) = 50 s_dir(x_*) at c_a = 1 as U4 put it (49 x_*³ when s_dir = x² there); **x_* = 0.0058 in x on every wall**, the module's constant, flagged as unmeasured on the power wall | above x_p, the tail exponential's κ_hi from x_p (U17's form with κ replaced); C₁ = 49 x_*³ kept as a number; x_* carried in k/ω_t (0.0029 ω_t, the 2PI run's probe), which gives x_* = 0.0082 (n = 1) and 0.0071 (n = 2) on the power wall |
 
+### 6.7 Proposed by the planner with prompt 04, 2026-11-15
+
+After 03 the user ruled on D12 (log 03 §2.2), in their words: "No need to argue about D12. Leave it as it is." The six
+tests 03 re-pinned outside the quanta modules stand.
+
+**P24–P32** stand unless the user rules otherwise. None needs a ruling before 04 is dispatched.
+- **P24 — the runner.** 04 runs each history through `tools/history_and_bbn.py`'s own `main`, in-process, with
+  `integrate_scalar_history` wrapped to keep the final `IntegrationResult` (as 02's `path_map.py` does), in
+  `source/sample/sample_run.py`. It prints the tool's lines unchanged, then a per-candidate table. Its tool lines are
+  checked against a plain run of the tool at three histories.
+- **P25 — the counterparts.** The exponential's twenty rows are read from the 2026.11.0 main export's `histories.csv`
+  (a copy, never the main checkout) and committed as an extract with the source's SHA-256. The tool route is checked
+  against three of them, so that the comparison is between walls and not between routes.
+- **P26 — the overlaps.** Fourteen of the forty were run by 01 or 03. Each is compared with its committed output,
+  timings masked, and a difference is a stop.
+- **P27 — R9's share.** The share of K from candidates with E/V₀ < 100 and < 10³, from each injection's assessed ln E less
+  the tuned normalization, with the table's error 1/s_t at the smallest x reached. Planner's expectation, from 02's
+  maps: zero, since every mapped candidate has ln(E/V₀) ≥ 33 and the parking cut ends the cascade there.
+- **P28 — the thresholds.** Each of §0.3's is read off the forty as the prompt lists it (§1.4). Reported, not changed
+  (P10).
+- **P29 — the surfing edges.** By `tools/surfing_scan.py --model inverse-power` at M = 10⁻³ M_P, where electroweak-eos
+  measured the exponential's: a coarse grid at 0.05, then 0.001 grids at the onset of QCD capture, and from the last
+  QCD capture to the first EW capture, per n. The exponential's reference is electroweak-eos 02's scans on the same w
+  table, checked at three rows, plus a fine grid at its QCD onset, which was never measured. Rows that fail at G2 (R5)
+  are kept and the edges reported around them. The edges at laboratory M are not scanned.
+- **P30 — M_crit on this wall.** Estimated from 02's path formula and the sample's own ln x and ln(V₀/M⁴), with no history
+  added: the M at which ln R reaches 0 at the first impact and at the smallest ln R of a cascade.
+- **P31 — no production change.** 04 writes only under `prompts/power-law-wall/` and `.documents/`, and the board.
+- **P32 — the counts.** The suites run in full at the base. Since the commit changes nothing they import, the counts after
+  are taken by discovery (P14).
+
 ## 7. What this campaign hands to the user
 
 - A tree that builds, stores, exports and plots the power-law model under both drain laws at any n, beside an
