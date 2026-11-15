@@ -262,7 +262,18 @@ On prompt 02's measurements (verification §2.10; board, "Orchestrator review of
   S₂ = 5.21615×10⁻³ (stage 1a, `.documents/power-law-wall/wall-02/stage1a_S_n.txt`), constant in x; this replaces the
   exponential's S(L) table on this wall only. The exponential's classical branch is unchanged.
 
-U3 (the law) and U5 (the spectrum) are not yet ruled.
+- **R7 (U3), the law on this wall.** Shown the candidate laws against stage 2's fraction on the three curves, and a
+  fit of that fraction in ln R alone, per n, the user ruled: "yes, I'd like to use the `f_n(ln R)` fit". The measured
+  fraction depends on ln R and n alone (validate V6), so on the power wall the drain fraction is a function f_n(ln R)
+  for each n, above the classical branch R·S_n (R6); it does not read ℓ or an L. The orchestrator's scratch fit, shown
+  to the user and not committed, was two branches in ln R switched where they cross (at the peak, ln R ≈ 23.1 for
+  n = 1 and 16.7 for n = 2): f = 1 − exp(−G (ln R − R₀)^P) below, f = 1 − exp(−A/(ln R − c)) above. Over the 62 | 60
+  non-classical points where the field came back out its largest miss was 0.054 | 0.056 (rms 0.019 | 0.022), within
+  the exponential law's own accuracy (0.074 one-loop, 0.062 gap); over the mapped histories' points, 0.004 | 0.003.
+  03 fits and records the law; it is a new `alpha_value.drain_model` value (P8), defined for n = 1 and 2 only, and
+  refused at entry for any other n.
+
+U5 (the spectrum) is not yet ruled.
 
 ## 7. What this campaign hands to the user
 
