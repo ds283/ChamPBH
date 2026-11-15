@@ -363,6 +363,11 @@ After 03 the user ruled on D12 (log 03 §2.2), in their words: "No need to argue
 tests 03 re-pinned outside the quanta modules stand.
 
 **P24–P32** stand unless the user rules otherwise. None needs a ruling before 04 is dispatched.
+
+**Ruled by the user, 2026-11-15, in their words:** "P24–P32 as proposed; don't yet dispatch prompt 04, though: I'll do that
+in a fresh session."
+
+The list below is the proposal as it was put.
 - **P24 — the runner.** 04 runs each history through `tools/history_and_bbn.py`'s own `main`, in-process, with
   `integrate_scalar_history` wrapped to keep the final `IntegrationResult` (as 02's `path_map.py` does), in
   `source/sample/sample_run.py`. It prints the tool's lines unchanged, then a per-candidate table. Its tool lines are

@@ -1,8 +1,8 @@
 # Orchestrator — prompt 04, measure a sample
 
 **Written** 2026-11-15 with the prompt, at the user's request: "No need to argue about D12. Leave it as it is. Please
-write prompt 04 and its orchestrator note." Not dispatched. No U-question stands open, so it may be dispatched at the
-user's word.
+write prompt 04 and its orchestrator note." Not dispatched. P24–P32 were ruled by the user the same day, as proposed
+(README §6.7); the user dispatches it from a fresh session, whose brief is [`session-04.md`](session-04.md).
 
 Read [`../README.md`](../README.md) first: §2, §4, §5, and §6 as ruled (R1–R10, U1–U9) and as proposed (§6.7, P24–P32).
 Then read the prompt. This note binds 04 only. The conventions of earlier notes bind here as well: a tolerance is a
@@ -16,8 +16,8 @@ number with its reason, timing is taken under load, and the suites run serially.
 **The prompt:** [`04-measure-a-sample.md`](../04-measure-a-sample.md) · **Gate:** "Sample" · **Closes:** nothing ·
 **Opens:** only what the work finds · **Model:** Opus · **Network:** none. Nothing is pushed.
 
-**When:** written 2026-11-15 at the user's request. Whether it is dispatched from this context or a fresh one is the
-user's to say. Either way, the dispatching context re-checks the Gate (§1).
+**When:** written 2026-11-15 at the user's request. The user dispatches it from a fresh session ("I'll do that in a
+fresh session"), which re-checks the Gate (§1).
 
 **Gate**, as measured by the planner on 2026-11-15 at 18:49 local, before this note and the prompt were committed:
 - **The worktree.** `.claude/worktrees/power-law-wall` is on `power-law-wall` at `99cc79b` (review of 03), on top of
