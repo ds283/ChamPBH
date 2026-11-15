@@ -1,6 +1,6 @@
 # power-law-wall campaign — implementation state
 
-**Last updated:** 2026-11-15 · **Status: LIVE — 2 of 8 prompts landed and reviewed (01, the gate Model holds; 02, the gate Wall holds); R4–R5 ruled on 01's measurements (README §6.4); R6 (U4, S = S_n constant) and R7 (U3, the law f_n(ln R)) ruled on 02's (README §6.5); U5 waits for the user; R1–R3 and U1–U7 ruled (README §6).**
+**Last updated:** 2026-11-15 · **Status: LIVE — 2 of 8 prompts landed and reviewed (01, the gate Model holds; 02, the gate Wall holds); R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); 03 not written; R1–R3 and U1–U7 ruled (README §6).**
 
 The campaign adds the inverse-power-law model V = V₀[1 + (M/φ)ⁿ] beside the exponential, defines the one-loop drain
 law on its wall from measurements, and takes it through the store, the drivers and a rehearsal, so that a science run
@@ -229,3 +229,7 @@ ObjectFactories 163, tools 292, RunDrivers 76. 01 re-measures them at its base.
   not written.
 - 2026-11-15: R7 (U3) ruled by the user: the law on this wall is a fit f_n(ln R) per n (README §6.5). U5 still
   waits; 03 is not written.
+- 2026-11-15: R8 (U5) ruled by the user: the spectrum's direct piece is a measured table around the peak, k² below
+  it and an exponential above it, on every wall, the exponential's included (README §6.5). This amends README §5's
+  rule "The exponential does not move", P2 and the gate Law for the spectrum alone; the standard analysis
+  "Relativistic quanta" is repeated after this campaign (convention 8). U3–U5 are all ruled; 03 is not written.

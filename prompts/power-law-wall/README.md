@@ -96,7 +96,8 @@ In the user's notation the potential is V₀ + Λ^{4+n}/φⁿ, with Λ^{4+n} = V
 **Out of scope:**
 - The science run of record and its figures (§7; the user's).
 - The 2PI (Kadanoff–Baym) run on the power wall for x_* and the associated piece (U5); ChamKadanoffBaym's work.
-- Any change to the exponential model's results. Every exponential history is bitwise as at the base (P2).
+- Any change to the exponential model's results. Every exponential history is bitwise as at the base (P2). *(Amended
+  2026-11-15 by R8, §6.5: the exponential's spectrum, read only by the post-processing, is redone.)*
 - The wall back-reaction notes' power-law chain (λ ≈ n/φ), except as 02 needs it.
 - The open issues of the exponential run (`science-runs/plan-science-2026.11.0/PLAN.md` §5), unless one blocks a
   gate here.
@@ -125,7 +126,7 @@ ruling. 06 needs only 05's schema; 08 needs 07's stores.
 |---|---|---|
 | **Model** | each hook of `InversePowerModel` equals its closed form (and finite differences of the one below it) across 10⁻⁹⁰ M ≤ φ ≤ 10 M_P at n = 1, 2, with no overflow; the turning point, the minimum and the seed against closed forms; under the one-loop law the model is refused at entry; every exponential golden bitwise; the suites at their counts or above | 01 |
 | **Wall** | S, the one-loop fraction and the spectrum measured at n = 1, 2 along the power-law paths, each validated as crossover's stage 2 was (Born limit, classical limit, energy); the adopted law's residuals at each candidate L stated; nothing ruled by the agent | 02 |
-| **Law** | the power wall's law as ruled equals its reference implementation at synthetic inputs and reproduces 02's maps candidate by candidate; the exponential law and spectrum bitwise | 03 |
+| **Law** | the power wall's law as ruled equals its reference implementation at synthetic inputs and reproduces 02's maps candidate by candidate; the exponential law bitwise; the spectrum as R8 rules on every wall *(amended 2026-11-15 by R8)* | 03 |
 | **Sample** | every sampled history measured under both laws, re-tuned, with its failures stated; every threshold of §0.3 reported against its use on this wall | 04 |
 | **Store** | power-law histories round-trip in a temporary store; the exponential store's fingerprint golden unchanged apart from the format | 05 |
 | **Export** | the exponential exports byte-identical to the base's on the same store; the power-law exports carry the model and read back | 06 |
@@ -155,7 +156,9 @@ ruling. 06 needs only 05's schema; 08 needs 07's stores.
 
 `CLAUDE.md`'s invariants 1–8 and "Repository mechanics", and:
 - **The exponential does not move.** Every exponential history, export and golden record is bitwise as at the base. A
-  prompt that cannot keep that stops.
+  prompt that cannot keep that stops. *(Amended 2026-11-15 by R8, §6.5: the exponential's spectrum, read only by the
+  post-processing, is redone as the power wall's is, so its relativistic-quanta outputs change; nothing stored or
+  exported moves.)*
 - **The integration stays decoupled from the potential.** Anything whose meaning depends on the wall's form goes in
   the model class, with no generic default; `ComputeTargets/ScalarHistory.py` gains no power-law expression (the user's
   ruling of 2026-11-05).
@@ -213,7 +216,8 @@ Accepted as proposed unless the user rules otherwise.
   φ ≪ M; its derivatives through u/(1 + u) as `_PowerLawWall` writes them. `_log_V_floor` = ln V₀;
   `reflects_at_origin` True. Its `name` and shard key as the exponential's.
 - **P2 — the exponential bitwise.** No exponential hook, constant or code path changes. 01 and 03 run the goldens; 05–07
-  the fingerprint and export goldens.
+  the fingerprint and export goldens. *(Amended 2026-11-15 by R8, §6.5: except the spectrum's constants and shape in
+  `quanta_spectrum.py`.)*
 - **P3 — the seed.** At any n, the static and tracking minimum of V₀[1 + (M/φ)ⁿ] + ρ_m0 A in the exponential seed's
   loop, with V′ = −n(V − V₀)/φ in place of n = 1's −V M/φ²; tested at n = 1, 2 against a root-find.
 - **P4 — `_drain_L` not in 01.** 01 leaves it unimplemented, so the one-loop law refuses the model loudly until 03 (or
@@ -273,7 +277,34 @@ On prompt 02's measurements (verification §2.10; board, "Orchestrator review of
   03 fits and records the law; it is a new `alpha_value.drain_model` value (P8), defined for n = 1 and 2 only, and
   refused at entry for any other n.
 
-U5 (the spectrum) is not yet ruled.
+- **R8 (U5), the spectrum.** Asked whether the test field's spectrum should be described in three regions, the user
+  ruled: "Yes, this is the design I want. The three-region fit you describe sounds correct, and also the universal
+  `q^2` power law at low `q` (neglecting the `q^2 ln q` term)." Earlier, conditional on that design: "(a) yes, it
+  makes sense to do the same for the exponential". So, for each wall (the exponential, and the power wall at n = 1
+  and n = 2), the direct piece of `quanta_spectrum.py`'s spectrum replaces the shape x² up to x_p and
+  e^{−κ(x − x_p)} above with:
+  - **the peak region**, a table of the test field's measured |β_k|², interpolated, running from k/ω_t = 10⁻³ (in
+    the orchestrator's scratch probe, the solver's precision floor is near 10⁻⁴) out to an upper edge far enough
+    above the peak that the tail carries well under 1% of the energy x³|β|² (x ≈ 5 or beyond; 03 measures the
+    share);
+  - **below the table**, k², matched in value at the table's lower edge, on every wall. The probe found the local
+    power tending to 2 on all three walls (2.000 on the exponential at k/ω_t = 10⁻³; 1.989 at n = 2, with a
+    shortfall linear in k; 1.66 at n = 1, with a shortfall (2 − p) ln(1/k) ≈ 2.3, as k² ln²(1/k) would give); the
+    logarithm at n = 1 is neglected, by the user's ruling. Prompt 02's slopes below the peak (1.34, 1.76) were fitted
+    on k/k_ex ∈ [0.02, 0.1], short of the asymptotic region;
+  - **above the table**, an exponential matched in value and slope at the table's upper edge.
+
+  The associated piece (x_*) is carried over from the exponential's 2PI run and flagged as unmeasured on the power
+  wall, as U1–U7 ruled. The exponential's spectrum is redone in the same way, so `SPECTRUM_MODEL` (`U4-U17-v1`)
+  changes. **This amends §5's rule "The exponential does not move", P2 and the gate Law, for the spectrum alone:** the
+  spectrum is read only by the post-processing (`tools/quanta_measures.py`, `tools/plot_quanta_history.py`,
+  `tools/plot_quanta_grid.py`, `tools/quanta_figures.py` and their tests), so every exponential history, store,
+  export and golden record stays bitwise, while the exponential's relativistic-quanta outputs change. Under
+  convention 8, a rebuild after this campaign repeats the standard analysis "Relativistic quanta" (`science-runs/
+  README.md`) for the exponential as well as the power law; its inputs (`histories.csv`, `fields.csv`, `bounces.csv`)
+  do not change, so its row there is not amended.
+
+U3, U4 and U5 are all ruled; 03 is written from R6–R8.
 
 ## 7. What this campaign hands to the user
 
