@@ -176,3 +176,320 @@ the same warning gives 6.6e-26, 9.3e-27 and 2.1e-27 M_P.
   The probe's identical rows (production mode) reproduce §1.5's outcomes and counts.
 
 Nothing in the integrator was changed; which continuation, if any, is wanted is the user's to rule.
+
+---
+
+## 2. The wall (prompt 02, 2026-11-14 to 15)
+
+**Tree:** the worktree on branch `power-law-wall` at `35f6359` plus prompt 02's files, all under
+`prompts/power-law-wall/source/wall/` and `.documents/power-law-wall/wall-02/`; no production file changes. No Ray, no
+store, no registry run. The scans used at most six processes (three for the map). Each output file records `uptime`
+at its start and end; the one-minute load ranged from 3 to 34 over the work (the high values from other processes on
+the machine). Scripts, what they compute and how to run each: [`source/wall/README.md`](../prompts/power-law-wall/source/wall/README.md).
+
+**Measurements, not bounds.** Nothing below is a threshold, a recommendation or a reason to exclude a history. The
+options for U3–U5 are stated with their evidence in §2.10; the user rules.
+
+### 2.1 The copies, the wall and the units
+
+- **The copies** (P6): `walls.py`, `born.py`, `stage1a_classical.py`, `stage2.py` and `stage2_validate.py`, from
+  crossover at `d0fe64a`, `9da5162`, `9da5162`, `d0fe64a` and `00a4ffc` (each one's last change). Below their headers
+  they are crossover's files except where marked "power-law-wall 02": `walls.PowerWall`; `stage2.solve` and
+  `run_point` accept a wall object; `stage2.V4` reads any wall's `V4`; `solve`'s start cap is 1e15 times
+  max(the entry point, 1) in place of 1e15, so that every run crossover's cap let through is unchanged.
+- **`PowerWall(x, n)`**: U = V − V₀ = A φ^{−n}, ω_t = 1, x = E/V₀ at φ_t, L = ln(1 + x). Units of φ_t (the default,
+  orchestrator note 02 ruling 2): φ_t = 1, A = E = 1/(n(n + 1)), V₀ = E/x; x = ∞ is the wall with no floor. Units of
+  M (walls.py's): φ_t = x^{−1/n}, A = c = V₀ = φ_t^{n+2}/(n(n + 1)), E = cx.
+- **The loop term in these units.** With field unit u and time unit 1/ω_t, ½V'''⟨δφ²⟩/(uω_t²) = ½Ũ'''Σ̃(ω_t/u)², and
+  (ω_t/u)² = 8π²RẼ because R = ω_t⁴/(8π²E_phys) and Ẽ = E_phys/(u²ω_t²). So the background equation is
+  φ'' = −U' − K V''' Σ with K = 4π²RE in any unit of field, born.py's G = RE/2 in the Born limit; stage2.py is
+  unchanged in units of φ_t.
+- **What the floor does.** In units of φ_t, U and its derivatives do not depend on x, so the classical bounce, the
+  mode equation and the stage-2 system are the same at every x. x enters only through λ = −d ln V/dφ = n s/φ,
+  s = U/(V₀ + U): the chain's k_ex and ℓ (and the production's) and the copied `run_point`'s grid references.
+  `powerscan.run_point_power` sets the grid from the floor-free chain's m_ta and k_ex instead (§2.3, V6).
+- **Derivatives** (`validate_wall.py` D): U, U', V'', V''', V'''' against central differences of the one below
+  (h = 1e-4 φ), both units, n = 1, 2, x = 10 and 1e40 (φ_t units), 10 and 1e3 (M units), φ = 0.5–30 φ_t: worst
+  7.0e-8 against a tolerance of 1e-6. V''(φ_t) = 1, U(φ_t) = E and U(φ_t) = xV₀ to 1e-15.
+- **The units** (`validate_wall.py` U), units of φ_t against units of M:
+
+  | quantity | points | difference | tolerance (reason) |
+  |---|---|---|---|
+  | S (241-point ln-k trapezoid) | n = 1, 2 at x = 10, 1e3 | ≤ 2.7e-11 relative | 1e-6 (DOP853 at rtol 1e-11) |
+  | ℓ (`born.chain`) | n = 1: x = 1e3 ln R 40 (1.70274), x = 1e2 ln R 29.5 (0.56969); n = 2: x = 1e3 ln R 28.5 (1.86476), x = 1e2 ln R 20 (0.71339); at x = 10 neither unit has a chain (ln R 20 and 15) | ≤ 6.7e-16 | 1e-10 (the chain's 1e-12 on ℓ) |
+  | stage-2 fraction (`run_point`) | n = 1: x = 10 ln R 10 (0.4540304688), x = 1e3 ln R 40 (0.6684185809); n = 2: x = 10 ln R 8 (0.4486221582), x = 1e3 ln R 25 (0.7685216224) | ≤ 1.2e-14, same step count | 1e-8 (one fixed-step RK4 in rescaled variables) |
+
+- **The exponential stays reproducible** (`reproduce_exponential.py`, copies on crossover's `Wall` and `WallN`), to the
+  digits crossover recorded: S(10) 1.3529e-03 (stage 1a); S of WallN(5, 2) by stage 2, loop off, 2.14335e-03; born.run
+  on Wall(20.95) at ln R = 44.44, k_IR = 10 m_ta, 0.44982; stage2.run_point(7.885, 23.833): 0.71709, v_out/v_in 0.5319,
+  M/φ_turn 1.678, 311 modes, 53265 steps. All equal.
+
+### 2.2 The paths (§1.4)
+
+`path_map.py` by `runs_map.sh`, 2026-11-14 23:41–23:42 (load 5.0 → 5.9), three at a time; outputs `wall-02/map/`,
+summary `wall-02/map_summary.txt`. All twenty-five histories tuned in one integration from the tracking seed; none
+failed. Every candidate of every history is in the one-loop regime, and every history parks while one-loop; no
+mapped candidate is in the gap or classical.
+
+| history | candidates | ln x range | ln R range | ℓ range | parks at N (candidate) |
+|---|---|---|---|---|---|
+| IP n=1, 4e-31, β 1.2, α 0.01 / 0.1 | 5 / 9 | 40.21–102.14 / 33.30–102.14 | 201.4–511.1 / 166.9–511.1 | 15.86–41.75 / 12.96–41.75 | 30.053 (4) / 32.046 (8) |
+| IP n=1, 4e-31, β 2.0, α 0.01 / 0.1 | 85 / 49 | 55.00–106.04 / 56.08–106.04 | 275.4–530.6 / 280.8–530.6 | 22.05–43.37 / 22.50–43.37 | 30.621 (84) / 30.349 (48) |
+| IP n=1, 4e-31, β 2.9, α 0.01 / 0.1 | 55 / 42 | 39.78–109.06 / 75.77–109.06 | 199.3–545.6 / 379.2–545.6 | 15.68–44.63 / 30.73–44.63 | 38.898 (54) / 29.695 (41) |
+| IP n=1, 1e-33, β 2.0, α 0.01 / 0.1 | 85 / 49 | 55.00–106.04 / 56.08–106.04 | 299.3–554.5 / 304.7–554.5 | 24.05–45.37 / 24.50–45.37 | 30.621 / 30.349 |
+| IP n=1, 1e-15, β 2.0, α 0.01 / 0.1 | 85 / 49 | 55.00–106.04 / 56.08–106.04 | 133.5–388.8 / 138.9–388.8 | 10.17–31.53 / 10.62–31.53 | 30.621 / 30.349 |
+| IP n=2, 4e-31, β 1.2, α 0.01 / 0.1 | 5 / 9 | as n = 1 | 123.2–309.0 / 102.5–309.0 | 14.67–38.01 / 12.05–38.01 | as n = 1 |
+| IP n=2, 4e-31, β 2.0, α 0.01 / 0.1 | 85 / 49 | as n = 1 | 167.6–320.7 / 170.8–320.7 | 20.25–39.48 / 20.66–39.48 | as n = 1 |
+| IP n=2, 4e-31, β 2.9, α 0.01 / 0.1 | 55 / 42 | as n = 1 | 121.9–329.7 / 229.9–329.7 | 14.50–40.61 / 28.08–40.61 | as n = 1 |
+| IP n=2, 1e-33, β 2.0, α 0.01 / 0.1 | 85 / 49 | as n = 1 | 191.5–344.7 / 194.8–344.7 | 23.26–42.48 / 23.67–42.48 | as n = 1 |
+| IP n=2, 1e-15, β 2.0, α 0.01 / 0.1 | 85 / 49 | as n = 1 | 25.7–178.9 / 29.0–178.9 | 2.25–21.67 / 2.68–21.67 | as n = 1 |
+| exp, 4e-31, β 2.0 / 2.9 / 3.05, α 0.1 | 49 / 42 / 61 | 56.08–106.04 / 75.77–109.06 / 91.24–123.61 | 87.3–142.4 / 109.4–145.6 / 126.4–161.2 | 19.06–33.36 / 24.86–34.19 / 29.25–38.17 | 30.349 / 29.695 / 26.668 |
+| IP n=1 / n=2, 4e-31, β 3.05, α 0.1 | 61 / 61 | 91.24–123.61 | 456.6–618.4 / 276.3–373.4 | 37.19–50.71 / 33.91–46.08 | 26.668 (60) |
+
+At each β and α, every power-law history (both n, every M) has the same candidates, at the same N and ln x, and parks
+at the same candidate; where the exponential was mapped (laboratory M, α = 0.1, β = 2, 2.9, 3.05) it has them too
+(01 found the same). The path formula ln R = ln(V₀/M⁴) + 2 ln(n(n + 1)) − ln 8π² + (1 + 4/n) ln x holds at
+every power-wall candidate (1148) to **2.8e-13** at worst; crossover's exponential curve holds at the 152 exponential
+candidates to 4.4e-12. The curves' intercepts and R = 1 points are note §0's: ln(V₀/M⁴) = 3.344645, 27.310504,
+−138.475623; R = 1 at x = 0.930 / 0.426 (laboratory, n = 1 / 2), 7.70e-3 / 1.44e-4 (1e-33), 1.93e12 / 1.45e20 (1e-15).
+
+**The Planck scale.** ln(k_ex/M_P) = `log_k_ex − ln units.PlanckMass`, Einstein frame. ln A(φ_t) = β(φ_t − φ_ref)/M_P
+at the first impact is −1.3e-15 (laboratory M), −6.7e-17 (1e-33) and −6.7e-8 (1e-15) at n = 1, −1.4e-20, −2.6e-22 and
+−2.6e-10 at n = 2: the Jordan-frame k differs by that factor. The estimate is note §0's formula at the first impact's
+measured E; "note §0" is the planner's number where it gave one.
+
+| history | first impact N | T_J (MeV) | ln(E/V₀) | classical | turnaround | max classical | max turnaround | # classical > 0 | estimate | measured − estimate | note §0 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| IP n=1 4e-31 β 1.2 α 0.01 / 0.1 | 17.66785 | 231.124 | 102.1423 | 84.1988 | −1.3710 | 84.1988 | −1.3710 | 4/5, 7/9 | 84.1988 | −2.9e-7 | |
+| IP n=1 4e-31 β 2.0 | 20.35210 | 746.688 | 106.0425 | 90.0491 | 1.2228 | 90.0491 | 1.2228 | 85/85, 49/49 | 90.0491 | +4.1e-7 | ≈ 89.8 (10³⁹) |
+| IP n=1 4e-31 β 2.9 | 23.88782 | 1870.300 | 109.0554 | 94.5685 | 3.2266 | 94.5685 | 3.2266 | 54/55, 42/42 | 94.5685 | +2.1e-7 | |
+| IP n=1 4e-31 β 3.05 α 0.1 | 20.96367 | 67669.439 | 123.6099 | 116.4001 | 12.9083 | 116.4001 | 12.9083 | 61/61 | 116.4001 | −4.4e-8 | |
+| IP n=1 1e-33 β 2.0 | 20.35210 | 746.688 | 106.0425 | 96.0406 | 3.2124 | 96.0406 | 3.2124 | 85/85, 49/49 | 96.0406 | −1.4e-7 | |
+| IP n=1 1e-15 β 2.0 | 20.35210 | 746.688 | 106.0425 | 54.5941 | −10.5424 | 54.5941 | −10.5424 | 9/85, 11/49 | 54.5941 | −3.1e-7 | |
+| IP n=2 4e-31 β 1.2 | 17.66785 | 231.124 | 102.1423 | 33.8208 | −5.0839 | 33.8208 | −5.0839 | 3/5, 3/9 | 33.8208 | +2.8e-7 | |
+| IP n=2 4e-31 β 2.0 | 20.35210 | 746.688 | 106.0425 | 37.7210 | −2.6510 | 37.7210 | −2.6510 | 11/85, 12/49 | 37.7210 | ≤ 5e-7 | ≈ 38.0 (3×10¹⁶) |
+| IP n=2 4e-31 β 2.9 | 23.88782 | 1870.300 | 109.0554 | 40.7339 | −0.7715 | 40.7339 | −0.7715 | 22/55, 42/42 | 40.7339 | +2.8e-7 | |
+| IP n=2 4e-31 β 3.05 α 0.1 | 20.96367 | 67669.439 | 123.6099 | 55.2883 | 8.3092 | 55.2883 | 8.3092 | 61/61 | 55.2883 | −2.3e-7 | |
+| IP n=2 1e-33 β 2.0 | 20.35210 | 746.688 | 106.0425 | 43.7125 | 0.3355 | 43.7125 | 0.3355 | 38/85, 24/49 | 43.7125 | −4.7e-7 | |
+| IP n=2 1e-15 β 2.0 | 20.35210 | 746.688 | 106.0425 | 2.2659 | −20.3036 | 2.2659 | −20.3036 | 1/85, 1/49 | 2.2659 | +2.0e-7 | ≈ 2.3 (10 M_P) |
+| exp 4e-31 β 2.0 α 0.1 | 20.35210 | 746.688 | 106.0425 | −6.6657 | −8.7244 | −6.6657 | −8.7244 | 0/49 | −6.6657 | −4.8e-7 | ≈ −6.9 (10⁻³) |
+| exp 4e-31 β 2.9 α 0.1 | 23.88782 | 1870.300 | 109.0554 | −5.1032 | −7.1476 | −5.1032 | −7.1476 | 0/42 | −5.1032 | −1.3e-7 | |
+| exp 4e-31 β 3.05 α 0.1 | 20.96367 | 67669.439 | 123.6099 | 2.4245 | 0.4408 | 2.4245 | 0.4408 | 1/61 | 2.4245 | +1.6e-7 | ≈ 3.2 (25 M_P, EW) |
+
+Where a row covers both α the first impact is the same history; the counts are given for α = 0.01, then 0.1. The
+measured − estimate column is the printed digits (6 decimals) apart from ln s_t = −ln(1 + 1/x) ~ e^{−100}. The first
+impact's E: ln E = ln x + ln V₀ = −170.59 (≈ 0.29 GeV⁴) at β = 2 and −153.02 (≈ 1.2×10⁷ GeV⁴) at β = 3.05, against note
+§0's 0.3 GeV⁴ (taken from 01) and its EW estimate 7×10⁷ GeV⁴.
+
+### 2.3 The validation (§1.3), before the scans
+
+`validate_wall.py` → `wall-02/validation.txt` (2026-11-15 00:07–00:10, load 5.8 → 6.6, six processes);
+`chain_vs_production.py` → `wall-02/chain_vs_production.txt`.
+
+1. **The classical limit.** Stage 2 with the loop off (units of φ_t) against walls.py's independent test field (481-point
+   ln-k trapezoid) at x = 1e40 (units of φ_t) and x = 1, 0.1 (units of M): ratio 1.000001 (n = 1, S = 1.026202e-2) and
+   1.000002 (n = 2, 5.216159e-3) at all three; tolerance 1e-4 (crossover's V-A agreement and the two quadratures). With
+   the loop on, frac/R at ln R = −8, −6, −4, −2, 0: 1.0258e-2, 1.0232e-2, 1.0044e-2, 8.742e-3, 2.862e-3 (n = 1) and
+   5.2144e-3, 5.2032e-3, 5.1214e-3, 4.5476e-3, 1.7062e-3 (n = 2): it tends to S_n as R → 0, 4e-4 and 3e-4 short at
+   ln R = −8.
+2. **The Born limit.** Stage 2 cut at k_IR = 10 m_ta against born.run at the same k_IR (x = 1e40): ratio 1.00043
+   (ℓ = 5) and 1.00028 (ℓ = 8) at n = 1, 1.00071 and 1.00040 at n = 2; tolerance 2e-3 (crossover's V1, 4e-4–1.0e-3).
+   Ruling 3's overlap, born.py self-consistent (k_IR = √V''_max) against stage 2's physical infrared end: ratio 0.936,
+   0.956, 0.975, 0.984, 0.990 at ℓ = 5, 8, 15, 25, 40 (n = 1) and 0.932, 0.954, 0.974, 0.984, 0.990 (n = 2), against
+   crossover's 0.93–0.96 at ℓ = 4.9–9.5.
+3. **Energy.** max |E_tot − E|/E along each run: ≤ 2e-8 in every validation run with stage 2's own grid, ≤ 1.9e-8 at
+   every one of the 153 scan points on the curves, ≤ 7.4e-11 in the classical rows. Runs of the copied `run_point` at
+   small x, whose grid follows the floor (item 6), reach 4.7e-7 (x = 100, ln R = 40) and, off the curves, 1.5e-2 to
+   5e19 (§2.5): the energy check flags them.
+4. **Convergence** (mode spacing halved, k_max doubled, k_min halved, step halved, EPS/10), at four points per n:
+
+   | point | n = 1: largest change in f | n = 2 |
+   |---|---|---|
+   | one-loop, ℓ = 25 (n = 1), 24.2 (n = 2) | 4.5e-6 (k_min) | 5.0e-6 (k_min) |
+   | one-loop, ℓ = 1.0 | 5.1e-4 (k_min) | 2.7e-4 (k_min) |
+   | gap, ln R = 10 (n = 1), 8 (n = 2) | 2.0e-3 (k_max) | 5.8e-3 (k_min) |
+   | gap, ln R = 3.25 (n = 1), 3.64 (n = 2) | 1.4e-4 | 6.3e-4 |
+
+   The mode spacing, the step and EPS move f by ≤ 1.3e-6 everywhere. The scan's stated precision: ±1e-5 at ℓ ≳ 20,
+   ±1e-3 near ℓ = 1, ±6e-3 in the gap.
+5. **The chain against production.** (a) At all 1148 mapped power-wall candidates, `born.chain` on PowerWall(x, n) at
+   the candidate's printed ln x and ln R against the history's `one_loop_turnaround` ℓ: worst 5.0e-6, tolerance 1e-5
+   (the printed digits); no candidate where one has a chain and the other not. (b) Twelve candidates directly, through
+   `InversePowerModel` in Planck units: ℓ and φ_ta/φ_t to 1.7e-14 relative at worst, tolerance 1e-9. (c)
+   `powerscan.f_law` equals `drain_fraction` bitwise at 4000 inputs. No disagreement with the production wall search.
+6. **Scale invariance.** S_n at x = 1e10, 1e20, 1e40, 1e100: bitwise equal (1.0262017159e-2, 5.2161509765e-3). ℓ at fixed
+   R: equal at x ≥ 1e20 for ln R ≤ 300 (ln R ≤ 100 from 1e10). **The floor starts to matter for ℓ** (|ℓ(x) − ℓ_∞| >
+   1e-3) below x ≈ 1.2–2×10³ (φ_ta/φ_t)ⁿ, at every ln R tested (n = 1: x = 10^4.5, 10^6, 10^10.5, 10^25 at ln R = 20,
+   40, 100, 300; n = 2: 10^4.75, 10^5.75, 10^9.75, 10^25 at ln R = 15, 25, 60, 200), as ℓ(x) − ℓ_∞ ≈ ln s_ta ≈
+   −(φ_ta/φ_t)ⁿ/x says. The stage-2 fraction by `run_point_power` does not depend on x (its inputs do not); by the
+   copied `run_point` it equals that to 2.4e-5 at x = 1e4 and 3e-4 at 1e3 (n = 1, ln R = 40), and falls to 0.546
+   against 0.669 at x = 100, where the floor-suppressed λ puts the grid's top below the production (n = 2, ln R = 25:
+   0.7521 against 0.7686).
+
+### 2.4 S on this wall (§1.5, U4)
+
+`stage1a_power.py` → `wall-02/stage1a_S_n.txt` (2026-11-14 23:56–23:58, load 15.5 → 5.6).
+
+**S_n does not depend on x.** The runs in units of M at x = 1e-3, 1e-2, 0.1, 0.3, 1, 3, 10, 100, 1e3 and the run in
+units of φ_t at 1e10 give the same value to every printed digit:
+
+| n | S_n | \|β\|²_max | at k/ω_t | the exponential's S(L_E) at x = 0.3 / 1 / 10 / 1e3 / 1e10 | S_n/S(L_E) there |
+|---|---|---|---|---|---|
+| 1 | **1.02620e-2** | 7.680e-2 | 0.165 | 1.004e-2 / 9.330e-3 / 5.875e-3 / 2.201e-3 / 3.663e-4 | 1.02 / 1.10 / 1.75 / 4.66 / 28.0 |
+| 2 | **5.21615e-3** | 3.390e-2 | 0.207 | the same | 0.52 / 0.56 / 0.89 / 2.37 / 14.2 |
+
+The quadrature (at x = 10, as crossover's V2q): the ln-k trapezoid on [1e-3, 10] with 121, 241, 481 points and on
+[1e-4, 20] with 601 points agree to 3e-7 (n = 1) and 7e-7 (n = 2); the linear-k trapezoid is 0.10% and 0.10% high at
+121 points, 0.006% at 481; EPS/100 moves S by 9e-7 relative; stage 2 with the loop off at 80 and 160 modes a decade
+gives 1.0262021e-2 and 5.216159e-3. The exponential's S(L) tends to S_1 as L → 0 (S(0.3) = 1.0041e-2): its wall at
+small L is the n = 1 power wall.
+
+### 2.5 The one-loop fraction along the paths (§1.6, U3)
+
+`scan_curves.py` → `wall-02/stage2_scan.txt`, tabled with the law in `wall-02/stage2_curves.md` (2026-11-14
+23:59 – 2026-11-15 00:04, load 3.3 → 6.8, six processes; 153 curve runs in 1023 s of process time, 2–17 s each).
+Six curves (laboratory M, 1e-33 and 1e-15 M_P; n = 1, 2), each from its largest mapped ℓ down to ℓ = 0.1 (or the
+chain's end), eight gap points from the gap's entry to R = 1, and ln R = −0.5, −2, −5. "mapped" marks the one-loop
+points with ℓ in the range the curve's histories reached; every other point is beyond where any mapped history goes.
+
+- **The fraction is one function of ln R per n.** Points at the same ln R on different curves agree to the scan's
+  precision (0.059815 at ln R = 490.17 on the laboratory and 1e-33 curves; 0.11572 at ln R = 250.87 on the laboratory
+  and 1e-15 curves; the classical rows identical to six digits). What differs between curves at the same R is x, and
+  with it the production's ℓ: on the 1e-33 curve ℓ = 1 sits at ln R = 58.8 (ℓ_∞ = 3.85, f = 0.469), on the laboratory
+  curve at 29.2 (ℓ_∞ = 1.30, f = 0.869), on the 1e-15 curve at 25.9 (ℓ_∞ = 1.00, f = 0.941).
+- **The gap entries** (the least ln R on the curve with a chain): ln R = 20.27, 13.70 (laboratory, n = 1, 2); 52.37,
+  48.01 (1e-33); 17.36, 11.64 (1e-15), where ℓ_∞ is 0.34, 0.43 (laboratory), 3.03, 4.75 (1e-33) and 0.09, 0.14
+  (1e-15). On the 1e-33 curve the floor removes the chain while the bounce is still deep in the one-loop regime.
+- **Largest fractions.** 0.974 (ℓ = 0.4, laboratory n = 1; ℓ = 0.7, laboratory n = 2); 13 points did not come back out
+  within the run (ℓ ≲ 1–1.5 on the laboratory and 1e-15 curves, and one gap point each on the 1e-33 curves at
+  ln R = 22.9 and 15.0, where ℓ_∞ = 0.73 and 0.77).
+- **The first impacts:** f = 0.0538 (ℓ = 44.63, n = 1) and 0.0611 (ℓ = 40.61, n = 2) at laboratory M; 0.0529 (45.37)
+  and 0.0585 (42.48) at 1e-33; 0.0752 (31.53) and 0.1119 (21.67) at 1e-15.
+- **The gap** falls with ln R: on the laboratory curve, n = 1, 0.874 at ln R = 19.0 to 0.140 at 3.8 and 0.0040 at 1.27;
+  n = 2, 0.826 at 12.8 to 0.068 at 2.57 and 8e-4 at 0.86.
+- **The loop parameter** ε_turn = V''''RE/2 at the turn is 10³⁹ (first impacts) to ~10² (ℓ ≈ 1), 3–10⁵ in the gap (the larger on the 1e-33 curves) and
+  0.01–1.7 in the classical rows: outside the scheme's own expansion, as on the exponential.
+- **The off-curve grid** (x = 1e2, 1e3, 1e4, 1e10, 1e40 at ln R = 10, 20, 40, 100 (n = 1) and 8, 15, 25, 60 (n = 2),
+  by the copied `run_point`), against `run_point_power` at the same ln R: equal at x ≥ 1e10 (to the last digit at
+  1e40); within 3e-4 at x = 1e3 and 1e4 wherever the copy's run is valid; at x = 100 within 8.4e-4 at the two lower
+  ln R, and 0.546 against 0.669 (n = 1, ln R = 40) and 0.752 against 0.769 (n = 2, ln R = 25). At ln R = 100 (n = 1)
+  and 60 (n = 2) and x ≤ 1e4 the copy's grid, set from the floor-suppressed λ, gives energies off by 5.4e-4 to 5e19:
+  those six runs are invalid, not measurements of f.
+
+The curve tables (`stage2_curves.md`) give, for each point, ln R, ln x, the regime, ℓ, ℓ_∞, f from the modes and from
+the balance (equal to six digits at every point), v_out/v_in, back, ε_turn, |ΔE/E|, the run time, and the adopted
+law at L_E and at L = n.
+
+### 2.6 The adopted law against it (§1.7, U3)
+
+`fit_law.py` → `wall-02/fit_law.txt`. Residual = law − stage 2, at the 140 curve points where the field came back out;
+regime and ℓ the production's. "mapped": the one-loop points within the mapped ℓ range (ℓ ≥ 12–24, and n = 2 at
+1e-15 from 2.25).
+
+| option | n | one-loop ℓ ≥ 1: max / rms / mean (all) | mapped only | plateau ℓ < 1 | gap |
+|---|---|---|---|---|---|
+| (i) L_E = ln(1 + x) | 1 | 0.429 / 0.128 / +0.073 (34) | 0.021 / 0.012 / +0.011 (12) | 0.409 / 0.254 / +0.186 (5) | 0.806 / 0.294 / +0.099 (23) |
+| | 2 | 0.524 / 0.156 / +0.070 (31) | 0.070 / 0.026 / +0.018 (15) | 0.500 / 0.212 / +0.130 (6) | 0.895 / 0.318 / +0.047 (23) |
+| (ii) L = n | 1 | 0.276 / 0.088 / +0.008 | 0.005 / 0.004 / +0.004 | as (i) | 0.445 / 0.149 / +0.004 |
+| | 2 | 0.411 / 0.127 / +0.021 | 0.100 / 0.028 / −0.010 | as (i) | 0.565 / 0.199 / +0.038 |
+| (iii) L_M = x^{1/n} | 1 | 0.896 / 0.636 / +0.596 | 0.896 / 0.790 / +0.780 | as (i) | 0.839 / 0.399 / +0.198 |
+| | 2 | 0.837 / 0.401 / +0.306 | 0.837 / 0.476 / +0.357 | as (i) | 0.739 / 0.378 / +0.158 |
+| (iv) best constant L | 1 | L = 0.731: 0.253 / 0.087 / +0.001 | 0.004 / 0.004 / +0.004 | as (i) | L = 1.317: 0.445 / 0.140 / +0.046 |
+| | 2 | L = 0.383: 0.293 / 0.118 / −0.010 | 0.158 / 0.046 / −0.020 | as (i) | L = 3.065: 0.565 / 0.193 / +0.074 |
+| (v) refit | 1 | b = 1.0975: 0.254 / 0.087 / +0.001 | 0.004 / 0.004 / +0.004 | measured 0.49–0.89, mean 0.71 | G 0.0017, R0 −1.80, P 2.39: 0.445 / 0.139 / +0.053 |
+| | 2 | b = 1.3627: 0.293 / 0.118 / −0.010 | 0.158 / 0.046 / −0.020 | measured 0.40–0.88, mean 0.77 | G 1e-4, R0 −3.95, P 3.52: 0.565 / 0.192 / +0.082 |
+
+The exponential's own accuracy (crossover `fit_law.txt`): one-loop max 0.074 (rms 0.021), gap max 0.062 (rms 0.024).
+The cap: the largest measured fraction is 0.974 (n = 1 and 2).
+
+**By curve** (one-loop ℓ ≥ 1 / gap, max |res|): at L_E, 0.052 / 0.124 (laboratory), 0.429 / 0.806 (1e-33), 0.119 /
+0.436 (1e-15) at n = 1, and 0.060 / 0.112, 0.524 / 0.895, 0.070 / 0.345 at n = 2; at L = n, 0.124 / 0.135,
+0.276 / 0.445, 0.157 / 0.133 (n = 1) and 0.147 / 0.138, 0.411 / 0.565, 0.169 / 0.141 (n = 2). The 1e-33 curve's points
+carry the largest residuals under every option: there the production's ℓ is lowered by the floor (by up to 3.0 at
+n = 1 and 4.6 at n = 2 below ℓ_∞ = 20), and its "gap" covers ℓ_∞ up to 3.0 (n = 1) and 4.75 (n = 2). For reference only (not an option of §1.7), the law read at ℓ_∞ and its
+regime: one-loop max 0.154 / 0.345 (L_E, n = 1 / 2) and 0.175 / 0.205 (L = n); gap 0.806 / 0.585 (L_E) and
+0.135 / 0.141 (L = n).
+
+**Classical points** (ln R = −0.5, −2, −5, every curve): f/(R S_n) = 0.473, 0.852, 0.998 (n = 1) and 0.523, 0.871,
+0.996 (n = 2), the same on every curve. Against the exponential's table at L_E, f/(R S(L_E)) is 0.48–1.02 at
+laboratory M and 1e-33 (n = 1), 0.27–0.52 there at n = 2, and 18.7–37.4 (n = 1), 25.7–45.9 (n = 2) at 1e-15, where
+L_E ≈ 27–46.
+
+### 2.7 The spectrum (§1.8, U5)
+
+`spectrum.py` → `wall-02/spectrum.txt` (2026-11-15 00:06, load 3.6 → 6.5). k in units of the production's
+k_ex = λ_t√E/2 at φ_t, k/k_ex = (k/ω_t)/(k_ex/ω_t), k_ex/ω_t = (s_t/2)√(n/(n + 1)), s_t = x/(1 + x). x_p by the grid
+(300 points in k/k_ex on [1e-2, 12]) and by a parabola in ln k through the seven points round the peak; the slope by
+a fit of ln|β|² on ln k over k/k_ex ∈ [0.02, 0.1]; κ by `kappa_fit`'s two-point rule with |β|² at x = 10 measured (and
+again at EPS/1000, rtol 1e-13, atol 1e-17: "strict"), and by a straight-line fit of ln|β|² on k/k_ex over [3, 10].
+
+| wall | x | k_ex/ω_t | \|β\|²_max | x_p grid / fit | slope below | \|β\|²(x = 10) (strict) | κ two-point (strict) | κ tail fit |
+|---|---|---|---|---|---|---|---|---|
+| power n = 1 | 1e40 | 0.35355 | 7.680e-2 | 0.466 / 0.466 | 1.34 | 3.81e-10 (3.80e-10) | 2.006 (2.006) | 2.145 |
+| power n = 1 | 6.87 (laboratory, ln R = 10) | 0.30865 | 7.680e-2 | 0.537 / 0.533 | 1.37 | 6.06e-9 (6.08e-9) | 1.728 (1.728) | 1.858 |
+| power n = 1 | 0.930 (laboratory, R = 1) | 0.17038 | 7.680e-2 | 0.972 / 0.966 | 1.47 | 2.82e-5 | 0.876 | 0.966 |
+| power n = 2 | 1e40 | 0.40825 | 3.390e-2 | 0.512 / 0.507 | 1.76 | 1.52e-12 (1.12e-12) | 2.511 (2.544) | 2.713 |
+| power n = 2 | 11.9 (laboratory, ln R = 10) | 0.37671 | 3.390e-2 | 0.550 / 0.549 | 1.78 | 9.77e-12 (9.63e-12) | 2.325 (2.326) | 2.504 |
+| power n = 2 | 0.426 (laboratory, R = 1) | 0.12198 | 3.390e-2 | 1.677 / 1.695 | 1.92 | 2.23e-4 | 0.604 | 0.672 |
+| exponential WallN(90, 1), exact k_ex | — | 0.49454 | 1.4286e-4 | 0.649 / 0.646 | 1.985 | 1.108e-20 (1.108e-20) | 3.967 (3.967) | 4.262 |
+| exponential, k_ex = ω_t/2 | — | 0.5 | 1.4285e-4 | 0.634 / 0.639 | 1.984 | 6.85e-21 (6.88e-21) | 4.012 (4.012) | 4.311 |
+
+The peak in units of ω_t is the same at every x (0.1646 at n = 1, 0.2068 at n = 2); x_p and κ move with x only
+through k_ex/ω_t. The method reproduces the exponential's constants: slope 1.985 (the note's 1.99), |β|² at 5 ω_t
+1.1e-20 (the note's "about 10⁻²⁰"), κ = 3.967 against `KAPPA` = 3.966, and k_peak/ω_t = 0.320 (Table tab:beta 0.316,
+x_p = 0.62 from 0.31/0.5 against 0.64 here). On the power wall at n = 2 the default tolerances leave |β|²(x = 10)
+≈ 1e-12 36% above the strict value; κ changes by 0.03.
+
+### 2.8 The breakage record (§3)
+
+Each mutation was made in a scratch copy of `source/wall/` and the checks of §2.3 run on it (diffs in log 02 §5).
+
+| mutation | caught by | not caught by |
+|---|---|---|
+| G doubled (`K = 8π²RE` in `stage2.solve`) | the Born limit (ratio 0.515, 0.512 against 1 ± 2e-3); energy (\|ΔE/E\| 0.50 in the Born and units rows, 1.3e-4 at ln R = −6) | the classical limit (loop off), S, ℓ, the units comparison (both units broken alike) |
+| V''' of the wrong sign in `PowerWall` | D (worst 2.0, against 1e-6); energy (\|ΔE/E\| 0.12–0.13 in the units rows, 5e-4 in the Born rows, 6.7e-5 at ln R = −6) | the classical limit (ratio 0.999986, within 1e-4: the test field reads V''' only through ω' in its adiabatic projection), S, ℓ, the Born ratio (1.00095, 1.00131) |
+| the floor converted wrongly (`V₀ = A x^{−1−2/n}`, walls.py's M-unit value, in units of φ_t) | the units comparison of ℓ (difference 0.54, 0.75 against 1e-10) and of f (3e-4, 8e-5 against 1e-8); D's U(φ_t)/(xV₀) (100 to 1e80 against 1); the chain against production ((a) 8.1e-3 against 1e-5, (b) 3.9e-4 against 1e-9) | S, the classical and Born limits, energy (the dynamics do not read V₀) |
+
+### 2.9 README §0.3's estimates, checked
+
+- **φ_t at early times** ("E/V₀ of order 10⁶⁰; φ_t ≈ 10⁻⁶⁰M (n = 1), 10⁻³⁰M (n = 2), against M/138"): at the QCD
+  kick E/V₀ = 10^44.4–10^47.4 (ln x = 102.1–109.1, β = 1.2–2.9), so φ_t ≈ 10⁻⁴⁶M (n = 1) and 10⁻²³M (n = 2); at the
+  electroweak kick (β = 3.05) 10^53.7, φ_t ≈ 10⁻⁵⁴M and 10⁻²⁷M. The exponential's φ_t = M/L with L = 102–124. Every
+  first impact is below 10⁻⁸ M_P (the largest mapped φ_t is 1.1e-27 M_P, n = 2 at 1e-15 M_P). (§2.2, map.)
+- **The drain's variables** ("ℓ, L and R may sit where the law was never measured"): ℓ = 38–46 at the first impacts
+  (51 at β = 3.05, n = 1) against the exponential's 33–38; ln R = 102–618 against 87–161; L_E = 33–124. Stage 2 there:
+  §2.5; the law's residuals: §2.6.
+- **The spectrum constants** (x_p = 0.62, κ from the exponential): x_p = 0.47 (n = 1), 0.51 (n = 2) at large x, 0.53–1.70
+  near the floor; κ = 2.0 and 2.5 at large x, 0.6–1.7 near the floor, against 0.62 (0.65 remeasured) and 3.97 (§2.7).
+- **The thresholds** (reported only, P10; 04 measures them in histories): every mapped first impact is far below the
+  unresolved-reflection threshold 10⁻⁸ M_P (φ_t ≤ 1.1e-27 M_P at every candidate); every mapped history parked
+  (N = 26.67–38.90) while one-loop; `WALL_ROUNDING_QUANTA` and the surfing thresholds are not measured here.
+
+### 2.10 For the user: U3–U5, and the Planck scale
+
+The options and the evidence. The user rules; nothing here is acted on.
+
+- **U3, the law on this wall.** Stage 2 on V₀[1 + (M/φ)ⁿ] gives a fraction that depends on ln R and n alone (§2.5);
+  the law reads (ℓ, L, ln R), and on this wall the production's ℓ depends on x through the floor where
+  x ≲ 10³(φ_ta/φ_t)ⁿ (§2.3 item 6). The residuals of (i)–(v) are §2.6's table; against the exponential's 0.074
+  (one-loop) and 0.062 (gap):
+  - (i) L_E: within 0.07 at the mapped points (n = 1: 0.021; n = 2: 0.070) and on the laboratory curve's one-loop rows
+    (0.052, 0.060); 0.42–0.90 at worst on the 1e-33 curve and in the gap.
+  - (ii) L = n: 0.005 (n = 1) and 0.100 (n = 2) at the mapped points; gap 0.13–0.14 on the laboratory and 1e-15
+    curves, 0.45–0.57 on the 1e-33 curve.
+  - (iii) L_M: off by 0.3–0.9 throughout.
+  - (iv) best constant L: one-loop L = 0.73 / 0.38, gap L = 1.32 / 3.07; no better than (ii) at the worst point.
+  - (v) the refit (b = 1.10 / 1.36; gap G, R0, P per n): one-loop max 0.25 / 0.29, gap 0.45 / 0.57, both set by the
+    1e-33 curve; the plateau measured 0.40–0.89 and the cap 0.974.
+  - Every option's worst residual is on the 1e-33 curve, below the mapped range, where the floor shifts ℓ and the
+    regime but not f.
+- **U4, S on this wall.** S_n is a constant: S_1 = 1.02620e-2, S_2 = 5.21615e-3 (§2.4), against the exponential's
+  S(L_E), which is within 2% (n = 1) at x ≤ 0.3, 1.1–4.7 times smaller than S_1 at x = 1–1e3 and 28 times smaller at
+  1e10; at n = 2 S_2 is 0.52–0.56 of S(L_E) at x ≤ 1. The classical points follow R S_n (0.998 and 0.996 of it at
+  ln R = −5; 0.47–0.52 at ln R = −0.5, where the dressing deforms the bounce, as crossover's V6 found).
+- **U5, the spectrum.** x_p and κ against the exponential's (§2.7): large x, x_p = 0.47 / 0.51 and κ = 2.01 / 2.51
+  (two-point; tail fit 2.14 / 2.71) against 0.62–0.65 and 3.97; near the floor both move with k_ex/ω_t = (s_t/2)
+  √(n/(n + 1)). The rise below the peak is k^1.3 (n = 1) and k^1.8 (n = 2) on [0.02, 0.1] k_ex, against k^1.99.
+- **Beside these, the Planck scale** (§2.2): at laboratory M the classical k_ex at the first impact is e^84–e^116 M_P
+  (n = 1) and e^34–e^55 M_P (n = 2), and the turnaround's e^−1.4–e^12.9 and e^−5.1–e^8.3; at 1e-15 M_P, n = 2, e^2.27 and
+  e^−20.3; on the exponential e^−6.7 (β = 2), e^−5.1 (β = 2.9) and e^2.42 (β = 3.05, the electroweak kick).

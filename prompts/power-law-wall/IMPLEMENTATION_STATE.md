@@ -1,6 +1,6 @@
 # power-law-wall campaign — implementation state
 
-**Last updated:** 2026-11-14 · **Status: LIVE — 1 of 8 prompts landed and reviewed (01, the gate Model holds); R4–R5 ruled on its measurements (README §6.4); 02 written, not dispatched; R1–R3 and U1–U7 ruled (README §6).**
+**Last updated:** 2026-11-15 · **Status: LIVE — 2 of 8 prompts landed (01 reviewed, the gate Model holds; 02 landed, the gate Wall holds, not yet reviewed); R4–R5 ruled on 01's measurements (README §6.4); U3–U5 wait for the user, on 02's hand-back; R1–R3 and U1–U7 ruled (README §6).**
 
 The campaign adds the inverse-power-law model V = V₀[1 + (M/φ)ⁿ] beside the exponential, defines the one-loop drain
 law on its wall from measurements, and takes it through the store, the drivers and a rehearsal, so that a science run
@@ -22,7 +22,7 @@ at n = 1 and 2 can follow, under the one-loop law with the fixed α beside it.
 | # | Prompt | Covers | Model | Written? | Landed? | Commit | Log |
 |---|---|---|---|---|---|---|---|
 | 01 | The model | `InversePowerModel`, the seed at any n, the tool route's `--model` and `--n`; natural mode at large M measured | Opus | ✍️ | ✅ | `3aae9a5` | [`logs/01-the-model.md`](logs/01-the-model.md) |
-| 02 | Measure the wall | S, the one-loop fraction and the spectrum on the power wall (research, `source/wall/`); then U3–U5 | Opus | ✍️ | ⬜ | — | — |
+| 02 | Measure the wall | S, the one-loop fraction and the spectrum on the power wall (research, `source/wall/`); then U3–U5 | Opus | ✍️ | ✅ | this commit | [`logs/02-measure-the-wall.md`](logs/02-measure-the-wall.md) |
 | 03 | The law on this wall | `_drain_L`, the law and the spectrum as U3–U5 rule | Opus | ⬜ | ⬜ | — | — |
 | 04 | Measure a sample | about forty histories under both laws; the thresholds | Opus | ⬜ | ⬜ | — | — |
 | 05 | The store | type id 2, its table, the registry, `FINGERPRINT_FORMAT` 8, the label (U6) | Opus | ⬜ | ⬜ | — | — |
@@ -34,8 +34,8 @@ at n = 1 and 2 can follow, under the one-loop law with the fixed α beside it.
 
 Prompts are written one at a time, each after the previous one lands and is reviewed. Orchestrator notes, one prompt at
 a time, in `orchestrator/`: [`prompt-01.md`](orchestrator/prompt-01.md), written 2026-11-13 with prompt 01, used for
-01 (dispatched 2026-11-14 at `75ac6fb`); [`prompt-02.md`](orchestrator/prompt-02.md), written 2026-11-14 with prompt 02, not
-dispatched. Its §0 holds the planner's probe: the path formula, the power wall's scale invariance above V₀, and the
+01 (dispatched 2026-11-14 at `75ac6fb`); [`prompt-02.md`](orchestrator/prompt-02.md), written 2026-11-14 with prompt 02, used for
+02 (dispatched 2026-11-14 at `35f6359`). Its §0 holds the planner's probe: the path formula, the power wall's scale invariance above V₀, and the
 crossover scripts' absolute tolerances failing at large E/V₀.
 
 **Planner's probe for 01 (2026-11-13, at `c540caa`, not committed).** A scratch power-law model through
@@ -106,6 +106,12 @@ As README §2.1: Model (01), Wall (02), Law (03), Sample (04), Store (05), Expor
   equals its closed form and the centred difference of the hook below it from 1e-90 M to 10 M_P at n = 1, 2 (M = 4e-31
   and 1e-3 M_P) with no overflow; the turning point, the minimum, its derivative and the seed against closed forms or an
   independent root; the one-loop law refuses the model at entry; the exponential goldens bitwise; no suite count fell.
+- **Wall — holds** (prompt 02, 2026-11-15; log 02 §4, `.documents/power-law-wall-verification.md` §2): S_n measured at
+  n = 1, 2 (1.02620e-2, 5.21615e-3, constant in x); stage 2 at 153 points on the six mapped curves (laboratory M, 1e-33,
+  1e-15 M_P), validated by the classical limit (2e-6), the Born limit (7.1e-4), energy (≤ 1.9e-8) and convergence
+  (±1e-5 to ±6e-3), the chain equal to `one_loop_turnaround` (1.7e-14); x_p, the slope and κ measured with the
+  exponential recomputed by the same code; the adopted law's residuals at L_E, n, L_M, the best constant L and a refit
+  stated; nothing ruled by the agent. The options and evidence for U3–U5 are verification §2.10.
 
 ## 3. Active and unresolved issues
 
@@ -127,6 +133,8 @@ ObjectFactories 163, tools 292, RunDrivers 76. 01 re-measures them at its base.
 - **01, 2026-11-14, in the worktree:** at the base `75ac6fb` 26, 684 (219 + 465), 163, 292, 76; after 01 26, 705
   (219 + 486), 163, 302, 76. In both, the two worktree failures of orchestrator note 01 ruling 7 (one in RunDrivers, one
   in tools) and no other.
+- **02, 2026-11-14 to 15, in the worktree:** at the base `35f6359` 26, 705 (219 + 486), 163, 302, 76; after 02 the
+  same. In both, the same two worktree failures and no other.
 
 ### History of the status line
 
@@ -141,3 +149,6 @@ ObjectFactories 163, tools 292, RunDrivers 76. 01 re-measures them at its base.
 - 2026-11-14: prompt 02 and its orchestrator note written; not dispatched.
 - 2026-11-14: prompt 02 and its note amended before dispatch, at the user's request ("Add k_ex/M_P at first impact to
   prompt 02's map"): ln(k_ex/M_P) at every candidate, and five more mapped histories (§1.4).
+- 2026-11-14: prompt 02 dispatched at `35f6359`.
+- 2026-11-15: prompt 02 landed (this commit); the gate Wall holds. No issue opened. U3–U5 go to the user with the
+  hand-back (verification §2.10).

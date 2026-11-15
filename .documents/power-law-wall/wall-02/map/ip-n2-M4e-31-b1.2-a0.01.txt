@@ -1,0 +1,12 @@
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+-- tune power-law-wall-02-path-map-inverse-power-n2 it=0 kind=seed H/H0-1=-9.932e-08 phi_ref/phi_min-1=-1.110e-07 norm=-276.630728594 phi_ref=8.3892364002e-21 wall=1.4
+# beta=1.2 M=4e-31 model=inverse-power n=2 alpha=0.01: uptime at end: 23:41  up 15 days,  2:02, 1 user, load averages: 5.98 7.27 7.37
+# beta=1.2 M=4e-31 model=inverse-power n=2 alpha=0.01: tuned normalization ln V0 = -276.63072859401797, phi_ref = 8.389236400198545e-21 M_P, integrations = 1, wall = 1.7 s
+# ln(V0/M^4) = 3.344645; injections = 5; reflections = 5; N_final = 46.075644; parking: N = 30.052637 at candidate 4, ln T_J = -13.056757 (GeV)
+# first bounce: N = 17.667851520, T_J = 231.124418 MeV, phi = 7.802618e-11 M_P, reflected = True
+# idx        N         kind   ln(E/V0)       ln R    phi_t/M_P     ell_t        ell     regime lnkex_t/MP lnkex_ta/MP  phi_ta/M_P  lnR(path) resid(path) lnA(phi_t) P
+    0  17.66785        floor 102.1423115  308.986198  2.64325e-53  -0.89588   38.00884   one_loop   33.820791    -5.083924  2.0809e-36  308.98620   0.000e+00 -1.007e-20 
+    1  20.07984        floor  90.0966542  272.849226  1.09099e-50  -0.89588   33.47584   one_loop   21.775133   -12.596586  9.2314e-36  272.84923   5.684e-14 -1.007e-20 
+    2  25.15362        floor  69.2290264  210.246342  3.70824e-46  -0.89588   25.61703   one_loop    0.907506   -25.605408  1.2122e-34  210.24634   0.000e+00 -1.007e-20 
+    3  25.97253        floor  65.4139853  198.801219  2.49801e-45  -0.89588   24.17917   one_loop   -2.907535   -27.982588  1.9389e-34  198.80122   0.000e+00 -1.007e-20 
+    4  30.05264        floor  40.2107226  123.191431  7.42015e-40  -0.89588   14.66534   one_loop  -28.110798   -43.672239  4.2522e-33  123.19143   1.421e-14 -1.007e-20 P

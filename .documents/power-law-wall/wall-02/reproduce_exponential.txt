@@ -1,0 +1,6 @@
+# reproduce_exponential.py; start: 23:45  up 15 days,  2:06, 1 user, load averages: 3.73 5.69 6.67
+S Wall(10), stage 1a's 121 points: 1.3529e-03  recorded 1.3529e-03
+S WallN(5, 2), stage 2 loop off: 2.14335e-03  recorded 2.14335e-03
+Born Wall(20.95), ln R = 44.44, k_IR = 10 m_ta: 0.44982  recorded 0.44982
+stage 2 run_point(7.885, 23.833): frac 0.71709 v_out/v_in 0.5319 M/phi_turn 1.678 modes 311 steps 53265  recorded 0.71709 0.5319 1.678 311 53265
+# end (7 s): 23:45  up 15 days,  2:06, 1 user, load averages: 3.83 5.68 6.66

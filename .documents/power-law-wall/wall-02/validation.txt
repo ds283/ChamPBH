@@ -1,0 +1,146 @@
+# validate_wall.py; start: 0:07  up 15 days,  2:27, 1 user, load averages: 5.76 7.50 8.60
+# stage-2 rows: frac = 8 pi^2 R rho (the modes' energy), bal = (E - phi'^2/2 - U)/E (the background's balance), v_out/v_in, back = the field came back out, |dE/E| = max |E_tot - E|/E along the run (V3)
+# D: PowerWall's derivatives against central differences, h = 1e-4 phi; tolerance 1e-6 relative (the central difference's own error is ~(h/phi)^2 ~ 1e-8 times the derivatives' ratio)
+D units=phi_t n=1 x=1e+01: V''(phi_t) = 1.000000000000000, U(phi_t)/E = 1.000000000000000, U(phi_t)/(V0 x) = 1.000000000000000
+D units=phi_t n=1 x=1e+40: V''(phi_t) = 1.000000000000000, U(phi_t)/E = 1.000000000000000, U(phi_t)/(V0 x) = 1.000000000000000
+D units=phi_t n=2 x=1e+01: V''(phi_t) = 1.000000000000000, U(phi_t)/E = 1.000000000000000, U(phi_t)/(V0 x) = 1.000000000000000
+D units=phi_t n=2 x=1e+40: V''(phi_t) = 1.000000000000000, U(phi_t)/E = 1.000000000000000, U(phi_t)/(V0 x) = 1.000000000000000
+D units=M     n=1 x=1e+01: V''(phi_t) = 1.000000000000000, U(phi_t)/E = 1.000000000000000, U(phi_t)/(V0 x) = 1.000000000000000
+D units=M     n=1 x=1e+03: V''(phi_t) = 1.000000000000000, U(phi_t)/E = 1.000000000000000, U(phi_t)/(V0 x) = 1.000000000000000
+D units=M     n=2 x=1e+01: V''(phi_t) = 1.000000000000000, U(phi_t)/E = 1.000000000000000, U(phi_t)/(V0 x) = 1.000000000000000
+D units=M     n=2 x=1e+03: V''(phi_t) = 1.000000000000000, U(phi_t)/E = 1.000000000000000, U(phi_t)/(V0 x) = 1.000000000000000
+D worst relative difference over every derivative, unit, n, x and phi: 7.00e-08
+U S   n=1 x=1e+01: phi_t units 1.02620172e-02  M units 1.02620172e-02  rel +4.7e-12  (tolerance 1e-6: DOP853 at rtol 1e-11 in either unit)  (19 s)
+U S   n=1 x=1e+03: phi_t units 1.02620172e-02  M units 1.02620172e-02  rel +2.7e-11  (tolerance 1e-6: DOP853 at rtol 1e-11 in either unit)  (19 s)
+U S   n=2 x=1e+01: phi_t units 5.21615098e-03  M units 5.21615098e-03  rel +1.2e-12  (tolerance 1e-6: DOP853 at rtol 1e-11 in either unit)  (17 s)
+U S   n=2 x=1e+03: phi_t units 5.21615098e-03  M units 5.21615098e-03  rel +1.4e-11  (tolerance 1e-6: DOP853 at rtol 1e-11 in either unit)  (17 s)
+U ell n=1 x=1e+03 lnR=40.0: phi_t units 1.702743771044  M units 1.702743771044  diff +6.7e-16  phi_ta/phi_t 681.519203 vs 681.519203  (tolerance 1e-10: the chain's 1e-12 on ell and rtol 1e-14 on phi_ta)
+U ell n=1 x=1e+02 lnR=29.5: phi_t units 0.569694936345  M units 0.569694936345  diff +5.6e-16  phi_ta/phi_t 98.676014 vs 98.676014  (tolerance 1e-10: the chain's 1e-12 on ell and rtol 1e-14 on phi_ta)
+U ell n=1 x=1e+01 lnR=20.0: phi_t units None  M units None  (no chain)
+U ell n=2 x=1e+03 lnR=28.5: phi_t units 1.864763245768  M units 1.864763245768  diff -2.2e-16  phi_ta/phi_t 32.043840 vs 32.043840  (tolerance 1e-10: the chain's 1e-12 on ell and rtol 1e-14 on phi_ta)
+U ell n=2 x=1e+02 lnR=20.0: phi_t units 0.713394617732  M units 0.713394617732  diff +4.4e-16  phi_ta/phi_t 9.820756 vs 9.820756  (tolerance 1e-10: the chain's 1e-12 on ell and rtol 1e-14 on phi_ta)
+U ell n=2 x=1e+01 lnR=15.0: phi_t units None  M units None  (no chain)
+U frac n=1 x=1e+01 lnR=10.0: phi_t units 0.4540304688  M units 0.4540304688  diff +8.9e-16  steps 39235 vs 39235  |dE/E| 3.6e-10 3.6e-10  (tolerance 1e-8: the same fixed-step RK4 in rescaled variables, which differ by rounding)  (18 s)
+U frac n=1 x=1e+03 lnR=40.0: phi_t units 0.6684185809  M units 0.6684185809  diff +7.8e-16  steps 38245 vs 38245  |dE/E| 1.1e-09 1.1e-09  (tolerance 1e-8: the same fixed-step RK4 in rescaled variables, which differ by rounding)  (8 s)
+U frac n=2 x=1e+01 lnR=8.0: phi_t units 0.4486221582  M units 0.4486221582  diff +2.7e-15  steps 28031 vs 28031  |dE/E| 4.7e-10 4.7e-10  (tolerance 1e-8: the same fixed-step RK4 in rescaled variables, which differ by rounding)  (11 s)
+U frac n=2 x=1e+03 lnR=25.0: phi_t units 0.7685216224  M units 0.7685216224  diff -1.2e-14  steps 29693 vs 29693  |dE/E| 1.9e-10 1.9e-10  (tolerance 1e-8: the same fixed-step RK4 in rescaled variables, which differ by rounding)  (6 s)
+V1 n=1 x=1e+40: S stage 2 (loop off, phi_t units) 1.026202e-02  walls.py (phi_t units, 481 points) 1.026201e-02  ratio 1.000001  v_out/v_in 0.995962  (tolerance 1e-4: crossover's V-A agreement, 1e-5, and the two quadratures)  (24 s)
+V1 n=1 x=1e+00: S stage 2 (loop off, phi_t units) 1.026202e-02  walls.py (M units, 481 points) 1.026201e-02  ratio 1.000001  v_out/v_in 0.995962  (tolerance 1e-4: crossover's V-A agreement, 1e-5, and the two quadratures)  (24 s)
+V1 n=1 x=1e-01: S stage 2 (loop off, phi_t units) 1.026202e-02  walls.py (M units, 481 points) 1.026201e-02  ratio 1.000001  v_out/v_in 0.995962  (tolerance 1e-4: crossover's V-A agreement, 1e-5, and the two quadratures)  (24 s)
+V1 n=2 x=1e+40: S stage 2 (loop off, phi_t units) 5.216159e-03  walls.py (phi_t units, 481 points) 5.216151e-03  ratio 1.000002  v_out/v_in 0.999514  (tolerance 1e-4: crossover's V-A agreement, 1e-5, and the two quadratures)  (19 s)
+V1 n=2 x=1e+00: S stage 2 (loop off, phi_t units) 5.216159e-03  walls.py (M units, 481 points) 5.216151e-03  ratio 1.000002  v_out/v_in 0.999514  (tolerance 1e-4: crossover's V-A agreement, 1e-5, and the two quadratures)  (19 s)
+V1 n=2 x=1e-01: S stage 2 (loop off, phi_t units) 5.216159e-03  walls.py (M units, 481 points) 5.216151e-03  ratio 1.000002  v_out/v_in 0.999514  (tolerance 1e-4: crossover's V-A agreement, 1e-5, and the two quadratures)  (19 s)
+V1R n=1 lnR= -8.0 loop on: frac/R 1.02580e-02  frac 0.000003 bal 0.000003 vout 1.0000 back  True |dE/E| 7.4e-11 modes 205 steps 45969  phi_turn/phi_t 1.0000
+V1R n=1 lnR= -6.0 loop on: frac/R 1.02322e-02  frac 0.000025 bal 0.000025 vout 1.0000 back  True |dE/E| 7.4e-11 modes 205 steps 45970  phi_turn/phi_t 1.0001
+V1R n=1 lnR= -4.0 loop on: frac/R 1.00438e-02  frac 0.000184 bal 0.000184 vout 0.9999 back  True |dE/E| 7.3e-11 modes 205 steps 45973  phi_turn/phi_t 1.0005
+V1R n=1 lnR= -2.0 loop on: frac/R 8.74205e-03  frac 0.001183 bal 0.001183 vout 0.9994 back  True |dE/E| 7.3e-11 modes 205 steps 45991  phi_turn/phi_t 1.0033
+V1R n=1 lnR=  0.0 loop on: frac/R 2.86155e-03  frac 0.002862 bal 0.002862 vout 0.9986 back  True |dE/E| 7.3e-11 modes 205 steps 46047  phi_turn/phi_t 1.0215
+V1R n=2 lnR= -8.0 loop on: frac/R 5.21441e-03  frac 0.000002 bal 0.000002 vout 0.9997 back  True |dE/E| 2.6e-11 modes 210 steps 26967  phi_turn/phi_t 1.0000
+V1R n=2 lnR= -6.0 loop on: frac/R 5.20324e-03  frac 0.000013 bal 0.000013 vout 0.9997 back  True |dE/E| 2.6e-11 modes 210 steps 26967  phi_turn/phi_t 1.0000
+V1R n=2 lnR= -4.0 loop on: frac/R 5.12135e-03  frac 0.000094 bal 0.000094 vout 0.9997 back  True |dE/E| 2.6e-11 modes 210 steps 26968  phi_turn/phi_t 1.0002
+V1R n=2 lnR= -2.0 loop on: frac/R 4.54759e-03  frac 0.000615 bal 0.000615 vout 0.9994 back  True |dE/E| 2.6e-11 modes 210 steps 26976  phi_turn/phi_t 1.0016
+V1R n=2 lnR=  0.0 loop on: frac/R 1.70624e-03  frac 0.001706 bal 0.001706 vout 0.9989 back  True |dE/E| 2.6e-11 modes 210 steps 27011  phi_turn/phi_t 1.0105
+V2 n=1 ell=5.0000 lnR=72.2535 k_IR = 10 m_ta: born 0.658431  stage2-cut 0.658717  ratio 1.00043  |dE/E| 4.6e-10  (tolerance 2e-3: crossover's V1, 4e-4 to 1.0e-3, the Born reduction's own error)  (9 s)
+V2 n=1 ell=8.0000 lnR=107.7835 k_IR = 10 m_ta: born 0.368789  stage2-cut 0.368892  ratio 1.00028  |dE/E| 4.9e-10  (tolerance 2e-3: crossover's V1, 4e-4 to 1.0e-3, the Born reduction's own error)  (7 s)
+V2 n=2 ell=5.0000 lnR=46.9439 k_IR = 10 m_ta: born 0.738515  stage2-cut 0.739042  ratio 1.00071  |dE/E| 1.0e-10  (tolerance 2e-3: crossover's V1, 4e-4 to 1.0e-3, the Born reduction's own error)  (6 s)
+V2 n=2 ell=8.0000 lnR=70.4739 k_IR = 10 m_ta: born 0.398462  stage2-cut 0.398621  ratio 1.00040  |dE/E| 1.4e-10  (tolerance 2e-3: crossover's V1, 4e-4 to 1.0e-3, the Born reduction's own error)  (4 s)
+V2sc n=1 ell=5.0000 lnR=72.2535: born-sc 0.41258 (back True, iterations 3)  stage 2 physical 0.38597  ratio 0.9355  2.7/ell 0.5400  |dE/E| 4.8e-10  (12 s)
+V2sc n=1 ell=8.0000 lnR=107.7835: born-sc 0.27546 (back True, iterations 2)  stage 2 physical 0.26325  ratio 0.9557  2.7/ell 0.3375  |dE/E| 7.0e-09  (10 s)
+V2sc n=1 ell=15.0000 lnR=191.1549: born-sc 0.15494 (back True, iterations 2)  stage 2 physical 0.15099  ratio 0.9745  2.7/ell 0.1800  |dE/E| 3.9e-09  (11 s)
+V2sc n=1 ell=25.0000 lnR=310.6441: born-sc 0.09532 (back True, iterations 2)  stage 2 physical 0.09380  ratio 0.9841  2.7/ell 0.1080  |dE/E| 2.5e-09  (11 s)
+V2sc n=1 ell=40.0000 lnR=490.1741: born-sc 0.06044 (back True, iterations 2)  stage 2 physical 0.05981  ratio 0.9897  2.7/ell 0.0675  |dE/E| 1.9e-09  (13 s)
+V2sc n=2 ell=5.0000 lnR=46.9439: born-sc 0.44831 (back True, iterations 3)  stage 2 physical 0.41775  ratio 0.9318  2.7/ell 0.5400  |dE/E| 6.0e-10  (7 s)
+V2sc n=2 ell=8.0000 lnR=70.4739: born-sc 0.29382 (back True, iterations 2)  stage 2 physical 0.28031  ratio 0.9540  2.7/ell 0.3375  |dE/E| 2.0e-08  (6 s)
+V2sc n=2 ell=15.0000 lnR=125.8453: born-sc 0.16263 (back True, iterations 2)  stage 2 physical 0.15840  ratio 0.9740  2.7/ell 0.1800  |dE/E| 1.0e-08  (6 s)
+V2sc n=2 ell=25.0000 lnR=205.3345: born-sc 0.09926 (back True, iterations 2)  stage 2 physical 0.09767  ratio 0.9839  2.7/ell 0.1080  |dE/E| 5.8e-09  (6 s)
+V2sc n=2 ell=40.0000 lnR=324.8645: born-sc 0.06264 (back True, iterations 2)  stage 2 physical 0.06200  ratio 0.9898  2.7/ell 0.0675  |dE/E| 3.6e-09  (8 s)
+V4 one-loop l~24  n=1 x=1e+40 lnR=310.644 ell=25.00000269345061 ell_inf=25.00000269345061 passes=1 eps_turn=1.91e+22
+V4 one-loop l~24  base     frac 0.093803 bal 0.093803 vout 0.9519 back  True |dE/E| 2.5e-09 modes 1110 steps 43921
+V4 one-loop l~24  ppd x2   frac 0.093803 bal 0.093803 vout 0.9519 back  True |dE/E| 2.5e-09 modes 2219 steps 43921  d(frac) -2.0e-10
+V4 one-loop l~24  kmax x2  frac 0.093806 bal 0.093806 vout 0.9519 back  True |dE/E| 2.1e-09 modes 1134 steps 87395  d(frac) +2.9e-06
+V4 one-loop l~24  kmin /2  frac 0.093799 bal 0.093799 vout 0.9519 back  True |dE/E| 2.9e-09 modes 1134 steps 43327  d(frac) -4.5e-06
+V4 one-loop l~24  h /2     frac 0.093803 bal 0.093803 vout 0.9519 back  True |dE/E| 2.1e-09 modes 1110 steps 87596  d(frac) +2.5e-09
+V4 one-loop l~24  EPS /10  frac 0.093803 bal 0.093803 vout 0.9519 back  True |dE/E| 9.8e-10 modes 1110 steps 43327  d(frac) -1.4e-08
+V4 one-loop l~24  largest |d(frac)| 4.5e-06  (71 s)
+V4 one-loop l~1   n=1 x=1e+40 lnR=25.863 ell=0.9999960353448683 ell_inf=0.9999960353448683 passes=1 eps_turn=3.40e+02
+V4 one-loop l~1   base     frac 0.941183 bal 0.941183 vout 0.2422 back False |dE/E| 1.5e-10 modes 276 steps 102344
+V4 one-loop l~1   ppd x2   frac 0.941183 bal 0.941183 vout 0.2422 back False |dE/E| 1.5e-10 modes 551 steps 102344  d(frac) -6.2e-08
+V4 one-loop l~1   kmax x2  frac 0.941430 bal 0.941430 vout 0.2417 back False |dE/E| 4.3e-11 modes 300 steps 204669  d(frac) +2.5e-04
+V4 one-loop l~1   kmin /2  frac 0.940673 bal 0.940673 vout 0.2432 back False |dE/E| 1.5e-10 modes 300 steps 102985  d(frac) -5.1e-04
+V4 one-loop l~1   h /2     frac 0.941183 bal 0.941183 vout 0.2422 back False |dE/E| 1.2e-11 modes 276 steps 209307  d(frac) -1.2e-07
+V4 one-loop l~1   EPS /10  frac 0.941181 bal 0.941181 vout 0.2422 back False |dE/E| 1.4e-10 modes 276 steps 102985  d(frac) -1.2e-06
+V4 one-loop l~1   largest |d(frac)| 5.1e-04  (89 s)
+V4 gap            n=1 x=1e+40 lnR=10.000 ell=None ell_inf=None passes=2 eps_turn=4.37e+01
+V4 gap            base     frac 0.451178 bal 0.451178 vout 0.7401 back  True |dE/E| 4.1e-10 modes 231 steps 55854
+V4 gap            ppd x2   frac 0.451178 bal 0.451178 vout 0.7401 back  True |dE/E| 4.1e-10 modes 460 steps 55854  d(frac) -1.7e-07
+V4 gap            kmax x2  frac 0.449192 bal 0.449192 vout 0.7414 back  True |dE/E| 2.3e-10 modes 255 steps 111577  d(frac) -2.0e-03
+V4 gap            kmin /2  frac 0.452678 bal 0.452678 vout 0.7388 back  True |dE/E| 3.7e-10 modes 255 steps 55449  d(frac) +1.5e-03
+V4 gap            h /2     frac 0.451178 bal 0.451178 vout 0.7401 back  True |dE/E| 9.2e-12 modes 231 steps 111827  d(frac) -7.1e-09
+V4 gap            EPS /10  frac 0.451177 bal 0.451177 vout 0.7398 back  True |dE/E| 4.3e-10 modes 231 steps 55721  d(frac) -6.2e-07
+V4 gap            largest |d(frac)| 2.0e-03  (51 s)
+V4 one-loop l~24  n=2 x=1e+40 lnR=199.000 ell=24.204148978227092 ell_inf=24.204148978227092 passes=1 eps_turn=1.69e+21
+V4 one-loop l~24  base     frac 0.100742 bal 0.100742 vout 0.9483 back  True |dE/E| 5.9e-09 modes 1082 steps 28233
+V4 one-loop l~24  ppd x2   frac 0.100742 bal 0.100742 vout 0.9483 back  True |dE/E| 5.9e-09 modes 2163 steps 28233  d(frac) -1.1e-09
+V4 one-loop l~24  kmax x2  frac 0.100744 bal 0.100744 vout 0.9483 back  True |dE/E| 5.9e-09 modes 1107 steps 56002  d(frac) +1.5e-06
+V4 one-loop l~24  kmin /2  frac 0.100737 bal 0.100737 vout 0.9483 back  True |dE/E| 6.4e-09 modes 1107 steps 28122  d(frac) -5.0e-06
+V4 one-loop l~24  h /2     frac 0.100742 bal 0.100742 vout 0.9483 back  True |dE/E| 5.8e-09 modes 1082 steps 56442  d(frac) +6.1e-10
+V4 one-loop l~24  EPS /10  frac 0.100742 bal 0.100742 vout 0.9483 back  True |dE/E| 1.4e-09 modes 1082 steps 28122  d(frac) -3.4e-08
+V4 one-loop l~24  largest |d(frac)| 5.0e-06  (44 s)
+V4 one-loop l~1   n=2 x=1e+40 lnR=16.553 ell=0.9999953945654084 ell_inf=0.9999953945654084 passes=1 eps_turn=1.69e+02
+V4 one-loop l~1   base     frac 0.961468 bal 0.961468 vout 0.1962 back False |dE/E| 7.4e-11 modes 276 steps 64288
+V4 one-loop l~1   ppd x2   frac 0.961468 bal 0.961468 vout 0.1962 back False |dE/E| 7.3e-11 modes 551 steps 64288  d(frac) +4.5e-08
+V4 one-loop l~1   kmax x2  frac 0.961372 bal 0.961372 vout 0.1964 back False |dE/E| 4.6e-11 modes 300 steps 128553  d(frac) -9.6e-05
+V4 one-loop l~1   kmin /2  frac 0.961734 bal 0.961734 vout 0.1955 back False |dE/E| 7.3e-11 modes 300 steps 65002  d(frac) +2.7e-04
+V4 one-loop l~1   h /2     frac 0.961468 bal 0.961468 vout 0.1962 back False |dE/E| 1.5e-11 modes 276 steps 129150  d(frac) -3.1e-08
+V4 one-loop l~1   EPS /10  frac 0.961469 bal 0.961469 vout 0.1962 back False |dE/E| 6.4e-11 modes 276 steps 63685  d(frac) +1.3e-06
+V4 one-loop l~1   largest |d(frac)| 2.7e-04  (55 s)
+V4 gap            n=2 x=1e+40 lnR=8.000 ell=None ell_inf=None passes=2 eps_turn=1.53e+02
+V4 gap            base     frac 0.447927 bal 0.447927 vout 0.7429 back  True |dE/E| 3.7e-10 modes 230 steps 36589
+V4 gap            ppd x2   frac 0.447928 bal 0.447928 vout 0.7429 back  True |dE/E| 3.7e-10 modes 458 steps 36589  d(frac) +1.2e-06
+V4 gap            kmax x2  frac 0.447193 bal 0.447193 vout 0.7434 back  True |dE/E| 1.9e-10 modes 254 steps 73135  d(frac) -7.3e-04
+V4 gap            kmin /2  frac 0.453680 bal 0.453680 vout 0.7390 back  True |dE/E| 3.6e-10 modes 254 steps 36862  d(frac) +5.8e-03
+V4 gap            h /2     frac 0.447927 bal 0.447927 vout 0.7429 back  True |dE/E| 2.7e-11 modes 230 steps 73241  d(frac) +6.3e-08
+V4 gap            EPS /10  frac 0.447926 bal 0.447926 vout 0.7429 back  True |dE/E| 3.6e-10 modes 230 steps 36698  d(frac) -1.0e-06
+V4 gap            largest |d(frac)| 5.8e-03  (33 s)
+V4 gap low        n=1 x=1e+40 lnR=3.254 ell=None ell_inf=None passes=1 eps_turn=4.13e+01
+V4 gap low        base     frac 0.121017 bal 0.121017 vout 0.9370 back  True |dE/E| 2.5e-10 modes 205 steps 48105
+V4 gap low        ppd x2   frac 0.121017 bal 0.121017 vout 0.9370 back  True |dE/E| 2.5e-10 modes 409 steps 48105  d(frac) +7.4e-08
+V4 gap low        kmax x2  frac 0.121065 bal 0.121065 vout 0.9369 back  True |dE/E| 8.2e-11 modes 229 steps 96206  d(frac) +4.8e-05
+V4 gap low        kmin /2  frac 0.121152 bal 0.121152 vout 0.9352 back  True |dE/E| 1.9e-10 modes 229 steps 48332  d(frac) +1.4e-04
+V4 gap low        h /2     frac 0.121017 bal 0.121017 vout 0.9370 back  True |dE/E| 7.2e-12 modes 205 steps 96945  d(frac) +1.1e-09
+V4 gap low        EPS /10  frac 0.121017 bal 0.121017 vout 0.9352 back  True |dE/E| 2.4e-10 modes 205 steps 48682  d(frac) +9.5e-09
+V4 gap low        largest |d(frac)| 1.4e-04  (38 s)
+V4 gap low        n=2 x=1e+40 lnR=3.638 ell=None ell_inf=None passes=1 eps_turn=3.49e+01
+V4 gap low        base     frac 0.178566 bal 0.178566 vout 0.9060 back  True |dE/E| 3.6e-10 modes 210 steps 28861
+V4 gap low        ppd x2   frac 0.178566 bal 0.178566 vout 0.9060 back  True |dE/E| 3.6e-10 modes 419 steps 28861  d(frac) +1.8e-07
+V4 gap low        kmax x2  frac 0.178523 bal 0.178523 vout 0.9060 back  True |dE/E| 1.6e-10 modes 234 steps 57705  d(frac) -4.3e-05
+V4 gap low        kmin /2  frac 0.179191 bal 0.179191 vout 0.9055 back  True |dE/E| 3.4e-10 modes 234 steps 28717  d(frac) +6.3e-04
+V4 gap low        h /2     frac 0.178566 bal 0.178566 vout 0.9060 back  True |dE/E| 1.8e-11 modes 210 steps 57454  d(frac) +1.3e-08
+V4 gap low        EPS /10  frac 0.178565 bal 0.178565 vout 0.9059 back  True |dE/E| 3.7e-10 modes 210 steps 28743  d(frac) -2.8e-07
+V4 gap low        largest |d(frac)| 6.3e-04  (22 s)
+V6 S n=1 at x = 1e10, 1e20, 1e40, 1e100 (phi_t units): 1.0262017159e-02, 1.0262017159e-02, 1.0262017159e-02, 1.0262017159e-02  spread 0.0e+00
+V6 S n=2 at x = 1e10, 1e20, 1e40, 1e100 (phi_t units): 5.2161509765e-03, 5.2161509765e-03, 5.2161509765e-03, 5.2161509765e-03  spread 0.0e+00
+# V6 ell: ell(x) - ell_inf at fixed ln R; 'floor' is the least x (on a grid of 0.25 decades) above which |ell(x) - ell_inf| <= 1e-3, beside (phi_ta/phi_t)^n there (the floor matters once it approaches x)
+V6 ell n=1 lnR=  20.0: ell_inf 0.443705; at x = 1e10/1e20/1e40/1e100: 0.443705/0.443705/0.443705/0.443705; |ell - ell_inf| <= 1e-3 from x = 1e4.50, (phi_ta/phi_t)^n = 1.943e+01
+V6 ell n=1 lnR=  40.0: ell_inf 2.245499; at x = 1e10/1e20/1e40/1e100: 2.245499/2.245499/2.245499/2.245499; |ell - ell_inf| <= 1e-3 from x = 1e6.00, (phi_ta/phi_t)^n = 7.137e+02
+V6 ell n=1 lnR= 100.0: ell_inf 7.344248; at x = 1e10/1e20/1e40/1e100: 7.342313/7.344248/7.344248/7.344248; |ell - ell_inf| <= 1e-3 from x = 1e10.50, (phi_ta/phi_t)^n = 1.915e+07
+V6 ell n=1 lnR= 300.0: ell_inf 24.109973; at x = 1e10/1e20/1e40/1e100: none/19.863772/24.109973/24.109973; |ell - ell_inf| <= 1e-3 from x = 1e25.00, (phi_ta/phi_t)^n = 6.994e+21
+V6 ell n=2 lnR=  15.0: ell_inf 0.773774; at x = 1e10/1e20/1e40/1e100: 0.773774/0.773774/0.773774/0.773774; |ell - ell_inf| <= 1e-3 from x = 1e4.75, (phi_ta/phi_t)^n = 2.820e+01
+V6 ell n=2 lnR=  25.0: ell_inf 2.151611; at x = 1e10/1e20/1e40/1e100: 2.151611/2.151611/2.151611/2.151611; |ell - ell_inf| <= 1e-3 from x = 1e5.75, (phi_ta/phi_t)^n = 4.436e+02
+V6 ell n=2 lnR=  60.0: ell_inf 6.667998; at x = 1e10/1e20/1e40/1e100: 6.667620/6.667998/6.667998/6.667998; |ell - ell_inf| <= 1e-3 from x = 1e9.75, (phi_ta/phi_t)^n = 3.715e+06
+V6 ell n=2 lnR= 200.0: ell_inf 24.329796; at x = 1e10/1e20/1e40/1e100: none/19.942179/24.329796/24.329796; |ell - ell_inf| <= 1e-3 from x = 1e25.00, (phi_ta/phi_t)^n = 8.142e+21
+V6 frac n=1 lnR= 40.0 x=1e+100: run_point (refs from the chain on PowerWall(x)) 0.668714  bal 0.668714  ell(x) 2.2454986674080772  mref 5.245e-05 kref 4.954e-04 passes 1  |dE/E| 2.2e-10  (7 s)
+V6 frac n=1 lnR= 40.0 x=1e+40: run_point (refs from the chain on PowerWall(x)) 0.668714  bal 0.668714  ell(x) 2.2454986674080772  mref 5.245e-05 kref 4.954e-04 passes 1  |dE/E| 2.2e-10  (6 s)
+V6 frac n=1 lnR= 40.0 x=1e+10: run_point (refs from the chain on PowerWall(x)) 0.668714  bal 0.668714  ell(x) 2.245498593289131  mref 5.245e-05 kref 4.954e-04 passes 1  |dE/E| 2.2e-10  (6 s)
+V6 frac n=1 lnR= 40.0 x=1e+04: run_point (refs from the chain on PowerWall(x)) 0.668690  bal 0.668690  ell(x) 2.174231537085794  mref 5.287e-05 kref 4.651e-04 passes 1  |dE/E| 2.6e-10  (6 s)
+V6 frac n=1 lnR= 40.0 x=1e+03: run_point (refs from the chain on PowerWall(x)) 0.668419  bal 0.668419  ell(x) 1.702743771044317  mref 5.621e-05 kref 3.085e-04 passes 1  |dE/E| 1.1e-09  (4 s)
+V6 frac n=1 lnR= 40.0 x=1e+02: run_point (refs from the chain on PowerWall(x)) 0.546246  bal 0.546247  ell(x) None  mref 5.204e-05 kref 6.028e-05 passes 3  |dE/E| 4.7e-07  (43 s)
+V6 frac n=2 lnR= 25.0 x=1e+100: run_point (refs from the chain on PowerWall(x)) 0.768603  bal 0.768603  ell(x) 2.15161055221634  mref 2.254e-03 kref 1.938e-02 passes 1  |dE/E| 9.0e-11  (4 s)
+V6 frac n=2 lnR= 25.0 x=1e+40: run_point (refs from the chain on PowerWall(x)) 0.768603  bal 0.768603  ell(x) 2.15161055221634  mref 2.254e-03 kref 1.938e-02 passes 1  |dE/E| 9.0e-11  (4 s)
+V6 frac n=2 lnR= 25.0 x=1e+10: run_point (refs from the chain on PowerWall(x)) 0.768603  bal 0.768603  ell(x) 2.151610505117546  mref 2.254e-03 kref 1.938e-02 passes 1  |dE/E| 9.0e-11  (4 s)
+V6 frac n=2 lnR= 25.0 x=1e+04: run_point (refs from the chain on PowerWall(x)) 0.768597  bal 0.768597  ell(x) 2.1057383133215453  mref 2.266e-03 kref 1.861e-02 passes 1  |dE/E| 9.6e-11  (4 s)
+V6 frac n=2 lnR= 25.0 x=1e+03: run_point (refs from the chain on PowerWall(x)) 0.768522  bal 0.768522  ell(x) 1.7749367107746785  mref 2.365e-03 kref 1.395e-02 passes 1  |dE/E| 1.9e-10  (3 s)
+V6 frac n=2 lnR= 25.0 x=1e+02: run_point (refs from the chain on PowerWall(x)) 0.752106  bal 0.752106  ell(x) 0.5562084910739877  mref 2.041e-03 kref 3.127e-03 passes 2  |dE/E| 5.1e-08  (2 s)
+V6 frac n=1 lnR= 40.0 run_point_power (floor-free references; the same at every x): 0.668714  mref 5.245e-05 kref 4.954e-04 passes 1
+V6 frac n=2 lnR= 25.0 run_point_power (floor-free references; the same at every x): 0.768603  mref 2.254e-03 kref 1.938e-02 passes 1
+# end (187 s): 0:10  up 15 days,  2:30, 1 user, load averages: 6.60 7.49 8.39
