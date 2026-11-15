@@ -1,6 +1,7 @@
 # Orchestrator — prompt 03, the law on this wall
 
-**Not yet used.** Written 2026-11-15 with the prompt. U8 and U9 were ruled by the user the same day, both as proposed
+**Used for 03** (dispatched 2026-11-15 at `7c60226`; landed `d924275`; reviewed on the board, "Orchestrator review of
+prompt 03"). Written 2026-11-15 with the prompt. U8 and U9 were ruled by the user the same day, both as proposed
 (README §6.6, R9 and R10), so it may be dispatched at the user's word.
 
 Read [`../README.md`](../README.md) first: §2, §4, §5, and §6 as ruled (R1–R8, U1–U7) and as proposed (§6.6). For this

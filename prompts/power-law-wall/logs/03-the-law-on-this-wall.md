@@ -3,7 +3,7 @@
 **Subject:** the power wall's one-loop drain law, f_n(ln R) above R·S_n, in `InversePowerModel` under
 `one-loop-measured-pl-v1`, through two new model hooks; the spectrum's direct piece as measured tables on three walls,
 the exponential's included (R6–R10).
-**Commit:** this commit, on branch `power-law-wall`, on top of `7c60226`
+**Commit:** `d924275`, on branch `power-law-wall`, on top of `7c60226`
 **Date:** 2026-11-15, by Claude Opus 5.5 (one agent, in the worktree `.claude/worktrees/power-law-wall`)
 **Result:** **COMPLETE.** The gate Law holds (§4). No stop was reached. Six tests outside the three quanta modules
 were edited because the prompt's own change contradicts what they pinned (§2.2 D12); none pins an exponential history,

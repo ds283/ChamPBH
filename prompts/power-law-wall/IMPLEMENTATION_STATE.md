@@ -1,6 +1,6 @@
 # power-law-wall campaign — implementation state
 
-**Last updated:** 2026-11-15 · **Status: LIVE — 3 of 8 prompts landed (01 and 02 reviewed; 01, the gate Model holds; 02, the gate Wall holds; 03, the gate Law holds, not yet reviewed); R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); R9–R10 (U8 table in x, U9 associated piece) ruled with 03 (README §6.6); R1–R3 and U1–U7 ruled (README §6).**
+**Last updated:** 2026-11-15 · **Status: LIVE — 3 of 8 prompts landed and reviewed (01, the gate Model holds; 02, the gate Wall holds; 03, the gate Law holds); 04 not written; R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); R9–R10 (U8 table in x, U9 associated piece) ruled with 03 (README §6.6); R1–R3 and U1–U7 ruled (README §6).**
 
 The campaign adds the inverse-power-law model V = V₀[1 + (M/φ)ⁿ] beside the exponential, defines the one-loop drain
 law on its wall from measurements, and takes it through the store, the drivers and a rehearsal, so that a science run
@@ -23,7 +23,7 @@ at n = 1 and 2 can follow, under the one-loop law with the fixed α beside it.
 |---|---|---|---|---|---|---|---|
 | 01 | The model | `InversePowerModel`, the seed at any n, the tool route's `--model` and `--n`; natural mode at large M measured | Opus | ✍️ | ✅ | `3aae9a5` | [`logs/01-the-model.md`](logs/01-the-model.md) |
 | 02 | Measure the wall | S, the one-loop fraction and the spectrum on the power wall (research, `source/wall/`); then U3–U5 | Opus | ✍️ | ✅ | `693784b` | [`logs/02-measure-the-wall.md`](logs/02-measure-the-wall.md) |
-| 03 | The law on this wall | f_n(ln R) and S_n in `InversePowerModel` under `one-loop-measured-pl-v1`; the spectrum as tables on three walls (R6–R8) | Opus | ✍️ | ✅ | this commit | [`logs/03-the-law-on-this-wall.md`](logs/03-the-law-on-this-wall.md) |
+| 03 | The law on this wall | f_n(ln R) and S_n in `InversePowerModel` under `one-loop-measured-pl-v1`; the spectrum as tables on three walls (R6–R8) | Opus | ✍️ | ✅ | `d924275` | [`logs/03-the-law-on-this-wall.md`](logs/03-the-law-on-this-wall.md) |
 | 04 | Measure a sample | about forty histories under both laws; the thresholds | Opus | ⬜ | ⬜ | — | — |
 | 05 | The store | type id 2, its table, the registry, `FINGERPRINT_FORMAT` 8, the label (U6) | Opus | ⬜ | ⬜ | — | — |
 | 06 | Drivers and exports | the model option, the plot scripts, the export layout (P11) | Sonnet | ⬜ | ⬜ | — | — |
@@ -36,7 +36,7 @@ Prompts are written one at a time, each after the previous one lands and is revi
 a time, in `orchestrator/`: [`prompt-01.md`](orchestrator/prompt-01.md), written 2026-11-13 with prompt 01, used for
 01 (dispatched 2026-11-14 at `75ac6fb`); [`prompt-02.md`](orchestrator/prompt-02.md), written 2026-11-14 with prompt 02, used for
 02 (dispatched 2026-11-14 at `35f6359`); [`prompt-03.md`](orchestrator/prompt-03.md), written 2026-11-15 with prompt 03,
-not yet used (U8 and U9 ruled as proposed, R9 and R10), and its §0 holds the f_n(ln R) fit the user ruled R7 on and the
+used for 03 (dispatched 2026-11-15 at `7c60226`, after U8 and U9 were ruled as proposed, R9 and R10), and its §0 holds the f_n(ln R) fit the user ruled R7 on and the
 spectrum probes R8 was ruled on. Note 02's §0 holds the planner's probe: the path formula, the power wall's scale invariance above V₀, and the
 crossover scripts' absolute tolerances failing at large E/V₀.
 
@@ -171,6 +171,99 @@ serially by the orchestrator at `693784b`, from scratch scripts that are not com
 - **For the user's ruling** (not acted on): U3, U4 and U5 on verification §2.10. Beside them, not a ruling, is the
   Planck-scale table of verification §2.2. Prompt 03 is not written until they are ruled.
 
+**Orchestrator review of prompt 03 (2026-11-15).** All six checks of note 03 §3 pass. The re-runs below were made
+serially by the orchestrator at `d924275`, from scratch scripts that are not committed, each timed, with the one-minute
+load at its start.
+- **The gate at dispatch** (09:46 local).
+  - `HEAD` was `7c60226`, two text-only commits after the note's measured `434c747` (the prompt `1b9071a`, R9–R10
+    `7c60226`). The worktree held `?? venv` only.
+  - The code was as the note records: no `def _drain_L` in `InversePowerModel`, two drain models, `SPECTRUM_MODEL`
+    `U4-U17-v1`, and the verification document with §1 and §2.
+  - The registry had 62 runs, all finished. The rehearsal lock was free. The main checkout was at `9df9e13` and clean.
+  - One thing differed from the note: the load was 10.84 / 7.63 / 6.15, against the planner's 2.44 / 4.52 / 5.57. Free
+    disk was 125 GB, as the note recorded.
+  - The planner's scratch directory still existed. Its six files were given to the agent as copies, with note §0 proper.
+1. *Scope.* `d924275`'s parent is `7c60226`.
+   - Its 33 files are the prompt's §4 list. `venv` is not in it, and neither is `.documents/OPEN_ISSUES.md`, since no
+     issue was opened.
+   - `git diff 7c60226 d924275` touches no driver, plot script, `config/`, `ObjectFactories/`, `extract_common.py`,
+     `plot_inputs.py` or store tool, and nothing under `science-runs/` or crossover.
+   - The main checkout is still at `9df9e13` and clean. No remote branch contains the commit.
+   - **Six tests outside the three quanta modules are edited (log D12, classed STRUCTURALLY REQUIRED).** P22 names only
+     the three. Each edit follows from a change the prompt orders:
+     - `test_drain_store_records`: `DRAIN_MODELS` gains its third model;
+     - `test_a_values_option`: the third model maps to `one-loop-measured-v1` under `model_of_law`;
+     - `test_inverse_power_model` (g) and `test_model_option` (4): the one-loop refusal moves to n = 3;
+     - `test_plot_quanta_history` and `test_plot_quanta_grid`: the footer's spectrum model is renamed.
+
+     I read all six diffs. None pins an exponential history, golden or fingerprint. `test_a_values_option` failed on
+     the agent's first run after the change and was re-pinned without a stop. Whether D12 stands is for the user.
+2. *The exponential does not move.*
+   - `git diff 7c60226 d924275 -- ComputeTargets/ScalarHistory.py` changes no constant, no S-table literal and nothing
+     of `drain_fraction`'s body. It adds the dispatch, the check, the record's drain model, their comments, and the
+     regimes imported from `drain_model.py` (the same objects).
+   - `test_golden_history`, `test_golden_reflecting_history`, `test_tuning`, `test_store_fingerprint_golden` and
+     `test_fingerprint_format_guard`: 54 tests, OK, 181 s, from a load of 3.27.
+   - `test_history_and_bbn` and `test_history_and_bbn_drain_law`: 12 tests, OK, 44 s, from a load of 2.93.
+   - None of these seven test modules is edited in the commit.
+   - The exponential's tool route under the one-loop law, A = 1, β = 2, laboratory M, run from a `git archive` of
+     `7c60226` (16 s, load 3.00) and at `d924275` (16 s, load 2.71). The two outputs are identical with timings masked,
+     and both equal the committed `tool_route_exponential.txt`.
+3. *The law.* A scratch script that does not import `fit_fn.py`, with the constants transcribed by hand (about 1 s, load
+   1.94):
+   - At every candidate of `ip-n1-M1e-33-b2.0-a0.1`, `ip-n2-M4e-31-b2.9-a0.01` and `ip-n1-M1e-15-b2.0-a0.01` (49, 55 and
+     85, all one-loop), production's `drain_alpha_effective` at A = 1, w_gate = 1, through `InversePowerModel`, equals
+     min(0.99, f) exactly.
+   - From `stage2_scan.txt` with the committed constants, against note §0's:
+
+     | n | points | worst | rms | mapped worst | not back out | §0 |
+     |---|---|---|---|---|---|---|
+     | 1 | 62 | 0.0541 | 0.0191 | 0.0042 | −0.0177 to +0.0114 | 0.054, 0.019, 0.004 |
+     | 2 | 60 | 0.0557 | 0.0215 | 0.0030 | −0.0491 to +0.0262 | 0.056, 0.022, 0.003 |
+
+     Across the switch f is continuous to 1.1e-16 (n = 1) and 0 (n = 2). f peaks at 0.9683 and 0.9659.
+   - At n = 3 the one-loop law refuses `InversePowerModel`, realized or not, naming the class, `one_loop_drain_model` and
+     n = 3. The fixed law accepts it. n = 1 and 2 are accepted under Planck and GeV units and name
+     `one-loop-measured-pl-v1`. The exponential names `one-loop-measured-v1`; it has `_drain_L` and no fraction of its own.
+4. *The spectrum.*
+   - `spectrum_table.py table` re-run took 47 s, at a load of 1.99. On all three walls its literals equal the committed
+     `_LN_BETA2_*` bit for bit (153, 156 and 156 nodes). The first, middle and last entries were matched by eye as well.
+   - On `power-n1` I built my own shape from the committed literals: a not-a-knot spline in (ln x, ln s), x² below the
+     table, the matched exponential above it, and R10's associated piece. I integrated it with scipy's `quad` at
+     rtol 1e-13. Against the module at c_a = 1:
+     - I agrees to 1.7e-13 relative, J to 4.2e-14 and G(1) to 1.1e-12;
+     - x_p agrees to 3e-15 and κ_hi bit for bit.
+   - At both edges s_dir is continuous to the printed 15 digits. At x_hi, d ln s_dir/dx is −2.1574513 on both sides, which
+     is κ_hi.
+   - On every wall C₁ equals 49 x_* s_dir(x_*) exactly, and s(x_*)/s_dir(x_*) = 50 at c_a = 1. s_assoc is continuous at
+     x_p, and C scales with c_a.
+   - An unknown wall is a ValueError naming the three.
+   - The four readers set `SPECTRUM_WALL = qs.WALL_EXPONENTIAL` with a comment naming prompt 06. The rest of their diffs
+     replace `SPECTRUM_MODEL` with `spectrum_model(SPECTRUM_WALL)`.
+5. *The tool-route history.* n = 2, re-run at a load of 2.33 (16 s). Its output equals the committed
+   `tool_route_ip_n2.txt` with timings masked: 48 one-loop injections, `model=one-loop-measured-pl-v1`, ΔN_eff at 1 MeV
+   0.0329852.
+6. *The records.*
+   - The log has §5.1's seven parts. It classifies rulings 1–10 and D1–D16, with every moved test listed with its old and
+     new value (§3.6, §2.2 D12). D1 (the base suite run disturbed by an early edit, then re-run on the clean base) is its
+     one UNINTENDED DRIFT.
+   - The verification document has §3. `law-03/` holds six files. `source/wall/README.md` is appended.
+   - The board had row 03, the gate Law and the baselines.
+   - `CLAUDE.md` now gives 732 and 513. Test discovery at `d924275` counts 26, 219 + 513, 163, 302 and 76, which match
+     the suites' counts after. The full suites were not re-run by me.
+   - `black --check` passes on the 22 Python files changed.
+   - No issue was opened, so §3, §4 and `.documents/OPEN_ISSUES.md` (32 open) are unchanged.
+   - "This commit" is replaced by `d924275` in the log and on the board.
+- **For the user** (not acted on):
+  - D12, above.
+  - Three of the log's observations (§6):
+    - note §0's energy table weighted the spectrum in ln x, not x. The share above x = 3 is 0.41%, 14.5% and 5.8%
+      (exponential, n = 1, n = 2), against §0's 0.2%, 6.8% and 2.5%. The tables' tail share (≤ 7.4e-4) is measured
+      directly and does not depend on it;
+    - f_n peaks at 0.968 | 0.966, above the exponential law's branch caps (0.95, 0.9). Only `DRAIN_ALPHA_CAP` = 0.99
+      applies on this wall;
+    - `model_of_law` still names `one-loop-measured-v1` for the one-loop law, until 05 and 06.
+
 ## 2. The gates
 
 As README §2.1: Model (01), Wall (02), Law (03), Sample (04), Store (05), Export (06), R (07), Close (08).
@@ -251,4 +344,6 @@ ObjectFactories 163, tools 292, RunDrivers 76. 01 re-measures them at its base.
   piece on the new shape) in README §6.6. Not dispatched: it waits for U8 and U9.
 - 2026-11-15: R9 (U8 (a): one table per wall in x, the late cascade's error measured only) and R10 (U9 as proposed)
   ruled by the user (README §6.6). 03 needs no amendment and is not dispatched.
-- 2026-11-15: prompt 03 dispatched at `7c60226`, and landed (this commit); the gate Law holds. No issue opened.
+- 2026-11-15: prompt 03 dispatched at `7c60226`, and landed (`d924275`); the gate Law holds. No issue opened.
+- 2026-11-15: prompt 03 reviewed by the orchestrator (this board, "Orchestrator review of prompt 03"); all six checks
+  pass. D12 (six tests outside the quanta modules re-pinned) goes to the user beside the hand-back; 04 is not written.
