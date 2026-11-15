@@ -86,3 +86,58 @@ The full record, with every table, is `.documents/power-law-wall-verification.md
   peak k^1.3 and k^1.8; the same code gives the exponential's 0.65, 3.97 and 1.99.
 
 No figure was made.
+
+## Prompt 03: the law and the spectrum on this wall (2026-11-15)
+
+**Prompt:** [`03-the-law-on-this-wall.md`](../../03-the-law-on-this-wall.md) · **Log:**
+[`logs/03-the-law-on-this-wall.md`](../../logs/03-the-law-on-this-wall.md) · **Outputs:**
+[`.documents/power-law-wall/law-03/`](../../../../.documents/power-law-wall/law-03/) · **Record:**
+[`.documents/power-law-wall-verification.md`](../../../../.documents/power-law-wall-verification.md) §3
+
+Two scripts, added by prompt 03 to carry out the user's rulings R6–R10 (README §6.5, §6.6). Each is still research in
+the sense of this directory: its output is a record, and production reads only the literals typed from it.
+
+| file | what |
+|---|---|
+| `fit_fn.py` | the drain fraction on this wall as f_n(ln R) per n (R7), fitted on 02's `stage2_scan.txt` (read, not re-run); its reference implementation `fraction_power(n, ln R)`, whose literals are production's (`InversePowerModel.DRAIN_PL_*`); and, with `gate`, the gate Law's first two items against production |
+| `spectrum_table.py` | the test field's \|β_k\|² tabulated on three walls (R8; P19–P21) for `ComputeTargets/quanta_spectrum.py`, at walls.py's strict setting; modes `lowk`, `energy`, `table`, `shape` (R9) and `oldnew` |
+
+How to run each (from this directory):
+
+```bash
+../../../../venv/bin/python fit_fn.py > ../../../../.documents/power-law-wall/law-03/fit_fn.txt
+PYTHONPATH=../../../.. ../../../../venv/bin/python fit_fn.py gate > ../../../../.documents/power-law-wall/law-03/gate_law.txt
+../../../../venv/bin/python spectrum_table.py lowk   >  ../../../../.documents/power-law-wall/law-03/spectrum_tables.txt
+../../../../venv/bin/python spectrum_table.py energy >> ../../../../.documents/power-law-wall/law-03/spectrum_tables.txt
+../../../../venv/bin/python spectrum_table.py table LITERALS.py >> ../../../../.documents/power-law-wall/law-03/spectrum_tables.txt
+PYTHONPATH=../../../.. ../../../../venv/bin/python spectrum_table.py shape >> ../../../../.documents/power-law-wall/law-03/spectrum_tables.txt
+PYTHONPATH=../../../.. ../../../../venv/bin/python spectrum_table.py oldnew OLD_MODULE.py >> ../../../../.documents/power-law-wall/law-03/spectrum_tables.txt
+```
+
+`table` writes the literals for `quanta_spectrum.py` to `LITERALS.py` (a scratch path; not committed). `oldnew` reads the
+module as it stood before prompt 03 (`git show 7c60226:ComputeTargets/quanta_spectrum.py > OLD_MODULE.py`). The
+spectrum modes use six processes; `shape` takes about twenty minutes, the others under a minute each.
+
+### Results
+
+The full record is `.documents/power-law-wall-verification.md` §3. In brief:
+
+- **The fit** (`fit_fn.txt`): the orchestrator's scratch fit (note 03 §0) reproduced with its windows and weights. At the
+  literals (six significant figures), over the 62 | 60 non-classical back-out points (n = 1 | 2) the largest miss is
+  0.0541 | 0.0557 (rms 0.0191 | 0.0215), and over the mapped histories' points 0.0042 | 0.0030; the switch is at
+  ln R_x = 23.0894 | 16.7102, where f peaks at 0.968 | 0.966; f(0⁺) = 0.0049 | 0.0037 against R S_n = 0.0103 | 0.0052
+  at ln R = 0.
+- **The gate** (`gate_law.txt`): `InversePowerModel`'s fraction equals `fraction_power` bit for bit at 122019
+  evaluations per (n, units), under Planck and GeV units; production's α_eff at A = 1 equals min(0.99, f) bit for bit at
+  all 1148 candidates of 02's twenty-two power-law map files.
+- **The tables** (`spectrum_tables.txt`): from k/ω_t = 10⁻³ to x_hi = 4.0 (exponential), 6.5 (n = 1) and 5.5 (n = 2),
+  153–156 nodes at 0.05 in ln x; the spline within 2.8e-6 of direct evaluations at every midpoint; x_p = 0.6468, 0.4658,
+  0.5067; κ_hi = 4.191, 2.157, 2.720; the tail carries 2.2e-4, 7.4e-4, 4.5e-4 of x³s. The low-k power at the strict
+  setting is 2.0000 (exponential), 1.665 (n = 1) and 1.986 (n = 2) at k/ω_t = 10⁻³; the precision floor moves from
+  near 10⁻⁴ ω_t (walls.py's setting) to near 10⁻⁵ ω_t.
+- **The shapes** (`shape`): on the exponential, from L = 40 to 134, x_p moves by −3.2% to +0.9%, J by −0.7% to +0.2%
+  and κ_hi by −3.7% to +1.1% against L = 90's table. On the power wall the spectrum measured at E/V₀ is the table read
+  at x s_t to 2.4e-6 in ln|β|²: the table's error in x is the factor 1/s_t (x_p ×2.08 at n = 1 and ×3.35 at n = 2 at
+  the laboratory curve's R = 1 point), measured and not acted on (R9).
+- **Old against new** (`oldnew`): on the exponential at c_a = 1, I ×1.334, J ×0.79, M₁/M₃ ×0.63, ln s(x_p) from −0.956
+  to −1.975, G(1) ×0.68, Ω(0.5) ×0.53, Ω(2) ×1.25 against U4-U17-v1.

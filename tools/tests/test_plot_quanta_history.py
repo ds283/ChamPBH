@@ -234,7 +234,7 @@ class TestTheFigure(ExportMixin, unittest.TestCase):
         text = " ".join(t.get_text() for t in self.fig.texts)
         for needle in (
             "one-loop-measured-v1 A=1.0 M_Mp=1e-20 n=1 beta=2.0",
-            "U4-U17-v1",
+            "R8-exponential-v1",  # the exponential's spectrum model (power-law-wall prompt 03)
             "c_a = 1",
             "generations 5, bounce rows 9",
             "delta_stim",

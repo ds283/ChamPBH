@@ -20,8 +20,9 @@ every one-loop history of a plot run's exports, from the exports alone. No store
     PYTHONPATH=. ./venv/bin/python tools/quanta_measures.py EXPORT_ROOT [--assoc-scale C]
 
 EXPORT_ROOT is a plot run's `<output>/<label>/`, holding histories.csv and the per-row directories (log 04 §7). C is the
-associated piece's scale c_a (default 1; P46), the only choice of spectrum: U4's shape (U16), with U17's end
-(ComputeTargets/quanta_spectrum.py, SPECTRUM_MODEL).
+associated piece's scale c_a (default 1; P46), the only choice of spectrum: the exponential wall's measured shape, with
+R10's associated piece (ComputeTargets/quanta_spectrum.py, SPECTRUM_MODELS; power-law-wall prompt 03), whose
+spectrum_model every output names (SPECTRUM_WALL below; power-law-wall prompt 06 takes the wall from the export).
 
 **Finding a history.** Each histories.csv row whose drain_model is not `fixed` and whose `normalization` is not blank names
 one directory, EXPORT_ROOT / alpha_path(A, drain_model) / "csv" / history_directory(beta, M_eV, n), by extract_common's
@@ -91,6 +92,10 @@ from CosmologyConcepts.drain_model import DRAIN_MODEL_FIXED
 from Units import Planck_units
 from Units.base import UnitsLike
 from extract_common import alpha_path, history_directory
+
+# the spectrum's wall (power-law-wall prompt 03; README §6.6 P19): the exponential's, passed explicitly until
+# power-law-wall prompt 06 takes it from the export's model column (README §6.3 P11, §2 row 06)
+SPECTRUM_WALL = qs.WALL_EXPONENTIAL
 
 # K_before + delta_K against the next K_before, and the leftover's size against parking_share x K_final: relative to the
 # larger K (ruling 6). Each converted cell is one division by M_P^4 (half an ulp), and the ledger's sum one addition (half
@@ -688,7 +693,7 @@ def run(
     except (OSError, csv.Error, UnicodeDecodeError) as e:
         print(f"!! quanta_measures: cannot read {histories_csv}: {e}", file=sys.stderr)
         return 2
-    spectrum = qs.spectrum(assoc_scale)
+    spectrum = qs.spectrum(SPECTRUM_WALL, assoc_scale)
     tag = suffix(spectrum.assoc_scale)
     model = dict(spectrum_model=spectrum.model, assoc_scale=spectrum.assoc_scale)
     t_start = time.perf_counter()

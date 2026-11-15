@@ -497,3 +497,230 @@ The options and the evidence. The user rules; nothing here is acted on.
 - **Beside these, the Planck scale** (§2.2): at laboratory M the classical k_ex at the first impact is e^84–e^116 M_P
   (n = 1) and e^34–e^55 M_P (n = 2), and the turnaround's e^−1.4–e^12.9 and e^−5.1–e^8.3; at 1e-15 M_P, n = 2, e^2.27 and
   e^−20.3; on the exponential e^−6.7 (β = 2), e^−5.1 (β = 2.9) and e^2.42 (β = 3.05, the electroweak kick).
+
+## 3. The law on this wall (prompt 03, 2026-11-15)
+
+**Tree:** the worktree on branch `power-law-wall` at `7c60226` plus prompt 03's files. No Ray, no store, no registry run.
+The spectrum tables and their measurements used six processes; the tool-route histories ran one at a time. Each output
+in `.documents/power-law-wall/law-03/` records `uptime` at its start and end; the one-minute load ranged from 3 to 13
+over the work. Scripts and how to run each: [`source/wall/README.md`](../prompts/power-law-wall/source/wall/README.md),
+"Prompt 03".
+
+**Measurements, not bounds.** The fit's residuals, the step at ln R = 0, the spectrum's variation over L and E/V₀, and old
+against new are reported; none is a threshold.
+
+### 3.1 The fit f_n(ln R) (R7; P18)
+
+`fit_fn.py` on 02's `stage2_scan.txt` (`law-03/fit_fn.txt`, 11:04, load 3.0; first run at 09:54, load 8.0, with the
+same numbers). The points: the `curve-*` rows with the field back out and production's regime not classical, 62
+(n = 1) and 60 (n = 2). The form y = −ln(1 − f): rising branch y = G (ln R − R₀)^P fitted on 0.3 < ln R < 20 (22 | 23 points), falling branch y = A/(ln R − c) on ln R > 28 (40 | 32
+points), unweighted least squares in f, switched where the two y are equal: the windows, weights and starting points of
+the orchestrator's scratch fit (note 03 §0), kept so that the law is the one R7 was ruled on.
+
+| n | G | R₀ | P | A | c | switch ln R_× |
+|---|---|---|---|---|---|---|
+| 1 | 2.86769e-3 ± 3.3e-3 | −1.27414 ± 1.64 | 2.22126 ± 0.34 | 27.9671 ± 0.14 | 14.9835 ± 0.14 | 23.08943252571177 |
+| 2 | 2.85913e-3 ± 3.8e-3 | −1.10903 ± 1.45 | 2.45613 ± 0.42 | 19.6100 ± 0.057 | 10.9039 ± 0.096 | 16.710187997698853 |
+
+The constants are the fit's rounded to six significant figures, and are production's literals; the ± are curve_fit's
+standard errors (G, R₀ and P are strongly correlated). The switch is the root of y_rise = y_fall at the literals; f's
+step across it is 1.1e-16 (n = 1) and 0 (n = 2). f peaks there at 0.9683 | 0.9659.
+
+Residuals (law − stage 2) at the literals, beside note 03 §0's:
+
+| | n = 1: max / rms / mean (points) | §0 | n = 2: max / rms / mean (points) | §0 |
+|---|---|---|---|---|
+| all non-classical back-out | 0.0541 / 0.0191 / −0.0004 (62) | 0.054 / 0.019 | 0.0557 / 0.0215 / −0.0016 (60) | 0.056 / 0.022 |
+| the mapped histories' points | 0.0042 / 0.0033 / −0.0033 (12) | 0.004 | 0.0030 / 0.0017 / −0.0012 (15) | 0.003 |
+| one-loop ℓ ≥ 1 | 0.0090 / 0.0035 (34) | | 0.0309 / 0.0075 (31) | |
+| one-loop ℓ < 1 | 0.0270 / 0.0187 (5) | | 0.0336 / 0.0250 (6) | |
+| gap | 0.0541 / 0.0299 (23) | | 0.0557 / 0.0311 (23) | |
+| laboratory curve: one-loop ℓ ≥ 1, ℓ < 1, gap | 0.0090, —, 0.0541 | 0.009, 0.054 | 0.0309, 0.0336, 0.0483 | 0.031, 0.034, 0.048 |
+| 1e-33 M_P curve | 0.0042, 0.0040, 0.0425 | 0.004, 0.004, 0.043 | 0.0017, 0.0018, 0.0380 | 0.002, 0.002, 0.038 |
+| 1e-15 M_P curve | 0.0047, 0.0270, 0.0508 | 0.005, 0.027, 0.051 | 0.0221, 0.0318, 0.0557 | 0.022, 0.032, 0.056 |
+
+The unrounded constants give the same residuals to the four digits printed. Beside it, the exponential law's own
+accuracy: 0.074 one-loop, 0.062 gap (crossover's `fit_law.txt`).
+
+- **Not back out** (law − measured): n = 1, seven points, −0.0177 to +0.0114; n = 2, six points, −0.0491 to +0.0262.
+- **The grid rows** back out with |ΔE/E| ≤ 1e-8 (not fitted): n = 1, 20 rows, max 0.0165 (rms 0.0115, mean +0.0094);
+  n = 2, 15 rows, max 0.0300 (rms 0.0225, mean +0.0081), the largest at ln R = 8 (gap) on every copy of x.
+- **The step at ln R = 0:** f_n(0⁺) = 0.00489983 (n = 1) and 0.00367977 (n = 2), against R S_n = 0.010262 and
+  0.00521615 at ln R = 0: ratios 0.4775 and 0.7055. The classical points: f/(R S_n) = 0.473 | 0.523 at ln R = −0.5,
+  0.852 | 0.871 at −2 and 0.998 | 0.996 at −5 (02's measurement, the same on each curve).
+
+### 3.2 The law's dispatch (R7; P15–P17)
+
+- **The drain models** (`CosmologyConcepts/drain_model.py`): `DRAIN_MODEL_ONE_LOOP_PL = "one-loop-measured-pl-v1"`, whose
+  law is the one-loop law; `DRAIN_MODELS = ("fixed", "one-loop-measured-v1", "one-loop-measured-pl-v1")`; `model_of_law`
+  written out, still `one-loop-measured-v1` for the one-loop law. The regimes (`REGIME_*`, `DRAIN_REGIMES`) moved here
+  from `ScalarHistory.py`, which imports them, so that a model can name them without a cycle; every `SM.REGIME_*` is the
+  same object.
+- **The hooks** (`AbstractModel`, no generic default): `_drain_fraction(normalization, regime, ell, log_E, log_R)` (base
+  raises `NotImplementedError` naming the class; `drain_fraction_implemented`; `RealizedModel.drain_fraction(regime,
+  ell, log_E, log_R)`), and the property `one_loop_drain_model` (base raises `NotImplementedError`; a model whose law is
+  undefined at its parameters raises `ValueError`; `RealizedModel.one_loop_drain_model`). `ExponentialModel` keeps
+  `_drain_L` and names `one-loop-measured-v1`; `InversePowerModel` defines `_drain_fraction` and names
+  `one-loop-measured-pl-v1` at n = 1, 2, and raises `ValueError` from both at any other n.
+- **The law** (`InversePowerModel`): `DRAIN_PL_S`, `_G`, `_R0`, `_P`, `_A`, `_C`, `_SWITCH`, keyed by n, each with its
+  source; unassessed 0; classical, or ln R ≤ 0, exp(ln R) S_n; one-loop and gap 1 − e^{−y}, the rising y below the switch
+  and the falling at and above it. It reads neither ℓ, ln E nor the normalization.
+- **The check** (`check_drain_law_model`): under the one-loop law, refuses a model with neither or both of `_drain_L` and
+  `_drain_fraction` ("the one-loop drain law needs exactly one of the model's wall variable L, _drain_L(normalization,
+  log_E), and its own fraction, _drain_fraction(normalization, regime, ell, log_E, log_R); C implements neither|both"),
+  one whose `one_loop_drain_model` raises ("the one-loop drain law: " + the hook's message, e.g. "InversePowerModel (n=3)
+  has no one-loop drain law: one_loop_drain_model is defined at n = 1 and 2 only (power-law-wall README §6.5 R7) (…)"),
+  or one naming a model whose law is not the one-loop law. The fixed law checks nothing.
+- **The loop:** `drain_law_inputs` gives L = None on a model without `_drain_L`; `drain_alpha_effective(…, model=None,
+  log_E=None)` takes the L law when the model is None or defines `_drain_L`, the model's own fraction otherwise, with the
+  cap and gate unchanged; the record's `model` is the model's `one_loop_drain_model` under the one-loop law,
+  `DRAIN_MODEL_FIXED` under the fixed law. `drain_fraction`, its constants and the S table are unchanged.
+
+### 3.3 The spectrum tables (R8; P19–P21; R9, R10)
+
+`spectrum_table.py` (`law-03/spectrum_tables.txt`, 10:28–10:53, load 3.2 to 13.2), walls.Bounce and walls.beta_squared
+unchanged. x = k/k_ex, k_ex the production's: 0.494535 ω_t on WallN(90, 1) (U4-U17-v1 took ω_t/2), and
+(s_t/2)√(n/(n + 1)) = 0.353553 | 0.408248 ω_t on PowerWall(1e40, n), s_t = 1 to double precision.
+
+- **The precision.** At walls.py's setting (rtol 1e-11, atol 1e-14, EPS 1e-5) |β| carries an absolute error near 1e-7,
+  1e-3 of |β|² where the tables end; the tables are computed at the strict setting of 02's `spectrum.py` (rtol 1e-13,
+  atol 1e-17, EPS 1e-8).
+- **The low-k power** d ln|β|²/d ln k (centred difference over k(1 ± 0.02)):
+
+  | k/ω_t | 1e-2 | 1e-3 | 3e-4 | 1e-4 | 3e-5 | 1e-5 |
+  |---|---|---|---|---|---|---|
+  | exponential, walls.py's | 1.9976 | 2.0008 | 2.0069 | 2.0529 | 2.9522 | −5.1339 |
+  | exponential, strict | 1.9976 | 2.0000 | 2.0000 | 2.0004 | 1.9982 | 2.0974 |
+  | n = 1, walls.py's | 1.4353 | 1.6638 | 1.7272 | 1.7562 | 1.7279 | 1.7389 |
+  | n = 1, strict | 1.4353 | 1.6649 | 1.7223 | 1.7591 | 1.8113 | 2.1739 |
+  | n = 2, walls.py's | 1.8729 | 1.9828 | 1.9931 | 2.0421 | 2.1213 | 2.3856 |
+  | n = 2, strict | 1.8717 | 1.9863 | 1.9959 | 1.9991 | 1.9981 | 0.9251 |
+
+  The precision floor, where the power stops tending to 2: near 1e-4 ω_t at walls.py's setting (note 03 §0), near 1e-5
+  ω_t at the strict one. R8's lower edge, 1e-3 ω_t, is above both.
+- **x_hi:** the smallest of 3, 3.5, 4, … at which the tail, as the model continues it, carries at most 1e-3 of x³s.
+  The measured data alone give 3.5, 6.5 and 5.0 (shares 7.5e-4, 6.8e-4, 9.9e-4); under the model those carry 1.2e-3,
+  7.4e-4 and 1.3e-3, so the tables end at 4.0, 6.5 and 5.5.
+
+| wall | x_lo | x_hi | nodes | spline at midpoints (max / rms) | monotone either side of the peak | x_p (parabola) | κ_hi (direct difference) | tail share | J | M₁/M₃ | M₄/M₃ |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| exponential | 0.0020221 | 4.0 | 153 | 2.75e-6 / 2.5e-7 | yes (6081 points) | 0.646803 (0.644555) | 4.191348 (4.191444) | 2.22e-4 | 0.835827 | 0.828542 | 1.383507 |
+| power n = 1 | 0.0028284 | 6.5 | 156 | 2.28e-6 / 2.0e-7 | yes (6201) | 0.465750 (0.464618) | 2.157451 (2.157501) | 7.43e-4 | 0.591750 | 0.464252 | 2.112967 |
+| power n = 2 | 0.0024495 | 5.5 | 156 | 2.34e-6 / 2.1e-7 | yes (6201) | 0.506743 (0.505470) | 2.720202 (2.720259) | 4.47e-4 | 0.689202 | 0.608930 | 1.776235 |
+
+The moments are at c_a = 0 (the script's trapezoid; the module's quadrature agrees to 1e-6). The share of x³s below
+x_lo is below 1e-14 on every wall.
+
+### 3.4 The module (P19, P20)
+
+- `spectrum(wall, assoc_scale=1.0)`, the wall required: `WALL_EXPONENTIAL` ("exponential"), `WALL_POWER_N1`
+  ("power-n1"), `WALL_POWER_N2` ("power-n2"); an unknown wall is a ValueError naming the three. `SPECTRUM_MODELS` gives
+  each its string, "R8-exponential-v1", "R8-power-n1-v1", "R8-power-n2-v1", which is `QuantaSpectrum.model` and the
+  `spectrum_model` column of every quanta output (no column added). `SPECTRUM_MODEL` is gone, so a reader that still names
+  it fails loudly.
+- The tables are literals (ln|β|² at the nodes, X_LO, X_HI, k_ex/ω_t), each with its source; s_dir = x² below x_lo (the
+  normalization), the not-a-knot spline in (ln x, ln s) on the table, s(x_hi) e^{−κ_hi(x − x_hi)} above, κ_hi from the
+  spline's end derivative; x_p the spline's maximum; s_assoc = C₁/x to x_p and (C₁/x) s_dir/s_dir(x_p) above, C₁ = 49 x_*
+  s_dir(x_*): 9.5597e-6 (exponential; 49 x_*³ = 9.5605e-6), 7.3932e-6 (n = 1), 9.3848e-6 (n = 2).
+- Moments and kernel nodes by composite Gauss–Legendre on the pieces between the table's nodes, x_p and x_hi (and their
+  images times e^u for Ω), with the asymptotes of the module docstring. OMEGA_U_MAX = 9 (it was 4) and OMEGA_U_STEP =
+  0.01 (it was 0.005): the asymptote's remainder bound at u = 9 is below 1.2e-15 of M₅ and 1e-18 of M₂ on every wall
+  (3.6e-4 at u = 8). G's grid is unchanged.
+- **Against direct quadrature**, every wall at c_a = 1, 0 and 10: moments to 1e-12; G (37 points across the grid, its
+  ends and beyond) within 1e-10, the largest 9.7e-11 (n = 1); Ω (31 points over ±13) within 4.8e-10 (exponential); the
+  quadratures' stated errors 1.1e-14. The unit tests assert 1e-7 (ruling 5).
+- `PEAK_SPECTRUM` is unchanged. `X_PEAK`, `KAPPA`, `KAPPA_BY_L`, `BETA2_MAX_BY_L`, `kappa_fit`, the fit's constants and
+  the closed forms are removed; no reader used them (two tool tests' direct quadratures did, and are re-pinned, §3.8).
+
+### 3.5 The shapes over L and over E/V₀ (R9)
+
+At c_a = 0, each table built by the same rule (step 0.05):
+
+| exponential, WallN(L, 1) | k_ex/ω_t | x_p | J | M₁/M₃ | κ_hi | against L = 90: x_p, J, M₁/M₃, κ_hi |
+|---|---|---|---|---|---|---|
+| L = 40 | 0.487950 | 0.62636 | 0.83030 | 0.82383 | 4.0365 | ×0.9684, 0.9934, 0.9943, 0.9631 |
+| L = 70 | 0.493007 | 0.64198 | 0.83464 | 0.82764 | 4.1541 | ×0.9925, 0.9986, 0.9989, 0.9911 |
+| L = 90 | 0.494535 | 0.64680 | 0.83583 | 0.82854 | 4.1913 | ×1 |
+| L = 110 | 0.495516 | 0.64992 | 0.83656 | 0.82906 | 4.2157 | ×1.0048, 1.0009, 1.0006, 1.0058 |
+| L = 134 | 0.496310 | 0.65245 | 0.83713 | 0.82944 | 4.2356 | ×1.0087, 1.0016, 1.0011, 1.0106 |
+
+On the power wall, measured at each E/V₀ in its own x (walls.py's units of M below 1e40):
+
+| wall, x = E/V₀ | s_t | x_p | J | M₁/M₃ | κ_hi | against the table: x_p, J, M₁/M₃, κ_hi | ln\|β\|² against the table at x s_t / at x (max) |
+|---|---|---|---|---|---|---|---|
+| n = 1, 1e40 | 1 | 0.46575 | 0.59175 | 0.46425 | 2.1575 | ×1 | 4.4e-16 / 0 |
+| n = 1, 1e3 | 0.9990 | 0.46622 | 0.59116 | 0.46332 | 2.1552 | ×1.0010, 0.9990, 0.9980, 0.9990 | 3.1e-7 / 0.01 |
+| n = 1, 10 | 0.9091 | 0.51232 | 0.53795 | 0.38368 | 1.9595 | ×1.1000, 0.9091, 0.8264, 0.9082 | 2.4e-6 / 1.24 |
+| n = 1, 1 | 0.5000 | 0.93150 | 0.29588 | 0.11606 | 1.0787 | ×2.0000, 0.5000, 0.2500, 0.5000 | 5.0e-8 / 6.84 |
+| n = 1, 0.9302 (lab, R = 1) | 0.4819 | 0.96647 | 0.28517 | 0.10781 | 1.0397 | ×2.0751, 0.4819, 0.2322, 0.4819 | 7.4e-8 / 6.98 |
+| n = 2, 1e40 | 1 | 0.50674 | 0.68920 | 0.60893 | 2.7202 | ×1 | 1.8e-15 / 0 |
+| n = 2, 1e3 | 0.9990 | 0.50725 | 0.68851 | 0.60771 | 2.7173 | ×1.0010, 0.9990, 0.9980, 0.9989 | 3.0e-7 / 0.01 |
+| n = 2, 10 | 0.9091 | 0.55742 | 0.62655 | 0.50325 | 2.4717 | ×1.1000, 0.9091, 0.8264, 0.9086 | 2.0e-6 / 1.34 |
+| n = 2, 1 | 0.5000 | 1.01349 | 0.34460 | 0.15223 | 1.3561 | ×2.0000, 0.5000, 0.2500, 0.4985 | 3.4e-7 / 7.28 |
+| n = 2, 0.4261 (lab, R = 1) | 0.2988 | 1.69601 | 0.20592 | 0.05436 | 0.8102 | ×3.3469, 0.2988, 0.0893, 0.2978 | 2.6e-7 / 9.53 |
+
+The measured spectrum at each E/V₀ is the reference table read at x s_t, to 2.4e-6 in ln|β|²: the table's error in x
+is the factor 1/s_t, exactly, and x_p, J, M₁/M₃ and κ_hi move as 1/s_t, s_t, s_t² and s_t. Measured, not acted on (R9).
+
+### 3.6 Old against new on the exponential
+
+Both normalized with s_dir = x² at small x (U4-U17-v1's x is k/(ω_t/2), the table's k/(0.494535 ω_t)):
+
+| | c_a = 1: U4-U17-v1 | R8-exponential-v1 | new/old | c_a = 0: new/old |
+|---|---|---|---|---|
+| I | 9.300716e-2 | 1.240385e-1 | 1.3336 | 1.3336 |
+| J = M₂/M₃ | 1.056044 | 0.8358392 | 0.7915 | 0.7915 |
+| M₁/M₃ | 1.306207 | 0.8285867 | 0.6343 | 0.6343 |
+| ln s(x_p) | −0.9560315 | −1.975485 | 2.0663 | 2.0664 |
+| x_p | 0.62 | 0.6468034 | 1.0432 | 1.0432 |
+| G(0.01) | 6.530617e-5 | 4.142724e-5 | 0.6344 | 0.6343 |
+| G(1) | 0.4817193 | 0.3266532 | 0.6781 | 0.6781 |
+| G(10) | 9.615863 | 7.427097 | 0.7724 | 0.7724 |
+| Ω(0.5) | 0.1994639 | 0.1055976 | 0.5294 | 0.5294 |
+| Ω(1) | 0.1574770 | 0.1093577 | 0.6944 | 0.6944 |
+| Ω(2) | 2.683541e-2 | 3.351884e-2 | 1.2491 | 1.2503 |
+
+The relativistic-quanta analysis of the exponential moves by these when it is repeated after this campaign (R8,
+convention 8).
+
+### 3.7 The gate Law, item by item
+
+1. **The law at synthetic inputs** (`law-03/gate_law.txt`, 11:04, load 3.0): `InversePowerModel`'s fraction equals
+   `fit_fn.fraction_power` bit for bit at every one of 122019 evaluations per (n, units), n = 1, 2, under Planck_units
+   and GeV_units, over ln R ∈ [−20, 600] (62001 grid points, 0 and its float neighbours, the switches and theirs; the
+   classical regime at ln R ≤ 0, one-loop and gap above). The unit test `test_power_wall_law` (d) asserts the same on its
+   own grid.
+2. **02's maps, candidate by candidate:** at all 1148 candidates of the twenty-two `map/ip-*.txt` files (the prompt's
+   twenty and the two at β = 3.05 that 02's amended map added; every candidate one-loop), production's α_eff at A = 1,
+   w_gate = 1, through `drain_alpha_effective` with the model, equals min(0.99, `fraction_power`) bit for bit.
+3. **The exponential bitwise:** `test_golden_history`, `test_golden_reflecting_history`, `test_measured_drain_law`,
+   `test_drain_law`, the tool tests under both laws (`test_history_and_bbn`, `_alpha`, `_drain_law`, `test_surfing_scan`)
+   and the fingerprint goldens (in `ObjectFactories/tests`) pass unedited. The exponential's tool route below is identical
+   to the base's, timings masked.
+4. **The tool route** (`law-03/tool_route_*.txt`, 10:54–10:55, load 8.9 to 5.8; 16–17 s each), `tools/history_and_bbn.py
+   2.0 4e-31 --drain-law one_loop --alpha 1`, tuned in one integration from the tracking seed:
+
+   | | injections (regimes) | Σ α_eff | first impact ln R, α_eff | ΔN_eff 1 MeV / today | parking N (ln T_J) | drain.model |
+   |---|---|---|---|---|---|---|
+   | n = 1 | 37 (one-loop 37) | 3.102674 | 530.575, 0.052798 | 0.0285519 / 0.030891 | 30.9009 (−9.90666) | one-loop-measured-pl-v1 |
+   | n = 2 | 48 (one-loop 48) | 4.673102 | 320.687, 0.061340 | 0.0329852 / 0.0345102 | 29.654 (−8.81398) | one-loop-measured-pl-v1 |
+   | exponential | 45 (one-loop 45) | 5.315675 | 142.366, 0.079630 | 0.041888 / 0.044624 | 30.1253 (−9.19825) | one-loop-measured-v1 |
+
+   The power-law records have L None at every candidate. Σ α_eff is from a scratch capture of the same tuned payloads
+   (not committed). The exponential's output equals the base's (`git archive 7c60226`, run from scratch) line for line
+   with the timings masked.
+5. **The spectrum** as R8 rules on every wall (§3.3, §3.4): `test_quanta_spectrum` rewritten (23 tests), the tools' quanta
+   tests pass, re-pinned only where the spectrum moved (§3.8).
+
+### 3.8 The tests that moved
+
+In the three quanta modules (P22): `test_quanta_spectrum.py` is rewritten for the walls (14 tests → 23); in
+`test_quanta_measures.py` the direct-quadrature helpers take the exponential wall's shape and breaks (`qs.shape(x, c)`,
+`qs.X_PEAK`, `qs.KAPPA` → `qs.shape(WALL, x, c)`, the wall's x_lo, x_p, x_hi and κ_hi), ln n_g's reference reads
+`qs.x_peak(WALL)`, and `spectrum_model` is `qs.spectrum_model(WALL)` (was `qs.SPECTRUM_MODEL`); in
+`test_quanta_figures.py` `qs.SPECTRUM_MODEL` → `qs.spectrum_model(qf.SPECTRUM_WALL)` (two places). No tolerance moved.
+Outside them, where the prompt's own change contradicts an assertion: the footers' "U4-U17-v1" → "R8-exponential-v1"
+(`test_plot_quanta_history`, `test_plot_quanta_grid`); `DRAIN_MODELS` gains its third value
+(`test_drain_store_records`); `model_of_law` inverts `law_of` on the first two models only (`test_a_values_option`); the
+one-loop refusal of `InversePowerModel` moves from n = 2 to n = 3 (`test_inverse_power_model` (g), `test_model_option`
+(4)). No test that pins an exponential history, golden or fingerprint is edited.

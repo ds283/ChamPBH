@@ -28,9 +28,16 @@ table and the law's long comment stay in ComputeTargets/ScalarHistory.py.
   carries the law's strength A, finite and > 0, and each candidate drains by the measured law of
   ComputeTargets/ScalarHistory.py (drain_alpha_effective).
 - the drain models (README §8.10, decision 1; §8.11 P27): the value of `alpha_value.drain_model`, a key of every
-  history. DRAIN_MODEL_FIXED is the fixed law; DRAIN_MODEL_ONE_LOOP names the measured law and its version.
+  history. DRAIN_MODEL_FIXED is the fixed law; DRAIN_MODEL_ONE_LOOP names the measured law and its version, the
+  exponential family's (the L law of ComputeTargets/ScalarHistory.py); DRAIN_MODEL_ONE_LOOP_PL (power-law-wall
+  prompt 03; README §6.6 P17) names the power wall's one-loop law, f_n(ln R) and R S_n, which
+  CosmologyConcepts/Models/InversePowerModel.py defines. Which one-loop model a history takes is its model's
+  (AbstractModel.one_loop_drain_model).
 - law_of: the one mapping from a model to its law; check_drain_law: the rules for the value under a law, the
   one statement of them.
+- the regimes of a candidate under the one-loop law (REGIME_*, DRAIN_REGIMES), defined here since power-law-wall
+  prompt 03 so that a model's own fraction (AbstractModel._drain_fraction) can name them without importing
+  ComputeTargets.ScalarHistory, which imports them from here, so that every SM.REGIME_* resolves to the same object.
 """
 
 from math import isfinite
@@ -44,21 +51,38 @@ DRAIN_LAWS = (DRAIN_LAW_FIXED, DRAIN_LAW_ONE_LOOP)
 # measured law and its version. THE VERSION MOVES whenever drain_fraction, its constants or the S table
 # (ComputeTargets/ScalarHistory.py) change, so that a new version is a new key value: a lookup under the new
 # string finds no history of the old version, as a lookup under a new VERSION_LABEL finds none of the old label
+#
+# DRAIN_MODEL_ONE_LOOP_PL (power-law-wall prompt 03; README §6.5 R7, §6.6 P17) is the power wall's one-loop law,
+# f_n(ln R) above the classical branch R S_n, defined at n = 1 and 2 by InversePowerModel, whose constants it versions:
+# THE VERSION MOVES whenever they change. It joins DRAIN_MODELS after the two there, so that their order (and
+# extract_common's sort by it) is unchanged for the exponential
 DRAIN_MODEL_FIXED = "fixed"
 DRAIN_MODEL_ONE_LOOP = "one-loop-measured-v1"
-DRAIN_MODELS = (DRAIN_MODEL_FIXED, DRAIN_MODEL_ONE_LOOP)
+DRAIN_MODEL_ONE_LOOP_PL = "one-loop-measured-pl-v1"
+DRAIN_MODELS = (DRAIN_MODEL_FIXED, DRAIN_MODEL_ONE_LOOP, DRAIN_MODEL_ONE_LOOP_PL)
 
 # the law each model is integrated under (the one mapping; one-loop-drain prompt 03 §1.1)
 _LAW_OF_MODEL = {
     DRAIN_MODEL_FIXED: DRAIN_LAW_FIXED,
     DRAIN_MODEL_ONE_LOOP: DRAIN_LAW_ONE_LOOP,
+    DRAIN_MODEL_ONE_LOOP_PL: DRAIN_LAW_ONE_LOOP,
 }
+
+# the regimes of a candidate under the one-loop law (one-loop-drain README §8.2): peak_estimate's classification,
+# computed once, in the loop (P18), with a one-loop solution of ell <= 0 called gap (P24). Defined in
+# ComputeTargets/ScalarHistory.py until power-law-wall prompt 03, which imports them from here
+REGIME_ONE_LOOP = "one_loop"
+REGIME_GAP = "gap"
+REGIME_CLASSICAL = "classical"
+REGIME_UNASSESSED = "unassessed"
+DRAIN_REGIMES = (REGIME_ONE_LOOP, REGIME_GAP, REGIME_CLASSICAL, REGIME_UNASSESSED)
 
 
 def law_of(drain_model: str, context: str = "law_of") -> str:
     """
-    The drain law of a drain model: DRAIN_LAW_FIXED for DRAIN_MODEL_FIXED and DRAIN_LAW_ONE_LOOP for
-    DRAIN_MODEL_ONE_LOOP. Any other model is a ValueError, whose message begins with context.
+    The drain law of a drain model: DRAIN_LAW_FIXED for DRAIN_MODEL_FIXED, and DRAIN_LAW_ONE_LOOP for
+    DRAIN_MODEL_ONE_LOOP and DRAIN_MODEL_ONE_LOOP_PL. Any other model is a ValueError, whose message begins with
+    context.
     """
     try:
         return _LAW_OF_MODEL[drain_model]
@@ -70,8 +94,15 @@ def law_of(drain_model: str, context: str = "law_of") -> str:
 
 # the inverse of law_of, the one mapping from a law to its current model (one-loop-drain prompt 04, orchestrator
 # note 04 ruling 4): the model a driver's or a tool's law option names. DRAIN_MODEL_ONE_LOOP is the code's current
-# one-loop model, so a version bump moves this and nothing typed at a call site
-_MODEL_OF_LAW = {law: model for model, law in _LAW_OF_MODEL.items()}
+# one-loop model, so a version bump moves this and nothing typed at a call site. Written out since power-law-wall
+# prompt 03 (P17), when two models came to share the one-loop law: it still returns DRAIN_MODEL_ONE_LOOP, the
+# exponential family's, for that law. A history's one-loop model is its model's (AbstractModel.one_loop_drain_model);
+# the call sites that name this mapping or DRAIN_MODEL_ONE_LOOP (the drivers, the plot scripts, the argument parser and
+# the store tools) are made model-aware by power-law-wall prompts 05 and 06
+_MODEL_OF_LAW = {
+    DRAIN_LAW_FIXED: DRAIN_MODEL_FIXED,
+    DRAIN_LAW_ONE_LOOP: DRAIN_MODEL_ONE_LOOP,
+}
 
 
 def model_of_law(drain_law: str, context: str = "model_of_law") -> str:

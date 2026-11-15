@@ -233,7 +233,7 @@ class TestThePanels(ExportMixin, unittest.TestCase):
             "failed 1",
             "no quanta_histories row 1",
             "A = 1",
-            "U4-U17-v1",
+            "R8-exponential-v1",  # the exponential's spectrum model (power-law-wall prompt 03)
             "c_a = 1",
             "one-loop-measured-v1",
         ):

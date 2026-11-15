@@ -1,6 +1,6 @@
 # power-law-wall campaign — implementation state
 
-**Last updated:** 2026-11-15 · **Status: LIVE — 2 of 8 prompts landed and reviewed (01, the gate Model holds; 02, the gate Wall holds); R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); R9–R10 (U8 table in x, U9 associated piece) ruled with 03 (README §6.6); 03 written, not dispatched; R1–R3 and U1–U7 ruled (README §6).**
+**Last updated:** 2026-11-15 · **Status: LIVE — 3 of 8 prompts landed (01 and 02 reviewed; 01, the gate Model holds; 02, the gate Wall holds; 03, the gate Law holds, not yet reviewed); R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); R9–R10 (U8 table in x, U9 associated piece) ruled with 03 (README §6.6); R1–R3 and U1–U7 ruled (README §6).**
 
 The campaign adds the inverse-power-law model V = V₀[1 + (M/φ)ⁿ] beside the exponential, defines the one-loop drain
 law on its wall from measurements, and takes it through the store, the drivers and a rehearsal, so that a science run
@@ -23,7 +23,7 @@ at n = 1 and 2 can follow, under the one-loop law with the fixed α beside it.
 |---|---|---|---|---|---|---|---|
 | 01 | The model | `InversePowerModel`, the seed at any n, the tool route's `--model` and `--n`; natural mode at large M measured | Opus | ✍️ | ✅ | `3aae9a5` | [`logs/01-the-model.md`](logs/01-the-model.md) |
 | 02 | Measure the wall | S, the one-loop fraction and the spectrum on the power wall (research, `source/wall/`); then U3–U5 | Opus | ✍️ | ✅ | `693784b` | [`logs/02-measure-the-wall.md`](logs/02-measure-the-wall.md) |
-| 03 | The law on this wall | f_n(ln R) and S_n in `InversePowerModel` under `one-loop-measured-pl-v1`; the spectrum as tables on three walls (R6–R8) | Opus | ✍️ | ⬜ | — | — |
+| 03 | The law on this wall | f_n(ln R) and S_n in `InversePowerModel` under `one-loop-measured-pl-v1`; the spectrum as tables on three walls (R6–R8) | Opus | ✍️ | ✅ | this commit | [`logs/03-the-law-on-this-wall.md`](logs/03-the-law-on-this-wall.md) |
 | 04 | Measure a sample | about forty histories under both laws; the thresholds | Opus | ⬜ | ⬜ | — | — |
 | 05 | The store | type id 2, its table, the registry, `FINGERPRINT_FORMAT` 8, the label (U6) | Opus | ⬜ | ⬜ | — | — |
 | 06 | Drivers and exports | the model option, the plot scripts, the export layout (P11) | Sonnet | ⬜ | ⬜ | — | — |
@@ -186,6 +186,15 @@ As README §2.1: Model (01), Wall (02), Law (03), Sample (04), Store (05), Expor
   exponential recomputed by the same code; the adopted law's residuals at L_E, n, L_M, the best constant L and a refit
   stated; nothing ruled by the agent. The options and evidence for U3–U5 are verification §2.10.
 
+- **Law — holds** (prompt 03, 2026-11-15; log 03 §4, `.documents/power-law-wall-verification.md` §3): the fit f_n(ln R)
+  reproduces note 03 §0's (worst 0.0541 | 0.0557, mapped 0.0042 | 0.0030; n = 1 | 2); `InversePowerModel`'s fraction
+  equals `fit_fn.fraction_power` bit for bit at 122019 synthetic inputs per (n, units) under two `UnitsLike`, and
+  production's α_eff at A = 1 equals min(0.99, f) bit for bit at all 1148 candidates of 02's power-law maps; the
+  exponential's goldens, tool tests and fingerprint goldens pass unedited, and its tool route is identical to the base's;
+  the power-law tool route runs under `one-loop-measured-pl-v1` at n = 1, 2; the spectrum is R8's three regions on every
+  wall (tables to k/ω_t = 10⁻³, x_hi 4.0 | 6.5 | 5.5, the tail ≤ 7.4e-4 of the energy), every kernel within 5e-10 of its
+  quadrature reference.
+
 ## 3. Active and unresolved issues
 
 None.
@@ -208,6 +217,8 @@ ObjectFactories 163, tools 292, RunDrivers 76. 01 re-measures them at its base.
   in tools) and no other.
 - **02, 2026-11-14 to 15, in the worktree:** at the base `35f6359` 26, 705 (219 + 486), 163, 302, 76; after 02 the
   same. In both, the same two worktree failures and no other.
+- **03, 2026-11-15, in the worktree:** at the base `7c60226` 26, 705 (219 + 486), 163, 302, 76; after 03 26, 732
+  (219 + 513), 163, 302, 76. In both, the same two worktree failures and no other.
 
 ### History of the status line
 
@@ -240,3 +251,4 @@ ObjectFactories 163, tools 292, RunDrivers 76. 01 re-measures them at its base.
   piece on the new shape) in README §6.6. Not dispatched: it waits for U8 and U9.
 - 2026-11-15: R9 (U8 (a): one table per wall in x, the late cascade's error measured only) and R10 (U9 as proposed)
   ruled by the user (README §6.6). 03 needs no amendment and is not dispatched.
+- 2026-11-15: prompt 03 dispatched at `7c60226`, and landed (this commit); the gate Law holds. No issue opened.

@@ -37,16 +37,30 @@ ln(M/phi) does not exist, is a ComputationFailureError naming the model, phi and
 note 01, ruling 2); the integrator treats one raised on a trial state as a rejected step. Whether some
 continuation to phi <= 0 is wanted is the user's to rule (prompt 01 §1.6).
 
-_drain_L is not implemented. The one-loop drain law was fitted on the exponential family, whose wall
-has a large parameter L; this wall's local index is n and it has none, so L on this wall is measured by
-power-law-wall prompt 02 and defined by prompt 03 as the user rules (U3). Until then the one-loop law
-refuses the model at entry (check_drain_law_model), and the fixed law and natural mode run it.
+_drain_L is not implemented: the power wall has no large parameter L (its local index is n), and the one-loop
+law of the exponential family does not describe it (power-law-wall prompt 02). Its one-loop law is its own
+(power-law-wall prompt 03; README §6.5 R6, R7, §6.6 P15, P16), _drain_fraction, stored under the drain model
+one_loop_drain_model = "one-loop-measured-pl-v1", at n = 1 and 2 only:
+
+    f = R S_n                     at ln R <= 0 (the classical branch, R6),
+    f = 1 - exp(-y)               above, with y = G_n (ln R - R0_n)^P_n below the switch ln R_x,n and
+                                  y = A_n/(ln R - c_n) at and above it (f_n(ln R), R7),
+
+for one-loop and gap candidates alike (the measured fraction depends on ln R and n alone; it reads neither ell
+nor an L), and 0 for an unassessed one. At any other n the one-loop law is undefined, and check_drain_law_model
+refuses the model under it; the fixed law and natural mode run it at every n.
 """
 
 from math import exp, log, log1p, sqrt
 
 from ComputeTargets.exceptions import ComputationFailureError
 from CosmologyConcepts import M_value, beta_value, FieldLike, GetFieldValue
+from CosmologyConcepts.drain_model import (
+    DRAIN_MODEL_ONE_LOOP_PL,
+    DRAIN_REGIMES,
+    REGIME_CLASSICAL,
+    REGIME_UNASSESSED,
+)
 from CosmologyConcepts.Models.AbstractModel import AbstractModel, Seed
 from CosmologyConcepts.Models.model_ids import INVERSE_POWER_MODEL
 from Units.base import UnitsLike
@@ -60,6 +74,31 @@ _LOG_U_SMALL = -700.0
 # the analytic seed's fixed point (seed, _analytic_seed): the exponential's stopping rule and cap
 _SEED_RTOL = 1.0e-14
 _SEED_MAX_ITERATIONS = 200
+
+# the one-loop drain law on this wall (power-law-wall prompt 03 §1.2; README §6.5 R6, R7, §6.6 P15, P18), stored under
+# DRAIN_MODEL_ONE_LOOP_PL, keyed by n (defined at n = 1 and 2 only). Each constant with its source; the same decimal
+# literals as the reference implementation, fraction_power in prompts/power-law-wall/source/wall/fit_fn.py
+# (orchestrator note 03, ruling 3), so that the two are equal bit for bit:
+#   DRAIN_PL_S:       S_n, the classical wall's production energy ratio, constant in E/V_0 (R6, "yes, just use the
+#                     constants"): .documents/power-law-wall/wall-02/stage1a_S_n.txt (stage 1a, the 241-point ln-k
+#                     trapezoid), 1.0262017e-2 and 5.2161510e-3, as the user ruled them, 1.02620e-2 and 5.21615e-3
+#   DRAIN_PL_G, DRAIN_PL_R0, DRAIN_PL_P:  the rising branch y = G (ln R - R0)^P, y = -ln(1 - f), fitted on stage 2's
+#                     points with 0.3 < ln R < 20 (R7, "yes, I'd like to use the `f_n(ln R)` fit");
+#   DRAIN_PL_A, DRAIN_PL_C:  the falling branch y = A/(ln R - c), fitted on the points with ln R > 28;
+#                     both: .documents/power-law-wall/law-03/fit_fn.txt (fit_fn.py, from 02's stage2_scan.txt, the
+#                     curve points with the field back out and not classical; unweighted least squares in f), rounded
+#                     to six significant figures. Over those 62 | 60 points the law is within 0.054 | 0.056 (rms
+#                     0.019 | 0.022), and within 0.0042 | 0.0030 of the mapped histories' points (n = 1 | 2)
+#   DRAIN_PL_SWITCH:  ln R_x, where the two branches' y are equal at the literals above (fit_fn.py's brentq, xtol
+#                     1e-14), so that f is continuous to rounding there; the rising branch below it, the falling at
+#                     and above it
+DRAIN_PL_S = {1: 1.02620e-2, 2: 5.21615e-3}
+DRAIN_PL_G = {1: 2.86769e-3, 2: 2.85913e-3}
+DRAIN_PL_R0 = {1: -1.27414, 2: -1.10903}
+DRAIN_PL_P = {1: 2.22126, 2: 2.45613}
+DRAIN_PL_A = {1: 27.9671, 2: 19.6100}
+DRAIN_PL_C = {1: 14.9835, 2: 10.9039}
+DRAIN_PL_SWITCH = {1: 23.08943252571177, 2: 16.710187997698853}
 
 
 def _log1p_exp(x: float) -> float:
@@ -111,9 +150,53 @@ class InversePowerModel(AbstractModel):
         # far from the wall (M/phi -> 0) the potential tends to V_0
         return normalization
 
-    # no _drain_L (README §6.3 P4): the one-loop law's L was defined and fitted on the exponential family; this
-    # wall has no large parameter, and what L means on it is measured by prompt 02 and ruled (U3) before prompt
-    # 03 defines it. A guess here would let the one-loop law run on a wall it was never measured on
+    # no _drain_L (README §6.6 P16, replacing §6.3 P4): the one-loop law's L was defined and fitted on the exponential
+    # family; this wall has no large parameter, and its measured fraction depends on ln R and n alone (prompt 02,
+    # validate V6). Its one-loop law is its own fraction below (R7)
+
+    def _undefined_at_n(self, hook: str) -> ValueError:
+        return ValueError(
+            f"InversePowerModel (n={self._n}) has no one-loop drain law: {hook} is defined at n = 1 and 2 only "
+            f"(power-law-wall README §6.5 R7) ({self.name})"
+        )
+
+    @property
+    def one_loop_drain_model(self) -> str:
+        # the drain model the one-loop law is stored under (AbstractModel.one_loop_drain_model; README §6.6 P16, P17):
+        # DRAIN_MODEL_ONE_LOOP_PL at n = 1 and 2; a ValueError at any other n, where the law is undefined (R7)
+        if self._n not in DRAIN_PL_S:
+            raise self._undefined_at_n("one_loop_drain_model")
+        return DRAIN_MODEL_ONE_LOOP_PL
+
+    def _drain_fraction(self, normalization, regime, ell, log_E, log_R) -> float:
+        """
+        f on this wall at one candidate (AbstractModel._drain_fraction; README §6.5 R6, R7, §6.6 P15, P18), by regime,
+        term for term as fraction_power (prompts/power-law-wall/source/wall/fit_fn.py) writes it, so that the two are
+        equal bit for bit:
+          - unassessed: 0.0, reading nothing else;
+          - classical (ln R <= 0): exp(ln R) S_n;
+          - one_loop and gap: exp(ln R) S_n at ln R <= 0 (which the regimes' classification does not give, ln R > 0
+            being what makes a candidate one-loop or gap), else 1 - exp(-y), y = G (ln R - R0)^P below the switch
+            and A/(ln R - c) at and above it.
+        It reads neither ell nor ln E (the fraction measured on this wall depends on ln R and n alone), nor the
+        normalization. An unknown regime is a ValueError, and so is n other than 1 or 2.
+        """
+        n = self._n
+        if n not in DRAIN_PL_S:
+            raise self._undefined_at_n("_drain_fraction")
+        if regime == REGIME_UNASSESSED:
+            return 0.0
+        if regime not in DRAIN_REGIMES:
+            raise ValueError(
+                f"InversePowerModel._drain_fraction: the regime must be one of {DRAIN_REGIMES}, not {regime!r}"
+            )
+        if regime == REGIME_CLASSICAL or log_R <= 0.0:
+            return exp(log_R) * DRAIN_PL_S[n]
+        if log_R < DRAIN_PL_SWITCH[n]:
+            y = DRAIN_PL_G[n] * (log_R - DRAIN_PL_R0[n]) ** DRAIN_PL_P[n]
+        else:
+            y = DRAIN_PL_A[n] / (log_R - DRAIN_PL_C[n])
+        return 1.0 - exp(-y)
 
     def _failure(
         self, hook: str, phi_float: float, reason: str

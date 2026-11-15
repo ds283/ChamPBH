@@ -30,6 +30,7 @@ from math import exp, log, log1p, sqrt
 
 from ComputeTargets.exceptions import ComputationFailureError
 from CosmologyConcepts import M_value, beta_value, FieldLike, GetFieldValue
+from CosmologyConcepts.drain_model import DRAIN_MODEL_ONE_LOOP
 from CosmologyConcepts.Models.AbstractModel import AbstractModel, RealizedModel, Seed
 from CosmologyConcepts.Models.model_ids import EXPONENTIAL_MODEL
 from Units.base import UnitsLike
@@ -89,6 +90,13 @@ class ExponentialModel(AbstractModel):
         if x > 0.0:
             return x + log1p(exp(-x))
         return log1p(exp(x))
+
+    @property
+    def one_loop_drain_model(self) -> str:
+        # the drain model the one-loop law is stored under (power-law-wall prompt 03; AbstractModel.one_loop_drain_model,
+        # README §6.6 P16): the L law, drain_fraction read at _drain_L above, at every n, which the measured law was
+        # fitted on (one-loop-drain README §8.10)
+        return DRAIN_MODEL_ONE_LOOP
 
     def _log_V(self, normalization, phi: FieldLike) -> float:
         phi_float = GetFieldValue(phi)

@@ -28,8 +28,9 @@ PRyMordial solve), as test_history_and_bbn_alpha does:
 - (3) `--model exponential --n 2` and `--model inverse-power` (n = 1): the tuned path hands the model of
   that class and n to tune_history, and the label names both (a stand-in tuning that fails, no
   integration);
-- (4) `--drain-law one_loop` with `--model inverse-power`: exit 2 with check_drain_law_model's message on
-  stderr, before any tuning, integration or BBN; under the exponential the same options reach the tuning;
+- (4) `--drain-law one_loop` with `--model inverse-power --n 3`: exit 2 with check_drain_law_model's message on
+  stderr, before any tuning, integration or BBN; under the exponential the same options reach the tuning (since
+  power-law-wall prompt 03 the one-loop law is defined on the power wall at n = 1 and 2, and refused at any other n);
 - (5) `--n 0`, `--n x` and an unknown model are refused at parse, exit 2;
 - (6) build_model, model_label and model_task_suffix.
 
@@ -189,7 +190,7 @@ class TestHistoryAndBBNInversePower(unittest.TestCase):
                         "--model",
                         "inverse-power",
                         "--n",
-                        "2",
+                        "3",
                         "--drain-law",
                         "one_loop",
                         "--alpha",
@@ -197,11 +198,16 @@ class TestHistoryAndBBNInversePower(unittest.TestCase):
                     ]
                 )
         self.assertEqual(status, 2)
-        self.assertEqual(
-            err.getvalue().strip(),
-            "!! history_and_bbn: history_and_bbn: the one-loop drain law needs the model's wall "
-            "variable L, _drain_L(normalization, log_E), which InversePowerModel does not implement",
+        # power-law-wall prompt 03: at n = 1 and 2 the model has its own one-loop law; at n = 3 it is undefined
+        message = err.getvalue().strip()
+        self.assertTrue(
+            message.startswith(
+                "!! history_and_bbn: history_and_bbn: the one-loop drain law: InversePowerModel (n=3) has no "
+                "one-loop drain law: one_loop_drain_model is defined at n = 1 and 2 only"
+            ),
+            message,
         )
+        self.assertEqual(len(message.splitlines()), 1)
         self.assertEqual(out.getvalue(), "")
         tune.assert_not_called()
         integrate.assert_not_called()

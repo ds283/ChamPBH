@@ -74,6 +74,10 @@ from extract_common import alpha_path
 from tools import quanta_figures as qf
 from tools import quanta_measures as qm
 
+# the spectrum's wall (power-law-wall prompt 03; README §6.6 P19): the exponential's, passed explicitly until
+# power-law-wall prompt 06 takes it from the export's model column (README §6.3 P11, §2 row 06)
+SPECTRUM_WALL = qs.WALL_EXPONENTIAL
+
 HATCH_FILL = "#d9d9d9"
 HATCH_EDGE = "#7f7f7f"
 ZERO_FILL = "#6e6e6e"
@@ -224,7 +228,7 @@ def build_figure(
     drain_model: str,
     A: float,
     scale: float,
-    model: str = qs.SPECTRUM_MODEL,
+    model: str = qs.spectrum_model(SPECTRUM_WALL),
 ) -> Figure:
     """
     The ten-panel figure of one A. The returned Figure carries `quanta_counts`, a dict by panel letter of the counts of
@@ -467,7 +471,7 @@ def run(
         counts["written"] += 1
         print(figure_line(model, A, fig, written, time.perf_counter() - t0), file=out)
     print(
-        f"plot_quanta_grid ({qs.SPECTRUM_MODEL}, assoc scale {assoc_scale:g}): figures written {counts['written']}, "
+        f"plot_quanta_grid ({qs.spectrum_model(SPECTRUM_WALL)}, assoc scale {assoc_scale:g}): figures written {counts['written']}, "
         f"refused {counts['refused']}, A with no drawn or failed row {counts['empty']}; skipped as fixed-law "
         f"{len(by_class[qf.FIXED])}, marker rows {len(by_class[qf.MARKER])}; wall {time.perf_counter() - t_start:.1f} s",
         file=out,

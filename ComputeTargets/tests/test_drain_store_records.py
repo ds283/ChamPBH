@@ -110,7 +110,11 @@ class TestTheKey(unittest.TestCase):
         ):
             with self.subTest(name=name):
                 self.assertIs(getattr(SM, name), getattr(DM, name))
-        self.assertEqual(DM.DRAIN_MODELS, ("fixed", "one-loop-measured-v1"))
+        # power-law-wall prompt 03 (README §6.6 P17): the power wall's model joins after the two, whose order is kept
+        self.assertEqual(
+            DM.DRAIN_MODELS,
+            ("fixed", "one-loop-measured-v1", "one-loop-measured-pl-v1"),
+        )
 
     def test_the_mapping(self):
         self.assertEqual(DM.law_of("fixed"), "fixed")

@@ -79,13 +79,31 @@ PROBE_B = 8.0
 # ---------------------------------------------------------------------------------------------------------------------
 
 
+# the spectrum's wall: the exponential's, as the tool passes it (power-law-wall prompt 03; prompt 06 takes it from the
+# export's model column)
+WALL = qs.WALL_EXPONENTIAL
+
+
 def _quad_x(f, extra=()):
-    """int_0^inf f(x) dx for an integrand carrying s(x) of a generation (x = q/Q), split at x_p and the extra points."""
-    xp, k = qs.X_PEAK, qs.KAPPA
+    """int_0^inf f(x) dx for an integrand carrying s(x) of a generation (x = q/Q), split at the wall's table edges, x_p,
+    sixty points between the edges, the tail's scales and the extra points (power-law-wall prompt 03: the measured
+    shape; before it, at U4's x_p and its tail's scales)."""
+    sp = qs.spectrum(WALL)
+    xp, k, lo, hi = sp.x_p, sp.kappa_hi, sp.x_lo, sp.x_hi
+    end = hi + 60 / k
     pts = sorted(
-        {0.0, xp, *[p for p in extra if p > 0.0], xp + 4 / k, xp + 16 / k, xp + 60 / k}
+        {
+            0.0,
+            lo,
+            xp,
+            *np.geomspace(lo, hi, 60),
+            *[p for p in extra if p > 0.0],
+            hi + 4 / k,
+            hi + 16 / k,
+            end,
+        }
     )
-    pts = [p for p in pts if p <= xp + 60 / k]
+    pts = [p for p in pts if p <= end]
     scale = sum(
         abs(quad(f, a, b, epsrel=1e-8, limit=200)[0]) for a, b in zip(pts, pts[1:])
     )
@@ -96,7 +114,7 @@ def _quad_x(f, extra=()):
 
 
 def direct_I(c):
-    return _quad_x(lambda x: x**3 * float(qs.shape(x, c)))
+    return _quad_x(lambda x: x**3 * float(qs.shape(WALL, x, c)))
 
 
 def direct_A(dK, log_q, c):
@@ -110,7 +128,14 @@ def direct_energy_excess(dK, log_q, m_a, c):
     A = direct_A(dK, log_q, c)
     y = m_a / Q
     # (1/2pi^2) Q^4 A int x^3 s(x) [sqrt(1 + y^2/x^2) - 1] dx, the bracket as y^2/(x(sqrt(x^2+y^2)+x))
-    g = lambda x: x * x * float(qs.shape(x, c)) * y * y / (sqrt(x * x + y * y) + x)
+    g = (
+        lambda x: x
+        * x
+        * float(qs.shape(WALL, x, c))
+        * y
+        * y
+        / (sqrt(x * x + y * y) + x)
+    )
     return Q**4 * A / (2.0 * pi * pi) * _quad_x(g, extra=(y / 10, y, 10 * y))
 
 
@@ -132,13 +157,19 @@ def direct_n_bar(gens, j, c):
             A = direct_A(dK, lq_g, c)
             r = exp(lq_j - lq_g)
             num += A * _quad_x(
-                lambda x: x**3 * float(qs.shape(x, c)) * float(qs.shape(x * r, c)),
+                lambda x: x**3
+                * float(qs.shape(WALL, x, c))
+                * float(qs.shape(WALL, x * r, c)),
                 extra=(
-                    qs.X_PEAK / r,
-                    *(qs.X_PEAK / r + k / (qs.KAPPA * r) for k in (1, 4, 16, 60)),
+                    qs.spectrum(WALL).x_lo / r,
+                    qs.spectrum(WALL).x_p / r,
+                    *(
+                        (qs.spectrum(WALL).x_hi + k / qs.spectrum(WALL).kappa_hi) / r
+                        for k in (0, 1, 4, 16, 60)
+                    ),
                 ),
             )
-    den = _quad_x(lambda x: x**3 * float(qs.shape(x, c)))
+    den = _quad_x(lambda x: x**3 * float(qs.shape(WALL, x, c)))
     return num / den
 
 
@@ -153,7 +184,7 @@ def direct_n_chi_a3(gens, N_k, c):
                 Q**3
                 * A
                 / (2 * pi * pi)
-                * _quad_x(lambda x: x * x * float(qs.shape(x, c)))
+                * _quad_x(lambda x: x * x * float(qs.shape(WALL, x, c)))
             )
     return total
 
@@ -344,7 +375,11 @@ class TestTheMeasuresAgainstQuadrature(_ExportCase):
             out = by_ordinal[g.ordinal]
             A = direct_A(g.delta_K, g.log_q, c)
             self.assertLess(
-                abs(f(out["ln_n_g"]) - log(A * float(qs.shape(qs.X_PEAK, c)))), 1e-6
+                abs(
+                    f(out["ln_n_g"])
+                    - log(A * float(qs.shape(WALL, qs.x_peak(WALL), c)))
+                ),
+                1e-6,
             )
             nb = direct_n_bar(gens, j, c)
             n_bars.append(nb)
@@ -611,7 +646,7 @@ class TestFindingAndTheFiles(_ExportCase):
                 self.root / f"quanta_histories{sfx}.csv",
             ):
                 for row in self.read(path):
-                    self.assertEqual(row["spectrum_model"], qs.SPECTRUM_MODEL)
+                    self.assertEqual(row["spectrum_model"], qs.spectrum_model(WALL))
                     self.assertEqual(float(row["assoc_scale"]), c)
         b = {int(r["ordinal"]): r for r in self.read(d / "quanta_bounces.csv")}
         self.assertEqual(len(b), len(rows))
@@ -805,7 +840,10 @@ class TestAStoredHistory(_DrainStoreCase):
         self.assertLess(rel(float(gen_rows[j]["n_bar"]), direct_n_bar(G, j, c)), 1e-6)
         A = direct_A(G[0][2], G[0][1], c)
         self.assertLess(
-            abs(float(gen_rows[0]["ln_n_g"]) - log(A * float(qs.shape(qs.X_PEAK, c)))),
+            abs(
+                float(gen_rows[0]["ln_n_g"])
+                - log(A * float(qs.shape(WALL, qs.x_peak(WALL), c)))
+            ),
             1e-6,
         )
         K_final = ledger.K(1e9)

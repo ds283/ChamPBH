@@ -71,6 +71,10 @@ from Units import Planck_units
 from tools import quanta_figures as qf
 from tools import quanta_measures as qm
 
+# the spectrum's wall (power-law-wall prompt 03; README §6.6 P19): the exponential's, passed explicitly until
+# power-law-wall prompt 06 takes it from the export's model column (README §6.3 P11, §2 row 06)
+SPECTRUM_WALL = qs.WALL_EXPONENTIAL
+
 LN_N_G_MAX = 709.0
 LN_N_G_MIN = -745.0
 
@@ -569,7 +573,14 @@ def run(
             qb = qf.read_checked(d / names[0], assoc_scale)
             qsm = qf.read_checked(d / names[1], assoc_scale)
             data = HistoryData(
-                h, q, fields, bounces, qb, qsm, assoc_scale, qs.SPECTRUM_MODEL
+                h,
+                q,
+                fields,
+                bounces,
+                qb,
+                qsm,
+                assoc_scale,
+                qs.spectrum_model(SPECTRUM_WALL),
             )
             fig = build_figure(data)
             stem = qf.to_output(
@@ -588,7 +599,7 @@ def run(
         counts["written"] += 1
         print(figure_line(h, fig, written, time.perf_counter() - t0), file=out)
     print(
-        f"plot_quanta_history ({qs.SPECTRUM_MODEL}, assoc scale {assoc_scale:g}): figures written {counts['written']}, "
+        f"plot_quanta_history ({qs.spectrum_model(SPECTRUM_WALL)}, assoc scale {assoc_scale:g}): figures written {counts['written']}, "
         f"refused {counts['refused']}, no quanta files {counts['no_quanta_files']}; skipped as fixed-law "
         f"{len(by_class[qf.FIXED])}, marker rows {len(by_class[qf.MARKER])}, failed histories {len(by_class[qf.FAILED])}; "
         f"wall {time.perf_counter() - t_start:.1f} s",

@@ -25,7 +25,8 @@ the tools read 04's exports and 05's outputs (`tools/quanta_measures.py`) and dr
   (`plots_dir`), as the plot scripts write it; a row's directory is `extract_common.alpha_path`. `to_output` maps a
   path below the root to the same path below `--output`. No path is formatted inline.
 - **The model check** (`check_model_rows`, `read_checked`): every row of every quanta file names the expected
-  `spectrum_model` (`ComputeTargets.quanta_spectrum.SPECTRUM_MODEL`) and the `assoc_scale` asked for, compared as
+  `spectrum_model` (`ComputeTargets.quanta_spectrum.SPECTRUM_MODELS` of the exponential's wall, `SPECTRUM_WALL`, until
+  power-law-wall prompt 06 takes the wall from the export) and the `assoc_scale` asked for, compared as
   `float(cell) == scale` (ruling 3). A file that fails is refused with the reason.
 - **The rows to draw** (`classify`, `walk`): a histories.csv row is counted in the first of these that it meets, and only
   there (ruling 1): `fixed` (`drain_model` is `fixed`, marker or not); `marker` (`failure_reasons` is exactly
@@ -43,6 +44,10 @@ import numpy as np
 from ComputeTargets import quanta_spectrum as qs
 from CosmologyConcepts.drain_model import DRAIN_MODEL_FIXED
 from tools import quanta_measures as qm
+
+# the spectrum's wall (power-law-wall prompt 03; README §6.6 P19): the exponential's, passed explicitly until
+# power-law-wall prompt 06 takes it from the export's model column (README §6.3 P11, §2 row 06)
+SPECTRUM_WALL = qs.WALL_EXPONENTIAL
 
 # the plot script's marker of a grid point with no history (plot_by_beta.py)
 MARKER_REASON = "no ScalarHistory row in the store"
@@ -126,12 +131,13 @@ def is_close(value: float, cell: str) -> bool:
 
 
 def check_model_rows(rows: Sequence[dict], scale: float, what: str) -> None:
-    """Every row names SPECTRUM_MODEL and `scale`, or FigureRefused says which row and why."""
+    """Every row names the wall's spectrum model and `scale`, or FigureRefused says which row and why."""
+    expected = qs.spectrum_model(SPECTRUM_WALL)
     for k, r in enumerate(rows):
         model = r.get("spectrum_model")
-        if model != qs.SPECTRUM_MODEL:
+        if model != expected:
             raise FigureRefused(
-                f"{what}: row {k + 2} names spectrum_model {model!r}, not {qs.SPECTRUM_MODEL!r}"
+                f"{what}: row {k + 2} names spectrum_model {model!r}, not {expected!r}"
             )
         cell = r.get("assoc_scale")
         try:

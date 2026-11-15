@@ -289,7 +289,10 @@ class TestTheModelCheck(ExportMixin, unittest.TestCase):
         ):
             rows = qf.read_checked(self.root / name, c)
             self.assertTrue(rows)
-            self.assertEqual({r["spectrum_model"] for r in rows}, {qs.SPECTRUM_MODEL})
+            self.assertEqual(
+                {r["spectrum_model"] for r in rows},
+                {qs.spectrum_model(qf.SPECTRUM_WALL)},
+            )
             self.assertEqual({float(r["assoc_scale"]) for r in rows}, {c})
 
     def test_a_file_of_another_scale_is_refused(self):
@@ -315,7 +318,7 @@ class TestTheModelCheck(ExportMixin, unittest.TestCase):
     def build_again_for_two_models(self, p):
         def one_other(rows):
             for r in rows:
-                r["spectrum_model"] = qs.SPECTRUM_MODEL
+                r["spectrum_model"] = qs.spectrum_model(qf.SPECTRUM_WALL)
             rows[-1]["spectrum_model"] = "U4-v0"
 
         self.rewrite(p, one_other)

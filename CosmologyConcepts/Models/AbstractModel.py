@@ -425,6 +425,25 @@ class RealizedModel:
     def drain_L_implemented(self) -> bool:
         return self._model.drain_L_implemented
 
+    def drain_fraction(
+        self,
+        regime: str,
+        ell: Optional[float],
+        log_E: Optional[float],
+        log_R: Optional[float],
+    ) -> float:
+        return self._model._drain_fraction(
+            self._normalization, regime, ell, log_E, log_R
+        )
+
+    @property
+    def drain_fraction_implemented(self) -> bool:
+        return self._model.drain_fraction_implemented
+
+    @property
+    def one_loop_drain_model(self) -> str:
+        return self._model.one_loop_drain_model
+
     @property
     def reflects_at_origin(self) -> bool:
         return self._model.reflects_at_origin
@@ -535,6 +554,52 @@ class AbstractModel(DatastoreObject, ABC):
     def drain_L_implemented(self) -> bool:
         """True iff this model's class overrides _drain_L (RealizedModel.drain_L_implemented)."""
         return type(self)._drain_L is not AbstractModel._drain_L
+
+    def _drain_fraction(
+        self,
+        normalization,
+        regime: str,
+        ell: Optional[float],
+        log_E: Optional[float],
+        log_R: Optional[float],
+    ) -> float:
+        """
+        f, the model's own one-loop drain fraction at one candidate (power-law-wall prompt 03 §1.2; README §6.6 P15,
+        P16), for a model whose wall the L law (ComputeTargets/ScalarHistory.py's drain_fraction, read at the
+        model's _drain_L) does not describe: RealizedModel.drain_fraction. Its inputs are the candidate's regime
+        (CosmologyConcepts.drain_model.REGIME_*, as drain_regime classifies it), ell (the turnaround's, regime
+        one_loop only, else None), ln E of the assessment and ln R of its classical turning point (None if
+        unassessed). The loop drains alpha_eff = min(DRAIN_ALPHA_CAP, A f) w_gate with it, as with the L law.
+
+        A model defines exactly one of _drain_L and this (check_drain_law_model refuses neither and both under the
+        one-loop law). No default, as _drain_L has none (the user's ruling of 2026-11-05, "when a new potential is
+        implemented, breakage is loud"): this base raises, naming the class.
+        """
+        raise NotImplementedError(
+            f"{type(self).__name__} does not implement _drain_fraction(normalization, regime, ell, log_E, log_R), "
+            f"the model's own one-loop drain fraction"
+        )
+
+    @property
+    def drain_fraction_implemented(self) -> bool:
+        """True iff this model's class overrides _drain_fraction (RealizedModel.drain_fraction_implemented)."""
+        return type(self)._drain_fraction is not AbstractModel._drain_fraction
+
+    @property
+    def one_loop_drain_model(self) -> str:
+        """
+        The drain model the model's one-loop law is stored under (power-law-wall prompt 03 §1.2; README §6.6 P16,
+        P17): a value of CosmologyConcepts.drain_model.DRAIN_MODELS whose law is the one-loop law, named in the
+        payload's "drain" record and so in alpha_value's drain_model. RealizedModel.one_loop_drain_model.
+
+        No default (P16): this base raises NotImplementedError, naming the class. A model whose one-loop law is
+        undefined at its parameters raises ValueError naming its class, the hook and why. check_drain_law_model
+        reads it at entry under the one-loop law and refuses either.
+        """
+        raise NotImplementedError(
+            f"{type(self).__name__} does not implement one_loop_drain_model, the drain model its one-loop law is "
+            f"stored under"
+        )
 
     # ---- the interface ----
 

@@ -439,8 +439,11 @@ class TestTheHelpers(unittest.TestCase):
         self.assertEqual(DRAIN_MODEL_ONE_LOOP, ONE_LOOP)
 
     def test_3_model_of_law_inverts_law_of(self):
-        for model in DRAIN_MODELS:
+        # power-law-wall prompt 03 (README §6.6 P17): the power wall's one-loop-measured-pl-v1 shares the one-loop law,
+        # and model_of_law still returns one-loop-measured-v1 for it, so the inverse holds on the first two models
+        for model in DRAIN_MODELS[:2]:
             self.assertEqual(model_of_law(law_of(model)), model)
+        self.assertEqual(model_of_law(law_of(DRAIN_MODELS[2])), DRAIN_MODEL_ONE_LOOP)
         for law in DRAIN_LAWS:
             self.assertEqual(law_of(model_of_law(law)), law)
         self.assertEqual(model_of_law("fixed"), DRAIN_MODEL_FIXED)

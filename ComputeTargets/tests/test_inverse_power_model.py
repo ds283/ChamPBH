@@ -33,8 +33,9 @@ The inverse-power-law model (power-law-wall prompt 01 §1.3): `InversePowerModel
   normalization against an independent brentq of prompt §1.2's equation.
 - (f) `TestRenormalize`: renormalize reaches its target, refuses V_target <= 0; the coordinate
   round-trips exactly.
-- (g) `TestTheDrainLaw`: check_drain_law_model refuses the model under the one-loop law, naming the
-  class and _drain_L, and accepts it under the fixed law.
+- (g) `TestTheDrainLaw`: check_drain_law_model refuses the model under the one-loop law at n = 3, naming the
+  class, the hook and n, and accepts it under the fixed law (since power-law-wall prompt 03 the one-loop law is the
+  model's own at n = 1 and 2; test_power_wall_law tests it).
 - (h) `TestShortIntegrations`: one untuned integration under natural mode and one under the fixed law
   (alpha = 0.1), at M = 4e-31 M_P, beta = 2, n = 2 and n = 1, from T* = 2e4 GeV to T_J = 100 MeV, past
   the first bounce.
@@ -551,17 +552,20 @@ class TestRenormalize(unittest.TestCase):
 
 
 class TestTheDrainLaw(unittest.TestCase):
-    """(g) No _drain_L (README §6.3 P4): the one-loop law refuses the model; the fixed law accepts it."""
+    """(g) No _drain_L (README §6.6 P16, replacing §6.3 P4): the model's own one-loop law is defined at n = 1 and 2
+    only (power-law-wall prompt 03), so the one-loop law refuses it at n = 3; the fixed law accepts it.
+    """
 
     def test_g_the_one_loop_law_refuses_it(self):
-        m = model(2, 4.0e-31)
+        m = model(3, 4.0e-31)
         self.assertFalse(m.drain_L_implemented)
         for subject in (m, m.realize(NORMALIZATION, 0.0)):
             with self.subTest(subject=type(subject).__name__):
                 with self.assertRaises(ValueError) as ctx:
                     check_drain_law_model(DRAIN_LAW_ONE_LOOP, subject, "test")
                 self.assertIn("InversePowerModel", str(ctx.exception))
-                self.assertIn("_drain_L", str(ctx.exception))
+                self.assertIn("one_loop_drain_model", str(ctx.exception))
+                self.assertIn("n=3", str(ctx.exception))
         with self.assertRaises(NotImplementedError) as ctx:
             m.realize(NORMALIZATION, 0.0).drain_L(-120.0)
         self.assertIn("InversePowerModel", str(ctx.exception))

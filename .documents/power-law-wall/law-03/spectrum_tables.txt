@@ -1,0 +1,97 @@
+# spectrum_table.py lowk; start: 10:28  up 15 days, 12:49, 1 user, load averages: 3.21 3.41 3.97
+
+## lowk: the local power d ln|beta|^2/d ln k; start: 10:28  up 15 days, 12:49, 1 user, load averages: 3.21 3.41 3.97
+exponential  walls.py's (rtol 1e-11, atol 1e-14, EPS 1e-05): 0.01: 1.9976  0.001: 2.0008  0.0003: 2.0069  0.0001: 2.0529  3e-05: 2.9522  1e-05: -5.1339   (0 s)
+exponential  strict     (rtol 1e-13, atol 1e-17, EPS 1e-08): 0.01: 1.9976  0.001: 2.0000  0.0003: 2.0000  0.0001: 2.0004  3e-05: 1.9982  1e-05: 2.0974   (0 s)
+power-n1     walls.py's (rtol 1e-11, atol 1e-14, EPS 1e-05): 0.01: 1.4353  0.001: 1.6638  0.0003: 1.7272  0.0001: 1.7562  3e-05: 1.7279  1e-05: 1.7389   (0 s)
+power-n1     strict     (rtol 1e-13, atol 1e-17, EPS 1e-08): 0.01: 1.4353  0.001: 1.6649  0.0003: 1.7223  0.0001: 1.7591  3e-05: 1.8113  1e-05: 2.1739   (0 s)
+power-n2     walls.py's (rtol 1e-11, atol 1e-14, EPS 1e-05): 0.01: 1.8729  0.001: 1.9828  0.0003: 1.9931  0.0001: 2.0421  3e-05: 2.1213  1e-05: 2.3856   (0 s)
+power-n2     strict     (rtol 1e-13, atol 1e-17, EPS 1e-08): 0.01: 1.8717  0.001: 1.9863  0.0003: 1.9959  0.0001: 1.9991  3e-05: 1.9981  1e-05: 0.9251   (0 s)
+# lowk end: 10:28  up 15 days, 12:49, 1 user, load averages: 3.21 3.41 3.97
+# spectrum_table.py lowk end (1 s): 10:28  up 15 days, 12:49, 1 user, load averages: 3.21 3.41 3.97
+# spectrum_table.py energy; start: 10:28  up 15 days, 12:49, 1 user, load averages: 3.21 3.41 3.97
+
+## energy: where x^3 |beta|^2 sits, from strict |beta|^2 on x in [x_lo, 16]; start: 10:28  up 15 days, 12:49, 1 user, load averages: 3.21 3.41 3.97
+exponential  k_ex/omega_t 0.494535, x_lo 0.0020221; energy share above x = 3: 4.06e-03, 3.5: 7.48e-04, 4: 1.99e-04, 4.5: 1.94e-05, 5: 3.21e-06, 5.5: 4.25e-07, 6: 1.41e-07, 6.5: 1.28e-08, 7: 3.45e-09, 7.5: 2.01e-10, 8: 4.31e-11, 8.5: 8.44e-12, 9: 2.46e-13, 9.5: 3.61e-14, 10: 4.78e-15; x_hi = 3.5  (14 s)
+power-n1     k_ex/omega_t 0.353553, x_lo 0.00282843; energy share above x = 3: 1.45e-01, 3.5: 7.46e-02, 4: 3.23e-02, 4.5: 1.66e-02, 5: 7.68e-03, 5.5: 3.19e-03, 6: 1.17e-03, 6.5: 6.75e-04, 7: 2.01e-04, 7.5: 1.03e-04, 8: 5.11e-05, 8.5: 1.09e-05, 9: 4.67e-06, 9.5: 1.91e-06, 10: 7.39e-07; x_hi = 6.5  (10 s)
+power-n2     k_ex/omega_t 0.408248, x_lo 0.00244949; energy share above x = 3: 5.76e-02, 3.5: 2.26e-02, 4: 1.07e-02, 4.5: 2.83e-03, 5: 9.93e-04, 5.5: 3.02e-04, 6: 7.82e-05, 6.5: 3.73e-05, 7: 7.38e-06, 7.5: 3.04e-06, 8: 1.19e-06, 8.5: 1.53e-07, 9: 4.99e-08, 9.5: 1.53e-08, 10: 4.37e-09; x_hi = 5  (6 s)
+# energy end: 10:29  up 15 days, 12:49, 1 user, load averages: 4.37 3.67 4.04
+# spectrum_table.py energy end (30 s): 10:29  up 15 days, 12:49, 1 user, load averages: 4.37 3.67 4.04
+# spectrum_table.py table; start: 10:29  up 15 days, 12:49, 1 user, load averages: 4.37 3.67 4.04
+
+## table: the three tables; start: 10:29  up 15 days, 12:49, 1 user, load averages: 4.37 3.67 4.04
+exponential  the tail's share under the model at x_hi = 3.5: 1.245e-03, 4: 2.218e-04
+exponential  k_ex/omega_t 0.494535; edges x_lo 0.0020221 (k/omega_t 1e-3), x_hi 4; 153 nodes, step 0.05 in ln x; |beta|^2 at x_lo 4.2123e-09, at x_hi 1.5448e-09, max 1.42722e-04
+   interpolant (not-a-knot cubic spline in (ln x, ln s)) against 152 direct midpoints: max rel 2.75e-06 (at x = 3.901), rms 2.48e-07; derivative of the wrong sign at 0 points below the peak and 0 above it (of 6081 on a 40x finer grid)
+   x_p 0.646803 (the interpolant's maximum; parabola through seven nodes 0.644555); k_peak/omega_t 0.319867
+   kappa_hi 4.191348 (the spline's end derivative); centred difference of direct evaluations at x_hi (1 +- 1e-3): 4.191444
+   under the model at c_a = 0: M1/M3 0.828542, J = M2/M3 0.835827, M4/M3 1.383507; energy share above x_hi (the tail) 2.218e-04, below x_lo (c x^2) 9.186e-17  (12 s)
+power-n1     the tail's share under the model at x_hi = 6.5: 7.430e-04
+power-n1     k_ex/omega_t 0.353553; edges x_lo 0.00282843 (k/omega_t 1e-3), x_hi 6.5; 156 nodes, step 0.05 in ln x; |beta|^2 at x_lo 1.4469e-04, at x_hi 7.6879e-07, max 7.67931e-02
+   interpolant (not-a-knot cubic spline in (ln x, ln s)) against 155 direct midpoints: max rel 2.28e-06 (at x = 6.34), rms 2.02e-07; derivative of the wrong sign at 0 points below the peak and 0 above it (of 6201 on a 40x finer grid)
+   x_p 0.465750 (the interpolant's maximum; parabola through seven nodes 0.464618); k_peak/omega_t 0.164668
+   kappa_hi 2.157451 (the spline's end derivative); centred difference of direct evaluations at x_hi (1 +- 1e-3): 2.157501
+   under the model at c_a = 0: M1/M3 0.464252, J = M2/M3 0.591750, M4/M3 2.112967; energy share above x_hi (the tail) 7.430e-04, below x_lo (c x^2) 9.400e-15  (17 s)
+power-n2     the tail's share under the model at x_hi = 5: 1.341e-03, 5.5: 4.467e-04
+power-n2     k_ex/omega_t 0.408248; edges x_lo 0.00244949 (k/omega_t 1e-3), x_hi 5.5; 156 nodes, step 0.05 in ln x; |beta|^2 at x_lo 7.3012e-06, at x_hi 2.7898e-07, max 3.39010e-02
+   interpolant (not-a-knot cubic spline in (ln x, ln s)) against 155 direct midpoints: max rel 2.34e-06 (at x = 5.365), rms 2.12e-07; derivative of the wrong sign at 0 points below the peak and 0 above it (of 6201 on a 40x finer grid)
+   x_p 0.506743 (the interpolant's maximum; parabola through seven nodes 0.505470); k_peak/omega_t 0.206877
+   kappa_hi 2.720202 (the spline's end derivative); centred difference of direct evaluations at x_hi (1 +- 1e-3): 2.720259
+   under the model at c_a = 0: M1/M3 0.608930, J = M2/M3 0.689202, M4/M3 1.776235; energy share above x_hi (the tail) 4.467e-04, below x_lo (c x^2) 9.331e-16  (18 s)
+# table end: 10:29  up 15 days, 12:50, 1 user, load averages: 5.97 4.21 4.22
+# spectrum_table.py table end (46 s): 10:29  up 15 days, 12:50, 1 user, load averages: 5.97 4.21 4.22
+# spectrum_table.py shape; start: 10:29  up 15 days, 12:50, 1 user, load averages: 5.97 4.21 4.22
+
+## shape: each table built by `table`'s rule at step 0.05 in ln x; moments at c_a = 0 under the three regions (trapezoid on a 200x finer grid); start: 10:29  up 15 days, 12:50, 1 user, load averages: 5.97 4.21 4.22
+the module's exponential (reference): x_p 0.64680, J 0.83583, M1/M3 0.82854, kappa_hi 4.1913, x_hi 4
+the module's power-n1 (reference): x_p 0.46575, J 0.59175, M1/M3 0.46425, kappa_hi 2.1575, x_hi 6.5
+the module's power-n2 (reference): x_p 0.50674, J 0.68920, M1/M3 0.60893, kappa_hi 2.7202, x_hi 5.5
+# the exponential's shape over L (WallN(L, 1), k_ex exact at each L), against L = 90's table
+exponential L = 40: k_ex/omega_t 0.487950, x_lo 0.0020494, x_hi 4 (tail share 3.3e-04), midpoints max 3.0e-06; x_p 0.62636, J 0.83030, M1/M3 0.82383, kappa_hi 4.0365; against the reference: x_p x0.9684, J x0.9934, M1/M3 x0.9943, kappa_hi x0.9631  (10 s)
+exponential L = 70: k_ex/omega_t 0.493007, x_lo 0.0020284, x_hi 4 (tail share 2.4e-04), midpoints max 2.7e-06; x_p 0.64198, J 0.83464, M1/M3 0.82764, kappa_hi 4.1541; against the reference: x_p x0.9925, J x0.9986, M1/M3 x0.9989, kappa_hi x0.9911  (13 s)
+exponential L = 90: k_ex/omega_t 0.494535, x_lo 0.0020221, x_hi 4 (tail share 2.2e-04), midpoints max 2.7e-06; x_p 0.64680, J 0.83583, M1/M3 0.82854, kappa_hi 4.1913; against the reference: x_p x1.0000, J x1.0000, M1/M3 x1.0000, kappa_hi x1.0000  (15 s)
+exponential L = 110: k_ex/omega_t 0.495516, x_lo 0.0020181, x_hi 4 (tail share 2.1e-04), midpoints max 2.8e-06; x_p 0.64992, J 0.83656, M1/M3 0.82906, kappa_hi 4.2157; against the reference: x_p x1.0048, J x1.0009, M1/M3 x1.0006, kappa_hi x1.0058  (18 s)
+exponential L = 134: k_ex/omega_t 0.496310, x_lo 0.0020149, x_hi 4 (tail share 2.0e-04), midpoints max 2.8e-06; x_p 0.65245, J 0.83713, M1/M3 0.82944, kappa_hi 4.2356; against the reference: x_p x1.0087, J x1.0016, M1/M3 x1.0011, kappa_hi x1.0106  (20 s)
+# the power wall's shape over x = E/V0 (R9: measured, not acted on). In k/omega_t the bounce is the same at every x, and k_ex/omega_t = (s_t/2) sqrt(n/(n + 1)), s_t = x/(1 + x): the reference table (s_t = 1) read at x is off in x by the factor s_t. Each line: the spectrum measured at that x (walls.py's units of M below 1e40), in its own x = k/k_ex, by `table`'s rule; then the measured ln|beta|^2 at the table's nodes against the reference table read at x s_t (the scale invariance) and at x (the table's error)
+power-n1 x = E/V0 = 1e+40 (reference), s_t 1.0000: k_ex/omega_t 0.353553, x_lo 0.0028284, x_hi 6.5 (tail share 7.4e-04), midpoints max 2.3e-06; x_p 0.46575, J 0.59175, M1/M3 0.46425, kappa_hi 2.1575; against the reference: x_p x1.0000, J x1.0000, M1/M3 x1.0000, kappa_hi x1.0000; |ln|beta|^2 - reference at x s_t| max 4.4e-16; at x (the table's error) max 0.00  (110 s)
+power-n1 x = E/V0 = 1000, s_t 0.9990: k_ex/omega_t 0.353200, x_lo 0.0028313, x_hi 6.5 (tail share 7.5e-04), midpoints max 2.3e-06; x_p 0.46622, J 0.59116, M1/M3 0.46332, kappa_hi 2.1552; against the reference: x_p x1.0010, J x0.9990, M1/M3 x0.9980, kappa_hi x0.9990; |ln|beta|^2 - reference at x s_t| max 3.1e-07; at x (the table's error) max 0.01  (109 s)
+power-n1 x = E/V0 = 10, s_t 0.9091: k_ex/omega_t 0.321412, x_lo 0.0031113, x_hi 7 (tail share 9.4e-04), midpoints max 2.1e-06; x_p 0.51232, J 0.53795, M1/M3 0.38368, kappa_hi 1.9595; against the reference: x_p x1.1000, J x0.9091, M1/M3 x0.8264, kappa_hi x0.9082; |ln|beta|^2 - reference at x s_t| max 2.4e-06; at x (the table's error) max 1.24  (122 s)
+power-n1 x = E/V0 = 1, s_t 0.5000: k_ex/omega_t 0.176777, x_lo 0.0056569, x_hi 13 (tail share 7.4e-04), midpoints max 2.3e-06; x_p 0.93150, J 0.29588, M1/M3 0.11606, kappa_hi 1.0787; against the reference: x_p x2.0000, J x0.5000, M1/M3 x0.2500, kappa_hi x0.5000; |ln|beta|^2 - reference at x s_t| max 5.0e-08; at x (the table's error) max 6.84  (265 s)
+power-n1 x = E/V0 = 0.9302 (laboratory curve, R = 1), s_t 0.4819: k_ex/omega_t 0.170380, x_lo 0.0058693, x_hi 13.5 (tail share 7.4e-04), midpoints max 2.3e-06; x_p 0.96647, J 0.28517, M1/M3 0.10781, kappa_hi 1.0397; against the reference: x_p x2.0751, J x0.4819, M1/M3 x0.2322, kappa_hi x0.4819; |ln|beta|^2 - reference at x s_t| max 7.4e-08; at x (the table's error) max 6.98  (279 s)
+power-n2 x = E/V0 = 1e+40 (reference), s_t 1.0000: k_ex/omega_t 0.408248, x_lo 0.0024495, x_hi 5.5 (tail share 4.5e-04), midpoints max 2.3e-06; x_p 0.50674, J 0.68920, M1/M3 0.60893, kappa_hi 2.7202; against the reference: x_p x1.0000, J x1.0000, M1/M3 x1.0000, kappa_hi x1.0000; |ln|beta|^2 - reference at x s_t| max 1.8e-15; at x (the table's error) max 0.00  (48 s)
+power-n2 x = E/V0 = 1000, s_t 0.9990: k_ex/omega_t 0.407840, x_lo 0.0024519, x_hi 5.5 (tail share 4.5e-04), midpoints max 2.3e-06; x_p 0.50725, J 0.68851, M1/M3 0.60771, kappa_hi 2.7173; against the reference: x_p x1.0010, J x0.9990, M1/M3 x0.9980, kappa_hi x0.9989; |ln|beta|^2 - reference at x s_t| max 3.0e-07; at x (the table's error) max 0.01  (47 s)
+power-n2 x = E/V0 = 10, s_t 0.9091: k_ex/omega_t 0.371135, x_lo 0.0026944, x_hi 6 (tail share 4.9e-04), midpoints max 2.3e-06; x_p 0.55742, J 0.62655, M1/M3 0.50325, kappa_hi 2.4717; against the reference: x_p x1.1000, J x0.9091, M1/M3 x0.8264, kappa_hi x0.9086; |ln|beta|^2 - reference at x s_t| max 2.0e-06; at x (the table's error) max 1.34  (55 s)
+power-n2 x = E/V0 = 1, s_t 0.5000: k_ex/omega_t 0.204124, x_lo 0.004899, x_hi 10.5 (tail share 7.8e-04), midpoints max 2.2e-06; x_p 1.01349, J 0.34460, M1/M3 0.15223, kappa_hi 1.3561; against the reference: x_p x2.0000, J x0.5000, M1/M3 x0.2500, kappa_hi x0.4985; |ln|beta|^2 - reference at x s_t| max 3.4e-07; at x (the table's error) max 7.28  (112 s)
+power-n2 x = E/V0 = 0.4261 (laboratory curve, R = 1), s_t 0.2988: k_ex/omega_t 0.121979, x_lo 0.0081982, x_hi 17.5 (tail share 8.1e-04), midpoints max 2.2e-06; x_p 1.69601, J 0.20592, M1/M3 0.05436, kappa_hi 0.8102; against the reference: x_p x3.3469, J x0.2988, M1/M3 x0.0893, kappa_hi x0.2978; |ln|beta|^2 - reference at x s_t| max 2.6e-07; at x (the table's error) max 9.53  (202 s)
+# shape end: 10:53  up 15 days, 13:14, 1 user, load averages: 13.24 10.82 8.56
+# spectrum_table.py shape end (1426 s): 10:53  up 15 days, 13:14, 1 user, load averages: 13.24 10.82 8.56
+# spectrum_table.py oldnew; start: 10:53  up 15 days, 13:14, 1 user, load averages: 13.24 10.82 8.56
+
+## oldnew: the exponential under U4-U17-v1 (git show 7c60226:ComputeTargets/quanta_spectrum.py) and under R8-exponential-v1; start: 10:53  up 15 days, 13:14, 1 user, load averages: 13.24 10.82 8.56
+# both normalized with s_dir = x^2 at small x (below x_p in U4-U17-v1, below x_lo in the table), so I and ln s(x_p) compare; old x is k/(omega_t/2), new x is k/(0.494535 omega_t)
+c_a = 1:
+  I          old 9.300716e-02  new 1.240385e-01  new/old 1.3336
+  J = M2/M3  old 1.056044e+00  new 8.358392e-01  new/old 0.7915
+  M1/M3      old 1.306207e+00  new 8.285867e-01  new/old 0.6343
+  ln s(x_p)  old -9.560315e-01  new -1.975485e+00  new/old 2.0663
+  x_p        old 6.200000e-01  new 6.468034e-01  new/old 1.0432
+  G(0.01)    old 6.530617e-05  new 4.142724e-05  new/old 0.6344
+  G(1)       old 4.817193e-01  new 3.266532e-01  new/old 0.6781
+  G(10)      old 9.615863e+00  new 7.427097e+00  new/old 0.7724
+  Omega(0.5) old 1.994639e-01  new 1.055976e-01  new/old 0.5294
+  Omega(1)   old 1.574770e-01  new 1.093577e-01  new/old 0.6944
+  Omega(2)   old 2.683541e-02  new 3.351884e-02  new/old 1.2491
+c_a = 0:
+  I          old 9.300441e-02  new 1.240312e-01  new/old 1.3336
+  J = M2/M3  old 1.056032e+00  new 8.358269e-01  new/old 0.7915
+  M1/M3      old 1.306156e+00  new 8.285420e-01  new/old 0.6343
+  ln s(x_p)  old -9.560716e-01  new -1.975591e+00  new/old 2.0664
+  x_p        old 6.200000e-01  new 6.468034e-01  new/old 1.0432
+  G(0.01)    old 6.530365e-05  new 4.142503e-05  new/old 0.6343
+  G(1)       old 4.817101e-01  new 3.266438e-01  new/old 0.6781
+  G(10)      old 9.615752e+00  new 7.426975e+00  new/old 0.7724
+  Omega(0.5) old 1.994503e-01  new 1.055859e-01  new/old 0.5294
+  Omega(1)   old 1.574514e-01  new 1.093369e-01  new/old 0.6944
+  Omega(2)   old 2.676108e-02  new 3.346025e-02  new/old 1.2503
+# oldnew end: 10:53  up 15 days, 13:14, 1 user, load averages: 12.42 10.69 8.53
+# spectrum_table.py oldnew end (4 s): 10:53  up 15 days, 13:14, 1 user, load averages: 12.42 10.69 8.53
