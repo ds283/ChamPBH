@@ -12,6 +12,7 @@
 
 **U8 and U9 (README §6.6) are ruled by the user before this prompt is dispatched.** The prompt is written on their
 proposals. If either is ruled otherwise, the prompt is amended before dispatch, and the amendment is dated here.
+*(2026-11-15: both ruled as proposed, R9 and R10; no amendment.)*
 
 If an orchestrator note is written for this prompt at dispatch, it governs where it differs from this file.
 
@@ -132,7 +133,7 @@ In `prompts/power-law-wall/source/wall/fit_fn.py`, from 02's `stage2_scan.txt` (
 - **The exponential bitwise.** No exponential history moves: the goldens (`test_golden_history`,
   `test_golden_reflecting_history`), the tool tests under both laws and the fingerprint goldens pass unedited.
 
-### 1.3 The spectrum (R8; P19–P21; U8 and U9 as proposed)
+### 1.3 The spectrum (R8; P19–P21; R9 and R10, U8 and U9 as proposed)
 
 **The tables.** In `prompts/power-law-wall/source/wall/spectrum_table.py`, the test field's |β_k|² (02's `walls.Bounce`
 and `beta_squared`, through `stage1a_power.spectrum`) on three walls:
@@ -158,7 +159,7 @@ probe), and state both.
 **Measured, beside the tables** (into `.documents/power-law-wall/law-03/spectrum_tables.txt`):
 - **the exponential's shape over L**: x_p, the moments' ratios J = M₂/M₃ and M₁/M₃, and κ_hi at L = 40, 70, 90, 110
   and 134 against L = 90's table;
-- **the power wall's shape over E/V₀** (U8): the same at x = E/V₀ = 10⁴⁰, 10³, 10, 1 and the laboratory curve's R = 1
+- **the power wall's shape over E/V₀** (R9, U8 (a): measured, not acted on): the same at x = E/V₀ = 10⁴⁰, 10³, 10, 1 and the laboratory curve's R = 1
   point. On this wall the bounce in k/ω_t does not depend on E/V₀ (02's `spectrum.txt`: |β|²_max and k_peak/ω_t the
   same at x = 10⁴⁰, 6.87 and 0.93), and only k_ex/ω_t = (s_t/2)√(n/(n + 1)) moves, with s_t = x/(1 + x); give the
   table's error in x against the measured spectrum at each point;
@@ -171,7 +172,7 @@ probe), and state both.
   the agent's choice, stated; an unknown wall is a ValueError naming the known ones.
 - The tables as decimal literals in the module (it stays pure: no I/O), each with its source script, commit and
   reference point, as `DRAIN_S_TABLE_*` carries its source.
-- **The associated piece (U9, as proposed):** 1/x up to the table's x_p, and above it the direct piece's own fall,
+- **The associated piece (R10, U9 as proposed):** 1/x up to the table's x_p, and above it the direct piece's own fall,
   s_assoc(x) = (C₁/x)·s_dir(x)/s_dir(x_p), which is U17's form when s_dir is U4's; its coefficient C₁ = 49 x_* s_dir(x_*),
   so that s(x_*) = 50 s_dir(x_*) at c_a = 1, as U4 put it; x_* = 0.0058 in x on every wall, carried over and flagged as
   unmeasured on the power wall (U1–U7 as ruled). c_a is unchanged in meaning and default.

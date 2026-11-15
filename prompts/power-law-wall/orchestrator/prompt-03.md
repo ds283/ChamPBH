@@ -1,7 +1,7 @@
 # Orchestrator — prompt 03, the law on this wall
 
-**Not yet used.** Written 2026-11-15 with the prompt. It is dispatched only after the user rules U8 and U9 (README
-§6.6).
+**Not yet used.** Written 2026-11-15 with the prompt. U8 and U9 were ruled by the user the same day, both as proposed
+(README §6.6, R9 and R10), so it may be dispatched at the user's word.
 
 Read [`../README.md`](../README.md) first: §2, §4, §5, and §6 as ruled (R1–R8, U1–U7) and as proposed (§6.6). For this
 prompt the user's words are: "Write prompt 03 and its orchestrator note" (2026-11-15, after R6–R8). Then read the prompt.
@@ -145,8 +145,8 @@ unchanged. That directory belongs to this session and may not survive it. The nu
 
 ## 1. Before you dispatch
 
-1. **U8 and U9 ruled** in README §6.6, in the user's words. If either is ruled otherwise than proposed, the prompt's §1.3
-   is amended first, and the amendment is dated in the prompt's header.
+1. **U8 and U9 ruled** in README §6.6, in the user's words. *(Done 2026-11-15: R9 and R10, both as proposed; the prompt
+   needs no amendment.)*
 2. **The Gate above**, on the commit that adds this note, or a later one.
 3. **`runregistrykit list`**, and the load average.
 

@@ -313,7 +313,17 @@ U3, U4 and U5 are all ruled; 03 is written from R6–R8.
 
 ### 6.6 Proposed by the planner with prompt 03, 2026-11-15
 
-**P15–P23** stand unless the user rules otherwise. **U8 and U9 are the user's to rule before 03 is dispatched.**
+**P15–P23** stand unless the user rules otherwise. U8 and U9 were the user's to rule before 03 is dispatched.
+
+**Ruled by the user, 2026-11-15, in their words:**
+- **R9 (U8), the spectrum's scale near the floor.** "U8 (a) as proposed. What happens late in the cascade is not of so
+  much concern. These diagnostics are only expected to be approximate." One table per wall in x = k/k_ex, at the
+  scale-free reference; 03 measures the error in x over E/V₀, reported and not acted on.
+- **R10 (U9), the associated piece on the new shape.** "U9 accept as proposed." 1/x up to the table's x_p, then the
+  direct piece's own fall; C₁ = 49 x_* s_dir(x_*); x_* = 0.0058 in x on every wall, flagged as unmeasured on the power
+  wall.
+
+The table below is the proposal as it was put.
 - **P15 — the law's home.** The power wall's constants (f_n's and S_n) and its fraction are in `InversePowerModel`, each
   constant with its source. `ScalarHistory.py` gains no power-law expression (§5); `drain_fraction`, its constants and the
   S table stay the exponential family's law (the "L law"), unchanged.
