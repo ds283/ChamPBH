@@ -1,6 +1,7 @@
 # Orchestrator — prompt 05, the store
 
-**Written** 2026-11-16 with the prompt, at the user's request: "I'm not going to chase this now. Note it and move on.
+**Used for 05** (dispatched 2026-11-16 at `fb8bef2`; stopped at ruling 4, ruled (a) by the user; landed
+`bdb6ae7`; reviewed on the board, "Orchestrator review of prompt 05"). **Written** 2026-11-16 with the prompt, at the user's request: "I'm not going to chase this now. Note it and move on.
 Please write 05 and its orchestration note." The first sentence is R11 (README §6.8). Not dispatched. P33–P44 (README
 §6.9) are proposed with it and stand unless the user rules otherwise; none needs a ruling first. It is dispatched at the
 user's word.

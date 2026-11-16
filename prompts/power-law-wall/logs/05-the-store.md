@@ -4,7 +4,7 @@
 (M, n, β), the registry and the sharding, `ScalarHistory`'s polymorphic key (type id 2), the key's drain model checked
 when a `ScalarHistory` is constructed, the store tools that join a model's table (filtered by `model_type`;
 `bbn_from_store`'s `--model` and `--n`), `FINGERPRINT_FORMAT` 8 and `VERSION_LABEL` 2026.12.0 (P33–P44, U6).
-**Commit:** this commit, on branch `power-law-wall`, on top of `fb8bef2`
+**Commit:** `bdb6ae7`, on branch `power-law-wall`, on top of `fb8bef2`
 **Date:** 2026-11-16, by Claude Opus 5.5 (one agent, in the worktree `.claude/worktrees/power-law-wall`)
 **Result:** **COMPLETE.** The gate Store holds (§4).
 - **One stop, ruled by the user.** Ruling 4: one existing test built a `ScalarHistory` with a key the new check

@@ -1,6 +1,6 @@
 # power-law-wall campaign — implementation state
 
-**Last updated:** 2026-11-16 · **Status: LIVE — 5 of 8 prompts landed (01, the gate Model holds; 02, the gate Wall holds; 03, the gate Law holds; 04, the gate Sample holds; 05, the gate Store holds, after its ruling-4 stop was ruled (a) by the user); 01–04 reviewed, 05 not yet; R11 (the surfing thresholds at n = 1 recorded as measured) ruled after 04 (README §6.8); P33–P44 stand as proposed (README §6.9); P24–P32 ruled as proposed; D12 left as it is by the user; R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); R9–R10 (U8 table in x, U9 associated piece) ruled with 03 (README §6.6); R1–R3 and U1–U7 ruled (README §6).**
+**Last updated:** 2026-11-16 · **Status: LIVE — 5 of 8 prompts landed (01, the gate Model holds; 02, the gate Wall holds; 03, the gate Law holds; 04, the gate Sample holds; 05, the gate Store holds, after its ruling-4 stop was ruled (a) by the user); 01–05 reviewed; R11 (the surfing thresholds at n = 1 recorded as measured) ruled after 04 (README §6.8); P33–P44 stand as proposed (README §6.9); P24–P32 ruled as proposed; D12 left as it is by the user; R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); R9–R10 (U8 table in x, U9 associated piece) ruled with 03 (README §6.6); R1–R3 and U1–U7 ruled (README §6).**
 
 The campaign adds the inverse-power-law model V = V₀[1 + (M/φ)ⁿ] beside the exponential, defines the one-loop drain
 law on its wall from measurements, and takes it through the store, the drivers and a rehearsal, so that a science run
@@ -25,7 +25,7 @@ at n = 1 and 2 can follow, under the one-loop law with the fixed α beside it.
 | 02 | Measure the wall | S, the one-loop fraction and the spectrum on the power wall (research, `source/wall/`); then U3–U5 | Opus | ✍️ | ✅ | `693784b` | [`logs/02-measure-the-wall.md`](logs/02-measure-the-wall.md) |
 | 03 | The law on this wall | f_n(ln R) and S_n in `InversePowerModel` under `one-loop-measured-pl-v1`; the spectrum as tables on three walls (R6–R8) | Opus | ✍️ | ✅ | `d924275` | [`logs/03-the-law-on-this-wall.md`](logs/03-the-law-on-this-wall.md) |
 | 04 | Measure a sample | U7's forty histories under both laws beside the exponential's; the thresholds of README §0.3, the surfing edges, R9's share, M_crit (P24–P32) | Opus | ✍️ | ✅ | `05f6920` | [`logs/04-measure-a-sample.md`](logs/04-measure-a-sample.md) |
-| 05 | The store | type id 2, its table, the registry, `FINGERPRINT_FORMAT` 8, the label (U6); the key's drain model at entry and the joins by model type (P33–P44) | Opus | ✍️ | ✅ | this commit | [`logs/05-the-store.md`](logs/05-the-store.md) |
+| 05 | The store | type id 2, its table, the registry, `FINGERPRINT_FORMAT` 8, the label (U6); the key's drain model at entry and the joins by model type (P33–P44) | Opus | ✍️ | ✅ | `bdb6ae7` | [`logs/05-the-store.md`](logs/05-the-store.md) |
 | 06 | Drivers and exports | the model option, the plot scripts, the export layout (P11) | Sonnet | ⬜ | ⬜ | — | — |
 | 07 | Rehearse | registered builds, exponential bitwise, power law resumed | Opus | ⬜ | ⬜ | — | — |
 | 08 | Close | the documents, the handover, the issues, the indexes | Opus | ⬜ | ⬜ | — | — |
@@ -341,6 +341,80 @@ load at its start.
   `n_crossings` one fewer on a reflected first bounce; and the one-loop law's cap and classical branch exercised by no
   history in the sample.
 
+**Orchestrator review of prompt 05 (2026-11-16).** All six checks of note 05 §3 pass. The re-runs below were made
+serially by the orchestrator at `bdb6ae7`, from scratch scripts that are not committed, each timed, with the one-minute
+load at its start. The machine was heavily loaded by another process during the agent's after-suites (one-minute load
+up to 147) and still at 15–28 when the review began.
+- **The gate at dispatch** (2026-11-16, 01:44 local).
+  - `HEAD` was `fb8bef2`, the note's own commit. The worktree held `?? venv` only.
+  - The code was as the note records: `FINGERPRINT_FORMAT = 7`, `VERSION_LABEL = "2026.11.0"`, no
+    `ObjectFactories/InversePowerModel.py`, and id 2 in `compare_stores`' `UNSTORED_TYPE_VALUES`.
+  - The registry had 62 runs, all finished. The rehearsal lock was free. The main checkout was at `9df9e13` and clean.
+  - The load was 8.46 / 5.56 / 5.39, against the planner's 3.24 / 5.45 / 6.71. Free disk was 117 GB.
+  - The planner's three probe scripts still existed and were given to the agent as read-only copies, with note §0.
+- **The stop.** The agent stopped at ruling 4: the entry check refused
+  `test_drain_store_records.test_compute_passes_the_keys_law` (subtest `one_loop`), whose `mock.Mock()` model has a Mock
+  for `one_loop_drain_model`. I read the test and confirmed it. The user ruled "(a) here please": the stand-in is given
+  `one_loop_drain_model="one-loop-measured-v1"`, and the check is unchanged. The log records it as D1.
+1. *Scope.* `bdb6ae7`'s parent is `fb8bef2`.
+   - Its 29 files are prompt §5's list plus `test_drain_store_records.py` (D1, by the user's ruling). `venv` and
+     `.documents/OPEN_ISSUES.md` are not in it.
+   - `ObjectFactories/ExponentialModel.py` has no diff. In `test_store_fingerprint_golden` only `GOLDEN`, the class count,
+     the count-0 exception for `InversePowerModel`, the command-line format and the docstring change; `build_store` does
+     not.
+   - In `ComputeTargets/ScalarHistory.py` the diff is `check_key_drain_model` and its call, with comments, at the head of
+     `ScalarHistory.__init__`.
+   - The main checkout is still at `9df9e13` and clean. The branch has no upstream; nothing is pushed.
+2. *The exponential is unchanged.*
+   - `test_golden_history`, `test_golden_reflecting_history`, `test_tuning`, `test_tuned_history_round_trip`,
+     `test_drain_store` and `test_dissipation_store`: 86 tests OK in 268 s (load 14.7). The three goldens' modules and
+     their `golden_*.py` data are unedited.
+   - `tools/history_and_bbn.py 2.0 4e-31 --drain-law one_loop --alpha 1` (17 s, load 8.8), with `#` lines dropped and
+     `wall=` and `PRyM_time=` masked, is identical to 04's `sample-04/tool-route/exp-M4e-31-b2.0-oneloop1.txt` (13
+     lines each).
+3. *The fingerprint.*
+   - `spec_digests(config.datastore.factories)`, regenerated, equals `SPEC_DIGESTS[8]`: 17 pairs. Against format 7 only
+     `ScalarHistory` moved; `InversePowerModel` is new, with `ExponentialModel`'s digest.
+   - The diff of `config/fingerprint.py` removes no line but `FINGERPRINT_FORMAT = 7`.
+   - `diff` of the two golden JSON files: exactly note §0's three differences (the format 7 → 8, the class
+     `InversePowerModel` at count 0 with the empty digest and no tag sets, and the top digest).
+4. *The round trip.*
+   - `test_inverse_power_store`, `test_power_law_store_tools` and `test_bbn_from_store_model`: 24 tests OK in 46 s
+     (load 6.6).
+   - My own probe, on `_DissipationStoreCase` (unchanged since before 05) through the committed factories, crossed the
+     serials: `ExponentialModel` n = 1, 2 took 1, 2 and `InversePowerModel` n = 2, 1 took 1, 2. With histories at n = 1
+     under both models, each lookup found its own (by failure reason and model class), and `InversePowerModel` n = 2,
+     which shares serial 1 with the exponential's n = 1, found nothing.
+   - The check reads `alpha.drain_model` and `model.one_loop_drain_model` only; it holds no power-law expression.
+   - The keys of prompt §1.7, constructed by me: refused, `InversePowerModel` n = 1 and n = 2 under
+     `one-loop-measured-v1` and `ExponentialModel` under `one-loop-measured-pl-v1` (the check's `ValueError`), and
+     `InversePowerModel` n = 3 under `one-loop-measured-pl-v1` (the model's own); accepted under `fixed`,
+     `InversePowerModel` n = 1, `ExponentialModel` n = 1 and `InversePowerModel` n = 3.
+5. *The store tools.*
+   - `git grep model_serial` over the tree's Python: outside `.documents/`, `science-runs/`, `prompts/` and the tests,
+     the raw joins of a model table are `tools/bbn_from_store.py` (both find queries, and the power law's copies) and
+     `tools/outward_step_scan.py:878`. Both match `model_type`; `ObjectFactories/ScalarHistory.py`'s build already did.
+   - `test_bbn_from_store`, `test_bbn_from_store_alpha`, `test_bbn_from_store_model`, `test_compare_stores` and
+     `test_power_law_store_tools`: 45 tests OK in 42 s (load 7.9). `test_one_loop_tools` and `test_outward_step_scan`:
+     38 tests OK in 62 s (load 6.2).
+   - `bbn_from_store`'s header: at the defaults `model_label` returns "", so the line is the same string as at
+     `fb8bef2`, read from both versions' source.
+6. *The records.*
+   - The log has §5.1's seven parts, classes rulings 1–10 and D1–D8, lists every changed test with its old and new value,
+     and quotes the user's ruling. It has no UNINTENDED DRIFT.
+   - The board had row 05, the gate Store and the baselines. No issue was opened, so §3, §4 and
+     `.documents/OPEN_ISSUES.md` (32 open) are unchanged.
+   - `CLAUDE.md` changes only in the counts and the note of their last change. Test discovery at `bdb6ae7` counts 26,
+     226 + 513, 175, 307 and 76, as it says. The full suites were not re-run by me.
+   - `config/version.py`'s paragraph says a 2026.11.0 store cannot be read by this tree and is read with the tree of
+     its own commit.
+   - `black --check` passes on the 25 changed Python files.
+   - "This commit" is replaced by `bdb6ae7` in the log and on the board.
+- **For 06**, from the log's §7: `main.py` and the plot scripts must look up the power law's one-loop `alpha_value` rows
+  under the model's own `one_loop_drain_model`, or every power-law history is refused at construction; every read of
+  the store must match `model_type`; `outward_step_scan` stays exponential-only, and re-runs every exponential row at
+  n = 1 (an observation, harmless while the science stores hold n = 1 only).
+
 ## 2. The gates
 
 As README §2.1: Model (01), Wall (02), Law (03), Sample (04), Store (05), Export (06), R (07), Close (08).
@@ -477,4 +551,6 @@ ObjectFactories 163, tools 292, RunDrivers 76. 01 re-measures them at its base.
     `mock.Mock()` model names no one-loop drain model.
   - The user ruled, in their words, "(a) here please": the test's stand-in model is given
     `one_loop_drain_model="one-loop-measured-v1"`, and the check is unchanged.
-  - 05 then landed (this commit), and the gate Store holds. No issue opened.
+  - 05 then landed (`bdb6ae7`), and the gate Store holds. No issue opened.
+- 2026-11-16: prompt 05 reviewed by the orchestrator (this board, "Orchestrator review of prompt 05"); all six checks
+  pass. 06 is written only when the user asks for it.
